@@ -40,6 +40,10 @@ remote.OnClientEvent:Connect(function(ev, a, b)
 		dead = false
 		label.Text = "Next round in " .. a .. "…"
 
+	elseif ev == "elevator" then
+		dead = false
+		label.Text = "Doors opening in " .. a .. "…"
+
 	elseif ev == "start" then
 		dead = false
 		label.Text = "SURVIVE"

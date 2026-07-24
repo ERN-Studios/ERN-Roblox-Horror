@@ -13,10 +13,23 @@ local entity = workspace:WaitForChild("Entity")
 local humanoid = entity:WaitForChild("Humanoid")
 local root = entity:WaitForChild("HumanoidRootPart")
 
+-- put the entity in its collision group so the invisible pit-zone barriers
+-- (built by MazeGenerator) stop it — and only it
+do
+	local PhysicsService = game:GetService("PhysicsService")
+	pcall(function() PhysicsService:RegisterCollisionGroup("Entity") end)
+	for _, d in ipairs(entity:GetDescendants()) do
+		if d:IsA("BasePart") then d.CollisionGroup = "Entity" end
+	end
+	entity.DescendantAdded:Connect(function(d)
+		if d:IsA("BasePart") then d.CollisionGroup = "Entity" end
+	end)
+end
+
 -- ── tuning ────────────────────────────────────────────────
-local SIGHT_RANGE       = 70
-local SIGHT_RANGE_LIT   = 140   -- when the player's flashlight is on
-local SIGHT_ANGLE       = math.rad(55)
+local SIGHT_RANGE       = 650   -- effectively unlimited — only walls and the cone stop it
+local SIGHT_RANGE_LIT   = 1100  -- when the player's flashlight is on
+local SIGHT_ANGLE       = math.rad(80)  -- half-angle: 160° total — human-ish vision, minus a bit
 local HEAR_RANGE        = 220
 local SPEED_LURK        = 8
 local SPEED_INVESTIGATE = 15
@@ -51,6 +64,44 @@ RS:WaitForChild("Remotes"):WaitForChild("ReportNoise").OnServerEvent
 
 Players.PlayerRemoving:Connect(function(p) lastReport[p] = nil end)
 
+-- ── pit zone awareness ────────────────────────────────────
+-- MazeGenerator drops invisible markers in workspace.PitZones; the entity
+-- refuses to charge straight across a hole field and routes around instead
+local pitZones = {}
+task.spawn(function()
+	local folder = workspace:WaitForChild("PitZones", 30)
+	if not folder then return end
+	local function add(p)
+		table.insert(pitZones, {
+			minX = p.Position.X - p.Size.X / 2, maxX = p.Position.X + p.Size.X / 2,
+			minZ = p.Position.Z - p.Size.Z / 2, maxZ = p.Position.Z + p.Size.Z / 2,
+		})
+	end
+	for _, p in ipairs(folder:GetChildren()) do add(p) end
+	folder.ChildAdded:Connect(add)
+end)
+
+local function inPitZone(pos)
+	for _, zn in ipairs(pitZones) do
+		if pos.X > zn.minX and pos.X < zn.maxX
+			and pos.Z > zn.minZ and pos.Z < zn.maxZ then
+			return true
+		end
+	end
+	return false
+end
+
+local function crossesPitZone(from, to)
+	local dir = to - from
+	local dist = dir.Magnitude
+	if dist < 1 then return false end
+	dir = dir.Unit
+	for d = 4, dist, 6 do
+		if inPitZone(from + dir * d) then return true end
+	end
+	return false
+end
+
 -- ── perception ────────────────────────────────────────────
 local function sightRangeFor(char)
 	local flag = char:FindFirstChild("FlashlightOn")
@@ -63,9 +114,13 @@ local function canSee(char, hrp)
 	if dist > sightRangeFor(char) then return false end
 	if dist < 0.1 then return true end
 
-	local fwd = root.CFrame.LookVector
-	if math.acos(math.clamp(fwd:Dot(dir.Unit), -1, 1)) > SIGHT_ANGLE then
-		return false
+	-- the vision cone only limits SPOTTING you. Once chasing, awareness is
+	-- 360° — you can't juke it by circling behind; only walls break the chase
+	if current ~= State.CHASE then
+		local fwd = root.CFrame.LookVector
+		if math.acos(math.clamp(fwd:Dot(dir.Unit), -1, 1)) > SIGHT_ANGLE then
+			return false
+		end
 	end
 
 	local params = RaycastParams.new()
@@ -136,7 +191,12 @@ task.spawn(function()
 				humanoid.WalkSpeed = SPEED_CHASE
 			end
 			lastKnownPos = hrp.Position
-			humanoid:MoveTo(hrp.Position)
+			if crossesPitZone(root.Position, hrp.Position) then
+				-- never sprint straight over the holes — go around
+				pathTo(hrp.Position, moveToken)
+			else
+				humanoid:MoveTo(hrp.Position)
+			end
 
 		elseif current == State.CHASE then
 			interrupt()

@@ -1,111 +1,120 @@
-# MongoTV — Backrooms Horror Game
+# MongoTV
 
-Folder layout mirrors the Roblox Studio **Explorer** exactly. Open a file, copy
-everything, and paste it into the matching object in Studio.
+A round-based **Backrooms-inspired horror game** for Roblox. You and your party wake
+up in an elevator. The doors open into an endless yellow maze. One of you makes it
+back — or none of you do.
 
-## File → Studio mapping
+Built entirely with procedural generation: every round is a new maze.
 
-The Studio object type is in every filename: `Name.<ObjectType>.lua` (or `.txt`
-for things that aren't scripts).
+## 🎮 Gameplay
 
-| File on disk | Create in Studio as |
-|---|---|
-| `ReplicatedStorage/Remotes/ReportNoise.RemoteEvent.txt` | **RemoteEvent** named `ReportNoise` (object, not a script) |
-| `ReplicatedStorage/Remotes/ToggleFlashlight.RemoteEvent.txt` | **RemoteEvent** named `ToggleFlashlight` (object, not a script) |
-| `ReplicatedStorage/Remotes/Jumpscare.RemoteEvent.txt` | **RemoteEvent** named `Jumpscare` (object, not a script) |
-| `ReplicatedStorage/Remotes/RoundStatus.RemoteEvent.txt` | **RemoteEvent** named `RoundStatus` (object, not a script) |
-| `ServerScriptService/NoiseRegistry.ModuleScript.lua` | **ModuleScript** named `NoiseRegistry` |
-| `ServerScriptService/EntityAI.Script.lua` | **Script** named `EntityAI` |
-| `ServerScriptService/FlashlightSync.Script.lua` | **Script** named `FlashlightSync` |
-| `ServerScriptService/EntityKill.Script.lua` | **Script** named `EntityKill` |
-| `ServerScriptService/MazeGenerator.Script.lua` | **Script** named `MazeGenerator` |
-| `ServerScriptService/GameManager.Script.lua` | **Script** named `GameManager` |
-| `StarterPlayer/StarterPlayerScripts/NoiseReporter.LocalScript.lua` | **LocalScript** named `NoiseReporter` |
-| `StarterPlayer/StarterPlayerScripts/FlashlightController.LocalScript.lua` | **LocalScript** named `FlashlightController` |
-| `StarterPlayer/StarterPlayerScripts/JumpscareUI.LocalScript.lua` | **LocalScript** named `JumpscareUI` |
-| `StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua` | **LocalScript** named `RoundUI` |
-| `Workspace/Entity.Model.txt` | **Model** named `Entity` (built in Studio — see the txt) |
+- Everyone spawns **inside an elevator** — doors shut, countdown, doors slide open
+- **One life per round.** Die and you spectate until the round ends
+- The **Entity** hunts by sight and sound: sprinting is loud, crouching is silent
+- Flickering lights ahead of it can betray its approach — or just be a dying tube
+- **Pit rooms**: huge open halls where the floor is a grid of holes with narrow
+  beams between them. Falling in counts as your death. The Entity can't enter —
+  balancing over the void is the only safe haven
+- Everyone dead → **you lose** · survive the timer → **you win** · back to the
+  elevator, next round
 
-In Studio the names have **no suffix** — just `EntityAI`, not `EntityAI.Script`.
+## ⌨️ Controls
 
-## Paste order
-
-1. `ReplicatedStorage/Remotes` — the Folder + both RemoteEvents **first**
-   (everything else waits on these)
-2. Both ModuleScript/Scripts in `ServerScriptService`
-3. Both LocalScripts in `StarterPlayerScripts`
-4. Build the `Entity` model in Workspace (see checklist)
-
-## Controls
-
-| Key | Action | Noise |
+| Key | Action | Effect |
 |---|---|---|
-| WASD | Walk | quiet (0.45) |
-| Left Shift | Sprint | loud (1.0) — entity hears from far |
-| Left Ctrl | Crouch | silent (0.0) |
-| F | Flashlight | doubles entity's sight range while on |
+| `WASD` | Walk | quiet — the Entity hears it at medium range |
+| `Left Shift` | Sprint | **loud** — audible across the maze |
+| `Left Ctrl` | Crouch | silent, slow |
+| `F` | Flashlight | see further — but the Entity sees YOU much further |
+| — | Jump | disabled. The beams are the only way across the pits |
 
-## Test checklist (F5 / Home → Play)
+First person is forced. The cursor is hidden. There is no map.
 
-- Walk into the entity's view cone → it chases
-- Press F, stand further away → it still spots you (lit range 140 vs 70)
-- Sprint from across the map → it walks to where you were
-- Crouch-walk near it (outside its cone) → ignored
+## 🗂️ Repository layout
 
-## Lighting (do this in Studio, no script needed)
+The folder structure mirrors the **Roblox Studio Explorer** 1:1 — every file
+states at the top exactly where it gets pasted.
 
-Backrooms look = lighting, not geometry:
-- `Lighting.Technology` = **Future**
-- `Lighting.Ambient` = near-black, `Brightness` ≈ 0.5
-- `Lighting.ClockTime` = 0 (midnight), no outdoor light leaking in
-- Sickly-yellow SurfaceLights on ceiling panels + a looping fluorescent buzz Sound
+```
+ReplicatedStorage/
+  Remotes/                  ← RemoteEvents (objects, not scripts — see the .txt files)
+ServerScriptService/
+  MazeGenerator.Script.lua      procedural maze, pit zones, elevator, lighting
+  GameManager.Script.lua        round loop, one-life rule, elevator doors
+  EntityAI.Script.lua           sight/sound hunting, chase, pit avoidance
+  EntityKill.Script.lua         touch = death + jumpscare
+  FlashlightSync.Script.lua     server-side flashlight state (Entity sight bonus)
+  NoiseRegistry.ModuleScript.lua  footstep noise bookkeeping
+StarterPlayer/StarterPlayerScripts/
+  NoiseReporter.LocalScript.lua      movement state → noise events
+  FlashlightController.LocalScript.lua  handheld two-cone flashlight
+  RoundUI.LocalScript.lua            round status bar
+  JumpscareUI.LocalScript.lua        death flicker/shake (+ optional image/sound)
+Workspace/
+  Entity.Model.txt          ← checklist for building the Entity rig in Studio
+textures/                   ← source PNGs for all our custom decals
+```
 
-## Maze setup (one-time, before testing MazeGenerator)
+File naming: `Name.<StudioObjectType>.lua` — the middle part tells you what to
+insert in Studio (`Script`, `LocalScript`, `ModuleScript`). In Studio the
+instance name has no suffix (`EntityAI`, not `EntityAI.Script`).
 
-1. **Delete** the default `Baseplate` and default `SpawnLocation` in Workspace —
-   the maze generates its own floor and spawn
-2. Lighting engine: modern Studio versions use unified lighting automatically —
-   there's nothing to set. Only if you see a `Technology` property on `Lighting`
-   (older Studio), set it to **Future**. Quick check either way: in Play mode the
-   flashlight should make a crisp cone with shadows, not a vague blob.
+## 🛠️ Setting up in Roblox Studio
 
-Maze tuning lives at the top of `MazeGenerator.Script.lua`: `GRID` (size),
-`OPENNESS` (how open/loopy), `SEED` (set a number for the same maze every run).
+1. New place → **delete the default `Baseplate` and `SpawnLocation`**
+2. Create the RemoteEvents: `ReplicatedStorage → Remotes (Folder)` containing
+   `ReportNoise`, `ToggleFlashlight`, `Jumpscare`, `RoundStatus` (all RemoteEvents,
+   names are case-sensitive — see the `.txt` files in `ReplicatedStorage/Remotes/`)
+3. Paste each `.lua` file into the matching object per the table above
+4. Build the **Entity**: Avatar tab → Rig Builder → block rig → rename to `Entity`,
+   set `PrimaryPart` = HumanoidRootPart, `CanCollide = false` on all other parts
+   (full checklist in `Workspace/Entity.Model.txt`)
+5. **Publish the place** (File → Publish) — unpublished places fail to load assets
+6. Play (F5)
 
-## Round flow (GameManager)
+### Testing vs production values
 
-- Everyone spawns in the **Lobby** (concrete room floating above the maze)
-- First person is forced by code (`CameraMode = LockFirstPerson`)
-- Intermission countdown → whole party teleports to the maze start corner
-- **One life each** — dying respawns you in the lobby to wait out the round
-- Everyone dead → **LOSE** · timer (default 5 min) runs out with survivors → **WIN**
-- Everyone returns to the lobby, next round starts
-- Tuning at the top of `GameManager.Script.lua`: `MIN_PLAYERS`, `INTERMISSION`, `ROUND_TIME`
+For quick testing, override locally in Studio (don't commit these):
 
-## Using Toolbox (free models & textures)
+| Script | Setting | Testing | Production |
+|---|---|---|---|
+| MazeGenerator | `GRID` | `10` | `40` |
+| GameManager | `ELEVATOR_TIME` | `2` | `12` |
 
-**For walls/floor/ceiling — use IMAGES, not models.** The maze is generated by
-script, so you skin it with textures:
-1. Toolbox → Marketplace tab → change the filter dropdown from *Models* to **Images**
-2. Search "backrooms wallpaper", "carpet texture", "ceiling tile"
-3. Right-click the image → **Copy Asset ID**
-4. Paste into the top of `MazeGenerator.Script.lua`:
-   `local WALL_TEXTURE = "rbxassetid://<the id>"` (same for FLOOR/CEILING)
+## 🎨 Textures
 
-**For props (doors, vents, furniture, monster models) — use Models:**
-1. Toolbox → Models → search → drag into the 3D view
-2. Keep them in a Folder named `Props` in Workspace to stay organized
-3. ⚠ SAFETY: free models often hide malicious scripts. After inserting one,
-   expand it fully in Explorer and DELETE any Script/LocalScript inside it that
-   you didn't expect. (Explorer search box: type `script` while the model is
-   selected.) Sketchy names like "Vaccine", "Fire", "Spread" = delete on sight.
-4. Replacing the entity with a Toolbox monster: keep the model named `Entity`,
-   with a `Humanoid` + `HumanoidRootPart`, `PrimaryPart` set, all parts
-   `CanCollide = false` except the root — same checklist as `Workspace/Entity.Model.txt`
+All decals are **our own uploads** (source PNGs in [`textures/`](textures/)).
+To change one: upload the PNG via Studio's Asset Manager → copy the asset ID →
+paste it into the matching `*_TEXTURE` config at the top of
+`MazeGenerator.Script.lua`. Decal IDs and image IDs both work — the script
+resolves them automatically at server start.
 
-## Not built yet
+Available slots: wall · floor · ceiling tile · mold overlay · lit light fixture ·
+dead light fixture · elevator walls/floor/doors.
 
-- Sanity / stamina systems
-- Ambient sound (fluorescent buzz, distant drones) — add via Toolbox sounds
-- Win condition variant: find-the-exit instead of survive-the-timer
-- Spectate teammates while dead (currently you wait in the lobby)
+Alignment notes:
+- **Ceiling**: one image = one office tile; the grid auto-aligns so every light
+  panel replaces exactly one tile
+- **Mold**: transparent PNG, mold hanging from the image top — tiled once over
+  the wall height, applied to random walls and around every pit shaft
+
+## ⚙️ Key tuning knobs (top of `MazeGenerator.Script.lua`)
+
+| Knob | Does |
+|---|---|
+| `GRID` | maze size in cells (1 cell = 24 studs) |
+| `OPENNESS` / `NOISE_SCALE` / `PLAZA_T` | corridor-vs-open-room balance |
+| `PIT_ZONES` / `PIT_ZONE_CELLS` / `PIT_HOLE` / `PIT_GAP` | pit room count/size/hole layout |
+| `FLICKER_CHANCE` / `DEAD_CHANCE` | fraction of lights that flicker / are broken |
+| `SEED` | set a number for the same maze every run |
+
+Entity difficulty lives at the top of `EntityAI.Script.lua`
+(`SIGHT_RANGE`, `SIGHT_ANGLE`, `HEAR_RANGE`, speeds).
+
+## 🗺️ Roadmap
+
+- [ ] **Puzzle exit** — win by escaping, not just surviving the timer
+- [ ] Stamina system (sprint has a cost)
+- [ ] Ambient audio — fluorescent buzz, distant drones, jumpscare sound
+- [ ] Spectate teammates while dead
+- [ ] Custom Entity model + animations
