@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Rename-Item \"g:\\\\Roblox\\\\MongoTV\\\\ServerScriptService\\\\NoiseRegistry.module.lua\" \"NoiseRegistry.ModuleScript.lua\")",
+      "PowerShell(Rename-Item \"g:\\\\Roblox\\\\MongoTV\\\\ServerScriptService\\\\EntityAI.server.lua\" \"EntityAI.Script.lua\")",
+      "PowerShell(Rename-Item \"g:\\\\Roblox\\\\MongoTV\\\\ServerScriptService\\\\FlashlightSync.server.lua\" \"FlashlightSync.Script.lua\")",
+      "PowerShell(Rename-Item \"g:\\\\Roblox\\\\MongoTV\\\\StarterPlayer\\\\StarterPlayerScripts\\\\NoiseReporter.client.lua\" \"NoiseReporter.LocalScript.lua\")",
+      "PowerShell(Rename-Item \"g:\\\\Roblox\\\\MongoTV\\\\StarterPlayer\\\\StarterPlayerScripts\\\\FlashlightController.client.lua\" \"FlashlightController.LocalScript.lua\")",
+      "PowerShell(Rename-Item \"g:\\\\Roblox\\\\MongoTV\\\\Workspace\\\\_ENTITY-MODEL-CHECKLIST.txt\" \"Entity.Model.txt\")",
+      "PowerShell(Remove-Item \"g:\\\\Roblox\\\\MongoTV\\\\ReplicatedStorage\\\\Remotes\\\\_CREATE-THESE-IN-STUDIO.txt\" -Confirm:$false)"
+    ]
+  }
+}

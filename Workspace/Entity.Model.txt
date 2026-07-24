@@ -1,0 +1,18 @@
+The Entity is a MODEL you build/import in Studio, not a script.
+
+Requirements (EntityAI.server.lua depends on all of these):
+
+[ ] A Model in Workspace named exactly "Entity"
+[ ] It contains a Humanoid
+[ ] It contains a part named "HumanoidRootPart"
+[ ] Model's PrimaryPart property is set to HumanoidRootPart
+[ ] Every part: CanCollide = false, EXCEPT HumanoidRootPart
+[ ] Parts are NOT anchored (Anchored = false), or the Humanoid can't move it
+
+Quick way to get one for testing:
+- Avatar tab → Rig Builder → R15 (or R6) block rig → rename the model to "Entity"
+- Rig Builder already sets up Humanoid + HumanoidRootPart correctly
+- Then set CanCollide = false on all parts except HumanoidRootPart
+
+If the entity stands still in-game: it's almost always PrimaryPart not set,
+anchored parts, or no walkable floor under it (pathfinding fails silently).

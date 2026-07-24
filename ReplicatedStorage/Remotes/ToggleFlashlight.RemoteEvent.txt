@@ -1,0 +1,10 @@
+NOT a script — this is an object you insert in Studio.
+
+Right-click the "Remotes" folder (under ReplicatedStorage)
+→ Insert Object → RemoteEvent → rename to: ToggleFlashlight
+
+(First create the Remotes folder itself if you haven't:
+ right-click ReplicatedStorage → Insert Object → Folder → rename to "Remotes")
+
+Used by: FlashlightController (client) → FlashlightSync (server)
+Name is case-sensitive — must be exactly "ToggleFlashlight".

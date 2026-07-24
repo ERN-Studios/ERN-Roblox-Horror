@@ -1,0 +1,7 @@
+NOT a script — this is an object you insert in Studio.
+
+Right-click the "Remotes" folder (under ReplicatedStorage)
+→ Insert Object → RemoteEvent → rename to: RoundStatus
+
+Used by: GameManager (server) → RoundUI (client)
+Name is case-sensitive — must be exactly "RoundStatus".
