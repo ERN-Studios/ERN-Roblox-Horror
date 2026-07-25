@@ -21,6 +21,13 @@ PhysicsService:CollisionGroupSetCollidable("PitBarrier", "Default", false)
 PhysicsService:CollisionGroupSetCollidable("PitBarrier", "Entity", true)
 PhysicsService:CollisionGroupSetCollidable("PitBarrier", "PitBarrier", false)
 
+-- stop the entity free-falling during generation — its Studio spot has no floor
+-- under it. Anchor it now; EntityAI drops it on the floor once the maze exists.
+do
+	local e0 = workspace:FindFirstChild("Entity")
+	if e0 and e0.PrimaryPart then e0.PrimaryPart.Anchored = true end
+end
+
 -- ── tuning ────────────────────────────────────────────────
 local GRID       = 40      -- maze is GRID x GRID cells
 local CELL       = 24      -- studs per cell (corridor width)
@@ -69,8 +76,8 @@ local CEILING_TILE = LIGHT_SIZE -- one repeat = one office tile = one light pane
 
 -- Optional light-panel textures (your own decals). Each fills ONE panel face
 -- exactly — draw a full office fixture (diffuser grid / frame) per image.
-local LIGHT_TEXTURE      = "" -- lit fixture face
-local DEAD_LIGHT_TEXTURE = "" -- broken/dark fixture face
+local LIGHT_TEXTURE      = "rbxassetid://135786374638992"  -- lit fixture face
+local DEAD_LIGHT_TEXTURE = "rbxassetid://107766152992499"  -- broken/dark fixture face
 
 -- Optional elevator textures (your own decals)
 local ELEV_WALL_TEXTURE  = "" -- cabin walls (over the steel)
@@ -83,6 +90,20 @@ local ELEV_TILE = 4           -- studs per repeat inside the cabin
 -- tiled once over the wall height, so image-top = wall-top.
 local MOLD_TEXTURE = ""
 local MOLD_CHANCE  = 0.22 -- fraction of maze walls that get mold
+
+-- Optional wall drawings / graffiti / clues (your own decals). Each is stamped
+-- once at a readable size on a random wall — add as many IDs as you like.
+local WALL_ART = {
+	-- "rbxassetid://...",
+}
+local WALL_ART_CHANCE = 0.05 -- per maze wall
+local WALL_ART_SIZE   = 8    -- stamp size in studs
+
+-- Optional carpet stains (your own decals), stamped flat on random floor cells.
+local STAIN_TEXTURES = {
+	-- "rbxassetid://...",
+}
+local STAIN_CHANCE = 0.06 -- per floor cell
 -- ──────────────────────────────────────────────────────────
 
 if SEED then math.randomseed(SEED) end
@@ -90,6 +111,12 @@ if SEED then math.randomseed(SEED) end
 -- safety: zones must fit inside the maze with room to place — out-of-range
 -- values error out in math.random/math.clamp otherwise
 PIT_ZONE_CELLS = math.clamp(PIT_ZONE_CELLS, 2, math.floor(GRID / 3))
+
+-- elevator location: centered in the maze, with an open room around it so it
+-- looks like it just stands there out in the open
+local ELEV_CLEAR = 2                  -- open cells on every side of the elevator
+local ELEV_X = math.floor(GRID / 2)
+local ELEV_Y = math.floor(GRID / 2)
 
 -- ── resolve decal IDs → image IDs ─────────────────────────
 -- Toolbox "Copy Asset ID" usually gives the DECAL id; Texture instances need
@@ -120,6 +147,8 @@ DEAD_LIGHT_TEXTURE = resolveTexture(DEAD_LIGHT_TEXTURE)
 ELEV_WALL_TEXTURE = resolveTexture(ELEV_WALL_TEXTURE)
 ELEV_FLOOR_TEXTURE = resolveTexture(ELEV_FLOOR_TEXTURE)
 ELEV_DOOR_TEXTURE = resolveTexture(ELEV_DOOR_TEXTURE)
+for i, id in ipairs(WALL_ART) do WALL_ART[i] = resolveTexture(id) end
+for i, id in ipairs(STAIN_TEXTURES) do STAIN_TEXTURES[i] = resolveTexture(id) end
 
 local function key(x, z) return x .. "," .. z end
 
@@ -218,14 +247,25 @@ local function insideForcedPlaza(x, z)
 	return math.abs(x - fx) <= PLAZA_R and math.abs(z - fz) <= PLAZA_R
 end
 
--- keep the elevator exit clear: force the wall east of the start cell open
-wallV[2][2] = false
+-- ── open room around the central elevator ─────────────────
+-- clear every wall within ELEV_CLEAR cells so the elevator stands alone
+for x = ELEV_X - ELEV_CLEAR, ELEV_X + ELEV_CLEAR - 1 do
+	for z = ELEV_Y - ELEV_CLEAR, ELEV_Y + ELEV_CLEAR do
+		if wallV[x] and wallV[x][z] ~= nil then wallV[x][z] = false end
+	end
+end
+for x = ELEV_X - ELEV_CLEAR, ELEV_X + ELEV_CLEAR do
+	for z = ELEV_Y - ELEV_CLEAR, ELEV_Y + ELEV_CLEAR - 1 do
+		if wallH[x] and wallH[x][z] ~= nil then wallH[x][z] = false end
+	end
+end
 
--- the elevator shell replaces cell (2,2)'s own walls — drop the maze copies,
--- otherwise they generate overlapping the shell and z-fight/clip into it
-wallV[1][2] = false
-wallH[2][1] = false
-wallH[2][2] = false
+-- the elevator shell provides this cell's 4 walls (doors on the east), so
+-- suppress the maze's own copies — otherwise they clip/z-fight the shell
+wallV[ELEV_X - 1][ELEV_Y] = false
+wallV[ELEV_X][ELEV_Y] = false
+wallH[ELEV_X][ELEV_Y - 1] = false
+wallH[ELEV_X][ELEV_Y] = false
 
 -- ── place pit zones (away from both corners, non-overlapping) ──
 local zones = {}
@@ -238,27 +278,21 @@ local function zoneOK(zx, zz)
 			return false
 		end
 	end
-	-- keep away from the start/entity corners
+	-- keep away from the central elevator room and the entity's corner
 	local hi = PIT_ZONE_CELLS - 1
-	local function nearCorner(cx0, cz0)
-		return zx <= cx0 + PIT_SAFE_CELLS and zx + hi >= cx0 - PIT_SAFE_CELLS
-			and zz <= cz0 + PIT_SAFE_CELLS and zz + hi >= cz0 - PIT_SAFE_CELLS
+	local function nearPoint(cx0, cz0, margin)
+		return zx <= cx0 + margin and zx + hi >= cx0 - margin
+			and zz <= cz0 + margin and zz + hi >= cz0 - margin
 	end
-	return not (nearCorner(2, 2) or nearCorner(GRID - 1, GRID - 1))
+	return not (nearPoint(ELEV_X, ELEV_Y, PIT_SAFE_CELLS + ELEV_CLEAR)
+		or nearPoint(GRID - 1, GRID - 1, PIT_SAFE_CELLS))
 end
 
--- the FIRST zone always sits in the guaranteed plaza → every level has a
--- big open room full of holes, and it's guaranteed to exist
-do
-	local zx = math.clamp(fx - math.floor(PIT_ZONE_CELLS / 2), 2, GRID - PIT_ZONE_CELLS)
-	local zz = math.clamp(fz - math.floor(PIT_ZONE_CELLS / 2), 2, GRID - PIT_ZONE_CELLS)
-	table.insert(zones, { x = zx, z = zz })
-end
-
--- remaining zones placed randomly
-for i = 2, PIT_ZONES do
+-- pit zones placed randomly, avoiding the elevator room, the entity corner,
+-- and each other
+for i = 1, PIT_ZONES do
 	local placed = false
-	for _ = 1, 80 do -- placement attempts
+	for _ = 1, 120 do -- placement attempts
 		local zx = math.random(2, GRID - PIT_ZONE_CELLS)
 		local zz = math.random(2, GRID - PIT_ZONE_CELLS)
 		if zoneOK(zx, zz) then
@@ -268,7 +302,7 @@ for i = 2, PIT_ZONES do
 		end
 	end
 	if not placed then
-		warn(("MazeGenerator: no room for pit zone %d — map too crowded for this PIT_ZONE_CELLS"):format(i))
+		warn(("MazeGenerator: couldn't place pit zone %d — map too crowded"):format(i))
 	end
 end
 
@@ -289,7 +323,7 @@ end
 -- maze-tree connection ran through it. Flood-fill from the cell outside the
 -- elevator doors and knock open walls until every cell is reachable.
 do
-	local blocked = { [key(2, 2)] = true } -- elevator cell is solid
+	local blocked = { [key(ELEV_X, ELEV_Y)] = true } -- elevator cell is solid
 	local reached = {}
 
 	local function bfs(sx, sz)
@@ -313,7 +347,7 @@ do
 		end
 	end
 
-	bfs(3, 2) -- just outside the elevator doors
+	bfs(ELEV_X + 1, ELEV_Y) -- just outside the elevator doors (east)
 
 	local repaired = 0
 	local changed = true
@@ -345,8 +379,8 @@ local zoneDesc = {}
 for _, zn in ipairs(zones) do
 	table.insert(zoneDesc, ("(%d,%d)"):format(zn.x, zn.z))
 end
-print(("MazeGenerator: plaza at (%d,%d) · %d pit zone(s) at %s · elevator at (2,2)")
-	:format(fx, fz, #zones, table.concat(zoneDesc, " ")))
+print(("MazeGenerator: plaza at (%d,%d) · %d pit zone(s) at %s · elevator at (%d,%d)")
+	:format(fx, fz, #zones, table.concat(zoneDesc, " "), ELEV_X, ELEV_Y))
 
 -- ── build geometry ────────────────────────────────────────
 local maze = Instance.new("Model")
@@ -381,6 +415,40 @@ end
 local WALL_FACES = { Enum.NormalId.Front, Enum.NormalId.Back,
 	Enum.NormalId.Left, Enum.NormalId.Right }
 
+-- stamp a single fixed-size decal onto one face of a maze wall (drawings/clues)
+local function stampWallArt(cf, size)
+	if #WALL_ART == 0 or math.random() >= WALL_ART_CHANCE then return end
+	local id = WALL_ART[math.random(#WALL_ART)]
+	local thinX = size.X < size.Z
+	local sign = (math.random() < 0.5) and 1 or -1
+	local half = (thinX and size.X or size.Z) / 2
+	local longLen = thinX and size.Z or size.X
+	local jit = (math.random() * 2 - 1) * math.max((longLen - WALL_ART_SIZE) / 2, 0)
+	local y = cf.Y + (math.random() * 2 - 1) * math.max((WALL_H - WALL_ART_SIZE) / 2 - 0.5, 0)
+
+	local pos, normal
+	if thinX then
+		normal = Vector3.new(sign, 0, 0)
+		pos = Vector3.new(cf.X + sign * (half + 0.05), y, cf.Z + jit)
+	else
+		normal = Vector3.new(0, 0, sign)
+		pos = Vector3.new(cf.X + jit, y, cf.Z + sign * (half + 0.05))
+	end
+
+	local p = Instance.new("Part")
+	p.Anchored = true
+	p.CanCollide = false
+	p.CanQuery = false
+	p.Transparency = 1
+	p.Size = Vector3.new(WALL_ART_SIZE, WALL_ART_SIZE, 0.05)
+	p.CFrame = CFrame.new(pos, pos + normal) -- Front face points outward
+	local d = Instance.new("Decal")
+	d.Texture = id
+	d.Face = Enum.NormalId.Front
+	d.Parent = p
+	p.Parent = maze
+end
+
 local function wallPart(size, cf, parent)
 	local p = part(size, cf, WALL_COLOR, nil, parent)
 	applyTexture(p, WALL_TEXTURE, WALL_FACES, WALL_TILE)
@@ -397,6 +465,8 @@ local function wallPart(size, cf, parent)
 			t.Parent = p
 		end
 	end
+	-- wall art only on real maze walls (not the elevator shell / pit walls)
+	if not parent then stampWallArt(cf, size) end
 	return p
 end
 
@@ -406,8 +476,37 @@ local function floorTile(size, px, pz)
 	return p
 end
 
+-- stamp a stain decal flat on the carpet at a random size/rotation
+local function stampStain(cx, cz)
+	if #STAIN_TEXTURES == 0 or math.random() >= STAIN_CHANCE then return end
+	local id = STAIN_TEXTURES[math.random(#STAIN_TEXTURES)]
+	local s = math.random(6, 12)
+	local p = Instance.new("Part")
+	p.Anchored = true
+	p.CanCollide = false
+	p.CanQuery = false
+	p.Transparency = 1
+	p.Size = Vector3.new(s, 0.05, s)
+	p.CFrame = CFrame.new(cx, 0.03, cz) * CFrame.Angles(0, math.random() * math.pi * 2, 0)
+	local d = Instance.new("Decal")
+	d.Texture = id
+	d.Face = Enum.NormalId.Top
+	d.Parent = p
+	p.Parent = maze
+end
+
 local SIZE = GRID * CELL
 local O = -SIZE / 2 -- world coord of the maze's min edge
+
+-- publish maze data + shared game state for PuzzleManager / EntityAI to read
+workspace:SetAttribute("GRID", GRID)
+workspace:SetAttribute("CELL", CELL)
+workspace:SetAttribute("ORIGIN", O)
+workspace:SetAttribute("ELEV_X", ELEV_X)
+workspace:SetAttribute("ELEV_Y", ELEV_Y)
+workspace:SetAttribute("LightMode", "NORMAL")   -- NORMAL · ALERT · BLACKOUT
+workspace:SetAttribute("FlickerBoost", 0)       -- higher = lights flicker more
+workspace:SetAttribute("EntitySpeedMul", 1)     -- entity speed multiplier
 
 local entityStartCF = CFrame.new(O + (GRID - 1.5) * CELL, 3, O + (GRID - 1.5) * CELL)
 
@@ -426,7 +525,9 @@ local function onPitTouch(hit)
 	if not model then return end
 	if model.Name == "Entity" then
 		-- the entity climbs back out instead of soft-locking the round
-		model:PivotTo(entityStartCF + Vector3.new(0, 5, 0))
+		local bbox, size = model:GetBoundingBox()
+		local pivot = model:GetPivot()
+		model:PivotTo(CFrame.new(entityStartCF.X, 0.5 + (pivot.Y - (bbox.Y - size.Y / 2)), entityStartCF.Z))
 		return
 	end
 	local hum = model:FindFirstChildOfClass("Humanoid")
@@ -439,8 +540,9 @@ end
 for x = 1, GRID do
 	for z = 1, GRID do
 		if not pitCellSet[key(x, z)] then
-			floorTile(Vector3.new(CELL, 1, CELL),
-				O + (x - 0.5) * CELL, O + (z - 0.5) * CELL)
+			local fcx, fcz = O + (x - 0.5) * CELL, O + (z - 0.5) * CELL
+			floorTile(Vector3.new(CELL, 1, CELL), fcx, fcz)
+			stampStain(fcx, fcz)
 		end
 	end
 end
@@ -576,8 +678,9 @@ for _, zn in ipairs(zones) do
 	bottom.Touched:Connect(onPitTouch)
 end
 
--- ceiling — texture offset by half a tile so a tile sits CENTERED under each
--- light panel (cell centers land on the tile grid lines otherwise)
+-- ceiling — one slab, texture offset by half a tile so a tile sits centered
+-- under each light. The flush light panels (below) are opaque, so they simply
+-- hide the tile behind them — no clipping.
 local ceilingPart = part(Vector3.new(SIZE, 1, SIZE), CFrame.new(0, WALL_H + 0.5, 0),
 	CEILING_COLOR)
 if CEILING_TEXTURE ~= "" then
@@ -619,8 +722,8 @@ end
 -- Yellow textured shell outside (native backrooms wall), metal cabin inside,
 -- metal doors on the east face. GameManager finds "Elevator" and drives the doors.
 do
-	local x0, x1 = O + CELL, O + 2 * CELL          -- start cell bounds (cell 2,2)
-	local z0, z1 = O + CELL, O + 2 * CELL
+	local x0, x1 = O + (ELEV_X - 1) * CELL, O + ELEV_X * CELL -- elevator cell bounds
+	local z0, z1 = O + (ELEV_Y - 1) * CELL, O + ELEV_Y * CELL
 	local cx, cz = (x0 + x1) / 2, (z0 + z1) / 2
 
 	local elev = Instance.new("Model")
@@ -720,13 +823,14 @@ local flicker = {}
 local allLights = {} -- every WORKING light, for the entity-presence effect
 for x = 2, GRID, LIGHT_EVERY do
 	for z = 2, GRID, LIGHT_EVERY do
-		if not (x == 2 and z == 2) then -- skip the elevator cell
+		if not (x == ELEV_X and z == ELEV_Y) then -- skip the elevator cell
 			local isDead = math.random() < DEAD_CHANCE
 
-			-- panel embedded in the ceiling slab, face sitting a hair (0.1)
-			-- below the ceiling plane so it never clips the ceiling texture
-			local panel = part(Vector3.new(LIGHT_SIZE, 0.4, LIGHT_SIZE),
-				CFrame.new(O + (x - 0.5) * CELL, WALL_H + 0.1, O + (z - 0.5) * CELL),
+			-- flush with the ceiling: bottom face sits 0.075 below the ceiling
+			-- plane (clear of it → no z-fight) and the opaque panel hides the
+			-- tile behind it. Reads as level with the ceiling.
+			local panel = part(Vector3.new(LIGHT_SIZE, 0.15, LIGHT_SIZE),
+				CFrame.new(O + (x - 0.5) * CELL, WALL_H, O + (z - 0.5) * CELL),
 				isDead and Color3.fromRGB(118, 115, 102) or Color3.fromRGB(255, 250, 230),
 				isDead and Enum.Material.SmoothPlastic or Enum.Material.Neon)
 
@@ -740,6 +844,10 @@ for x = 2, GRID, LIGHT_EVERY do
 				ft.StudsPerTileV = LIGHT_SIZE
 				ft.Parent = panel
 			end
+
+			-- cover the thin exposed rim (the 4 sides) with the ceiling texture
+			-- so it blends into the ceiling instead of showing a lit edge
+			applyTexture(panel, CEILING_TEXTURE, WALL_FACES, CEILING_TILE)
 
 			local light = Instance.new("SurfaceLight")
 			light.Face = Enum.NormalId.Bottom
@@ -777,14 +885,16 @@ local function marker(name, cf)
 	return m
 end
 
-marker("MazeStart", CFrame.new(O + 1.5 * CELL, 3, O + 1.5 * CELL))
+marker("MazeStart", CFrame.new(O + (ELEV_X - 0.5) * CELL, 3, O + (ELEV_Y - 0.5) * CELL))
 marker("EntityStart", entityStartCF)
 
 -- park the entity in its corner until GameManager takes over
 task.spawn(function()
 	local entity = workspace:WaitForChild("Entity", 15)
 	if entity and entity.PrimaryPart then
-		entity:PivotTo(entityStartCF + Vector3.new(0, 5, 0))
+		local bbox, size = entity:GetBoundingBox()
+		local pivot = entity:GetPivot()
+		entity:PivotTo(CFrame.new(entityStartCF.X, 0.5 + (pivot.Y - (bbox.Y - size.Y / 2)), entityStartCF.Z))
 	end
 end)
 
@@ -794,9 +904,13 @@ Lighting.OutdoorAmbient = Color3.fromRGB(0, 0, 0)
 Lighting.Brightness = 0.3
 Lighting.ClockTime = 0
 Lighting.GlobalShadows = true
-Lighting.FogColor = Color3.fromRGB(16, 14, 9)   -- darker, closer fog — dread, not haze
-Lighting.FogEnd = 160
-Lighting.FogStart = 12
+-- an Atmosphere object OVERRIDES legacy Fog and lets you see forever — remove
+-- it so the fog below actually limits how far players can see
+local _atmos = Lighting:FindFirstChildOfClass("Atmosphere")
+if _atmos then _atmos:Destroy() end
+Lighting.FogColor = Color3.fromRGB(16, 14, 9)   -- dark, close fog — dread, not haze
+Lighting.FogStart = 8
+Lighting.FogEnd = 95                            -- players can't see much past ~4 cells
 
 -- color grade: desaturated, contrast-crushed, sickly warm tint
 local grade = Lighting:FindFirstChild("MongoGrade") or Instance.new("ColorCorrectionEffect")
@@ -807,72 +921,147 @@ grade.Brightness = -0.02
 grade.TintColor = Color3.fromRGB(255, 243, 220)
 grade.Parent = Lighting
 
--- ── light flicker: fast fluorescent buzz-bursts ───────────
--- each flickering light idles, then strobes rapidly for a moment
+-- ── light control: NORMAL flicker · ALERT red pulse · BLACKOUT ──
+local function lightMode() return workspace:GetAttribute("LightMode") or "NORMAL" end
+local function flickerBoost() return workspace:GetAttribute("FlickerBoost") or 0 end
+
 local function setLight(f, on)
 	f[2].Enabled = on
 	f[1].Material = on and Enum.Material.Neon or Enum.Material.SmoothPlastic
 end
 
+local function restoreLight(L)
+	L.light.Enabled = true
+	L.light.Color = LIGHT_COLOR
+	L.light.Brightness = 0.7
+	L.panel.Color = Color3.fromRGB(255, 250, 230)
+	L.panel.Material = Enum.Material.Neon
+end
+
+-- per-light buzz-flicker — NORMAL mode only; FlickerBoost shortens the calm gap
 for _, f in ipairs(flicker) do
 	task.spawn(function()
 		while true do
-			task.wait(1 + math.random() * 4)          -- calm period
-			for _ = 1, math.random(4, 10) do          -- rapid strobe burst
-				setLight(f, false)
-				task.wait(0.03 + math.random() * 0.06)
-				setLight(f, true)
-				task.wait(0.03 + math.random() * 0.06)
-			end
-			-- occasionally stay dark a beat before recovering
-			if math.random() < 0.3 then
-				setLight(f, false)
-				task.wait(0.2 + math.random() * 0.5)
-				setLight(f, true)
+			task.wait((1 + math.random() * 4) / (1 + flickerBoost()))
+			if lightMode() == "NORMAL" then
+				for _ = 1, math.random(4, 10) do
+					setLight(f, false)
+					task.wait(0.03 + math.random() * 0.06)
+					setLight(f, true)
+					task.wait(0.03 + math.random() * 0.06)
+				end
+				if math.random() < 0.3 then
+					setLight(f, false)
+					task.wait(0.2 + math.random() * 0.5)
+					setLight(f, true)
+				end
 			end
 		end
 	end)
 end
 
--- ── entity presence: lights ahead of it are just LIKELIER to flicker ──
--- not a constant strobe — every 2s the 1–2 nearest lights in front of the
--- entity each have a 50% chance of one short burst (~double the ambient rate)
+-- mode controller: ALERT pulses all lights red (continuous); NORMAL & BLACKOUT
+-- are applied once on transition so the flicker/presence loops can own lights
+task.spawn(function()
+	local prev = "NORMAL"
+	local phase = 0
+	while true do
+		local dt = task.wait(0.08)
+		local mode = lightMode()
+		if mode == "ALERT" then
+			phase += dt
+			local b = 0.12 + 0.55 * (0.5 + 0.5 * math.sin(phase * 1.6))
+			for _, L in ipairs(allLights) do
+				L.light.Enabled = true
+				L.light.Color = Color3.fromRGB(255, 45, 30)
+				L.light.Brightness = b
+				L.panel.Color = Color3.fromRGB(120, 12, 10)
+				L.panel.Material = Enum.Material.Neon
+			end
+		elseif mode == "BLACKOUT" then
+			if prev ~= "BLACKOUT" then
+				-- mostly dark, but ~12% of panels stay faintly lit so it's not
+				-- pitch black — the entity beacon does the rest
+				for _, L in ipairs(allLights) do
+					L.keep = math.random() < 0.12
+					if L.keep then
+						L.light.Enabled = true
+						L.light.Color = LIGHT_COLOR
+						L.light.Brightness = 0.28
+						L.panel.Color = Color3.fromRGB(120, 116, 96)
+						L.panel.Material = Enum.Material.Neon
+					else
+						L.light.Enabled = false
+						L.panel.Color = Color3.fromRGB(18, 18, 18)
+						L.panel.Material = Enum.Material.SmoothPlastic
+					end
+				end
+			end
+		else
+			if prev ~= "NORMAL" then
+				for _, L in ipairs(allLights) do restoreLight(L) end
+			end
+		end
+		prev = mode
+	end
+end)
+
+-- ── entity presence ──────────────────────────────────────
+-- NORMAL → the 1–2 nearest lights in front of the entity are likelier to
+-- flicker · BLACKOUT → the entity is the ONLY light: the nearest panel blinks,
+-- a beacon showing roughly where it is in the dark
 task.spawn(function()
 	local entity = workspace:WaitForChild("Entity", 30)
 	if not entity then return end
 	local busy = {}
 	while true do
-		task.wait(2)
-		local root = entity:FindFirstChild("HumanoidRootPart")
-		if root then
-			local ahead = root.Position + root.CFrame.LookVector * 18
-
-			-- two nearest working lights to the point the entity is facing
-			local best, bestD = nil, math.huge
-			local best2, bestD2 = nil, math.huge
-			for _, L in ipairs(allLights) do
-				local d = (L.pos - ahead).Magnitude
-				if d < bestD then
-					best2, bestD2 = best, bestD
-					best, bestD = L, d
-				elseif d < bestD2 then
-					best2, bestD2 = L, d
-				end
-			end
-
-			for _, L in ipairs({ best, best2 }) do
-				if L and (L.pos - ahead).Magnitude < 45 and not busy[L]
-					and math.random() < 0.5 then
-					busy[L] = true
-					task.spawn(function()
-						for _ = 1, math.random(2, 5) do
-							setLight({ L.panel, L.light }, false)
-							task.wait(0.04 + math.random() * 0.05)
-							setLight({ L.panel, L.light }, true)
-							task.wait(0.04 + math.random() * 0.05)
+		task.wait(0.4)
+		local mode = lightMode()
+		if mode ~= "ALERT" then
+			local root = entity:FindFirstChild("HumanoidRootPart")
+			if root then
+				if mode == "BLACKOUT" then
+					local best, bd = nil, math.huge
+					for _, L in ipairs(allLights) do
+						local d = (L.pos - root.Position).Magnitude
+						if d < bd then best, bd = L, d end
+					end
+					if best then
+						best.light.Color = LIGHT_COLOR
+						best.light.Brightness = 0.7
+						best.light.Enabled = true
+						best.panel.Material = Enum.Material.Neon
+						task.wait(0.08 + math.random() * 0.12)
+						-- return it to whatever its blackout state was
+						if best.keep then
+							best.light.Brightness = 0.28
+						else
+							best.light.Enabled = false
+							best.panel.Material = Enum.Material.SmoothPlastic
 						end
-						busy[L] = nil
-					end)
+					end
+				else
+					local ahead = root.Position + root.CFrame.LookVector * 18
+					local best, bd, best2, bd2 = nil, math.huge, nil, math.huge
+					for _, L in ipairs(allLights) do
+						local d = (L.pos - ahead).Magnitude
+						if d < bd then best2, bd2 = best, bd; best, bd = L, d
+						elseif d < bd2 then best2, bd2 = L, d end
+					end
+					for _, L in ipairs({ best, best2 }) do
+						if L and (L.pos - ahead).Magnitude < 45 and not busy[L] and math.random() < 0.5 then
+							busy[L] = true
+							task.spawn(function()
+								for _ = 1, math.random(2, 5) do
+									setLight({ L.panel, L.light }, false)
+									task.wait(0.04 + math.random() * 0.05)
+									setLight({ L.panel, L.light }, true)
+									task.wait(0.04 + math.random() * 0.05)
+								end
+								busy[L] = nil
+							end)
+						end
+					end
 				end
 			end
 		end

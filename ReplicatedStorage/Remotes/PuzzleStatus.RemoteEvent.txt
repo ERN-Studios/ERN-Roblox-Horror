@@ -1,0 +1,7 @@
+NOT a script — this is an object you insert in Studio.
+
+Right-click the "Remotes" folder (under ReplicatedStorage)
+→ Insert Object → RemoteEvent → rename to: PuzzleStatus
+
+Used by: PuzzleManager (server) → PuzzleUI (client)
+Name is case-sensitive — must be exactly "PuzzleStatus".

@@ -1,6 +1,8 @@
 -- RoundUI
 -- PASTE INTO: StarterPlayer → StarterPlayerScripts → Insert Object → LocalScript → rename to "RoundUI"
--- Top-of-screen status bar: intermission countdown, round timer, deaths, win/lose.
+-- Top-of-screen status bar: elevator countdown, deaths, win/lose.
+-- No timer and no alive-count — winning is the puzzle, and nobody should know
+-- how many teammates are still alive.
 
 local Players = game:GetService("Players")
 local RS = game:GetService("ReplicatedStorage")
@@ -28,37 +30,32 @@ label.Parent = gui
 
 local dead = false
 
-local function fmt(sec)
-	return string.format("%d:%02d", math.floor(sec / 60), sec % 60)
-end
-
 remote.OnClientEvent:Connect(function(ev, a, b)
 	if ev == "waiting" then
 		label.Text = "Waiting for players…"
-
-	elseif ev == "intermission" then
-		dead = false
-		label.Text = "Next round in " .. a .. "…"
 
 	elseif ev == "elevator" then
 		dead = false
 		label.Text = "Doors opening in " .. a .. "…"
 
 	elseif ev == "start" then
+		-- round handed to the puzzle; PuzzleUI shows the objective from here
 		dead = false
-		label.Text = "SURVIVE"
-
-	elseif ev == "timer" then
-		label.Text = (dead and "[DEAD]  " or "") .. fmt(a) .. "   •   " .. b .. " alive"
+		label.Text = ""
 
 	elseif ev == "death" then
-		if a == player.Name then dead = true end
-		label.Text = a .. " died — " .. b .. " left"
+		-- name only — never a remaining-alive count
+		if a == player.Name then
+			dead = true
+			label.Text = "You died — spectating"
+		else
+			label.Text = a .. " died"
+		end
 
 	elseif ev == "lose" then
 		label.Text = "EVERYONE DIED — YOU LOSE"
 
 	elseif ev == "win" then
-		label.Text = dead and "THE OTHERS MADE IT OUT" or "YOU SURVIVED"
+		label.Text = dead and "THE OTHERS ESCAPED" or "YOU ESCAPED"
 	end
 end)

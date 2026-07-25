@@ -15,7 +15,7 @@ local status = RS:WaitForChild("Remotes"):WaitForChild("RoundStatus")
 -- ── tuning ────────────────────────────────────────────────
 local MIN_PLAYERS   = 1     -- raise to 2+ for real multiplayer rounds
 local ELEVATOR_TIME = 12    -- seconds with doors shut before each round
-local ROUND_TIME    = 300   -- survive this many seconds to win
+-- (no round timer — the round ends only when the puzzle is solved or all die)
 -- ──────────────────────────────────────────────────────────
 
 Players.CharacterAutoLoads = false -- we control every (re)spawn
@@ -119,9 +119,12 @@ task.spawn(function()
 		local aliveCount = #participants
 		local conns = {}
 
-		-- reset the entity to its corner
+		-- reset the entity to its corner, feet on the floor (whatever its size)
 		if entity and entity.PrimaryPart and entityStart then
-			entity:PivotTo(entityStart.CFrame + Vector3.new(0, 5, 0))
+			local bbox, size = entity:GetBoundingBox()
+			local pivot = entity:GetPivot()
+			local bottomToPivot = pivot.Y - (bbox.Y - size.Y / 2)
+			entity:PivotTo(CFrame.new(entityStart.CFrame.X, 0.5 + bottomToPivot, entityStart.CFrame.Z))
 		end
 
 		-- one life: track deaths
@@ -152,21 +155,26 @@ task.spawn(function()
 		end
 		elevator.open()
 
-		status:FireAllClients("start", ROUND_TIME)
+		-- hand the round to PuzzleManager (spawns fuses/boxes/levers/exit)
+		workspace:SetAttribute("PuzzleWon", false)
+		workspace:SetAttribute("RoundActive", true)
 
-		-- run the round
-		local result = "win"
-		local endTime = os.clock() + ROUND_TIME
-		while os.clock() < endTime do
-			if aliveCount <= 0 then
-				result = "lose"
-				break
-			end
-			status:FireAllClients("timer",
-				math.ceil(endTime - os.clock()), aliveCount)
-			task.wait(1)
+		status:FireAllClients("start")
+
+		-- the round ends ONLY when the puzzle is solved (win) or everyone is
+		-- dead (lose) — there is no time limit
+		local result
+		while true do
+			if workspace:GetAttribute("PuzzleWon") then result = "win" break end
+			if aliveCount <= 0 then result = "lose" break end
+			task.wait(0.5)
 		end
-		if aliveCount <= 0 then result = "lose" end
+
+		-- round over: tear down the puzzle and reset all shared state
+		workspace:SetAttribute("RoundActive", false)
+		workspace:SetAttribute("LightMode", "NORMAL")
+		workspace:SetAttribute("FlickerBoost", 0)
+		workspace:SetAttribute("EntitySpeedMul", 1)
 
 		for _, c in ipairs(conns) do c:Disconnect() end
 		status:FireAllClients(result)
