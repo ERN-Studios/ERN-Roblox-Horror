@@ -1,7 +1,8 @@
 -- JumpscareUI
 -- PASTE INTO: StarterPlayer → StarterPlayerScripts → Insert Object → LocalScript → rename to "JumpscareUI"
--- Screen flicker + camera shake when the entity kills you.
--- OPTIONAL: paste asset ids below (find them in the Toolbox) for a face image / scream sound.
+-- Screen flicker + camera shake + optional face image when the entity kills you.
+-- The death SCREAM is not here — all sound ids live in SoundController
+-- (JUMPSCARE_SOUND), which also listens to this same Jumpscare remote.
 
 local Players = game:GetService("Players")
 local RS = game:GetService("ReplicatedStorage")
@@ -9,10 +10,9 @@ local RS = game:GetService("ReplicatedStorage")
 local remote = RS:WaitForChild("Remotes"):WaitForChild("Jumpscare")
 local player = Players.LocalPlayer
 
--- Optional assets. Leave as "" and it still works (flicker + shake only).
--- Format: "rbxassetid://1234567890"
+-- Optional face image shown full-screen on death. Leave "" for flicker + shake
+-- only. Format: "rbxassetid://1234567890"
 local JUMPSCARE_IMAGE = ""
-local JUMPSCARE_SOUND = ""
 
 remote.OnClientEvent:Connect(function()
 	local gui = Instance.new("ScreenGui")
@@ -37,13 +37,7 @@ remote.OnClientEvent:Connect(function()
 		img.Parent = frame
 	end
 
-	if JUMPSCARE_SOUND ~= "" then
-		local s = Instance.new("Sound")
-		s.SoundId = JUMPSCARE_SOUND
-		s.Volume = 2
-		s.Parent = gui
-		s:Play()
-	end
+	-- (the scream is played by SoundController, which hears this same remote)
 
 	-- camera shake
 	task.spawn(function()

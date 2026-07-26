@@ -134,7 +134,10 @@ task.spawn(function()
 				if alive[p] then
 					alive[p] = nil
 					aliveCount -= 1
-					status:FireAllClients("death", p.Name, aliveCount)
+					-- pass the kill POSITION so everyone hears a positional scream
+					local ch = p.Character
+					local hrp = ch and ch:FindFirstChild("HumanoidRootPart")
+					status:FireAllClients("death", p.Name, hrp and hrp.Position or nil)
 				end
 			end))
 		end
@@ -144,7 +147,7 @@ task.spawn(function()
 			if alive[p] then
 				alive[p] = nil
 				aliveCount -= 1
-				status:FireAllClients("death", p.Name, aliveCount)
+				status:FireAllClients("death", p.Name, nil) -- left the game: no scream
 			end
 		end))
 

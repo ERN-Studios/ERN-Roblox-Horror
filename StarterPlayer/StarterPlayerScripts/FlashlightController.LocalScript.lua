@@ -106,11 +106,47 @@ RunService:BindToRenderStep("MongoFlashlight", Enum.RenderPriority.Camera.Value 
 	mount.CFrame = aimCF.Rotation + handPos
 end)
 
+-- ── battery ───────────────────────────────────────────────
+-- No HUD at all. The player is warned the battery is low by the beam itself
+-- flickering: one blink at 50%, a few blinks at 25%.
+local BATTERY_MAX      = 100
+local DRAIN_PER_SEC    = 3.3  -- ~30s of continuous light on a full charge
+local RECHARGE_PER_SEC = 1.5  -- slowly recovers while the light is OFF
+local MIN_TO_TURN_ON   = 5    -- can't switch on below this (must recharge a bit)
+local battery = BATTERY_MAX
+local warned50, warned25 = false, false
+
+local function setLights(state)
+	on = state
+	if coreLight then coreLight.Enabled = state end
+	if spillLight then spillLight.Enabled = state end
+	remote:FireServer(state)
+end
+
+-- a low-battery WARNING flicker: briefly drop the beam `times` times then
+-- restore it. Purely visual — doesn't change the real on/off state, so it
+-- doesn't spam the server or affect the entity's sight bonus.
+local function warnBlink(times)
+	if not on then return end
+	task.spawn(function()
+		for _ = 1, times do
+			if not on then break end
+			if coreLight then coreLight.Enabled = false end
+			if spillLight then spillLight.Enabled = false end
+			task.wait(0.08)
+			if coreLight then coreLight.Enabled = on end
+			if spillLight then spillLight.Enabled = on end
+			task.wait(0.14)
+		end
+	end)
+end
+
 local function toggle()
-	on = not on
-	if coreLight then coreLight.Enabled = on end
-	if spillLight then spillLight.Enabled = on end
-	remote:FireServer(on)
+	if on then
+		setLights(false)
+	elseif battery > MIN_TO_TURN_ON then
+		setLights(true)
+	end
 end
 
 UIS.InputBegan:Connect(function(input, processed)
@@ -120,8 +156,30 @@ end)
 
 -- flashlight resets to off on respawn
 player.CharacterAdded:Connect(function()
-	on = false
-	if coreLight then coreLight.Enabled = false end
-	if spillLight then spillLight.Enabled = false end
-	remote:FireServer(false)
+	setLights(false)
+end)
+
+-- drain while on, recharge while off; die at empty
+RunService.Heartbeat:Connect(function(dt)
+	if on then
+		battery = battery - DRAIN_PER_SEC * dt
+		if battery <= 0 then
+			battery = 0
+			setLights(false)
+		end
+	else
+		battery = math.min(BATTERY_MAX, battery + RECHARGE_PER_SEC * dt)
+	end
+
+	-- re-arm the warnings once it recharges back up (small hysteresis)
+	if battery > 55 then warned50 = false end
+	if battery > 30 then warned25 = false end
+	-- fire each warning once as the battery falls past the threshold
+	if on and battery <= 25 and not warned25 then
+		warned25 = true
+		warnBlink(3)
+	elseif on and battery <= 50 and not warned50 then
+		warned50 = true
+		warnBlink(1)
+	end
 end)

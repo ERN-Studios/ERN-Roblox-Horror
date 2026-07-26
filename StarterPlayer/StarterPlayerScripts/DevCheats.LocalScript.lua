@@ -3,13 +3,17 @@
 --
 --   B = toggle ESP (see fuses / boxes / levers / exit / entity through walls)
 --   V = toggle noclip fly (WASD + mouse to move, Space up, Ctrl down)
+--   P = pause / unpause the Entity (freezes it in place)
+--   I = toggle immunity to the Entity's yell push-back
 --
 -- ALLOWED_NAMES empty = everyone can cheat (fine while testing). Add your
 -- Roblox usernames to restrict it to just you two, or delete this script.
+-- The P pause needs a RemoteEvent "DevControl" in ReplicatedStorage/Remotes.
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UIS = game:GetService("UserInputService")
+local RS = game:GetService("ReplicatedStorage")
 
 local player = Players.LocalPlayer
 
@@ -22,6 +26,23 @@ local function allowed()
 	return false
 end
 if not allowed() then return end
+
+-- RemoteEvent used to talk to the server Entity (P pause, I push-immunity).
+-- Fetched lazily so it still works if you create DevControl after pressing play,
+-- and so a missing one never blocks ESP / noclip below.
+local remotes = RS:WaitForChild("Remotes")
+local devControl = remotes:FindFirstChild("DevControl")
+local function fireDev(cmd, arg)
+	if not devControl then devControl = remotes:FindFirstChild("DevControl") end
+	if devControl then
+		devControl:FireServer(cmd, arg)
+		return true
+	end
+	warn("[DevCheats] DevControl RemoteEvent missing in ReplicatedStorage/Remotes — P/I won't work")
+	return false
+end
+local entityPaused = false
+local pushImmune = false
 
 -- ── ESP (highlight through walls) ─────────────────────────
 local COLORS = {
@@ -118,5 +139,13 @@ UIS.InputBegan:Connect(function(input, processed)
 		end
 	elseif input.KeyCode == Enum.KeyCode.V then
 		if flying then stopFlying() else flying = true end
+	elseif input.KeyCode == Enum.KeyCode.P then
+		entityPaused = not entityPaused
+		fireDev("pauseEntity", entityPaused)
+		print("[DevCheats] Entity " .. (entityPaused and "PAUSED" or "resumed"))
+	elseif input.KeyCode == Enum.KeyCode.I then
+		pushImmune = not pushImmune
+		fireDev("immunePush", pushImmune)
+		print("[DevCheats] Yell push-back immunity " .. (pushImmune and "ON" or "OFF"))
 	end
 end)

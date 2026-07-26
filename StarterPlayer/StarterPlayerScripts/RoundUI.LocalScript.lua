@@ -26,36 +26,41 @@ label.Font = Enum.Font.SpecialElite
 label.TextScaled = true
 label.TextColor3 = Color3.fromRGB(225, 220, 200)
 label.Text = ""
+label.Visible = false -- hide the black bar until there's actually a message
 label.Parent = gui
+
+-- only show the bar when it has text (empty text left a blank black box)
+local function setMsg(t)
+	label.Text = t or ""
+	label.Visible = (t ~= nil and t ~= "")
+end
 
 local dead = false
 
 remote.OnClientEvent:Connect(function(ev, a, b)
 	if ev == "waiting" then
-		label.Text = "Waiting for players…"
+		setMsg("Waiting for players…")
 
 	elseif ev == "elevator" then
 		dead = false
-		label.Text = "Doors opening in " .. a .. "…"
+		setMsg("Doors opening in " .. a .. "…")
 
 	elseif ev == "start" then
 		-- round handed to the puzzle; PuzzleUI shows the objective from here
 		dead = false
-		label.Text = ""
+		setMsg("")
 
 	elseif ev == "death" then
-		-- name only — never a remaining-alive count
+		-- no on-screen announcement — the positional death scream is the signal
+		-- now. We still track OUR OWN death so the win banner reads correctly.
 		if a == player.Name then
 			dead = true
-			label.Text = "You died — spectating"
-		else
-			label.Text = a .. " died"
 		end
 
 	elseif ev == "lose" then
-		label.Text = "EVERYONE DIED — YOU LOSE"
+		setMsg("EVERYONE DIED — YOU LOSE")
 
 	elseif ev == "win" then
-		label.Text = dead and "THE OTHERS ESCAPED" or "YOU ESCAPED"
+		setMsg(dead and "THE OTHERS ESCAPED" or "YOU ESCAPED")
 	end
 end)

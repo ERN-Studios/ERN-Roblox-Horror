@@ -13,8 +13,9 @@ Built entirely with procedural generation: every round is a new maze.
 - The **Entity** hunts by sight and sound: sprinting is loud, sneaking is silent
 - Flickering lights ahead of it can betray its approach — or just be a dying tube
 - **Pit rooms**: huge open halls where the floor is a grid of holes with narrow
-  beams between them. Falling in counts as your death. The Entity can't enter —
-  balancing over the void is the only safe haven
+  beams between them. Falling in counts as your death. The Entity can't walk in —
+  but if it spots you out there it **roars and shoves you off the beams**, so the
+  void is a risky shortcut, not a safe haven
 - **Win by solving the puzzle** (fuses → boxes → levers → exit — see below).
   There is **no timer**. The round ends only when the party escapes (**win**) or
   everyone is dead (**lose**). You're never told how many teammates are still alive.
@@ -24,16 +25,22 @@ Built entirely with procedural generation: every round is a new maze.
 | Key | Action | Effect |
 |---|---|---|
 | `WASD` | Walk | quiet — the Entity hears it at medium range |
-| `Left Shift` | Sprint | **loud** — audible across the maze |
+| `Left Shift` | Sprint | **loud** — limited stamina (no bar), can't sprint when exhausted |
 | `Left Ctrl` | Sneak | slow + silent walk (there's no crouch pose) |
-| `F` | Flashlight | see further — but the Entity sees YOU much further |
+| `F` | Flashlight | see further — but limited **battery**; dies when drained |
+| `Q` / `E` | Spectate | while dead, cycle between living teammates |
 | — | Jump | disabled. The beams are the only way across the pits |
 
-First person is forced. The cursor is hidden. There is no map.
+First person is forced. The cursor is hidden. There is no map and **no HUD**.
+Both limits are felt, not shown: **stamina** cuts your sprint out when it's spent,
+and the **flashlight** warns you it's low by flickering — one blink at 50%, a few
+at 25% — before it dies.
 
 **Dev cheats** (`DevCheats.LocalScript` — testing only, remove before release):
 `B` toggles ESP (fuses / boxes / levers / exit / entity glow through walls),
-`V` toggles noclip fly (WASD + Space/Ctrl). Restrict via `ALLOWED_NAMES` or delete.
+`V` toggles noclip fly (WASD + Space/Ctrl), `P` pauses/unpauses the Entity,
+`I` toggles immunity to the Entity's yell push-back. Restrict via `ALLOWED_NAMES`
+or delete. `P` and `I` need the `DevControl` RemoteEvent.
 
 ## 🗂️ Repository layout
 
@@ -46,7 +53,8 @@ ReplicatedStorage/
 ServerScriptService/
   MazeGenerator.Script.lua      procedural maze, pit zones, elevator, lighting
   GameManager.Script.lua        round loop, one-life rule, elevator doors
-  EntityAI.Script.lua           sight/sound hunting, chase, pit avoidance
+  EntityAI.Script.lua           sight/sound hunting, chase, lunge, pit yell
+  EntityAnimation.Script.lua    walk/run/idle + yell animation (fires on PlayYell)
   EntityKill.Script.lua         touch = death + jumpscare
   FlashlightSync.Script.lua     server-side flashlight state (Entity sight bonus)
   PuzzleManager.Script.lua      fuses → fuse boxes → levers → exit (the win)
@@ -57,6 +65,7 @@ StarterPlayer/StarterPlayerScripts/
   SoundController.LocalScript.lua       ambience, proximity breathing, footsteps
   RoundUI.LocalScript.lua            round status bar
   PuzzleUI.LocalScript.lua           objective + fuse counter
+  SpectateController.LocalScript.lua spectate teammates while dead (Q/E)
   JumpscareUI.LocalScript.lua        death flicker/shake (+ optional image/sound)
   DevCheats.LocalScript.lua          TESTING ONLY — ESP + noclip fly (remove for release)
 Workspace/
@@ -73,8 +82,8 @@ instance name has no suffix (`EntityAI`, not `EntityAI.Script`).
 1. New place → **delete the default `Baseplate` and `SpawnLocation`**
 2. Create the RemoteEvents: `ReplicatedStorage → Remotes (Folder)` containing
    `ReportNoise`, `ToggleFlashlight`, `Jumpscare`, `RoundStatus`, `PuzzleStatus`
-   (all RemoteEvents, names are case-sensitive — see the `.txt` files in
-   `ReplicatedStorage/Remotes/`)
+   (and `DevControl` if you use the dev cheats) — all RemoteEvents, names are
+   case-sensitive — see the `.txt` files in `ReplicatedStorage/Remotes/`
 3. Paste each `.lua` file into the matching object per the table above
 4. Build the **Entity**: Avatar tab → Rig Builder → block rig → rename to `Entity`,
    set `PrimaryPart` = HumanoidRootPart, `CanCollide = false` on all other parts
@@ -120,11 +129,15 @@ Scales with the party — **per player: 2 fuses spawn, 1 fuse box, 1 lever.**
    more, the entity speeds up, and **the entity appears in that area** (~10 cells
    off — near, not on top of you).
 3. **All boxes full → the levers unlock** (also wall-mounted, near the map edges,
-   spread far apart, so the party has to **split up**). Once the boxes are done
-   there's a chance every 10s of **ALERT** (red pulsing lights + siren) — 50% the
-   first roll, 5% after.
-4. **Flick every lever within 10 seconds of each other.** Pulling one turns its
-   light green — the signal (use voice chat) for everyone else to pull theirs.
+   spread far apart, so the party has to **split up**). Each box has a **coloured
+   wire** on the floor leading to its lever — follow it to navigate. Once the
+   boxes are done there's a chance every 10s of **ALERT** (red pulsing lights +
+   siren) — 50% the first roll, 5% after.
+4. **Flick every lever within 10 seconds of each other.** Each lever wears a
+   **column of status lights** (one per lever, on the side of the plate) showing
+   every lever's on/off, so you can read progress from any of them. **Clutch:** if a teammate dies, the 10-second sync is
+   dropped — levers become flip-and-stay, so survivors can pull them at their own
+   pace (they still have to find and pull them all).
 5. **All levers together → the lights drop** (a few stay faintly on; the entity
    becomes a blinking beacon), the **EXIT opens in the outer wall** with the
    entity guarding it. Reach the exit to **win** (level 2 later).
@@ -138,16 +151,27 @@ later, just keep the names. Tuning is at the top of `PuzzleManager.Script.lua`
 
 ## 🔊 Audio
 
-Paste your own audio asset IDs into the slots — any left `""` is silent.
+**Every sound ID lives in one place** — the slots at the top of
+`SoundController.LocalScript.lua`. Paste your asset IDs there; any left `""` is
+silent.
 
-| Sound | Where | Behaviour |
-|---|---|---|
-| Ambience | `SoundController.LocalScript.lua` | constant background drone (2D) |
-| Breathing | `SoundController.LocalScript.lua` | swells louder as the Entity nears — no direction |
-| Footsteps (walk/run) | `SoundController.LocalScript.lua` | your own steps; sneaking is silent |
-| Entity sound | `ENTITY_SOUND` in `EntityAI.Script.lua` | looping growl/drone, **positional** (you hear which way) |
-| Alert siren | `ALERT_SOUND` in `SoundController.LocalScript.lua` | plays during ALERT (red-lights) mode |
-| Jumpscare | `JUMPSCARE_SOUND` in `JumpscareUI.LocalScript.lua` | plays on death |
+| Slot (`SoundController`) | Behaviour |
+|---|---|
+| `AMBIENCE_SOUND` | constant background drone (2D) |
+| `BREATHING_SOUND` | **your own** winded breathing — fades in below 50% stamina, lingers until full |
+| `FOOTSTEP_WALK` / `FOOTSTEP_RUN` | your own steps; sneaking is silent |
+| `ALERT_SOUND` | plays during ALERT (red-lights) mode |
+| `ENTITY_SOUND` | the Entity's looping growl, **positional** (you hear which way) |
+| `ENTITY_STEP_WALK` / `ENTITY_STEP_RUN` | the Entity's footstep thumps, **positional** (walk vs chase pace) |
+| `IDLE_SOUNDS` (×3) | random idle vocalisations while it roams, **positional** (fill 1–3) |
+| `CHASE_SOUND` | loops while it's actively chasing you, **positional** (off during a yell) |
+| `LUNGE_SOUND` | telegraph cue as it winds up a pounce, **positional** |
+| `YELL_SOUND` | the Entity's roar when it shoves you off a pit beam, **positional** |
+| `DEATH_SOUND` | the scream **alive** players hear when someone dies, positional at the kill (quieter further away) |
+| `JUMPSCARE_SOUND` | the **dying** player's own jumpscare sound (2D, only they hear it) |
+
+(The jumpscare's optional full-screen **image** stays in `JumpscareUI.LocalScript.lua`
+as `JUMPSCARE_IMAGE` — that's a visual, not a sound.)
 
 ## ⚙️ Key tuning knobs (top of `MazeGenerator.Script.lua`)
 
@@ -167,23 +191,30 @@ Entity difficulty lives at the top of `EntityAI.Script.lua`
 **Done**
 - [x] Procedural maze — corridors, plazas, pit rooms, centered elevator
 - [x] Round loop — elevator intro, one life, win/lose
-- [x] Entity AI — sight (cone + close-range) · hearing footsteps · frame-tight chase · pit avoidance
+- [x] Entity AI — sight (cone + close-range) · hearing footsteps · frame-tight chase
+- [x] **Chase upgrades** — pathfinds around corners (no more wall-humping), walks
+      nearer room centres, and **lurks toward open room middles** when idle
+- [x] **Lunge** — freezes to telegraph (0.5s), then pounces to where you stand and stops
+- [x] **Pit "yell"** — can't cross the beams, so it walks to the edge, faces you,
+      roars, and shoves you off with a steady push **you can walk against**
 - [x] Puzzle win — fuses → fuse boxes → levers → exit _(placeholder shapes; model them)_
-- [x] Clutch — a fallen teammate's lever latches on, no more 10s sync
-- [x] Audio hooks — ambience, breathing, footsteps, entity, alert, jumpscare _(drop in asset IDs)_
+- [x] Clutch — a teammate's death drops the 10s lever sync (flip-and-stay)
 - [x] **Player fog** — limited view distance (Atmosphere removed, tight legacy fog)
 - [x] Pit falls kill · Entity can't get stuck in / enter pit fields
+- [x] **Lever status lights** · **fuse-box → lever wire** (rides the floor/beams)
+- [x] **No interacting through walls** — ProximityPrompts require line of sight
+- [x] **Flashlight battery** (flicker warnings) · **Stamina** (no bar, felt)
+- [x] **Spectate teammates while dead** (Q/E)
+- [x] **Custom Entity model** — walk/run animations in, self fill-light so it isn't
+      pure black; yell/lunge animation **slots ready** (paste IDs in EntityAnimation)
+- [x] **Audio hub** — every sound id in one place (`SoundController`): ambience,
+      winded breathing, footsteps, alert, entity growl/idle/chase/lunge/yell/steps,
+      death scream (alive, positional) + dying player's own jumpscare
+- [x] **Dev cheats** — ESP · noclip fly · pause Entity (`P`) · push immunity (`I`)
 
-**Next**
-- [ ] **Lever status lights** — each lever shows a row of lights for ALL levers, so
-      you can read which are already on/off from any lever
-- [ ] **Fuse-box → lever wire** — a visible cable/marker linking each box to its
-      lever, to follow for navigation
+**Next** _(friend is filling animation + sound IDs tonight)_
+- [ ] **Drop in remaining animation IDs** — yell, lunge (`EntityAnimation`)
+- [ ] **Drop in remaining sound IDs** — breathing, footsteps, alert, idle, jumpscare,
+      lunge, entity steps (`SoundController`)
 - [ ] **More decor**
-- [ ] **Stage hazard** — Entity can throw objects at players stranded on pit beams
-- [ ] **No interacting through walls** — ProximityPrompts require line of sight
-- [ ] **Flashlight battery** — drains with use / limited, not always-on
-- [ ] **Stamina** — sprint is limited, not unlimited
 - [ ] Level 2 (the exit currently just wins)
-- [ ] Spectate teammates while dead
-- [ ] Custom Entity model + walk animation _(fixes the visual "gliding")_

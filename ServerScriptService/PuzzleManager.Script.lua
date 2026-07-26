@@ -21,6 +21,7 @@
 
 local Players = game:GetService("Players")
 local RS = game:GetService("ReplicatedStorage")
+local PathfindingService = game:GetService("PathfindingService")
 
 local status = RS:WaitForChild("Remotes"):WaitForChild("PuzzleStatus")
 
@@ -35,7 +36,7 @@ local ALERT_TIME    = 8      -- seconds an alert lasts
 local FLICK_PER_FUSE = 0.6   -- FlickerBoost added per fuse inserted
 local SPEED_PER_FUSE = 0.06  -- EntitySpeedMul added per fuse inserted
 local END_SPEED_MUL  = 1.6   -- entity speed once the exit opens
-local ENTITY_AREA_CELLS = 10 -- entity appears ~this many cells from the box
+local ENTITY_AREA_CELLS = 5  -- entity appears ~this many cells from the box
 local EDGE_BAND      = 3      -- levers/exit spawn within this many cells of an edge
 -- ──────────────────────────────────────────────────────────
 
@@ -120,7 +121,7 @@ local function makePrompt(parent, action, obj, dist)
 	pp.ObjectText = obj or ""
 	pp.HoldDuration = 0
 	pp.MaxActivationDistance = dist or 9
-	pp.RequiresLineOfSight = false
+	pp.RequiresLineOfSight = true -- can't interact through walls
 	pp.Parent = parent
 	return pp
 end
@@ -346,9 +347,10 @@ local function makeBox(cf, folder)
 		Color3.fromRGB(70, 70, 75), Enum.Material.Metal, model, "Body")
 	local ind = build(cf, Vector3.new(0.8, 0.8, 0.2), CFrame.new(0.9, 0.9, -1.02),
 		Color3.fromRGB(200, 40, 40), Enum.Material.Neon, model, "Indicator")
+	ind.CanQuery = false -- must not block the prompt's / entity's line of sight
 	local pp = makePrompt(body, "Insert Fuse", "Fuse Box (0/" .. FUSES_PER_BOX .. ")", 9)
 	model.Parent = folder
-	return { model = model, body = body, ind = ind, prompt = pp, count = 0, complete = false }
+	return { model = model, cf = cf, body = body, ind = ind, prompt = pp, count = 0, complete = false }
 end
 
 local function makeLever(cf, folder)
@@ -362,13 +364,25 @@ local function makeLever(cf, folder)
 	handle.Anchored = true
 	handle.Color = Color3.fromRGB(160, 30, 30)
 	handle.CFrame = cf * CFrame.new(0, 0.2, -0.6) * CFrame.Angles(math.rad(35), 0, 0)
+	handle.CanQuery = false -- red handle must not block line of sight to the prompt
 	handle.Parent = model
-	local ind = build(cf, Vector3.new(0.5, 0.5, 0.2), CFrame.new(0.7, 1.1, -0.35),
-		Color3.fromRGB(200, 40, 40), Enum.Material.Neon, model, "Indicator")
-	local pp = makePrompt(plate, "Pull Lever", "Lever (locked)", 9)
+	-- put the prompt on an invisible anchor set OUT IN FRONT of the handle, so
+	-- the protruding red handle can never sit between the player and the prompt
+	-- (the line-of-sight check still hits real walls → no interacting through them)
+	local anchor = Instance.new("Part")
+	anchor.Name = "Interact"
+	anchor.Size = Vector3.new(2, 3, 0.3)
+	anchor.Transparency = 1
+	anchor.Anchored = true
+	anchor.CanCollide = false
+	anchor.CanQuery = false
+	anchor.CFrame = cf * CFrame.new(0, 0.2, -1.4)
+	anchor.Parent = model
+	local pp = makePrompt(anchor, "Pull Lever", "Lever (locked)", 9)
 	pp.Enabled = false
 	model.Parent = folder
-	return { model = model, cf = cf, plate = plate, handle = handle, ind = ind, prompt = pp, activeUntil = 0 }
+	-- no own indicator: the status-light column already shows this lever's state
+	return { model = model, cf = cf, plate = plate, handle = handle, prompt = pp, activeUntil = 0 }
 end
 
 local function setLeverHandle(lever, pulled)
@@ -466,8 +480,10 @@ local function startPuzzle()
 			-- ramp the danger; the entity shows up in the AREA (not on top of you)
 			workspace:SetAttribute("FlickerBoost",
 				math.min(attr("FlickerBoost", 0) + FLICK_PER_FUSE, 4))
+			-- fuse boxes ramp the entity's speed by at most +10% total (the big
+			-- finale boost happens later, when the exit opens: END_SPEED_MUL)
 			workspace:SetAttribute("EntitySpeedMul",
-				math.min(attr("EntitySpeedMul", 1) + SPEED_PER_FUSE, 1.5))
+				math.min(attr("EntitySpeedMul", 1) + SPEED_PER_FUSE, 1.1))
 			entityToArea(box.body.Position, ENTITY_AREA_CELLS)
 
 			if box.count >= FUSES_PER_BOX then
@@ -499,9 +515,9 @@ local function startPuzzle()
 			else
 				lever.activeUntil = os.clock() + LEVER_WINDOW
 			end
-			lever.ind.Color = Color3.fromRGB(50, 220, 60) -- GREEN: tell your team
 			setLeverHandle(lever, true)
 			status:FireAllClients("lever")
+			if session.updateLeverLights then session.updateLeverLights() end
 
 			-- a lever counts as ON if it's latched OR still inside its window
 			local all = true
@@ -515,8 +531,8 @@ local function startPuzzle()
 				task.delay(LEVER_WINDOW + 0.1, function()
 					if session and session.active and session.stage == "levers"
 						and not lever.latched and os.clock() >= lever.activeUntil then
-						lever.ind.Color = Color3.fromRGB(200, 40, 40)
 						setLeverHandle(lever, false)
+						if session.updateLeverLights then session.updateLeverLights() end
 					end
 				end)
 			end
@@ -526,44 +542,334 @@ local function startPuzzle()
 	-- CLUTCH: when a teammate dies or leaves, their lever latches ON for good and
 	-- the levers stop needing the 10s simultaneity — survivors just flip the rest
 	-- at their own pace (coordination gets unfair as the party shrinks)
-	local function onParticipantDown()
+	local function onParticipantDown(reason)
 		if not session or not session.active then return end
+		if session.latchMode then return end -- already clutched; don't re-log
+		-- a death only DROPS the 10s simultaneity requirement — levers now
+		-- flip-and-STAY. It does NOT turn any lever on: survivors still have to
+		-- find and pull every lever themselves, just without the timing pressure.
+		-- (If levers "stay on with nobody dead", this print will name the cause —
+		-- usually a teammate you didn't see die, since there's no alive count.)
+		print("[Puzzle] Clutch engaged (" .. tostring(reason) ..
+			"): levers are now flip-and-stay, 10s sync dropped")
 		session.latchMode = true
-		-- lock in any lever currently being held so it can't time out
+		-- lock in any lever currently being held so it can't time out on them
 		for _, lv in ipairs(session.levers) do
 			if not lv.latched and os.clock() < lv.activeUntil then
 				lv.latched = true
 				lv.prompt.Enabled = false
 			end
 		end
-		-- latch one more — the fallen teammate's lever
-		for _, lv in ipairs(session.levers) do
-			if not lv.latched then
-				lv.latched = true
-				lv.ind.Color = Color3.fromRGB(50, 220, 60)
-				setLeverHandle(lv, true)
-				lv.prompt.Enabled = false
-				break
-			end
-		end
-		-- maybe that was the last one needed
-		if session.stage == "levers" then
-			local all = true
-			for _, lv in ipairs(session.levers) do
-				if not (lv.latched or os.clock() < lv.activeUntil) then all = false break end
-			end
-			if all then session.onLevers() end
-		end
+		if session.updateLeverLights then session.updateLeverLights() end
 	end
 
 	for _, p in ipairs(Players:GetPlayers()) do
 		local char = p.Character
 		local hum = char and char:FindFirstChildOfClass("Humanoid")
 		if hum and hum.Health > 0 then
-			table.insert(session.conns, hum.Died:Connect(onParticipantDown))
+			table.insert(session.conns, hum.Died:Connect(function()
+				onParticipantDown("death: " .. p.Name)
+			end))
 		end
 	end
-	table.insert(session.conns, Players.PlayerRemoving:Connect(onParticipantDown))
+	table.insert(session.conns, Players.PlayerRemoving:Connect(function(lp)
+		onParticipantDown("left: " .. lp.Name)
+	end))
+
+	-- ── lever status lights: each lever wears a row showing EVERY lever's state
+	do
+		local N = #session.levers
+		for _, lv in ipairs(session.levers) do
+			lv.statusLights = {}
+			for j = 1, N do
+				-- one light per lever, stacked DOWN a column on the side of the
+				-- plate; past 4 it starts a second column on the other side
+				local col = math.floor((j - 1) / 4) -- 0 = left, 1 = right
+				local row = (j - 1) % 4
+				local ox = (col == 0) and -0.7 or 0.7
+				local oy = 1.05 - row * 0.6
+				lv.statusLights[j] = build(lv.cf, Vector3.new(0.32, 0.32, 0.15),
+					CFrame.new(ox, oy, -0.5),
+					Color3.fromRGB(120, 20, 20), Enum.Material.Neon, lv.model, "Status")
+				lv.statusLights[j].CanQuery = false
+			end
+		end
+	end
+
+	function session.updateLeverLights()
+		if not session then return end
+		for _, lv in ipairs(session.levers) do
+			if lv.statusLights then
+				for j, sl in ipairs(lv.statusLights) do
+					local other = session.levers[j]
+					local on = other and (other.latched or os.clock() < other.activeUntil)
+					sl.Color = on and Color3.fromRGB(50, 220, 60) or Color3.fromRGB(120, 20, 20)
+				end
+			end
+		end
+	end
+	session.updateLeverLights()
+
+	-- ── fuse box → lever wire: a glowing floor cable you can follow, plus
+	-- matching coloured tags on the box and its paired lever
+	-- bold, distinct "wire" colours (pair 1 = red)
+	local WIRE_COLORS = {
+		Color3.fromRGB(230, 40, 40),  -- red
+		Color3.fromRGB(50, 120, 255), -- blue
+		Color3.fromRGB(50, 200, 70),  -- green
+		Color3.fromRGB(240, 210, 40), -- yellow
+		Color3.fromRGB(210, 70, 230), -- purple
+		Color3.fromRGB(0, 210, 210),  -- cyan
+	}
+
+	local GRIDn = attr("GRID", 40)
+	local CELLn = attr("CELL", 24)
+	local On = attr("ORIGIN", -480)
+	local mazeModel = workspace:FindFirstChild("Maze")
+
+	local function cellWorld(x, z) return On + (x - 0.5) * CELLn, On + (z - 0.5) * CELLn end
+	local function cellOf(p)
+		return math.clamp(math.floor((p.X - On) / CELLn) + 1, 1, GRIDn),
+			math.clamp(math.floor((p.Z - On) / CELLn) + 1, 1, GRIDn)
+	end
+	local function frontCell(cf)
+		local p = (cf * CFrame.new(0, 0, -3)).Position
+		return cellOf(p)
+	end
+
+	-- can you walk straight between two adjacent cells (no wall between)? memoised
+	local openCache = {}
+	local function openBetween(x, z, nx, nz)
+		local k = x .. "," .. z .. ">" .. nx .. "," .. nz
+		if openCache[k] ~= nil then return openCache[k] end
+		local ax, az = cellWorld(x, z)
+		local bx, bz = cellWorld(nx, nz)
+		local fya, fyb = floorY(ax, az), floorY(bx, bz)
+		local res = false
+		if fya and fyb and mazeModel then
+			local a = Vector3.new(ax, fya + 3, az)
+			local b = Vector3.new(bx, fyb + 3, bz)
+			local rp = RaycastParams.new()
+			rp.FilterType = Enum.RaycastFilterType.Include
+			rp.FilterDescendantsInstances = { mazeModel }
+			res = workspace:Raycast(a, b - a, rp) == nil
+		end
+		openCache[k] = res
+		return res
+	end
+
+	-- BFS on the maze grid → list of cells (axis-aligned steps only, never diagonal)
+	local function gridPath(sx, sz, gx, gz)
+		local key = function(x, z) return x .. "," .. z end
+		local q, seen, prev, head = { { sx, sz } }, { [key(sx, sz)] = true }, {}, 1
+		while head <= #q do
+			local cur = q[head]; head += 1
+			if cur[1] == gx and cur[2] == gz then break end
+			for _, d in ipairs({ { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } }) do
+				local nx, nz = cur[1] + d[1], cur[2] + d[2]
+				if nx >= 1 and nx <= GRIDn and nz >= 1 and nz <= GRIDn
+					and not seen[key(nx, nz)] and openBetween(cur[1], cur[2], nx, nz) then
+					seen[key(nx, nz)] = true
+					prev[key(nx, nz)] = cur
+					q[#q + 1] = { nx, nz }
+				end
+			end
+		end
+		if not seen[key(gx, gz)] then return nil end
+		local path, cur = {}, { gx, gz }
+		while cur do
+			table.insert(path, 1, cur)
+			cur = prev[key(cur[1], cur[2])]
+		end
+		return path
+	end
+
+	local function turningPoints(cells)
+		if #cells <= 2 then return cells end
+		local turns = { cells[1] }
+		for i = 2, #cells - 1 do
+			local a, b, c = cells[i - 1], cells[i], cells[i + 1]
+			if (b[1] - a[1]) ~= (c[1] - b[1]) or (b[2] - a[2]) ~= (c[2] - b[2]) then
+				turns[#turns + 1] = b
+			end
+		end
+		turns[#turns + 1] = cells[#cells]
+		return turns
+	end
+
+	-- offset a straight run toward the nearer perpendicular wall (~2 studs off)
+	local function runOffset(a, b)
+		local along = (math.abs(b.X - a.X) > math.abs(b.Z - a.Z)) and "X" or "Z"
+		local mid = (a + b) / 2
+		local origin = Vector3.new(mid.X, (floorY(mid.X, mid.Z) or 0) + 3, mid.Z)
+		local pDir = (along == "X") and Vector3.new(0, 0, 1) or Vector3.new(1, 0, 0)
+		local rp = RaycastParams.new()
+		rp.FilterType = Enum.RaycastFilterType.Include
+		rp.FilterDescendantsInstances = { mazeModel }
+		local hp = workspace:Raycast(origin, pDir * CELLn, rp)
+		local hm = workspace:Raycast(origin, -pDir * CELLn, rp)
+		local dp = hp and (hp.Position - origin).Magnitude or math.huge
+		local dm = hm and (hm.Position - origin).Magnitude or math.huge
+		if dp <= dm and hp then return along, math.max(dp - 2, 0)
+		elseif hm then return along, -math.max(dm - 2, 0)
+		else return along, 0 end
+	end
+
+	-- one short piece of matte cable between two fixed points
+	local function layPiece(a, b, color)
+		local len = (b - a).Magnitude
+		if len <= 0.05 then return end
+		local seg = Instance.new("Part")
+		seg.Anchored = true
+		seg.CanCollide = false
+		seg.CanQuery = false
+		seg.Material = Enum.Material.SmoothPlastic
+		seg.Color = color
+		seg.Size = Vector3.new(0.25, 0.06, len)
+		seg.CFrame = CFrame.lookAt((a + b) / 2, b)
+		seg.Parent = folder
+	end
+
+	-- lay cable from a→b RIDING THE ACTUAL FLOOR, breaking over holes so it never
+	-- floats across a pit — it sits on the beams instead. Solid runs stay a single
+	-- part (fast path); only pit-crossing runs get subdivided.
+	local function laySeg(a, b, color)
+		local total = (b - a).Magnitude
+		if total <= 0.05 then return end
+		local dir = b - a
+		local checks = math.max(2, math.floor(total / 6))
+		local simple = true
+		for i = 0, checks do
+			local p = a + dir * (i / checks)
+			if not floorY(p.X, p.Z) then simple = false break end
+		end
+		if simple then
+			layPiece(
+				Vector3.new(a.X, (floorY(a.X, a.Z) or 0) + 0.06, a.Z),
+				Vector3.new(b.X, (floorY(b.X, b.Z) or 0) + 0.06, b.Z), color)
+			return
+		end
+		-- crosses a hole field: step along, follow the floor, skip the gaps
+		local steps = math.max(1, math.ceil(total / 3))
+		local prev = nil
+		for i = 0, steps do
+			local p = a + dir * (i / steps)
+			local fy = floorY(p.X, p.Z)
+			if fy then
+				local gp = Vector3.new(p.X, fy + 0.06, p.Z)
+				if prev then layPiece(prev, gp, color) end
+				prev = gp
+			else
+				prev = nil -- over a hole → break the cable (don't bridge the void)
+			end
+		end
+	end
+
+	-- a vertical riser (the cable climbing the wall up into a box / lever)
+	local function layRiser(x, z, y0, y1, color)
+		local len = math.abs(y1 - y0)
+		if len <= 0.05 then return end
+		local seg = Instance.new("Part")
+		seg.Anchored = true
+		seg.CanCollide = false
+		seg.CanQuery = false
+		seg.Material = Enum.Material.SmoothPlastic
+		seg.Color = color
+		seg.Size = Vector3.new(0.25, len, 0.25)
+		seg.CFrame = CFrame.new(x, (y0 + y1) / 2, z)
+		seg.Parent = folder
+	end
+
+	-- run the cable from a floor vertex to directly under the wall object, then
+	-- UP into it, so it reads as actually connected (not just stopping nearby)
+	local function connectEnd(endVert, cf, color)
+		local ev = Vector3.new(endVert.X, (floorY(endVert.X, endVert.Z) or 0) + 0.06, endVert.Z)
+		-- floor point flush against the wall, right under the object
+		local foot = (cf * CFrame.new(0, 0, -0.12)).Position
+		local y0 = ev.Y
+		-- 90° L along the floor (X leg, then Z leg) — reach the wall base
+		local corner = Vector3.new(foot.X, y0, ev.Z)
+		laySeg(ev, corner, color)
+		laySeg(corner, Vector3.new(foot.X, y0, foot.Z), color)
+		-- climb the wall and STOP at the object's bottom (cf.Y is the centre,
+		-- body ~3 tall → bottom is 1.5 below) so it vanishes into it, no overshoot
+		layRiser(foot.X, foot.Z, y0, cf.Position.Y - 1.5, color)
+	end
+
+	-- fallback when the grid BFS can't route (e.g. a station tucked in an odd
+	-- spot): a plain right-angle L on the floor so a wire ALWAYS appears
+	local function layWireDirect(fromCF, toCF, color)
+		local a = (fromCF * CFrame.new(0, 0, -3)).Position
+		local b = (toCF * CFrame.new(0, 0, -3)).Position
+		local y = (floorY(a.X, a.Z) or 0) + 0.06
+		local p1 = Vector3.new(a.X, y, a.Z)
+		local corner = Vector3.new(b.X, y, a.Z)
+		local p2 = Vector3.new(b.X, y, b.Z)
+		laySeg(p1, corner, color)
+		laySeg(corner, p2, color)
+		connectEnd(p1, fromCF, color)
+		connectEnd(p2, toCF, color)
+	end
+
+	local function layWire(fromCF, toCF, color)
+		if not mazeModel then return end
+		local sx, sz = frontCell(fromCF)
+		local gx, gz = frontCell(toCF)
+		local cells = gridPath(sx, sz, gx, gz)
+		if not cells or #cells < 2 then
+			layWireDirect(fromCF, toCF, color) -- BFS failed → guarantee a wire
+			return
+		end
+		local turns = turningPoints(cells)
+
+		local W = {}
+		for _, t in ipairs(turns) do
+			local wx, wz = cellWorld(t[1], t[2])
+			W[#W + 1] = Vector3.new(wx, 0, wz)
+		end
+
+		-- per-segment perpendicular offset (hug the wall)
+		local axis, konst = {}, {}
+		for i = 1, #W - 1 do
+			local al, off = runOffset(W[i], W[i + 1])
+			axis[i] = al
+			konst[i] = (al == "X") and ((W[i].Z + W[i + 1].Z) / 2 + off)
+				or ((W[i].X + W[i + 1].X) / 2 + off)
+		end
+
+		-- vertices: start · corners (offset-line intersections) · end — all 90°
+		local verts = {}
+		verts[1] = (axis[1] == "X") and Vector3.new(W[1].X, 0, konst[1])
+			or Vector3.new(konst[1], 0, W[1].Z)
+		for i = 1, #axis - 1 do
+			if axis[i] == "X" then
+				verts[#verts + 1] = Vector3.new(konst[i + 1], 0, konst[i])
+			else
+				verts[#verts + 1] = Vector3.new(konst[i], 0, konst[i + 1])
+			end
+		end
+		local L = #axis
+		verts[#verts + 1] = (axis[L] == "X") and Vector3.new(W[#W].X, 0, konst[L])
+			or Vector3.new(konst[L], 0, W[#W].Z)
+
+		for i = 1, #verts - 1 do
+			local a = Vector3.new(verts[i].X, (floorY(verts[i].X, verts[i].Z) or 0) + 0.06, verts[i].Z)
+			local b = Vector3.new(verts[i + 1].X, (floorY(verts[i + 1].X, verts[i + 1].Z) or 0) + 0.06, verts[i + 1].Z)
+			laySeg(a, b, color)
+		end
+
+		-- tie both ends up into the box and the lever
+		connectEnd(verts[1], fromCF, color)
+		connectEnd(verts[#verts], toCF, color)
+	end
+
+	for i, box in ipairs(session.boxes) do
+		local lever = session.levers[i]
+		if lever then
+			local color = WIRE_COLORS[((i - 1) % #WIRE_COLORS) + 1]
+			layWire(box.cf, lever.cf, color)
+		end
+	end
 
 	-- exit: a doorway in the OUTER BORDER wall (you're actually leaving), dim
 	-- and closed until the levers are pulled
@@ -592,6 +898,14 @@ local function startPuzzle()
 			lv.prompt.ObjectText = "Lever"
 		end
 		status:FireAllClients("levers")
+
+		-- keep the status rows accurate as temporary levers' windows lapse
+		task.spawn(function()
+			while session and session.active and session.stage == "levers" do
+				if session.updateLeverLights then session.updateLeverLights() end
+				task.wait(0.5)
+			end
+		end)
 
 		task.spawn(function()
 			local first = true

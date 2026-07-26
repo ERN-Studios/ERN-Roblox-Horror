@@ -1,0 +1,12 @@
+NOT a script — this is an object you insert in Studio.
+
+Right-click the "Remotes" folder (under ReplicatedStorage)
+→ Insert Object → RemoteEvent → rename to: DevControl
+
+Used by: DevCheats (client) → EntityAI (server)
+Purpose: the P dev-cheat pauses/unpauses the Entity.
+Name is case-sensitive — must be exactly "DevControl".
+
+TESTING ONLY — this is part of the DevCheats system. Remove both
+(this RemoteEvent + DevCheats) before publishing, or the pause can
+be triggered by any client.
