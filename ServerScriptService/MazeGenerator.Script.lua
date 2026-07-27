@@ -21,6 +21,11 @@ PhysicsService:CollisionGroupSetCollidable("PitBarrier", "Default", false)
 PhysicsService:CollisionGroupSetCollidable("PitBarrier", "Entity", true)
 PhysicsService:CollisionGroupSetCollidable("PitBarrier", "PitBarrier", false)
 
+-- decor (furniture) is solid for PLAYERS, but the entity passes straight through
+-- it so it can never get snagged/stuck on a chair or table while chasing
+pcall(function() PhysicsService:RegisterCollisionGroup("Decor") end)
+PhysicsService:CollisionGroupSetCollidable("Decor", "Entity", false)
+
 -- stop the entity free-falling during generation — its Studio spot has no floor
 -- under it. Anchor it now; EntityAI drops it on the floor once the maze exists.
 do
@@ -48,10 +53,10 @@ local PLAZA_R     = 3      -- radius (cells) of the one GUARANTEED plaza
 local PIT_ZONES      = 2     -- hole fields per level (always at least this many)
 local PIT_ZONE_CELLS = 6     -- zone size in MAZE CELLS per axis (1 cell = 24 studs).
                              -- 6 → 144×144 studs → 6×6 = 36 big holes. Max ~12.
-local PIT_HOLE       = 21    -- hole size in studs
-local PIT_GAP        = 2     -- beam width between holes, in studs (tight but walkable)
+local PIT_HOLE       = 12    -- hole size in studs
+local PIT_GAP        = 1     -- beam width between holes, in studs (tight but walkable)
 local PIT_DEPTH      = 50    -- how far down the shaft goes
-local PIT_SAFE_CELLS = 1     -- min cell distance from the start/entity corners
+local PIT_SAFE_CELLS = 0     -- min cell distance from the start/entity corners
 
 local LIGHT_EVERY = 2      -- ceiling light every N cells
 local LIGHT_SIZE  = 4      -- light panel size — matches CEILING_TILE so one
@@ -85,25 +90,61 @@ local ELEV_FLOOR_TEXTURE = "" -- cabin floor (over the marble)
 local ELEV_DOOR_TEXTURE  = "" -- door faces
 local ELEV_TILE = 4           -- studs per repeat inside the cabin
 
--- Optional mold/grime overlay (your own decal, transparent PNG).
--- Draw the mold hanging from the TOP of the image, rest transparent — it's
--- tiled once over the wall height, so image-top = wall-top.
-local MOLD_TEXTURE = ""
-local MOLD_CHANCE  = 0.22 -- fraction of maze walls that get mold
-
--- Optional wall drawings / graffiti / clues (your own decals). Each is stamped
--- once at a readable size on a random wall — add as many IDs as you like.
-local WALL_ART = {
-	-- "rbxassetid://...",
+-- Optional MOLD overlay (your own decals, transparent PNGs) — up to 5 variants,
+-- picked at random per wall. Draw the mold hanging from the TOP of the image,
+-- rest transparent — it's tiled once over the wall height, so image-top =
+-- wall-top. Spawns on the top of maze walls AND wraps the top of every pit-shaft
+-- wall. Plug in IDs when you have them; leave empty and no mold generates.
+local MOLD_TEXTURES = {
+	-- "rbxassetid://...",  -- mold 1
+	-- "rbxassetid://...",  -- mold 2
+	-- "rbxassetid://...",  -- mold 3
+	-- "rbxassetid://...",  -- mold 4
+	-- "rbxassetid://...",  -- mold 5
 }
-local WALL_ART_CHANCE = 0.05 -- per maze wall
-local WALL_ART_SIZE   = 8    -- stamp size in studs
+local MOLD_CHANCE  = 0.22 -- fraction of walls that get mold
 
--- Optional carpet stains (your own decals), stamped flat on random floor cells.
+-- Optional ARTWORK / drawings / clues (your own decals) — up to 5 variants.
+-- Each is stamped once, CENTERED on a wall (middle height, middle of the panel).
+local ARTWORK = {
+	-- "rbxassetid://...",  -- artwork 1
+	-- "rbxassetid://...",  -- artwork 2
+	-- "rbxassetid://...",  -- artwork 3
+	-- "rbxassetid://...",  -- artwork 4
+	-- "rbxassetid://...",  -- artwork 5
+}
+local ARTWORK_CHANCE = 0.05 -- per maze wall
+local ARTWORK_SIZE   = 8    -- stamp size in studs
+
+-- Optional STAIN decals (your own) — up to 5 variants. Stamped flat on random
+-- floor tiles, ANYWHERE on the carpet.
 local STAIN_TEXTURES = {
-	-- "rbxassetid://...",
+	-- "rbxassetid://...",  -- stain 1
+	-- "rbxassetid://...",  -- stain 2
+	-- "rbxassetid://...",  -- stain 3
+	-- "rbxassetid://...",  -- stain 4
+	-- "rbxassetid://...",  -- stain 5
 }
 local STAIN_CHANCE = 0.06 -- per floor cell
+
+-- ── decor / furniture props ───────────────────────────────
+-- Self-built from primitive Parts (the Toolbox model IDs mostly failed to load /
+-- came in sideways, so we build our own — always upright, correctly sized, no
+-- InsertService needed). Each prop's model is defined in DECOR_BUILDERS lower
+-- down; here you tune size/rarity/placement. DECOR_DENSITY is the master knob.
+local DECOR_DENSITY = 0.1      -- chance PER eligible cell that it tries a prop
+local DECOR_COLLIDE = true     -- props are solid for players; the entity walks through
+local DECOR_SCALE_JITTER = 0.2 -- ±fraction random size wobble per prop (weird-gen look)
+local DECOR_MIN_GAP = 2        -- same-type props must be MORE than this many cells apart
+-- place = "room" (alone in the middle of an open cell) or "wall" (against a wall)
+-- weight = relative pick chance · height = studs tall (per-object size knob)
+local PROPS = {
+	{ name = "Chair",            height = 3.5, place = "room", weight = 3 },
+	{ name = "Table",            height = 3.2, place = "room", weight = 2, phone = true }, -- carries a phone
+	{ name = "CardboardBox",     height = 2.6, place = "wall", weight = 3 },
+	{ name = "Printer",          height = 4.5, place = "wall", weight = 2 },
+	{ name = "GrandfatherClock", height = 8.5, place = "wall", weight = 1 },
+}
 -- ──────────────────────────────────────────────────────────
 
 if SEED then math.randomseed(SEED) end
@@ -141,14 +182,20 @@ end
 WALL_TEXTURE = resolveTexture(WALL_TEXTURE)
 FLOOR_TEXTURE = resolveTexture(FLOOR_TEXTURE)
 CEILING_TEXTURE = resolveTexture(CEILING_TEXTURE)
-MOLD_TEXTURE = resolveTexture(MOLD_TEXTURE)
 LIGHT_TEXTURE = resolveTexture(LIGHT_TEXTURE)
 DEAD_LIGHT_TEXTURE = resolveTexture(DEAD_LIGHT_TEXTURE)
 ELEV_WALL_TEXTURE = resolveTexture(ELEV_WALL_TEXTURE)
 ELEV_FLOOR_TEXTURE = resolveTexture(ELEV_FLOOR_TEXTURE)
 ELEV_DOOR_TEXTURE = resolveTexture(ELEV_DOOR_TEXTURE)
-for i, id in ipairs(WALL_ART) do WALL_ART[i] = resolveTexture(id) end
+for i, id in ipairs(MOLD_TEXTURES) do MOLD_TEXTURES[i] = resolveTexture(id) end
+for i, id in ipairs(ARTWORK) do ARTWORK[i] = resolveTexture(id) end
 for i, id in ipairs(STAIN_TEXTURES) do STAIN_TEXTURES[i] = resolveTexture(id) end
+
+-- pick a random mold decal, or nil if none configured
+local function pickMold()
+	if #MOLD_TEXTURES == 0 then return nil end
+	return MOLD_TEXTURES[math.random(#MOLD_TEXTURES)]
+end
 
 local function key(x, z) return x .. "," .. z end
 
@@ -415,24 +462,23 @@ end
 local WALL_FACES = { Enum.NormalId.Front, Enum.NormalId.Back,
 	Enum.NormalId.Left, Enum.NormalId.Right }
 
--- stamp a single fixed-size decal onto one face of a maze wall (drawings/clues)
-local function stampWallArt(cf, size)
-	if #WALL_ART == 0 or math.random() >= WALL_ART_CHANCE then return end
-	local id = WALL_ART[math.random(#WALL_ART)]
+-- stamp one artwork decal CENTERED on a maze wall face — dead middle of the
+-- panel horizontally, wall-mid height vertically (so it reads like hung art)
+local function stampArtwork(cf, size)
+	if #ARTWORK == 0 or math.random() >= ARTWORK_CHANCE then return end
+	local id = ARTWORK[math.random(#ARTWORK)]
 	local thinX = size.X < size.Z
-	local sign = (math.random() < 0.5) and 1 or -1
+	local sign = (math.random() < 0.5) and 1 or -1 -- which face of the wall
 	local half = (thinX and size.X or size.Z) / 2
-	local longLen = thinX and size.Z or size.X
-	local jit = (math.random() * 2 - 1) * math.max((longLen - WALL_ART_SIZE) / 2, 0)
-	local y = cf.Y + (math.random() * 2 - 1) * math.max((WALL_H - WALL_ART_SIZE) / 2 - 0.5, 0)
+	local y = cf.Y -- wall CFrame Y is the wall's vertical centre → middle height
 
 	local pos, normal
 	if thinX then
 		normal = Vector3.new(sign, 0, 0)
-		pos = Vector3.new(cf.X + sign * (half + 0.05), y, cf.Z + jit)
+		pos = Vector3.new(cf.X + sign * (half + 0.05), y, cf.Z) -- centred on Z
 	else
 		normal = Vector3.new(0, 0, sign)
-		pos = Vector3.new(cf.X + jit, y, cf.Z + sign * (half + 0.05))
+		pos = Vector3.new(cf.X, y, cf.Z + sign * (half + 0.05)) -- centred on X
 	end
 
 	local p = Instance.new("Part")
@@ -440,7 +486,7 @@ local function stampWallArt(cf, size)
 	p.CanCollide = false
 	p.CanQuery = false
 	p.Transparency = 1
-	p.Size = Vector3.new(WALL_ART_SIZE, WALL_ART_SIZE, 0.05)
+	p.Size = Vector3.new(ARTWORK_SIZE, ARTWORK_SIZE, 0.05)
 	p.CFrame = CFrame.new(pos, pos + normal) -- Front face points outward
 	local d = Instance.new("Decal")
 	d.Texture = id
@@ -453,10 +499,11 @@ local function wallPart(size, cf, parent)
 	local p = part(size, cf, WALL_COLOR, nil, parent)
 	applyTexture(p, WALL_TEXTURE, WALL_FACES, WALL_TILE)
 	-- random mold overlay hanging from the top of some walls
-	if MOLD_TEXTURE ~= "" and math.random() < MOLD_CHANCE then
+	local mold = pickMold()
+	if mold and math.random() < MOLD_CHANCE then
 		for _, face in ipairs(WALL_FACES) do
 			local t = Instance.new("Texture")
-			t.Texture = MOLD_TEXTURE
+			t.Texture = mold
 			t.Face = face
 			t.StudsPerTileU = 12
 			t.StudsPerTileV = WALL_H -- one vertical repeat: image top = wall top
@@ -465,8 +512,8 @@ local function wallPart(size, cf, parent)
 			t.Parent = p
 		end
 	end
-	-- wall art only on real maze walls (not the elevator shell / pit walls)
-	if not parent then stampWallArt(cf, size) end
+	-- artwork only on real maze walls (not the elevator shell / pit walls)
+	if not parent then stampArtwork(cf, size) end
 	return p
 end
 
@@ -501,6 +548,7 @@ local O = -SIZE / 2 -- world coord of the maze's min edge
 -- publish maze data + shared game state for PuzzleManager / EntityAI to read
 workspace:SetAttribute("GRID", GRID)
 workspace:SetAttribute("CELL", CELL)
+workspace:SetAttribute("WALL_H", WALL_H)
 workspace:SetAttribute("ORIGIN", O)
 workspace:SetAttribute("ELEV_X", ELEV_X)
 workspace:SetAttribute("ELEV_Y", ELEV_Y)
@@ -599,10 +647,11 @@ local function deepBeam(alongX, px, pz, length)
 			applyTexture(p, WALL_TEXTURE, WALL_FACES, WALL_TILE, Color3.new(shade, shade, shade))
 		end
 		-- mold wraps the top band of every hole wall in the pit zones
-		if MOLD_TEXTURE ~= "" and yTop == -1 then
+		local pitMold = (yTop == -1) and pickMold() or nil
+		if pitMold then
 			for _, face in ipairs(WALL_FACES) do
 				local t = Instance.new("Texture")
-				t.Texture = MOLD_TEXTURE
+				t.Texture = pitMold
 				t.Face = face
 				t.StudsPerTileU = 8
 				t.StudsPerTileV = h
@@ -738,20 +787,33 @@ do
 	wallPart(Vector3.new(CELL, WALL_H, 2), CFrame.new(cx, WALL_H / 2, z0 + 1), elev)   -- south
 	wallPart(Vector3.new(CELL, WALL_H, 2), CFrame.new(cx, WALL_H / 2, z1 - 1), elev)   -- north
 	wallPart(Vector3.new(2, WALL_H, CELL), CFrame.new(x0 + 1, WALL_H / 2, cz), elev)   -- west (back)
-	-- east face: header above the doors + fillers leaving an 8-stud opening
-	wallPart(Vector3.new(2, WALL_H - 10, CELL), CFrame.new(x1 - 1, (WALL_H + 10) / 2, cz), elev)
-	wallPart(Vector3.new(2, 10, 8), CFrame.new(x1 - 1, 5, z0 + 4), elev)
-	wallPart(Vector3.new(2, 10, 8), CFrame.new(x1 - 1, 5, z1 - 4), elev)
+	-- east face: a BLACK elevator frame around the doors (header + side fillers)
+	-- instead of yellow wall — so from the maze it reads as a proper elevator
+	-- entrance ("there's supposed to be an elevator here"). 8-stud opening.
+	local FRAME = Color3.fromRGB(14, 14, 17)
+	part(Vector3.new(2, WALL_H - 10, CELL), CFrame.new(x1 - 1, (WALL_H + 10) / 2, cz), FRAME, Enum.Material.Metal, elev)
+	part(Vector3.new(2, 10, 8), CFrame.new(x1 - 1, 5, z0 + 4), FRAME, Enum.Material.Metal, elev)
+	part(Vector3.new(2, 10, 8), CFrame.new(x1 - 1, 5, z1 - 4), FRAME, Enum.Material.Metal, elev)
 
-	-- sliding stainless doors (named for GameManager; they slide ±4 now)
-	local doorL = part(Vector3.new(1, 10, 4), CFrame.new(x1 - 1, 5, cz - 2),
+	-- sliding stainless doors (named for GameManager; they slide ±4 now). Thicker
+	-- than the 2-stud wall cavity (2.2) so no yellow shell can peek at the edges;
+	-- being wider than the fillers, an open door hides them inside it (no z-fight).
+	local doorL = part(Vector3.new(2.2, 10, 4), CFrame.new(x1 - 1, 5, cz - 2),
 		STEEL_DARK, Enum.Material.Metal, elev)
 	doorL.Name = "DoorL"
-	local doorR = part(Vector3.new(1, 10, 4), CFrame.new(x1 - 1, 5, cz + 2),
+	local doorR = part(Vector3.new(2.2, 10, 4), CFrame.new(x1 - 1, 5, cz + 2),
 		STEEL_DARK, Enum.Material.Metal, elev)
 	doorR.Name = "DoorR"
 	applyTexture(doorL, ELEV_DOOR_TEXTURE, WALL_FACES, ELEV_TILE)
 	applyTexture(doorR, ELEV_DOOR_TEXTURE, WALL_FACES, ELEV_TILE)
+
+	-- threshold GAP: a dark, near-flush band across the doorway — the shadow gap
+	-- between a building floor and the elevator car. Cosmetic (the carpet tile
+	-- under it carries the player), and it hides the door bottoms at the seam.
+	local sill = part(Vector3.new(2.6, 0.3, 8), CFrame.new(x1 - 1, 0.0, cz),
+		Color3.fromRGB(8, 8, 10), Enum.Material.Metal, elev)
+	sill.CanCollide = false
+	sill.CanQuery = false
 
 	elev.Parent = workspace
 
@@ -798,6 +860,55 @@ do
 		elevLamp.Range = depth + 8
 		elevLamp.Color = Color3.fromRGB(255, 240, 210)
 		elevLamp.Parent = lightPanel
+
+		-- cosmetic FLOOR SELECTOR by the doors: a lit button panel with numbers.
+		-- Purely decorative — no collision, no query, does nothing.
+		do
+			local selX = xFront - 1.2                 -- near the doors
+			local selZ = cz + CAB_W / 2 - 0.07         -- flush against the +Z side wall (was floating)
+			local plate = part(Vector3.new(1.5, 3, 0.12), CFrame.new(selX, 4.6, selZ),
+				Color3.fromRGB(30, 30, 34), Enum.Material.Metal, cabin)
+			plate.CanCollide = false
+			plate.CanQuery = false
+
+			local gui = Instance.new("SurfaceGui")
+			gui.Face = Enum.NormalId.Front             -- Front = -Z → faces the cabin
+			gui.CanvasSize = Vector2.new(150, 300)
+			gui.Parent = plate
+
+			-- current-floor readout
+			local readout = Instance.new("TextLabel")
+			readout.Size = UDim2.new(1, -12, 0, 48)
+			readout.Position = UDim2.new(0, 6, 0, 6)
+			readout.BackgroundColor3 = Color3.fromRGB(8, 8, 10)
+			readout.TextColor3 = Color3.fromRGB(255, 140, 50)
+			readout.Font = Enum.Font.Gotham
+			readout.TextScaled = true
+			readout.Text = "\u{25B2} 1"
+			readout.Parent = gui
+			local rc = Instance.new("UICorner"); rc.CornerRadius = UDim.new(0, 6); rc.Parent = readout
+
+			-- floor buttons grid
+			local holder = Instance.new("Frame")
+			holder.Size = UDim2.new(1, -12, 1, -66)
+			holder.Position = UDim2.new(0, 6, 0, 60)
+			holder.BackgroundTransparency = 1
+			holder.Parent = gui
+			local grid = Instance.new("UIGridLayout")
+			grid.CellSize = UDim2.new(0, 62, 0, 46)
+			grid.CellPadding = UDim2.new(0, 6, 0, 6)
+			grid.Parent = holder
+			for f = 1, 8 do
+				local b = Instance.new("TextLabel")
+				b.Text = tostring(f)
+				b.Font = Enum.Font.Gotham
+				b.TextScaled = true
+				b.TextColor3 = Color3.fromRGB(235, 235, 240)
+				b.BackgroundColor3 = (f == 1) and Color3.fromRGB(70, 120, 60) or Color3.fromRGB(45, 45, 52)
+				b.Parent = holder
+				local bc = Instance.new("UICorner"); bc.CornerRadius = UDim.new(0, 6); bc.Parent = b
+			end
+		end
 
 		pad.Size = Vector3.new(math.max(depth - 3, 4), 1, CAB_W - 2)
 		pad.Position = Vector3.new(bx, 0.5, cz)
@@ -869,6 +980,286 @@ for x = 2, GRID, LIGHT_EVERY do
 	end
 end
 
+-- ── decor / furniture props ───────────────────────────────
+-- Built from primitive Parts (self-contained, always UPRIGHT & correctly sized —
+-- the Toolbox model IDs mostly failed to load / came in sideways). Room props
+-- (chairs/tables) sit alone in open cells; wall props (boxes/printers/clocks)
+-- stand against a wall facing in; tables carry a phone. One chair is GUARANTEED
+-- in the plaza. Everything is in the Decor collision group so the entity walks
+-- through it and never gets stuck. Wrapped in a function to keep its locals out
+-- of the main chunk's scope (no asset loading, so it still runs synchronously).
+task.spawn(function()
+	local decorFolder = Instance.new("Folder")
+	decorFolder.Name = "Decor"
+	decorFolder.Parent = workspace
+
+	-- one anchored part inside a decor model
+	local function dpart(model, size, cf, color, material)
+		local p = Instance.new("Part")
+		p.Size = size
+		p.CFrame = cf
+		p.Color = color
+		p.Material = material or Enum.Material.SmoothPlastic
+		p.Anchored = true
+		p.TopSurface = Enum.SurfaceType.Smooth
+		p.BottomSurface = Enum.SurfaceType.Smooth
+		p.Parent = model
+		return p
+	end
+
+	local WOOD      = Color3.fromRGB(96, 64, 38)
+	local WOOD_DARK = Color3.fromRGB(66, 43, 25)
+	local CARD      = Color3.fromRGB(178, 142, 92)
+	local CARD_DARK = Color3.fromRGB(150, 116, 72)
+	local PLASTIC   = Color3.fromRGB(210, 206, 196)
+	local BLACK     = Color3.fromRGB(24, 24, 26)
+	local CREAM     = Color3.fromRGB(226, 220, 198)
+
+	-- each builder returns a fresh Model, UPRIGHT, front facing -Z, base near y=0
+	-- (placeOnFloor re-seats it). Natural sizes; scaleToHeight normalises them.
+	local DECOR_BUILDERS = {}
+
+	DECOR_BUILDERS.Chair = function()
+		local m = Instance.new("Model"); m.Name = "Chair"
+		local seatY = 1.7
+		local seat = dpart(m, Vector3.new(2, 0.3, 2), CFrame.new(0, seatY, 0), WOOD)
+		dpart(m, Vector3.new(2, 2, 0.25), CFrame.new(0, seatY + 1.1, -0.9), WOOD) -- backrest
+		for _, c in ipairs({ { 0.8, 0.8 }, { -0.8, 0.8 }, { 0.8, -0.8 }, { -0.8, -0.8 } }) do
+			dpart(m, Vector3.new(0.22, seatY, 0.22), CFrame.new(c[1], seatY / 2, c[2]), WOOD_DARK)
+		end
+		m.PrimaryPart = seat
+		return m
+	end
+
+	DECOR_BUILDERS.Table = function()
+		local m = Instance.new("Model"); m.Name = "Table"
+		local topY = 2.7
+		local top = dpart(m, Vector3.new(5, 0.3, 3), CFrame.new(0, topY, 0), WOOD)
+		for _, c in ipairs({ { 2.2, 1.2 }, { -2.2, 1.2 }, { 2.2, -1.2 }, { -2.2, -1.2 } }) do
+			dpart(m, Vector3.new(0.28, topY, 0.28), CFrame.new(c[1], topY / 2, c[2]), WOOD_DARK)
+		end
+		m.PrimaryPart = top
+		return m
+	end
+
+	DECOR_BUILDERS.Telephone = function()
+		local m = Instance.new("Model"); m.Name = "Telephone"
+		local base = dpart(m, Vector3.new(1.2, 0.45, 1), CFrame.new(0, 0.22, 0), BLACK)
+		dpart(m, Vector3.new(1.3, 0.28, 0.32), CFrame.new(0, 0.62, -0.15), BLACK)              -- handset
+		dpart(m, Vector3.new(0.5, 0.1, 0.5), CFrame.new(0.15, 0.47, 0.2), Color3.fromRGB(60, 60, 64)) -- dial
+		m.PrimaryPart = base
+		return m
+	end
+
+	DECOR_BUILDERS.CardboardBox = function()
+		local m = Instance.new("Model"); m.Name = "CardboardBox"
+		local s = 2.4
+		local bh = s * 0.85                 -- body a touch shorter so the flaps read
+		local mat = Enum.Material.SmoothPlastic -- matte cardboard, not wood grain
+		local body = dpart(m, Vector3.new(s, bh, s), CFrame.new(0, bh / 2, 0), CARD, mat)
+		-- four lid flaps hinged at the top rim, opened outward ~48°
+		local flap, ang = s * 0.55, math.rad(48)
+		local dz, dy = flap * 0.33, flap * 0.37 -- outward / upward offset of the flap centre
+		dpart(m, Vector3.new(s, 0.08, flap), CFrame.new(0, bh + dy, -s / 2 - dz) * CFrame.Angles(ang, 0, 0), CARD_DARK, mat)
+		dpart(m, Vector3.new(s, 0.08, flap), CFrame.new(0, bh + dy,  s / 2 + dz) * CFrame.Angles(-ang, 0, 0), CARD_DARK, mat)
+		dpart(m, Vector3.new(flap, 0.08, s), CFrame.new(-s / 2 - dz, bh + dy, 0) * CFrame.Angles(0, 0, -ang), CARD_DARK, mat)
+		dpart(m, Vector3.new(flap, 0.08, s), CFrame.new( s / 2 + dz, bh + dy, 0) * CFrame.Angles(0, 0, ang), CARD_DARK, mat)
+		-- a FULL box of files: many thin sheets packed in a neat row, standing up
+		-- out of the box (packed along Z, so you read a stack of many page edges)
+		local inner = s - 0.45
+		local sheets = 11
+		local paperCols = {
+			Color3.fromRGB(236, 232, 220), Color3.fromRGB(224, 214, 190),
+			Color3.fromRGB(212, 206, 192), Color3.fromRGB(230, 226, 214),
+		}
+		for i = 1, sheets do
+			local fz = -inner / 2 + (i - 0.5) * (inner / sheets)
+			local fhh = 0.8 + math.random() * 0.4 -- slight per-sheet height variation
+			dpart(m, Vector3.new(inner * 0.85, fhh, 0.05),
+				CFrame.new(0, bh + fhh / 2 - 0.15, fz),
+				paperCols[(i % #paperCols) + 1], mat)
+		end
+		m.PrimaryPart = body
+		return m
+	end
+
+	DECOR_BUILDERS.Printer = function()
+		local m = Instance.new("Model"); m.Name = "Printer"
+		local body = dpart(m, Vector3.new(3, 2, 2.4), CFrame.new(0, 1, 0), PLASTIC)
+		dpart(m, Vector3.new(2.6, 0.3, 1.4), CFrame.new(0, 2.05, -0.1), Color3.fromRGB(90, 90, 96))   -- tray
+		dpart(m, Vector3.new(2, 0.05, 1.2), CFrame.new(0, 2.25, -0.6), Color3.fromRGB(245, 245, 240)) -- paper
+		dpart(m, Vector3.new(0.8, 0.5, 0.05), CFrame.new(0.9, 1.4, -1.22), Color3.fromRGB(40, 44, 52), Enum.Material.Neon) -- panel (front)
+		m.PrimaryPart = body
+		return m
+	end
+
+	DECOR_BUILDERS.GrandfatherClock = function()
+		local m = Instance.new("Model"); m.Name = "GrandfatherClock"
+		local cab = dpart(m, Vector3.new(2, 9, 1.2), CFrame.new(0, 4.5, 0), WOOD)      -- cabinet
+		dpart(m, Vector3.new(1.5, 3, 0.1), CFrame.new(0, 4, -0.62), BLACK)             -- pendulum window
+		dpart(m, Vector3.new(1.5, 1.5, 0.15), CFrame.new(0, 7.6, -0.62), CREAM)        -- clock face (front -Z)
+		-- two hands pivoted at the face centre, each spun to a RANDOM angle so
+		-- every clock reads a different time
+		local function hand(len, w)
+			local h = dpart(m, Vector3.new(w, len, 0.06), CFrame.new(0, 7.6, -0.72), BLACK)
+			h.CFrame = CFrame.new(0, 7.6, -0.72) * CFrame.Angles(0, 0, math.random() * math.pi * 2) * CFrame.new(0, len / 2, 0)
+			return h
+		end
+		hand(0.55, 0.12) -- hour
+		hand(0.85, 0.08) -- minute
+		m.PrimaryPart = cab
+		return m
+	end
+
+	local function scaleToHeight(model, target)
+		local _, size = model:GetBoundingBox()
+		if size.Y > 0.01 then pcall(function() model:ScaleTo(target / size.Y) end) end
+	end
+
+	local function prep(model)
+		for _, d in ipairs(model:GetDescendants()) do
+			if d:IsA("BasePart") then
+				d.Anchored = true
+				d.CanCollide = DECOR_COLLIDE
+				d.CollisionGroup = "Decor" -- entity passes through → never stuck
+				d.CanQuery = false -- invisible to raycasts: furniture must NOT block
+				                   -- the entity's line-of-sight (it was stopping the
+				                   -- entity from spotting players through/past props)
+			end
+		end
+	end
+
+	-- drop a model so its bounding-box bottom rests on the floor (y = 0), with an
+	-- optional inward-facing look direction (else random yaw) plus an extra yaw so
+	-- you can correct a model whose "front" isn't -Z. Rotation-safe.
+	local function placeOnFloor(model, px, pz, lookDir, extraYaw)
+		local baseCF
+		if lookDir then
+			baseCF = CFrame.lookAt(Vector3.new(px, 100, pz), Vector3.new(px, 100, pz) + lookDir)
+				* CFrame.Angles(0, extraYaw or 0, 0)
+		else
+			baseCF = CFrame.new(px, 100, pz) * CFrame.Angles(0, math.random() * math.pi * 2, 0)
+		end
+		model:PivotTo(baseCF)
+		local cf, size = model:GetBoundingBox()
+		model:PivotTo(model:GetPivot() + Vector3.new(0, 0 - (cf.Y - size.Y / 2), 0))
+	end
+
+	-- build → scale (with a random size wobble) → prep → place; returns the model
+	local function spawnProp(name, height, px, pz, lookDir)
+		local build = DECOR_BUILDERS[name]
+		if not build then return nil end
+		local model = build()
+		local h = height * (1 + (math.random() * 2 - 1) * DECOR_SCALE_JITTER)
+		scaleToHeight(model, h)
+		prep(model)
+		placeOnFloor(model, px, pz, lookDir)
+		model.Parent = decorFolder
+		return model
+	end
+
+	-- centre a phone on top of a placed table
+	local function addPhone(tableModel)
+		local cf, size = tableModel:GetBoundingBox()
+		local phone = DECOR_BUILDERS.Telephone()
+		scaleToHeight(phone, 0.9); prep(phone)
+		phone:PivotTo(CFrame.new(cf.X, 200, cf.Z) * CFrame.Angles(0, math.random() * math.pi * 2, 0))
+		local pcf, psize = phone:GetBoundingBox()
+		phone:PivotTo(phone:GetPivot() + Vector3.new(
+			cf.X - pcf.X, (cf.Y + size.Y / 2) - (pcf.Y - psize.Y / 2), cf.Z - pcf.Z))
+		phone.Parent = decorFolder
+	end
+
+	-- which sides of a cell have a wall (border counts as a wall)
+	local function presentWalls(x, z)
+		return {
+			east  = (x == GRID) or wallV[x][z],
+			west  = (x == 1) or wallV[x - 1][z],
+			north = (z == GRID) or wallH[x][z],
+			south = (z == 1) or wallH[x][z - 1],
+		}
+	end
+
+	-- same-type spacing: a prop can't spawn within DECOR_MIN_GAP cells of another
+	-- of the SAME kind (so no two chairs / two printers cluster up)
+	local placedCells = {}
+	local function propHeight(name)
+		for _, p in ipairs(PROPS) do if p.name == name then return p.height end end
+		return 3
+	end
+	local function tooClose(name, x, z)
+		local list = placedCells[name]
+		if not list then return false end
+		for _, c in ipairs(list) do
+			if math.max(math.abs(c[1] - x), math.abs(c[2] - z)) <= DECOR_MIN_GAP then return true end
+		end
+		return false
+	end
+	local function record(name, x, z)
+		placedCells[name] = placedCells[name] or {}
+		table.insert(placedCells[name], { x, z })
+	end
+
+	-- GUARANTEED: a lone chair in the middle of the plaza
+	spawnProp("Chair", propHeight("Chair"), O + (fx - 0.5) * CELL, O + (fz - 0.5) * CELL, nil)
+	record("Chair", fx, fz)
+
+	for x = 1, GRID do
+		for z = 1, GRID do
+			local k = key(x, z)
+			if pitCellSet[k] then continue end
+			-- keep clear of the elevator room and its cell
+			if math.max(math.abs(x - ELEV_X), math.abs(z - ELEV_Y)) <= ELEV_CLEAR then continue end
+			if math.random() > DECOR_DENSITY then continue end
+
+			local walls = presentWalls(x, z)
+			local wcount = 0
+			for _, v in pairs(walls) do if v then wcount += 1 end end
+			local fcx, fcz = O + (x - 0.5) * CELL, O + (z - 0.5) * CELL
+
+			-- room props want an OPEN cell (≤1 wall); wall props want a wall — and
+			-- must not sit within DECOR_MIN_GAP cells of the same prop type
+			local candidates = {}
+			for _, prop in ipairs(PROPS) do
+				local fits = (prop.place == "room" and wcount <= 1)
+					or (prop.place == "wall" and wcount >= 1)
+				if fits and not tooClose(prop.name, x, z) then
+					for _ = 1, prop.weight do table.insert(candidates, prop) end
+				end
+			end
+			if #candidates == 0 then continue end
+
+			local prop = candidates[math.random(#candidates)]
+			record(prop.name, x, z)
+			local model
+			if prop.place == "wall" then
+				-- sit against a present wall, front (-Z) facing into the room, but
+				-- JITTERED along the wall so it isn't dead-centre on the panel
+				local opts = {}
+				if walls.east  then table.insert(opts, { Vector3.new(1, 0, 0), Vector3.new(-1, 0, 0) }) end
+				if walls.west  then table.insert(opts, { Vector3.new(-1, 0, 0), Vector3.new(1, 0, 0) }) end
+				if walls.north then table.insert(opts, { Vector3.new(0, 0, 1), Vector3.new(0, 0, -1) }) end
+				if walls.south then table.insert(opts, { Vector3.new(0, 0, -1), Vector3.new(0, 0, 1) }) end
+				local o = opts[math.random(#opts)]
+				local wallDir, inward = o[1], o[2]
+				local along = Vector3.new(-wallDir.Z, 0, wallDir.X) -- runs ALONG the wall
+				local j = (math.random() * 2 - 1) * (CELL * 0.28)
+				local px = fcx + wallDir.X * (CELL / 2 - 1.5) + along.X * j
+				local pz = fcz + wallDir.Z * (CELL / 2 - 1.5) + along.Z * j
+				model = spawnProp(prop.name, prop.height, px, pz, inward)
+			else
+				-- room prop: offset randomly within the cell so it isn't always
+				-- dead-centre (chairs strewn about, not on a grid)
+				local jx = (math.random() * 2 - 1) * (CELL * 0.25)
+				local jz = (math.random() * 2 - 1) * (CELL * 0.25)
+				model = spawnProp(prop.name, prop.height, fcx + jx, fcz + jz, nil)
+			end
+
+			if model and prop.phone then addPhone(model) end
+		end
+	end
+end)
+
 maze.Parent = workspace
 
 -- ── markers for GameManager (invisible, no collision) ─────
@@ -909,8 +1300,8 @@ Lighting.GlobalShadows = true
 local _atmos = Lighting:FindFirstChildOfClass("Atmosphere")
 if _atmos then _atmos:Destroy() end
 Lighting.FogColor = Color3.fromRGB(16, 14, 9)   -- dark, close fog — dread, not haze
-Lighting.FogStart = 8
-Lighting.FogEnd = 95                            -- players can't see much past ~4 cells
+Lighting.FogStart = 14
+Lighting.FogEnd = 150                           -- see a bit further (~6 cells) — less oppressive than before
 
 -- color grade: desaturated, contrast-crushed, sickly warm tint
 local grade = Lighting:FindFirstChild("MongoGrade") or Instance.new("ColorCorrectionEffect")

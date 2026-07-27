@@ -16,24 +16,25 @@ gui.Name = "PuzzleGui"
 gui.ResetOnSpawn = false
 gui.Parent = player:WaitForChild("PlayerGui")
 
-local function makeLabel(yOffset, color)
+local function makeLabel(yOffset)
 	local l = Instance.new("TextLabel")
 	l.AnchorPoint = Vector2.new(1, 1)
 	l.Position = UDim2.new(1, -16, 1, yOffset)
 	l.Size = UDim2.new(0, 200, 0, 30)
 	l.BackgroundColor3 = Color3.new(0, 0, 0)
-	l.BackgroundTransparency = 0.45
+	l.BackgroundTransparency = 0.82 -- much more see-through
 	l.BorderSizePixel = 0
-	l.Font = Enum.Font.SpecialElite
+	l.Font = Enum.Font.Gotham -- loads fast (no first-use hitch) + clean B/W look
 	l.TextScaled = true
-	l.TextColor3 = color
+	l.TextColor3 = Color3.fromRGB(245, 245, 245) -- white, black-and-white theme
 	l.Visible = false
 	l.Parent = gui
+	local c = Instance.new("UICorner"); c.CornerRadius = UDim.new(0, 6); c.Parent = l
 	return l
 end
 
-local boxesLabel = makeLabel(-52, Color3.fromRGB(120, 220, 255))
-local carryLabel = makeLabel(-16, Color3.fromRGB(250, 220, 90))
+local boxesLabel = makeLabel(-52)
+local carryLabel = makeLabel(-16)
 
 local function show(on)
 	boxesLabel.Visible = on

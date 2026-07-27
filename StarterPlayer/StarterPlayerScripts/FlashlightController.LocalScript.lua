@@ -116,6 +116,85 @@ local MIN_TO_TURN_ON   = 5    -- can't switch on below this (must recharge a bit
 local battery = BATTERY_MAX
 local warned50, warned25 = false, false
 
+-- bottom-of-screen pop-up (shown when the battery dies)
+local popupGui = Instance.new("ScreenGui")
+popupGui.Name = "FlashlightPopup"
+popupGui.ResetOnSpawn = false
+popupGui.Parent = player:WaitForChild("PlayerGui")
+local popup = Instance.new("TextLabel")
+popup.AnchorPoint = Vector2.new(0.5, 1)
+popup.Position = UDim2.new(0.5, 0, 1, -26)
+popup.Size = UDim2.new(0, 360, 0, 34)
+popup.BackgroundColor3 = Color3.new(0, 0, 0)
+popup.BackgroundTransparency = 0.35
+popup.BorderSizePixel = 0
+popup.Font = Enum.Font.Gotham
+popup.TextScaled = true
+popup.TextColor3 = Color3.fromRGB(235, 95, 75)
+popup.Text = ""
+popup.Visible = false
+popup.Parent = popupGui
+local pc = Instance.new("UICorner"); pc.CornerRadius = UDim.new(0, 6); pc.Parent = popup
+
+local popupToken = 0
+local function showPopup(text, seconds)
+	popup.Text = text
+	popup.Visible = true
+	popupToken += 1
+	local mine = popupToken
+	task.delay(seconds or 2.5, function()
+		if popupToken == mine then popup.Visible = false end
+	end)
+end
+
+-- battery icon (5 bars, each = 20%; bars empty as it drains and the remaining
+-- ones shift white → red), bottom-left corner
+local batBody = Instance.new("Frame")
+batBody.Name = "Battery"
+batBody.AnchorPoint = Vector2.new(0, 1)
+batBody.Position = UDim2.new(0, 16, 1, -16)
+batBody.Size = UDim2.new(0, 78, 0, 28)
+batBody.BackgroundColor3 = Color3.fromRGB(10, 10, 12)
+batBody.BackgroundTransparency = 0.35
+batBody.BorderSizePixel = 0
+batBody.Parent = popupGui
+local batStroke = Instance.new("UIStroke")
+batStroke.Color = Color3.fromRGB(225, 225, 230); batStroke.Thickness = 2; batStroke.Parent = batBody
+local batCorner = Instance.new("UICorner"); batCorner.CornerRadius = UDim.new(0, 4); batCorner.Parent = batBody
+-- positive terminal nub on the right
+local nub = Instance.new("Frame")
+nub.AnchorPoint = Vector2.new(0, 0.5)
+nub.Position = UDim2.new(1, 2, 0.5, 0)
+nub.Size = UDim2.new(0, 4, 0, 12)
+nub.BackgroundColor3 = Color3.fromRGB(225, 225, 230); nub.BorderSizePixel = 0
+nub.Parent = batBody
+local nubCorner = Instance.new("UICorner"); nubCorner.CornerRadius = UDim.new(0, 2); nubCorner.Parent = nub
+-- 5 bar cells laid out left→right
+local barHolder = Instance.new("Frame")
+barHolder.Size = UDim2.new(1, -8, 1, -8)
+barHolder.Position = UDim2.new(0, 4, 0, 4)
+barHolder.BackgroundTransparency = 1
+barHolder.Parent = batBody
+local barList = Instance.new("UIListLayout")
+barList.FillDirection = Enum.FillDirection.Horizontal
+barList.Padding = UDim.new(0, 3)
+barList.HorizontalAlignment = Enum.HorizontalAlignment.Left
+barList.VerticalAlignment = Enum.VerticalAlignment.Center
+barList.Parent = barHolder
+local batBars = {}
+for i = 1, 5 do
+	local bar = Instance.new("Frame")
+	bar.Size = UDim2.new(0, 10, 1, 0)
+	bar.BackgroundColor3 = Color3.fromRGB(245, 245, 245)
+	bar.BorderSizePixel = 0
+	bar.Parent = barHolder
+	local bc = Instance.new("UICorner"); bc.CornerRadius = UDim.new(0, 2); bc.Parent = bar
+	batBars[i] = bar
+end
+
+local BAT_FULL  = Color3.fromRGB(245, 245, 245) -- white at full
+local BAT_EMPTY = Color3.fromRGB(235, 60, 50)   -- red near empty
+
 local function setLights(state)
 	on = state
 	if coreLight then coreLight.Enabled = state end
@@ -141,7 +220,14 @@ local function warnBlink(times)
 	end)
 end
 
+local function alive()
+	local char = player.Character
+	local hum = char and char:FindFirstChildOfClass("Humanoid")
+	return hum and hum.Health > 0
+end
+
 local function toggle()
+	if not alive() then return end -- dead / spectating: no flashlight of your own
 	if on then
 		setLights(false)
 	elseif battery > MIN_TO_TURN_ON then
@@ -154,9 +240,13 @@ UIS.InputBegan:Connect(function(input, processed)
 	if input.KeyCode == Enum.KeyCode.F then toggle() end
 end)
 
--- flashlight resets to off on respawn
-player.CharacterAdded:Connect(function()
+-- on (re)spawn: light off, battery back to FULL (so it refills each round reset),
+-- and kill the beam the instant you die so a dead spectator isn't shining it
+player.CharacterAdded:Connect(function(char)
 	setLights(false)
+	battery = BATTERY_MAX
+	local hum = char:WaitForChild("Humanoid")
+	hum.Died:Connect(function() setLights(false) end)
 end)
 
 -- drain while on, recharge while off; die at empty
@@ -165,7 +255,8 @@ RunService.Heartbeat:Connect(function(dt)
 		battery = battery - DRAIN_PER_SEC * dt
 		if battery <= 0 then
 			battery = 0
-			setLights(false)
+			setLights(false) -- (sets `on` false, so this fires once at the drain-out)
+			showPopup("Flashlight dead — let it recharge", 3)
 		end
 	else
 		battery = math.min(BATTERY_MAX, battery + RECHARGE_PER_SEC * dt)
@@ -181,5 +272,18 @@ RunService.Heartbeat:Connect(function(dt)
 	elseif on and battery <= 50 and not warned50 then
 		warned50 = true
 		warnBlink(1)
+	end
+
+	-- battery bars: fill count + colour (white full → red near empty)
+	local filled = math.clamp(math.ceil(battery / 20), 0, 5)
+	local col = BAT_FULL:Lerp(BAT_EMPTY, math.clamp(1 - battery / 100, 0, 1))
+	for i, bar in ipairs(batBars) do
+		if i <= filled then
+			bar.BackgroundTransparency = 0
+			bar.BackgroundColor3 = col
+		else
+			bar.BackgroundTransparency = 0.7
+			bar.BackgroundColor3 = Color3.fromRGB(50, 50, 55)
+		end
 	end
 end)

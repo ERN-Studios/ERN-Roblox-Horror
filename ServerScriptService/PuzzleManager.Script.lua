@@ -413,6 +413,60 @@ local function makeExit(cf, folder)
 	return { model = model, sign = sign, light = light, trig = trig, open = false }
 end
 
+-- the SAFE ROOM you step into through the exit — a sealed elevator-style cabin
+-- built far OUTSIDE the maze, so the entity (barriered into the maze, no navmesh
+-- out here) can never reach it. For now it just looks like the start elevator, so
+-- escaping reads as "you looped"; later this becomes the level-2 start room.
+local function makeSafeRoom()
+	-- persistent: parented to workspace, NOT the puzzle folder. On a win
+	-- GameManager flips RoundActive off → clearPuzzle destroys the puzzle folder,
+	-- so a room parented there would vanish out from under the escaped player
+	-- (they'd fall until respawn). This survives until the next round rebuilds it.
+	local existing = workspace:FindFirstChild("SafeRoom")
+	if existing then existing:Destroy() end
+	local O = attr("ORIGIN", -480)
+	local cx, cz = O - 120, 0 -- well west of the maze, out of the entity's world
+	local model = Instance.new("Model")
+	model.Name = "SafeRoom"
+
+	local STEEL      = Color3.fromRGB(118, 122, 128)
+	local STEEL_DARK = Color3.fromRGB(88, 92, 98)
+	local MARBLE     = Color3.fromRGB(24, 24, 28)
+	local W, D, H = 16, 14, 11 -- interior width / depth / height
+
+	local function sp(pos, size, color, mat)
+		local p = Instance.new("Part")
+		p.Anchored = true
+		p.Size = size
+		p.CFrame = CFrame.new(pos)
+		p.Color = color
+		p.Material = mat or Enum.Material.Metal
+		p.TopSurface = Enum.SurfaceType.Smooth
+		p.BottomSurface = Enum.SurfaceType.Smooth
+		p.Parent = model
+		return p
+	end
+
+	sp(Vector3.new(cx, 0, cz), Vector3.new(W, 1, D), MARBLE, Enum.Material.Marble)          -- floor
+	sp(Vector3.new(cx, H, cz), Vector3.new(W, 1, D), STEEL_DARK)                            -- ceiling
+	sp(Vector3.new(cx - W / 2, H / 2, cz), Vector3.new(1, H, D), STEEL)                     -- back (west)
+	sp(Vector3.new(cx, H / 2, cz - D / 2), Vector3.new(W, H, 1), STEEL)                     -- south
+	sp(Vector3.new(cx, H / 2, cz + D / 2), Vector3.new(W, H, 1), STEEL)                     -- north
+	-- east face: header + two closed steel doors (the "elevator" you arrive in)
+	sp(Vector3.new(cx + W / 2, H - 1.5, cz), Vector3.new(1, 3, D), STEEL)                   -- header
+	sp(Vector3.new(cx + W / 2, (H - 3) / 2, cz - D / 4), Vector3.new(1, H - 3, D / 2), STEEL_DARK) -- door L
+	sp(Vector3.new(cx + W / 2, (H - 3) / 2, cz + D / 4), Vector3.new(1, H - 3, D / 2), STEEL_DARK) -- door R
+
+	local panel = sp(Vector3.new(cx, H - 0.6, cz), Vector3.new(3, 0.3, 3),
+		Color3.fromRGB(255, 250, 230), Enum.Material.Neon)
+	local lamp = Instance.new("PointLight")
+	lamp.Brightness = 1.5; lamp.Range = 26; lamp.Color = Color3.fromRGB(255, 240, 210)
+	lamp.Parent = panel
+
+	model.Parent = workspace
+	return CFrame.new(cx, 3.5, cz) -- where the escaping player lands
+end
+
 -- ── round lifecycle ───────────────────────────────────────
 local function clearPuzzle()
 	if not session then return end
@@ -484,7 +538,17 @@ local function startPuzzle()
 			-- finale boost happens later, when the exit opens: END_SPEED_MUL)
 			workspace:SetAttribute("EntitySpeedMul",
 				math.min(attr("EntitySpeedMul", 1) + SPEED_PER_FUSE, 1.1))
-			entityToArea(box.body.Position, ENTITY_AREA_CELLS)
+			-- summon the entity to the AREA — but NOT if it's already near the
+			-- player (don't teleport it right on top of them / it's already here)
+			local pchar = player.Character
+			local phrp = pchar and pchar:FindFirstChild("HumanoidRootPart")
+			local ent = workspace:FindFirstChild("Entity")
+			local eroot = ent and ent.PrimaryPart
+			local alreadyNear = phrp and eroot
+				and (phrp.Position - eroot.Position).Magnitude < ENTITY_AREA_CELLS * CELLv
+			if not alreadyNear then
+				entityToArea(box.body.Position, ENTITY_AREA_CELLS)
+			end
 
 			if box.count >= FUSES_PER_BOX then
 				box.complete = true
@@ -499,6 +563,10 @@ local function startPuzzle()
 		end))
 	end
 	session.boxCount = #session.boxes -- target = boxes actually placed
+
+	-- tell the clients to show the HUD NOW (before the heavier lever/wire build),
+	-- so the PuzzleUI doesn't lag behind the round start
+	status:FireAllClients("begin", session.boxCount * FUSES_PER_BOX, session.boxCount)
 
 	-- levers on walls near the edges, far apart, locked until the boxes are done
 	local leverSpacing = math.max(6 * CELLv, 0.22 * SIZEv)
@@ -625,6 +693,8 @@ local function startPuzzle()
 	local GRIDn = attr("GRID", 40)
 	local CELLn = attr("CELL", 24)
 	local On = attr("ORIGIN", -480)
+	local WALLHn = attr("WALL_H", 14)  -- ceiling height, for routing over pits
+	local wirePits = pitRects()        -- pit fields a floor cable can't cross
 	local mazeModel = workspace:FindFirstChild("Maze")
 
 	local function cellWorld(x, z) return On + (x - 0.5) * CELLn, On + (z - 0.5) * CELLn end
@@ -796,6 +866,33 @@ local function startPuzzle()
 		layRiser(foot.X, foot.Z, y0, cf.Position.Y - 1.5, color)
 	end
 
+	-- does a straight floor run pass over a pit (no floor under it)?
+	local function segCrossesPit(a, b)
+		local dx, dz = b.X - a.X, b.Z - a.Z
+		local dist = math.sqrt(dx * dx + dz * dz)
+		local steps = math.max(2, math.floor(dist / 4))
+		for s = 0, steps do
+			local t = s / steps
+			local x, z = a.X + dx * t, a.Z + dz * t
+			if inAnyPit(x, z, wirePits) or floorY(x, z) == nil then return true end
+		end
+		return false
+	end
+
+	-- a run that would cross a pit instead climbs the wall, runs across the
+	-- CEILING, and drops back down on the far side (so it never floats over/into
+	-- the void). a,b are the raw (y=0) floor vertices.
+	local function layOverhead(a, b, color)
+		local ay = (floorY(a.X, a.Z) or 0) + 0.06
+		local by = (floorY(b.X, b.Z) or 0) + 0.06
+		local topY = WALLHn - 0.4 -- just under the ceiling slab
+		layRiser(a.X, a.Z, ay, topY, color)
+		-- layPiece (NOT laySeg): a fixed straight part that ignores the floor, so
+		-- it stays up at the ceiling across the void instead of dropping into it
+		layPiece(Vector3.new(a.X, topY, a.Z), Vector3.new(b.X, topY, b.Z), color)
+		layRiser(b.X, b.Z, by, topY, color)
+	end
+
 	-- fallback when the grid BFS can't route (e.g. a station tucked in an odd
 	-- spot): a plain right-angle L on the floor so a wire ALWAYS appears
 	local function layWireDirect(fromCF, toCF, color)
@@ -853,9 +950,13 @@ local function startPuzzle()
 			or Vector3.new(konst[L], 0, W[#W].Z)
 
 		for i = 1, #verts - 1 do
-			local a = Vector3.new(verts[i].X, (floorY(verts[i].X, verts[i].Z) or 0) + 0.06, verts[i].Z)
-			local b = Vector3.new(verts[i + 1].X, (floorY(verts[i + 1].X, verts[i + 1].Z) or 0) + 0.06, verts[i + 1].Z)
-			laySeg(a, b, color)
+			if segCrossesPit(verts[i], verts[i + 1]) then
+				layOverhead(verts[i], verts[i + 1], color) -- up wall, over ceiling, down
+			else
+				local a = Vector3.new(verts[i].X, (floorY(verts[i].X, verts[i].Z) or 0) + 0.06, verts[i].Z)
+				local b = Vector3.new(verts[i + 1].X, (floorY(verts[i + 1].X, verts[i + 1].Z) or 0) + 0.06, verts[i + 1].Z)
+				laySeg(a, b, color)
+			end
 		end
 
 		-- tie both ends up into the box and the lever
@@ -875,10 +976,16 @@ local function startPuzzle()
 	-- and closed until the levers are pulled
 	local exitCF = pickExitOnBorder(stations, 5 * CELLv) or CFrame.new(0, 4, 0)
 	session.exit = makeExit(exitCF, folder)
+	session.safeSpawn = makeSafeRoom() -- the room you step into through the exit
 	table.insert(session.conns, session.exit.trig.Touched:Connect(function(hit)
 		if not session or not session.exit.open then return end
 		local p = Players:GetPlayerFromCharacter(hit.Parent)
 		if p then
+			-- step INTO the safe room the entity can't reach (reads as looping back
+			-- into the elevator for now; becomes the level-2 start room later)
+			local char = p.Character
+			local hrp = char and char:FindFirstChild("HumanoidRootPart")
+			if hrp and session.safeSpawn then hrp.CFrame = session.safeSpawn end
 			status:FireAllClients("win")
 			workspace:SetAttribute("PuzzleWon", true) -- GameManager ends the round
 		end
@@ -887,8 +994,6 @@ local function startPuzzle()
 	table.insert(session.conns, Players.PlayerRemoving:Connect(function(p)
 		if session then session.carried[p] = nil end
 	end))
-
-	status:FireAllClients("begin", session.boxCount * FUSES_PER_BOX, session.boxCount)
 
 	function session.onAllBoxes()
 		if session.stage ~= "fuses" then return end

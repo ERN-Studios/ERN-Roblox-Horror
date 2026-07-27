@@ -14,7 +14,7 @@ local status = RS:WaitForChild("Remotes"):WaitForChild("RoundStatus")
 
 -- ── tuning ────────────────────────────────────────────────
 local MIN_PLAYERS   = 1     -- raise to 2+ for real multiplayer rounds
-local ELEVATOR_TIME = 12    -- seconds with doors shut before each round
+local ELEVATOR_TIME = 19    -- seconds with doors shut before each round (matches the elevator sound length)
 -- (no round timer — the round ends only when the puzzle is solved or all die)
 -- ──────────────────────────────────────────────────────────
 
@@ -63,8 +63,9 @@ local function connectElevator()
 
 	local api = {}
 	function api.open()
-		TweenService:Create(doorL, info, { CFrame = closedL * CFrame.new(0, 0, -4) }):Play()
-		TweenService:Create(doorR, info, { CFrame = closedR * CFrame.new(0, 0, 4) }):Play()
+		-- retract 3.6 (not the full 4) so the thicker doors don't clip the frame
+		TweenService:Create(doorL, info, { CFrame = closedL * CFrame.new(0, 0, -3.6) }):Play()
+		TweenService:Create(doorR, info, { CFrame = closedR * CFrame.new(0, 0, 3.6) }):Play()
 	end
 	function api.close()
 		TweenService:Create(doorL, info, { CFrame = closedL }):Play()

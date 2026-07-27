@@ -96,6 +96,7 @@ local SPEED_LURK        = 8
 local SPEED_INVESTIGATE = 15
 local SPEED_CHASE       = 27.2  -- just faster than a sprinting player (sprint = 26)
 local SEARCH_TIME       = 12
+local TRACK_TIME        = 5     -- after LOSING sight it still knows your live position this long
 
 -- lunge: when a chase gets close it dashes to WHERE YOU ARE and stops there —
 -- a committed pounce, not an endless slide. Contact still kills via EntityKill;
@@ -105,7 +106,7 @@ local LUNGE_WINDUP      = 0.5   -- it FREEZES this long first (telegraph) before
 local LUNGE_SPEED       = 42    -- dash speed toward the captured spot
 local LUNGE_MAX_TIME    = 0.6   -- safety cap on the dash (it stops on arrival)
 local LUNGE_RECOVER     = 0.35  -- brief dead stop after it lands (kills the ice-slide)
-local LUNGE_COOLDOWN    = 2.5   -- min seconds between lunges (from wind-up start)
+local LUNGE_COOLDOWN    = 10    -- min seconds between lunges (from wind-up start)
 
 -- yell: it can't walk onto the pit beams, so it first WALKS TO THE PIT EDGE
 -- nearest you, faces you, winds up, then roars and shoves you off with a STEADY
@@ -119,8 +120,10 @@ local YELL_COOLDOWN     = 10    -- min seconds between yells at the same player 
 local YELL_WINDUP       = 0.6   -- pause after the roar before the push lands (sync w/ anim)
 local YELL_SOUND_LEAD   = 0.5   -- start the SOUND this long before the anim (it has an inhale)
 local YELL_EDGE_DIST    = 6     -- how close to the pit edge it must get before yelling
-local AGENT_RADIUS      = 6     -- pathfinding agent size — bigger keeps paths OFF the
-                                -- walls (walks nearer room centres); raise if model is big
+local AGENT_RADIUS      = 8     -- pathfinding agent size — bigger keeps paths OFF the
+                                -- walls / out of corners while NOT chasing (lurk/search
+                                -- are pathfinding-driven). Chase uses the velocity
+                                -- override, which still commits into corners after you.
 local AGENT_HEIGHT      = 8
 local WAYPOINT_TIME     = 1.5   -- seconds to reach one waypoint before re-planning
 -- ──────────────────────────────────────────────────────────
@@ -202,10 +205,9 @@ local State = { LURK = "LURK", INVESTIGATE = "INVESTIGATE",
 local current = State.LURK
 local lastKnownPos = nil
 local searchUntil = 0
-local moveToken = 0
-local chasePlayer = nil -- the player being chased (steered every frame)
-local lurkTarget = nil  -- current patrol goal (a room-middle it walks toward)
-local lurkPickedAt = 0
+local chasePlayer = nil -- the player currently in sight (drives the lunge)
+local trackPlayer = nil -- after losing sight it still tracks THIS player's live
+local trackUntil = 0    -- position until this time (the TRACK_TIME "memory" window)
 
 -- lunge state (driven in the chase Heartbeat)
 local lungePhase = 0            -- 0 idle · 1 wind-up (frozen telegraph) · 2 dashing
@@ -255,22 +257,50 @@ local function crossesPitZone(from, to)
 	return false
 end
 
--- is a maze wall between the entity and a target? Cast flat at body height (not
--- the lenient eye-to-head sight ray) — if it hits, a straight run would ram the
--- wall, so we hand off to pathfinding to go AROUND the corner instead.
+-- is a maze wall between the entity and a target? Single flat ray at body height
+-- — if it hits, a straight run would ram the wall, so hand off to pathfinding to
+-- go AROUND the corner. (A wider body-width check made it pathfind INTO corners
+-- and wedge, so we keep this to the direct line only.)
+local wbParams = RaycastParams.new()
+wbParams.FilterType = Enum.RaycastFilterType.Include
 local function wallBetween(targetPos)
 	local maze = workspace:FindFirstChild("Maze")
 	if not maze then return false end
+	wbParams.FilterDescendantsInstances = { maze }
 	local from = root.Position + Vector3.new(0, 2, 0)
 	local flat = Vector3.new(targetPos.X - from.X, 0, targetPos.Z - from.Z)
 	local d = flat.Magnitude
 	if d < 4 then return false end
-	local rp = RaycastParams.new()
-	rp.FilterType = Enum.RaycastFilterType.Include
-	rp.FilterDescendantsInstances = { maze }
 	-- stop 3 studs short so a wall the player is standing against doesn't count
-	local hit = workspace:Raycast(from, flat.Unit * (d - 3), rp)
-	return hit ~= nil
+	return workspace:Raycast(from, flat.Unit * (d - 3), wbParams) ~= nil
+end
+
+-- wall-slide: if a wall is close AHEAD in the travel direction, project the
+-- heading ONTO the wall so the entity slides along it (and rounds the corner)
+-- instead of driving its face into it and lodging there. Three parallel rays
+-- (centre + two offsets) so a corner the body would clip is caught too. `dir`
+-- must be a unit XZ vector.
+local WALL_CLEARANCE = 5
+local slideParams = RaycastParams.new()
+slideParams.FilterType = Enum.RaycastFilterType.Include
+local function wallSlide(pos, dir)
+	local maze = workspace:FindFirstChild("Maze")
+	if not maze then return dir end
+	slideParams.FilterDescendantsInstances = { maze }
+	local side = Vector3.new(-dir.Z, 0, dir.X) -- perpendicular, horizontal
+	local origin0 = pos + Vector3.new(0, 2, 0)
+	for _, off in ipairs({ 0, 3.5, -3.5 }) do
+		local hit = workspace:Raycast(origin0 + side * off, dir * WALL_CLEARANCE, slideParams)
+		if hit and math.abs(hit.Normal.Y) < 0.5 then
+			local n = Vector3.new(hit.Normal.X, 0, hit.Normal.Z)
+			if n.Magnitude > 0.01 then
+				n = n.Unit
+				local slid = dir - n * dir:Dot(n) -- drop the into-wall component
+				if slid.Magnitude > 0.05 then return slid.Unit end
+			end
+		end
+	end
+	return dir
 end
 
 -- turn to face a target (flat), so it doesn't stare into the air at a pit player
@@ -481,67 +511,161 @@ local function findVisiblePlayer()
 	return bestChar, bestRoot
 end
 
--- ── movement ──────────────────────────────────────────────
-local function pathTo(destination, token)
-	local path = PathfindingService:CreatePath({
-		AgentRadius = AGENT_RADIUS,
-		AgentHeight = AGENT_HEIGHT,
-		AgentCanJump = false,
-		AgentCanClimb = false,
-	})
-
-	local ok = pcall(function()
-		path:ComputeAsync(root.Position, destination)
-	end)
-	if not ok or path.Status ~= Enum.PathStatus.Success then
-		return false
-	end
-
-	for _, wp in ipairs(path:GetWaypoints()) do
-		if token ~= moveToken then return false end
-		humanoid:MoveTo(wp.Position)
-		-- time-boxed, interruptible wait — never hang 8s on an unreachable
-		-- waypoint (the old MoveToFinished:Wait() is what caused "walking in
-		-- place"); give up after WAYPOINT_TIME so the main loop re-plans
-		local t0 = os.clock()
-		while true do
-			if token ~= moveToken or humanoid.Health <= 0 then return false end
-			local dx = root.Position.X - wp.Position.X
-			local dz = root.Position.Z - wp.Position.Z
-			if (dx * dx + dz * dz) < 16 then break end -- within 4 studs
-			if os.clock() - t0 > WAYPOINT_TIME then return false end
-			task.wait(0.08)
-		end
-	end
-	return true
+-- ── maze-layout navigation (the entity KNOWS the whole maze) ──
+-- It navigates a CELL GRID it probes by raycast — "is the edge between these two
+-- adjacent cells open, or is there a wall?" — and memoises the answer. A BFS on
+-- that grid returns a route of corridor-CENTRE waypoints, so walking it can NEVER
+-- clip a wall (unlike the navmesh/velocity chase, which did). The grid is learned
+-- once at startup, so in-game path queries are instant.
+local function gAttr()
+	return workspace:GetAttribute("GRID") or 40,
+		workspace:GetAttribute("CELL") or 24,
+		workspace:GetAttribute("ORIGIN") or -480
+end
+local function cellXZ(x, z)
+	local _, CELL, O = gAttr()
+	return O + (x - 0.5) * CELL, O + (z - 0.5) * CELL
+end
+local function cellOf(pos)
+	local GRID, CELL, O = gAttr()
+	return math.clamp(math.floor((pos.X - O) / CELL) + 1, 1, GRID),
+		math.clamp(math.floor((pos.Z - O) / CELL) + 1, 1, GRID)
 end
 
-local function interrupt()
-	moveToken += 1
+local navParams = RaycastParams.new()
+navParams.FilterType = Enum.RaycastFilterType.Include
+local function floorAt(cx, cz)
+	local maze = workspace:FindFirstChild("Maze")
+	if not maze then return nil end
+	navParams.FilterDescendantsInstances = { maze }
+	local hit = workspace:Raycast(Vector3.new(cx, 9, cz), Vector3.new(0, -15, 0), navParams)
+	if hit and hit.Position.Y > -3 then return hit.Position.Y end
+	return nil
+end
+
+-- memoised + symmetric: can you walk straight between two adjacent cells?
+local navOpen = {}
+local function edgeKey(x, z, nx, nz)
+	if x < nx or (x == nx and z < nz) then return x .. "_" .. z .. "_" .. nx .. "_" .. nz end
+	return nx .. "_" .. nz .. "_" .. x .. "_" .. z
+end
+local function edgeOpen(x, z, nx, nz)
+	local k = edgeKey(x, z, nx, nz)
+	local c = navOpen[k]; if c ~= nil then return c end
+	local res = false
+	local maze = workspace:FindFirstChild("Maze")
+	if maze then
+		local ax, az = cellXZ(x, z)
+		local bx, bz = cellXZ(nx, nz)
+		local fya, fyb = floorAt(ax, az), floorAt(bx, bz)
+		-- both cells must have floor and not be pit cells (it can't cross a pit)
+		if fya and fyb
+			and not inPitZone(Vector3.new(ax, 0, az))
+			and not inPitZone(Vector3.new(bx, 0, bz)) then
+			navParams.FilterDescendantsInstances = { maze }
+			local a = Vector3.new(ax, fya + 3, az)
+			local b = Vector3.new(bx, fyb + 3, bz)
+			res = workspace:Raycast(a, b - a, navParams) == nil
+		end
+	end
+	navOpen[k] = res
+	return res
+end
+
+local function gridBFS(sx, sz, gx, gz)
+	if sx == gx and sz == gz then return { { sx, sz } } end
+	local GRID = gAttr()
+	local key = function(x, z) return x * 1000 + z end
+	local q, seen, prev, head = { { sx, sz } }, { [key(sx, sz)] = true }, {}, 1
+	while head <= #q do
+		local cur = q[head]; head += 1
+		if cur[1] == gx and cur[2] == gz then break end
+		for _, d in ipairs({ { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } }) do
+			local nx, nz = cur[1] + d[1], cur[2] + d[2]
+			if nx >= 1 and nx <= GRID and nz >= 1 and nz <= GRID
+				and not seen[key(nx, nz)] and edgeOpen(cur[1], cur[2], nx, nz) then
+				seen[key(nx, nz)] = true
+				prev[key(nx, nz)] = cur
+				q[#q + 1] = { nx, nz }
+			end
+		end
+	end
+	if not seen[key(gx, gz)] then return nil end
+	local path, cur = {}, { gx, gz }
+	while cur do
+		table.insert(path, 1, cur)
+		cur = prev[key(cur[1], cur[2])]
+	end
+	return path
+end
+
+-- learn the whole layout up front, one row per frame (no hitch), so in-game
+-- path queries hit the cache and never raycast
+task.spawn(function()
+	workspace:WaitForChild("Maze", 60)
+	task.wait(1)
+	local GRID = gAttr()
+	for x = 1, GRID do
+		for z = 1, GRID do
+			if x < GRID then edgeOpen(x, z, x + 1, z) end
+			if z < GRID then edgeOpen(x, z, x, z + 1) end
+		end
+		task.wait()
+	end
+	print("[EntityAI] learned the maze layout (" .. GRID .. "x" .. GRID .. ")")
+end)
+
+-- follow the grid ONE waypoint per call (non-blocking). Re-plans only when the
+-- destination cell changes or the route is used up, so the main loop can react
+-- (see/hear a player) every tick instead of committing to a whole path.
+local navPath, navIndex, navGoal = nil, 1, nil
+local function resetNav() navPath = nil end
+local function stepToward(destPos, speed)
+	humanoid.WalkSpeed = speed
+	local gx, gz = cellOf(destPos)
+	if not navPath or not navGoal or navGoal[1] ~= gx or navGoal[2] ~= gz or navIndex > #navPath then
+		local sx, sz = cellOf(root.Position)
+		navPath = gridBFS(sx, sz, gx, gz)
+		navGoal = { gx, gz }
+		navIndex = 2 -- cell 1 is where we already are
+	end
+	if not navPath then -- unreachable on the grid (e.g. across a pit) → straight walk
+		humanoid:MoveTo(Vector3.new(destPos.X, root.Position.Y, destPos.Z))
+		return
+	end
+	while navIndex <= #navPath do -- pop any waypoints we've reached
+		local cx, cz = cellXZ(navPath[navIndex][1], navPath[navIndex][2])
+		local dx, dz = root.Position.X - cx, root.Position.Z - cz
+		if dx * dx + dz * dz < 30 then navIndex += 1 else break end
+	end
+	if navIndex > #navPath then -- in the goal cell → walk to the exact target
+		humanoid:MoveTo(Vector3.new(destPos.X, root.Position.Y, destPos.Z))
+	else
+		local cx, cz = cellXZ(navPath[navIndex][1], navPath[navIndex][2])
+		humanoid:MoveTo(Vector3.new(cx, floorAt(cx, cz) or root.Position.Y, cz))
+	end
 end
 
 -- ── anti-stuck watchdog ───────────────────────────────────
--- if it hasn't moved while it should be walking, cancel the current move so
--- the main loop re-plans — stops it grinding against a wall forever
+-- if it hasn't moved while it should be walking, drop the cached route so it
+-- re-plans from where it actually is — clears any rare physics wedge
 task.spawn(function()
 	local last = root.Position
-	while task.wait(2) do
+	while task.wait(1.2) do
 		if humanoid.Health <= 0 then break end
 		local moved = (root.Position - last).Magnitude
 		last = root.Position
-		if moved < 2 and humanoid.WalkSpeed > 0.1 then
-			moveToken += 1 -- breaks the time-boxed wait in pathTo within 0.08s
-		end
+		if moved < 2 and humanoid.WalkSpeed > 0.1 then resetNav() end
 	end
 end)
 
--- ── frame-tight chase steering ────────────────────────────
--- re-aim at the player EVERY frame while chasing, so it tracks your live
--- position with no lag instead of gliding past ("ice"). Pit-crossing is left to
--- the main loop's pathfinding (Heartbeat skips it then).
+-- ── lunge (the only velocity override left) ───────────────
+-- Movement is now the grid-walk in the main loop (which never clips a wall). The
+-- Heartbeat only runs the LUNGE — a committed pounce when it gets close and has a
+-- clear shot. Everything else, it does nothing and lets the grid-walk drive.
 RunService.Heartbeat:Connect(function()
 	if humanoid.Health <= 0 then return end
-	if isPaused() then -- dev pause: hold it in place every frame
+	if isPaused() then
 		lungePhase = 0
 		local v = root.AssemblyLinearVelocity
 		root.AssemblyLinearVelocity = Vector3.new(0, v.Y, 0)
@@ -550,175 +674,203 @@ RunService.Heartbeat:Connect(function()
 	if current ~= State.CHASE or not chasePlayer then lungePhase = 0; return end
 	local char = chasePlayer.Character
 	local hrp = char and char:FindFirstChild("HumanoidRootPart")
-	if not hrp or crossesPitZone(root.Position, hrp.Position) then lungePhase = 0; return end
-	-- a wall is in the way → don't drive straight into it; the main loop's
-	-- pathfinding takes over and routes around the corner (skip while lunging)
-	if lungePhase == 0 and wallBetween(hrp.Position) then return end
+	if not hrp then lungePhase = 0; return end
 
-	local to = hrp.Position - root.Position
-	to = Vector3.new(to.X, 0, to.Z)
+	local to = Vector3.new(hrp.Position.X - root.Position.X, 0, hrp.Position.Z - root.Position.Z)
 	local dist = to.Magnitude
 	local now = os.clock()
 	local v = root.AssemblyLinearVelocity
 
-	-- ── LUNGE state machine ──
-	-- phase 1: WIND-UP — freeze in place and face you for LUNGE_WINDUP seconds,
-	-- clearly telegraphing "I'm about to pounce"
+	-- phase 1: WIND-UP — freeze + face you (telegraph)
 	if lungePhase == 1 then
+		humanoid.WalkSpeed = 0
 		root.AssemblyLinearVelocity = Vector3.new(0, v.Y, 0)
 		humanoid:MoveTo(root.Position)
 		faceFlat(hrp.Position)
 		if now >= lungeWindupUntil then
 			lungePhase = 2
-			lungeTarget = hrp.Position          -- lock the target at launch
+			lungeTarget = hrp.Position
 			lungeUntil = now + LUNGE_MAX_TIME
 		end
 		return
 	end
 
-	-- phase 2: DASH to the captured spot, then STOP dead (no ice-slide)
+	-- phase 2: DASH to the captured spot (MoveTo-driven at a high WalkSpeed, so the
+	-- legs animate — no velocity override, no ice-glide), then STOP dead
 	if lungePhase == 2 then
 		local toT = Vector3.new(lungeTarget.X - root.Position.X, 0, lungeTarget.Z - root.Position.Z)
 		if toT.Magnitude <= 3 or now >= lungeUntil then
 			lungePhase = 0
 			lungeRecoverUntil = now + LUNGE_RECOVER
-			root.AssemblyLinearVelocity = Vector3.new(0, v.Y, 0)
+			resetNav() -- re-plan the grid route from where the dash landed
+			humanoid.WalkSpeed = 0
+			root.AssemblyLinearVelocity = Vector3.new(0, v.Y, 0) -- one-frame hard stop
 			humanoid:MoveTo(root.Position)
 			return
 		end
-		local dir = toT.Unit
-		root.AssemblyLinearVelocity =
-			Vector3.new(dir.X * LUNGE_SPEED, v.Y, dir.Z * LUNGE_SPEED)
+		humanoid.WalkSpeed = LUNGE_SPEED
 		humanoid:MoveTo(lungeTarget)
 		return
 	end
 
 	-- brief dead stop right after a lunge lands
 	if now < lungeRecoverUntil then
+		humanoid.WalkSpeed = 0
 		root.AssemblyLinearVelocity = Vector3.new(0, v.Y, 0)
 		humanoid:MoveTo(root.Position)
 		return
 	end
 
-	-- close enough + off cooldown → BEGIN a wind-up (also fires the telegraph
-	-- sound via the EntityLunge attribute)
-	if now >= lungeCooldownUntil and dist < LUNGE_RANGE and dist > 1 then
+	-- close + clear (no wall or pit between) + off cooldown → wind up a lunge
+	if now >= lungeCooldownUntil and dist < LUNGE_RANGE and dist > 1
+		and not crossesPitZone(root.Position, hrp.Position)
+		and not wallBetween(hrp.Position) then
 		lungePhase = 1
 		lungeWindupUntil = now + LUNGE_WINDUP
 		lungeCooldownUntil = now + LUNGE_COOLDOWN
 		workspace:SetAttribute("EntityLunge", (workspace:GetAttribute("EntityLunge") or 0) + 1)
 		root.AssemblyLinearVelocity = Vector3.new(0, v.Y, 0)
 		humanoid:MoveTo(root.Position)
-		return
 	end
-
-	-- normal chase steering
-	if dist > 1 then
-		local dir = to.Unit
-		local sp = humanoid.WalkSpeed
-		-- override the horizontal velocity so it changes direction INSTANTLY
-		-- (no Humanoid acceleration lag = no sliding when you juke around it).
-		-- Y is preserved so gravity still applies.
-		root.AssemblyLinearVelocity = Vector3.new(dir.X * sp, v.Y, dir.Z * sp)
-		humanoid:MoveTo(hrp.Position) -- keeps it turned/animating toward you
-	end
+	-- otherwise: nothing — the grid-walk (main loop) is doing the moving
 end)
 
 -- ── main loop ─────────────────────────────────────────────
--- decides state (spot / lose / hear); chase movement is the Heartbeat above
+-- picks WHO to head for, then grid-walks there (the walk never clips a wall).
+-- A slow, relentless, map-aware hunter: even unseen it slowly makes its way to a
+-- (random) player; SEEING you speeds it to a chase; HEARING you redirects it.
+local HUNT_SPEED    = 11  -- base slow walk toward a random player (via the map)
+local HUNT_RETARGET = 60  -- ALWAYS re-rolls which player it hunts after this long
+local huntTarget, huntPickedAt = nil, 0
+
+local function livingPlayers()
+	local list = {}
+	for _, p in ipairs(Players:GetPlayers()) do
+		local c = p.Character
+		local h = c and c:FindFirstChildOfClass("Humanoid")
+		if h and h.Health > 0 and c:FindFirstChild("HumanoidRootPart") then
+			table.insert(list, p)
+		end
+	end
+	return list
+end
+
+-- position of the player it's currently hunting (re-rolls periodically / when the
+-- target dies or leaves) — this is what makes it "slowly find a random player"
+local function huntPos()
+	local living = livingPlayers()
+	if #living == 0 then huntTarget = nil; return nil end
+	if not (huntTarget and table.find(living, huntTarget))
+		or (os.clock() - huntPickedAt) > HUNT_RETARGET then
+		huntTarget = living[math.random(#living)]
+		huntPickedAt = os.clock()
+		resetNav()
+	end
+	local hrp = huntTarget.Character and huntTarget.Character:FindFirstChild("HumanoidRootPart")
+	return hrp and hrp.Position
+end
+
 task.spawn(function()
 	while task.wait(0.1) do
 		if humanoid.Health <= 0 then break end
-		if isPaused() then -- dev pause: stop dead, drop any target, don't plan
+		if isPaused() then
 			humanoid.WalkSpeed = 0
 			humanoid:MoveTo(root.Position)
-			interrupt()
 			chasePlayer = nil
+			resetNav()
 			continue
 		end
 		NoiseRegistry.Prune()
 
-		local yelling = false -- true while parked at a pit edge dealing with a pit player
+		local yelling = false
 		local char, hrp = findVisiblePlayer()
 
+		-- seeing a player (re)opens a TRACK window on them: for TRACK_TIME after it
+		-- loses sight it STILL knows their LIVE position and keeps coming
 		if char then
-			if current ~= State.CHASE then
-				interrupt()
-				current = State.CHASE
-				humanoid.WalkSpeed = SPEED_CHASE * speedMul()
-			end
-			chasePlayer = Players:GetPlayerFromCharacter(char)
-			lastKnownPos = hrp.Position
+			trackPlayer = Players:GetPlayerFromCharacter(char)
+			trackUntil = os.clock() + TRACK_TIME
+		end
 
-			if inPitZone(hrp.Position) then
-				-- player out on the beams: walk to the pit EDGE nearest them,
-				-- face them, and only yell once we're actually at the edge
-				local edge = pitEdgeToward(hrp.Position, root.Position)
+		-- the current chase target: the visible player, else the tracked one while
+		-- its window is still open (and it's still alive)
+		local targetPlayer, targetHrp = nil, nil
+		if char then
+			targetPlayer, targetHrp = Players:GetPlayerFromCharacter(char), hrp
+		elseif trackPlayer and os.clock() < trackUntil then
+			local tc = trackPlayer.Character
+			local th = tc and tc:FindFirstChild("HumanoidRootPart")
+			local thum = tc and tc:FindFirstChildOfClass("Humanoid")
+			if th and thum and thum.Health > 0 then
+				targetPlayer, targetHrp = trackPlayer, th
+			else
+				trackPlayer = nil
+			end
+		end
+
+		if targetHrp then
+			if current ~= State.CHASE then current = State.CHASE; resetNav() end
+			chasePlayer = targetPlayer
+			lastKnownPos = targetHrp.Position
+			local seen = char ~= nil -- truly in sight vs tracking blind
+
+			if seen and inPitZone(targetHrp.Position) then
+				-- player on the beams: grid-walk to the pit EDGE, face them, yell
+				local edge = pitEdgeToward(targetHrp.Position, root.Position)
 				local toEdge = Vector3.new(root.Position.X - edge.X, 0, root.Position.Z - edge.Z)
 				if toEdge.Magnitude <= YELL_EDGE_DIST then
-					yelling = true                 -- parked at the edge → not "chasing"
-					humanoid:MoveTo(root.Position) -- stop dead at the edge
-					faceFlat(hrp.Position)         -- point at them, not into the air
-					tryYell(char, hrp)             -- winds up, then shoves them off
+					yelling = true
+					humanoid:MoveTo(root.Position)
+					faceFlat(targetHrp.Position)
+					tryYell(char, targetHrp)
+				else
+					stepToward(edge, SPEED_CHASE * speedMul())
+				end
+			elseif lungePhase == 0 then
+				-- CLEAR SHOT → beeline straight to them (don't zig-zag through cell
+				-- centres / detour to the middle of the room). Only grid-walk when a
+				-- wall or pit is actually in the way. (Heartbeat lunges when close.)
+				if wallBetween(targetHrp.Position)
+					or crossesPitZone(root.Position, targetHrp.Position) then
+					stepToward(targetHrp.Position, SPEED_CHASE * speedMul())
 				else
 					humanoid.WalkSpeed = SPEED_CHASE * speedMul()
-					pathTo(edge, moveToken)
+					humanoid:MoveTo(Vector3.new(targetHrp.Position.X, root.Position.Y, targetHrp.Position.Z))
+					resetNav() -- so it re-plans fresh when a wall next blocks the line
 				end
-
-			-- straight-line chase is steered every frame by the Heartbeat above.
-			-- If a pit OR a wall is in the way, pathfind AROUND it (this is what
-			-- stops it ramming corners and getting stuck).
-			elseif crossesPitZone(root.Position, hrp.Position)
-				or wallBetween(hrp.Position) then
-				pathTo(hrp.Position, moveToken)
 			end
 
 		else
 			chasePlayer = nil
-			-- just lost sight of someone → mark a spot to search
+			trackPlayer = nil -- track window is over
 			if current == State.CHASE then
-				interrupt()
 				current = State.SEARCH
 				searchUntil = os.clock() + SEARCH_TIME
+				resetNav()
 			end
 
-			-- HEARING takes priority: a fresh footstep noise always pulls it in.
-			-- This is what makes sprinting dangerous when it can't see you.
+			-- HEARING redirects it to a fresh footstep noise
 			local noise = NoiseRegistry.GetBest(root.Position, HEAR_RANGE)
 			if noise then
 				current = State.INVESTIGATE
-				humanoid.WalkSpeed = SPEED_INVESTIGATE * speedMul()
-				pathTo(noise.pos, moveToken)
+				stepToward(noise.pos, SPEED_INVESTIGATE * speedMul())
 
 			elseif current == State.SEARCH and os.clock() < searchUntil and lastKnownPos then
-				humanoid.WalkSpeed = SPEED_INVESTIGATE * speedMul()
-				pathTo(lastKnownPos + Vector3.new(
-					math.random(-25, 25), 0, math.random(-25, 25)), moveToken)
+				current = State.SEARCH
+				stepToward(lastKnownPos, SPEED_INVESTIGATE * speedMul())
 
 			else
+				-- HUNT: always, slowly, make its way toward a (random) player
 				current = State.LURK
-				humanoid.WalkSpeed = SPEED_LURK * speedMul()
-				-- patrol toward the middle of an open room; keep the same goal
-				-- until we reach it (or after a while), so it actually crosses
-				-- rooms instead of re-rolling a nearby point every tick
-				local reached = lurkTarget and Vector3.new(
-					root.Position.X - lurkTarget.X, 0, root.Position.Z - lurkTarget.Z).Magnitude < 8
-				if not lurkTarget or reached or (os.clock() - lurkPickedAt) > 10 then
-					lurkTarget = pickLurkTarget()
-					lurkPickedAt = os.clock()
-				end
-				if lurkTarget then
-					pathTo(lurkTarget, moveToken)
-				else
-					pathTo(root.Position + Vector3.new(
-						math.random(-70, 70), 0, math.random(-70, 70)), moveToken)
-				end
+				local hp = huntPos()
+				if hp then stepToward(hp, HUNT_SPEED * speedMul()) end
 			end
 		end
 
-		-- publish state so SoundController knows when it's just roaming (idle
-		-- vocalisations) vs actively hunting vs mid-yell (chase sound off)
 		local pubState = current
+		-- in CHASE but can't actually SEE them = blindly tracking (the memory
+		-- window). Publish TRACK so SoundController can slowly fade the chase music.
+		if current == State.CHASE and not char then pubState = "TRACK" end
 		if yelling or os.clock() < yellActiveUntil then pubState = "YELL" end
 		workspace:SetAttribute("EntityState", pubState)
 	end

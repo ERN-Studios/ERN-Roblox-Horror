@@ -28,7 +28,7 @@ Built entirely with procedural generation: every round is a new maze.
 | `Left Shift` | Sprint | **loud** — limited stamina (no bar), can't sprint when exhausted |
 | `Left Ctrl` | Sneak | slow + silent walk (there's no crouch pose) |
 | `F` | Flashlight | see further — but limited **battery**; dies when drained |
-| `Q` / `E` | Spectate | while dead, cycle between living teammates |
+| `Q` / `E` | Spectate | while dead, take a teammate's full first-person POV (you see their flashlight); cycle survivors |
 | — | Jump | disabled. The beams are the only way across the pits |
 
 First person is forced. The cursor is hidden. There is no map and **no HUD**.
@@ -66,6 +66,7 @@ StarterPlayer/StarterPlayerScripts/
   RoundUI.LocalScript.lua            round status bar
   PuzzleUI.LocalScript.lua           objective + fuse counter
   SpectateController.LocalScript.lua spectate teammates while dead (Q/E)
+  EntityShakeController.LocalScript.lua screen shake — trembles when it lurks near, stomps when it chases
   JumpscareUI.LocalScript.lua        death flicker/shake (+ optional image/sound)
   DevCheats.LocalScript.lua          TESTING ONLY — ESP + noclip fly (remove for release)
 Workspace/
@@ -98,7 +99,7 @@ For quick testing, override locally in Studio (don't commit these):
 | Script | Setting | Testing | Production |
 |---|---|---|---|
 | MazeGenerator | `GRID` | `10` | `40` |
-| GameManager | `ELEVATOR_TIME` | `2` | `12` |
+| GameManager | `ELEVATOR_TIME` | `2` | `19` (matches the elevator sound) |
 
 ## 🎨 Textures
 
@@ -108,16 +109,47 @@ paste it into the matching `*_TEXTURE` config at the top of
 `MazeGenerator.Script.lua`. Decal IDs and image IDs both work — the script
 resolves them automatically at server start.
 
-Available slots: wall · floor · ceiling tile · mold overlay · lit light fixture ·
-dead light fixture · elevator walls/floor/doors · **wall drawings** (`WALL_ART`,
-a list — graffiti/clues/scares stamped on random walls) · **carpet stains**
-(`STAIN_TEXTURES`, a list — stamped flat on random floor tiles).
+Single-ID slots: wall · floor · ceiling tile · lit light fixture · dead light
+fixture · elevator walls/floor/doors.
+
+**Plug-and-play decal lists** (each holds up to **5 variants**, picked at random;
+leave empty = nothing generates):
+- `MOLD_TEXTURES` — grime hanging from the **top of walls** and wrapping the top
+  of **every pit shaft**. Transparent PNG, mold at the image top.
+- `STAIN_TEXTURES` — stamped flat on random floor tiles, **anywhere** on the carpet.
+- `ARTWORK` — stamped **dead-centre on a wall** (middle height + middle of the
+  panel), so it reads like hung art. `ARTWORK_SIZE` controls the stamp size.
 
 Alignment notes:
 - **Ceiling**: one image = one office tile; the grid auto-aligns so every light
   panel replaces exactly one tile
 - **Mold**: transparent PNG, mold hanging from the image top — tiled once over
   the wall height, applied to random walls and around every pit shaft
+
+### 🪑 Decor (furniture props)
+
+Furniture is **built from primitive Parts** in `MazeGenerator.Script.lua`
+(`DECOR_BUILDERS`) — always upright and correctly sized, no Toolbox loading
+(those IDs mostly failed to load / imported sideways). Props: **chair, table
+(+ telephone on top), cardboard box, printer/fax, grandfather clock** (its two
+hands spin to a random time per clock). Placement:
+- **Chairs / tables** stand alone in the middle of open cells; **one chair is
+  guaranteed in the plaza**.
+- **Boxes / printers / grandfather clocks** stand against a wall, facing in.
+
+Knobs:
+- `DECOR_DENSITY` — master rarity (per eligible cell). Scales with `GRID`, so
+  lower it for the big production maze.
+- per-prop `height` — each object's size in studs.
+- `DECOR_SCALE_JITTER` — random ± size wobble per prop (`0.2` = up to ±20%), for
+  that off-kilter generated look.
+- `DECOR_MIN_GAP` — same-type props stay more than this many cells apart (`2` =
+  no two chairs / two printers clustering).
+- `DECOR_COLLIDE` — `true` = solid for players. Either way the Entity **passes
+  through** all decor (a `Decor` collision group), so it never gets stuck on it.
+
+To restyle a prop, edit its builder in `DECOR_BUILDERS`; to add a new one, add a
+builder + a `PROPS` entry.
 
 ## 🧩 How to win (the puzzle)
 
@@ -211,10 +243,39 @@ Entity difficulty lives at the top of `EntityAI.Script.lua`
       winded breathing, footsteps, alert, entity growl/idle/chase/lunge/yell/steps,
       death scream (alive, positional) + dying player's own jumpscare
 - [x] **Dev cheats** — ESP · noclip fly · pause Entity (`P`) · push immunity (`I`)
+- [x] **Decor** — furniture props (chairs, tables + phone, boxes, printers,
+      grandfather clocks) at low tunable density; 5-slot mold/stain/artwork lists
+- [x] **Wires cross pits** — a run that would pass over a hole field climbs the
+      wall, runs across the ceiling, and drops down the far side
+- [x] **Screen shake** — faint tremble as the Entity lurks nearer, heavy footstep
+      stomps while it chases (`STOMP_INTERVAL` knob to sync with the run sound/anim)
+- [x] **Wall-slide chase** — the Entity projects its heading along a wall that's
+      ahead and rounds the corner instead of grinding its face into it
+- [x] **Exit → safe room** — stepping through the exit drops you in a sealed
+      elevator-style room the Entity can't reach (placeholder for the level-2 start)
 
-**Next** _(friend is filling animation + sound IDs tonight)_
-- [ ] **Drop in remaining animation IDs** — yell, lunge (`EntityAnimation`)
-- [ ] **Drop in remaining sound IDs** — breathing, footsteps, alert, idle, jumpscare,
-      lunge, entity steps (`SoundController`)
-- [ ] **More decor**
-- [ ] Level 2 (the exit currently just wins)
+**Next** _(each `[ ]` below is one empty asset slot — plug the ID in and it just works)_
+
+_Sounds_ (`SoundController.LocalScript.lua`):
+- [ ] Winded breathing (2D) — `BREATHING_SOUND`
+- [ ] Player footstep — walk — `FOOTSTEP_WALK`
+- [ ] Player footstep — run — `FOOTSTEP_RUN`
+- [ ] Alert siren (red-lights mode) — `ALERT_SOUND`
+- [ ] Dying player's own jumpscare (2D) — `JUMPSCARE_SOUND`
+- [ ] Lunge telegraph — `LUNGE_SOUND`
+- [ ] Entity footstep — run/chase — `ENTITY_STEP_RUN`
+- [ ] Entity idle vocalisations ×3 — `IDLE_SOUNDS`
+
+_Animations_ (`EntityAnimation` — walk/run already in):
+- [ ] Yell / roar (pit shove)
+- [ ] Lunge pounce
+- [ ] _(fix)_ scale walk anim playback to WalkSpeed so it doesn't glide at chase speed
+
+_Textures_ (`MazeGenerator.Script.lua` — up to 5 variants each):
+- [ ] Mold overlay — `MOLD_TEXTURES`
+- [ ] Carpet stains — `STAIN_TEXTURES`
+- [ ] Wall artwork — `ARTWORK`
+
+_Features_:
+- [ ] More decor variety — more prop types / clue props
+- [ ] Level 2 (the exit currently just loops you into the safe room)

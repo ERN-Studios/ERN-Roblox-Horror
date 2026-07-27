@@ -12,6 +12,7 @@
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local SoundService = game:GetService("SoundService")
+local TweenService = game:GetService("TweenService")
 local RS = game:GetService("ReplicatedStorage")
 
 -- ── audio slots (every sound in the game) ─────────────────
@@ -20,12 +21,13 @@ local BREATHING_SOUND = "" -- YOUR OWN winded breathing (2D) — fades in below 
 local FOOTSTEP_WALK   = "" -- one thump per step while walking (e.g. soft carpet step)
 local FOOTSTEP_RUN    = "" -- one thump per step while running (heavier carpet thump)
 local ALERT_SOUND     = "" -- plays while the maze is in ALERT (red lights) mode
+local ELEVATOR_SOUND  = "rbxassetid://72303878759145" -- the elevator ride, plays through the pre-round intro (2D)
 local ENTITY_SOUND    = "rbxassetid://103206085469231" -- looping growl/drone emitted BY the Entity (positional)
 local DEATH_SOUND     = "rbxassetid://113822157484898" -- the scream ALIVE players hear when someone dies (positional at the kill)
 local JUMPSCARE_SOUND = "" -- the DYING player's OWN jumpscare sound (2D, only they hear it)
 local YELL_SOUND      = "rbxassetid://92808749593079" -- the Entity's roar when it shoves you off a pit beam (positional)
 local LUNGE_SOUND     = "" -- plays as it winds up a lunge (telegraph, positional)
-local ENTITY_STEP_WALK = "" -- the Entity's footstep thump while walking (positional)
+local ENTITY_STEP_WALK = "rbxassetid://99809246525734" -- the Entity's footstep thump while walking (positional)
 local ENTITY_STEP_RUN  = "" -- the Entity's footstep thump while running/chasing (positional)
 -- idle vocalisations played at random while the Entity just roams (positional).
 -- Fill any of the 3 — it works with just one; empty slots are skipped.
@@ -34,6 +36,7 @@ local CHASE_SOUND     = "rbxassetid://72818169474421" -- loops while the Entity 
 
 -- ── tuning ────────────────────────────────────────────────
 local AMBIENCE_VOLUME   = 0.4
+local ELEVATOR_VOLUME   = 0.8  -- the elevator door-open / arrival sound (2D)
 local BREATH_START      = 0.5  -- stamina fraction at which winded breathing fades IN
 local BREATH_MAX_VOLUME = 1.0  -- volume at 0 stamina (loudest gasping)
 local BREATH_SMOOTH     = 3    -- how fast the breathing volume eases toward target
@@ -51,6 +54,10 @@ local IDLE_VOLUME      = 0.7   -- the Entity's idle vocalisations (positional)
 local IDLE_MIN_GAP     = 6     -- min seconds between idle vocalisations
 local IDLE_MAX_GAP     = 14    -- max seconds between them
 local CHASE_VOLUME     = 0.85  -- the Entity's chase sound (positional, looping)
+local CHASE_FADE       = 0.6   -- seconds to fade the chase loop in / out
+local TRACK_FADE       = 5     -- seconds to SLOWLY fade the chase music once it loses
+                               -- sight and is only tracking blindly (match TRACK_TIME)
+local SPOT_VOLUME      = 1      -- the "spotted you!" sting (reuses YELL_SOUND) fired as a chase begins
 local LUNGE_VOLUME     = 1     -- the lunge telegraph (positional)
 local STEP_WALK_VOLUME = 0.5   -- entity walk thump
 local STEP_RUN_VOLUME  = 0.8   -- entity run thump
@@ -70,7 +77,12 @@ local function makeLoop(id, vol)
 	return s
 end
 
-local ambience = makeLoop(AMBIENCE_SOUND, AMBIENCE_VOLUME)
+-- ambience starts SILENT and fades in when the round begins — during the
+-- elevator ride you hear the elevator, not the maze. `ambienceTarget` is set by
+-- the round events below and eased toward in the main Heartbeat.
+local AMBIENCE_FADE = 4      -- ~seconds to ease the ambience in / out
+local ambienceTarget = 0
+local ambience = makeLoop(AMBIENCE_SOUND, 0)
 local breathing = makeLoop(BREATHING_SOUND, 0)
 -- PRELOAD the looping sounds before playing them. A loop that isn't fully loaded
 -- re-buffers at the loop point, which is the "slight stop" you hear each cycle;
@@ -159,6 +171,28 @@ roundStatus.OnClientEvent:Connect(function(ev, name, pos)
 	task.delay(8, function() if holder then holder:Destroy() end end)
 end)
 
+-- the elevator sound: a ONE-SHOT that starts with the countdown and plays right
+-- through — the doors opening does NOT cut it (make its length match
+-- ELEVATOR_TIME, ~19s). It also drives the ambience fade: the maze ambience is
+-- silent through the elevator ride and fades in when the round actually starts.
+local elevatorSound = Instance.new("Sound")
+elevatorSound.Parent = SoundService
+roundStatus.OnClientEvent:Connect(function(ev)
+	if ev == "elevator" then
+		ambienceTarget = 0 -- silent during the ride
+		if ELEVATOR_SOUND ~= "" and not elevatorSound.IsPlaying then
+			elevatorSound.SoundId = ELEVATOR_SOUND
+			elevatorSound.Volume = ELEVATOR_VOLUME
+			elevatorSound:Play()
+		end
+	elseif ev == "start" then
+		ambienceTarget = AMBIENCE_VOLUME -- doors open → fade the maze in (elevator keeps playing)
+	elseif ev == "win" or ev == "lose" or ev == "waiting" then
+		ambienceTarget = 0
+		elevatorSound:Stop() -- round over / reset (doors opening does NOT stop it)
+	end
+end)
+
 -- the Entity's yell/roar: EntityAI bumps the EntityYell attribute each time it
 -- shoves a pit player, and we play the roar POSITIONALLY at the entity
 if YELL_SOUND ~= "" then
@@ -190,7 +224,7 @@ task.spawn(function()
 		end
 		if #ids == 0 then continue end
 		local st = workspace:GetAttribute("EntityState")
-		if st == "CHASE" or st == "YELL" then continue end
+		if st == "CHASE" or st == "YELL" or st == "TRACK" then continue end
 		local entity = workspace:FindFirstChild("Entity")
 		local er = entity and entity:FindFirstChild("HumanoidRootPart")
 		if not er then continue end
@@ -207,31 +241,79 @@ task.spawn(function()
 	end
 end)
 
--- the chase sound: a looping POSITIONAL sound on the entity that plays only
--- while it's actively hunting you (EntityState == CHASE) and stops otherwise
+-- the chase audio: when the Entity SPOTS you (EntityState → CHASE) it first
+-- plays a "spotted you!" sting — the same sound as the yell — then the chase
+-- loop fades in beneath it. Leaving CHASE fades the loop back out. Both fade
+-- rather than snapping on/off.
 task.spawn(function()
-	if CHASE_SOUND == "" then return end
 	local entity = workspace:WaitForChild("Entity", 60)
 	local er = entity and entity:WaitForChild("HumanoidRootPart", 15)
 	if not er then return end
-	local s = Instance.new("Sound")
-	s.Name = "ChaseSound"
-	s.Looped = true
-	s.Volume = CHASE_VOLUME
-	s.SoundId = CHASE_SOUND
-	s.RollOffMode = Enum.RollOffMode.InverseTapered
-	s.RollOffMinDistance = 10
-	s.RollOffMaxDistance = 200
-	s.Parent = er
-	local function refresh()
-		if workspace:GetAttribute("EntityState") == "CHASE" then
-			if not s.IsPlaying then s:Play() end
-		elseif s.IsPlaying then
-			s:Stop()
-		end
+
+	local chase
+	if CHASE_SOUND ~= "" then
+		chase = Instance.new("Sound")
+		chase.Name = "ChaseSound"
+		chase.Looped = true
+		chase.Volume = 0
+		chase.SoundId = CHASE_SOUND
+		chase.RollOffMode = Enum.RollOffMode.InverseTapered
+		chase.RollOffMinDistance = 10
+		chase.RollOffMaxDistance = 200
+		chase.Parent = er
 	end
-	workspace:GetAttributeChangedSignal("EntityState"):Connect(refresh)
-	refresh()
+
+	local prevEngaged = false -- was CHASE or TRACK last time
+	local lastSpot = -999     -- cooldown so rapid re-acquires don't spam the sting
+	local fadeTween
+	local function fadeChase(target, dur)
+		if not chase then return end
+		if not chase.IsPlaying then chase:Play() end
+		if fadeTween then fadeTween:Cancel() end
+		fadeTween = TweenService:Create(chase, TweenInfo.new(dur, Enum.EasingStyle.Linear), { Volume = target })
+		fadeTween:Play()
+	end
+
+	local function onState()
+		local st = workspace:GetAttribute("EntityState")
+		local chasing = (st == "CHASE")   -- actively sees you
+		local tracking = (st == "TRACK")  -- lost sight, hunting your last live position
+
+		if chasing then
+			-- freshly spotted (wasn't already engaged) → the "spotted you" sting
+			if not prevEngaged and YELL_SOUND ~= "" and (os.clock() - lastSpot) > 4 then
+				lastSpot = os.clock()
+				local spot = Instance.new("Sound")
+				spot.SoundId = YELL_SOUND
+				spot.Volume = 0
+				spot.RollOffMode = Enum.RollOffMode.InverseTapered
+				spot.RollOffMinDistance = 10
+				spot.RollOffMaxDistance = 200
+				spot.Parent = er
+				spot:Play()
+				TweenService:Create(spot, TweenInfo.new(0.25), { Volume = SPOT_VOLUME }):Play()
+				spot.Ended:Connect(function() spot:Destroy() end)
+				task.delay(8, function() if spot then spot:Destroy() end end)
+			end
+			fadeChase(CHASE_VOLUME, CHASE_FADE) -- rise to (or hold) full
+
+		elseif tracking then
+			-- lost sight but still coming → SLOWLY fade the music over the window;
+			-- if it re-spots you, the CHASE branch snaps it back up
+			fadeChase(0, TRACK_FADE)
+
+		elseif chase and chase.IsPlaying then
+			-- fully lost → finish the fade out and stop
+			fadeChase(0, CHASE_FADE)
+			task.delay(CHASE_FADE + 0.1, function()
+				local s = workspace:GetAttribute("EntityState")
+				if s ~= "CHASE" and s ~= "TRACK" then chase:Stop() end
+			end)
+		end
+		prevEngaged = chasing or tracking
+	end
+	workspace:GetAttributeChangedSignal("EntityState"):Connect(onState)
+	onState()
 end)
 
 -- the lunge telegraph: EntityAI bumps EntityLunge when it winds up a pounce, and
@@ -268,9 +350,17 @@ task.spawn(function()
 	step.RollOffMaxDistance = 140
 	step.Parent = er
 	local clock = 0
+	local lastPos = er.Position
 	RunService.Heartbeat:Connect(function(dt)
-		local spd = Vector3.new(er.AssemblyLinearVelocity.X, 0, er.AssemblyLinearVelocity.Z).Magnitude
-		if spd < 3 then clock = 999; return end -- standing still: silent
+		-- measure ACTUAL translation, not AssemblyLinearVelocity — the chase code
+		-- SETS the entity's velocity every frame, so when it's wedged against a
+		-- wall the velocity reads high while it isn't really moving. Position
+		-- delta is the truth: no real movement → no footstep thumps.
+		local now = er.Position
+		local moved = Vector3.new(now.X - lastPos.X, 0, now.Z - lastPos.Z).Magnitude
+		lastPos = now
+		local spd = (dt > 0) and (moved / dt) or 0
+		if spd < 3 then clock = 999; return end -- standing still (or stuck): silent
 		local run = spd >= STEP_RUN_SPEED
 		local id = run and ENTITY_STEP_RUN or ENTITY_STEP_WALK
 		local interval = run and STEP_RUN_INT or STEP_WALK_INT
@@ -318,6 +408,13 @@ RunService.Heartbeat:Connect(function(dt)
 		local target = breathingActive and (math.clamp(1 - frac, 0, 1) * BREATH_MAX_VOLUME) or 0
 		breathing.Volume = breathing.Volume
 			+ (target - breathing.Volume) * math.clamp(dt * BREATH_SMOOTH, 0, 1)
+	end
+
+	-- maze ambience: eased toward its target (silent during the elevator ride,
+	-- faded in when the round starts) — see the round-event handler above
+	if AMBIENCE_SOUND ~= "" then
+		ambience.Volume = ambience.Volume
+			+ (ambienceTarget - ambience.Volume) * math.clamp(dt / AMBIENCE_FADE, 0, 1)
 	end
 
 	-- footstep thumps on a cadence

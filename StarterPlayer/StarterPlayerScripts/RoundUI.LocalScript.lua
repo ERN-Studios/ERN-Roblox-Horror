@@ -20,14 +20,15 @@ label.AnchorPoint = Vector2.new(0.5, 0)
 label.Position = UDim2.new(0.5, 0, 0, 10)
 label.Size = UDim2.new(0, 520, 0, 34)
 label.BackgroundColor3 = Color3.new(0, 0, 0)
-label.BackgroundTransparency = 0.45
+label.BackgroundTransparency = 0.85 -- barely-there backdrop; the text carries it
 label.BorderSizePixel = 0
-label.Font = Enum.Font.SpecialElite
+label.Font = Enum.Font.Gotham
 label.TextScaled = true
-label.TextColor3 = Color3.fromRGB(225, 220, 200)
+label.TextColor3 = Color3.fromRGB(235, 232, 222)
 label.Text = ""
 label.Visible = false -- hide the black bar until there's actually a message
 label.Parent = gui
+local rlc = Instance.new("UICorner"); rlc.CornerRadius = UDim.new(0, 6); rlc.Parent = label
 
 -- only show the bar when it has text (empty text left a blank black box)
 local function setMsg(t)
