@@ -30,16 +30,22 @@ label.Text = ""
 label.Parent = gui
 local lc = Instance.new("UICorner"); lc.CornerRadius = UDim.new(0, 6); lc.Parent = label
 
+local SMOOTH = 11     -- how fast the POV eases toward their head — high enough to
+                      -- follow, low enough to filter out the walk/idle head-bob jitter
+
 local spectating = false
 local targets = {}
 local idx = 1
 local spectated = nil -- the player whose POV we're in
 local hidden = nil    -- character whose parts we've hidden locally
+local snapCam = true  -- snap (not ease) on the first frame and whenever we switch target
 
 local function livingOthers()
 	local list = {}
 	for _, p in ipairs(Players:GetPlayers()) do
-		if p ~= player then
+		-- only players still ACTIVE in the maze: alive and not escaped (escapees
+		-- sit parked in the safe room — nothing to watch there)
+		if p ~= player and p:GetAttribute("Escaped") ~= true then
 			local char = p.Character
 			local hum = char and char:FindFirstChildOfClass("Humanoid")
 			if hum and hum.Health > 0 and char:FindFirstChild("HumanoidRootPart") then
@@ -82,26 +88,34 @@ local function watch(i)
 	if #targets == 0 then
 		spectated = nil
 		unhide()
-		label.Text = "Spectating — no survivors left"
+		label.Text = player:GetAttribute("Escaped") == true
+			and "You escaped — waiting for the round to end"
+			or "Spectating — no survivors left"
 		return
 	end
 	idx = ((i - 1) % #targets) + 1
-	if spectated ~= targets[idx] then unhide() end -- reveal the previous body
+	if spectated ~= targets[idx] then unhide(); snapCam = true end -- reveal prev body, snap to new POV
 	spectated = targets[idx]
 	label.Text = "POV: " .. spectated.Name .. "   (Q / E to switch)"
 end
 
 -- drive the POV camera + borrowed flashlight every frame while spectating
-RunService.RenderStepped:Connect(function()
+RunService.RenderStepped:Connect(function(dt)
 	if not (spectating and spectated) then return end
 	local cam = workspace.CurrentCamera
 	local char = spectated.Character
 	local head = char and char:FindFirstChild("Head")
 	if not (cam and head) then return end
 
-	-- lock to their eyes + look direction (no free-look)
+	-- lock to their eyes + look direction (no free-look), but EASE toward the head
+	-- so their walk/idle head-bob doesn't jitter the whole screen
 	cam.CameraType = Enum.CameraType.Scriptable
-	cam.CFrame = head.CFrame
+	if snapCam then
+		cam.CFrame = head.CFrame
+		snapCam = false
+	else
+		cam.CFrame = cam.CFrame:Lerp(head.CFrame, math.clamp(dt * SMOOTH, 0, 1))
+	end
 
 	-- hide their body locally so it doesn't fill the screen (true first person)
 	if hidden ~= char then unhide(); hidden = char end
@@ -149,6 +163,14 @@ end
 if player.Character then onChar(player.Character) end
 player.CharacterAdded:Connect(onChar)
 
+-- ESCAPING also puts you in spectate: you're alive (parked in the safe room)
+-- but the round goes on — watch the teammates still inside until it ends
+player:GetAttributeChangedSignal("Escaped"):Connect(function()
+	if player:GetAttribute("Escaped") == true then
+		startSpectate()
+	end
+end)
+
 UIS.InputBegan:Connect(function(input, processed)
 	if processed or not spectating then return end
 	if input.KeyCode == Enum.KeyCode.E then
@@ -158,14 +180,17 @@ UIS.InputBegan:Connect(function(input, processed)
 	end
 end)
 
--- if the teammate you're watching dies or leaves, jump to another
+-- if the teammate you're watching dies, escapes, or leaves, jump to another
 task.spawn(function()
 	while true do
 		task.wait(1)
 		if spectating then
 			local hum = spectated and spectated.Character
 				and spectated.Character:FindFirstChildOfClass("Humanoid")
-			if not (hum and hum.Health > 0) then watch(idx) end
+			if not (hum and hum.Health > 0)
+				or (spectated and spectated:GetAttribute("Escaped") == true) then
+				watch(idx)
+			end
 		end
 	end
 end)

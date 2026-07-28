@@ -17,14 +17,15 @@ local RS = game:GetService("ReplicatedStorage")
 
 -- ── audio slots (every sound in the game) ─────────────────
 local AMBIENCE_SOUND  = "rbxassetid://92576512092725" -- constant background drone/hum (2D, always playing)
-local BREATHING_SOUND = "" -- YOUR OWN winded breathing (2D) — fades in below 50% stamina
-local FOOTSTEP_WALK   = "" -- one thump per step while walking (e.g. soft carpet step)
-local FOOTSTEP_RUN    = "" -- one thump per step while running (heavier carpet thump)
-local ALERT_SOUND     = "" -- plays while the maze is in ALERT (red lights) mode
+local BREATHING_SOUND = "rbxassetid://74603278311777" -- YOUR OWN winded breathing (2D) — fades in below 50% stamina
+local FOOTSTEP_WALK   = "rbxassetid://108141977175862" -- walking loop (the slower-cadence clip)
+local FOOTSTEP_RUN    = "rbxassetid://133003345144597" -- running loop (the faster-cadence clip, natural pitch)
+local ALERT_SOUND     = "rbxassetid://118863512220494" -- plays while the maze is in ALERT (red lights) mode
 local ELEVATOR_SOUND  = "rbxassetid://72303878759145" -- the elevator ride, plays through the pre-round intro (2D)
+local FLASHLIGHT_SOUND = "rbxassetid://79013410316837" -- click when YOU toggle the flashlight on/off (2D, only you hear it)
 local ENTITY_SOUND    = "rbxassetid://103206085469231" -- looping growl/drone emitted BY the Entity (positional)
 local DEATH_SOUND     = "rbxassetid://113822157484898" -- the scream ALIVE players hear when someone dies (positional at the kill)
-local JUMPSCARE_SOUND = "" -- the DYING player's OWN jumpscare sound (2D, only they hear it)
+local JUMPSCARE_SOUND = "rbxassetid://140233243543479" -- the DYING player's OWN jumpscare sound (2D, only they hear it)
 local YELL_SOUND      = "rbxassetid://92808749593079" -- the Entity's roar when it shoves you off a pit beam (positional)
 local LUNGE_SOUND     = "" -- plays as it winds up a lunge (telegraph, positional)
 local ENTITY_STEP_WALK = "rbxassetid://99809246525734" -- the Entity's footstep thump while walking (positional)
@@ -37,14 +38,24 @@ local CHASE_SOUND     = "rbxassetid://72818169474421" -- loops while the Entity 
 -- ── tuning ────────────────────────────────────────────────
 local AMBIENCE_VOLUME   = 0.4
 local ELEVATOR_VOLUME   = 0.8  -- the elevator door-open / arrival sound (2D)
-local BREATH_START      = 0.5  -- stamina fraction at which winded breathing fades IN
-local BREATH_MAX_VOLUME = 1.0  -- volume at 0 stamina (loudest gasping)
-local BREATH_SMOOTH     = 3    -- how fast the breathing volume eases toward target
+local BREATH_START      = 0.5   -- stamina fraction at which winded breathing kicks in
+local BREATH_VOLUME     = 0.12  -- peak breath volume (turned down more)
+local BREATH_SMOOTH     = 2     -- how fast the breathing volume eases up / down
+-- The clip is a long continuous breathing track (~11s), so it plays as a LOOP
+-- and we just ride its VOLUME with how winded / scared you are — no chopping it
+-- into breaths.
+-- adrenaline breathing: when the Entity had you and LOSES you, you pant with fright
+-- for a while, easing off. EntityAI bumps the local player's "PostChaseBreath"
+-- attribute at the moment it gives up the chase.
+local SCARE_BREATH_TIME = 9     -- seconds of scared panting after it loses you
 
-local WALK_VOLUME   = 0.4
-local RUN_VOLUME    = 0.7
-local WALK_INTERVAL = 0.50    -- seconds between walking thumps
-local RUN_INTERVAL  = 0.30    -- seconds between running thumps
+local WALK_VOLUME   = 0.3    -- walking loop volume (a bit louder)
+local RUN_VOLUME    = 0.5    -- running loop volume
+local WALK_SPEEDUP  = 1.0    -- walk-loop playback speed (keep near 1.0 — speeding up pitches it high)
+local RUN_SPEEDUP   = 1.0    -- run-loop playback speed (same: the clip's own cadence is the pace)
+local RUN_WALKSPEED = 22     -- your WalkSpeed at/above which it counts as running
+local FOOT_FADE     = 6      -- how fast the loop fades in as you move / out as you stop
+local FLASHLIGHT_VOLUME = 0.6 -- the flashlight toggle click (2D)
 
 local ENTITY_VOLUME    = 1.0  -- the Entity's growl (positional)
 local DEATH_VOLUME     = 2     -- the death scream others hear (positional)
@@ -83,7 +94,7 @@ end
 local AMBIENCE_FADE = 4      -- ~seconds to ease the ambience in / out
 local ambienceTarget = 0
 local ambience = makeLoop(AMBIENCE_SOUND, 0)
-local breathing = makeLoop(BREATHING_SOUND, 0)
+local breathing = makeLoop(BREATHING_SOUND, 0) -- long continuous loop, volume-ridden
 -- PRELOAD the looping sounds before playing them. A loop that isn't fully loaded
 -- re-buffers at the loop point, which is the "slight stop" you hear each cycle;
 -- preloading makes the ambience loop seamlessly.
@@ -94,11 +105,11 @@ task.spawn(function()
 	if BREATHING_SOUND ~= "" then table.insert(toLoad, breathing) end
 	if #toLoad > 0 then pcall(function() ContentProvider:PreloadAsync(toLoad) end) end
 	if AMBIENCE_SOUND ~= "" then ambience:Play() end
-	if BREATHING_SOUND ~= "" then breathing:Play() end
+	if BREATHING_SOUND ~= "" then breathing:Play() end -- loops silently; volume rides below
 end)
 
 -- alert siren: plays whenever the maze enters ALERT (red pulsing) mode
-local alert = makeLoop(ALERT_SOUND, 0.8)
+local alert = makeLoop(ALERT_SOUND, 1.4)
 local function refreshAlert()
 	if ALERT_SOUND == "" then return end
 	if workspace:GetAttribute("LightMode") == "ALERT" then
@@ -129,24 +140,28 @@ task.spawn(function()
 	s:Play()
 end)
 
+-- YOUR OWN jumpscare scream (2D): fired on the SAME Jumpscare remote as the
+-- face image (JumpscareUI), so the sound and picture land together — no lag,
+-- no double. Only the Entity firing this remote triggers it (pit falls don't).
+local jumpscareRemote = RS:WaitForChild("Remotes"):WaitForChild("Jumpscare")
+jumpscareRemote.OnClientEvent:Connect(function()
+	if JUMPSCARE_SOUND == "" then return end
+	local s = Instance.new("Sound")
+	s.SoundId = JUMPSCARE_SOUND
+	s.Volume = JUMPSCARE_VOLUME
+	s.Parent = SoundService -- 2D: only you hear it
+	s:Play()
+	task.delay(6, function() if s then s:Destroy() end end)
+end)
+
 -- death audio: GameManager fires RoundStatus "death" with the victim + kill spot.
---   • if YOU died → your OWN jumpscare sound (2D, personal)
---   • if someone ELSE died → the death scream, POSITIONAL at the kill, and only
---     if you're still ALIVE (dead spectators don't hear it)
+-- When someone ELSE dies → the death scream, POSITIONAL at the kill, and only if
+-- you're still ALIVE (dead spectators don't hear it). Your own death is handled
+-- by the Jumpscare remote above.
 local roundStatus = RS:WaitForChild("Remotes"):WaitForChild("RoundStatus")
 roundStatus.OnClientEvent:Connect(function(ev, name, pos)
 	if ev ~= "death" then return end
-
-	if name == player.Name then
-		if JUMPSCARE_SOUND == "" then return end
-		local s = Instance.new("Sound")
-		s.SoundId = JUMPSCARE_SOUND
-		s.Volume = JUMPSCARE_VOLUME
-		s.Parent = SoundService -- 2D: only you hear it
-		s:Play()
-		task.delay(6, function() if s then s:Destroy() end end)
-		return
-	end
+	if name == player.Name then return end -- your own scare is on the Jumpscare remote
 
 	if DEATH_SOUND == "" or typeof(pos) ~= "Vector3" then return end
 	local hum = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
@@ -163,8 +178,8 @@ roundStatus.OnClientEvent:Connect(function(ev, name, pos)
 	s.SoundId = DEATH_SOUND
 	s.Volume = DEATH_VOLUME
 	s.RollOffMode = Enum.RollOffMode.InverseTapered
-	s.RollOffMinDistance = 12   -- full volume near the kill
-	s.RollOffMaxDistance = 260  -- still audible far off, just quiet
+	s.RollOffMinDistance = 70   -- big "full volume" bubble → falloff is gentle
+	s.RollOffMaxDistance = 1500 -- the WHOLE map hears a death (maze is ~960 studs)
 	s.Parent = holder
 	s:Play()
 	s.Ended:Connect(function() holder:Destroy() end)
@@ -376,9 +391,20 @@ task.spawn(function()
 	end)
 end)
 
--- single-shot footstep sound, re-triggered each step
-local footstep = Instance.new("Sound")
-footstep.Parent = SoundService
+-- FOOTSTEPS: the clips are continuous LOOPS (several seconds), not one-shot thumps
+-- — so we run ONE looping sound that only plays while you MOVE and FADES OUT when
+-- you stop (never a hard cut, never droning while you stand still). Walking uses
+-- the walk loop; running swaps to the run loop at its natural pitch.
+local steps = Instance.new("Sound")
+steps.Looped = true
+steps.Volume = 0
+steps.Parent = SoundService
+local curStepId = ""
+if FOOTSTEP_WALK ~= "" then
+	steps.SoundId = FOOTSTEP_WALK
+	curStepId = FOOTSTEP_WALK
+	steps:Play()
+end
 
 local function aliveParts()
 	local char = player.Character
@@ -388,26 +414,47 @@ local function aliveParts()
 	if hum and root and hum.Health > 0 then return hum, root end
 end
 
-local stepClock = 999 -- high so the first step fires immediately on moving
 local breathingActive = false -- once winded, stays true until stamina is full again
+local breathI = 0     -- eased breathing intensity 0–1
+
+-- adrenaline panting window: opened when EntityAI bumps our PostChaseBreath
+-- attribute (it just lost sight of / gave up chasing us)
+local scareUntil = 0
+player:GetAttributeChangedSignal("PostChaseBreath"):Connect(function()
+	scareUntil = os.clock() + SCARE_BREATH_TIME
+end)
 
 RunService.Heartbeat:Connect(function(dt)
 	local hum, root = aliveParts()
 
-	-- YOUR winded breathing: fades in once stamina drops below BREATH_START and
-	-- LINGERS (hysteresis) until stamina is back to full. Louder the lower it is.
+	-- YOUR winded breathing: a continuous loop whose VOLUME rises the more winded
+	-- (below BREATH_START stamina, lingering until full) or scared you are. Never
+	-- breathes while DEAD / spectating (hum is nil unless you're alive).
 	-- NoiseReporter publishes your stamina as the player attribute "Stamina" (0–1).
 	if BREATHING_SOUND ~= "" then
-		local frac = player:GetAttribute("Stamina")
-		if typeof(frac) ~= "number" then frac = 1 end
-		if frac < BREATH_START then
-			breathingActive = true
-		elseif frac >= 1 then
-			breathingActive = false
+		local targetI = 0
+		if hum then
+			local frac = player:GetAttribute("Stamina")
+			if typeof(frac) ~= "number" then frac = 1 end
+			if frac < BREATH_START then
+				breathingActive = true
+			elseif frac >= 1 then
+				breathingActive = false
+			end
+			local staminaI = breathingActive and math.clamp(1 - frac, 0, 1) or 0
+			-- scared panting after the Entity gives up on you: starts strong, eases to 0
+			local scareI = 0
+			if os.clock() < scareUntil then
+				scareI = (scareUntil - os.clock()) / SCARE_BREATH_TIME
+			end
+			targetI = math.clamp(math.max(staminaI, scareI), 0, 1)
 		end
-		local target = breathingActive and (math.clamp(1 - frac, 0, 1) * BREATH_MAX_VOLUME) or 0
-		breathing.Volume = breathing.Volume
-			+ (target - breathing.Volume) * math.clamp(dt * BREATH_SMOOTH, 0, 1)
+		if not hum then
+			breathI = 0 -- dead: silence immediately, no fade tail
+		else
+			breathI = breathI + (targetI - breathI) * math.clamp(dt * BREATH_SMOOTH, 0, 1)
+		end
+		breathing.Volume = breathI * BREATH_VOLUME
 	end
 
 	-- maze ambience: eased toward its target (silent during the elevator ride,
@@ -417,31 +464,69 @@ RunService.Heartbeat:Connect(function(dt)
 			+ (ambienceTarget - ambience.Volume) * math.clamp(dt / AMBIENCE_FADE, 0, 1)
 	end
 
-	-- footstep thumps on a cadence
-	if not (hum and root) then
-		stepClock = 999
-		return
+	-- footsteps: a looping track that only plays while you MOVE and fades out when
+	-- you stop (so a long loop never drones on while standing, and never hard-cuts)
+	local footTarget, footSpeed = 0, nil
+	if hum and root then
+		local vel = root.AssemblyLinearVelocity
+		local flat = Vector3.new(vel.X, 0, vel.Z).Magnitude
+		local ws = hum.WalkSpeed
+		if flat >= 2 and ws > 10 then
+			-- walk uses the walk loop; run uses its OWN clip at natural pitch
+			-- (speeding a clip up to fake a run makes it chipmunk-high). Falls back
+			-- to the walk loop sped up only if no run clip is set.
+			local run = ws >= RUN_WALKSPEED
+			local wantId = run and (FOOTSTEP_RUN ~= "" and FOOTSTEP_RUN or FOOTSTEP_WALK) or FOOTSTEP_WALK
+			local wantSpeed = run and RUN_SPEEDUP or WALK_SPEEDUP
+			local wantVol = run and RUN_VOLUME or WALK_VOLUME
+			if wantId ~= "" then
+				if curStepId ~= wantId then
+					steps.SoundId = wantId; curStepId = wantId; steps:Play()
+				end
+				footTarget, footSpeed = wantVol, wantSpeed
+			end
+		end
 	end
-	local vel = root.AssemblyLinearVelocity
-	local flat = Vector3.new(vel.X, 0, vel.Z).Magnitude
-	local ws = hum.WalkSpeed
-
-	if flat < 2 or ws <= 10 then
-		-- standing still or crouching: silent
-		stepClock = 999
-		return
-	end
-
-	local run = ws >= 22
-	local id = run and FOOTSTEP_RUN or FOOTSTEP_WALK
-	local interval = run and RUN_INTERVAL or WALK_INTERVAL
-
-	stepClock += dt
-	if id ~= "" and stepClock >= interval then
-		stepClock = 0
-		footstep.SoundId = id
-		footstep.Volume = run and RUN_VOLUME or WALK_VOLUME
-		footstep.PlaybackSpeed = 0.94 + math.random() * 0.12 -- tiny variation
-		footstep:Play()
-	end
+	if footSpeed then steps.PlaybackSpeed = footSpeed end -- hold last speed while fading out
+	steps.Volume = steps.Volume + (footTarget - steps.Volume) * math.clamp(dt * FOOT_FADE, 0, 1)
 end)
+
+-- flashlight toggle click: reacts to the replicated FlashlightOn flag flipping.
+-- Kept here (the audio hub) so every sound id lives in one place; the tiny
+-- round-trip delay is inaudible for a click.
+local function hookFlashlightClick(char)
+	if FLASHLIGHT_SOUND == "" then return end
+	task.spawn(function()
+		local flag = char:WaitForChild("FlashlightOn", 10)
+		if not flag then return end
+		flag.Changed:Connect(function()
+			local hum = char:FindFirstChildOfClass("Humanoid")
+			if not (hum and hum.Health > 0) then return end -- no click on the forced-off at death
+			local s = Instance.new("Sound")
+			s.SoundId = FLASHLIGHT_SOUND
+			s.Volume = FLASHLIGHT_VOLUME
+			s.Parent = SoundService -- 2D: only you hear it
+			s:Play()
+			s.Ended:Connect(function() s:Destroy() end)
+			task.delay(3, function() if s then s:Destroy() end end)
+		end)
+	end)
+end
+if player.Character then hookFlashlightClick(player.Character) end
+player.CharacterAdded:Connect(hookFlashlightClick)
+
+-- silence Roblox's built-in footstep loop so only our custom thumps play
+local function muteDefaultSteps(char)
+	task.spawn(function()
+		local hrp = char:WaitForChild("HumanoidRootPart", 10)
+		if not hrp then return end
+		local running = hrp:WaitForChild("Running", 5)
+		if not running then return end
+		running.Volume = 0
+		running:GetPropertyChangedSignal("Volume"):Connect(function()
+			if running.Volume ~= 0 then running.Volume = 0 end -- keep it muted no matter what
+		end)
+	end)
+end
+if player.Character then muteDefaultSteps(player.Character) end
+player.CharacterAdded:Connect(muteDefaultSteps)

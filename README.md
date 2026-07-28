@@ -57,6 +57,7 @@ ServerScriptService/
   EntityAnimation.Script.lua    walk/run/idle + yell animation (fires on PlayYell)
   EntityKill.Script.lua         touch = death + jumpscare
   FlashlightSync.Script.lua     server-side flashlight state (Entity sight bonus)
+  AvatarNormalize.Script.lua    forces every player to the default avatar size
   PuzzleManager.Script.lua      fuses → fuse boxes → levers → exit (the win)
   NoiseRegistry.ModuleScript.lua  footstep noise bookkeeping
 StarterPlayer/StarterPlayerScripts/
@@ -68,7 +69,8 @@ StarterPlayer/StarterPlayerScripts/
   SpectateController.LocalScript.lua spectate teammates while dead (Q/E)
   EntityShakeController.LocalScript.lua screen shake — trembles when it lurks near, stomps when it chases
   JumpscareUI.LocalScript.lua        death flicker/shake (+ optional image/sound)
-  DevCheats.LocalScript.lua          TESTING ONLY — ESP + noclip fly (remove for release)
+  DevCheats.LocalScript.lua          TESTING ONLY — ESP, noclip fly, entity pause,
+                                     push immunity, unlimited battery/stamina (U, whitelisted)
 Workspace/
   Entity.Model.txt          ← checklist for building the Entity rig in Studio
 textures/                   ← source PNGs for all our custom decals
@@ -253,29 +255,39 @@ Entity difficulty lives at the top of `EntityAI.Script.lua`
       ahead and rounds the corner instead of grinding its face into it
 - [x] **Exit → safe room** — stepping through the exit drops you in a sealed
       elevator-style room the Entity can't reach (placeholder for the level-2 start)
+- [x] **Escape flow** — first escapee triggers the GREEN GUIDE LINE (ceiling
+      lights along the actual route elevator → exit) + a top-bar notice; escapees
+      spectate the players still inside; round ends when everyone's out or dead
+- [x] **Full audio pass** — footstep/breathing loops (fade in/out, run = own clip),
+      flashlight click, jumpscare image+scream synced with fade-to-black death
+      sequence, whole-map death scream, spot sting + chase music with 5s memory fade
+- [x] **Glowing eyes** — neon EyeL/EyeR dots (parts or attachments, auto-found)
+      with a directional glow where it faces; amber roaming → red when hunting
+- [x] **Adrenaline** — stamina lasts 3× while the Entity is on you (+ linger)
+- [x] **Camera feel** — subtle walk head-bob (stronger running) + entity shake
+- [x] **QoL** — scattered elevator spawns, forced default avatar size, teammate
+      flashlights visible, themed stamina bar, battery widget, Gotham UI
+- [x] **Dev cheats** — + unlimited battery/stamina (`U`, whitelisted)
 
-**Next** _(each `[ ]` below is one empty asset slot — plug the ID in and it just works)_
+**Next** _(the current todo)_
 
-_Sounds_ (`SoundController.LocalScript.lua`):
-- [ ] Winded breathing (2D) — `BREATHING_SOUND`
-- [ ] Player footstep — walk — `FOOTSTEP_WALK`
-- [ ] Player footstep — run — `FOOTSTEP_RUN`
-- [ ] Alert siren (red-lights mode) — `ALERT_SOUND`
-- [ ] Dying player's own jumpscare (2D) — `JUMPSCARE_SOUND`
+_🗺️ Map / Level Design_:
+- [ ] Create the lobby
+- [ ] Environmental details (`MazeGenerator.Script.lua`, 5 ID slots each — plug in and it works):
+  - [ ] Mold — `MOLD_TEXTURES`
+  - [ ] Stains — `STAIN_TEXTURES`
+  - [ ] Wall art — `ARTWORK`
+
+_🎨 Graphics / 3D Models_:
+- [ ] Create player models
+
+_🎬 Animations_:
+- [ ] Lunge animation — `LUNGE_ANIM_ID` in `EntityAnimation`
+
+_Empty sound slots left_ (`SoundController.LocalScript.lua`):
 - [ ] Lunge telegraph — `LUNGE_SOUND`
 - [ ] Entity footstep — run/chase — `ENTITY_STEP_RUN`
 - [ ] Entity idle vocalisations ×3 — `IDLE_SOUNDS`
 
-_Animations_ (`EntityAnimation` — walk/run already in):
-- [ ] Yell / roar (pit shove)
-- [ ] Lunge pounce
-- [ ] _(fix)_ scale walk anim playback to WalkSpeed so it doesn't glide at chase speed
-
-_Textures_ (`MazeGenerator.Script.lua` — up to 5 variants each):
-- [ ] Mold overlay — `MOLD_TEXTURES`
-- [ ] Carpet stains — `STAIN_TEXTURES`
-- [ ] Wall artwork — `ARTWORK`
-
-_Features_:
-- [ ] More decor variety — more prop types / clue props
-- [ ] Level 2 (the exit currently just loops you into the safe room)
+_Later_:
+- [ ] More decor variety · Level 2 (exit currently loops into the safe room)

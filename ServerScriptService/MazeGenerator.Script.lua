@@ -552,7 +552,7 @@ workspace:SetAttribute("WALL_H", WALL_H)
 workspace:SetAttribute("ORIGIN", O)
 workspace:SetAttribute("ELEV_X", ELEV_X)
 workspace:SetAttribute("ELEV_Y", ELEV_Y)
-workspace:SetAttribute("LightMode", "NORMAL")   -- NORMAL · ALERT · BLACKOUT
+workspace:SetAttribute("LightMode", "NORMAL")   -- NORMAL · ALERT · BLACKOUT · ESCAPE (green guidance)
 workspace:SetAttribute("FlickerBoost", 0)       -- higher = lights flicker more
 workspace:SetAttribute("EntitySpeedMul", 1)     -- entity speed multiplier
 
@@ -1388,6 +1388,65 @@ task.spawn(function()
 					end
 				end
 			end
+		elseif mode == "ESCAPE" then
+			-- someone made it out: ONE green LINE of ceiling lights lights up —
+			-- the actual walkable route from the elevator to the exit (BFS over
+			-- the real wall data, skipping pit fields). Panels on that route glow
+			-- green; every other light goes dark, so the line is unmissable.
+			if prev ~= "ESCAPE" then
+				local exitPos = workspace:GetAttribute("ExitPos")
+				local gx = exitPos and math.clamp(math.floor((exitPos.X - O) / CELL) + 1, 1, GRID) or GRID
+				local gz = exitPos and math.clamp(math.floor((exitPos.Z - O) / CELL) + 1, 1, GRID) or GRID
+
+				-- BFS from just outside the elevator doors to the exit's cell
+				local prevCell, seen = {}, {}
+				local q, head2 = { { ELEV_X + 1, ELEV_Y } }, 1
+				seen[key(ELEV_X + 1, ELEV_Y)] = true
+				while head2 <= #q do
+					local c = q[head2]; head2 += 1
+					local x, z = c[1], c[2]
+					if x == gx and z == gz then break end
+					local nbs = {}
+					if x < GRID and not wallV[x][z] then nbs[#nbs + 1] = { x + 1, z } end
+					if x > 1 and not wallV[x - 1][z] then nbs[#nbs + 1] = { x - 1, z } end
+					if z < GRID and not wallH[x][z] then nbs[#nbs + 1] = { x, z + 1 } end
+					if z > 1 and not wallH[x][z - 1] then nbs[#nbs + 1] = { x, z - 1 } end
+					for _, nb in ipairs(nbs) do
+						local k = key(nb[1], nb[2])
+						if not seen[k] and not pitCellSet[k]
+							and not (nb[1] == ELEV_X and nb[2] == ELEV_Y) then
+							seen[k] = true
+							prevCell[k] = c
+							q[#q + 1] = nb
+						end
+					end
+				end
+
+				-- walk the route back into a cell set
+				local onPath = {}
+				local cur = seen[key(gx, gz)] and { gx, gz } or nil
+				while cur do
+					onPath[key(cur[1], cur[2])] = true
+					cur = prevCell[key(cur[1], cur[2])]
+				end
+
+				for _, L in ipairs(allLights) do
+					local lx = math.clamp(math.floor((L.pos.X - O) / CELL) + 1, 1, GRID)
+					local lz = math.clamp(math.floor((L.pos.Z - O) / CELL) + 1, 1, GRID)
+					if onPath[key(lx, lz)] then
+						L.light.Enabled = true
+						L.light.Color = Color3.fromRGB(70, 255, 130)
+						L.light.Brightness = 1.6 -- bright: this IS the way out
+						L.panel.Color = Color3.fromRGB(60, 220, 110)
+						L.panel.Material = Enum.Material.Neon
+					else
+						-- off the route: dark, so the green line pops
+						L.light.Enabled = false
+						L.panel.Color = Color3.fromRGB(18, 18, 18)
+						L.panel.Material = Enum.Material.SmoothPlastic
+					end
+				end
+			end
 		else
 			if prev ~= "NORMAL" then
 				for _, L in ipairs(allLights) do restoreLight(L) end
@@ -1408,7 +1467,8 @@ task.spawn(function()
 	while true do
 		task.wait(0.4)
 		local mode = lightMode()
-		if mode ~= "ALERT" then
+		-- ESCAPE = the green guide line; the entity must not flip panels back on
+		if mode ~= "ALERT" and mode ~= "ESCAPE" then
 			local root = entity:FindFirstChild("HumanoidRootPart")
 			if root then
 				if mode == "BLACKOUT" then

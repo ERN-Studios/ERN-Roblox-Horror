@@ -23,9 +23,22 @@ Players.CharacterAutoLoads = false -- we control every (re)spawn
 local spawnReady = false
 local inRound = {} -- participants locked out of respawning until round end
 
+-- every (re)spawn lands in the elevator — scatter each character to a random
+-- spot on the spawn pad so the party doesn't stack on one point
+local function scatterInElevator(char)
+	local pad = workspace:FindFirstChild("ElevatorSpawn")
+	local hrp = char:WaitForChild("HumanoidRootPart", 5)
+	if not (pad and hrp) then return end
+	local ox = (math.random() - 0.5) * math.max(pad.Size.X - 3, 1)
+	local oz = (math.random() - 0.5) * math.max(pad.Size.Z - 3, 1)
+	char:PivotTo(CFrame.new(pad.Position + Vector3.new(ox, 3.2, oz))
+		* CFrame.Angles(0, math.random() * math.pi * 2, 0)) -- random facing too
+end
+
 -- first person while alive, free camera while dead; jumping disabled
 local function onCharacter(p, char)
 	p.CameraMode = Enum.CameraMode.LockFirstPerson
+	task.defer(scatterInElevator, char)
 	local hum = char:WaitForChild("Humanoid")
 	hum.UseJumpPower = true
 	hum.JumpPower = 0
@@ -103,6 +116,9 @@ task.spawn(function()
 		local participants = {}
 		local alive = {}
 		for _, p in ipairs(Players:GetPlayers()) do
+			p:SetAttribute("Escaped", nil) -- fresh round: nobody has escaped yet
+		end
+		for _, p in ipairs(Players:GetPlayers()) do
 			local char = p.Character
 			local hum = char and char:FindFirstChild("Humanoid")
 			if char and hum and hum.Health > 0 and char:FindFirstChild("HumanoidRootPart") then
@@ -165,12 +181,19 @@ task.spawn(function()
 
 		status:FireAllClients("start")
 
-		-- the round ends ONLY when the puzzle is solved (win) or everyone is
-		-- dead (lose) — there is no time limit
+		-- the round ends when every living player has ESCAPED (win) or everyone
+		-- is dead (lose) — there is no time limit. Escapees wait in the safe room
+		-- (spectating) while the rest are still in the maze.
 		local result
 		while true do
 			if workspace:GetAttribute("PuzzleWon") then result = "win" break end
 			if aliveCount <= 0 then result = "lose" break end
+			local anyEscaped, anyInside = false, false
+			for p in pairs(alive) do
+				if p:GetAttribute("Escaped") == true then anyEscaped = true
+				else anyInside = true end
+			end
+			if anyEscaped and not anyInside then result = "win" break end
 			task.wait(0.5)
 		end
 

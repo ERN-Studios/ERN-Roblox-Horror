@@ -30,12 +30,13 @@ local FUSES_PER_BOX = 1      -- fuses each box needs
 local SPAWN_MULT    = 2      -- fuses spawned = needed × this
 local LEVER_WINDOW  = 10     -- seconds all levers must be on together
 local ALERT_INTERVAL = 10    -- seconds between alert rolls
+local ALERT_DELAY_1  = 1.5   -- seconds before the FIRST roll (alert hits almost immediately)
 local ALERT_FIRST   = 1.00   -- alert chance on the first roll (guaranteed)
 local ALERT_AFTER   = 0.05   -- alert chance on every roll after
-local ALERT_TIME    = 8      -- seconds an alert lasts
+local ALERT_TIME    = 30     -- seconds an alert lasts
 local FLICK_PER_FUSE = 0.6   -- FlickerBoost added per fuse inserted
 local SPEED_PER_FUSE = 0.06  -- EntitySpeedMul added per fuse inserted
-local END_SPEED_MUL  = 1.6   -- entity speed once the exit opens
+local END_SPEED_MUL  = 1.3   -- entity speed once the exit opens (finale boost)
 local ENTITY_AREA_CELLS = 5  -- entity appears ~this many cells from the box
 local EDGE_BAND      = 3      -- levers/exit spawn within this many cells of an edge
 -- ──────────────────────────────────────────────────────────
@@ -496,6 +497,7 @@ local function startPuzzle()
 		active = true, stage = "fuses", conns = {}, folder = folder,
 		boxes = {}, levers = {}, carried = {}, exit = nil,
 		boxesDone = 0, boxCount = boxCount, latchMode = false,
+		escaped = {}, escapeAnnounced = false, -- who's out + first-escape latch
 	}
 
 	-- fuses on the ground, spread across the map
@@ -980,14 +982,27 @@ local function startPuzzle()
 	table.insert(session.conns, session.exit.trig.Touched:Connect(function(hit)
 		if not session or not session.exit.open then return end
 		local p = Players:GetPlayerFromCharacter(hit.Parent)
-		if p then
-			-- step INTO the safe room the entity can't reach (reads as looping back
-			-- into the elevator for now; becomes the level-2 start room later)
-			local char = p.Character
-			local hrp = char and char:FindFirstChild("HumanoidRootPart")
-			if hrp and session.safeSpawn then hrp.CFrame = session.safeSpawn end
-			status:FireAllClients("win")
-			workspace:SetAttribute("PuzzleWon", true) -- GameManager ends the round
+		if not p or session.escaped[p] then return end
+		local char = p.Character
+		local hrp = char and char:FindFirstChild("HumanoidRootPart")
+		if not hrp then return end
+
+		-- step INTO the safe room the entity can't reach (reads as looping back
+		-- into the elevator for now; becomes the level-2 start room later)
+		session.escaped[p] = true
+		if session.safeSpawn then hrp.CFrame = session.safeSpawn end
+		hrp.Anchored = true -- parked: they spectate from here, no wandering the void
+		p.CameraMode = Enum.CameraMode.Classic -- release first-person for spectate
+		p:SetAttribute("Escaped", true) -- spectate + EntityAI + the win check key off this
+
+		-- FIRST escape only, once per round: guidance lights go green (brighter
+		-- toward the exit) and everyone still inside gets the notification.
+		-- The round itself continues — GameManager ends it when every living
+		-- player has escaped (or everyone left inside is dead).
+		if not session.escapeAnnounced then
+			session.escapeAnnounced = true
+			workspace:SetAttribute("LightMode", "ESCAPE")
+			status:FireAllClients("escape", p.Name)
 		end
 	end))
 
@@ -1015,7 +1030,7 @@ local function startPuzzle()
 		task.spawn(function()
 			local first = true
 			while session and session.active and session.stage == "levers" do
-				task.wait(ALERT_INTERVAL)
+				task.wait(first and ALERT_DELAY_1 or ALERT_INTERVAL)
 				if not (session and session.active and session.stage == "levers") then break end
 				local chance = first and ALERT_FIRST or ALERT_AFTER
 				first = false
@@ -1043,6 +1058,7 @@ local function startPuzzle()
 		ex.sign.Color = Color3.fromRGB(45, 255, 110)
 		ex.light.Range = 40
 		ex.light.Brightness = 3
+		workspace:SetAttribute("ExitPos", ex.sign.Position) -- guidance lights aim here
 		entityToArea(ex.sign.Position, 3) -- it guards the way out (close by)
 
 		status:FireAllClients("exit")

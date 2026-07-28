@@ -30,9 +30,13 @@ label.Visible = false -- hide the black bar until there's actually a message
 label.Parent = gui
 local rlc = Instance.new("UICorner"); rlc.CornerRadius = UDim.new(0, 6); rlc.Parent = label
 
--- only show the bar when it has text (empty text left a blank black box)
-local function setMsg(t)
+-- only show the bar when it has text (empty text left a blank black box).
+-- Optional colour accents a message (e.g. the green escape notice); defaults
+-- back to the standard off-white every call.
+local DEFAULT_TEXT = Color3.fromRGB(235, 232, 222)
+local function setMsg(t, color)
 	label.Text = t or ""
+	label.TextColor3 = color or DEFAULT_TEXT
 	label.Visible = (t ~= nil and t ~= "")
 end
 
@@ -58,10 +62,22 @@ remote.OnClientEvent:Connect(function(ev, a, b)
 			dead = true
 		end
 
+	elseif ev == "escape" then
+		-- first player out (fires once per round) — guide everyone still inside.
+		-- The escapee themselves (and anyone else already out) doesn't need it.
+		if a ~= player.Name and player:GetAttribute("Escaped") ~= true then
+			local msg = "One player has successfully escaped. Follow the green lights to safety."
+			setMsg(msg, Color3.fromRGB(150, 235, 175))
+			task.delay(8, function()
+				if label.Text == msg then setMsg("") end -- don't wipe a newer message
+			end)
+		end
+
 	elseif ev == "lose" then
 		setMsg("EVERYONE DIED — YOU LOSE")
 
 	elseif ev == "win" then
+		-- you made it out (escaped, or somehow still standing) vs died watching
 		setMsg(dead and "THE OTHERS ESCAPED" or "YOU ESCAPED")
 	end
 end)

@@ -249,9 +249,85 @@ player.CharacterAdded:Connect(function(char)
 	hum.Died:Connect(function() setLights(false) end)
 end)
 
+-- ── teammates' flashlights (visible to YOU) ───────────────
+-- Your own beam lives on your camera, so others can't see it — but everyone's
+-- on/off flag replicates (FlashlightSync's FlashlightOn BoolValue). Attach a
+-- beam to every OTHER character's head that follows their flag, so you see
+-- teammates' lights sweeping around the maze.
+local mateBeams = {} -- [character] = { core = ..., spill = ... }
+
+local function attachMateBeam(char)
+	task.spawn(function()
+		local head = char:WaitForChild("Head", 30)
+		if not head then return end
+		if head:FindFirstChild("MateBeamCore") then return end
+
+		local core = Instance.new("SpotLight")
+		core.Name = "MateBeamCore"
+		core.Brightness = 4
+		core.Range = 32
+		core.Angle = 30
+		core.Color = Color3.fromRGB(255, 244, 214)
+		core.Shadows = true
+		core.Face = Enum.NormalId.Front -- follows where their head points
+		core.Enabled = false
+		core.Parent = head
+
+		local spill = Instance.new("SpotLight")
+		spill.Name = "MateBeamSpill"
+		spill.Brightness = 0.8
+		spill.Range = 40
+		spill.Angle = 70
+		spill.Color = Color3.fromRGB(255, 240, 205)
+		spill.Shadows = false
+		spill.Face = Enum.NormalId.Front
+		spill.Enabled = false
+		spill.Parent = head
+
+		mateBeams[char] = { core = core, spill = spill }
+		char.AncestryChanged:Connect(function(_, parent)
+			if not parent then mateBeams[char] = nil end -- character gone
+		end)
+	end)
+end
+
+local function hookMate(p)
+	if p == player then return end -- your own beam is the camera torch above
+	if p.Character then attachMateBeam(p.Character) end
+	p.CharacterAdded:Connect(attachMateBeam)
+end
+Players.PlayerAdded:Connect(hookMate)
+for _, p in ipairs(Players:GetPlayers()) do hookMate(p) end
+Players.PlayerRemoving:Connect(function(p)
+	if p.Character then mateBeams[p.Character] = nil end
+end)
+
+-- drive every mate beam from its owner's replicated flag EVERY frame — no
+-- one-shot event binding to go stale, and it works exactly the same whether
+-- you're alive, dead, or spectating (the beams live on THEIR heads, not yours)
+RunService.Heartbeat:Connect(function()
+	for char, beams in pairs(mateBeams) do
+		local flag = char:FindFirstChild("FlashlightOn")
+		local hum = char:FindFirstChildOfClass("Humanoid")
+		local shine = flag ~= nil and flag.Value == true
+			and hum ~= nil and hum.Health > 0
+		beams.core.Enabled = shine
+		beams.spill.Enabled = shine
+	end
+end)
+
+-- dev cheat confirmation (also proves this script version is the one running)
+player:GetAttributeChangedSignal("DevUnlimited"):Connect(function()
+	local active = player:GetAttribute("DevUnlimited") == true
+	if active then battery = BATTERY_MAX end
+	print("[Flashlight] unlimited battery " .. (active and "ON" or "OFF"))
+end)
+
 -- drain while on, recharge while off; die at empty
 RunService.Heartbeat:Connect(function(dt)
-	if on then
+	if player:GetAttribute("DevUnlimited") == true then
+		battery = BATTERY_MAX -- dev cheat (DevCheats, U key): never drains
+	elseif on then
 		battery = battery - DRAIN_PER_SEC * dt
 		if battery <= 0 then
 			battery = 0

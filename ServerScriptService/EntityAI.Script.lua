@@ -71,6 +71,23 @@ task.spawn(function()
 		entity:PivotTo(CFrame.new(es.CFrame.X, 0.5 + (pivot.Y - (bbox.Y - size.Y / 2)), es.CFrame.Z))
 	end
 	root.Anchored = false
+	-- CRITICAL: the SERVER must own the entity's physics forever. By default an
+	-- unanchored NPC near a player is simulated on THAT PLAYER'S machine — every
+	-- control change then does a network round-trip and the entity coasts through
+	-- turns like a car on ice (worst exactly when it's close to someone).
+	pcall(function() root:SetNetworkOwner(nil) end)
+	-- verify the claim in the console (run up to the entity, watch this line):
+	task.spawn(function()
+		while root.Parent and not root.Anchored do
+			local ok, owner = pcall(function() return root:GetNetworkOwner() end)
+			if ok then
+				if owner ~= nil then
+					warn("[EntityAI] physics owner is " .. owner.Name .. " — NOT the server! (this causes the ice-glide)")
+				end
+			end
+			task.wait(5)
+		end
+	end)
 end)
 
 -- put the entity in its collision group so the invisible pit-zone barriers
@@ -85,6 +102,47 @@ do
 		if d:IsA("BasePart") then d.CollisionGroup = "Entity" end
 	end)
 end
+
+-- ── stop it sliding "on ice" ──────────────────────────────
+-- The imported rig is heavy: it carries so much momentum that the Humanoid can't
+-- kill the sideways drift in time and it sails PAST corners (a car braking on
+-- ice). Two fixes: (1) strip the mass off every non-root limb so the whole
+-- assembly is light and turns on a dime; (2) give the grounded root very high
+-- friction so it grips the floor instead of skating. Re-applied to any part that
+-- streams in later.
+local GRIP = PhysicalProperties.new(
+	1.0,   -- density
+	3.0,   -- friction (high — grips hard)
+	0,     -- elasticity (no bounce)
+	100,   -- frictionWeight (dominate the floor's friction)
+	1      -- elasticityWeight
+)
+for _, d in ipairs(entity:GetDescendants()) do
+	if d:IsA("BasePart") and d ~= root then d.Massless = true end
+end
+root.CustomPhysicalProperties = GRIP
+entity.DescendantAdded:Connect(function(d)
+	if d:IsA("BasePart") and d ~= root then d.Massless = true end
+end)
+
+-- ── drift killer ──────────────────────────────────────────
+-- Belt-and-braces on top of the network-ownership fix: every physics step,
+-- any velocity that ISN'T pointing where the Humanoid is trying to walk gets
+-- cancelled — sideways momentum can never carry it past a corner. When it's
+-- not trying to move at all, the leftover coast bleeds off in a blink.
+RunService.Heartbeat:Connect(function()
+	if humanoid.Health <= 0 or root.Anchored then return end
+	local v = root.AssemblyLinearVelocity
+	local flat = Vector3.new(v.X, 0, v.Z)
+	local dir = humanoid.MoveDirection -- unit vector of walk intent (or zero)
+	if dir.Magnitude > 0.1 then
+		local along = math.clamp(flat:Dot(dir), 0, humanoid.WalkSpeed * 1.05)
+		root.AssemblyLinearVelocity = Vector3.new(dir.X * along, v.Y, dir.Z * along)
+	else
+		-- no intent → kill the coast quickly (no slide-out when it stops)
+		root.AssemblyLinearVelocity = Vector3.new(flat.X * 0.8, v.Y, flat.Z * 0.8)
+	end
+end)
 
 -- ── tuning ────────────────────────────────────────────────
 local SIGHT_RANGE       = 650   -- effectively unlimited — only walls and the cone stop it
@@ -152,6 +210,154 @@ for _, host in ipairs({ entity:FindFirstChild("Head"), root }) do
 		fill.Parent = host
 	end
 end
+
+-- ── glowing eyes ──────────────────────────────────────────
+-- Two small NEON dots (visible as bright points even far off in the dark) plus
+-- a soft PointLight glow that catches nearby walls. Amber while it roams; RED
+-- the moment it's hunting someone (CHASE / TRACK / YELL). Mounted on the
+-- "EyeL" / "EyeR" attachments on the rig (the modeller places those); if
+-- they're missing it falls back to Head-offset knobs so it still works.
+local EYE_COLOR_IDLE   = Color3.fromRGB(255, 190, 110) -- soft amber, roaming
+local EYE_COLOR_HUNT   = Color3.fromRGB(255, 38, 28)   -- red, after someone
+local EYE_DOT_SIZE     = 0.18  -- neon dot diameter (studs)
+local EYE_BRIGHTNESS   = 0.7   -- idle glow on nearby surfaces (keep subtle)
+local EYE_RANGE        = 9     -- idle glow reach in studs — NOT far, by design
+local EYE_ANGLE        = 55    -- glow cone width (degrees) — it shines WHERE IT FACES
+local EYE_HUNT_BRIGHTNESS = 1.5 -- the red glow is angrier…
+local EYE_HUNT_RANGE      = 13  -- …and reaches a bit further
+-- fallback placement when no EyeL/EyeR attachments exist (offsets from Head):
+local EYE_FB_SPACING = 0.4   -- studs between the two eyes
+local EYE_FB_UP      = 0.05  -- above the head part's centre
+local EYE_FB_FORWARD = 0.6   -- out of the face (-Z)
+
+task.spawn(function()
+	-- the modeller can mark the eyes with EITHER:
+	--   • two Attachments named EyeL / EyeR (on any part of the rig), or
+	--   • two small Parts/MeshParts named EyeL / EyeR (the eyeballs themselves)
+	local function findEyes()
+		local L, R
+		for _, d in ipairs(entity:GetDescendants()) do
+			if (d:IsA("Attachment") or d:IsA("BasePart")) then
+				if d.Name == "EyeL" then L = d
+				elseif d.Name == "EyeR" then R = d end
+			end
+		end
+		return L, R
+	end
+
+	-- give the rig (and the modeller's markers) time to stream in
+	local eyeL, eyeR
+	for _ = 1, 30 do
+		eyeL, eyeR = findEyes()
+		if eyeL and eyeR then break end
+		task.wait(1)
+	end
+	if not (eyeL and eyeR) then
+		warn("EntityAI: no EyeL/EyeR attachments or parts found — using Head-offset fallback for the eye glow")
+		local head = entity:FindFirstChild("Head") or root
+		local function fbEye(name, side)
+			local at = Instance.new("Attachment")
+			at.Name = name
+			at.Position = Vector3.new(side * EYE_FB_SPACING / 2, EYE_FB_UP, -EYE_FB_FORWARD)
+			at.Parent = head
+			return at
+		end
+		eyeL = eyeL or fbEye("EyeL", -1)
+		eyeR = eyeR or fbEye("EyeR", 1)
+	end
+
+	local eyes = {}
+	for _, marker in ipairs({ eyeL, eyeR }) do
+		local dot
+		if marker:IsA("BasePart") then
+			-- he added PARTS: the part IS the eyeball — make it glow directly
+			dot = marker
+			dot.Material = Enum.Material.Neon
+			dot.CastShadow = false
+			dot.CanCollide = false
+			dot.CanQuery = false -- must never block sight/flashlight raycasts
+			dot.CanTouch = false
+			dot.Massless = true
+			-- make sure it's actually attached to the rig: if it's anchored (or
+			-- free-floating) it would hang in the air while the entity walks off
+			if dot.Anchored or (not dot:FindFirstChildOfClass("WeldConstraint")
+				and not dot:FindFirstChildOfClass("Weld") and not dot:FindFirstChildOfClass("Motor6D")) then
+				local host = (dot.Parent:IsA("BasePart") and dot.Parent)
+					or entity:FindFirstChild("Head") or root
+				dot.Anchored = false
+				local weld = Instance.new("WeldConstraint")
+				weld.Part0 = dot
+				weld.Part1 = host
+				weld.Parent = dot
+			end
+		else
+			-- he added ATTACHMENTS: spawn our own neon dot at the marked spot
+			dot = Instance.new("Part")
+			dot.Name = "EyeGlow"
+			dot.Shape = Enum.PartType.Ball
+			dot.Size = Vector3.new(EYE_DOT_SIZE, EYE_DOT_SIZE, EYE_DOT_SIZE)
+			dot.Material = Enum.Material.Neon
+			dot.CastShadow = false
+			dot.CanCollide = false
+			dot.CanQuery = false
+			dot.CanTouch = false
+			dot.Massless = true
+			dot.CFrame = marker.WorldCFrame
+			local weld = Instance.new("WeldConstraint")
+			weld.Part0 = dot
+			weld.Part1 = marker.Parent
+			weld.Parent = dot
+			dot.Parent = marker.Parent
+		end
+		dot.Color = EYE_COLOR_IDLE
+
+		-- the glow is DIRECTIONAL: an invisible emitter aligned with the rig's
+		-- facing carries a SpotLight, so the light lands on whatever the entity
+		-- is looking toward (not a round bubble around its head)
+		local pos = dot.Position
+		local emitter = Instance.new("Part")
+		emitter.Name = "EyeBeamMount"
+		emitter.Size = Vector3.new(0.2, 0.2, 0.2)
+		emitter.Transparency = 1
+		emitter.CastShadow = false
+		emitter.CanCollide = false
+		emitter.CanQuery = false
+		emitter.CanTouch = false
+		emitter.Massless = true
+		emitter.CFrame = CFrame.lookAt(pos, pos + root.CFrame.LookVector)
+		local eweld = Instance.new("WeldConstraint")
+		eweld.Part0 = emitter
+		eweld.Part1 = dot
+		eweld.Parent = emitter
+		emitter.Parent = dot
+
+		local glow = Instance.new("SpotLight")
+		glow.Name = "EyeLight"
+		glow.Face = Enum.NormalId.Front -- out of the emitter's forward face
+		glow.Angle = EYE_ANGLE
+		glow.Brightness = EYE_BRIGHTNESS
+		glow.Range = EYE_RANGE
+		glow.Color = EYE_COLOR_IDLE
+		glow.Shadows = false
+		glow.Parent = emitter
+
+		table.insert(eyes, { dot = dot, glow = glow })
+	end
+
+	local function refreshEyes()
+		local st = workspace:GetAttribute("EntityState")
+		local hunting = (st == "CHASE" or st == "TRACK" or st == "YELL")
+		local c = hunting and EYE_COLOR_HUNT or EYE_COLOR_IDLE
+		for _, e in ipairs(eyes) do
+			e.dot.Color = c
+			e.glow.Color = c
+			e.glow.Brightness = hunting and EYE_HUNT_BRIGHTNESS or EYE_BRIGHTNESS
+			e.glow.Range = hunting and EYE_HUNT_RANGE or EYE_RANGE
+		end
+	end
+	workspace:GetAttributeChangedSignal("EntityState"):Connect(refreshEyes)
+	refreshEyes()
+end)
 
 -- ── dev: pause the entity (from DevCheats, testing only) ───
 -- DevCheats (client) fires DevControl; we flip a workspace attribute the AI
@@ -501,7 +707,9 @@ local function findVisiblePlayer()
 		local char = p.Character
 		local hrp = char and char:FindFirstChild("HumanoidRootPart")
 		local hum = char and char:FindFirstChild("Humanoid")
-		if hrp and hum and hum.Health > 0 and canSee(char, hrp) then
+		-- escaped players are OUT (safe room) — invisible to the entity
+		if p:GetAttribute("Escaped") ~= true
+			and hrp and hum and hum.Health > 0 and canSee(char, hrp) then
 			local d = (hrp.Position - root.Position).Magnitude
 			if d < bestDist then
 				bestChar, bestRoot, bestDist = char, hrp, d
@@ -739,16 +947,19 @@ end)
 -- picks WHO to head for, then grid-walks there (the walk never clips a wall).
 -- A slow, relentless, map-aware hunter: even unseen it slowly makes its way to a
 -- (random) player; SEEING you speeds it to a chase; HEARING you redirects it.
-local HUNT_SPEED    = 11  -- base slow walk toward a random player (via the map)
+local HUNT_SPEED    = 7   -- base slow creep toward a random player (via the map)
 local HUNT_RETARGET = 60  -- ALWAYS re-rolls which player it hunts after this long
 local huntTarget, huntPickedAt = nil, 0
+local lastChaseTarget = nil -- who currently carries the BeingChased attribute
 
 local function livingPlayers()
 	local list = {}
 	for _, p in ipairs(Players:GetPlayers()) do
 		local c = p.Character
 		local h = c and c:FindFirstChildOfClass("Humanoid")
-		if h and h.Health > 0 and c:FindFirstChild("HumanoidRootPart") then
+		-- escaped players are out of the maze — never hunt toward the safe room
+		if p:GetAttribute("Escaped") ~= true
+			and h and h.Health > 0 and c:FindFirstChild("HumanoidRootPart") then
 			table.insert(list, p)
 		end
 	end
@@ -808,6 +1019,14 @@ task.spawn(function()
 			end
 		end
 
+		-- publish WHO is being chased as a per-player attribute (true through the
+		-- blind TRACK window too) — their client uses it for adrenaline stamina
+		if targetPlayer ~= lastChaseTarget then
+			if lastChaseTarget then lastChaseTarget:SetAttribute("BeingChased", nil) end
+			if targetPlayer then targetPlayer:SetAttribute("BeingChased", true) end
+			lastChaseTarget = targetPlayer
+		end
+
 		if targetHrp then
 			if current ~= State.CHASE then current = State.CHASE; resetNav() end
 			chasePlayer = targetPlayer
@@ -841,12 +1060,17 @@ task.spawn(function()
 			end
 
 		else
+			local lost = chasePlayer -- who it was chasing, about to give up
 			chasePlayer = nil
 			trackPlayer = nil -- track window is over
 			if current == State.CHASE then
 				current = State.SEARCH
 				searchUntil = os.clock() + SEARCH_TIME
 				resetNav()
+				-- it just lost you → your client pants with fright (SoundController)
+				if lost then
+					lost:SetAttribute("PostChaseBreath", (lost:GetAttribute("PostChaseBreath") or 0) + 1)
+				end
 			end
 
 			-- HEARING redirects it to a fresh footstep noise

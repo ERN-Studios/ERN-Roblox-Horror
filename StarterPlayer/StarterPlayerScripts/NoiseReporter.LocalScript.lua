@@ -25,6 +25,24 @@ local STAMINA_RECHARGE = 10   -- recovers while not sprinting
 local STAMINA_RECOVER  = 25   -- must reach this after exhaustion before sprinting again
 local stamina, exhausted = STAMINA_MAX, false
 
+-- ADRENALINE: while the Entity is on YOU (chasing, or blindly tracking you for
+-- the few seconds after it loses sight — the server marks you "BeingChased"),
+-- your stamina lasts ADRENALINE_MUL times longer, lingering a moment after.
+local ADRENALINE_MUL    = 3
+local ADRENALINE_LINGER = 4   -- seconds the boost outlives the chase itself
+local adrenalineUntil = 0
+player:GetAttributeChangedSignal("BeingChased"):Connect(function()
+	if player:GetAttribute("BeingChased") ~= true then
+		adrenalineUntil = os.clock() + ADRENALINE_LINGER -- chase just ended → linger
+	end
+end)
+local function adrenalized()
+	return player:GetAttribute("BeingChased") == true or os.clock() < adrenalineUntil
+end
+
+-- dev cheat (DevCheats toggles the local DevUnlimited attribute): stamina never drains
+local function devUnlimited() return player:GetAttribute("DevUnlimited") == true end
+
 local function currentChar()
 	local char = player.Character
 	return char, char and char:FindFirstChild("Humanoid")
@@ -88,25 +106,42 @@ task.spawn(function()
 	end
 end)
 
--- ── stamina UI + drain/recharge ───────────────────────────
+-- ── stamina bar ───────────────────────────────────────────
+-- Matches the rest of the HUD: near-black translucent backdrop, rounded corners,
+-- white fill that blushes red as it empties (same white→red as the battery).
+-- Bottom-centre, slim; fades IN when you spend stamina, fades OUT when full.
+local BAR_W, BAR_H  = 230, 9
+local STA_FULL      = Color3.fromRGB(235, 235, 235) -- fill at full stamina
+local STA_EMPTY     = Color3.fromRGB(230, 80, 60)   -- fill near empty / exhausted
+local BAR_BG_ALPHA  = 0.6   -- backdrop transparency when shown
+local BAR_FADE      = 5     -- how fast the bar fades in / out
+
 local gui = Instance.new("ScreenGui")
 gui.Name = "StaminaGui"
 gui.ResetOnSpawn = false
 gui.Parent = player:WaitForChild("PlayerGui")
+
 local staBg = Instance.new("Frame")
-staBg.AnchorPoint = Vector2.new(0, 1)
-staBg.Position = UDim2.new(0, 16, 1, -40) -- just above the flashlight battery
-staBg.Size = UDim2.new(0, 160, 0, 16)
+staBg.AnchorPoint = Vector2.new(0.5, 1)
+staBg.Position = UDim2.new(0.5, 0, 1, -22)
+staBg.Size = UDim2.new(0, BAR_W, 0, BAR_H)
 staBg.BackgroundColor3 = Color3.new(0, 0, 0)
-staBg.BackgroundTransparency = 0.45
+staBg.BackgroundTransparency = 1 -- starts hidden (full stamina)
 staBg.BorderSizePixel = 0
-staBg.Visible = false -- stamina still limits sprint, just no on-screen bar
 staBg.Parent = gui
+local bgc = Instance.new("UICorner"); bgc.CornerRadius = UDim.new(0, 5); bgc.Parent = staBg
+
 local staFill = Instance.new("Frame")
-staFill.Size = UDim2.new(1, 0, 1, 0)
+staFill.AnchorPoint = Vector2.new(0, 0.5)
+staFill.Position = UDim2.new(0, 2, 0.5, 0)
+staFill.Size = UDim2.new(1, -4, 1, -4)
+staFill.BackgroundColor3 = STA_FULL
+staFill.BackgroundTransparency = 1
 staFill.BorderSizePixel = 0
-staFill.BackgroundColor3 = Color3.fromRGB(120, 220, 120)
 staFill.Parent = staBg
+local fc = Instance.new("UICorner"); fc.CornerRadius = UDim.new(0, 4); fc.Parent = staFill
+
+local barShown = 0 -- eased 0–1 visibility
 
 RunService.Heartbeat:Connect(function(dt)
 	local char = player.Character
@@ -114,8 +149,12 @@ RunService.Heartbeat:Connect(function(dt)
 	local moving = root
 		and Vector3.new(root.AssemblyLinearVelocity.X, 0, root.AssemblyLinearVelocity.Z).Magnitude > 2
 
-	if state == "sprint" and moving then
-		stamina = stamina - SPRINT_DRAIN * dt
+	if devUnlimited() then
+		stamina = STAMINA_MAX -- dev cheat: never drains
+		exhausted = false
+	elseif state == "sprint" and moving then
+		-- adrenaline: the Entity is (or was just) on you → stamina lasts 3x longer
+		stamina = stamina - (SPRINT_DRAIN / (adrenalized() and ADRENALINE_MUL or 1)) * dt
 		if stamina <= 0 then
 			stamina = 0
 			exhausted = true
@@ -132,8 +171,13 @@ RunService.Heartbeat:Connect(function(dt)
 	local frac = stamina / STAMINA_MAX
 	-- publish stamina (0–1) so SoundController can drive the winded-breathing sound
 	player:SetAttribute("Stamina", frac)
-	staFill.Size = UDim2.new(frac, 0, 1, 0)
-	staFill.BackgroundColor3 = exhausted
-		and Color3.fromRGB(230, 80, 60)
-		or Color3.fromRGB(120, 220, 120)
+
+	-- bar: width + white→red colour (solid red while exhausted), fade with use
+	staFill.Size = UDim2.new(frac, -4, 1, -4)
+	staFill.BackgroundColor3 = exhausted and STA_EMPTY
+		or STA_FULL:Lerp(STA_EMPTY, math.clamp(1 - frac, 0, 1) * 0.85)
+	local wantShown = (frac < 0.999) and 1 or 0
+	barShown = barShown + (wantShown - barShown) * math.clamp(dt * BAR_FADE, 0, 1)
+	staBg.BackgroundTransparency = 1 - barShown * (1 - BAR_BG_ALPHA)
+	staFill.BackgroundTransparency = 1 - barShown
 end)
