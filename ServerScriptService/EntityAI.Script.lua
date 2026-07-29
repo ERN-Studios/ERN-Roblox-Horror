@@ -130,18 +130,27 @@ end)
 -- any velocity that ISN'T pointing where the Humanoid is trying to walk gets
 -- cancelled — sideways momentum can never carry it past a corner. When it's
 -- not trying to move at all, the leftover coast bleeds off in a blink.
+--
+-- NOTE: intent is read from WalkToPoint (the current MoveTo goal), NOT from
+-- Humanoid.MoveDirection — MoveDirection reads ZERO for a server-driven MoveTo
+-- humanoid, which made an earlier version brake the entity to a ~4 stud/s crawl.
 RunService.Heartbeat:Connect(function()
 	if humanoid.Health <= 0 or root.Anchored then return end
 	local v = root.AssemblyLinearVelocity
 	local flat = Vector3.new(v.X, 0, v.Z)
-	local dir = humanoid.MoveDirection -- unit vector of walk intent (or zero)
-	if dir.Magnitude > 0.1 then
-		local along = math.clamp(flat:Dot(dir), 0, humanoid.WalkSpeed * 1.05)
+	local goal = humanoid.WalkToPoint
+	local toGoal = Vector3.new(goal.X - root.Position.X, 0, goal.Z - root.Position.Z)
+	if humanoid.WalkSpeed > 0.5 and toGoal.Magnitude > 0.75 then
+		-- walking somewhere: keep ALL the forward speed, strip only the skid
+		local dir = toGoal.Unit
+		local along = math.max(flat:Dot(dir), 0)
 		root.AssemblyLinearVelocity = Vector3.new(dir.X * along, v.Y, dir.Z * along)
-	else
-		-- no intent → kill the coast quickly (no slide-out when it stops)
-		root.AssemblyLinearVelocity = Vector3.new(flat.X * 0.8, v.Y, flat.Z * 0.8)
+	elseif humanoid.WalkSpeed <= 0.5 then
+		-- deliberately stopped: bleed off any coasting fast
+		root.AssemblyLinearVelocity = Vector3.new(flat.X * 0.85, v.Y, flat.Z * 0.85)
 	end
+	-- (walking but basically AT the goal → leave physics alone; the AI issues a
+	-- fresh MoveTo within 0.1s)
 end)
 
 -- ── tuning ────────────────────────────────────────────────
@@ -223,6 +232,8 @@ local EYE_DOT_SIZE     = 0.18  -- neon dot diameter (studs)
 local EYE_BRIGHTNESS   = 0.7   -- idle glow on nearby surfaces (keep subtle)
 local EYE_RANGE        = 9     -- idle glow reach in studs — NOT far, by design
 local EYE_ANGLE        = 55    -- glow cone width (degrees) — it shines WHERE IT FACES
+local EYE_NUDGE        = 0.15  -- studs the dot is pushed FORWARD out of the face,
+                               -- so the head mesh doesn't swallow the neon
 local EYE_HUNT_BRIGHTNESS = 1.5 -- the red glow is angrier…
 local EYE_HUNT_RANGE      = 13  -- …and reaches a bit further
 -- fallback placement when no EyeL/EyeR attachments exist (offsets from Head):
@@ -266,8 +277,16 @@ task.spawn(function()
 		eyeR = eyeR or fbEye("EyeR", 1)
 	end
 
+	print("[EntityAI] eye markers: " .. eyeL:GetFullName() .. " · " .. eyeR:GetFullName())
+
 	local eyes = {}
 	for _, marker in ipairs({ eyeL, eyeR }) do
+		local ok, err = pcall(function()
+		-- the nearest REAL part to fasten to — a rigged model can have the
+		-- attachment sitting on a Bone, and welds only accept BaseParts
+		local host = marker:FindFirstAncestorWhichIsA("BasePart")
+			or entity:FindFirstChild("Head") or root
+
 		local dot
 		if marker:IsA("BasePart") then
 			-- he added PARTS: the part IS the eyeball — make it glow directly
@@ -282,8 +301,6 @@ task.spawn(function()
 			-- free-floating) it would hang in the air while the entity walks off
 			if dot.Anchored or (not dot:FindFirstChildOfClass("WeldConstraint")
 				and not dot:FindFirstChildOfClass("Weld") and not dot:FindFirstChildOfClass("Motor6D")) then
-				local host = (dot.Parent:IsA("BasePart") and dot.Parent)
-					or entity:FindFirstChild("Head") or root
 				dot.Anchored = false
 				local weld = Instance.new("WeldConstraint")
 				weld.Part0 = dot
@@ -291,7 +308,9 @@ task.spawn(function()
 				weld.Parent = dot
 			end
 		else
-			-- he added ATTACHMENTS: spawn our own neon dot at the marked spot
+			-- he added ATTACHMENTS: spawn our own neon dot at the marked spot,
+			-- NUDGED forward out of the face so the mesh can't swallow the neon
+			local pos = marker.WorldCFrame.Position + root.CFrame.LookVector * EYE_NUDGE
 			dot = Instance.new("Part")
 			dot.Name = "EyeGlow"
 			dot.Shape = Enum.PartType.Ball
@@ -302,12 +321,12 @@ task.spawn(function()
 			dot.CanQuery = false
 			dot.CanTouch = false
 			dot.Massless = true
-			dot.CFrame = marker.WorldCFrame
+			dot.CFrame = CFrame.new(pos)
 			local weld = Instance.new("WeldConstraint")
 			weld.Part0 = dot
-			weld.Part1 = marker.Parent
+			weld.Part1 = host
 			weld.Parent = dot
-			dot.Parent = marker.Parent
+			dot.Parent = host
 		end
 		dot.Color = EYE_COLOR_IDLE
 
@@ -342,7 +361,12 @@ task.spawn(function()
 		glow.Parent = emitter
 
 		table.insert(eyes, { dot = dot, glow = glow })
+		end) -- pcall: one bad eye must not kill the other (or the colour watcher)
+		if not ok then
+			warn("[EntityAI] eye build FAILED for " .. marker:GetFullName() .. ": " .. tostring(err))
+		end
 	end
+	print("[EntityAI] glowing eyes active: " .. #eyes .. "/2")
 
 	local function refreshEyes()
 		local st = workspace:GetAttribute("EntityState")
@@ -479,6 +503,32 @@ local function wallBetween(targetPos)
 	if d < 4 then return false end
 	-- stop 3 studs short so a wall the player is standing against doesn't count
 	return workspace:Raycast(from, flat.Unit * (d - 3), wbParams) ~= nil
+end
+
+-- BODY-WIDTH version for the CHASE beeline: the single centre ray can be clear
+-- while a shoulder still catches the corner — it then grinds the edge and hangs
+-- there. Three parallel rays require the WHOLE body to fit the straight line
+-- before it commits to it. Failing this just hands off to the grid-walk, which
+-- rounds the corner through the cell centres — so being strict costs nothing.
+-- (A wide check was tried before and caused wedging, but that was under the OLD
+-- pathfinding movement; with grid navigation the fallback is safe.)
+local BEELINE_HALF_W = 2.6 -- half the body width the straight line must clear
+local function wallBetweenWide(targetPos)
+	local maze = workspace:FindFirstChild("Maze")
+	if not maze then return false end
+	wbParams.FilterDescendantsInstances = { maze }
+	local from = root.Position + Vector3.new(0, 2, 0)
+	local flat = Vector3.new(targetPos.X - from.X, 0, targetPos.Z - from.Z)
+	local d = flat.Magnitude
+	if d < 4 then return false end
+	local dir = flat.Unit
+	local side = Vector3.new(-dir.Z, 0, dir.X)
+	for _, off in ipairs({ 0, BEELINE_HALF_W, -BEELINE_HALF_W }) do
+		if workspace:Raycast(from + side * off, dir * (d - 3), wbParams) then
+			return true
+		end
+	end
+	return false
 end
 
 -- wall-slide: if a wall is close AHEAD in the travel direction, project the
@@ -856,14 +906,19 @@ end
 
 -- ── anti-stuck watchdog ───────────────────────────────────
 -- if it hasn't moved while it should be walking, drop the cached route so it
--- re-plans from where it actually is — clears any rare physics wedge
+-- re-plans from where it actually is — and force the chase onto the GRID for a
+-- moment (cell-centre waypoints pull it cleanly off whatever corner caught it)
+local forceGridUntil = 0
 task.spawn(function()
 	local last = root.Position
 	while task.wait(1.2) do
 		if humanoid.Health <= 0 then break end
 		local moved = (root.Position - last).Magnitude
 		last = root.Position
-		if moved < 2 and humanoid.WalkSpeed > 0.1 then resetNav() end
+		if moved < 2 and humanoid.WalkSpeed > 0.1 then
+			resetNav()
+			forceGridUntil = os.clock() + 1.5 -- brief grid detour to unwedge
+		end
 	end
 end)
 
@@ -1047,9 +1102,11 @@ task.spawn(function()
 				end
 			elseif lungePhase == 0 then
 				-- CLEAR SHOT → beeline straight to them (don't zig-zag through cell
-				-- centres / detour to the middle of the room). Only grid-walk when a
-				-- wall or pit is actually in the way. (Heartbeat lunges when close.)
-				if wallBetween(targetHrp.Position)
+				-- centres / detour to the middle of the room). Grid-walk when the
+				-- BODY-WIDE line is blocked (a shoulder would catch the corner), a
+				-- pit is in the way, or the watchdog just caught it wedged.
+				if os.clock() < forceGridUntil
+					or wallBetweenWide(targetHrp.Position)
 					or crossesPitZone(root.Position, targetHrp.Position) then
 					stepToward(targetHrp.Position, SPEED_CHASE * speedMul())
 				else
