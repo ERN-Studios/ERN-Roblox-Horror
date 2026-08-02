@@ -9,7 +9,9 @@ studio-sync.rbxl.lock
 *.winmd
 *.exe
 *.msi
-textures/sounds/*.zip
+
+# local stash for downloads/installers that ended up in the repo folder
+_local/
 
 # Python bytecode (tools/)
 __pycache__/

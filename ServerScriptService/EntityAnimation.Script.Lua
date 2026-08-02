@@ -3,13 +3,13 @@ local RunService = game:GetService("RunService")
 -- Blender action mapping. Empty slots are safe: the controller falls back to a
 -- compatible clip until the exported action has received its Roblox asset id.
 local ANIMATION_IDS = {
-	Watch = "",                    -- Blender: Watch (idle loop)
-	Walk = "74979742062849",       -- Blender: Walk
-	Run = "138859570115399",       -- Blender: Run_Chase
-	Howl = "117128353689729",      -- Blender: Yell_Howl (first sight)
-	YellFromRun = "",              -- Blender: Yell_FromRun (pit yell)
-	Lunge = "",                   -- Blender: Lunge (fallback)
-	LungeFromRun = "",            -- Blender: Lunge_FromRun (normal chase lunge)
+	Watch = "129452887687978",         -- Blender: Watch (idle loop)
+	Walk = "79037853194841",           -- Blender: Walk
+	Run = "110343018595451",           -- Blender: Run_Chase
+	Howl = "102924140813036",          -- Blender: Yell_Howl (first sight)
+	YellFromRun = "97380507966441",    -- Blender: Yell_FromRun (pit yell)
+	Lunge = "122769036667525",         -- Blender: Lunge (fallback)
+	LungeFromRun = "131606138259618",  -- Blender: Lunge_FromRun (normal chase lunge)
 }
 
 local WALK_ANIM_SPEED = 9

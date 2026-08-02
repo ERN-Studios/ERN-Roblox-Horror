@@ -34,8 +34,8 @@ local function applyPlayerLighting()
   Lighting.Brightness = 0.3
   Lighting.ClockTime = 0
   Lighting.FogColor = Color3.fromRGB(16, 14, 9)
-  Lighting.FogStart = 14
-  Lighting.FogEnd = 150
+  Lighting.FogStart = 30
+  Lighting.FogEnd = 220
   lobbyGrade.Enabled = false
   if mazeGrade then mazeGrade.Enabled = true end
  else
@@ -704,6 +704,7 @@ local function setMsg(text, color)
 end
 
 local objectiveRun = 0
+local elevatorBriefingStarted = false
 
 local function playObjective()
 	objectiveRun += 1
@@ -732,7 +733,7 @@ local function playObjective()
 				if not alive() then return nil end
 				label.Text = base .. text:sub(1, i) .. "."
 				keyClick()
-				task.wait(speed or 0.055)
+				task.wait(speed or 0.03)
 			end
 			label.Text = base .. text
 			return base .. text
@@ -761,44 +762,44 @@ local function playObjective()
    if alive() then setMsg("") end
    return
   end
-  local built = typeInto("", "Find the fuses", 0.055)
+			local built = typeInto("", "Find the fuses", 0.03)
 		if not built then return end
-		task.wait(2)
+		task.wait(0.6)
 
-		built = typeInto(built .. string.char(10), "Power every fuse box with a fuse", 0.055)
+		built = typeInto(built .. string.char(10), "Power every fuse box with a fuse", 0.03)
 		if not built then return end
-		task.wait(2)
+		task.wait(0.6)
 
-		built = typeInto(built .. string.char(10), "Pull all levers to power the exit door", 0.055)
+		built = typeInto(built .. string.char(10), "Pull all levers to power the exit door", 0.03)
 		if not built then return end
-		task.wait(1)
+		task.wait(0.5)
 
-		built = typeInto(built .. string.char(10), "Then escape", 0.055)
+		built = typeInto(built .. string.char(10), "Then escape", 0.03)
 		if not built then return end
 
 		-- Blink a terminal-style dot for about three seconds.
-		for _ = 1, 6 do
+		for _ = 1, 4 do
 			if not alive() then return end
 			label.Text = built .. "."
-			task.wait(0.25)
+			task.wait(0.15)
 			label.Text = built
-			task.wait(0.25)
+			task.wait(0.15)
 		end
 
 		if not alive() then return end
 		label.Text = ""
 
-		local warning = typeInto("", "If you hear it...", 0.065)
+		local warning = typeInto("", "If you hear it...", 0.035)
 		if not warning then return end
-		task.wait(1.8)
+		task.wait(0.6)
 
-		warning = typeInto(warning .. string.char(10), "Or even worse...", 0.065)
+		warning = typeInto(warning .. string.char(10), "Or even worse...", 0.035)
 		if not warning then return end
-		task.wait(1.8)
+		task.wait(0.6)
 
-		warning = typeInto(warning .. " ", "see it...", 0.065)
+		warning = typeInto(warning .. " ", "see it...", 0.035)
 		if not warning then return end
-		task.wait(2.2)
+		task.wait(0.8)
 
 		if not alive() then return end
 		label.Text = ""
@@ -812,23 +813,25 @@ local function playObjective()
 			if not alive() then return end
 			label.Text = ("RUN"):sub(1, i)
 			keyClick(0.9)
-			task.wait(0.22)
+			task.wait(0.12)
 		end
 
 		-- RUN stays visible while the exclamation points and glow blink.
-		for _ = 1, 9 do
+		for _ = 1, 6 do
 			if not alive() then return end
 			label.Text = "! RUN !"
 			label.TextTransparency = 0
 			label.TextStrokeTransparency = 0.06
-			task.wait(0.18)
+			task.wait(0.12)
 			label.Text = "  RUN  "
 			label.TextTransparency = 0.08
 			label.TextStrokeTransparency = 0.4
-			task.wait(0.18)
+			task.wait(0.12)
 		end
 
-		if alive() then setMsg("") end
+		-- Keep the final warning until the elevator doors open. The "start"
+		-- event below clears it, so the entire briefing lives inside the ride.
+		if alive() then label.Text = "! RUN !" end
 	end)
 end
 
@@ -1049,6 +1052,8 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
 		setMsg("GAME IN PROGRESS — WAIT FOR THE NEXT GROUP", Color3.fromRGB(255, 215, 120))
 
 	elseif ev == "loadinggame" then
+		objectiveRun += 1
+		elevatorBriefingStarted = false
 		hideRoundEnding(true)
 		stopSpectating()
 		dead = false
@@ -1067,6 +1072,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
 		setMsg("WORLD GENERATION FAILED — RETURNING TO LOBBY", Color3.fromRGB(255, 100, 100))
 
 	elseif ev == "waiting" then
+		elevatorBriefingStarted = false
 		setMsg("Waiting for players…")
 
 	elseif ev == "poolaccess" then
@@ -1082,7 +1088,10 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
 		finishLoadingWhenReady()
 		scheduleElevatorShake()
 		dead = false
-		setMsg("Doors opening in " .. a .. "…")
+		if not elevatorBriefingStarted then
+			elevatorBriefingStarted = true
+			playObjective()
+		end
 
 	elseif ev == "start" then
 		hideRoundEnding(true)
@@ -1091,7 +1100,8 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
 		serverReadyForEntry = true
 		finishLoadingWhenReady()
 		dead = false
-		playObjective()
+		objectiveRun += 1
+		setMsg("")
 
 	elseif ev == "death" then
 		if a == player.Name then

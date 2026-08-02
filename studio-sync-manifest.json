@@ -3,13 +3,13 @@
   "source": "Roblox Studio built-in MCP",
   "studio": {
     "name": "Backrooms: No Way Out",
-    "id": "0066fabb-ad65-4f20-9aba-286c978f20c3"
+    "id": "14140615-6dd6-47dd-a780-b2cd0307156f"
   },
   "counts": {
     "scripts": 47,
-    "remoteEvents": 7,
-    "total": 54,
-    "created": 0,
+    "remoteEvents": 11,
+    "total": 58,
+    "created": 4,
     "updated": 0,
     "unchanged": 54
   },
@@ -35,8 +35,8 @@
       "studioPath": "ServerScriptService.EntityAI",
       "className": "Script",
       "file": "ServerScriptService/EntityAI.Script.lua",
-      "bytes": 48663,
-      "sha256": "e23b87dcb2fa57a76c46dcc292058eddb6aff123f72027a8213bc5f1d3fdec49",
+      "bytes": 49959,
+      "sha256": "f4b30a7585e316c9581fa68c9e5fa5e8831a2817364684dadb8bd0aa01ea9f55",
       "status": "unchanged"
     },
     {
@@ -51,8 +51,8 @@
       "studioPath": "ServerScriptService.MazeGenerator",
       "className": "Script",
       "file": "ServerScriptService/MazeGenerator.Script.lua",
-      "bytes": 69628,
-      "sha256": "481781f2a57f1278e0538b177876a84a37ea596a661aa3a7078c212fd2e2b33d",
+      "bytes": 69883,
+      "sha256": "f670dd04b0ad65187911cb28e44fae1438471ce3f70f95f23dbcbbea647494ac",
       "status": "unchanged"
     },
     {
@@ -67,16 +67,16 @@
       "studioPath": "ServerScriptService.PuzzleManager",
       "className": "Script",
       "file": "ServerScriptService/PuzzleManager.Script.lua",
-      "bytes": 58664,
-      "sha256": "6e75a3ab953782584cd5ab88672ffb7ec32607dced2b814d95ac8186bea15e2c",
+      "bytes": 59330,
+      "sha256": "bfe8d090727c706c4dd293b42df2135b7ccb1eff3ece61234ea02ec2cadea297",
       "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.EntityAnimation",
       "className": "Script",
       "file": "ServerScriptService/EntityAnimation.Script.lua",
-      "bytes": 7238,
-      "sha256": "3e5f4d36ea0cd575995073aed60fbee5c64e23417a291202b5a37820090e3c93",
+      "bytes": 5306,
+      "sha256": "06ad3a62cee5cc7bf41f4764781fffebc938a74c08eba0e1ffb29979a7900cc4",
       "status": "unchanged"
     },
     {
@@ -155,8 +155,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.FlashlightController",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/FlashlightController.LocalScript.lua",
-      "bytes": 15790,
-      "sha256": "e7f8635490dbda695f83e2967c21119422be0c15590e48c28f4916ead6bdcfa1",
+      "bytes": 15792,
+      "sha256": "b2edd66df02797e94e248fca370fc7bbb4eec8f45163d72cbdf9b711c2412a14",
       "status": "unchanged"
     },
     {
@@ -171,16 +171,16 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.RoundUI",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
-      "bytes": 69615,
-      "sha256": "978bca21d22fd5cfed9154a4515c75f2b7d1ec32b3aba7e8f4b926e528bba34d",
+      "bytes": 69968,
+      "sha256": "ad8b445c692bb91380b669065c476950d48689d0e2e7f80647390f3707e126a9",
       "status": "unchanged"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.SoundController",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
-      "bytes": 23733,
-      "sha256": "24431abbca5cf2b3a385b40c193d039ee75e9e97ef8664cf5919bc537539e206",
+      "bytes": 23888,
+      "sha256": "2e3f82b26a9c6eea36611f4ddcef5f0800ad7d58fead47a1e3bd196900ee04e0",
       "status": "unchanged"
     },
     {
@@ -195,8 +195,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.DevCheats",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/DevCheats.LocalScript.lua",
-      "bytes": 6264,
-      "sha256": "ff79979c3ff270468102a87e7f6d9b8687e23a8494bc12589570e33dcc510a6f",
+      "bytes": 5806,
+      "sha256": "cb6ae2f7cc7b8bf4ecb31c72903bf930f0bb89acf1f35878e1a57ba8468d50c1",
       "status": "unchanged"
     },
     {
@@ -398,6 +398,38 @@
       "bytes": 148,
       "sha256": "d2d89a5dcd9f10a184aa9d2019c99d89148a1f34c10a6de3550a990287b0341b",
       "status": "unchanged"
+    },
+    {
+      "studioPath": "RobloxReplicatedStorage.IntegrityCheckProcessorKey2_LocalizationTableAnalyticsSender_LocalizationService",
+      "className": "RemoteEvent",
+      "file": "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_LocalizationTableAnalyticsSender_LocalizationService.RemoteEvent.txt",
+      "bytes": 218,
+      "sha256": "0432a5de97e1426f4a38582dd74866cfe180f6c171c51ccace99d96841778589",
+      "status": "created"
+    },
+    {
+      "studioPath": "RobloxReplicatedStorage.IntegrityCheckProcessorKey2_TextSafetyAnalyticsSender_LocalizationService",
+      "className": "RemoteEvent",
+      "file": "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_TextSafetyAnalyticsSender_LocalizationService.RemoteEvent.txt",
+      "bytes": 211,
+      "sha256": "d7149b0b3da5428845dfe6f941727138d00e6a58242255c5a70ada9a2749569b",
+      "status": "created"
+    },
+    {
+      "studioPath": "RobloxReplicatedStorage.IntegrityCheckProcessorKey2_DynamicTranslationSender_LocalizationService",
+      "className": "RemoteEvent",
+      "file": "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_DynamicTranslationSender_LocalizationService.RemoteEvent.txt",
+      "bytes": 210,
+      "sha256": "e0b944c8cb924f2879742a665bcf4cdfedbb8ab699b4ed0d629cf2d5ec1a9474",
+      "status": "created"
+    },
+    {
+      "studioPath": "RobloxReplicatedStorage.IntegrityCheckProcessorKey2_AutomaticAssetCaptureSender_LocalizationService",
+      "className": "RemoteEvent",
+      "file": "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_AutomaticAssetCaptureSender_LocalizationService.RemoteEvent.txt",
+      "bytes": 213,
+      "sha256": "9b95e9a8752b62a312fe5833af741b9b38691c26226f9c8465b55289b18e5bfc",
+      "status": "created"
     },
     {
       "studioPath": "ReplicatedStorage.Remotes.ReportNoise",

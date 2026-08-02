@@ -110,7 +110,7 @@ end)
 -- No HUD at all. The player is warned the battery is low by the beam itself
 -- flickering: one blink at 50%, a few blinks at 25%.
 local BATTERY_MAX      = 100
-local DRAIN_PER_SEC    = 3.3  -- ~30s of continuous light on a full charge
+local DRAIN_PER_SEC    = 1.667 -- ~60s of continuous light on a full charge
 local RECHARGE_PER_SEC = 1.5  -- slowly recovers while the light is OFF
 local MIN_TO_TURN_ON   = 5    -- can't switch on below this (must recharge a bit)
 local battery = BATTERY_MAX

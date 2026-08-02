@@ -112,7 +112,7 @@ end
 -- streams in later.
 local GRIP = PhysicalProperties.new(
 	1.0,   -- density
-	3.0,   -- friction (high — grips hard)
+	2.0,   -- friction (Roblox maximum; grips hard without runtime clamping)
 	0,     -- elasticity (no bounce)
 	100,   -- frictionWeight (dominate the floor's friction)
 	1      -- elasticityWeight

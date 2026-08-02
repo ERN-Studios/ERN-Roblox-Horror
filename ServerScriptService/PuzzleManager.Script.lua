@@ -1078,6 +1078,7 @@ local function startPuzzle()
 	local WALLHn = attr("WALL_H", 14)  -- ceiling height, for routing over pits
 	local wirePits = pitRects()        -- pit fields a floor cable can't cross
 	local mazeModel = workspace:FindFirstChild("Maze")
+	local WIRE_LANE_GAP = 0.38         -- parallel routes sit beside, never inside, each other
 
 	local function cellWorld(x, z) return On + (x - 0.5) * CELLn, On + (z - 0.5) * CELLn end
 	local function cellOf(p)
@@ -1282,15 +1283,21 @@ local function startPuzzle()
 
 	-- fallback when the grid BFS can't route (e.g. a station tucked in an odd
 	-- spot): a plain right-angle L on the floor so a wire ALWAYS appears
-	local function layWireDirect(fromCF, toCF, color, connectStart)
+	local function layWireDirect(fromCF, toCF, color, connectStart, laneIndex)
 		local a = (fromCF * CFrame.new(0, 0, -3)).Position
 		local b = (toCF * CFrame.new(0, 0, -3)).Position
 		local y = (floorY(a.X, a.Z) or 0) + 0.06
 		local p1 = Vector3.new(a.X, y, a.Z)
-		local corner = Vector3.new(b.X, y, a.Z)
 		local p2 = Vector3.new(b.X, y, b.Z)
-		laySeg(p1, corner, color)
-		laySeg(corner, p2, color)
+		local lane = math.max((laneIndex or 1) - 1, 0) * WIRE_LANE_GAP
+		local side = ((laneIndex or 1) % 2 == 0) and 1 or -1
+		local q1 = Vector3.new(p1.X, y, p1.Z + side * lane)
+		local corner = Vector3.new(p2.X + side * lane, y, q1.Z)
+		local q2 = Vector3.new(p2.X + side * lane, y, p2.Z)
+		laySeg(p1, q1, color)
+		laySeg(q1, corner, color)
+		laySeg(corner, q2, color)
+		laySeg(q2, p2, color)
 		if connectStart ~= false then
 			connectEnd(p1, fromCF, color)
 		else
@@ -1301,13 +1308,13 @@ local function startPuzzle()
 		connectEnd(p2, toCF, color)
 	end
 
-	local function layWire(fromCF, toCF, color, connectStart)
+	local function layWire(fromCF, toCF, color, connectStart, laneIndex)
 		if not mazeModel then return end
 		local sx, sz = frontCell(fromCF)
 		local gx, gz = frontCell(toCF)
 		local cells = gridPath(sx, sz, gx, gz)
 		if not cells or #cells < 2 then
-			layWireDirect(fromCF, toCF, color, connectStart) -- BFS failed → guarantee a wire
+			layWireDirect(fromCF, toCF, color, connectStart, laneIndex) -- BFS failed → guarantee a wire
 			return
 		end
 		local turns = turningPoints(cells)
@@ -1322,6 +1329,9 @@ local function startPuzzle()
 		local axis, konst = {}, {}
 		for i = 1, #W - 1 do
 			local al, off = runOffset(W[i], W[i + 1])
+			local lane = math.max((laneIndex or 1) - 1, 0) * WIRE_LANE_GAP
+			-- runOffset hugs a wall; move later routes inward toward the cell centre.
+			if off > 0 then off -= lane elseif off < 0 then off += lane end
 			axis[i] = al
 			konst[i] = (al == "X") and ((W[i].Z + W[i + 1].Z) / 2 + off)
 				or ((W[i].X + W[i + 1].X) / 2 + off)
@@ -1386,11 +1396,11 @@ local function startPuzzle()
 	local FUSE_WIRE = Color3.fromRGB(205, 170, 35)   -- aged safety yellow
 	local LEVER_WIRE = Color3.fromRGB(205, 82, 30)   -- muted industrial orange
 
-	for _, box in ipairs(session.boxes) do
-		layWire(fuseCableStart, box.cf, FUSE_WIRE, false)
+	for laneIndex, box in ipairs(session.boxes) do
+		layWire(fuseCableStart, box.cf, FUSE_WIRE, false, laneIndex)
 	end
-	for _, lever in ipairs(session.levers) do
-		layWire(leverCableStart, lever.cf, LEVER_WIRE, false)
+	for laneIndex, lever in ipairs(session.levers) do
+		layWire(leverCableStart, lever.cf, LEVER_WIRE, false, laneIndex)
 	end
 
 	-- exit: a doorway in the OUTER BORDER wall (you're actually leaving), dim

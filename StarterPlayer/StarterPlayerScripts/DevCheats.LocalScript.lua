@@ -18,7 +18,7 @@ local RS = game:GetService("ReplicatedStorage")
 
 local player = Players.LocalPlayer
 
-local ALLOWED_NAMES = { "LaverSneglen" } -- e.g. { "Krillemand" } — empty = everyone
+local ALLOWED_NAMES = { "mikkelczar","LaverSneglen" } -- e.g. { "Krillemand" } — empty = everyone
 local function allowed()
 	if #ALLOWED_NAMES == 0 then return true end
 	for _, n in ipairs(ALLOWED_NAMES) do
@@ -45,16 +45,7 @@ end
 local entityPaused = false
 local pushImmune = false
 
--- U — unlimited battery + stamina. Its OWN whitelist (unlike the cheats above):
--- ONLY these exact usernames get it. Comparison is == so it IS case-sensitive.
-local UNLIMITED_ALLOWED = { "LaverSneglen" }
 local unlimitedOn = false
-local function unlimitedAllowed()
-	for _, n in ipairs(UNLIMITED_ALLOWED) do
-		if n == player.Name then return true end
-	end
-	return false
-end
 
 -- ── ESP (highlight through walls) ─────────────────────────
 local COLORS = {
@@ -160,10 +151,6 @@ UIS.InputBegan:Connect(function(input, processed)
 		fireDev("immunePush", pushImmune)
 		print("[DevCheats] Yell push-back immunity " .. (pushImmune and "ON" or "OFF"))
 	elseif input.KeyCode == Enum.KeyCode.U then
-		if not unlimitedAllowed() then
-			print("[DevCheats] Unlimited battery/stamina: not on the whitelist")
-			return
-		end
 		unlimitedOn = not unlimitedOn
 		-- local attribute: FlashlightController (battery) and NoiseReporter
 		-- (stamina) both read it on this same client

@@ -150,6 +150,10 @@ class StudioMcpClient:
             raise StudioMcpError(f"{tool} failed: {text}")
         return text
 
+    def list_tools(self) -> list[dict[str, Any]]:
+        response = self._request("tools/list", {})
+        return response.get("result", {}).get("tools", [])
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(

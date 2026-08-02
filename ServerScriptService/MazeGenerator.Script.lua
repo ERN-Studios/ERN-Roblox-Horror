@@ -93,7 +93,8 @@ local LIGHT_TEXTURE      = "rbxassetid://135786374638992"  -- lit fixture face
 local DEAD_LIGHT_TEXTURE = "rbxassetid://107766152992499"  -- broken/dark fixture face
 
 -- Optional elevator textures (your own decals)
-local ELEV_WALL_TEXTURE  = "" -- cabin walls (over the steel)
+local ELEV_WALL_TEXTURE  = "rbxassetid://87269381352642" -- cabin walls (over the steel)
+local ELEV_CEILING_TEXTURE = "rbxassetid://111454130187372" -- cabin ceiling, viewed from below
 local ELEV_FLOOR_TEXTURE = "" -- cabin floor (over the marble)
 local ELEV_DOOR_TEXTURE  = "" -- door faces
 local ELEV_TILE = 4           -- studs per repeat inside the cabin
@@ -175,7 +176,7 @@ local STAIN_CHANCE = 0.06 -- per floor cell
 -- came in sideways, so we build our own — always upright, correctly sized, no
 -- InsertService needed). Each prop's model is defined in DECOR_BUILDERS lower
 -- down; here you tune size/rarity/placement. DECOR_DENSITY is the master knob.
-local DECOR_DENSITY = 0.1      -- chance PER eligible cell that it tries a prop
+local DECOR_DENSITY = 0.16     -- chance PER eligible cell that it tries a prop
 local DECOR_COLLIDE = true     -- props are solid for players; the entity walks through
 local DECOR_SCALE_JITTER = 0.2 -- ±fraction random size wobble per prop (weird-gen look)
 local DECOR_MIN_GAP = 2        -- same-type props must be MORE than this many cells apart
@@ -228,6 +229,7 @@ CEILING_TEXTURE = resolveTexture(CEILING_TEXTURE)
 LIGHT_TEXTURE = resolveTexture(LIGHT_TEXTURE)
 DEAD_LIGHT_TEXTURE = resolveTexture(DEAD_LIGHT_TEXTURE)
 ELEV_WALL_TEXTURE = resolveTexture(ELEV_WALL_TEXTURE)
+ELEV_CEILING_TEXTURE = resolveTexture(ELEV_CEILING_TEXTURE)
 ELEV_FLOOR_TEXTURE = resolveTexture(ELEV_FLOOR_TEXTURE)
 ELEV_DOOR_TEXTURE = resolveTexture(ELEV_DOOR_TEXTURE)
 for i, id in ipairs(MOLD_TEXTURES) do MOLD_TEXTURES[i] = resolveTexture(id) end
@@ -887,13 +889,14 @@ do
 		local back = part(Vector3.new(0.5, 10, CAB_W + 1), CFrame.new(xBack - 0.25, 5, cz), STEEL, Enum.Material.Metal, cabin)
 		local sideA = part(Vector3.new(depth, 10, 0.5), CFrame.new(bx, 5, cz - CAB_W / 2 - 0.25), STEEL, Enum.Material.Metal, cabin)
 		local sideB = part(Vector3.new(depth, 10, 0.5), CFrame.new(bx, 5, cz + CAB_W / 2 + 0.25), STEEL, Enum.Material.Metal, cabin)
-		part(Vector3.new(depth + 1, 1, CAB_W + 2), CFrame.new(bx - 0.25, 10.5, cz), STEEL_DARK, Enum.Material.Metal, cabin) -- roof
+		local roof = part(Vector3.new(depth + 1, 1, CAB_W + 2), CFrame.new(bx - 0.25, 10.5, cz), STEEL_DARK, Enum.Material.Metal, cabin)
 		local floorP = part(Vector3.new(depth, 0.2, CAB_W), CFrame.new(bx, 0.1, cz), MARBLE, Enum.Material.Marble, cabin)
 
 		-- optional custom cabin textures
 		applyTexture(back, ELEV_WALL_TEXTURE, WALL_FACES, ELEV_TILE)
 		applyTexture(sideA, ELEV_WALL_TEXTURE, WALL_FACES, ELEV_TILE)
 		applyTexture(sideB, ELEV_WALL_TEXTURE, WALL_FACES, ELEV_TILE)
+		applyTexture(roof, ELEV_CEILING_TEXTURE, { Enum.NormalId.Bottom }, ELEV_TILE)
 		applyTexture(floorP, ELEV_FLOOR_TEXTURE, { Enum.NormalId.Top }, ELEV_TILE)
 
 		local lightPanel = part(Vector3.new(2, 0.3, 2), CFrame.new(bx, 9.7, cz),
@@ -1502,8 +1505,8 @@ Lighting.GlobalShadows = true
 local _atmos = Lighting:FindFirstChildOfClass("Atmosphere")
 if _atmos then _atmos:Destroy() end
 Lighting.FogColor = Color3.fromRGB(16, 14, 9)   -- dark, close fog — dread, not haze
-Lighting.FogStart = 14
-Lighting.FogEnd = 150                           -- see a bit further (~6 cells) — less oppressive than before
+Lighting.FogStart = 30
+Lighting.FogEnd = 220                           -- lighter fog while keeping long corridors hidden
 
 -- color grade: desaturated, contrast-crushed, sickly warm tint
 local grade = Lighting:FindFirstChild("MongoGrade") or Instance.new("ColorCorrectionEffect")

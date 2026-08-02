@@ -73,7 +73,7 @@ StarterPlayer/StarterPlayerScripts/
                                      push immunity, unlimited battery/stamina (U, whitelisted)
 Workspace/
   Entity.Model.txt          ← checklist for building the Entity rig in Studio
-textures/                   ← source PNGs for all our custom decals
+assets/                    ← all source assets: textures · sounds · models · banners · animations
 ```
 
 File naming: `Name.<StudioObjectType>.lua` — the middle part tells you what to
@@ -105,7 +105,7 @@ For quick testing, override locally in Studio (don't commit these):
 
 ## 🎨 Textures
 
-All decals are **our own uploads** (source PNGs in [`textures/`](textures/)).
+All decals are **our own uploads** (source PNGs in [`assets/textures/`](assets/textures/)).
 To change one: upload the PNG via Studio's Asset Manager → copy the asset ID →
 paste it into the matching `*_TEXTURE` config at the top of
 `MazeGenerator.Script.lua`. Decal IDs and image IDs both work — the script
