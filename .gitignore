@@ -10,3 +10,7 @@ studio-sync.rbxl.lock
 *.exe
 *.msi
 textures/sounds/*.zip
+
+# Python bytecode (tools/)
+__pycache__/
+*.pyc
