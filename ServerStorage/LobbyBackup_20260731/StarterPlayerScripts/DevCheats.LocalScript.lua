@@ -18,7 +18,7 @@ local RS = game:GetService("ReplicatedStorage")
 
 local player = Players.LocalPlayer
 
-local ALLOWED_NAMES = { "LaverSneglen" } -- e.g. { "Krillemand" } — empty = everyone
+local ALLOWED_NAMES = {} -- e.g. { "Krillemand" } — empty = everyone
 local function allowed()
 	if #ALLOWED_NAMES == 0 then return true end
 	for _, n in ipairs(ALLOWED_NAMES) do
@@ -47,7 +47,7 @@ local pushImmune = false
 
 -- U — unlimited battery + stamina. Its OWN whitelist (unlike the cheats above):
 -- ONLY these exact usernames get it. Comparison is == so it IS case-sensitive.
-local UNLIMITED_ALLOWED = { "LaverSneglen" }
+local UNLIMITED_ALLOWED = { "mikkelczar", "LaverSneglen" }
 local unlimitedOn = false
 local function unlimitedAllowed()
 	for _, n in ipairs(UNLIMITED_ALLOWED) do

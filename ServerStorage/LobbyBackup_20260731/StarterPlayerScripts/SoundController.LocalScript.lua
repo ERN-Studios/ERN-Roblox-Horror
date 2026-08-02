@@ -49,8 +49,8 @@ local BREATH_SMOOTH     = 2     -- how fast the breathing volume eases up / down
 -- attribute at the moment it gives up the chase.
 local SCARE_BREATH_TIME = 9     -- seconds of scared panting after it loses you
 
-local WALK_VOLUME   = 0.38   -- walking loop volume
-local RUN_VOLUME    = 0.6    -- running loop volume
+local WALK_VOLUME   = 0.3    -- walking loop volume (a bit louder)
+local RUN_VOLUME    = 0.5    -- running loop volume
 local WALK_SPEEDUP  = 1.0    -- walk-loop playback speed (keep near 1.0 — speeding up pitches it high)
 local RUN_SPEEDUP   = 1.0    -- run-loop playback speed (same: the clip's own cadence is the pace)
 local RUN_WALKSPEED = 22     -- your WalkSpeed at/above which it counts as running
@@ -58,8 +58,8 @@ local FOOT_FADE     = 6      -- how fast the loop fades in as you move / out as 
 local FLASHLIGHT_VOLUME = 0.6 -- the flashlight toggle click (2D)
 
 local ENTITY_VOLUME    = 1.0  -- the Entity's growl (positional)
-local DEATH_VOLUME     = 1.15  -- controlled positional scream, not map-wide clipping
-local JUMPSCARE_VOLUME = 1.35  -- the dying player's own jumpscare sound (2D)
+local DEATH_VOLUME     = 2     -- the death scream others hear (positional)
+local JUMPSCARE_VOLUME = 2     -- the dying player's own jumpscare sound (2D)
 local YELL_VOLUME      = 1     -- the Entity's roar (positional)
 local IDLE_VOLUME      = 0.7   -- the Entity's idle vocalisations (positional)
 local IDLE_MIN_GAP     = 6     -- min seconds between idle vocalisations
@@ -70,8 +70,8 @@ local TRACK_FADE       = 5     -- seconds to SLOWLY fade the chase music once it
 -- sight and is only tracking blindly (match TRACK_TIME)
 local SPOT_VOLUME      = 1      -- the "spotted you!" sting (reuses YELL_SOUND) fired as a chase begins
 local LUNGE_VOLUME     = 1     -- the lunge telegraph (positional)
-local STEP_WALK_VOLUME = 0.62  -- entity walk thump
-local STEP_RUN_VOLUME  = 0.9   -- entity run thump
+local STEP_WALK_VOLUME = 0.5   -- entity walk thump
+local STEP_RUN_VOLUME  = 0.8   -- entity run thump
 local STEP_WALK_INT    = 0.55  -- seconds between entity walk thumps
 local STEP_RUN_INT     = 0.32  -- seconds between entity run thumps
 local STEP_RUN_SPEED   = 20    -- entity speed at/above which it uses the run thump
@@ -177,15 +177,9 @@ roundStatus.OnClientEvent:Connect(function(ev, name, pos)
 	local s = Instance.new("Sound")
 	s.SoundId = DEATH_SOUND
 	s.Volume = DEATH_VOLUME
-	s.PlaybackSpeed = 0.98 + math.random() * 0.04
 	s.RollOffMode = Enum.RollOffMode.InverseTapered
-	s.RollOffMinDistance = 12
-	s.RollOffMaxDistance = 280
-	local eq = Instance.new("EqualizerSoundEffect")
-	eq.HighGain = -3
-	eq.MidGain = -1
-	eq.LowGain = 0
-	eq.Parent = s
+	s.RollOffMinDistance = 70   -- big "full volume" bubble → falloff is gentle
+	s.RollOffMaxDistance = 1500 -- the WHOLE map hears a death (maze is ~960 studs)
 	s.Parent = holder
 	s:Play()
 	s.Ended:Connect(function() holder:Destroy() end)
@@ -245,7 +239,7 @@ task.spawn(function()
 		end
 		if #ids == 0 then continue end
 		local st = workspace:GetAttribute("EntityState")
-		if st == "ALERT" or st == "CHASE" or st == "YELL" or st == "TRACK" then continue end
+		if st == "CHASE" or st == "YELL" or st == "TRACK" then continue end
 		local entity = workspace:FindFirstChild("Entity")
 		local er = entity and entity:FindFirstChild("HumanoidRootPart")
 		if not er then continue end
@@ -297,7 +291,6 @@ task.spawn(function()
 
 	local function onState()
 		local st = workspace:GetAttribute("EntityState")
-		local alerting = (st == "ALERT") -- howl already owns the spotted sound
 		local chasing = (st == "CHASE")   -- actively sees you
 		local tracking = (st == "TRACK")  -- lost sight, hunting your last live position
 
@@ -332,7 +325,7 @@ task.spawn(function()
 				if s ~= "CHASE" and s ~= "TRACK" then chase:Stop() end
 			end)
 		end
-		prevEngaged = alerting or chasing or tracking
+		prevEngaged = chasing or tracking
 	end
 	workspace:GetAttributeChangedSignal("EntityState"):Connect(onState)
 	onState()

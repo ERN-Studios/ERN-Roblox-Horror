@@ -1,233 +1,164 @@
 local RunService = game:GetService("RunService")
 
--- ══ ANIMATION IDS — paste yours here (just the number, no "rbxassetid://") ══
-local WALK_ANIM_ID  = "74979742062849"   -- plays while the Entity walks / roams
-local RUN_ANIM_ID   = "138859570115399"  -- plays while the Entity runs (chasing)
-local YELL_ANIM_ID  = "117128353689729"  -- one-shot roar when it shoves a pit player ("" = none)
-local LUNGE_ANIM_ID = ""                 -- one-shot pounce as it winds up a lunge ("" = none)
--- ═══════════════════════════════════════════════════════════════════════════
+-- Blender action mapping. Empty slots are safe: the controller falls back to a
+-- compatible clip until the exported action has received its Roblox asset id.
+local ANIMATION_IDS = {
+	Watch = "",                    -- Blender: Watch (idle loop)
+	Walk = "74979742062849",       -- Blender: Walk
+	Run = "138859570115399",       -- Blender: Run_Chase
+	Howl = "117128353689729",      -- Blender: Yell_Howl (first sight)
+	YellFromRun = "",              -- Blender: Yell_FromRun (pit yell)
+	Lunge = "",                   -- Blender: Lunge (fallback)
+	LungeFromRun = "",            -- Blender: Lunge_FromRun (normal chase lunge)
+}
 
-print("[EntityAnimations] Script started")
+local WALK_ANIM_SPEED = 9
+local RUN_ANIM_SPEED = 15
+local ANIM_SPEED_MIN = 0.6
+local ANIM_SPEED_MAX = 2.5
+local LOCOMOTION_FADE = 0.2
+local ACTION_FADE = 0.12
 
 local entity = workspace:WaitForChild("Entity", 30)
-
 if not entity then
-	warn("[EntityAnimations] FEJL: Entity blev ikke fundet i Workspace")
+	warn("[EntityAnimations] Entity was not found")
 	return
 end
-
-print("[EntityAnimations] Entity found:", entity:GetFullName())
 
 local humanoid = entity:WaitForChild("Humanoid", 10)
 local root = entity:WaitForChild("HumanoidRootPart", 10)
-
-if not humanoid then
-	warn("[EntityAnimations] FEJL: Humanoid blev ikke fundet")
+if not humanoid or not root then
+	warn("[EntityAnimations] Humanoid or HumanoidRootPart was not found")
 	return
 end
-
-if not root then
-	warn("[EntityAnimations] FEJL: HumanoidRootPart blev ikke fundet")
-	return
-end
-
-print("[EntityAnimations] Humanoid found")
-print("[EntityAnimations] HumanoidRootPart found")
 
 local animator = humanoid:FindFirstChildOfClass("Animator")
-
 if not animator then
 	animator = Instance.new("Animator")
 	animator.Parent = humanoid
-	print("[EntityAnimations] New Animator created")
-else
-	print("[EntityAnimations] Existing Animator found")
 end
 
 for _, oldTrack in ipairs(animator:GetPlayingAnimationTracks()) do
-	print("[EntityAnimations] Stopping old track:", oldTrack.Name)
 	oldTrack:Stop(0)
 end
 
-local function loadAnimation(name, id)
-	print("[EntityAnimations] Loading", name, "ID:", id)
-
+local function loadTrack(name, id, looped, priority)
+	if id == "" then return nil end
 	local animation = Instance.new("Animation")
 	animation.Name = name
 	animation.AnimationId = "rbxassetid://" .. id
 	animation.Parent = script
-
-	local success, result = pcall(function()
+	local ok, track = pcall(function()
 		return animator:LoadAnimation(animation)
 	end)
-
-	if not success then
-		warn("[EntityAnimations] LOAD ERROR for", name, ":", result)
+	if not ok then
+		warn("[EntityAnimations] Could not load " .. name .. ": " .. tostring(track))
 		return nil
 	end
-
-	result.Looped = true
-	result.Priority = Enum.AnimationPriority.Action
-
-	print("[EntityAnimations]", name, "track created")
-
-	return result
+	track.Name = name
+	track.Looped = looped
+	track.Priority = priority
+	return track
 end
 
-local walkTrack = loadAnimation("ExplorerWalk", WALK_ANIM_ID)
-local runTrack = loadAnimation("ExplorerRun", RUN_ANIM_ID)
+local tracks = {
+	Watch = loadTrack("Watch", ANIMATION_IDS.Watch, true, Enum.AnimationPriority.Idle),
+	Walk = loadTrack("Walk", ANIMATION_IDS.Walk, true, Enum.AnimationPriority.Movement),
+	Run = loadTrack("Run_Chase", ANIMATION_IDS.Run, true, Enum.AnimationPriority.Movement),
+	Howl = loadTrack("Yell_Howl", ANIMATION_IDS.Howl, false, Enum.AnimationPriority.Action4),
+	YellFromRun = loadTrack("Yell_FromRun", ANIMATION_IDS.YellFromRun, false, Enum.AnimationPriority.Action4),
+	Lunge = loadTrack("Lunge", ANIMATION_IDS.Lunge, false, Enum.AnimationPriority.Action4),
+	LungeFromRun = loadTrack("Lunge_FromRun", ANIMATION_IDS.LungeFromRun, false, Enum.AnimationPriority.Action4),
+}
 
--- ── yell (a one-shot roar EntityAI triggers when it shoves a pit player) ──
--- YELL_ANIM_ID is set in the config block at the top. "" = no anim, just the push.
-local yellTrack
-if YELL_ANIM_ID ~= "" then
-	yellTrack = loadAnimation("EntityYell", YELL_ANIM_ID)
-	if yellTrack then
-		yellTrack.Looped = false                        -- play once
-		yellTrack.Priority = Enum.AnimationPriority.Action4 -- overrides walk/run
-	end
-end
-
--- EntityAI fires this BindableEvent to make the entity play its yell. Parented
--- to the Entity so EntityAI can find it with entity:FindFirstChild("PlayYell").
-local playYell = Instance.new("BindableEvent")
-playYell.Name = "PlayYell"
-playYell.Parent = entity
-playYell.Event:Connect(function()
-	if yellTrack then
-		yellTrack:Play(0.1)
-	else
-		print("[EntityAnimations] PlayYell fired but YELL_ANIM_ID is empty")
-	end
-end)
-
--- ── lunge (one-shot pounce prep; EntityAI bumps the EntityLunge attribute at
--- the start of its wind-up, and we play the animation off that) ──
-local lungeTrack
-if LUNGE_ANIM_ID ~= "" then
-	lungeTrack = loadAnimation("EntityLunge", LUNGE_ANIM_ID)
-	if lungeTrack then
-		lungeTrack.Looped = false                         -- play once
-		lungeTrack.Priority = Enum.AnimationPriority.Action4 -- overrides walk/run
-	end
-end
-workspace:GetAttributeChangedSignal("EntityLunge"):Connect(function()
-	if lungeTrack then lungeTrack:Play(0.1) end
-end)
-
-if not walkTrack or not runTrack then
-	warn("[EntityAnimations] FEJL: En eller flere tracks kunne ikke indlæses")
+if not tracks.Walk or not tracks.Run then
+	warn("[EntityAnimations] Walk/Run ids must be valid for locomotion")
 	return
 end
 
-task.wait(3)
+local currentLocomotion = nil
+local currentAction = nil
 
-print("========== ANIMATION LOAD REPORT ==========")
-print("[EntityAnimations] Walk Length:", walkTrack.Length)
-print("[EntityAnimations] Run Length:", runTrack.Length)
-
-local boneCount = 0
-
-for _, object in ipairs(entity:GetDescendants()) do
-	if object:IsA("Bone") then
-		boneCount += 1
+local function stopLocomotion(fade)
+	for _, name in ipairs({ "Watch", "Walk", "Run" }) do
+		local track = tracks[name]
+		if track and track.IsPlaying then track:Stop(fade) end
 	end
+	currentLocomotion = nil
 end
 
-print("[EntityAnimations] Bone count:", boneCount)
-print("===========================================")
-
-if walkTrack.Length == 0 then
-	warn("[EntityAnimations] WALK LENGTH IS 0")
-end
-
-if runTrack.Length == 0 then
-	warn("[EntityAnimations] RUN LENGTH IS 0")
-end
-
-local currentState = "None"
-
-local function switchState(newState)
-	if newState == currentState then
-		return
-	end
-
-	print(
-		"[EntityAnimations] STATE CHANGE:",
-		currentState,
-		"→",
-		newState,
-		"| WalkSpeed:",
-		humanoid.WalkSpeed
-	)
-
-	currentState = newState
-
-	if newState == "Idle" then
-		walkTrack:Stop(0.15)
-		runTrack:Stop(0.15)
-
-	elseif newState == "Walk" then
-		runTrack:Stop(0.1)
-
-		if not walkTrack.IsPlaying then
-			walkTrack:Play(0.15)
-			print("[EntityAnimations] WALK started")
-		end
-
-	elseif newState == "Run" then
-		walkTrack:Stop(0.1)
-
-		if not runTrack.IsPlaying then
-			runTrack:Play(0.1)
-			print("[EntityAnimations] RUN started")
+local function switchLocomotion(name)
+	if currentLocomotion == name then return end
+	for _, other in ipairs({ "Watch", "Walk", "Run" }) do
+		if other ~= name then
+			local track = tracks[other]
+			if track and track.IsPlaying then track:Stop(LOCOMOTION_FADE) end
 		end
 	end
+	currentLocomotion = name
+	local track = tracks[name]
+	if track and not track.IsPlaying then track:Play(LOCOMOTION_FADE) end
 end
 
-local lastDiagnostic = 0
+local function playAction(track)
+	if not track then return end
+	if currentAction and currentAction ~= track and currentAction.IsPlaying then
+		currentAction:Stop(ACTION_FADE)
+	end
+	stopLocomotion(ACTION_FADE)
+	currentAction = track
+	track:Play(ACTION_FADE, 1, 1)
+	local thisTrack = track
+	task.spawn(function()
+		thisTrack.Ended:Wait()
+		if currentAction == thisTrack then currentAction = nil end
+	end)
+end
+
+local function bindEvent(name, callback)
+	local old = entity:FindFirstChild(name)
+	if old and old:IsA("BindableEvent") then old:Destroy() end
+	local event = Instance.new("BindableEvent")
+	event.Name = name
+	event.Parent = entity
+	event.Event:Connect(callback)
+	return event
+end
+
+bindEvent("PlayHowl", function()
+	playAction(tracks.Howl)
+end)
+
+bindEvent("PlayYell", function()
+	playAction(tracks.YellFromRun or tracks.Howl)
+end)
+
+workspace:GetAttributeChangedSignal("EntityLunge"):Connect(function()
+	playAction(tracks.LungeFromRun or tracks.Lunge)
+end)
 
 RunService.Heartbeat:Connect(function()
 	if humanoid.Health <= 0 then
-		switchState("Idle")
+		stopLocomotion(0.15)
 		return
 	end
+	if currentAction and currentAction.IsPlaying then return end
+	if currentAction then currentAction = nil end
 
 	local velocity = root.AssemblyLinearVelocity
-	local horizontalSpeed = Vector3.new(
-		velocity.X,
-		0,
-		velocity.Z
-	).Magnitude
+	local horizontalSpeed = Vector3.new(velocity.X, 0, velocity.Z).Magnitude
+	local aiState = workspace:GetAttribute("EntityState")
 
 	if horizontalSpeed < 0.3 then
-		switchState("Idle")
-	elseif humanoid.WalkSpeed >= 20 then
-		switchState("Run")
+		switchLocomotion("Watch")
+	elseif aiState == "CHASE" then
+		switchLocomotion("Run")
+		tracks.Run:AdjustSpeed(math.clamp(horizontalSpeed / RUN_ANIM_SPEED, ANIM_SPEED_MIN, ANIM_SPEED_MAX))
 	else
-		switchState("Walk")
-	end
-
-	if os.clock() - lastDiagnostic >= 2 then
-		lastDiagnostic = os.clock()
-
-		print(
-			"[EntityAnimations] DIAGNOSTIC | State:",
-			currentState,
-			"| Horizontal speed:",
-			math.round(horizontalSpeed * 10) / 10,
-			"| WalkSpeed:",
-			humanoid.WalkSpeed,
-			"| Walk playing:",
-			walkTrack.IsPlaying,
-			"| Run playing:",
-			runTrack.IsPlaying,
-			"| Walk length:",
-			walkTrack.Length,
-			"| Run length:",
-			runTrack.Length
-		)
+		-- TRACK/SEARCH is intentionally a fast walk after sight is lost.
+		switchLocomotion("Walk")
+		tracks.Walk:AdjustSpeed(math.clamp(horizontalSpeed / WALK_ANIM_SPEED, ANIM_SPEED_MIN, ANIM_SPEED_MAX))
 	end
 end)
 
-print("[EntityAnimations] Heartbeat connection active")
+print("[EntityAnimations] Transition controller active")

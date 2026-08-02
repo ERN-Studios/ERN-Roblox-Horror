@@ -1,2 +1,12 @@
 # Claude Code local settings / project data — not part of the game
 .claude/
+
+# Studio MCP sync artifacts — regenerated on every sync (manifest IS tracked)
+studio-sync.rbxl
+studio-sync.rbxl.lock
+
+# stray Windows/installer junk — never game content
+*.winmd
+*.exe
+*.msi
+textures/sounds/*.zip

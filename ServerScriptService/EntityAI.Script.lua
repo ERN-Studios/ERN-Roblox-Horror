@@ -157,13 +157,16 @@ end)
 local SIGHT_RANGE       = 650   -- effectively unlimited — only walls and the cone stop it
 local SIGHT_RANGE_LIT   = 1100  -- when the player's flashlight is on
 local SIGHT_ANGLE       = math.rad(135) -- half-angle of the vision cone
-local SIGHT_CLOSE       = 48    -- within this it notices you even outside its cone
+local SIGHT_CLOSE       = 8     -- only near-contact overrides the vision cone
 local HEAR_RANGE        = 220
 local SPEED_LURK        = 8
 local SPEED_INVESTIGATE = 15
 local SPEED_CHASE       = 27.2  -- just faster than a sprinting player (sprint = 26)
+local SPEED_LOST        = 17    -- alert search pace after LOS is broken
 local SEARCH_TIME       = 12
 local TRACK_TIME        = 5     -- after LOSING sight it still knows your live position this long
+local SPOT_HOWL_TIME    = 2.2   -- 66 frames at 30 fps: finish howl before chase
+local SPOT_COOLDOWN     = 7     -- avoids repeated howls on rapid reacquisition
 
 -- lunge: when a chase gets close it dashes to WHERE YOU ARE and stops there —
 -- a committed pounce, not an endless slide. Contact still kills via EntityKill;
@@ -174,6 +177,7 @@ local LUNGE_SPEED       = 42    -- dash speed toward the captured spot
 local LUNGE_MAX_TIME    = 0.6   -- safety cap on the dash (it stops on arrival)
 local LUNGE_RECOVER     = 0.35  -- brief dead stop after it lands (kills the ice-slide)
 local LUNGE_COOLDOWN    = 10    -- min seconds between lunges (from wind-up start)
+local LUNGE_CHANCE      = 0.35  -- rolled once per close-range opportunity
 
 -- yell: it can't walk onto the pit beams, so it first WALKS TO THE PIT EDGE
 -- nearest you, faces you, winds up, then roars and shoves you off with a STEADY
@@ -181,16 +185,16 @@ local LUNGE_COOLDOWN    = 10    -- min seconds between lunges (from wind-up star
 -- beam edge you fall. The roar animation is owned by EntityAnimation (PlayYell).
 local YELL_PUSH         = 12    -- push speed it aims for (studs/s; sprint is 26)
 local YELL_FORCE        = 2200  -- how hard it shoves — LOW enough that you can walk
-                                -- AGAINST it (raise to make it harder to resist)
+-- AGAINST it (raise to make it harder to resist)
 local YELL_DURATION     = 3     -- seconds the steady push lasts
 local YELL_COOLDOWN     = 10    -- min seconds between yells at the same player (> duration)
 local YELL_WINDUP       = 0.6   -- pause after the roar before the push lands (sync w/ anim)
 local YELL_SOUND_LEAD   = 0.5   -- start the SOUND this long before the anim (it has an inhale)
 local YELL_EDGE_DIST    = 6     -- how close to the pit edge it must get before yelling
 local AGENT_RADIUS      = 8     -- pathfinding agent size — bigger keeps paths OFF the
-                                -- walls / out of corners while NOT chasing (lurk/search
-                                -- are pathfinding-driven). Chase uses the velocity
-                                -- override, which still commits into corners after you.
+-- walls / out of corners while NOT chasing (lurk/search
+-- are pathfinding-driven). Chase uses the velocity
+-- override, which still commits into corners after you.
 local AGENT_HEIGHT      = 8
 local WAYPOINT_TIME     = 1.5   -- seconds to reach one waypoint before re-planning
 -- ──────────────────────────────────────────────────────────
@@ -233,7 +237,7 @@ local EYE_BRIGHTNESS   = 0.7   -- idle glow on nearby surfaces (keep subtle)
 local EYE_RANGE        = 9     -- idle glow reach in studs — NOT far, by design
 local EYE_ANGLE        = 55    -- glow cone width (degrees) — it shines WHERE IT FACES
 local EYE_NUDGE        = 0.15  -- studs the dot is pushed FORWARD out of the face,
-                               -- so the head mesh doesn't swallow the neon
+-- so the head mesh doesn't swallow the neon
 local EYE_HUNT_BRIGHTNESS = 1.5 -- the red glow is angrier…
 local EYE_HUNT_RANGE      = 13  -- …and reaches a bit further
 -- fallback placement when no EyeL/EyeR attachments exist (offsets from Head):
@@ -282,85 +286,85 @@ task.spawn(function()
 	local eyes = {}
 	for _, marker in ipairs({ eyeL, eyeR }) do
 		local ok, err = pcall(function()
-		-- the nearest REAL part to fasten to — a rigged model can have the
-		-- attachment sitting on a Bone, and welds only accept BaseParts
-		local host = marker:FindFirstAncestorWhichIsA("BasePart")
-			or entity:FindFirstChild("Head") or root
+			-- the nearest REAL part to fasten to — a rigged model can have the
+			-- attachment sitting on a Bone, and welds only accept BaseParts
+			local host = marker:FindFirstAncestorWhichIsA("BasePart")
+				or entity:FindFirstChild("Head") or root
 
-		local dot
-		if marker:IsA("BasePart") then
-			-- he added PARTS: the part IS the eyeball — make it glow directly
-			dot = marker
-			dot.Material = Enum.Material.Neon
-			dot.CastShadow = false
-			dot.CanCollide = false
-			dot.CanQuery = false -- must never block sight/flashlight raycasts
-			dot.CanTouch = false
-			dot.Massless = true
-			-- make sure it's actually attached to the rig: if it's anchored (or
-			-- free-floating) it would hang in the air while the entity walks off
-			if dot.Anchored or (not dot:FindFirstChildOfClass("WeldConstraint")
-				and not dot:FindFirstChildOfClass("Weld") and not dot:FindFirstChildOfClass("Motor6D")) then
-				dot.Anchored = false
+			local dot
+			if marker:IsA("BasePart") then
+				-- he added PARTS: the part IS the eyeball — make it glow directly
+				dot = marker
+				dot.Material = Enum.Material.Neon
+				dot.CastShadow = false
+				dot.CanCollide = false
+				dot.CanQuery = false -- must never block sight/flashlight raycasts
+				dot.CanTouch = false
+				dot.Massless = true
+				-- make sure it's actually attached to the rig: if it's anchored (or
+				-- free-floating) it would hang in the air while the entity walks off
+				if dot.Anchored or (not dot:FindFirstChildOfClass("WeldConstraint")
+					and not dot:FindFirstChildOfClass("Weld") and not dot:FindFirstChildOfClass("Motor6D")) then
+					dot.Anchored = false
+					local weld = Instance.new("WeldConstraint")
+					weld.Part0 = dot
+					weld.Part1 = host
+					weld.Parent = dot
+				end
+			else
+				-- he added ATTACHMENTS: spawn our own neon dot at the marked spot,
+				-- NUDGED forward out of the face so the mesh can't swallow the neon
+				local pos = marker.WorldCFrame.Position + root.CFrame.LookVector * EYE_NUDGE
+				dot = Instance.new("Part")
+				dot.Name = "EyeGlow"
+				dot.Shape = Enum.PartType.Ball
+				dot.Size = Vector3.new(EYE_DOT_SIZE, EYE_DOT_SIZE, EYE_DOT_SIZE)
+				dot.Material = Enum.Material.Neon
+				dot.CastShadow = false
+				dot.CanCollide = false
+				dot.CanQuery = false
+				dot.CanTouch = false
+				dot.Massless = true
+				dot.CFrame = CFrame.new(pos)
 				local weld = Instance.new("WeldConstraint")
 				weld.Part0 = dot
 				weld.Part1 = host
 				weld.Parent = dot
+				dot.Parent = host
 			end
-		else
-			-- he added ATTACHMENTS: spawn our own neon dot at the marked spot,
-			-- NUDGED forward out of the face so the mesh can't swallow the neon
-			local pos = marker.WorldCFrame.Position + root.CFrame.LookVector * EYE_NUDGE
-			dot = Instance.new("Part")
-			dot.Name = "EyeGlow"
-			dot.Shape = Enum.PartType.Ball
-			dot.Size = Vector3.new(EYE_DOT_SIZE, EYE_DOT_SIZE, EYE_DOT_SIZE)
-			dot.Material = Enum.Material.Neon
-			dot.CastShadow = false
-			dot.CanCollide = false
-			dot.CanQuery = false
-			dot.CanTouch = false
-			dot.Massless = true
-			dot.CFrame = CFrame.new(pos)
-			local weld = Instance.new("WeldConstraint")
-			weld.Part0 = dot
-			weld.Part1 = host
-			weld.Parent = dot
-			dot.Parent = host
-		end
-		dot.Color = EYE_COLOR_IDLE
+			dot.Color = EYE_COLOR_IDLE
 
-		-- the glow is DIRECTIONAL: an invisible emitter aligned with the rig's
-		-- facing carries a SpotLight, so the light lands on whatever the entity
-		-- is looking toward (not a round bubble around its head)
-		local pos = dot.Position
-		local emitter = Instance.new("Part")
-		emitter.Name = "EyeBeamMount"
-		emitter.Size = Vector3.new(0.2, 0.2, 0.2)
-		emitter.Transparency = 1
-		emitter.CastShadow = false
-		emitter.CanCollide = false
-		emitter.CanQuery = false
-		emitter.CanTouch = false
-		emitter.Massless = true
-		emitter.CFrame = CFrame.lookAt(pos, pos + root.CFrame.LookVector)
-		local eweld = Instance.new("WeldConstraint")
-		eweld.Part0 = emitter
-		eweld.Part1 = dot
-		eweld.Parent = emitter
-		emitter.Parent = dot
+			-- the glow is DIRECTIONAL: an invisible emitter aligned with the rig's
+			-- facing carries a SpotLight, so the light lands on whatever the entity
+			-- is looking toward (not a round bubble around its head)
+			local pos = dot.Position
+			local emitter = Instance.new("Part")
+			emitter.Name = "EyeBeamMount"
+			emitter.Size = Vector3.new(0.2, 0.2, 0.2)
+			emitter.Transparency = 1
+			emitter.CastShadow = false
+			emitter.CanCollide = false
+			emitter.CanQuery = false
+			emitter.CanTouch = false
+			emitter.Massless = true
+			emitter.CFrame = CFrame.lookAt(pos, pos + root.CFrame.LookVector)
+			local eweld = Instance.new("WeldConstraint")
+			eweld.Part0 = emitter
+			eweld.Part1 = dot
+			eweld.Parent = emitter
+			emitter.Parent = dot
 
-		local glow = Instance.new("SpotLight")
-		glow.Name = "EyeLight"
-		glow.Face = Enum.NormalId.Front -- out of the emitter's forward face
-		glow.Angle = EYE_ANGLE
-		glow.Brightness = EYE_BRIGHTNESS
-		glow.Range = EYE_RANGE
-		glow.Color = EYE_COLOR_IDLE
-		glow.Shadows = false
-		glow.Parent = emitter
+			local glow = Instance.new("SpotLight")
+			glow.Name = "EyeLight"
+			glow.Face = Enum.NormalId.Front -- out of the emitter's forward face
+			glow.Angle = EYE_ANGLE
+			glow.Brightness = EYE_BRIGHTNESS
+			glow.Range = EYE_RANGE
+			glow.Color = EYE_COLOR_IDLE
+			glow.Shadows = false
+			glow.Parent = emitter
 
-		table.insert(eyes, { dot = dot, glow = glow })
+			table.insert(eyes, { dot = dot, glow = glow })
 		end) -- pcall: one bad eye must not kill the other (or the colour watcher)
 		if not ok then
 			warn("[EntityAI] eye build FAILED for " .. marker:GetFullName() .. ": " .. tostring(err))
@@ -370,7 +374,7 @@ task.spawn(function()
 
 	local function refreshEyes()
 		local st = workspace:GetAttribute("EntityState")
-		local hunting = (st == "CHASE" or st == "TRACK" or st == "YELL")
+		local hunting = (st == "ALERT" or st == "CHASE" or st == "TRACK" or st == "YELL")
 		local c = hunting and EYE_COLOR_HUNT or EYE_COLOR_IDLE
 		for _, e in ipairs(eyes) do
 			e.dot.Color = c
@@ -430,7 +434,7 @@ end)
 local function speedMul() return workspace:GetAttribute("EntitySpeedMul") or 1 end
 
 local State = { LURK = "LURK", INVESTIGATE = "INVESTIGATE",
-	CHASE = "CHASE", SEARCH = "SEARCH" }
+	ALERT = "ALERT", CHASE = "CHASE", SEARCH = "SEARCH" }
 
 local current = State.LURK
 local lastKnownPos = nil
@@ -438,6 +442,9 @@ local searchUntil = 0
 local chasePlayer = nil -- the player currently in sight (drives the lunge)
 local trackPlayer = nil -- after losing sight it still tracks THIS player's live
 local trackUntil = 0    -- position until this time (the TRACK_TIME "memory" window)
+local spottingPlayer = nil
+local spotUntil = 0
+local spotCooldownUntil = 0
 
 -- lunge state (driven in the chase Heartbeat)
 local lungePhase = 0            -- 0 idle · 1 wind-up (frozen telegraph) · 2 dashing
@@ -446,6 +453,7 @@ local lungeWindupUntil = 0      -- end of the freeze/telegraph
 local lungeUntil = 0            -- safety timeout for the current dash
 local lungeCooldownUntil = 0
 local lungeRecoverUntil = 0     -- brief post-lunge dead stop
+local lungeRollArmed = true     -- one chance roll each time the target enters range
 local yellActiveUntil = 0       -- while >now the entity is mid-yell (chase sound off)
 -- (lastYell is declared up top — it's used by the PlayerRemoving cleanup there)
 
@@ -943,6 +951,9 @@ RunService.Heartbeat:Connect(function()
 	local dist = to.Magnitude
 	local now = os.clock()
 	local v = root.AssemblyLinearVelocity
+	if dist >= LUNGE_RANGE + 3 then
+		lungeRollArmed = true
+	end
 
 	-- phase 1: WIND-UP — freeze + face you (telegraph)
 	if lungePhase == 1 then
@@ -984,27 +995,37 @@ RunService.Heartbeat:Connect(function()
 		return
 	end
 
-	-- close + clear (no wall or pit between) + off cooldown → wind up a lunge
-	if now >= lungeCooldownUntil and dist < LUNGE_RANGE and dist > 1
+	-- Roll ONCE when a target enters the close-range window. A failed roll stays
+	-- failed until they create distance and enter again; a successful roll keeps
+	-- the original cooldown, so Heartbeat cannot turn the chance into certainty.
+	if lungeRollArmed and now >= lungeCooldownUntil and dist < LUNGE_RANGE and dist > 1
 		and not crossesPitZone(root.Position, hrp.Position)
 		and not wallBetween(hrp.Position) then
-		lungePhase = 1
-		lungeWindupUntil = now + LUNGE_WINDUP
-		lungeCooldownUntil = now + LUNGE_COOLDOWN
-		workspace:SetAttribute("EntityLunge", (workspace:GetAttribute("EntityLunge") or 0) + 1)
-		root.AssemblyLinearVelocity = Vector3.new(0, v.Y, 0)
-		humanoid:MoveTo(root.Position)
+		lungeRollArmed = false
+		if math.random() <= LUNGE_CHANCE then
+			lungePhase = 1
+			lungeWindupUntil = now + LUNGE_WINDUP
+			lungeCooldownUntil = now + LUNGE_COOLDOWN
+			workspace:SetAttribute("EntityLunge", (workspace:GetAttribute("EntityLunge") or 0) + 1)
+			root.AssemblyLinearVelocity = Vector3.new(0, v.Y, 0)
+			humanoid:MoveTo(root.Position)
+		end
 	end
 	-- otherwise: nothing — the grid-walk (main loop) is doing the moving
 end)
 
 -- ── main loop ─────────────────────────────────────────────
--- picks WHO to head for, then grid-walks there (the walk never clips a wall).
--- A slow, relentless, map-aware hunter: even unseen it slowly makes its way to a
--- (random) player; SEEING you speeds it to a chase; HEARING you redirects it.
-local HUNT_SPEED    = 7   -- base slow creep toward a random player (via the map)
-local HUNT_RETARGET = 60  -- ALWAYS re-rolls which player it hunts after this long
-local huntTarget, huntPickedAt = nil, 0
+-- Neutral behaviour never uses a player's location. It picks open maze cells,
+-- walks there, pauses briefly, then picks another. Players only influence it by
+-- being seen or heard.
+local WANDER_REACH = 5
+local WANDER_MIN_TIME = 8
+local WANDER_MAX_TIME = 18
+local WANDER_PAUSE_MIN = 0.8
+local WANDER_PAUSE_MAX = 2.2
+local wanderTarget = nil
+local wanderRetargetAt = 0
+local wanderPauseUntil = 0
 local lastChaseTarget = nil -- who currently carries the BeingChased attribute
 
 local function livingPlayers()
@@ -1021,19 +1042,29 @@ local function livingPlayers()
 	return list
 end
 
--- position of the player it's currently hunting (re-rolls periodically / when the
--- target dies or leaves) — this is what makes it "slowly find a random player"
-local function huntPos()
-	local living = livingPlayers()
-	if #living == 0 then huntTarget = nil; return nil end
-	if not (huntTarget and table.find(living, huntTarget))
-		or (os.clock() - huntPickedAt) > HUNT_RETARGET then
-		huntTarget = living[math.random(#living)]
-		huntPickedAt = os.clock()
+local function wanderPos(now)
+	if wanderTarget then
+		local flat = Vector3.new(wanderTarget.X - root.Position.X, 0, wanderTarget.Z - root.Position.Z)
+		if flat.Magnitude <= WANDER_REACH then
+			wanderTarget = nil
+			wanderPauseUntil = now + math.random() * (WANDER_PAUSE_MAX - WANDER_PAUSE_MIN) + WANDER_PAUSE_MIN
+			resetNav()
+		end
+	end
+	if now < wanderPauseUntil then return nil end
+	if not wanderTarget or now >= wanderRetargetAt then
+		wanderTarget = pickLurkTarget()
+		wanderRetargetAt = now + math.random(WANDER_MIN_TIME, WANDER_MAX_TIME)
 		resetNav()
 	end
-	local hrp = huntTarget.Character and huntTarget.Character:FindFirstChild("HumanoidRootPart")
-	return hrp and hrp.Position
+	return wanderTarget
+end
+
+local function setChaseMarker(player)
+	if player == lastChaseTarget then return end
+	if lastChaseTarget then lastChaseTarget:SetAttribute("BeingChased", nil) end
+	if player then player:SetAttribute("BeingChased", true) end
+	lastChaseTarget = player
 end
 
 task.spawn(function()
@@ -1043,27 +1074,67 @@ task.spawn(function()
 			humanoid.WalkSpeed = 0
 			humanoid:MoveTo(root.Position)
 			chasePlayer = nil
+			setChaseMarker(nil)
 			resetNav()
 			continue
 		end
 		NoiseRegistry.Prune()
 
+		local now = os.clock()
 		local yelling = false
 		local char, hrp = findVisiblePlayer()
+		local visiblePlayer = char and Players:GetPlayerFromCharacter(char) or nil
 
-		-- seeing a player (re)opens a TRACK window on them: for TRACK_TIME after it
-		-- loses sight it STILL knows their LIVE position and keeps coming
-		if char then
-			trackPlayer = Players:GetPlayerFromCharacter(char)
-			trackUntil = os.clock() + TRACK_TIME
+		-- A newly spotted player gets a complete, stationary howl before pursuit.
+		-- Rapid reacquisition inside SPOT_COOLDOWN resumes the chase immediately.
+		if current == State.ALERT and now < spotUntil then
+			local sc = spottingPlayer and spottingPlayer.Character
+			local shrp = sc and sc:FindFirstChild("HumanoidRootPart")
+			humanoid.WalkSpeed = 0
+			humanoid:MoveTo(root.Position)
+			chasePlayer = nil
+			if shrp then faceFlat(shrp.Position) end
+			setChaseMarker(spottingPlayer)
+			workspace:SetAttribute("EntityState", "ALERT")
+			continue
+		elseif current == State.ALERT then
+			current = State.CHASE
+			spottingPlayer = nil
+			resetNav()
 		end
 
-		-- the current chase target: the visible player, else the tracked one while
-		-- its window is still open (and it's still alive)
+		if char then
+			trackPlayer = visiblePlayer
+			trackUntil = now + TRACK_TIME
+			if current ~= State.CHASE then
+				if now >= spotCooldownUntil then
+					current = State.ALERT
+					spottingPlayer = visiblePlayer
+					spotUntil = now + SPOT_HOWL_TIME
+					spotCooldownUntil = now + SPOT_COOLDOWN
+					trackUntil = spotUntil + TRACK_TIME
+					humanoid.WalkSpeed = 0
+					humanoid:MoveTo(root.Position)
+					faceFlat(hrp.Position)
+					local ev = entity:FindFirstChild("PlayHowl")
+					if ev then ev:Fire() end
+					workspace:SetAttribute("EntityYell", (workspace:GetAttribute("EntityYell") or 0) + 1)
+					setChaseMarker(visiblePlayer)
+					workspace:SetAttribute("EntityState", "ALERT")
+					continue
+				else
+					current = State.CHASE
+					resetNav()
+				end
+			end
+		end
+
+		-- Visible targets are chased at full speed. During the short memory window,
+		-- it follows at a faster WALK instead of continuing a full-speed blind chase.
 		local targetPlayer, targetHrp = nil, nil
 		if char then
-			targetPlayer, targetHrp = Players:GetPlayerFromCharacter(char), hrp
-		elseif trackPlayer and os.clock() < trackUntil then
+			targetPlayer, targetHrp = visiblePlayer, hrp
+		elseif trackPlayer and now < trackUntil then
 			local tc = trackPlayer.Character
 			local th = tc and tc:FindFirstChild("HumanoidRootPart")
 			local thum = tc and tc:FindFirstChildOfClass("Humanoid")
@@ -1073,23 +1144,15 @@ task.spawn(function()
 				trackPlayer = nil
 			end
 		end
-
-		-- publish WHO is being chased as a per-player attribute (true through the
-		-- blind TRACK window too) — their client uses it for adrenaline stamina
-		if targetPlayer ~= lastChaseTarget then
-			if lastChaseTarget then lastChaseTarget:SetAttribute("BeingChased", nil) end
-			if targetPlayer then targetPlayer:SetAttribute("BeingChased", true) end
-			lastChaseTarget = targetPlayer
-		end
+		setChaseMarker(targetPlayer)
 
 		if targetHrp then
 			if current ~= State.CHASE then current = State.CHASE; resetNav() end
-			chasePlayer = targetPlayer
+			local seen = char ~= nil
+			chasePlayer = seen and targetPlayer or nil
 			lastKnownPos = targetHrp.Position
-			local seen = char ~= nil -- truly in sight vs tracking blind
 
 			if seen and inPitZone(targetHrp.Position) then
-				-- player on the beams: grid-walk to the pit EDGE, face them, yell
 				local edge = pitEdgeToward(targetHrp.Position, root.Position)
 				local toEdge = Vector3.new(root.Position.X - edge.X, 0, root.Position.Z - edge.Z)
 				if toEdge.Magnitude <= YELL_EDGE_DIST then
@@ -1100,59 +1163,54 @@ task.spawn(function()
 				else
 					stepToward(edge, SPEED_CHASE * speedMul())
 				end
+			elseif not seen then
+				stepToward(targetHrp.Position, SPEED_LOST * speedMul())
 			elseif lungePhase == 0 then
-				-- CLEAR SHOT → beeline straight to them (don't zig-zag through cell
-				-- centres / detour to the middle of the room). Grid-walk when the
-				-- BODY-WIDE line is blocked (a shoulder would catch the corner), a
-				-- pit is in the way, or the watchdog just caught it wedged.
-				if os.clock() < forceGridUntil
+				if now < forceGridUntil
 					or wallBetweenWide(targetHrp.Position)
 					or crossesPitZone(root.Position, targetHrp.Position) then
 					stepToward(targetHrp.Position, SPEED_CHASE * speedMul())
 				else
 					humanoid.WalkSpeed = SPEED_CHASE * speedMul()
 					humanoid:MoveTo(Vector3.new(targetHrp.Position.X, root.Position.Y, targetHrp.Position.Z))
-					resetNav() -- so it re-plans fresh when a wall next blocks the line
+					resetNav()
 				end
 			end
-
 		else
-			local lost = chasePlayer -- who it was chasing, about to give up
+			local lost = lastChaseTarget or trackPlayer
 			chasePlayer = nil
-			trackPlayer = nil -- track window is over
-			if current == State.CHASE then
+			trackPlayer = nil
+			if current == State.CHASE or current == State.ALERT then
 				current = State.SEARCH
-				searchUntil = os.clock() + SEARCH_TIME
+				searchUntil = now + SEARCH_TIME
 				resetNav()
-				-- it just lost you → your client pants with fright (SoundController)
 				if lost then
 					lost:SetAttribute("PostChaseBreath", (lost:GetAttribute("PostChaseBreath") or 0) + 1)
 				end
 			end
+			setChaseMarker(nil)
 
-			-- HEARING redirects it to a fresh footstep noise
 			local noise = NoiseRegistry.GetBest(root.Position, HEAR_RANGE)
 			if noise then
 				current = State.INVESTIGATE
 				stepToward(noise.pos, SPEED_INVESTIGATE * speedMul())
-
-			elseif current == State.SEARCH and os.clock() < searchUntil and lastKnownPos then
-				current = State.SEARCH
-				stepToward(lastKnownPos, SPEED_INVESTIGATE * speedMul())
-
+			elseif current == State.SEARCH and now < searchUntil and lastKnownPos then
+				stepToward(lastKnownPos, SPEED_LOST * speedMul())
 			else
-				-- HUNT: always, slowly, make its way toward a (random) player
 				current = State.LURK
-				local hp = huntPos()
-				if hp then stepToward(hp, HUNT_SPEED * speedMul()) end
+				local wp = wanderPos(now)
+				if wp then
+					stepToward(wp, SPEED_LURK * speedMul())
+				else
+					humanoid.WalkSpeed = 0
+					humanoid:MoveTo(root.Position)
+				end
 			end
 		end
 
 		local pubState = current
-		-- in CHASE but can't actually SEE them = blindly tracking (the memory
-		-- window). Publish TRACK so SoundController can slowly fade the chase music.
 		if current == State.CHASE and not char then pubState = "TRACK" end
-		if yelling or os.clock() < yellActiveUntil then pubState = "YELL" end
+		if yelling or now < yellActiveUntil then pubState = "YELL" end
 		workspace:SetAttribute("EntityState", pubState)
 	end
 end)

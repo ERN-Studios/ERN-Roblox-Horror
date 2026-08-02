@@ -276,7 +276,7 @@ _🗺️ Map / Level Design_:
 - [ ] Environmental details (`MazeGenerator.Script.lua`, 5 ID slots each — plug in and it works):
   - [ ] Mold — `MOLD_TEXTURES`
   - [ ] Stains — `STAIN_TEXTURES`
-  - [ ] Wall art — `ARTWORK`
+  - [x] Wall art — `ARTWORK` (10 wall writings / doodles in)
 
 _🎨 Graphics / 3D Models_:
 - [ ] Create player models

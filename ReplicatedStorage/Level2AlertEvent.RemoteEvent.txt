@@ -1,0 +1,4 @@
+NOT a script — this file mirrors a RemoteEvent object in Roblox Studio.
+
+Studio path: ReplicatedStorage.Level2AlertEvent
+Object type: RemoteEvent

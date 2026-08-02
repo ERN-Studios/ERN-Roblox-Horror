@@ -406,7 +406,7 @@ endTitle.Position = UDim2.fromScale(0.5, 0.43)
 endTitle.Size = UDim2.new(0.88, 0, 0.18, 0)
 endTitle.BackgroundTransparency = 1
 endTitle.Font = Enum.Font.GothamBlack
-endTitle.Text = (workspace:GetAttribute("SelectedLevel") == 2 and "LEVEL 2 CLEARED" or "LEVEL 1 CLEARED")
+endTitle.Text = "LEVEL 1 CLEARED"
 endTitle.TextColor3 = Color3.fromRGB(115, 255, 170)
 endTitle.TextScaled = true
 endTitle.TextStrokeColor3 = Color3.new(0, 0, 0)
@@ -626,9 +626,9 @@ if RunService:IsStudio() then
  player:GetAttributeChangedSignal("DevRoundEnding"):Connect(function()
   local mode = tostring(player:GetAttribute("DevRoundEnding") or ""):lower()
   if mode:find("escape", 1, true) then
-   showRoundEnding((workspace:GetAttribute("SelectedLevel") == 2 and "LEVEL 2 CLEARED" or "LEVEL 1 CLEARED"), "SIGNAL LOST", "WAITING FOR THE OTHERS", Color3.fromRGB(115, 255, 170), true)
+   showRoundEnding("LEVEL 1 CLEARED", "SIGNAL LOST", "WAITING FOR THE OTHERS", Color3.fromRGB(115, 255, 170), true)
   elseif mode:find("win", 1, true) then
-   showRoundEnding((workspace:GetAttribute("SelectedLevel") == 2 and "LEVEL 2 CLEARED" or "LEVEL 1 CLEARED"), "TIME 03:42  •  SURVIVORS 2/3", "RETURNING TO BASE", Color3.fromRGB(115, 255, 170), false)
+   showRoundEnding("LEVEL 1 CLEARED", "TIME 03:42  •  SURVIVORS 2/3", "RETURNING TO BASE", Color3.fromRGB(115, 255, 170), false)
   elseif mode:find("lose", 1, true) then
    showRoundEnding("NO ONE FOUND A WAY OUT", "TIME 04:17  •  SURVIVORS 0/3", "RETURNING TO BASE", Color3.fromRGB(255, 82, 72), false)
   elseif mode:find("hide", 1, true) then
@@ -1069,13 +1069,6 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
 	elseif ev == "waiting" then
 		setMsg("Waiting for players…")
 
-	elseif ev == "poolaccess" then
-		loadingFrame.Visible = false
-		serverReadyForEntry = true
-		finishLoadingWhenReady()
-		dead = false
-		setMsg("POOL ACCESS READY", Color3.fromRGB(105, 230, 210))
-
 	elseif ev == "elevator" then
 		loadingFrame.Visible = false
 		serverReadyForEntry = true
@@ -1106,7 +1099,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
 	elseif ev == "escape" then
 		if a == player.Name then
 			showRoundEnding(
-				(workspace:GetAttribute("SelectedLevel") == 2 and "LEVEL 2 CLEARED" or "LEVEL 1 CLEARED"),
+				"LEVEL 1 CLEARED",
 				"SIGNAL LOST",
 				"WAITING FOR THE OTHERS",
 				Color3.fromRGB(115, 255, 170),
@@ -1136,7 +1129,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
 		local survivors = math.max(0, math.floor(tonumber(b) or 0))
 		local totalPlayers = math.max(1, math.floor(tonumber(c) or math.max(1, survivors)))
 		showRoundEnding(
-			dead and "THE OTHERS FOUND A WAY OUT" or (workspace:GetAttribute("SelectedLevel") == 2 and "LEVEL 2 CLEARED" or "LEVEL 1 CLEARED"),
+			dead and "THE OTHERS FOUND A WAY OUT" or "LEVEL 1 CLEARED",
 			"TIME " .. formatRoundTime(a) .. "  •  SURVIVORS " .. survivors .. "/" .. totalPlayers,
 			"RETURNING TO BASE",
 			Color3.fromRGB(115, 255, 170),
