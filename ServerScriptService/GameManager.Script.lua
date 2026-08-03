@@ -5,6 +5,8 @@ local RS = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local TeleportService = game:GetService("TeleportService")
 local RunService = game:GetService("RunService")
+local StarterPlayer = game:GetService("StarterPlayer")
+local ServerStorage = game:GetService("ServerStorage")
 
 local remotes = RS:WaitForChild("Remotes")
 local status = remotes:WaitForChild("RoundStatus")
@@ -16,6 +18,8 @@ if not queueConfig then
 end
 
 local QUEUE_TIME = 10
+local FAST_QUEUE_TIME = 3
+local DEV_QUEUE_NAMES = {mikkelczar = true, LaverSneglen = true}
 local MAX_PLAYERS_PER_STATION = 6
 local ELEVATOR_TIME = 19
 local LOBBY_CENTER = Vector3.new(0, 30, -760)
@@ -29,12 +33,82 @@ workspace:SetAttribute("RoundActive", false)
 local IS_RESERVED_ROUND_SERVER = game.PrivateServerId ~= "" and game.PrivateServerOwnerId == 0
 local IS_STUDIO = RunService:IsStudio()
 
+-- B keeps its existing ESP toggle on the client and also sends this
+-- server-authoritative queue-speed toggle for whitelisted developers.
+local devControl = remotes:WaitForChild("DevControl")
+devControl.OnServerEvent:Connect(function(player, command, enabled)
+ if IS_RESERVED_ROUND_SERVER or command ~= "fastQueue" then return end
+ if not DEV_QUEUE_NAMES[player.Name] then return end
+ player:SetAttribute("DevFastQueue", enabled == true and true or nil)
+ print("[GameManager] 3-second queue", enabled == true and "ON" or "OFF", "for", player.Name)
+end)
+
 local inRound = {}
 local roundBusy = false
 local worldReady = false
 local activeLevel = 1
 local elevatorApi = nil
 local mazeStart, entityStart, entity
+
+-- StarterPlayer contains the project's gameplay StarterCharacter, so ordinary
+-- LoadCharacterAsync spawns that rig. Lobby players instead load from their own
+-- current Roblox HumanoidDescription; entering a level deliberately uses the
+-- StarterCharacter again.
+local lobbyDescriptions = {}
+local characterLoadBusy = false
+
+local function beginCharacterLoad()
+ while characterLoadBusy do task.wait() end
+ characterLoadBusy = true
+end
+
+local function finishCharacterLoad()
+ characterLoadBusy = false
+end
+
+local function loadLobbyCharacter(player)
+ if not (player and player.Parent) or inRound[player] then return false end
+ local description = lobbyDescriptions[player.UserId]
+ if not description then
+  local ok, result = pcall(Players.GetHumanoidDescriptionFromUserIdAsync, Players, player.UserId)
+  if ok and result then
+   description = result
+   lobbyDescriptions[player.UserId] = result
+  else
+   warn("[GameManager] Could not load lobby avatar for " .. player.Name .. ": " .. tostring(result))
+  end
+ end
+ if not (player.Parent and not inRound[player]) then return false end
+
+ -- LoadCharacterWithHumanoidDescriptionAsync still builds on a configured
+ -- StarterCharacter. Temporarily park the hazmat gameplay rig while the load is
+ -- serialized, otherwise its suit meshes remain underneath the lobby avatar.
+ beginCharacterLoad()
+ if not (player.Parent and not inRound[player]) then
+  finishCharacterLoad()
+  return false
+ end
+ local gameplayRig = StarterPlayer:FindFirstChild("StarterCharacter")
+ if gameplayRig then gameplayRig.Parent = ServerStorage end
+ local ok, err
+ if description then
+  ok, err = pcall(player.LoadCharacterWithHumanoidDescriptionAsync, player, description:Clone())
+ else
+  ok, err = pcall(player.LoadCharacterAsync, player)
+ end
+ if gameplayRig then gameplayRig.Parent = StarterPlayer end
+ finishCharacterLoad()
+ if not ok then warn("[GameManager] Lobby character load failed:", err) end
+ return ok
+end
+
+local function loadGameplayCharacter(player)
+ beginCharacterLoad()
+ local ok, err = pcall(player.LoadCharacterAsync, player)
+ finishCharacterLoad()
+ if not ok then warn("[GameManager] Gameplay character load failed:", err) end
+ return ok
+end
 
 -- Simple isolated server lobby with a large glowing launch square.
 local function makePart(parent, name, position, size, color, material, transparency)
@@ -108,7 +182,15 @@ local function placeSafelyInElevator(player, char)
 end
 
 local function onCharacter(player, char)
- player.CameraMode = Enum.CameraMode.LockFirstPerson
+ if inRound[player] then
+  player.CameraMode = Enum.CameraMode.LockFirstPerson
+  player.CameraMinZoomDistance = 0.5
+  player.CameraMaxZoomDistance = 0.5
+ else
+  player.CameraMode = Enum.CameraMode.Classic
+  player.CameraMinZoomDistance = 8
+  player.CameraMaxZoomDistance = 18
+ end
  task.defer(function()
   if inRound[player] then
    if worldReady then placeSafelyInElevator(player, char) end
@@ -118,12 +200,14 @@ local function onCharacter(player, char)
  end)
  local hum = char:WaitForChild("Humanoid")
  hum.UseJumpPower = true
- hum.JumpPower = 0
+ hum.JumpPower = 50 -- normal Roblox jump; kill sequence temporarily disables/restores it
  hum.Died:Connect(function()
   player.CameraMode = Enum.CameraMode.Classic
+  player.CameraMinZoomDistance = 8
+  player.CameraMaxZoomDistance = 18
   if not inRound[player] then
    task.delay(3, function()
-    if player.Parent and not inRound[player] then player:LoadCharacter() end
+    if player.Parent and not inRound[player] then loadLobbyCharacter(player) end
    end)
   end
  end)
@@ -136,7 +220,7 @@ local function setupPlayer(player)
  player.CharacterAdded:Connect(function(char) onCharacter(player, char) end)
  task.defer(function()
   if not player.Parent then return end
-  if not IS_RESERVED_ROUND_SERVER and not player.Character then player:LoadCharacter() end
+  if not IS_RESERVED_ROUND_SERVER and not player.Character then loadLobbyCharacter(player) end
   status:FireClient(player, IS_RESERVED_ROUND_SERVER and "loadinggame" or "lobby")
  end)
 end
@@ -348,7 +432,7 @@ local function returnGroupToLobby(group)
   inRound[player] = nil
   player:SetAttribute("InRound", false)
   player:SetAttribute("Escaped", nil)
-  player:LoadCharacter()
+  loadLobbyCharacter(player)
   status:FireClient(player, "lobby")
  end
 end
@@ -478,7 +562,7 @@ local function launchStation(station, participants)
   if ensureWorld(participants, station.level or 1) then
    for _, player in ipairs(participants) do
     if player.Parent then
-     player:LoadCharacter()
+     loadGameplayCharacter(player)
      local char = player.Character or player.CharacterAdded:Wait()
      placeSafelyInElevator(player, char)
     end
@@ -658,7 +742,14 @@ local function runStation(station)
 
   local cancelled = false
   local lastReady = ready
-  for t = QUEUE_TIME, 1, -1 do
+  local countdownTime = QUEUE_TIME
+  for _, player in ipairs(ready) do
+   if player:GetAttribute("DevFastQueue") == true then
+    countdownTime = FAST_QUEUE_TIME
+    break
+   end
+  end
+  for t = countdownTime, 1, -1 do
    if not (station.host and playerInsideZone(station.host, station) and station.configured) then
     cancelled = true
     break
@@ -731,7 +822,7 @@ if IS_RESERVED_ROUND_SERVER then
   if ensureWorld(participants, selectedLevel) then
    for _, player in ipairs(participants) do
     if player.Parent then
-     player:LoadCharacter()
+     loadGameplayCharacter(player)
      local char = player.Character or player.CharacterAdded:Wait()
      placeSafelyInElevator(player, char)
     end

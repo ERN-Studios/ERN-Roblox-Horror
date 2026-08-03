@@ -16,6 +16,10 @@ local Players = game:GetService("Players")
 local SCALES = { "BodyHeightScale", "BodyWidthScale", "BodyDepthScale", "HeadScale" }
 
 local function normalize(char)
+	local player = Players:GetPlayerFromCharacter(char)
+	-- Preserve the player's exact personal avatar in the public lobby. Size is
+	-- normalized only for the gameplay character where hitbox parity matters.
+	if not player or player:GetAttribute("InRound") ~= true then return end
 	local hum = char:FindFirstChildOfClass("Humanoid")
 	if not hum then return end
 	for _, name in ipairs(SCALES) do

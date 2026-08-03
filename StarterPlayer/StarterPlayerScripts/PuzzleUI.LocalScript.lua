@@ -10,30 +10,63 @@ local player = Players.LocalPlayer
 local gui = Instance.new("ScreenGui")
 gui.Name = "PuzzleGui"
 gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
+gui.DisplayOrder = 18
 gui.Parent = player:WaitForChild("PlayerGui")
 
-local function makeLabel(yOffset, width)
+-- Level 1 now uses the same compact terminal-card language as Level 2 instead
+-- of three unrelated floating counters.
+local objectivePanel = Instance.new("Frame")
+objectivePanel.Name = "Level1Objectives"
+objectivePanel.AnchorPoint = Vector2.new(1, 1)
+objectivePanel.Position = UDim2.new(1, -18, 1, -18)
+objectivePanel.Size = UDim2.new(0, 300, 0, 112)
+objectivePanel.BackgroundColor3 = Color3.fromRGB(8, 14, 9)
+objectivePanel.BackgroundTransparency = 0.18
+objectivePanel.BorderSizePixel = 0
+objectivePanel.Visible = false
+objectivePanel.Parent = gui
+
+local panelCorner = Instance.new("UICorner")
+panelCorner.CornerRadius = UDim.new(0, 8)
+panelCorner.Parent = objectivePanel
+local panelStroke = Instance.new("UIStroke")
+panelStroke.Color = Color3.fromRGB(105, 238, 168)
+panelStroke.Transparency = 0.27
+panelStroke.Thickness = 1.4
+panelStroke.Parent = objectivePanel
+
+local objectiveTitle = Instance.new("TextLabel")
+objectiveTitle.Name = "ObjectiveTitle"
+objectiveTitle.BackgroundTransparency = 1
+objectiveTitle.Position = UDim2.new(0, 13, 0, 6)
+objectiveTitle.Size = UDim2.new(1, -26, 0, 25)
+objectiveTitle.Font = Enum.Font.Code
+objectiveTitle.Text = "> POWER RESTORATION"
+objectiveTitle.TextColor3 = Color3.fromRGB(120, 255, 175)
+objectiveTitle.TextSize = 17
+objectiveTitle.TextXAlignment = Enum.TextXAlignment.Left
+objectiveTitle.Parent = objectivePanel
+
+local function makeLabel(name, yOffset)
 	local label = Instance.new("TextLabel")
-	label.AnchorPoint = Vector2.new(1, 1)
-	label.Position = UDim2.new(1, -16, 1, yOffset)
-	label.Size = UDim2.new(0, width or 200, 0, 30)
-	label.BackgroundColor3 = Color3.new(0, 0, 0)
-	label.BackgroundTransparency = 0.82
+	label.Name = name
+	label.Position = UDim2.new(0, 13, 0, yOffset)
+	label.Size = UDim2.new(1, -26, 0, 23)
+	label.BackgroundTransparency = 1
 	label.BorderSizePixel = 0
-	label.Font = Enum.Font.Gotham
-	label.TextScaled = true
-	label.TextColor3 = Color3.fromRGB(245, 245, 245)
+	label.Font = Enum.Font.Code
+	label.TextSize = 15
+	label.TextXAlignment = Enum.TextXAlignment.Left
+	label.TextColor3 = Color3.fromRGB(218, 237, 223)
 	label.Visible = false
-	label.Parent = gui
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 6)
-	corner.Parent = label
+	label.Parent = objectivePanel
 	return label
 end
 
-local leverLabel = makeLabel(-88)
-local boxesLabel = makeLabel(-52)
-local carryLabel = makeLabel(-16)
+local boxesLabel = makeLabel("FuseBoxStatus", 34)
+local carryLabel = makeLabel("FuseCarryStatus", 59)
+local leverLabel = makeLabel("LeverStatus", 84)
 
 -- Handheld exit-signal receiver
 local receiver = Instance.new("Frame")
@@ -192,6 +225,7 @@ local leverEndsAt = 0
 local leverLatchMode = false
 
 local function showCounters(on)
+	objectivePanel.Visible = on
 	boxesLabel.Visible = on
 	carryLabel.Visible = on
 	if not on then leverLabel.Visible = false end
@@ -218,6 +252,13 @@ end
 
 RunService.RenderStepped:Connect(refreshLever)
 
+local function progressMeter(current, total)
+	current = math.max(0, math.floor(tonumber(current) or 0))
+	total = math.max(1, math.floor(tonumber(total) or 1))
+	return "[" .. string.rep("#", math.min(current, total))
+		.. string.rep("-", math.max(total - current, 0)) .. "]"
+end
+
 remote.OnClientEvent:Connect(function(ev, a, b, c, d)
 	-- PuzzleManager broadcasts shared world changes, but lobby spectators must
 	-- never inherit the active party's maze HUD.
@@ -229,18 +270,22 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d)
 
 	if ev == "begin" then
 		setReceiver(false)
-		carryLabel.Text = "Fuses: 0"
-		boxesLabel.Text = ("Fuse boxes: 0/%d"):format(b)
+		objectiveTitle.Text = "> POWER RESTORATION"
+		objectiveTitle.TextColor3 = Color3.fromRGB(120, 255, 175)
+		carryLabel.Text = "FUSES HELD  0"
+		boxesLabel.Text = ("%s FUSE BOXES  0/%d"):format(progressMeter(0, b), b)
 		leverPhase = false
 		showCounters(true)
 
 	elseif ev == "carry" then
-		carryLabel.Text = "Fuses: " .. a
+		carryLabel.Text = "FUSES HELD  " .. a
 
 	elseif ev == "boxes" then
-		boxesLabel.Text = ("Fuse boxes: %d/%d"):format(a, b)
+		boxesLabel.Text = ("%s FUSE BOXES  %d/%d"):format(progressMeter(a, b), a, b)
 
 	elseif ev == "levers" then
+		objectiveTitle.Text = "> EXIT CIRCUIT"
+		objectiveTitle.TextColor3 = Color3.fromRGB(170, 225, 255)
 		leverPhase = true
 		leverActive = 0
 		leverTotal = a or 0
@@ -268,6 +313,8 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d)
 		receiverReadout.Text = "PATH DETECTED\nFOLLOW EXIT VECTOR"
 
 	elseif ev == "exit" then
+		objectiveTitle.Text = "> EXIT ONLINE"
+		objectiveTitle.TextColor3 = Color3.fromRGB(120, 255, 160)
 		setReceiver(true)
 		compassMode = true
 		compassArrow.Visible = true

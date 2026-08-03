@@ -1,0 +1,37 @@
+{
+  "scale": 0.0647058718344128,
+  "actions": {
+    "Walk": {
+      "frames": 40,
+      "first_frame_translation_max": 0.27136856234639223
+    },
+    "Run_Chase": {
+      "frames": 48,
+      "first_frame_translation_max": 0.753526125812505
+    },
+    "Watch": {
+      "frames": 180,
+      "first_frame_translation_max": 2.7755575615628914e-17
+    },
+    "Yell_Howl": {
+      "frames": 66,
+      "first_frame_translation_max": 0.0006845206500348853
+    },
+    "Yell_FromRun": {
+      "frames": 87,
+      "first_frame_translation_max": 1.25
+    },
+    "Lunge": {
+      "frames": 72,
+      "first_frame_translation_max": 0.0006845188219782482
+    },
+    "Lunge_FromRun": {
+      "frames": 52,
+      "first_frame_translation_max": 0.45232678966934337
+    },
+    "Kill_GroundPinPunch": {
+      "frames": 150,
+      "first_frame_translation_max": 2.7755575615628914e-17
+    }
+  }
+}

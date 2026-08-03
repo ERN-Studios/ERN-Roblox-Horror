@@ -7,6 +7,7 @@ local Players = game:GetService("Players")
 local PathfindingService = game:GetService("PathfindingService")
 local RS = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
+local PhysicsService = game:GetService("PhysicsService")
 
 -- NoiseRegistry must be a ModuleScript that `return`s its table. If it's the
 -- wrong object type, empty, or errors, we don't want it to kill the whole
@@ -136,6 +137,9 @@ end)
 -- humanoid, which made an earlier version brake the entity to a ~4 stud/s crawl.
 RunService.Heartbeat:Connect(function()
 	if humanoid.Health <= 0 or root.Anchored then return end
+	-- A lunge is deliberately ballistic; do not let the anti-skid safety net
+	-- flatten its horizontal velocity while the creature is airborne.
+	if workspace:GetAttribute("EntityIsLunging") == true then return end
 	local v = root.AssemblyLinearVelocity
 	local flat = Vector3.new(v.X, 0, v.Z)
 	local goal = humanoid.WalkToPoint
@@ -157,10 +161,9 @@ end)
 local SIGHT_RANGE       = 650   -- effectively unlimited — only walls and the cone stop it
 local SIGHT_RANGE_LIT   = 1100  -- when the player's flashlight is on
 local SIGHT_ANGLE       = math.rad(135) -- half-angle of the vision cone
-local SIGHT_CLOSE       = 8     -- only near-contact overrides the vision cone
 local HEAR_RANGE        = 220
 local SPEED_LURK        = 8
-local SPEED_INVESTIGATE = 15
+local SPEED_INVESTIGATE = 8     -- heard a player: normal walk, never a proximity speed-up
 local SPEED_CHASE       = 27.2  -- just faster than a sprinting player (sprint = 26)
 local SPEED_LOST        = 17    -- alert search pace after LOS is broken
 local SEARCH_TIME       = 12
@@ -171,10 +174,11 @@ local SPOT_COOLDOWN     = 7     -- avoids repeated howls on rapid reacquisition
 -- lunge: when a chase gets close it dashes to WHERE YOU ARE and stops there —
 -- a committed pounce, not an endless slide. Contact still kills via EntityKill;
 -- it locks its target at the start so it's dodgeable. Animation comes later.
-local LUNGE_RANGE       = 12    -- starts a lunge when this close during a chase
-local LUNGE_WINDUP      = 0.5   -- it FREEZES this long first (telegraph) before pouncing
-local LUNGE_SPEED       = 42    -- dash speed toward the captured spot
-local LUNGE_MAX_TIME    = 0.6   -- safety cap on the dash (it stops on arrival)
+local LUNGE_RANGE       = 28    -- former 12 + requested 16 studs; still chance/cooldown gated
+local LUNGE_WINDUP      = 0.32  -- short readable crouch before the physical jump
+local LUNGE_SPEED       = 62    -- enough horizontal travel to threaten from the full 28-stud window
+local LUNGE_UP_SPEED    = 42    -- visible arc without Humanoid's default jump impulse taking over
+local LUNGE_MAX_TIME    = 0.82  -- lets the stronger jump complete before the safety stop
 local LUNGE_RECOVER     = 0.35  -- brief dead stop after it lands (kills the ice-slide)
 local LUNGE_COOLDOWN    = 10    -- min seconds between lunges (from wind-up start)
 local LUNGE_CHANCE      = 0.35  -- rolled once per close-range opportunity
@@ -190,6 +194,7 @@ local YELL_DURATION     = 3     -- seconds the steady push lasts
 local YELL_COOLDOWN     = 10    -- min seconds between yells at the same player (> duration)
 local YELL_WINDUP       = 0.6   -- pause after the roar before the push lands (sync w/ anim)
 local YELL_SOUND_LEAD   = 0.5   -- start the SOUND this long before the anim (it has an inhale)
+local PIT_HOWL_TIME     = 2.2   -- finish the pit howl, then settle into Watch at the edge
 local YELL_EDGE_DIST    = 6     -- how close to the pit edge it must get before yelling
 local AGENT_RADIUS      = 8     -- pathfinding agent size — bigger keeps paths OFF the
 -- walls / out of corners while NOT chasing (lurk/search
@@ -283,6 +288,20 @@ task.spawn(function()
 
 	print("[EntityAI] eye markers: " .. eyeL:GetFullName() .. " · " .. eyeR:GetFullName())
 
+	-- These authored markers currently sit directly under the Entity model. A
+	-- Model has no animated transform, so attach them to the real Head bone while
+	-- preserving their exact world-space placement.
+	local headBone = entity:FindFirstChild("Head", true)
+	if headBone and headBone:IsA("Bone") then
+		for _, marker in ipairs({ eyeL, eyeR }) do
+			if marker:IsA("Attachment") and not marker:FindFirstAncestorWhichIsA("Bone") then
+				local authoredWorld = marker.WorldCFrame
+				marker.Parent = headBone
+				marker.CFrame = headBone.WorldCFrame:ToObjectSpace(authoredWorld)
+			end
+		end
+	end
+
 	local eyes = {}
 	for _, marker in ipairs({ eyeL, eyeR }) do
 		local ok, err = pcall(function()
@@ -292,6 +311,7 @@ task.spawn(function()
 				or entity:FindFirstChild("Head") or root
 
 			local dot
+			local glowHost
 			if marker:IsA("BasePart") then
 				-- he added PARTS: the part IS the eyeball — make it glow directly
 				dot = marker
@@ -301,58 +321,29 @@ task.spawn(function()
 				dot.CanQuery = false -- must never block sight/flashlight raycasts
 				dot.CanTouch = false
 				dot.Massless = true
-				-- make sure it's actually attached to the rig: if it's anchored (or
-				-- free-floating) it would hang in the air while the entity walks off
-				if dot.Anchored or (not dot:FindFirstChildOfClass("WeldConstraint")
-					and not dot:FindFirstChildOfClass("Weld") and not dot:FindFirstChildOfClass("Motor6D")) then
-					dot.Anchored = false
-					local weld = Instance.new("WeldConstraint")
-					weld.Part0 = dot
-					weld.Part1 = host
-					weld.Parent = dot
-				end
+				glowHost = dot
 			else
-				-- he added ATTACHMENTS: spawn our own neon dot at the marked spot,
-				-- NUDGED forward out of the face so the mesh can't swallow the neon
-				local pos = marker.WorldCFrame.Position + root.CFrame.LookVector * EYE_NUDGE
-				dot = Instance.new("Part")
-				dot.Name = "EyeGlow"
-				dot.Shape = Enum.PartType.Ball
-				dot.Size = Vector3.new(EYE_DOT_SIZE, EYE_DOT_SIZE, EYE_DOT_SIZE)
-				dot.Material = Enum.Material.Neon
-				dot.CastShadow = false
-				dot.CanCollide = false
-				dot.CanQuery = false
-				dot.CanTouch = false
-				dot.Massless = true
-				dot.CFrame = CFrame.new(pos)
-				local weld = Instance.new("WeldConstraint")
-				weld.Part0 = dot
-				weld.Part1 = host
-				weld.Parent = dot
-				dot.Parent = host
+				-- Billboard content parented to an Attachment follows Bone deformation.
+				-- A welded Part only followed the skinned MeshPart shell and floated.
+				local billboard = Instance.new("BillboardGui")
+				billboard.Name = "EyeGlow"
+				billboard.Adornee = marker
+				billboard.Size = UDim2.fromScale(EYE_DOT_SIZE, EYE_DOT_SIZE)
+				billboard.StudsOffsetWorldSpace = marker.WorldCFrame.LookVector * EYE_NUDGE
+				billboard.AlwaysOnTop = false
+				billboard.LightInfluence = 0
+				billboard.Parent = marker
+				dot = Instance.new("Frame")
+				dot.Name = "Dot"
+				dot.Size = UDim2.fromScale(1, 1)
+				dot.BorderSizePixel = 0
+				dot.Parent = billboard
+				local corner = Instance.new("UICorner")
+				corner.CornerRadius = UDim.new(1, 0)
+				corner.Parent = dot
+				glowHost = marker
 			end
-			dot.Color = EYE_COLOR_IDLE
-
-			-- the glow is DIRECTIONAL: an invisible emitter aligned with the rig's
-			-- facing carries a SpotLight, so the light lands on whatever the entity
-			-- is looking toward (not a round bubble around its head)
-			local pos = dot.Position
-			local emitter = Instance.new("Part")
-			emitter.Name = "EyeBeamMount"
-			emitter.Size = Vector3.new(0.2, 0.2, 0.2)
-			emitter.Transparency = 1
-			emitter.CastShadow = false
-			emitter.CanCollide = false
-			emitter.CanQuery = false
-			emitter.CanTouch = false
-			emitter.Massless = true
-			emitter.CFrame = CFrame.lookAt(pos, pos + root.CFrame.LookVector)
-			local eweld = Instance.new("WeldConstraint")
-			eweld.Part0 = emitter
-			eweld.Part1 = dot
-			eweld.Parent = emitter
-			emitter.Parent = dot
+			if dot:IsA("GuiObject") then dot.BackgroundColor3 = EYE_COLOR_IDLE else dot.Color = EYE_COLOR_IDLE end
 
 			local glow = Instance.new("SpotLight")
 			glow.Name = "EyeLight"
@@ -362,7 +353,7 @@ task.spawn(function()
 			glow.Range = EYE_RANGE
 			glow.Color = EYE_COLOR_IDLE
 			glow.Shadows = false
-			glow.Parent = emitter
+			glow.Parent = glowHost
 
 			table.insert(eyes, { dot = dot, glow = glow })
 		end) -- pcall: one bad eye must not kill the other (or the colour watcher)
@@ -377,7 +368,7 @@ task.spawn(function()
 		local hunting = (st == "ALERT" or st == "CHASE" or st == "TRACK" or st == "YELL")
 		local c = hunting and EYE_COLOR_HUNT or EYE_COLOR_IDLE
 		for _, e in ipairs(eyes) do
-			e.dot.Color = c
+			if e.dot:IsA("GuiObject") then e.dot.BackgroundColor3 = c else e.dot.Color = c end
 			e.glow.Color = c
 			e.glow.Brightness = hunting and EYE_HUNT_BRIGHTNESS or EYE_BRIGHTNESS
 			e.glow.Range = hunting and EYE_HUNT_RANGE or EYE_RANGE
@@ -390,11 +381,52 @@ end)
 -- ── dev: pause the entity (from DevCheats, testing only) ───
 -- DevCheats (client) fires DevControl; we flip a workspace attribute the AI
 -- loops read. Safe to ship without DevControl existing — we just skip it.
-local DEV_ALLOWED = {} -- empty = anyone; add usernames to lock it down
+-- One server-side whitelist protects every developer command, including noclip.
+local DEV_ALLOWED = { "mikkelczar", "LaverSneglen" }
 local function devAllowed(p)
 	if #DEV_ALLOWED == 0 then return true end
 	for _, n in ipairs(DEV_ALLOWED) do if n == p.Name then return true end end
 	return false
+end
+
+local NOCLIP_GROUP = "DevNoclip"
+local noclipState = {}
+pcall(function() PhysicsService:RegisterCollisionGroup(NOCLIP_GROUP) end)
+for _, group in ipairs(PhysicsService:GetRegisteredCollisionGroups()) do
+	pcall(function()
+		PhysicsService:CollisionGroupSetCollidable(NOCLIP_GROUP, group.name, false)
+	end)
+end
+
+local function setServerNoclip(player, enabled)
+	local char = player.Character
+	if not char then return end
+	if enabled then
+		if noclipState[player] then return end
+		local state = { parts = {}, added = nil }
+		noclipState[player] = state
+		local function disablePart(part)
+			if not part:IsA("BasePart") then return end
+			if state.parts[part] == nil then
+				state.parts[part] = { group = part.CollisionGroup, collide = part.CanCollide }
+			end
+			part.CollisionGroup = NOCLIP_GROUP
+			part.CanCollide = false
+		end
+		for _, d in ipairs(char:GetDescendants()) do disablePart(d) end
+		state.added = char.DescendantAdded:Connect(disablePart)
+	else
+		local state = noclipState[player]
+		if not state then return end
+		noclipState[player] = nil
+		if state.added then state.added:Disconnect() end
+		for part, original in pairs(state.parts) do
+			if part.Parent then
+				part.CollisionGroup = original.group
+				part.CanCollide = original.collide
+			end
+		end
+	end
 end
 -- wait for the RemoteEvent in a task (robust to load order) so the handler
 -- always connects if DevControl exists at all
@@ -413,11 +445,21 @@ task.spawn(function()
 		elseif cmd == "immunePush" then
 			immunePush[p] = (arg == true) or nil -- immune to the yell push-back
 			print("[EntityAI] push-immunity =", immunePush[p] == true, "for", p.Name)
+		elseif cmd == "noclip" then
+			setServerNoclip(p, arg == true)
+			print("[EntityAI] server noclip =", arg == true, "for", p.Name)
 		end
 	end)
 	print("[EntityAI] DevControl handler connected")
 end)
-local function isPaused() return workspace:GetAttribute("EntityPaused") == true end
+Players.PlayerRemoving:Connect(function(p)
+	setServerNoclip(p, false)
+	noclipState[p] = nil
+end)
+local function isPaused()
+	return workspace:GetAttribute("EntityPaused") == true
+		or workspace:GetAttribute("EntityKillActive") == true
+end
 
 -- safety net for the push-immunity dev cheat: an immune player never keeps a
 -- YellPush, even one applied the instant before they toggled immunity on
@@ -451,6 +493,8 @@ local lungePhase = 0            -- 0 idle · 1 wind-up (frozen telegraph) · 2 d
 local lungeTarget = Vector3.zero
 local lungeWindupUntil = 0      -- end of the freeze/telegraph
 local lungeUntil = 0            -- safety timeout for the current dash
+local lungeLaunchAt = 0
+local lungeDirection = Vector3.zero
 local lungeCooldownUntil = 0
 local lungeRecoverUntil = 0     -- brief post-lunge dead stop
 local lungeRollArmed = true     -- one chance roll each time the target enters range
@@ -641,24 +685,21 @@ end
 local function tryYell(char, hrp)
 	local p = Players:GetPlayerFromCharacter(char)
 	local now = os.clock()
-	if p and lastYell[p] and now - lastYell[p] < YELL_COOLDOWN then return end
+	if p and lastYell[p] and now - lastYell[p] < YELL_COOLDOWN then return false end
 	if p then lastYell[p] = now end
 	-- mark the whole yell (lead + wind-up + push) so the chase sound goes quiet
-	yellActiveUntil = now + YELL_SOUND_LEAD + YELL_WINDUP + YELL_DURATION
+	yellActiveUntil = now + PIT_HOWL_TIME
 
 	task.spawn(function()
 		-- the roar SOUND has an inhale before the yell, so start it FIRST and
 		-- let the inhale play; then trigger the animation so the visual lands on
 		-- the actual yell (id lives in SoundController, keyed off this attribute)
 		workspace:SetAttribute("EntityYell", (workspace:GetAttribute("EntityYell") or 0) + 1)
-		task.wait(YELL_SOUND_LEAD)
-
-		-- roar animation, owned by EntityAnimation (it has the id ready)
-		local ev = entity:FindFirstChild("PlayYell")
+		local ev = entity:FindFirstChild("PlayHowl")
 		if ev then ev:Fire() end
 
 		-- wind up with the roar, THEN shove — so the push lands with the animation
-		task.wait(YELL_WINDUP)
+		task.wait(YELL_SOUND_LEAD + YELL_WINDUP)
 
 		if p and immunePush[p] then return end -- dev cheat: no push-back
 
@@ -691,6 +732,7 @@ local function tryYell(char, hrp)
 			if bv and bv.Parent then bv:Destroy() end
 		end)
 	end)
+	return true
 end
 
 -- ── perception ────────────────────────────────────────────
@@ -741,7 +783,7 @@ local function canSee(char, hrp)
 	-- right next to it, OR out over a pit (where it wants to yell you off a
 	-- beam) → noticed regardless of which way it's facing. Pit players kept
 	-- getting missed because they stand still (no noise) and outside the cone.
-	if dist < SIGHT_CLOSE or inPitZone(hrp.Position) then
+	if inPitZone(hrp.Position) then
 		return clearLoS(char)
 	end
 
@@ -934,23 +976,90 @@ end)
 -- Movement is now the grid-walk in the main loop (which never clips a wall). The
 -- Heartbeat only runs the LUNGE — a committed pounce when it gets close and has a
 -- clear shot. Everything else, it does nothing and lets the grid-walk drive.
+local function launchBallisticLunge(targetPosition, now)
+	lungePhase = 2
+	lungeTarget = targetPosition
+	local launch = Vector3.new(lungeTarget.X - root.Position.X, 0, lungeTarget.Z - root.Position.Z)
+	lungeDirection = launch.Magnitude > 0.01 and launch.Unit or root.CFrame.LookVector
+	lungeLaunchAt = now
+	lungeUntil = now + LUNGE_MAX_TIME
+	workspace:SetAttribute("EntityIsLunging", true)
+	-- Jumping applies the Humanoid's unrelated JumpPower and can keep
+	-- FloorMaterial stale for several frames. Freefall + explicit velocity gives
+	-- the same deterministic arc in Studio and live servers.
+	humanoid:ChangeState(Enum.HumanoidStateType.Freefall)
+	root.AssemblyLinearVelocity = lungeDirection * LUNGE_SPEED + Vector3.new(0, LUNGE_UP_SPEED, 0)
+end
+
 RunService.Heartbeat:Connect(function()
 	if humanoid.Health <= 0 then return end
 	if isPaused() then
 		lungePhase = 0
+		workspace:SetAttribute("EntityIsLunging", false)
 		local v = root.AssemblyLinearVelocity
 		root.AssemblyLinearVelocity = Vector3.new(0, v.Y, 0)
 		return
 	end
-	if current ~= State.CHASE or not chasePlayer then lungePhase = 0; return end
+	local now = os.clock()
+	local v = root.AssemblyLinearVelocity
+	-- Deterministic Studio-only smoke hook. This never runs in a published
+	-- server; it lets the automated test verify the real ballistic phase rather
+	-- than waiting on the deliberately random gameplay roll.
+	if RunService:IsStudio() and workspace:GetAttribute("TestForceEntityLunge") == true
+		and lungePhase == 0 then
+		workspace:SetAttribute("TestForceEntityLunge", false)
+		local testPlayer = Players:GetPlayers()[1]
+		local testCharacter = testPlayer and testPlayer.Character
+		local testRoot = testCharacter and testCharacter:FindFirstChild("HumanoidRootPart")
+		if testRoot then
+			current = State.CHASE
+			chasePlayer = testPlayer
+			launchBallisticLunge(testRoot.Position, now)
+		end
+	end
+
+	-- A launched pounce is committed to its captured position, even if the
+	-- player breaks line of sight while the entity is airborne.
+	if lungePhase == 2 then
+		local toTarget = Vector3.new(lungeTarget.X - root.Position.X, 0, lungeTarget.Z - root.Position.Z)
+		local flightAge = now - lungeLaunchAt
+		local landed = flightAge > 0.28
+			and humanoid.FloorMaterial ~= Enum.Material.Air
+			and root.AssemblyLinearVelocity.Y <= 0
+		if toTarget.Magnitude <= 2.5 or landed or now >= lungeUntil then
+			lungePhase = 0
+			workspace:SetAttribute("EntityIsLunging", false)
+			lungeRecoverUntil = now + LUNGE_RECOVER
+			resetNav()
+			humanoid.WalkSpeed = 0
+			root.AssemblyLinearVelocity = Vector3.new(0, v.Y, 0)
+			humanoid:MoveTo(root.Position)
+			return
+		end
+		humanoid.WalkSpeed = 0
+		root.AssemblyLinearVelocity = Vector3.new(
+			lungeDirection.X * LUNGE_SPEED,
+			root.AssemblyLinearVelocity.Y,
+			lungeDirection.Z * LUNGE_SPEED
+		)
+		return
+	end
+
+	if current ~= State.CHASE or not chasePlayer then
+		lungePhase = 0
+		workspace:SetAttribute("EntityIsLunging", false)
+		return
+	end
 	local char = chasePlayer.Character
 	local hrp = char and char:FindFirstChild("HumanoidRootPart")
-	if not hrp then lungePhase = 0; return end
+	if not hrp then
+		lungePhase = 0
+		workspace:SetAttribute("EntityIsLunging", false)
+		return
+	end
 
 	local to = Vector3.new(hrp.Position.X - root.Position.X, 0, hrp.Position.Z - root.Position.Z)
 	local dist = to.Magnitude
-	local now = os.clock()
-	local v = root.AssemblyLinearVelocity
 	if dist >= LUNGE_RANGE + 3 then
 		lungeRollArmed = true
 	end
@@ -962,31 +1071,13 @@ RunService.Heartbeat:Connect(function()
 		humanoid:MoveTo(root.Position)
 		faceFlat(hrp.Position)
 		if now >= lungeWindupUntil then
-			lungePhase = 2
-			lungeTarget = hrp.Position
-			lungeUntil = now + LUNGE_MAX_TIME
+			launchBallisticLunge(hrp.Position, now)
 		end
 		return
 	end
 
 	-- phase 2: DASH to the captured spot (MoveTo-driven at a high WalkSpeed, so the
 	-- legs animate — no velocity override, no ice-glide), then STOP dead
-	if lungePhase == 2 then
-		local toT = Vector3.new(lungeTarget.X - root.Position.X, 0, lungeTarget.Z - root.Position.Z)
-		if toT.Magnitude <= 3 or now >= lungeUntil then
-			lungePhase = 0
-			lungeRecoverUntil = now + LUNGE_RECOVER
-			resetNav() -- re-plan the grid route from where the dash landed
-			humanoid.WalkSpeed = 0
-			root.AssemblyLinearVelocity = Vector3.new(0, v.Y, 0) -- one-frame hard stop
-			humanoid:MoveTo(root.Position)
-			return
-		end
-		humanoid.WalkSpeed = LUNGE_SPEED
-		humanoid:MoveTo(lungeTarget)
-		return
-	end
-
 	-- brief dead stop right after a lunge lands
 	if now < lungeRecoverUntil then
 		humanoid.WalkSpeed = 0
@@ -1007,6 +1098,7 @@ RunService.Heartbeat:Connect(function()
 			lungeWindupUntil = now + LUNGE_WINDUP
 			lungeCooldownUntil = now + LUNGE_COOLDOWN
 			workspace:SetAttribute("EntityLunge", (workspace:GetAttribute("EntityLunge") or 0) + 1)
+			workspace:SetAttribute("EntityIsLunging", false)
 			root.AssemblyLinearVelocity = Vector3.new(0, v.Y, 0)
 			humanoid:MoveTo(root.Position)
 		end
@@ -1156,10 +1248,12 @@ task.spawn(function()
 				local edge = pitEdgeToward(targetHrp.Position, root.Position)
 				local toEdge = Vector3.new(root.Position.X - edge.X, 0, root.Position.Z - edge.Z)
 				if toEdge.Magnitude <= YELL_EDGE_DIST then
-					yelling = true
+					humanoid.WalkSpeed = 0
 					humanoid:MoveTo(root.Position)
+					local velocity = root.AssemblyLinearVelocity
+					root.AssemblyLinearVelocity = Vector3.new(0, velocity.Y, 0)
 					faceFlat(targetHrp.Position)
-					tryYell(char, targetHrp)
+					yelling = tryYell(char, targetHrp) or now < yellActiveUntil
 				else
 					stepToward(edge, SPEED_CHASE * speedMul())
 				end

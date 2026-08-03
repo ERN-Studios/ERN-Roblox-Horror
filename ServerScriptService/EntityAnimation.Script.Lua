@@ -3,13 +3,14 @@ local RunService = game:GetService("RunService")
 -- Blender action mapping. Empty slots are safe: the controller falls back to a
 -- compatible clip until the exported action has received its Roblox asset id.
 local ANIMATION_IDS = {
-	Watch = "129452887687978",         -- Blender: Watch (idle loop)
-	Walk = "79037853194841",           -- Blender: Walk
-	Run = "110343018595451",           -- Blender: Run_Chase
-	Howl = "102924140813036",          -- Blender: Yell_Howl (first sight)
-	YellFromRun = "97380507966441",    -- Blender: Yell_FromRun (pit yell)
-	Lunge = "122769036667525",         -- Blender: Lunge (fallback)
-	LungeFromRun = "131606138259618",  -- Blender: Lunge_FromRun (normal chase lunge)
+	Watch = "86013923573480",             -- Blender v5: Watch-neutral Studio basis + fingers
+	Walk = "139801177050454",             -- Blender v6: restrained Walk (less hip/arm sway)
+	Run = "85991585476335",                -- Blender v8: walk-derived predatory jog; stable knees and active upper body
+	Howl = "118013244839249",              -- Blender v5: Yell_Howl (first sight)
+	YellFromRun = "119056181976223",       -- Blender v5: Yell_FromRun (pit yell)
+	Lunge = "94661930573561",              -- Blender v5: Lunge (fallback)
+	LungeFromRun = "81430032814694",       -- Blender v5: Lunge_FromRun
+	Kill = "116430726507331",              -- Blender v9: lateral wind-up beside helmet / grounded punch
 }
 
 local WALK_ANIM_SPEED = 9
@@ -69,6 +70,7 @@ local tracks = {
 	YellFromRun = loadTrack("Yell_FromRun", ANIMATION_IDS.YellFromRun, false, Enum.AnimationPriority.Action4),
 	Lunge = loadTrack("Lunge", ANIMATION_IDS.Lunge, false, Enum.AnimationPriority.Action4),
 	LungeFromRun = loadTrack("Lunge_FromRun", ANIMATION_IDS.LungeFromRun, false, Enum.AnimationPriority.Action4),
+	Kill = loadTrack("Kill_GroundPinPunch", ANIMATION_IDS.Kill, false, Enum.AnimationPriority.Action4),
 }
 
 if not tracks.Walk or not tracks.Run then
@@ -131,6 +133,10 @@ end)
 
 bindEvent("PlayYell", function()
 	playAction(tracks.YellFromRun or tracks.Howl)
+end)
+
+bindEvent("PlayKill", function()
+	playAction(tracks.Kill)
 end)
 
 workspace:GetAttributeChangedSignal("EntityLunge"):Connect(function()

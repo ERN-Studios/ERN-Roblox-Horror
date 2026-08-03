@@ -14,6 +14,7 @@ local RunService = game:GetService("RunService")
 local SoundService = game:GetService("SoundService")
 local TweenService = game:GetService("TweenService")
 local RS = game:GetService("ReplicatedStorage")
+local CollectionService = game:GetService("CollectionService")
 
 -- ── audio slots (every sound in the game) ─────────────────
 local AMBIENCE_SOUND  = "rbxassetid://92576512092725" -- constant background drone/hum (2D, always playing)
@@ -49,8 +50,8 @@ local BREATH_SMOOTH     = 2     -- how fast the breathing volume eases up / down
 -- attribute at the moment it gives up the chase.
 local SCARE_BREATH_TIME = 9     -- seconds of scared panting after it loses you
 
-local WALK_VOLUME   = 0.38   -- walking loop volume
-local RUN_VOLUME    = 0.6    -- running loop volume
+local WALK_VOLUME   = 0.44   -- walking loop volume, slightly clearer over ambience
+local RUN_VOLUME    = 0.68   -- running loop volume
 local WALK_SPEEDUP  = 1.0    -- walk-loop playback speed (keep near 1.0 — speeding up pitches it high)
 local RUN_SPEEDUP   = 1.0    -- run-loop playback speed (same: the clip's own cadence is the pace)
 local RUN_WALKSPEED = 22     -- your WalkSpeed at/above which it counts as running
@@ -58,8 +59,8 @@ local FOOT_FADE     = 6      -- how fast the loop fades in as you move / out as 
 local FLASHLIGHT_VOLUME = 0.6 -- the flashlight toggle click (2D)
 
 local ENTITY_VOLUME    = 1.0  -- the Entity's growl (positional)
-local DEATH_VOLUME     = 1.15  -- controlled positional scream, not map-wide clipping
-local JUMPSCARE_VOLUME = 1.35  -- the dying player's own jumpscare sound (2D)
+local DEATH_VOLUME     = 1.15  -- loud positional scream heard across the complete map
+local JUMPSCARE_VOLUME = 0.82  -- the dying player's own impact sound (2D, intentionally restrained)
 local YELL_VOLUME      = 1     -- the Entity's roar (positional)
 local IDLE_VOLUME      = 0.7   -- the Entity's idle vocalisations (positional)
 local IDLE_MIN_GAP     = 6     -- min seconds between idle vocalisations
@@ -70,8 +71,8 @@ local TRACK_FADE       = 5     -- seconds to SLOWLY fade the chase music once it
 -- sight and is only tracking blindly (match TRACK_TIME)
 local SPOT_VOLUME      = 1      -- the "spotted you!" sting (reuses YELL_SOUND) fired as a chase begins
 local LUNGE_VOLUME     = 1     -- the lunge telegraph (positional)
-local STEP_WALK_VOLUME = 0.62  -- entity walk thump
-local STEP_RUN_VOLUME  = 0.9   -- entity run thump
+local STEP_WALK_VOLUME = 0.72  -- entity walk thump
+local STEP_RUN_VOLUME  = 1.0   -- entity run thump
 local STEP_WALK_INT    = 0.55  -- seconds between entity walk thumps
 local STEP_RUN_INT     = 0.32  -- seconds between entity run thumps
 local STEP_RUN_SPEED   = 20    -- entity speed at/above which it uses the run thump
@@ -144,7 +145,9 @@ end)
 -- face image (JumpscareUI), so the sound and picture land together — no lag,
 -- no double. Only the Entity firing this remote triggers it (pit falls don't).
 local jumpscareRemote = RS:WaitForChild("Remotes"):WaitForChild("Jumpscare")
-jumpscareRemote.OnClientEvent:Connect(function()
+jumpscareRemote.OnClientEvent:Connect(function(eventName)
+	-- Capture starts silently; the scream lands on the authored fatal impact.
+	if eventName ~= "death" then return end
 	if JUMPSCARE_SOUND == "" then return end
 	local s = Instance.new("Sound")
 	s.SoundId = JUMPSCARE_SOUND
@@ -178,9 +181,11 @@ roundStatus.OnClientEvent:Connect(function(ev, name, pos)
 	s.SoundId = DEATH_SOUND
 	s.Volume = DEATH_VOLUME
 	s.PlaybackSpeed = 0.98 + math.random() * 0.04
-	s.RollOffMode = Enum.RollOffMode.InverseTapered
-	s.RollOffMinDistance = 12
-	s.RollOffMaxDistance = 280
+	-- Level 1 spans hundreds of studs. Linear falloff keeps the scream directional
+	-- while remaining clearly audible to survivors at the far side of the maze.
+	s.RollOffMode = Enum.RollOffMode.Linear
+	s.RollOffMinDistance = 60
+	s.RollOffMaxDistance = 2200
 	local eq = Instance.new("EqualizerSoundEffect")
 	eq.HighGain = -3
 	eq.MidGain = -1
@@ -474,7 +479,7 @@ RunService.Heartbeat:Connect(function(dt)
 	-- footsteps: a looping track that only plays while you MOVE and fades out when
 	-- you stop (so a long loop never drones on while standing, and never hard-cuts)
 	local footTarget, footSpeed = 0, nil
-	if hum and root then
+	if hum and root and workspace:GetAttribute("SelectedLevel") ~= 2 then
 		local vel = root.AssemblyLinearVelocity
 		local flat = Vector3.new(vel.X, 0, vel.Z).Magnitude
 		local ws = hum.WalkSpeed
@@ -537,3 +542,557 @@ local function muteDefaultSteps(char)
 end
 if player.Character then muteDefaultSteps(player.Character) end
 player.CharacterAdded:Connect(muteDefaultSteps)
+
+-- ── LEVEL 2 SHALLOW-WATER + ENTITY AUDIO ───────────────────────────────────
+-- The seven user-owned takes are resolved at runtime. Put their uploaded IDs on
+-- ReplicatedStorage, Workspace, PoolroomsLevel2, ReplicatedStorage.Level2Audio,
+-- or an individual entity model as Level2WadeStep1..7 / HeavyBootsSplash1..7.
+-- This deliberately contains no placeholder asset IDs.
+local LEVEL2_WADE_SPECS = {
+	{ gain = 1.585, offset = 0.35 },
+	{ gain = 0.841, offset = 0.30 },
+	{ gain = 1.000, offset = 0.62 },
+	{ gain = 0.700, offset = 0.34 },
+	{ gain = 1.245, offset = 0.39 },
+	{ gain = 0.692, offset = 0.28 },
+	{ gain = 2.661, offset = 0.43 },
+}
+
+-- One upload can serve every Level 2 SFX. Each boundary is sample-exact in the
+-- 48 kHz WAV; 100 ms of silence separates adjacent segments.
+local LEVEL2_SFX_SPRITE_SEGMENTS = {
+	wade1 = { start = 0.000, duration = 1.186 },
+	wade2 = { start = 1.286, duration = 1.236 },
+	wade3 = { start = 2.622, duration = 0.916 },
+	wade4 = { start = 3.638, duration = 1.196 },
+	wade5 = { start = 4.934, duration = 1.146 },
+	wade6 = { start = 6.180, duration = 1.256 },
+	wade7 = { start = 7.536, duration = 1.106 },
+	pipeWalk1 = { start = 8.742, duration = 0.420 },
+	pipeWalk2 = { start = 9.262, duration = 0.550 },
+	pipeRun = { start = 9.912, duration = 0.700 },
+	pipeAttack = { start = 10.712, duration = 1.350 },
+	pipeBreathing = { start = 12.162, duration = 2.160 },
+}
+
+local function level2SoundId(raw)
+	if typeof(raw) == "number" then
+		if raw > 0 then return "rbxassetid://" .. tostring(math.floor(raw)) end
+		return nil
+	end
+	if typeof(raw) ~= "string" then return nil end
+	local digits = raw:match("^%s*(%d+)%s*$") or raw:match("^%s*rbxassetid://(%d+)%s*$")
+	if not digits or tonumber(digits) == 0 then return nil end
+	return "rbxassetid://" .. digits
+end
+
+local function level2ValueId(source, names)
+	if not source then return nil end
+	for _, name in ipairs(names) do
+		local id = level2SoundId(source:GetAttribute(name))
+		if id then return id end
+		local value = source:FindFirstChild(name)
+		if value and value:IsA("ValueBase") then
+			id = level2SoundId(value.Value)
+			if id then return id end
+		end
+	end
+	return nil
+end
+
+local function level2Sources(model)
+	local sources = {}
+	local function add(source)
+		if source then sources[#sources + 1] = source end
+	end
+	add(model)
+	add(RS:FindFirstChild("Level2Audio"))
+	add(workspace:FindFirstChild("PoolroomsLevel2"))
+	add(RS)
+	add(workspace)
+	return sources
+end
+
+local function level2SpriteId(model)
+	for _, source in ipairs(level2Sources(model)) do
+		local id = level2ValueId(source, {
+			"Level2SfxSpriteId",
+			"PoolPipeSfxSpriteId",
+		})
+		if id then return id end
+	end
+	return nil
+end
+
+local function level2TakeId(index, model, profile)
+	local names = {
+		"Level2WadeStep" .. index,
+		"Level2WadeStepId" .. index,
+		"HeavyBootsSplash" .. index,
+		"WadeStep" .. index,
+		"ShallowWaterStep" .. index,
+	}
+	if profile == "pipe" then table.insert(names, 1, "PoolPipeStep" .. index) end
+	if profile == "foam" then table.insert(names, 1, "PoolFoamStep" .. index) end
+	for _, source in ipairs(level2Sources(model)) do
+		local id = level2ValueId(source, names)
+		if id then return id end
+	end
+	return nil
+end
+
+local function level2AuxId(model, names)
+	for _, source in ipairs(level2Sources(model)) do
+		local id = level2ValueId(source, names)
+		if id then return id end
+	end
+	return nil
+end
+
+local function shuffleLevel2Bag(indices, previous)
+	for i = #indices, 2, -1 do
+		local j = math.random(i)
+		indices[i], indices[j] = indices[j], indices[i]
+	end
+	if #indices > 1 and indices[1] == previous then
+		indices[1], indices[2] = indices[2], indices[1]
+	end
+	return indices
+end
+
+local function makeLevel2Bank(parent, name, baseVolume, model, profile, positional)
+	local bank = {
+		voices = {},
+		bag = {},
+		pipeWalkBag = {},
+		cursor = 0,
+		lastTake = nil,
+		lastPipeWalk = nil,
+	}
+	for index = 1, #LEVEL2_WADE_SPECS do
+		local voice = Instance.new("Sound")
+		voice.Name = name .. "Voice" .. index
+		voice.Looped = false
+		voice.Volume = 0
+		if positional then
+			voice.RollOffMode = Enum.RollOffMode.InverseTapered
+			voice.RollOffMinDistance = profile == "pipe" and 11 or 7
+			voice.RollOffMaxDistance = profile == "pipe" and 175 or 115
+		end
+		if profile == "pipe" then
+			local echo = Instance.new("EchoSoundEffect")
+			echo.Delay = 0.17
+			echo.Feedback = 0.22
+			echo.DryLevel = 0
+			echo.WetLevel = -13
+			echo.Parent = voice
+		end
+		voice.Parent = parent
+		bank.voices[index] = voice
+	end
+
+	function bank:nextTake(spriteAvailable)
+		if #self.bag == 0 then
+			local available = {}
+			for index = 1, #LEVEL2_WADE_SPECS do
+				if spriteAvailable or level2TakeId(index, model, profile) then
+					available[#available + 1] = index
+				end
+			end
+			if #available == 0 then return nil end
+			self.bag = shuffleLevel2Bag(available, self.lastTake)
+		end
+		local take = table.remove(self.bag, 1)
+		self.lastTake = take
+		return take
+	end
+
+	function bank:nextPipeWalk()
+		if #self.pipeWalkBag == 0 then
+			self.pipeWalkBag = shuffleLevel2Bag({ 1, 2 }, self.lastPipeWalk)
+		end
+		local take = table.remove(self.pipeWalkBag, 1)
+		self.lastPipeWalk = take
+		return take
+	end
+
+	function bank:play(playbackSpeed, volumeScale, motionVariant)
+		local spriteId = level2SpriteId(model)
+		local take, id, startAt, duration, gain
+		if spriteId then
+			id = spriteId
+			if profile == "pipe" then
+				local segment
+				if motionVariant == "run" then
+					segment = LEVEL2_SFX_SPRITE_SEGMENTS.pipeRun
+				else
+					local pipeTake = self:nextPipeWalk()
+					segment = pipeTake == 1
+						and LEVEL2_SFX_SPRITE_SEGMENTS.pipeWalk1
+						or LEVEL2_SFX_SPRITE_SEGMENTS.pipeWalk2
+				end
+				startAt, duration, gain = segment.start, segment.duration, 1
+			else
+				take = self:nextTake(true)
+				local segment = take and LEVEL2_SFX_SPRITE_SEGMENTS["wade" .. take]
+				if not segment then return false end
+				startAt, duration, gain = segment.start, segment.duration, LEVEL2_WADE_SPECS[take].gain
+			end
+		else
+			take = self:nextTake(false)
+			if not take then return false end
+			id = level2TakeId(take, model, profile)
+			if not id then
+				self.bag = {}
+				return false
+			end
+			local spec = LEVEL2_WADE_SPECS[take]
+			startAt, gain = spec.offset, spec.gain
+		end
+
+		self.cursor = self.cursor % #self.voices + 1
+		local voice = self.voices[self.cursor]
+		local speed = playbackSpeed or 1
+		local token = (voice:GetAttribute("SpritePlayToken") or 0) + 1
+		voice:SetAttribute("SpritePlayToken", token)
+		voice:Stop()
+		voice.SoundId = id
+		voice.Volume = math.clamp(baseVolume * gain * (volumeScale or 1), 0, 2)
+		voice.PlaybackSpeed = speed
+		voice.TimePosition = startAt
+		voice:Play()
+		if duration then
+			task.delay(duration / speed, function()
+				if voice.Parent and voice:GetAttribute("SpritePlayToken") == token then
+					voice:Stop()
+				end
+			end)
+		end
+		return true
+	end
+
+	function bank:destroy()
+		for _, voice in ipairs(self.voices) do voice:Destroy() end
+	end
+	return bank
+end
+
+local level2PlayerBank = makeLevel2Bank(SoundService, "Level2PlayerWade", 0.36, nil, "player", false)
+local level2WaterRay = RaycastParams.new()
+level2WaterRay.FilterType = Enum.RaycastFilterType.Exclude
+level2WaterRay.IgnoreWater = false
+local level2PlayerLastPosition = nil
+local level2PlayerStepClock = 0
+
+local function level2ShallowWater(humanoid, root)
+	if workspace:GetAttribute("SelectedLevel") ~= 2 then return false end
+	local state = humanoid:GetState()
+	if state == Enum.HumanoidStateType.Swimming
+		or state == Enum.HumanoidStateType.Freefall
+		or state == Enum.HumanoidStateType.Jumping
+		or state == Enum.HumanoidStateType.FallingDown
+		or state == Enum.HumanoidStateType.Dead
+		or state == Enum.HumanoidStateType.Seated then
+		return false
+	end
+	level2WaterRay.FilterDescendantsInstances = { player.Character }
+	local hit = workspace:Raycast(root.Position + Vector3.new(0, 1.5, 0), Vector3.new(0, -6.5, 0), level2WaterRay)
+	if not hit or hit.Material ~= Enum.Material.Water then return false end
+	local rootAboveSurface = root.Position.Y - hit.Position.Y
+	return rootAboveSurface >= 0.6 and rootAboveSurface <= 4.25
+end
+
+RunService.Heartbeat:Connect(function(dt)
+	local hum, root = aliveParts()
+	if workspace:GetAttribute("SelectedLevel") ~= 2 or not hum or not root then
+		level2PlayerLastPosition = root and root.Position or nil
+		level2PlayerStepClock = 0
+		return
+	end
+
+	local now = root.Position
+	if not level2PlayerLastPosition then
+		level2PlayerLastPosition = now
+		return
+	end
+	local displacement = Vector3.new(now.X - level2PlayerLastPosition.X, 0, now.Z - level2PlayerLastPosition.Z).Magnitude
+	level2PlayerLastPosition = now
+	if displacement > 7 then
+		level2PlayerStepClock = 0
+		return
+	end
+	local flatSpeed = dt > 0 and displacement / dt or 0
+	if flatSpeed < 1.35 or not level2ShallowWater(hum, root) then
+		level2PlayerStepClock = math.min(level2PlayerStepClock, 0.12)
+		return
+	end
+
+	local cadence = math.clamp(0.68 - flatSpeed * 0.015, 0.30, 0.56)
+	level2PlayerStepClock += dt
+	if level2PlayerStepClock >= cadence then
+		level2PlayerStepClock %= cadence
+		level2PlayerBank:play(0.97 + math.random() * 0.06, math.clamp(0.88 + flatSpeed / 42, 0.9, 1.18))
+	end
+end)
+
+workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(function()
+	if workspace:GetAttribute("SelectedLevel") == 2 then
+		steps.Volume = 0
+		level2PlayerStepClock = 0
+	end
+end)
+
+-- Pool Foam and Pool Pipe use the same seven normalized source takes through
+-- positional banks. Model Profile/MotionState/ActionSerial are the primary API;
+-- names and CollectionService tags make hand-authored/test rigs work as well.
+local level2EntityAudio = {}
+
+local function level2Profile(model)
+	local raw = string.lower(tostring(model:GetAttribute("Profile") or ""))
+	local name = string.lower(model.Name):gsub("[%s_%-]", "")
+	if raw:find("pipe", 1, true) or name:find("poolpipe", 1, true)
+		or CollectionService:HasTag(model, "PoolPipeEntity") then
+		return "pipe"
+	end
+	if raw:find("foam", 1, true) or name:find("poolfoam", 1, true)
+		or CollectionService:HasTag(model, "PoolFoamEntity") then
+		return "foam"
+	end
+	return nil
+end
+
+local function level2EntityRoot(model)
+	if model.PrimaryPart then return model.PrimaryPart end
+	local named = model:FindFirstChild("HumanoidRootPart", true)
+		or model:FindFirstChild("Root", true)
+		or model:FindFirstChild("char1", true)
+	if named and named:IsA("BasePart") then return named end
+	return model:FindFirstChildWhichIsA("BasePart", true)
+end
+
+local function addPipeAcoustics(sound)
+	local echo = Instance.new("EchoSoundEffect")
+	echo.Delay = 0.21
+	echo.Feedback = 0.18
+	echo.DryLevel = 0
+	echo.WetLevel = -15
+	echo.Parent = sound
+	local eq = Instance.new("EqualizerSoundEffect")
+	eq.LowGain = 2
+	eq.MidGain = -1
+	eq.HighGain = -5
+	eq.Parent = sound
+end
+
+local function level2PipeAuxSound(root, name, looped, volume, maxDistance)
+	local sound = Instance.new("Sound")
+	sound.Name = name
+	sound.Looped = looped
+	sound.Volume = volume
+	sound.RollOffMode = Enum.RollOffMode.InverseTapered
+	sound.RollOffMinDistance = 11
+	sound.RollOffMaxDistance = maxDistance
+	addPipeAcoustics(sound)
+	sound.Parent = root
+	return sound
+end
+
+local function refreshPipeBreathing(controller)
+	if controller.profile ~= "pipe" then return end
+	local sound = controller.breathing
+	local spriteId = level2SpriteId(controller.model)
+	local id = spriteId or level2AuxId(controller.model, {
+		"PoolPipeBreathingSoundId",
+		"PoolPipeBreathSoundId",
+		"MetalBreathingSoundId",
+		"BreathingSoundId",
+	})
+	local usesSprite = spriteId ~= nil
+	controller.breathingUsesSprite = usesSprite
+	sound.Looped = not usesSprite
+	if (id or "") ~= sound.SoundId then
+		sound:Stop()
+		sound.SoundId = id or ""
+	end
+	if workspace:GetAttribute("SelectedLevel") == 2 and id then
+		if not sound.IsPlaying then
+			if usesSprite then sound.TimePosition = LEVEL2_SFX_SPRITE_SEGMENTS.pipeBreathing.start end
+			sound:Play()
+		end
+	elseif sound.IsPlaying then
+		sound:Stop()
+	end
+end
+
+local function playPipeAttack(controller)
+	if controller.profile ~= "pipe" or workspace:GetAttribute("SelectedLevel") ~= 2 then return end
+	if os.clock() - controller.lastAttackAt < 0.12 then return end
+	controller.lastAttackAt = os.clock()
+	local spriteId = level2SpriteId(controller.model)
+	local id = spriteId or level2AuxId(controller.model, {
+		"PoolPipeAttackSoundId",
+		"MetalAttackSoundId",
+		"AttackSoundId",
+	})
+	if not id then return end
+	local sound = controller.attack
+	local speed = 0.94 + math.random() * 0.08
+	local token = (sound:GetAttribute("SpritePlayToken") or 0) + 1
+	sound:SetAttribute("SpritePlayToken", token)
+	sound:Stop()
+	sound.SoundId = id
+	sound.PlaybackSpeed = speed
+	sound.TimePosition = spriteId and LEVEL2_SFX_SPRITE_SEGMENTS.pipeAttack.start or 0
+	sound:Play()
+	if spriteId then
+		task.delay(LEVEL2_SFX_SPRITE_SEGMENTS.pipeAttack.duration / speed, function()
+			if sound.Parent and sound:GetAttribute("SpritePlayToken") == token then sound:Stop() end
+		end)
+	end
+end
+
+local function hookLevel2Entity(model)
+	if level2EntityAudio[model] or not model:IsDescendantOf(workspace) then return end
+	local profile = level2Profile(model)
+	if not profile then return end
+	local root = level2EntityRoot(model)
+	if not root then
+		task.delay(0.25, function() hookLevel2Entity(model) end)
+		return
+	end
+
+	local controller = {
+		model = model,
+		root = root,
+		profile = profile,
+		lastPosition = root.Position,
+		stepClock = 0,
+		lastActionSerial = model:GetAttribute("ActionSerial"),
+		lastMotionState = string.lower(tostring(model:GetAttribute("MotionState") or "")),
+		lastAttackAt = -999,
+		auxRefreshAt = 0,
+	}
+	controller.bank = makeLevel2Bank(
+		root,
+		profile == "pipe" and "PoolPipeStep" or "PoolFoamStep",
+		profile == "pipe" and 0.52 or 0.42,
+		model,
+		profile,
+		true
+	)
+	if profile == "pipe" then
+		controller.breathing = level2PipeAuxSound(root, "PoolPipeBreathing", true, 0.18, 145)
+		controller.attack = level2PipeAuxSound(root, "PoolPipeAttack", false, 0.95, 190)
+		refreshPipeBreathing(controller)
+	end
+	level2EntityAudio[model] = controller
+
+	controller.actionConnection = model:GetAttributeChangedSignal("ActionSerial"):Connect(function()
+		local serial = model:GetAttribute("ActionSerial")
+		if serial == controller.lastActionSerial then return end
+		controller.lastActionSerial = serial
+		playPipeAttack(controller)
+	end)
+	controller.motionConnection = model:GetAttributeChangedSignal("MotionState"):Connect(function()
+		local motion = string.lower(tostring(model:GetAttribute("MotionState") or ""))
+		if motion:find("attack", 1, true) and not controller.lastMotionState:find("attack", 1, true) then
+			playPipeAttack(controller)
+		end
+		controller.lastMotionState = motion
+	end)
+end
+
+local function tryHookLevel2Entity(model)
+	task.defer(function()
+		if model and model.Parent then hookLevel2Entity(model) end
+	end)
+end
+
+for _, descendant in ipairs(workspace:GetDescendants()) do
+	if descendant:IsA("Model") and level2Profile(descendant) then
+		tryHookLevel2Entity(descendant)
+	end
+end
+workspace.DescendantAdded:Connect(function(descendant)
+	if descendant:IsA("Model") then
+		tryHookLevel2Entity(descendant)
+	elseif descendant:IsA("BasePart") and descendant.Parent and descendant.Parent:IsA("Model") then
+		tryHookLevel2Entity(descendant.Parent)
+	end
+end)
+for _, tag in ipairs({ "PoolPipeEntity", "PoolFoamEntity" }) do
+	CollectionService:GetInstanceAddedSignal(tag):Connect(function(instance)
+		if instance:IsA("Model") then tryHookLevel2Entity(instance) end
+	end)
+end
+
+RunService.Heartbeat:Connect(function(dt)
+	local levelTwo = workspace:GetAttribute("SelectedLevel") == 2
+	for model, controller in pairs(level2EntityAudio) do
+		local root = controller.root
+		if not model.Parent or not root.Parent then
+			if controller.actionConnection then controller.actionConnection:Disconnect() end
+			if controller.motionConnection then controller.motionConnection:Disconnect() end
+			controller.bank:destroy()
+			if controller.breathing then controller.breathing:Destroy() end
+			if controller.attack then controller.attack:Destroy() end
+			level2EntityAudio[model] = nil
+			continue
+		end
+
+		if controller.profile == "pipe" and os.clock() >= controller.auxRefreshAt then
+			controller.auxRefreshAt = os.clock() + 0.75
+			refreshPipeBreathing(controller)
+		end
+		if controller.profile == "pipe" and controller.breathingUsesSprite
+			and controller.breathing and controller.breathing.IsPlaying then
+			local segment = LEVEL2_SFX_SPRITE_SEGMENTS.pipeBreathing
+			local segmentEnd = segment.start + segment.duration
+			local position = controller.breathing.TimePosition
+			if position >= segmentEnd or position < segment.start - 0.03 then
+				controller.breathing.TimePosition = segment.start
+			end
+		end
+
+		local now = root.Position
+		local displacement = Vector3.new(now.X - controller.lastPosition.X, 0, now.Z - controller.lastPosition.Z).Magnitude
+		controller.lastPosition = now
+		if not levelTwo or displacement > 10 then
+			controller.stepClock = 0
+			continue
+		end
+		local speed = dt > 0 and displacement / dt or 0
+		local motion = string.lower(tostring(model:GetAttribute("MotionState") or ""))
+		local movingState = motion == ""
+			or motion:find("walk", 1, true)
+			or motion:find("wander", 1, true)
+			or motion:find("move", 1, true)
+			or motion:find("patrol", 1, true)
+			or motion:find("search", 1, true)
+			or motion:find("chase", 1, true)
+			or motion:find("run", 1, true)
+			or motion:find("hunt", 1, true)
+		if speed < 0.75 or not movingState then
+			controller.stepClock = math.min(controller.stepClock, 0.12)
+			continue
+		end
+		local running = motion:find("chase", 1, true)
+			or motion:find("run", 1, true)
+			or motion:find("hunt", 1, true)
+			or speed >= (controller.profile == "pipe" and 12 or 14)
+		local cadence
+		if controller.profile == "foam" then
+			cadence = running and 0.31 or 0.62
+		else
+			cadence = running and 0.34 or 0.72
+		end
+		controller.stepClock += dt
+		if controller.stepClock >= cadence then
+			controller.stepClock %= cadence
+			local pitch = controller.profile == "pipe"
+				and (running and (0.90 + math.random() * 0.07) or (0.84 + math.random() * 0.07))
+				or (0.96 + math.random() * 0.08)
+			controller.bank:play(pitch, running and 1.16 or 1, running and "run" or "walk")
+		end
+	end
+end)

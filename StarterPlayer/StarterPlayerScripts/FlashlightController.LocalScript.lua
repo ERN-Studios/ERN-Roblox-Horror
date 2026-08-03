@@ -18,17 +18,23 @@ local player = Players.LocalPlayer
 UIS.MouseIconEnabled = false -- no cursor
 
 -- how the torch is held, relative to the eye (horizontal offset + drop)
-local HAND_SIDE = 0.9   -- studs to the right
-local HAND_DOWN = -0.7  -- studs below eye level
+local HAND_SIDE = 0.25  -- small hand offset: avoids putting the light inside walls
+local HAND_DOWN = -0.25
+local HAND_FORWARD = 0.3
 local SWAY = 14         -- higher = snappier, lower = more lag/sway
 
 local mount, coreLight, spillLight
 local on = false
 local aimCF = nil
+local aimSendClock = 0
 
 local function buildMount()
 	local camera = workspace.CurrentCamera
 	if not camera then return end
+	if mount then
+		mount:Destroy()
+		mount, coreLight, spillLight = nil, nil, nil
+	end
 
 	mount = Instance.new("Part")
 	mount.Name = "FlashlightMount"
@@ -40,18 +46,18 @@ local function buildMount()
 
 	-- tight bright core: the actual "beam" (tune Range to taste; ~27–35)
 	coreLight = Instance.new("SpotLight")
-	coreLight.Brightness = 5
-	coreLight.Range = 35
-	coreLight.Angle = 32
+	coreLight.Brightness = 1.2
+	coreLight.Range = 38
+	coreLight.Angle = 38
 	coreLight.Color = Color3.fromRGB(255, 244, 214)
-	coreLight.Shadows = true
+	coreLight.Shadows = false -- close props/walls must not self-occlude the beam
 	coreLight.Enabled = on
 	coreLight.Face = Enum.NormalId.Front
 	coreLight.Parent = mount
 
 	-- wide dim spill: what your eye reads as the "cone of light"
 	spillLight = Instance.new("SpotLight")
-	spillLight.Brightness = 1
+	spillLight.Brightness = 0.3
 	spillLight.Range = 45
 	spillLight.Angle = 75
 	spillLight.Color = Color3.fromRGB(255, 240, 205)
@@ -60,7 +66,10 @@ local function buildMount()
 	spillLight.Face = Enum.NormalId.Front
 	spillLight.Parent = mount
 
-	mount.Parent = camera
+	-- A light parented below CurrentCamera can report Enabled while contributing
+	-- nothing to world lighting. Keep the invisible local mount in Workspace and
+	-- drive its CFrame from the camera instead; it remains client-only.
+	mount.Parent = workspace
 end
 
 buildMount()
@@ -69,11 +78,24 @@ workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(buildMount)
 local rayParams = RaycastParams.new()
 rayParams.FilterType = Enum.RaycastFilterType.Exclude
 
+-- Roblox's dynamic Lights can contribute very little on the extremely dark
+-- prop albedos used by Level 1. A subtle, occluded near-field highlight keeps
+-- the aimed surface/prop readable without glowing through walls or flattening
+-- the whole maze. It follows the exact camera ray, including up/down.
+local nearHighlight = Instance.new("Highlight")
+nearHighlight.Name = "FlashlightNearField"
+nearHighlight.FillColor = Color3.fromRGB(255, 232, 185)
+nearHighlight.FillTransparency = 0.93
+nearHighlight.OutlineTransparency = 1
+nearHighlight.DepthMode = Enum.HighlightDepthMode.Occluded
+nearHighlight.Enabled = false
+nearHighlight.Parent = workspace
+
 -- bind AFTER the camera updates, so up/down tracking is exact
 RunService:BindToRenderStep("MongoFlashlight", Enum.RenderPriority.Camera.Value + 1, function(dt)
 	local camera = workspace.CurrentCamera
 	if not camera then return end
-	if not (mount and mount.Parent == camera) then
+	if not (mount and mount.Parent == workspace) then
 		buildMount()
 		if not mount then return end
 	end
@@ -91,6 +113,7 @@ RunService:BindToRenderStep("MongoFlashlight", Enum.RenderPriority.Camera.Value 
 	local rightFlat = Vector3.new(right.X, 0, right.Z)
 	rightFlat = (rightFlat.Magnitude > 0.001) and rightFlat.Unit or Vector3.new(1, 0, 0)
 	local handPos = eye + rightFlat * HAND_SIDE + Vector3.new(0, HAND_DOWN, 0)
+		+ aimCF.LookVector * HAND_FORWARD
 
 	-- never originate the light inside a wall (kills close-range illumination)
 	local filter = { camera }
@@ -104,6 +127,47 @@ RunService:BindToRenderStep("MongoFlashlight", Enum.RenderPriority.Camera.Value 
 
 	-- position at the hand, but point EXACTLY where the camera looks
 	mount.CFrame = aimCF.Rotation + handPos
+
+	-- The server mount lets other players see this flashlight. Suppress only the
+	-- local player's replicated copy so their own camera never receives the same
+	-- two SpotLights twice; this is a client-local property override.
+	local replicatedSelf = workspace:FindFirstChild("ReplicatedFlashlight_" .. player.UserId)
+	if replicatedSelf then
+		for _, item in ipairs(replicatedSelf:GetChildren()) do
+			if item:IsA("Light") then item.Enabled = false end
+		end
+	end
+
+	if on then
+		local nearHit = workspace:Raycast(eye, aimCF.LookVector * 20, rayParams)
+		if nearHit then
+			local adornee = nearHit.Instance
+			local decor = workspace:FindFirstChild("Decor")
+			if decor and adornee:IsDescendantOf(decor) then
+				local node = adornee
+				while node.Parent and node.Parent ~= decor do node = node.Parent end
+				adornee = node
+			end
+			nearHighlight.Adornee = adornee
+			-- Keep the texture-readable near field, but at 30% of its old opacity.
+			nearHighlight.FillTransparency = math.clamp(
+				0.898 + nearHit.Distance / 500, 0.904, 0.946)
+			nearHighlight.Enabled = true
+		else
+			nearHighlight.Enabled = false
+		end
+	else
+		nearHighlight.Enabled = false
+	end
+	if on then
+		aimSendClock += dt
+		if aimSendClock >= 1 / 15 then
+			aimSendClock = 0
+			remote:FireServer("aim", mount.CFrame)
+		end
+	else
+		aimSendClock = 0
+	end
 end)
 
 -- ── battery ───────────────────────────────────────────────
@@ -120,6 +184,7 @@ local warned50, warned25 = false, false
 local popupGui = Instance.new("ScreenGui")
 popupGui.Name = "FlashlightPopup"
 popupGui.ResetOnSpawn = false
+popupGui.Enabled = player:GetAttribute("InRound") == true
 popupGui.Parent = player:WaitForChild("PlayerGui")
 local popup = Instance.new("TextLabel")
 popup.AnchorPoint = Vector2.new(0.5, 1)
@@ -147,15 +212,16 @@ local function showPopup(text, seconds)
 	end)
 end
 
--- simple angled flashlight silhouette with live power bars in the handle
+-- Complete flashlight silhouette: black body, battery window in the middle and
+-- three yellow rays at the front. The art is centred inside one fixed hit box so
+-- rotation cannot make the touch target or visible torch drift off-centre.
 local batBody = Instance.new("Frame")
 batBody.Name = "FlashlightPower"
 batBody.AnchorPoint = Vector2.new(0, 1)
-batBody.Position = UDim2.new(0, 26, 1, -22)
-batBody.Size = UDim2.new(0, 72, 0, 110)
+batBody.Position = UDim2.new(0, 12, 1, -10)
+batBody.Size = UDim2.new(0, 72, 0, 136)
 batBody.BackgroundTransparency = 1
 batBody.BorderSizePixel = 0
-batBody.Rotation = 0
 batBody.Parent = popupGui
 
 -- Touch-only hit target over the existing flashlight symbol. It remains absent
@@ -172,92 +238,119 @@ touchFlashButton.Visible = UIS.TouchEnabled or (RunService:IsStudio() and worksp
 touchFlashButton.ZIndex = 20
 touchFlashButton.Parent = batBody
 
--- one broad lamp head: no stacked razor-like layers
-local flashHead = Instance.new("Frame")
-flashHead.Position = UDim2.new(0, 8, 0, 0)
-flashHead.Size = UDim2.new(0, 52, 0, 34)
-flashHead.BackgroundColor3 = Color3.fromRGB(12, 13, 15)
-flashHead.BorderSizePixel = 0
-flashHead.Parent = batBody
-local headCorner = Instance.new("UICorner")
-headCorner.CornerRadius = UDim.new(0, 7)
-headCorner.Parent = flashHead
-local headStroke = Instance.new("UIStroke")
-headStroke.Color = Color3.fromRGB(238, 238, 240)
-headStroke.Thickness = 2
-headStroke.Parent = flashHead
+local torch = Instance.new("Frame")
+torch.Name = "Silhouette"
+torch.AnchorPoint = Vector2.new(0.5, 0.5)
+torch.Position = UDim2.fromScale(0.5, 0.5)
+torch.Size = UDim2.new(0, 160, 0, 48)
+torch.BackgroundTransparency = 1
+torch.Rotation = -90 -- upright, with the lens/rays at the top
+torch.Parent = batBody
+local torchScale = Instance.new("UIScale")
+torchScale.Scale = 0.72
+torchScale.Parent = torch
 
--- three tiny light rays: one centered and two angled
-local rayColor = Color3.fromRGB(255, 238, 150)
-local lightRays = {}
-local function makeRay(x, y, rotation, height)
- local ray = Instance.new("Frame")
- ray.AnchorPoint = Vector2.new(0.5, 1)
- ray.Position = UDim2.new(0, x, 0, y)
- ray.Size = UDim2.new(0, 3, 0, height)
- ray.BackgroundColor3 = rayColor
- ray.BorderSizePixel = 0
- ray.Rotation = rotation
- ray.Visible = on -- off by default; becomes visible with the real beam
- ray.Parent = batBody
- local rc = Instance.new("UICorner")
- rc.CornerRadius = UDim.new(1, 0)
- rc.Parent = ray
- lightRays[#lightRays + 1] = ray
+local function outline(frame, radius)
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(0, radius)
+	corner.Parent = frame
+	local stroke = Instance.new("UIStroke")
+	stroke.Color = Color3.fromRGB(235, 236, 240)
+	stroke.Thickness = 2
+	stroke.Parent = frame
 end
-makeRay(34, -8, 0, 10)
-makeRay(21, -6, -32, 8)
-makeRay(47, -6, 32, 8)
 
--- short neck flowing directly into the grip
-local neck = Instance.new("Frame")
-neck.Position = UDim2.new(0, 22, 0, 31)
-neck.Size = UDim2.new(0, 24, 0, 12)
-neck.BackgroundColor3 = Color3.fromRGB(12, 13, 15)
-neck.BorderSizePixel = 0
-neck.Parent = batBody
-local neckStroke = Instance.new("UIStroke")
-neckStroke.Color = Color3.fromRGB(238, 238, 240)
-neckStroke.Thickness = 2
-neckStroke.Parent = neck
+local tail = Instance.new("Frame")
+tail.Position = UDim2.new(0, 3, 0, 13)
+tail.Size = UDim2.new(0, 17, 0, 24)
+tail.BackgroundColor3 = Color3.fromRGB(8, 9, 11)
+tail.BorderSizePixel = 0
+tail.Parent = torch
+outline(tail, 5)
 
 local handle = Instance.new("Frame")
-handle.Position = UDim2.new(0, 20, 0, 40)
-handle.Size = UDim2.new(0, 28, 0, 70)
-handle.BackgroundColor3 = Color3.fromRGB(12, 13, 15)
+handle.Position = UDim2.new(0, 14, 0, 10)
+handle.Size = UDim2.new(0, 100, 0, 30)
+handle.BackgroundColor3 = Color3.fromRGB(10, 11, 14)
 handle.BorderSizePixel = 0
-handle.Parent = batBody
-local handleCorner = Instance.new("UICorner")
-handleCorner.CornerRadius = UDim.new(0, 7)
-handleCorner.Parent = handle
-local handleStroke = Instance.new("UIStroke")
-handleStroke.Color = Color3.fromRGB(238, 238, 240)
-handleStroke.Thickness = 2
-handleStroke.Parent = handle
+handle.Parent = torch
+outline(handle, 7)
+
+local batteryWindow = Instance.new("Frame")
+batteryWindow.Position = UDim2.new(0, 26, 0, 6)
+batteryWindow.Size = UDim2.new(0, 53, 0, 18)
+batteryWindow.BackgroundColor3 = Color3.fromRGB(26, 28, 33)
+batteryWindow.BorderSizePixel = 0
+batteryWindow.Parent = handle
+outline(batteryWindow, 4)
 
 local barHolder = Instance.new("Frame")
-barHolder.Size = UDim2.new(1, -10, 1, -12)
-barHolder.Position = UDim2.new(0, 5, 0, 6)
+barHolder.Position = UDim2.new(0, 4, 0, 4)
+barHolder.Size = UDim2.new(1, -8, 1, -8)
 barHolder.BackgroundTransparency = 1
-barHolder.Parent = handle
+barHolder.Parent = batteryWindow
 local barList = Instance.new("UIListLayout")
-barList.FillDirection = Enum.FillDirection.Vertical
+barList.FillDirection = Enum.FillDirection.Horizontal
 barList.Padding = UDim.new(0, 3)
 barList.HorizontalAlignment = Enum.HorizontalAlignment.Center
 barList.VerticalAlignment = Enum.VerticalAlignment.Center
 barList.Parent = barHolder
 local batBars = {}
 for i = 1, 5 do
- local bar = Instance.new("Frame")
- bar.Size = UDim2.new(1, 0, 0, 8)
- bar.BackgroundColor3 = Color3.fromRGB(245, 245, 245)
- bar.BorderSizePixel = 0
- bar.LayoutOrder = 6 - i
- bar.Parent = barHolder
- local bc = Instance.new("UICorner")
- bc.CornerRadius = UDim.new(0, 3)
- bc.Parent = bar
- batBars[i] = bar
+	local bar = Instance.new("Frame")
+	bar.Size = UDim2.new(0, 7, 1, 0)
+	bar.BackgroundColor3 = Color3.fromRGB(245, 245, 245)
+	bar.BorderSizePixel = 0
+	bar.LayoutOrder = i
+	bar.Parent = barHolder
+	local bc = Instance.new("UICorner")
+	bc.CornerRadius = UDim.new(0, 2)
+	bc.Parent = bar
+	batBars[i] = bar
+end
+
+local neck = Instance.new("Frame")
+neck.Position = UDim2.new(0, 109, 0, 8)
+neck.Size = UDim2.new(0, 11, 0, 34)
+neck.BackgroundColor3 = Color3.fromRGB(9, 10, 12)
+neck.BorderSizePixel = 0
+neck.Parent = torch
+outline(neck, 4)
+
+local flashHead = Instance.new("Frame")
+flashHead.Position = UDim2.new(0, 116, 0, 4)
+flashHead.Size = UDim2.new(0, 27, 0, 42)
+flashHead.BackgroundColor3 = Color3.fromRGB(8, 9, 11)
+flashHead.BorderSizePixel = 0
+flashHead.Parent = torch
+outline(flashHead, 6)
+
+local lens = Instance.new("Frame")
+lens.Position = UDim2.new(1, -7, 0, 5)
+lens.Size = UDim2.new(0, 8, 1, -10)
+lens.BackgroundColor3 = Color3.fromRGB(255, 218, 82)
+lens.BackgroundTransparency = on and 0 or 0.7
+lens.BorderSizePixel = 0
+lens.Parent = flashHead
+local lensCorner = Instance.new("UICorner")
+lensCorner.CornerRadius = UDim.new(0, 4)
+lensCorner.Parent = lens
+
+local lightRays = {}
+for index, spec in ipairs({ { 146, 8, -10 }, { 149, 22, 0 }, { 146, 36, 10 } }) do
+	local ray = Instance.new("Frame")
+	ray.Name = "PowerRay" .. index
+	ray.Position = UDim2.new(0, spec[1], 0, spec[2])
+	ray.Size = UDim2.new(0, index == 2 and 18 or 14, 0, 4)
+	ray.BackgroundColor3 = Color3.fromRGB(255, 215, 72)
+	ray.BorderSizePixel = 0
+	ray.Rotation = spec[3]
+	ray.Visible = on
+	ray.Parent = torch
+	local rc = Instance.new("UICorner")
+	rc.CornerRadius = UDim.new(1, 0)
+	rc.Parent = ray
+	lightRays[#lightRays + 1] = ray
 end
 
 local BAT_FULL  = Color3.fromRGB(245, 245, 245)
@@ -265,8 +358,9 @@ local BAT_EMPTY = Color3.fromRGB(235, 60, 50)
 
 local function setLights(state)
  on = state
- if coreLight then coreLight.Enabled = state end
- if spillLight then spillLight.Enabled = state end
+	if coreLight then coreLight.Enabled = state end
+	if spillLight then spillLight.Enabled = state end
+ lens.BackgroundTransparency = state and 0 or 0.72
  for _, ray in ipairs(lightRays) do ray.Visible = state end
  remote:FireServer(state)
 end
@@ -296,6 +390,7 @@ local function alive()
 end
 
 local function toggle()
+	if player:GetAttribute("InRound") ~= true then return end
 	if not alive() then return end -- dead / spectating: no flashlight of your own
 	if on then
 		setLights(false)
@@ -321,12 +416,29 @@ end)
 
 -- on (re)spawn: light off, battery back to FULL (so it refills each round reset),
 -- and kill the beam the instant you die so a dead spectator isn't shining it
-player.CharacterAdded:Connect(function(char)
+local boundCharacter
+local function bindCharacter(char)
+	if boundCharacter == char then return end
+	boundCharacter = char
 	setLights(false)
 	battery = BATTERY_MAX
 	local hum = char:WaitForChild("Humanoid")
 	hum.Died:Connect(function() setLights(false) end)
-end)
+end
+player.CharacterAdded:Connect(bindCharacter)
+if player.Character then task.spawn(bindCharacter, player.Character) end
+
+local function updateRoundVisibility()
+	local inRound = player:GetAttribute("InRound") == true
+	popupGui.Enabled = inRound
+	if not inRound and on then setLights(false) end
+	if not inRound then
+		nearHighlight.Enabled = false
+		popup.Visible = false
+	end
+end
+player:GetAttributeChangedSignal("InRound"):Connect(updateRoundVisibility)
+updateRoundVisibility()
 
 -- ── teammates' flashlights (visible to YOU) ───────────────
 -- Your own beam lives on your camera, so others can't see it — but everyone's
@@ -343,7 +455,7 @@ local function attachMateBeam(char)
 
 		local core = Instance.new("SpotLight")
 		core.Name = "MateBeamCore"
-		core.Brightness = 4
+		core.Brightness = 1.2
 		core.Range = 32
 		core.Angle = 30
 		core.Color = Color3.fromRGB(255, 244, 214)
@@ -354,7 +466,7 @@ local function attachMateBeam(char)
 
 		local spill = Instance.new("SpotLight")
 		spill.Name = "MateBeamSpill"
-		spill.Brightness = 0.8
+		spill.Brightness = 0.24
 		spill.Range = 40
 		spill.Angle = 70
 		spill.Color = Color3.fromRGB(255, 240, 205)

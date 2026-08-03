@@ -5,6 +5,9 @@
 
 local RUN_ID = "rbxassetid://83054249237379"
 
+local player = game:GetService("Players").LocalPlayer
+if player:GetAttribute("InRound") ~= true then return end
+
 local char = script.Parent
 local animate = char:WaitForChild("Animate")
 local runAnim = animate:WaitForChild("run"):WaitForChild("RunAnim")

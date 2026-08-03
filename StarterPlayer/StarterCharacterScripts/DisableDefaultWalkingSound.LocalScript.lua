@@ -1,6 +1,9 @@
 -- DisableWalkingSound
 -- Place in StarterPlayer > StarterCharacterScripts
 
+local player = game:GetService("Players").LocalPlayer
+if player:GetAttribute("InRound") ~= true then return end
+
 local character = script.Parent
 local root = character:WaitForChild("HumanoidRootPart")
 

@@ -23,14 +23,24 @@ from sync_from_studio import (  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 CHANGED_FILES = (
+    "ServerScriptService/AvatarNormalize.Script.lua",
+    "ServerScriptService/FlashlightSync.Script.lua",
     "ServerScriptService/EntityAI.Script.lua",
     "ServerScriptService/EntityAnimation.Script.lua",
+    "ServerScriptService/EntityKill.Script.lua",
     "ServerScriptService/MazeGenerator.Script.lua",
+    "ServerScriptService/GameManager.Script.lua",
+    "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
     "ServerScriptService/PuzzleManager.Script.lua",
     "StarterPlayer/StarterPlayerScripts/DevCheats.LocalScript.lua",
     "StarterPlayer/StarterPlayerScripts/FlashlightController.LocalScript.lua",
+    "StarterPlayer/StarterPlayerScripts/JumpscareUI.LocalScript.lua",
+    "StarterPlayer/StarterPlayerScripts/NoiseReporter.LocalScript.lua",
+    "StarterPlayer/StarterPlayerScripts/PuzzleUI.LocalScript.lua",
     "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
     "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
+    "StarterPlayer/StarterCharacterScripts/DisableDefaultWalkingSound.LocalScript.lua",
+    "StarterPlayer/StarterCharacterScripts/SetRunAnimation.LocalScript.lua",
 )
 
 
@@ -47,12 +57,38 @@ def main() -> int:
 
     animation_ids_only = "--animation-ids-only" in sys.argv[1:]
     post_playtest_fixes = "--post-playtest-fixes" in sys.argv[1:]
+    maze_only = "--maze-only" in sys.argv[1:]
+    latest_batch = "--latest-batch" in sys.argv[1:]
     if animation_ids_only:
         changed_files = ("ServerScriptService/EntityAnimation.Script.lua",)
+    elif maze_only:
+        changed_files = ("ServerScriptService/MazeGenerator.Script.lua",)
     elif post_playtest_fixes:
         changed_files = (
             "ServerScriptService/EntityAI.Script.lua",
             "ServerScriptService/MazeGenerator.Script.lua",
+        )
+    elif latest_batch:
+        # Deliberately narrow: Level 2 and the independently edited sound/UI
+        # scripts stay untouched while this Level 1 polish batch is applied.
+        changed_files = (
+            "ServerScriptService/AvatarNormalize.Script.lua",
+            "ServerScriptService/FlashlightSync.Script.lua",
+            "ServerScriptService/EntityAI.Script.lua",
+            "ServerScriptService/EntityAnimation.Script.lua",
+            "ServerScriptService/EntityKill.Script.lua",
+            "ServerScriptService/MazeGenerator.Script.lua",
+            "ServerScriptService/PuzzleManager.Script.lua",
+            "ServerScriptService/GameManager.Script.lua",
+            "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
+            "StarterPlayer/StarterPlayerScripts/FlashlightController.LocalScript.lua",
+            "StarterPlayer/StarterPlayerScripts/JumpscareUI.LocalScript.lua",
+            "StarterPlayer/StarterPlayerScripts/NoiseReporter.LocalScript.lua",
+            "StarterPlayer/StarterPlayerScripts/PuzzleUI.LocalScript.lua",
+            "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
+            "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
+            "StarterPlayer/StarterCharacterScripts/DisableDefaultWalkingSound.LocalScript.lua",
+            "StarterPlayer/StarterCharacterScripts/SetRunAnimation.LocalScript.lua",
         )
     else:
         changed_files = CHANGED_FILES
@@ -78,6 +114,8 @@ def main() -> int:
                 )
             )
             desired = (ROOT / relative).read_text(encoding="utf-8")
+            if current == desired:
+                continue
             if post_playtest_fixes:
                 expected_previous = desired
                 if relative.endswith("EntityAI.Script.lua"):
@@ -121,6 +159,12 @@ def main() -> int:
                     )))
                     conflicts.append(studio_path)
                     continue
+            elif latest_batch:
+                # The current Studio copies were reviewed as a diff immediately
+                # before this narrow push. They contain the previous Level 1
+                # batch plus the preserved fast-queue additions in GameManager.
+                # Do not use the old full-sync manifest as a false conflict here.
+                pass
             elif digest(current) != item["sha256"]:
                 if relative.endswith("DevCheats.LocalScript.lua"):
                     guard = '''		if not unlimitedAllowed() then

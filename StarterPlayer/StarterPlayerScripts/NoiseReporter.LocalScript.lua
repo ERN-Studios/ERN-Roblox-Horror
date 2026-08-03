@@ -9,6 +9,7 @@ local RunService = game:GetService("RunService")
 
 local remote = RS:WaitForChild("Remotes"):WaitForChild("ReportNoise")
 local player = Players.LocalPlayer
+local function inRound() return player:GetAttribute("InRound") == true end
 
 local WALK_SPEED, SPRINT_SPEED, CROUCH_SPEED = 16, 26, 8
 
@@ -52,6 +53,11 @@ end
 local function applySpeed()
 	local _, hum = currentChar()
 	if not hum then return end
+	if not inRound() then
+		state = "walk"
+		hum.WalkSpeed = WALK_SPEED
+		return
+	end
 
 	if crouching then
 		state = "crouch"
@@ -72,6 +78,7 @@ end
 
 UIS.InputBegan:Connect(function(input, processed)
 	if processed then return end
+	if not inRound() then return end
 	if input.KeyCode == Enum.KeyCode.LeftShift then
 		shiftSprintHeld = true; refreshSprint()
 	elseif input.KeyCode == Enum.KeyCode.LeftControl then
@@ -97,6 +104,7 @@ end)
 -- report at 5Hz, only while actually moving
 task.spawn(function()
 	while task.wait(0.2) do
+		if not inRound() then continue end
 		local char, hum = currentChar()
 		if not (char and hum and hum.Health > 0) then continue end
 
@@ -117,7 +125,7 @@ end)
 -- Matches the rest of the HUD: near-black translucent backdrop, rounded corners,
 -- white fill that blushes red as it empties (same white→red as the battery).
 -- Bottom-centre, slim; fades IN when you spend stamina, fades OUT when full.
-local BAR_W, BAR_H  = 230, 9
+local BAR_W, BAR_H  = 300, 14
 local STA_FULL      = Color3.fromRGB(235, 235, 235) -- fill at full stamina
 local STA_EMPTY     = Color3.fromRGB(230, 80, 60)   -- fill near empty / exhausted
 local BAR_BG_ALPHA  = 0.6   -- backdrop transparency when shown
@@ -126,54 +134,138 @@ local BAR_FADE      = 5     -- how fast the bar fades in / out
 local gui = Instance.new("ScreenGui")
 gui.Name = "StaminaGui"
 gui.ResetOnSpawn = false
+gui.Enabled = inRound()
 gui.Parent = player:WaitForChild("PlayerGui")
 
--- Touch-only tap-to-toggle sprint. Keyboard Shift remains the only desktop path.
-local touchRunButton = Instance.new("TextButton")
-touchRunButton.Name = "TouchRunHold"
-touchRunButton.AnchorPoint = Vector2.new(1, 1)
-touchRunButton.Position = UDim2.new(1, -28, 1, -130)
-touchRunButton.Size = UDim2.fromOffset(76, 76)
-touchRunButton.BackgroundColor3 = Color3.fromRGB(8, 10, 9)
-touchRunButton.BackgroundTransparency = 0.52
-touchRunButton.BorderSizePixel = 0
-touchRunButton.AutoButtonColor = false
-touchRunButton.Font = Enum.Font.GothamBold
-touchRunButton.Text = "RUN  »"
-touchRunButton.TextColor3 = Color3.fromRGB(235, 238, 232)
-touchRunButton.TextSize = 18
-touchRunButton.Visible = UIS.TouchEnabled or (RunService:IsStudio() and workspace:GetAttribute("ForceTouchUI") == true)
-touchRunButton.ZIndex = 20
-touchRunButton.Parent = gui
-local runCorner = Instance.new("UICorner")
-runCorner.CornerRadius = UDim.new(1, 0)
-runCorner.Parent = touchRunButton
-local runStroke = Instance.new("UIStroke")
-runStroke.Color = Color3.fromRGB(220, 228, 218)
-runStroke.Transparency = 0.48
-runStroke.Thickness = 1.5
-runStroke.Parent = touchRunButton
+-- Compact touch control cluster. Keyboard/controller paths remain unchanged.
+-- RUN and JUMP form the right column; POV sits above the upright flashlight
+-- immediately to their left, keeping the camera-dragging area clear.
+local touchControlsVisible = UIS.TouchEnabled
+	or (RunService:IsStudio() and workspace:GetAttribute("ForceTouchUI") == true)
+
+local function makeTouchButton(name, text)
+	local button = Instance.new("TextButton")
+	button.Name = name
+	button.AnchorPoint = Vector2.new(1, 1)
+	button.BackgroundColor3 = Color3.fromRGB(8, 10, 9)
+	button.BackgroundTransparency = 0.52
+	button.BorderSizePixel = 0
+	button.AutoButtonColor = false
+	button.Font = Enum.Font.GothamBold
+	button.Text = text
+	button.TextColor3 = Color3.fromRGB(235, 238, 232)
+	button.TextSize = 17
+	button.TextWrapped = true
+	button.Visible = touchControlsVisible
+	button.ZIndex = 20
+	button.Parent = gui
+
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(1, 0)
+	corner.Parent = button
+	local stroke = Instance.new("UIStroke")
+	stroke.Color = Color3.fromRGB(220, 228, 218)
+	stroke.Transparency = 0.48
+	stroke.Thickness = 1.5
+	stroke.Parent = button
+	return button, stroke
+end
+
+local touchRunButton, runStroke = makeTouchButton("TouchRunHold", "RUN  »")
+local touchJumpButton = makeTouchButton("TouchJump", "JUMP  ↑")
+local touchPOVButton, povStroke = makeTouchButton("TouchPOV", "POV\n1ST")
+touchPOVButton.TextSize = 13
+
+local lastControlViewport = Vector2.new(-1, -1)
+local function applyTouchControlLayout()
+	if not touchControlsVisible then return end
+	local camera = workspace.CurrentCamera
+	local viewport = camera and camera.ViewportSize or Vector2.new(1280, 720)
+	if viewport == lastControlViewport then return end
+	lastControlViewport = viewport
+
+	local phone = viewport.Y < 700
+	local edge = phone and 22 or 28
+	local buttonSize = phone and 64 or 76
+	local gap = phone and 14 or 18
+	local leftColumn = edge + buttonSize + (phone and 16 or 18)
+	local flashlightHeight = phone and 106 or 128
+
+	touchJumpButton.Position = UDim2.new(1, -edge, 1, -edge)
+	touchJumpButton.Size = UDim2.fromOffset(buttonSize, buttonSize)
+	touchRunButton.Position = UDim2.new(1, -edge, 1, -(edge + buttonSize + gap))
+	touchRunButton.Size = UDim2.fromOffset(buttonSize, buttonSize)
+	touchPOVButton.Position = UDim2.new(1, -leftColumn, 1, -(edge + flashlightHeight + (phone and 12 or 14)))
+	touchPOVButton.Size = UDim2.fromOffset(phone and 58 or 72, phone and 48 or 54)
+	touchRunButton.TextSize = phone and 16 or 18
+	touchJumpButton.TextSize = phone and 15 or 17
+end
+
+applyTouchControlLayout()
+RunService.RenderStepped:Connect(applyTouchControlLayout)
 
 local touchSprintToggled = false
 local function showRunEnabled(enabled)
- touchRunButton.BackgroundTransparency = enabled and 0.25 or 0.52
- touchRunButton.TextColor3 = enabled and Color3.fromRGB(125, 255, 175) or Color3.fromRGB(235, 238, 232)
- runStroke.Color = enabled and Color3.fromRGB(125, 255, 175) or Color3.fromRGB(220, 228, 218)
- touchRunButton.Text = enabled and "RUN  ON" or "RUN  »"
+	touchRunButton.BackgroundTransparency = enabled and 0.25 or 0.52
+	touchRunButton.TextColor3 = enabled and Color3.fromRGB(125, 255, 175) or Color3.fromRGB(235, 238, 232)
+	runStroke.Color = enabled and Color3.fromRGB(125, 255, 175) or Color3.fromRGB(220, 228, 218)
+	touchRunButton.Text = enabled and "RUN  ON" or "RUN  »"
 end
 
 -- Tap once to sprint, tap again to stop. A held GUI touch no longer steals
 -- the phone/tablet camera finger, so players can steer and look around freely.
 touchRunButton.Activated:Connect(function()
- touchSprintToggled = not touchSprintToggled
- touchSprintHeld = touchSprintToggled
- showRunEnabled(touchSprintToggled)
- refreshSprint()
+	if not inRound() then return end
+	touchSprintToggled = not touchSprintToggled
+	touchSprintHeld = touchSprintToggled
+	showRunEnabled(touchSprintToggled)
+	refreshSprint()
 end)
+
+touchJumpButton.Activated:Connect(function()
+	if not inRound() then return end
+	local _, hum = currentChar()
+	if hum and hum.Health > 0 and hum:GetState() ~= Enum.HumanoidStateType.Dead then
+		hum.Jump = true
+		hum:ChangeState(Enum.HumanoidStateType.Jumping)
+	end
+end)
+
+local function firstPersonEnabled()
+	return player.CameraMode == Enum.CameraMode.LockFirstPerson
+		or player.CameraMaxZoomDistance <= 0.6
+end
+
+local function refreshPOVButton()
+	local firstPerson = firstPersonEnabled()
+	touchPOVButton.Text = firstPerson and "POV\n3RD" or "POV\n1ST"
+	touchPOVButton.TextColor3 = firstPerson and Color3.fromRGB(130, 220, 255)
+		or Color3.fromRGB(235, 238, 232)
+	povStroke.Color = firstPerson and Color3.fromRGB(130, 220, 255)
+		or Color3.fromRGB(220, 228, 218)
+end
+
+touchPOVButton.Activated:Connect(function()
+	if firstPersonEnabled() then
+		player.CameraMode = Enum.CameraMode.Classic
+		player.CameraMinZoomDistance = 0.5
+		player.CameraMaxZoomDistance = 14
+	else
+		player.CameraMode = Enum.CameraMode.LockFirstPerson
+		player.CameraMinZoomDistance = 0.5
+		player.CameraMaxZoomDistance = 0.5
+	end
+	refreshPOVButton()
+end)
+player:GetPropertyChangedSignal("CameraMode"):Connect(refreshPOVButton)
+player:GetPropertyChangedSignal("CameraMaxZoomDistance"):Connect(refreshPOVButton)
+refreshPOVButton()
+
 player.CharacterAdded:Connect(function()
- touchSprintToggled = false
- touchSprintHeld = false
- showRunEnabled(false)
+	touchSprintToggled = false
+	touchSprintHeld = false
+	showRunEnabled(false)
+	task.delay(0.75, refreshPOVButton)
 end)
 
 local staBg = Instance.new("Frame")
@@ -199,6 +291,16 @@ local fc = Instance.new("UICorner"); fc.CornerRadius = UDim.new(0, 4); fc.Parent
 local barShown = 0 -- eased 0–1 visibility
 
 RunService.Heartbeat:Connect(function(dt)
+	if not inRound() then
+		stamina = STAMINA_MAX
+		exhausted = false
+		state = "walk"
+		player:SetAttribute("Stamina", 1)
+		barShown = 0
+		staBg.BackgroundTransparency = 1
+		staFill.BackgroundTransparency = 1
+		return
+	end
 	local char = player.Character
 	local root = char and char:FindFirstChild("HumanoidRootPart")
 	local moving = root
@@ -236,3 +338,17 @@ RunService.Heartbeat:Connect(function(dt)
 	staBg.BackgroundTransparency = 1 - barShown * (1 - BAR_BG_ALPHA)
 	staFill.BackgroundTransparency = 1 - barShown
 end)
+
+local function updateRoundState()
+	local active = inRound()
+	gui.Enabled = active
+	if not active then
+		shiftSprintHeld, touchSprintHeld = false, false
+		sprinting, crouching = false, false
+		touchSprintToggled = false
+		showRunEnabled(false)
+		applySpeed()
+	end
+end
+player:GetAttributeChangedSignal("InRound"):Connect(updateRoundState)
+updateRoundState()

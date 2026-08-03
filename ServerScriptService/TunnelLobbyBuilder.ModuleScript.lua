@@ -670,6 +670,7 @@ function Builder.Build(center)
 	spawn.Transparency = 1
 	spawn.Neutral = true
 	spawn.Enabled = true
+	spawn.Duration = 0 -- remove Roblox's default join/spawn ForceField glow
 	spawn.Parent = model
 	spawn.CanCollide = false
 	spawn.CanTouch = false

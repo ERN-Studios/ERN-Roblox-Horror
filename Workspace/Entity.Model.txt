@@ -1,18 +1,28 @@
-The Entity is a MODEL you build/import in Studio, not a script.
+Workspace.Entity is a Studio model (not a Lua source file).
 
-Requirements (EntityAI.server.lua depends on all of these):
+Current synchronized rig (2026-08-03):
+- RigVersion attribute: v3-fingers
+- Imported MeshPart asset: rbxassetid://113409117000796
+- Surface texture retained from the previous entity: rbxassetid://104698412375264
+- Humanoid + Animator
+- HumanoidRootPart is the model PrimaryPart
+- 51 Bones total, including 28 articulated finger Bones
+- EyeL and EyeR authored Attachments are reparented to the animated Head Bone at runtime
+- Rollback copy in Studio: ServerStorage.EntityRigBackup_PreFingers_20260803
 
-[ ] A Model in Workspace named exactly "Entity"
-[ ] It contains a Humanoid
-[ ] It contains a part named "HumanoidRootPart"
-[ ] Model's PrimaryPart property is set to HumanoidRootPart
-[ ] Every part: CanCollide = false, EXCEPT HumanoidRootPart
-[ ] Parts are NOT anchored (Anchored = false), or the Humanoid can't move it
+Required by the Level 1 controllers:
+- Model name must remain Entity
+- HumanoidRootPart must remain present and configured as PrimaryPart
+- Mesh/bone parts must remain unanchored while the Entity is active
+- HumanoidRootPart supplies movement/collision; visible mesh pieces do not collide
 
-Quick way to get one for testing:
-- Avatar tab → Rig Builder → R15 (or R6) block rig → rename the model to "Entity"
-- Rig Builder already sets up Humanoid + HumanoidRootPart correctly
-- Then set CanCollide = false on all parts except HumanoidRootPart
-
-If the entity stands still in-game: it's almost always PrimaryPart not set,
-anchored parts, or no walkable floor under it (pathfinding fails silently).
+The Blender source and import/export artifacts are mirrored under:
+- assets/blender/entity_v2_before_ground_kill_2026-08-03.blend
+- assets/models/entity_v3_fingers.fbx
+- assets/animations/entity/keyframes_v3
+- assets/animations/entity/published-assets-v5.json
+- assets/animations/entity/published-assets-v6-walk.json
+- assets/animations/entity/published-assets-v6-actions.json
+- assets/animations/entity/published-assets-v7-actions.json
+- assets/animations/entity/published-assets-v8-actions.json
+- assets/animations/entity/published-assets-v9-actions.json

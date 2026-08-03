@@ -1078,7 +1078,7 @@ local function startPuzzle()
 	local WALLHn = attr("WALL_H", 14)  -- ceiling height, for routing over pits
 	local wirePits = pitRects()        -- pit fields a floor cable can't cross
 	local mazeModel = workspace:FindFirstChild("Maze")
-	local WIRE_LANE_GAP = 0.38         -- parallel routes sit beside, never inside, each other
+	local WIRE_LANE_GAP = 0.55         -- cable width .25: leaves a visible gap between routes
 
 	local function cellWorld(x, z) return On + (x - 0.5) * CELLn, On + (z - 0.5) * CELLn end
 	local function cellOf(p)
@@ -1173,8 +1173,44 @@ local function startPuzzle()
 		else return along, 0 end
 	end
 
-	-- one short piece of matte cable between two fixed points
-	local function layPiece(a, b, color)
+	-- Registry used by the final physical cable pass. Even with deterministic
+	-- maze lanes, a short source/endpoint connector can occasionally land on a
+	-- longer route from another circuit. In that case the later piece is nudged
+	-- sideways and receives two small joiners, so the cables visibly run beside
+	-- one another instead of occupying the same geometry.
+	local occupiedRuns = {}
+	local function registerRun(a, b)
+		local flat = Vector3.new(b.X - a.X, 0, b.Z - a.Z)
+		if math.abs(a.Y - b.Y) > 0.12 or flat.Magnitude <= 0.05 then return end
+		occupiedRuns[#occupiedRuns + 1] = {
+			center = (a + b) * 0.5,
+			unit = flat.Unit,
+			half = flat.Magnitude * 0.5,
+			y = (a.Y + b.Y) * 0.5,
+		}
+	end
+
+	local function overlapsOccupied(a, b)
+		local flat = Vector3.new(b.X - a.X, 0, b.Z - a.Z)
+		if math.abs(a.Y - b.Y) > 0.12 or flat.Magnitude <= 0.05 then return false end
+		local unit, half = flat.Unit, flat.Magnitude * 0.5
+		local center = (a + b) * 0.5
+		local perp = Vector3.new(-unit.Z, 0, unit.X)
+		for _, run in ipairs(occupiedRuns) do
+			if math.abs(center.Y - run.y) <= 0.12 and math.abs(unit:Dot(run.unit)) > 0.999 then
+				local delta = run.center - center
+				if math.abs(delta:Dot(perp)) < 0.24 then
+					local along = delta:Dot(unit)
+					local overlap = math.min(half, along + run.half)
+						- math.max(-half, along - run.half)
+					if overlap > 0.05 then return true end
+				end
+			end
+		end
+		return false
+	end
+
+	local function makeRawPiece(a, b, color)
 		local len = (b - a).Magnitude
 		if len <= 0.05 then return end
 		local seg = Instance.new("Part")
@@ -1186,6 +1222,42 @@ local function startPuzzle()
 		seg.Size = Vector3.new(0.25, 0.06, len)
 		seg.CFrame = CFrame.lookAt((a + b) / 2, b)
 		seg.Parent = folder
+		registerRun(a, b)
+	end
+
+	-- one short piece of matte cable between two fixed points
+	local function layPiece(a, b, color)
+		local flat = Vector3.new(b.X - a.X, 0, b.Z - a.Z)
+		local finalA, finalB = a, b
+		if math.abs(a.Y - b.Y) <= 0.12 and flat.Magnitude > 0.05
+			and overlapsOccupied(a, b) then
+			local perp = Vector3.new(-flat.Unit.Z, 0, flat.Unit.X)
+			for ring = 1, 8 do
+				for _, sign in ipairs({ 1, -1 }) do
+					local shift = perp * (WIRE_LANE_GAP * ring * sign)
+					local candidateA, candidateB = a + shift, b + shift
+					if not overlapsOccupied(candidateA, candidateB) then
+						finalA, finalB = candidateA, candidateB
+						break
+					end
+				end
+				if finalA ~= a then break end
+			end
+		end
+		if finalA ~= a then
+			-- Bevel the two joiners instead of drawing them exactly perpendicular.
+			-- A perpendicular half-stud joiner can itself lie along an unrelated
+			-- crossing run; the slight diagonal keeps the entire detour unique.
+			local unit = flat.Unit
+			local bevel = math.min(0.3, flat.Magnitude * 0.2)
+			local mainA = finalA + unit * bevel
+			local mainB = finalB - unit * bevel
+			makeRawPiece(mainA, mainB, color)
+			makeRawPiece(a, mainA, color)
+			makeRawPiece(mainB, b, color)
+		else
+			makeRawPiece(finalA, finalB, color)
+		end
 	end
 
 	-- lay cable from a→b RIDING THE ACTUAL FLOOR, breaking over holes so it never
@@ -1303,7 +1375,19 @@ local function startPuzzle()
 		else
 			local raw = (fromCF * CFrame.new(0, 0, -0.2)).Position
 			local source = Vector3.new(raw.X, (floorY(raw.X, raw.Z) or 0) + 0.06, raw.Z)
-			laySeg(source, p1, color)
+			local function sourceOnRun(a, b)
+				local vx, vz = b.X - a.X, b.Z - a.Z
+				local wx, wz = source.X - a.X, source.Z - a.Z
+				local lengthSquared = vx * vx + vz * vz
+				local dot = vx * wx + vz * wz
+				return lengthSquared > 0.001
+					and math.abs(vx * wz - vz * wx) <= 0.05
+					and dot >= 0 and dot <= lengthSquared
+			end
+			local alreadyConnected = sourceOnRun(p1, q1)
+				or sourceOnRun(q1, corner) or sourceOnRun(corner, q2)
+				or sourceOnRun(q2, p2)
+			if not alreadyConnected then laySeg(source, p1, color) end
 		end
 		connectEnd(p2, toCF, color)
 	end
@@ -1328,10 +1412,18 @@ local function startPuzzle()
 		-- per-segment perpendicular offset (hug the wall)
 		local axis, konst = {}, {}
 		for i = 1, #W - 1 do
-			local al, off = runOffset(W[i], W[i + 1])
+			local al = (math.abs(W[i + 1].X - W[i].X)
+				>= math.abs(W[i + 1].Z - W[i].Z)) and "X" or "Z"
 			local lane = math.max((laneIndex or 1) - 1, 0) * WIRE_LANE_GAP
-			-- runOffset hugs a wall; move later routes inward toward the cell centre.
-			if off > 0 then off -= lane elseif off < 0 then off += lane end
+			-- All routes use the SAME side of a corridor. Picking the nearest wall per
+			-- route let lanes approaching from opposite sides meet on the same centre
+			-- line (different-length Parts then visibly occupied each other). Preserve
+			-- the measured wall-hug distance, but give every global lane one absolute
+			-- coordinate from the negative edge inward.
+			-- Derive the coordinate from the maze cell itself, rather than a raycast
+			-- distance that can differ on two otherwise shared runs. This guarantees
+			-- lane N has the same absolute position for every cable in that corridor.
+			local off = -math.max(CELLn * 0.5 - 2, 0) + lane
 			axis[i] = al
 			konst[i] = (al == "X") and ((W[i].Z + W[i + 1].Z) / 2 + off)
 				or ((W[i].X + W[i + 1].X) / 2 + off)
@@ -1370,16 +1462,37 @@ local function startPuzzle()
 			local raw = (fromCF * CFrame.new(0, 0, -0.2)).Position
 			local source = Vector3.new(raw.X, (floorY(raw.X, raw.Z) or 0) + 0.06, raw.Z)
 			local first = Vector3.new(verts[1].X, (floorY(verts[1].X, verts[1].Z) or 0) + 0.06, verts[1].Z)
-			local corner = Vector3.new(first.X, source.Y, source.Z)
-			laySeg(source, corner, color)
-			laySeg(corner, first, color)
+			-- If the source already lies on the first routed run, that run physically
+			-- reaches the source. Adding an extra source-to-first Part would retrace
+			-- (and fully overlap) the same cable for the first stud or two.
+			local sourceOnRoutedRun = false
+			for i = 1, #verts - 1 do
+				local a, b = verts[i], verts[i + 1]
+				local vx, vz = b.X - a.X, b.Z - a.Z
+				local wx, wz = source.X - a.X, source.Z - a.Z
+				local lengthSquared = vx * vx + vz * vz
+				local dot = vx * wx + vz * wz
+				if lengthSquared > 0.001
+					and math.abs(vx * wz - vz * wx) <= 0.05
+					and dot >= 0 and dot <= lengthSquared then
+					sourceOnRoutedRun = true
+					break
+				end
+			end
+			if not sourceOnRoutedRun then
+				local corner = Vector3.new(first.X, source.Y, source.Z)
+				laySeg(source, corner, color)
+				laySeg(corner, first, color)
+			end
 		end
 		connectEnd(verts[#verts], toCF, color)
 	end
 
 	-- A shared cable bundle begins just outside the starting elevator.
 	-- Yellow branches lead to fuse boxes; orange branches lead to lever circuits.
-	-- Repeated routes overlap near the lift, reading as one main trunk before splitting.
+	-- Every route owns a unique lane for its entire path. Fuse and lever routes
+	-- share the same global lane numbering, so equal local indices can never
+	-- collapse onto each other again after they leave the elevator.
 	local elevX = attr("ELEV_X", math.floor(GRIDn / 2))
 	local elevZ = attr("ELEV_Y", math.floor(GRIDn / 2))
 	local _, startWZ = cellWorld(math.clamp(elevX + 1, 1, GRIDn), elevZ)
@@ -1390,17 +1503,23 @@ local function startPuzzle()
 		Vector3.new(startWX + 1, startY, startWZ - 1.1)
 	)
 	local leverCableStart = CFrame.lookAt(
-		Vector3.new(startWX, startY, startWZ + 1.1),
-		Vector3.new(startWX + 1, startY, startWZ + 1.1)
+		Vector3.new(startWX + (#session.boxes + 1) * WIRE_LANE_GAP, startY, startWZ + 1.1),
+		Vector3.new(startWX + (#session.boxes + 1) * WIRE_LANE_GAP + 1, startY, startWZ + 1.1)
 	)
 	local FUSE_WIRE = Color3.fromRGB(205, 170, 35)   -- aged safety yellow
 	local LEVER_WIRE = Color3.fromRGB(205, 82, 30)   -- muted industrial orange
 
 	for laneIndex, box in ipairs(session.boxes) do
-		layWire(fuseCableStart, box.cf, FUSE_WIRE, false, laneIndex)
+		-- Fan each route out immediately instead of letting several different-length
+		-- connector pieces share the same centre line before their maze lanes split.
+		local routeStart = fuseCableStart
+			+ fuseCableStart.LookVector * ((laneIndex - 1) * WIRE_LANE_GAP)
+		layWire(routeStart, box.cf, FUSE_WIRE, false, laneIndex)
 	end
 	for laneIndex, lever in ipairs(session.levers) do
-		layWire(leverCableStart, lever.cf, LEVER_WIRE, false, laneIndex)
+		local routeStart = leverCableStart
+			+ leverCableStart.LookVector * ((laneIndex - 1) * WIRE_LANE_GAP)
+		layWire(routeStart, lever.cf, LEVER_WIRE, false, #session.boxes + laneIndex)
 	end
 
 	-- exit: a doorway in the OUTER BORDER wall (you're actually leaving), dim

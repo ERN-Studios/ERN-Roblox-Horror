@@ -1,0 +1,42 @@
+{
+  "Walk": {
+    "id": "111438501305925",
+    "reused": false,
+    "name": "Walk"
+  },
+  "Run_Chase": {
+    "id": "91888525275025",
+    "reused": false,
+    "name": "Run_Chase"
+  },
+  "Watch": {
+    "id": "129401363536804",
+    "reused": false,
+    "name": "Watch"
+  },
+  "Yell_Howl": {
+    "id": "132421139634506",
+    "reused": false,
+    "name": "Yell_Howl"
+  },
+  "Yell_FromRun": {
+    "id": "100655617830150",
+    "reused": false,
+    "name": "Yell_FromRun"
+  },
+  "Lunge": {
+    "id": "129411802349452",
+    "reused": false,
+    "name": "Lunge"
+  },
+  "Lunge_FromRun": {
+    "id": "118506682454741",
+    "reused": false,
+    "name": "Lunge_FromRun"
+  },
+  "Kill_VisorCrush": {
+    "id": "139968377472432",
+    "reused": false,
+    "name": "Kill_VisorCrush"
+  }
+}

@@ -63,6 +63,8 @@ applyPlayerLighting()
 local gui = Instance.new("ScreenGui")
 gui.Name = "RoundGui"
 gui.ResetOnSpawn = false
+gui.IgnoreGuiInset = true
+gui.DisplayOrder = 100
 gui.Parent = player:WaitForChild("PlayerGui")
 
 local label = Instance.new("TextLabel")
@@ -688,8 +690,8 @@ typeSound.Parent = gui
 local DEFAULT_TEXT = Color3.fromRGB(235, 232, 222)
 local DEFAULT_SIZE = 26
 local DEFAULT_FONT = Enum.Font.GothamMedium
-local COMPACT_SIZE = UDim2.new(0, 700, 0, 52)
-local OBJECTIVE_SIZE = UDim2.new(0, 700, 0, 180)
+local COMPACT_SIZE = UDim2.new(0, 620, 0, 48)
+local OBJECTIVE_SIZE = UDim2.new(0, 600, 0, 154)
 
 local function setMsg(text, color)
 	label.TextSize = DEFAULT_SIZE
@@ -817,7 +819,7 @@ local function playObjective()
 		end
 
 		-- RUN stays visible while the exclamation points and glow blink.
-		for _ = 1, 6 do
+		for _ = 1, 2 do
 			if not alive() then return end
 			label.Text = "! RUN !"
 			label.TextTransparency = 0
@@ -829,9 +831,13 @@ local function playObjective()
 			task.wait(0.12)
 		end
 
-		-- Keep the final warning until the elevator doors open. The "start"
-		-- event below clears it, so the entire briefing lives inside the ride.
-		if alive() then label.Text = "! RUN !" end
+		-- Give RUN the same short readable beat as the other briefing lines. The
+		-- sequence still starts only on an elevator countdown event, but it no
+		-- longer hangs on screen until the doors open.
+		if not alive() then return end
+		label.Text = "! RUN !"
+		task.wait(0.55)
+		if alive() then setMsg("") end
 	end)
 end
 
@@ -968,7 +974,9 @@ end
 -- dead is declared with the player state above so the ending and spectate UI share it.
 
 remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
-	if ev ~= "start" then
+	-- GameManager emits an elevator countdown tick every second. Those ticks must
+	-- not invalidate the objective coroutine that is meant to fill the ride.
+	if ev ~= "start" and ev ~= "elevator" then
 		objectiveRun += 1
 	end
 
@@ -1389,7 +1397,8 @@ local function mimicBuild(sourcePlayer, spawnPos)
     local startToken = os.clock()
     steps:SetAttribute("StartToken", startToken)
     task.delay(0.25 + math.random() * 0.45, function()
-     if model.Parent and moving == true and steps:GetAttribute("StartToken") == startToken then
+     if workspace:GetAttribute("SelectedLevel") ~= 2
+      and model.Parent and moving == true and steps:GetAttribute("StartToken") == startToken then
       steps.TimePosition = math.random() * 0.28
       steps:Play()
      end
@@ -1644,6 +1653,9 @@ local function ambientEmitter(name, position, lifetime)
 end
 
 local function ambientFootsteps()
+ -- Level 2 owns its real shallow-water/entity step mix in SoundController.
+ -- Do not layer the dry plastic fake-footstep scare over that soundscape.
+ if workspace:GetAttribute("SelectedLevel") == 2 then return false end
  local _, _, root, alive = ambientCharacter()
  if not alive then return false end
  local backward = -ambientFlatUnit(root.CFrame.LookVector)

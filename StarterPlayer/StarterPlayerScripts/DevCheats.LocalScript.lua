@@ -1,7 +1,7 @@
 -- DevCheats  (TESTING ONLY — delete or restrict before publishing!)
 -- PASTE INTO: StarterPlayer → StarterPlayerScripts → Insert Object → LocalScript → rename to "DevCheats"
 --
---   B = toggle ESP (see fuses / boxes / levers / exit / entity through walls)
+--   B = toggle ESP + 3-second lobby queue (existing ESP behavior is preserved)
 --   V = toggle noclip fly (WASD + mouse to move, Space up, Ctrl down)
 --   P = pause / unpause the Entity (freezes it in place)
 --   I = toggle immunity to the Entity's yell push-back
@@ -9,7 +9,7 @@
 --
 -- ALLOWED_NAMES empty = everyone can cheat (fine while testing). Add your
 -- Roblox usernames to restrict it to just you two, or delete this script.
--- The P pause needs a RemoteEvent "DevControl" in ReplicatedStorage/Remotes.
+-- The B/P/I server cheats need a RemoteEvent "DevControl" in ReplicatedStorage/Remotes.
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -28,7 +28,7 @@ local function allowed()
 end
 if not allowed() then return end
 
--- RemoteEvent used to talk to the server Entity (P pause, I push-immunity).
+-- RemoteEvent used for the B fast queue plus Entity controls (P pause, I push-immunity).
 -- Fetched lazily so it still works if you create DevControl after pressing play,
 -- and so a missing one never blocks ESP / noclip below.
 local remotes = RS:WaitForChild("Remotes")
@@ -39,13 +39,14 @@ local function fireDev(cmd, arg)
 		devControl:FireServer(cmd, arg)
 		return true
 	end
-	warn("[DevCheats] DevControl RemoteEvent missing in ReplicatedStorage/Remotes — P/I won't work")
+	warn("[DevCheats] DevControl RemoteEvent missing in ReplicatedStorage/Remotes — B/P/I server cheats won't work")
 	return false
 end
 local entityPaused = false
 local pushImmune = false
 
 local unlimitedOn = false
+local fastQueueOn = false
 
 -- ── ESP (highlight through walls) ─────────────────────────
 local COLORS = {
@@ -88,24 +89,53 @@ end)
 -- ── noclip fly ────────────────────────────────────────────
 local flying = false
 local FLY_SPEED = 90
+local collisionOriginal = {}
+local noclipAdded = nil
+local humanoidOriginal = nil
 
-local function setCollide(char, state)
-	for _, p in ipairs(char:GetDescendants()) do
-		if p:IsA("BasePart") and p.Name ~= "HumanoidRootPart" then
-			p.CanCollide = state
-		end
+local function disablePart(part)
+	if not part:IsA("BasePart") then return end
+	if collisionOriginal[part] == nil then
+		collisionOriginal[part] = part.CanCollide
 	end
+	part.CanCollide = false
 end
 
-RunService.RenderStepped:Connect(function(dt)
+local function applyLocalNoclip(char)
+	for _, part in ipairs(char:GetDescendants()) do disablePart(part) end
+end
+
+local function startFlying()
+	local char = player.Character
+	local hum = char and char:FindFirstChildOfClass("Humanoid")
+	if not (char and hum) then return end
+	flying = true
+	collisionOriginal = {}
+	humanoidOriginal = {
+		autoRotate = hum.AutoRotate,
+		fallingDown = hum:GetStateEnabled(Enum.HumanoidStateType.FallingDown),
+		ragdoll = hum:GetStateEnabled(Enum.HumanoidStateType.Ragdoll),
+	}
+	hum.PlatformStand = false
+	hum.AutoRotate = false
+	hum:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
+	hum:SetStateEnabled(Enum.HumanoidStateType.Ragdoll, false)
+	hum:ChangeState(Enum.HumanoidStateType.Flying)
+	applyLocalNoclip(char)
+	noclipAdded = char.DescendantAdded:Connect(disablePart)
+	fireDev("noclip", true) -- server authority makes live-server collision reliable
+end
+
+RunService.PreSimulation:Connect(function()
 	if not flying then return end
 	local char = player.Character
 	local root = char and char:FindFirstChild("HumanoidRootPart")
 	local hum = char and char:FindFirstChildOfClass("Humanoid")
 	if not (root and hum) then return end
 
-	hum.PlatformStand = true
-	setCollide(char, false)
+	hum.PlatformStand = false
+	hum.AutoRotate = false
+	applyLocalNoclip(char)
 
 	local cam = workspace.CurrentCamera
 	local move = Vector3.zero
@@ -117,20 +147,40 @@ RunService.RenderStepped:Connect(function(dt)
 	if UIS:IsKeyDown(Enum.KeyCode.LeftControl) then move -= Vector3.new(0, 1, 0) end
 	if move.Magnitude > 0 then move = move.Unit end
 
-	root.AssemblyLinearVelocity = Vector3.zero
-	root.CFrame = root.CFrame + move * FLY_SPEED * dt
+	root.AssemblyAngularVelocity = Vector3.zero
+	root.AssemblyLinearVelocity = move * FLY_SPEED
 end)
 
 local function stopFlying()
+	if not flying then return end
 	flying = false
+	fireDev("noclip", false)
+	if noclipAdded then noclipAdded:Disconnect(); noclipAdded = nil end
 	local char = player.Character
 	local hum = char and char:FindFirstChildOfClass("Humanoid")
-	if hum then hum.PlatformStand = false end
-	if char then setCollide(char, true) end
+	local root = char and char:FindFirstChild("HumanoidRootPart")
+	for part, original in pairs(collisionOriginal) do
+		if part.Parent then part.CanCollide = original end
+	end
+	collisionOriginal = {}
+	if root then
+		root.AssemblyLinearVelocity = Vector3.zero
+		root.AssemblyAngularVelocity = Vector3.zero
+	end
+	if hum then
+		hum.PlatformStand = false
+		hum.AutoRotate = humanoidOriginal and humanoidOriginal.autoRotate ~= false
+		hum:SetStateEnabled(Enum.HumanoidStateType.FallingDown,
+			not humanoidOriginal or humanoidOriginal.fallingDown)
+		hum:SetStateEnabled(Enum.HumanoidStateType.Ragdoll,
+			not humanoidOriginal or humanoidOriginal.ragdoll)
+		hum:ChangeState(Enum.HumanoidStateType.GettingUp)
+	end
+	humanoidOriginal = nil
 end
 
 player.CharacterAdded:Connect(function()
-	flying = false -- reset on respawn
+	if flying then stopFlying() end
 end)
 
 UIS.InputBegan:Connect(function(input, processed)
@@ -140,8 +190,11 @@ UIS.InputBegan:Connect(function(input, processed)
 		for _, d in ipairs(workspace:GetDescendants()) do
 			if d.Name == "ESP" and d:IsA("Highlight") then d.Enabled = espOn end
 		end
+		fastQueueOn = not fastQueueOn
+		fireDev("fastQueue", fastQueueOn)
+		print("[DevCheats] 3-second lobby queue " .. (fastQueueOn and "ON" or "OFF"))
 	elseif input.KeyCode == Enum.KeyCode.V then
-		if flying then stopFlying() else flying = true end
+		if flying then stopFlying() else startFlying() end
 	elseif input.KeyCode == Enum.KeyCode.P then
 		entityPaused = not entityPaused
 		fireDev("pauseEntity", entityPaused)

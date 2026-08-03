@@ -61,7 +61,7 @@ local function update()
 	if workspace:GetAttribute("Level2ExitPowered") then
 		title.Text = "> EXIT SLIDE POWERED"
 		title.TextColor3 = Color3.fromRGB(84, 255, 139)
-		status.Text = "[###] Follow the green glow\nEnter the black slide"
+		status.Text = "[###] Follow the green glow\nEnter the glossy green pool slide"
 	else
 		title.Text = "> FILTRATION CONTROL"
 		title.TextColor3 = Color3.fromRGB(112, 255, 220)

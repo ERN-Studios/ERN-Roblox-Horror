@@ -93,11 +93,11 @@ local LIGHT_TEXTURE      = "rbxassetid://135786374638992"  -- lit fixture face
 local DEAD_LIGHT_TEXTURE = "rbxassetid://107766152992499"  -- broken/dark fixture face
 
 -- Optional elevator textures (your own decals)
-local ELEV_WALL_TEXTURE  = "rbxassetid://87269381352642" -- cabin walls (over the steel)
-local ELEV_CEILING_TEXTURE = "rbxassetid://111454130187372" -- cabin ceiling, viewed from below
-local ELEV_FLOOR_TEXTURE = "" -- cabin floor (over the marble)
-local ELEV_DOOR_TEXTURE  = "" -- door faces
-local ELEV_TILE = 4           -- studs per repeat inside the cabin
+local ELEV_WALL_TEXTURE  = "rbxassetid://125879540003063" -- warm worn 1990s cabin panels
+local ELEV_CEILING_TEXTURE = "rbxassetid://119278377564096" -- matching aged ceiling grid
+local ELEV_FLOOR_TEXTURE = "rbxassetid://114910161826427" -- matching charcoal-brown vinyl tile
+local ELEV_DOOR_TEXTURE  = "rbxassetid://93847962634230" -- distinct aged bronze-grey doors/frame
+local ELEV_FLOOR_TILE = 8 -- one six-tile texture repeat across the cabin width
 
 -- Optional MOLD overlay (your own decals, transparent PNGs) — up to 5 variants,
 -- picked at random per wall. Draw the mold hanging from the TOP of the image,
@@ -180,12 +180,14 @@ local DECOR_DENSITY = 0.16     -- chance PER eligible cell that it tries a prop
 local DECOR_COLLIDE = true     -- props are solid for players; the entity walks through
 local DECOR_SCALE_JITTER = 0.2 -- ±fraction random size wobble per prop (weird-gen look)
 local DECOR_MIN_GAP = 2        -- same-type props must be MORE than this many cells apart
+local PROP_WALNUT_TEXTURE = "rbxassetid://109803400965301"
 -- place = "room" (alone in the middle of an open cell) or "wall" (against a wall)
 -- weight = relative pick chance · height = studs tall (per-object size knob)
 local PROPS = {
 	{ name = "Chair",            height = 3.5, place = "room", weight = 3 },
 	{ name = "Table",            height = 3.2, place = "room", weight = 2, phone = true }, -- carries a phone
-	{ name = "CardboardBox",     height = 2.6, place = "wall", weight = 3 },
+	{ name = "CardboardPile",    height = 4.8, place = "wall", weight = 2,
+		minGap = 2, wallInset = 4.5 },
 	{ name = "Printer",          height = 4.5, place = "wall", weight = 2 },
 	{ name = "GrandfatherClock", height = 8.5, place = "wall", weight = 1 },
 }
@@ -207,34 +209,67 @@ local ELEV_Y = math.floor(GRID / 2)
 -- Toolbox "Copy Asset ID" usually gives the DECAL id; Texture instances need
 -- the underlying IMAGE id. Load the asset server-side and read the real id.
 local function resolveTexture(id)
+	-- ContentId properties resolve uploaded image/decal ids themselves. Returning
+	-- immediately prevents InsertService from ever blocking the level boot.
+	do return id end
+	-- Legacy resolver retained below for reference; this branch is unreachable.
 	if id == "" then return "" end
 	local numeric = tonumber(string.match(id, "%d+"))
 	if not numeric then return id end
-	local ok, resolved = pcall(function()
-		local asset = InsertService:LoadAsset(numeric)
-		local decal = asset:FindFirstChildWhichIsA("Decal", true)
-		local tex = decal and decal.Texture
-		asset:Destroy()
-		return tex
+	local completed, ok, resolved = false, false, nil
+	-- LoadAsset can stall for a moderated/private id. Never let one cosmetic
+	-- image hold the whole level hostage: after 1.5s the ContentId is used as-is.
+	task.spawn(function()
+		ok, resolved = pcall(function()
+			local asset = InsertService:LoadAsset(numeric)
+			local decal = asset:FindFirstChildWhichIsA("Decal", true)
+			local tex = decal and decal.Texture
+			asset:Destroy()
+			return tex
+		end)
+		completed = true
 	end)
-	if ok and resolved and resolved ~= "" then
+	local deadline = os.clock() + 1.5
+	while not completed and os.clock() < deadline do task.wait() end
+	if completed and ok and resolved and resolved ~= "" then
 		return resolved
 	end
 	return id -- already an image id (or offline) — use as-is
 end
 
-WALL_TEXTURE = resolveTexture(WALL_TEXTURE)
-FLOOR_TEXTURE = resolveTexture(FLOOR_TEXTURE)
-CEILING_TEXTURE = resolveTexture(CEILING_TEXTURE)
-LIGHT_TEXTURE = resolveTexture(LIGHT_TEXTURE)
-DEAD_LIGHT_TEXTURE = resolveTexture(DEAD_LIGHT_TEXTURE)
-ELEV_WALL_TEXTURE = resolveTexture(ELEV_WALL_TEXTURE)
-ELEV_CEILING_TEXTURE = resolveTexture(ELEV_CEILING_TEXTURE)
-ELEV_FLOOR_TEXTURE = resolveTexture(ELEV_FLOOR_TEXTURE)
-ELEV_DOOR_TEXTURE = resolveTexture(ELEV_DOOR_TEXTURE)
-for i, id in ipairs(MOLD_TEXTURES) do MOLD_TEXTURES[i] = resolveTexture(id) end
-for i, id in ipairs(ARTWORK) do ARTWORK[i] = resolveTexture(id) end
-for i, id in ipairs(STAIN_TEXTURES) do STAIN_TEXTURES[i] = resolveTexture(id) end
+-- Asset loads yield. Resolving forty-plus decals serially delayed the entire map
+-- (including elevator, fog and intro) for tens of seconds. A small worker pool
+-- keeps startup bounded without hammering Roblox with every request at once.
+local function resolveArray(ids)
+	if #ids == 0 then return end
+	local nextIndex, finished = 1, 0
+	local workerCount = math.min(8, #ids)
+	for _ = 1, workerCount do
+		task.spawn(function()
+			while true do
+				local i = nextIndex
+				nextIndex += 1
+				if i > #ids then break end
+				ids[i] = resolveTexture(ids[i])
+			end
+			finished += 1
+		end)
+	end
+	while finished < workerCount do task.wait() end
+end
+
+local primaryTextures = {
+	WALL_TEXTURE, FLOOR_TEXTURE, CEILING_TEXTURE, LIGHT_TEXTURE,
+	DEAD_LIGHT_TEXTURE, ELEV_WALL_TEXTURE, ELEV_CEILING_TEXTURE,
+	ELEV_FLOOR_TEXTURE, ELEV_DOOR_TEXTURE,
+}
+resolveArray(primaryTextures)
+WALL_TEXTURE, FLOOR_TEXTURE, CEILING_TEXTURE, LIGHT_TEXTURE,
+	DEAD_LIGHT_TEXTURE, ELEV_WALL_TEXTURE, ELEV_CEILING_TEXTURE,
+	ELEV_FLOOR_TEXTURE, ELEV_DOOR_TEXTURE = table.unpack(primaryTextures)
+resolveArray(MOLD_TEXTURES)
+resolveArray(ARTWORK)
+resolveArray(STAIN_TEXTURES)
 
 -- pick a random mold decal, or nil if none configured
 local function pickMold()
@@ -491,14 +526,14 @@ local function part(size, cf, color, material, parent)
 	return p
 end
 
-local function applyTexture(p, id, faces, tile, tint)
+local function applyTexture(p, id, faces, tile, tint, tileV)
 	if id == "" then return end
 	for _, face in ipairs(faces) do
 		local t = Instance.new("Texture")
 		t.Texture = id
 		t.Face = face
 		t.StudsPerTileU = tile
-		t.StudsPerTileV = tile
+		t.StudsPerTileV = tileV or tile
 		if tint then t.Color3 = tint end -- darkens the texture image itself
 		t.Parent = p
 	end
@@ -823,9 +858,9 @@ do
 	local elev = Instance.new("Model")
 	elev.Name = "Elevator"
 
-	local STEEL      = Color3.fromRGB(118, 122, 128) -- dark brushed steel
-	local STEEL_DARK = Color3.fromRGB(88, 92, 98)
-	local MARBLE     = Color3.fromRGB(24, 24, 28)    -- near-black marble floor
+	local STEEL      = Color3.fromRGB(151, 137, 112) -- warm aged office-elevator metal
+	local STEEL_DARK = Color3.fromRGB(78, 69, 57)
+	local MARBLE     = Color3.fromRGB(45, 38, 31)    -- dark warm commercial floor backing
 	local CAB_W = 8 -- interior width — LONG and narrow, not wide
 
 	-- outer shell: same textured yellow walls as the rest of the maze
@@ -836,9 +871,16 @@ do
 	-- instead of yellow wall — so from the maze it reads as a proper elevator
 	-- entrance ("there's supposed to be an elevator here"). 8-stud opening.
 	local FRAME = Color3.fromRGB(14, 14, 17)
-	part(Vector3.new(2, WALL_H - 10, CELL), CFrame.new(x1 - 1, (WALL_H + 10) / 2, cz), FRAME, Enum.Material.Metal, elev)
-	part(Vector3.new(2, 10, 8), CFrame.new(x1 - 1, 5, z0 + 4), FRAME, Enum.Material.Metal, elev)
-	part(Vector3.new(2, 10, 8), CFrame.new(x1 - 1, 5, z1 - 4), FRAME, Enum.Material.Metal, elev)
+	local frameTop = part(Vector3.new(2, WALL_H - 10, CELL), CFrame.new(x1 - 1, (WALL_H + 10) / 2, cz), FRAME, Enum.Material.Metal, elev)
+	local frameSideA = part(Vector3.new(2, 10, 8), CFrame.new(x1 - 1, 5, z0 + 4), FRAME, Enum.Material.Metal, elev)
+	local frameSideB = part(Vector3.new(2, 10, 8), CFrame.new(x1 - 1, 5, z1 - 4), FRAME, Enum.Material.Metal, elev)
+	-- The dark entrance used to stay plain black after the doors opened. Use the
+	-- same brushed-steel texture on both the maze-facing and cabin-facing sides,
+	-- so every visible part of the doorway reads as one material.
+	for _, framePart in ipairs({ frameTop, frameSideA, frameSideB }) do
+		applyTexture(framePart, ELEV_DOOR_TEXTURE,
+			{ Enum.NormalId.Left, Enum.NormalId.Right }, 8, nil, 10)
+	end
 
 	-- sliding stainless doors (named for GameManager; they slide ±4 now). Thicker
 	-- than the 2-stud wall cavity (2.2) so no yellow shell can peek at the edges;
@@ -849,8 +891,8 @@ do
 	local doorR = part(Vector3.new(2.2, 10, 4), CFrame.new(x1 - 1, 5, cz + 2),
 		STEEL_DARK, Enum.Material.Metal, elev)
 	doorR.Name = "DoorR"
-	applyTexture(doorL, ELEV_DOOR_TEXTURE, WALL_FACES, ELEV_TILE)
-	applyTexture(doorR, ELEV_DOOR_TEXTURE, WALL_FACES, ELEV_TILE)
+	applyTexture(doorL, ELEV_DOOR_TEXTURE, WALL_FACES, 4, nil, 10)
+	applyTexture(doorR, ELEV_DOOR_TEXTURE, WALL_FACES, 4, nil, 10)
 
 	-- threshold GAP: a dark, near-flush band across the doorway — the shadow gap
 	-- between a building floor and the elevator car. Cosmetic (the carpet tile
@@ -859,6 +901,8 @@ do
 		Color3.fromRGB(8, 8, 10), Enum.Material.Metal, elev)
 	sill.CanCollide = false
 	sill.CanQuery = false
+	applyTexture(sill, ELEV_DOOR_TEXTURE,
+		{ Enum.NormalId.Top, Enum.NormalId.Left, Enum.NormalId.Right }, 8)
 
 	elev.Parent = workspace
 
@@ -893,11 +937,14 @@ do
 		local floorP = part(Vector3.new(depth, 0.2, CAB_W), CFrame.new(bx, 0.1, cz), MARBLE, Enum.Material.Marble, cabin)
 
 		-- optional custom cabin textures
-		applyTexture(back, ELEV_WALL_TEXTURE, WALL_FACES, ELEV_TILE)
-		applyTexture(sideA, ELEV_WALL_TEXTURE, WALL_FACES, ELEV_TILE)
-		applyTexture(sideB, ELEV_WALL_TEXTURE, WALL_FACES, ELEV_TILE)
-		applyTexture(roof, ELEV_CEILING_TEXTURE, { Enum.NormalId.Bottom }, ELEV_TILE)
-		applyTexture(floorP, ELEV_FLOOR_TEXTURE, { Enum.NormalId.Top }, ELEV_TILE)
+		-- The images already contain a complete wall/ceiling design. Put one copy
+		-- on each visible cabin face instead of repeating it every four studs (the
+		-- old setup produced seams, mirrored exterior copies and warped panels).
+		applyTexture(back, ELEV_WALL_TEXTURE, { Enum.NormalId.Right }, CAB_W + 1, nil, 10)
+		applyTexture(sideA, ELEV_WALL_TEXTURE, { Enum.NormalId.Back }, depth, nil, 10)
+		applyTexture(sideB, ELEV_WALL_TEXTURE, { Enum.NormalId.Front }, depth, nil, 10)
+		applyTexture(roof, ELEV_CEILING_TEXTURE, { Enum.NormalId.Bottom }, depth + 1, nil, CAB_W + 2)
+		applyTexture(floorP, ELEV_FLOOR_TEXTURE, { Enum.NormalId.Top }, ELEV_FLOOR_TILE)
 
 		local lightPanel = part(Vector3.new(2, 0.3, 2), CFrame.new(bx, 9.7, cz),
 			Color3.fromRGB(255, 250, 230), Enum.Material.Neon, cabin)
@@ -1199,7 +1246,7 @@ task.spawn(function()
 	decorFolder.Parent = workspace
 
 	-- one anchored part inside a decor model
-	local function dpart(model, size, cf, color, material)
+	local function dpart(model, size, cf, color, material, textureId, tileSize, textureFaces)
 		local p = Instance.new("Part")
 		p.Size = size
 		p.CFrame = cf
@@ -1209,6 +1256,24 @@ task.spawn(function()
 		p.TopSurface = Enum.SurfaceType.Smooth
 		p.BottomSurface = Enum.SurfaceType.Smooth
 		p.Parent = model
+		if textureId and textureId ~= "" then
+			for _, face in ipairs(textureFaces or {
+				Enum.NormalId.Top,
+				Enum.NormalId.Front,
+				Enum.NormalId.Back,
+			}) do
+				local texture = Instance.new("Texture")
+				texture.Name = "PropSurface"
+				texture.Texture = textureId
+				texture.Face = face
+				-- The uploaded albedo must stay neutral. Multiplying it by the already
+				-- dark wood colour made props look almost immune to the flashlight.
+				texture.Color3 = Color3.new(1, 1, 1)
+				texture.StudsPerTileU = tileSize or 2.5
+				texture.StudsPerTileV = tileSize or 2.5
+				texture.Parent = p
+			end
+		end
 		return p
 	end
 
@@ -1227,10 +1292,10 @@ task.spawn(function()
 	DECOR_BUILDERS.Chair = function()
 		local m = Instance.new("Model"); m.Name = "Chair"
 		local seatY = 1.7
-		local seat = dpart(m, Vector3.new(2, 0.3, 2), CFrame.new(0, seatY, 0), WOOD)
-		dpart(m, Vector3.new(2, 2, 0.25), CFrame.new(0, seatY + 1.1, -0.9), WOOD) -- backrest
+		local seat = dpart(m, Vector3.new(2, 0.3, 2), CFrame.new(0, seatY, 0), WOOD, Enum.Material.Wood, PROP_WALNUT_TEXTURE, 2.5, { Enum.NormalId.Top })
+		dpart(m, Vector3.new(2, 2, 0.25), CFrame.new(0, seatY + 1.1, -0.9), WOOD, Enum.Material.Wood) -- backrest
 		for _, c in ipairs({ { 0.8, 0.8 }, { -0.8, 0.8 }, { 0.8, -0.8 }, { -0.8, -0.8 } }) do
-			dpart(m, Vector3.new(0.22, seatY, 0.22), CFrame.new(c[1], seatY / 2, c[2]), WOOD_DARK)
+			dpart(m, Vector3.new(0.22, seatY, 0.22), CFrame.new(c[1], seatY / 2, c[2]), WOOD_DARK, Enum.Material.Wood)
 		end
 		m.PrimaryPart = seat
 		return m
@@ -1239,9 +1304,9 @@ task.spawn(function()
 	DECOR_BUILDERS.Table = function()
 		local m = Instance.new("Model"); m.Name = "Table"
 		local topY = 2.7
-		local top = dpart(m, Vector3.new(5, 0.3, 3), CFrame.new(0, topY, 0), WOOD)
+		local top = dpart(m, Vector3.new(5, 0.3, 3), CFrame.new(0, topY, 0), WOOD, Enum.Material.Wood, PROP_WALNUT_TEXTURE, 3, { Enum.NormalId.Top })
 		for _, c in ipairs({ { 2.2, 1.2 }, { -2.2, 1.2 }, { 2.2, -1.2 }, { -2.2, -1.2 } }) do
-			dpart(m, Vector3.new(0.28, topY, 0.28), CFrame.new(c[1], topY / 2, c[2]), WOOD_DARK)
+			dpart(m, Vector3.new(0.28, topY, 0.28), CFrame.new(c[1], topY / 2, c[2]), WOOD_DARK, Enum.Material.Wood)
 		end
 		m.PrimaryPart = top
 		return m
@@ -1260,7 +1325,7 @@ task.spawn(function()
 		local m = Instance.new("Model"); m.Name = "CardboardBox"
 		local s = 2.4
 		local bh = s * 0.85                 -- body a touch shorter so the flaps read
-		local mat = Enum.Material.SmoothPlastic -- matte cardboard, not wood grain
+		local mat = Enum.Material.Fabric -- fibrous matte surface reads as worn cardboard
 		local body = dpart(m, Vector3.new(s, bh, s), CFrame.new(0, bh / 2, 0), CARD, mat)
 		-- four lid flaps hinged at the top rim, opened outward ~48°
 		local flap, ang = s * 0.55, math.rad(48)
@@ -1288,9 +1353,59 @@ task.spawn(function()
 		return m
 	end
 
+	DECOR_BUILDERS.CardboardPile = function()
+		local m = Instance.new("Model"); m.Name = "CardboardBoxPile"
+		local mat = Enum.Material.Fabric
+		local paperCols = {
+			Color3.fromRGB(236, 232, 220), Color3.fromRGB(224, 214, 190),
+			Color3.fromRGB(212, 206, 192), Color3.fromRGB(230, 226, 214),
+		}
+		local primary
+		local function addOpenBox(base, yaw, scale)
+			local s, bh = 2.4 * scale, 2.04 * scale
+			local boxCF = CFrame.new(base) * CFrame.Angles(0, yaw, 0)
+			local body = dpart(m, Vector3.new(s, bh, s),
+				boxCF * CFrame.new(0, bh / 2, 0), CARD, mat)
+			body.Name = "BoxBody"
+			primary = primary or body
+			local flap, ang = s * 0.48, math.rad(40)
+			local dz, dy = flap * 0.28, flap * 0.32
+			dpart(m, Vector3.new(s, 0.08, flap), boxCF * CFrame.new(0, bh + dy, -s / 2 - dz) * CFrame.Angles(ang, 0, 0), CARD_DARK, mat)
+			dpart(m, Vector3.new(s, 0.08, flap), boxCF * CFrame.new(0, bh + dy, s / 2 + dz) * CFrame.Angles(-ang, 0, 0), CARD_DARK, mat)
+			dpart(m, Vector3.new(flap, 0.08, s), boxCF * CFrame.new(-s / 2 - dz, bh + dy, 0) * CFrame.Angles(0, 0, -ang), CARD_DARK, mat)
+			dpart(m, Vector3.new(flap, 0.08, s), boxCF * CFrame.new(s / 2 + dz, bh + dy, 0) * CFrame.Angles(0, 0, ang), CARD_DARK, mat)
+			for i = 1, 3 do
+				local fz = -s * 0.22 + (i - 1) * s * 0.22
+				local ph = (0.55 + math.random() * 0.35) * scale
+				local file = dpart(m, Vector3.new(s * 0.7, ph, 0.045),
+					boxCF * CFrame.new(0, bh + ph / 2 - 0.12, fz),
+					paperCols[(i % #paperCols) + 1], mat)
+				file.Name = "PaperFile"
+			end
+		end
+
+		addOpenBox(Vector3.new(-0.85, 0, 0), math.rad(-8), 1)
+		addOpenBox(Vector3.new(1.35, 0, 0.65), math.rad(13), 0.9)
+		if math.random() < 0.8 then
+			addOpenBox(Vector3.new(-0.65, 2.08, 0.15), math.rad(7), 0.82)
+		end
+		for i = 1, math.random(4, 6) do
+			local px = (math.random() * 2 - 1) * 3.8
+			local pz = (math.random() * 2 - 1) * 3.1
+			local yaw = math.random() * math.pi * 2
+			local loose = dpart(m,
+				Vector3.new(1.35 + math.random() * 0.5, 0.025, 1.75 + math.random() * 0.5),
+				CFrame.new(px, 0.025 + i * 0.002, pz) * CFrame.Angles(0, yaw, 0),
+				paperCols[(i % #paperCols) + 1], mat)
+			loose.Name = "LoosePaper"
+		end
+		m.PrimaryPart = primary
+		return m
+	end
+
 	DECOR_BUILDERS.Printer = function()
 		local m = Instance.new("Model"); m.Name = "Printer"
-		local body = dpart(m, Vector3.new(3, 2, 2.4), CFrame.new(0, 1, 0), PLASTIC)
+		local body = dpart(m, Vector3.new(3, 2, 2.4), CFrame.new(0, 1, 0), PLASTIC, Enum.Material.Plastic)
 		dpart(m, Vector3.new(2.6, 0.3, 1.4), CFrame.new(0, 2.05, -0.1), Color3.fromRGB(90, 90, 96))   -- tray
 		dpart(m, Vector3.new(2, 0.05, 1.2), CFrame.new(0, 2.25, -0.6), Color3.fromRGB(245, 245, 240)) -- paper
 		dpart(m, Vector3.new(0.8, 0.5, 0.05), CFrame.new(0.9, 1.4, -1.22), Color3.fromRGB(40, 44, 52), Enum.Material.Neon) -- panel (front)
@@ -1300,7 +1415,7 @@ task.spawn(function()
 
 	DECOR_BUILDERS.GrandfatherClock = function()
 		local m = Instance.new("Model"); m.Name = "GrandfatherClock"
-		local cab = dpart(m, Vector3.new(2, 9, 1.2), CFrame.new(0, 4.5, 0), WOOD)      -- cabinet
+		local cab = dpart(m, Vector3.new(2, 9, 1.2), CFrame.new(0, 4.5, 0), WOOD, Enum.Material.Wood, PROP_WALNUT_TEXTURE, 3, { Enum.NormalId.Front }) -- cabinet
 		dpart(m, Vector3.new(1.5, 3, 0.1), CFrame.new(0, 4, -0.62), BLACK)             -- pendulum window
 		dpart(m, Vector3.new(1.5, 1.5, 0.15), CFrame.new(0, 7.6, -0.62), CREAM)        -- clock face (front -Z)
 		-- two hands pivoted at the face centre, each spun to a RANDOM angle so
@@ -1395,8 +1510,12 @@ task.spawn(function()
 	local function tooClose(name, x, z)
 		local list = placedCells[name]
 		if not list then return false end
+		local gap = DECOR_MIN_GAP
+		for _, prop in ipairs(PROPS) do
+			if prop.name == name and prop.minGap ~= nil then gap = prop.minGap break end
+		end
 		for _, c in ipairs(list) do
-			if math.max(math.abs(c[1] - x), math.abs(c[2] - z)) <= DECOR_MIN_GAP then return true end
+			if math.max(math.abs(c[1] - x), math.abs(c[2] - z)) <= gap then return true end
 		end
 		return false
 	end
@@ -1449,8 +1568,9 @@ task.spawn(function()
 				local wallDir, inward = o[1], o[2]
 				local along = Vector3.new(-wallDir.Z, 0, wallDir.X) -- runs ALONG the wall
 				local j = (math.random() * 2 - 1) * (CELL * 0.28)
-				local px = fcx + wallDir.X * (CELL / 2 - 1.5) + along.X * j
-				local pz = fcz + wallDir.Z * (CELL / 2 - 1.5) + along.Z * j
+				local inset = prop.wallInset or 1.5
+				local px = fcx + wallDir.X * (CELL / 2 - inset) + along.X * j
+				local pz = fcz + wallDir.Z * (CELL / 2 - inset) + along.Z * j
 				model = spawnProp(prop.name, prop.height, px, pz, inward)
 			else
 				-- room prop: offset randomly within the cell so it isn't always
