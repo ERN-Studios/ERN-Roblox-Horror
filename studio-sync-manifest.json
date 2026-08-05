@@ -10,8 +10,8 @@
     "remoteEvents": 13,
     "total": 90,
     "created": 0,
-    "updated": 7,
-    "unchanged": 83
+    "updated": 1,
+    "unchanged": 89
   },
   "extraMirroredFilesNotInStudio": [],
   "items": [
@@ -77,7 +77,7 @@
       "file": "ServerScriptService/GameManager.Script.lua",
       "bytes": 42698,
       "sha256": "ec3596d8b945411b6bc4e36f2a5eafa9ed342c5803a5e3ca752681d17a8439d0",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.PuzzleManager",
@@ -205,7 +205,7 @@
       "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
       "bytes": 72234,
       "sha256": "9fa67a4df5cc522b75a370df2212b1dbed1d5ff8a2afe6090883ccfb0f4eedc9",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.SoundController",
@@ -253,7 +253,7 @@
       "file": "StarterPlayer/StarterPlayerScripts/Level2AlertClient.LocalScript.lua",
       "bytes": 4559,
       "sha256": "2fc7a6235532017c25c766e0d376caddfeadc1c0bba439765e196d2c5333df07",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
@@ -277,7 +277,7 @@
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Lighting Controller.LocalScript.lua",
       "bytes": 3856,
       "sha256": "945a139ad11fd955ed0d8d593b623d0b0724c5b5f5ff3c4de22757dc23a47c09",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
@@ -307,8 +307,8 @@
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 World Builder",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua",
-      "bytes": 55878,
-      "sha256": "ab29b52e04d139d139a54c7aa09aca05c742828fc6b7d78e9c944e2200c0ce5b",
+      "bytes": 57477,
+      "sha256": "1bb3db5f1c70ebc0897b5e916f0210cf1e27db96c8c907a3f080c9b29a8bca64",
       "status": "updated"
     },
     {
@@ -317,7 +317,7 @@
       "file": "ServerScriptService/Level 2 Systems/Level 2 Objective Controller.ModuleScript.lua",
       "bytes": 7285,
       "sha256": "e389aba88b3bd499ab21a55d0d7a881d5e2eb7969876d2fe38a3b65bbbb17e88",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Round Adapter",
@@ -325,7 +325,7 @@
       "file": "ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua",
       "bytes": 8821,
       "sha256": "fa2c62ec7282f4abb413a37763d8c5bc3d0717db76acdf15924205582be5a82a",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.README - LEVEL 2 TWEAKS",

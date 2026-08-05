@@ -218,6 +218,29 @@ local function makeHallFloor(parent, hall)
 	return depth
 end
 
+-- Skylight slot layout for a hall — shared by the ceiling builder and the
+-- light placer, so a ceiling light can never be built inside a skylight
+-- opening (they used to coincide whenever the slot and light grids aligned).
+local function skylightSlotsFor(hall)
+	if isKids(hall) then return {}, 0 end
+	local slots = math.clamp(math.floor(hall.Width / 70), 1, 4)
+	local xs = {}
+	for slot = 1, slots do
+		table.insert(xs, hall.MinX + (slot / (slots + 1)) * hall.Width)
+	end
+	return xs, 11
+end
+
+local function overlapsSkylight(hall, x, width)
+	local xs, slotWidth = skylightSlotsFor(hall)
+	for _, slotX in ipairs(xs) do
+		if math.abs(x - slotX) < (slotWidth + width) * .5 + 1.5 then
+			return true
+		end
+	end
+	return false
+end
+
 -- Ceilings carry REAL skylight slots: open cuts with translucent glass panes
 -- that cast no shadow, so actual sunlight drops into the room and bounces.
 local function makeHallCeiling(parent, hall)
@@ -231,12 +254,7 @@ local function makeHallCeiling(parent, hall)
 		return
 	end
 
-	local slots = math.clamp(math.floor(hall.Width / 70), 1, 4)
-	local slotWidth = 11
-	local xs = {}
-	for slot = 1, slots do
-		table.insert(xs, hall.MinX + (slot / (slots + 1)) * hall.Width)
-	end
+	local xs, slotWidth = skylightSlotsFor(hall)
 	table.sort(xs)
 
 	local cursor = hall.MinX
@@ -424,13 +442,32 @@ local function lightHall(parent, hall, index)
 	local height = hallHeight(hall)
 	local columns = math.clamp(math.floor(hall.Width / 90), 1, 4)
 	local rows = math.clamp(math.floor(hall.Depth / 90), 1, 4)
+	local panelWidth = math.min(46, hall.Width * .42)
+	local slotXs = skylightSlotsFor(hall)
+	local nudge = #slotXs > 0 and hall.Width / ((#slotXs + 1) * 2) or 0
 	for cx = 1, columns do
 		for cz = 1, rows do
 			local x = hall.Center.X - hall.Width * .5 + (cx / (columns + 1)) * hall.Width
 			local z = hall.Center.Z - hall.Depth * .5 + (cz / (rows + 1)) * hall.Depth
-			makeCeilingPanel(parent, Vector3.new(x, 0, z),
-				index .. "." .. cx .. "." .. cz,
-				Vector3.new(math.min(46, hall.Width * .42), .55, 9), 0, height)
+			-- Never build a light fixture inside a skylight opening: slide it
+			-- sideways into the gap between slots, or drop it entirely; the
+			-- slot already floods that spot with real sun.
+			if overlapsSkylight(hall, x, panelWidth) then
+				if not overlapsSkylight(hall, x + nudge, panelWidth)
+					and x + nudge + panelWidth * .5 < hall.MaxX - 4 then
+					x = x + nudge
+				elseif not overlapsSkylight(hall, x - nudge, panelWidth)
+					and x - nudge - panelWidth * .5 > hall.MinX + 4 then
+					x = x - nudge
+				else
+					x = nil
+				end
+			end
+			if x then
+				makeCeilingPanel(parent, Vector3.new(x, 0, z),
+					index .. "." .. cx .. "." .. cz,
+					Vector3.new(panelWidth, .55, 9), 0, height)
+			end
 		end
 	end
 end
@@ -940,7 +977,14 @@ local function makeArrivalConcourse(parent, hall)
 	signText.Text = "ZYNTRA AQUATICS  •  SUBLEVEL 2\nSUNKEN LEISURE COMPLEX"
 	signText.Parent = signGui
 
-	makeCeilingPanel(arrivalFolder, center, "Arrival", Vector3.new(30, .55, 12), 0, hallHeight(hall))
+	local arrivalPanelX = center.X
+	if overlapsSkylight(hall, arrivalPanelX, 30) then
+		local xs = skylightSlotsFor(hall)
+		local shift = hall.Width / ((#xs + 1) * 2)
+		arrivalPanelX = overlapsSkylight(hall, center.X + shift, 30) and center.X - shift or center.X + shift
+	end
+	makeCeilingPanel(arrivalFolder, Vector3.new(arrivalPanelX, 0, center.Z), "Arrival",
+		Vector3.new(30, .55, 12), 0, hallHeight(hall))
 	return platformHeight
 end
 
