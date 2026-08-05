@@ -114,7 +114,7 @@ workspace.ChildAdded:Connect(function(child)
 	end
 end)
 
-event.OnClientEvent:Connect(function(line1, line2, finalLine)
+event.OnClientEvent:Connect(function(line1, line2, finalLine, holdSeconds)
 	if workspace:GetAttribute("SelectedLevel") ~= 2 then return end
 	if player:GetAttribute("InRound") ~= true then return end
 
@@ -125,7 +125,8 @@ event.OnClientEvent:Connect(function(line1, line2, finalLine)
 	shade.BackgroundTransparency = 1
 	TweenService:Create(shade, TweenInfo.new(.25), {BackgroundTransparency = .46}):Play()
 
-	task.wait(2.5)
+	-- The server passes a longer hold for the opening briefing.
+	task.wait(typeof(holdSeconds) == "number" and holdSeconds or 2.5)
 	panel.Visible = false
 	run.Visible = true
 

@@ -338,12 +338,28 @@ local function makeColonnade(parent, hall, depth, rows)
 end
 
 -- An archway: contiguous tangent segments built with lookAt between successive
--- ring points, so the orientation can never be wrong. Feet stand on the floor
--- (in the water). `acrossZ` = the ring spans across Z; you walk through along X.
-local function makeArchSpan(parent, center, acrossZ, index, radius)
+-- ring points, so the orientation can never be wrong. Two styles:
+--   "half" - a classic arch whose feet run DOWN past the water surface into
+--            the floor slab, so it never floats;
+--   "full" - a complete ring you walk through, its lower third submerged.
+-- `acrossZ` = the ring spans across Z; you walk through along X.
+local function makeArchSpan(parent, center, acrossZ, index, radius, style, floorDepth, heightLimit)
 	radius = math.max(6, radius)
-	local steps = math.max(14, math.floor(radius * 1.8))
-	local arcCenter = center + Vector3.new(0, 1, 0)
+	style = style or "half"
+	floorDepth = floorDepth or 0
+	local arcCenter, angleFrom, angleTo
+	if style == "full" then
+		if heightLimit then
+			radius = math.min(radius, (heightLimit + floorDepth) * .5 - 1.6)
+		end
+		arcCenter = center + Vector3.new(0, radius - floorDepth - 1.2, 0)
+		angleFrom, angleTo = 0, math.pi * 2
+	else
+		local dip = math.asin(math.clamp((floorDepth + 2.2) / radius, 0, .55))
+		arcCenter = center + Vector3.new(0, 1, 0)
+		angleFrom, angleTo = -dip, math.pi + dip
+	end
+	local steps = math.max(14, math.floor(radius * (style == "full" and 3.2 or 1.9)))
 	local function pointAt(a)
 		if acrossZ then
 			return arcCenter + Vector3.new(0, math.sin(a) * radius, math.cos(a) * radius)
@@ -351,8 +367,8 @@ local function makeArchSpan(parent, center, acrossZ, index, radius)
 		return arcCenter + Vector3.new(math.cos(a) * radius, math.sin(a) * radius, 0)
 	end
 	for step = 0, steps - 1 do
-		local a0 = math.pi * step / steps
-		local a1 = math.pi * (step + 1) / steps
+		local a0 = angleFrom + (angleTo - angleFrom) * step / steps
+		local a1 = angleFrom + (angleTo - angleFrom) * (step + 1) / steps
 		local from = pointAt(a0)
 		local to = pointAt(a1)
 		local mid = (from + to) * .5
@@ -893,7 +909,8 @@ local function makeCorridor(parent, layout, corridor, doorFolder)
 	for ring = 1, rings do
 		local t = ring / (rings + 1)
 		makeArchSpan(parent, center + oriented(from - mid + (to - from) * t, 0),
-			alongX, corridor.Index .. "." .. ring, archRadius)
+			alongX, corridor.Index .. "." .. ring, archRadius,
+			ring % 2 == 0 and "full" or "half", depth, height)
 	end
 
 	makeCeilingPanel(parent, center, "Corridor " .. corridor.Index,
@@ -945,23 +962,6 @@ local function makeArrivalConcourse(parent, hall)
 			"Level 2 Arrival Steps", 2.0, .6)
 	end
 
-	local sign = tiledPart(arrivalFolder, "Level 2 Arrival Sign Wall",
-		CFrame.new(Vector3.new(center.X, 9, hall.MinZ + 4)),
-		Vector3.new(34, 14, 1.6), C.TileCool, nil, 7)
-	sign.CanCollide = true
-	local signGui = Instance.new("SurfaceGui")
-	signGui.Name = "Level 2 Arrival Sign"
-	signGui.Face = Enum.NormalId.Back
-	signGui.CanvasSize = Vector2.new(680, 280)
-	signGui.Parent = sign
-	local signText = Instance.new("TextLabel")
-	signText.Size = UDim2.fromScale(1, 1)
-	signText.BackgroundTransparency = 1
-	signText.Font = Enum.Font.GothamBold
-	signText.TextScaled = true
-	signText.TextColor3 = Color3.fromRGB(36, 104, 132)
-	signText.Text = "ZYNTRA AQUATICS  •  SUBLEVEL 2\nSUNKEN LEISURE COMPLEX"
-	signText.Parent = signGui
 
 	-- The arrival hall is skylit like every other hall: sun only, no fixture.
 	return platformHeight
@@ -1132,7 +1132,8 @@ function WorldBuilder.Build(layout, generation)
 					local position = acrossZ
 						and Vector3.new(hall.MinX + along * t, 0, hall.Center.Z)
 						or Vector3.new(hall.Center.X, 0, hall.MinZ + along * t)
-					makeArchSpan(hallModel, position, acrossZ, hall.Index .. "." .. ring, radius)
+					makeArchSpan(hallModel, position, acrossZ, hall.Index .. "." .. ring, radius,
+						ring % 2 == 0 and "full" or "half", depth or 0, height)
 				end
 			elseif archetype == "Spiral Stair Well" then
 				makeSpiralStair(hallModel, hall.Center, -(depth or 1) + .5, height - 12, 13,

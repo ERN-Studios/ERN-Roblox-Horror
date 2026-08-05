@@ -6,12 +6,12 @@
     "id": "d1b9c157-bcf8-4939-995c-ddf9f1a5cf57"
   },
   "counts": {
-    "scripts": 77,
+    "scripts": 78,
     "remoteEvents": 13,
-    "total": 90,
-    "created": 0,
-    "updated": 1,
-    "unchanged": 89
+    "total": 91,
+    "created": 1,
+    "updated": 3,
+    "unchanged": 87
   },
   "extraMirroredFilesNotInStudio": [],
   "items": [
@@ -251,9 +251,9 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level2AlertClient",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level2AlertClient.LocalScript.lua",
-      "bytes": 4559,
-      "sha256": "2fc7a6235532017c25c766e0d376caddfeadc1c0bba439765e196d2c5333df07",
-      "status": "unchanged"
+      "bytes": 4685,
+      "sha256": "18211eeb06003f05ae8d2457184404f64d3c05beb6349effd448776792baa970",
+      "status": "updated"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
@@ -288,6 +288,14 @@
       "status": "unchanged"
     },
     {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Objective UI",
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua",
+      "bytes": 3898,
+      "sha256": "88542a38cb5630678fc790074702308386295251bb6ff483b49330faadf8f718",
+      "status": "created"
+    },
+    {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Configuration",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Configuration.ModuleScript.lua",
@@ -307,17 +315,17 @@
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 World Builder",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua",
-      "bytes": 56723,
-      "sha256": "0b33d90749cdf8b0c22ff5a557a742a99cd1fa74b0e4b9281894634a5068e25b",
+      "bytes": 56846,
+      "sha256": "8811f1be992b6f16474d1235efc57b26a82bd7e37a7728a51ef1d7c04e58eef2",
       "status": "updated"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Objective Controller.ModuleScript.lua",
-      "bytes": 7285,
-      "sha256": "e389aba88b3bd499ab21a55d0d7a881d5e2eb7969876d2fe38a3b65bbbb17e88",
-      "status": "unchanged"
+      "bytes": 7389,
+      "sha256": "31a41cb57b24b16cb299228b3174f6a44aa60af870271c8fce6874f6041a5819",
+      "status": "updated"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Round Adapter",

@@ -40,12 +40,12 @@ local function fireSound(cue, player)
 	if player then event:FireClient(player, cue) else event:FireAllClients(cue) end
 end
 
-local function fireStatus(title, subtitle, instruction)
+local function fireStatus(title, subtitle, instruction, holdSeconds)
 	local event = ReplicatedStorage:FindFirstChild("Level2AlertEvent")
 	if not event then return end
 	for _, player in ipairs(Players:GetPlayers()) do
 		if player:GetAttribute("InRound") then
-			event:FireClient(player, title, subtitle, instruction)
+			event:FireClient(player, title, subtitle, instruction, holdSeconds)
 		end
 	end
 end
@@ -190,10 +190,12 @@ function ObjectiveController.Start(manifest, generation)
 	-- round was already live when this session started).
 	local function fireIntro()
 		if activeSession ~= session then return end
+		-- The opening briefing holds noticeably longer than in-round alerts.
 		fireStatus(
 			"SUNKEN LEISURE COMPLEX",
 			string.format("%d PUMP STATIONS OFFLINE", goal),
-			"START EVERY PUMP TO DRAIN THE COMPLEX"
+			"START EVERY PUMP TO DRAIN THE COMPLEX",
+			7
 		)
 	end
 	if workspace:GetAttribute("RoundActive") == true then
