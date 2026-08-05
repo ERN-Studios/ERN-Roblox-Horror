@@ -1,7 +1,8 @@
 -- DevCheats (whitelisted developers only)
 --
 --   B = toggle ESP + 3-second lobby queue
---   V = toggle noclip fly (WASD + mouse, Space up, Ctrl down)
+--   V = toggle noclip fly (WASD + mouse, Space up, Ctrl down; on touch and
+--       gamepad the thumbstick flies and the jump button climbs)
 --   P = pause / resume hostile entities
 --   I = toggle immunity to the Entity's yell push-back
 --   U = toggle unlimited battery + stamina
@@ -283,6 +284,32 @@ RunService.PreSimulation:Connect(function(deltaTime)
 	if UIS:IsKeyDown(Enum.KeyCode.A) then move -= camera.CFrame.RightVector end
 	if UIS:IsKeyDown(Enum.KeyCode.Space) then move += Vector3.new(0, 1, 0) end
 	if UIS:IsKeyDown(Enum.KeyCode.LeftControl) then move -= Vector3.new(0, 1, 0) end
+
+	-- Touch and gamepad have no WASD, and this loop zeroes velocity every frame,
+	-- so without this branch a developer who toggles fly on a phone is frozen
+	-- solid until they toggle it back off.
+	--
+	-- Humanoid.MoveDirection is whatever the active control scheme produced, but
+	-- it is flattened onto the ground plane. Re-project it through the camera's
+	-- full basis so pushing the thumbstick forward while looking up climbs,
+	-- exactly the way W does on a keyboard.
+	if move.Magnitude == 0 then
+		local direction = humanoid.MoveDirection
+		if direction.Magnitude > 0 then
+			local flatLook = Vector3.new(camera.CFrame.LookVector.X, 0, camera.CFrame.LookVector.Z)
+			local flatRight = Vector3.new(camera.CFrame.RightVector.X, 0, camera.CFrame.RightVector.Z)
+			if flatLook.Magnitude > 1e-3 and flatRight.Magnitude > 1e-3 then
+				move += camera.CFrame.LookVector * direction:Dot(flatLook.Unit)
+					+ camera.CFrame.RightVector * direction:Dot(flatRight.Unit)
+			else
+				-- Camera pointing straight up or down: fall back to the raw stick.
+				move += direction
+			end
+		end
+		-- Jump is the only other control guaranteed to exist on every device.
+		if humanoid.Jump then move += Vector3.new(0, 1, 0) end
+	end
+
 	if move.Magnitude > 0 then move = move.Unit end
 
 	root.AssemblyAngularVelocity = Vector3.zero

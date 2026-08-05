@@ -9,9 +9,9 @@
     "scripts": 68,
     "remoteEvents": 13,
     "total": 81,
-    "created": 14,
-    "updated": 7,
-    "unchanged": 60
+    "created": 0,
+    "updated": 1,
+    "unchanged": 80
   },
   "extraMirroredFilesNotInStudio": [],
   "items": [
@@ -77,7 +77,7 @@
       "file": "ServerScriptService/GameManager.Script.lua",
       "bytes": 42460,
       "sha256": "cb732f5d6945f19f5327d7411c553f012763ec110b107b575e861d653b5a0a13",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.PuzzleManager",
@@ -109,7 +109,7 @@
       "file": "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
       "bytes": 33675,
       "sha256": "eb3f2d233b06a55a267fcaf2ca20a60ec7baf7c5d648913e239a0911f1a1575b",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level2Generator",
@@ -117,7 +117,7 @@
       "file": "ServerScriptService/Level2Generator.ModuleScript.lua",
       "bytes": 382,
       "sha256": "e39528145540d2fc075b2c65427792ef506bb405ea3c95ec23e073ce6b78a051",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level2EntityAI",
@@ -125,7 +125,7 @@
       "file": "ServerScriptService/Level2EntityAI.Script.lua",
       "bytes": 2662,
       "sha256": "d02c7e717c30087ba958485b3aabca0feb8c8d12f48c4e9d2240567a5eeae219",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level2EntityAnimation",
@@ -149,7 +149,7 @@
       "file": "ServerScriptService/Level2EntityProfiles.ModuleScript.lua",
       "bytes": 5182,
       "sha256": "fe043b5b04efdce9be3bb3e301fddc73e5ee71bbc57920479189efa92cc54d47",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level2Navigation",
@@ -189,7 +189,7 @@
       "file": "ServerScriptService/Level3Generator.ModuleScript.lua",
       "bytes": 427,
       "sha256": "57e0263ac2afa79e04d5858252fe26b7e30ddba8116883aeff29ab7c29f179c6",
-      "status": "created"
+      "status": "unchanged"
     },
     {
       "studioPath": "Workspace.StarterCharacter.AnimateScript",
@@ -269,7 +269,7 @@
       "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
       "bytes": 72699,
       "sha256": "ca0b8e2b02dde3622ba7d6718a11ff7814bdf66d121bcee8ed436f2e803d39d8",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.SoundController",
@@ -277,7 +277,7 @@
       "file": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
       "bytes": 42453,
       "sha256": "b74dc2370f2ae57735df09f70fdedb6d3ea8707b1f114746a5c20f24094adf02",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.PuzzleUI",
@@ -291,9 +291,9 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.DevCheats",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/DevCheats.LocalScript.lua",
-      "bytes": 13854,
-      "sha256": "989c471ddf327d8d49d909f05a7cd77a148327b8cea00af493b3a519dd71d4a9",
-      "status": "unchanged"
+      "bytes": 15150,
+      "sha256": "c16c15e1499f437bdc2fb0d2d65697af283e79eaadcbc83821b8b8616f6b244b",
+      "status": "updated"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.SpectateController",
@@ -341,7 +341,7 @@
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Sound Controller.LocalScript.lua",
       "bytes": 5936,
       "sha256": "305e6084c83d31f965db7ffabd98d1bfe553a4fbcbdac5d52a48c31b2467dc20",
-      "status": "created"
+      "status": "unchanged"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Lighting Controller",
@@ -349,7 +349,7 @@
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Lighting Controller.LocalScript.lua",
       "bytes": 2529,
       "sha256": "d61e0e50d7873318fe91caa5927492565b47a48e6bebc5646b1b680c810605de",
-      "status": "created"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
@@ -357,7 +357,7 @@
       "file": "ServerScriptService/Level 2 Systems/Level 2 Objective Controller.ModuleScript.lua",
       "bytes": 4487,
       "sha256": "2b00bfe7ca4a55796b96a703b1399dff105e76cca67758d7bd31c4c3b470065b",
-      "status": "created"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Round Adapter",
@@ -365,7 +365,7 @@
       "file": "ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua",
       "bytes": 5589,
       "sha256": "55d575e7b2256e778fc4e1f62d75acf317ad6402d96b49795e7302d182b46c27",
-      "status": "created"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Configuration",
@@ -373,7 +373,7 @@
       "file": "ServerScriptService/Level 2 Systems/Level 2 Configuration.ModuleScript.lua",
       "bytes": 2221,
       "sha256": "8f82a776f95267fdbe7d1701e2dedbc14d188098cd1ca9bd0b877160e4c26574",
-      "status": "created"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Layout Generator",
@@ -381,7 +381,7 @@
       "file": "ServerScriptService/Level 2 Systems/Level 2 Layout Generator.ModuleScript.lua",
       "bytes": 8955,
       "sha256": "dad2e9b84c2ce03807e199f7cb54d0ba3e759e77fb72614c075c3f32f942a207",
-      "status": "created"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 World Builder",
@@ -389,7 +389,7 @@
       "file": "ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua",
       "bytes": 33353,
       "sha256": "157b885e879488342408c94b17045e44507f930cf3386507d2287cd8e4d93848",
-      "status": "created"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
@@ -397,7 +397,7 @@
       "file": "ServerScriptService/Level 3 Systems/Level 3 Configuration.ModuleScript.lua",
       "bytes": 4373,
       "sha256": "917ca87681ec9004136cdb3634f4b1fba4596fbbe2765d71d09bcd223961cd52",
-      "status": "created"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Layout Generator",
@@ -405,7 +405,7 @@
       "file": "ServerScriptService/Level 3 Systems/Level 3 Layout Generator.ModuleScript.lua",
       "bytes": 17638,
       "sha256": "64fb6d76ca419feb88533c0b30c0b44d38359c991a1923a0ad7a179c759b1f05",
-      "status": "created"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
@@ -413,7 +413,7 @@
       "file": "ServerScriptService/Level 3 Systems/Level 3 World Builder.ModuleScript.lua",
       "bytes": 41355,
       "sha256": "bc926b1728c41af5691d9c41b058aa6e4c8a0a82c0b6249cdfaab0dea620982a",
-      "status": "created"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
@@ -421,7 +421,7 @@
       "file": "ServerScriptService/Level 3 Systems/Level 3 Objective Controller.ModuleScript.lua",
       "bytes": 6108,
       "sha256": "f4599e0cc410bd0b1f020cee6b91c446328b2ac526f0f01eaeb558edf63fef3b",
-      "status": "created"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
@@ -429,7 +429,7 @@
       "file": "ServerScriptService/Level 3 Systems/Level 3 Round Adapter.ModuleScript.lua",
       "bytes": 6695,
       "sha256": "dbaf45d95665bbe0979b04026b05f444f7199ef0a85da0a9c5d4613b892a2947",
-      "status": "created"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerStorage.LobbyBackup_20260731.GameManager",
@@ -573,7 +573,7 @@
       "file": "ReplicatedStorage/Level 2 Sound Event.RemoteEvent.txt",
       "bytes": 151,
       "sha256": "0ba809f3fd9e16ffa9df434397aeecf995100bd68140856e69113c62d8f4443d",
-      "status": "created"
+      "status": "unchanged"
     },
     {
       "studioPath": "RobloxReplicatedStorage.IntegrityCheckProcessorKey2_LocalizationTableAnalyticsSender_LocalizationService",
