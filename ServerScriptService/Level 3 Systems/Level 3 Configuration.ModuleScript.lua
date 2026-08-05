@@ -68,11 +68,11 @@ local Configuration = {
 	DrainableCorridorDepth = 6,
 
 	-- ── lighting ────────────────────────────────────────────────────────────
-	CeilingPanelBrightness = 1.15,
+	CeilingPanelBrightness = 1.55,
 	CeilingPanelRange = 44,
-	WallPanelBrightness = 0.7,
+	WallPanelBrightness = 0.95,
 	WallPanelRange = 28,
-	SkylightBrightness = 2.2,
+	SkylightBrightness = 3.1,
 	SkylightRange = 95,
 
 	-- ── slides ──────────────────────────────────────────────────────────────

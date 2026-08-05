@@ -10,8 +10,8 @@
     "remoteEvents": 13,
     "total": 82,
     "created": 0,
-    "updated": 4,
-    "unchanged": 78
+    "updated": 3,
+    "unchanged": 79
   },
   "extraMirroredFilesNotInStudio": [],
   "items": [
@@ -77,7 +77,7 @@
       "file": "ServerScriptService/GameManager.Script.lua",
       "bytes": 42534,
       "sha256": "a8a755d955a625e73116d58b24f691590886455d98523ffd428116486ad1a9c0",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.PuzzleManager",
@@ -355,8 +355,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 3 Lighting Controller.LocalScript.lua",
-      "bytes": 3621,
-      "sha256": "d8d38d3aad93ac490888b505d50a06df7c0af0b053e0c30421fd57be5358165a",
+      "bytes": 3856,
+      "sha256": "61e055a939d1ea24ed2ac0b71a7427d68f6bb4a08313538691b1108a3c16e048",
       "status": "updated"
     },
     {
@@ -403,9 +403,9 @@
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Configuration.ModuleScript.lua",
-      "bytes": 5014,
-      "sha256": "35216569498dc5a9621c911d4f7f0b72e9fda4935681ef598bd7965af6d3953b",
-      "status": "unchanged"
+      "bytes": 5015,
+      "sha256": "17c52044e8e039e5b33896103a533b667ebfb0e1fc1b7c1e71893d00506732be",
+      "status": "updated"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Layout Generator",
@@ -419,8 +419,8 @@
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 World Builder.ModuleScript.lua",
-      "bytes": 55612,
-      "sha256": "8f6da6079032e5ab286a5291dc17ae5833a688c0ece4f613575611ce592ac946",
+      "bytes": 56570,
+      "sha256": "7e91ea9fd6204a1b339dfc0903862775c429405fca3f8fa6b57d449b1d5da5f0",
       "status": "updated"
     },
     {
@@ -437,7 +437,7 @@
       "file": "ServerScriptService/Level 3 Systems/Level 3 Round Adapter.ModuleScript.lua",
       "bytes": 7857,
       "sha256": "7949e75e7d52c9341ad1fa0050a2fc3d4d652144978b6243ff00ab5a5a49c76a",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerStorage.LobbyBackup_20260731.GameManager",

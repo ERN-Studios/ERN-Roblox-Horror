@@ -591,37 +591,53 @@ local function makeExitFlume(parent, layout, hall, deck)
 		Vector3.new(20, 20, 1.4), C.Emergency, Enum.Material.Neon, .55)
 	mouth.CanCollide = false
 
-	-- Open-air escape courtyard past the shell: tiled patio, low parapet, no
-	-- roof. It is DAY out here — the payoff for getting out.
+	-- Sealed GATEWAY chamber: the placeholder for the Level 4 transition. The
+	-- flume drops escapees here; a bulkhead door promises the next level. For
+	-- now they wait here and the round flow returns everyone to the lobby.
 	local catchCenter = p3 + Vector3.new(24, 2, 0)
-	local catchSize = 52
-	tiledPart(parent, "Level 3 Exit Courtyard Floor",
+	local catchSize = 48
+	local gatewayHeight = 22
+	tiledPart(parent, "Level 3 Gateway Floor",
 		CFrame.new(catchCenter + Vector3.new(0, -6, 0)),
 		Vector3.new(catchSize, 1.5, catchSize), C.TileWarm, {Enum.NormalId.Top}, 9)
+	tiledPart(parent, "Level 3 Gateway Ceiling",
+		CFrame.new(catchCenter + Vector3.new(0, gatewayHeight - 5, 0)),
+		Vector3.new(catchSize, 1.5, catchSize), C.TileCool, {Enum.NormalId.Bottom}, 9)
 	for _, data in ipairs({
-		{Vector3.new(-catchSize * .5, -2.8, 0), Vector3.new(1.5, 5, catchSize)},
-		{Vector3.new(catchSize * .5, -2.8, 0), Vector3.new(1.5, 5, catchSize)},
-		{Vector3.new(0, -2.8, -catchSize * .5), Vector3.new(catchSize, 5, 1.5)},
-		{Vector3.new(0, -2.8, catchSize * .5), Vector3.new(catchSize, 5, 1.5)},
+		{Vector3.new(-catchSize * .5, gatewayHeight * .5 - 6, 0), Vector3.new(1.5, gatewayHeight, catchSize)},
+		{Vector3.new(0, gatewayHeight * .5 - 6, -catchSize * .5), Vector3.new(catchSize, gatewayHeight, 1.5)},
+		{Vector3.new(0, gatewayHeight * .5 - 6, catchSize * .5), Vector3.new(catchSize, gatewayHeight, 1.5)},
 	}) do
-		tiledPart(parent, "Level 3 Exit Courtyard Parapet", CFrame.new(catchCenter + data[1]), data[2],
+		tiledPart(parent, "Level 3 Gateway Wall", CFrame.new(catchCenter + data[1]), data[2],
 			C.TileCool, nil, 9)
 	end
-	makeRail(parent,
-		catchCenter + Vector3.new(-catchSize * .5 + 1, -5.2, -catchSize * .5 + 1),
-		catchCenter + Vector3.new(-catchSize * .5 + 1, -5.2, catchSize * .5 - 1),
-		"Level 3 Exit Courtyard")
-	makeRail(parent,
-		catchCenter + Vector3.new(catchSize * .5 - 1, -5.2, -catchSize * .5 + 1),
-		catchCenter + Vector3.new(catchSize * .5 - 1, -5.2, catchSize * .5 - 1),
-		"Level 3 Exit Courtyard")
-	-- A couple of pool loungers to sell the "leisure" of having survived.
-	for lounger = -1, 1, 2 do
-		local seat = part(parent, "Level 3 Courtyard Lounger",
-			CFrame.new(catchCenter + Vector3.new(lounger * 12, -4.4, 14)) * CFrame.Angles(0, 0, math.rad(-8)),
-			Vector3.new(3.4, .6, 9), C.TileWarm, Enum.Material.SmoothPlastic)
-		seat.CanCollide = true
-	end
+
+	-- The east wall IS the Level 4 bulkhead: a heavy sealed door with signage.
+	local doorWall = tiledPart(parent, "Level 3 Gateway East Wall",
+		CFrame.new(catchCenter + Vector3.new(catchSize * .5, gatewayHeight * .5 - 6, 0)),
+		Vector3.new(1.5, gatewayHeight, catchSize), C.TileCool, nil, 9)
+	local bulkhead = part(parent, "Level 3 Gateway Level 4 Bulkhead",
+		CFrame.new(catchCenter + Vector3.new(catchSize * .5 - 1.6, 4, 0)),
+		Vector3.new(2, 18, 22), C.Metal, Enum.Material.DiamondPlate)
+	bulkhead.CanCollide = true
+	local stripe = part(parent, "Level 3 Gateway Bulkhead Stripe",
+		bulkhead.CFrame + Vector3.new(-1.2, 7, 0), Vector3.new(.3, 1.4, 20), C.Locked, Enum.Material.Neon)
+	stripe.CanCollide = false
+	local bulkheadGui = Instance.new("SurfaceGui")
+	bulkheadGui.Name = "Level 3 Gateway Sign"
+	bulkheadGui.Face = Enum.NormalId.Left
+	bulkheadGui.CanvasSize = Vector2.new(560, 420)
+	bulkheadGui.Parent = bulkhead
+	local bulkheadText = Instance.new("TextLabel")
+	bulkheadText.Size = UDim2.fromScale(1, 1)
+	bulkheadText.BackgroundTransparency = 1
+	bulkheadText.Font = Enum.Font.GothamBold
+	bulkheadText.TextScaled = true
+	bulkheadText.TextColor3 = Color3.fromRGB(255, 226, 140)
+	bulkheadText.Text = "SUBLEVEL 4\nACCESS PENDING\n\nAWAITING PRESSURE\nCERTIFICATION"
+	bulkheadText.Parent = bulkheadGui
+
+	makeCeilingPanel(parent, catchCenter, "Gateway", Vector3.new(30, .55, 10), 0, gatewayHeight - 6)
 
 	local safeSpawn = part(parent, "Level 3 Exit Safe Spawn",
 		CFrame.new(catchCenter + Vector3.new(0, -4.9, 0)), Vector3.new(7, .4, 7),

@@ -1,7 +1,8 @@
 -- Level 3 Lighting Controller
 -- Client-side grade for the Sunken Leisure Complex, mirroring the Level 2
--- controller's ownership pattern. Aims for the reference-photo mood: warm
--- cream haze, soft daylight-through-tiles, no visible sky, turquoise water.
+-- controller's ownership pattern. Level 3 is deliberately BRIGHT: the
+-- reference photos are sunlit liminal poolrooms — no fog, high ambient bounce,
+-- warm natural daylight filling every room, turquoise water.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -58,36 +59,39 @@ local function apply()
 	grade.Enabled = true
 	bloom.Enabled = true
 	local mode = state and state:GetAttribute("Level3_LightingMode") or "NORMAL"
+	-- Bright, airy, NO fog. High ambient is what makes the light feel like it
+	-- bounces around the tiled rooms; the skylight SurfaceLights (Shadows on)
+	-- paint the sun shafts on top of it.
 	Lighting.ClockTime = 12
-	Lighting.FogColor = Color3.fromRGB(222, 216, 190)
-	Lighting.FogStart = 110
-	Lighting.FogEnd = mode == "EXIT_OPEN" and 720 or 560
-	Lighting.EnvironmentDiffuseScale = .5
-	Lighting.EnvironmentSpecularScale = .6
+	Lighting.FogColor = Color3.fromRGB(235, 230, 208)
+	Lighting.FogStart = 100000
+	Lighting.FogEnd = 100000
+	Lighting.EnvironmentDiffuseScale = 1
+	Lighting.EnvironmentSpecularScale = 1
 	Lighting.GlobalShadows = true
-	Lighting.ColorShift_Top = Color3.fromRGB(255, 248, 216)
-	Lighting.ColorShift_Bottom = Color3.fromRGB(76, 88, 80)
+	Lighting.ColorShift_Top = Color3.fromRGB(255, 250, 224)
+	Lighting.ColorShift_Bottom = Color3.fromRGB(196, 206, 188)
 	if mode == "EXIT_OPEN" then
-		Lighting.Brightness = 1.9
-		Lighting.Ambient = Color3.fromRGB(116, 116, 98)
-		Lighting.OutdoorAmbient = Color3.fromRGB(90, 94, 84)
-		grade.Brightness = .04
-		grade.Contrast = .04
-		grade.Saturation = -.04
-		grade.TintColor = Color3.fromRGB(232, 255, 236)
-		bloom.Intensity = .22
+		Lighting.Brightness = 2.6
+		Lighting.Ambient = Color3.fromRGB(158, 160, 140)
+		Lighting.OutdoorAmbient = Color3.fromRGB(150, 154, 136)
+		grade.Brightness = .07
+		grade.Contrast = .03
+		grade.Saturation = .03
+		grade.TintColor = Color3.fromRGB(238, 255, 240)
+		bloom.Intensity = .3
 	else
-		Lighting.Brightness = 1.7
-		Lighting.Ambient = Color3.fromRGB(104, 102, 88)
-		Lighting.OutdoorAmbient = Color3.fromRGB(82, 84, 76)
-		grade.Brightness = .02
-		grade.Contrast = .05
-		grade.Saturation = -.06
-		grade.TintColor = Color3.fromRGB(250, 242, 210)
-		bloom.Intensity = .16
+		Lighting.Brightness = 2.4
+		Lighting.Ambient = Color3.fromRGB(150, 146, 126)
+		Lighting.OutdoorAmbient = Color3.fromRGB(140, 140, 120)
+		grade.Brightness = .05
+		grade.Contrast = .03
+		grade.Saturation = .02
+		grade.TintColor = Color3.fromRGB(255, 248, 222)
+		bloom.Intensity = .26
 	end
-	bloom.Size = 26
-	bloom.Threshold = 1.12
+	bloom.Size = 30
+	bloom.Threshold = 1.05
 	lastApplied = os.clock()
 end
 
