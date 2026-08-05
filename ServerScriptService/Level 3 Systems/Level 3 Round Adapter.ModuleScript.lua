@@ -18,6 +18,39 @@ local activeManifest
 local generation = 0
 local levelOneScriptStates
 local storedLevelOneEntity
+local storedServerLobby
+
+local STORED_LOBBY_NAME = "Level 3 Stored Server Lobby"
+
+-- Only the level should be loaded during a round: the persistent tunnel lobby
+-- is parked in ServerStorage while Level 3 is live and restored on cleanup,
+-- the same trick Level 2's original generator used. GameManager's station
+-- references stay valid because it is the same instance moving parents.
+local function storeLobby()
+	local lobby = workspace:FindFirstChild("ServerLobby")
+	if lobby then
+		storedServerLobby = lobby
+		lobby.Name = STORED_LOBBY_NAME
+		lobby.Parent = ServerStorage
+	end
+end
+
+local function restoreLobby()
+	local stored = storedServerLobby
+	if not (stored and stored.Parent == ServerStorage) then
+		stored = ServerStorage:FindFirstChild(STORED_LOBBY_NAME)
+	end
+	storedServerLobby = nil
+	if not stored then return end
+	local existing = workspace:FindFirstChild("ServerLobby")
+	if existing then
+		-- GameManager already rebuilt a live lobby; the stored copy is stale.
+		stored:Destroy()
+		return
+	end
+	stored.Name = "ServerLobby"
+	stored.Parent = workspace
+end
 
 -- Level 1 owns these; they must be off while Level 3 is live or PuzzleManager
 -- builds the fuse puzzle inside the poolrooms and EntityAI pathfinds through
@@ -122,6 +155,7 @@ function Adapter.Cleanup()
 	end
 
 	destroyCompatibilityObjects()
+	restoreLobby()
 	restoreLevelOneRuntime()
 
 	workspace:SetAttribute("WorldGenerated", false)
@@ -160,6 +194,7 @@ function Adapter.Build()
 
 	setScriptsEnabled(LEVEL_TWO_RUNTIME_SCRIPTS, false)
 	isolateLevelOneRuntime()
+	storeLobby()
 	clearOwnedTerrain(nil)
 
 	-- GameManager reads success only from whether this raises, so every failure

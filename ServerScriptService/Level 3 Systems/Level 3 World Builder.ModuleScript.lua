@@ -591,23 +591,36 @@ local function makeExitFlume(parent, layout, hall, deck)
 		Vector3.new(20, 20, 1.4), C.Emergency, Enum.Material.Neon, .55)
 	mouth.CanCollide = false
 
-	-- Sealed catch room past the shell.
+	-- Open-air escape courtyard past the shell: tiled patio, low parapet, no
+	-- roof. It is DAY out here — the payoff for getting out.
 	local catchCenter = p3 + Vector3.new(24, 2, 0)
-	local catchSize = 44
-	tiledPart(parent, "Level 3 Exit Catch Floor",
+	local catchSize = 52
+	tiledPart(parent, "Level 3 Exit Courtyard Floor",
 		CFrame.new(catchCenter + Vector3.new(0, -6, 0)),
 		Vector3.new(catchSize, 1.5, catchSize), C.TileWarm, {Enum.NormalId.Top}, 9)
-	tiledPart(parent, "Level 3 Exit Catch Ceiling",
-		CFrame.new(catchCenter + Vector3.new(0, 18, 0)),
-		Vector3.new(catchSize, 1.5, catchSize), C.TileCool, {Enum.NormalId.Bottom}, 9)
 	for _, data in ipairs({
-		{Vector3.new(-catchSize * .5, 6, 0), Vector3.new(1.5, 24, catchSize)},
-		{Vector3.new(catchSize * .5, 6, 0), Vector3.new(1.5, 24, catchSize)},
-		{Vector3.new(0, 6, -catchSize * .5), Vector3.new(catchSize, 24, 1.5)},
-		{Vector3.new(0, 6, catchSize * .5), Vector3.new(catchSize, 24, 1.5)},
+		{Vector3.new(-catchSize * .5, -2.8, 0), Vector3.new(1.5, 5, catchSize)},
+		{Vector3.new(catchSize * .5, -2.8, 0), Vector3.new(1.5, 5, catchSize)},
+		{Vector3.new(0, -2.8, -catchSize * .5), Vector3.new(catchSize, 5, 1.5)},
+		{Vector3.new(0, -2.8, catchSize * .5), Vector3.new(catchSize, 5, 1.5)},
 	}) do
-		tiledPart(parent, "Level 3 Exit Catch Wall", CFrame.new(catchCenter + data[1]), data[2],
+		tiledPart(parent, "Level 3 Exit Courtyard Parapet", CFrame.new(catchCenter + data[1]), data[2],
 			C.TileCool, nil, 9)
+	end
+	makeRail(parent,
+		catchCenter + Vector3.new(-catchSize * .5 + 1, -5.2, -catchSize * .5 + 1),
+		catchCenter + Vector3.new(-catchSize * .5 + 1, -5.2, catchSize * .5 - 1),
+		"Level 3 Exit Courtyard")
+	makeRail(parent,
+		catchCenter + Vector3.new(catchSize * .5 - 1, -5.2, -catchSize * .5 + 1),
+		catchCenter + Vector3.new(catchSize * .5 - 1, -5.2, catchSize * .5 - 1),
+		"Level 3 Exit Courtyard")
+	-- A couple of pool loungers to sell the "leisure" of having survived.
+	for lounger = -1, 1, 2 do
+		local seat = part(parent, "Level 3 Courtyard Lounger",
+			CFrame.new(catchCenter + Vector3.new(lounger * 12, -4.4, 14)) * CFrame.Angles(0, 0, math.rad(-8)),
+			Vector3.new(3.4, .6, 9), C.TileWarm, Enum.Material.SmoothPlastic)
+		seat.CanCollide = true
 	end
 
 	local safeSpawn = part(parent, "Level 3 Exit Safe Spawn",
@@ -1120,16 +1133,6 @@ function WorldBuilder.Build(layout, generation)
 						Vector3.new(math.min(22, hall.Width * .2), 2.2, 5), C.TileWarm, nil, 7)
 					benchPart.CanCollide = true
 				end
-			elseif basinWidth and (archetype == "Channel Junction" or archetype == "Flooded Gallery"
-				or archetype == "Bright Basin" or archetype == "Low Water Hall") then
-				-- A bridge across the water, clamped inside the basin.
-				local alongX2 = hall.Orientation ~= "NorthSouth"
-				local span = alongX2 and basinWidth or basinDepth
-				local bridge = tiledPart(hallModel, "Level 3 Basin Bridge",
-					CFrame.new(hall.Center + Vector3.new(0, .5, 0)),
-					alongX2 and Vector3.new(span + 8, 1.1, 9) or Vector3.new(9, 1.1, span + 8),
-					C.TileWarm, Enum.NormalId:GetEnumItems(), 9)
-				bridge.CanCollide = true
 			end
 		end
 
@@ -1234,18 +1237,9 @@ function WorldBuilder.Build(layout, generation)
 		Vector3.new(extent + 150, 4, extent + 150), C.DarkGrout, {Enum.NormalId.Bottom}, 12)
 	roof.CanCollide = true
 
-	-- Backdrop box shields the flume hole from the void; the catch room sits
-	-- just past it under its own sealed roof.
-	if exit then
-		local backdrop = tiledPart(containment, "Level 3 Exit Duct Backdrop",
-			CFrame.new(exit.EndPosition.X + 26, 24, exit.EndPosition.Z),
-			Vector3.new(4, 130, 96), C.DarkGrout, nil, 12)
-		backdrop.CanCollide = true
-		local ductRoof = tiledPart(containment, "Level 3 Exit Duct Roof",
-			CFrame.new(worldCenterX + shellHalfX + 24, 90, exit.EndPosition.Z),
-			Vector3.new(52, 4, 96), C.DarkGrout, {Enum.NormalId.Bottom}, 12)
-		ductRoof.CanCollide = true
-	end
+	-- The flume hole in the east shell stays open: from the top deck you see a
+	-- slot of real daylight at the end of the tube — the way out.
+
 
 	local terrainCenter = Vector3.new(worldCenterX, -16, worldCenterZ)
 	local terrainSize = Vector3.new(extent + 700, 200, extent + 700)

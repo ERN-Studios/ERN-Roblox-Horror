@@ -24,15 +24,37 @@ local lastApplied = 0
 local function active()
 	return workspace:GetAttribute("SelectedLevel") == 3
 		and player:GetAttribute("InRound") == true
+		and player:GetAttribute("Escaped") ~= true
 		and workspace:GetAttribute("Level3LightingOwnedByController") == true
+end
+
+-- The place's own daylight, restored the moment this controller lets go —
+-- an escapee stepping into the courtyard, a death, or the round ending must
+-- never inherit the interior fog.
+local wasActive = false
+local function restoreDaylight()
+	Lighting.ClockTime = 14
+	Lighting.FogColor = Color3.fromRGB(192, 192, 192)
+	Lighting.FogStart = 100000
+	Lighting.FogEnd = 100000
+	Lighting.Brightness = 2
+	Lighting.Ambient = Color3.fromRGB(92, 88, 70)
+	Lighting.OutdoorAmbient = Color3.fromRGB(105, 101, 82)
+	Lighting.ColorShift_Top = Color3.fromRGB(0, 0, 0)
+	Lighting.ColorShift_Bottom = Color3.fromRGB(0, 0, 0)
 end
 
 local function apply()
 	if not active() then
 		grade.Enabled = false
 		bloom.Enabled = false
+		if wasActive then
+			wasActive = false
+			restoreDaylight()
+		end
 		return
 	end
+	wasActive = true
 	grade.Enabled = true
 	bloom.Enabled = true
 	local mode = state and state:GetAttribute("Level3_LightingMode") or "NORMAL"
@@ -72,6 +94,7 @@ end
 workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(apply)
 workspace:GetAttributeChangedSignal("Level3LightingOwnedByController"):Connect(apply)
 player:GetAttributeChangedSignal("InRound"):Connect(apply)
+player:GetAttributeChangedSignal("Escaped"):Connect(apply)
 if state then
 	state:GetAttributeChangedSignal("Level3_LightingMode"):Connect(apply)
 end

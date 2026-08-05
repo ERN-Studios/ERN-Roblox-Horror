@@ -329,7 +329,9 @@ local function sanitizePersistedLevelState()
   or selected == 2 then
   stale[#stale + 1] = 2
  end
- if workspace:FindFirstChild("Level 3 Generated World") ~= nil or selected == 3 then
+ if workspace:FindFirstChild("Level 3 Generated World") ~= nil
+  or ServerStorage:FindFirstChild("Level 3 Stored Server Lobby") ~= nil
+  or selected == 3 then
   stale[#stale + 1] = 3
  end
  if #stale == 0 then return end
