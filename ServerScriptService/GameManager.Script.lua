@@ -60,9 +60,8 @@ local IS_STUDIO = RunService:IsStudio()
 -- attribute-driven MazeGenerator and is deliberately not listed here.
 local LEVEL_GENERATORS = {
  [2] = "Level2Generator",
- [3] = "Level3Generator",
 }
-local MAX_LEVEL = 3
+local MAX_LEVEL = 2
 
 -- Always-on server authority for every developer command. Unlike the Level 1
 -- entity script, GameManager remains active in both levels.
@@ -325,14 +324,11 @@ local function sanitizePersistedLevelState()
  if workspace:FindFirstChild("PoolroomsLevel2") ~= nil
   or workspace:FindFirstChild("Level 2 Generated World") ~= nil
   or ServerStorage:FindFirstChild("StoredLevel1Entity") ~= nil
+  or ServerStorage:FindFirstChild("Level 2 Stored Level 1 Entity") ~= nil
   or ServerStorage:FindFirstChild("StoredServerLobby") ~= nil
+  or ServerStorage:FindFirstChild("Level 2 Stored Server Lobby") ~= nil
   or selected == 2 then
   stale[#stale + 1] = 2
- end
- if workspace:FindFirstChild("Level 3 Generated World") ~= nil
-  or ServerStorage:FindFirstChild("Level 3 Stored Server Lobby") ~= nil
-  or selected == 3 then
-  stale[#stale + 1] = 3
  end
  if #stale == 0 then return end
 
@@ -717,6 +713,11 @@ local function returnGroupToLobby(group)
   loadLobbyCharacter(player)
   status:FireClient(player, "lobby")
  end
+
+ -- Restore the game-wide baseline (set false at boot): lobby characters are
+ -- loaded manually, and leaving auto-loads on lets the engine respawn a
+ -- default rig instead of the lobby avatar.
+ Players.CharacterAutoLoads = false
 end
 
 local function playRound(participants)
@@ -801,7 +802,7 @@ local function playRound(participants)
  end
 
  if aliveCount <= 0 then sendWipedPartyHome(); return end
- if activeLevel == 2 or activeLevel == 3 then
+ if activeLevel == 2 then
   fireGroup(participants, "poolaccess")
   task.wait(1.25)
  else

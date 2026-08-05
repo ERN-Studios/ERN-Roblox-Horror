@@ -37,14 +37,6 @@ local function applyPlayerLighting()
   return
  end
 
- -- Level 3 owns its grade the same way Level 2 does.
- local levelThreeWorld = workspace:FindFirstChild("Level 3 Generated World")
- local isLevelThree = levelThreeWorld ~= nil and (workspace:GetAttribute("SelectedLevel") == 3 or inMaze)
- if isLevelThree and workspace:GetAttribute("Level3LightingOwnedByController") == true then
-  lobbyGrade.Enabled = false
-  if mazeGrade then mazeGrade.Enabled = false end
-  return
- end
 
  if isLevelTwo then
   lobbyGrade.Enabled = false
@@ -800,33 +792,11 @@ local function playObjective()
 			return base .. text
 		end
 
-		if workspace:GetAttribute("SelectedLevel") == 3 then
-			-- Level 3 runs its own alert-based intro from its objective controller.
+		if workspace:GetAttribute("SelectedLevel") == 2 then
+			-- Level 2 (Sunken Leisure Complex) runs its own alert-based intro
+			-- from its objective controller; no typewriter here.
 			return
 		end
-		if workspace:GetAttribute("SelectedLevel") == 2 then
-   local poolText = typeInto("", "Restore the three pressure valves", 0.055)
-   if not poolText then return end
-   task.wait(2)
-   poolText = typeInto(poolText .. string.char(10), "Search the dry pool chambers", 0.055)
-   if not poolText then return end
-   task.wait(2)
-   poolText = typeInto(poolText .. string.char(10), "Power the green exit slide", 0.055)
-   if not poolText then return end
-   task.wait(2)
-   poolText = typeInto(poolText .. string.char(10), "Enter the black tube", 0.055)
-   if not poolText then return end
-   for _ = 1, 6 do
-    if not alive() then return end
-    label.Text = poolText .. "."
-    task.wait(0.25)
-    label.Text = poolText
-    task.wait(0.25)
-   end
-   task.wait(1.5)
-   if alive() then setMsg("") end
-   return
-  end
 			local built = typeInto("", "Find ZYNTRA power relays", 0.03)
 		if not built then return end
 		task.wait(0.6)
@@ -1461,7 +1431,6 @@ local function mimicBuild(sourcePlayer, spawnPos)
     steps:SetAttribute("StartToken", startToken)
     task.delay(0.25 + math.random() * 0.45, function()
      if workspace:GetAttribute("SelectedLevel") ~= 2
-      and workspace:GetAttribute("SelectedLevel") ~= 3
       and model.Parent and moving == true and steps:GetAttribute("StartToken") == startToken then
       steps.TimePosition = math.random() * 0.28
       steps:Play()
@@ -1719,8 +1688,7 @@ end
 local function ambientFootsteps()
  -- Level 2 owns its real shallow-water/entity step mix in SoundController.
  -- Do not layer the dry plastic fake-footstep scare over that soundscape.
- local scareLevel = workspace:GetAttribute("SelectedLevel")
- if scareLevel == 2 or scareLevel == 3 then return false end
+ if workspace:GetAttribute("SelectedLevel") == 2 then return false end
  local _, _, root, alive = ambientCharacter()
  if not alive then return false end
  local backward = -ambientFlatUnit(root.CFrame.LookVector)
@@ -1759,6 +1727,8 @@ local function ambientFootsteps()
 end
 
 local function ambientKnocks()
+ -- Level 2 owns its own soundscape; keep the Level 1 wall-knock scare out.
+ if workspace:GetAttribute("SelectedLevel") == 2 then return false end
  local _, _, root, alive = ambientCharacter()
  if not alive then return false end
  local forward = ambientFlatUnit(root.CFrame.LookVector)

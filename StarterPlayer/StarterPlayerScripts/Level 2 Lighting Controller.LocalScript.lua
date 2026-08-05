@@ -1,10 +1,16 @@
+-- Level 2 Lighting Controller
+-- Client-side grade for the Sunken Leisure Complex, mirroring the Level 2
+-- controller's ownership pattern. Level 2 is deliberately BRIGHT: the
+-- reference photos are sunlit liminal poolrooms — no fog, high ambient bounce,
+-- warm natural daylight filling every room, turquoise water.
+
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Lighting = game:GetService("Lighting")
 local RunService = game:GetService("RunService")
 
 local player = Players.LocalPlayer
-local state = ReplicatedStorage:WaitForChild("Level 2 State")
+local state = ReplicatedStorage:WaitForChild("Level 2 State", 30)
 
 local grade = Lighting:FindFirstChild("Level 2 Client Color Grade") or Instance.new("ColorCorrectionEffect")
 grade.Name = "Level 2 Client Color Grade"
@@ -19,55 +25,83 @@ local lastApplied = 0
 local function active()
 	return workspace:GetAttribute("SelectedLevel") == 2
 		and player:GetAttribute("InRound") == true
+		and player:GetAttribute("Escaped") ~= true
 		and workspace:GetAttribute("Level2LightingOwnedByController") == true
+end
+
+-- The place's own daylight, restored the moment this controller lets go —
+-- an escapee stepping into the courtyard, a death, or the round ending must
+-- never inherit the interior fog.
+local wasActive = false
+local function restoreDaylight()
+	Lighting.ClockTime = 14
+	Lighting.FogColor = Color3.fromRGB(192, 192, 192)
+	Lighting.FogStart = 100000
+	Lighting.FogEnd = 100000
+	Lighting.Brightness = 2
+	Lighting.Ambient = Color3.fromRGB(92, 88, 70)
+	Lighting.OutdoorAmbient = Color3.fromRGB(105, 101, 82)
+	Lighting.ColorShift_Top = Color3.fromRGB(0, 0, 0)
+	Lighting.ColorShift_Bottom = Color3.fromRGB(0, 0, 0)
 end
 
 local function apply()
 	if not active() then
 		grade.Enabled = false
 		bloom.Enabled = false
+		if wasActive then
+			wasActive = false
+			restoreDaylight()
+		end
 		return
 	end
+	wasActive = true
 	grade.Enabled = true
 	bloom.Enabled = true
-	local mode = state:GetAttribute("Level2_LightingMode") or "NORMAL"
-	Lighting.ClockTime = 10.7
-	Lighting.FogColor = Color3.fromRGB(207, 205, 178)
-	Lighting.FogStart = 95
-	Lighting.FogEnd = mode == "EXIT_OPEN" and 650 or 520
-	Lighting.EnvironmentDiffuseScale = .5
-	Lighting.EnvironmentSpecularScale = .6
+	local mode = state and state:GetAttribute("Level2_LightingMode") or "NORMAL"
+	-- Bright, airy, NO fog. High ambient is what makes the light feel like it
+	-- bounces around the tiled rooms; the skylight SurfaceLights (Shadows on)
+	-- paint the sun shafts on top of it.
+	Lighting.ClockTime = 12
+	Lighting.FogColor = Color3.fromRGB(235, 230, 208)
+	Lighting.FogStart = 100000
+	Lighting.FogEnd = 100000
+	Lighting.EnvironmentDiffuseScale = 1
+	Lighting.EnvironmentSpecularScale = 1
 	Lighting.GlobalShadows = true
-	Lighting.ColorShift_Top = Color3.fromRGB(255, 247, 213)
-	Lighting.ColorShift_Bottom = Color3.fromRGB(70, 85, 77)
+	Lighting.ColorShift_Top = Color3.fromRGB(255, 250, 224)
+	Lighting.ColorShift_Bottom = Color3.fromRGB(196, 206, 188)
 	if mode == "EXIT_OPEN" then
-		Lighting.Brightness = 1.85
-		Lighting.Ambient = Color3.fromRGB(112, 112, 96)
-		Lighting.OutdoorAmbient = Color3.fromRGB(88, 92, 82)
-		grade.Brightness = .035
-		grade.Contrast = .035
-		grade.Saturation = -.05
-		grade.TintColor = Color3.fromRGB(231, 255, 235)
-		bloom.Intensity = .2
+		Lighting.Brightness = 2.6
+		Lighting.Ambient = Color3.fromRGB(158, 160, 140)
+		Lighting.OutdoorAmbient = Color3.fromRGB(150, 154, 136)
+		grade.Brightness = .07
+		grade.Contrast = .03
+		grade.Saturation = .03
+		grade.TintColor = Color3.fromRGB(238, 255, 240)
+		bloom.Intensity = .3
 	else
-		Lighting.Brightness = 1.62
-		Lighting.Ambient = Color3.fromRGB(99, 99, 85)
-		Lighting.OutdoorAmbient = Color3.fromRGB(78, 82, 74)
-		grade.Brightness = .015
-		grade.Contrast = .055
-		grade.Saturation = -.08
-		grade.TintColor = Color3.fromRGB(247, 239, 203)
-		bloom.Intensity = .13
+		Lighting.Brightness = 2.4
+		Lighting.Ambient = Color3.fromRGB(150, 146, 126)
+		Lighting.OutdoorAmbient = Color3.fromRGB(140, 140, 120)
+		grade.Brightness = .05
+		grade.Contrast = .03
+		grade.Saturation = .02
+		grade.TintColor = Color3.fromRGB(255, 248, 222)
+		bloom.Intensity = .26
 	end
-	bloom.Size = 25
-	bloom.Threshold = 1.15
+	bloom.Size = 30
+	bloom.Threshold = 1.05
 	lastApplied = os.clock()
 end
 
 workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(apply)
 workspace:GetAttributeChangedSignal("Level2LightingOwnedByController"):Connect(apply)
 player:GetAttributeChangedSignal("InRound"):Connect(apply)
-state:GetAttributeChangedSignal("Level2_LightingMode"):Connect(apply)
+player:GetAttributeChangedSignal("Escaped"):Connect(apply)
+if state then
+	state:GetAttributeChangedSignal("Level2_LightingMode"):Connect(apply)
+end
 RunService.Heartbeat:Connect(function()
 	if active() and os.clock() - lastApplied > .75 then apply() end
 end)

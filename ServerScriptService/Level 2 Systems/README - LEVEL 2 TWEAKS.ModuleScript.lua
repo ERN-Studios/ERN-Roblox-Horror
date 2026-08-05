@@ -1,0 +1,65 @@
+-- ╔══════════════════════════════════════════════════════════════════════╗
+-- ║  LEVEL 2 — SUNKEN LEISURE COMPLEX — WHERE TO TWEAK WHAT              ║
+-- ╚══════════════════════════════════════════════════════════════════════╝
+--
+-- The whole level is generated fresh each round from a seed. Nothing about
+-- the world is hand-placed, so every tweak is a value in one of the files
+-- below, all sitting next to this README in "Level 2 Systems".
+--
+-- ── THE FILES ───────────────────────────────────────────────────────────
+--  Level 2 Configuration        ← 95% of tweaks happen HERE (see below)
+--  Level 2 Layout Generator     ← how the floor plan is carved (BSP)
+--  Level 2 World Builder        ← how the plan becomes parts/water/slides
+--  Level 2 Objective Controller ← pumps → drains → pressure doors → escape
+--  Level 2 Round Adapter        ← Build/Cleanup, lobby parking, terrain
+--  (ServerScriptService.Level2Generator is just the doorway GameManager
+--   calls — never needs editing.)
+--
+-- ── QUICK TWEAKS (all in Level 2 Configuration) ─────────────────────────
+--  World size            ComplexExtent (1400). Bigger = more halls.
+--  Room sizes            MinimumLeafSize / MaximumSplitDepth / EarlyStopChance
+--  Water depths          ShallowPoolDepth / DeepPoolDepth / SlidePoolDepth
+--  Ceiling heights       WallHeight / SlideHallHeight / GrandSlideHallHeight
+--  Colors                Configuration.Colors (tiles) / KidsColors (3 kids
+--                        colors) / SlideColors (flume plastic)
+--  Brightness of lights  CeilingPanelBrightness / SkylightBrightness
+--  Slides                SlidesPerHall / SlideTubeRadius
+--  Kids wing size        KidsAreaRoomCount
+--
+-- ── TESTING A SPECIFIC LAYOUT ───────────────────────────────────────────
+--  Set workspace attribute "Level2Seed" to any number BEFORE launching a
+--  round: same seed = identical world every time. Clear it for random.
+--  Dev keys (whitelisted): B esp+fast queue · V noclip fly · M dev phone.
+--
+-- ── SUNLIGHT / MOOD ─────────────────────────────────────────────────────
+--  StarterPlayerScripts."Level 2 Lighting Controller" owns the in-round
+--  look (brightness, fog, tint). The sun is REAL: it comes through the
+--  glass sky roof and the skylight slots (both CastShadow = false), so if
+--  a room feels dark, first check its ceiling slots, then raise Ambient
+--  in the lighting controller.
+--
+-- ── SOUND ───────────────────────────────────────────────────────────────
+--  StarterPlayerScripts."Level 2 Sound Controller" plays everything.
+--  Asset ids go into ReplicatedStorage["Level 2 Sound Library"] as
+--  StringValue values — paste the id, done. Empty slot = silent. Cues the
+--  server already fires: "Level 2 Pump Start", "Level 2 Drain Rush",
+--  "Level 2 Pressure Door", "Level 2 Slide Rush".
+--  Level 1 has the same setup: "Level 1 Sound Controller" +
+--  ReplicatedStorage["Level 1 Sound Library"].
+--
+-- ── ENTITIES (RESERVED, NOT BUILT) ──────────────────────────────────────
+--  Space for 1-2 hostiles is already laid out:
+--   • Configuration.Entities — two empty profile stubs (A and B).
+--   • Every generated world contains "Level 2 Entity Nodes" with
+--     "Level 2 Entity Den A Spawn", "Level 2 Entity Den B Spawn" and four
+--     patrol nodes per hall. Doorways are 30x19 so a big rig fits.
+--  Nothing reads these yet — they are the agreed anchor points for
+--  whoever builds the entity.
+--
+-- ── IF SOMETHING BREAKS ─────────────────────────────────────────────────
+--  The complete PREVIOUS Level 2 (world + entity scripts + its clients)
+--  is preserved untouched in ServerStorage.Level2Backup_20260805, and the
+--  pre-rename copy of this stack is in the git history. Moving the backup
+--  scripts back to their old parents restores the old level.
+
+return {}

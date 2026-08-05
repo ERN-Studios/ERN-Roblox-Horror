@@ -76,11 +76,11 @@ end
 local function refreshValveHighlights()
 	clearValveHighlights()
 	if not valveVisionEnabled or workspace:GetAttribute("SelectedLevel") ~= 2 then return end
-	local world = workspace:FindFirstChild("PoolroomsLevel2")
-	local objectives = world and world:FindFirstChild("Objectives")
+	local world = workspace:FindFirstChild("Level 2 Generated World")
+	local objectives = world and world:FindFirstChild("Level 2 Objectives")
 	if not objectives then return end
 	for _, valve in ipairs(objectives:GetChildren()) do
-		if valve:IsA("Model") and valve.Name:match("^PressureValve") then
+		if valve:IsA("Model") and valve.Name:match("^Level 2 Pump Station") then
 			local color = valve:GetAttribute("VisionColor") or Color3.fromRGB(80, 220, 180)
 			local highlight = Instance.new("Highlight")
 			highlight.Name = "ValveVisionHighlight"
@@ -108,15 +108,14 @@ workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(function()
 end)
 
 workspace.ChildAdded:Connect(function(child)
-	if child.Name == "PoolroomsLevel2" and valveVisionEnabled then
+	if child.Name == "Level 2 Generated World" and valveVisionEnabled then
 		task.wait(.5)
 		refreshValveHighlights()
 	end
 end)
 
 event.OnClientEvent:Connect(function(line1, line2, finalLine)
-	local alertLevel = workspace:GetAttribute("SelectedLevel")
-	if alertLevel ~= 2 and alertLevel ~= 3 then return end
+	if workspace:GetAttribute("SelectedLevel") ~= 2 then return end
 	if player:GetAttribute("InRound") ~= true then return end
 
 	first.Text, second.Text, run.Text = line1, line2, finalLine

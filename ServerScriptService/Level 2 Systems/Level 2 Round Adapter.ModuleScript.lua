@@ -1,3 +1,8 @@
+-- Level 2 Round Adapter
+-- The Build/Cleanup surface GameManager talks to, and the owner of everything
+-- Level 2 touches outside its own world model: terrain, the Level 1 runtime
+-- scripts, the compatibility markers, and the replicated state folder.
+
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
@@ -13,13 +18,43 @@ local activeManifest
 local generation = 0
 local levelOneScriptStates
 local storedLevelOneEntity
+local storedServerLobby
 
-local LEGACY_LEVEL_TWO_SCRIPTS = {
-	"Level2EntityAI",
-	"Level2EntityAnimation",
-	"Level2EntityKill",
-}
+local STORED_LOBBY_NAME = "Level 2 Stored Server Lobby"
 
+-- Only the level should be loaded during a round: the persistent tunnel lobby
+-- is parked in ServerStorage while Level 2 is live and restored on cleanup,
+-- the same trick Level 2's original generator used. GameManager's station
+-- references stay valid because it is the same instance moving parents.
+local function storeLobby()
+	local lobby = workspace:FindFirstChild("ServerLobby")
+	if lobby then
+		storedServerLobby = lobby
+		lobby.Name = STORED_LOBBY_NAME
+		lobby.Parent = ServerStorage
+	end
+end
+
+local function restoreLobby()
+	local stored = storedServerLobby
+	if not (stored and stored.Parent == ServerStorage) then
+		stored = ServerStorage:FindFirstChild(STORED_LOBBY_NAME)
+	end
+	storedServerLobby = nil
+	if not stored then return end
+	local existing = workspace:FindFirstChild("ServerLobby")
+	if existing then
+		-- GameManager already rebuilt a live lobby; the stored copy is stale.
+		stored:Destroy()
+		return
+	end
+	stored.Name = "ServerLobby"
+	stored.Parent = workspace
+end
+
+-- Level 1 owns these; they must be off while Level 2 is live or PuzzleManager
+-- builds the fuse puzzle inside the poolrooms and EntityAI pathfinds through
+-- geometry it does not understand.
 local LEVEL_ONE_RUNTIME_SCRIPTS = {
 	"EntityAI",
 	"EntityAnimation",
@@ -27,15 +62,41 @@ local LEVEL_ONE_RUNTIME_SCRIPTS = {
 	"PuzzleManager",
 }
 
+-- The pre-rewrite poolrooms entity scripts. They normally live only in the
+-- ServerStorage backup now; this list is harmless insurance in case someone
+-- restores them without wiring them up.
+local LEGACY_POOLROOMS_SCRIPTS = {
+	"Level2EntityAI",
+	"Level2EntityAnimation",
+	"Level2EntityKill",
+}
+
 local function getState()
-	return ReplicatedStorage:WaitForChild("Level 2 State")
+	local existing = ReplicatedStorage:FindFirstChild("Level 2 State")
+	if existing and existing:IsA("Folder") then return existing end
+	if existing then existing:Destroy() end
+	local created = Instance.new("Folder")
+	created.Name = "Level 2 State"
+	created.Parent = ReplicatedStorage
+	return created
+end
+
+local function setScriptsEnabled(names, enabled)
+	for _, name in ipairs(names) do
+		local object = ServerScriptService:FindFirstChild(name)
+		if object and object:IsA("BaseScript") then
+			object.Enabled = enabled
+		end
+	end
 end
 
 local function destroyCompatibilityObjects()
 	for _, name in ipairs({"Elevator", "MazeStart", "ElevatorSpawn", "EntityStart"}) do
-		local object = workspace:FindFirstChild(name)
-		if object and object:GetAttribute("Level2_CompatibilityMarker") == true then object:Destroy()
-		elseif object and name == "Elevator" and object:FindFirstChild("Level 2 Arrival Elevator Shell", true) then object:Destroy() end
+		for _, object in ipairs(workspace:GetChildren()) do
+			if object.Name == name and object:GetAttribute("Level2_CompatibilityMarker") == true then
+				object:Destroy()
+			end
+		end
 	end
 end
 
@@ -71,8 +132,10 @@ local function restoreLevelOneRuntime()
 end
 
 local function clearOwnedTerrain(manifest)
-	local center = manifest and manifest.TerrainCenter or Vector3.new(0, -8, 0)
-	local size = manifest and manifest.TerrainSize or Vector3.new(1000, 100, 1000)
+	local extent = Configuration.ComplexExtent
+	local center = manifest and manifest.TerrainCenter or Vector3.new(
+		Configuration.WorldCenterX or 0, -16, Configuration.WorldCenterZ or 0)
+	local size = manifest and manifest.TerrainSize or Vector3.new(extent + 700, 200, extent + 700)
 	Terrain:FillBlock(CFrame.new(center), size, Enum.Material.Air)
 end
 
@@ -80,66 +143,105 @@ function Adapter.Cleanup()
 	ObjectiveController.Stop()
 	local state = getState()
 	state:SetAttribute("Level2_Phase", "CLEANING")
+
 	clearOwnedTerrain(activeManifest)
-	if activeManifest and activeManifest.World and activeManifest.World.Parent then activeManifest.World:Destroy() end
-	activeManifest = nil
-	for _, name in ipairs({"Level 2 Generated World", "PoolroomsLevel2"}) do
-		local object = workspace:FindFirstChild(name)
-		if object then object:Destroy() end
+	if activeManifest and activeManifest.World and activeManifest.World.Parent then
+		activeManifest.World:Destroy()
 	end
+	activeManifest = nil
+
+	local stale = workspace:FindFirstChild("Level 2 Generated World")
+	while stale do
+		stale:Destroy()
+		stale = workspace:FindFirstChild("Level 2 Generated World")
+	end
+	-- A world saved by the PRE-rewrite poolrooms build.
+	local legacy = workspace:FindFirstChild("PoolroomsLevel2")
+	if legacy then legacy:Destroy() end
+
 	destroyCompatibilityObjects()
+	restoreLobby()
 	restoreLevelOneRuntime()
+
 	workspace:SetAttribute("WorldGenerated", false)
-	workspace:SetAttribute("Level2Valves", 0)
+	workspace:SetAttribute("Level2Pumps", 0)
+	workspace:SetAttribute("Level2PumpGoal", 0)
 	workspace:SetAttribute("Level2ExitPowered", false)
-	workspace:SetAttribute("ValveColorWashUntil", 0)
-	workspace:SetAttribute("ValveBlackoutActive", false)
 	workspace:SetAttribute("Level2LightingOwnedByController", false)
+	-- Hand the world back to Level 1, so GameManager's boot-time recovery does
+	-- not see a stale SelectedLevel == 2 and try to clean up again.
+	if workspace:GetAttribute("SelectedLevel") == 2 then
+		workspace:SetAttribute("SelectedLevel", 1)
+	end
+
 	state:SetAttribute("Level2_Phase", "IDLE")
 	state:SetAttribute("Level2_LightingMode", "OFF")
-	state:SetAttribute("Level2_ValveProgress", 0)
+	state:SetAttribute("Level2_PumpProgress", 0)
 end
 
 function Adapter.Build()
 	Adapter.Cleanup()
 	generation += 1
+
 	local state = getState()
 	local requestedSeed = workspace:GetAttribute("Level2Seed")
 	if type(requestedSeed) ~= "number" then
 		requestedSeed = DateTime.now().UnixTimestampMillis % 2147483647
 		workspace:SetAttribute("Level2Seed", requestedSeed)
 	end
+
 	state:SetAttribute("Level2_Phase", "GENERATING_LAYOUT")
 	state:SetAttribute("Level2_Generation", generation)
 	state:SetAttribute("Level2_Seed", requestedSeed)
 	workspace:SetAttribute("WorldGenerated", false)
 	workspace:SetAttribute("LoadStage", "LEVEL_2_GENERATING_LAYOUT")
 	workspace:SetAttribute("Level2LightingOwnedByController", true)
-	workspace:SetAttribute("ValveColorWashUntil", 0)
-	workspace:SetAttribute("ValveBlackoutActive", false)
 
-	for _, name in ipairs(LEGACY_LEVEL_TWO_SCRIPTS) do
-		local object = ServerScriptService:FindFirstChild(name)
-		if object and object:IsA("BaseScript") then object.Enabled = false end
-	end
+	setScriptsEnabled(LEGACY_POOLROOMS_SCRIPTS, false)
 	isolateLevelOneRuntime()
 	clearOwnedTerrain(nil)
 
+	-- GameManager reads success only from whether this raises, so every failure
+	-- path must re-raise after cleaning up.
 	local success, result = xpcall(function()
 		local layout = LayoutGenerator.Generate(requestedSeed)
+
 		state:SetAttribute("Level2_Phase", "BUILDING_WORLD")
 		workspace:SetAttribute("LoadStage", "LEVEL_2_BUILDING_WORLD")
 		local manifest = WorldBuilder.Build(layout, generation)
 		activeManifest = manifest
+
+		-- Move everyone out of the lobby BEFORE parking it, or the floor
+		-- vanishes from under them and they fall into the void. The arrival
+		-- platform is solid ground; GameManager re-places participants on it
+		-- moments later anyway.
+		local Players = game:GetService("Players")
+		local arrivalPosition = manifest.Arrival.ElevatorSpawn.Position
+		local moved = 0
+		for _, player in ipairs(Players:GetPlayers()) do
+			local character = player.Character
+			local root = character and character:FindFirstChild("HumanoidRootPart")
+			if root then
+				moved += 1
+				character:PivotTo(CFrame.new(arrivalPosition
+					+ Vector3.new(((moved % 3) - 1) * 4, 4, math.floor(moved / 3) * 4)))
+			end
+		end
+		storeLobby()
+
 		state:SetAttribute("Level2_Phase", "READY")
 		state:SetAttribute("Level2_LightingMode", "NORMAL")
-		state:SetAttribute("Level2_ValveProgress", 0)
+		state:SetAttribute("Level2_PumpProgress", 0)
+		state:SetAttribute("Level2_HallCount", #layout.Halls)
+
 		ObjectiveController.Start(manifest, generation)
+
 		workspace:SetAttribute("SelectedLevel", 2)
 		workspace:SetAttribute("LoadStage", "READY")
 		workspace:SetAttribute("WorldGenerated", true)
 		return manifest.World
 	end, debug.traceback)
+
 	if not success then
 		Adapter.Cleanup()
 		workspace:SetAttribute("LoadStage", "WORLD_ERROR")

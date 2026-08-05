@@ -56,49 +56,37 @@ Colour-coded floor cables run from the elevator trunk to every fuse box (yellow)
 and lever (orange) in separate lanes — follow the wires to navigate. A cabin
 poster teaches the colour code during the elevator ride.
 
-## 🌊 Level 2 — Flooded Poolrooms (in progress)
+## 🩵 Level 2 — Sunken Leisure Complex (world done, entity pending)
 
-Hand-authored flooded poolrooms: pool halls, water channels, sunken galleries,
-curved flooded corridors — plus a secret party room for those who look.
+A bright, sunlit liminal poolrooms complex with its **own** generator — it
+shares only the tile texture and the water look with Level 1's palette of
+services. (The previous hand-authored Flooded Poolrooms level is preserved in
+`ServerStorage.Level2Backup_20260805`.)
 
-- **Objective:** open **3 pressure valves** (each triggers a 30 s blackout with a
-  flicker recovery), then escape through the **glossy green pool slide**.
-- **Two hostiles** (tag-driven, shared brain): the **PoolFoam** stalker and the
-  **PoolPipe** entity — pathfinding with waypoint gating, blackout burst
-  aggression, last-seen memory, stuck recovery, and real melee combat
-  (windup → impact → recovery), all in `Level2EntityController`.
-- Dedicated **water audio engine** in `SoundController`: loudness-normalized wade
-  takes, a sample-exact SFX sprite sheet, per-entity step/breathing/attack audio
-  with echo in the pipes. (Asset IDs are wired via attributes on the Studio side.)
-- Level 2 disables the Level 1 scripts while active and restores everything on
-  cleanup — including terrain water and the stored lobby.
-
-## 🩵 Level 3 — Sunken Leisure Complex (world in, entity pending)
-
-A second, larger poolrooms wing with its **own** generator — it shares only the
-tile texture and the terrain water look with Level 2, nothing structural.
-
-Where Level 2 is a uniform 6×6 grid of identical 92-stud cells carved by a maze
-walk, Level 3 is a **binary space partition** of one 1400-stud region:
-
-- **Halls of very different sizes** (typically 17–20 per run, up to a ~10×
-  spread in floor area) joined by real **corridors**, which is where the arched
-  flooded tunnels live. Per-hall ceiling heights, up to 96 studs.
-- **Slide halls** — three oversized rooms with a mezzanine deck near the ceiling,
-  a spiral stair up to it, and colored flumes curving back down into the water.
-- **Kids play area** — a contiguous block of 5 halls that are painted rather than
-  tiled (three colors total, adjacent rooms differ), with soft-play blocks, a
-  small flume and a ball pit.
-- **Objective:** start **3 pump stations**. Each one *drains* the flooded corridor
-  beside it — the terrain water is actually removed, so the space changes and a
-  new route opens. All three running unseals the **pressure doors** into the Grand
-  Slide Hall, where the exit flume sits on the **top deck**.
-- **Entity space is reserved but empty**: an entity den, per-hall patrol nodes,
-  and 30×19-stud doorways sized for a large rig. Nothing hunts you yet.
-
-Generation is seeded and deterministic (`workspace.Level3Seed`), builds in well
-under a second, and lives in `ServerScriptService."Level 3 Systems"` behind the
-same `Build()`/`Cleanup()` doorway Level 2 uses.
+- **Binary space partition** of a 1400-stud region: 17–20 halls of wildly
+  different sizes joined by flooded **arch-tunnel corridors** (a vaulted ring
+  every 11 studs). Water covers the floor **wall-to-wall** in every pool hall —
+  shallow wading in most, swimmably deep in others, with stairs descending
+  from every doorway.
+- **Real sunlight**: the outer roof is translucent glass (no shadow), hall
+  ceilings carry genuine skylight slots, and the in-round grade is bright and
+  fog-free. Colonnades and tiled columns rise straight out of the water.
+- **Slide halls** (3): a mezzanine deck near the ceiling, straight parallel
+  flumes into the water, and a **helix slide wrapping a column**. The grand
+  hall carries the exit flume to a sealed **Level 4 gateway** placeholder.
+- **Kids wing**: 5 contiguous painted (untiled) rooms in 3 colors, connected
+  wall-to-wall, with soft-play blocks, a mini slide and a raised paddling pool.
+- **Objective:** start **3 pump stations** — each drains a flooded corridor
+  (terrain water actually removed) — then the pressure doors into the grand
+  hall unseal; ride the exit flume from the top deck.
+- **Sound**: `Level 2 Sound Controller` + StringValue slots in
+  `ReplicatedStorage["Level 2 Sound Library"]` (paste an asset id, done).
+  Level 1 has the same setup. Server fires pump/drain/door/slide cues.
+- **Entity space reserved, nothing spawns yet**: two den markers (A deepest,
+  B far from A), 4 patrol nodes per hall, 30×19 doorways, and empty profile
+  stubs in `Configuration.Entities`.
+- Tweak guide for collaborators: `ServerScriptService."Level 2 Systems".README
+  - LEVEL 2 TWEAKS`. Force a layout with the `Level2Seed` workspace attribute.
 
 ## ⌨️ Controls
 
@@ -125,9 +113,9 @@ ServerScriptService/
   MazeGenerator.Script.lua          Level 1: maze, pits, elevator, lights, decor
   PuzzleManager.Script.lua          Level 1: fuses → boxes → levers → exit
   EntityAI / EntityAnimation / EntityKill      Level 1 entity (AI, clips, kill)
-  Level2Generator.ModuleScript      Level 2: poolrooms world + valves + slide
-  Level2EntityController/Profiles/Navigation   Level 2 entity brain (modules)
-  Level2MeshyAnimationPlayer        embedded-keyframe animation fallback
+  Level2Generator.ModuleScript      Level 2: doorway into "Level 2 Systems"
+  Level 2 Systems/                  Level 2: config, BSP layout, world builder,
+                                    pump objective, round adapter, tweak README
   FlashlightSync / AvatarNormalize / NoiseRegistry   shared services
 StarterPlayer/
   StarterCharacter/                 hazmat gameplay rig (+ Animate)
@@ -175,13 +163,11 @@ Lock down / remove before publishing.
 
 - [x] **Level 1 — done** (maze, entity, puzzle, escape flow, cinematic kill,
       full audio/animation set, lobby + matchmaking around it)
-- [ ] **Level 2 — finish** (world + entity brain are in; remaining: entity
-      audio module + kill camera/jumpscare parity with Level 1, published
-      animation hookup on the Studio templates, noise-hearing wiring,
-      wander-node usage, general playtest pass)
-- [ ] **Level 3 — build** (world generator, objective and lobby bay 3 are in;
-      remaining: a hostile for the reserved entity den, level-3 lighting/audio
-      clients, and a playtest pass)
+- [ ] **Level 2 — Sunken Leisure Complex** (world, objective, lighting and
+      sound scaffolding are in; remaining: 1–2 hostiles for the reserved dens,
+      sound-library asset ids, and a playtest pass. The previous Flooded
+      Poolrooms build is parked in `ServerStorage.Level2Backup_20260805`.)
+- [ ] **Level 3 — build** (bay 3 is sealed again and waiting)
 - [ ] **Pre-publish pass**: restrict/remove DevCheats (key on UserId, not name),
       strip Studio-only test hooks, mold/stain texture slots, final audio slots
       (`LUNGE_SOUND`, `ENTITY_STEP_RUN`, `IDLE_SOUNDS`)

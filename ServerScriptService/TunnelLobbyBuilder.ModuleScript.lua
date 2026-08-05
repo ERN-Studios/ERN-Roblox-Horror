@@ -991,7 +991,7 @@ function Builder.Build(center)
 	local levelDefs = {
 		{level = 1, side = -1, z = -80, active = true},
 		{level = 2, side = 1, z = -80, active = true},
-		{level = 3, side = -1, z = 0, active = true},
+		{level = 3, side = -1, z = 0, active = false},
 		{level = 4, side = 1, z = 0, active = false},
 		{level = 5, side = -1, z = 80, active = false},
 		{level = 6, side = 1, z = 80, active = false},
