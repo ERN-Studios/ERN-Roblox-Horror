@@ -7,6 +7,24 @@ local TeleportService = game:GetService("TeleportService")
 local RunService = game:GetService("RunService")
 local StarterPlayer = game:GetService("StarterPlayer")
 local ServerStorage = game:GetService("ServerStorage")
+local Debris = game:GetService("Debris")
+local PhysicsService = game:GetService("PhysicsService")
+local Lighting = game:GetService("Lighting")
+local DevAccess = require(RS:WaitForChild("DevAccess"))
+
+local zyntraLevelCompleted = ServerStorage:FindFirstChild("ZyntraLevelCompleted")
+if not zyntraLevelCompleted then
+ zyntraLevelCompleted = Instance.new("BindableEvent")
+ zyntraLevelCompleted.Name = "ZyntraLevelCompleted"
+ zyntraLevelCompleted.Parent = ServerStorage
+end
+local zyntraReentry = ServerStorage:FindFirstChild("ZyntraReentry")
+if not zyntraReentry then
+ zyntraReentry = Instance.new("BindableFunction")
+ zyntraReentry.Name = "ZyntraReentry"
+ zyntraReentry.Parent = ServerStorage
+end
+zyntraReentry.OnInvoke = function() return false end
 
 local remotes = RS:WaitForChild("Remotes")
 local status = remotes:WaitForChild("RoundStatus")
@@ -16,10 +34,15 @@ if not queueConfig then
  queueConfig.Name = "ConfigureQueue"
  queueConfig.Parent = remotes
 end
+local dropGlowstick = remotes:FindFirstChild("DropGlowstick")
+if not dropGlowstick then
+ dropGlowstick = Instance.new("RemoteEvent")
+ dropGlowstick.Name = "DropGlowstick"
+ dropGlowstick.Parent = remotes
+end
 
 local QUEUE_TIME = 10
 local FAST_QUEUE_TIME = 3
-local DEV_QUEUE_NAMES = {mikkelczar = true, LaverSneglen = true}
 local MAX_PLAYERS_PER_STATION = 6
 local ELEVATOR_TIME = 19
 local LOBBY_CENTER = Vector3.new(0, 30, -760)
@@ -33,14 +56,73 @@ workspace:SetAttribute("RoundActive", false)
 local IS_RESERVED_ROUND_SERVER = game.PrivateServerId ~= "" and game.PrivateServerOwnerId == 0
 local IS_STUDIO = RunService:IsStudio()
 
--- B keeps its existing ESP toggle on the client and also sends this
--- server-authoritative queue-speed toggle for whitelisted developers.
+-- Levels that own a world module with a Build/Cleanup surface. Level 1 is the
+-- attribute-driven MazeGenerator and is deliberately not listed here.
+local LEVEL_GENERATORS = {
+ [2] = "Level2Generator",
+ [3] = "Level3Generator",
+}
+local MAX_LEVEL = 3
+
+-- Always-on server authority for every developer command. Unlike the Level 1
+-- entity script, GameManager remains active in both levels.
 local devControl = remotes:WaitForChild("DevControl")
+local NOCLIP_GROUP = "DevNoclip"
+local noclipState = {}
+pcall(function() PhysicsService:RegisterCollisionGroup(NOCLIP_GROUP) end)
+for _, group in ipairs(PhysicsService:GetRegisteredCollisionGroups()) do
+ pcall(function()
+  PhysicsService:CollisionGroupSetCollidable(NOCLIP_GROUP, group.name, false)
+ end)
+end
+
+local function setServerNoclip(player, enabled)
+ local char = player.Character
+ if not char then return end
+ if enabled then
+  if noclipState[player] then return end
+  local state = {parts = {}, added = nil}
+  noclipState[player] = state
+  local function disablePart(part)
+   if not part:IsA("BasePart") then return end
+   if state.parts[part] == nil then
+    state.parts[part] = {group = part.CollisionGroup, collide = part.CanCollide}
+   end
+   part.CollisionGroup = NOCLIP_GROUP
+   part.CanCollide = false
+  end
+  for _, part in ipairs(char:GetDescendants()) do disablePart(part) end
+  state.added = char.DescendantAdded:Connect(disablePart)
+ else
+  local state = noclipState[player]
+  if not state then return end
+  noclipState[player] = nil
+  if state.added then state.added:Disconnect() end
+  for part, original in pairs(state.parts) do
+   if part.Parent then
+    part.CollisionGroup = original.group
+    part.CanCollide = original.collide
+   end
+  end
+ end
+end
+
 devControl.OnServerEvent:Connect(function(player, command, enabled)
- if IS_RESERVED_ROUND_SERVER or command ~= "fastQueue" then return end
- if not DEV_QUEUE_NAMES[player.Name] then return end
- player:SetAttribute("DevFastQueue", enabled == true and true or nil)
- print("[GameManager] 3-second queue", enabled == true and "ON" or "OFF", "for", player.Name)
+ if not DevAccess.IsAllowed(player) then return end
+ if command == "fastQueue" then
+  if IS_RESERVED_ROUND_SERVER then return end
+  player:SetAttribute("DevFastQueue", enabled == true and true or nil)
+  print("[GameManager] 3-second queue", enabled == true and "ON" or "OFF", "for", player.Name)
+ elseif command == "pauseEntity" then
+  workspace:SetAttribute("EntityPaused", enabled == true)
+  print("[GameManager] all entities", enabled == true and "PAUSED" or "resumed", "by", player.Name)
+ elseif command == "immunePush" then
+  player:SetAttribute("DevPushImmune", enabled == true and true or nil)
+  print("[GameManager] yell push-immunity", enabled == true and "ON" or "OFF", "for", player.Name)
+ elseif command == "noclip" then
+  setServerNoclip(player, enabled == true)
+  print("[GameManager] server noclip", enabled == true and "ON" or "OFF", "for", player.Name)
+ end
 end)
 
 local inRound = {}
@@ -49,6 +131,110 @@ local worldReady = false
 local activeLevel = 1
 local elevatorApi = nil
 local mazeStart, entityStart, entity
+
+local GLOWSTICK_COOLDOWN = 5
+local GLOWSTICK_COLORS = {
+ Color3.fromRGB(65, 145, 255),  -- player 1: blue
+ Color3.fromRGB(255, 65, 65),   -- player 2: red
+ Color3.fromRGB(70, 235, 105),  -- player 3: green
+ Color3.fromRGB(255, 220, 55),  -- player 4: yellow
+ Color3.fromRGB(190, 90, 255),  -- player 5: purple
+ Color3.fromRGB(55, 235, 225),  -- player 6: turquoise
+}
+local lastGlowstickDrop = {}
+
+local function glowstickFolder()
+ local folder = workspace:FindFirstChild("DroppedGlowsticks")
+ if not folder then
+  folder = Instance.new("Folder")
+  folder.Name = "DroppedGlowsticks"
+  folder.Parent = workspace
+ end
+ return folder
+end
+
+local function clearGlowsticks()
+ local folder = workspace:FindFirstChild("DroppedGlowsticks")
+ if folder then folder:Destroy() end
+ table.clear(lastGlowstickDrop)
+end
+
+local function assignGlowstickSlots(participants, suppliedSlots)
+ for index, player in ipairs(participants) do
+  local deadline = os.clock() + 10
+  while player.Parent and player:GetAttribute("ZyntraProfileLoaded") ~= true and os.clock() < deadline do
+   task.wait(0.1)
+  end
+  local supplied = suppliedSlots and suppliedSlots[tostring(player.UserId)]
+  local slot = math.clamp(math.floor(tonumber(supplied) or index), 1, #GLOWSTICK_COLORS)
+  local customColor = player:GetAttribute("ZyntraOwnsCosmeticEquipment") == true
+   and player:GetAttribute("ZyntraGlowstickColor") or nil
+  player:SetAttribute("GlowstickSlot", slot)
+  player:SetAttribute("GlowstickColor", typeof(customColor) == "Color3" and customColor or GLOWSTICK_COLORS[slot])
+ end
+end
+
+dropGlowstick.OnServerEvent:Connect(function(player)
+ if not inRound[player] or player:GetAttribute("Escaped") == true then return end
+ local now = os.clock()
+ if now - (lastGlowstickDrop[player] or -math.huge) < GLOWSTICK_COOLDOWN then return end
+ local character = player.Character
+ local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+ local root = character and character:FindFirstChild("HumanoidRootPart")
+ if not (humanoid and humanoid.Health > 0 and root) then return end
+ lastGlowstickDrop[player] = now
+
+ local slot = math.clamp(math.floor(tonumber(player:GetAttribute("GlowstickSlot")) or 1),
+  1, #GLOWSTICK_COLORS)
+ local selectedColor = player:GetAttribute("GlowstickColor")
+ local color = typeof(selectedColor) == "Color3" and selectedColor or GLOWSTICK_COLORS[slot]
+ local look = Vector3.new(root.CFrame.LookVector.X, 0, root.CFrame.LookVector.Z)
+ look = look.Magnitude > 0.01 and look.Unit or Vector3.new(0, 0, -1)
+ local position = root.Position + look * 3 + Vector3.new(0, 0.3, 0)
+
+ local stick = Instance.new("Part")
+ stick.Name = ("Glowstick_P%d_%s"):format(slot, player.Name)
+ stick.Shape = Enum.PartType.Cylinder
+ stick.Size = Vector3.new(2.35, 0.34, 0.34)
+ stick.Material = Enum.Material.Neon
+ stick.Color = color
+ stick.Anchored = false
+ stick.CanCollide = true
+ stick.CanTouch = false
+ stick.CanQuery = true
+ stick.CustomPhysicalProperties = PhysicalProperties.new(0.5, 0.72, 0.2, 1, 1)
+ stick.CFrame = CFrame.lookAt(position, position + look) * CFrame.Angles(0, math.pi / 2, 0)
+ stick:SetAttribute("OwnerUserId", player.UserId)
+ stick:SetAttribute("GlowstickSlot", slot)
+ stick.Parent = glowstickFolder()
+
+ local light = Instance.new("PointLight")
+ light.Name = "Glow"
+ light.Color = color
+ light.Brightness = 1.15
+ light.Range = 15
+ light.Shadows = false
+ light.Parent = stick
+ local a0 = Instance.new("Attachment"); a0.Position = Vector3.new(-1.05, 0, 0); a0.Parent = stick
+ local a1 = Instance.new("Attachment"); a1.Position = Vector3.new(1.05, 0, 0); a1.Parent = stick
+ local trail = Instance.new("Trail")
+ trail.Attachment0, trail.Attachment1 = a0, a1
+ trail.Color = ColorSequence.new(color)
+ trail.Lifetime = 0.18
+ trail.MinLength = 0.1
+ trail.LightEmission = 1
+ trail.Transparency = NumberSequence.new({
+  NumberSequenceKeypoint.new(0, 0.35), NumberSequenceKeypoint.new(1, 1),
+ })
+ trail.Parent = stick
+
+ stick.AssemblyLinearVelocity = look * 8 + Vector3.new(0, 2.5, 0)
+ stick.AssemblyAngularVelocity = Vector3.new(math.random(-5, 5), math.random(-8, 8), math.random(-5, 5))
+ pcall(function() stick:SetNetworkOwner(nil) end)
+ -- Safety cleanup only; ordinary matches end long before this, so sticks remain
+ -- useful breadcrumbs for the whole round.
+ Debris:AddItem(stick, 20 * 60)
+end)
 
 -- StarterPlayer contains the project's gameplay StarterCharacter, so ordinary
 -- LoadCharacterAsync spawns that rig. Lobby players instead load from their own
@@ -130,6 +316,37 @@ local function buildLobby()
  return require(script.Parent:WaitForChild("TunnelLobbyBuilder")).Build(LOBBY_CENTER)
 end
 
+-- Recover automatically if a generated world was accidentally saved into the
+-- place from Edit mode. Without this, Level 1 builds its maze on top of the
+-- saved level while its Entity and puzzle scripts remain stored/disabled.
+local function sanitizePersistedLevelState()
+ local selected = workspace:GetAttribute("SelectedLevel")
+ local stale = {}
+ if workspace:FindFirstChild("PoolroomsLevel2") ~= nil
+  or workspace:FindFirstChild("Level 2 Generated World") ~= nil
+  or ServerStorage:FindFirstChild("StoredLevel1Entity") ~= nil
+  or ServerStorage:FindFirstChild("StoredServerLobby") ~= nil
+  or selected == 2 then
+  stale[#stale + 1] = 2
+ end
+ if workspace:FindFirstChild("Level 3 Generated World") ~= nil or selected == 3 then
+  stale[#stale + 1] = 3
+ end
+ if #stale == 0 then return end
+
+ for _, level in ipairs(stale) do
+  local ok, err = pcall(function()
+   require(script.Parent:WaitForChild(LEVEL_GENERATORS[level])).Cleanup()
+  end)
+  if ok then
+   warn("[GameManager] Recovered a persisted Level " .. level .. " edit-state before lobby startup")
+  else
+   warn("[GameManager] Could not recover persisted Level " .. level .. " state: " .. tostring(err))
+  end
+ end
+end
+
+sanitizePersistedLevelState()
 local lobbyModel, lobbySpawn, lobbyStations = buildLobby()
 
 local function setStationDisplay(station, main, secondary, color)
@@ -217,6 +434,8 @@ local function setupPlayer(player)
  inRound[player] = nil
  player:SetAttribute("InRound", false)
  player:SetAttribute("Escaped", nil)
+ player:SetAttribute("GlowstickSlot", nil)
+ player:SetAttribute("GlowstickColor", nil)
  player.CharacterAdded:Connect(function(char) onCharacter(player, char) end)
  task.defer(function()
   if not player.Parent then return end
@@ -227,7 +446,12 @@ end
 
 Players.PlayerAdded:Connect(setupPlayer)
 for _, player in ipairs(Players:GetPlayers()) do setupPlayer(player) end
-Players.PlayerRemoving:Connect(function(player) inRound[player] = nil end)
+Players.PlayerRemoving:Connect(function(player)
+ inRound[player] = nil
+ setServerNoclip(player, false)
+ noclipState[player] = nil
+ player:SetAttribute("DevPushImmune", nil)
+end)
 
 local function playerInsideZone(player, station)
  if inRound[player] or station.busy then return false end
@@ -368,18 +592,19 @@ local function connectElevator()
 end
 
 local function ensureWorld(group, requestedLevel)
- local level = math.clamp(math.floor(tonumber(requestedLevel) or 1), 1, 2)
+ local level = math.clamp(math.floor(tonumber(requestedLevel) or 1), 1, MAX_LEVEL)
  if worldReady and activeLevel == level then return true end
  activeLevel = level
  workspace:SetAttribute("SelectedLevel", level)
  workspace:SetAttribute("WorldGenerated", false)
- if level == 2 then
-  workspace:SetAttribute("LoadStage", "ENTERING_DRY_POOLROOMS")
+ local generatorName = LEVEL_GENERATORS[level]
+ if generatorName then
+  workspace:SetAttribute("LoadStage", level == 2 and "ENTERING_DRY_POOLROOMS" or "ENTERING_SUNKEN_COMPLEX")
   local ok, err = pcall(function()
-   require(script.Parent:WaitForChild("Level2Generator")).Build()
+   require(script.Parent:WaitForChild(generatorName)).Build()
   end)
   if not ok then
-   warn("GameManager: Level 2 generation failed: " .. tostring(err))
+   warn("GameManager: Level " .. level .. " generation failed: " .. tostring(err))
    workspace:SetAttribute("LoadStage", "WORLD_ERROR")
    return false
   end
@@ -401,15 +626,68 @@ local function ensureWorld(group, requestedLevel)
  workspace:SetAttribute("LoadStage", worldReady and "READY" or "WORLD_ERROR")
  return worldReady
 end
+
+local function cleanupLevelOneWorld()
+ workspace:SetAttribute("GenerateWorld", false)
+ workspace:SetAttribute("WorldGenerated", false)
+ workspace:SetAttribute("DecorReady", false)
+ workspace:SetAttribute("EntityPaused", false)
+ workspace:SetAttribute("ForcedPlazaCenter", nil)
+ workspace:SetAttribute("PlazaHeapCount", nil)
+ workspace:SetAttribute("MiniPropPileCount", nil)
+ workspace:SetAttribute("EntityObjectiveTarget", nil)
+ workspace:SetAttribute("EntityObjectiveStage", nil)
+ workspace:SetAttribute("ExitPos", nil)
+
+ for _, name in ipairs({
+  "PuzzleItems", "Decor", "PitZones", "Maze", "Elevator",
+  "ElevatorSpawn", "MazeStart", "EntityStart",
+ }) do
+  repeat
+   local generated = workspace:FindFirstChild(name)
+   if not generated then break end
+   generated:Destroy()
+  until false
+ end
+
+ local grade = Lighting:FindFirstChild("MongoGrade")
+ if grade then grade:Destroy() end
+ Lighting.Brightness = 2
+ Lighting.Ambient = Color3.fromRGB(92, 88, 70)
+ Lighting.OutdoorAmbient = Color3.fromRGB(105, 101, 82)
+ Lighting.FogStart = 100000
+ Lighting.FogEnd = 100000
+ Lighting.ClockTime = 14
+
+ worldReady = false
+ elevatorApi, mazeStart, entityStart, entity = nil, nil, nil, nil
+
+ -- Re-arm the one-shot generator for Studio/fallback servers. The public game
+ -- normally leaves this reserved server after a round, but a failed teleport
+ -- must still return to a clean lobby and remain capable of another test.
+ local generatorScript = script.Parent:FindFirstChild("MazeGenerator")
+ local entityScript = script.Parent:FindFirstChild("EntityAI")
+ if generatorScript and generatorScript:IsA("Script") then generatorScript.Disabled = true end
+ if entityScript and entityScript:IsA("Script") then entityScript.Disabled = true end
+ task.defer(function()
+  if generatorScript and generatorScript.Parent then generatorScript.Disabled = false end
+  if entityScript and entityScript.Parent then entityScript.Disabled = false end
+ end)
+end
+
 local function returnGroupToLobby(group)
+	clearGlowsticks()
 	-- LEVEL2 ROUND CLEANUP: restore the persistent lobby and release generated geometry.
-	if activeLevel == 2 then
+	local cleanupGenerator = LEVEL_GENERATORS[activeLevel]
+	if cleanupGenerator then
 		Players.CharacterAutoLoads = true
-		local ok, err = pcall(function() require(script.Parent:WaitForChild("Level2Generator")).Cleanup() end)
-		if not ok then warn("[GameManager] Level 2 cleanup failed:", err) end
+		local ok, err = pcall(function() require(script.Parent:WaitForChild(cleanupGenerator)).Cleanup() end)
+		if not ok then warn("[GameManager] Level " .. activeLevel .. " cleanup failed:", err) end
 		worldReady = false
 		activeLevel = 1
 		elevatorApi, mazeStart, entityStart, entity = nil, nil, nil, nil
+	else
+		cleanupLevelOneWorld()
 	end
  local live = {}
  for _, player in ipairs(group) do
@@ -432,23 +710,42 @@ local function returnGroupToLobby(group)
   inRound[player] = nil
   player:SetAttribute("InRound", false)
   player:SetAttribute("Escaped", nil)
+  player:SetAttribute("GlowstickSlot", nil)
+  player:SetAttribute("GlowstickColor", nil)
   loadLobbyCharacter(player)
   status:FireClient(player, "lobby")
  end
 end
 
 local function playRound(participants)
-	if activeLevel == 2 then Players.CharacterAutoLoads = false end
+	if LEVEL_GENERATORS[activeLevel] then Players.CharacterAutoLoads = false end
  local alive = {}
  local aliveCount = 0
  local conns = {}
+ local participantSet = {}
+ local reentryUsed = {}
+
+ local function hookLife(player, hum)
+  conns[#conns + 1] = hum.Died:Connect(function()
+   if alive[player] then
+    alive[player] = nil
+    aliveCount -= 1
+    local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    fireGroup(participants, "death", player.Name, root and root.Position or nil)
+   end
+  end)
+ end
+
  for _, player in ipairs(participants) do
+  participantSet[player] = true
+  player:SetAttribute("ZyntraReentryUsed", false)
   local char = player.Parent and player.Character
   local hum = char and char:FindFirstChildOfClass("Humanoid")
   local root = char and char:FindFirstChild("HumanoidRootPart")
   if hum and hum.Health > 0 and root then
    alive[player] = true
    aliveCount += 1
+   hookLife(player, hum)
   end
  end
 
@@ -459,25 +756,40 @@ local function playRound(participants)
   entity:PivotTo(CFrame.new(entityStart.CFrame.X, 0.5 + bottomToPivot, entityStart.CFrame.Z))
  end
 
- for _, player in ipairs(participants) do
-  local hum = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
-  if hum then
-   conns[#conns + 1] = hum.Died:Connect(function()
-    if alive[player] then
-     alive[player] = nil
-     aliveCount -= 1
-     local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-     fireGroup(participants, "death", player.Name, root and root.Position or nil)
-    end
-   end)
+ zyntraReentry.OnInvoke = function(player)
+  if not participantSet[player] or not player.Parent or alive[player] then return false end
+  if workspace:GetAttribute("RoundActive") ~= true or player:GetAttribute("Escaped") == true then return false end
+  if reentryUsed[player] or player:GetAttribute("ZyntraReentryUsed") == true then return false end
+  reentryUsed[player] = true
+  player:SetAttribute("ZyntraReentryUsed", true)
+  player:SetAttribute("Escaped", nil)
+  if not loadGameplayCharacter(player) then
+   reentryUsed[player] = nil
+   player:SetAttribute("ZyntraReentryUsed", false)
+   return false
   end
+  local char = player.Character or player.CharacterAdded:Wait()
+  local hum = char:FindFirstChildOfClass("Humanoid")
+  if not hum or hum.Health <= 0 or not placeSafelyInElevator(player, char) then
+   reentryUsed[player] = nil
+   player:SetAttribute("ZyntraReentryUsed", false)
+   return false
+  end
+  alive[player] = true
+  aliveCount += 1
+  hookLife(player, hum)
+  fireGroup(participants, "reentry", player.Name)
+  return true
  end
+
  conns[#conns + 1] = Players.PlayerRemoving:Connect(function(player)
+  participantSet[player] = nil
   if alive[player] then alive[player] = nil; aliveCount -= 1 end
  end)
 
  local function sendWipedPartyHome()
   workspace:SetAttribute("RoundActive", false)
+  zyntraReentry.OnInvoke = function() return false end
   for _, connection in ipairs(conns) do connection:Disconnect() end
   fireGroup(participants, "lose", 0, 0, #participants)
   task.wait(5)
@@ -504,9 +816,15 @@ local function playRound(participants)
  fireGroup(participants, "start")
 
  local result
+ local wipeDeadline
  while true do
   if workspace:GetAttribute("PuzzleWon") then result = "win" break end
-  if aliveCount <= 0 then result = "lose" break end
+  if aliveCount <= 0 then
+   wipeDeadline = wipeDeadline or (os.clock() + 15)
+   if os.clock() >= wipeDeadline then result = "lose" break end
+  else
+   wipeDeadline = nil
+  end
   local anyEscaped, anyInside = false, false
   for player in pairs(alive) do
    if player:GetAttribute("Escaped") == true then anyEscaped = true else anyInside = true end
@@ -516,6 +834,7 @@ local function playRound(participants)
  end
 
  workspace:SetAttribute("RoundActive", false)
+ zyntraReentry.OnInvoke = function() return false end
  workspace:SetAttribute("LightMode", "NORMAL")
  workspace:SetAttribute("FlickerBoost", 0)
  workspace:SetAttribute("EntitySpeedMul", 1)
@@ -528,6 +847,7 @@ local function playRound(participants)
  for _, participant in ipairs(participants) do
   if participant.Parent and participant:GetAttribute("Escaped") == true then
    escapedCount += 1
+   if result == "win" then zyntraLevelCompleted:Fire(participant, activeLevel) end
   end
  end
  fireGroup(participants, result, elapsed, escapedCount, #participants)
@@ -554,6 +874,8 @@ local function launchStation(station, participants)
   end
 
   roundBusy = true
+  clearGlowsticks()
+  assignGlowstickSlots(participants)
   for _, player in ipairs(participants) do
    inRound[player] = true
    player:SetAttribute("InRound", true)
@@ -579,6 +901,10 @@ local function launchStation(station, participants)
  end
 
  local options = Instance.new("TeleportOptions")
+ local glowstickSlots = {}
+ for index, player in ipairs(participants) do
+  glowstickSlots[tostring(player.UserId)] = index
+ end
  options.ShouldReserveServer = true
  options:SetTeleportData({
   BackroomsRound = true,
@@ -586,6 +912,7 @@ local function launchStation(station, participants)
   Station = station.index,
    Level = station.level or 1,
   LaunchToken = game.JobId .. ":" .. station.index .. ":" .. math.floor(os.clock() * 1000),
+  GlowstickSlots = glowstickSlots,
  })
  local ok, err = pcall(function()
   TeleportService:TeleportAsync(game.PlaceId, participants, options)
@@ -801,7 +1128,7 @@ if IS_RESERVED_ROUND_SERVER then
   while #Players:GetPlayers() == 0 and os.clock() < arrivalDeadline do task.wait(0.2) end
 
   local data = roundTeleportData()
-  local selectedLevel = math.clamp(math.floor(tonumber(data and data.Level) or 1), 1, 2)
+  local selectedLevel = math.clamp(math.floor(tonumber(data and data.Level) or 1), 1, MAX_LEVEL)
   local expected = math.clamp(tonumber(data and data.PartySize) or 1, 1, MAX_PLAYERS_PER_STATION)
   local partyDeadline = os.clock() + 12
   while #Players:GetPlayers() < expected and os.clock() < partyDeadline do task.wait(0.2) end
@@ -812,6 +1139,8 @@ if IS_RESERVED_ROUND_SERVER then
   if #participants == 0 then return end
 
   roundBusy = true
+  clearGlowsticks()
+  assignGlowstickSlots(participants, data and data.GlowstickSlots)
   for _, player in ipairs(participants) do
    inRound[player] = true
    player:SetAttribute("InRound", true)

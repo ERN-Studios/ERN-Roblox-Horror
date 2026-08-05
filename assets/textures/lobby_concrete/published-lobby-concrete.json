@@ -1,0 +1,18 @@
+{
+  "wall_fine_a": {
+    "assetId": "rbxassetid://137549469660951",
+    "file": "concrete_wall_fine_a.png"
+  },
+  "wall_fine_b": {
+    "assetId": "rbxassetid://111820708793535",
+    "file": "concrete_wall_fine_b.png"
+  },
+  "floor_dense": {
+    "assetId": "rbxassetid://134299652574760",
+    "file": "concrete_floor_dense.png"
+  },
+  "curb_light": {
+    "assetId": "rbxassetid://135670497420182",
+    "file": "concrete_curb_light.png"
+  }
+}

@@ -1,8 +1,9 @@
 -- PuzzleManager  (v2 — wall-mounted boxes/levers, edge exit)
 -- PASTE INTO: ServerScriptService → Insert Object → Script → rename to "PuzzleManager"
 --
--- The win objective. Per player: 2 fuses spawn, 1 fuse box, 1 lever.
---   • Fuses lie on the ground; pick them up and carry them.
+-- The win objective. Per player: 2 fuse relays spawn, 1 fuse box, 1 lever.
+--   • Fuses are extracted from wall-mounted ZYNTRA relays. Extraction opens
+--     the cabinet, flickers nearby lights, and emits noise that attracts Entity.
 --   • Fuse boxes are MOUNTED ON WALLS and need 1 fuse each. Inserting one ramps
 --     the danger (more flicker, faster entity) and makes the entity appear in
 --     that AREA (~10 cells away — near, not on top of you).
@@ -26,6 +27,7 @@ local TweenService = game:GetService("TweenService")
 local Debris = game:GetService("Debris")
 
 local status = RS:WaitForChild("Remotes"):WaitForChild("PuzzleStatus")
+local NoiseRegistry = require(script.Parent:WaitForChild("NoiseRegistry"))
 
 -- ── tuning ────────────────────────────────────────────────
 local FUSES_PER_BOX = 1      -- fuses each box needs
@@ -41,6 +43,7 @@ local SPEED_PER_FUSE = 0.06  -- EntitySpeedMul added per fuse inserted
 local END_SPEED_MUL  = 1.3   -- entity speed once the exit opens (finale boost)
 local ENTITY_AREA_CELLS = 5  -- entity appears ~this many cells from the box
 local EDGE_BAND      = 3      -- levers/exit spawn within this many cells of an edge
+local RELAY_HOLD_TIME = 1.8   -- deliberate extraction interaction
 -- ──────────────────────────────────────────────────────────
 
 local function attr(name, default)
@@ -66,6 +69,23 @@ local function floorY(cx, cz)
 	local hit = workspace:Raycast(Vector3.new(cx, 9, cz), Vector3.new(0, -15, 0), rp)
 	if hit and hit.Position.Y > -3 then return hit.Position.Y end
 	return nil
+end
+
+-- Decor is generated before the puzzle. Keep every relay and wall station
+-- outside the horizontal footprint of furniture/box piles, including models
+-- whose parts deliberately have CanQuery=false for entity line-of-sight.
+local function decorClear(pos, clearance)
+	local decor = workspace:FindFirstChild("Decor")
+	if not decor then return true end
+	for _, model in ipairs(decor:GetChildren()) do
+		if model:IsA("Model") then
+			local cf, size = model:GetBoundingBox()
+			local dx = math.max(math.abs(pos.X - cf.X) - size.X * 0.5, 0)
+			local dz = math.max(math.abs(pos.Z - cf.Z) - size.Z * 0.5, 0)
+			if math.sqrt(dx * dx + dz * dz) < clearance then return false end
+		end
+	end
+	return true
 end
 
 -- pit zone rectangles (things must not spawn ON the hole fields)
@@ -173,28 +193,6 @@ local function eligibleCell()
 	end
 end
 
--- floor spots (for fuses on the ground)
-local function pickFloorSpots(count, minDist)
-	local nextCell = eligibleCell()
-	local spots, minD = {}, minDist
-	for _ = 1, count do
-		local placed
-		for attempt = 1, 400 do
-			if attempt % 80 == 0 then minD = minD * 0.7 end
-			local pos = nextCell(false)
-			if pos then
-				local ok = true
-				for _, s in ipairs(spots) do
-					if (s - pos).Magnitude < minD then ok = false break end
-				end
-				if ok then placed = pos break end
-			end
-		end
-		if placed then table.insert(spots, placed) end
-	end
-	return spots
-end
-
 -- wall-mount frames (front faces into the room) for boxes / levers / exit.
 -- `avoid` is a shared list of already-placed station positions so DIFFERENT
 -- object types stay apart too (not just within their own type); picks append
@@ -213,7 +211,7 @@ local function pickWallSpots(count, minDist, edgeOnly, avoid)
 				local wp, n = nearestWall(pos)
 				if wp then
 					local at = Vector3.new(wp.X, pos.Y + 4, wp.Z)
-					local ok = true
+					local ok = decorClear(at, 7)
 					for _, u in ipairs(avoid) do
 						if (u - at).Magnitude < minD then ok = false break end
 					end
@@ -373,42 +371,140 @@ local function updateCarriedFuse(player, count)
 
 end
 
-local function makeFuse(pos, folder)
-	local p = Instance.new("Part")
-	p.Name = "Fuse"
-	p.Size = Vector3.new(1, 2, 0.7)
-	p.Anchored = true
-	p.CanCollide = false
-	p.Material = Enum.Material.Neon
-	p.Color = Color3.fromRGB(205, 170, 45)
-	p.CFrame = CFrame.new(pos + Vector3.new(0, 1.4, 0))
-	p.Parent = folder
+-- Wall-mounted replacement for loose floor fuses. The relay remains in the
+-- world after use so its open, empty state tells players it was searched.
+local function makeFuseRelay(cf, folder)
+	local model = Instance.new("Model")
+	model.Name = "FuseRelay"
+	model:SetAttribute("ContainsFuse", true)
+	model.Parent = folder
 
-	local pl = Instance.new("PointLight")
-	pl.Range = 10
-	pl.Brightness = 1.1
-	pl.Color = Color3.fromRGB(235, 205, 105)
-	pl.Parent = p
+	local function relayPart(name, size, offset, color, material, transparency)
+		local part = Instance.new("Part")
+		part.Name = name
+		part.Size = size
+		part.Anchored = true
+		part.Color = color
+		part.Material = material or Enum.Material.Metal
+		part.Transparency = transparency or 0
+		part.CFrame = cf * offset
+		part.Parent = model
+		return part
+	end
 
-	local pp = makePrompt(p, "Pick up", "Fuse", 8)
+	local body = relayPart("RelayBody", Vector3.new(5.4, 6.6, 0.85), CFrame.new(0, 0, -0.43),
+		Color3.fromRGB(48, 51, 50), Enum.Material.Metal)
+	model.PrimaryPart = body
+	relayPart("OuterFrame", Vector3.new(5.85, 7.05, 0.2), CFrame.new(0, 0, -0.96),
+		Color3.fromRGB(23, 25, 24), Enum.Material.Metal).CanCollide = false
+	relayPart("InnerPanel", Vector3.new(4.85, 5.95, 0.2), CFrame.new(0, -0.1, -1.08),
+		Color3.fromRGB(69, 72, 68), Enum.Material.Metal).CanCollide = false
 
-	-- Exploration hint: make a CLUSTER of nearby ceiling lamps conspicuously
-	-- brighter. This is persistent and visible down corridors, unlike the old
-	-- close-range double pulse. Reference counts keep overlapping fuse clusters safe.
+	local door = relayPart("RelayDoor", Vector3.new(5.15, 6.25, 0.2), CFrame.new(0, 0, -1.42),
+		Color3.fromRGB(38, 41, 40), Enum.Material.DiamondPlate, 0.18)
+	door.CanCollide = false
+	local openDoorCF = cf * CFrame.new(-2.58, 0, -1.42)
+		* CFrame.Angles(0, math.rad(-86), 0) * CFrame.new(2.58, 0, 0)
+
+	local core = relayPart("Fuse", Vector3.new(0.9, 2.65, 0.72), CFrame.new(0, -0.35, -1.25),
+		Color3.fromRGB(218, 174, 38), Enum.Material.Neon)
+	core.CanCollide = false
+	core.CanQuery = false
+	local coreLight = Instance.new("PointLight")
+	coreLight.Color = core.Color
+	coreLight.Brightness = 0.8
+	coreLight.Range = 8
+	coreLight.Parent = core
+	local capTop = relayPart("FuseCap", Vector3.new(1.08, 0.22, 0.86), CFrame.new(0, 1.02, -1.25),
+		Color3.fromRGB(81, 78, 68), Enum.Material.Metal)
+	local capBottom = relayPart("FuseCap", Vector3.new(1.08, 0.22, 0.86), CFrame.new(0, -1.72, -1.25),
+		Color3.fromRGB(81, 78, 68), Enum.Material.Metal)
+	for _, cap in ipairs({ capTop, capBottom }) do
+		cap.CanCollide = false
+		cap.CanQuery = false
+	end
+	local fuseParts = { core, capTop, capBottom }
+
+	local indicator = relayPart("RelayIndicator", Vector3.new(1.1, 0.55, 0.24), CFrame.new(1.65, 2.35, -1.56),
+		Color3.fromRGB(255, 178, 42), Enum.Material.Neon)
+	indicator.CanCollide = false
+	indicator.CanQuery = false
+	local indicatorLight = Instance.new("PointLight")
+	indicatorLight.Color = indicator.Color
+	indicatorLight.Brightness = 1.4
+	indicatorLight.Range = 13
+	indicatorLight.Shadows = true
+	indicatorLight.Parent = indicator
+
+	local handle = relayPart("ReleaseHandle", Vector3.new(0.38, 1.7, 0.38), CFrame.new(-1.85, 0.15, -1.72)
+		* CFrame.Angles(0, 0, math.rad(-18)), Color3.fromRGB(184, 116, 31), Enum.Material.Metal)
+	handle.CanCollide = false
+
+	local labelPlate = relayPart("RelayLabel", Vector3.new(3.25, 0.72, 0.16), CFrame.new(-0.35, 2.35, -1.55),
+		Color3.fromRGB(13, 16, 15), Enum.Material.Metal)
+	labelPlate.CanCollide = false
+	labelPlate.CanQuery = false
+	local surface = Instance.new("SurfaceGui")
+	surface.Face = Enum.NormalId.Front
+	surface.CanvasSize = Vector2.new(520, 120)
+	surface.LightInfluence = 0.25
+	surface.Parent = labelPlate
+	local label = Instance.new("TextLabel")
+	label.Size = UDim2.fromScale(1, 1)
+	label.BackgroundTransparency = 1
+	label.Font = Enum.Font.Code
+	label.Text = "ZYNTRA RELAY  //  LIVE"
+	label.TextColor3 = Color3.fromRGB(255, 198, 76)
+	label.TextScaled = true
+	label.Parent = surface
+
+	-- These controls live on the door. Weld them to it so opening the cabinet
+	-- cannot leave the label, lamp, or handle floating beside the relay.
+	for _, doorControl in ipairs({ indicator, handle, labelPlate }) do
+		doorControl.Anchored = false
+		doorControl.Massless = true
+		local weld = Instance.new("WeldConstraint")
+		weld.Part0 = door
+		weld.Part1 = doorControl
+		weld.Parent = doorControl
+	end
+
+	-- Put the prompt on the visible front face instead of the recessed body.
+	local promptPoint = Instance.new("Attachment")
+	promptPoint.Name = "InteractionPoint"
+	promptPoint.Position = Vector3.new(0, 0, -0.18)
+	promptPoint.Parent = door
+	local prompt = makePrompt(promptPoint, "Extract fuse", "ZYNTRA power relay", 10)
+	prompt.HoldDuration = RELAY_HOLD_TIME
+	prompt.KeyboardKeyCode = Enum.KeyCode.E
+
+	local hum = Instance.new("Sound")
+	hum.Name = "RelayHum"
+	hum.SoundId = "rbxasset://sounds/electronicpingshort.wav"
+	hum.Volume = 0.055
+	hum.PlaybackSpeed = 0.22
+	hum.Looped = true
+	hum.RollOffMinDistance = 4
+	hum.RollOffMaxDistance = 28
+	hum.Parent = body
+	hum:Play()
+
+	-- A restrained cluster of warm ceiling lamps helps exploration without
+	-- turning the relay into a beacon visible across the entire maze.
 	local candidates = {}
-	for _, d in ipairs(workspace:GetDescendants()) do
-		if d:IsA("SurfaceLight") and d.Parent and d.Parent:IsA("BasePart") then
-			local distance = (d.Parent.Position - p.Position).Magnitude
-			if distance <= 125 then
-				candidates[#candidates + 1] = { light = d, distance = distance }
+	for _, item in ipairs(workspace:GetDescendants()) do
+		if item:IsA("SurfaceLight") and item.Parent and item.Parent:IsA("BasePart") then
+			local distance = (item.Parent.Position - core.Position).Magnitude
+			if distance <= 100 then
+				candidates[#candidates + 1] = { light = item, distance = distance }
 			end
 		end
 	end
 	table.sort(candidates, function(a, b) return a.distance < b.distance end)
 
 	local cluster = {}
-	for i = 1, math.min(7, #candidates) do
-		local light = candidates[i].light
+	for index = 1, math.min(4, #candidates) do
+		local light = candidates[index].light
 		local panel = light.Parent
 		local count = light:GetAttribute("FuseClusterCount") or 0
 		if count == 0 then
@@ -419,16 +515,19 @@ local function makeFuse(pos, folder)
 			panel:SetAttribute("FuseBasePanelMaterial", panel.Material.Name)
 		end
 		light:SetAttribute("FuseClusterCount", count + 1)
-		light.Brightness = 3.75
-		light.Range = 56
-		light.Color = Color3.fromRGB(255, 244, 205)
+		light.Brightness = math.max(light.Brightness, 2.6)
+		light.Range = math.max(light.Range, 42)
+		light.Color = Color3.fromRGB(255, 224, 150)
 		light.Enabled = true
-		panel.Color = Color3.fromRGB(255, 248, 205)
+		panel.Color = Color3.fromRGB(255, 230, 155)
 		panel.Material = Enum.Material.Neon
 		cluster[#cluster + 1] = light
 	end
 
-	p.Destroying:Connect(function()
+	local clusterReleased = false
+	local function releaseCluster()
+		if clusterReleased then return end
+		clusterReleased = true
 		for _, light in ipairs(cluster) do
 			if light and light.Parent then
 				local panel = light.Parent
@@ -440,7 +539,7 @@ local function makeFuse(pos, folder)
 					local baseColor = light:GetAttribute("FuseBaseColor") or Color3.fromRGB(255, 243, 220)
 					local basePanelColor = panel:GetAttribute("FuseBasePanelColor") or Color3.fromRGB(255, 250, 230)
 					local materialName = panel:GetAttribute("FuseBasePanelMaterial")
-					local fade = TweenInfo.new(1.35, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+					local fade = TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 					TweenService:Create(light, fade, {
 						Brightness = baseBrightness, Range = baseRange, Color = baseColor,
 					}):Play()
@@ -454,9 +553,46 @@ local function makeFuse(pos, folder)
 				end
 			end
 		end
-	end)
+	end
 
-	return p, pp
+	local function flickerAndRelease()
+		task.spawn(function()
+			for _ = 1, 4 do
+				for _, light in ipairs(cluster) do
+					if light and light.Parent then light.Brightness = 0.03 end
+				end
+				indicatorLight.Brightness = 0.05
+				task.wait(0.08)
+				for _, light in ipairs(cluster) do
+					if light and light.Parent then light.Brightness = 3.4 end
+				end
+				indicatorLight.Brightness = 2.2
+				task.wait(0.1)
+			end
+			releaseCluster()
+		end)
+	end
+
+	model.Destroying:Connect(releaseCluster)
+
+	return {
+		model = model,
+		body = body,
+		core = core,
+		fuseParts = fuseParts,
+		door = door,
+		openDoorCF = openDoorCF,
+		indicator = indicator,
+		indicatorLight = indicatorLight,
+		label = label,
+		handle = handle,
+		hum = hum,
+		prompt = prompt,
+		flickerAndRelease = flickerAndRelease,
+		cf = cf,
+		extracting = false,
+		extracted = false,
+	}
 end
 
 local function build(cf, size, off, color, material, folder, name)
@@ -771,7 +907,11 @@ end
 
 -- ── round lifecycle ───────────────────────────────────────
 local function clearPuzzle()
-	if not session then return end
+	if not session then
+		workspace:SetAttribute("EntityObjectiveTarget", nil)
+		workspace:SetAttribute("EntityObjectiveStage", nil)
+		return
+	end
 	session.active = false
 	for _, c in ipairs(session.conns) do pcall(function() c:Disconnect() end) end
 	if session.folder then session.folder:Destroy() end
@@ -779,10 +919,16 @@ local function clearPuzzle()
 	workspace:SetAttribute("LightMode", "NORMAL")
 	workspace:SetAttribute("FlickerBoost", 0)
 	workspace:SetAttribute("EntitySpeedMul", 1)
+	workspace:SetAttribute("EntityObjectiveTarget", nil)
+	workspace:SetAttribute("EntityObjectiveStage", nil)
 end
 
 local function startPuzzle()
 	clearPuzzle()
+	local decorDeadline = os.clock() + 15
+	while workspace:GetAttribute("DecorReady") ~= true and os.clock() < decorDeadline do
+		task.wait(0.1)
+	end
 
 	-- Only the party that stood in the lobby launch square owns this puzzle.
 	local roundPlayers, roundPlayerSet = {}, {}
@@ -804,11 +950,45 @@ local function startPuzzle()
 
 	session = {
 		active = true, stage = "fuses", conns = {}, folder = folder,
-		boxes = {}, levers = {}, carried = {}, exit = nil,
+		boxes = {}, levers = {}, relays = {}, fuses = {}, carried = {}, exit = nil,
 		boxesDone = 0, boxCount = boxCount, latchMode = false,
 		escaped = {}, escapeAnnounced = false, -- who's out + first-escape latch
 		participants = roundPlayerSet,
 	}
+
+	local function updateEntityObjectiveTarget()
+		if not session or not session.active then return end
+		local target
+		if session.stage == "fuses" then
+			local someoneCarries = false
+			for _, count in pairs(session.carried) do
+				if count > 0 then someoneCarries = true break end
+			end
+			if someoneCarries then
+				for _, box in ipairs(session.boxes) do
+					if not box.complete and box.body and box.body.Parent then target = box.body.Position break end
+				end
+			else
+				for _, fuse in ipairs(session.fuses) do
+					if fuse.Parent then target = fuse.Position break end
+				end
+			end
+		elseif session.stage == "levers" then
+			local now = os.clock()
+			for _, lever in ipairs(session.levers) do
+				if not lever.latched and now >= (lever.activeUntil or 0)
+					and lever.plate and lever.plate.Parent then
+					target = lever.plate.Position
+					break
+				end
+			end
+		elseif session.stage == "end" and session.exit and session.exit.sign then
+			target = session.exit.sign.Position
+		end
+		workspace:SetAttribute("EntityObjectiveTarget", target)
+		workspace:SetAttribute("EntityObjectiveStage", session.stage)
+	end
+	session.updateEntityObjectiveTarget = updateEntityObjectiveTarget
 
 	-- Send an authoritative lever snapshot whenever the lever state changes.
 	-- The countdown follows the earliest temporary lever that will expire.
@@ -829,39 +1009,113 @@ local function startPuzzle()
 	end
 	session.broadcastLeverStatus = broadcastLeverStatus
 
-	-- fuses on the ground, spread across the map
-	for _, pos in ipairs(pickFloorSpots(fuseCount, 40)) do
-		local part, pp = makeFuse(pos, folder)
-		table.insert(session.conns, pp.Triggered:Connect(function(player)
-			if not session or not session.active or not part.Parent then return end
-			part:Destroy()
-
-			-- Short built-in electrical confirmation: no uploaded asset and no HUD message.
-			local char = player.Character
-			local soundParent = char and (char:FindFirstChild("HumanoidRootPart") or char:FindFirstChild("Head"))
-			if soundParent then
-				local pickupSound = Instance.new("Sound")
-				pickupSound.Name = "FusePickup"
-				pickupSound.SoundId = "rbxasset://sounds/electronicpingshort.wav"
-				pickupSound.Volume = 0.32
-				pickupSound.PlaybackSpeed = 1.35
-				pickupSound.RollOffMaxDistance = 22
-				pickupSound.Parent = soundParent
-				pickupSound:Play()
-				Debris:AddItem(pickupSound, 2)
-			end
-
-			session.carried[player] = (session.carried[player] or 0) + 1
-			updateCarriedFuse(player, session.carried[player])
-			status:FireClient(player, "carry", session.carried[player])
-		end))
-	end
-
 	-- keep the interactive stations (boxes / levers / exit) well apart from
 	-- EACH OTHER, not just within their own type — one shared avoid list
 	local CELLv = attr("CELL", 24)
 	local SIZEv = attr("GRID", 40) * CELLv
 	local stations = {}
+
+	-- Wall relays share the station avoidance list with fuse boxes, levers, and
+	-- the exit, so props and puzzle machinery cannot conceal or overlap them.
+	local relayFrames = pickWallSpots(fuseCount, 2.2 * CELLv, false, stations)
+	if #relayFrames < fusesNeeded then
+		for _, fallbackCF in ipairs(pickWallSpots(fusesNeeded - #relayFrames, 1.1 * CELLv, false, stations)) do
+			table.insert(relayFrames, fallbackCF)
+		end
+	end
+	for _, cf in ipairs(relayFrames) do
+		local relay = makeFuseRelay(cf, folder)
+		table.insert(session.relays, relay)
+		table.insert(session.fuses, relay.core)
+		local owningSession = session
+		table.insert(session.conns, relay.prompt.Triggered:Connect(function(player)
+			if session ~= owningSession or not session.active or relay.extracting or relay.extracted then return end
+			if session.participants[player] ~= true then return end
+			relay.extracting = true
+			relay.prompt.Enabled = false
+			relay.label.Text = "RELEASING  //  STAND BY"
+			relay.hum:Stop()
+
+			local noisePosition = relay.core.Position
+			NoiseRegistry.Add(noisePosition, "relay")
+			workspace:SetAttribute("LastRelayExtraction", noisePosition)
+
+			local releaseSound = Instance.new("Sound")
+			releaseSound.Name = "RelayMechanicalRelease"
+			releaseSound.SoundId = "rbxassetid://106430305259947"
+			releaseSound.Volume = 0.72
+			releaseSound.PlaybackSpeed = 0.88
+			releaseSound.RollOffMinDistance = 8
+			releaseSound.RollOffMaxDistance = 105
+			releaseSound.Parent = relay.body
+			releaseSound:Play()
+			Debris:AddItem(releaseSound, 4)
+
+			local electricalSnap = Instance.new("Sound")
+			electricalSnap.Name = "RelayElectricalSnap"
+			electricalSnap.SoundId = "rbxasset://sounds/electronicpingshort.wav"
+			electricalSnap.Volume = 0.5
+			electricalSnap.PlaybackSpeed = 0.72
+			electricalSnap.RollOffMaxDistance = 75
+			electricalSnap.Parent = relay.body
+			electricalSnap:Play()
+			Debris:AddItem(electricalSnap, 3)
+
+			TweenService:Create(relay.door, TweenInfo.new(0.34, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
+				CFrame = relay.openDoorCF,
+			}):Play()
+			TweenService:Create(relay.handle, TweenInfo.new(0.22, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+				CFrame = relay.handle.CFrame * CFrame.Angles(0, 0, math.rad(58)),
+			}):Play()
+			for _, fusePart in ipairs(relay.fuseParts) do
+				TweenService:Create(fusePart, TweenInfo.new(0.48, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+					CFrame = fusePart.CFrame * CFrame.new(0, 0, -2.35),
+				}):Play()
+			end
+			relay.flickerAndRelease()
+
+			for _ = 1, 10 do
+				local spark = Instance.new("Part")
+				spark.Name = "RelaySpark"
+				spark.Size = Vector3.new(0.08, math.random(2, 5) * 0.08, 0.08)
+				spark.Material = Enum.Material.Neon
+				spark.Color = math.random() < 0.5 and Color3.fromRGB(255, 201, 64) or Color3.fromRGB(145, 215, 255)
+				spark.CanCollide = false
+				spark.CanQuery = false
+				spark.Massless = true
+				spark.CFrame = relay.core.CFrame * CFrame.new(
+					math.random(-8, 8) * 0.05,
+					math.random(-10, 10) * 0.05,
+					-0.55
+				)
+				spark.Parent = folder
+				spark.AssemblyLinearVelocity = cf.LookVector * math.random(8, 15)
+					+ Vector3.new(math.random(-6, 6), math.random(4, 12), math.random(-6, 6))
+				Debris:AddItem(spark, 0.55)
+			end
+
+			task.delay(0.55, function()
+				if session ~= owningSession or not session.active or not relay.model.Parent then return end
+				relay.extracted = true
+				relay.model:SetAttribute("ContainsFuse", false)
+				for _, fusePart in ipairs(relay.fuseParts) do
+					if fusePart.Parent then fusePart:Destroy() end
+				end
+				relay.indicator.Color = Color3.fromRGB(106, 31, 25)
+				relay.indicatorLight.Color = relay.indicator.Color
+				relay.indicatorLight.Brightness = 0.18
+				relay.indicatorLight.Range = 4
+				relay.label.Text = "EMPTY  //  POWER ISOLATED"
+				relay.label.TextColor3 = Color3.fromRGB(188, 89, 68)
+
+				session.carried[player] = (session.carried[player] or 0) + 1
+				updateCarriedFuse(player, session.carried[player])
+				status:FireClient(player, "carry", session.carried[player])
+				status:FireClient(player, "msg", "Fuse extracted")
+				updateEntityObjectiveTarget()
+			end)
+		end))
+	end
 
 	-- fuse boxes on walls, spread apart
 	for _, cf in ipairs(pickWallSpots(boxCount, 4 * CELLv, false, stations)) do
@@ -878,6 +1132,7 @@ local function startPuzzle()
 			updateCarriedFuse(player, session.carried[player])
 			status:FireClient(player, "carry", session.carried[player])
 			box.count += 1
+			updateEntityObjectiveTarget()
 			showFuseInBox(box, box.count)
 			box.ind.Color = Color3.fromRGB(235, 165, 45)
 			box.indicatorLight.Color = box.ind.Color
@@ -946,6 +1201,7 @@ local function startPuzzle()
 				lever.activeUntil = os.clock() + LEVER_WINDOW
 			end
 			setLeverHandle(lever, true)
+			updateEntityObjectiveTarget()
 			if session.updateLeverLights then session.updateLeverLights() end
 			if session.broadcastLeverStatus then session.broadcastLeverStatus() end
 
@@ -964,6 +1220,7 @@ local function startPuzzle()
 						setLeverHandle(lever, false)
 						if session.updateLeverLights then session.updateLeverLights() end
 						if session.broadcastLeverStatus then session.broadcastLeverStatus() end
+						if session.updateEntityObjectiveTarget then session.updateEntityObjectiveTarget() end
 					end
 				end)
 			end
@@ -1527,6 +1784,7 @@ local function startPuzzle()
 	local exitCF = pickExitOnBorder(stations, 5 * CELLv) or CFrame.new(0, 4, 0)
 	session.exit = makeExit(exitCF, folder)
 	session.safeSpawn = makeSafeRoom() -- the room you step into through the exit
+	updateEntityObjectiveTarget()
 	table.insert(session.conns, session.exit.trig.Touched:Connect(function(hit)
 		if not session or not session.exit.open then return end
 		local p = Players:GetPlayerFromCharacter(hit.Parent)
@@ -1561,6 +1819,7 @@ local function startPuzzle()
 	function session.onAllBoxes()
 		if session.stage ~= "fuses" then return end
 		session.stage = "levers"
+		updateEntityObjectiveTarget()
 
 		-- All distribution boxes are live: the building enters a continuous
 		-- red overload alert until the levers divert power to the exit door.
@@ -1604,6 +1863,7 @@ local function startPuzzle()
 	function session.onLevers(shutdownOrigin)
 		if session.stage ~= "levers" then return end
 		session.stage = "end"
+		updateEntityObjectiveTarget()
 		workspace:SetAttribute("EntitySpeedMul", END_SPEED_MUL)
 
 		-- The final lever sound plays immediately. One second later, the uploaded

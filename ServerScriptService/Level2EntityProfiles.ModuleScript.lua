@@ -43,26 +43,6 @@ local DEFAULT = {
 }
 
 local DEFINITIONS = {
-	PoolFoam = {
-		Name = "PoolFoam",
-		WanderSpeed = 7.5,
-		ChaseSpeed = 18,
-		SightRange = 105,
-		HearingRange = 32,
-		GiveUpRange = 145,
-		LastSeenSeconds = 5.5,
-		AgentRadius = 2.4,
-		AgentHeight = 9,
-		MaxWaterDepth = 1.55,
-		AttackRange = 5.2,
-		AttackHitRange = 5.9,
-		AttackConeDegrees = 110,
-		AttackWindup = 0.42,
-		AttackRecovery = 0.64,
-		AttackCooldown = 1.3,
-		ReferenceWalkSpeed = 7.5,
-		ReferenceRunSpeed = 18,
-	},
 	PoolPipe = {
 		Name = "PoolPipe",
 		WanderSpeed = 5.4,
@@ -125,16 +105,13 @@ function Profiles.InferName(entity: Instance): string
 	if string.find(lowered, "pipe", 1, true) then
 		return "PoolPipe"
 	end
-	if string.find(lowered, "foam", 1, true) then
-		return "PoolFoam"
-	end
-	return "PoolFoam"
+	return "PoolPipe"
 end
 
 function Profiles.Resolve(entity: Instance)
 	local resolved = {}
 	copyInto(resolved, DEFAULT)
-	copyInto(resolved, DEFINITIONS[Profiles.InferName(entity)] or DEFINITIONS.PoolFoam)
+	copyInto(resolved, DEFINITIONS[Profiles.InferName(entity)] or DEFINITIONS.PoolPipe)
 
 	for _, key in ipairs(OVERRIDABLE) do
 		local value = entity:GetAttribute(key)

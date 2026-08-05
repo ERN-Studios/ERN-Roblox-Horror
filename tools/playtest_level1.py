@@ -33,6 +33,18 @@ local cableCount = 0
 local exactCableOverlapCount = 0
 local collinearCableOverlapCount = 0
 local collinearCableOverlapPairs = {}
+local propModelCount = 0
+local propHeightTotal = 0
+local propMaxHeight = 0
+local plazaPropCount = 0
+local decorPuzzleOverlapCount = 0
+local plazaPileModelCount = 0
+local plazaSightBlockerCount = 0
+local plazaPileMinY = math.huge
+local plazaPileMaxY = -math.huge
+local standaloneChairCount = 0
+local miniPropPileModelCount = 0
+local miniPropPileGroups = {}
 if elevator then
     for _, item in ipairs(elevator:GetDescendants()) do
         if item:IsA("Texture") then
@@ -89,8 +101,48 @@ if puzzleItems then
     end
 end
 if decor then
-    for _, child in ipairs(decor:GetChildren()) do
-        if child:IsA("Model") and child.Name == "CardboardBoxPile" then
+	for _, child in ipairs(decor:GetChildren()) do
+		if child:IsA("BasePart") and child:GetAttribute("BlocksEntitySight") == true then
+			plazaSightBlockerCount += 1
+		end
+		if child:IsA("Model") then
+			if child:GetAttribute("MiniPropPile") == true then
+				miniPropPileModelCount += 1
+				local group = child:GetAttribute("MiniPropPileIndex")
+				if group then miniPropPileGroups[tostring(group)] = true end
+			end
+			if child.Name == "Chair" and child:GetAttribute("PlazaPile") ~= true then
+				standaloneChairCount += 1
+			end
+			propModelCount += 1
+			local cf, size = child:GetBoundingBox()
+			propHeightTotal += size.Y
+			propMaxHeight = math.max(propMaxHeight, size.Y)
+			if child:GetAttribute("PlazaPile") == true then
+				plazaPileModelCount += 1
+				plazaPileMinY = math.min(plazaPileMinY, cf.Position.Y - size.Y * 0.5)
+				plazaPileMaxY = math.max(plazaPileMaxY, cf.Position.Y + size.Y * 0.5)
+			end
+			local plazaCenter = workspace:GetAttribute("ForcedPlazaCenter")
+			if typeof(plazaCenter) == "Vector3"
+				and Vector3.new(cf.Position.X - plazaCenter.X, 0, cf.Position.Z - plazaCenter.Z).Magnitude <= 58 then
+				plazaPropCount += 1
+			end
+			if puzzleItems then
+				for _, puzzle in ipairs(puzzleItems:GetChildren()) do
+					if puzzle:IsA("Model") and (puzzle.Name == "Fuse" or puzzle.Name == "FuseRelay"
+						or puzzle.Name == "FuseBox" or puzzle.Name == "Lever") then
+						local pcf, ps = puzzle:GetBoundingBox()
+						if math.abs(cf.Position.X - pcf.Position.X) < (size.X + ps.X) * 0.5
+							and math.abs(cf.Position.Y - pcf.Position.Y) < (size.Y + ps.Y) * 0.5
+							and math.abs(cf.Position.Z - pcf.Position.Z) < (size.Z + ps.Z) * 0.5 then
+							decorPuzzleOverlapCount += 1
+						end
+					end
+				end
+			end
+		end
+		if child:IsA("Model") and child.Name == "CardboardBoxPile" then
             cardboardPileCount += 1
         end
     end
@@ -153,7 +205,28 @@ return HttpService:JSONEncode({
     cableCount = cableCount,
     exactCableOverlapCount = exactCableOverlapCount,
     collinearCableOverlapCount = collinearCableOverlapCount,
-    collinearCableOverlapPairs = collinearCableOverlapPairs,
+	collinearCableOverlapPairs = collinearCableOverlapPairs,
+	decorReady = workspace:GetAttribute("DecorReady"),
+	propModelCount = propModelCount,
+	averagePropHeight = propModelCount > 0 and propHeightTotal / propModelCount or 0,
+	propMaxHeight = propMaxHeight,
+	plazaPropCount = plazaPropCount,
+	decorPuzzleOverlapCount = decorPuzzleOverlapCount,
+	clockDongMinSeconds = decor and decor:GetAttribute("ClockDongMinSeconds") or nil,
+	clockDongMaxSeconds = decor and decor:GetAttribute("ClockDongMaxSeconds") or nil,
+	entityObjectiveStage = workspace:GetAttribute("EntityObjectiveStage"),
+	hasEntityObjectiveTarget = typeof(workspace:GetAttribute("EntityObjectiveTarget")) == "Vector3",
+	plazaPileModelCount = plazaPileModelCount,
+	plazaSightBlockerCount = plazaSightBlockerCount,
+	plazaPileHeight = plazaPileModelCount > 0 and plazaPileMaxY - plazaPileMinY or 0,
+	plazaHeapCount = workspace:GetAttribute("PlazaHeapCount"),
+	standaloneChairCount = standaloneChairCount,
+	miniPropPileModelCount = miniPropPileModelCount,
+	miniPropPileGroupCount = (function()
+		local count = 0
+		for _ in pairs(miniPropPileGroups) do count += 1 end
+		return count
+	end)(),
 })
 '''
 

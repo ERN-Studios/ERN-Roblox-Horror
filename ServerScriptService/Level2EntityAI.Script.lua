@@ -23,11 +23,11 @@ end)
 
 local function isLegacyHostile(instance)
 	if not instance:IsA("Model") then return false end
-	if instance.Name == "PoolFoamEntity" or instance.Name == "PoolPipeEntity" then
+	if instance.Name == "PoolPipeEntity" then
 		return true
 	end
 	local profile = instance:GetAttribute("EntityProfile")
-	return profile == "PoolFoam" or profile == "PoolPipe"
+	return profile == "PoolPipe"
 end
 
 local function bind(instance)

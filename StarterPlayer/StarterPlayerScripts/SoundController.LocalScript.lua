@@ -37,7 +37,7 @@ local IDLE_SOUNDS     = { "", "", "" }
 local CHASE_SOUND     = "rbxassetid://72818169474421" -- loops while the Entity is actively CHASING you (positional)
 
 -- ── tuning ────────────────────────────────────────────────
-local AMBIENCE_VOLUME   = 0.4
+local AMBIENCE_VOLUME   = 0.48 -- slightly stronger room tone without masking cues
 local ELEVATOR_VOLUME   = 0.8  -- the elevator door-open / arrival sound (2D)
 local BREATH_START      = 0.5   -- stamina fraction at which winded breathing kicks in
 local BREATH_VOLUME     = 0.12  -- peak breath volume (turned down more)
@@ -212,7 +212,9 @@ roundStatus.OnClientEvent:Connect(function(ev)
 			elevatorSound:Play()
 		end
 	elseif ev == "start" then
-		ambienceTarget = AMBIENCE_VOLUME -- doors open → fade the maze in (elevator keeps playing)
+		-- The office fluorescent drone belongs to level 1 only. Level 2 stays
+		-- silent until its dedicated hollow poolroom ambience asset is supplied.
+		ambienceTarget = workspace:GetAttribute("SelectedLevel") == 2 and 0 or AMBIENCE_VOLUME
 	elseif ev == "win" or ev == "lose" or ev == "waiting" then
 		ambienceTarget = 0
 		elevatorSound:Stop() -- round over / reset (doors opening does NOT stop it)
@@ -469,11 +471,13 @@ RunService.Heartbeat:Connect(function(dt)
 		breathing.Volume = breathI * BREATH_VOLUME
 	end
 
-	-- maze ambience: eased toward its target (silent during the elevator ride,
-	-- faded in when the round starts) — see the round-event handler above
+	-- Level 2 deliberately has no fluorescent office drone. Re-check the
+	-- selected level every frame so a direct dev teleport also silences it.
 	if AMBIENCE_SOUND ~= "" then
+		local effectiveAmbienceTarget = workspace:GetAttribute("SelectedLevel") == 2
+			and 0 or ambienceTarget
 		ambience.Volume = ambience.Volume
-			+ (ambienceTarget - ambience.Volume) * math.clamp(dt / AMBIENCE_FADE, 0, 1)
+			+ (effectiveAmbienceTarget - ambience.Volume) * math.clamp(dt / AMBIENCE_FADE, 0, 1)
 	end
 
 	-- footsteps: a looping track that only plays while you MOVE and fades out when
@@ -633,7 +637,6 @@ local function level2TakeId(index, model, profile)
 		"ShallowWaterStep" .. index,
 	}
 	if profile == "pipe" then table.insert(names, 1, "PoolPipeStep" .. index) end
-	if profile == "foam" then table.insert(names, 1, "PoolFoamStep" .. index) end
 	for _, source in ipairs(level2Sources(model)) do
 		local id = level2ValueId(source, names)
 		if id then return id end
@@ -842,7 +845,7 @@ workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(function()
 	end
 end)
 
--- Pool Foam and Pool Pipe use the same seven normalized source takes through
+-- Pool Pipe uses the seven normalized source takes through
 -- positional banks. Model Profile/MotionState/ActionSerial are the primary API;
 -- names and CollectionService tags make hand-authored/test rigs work as well.
 local level2EntityAudio = {}
@@ -854,10 +857,6 @@ local function level2Profile(model)
 		or CollectionService:HasTag(model, "PoolPipeEntity") then
 		return "pipe"
 	end
-	if raw:find("foam", 1, true) or name:find("poolfoam", 1, true)
-		or CollectionService:HasTag(model, "PoolFoamEntity") then
-		return "foam"
-	end
 	return nil
 end
 
@@ -865,7 +864,6 @@ local function level2EntityRoot(model)
 	if model.PrimaryPart then return model.PrimaryPart end
 	local named = model:FindFirstChild("HumanoidRootPart", true)
 		or model:FindFirstChild("Root", true)
-		or model:FindFirstChild("char1", true)
 	if named and named:IsA("BasePart") then return named end
 	return model:FindFirstChildWhichIsA("BasePart", true)
 end
@@ -974,8 +972,8 @@ local function hookLevel2Entity(model)
 	}
 	controller.bank = makeLevel2Bank(
 		root,
-		profile == "pipe" and "PoolPipeStep" or "PoolFoamStep",
-		profile == "pipe" and 0.52 or 0.42,
+		"PoolPipeStep",
+		0.52,
 		model,
 		profile,
 		true
@@ -1020,7 +1018,7 @@ workspace.DescendantAdded:Connect(function(descendant)
 		tryHookLevel2Entity(descendant.Parent)
 	end
 end)
-for _, tag in ipairs({ "PoolPipeEntity", "PoolFoamEntity" }) do
+for _, tag in ipairs({ "PoolPipeEntity" }) do
 	CollectionService:GetInstanceAddedSignal(tag):Connect(function(instance)
 		if instance:IsA("Model") then tryHookLevel2Entity(instance) end
 	end)
@@ -1080,12 +1078,7 @@ RunService.Heartbeat:Connect(function(dt)
 			or motion:find("run", 1, true)
 			or motion:find("hunt", 1, true)
 			or speed >= (controller.profile == "pipe" and 12 or 14)
-		local cadence
-		if controller.profile == "foam" then
-			cadence = running and 0.31 or 0.62
-		else
-			cadence = running and 0.34 or 0.72
-		end
+		local cadence = running and 0.34 or 0.72
 		controller.stepClock += dt
 		if controller.stepClock >= cadence then
 			controller.stepClock %= cadence

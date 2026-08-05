@@ -7,7 +7,6 @@ local Players = game:GetService("Players")
 local PathfindingService = game:GetService("PathfindingService")
 local RS = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
-local PhysicsService = game:GetService("PhysicsService")
 
 -- NoiseRegistry must be a ModuleScript that `return`s its table. If it's the
 -- wrong object type, empty, or errors, we don't want it to kill the whole
@@ -37,7 +36,6 @@ end
 -- events pile up on the server → "invocation queue exhausted" warnings.
 local lastReport = {}
 local lastYell = {}    -- per-player yell cooldown (declared early: used just below)
-local immunePush = {}  -- dev cheat: players who are immune to the yell push-back
 RS:WaitForChild("Remotes"):WaitForChild("ReportNoise").OnServerEvent
 	:Connect(function(player, stateName)
 		local now = os.clock()
@@ -50,7 +48,7 @@ RS:WaitForChild("Remotes"):WaitForChild("ReportNoise").OnServerEvent
 		NoiseRegistry.Add(hrp.Position, stateName)
 	end)
 Players.PlayerRemoving:Connect(function(p)
-	lastReport[p] = nil; lastYell[p] = nil; immunePush[p] = nil
+	lastReport[p] = nil; lastYell[p] = nil
 end)
 
 local entity = workspace:WaitForChild("Entity")
@@ -378,84 +376,6 @@ task.spawn(function()
 	refreshEyes()
 end)
 
--- ── dev: pause the entity (from DevCheats, testing only) ───
--- DevCheats (client) fires DevControl; we flip a workspace attribute the AI
--- loops read. Safe to ship without DevControl existing — we just skip it.
--- One server-side whitelist protects every developer command, including noclip.
-local DEV_ALLOWED = { "mikkelczar", "LaverSneglen" }
-local function devAllowed(p)
-	if #DEV_ALLOWED == 0 then return true end
-	for _, n in ipairs(DEV_ALLOWED) do if n == p.Name then return true end end
-	return false
-end
-
-local NOCLIP_GROUP = "DevNoclip"
-local noclipState = {}
-pcall(function() PhysicsService:RegisterCollisionGroup(NOCLIP_GROUP) end)
-for _, group in ipairs(PhysicsService:GetRegisteredCollisionGroups()) do
-	pcall(function()
-		PhysicsService:CollisionGroupSetCollidable(NOCLIP_GROUP, group.name, false)
-	end)
-end
-
-local function setServerNoclip(player, enabled)
-	local char = player.Character
-	if not char then return end
-	if enabled then
-		if noclipState[player] then return end
-		local state = { parts = {}, added = nil }
-		noclipState[player] = state
-		local function disablePart(part)
-			if not part:IsA("BasePart") then return end
-			if state.parts[part] == nil then
-				state.parts[part] = { group = part.CollisionGroup, collide = part.CanCollide }
-			end
-			part.CollisionGroup = NOCLIP_GROUP
-			part.CanCollide = false
-		end
-		for _, d in ipairs(char:GetDescendants()) do disablePart(d) end
-		state.added = char.DescendantAdded:Connect(disablePart)
-	else
-		local state = noclipState[player]
-		if not state then return end
-		noclipState[player] = nil
-		if state.added then state.added:Disconnect() end
-		for part, original in pairs(state.parts) do
-			if part.Parent then
-				part.CollisionGroup = original.group
-				part.CanCollide = original.collide
-			end
-		end
-	end
-end
--- wait for the RemoteEvent in a task (robust to load order) so the handler
--- always connects if DevControl exists at all
-task.spawn(function()
-	local remotes = RS:WaitForChild("Remotes", 20)
-	local devControl = remotes and remotes:WaitForChild("DevControl", 20)
-	if not devControl then
-		warn("EntityAI: DevControl RemoteEvent not found — P/I dev cheats disabled")
-		return
-	end
-	devControl.OnServerEvent:Connect(function(p, cmd, arg)
-		if not devAllowed(p) then return end
-		if cmd == "pauseEntity" then
-			workspace:SetAttribute("EntityPaused", arg == true)
-			print("[EntityAI] pause =", arg == true, "by", p.Name)
-		elseif cmd == "immunePush" then
-			immunePush[p] = (arg == true) or nil -- immune to the yell push-back
-			print("[EntityAI] push-immunity =", immunePush[p] == true, "for", p.Name)
-		elseif cmd == "noclip" then
-			setServerNoclip(p, arg == true)
-			print("[EntityAI] server noclip =", arg == true, "for", p.Name)
-		end
-	end)
-	print("[EntityAI] DevControl handler connected")
-end)
-Players.PlayerRemoving:Connect(function(p)
-	setServerNoclip(p, false)
-	noclipState[p] = nil
-end)
 local function isPaused()
 	return workspace:GetAttribute("EntityPaused") == true
 		or workspace:GetAttribute("EntityKillActive") == true
@@ -464,7 +384,8 @@ end
 -- safety net for the push-immunity dev cheat: an immune player never keeps a
 -- YellPush, even one applied the instant before they toggled immunity on
 RunService.Heartbeat:Connect(function()
-	for p in pairs(immunePush) do
+	for _, p in ipairs(Players:GetPlayers()) do
+		if p:GetAttribute("DevPushImmune") ~= true then continue end
 		local char = p.Character
 		local hrp = char and char:FindFirstChild("HumanoidRootPart")
 		local push = hrp and hrp:FindFirstChild("YellPush")
@@ -701,7 +622,7 @@ local function tryYell(char, hrp)
 		-- wind up with the roar, THEN shove — so the push lands with the animation
 		task.wait(YELL_SOUND_LEAD + YELL_WINDUP)
 
-		if p and immunePush[p] then return end -- dev cheat: no push-back
+		if p and p:GetAttribute("DevPushImmune") == true then return end
 
 		local char2 = p and p.Character or char
 		local hrp2 = char2 and char2:FindFirstChild("HumanoidRootPart")
@@ -752,6 +673,44 @@ losParams.FilterType = Enum.RaycastFilterType.Exclude
 -- and it sees through open space both horizontally and vertically. The eye is
 -- lifted so a slightly-sunk model still casts from above the floor.
 local EYE_UP = 3
+
+-- Decor remains CanQuery=false so it never breaks the player's flashlight.
+-- The plaza heap therefore supplies explicit sight-only volumes; test the
+-- sight segment against their oriented boxes without Roblox raycasts.
+local function segmentHitsBox(from, to, box)
+	local a = box.CFrame:PointToObjectSpace(from)
+	local b = box.CFrame:PointToObjectSpace(to)
+	local delta = b - a
+	local half = box.Size * 0.5
+	local tMin, tMax = 0, 1
+	for _, axis in ipairs({ "X", "Y", "Z" }) do
+		local origin, direction, extent = a[axis], delta[axis], half[axis]
+		if math.abs(direction) < 1e-5 then
+			if origin < -extent or origin > extent then return false end
+		else
+			local t1 = (-extent - origin) / direction
+			local t2 = (extent - origin) / direction
+			if t1 > t2 then t1, t2 = t2, t1 end
+			tMin = math.max(tMin, t1)
+			tMax = math.min(tMax, t2)
+			if tMin > tMax then return false end
+		end
+	end
+	return true
+end
+
+local function blockedByPlazaPile(from, to)
+	local decor = workspace:FindFirstChild("Decor")
+	if not decor then return false end
+	for _, item in ipairs(decor:GetChildren()) do
+		if item:IsA("BasePart") and item:GetAttribute("BlocksEntitySight") == true
+			and segmentHitsBox(from, to, item) then
+			return true
+		end
+	end
+	return false
+end
+
 local function clearLoS(char)
 	local from = root.Position + Vector3.new(0, EYE_UP, 0)
 	local hrp = char:FindFirstChild("HumanoidRootPart")
@@ -763,10 +722,12 @@ local function clearLoS(char)
 		table.insert(targets, hrp.Position - Vector3.new(0, 2.5, 0)) -- feet
 	end
 	for _, tp in ipairs(targets) do
-		local hit = workspace:Raycast(from, tp - from, losParams)
-		-- nothing blocking, or the thing we hit IS the player → visible
-		if hit == nil or hit.Instance:IsDescendantOf(char) then
-			return true
+		if not blockedByPlazaPile(from, tp) then
+			local hit = workspace:Raycast(from, tp - from, losParams)
+			-- nothing blocking, or the thing we hit IS the player → visible
+			if hit == nil or hit.Instance:IsDescendantOf(char) then
+				return true
+			end
 		end
 	end
 	return false
@@ -1118,6 +1079,7 @@ local WANDER_PAUSE_MAX = 2.2
 local wanderTarget = nil
 local wanderRetargetAt = 0
 local wanderPauseUntil = 0
+local activeObjectiveTarget = nil
 local lastChaseTarget = nil -- who currently carries the BeingChased attribute
 
 local function livingPlayers()
@@ -1135,6 +1097,23 @@ local function livingPlayers()
 end
 
 local function wanderPos(now)
+	local objectiveTarget = workspace:GetAttribute("EntityObjectiveTarget")
+	if typeof(objectiveTarget) == "Vector3" then
+		if activeObjectiveTarget ~= objectiveTarget then
+			activeObjectiveTarget = objectiveTarget
+			wanderTarget = nil
+			resetNav()
+		end
+		local flat = Vector3.new(objectiveTarget.X - root.Position.X, 0,
+			objectiveTarget.Z - root.Position.Z)
+		-- Wait near the current objective instead of selecting a random player or
+		-- a new room; PuzzleManager advances this marker with the objective stage.
+		if flat.Magnitude <= WANDER_REACH + 3 then return nil end
+		return objectiveTarget
+	elseif activeObjectiveTarget then
+		activeObjectiveTarget = nil
+		resetNav()
+	end
 	if wanderTarget then
 		local flat = Vector3.new(wanderTarget.X - root.Position.X, 0, wanderTarget.Z - root.Position.Z)
 		if flat.Magnitude <= WANDER_REACH then

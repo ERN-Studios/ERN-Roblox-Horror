@@ -3,7 +3,12 @@
 
 local NoiseRegistry = {}
 
-local LOUDNESS = { sprint = 1.0, walk = 0.45, crouch = 0.0 }
+local LOUDNESS = {
+	sprint = 1.0,
+	walk = 0.45,
+	crouch = 0.0,
+	relay = 1.35, -- metal release + electrical snap from a fuse extraction
+}
 local DECAY = 5
 
 local sounds = {}

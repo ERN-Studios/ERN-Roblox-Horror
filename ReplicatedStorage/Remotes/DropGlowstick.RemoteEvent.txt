@@ -1,0 +1,5 @@
+NOT a script — this file mirrors a RemoteEvent object in Roblox Studio.
+
+Studio path: ReplicatedStorage.Remotes.DropGlowstick
+Used by NoiseReporter (client) and GameManager (server).
+Name is case-sensitive and must be exactly "DropGlowstick".

@@ -1,0 +1,57 @@
+local Configuration = {
+	Version = 2,
+	GridSize = 6,
+	CellSize = 92,
+	WallHeight = 26,
+	WallThickness = 3,
+	DoorWidth = 24,
+	DoorHeight = 15,
+	WalkwayWidth = 13,
+	DeepPoolDepth = 18,
+	ShallowPoolDepth = 1.55,
+	CeilingPanelBrightness = 1.12,
+	CeilingPanelRange = 34,
+	WallPanelBrightness = 0.68,
+	WallPanelRange = 25,
+	ExtraConnectionChance = 0.18,
+	MinimumValveDistance = 7,
+	MinimumValveSeparation = 5,
+	GenerationAttempts = 24,
+	Theme = "Procedural Sealed Poolrooms",
+}
+
+Configuration.Colors = {
+	Tile = Color3.fromRGB(225, 222, 202),
+	TileCool = Color3.fromRGB(205, 220, 211),
+	TileWarm = Color3.fromRGB(235, 226, 194),
+	Grout = Color3.fromRGB(36, 104, 132),
+	DarkGrout = Color3.fromRGB(22, 55, 66),
+	Metal = Color3.fromRGB(83, 96, 99),
+	Water = Color3.fromRGB(48, 150, 159),
+	Light = Color3.fromRGB(255, 247, 210),
+	Emergency = Color3.fromRGB(194, 224, 205),
+	Void = Color3.fromRGB(7, 15, 18),
+}
+
+Configuration.SoundSlots = {
+	{"Level 2 Room Tone", true, "Continuous hollow tiled-pool ambience"},
+	{"Level 2 Ventilation Hum", true, "Low mechanical ventilation bed"},
+	{"Level 2 Fluorescent Buzz", true, "Quiet ceiling-light electrical buzz"},
+	{"Level 2 Distant Water", true, "Large-room water movement and reverb"},
+	{"Level 2 Shallow Footstep 1", false, "First shallow-water footstep variation"},
+	{"Level 2 Shallow Footstep 2", false, "Second shallow-water footstep variation"},
+	{"Level 2 Shallow Footstep 3", false, "Third shallow-water footstep variation"},
+	{"Level 2 Swim Stroke 1", false, "Swimming stroke variation"},
+	{"Level 2 Swim Stroke 2", false, "Swimming stroke variation"},
+	{"Level 2 Water Drop", false, "Single close ceramic water drip"},
+	{"Level 2 Distant Splash", false, "Unexplained splash in another room"},
+	{"Level 2 Ceramic Knock", false, "Short tile or pipe knock"},
+	{"Level 2 Drain Gurgle", false, "Drain suction and gurgle"},
+	{"Level 2 Pipe Groan", false, "Long building-pressure groan"},
+	{"Level 2 Underwater Thump", false, "Muffled low-frequency impact"},
+	{"Level 2 Valve Turn", false, "Pressure valve interaction"},
+	{"Level 2 Exit Unlock", false, "Steady mechanical exit release"},
+	{"Level 2 Slide Rush", false, "Water and tile rush inside exit tube"},
+}
+
+return Configuration

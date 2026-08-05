@@ -28,6 +28,45 @@ lobbyGrade.Parent = Lighting
 local function applyPlayerLighting()
  local inMaze = player:GetAttribute("InRound") == true
  local mazeGrade = Lighting:FindFirstChild("MongoGrade")
+ local levelTwoWorld = workspace:FindFirstChild("Level 2 Generated World") or workspace:FindFirstChild("PoolroomsLevel2")
+ local isLevelTwo = levelTwoWorld ~= nil and (workspace:GetAttribute("SelectedLevel") == 2 or inMaze)
+
+ if isLevelTwo and workspace:GetAttribute("Level2LightingOwnedByController") == true then
+  lobbyGrade.Enabled = false
+  if mazeGrade then mazeGrade.Enabled = false end
+  return
+ end
+
+ if isLevelTwo then
+  lobbyGrade.Enabled = false
+  if mazeGrade then mazeGrade.Enabled = false end
+  Lighting.ClockTime = 14
+  Lighting.FogColor = Color3.fromRGB(216, 217, 195)
+  Lighting.FogStart = 100000
+  Lighting.FogEnd = 100000
+
+  if levelTwoWorld:GetAttribute("ValveColorWashActive") == true then
+   local valveColor = levelTwoWorld:GetAttribute("ValveColorWashColor")
+   if typeof(valveColor) == "Color3" then
+    Lighting.Brightness = 1.95
+    Lighting.Ambient = Color3.fromRGB(92, 90, 78):Lerp(valveColor, .30)
+    Lighting.OutdoorAmbient = Color3.fromRGB(102, 100, 88):Lerp(valveColor, .22)
+    Lighting.ColorShift_Top = Color3.new(1, 1, 1):Lerp(valveColor, .42)
+    Lighting.ColorShift_Bottom = valveColor:Lerp(Color3.new(0, 0, 0), .76)
+    return
+   end
+  end
+
+  Lighting.Ambient = Color3.fromRGB(92, 90, 78)
+  Lighting.OutdoorAmbient = Color3.fromRGB(102, 100, 88)
+  Lighting.Brightness = 1.75
+  Lighting.ColorShift_Top = Color3.fromRGB(255, 246, 220)
+  Lighting.ColorShift_Bottom = Color3.fromRGB(20, 29, 28)
+  return
+ end
+
+ Lighting.ColorShift_Top = Color3.new(0, 0, 0)
+ Lighting.ColorShift_Bottom = Color3.new(0, 0, 0)
  if inMaze then
   Lighting.Ambient = Color3.fromRGB(4, 4, 3)
   Lighting.OutdoorAmbient = Color3.fromRGB(0, 0, 0)
@@ -312,20 +351,31 @@ queueClose.Activated:Connect(function()
 end)
 refreshQueuePanel()
 
--- A visible modal button releases Roblox's first-person mouse lock. The frame
--- callback keeps the cursor available even if the camera module tries to recapture it.
-queueShade:GetPropertyChangedSignal("Visible"):Connect(function()
- if not UIS.MouseEnabled then return end
- if queueShade.Visible then
-  UIS.MouseBehavior = Enum.MouseBehavior.Default
-  UIS.MouseIconEnabled = true
- else
-  UIS.MouseIconEnabled = false
- end
-end)
+-- RoundUI is the sole cursor-policy owner. Lobby players need the mouse for the
+-- queue phone and Zyntra store; gameplay hides it unless a modal is open.
+local function shouldShowCursor()
+ return player:GetAttribute("InRound") ~= true
+  or queueShade.Visible
+  or player:GetAttribute("DevPhoneOpen") == true
+end
 
+local function refreshCursor()
+ if not UIS.MouseEnabled then return end
+ local visible = shouldShowCursor()
+ if visible then UIS.MouseBehavior = Enum.MouseBehavior.Default end
+ UIS.MouseIconEnabled = visible
+end
+
+queueShade:GetPropertyChangedSignal("Visible"):Connect(refreshCursor)
+player:GetAttributeChangedSignal("InRound"):Connect(refreshCursor)
+player:GetAttributeChangedSignal("DevPhoneOpen"):Connect(refreshCursor)
+refreshCursor()
+
+-- An open modal must keep the pointer free. Ordinary lobby play deliberately
+-- does not touch MouseBehavior here: Roblox uses its temporary right-button
+-- lock to rotate the Classic camera while RMB is held.
 RunService.RenderStepped:Connect(function()
- if queueShade.Visible and UIS.MouseEnabled then
+ if UIS.MouseEnabled and (queueShade.Visible or player:GetAttribute("DevPhoneOpen") == true) then
   UIS.MouseBehavior = Enum.MouseBehavior.Default
   UIS.MouseIconEnabled = true
  end
@@ -408,7 +458,7 @@ endTitle.Position = UDim2.fromScale(0.5, 0.43)
 endTitle.Size = UDim2.new(0.88, 0, 0.18, 0)
 endTitle.BackgroundTransparency = 1
 endTitle.Font = Enum.Font.GothamBlack
-endTitle.Text = (workspace:GetAttribute("SelectedLevel") == 2 and "LEVEL 2 CLEARED" or "LEVEL 1 CLEARED")
+endTitle.Text = ("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED")
 endTitle.TextColor3 = Color3.fromRGB(115, 255, 170)
 endTitle.TextScaled = true
 endTitle.TextStrokeColor3 = Color3.new(0, 0, 0)
@@ -628,9 +678,9 @@ if RunService:IsStudio() then
  player:GetAttributeChangedSignal("DevRoundEnding"):Connect(function()
   local mode = tostring(player:GetAttribute("DevRoundEnding") or ""):lower()
   if mode:find("escape", 1, true) then
-   showRoundEnding((workspace:GetAttribute("SelectedLevel") == 2 and "LEVEL 2 CLEARED" or "LEVEL 1 CLEARED"), "SIGNAL LOST", "WAITING FOR THE OTHERS", Color3.fromRGB(115, 255, 170), true)
+   showRoundEnding(("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"), "SIGNAL LOST", "WAITING FOR THE OTHERS", Color3.fromRGB(115, 255, 170), true)
   elseif mode:find("win", 1, true) then
-   showRoundEnding((workspace:GetAttribute("SelectedLevel") == 2 and "LEVEL 2 CLEARED" or "LEVEL 1 CLEARED"), "TIME 03:42  •  SURVIVORS 2/3", "RETURNING TO BASE", Color3.fromRGB(115, 255, 170), false)
+   showRoundEnding(("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"), "TIME 03:42  •  SURVIVORS 2/3", "RETURNING TO BASE", Color3.fromRGB(115, 255, 170), false)
   elseif mode:find("lose", 1, true) then
    showRoundEnding("NO ONE FOUND A WAY OUT", "TIME 04:17  •  SURVIVORS 0/3", "RETURNING TO BASE", Color3.fromRGB(255, 82, 72), false)
   elseif mode:find("hide", 1, true) then
@@ -764,11 +814,11 @@ local function playObjective()
    if alive() then setMsg("") end
    return
   end
-			local built = typeInto("", "Find the fuses", 0.03)
+			local built = typeInto("", "Find ZYNTRA power relays", 0.03)
 		if not built then return end
 		task.wait(0.6)
 
-		built = typeInto(built .. string.char(10), "Power every fuse box with a fuse", 0.03)
+		built = typeInto(built .. string.char(10), "Extract fuses and power every fuse box", 0.03)
 		if not built then return end
 		task.wait(0.6)
 
@@ -1124,7 +1174,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
 	elseif ev == "escape" then
 		if a == player.Name then
 			showRoundEnding(
-				(workspace:GetAttribute("SelectedLevel") == 2 and "LEVEL 2 CLEARED" or "LEVEL 1 CLEARED"),
+				("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"),
 				"SIGNAL LOST",
 				"WAITING FOR THE OTHERS",
 				Color3.fromRGB(115, 255, 170),
@@ -1154,7 +1204,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
 		local survivors = math.max(0, math.floor(tonumber(b) or 0))
 		local totalPlayers = math.max(1, math.floor(tonumber(c) or math.max(1, survivors)))
 		showRoundEnding(
-			dead and "THE OTHERS FOUND A WAY OUT" or (workspace:GetAttribute("SelectedLevel") == 2 and "LEVEL 2 CLEARED" or "LEVEL 1 CLEARED"),
+			dead and "THE OTHERS FOUND A WAY OUT" or ("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"),
 			"TIME " .. formatRoundTime(a) .. "  •  SURVIVORS " .. survivors .. "/" .. totalPlayers,
 			"RETURNING TO BASE",
 			Color3.fromRGB(115, 255, 170),

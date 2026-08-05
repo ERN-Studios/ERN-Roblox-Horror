@@ -1,0 +1,42 @@
+{
+  "Walk_Restrained": {
+    "id": "121187609243437",
+    "reused": false,
+    "name": "Walk_Restrained"
+  },
+  "Run_PredatoryJog": {
+    "id": "90840395594409",
+    "reused": false,
+    "name": "Run_PredatoryJog"
+  },
+  "Watch": {
+    "id": "92831421568704",
+    "reused": true,
+    "name": "Watch"
+  },
+  "Yell_Howl": {
+    "id": "102035504530432",
+    "reused": true,
+    "name": "Yell_Howl"
+  },
+  "Yell_FromRun": {
+    "id": "132425538759403",
+    "reused": true,
+    "name": "Yell_FromRun"
+  },
+  "Lunge": {
+    "id": "70970124497806",
+    "reused": true,
+    "name": "Lunge"
+  },
+  "Lunge_FromRun": {
+    "id": "132839013239254",
+    "reused": true,
+    "name": "Lunge_FromRun"
+  },
+  "Kill_CloseHunchPunch": {
+    "id": "94135265462008",
+    "reused": false,
+    "name": "Kill_CloseHunchPunch"
+  }
+}

@@ -1,11 +1,36 @@
 -- TunnelLobbyBuilder
--- Modular A-Sync transit lobby used by GameManager.
+-- Modular Zyntra transit lobby used by GameManager.
 -- Geometry is intentionally built from simple anchored parts so the lobby remains
 -- easy to resize, texture, and extend when more levels are enabled.
 
 local Builder = {}
 
-local WALLPAPER_TEXTURE = "rbxassetid://87947439437597"
+local LOBBY_CONCRETE_MATERIALS = {
+	Concrete = {
+		texture = "rbxassetid://137549469660951",
+		studsPerTile = 14,
+	},
+	ConcreteAlt = {
+		texture = "rbxassetid://111820708793535",
+		studsPerTile = 14,
+	},
+	ConcreteAll = {
+		texture = "rbxassetid://137549469660951",
+		studsPerTile = 14,
+	},
+	FloorConcrete = {
+		texture = "rbxassetid://134299652574760",
+		studsPerTile = 12,
+	},
+	FloorConcreteAll = {
+		texture = "rbxassetid://134299652574760",
+		studsPerTile = 12,
+	},
+	Curb = {
+		texture = "rbxassetid://135670497420182",
+		studsPerTile = 5,
+	},
+}
 
 local COLORS = {
 	concrete = Color3.fromRGB(116, 105, 82),
@@ -37,23 +62,48 @@ local function makePart(parent, name, cf, size, color, material, transparency)
 	return p
 end
 
-local function tagSurface(part, role)
-	part:SetAttribute("TunnelTextureRole", role)
-	return part
-end
-
-local function addTexture(part, textureId, face, studsU, studsV)
-	if not textureId or textureId == "" then
-		return
-	end
+local function addSurfaceTexture(part, spec, face)
 	local texture = Instance.new("Texture")
-	texture.Name = "TunnelSurfaceTexture"
-	texture.Texture = textureId
+	texture.Name = "LobbyConcreteTexture"
+	texture.Texture = spec.texture
 	texture.Face = face
-	texture.StudsPerTileU = studsU or 12
-	texture.StudsPerTileV = studsV or 12
+	texture.StudsPerTileU = spec.studsPerTile
+	texture.StudsPerTileV = spec.studsPerTile
 	texture.Color3 = Color3.new(1, 1, 1)
 	texture.Parent = part
+end
+
+local function tagSurface(part, role)
+	part:SetAttribute("TunnelTextureRole", role)
+	local spec = LOBBY_CONCRETE_MATERIALS[role]
+	if spec then
+		part.Material = Enum.Material.Concrete
+		local faces
+		if role == "ConcreteAll" or role == "FloorConcreteAll" then
+			faces = {
+				Enum.NormalId.Top,
+				Enum.NormalId.Bottom,
+				Enum.NormalId.Left,
+				Enum.NormalId.Right,
+				Enum.NormalId.Front,
+				Enum.NormalId.Back,
+			}
+		elseif role == "FloorConcrete" then
+			faces = { Enum.NormalId.Top }
+		elseif role == "Curb" then
+			faces = { Enum.NormalId.Top, Enum.NormalId.Left, Enum.NormalId.Right }
+		elseif part.Size.X <= part.Size.Y and part.Size.X <= part.Size.Z then
+			faces = { Enum.NormalId.Left, Enum.NormalId.Right }
+		elseif part.Size.Y <= part.Size.Z then
+			faces = { Enum.NormalId.Top, Enum.NormalId.Bottom }
+		else
+			faces = { Enum.NormalId.Front, Enum.NormalId.Back }
+		end
+		for _, face in ipairs(faces) do
+			addSurfaceTexture(part, spec, face)
+		end
+	end
+	return part
 end
 
 local function addBoard(panel, face, titleText, subtitleText, titleColor)
@@ -107,10 +157,6 @@ local function addBoard(panel, face, titleText, subtitleText, titleColor)
 	return title, subtitle
 end
 
-local function addWallpaper(part, face)
-	addTexture(part, WALLPAPER_TEXTURE, face, 9, 9)
-end
-
 local function addLamp(parent, center, x, z)
 	local mount = makePart(
 		parent,
@@ -138,6 +184,278 @@ local function addLamp(parent, center, x, z)
 	point.Range = 30
 	point.Shadows = true
 	point.Parent = lens
+end
+
+local function addTunnelEndBarricade(parent, center, zOffset, inward, seed)
+	local model = Instance.new("Model")
+	model.Name = zOffset < 0 and "NearPropBarricade" or "FarPropBarricade"
+	model.Parent = parent
+	local random = Random.new(seed)
+	local base = center + Vector3.new(0, 0, zOffset)
+
+	-- The dark backstop is fully hidden by the pile in normal play. It prevents
+	-- pinholes between silhouettes from revealing the finite end of the lobby.
+	local backstop = makePart(
+		model,
+		"OcclusionBackstop",
+		CFrame.new(base + Vector3.new(0, 29, -inward * 2.8)),
+		Vector3.new(70, 58, 2.4),
+		Color3.fromRGB(38, 37, 34),
+		Enum.Material.Concrete
+	)
+	tagSurface(backstop, "ConcreteAlt")
+
+	-- A single continuous collider guarantees that players cannot squeeze
+	-- through small natural gaps in the furniture wall.
+	local blocker = makePart(
+		model,
+		"PropBarricadeCollision",
+		CFrame.new(base + Vector3.new(0, 18, inward * 1.5)),
+		Vector3.new(69, 36, 7),
+		Color3.new(0, 0, 0),
+		Enum.Material.SmoothPlastic,
+		1
+	)
+	blocker.CanQuery = false
+	blocker.CanTouch = false
+
+	local cardboard = {
+		Color3.fromRGB(139, 105, 66),
+		Color3.fromRGB(118, 89, 57),
+		Color3.fromRGB(156, 122, 77),
+		Color3.fromRGB(102, 78, 54),
+	}
+
+	-- Six overlapping courses make a dense, irregular mass across the complete
+	-- road and both walkways instead of a repeated row of identical crates.
+	for layer = 0, 5 do
+		for column = -5, 5 do
+			local width = random:NextNumber(5.7, 7.2)
+			local height = random:NextNumber(4.3, 5.8)
+			local depth = random:NextNumber(4.5, 7.5)
+			local x = column * 6.25 + random:NextNumber(-0.8, 0.8)
+			local y = 2.25 + layer * 4.55 + random:NextNumber(-0.35, 0.35)
+			local z = inward * (1.2 + random:NextNumber(-1.4, 2.5) - layer * 0.24)
+			-- Leave irregular pockets above the solid bottom course. Furniture is
+			-- wedged into these spaces below instead of merely standing in front.
+			if layer == 0 or random:NextNumber() > 0.24 then
+				local box = makePart(
+					model,
+					"AbandonedArchiveBox",
+					CFrame.new(base + Vector3.new(x, y, z)) * CFrame.Angles(
+						math.rad(random:NextNumber(-4, 4)),
+						math.rad(random:NextNumber(-10, 10)),
+						math.rad(random:NextNumber(-5, 5))
+					),
+					Vector3.new(width, height, depth),
+					cardboard[random:NextInteger(1, #cardboard)],
+					Enum.Material.Wood
+				)
+				box:SetAttribute("LobbyProp", "ArchiveBox")
+			end
+		end
+	end
+
+	local function addEmbeddedChair(chairCF, scale)
+		makePart(model, "WedgedChairSeat", chairCF, Vector3.new(3.8, 0.65, 3.8) * scale, Color3.fromRGB(63, 65, 60), Enum.Material.Metal)
+		makePart(model, "WedgedChairBack", chairCF * CFrame.new(0, 2.25 * scale, 1.65 * scale), Vector3.new(3.8, 4.2, 0.55) * scale, Color3.fromRGB(72, 73, 66), Enum.Material.Metal)
+		for _, legX in ipairs({ -1.45, 1.45 }) do
+			for _, legZ in ipairs({ -1.45, 1.45 }) do
+				makePart(
+					model,
+					"WedgedChairLeg",
+					chairCF * CFrame.new(legX * scale, -1.65 * scale, legZ * scale),
+					Vector3.new(0.35, 3.1, 0.35) * scale,
+					Color3.fromRGB(42, 44, 42),
+					Enum.Material.Metal
+				)
+			end
+		end
+	end
+
+	local function addEmbeddedTable(tableCF, scale)
+		makePart(model, "WedgedDeskTop", tableCF, Vector3.new(9.2, 0.75, 5.1) * scale, Color3.fromRGB(76, 55, 38), Enum.Material.WoodPlanks)
+		for _, legX in ipairs({ -3.8, 3.8 }) do
+			for _, legZ in ipairs({ -1.8, 1.8 }) do
+				makePart(
+					model,
+					"WedgedDeskLeg",
+					tableCF * CFrame.new(legX * scale, -2.4 * scale, legZ * scale),
+					Vector3.new(0.5, 4.5, 0.5) * scale,
+					Color3.fromRGB(48, 50, 47),
+					Enum.Material.Metal
+				)
+			end
+		end
+	end
+
+	local function addGrandfatherClock(clockCF, scale)
+		local wood = Color3.fromRGB(79, 48, 29)
+		makePart(model, "WedgedGrandfatherClockBody", clockCF, Vector3.new(4.2, 10.5, 2.4) * scale, wood, Enum.Material.WoodPlanks)
+		makePart(model, "WedgedGrandfatherClockHood", clockCF * CFrame.new(0, 5.2 * scale, 0), Vector3.new(5.1, 4.1, 3) * scale, Color3.fromRGB(64, 38, 24), Enum.Material.WoodPlanks)
+		local face = makePart(
+			model,
+			"GrandfatherClockFace",
+			clockCF * CFrame.new(0, 5.25 * scale, -1.53 * scale) * CFrame.Angles(0, math.rad(90), 0),
+			Vector3.new(0.3, 2.8, 2.8) * scale,
+			Color3.fromRGB(204, 189, 143),
+			Enum.Material.SmoothPlastic
+		)
+		face.Shape = Enum.PartType.Cylinder
+		face.CanCollide = false
+		local window = makePart(model, "GrandfatherClockWindow", clockCF * CFrame.new(0, 0.4 * scale, -1.23 * scale), Vector3.new(2.2, 4.1, 0.18) * scale, Color3.fromRGB(25, 23, 20), Enum.Material.Glass, 0.18)
+		window.CanCollide = false
+		local pendulum = makePart(model, "GrandfatherClockPendulum", clockCF * CFrame.new(0, 0.15 * scale, -1.36 * scale), Vector3.new(0.38, 2.7, 0.18) * scale, Color3.fromRGB(177, 139, 56), Enum.Material.Metal)
+		pendulum.CanCollide = false
+	end
+
+	local function addPrinter(printerCF, scale)
+		local shell = Color3.fromRGB(165, 166, 157)
+		makePart(model, "WedgedOfficePrinter", printerCF, Vector3.new(4.8, 2.5, 4) * scale, shell, Enum.Material.SmoothPlastic)
+		makePart(model, "PrinterScannerLid", printerCF * CFrame.new(0, 1.45 * scale, 0.15 * scale), Vector3.new(4.35, 0.45, 3.45) * scale, Color3.fromRGB(194, 195, 184), Enum.Material.SmoothPlastic)
+		local slot = makePart(model, "PrinterOutputSlot", printerCF * CFrame.new(0, -0.15 * scale, -2.03 * scale), Vector3.new(3.25, 0.38, 0.18) * scale, Color3.fromRGB(28, 30, 28), Enum.Material.SmoothPlastic)
+		slot.CanCollide = false
+		local paper = makePart(model, "PrinterPaper", printerCF * CFrame.new(0, -0.65 * scale, -2.7 * scale) * CFrame.Angles(math.rad(18), 0, 0), Vector3.new(3, 0.08, 2.4) * scale, Color3.fromRGB(220, 216, 195), Enum.Material.SmoothPlastic)
+		paper.CanCollide = false
+	end
+
+	-- Furniture and office equipment are distributed through the entire height
+	-- of the pile. Strong rotations make pieces look crushed and load-bearing.
+	for index = 1, 15 do
+		local row = math.floor((index - 1) / 5)
+		local column = (index - 1) % 5
+		local chairCF = CFrame.new(base + Vector3.new(
+			-25 + column * 12.5 + random:NextNumber(-2, 2),
+			8 + row * 8.2 + random:NextNumber(-1.2, 1.2),
+			inward * random:NextNumber(4.3, 7.2)
+		)) * CFrame.Angles(
+			math.rad(random:NextNumber(-55, 55)),
+			math.rad(random:NextNumber(-75, 75)),
+			math.rad(random:NextNumber(-70, 70))
+		)
+		addEmbeddedChair(chairCF, random:NextNumber(0.82, 1.08))
+	end
+
+	for index = 1, 7 do
+		local row = math.floor((index - 1) / 4)
+		local column = (index - 1) % 4
+		local tableCF = CFrame.new(base + Vector3.new(
+			-24 + column * 16 + random:NextNumber(-2.2, 2.2),
+			11 + row * 11 + random:NextNumber(-1, 1),
+			inward * random:NextNumber(3.5, 6.2)
+		)) * CFrame.Angles(
+			math.rad(random:NextNumber(-25, 25)),
+			math.rad(random:NextNumber(-50, 50)),
+			math.rad(random:NextNumber(-38, 38))
+		)
+		addEmbeddedTable(tableCF, random:NextNumber(0.82, 1.05))
+	end
+
+	for index = 1, 5 do
+		local clockCF = CFrame.new(base + Vector3.new(
+			-26 + (index - 1) * 13 + random:NextNumber(-1.5, 1.5),
+			10.5 + (index % 2) * 8,
+			inward * random:NextNumber(5.2, 7.8)
+		)) * CFrame.Angles(
+			math.rad(random:NextNumber(-16, 16)),
+			math.rad(random:NextNumber(-35, 35)),
+			math.rad(random:NextNumber(-32, 32))
+		)
+		addGrandfatherClock(clockCF, random:NextNumber(0.78, 0.96))
+	end
+
+	for index = 1, 12 do
+		local row = math.floor((index - 1) / 6)
+		local column = (index - 1) % 6
+		local printerCF = CFrame.new(base + Vector3.new(
+			-28 + column * 11 + random:NextNumber(-1.5, 1.5),
+			7.5 + row * 13 + random:NextNumber(-1.4, 1.4),
+			inward * random:NextNumber(6, 9)
+		)) * CFrame.Angles(
+			math.rad(random:NextNumber(-35, 35)),
+			math.rad(random:NextNumber(-65, 65)),
+			math.rad(random:NextNumber(-38, 38))
+		)
+		addPrinter(printerCF, random:NextNumber(0.78, 1.08))
+	end
+
+	-- Metal filing cabinets break up the cardboard silhouette and sell the
+	-- abandoned-office origin of the barricade.
+	for index = -3, 3 do
+		local x = index * 9 + random:NextNumber(-1.5, 1.5)
+		local cabinetCF = CFrame.new(base + Vector3.new(x, 5.2, inward * 5.3))
+			* CFrame.Angles(0, math.rad(random:NextNumber(-16, 16)), math.rad(random:NextNumber(-3, 3)))
+		local cabinet = makePart(
+			model,
+			"AbandonedFileCabinet",
+			cabinetCF,
+			Vector3.new(5.4, 10.2, 4.2),
+			Color3.fromRGB(72, 76, 72),
+			Enum.Material.Metal
+		)
+		cabinet:SetAttribute("LobbyProp", "FileCabinet")
+		for drawer = -1, 1 do
+			local front = makePart(
+				model,
+				"CabinetDrawer",
+				cabinetCF * CFrame.new(0, drawer * 2.7, inward * 2.13),
+				Vector3.new(4.5, 0.18, 0.18),
+				Color3.fromRGB(29, 31, 29),
+				Enum.Material.Metal
+			)
+			front.CanCollide = false
+		end
+	end
+
+	-- Half-buried office tables and chairs form the readable foreground layer.
+	for index = 1, 5 do
+		local x = -27 + (index - 1) * 13.5 + random:NextNumber(-1.5, 1.5)
+		local yaw = math.rad(random:NextNumber(-28, 28))
+		local tableCF = CFrame.new(base + Vector3.new(x, 5.2, inward * 9.2)) * CFrame.Angles(0, yaw, 0)
+		makePart(model, "DiscardedDeskTop", tableCF, Vector3.new(10.5, 0.8, 5.5), Color3.fromRGB(76, 55, 38), Enum.Material.WoodPlanks)
+		for _, legX in ipairs({ -4.4, 4.4 }) do
+			for _, legZ in ipairs({ -2.1, 2.1 }) do
+				makePart(
+					model,
+					"DiscardedDeskLeg",
+					tableCF * CFrame.new(legX, -2.5, legZ),
+					Vector3.new(0.55, 4.8, 0.55),
+					Color3.fromRGB(48, 50, 47),
+					Enum.Material.Metal
+				)
+			end
+		end
+	end
+
+	for index = 1, 7 do
+		local x = -30 + (index - 1) * 10 + random:NextNumber(-1, 1)
+		local chairCF = CFrame.new(base + Vector3.new(x, 2.9, inward * 13.2))
+			* CFrame.Angles(math.rad(random:NextNumber(-7, 7)), math.rad(random:NextNumber(-35, 35)), math.rad(random:NextNumber(-8, 8)))
+		makePart(model, "DiscardedChairSeat", chairCF, Vector3.new(3.8, 0.65, 3.8), Color3.fromRGB(63, 65, 60), Enum.Material.Metal)
+		makePart(model, "DiscardedChairBack", chairCF * CFrame.new(0, 2.25, 1.65), Vector3.new(3.8, 4.2, 0.55), Color3.fromRGB(72, 73, 66), Enum.Material.Metal)
+		for _, legX in ipairs({ -1.45, 1.45 }) do
+			for _, legZ in ipairs({ -1.45, 1.45 }) do
+				makePart(model, "DiscardedChairLeg", chairCF * CFrame.new(legX, -1.65, legZ), Vector3.new(0.35, 3.1, 0.35), Color3.fromRGB(42, 44, 42), Enum.Material.Metal)
+			end
+		end
+	end
+
+	-- Long fallen shelving panels close the irregular upper outline beneath the
+	-- tunnel crown and make the blockade feel deliberately impossible to cross.
+	for index = -1, 1 do
+		makePart(
+			model,
+			"CollapsedShelvingPanel",
+			CFrame.new(base + Vector3.new(index * 21, 29 + math.abs(index) * 1.6, inward * 2.2))
+				* CFrame.Angles(math.rad(4 * index), math.rad(random:NextNumber(-9, 9)), math.rad(index * 13)),
+			Vector3.new(25, 1.25, 5.5),
+			Color3.fromRGB(54, 57, 54),
+			Enum.Material.Metal
+		)
+	end
+
+	model:SetAttribute("DenseEndBarricade", true)
+	return model
 end
 
 local function addQueueStation(parent, roomCenter, index, offset, color, active, displayIndex, level)
@@ -236,7 +554,7 @@ local function addRoom(parent, center, level, side, zOffset, active, stations)
 		Enum.Material.Concrete
 	)
 	floor.Shape = Enum.PartType.Cylinder
-	tagSurface(floor, "Curb")
+	tagSurface(floor, "FloorConcrete")
 
 	local ceiling = makePart(
 		roomModel,
@@ -278,10 +596,50 @@ local function addRoom(parent, center, level, side, zOffset, active, stations)
 		roomModel,
 		"DoorThreshold",
 		CFrame.new(center.X + passageCenterX, center.Y - 0.25, center.Z + zOffset),
-		Vector3.new(math.abs(roomEdgeX - tunnelEdgeX) + 2, 0.5, 18),
+		-- Overlap both the service ledge and chamber floor slightly. The old
+		-- three-stud bridge left a visible crack on either side of the doorway.
+		Vector3.new(math.abs(roomEdgeX - tunnelEdgeX) + 4, 0.5, 19.6),
 		COLORS.metalLight,
 		Enum.Material.DiamondPlate
 	), "Metal")
+
+	-- Join the cylindrical chamber to the tunnel with a short rectangular
+	-- vestibule. Large square seam fillers looked correct from the tunnel but
+	-- exposed their backs (and a sliver of sky) when viewed from inside a bay.
+	-- These edge-on walls, floor, and ceiling overlap both structures instead.
+	for _, zSide in ipairs({ -1, 1 }) do
+		tagSurface(makePart(
+			roomModel,
+			"DoorVestibuleWall",
+			CFrame.new(center + Vector3.new(
+				side * 38,
+				11.25,
+				zOffset + zSide * 10.15
+			)),
+			Vector3.new(11, 23.5, 1.5),
+			COLORS.concrete,
+			Enum.Material.Concrete
+		), "ConcreteAll")
+	end
+
+	tagSurface(makePart(
+		roomModel,
+		"DoorVestibuleFloor",
+		CFrame.new(center + Vector3.new(side * 38, -0.25, zOffset)),
+		Vector3.new(11, 0.8, 21.8),
+		COLORS.concreteDark,
+		Enum.Material.Concrete
+	), "FloorConcreteAll")
+	tagSurface(makePart(
+		roomModel,
+		"DoorVestibuleCeiling",
+		-- A solid overhead backfill reaches the chamber ceiling. A thin roof
+		-- still allowed high third-person cameras to see into the void above it.
+		CFrame.new(center + Vector3.new(side * 38, 19.4, zOffset)),
+		Vector3.new(11, 7.8, 21.8),
+		COLORS.concrete,
+		Enum.Material.Concrete
+	), "ConcreteAll")
 
 	local stationColors = {
 		Color3.fromRGB(82, 255, 180),
@@ -414,7 +772,7 @@ function Builder.Build(center)
 	local model = Instance.new("Model")
 	model.Name = "ServerLobby"
 	model.Parent = workspace
-	model:SetAttribute("LobbyStyle", "ASyncTunnel")
+	model:SetAttribute("LobbyStyle", "ZyntraTunnel")
 	model:SetAttribute("TextureVersion", 1)
 
 	local geometry = Instance.new("Folder")
@@ -445,7 +803,7 @@ function Builder.Build(center)
 		geometry,
 		"MainAsphaltRoad",
 		CFrame.new(center + Vector3.new(0, -0.55, 0)),
-		Vector3.new(32, 1.1, tunnelLength),
+		Vector3.new(33, 1.1, tunnelLength),
 		COLORS.asphalt,
 		Enum.Material.Asphalt
 	)
@@ -456,11 +814,13 @@ function Builder.Build(center)
 			geometry,
 			"RaisedServiceLedge",
 			CFrame.new(center + Vector3.new(side * 25, 0.05, 0)),
-			Vector3.new(14, 1.2, tunnelLength),
+			-- Reach 0.3 studs underneath the lower tunnel wall. The old 14.5
+			-- width stopped 0.65 studs short and exposed a long void trench.
+			Vector3.new(16.4, 1.2, tunnelLength),
 			COLORS.curb,
 			Enum.Material.Concrete
 		)
-		tagSurface(walkway, "Curb")
+		tagSurface(walkway, "FloorConcrete")
 
 		local curb = makePart(
 			geometry,
@@ -631,7 +991,7 @@ function Builder.Build(center)
 	local levelDefs = {
 		{level = 1, side = -1, z = -80, active = true},
 		{level = 2, side = 1, z = -80, active = true},
-		{level = 3, side = -1, z = 0, active = false},
+		{level = 3, side = -1, z = 0, active = true},
 		{level = 4, side = 1, z = 0, active = false},
 		{level = 5, side = -1, z = 80, active = false},
 		{level = 6, side = 1, z = 80, active = false},
@@ -641,31 +1001,18 @@ function Builder.Build(center)
 		addRoom(rooms, center, def.level, def.side, def.z, def.active, stations)
 	end
 
-	-- Backrooms wallpaper end caps make the finite tunnel feel like an abnormal
-	-- intrusion into the familiar Level 1 environment.
-	local nearCap = makePart(
-		geometry,
-		"BackroomsEndCapNear",
-		CFrame.new(center + Vector3.new(0, 30, -halfLength + 0.6)),
-		Vector3.new(70, 60, 1.2),
-		COLORS.wallpaper,
-		Enum.Material.SmoothPlastic
-	)
-	addWallpaper(nearCap, Enum.NormalId.Back)
-	local farCap = makePart(
-		geometry,
-		"BackroomsEndCapFar",
-		CFrame.new(center + Vector3.new(0, 30, halfLength - 0.6)),
-		Vector3.new(70, 60, 1.2),
-		COLORS.wallpaper,
-		Enum.Material.SmoothPlastic
-	)
-	addWallpaper(farCap, Enum.NormalId.Front)
+	-- Dense abandoned-office barricades replace the old flat wallpaper caps.
+	-- `inward` points from each finite end back into the playable tunnel.
+	addTunnelEndBarricade(detail, center, -halfLength + 1.2, 1, 1993)
+	addTunnelEndBarricade(detail, center, halfLength - 1.2, -1, 1997)
 
 	local spawn = Instance.new("SpawnLocation")
 	spawn.Name = "LobbySpawn"
 	spawn.Anchored = true
-	spawn.CFrame = CFrame.new(center + Vector3.new(0, 0.4, -118))
+	local spawnPosition = center + Vector3.new(0, 0.4, -100)
+	-- Keep enough clearance behind a third-person camera for the new dense end
+	-- barricade, and face arrivals toward the level stations.
+	spawn.CFrame = CFrame.lookAt(spawnPosition, center + Vector3.new(0, 0.4, 0))
 	spawn.Size = Vector3.new(8, 0.5, 8)
 	spawn.Transparency = 1
 	spawn.Neutral = true
@@ -678,7 +1025,7 @@ function Builder.Build(center)
 
 	local welcome = makePart(
 		detail,
-		"ASyncWelcomeBoard",
+		"ZyntraWelcomeBoard",
 		CFrame.new(center + Vector3.new(0, 13.5, -138.1)) * CFrame.Angles(0, math.pi, 0),
 		Vector3.new(26, 7.5, 0.55),
 		COLORS.metal,
@@ -688,8 +1035,8 @@ function Builder.Build(center)
 	addBoard(
 		welcome,
 		Enum.NormalId.Front,
-		"A-SYNC TRANSIT ACCESS",
-		"ANOMALOUS RECOVERY DIVISION  •  PROCEED TO AN AUTHORIZED LEVEL BAY",
+		"ZYNTRA TRANSIT ACCESS",
+		"POWERING THE FUTURE.  •  PROCEED TO AN AUTHORIZED LEVEL BAY",
 		COLORS.green
 	)
 

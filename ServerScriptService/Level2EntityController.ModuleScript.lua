@@ -354,6 +354,26 @@ local function stepState(state, dt, now)
 		state.LastProgressAt = now
 		return
 	end
+	if workspace:GetAttribute("EntityPaused") == true then
+		if not state.DevPaused then
+			state.DevPaused = true
+			state.AttackToken += 1
+			state.Attacking = false
+			Navigation.CancelPath(state)
+			state.Root.AssemblyLinearVelocity = Vector3.zero
+			state.Root.AssemblyAngularVelocity = Vector3.zero
+			setAttribute(state.Entity, "AttackStage", "Ready")
+			setAttribute(state.Entity, "ActionName", "")
+			setAttribute(state.Entity, "AttackTargetUserId", 0)
+			setMotion(state, "Idle", 0)
+		end
+		state.LastProgressAt = now
+		return
+	elseif state.DevPaused then
+		state.DevPaused = false
+		state.RepathRequested = true
+		state.NextScanAt = 0
+	end
 
 	if now >= state.NextScanAt then
 		state.NextScanAt = now + 0.17
@@ -485,6 +505,7 @@ function Controller.Start(entity)
 		StuckCount = 0,
 		LastSafeCFrame = entity:GetPivot(),
 		NextSafeAnchorAt = os.clock() + 3,
+		DevPaused = false,
 	}
 	states[entity] = state
 

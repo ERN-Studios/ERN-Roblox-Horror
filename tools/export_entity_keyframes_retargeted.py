@@ -188,6 +188,30 @@ def quaternion_xyzw(rotation: np.ndarray) -> tuple[float, float, float, float]:
     return x/length, y/length, z/length, w/length
 
 
+def slerp_xyzw(a: list[float], b: list[float], alpha: float) -> list[float]:
+    """Shortest-path quaternion interpolation for a seamless loop tail."""
+    av = np.array(a, dtype=float)
+    bv = np.array(b, dtype=float)
+    av /= np.linalg.norm(av)
+    bv /= np.linalg.norm(bv)
+    dot = float(np.dot(av, bv))
+    if dot < 0:
+        bv = -bv
+        dot = -dot
+    alpha = max(0.0, min(1.0, alpha))
+    if dot > 0.9995:
+        result = av + (bv - av) * alpha
+        result /= np.linalg.norm(result)
+        return result.tolist()
+    theta = math.acos(max(-1.0, min(1.0, dot)))
+    sine = math.sin(theta)
+    result = (
+        math.sin((1 - alpha) * theta) * av
+        + math.sin(alpha * theta) * bv
+    ) / sine
+    return result.tolist()
+
+
 def main() -> int:
     blender = blender_execute(blender_sample_code(), timeout=240)["result"]
     studio = studio_rest()
@@ -233,6 +257,26 @@ def main() -> int:
     for public_name, action_data in blender["actions"].items():
         output_frames = []
         max_rest_error = 0.0
+        # Every action is authored in-place, but several Blender clips begin at
+        # a different Hips offset. Normalize that hidden per-clip origin so a
+        # crossfade cannot pop the whole rig by 0.3-1.25 studs.
+        first_hips_pose = convert_blender(
+            matrix(action_data["frames"][0]["Hips"]), scale)
+        first_hips_mapped = np.eye(4)
+        first_hips_world_delta = (
+            first_hips_pose[:3, :3]
+            @ converted_reference["Hips"][:3, :3].T
+        )
+        first_hips_mapped[:3, :3] = (
+            first_hips_world_delta @ studio_global["Hips"][:3, :3]
+        )
+        first_hips_mapped[:3, 3] = (
+            studio_global["Hips"][:3, 3]
+            + first_hips_pose[:3, 3]
+            - converted_reference["Hips"][:3, 3]
+        )
+        first_hips_delta = np.linalg.inv(studio_local["Hips"]) @ first_hips_mapped
+        hips_origin = first_hips_delta[:3, 3].copy()
         for frame_index, frame in enumerate(action_data["frames"]):
             mapped_global = {}
             for name in BONES:
@@ -269,6 +313,7 @@ def main() -> int:
                 if name != "Hips":
                     location = np.zeros(3)
                 else:
+                    location = location - hips_origin
                     magnitude = float(np.linalg.norm(location))
                     if magnitude > 1.25:
                         location = location * (1.25 / magnitude)
@@ -283,6 +328,23 @@ def main() -> int:
                 if frame_index == 0:
                     max_rest_error = max(max_rest_error, float(np.linalg.norm(location)))
             output_frames.append([round(frame_index / FPS, 6), transforms])
+
+        # Blender's locomotion ranges stop one sample before an exact duplicate
+        # of frame 1. Ease the final five samples back into frame 1 so Roblox's
+        # loop boundary has no knee/hip snap.
+        if public_name in LOOPED and len(output_frames) >= 7:
+            first = {values[0]: values for values in output_frames[0][1]}
+            tail_start = len(output_frames) - 5
+            for index in range(tail_start, len(output_frames)):
+                alpha = (index - tail_start + 1) / 5
+                for values in output_frames[index][1]:
+                    target = first[values[0]]
+                    for component in range(1, 4):
+                        values[component] = round(
+                            values[component]
+                            + (target[component] - values[component]) * alpha, 6)
+                    values[4:8] = [round(value, 7) for value in slerp_xyzw(
+                        values[4:8], target[4:8], alpha)]
         payload = {
             "name": public_name,
             "looped": public_name in LOOPED,
@@ -291,7 +353,7 @@ def main() -> int:
                 else "Movement" if public_name in LOOPED
                 else "Action4"
             ),
-            "retarget": "global-pose-delta-v5-forward-and-fingers",
+            "retarget": "global-pose-delta-v10-normalized-origin-loop-closure",
             "frames": output_frames,
         }
         filename = public_name.lower() + ".json"
@@ -300,6 +362,7 @@ def main() -> int:
         )
         diagnostics["actions"][public_name] = {
             "frames": len(output_frames), "first_frame_translation_max": max_rest_error,
+            "removed_hips_origin": [round(float(value), 6) for value in hips_origin],
         }
         print(f"RETARGETED {public_name}: {len(output_frames)} frames -> {filename}")
 

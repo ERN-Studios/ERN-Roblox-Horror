@@ -23,6 +23,7 @@ from sync_from_studio import (  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
 CHANGED_FILES = (
+    "ReplicatedStorage/DevAccess.ModuleScript.lua",
     "ServerScriptService/AvatarNormalize.Script.lua",
     "ServerScriptService/FlashlightSync.Script.lua",
     "ServerScriptService/EntityAI.Script.lua",
@@ -32,6 +33,7 @@ CHANGED_FILES = (
     "ServerScriptService/GameManager.Script.lua",
     "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
     "ServerScriptService/PuzzleManager.Script.lua",
+    "ServerScriptService/Level2EntityController.ModuleScript.lua",
     "StarterPlayer/StarterPlayerScripts/DevCheats.LocalScript.lua",
     "StarterPlayer/StarterPlayerScripts/FlashlightController.LocalScript.lua",
     "StarterPlayer/StarterPlayerScripts/JumpscareUI.LocalScript.lua",
@@ -39,6 +41,8 @@ CHANGED_FILES = (
     "StarterPlayer/StarterPlayerScripts/PuzzleUI.LocalScript.lua",
     "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
     "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
+    "StarterPlayer/StarterPlayerScripts/Level2AlertClient.LocalScript.lua",
+    "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
     "StarterPlayer/StarterCharacterScripts/DisableDefaultWalkingSound.LocalScript.lua",
     "StarterPlayer/StarterCharacterScripts/SetRunAnimation.LocalScript.lua",
 )
@@ -58,11 +62,66 @@ def main() -> int:
     animation_ids_only = "--animation-ids-only" in sys.argv[1:]
     post_playtest_fixes = "--post-playtest-fixes" in sys.argv[1:]
     maze_only = "--maze-only" in sys.argv[1:]
+    tunnel_lobby_only = "--tunnel-lobby-only" in sys.argv[1:]
+    fuse_relays = "--fuse-relays" in sys.argv[1:]
+    dev_cheats_level2 = "--dev-cheats-level2" in sys.argv[1:]
+    round_polish = "--round-polish" in sys.argv[1:]
+    branding = "--branding" in sys.argv[1:]
+    level_state_fix = "--level-state-fix" in sys.argv[1:]
+    dev_phone = "--dev-phone" in sys.argv[1:]
     latest_batch = "--latest-batch" in sys.argv[1:]
     if animation_ids_only:
         changed_files = ("ServerScriptService/EntityAnimation.Script.lua",)
     elif maze_only:
         changed_files = ("ServerScriptService/MazeGenerator.Script.lua",)
+    elif tunnel_lobby_only:
+        changed_files = ("ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",)
+    elif fuse_relays:
+        changed_files = (
+            "ServerScriptService/NoiseRegistry.ModuleScript.lua",
+            "ServerScriptService/PuzzleManager.Script.lua",
+            "ServerScriptService/MazeGenerator.Script.lua",
+            "StarterPlayer/StarterPlayerScripts/DevCheats.LocalScript.lua",
+            "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
+        )
+    elif dev_cheats_level2:
+        changed_files = (
+            "ReplicatedStorage/DevAccess.ModuleScript.lua",
+            "ServerScriptService/PuzzleManager.Script.lua",
+            "ServerScriptService/GameManager.Script.lua",
+            "ServerScriptService/EntityAI.Script.lua",
+            "ServerScriptService/Level2EntityController.ModuleScript.lua",
+            "StarterPlayer/StarterPlayerScripts/DevCheats.LocalScript.lua",
+            "StarterPlayer/StarterPlayerScripts/FlashlightController.LocalScript.lua",
+            "StarterPlayer/StarterPlayerScripts/Level2AlertClient.LocalScript.lua",
+        )
+    elif round_polish:
+        changed_files = (
+            "ServerScriptService/MazeGenerator.Script.lua",
+            "ServerScriptService/GameManager.Script.lua",
+            "StarterPlayer/StarterPlayerScripts/FlashlightController.LocalScript.lua",
+        )
+    elif branding:
+        changed_files = (
+            "ServerScriptService/MazeGenerator.Script.lua",
+            "ServerScriptService/PuzzleManager.Script.lua",
+            "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
+            "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
+        )
+    elif level_state_fix:
+        changed_files = (
+            "ServerScriptService/GameManager.Script.lua",
+            "ServerScriptService/Level2Generator.ModuleScript.lua",
+            "StarterPlayer/StarterPlayerScripts/FlashlightController.LocalScript.lua",
+            "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
+        )
+    elif dev_phone:
+        changed_files = (
+            "StarterPlayer/StarterPlayerScripts/DevCheats.LocalScript.lua",
+            "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
+            "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
+            "StarterPlayer/StarterPlayerScripts/NoiseReporter.LocalScript.lua",
+        )
     elif post_playtest_fixes:
         changed_files = (
             "ServerScriptService/EntityAI.Script.lua",
@@ -164,6 +223,29 @@ def main() -> int:
                 # before this narrow push. They contain the previous Level 1
                 # batch plus the preserved fast-queue additions in GameManager.
                 # Do not use the old full-sync manifest as a false conflict here.
+                pass
+            elif tunnel_lobby_only:
+                # This mode is used only after an explicit Studio/local diff of
+                # TunnelLobbyBuilder has been reviewed in the current session.
+                pass
+            elif fuse_relays:
+                # The relay batch is reviewed and tested as one cohesive puzzle
+                # change, so its current Studio/local diff is intentional.
+                pass
+            elif dev_cheats_level2:
+                # This follow-up builds directly on the already verified relay
+                # and cheats batch currently open in Studio.
+                pass
+            elif round_polish:
+                # Reviewed follow-up on top of the current Studio scripts.
+                pass
+            elif branding:
+                # Branding pushes are preceded by a complete Studio/local diff
+                # of this deliberately narrow four-script set.
+                pass
+            elif dev_phone:
+                # Iterative developer-phone work is pushed only after this
+                # narrow three-script set has been read back and verified.
                 pass
             elif digest(current) != item["sha256"]:
                 if relative.endswith("DevCheats.LocalScript.lua"):

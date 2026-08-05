@@ -3,14 +3,14 @@ local RunService = game:GetService("RunService")
 -- Blender action mapping. Empty slots are safe: the controller falls back to a
 -- compatible clip until the exported action has received its Roblox asset id.
 local ANIMATION_IDS = {
-	Watch = "86013923573480",             -- Blender v5: Watch-neutral Studio basis + fingers
-	Walk = "139801177050454",             -- Blender v6: restrained Walk (less hip/arm sway)
-	Run = "85991585476335",                -- Blender v8: walk-derived predatory jog; stable knees and active upper body
-	Howl = "118013244839249",              -- Blender v5: Yell_Howl (first sight)
-	YellFromRun = "119056181976223",       -- Blender v5: Yell_FromRun (pit yell)
-	Lunge = "94661930573561",              -- Blender v5: Lunge (fallback)
-	LungeFromRun = "81430032814694",       -- Blender v5: Lunge_FromRun
-	Kill = "116430726507331",              -- Blender v9: lateral wind-up beside helmet / grounded punch
+	Watch = "92831421568704",              -- Blender v10: zero-origin, seamless loop
+	Walk = "121187609243437",              -- Blender v10: restrained, zero-origin, seamless loop
+	Run = "90840395594409",                -- Blender v10: predatory jog, zero-origin, seamless loop
+	Howl = "102035504530432",              -- Blender v10: first-sight howl
+	YellFromRun = "132425538759403",       -- Blender v10: chase/pit howl with normalized origin
+	Lunge = "70970124497806",              -- Blender v10: neutral-to-lunge
+	LungeFromRun = "132839013239254",      -- Blender v10: chase-to-lunge with normalized origin
+	Kill = "94135265462008",               -- Blender v10: hunched ground-pin knockout
 }
 
 local WALK_ANIM_SPEED = 9

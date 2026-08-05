@@ -60,6 +60,34 @@ game:GetService("ReplicatedStorage").Remotes.ConfigureQueue:FireServer(1, 1, "pu
 return "configured"
 '''
 
+GLOWSTICK = r'''
+local H = game:GetService("HttpService")
+local player = game:GetService("Players").LocalPlayer
+local remote = game.ReplicatedStorage.Remotes.DropGlowstick
+local function count()
+    local folder = workspace:FindFirstChild("DroppedGlowsticks")
+    return folder and #folder:GetChildren() or 0
+end
+local before = count()
+remote:FireServer(); task.wait(0.5)
+local first = count()
+remote:FireServer(); task.wait(0.5)
+local immediate = count()
+task.wait(5.1)
+remote:FireServer(); task.wait(0.5)
+local afterCooldown = count()
+local color = player:GetAttribute("GlowstickColor")
+return H:JSONEncode({
+    slot = player:GetAttribute("GlowstickSlot"),
+    color = typeof(color) == "Color3" and {
+        math.floor(color.R * 255 + 0.5), math.floor(color.G * 255 + 0.5),
+        math.floor(color.B * 255 + 0.5),
+    } or nil,
+    before = before, first = first, immediate = immediate,
+    afterCooldown = afterCooldown,
+})
+'''
+
 
 def decode(value: object) -> dict:
     if not isinstance(value, str):
@@ -116,6 +144,10 @@ def main() -> int:
                 and round_snapshot.get("cameraMode") == "LockFirstPerson",
             "characterAppearanceChanged": not same_meshes,
         }))
+        if round_snapshot.get("inRound") is True:
+            print("GLOWSTICK", client.call("execute_luau", {
+                "datamodel_type": "Client", "code": GLOWSTICK,
+            }))
         print("CONSOLE_BEGIN")
         print(client.call("get_console_output"))
         print("CONSOLE_END")

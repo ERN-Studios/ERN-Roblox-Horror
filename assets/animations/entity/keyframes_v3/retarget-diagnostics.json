@@ -3,35 +3,75 @@
   "actions": {
     "Walk": {
       "frames": 40,
-      "first_frame_translation_max": 0.27136856234639223
+      "first_frame_translation_max": 0.0,
+      "removed_hips_origin": [
+        0.044807,
+        0.008365,
+        0.267513
+      ]
     },
     "Run_Chase": {
       "frames": 48,
-      "first_frame_translation_max": 0.753526125812505
+      "first_frame_translation_max": 0.0,
+      "removed_hips_origin": [
+        -0.26139,
+        -0.11197,
+        0.697811
+      ]
     },
     "Watch": {
       "frames": 180,
-      "first_frame_translation_max": 2.7755575615628914e-17
+      "first_frame_translation_max": 0.0,
+      "removed_hips_origin": [
+        -0.0,
+        0.0,
+        0.0
+      ]
     },
     "Yell_Howl": {
       "frames": 66,
-      "first_frame_translation_max": 0.0006845206500348853
+      "first_frame_translation_max": 0.0,
+      "removed_hips_origin": [
+        0.000653,
+        -4e-06,
+        0.000204
+      ]
     },
     "Yell_FromRun": {
       "frames": 87,
-      "first_frame_translation_max": 1.25
+      "first_frame_translation_max": 0.0,
+      "removed_hips_origin": [
+        0.051846,
+        3.5247,
+        0.683757
+      ]
     },
     "Lunge": {
       "frames": 72,
-      "first_frame_translation_max": 0.0006845188219782482
+      "first_frame_translation_max": 0.0,
+      "removed_hips_origin": [
+        0.000653,
+        -4e-06,
+        0.000205
+      ]
     },
     "Lunge_FromRun": {
       "frames": 52,
-      "first_frame_translation_max": 0.45232678966934337
+      "first_frame_translation_max": 0.0,
+      "removed_hips_origin": [
+        -0.323843,
+        0.17208,
+        0.26479
+      ]
     },
     "Kill_GroundPinPunch": {
       "frames": 150,
-      "first_frame_translation_max": 2.7755575615628914e-17
+      "first_frame_translation_max": 0.0,
+      "removed_hips_origin": [
+        -0.0,
+        0.0,
+        0.0
+      ]
     }
   }
 }

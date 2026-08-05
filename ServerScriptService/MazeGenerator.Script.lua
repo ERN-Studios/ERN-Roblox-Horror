@@ -98,6 +98,7 @@ local ELEV_CEILING_TEXTURE = "rbxassetid://119278377564096" -- matching aged cei
 local ELEV_FLOOR_TEXTURE = "rbxassetid://114910161826427" -- matching charcoal-brown vinyl tile
 local ELEV_DOOR_TEXTURE  = "rbxassetid://93847962634230" -- distinct aged bronze-grey doors/frame
 local ELEV_FLOOR_TILE = 8 -- one six-tile texture repeat across the cabin width
+local ELEV_CEILING_TILE = 4 -- fixed square grid; never stretches as cabin depth changes
 
 -- Optional MOLD overlay (your own decals, transparent PNGs) — up to 5 variants,
 -- picked at random per wall. Draw the mold hanging from the TOP of the image,
@@ -176,7 +177,7 @@ local STAIN_CHANCE = 0.06 -- per floor cell
 -- came in sideways, so we build our own — always upright, correctly sized, no
 -- InsertService needed). Each prop's model is defined in DECOR_BUILDERS lower
 -- down; here you tune size/rarity/placement. DECOR_DENSITY is the master knob.
-local DECOR_DENSITY = 0.16     -- chance PER eligible cell that it tries a prop
+local DECOR_DENSITY = 0.22     -- chance PER eligible cell that it tries a prop
 local DECOR_COLLIDE = true     -- props are solid for players; the entity walks through
 local DECOR_SCALE_JITTER = 0.2 -- ±fraction random size wobble per prop (weird-gen look)
 local DECOR_MIN_GAP = 2        -- same-type props must be MORE than this many cells apart
@@ -943,7 +944,8 @@ do
 		applyTexture(back, ELEV_WALL_TEXTURE, { Enum.NormalId.Right }, CAB_W + 1, nil, 10)
 		applyTexture(sideA, ELEV_WALL_TEXTURE, { Enum.NormalId.Back }, depth, nil, 10)
 		applyTexture(sideB, ELEV_WALL_TEXTURE, { Enum.NormalId.Front }, depth, nil, 10)
-		applyTexture(roof, ELEV_CEILING_TEXTURE, { Enum.NormalId.Bottom }, depth + 1, nil, CAB_W + 2)
+		applyTexture(roof, ELEV_CEILING_TEXTURE, { Enum.NormalId.Bottom },
+			ELEV_CEILING_TILE, nil, ELEV_CEILING_TILE)
 		applyTexture(floorP, ELEV_FLOOR_TEXTURE, { Enum.NormalId.Top }, ELEV_FLOOR_TILE)
 
 		local lightPanel = part(Vector3.new(2, 0.3, 2), CFrame.new(bx, 9.7, cz),
@@ -1099,8 +1101,8 @@ do
 
 			posterRow(100, Color3.fromRGB(205, 170, 35), "YELLOW = FUSE BOX", "[====]  POWER")
 			posterRow(190, Color3.fromRGB(205, 82, 30), "ORANGE = LEVER", "---/  RELEASE")
-			-- Separate symbol language for loose fuses: a cluster of ceiling lamps,
-			-- deliberately NOT another cable line.
+			-- Warm ceiling-light clusters lead toward wall-mounted ZYNTRA relays,
+			-- deliberately using a different language from the cable routes.
 			do
 				local icon = Instance.new("Frame")
 				icon.Position = UDim2.new(0, 18, 0, 286)
@@ -1131,7 +1133,7 @@ do
 				clusterTitle.Size = UDim2.new(1, -158, 0, 44)
 				clusterTitle.BackgroundTransparency = 1
 				clusterTitle.Font = Enum.Font.Code
-				clusterTitle.Text = "SEVERAL BRIGHT LIGHTS"
+				clusterTitle.Text = "WARM LIGHT CLUSTER"
 				clusterTitle.TextColor3 = Color3.fromRGB(230, 224, 195)
 				clusterTitle.TextSize = 20
 				clusterTitle.TextXAlignment = Enum.TextXAlignment.Left
@@ -1142,7 +1144,7 @@ do
 				clusterNote.Size = UDim2.new(1, -158, 0, 38)
 				clusterNote.BackgroundTransparency = 1
 				clusterNote.Font = Enum.Font.Code
-				clusterNote.Text = "= FUSE NEARBY"
+				clusterNote.Text = "= ZYNTRA RELAY NEARBY"
 				clusterNote.TextColor3 = Color3.fromRGB(255, 222, 105)
 				clusterNote.TextSize = 15
 				clusterNote.TextWrapped = true
@@ -1240,6 +1242,7 @@ end
 -- in the plaza. Everything is in the Decor collision group so the entity walks
 -- through it and never gets stuck. Wrapped in a function to keep its locals out
 -- of the main chunk's scope (no asset loading, so it still runs synchronously).
+workspace:SetAttribute("DecorReady", false)
 task.spawn(function()
 	local decorFolder = Instance.new("Folder")
 	decorFolder.Name = "Decor"
@@ -1524,9 +1527,159 @@ task.spawn(function()
 		table.insert(placedCells[name], { x, z })
 	end
 
-	-- GUARANTEED: a lone chair in the middle of the plaza
-	spawnProp("Chair", propHeight("Chair"), O + (fx - 0.5) * CELL, O + (fz - 0.5) * CELL, nil)
-	record("Chair", fx, fz)
+	-- Open areas use a handful of huge furniture heaps instead of hundreds of
+	-- separately scattered chairs. Each heap is a dense base, a narrower middle
+	-- and a crooked top, like an abandoned office was pushed into a barricade.
+	local plazaCenter = Vector3.new(O + (fx - 0.5) * CELL, 0, O + (fz - 0.5) * CELL)
+	workspace:SetAttribute("ForcedPlazaCenter", plazaCenter)
+	local pileChoices = {
+		"Chair", "Chair", "Chair", "Table", "Table",
+		"CardboardPile", "CardboardPile", "GrandfatherClock",
+	}
+	local function addPileLayer(center, heapIndex, count, maxRadius, minLift, maxLift, maxTilt, choices)
+		for _ = 1, count do
+			local angle = math.random() * math.pi * 2
+			local radius = math.sqrt(math.random()) * maxRadius
+			local px = center.X + math.cos(angle) * radius
+			local pz = center.Z + math.sin(angle) * radius
+			local available = choices or pileChoices
+			local name = available[math.random(#available)]
+			local placed = spawnProp(name, propHeight(name), px, pz, nil)
+			if placed then
+				local pivot = placed:GetPivot()
+				local tiltX = math.rad(math.random(-maxTilt, maxTilt))
+				local tiltZ = math.rad(math.random(-maxTilt, maxTilt))
+				local yaw = math.random() * math.pi * 2
+				local lift = minLift + math.random() * (maxLift - minLift)
+				placed:PivotTo(CFrame.new(pivot.Position + Vector3.new(0, lift, 0))
+					* CFrame.Angles(tiltX, yaw, tiltZ))
+				placed:SetAttribute("PlazaPile", true)
+				placed:SetAttribute("PlazaHeapIndex", heapIndex)
+				if name == "Table" and math.random() < 0.55 then addPhone(placed) end
+			end
+		end
+	end
+	local function makeFurnitureHeap(center, heapIndex)
+		addPileLayer(center, heapIndex, math.random(30, 35), 13.5, 0, 1.25, 26)
+		addPileLayer(center, heapIndex, math.random(22, 27), 9.0, 2.5, 4.7, 44)
+		addPileLayer(center, heapIndex, math.random(12, 16), 5.5, 6.4, 8.0, 58,
+			{ "Chair", "Chair", "Table", "Table", "CardboardPile" })
+
+		-- These invisible volumes affect Entity sight only. CanQuery stays false
+		-- so flashlight rays still illuminate the visible furniture.
+		for index, data in ipairs({
+			{ size = Vector3.new(27, 8.5, 27), y = 4.25 },
+			{ size = Vector3.new(15, 5.5, 15), y = 10.75 },
+		}) do
+			local blocker = Instance.new("Part")
+			blocker.Name = ("PlazaSightBlocker%d_%d"):format(heapIndex, index)
+			blocker.Anchored = true
+			blocker.CanCollide = false
+			blocker.CanTouch = false
+			blocker.CanQuery = false
+			blocker.Transparency = 1
+			blocker.Size = data.size
+			blocker.Position = center + Vector3.new(0, data.y, 0)
+			blocker:SetAttribute("BlocksEntitySight", true)
+			blocker:SetAttribute("PlazaHeapIndex", heapIndex)
+			blocker.Parent = decorFolder
+		end
+	end
+
+	-- Smaller narrative clusters break up ordinary corridors: an abandoned desk
+	-- shoved together with its chair, a clock and another office prop. Deliberate
+	-- overlap makes these read as hurried piles rather than neatly placed furniture.
+	local function makeMiniPropPile(center, pileIndex)
+		local yaw = math.random() * math.pi * 2
+		local function rotatedOffset(x, z)
+			return Vector3.new(
+				x * math.cos(yaw) - z * math.sin(yaw),
+				0,
+				x * math.sin(yaw) + z * math.cos(yaw)
+			)
+		end
+		local extra = math.random() < 0.5 and "Printer" or "CardboardPile"
+		local specs = {
+			{ "Table",            0.0,  0.0, 0.05,  5 },
+			{ "Chair",            2.0,  0.7, 0.35, 24 },
+			{ "GrandfatherClock", -2.0, -0.8, 0.45, 11 },
+			{ extra,               0.8, -1.6, 0.85, 19 },
+		}
+		for order, spec in ipairs(specs) do
+			local name, ox, oz, lift, tilt = table.unpack(spec)
+			local offset = rotatedOffset(ox, oz)
+			local placed = spawnProp(name, propHeight(name),
+				center.X + offset.X, center.Z + offset.Z, nil)
+			if placed then
+				local pivot = placed:GetPivot()
+				local side = order % 2 == 0 and 1 or -1
+				placed:PivotTo(CFrame.new(pivot.Position + Vector3.new(0, lift, 0))
+					* CFrame.Angles(math.rad(tilt * side), yaw + order * 0.63,
+						math.rad(tilt * 0.55 * -side)))
+				placed:SetAttribute("MiniPropPile", true)
+				placed:SetAttribute("MiniPropPileIndex", pileIndex)
+				if name == "Table" then addPhone(placed) end
+			end
+		end
+	end
+
+	local heapCells = { { fx, fz } }
+	local openCandidates = {}
+	for x = 2, GRID - 1 do
+		for z = 2, GRID - 1 do
+			if pitCellSet[key(x, z)] or insideForcedPlaza(x, z) then continue end
+			if math.max(math.abs(x - ELEV_X), math.abs(z - ELEV_Y)) <= ELEV_CLEAR + 2 then continue end
+			local walls = presentWalls(x, z)
+			local wallCount = 0
+			for _, present in pairs(walls) do if present then wallCount += 1 end end
+			if wallCount == 0 then
+				openCandidates[#openCandidates + 1] = { x, z, density(x, z) }
+			end
+		end
+	end
+	table.sort(openCandidates, function(a, b) return a[3] > b[3] end)
+	for _, candidate in ipairs(openCandidates) do
+		if #heapCells >= 3 then break end
+		local farEnough = true
+		for _, existing in ipairs(heapCells) do
+			local dx, dz = candidate[1] - existing[1], candidate[2] - existing[2]
+			if dx * dx + dz * dz < 10 * 10 then farEnough = false break end
+		end
+		if farEnough then heapCells[#heapCells + 1] = { candidate[1], candidate[2] } end
+	end
+	for heapIndex, cell in ipairs(heapCells) do
+		makeFurnitureHeap(Vector3.new(O + (cell[1] - 0.5) * CELL, 0,
+			O + (cell[2] - 0.5) * CELL), heapIndex)
+	end
+	workspace:SetAttribute("PlazaHeapCount", #heapCells)
+
+	-- Spread several compact piles through non-plaza open rooms. Shuffle first so
+	-- they are not biased toward the density sort used for the large heaps.
+	for index = #openCandidates, 2, -1 do
+		local other = math.random(index)
+		openCandidates[index], openCandidates[other] = openCandidates[other], openCandidates[index]
+	end
+	local miniCells = {}
+	for _, candidate in ipairs(openCandidates) do
+		if #miniCells >= 9 then break end
+		local farEnough = true
+		for _, heapCell in ipairs(heapCells) do
+			local dx, dz = candidate[1] - heapCell[1], candidate[2] - heapCell[2]
+			if dx * dx + dz * dz < 5 * 5 then farEnough = false break end
+		end
+		if farEnough then
+			for _, miniCell in ipairs(miniCells) do
+				local dx, dz = candidate[1] - miniCell[1], candidate[2] - miniCell[2]
+				if dx * dx + dz * dz < 4 * 4 then farEnough = false break end
+			end
+		end
+		if farEnough then
+			miniCells[#miniCells + 1] = { candidate[1], candidate[2] }
+			makeMiniPropPile(Vector3.new(O + (candidate[1] - 0.5) * CELL, 0,
+				O + (candidate[2] - 0.5) * CELL), #miniCells)
+		end
+	end
+	workspace:SetAttribute("MiniPropPileCount", #miniCells)
 
 	for x = 1, GRID do
 		for z = 1, GRID do
@@ -1534,6 +1687,9 @@ task.spawn(function()
 			if pitCellSet[k] then continue end
 			-- keep clear of the elevator room and its cell
 			if math.max(math.abs(x - ELEV_X), math.abs(z - ELEV_Y)) <= ELEV_CLEAR then continue end
+			-- All open/plaza cells are intentionally clean around the large heaps;
+			-- this prevents the old fields of dozens of isolated chairs.
+			if insideForcedPlaza(x, z) or density(x, z) >= PLAZA_T then continue end
 			if math.random() > DECOR_DENSITY then continue end
 
 			local walls = presentWalls(x, z)
@@ -1583,6 +1739,45 @@ task.spawn(function()
 			if model and prop.phone then addPhone(model) end
 		end
 	end
+
+	decorFolder:SetAttribute("ClockDongMinSeconds", 180)
+	decorFolder:SetAttribute("ClockDongMaxSeconds", 300)
+	workspace:SetAttribute("DecorReady", true)
+	-- One synchronized, positional grandfather-clock strike every 3-5 minutes.
+	-- The stock bass sample is pitched down and reverberated into a metallic DONG;
+	-- no external audio asset is required.
+	task.spawn(function()
+		while decorFolder.Parent do
+			task.wait(math.random(180, 300))
+			local clocks = {}
+			for _, child in ipairs(decorFolder:GetChildren()) do
+				if child:IsA("Model") and child.Name == "GrandfatherClock" and child.PrimaryPart then
+					clocks[#clocks + 1] = child
+				end
+			end
+			local clockModel = clocks[math.random(1, math.max(#clocks, 1))]
+			if clockModel and clockModel.PrimaryPart then
+				local dong = Instance.new("Sound")
+				dong.Name = "GrandfatherClockDong"
+				dong.SoundId = "rbxasset://sounds/bass.wav"
+				dong.Volume = 1.65
+				dong.PlaybackSpeed = 0.38
+				dong.RollOffMode = Enum.RollOffMode.Linear
+				dong.RollOffMinDistance = 45
+				dong.RollOffMaxDistance = 1200
+				local reverb = Instance.new("ReverbSoundEffect")
+				reverb.DecayTime = 5.5
+				reverb.Density = 0.82
+				reverb.Diffusion = 0.75
+				reverb.DryLevel = -1
+				reverb.WetLevel = -4
+				reverb.Parent = dong
+				dong.Parent = clockModel.PrimaryPart
+				dong:Play()
+				game:GetService("Debris"):AddItem(dong, 12)
+			end
+		end
+	end)
 end)
 
 maze.Parent = workspace

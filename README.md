@@ -9,7 +9,7 @@ something hunts you — escape together, or watch your friends try.
 **Status:** Level 1 is **done**. Level 2 is **in progress**. Level 3 comes next —
 then we publish on Roblox.
 
-## 🚇 The lobby ("A-Sync Transit")
+## 🚇 The lobby ("Zyntra Transit — Powering the Future.")
 
 - A persistent tunnel lobby built at server start (`TunnelLobbyBuilder`). You walk
   around in your **own Roblox avatar** (third person, jumping allowed, dance emote
@@ -72,6 +72,33 @@ curved flooded corridors — plus a secret party room for those who look.
   with echo in the pipes. (Asset IDs are wired via attributes on the Studio side.)
 - Level 2 disables the Level 1 scripts while active and restores everything on
   cleanup — including terrain water and the stored lobby.
+
+## 🩵 Level 3 — Sunken Leisure Complex (world in, entity pending)
+
+A second, larger poolrooms wing with its **own** generator — it shares only the
+tile texture and the terrain water look with Level 2, nothing structural.
+
+Where Level 2 is a uniform 6×6 grid of identical 92-stud cells carved by a maze
+walk, Level 3 is a **binary space partition** of one 1400-stud region:
+
+- **Halls of very different sizes** (typically 17–20 per run, up to a ~10×
+  spread in floor area) joined by real **corridors**, which is where the arched
+  flooded tunnels live. Per-hall ceiling heights, up to 96 studs.
+- **Slide halls** — three oversized rooms with a mezzanine deck near the ceiling,
+  a spiral stair up to it, and colored flumes curving back down into the water.
+- **Kids play area** — a contiguous block of 5 halls that are painted rather than
+  tiled (three colors total, adjacent rooms differ), with soft-play blocks, a
+  small flume and a ball pit.
+- **Objective:** start **3 pump stations**. Each one *drains* the flooded corridor
+  beside it — the terrain water is actually removed, so the space changes and a
+  new route opens. All three running unseals the **pressure doors** into the Grand
+  Slide Hall, where the exit flume sits on the **top deck**.
+- **Entity space is reserved but empty**: an entity den, per-hall patrol nodes,
+  and 30×19-stud doorways sized for a large rig. Nothing hunts you yet.
+
+Generation is seeded and deterministic (`workspace.Level3Seed`), builds in well
+under a second, and lives in `ServerScriptService."Level 3 Systems"` behind the
+same `Build()`/`Cleanup()` doorway Level 2 uses.
 
 ## ⌨️ Controls
 
@@ -141,7 +168,8 @@ Override locally in Studio for quick tests (don't sync these):
 
 **Dev cheats** (`DevCheats.LocalScript` — whitelisted accounts only):
 `B` ESP + 3 s fast queue · `V` noclip fly · `P` pause entity · `I` push immunity ·
-`U` unlimited battery/stamina. Lock down / remove before publishing.
+`U` unlimited battery/stamina · `C` third person · `M` Zyntra developer phone.
+Lock down / remove before publishing.
 
 ## 🗺️ Roadmap to release
 
@@ -151,7 +179,9 @@ Override locally in Studio for quick tests (don't sync these):
       audio module + kill camera/jumpscare parity with Level 1, published
       animation hookup on the Studio templates, noise-hearing wiring,
       wander-node usage, general playtest pass)
-- [ ] **Level 3 — build** (bay 3 is waiting in the lobby)
+- [ ] **Level 3 — build** (world generator, objective and lobby bay 3 are in;
+      remaining: a hostile for the reserved entity den, level-3 lighting/audio
+      clients, and a playtest pass)
 - [ ] **Pre-publish pass**: restrict/remove DevCheats (key on UserId, not name),
       strip Studio-only test hooks, mold/stain texture slots, final audio slots
       (`LUNGE_SOUND`, `ENTITY_STEP_RUN`, `IDLE_SOUNDS`)

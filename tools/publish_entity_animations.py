@@ -17,21 +17,31 @@ from sync_from_studio import (  # noqa: E402
 
 
 ROOT = Path(__file__).resolve().parents[1]
+V10 = "--v10" in sys.argv[1:]
 V9_ACTIONS = "--v9-actions" in sys.argv[1:]
 V8_ACTIONS = "--v8-actions" in sys.argv[1:]
 V7_ACTIONS = "--v7-actions" in sys.argv[1:]
 V6_ACTIONS = "--v6-actions" in sys.argv[1:]
 V6_WALK = "--v6-walk" in sys.argv[1:]
 V5 = "--v5" in sys.argv[1:]
-V3 = "--v3" in sys.argv[1:] or V5 or V6_WALK or V6_ACTIONS or V7_ACTIONS or V8_ACTIONS or V9_ACTIONS
+V3 = "--v3" in sys.argv[1:] or V5 or V6_WALK or V6_ACTIONS or V7_ACTIONS or V8_ACTIONS or V9_ACTIONS or V10
 V2 = "--v2" in sys.argv[1:] and not V3
 FORCE = "--force" in sys.argv[1:]
 SOURCE_DIR = ROOT / "assets" / "animations" / "entity" / (
     "keyframes_v3" if V3 else "keyframes_v2" if V2 else "keyframes"
 )
-ACTION_FILES = (("kill_hunched_groundpunch.json",) if V9_ACTIONS
+ACTION_FILES = ((
+    "walk_restrained.json",
+    "run_chase_corrected.json",
+    "watch.json",
+    "yell_howl.json",
+    "yell_fromrun.json",
+    "lunge.json",
+    "lunge_fromrun.json",
+    "kill_hunched_groundpunch.json",
+) if V10 else ("kill_hunched_groundpunch.json",) if V9_ACTIONS
     else ("run_chase_corrected.json", "kill_hunched_groundpunch.json")
-    if (V6_ACTIONS or V7_ACTIONS or V8_ACTIONS) else ("walk_restrained.json",)) if (V6_ACTIONS or V7_ACTIONS or V8_ACTIONS or V9_ACTIONS or V6_WALK) else (
+    if (V6_ACTIONS or V7_ACTIONS or V8_ACTIONS) else ("walk_restrained.json",)) if (V10 or V6_ACTIONS or V7_ACTIONS or V8_ACTIONS or V9_ACTIONS or V6_WALK) else (
     "walk.json",
     "run_chase.json",
     "watch.json",
@@ -40,7 +50,7 @@ ACTION_FILES = (("kill_hunched_groundpunch.json",) if V9_ACTIONS
     "lunge.json",
     "lunge_fromrun.json",
 ) + (("kill_groundpinpunch.json",) if V3 else ("kill_visorcrush.json",) if V2 else ())
-VERSION_LABEL = "v9actions" if V9_ACTIONS else "v8actions" if V8_ACTIONS else "v7actions" if V7_ACTIONS else "v6actions" if V6_ACTIONS else "v6walk" if V6_WALK else "v5" if V5 else "v4" if V3 and FORCE else "v3" if V3 else "v2" if V2 else "v1"
+VERSION_LABEL = "v10full" if V10 else "v9actions" if V9_ACTIONS else "v8actions" if V8_ACTIONS else "v7actions" if V7_ACTIONS else "v6actions" if V6_ACTIONS else "v6walk" if V6_WALK else "v5" if V5 else "v4" if V3 and FORCE else "v3" if V3 else "v2" if V2 else "v1"
 CREATOR_ID = 1039373905
 
 PARENTS = {
@@ -158,7 +168,8 @@ def main() -> int:
     finally:
         client.close()
     manifest_name = (
-        "published-assets-v9-actions.json" if V9_ACTIONS
+        "published-assets-v10-full.json" if V10
+        else "published-assets-v9-actions.json" if V9_ACTIONS
         else "published-assets-v8-actions.json" if V8_ACTIONS
         else "published-assets-v7-actions.json" if V7_ACTIONS
         else "published-assets-v6-actions.json" if V6_ACTIONS

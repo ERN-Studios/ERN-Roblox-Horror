@@ -15,8 +15,6 @@ local RunService = game:GetService("RunService")
 local remote = RS:WaitForChild("Remotes"):WaitForChild("ToggleFlashlight")
 local player = Players.LocalPlayer
 
-UIS.MouseIconEnabled = false -- no cursor
-
 -- how the torch is held, relative to the eye (horizontal offset + drop)
 local HAND_SIDE = 0.25  -- small hand offset: avoids putting the light inside walls
 local HAND_DOWN = -0.25
@@ -173,11 +171,14 @@ end)
 -- ── battery ───────────────────────────────────────────────
 -- No HUD at all. The player is warned the battery is low by the beam itself
 -- flickering: one blink at 50%, a few blinks at 25%.
-local BATTERY_MAX      = 100
-local DRAIN_PER_SEC    = 1.667 -- ~60s of continuous light on a full charge
-local RECHARGE_PER_SEC = 1.5  -- slowly recovers while the light is OFF
+local BATTERY_BASE     = 100
+local DRAIN_PER_SEC    = 1.111 -- ~90s of continuous light on a full charge
+local RECHARGE_PER_SEC = 3.0  -- full recharge in roughly 33s while switched OFF
 local MIN_TO_TURN_ON   = 5    -- can't switch on below this (must recharge a bit)
-local battery = BATTERY_MAX
+local function batteryMax()
+	return BATTERY_BASE * math.max(1, tonumber(player:GetAttribute("ZyntraBatteryMultiplier")) or 1)
+end
+local battery = batteryMax()
 local warned50, warned25 = false, false
 
 -- bottom-of-screen pop-up (shown when the battery dies)
@@ -421,7 +422,7 @@ local function bindCharacter(char)
 	if boundCharacter == char then return end
 	boundCharacter = char
 	setLights(false)
-	battery = BATTERY_MAX
+	battery = batteryMax()
 	local hum = char:WaitForChild("Humanoid")
 	hum.Died:Connect(function() setLights(false) end)
 end
@@ -507,17 +508,17 @@ RunService.Heartbeat:Connect(function()
 	end
 end)
 
--- dev cheat confirmation (also proves this script version is the one running)
+-- DevCheats owns the single output confirmation; this listener only applies
+-- the battery state so pressing U never prints two messages.
 player:GetAttributeChangedSignal("DevUnlimited"):Connect(function()
 	local active = player:GetAttribute("DevUnlimited") == true
-	if active then battery = BATTERY_MAX end
-	print("[Flashlight] unlimited battery " .. (active and "ON" or "OFF"))
+	if active then battery = batteryMax() end
 end)
 
 -- drain while on, recharge while off; die at empty
 RunService.Heartbeat:Connect(function(dt)
 	if player:GetAttribute("DevUnlimited") == true then
-		battery = BATTERY_MAX -- dev cheat (DevCheats, U key): never drains
+		battery = batteryMax() -- dev cheat (DevCheats, U key): never drains
 	elseif on then
 		battery = battery - DRAIN_PER_SEC * dt
 		if battery <= 0 then
@@ -526,24 +527,24 @@ RunService.Heartbeat:Connect(function(dt)
 			showPopup("Flashlight dead — let it recharge", 3)
 		end
 	else
-		battery = math.min(BATTERY_MAX, battery + RECHARGE_PER_SEC * dt)
+		battery = math.min(batteryMax(), battery + RECHARGE_PER_SEC * dt)
 	end
 
-	-- re-arm the warnings once it recharges back up (small hysteresis)
-	if battery > 55 then warned50 = false end
-	if battery > 30 then warned25 = false end
-	-- fire each warning once as the battery falls past the threshold
-	if on and battery <= 25 and not warned25 then
+	-- re-arm and fire warnings by percentage, so upgrades preserve the same UX.
+	local batteryFraction = math.clamp(battery / batteryMax(), 0, 1)
+	if batteryFraction > 0.55 then warned50 = false end
+	if batteryFraction > 0.30 then warned25 = false end
+	if on and batteryFraction <= 0.25 and not warned25 then
 		warned25 = true
 		warnBlink(3)
-	elseif on and battery <= 50 and not warned50 then
+	elseif on and batteryFraction <= 0.50 and not warned50 then
 		warned50 = true
 		warnBlink(1)
 	end
 
 	-- battery bars: fill count + colour (white full → red near empty)
-	local filled = math.clamp(math.ceil(battery / 20), 0, 5)
-	local col = BAT_FULL:Lerp(BAT_EMPTY, math.clamp(1 - battery / 100, 0, 1))
+	local filled = math.clamp(math.ceil(batteryFraction * 5), 0, 5)
+	local col = BAT_FULL:Lerp(BAT_EMPTY, 1 - batteryFraction)
 	for i, bar in ipairs(batBars) do
 		if i <= filled then
 			bar.BackgroundTransparency = 0

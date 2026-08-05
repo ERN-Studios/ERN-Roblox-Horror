@@ -4,7 +4,6 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
-local UserInputService = game:GetService("UserInputService")
 
 local player = Players.LocalPlayer
 local event = ReplicatedStorage:WaitForChild("Level2AlertEvent")
@@ -64,7 +63,7 @@ run.TextScaled = true
 run.Visible = false
 run.Parent = shade
 
-local valveVisionEnabled = false
+local valveVisionEnabled = player:GetAttribute("DevEspEnabled") == true
 local valveHighlights = {}
 
 local function clearValveHighlights()
@@ -97,18 +96,15 @@ local function refreshValveHighlights()
 	end
 end
 
-UserInputService.InputBegan:Connect(function(input, processed)
-	if processed or input.KeyCode ~= Enum.KeyCode.V then return end
-	if workspace:GetAttribute("SelectedLevel") ~= 2 then return end
-	valveVisionEnabled = not valveVisionEnabled
+-- DevCheats owns B/V consistently in both levels. Valve vision follows B via
+-- this local attribute, leaving V exclusively for noclip.
+player:GetAttributeChangedSignal("DevEspEnabled"):Connect(function()
+	valveVisionEnabled = player:GetAttribute("DevEspEnabled") == true
 	refreshValveHighlights()
 end)
 
 workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(function()
-	if workspace:GetAttribute("SelectedLevel") ~= 2 then
-		valveVisionEnabled = false
-		clearValveHighlights()
-	end
+	refreshValveHighlights()
 end)
 
 workspace.ChildAdded:Connect(function(child)

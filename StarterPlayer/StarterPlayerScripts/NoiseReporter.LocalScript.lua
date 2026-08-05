@@ -8,7 +8,10 @@ local UIS = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
 local remote = RS:WaitForChild("Remotes"):WaitForChild("ReportNoise")
+local glowstickRemote = RS:WaitForChild("Remotes"):WaitForChild("DropGlowstick")
 local player = Players.LocalPlayer
+local DevAccess = require(RS:WaitForChild("DevAccess"))
+local devAllowed = DevAccess.IsAllowed(player)
 local function inRound() return player:GetAttribute("InRound") == true end
 
 local WALK_SPEED, SPRINT_SPEED, CROUCH_SPEED = 16, 26, 8
@@ -19,13 +22,27 @@ local LOUDNESS = { sprint = 1.0, walk = 0.45, crouch = 0.0 }
 local state = "walk"
 local sprinting, crouching = false, false
 local shiftSprintHeld, touchSprintHeld = false, false
+local GLOWSTICK_COOLDOWN = 5
+local lastGlowstickDrop = -math.huge
+local currentChar
+
+local function dropGlowstick()
+	if not inRound() or os.clock() - lastGlowstickDrop < GLOWSTICK_COOLDOWN then return end
+	local char, hum = currentChar()
+	if not (char and hum and hum.Health > 0) then return end
+	lastGlowstickDrop = os.clock()
+	glowstickRemote:FireServer()
+end
 
 -- stamina: sprint is limited, drains while sprinting, recovers otherwise
-local STAMINA_MAX      = 100
+local STAMINA_BASE     = 100
 local SPRINT_DRAIN     = 16   -- ~6s of sprint on a full bar
 local STAMINA_RECHARGE = 10   -- recovers while not sprinting
 local STAMINA_RECOVER  = 25   -- must reach this after exhaustion before sprinting again
-local stamina, exhausted = STAMINA_MAX, false
+local function staminaMax()
+	return STAMINA_BASE * math.max(1, tonumber(player:GetAttribute("ZyntraStaminaMultiplier")) or 1)
+end
+local stamina, exhausted = staminaMax(), false
 
 -- ADRENALINE: while the Entity is on YOU (chasing, or blindly tracking you for
 -- the few seconds after it loses sight — the server marks you "BeingChased"),
@@ -45,7 +62,7 @@ end
 -- dev cheat (DevCheats toggles the local DevUnlimited attribute): stamina never drains
 local function devUnlimited() return player:GetAttribute("DevUnlimited") == true end
 
-local function currentChar()
+currentChar = function()
 	local char = player.Character
 	return char, char and char:FindFirstChild("Humanoid")
 end
@@ -83,6 +100,8 @@ UIS.InputBegan:Connect(function(input, processed)
 		shiftSprintHeld = true; refreshSprint()
 	elseif input.KeyCode == Enum.KeyCode.LeftControl then
 		crouching = true; applySpeed()
+	elseif input.KeyCode == Enum.KeyCode.G or input.KeyCode == Enum.KeyCode.ButtonX then
+		dropGlowstick()
 	end
 end)
 
@@ -174,7 +193,10 @@ end
 local touchRunButton, runStroke = makeTouchButton("TouchRunHold", "RUN  »")
 local touchJumpButton = makeTouchButton("TouchJump", "JUMP  ↑")
 local touchPOVButton, povStroke = makeTouchButton("TouchPOV", "POV\n1ST")
+local touchGlowButton = makeTouchButton("TouchDropGlowstick", "DROP\nGLOW")
 touchPOVButton.TextSize = 13
+touchPOVButton.Visible = touchControlsVisible and devAllowed
+touchGlowButton.TextSize = 12
 
 local lastControlViewport = Vector2.new(-1, -1)
 local function applyTouchControlLayout()
@@ -197,6 +219,8 @@ local function applyTouchControlLayout()
 	touchRunButton.Size = UDim2.fromOffset(buttonSize, buttonSize)
 	touchPOVButton.Position = UDim2.new(1, -leftColumn, 1, -(edge + flashlightHeight + (phone and 12 or 14)))
 	touchPOVButton.Size = UDim2.fromOffset(phone and 58 or 72, phone and 48 or 54)
+	touchGlowButton.Position = UDim2.new(1, -leftColumn, 1, -(edge + flashlightHeight + buttonSize + gap))
+	touchGlowButton.Size = UDim2.fromOffset(phone and 58 or 72, phone and 58 or 72)
 	touchRunButton.TextSize = phone and 16 or 18
 	touchJumpButton.TextSize = phone and 15 or 17
 end
@@ -231,9 +255,10 @@ touchJumpButton.Activated:Connect(function()
 	end
 end)
 
+touchGlowButton.Activated:Connect(dropGlowstick)
+
 local function firstPersonEnabled()
-	return player.CameraMode == Enum.CameraMode.LockFirstPerson
-		or player.CameraMaxZoomDistance <= 0.6
+	return player:GetAttribute("DevCheatThirdPerson") ~= true
 end
 
 local function refreshPOVButton()
@@ -246,19 +271,13 @@ local function refreshPOVButton()
 end
 
 touchPOVButton.Activated:Connect(function()
-	if firstPersonEnabled() then
-		player.CameraMode = Enum.CameraMode.Classic
-		player.CameraMinZoomDistance = 0.5
-		player.CameraMaxZoomDistance = 14
-	else
-		player.CameraMode = Enum.CameraMode.LockFirstPerson
-		player.CameraMinZoomDistance = 0.5
-		player.CameraMaxZoomDistance = 0.5
+	if not (devAllowed and inRound()) then return end
+	local command = player:WaitForChild("PlayerScripts"):FindFirstChild("DevCheatCommand")
+	if command and command:IsA("BindableEvent") then
+		command:Fire("thirdPerson")
 	end
-	refreshPOVButton()
 end)
-player:GetPropertyChangedSignal("CameraMode"):Connect(refreshPOVButton)
-player:GetPropertyChangedSignal("CameraMaxZoomDistance"):Connect(refreshPOVButton)
+player:GetAttributeChangedSignal("DevCheatThirdPerson"):Connect(refreshPOVButton)
 refreshPOVButton()
 
 player.CharacterAdded:Connect(function()
@@ -292,7 +311,7 @@ local barShown = 0 -- eased 0–1 visibility
 
 RunService.Heartbeat:Connect(function(dt)
 	if not inRound() then
-		stamina = STAMINA_MAX
+		stamina = staminaMax()
 		exhausted = false
 		state = "walk"
 		player:SetAttribute("Stamina", 1)
@@ -307,7 +326,7 @@ RunService.Heartbeat:Connect(function(dt)
 		and Vector3.new(root.AssemblyLinearVelocity.X, 0, root.AssemblyLinearVelocity.Z).Magnitude > 2
 
 	if devUnlimited() then
-		stamina = STAMINA_MAX -- dev cheat: never drains
+		stamina = staminaMax() -- dev cheat: never drains
 		exhausted = false
 	elseif state == "sprint" and moving then
 		-- adrenaline: the Entity is (or was just) on you → stamina lasts 3x longer
@@ -318,14 +337,14 @@ RunService.Heartbeat:Connect(function(dt)
 			applySpeed() -- drop out of sprint
 		end
 	else
-		stamina = math.min(STAMINA_MAX, stamina + STAMINA_RECHARGE * dt)
+		stamina = math.min(staminaMax(), stamina + STAMINA_RECHARGE * dt)
 		if exhausted and stamina >= STAMINA_RECOVER then
 			exhausted = false
 			applySpeed() -- sprint available again if shift still held
 		end
 	end
 
-	local frac = stamina / STAMINA_MAX
+	local frac = stamina / staminaMax()
 	-- publish stamina (0–1) so SoundController can drive the winded-breathing sound
 	player:SetAttribute("Stamina", frac)
 
@@ -343,6 +362,7 @@ local function updateRoundState()
 	local active = inRound()
 	gui.Enabled = active
 	if not active then
+		lastGlowstickDrop = -math.huge
 		shiftSprintHeld, touchSprintHeld = false, false
 		sprinting, crouching = false, false
 		touchSprintToggled = false
