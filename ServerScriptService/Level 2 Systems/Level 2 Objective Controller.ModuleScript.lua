@@ -195,7 +195,7 @@ function ObjectiveController.Start(manifest, generation)
 			"SUNKEN LEISURE COMPLEX",
 			string.format("%d PUMP STATIONS OFFLINE", goal),
 			"START EVERY PUMP TO DRAIN THE COMPLEX",
-			7
+			4.5
 		)
 	end
 	if workspace:GetAttribute("RoundActive") == true then

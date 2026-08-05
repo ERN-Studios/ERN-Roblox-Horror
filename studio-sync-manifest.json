@@ -9,9 +9,9 @@
     "scripts": 78,
     "remoteEvents": 13,
     "total": 91,
-    "created": 1,
-    "updated": 3,
-    "unchanged": 87
+    "created": 0,
+    "updated": 2,
+    "unchanged": 89
   },
   "extraMirroredFilesNotInStudio": [],
   "items": [
@@ -253,7 +253,7 @@
       "file": "StarterPlayer/StarterPlayerScripts/Level2AlertClient.LocalScript.lua",
       "bytes": 4685,
       "sha256": "18211eeb06003f05ae8d2457184404f64d3c05beb6349effd448776792baa970",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
@@ -293,7 +293,7 @@
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua",
       "bytes": 3898,
       "sha256": "88542a38cb5630678fc790074702308386295251bb6ff483b49330faadf8f718",
-      "status": "created"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Configuration",
@@ -315,16 +315,16 @@
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 World Builder",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua",
-      "bytes": 56846,
-      "sha256": "8811f1be992b6f16474d1235efc57b26a82bd7e37a7728a51ef1d7c04e58eef2",
+      "bytes": 58002,
+      "sha256": "4fca985383c272391f20ec44524c257f6e539a698b6480ddb5d4ec591e6aa046",
       "status": "updated"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Objective Controller.ModuleScript.lua",
-      "bytes": 7389,
-      "sha256": "31a41cb57b24b16cb299228b3174f6a44aa60af870271c8fce6874f6041a5819",
+      "bytes": 7391,
+      "sha256": "c9a9847ad63b338abba95480a1cbe09d8e8f9f4651282551c85f1cfe870a520d",
       "status": "updated"
     },
     {

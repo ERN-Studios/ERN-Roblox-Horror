@@ -338,28 +338,16 @@ local function makeColonnade(parent, hall, depth, rows)
 end
 
 -- An archway: contiguous tangent segments built with lookAt between successive
--- ring points, so the orientation can never be wrong. Two styles:
---   "half" - a classic arch whose feet run DOWN past the water surface into
---            the floor slab, so it never floats;
---   "full" - a complete ring you walk through, its lower third submerged.
--- `acrossZ` = the ring spans across Z; you walk through along X.
-local function makeArchSpan(parent, center, acrossZ, index, radius, style, floorDepth, heightLimit)
+-- ring points, so the orientation can never be wrong. Classic half arch whose
+-- feet run DOWN past the water surface into the floor slab, so it never
+-- floats. `acrossZ` = the ring spans across Z; you walk through along X.
+local function makeArchSpan(parent, center, acrossZ, index, radius, floorDepth)
 	radius = math.max(6, radius)
-	style = style or "half"
 	floorDepth = floorDepth or 0
-	local arcCenter, angleFrom, angleTo
-	if style == "full" then
-		if heightLimit then
-			radius = math.min(radius, (heightLimit + floorDepth) * .5 - 1.6)
-		end
-		arcCenter = center + Vector3.new(0, radius - floorDepth - 1.2, 0)
-		angleFrom, angleTo = 0, math.pi * 2
-	else
-		local dip = math.asin(math.clamp((floorDepth + 2.2) / radius, 0, .55))
-		arcCenter = center + Vector3.new(0, 1, 0)
-		angleFrom, angleTo = -dip, math.pi + dip
-	end
-	local steps = math.max(14, math.floor(radius * (style == "full" and 3.2 or 1.9)))
+	local dip = math.asin(math.clamp((floorDepth + 2.2) / radius, 0, .55))
+	local angleFrom, angleTo = -dip, math.pi + dip
+	local steps = math.max(14, math.floor(radius * 1.9))
+	local arcCenter = center + Vector3.new(0, 1, 0)
 	local function pointAt(a)
 		if acrossZ then
 			return arcCenter + Vector3.new(0, math.sin(a) * radius, math.cos(a) * radius)
@@ -378,6 +366,35 @@ local function makeArchSpan(parent, center, acrossZ, index, radius, style, floor
 			CFrame.lookAt(mid, to, up),
 			Vector3.new(3.2, 2.2, (to - from).Magnitude + .9), C.TileWarm)
 		addTexture(rib, Enum.NormalId:GetEnumItems(), 7)
+	end
+end
+
+-- The continuous shell that CONNECTS the arch ribs: long tiled strips running
+-- the passage's whole length, one per angular step, sitting just behind the
+-- ribs — together they form the half cylinder you walk through, its feet
+-- submerged like the ribs'.
+local function makeBarrelVault(parent, center, acrossZ, index, radius, length, floorDepth)
+	radius = math.max(6, radius)
+	floorDepth = floorDepth or 0
+	local dip = math.asin(math.clamp((floorDepth + 2.2) / radius, 0, .55))
+	local angleFrom, angleTo = -dip, math.pi + dip
+	local steps = math.max(12, math.floor(radius * 1.5))
+	local arcCenter = center + Vector3.new(0, 1, 0)
+	local axis = acrossZ and Vector3.new(1, 0, 0) or Vector3.new(0, 0, 1)
+	for step = 0, steps - 1 do
+		local a0 = angleFrom + (angleTo - angleFrom) * step / steps
+		local a1 = angleFrom + (angleTo - angleFrom) * (step + 1) / steps
+		local am = (a0 + a1) * .5
+		local offset = acrossZ
+			and Vector3.new(0, math.sin(am) * radius, math.cos(am) * radius)
+			or Vector3.new(math.cos(am) * radius, math.sin(am) * radius, 0)
+		local mid = arcCenter + offset
+		local up = offset.Magnitude > .01 and offset.Unit or Vector3.yAxis
+		local chord = 2 * radius * math.sin((a1 - a0) * .5) + .9
+		local strip = part(parent, "Level 2 Vault Strip " .. index,
+			CFrame.lookAt(mid, mid + axis, up),
+			Vector3.new(chord, 1.6, length), C.TileCool)
+		addTexture(strip, {Enum.NormalId.Top, Enum.NormalId.Bottom}, 8)
 	end
 end
 
@@ -909,9 +926,10 @@ local function makeCorridor(parent, layout, corridor, doorFolder)
 	for ring = 1, rings do
 		local t = ring / (rings + 1)
 		makeArchSpan(parent, center + oriented(from - mid + (to - from) * t, 0),
-			alongX, corridor.Index .. "." .. ring, archRadius,
-			ring % 2 == 0 and "full" or "half", depth, height)
+			alongX, corridor.Index .. "." .. ring, archRadius, depth)
 	end
+	-- The ribs connect into one continuous half-cylinder vault.
+	makeBarrelVault(parent, center, alongX, corridor.Index, archRadius + 1.4, length - 2, depth)
 
 	makeCeilingPanel(parent, center, "Corridor " .. corridor.Index,
 		orientedSize(math.min(length * .55, 40), .55, 6), 0, height)
@@ -1132,9 +1150,10 @@ function WorldBuilder.Build(layout, generation)
 					local position = acrossZ
 						and Vector3.new(hall.MinX + along * t, 0, hall.Center.Z)
 						or Vector3.new(hall.Center.X, 0, hall.MinZ + along * t)
-					makeArchSpan(hallModel, position, acrossZ, hall.Index .. "." .. ring, radius,
-						ring % 2 == 0 and "full" or "half", depth or 0, height)
+					makeArchSpan(hallModel, position, acrossZ, hall.Index .. "." .. ring, radius, depth or 0)
 				end
+				makeBarrelVault(hallModel, hall.Center, acrossZ, hall.Index,
+					radius + 1.4, along - 14, depth or 0)
 			elseif archetype == "Spiral Stair Well" then
 				makeSpiralStair(hallModel, hall.Center, -(depth or 1) + .5, height - 12, 13,
 					"Level 2 Stair Well " .. hall.Index)
