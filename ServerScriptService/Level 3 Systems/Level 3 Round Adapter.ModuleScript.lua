@@ -194,7 +194,6 @@ function Adapter.Build()
 
 	setScriptsEnabled(LEVEL_TWO_RUNTIME_SCRIPTS, false)
 	isolateLevelOneRuntime()
-	storeLobby()
 	clearOwnedTerrain(nil)
 
 	-- GameManager reads success only from whether this raises, so every failure
@@ -206,6 +205,24 @@ function Adapter.Build()
 		workspace:SetAttribute("LoadStage", "LEVEL_3_BUILDING_WORLD")
 		local manifest = WorldBuilder.Build(layout, generation)
 		activeManifest = manifest
+
+		-- Move everyone out of the lobby BEFORE parking it, or the floor
+		-- vanishes from under them and they fall into the void. The arrival
+		-- platform is solid ground; GameManager re-places participants on it
+		-- moments later anyway.
+		local Players = game:GetService("Players")
+		local arrivalPosition = manifest.Arrival.ElevatorSpawn.Position
+		local moved = 0
+		for _, player in ipairs(Players:GetPlayers()) do
+			local character = player.Character
+			local root = character and character:FindFirstChild("HumanoidRootPart")
+			if root then
+				moved += 1
+				character:PivotTo(CFrame.new(arrivalPosition
+					+ Vector3.new(((moved % 3) - 1) * 4, 4, math.floor(moved / 3) * 4)))
+			end
+		end
+		storeLobby()
 
 		state:SetAttribute("Level3_Phase", "READY")
 		state:SetAttribute("Level3_LightingMode", "NORMAL")

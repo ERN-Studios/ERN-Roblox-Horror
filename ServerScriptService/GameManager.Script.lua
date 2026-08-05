@@ -801,7 +801,7 @@ local function playRound(participants)
  end
 
  if aliveCount <= 0 then sendWipedPartyHome(); return end
- if activeLevel == 2 then
+ if activeLevel == 2 or activeLevel == 3 then
   fireGroup(participants, "poolaccess")
   task.wait(1.25)
  else

@@ -22,15 +22,15 @@ local Configuration = {
 	WorldCenterX = 0,
 	WorldCenterZ = 240,
 
-	MinimumLeafSize = 200,
+	MinimumLeafSize = 150,
 	MinimumSplitDepth = 2,
-	MaximumSplitDepth = 5,
+	MaximumSplitDepth = 6,
 	-- Chance a branch stops early, which is what leaves a few enormous halls.
 	EarlyStopChance = 0.18,
 	-- Gap left around every hall; corridors run through it.
 	HallMargin = 30,
 	HallInsetJitter = 14,
-	MinimumHallSize = 110,
+	MinimumHallSize = 85,
 	MinimumHallCount = 16,
 	GenerationAttempts = 40,
 
@@ -55,12 +55,11 @@ local Configuration = {
 	DoorWidth = 30,
 	DoorHeight = 19,
 
-	-- Water halls keep a dry tiled walkway of this width on every side of the
-	-- sunken basin, exactly like the reference photos.
-	HallBasinBorder = 20,
-
-	DeepPoolDepth = 24,
+	-- Water covers the floor wall-to-wall in every pool hall, exactly like the
+	-- reference photos. No basins, no dry walkway rings.
 	ShallowPoolDepth = 1.6,
+	DeepPoolDepth = 4.5,
+	SlidePoolDepth = 6,
 	CorridorChannelDepth = 1.5,
 	-- Drainable corridors are deep enough that draining them visibly changes
 	-- the space: flooded you swim across the surface, drained you walk the

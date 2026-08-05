@@ -4,10 +4,12 @@
 -- Shared with Level 2 on purpose, and nothing else: the tile texture asset and
 -- the terrain water appearance. Everything structural here is Level 3's own.
 --
--- Reference-photo language this builder aims for: warm off-white tiled rooms
--- with tiled ceilings, dry tiled walkways around sunken turquoise basins,
--- arched flooded tunnels, round tiled columns rising out of the water, spiral
--- stairs, daylight-slot skylights, and chrome rails/ladders at the pool edges.
+-- Design language (reference photos): WATER COVERS THE FLOOR WALL-TO-WALL in
+-- every pool hall and corridor — no basins, no dry walkway rings. Bright
+-- natural sunlight enters through real skylight slots cut in the ceilings
+-- (the outer roof is translucent glass that casts no shadow), tiled columns
+-- and arch tunnels rise straight out of the water, and stairs descend into
+-- the deeper halls.
 
 local Terrain = workspace.Terrain
 
@@ -86,8 +88,6 @@ local function kidsPalette(hall)
 	return Configuration.KidsColors[index] or Configuration.KidsColors[1]
 end
 
--- Kids halls are painted, not tiled — that is the "different walls and
--- textures" the design calls for, and it reads instantly on entry.
 local function surfaceFor(hall, parent, name, cframe, size, tileColor, faces, studs)
 	if isKids(hall) then
 		return part(parent, name, cframe, size, kidsPalette(hall).Color, Enum.Material.SmoothPlastic)
@@ -95,30 +95,20 @@ local function surfaceFor(hall, parent, name, cframe, size, tileColor, faces, st
 	return tiledPart(parent, name, cframe, size, tileColor, faces, studs)
 end
 
--- Which basin (if any) a hall carries: width, depth, water depth. The basin is
--- always centred, with a dry HallBasinBorder walkway all the way around.
-local function basinFor(hall)
-	local border = Configuration.HallBasinBorder
-	local width = hall.Width - border * 2
-	local depth = hall.Depth - border * 2
-	if width < 24 or depth < 24 then return nil end
-	if hall.Role == "Slide Hall" then
-		return width, depth, Configuration.DeepPoolDepth
+-- Water depth for a hall, or nil for a genuinely dry room. Water is
+-- wall-to-wall: the whole floor is recessed by this amount and flooded.
+local function hallWaterDepth(hall)
+	if hall.Role == "Kids Area" or hall.Role == "Arrival"
+		or hall.Role == "Pump Station" or hall.Role == "Exit" then
+		return nil
 	end
-	if hall.PoolType == "Deep" then
-		return width, depth, Configuration.DeepPoolDepth
-	end
-	if hall.PoolType == "Shallow" or hall.PoolType == "Arch" then
-		return width, depth, Configuration.ShallowPoolDepth
-	end
-	return nil
+	if hall.Role == "Slide Hall" then return Configuration.SlidePoolDepth end
+	if hall.PoolType == "Deep" then return Configuration.DeepPoolDepth end
+	return Configuration.ShallowPoolDepth
 end
 
 -- ── walls ───────────────────────────────────────────────────────────────────
 
--- A straight wall from `low` to `high` along `axis` at fixed `cross`, with any
--- number of floor-level doorway gaps, plus an optional raised rectangular hole
--- (used where the exit flume passes through a wall).
 local function makeWallWithGaps(parent, hall, name, axis, cross, low, high, gaps, height, bottomY, flumeGap)
 	height = height or hallHeight(hall)
 	bottomY = bottomY or -4
@@ -167,8 +157,14 @@ local function makeWallWithGaps(parent, hall, name, axis, cross, low, high, gaps
 						CFrame.new(positionFor((gapLow + gapHigh) * .5, doorHeight + lintelHeight * .5)),
 						sizeFor(span, lintelHeight), wallColor, nil, 7)
 				end
+				-- Door sill below the waterline so the wall still seals the
+				-- water column under the doorway threshold.
+				if bottomY < -4 then
+					surfaceFor(hall, parent, name .. " Sill",
+						CFrame.new(positionFor((gapLow + gapHigh) * .5, (bottomY - 4) * .5)),
+						sizeFor(span, math.abs(bottomY) - 4), wallColor, nil, 7)
+				end
 			else
-				-- Raised hole: fill below and above it.
 				if opening.bottom - bottomY > .1 then
 					surfaceFor(hall, parent, name .. " Sill",
 						CFrame.new(positionFor((gapLow + gapHigh) * .5, (opening.bottom + bottomY) * .5)),
@@ -191,103 +187,86 @@ end
 
 -- ── floors, ceilings, water ─────────────────────────────────────────────────
 
--- Water halls get a dry tiled walkway ring around the basin opening — the
--- floor is genuinely open over the water, never a slab underneath it.
+local waterRegionsRef -- set per Build
+
+local function addWater(center, size, label)
+	local region = {CFrame = CFrame.new(center), Size = size, Label = label}
+	Terrain:FillBlock(region.CFrame, region.Size, Enum.Material.Water)
+	table.insert(waterRegionsRef, region)
+	return region
+end
+
+-- Flooded halls: one recessed slab across the WHOLE footprint, water on top of
+-- it wall-to-wall. Dry halls: a plain slab at walking height.
 local function makeHallFloor(parent, hall)
-	local floorColor = isKids(hall) and kidsPalette(hall).Accent or C.TileWarm
-	local basinWidth, basinDepth = basinFor(hall)
-	if not basinWidth then
+	local depth = hallWaterDepth(hall)
+	if not depth then
+		local floorColor = isKids(hall) and kidsPalette(hall).Accent or C.TileWarm
 		local slab = surfaceFor(hall, parent, "Level 3 Hall Floor",
 			CFrame.new(hall.Center + Vector3.new(0, -.35, 0)),
 			Vector3.new(hall.Width, .7, hall.Depth), floorColor, {Enum.NormalId.Top}, 7)
 		slab.CanCollide = true
-		return
+		return nil
 	end
-
-	local border = (hall.Width - basinWidth) * .5
-	local borderZ = (hall.Depth - basinDepth) * .5
-	for _, data in ipairs({
-		{Vector3.new(0, -.35, -(hall.Depth - borderZ) * .5), Vector3.new(hall.Width, .7, borderZ)},
-		{Vector3.new(0, -.35, (hall.Depth - borderZ) * .5), Vector3.new(hall.Width, .7, borderZ)},
-		{Vector3.new(-(hall.Width - border) * .5, -.35, 0), Vector3.new(border, .7, hall.Depth - borderZ * 2)},
-		{Vector3.new((hall.Width - border) * .5, -.35, 0), Vector3.new(border, .7, hall.Depth - borderZ * 2)},
-	}) do
-		local strip = surfaceFor(hall, parent, "Level 3 Hall Walkway",
-			CFrame.new(hall.Center + data[1]), data[2], floorColor, {Enum.NormalId.Top}, 7)
-		strip.CanCollide = true
-	end
+	local slab = tiledPart(parent, "Level 3 Hall Water Floor",
+		CFrame.new(hall.Center + Vector3.new(0, -depth - .6, 0)),
+		Vector3.new(hall.Width, 1.2, hall.Depth), C.TileCool, {Enum.NormalId.Top}, 10)
+	slab.CanCollide = true
+	local waterHeight = depth + .1
+	addWater(hall.Center + Vector3.new(0, .1 - waterHeight * .5, 0),
+		Vector3.new(hall.Width - 3, waterHeight, hall.Depth - 3), hall.Id)
+	return depth
 end
 
+-- Ceilings carry REAL skylight slots: open cuts with translucent glass panes
+-- that cast no shadow, so actual sunlight drops into the room and bounces.
 local function makeHallCeiling(parent, hall)
 	local height = hallHeight(hall)
 	local color = isKids(hall) and kidsPalette(hall).Accent or C.TileCool
-	local slab = surfaceFor(hall, parent, "Level 3 Hall Ceiling",
-		CFrame.new(hall.Center + Vector3.new(0, height + 1, 0)),
-		Vector3.new(hall.Width, 2, hall.Depth), color, {Enum.NormalId.Bottom}, 9)
-	slab.CanCollide = true
-	return slab
-end
-
--- A sunken tiled basin filled with terrain water. Registers the water block in
--- `waterRegions` so validation and draining can find it. Returns the region.
-local function makeBasin(parent, waterRegions, center, width, depth3, poolDepth, label)
-	local wallThickness = 4
-	local bottomY = -poolDepth
-	local wallTop = 1.25
-	local wallHeight = wallTop - bottomY
-	local wallCenterY = bottomY + wallHeight * .5
-
-	local bottom = tiledPart(parent, "Level 3 " .. label .. " Basin Floor",
-		CFrame.new(center + Vector3.new(0, bottomY - .75, 0)),
-		Vector3.new(width, 1.5, depth3), C.TileCool, {Enum.NormalId.Top}, 10)
-	bottom.CanCollide = true
-
-	for _, data in ipairs({
-		{Vector3.new(-width * .5, wallCenterY, 0), Vector3.new(wallThickness, wallHeight, depth3)},
-		{Vector3.new(width * .5, wallCenterY, 0), Vector3.new(wallThickness, wallHeight, depth3)},
-		{Vector3.new(0, wallCenterY, -depth3 * .5), Vector3.new(width, wallHeight, wallThickness)},
-		{Vector3.new(0, wallCenterY, depth3 * .5), Vector3.new(width, wallHeight, wallThickness)},
-	}) do
-		local wall = tiledPart(parent, "Level 3 " .. label .. " Basin Wall",
-			CFrame.new(center + data[1]), data[2], C.TileCool, nil, 10)
-		wall.CanCollide = true
+	if isKids(hall) then
+		local slab = part(parent, "Level 3 Hall Ceiling",
+			CFrame.new(hall.Center + Vector3.new(0, height + 1, 0)),
+			Vector3.new(hall.Width, 2, hall.Depth), color, Enum.Material.SmoothPlastic)
+		slab.CanCollide = true
+		return
 	end
 
-	-- Chrome pool ladder on the north wall for deep basins (reference photos).
-	if poolDepth > 4 then
-		local ladderX = center.X - width * .25
-		local ladderZ = center.Z - depth3 * .5 + 1.2
-		local railTop = 2.6
-		local railBottom = -poolDepth * .5
-		local railHeight = railTop - railBottom
-		for _, offset in ipairs({-1.4, 1.4}) do
-			part(parent, "Level 3 Pool Ladder Rail",
-				CFrame.new(ladderX + offset, (railTop + railBottom) * .5, ladderZ),
-				Vector3.new(.34, railHeight, .34), C.Rail, Enum.Material.Metal)
-		end
-		for rung = 0, 4 do
-			part(parent, "Level 3 Pool Ladder Rung",
-				CFrame.new(ladderX, railTop - 1.2 - rung * ((railHeight - 1.6) / 4), ladderZ),
-				Vector3.new(3.1, .3, .3), C.Rail, Enum.Material.Metal)
-		end
+	local slots = math.clamp(math.floor(hall.Width / 70), 1, 4)
+	local slotWidth = 11
+	local xs = {}
+	for slot = 1, slots do
+		table.insert(xs, hall.MinX + (slot / (slots + 1)) * hall.Width)
 	end
+	table.sort(xs)
 
-	local waterWidth = math.max(4, width - wallThickness * 2 - 2)
-	local waterDepth = math.max(4, depth3 - wallThickness * 2 - 2)
-	local waterHeight = math.max(.8, poolDepth - .35)
-	local region = {
-		CFrame = CFrame.new(center + Vector3.new(0, -waterHeight * .5 + .1, 0)),
-		Size = Vector3.new(waterWidth, waterHeight, waterDepth),
-		Label = label,
-	}
-	Terrain:FillBlock(region.CFrame, region.Size, Enum.Material.Water)
-	table.insert(waterRegions, region)
-	return region
+	local cursor = hall.MinX
+	for _, x in ipairs(xs) do
+		local segmentEnd = x - slotWidth * .5
+		if segmentEnd - cursor > .5 then
+			local slab = tiledPart(parent, "Level 3 Hall Ceiling",
+				CFrame.new(Vector3.new((cursor + segmentEnd) * .5, height + 1, hall.Center.Z)),
+				Vector3.new(segmentEnd - cursor, 2, hall.Depth), color, {Enum.NormalId.Bottom}, 9)
+			slab.CanCollide = true
+		end
+		-- The glass pane: sunlight passes (CastShadow off), players cannot.
+		local pane = part(parent, "Level 3 Skylight Glass",
+			CFrame.new(Vector3.new(x, height + 1, hall.Center.Z)),
+			Vector3.new(slotWidth, .6, hall.Depth), Color3.fromRGB(248, 246, 236),
+			Enum.Material.Glass, .55)
+		pane.CanCollide = true
+		pane.CastShadow = false
+		cursor = x + slotWidth * .5
+	end
+	if hall.MaxX - cursor > .5 then
+		local slab = tiledPart(parent, "Level 3 Hall Ceiling",
+			CFrame.new(Vector3.new((cursor + hall.MaxX) * .5, height + 1, hall.Center.Z)),
+			Vector3.new(hall.MaxX - cursor, 2, hall.Depth), color, {Enum.NormalId.Bottom}, 9)
+		slab.CanCollide = true
+	end
 end
 
--- A raised wading pool that sits ON the floor (kids rooms). No digging, so the
--- floor slab underneath stays honest.
-local function makeRaisedPool(parent, waterRegions, center, width, depth3, palette)
+-- Raised wading pool for the kids wing (water above the floor, no digging).
+local function makeRaisedPool(parent, center, width, depth3, palette)
 	local wallHeight = 2.4
 	local shellBottom = part(parent, "Level 3 Kids Pool Base",
 		CFrame.new(center + Vector3.new(0, .15, 0)), Vector3.new(width, .3, depth3),
@@ -302,19 +281,11 @@ local function makeRaisedPool(parent, waterRegions, center, width, depth3, palet
 		part(parent, "Level 3 Kids Pool Wall", CFrame.new(center + data[1]), data[2],
 			palette.Color, Enum.Material.SmoothPlastic).CanCollide = true
 	end
-	-- Step block so small legs can climb in.
 	part(parent, "Level 3 Kids Pool Step",
 		CFrame.new(center + Vector3.new(0, .6, depth3 * .5 + 2)), Vector3.new(10, 1.2, 3.4),
 		palette.Accent, Enum.Material.SmoothPlastic).CanCollide = true
-
-	local region = {
-		CFrame = CFrame.new(center + Vector3.new(0, wallHeight * .5 + .2, 0)),
-		Size = Vector3.new(width - 3, wallHeight - .6, depth3 - 3),
-		Label = "Kids Pool",
-	}
-	Terrain:FillBlock(region.CFrame, region.Size, Enum.Material.Water)
-	table.insert(waterRegions, region)
-	return region
+	addWater(center + Vector3.new(0, wallHeight * .5 + .2, 0),
+		Vector3.new(width - 3, wallHeight - .6, depth3 - 3), "Kids Pool")
 end
 
 -- ── set pieces ──────────────────────────────────────────────────────────────
@@ -329,29 +300,49 @@ local function makeColumn(parent, position, height, radius)
 	return column
 end
 
--- A proper archway: a contiguous half-ring of tangent-rotated tiled segments,
--- grounded at both ends. `acrossZ` picks which vertical plane the arch lives
--- in: true = the ring spans across Z (you walk through it travelling along X).
-local function makeArchRing(parent, center, acrossZ, index, radius)
-	radius = math.max(6, radius)
-	local steps = math.max(12, math.floor(radius * 1.6))
-	local segmentLength = (math.pi * radius) / steps + .8
-	for step = 0, steps do
-		local a = math.pi * step / steps
-		local side = math.cos(a) * radius
-		local y = 1 + math.sin(a) * radius
-		local position, orientation
-		if acrossZ then
-			position = center + Vector3.new(0, y, side)
-			orientation = CFrame.Angles(math.pi * .5 - a, 0, 0)
-		else
-			position = center + Vector3.new(side, y, 0)
-			orientation = CFrame.Angles(0, 0, a - math.pi * .5)
+-- Rows of columns rising out of the water — the reference-photo colonnades.
+local function makeColonnade(parent, hall, depth, rows)
+	local alongX = hall.Width >= hall.Depth
+	local long = alongX and hall.Width or hall.Depth
+	local short = alongX and hall.Depth or hall.Width
+	local count = math.clamp(math.floor(long / 38), 2, 8)
+	local height = hallHeight(hall)
+	for _, rowOffset in ipairs(rows) do
+		local offset = rowOffset * short * .5
+		for column = 1, count do
+			local along = (column / (count + 1) - .5) * (long - 40)
+			local position = alongX
+				and hall.Center + Vector3.new(along, -(depth or 0), offset)
+				or hall.Center + Vector3.new(offset, -(depth or 0), along)
+			makeColumn(parent, position, height + (depth or 0), 5.5)
 		end
+	end
+end
+
+-- An archway: contiguous tangent segments built with lookAt between successive
+-- ring points, so the orientation can never be wrong. Feet stand on the floor
+-- (in the water). `acrossZ` = the ring spans across Z; you walk through along X.
+local function makeArchSpan(parent, center, acrossZ, index, radius)
+	radius = math.max(6, radius)
+	local steps = math.max(14, math.floor(radius * 1.8))
+	local arcCenter = center + Vector3.new(0, 1, 0)
+	local function pointAt(a)
+		if acrossZ then
+			return arcCenter + Vector3.new(0, math.sin(a) * radius, math.cos(a) * radius)
+		end
+		return arcCenter + Vector3.new(math.cos(a) * radius, math.sin(a) * radius, 0)
+	end
+	for step = 0, steps - 1 do
+		local a0 = math.pi * step / steps
+		local a1 = math.pi * (step + 1) / steps
+		local from = pointAt(a0)
+		local to = pointAt(a1)
+		local mid = (from + to) * .5
+		local radial = (mid - arcCenter)
+		local up = radial.Magnitude > .01 and radial.Unit or Vector3.yAxis
 		local rib = part(parent, "Level 3 Arch Rib " .. index,
-			CFrame.new(position) * orientation,
-			acrossZ and Vector3.new(3.2, 2.0, segmentLength) or Vector3.new(segmentLength, 2.0, 3.2),
-			C.TileWarm)
+			CFrame.lookAt(mid, to, up),
+			Vector3.new(3.2, 2.2, (to - from).Magnitude + .9), C.TileWarm)
 		addTexture(rib, Enum.NormalId:GetEnumItems(), 7)
 	end
 end
@@ -408,26 +399,6 @@ local function makeSpiralStair(parent, center, baseY, topY, radius, name)
 	end
 end
 
-local function makeSkylight(parent, center, width, depth3, index, height)
-	local slots = math.max(2, math.floor(width / 60))
-	for slot = 1, slots do
-		local x = -width * .5 + (slot / (slots + 1)) * width
-		local pane = part(parent, "Level 3 Skylight Pane " .. index .. " " .. slot,
-			CFrame.new(center + Vector3.new(x, height - 1.4, 0)),
-			Vector3.new(14, .5, math.max(20, depth3 * .62)), C.Light, Enum.Material.Neon, .05)
-		pane.CanCollide = false
-		local light = Instance.new("SurfaceLight")
-		light.Name = "Level 3 Skylight Surface Light"
-		light.Face = Enum.NormalId.Bottom
-		light.Color = C.Light
-		light.Brightness = Configuration.SkylightBrightness
-		light.Range = Configuration.SkylightRange
-		light.Angle = 92
-		light.Shadows = true
-		light.Parent = pane
-	end
-end
-
 local function makeCeilingPanel(parent, position, index, panelSize, yaw, height)
 	local y = (height or Configuration.WallHeight) - .7
 	panelSize = panelSize or Vector3.new(30, .55, 9)
@@ -464,15 +435,15 @@ local function lightHall(parent, hall, index)
 	end
 end
 
--- ── slides ──────────────────────────────────────────────────────────────────
+-- ── tubes and slides ────────────────────────────────────────────────────────
 
-local function makeSlideTube(parent, p0, p1, p2, p3, radius, color, name, segments, openTop)
-	segments = segments or Configuration.SlideSegments
+-- Tube from an ordered point list — shared by flumes, the exit slide and the
+-- helix slides. Orientation is always lookAt-derived, never trig.
+local function makeTubeFromPoints(parent, points, radius, color, name, openTop)
 	local sides = Configuration.SlideTubeSides
 	local arcWidth = 2 * radius * math.sin(math.pi / sides) * 1.18
-	for segment = 1, segments do
-		local t0, t1 = (segment - 1) / segments, segment / segments
-		local a, b = bezier(p0, p1, p2, p3, t0), bezier(p0, p1, p2, p3, t1)
+	for index = 1, #points - 1 do
+		local a, b = points[index], points[index + 1]
 		local length = (b - a).Magnitude
 		if length > .05 then
 			local base = CFrame.lookAt((a + b) * .5, b, Vector3.yAxis)
@@ -492,26 +463,51 @@ local function makeSlideTube(parent, p0, p1, p2, p3, radius, color, name, segmen
 	end
 end
 
--- A slide hall: sunken basin with walkways, columns to the roof, a top deck on
--- the north edge reached by a spiral stair plus a catwalk, and flumes that
--- each stay in their own straight lane down into the water — lanes never
--- cross, and every lane is clamped inside the basin.
-local function makeSlideHall(parent, waterRegions, hall, index)
+local function makeSlideTube(parent, p0, p1, p2, p3, radius, color, name, segments, openTop)
+	segments = segments or Configuration.SlideSegments
+	local points = {}
+	for segment = 0, segments do
+		table.insert(points, bezier(p0, p1, p2, p3, segment / segments))
+	end
+	makeTubeFromPoints(parent, points, radius, color, name, openTop)
+end
+
+-- A slide that WINDS AROUND a column: helix from a deck-level catwalk down
+-- into the water.
+local function makeHelixSlide(parent, columnPosition, helixRadius, topY, color, name)
+	local turns = 2.1
+	local segments = 30
+	local points = {}
+	for segment = 0, segments do
+		local t = segment / segments
+		local angle = -math.pi * .5 + t * math.pi * 2 * turns
+		local y = topY * (1 - t) + 2.2 * t
+		table.insert(points, Vector3.new(
+			columnPosition.X + math.cos(angle) * helixRadius,
+			y,
+			columnPosition.Z + math.sin(angle) * helixRadius))
+	end
+	makeTubeFromPoints(parent, points, 4.6, color, name, true)
+	return points[1]
+end
+
+-- A slide hall: wall-to-wall deep water, columns to the roof, a top deck on
+-- the north edge with straight parallel flume lanes down into the water, a
+-- helix slide wrapping the north-east column, spiral stair + catwalk access.
+local function makeSlideHall(parent, hall, index)
 	local height = hallHeight(hall)
 	local center = hall.Center
+	local depth = Configuration.SlidePoolDepth
 	local hallFolder = folder(parent, "Level 3 Slide Hall " .. index)
+	local radius = Configuration.SlideTubeRadius
 
-	local basinWidth, basinDepth, poolDepth = basinFor(hall)
-	makeBasin(hallFolder, waterRegions, center, basinWidth, basinDepth, poolDepth, "Slide Hall " .. index)
-
-	-- Columns clamped inside the basin so they rise from the water, not walls.
-	local columnOffsetX = math.min(hall.Width * .30, basinWidth * .5 - 12)
-	local columnOffsetZ = math.min(hall.Depth * .30, basinDepth * .5 - 12)
+	local columnOffsetX = math.min(hall.Width * .30, hall.Width * .5 - 16)
+	local columnOffsetZ = math.min(hall.Depth * .30, hall.Depth * .5 - 16)
 	for _, sx in ipairs({-1, 1}) do
 		for _, sz in ipairs({-1, 1}) do
 			makeColumn(hallFolder,
-				center + Vector3.new(sx * columnOffsetX, -poolDepth, sz * columnOffsetZ),
-				height + poolDepth, 9)
+				center + Vector3.new(sx * columnOffsetX, -depth, sz * columnOffsetZ),
+				height + depth, 9)
 		end
 	end
 
@@ -519,67 +515,103 @@ local function makeSlideHall(parent, waterRegions, hall, index)
 	local deckY = height - 22
 	local deckDepth = math.min(46, hall.Depth * .3)
 	local deckZ = hall.MinZ + deckDepth * .5 + 4
+	local deckFront = deckZ + deckDepth * .5
 	local deck = tiledPart(hallFolder, "Level 3 Slide Hall Deck",
 		CFrame.new(Vector3.new(center.X, deckY, deckZ)),
 		Vector3.new(hall.Width - 16, 2, deckDepth), C.TileWarm, Enum.NormalId:GetEnumItems(), 8)
 	deck.CanCollide = true
-	makeRail(hallFolder,
-		Vector3.new(hall.MinX + 10, deckY + 1, deckZ + deckDepth * .5),
-		Vector3.new(hall.MaxX - 10, deckY + 1, deckZ + deckDepth * .5),
-		"Level 3 Slide Hall " .. index .. " Deck")
 
-	-- Spiral stair in the south-east corner, then a catwalk along the east wall
-	-- up to the deck, so the climb is actually connected.
-	local spiralCenter = Vector3.new(hall.MaxX - 26, 0, hall.MaxZ - 26)
-	makeSpiralStair(hallFolder, spiralCenter, -1, deckY, 12,
-		"Level 3 Slide Hall " .. index .. " Spiral")
-	local catwalkZ0 = hall.MaxZ - 26
-	local catwalkZ1 = deckZ + deckDepth * .5
-	local catwalk = tiledPart(hallFolder, "Level 3 Slide Hall Catwalk",
-		CFrame.new(Vector3.new(hall.MaxX - 12, deckY, (catwalkZ0 + catwalkZ1) * .5)),
-		Vector3.new(8, 2, math.abs(catwalkZ0 - catwalkZ1)), C.TileWarm,
-		Enum.NormalId:GetEnumItems(), 8)
-	catwalk.CanCollide = true
-	makeRail(hallFolder,
-		Vector3.new(hall.MaxX - 16, deckY + 1, catwalkZ0),
-		Vector3.new(hall.MaxX - 16, deckY + 1, catwalkZ1),
-		"Level 3 Slide Hall " .. index .. " Catwalk")
-
-	-- Flumes: each lane keeps one X offset all the way down — no sign flips, so
-	-- tubes can never cross. Lane spacing beats tube diameter by a margin.
-	local radius = Configuration.SlideTubeRadius
-	local laneStep = math.max(radius * 2 + 9, math.min(34, hall.Width * .18))
+	-- Straight parallel flume lanes: one X offset each, kept for the whole run,
+	-- so tubes cannot meet. Lanes that will not fit are skipped, never clamped
+	-- onto a neighbour.
+	local laneStep = math.max(radius * 2 + 10, math.min(34, hall.Width * .18))
+	local laneLimit = hall.Width * .5 - radius - 8
+	local mouths = {}
 	for slide = 1, Configuration.SlidesPerHall do
 		local lane = (slide - (Configuration.SlidesPerHall + 1) * .5) * laneStep
-		lane = math.clamp(lane, -basinWidth * .5 + radius + 4, basinWidth * .5 - radius - 4)
-		local color = Configuration.SlideColors[((index + slide - 2) % #Configuration.SlideColors) + 1]
-		local startPoint = Vector3.new(center.X + lane, deckY + 4, deckZ + deckDepth * .4)
-		local p1 = Vector3.new(center.X + lane, deckY - 10, deckZ + deckDepth * .4 + hall.Depth * .18)
-		local p2 = Vector3.new(center.X + lane * .9, 14, center.Z + hall.Depth * .08)
-		local endZ = math.min(center.Z + hall.Depth * .26, center.Z + basinDepth * .5 - radius - 4)
-		local p3 = Vector3.new(center.X + lane * .8, 2.5, endZ)
-		makeSlideTube(hallFolder, startPoint, p1, p2, p3, radius, color,
-			"Level 3 Slide Hall " .. index .. " Flume " .. slide, Configuration.SlideSegments, true)
-		local mouth = part(hallFolder, "Level 3 Slide Hall " .. index .. " Flume Mouth " .. slide,
-			CFrame.lookAt(startPoint, p1), Vector3.new(radius * 2.4, .8, 3), color,
-			Enum.Material.Neon, .35)
-		mouth.CanCollide = false
+		if math.abs(lane) <= laneLimit then
+			local color = Configuration.SlideColors[((index + slide - 2) % #Configuration.SlideColors) + 1]
+			local laneX = center.X + lane
+			local startPoint = Vector3.new(laneX, deckY + radius + 1, deckFront - 2)
+			local p1 = Vector3.new(laneX, deckY - 8, deckFront + hall.Depth * .18)
+			local p2 = Vector3.new(laneX, 15, center.Z + hall.Depth * .06)
+			local endZ = math.min(center.Z + hall.Depth * .26, hall.MaxZ - radius - 8)
+			local p3 = Vector3.new(laneX, 2.5, endZ)
+			makeSlideTube(hallFolder, startPoint, p1, p2, p3, radius, color,
+				"Level 3 Slide Hall " .. index .. " Flume " .. slide, Configuration.SlideSegments, true)
+			local mouth = part(hallFolder, "Level 3 Slide Hall " .. index .. " Flume Mouth " .. slide,
+				CFrame.lookAt(startPoint, p1), Vector3.new(radius * 2.4, .8, 3), color,
+				Enum.Material.Neon, .35)
+			mouth.CanCollide = false
+			table.insert(mouths, laneX)
+		end
 	end
 
+	-- Deck-front rail, segmented around the flume mouths.
+	table.sort(mouths)
+	local railY = deckY + 1
+	local cursor = hall.MinX + 10
+	local mouthGap = radius + 3
+	for _, mouthX in ipairs(mouths) do
+		if mouthX - mouthGap - cursor > 3 then
+			makeRail(hallFolder,
+				Vector3.new(cursor, railY, deckFront),
+				Vector3.new(mouthX - mouthGap, railY, deckFront),
+				"Level 3 Slide Hall " .. index .. " Deck")
+		end
+		cursor = mouthX + mouthGap
+	end
+	if hall.MaxX - 10 - cursor > 3 then
+		makeRail(hallFolder,
+			Vector3.new(cursor, railY, deckFront),
+			Vector3.new(hall.MaxX - 10, railY, deckFront),
+			"Level 3 Slide Hall " .. index .. " Deck")
+	end
+
+	-- Helix slide wrapping the north-east column, fed by a catwalk off the deck.
+	local helixColumn = center + Vector3.new(columnOffsetX, 0, -columnOffsetZ)
+	local helixRadius = math.min(16, hall.MaxX - helixColumn.X - 6)
+	if helixRadius >= 12 then
+		local helixColor = Configuration.SlideColors[((index + 2) % #Configuration.SlideColors) + 1]
+		local helixTop = makeHelixSlide(hallFolder, helixColumn, helixRadius, deckY + 5,
+			helixColor, "Level 3 Slide Hall " .. index .. " Helix")
+		local catwalk = tiledPart(hallFolder, "Level 3 Slide Hall Helix Catwalk",
+			CFrame.new(Vector3.new(helixTop.X, deckY, (deckFront + helixTop.Z) * .5)),
+			Vector3.new(7, 2, math.max(4, math.abs(helixTop.Z - deckFront))), C.TileWarm,
+			Enum.NormalId:GetEnumItems(), 8)
+		catwalk.CanCollide = true
+		makeRail(hallFolder,
+			Vector3.new(helixTop.X - 3.2, railY, deckFront),
+			Vector3.new(helixTop.X - 3.2, railY, helixTop.Z),
+			"Level 3 Slide Hall " .. index .. " Helix Catwalk")
+	end
+
+	-- Spiral stair in the south-east corner + catwalk along the east wall.
+	local spiralCenter = Vector3.new(hall.MaxX - 26, 0, hall.MaxZ - 26)
+	makeSpiralStair(hallFolder, spiralCenter, -depth + 1, deckY, 12,
+		"Level 3 Slide Hall " .. index .. " Spiral")
+	local catwalkZ1 = deckFront
+	local eastCatwalk = tiledPart(hallFolder, "Level 3 Slide Hall Catwalk",
+		CFrame.new(Vector3.new(hall.MaxX - 12, deckY, (hall.MaxZ - 26 + catwalkZ1) * .5)),
+		Vector3.new(8, 2, math.abs(hall.MaxZ - 26 - catwalkZ1)), C.TileWarm,
+		Enum.NormalId:GetEnumItems(), 8)
+	eastCatwalk.CanCollide = true
+	makeRail(hallFolder,
+		Vector3.new(hall.MaxX - 16, railY, hall.MaxZ - 26),
+		Vector3.new(hall.MaxX - 16, railY, catwalkZ1),
+		"Level 3 Slide Hall " .. index .. " Catwalk")
+
 	lightHall(hallFolder, hall, "SlideHall" .. index)
-	makeSkylight(hallFolder, center, hall.Width, hall.Depth, "SlideHall" .. index, height)
 
 	return {Folder = hallFolder, DeckY = deckY, DeckZ = deckZ, DeckDepth = deckDepth}
 end
 
--- The exit flume leaves the grand hall's top deck heading east, stays high in
--- the void above the other halls' ceilings, and only dives once it is past the
--- outer shell. Both the grand hall's east wall and the shell get a matching
--- pass-through hole, so nothing solid ever crosses the tube's interior.
+-- Exit flume off the grand hall's top deck, east through matching wall holes,
+-- into the sealed Level 4 gateway.
 local function makeExitFlume(parent, layout, hall, deck)
 	local boundsMaxX = layout.Bounds.MaxX
 	local shellX = boundsMaxX + 60
-	local startPoint = Vector3.new(hall.MaxX - 14, deck.DeckY + 5, deck.DeckZ)
+	local startPoint = Vector3.new(hall.MaxX - 14, deck.DeckY + 9, deck.DeckZ)
 	local run = (shellX + 34) - startPoint.X
 	local p1 = startPoint + Vector3.new(run * .35, -4, 0)
 	local p2 = startPoint + Vector3.new(run * .8, -12, 0)
@@ -591,9 +623,7 @@ local function makeExitFlume(parent, layout, hall, deck)
 		Vector3.new(20, 20, 1.4), C.Emergency, Enum.Material.Neon, .55)
 	mouth.CanCollide = false
 
-	-- Sealed GATEWAY chamber: the placeholder for the Level 4 transition. The
-	-- flume drops escapees here; a bulkhead door promises the next level. For
-	-- now they wait here and the round flow returns everyone to the lobby.
+	-- Sealed GATEWAY chamber: the placeholder for the Level 4 transition.
 	local catchCenter = p3 + Vector3.new(24, 2, 0)
 	local catchSize = 48
 	local gatewayHeight = 22
@@ -612,8 +642,7 @@ local function makeExitFlume(parent, layout, hall, deck)
 			C.TileCool, nil, 9)
 	end
 
-	-- The east wall IS the Level 4 bulkhead: a heavy sealed door with signage.
-	local doorWall = tiledPart(parent, "Level 3 Gateway East Wall",
+	tiledPart(parent, "Level 3 Gateway East Wall",
 		CFrame.new(catchCenter + Vector3.new(catchSize * .5, gatewayHeight * .5 - 6, 0)),
 		Vector3.new(1.5, gatewayHeight, catchSize), C.TileCool, nil, 9)
 	local bulkhead = part(parent, "Level 3 Gateway Level 4 Bulkhead",
@@ -657,14 +686,14 @@ local function makeExitFlume(parent, layout, hall, deck)
 		Mouth = mouth,
 		EndPosition = catchCenter,
 		StartPoint = startPoint,
-		HallWallGap = {center = deck.DeckZ, width = 30, bottom = deck.DeckY - 14, top = deck.DeckY + 20},
-		ShellGap = {center = deck.DeckZ, width = 40, bottom = -10, top = deck.DeckY + 4},
+		HallWallGap = {center = deck.DeckZ, width = 30, bottom = deck.DeckY - 10, top = deck.DeckY + 24},
+		ShellGap = {center = deck.DeckZ, width = 40, bottom = -10, top = deck.DeckY + 8},
 	}
 end
 
 -- ── kids wing ───────────────────────────────────────────────────────────────
 
-local function makeKidsHall(parent, waterRegions, hall, index)
+local function makeKidsHall(parent, hall, index)
 	local palette = kidsPalette(hall)
 	local center = hall.Center
 	local kidsFolder = folder(parent, "Level 3 Kids Room " .. index .. " " .. palette.Name)
@@ -684,8 +713,6 @@ local function makeKidsHall(parent, waterRegions, hall, index)
 		pad.CanCollide = true
 	end
 
-	-- Kids flume: stair count and run clamped to the room so nothing pokes
-	-- through a wall.
 	local steps = math.clamp(math.floor((hall.Depth * .3 - 8) / 2.3), 6, 15)
 	local topY = steps * .78
 	local slideTop = center + Vector3.new(-hall.Width * .26, topY + 2.5, -hall.Depth * .2)
@@ -699,7 +726,6 @@ local function makeKidsHall(parent, waterRegions, hall, index)
 		Configuration.SlideColors[(index % #Configuration.SlideColors) + 1],
 		"Level 3 Kids Slide " .. index, 14, true)
 
-	-- Ball pit basin (dry, plastic).
 	local pitCenter = center + Vector3.new(-hall.Width * .26, 0, math.min(hall.Depth * .26, hall.Depth * .5 - 20))
 	local pit = part(kidsFolder, "Level 3 Ball Pit Basin",
 		CFrame.new(pitCenter + Vector3.new(0, .6, 0)), Vector3.new(36, 1.2, 32),
@@ -715,10 +741,8 @@ local function makeKidsHall(parent, waterRegions, hall, index)
 			CFrame.new(pitCenter + data[1]), data[2], palette.Color, Enum.Material.SmoothPlastic)
 	end
 
-	-- Raised paddling pool: water above the floor, so no digging and no
-	-- walking-on-water artefacts.
 	if hall.PoolType == "KidsShallow" then
-		makeRaisedPool(kidsFolder, waterRegions,
+		makeRaisedPool(kidsFolder,
 			center + Vector3.new(math.min(hall.Width * .26, hall.Width * .5 - 34), 0, 0),
 			math.min(52, hall.Width * .36), math.min(52, hall.Depth * .44), palette)
 	end
@@ -746,7 +770,6 @@ local function makePumpStation(parent, hall, index)
 	housing.Shape = Enum.PartType.Cylinder
 	housing.CanCollide = true
 
-	-- Fat intake pipes running from the pump into the floor.
 	for _, sx in ipairs({-1, 1}) do
 		local pipe = part(model, "Level 3 Pump Intake Pipe",
 			CFrame.new(center + Vector3.new(sx * 9.5, 4, 0)) * CFrame.Angles(0, 0, math.pi * .5),
@@ -780,14 +803,14 @@ end
 
 -- ── corridors ───────────────────────────────────────────────────────────────
 
--- A corridor is two dry side walkways with a recessed water channel between
--- them — you wade the channel or keep your feet dry on the walkways, exactly
--- like the reference photos. Drainable corridors are deeper: flooded you swim
--- across the surface, drained you take the steps down and walk the channel.
-local function makeCorridor(parent, waterRegions, layout, corridor, doorFolder)
+-- Flooded arch tunnels: full-width water over a recessed floor, dense arch
+-- rings overhead. Drainable corridors are deeper, with steps at both ends.
+local function makeCorridor(parent, layout, corridor, doorFolder)
+	if corridor.Kind == "SharedWall" then
+		return nil -- the halls meet wall-to-wall; the doorway lives in the wall
+	end
+
 	local width = corridor.Width
-	local walkway = Configuration.CorridorWalkwayWidth
-	local channelWidth = width - walkway * 2
 	local height = Configuration.CorridorHeight
 	local from, to = corridor.From, corridor.To
 	local length = math.abs(to - from) + 4
@@ -795,11 +818,10 @@ local function makeCorridor(parent, waterRegions, layout, corridor, doorFolder)
 	local alongX = corridor.Axis == "X"
 	local center = alongX and Vector3.new(mid, 0, corridor.Cross)
 		or Vector3.new(corridor.Cross, 0, mid)
-	local channelDepth = corridor.DrainGroup and Configuration.DrainableCorridorDepth
+	local depth = corridor.DrainGroup and Configuration.DrainableCorridorDepth
 		or Configuration.CorridorChannelDepth
 
 	local function oriented(x, z)
-		-- x = along the corridor, z = across it.
 		if alongX then return Vector3.new(x, 0, z) end
 		return Vector3.new(z, 0, x)
 	end
@@ -808,45 +830,33 @@ local function makeCorridor(parent, waterRegions, layout, corridor, doorFolder)
 		return Vector3.new(across, y, along)
 	end
 
-	-- Side walkways at floor level.
-	for _, side in ipairs({-1, 1}) do
-		local strip = tiledPart(parent, "Level 3 Corridor Walkway",
-			CFrame.new(center + oriented(0, side * (width - walkway) * .5) + Vector3.new(0, -.35, 0)),
-			orientedSize(length, .7, walkway), C.TileWarm, {Enum.NormalId.Top}, 7)
-		strip.CanCollide = true
-		-- Channel lip under the walkway's inner edge, down to the channel floor.
-		local lip = tiledPart(parent, "Level 3 Corridor Channel Lip",
-			CFrame.new(center + oriented(0, side * channelWidth * .5)
-				+ Vector3.new(0, -channelDepth * .5, 0)),
-			orientedSize(length, channelDepth, 1.4), C.TileCool, nil, 8)
-		lip.CanCollide = true
-	end
+	-- Recessed floor, water wall-to-wall.
+	local floorSlab = tiledPart(parent, "Level 3 Corridor Water Floor",
+		CFrame.new(center + Vector3.new(0, -depth - .6, 0)),
+		orientedSize(length, 1.2, width), C.TileCool, {Enum.NormalId.Top}, 8)
+	floorSlab.CanCollide = true
 
-	-- Channel floor.
-	local channelFloor = tiledPart(parent, "Level 3 Corridor Channel Floor",
-		CFrame.new(center + Vector3.new(0, -channelDepth - .6, 0)),
-		orientedSize(length, 1.2, channelWidth), C.TileCool, {Enum.NormalId.Top}, 8)
-	channelFloor.CanCollide = true
-
-	-- Steps into the channel at both ends so a drained corridor is walkable
-	-- end to end (and a flooded shallow one is easy to wade out of).
-	if channelDepth > 2 then
+	-- Steps at both ends of deep (drainable) corridors so the drained channel
+	-- is walkable end to end.
+	if depth > 2.5 then
 		local stepRun, stepRise = 1.4, .92
-		local stepCount = math.ceil(channelDepth / stepRise)
+		local stepCount = math.ceil(depth / stepRise)
 		for _, endSign in ipairs({-1, 1}) do
 			local outward = oriented(endSign, 0)
 			local base = center + oriented(endSign * (length * .5 - 2 - stepCount * stepRun), 0)
-				+ Vector3.new(0, -channelDepth, 0)
-			makeStairFlight(parent, base, outward, channelWidth - 4, stepCount,
-				"Level 3 Corridor " .. corridor.Index .. " Channel Steps", stepRun, stepRise)
+				+ Vector3.new(0, -depth, 0)
+			makeStairFlight(parent, base, outward, width - 6, stepCount,
+				"Level 3 Corridor " .. corridor.Index .. " Steps", stepRun, stepRise)
 		end
 	end
 
-	-- Walls and ceiling.
+	-- Walls reach below the waterline; ceiling stays solid (tunnels).
+	local wallBottom = -depth - 3
+	local wallTop = height + 2
 	for _, side in ipairs({-1, 1}) do
 		local wall = tiledPart(parent, "Level 3 Corridor Wall",
-			CFrame.new(center + oriented(0, side * width * .5) + Vector3.new(0, height * .5 - 2, 0)),
-			orientedSize(length, height + 4, Configuration.WallThickness), C.TileCool, nil, 7)
+			CFrame.new(center + oriented(0, side * width * .5) + Vector3.new(0, (wallTop + wallBottom) * .5, 0)),
+			orientedSize(length, wallTop - wallBottom, Configuration.WallThickness), C.TileCool, nil, 7)
 		wall.CanCollide = true
 	end
 	local ceiling = tiledPart(parent, "Level 3 Corridor Ceiling",
@@ -854,32 +864,25 @@ local function makeCorridor(parent, waterRegions, layout, corridor, doorFolder)
 		orientedSize(length, 2, width), C.TileCool, {Enum.NormalId.Bottom}, 9)
 	ceiling.CanCollide = true
 
-	-- Arches spanning ACROSS the corridor (you walk through them), grounded on
-	-- the walkways, sized to clear the walls.
-	local ribs = math.max(2, math.floor(length / 30))
-	local archRadius = width * .5 - 3.5
-	for rib = 1, ribs do
-		local t = rib / (ribs + 1)
-		makeArchRing(parent, center + oriented(from - mid + (to - from) * t, 0),
-			alongX, corridor.Index .. "." .. rib, archRadius)
+	-- Dense arch rings: the corridor reads as a vaulted arch tunnel.
+	local rings = math.max(3, math.floor(length / 11))
+	local archRadius = width * .5 - 3
+	for ring = 1, rings do
+		local t = ring / (rings + 1)
+		makeArchSpan(parent, center + oriented(from - mid + (to - from) * t, 0),
+			alongX, corridor.Index .. "." .. ring, archRadius)
 	end
 
 	makeCeilingPanel(parent, center, "Corridor " .. corridor.Index,
 		orientedSize(math.min(length * .55, 40), .55, 6), 0, height)
 
-	-- Channel water.
-	local surfaceY = .1
-	local waterHeight = channelDepth + surfaceY - .15
-	local region = {
-		CFrame = CFrame.new(center + Vector3.new(0, surfaceY - waterHeight * .5, 0)),
-		Size = alongX and Vector3.new(length - 4, waterHeight, channelWidth - 3)
-			or Vector3.new(channelWidth - 3, waterHeight, length - 4),
-		Label = "Corridor " .. corridor.Index,
-	}
-	Terrain:FillBlock(region.CFrame, region.Size, Enum.Material.Water)
-	table.insert(waterRegions, region)
+	-- Water, full width.
+	local waterHeight = depth + .1
+	local region = addWater(center + Vector3.new(0, .1 - waterHeight * .5, 0),
+		alongX and Vector3.new(length - 3, waterHeight, width - 3)
+			or Vector3.new(width - 3, waterHeight, length - 3),
+		"Corridor " .. corridor.Index)
 
-	-- Pressure doors seal the grand slide hall until every pump runs.
 	local door
 	if corridor.Kind == "PressureDoor" then
 		local doorCenter = center + oriented(to - mid, 0) + Vector3.new(0, height * .5 - 2, 0)
@@ -899,9 +902,6 @@ end
 
 -- ── arrival ─────────────────────────────────────────────────────────────────
 
--- A real arrival: raised tiled platform, glowing ring, signage, and steps down
--- into the concourse. The spawn markers sit flush on the platform so the
--- collidable ElevatorSpawn plate never floats in the air.
 local function makeArrivalConcourse(parent, hall)
 	local center = hall.Center
 	local arrivalFolder = folder(parent, "Level 3 Arrival Concourse")
@@ -922,7 +922,6 @@ local function makeArrivalConcourse(parent, hall)
 			"Level 3 Arrival Steps", 2.0, .6)
 	end
 
-	-- Signage wall on the north side.
 	local sign = tiledPart(arrivalFolder, "Level 3 Arrival Sign Wall",
 		CFrame.new(Vector3.new(center.X, 9, hall.MinZ + 4)),
 		Vector3.new(34, 14, 1.6), C.TileCool, nil, 7)
@@ -945,8 +944,6 @@ local function makeArrivalConcourse(parent, hall)
 	return platformHeight
 end
 
--- GameManager still requires these named objects. The elevator stub is
--- mandatory: connectElevator blocks forever on a missing DoorL/DoorR.
 local function makeCompatibilityArrival(world, arrivalPosition, platformHeight)
 	local topY = platformHeight or 0
 
@@ -984,8 +981,6 @@ local function makeCompatibilityArrival(world, arrivalPosition, platformHeight)
 		return object
 	end
 
-	-- placeSafelyInElevator writes CanCollide = true onto ElevatorSpawn, so it
-	-- sits flush on the platform where an invisible plate cannot be felt.
 	local mazeStart = compatibilityMarker("MazeStart",
 		arrivalPosition + Vector3.new(0, topY + .2, 0), Vector3.new(4, .2, 4))
 	local elevatorSpawn = compatibilityMarker("ElevatorSpawn",
@@ -1005,7 +1000,6 @@ end
 -- ── build ───────────────────────────────────────────────────────────────────
 
 function WorldBuilder.Build(layout, generation)
-	-- Same water look as Level 2, on purpose.
 	Terrain.WaterColor = C.Water
 	Terrain.WaterTransparency = .24
 	Terrain.WaterReflectance = .08
@@ -1039,13 +1033,13 @@ function WorldBuilder.Build(layout, generation)
 
 	local tallest = Configuration.GrandSlideHallHeight
 	local waterRegions = {}
+	waterRegionsRef = waterRegions
 
 	local floor = tiledPart(containment, "Level 3 Sealed Foundation",
 		CFrame.new(worldCenterX, -36, worldCenterZ),
 		Vector3.new(extent + 140, 4, extent + 140), C.DarkGrout, {Enum.NormalId.Top}, 12)
 	floor.CanCollide = true
 
-	-- Corridor doorways through hall walls.
 	local doorsByHall = {}
 	for _, hall in ipairs(layout.Halls) do
 		doorsByHall[hall.Index] = {East = {}, West = {}, North = {}, South = {}}
@@ -1065,13 +1059,11 @@ function WorldBuilder.Build(layout, generation)
 		end
 	end
 
-	-- The grand hall's slide-deck data is needed before its walls are built,
-	-- because the exit flume punches a hole through its east wall.
 	local slideDecks = {}
 	local exit
-	local grand = layout.GrandSlideHall
-
+	local hallDepths = {}
 	local built = 0
+
 	for _, hall in ipairs(layout.Halls) do
 		local hallModel = Instance.new("Model")
 		hallModel.Name = hall.Id .. " " .. (hall.Archetype or "Hall")
@@ -1085,69 +1077,92 @@ function WorldBuilder.Build(layout, generation)
 		end
 		hallModel.Parent = hallsFolder
 
-		makeHallFloor(hallModel, hall)
+		local depth = makeHallFloor(hallModel, hall)
+		hallDepths[hall.Index] = depth
 		makeHallCeiling(hallModel, hall)
 
 		if hall.Role == "Kids Area" then
-			makeKidsHall(kidsFolder, waterRegions, hall, hall.KidsIndex or hall.Index)
+			makeKidsHall(kidsFolder, hall, hall.KidsIndex or hall.Index)
 		elseif hall.Role == "Slide Hall" then
-			slideDecks[hall.SlideHallIndex] = makeSlideHall(slideFolder, waterRegions, hall, hall.SlideHallIndex)
+			slideDecks[hall.SlideHallIndex] = makeSlideHall(slideFolder, hall, hall.SlideHallIndex)
 			if hall.IsGrand then
 				exit = makeExitFlume(geometry, layout, hall, slideDecks[hall.SlideHallIndex])
 			end
 		else
-			local basinWidth, basinDepth, poolDepth = basinFor(hall)
-			if basinWidth then
-				makeBasin(hallModel, waterRegions, hall.Center, basinWidth, basinDepth, poolDepth,
-					hall.PoolType)
-			end
-
 			local archetype = hall.Archetype or ""
 			local height = hallHeight(hall)
 			if archetype == "Pillar Basin" or archetype == "Diving Well" then
-				local offsetX = math.min(hall.Width * .26, (basinWidth or hall.Width) * .5 - 11)
-				local offsetZ = math.min(hall.Depth * .26, (basinDepth or hall.Depth) * .5 - 11)
-				for _, sx in ipairs({-1, 1}) do
-					for _, sz in ipairs({-1, 1}) do
-						makeColumn(hallModel,
-							hall.Center + Vector3.new(sx * offsetX, -(poolDepth or 0), sz * offsetZ),
-							height + (poolDepth or 0), 7)
-					end
-				end
+				makeColonnade(hallModel, hall, depth, {-.6, .6})
+			elseif archetype == "Column Forest" then
+				makeColonnade(hallModel, hall, depth, {-.62, 0, .62})
+			elseif archetype == "Curved Gallery" then
+				makeColonnade(hallModel, hall, depth, {-.56})
+			elseif archetype == "Flooded Gallery" then
+				makeColonnade(hallModel, hall, depth, {-.64, .64})
 			elseif archetype == "Arch Tunnel" or archetype == "Ring Corridor" then
 				local acrossZ = hall.Width >= hall.Depth
 				local along = acrossZ and hall.Width or hall.Depth
-				local rings = math.clamp(math.floor(along / 44), 2, 5)
-				local radius = math.min((acrossZ and hall.Depth or hall.Width) * .5 - 8, height - 6, 20)
+				local rings = math.clamp(math.floor(along / 26), 3, 9)
+				local radius = math.min((acrossZ and hall.Depth or hall.Width) * .5 - 6, height - 5, 19)
 				for ring = 1, rings do
 					local t = ring / (rings + 1)
 					local position = acrossZ
 						and Vector3.new(hall.MinX + along * t, 0, hall.Center.Z)
 						or Vector3.new(hall.Center.X, 0, hall.MinZ + along * t)
-					makeArchRing(hallModel, position, acrossZ, hall.Index .. "." .. ring, radius)
+					makeArchSpan(hallModel, position, acrossZ, hall.Index .. "." .. ring, radius)
 				end
 			elseif archetype == "Spiral Stair Well" then
-				makeSpiralStair(hallModel, hall.Center, -1, height - 12, 13, "Level 3 Stair Well " .. hall.Index)
+				makeSpiralStair(hallModel, hall.Center, -(depth or 1) + .5, height - 12, 13,
+					"Level 3 Stair Well " .. hall.Index)
 			elseif archetype == "Skylight Hall" then
-				makeSkylight(hallModel, hall.Center, hall.Width, hall.Depth, hall.Index, height)
-			elseif archetype == "Curved Gallery" then
-				local count = math.clamp(math.floor(hall.Width / 46), 3, 7)
-				local rowZ = hall.Center.Z - math.min(hall.Depth * .28, (basinDepth or hall.Depth) * .5 - 10)
-				for column = 1, count do
-					local x = hall.Center.X - hall.Width * .5 + (column / (count + 1)) * hall.Width
-					makeColumn(hallModel, Vector3.new(x, -(poolDepth or 0), rowZ),
-						height + (poolDepth or 0), 6)
+				-- The real skylight slots already daylight this hall; add columns.
+				makeColonnade(hallModel, hall, depth, {-.5, .5})
+			elseif archetype == "Porthole Hall" then
+				for step = -1, 1 do
+					local offset = Vector3.new(step * math.min(30, hall.Width * .25), 9, -hall.Depth * .5 + 3)
+					local pane = part(hallModel, "Level 3 Porthole " .. hall.Index .. " " .. step,
+						CFrame.new(hall.Center + offset), Vector3.new(10, 15, .6), C.Light,
+						Enum.Material.Neon, .1)
+					pane.CanCollide = false
+					local light = Instance.new("SurfaceLight")
+					light.Face = Enum.NormalId.Back
+					light.Color = C.Light
+					light.Brightness = .7
+					light.Range = 26
+					light.Angle = 110
+					light.Shadows = false
+					light.Parent = pane
 				end
-			elseif archetype == "Pump Station" then
-				-- geometry handled by makePumpStation below
-			elseif archetype == "Arrival Concourse" then
-				-- geometry handled by makeArrivalConcourse below
-			elseif archetype == "Locker Row" or archetype == "Dry Gallery" then
-				for bench = -1, 1 do
-					local benchPart = tiledPart(hallModel, "Level 3 Tiled Bench",
-						CFrame.new(hall.Center + Vector3.new(bench * math.min(30, hall.Width * .25), 1.1, 0)),
-						Vector3.new(math.min(22, hall.Width * .2), 2.2, 5), C.TileWarm, nil, 7)
-					benchPart.CanCollide = true
+			end
+
+			-- Deep water: stairs descend from every doorway into the pool.
+			if depth and depth > 2.5 then
+				local stepRun, stepRise = 1.4, .92
+				local stepCount = math.ceil(depth / stepRise)
+				local stairWidth = Configuration.DoorWidth - 6
+				for _, doorZ in ipairs(doorsByHall[hall.Index].West) do
+					makeStairFlight(hallModel,
+						Vector3.new(hall.MinX + 2 + stepCount * stepRun, -depth, doorZ),
+						Vector3.new(-1, 0, 0), stairWidth, stepCount,
+						"Level 3 Hall " .. hall.Index .. " Doorway Steps", stepRun, stepRise)
+				end
+				for _, doorZ in ipairs(doorsByHall[hall.Index].East) do
+					makeStairFlight(hallModel,
+						Vector3.new(hall.MaxX - 2 - stepCount * stepRun, -depth, doorZ),
+						Vector3.new(1, 0, 0), stairWidth, stepCount,
+						"Level 3 Hall " .. hall.Index .. " Doorway Steps", stepRun, stepRise)
+				end
+				for _, doorX in ipairs(doorsByHall[hall.Index].North) do
+					makeStairFlight(hallModel,
+						Vector3.new(doorX, -depth, hall.MinZ + 2 + stepCount * stepRun),
+						Vector3.new(0, 0, -1), stairWidth, stepCount,
+						"Level 3 Hall " .. hall.Index .. " Doorway Steps", stepRun, stepRise)
+				end
+				for _, doorX in ipairs(doorsByHall[hall.Index].South) do
+					makeStairFlight(hallModel,
+						Vector3.new(doorX, -depth, hall.MaxZ - 2 - stepCount * stepRun),
+						Vector3.new(0, 0, 1), stairWidth, stepCount,
+						"Level 3 Hall " .. hall.Index .. " Doorway Steps", stepRun, stepRise)
 				end
 			end
 		end
@@ -1180,8 +1195,7 @@ function WorldBuilder.Build(layout, generation)
 		if built % 4 == 0 then task.wait() end
 	end
 
-	-- Hall walls. Built after the exit flume exists so the grand hall's east
-	-- wall can take the flume pass-through hole.
+	-- Hall walls, deepened below each hall's waterline.
 	for _, hall in ipairs(layout.Halls) do
 		local hallModel
 		for _, child in ipairs(hallsFolder:GetChildren()) do
@@ -1189,38 +1203,37 @@ function WorldBuilder.Build(layout, generation)
 		end
 		local doors = doorsByHall[hall.Index]
 		local height = hallHeight(hall)
+		local bottomY = -(hallDepths[hall.Index] or 0) - 4
 		local eastFlumeGap = (hall.IsGrand and exit) and exit.HallWallGap or nil
-		makeWallWithGaps(hallModel, hall, "Level 3 Hall West Wall", "Z", hall.MinX, hall.MinZ, hall.MaxZ, doors.West, height)
-		makeWallWithGaps(hallModel, hall, "Level 3 Hall East Wall", "Z", hall.MaxX, hall.MinZ, hall.MaxZ, doors.East, height, nil, eastFlumeGap)
-		makeWallWithGaps(hallModel, hall, "Level 3 Hall North Wall", "X", hall.MinZ, hall.MinX, hall.MaxX, doors.North, height)
-		makeWallWithGaps(hallModel, hall, "Level 3 Hall South Wall", "X", hall.MaxZ, hall.MinX, hall.MaxX, doors.South, height)
+		makeWallWithGaps(hallModel, hall, "Level 3 Hall West Wall", "Z", hall.MinX, hall.MinZ, hall.MaxZ, doors.West, height, bottomY)
+		makeWallWithGaps(hallModel, hall, "Level 3 Hall East Wall", "Z", hall.MaxX, hall.MinZ, hall.MaxZ, doors.East, height, bottomY, eastFlumeGap)
+		makeWallWithGaps(hallModel, hall, "Level 3 Hall North Wall", "X", hall.MinZ, hall.MinX, hall.MaxX, doors.North, height, bottomY)
+		makeWallWithGaps(hallModel, hall, "Level 3 Hall South Wall", "X", hall.MaxZ, hall.MinX, hall.MaxX, doors.South, height, bottomY)
 	end
 	task.wait()
 
-	-- Corridors.
 	local corridorRecords = {}
 	local drains = {}
 	local pressureDoors = {}
 	for _, corridor in ipairs(layout.Corridors) do
-		local record = makeCorridor(corridorsFolder, waterRegions, layout, corridor, doorFolder)
-		corridorRecords[corridor.Index] = record
-		if corridor.DrainGroup then drains[corridor.DrainGroup] = record end
-		if record.Door then table.insert(pressureDoors, record) end
+		local record = makeCorridor(corridorsFolder, layout, corridor, doorFolder)
+		if record then
+			corridorRecords[corridor.Index] = record
+			if corridor.DrainGroup then drains[corridor.DrainGroup] = record end
+			if record.Door then table.insert(pressureDoors, record) end
+		end
 	end
 	task.wait()
 
-	-- Pump stations.
 	local pumps = {}
 	for index, hall in ipairs(layout.PumpHalls) do
 		pumps[index] = makePumpStation(objectiveFolder, hall, index)
 		pumps[index].Hall = hall
 	end
 
-	-- Arrival.
 	local platformHeight = makeArrivalConcourse(geometry, layout.Arrival)
 	local arrival = makeCompatibilityArrival(world, layout.Arrival.Center, platformHeight)
 
-	-- Entity den marker: reserved space, nothing spawns here yet.
 	local den = part(entityFolder, "Level 3 Entity Den Spawn",
 		CFrame.new(layout.EntityDen.Center + Vector3.new(0, 3, 0)), Vector3.new(10, .4, 10),
 		C.Void, Enum.Material.Neon, 1)
@@ -1230,8 +1243,9 @@ function WorldBuilder.Build(layout, generation)
 	entityFolder:SetAttribute("Level3_DenPosition", layout.EntityDen.Center)
 	arrival.EntityStart.CFrame = CFrame.new(layout.EntityDen.Center + Vector3.new(0, 4, 0))
 
-	-- Outer shell: four full walls (east takes the flume pass-through), a roof
-	-- and the foundation. Fully sealed — no daylight anywhere inside.
+	-- Outer shell: four opaque walls, but a TRANSLUCENT GLASS ROOF that casts
+	-- no shadow — real sunlight pours through it and down through every
+	-- skylight slot in the hall ceilings.
 	local shellHalfX = extent * .5 + 60
 	local shellHeight = tallest + 12
 	local wallTall = shellHeight + 44
@@ -1248,14 +1262,12 @@ function WorldBuilder.Build(layout, generation)
 	makeWallWithGaps(containment, nil, "Level 3 Outer East Containment Wall", "Z",
 		worldCenterX + shellHalfX, worldCenterZ - shellHalfX - 6, worldCenterZ + shellHalfX + 6,
 		nil, shellHeight + 24, -36, exit and exit.ShellGap or nil)
-	local roof = tiledPart(containment, "Level 3 Sealed Ceiling",
+	local roof = part(containment, "Level 3 Glass Sky Roof",
 		CFrame.new(worldCenterX, shellHeight + 24, worldCenterZ),
-		Vector3.new(extent + 150, 4, extent + 150), C.DarkGrout, {Enum.NormalId.Bottom}, 12)
+		Vector3.new(extent + 150, 4, extent + 150), Color3.fromRGB(250, 247, 235),
+		Enum.Material.Glass, .6)
 	roof.CanCollide = true
-
-	-- The flume hole in the east shell stays open: from the top deck you see a
-	-- slot of real daylight at the end of the tube — the way out.
-
+	roof.CastShadow = false
 
 	local terrainCenter = Vector3.new(worldCenterX, -16, worldCenterZ)
 	local terrainSize = Vector3.new(extent + 700, 200, extent + 700)
@@ -1265,6 +1277,8 @@ function WorldBuilder.Build(layout, generation)
 	world:SetAttribute("Level3_CorridorCount", #layout.Corridors)
 	world:SetAttribute("Level3_KidsRoomCount", #(layout.KidsArea or {}))
 	world:SetAttribute("Level3_SlideHallCount", #(layout.SlideHalls or {}))
+
+	waterRegionsRef = nil
 
 	return {
 		World = world,

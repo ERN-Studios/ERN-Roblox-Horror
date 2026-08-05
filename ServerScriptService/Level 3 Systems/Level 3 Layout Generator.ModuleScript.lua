@@ -357,6 +357,57 @@ local function generateAttempt(seed)
 	layout.KidsArea = kidsBlock
 	for _, hall in ipairs(kidsBlock) do protected[hall] = true end
 
+	-- Merge the kids block wall-to-wall: for each corridor joining two kids
+	-- halls, extend both halls to a shared wall with a doorway, provided that
+	-- corridor is the only thing on that side of both halls (so the extension
+	-- cannot swallow another hall's corridor).
+	local kidsSet = {}
+	for _, hall in ipairs(kidsBlock) do kidsSet[hall.Index] = true end
+	local function corridorsOnSide(hall, axis, positive)
+		local count = 0
+		for _, corridor in ipairs(layout.Corridors) do
+			if corridor.Axis == axis and (corridor.A == hall.Index or corridor.B == hall.Index) then
+				local other = layout.Halls[corridor.A == hall.Index and corridor.B or corridor.A]
+				if axis == "X" then
+					if positive == (other.Center.X > hall.Center.X) then count += 1 end
+				else
+					if positive == (other.Center.Z > hall.Center.Z) then count += 1 end
+				end
+			end
+		end
+		return count
+	end
+	for _, corridor in ipairs(layout.Corridors) do
+		if kidsSet[corridor.A] and kidsSet[corridor.B] and corridor.Kind == "Open" then
+			local a, b = layout.Halls[corridor.A], layout.Halls[corridor.B]
+			if corridor.Axis == "X" then
+				local left = (a.MaxX <= b.MinX) and a or b
+				local right = (left == a) and b or a
+				if corridorsOnSide(left, "X", true) == 1 and corridorsOnSide(right, "X", false) == 1 then
+					local mid = (left.MaxX + right.MinX) * .5
+					left.MaxX = mid - 1.75
+					right.MinX = mid + 1.75
+					corridor.Kind = "SharedWall"
+				end
+			else
+				local north = (a.MaxZ <= b.MinZ) and a or b
+				local south = (north == a) and b or a
+				if corridorsOnSide(north, "Z", true) == 1 and corridorsOnSide(south, "Z", false) == 1 then
+					local mid = (north.MaxZ + south.MinZ) * .5
+					north.MaxZ = mid - 1.75
+					south.MinZ = mid + 1.75
+					corridor.Kind = "SharedWall"
+				end
+			end
+		end
+	end
+	for _, hall in ipairs(kidsBlock) do
+		hall.Center = rectCenter(hall)
+		hall.Width = rectWidth(hall)
+		hall.Depth = rectDepth(hall)
+		hall.Area = hall.Width * hall.Depth
+	end
+
 	-- Entity den: deepest remaining hall.
 	local denCandidates = {}
 	for _, hall in ipairs(layout.Halls) do
@@ -411,22 +462,20 @@ local function generateAttempt(seed)
 		end
 	end
 
-	-- Pool depth / archetype for everything unclaimed.
+	-- Every generic hall is flooded wall-to-wall; only depth and set dressing
+	-- vary. There are no dry rooms outside the kids wing and the service rooms.
 	for _, hall in ipairs(layout.Halls) do
 		if not protected[hall] then
 			local roll = rng:NextNumber()
-			if roll < .20 then
+			if roll < .28 then
 				hall.PoolType = "Deep"
-				hall.Archetype = ({"Diving Well", "Pillar Basin"})[rng:NextInteger(1, 2)]
-			elseif roll < .55 then
+				hall.Archetype = ({"Diving Well", "Pillar Basin", "Column Forest"})[rng:NextInteger(1, 3)]
+			elseif roll < .62 then
 				hall.PoolType = "Shallow"
-				hall.Archetype = ({"Flooded Gallery", "Curved Gallery", "Skylight Hall"})[rng:NextInteger(1, 3)]
-			elseif roll < .78 then
-				hall.PoolType = "Arch"
-				hall.Archetype = ({"Arch Tunnel", "Ring Corridor"})[rng:NextInteger(1, 2)]
+				hall.Archetype = ({"Flooded Gallery", "Curved Gallery", "Skylight Hall", "Column Forest"})[rng:NextInteger(1, 4)]
 			else
-				hall.PoolType = "Dry"
-				hall.Archetype = ({"Dry Gallery", "Spiral Stair Well", "Locker Row"})[rng:NextInteger(1, 3)]
+				hall.PoolType = "Shallow"
+				hall.Archetype = ({"Arch Tunnel", "Ring Corridor", "Spiral Stair Well", "Porthole Hall"})[rng:NextInteger(1, 4)]
 			end
 		end
 	end
