@@ -98,8 +98,9 @@ end
 
 local function clearOwnedTerrain(manifest)
 	local extent = Configuration.ComplexExtent
-	local center = manifest and manifest.TerrainCenter or Vector3.new(0, -16, 0)
-	local size = manifest and manifest.TerrainSize or Vector3.new(extent + 700, 160, extent + 700)
+	local center = manifest and manifest.TerrainCenter or Vector3.new(
+		Configuration.WorldCenterX or 0, -16, Configuration.WorldCenterZ or 0)
+	local size = manifest and manifest.TerrainSize or Vector3.new(extent + 700, 200, extent + 700)
 	Terrain:FillBlock(CFrame.new(center), size, Enum.Material.Air)
 end
 

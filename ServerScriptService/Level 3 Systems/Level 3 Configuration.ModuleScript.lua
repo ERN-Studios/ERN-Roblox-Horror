@@ -9,12 +9,19 @@
 -- and the terrain water appearance, so both levels feel like the same building.
 
 local Configuration = {
-	Version = 1,
+	Version = 2,
 	Theme = "Sunken Leisure Complex",
 
 	-- ── plan ────────────────────────────────────────────────────────────────
 	-- 1400 studs across. Level 2 is 552, so this is roughly 6x the floor area.
 	ComplexExtent = 1400,
+
+	-- The complex is shifted north so it can never intersect the persistent
+	-- tunnel lobby, which is built at (0, 30, -760) and spans roughly z -910
+	-- to -610. With this offset the outer shell runs z -525 .. +1005.
+	WorldCenterX = 0,
+	WorldCenterZ = 240,
+
 	MinimumLeafSize = 200,
 	MinimumSplitDepth = 2,
 	MaximumSplitDepth = 5,
@@ -28,6 +35,7 @@ local Configuration = {
 	GenerationAttempts = 40,
 
 	CorridorWidth = 34,
+	CorridorWalkwayWidth = 8,
 	MaximumCorridorLength = 130,
 	MinimumDrainableLength = 40,
 
@@ -47,10 +55,17 @@ local Configuration = {
 	DoorWidth = 30,
 	DoorHeight = 19,
 
+	-- Water halls keep a dry tiled walkway of this width on every side of the
+	-- sunken basin, exactly like the reference photos.
+	HallBasinBorder = 20,
+
 	DeepPoolDepth = 24,
 	ShallowPoolDepth = 1.6,
-	CorridorPoolDepth = 1.5,
-	DrainableCorridorDepth = 14,
+	CorridorChannelDepth = 1.5,
+	-- Drainable corridors are deep enough that draining them visibly changes
+	-- the space: flooded you swim across the surface, drained you walk the
+	-- channel floor between the entry and exit steps.
+	DrainableCorridorDepth = 6,
 
 	-- ── lighting ────────────────────────────────────────────────────────────
 	CeilingPanelBrightness = 1.15,

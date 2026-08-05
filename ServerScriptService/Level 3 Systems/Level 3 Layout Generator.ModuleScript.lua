@@ -220,10 +220,17 @@ end
 local function generateAttempt(seed)
 	local rng = Random.new(seed)
 	local extent = Configuration.ComplexExtent
+	-- The plan is laid out in world coordinates around WorldCenter, which is
+	-- shifted away from the persistent tunnel lobby so the two never overlap.
+	local cx = Configuration.WorldCenterX or 0
+	local cz = Configuration.WorldCenterZ or 0
 	local layout = {
 		Seed = seed,
 		Version = Configuration.Version,
-		Bounds = {MinX = -extent * .5, MaxX = extent * .5, MinZ = -extent * .5, MaxZ = extent * .5},
+		Bounds = {
+			MinX = cx - extent * .5, MaxX = cx + extent * .5,
+			MinZ = cz - extent * .5, MaxZ = cz + extent * .5,
+		},
 		Halls = {},
 		Corridors = {},
 		CorridorByPair = {},
@@ -308,7 +315,14 @@ local function generateAttempt(seed)
 	local slideHalls = chooseSpread(slideCandidates, Configuration.SlideHallCount, Configuration.SlideHallSeparation)
 	if #slideHalls < Configuration.SlideHallCount then return nil, "slide halls could not be spread" end
 	layout.SlideHalls = slideHalls
-	layout.GrandSlideHall = slideHalls[1]
+	-- The grand hall carries the exit flume, which leaves through the east
+	-- shell. Pick the easternmost slide hall so the flume's run stays short and
+	-- crosses nothing but the void above the other halls' ceilings.
+	local grand = slideHalls[1]
+	for _, hall in ipairs(slideHalls) do
+		if hall.Center.X > grand.Center.X then grand = hall end
+	end
+	layout.GrandSlideHall = grand
 
 	local protected = {[arrival] = true}
 	for _, hall in ipairs(slideHalls) do protected[hall] = true end
@@ -425,15 +439,15 @@ local function generateAttempt(seed)
 	for index, hall in ipairs(slideHalls) do
 		hall.Role = "Slide Hall"
 		hall.PoolType = "Slide"
-		hall.Archetype = index == 1 and "Grand Slide Hall" or "Slide Hall"
+		hall.IsGrand = hall == layout.GrandSlideHall
+		hall.Archetype = hall.IsGrand and "Grand Slide Hall" or "Slide Hall"
 		hall.SlideHallIndex = index
-		hall.IsGrand = index == 1
 	end
 
 	for index, hall in ipairs(pumps) do
 		hall.Role = "Pump Station"
 		hall.PumpIndex = index
-		hall.PoolType = "Shallow"
+		hall.PoolType = "Dry"
 		hall.Archetype = "Pump Station"
 	end
 

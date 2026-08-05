@@ -214,7 +214,8 @@ roundStatus.OnClientEvent:Connect(function(ev)
 	elseif ev == "start" then
 		-- The office fluorescent drone belongs to level 1 only. Level 2 stays
 		-- silent until its dedicated hollow poolroom ambience asset is supplied.
-		ambienceTarget = workspace:GetAttribute("SelectedLevel") == 2 and 0 or AMBIENCE_VOLUME
+		local ambienceLevel = workspace:GetAttribute("SelectedLevel")
+		ambienceTarget = (ambienceLevel == 2 or ambienceLevel == 3) and 0 or AMBIENCE_VOLUME
 	elseif ev == "win" or ev == "lose" or ev == "waiting" then
 		ambienceTarget = 0
 		elevatorSound:Stop() -- round over / reset (doors opening does NOT stop it)
@@ -474,7 +475,8 @@ RunService.Heartbeat:Connect(function(dt)
 	-- Level 2 deliberately has no fluorescent office drone. Re-check the
 	-- selected level every frame so a direct dev teleport also silences it.
 	if AMBIENCE_SOUND ~= "" then
-		local effectiveAmbienceTarget = workspace:GetAttribute("SelectedLevel") == 2
+		local liveAmbienceLevel = workspace:GetAttribute("SelectedLevel")
+		local effectiveAmbienceTarget = (liveAmbienceLevel == 2 or liveAmbienceLevel == 3)
 			and 0 or ambienceTarget
 		ambience.Volume = ambience.Volume
 			+ (effectiveAmbienceTarget - ambience.Volume) * math.clamp(dt / AMBIENCE_FADE, 0, 1)

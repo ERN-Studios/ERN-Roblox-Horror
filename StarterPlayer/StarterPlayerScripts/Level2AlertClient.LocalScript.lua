@@ -115,7 +115,8 @@ workspace.ChildAdded:Connect(function(child)
 end)
 
 event.OnClientEvent:Connect(function(line1, line2, finalLine)
-	if workspace:GetAttribute("SelectedLevel") ~= 2 then return end
+	local alertLevel = workspace:GetAttribute("SelectedLevel")
+	if alertLevel ~= 2 and alertLevel ~= 3 then return end
 	if player:GetAttribute("InRound") ~= true then return end
 
 	first.Text, second.Text, run.Text = line1, line2, finalLine

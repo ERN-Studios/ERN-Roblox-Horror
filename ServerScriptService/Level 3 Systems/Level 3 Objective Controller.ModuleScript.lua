@@ -173,11 +173,28 @@ function ObjectiveController.Start(manifest, generation)
 	end)
 	table.insert(session.Connections, escapeConnection)
 
-	fireStatus(
-		"SUNKEN LEISURE COMPLEX",
-		string.format("%d PUMP STATIONS OFFLINE", goal),
-		"START EVERY PUMP TO DRAIN THE COMPLEX"
-	)
+	-- Build() runs before anyone has InRound, so an immediate intro would reach
+	-- no one. Fire it once the round actually starts (or shortly after, if the
+	-- round was already live when this session started).
+	local function fireIntro()
+		if activeSession ~= session then return end
+		fireStatus(
+			"SUNKEN LEISURE COMPLEX",
+			string.format("%d PUMP STATIONS OFFLINE", goal),
+			"START EVERY PUMP TO DRAIN THE COMPLEX"
+		)
+	end
+	if workspace:GetAttribute("RoundActive") == true then
+		task.delay(2, fireIntro)
+	else
+		local introConnection
+		introConnection = workspace:GetAttributeChangedSignal("RoundActive"):Connect(function()
+			if workspace:GetAttribute("RoundActive") ~= true then return end
+			introConnection:Disconnect()
+			task.delay(4, fireIntro)
+		end)
+		table.insert(session.Connections, introConnection)
+	end
 	return session
 end
 

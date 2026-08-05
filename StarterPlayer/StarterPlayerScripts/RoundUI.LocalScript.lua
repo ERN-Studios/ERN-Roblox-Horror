@@ -37,6 +37,15 @@ local function applyPlayerLighting()
   return
  end
 
+ -- Level 3 owns its grade the same way Level 2 does.
+ local levelThreeWorld = workspace:FindFirstChild("Level 3 Generated World")
+ local isLevelThree = levelThreeWorld ~= nil and (workspace:GetAttribute("SelectedLevel") == 3 or inMaze)
+ if isLevelThree and workspace:GetAttribute("Level3LightingOwnedByController") == true then
+  lobbyGrade.Enabled = false
+  if mazeGrade then mazeGrade.Enabled = false end
+  return
+ end
+
  if isLevelTwo then
   lobbyGrade.Enabled = false
   if mazeGrade then mazeGrade.Enabled = false end
@@ -791,6 +800,10 @@ local function playObjective()
 			return base .. text
 		end
 
+		if workspace:GetAttribute("SelectedLevel") == 3 then
+			-- Level 3 runs its own alert-based intro from its objective controller.
+			return
+		end
 		if workspace:GetAttribute("SelectedLevel") == 2 then
    local poolText = typeInto("", "Restore the three pressure valves", 0.055)
    if not poolText then return end
@@ -1448,6 +1461,7 @@ local function mimicBuild(sourcePlayer, spawnPos)
     steps:SetAttribute("StartToken", startToken)
     task.delay(0.25 + math.random() * 0.45, function()
      if workspace:GetAttribute("SelectedLevel") ~= 2
+      and workspace:GetAttribute("SelectedLevel") ~= 3
       and model.Parent and moving == true and steps:GetAttribute("StartToken") == startToken then
       steps.TimePosition = math.random() * 0.28
       steps:Play()
@@ -1705,7 +1719,8 @@ end
 local function ambientFootsteps()
  -- Level 2 owns its real shallow-water/entity step mix in SoundController.
  -- Do not layer the dry plastic fake-footstep scare over that soundscape.
- if workspace:GetAttribute("SelectedLevel") == 2 then return false end
+ local scareLevel = workspace:GetAttribute("SelectedLevel")
+ if scareLevel == 2 or scareLevel == 3 then return false end
  local _, _, root, alive = ambientCharacter()
  if not alive then return false end
  local backward = -ambientFlatUnit(root.CFrame.LookVector)
