@@ -200,15 +200,23 @@ local function startFlying()
 	if flying then return true end
 	local character = player.Character
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-	if not (character and humanoid) then return false end
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	if not (character and humanoid and root) then return false end
 
 	flying = true
 	collisionOriginal = {}
 	humanoidOriginal = {
 		autoRotate = humanoid.AutoRotate,
+		anchored = root.Anchored,
 		fallingDown = humanoid:GetStateEnabled(Enum.HumanoidStateType.FallingDown),
 		ragdoll = humanoid:GetStateEnabled(Enum.HumanoidStateType.Ragdoll),
 	}
+	-- Anchor the root while flying. Zeroing velocity in PreSimulation does not
+	-- stop gravity being applied during the physics step that follows, so the
+	-- character sank a little every frame and the solver fought every PivotTo.
+	-- That reads in game as "drifts downward and moves far slower than
+	-- FLY_SPEED". Anchored, PivotTo is exact and nothing pulls back.
+	root.Anchored = true
 	humanoid.PlatformStand = false
 	humanoid.AutoRotate = false
 	humanoid:SetStateEnabled(Enum.HumanoidStateType.FallingDown, false)
@@ -238,6 +246,7 @@ local function stopFlying()
 	end
 	collisionOriginal = {}
 	if root then
+		root.Anchored = humanoidOriginal ~= nil and humanoidOriginal.anchored == true
 		root.AssemblyLinearVelocity = Vector3.zero
 		root.AssemblyAngularVelocity = Vector3.zero
 	end
@@ -312,8 +321,8 @@ RunService.PreSimulation:Connect(function(deltaTime)
 
 	if move.Magnitude > 0 then move = move.Unit end
 
-	root.AssemblyAngularVelocity = Vector3.zero
-	root.AssemblyLinearVelocity = Vector3.zero
+	-- Re-assert the anchor: a respawn or a server-side reset can clear it.
+	if not root.Anchored then root.Anchored = true end
 	if move.Magnitude > 0 then
 		character:PivotTo(character:GetPivot() + move * FLY_SPEED * math.min(deltaTime, 1 / 20))
 	end

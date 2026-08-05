@@ -1001,6 +1001,17 @@ function Builder.Build(center)
 		addRoom(rooms, center, def.level, def.side, def.z, def.active, stations)
 	end
 
+	-- Startup fingerprint. This is the fastest way to tell a stale server apart
+	-- from a code problem: if the log does not list the bay, the running build
+	-- is older than the change that opened it.
+	local activeBays, stationCount = {}, 0
+	for _, def in ipairs(levelDefs) do
+		if def.active then table.insert(activeBays, def.level) end
+	end
+	for _ in pairs(stations) do stationCount += 1 end
+	print(string.format("[TunnelLobbyBuilder] bays open: %s  |  launch stations: %d",
+		table.concat(activeBays, ", "), stationCount))
+
 	-- Dense abandoned-office barricades replace the old flat wallpaper caps.
 	-- `inward` points from each finite end back into the playable tunnel.
 	addTunnelEndBarricade(detail, center, -halfLength + 1.2, 1, 1993)
