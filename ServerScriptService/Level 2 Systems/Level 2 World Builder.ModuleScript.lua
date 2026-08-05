@@ -439,35 +439,21 @@ local function makeCeilingPanel(parent, position, index, panelSize, yaw, height)
 end
 
 local function lightHall(parent, hall, index)
+	-- Halls with skylights are lit by the SUN alone — no artificial fixtures.
+	-- Ceiling panels only exist where there is no skylight: the kids wing
+	-- (solid painted ceilings), corridors and the gateway.
+	if #skylightSlotsFor(hall) > 0 then return end
 	local height = hallHeight(hall)
 	local columns = math.clamp(math.floor(hall.Width / 90), 1, 4)
 	local rows = math.clamp(math.floor(hall.Depth / 90), 1, 4)
 	local panelWidth = math.min(46, hall.Width * .42)
-	local slotXs = skylightSlotsFor(hall)
-	local nudge = #slotXs > 0 and hall.Width / ((#slotXs + 1) * 2) or 0
 	for cx = 1, columns do
 		for cz = 1, rows do
 			local x = hall.Center.X - hall.Width * .5 + (cx / (columns + 1)) * hall.Width
 			local z = hall.Center.Z - hall.Depth * .5 + (cz / (rows + 1)) * hall.Depth
-			-- Never build a light fixture inside a skylight opening: slide it
-			-- sideways into the gap between slots, or drop it entirely; the
-			-- slot already floods that spot with real sun.
-			if overlapsSkylight(hall, x, panelWidth) then
-				if not overlapsSkylight(hall, x + nudge, panelWidth)
-					and x + nudge + panelWidth * .5 < hall.MaxX - 4 then
-					x = x + nudge
-				elseif not overlapsSkylight(hall, x - nudge, panelWidth)
-					and x - nudge - panelWidth * .5 > hall.MinX + 4 then
-					x = x - nudge
-				else
-					x = nil
-				end
-			end
-			if x then
-				makeCeilingPanel(parent, Vector3.new(x, 0, z),
-					index .. "." .. cx .. "." .. cz,
-					Vector3.new(panelWidth, .55, 9), 0, height)
-			end
+			makeCeilingPanel(parent, Vector3.new(x, 0, z),
+				index .. "." .. cx .. "." .. cz,
+				Vector3.new(panelWidth, .55, 9), 0, height)
 		end
 	end
 end
@@ -977,14 +963,7 @@ local function makeArrivalConcourse(parent, hall)
 	signText.Text = "ZYNTRA AQUATICS  •  SUBLEVEL 2\nSUNKEN LEISURE COMPLEX"
 	signText.Parent = signGui
 
-	local arrivalPanelX = center.X
-	if overlapsSkylight(hall, arrivalPanelX, 30) then
-		local xs = skylightSlotsFor(hall)
-		local shift = hall.Width / ((#xs + 1) * 2)
-		arrivalPanelX = overlapsSkylight(hall, center.X + shift, 30) and center.X - shift or center.X + shift
-	end
-	makeCeilingPanel(arrivalFolder, Vector3.new(arrivalPanelX, 0, center.Z), "Arrival",
-		Vector3.new(30, .55, 12), 0, hallHeight(hall))
+	-- The arrival hall is skylit like every other hall: sun only, no fixture.
 	return platformHeight
 end
 
