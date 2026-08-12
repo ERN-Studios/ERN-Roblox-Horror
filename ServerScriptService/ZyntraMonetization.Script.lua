@@ -144,9 +144,7 @@ local function applyHazmatColor(player)
 	local ownsAdvanced = player:GetAttribute("ZyntraOwnsAdvancedEquipment") == true
 	local ownsSupporter = player:GetAttribute("ZyntraOwnsSupporter") == true
 	if not ownsAdvanced and not ownsSupporter then return end
-	local color = ownsAdvanced
-		and (player:GetAttribute("ZyntraHazmatColor") or Config.Colors.HazmatDefault)
-		or Config.Colors.HazmatSupporter
+	local color = player:GetAttribute("ZyntraHazmatColor") or Config.Colors.HazmatDefault
 	for _, object in ipairs(character:GetChildren()) do
 		if object:IsA("MeshPart") then
 			local surface = object:FindFirstChildOfClass("SurfaceAppearance")
@@ -381,8 +379,10 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 			return true, "Battery increased by 5%.", "success"
 		end)
 	elseif action == "SetHazmatColor" then
-		if player:GetAttribute("ZyntraOwnsAdvancedEquipment") ~= true then
-			pushProfile(player, "Advanced Equipment is required.", "error")
+		local ownsAdvanced = player:GetAttribute("ZyntraOwnsAdvancedEquipment") == true
+		local ownsSupporter = player:GetAttribute("ZyntraOwnsSupporter") == true
+		if not ownsAdvanced and not ownsSupporter then
+			pushProfile(player, "Zyntra Supporter or Advanced Equipment is required.", "error")
 			return
 		end
 		local color = validColor(payload)
@@ -393,7 +393,7 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 		end)
 	elseif action == "SetGlowstickColor" then
 		if player:GetAttribute("ZyntraOwnsCosmeticEquipment") ~= true then
-			pushProfile(player, "Cosmetic Equipment Packs is required.", "error")
+			pushProfile(player, "Glowstick Customizer is required.", "error")
 			return
 		end
 		local color = validColor(payload)

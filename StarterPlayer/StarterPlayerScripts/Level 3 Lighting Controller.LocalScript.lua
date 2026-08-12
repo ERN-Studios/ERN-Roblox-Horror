@@ -48,6 +48,18 @@ type SuppressedEffect = {
 	Enabled: boolean,
 }
 
+type BlackoutLightRecord = {
+	Light: Light,
+	Enabled: boolean,
+	Brightness: number,
+}
+
+type BlackoutPartRecord = {
+	Part: BasePart,
+	Material: Enum.Material,
+	Color: Color3,
+}
+
 local grade = Lighting:FindFirstChild("Level3ClientColorGrade")
 if not (grade and grade:IsA("ColorCorrectionEffect")) then
 	if grade then grade:Destroy() end
@@ -80,6 +92,11 @@ local fixtureByPart: {[BasePart]: FixtureRecord} = {}
 local boundWorld: Model? = nil
 local worldAddedConnection: RBXScriptConnection? = nil
 local worldRemovingConnection: RBXScriptConnection? = nil
+local blackoutApplied = false
+local blackoutLights: {BlackoutLightRecord} = {}
+local blackoutParts: {BlackoutPartRecord} = {}
+local blackoutPartSeen: {[BasePart]: boolean} = {}
+local applyLevelGrade: (boolean) -> ()
 
 local function cancelTweens()
 	for _, tween in ipairs(tweens) do tween:Cancel() end
@@ -141,6 +158,104 @@ local function exitUnlocked(): boolean
 	local value = state and state:GetAttribute("Level3_ExitUnlocked")
 	if value == nil then value = workspace:GetAttribute("Level3ExitUnlocked") end
 	return value == true
+end
+
+local function blackoutRequested(): boolean
+	local state = stateFolder()
+	local value = state and state:GetAttribute("Level3_BlackoutActive")
+	if value == nil then value = workspace:GetAttribute("Level3BlackoutActive") end
+	return value == true
+end
+
+local function restoreBlackoutWorld()
+	for _, record in ipairs(blackoutLights) do
+		if record.Light.Parent then
+			record.Light.Enabled = record.Enabled
+			record.Light.Brightness = record.Brightness
+		end
+	end
+	for _, record in ipairs(blackoutParts) do
+		if record.Part.Parent then
+			record.Part.Material = record.Material
+			record.Part.Color = record.Color
+		end
+	end
+	table.clear(blackoutLights)
+	table.clear(blackoutParts)
+	table.clear(blackoutPartSeen)
+	blackoutApplied = false
+end
+
+local function enforceBlackout()
+	for _, record in ipairs(blackoutLights) do
+		if record.Light.Parent then
+			record.Light.Enabled = false
+			record.Light.Brightness = 0
+		end
+	end
+end
+
+local function beginBlackout()
+	if blackoutApplied then
+		enforceBlackout()
+		return
+	end
+	blackoutApplied = true
+	table.clear(blackoutLights)
+	table.clear(blackoutParts)
+	table.clear(blackoutPartSeen)
+	local world = boundWorld
+	if world then
+		for _, descendant in ipairs(world:GetDescendants()) do
+			if descendant:IsA("Light") then
+				table.insert(blackoutLights, {
+					Light = descendant,
+					Enabled = descendant.Enabled,
+					Brightness = descendant.Brightness,
+				})
+				local parent = descendant.Parent
+				if parent and parent:IsA("BasePart") and not blackoutPartSeen[parent] then
+					blackoutPartSeen[parent] = true
+					table.insert(blackoutParts, {
+						Part = parent,
+						Material = parent.Material,
+						Color = parent.Color,
+					})
+					parent.Material = Enum.Material.SmoothPlastic
+					parent.Color = Color3.fromRGB(13, 14, 15)
+				end
+			end
+		end
+	end
+	cancelTweens()
+	colorGrade.Enabled = true
+	bloom.Enabled = false
+	tween(Lighting, .35, {
+		Brightness = .025,
+		ExposureCompensation = -1.55,
+		Ambient = Color3.fromRGB(0, 0, 0),
+		OutdoorAmbient = Color3.fromRGB(0, 0, 0),
+		ColorShift_Top = Color3.new(0, 0, 0),
+		ColorShift_Bottom = Color3.new(0, 0, 0),
+		EnvironmentDiffuseScale = 0,
+		EnvironmentSpecularScale = .02,
+		FogColor = Color3.fromRGB(2, 3, 4),
+		FogStart = 14,
+		FogEnd = 115,
+	})
+	tween(colorGrade, .35, {
+		Brightness = -.14,
+		Contrast = .18,
+		Saturation = -.38,
+		TintColor = Color3.fromRGB(104, 122, 132),
+	})
+	enforceBlackout()
+end
+
+local function endBlackout(reapplyGrade: boolean)
+	if not blackoutApplied then return end
+	restoreBlackoutWorld()
+	if reapplyGrade and active then applyLevelGrade(exitUnlocked()) end
 end
 
 local function shouldOwnLighting(): boolean
@@ -209,7 +324,7 @@ local function refreshWorld()
 	bindWorld(if object and object:IsA("Model") then object else nil)
 end
 
-local function applyLevelGrade(unlocked: boolean)
+applyLevelGrade = function(unlocked: boolean)
 	lastExitUnlocked = unlocked
 	cancelTweens()
 	colorGrade.Enabled = true
@@ -260,6 +375,7 @@ local function applyLevelGrade(unlocked: boolean)
 end
 
 local function restoreLighting()
+	endBlackout(false)
 	transitionSerial += 1
 	local serial = transitionSerial
 	local original = snapshot
@@ -318,7 +434,7 @@ end
 workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(refreshOwnership)
 workspace:GetAttributeChangedSignal("Level3LightingOwnedByController"):Connect(refreshOwnership)
 workspace:GetAttributeChangedSignal("Level3ExitUnlocked"):Connect(function()
-	if active and lastExitUnlocked ~= exitUnlocked() then applyLevelGrade(exitUnlocked()) end
+	if active and not blackoutApplied and lastExitUnlocked ~= exitUnlocked() then applyLevelGrade(exitUnlocked()) end
 end)
 player:GetAttributeChangedSignal("InRound"):Connect(refreshOwnership)
 workspace.ChildAdded:Connect(function(child)
@@ -336,11 +452,21 @@ RunService.Heartbeat:Connect(function(dt)
 
 	refreshOwnership()
 	if not active then return end
+	local wantsBlackout = blackoutRequested()
+	if wantsBlackout then
+		beginBlackout()
+	elseif blackoutApplied then
+		endBlackout(true)
+	end
 	local unlocked = exitUnlocked()
-	if unlocked ~= lastExitUnlocked then applyLevelGrade(unlocked) end
+	if not blackoutApplied and unlocked ~= lastExitUnlocked then applyLevelGrade(unlocked) end
 
 	local now = os.clock()
 	for index = #fixtures, 1, -1 do
+		if blackoutApplied then
+			enforceBlackout()
+			break
+		end
 		local record = fixtures[index]
 		if not (record.Part.Parent and record.Light.Parent) then
 			fixtureByPart[record.Part] = nil

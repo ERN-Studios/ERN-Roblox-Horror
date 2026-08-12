@@ -16,6 +16,7 @@ local ServerStorage = game:GetService("ServerStorage")
 local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
 local WorldBuilder = require(script.Parent:WaitForChild("Level 3 World Builder"))
 local ObjectiveController = require(script.Parent:WaitForChild("Level 3 Objective Controller"))
+local MusicSequenceController = require(script.Parent:WaitForChild("Level 3 Music Sequence Controller"))
 
 local Adapter = {}
 
@@ -196,6 +197,13 @@ local function stopObjectiveController()
 	end
 end
 
+local function stopMusicSequence()
+	local success, problem = pcall(MusicSequenceController.Stop)
+	if not success then
+		warn("[Level 3] Music sequence cleanup failed: " .. tostring(problem))
+	end
+end
+
 local function validateManifest(manifest: any)
 	assert(type(manifest) == "table", "Level 3 world builder must return a manifest table")
 	assert(manifest.World and manifest.World:IsA("Model") and manifest.World.Parent == workspace,
@@ -246,6 +254,13 @@ local function resetReplicatedState(levelState: Folder)
 	levelState:SetAttribute("Level3_ExitUnlocked", false)
 	levelState:SetAttribute("Level3_ExitPosition", nil)
 	levelState:SetAttribute("Level3_LightingMode", "OFF")
+	levelState:SetAttribute("Level3_RoomSongPhase", "STOPPED")
+	levelState:SetAttribute("Level3_RoomSongStartServerTime", 0)
+	levelState:SetAttribute("Level3_RoomSongDuration", Configuration.MusicSequence.DurationSeconds)
+	levelState:SetAttribute("Level3_BlackoutDuration", Configuration.MusicSequence.BlackoutSeconds)
+	levelState:SetAttribute("Level3_BlackoutStartedAtServerTime", 0)
+	levelState:SetAttribute("Level3_BlackoutUntilServerTime", 0)
+	levelState:SetAttribute("Level3_BlackoutActive", false)
 	levelState:SetAttribute("Level3_Error", nil)
 end
 
@@ -257,6 +272,7 @@ function Adapter.Cleanup()
 		or ServerStorage:FindFirstChild(STORED_LOBBY_NAME) ~= nil
 	)
 
+	stopMusicSequence()
 	stopObjectiveController()
 	local levelState = state()
 	levelState:SetAttribute("Level3_Phase", "CLEANING")
@@ -275,6 +291,7 @@ function Adapter.Cleanup()
 	workspace:SetAttribute("Level3ModuleGoal", 0)
 	workspace:SetAttribute("Level3ExitUnlocked", false)
 	workspace:SetAttribute("Level3LightingOwnedByController", false)
+	workspace:SetAttribute("Level3BlackoutActive", false)
 	clearLegacyAttributes()
 
 	-- Preserve SelectedLevel throughout GameManager's result delay. Cleanup is
@@ -300,6 +317,13 @@ function Adapter.Build()
 	levelState:SetAttribute("Level3_ExitUnlocked", false)
 	levelState:SetAttribute("Level3_ExitPosition", nil)
 	levelState:SetAttribute("Level3_LightingMode", "NORMAL")
+	levelState:SetAttribute("Level3_RoomSongPhase", "WAITING_FOR_ROUND")
+	levelState:SetAttribute("Level3_RoomSongStartServerTime", 0)
+	levelState:SetAttribute("Level3_RoomSongDuration", Configuration.MusicSequence.DurationSeconds)
+	levelState:SetAttribute("Level3_BlackoutDuration", Configuration.MusicSequence.BlackoutSeconds)
+	levelState:SetAttribute("Level3_BlackoutStartedAtServerTime", 0)
+	levelState:SetAttribute("Level3_BlackoutUntilServerTime", 0)
+	levelState:SetAttribute("Level3_BlackoutActive", false)
 	levelState:SetAttribute("Level3_Error", nil)
 
 	workspace:SetAttribute("WorldGenerated", false)
@@ -308,6 +332,7 @@ function Adapter.Build()
 	workspace:SetAttribute("Level3ModuleGoal", Configuration.ModuleGoal)
 	workspace:SetAttribute("Level3ExitUnlocked", false)
 	workspace:SetAttribute("Level3LightingOwnedByController", true)
+	workspace:SetAttribute("Level3BlackoutActive", false)
 
 	isolateLevelOneRuntime()
 
@@ -330,6 +355,7 @@ function Adapter.Build()
 		-- READY is established first so the objective controller may replace it
 		-- with its more specific active phase without the adapter overwriting it.
 		ObjectiveController.Start(manifest, generation)
+		MusicSequenceController.Start(manifest, generation)
 
 		workspace:SetAttribute("LoadStage", "READY")
 		workspace:SetAttribute("WorldGenerated", true)

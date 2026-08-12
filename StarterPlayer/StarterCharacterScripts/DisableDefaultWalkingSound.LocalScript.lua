@@ -1,23 +1,5 @@
--- DisableWalkingSound
--- Place in StarterPlayer > StarterCharacterScripts
-
-local player = game:GetService("Players").LocalPlayer
-if player:GetAttribute("InRound") ~= true then return end
-
-local character = script.Parent
-local root = character:WaitForChild("HumanoidRootPart")
-
-local function disableRunningSound(object)
-	if object:IsA("Sound") and object.Name == "Running" then
-		object.Volume = 0
-		object.Playing = false
-	end
-end
-
-for _, object in ipairs(root:GetChildren()) do
-	disableRunningSound(object)
-end
-
-root.ChildAdded:Connect(disableRunningSound)
-
-print("[DisableWalkingSound] Default Roblox walking sound disabled")
+-- Compatibility marker.
+-- SoundController now switches the Roblox Running sound dynamically:
+-- enabled in the lobby, muted only while InRound so custom level footsteps can
+-- play without being doubled. Keeping this script inert avoids two competing
+-- writers on HumanoidRootPart.Running.Volume.

@@ -8,6 +8,8 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local ContextActionService = game:GetService("ContextActionService")
 
 local player = Players.LocalPlayer
 
@@ -127,6 +129,30 @@ signalLabel.TextTruncate = Enum.TextTruncate.AtEnd
 signalLabel.TextXAlignment = Enum.TextXAlignment.Left
 signalLabel.Parent = panel
 
+local toggleButton = Instance.new("TextButton")
+toggleButton.Name = "ReaderToggle"
+toggleButton.AutoButtonColor = true
+toggleButton.AnchorPoint = Vector2.new(1, 0)
+toggleButton.BackgroundColor3 = PANEL
+toggleButton.BackgroundTransparency = 0.10
+toggleButton.BorderSizePixel = 0
+toggleButton.Font = Enum.Font.Code
+toggleButton.Text = "HIDE [R]"
+toggleButton.TextColor3 = ENERGON
+toggleButton.TextSize = 12
+toggleButton.Visible = false
+toggleButton.Parent = gui
+local toggleCorner = Instance.new("UICorner")
+toggleCorner.CornerRadius = UDim.new(0, 5)
+toggleCorner.Parent = toggleButton
+local toggleStroke = Instance.new("UIStroke")
+toggleStroke.Color = ENERGON
+toggleStroke.Thickness = 1.5
+toggleStroke.Transparency = 0.34
+toggleStroke.Parent = toggleButton
+
+local readerHidden = false
+
 local toast = Instance.new("Frame")
 toast.Name = "AlertToast"
 toast.AnchorPoint = Vector2.new(0.5, 0)
@@ -187,6 +213,14 @@ local function applyLayout()
 		then UDim2.fromOffset(10, 64)
 		else UDim2.new(1, -10, 0, 70)
 	panel.Size = UDim2.fromOffset(width, 101)
+	if mobileControls then
+		toggleButton.AnchorPoint = Vector2.new(0, 0)
+		toggleButton.Position = UDim2.fromOffset(10, 169)
+	else
+		toggleButton.AnchorPoint = Vector2.new(1, 0)
+		toggleButton.Position = UDim2.new(1, -10, 0, 175)
+	end
+	toggleButton.Size = UDim2.fromOffset(readerHidden and 218 or 82, 28)
 
 	local toastWidth = math.floor(math.clamp(viewport.X - 30, 228, 520))
 	toast.Position = UDim2.new(0.5, 0, 0, stackToast and 176 or 76)
@@ -195,6 +229,31 @@ local function applyLayout()
 	progressLabel.TextSize = narrow and 13 or 15
 	signalLabel.TextSize = narrow and 11 or 13
 end
+
+local function updateTogglePresentation()
+	toggleButton.Text = if readerHidden then "PRESS R / TAP TO OPEN EXIT READER" else "HIDE [R]"
+	toggleButton.TextColor3 = if readerHidden then TEXT else ENERGON
+	toggleButton.Size = UDim2.fromOffset(readerHidden and 218 or 82, 28)
+end
+
+local function setReaderHidden(hidden: boolean)
+	readerHidden = hidden
+	updateTogglePresentation()
+end
+
+toggleButton.Activated:Connect(function() setReaderHidden(not readerHidden) end)
+ContextActionService:BindAction("Level3ToggleExitReader", function(_, inputState)
+	if inputState == Enum.UserInputState.Begin
+		and UserInputService:GetFocusedTextBox() == nil
+		and workspace:GetAttribute("SelectedLevel") == LEVEL
+		and player:GetAttribute("InRound") == true
+		and player:GetAttribute("Escaped") ~= true then
+		setReaderHidden(not readerHidden)
+		return Enum.ContextActionResult.Sink
+	end
+	return Enum.ContextActionResult.Pass
+end, false, Enum.KeyCode.R)
+updateTogglePresentation()
 
 local viewportConnection: RBXScriptConnection? = nil
 local function bindCamera()
@@ -342,7 +401,8 @@ end
 
 local function updateReader(dt: number)
 	local active = isActive()
-	panel.Visible = active
+	panel.Visible = active and not readerHidden
+	toggleButton.Visible = active
 	if not active then
 		toastSerial += 1
 		toast.Visible = false

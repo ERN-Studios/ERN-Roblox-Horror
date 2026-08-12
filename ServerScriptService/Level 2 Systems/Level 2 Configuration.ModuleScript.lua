@@ -64,7 +64,9 @@ local Configuration = {
 	-- Water covers the floor wall-to-wall in every pool hall, exactly like the
 	-- reference photos. No basins, no dry walkway rings.
 	ShallowPoolDepth = 1.6,
-	DeepPoolDepth = 4.5,
+	-- Even the "deep" halls stay below the swim threshold: the whole level
+	-- is walkable water.
+	DeepPoolDepth = 2,
 	-- Wading depth everywhere players land and walk; nobody swims in the
 	-- slide halls any more.
 	SlidePoolDepth = 1.8,

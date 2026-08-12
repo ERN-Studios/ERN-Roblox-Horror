@@ -4,6 +4,7 @@
 
 local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerStorage = game:GetService("ServerStorage")
 
 local Builder = {}
 local C = Configuration.Colors
@@ -17,8 +18,11 @@ end
 
 local TEXTURES = {
 	PartyCarpet = contentTexture("PartyCarpetTexture", Configuration.Textures.PartyCarpet),
+	PartyCarpetNeon = contentTexture("PartyCarpetNeonTexture", Configuration.Textures.PartyCarpetNeon),
+	PartyCarpetRed = contentTexture("PartyCarpetRedTexture", Configuration.Textures.PartyCarpetRed),
 	CityCarpet = contentTexture("CityPlayCarpetTexture", Configuration.Textures.CityCarpet),
 	PastelWallpaper = contentTexture("PastelWallpaperTexture", Configuration.Textures.PastelWallpaper),
+	OrangeWall = contentTexture("OrangeWallTexture", Configuration.Textures.OrangeWall),
 	ConfettiTablecloth = contentTexture("ConfettiTableclothTexture", Configuration.Textures.ConfettiTablecloth),
 	StaffDoor = contentTexture("StaffDoorTexture", Configuration.Textures.StaffDoor),
 	FinalExitDoor = contentTexture("FinalExitDoorTexture", Configuration.Textures.FinalExitDoor),
@@ -41,7 +45,9 @@ local function part(parent: Instance, name: string, cframe: CFrame, size: Vector
 	object.Color = color
 	object.Material = material or Enum.Material.SmoothPlastic
 	object.Transparency = transparency or 0
+	object.CanCollide = true
 	object.CanTouch = false
+	object.CanQuery = true
 	object.TopSurface = Enum.SurfaceType.Smooth
 	object.BottomSurface = Enum.SurfaceType.Smooth
 	object.CastShadow = true
@@ -80,11 +86,18 @@ local function worldPosition(room: {[string]: any}, y: number?): Vector3
 	return Configuration.WorldOrigin + Vector3.new(room.X, y or 0, room.Z)
 end
 
-local function floorStyle(kind: string): (Color3, Enum.Material, string?, number)
+local RED_PARTY_ROOMS = {PartyA = true, Records = true}
+local NEON_PARTY_ROOMS = {PartyB = true, UtilityWest = true, CentralHall = true}
+
+local function floorStyle(kind: string, roomId: string?): (Color3, Enum.Material, string?, number)
 	if kind == "City" then
 		return Color3.fromRGB(190, 188, 166), Enum.Material.Carpet, TEXTURES.CityCarpet, Configuration.TextureStuds.CityCarpet
 	elseif kind == "Exit" then
 		return Color3.fromRGB(70, 71, 66), Enum.Material.DiamondPlate, nil, 10
+	elseif roomId and RED_PARTY_ROOMS[roomId] then
+		return Color3.fromRGB(111, 31, 27), Enum.Material.Carpet, TEXTURES.PartyCarpetRed, Configuration.TextureStuds.PartyCarpetRed
+	elseif roomId and NEON_PARTY_ROOMS[roomId] then
+		return Color3.fromRGB(13, 17, 24), Enum.Material.Carpet, TEXTURES.PartyCarpetNeon, Configuration.TextureStuds.PartyCarpetNeon
 	end
 	return C.DarkCarpet, Enum.Material.Carpet, TEXTURES.PartyCarpet, Configuration.TextureStuds.PartyCarpet
 end
@@ -124,6 +137,11 @@ local function wallSegment(parent: Instance, name: string, cframe: CFrame, size:
 	if wallpaper and wallpaperFace then
 		texture(wall, TEXTURES.PastelWallpaper, wallpaperFace,
 			Configuration.TextureStuds.Wallpaper, Configuration.TextureStuds.Wallpaper, 0.08)
+	elseif wallpaperFace then
+		-- Orange rooms retain their color identity while gaining subtle plaster
+		-- wear, roller variation and removed-decoration pinholes.
+		texture(wall, TEXTURES.OrangeWall, wallpaperFace,
+			Configuration.TextureStuds.OrangeWall, Configuration.TextureStuds.OrangeWall, 0.28)
 	end
 	return wall
 end
@@ -237,33 +255,94 @@ local function makeRoomLights(parent: Instance, room: {[string]: any}, roomIndex
 	end
 end
 
-local function makeTable(parent: Instance, cframe: CFrame, party: boolean, chairs: number)
-	local top = part(parent, "Level 3 Folding Table", cframe * CFrame.new(0, 3, 0),
-		Vector3.new(12, .55, 4.5), party and Color3.fromRGB(218, 211, 190) or Color3.fromRGB(133, 116, 91),
-		party and Enum.Material.SmoothPlastic or Enum.Material.WoodPlanks)
-	if party then texture(top, TEXTURES.ConfettiTablecloth, Enum.NormalId.Top,
-		Configuration.TextureStuds.Tablecloth, Configuration.TextureStuds.Tablecloth) end
-	for _, x in ipairs({-5, 5}) do
-		for _, z in ipairs({-1.6, 1.6}) do
-			part(parent, "Level 3 Table Leg", cframe * CFrame.new(x, 1.45, z),
-				Vector3.new(.35, 2.9, .35), C.Metal, Enum.Material.Metal)
-		end
+local function furnitureTemplate(name: string): MeshPart?
+	local assets = ServerStorage:FindFirstChild("Level3Assets")
+	local templates = assets and assets:FindFirstChild("FurnitureTemplates")
+	local object = templates and templates:FindFirstChild(name)
+	return object and object:IsA("MeshPart") and object or nil
+end
+
+local TABLECLOTH_COLORS = {
+	Color3.fromRGB(38, 153, 165),
+	Color3.fromRGB(55, 130, 87),
+	Color3.fromRGB(151, 49, 59),
+	Color3.fromRGB(192, 112, 35),
+	Color3.fromRGB(71, 72, 137),
+}
+local CHAIR_COLORS = {
+	Color3.fromRGB(57, 87, 140),
+	Color3.fromRGB(194, 157, 49),
+	Color3.fromRGB(137, 45, 52),
+	Color3.fromRGB(73, 129, 86),
+	Color3.fromRGB(53, 48, 71),
+}
+
+local function cloneDecorMesh(templateName: string, parent: Instance, name: string,
+	cframe: CFrame, size: Vector3?, color: Color3?): MeshPart?
+	local template = furnitureTemplate(templateName)
+	if not template then return nil end
+	local object = template:Clone()
+	object.Name = name
+	object.Anchored = true
+	object.CanCollide = false
+	object.CanTouch = false
+	object.CanQuery = false
+	object.CastShadow = true
+	if size then object.Size = size end
+	if color then object.Color = color end
+	object.CFrame = cframe
+	object.Parent = parent
+	return object
+end
+
+local function makeTable(parent: Instance, cframe: CFrame, party: boolean, chairs: number, styleIndex: number)
+	local tableColor = TABLECLOTH_COLORS[(styleIndex - 1) % #TABLECLOTH_COLORS + 1]
+	local tableMesh = cloneDecorMesh("FoldingTableTemplate", parent, "Level 3 Vetted Folding Table",
+		cframe * CFrame.new(0, 1.72, 0), Vector3.new(11.2, 3.44, 4.35))
+	if not tableMesh then
+		tableMesh = part(parent, "Level 3 Folding Table", cframe * CFrame.new(0, 3, 0),
+			Vector3.new(11.2, .5, 4.35), Color3.fromRGB(201, 198, 185), Enum.Material.SmoothPlastic)
+		decorative(tableMesh)
 	end
-	for i = 1, chairs do
-		local side = i % 2 == 0 and 1 or -1
-		local column = math.floor((i - 1) / 2)
-		local chairCF = cframe * CFrame.new(-4 + column * 4, 0, side * 4.2)
-		local chairColor = party and ({C.MutedBlue, C.FadedGreen, C.Burgundy})[(i - 1) % 3 + 1]
-			or Color3.fromRGB(80, 76, 68)
-		part(parent, "Level 3 Chair Seat", chairCF * CFrame.new(0, 2.2, 0),
-			Vector3.new(2.5, .45, 2.5), chairColor, Enum.Material.SmoothPlastic)
-		part(parent, "Level 3 Chair Back", chairCF * CFrame.new(0, 4.1, side * 1.05),
-			Vector3.new(2.5, 3.4, .4), chairColor, Enum.Material.SmoothPlastic)
-		for _, legX in ipairs({-1, 1}) do
-			for _, legZ in ipairs({-.95, .95}) do
-				part(parent, "Level 3 Chair Leg", chairCF * CFrame.new(legX, 1, legZ),
-					Vector3.new(.22, 2, .22), C.Metal, Enum.Material.Metal)
-			end
+	-- Keep the detailed free mesh decorative, but add one simple invisible
+	-- tabletop collider so players cannot walk through the banquet tables.
+	local tableCollision = part(parent, "Level 3 Folding Table Collision", cframe * CFrame.new(0, 3.0, 0),
+		Vector3.new(11.0, .48, 4.15), Color3.new(), Enum.Material.SmoothPlastic, 1)
+	tableCollision:SetAttribute("Level3_TableCollision", true)
+	tableCollision.CastShadow = false
+
+	-- A thin top and four hanging skirts turn the clean folding-table mesh into
+	-- a believable disposable party tablecloth without multiplying textures.
+	local top = part(parent, "Level 3 Party Tablecloth Top", cframe * CFrame.new(0, 3.48, 0),
+		Vector3.new(11.45, .12, 4.62), tableColor, Enum.Material.Fabric)
+	decorative(top)
+	texture(top, TEXTURES.ConfettiTablecloth, Enum.NormalId.Top,
+		Configuration.TextureStuds.Tablecloth, Configuration.TextureStuds.Tablecloth, .34)
+	for _, data in ipairs({
+		{CFrame.new(0, 3.05, -2.34), Vector3.new(11.45, .82, .10)},
+		{CFrame.new(0, 3.05, 2.34), Vector3.new(11.45, .82, .10)},
+		{CFrame.new(-5.78, 3.05, 0), Vector3.new(.10, .82, 4.62)},
+		{CFrame.new(5.78, 3.05, 0), Vector3.new(.10, .82, 4.62)},
+	}) do
+		local skirt = part(parent, "Level 3 Party Tablecloth Skirt", cframe * data[1],
+			data[2], tableColor, Enum.Material.Fabric)
+		decorative(skirt)
+	end
+
+	for chairIndex = 1, chairs do
+		local side = chairIndex % 2 == 0 and 1 or -1
+		local column = math.floor((chairIndex - 1) / 2)
+		local columns = math.max(1, math.ceil(chairs / 2))
+		local x = columns == 1 and 0 or (-3.8 + column * (7.6 / math.max(1, columns - 1)))
+		local yaw = side > 0 and 0 or math.pi
+		local chairColor = CHAIR_COLORS[(chairIndex + styleIndex - 2) % #CHAIR_COLORS + 1]
+		local chairCF = cframe * CFrame.new(x, 2.28, side * 4.1) * CFrame.Angles(0, yaw, 0)
+		local chair = cloneDecorMesh("PlasticPartyChairTemplate", parent, "Level 3 Vetted Plastic Party Chair",
+			chairCF, Vector3.new(2.55, 4.3, 2.58), chairColor)
+		if not chair then
+			local seat = part(parent, "Level 3 Party Chair", chairCF,
+				Vector3.new(2.4, 4.2, 2.5), chairColor, Enum.Material.SmoothPlastic)
+			decorative(seat)
 		end
 	end
 end
@@ -306,20 +385,42 @@ local function makeDesk(parent: Instance, cframe: CFrame, withCrt: boolean)
 	end
 end
 
-local function makeBalloonCluster(parent: Instance, position: Vector3, colorOffset: number)
-	local colors = {Color3.fromRGB(178, 45, 53), Color3.fromRGB(49, 101, 153),
-		Color3.fromRGB(67, 133, 88), Color3.fromRGB(184, 139, 41), Color3.fromRGB(107, 62, 132)}
-	for i = 1, 5 do
-		local angle = (i / 5) * math.pi * 2
-		local p = position + Vector3.new(math.cos(angle) * 1.5, 7 + (i % 2) * 1.2, math.sin(angle) * 1.5)
-		local balloon = part(parent, "Level 3 Faded Balloon", CFrame.new(p), Vector3.new(2.2, 2.8, 2.2),
-			colors[(i + colorOffset) % #colors + 1], Enum.Material.SmoothPlastic, .05)
+local function segmentBetween(parent: Instance, name: string, a: Vector3, b: Vector3,
+	thickness: number, color: Color3, transparency: number?): BasePart
+	local direction = b - a
+	local object = part(parent, name, CFrame.lookAt((a + b) * .5, b) * CFrame.Angles(math.pi * .5, 0, 0),
+		Vector3.new(thickness, direction.Magnitude, thickness), color, Enum.Material.SmoothPlastic, transparency)
+	decorative(object)
+	return object
+end
+
+local function makeBalloonCluster(parent: Instance, position: Vector3, colorOffset: number, count: number?)
+	local colors = {Color3.fromRGB(187, 42, 52), Color3.fromRGB(40, 104, 169),
+		Color3.fromRGB(55, 139, 91), Color3.fromRGB(210, 159, 37), Color3.fromRGB(119, 61, 151),
+		Color3.fromRGB(215, 94, 38)}
+	local balloonCount = count or 5
+	local anchor = position + Vector3.new(0, .35, 0)
+	for balloonIndex = 1, balloonCount do
+		-- Irrational-looking deterministic offsets keep every bouquet asymmetrical
+		-- without relying on global random state.
+		local angle = balloonIndex * 2.399963 + colorOffset * .37
+		local radius = 1.0 + ((balloonIndex * 17 + colorOffset * 11) % 8) * .12
+		local height = 6.4 + ((balloonIndex * 13 + colorOffset * 7) % 9) * .27
+		local p = position + Vector3.new(math.cos(angle) * radius, height, math.sin(angle) * radius)
+		local color = colors[(balloonIndex + colorOffset - 1) % #colors + 1]
+		local balloon = part(parent, "Level 3 Oval Party Balloon", CFrame.new(p),
+			Vector3.new(1.72, 2.36, 1.72), color, Enum.Material.SmoothPlastic, .025)
 		balloon.Shape = Enum.PartType.Ball
+		balloon.Reflectance = .06
 		decorative(balloon)
-		local stringPart = part(parent, "Level 3 Balloon String", CFrame.new((p + position + Vector3.new(0, 2, 0)) * .5),
-			Vector3.new(.035, (p - (position + Vector3.new(0, 2, 0))).Magnitude, .035),
-			Color3.fromRGB(92, 90, 82), Enum.Material.SmoothPlastic, .15)
-		decorative(stringPart)
+
+		local knot = part(parent, "Level 3 Balloon Knot", CFrame.new(p - Vector3.new(0, 1.27, 0))
+			* CFrame.Angles(0, 0, math.rad(45)), Vector3.new(.22, .30, .22),
+			color:Lerp(Color3.new(0, 0, 0), .12), Enum.Material.SmoothPlastic)
+		knot.Shape = Enum.PartType.Ball
+		decorative(knot)
+		segmentBetween(parent, "Level 3 Balloon String", p - Vector3.new(0, 1.4, 0),
+			anchor, .025, Color3.fromRGB(118, 115, 106), .18)
 	end
 end
 
@@ -354,35 +455,37 @@ local function makeRoomProps(parent: Instance, room: {[string]: any}, index: num
 	local p = worldPosition(room)
 	if room.Kind == "Exit" then return end
 
-	-- Revision 3 uses one restricted prop language: party tables, folding
-	-- chairs and balloons. No boxes, shelving, desks, cabinets, plants,
-	-- utility pipes or other storage clutter are generated.
+	-- Revision 4 keeps the restricted prop language but makes it believable:
+	-- fewer, higher-quality tables; vetted chair meshes; asymmetrical balloons.
 	local tableCount
 	if room.W >= 110 then
-		tableCount = 6
-	elseif room.W >= 85 or room.D >= 68 then
-		tableCount = 4
-	elseif room.W >= 65 then
 		tableCount = 3
-	else
+	elseif room.W >= 82 or room.D >= 65 then
 		tableCount = 2
+	else
+		tableCount = 1
 	end
-	if room.Id == "Arrival" then tableCount = 1 end
+	if room.Id == "Arrival" or room.Kind == "PartyHall" then tableCount = 1 end
 
-	local columns = math.max(1, math.ceil(tableCount / 2))
-	local xSpan = math.min(room.W * .55, columns * 18)
+	local layouts = {
+		{-.22, -.18, 0},
+		{ .20,  .16, math.rad(180)},
+		{-.02,  .25, math.rad(90)},
+	}
 	for tableIndex = 1, tableCount do
-		local row = (tableIndex - 1) % 2
-		local column = math.floor((tableIndex - 1) / 2)
-		local x = columns == 1 and 0 or (-xSpan * .5 + (column / math.max(1, columns - 1)) * xSpan)
-		local z = (row == 0 and -1 or 1) * math.min(9, room.D * .18)
-		makeTable(parent, CFrame.new(p + Vector3.new(x, 0, z)), true, room.W >= 80 and 6 or 4)
+		local layout = layouts[tableIndex]
+		local tableCF = CFrame.new(p + Vector3.new(layout[1] * room.W, 0, layout[2] * room.D))
+			* CFrame.Angles(0, layout[3] + ((index + tableIndex) % 2) * math.rad(4), 0)
+		local chairCount = room.W >= 82 and 6 or 4
+		makeTable(parent, tableCF, true, chairCount, index + tableIndex)
 	end
 
-	local west = p + Vector3.new(-room.W * .5 + 7, 0, -room.D * .25)
-	local east = p + Vector3.new(room.W * .5 - 7, 0, room.D * .25)
-	makeBalloonCluster(parent, west, index)
-	if room.W >= 65 then makeBalloonCluster(parent, east, index + 2) end
+	local west = p + Vector3.new(-room.W * .5 + 6.5, 0, -room.D * .25)
+	local east = p + Vector3.new(room.W * .5 - 6.5, 0, room.D * .24)
+	makeBalloonCluster(parent, west, index, room.Kind == "Party" and 7 or 4)
+	if room.W >= 72 and room.Kind ~= "PartyHall" then
+		makeBalloonCluster(parent, east, index + 2, room.Kind == "Party" and 6 or 4)
+	end
 
 	-- Furniture is visual set dressing, not a navigation obstacle. This keeps
 	-- the enlarged rooms multiplayer-safe and cuts collision cost sharply.
@@ -569,7 +672,7 @@ local function makeRoom(parent: Instance, room: {[string]: any}, openings: {[str
 	model:SetAttribute("Level3_RoomKind", room.Kind)
 	model.Parent = parent
 	local p = worldPosition(room)
-	local color, material, textureId, studs = floorStyle(room.Kind)
+	local color, material, textureId, studs = floorStyle(room.Kind, room.Id)
 	local floorPart = part(model, "Level 3 Room Floor", CFrame.new(p - Vector3.new(0, .5, 0)),
 		Vector3.new(room.W, Configuration.FloorThickness, room.D), color, material)
 	if textureId then texture(floorPart, textureId, Enum.NormalId.Top, studs, studs) end
@@ -893,8 +996,6 @@ function Builder.Build(generation: number): {[string]: any}
 	local arrivalRoom = roomById("Arrival")
 	local elevator, elevatorSpawn, mazeStart = makeArrivalElevator(world, arrivalRoom)
 	local escapePrompt, safeSpawn, exitPosition, finalExit = makeExitSet(world, roomById("Exit"))
-	makeAmbientEmitter(ambienceFolder, "Level 3 Fluorescent Bed", worldPosition(roomById("CentralHall"), 9),
-		Configuration.Audio.FluorescentHum, .12, 190)
 	makeAmbientEmitter(ambienceFolder, "Level 3 HVAC Bed", worldPosition(roomById("Janitor"), 8),
 		Configuration.Audio.HVAC, .10, 150)
 	makeAmbientEmitter(ambienceFolder, "Level 3 Distant Drip", worldPosition(roomById("LoadingStore"), 1),
@@ -903,6 +1004,15 @@ function Builder.Build(generation: number): {[string]: any}
 	world:SetAttribute("Level3_RoomCount", #Configuration.Rooms)
 	world:SetAttribute("Level3_CorridorCount", #Configuration.Links)
 	world:SetAttribute("Level3_ModuleCount", #modules)
+	-- Decorative helper calls intentionally strip collision. Reassert the one
+	-- tagged, low-cost tabletop collider after all room dressing is complete.
+	for _, object in ipairs(world:GetDescendants()) do
+		if object:IsA("BasePart") and object:GetAttribute("Level3_TableCollision") == true then
+			object.CanCollide = true
+			object.CanTouch = false
+			object.CanQuery = true
+		end
+	end
 	return {
 		World=world,
 		Rooms=manifestRooms,

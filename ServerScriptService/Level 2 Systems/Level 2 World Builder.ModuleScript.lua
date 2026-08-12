@@ -170,9 +170,11 @@ end
 -- wall-to-wall: the whole floor is recessed by this amount and flooded.
 local function hallWaterDepth(hall)
 	if hall.Role == "Kids Area" or hall.Role == "Arrival"
-		or hall.Role == "Pump Station" or hall.Role == "Exit" then
+		or hall.Role == "Exit" then
 		return nil
 	end
+	-- Pump rooms carry shallow water under their raised walkway ring.
+	if hall.Role == "Pump Station" then return 1.2 end
 	if hall.Role == "Slide Hall" then return Configuration.SlidePoolDepth end
 	if hall.PoolType == "Deep" then return Configuration.DeepPoolDepth end
 	return Configuration.ShallowPoolDepth
@@ -285,8 +287,10 @@ local function makeHallFloor(parent, hall)
 		Vector3.new(hall.Width, 1.2, hall.Depth), C.TileCool, {Enum.NormalId.Top}, 10)
 	slab.CanCollide = true
 	local waterHeight = depth + .1
+	-- Overlap slightly INTO the walls so voxel snapping can never leave a
+	-- dry strip along the skirting.
 	addWater(hall.Center + Vector3.new(0, .1 - waterHeight * .5, 0),
-		Vector3.new(hall.Width - 3, waterHeight, hall.Depth - 3), hall.Id)
+		Vector3.new(hall.Width + 1.5, waterHeight, hall.Depth + 1.5), hall.Id)
 	return depth
 end
 
@@ -662,7 +666,39 @@ local function makeColumn(parent, position, height, radius)
 		Vector3.new(height, radius, radius), C.TileWarm, nil, 9)
 	column.Shape = Enum.PartType.Cylinder
 	column.CanCollide = true
+	-- Flared rings at both ends read as a smooth curve into the floor and the
+	-- ceiling instead of a hard cylinder butt.
+	for _, flare in ipairs({
+		{y = .3, r = radius * 1.38, h = .75},
+		{y = .92, r = radius * 1.16, h = .6},
+		{y = height - 2.42, r = radius * 1.16, h = .6},
+		{y = height - 1.72, r = radius * 1.38, h = .75},
+	}) do
+		local ring = tiledPart(parent, "Level 2 Column Flare",
+			CFrame.new(position + Vector3.new(0, flare.y - 1, 0)) * CFrame.Angles(0, 0, math.pi * .5),
+			Vector3.new(flare.h, flare.r, flare.r), C.TileWarm, nil, 9)
+		ring.Shape = Enum.PartType.Cylinder
+		ring.CanCollide = false
+	end
 	return column
+end
+
+-- Shift an X position sideways until the column (or other tall object) at it
+-- no longer stands under a skylight slot — a column must never end cut off by
+-- an open ceiling slot.
+local function dodgeSkylightX(hall, x, width)
+	if not overlapsSkylight(hall, x, width) then return x end
+	local xs = skylightSlotsFor(hall)
+	local spacing = #xs > 0 and hall.Width / (#xs + 1) or 0
+	for _, candidate in ipairs({
+		x + spacing * .5, x - spacing * .5, x + spacing, x - spacing,
+	}) do
+		if not overlapsSkylight(hall, candidate, width)
+			and candidate > hall.MinX + 8 and candidate < hall.MaxX - 8 then
+			return candidate
+		end
+	end
+	return x
 end
 
 -- Rows of columns rising out of the water — the reference-photo colonnades.
@@ -679,6 +715,8 @@ local function makeColonnade(parent, hall, depth, rows)
 			local position = alongX
 				and hall.Center + Vector3.new(along, -(depth or 0), offset)
 				or hall.Center + Vector3.new(offset, -(depth or 0), along)
+			position = Vector3.new(
+				dodgeSkylightX(hall, position.X, 13), position.Y, position.Z)
 			makeColumn(parent, position, height + (depth or 0), 5.5)
 		end
 	end
@@ -688,12 +726,17 @@ end
 -- ring points, so the orientation can never be wrong. Classic half arch whose
 -- feet run DOWN past the water surface into the floor slab, so it never
 -- floats. `acrossZ` = the ring spans across Z; you walk through along X.
-local function makeArchSpan(parent, center, acrossZ, index, radius, floorDepth, styleHall)
+local function makeArchSpan(parent, center, acrossZ, index, radius, floorDepth, styleHall, options)
+	options = options or {}
 	radius = math.max(6, radius)
 	floorDepth = floorDepth or 0
 	local dip = math.asin(math.clamp((floorDepth + 2.2) / radius, 0, .55))
 	local angleFrom, angleTo = -dip, math.pi + dip
-	local steps = math.max(14, math.floor(radius * 1.9))
+	local steps = math.max(options.MinimumSteps or 14,
+		math.ceil(radius * (options.Density or 1.9)))
+	local axialDepth = options.AxialDepth or 3.2
+	local radialDepth = options.RadialDepth or 2.2
+	local segmentOverlap = options.SegmentOverlap or .9
 	local arcCenter = center + Vector3.new(0, 1, 0)
 	local function pointAt(a)
 		if acrossZ then
@@ -713,14 +756,19 @@ local function makeArchSpan(parent, center, acrossZ, index, radius, floorDepth, 
 		if styleHall then
 			rib = part(parent, "Level 2 Arch Rib " .. index,
 				CFrame.lookAt(mid, to, up),
-				Vector3.new(3.2, 2.2, (to - from).Magnitude + .9),
+				Vector3.new(axialDepth, radialDepth, (to - from).Magnitude + segmentOverlap),
 				kidsPalette(styleHall).Color, Enum.Material.SmoothPlastic)
-			addKidsTileTexture(rib, styleHall)
+			addKidsTileTexture(rib, styleHall, options.Faces, options.Studs)
 		else
 			rib = part(parent, "Level 2 Arch Rib " .. index,
 				CFrame.lookAt(mid, to, up),
-				Vector3.new(3.2, 2.2, (to - from).Magnitude + .9), C.TileWarm)
-			addTexture(rib, Enum.NormalId:GetEnumItems(), 7)
+				Vector3.new(axialDepth, radialDepth, (to - from).Magnitude + segmentOverlap), C.TileWarm)
+			addTexture(rib, options.Faces or Enum.NormalId:GetEnumItems(), options.Studs or 7)
+		end
+		if options.CanCollide == false then
+			rib.CanCollide = false
+			rib.CanTouch = false
+			rib.CanQuery = false
 		end
 	end
 end
@@ -1184,7 +1232,8 @@ local function makeSlideHall(parent, hall, index)
 	for _, sx in ipairs({-1, 1}) do
 		for _, sz in ipairs({-1, 1}) do
 			makeColumn(hallFolder,
-				center + Vector3.new(sx * columnOffsetX, -depth, sz * columnOffsetZ),
+				Vector3.new(dodgeSkylightX(hall, center.X + sx * columnOffsetX, 20),
+					-depth, center.Z + sz * columnOffsetZ),
 				height + depth, 9)
 		end
 	end
@@ -2106,6 +2155,7 @@ local function makePumpStation(parent, hall, index, handleSpec)
 	model:SetAttribute("Level2_LeverHandleColorValue", handleSpec.Color)
 	model.Parent = parent
 
+	-- The plinth sits on the walkway island (WALKWAY_TOP above the water).
 	local plinth = tiledPart(model, "Level 2 Pump Plinth",
 		CFrame.new(center + Vector3.new(0, 2.5, 0)), Vector3.new(25, 5, 17), C.TileWarm, nil, 8)
 	plinth.CanCollide = true
@@ -2351,25 +2401,35 @@ local function makeCorridor(parent, layout, corridor, doorFolder)
 		-- The halls meet wall-to-wall; the doorway lives in the wall. Bridge
 		-- the footprint gap between the two extended halls so the doorway has
 		-- a floor instead of a hole down to the foundation.
-		local a = layout.Halls[corridor.A]
-		local styleHall = isKids(a) and a or layout.Halls[corridor.B]
+		local hallA = layout.Halls[corridor.A]
+		local hallB = layout.Halls[corridor.B]
 		local gapMid = (corridor.From + corridor.To) * .5
-		local thresholdCenter = corridor.Axis == "X"
-			and Vector3.new(gapMid, 0, corridor.Cross)
-			or Vector3.new(corridor.Cross, 0, gapMid)
-		local threshold = surfaceFor(styleHall, parent, "Level 2 Shared Doorway Threshold",
-			CFrame.new(thresholdCenter + Vector3.new(0, -.35, 0)),
-			corridor.Axis == "X" and Vector3.new(9, .7, Configuration.DoorWidth + 2)
-				or Vector3.new(Configuration.DoorWidth + 2, .7, 9),
-			nil, {Enum.NormalId.Top})
-		threshold.CanCollide = true
+		-- Two flush halves, each wearing its own room's colour, meeting exactly
+		-- at the wall line and never wider than the doorway itself.
+		local acrossWidth = Configuration.DoorWidth - .4
+		local function half(styleHall, offsetSign)
+			local halfCenter = corridor.Axis == "X"
+				and Vector3.new(gapMid + offsetSign * 2.25, 0, corridor.Cross)
+				or Vector3.new(corridor.Cross, 0, gapMid + offsetSign * 2.25)
+			local slab = surfaceFor(styleHall, parent, "Level 2 Shared Doorway Threshold",
+				CFrame.new(halfCenter + Vector3.new(0, -.35, 0)),
+				corridor.Axis == "X" and Vector3.new(4.7, .7, acrossWidth)
+					or Vector3.new(acrossWidth, .7, 4.7),
+				nil, {Enum.NormalId.Top})
+			slab.CanCollide = true
+		end
+		local aIsLow = corridor.Axis == "X" and hallA.Center.X < hallB.Center.X
+			or corridor.Axis ~= "X" and hallA.Center.Z < hallB.Center.Z
+		half(aIsLow and hallA or hallB, -1)
+		half(aIsLow and hallB or hallA, 1)
 		return nil
 	end
 
 	local width = corridor.Width
 	local height = Configuration.CorridorHeight
 	local from, to = corridor.From, corridor.To
-	local length = math.abs(to - from) + 4
+	local gapLength = math.abs(to - from)
+	local length = gapLength + 4
 	local mid = (from + to) * .5
 	local alongX = corridor.Axis == "X"
 	local center = alongX and Vector3.new(mid, 0, corridor.Cross)
@@ -2387,11 +2447,15 @@ local function makeCorridor(parent, layout, corridor, doorFolder)
 	end
 
 	-- Corridors that touch the kids wing wear the kids tiles end to end.
-	local kidsStyleHall
-	do
-		local hallA = layout.Halls[corridor.A]
-		local hallB = layout.Halls[corridor.B]
-		kidsStyleHall = (isKids(hallA) and hallA) or (isKids(hallB) and hallB) or nil
+	local hallA = layout.Halls[corridor.A]
+	local hallB = layout.Halls[corridor.B]
+	local kidsStyleHall = (isKids(hallA) and hallA) or (isKids(hallB) and hallB) or nil
+	local function hallAlong(hall)
+		return alongX and hall.Center.X or hall.Center.Z
+	end
+	local negativeEndHall, positiveEndHall = hallA, hallB
+	if hallAlong(negativeEndHall) > hallAlong(positiveEndHall) then
+		negativeEndHall, positiveEndHall = positiveEndHall, negativeEndHall
 	end
 	local function corridorSkin(name, cf, size, normalColor, faces, studs)
 		if kidsStyleHall then
@@ -2420,18 +2484,22 @@ local function makeCorridor(parent, layout, corridor, doorFolder)
 		end
 	end
 
-	-- Walls reach below the waterline; ceiling stays solid (tunnels).
+	-- Walls reach below the waterline; ceiling stays solid (tunnels). Stop the
+	-- rectangular shell just behind the hall's outer wall face so it cannot
+	-- read as a second box sitting on top of the doorway.
 	local wallBottom = -depth - 3
 	local wallTop = height + 2
+	local wallHalf = Configuration.WallThickness * .5
+	local shellLength = gapLength + 2 * (wallHalf - .12)
 	for _, side in ipairs({-1, 1}) do
 		local wall = corridorSkin("Level 2 Corridor Wall",
 			CFrame.new(center + oriented(0, side * width * .5) + Vector3.new(0, (wallTop + wallBottom) * .5, 0)),
-			orientedSize(length, wallTop - wallBottom, Configuration.WallThickness), C.TileCool, nil, 7)
+			orientedSize(shellLength, wallTop - wallBottom, Configuration.WallThickness), C.TileCool, nil, 7)
 		wall.CanCollide = true
 	end
 	local ceiling = corridorSkin("Level 2 Corridor Ceiling",
 		CFrame.new(center + Vector3.new(0, height + 1, 0)),
-		orientedSize(length, 2, width), C.TileCool, {Enum.NormalId.Bottom}, 9)
+		orientedSize(shellLength, 2, width), C.TileCool, {Enum.NormalId.Bottom}, 9)
 	ceiling.CanCollide = true
 
 	-- Dense arch rings: the corridor reads as a vaulted arch tunnel.
@@ -2446,35 +2514,77 @@ local function makeCorridor(parent, layout, corridor, doorFolder)
 	end
 	-- The ribs connect into one continuous half-cylinder vault.
 	local vaultRadius = math.min(archRadius + 1.4, Configuration.DoorWidth * .5 - .9)
-	makeBarrelVault(parent, center, alongX, corridor.Index, vaultRadius, length - 2, depth, kidsStyleHall)
+	local portalFaceDepth = .6
+	local vaultLength = gapLength + 2 * (wallHalf - portalFaceDepth + .05)
+	makeBarrelVault(parent, center, alongX, corridor.Index, vaultRadius, vaultLength, depth, kidsStyleHall)
 
-	-- End caps: seal the WHOLE corridor cross-section around the arch opening
-	-- at both ends, flush with the hall wall, using fine slats so the curved
-	-- edge reads smooth — then trim the opening with a face arch ring.
-	local capHalfWidth = width * .5 - .1
-	local capTop = height + 1
-	local slats = 20
+	-- Integrate each tunnel mouth into the hall's existing 30 x 19 doorway.
+	-- A single header keeps the tile field continuous above the crown; narrow
+	-- spandrel strips only fill the curved shoulders. The thin, high-resolution
+	-- face ring sits at the hall-facing wall surface and hides the final sub-stud
+	-- approximation, instead of being recessed behind it.
+	local capHalfWidth = Configuration.DoorWidth * .5 + .03
+	local capTop = Configuration.DoorHeight + .04
+	local faceRadialDepth = 1.4
+	local faceRadius = math.min(vaultRadius,
+		capHalfWidth - faceRadialDepth * .5 - .12)
+	local capCurveRadius = math.min(capHalfWidth - .04,
+		faceRadius + faceRadialDepth * .5 - .12)
+	local capCrown = 1 + capCurveRadius
+	local capBottom = -depth - 2.2
+	local capDepth = Configuration.WallThickness + .04
+	local slats = 48
 	local slatWidth = (capHalfWidth * 2) / slats
+	local capFaces = alongX
+		and {Enum.NormalId.Left, Enum.NormalId.Right}
+		or {Enum.NormalId.Front, Enum.NormalId.Back}
 	for _, endSign in ipairs({-1, 1}) do
-		local along = endSign * (length * .5 - 2.2)
+		local along = endSign < 0 and (from - mid) or (to - mid)
+		local endHall = endSign < 0 and negativeEndHall or positiveEndHall
+		local endStyleHall = isKids(endHall) and endHall or nil
+		local endWallColor = isKids(endHall) and kidsPalette(endHall).Color or C.TileCool
+		local function portalSurface(name, y, tall, across, acrossSize)
+			local object = surfaceFor(endHall, parent, name,
+				CFrame.new(center + oriented(along, across) + Vector3.new(0, y, 0)),
+				orientedSize(capDepth, tall, acrossSize), endWallColor, capFaces, 7)
+			object.CanCollide = false
+			object.CanTouch = false
+			object.CanQuery = false
+			return object
+		end
+
+		local headerHeight = capTop - capCrown
+		portalSurface("Level 2 Corridor Arch Header " .. corridor.Index,
+			(capTop + capCrown) * .5, headerHeight, 0, capHalfWidth * 2)
+
 		for slat = 0, slats - 1 do
 			local xLocal = -capHalfWidth + (slat + .5) * slatWidth
 			local arcY
-			if math.abs(xLocal) < vaultRadius - .6 then
-				arcY = 1 + math.sqrt(math.max(vaultRadius ^ 2 - xLocal ^ 2, 0)) - .6
+			if math.abs(xLocal) < capCurveRadius then
+				arcY = 1 + math.sqrt(math.max(capCurveRadius ^ 2 - xLocal ^ 2, 0))
 			else
-				arcY = -depth - 1
+				arcY = capBottom
 			end
-			if capTop - arcY > .4 then
-				local cap = corridorSkin("Level 2 Corridor Arch Face " .. corridor.Index,
-					CFrame.new(center + oriented(along, xLocal) + Vector3.new(0, (capTop + arcY) * .5, 0)),
-					orientedSize(2.6, capTop - arcY, slatWidth + .1), C.TileCool, nil, 7)
-				cap.CanCollide = true
+			local spandrelTop = capCrown + .05
+			if spandrelTop - arcY > .08 then
+				portalSurface("Level 2 Corridor Arch Spandrel " .. corridor.Index,
+					(spandrelTop + arcY) * .5, spandrelTop - arcY,
+					xLocal, slatWidth + .07)
 			end
 		end
-		-- Face ring: covers the slat edge so the mouth reads as one clean arch.
-		makeArchSpan(parent, center + oriented(along + endSign * -1.6, 0),
-			alongX, corridor.Index .. ".face" .. endSign, vaultRadius, depth, kidsStyleHall)
+
+		local faceAlong = along + endSign * (wallHalf - portalFaceDepth * .5 + .04)
+		makeArchSpan(parent, center + oriented(faceAlong, 0),
+			alongX, corridor.Index .. ".face" .. endSign, faceRadius, depth, endStyleHall, {
+				AxialDepth = portalFaceDepth,
+				RadialDepth = faceRadialDepth,
+				Density = 3.2,
+				MinimumSteps = 42,
+				SegmentOverlap = .42,
+				Faces = {Enum.NormalId.Left, Enum.NormalId.Right},
+				Studs = 7,
+				CanCollide = false,
+			})
 	end
 
 	-- Tunnel light comes from small lamps INSIDE the vault; the old ceiling
@@ -2496,8 +2606,8 @@ local function makeCorridor(parent, layout, corridor, doorFolder)
 	-- Water, full width.
 	local waterHeight = depth + .1
 	local region = addWater(center + Vector3.new(0, .1 - waterHeight * .5, 0),
-		alongX and Vector3.new(length - 3, waterHeight, width - 3)
-			or Vector3.new(width - 3, waterHeight, length - 3),
+		alongX and Vector3.new(length - 1, waterHeight, width + 1.5)
+			or Vector3.new(width + 1.5, waterHeight, length - 1),
 		"Corridor " .. corridor.Index)
 
 	local door
@@ -2535,34 +2645,6 @@ local function dressHall(parent, hall, depth, doors, index, density)
 			if math.abs(doorAt - value) < Configuration.DoorWidth * .5 + 8 then return false end
 		end
 		return true
-	end
-
-	-- Parasols: pole + two-disc canopy, sun-bleached, a few leaning.
-	local parasols = math.clamp(math.floor(hall.Area / 26000 * density), 1, 4)
-	for parasol = 1, parasols do
-		local px = rng:NextNumber(-.34, .34) * hall.Width
-		local pz = rng:NextNumber(-.34, .34) * hall.Depth
-		local base = hall.Center + Vector3.new(px, -depth, pz)
-		local lean = rng:NextNumber() < .4 and math.rad(rng:NextNumber(8, 22)) or 0
-		local yaw = rng:NextNumber() * math.pi * 2
-		local tilt = CFrame.new(base) * CFrame.Angles(0, yaw, 0) * CFrame.Angles(lean, 0, 0)
-		local poleHeight = depth + 7.5
-		local pole = part(parent, "Level 2 Parasol Pole " .. index .. "." .. parasol,
-			tilt * CFrame.new(0, poleHeight * .5, 0) * CFrame.Angles(0, 0, math.pi * .5),
-			Vector3.new(poleHeight, .5, .5), C.Rail, Enum.Material.Metal)
-		pole.Shape = Enum.PartType.Cylinder
-		pole.CanCollide = false
-		local canopyColor = faded(Configuration.SlideColors[rng:NextInteger(1, #Configuration.SlideColors)])
-		local canopy = part(parent, "Level 2 Parasol Canopy " .. index .. "." .. parasol,
-			tilt * CFrame.new(0, poleHeight, 0) * CFrame.Angles(0, 0, math.pi * .5),
-			Vector3.new(.7, 9, 9), canopyColor, Enum.Material.Fabric)
-		canopy.Shape = Enum.PartType.Cylinder
-		canopy.CanCollide = false
-		local crown = part(parent, "Level 2 Parasol Crown " .. index .. "." .. parasol,
-			tilt * CFrame.new(0, poleHeight + .6, 0) * CFrame.Angles(0, 0, math.pi * .5),
-			Vector3.new(.55, 4.6, 4.6), canopyColor, Enum.Material.Fabric)
-		crown.Shape = Enum.PartType.Cylinder
-		crown.CanCollide = false
 	end
 
 	-- Loungers sunk in the shallows (skip in genuinely deep halls).
@@ -2680,146 +2762,96 @@ local function dressHall(parent, hall, depth, doors, index, density)
 	end
 end
 
--- Pump rooms read as working plant rooms. Everything is DOOR-AWARE and
--- wall-hugging: nothing may block a doorway or float in the air.
+-- Pump rooms: a raised WALKWAY ring around the room plus a centre cross to
+-- the pump island, standing just above shallow water that fills the rest of
+-- the floor (step off the walkway and you wade). No pipes anywhere.
+local WALKWAY_TOP = .45
 local function decoratePumpHall(parent, hall, index, doors)
 	doors = doors or {East = {}, West = {}, North = {}, South = {}}
 	local rng = Random.new((hall.LocalSeed or hall.Index or 1) + 13)
-	local height = hallHeight(hall)
+	local walkwayWidth = 6.5
+	local depth = hallWaterDepth(hall) or 1.2
 
+	local function deck(name, centerPos, sizeX, sizeZ)
+		local slabHeight = WALKWAY_TOP + depth + .3
+		local slab = tiledPart(parent, name,
+			CFrame.new(Vector3.new(centerPos.X, WALKWAY_TOP - slabHeight * .5, centerPos.Z)),
+			Vector3.new(sizeX, slabHeight, sizeZ), C.TileWarm,
+			{Enum.NormalId.Top, Enum.NormalId.Front, Enum.NormalId.Back,
+				Enum.NormalId.Left, Enum.NormalId.Right}, 7)
+		slab.CanCollide = true
+		return slab
+	end
+
+	-- Perimeter ring hugging all four walls.
+	local inset = walkwayWidth * .5 + 1.9
+	deck("Level 2 Pump Walkway North " .. index,
+		Vector3.new(hall.Center.X, 0, hall.MinZ + inset), hall.Width - 3.5, walkwayWidth)
+	deck("Level 2 Pump Walkway South " .. index,
+		Vector3.new(hall.Center.X, 0, hall.MaxZ - inset), hall.Width - 3.5, walkwayWidth)
+	deck("Level 2 Pump Walkway West " .. index,
+		Vector3.new(hall.MinX + inset, 0, hall.Center.Z), walkwayWidth, hall.Depth - 3.5)
+	deck("Level 2 Pump Walkway East " .. index,
+		Vector3.new(hall.MaxX - inset, 0, hall.Center.Z), walkwayWidth, hall.Depth - 3.5)
+
+	-- Centre island under the pump, plus a cross of walkways reaching it.
+	deck("Level 2 Pump Island " .. index, Vector3.new(hall.Center.X, 0, hall.Center.Z), 26, 18)
+	deck("Level 2 Pump Walkway Cross X " .. index,
+		Vector3.new(hall.Center.X, 0, hall.Center.Z), hall.Width - 3.5, walkwayWidth)
+	deck("Level 2 Pump Walkway Cross Z " .. index,
+		Vector3.new(hall.Center.X, 0, hall.Center.Z), walkwayWidth, hall.Depth - 3.5)
+
+	-- Supply crates ON the walkway in a corner.
+	for crate = 1, rng:NextInteger(3, 5) do
+		local crateSize = rng:NextNumber(2.6, 4.2)
+		local box = part(parent, "Level 2 Pump Room Crate " .. index .. "." .. crate,
+			CFrame.new(Vector3.new(
+				hall.MinX + inset + rng:NextNumber(-2, 2),
+				WALKWAY_TOP + crateSize * .5,
+				hall.MinZ + inset + rng:NextNumber(-1.5, 6)))
+				* CFrame.Angles(0, rng:NextNumber() * math.pi, 0),
+			Vector3.new(crateSize, crateSize, crateSize), C.TileWarm, Enum.Material.WoodPlanks)
+		box.CanCollide = true
+	end
+
+	-- Gauge board flush on a doorless wall stretch.
 	local function clearOfDoors(list, value, clearance)
 		for _, doorAt in ipairs(list) do
 			if math.abs(doorAt - value) < clearance then return false end
 		end
 		return true
 	end
-
-	-- Corner risers: vertical floor-to-ceiling pipes tucked into the corners
-	-- (corners can never carry a doorway), with a short elbow into the wall.
-	for _, corner in ipairs({
-		Vector3.new(-1, 0, -1), Vector3.new(1, 0, -1),
-		Vector3.new(-1, 0, 1), Vector3.new(1, 0, 1),
-	}) do
-		local riserPos = hall.Center + Vector3.new(
-			corner.X * (hall.Width * .5 - 3.4), 0, corner.Z * (hall.Depth * .5 - 3.4))
-		local riser = part(parent, "Level 2 Pump Room Riser " .. index,
-			CFrame.new(riserPos + Vector3.new(0, height * .5, 0)) * CFrame.Angles(0, 0, math.pi * .5),
-			Vector3.new(height, 1.8, 1.8), C.Metal, Enum.Material.Metal)
-		riser.Shape = Enum.PartType.Cylinder
-		riser.CanCollide = false
-		local elbow = part(parent, "Level 2 Pump Room Riser Elbow " .. index,
-			CFrame.new(riserPos + Vector3.new(-corner.X * 1.4, 4.6, 0)),
-			Vector3.new(3.4, 1.6, 1.6), C.Metal, Enum.Material.Metal)
-		elbow.Shape = Enum.PartType.Cylinder
-		elbow.CanCollide = false
-	end
-
-	-- Ceiling conduit ring: high along the walls, well above every doorway.
-	local conduitY = height - 2.2
-	for _, run in ipairs({
-		{Vector3.new(0, conduitY, -(hall.Depth * .5 - 2.4)), Vector3.new(hall.Width - 10, 1.1, 1.1)},
-		{Vector3.new(0, conduitY, hall.Depth * .5 - 2.4), Vector3.new(hall.Width - 10, 1.1, 1.1)},
-	}) do
-		local conduit = part(parent, "Level 2 Pump Room Conduit " .. index,
-			CFrame.new(hall.Center + run[1]), run[2], C.Metal, Enum.Material.Metal)
-		conduit.Shape = Enum.PartType.Cylinder
-		conduit.CanCollide = false
-	end
-
-	-- Tank battery: pick the corner quadrant whose two walls are doorless
-	-- nearby; tanks stand ON the floor with feed pipes running INTO the wall.
-	local tankCorner
-	for _, corner in ipairs({
-		Vector3.new(1, 0, 1), Vector3.new(-1, 0, 1),
-		Vector3.new(1, 0, -1), Vector3.new(-1, 0, -1),
-	}) do
-		local cornerX = hall.Center.X + corner.X * (hall.Width * .5 - 12)
-		local cornerZ = hall.Center.Z + corner.Z * (hall.Depth * .5 - 9)
-		local xList = corner.X > 0 and doors.East or doors.West
-		local zList = corner.Z > 0 and doors.South or doors.North
-		-- The tank row spreads +/-8.5 studs from the corner point, so clear a
-		-- wide margin around any doorway on both adjacent walls.
-		if clearOfDoors(xList, cornerZ, 30) and clearOfDoors(zList, cornerX, 36) then
-			tankCorner = Vector3.new(cornerX, 0, cornerZ)
-			break
-		end
-	end
-	if tankCorner then
-		local wallSign = tankCorner.Z > hall.Center.Z and 1 or -1
-		for tank = 1, 3 do
-			local tankPos = Vector3.new(
-				tankCorner.X + (tank - 2) * 8.5, 0, tankCorner.Z)
-			local body = part(parent, "Level 2 Pump Room Tank " .. index .. "." .. tank,
-				CFrame.new(tankPos + Vector3.new(0, 6, 0)) * CFrame.Angles(0, 0, math.pi * .5),
-				Vector3.new(12, 6.5, 6.5), Color3.fromRGB(126, 138, 140), Enum.Material.Metal)
-			body.Shape = Enum.PartType.Cylinder
-			body.CanCollide = true
-			local cap = part(parent, "Level 2 Pump Room Tank Cap " .. index .. "." .. tank,
-				CFrame.new(tankPos + Vector3.new(0, 12.5, 0)), Vector3.new(3, 1, 3),
-				C.Locked, Enum.Material.Metal)
-			cap.CanCollide = false
-			-- Feed runs from the tank INTO the near wall, resting on the floor.
-			local feedLength = math.abs((hall.Center.Z + wallSign * hall.Depth * .5) - tankPos.Z) - 2
-			local feed = part(parent, "Level 2 Pump Room Tank Feed " .. index .. "." .. tank,
-				CFrame.new(tankPos + Vector3.new(0, 1.1, wallSign * (feedLength * .5 + 2)))
-					* CFrame.Angles(0, math.pi * .5, 0),
-				Vector3.new(feedLength, 1.2, 1.2), C.Metal, Enum.Material.Metal)
-			feed.Shape = Enum.PartType.Cylinder
-			feed.CanCollide = false
-		end
-	end
-
-	-- Supply crates: floor-standing, in whichever corner the tanks did not take.
-	local crateCorner = Vector3.new(
-		hall.Center.X - (tankCorner and (tankCorner.X - hall.Center.X > 0 and 1 or -1) or 1) * (hall.Width * .5 - 10),
-		0,
-		hall.Center.Z - (tankCorner and (tankCorner.Z - hall.Center.Z > 0 and 1 or -1) or 1) * (hall.Depth * .5 - 9))
-	for crate = 1, rng:NextInteger(3, 5) do
-		local crateSize = rng:NextNumber(3, 5)
-		local cratePos = crateCorner + Vector3.new(
-			rng:NextNumber(-6, 6), crateSize * .5, rng:NextNumber(-4, 4))
-		local box = part(parent, "Level 2 Pump Room Crate " .. index .. "." .. crate,
-			CFrame.new(cratePos) * CFrame.Angles(0, rng:NextNumber() * math.pi, 0),
-			Vector3.new(crateSize, crateSize, crateSize), C.TileWarm, Enum.Material.WoodPlanks)
-		box.CanCollide = true
-	end
-
-	-- Gauge board: FLUSH on a doorless wall stretch, light housing, softly lit.
-	local boardWall
 	for _, candidate in ipairs({
-		{list = doors.North, z = -(hall.Depth * .5 - 2.1), x = hall.Center.X + 8},
-		{list = doors.North, z = -(hall.Depth * .5 - 2.1), x = hall.Center.X - 14},
-		{list = doors.South, z = hall.Depth * .5 - 2.1, x = hall.Center.X + 8},
-		{list = doors.South, z = hall.Depth * .5 - 2.1, x = hall.Center.X - 14},
+		{list = doors.North, z = hall.MinZ + 2.1, x = hall.Center.X + 9},
+		{list = doors.North, z = hall.MinZ + 2.1, x = hall.Center.X - 15},
+		{list = doors.South, z = hall.MaxZ - 2.1, x = hall.Center.X + 9},
+		{list = doors.South, z = hall.MaxZ - 2.1, x = hall.Center.X - 15},
 	}) do
 		if clearOfDoors(candidate.list, candidate.x, 22) then
-			boardWall = candidate
+			local boardPos = Vector3.new(candidate.x, 9, candidate.z)
+			local board = part(parent, "Level 2 Pump Room Gauge Panel " .. index,
+				CFrame.new(boardPos), Vector3.new(9, 5, .8), Color3.fromRGB(168, 176, 172),
+				Enum.Material.DiamondPlate)
+			board.CanCollide = false
+			local inward = candidate.z > hall.Center.Z and -1 or 1
+			for dial = -1, 1 do
+				local gauge = part(parent, "Level 2 Pump Room Gauge " .. index .. "." .. dial,
+					CFrame.new(boardPos + Vector3.new(dial * 2.8, .4, inward * .6))
+						* CFrame.Angles(0, 0, math.pi * .5),
+					Vector3.new(.4, 1.7, 1.7), C.Light, Enum.Material.Neon)
+				gauge.Shape = Enum.PartType.Cylinder
+				gauge.CanCollide = false
+			end
 			break
 		end
 	end
-	if boardWall then
-		local boardPos = Vector3.new(boardWall.x, 9, hall.Center.Z + boardWall.z)
-		local board = part(parent, "Level 2 Pump Room Gauge Panel " .. index,
-			CFrame.new(boardPos), Vector3.new(9, 5, .8), Color3.fromRGB(168, 176, 172),
-			Enum.Material.DiamondPlate)
-		board.CanCollide = false
-		local inward = boardWall.z > 0 and -1 or 1
-		for dial = -1, 1 do
-			local gauge = part(parent, "Level 2 Pump Room Gauge " .. index .. "." .. dial,
-				CFrame.new(boardPos + Vector3.new(dial * 2.8, .4, inward * .6))
-					* CFrame.Angles(0, 0, math.pi * .5),
-				Vector3.new(.4, 1.7, 1.7), C.Light, Enum.Material.Neon)
-			gauge.Shape = Enum.PartType.Cylinder
-			gauge.CanCollide = false
-		end
-	end
 
-	-- Painted safety border on the floor around the central pump plinth.
+	-- Painted safety border around the pump island's edge.
 	for _, stripe in ipairs({
-		{Vector3.new(0, .05, -10), Vector3.new(26, .12, 1.6)},
-		{Vector3.new(0, .05, 10), Vector3.new(26, .12, 1.6)},
-		{Vector3.new(-13, .05, 0), Vector3.new(1.6, .12, 18.4)},
-		{Vector3.new(13, .05, 0), Vector3.new(1.6, .12, 18.4)},
+		{Vector3.new(0, WALKWAY_TOP + .05, -8.4), Vector3.new(25, .1, 1.2)},
+		{Vector3.new(0, WALKWAY_TOP + .05, 8.4), Vector3.new(25, .1, 1.2)},
+		{Vector3.new(-12.4, WALKWAY_TOP + .05, 0), Vector3.new(1.2, .1, 15.6)},
+		{Vector3.new(12.4, WALKWAY_TOP + .05, 0), Vector3.new(1.2, .1, 15.6)},
 	}) do
 		local paint = part(parent, "Level 2 Pump Room Safety Stripe " .. index,
 			CFrame.new(hall.Center + stripe[1]), stripe[2],
@@ -2833,10 +2865,60 @@ end
 -- flume back into the water) and, in the largest halls, a diving platform.
 -- Deterministic per hall so a seed always builds the same room.
 local function decorateLargeHall(parent, hall, depth, index)
-	if not depth or hall.Area < 42000 then return end
+	if not depth or hall.Area < 26000 then return end
 	local rng = Random.new((hall.LocalSeed or hall.Index or 1) + 7)
 	local sign = rng:NextInteger(0, 1) == 0 and 1 or -1
 	local height = hallHeight(hall)
+
+	-- Mid-size halls get a classic poolside chute slide even before they earn
+	-- a full tower: steps up to a small pad, straight chute into the water.
+	if hall.Area < 40000 then
+		local chuteBase = hall.Center + Vector3.new(sign * hall.Width * .24, 0, -hall.Depth * .18)
+		local padTop = 5.2
+		local stepRun, stepRise = 1.6, .74
+		local stepCount = math.ceil((padTop + depth) / stepRise)
+		makeStairFlight(parent, chuteBase + Vector3.new(-4 - stepCount * stepRun, -depth, 0),
+			Vector3.new(1, 0, 0), 6, stepCount, "Level 2 Chute Steps " .. index, stepRun, stepRise)
+		local pad = tiledPart(parent, "Level 2 Chute Pad " .. index,
+			CFrame.new(chuteBase + Vector3.new(0, padTop - .4, 0)), Vector3.new(7, .8, 7),
+			C.TileWarm, Enum.NormalId:GetEnumItems(), 7)
+		pad.CanCollide = true
+		local chuteColor = Configuration.SlideColors[((tonumber(index) or 1) % #Configuration.SlideColors) + 1]
+		local run = 15
+		local chuteAngle = math.atan2(padTop + .6, run)
+		local chuteLength = math.sqrt(run * run + (padTop + .6) ^ 2) + 2
+		local chute = part(parent, "Level 2 Chute Slide " .. index,
+			CFrame.new(chuteBase + Vector3.new(0, (padTop - .6) * .5, run * .5 + 3))
+				* CFrame.Angles(-chuteAngle, 0, 0),
+			Vector3.new(4.2, .5, chuteLength), chuteColor, Enum.Material.SmoothPlastic)
+		chute.CanCollide = true
+		chute.CustomPhysicalProperties = PhysicalProperties.new(.7, .04, .05, 1, 1)
+		for _, lipSide in ipairs({-1, 1}) do
+			local lip = part(parent, "Level 2 Chute Lip " .. index,
+				chute.CFrame * CFrame.new(lipSide * 2.2, .55, 0),
+				Vector3.new(.4, .9, chuteLength), chuteColor, Enum.Material.SmoothPlastic)
+			lip.CanCollide = true
+		end
+		return
+	end
+
+	-- Stair overlook: a wide freestanding stair up to a railed landing.
+	if hall.Area >= 52000 then
+		local overlookPos = hall.Center + Vector3.new(-sign * hall.Width * .1, 0, hall.Depth * .3)
+		local landingTop = 7
+		local stepRun, stepRise = 1.5, .78
+		local stepCount = math.ceil((landingTop + depth) / stepRise)
+		makeStairFlight(parent, overlookPos + Vector3.new(-5 - stepCount * stepRun, -depth, 0),
+			Vector3.new(1, 0, 0), 10, stepCount, "Level 2 Overlook Steps " .. index, stepRun, stepRise)
+		local landing = tiledPart(parent, "Level 2 Overlook Landing " .. index,
+			CFrame.new(overlookPos + Vector3.new(0, landingTop - .5, 0)), Vector3.new(12, 1, 10),
+			C.TileWarm, Enum.NormalId:GetEnumItems(), 7)
+		landing.CanCollide = true
+		makeRail(parent, overlookPos + Vector3.new(6, landingTop, -5),
+			overlookPos + Vector3.new(6, landingTop, 5), "Level 2 Overlook " .. index)
+		makeRail(parent, overlookPos + Vector3.new(-6, landingTop, 5),
+			overlookPos + Vector3.new(6, landingTop, 5), "Level 2 Overlook Back " .. index)
+	end
 
 	-- Play tower.
 	local towerPos = hall.Center + Vector3.new(sign * hall.Width * .27, 0, hall.Depth * .2)
@@ -2845,8 +2927,9 @@ local function decorateLargeHall(parent, hall, depth, index)
 		CFrame.new(towerPos + Vector3.new(0, topY - .5, 0)), Vector3.new(13, 1, 13),
 		C.TileWarm, Enum.NormalId:GetEnumItems(), 7)
 	platform.CanCollide = true
-	makeSpiralStair(parent, towerPos + Vector3.new(-11, 0, -4), -depth + .5, topY, 6.5,
-		"Level 2 Play Tower " .. index)
+	makeSpiralStair(parent,
+		Vector3.new(dodgeSkylightX(hall, towerPos.X - 11, 18), 0, towerPos.Z - 4),
+		-depth + .5, topY, 6.5, "Level 2 Play Tower " .. index)
 	makeRail(parent, towerPos + Vector3.new(-6, topY - 1, -6.2),
 		towerPos + Vector3.new(6, topY - 1, -6.2), "Level 2 Play Tower " .. index)
 	local color = Configuration.SlideColors[((tonumber(index) or 1) % #Configuration.SlideColors) + 1]
@@ -2880,7 +2963,9 @@ local function decorateLargeHall(parent, hall, depth, index)
 
 	-- Diving platform arrives earlier now.
 	if hall.Area >= 60000 then
-		local divePos = hall.Center + Vector3.new(-sign * hall.Width * .27, 0, -hall.Depth * .22)
+		local divePos = Vector3.new(
+			dodgeSkylightX(hall, hall.Center.X - sign * hall.Width * .27, 11),
+			0, hall.Center.Z - hall.Depth * .22)
 		makeColumn(parent, divePos + Vector3.new(0, -depth, 0), depth + 8, 4.5)
 		local deck = tiledPart(parent, "Level 2 Diving Deck " .. index,
 			CFrame.new(divePos + Vector3.new(0, 8, 0)), Vector3.new(9, 1, 9),
@@ -2904,8 +2989,9 @@ local function decorateLargeHall(parent, hall, depth, index)
 			CFrame.new(tower2 + Vector3.new(0, top2 - .5, 0)), Vector3.new(13, 1, 13),
 			C.TileWarm, Enum.NormalId:GetEnumItems(), 7)
 		deck2.CanCollide = true
-		makeSpiralStair(parent, tower2 + Vector3.new(11, 0, 4), -depth + .5, top2, 6.5,
-			"Level 2 Play Tower " .. index .. "b")
+		makeSpiralStair(parent,
+			Vector3.new(dodgeSkylightX(hall, tower2.X + 11, 18), 0, tower2.Z + 4),
+			-depth + .5, top2, 6.5, "Level 2 Play Tower " .. index .. "b")
 		local color2 = Configuration.SlideColors[((tonumber(index) or 1) + 1) % #Configuration.SlideColors + 1]
 		local start2 = tower2 + Vector3.new(0, top2 + 3.6, -6)
 		local landing2 = tower2 + Vector3.new(sign * 6, 1.8, -26)
@@ -2919,8 +3005,10 @@ local function decorateLargeHall(parent, hall, depth, index)
 			Vector3.new(1.3, 19, 19), C.TileWarm, nil, 8)
 		island.Shape = Enum.PartType.Cylinder
 		island.CanCollide = true
-		makeColumn(parent, hall.Center + Vector3.new(4, 0, 0), height, 4.5)
-		makeColumn(parent, hall.Center + Vector3.new(-4, 0, 0), height, 4.5)
+		makeColumn(parent, Vector3.new(
+			dodgeSkylightX(hall, hall.Center.X + 4, 11), hall.Center.Y, hall.Center.Z), height, 4.5)
+		makeColumn(parent, Vector3.new(
+			dodgeSkylightX(hall, hall.Center.X - 4, 11), hall.Center.Y, hall.Center.Z), height, 4.5)
 	end
 end
 

@@ -21,12 +21,14 @@ local CLIENT_EVENT_NAME = "ClientEvent"
 local LIBRARY_NAME = "Level 3 Sound Library"
 
 local DEFAULT_AUDIO: {[string]: string} = {
-	FluorescentHum = "rbxassetid://9112889325",
+	FluorescentHum = "rbxassetid://92576512092725",
 	HVAC = "rbxassetid://9125446543",
 	DoorRattle = "rbxassetid://9118901593",
 	DoorMovement = "rbxassetid://9119631915",
 	ReaderBeep = "rbxassetid://9119103325",
 	WaterDrip = "rbxassetid://9126193223",
+	PowerDown = "rbxassetid://75561087895749",
+	RoomListeningSong = "rbxassetid://140244948455675",
 }
 
 local LIBRARY_ALIASES: {[string]: {string}} = {
@@ -36,12 +38,20 @@ local LIBRARY_ALIASES: {[string]: {string}} = {
 	DoorMovement = {"DoorMovement", "Level 3 Door Movement"},
 	ReaderBeep = {"ReaderBeep", "Level 3 Reader Beep"},
 	WaterDrip = {"WaterDrip", "Level 3 Water Drip"},
+	PowerDown = {"PowerDown", "Level 3 Power Down"},
+	RoomListeningSong = {"RoomListeningSong", "The Room is Listening"},
 }
 
 type AmbientRecord = {
 	Sound: Sound,
 	TargetVolume: number,
 	Kind: string,
+}
+
+type RoomRegion = {
+	Part: BasePart,
+	HalfX: number,
+	HalfZ: number,
 }
 
 local ambience: {AmbientRecord} = {}
@@ -51,6 +61,45 @@ local worldAddedConnection: RBXScriptConnection? = nil
 local worldRemovingConnection: RBXScriptConnection? = nil
 local clientEventConnection: RBXScriptConnection? = nil
 local boundClientEvent: RemoteEvent? = nil
+local roomRegions: {RoomRegion} = {}
+local fluorescentDiffusers: {BasePart} = {}
+
+local fluorescentEmitter = Instance.new("Part")
+fluorescentEmitter.Name = "Level 3 Local Nearest Fluorescent Emitter"
+fluorescentEmitter.Size = Vector3.new(0.05, 0.05, 0.05)
+fluorescentEmitter.Transparency = 1
+fluorescentEmitter.Anchored = true
+fluorescentEmitter.CanCollide = false
+fluorescentEmitter.CanTouch = false
+fluorescentEmitter.CanQuery = false
+fluorescentEmitter.CastShadow = false
+fluorescentEmitter.Parent = workspace
+local fluorescentHum = Instance.new("Sound")
+fluorescentHum.Name = "Level 3 Nearest Fluorescent Hum"
+fluorescentHum.SoundId = DEFAULT_AUDIO.FluorescentHum
+fluorescentHum.Looped = true
+fluorescentHum.Volume = 0
+fluorescentHum.RollOffMode = Enum.RollOffMode.InverseTapered
+fluorescentHum.RollOffMinDistance = 4
+fluorescentHum.RollOffMaxDistance = 38
+fluorescentHum.Parent = fluorescentEmitter
+
+local powerDown = Instance.new("Sound")
+powerDown.Name = "Level 3 Power Down"
+powerDown.SoundId = DEFAULT_AUDIO.PowerDown
+powerDown.Volume = 0.92
+powerDown.Looped = false
+powerDown.Parent = SoundService
+local lastSequencePhase = "STOPPED"
+
+local roomSong = Instance.new("Sound")
+roomSong.Name = "Level 3 - The Room is Listening"
+roomSong.Looped = false
+roomSong.Volume = 0
+roomSong.PlaybackSpeed = 1
+roomSong.Parent = SoundService
+local roomSongAsset = ""
+local roomSongPreloaded = false
 
 local liveOneShots = 0
 local windowStarted = os.clock()
@@ -106,6 +155,93 @@ end
 local function currentWorld(): Model?
 	local object = workspace:FindFirstChild(WORLD_NAME)
 	return if object and object:IsA("Model") then object else nil
+end
+
+local function roomSongPhase(): string
+	local value = stateAttribute("Level3_RoomSongPhase", nil)
+	return if type(value) == "string" then value else "STOPPED"
+end
+
+local function songAssetId(): string?
+	local stateValue = stateAttribute("Level3_RoomSongAssetId", nil)
+	local normalized = normalizeId(stateValue)
+	if normalized and normalized ~= "rbxassetid://0" then return normalized end
+	local resolved = resolveId("RoomListeningSong")
+	return if resolved ~= "rbxassetid://0" then resolved else nil
+end
+
+local function distanceFromRoom(position: Vector3): number
+	local closest = math.huge
+	for index = #roomRegions, 1, -1 do
+		local region = roomRegions[index]
+		if not region.Part.Parent then
+			table.remove(roomRegions, index)
+		else
+			local localPosition = region.Part.CFrame:PointToObjectSpace(position)
+			local dx = math.max(math.abs(localPosition.X) - region.HalfX, 0)
+			local dz = math.max(math.abs(localPosition.Z) - region.HalfZ, 0)
+			closest = math.min(closest, math.sqrt(dx * dx + dz * dz))
+		end
+	end
+	return closest
+end
+
+local function targetSongVolume(): number
+	local character = player.Character
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	if not (root and root:IsA("BasePart")) then return 0 end
+	local distance = distanceFromRoom(root.Position)
+	local fadeDistance = 18
+	local roomVolume, corridorVolume = .48, .045
+	local alpha = 1 - math.clamp(distance / fadeDistance, 0, 1)
+	return corridorVolume + (roomVolume - corridorVolume) * alpha
+end
+
+local function stopRoomSong()
+	roomSong.Volume = 0
+	if roomSong.IsPlaying then roomSong:Stop() end
+end
+
+local function updateRoomSong(dt: number)
+	local phase = roomSongPhase()
+	if not isActive() or (phase ~= "ARMED" and phase ~= "PLAYING") then
+		stopRoomSong()
+		return
+	end
+	local id = songAssetId()
+	if not id then
+		stopRoomSong()
+		return
+	end
+	if id ~= roomSongAsset then
+		roomSongAsset = id
+		roomSongPreloaded = false
+		roomSong.SoundId = id
+		task.spawn(function()
+			pcall(function() ContentProvider:PreloadAsync({roomSong}) end)
+			if roomSong.SoundId == id then roomSongPreloaded = true end
+		end)
+	end
+	local startValue = stateAttribute("Level3_RoomSongStartServerTime", nil)
+	local durationValue = stateAttribute("Level3_RoomSongDuration", nil)
+	if type(startValue) ~= "number" or type(durationValue) ~= "number" then return end
+	local position = workspace:GetServerTimeNow() - startValue
+	if position < 0 then
+		roomSong.Volume += (0 - roomSong.Volume) * math.clamp(dt / .3, 0, 1)
+		return
+	end
+	if position >= durationValue then
+		stopRoomSong()
+		return
+	end
+	if not roomSong.IsPlaying then
+		pcall(function() roomSong.TimePosition = position end)
+		roomSong:Play()
+	elseif math.abs(roomSong.TimePosition - position) > .32 then
+		pcall(function() roomSong.TimePosition = position end)
+	end
+	local wanted = targetSongVolume()
+	roomSong.Volume += (wanted - roomSong.Volume) * math.clamp(dt / 1.15, 0, 1)
 end
 
 local function generationMatches(payload: {[any]: any}): boolean
@@ -262,12 +398,37 @@ local function bindWorld(world: Model?)
 	worldAddedConnection = nil
 	worldRemovingConnection = nil
 	clearAmbience()
+	table.clear(roomRegions)
+	table.clear(fluorescentDiffusers)
 	boundWorld = world
 	if not world then return end
-	for _, descendant in ipairs(world:GetDescendants()) do tryAddAmbience(descendant) end
+	for _, descendant in ipairs(world:GetDescendants()) do
+		tryAddAmbience(descendant)
+		if descendant:IsA("BasePart") and descendant.Name == "Level 3 Room Floor" then
+			table.insert(roomRegions, {
+				Part = descendant,
+				HalfX = descendant.Size.X * .5,
+				HalfZ = descendant.Size.Z * .5,
+			})
+		elseif descendant:IsA("BasePart") and descendant.Name == "Level 3 Fluorescent Diffuser"
+			and descendant:FindFirstChild("Level 3 Fluorescent Light") then
+			table.insert(fluorescentDiffusers, descendant)
+		end
+	end
 	worldAddedConnection = world.DescendantAdded:Connect(function(descendant)
 		task.defer(function()
-			if world == boundWorld and descendant:IsDescendantOf(world) then tryAddAmbience(descendant) end
+			if world ~= boundWorld or not descendant:IsDescendantOf(world) then return end
+			tryAddAmbience(descendant)
+			if descendant:IsA("BasePart") and descendant.Name == "Level 3 Room Floor" then
+				table.insert(roomRegions, {
+					Part = descendant,
+					HalfX = descendant.Size.X * .5,
+					HalfZ = descendant.Size.Z * .5,
+				})
+			elseif descendant:IsA("BasePart") and descendant.Name == "Level 3 Fluorescent Diffuser"
+				and descendant:FindFirstChild("Level 3 Fluorescent Light") then
+				table.insert(fluorescentDiffusers, descendant)
+			end
 		end)
 	end)
 	worldRemovingConnection = world.AncestryChanged:Connect(function(_, parent)
@@ -312,24 +473,15 @@ local function updateReaderCadence(now: number)
 	local signal = math.clamp(facing * 0.68 + range * 0.32, 0, 1)
 	local unlocked = stateAttribute("Level3_ExitUnlocked", "Level3ExitUnlocked") == true
 
-	if progress == 0 then
-		playOneShot("ReaderBeep", "ReaderPulse", nil, 0.10, 0.76 + random:NextNumber(-0.04, 0.04))
-		nextReaderBeep = now + random:NextNumber(6.5, 9.5)
-		return
-	end
-
-	local interval = 5.0 - calibration * 3.2 - signal * (unlocked and 1.05 or 0.55)
-	interval = math.clamp(interval, unlocked and 0.72 or 1.25, 5)
-	local volume = 0.10 + calibration * 0.08 + signal * 0.05
-	local speed = 0.78 + calibration * 0.11 + signal * 0.13
-	playOneShot("ReaderBeep", "ReaderPulse", nil, volume, speed)
-	nextReaderBeep = now + interval
+	-- The reader is visual-only. Calibration, module recovery, and exit unlock
+	-- retain their explicit UI feedback, but the directional pulse never beeps.
+	nextReaderBeep = now + (if progress == 0 then 8 else math.clamp(5.0 - calibration * 3.2 - signal * 0.55, 1.25, 5))
 end
 
 -- Preload the small, allowlisted cue set. Empty/failed assets remain harmless.
 task.spawn(function()
 	local temporary: {Sound} = {}
-	for _, key in ipairs({"DoorRattle", "DoorMovement", "ReaderBeep"}) do
+	for _, key in ipairs({"DoorRattle", "DoorMovement", "ReaderBeep", "FluorescentHum", "PowerDown", "RoomListeningSong"}) do
 		local id = resolveId(key)
 		if id then
 			local sound = Instance.new("Sound")
@@ -374,7 +526,10 @@ RunService.Heartbeat:Connect(function(dt)
 			ambienceBySound[sound] = nil
 			table.remove(ambience, index)
 		else
-			local target = if playing then record.TargetVolume else 0
+				local sequencePhase = roomSongPhase()
+			local sequenceDuck = if sequencePhase == "PLAYING" or sequencePhase == "ARMED" then .20
+				elseif sequencePhase == "BLACKOUT" then .04 else 1
+			local target = if playing then record.TargetVolume * sequenceDuck else 0
 			if playing and record.Kind == "FluorescentHum" then
 				-- Slow ballast variation adds life without audible strobing.
 				target *= 0.96 + math.noise(now * 0.17, 7) * 0.04
@@ -385,7 +540,38 @@ RunService.Heartbeat:Connect(function(dt)
 			if not playing and sound.Volume < 0.004 and sound.IsPlaying then sound:Stop() end
 		end
 	end
+	updateRoomSong(elapsed)
 	updateReaderCadence(now)
+
+	local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	local nearest: BasePart? = nil
+	local nearestDistance = math.huge
+	if root and root:IsA("BasePart") then
+		for index = #fluorescentDiffusers, 1, -1 do
+			local fixture = fluorescentDiffusers[index]
+			if not fixture.Parent then
+				table.remove(fluorescentDiffusers, index)
+			else
+				local distance = (fixture.Position - root.Position).Magnitude
+				if distance < nearestDistance then nearest, nearestDistance = fixture, distance end
+			end
+		end
+	end
+	local sequencePhase = roomSongPhase()
+	if playing and nearest then fluorescentEmitter.Position = nearest.Position end
+	local humTarget = if playing and nearest and sequencePhase ~= "BLACKOUT"
+		then ((sequencePhase == "PLAYING" or sequencePhase == "ARMED") and 0.035 or 0.15) else 0
+	fluorescentHum.Volume += (humTarget - fluorescentHum.Volume) * math.clamp(elapsed / .65, 0, 1)
+	if humTarget > 0 and not fluorescentHum.IsPlaying then fluorescentHum:Play() end
+	if humTarget == 0 and fluorescentHum.Volume < .003 and fluorescentHum.IsPlaying then fluorescentHum:Stop() end
+
+	if sequencePhase == "BLACKOUT" and lastSequencePhase ~= "BLACKOUT" then
+		powerDown.SoundId = resolveId("PowerDown") or DEFAULT_AUDIO.PowerDown
+		powerDown.TimePosition = 0
+		powerDown:Play()
+	end
+	if not playing and powerDown.IsPlaying then powerDown:Stop() end
+	lastSequencePhase = sequencePhase
 end)
 
 bindClientEvent()

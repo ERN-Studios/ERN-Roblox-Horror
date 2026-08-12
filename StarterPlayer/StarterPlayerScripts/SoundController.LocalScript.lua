@@ -205,6 +205,12 @@ elevatorSound.Parent = SoundService
 roundStatus.OnClientEvent:Connect(function(ev)
 	if ev == "elevator" then
 		ambienceTarget = 0 -- silent during the ride
+		-- This is Level 1's authored elevator one-shot. Level 3 has its own entry
+		-- soundscape and must never inherit the old office-level introduction.
+		if workspace:GetAttribute("SelectedLevel") ~= 1 then
+			elevatorSound:Stop()
+			return
+		end
 		if ELEVATOR_SOUND ~= "" and not elevatorSound.IsPlaying then
 			elevatorSound.SoundId = ELEVATOR_SOUND
 			elevatorSound.Volume = ELEVATOR_VOLUME
@@ -482,7 +488,8 @@ RunService.Heartbeat:Connect(function(dt)
 	-- footsteps: a looping track that only plays while you MOVE and fades out when
 	-- you stop (so a long loop never drones on while standing, and never hard-cuts)
 	local footTarget, footSpeed = 0, nil
-	if hum and root and workspace:GetAttribute("SelectedLevel") ~= 2 then
+	if player:GetAttribute("InRound") == true
+		and hum and root and workspace:GetAttribute("SelectedLevel") ~= 2 then
 		local vel = root.AssemblyLinearVelocity
 		local flat = Vector3.new(vel.X, 0, vel.Z).Magnitude
 		local ws = hum.WalkSpeed
@@ -530,21 +537,43 @@ end
 if player.Character then hookFlashlightClick(player.Character) end
 player.CharacterAdded:Connect(hookFlashlightClick)
 
--- silence Roblox's built-in footstep loop so only our custom thumps play
-local function muteDefaultSteps(char)
+-- Use Roblox's own character footsteps in the lobby. During a level, mute that
+-- loop so it cannot layer over this controller's custom carpet/water sounds.
+local DEFAULT_RUNNING_VOLUME = 0.65
+local function configureDefaultSteps(char)
 	task.spawn(function()
 		local hrp = char:WaitForChild("HumanoidRootPart", 10)
 		if not hrp then return end
 		local running = hrp:WaitForChild("Running", 5)
 		if not running then return end
-		running.Volume = 0
-		running:GetPropertyChangedSignal("Volume"):Connect(function()
-			if running.Volume ~= 0 then running.Volume = 0 end -- keep it muted no matter what
+
+		local lobbyVolume = running.Volume > 0 and running.Volume or DEFAULT_RUNNING_VOLUME
+		local changing = false
+		local function refresh()
+			if not running.Parent then return end
+			changing = true
+			running.Volume = player:GetAttribute("InRound") == true and 0 or lobbyVolume
+			changing = false
+		end
+
+		local volumeConnection = running:GetPropertyChangedSignal("Volume"):Connect(function()
+			if changing then return end
+			if player:GetAttribute("InRound") == true then
+				refresh()
+			elseif running.Volume > 0 then
+				lobbyVolume = running.Volume
+			end
 		end)
+		local roundConnection = player:GetAttributeChangedSignal("InRound"):Connect(refresh)
+		char.Destroying:Once(function()
+			volumeConnection:Disconnect()
+			roundConnection:Disconnect()
+		end)
+		refresh()
 	end)
 end
-if player.Character then muteDefaultSteps(player.Character) end
-player.CharacterAdded:Connect(muteDefaultSteps)
+if player.Character then configureDefaultSteps(player.Character) end
+player.CharacterAdded:Connect(configureDefaultSteps)
 
 -- ── LEVEL 2 SHALLOW-WATER AUDIO ────────────────────────────────────────────
 -- The seven user-owned takes are resolved at runtime. Put their uploaded IDs on
@@ -718,6 +747,14 @@ local function makeLevel2Bank(parent, name, baseVolume, model)
 		return true
 	end
 
+	function bank:stop()
+		self.bag = {}
+		for _, voice in ipairs(self.voices) do
+			voice:SetAttribute("SpritePlayToken", (voice:GetAttribute("SpritePlayToken") or 0) + 1)
+			voice:Stop()
+		end
+	end
+
 	return bank
 end
 
@@ -729,7 +766,8 @@ local level2PlayerLastPosition = nil
 local level2PlayerStepClock = 0
 
 local function level2ShallowWater(humanoid, root)
-	if workspace:GetAttribute("SelectedLevel") ~= 2 then return false end
+	if player:GetAttribute("InRound") ~= true
+		or workspace:GetAttribute("SelectedLevel") ~= 2 then return false end
 	local state = humanoid:GetState()
 	if state == Enum.HumanoidStateType.Swimming
 		or state == Enum.HumanoidStateType.Freefall
@@ -748,7 +786,8 @@ end
 
 RunService.Heartbeat:Connect(function(dt)
 	local hum, root = aliveParts()
-	if workspace:GetAttribute("SelectedLevel") ~= 2 or not hum or not root then
+	if player:GetAttribute("InRound") ~= true
+		or workspace:GetAttribute("SelectedLevel") ~= 2 or not hum or not root then
 		level2PlayerLastPosition = root and root.Position or nil
 		level2PlayerStepClock = 0
 		return
@@ -780,8 +819,22 @@ RunService.Heartbeat:Connect(function(dt)
 end)
 
 workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(function()
+	if workspace:GetAttribute("SelectedLevel") ~= 1 then elevatorSound:Stop() end
 	if workspace:GetAttribute("SelectedLevel") == 2 then
 		steps.Volume = 0
+		level2PlayerStepClock = 0
+	else
+		level2PlayerBank:stop()
+	end
+end)
+
+player:GetAttributeChangedSignal("InRound"):Connect(function()
+	if player:GetAttribute("InRound") ~= true then
+		-- Do not let a custom fade or a water one-shot overlap the lobby's
+		-- restored Roblox character footsteps.
+		steps.Volume = 0
+		level2PlayerBank:stop()
+		level2PlayerLastPosition = nil
 		level2PlayerStepClock = 0
 	end
 end)

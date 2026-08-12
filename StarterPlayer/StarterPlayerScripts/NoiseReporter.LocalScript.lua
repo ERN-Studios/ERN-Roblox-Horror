@@ -71,8 +71,10 @@ local function applySpeed()
 	local _, hum = currentChar()
 	if not hum then return end
 	if not inRound() then
-		state = "walk"
-		hum.WalkSpeed = WALK_SPEED
+		-- Lobby sprint is unlimited: it uses the regular sprint speed without
+		-- touching the level stamina/exhaustion state.
+		state = sprinting and "sprint" or "walk"
+		hum.WalkSpeed = sprinting and SPRINT_SPEED or WALK_SPEED
 		return
 	end
 
@@ -95,12 +97,11 @@ end
 
 UIS.InputBegan:Connect(function(input, processed)
 	if processed then return end
-	if not inRound() then return end
 	if input.KeyCode == Enum.KeyCode.LeftShift then
 		shiftSprintHeld = true; refreshSprint()
-	elseif input.KeyCode == Enum.KeyCode.LeftControl then
+	elseif inRound() and input.KeyCode == Enum.KeyCode.LeftControl then
 		crouching = true; applySpeed()
-	elseif input.KeyCode == Enum.KeyCode.G or input.KeyCode == Enum.KeyCode.ButtonX then
+	elseif inRound() and (input.KeyCode == Enum.KeyCode.G or input.KeyCode == Enum.KeyCode.ButtonX) then
 		dropGlowstick()
 	end
 end)
@@ -153,7 +154,10 @@ local BAR_FADE      = 5     -- how fast the bar fades in / out
 local gui = Instance.new("ScreenGui")
 gui.Name = "StaminaGui"
 gui.ResetOnSpawn = false
-gui.Enabled = inRound()
+-- Keep the container alive in the lobby for the mobile RUN button. The actual
+-- stamina bar remains fully hidden there, and the level-only controls are
+-- hidden explicitly by updateRoundState().
+gui.Enabled = true
 gui.Parent = player:WaitForChild("PlayerGui")
 
 -- Compact touch control cluster. Keyboard/controller paths remain unchanged.
@@ -239,7 +243,6 @@ end
 -- Tap once to sprint, tap again to stop. A held GUI touch no longer steals
 -- the phone/tablet camera finger, so players can steer and look around freely.
 touchRunButton.Activated:Connect(function()
-	if not inRound() then return end
 	touchSprintToggled = not touchSprintToggled
 	touchSprintHeld = touchSprintToggled
 	showRunEnabled(touchSprintToggled)
@@ -360,7 +363,11 @@ end)
 
 local function updateRoundState()
 	local active = inRound()
-	gui.Enabled = active
+	gui.Enabled = true
+	touchRunButton.Visible = touchControlsVisible
+	touchJumpButton.Visible = touchControlsVisible and active
+	touchPOVButton.Visible = touchControlsVisible and devAllowed and active
+	touchGlowButton.Visible = touchControlsVisible and active
 	if not active then
 		lastGlowstickDrop = -math.huge
 		shiftSprintHeld, touchSprintHeld = false, false

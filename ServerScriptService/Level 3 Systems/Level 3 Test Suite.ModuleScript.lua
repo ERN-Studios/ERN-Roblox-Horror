@@ -20,6 +20,8 @@ local BEIGE_ROOM_IDS = {
 	LostFound = true,
 	Exit = true,
 }
+local RED_PARTY_ROOMS = {PartyA = true, Records = true}
+local NEON_PARTY_ROOMS = {PartyB = true, UtilityWest = true, CentralHall = true}
 local LEVEL_ONE_RUNTIME_SCRIPTS = {"EntityAI", "EntityAnimation", "EntityKill", "PuzzleManager"}
 
 local function countMap(values: {[any]: any}): number
@@ -40,13 +42,33 @@ local function assertPart(record: {[string]: any}, key: string, root: Instance):
 end
 
 function TestSuite.ValidateConfiguration(): {[string]: any}
-	assert(Configuration.Version >= 3, "Level 3 full-map revision must be at least 3")
+	assert(Configuration.Version >= 4, "Level 3 decor/texture revision must be at least 4")
 	assert(Configuration.CorridorWidth == 14, "Level 3 corridors must remain 14 studs wide")
 	assert(Configuration.DoorWidth == 6 and Configuration.DoorHeight == 8.5,
 		"Level 3 doors must remain the approved 6 x 8.5 studs")
 	assert(Configuration.ModuleGoal == 5, "Level 3 must require exactly five modules")
+	assert(Configuration.MusicSequence.DurationSeconds == 180.035917
+		and Configuration.MusicSequence.BlackoutSeconds == 30,
+		"Level 3 room-song timing must match the complete three-minute master and 30-second blackout")
+	assert(Configuration.MusicSequence.CorridorVolume < Configuration.MusicSequence.RoomVolume,
+		"Level 3 room song must be quieter in corridors than inside rooms")
 	assert(Configuration.Textures.StaffDoor == "rbxassetid://127165696221846",
 		"Level 3 StaffDoor must use the approved published texture")
+	assert(Configuration.Textures.PartyCarpetNeon == "rbxassetid://110230144446272"
+		and Configuration.Textures.PartyCarpetRed == "rbxassetid://108064770913201"
+		and Configuration.Textures.OrangeWall == "rbxassetid://128270554927663",
+		"Level 3 Revision 4 generated texture IDs are missing or stale")
+	local assets = ServerStorage:FindFirstChild("Level3Assets")
+	local furniture = assets and assets:FindFirstChild("FurnitureTemplates")
+	assert(furniture and furniture:IsA("Folder"), "Level 3 vetted furniture templates are missing")
+	for _, templateName in ipairs({"PlasticPartyChairTemplate", "FoldingTableTemplate"}) do
+		local template = furniture:FindFirstChild(templateName)
+		assert(template and template:IsA("MeshPart") and template:GetAttribute("Level3_VettedTemplate") == true,
+			"Missing vetted Level 3 furniture template: " .. templateName)
+		for _, object in ipairs(template:GetDescendants()) do
+			assert(not object:IsA("BaseScript"), "Vetted Level 3 furniture contains a script: " .. object:GetFullName())
+		end
+	end
 
 	local roomsById = {}
 	local moduleRooms = 0
@@ -199,6 +221,9 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 		BeigeRooms = 0,
 		RoomFloors = 0,
 		PartyFloors = 0,
+		RedPartyFloors = 0,
+		NeonPartyFloors = 0,
+		OrangeWallTextures = 0,
 		CityFloors = 0,
 		ExitFloors = 0,
 		CorridorFloors = 0,
@@ -324,11 +349,25 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 				and floorTexture.Texture == Configuration.Textures.CityCarpet,
 				"Glossy pale room must use city carpet: " .. room.Id)
 			stats.CityFloors += 1
+		elseif RED_PARTY_ROOMS[room.Id] then
+			assert(floorPart.Material == Enum.Material.Carpet
+				and floorTexture and floorTexture:IsA("Texture")
+				and floorTexture.Texture == Configuration.Textures.PartyCarpetRed,
+				"Authored red party room has the wrong carpet: " .. room.Id)
+			stats.PartyFloors += 1
+			stats.RedPartyFloors += 1
+		elseif NEON_PARTY_ROOMS[room.Id] then
+			assert(floorPart.Material == Enum.Material.Carpet
+				and floorTexture and floorTexture:IsA("Texture")
+				and floorTexture.Texture == Configuration.Textures.PartyCarpetNeon,
+				"Authored neon party room has the wrong carpet: " .. room.Id)
+			stats.PartyFloors += 1
+			stats.NeonPartyFloors += 1
 		else
 			assert(floorPart.Material == Enum.Material.Carpet and floorPart.Color == Configuration.Colors.DarkCarpet
 				and floorTexture and floorTexture:IsA("Texture")
 				and floorTexture.Texture == Configuration.Textures.PartyCarpet,
-				"Every orange non-Exit room must use black party carpet: " .. room.Id)
+				"Every other orange non-Exit room must use the original black party carpet: " .. room.Id)
 			stats.PartyFloors += 1
 		end
 
@@ -342,8 +381,14 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 				for _, child in ipairs(descendant:GetChildren()) do
 					local isWallpaper = child:IsA("Texture")
 						and child.Texture == Configuration.Textures.PastelWallpaper
+					local isOrangeFinish = child:IsA("Texture")
+						and child.Texture == Configuration.Textures.OrangeWall
 					assert((BEIGE_ROOM_IDS[room.Id] == true) == isWallpaper,
 						"Wallpaper/wall-color mismatch in room " .. room.Id)
+					if isOrangeFinish then
+						assert(not BEIGE_ROOM_IDS[room.Id], "Orange finish leaked into a glossy pale room")
+						stats.OrangeWallTextures += 1
+					end
 				end
 			end
 		end
@@ -358,6 +403,10 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 	assert(stats.CityFloors == 6 and stats.ExitFloors == 1
 		and stats.PartyFloors == stats.RoomFloors - 7,
 		"Level 3 floor palette is inconsistent")
+	assert(stats.RedPartyFloors == 2 and stats.NeonPartyFloors == 3,
+		"Level 3 must preserve its authored red/neon carpet room variation")
+	assert(stats.OrangeWallTextures > 0,
+		"Level 3 orange rooms are missing their generated worn-wall finish")
 
 	local corridors = world:FindFirstChild("Corridors")
 	assert(corridors and corridors:IsA("Folder"), "Level 3 Corridors folder is missing")
@@ -384,7 +433,7 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 	for _, instance in ipairs(world:GetDescendants()) do
 		for _, fragment in ipairs(forbiddenDecor) do
 			assert(not string.find(instance.Name, fragment, 1, true),
-				"Revision 3 contains forbidden clutter: " .. instance:GetFullName())
+				"Revision 4 contains forbidden clutter: " .. instance:GetFullName())
 		end
 	end
 
@@ -489,7 +538,7 @@ function TestSuite.ValidateRuntime(expectedProgress: number): {[string]: any}
 				"Settled door collision state is unsafe: " .. model:GetFullName())
 		end
 	end
-	assert(stableDoors > 0, "ValidateRuntime found no interactive Level 3 doors")
+	assert(stableDoors == 0, "Revision 4 must not restore ordinary interactive Level 3 doors")
 	return {Progress = expectedProgress, Frames = #frameParts, Doors = stableDoors}
 end
 

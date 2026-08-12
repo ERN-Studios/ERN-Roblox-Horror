@@ -6,12 +6,12 @@
     "id": "8d8343e4-4d2e-479a-9d26-f198e1561d5c"
   },
   "counts": {
-    "scripts": 96,
+    "scripts": 97,
     "remoteEvents": 16,
-    "total": 112,
-    "created": 0,
-    "updated": 1,
-    "unchanged": 111
+    "total": 113,
+    "created": 1,
+    "updated": 11,
+    "unchanged": 101
   },
   "extraMirroredFilesNotInStudio": [],
   "items": [
@@ -27,8 +27,8 @@
       "studioPath": "ReplicatedStorage.ZyntraConfig",
       "className": "ModuleScript",
       "file": "ReplicatedStorage/ZyntraConfig.ModuleScript.lua",
-      "bytes": 1354,
-      "sha256": "ae7b0ae339aa3a0ab6f571cd5ea51aa59c441f335820bcb5a1d481e7a00d492f",
+      "bytes": 1499,
+      "sha256": "935e4c5083643ad256d03d4d9d6f4b01922f0858b34b7d37d92df9421b00ccea",
       "status": "unchanged"
     },
     {
@@ -115,8 +115,8 @@
       "studioPath": "ServerScriptService.ZyntraMonetization",
       "className": "Script",
       "file": "ServerScriptService/ZyntraMonetization.Script.lua",
-      "bytes": 17414,
-      "sha256": "1dfecb70971112e27c19b2e4169c0ca723c087d6f40d9fb643f2c67da647a933",
+      "bytes": 17511,
+      "sha256": "e1aa0187c9aa1245c3273f7cf59478e2f2f888553fdec9c4fc676db0525765d9",
       "status": "unchanged"
     },
     {
@@ -155,8 +155,8 @@
       "studioPath": "StarterPlayer.StarterCharacterScripts.DisableDefaultWalkingSound",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterCharacterScripts/DisableDefaultWalkingSound.LocalScript.lua",
-      "bytes": 630,
-      "sha256": "c0cba2d3042fd16fecb05f2d8fab69f09136e96dc89069993ca606977660caf9",
+      "bytes": 300,
+      "sha256": "b5309d09c60b9fb5ea319c24d34cbdc3b861fdb1726727a608944e528462e66f",
       "status": "unchanged"
     },
     {
@@ -187,8 +187,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/NoiseReporter.LocalScript.lua",
-      "bytes": 13684,
-      "sha256": "511972a4df38a4825cb8b44e463daf673be5c8623c7cd4482ba76de32ca9c02c",
+      "bytes": 14254,
+      "sha256": "3076dac81cb223ae2f508535ced6ff547ac63732b73066539bdf6d023e706f8c",
       "status": "unchanged"
     },
     {
@@ -219,9 +219,9 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.SoundController",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
-      "bytes": 32059,
-      "sha256": "4672fdb6de6f24a93443c4aa8ca706dd48981818fe2a3dad250981a18281b5e3",
-      "status": "unchanged"
+      "bytes": 33820,
+      "sha256": "6a0bbbbab8c2f4a134e2a966cbe6986c14d52a19bbd504fb2d81fd6fe1e637d3",
+      "status": "updated"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.PuzzleUI",
@@ -267,9 +267,9 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
-      "bytes": 28920,
-      "sha256": "b0c08f1d0625229c973e4e6abd4794338e0ac8856d2f805104863a0407685482",
-      "status": "unchanged"
+      "bytes": 29431,
+      "sha256": "677d178685028377bd92ba125fe6232205ae695ed760af26e986b499334daea7",
+      "status": "updated"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 1 Sound Controller",
@@ -315,33 +315,33 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 3 Reader Client.LocalScript.lua",
-      "bytes": 15784,
-      "sha256": "9d3021bf2e1cf81e98e3d831087e96517d8c8821995860983ca7f77910b1b083",
-      "status": "unchanged"
+      "bytes": 18016,
+      "sha256": "5e25e68755596a18f5ee48ab8e9a32c85a45167fa8303b3b0c0f40ae60959eb3",
+      "status": "updated"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 3 Lighting Controller.LocalScript.lua",
-      "bytes": 11693,
-      "sha256": "b55e6e0386720e3d903623407c42cd102806b17f4a4610db1c3af4f8e130072a",
-      "status": "unchanged"
+      "bytes": 14951,
+      "sha256": "5f2af037d69c55b1f3ad7acf73fbbb9a0ed7cc63f25d824697b9e5ea2bc8f17f",
+      "status": "updated"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Sound Controller",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 3 Sound Controller.LocalScript.lua",
-      "bytes": 13764,
-      "sha256": "2423b854e53d962d9b83bc379986d95251c935b754929a68f140f6dd6c3e59cd",
-      "status": "unchanged"
+      "bytes": 20745,
+      "sha256": "9385201a55a0bf4a146c7459e5b8089783bb140b43d2a94b323cc8e398489961",
+      "status": "updated"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Configuration",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Configuration.ModuleScript.lua",
-      "bytes": 6064,
-      "sha256": "85f2f114be9b2cf8e8cccf115f8e9bb42cbfabdeddbb412d5e36126a4089fc07",
-      "status": "unchanged"
+      "bytes": 6158,
+      "sha256": "579591e7b64244a8e49167a45f00f17a951c8f2b503a349cb1c90200ff5195a1",
+      "status": "updated"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Layout Generator",
@@ -355,8 +355,8 @@
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 World Builder",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua",
-      "bytes": 150660,
-      "sha256": "412b4104ffddb81b5bd5d8fa5056858f27ac10c0c3a068bbf14e00a33a316f73",
+      "bytes": 154492,
+      "sha256": "ef237417d37a38cd94ed7db8b99ac855a6b4a9152f4df397799cbc86b06dba46",
       "status": "updated"
     },
     {
@@ -443,17 +443,17 @@
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Configuration.ModuleScript.lua",
-      "bytes": 5554,
-      "sha256": "b341d887ac01fb96845b9a5c1e9ee891bf175b39662f1226bb6888d6bbf3cbc1",
-      "status": "unchanged"
+      "bytes": 6238,
+      "sha256": "6595ab244e905254c42f4f01029c312a836363711f1c17203e5082828e3c47d4",
+      "status": "updated"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 World Builder.ModuleScript.lua",
-      "bytes": 42294,
-      "sha256": "8a3ed8d5e448bdff42cb945d0b79159fb982e643ade49564b14c7a7286655477",
-      "status": "unchanged"
+      "bytes": 47260,
+      "sha256": "cf64c7be5a2d492d796e58b3311639cb531fd895adc3a9e0d370209393bb4537",
+      "status": "updated"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
@@ -467,17 +467,25 @@
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Round Adapter.ModuleScript.lua",
-      "bytes": 12157,
-      "sha256": "13781062791b61f61d47dad1322e0b6ba8fdd1f377917d9d4e9013fe140961e8",
-      "status": "unchanged"
+      "bytes": 13660,
+      "sha256": "e140f0a1ad7610111e2d4634074551546bbed92fc9bed5ee96318e13a8b17fea",
+      "status": "updated"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Test Suite",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Test Suite.ModuleScript.lua",
-      "bytes": 26870,
-      "sha256": "beb548702fcd069e846aabf6d207f07a230dc4c32b49e300f15cbec426882ab8",
-      "status": "unchanged"
+      "bytes": 29725,
+      "sha256": "6d6d174b2a21bb3641f5356089fa43e859683e88c1c28c52874b99ca51712bce",
+      "status": "updated"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Music Sequence Controller",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 3 Systems/Level 3 Music Sequence Controller.ModuleScript.lua",
+      "bytes": 6459,
+      "sha256": "a918ccb4f3904d59b548a67c11e7999113da06056e4a5156f84fef4a6d5ed4df",
+      "status": "created"
     },
     {
       "studioPath": "ServerStorage.LobbyBackup_20260731.GameManager",

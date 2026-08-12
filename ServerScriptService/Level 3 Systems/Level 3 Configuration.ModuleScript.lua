@@ -5,7 +5,7 @@
 -- damage source, or entity compatibility marker.
 
 local Configuration = {
-	Version = 3,
+	Version = 4,
 	WorldName = "Level 3 Generated World",
 	StateFolderName = "Level 3 State",
 	RemotesFolderName = "Level 3 Remotes",
@@ -21,25 +21,44 @@ local Configuration = {
 	ModuleGoal = 5,
 	TextureStuds = {
 		PartyCarpet = 28,
+		PartyCarpetNeon = 22,
+		PartyCarpetRed = 30,
 		CityCarpet = 52,
 		Wallpaper = 18,
+		OrangeWall = 22,
 		Tablecloth = 10,
 	},
 	Textures = {
 		PartyCarpet = "rbxassetid://92795890253148",
+		PartyCarpetNeon = "rbxassetid://110230144446272",
+		PartyCarpetRed = "rbxassetid://108064770913201",
 		CityCarpet = "rbxassetid://75635502248205",
 		PastelWallpaper = "rbxassetid://96252806287644",
+		OrangeWall = "rbxassetid://128270554927663",
 		ConfettiTablecloth = "rbxassetid://103412925025303",
 		StaffDoor = "rbxassetid://127165696221846",
 		FinalExitDoor = "rbxassetid://120063024460642",
 	},
 	Audio = {
-		FluorescentHum = "rbxassetid://9112889325",
+		FluorescentHum = "rbxassetid://92576512092725",
 		HVAC = "rbxassetid://9125446543",
 		DoorRattle = "rbxassetid://9118901593",
 		DoorMovement = "rbxassetid://9119631915",
 		ReaderBeep = "rbxassetid://9119103325",
 		WaterDrip = "rbxassetid://9126193223",
+		PowerDown = "rbxassetid://75561087895749",
+		-- Group-owned song uploaded specifically for the synchronized Level 3 sequence.
+		RoomListeningSong = "rbxassetid://140244948455675",
+	},
+	MusicSequence = {
+		DurationSeconds = 180.035917,
+		BlackoutSeconds = 30,
+		PreloadLeadSeconds = 1.5,
+		RoomVolume = 0.48,
+		CorridorVolume = 0.045,
+		RoomFadeDistance = 18,
+		VolumeFadeSeconds = 1.15,
+		TimelineDriftTolerance = 0.32,
 	},
 	Colors = {
 		Cream = Color3.fromRGB(205, 192, 157),
@@ -119,6 +138,7 @@ local Configuration = {
 table.freeze(Configuration.TextureStuds)
 table.freeze(Configuration.Textures)
 table.freeze(Configuration.Audio)
+table.freeze(Configuration.MusicSequence)
 table.freeze(Configuration.Colors)
 table.freeze(Configuration.Reader)
 for _, room in ipairs(Configuration.Rooms) do table.freeze(room) end

@@ -400,10 +400,25 @@ local function makeProductCard(key, item, kind, description)
 	corner(card, 9)
 	outline(card, COLORS.line, 0.4)
 
-	local kindLabel = label(card, kind == "Pass" and "PERMANENT PASS" or "DEVELOPER PRODUCT", UDim2.new(1, -24, 0, 18), UDim2.fromOffset(14, 10), 10, COLORS.accent, Enum.Font.Code)
-	local heading = label(card, item.Name, UDim2.new(1, -28, 0, 38), UDim2.fromOffset(14, 28), 18, COLORS.text, Enum.Font.GothamBold)
+	local icon = Instance.new("ImageLabel")
+	icon.Name = "ProductIcon"
+	icon.Size = UDim2.fromOffset(76, 76)
+	icon.Position = UDim2.fromOffset(14, 18)
+	icon.BackgroundColor3 = COLORS.bg
+	icon.BorderSizePixel = 0
+	icon.Image = item.IconId and ("rbxassetid://" .. tostring(item.IconId)) or ""
+	icon.ScaleType = Enum.ScaleType.Crop
+	icon.Parent = card
+	corner(icon, 38)
+	outline(icon, COLORS.accent, 0.35, 1.5)
+
+	local headingY = kind == "Pass" and 28 or 16
+	if kind == "Pass" then
+		label(card, "PERMANENT PASS", UDim2.new(1, -118, 0, 18), UDim2.fromOffset(104, 10), 10, COLORS.accent, Enum.Font.Code)
+	end
+	local heading = label(card, item.Name, UDim2.new(1, -118, 0, 42), UDim2.fromOffset(104, headingY), 18, COLORS.text, Enum.Font.GothamBold)
 	heading.TextWrapped = true
-	local desc = label(card, description or item.Description or "", UDim2.new(1, -28, 0, 56), UDim2.fromOffset(14, 70), 12, COLORS.muted)
+	local desc = label(card, description or item.Description or "", UDim2.new(1, -118, 0, 48), UDim2.fromOffset(104, 72), 12, COLORS.muted)
 	desc.TextWrapped = true
 	desc.TextYAlignment = Enum.TextYAlignment.Top
 	local buy = button(card, tostring(item.Price) .. " R$", UDim2.new(1, -28, 0, 38), UDim2.new(0, 14, 1, -50))
@@ -423,7 +438,7 @@ local function makeProductCard(key, item, kind, description)
 	return card
 end
 
-makeProductCard("Supporter", Config.Passes.Supporter, "Pass", "10 Research Tokens, supporter tag and exclusive teal hazmat styling.")
+makeProductCard("Supporter", Config.Passes.Supporter, "Pass", "10 Research Tokens, supporter tag and custom hazmat styling.")
 makeProductCard("AdvancedEquipment", Config.Passes.AdvancedEquipment, "Pass", "+5% stamina, +5% battery and hazmat color picker.")
 makeProductCard("Tokens4", Config.Products.Tokens4, "Product", "Adds 4 permanent Research Tokens to your account.")
 makeProductCard("Tokens20", Config.Products.Tokens20, "Product", "Adds 20 permanent Research Tokens to your account.")
@@ -665,8 +680,9 @@ local function refreshUI()
 		end
 	end
 
-	hazmatPicker.SetLocked(not profile.OwnsAdvancedEquipment, "ADVANCED EQUIPMENT REQUIRED")
-	glowstickPicker.SetLocked(not profile.OwnsCosmeticEquipment, "COSMETIC EQUIPMENT REQUIRED")
+	local ownsHazmatStyling = profile.OwnsAdvancedEquipment or profile.OwnsSupporter
+	hazmatPicker.SetLocked(not ownsHazmatStyling, "SUPPORTER OR ADVANCED EQUIPMENT REQUIRED")
+	glowstickPicker.SetLocked(not profile.OwnsCosmeticEquipment, "GLOWSTICK CUSTOMIZER REQUIRED")
 	hazmatPicker.SetColor(profile.HazmatColor)
 	glowstickPicker.SetColor(profile.GlowstickColor)
 	updateReentry()
