@@ -10,18 +10,10 @@
     "remoteEvents": 16,
     "total": 112,
     "created": 0,
-    "updated": 8,
-    "unchanged": 104
+    "updated": 2,
+    "unchanged": 110
   },
-  "extraMirroredFilesNotInStudio": [
-    "ServerStorage/Level2Backup_20260805/ServerScriptService/Level2EntityAI.Script.lua",
-    "ServerStorage/Level2Backup_20260805/ServerScriptService/Level2EntityAnimation.Script.lua",
-    "ServerStorage/Level2Backup_20260805/ServerScriptService/Level2EntityController.ModuleScript.lua",
-    "ServerStorage/Level2Backup_20260805/ServerScriptService/Level2EntityKill.Script.lua",
-    "ServerStorage/Level2Backup_20260805/ServerScriptService/Level2EntityProfiles.ModuleScript.lua",
-    "ServerStorage/Level2Backup_20260805/ServerScriptService/Level2MeshyAnimationPlayer.ModuleScript.lua",
-    "ServerStorage/Level2Backup_20260805/ServerScriptService/Level2Navigation.ModuleScript.lua"
-  ],
+  "extraMirroredFilesNotInStudio": [],
   "items": [
     {
       "studioPath": "ReplicatedStorage.DevAccess",
@@ -301,7 +293,7 @@
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Sound Controller.LocalScript.lua",
       "bytes": 5438,
       "sha256": "25b83a28d23c0f1fbee08ed7cc495982769a07bc24aa8726757c4330ef7723b8",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Objective UI",
@@ -317,7 +309,7 @@
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Pool Foam Client.LocalScript.lua",
       "bytes": 16906,
       "sha256": "d7b7c6cc9071f0e6be8bb86d93b76022447faf836490337b1687be186ae19bbb",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
@@ -347,8 +339,8 @@
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Configuration",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Configuration.ModuleScript.lua",
-      "bytes": 5965,
-      "sha256": "d08dcc2940838ddc76e5f1b3eb92b77de41c9e682c5fb08fb5ca65a4ddae848d",
+      "bytes": 6064,
+      "sha256": "85f2f114be9b2cf8e8cccf115f8e9bb42cbfabdeddbb412d5e36126a4089fc07",
       "status": "updated"
     },
     {
@@ -363,8 +355,8 @@
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 World Builder",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua",
-      "bytes": 130634,
-      "sha256": "70c68bc0f31cb198e58372b700783fbe6a37d3ac7d2f63a1cecbe3fdefe1af11",
+      "bytes": 139267,
+      "sha256": "f3a3daf44682d379de6d1e5b1ac6c9fa4a62218172a68c59edbab61f550ce856",
       "status": "updated"
     },
     {
@@ -453,7 +445,7 @@
       "file": "ServerScriptService/Level 3 Systems/Level 3 Configuration.ModuleScript.lua",
       "bytes": 5554,
       "sha256": "b341d887ac01fb96845b9a5c1e9ee891bf175b39662f1226bb6888d6bbf3cbc1",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
@@ -461,7 +453,7 @@
       "file": "ServerScriptService/Level 3 Systems/Level 3 World Builder.ModuleScript.lua",
       "bytes": 42294,
       "sha256": "8a3ed8d5e448bdff42cb945d0b79159fb982e643ade49564b14c7a7286655477",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
@@ -469,7 +461,7 @@
       "file": "ServerScriptService/Level 3 Systems/Level 3 Objective Controller.ModuleScript.lua",
       "bytes": 31698,
       "sha256": "36c6e9ca697c69e756c5fd4d0353af83044f693ddcc7012cd8bc78ae21924fb7",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
@@ -485,7 +477,7 @@
       "file": "ServerScriptService/Level 3 Systems/Level 3 Test Suite.ModuleScript.lua",
       "bytes": 26870,
       "sha256": "beb548702fcd069e846aabf6d207f07a230dc4c32b49e300f15cbec426882ab8",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerStorage.LobbyBackup_20260731.GameManager",

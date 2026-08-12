@@ -65,7 +65,9 @@ local Configuration = {
 	-- reference photos. No basins, no dry walkway rings.
 	ShallowPoolDepth = 1.6,
 	DeepPoolDepth = 4.5,
-	SlidePoolDepth = 6,
+	-- Wading depth everywhere players land and walk; nobody swims in the
+	-- slide halls any more.
+	SlidePoolDepth = 1.8,
 	CorridorChannelDepth = 1.5,
 	-- Drainable corridors stay WADING depth: deep enough that a pump visibly
 	-- empties them, never deep enough to force swimming in a tunnel.
