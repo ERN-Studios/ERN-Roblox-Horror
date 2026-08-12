@@ -55,9 +55,14 @@ local function split(rng, rect, depth, leaves)
 	local canSplitX = width >= minLeaf * 2 + Configuration.HallMargin
 	local canSplitZ = depth3 >= minLeaf * 2 + Configuration.HallMargin
 
-	local mustStop = depth >= Configuration.MaximumSplitDepth or (not canSplitX and not canSplitZ)
-	-- Stop early sometimes so the plan keeps a few genuinely huge rooms.
-	if not mustStop and depth >= Configuration.MinimumSplitDepth
+	local maxLeaf = Configuration.MaximumLeafSize or math.huge
+	local oversize = width > maxLeaf or depth3 > maxLeaf
+	local mustStop = (not canSplitX and not canSplitZ)
+		or (depth >= Configuration.MaximumSplitDepth and not oversize)
+	-- Stop early sometimes so the plan keeps a few of the LARGEST ALLOWED
+	-- rooms — never while the region still exceeds MaximumLeafSize and can
+	-- legally split again.
+	if not mustStop and not oversize and depth >= Configuration.MinimumSplitDepth
 		and rng:NextNumber() < Configuration.EarlyStopChance then
 		mustStop = true
 	end
@@ -381,9 +386,16 @@ local function generateAttempt(seed)
 	-- discovered, and never lets a depth-one hall become part of Kids Area.
 	-- It is selected before the pumps because exactly one objective pump belongs
 	-- inside this wing on every generated layout.
+	-- Kids rooms must stay cosy: never grow the wing out of big halls, since
+	-- the wall-to-wall merge below extends them even further.
+	local function kidsSized(hall)
+		return math.max(hall.Width, hall.Depth) <= 200
+	end
 	local kidsSeeds = {}
 	for _, hall in ipairs(layout.Halls) do
-		if not protected[hall] and hall.GraphDepth >= 2 then table.insert(kidsSeeds, hall) end
+		if not protected[hall] and hall.GraphDepth >= 2 and kidsSized(hall) then
+			table.insert(kidsSeeds, hall)
+		end
 	end
 	table.sort(kidsSeeds, function(a, b)
 		if a.GraphDepth == b.GraphDepth then return a.Index < b.Index end
@@ -392,7 +404,7 @@ local function generateAttempt(seed)
 	local kidsBlock
 	for _, candidate in ipairs(kidsSeeds) do
 		kidsBlock = growBlock(layout, candidate, Configuration.KidsAreaRoomCount, protected,
-			function(hall) return hall.GraphDepth >= 2 end)
+			function(hall) return hall.GraphDepth >= 2 and kidsSized(hall) end)
 		if kidsBlock then break end
 	end
 	if not kidsBlock then return nil, "kids area block could not be grown" end

@@ -23,9 +23,13 @@ local Configuration = {
 	WorldCenterZ = 240,
 
 	MinimumLeafSize = 150,
+	-- No leaf may exceed this on either axis: halls top out around 250 studs
+	-- (rare 270 from unsplittable 310-330 leaves), never the old giants.
+	MaximumLeafSize = 310,
 	MinimumSplitDepth = 2,
 	MaximumSplitDepth = 6,
-	-- Chance a branch stops early, which is what leaves a few enormous halls.
+	-- Chance a branch stops early, which keeps a few of the largest allowed
+	-- rooms (bounded by MaximumLeafSize).
 	EarlyStopChance = 0.18,
 	-- Gap left around every hall; corridors run through it.
 	HallMargin = 30,

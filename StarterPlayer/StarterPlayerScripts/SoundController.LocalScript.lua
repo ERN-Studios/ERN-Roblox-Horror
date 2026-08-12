@@ -17,7 +17,7 @@ local RS = game:GetService("ReplicatedStorage")
 
 -- ── audio slots (every sound in the game) ─────────────────
 local AMBIENCE_SOUND  = "rbxassetid://92576512092725" -- constant background drone/hum (2D, always playing)
-local BREATHING_SOUND = "rbxassetid://74603278311777" -- YOUR OWN winded breathing (2D) — fades in below 20% stamina
+local BREATHING_SOUND = "" -- YOUR OWN winded breathing (2D) — fades in below 20% stamina
 local FOOTSTEP_WALK   = "rbxassetid://108141977175862" -- walking loop (the slower-cadence clip)
 local FOOTSTEP_RUN    = "rbxassetid://133003345144597" -- running loop (the faster-cadence clip, natural pitch)
 local ALERT_SOUND     = "rbxassetid://118863512220494" -- plays while the maze is in ALERT (red lights) mode
@@ -488,8 +488,9 @@ RunService.Heartbeat:Connect(function(dt)
 	-- footsteps: a looping track that only plays while you MOVE and fades out when
 	-- you stop (so a long loop never drones on while standing, and never hard-cuts)
 	local footTarget, footSpeed = 0, nil
-	if player:GetAttribute("InRound") == true
-		and hum and root and workspace:GetAttribute("SelectedLevel") ~= 2 then
+	local inLevel2Round = player:GetAttribute("InRound") == true
+		and workspace:GetAttribute("SelectedLevel") == 2
+	if hum and root and not inLevel2Round then
 		local vel = root.AssemblyLinearVelocity
 		local flat = Vector3.new(vel.X, 0, vel.Z).Magnitude
 		local ws = hum.WalkSpeed
@@ -552,17 +553,13 @@ local function configureDefaultSteps(char)
 		local function refresh()
 			if not running.Parent then return end
 			changing = true
-			running.Volume = player:GetAttribute("InRound") == true and 0 or lobbyVolume
+			running.Volume = 0
 			changing = false
 		end
 
 		local volumeConnection = running:GetPropertyChangedSignal("Volume"):Connect(function()
 			if changing then return end
-			if player:GetAttribute("InRound") == true then
-				refresh()
-			elseif running.Volume > 0 then
-				lobbyVolume = running.Volume
-			end
+			refresh()
 		end)
 		local roundConnection = player:GetAttributeChangedSignal("InRound"):Connect(refresh)
 		char.Destroying:Once(function()

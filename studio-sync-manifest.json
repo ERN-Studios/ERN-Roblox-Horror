@@ -10,8 +10,8 @@
     "remoteEvents": 16,
     "total": 113,
     "created": 0,
-    "updated": 4,
-    "unchanged": 109
+    "updated": 6,
+    "unchanged": 107
   },
   "extraMirroredFilesNotInStudio": [],
   "items": [
@@ -219,9 +219,9 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.SoundController",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
-      "bytes": 33820,
-      "sha256": "6a0bbbbab8c2f4a134e2a966cbe6986c14d52a19bbd504fb2d81fd6fe1e637d3",
-      "status": "unchanged"
+      "bytes": 33651,
+      "sha256": "3313c95562fe5278defe7aa5f4d41d0c110c4a1597e06617d645d28edaac05f0",
+      "status": "updated"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.PuzzleUI",
@@ -331,32 +331,32 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Sound Controller",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 3 Sound Controller.LocalScript.lua",
-      "bytes": 21360,
-      "sha256": "755b73f0226242dddf2581638960cd7825bbed1c0be511da6e79e7e4e5d37373",
+      "bytes": 22741,
+      "sha256": "ed54852a5b00971ba5940c6ec4167d4fdcaf205817ba219233c3d07f775df3c5",
       "status": "updated"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Configuration",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Configuration.ModuleScript.lua",
-      "bytes": 6158,
-      "sha256": "579591e7b64244a8e49167a45f00f17a951c8f2b503a349cb1c90200ff5195a1",
-      "status": "unchanged"
+      "bytes": 6366,
+      "sha256": "a3630b72dc7084c684a92dd8c304d7b50c1f0fab5685292e071af0756b20db75",
+      "status": "updated"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Layout Generator",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Layout Generator.ModuleScript.lua",
-      "bytes": 33579,
-      "sha256": "e371a8b92cc75c0c695fa9e17833fadbdddb64711cd64c38c0d22e70da95cde1",
-      "status": "unchanged"
+      "bytes": 34098,
+      "sha256": "366d74628313d4f0f614951ec52c9156bce35acf7542f0ffb12b57b1febd9fed",
+      "status": "updated"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 World Builder",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua",
-      "bytes": 159328,
-      "sha256": "6c823cda89d331b2658c996603e8aeedf9d42a83b2fd0802a5428d67ff20b38c",
+      "bytes": 166282,
+      "sha256": "d58b5462c5791cd1773b5f9677ee7b3bc1dcd133900649d574d396d8a6a7b400",
       "status": "updated"
     },
     {
@@ -413,7 +413,7 @@
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Navigator.ModuleScript.lua",
       "bytes": 16760,
       "sha256": "2745750bbea5e14ffb4c8206e9fab183c20dd48ab02e2ef5016ea700759535d3",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Observer",
@@ -483,8 +483,8 @@
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Music Sequence Controller",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Music Sequence Controller.ModuleScript.lua",
-      "bytes": 6806,
-      "sha256": "c4b0d80979d46bc8a656ae31af3f5f79ef75520790bbd4bd18f2bc1fbb765f96",
+      "bytes": 7540,
+      "sha256": "f4ebe4c2bdc627af02461cba2322b4d2099d38da6a256d92a345ff9595f0226b",
       "status": "updated"
     },
     {
