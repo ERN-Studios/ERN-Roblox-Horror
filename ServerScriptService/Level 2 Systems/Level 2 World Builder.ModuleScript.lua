@@ -280,6 +280,13 @@ local function makeHallFloor(parent, hall)
 			CFrame.new(hall.Center + Vector3.new(0, -.35, 0)),
 			Vector3.new(hall.Width, .7, hall.Depth), floorColor, {Enum.NormalId.Top}, floorStuds)
 		slab.CanCollide = true
+		if isKids(hall) then
+			-- A thin film of water ON TOP of the whole kids floor: ankle-deep
+			-- splashing wall to wall, while the furniture keeps standing on
+			-- the real floor underneath.
+			addWater(hall.Center + Vector3.new(0, .45, 0),
+				Vector3.new(hall.Width + 1.5, .9, hall.Depth + 1.5), hall.Id .. " Kids Film")
+		end
 		return nil
 	end
 	local slab = tiledPart(parent, "Level 2 Hall Water Floor",
@@ -659,26 +666,80 @@ end
 
 -- ── set pieces ──────────────────────────────────────────────────────────────
 
-local function makeColumn(parent, position, height, radius)
+-- Every placed column is registered per world so no system can ever build a
+-- column inside another one's (colonnades, spiral stairs, kits, islands).
+local columnRegistry = setmetatable({}, {__mode = "k"})
+
+local function columnRegistryFor(parent)
+	local root = parent
+	while root.Parent and root.Name ~= "Level 2 Generated World" do
+		root = root.Parent
+	end
+	local placed = columnRegistry[root]
+	if not placed then
+		placed = {}
+		columnRegistry[root] = placed
+	end
+	return placed
+end
+
+local function columnNear(parent, x, z, range)
+	for _, existing in ipairs(columnRegistryFor(parent)) do
+		if math.abs(existing.Position.X - x) < range and math.abs(existing.Position.Z - z) < range then
+			return true
+		end
+	end
+	return false
+end
+
+-- `essential` columns (spiral stair masts) must exist for their stair to
+-- make sense, so they always build and DESTROY any decorative column they
+-- would pierce. Decorative columns are skipped instead of overlapping.
+local function makeColumn(parent, position, height, radius, essential)
 	radius = radius or 6
+	local placed = columnRegistryFor(parent)
+	for entryIndex = #placed, 1, -1 do
+		local entry = placed[entryIndex]
+		if math.abs(entry.Position.X - position.X) < 9
+			and math.abs(entry.Position.Z - position.Z) < 9
+			and math.abs(entry.Position.Y - position.Y) < 30 then
+			if essential and not entry.Essential then
+				for _, piece in ipairs(entry.Parts) do
+					piece:Destroy()
+				end
+				table.remove(placed, entryIndex)
+			elseif not essential then
+				return nil
+			end
+		end
+	end
+	local entry = {Position = position, Essential = essential or false, Parts = {}}
+	table.insert(placed, entry)
+	-- The shaft overshoots by 2.4 so the top always embeds into the ceiling
+	-- slab instead of stopping a stud short of it.
+	local shaftHeight = height + 2.4
 	local column = tiledPart(parent, "Level 2 Tiled Column",
-		CFrame.new(position + Vector3.new(0, height * .5 - 1, 0)) * CFrame.Angles(0, 0, math.pi * .5),
-		Vector3.new(height, radius, radius), C.TileWarm, nil, 9)
+		CFrame.new(position + Vector3.new(0, shaftHeight * .5 - 1.2, 0)) * CFrame.Angles(0, 0, math.pi * .5),
+		Vector3.new(shaftHeight, radius, radius), C.TileWarm, nil, 9)
 	column.Shape = Enum.PartType.Cylinder
 	column.CanCollide = true
-	-- Flared rings at both ends read as a smooth curve into the floor and the
-	-- ceiling instead of a hard cylinder butt.
+	table.insert(entry.Parts, column)
+	-- Generous three-ring fillets: the column visibly swells into the floor
+	-- and the ceiling over ~4 studs at each end.
 	for _, flare in ipairs({
-		{y = .3, r = radius * 1.38, h = .75},
-		{y = .92, r = radius * 1.16, h = .6},
-		{y = height - 2.42, r = radius * 1.16, h = .6},
-		{y = height - 1.72, r = radius * 1.38, h = .75},
+		{y = .55, r = 1.8, h = 1.6},
+		{y = 1.95, r = 1.5, h = 1.5},
+		{y = 3.3, r = 1.24, h = 1.4},
+		{y = height - 4.3, r = 1.24, h = 1.4},
+		{y = height - 2.95, r = 1.5, h = 1.5},
+		{y = height - 1.55, r = 1.8, h = 1.6},
 	}) do
 		local ring = tiledPart(parent, "Level 2 Column Flare",
 			CFrame.new(position + Vector3.new(0, flare.y - 1, 0)) * CFrame.Angles(0, 0, math.pi * .5),
-			Vector3.new(flare.h, flare.r, flare.r), C.TileWarm, nil, 9)
+			Vector3.new(flare.h, radius * flare.r, radius * flare.r), C.TileWarm, nil, 9)
 		ring.Shape = Enum.PartType.Cylinder
 		ring.CanCollide = false
+		table.insert(entry.Parts, ring)
 	end
 	return column
 end
@@ -708,6 +769,7 @@ local function makeColonnade(parent, hall, depth, rows)
 	local short = alongX and hall.Depth or hall.Width
 	local count = math.clamp(math.floor(long / 38), 2, 8)
 	local height = hallHeight(hall)
+	local placed = {}
 	for _, rowOffset in ipairs(rows) do
 		local offset = rowOffset * short * .5
 		for column = 1, count do
@@ -717,7 +779,20 @@ local function makeColonnade(parent, hall, depth, rows)
 				or hall.Center + Vector3.new(offset, -(depth or 0), along)
 			position = Vector3.new(
 				dodgeSkylightX(hall, position.X, 13), position.Y, position.Z)
-			makeColumn(parent, position, height + (depth or 0), 5.5)
+			-- The dodge can push two columns onto the same spot; skip rather
+			-- than build them inside each other.
+			local tooClose = false
+			for _, existing in ipairs(placed) do
+				if math.abs(existing.X - position.X) < 12.5
+					and math.abs(existing.Z - position.Z) < 12.5 then
+					tooClose = true
+					break
+				end
+			end
+			if not tooClose then
+				table.insert(placed, position)
+				makeColumn(parent, position, height + (depth or 0), 5.5)
+			end
 		end
 	end
 end
@@ -858,7 +933,8 @@ local function makeSpiralStair(parent, center, baseY, topY, radius, name)
 	local rise = 1.05
 	local steps = math.max(10, math.floor((topY - baseY) / rise))
 	local turns = math.max(1.6, (topY - baseY) / 34)
-	makeColumn(parent, center + Vector3.new(0, baseY, 0), topY - baseY + 5, 8)
+	makeColumn(parent, center + Vector3.new(0, baseY, 0), topY - baseY + 5, 8, true)
+	local previousGuardTop
 	for index = 0, steps do
 		local t = index / steps
 		local angle = t * math.pi * 2 * turns
@@ -869,6 +945,26 @@ local function makeSpiralStair(parent, center, baseY, topY, radius, name)
 			Vector3.new(radius * 1.45, .7, 5.4), C.TileWarm,
 			{Enum.NormalId.Top, Enum.NormalId.Front, Enum.NormalId.Back}, 7)
 		tread.CanCollide = true
+		-- Outer guard rail so nobody walks off the far edge of the stair.
+		-- The last stretch stays open so decks stay reachable.
+		if index % 2 == 0 and t < .86 then
+			local outer = radius * 1.62
+			local postPos = center + Vector3.new(
+				math.cos(angle) * outer, y + 1.6, math.sin(angle) * outer)
+			local post = part(parent, name .. " Guard Post " .. index,
+				CFrame.new(postPos), Vector3.new(.35, 3.2, .35), C.Rail, Enum.Material.Metal)
+			post.CanCollide = true
+			local guardTop = postPos + Vector3.new(0, 1.6, 0)
+			if previousGuardTop then
+				local guardMid = (guardTop + previousGuardTop) * .5
+				local guardBar = part(parent, name .. " Guard Rail " .. index,
+					CFrame.lookAt(guardMid, guardTop),
+					Vector3.new(.3, .3, (guardTop - previousGuardTop).Magnitude + .25),
+					C.Rail, Enum.Material.Metal)
+				guardBar.CanCollide = true
+			end
+			previousGuardTop = guardTop
+		end
 	end
 end
 
@@ -1142,7 +1238,7 @@ local function makeHelixSlide(parent, columnPosition, helixRadius, topY, color, 
 
 	local function pointAt(t)
 		local angle = -math.pi * .5 + t * math.pi * 2 * turns
-		local y = topY * (1 - t) + 2.2 * t
+		local y = topY * (1 - t) + 3.4 * t
 		return Vector3.new(
 			columnPosition.X + math.cos(angle) * helixRadius,
 			y,
@@ -1173,7 +1269,9 @@ local function makeSlideHallScaleFrames(parent, hall, height, poolDepth, hallInd
 	local shortLength = alongX and hall.Depth or hall.Width
 	local frameCount = math.clamp(math.floor(longLength / 70), 3, 9)
 	local pilasterBottom = -poolDepth
-	local pilasterTop = height - 9
+	-- Piers run all the way into the ceiling slab, so the frame reads as a
+	-- structural bay: the crossing beam intersects them instead of floating.
+	local pilasterTop = height + .5
 	local pilasterHeight = math.max(10, pilasterTop - pilasterBottom)
 	local pilasterY = (pilasterTop + pilasterBottom) * .5
 
@@ -1265,7 +1363,9 @@ local function makeSlideHall(parent, hall, index)
 			local p1 = Vector3.new(laneX, deckY - 8, deckFront + hall.Depth * .18)
 			local p2 = Vector3.new(laneX, 15, center.Z + hall.Depth * .06)
 			local endZ = math.min(center.Z + hall.Depth * .26, hall.MaxZ - radius - 8)
-			local p3 = Vector3.new(laneX, 2.5, endZ)
+			-- The tube's underside must REST on the shallow floor, not stab
+			-- through it: end height = radius above the floor level.
+			local p3 = Vector3.new(laneX, radius - depth + .4, endZ)
 			makeSlideTube(hallFolder, startPoint, p1, p2, p3, radius, color,
 				"Level 2 Slide Hall " .. index .. " Flume " .. slide, Configuration.SlideSegments, true)
 			makeSlideMouth(hallFolder,
@@ -1618,7 +1718,7 @@ local function makeKidsBallPit(parent, hall, center, rng, index, width, depth3)
 		Vector3.new(math.max(3, openingWidth - 1), 1.1, 3.2), mutedKidsColor(palette.Accent, .25))
 	-- A loose, irregular bed reads as a real ball pit.  The former 6x5 grid
 	-- exposed most of the base and made each oversized ball look bolted down.
-	local targetCount = math.clamp(math.floor(width * depth3 / 5), 18, 180)
+	local targetCount = math.clamp(math.floor(width * depth3 / 3.4), 24, 260)
 	local layerCount = math.min(width, depth3) < 12 and 2 or 3
 	pitFolder:SetAttribute("Level2_BallCount", targetCount)
 	for ballIndex = 1, targetCount do
@@ -1628,9 +1728,13 @@ local function makeKidsBallPit(parent, hall, center, rng, index, width, depth3)
 		local zLimit = math.max(.25, depth3 * .5 - margin)
 		local x = rng:NextNumber(-xLimit, xLimit)
 		local z = rng:NextNumber(-zLimit, zLimit)
-		local layer = (ballIndex - 1) % layerCount
-		local y = .9 + diameter * .5 + layer * diameter * .58
-			+ rng:NextNumber(-.12, .12)
+		-- Most balls form a dense bed on the pit floor; only a few rest on
+		-- top of the bed, so nothing reads as hovering.
+		local layerRoll = rng:NextNumber()
+		local layer = layerRoll < .62 and 0 or (layerRoll < .9 and 1 or 2)
+		if layer >= layerCount then layer = layerCount - 1 end
+		local y = .9 + diameter * .5 + layer * diameter * .52
+			+ rng:NextNumber(-.06, .06)
 		local ball = part(pitFolder,
 			string.format("Level 2 Ball Pit Ball %03d", ballIndex),
 			CFrame.new(center + Vector3.new(x, y, z)),
@@ -2025,20 +2129,6 @@ local function makeKidsHall(parent, hall, index, doors, kidsPumpIndex)
 	kidsFolder:SetAttribute("Level2_CoreSetPiecePlaced", corePlaced)
 	kidsFolder:SetAttribute("Level2_CoreSizeTier", coreTier)
 	assert(corePlaced, string.format("[Level 2] no safe %s placement in Kids room %s", archetype, tostring(index)))
-
-	-- Every kids room gets at least a little water: if the core set piece was
-	-- not already the splash pool, tuck a small wading pool wherever it fits.
-	if archetype ~= "Splash Room" then
-		for _, option in ipairs({{18, 14}, {14, 12}, {11, 9}}) do
-			local zoneWidth, zoneDepth = option[1] + 6, option[2] + 6
-			local wadeCenter = reserveFirst("Kids wading pool",
-				placementCandidates(zoneWidth, zoneDepth), zoneWidth, zoneDepth, 3)
-			if wadeCenter then
-				makeRaisedPool(kidsFolder, wadeCenter, option[1], option[2], hall)
-				break
-			end
-		end
-	end
 
 	-- Deliberate edge-first clusters replace the old field of overlapping
 	-- random boxes.  Each orientation reserves its true footprint.
@@ -2592,7 +2682,7 @@ local function makeCorridor(parent, layout, corridor, doorFolder)
 	for _, lightT in ipairs({-.25, .25}) do
 		local emitter = part(parent, "Level 2 Corridor Vault Light " .. corridor.Index,
 			CFrame.new(center + oriented(lightT * length, 0) + Vector3.new(0, vaultRadius - 2.2, 0)),
-			Vector3.new(1.2, .4, 1.2), C.Light, Enum.Material.Neon, .25)
+			Vector3.new(1.2, .4, 1.2), C.Light, Enum.Material.Neon, 1)
 		emitter.CanCollide = false
 		emitter.CanTouch = false
 		local lamp = Instance.new("PointLight")
@@ -2625,6 +2715,16 @@ local function makeCorridor(parent, layout, corridor, doorFolder)
 	end
 
 	return {Corridor = corridor, Water = region, Door = door, Center = center}
+end
+
+-- Turn a prop into a real floating object: unanchored and lighter than
+-- water, so it bobs on the surface and drifts when players wade into it.
+local function makeBuoyant(object, density)
+	object.Anchored = false
+	object.CanCollide = true
+	object.CanTouch = true
+	object.CustomPhysicalProperties = PhysicalProperties.new(density or .22, .35, .45, 1, 1)
+	return object
 end
 
 -- The life layer: every water hall carries traces of the leisure complex it
@@ -2679,8 +2779,7 @@ local function dressHall(parent, hall, depth, doors, index, density)
 			Configuration.SlideColors[rng:NextInteger(1, #Configuration.SlideColors)],
 			Enum.Material.SmoothPlastic)
 		orb.Shape = Enum.PartType.Ball
-		orb.CanCollide = false
-		orb.CanTouch = false
+		makeBuoyant(orb, .16)
 	end
 	for noodle = 1, math.clamp(math.floor(hall.Area / 26000 * density), 1, 4) do
 		local pool = part(parent, "Level 2 Pool Noodle " .. index .. "." .. noodle,
@@ -2691,8 +2790,7 @@ local function dressHall(parent, hall, depth, doors, index, density)
 			Vector3.new(6, .6, .6),
 			Configuration.SlideColors[rng:NextInteger(1, #Configuration.SlideColors)],
 			Enum.Material.SmoothPlastic)
-		pool.CanCollide = false
-		pool.CanTouch = false
+		makeBuoyant(pool, .14)
 	end
 
 	-- Lifebuoys and a stopped clock on doorless wall stretches.
@@ -2721,30 +2819,6 @@ local function dressHall(parent, hall, depth, doors, index, density)
 		minuteHand.CanCollide = false
 	end
 
-	-- Pennant string across the hall, high up: the party that never ended.
-	if hall.Width > 70 and rng:NextNumber() < .8 then
-		local stringZ = hall.Center.Z + rng:NextNumber(-.2, .2) * hall.Depth
-		local stringY = math.min(height - 4, 22)
-		local cord = part(parent, "Level 2 Pennant Cord " .. index,
-			CFrame.new(Vector3.new(hall.Center.X, stringY, stringZ)),
-			Vector3.new(hall.Width - 4, .12, .12), C.Rail, Enum.Material.Metal)
-		cord.CanCollide = false
-		cord.CanTouch = false
-		local pennants = math.floor((hall.Width - 10) / 5)
-		for pennant = 1, pennants do
-			local t = pennant / (pennants + 1) - .5
-			local sag = (1 - (t * 2) ^ 2) * 1.6
-			local flag = part(parent, "Level 2 Pennant " .. index .. "." .. pennant,
-				CFrame.new(Vector3.new(hall.Center.X + t * (hall.Width - 8), stringY - .9 - sag * .3, stringZ))
-					* CFrame.Angles(0, 0, math.rad(rng:NextNumber(-8, 8))),
-				Vector3.new(1.5, 1.9, .12),
-				faded(Configuration.SlideColors[(pennant % #Configuration.SlideColors) + 1]),
-				Enum.Material.Fabric)
-			flag.CanCollide = false
-			flag.CanTouch = false
-		end
-	end
-
 	-- Waterline grime on doorless wall stretches.
 	for grime = 1, math.clamp(math.floor(hall.Area / 24000 * density), 1, 4) do
 		local sideNorth = rng:NextInteger(0, 1) == 0
@@ -2759,6 +2833,74 @@ local function dressHall(parent, hall, depth, doors, index, density)
 			stain.CanCollide = false
 			stain.CanTouch = false
 		end
+	end
+end
+
+-- Diving/jumping board colours, in the requested order.
+local BOARD_COLORS = {
+	Color3.fromRGB(78, 158, 214), -- blue
+	Color3.fromRGB(238, 202, 84), -- yellow
+	Color3.fromRGB(224, 96, 84), -- red
+	Color3.fromRGB(96, 196, 132), -- green
+}
+
+-- A one-piece slide kit: deck, spiral stair and straight chute are all placed
+-- from ONE origin and yaw, so the pieces can never drift apart or intersect.
+local function makeSlideKit(parent, hall, depth, origin, yaw, padTop, chuteRun, color, index)
+	local frame = CFrame.new(origin) * CFrame.Angles(0, yaw, 0)
+	local function at(offset)
+		return (frame * CFrame.new(offset)).Position
+	end
+	local pad = tiledPart(parent, "Level 2 Slide Kit Pad " .. index,
+		frame * CFrame.new(0, padTop - .4, 0), Vector3.new(8, .8, 8),
+		C.TileWarm, Enum.NormalId:GetEnumItems(), 7)
+	pad.CanCollide = true
+	makeSpiralStair(parent, at(Vector3.new(-8.6, 0, -2)), -depth + .5, padTop, 5.2,
+		"Level 2 Slide Kit Stair " .. index)
+	makeRail(parent, at(Vector3.new(-3.8, padTop + .1, 3.8)),
+		at(Vector3.new(3.8, padTop + .1, 3.8)), "Level 2 Slide Kit " .. index)
+	local drop = padTop + depth - .4
+	local chuteLength = math.sqrt(chuteRun ^ 2 + drop ^ 2) + 1.5
+	local chuteCFrame = frame
+		* CFrame.new(0, padTop - .6 - drop * .5, -(4 + chuteRun * .5))
+		* CFrame.Angles(math.atan2(drop, chuteRun), 0, 0)
+	local chute = part(parent, "Level 2 Slide Kit Chute " .. index, chuteCFrame,
+		Vector3.new(4.2, .5, chuteLength), color, Enum.Material.SmoothPlastic)
+	chute.CanCollide = true
+	chute.CustomPhysicalProperties = PhysicalProperties.new(.7, .04, .05, 1, 1)
+	for lipSide = -1, 1, 2 do
+		local lip = part(parent, "Level 2 Slide Kit Lip " .. index .. "." .. (lipSide + 2),
+			chuteCFrame * CFrame.new(lipSide * 2.2, .6, 0),
+			Vector3.new(.4, .95, chuteLength), color, Enum.Material.SmoothPlastic)
+		lip.CanCollide = true
+	end
+end
+
+-- A diving tower: the spiral stair's own column carries jump boards at
+-- SEVERAL heights, each board a different colour (blue/yellow/red/green).
+local function makeDivingTower(parent, hall, depth, origin, rng, index, boardHeights)
+	if not boardHeights then
+		boardHeights = {4.5, 7.5, 10.5}
+		if rng:NextNumber() < .5 then
+			table.insert(boardHeights, 13.5)
+		end
+	end
+	local top = boardHeights[#boardHeights]
+	local colorOffset = rng:NextInteger(0, #BOARD_COLORS - 1)
+	makeSpiralStair(parent, origin, -depth + .5, top + .8, 7.4,
+		"Level 2 Diving Tower " .. index)
+	for boardIndex, boardHeight in ipairs(boardHeights) do
+		local boardFrame = CFrame.new(origin + Vector3.new(0, boardHeight, 0))
+			* CFrame.Angles(0, math.rad(90 * boardIndex + 25), 0)
+		local color = BOARD_COLORS[((boardIndex - 1 + colorOffset) % #BOARD_COLORS) + 1]
+		local ledge = tiledPart(parent, "Level 2 Diving Ledge " .. index .. "." .. boardIndex,
+			boardFrame * CFrame.new(0, 0, -5.9), Vector3.new(4, .8, 5),
+			C.TileWarm, Enum.NormalId:GetEnumItems(), 7)
+		ledge.CanCollide = true
+		local board = part(parent, "Level 2 Diving Board " .. index .. "." .. boardIndex,
+			boardFrame * CFrame.new(0, .25, -11), Vector3.new(2.6, .45, 6.2),
+			color, Enum.Material.SmoothPlastic)
+		board.CanCollide = true
 	end
 end
 
@@ -2846,6 +2988,13 @@ local function decoratePumpHall(parent, hall, index, doors)
 		end
 	end
 
+	-- Jumping boards over the open water quadrant, at three heights.
+	if hall.Width >= 80 and hall.Depth >= 80 then
+		makeDivingTower(parent, hall, depth,
+			hall.Center + Vector3.new(hall.Width * .25, 0, -hall.Depth * .25),
+			rng, "P" .. index, {3.5, 6, 8.5})
+	end
+
 	-- Painted safety border around the pump island's edge.
 	for _, stripe in ipairs({
 		{Vector3.new(0, WALKWAY_TOP + .05, -8.4), Vector3.new(25, .1, 1.2)},
@@ -2861,87 +3010,121 @@ local function decoratePumpHall(parent, hall, index, doors)
 	end
 end
 
--- Big water halls earn real furniture: a play tower (spiral stair up, small
--- flume back into the water) and, in the largest halls, a diving platform.
--- Deterministic per hall so a seed always builds the same room.
+-- A play tower kit: deck, spiral, rail and tube flume all hang off one frame
+-- (origin + yaw), so the stair can never drift away from its deck again.
+local function makePlayTowerKit(parent, hall, depth, origin, yaw, topY, color, name)
+	local frame = CFrame.new(origin) * CFrame.Angles(0, yaw, 0)
+	local function at(offset)
+		return (frame * CFrame.new(offset)).Position
+	end
+	local deck = tiledPart(parent, name .. " Deck",
+		frame * CFrame.new(0, topY - .5, 0), Vector3.new(13, 1, 13),
+		C.TileWarm, Enum.NormalId:GetEnumItems(), 7)
+	deck.CanCollide = true
+	makeSpiralStair(parent, at(Vector3.new(-11, 0, -4)), -depth + .5, topY, 6.5, name)
+	makeRail(parent, at(Vector3.new(-6, topY + .1, -6.2)),
+		at(Vector3.new(6, topY + .1, -6.2)), name)
+	local landingHeight = 4.2 - depth + .4
+	makeSlideTube(parent,
+		at(Vector3.new(0, topY + 3.6, 6)),
+		at(Vector3.new(0, topY + .6, 14)),
+		at(Vector3.new(-2, landingHeight + 5, 17)),
+		at(Vector3.new(-6, landingHeight, 26)),
+		4.2, color, name .. " Slide", 12, true)
+end
+
+-- Big water halls earn real play furniture, randomized per hall: slide kits,
+-- play towers, a multi-board diving tower, a railed overlook, floats, and in
+-- the largest halls a centre island.  Every structure is placed from a single
+-- claimed spot so nothing interpenetrates, and stays deterministic per seed.
 local function decorateLargeHall(parent, hall, depth, index)
 	if not depth or hall.Area < 26000 then return end
 	local rng = Random.new((hall.LocalSeed or hall.Index or 1) + 7)
 	local sign = rng:NextInteger(0, 1) == 0 and 1 or -1
 	local height = hallHeight(hall)
 
-	-- Mid-size halls get a classic poolside chute slide even before they earn
-	-- a full tower: steps up to a small pad, straight chute into the water.
-	if hall.Area < 40000 then
-		local chuteBase = hall.Center + Vector3.new(sign * hall.Width * .24, 0, -hall.Depth * .18)
-		local padTop = 5.2
-		local stepRun, stepRise = 1.6, .74
-		local stepCount = math.ceil((padTop + depth) / stepRise)
-		makeStairFlight(parent, chuteBase + Vector3.new(-4 - stepCount * stepRun, -depth, 0),
-			Vector3.new(1, 0, 0), 6, stepCount, "Level 2 Chute Steps " .. index, stepRun, stepRise)
-		local pad = tiledPart(parent, "Level 2 Chute Pad " .. index,
-			CFrame.new(chuteBase + Vector3.new(0, padTop - .4, 0)), Vector3.new(7, .8, 7),
-			C.TileWarm, Enum.NormalId:GetEnumItems(), 7)
-		pad.CanCollide = true
-		local chuteColor = Configuration.SlideColors[((tonumber(index) or 1) % #Configuration.SlideColors) + 1]
-		local run = 15
-		local chuteAngle = math.atan2(padTop + .6, run)
-		local chuteLength = math.sqrt(run * run + (padTop + .6) ^ 2) + 2
-		local chute = part(parent, "Level 2 Chute Slide " .. index,
-			CFrame.new(chuteBase + Vector3.new(0, (padTop - .6) * .5, run * .5 + 3))
-				* CFrame.Angles(-chuteAngle, 0, 0),
-			Vector3.new(4.2, .5, chuteLength), chuteColor, Enum.Material.SmoothPlastic)
-		chute.CanCollide = true
-		chute.CustomPhysicalProperties = PhysicalProperties.new(.7, .04, .05, 1, 1)
-		for _, lipSide in ipairs({-1, 1}) do
-			local lip = part(parent, "Level 2 Chute Lip " .. index,
-				chute.CFrame * CFrame.new(lipSide * 2.2, .55, 0),
-				Vector3.new(.4, .9, chuteLength), chuteColor, Enum.Material.SmoothPlastic)
-			lip.CanCollide = true
+	-- Structure anchor spots: quadrant picks, dodged out of the skylight
+	-- bands ONCE per structure, spaced far apart so kits never overlap.
+	local spots = {}
+	local function claimSpot(fx, fz)
+		local x = dodgeSkylightX(hall, hall.Center.X + fx * hall.Width, 24)
+		local z = hall.Center.Z + fz * hall.Depth
+		if columnNear(parent, x, z, 15) then return nil end
+		for _, spot in ipairs(spots) do
+			if math.abs(spot.X - x) < 32 and math.abs(spot.Z - z) < 32 then
+				return nil
+			end
 		end
-		return
+		local spot = Vector3.new(x, 0, z)
+		table.insert(spots, spot)
+		return spot
 	end
 
-	-- Stair overlook: a wide freestanding stair up to a railed landing.
-	if hall.Area >= 52000 then
-		local overlookPos = hall.Center + Vector3.new(-sign * hall.Width * .1, 0, hall.Depth * .3)
-		local landingTop = 7
-		local stepRun, stepRise = 1.5, .78
-		local stepCount = math.ceil((landingTop + depth) / stepRise)
-		makeStairFlight(parent, overlookPos + Vector3.new(-5 - stepCount * stepRun, -depth, 0),
-			Vector3.new(1, 0, 0), 10, stepCount, "Level 2 Overlook Steps " .. index, stepRun, stepRise)
-		local landing = tiledPart(parent, "Level 2 Overlook Landing " .. index,
-			CFrame.new(overlookPos + Vector3.new(0, landingTop - .5, 0)), Vector3.new(12, 1, 10),
-			C.TileWarm, Enum.NormalId:GetEnumItems(), 7)
-		landing.CanCollide = true
-		makeRail(parent, overlookPos + Vector3.new(6, landingTop, -5),
-			overlookPos + Vector3.new(6, landingTop, 5), "Level 2 Overlook " .. index)
-		makeRail(parent, overlookPos + Vector3.new(-6, landingTop, 5),
-			overlookPos + Vector3.new(6, landingTop, 5), "Level 2 Overlook Back " .. index)
+	-- Slide kits: count, yaw, height, run and colour all vary per hall.
+	local kitCount = 1 + (hall.Area >= 40000 and 1 or 0) + (hall.Area >= 70000 and 1 or 0)
+	local quadrants = {
+		{sign * .27, .21}, {-sign * .27, -.23}, {sign * .23, -.27}, {-sign * .21, .27},
+	}
+	for kit = 1, kitCount do
+		local quadrant = quadrants[((kit - 1) % #quadrants) + 1]
+		local origin = claimSpot(quadrant[1], quadrant[2])
+		if origin then
+			makeSlideKit(parent, hall, depth, origin,
+				math.rad(rng:NextInteger(0, 7) * 45),
+				rng:NextNumber(4.5, 8.5), rng:NextNumber(12, 19),
+				BOARD_COLORS[rng:NextInteger(1, #BOARD_COLORS)], index .. "." .. kit)
+		end
 	end
 
-	-- Play tower.
-	local towerPos = hall.Center + Vector3.new(sign * hall.Width * .27, 0, hall.Depth * .2)
-	local topY = math.min(12, height - 9)
-	local platform = tiledPart(parent, "Level 2 Play Tower Deck " .. index,
-		CFrame.new(towerPos + Vector3.new(0, topY - .5, 0)), Vector3.new(13, 1, 13),
-		C.TileWarm, Enum.NormalId:GetEnumItems(), 7)
-	platform.CanCollide = true
-	makeSpiralStair(parent,
-		Vector3.new(dodgeSkylightX(hall, towerPos.X - 11, 18), 0, towerPos.Z - 4),
-		-depth + .5, topY, 6.5, "Level 2 Play Tower " .. index)
-	makeRail(parent, towerPos + Vector3.new(-6, topY - 1, -6.2),
-		towerPos + Vector3.new(6, topY - 1, -6.2), "Level 2 Play Tower " .. index)
-	local color = Configuration.SlideColors[((tonumber(index) or 1) % #Configuration.SlideColors) + 1]
-	local start = towerPos + Vector3.new(0, topY + 3.6, 6)
-	local landing = towerPos + Vector3.new(-sign * 6, 1.8, 26)
-	makeSlideTube(parent, start,
-		start + Vector3.new(0, -3, 8),
-		landing + Vector3.new(sign * 4, 5, -9),
-		landing, 4.2, color, "Level 2 Play Tower Slide " .. index, 12, true)
+	-- Play tower with a tube flume, randomized yaw; the biggest halls a pair.
+	if hall.Area >= 40000 then
+		local towerCount = hall.Area >= 85000 and 2 or 1
+		for tower = 1, towerCount do
+			local towerSign = tower == 1 and sign or -sign
+			local origin = claimSpot(towerSign * .13, -towerSign * .3)
+				or claimSpot(-towerSign * .3, towerSign * .13)
+			if origin then
+				local color = Configuration.SlideColors[
+					(((tonumber(index) or 1) + tower) % #Configuration.SlideColors) + 1]
+				makePlayTowerKit(parent, hall, depth, origin,
+					math.rad(rng:NextInteger(0, 7) * 45),
+					math.min(rng:NextNumber(10, 14), height - 9), color,
+					"Level 2 Play Tower " .. index .. "." .. tower)
+			end
+		end
+	end
 
-	-- Floating rings and rafts scatter across every decorated hall, sitting
-	-- half-sunk IN the water surface (0.1), never hovering above it.
+	-- Diving tower with boards at several heights.
+	if hall.Area >= 46000 then
+		local origin = claimSpot(-sign * .3, .04) or claimSpot(sign * .04, -.3)
+		if origin then
+			makeDivingTower(parent, hall, depth, origin, rng, index)
+		end
+	end
+
+	-- Railed stair overlook.
+	if hall.Area >= 60000 then
+		local origin = claimSpot(-sign * .12, .3) or claimSpot(sign * .3, .12)
+		if origin then
+			local landingTop = 7
+			local stepRun, stepRise = 1.5, .78
+			local stepCount = math.ceil((landingTop + depth) / stepRise)
+			makeStairFlight(parent, origin + Vector3.new(-5 - stepCount * stepRun, -depth, 0),
+				Vector3.new(1, 0, 0), 10, stepCount,
+				"Level 2 Overlook Steps " .. index, stepRun, stepRise)
+			local landing = tiledPart(parent, "Level 2 Overlook Landing " .. index,
+				CFrame.new(origin + Vector3.new(0, landingTop - .5, 0)), Vector3.new(12, 1, 10),
+				C.TileWarm, Enum.NormalId:GetEnumItems(), 7)
+			landing.CanCollide = true
+			makeRail(parent, origin + Vector3.new(6, landingTop, -5),
+				origin + Vector3.new(6, landingTop, 5), "Level 2 Overlook " .. index)
+			makeRail(parent, origin + Vector3.new(-6, landingTop, 5),
+				origin + Vector3.new(6, landingTop, 5), "Level 2 Overlook Back " .. index)
+		end
+	end
+
+	-- Rings and rafts adrift on the water: real floating objects now, pushed
+	-- around by anyone wading into them.
 	local floatCount = hall.Area >= 85000 and 8 or 4
 	for float = 1, floatCount do
 		local fx = rng:NextNumber(-.36, .36) * hall.Width
@@ -2949,66 +3132,32 @@ local function decorateLargeHall(parent, hall, depth, index)
 		local floatColor = Configuration.SlideColors[rng:NextInteger(1, #Configuration.SlideColors)]
 		if float % 3 == 0 then
 			local raft = part(parent, "Level 2 Pool Raft " .. index .. "." .. float,
-				CFrame.new(hall.Center + Vector3.new(fx, .12, fz)) * CFrame.Angles(0, rng:NextNumber() * math.pi, 0),
+				CFrame.new(hall.Center + Vector3.new(fx, .5, fz))
+					* CFrame.Angles(0, rng:NextNumber() * math.pi, 0),
 				Vector3.new(4, .7, 7.2), floatColor, Enum.Material.SmoothPlastic)
-			raft.CanCollide = true
+			makeBuoyant(raft, .24)
 		else
 			local ring = part(parent, "Level 2 Pool Float Ring " .. index .. "." .. float,
-				CFrame.new(hall.Center + Vector3.new(fx, .18, fz)) * CFrame.Angles(0, 0, math.pi * .5),
+				CFrame.new(hall.Center + Vector3.new(fx, .5, fz)) * CFrame.Angles(0, 0, math.pi * .5),
 				Vector3.new(.9, 6.4, 6.4), floatColor, Enum.Material.SmoothPlastic)
 			ring.Shape = Enum.PartType.Cylinder
-			ring.CanCollide = true
+			makeBuoyant(ring, .28)
 		end
 	end
 
-	-- Diving platform arrives earlier now.
-	if hall.Area >= 60000 then
-		local divePos = Vector3.new(
-			dodgeSkylightX(hall, hall.Center.X - sign * hall.Width * .27, 11),
-			0, hall.Center.Z - hall.Depth * .22)
-		makeColumn(parent, divePos + Vector3.new(0, -depth, 0), depth + 8, 4.5)
-		local deck = tiledPart(parent, "Level 2 Diving Deck " .. index,
-			CFrame.new(divePos + Vector3.new(0, 8, 0)), Vector3.new(9, 1, 9),
-			C.TileWarm, Enum.NormalId:GetEnumItems(), 7)
-		deck.CanCollide = true
-		local board = tiledPart(parent, "Level 2 Diving Board " .. index,
-			CFrame.new(divePos + Vector3.new(0, 8.4, 7.5)), Vector3.new(3, .5, 8),
-			C.TileCool, {Enum.NormalId.Top}, 7)
-		board.CanCollide = true
-		local stepRun, stepRise = 1.4, .92
-		local stepCount = math.ceil((8 + depth) / stepRise)
-		makeStairFlight(parent, divePos + Vector3.new(-4.5 - stepCount * stepRun, -depth, 0),
-			Vector3.new(1, 0, 0), 6, stepCount, "Level 2 Diving Steps " .. index, stepRun, stepRise)
-	end
-
-	-- The really big halls also get a second tower and a centre island.
+	-- The really big halls also get a centre island with twin columns.
 	if hall.Area >= 85000 then
-		local tower2 = hall.Center + Vector3.new(-sign * hall.Width * .3, 0, hall.Depth * .28)
-		local top2 = math.min(12, height - 9)
-		local deck2 = tiledPart(parent, "Level 2 Play Tower Deck " .. index .. "b",
-			CFrame.new(tower2 + Vector3.new(0, top2 - .5, 0)), Vector3.new(13, 1, 13),
-			C.TileWarm, Enum.NormalId:GetEnumItems(), 7)
-		deck2.CanCollide = true
-		makeSpiralStair(parent,
-			Vector3.new(dodgeSkylightX(hall, tower2.X + 11, 18), 0, tower2.Z + 4),
-			-depth + .5, top2, 6.5, "Level 2 Play Tower " .. index .. "b")
-		local color2 = Configuration.SlideColors[((tonumber(index) or 1) + 1) % #Configuration.SlideColors + 1]
-		local start2 = tower2 + Vector3.new(0, top2 + 3.6, -6)
-		local landing2 = tower2 + Vector3.new(sign * 6, 1.8, -26)
-		makeSlideTube(parent, start2,
-			start2 + Vector3.new(0, -3, -8),
-			landing2 + Vector3.new(-sign * 4, 5, 9),
-			landing2, 4.2, color2, "Level 2 Play Tower Slide " .. index .. "b", 12, true)
-
 		local island = tiledPart(parent, "Level 2 Pool Island " .. index,
 			CFrame.new(hall.Center + Vector3.new(0, .35, 0)) * CFrame.Angles(0, 0, math.pi * .5),
 			Vector3.new(1.3, 19, 19), C.TileWarm, nil, 8)
 		island.Shape = Enum.PartType.Cylinder
 		island.CanCollide = true
-		makeColumn(parent, Vector3.new(
-			dodgeSkylightX(hall, hall.Center.X + 4, 11), hall.Center.Y, hall.Center.Z), height, 4.5)
-		makeColumn(parent, Vector3.new(
-			dodgeSkylightX(hall, hall.Center.X - 4, 11), hall.Center.Y, hall.Center.Z), height, 4.5)
+		local islandColumnA = dodgeSkylightX(hall, hall.Center.X + 4, 11)
+		local islandColumnB = dodgeSkylightX(hall, hall.Center.X - 4, 11)
+		makeColumn(parent, Vector3.new(islandColumnA, hall.Center.Y, hall.Center.Z), height, 4.5)
+		if math.abs(islandColumnB - islandColumnA) > 10 then
+			makeColumn(parent, Vector3.new(islandColumnB, hall.Center.Y, hall.Center.Z), height, 4.5)
+		end
 	end
 end
 

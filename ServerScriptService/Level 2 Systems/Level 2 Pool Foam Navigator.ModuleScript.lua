@@ -294,7 +294,12 @@ end
 function Navigator:_surfaceAt(position)
 	local origin = position + Vector3.new(0, self.Tuning.FloorProbeAbove, 0)
 	local result = workspace:Raycast(origin, Vector3.new(0, -self.Tuning.FloorProbeDepth, 0), self.RaycastParams)
-	if result and result.Normal.Y > 0.15 then return result.Position.Y end
+	-- In low-ceilinged rooms (kids wing) the probe origin can start ABOVE the
+	-- roof, so the ray lands on the rooftop and the rig snaps on top of the
+	-- room. Only accept surfaces near or below the intended position.
+	if result and result.Normal.Y > 0.15 and result.Position.Y <= position.Y + 6 then
+		return result.Position.Y
+	end
 	return position.Y
 end
 
