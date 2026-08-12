@@ -2517,86 +2517,315 @@ local function makeCorridor(parent, layout, corridor, doorFolder)
 	return {Corridor = corridor, Water = region, Door = door, Center = center}
 end
 
--- Pump rooms read as working plant rooms, not empty boxes: pipe runs along
--- the walls, a tank battery in one corner, supply crates and a gauge panel
--- around the central pump. Deterministic per hall.
-local function decoratePumpHall(parent, hall, index)
-	local rng = Random.new((hall.LocalSeed or hall.Index or 1) + 13)
-	local alongX = hall.Width >= hall.Depth
-	local runLength = (alongX and hall.Width or hall.Depth) - 18
-	local cross = (alongX and hall.Depth or hall.Width) * .5 - 2.6
+-- The life layer: every water hall carries traces of the leisure complex it
+-- used to be — parasols (some tipped), loungers sunk in the shallows, beach
+-- balls and pool noodles adrift, lifebuoys and a stopped clock on the walls,
+-- pennant strings between the columns, and grime at the waterline.
+-- Door-aware and deterministic per hall.
+local function dressHall(parent, hall, depth, doors, index, density)
+	if not depth then return end
+	doors = doors or {East = {}, West = {}, North = {}, South = {}}
+	local rng = Random.new((hall.LocalSeed or hall.Index or 1) + 29)
+	density = density or 1
+	local height = hallHeight(hall)
+	local faded = function(color) return color:Lerp(Color3.fromRGB(168, 168, 158), .38) end
 
-	-- Twin pipe runs on both long walls.
-	for _, side in ipairs({-1, 1}) do
-		for level, y in ipairs({6.2, 9.4}) do
-			local position = alongX
-				and hall.Center + Vector3.new(0, y, side * cross)
-				or hall.Center + Vector3.new(side * cross, y, 0)
-			local pipe = part(parent, "Level 2 Pump Room Pipe " .. index,
-				alongX and CFrame.new(position) or CFrame.new(position) * CFrame.Angles(0, math.pi * .5, 0),
-				Vector3.new(runLength, 1.5 + level * .25, 1.5 + level * .25),
-				C.Metal, Enum.Material.Metal)
-			pipe.Shape = Enum.PartType.Cylinder
-			pipe.CanCollide = false
-			-- Brackets pin the pipes to the wall every dozen studs.
-			local brackets = math.max(2, math.floor(runLength / 14))
-			for bracket = 1, brackets do
-				local t = bracket / (brackets + 1) - .5
-				local bracketPos = alongX
-					and hall.Center + Vector3.new(t * runLength, y, side * (cross + .9))
-					or hall.Center + Vector3.new(side * (cross + .9), y, t * runLength)
-				part(parent, "Level 2 Pump Room Pipe Bracket " .. index,
-					CFrame.new(bracketPos), Vector3.new(1, 2.6, 1), C.Metal, Enum.Material.DiamondPlate)
-			end
+	local function wallSpotClear(sideList, value)
+		for _, doorAt in ipairs(sideList) do
+			if math.abs(doorAt - value) < Configuration.DoorWidth * .5 + 8 then return false end
+		end
+		return true
+	end
+
+	-- Parasols: pole + two-disc canopy, sun-bleached, a few leaning.
+	local parasols = math.clamp(math.floor(hall.Area / 26000 * density), 1, 4)
+	for parasol = 1, parasols do
+		local px = rng:NextNumber(-.34, .34) * hall.Width
+		local pz = rng:NextNumber(-.34, .34) * hall.Depth
+		local base = hall.Center + Vector3.new(px, -depth, pz)
+		local lean = rng:NextNumber() < .4 and math.rad(rng:NextNumber(8, 22)) or 0
+		local yaw = rng:NextNumber() * math.pi * 2
+		local tilt = CFrame.new(base) * CFrame.Angles(0, yaw, 0) * CFrame.Angles(lean, 0, 0)
+		local poleHeight = depth + 7.5
+		local pole = part(parent, "Level 2 Parasol Pole " .. index .. "." .. parasol,
+			tilt * CFrame.new(0, poleHeight * .5, 0) * CFrame.Angles(0, 0, math.pi * .5),
+			Vector3.new(poleHeight, .5, .5), C.Rail, Enum.Material.Metal)
+		pole.Shape = Enum.PartType.Cylinder
+		pole.CanCollide = false
+		local canopyColor = faded(Configuration.SlideColors[rng:NextInteger(1, #Configuration.SlideColors)])
+		local canopy = part(parent, "Level 2 Parasol Canopy " .. index .. "." .. parasol,
+			tilt * CFrame.new(0, poleHeight, 0) * CFrame.Angles(0, 0, math.pi * .5),
+			Vector3.new(.7, 9, 9), canopyColor, Enum.Material.Fabric)
+		canopy.Shape = Enum.PartType.Cylinder
+		canopy.CanCollide = false
+		local crown = part(parent, "Level 2 Parasol Crown " .. index .. "." .. parasol,
+			tilt * CFrame.new(0, poleHeight + .6, 0) * CFrame.Angles(0, 0, math.pi * .5),
+			Vector3.new(.55, 4.6, 4.6), canopyColor, Enum.Material.Fabric)
+		crown.Shape = Enum.PartType.Cylinder
+		crown.CanCollide = false
+	end
+
+	-- Loungers sunk in the shallows (skip in genuinely deep halls).
+	if depth <= 2.2 then
+		local loungers = math.clamp(math.floor(hall.Area / 30000 * density), 1, 3)
+		for lounger = 1, loungers do
+			local lx = rng:NextNumber(-.36, .36) * hall.Width
+			local lz = rng:NextNumber(-.36, .36) * hall.Depth
+			local yaw = rng:NextNumber() * math.pi * 2
+			local roll = rng:NextNumber() < .35 and math.rad(rng:NextNumber(30, 70)) or 0
+			local seatColor = faded(Configuration.SlideColors[rng:NextInteger(1, #Configuration.SlideColors)])
+			local frame = CFrame.new(hall.Center + Vector3.new(lx, -depth + .9, lz))
+				* CFrame.Angles(0, yaw, roll)
+			local seat = part(parent, "Level 2 Lounger Seat " .. index .. "." .. lounger,
+				frame, Vector3.new(2.6, .5, 6.4), seatColor, Enum.Material.SmoothPlastic)
+			seat.CanCollide = true
+			local back = part(parent, "Level 2 Lounger Back " .. index .. "." .. lounger,
+				frame * CFrame.new(0, 1.4, -2.9) * CFrame.Angles(math.rad(-35), 0, 0),
+				Vector3.new(2.6, .4, 3.4), seatColor, Enum.Material.SmoothPlastic)
+			back.CanCollide = false
 		end
 	end
 
-	-- Tank battery in a corner.
-	local cornerSign = rng:NextInteger(0, 1) == 0 and 1 or -1
-	local tankCorner = hall.Center + Vector3.new(
-		cornerSign * (hall.Width * .5 - 14), 0, (hall.Depth * .5 - 12))
-	for tank = 1, 3 do
-		local tankPos = tankCorner + Vector3.new(-cornerSign * (tank - 1) * 9, 0, 0)
-		local body = part(parent, "Level 2 Pump Room Tank " .. index .. "." .. tank,
-			CFrame.new(tankPos + Vector3.new(0, 6.5, 0)) * CFrame.Angles(0, 0, math.pi * .5),
-			Vector3.new(13, 7, 7), C.Metal, Enum.Material.Metal)
-		body.Shape = Enum.PartType.Cylinder
-		body.CanCollide = true
-		local cap = part(parent, "Level 2 Pump Room Tank Cap " .. index .. "." .. tank,
-			CFrame.new(tankPos + Vector3.new(0, 13.4, 0)), Vector3.new(3.4, 1.2, 3.4),
-			C.Locked, Enum.Material.Metal)
-		cap.CanCollide = false
-		local feed = part(parent, "Level 2 Pump Room Tank Feed " .. index .. "." .. tank,
-			CFrame.new(tankPos + Vector3.new(0, 2.2, -4.6)) * CFrame.Angles(math.pi * .5, 0, 0),
-			Vector3.new(6, 1.3, 1.3), C.Metal, Enum.Material.Metal)
-		feed.Shape = Enum.PartType.Cylinder
-		feed.CanCollide = false
+	-- Beach balls and pool noodles adrift on the surface.
+	for ball = 1, math.clamp(math.floor(hall.Area / 22000 * density), 1, 5) do
+		local size = rng:NextNumber(1.6, 2.6)
+		local orb = part(parent, "Level 2 Beach Ball " .. index .. "." .. ball,
+			CFrame.new(hall.Center + Vector3.new(
+				rng:NextNumber(-.38, .38) * hall.Width, .1 + size * .28,
+				rng:NextNumber(-.38, .38) * hall.Depth)),
+			Vector3.new(size, size, size),
+			Configuration.SlideColors[rng:NextInteger(1, #Configuration.SlideColors)],
+			Enum.Material.SmoothPlastic)
+		orb.Shape = Enum.PartType.Ball
+		orb.CanCollide = false
+		orb.CanTouch = false
+	end
+	for noodle = 1, math.clamp(math.floor(hall.Area / 26000 * density), 1, 4) do
+		local pool = part(parent, "Level 2 Pool Noodle " .. index .. "." .. noodle,
+			CFrame.new(hall.Center + Vector3.new(
+				rng:NextNumber(-.38, .38) * hall.Width, .12,
+				rng:NextNumber(-.38, .38) * hall.Depth))
+				* CFrame.Angles(0, rng:NextNumber() * math.pi, 0),
+			Vector3.new(6, .6, .6),
+			Configuration.SlideColors[rng:NextInteger(1, #Configuration.SlideColors)],
+			Enum.Material.SmoothPlastic)
+		pool.CanCollide = false
+		pool.CanTouch = false
 	end
 
-	-- Supply crates scattered near the opposite corner.
-	for crate = 1, rng:NextInteger(4, 6) do
-		local crateSize = rng:NextNumber(3.2, 5.4)
-		local cratePos = hall.Center + Vector3.new(
-			-cornerSign * (hall.Width * .5 - 12 - rng:NextNumber(0, 14)),
-			crateSize * .5,
-			-(hall.Depth * .5 - 10 - rng:NextNumber(0, 12)))
+	-- Lifebuoys and a stopped clock on doorless wall stretches.
+	local buoyX = hall.Center.X + rng:NextNumber(-.3, .3) * hall.Width
+	if wallSpotClear(doors.North, buoyX) then
+		local buoy = part(parent, "Level 2 Lifebuoy " .. index,
+			CFrame.new(Vector3.new(buoyX, 6.5, hall.MinZ + 2.2)) * CFrame.Angles(0, 0, math.pi * .5),
+			Vector3.new(.6, 3.6, 3.6), Color3.fromRGB(226, 96, 84), Enum.Material.SmoothPlastic)
+		buoy.Shape = Enum.PartType.Cylinder
+		buoy.CanCollide = false
+	end
+	local clockX = hall.Center.X + rng:NextNumber(-.25, .25) * hall.Width
+	if rng:NextNumber() < .5 and wallSpotClear(doors.South, clockX) then
+		local face = part(parent, "Level 2 Stopped Clock " .. index,
+			CFrame.new(Vector3.new(clockX, height - 6, hall.MaxZ - 2.2)) * CFrame.Angles(0, 0, math.pi * .5),
+			Vector3.new(.5, 4.2, 4.2), Color3.fromRGB(238, 238, 228), Enum.Material.SmoothPlastic)
+		face.Shape = Enum.PartType.Cylinder
+		face.CanCollide = false
+		local hourHand = part(parent, "Level 2 Clock Hand H " .. index,
+			CFrame.new(Vector3.new(clockX, height - 6.6, hall.MaxZ - 2.5)),
+			Vector3.new(.3, 1.3, .2), C.Void, Enum.Material.SmoothPlastic)
+		hourHand.CanCollide = false
+		local minuteHand = part(parent, "Level 2 Clock Hand M " .. index,
+			CFrame.new(Vector3.new(clockX + .6, height - 6, hall.MaxZ - 2.5)),
+			Vector3.new(1.4, .3, .2), C.Void, Enum.Material.SmoothPlastic)
+		minuteHand.CanCollide = false
+	end
+
+	-- Pennant string across the hall, high up: the party that never ended.
+	if hall.Width > 70 and rng:NextNumber() < .8 then
+		local stringZ = hall.Center.Z + rng:NextNumber(-.2, .2) * hall.Depth
+		local stringY = math.min(height - 4, 22)
+		local cord = part(parent, "Level 2 Pennant Cord " .. index,
+			CFrame.new(Vector3.new(hall.Center.X, stringY, stringZ)),
+			Vector3.new(hall.Width - 4, .12, .12), C.Rail, Enum.Material.Metal)
+		cord.CanCollide = false
+		cord.CanTouch = false
+		local pennants = math.floor((hall.Width - 10) / 5)
+		for pennant = 1, pennants do
+			local t = pennant / (pennants + 1) - .5
+			local sag = (1 - (t * 2) ^ 2) * 1.6
+			local flag = part(parent, "Level 2 Pennant " .. index .. "." .. pennant,
+				CFrame.new(Vector3.new(hall.Center.X + t * (hall.Width - 8), stringY - .9 - sag * .3, stringZ))
+					* CFrame.Angles(0, 0, math.rad(rng:NextNumber(-8, 8))),
+				Vector3.new(1.5, 1.9, .12),
+				faded(Configuration.SlideColors[(pennant % #Configuration.SlideColors) + 1]),
+				Enum.Material.Fabric)
+			flag.CanCollide = false
+			flag.CanTouch = false
+		end
+	end
+
+	-- Waterline grime on doorless wall stretches.
+	for grime = 1, math.clamp(math.floor(hall.Area / 24000 * density), 1, 4) do
+		local sideNorth = rng:NextInteger(0, 1) == 0
+		local grimeX = hall.Center.X + rng:NextNumber(-.34, .34) * hall.Width
+		local sideList = sideNorth and doors.North or doors.South
+		if wallSpotClear(sideList, grimeX) then
+			local grimeZ = sideNorth and hall.MinZ + 1.9 or hall.MaxZ - 1.9
+			local stain = part(parent, "Level 2 Waterline Grime " .. index .. "." .. grime,
+				CFrame.new(Vector3.new(grimeX, 1.1, grimeZ)),
+				Vector3.new(rng:NextNumber(7, 15), rng:NextNumber(2.4, 3.6), .18),
+				Color3.fromRGB(74, 96, 92), Enum.Material.Slate, .45)
+			stain.CanCollide = false
+			stain.CanTouch = false
+		end
+	end
+end
+
+-- Pump rooms read as working plant rooms. Everything is DOOR-AWARE and
+-- wall-hugging: nothing may block a doorway or float in the air.
+local function decoratePumpHall(parent, hall, index, doors)
+	doors = doors or {East = {}, West = {}, North = {}, South = {}}
+	local rng = Random.new((hall.LocalSeed or hall.Index or 1) + 13)
+	local height = hallHeight(hall)
+
+	local function clearOfDoors(list, value, clearance)
+		for _, doorAt in ipairs(list) do
+			if math.abs(doorAt - value) < clearance then return false end
+		end
+		return true
+	end
+
+	-- Corner risers: vertical floor-to-ceiling pipes tucked into the corners
+	-- (corners can never carry a doorway), with a short elbow into the wall.
+	for _, corner in ipairs({
+		Vector3.new(-1, 0, -1), Vector3.new(1, 0, -1),
+		Vector3.new(-1, 0, 1), Vector3.new(1, 0, 1),
+	}) do
+		local riserPos = hall.Center + Vector3.new(
+			corner.X * (hall.Width * .5 - 3.4), 0, corner.Z * (hall.Depth * .5 - 3.4))
+		local riser = part(parent, "Level 2 Pump Room Riser " .. index,
+			CFrame.new(riserPos + Vector3.new(0, height * .5, 0)) * CFrame.Angles(0, 0, math.pi * .5),
+			Vector3.new(height, 1.8, 1.8), C.Metal, Enum.Material.Metal)
+		riser.Shape = Enum.PartType.Cylinder
+		riser.CanCollide = false
+		local elbow = part(parent, "Level 2 Pump Room Riser Elbow " .. index,
+			CFrame.new(riserPos + Vector3.new(-corner.X * 1.4, 4.6, 0)),
+			Vector3.new(3.4, 1.6, 1.6), C.Metal, Enum.Material.Metal)
+		elbow.Shape = Enum.PartType.Cylinder
+		elbow.CanCollide = false
+	end
+
+	-- Ceiling conduit ring: high along the walls, well above every doorway.
+	local conduitY = height - 2.2
+	for _, run in ipairs({
+		{Vector3.new(0, conduitY, -(hall.Depth * .5 - 2.4)), Vector3.new(hall.Width - 10, 1.1, 1.1)},
+		{Vector3.new(0, conduitY, hall.Depth * .5 - 2.4), Vector3.new(hall.Width - 10, 1.1, 1.1)},
+	}) do
+		local conduit = part(parent, "Level 2 Pump Room Conduit " .. index,
+			CFrame.new(hall.Center + run[1]), run[2], C.Metal, Enum.Material.Metal)
+		conduit.Shape = Enum.PartType.Cylinder
+		conduit.CanCollide = false
+	end
+
+	-- Tank battery: pick the corner quadrant whose two walls are doorless
+	-- nearby; tanks stand ON the floor with feed pipes running INTO the wall.
+	local tankCorner
+	for _, corner in ipairs({
+		Vector3.new(1, 0, 1), Vector3.new(-1, 0, 1),
+		Vector3.new(1, 0, -1), Vector3.new(-1, 0, -1),
+	}) do
+		local cornerX = hall.Center.X + corner.X * (hall.Width * .5 - 12)
+		local cornerZ = hall.Center.Z + corner.Z * (hall.Depth * .5 - 9)
+		local xList = corner.X > 0 and doors.East or doors.West
+		local zList = corner.Z > 0 and doors.South or doors.North
+		-- The tank row spreads +/-8.5 studs from the corner point, so clear a
+		-- wide margin around any doorway on both adjacent walls.
+		if clearOfDoors(xList, cornerZ, 30) and clearOfDoors(zList, cornerX, 36) then
+			tankCorner = Vector3.new(cornerX, 0, cornerZ)
+			break
+		end
+	end
+	if tankCorner then
+		local wallSign = tankCorner.Z > hall.Center.Z and 1 or -1
+		for tank = 1, 3 do
+			local tankPos = Vector3.new(
+				tankCorner.X + (tank - 2) * 8.5, 0, tankCorner.Z)
+			local body = part(parent, "Level 2 Pump Room Tank " .. index .. "." .. tank,
+				CFrame.new(tankPos + Vector3.new(0, 6, 0)) * CFrame.Angles(0, 0, math.pi * .5),
+				Vector3.new(12, 6.5, 6.5), Color3.fromRGB(126, 138, 140), Enum.Material.Metal)
+			body.Shape = Enum.PartType.Cylinder
+			body.CanCollide = true
+			local cap = part(parent, "Level 2 Pump Room Tank Cap " .. index .. "." .. tank,
+				CFrame.new(tankPos + Vector3.new(0, 12.5, 0)), Vector3.new(3, 1, 3),
+				C.Locked, Enum.Material.Metal)
+			cap.CanCollide = false
+			-- Feed runs from the tank INTO the near wall, resting on the floor.
+			local feedLength = math.abs((hall.Center.Z + wallSign * hall.Depth * .5) - tankPos.Z) - 2
+			local feed = part(parent, "Level 2 Pump Room Tank Feed " .. index .. "." .. tank,
+				CFrame.new(tankPos + Vector3.new(0, 1.1, wallSign * (feedLength * .5 + 2)))
+					* CFrame.Angles(0, math.pi * .5, 0),
+				Vector3.new(feedLength, 1.2, 1.2), C.Metal, Enum.Material.Metal)
+			feed.Shape = Enum.PartType.Cylinder
+			feed.CanCollide = false
+		end
+	end
+
+	-- Supply crates: floor-standing, in whichever corner the tanks did not take.
+	local crateCorner = Vector3.new(
+		hall.Center.X - (tankCorner and (tankCorner.X - hall.Center.X > 0 and 1 or -1) or 1) * (hall.Width * .5 - 10),
+		0,
+		hall.Center.Z - (tankCorner and (tankCorner.Z - hall.Center.Z > 0 and 1 or -1) or 1) * (hall.Depth * .5 - 9))
+	for crate = 1, rng:NextInteger(3, 5) do
+		local crateSize = rng:NextNumber(3, 5)
+		local cratePos = crateCorner + Vector3.new(
+			rng:NextNumber(-6, 6), crateSize * .5, rng:NextNumber(-4, 4))
 		local box = part(parent, "Level 2 Pump Room Crate " .. index .. "." .. crate,
 			CFrame.new(cratePos) * CFrame.Angles(0, rng:NextNumber() * math.pi, 0),
 			Vector3.new(crateSize, crateSize, crateSize), C.TileWarm, Enum.Material.WoodPlanks)
 		box.CanCollide = true
 	end
 
-	-- Gauge panel with three dials on the north wall.
-	local panelPos = hall.Center + Vector3.new(-cornerSign * 10, 8, -(hall.Depth * .5 - 2.6))
-	local gaugePanel = part(parent, "Level 2 Pump Room Gauge Panel " .. index,
-		CFrame.new(panelPos), Vector3.new(10, 6, 1), C.Metal, Enum.Material.DiamondPlate)
-	gaugePanel.CanCollide = false
-	for dial = -1, 1 do
-		local gauge = part(parent, "Level 2 Pump Room Gauge " .. index .. "." .. dial,
-			CFrame.new(panelPos + Vector3.new(dial * 3, .6, .7)) * CFrame.Angles(0, 0, math.pi * .5),
-			Vector3.new(.5, 2, 2), C.Light, Enum.Material.Neon)
-		gauge.Shape = Enum.PartType.Cylinder
-		gauge.CanCollide = false
+	-- Gauge board: FLUSH on a doorless wall stretch, light housing, softly lit.
+	local boardWall
+	for _, candidate in ipairs({
+		{list = doors.North, z = -(hall.Depth * .5 - 2.1), x = hall.Center.X + 8},
+		{list = doors.North, z = -(hall.Depth * .5 - 2.1), x = hall.Center.X - 14},
+		{list = doors.South, z = hall.Depth * .5 - 2.1, x = hall.Center.X + 8},
+		{list = doors.South, z = hall.Depth * .5 - 2.1, x = hall.Center.X - 14},
+	}) do
+		if clearOfDoors(candidate.list, candidate.x, 22) then
+			boardWall = candidate
+			break
+		end
+	end
+	if boardWall then
+		local boardPos = Vector3.new(boardWall.x, 9, hall.Center.Z + boardWall.z)
+		local board = part(parent, "Level 2 Pump Room Gauge Panel " .. index,
+			CFrame.new(boardPos), Vector3.new(9, 5, .8), Color3.fromRGB(168, 176, 172),
+			Enum.Material.DiamondPlate)
+		board.CanCollide = false
+		local inward = boardWall.z > 0 and -1 or 1
+		for dial = -1, 1 do
+			local gauge = part(parent, "Level 2 Pump Room Gauge " .. index .. "." .. dial,
+				CFrame.new(boardPos + Vector3.new(dial * 2.8, .4, inward * .6))
+					* CFrame.Angles(0, 0, math.pi * .5),
+				Vector3.new(.4, 1.7, 1.7), C.Light, Enum.Material.Neon)
+			gauge.Shape = Enum.PartType.Cylinder
+			gauge.CanCollide = false
+		end
+	end
+
+	-- Painted safety border on the floor around the central pump plinth.
+	for _, stripe in ipairs({
+		{Vector3.new(0, .05, -10), Vector3.new(26, .12, 1.6)},
+		{Vector3.new(0, .05, 10), Vector3.new(26, .12, 1.6)},
+		{Vector3.new(-13, .05, 0), Vector3.new(1.6, .12, 18.4)},
+		{Vector3.new(13, .05, 0), Vector3.new(1.6, .12, 18.4)},
+	}) do
+		local paint = part(parent, "Level 2 Pump Room Safety Stripe " .. index,
+			CFrame.new(hall.Center + stripe[1]), stripe[2],
+			Color3.fromRGB(214, 170, 60), Enum.Material.SmoothPlastic)
+		paint.CanCollide = false
+		paint.CanTouch = false
 	end
 end
 
@@ -2628,7 +2857,8 @@ local function decorateLargeHall(parent, hall, depth, index)
 		landing + Vector3.new(sign * 4, 5, -9),
 		landing, 4.2, color, "Level 2 Play Tower Slide " .. index, 12, true)
 
-	-- Floating rings and rafts scatter across every decorated hall.
+	-- Floating rings and rafts scatter across every decorated hall, sitting
+	-- half-sunk IN the water surface (0.1), never hovering above it.
 	local floatCount = hall.Area >= 85000 and 8 or 4
 	for float = 1, floatCount do
 		local fx = rng:NextNumber(-.36, .36) * hall.Width
@@ -2636,12 +2866,12 @@ local function decorateLargeHall(parent, hall, depth, index)
 		local floatColor = Configuration.SlideColors[rng:NextInteger(1, #Configuration.SlideColors)]
 		if float % 3 == 0 then
 			local raft = part(parent, "Level 2 Pool Raft " .. index .. "." .. float,
-				CFrame.new(hall.Center + Vector3.new(fx, .3, fz)) * CFrame.Angles(0, rng:NextNumber() * math.pi, 0),
+				CFrame.new(hall.Center + Vector3.new(fx, .12, fz)) * CFrame.Angles(0, rng:NextNumber() * math.pi, 0),
 				Vector3.new(4, .7, 7.2), floatColor, Enum.Material.SmoothPlastic)
 			raft.CanCollide = true
 		else
 			local ring = part(parent, "Level 2 Pool Float Ring " .. index .. "." .. float,
-				CFrame.new(hall.Center + Vector3.new(fx, .32, fz)) * CFrame.Angles(0, 0, math.pi * .5),
+				CFrame.new(hall.Center + Vector3.new(fx, .18, fz)) * CFrame.Angles(0, 0, math.pi * .5),
 				Vector3.new(.9, 6.4, 6.4), floatColor, Enum.Material.SmoothPlastic)
 			ring.Shape = Enum.PartType.Cylinder
 			ring.CanCollide = true
@@ -2992,6 +3222,7 @@ function WorldBuilder.Build(layout, generation)
 			poolFoamSpawn:SetAttribute("Level2_PoolFoamSpawn", true)
 		elseif hall.Role == "Slide Hall" then
 			slideDecks[hall.SlideHallIndex] = makeSlideHall(slideFolder, hall, hall.SlideHallIndex)
+			dressHall(hallModel, hall, hallWaterDepth(hall), doorsByHall[hall.Index], hall.Index, .6)
 			if hall.IsGrand then
 				exit = makeExitFlume(geometry, layout, hall, slideDecks[hall.SlideHallIndex])
 			end
@@ -3033,7 +3264,7 @@ function WorldBuilder.Build(layout, generation)
 					makeArchSpan(hallModel, position, acrossZ, hall.Index .. "." .. ring, radius, depth or 0)
 				end
 			elseif archetype == "Pump Station" then
-				decoratePumpHall(hallModel, hall, hall.Index)
+				decoratePumpHall(hallModel, hall, hall.Index, doorsByHall[hall.Index])
 			elseif archetype == "Spiral Stair Well" then
 				makeSpiralStair(hallModel, hall.Center, -(depth or 1) + .5, height - 12, 13,
 					"Level 2 Stair Well " .. hall.Index)
@@ -3043,6 +3274,16 @@ function WorldBuilder.Build(layout, generation)
 			elseif archetype == "Porthole Hall" then
 				for step = -1, 1 do
 					local offset = Vector3.new(step * math.min(30, hall.Width * .25), 9, -hall.Depth * .5 + 3)
+					-- Skip panes that would hang over a doorway on this wall.
+					local paneX = hall.Center.X + offset.X
+					local blocked = false
+					for _, doorAt in ipairs(doorsByHall[hall.Index].North) do
+						if math.abs(doorAt - paneX) < Configuration.DoorWidth * .5 + 7 then
+							blocked = true
+							break
+						end
+					end
+					if blocked then continue end
 					local pane = part(hallModel, "Level 2 Porthole " .. hall.Index .. " " .. step,
 						CFrame.new(hall.Center + offset), Vector3.new(10, 15, .6), C.Light,
 						Enum.Material.Neon, .1)
@@ -3061,6 +3302,7 @@ function WorldBuilder.Build(layout, generation)
 			if archetype ~= "Ring Corridor" then
 				decorateLargeHall(hallModel, hall, depth, hall.Index)
 			end
+			dressHall(hallModel, hall, depth, doorsByHall[hall.Index], hall.Index, 1)
 
 			-- Deep water: stairs descend from every doorway into the pool.
 			if depth and depth > 2.5 then
