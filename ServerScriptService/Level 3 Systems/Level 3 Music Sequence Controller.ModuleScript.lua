@@ -55,6 +55,21 @@ local function setPhase(activeSession: any, phase: string)
 		state:SetAttribute("Level3_BlackoutStartedAtServerTime",
 			startTime + Configuration.MusicSequence.DurationSeconds)
 		setBlackout(true, untilTime)
+		local remotes = ReplicatedStorage:FindFirstChild(Configuration.RemotesFolderName)
+		local event = remotes and remotes:FindFirstChild(Configuration.ClientEventName)
+		if event and event:IsA("RemoteEvent") then
+			-- Defer one task step so phase/blackout attributes replicate before
+			-- the guaranteed audible cue is delivered.
+			task.defer(function()
+				if session == activeSession and activeSession.Phase == "BLACKOUT" then
+					event:FireAllClients({
+						Type = "Sound",
+						Cue = "PowerDown",
+						Generation = activeSession.Generation,
+					})
+				end
+			end)
+		end
 	elseif phase == "DONE" or phase == "STOPPED" or phase == "WAITING_FOR_ROUND" then
 		setBlackout(false, 0)
 	end
@@ -174,6 +189,9 @@ function Controller.DebugSetElapsed(elapsed: number)
 	assert(RunService:IsStudio(), "DebugSetElapsed is Studio-only")
 	local activeSession = assert(session, "Level 3 music sequence is not running")
 	activeSession.StartServerTime = workspace:GetServerTimeNow() - math.max(0, elapsed)
+	-- Debug timeline seeks must be able to traverse backward through phases;
+	-- production remains strictly monotonic.
+	activeSession.Phase = "DEBUG_SEEK"
 	stateFolder():SetAttribute("Level3_RoomSongStartServerTime", activeSession.StartServerTime)
 	update(activeSession)
 	return Controller.GetSnapshot()

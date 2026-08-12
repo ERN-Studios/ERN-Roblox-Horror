@@ -91,7 +91,8 @@ powerDown.Volume = 0.92
 powerDown.Looped = false
 powerDown.Parent = SoundService
 local lastBlackoutActive = false
-local powerDownArmed = true
+local lastObservedRoomSongPhase = "STOPPED"
+local powerDownHoldUntil = 0
 
 local roomSong = Instance.new("Sound")
 roomSong.Name = "Level 3 - The Room is Listening"
@@ -165,9 +166,7 @@ local function playPowerDown()
 	powerDown.SoundId = resolveId("PowerDown") or DEFAULT_AUDIO.PowerDown
 	powerDown.TimePosition = 0
 	powerDown:Play()
-	-- Hold the cue for one update window; some timelines briefly expose the
-	-- replicated phase edge before the local round state has fully settled.
-	powerDownArmed = false
+	powerDownHoldUntil = os.clock() + 1.25
 end
 
 local function bindBlackoutSignal()
@@ -339,6 +338,7 @@ local CUES: {[string]: CueSpec} = {
 	DoorLocked = {Key="DoorRattle", Volume=0.38, Speed=0.88},
 	ExitUnlocked = {Key="ReaderBeep", Volume=0.42, Speed=1.20},
 	Escape = {Key="ReaderBeep", Volume=0.30, Speed=1.32},
+	PowerDown = {Key="PowerDown", Volume=0.92, Speed=1.00},
 }
 
 local function playCue(cueValue: any, positionValue: any)
@@ -356,7 +356,21 @@ local function playCue(cueValue: any, positionValue: any)
 end
 
 local function handleClientEvent(payload: any)
-	if type(payload) ~= "table" or not isActive() or not generationMatches(payload) then return end
+	if type(payload) ~= "table" then return end
+	-- PowerDown is tied to the authoritative blackout edge itself. Let it
+	-- through before normal objective-generation filtering, which can be one
+	-- replication frame behind during the transition.
+	if payload.Type == "Sound" and payload.Cue == "PowerDown" then
+		if workspace:GetAttribute("SelectedLevel") == LEVEL
+			and player:GetAttribute("InRound") == true
+			and player:GetAttribute("Escaped") ~= true then
+			powerDown.SoundId = resolveId("PowerDown") or DEFAULT_AUDIO.PowerDown
+			powerDown.TimePosition = 0
+			powerDown:Play()
+		end
+		return
+	end
+	if not isActive() or not generationMatches(payload) then return end
 	if payload.Type == "Sound" then
 		playCue(payload.Cue, payload.Position)
 	end
@@ -366,7 +380,11 @@ local function bindClientEvent()
 	local folder = ReplicatedStorage:FindFirstChild(REMOTES_FOLDER_NAME)
 	local candidate = folder and folder:FindFirstChild(CLIENT_EVENT_NAME)
 	local event = if candidate and candidate:IsA("RemoteEvent") then candidate else nil
-	if event == boundClientEvent then return end
+	if event == boundClientEvent and clientEventConnection and clientEventConnection.Connected then
+		-- The generated remotes folder is rebuilt between Studio rounds; keep
+		-- the current live connection instead of churning it every mixer tick.
+		return
+	end
 	if clientEventConnection then clientEventConnection:Disconnect() end
 	clientEventConnection = nil
 	boundClientEvent = event
@@ -560,6 +578,9 @@ RunService.Heartbeat:Connect(function(dt)
 	end
 	updateRoomSong(elapsed)
 	updateReaderCadence(now)
+	if os.clock() < powerDownHoldUntil and not powerDown.IsPlaying then
+		powerDown:Play()
+	end
 
 	local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 	local nearest: BasePart? = nil
@@ -577,13 +598,23 @@ RunService.Heartbeat:Connect(function(dt)
 	end
 	local sequencePhase = roomSongPhase()
 	local blackoutActive = stateAttribute("Level3_BlackoutActive", "Level3BlackoutActive") == true
-	if not blackoutActive then
-		powerDownArmed = true
+	if sequencePhase == "PLAYING" or sequencePhase == "ARMED" then
+		lastObservedRoomSongPhase = sequencePhase
+		lastBlackoutActive = false
+	elseif sequencePhase == "BLACKOUT" then
+		if lastObservedRoomSongPhase ~= "BLACKOUT" and playing then
+			-- Phase replication is the audible edge; the blackout boolean still
+			-- owns all fixture/lighting state.
+			playPowerDown()
+			lastObservedRoomSongPhase = "BLACKOUT"
+		end
+		-- If the player/round attributes arrive one frame after blackout,
+		-- leave the cue armed so the next mixer pass can still play it.
+		lastBlackoutActive = true
+	elseif not blackoutActive then
+		lastObservedRoomSongPhase = sequencePhase
+		lastBlackoutActive = false
 	end
-	if blackoutActive and powerDownArmed then
-		playPowerDown()
-	end
-	lastBlackoutActive = blackoutActive
 	if playing and nearest then fluorescentEmitter.Position = nearest.Position end
 	local humTarget = if playing and nearest and sequencePhase ~= "BLACKOUT"
 		then ((sequencePhase == "PLAYING" or sequencePhase == "ARMED") and 0.035 or 0.15) else 0
