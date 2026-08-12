@@ -9,7 +9,7 @@
 -- and the terrain water appearance, so both levels feel like the same building.
 
 local Configuration = {
-	Version = 4,
+	Version = 3,
 	Theme = "Sunken Leisure Complex",
 
 	-- ── plan ────────────────────────────────────────────────────────────────
@@ -67,9 +67,10 @@ local Configuration = {
 	DeepPoolDepth = 4.5,
 	SlidePoolDepth = 6,
 	CorridorChannelDepth = 1.5,
-	-- Drainable corridors stay WADING depth: deep enough that a pump visibly
-	-- empties them, never deep enough to force swimming in a tunnel.
-	DrainableCorridorDepth = 1.8,
+	-- Drainable corridors are deep enough that draining them visibly changes
+	-- the space: flooded you swim across the surface, drained you walk the
+	-- channel floor between the entry and exit steps.
+	DrainableCorridorDepth = 6,
 
 	-- ── lighting ────────────────────────────────────────────────────────────
 	CeilingPanelBrightness = 1.085,
@@ -95,10 +96,6 @@ local Configuration = {
 	SlideMouthLength = 2.8,
 	SlideCollisionThickness = .6,
 	SlideCollisionFriction = .05,
-	-- Hidden collision may overlap farther than the decorative mesh so curved
-	-- flumes cannot open seams, and open slides keep a tall invisible guard lip.
-	SlideCollisionOverlap = 1.5,
-	SlideOpenSafetyWallHeight = 14,
 }
 
 Configuration.Colors = {

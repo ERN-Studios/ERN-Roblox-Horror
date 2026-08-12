@@ -60,14 +60,30 @@ local IS_STUDIO = RunService:IsStudio()
 -- attribute-driven MazeGenerator and is deliberately not listed here.
 local LEVEL_GENERATORS = {
  [2] = "Level2Generator",
+ [3] = "Level3Generator",
 }
-local MAX_LEVEL = 2
+local MAX_LEVEL = 3
 
 -- Always-on server authority for every developer command. Unlike the Level 1
 -- entity script, GameManager remains active in both levels.
 local devControl = remotes:WaitForChild("DevControl")
 local NOCLIP_GROUP = "DevNoclip"
 local noclipState = {}
+local devControlRate = {}
+local DEV_CONTROL_WINDOW = 1
+local DEV_CONTROL_LIMIT = 12
+
+local function allowDevControl(player)
+ local now = os.clock()
+ local bucket = devControlRate[player]
+ if not bucket or now - bucket.startedAt >= DEV_CONTROL_WINDOW then
+  devControlRate[player] = {startedAt = now, count = 1}
+  return true
+ end
+ if bucket.count >= DEV_CONTROL_LIMIT then return false end
+ bucket.count += 1
+ return true
+end
 pcall(function() PhysicsService:RegisterCollisionGroup(NOCLIP_GROUP) end)
 for _, group in ipairs(PhysicsService:GetRegisteredCollisionGroups()) do
  pcall(function()
@@ -108,6 +124,8 @@ end
 
 devControl.OnServerEvent:Connect(function(player, command, enabled)
  if not DevAccess.IsAllowed(player) then return end
+ if type(command) ~= "string" or type(enabled) ~= "boolean" then return end
+ if not allowDevControl(player) then return end
  if command == "fastQueue" then
   if IS_RESERVED_ROUND_SERVER then return end
   player:SetAttribute("DevFastQueue", enabled == true and true or nil)
@@ -330,6 +348,12 @@ local function sanitizePersistedLevelState()
   or selected == 2 then
   stale[#stale + 1] = 2
  end
+ if workspace:FindFirstChild("Level 3 Generated World") ~= nil
+  or ServerStorage:FindFirstChild("Level 3 Stored Server Lobby") ~= nil
+  or ServerStorage:FindFirstChild("Level 3 Stored Level 1 Entity") ~= nil
+  or selected == 3 then
+  stale[#stale + 1] = 3
+ end
  if #stale == 0 then return end
 
  for _, level in ipairs(stale) do
@@ -438,7 +462,11 @@ local function setupPlayer(player)
  task.defer(function()
   if not player.Parent then return end
   if not IS_RESERVED_ROUND_SERVER and not player.Character then loadLobbyCharacter(player) end
-  status:FireClient(player, IS_RESERVED_ROUND_SERVER and "loadinggame" or "lobby")
+  local initialStatus = "lobby"
+  if IS_RESERVED_ROUND_SERVER then
+   initialStatus = roundBusy and "spectating" or "loadinggame"
+  end
+  status:FireClient(player, initialStatus)
  end)
 end
 
@@ -448,6 +476,7 @@ Players.PlayerRemoving:Connect(function(player)
  inRound[player] = nil
  setServerNoclip(player, false)
  noclipState[player] = nil
+ devControlRate[player] = nil
  player:SetAttribute("DevPushImmune", nil)
 end)
 
@@ -597,7 +626,11 @@ local function ensureWorld(group, requestedLevel)
  workspace:SetAttribute("WorldGenerated", false)
  local generatorName = LEVEL_GENERATORS[level]
  if generatorName then
-  workspace:SetAttribute("LoadStage", level == 2 and "ENTERING_DRY_POOLROOMS" or "ENTERING_SUNKEN_COMPLEX")
+  local levelStages = {
+   [2] = "ENTERING_DRY_POOLROOMS",
+   [3] = "ENTERING_FORGOTTEN_MALL",
+  }
+  workspace:SetAttribute("LoadStage", levelStages[level] or "GENERATING_WORLD")
   local ok, err = pcall(function()
    require(script.Parent:WaitForChild(generatorName)).Build()
   end)
@@ -618,7 +651,7 @@ local function ensureWorld(group, requestedLevel)
  end
  elevatorApi = connectElevator()
  mazeStart = workspace:WaitForChild("MazeStart", 30)
- entityStart = workspace:WaitForChild("EntityStart", 30)
+ entityStart = level == 1 and workspace:WaitForChild("EntityStart", 30) or nil
  entity = level == 1 and workspace:WaitForChild("Entity", 30) or nil
  worldReady = elevatorApi ~= nil and mazeStart ~= nil
  workspace:SetAttribute("LoadStage", worldReady and "READY" or "WORLD_ERROR")
@@ -687,8 +720,11 @@ local function returnGroupToLobby(group)
 	else
 		cleanupLevelOneWorld()
 	end
+ -- A client can finish joining a reserved server after the party-arrival
+ -- deadline. It is a spectator, but it must not be stranded when the round ends.
+ local returnCandidates = IS_RESERVED_ROUND_SERVER and Players:GetPlayers() or group
  local live = {}
- for _, player in ipairs(group) do
+ for _, player in ipairs(returnCandidates) do
   if player.Parent then live[#live + 1] = player end
  end
 
@@ -805,6 +841,16 @@ local function playRound(participants)
  if activeLevel == 2 then
   fireGroup(participants, "poolaccess")
   task.wait(1.25)
+ elseif activeLevel == 3 then
+  -- A short service-elevator descent establishes the mall without replaying
+  -- Level 1's fuse briefing. Level 3 owns its own objective presentation.
+  for t = 7, 1, -1 do
+   if aliveCount <= 0 then sendWipedPartyHome(); return end
+   fireGroup(participants, "elevator", t)
+   task.wait(1)
+  end
+  elevatorApi.open()
+  fireGroup(participants, "level3access")
  else
   for t = ELEVATOR_TIME, 1, -1 do
    if aliveCount <= 0 then sendWipedPartyHome(); return end

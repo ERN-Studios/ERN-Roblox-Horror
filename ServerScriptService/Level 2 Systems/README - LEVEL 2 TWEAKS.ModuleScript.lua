@@ -12,6 +12,10 @@
 --  Level 2 World Builder        ← how the plan becomes parts/water/slides
 --  Level 2 Objective Controller ← pumps → drains → pressure doors → escape
 --  Level 2 Round Adapter        ← Build/Cleanup, lobby parking, terrain
+--  Level 2 Pool Foam Configuration ← entity balance + animation/audio slots
+--  Level 2 Pool Foam Controller ← two-entity scare director and cleanup
+--  Pool Foam Proxy/Animation/Navigator/Observer modules ← replaceable art,
+--                                  movement, and server-validated observation
 --  (ServerScriptService.Level2Generator is just the doorway GameManager
 --   calls — never needs editing.)
 --
@@ -47,19 +51,16 @@
 --  Level 1 has the same setup: "Level 1 Sound Controller" +
 --  ReplicatedStorage["Level 1 Sound Library"].
 --
--- ── ENTITIES (RESERVED, NOT BUILT) ──────────────────────────────────────
---  Space for 1-2 hostiles is already laid out:
---   • Configuration.Entities — two empty profile stubs (A and B).
---   • Every generated world contains "Level 2 Entity Nodes" with
---     "Level 2 Entity Den A Spawn", "Level 2 Entity Den B Spawn" and four
---     patrol nodes per hall. Doorways are 30x19 so a big rig fits.
---  Nothing reads these yet — they are the agreed anchor points for
---  whoever builds the entity.
+-- ── HOSTILE ENTITY STATUS ───────────────────────────────────────────────
+--  Level 2 owns two Pool Foam entities. They begin as still props in separate
+--  Kids Area rooms, move only while unobserved, and escalate with the pumps.
+--  Until final rigs exist, two distinct temporary proxies are generated.
+--  Drop PoolFoamPrimaryTemplate and PoolFoamSecondaryTemplate Models directly
+--  under ServerStorage.Level2Assets to replace them on the next Level 2 load.
+--  Full art/API instructions live in README - LEVEL 2 POOL FOAM.
 --
 -- ── IF SOMETHING BREAKS ─────────────────────────────────────────────────
---  The complete PREVIOUS Level 2 (world + entity scripts + its clients)
---  is preserved untouched in ServerStorage.Level2Backup_20260805, and the
---  pre-rename copy of this stack is in the git history. Moving the backup
---  scripts back to their old parents restores the old level.
+--  Use the current safety snapshot or source history for recovery. Do not
+--  restore retired poolrooms/valve/blackout scripts into the active rewrite.
 
 return {}

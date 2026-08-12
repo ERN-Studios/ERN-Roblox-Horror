@@ -96,19 +96,6 @@ local LEVEL2_KIDS_TILE_TEXTURE_SLOTS = {
 	Lagoon = "Level 2 Kids Lagoon Tile Texture",
 }
 local LEVEL2_KIDS_TILE_STUDS = 24
-local LEVEL2_KIDS_FOAM_VARIANT = "Level2 Kids Foam Vinyl"
-local LEVEL2_KIDS_FLOOR_VARIANT = "Level2 Kids Rubber Floor"
-local LEVEL2_KIDS_SLIDE_VARIANT = "Level2 Kids Slide Fiberglass"
-
-local function mutedKidsColor(color, neutralWeight)
-	return color:Lerp(Color3.fromRGB(151, 155, 148), neutralWeight or .42)
-end
-
-local function useKidsMaterial(object, material, variantName)
-	object.Material = material
-	object.MaterialVariant = variantName
-	return object
-end
 
 local function normalizedAssetId(value)
 	local raw = tostring(value or ""):gsub("%s", "")
@@ -150,7 +137,6 @@ local function addKidsTileTexture(object, hall, faces, studs)
 		texture.StudsPerTileU = studs or LEVEL2_KIDS_TILE_STUDS
 		texture.StudsPerTileV = studs or LEVEL2_KIDS_TILE_STUDS
 		texture.Color3 = Color3.new(1, 1, 1)
-		texture.Transparency = .08
 		texture:SetAttribute("Level2_KidsPalette", palette.Name)
 		texture.Parent = object
 	end
@@ -161,7 +147,7 @@ local function surfaceFor(hall, parent, name, cframe, size, tileColor, faces, st
 	if isKids(hall) then
 		local object = part(parent, name, cframe, size,
 			tileColor or kidsPalette(hall).Color, Enum.Material.SmoothPlastic)
-		return addKidsTileTexture(object, hall, faces, studs)
+		return addKidsTileTexture(object, hall, faces)
 	end
 	return tiledPart(parent, name, cframe, size, tileColor, faces, studs)
 end
@@ -273,10 +259,9 @@ local function makeHallFloor(parent, hall)
 	local depth = hallWaterDepth(hall)
 	if not depth then
 		local floorColor = isKids(hall) and kidsPalette(hall).Accent or C.TileWarm
-		local floorStuds = isKids(hall) and LEVEL2_KIDS_TILE_STUDS or 7
 		local slab = surfaceFor(hall, parent, "Level 2 Hall Floor",
 			CFrame.new(hall.Center + Vector3.new(0, -.35, 0)),
-			Vector3.new(hall.Width, .7, hall.Depth), floorColor, {Enum.NormalId.Top}, floorStuds)
+			Vector3.new(hall.Width, .7, hall.Depth), floorColor, {Enum.NormalId.Top}, 7)
 		slab.CanCollide = true
 		return nil
 	end
@@ -295,25 +280,12 @@ end
 -- opening (they used to coincide whenever the slot and light grids aligned).
 local function skylightSlotsFor(hall)
 	if isKids(hall) then return {}, 0 end
-	-- Skylights are accents, not the default ceiling of every room. Service,
-	-- arrival and entity spaces stay enclosed; one deterministic third of the
-	-- ordinary halls does too, giving the route real light/dark rhythm.
-	local enclosedRole = hall.Role == "Arrival"
-		or hall.Role == "Pump Station"
-		or hall.Role == "Entity Den"
-		or hall.Role == "Entity Den B"
-	if enclosedRole then return {}, 0 end
-	local authoredSkylight = hall.Archetype == "Skylight Hall" or hall.Role == "Slide Hall"
-	local hallKey = math.floor(tonumber(hall.LocalSeed) or tonumber(hall.Index) or 0)
-	-- Only one ordinary hall in six stays enclosed; sunlight is the default.
-	if not authoredSkylight and hallKey % 6 == 0 then return {}, 0 end
-
-	local slots = math.clamp(math.floor(hall.Width / 48), 1, 5)
+	local slots = math.clamp(math.floor(hall.Width / 70), 1, 4)
 	local xs = {}
 	for slot = 1, slots do
 		table.insert(xs, hall.MinX + (slot / (slots + 1)) * hall.Width)
 	end
-	return xs, 12
+	return xs, 11
 end
 
 local function overlapsSkylight(hall, x, width)
@@ -553,7 +525,6 @@ local function makeKidsRoundSkylightCeiling(parent, hall)
 		module.CFrame = CFrame.new(opening.X, height + 1, opening.Z)
 		module.Color = palette.Accent
 		module.Material = Enum.Material.SmoothPlastic
-		module.MaterialVariant = ""
 		module.Transparency = 0
 		module.Anchored = true
 		module.CanCollide = true
@@ -606,14 +577,12 @@ local function makeHallCeiling(parent, hall)
 			slab.CanCollide = true
 		end
 		-- The glass pane: sunlight passes (CastShadow off), players cannot.
-		local pane = part(parent, "Level 2 Frosted Skylight Diffuser",
+		local pane = part(parent, "Level 2 Skylight Glass",
 			CFrame.new(Vector3.new(x, height + 1, hall.Center.Z)),
-			Vector3.new(slotWidth, .6, hall.Depth), Color3.fromRGB(218, 231, 226),
-			Enum.Material.SmoothPlastic, .28)
+			Vector3.new(slotWidth, .6, hall.Depth), Color3.fromRGB(248, 246, 236),
+			Enum.Material.Glass, .55)
 		pane.CanCollide = true
-		pane.CanTouch = false
 		pane.CastShadow = false
-		pane.Reflectance = .02
 		cursor = x + slotWidth * .5
 	end
 	if hall.MaxX - cursor > .5 then
@@ -630,8 +599,8 @@ local function makeRaisedPool(parent, center, width, depth3, hall)
 	local wallHeight = 2.4
 	local shellBottom = part(parent, "Level 2 Kids Pool Base",
 		CFrame.new(center + Vector3.new(0, .15, 0)), Vector3.new(width, .3, depth3),
-		mutedKidsColor(palette.Accent, .35), Enum.Material.Rubber)
-	useKidsMaterial(shellBottom, Enum.Material.Rubber, LEVEL2_KIDS_FLOOR_VARIANT)
+		palette.Accent, Enum.Material.SmoothPlastic)
+	addKidsTileTexture(shellBottom, hall, {Enum.NormalId.Top})
 	shellBottom.CanCollide = true
 	for _, data in ipairs({
 		{Vector3.new(-width * .5, wallHeight * .5, 0), Vector3.new(1.2, wallHeight, depth3)},
@@ -646,8 +615,8 @@ local function makeRaisedPool(parent, center, width, depth3, hall)
 	end
 	local poolStep = part(parent, "Level 2 Kids Pool Step",
 		CFrame.new(center + Vector3.new(0, .6, depth3 * .5 + 2)), Vector3.new(10, 1.2, 3.4),
-		mutedKidsColor(palette.Accent, .28), Enum.Material.Rubber)
-	useKidsMaterial(poolStep, Enum.Material.Rubber, LEVEL2_KIDS_FLOOR_VARIANT)
+		palette.Accent, Enum.Material.SmoothPlastic)
+	addKidsTileTexture(poolStep, hall, {Enum.NormalId.Top, Enum.NormalId.Front, Enum.NormalId.Back})
 	poolStep.CanCollide = true
 	addWater(center + Vector3.new(0, wallHeight * .5 + .2, 0),
 		Vector3.new(width - 3, wallHeight - .6, depth3 - 3), "Kids Pool")
@@ -773,11 +742,9 @@ local function makeStairFlight(parent, base, direction, width, steps, name, run,
 		local center = base + direction * ((index - .5) * run) + Vector3.new(0, height * .5, 0)
 		local stair
 		if isKids(surfaceHall) then
-			stair = part(parent, name .. " Step " .. index,
-				CFrame.lookAt(center, center + direction), Vector3.new(width, height, run + .12),
-				mutedKidsColor(kidsPalette(surfaceHall).Accent, .24), Enum.Material.SmoothPlastic)
-			useKidsMaterial(stair, Enum.Material.SmoothPlastic, LEVEL2_KIDS_FOAM_VARIANT)
-			stair:SetAttribute("Level2_KidsPaddedStair", true)
+			stair = surfaceFor(surfaceHall, parent, name .. " Step " .. index,
+				CFrame.lookAt(center, center + direction), Vector3.new(width, height, run + .12), C.TileWarm,
+				{Enum.NormalId.Top, Enum.NormalId.Front, Enum.NormalId.Back}, 7)
 		else
 			stair = tiledPart(parent, name .. " Step " .. index,
 				CFrame.lookAt(center, center + direction), Vector3.new(width, height, run + .12), C.TileWarm,
@@ -833,8 +800,8 @@ local function lightHall(parent, hall, index)
 	-- remain only in enclosed corridors and gateway spaces.
 	if isKids(hall) or #skylightSlotsFor(hall) > 0 then return end
 	local height = hallHeight(hall)
-	local columns = math.clamp(math.floor(hall.Width / 130), 1, 2)
-	local rows = math.clamp(math.floor(hall.Depth / 130), 1, 2)
+	local columns = math.clamp(math.floor(hall.Width / 90), 1, 4)
+	local rows = math.clamp(math.floor(hall.Depth / 90), 1, 4)
 	local panelWidth = math.min(46, hall.Width * .42)
 	for cx = 1, columns do
 		for cz = 1, rows do
@@ -954,7 +921,7 @@ local function makeTubeFromPoints(parent, points, radius, color, name, openTop, 
 	local visuals = folder(tubeModel, name .. " Visuals")
 	local collisions = folder(tubeModel, name .. " Collision")
 	local thickness = Configuration.SlideCollisionThickness or .6
-	local collisionOverlap = Configuration.SlideCollisionOverlap or 1.5
+	local collisionOverlap = Configuration.SlideMeshOverlap or .65
 
 	local function addCollisionSegment(a, b, index)
 		local length = (b - a).Magnitude
@@ -967,18 +934,8 @@ local function makeTubeFromPoints(parent, points, radius, color, name, openTop, 
 			Vector3.new(0, -radius * .9 - thickness * .5, 0),
 			Vector3.new(radius * 1.55, thickness, collisionLength))
 
-		local sideHeight, sideY
-		if openTop then
-			-- Keep the authored open fiberglass shell, but extend its hidden side
-			-- collision well above jump height so players cannot climb onto the
-			-- exterior of elevated flumes or leave the intended route.
-			local sideBottom = -radius * .9
-			sideHeight = math.max(Configuration.SlideOpenSafetyWallHeight or 14, radius * 1.8)
-			sideY = sideBottom + sideHeight * .5
-		else
-			sideHeight = radius * 1.8
-			sideY = 0
-		end
+		local sideHeight = radius * (openTop and 1.35 or 1.8)
+		local sideY = openTop and -radius * .25 or 0
 		local sideX = radius * .9 + thickness * .5
 		makeSlideCollisionPart(collisions, name .. " Collision Left " .. suffix, base,
 			Vector3.new(-sideX, sideY, 0),
@@ -1098,59 +1055,6 @@ local function makeHelixSlide(parent, columnPosition, helixRadius, topY, color, 
 	return visualPoints[1]
 end
 
--- Very large slide halls need architectural rhythm or their authored play
--- equipment reads like a handful of prototypes in an empty box.  These high,
--- wall-hugging frames add scale and shadow without entering navigation space.
-local function makeSlideHallScaleFrames(parent, hall, height, poolDepth, hallIndex)
-	local alongX = hall.Width >= hall.Depth
-	local longLength = alongX and hall.Width or hall.Depth
-	local shortLength = alongX and hall.Depth or hall.Width
-	local frameCount = math.clamp(math.floor(longLength / 70), 3, 9)
-	local pilasterBottom = -poolDepth
-	local pilasterTop = height - 9
-	local pilasterHeight = math.max(10, pilasterTop - pilasterBottom)
-	local pilasterY = (pilasterTop + pilasterBottom) * .5
-
-	for frameIndex = 1, frameCount do
-		local alpha = frameIndex / (frameCount + 1)
-		local along = (alongX and hall.MinX or hall.MinZ) + longLength * alpha
-		local frameColor = frameIndex % 3 == 0 and C.TileCool or C.TileWarm
-		local beamPosition = alongX
-			and Vector3.new(along, height - 7, hall.Center.Z)
-			or Vector3.new(hall.Center.X, height - 7, along)
-		local beamSize = alongX
-			and Vector3.new(4, 3, math.max(20, shortLength - 16))
-			or Vector3.new(math.max(20, shortLength - 16), 3, 4)
-		local beam = part(parent,
-			string.format("Level 2 Slide Hall %d Scale Frame %02d Beam", hallIndex, frameIndex),
-			CFrame.new(beamPosition), beamSize, frameColor, Enum.Material.CeramicTiles)
-		beam.CanCollide = false
-		beam.CanTouch = false
-		beam.CanQuery = false
-
-		for sideIndex, sideSign in ipairs({-1, 1}) do
-			local pilasterPosition = alongX
-				and Vector3.new(along, pilasterY,
-					hall.Center.Z + sideSign * (shortLength * .5 - 6))
-				or Vector3.new(
-					hall.Center.X + sideSign * (shortLength * .5 - 6),
-					pilasterY, along)
-			local pilasterSize = alongX
-				and Vector3.new(5, pilasterHeight, 6)
-				or Vector3.new(6, pilasterHeight, 5)
-			local pilaster = part(parent,
-				string.format("Level 2 Slide Hall %d Scale Frame %02d Pier %d",
-					hallIndex, frameIndex, sideIndex),
-				CFrame.new(pilasterPosition), pilasterSize,
-				frameColor:Lerp(Color3.fromRGB(118, 119, 108), .18),
-				Enum.Material.CeramicTiles)
-			pilaster.CanCollide = false
-			pilaster.CanTouch = false
-			pilaster.CanQuery = false
-		end
-	end
-end
-
 -- A slide hall: wall-to-wall deep water, columns to the roof, a top deck on
 -- the north edge with straight parallel flume lanes down into the water, a
 -- helix slide wrapping the north-east column, spiral stair + catwalk access.
@@ -1170,14 +1074,12 @@ local function makeSlideHall(parent, hall, index)
 				height + depth, 9)
 		end
 	end
-	makeSlideHallScaleFrames(hallFolder, hall, height, depth, index)
 
 	-- Top deck along the north edge.
 	local deckY = height - 22
 	local deckDepth = math.min(46, hall.Depth * .3)
-	local deckBack = hall.MinZ + Configuration.WallThickness * .5
-	local deckZ = deckBack + deckDepth * .5
-	local deckFront = deckBack + deckDepth
+	local deckZ = hall.MinZ + deckDepth * .5 + 4
+	local deckFront = deckZ + deckDepth * .5
 	local deck = tiledPart(hallFolder, "Level 2 Slide Hall Deck",
 		CFrame.new(Vector3.new(center.X, deckY, deckZ)),
 		Vector3.new(hall.Width - 16, 2, deckDepth), C.TileWarm, Enum.NormalId:GetEnumItems(), 8)
@@ -1228,10 +1130,6 @@ local function makeSlideHall(parent, hall, index)
 			Vector3.new(hall.MaxX - 10, railY, deckFront),
 			"Level 2 Slide Hall " .. index .. " Deck")
 	end
-	makeRail(hallFolder,
-		Vector3.new(hall.MinX + 8, railY, deckBack),
-		Vector3.new(hall.MinX + 8, railY, deckFront),
-		"Level 2 Slide Hall " .. index .. " West Deck Edge")
 
 	-- Helix slide wrapping the north-east column, fed by a catwalk off the deck.
 	local helixColumn = center + Vector3.new(columnOffsetX, 0, -columnOffsetZ)
@@ -1245,13 +1143,10 @@ local function makeSlideHall(parent, hall, index)
 			Vector3.new(7, 2, math.max(4, math.abs(helixTop.Z - deckFront))), C.TileWarm,
 			Enum.NormalId:GetEnumItems(), 8)
 		catwalk.CanCollide = true
-		for _, railSide in ipairs({-1, 1}) do
-			makeRail(hallFolder,
-				Vector3.new(helixTop.X + railSide * 3.2, railY, deckFront),
-				Vector3.new(helixTop.X + railSide * 3.2, railY, helixTop.Z),
-				"Level 2 Slide Hall " .. index .. " Helix Catwalk "
-					.. (railSide < 0 and "Left" or "Right"))
-		end
+		makeRail(hallFolder,
+			Vector3.new(helixTop.X - 3.2, railY, deckFront),
+			Vector3.new(helixTop.X - 3.2, railY, helixTop.Z),
+			"Level 2 Slide Hall " .. index .. " Helix Catwalk")
 	end
 
 	-- Spiral stair in the south-east corner + catwalk along the east wall.
@@ -1259,18 +1154,14 @@ local function makeSlideHall(parent, hall, index)
 	makeSpiralStair(hallFolder, spiralCenter, -depth + 1, deckY, 12,
 		"Level 2 Slide Hall " .. index .. " Spiral")
 	local catwalkZ1 = deckFront
-	local catwalkOuterX = hall.MaxX - Configuration.WallThickness * .5
-	local catwalkInnerX = hall.MaxX - 16
-	local catwalkWidth = catwalkOuterX - catwalkInnerX
-	local catwalkCenterX = (catwalkOuterX + catwalkInnerX) * .5
 	local eastCatwalk = tiledPart(hallFolder, "Level 2 Slide Hall Catwalk",
-		CFrame.new(Vector3.new(catwalkCenterX, deckY, (hall.MaxZ - 26 + catwalkZ1) * .5)),
-		Vector3.new(catwalkWidth, 2, math.abs(hall.MaxZ - 26 - catwalkZ1)), C.TileWarm,
+		CFrame.new(Vector3.new(hall.MaxX - 12, deckY, (hall.MaxZ - 26 + catwalkZ1) * .5)),
+		Vector3.new(8, 2, math.abs(hall.MaxZ - 26 - catwalkZ1)), C.TileWarm,
 		Enum.NormalId:GetEnumItems(), 8)
 	eastCatwalk.CanCollide = true
 	makeRail(hallFolder,
-		Vector3.new(catwalkInnerX, railY, hall.MaxZ - 26),
-		Vector3.new(catwalkInnerX, railY, catwalkZ1),
+		Vector3.new(hall.MaxX - 16, railY, hall.MaxZ - 26),
+		Vector3.new(hall.MaxX - 16, railY, catwalkZ1),
 		"Level 2 Slide Hall " .. index .. " Catwalk")
 
 	lightHall(hallFolder, hall, "SlideHall" .. index)
@@ -1288,43 +1179,25 @@ local function makeExitFlume(parent, layout, hall, deck)
 	local shellX = boundsMaxX + 60
 	local startPoint = Vector3.new(hall.MaxX - 14, deck.DeckY + 9, deck.DeckZ)
 
-	-- The forced eastern exit hall leaves only a short level lead-in. A densely
-	-- sampled monotone Bezier then commits immediately to a steep descent and
-	-- finishes with a horizontal run-out, eliminating the coarse polyline seams.
+	-- Keep the long procedural span high and clear over the complex, then make
+	-- the commitment in the empty east margin: these three fixed segments stay
+	-- roughly 39–41 degrees regardless of the selected grand hall's distance
+	-- from the shell.  The final 40-stud run-out reaches the unchanged room.
 	local roomPenetration = 7
 	local roomEntry = Vector3.new(shellX + 34 + roomPenetration, 4, deck.DeckZ)
 	local plungeStart = Vector3.new(roomEntry.X - 120, startPoint.Y, deck.DeckZ)
-	local plungeControl1 = plungeStart + Vector3.new(24, -2, 0)
-	local plungeControl2 = roomEntry - Vector3.new(34, 0, 0)
-	local tubePoints = {startPoint, plungeStart}
-	for segment = 1, 72 do
-		table.insert(tubePoints, bezier(plungeStart, plungeControl1,
-			plungeControl2, roomEntry, segment / 72))
-	end
+	local tubePoints = {
+		startPoint,
+		plungeStart,
+		plungeStart + Vector3.new(14, -4, 0),
+		plungeStart + Vector3.new(36, -24, 0),
+		plungeStart + Vector3.new(58, -43, 0),
+		plungeStart + Vector3.new(80, -61, 0),
+		roomEntry,
+	}
 	local tube = makeTubeFromPoints(parent, tubePoints, radius, C.TileCool,
-		"Level 2 Exit Flume", false, 1.0)
+		"Level 2 Exit Flume", false)
 	tube:SetAttribute("Level2_OneWayExit", true)
-
-	local function pathAtX(targetX)
-		for pointIndex = 1, #tubePoints - 1 do
-			local a, b = tubePoints[pointIndex], tubePoints[pointIndex + 1]
-			if targetX >= math.min(a.X, b.X) and targetX <= math.max(a.X, b.X) then
-				local dx = b.X - a.X
-				local alpha = math.abs(dx) > 1e-4
-					and math.clamp((targetX - a.X) / dx, 0, 1) or 0
-				return a:Lerp(b, alpha), (b - a).Unit
-			end
-		end
-		local a, b = tubePoints[#tubePoints - 1], tubePoints[#tubePoints]
-		return b, (b - a).Unit
-	end
-	local portalHalfWidth = radius + 1.25
-	local hallPortalHalfHeight = radius + 1.25
-	local shellCrossing, shellDirection = pathAtX(shellX)
-	local shellDirectionX = math.max(math.abs(shellDirection.X), .2)
-	local shellSlope = math.abs(shellDirection.Y) / shellDirectionX
-	local shellPortalHalfHeight = radius / shellDirectionX
-		+ Configuration.WallThickness * .5 * shellSlope + 1.25
 
 	local mouth = makeSlideMouth(parent, "Level 2 Exit Flume Mouth",
 		startPoint, tubePoints[2], radius, C.Emergency, .55)
@@ -1435,289 +1308,14 @@ local function makeExitFlume(parent, layout, hall, deck)
 		RoomEntry = roomEntry,
 		RoomFloorTop = floorTop,
 		Door = woodenDoor,
-		HallWallGap = {
-			center = startPoint.Z,
-			width = portalHalfWidth * 2,
-			bottom = startPoint.Y - hallPortalHalfHeight,
-			top = startPoint.Y + hallPortalHalfHeight,
-		},
-		ShellGap = {
-			center = shellCrossing.Z,
-			width = portalHalfWidth * 2,
-			bottom = shellCrossing.Y - shellPortalHalfHeight,
-			top = shellCrossing.Y + shellPortalHalfHeight,
-		},
+		HallWallGap = {center = deck.DeckZ, width = 30, bottom = deck.DeckY - 10, top = deck.DeckY + 24},
+		ShellGap = {center = deck.DeckZ, width = 40, bottom = -10, top = deck.DeckY + 24},
 	}
 end
 
 -- ── kids wing ───────────────────────────────────────────────────────────────
 
-local KIDS_BALL_COLORS = {
-	Color3.fromRGB(198, 77, 69),
-	Color3.fromRGB(72, 137, 184),
-	Color3.fromRGB(218, 177, 67),
-	Color3.fromRGB(76, 156, 112),
-	Color3.fromRGB(156, 92, 160),
-}
-
-local function makeKidsFoamPart(parent, name, cframe, size, color, shape, collidable)
-	local object = part(parent, name, cframe, size, color, Enum.Material.SmoothPlastic)
-	if shape then object.Shape = shape end
-	useKidsMaterial(object, Enum.Material.SmoothPlastic, LEVEL2_KIDS_FOAM_VARIANT)
-	object.Reflectance = 0
-	object.CanCollide = collidable ~= false
-	object:SetAttribute("Level2_KidsFoam", true)
-	return object
-end
-
-local function makeKidsFoamWedge(parent, name, cframe, size, color)
-	local object = Instance.new("WedgePart")
-	object.Name = name
-	object.Anchored = true
-	object.CFrame = cframe
-	object.Size = size
-	object.Color = color
-	object.Material = Enum.Material.SmoothPlastic
-	object.MaterialVariant = LEVEL2_KIDS_FOAM_VARIANT
-	object.TopSurface = Enum.SurfaceType.Smooth
-	object.BottomSurface = Enum.SurfaceType.Smooth
-	object.CanCollide = true
-	object:SetAttribute("Level2_KidsFoam", true)
-	object.Parent = parent
-	return object
-end
-
-local function makeKidsFoamCluster(parent, hall, origin, forward, clusterIndex)
-	local palette = kidsPalette(hall)
-	local side = Vector3.new(-forward.Z, 0, forward.X)
-	local baseFrame = CFrame.lookAt(origin, origin + forward)
-	makeKidsFoamPart(parent, "Level 2 Padded Mat " .. clusterIndex,
-		baseFrame * CFrame.new(0, .45, 0), Vector3.new(11, .9, 9),
-		mutedKidsColor(palette.Accent, .18))
-	local wedgeCenter = origin + forward * 7 + Vector3.new(0, 2, 0)
-	makeKidsFoamWedge(parent, "Level 2 Foam Wedge " .. clusterIndex,
-		CFrame.lookAt(wedgeCenter, wedgeCenter + forward),
-		Vector3.new(7, 4, 7), mutedKidsColor(palette.Color, .16))
-	local rollerCenter = origin - forward * 7 + Vector3.new(0, 2.1, 0)
-	local roller = makeKidsFoamPart(parent, "Level 2 Foam Roller " .. clusterIndex,
-		CFrame.lookAt(rollerCenter, rollerCenter + side) * CFrame.Angles(0, math.pi * .5, 0),
-		Vector3.new(7, 4.2, 4.2), mutedKidsColor(palette.Accent, .10),
-		Enum.PartType.Cylinder)
-	roller:SetAttribute("Level2_KidsRoller", true)
-end
-
-local function makeKidsCrawlFrames(parent, hall, center, forward, label)
-	local palette = kidsPalette(hall)
-	local side = Vector3.new(-forward.Z, 0, forward.X)
-	for frameIndex = -1, 1 do
-		local frameCenter = center + forward * frameIndex * 4
-		for _, sign in ipairs({-1, 1}) do
-			makeKidsFoamPart(parent, label .. " Side " .. frameIndex .. "." .. sign,
-				CFrame.new(frameCenter + side * sign * 4 + Vector3.new(0, 3, 0)),
-				Vector3.new(2.4, 6, 2.4), mutedKidsColor(palette.Color, .22))
-		end
-		makeKidsFoamPart(parent, label .. " Top " .. frameIndex,
-			CFrame.lookAt(frameCenter + Vector3.new(0, 6.1, 0), frameCenter + Vector3.new(0, 6.1, 0) + forward),
-			Vector3.new(10.2, 2.2, 2.4), mutedKidsColor(palette.Accent, .18))
-	end
-end
-
-local function makeKidsBallPit(parent, hall, center, rng, index, width, depth3)
-	local palette = kidsPalette(hall)
-	local pitFolder = folder(parent, "Level 2 Filled Ball Pit " .. index)
-	width = width or 34
-	depth3 = depth3 or 30
-	local wallHeight = width < 12 and 2.4 or 3.2
-	pitFolder:SetAttribute("Level2_BallPitWidth", width)
-	pitFolder:SetAttribute("Level2_BallPitDepth", depth3)
-	makeKidsFoamPart(pitFolder, "Level 2 Ball Pit Padded Base",
-		CFrame.new(center + Vector3.new(0, .45, 0)), Vector3.new(width, .9, depth3),
-		mutedKidsColor(palette.Accent, .30))
-	local openingWidth = math.min(10, width * .34)
-	local shoulderWidth = (width - openingWidth) * .5
-	local shoulderCenter = openingWidth * .5 + shoulderWidth * .5
-	for wallIndex, data in ipairs({
-		{Vector3.new(-width * .5, wallHeight * .5, 0), Vector3.new(1.6, wallHeight, depth3)},
-		{Vector3.new(width * .5, wallHeight * .5, 0), Vector3.new(1.6, wallHeight, depth3)},
-		{Vector3.new(0, wallHeight * .5, depth3 * .5), Vector3.new(width, wallHeight, 1.6)},
-		{Vector3.new(-shoulderCenter, wallHeight * .5, -depth3 * .5), Vector3.new(shoulderWidth, wallHeight, 1.6)},
-		{Vector3.new(shoulderCenter, wallHeight * .5, -depth3 * .5), Vector3.new(shoulderWidth, wallHeight, 1.6)},
-	}) do
-		makeKidsFoamPart(pitFolder, "Level 2 Ball Pit Padded Wall " .. wallIndex,
-			CFrame.new(center + data[1]), data[2], mutedKidsColor(palette.Color, .18))
-	end
-	makeKidsFoamPart(pitFolder, "Level 2 Ball Pit Entry Step",
-		CFrame.new(center + Vector3.new(0, .55, -depth3 * .5 - 2.2)),
-		Vector3.new(math.max(3, openingWidth - 1), 1.1, 3.2), mutedKidsColor(palette.Accent, .25))
-	-- A loose, irregular bed reads as a real ball pit.  The former 6x5 grid
-	-- exposed most of the base and made each oversized ball look bolted down.
-	local targetCount = math.clamp(math.floor(width * depth3 / 5), 18, 180)
-	local layerCount = math.min(width, depth3) < 12 and 2 or 3
-	pitFolder:SetAttribute("Level2_BallCount", targetCount)
-	for ballIndex = 1, targetCount do
-		local diameter = rng:NextNumber(1.25, 1.85)
-		local margin = diameter * .5 + 1.25
-		local xLimit = math.max(.25, width * .5 - margin)
-		local zLimit = math.max(.25, depth3 * .5 - margin)
-		local x = rng:NextNumber(-xLimit, xLimit)
-		local z = rng:NextNumber(-zLimit, zLimit)
-		local layer = (ballIndex - 1) % layerCount
-		local y = .9 + diameter * .5 + layer * diameter * .58
-			+ rng:NextNumber(-.12, .12)
-		local ball = part(pitFolder,
-			string.format("Level 2 Ball Pit Ball %03d", ballIndex),
-			CFrame.new(center + Vector3.new(x, y, z)),
-			Vector3.new(diameter, diameter, diameter),
-			KIDS_BALL_COLORS[((ballIndex + index) % #KIDS_BALL_COLORS) + 1],
-			Enum.Material.SmoothPlastic)
-		ball.Shape = Enum.PartType.Ball
-		ball.CanCollide = false
-		ball.CanTouch = false
-		ball.CanQuery = false
-		ball.CastShadow = false
-		ball:SetAttribute("Level2_KidsDecorativeBall", true)
-	end
-	return pitFolder
-end
-
-local function makeKidsSplashToys(parent, center, rng, index, poolWidth, poolDepth)
-	local radiusX = math.max(2, poolWidth * .5 - 3)
-	local radiusZ = math.max(2, poolDepth * .5 - 3)
-	local diameterCap = math.max(1.8, math.min(poolWidth, poolDepth) * .16)
-	for toyIndex = 1, 6 do
-		local diameter = math.min(rng:NextNumber(2.1, 3.4), diameterCap)
-		local angle = (toyIndex / 6) * math.pi * 2
-		local toy = part(parent, "Level 2 Splash Ball " .. index .. "." .. toyIndex,
-			CFrame.new(center + Vector3.new(math.cos(angle) * radiusX, 2.25,
-				math.sin(angle) * radiusZ)),
-			Vector3.new(diameter, diameter, diameter),
-			KIDS_BALL_COLORS[((toyIndex + index) % #KIDS_BALL_COLORS) + 1],
-			Enum.Material.SmoothPlastic)
-		toy.Shape = Enum.PartType.Ball
-		toy.CanCollide = false
-		toy.CanTouch = false
-		toy.CanQuery = false
-		toy:SetAttribute("Level2_KidsWaterToy", true)
-	end
-end
-
-local function styleKidsSlide(slideModel)
-	for _, object in ipairs(slideModel:GetDescendants()) do
-		if object:IsA("MeshPart") and object:GetAttribute("Level2_SlideVisual") == true then
-			useKidsMaterial(object, Enum.Material.SmoothPlastic, LEVEL2_KIDS_SLIDE_VARIANT)
-			object.Reflectance = .025
-			object.CastShadow = false
-			object:SetAttribute("Level2_KidsFiberglass", true)
-		end
-	end
-end
-
-local function makeKidsSlideStructure(parent, hall, center, forward, index, longDimension, slideMode)
-	local palette = kidsPalette(hall)
-	local side = Vector3.new(-forward.Z, 0, forward.X)
-	local nano = slideMode == "Nano"
-	local micro = nano or slideMode == "Micro"
-	local compact = micro or slideMode == "Compact"
-	local deckY = nano and 3.8 or (micro and 5.4 or (compact and 7.2 or 8.5))
-	local radius = nano and 1.8 or (micro and 2.7 or (compact and 3.5 or 4.1))
-	local stepCount = nano and 5 or (micro and 7 or (compact and 10 or 12))
-	local stepRun = nano and .8 or (micro and 1.1 or (compact and 1.45 or 1.7))
-	local stepRise = deckY / stepCount
-	local totalLong = nano and math.min(20, longDimension * .32)
-		or (micro and math.min(34, longDimension * .42)
-		or (compact and math.min(49, longDimension * .54)
-		or math.min(64, longDimension * .62)))
-	local slideLength = nano and math.min(10.5, totalLong * .53)
-		or (micro and math.min(20, totalLong * .59)
-		or (compact and math.min(29, totalLong * .60)
-		or math.min(39, totalLong * .62)))
-	local deckWidth = nano and 8 or (micro and 12 or (compact and 17 or 20))
-	local deckDepth = nano and 5 or (micro and 6 or (compact and 8 or 9))
-	local stairWidth = nano and 4 or (micro and 5 or (compact and 6.5 or 7.5))
-	local sideOffset = nano and 2.5 or (micro and 3.3 or (compact and 4.7 or 5.4))
-	local backExtent = stepCount * stepRun
-	local landingForward = nano and 4.5 or (micro and 7 or (compact and 9 or 11))
-	local frontExtent = slideLength + landingForward
-	local entry = center + forward * ((backExtent - frontExtent) * .5)
-		- side * (nano and 2 or (micro and 3 or (compact and 4.2 or 5)))
-	local exit = entry + forward * slideLength
-	local deckCenter = entry + side * sideOffset + Vector3.new(0, deckY - .4, 0)
-	local deckFrame = CFrame.lookAt(deckCenter, deckCenter + forward)
-	local deck = makeKidsFoamPart(parent, "Level 2 Kids Slide Landing Deck " .. index,
-		deckFrame, Vector3.new(deckWidth, .8, deckDepth), mutedKidsColor(palette.Accent, .20))
-	deck:SetAttribute("Level2_KidsSlideMode", slideMode or "Full")
-	local supportNear = sideOffset - deckWidth * .5 + 1
-	local supportFar = sideOffset + deckWidth * .5 - 1
-	local supportRun = deckDepth * .5 - 1
-	for supportIndex, offset in ipairs({
-		side * supportNear + forward * -supportRun,
-		side * supportFar + forward * -supportRun,
-		side * supportNear + forward * supportRun,
-		side * supportFar + forward * supportRun,
-	}) do
-		makeKidsFoamPart(parent, "Level 2 Kids Slide Support " .. index .. "." .. supportIndex,
-			CFrame.new(entry + offset + Vector3.new(0, deckY * .5, 0)),
-			Vector3.new(1.4, deckY, 1.4), mutedKidsColor(palette.Color, .30))
-	end
-	local stairLine = entry + side * (nano and 4.3 or (micro and 6 or (compact and 8.5 or 10)))
-	local stairBase = stairLine - forward * (stepCount * stepRun)
-	makeStairFlight(parent, stairBase, forward, stairWidth, stepCount,
-		"Level 2 Kids Connected Stair " .. index, stepRun, stepRise, hall)
-	local rearGuardHeight = nano and 2.4 or (micro and 3.2 or 4.2)
-	local sideGuardHeight = nano and 2.1 or (micro and 2.8 or 3.4)
-	local rearGuardCenter = deckCenter - forward * (deckDepth * .5 - .5)
-		+ Vector3.new(0, rearGuardHeight * .5 + .3, 0)
-	makeKidsFoamPart(parent, "Level 2 Kids Slide Rear Guard " .. index,
-		CFrame.lookAt(rearGuardCenter, rearGuardCenter + forward),
-		Vector3.new(deckWidth - 1, rearGuardHeight, .8), mutedKidsColor(palette.Color, .28))
-	local sideGuardCenter = entry + side * (sideOffset + deckWidth * .5 - .4)
-		+ Vector3.new(0, deckY + sideGuardHeight * .5 - .1, 0)
-	makeKidsFoamPart(parent, "Level 2 Kids Slide Side Guard " .. index,
-		CFrame.lookAt(sideGuardCenter, sideGuardCenter + forward),
-		Vector3.new(.8, sideGuardHeight, deckDepth - 1), mutedKidsColor(palette.Color, .28))
-	local p0 = entry + Vector3.new(0, deckY + radius * .9, 0)
-	local p3 = exit + Vector3.new(0, .58 + radius * .9, 0)
-	-- One soft local fill preserves the fiberglass texture in the play tower's
-	-- deep shadow without raising exposure for the entire level.
-	local fillAnchor = part(parent, "Level 2 Kids Slide Soft Fill Anchor " .. index,
-		CFrame.new((p0 + p3) * .5 + Vector3.new(0, 5, 0)),
-		Vector3.new(.2, .2, .2), palette.Accent, Enum.Material.SmoothPlastic, 1)
-	fillAnchor.CanCollide = false
-	fillAnchor.CanTouch = false
-	fillAnchor.CanQuery = false
-	fillAnchor.CastShadow = false
-	local fillLight = Instance.new("PointLight")
-	fillLight.Name = "Level 2 Kids Slide Soft Fill"
-	fillLight.Color = palette.Accent:Lerp(Color3.new(1, 1, 1), .38)
-	fillLight.Brightness = .85
-	fillLight.Range = 34
-	fillLight.Shadows = false
-	fillLight.Parent = fillAnchor
-
-	-- The neutral fiberglass map still darkens its tint in skylight shadows.
-	local slideColor = Configuration.SlideColors[(index % #Configuration.SlideColors) + 1]
-		:Lerp(Color3.fromRGB(235, 235, 225), .48)
-	local controlDrop = nano and .6 or (micro and 1 or 1.4)
-	local controlLift = nano and .8 or (micro and 1.4 or 2.2)
-	local slideModel = makeSlideTube(parent, p0,
-		p0 + forward * (slideLength * .28) + Vector3.new(0, -controlDrop, 0),
-		p3 - forward * (slideLength * .30) + Vector3.new(0, controlLift, 0),
-		p3, radius, slideColor, "Level 2 Kids Slide " .. index,
-		nano and 6 or (micro and 8 or (compact and 10 or 12)), true)
-	slideModel:SetAttribute("Level2_KidsSlideMode", slideMode or "Full")
-	styleKidsSlide(slideModel)
-	local landingCenter = exit + forward * (nano and 2 or (micro and 3 or (compact and 4 or 5)))
-		+ Vector3.new(0, .38, 0)
-	makeKidsFoamPart(parent, "Level 2 Kids Slide Landing Mat " .. index,
-		CFrame.lookAt(landingCenter, landingCenter + forward),
-		nano and Vector3.new(6, .76, 5)
-			or (micro and Vector3.new(10, .76, 8)
-			or (compact and Vector3.new(12, .76, 10) or Vector3.new(14, .76, 12))),
-		mutedKidsColor(palette.Accent, .24))
-	return slideModel
-end
-
-local function makeKidsHall(parent, hall, index, doors, kidsPumpIndex)
+local function makeKidsHall(parent, hall, index)
 	local palette = kidsPalette(hall)
 	local center = hall.Center
 	local kidsFolder = folder(parent, "Level 2 Kids Room " .. index .. " " .. palette.Name)
@@ -1726,276 +1324,74 @@ local function makeKidsHall(parent, hall, index, doors, kidsPumpIndex)
 	kidsFolder:SetAttribute("Level2_KidsTileTexture", kidsTileTextureId(hall) or "")
 	kidsFolder:SetAttribute("Level2_ContainsPump", containsPump)
 
-	local zones = {}
-	local edgeMargin = 6
-	local function reserve(label, position, width, depth3, spacing)
-		spacing = spacing or 3
-		if position.X - width * .5 < hall.MinX + edgeMargin
-			or position.X + width * .5 > hall.MaxX - edgeMargin
-			or position.Z - depth3 * .5 < hall.MinZ + edgeMargin
-			or position.Z + depth3 * .5 > hall.MaxZ - edgeMargin then
-			return false
-		end
-		for _, other in ipairs(zones) do
-			if math.abs(position.X - other.Position.X) < (width + other.Width) * .5 + spacing
-				and math.abs(position.Z - other.Position.Z) < (depth3 + other.Depth) * .5 + spacing then
-				return false
-			end
-		end
-		table.insert(zones, {
-			Label = label,
-			Position = position,
-			Width = width,
-			Depth = depth3,
-		})
-		return true
-	end
-	local function reserveFirst(label, candidates, width, depth3, spacing)
-		for _, candidate in ipairs(candidates) do
-			if reserve(label, candidate, width, depth3, spacing) then return candidate end
-		end
-		return nil
-	end
-	local function placementCandidates(width, depth3)
-		local minX = hall.MinX + edgeMargin + width * .5
-		local maxX = hall.MaxX - edgeMargin - width * .5
-		local minZ = hall.MinZ + edgeMargin + depth3 * .5
-		local maxZ = hall.MaxZ - edgeMargin - depth3 * .5
-		if minX > maxX or minZ > maxZ then return {} end
-		local candidates = {}
-		-- Try deliberate quadrant/edge compositions first.
-		for _, fraction in ipairs({
-			{.75, .75}, {.25, .75}, {.75, .25}, {.25, .25},
-			{.5, .75}, {.5, .25}, {.75, .5}, {.25, .5}, {.5, .5},
-		}) do
-			table.insert(candidates, Vector3.new(
-				minX + (maxX - minX) * fraction[1], 0,
-				minZ + (maxZ - minZ) * fraction[2]))
-		end
-		-- Then scan every legal pocket at no more than four-stud intervals.
-		local xCount = math.max(1, math.ceil((maxX - minX) / 4))
-		local zCount = math.max(1, math.ceil((maxZ - minZ) / 4))
-		for xIndex = 0, xCount do
-			local x = minX + (maxX - minX) * (xIndex / xCount)
-			for zIndex = 0, zCount do
-				local z = minZ + (maxZ - minZ) * (zIndex / zCount)
-				table.insert(candidates, Vector3.new(x, 0, z))
-			end
-		end
-		return candidates
-	end
-
-	-- Door thresholds deliberately touch the room edge, so they bypass the
-	-- interior edge-margin test used for props.  Activity zones still reject
-	-- against these first, preserving an 18-stud-wide, 28-stud-deep approach.
-	doors = doors or {East = {}, West = {}, North = {}, South = {}}
-	local function reserveDoor(label, position, width, depth3)
-		table.insert(zones, {
-			Label = label,
-			Position = position,
-			Width = width,
-			Depth = depth3,
-		})
-	end
-	local doorwayClearWidth = Configuration.DoorWidth + 8
-	for _, doorZ in ipairs(doors.West or {}) do
-		reserveDoor("West doorway", Vector3.new(hall.MinX + 16, 0, doorZ), 32, doorwayClearWidth)
-	end
-	for _, doorZ in ipairs(doors.East or {}) do
-		reserveDoor("East doorway", Vector3.new(hall.MaxX - 16, 0, doorZ), 32, doorwayClearWidth)
-	end
-	for _, doorX in ipairs(doors.North or {}) do
-		reserveDoor("North doorway", Vector3.new(doorX, 0, hall.MinZ + 16), doorwayClearWidth, 32)
-	end
-	for _, doorX in ipairs(doors.South or {}) do
-		reserveDoor("South doorway", Vector3.new(doorX, 0, hall.MaxZ - 16), doorwayClearWidth, 32)
-	end
-	if containsPump then
-		table.insert(zones, {
-			Label = "Pump interaction",
-			Position = center,
-			Width = 60,
-			Depth = 52,
-		})
-	end
-
-	-- Reserve final-art clearance before set pieces consume the remaining room.
-	-- The rig footprint is about 5.2 x 3.8 studs; this zone plus normal spacing
-	-- keeps it out of pumps, door approaches, slides, pits and foam clusters.
-	local poolFoamSpawnPosition = reserveFirst("Pool Foam spawn",
-		placementCandidates(8, 8), 8, 8, 4)
-	assert(poolFoamSpawnPosition,
-		string.format("[Level 2] no safe Pool Foam spawn in Kids room %s", tostring(index)))
-
-	local slideIndex = kidsPumpIndex == 3 and 4 or 3
-	local ballIndex = kidsPumpIndex == 2 and 5 or 2
-	local archetype
-	if containsPump then archetype = "Pump Playroom"
-	elseif index == 1 then archetype = "Splash Room"
-	elseif index == slideIndex then archetype = "Slide Tower"
-	elseif index == ballIndex then archetype = "Ball Pit Room"
-	else archetype = "Sparse Abandoned Room" end
-	kidsFolder:SetAttribute("Level2_PlayArchetype", archetype)
-
-	local rng = Random.new((hall.LocalSeed or index) + 918273)
-	local longAlongX = hall.Width >= hall.Depth
-	local longAxis = longAlongX and Vector3.new(1, 0, 0) or Vector3.new(0, 0, 1)
-	local sideAxis = Vector3.new(-longAxis.Z, 0, longAxis.X)
-
-	local corePlaced = archetype == "Pump Playroom"
-	local coreTier = corePlaced and "Pump" or nil
-	if archetype == "Splash Room" then
-		local preferredWidth = math.max(28, math.min(46, hall.Width * .34))
-		local preferredDepth = math.max(26, math.min(40, hall.Depth * .36))
-		local poolOptions = {
-			{preferredWidth, preferredDepth, "Full"},
-			{math.max(24, preferredWidth * .82), math.max(22, preferredDepth * .82), "Compact"},
-			{20, 18, "Micro"},
-			{14, 12, "Nano"},
-			{10, 8, "Tiny"},
-		}
-		for _, option in ipairs(poolOptions) do
-			local zoneWidth, zoneDepth = option[1] + 8, option[2] + 10
-			local poolCenter = reserveFirst("Raised splash pool",
-				placementCandidates(zoneWidth, zoneDepth), zoneWidth, zoneDepth, 3)
-			if poolCenter then
-				makeRaisedPool(kidsFolder, poolCenter, option[1], option[2], hall)
-				makeKidsSplashToys(kidsFolder, poolCenter, rng, index, option[1], option[2])
-				corePlaced, coreTier = true, option[3]
-				break
-			end
-		end
-	elseif archetype == "Ball Pit Room" then
-		local pitOptions = {
-			{34, 30, "Full"},
-			{28, 24, "Compact"},
-			{22, 18, "Micro"},
-			{14, 13, "Nano"},
-			{8, 7, "Tiny"},
-		}
-		for _, option in ipairs(pitOptions) do
-			local zoneWidth, zoneDepth = option[1] + 8, option[2] + 9
-			local pitCenter = reserveFirst("Filled ball pit",
-				placementCandidates(zoneWidth, zoneDepth), zoneWidth, zoneDepth, 3)
-			if pitCenter then
-				makeKidsBallPit(kidsFolder, hall, pitCenter, rng, index, option[1], option[2])
-				corePlaced, coreTier = true, option[3]
-				break
-			end
-		end
-		local crawlWidth = math.abs(longAxis.X) > 0 and 20 or 15
-		local crawlDepth = math.abs(longAxis.Z) > 0 and 20 or 15
-		local crawlCenter = reserveFirst("Crawl frames",
-			placementCandidates(crawlWidth, crawlDepth), crawlWidth, crawlDepth, 3)
-		if crawlCenter then makeKidsCrawlFrames(kidsFolder, hall, crawlCenter, longAxis,
-			"Level 2 Foam Crawl Frame " .. index) end
-	elseif archetype == "Slide Tower" then
-		local slideOptions = {
-			{Long = 76, Short = 28, Mode = "Full"},
-			{Long = 58, Short = 26, Mode = "Compact"},
-			{Long = 42, Short = 22, Mode = "Micro"},
-			{Long = 24, Short = 14, Mode = "Nano"},
-		}
-		for _, option in ipairs(slideOptions) do
-			for _, forward in ipairs({longAxis, sideAxis}) do
-				local zoneWidth = math.abs(forward.X) > 0 and option.Long or option.Short
-				local zoneDepth = math.abs(forward.Z) > 0 and option.Long or option.Short
-				local slideCenter = reserveFirst("Connected slide tower",
-					placementCandidates(zoneWidth, zoneDepth), zoneWidth, zoneDepth, 3)
-				if slideCenter then
-					local directionLength = math.abs(forward.X) > 0 and hall.Width or hall.Depth
-					makeKidsSlideStructure(kidsFolder, hall, slideCenter, forward, index,
-						directionLength, option.Mode)
-					corePlaced, coreTier = true, option.Mode
+	local rng = Random.new(hall.LocalSeed or index)
+	local blocks = math.clamp(math.floor(hall.Area / 2600), 5, 14)
+	for block = 1, blocks do
+		local x, z
+		if containsPump then
+			-- Pump 1 owns the centre of this room. Re-roll props away from its
+			-- 25x17 plinth plus a generous interaction path around the lever.
+			for _ = 1, 20 do
+				local candidateX = rng:NextNumber(-.32, .32) * hall.Width
+				local candidateZ = rng:NextNumber(-.32, .32) * hall.Depth
+				if math.abs(candidateX) >= 27 or math.abs(candidateZ) >= 23 then
+					x, z = candidateX, candidateZ
 					break
 				end
 			end
-			if corePlaced then break end
-		end
-	elseif archetype == "Sparse Abandoned Room" then
-		local abandonedOptions = {
-			{
-				Width = math.abs(longAxis.X) > 0 and 22 or 14,
-				Depth = math.abs(longAxis.Z) > 0 and 22 or 14,
-				Tier = "Sparse",
-			},
-			-- Four-door minimum rooms can have no 22x14 pocket even though the
-			-- crawl-frame geometry itself fits safely inside a 12x12 footprint.
-			{Width = 12, Depth = 12, Tier = "SparseCompact"},
-		}
-		for _, option in ipairs(abandonedOptions) do
-			local crawlCenter = reserveFirst("Abandoned crawl frames",
-				placementCandidates(option.Width, option.Depth), option.Width, option.Depth, 3)
-			if crawlCenter then
-				makeKidsCrawlFrames(kidsFolder, hall, crawlCenter, longAxis,
-					"Level 2 Abandoned Foam Frame " .. index)
-				for ballIndex = 1, 3 do
-					-- Keep the abandoned balls beside the frames and inside both
-					-- the normal and compact reservations.
-					local offset = sideAxis * (ballIndex - 2) * 4 + longAxis * 4
-					local ball = part(kidsFolder, "Level 2 Displaced Ball " .. ballIndex,
-						CFrame.new(crawlCenter + offset + Vector3.new(0, 1.15, 0)),
-						Vector3.new(2.3, 2.3, 2.3),
-						KIDS_BALL_COLORS[((ballIndex + index) % #KIDS_BALL_COLORS) + 1],
-						Enum.Material.SmoothPlastic)
-					ball.Shape = Enum.PartType.Ball
-					ball.CanCollide = false
-					ball.CanTouch = false
-					ball.CanQuery = false
-					ball:SetAttribute("Level2_KidsDisplacedProp", true)
-				end
-				corePlaced, coreTier = true, option.Tier
-				break
+			if not x then
+				x = (block % 2 == 0 and 1 or -1) * math.min(hall.Width * .32, 34)
+				z = 0
 			end
+		else
+			x = rng:NextNumber(-.32, .32) * hall.Width
+			z = rng:NextNumber(-.32, .32) * hall.Depth
 		end
-		if not corePlaced then
-			-- A minimum-size four-door room can legitimately have no prop pocket
-			-- beyond the protected creature spawn.  Keep it deliberately bare and
-			-- let the waiting Pool Foam rig be this rare room's focal set piece.
-			corePlaced, coreTier = true, "SparseEntityOnly"
-		end
-	end
-	kidsFolder:SetAttribute("Level2_CoreSetPiecePlaced", corePlaced)
-	kidsFolder:SetAttribute("Level2_CoreSizeTier", coreTier)
-	assert(corePlaced, string.format("[Level 2] no safe %s placement in Kids room %s", archetype, tostring(index)))
-
-	-- Every kids room gets at least a little water: if the core set piece was
-	-- not already the splash pool, tuck a small wading pool wherever it fits.
-	if archetype ~= "Splash Room" then
-		for _, option in ipairs({{18, 14}, {14, 12}, {11, 9}}) do
-			local zoneWidth, zoneDepth = option[1] + 6, option[2] + 6
-			local wadeCenter = reserveFirst("Kids wading pool",
-				placementCandidates(zoneWidth, zoneDepth), zoneWidth, zoneDepth, 3)
-			if wadeCenter then
-				makeRaisedPool(kidsFolder, wadeCenter, option[1], option[2], hall)
-				break
-			end
-		end
+		local blockHeight = rng:NextNumber(3, 8)
+		local shade = block % 2 == 0 and palette.Accent or palette.Color
+		local pad = part(kidsFolder, "Level 2 Soft Play Block " .. block,
+			CFrame.new(center + Vector3.new(x, blockHeight * .5, z)) * CFrame.Angles(0, rng:NextNumber() * math.pi, 0),
+			Vector3.new(rng:NextNumber(8, 17), blockHeight, rng:NextNumber(8, 17)), shade,
+			Enum.Material.SmoothPlastic)
+		pad.CanCollide = true
 	end
 
-	-- Deliberate edge-first clusters replace the old field of overlapping
-	-- random boxes.  Each orientation reserves its true footprint.
-	local desiredClusters = archetype == "Sparse Abandoned Room" and 2
-		or archetype == "Pump Playroom" and 2
-		or 1
-	local placedClusters = 0
-	for clusterIndex = 1, desiredClusters do
-		local clusterForward = clusterIndex % 2 == 0 and Vector3.new(1, 0, 0)
-			or Vector3.new(0, 0, 1)
-		local clusterWidth = math.abs(clusterForward.X) > 0 and 30 or 15
-		local clusterDepth = math.abs(clusterForward.Z) > 0 and 30 or 15
-		local candidate = reserveFirst("Foam cluster",
-			placementCandidates(clusterWidth, clusterDepth), clusterWidth, clusterDepth, 3)
-		if candidate then
-			placedClusters += 1
-			makeKidsFoamCluster(kidsFolder, hall, candidate, clusterForward, placedClusters)
-		end
+	local steps = math.clamp(math.floor((hall.Depth * .3 - 8) / 2.3), 6, 15)
+	local topY = steps * .78
+	local slideTop = center + Vector3.new(-hall.Width * .26, topY + 2.5, -hall.Depth * .2)
+	local slideEnd = center + Vector3.new(-hall.Width * .26, 1.5, math.min(hall.Depth * .12, hall.Depth * .5 - 22))
+	makeStairFlight(kidsFolder, slideTop + Vector3.new(9, -topY - 2.5, 0), Vector3.new(0, 0, -1), 8, steps,
+		"Level 2 Kids Stair " .. index, nil, nil, hall)
+	makeSlideTube(kidsFolder, slideTop,
+		slideTop + Vector3.new(0, -3, 13),
+		slideEnd + Vector3.new(0, 6, -11),
+		slideEnd, 4.4,
+		Configuration.SlideColors[(index % #Configuration.SlideColors) + 1],
+		"Level 2 Kids Slide " .. index, 14, true)
+
+	local pitCenter = center + Vector3.new(-hall.Width * .26, 0, math.min(hall.Depth * .26, hall.Depth * .5 - 20))
+	local pit = part(kidsFolder, "Level 2 Ball Pit Basin",
+		CFrame.new(pitCenter + Vector3.new(0, .6, 0)), Vector3.new(36, 1.2, 32),
+		palette.Accent, Enum.Material.SmoothPlastic)
+	pit.CanCollide = true
+	for wallIndex, data in ipairs({
+		{Vector3.new(-18, 2.5, 0), Vector3.new(1.5, 5, 32)},
+		{Vector3.new(18, 2.5, 0), Vector3.new(1.5, 5, 32)},
+		{Vector3.new(0, 2.5, -16), Vector3.new(36, 5, 1.5)},
+		{Vector3.new(0, 2.5, 16), Vector3.new(36, 5, 1.5)},
+	}) do
+		part(kidsFolder, "Level 2 Ball Pit Wall " .. wallIndex,
+			CFrame.new(pitCenter + data[1]), data[2], palette.Color, Enum.Material.SmoothPlastic)
 	end
 
-	kidsFolder:SetAttribute("Level2_ReservedZoneCount", #zones)
-	kidsFolder:SetAttribute("Level2_FoamClusterCount", placedClusters)
-	-- Kids rooms remain lit only by the round natural skylights in their ceiling.
-	return kidsFolder, poolFoamSpawnPosition
+	if hall.PoolType == "KidsShallow" then
+		makeRaisedPool(kidsFolder,
+			center + Vector3.new(math.min(hall.Width * .26, hall.Width * .5 - 34), 0, 0),
+			math.min(52, hall.Width * .36), math.min(52, hall.Depth * .44), hall)
+	end
+
+	-- Kids rooms are lit only by the round natural skylights in their ceiling.
+	return kidsFolder
 end
 
 -- ── pump stations ───────────────────────────────────────────────────────────
@@ -2388,60 +1784,18 @@ local function makeCorridor(parent, layout, corridor, doorFolder)
 	ceiling.CanCollide = true
 
 	-- Dense arch rings: the corridor reads as a vaulted arch tunnel.
-	local rings = math.clamp(math.floor(length / 22), 3, 7)
-	-- Keep the outer vault inside the standard doorway shoulders. The old
-	-- 15.4-stud shell was wider than the 30-stud opening and visibly clipped.
-	local archRadius = math.min(width * .5 - 3, Configuration.DoorWidth * .5 - 1.8)
+	local rings = math.max(3, math.floor(length / 11))
+	local archRadius = width * .5 - 3
 	for ring = 1, rings do
 		local t = ring / (rings + 1)
 		makeArchSpan(parent, center + oriented(from - mid + (to - from) * t, 0),
 			alongX, corridor.Index .. "." .. ring, archRadius, depth)
 	end
 	-- The ribs connect into one continuous half-cylinder vault.
-	local vaultRadius = math.min(archRadius + 1.4, Configuration.DoorWidth * .5 - .9)
-	makeBarrelVault(parent, center, alongX, corridor.Index, vaultRadius, length - 2, depth)
+	makeBarrelVault(parent, center, alongX, corridor.Index, archRadius + 1.4, length - 2, depth)
 
-	-- End caps: fill the gap between the vault's curve and the rectangular
-	-- doorway at both ends, so the tunnel mouth reads as a solid arch face
-	-- with no open corners.
-	local capHalfWidth = Configuration.DoorWidth * .5
-	local capTop = Configuration.DoorHeight + .8
-	local slats = 10
-	local slatWidth = (capHalfWidth * 2) / slats
-	for _, endSign in ipairs({-1, 1}) do
-		local along = endSign * (length * .5 - 1.1)
-		for slat = 0, slats - 1 do
-			local xLocal = -capHalfWidth + (slat + .5) * slatWidth
-			local arcY
-			if math.abs(xLocal) < vaultRadius then
-				arcY = 1 + math.sqrt(vaultRadius ^ 2 - xLocal ^ 2) - .4
-			else
-				arcY = -depth - 1
-			end
-			if capTop - arcY > .4 then
-				local cap = tiledPart(parent, "Level 2 Corridor Arch Face " .. corridor.Index,
-					CFrame.new(center + oriented(along, xLocal) + Vector3.new(0, (capTop + arcY) * .5, 0)),
-					orientedSize(2.2, capTop - arcY, slatWidth + .12), C.TileCool, nil, 7)
-				cap.CanCollide = true
-			end
-		end
-	end
-
-	-- Tunnel light comes from small lamps INSIDE the vault; the old ceiling
-	-- bar sat above the shell and glowed over the tunnel from outside.
-	for _, lightT in ipairs({-.25, .25}) do
-		local emitter = part(parent, "Level 2 Corridor Vault Light " .. corridor.Index,
-			CFrame.new(center + oriented(lightT * length, 0) + Vector3.new(0, vaultRadius - 2.2, 0)),
-			Vector3.new(1.2, .4, 1.2), C.Light, Enum.Material.Neon, .25)
-		emitter.CanCollide = false
-		emitter.CanTouch = false
-		local lamp = Instance.new("PointLight")
-		lamp.Color = C.Light
-		lamp.Brightness = .7
-		lamp.Range = 26
-		lamp.Shadows = false
-		lamp.Parent = emitter
-	end
+	makeCeilingPanel(parent, center, "Corridor " .. corridor.Index,
+		orientedSize(math.min(length * .55, 40), .55, 6), 0, height)
 
 	-- Water, full width.
 	local waterHeight = depth + .1
@@ -2467,53 +1821,6 @@ local function makeCorridor(parent, layout, corridor, doorFolder)
 	return {Corridor = corridor, Water = region, Door = door, Center = center}
 end
 
--- Big water halls earn real furniture: a play tower (spiral stair up, small
--- flume back into the water) and, in the largest halls, a diving platform.
--- Deterministic per hall so a seed always builds the same room.
-local function decorateLargeHall(parent, hall, depth, index)
-	if not depth or hall.Area < 42000 then return end
-	local rng = Random.new((hall.LocalSeed or hall.Index or 1) + 7)
-	local sign = rng:NextInteger(0, 1) == 0 and 1 or -1
-	local height = hallHeight(hall)
-
-	-- Play tower.
-	local towerPos = hall.Center + Vector3.new(sign * hall.Width * .27, 0, hall.Depth * .2)
-	local topY = math.min(12, height - 9)
-	local platform = tiledPart(parent, "Level 2 Play Tower Deck " .. index,
-		CFrame.new(towerPos + Vector3.new(0, topY - .5, 0)), Vector3.new(13, 1, 13),
-		C.TileWarm, Enum.NormalId:GetEnumItems(), 7)
-	platform.CanCollide = true
-	makeSpiralStair(parent, towerPos + Vector3.new(-11, 0, -4), -depth + .5, topY, 6.5,
-		"Level 2 Play Tower " .. index)
-	makeRail(parent, towerPos + Vector3.new(-6, topY - 1, -6.2),
-		towerPos + Vector3.new(6, topY - 1, -6.2), "Level 2 Play Tower " .. index)
-	local color = Configuration.SlideColors[((tonumber(index) or 1) % #Configuration.SlideColors) + 1]
-	local start = towerPos + Vector3.new(0, topY + 3.6, 6)
-	local landing = towerPos + Vector3.new(-sign * 6, 1.8, 26)
-	makeSlideTube(parent, start,
-		start + Vector3.new(0, -3, 8),
-		landing + Vector3.new(sign * 4, 5, -9),
-		landing, 4.2, color, "Level 2 Play Tower Slide " .. index, 12, true)
-
-	-- Diving platform in the really big halls.
-	if hall.Area >= 72000 then
-		local divePos = hall.Center + Vector3.new(-sign * hall.Width * .27, 0, -hall.Depth * .22)
-		makeColumn(parent, divePos + Vector3.new(0, -depth, 0), depth + 8, 4.5)
-		local deck = tiledPart(parent, "Level 2 Diving Deck " .. index,
-			CFrame.new(divePos + Vector3.new(0, 8, 0)), Vector3.new(9, 1, 9),
-			C.TileWarm, Enum.NormalId:GetEnumItems(), 7)
-		deck.CanCollide = true
-		local board = tiledPart(parent, "Level 2 Diving Board " .. index,
-			CFrame.new(divePos + Vector3.new(0, 8.4, 7.5)), Vector3.new(3, .5, 8),
-			C.TileCool, {Enum.NormalId.Top}, 7)
-		board.CanCollide = true
-		local stepRun, stepRise = 1.4, .92
-		local stepCount = math.ceil((8 + depth) / stepRise)
-		makeStairFlight(parent, divePos + Vector3.new(-4.5 - stepCount * stepRun, -depth, 0),
-			Vector3.new(1, 0, 0), 6, stepCount, "Level 2 Diving Steps " .. index, stepRun, stepRise)
-	end
-end
-
 -- ── arrival ─────────────────────────────────────────────────────────────────
 
 local function makeArrivalConcourse(parent, hall, roomDirection)
@@ -2536,35 +1843,6 @@ local function makeArrivalConcourse(parent, hall, roomDirection)
 	for _, direction in ipairs({roomDirection, -roomDirection}) do
 		makeStairFlight(arrivalFolder, center + direction * 17.4, -direction, 12, 2,
 			"Level 2 Arrival Steps", 2.0, .6)
-	end
-
-	-- Paired piers and lintels give the oversized arrival room a deliberate
-	-- procession while preserving a forty-stud clear route into the level.
-	local arrivalHeight = hallHeight(hall)
-	for frameIndex, distance in ipairs({26, 58, 90}) do
-		local frameCenter = center + roomDirection * distance
-		if frameCenter.X > hall.MinX + 28 and frameCenter.X < hall.MaxX - 28
-			and frameCenter.Z > hall.MinZ + 28 and frameCenter.Z < hall.MaxZ - 28 then
-			for sideIndex, sideSign in ipairs({-1, 1}) do
-				local pierPosition = frameCenter + sideDirection * sideSign * 22
-					+ Vector3.new(0, (arrivalHeight - 4) * .5, 0)
-				local pier = part(arrivalFolder,
-					string.format("Level 2 Arrival Scale Frame %d Pier %d", frameIndex, sideIndex),
-					CFrame.new(pierPosition), Vector3.new(4, arrivalHeight - 4, 4),
-					C.TileCool, Enum.Material.CeramicTiles)
-				pier.CanCollide = false
-				pier.CanTouch = false
-				pier.CanQuery = false
-			end
-			local lintelPosition = frameCenter + Vector3.new(0, arrivalHeight - 6, 0)
-			local lintel = part(arrivalFolder,
-				"Level 2 Arrival Scale Frame " .. frameIndex .. " Lintel",
-				CFrame.lookAt(lintelPosition, lintelPosition + roomDirection),
-				Vector3.new(48, 3, 4), C.TileWarm, Enum.Material.CeramicTiles)
-			lintel.CanCollide = false
-			lintel.CanTouch = false
-			lintel.CanQuery = false
-		end
 	end
 
 	local vestibuleCenter = center - roomDirection * 2
@@ -2776,7 +2054,6 @@ function WorldBuilder.Build(layout, generation)
 	local exit
 	local hallDepths = {}
 	local built = 0
-	local kidsPumpIndex = layout.PumpHalls[1] and layout.PumpHalls[1].KidsIndex or -1
 
 	for _, hall in ipairs(layout.Halls) do
 		local hallModel = Instance.new("Model")
@@ -2797,19 +2074,7 @@ function WorldBuilder.Build(layout, generation)
 		makeHallCeiling(hallModel, hall)
 
 		if hall.Role == "Kids Area" then
-			local _, poolFoamSpawnPosition = makeKidsHall(kidsFolder, hall,
-				hall.KidsIndex or hall.Index, doorsByHall[hall.Index], kidsPumpIndex)
-			local poolFoamSpawn = part(entityFolder,
-				"Level 2 Pool Foam Spawn " .. hall.Index,
-				CFrame.new(poolFoamSpawnPosition + Vector3.new(0, 2, 0)),
-				Vector3.new(1.5, .2, 1.5), C.Emergency, Enum.Material.Neon, 1)
-			poolFoamSpawn.CanCollide = false
-			poolFoamSpawn.CanTouch = false
-			poolFoamSpawn.CanQuery = false
-			poolFoamSpawn:SetAttribute("Level2_HallId", hall.Id)
-			poolFoamSpawn:SetAttribute("Level2_HallIndex", hall.Index)
-			poolFoamSpawn:SetAttribute("Level2_KidsIndex", hall.KidsIndex or 0)
-			poolFoamSpawn:SetAttribute("Level2_PoolFoamSpawn", true)
+			makeKidsHall(kidsFolder, hall, hall.KidsIndex or hall.Index)
 		elseif hall.Role == "Slide Hall" then
 			slideDecks[hall.SlideHallIndex] = makeSlideHall(slideFolder, hall, hall.SlideHallIndex)
 			if hall.IsGrand then
@@ -2826,25 +2091,11 @@ function WorldBuilder.Build(layout, generation)
 				makeColonnade(hallModel, hall, depth, {-.56})
 			elseif archetype == "Flooded Gallery" then
 				makeColonnade(hallModel, hall, depth, {-.64, .64})
-			elseif archetype == "Arch Tunnel" then
-				-- A room-crossing vault tube read as a giant pipe dropped into the
-				-- hall; the vault belongs to real corridors only. These halls are
-				-- ordinary flooded galleries now, and the large-hall decoration
-				-- pass below gives them their set pieces.
-				makeColonnade(hallModel, hall, depth, {-.58, .58})
-			elseif archetype == "Ring Corridor" then
+			elseif archetype == "Arch Tunnel" or archetype == "Ring Corridor" then
 				local acrossZ = hall.Width >= hall.Depth
 				local along = acrossZ and hall.Width or hall.Depth
-				local rings = math.clamp(math.floor(along / 38), 3, 7)
-				local maximumDoorRadius = math.min(
-					Configuration.DoorWidth * .5 - 2,
-					Configuration.DoorHeight - 2
-				)
-				local radius = math.min(
-					(acrossZ and hall.Depth or hall.Width) * .5 - 6,
-					height - 5,
-					maximumDoorRadius
-				)
+				local rings = math.clamp(math.floor(along / 26), 3, 9)
+				local radius = math.min((acrossZ and hall.Depth or hall.Width) * .5 - 6, height - 5, 19)
 				for ring = 1, rings do
 					local t = ring / (rings + 1)
 					local position = acrossZ
@@ -2852,6 +2103,8 @@ function WorldBuilder.Build(layout, generation)
 						or Vector3.new(hall.Center.X, 0, hall.MinZ + along * t)
 					makeArchSpan(hallModel, position, acrossZ, hall.Index .. "." .. ring, radius, depth or 0)
 				end
+				makeBarrelVault(hallModel, hall.Center, acrossZ, hall.Index,
+					radius + 1.4, along - 14, depth or 0)
 			elseif archetype == "Spiral Stair Well" then
 				makeSpiralStair(hallModel, hall.Center, -(depth or 1) + .5, height - 12, 13,
 					"Level 2 Stair Well " .. hall.Index)
@@ -2874,10 +2127,6 @@ function WorldBuilder.Build(layout, generation)
 					light.Shadows = false
 					light.Parent = pane
 				end
-			end
-
-			if archetype ~= "Ring Corridor" then
-				decorateLargeHall(hallModel, hall, depth, hall.Index)
 			end
 
 			-- Deep water: stairs descend from every doorway into the pool.

@@ -8,6 +8,13 @@ local RS = game:GetService("ReplicatedStorage")
 
 local remote = RS:WaitForChild("Remotes"):WaitForChild("ToggleFlashlight")
 local mounts = {}
+local lastAim = {}
+local lastToggle = {}
+
+local function finiteVector(vector)
+	return vector.X == vector.X and vector.Y == vector.Y and vector.Z == vector.Z
+		and math.abs(vector.X) < 1e6 and math.abs(vector.Y) < 1e6 and math.abs(vector.Z) < 1e6
+end
 
 local function ensureFlag(char)
 	local flag = char:FindFirstChild("FlashlightOn")
@@ -75,20 +82,39 @@ end
 remote.OnServerEvent:Connect(function(player, value, payload)
 	local char = player.Character
 	if not char then return end
+	local humanoid = char:FindFirstChildOfClass("Humanoid")
+	local now = os.clock()
 	if type(value) == "boolean" then
+		if now - (lastToggle[player] or -math.huge) < 0.08 then
+			-- An off signal is always safe and must win even if death followed an
+			-- on signal immediately; never leave a replicated corpse beam lit.
+			if value == false then
+				local flag = char:FindFirstChild("FlashlightOn")
+				if flag and flag:IsA("BoolValue") then flag.Value = false end
+				local existingMount = mounts[player]
+				if existingMount then setMountEnabled(existingMount, false) end
+			end
+			return
+		end
+		lastToggle[player] = now
+		if value and (not humanoid or humanoid.Health <= 0) then return end
 		if player:GetAttribute("InRound") ~= true then value = false end
 		ensureFlag(char).Value = value
-		local mount = ensureMount(player, char)
-		setMountEnabled(mount, value)
+		local mount = value and ensureMount(player, char) or mounts[player]
+		if mount then setMountEnabled(mount, value) end
 	elseif value == "aim" and typeof(payload) == "CFrame" then
+		if not humanoid or humanoid.Health <= 0 then return end
+		if now - (lastAim[player] or -math.huge) < 1 / 30 then return end
+		lastAim[player] = now
 		if not ensureFlag(char).Value then return end
 		local head = char:FindFirstChild("Head")
 		if not head then return end
 		local requested = payload.Position
+		local look = payload.LookVector
+		if not finiteVector(requested) or not finiteVector(look) then return end
 		-- Camera origin must stay close to the character. Direction is still the
 		-- client's exact view, so looking up/down remains correct in first person.
 		local origin = (requested - head.Position).Magnitude <= 6 and requested or head.Position
-		local look = payload.LookVector
 		if look.Magnitude < 0.9 then return end
 		local mount = ensureMount(player, char)
 		mount.CFrame = CFrame.lookAt(origin, origin + look.Unit)
@@ -118,4 +144,8 @@ for _, p in ipairs(Players:GetPlayers()) do
 	if p.Character then ensureFlag(p.Character) end
 end
 
-Players.PlayerRemoving:Connect(removeMount)
+Players.PlayerRemoving:Connect(function(player)
+	lastAim[player] = nil
+	lastToggle[player] = nil
+	removeMount(player)
+end)

@@ -1,6 +1,6 @@
 -- Level 2 Objective Controller
 --
--- Level 2's own objective, not Level 2's:
+-- Level 2's own objective, separate from Level 1's fuse puzzle:
 --   1. Three PUMP STATIONS are scattered through the complex and can all be
 --      reached freely from the arrival.
 --   2. Starting a pump DRAINS the flooded corridor next to it — the water is
@@ -13,6 +13,7 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
 local Terrain = workspace.Terrain
 
 local ObjectiveController = {}
@@ -20,6 +21,10 @@ local activeSession
 
 local RUNNING_COLOR = Color3.fromRGB(150, 232, 176)
 local OPEN_COLOR = Color3.fromRGB(180, 218, 196)
+
+-- Pump audio is deliberately staged around the authored clip lengths.
+local DRAIN_RUSH_DELAY = 10
+local DRAIN_RUSH_DURATION = 12
 
 local function state()
 	return ReplicatedStorage:FindFirstChild("Level 2 State")
@@ -50,24 +55,97 @@ local function fireStatus(title, subtitle, instruction, holdSeconds)
 	end
 end
 
--- Level 2 never fires this, so its players only see the result at round end.
+-- Level 1 never fires this, so its players only see the result at round end.
 -- Level 2 fires it so an escape reads immediately for everyone.
 local function fireEscape(player)
 	local remotes = ReplicatedStorage:FindFirstChild("Remotes")
 	local status = remotes and remotes:FindFirstChild("RoundStatus")
 	if status then
-		status:FireAllClients("escape", player.Name)
+		for _, recipient in ipairs(Players:GetPlayers()) do
+			if recipient:GetAttribute("InRound") == true then
+				status:FireClient(recipient, "escape", player.Name)
+			end
+		end
 	end
 end
 
-local function validPlayer(player, session)
+local function validSession(session)
 	return activeSession == session
 		and workspace:GetAttribute("SelectedLevel") == 2
 		and workspace:GetAttribute("RoundActive") == true
-		and player:GetAttribute("InRound") == true
-		and player:GetAttribute("Escaped") ~= true
 		and session.Manifest.World.Parent ~= nil
 		and session.Manifest.World:GetAttribute("Level2_Generation") == session.Generation
+end
+
+local function validPlayer(player, session)
+	return validSession(session)
+		and player.Parent == Players
+		and player:GetAttribute("InRound") == true
+		and player:GetAttribute("Escaped") ~= true
+end
+
+local function livingCharacter(player)
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	if not (character and character.Parent and humanoid and humanoid.Health > 0 and root) then
+		return nil
+	end
+	return character, humanoid, root
+end
+
+local function promptWorldPosition(prompt)
+	local parent = prompt and prompt.Parent
+	if parent and parent:IsA("Attachment") then return parent.WorldPosition end
+	if parent and parent:IsA("BasePart") then return parent.Position end
+	return nil
+end
+
+local function canUsePump(player, session, pump)
+	if not validPlayer(player, session) then return false end
+	if not (pump.Prompt.Enabled and pump.Prompt:IsDescendantOf(session.Manifest.World)) then return false end
+	local character, _, root = livingCharacter(player)
+	local target = promptWorldPosition(pump.Prompt)
+	if not (character and target) then return false end
+	if (root.Position - target).Magnitude > pump.Prompt.MaxActivationDistance + 2 then return false end
+
+	if pump.Prompt.RequiresLineOfSight then
+		local originPart = character:FindFirstChild("Head") or root
+		local params = RaycastParams.new()
+		params.FilterType = Enum.RaycastFilterType.Exclude
+		params.FilterDescendantsInstances = {character}
+		params.IgnoreWater = true
+		local result = workspace:Raycast(originPart.Position, target - originPart.Position, params)
+		if result and not result.Instance:IsDescendantOf(pump.Model) then return false end
+	end
+	return true
+end
+
+local function validateManifest(manifest)
+	assert(type(manifest) == "table", "Level 2 objective manifest must be a table")
+	assert(manifest.World and manifest.World:IsA("Model") and manifest.World.Parent,
+		"Level 2 objective manifest is missing its live World model")
+	assert(type(manifest.Pumps) == "table" and #manifest.Pumps > 0,
+		"Level 2 objective manifest has no pumps")
+	local seenIndexes = {}
+	for _, pump in ipairs(manifest.Pumps) do
+		assert(type(pump) == "table" and type(pump.Index) == "number",
+			"Level 2 objective manifest contains an invalid pump record")
+		assert(not seenIndexes[pump.Index], "Level 2 objective manifest has a duplicate pump index")
+		seenIndexes[pump.Index] = true
+		assert(pump.Model and pump.Model:IsA("Model") and pump.Model:IsDescendantOf(manifest.World),
+			"Level 2 pump model is missing from the generated world")
+		assert(pump.Prompt and pump.Prompt:IsA("ProximityPrompt") and pump.Prompt:IsDescendantOf(pump.Model),
+			"Level 2 pump is missing its ProximityPrompt")
+		assert(pump.Lamp and pump.Lamp:IsA("BasePart"), "Level 2 pump is missing its status lamp")
+	end
+	assert(type(manifest.Exit) == "table", "Level 2 objective manifest has no exit")
+	assert(manifest.Exit.Trigger and manifest.Exit.Trigger:IsA("BasePart")
+		and manifest.Exit.Trigger:IsDescendantOf(manifest.World),
+		"Level 2 exit trigger is missing from the generated world")
+	assert(manifest.Exit.SafeSpawn and manifest.Exit.SafeSpawn:IsA("BasePart")
+		and manifest.Exit.SafeSpawn:IsDescendantOf(manifest.World),
+		"Level 2 exit safe spawn is missing from the generated world")
 end
 
 local function drain(record)
@@ -77,14 +155,14 @@ local function drain(record)
 end
 
 local function openPressureDoors(session)
-	if session.DoorsOpen then return end
+	if session.DoorsOpen or not validSession(session) then return end
 	session.DoorsOpen = true
 	workspace:SetAttribute("Level2ExitPowered", true)
 
-	local level3State = state()
-	if level3State then
-		level3State:SetAttribute("Level2_Phase", "EXIT_OPEN")
-		level3State:SetAttribute("Level2_LightingMode", "EXIT_OPEN")
+	local level2State = state()
+	if level2State then
+		level2State:SetAttribute("Level2_Phase", "EXIT_OPEN")
+		level2State:SetAttribute("Level2_LightingMode", "EXIT_OPEN")
 	end
 
 	for _, record in ipairs(session.Manifest.PressureDoors) do
@@ -114,6 +192,7 @@ end
 
 function ObjectiveController.Start(manifest, generation)
 	ObjectiveController.Stop()
+	validateManifest(manifest)
 	local session = {
 		Manifest = manifest,
 		Generation = generation,
@@ -121,6 +200,7 @@ function ObjectiveController.Start(manifest, generation)
 		Started = {},
 		StartedCount = 0,
 		DoorsOpen = false,
+		Escaping = {},
 	}
 	activeSession = session
 
@@ -131,40 +211,72 @@ function ObjectiveController.Start(manifest, generation)
 
 	for _, pump in ipairs(manifest.Pumps) do
 		local connection = pump.Prompt.Triggered:Connect(function(player)
-			if not validPlayer(player, session) or session.Started[pump.Index] then return end
+			if session.Started[pump.Index] or not canUsePump(player, session, pump) then return end
 			session.Started[pump.Index] = true
 			session.StartedCount += 1
 
 			pump.Prompt.Enabled = false
 			pump.Lamp.Color = RUNNING_COLOR
-			pump.Lever.Color = RUNNING_COLOR
-			pump.Lever.CFrame = pump.Lever.CFrame * CFrame.Angles(math.rad(76), 0, 0)
+			if pump.LampGlow and pump.LampGlow.Parent then
+				pump.LampGlow.Color = RUNNING_COLOR
+				pump.LampGlow.Brightness = 1.1
+				pump.LampGlow.Range = 20
+			end
+			if pump.LeverStatusRing and pump.LeverStatusRing.Parent then
+				pump.LeverStatusRing.Color = RUNNING_COLOR
+				pump.LeverStatusRing.Material = Enum.Material.Neon
+			end
+			if pump.Lever and pump.Lever.Parent then
+				local rest = pump.LeverRestCFrame or pump.Lever.CFrame
+				local target = rest * CFrame.Angles(math.rad(76), 0, 0)
+				local tween = TweenService:Create(
+					pump.Lever,
+					TweenInfo.new(.58, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut),
+					{ CFrame = target }
+				)
+				tween:Play()
+			end
 			pump.Model:SetAttribute("Level2_PumpRunning", true)
 
 			workspace:SetAttribute("Level2Pumps", session.StartedCount)
-			local level3State = state()
-			if level3State then
-				level3State:SetAttribute("Level2_PumpProgress", session.StartedCount)
+			local level2State = state()
+			if level2State then
+				level2State:SetAttribute("Level2_PumpProgress", session.StartedCount)
 			end
 
+			-- Start the 12-second pump motor cue as soon as the lever engages.
 			fireSound("Level 2 Pump Start", player)
 
-			-- The visible payoff: this pump's corridor empties out.
 			local drained = manifest.Drains and manifest.Drains[pump.Index]
-			if drained then fireSound("Level 2 Drain Rush") end
-			drain(drained)
+			local isFinalPump = session.StartedCount >= goal
+
+			-- Ten seconds into the pump motor, start the 12-second drain surge and
+			-- remove this pump's water at the same moment so audio and world match.
+			task.delay(DRAIN_RUSH_DELAY, function()
+				if not validSession(session) then return end
+				if drained then
+					fireSound("Level 2 Drain Rush")
+					drain(drained)
+				end
+
+				-- The third pump's pressure doors stay sealed until the complete
+				-- drain-surge clip has finished: 10 + 12 = 22 seconds after pull.
+				if isFinalPump then
+					task.delay(DRAIN_RUSH_DURATION, function()
+						if not validSession(session) or session.StartedCount < goal then return end
+						openPressureDoors(session)
+					end)
+				end
+			end)
 
 			fireStatus(
-				string.format("PUMP %d ONLINE", pump.Index),
-				string.format("%d / %d", session.StartedCount, goal),
-				session.StartedCount == goal
-					and "PRESSURE DOORS RELEASING"
-					or (drained and "A FLOODED SECTION HAS DRAINED" or "FIND THE REMAINING PUMPS")
+				string.format("PUMP STATION %02d ONLINE", pump.Index),
+				string.format("%d OF %d STATIONS RUNNING", session.StartedCount, goal),
+				isFinalPump
+					and "EQUALIZING PRESSURE"
+					or (drained and "DRAINING LOCAL SECTION" or "LOCATE REMAINING STATIONS"),
+				1.7
 			)
-
-			if session.StartedCount >= goal then
-				openPressureDoors(session)
-			end
 		end)
 		table.insert(session.Connections, connection)
 	end
@@ -173,13 +285,16 @@ function ObjectiveController.Start(manifest, generation)
 		if activeSession ~= session or not session.DoorsOpen then return end
 		local character = hit:FindFirstAncestorOfClass("Model")
 		local player = character and Players:GetPlayerFromCharacter(character)
-		if not player or not validPlayer(player, session) then return end
+		if not player or not validPlayer(player, session) or session.Escaping[player] then return end
+		local liveCharacter, _, root = livingCharacter(player)
+		if liveCharacter ~= character then return end
+		-- Touch fires for several character parts.  Lock the player before moving
+		-- them so crossing the doorway can only complete the level once.
+		session.Escaping[player] = true
 		player:SetAttribute("Escaped", true)
-		local root = character:FindFirstChild("HumanoidRootPart")
-		if root then
-			root.AssemblyLinearVelocity = Vector3.zero
-			root.CFrame = manifest.Exit.SafeSpawn.CFrame * CFrame.new(0, 3, 0)
-		end
+		root.AssemblyLinearVelocity = Vector3.zero
+		root.AssemblyAngularVelocity = Vector3.zero
+		liveCharacter:PivotTo(manifest.Exit.SafeSpawn.CFrame * CFrame.new(0, 3, 0))
 		fireSound("Level 2 Slide Rush", player)
 		fireEscape(player)
 	end)
@@ -194,8 +309,8 @@ function ObjectiveController.Start(manifest, generation)
 		fireStatus(
 			"SUNKEN LEISURE COMPLEX",
 			string.format("%d PUMP STATIONS OFFLINE", goal),
-			"START EVERY PUMP TO DRAIN THE COMPLEX",
-			4.5
+			"START ALL PUMPS TO UNSEAL THE EXIT",
+			3
 		)
 	end
 	if workspace:GetAttribute("RoundActive") == true then

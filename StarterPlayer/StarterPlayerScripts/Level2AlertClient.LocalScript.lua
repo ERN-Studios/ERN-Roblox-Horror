@@ -10,7 +10,7 @@ local event = ReplicatedStorage:WaitForChild("Level2AlertEvent")
 
 local gui = Instance.new("ScreenGui")
 gui.Name = "Level2AlertGui"
-gui.IgnoreGuiInset = true
+gui.IgnoreGuiInset = false
 gui.ResetOnSpawn = false
 gui.DisplayOrder = 80
 gui.Parent = player:WaitForChild("PlayerGui")
@@ -23,13 +23,50 @@ shade.Visible = false
 shade.Parent = gui
 
 local panel = Instance.new("Frame")
-panel.AnchorPoint = Vector2.new(.5, .5)
-panel.Position = UDim2.fromScale(.5, .44)
-panel.Size = UDim2.fromScale(.68, .25)
+-- Compact, inset-aware toast.  Wide screens keep it left of the persistent
+-- objective; medium screens use the remaining left column; narrow portrait
+-- screens stack it below the objective instead of covering either HUD.
 panel.BackgroundColor3 = Color3.fromRGB(5, 13, 16)
 panel.BackgroundTransparency = .12
 panel.BorderSizePixel = 0
 panel.Parent = shade
+local panelSize = Instance.new("UISizeConstraint")
+panelSize.MinSize = Vector2.new(180, 104)
+panelSize.MaxSize = Vector2.new(560, 140)
+panelSize.Parent = panel
+
+local cameraViewportConnection
+local function applySafePanelLayout()
+	local camera = workspace.CurrentCamera
+	local viewport = camera and camera.ViewportSize or Vector2.new(1280, 720)
+	if viewport.X < 600 then
+		panel.AnchorPoint = Vector2.new(.5, 0)
+		panel.Position = UDim2.new(.5, 0, 0, 158)
+		panel.Size = UDim2.new(1, -24, 0, 112)
+	elseif viewport.X < 860 then
+		panel.AnchorPoint = Vector2.new(0, 0)
+		panel.Position = UDim2.fromOffset(12, 70)
+		panel.Size = UDim2.fromOffset(math.max(180, viewport.X - 272), 118)
+	else
+		panel.AnchorPoint = Vector2.new(.5, .5)
+		panel.Position = UDim2.fromScale(.43, .24)
+		panel.Size = UDim2.new(.56, 0, 0, 132)
+	end
+end
+
+local function bindCurrentCamera()
+	if cameraViewportConnection then
+		cameraViewportConnection:Disconnect()
+		cameraViewportConnection = nil
+	end
+	local camera = workspace.CurrentCamera
+	if camera then
+		cameraViewportConnection = camera:GetPropertyChangedSignal("ViewportSize"):Connect(applySafePanelLayout)
+	end
+	applySafePanelLayout()
+end
+workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(bindCurrentCamera)
+bindCurrentCamera()
 
 local stroke = Instance.new("UIStroke")
 stroke.Color = Color3.fromRGB(54, 210, 221)
@@ -38,30 +75,46 @@ stroke.Parent = panel
 
 local first = Instance.new("TextLabel")
 first.BackgroundTransparency = 1
-first.Position = UDim2.fromScale(.04, .1)
-first.Size = UDim2.fromScale(.92, .27)
+first.Position = UDim2.fromScale(.04, .07)
+first.Size = UDim2.fromScale(.92, .24)
 first.Font = Enum.Font.Code
 first.TextColor3 = Color3.fromRGB(126, 224, 235)
 first.TextScaled = true
+first.TextWrapped = true
 first.Parent = panel
+local firstSize = Instance.new("UITextSizeConstraint")
+firstSize.MinTextSize = 14
+firstSize.MaxTextSize = 27
+firstSize.Parent = first
 
 local second = first:Clone()
-second.Position = UDim2.fromScale(.04, .48)
+local inheritedSecondSize = second:FindFirstChildOfClass("UITextSizeConstraint")
+if inheritedSecondSize then inheritedSecondSize:Destroy() end
+second.Position = UDim2.fromScale(.04, .36)
+second.Size = UDim2.fromScale(.92, .22)
 second.TextColor3 = Color3.fromRGB(231, 218, 145)
 second.Parent = panel
+local secondSize = Instance.new("UITextSizeConstraint")
+secondSize.MinTextSize = 12
+secondSize.MaxTextSize = 23
+secondSize.Parent = second
 
 local run = Instance.new("TextLabel")
-run.AnchorPoint = Vector2.new(.5, .5)
-run.Position = UDim2.fromScale(.5, .58)
-run.Size = UDim2.fromScale(.8, .32)
+run.Position = UDim2.fromScale(.04, .65)
+run.Size = UDim2.fromScale(.92, .24)
 run.BackgroundTransparency = 1
-run.Font = Enum.Font.GothamBlack
-run.TextColor3 = Color3.fromRGB(255, 38, 38)
-run.TextStrokeColor3 = Color3.fromRGB(110, 0, 0)
-run.TextStrokeTransparency = .1
+run.Font = Enum.Font.Code
+run.TextColor3 = Color3.fromRGB(231, 218, 145)
+run.TextStrokeColor3 = Color3.fromRGB(35, 28, 12)
+run.TextStrokeTransparency = .72
 run.TextScaled = true
+run.TextWrapped = true
 run.Visible = false
-run.Parent = shade
+run.Parent = panel
+local runSize = Instance.new("UITextSizeConstraint")
+runSize.MinTextSize = 11
+runSize.MaxTextSize = 19
+runSize.Parent = run
 
 local valveVisionEnabled = player:GetAttribute("DevEspEnabled") == true
 local valveHighlights = {}
@@ -114,30 +167,71 @@ workspace.ChildAdded:Connect(function(child)
 	end
 end)
 
+local announcementSerial = 0
+local activeTweens = {}
+
+local function cancelTweens()
+	for _, tween in ipairs(activeTweens) do tween:Cancel() end
+	table.clear(activeTweens)
+end
+
+local function tween(instance, info, properties)
+	local created = TweenService:Create(instance, info, properties)
+	table.insert(activeTweens, created)
+	created:Play()
+	return created
+end
+
+local function hideAlert()
+	announcementSerial += 1
+	cancelTweens()
+	shade.Visible = false
+	panel.Visible = true
+	run.Visible = false
+end
+
 event.OnClientEvent:Connect(function(line1, line2, finalLine, holdSeconds)
 	if workspace:GetAttribute("SelectedLevel") ~= 2 then return end
 	if player:GetAttribute("InRound") ~= true then return end
 
-	first.Text, second.Text, run.Text = line1, line2, finalLine
-	run.Visible = false
+	announcementSerial += 1
+	local serial = announcementSerial
+	cancelTweens()
+
+	first.Text = tostring(line1 or "")
+	second.Text = tostring(line2 or "")
+	run.Text = tostring(finalLine or "")
+	run.Visible = run.Text ~= ""
+	first.TextTransparency = 0
+	second.TextTransparency = 0
+	run.TextTransparency = 0
+	run.TextStrokeTransparency = .72
+	panel.BackgroundTransparency = .12
+	stroke.Transparency = .15
 	panel.Visible = true
 	shade.Visible = true
+	-- Status messages must never black out the play space or mobile controls.
 	shade.BackgroundTransparency = 1
-	TweenService:Create(shade, TweenInfo.new(.25), {BackgroundTransparency = .46}):Play()
 
-	-- The server passes a longer hold for the opening briefing.
-	task.wait(typeof(holdSeconds) == "number" and holdSeconds or 2.5)
-	panel.Visible = false
-	run.Visible = true
+	local hold = math.clamp(typeof(holdSeconds) == "number" and holdSeconds or 1.7, .7, 5)
+	task.wait(hold)
+	if serial ~= announcementSerial then return end
 
-	for _ = 1, 7 do
-		run.Visible = not run.Visible
-		task.wait(.18)
+	tween(panel, TweenInfo.new(.28), {BackgroundTransparency = 1})
+	tween(stroke, TweenInfo.new(.28), {Transparency = 1})
+	tween(first, TweenInfo.new(.24), {TextTransparency = 1})
+	tween(second, TweenInfo.new(.24), {TextTransparency = 1})
+	if run.Visible then
+		tween(run, TweenInfo.new(.24), {TextTransparency = 1, TextStrokeTransparency = 1})
 	end
-	run.Visible = true
-	task.wait(1.8)
-
-	TweenService:Create(shade, TweenInfo.new(.55), {BackgroundTransparency = 1}):Play()
-	task.wait(.6)
+	task.wait(.32)
+	if serial ~= announcementSerial then return end
 	shade.Visible = false
+end)
+
+workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(function()
+	if workspace:GetAttribute("SelectedLevel") ~= 2 then hideAlert() end
+end)
+player:GetAttributeChangedSignal("InRound"):Connect(function()
+	if player:GetAttribute("InRound") ~= true then hideAlert() end
 end)

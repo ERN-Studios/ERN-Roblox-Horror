@@ -36,15 +36,23 @@ end
 -- events pile up on the server → "invocation queue exhausted" warnings.
 local lastReport = {}
 local lastYell = {}    -- per-player yell cooldown (declared early: used just below)
+local CLIENT_NOISE = {walk = true, sprint = true}
 RS:WaitForChild("Remotes"):WaitForChild("ReportNoise").OnServerEvent
 	:Connect(function(player, stateName)
 		local now = os.clock()
 		if lastReport[player] and now - lastReport[player] < 0.15 then return end
 		lastReport[player] = now
-		if type(stateName) ~= "string" then return end
+		if type(stateName) ~= "string" or not CLIENT_NOISE[stateName] then return end
+		if player:GetAttribute("InRound") ~= true or player:GetAttribute("Escaped") == true then return end
 		local char = player.Character
+		local humanoid = char and char:FindFirstChildOfClass("Humanoid")
 		local hrp = char and char:FindFirstChild("HumanoidRootPart")
-		if not hrp then return end
+		if not (humanoid and humanoid.Health > 0 and hrp) then return end
+		local horizontalSpeed = Vector3.new(
+			hrp.AssemblyLinearVelocity.X, 0, hrp.AssemblyLinearVelocity.Z
+		).Magnitude
+		if horizontalSpeed < 2 then return end
+		if stateName == "sprint" and horizontalSpeed < 12 then return end
 		NoiseRegistry.Add(hrp.Position, stateName)
 	end)
 Players.PlayerRemoving:Connect(function(p)

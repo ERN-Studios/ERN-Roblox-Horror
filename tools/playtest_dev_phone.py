@@ -19,6 +19,7 @@ local store = player.PlayerGui:FindFirstChild("ZyntraStore")
 local terminal = store and store:FindFirstChild("Terminal")
 local devPage = terminal and terminal:FindFirstChild("Dev", true)
 local controls = devPage and devPage:FindFirstChild("DevControls")
+local openButton = store and store:FindFirstChild("ZyntraOpenButton")
 local rows = {}
 if controls then
     for _, row in ipairs(controls:GetChildren()) do
@@ -38,6 +39,9 @@ return H:JSONEncode({
     minZoom=player.CameraMinZoomDistance,
     maxZoom=player.CameraMaxZoomDistance,
     inRound=player:GetAttribute("InRound") == true,
+    touch=game:GetService("UserInputService").TouchEnabled,
+    openButtonVisible=openButton and openButton.Visible,
+    openButtonText=openButton and openButton.Text,
 })
 '''
 
@@ -159,9 +163,11 @@ return "cleared"
 PHONE_STATE = r'''
 local H = game:GetService("HttpService")
 local player = game:GetService("Players").LocalPlayer
+local store = player.PlayerGui.ZyntraStore
 return H:JSONEncode({
-    visible=player.PlayerGui.ZyntraStore.Terminal.Visible,
+    visible=store.Terminal.Visible,
     modal=player:GetAttribute("DevPhoneOpen") == true,
+    openButtonVisible=store.ZyntraOpenButton.Visible,
 })
 '''
 
@@ -216,8 +222,15 @@ def payload(result: object) -> object:
         return text
 
 
-def call(client: StudioMcpClient, datamodel: str, code: str) -> object:
-    return payload(client.call("execute_luau", {"datamodel_type": datamodel, "code": code}))
+def call(
+    client: StudioMcpClient, studio_id: str, datamodel: str, code: str
+) -> object:
+    return payload(
+        client.call(
+            "execute_luau",
+            {"studio_id": studio_id, "datamodel_type": datamodel, "code": code},
+        )
+    )
 
 
 def require(condition: bool, message: str) -> None:
@@ -228,25 +241,41 @@ def require(condition: bool, message: str) -> None:
 def main() -> int:
     client = StudioMcpClient(find_mcp_batch())
     started = False
+    studio_id: str | None = None
     try:
         client.initialize()
         time.sleep(2)
-        select_studio(client, "Backrooms: No Way Out", 20)
-        print("START", client.call("start_stop_play", {"is_start": True}))
+        studio = select_studio(client, "Backrooms: No Way Out", 20)
+        studio_id = studio["id"]
+        print(
+            "START",
+            client.call(
+                "start_stop_play", {"studio_id": studio_id, "is_start": True}
+            ),
+        )
         started = True
         time.sleep(7)
 
-        initial = call(client, "Client", CLIENT_SNAPSHOT)
+        initial = call(client, studio_id, "Client", CLIENT_SNAPSHOT)
         print("INITIAL", initial)
         require(isinstance(initial, dict) and initial.get("allowed") is True, "test player is not whitelisted")
         require(initial.get("rejectsUnknown") is True, "unknown name unexpectedly has dev access")
         require(initial.get("bridge") is True and initial.get("devPage") is True, "dev phone did not initialize")
         require(len(initial.get("rows", {})) == 7, "dev phone must expose seven controls")
+        require(initial.get("openButtonVisible") is True, "Equipment must be visible in the lobby")
+        require(initial.get("openButtonText") == "ZYNTRA // EQUIPMENT", "lobby Equipment label is wrong")
 
-        print("ROUND", call(client, "Server", SET_ROUND))
+        print("ROUND", call(client, studio_id, "Server", SET_ROUND))
         time.sleep(.7)
 
-        camera = call(client, "Client", KEY_C)
+        level_ui = call(client, studio_id, "Client", PHONE_STATE)
+        print("LEVEL_UI", level_ui)
+        if initial.get("touch") is True:
+            require(level_ui.get("openButtonVisible") is True, "dev mobile entry must remain visible in-level")
+        else:
+            require(level_ui.get("openButtonVisible") is False, "desktop Equipment button must be hidden in-level")
+
+        camera = call(client, studio_id, "Client", KEY_C)
         print("KEY_C", camera)
         require(camera.get("enabled") is True, "C did not enable third person")
         require(
@@ -256,7 +285,7 @@ def main() -> int:
             "third-person camera constraints are wrong",
         )
 
-        toggles = call(client, "Client", PHONE_TOGGLES)
+        toggles = call(client, studio_id, "Client", PHONE_TOGGLES)
         print("PHONE_TOGGLES", toggles)
         require(all(toggles.get(key) is value for key, value in {
             "esp": False,
@@ -270,46 +299,52 @@ def main() -> int:
         require(toggles.get("rows", {}).get("esp", "").startswith("OFF"), "phone ESP label did not refresh")
 
         time.sleep(.4)
-        server = call(client, "Server", SERVER_TOGGLES)
+        server = call(client, studio_id, "Server", SERVER_TOGGLES)
         print("SERVER_TOGGLES", server)
         require(all(server.values()), "server-backed cheat states did not arrive")
 
-        print("RESET_PAUSE", call(client, "Server", RESET_PAUSE))
+        print("RESET_PAUSE", call(client, studio_id, "Server", RESET_PAUSE))
         time.sleep(.3)
-        pause_mirror = call(client, "Client", CLIENT_PAUSE_MIRROR)
+        pause_mirror = call(client, studio_id, "Client", CLIENT_PAUSE_MIRROR)
         print("PAUSE_MIRROR", pause_mirror)
         require(
             pause_mirror.get("state") is False and pause_mirror.get("label", "").startswith("OFF"),
             "server pause reset did not reach the phone",
         )
 
-        phone_open = call(client, "Client", KEY_M)
+        phone_open = call(client, studio_id, "Client", KEY_M)
         print("KEY_M_OPEN", phone_open)
         require(phone_open.get("visible") is True and phone_open.get("modal") is True, "M did not open the dev phone")
         require(phone_open.get("devVisible") is True and phone_open.get("mouseIcon") is True, "dev phone did not open as a usable modal")
 
-        print("ESCAPE", call(client, "Server", SET_ESCAPE))
+        print("ESCAPE", call(client, studio_id, "Server", SET_ESCAPE))
         time.sleep(.3)
-        phone_closed = call(client, "Client", PHONE_STATE)
+        phone_closed = call(client, studio_id, "Client", PHONE_STATE)
         print("AUTO_CLOSE", phone_closed)
         require(phone_closed.get("visible") is False and phone_closed.get("modal") is False, "escape did not close the dev phone")
-        print("CLEAR_ESCAPE", call(client, "Server", CLEAR_ESCAPE))
+        print("CLEAR_ESCAPE", call(client, studio_id, "Server", CLEAR_ESCAPE))
 
-        phone_reopened = call(client, "Client", KEY_M)
+        phone_reopened = call(client, studio_id, "Client", KEY_M)
         print("KEY_M_REOPEN", phone_reopened)
         require(phone_reopened.get("visible") is True, "M did not reopen the dev phone")
-        phone_closed_again = call(client, "Client", KEY_M)
+        phone_closed_again = call(client, studio_id, "Client", KEY_M)
         print("KEY_M_CLOSE", phone_closed_again)
         require(phone_closed_again.get("visible") is False, "M did not close the dev phone")
 
-        print("CLEANUP_CLIENT", call(client, "Client", CLEANUP))
-        print("CLEANUP_SERVER", call(client, "Server", CLEAR_ROUND))
+        print("CLEANUP_CLIENT", call(client, studio_id, "Client", CLEANUP))
+        print("CLEANUP_SERVER", call(client, studio_id, "Server", CLEAR_ROUND))
         time.sleep(.5)
-        print("CONSOLE", client.call("get_console_output"))
+        print("CONSOLE", client.call("get_console_output", {"studio_id": studio_id}))
     finally:
-        if started:
+        if started and studio_id is not None:
             try:
-                print("STOP", client.call("start_stop_play", {"is_start": False}))
+                print(
+                    "STOP",
+                    client.call(
+                        "start_stop_play",
+                        {"studio_id": studio_id, "is_start": False},
+                    ),
+                )
             except Exception as error:  # noqa: BLE001
                 print("STOP_ERROR", error, file=sys.stderr)
         client.close()

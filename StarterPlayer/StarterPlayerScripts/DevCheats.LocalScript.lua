@@ -128,15 +128,6 @@ task.spawn(function()
 				tag(levelTwoEntity, COLORS.Level2Entity)
 			end
 		end
-		-- Compatibility fallback while a newly generated Level 2 entity is tagged.
-		local levelTwoWorld = workspace:FindFirstChild("PoolroomsLevel2")
-		if levelTwoWorld then
-			for _, candidate in ipairs(levelTwoWorld:GetDescendants()) do
-				if candidate:IsA("Model") and candidate:GetAttribute("Level2Hostile") == true then
-					tag(candidate, COLORS.Level2Entity)
-				end
-			end
-		end
 		task.wait(0.5)
 	end
 end)

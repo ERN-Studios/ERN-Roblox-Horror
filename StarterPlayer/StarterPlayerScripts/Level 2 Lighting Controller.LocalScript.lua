@@ -20,6 +20,18 @@ local bloom = Lighting:FindFirstChild("Level 2 Client Bloom") or Instance.new("B
 bloom.Name = "Level 2 Client Bloom"
 bloom.Parent = Lighting
 
+-- Level 2 owns its post-processing while active. Preserve inherited place
+-- effects so leaving the level restores the lobby/Level 1 exactly.
+local inheritedBloom = Lighting:FindFirstChild("Bloom")
+if inheritedBloom == bloom then inheritedBloom = nil end
+local inheritedBloomEnabled = inheritedBloom and inheritedBloom.Enabled
+local atmosphere = Lighting:FindFirstChildOfClass("Atmosphere")
+local inheritedAtmosphereDensity = atmosphere and atmosphere.Density
+local inheritedExposure = Lighting.ExposureCompensation
+local inheritedDiffuse = Lighting.EnvironmentDiffuseScale
+local inheritedSpecular = Lighting.EnvironmentSpecularScale
+local inheritedGlobalShadows = Lighting.GlobalShadows
+
 local lastApplied = 0
 
 local function active()
@@ -39,10 +51,20 @@ local function restoreDaylight()
 	Lighting.FogStart = 100000
 	Lighting.FogEnd = 100000
 	Lighting.Brightness = 2
+	Lighting.ExposureCompensation = inheritedExposure
+	Lighting.EnvironmentDiffuseScale = inheritedDiffuse
+	Lighting.EnvironmentSpecularScale = inheritedSpecular
+	Lighting.GlobalShadows = inheritedGlobalShadows
 	Lighting.Ambient = Color3.fromRGB(92, 88, 70)
 	Lighting.OutdoorAmbient = Color3.fromRGB(105, 101, 82)
 	Lighting.ColorShift_Top = Color3.fromRGB(0, 0, 0)
 	Lighting.ColorShift_Bottom = Color3.fromRGB(0, 0, 0)
+	if inheritedBloom and inheritedBloom.Parent then
+		inheritedBloom.Enabled = inheritedBloomEnabled
+	end
+	if atmosphere and atmosphere.Parent and inheritedAtmosphereDensity then
+		atmosphere.Density = inheritedAtmosphereDensity
+	end
 end
 
 local function apply()
@@ -58,40 +80,45 @@ local function apply()
 	wasActive = true
 	grade.Enabled = true
 	bloom.Enabled = true
+	if inheritedBloom and inheritedBloom.Parent then inheritedBloom.Enabled = false end
+	if atmosphere and atmosphere.Parent then atmosphere.Density = .16 end
 	local mode = state and state:GetAttribute("Level2_LightingMode") or "NORMAL"
-	-- Bright, airy, NO fog. High ambient is what makes the light feel like it
-	-- bounces around the tiled rooms; the skylight SurfaceLights (Shadows on)
-	-- paint the sun shafts on top of it.
+
+	-- Preserve the bright liminal-pool identity without clipping white tiles.
+	-- Near-black color shifts add only a subtle cast; mid-gray shifts washed the
+	-- entire frame out. One restrained bloom replaces the inherited double bloom.
 	Lighting.ClockTime = 12
-	Lighting.FogColor = Color3.fromRGB(235, 230, 208)
+	Lighting.FogColor = Color3.fromRGB(218, 222, 207)
 	Lighting.FogStart = 100000
 	Lighting.FogEnd = 100000
-	Lighting.EnvironmentDiffuseScale = 1
-	Lighting.EnvironmentSpecularScale = 1
+	Lighting.EnvironmentDiffuseScale = .62
+	Lighting.EnvironmentSpecularScale = .58
 	Lighting.GlobalShadows = true
-	Lighting.ColorShift_Top = Color3.fromRGB(255, 250, 224)
-	Lighting.ColorShift_Bottom = Color3.fromRGB(196, 206, 188)
+	Lighting.ColorShift_Top = Color3.fromRGB(18, 14, 8)
+	Lighting.ColorShift_Bottom = Color3.fromRGB(0, 5, 6)
 	if mode == "EXIT_OPEN" then
-		Lighting.Brightness = 2.6
-		Lighting.Ambient = Color3.fromRGB(158, 160, 140)
-		Lighting.OutdoorAmbient = Color3.fromRGB(150, 154, 136)
-		grade.Brightness = .07
-		grade.Contrast = .03
-		grade.Saturation = .03
+		Lighting.Brightness = 1.56
+		Lighting.ExposureCompensation = -.16
+		Lighting.Ambient = Color3.fromRGB(92, 92, 80)
+		Lighting.OutdoorAmbient = Color3.fromRGB(94, 96, 82)
+		grade.Brightness = 0
+		grade.Contrast = .075
+		grade.Saturation = 0
 		grade.TintColor = Color3.fromRGB(238, 255, 240)
-		bloom.Intensity = .3
+		bloom.Intensity = .11
 	else
-		Lighting.Brightness = 2.4
-		Lighting.Ambient = Color3.fromRGB(150, 146, 126)
-		Lighting.OutdoorAmbient = Color3.fromRGB(140, 140, 120)
-		grade.Brightness = .05
-		grade.Contrast = .03
-		grade.Saturation = .02
-		grade.TintColor = Color3.fromRGB(255, 248, 222)
-		bloom.Intensity = .26
+		Lighting.Brightness = 1.42
+		Lighting.ExposureCompensation = -.22
+		Lighting.Ambient = Color3.fromRGB(82, 80, 70)
+		Lighting.OutdoorAmbient = Color3.fromRGB(86, 86, 74)
+		grade.Brightness = -.015
+		grade.Contrast = .085
+		grade.Saturation = -.02
+		grade.TintColor = Color3.fromRGB(247, 242, 222)
+		bloom.Intensity = .085
 	end
-	bloom.Size = 30
-	bloom.Threshold = 1.05
+	bloom.Size = 24
+	bloom.Threshold = 1.35
 	lastApplied = os.clock()
 end
 

@@ -156,7 +156,8 @@ def main() -> int:
     try:
         client.initialize()
         time.sleep(3)
-        select_studio(client, "Backrooms: No Way Out", 20)
+        studio = select_studio(client, "Backrooms: No Way Out", 20)
+        studio_id = studio["id"]
 
         prepared: list[tuple[str, str, str]] = []
         conflicts: list[str] = []
@@ -167,6 +168,7 @@ def main() -> int:
                 client.call(
                     "script_read",
                     {
+                        "studio_id": studio_id,
                         "target_file": f"game.{studio_path}",
                         "should_read_entire_file": True,
                     },
@@ -284,6 +286,7 @@ def main() -> int:
             client.call(
                 "multi_edit",
                 {
+                    "studio_id": studio_id,
                     "file_path": f"game.{studio_path}",
                     "datamodel_type": "Edit",
                     "edits": [{"old_string": current, "new_string": desired}],
@@ -293,6 +296,7 @@ def main() -> int:
                 client.call(
                     "script_read",
                     {
+                        "studio_id": studio_id,
                         "target_file": f"game.{studio_path}",
                         "should_read_entire_file": True,
                     },

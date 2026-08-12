@@ -3,24 +3,32 @@
   "source": "Roblox Studio built-in MCP (.Source property read)",
   "studio": {
     "name": "Backrooms: No Way Out",
-    "id": "d1b9c157-bcf8-4939-995c-ddf9f1a5cf57"
+    "id": "8d8343e4-4d2e-479a-9d26-f198e1561d5c"
   },
   "counts": {
-    "scripts": 78,
-    "remoteEvents": 13,
-    "total": 91,
+    "scripts": 96,
+    "remoteEvents": 16,
+    "total": 112,
     "created": 0,
-    "updated": 2,
-    "unchanged": 89
+    "updated": 8,
+    "unchanged": 104
   },
-  "extraMirroredFilesNotInStudio": [],
+  "extraMirroredFilesNotInStudio": [
+    "ServerStorage/Level2Backup_20260805/ServerScriptService/Level2EntityAI.Script.lua",
+    "ServerStorage/Level2Backup_20260805/ServerScriptService/Level2EntityAnimation.Script.lua",
+    "ServerStorage/Level2Backup_20260805/ServerScriptService/Level2EntityController.ModuleScript.lua",
+    "ServerStorage/Level2Backup_20260805/ServerScriptService/Level2EntityKill.Script.lua",
+    "ServerStorage/Level2Backup_20260805/ServerScriptService/Level2EntityProfiles.ModuleScript.lua",
+    "ServerStorage/Level2Backup_20260805/ServerScriptService/Level2MeshyAnimationPlayer.ModuleScript.lua",
+    "ServerStorage/Level2Backup_20260805/ServerScriptService/Level2Navigation.ModuleScript.lua"
+  ],
   "items": [
     {
       "studioPath": "ReplicatedStorage.DevAccess",
       "className": "ModuleScript",
       "file": "ReplicatedStorage/DevAccess.ModuleScript.lua",
-      "bytes": 384,
-      "sha256": "53673190c2b324aab21967eeabb5fef2db5ca4ad37e2ba8119d3c33a01dd35ed",
+      "bytes": 617,
+      "sha256": "c84380b6c84fbd6b3e222fd8d084daed006ef9adf87c0e9c76ff96459286538a",
       "status": "unchanged"
     },
     {
@@ -43,16 +51,16 @@
       "studioPath": "ServerScriptService.FlashlightSync",
       "className": "Script",
       "file": "ServerScriptService/FlashlightSync.Script.lua",
-      "bytes": 3694,
-      "sha256": "8425d5724c3a7935dc2b924635b2fe033d93f9af2b43fb50c2dcdf730c5de4fe",
+      "bytes": 4952,
+      "sha256": "42cd0bf9184d2a3511cfa5178296b0d69d38fb45c6098bf6d4da05e4aabe47c7",
       "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.EntityAI",
       "className": "Script",
       "file": "ServerScriptService/EntityAI.Script.lua",
-      "bytes": 52876,
-      "sha256": "3f177b004da33d769977d0d4dc2ee00939dbd12246cd90c5ffc0276b20779aae",
+      "bytes": 53392,
+      "sha256": "e052576910291278ea492126d5c6f16c241b57d1adbec8100faeaea6e10dd0c4",
       "status": "unchanged"
     },
     {
@@ -75,8 +83,8 @@
       "studioPath": "ServerScriptService.GameManager",
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 42698,
-      "sha256": "ec3596d8b945411b6bc4e36f2a5eafa9ed342c5803a5e3ca752681d17a8439d0",
+      "bytes": 44398,
+      "sha256": "e30b399110c459a7771808757db8a5e842fdf6e3f73f74e60b226db1e113727a",
       "status": "unchanged"
     },
     {
@@ -107,8 +115,8 @@
       "studioPath": "ServerScriptService.TunnelLobbyBuilder",
       "className": "ModuleScript",
       "file": "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
-      "bytes": 34202,
-      "sha256": "35c89bf37b56d3efc47691c8ab4404e12a9839aa67c15f5385b87ec6012802bd",
+      "bytes": 34201,
+      "sha256": "7a0b439e100f3b8cc6c6a8066da47f597ace8b17dc1d29c081e169ef137f0834",
       "status": "unchanged"
     },
     {
@@ -128,17 +136,25 @@
       "status": "unchanged"
     },
     {
-      "studioPath": "Workspace.StarterCharacter.AnimateScript",
-      "className": "LocalScript",
-      "file": "Workspace/StarterCharacter/AnimateScript.LocalScript.lua",
-      "bytes": 28802,
-      "sha256": "49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0",
+      "studioPath": "ServerScriptService.Level3Generator",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level3Generator.ModuleScript.lua",
+      "bytes": 437,
+      "sha256": "3395a2c38e9de3e6b99568545fd1b5d719d8aa5d4e4cb5c2da3f0a6ada0da07d",
       "status": "unchanged"
     },
     {
       "studioPath": "Workspace.Dummy.Animate",
       "className": "LocalScript",
       "file": "Workspace/Dummy/Animate.LocalScript.lua",
+      "bytes": 28802,
+      "sha256": "49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "Workspace.StarterCharacter.AnimateScript",
+      "className": "LocalScript",
+      "file": "Workspace/StarterCharacter/AnimateScript.LocalScript.lua",
       "bytes": 28802,
       "sha256": "49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0",
       "status": "unchanged"
@@ -179,8 +195,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/NoiseReporter.LocalScript.lua",
-      "bytes": 13636,
-      "sha256": "5c06b57abe0dc836a0a6ad18ac43b44c3862c0ef9e02ca1f8cc84e98b69475f8",
+      "bytes": 13684,
+      "sha256": "511972a4df38a4825cb8b44e463daf673be5c8623c7cd4482ba76de32ca9c02c",
       "status": "unchanged"
     },
     {
@@ -203,16 +219,16 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.RoundUI",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
-      "bytes": 72234,
-      "sha256": "9fa67a4df5cc522b75a370df2212b1dbed1d5ff8a2afe6090883ccfb0f4eedc9",
+      "bytes": 73146,
+      "sha256": "4c1e30b915bb995c5c531dca451fc8294f4344473d1d669e4ec136bee2699eb8",
       "status": "unchanged"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.SoundController",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
-      "bytes": 42453,
-      "sha256": "b74dc2370f2ae57735df09f70fdedb6d3ea8707b1f114746a5c20f24094adf02",
+      "bytes": 32059,
+      "sha256": "4672fdb6de6f24a93443c4aa8ca706dd48981818fe2a3dad250981a18281b5e3",
       "status": "unchanged"
     },
     {
@@ -227,8 +243,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.DevCheats",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/DevCheats.LocalScript.lua",
-      "bytes": 15764,
-      "sha256": "cfb1a506c61d93d6608c169a8f94bfd0bc84836b994b42c7d91ec7a868b85beb",
+      "bytes": 15380,
+      "sha256": "7b367f77b7a918207fb6856c510ba81b5063b49a4b80d4bc8677341a24b0080c",
       "status": "unchanged"
     },
     {
@@ -251,16 +267,16 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level2AlertClient",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level2AlertClient.LocalScript.lua",
-      "bytes": 4685,
-      "sha256": "18211eeb06003f05ae8d2457184404f64d3c05beb6349effd448776792baa970",
+      "bytes": 7920,
+      "sha256": "314be5a73506eb98b1ee6f1b9abee54dd0bb4ee94350ecd82954a2ccc384afaf",
       "status": "unchanged"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
-      "bytes": 28048,
-      "sha256": "3be777e12831bc7783622290668b8bf4e66f6f78e325e79365527ff232b18fa4",
+      "bytes": 28920,
+      "sha256": "b0c08f1d0625229c973e4e6abd4794338e0ac8856d2f805104863a0407685482",
       "status": "unchanged"
     },
     {
@@ -275,73 +291,201 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Lighting Controller",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Lighting Controller.LocalScript.lua",
-      "bytes": 3856,
-      "sha256": "945a139ad11fd955ed0d8d593b623d0b0724c5b5f5ff3c4de22757dc23a47c09",
+      "bytes": 5252,
+      "sha256": "cfca5cbdd22f45605e83545901438e4f454bc70b590ede0fc6dfccd875c627c3",
       "status": "unchanged"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Sound Controller.LocalScript.lua",
-      "bytes": 3860,
-      "sha256": "6ca55c64f5f5f726368b4c248bdcbe84d3e0df76eca429387cfefbf1e83917a4",
-      "status": "unchanged"
+      "bytes": 5438,
+      "sha256": "25b83a28d23c0f1fbee08ed7cc495982769a07bc24aa8726757c4330ef7723b8",
+      "status": "updated"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Objective UI",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua",
-      "bytes": 3898,
-      "sha256": "88542a38cb5630678fc790074702308386295251bb6ff483b49330faadf8f718",
+      "bytes": 4752,
+      "sha256": "76f70be88f2c690b88e3e7b515ee6e80154a051517b3133841120ebce1cbbd34",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Pool Foam Client",
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 2 Pool Foam Client.LocalScript.lua",
+      "bytes": 16906,
+      "sha256": "d7b7c6cc9071f0e6be8bb86d93b76022447faf836490337b1687be186ae19bbb",
+      "status": "updated"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 3 Reader Client.LocalScript.lua",
+      "bytes": 15784,
+      "sha256": "9d3021bf2e1cf81e98e3d831087e96517d8c8821995860983ca7f77910b1b083",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller",
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 3 Lighting Controller.LocalScript.lua",
+      "bytes": 11693,
+      "sha256": "b55e6e0386720e3d903623407c42cd102806b17f4a4610db1c3af4f8e130072a",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Sound Controller",
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 3 Sound Controller.LocalScript.lua",
+      "bytes": 13764,
+      "sha256": "2423b854e53d962d9b83bc379986d95251c935b754929a68f140f6dd6c3e59cd",
       "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Configuration",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Configuration.ModuleScript.lua",
-      "bytes": 5926,
-      "sha256": "24cec1cebf1816fd727c70992588c96d89c92432f2aa53b777a920d2002b529c",
-      "status": "unchanged"
+      "bytes": 5965,
+      "sha256": "d08dcc2940838ddc76e5f1b3eb92b77de41c9e682c5fb08fb5ca65a4ddae848d",
+      "status": "updated"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Layout Generator",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Layout Generator.ModuleScript.lua",
-      "bytes": 20654,
-      "sha256": "056ead0a53d09f7a3169a314aaed2b91ec6e6b027932bb30514350772026a530",
+      "bytes": 33579,
+      "sha256": "e371a8b92cc75c0c695fa9e17833fadbdddb64711cd64c38c0d22e70da95cde1",
       "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 World Builder",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua",
-      "bytes": 58002,
-      "sha256": "4fca985383c272391f20ec44524c257f6e539a698b6480ddb5d4ec591e6aa046",
+      "bytes": 130634,
+      "sha256": "70c68bc0f31cb198e58372b700783fbe6a37d3ac7d2f63a1cecbe3fdefe1af11",
       "status": "updated"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Objective Controller.ModuleScript.lua",
-      "bytes": 7391,
-      "sha256": "c9a9847ad63b338abba95480a1cbe09d8e8f9f4651282551c85f1cfe870a520d",
-      "status": "updated"
+      "bytes": 12522,
+      "sha256": "b74865276e19760644abbc53c28946b14771bcaee796ff7e3d60b1e5fdf6bfe0",
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Round Adapter",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua",
-      "bytes": 8821,
-      "sha256": "fa2c62ec7282f4abb413a37763d8c5bc3d0717db76acdf15924205582be5a82a",
+      "bytes": 10711,
+      "sha256": "51603c6c8e80147aa10b251bf4307f96247274ddca7e532efd17a528f3e3729d",
       "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.README - LEVEL 2 TWEAKS",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/README - LEVEL 2 TWEAKS.ModuleScript.lua",
-      "bytes": 4811,
-      "sha256": "f25986ce12c61071d57bcf7d2d8ea32edc74d62a257404a2155d2634de02bd31",
+      "bytes": 5032,
+      "sha256": "2b13490dee92c456713e2b76818b01d566d27870644ea072b945f4115b0a58c6",
       "status": "unchanged"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Configuration",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Configuration.ModuleScript.lua",
+      "bytes": 5649,
+      "sha256": "5f710b834eb7246b2dc113b8e7ab9de53bf5912e9b4c5cc21f9d9717b00caa05",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Proxy Factory",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Proxy Factory.ModuleScript.lua",
+      "bytes": 10615,
+      "sha256": "98082ee743a0f38b551cc241930927059eebbb8f0304a70ca85e736f8ccc39db",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Animation Adapter",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Animation Adapter.ModuleScript.lua",
+      "bytes": 12550,
+      "sha256": "00b2de79f3889e75ef476d0c8e5083245b6d11b083e572cb9c3f1dcde59321fe",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Navigator.ModuleScript.lua",
+      "bytes": 16499,
+      "sha256": "115ae3a2a5b1e3ce285eeac85b2d22325b82b33e34cdeaaafc3028254df5c4c1",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Observer",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Observer.ModuleScript.lua",
+      "bytes": 14968,
+      "sha256": "5bd02f6bb983898858ab1a4c10dd01a1ae333697cfbe2b7481a5c3af60789350",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.README - LEVEL 2 POOL FOAM",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/README - LEVEL 2 POOL FOAM.ModuleScript.lua",
+      "bytes": 7382,
+      "sha256": "cff8ca350c34ebe07b5120328b96c8155c39007cf81e15ad6fa7220c920e46a2",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Controller.ModuleScript.lua",
+      "bytes": 37982,
+      "sha256": "5dd9f9cafa75795b4c5eb64e14ce3ba15d86e3525800051ac30664b9f18f9a9a",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 3 Systems/Level 3 Configuration.ModuleScript.lua",
+      "bytes": 5554,
+      "sha256": "b341d887ac01fb96845b9a5c1e9ee891bf175b39662f1226bb6888d6bbf3cbc1",
+      "status": "updated"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 3 Systems/Level 3 World Builder.ModuleScript.lua",
+      "bytes": 42294,
+      "sha256": "8a3ed8d5e448bdff42cb945d0b79159fb982e643ade49564b14c7a7286655477",
+      "status": "updated"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 3 Systems/Level 3 Objective Controller.ModuleScript.lua",
+      "bytes": 31698,
+      "sha256": "36c6e9ca697c69e756c5fd4d0353af83044f693ddcc7012cd8bc78ae21924fb7",
+      "status": "updated"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 3 Systems/Level 3 Round Adapter.ModuleScript.lua",
+      "bytes": 12157,
+      "sha256": "13781062791b61f61d47dad1322e0b6ba8fdd1f377917d9d4e9013fe140961e8",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Test Suite",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 3 Systems/Level 3 Test Suite.ModuleScript.lua",
+      "bytes": 26870,
+      "sha256": "beb548702fcd069e846aabf6d207f07a230dc4c32b49e300f15cbec426882ab8",
+      "status": "updated"
     },
     {
       "studioPath": "ServerStorage.LobbyBackup_20260731.GameManager",
@@ -381,6 +525,70 @@
       "file": "ServerStorage/Project Mirror/Script.Script.lua",
       "bytes": 235,
       "sha256": "e583992400de7c9bafd421907b8b33f1a6aaa859526e64282702fd70f4a08acf",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "ServerStorage.Level 2 Lever Redesign Backup 20260806.Level 2 World Builder",
+      "className": "ModuleScript",
+      "file": "ServerStorage/Level 2 Lever Redesign Backup 20260806/Level 2 World Builder.ModuleScript.lua",
+      "bytes": 58002,
+      "sha256": "4fca985383c272391f20ec44524c257f6e539a698b6480ddb5d4ec591e6aa046",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "ServerStorage.Level 2 Lever Redesign Backup 20260806.Level 2 Objective Controller",
+      "className": "ModuleScript",
+      "file": "ServerStorage/Level 2 Lever Redesign Backup 20260806/Level 2 Objective Controller.ModuleScript.lua",
+      "bytes": 7391,
+      "sha256": "c9a9847ad63b338abba95480a1cbe09d8e8f9f4651282551c85f1cfe870a520d",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "ServerStorage.Level 2 Lever Redesign Backup 20260806.Level 2 Configuration",
+      "className": "ModuleScript",
+      "file": "ServerStorage/Level 2 Lever Redesign Backup 20260806/Level 2 Configuration.ModuleScript.lua",
+      "bytes": 5926,
+      "sha256": "24cec1cebf1816fd727c70992588c96d89c92432f2aa53b777a920d2002b529c",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "ServerStorage.Level 2 Pump Scale Backup 20260806.Level 2 World Builder Before 40 Percent Reduction",
+      "className": "ModuleScript",
+      "file": "ServerStorage/Level 2 Pump Scale Backup 20260806/Level 2 World Builder Before 40 Percent Reduction.ModuleScript.lua",
+      "bytes": 68535,
+      "sha256": "343bcc9bf8bffcd225f1692ac722971c3e1d2e9551ba059614a8f3fd7387417b",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "ServerStorage.Level 2 Kids Texture Backup 20260806.Level 2 World Builder Before Kids Textures",
+      "className": "ModuleScript",
+      "file": "ServerStorage/Level 2 Kids Texture Backup 20260806/Level 2 World Builder Before Kids Textures.ModuleScript.lua",
+      "bytes": 69618,
+      "sha256": "8971886166a1fa4a79671c35f533589b13ba5a36449f1134ad73018b0db61328",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "ServerStorage.Level 2 Kids Skylight Backup 20260806.Level 2 World Builder Before Kids Skylights",
+      "className": "ModuleScript",
+      "file": "ServerStorage/Level 2 Kids Skylight Backup 20260806/Level 2 World Builder Before Kids Skylights.ModuleScript.lua",
+      "bytes": 84738,
+      "sha256": "380beb91a4623994c5e86b2c956eb9c68033d4df9fa0e9b4844ff451da9047b0",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "ServerStorage.Level 2 Kids V1 Backup 20260811.Level 2 Configuration",
+      "className": "ModuleScript",
+      "file": "ServerStorage/Level 2 Kids V1 Backup 20260811/Level 2 Configuration.ModuleScript.lua",
+      "bytes": 5803,
+      "sha256": "d24bd2185aead26ced59abb64f639f61494457642b6323943ce32d67f4bf2c6f",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "ServerStorage.Level 2 Kids V1 Backup 20260811.Level 2 World Builder",
+      "className": "ModuleScript",
+      "file": "ServerStorage/Level 2 Kids V1 Backup 20260811/Level 2 World Builder.ModuleScript.lua",
+      "bytes": 97093,
+      "sha256": "fdc69a799166da1f1b6324a8e09766d67fec298985d3408eb1d80685bba340d1",
       "status": "unchanged"
     },
     {
@@ -477,62 +685,6 @@
       "file": "ServerStorage/Level2Backup_20260805/ServerScriptService/Level2Generator.ModuleScript.lua",
       "bytes": 382,
       "sha256": "e39528145540d2fc075b2c65427792ef506bb405ea3c95ec23e073ce6b78a051",
-      "status": "unchanged"
-    },
-    {
-      "studioPath": "ServerStorage.Level2Backup_20260805.ServerScriptService.Level2EntityAI",
-      "className": "Script",
-      "file": "ServerStorage/Level2Backup_20260805/ServerScriptService/Level2EntityAI.Script.lua",
-      "bytes": 2662,
-      "sha256": "d02c7e717c30087ba958485b3aabca0feb8c8d12f48c4e9d2240567a5eeae219",
-      "status": "unchanged"
-    },
-    {
-      "studioPath": "ServerStorage.Level2Backup_20260805.ServerScriptService.Level2EntityAnimation",
-      "className": "Script",
-      "file": "ServerStorage/Level2Backup_20260805/ServerScriptService/Level2EntityAnimation.Script.lua",
-      "bytes": 24786,
-      "sha256": "a52c39a1a03022aee6154f76a365233992ca27d115fafdb3beef8a0cfb91a29d",
-      "status": "unchanged"
-    },
-    {
-      "studioPath": "ServerStorage.Level2Backup_20260805.ServerScriptService.Level2EntityKill",
-      "className": "Script",
-      "file": "ServerStorage/Level2Backup_20260805/ServerScriptService/Level2EntityKill.Script.lua",
-      "bytes": 342,
-      "sha256": "922b04144f2d6a15c06db3fff3878c76523fad901027708abca727dc3774432a",
-      "status": "unchanged"
-    },
-    {
-      "studioPath": "ServerStorage.Level2Backup_20260805.ServerScriptService.Level2EntityController",
-      "className": "ModuleScript",
-      "file": "ServerStorage/Level2Backup_20260805/ServerScriptService/Level2EntityController.ModuleScript.lua",
-      "bytes": 17883,
-      "sha256": "f99a16b2e131bbb93d87cc9ecac37158a6eab178b1950851db0430147b553fcd",
-      "status": "unchanged"
-    },
-    {
-      "studioPath": "ServerStorage.Level2Backup_20260805.ServerScriptService.Level2EntityProfiles",
-      "className": "ModuleScript",
-      "file": "ServerStorage/Level2Backup_20260805/ServerScriptService/Level2EntityProfiles.ModuleScript.lua",
-      "bytes": 5182,
-      "sha256": "fe043b5b04efdce9be3bb3e301fddc73e5ee71bbc57920479189efa92cc54d47",
-      "status": "unchanged"
-    },
-    {
-      "studioPath": "ServerStorage.Level2Backup_20260805.ServerScriptService.Level2Navigation",
-      "className": "ModuleScript",
-      "file": "ServerStorage/Level2Backup_20260805/ServerScriptService/Level2Navigation.ModuleScript.lua",
-      "bytes": 9956,
-      "sha256": "3f96ad95daca97d59815f92ef41099595dac5cf302503f34e31635fcde988701",
-      "status": "unchanged"
-    },
-    {
-      "studioPath": "ServerStorage.Level2Backup_20260805.ServerScriptService.Level2MeshyAnimationPlayer",
-      "className": "ModuleScript",
-      "file": "ServerStorage/Level2Backup_20260805/ServerScriptService/Level2MeshyAnimationPlayer.ModuleScript.lua",
-      "bytes": 9437,
-      "sha256": "41dbc55bd8fb7f9b87d0adb5b6e6f5cd73d14783f5148bba9870f23632c02254",
       "status": "unchanged"
     },
     {
@@ -656,22 +808,6 @@
       "status": "unchanged"
     },
     {
-      "studioPath": "RobloxReplicatedStorage.IntegrityCheckProcessorKey2_LocalizationTableAnalyticsSender_LocalizationService",
-      "className": "RemoteEvent",
-      "file": "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_LocalizationTableAnalyticsSender_LocalizationService.RemoteEvent.txt",
-      "bytes": 218,
-      "sha256": "0432a5de97e1426f4a38582dd74866cfe180f6c171c51ccace99d96841778589",
-      "status": "unchanged"
-    },
-    {
-      "studioPath": "RobloxReplicatedStorage.IntegrityCheckProcessorKey2_TextSafetyAnalyticsSender_LocalizationService",
-      "className": "RemoteEvent",
-      "file": "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_TextSafetyAnalyticsSender_LocalizationService.RemoteEvent.txt",
-      "bytes": 211,
-      "sha256": "d7149b0b3da5428845dfe6f941727138d00e6a58242255c5a70ada9a2749569b",
-      "status": "unchanged"
-    },
-    {
       "studioPath": "RobloxReplicatedStorage.IntegrityCheckProcessorKey2_DynamicTranslationSender_LocalizationService",
       "className": "RemoteEvent",
       "file": "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_DynamicTranslationSender_LocalizationService.RemoteEvent.txt",
@@ -685,6 +821,22 @@
       "file": "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_AutomaticAssetCaptureSender_LocalizationService.RemoteEvent.txt",
       "bytes": 213,
       "sha256": "9b95e9a8752b62a312fe5833af741b9b38691c26226f9c8465b55289b18e5bfc",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "RobloxReplicatedStorage.IntegrityCheckProcessorKey2_LocalizationTableAnalyticsSender_LocalizationService",
+      "className": "RemoteEvent",
+      "file": "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_LocalizationTableAnalyticsSender_LocalizationService.RemoteEvent.txt",
+      "bytes": 218,
+      "sha256": "0432a5de97e1426f4a38582dd74866cfe180f6c171c51ccace99d96841778589",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "RobloxReplicatedStorage.IntegrityCheckProcessorKey2_TextSafetyAnalyticsSender_LocalizationService",
+      "className": "RemoteEvent",
+      "file": "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_TextSafetyAnalyticsSender_LocalizationService.RemoteEvent.txt",
+      "bytes": 211,
+      "sha256": "d7149b0b3da5428845dfe6f941727138d00e6a58242255c5a70ada9a2749569b",
       "status": "unchanged"
     },
     {
@@ -741,6 +893,30 @@
       "file": "ReplicatedStorage/Remotes/DropGlowstick.RemoteEvent.txt",
       "bytes": 245,
       "sha256": "86458c8756ae1a2f91c93a642d3da93fd077d24ac6ad6698873b92ae84cb0194",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "ReplicatedStorage.Level 2 Pool Foam Remotes.ClientReport",
+      "className": "RemoteEvent",
+      "file": "ReplicatedStorage/Level 2 Pool Foam Remotes/ClientReport.RemoteEvent.txt",
+      "bytes": 171,
+      "sha256": "0c43f7f0767d158e450b0d5bab2add9650a26dcf1bbe4e9a810a0bb4010a65ee",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "ReplicatedStorage.Level 2 Pool Foam Remotes.ClientEvent",
+      "className": "RemoteEvent",
+      "file": "ReplicatedStorage/Level 2 Pool Foam Remotes/ClientEvent.RemoteEvent.txt",
+      "bytes": 170,
+      "sha256": "f8c6ce631bbf6ab6e69966618e76d4359465010bbe69b86b454646f3cbac48a3",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "ReplicatedStorage.Level 3 Remotes.ClientEvent",
+      "className": "RemoteEvent",
+      "file": "ReplicatedStorage/Level 3 Remotes/ClientEvent.RemoteEvent.txt",
+      "bytes": 160,
+      "sha256": "58c0db0a2621b63c09704a8d2d1e3bbe31ee80929c9ce9dd06cc7b2a96d293fc",
       "status": "unchanged"
     }
   ]

@@ -12,6 +12,8 @@ local Configuration = require(script.Parent:WaitForChild("Level 2 Configuration"
 local LayoutGenerator = require(script.Parent:WaitForChild("Level 2 Layout Generator"))
 local WorldBuilder = require(script.Parent:WaitForChild("Level 2 World Builder"))
 local ObjectiveController = require(script.Parent:WaitForChild("Level 2 Objective Controller"))
+local PoolFoamController = require(script.Parent:WaitForChild("Level 2 Pool Foam Controller"))
+local PoolFoamConfiguration = require(script.Parent:WaitForChild("Level 2 Pool Foam Configuration"))
 
 local Adapter = {}
 local activeManifest
@@ -62,15 +64,6 @@ local LEVEL_ONE_RUNTIME_SCRIPTS = {
 	"PuzzleManager",
 }
 
--- The pre-rewrite poolrooms entity scripts. They normally live only in the
--- ServerStorage backup now; this list is harmless insurance in case someone
--- restores them without wiring them up.
-local LEGACY_POOLROOMS_SCRIPTS = {
-	"Level2EntityAI",
-	"Level2EntityAnimation",
-	"Level2EntityKill",
-}
-
 local function getState()
 	local existing = ReplicatedStorage:FindFirstChild("Level 2 State")
 	if existing and existing:IsA("Folder") then return existing end
@@ -117,16 +110,26 @@ local function isolateLevelOneRuntime()
 	end
 end
 
-local function restoreLevelOneRuntime()
-	if storedLevelOneEntity and storedLevelOneEntity.Parent then
+local function restoreLevelOneRuntime(forceEnableScripts)
+	local stored = storedLevelOneEntity
+	if not (stored and stored.Parent) then
+		stored = ServerStorage:FindFirstChild("Level 2 Stored Level 1 Entity")
+	end
+	if stored and stored.Parent then
 		local existing = workspace:FindFirstChild("Entity")
-		if existing and existing ~= storedLevelOneEntity then existing:Destroy() end
-		storedLevelOneEntity.Name = "Entity"
-		storedLevelOneEntity.Parent = workspace
+		if existing and existing ~= stored then existing:Destroy() end
+		stored.Name = "Entity"
+		stored.Parent = workspace
 	end
 	storedLevelOneEntity = nil
-	for object, enabled in pairs(levelOneScriptStates or {}) do
-		if object.Parent then object.Enabled = enabled end
+	if levelOneScriptStates then
+		for object, enabled in pairs(levelOneScriptStates) do
+			if object.Parent then object.Enabled = enabled end
+		end
+	elseif forceEnableScripts then
+		-- A saved/crashed Level 2 edit state cannot preserve the old Lua table.
+		-- These four active Level 1 scripts are enabled in the clean place baseline.
+		setScriptsEnabled(LEVEL_ONE_RUNTIME_SCRIPTS, true)
 	end
 	levelOneScriptStates = nil
 end
@@ -140,7 +143,17 @@ local function clearOwnedTerrain(manifest)
 end
 
 function Adapter.Cleanup()
+	local recoveringPersistedState = levelOneScriptStates == nil and (
+		workspace:GetAttribute("SelectedLevel") == 2
+		or workspace:FindFirstChild("Level 2 Generated World") ~= nil
+		or workspace:FindFirstChild("PoolroomsLevel2") ~= nil
+		or ServerStorage:FindFirstChild("Level 2 Stored Level 1 Entity") ~= nil
+		or ServerStorage:FindFirstChild(STORED_LOBBY_NAME) ~= nil
+	)
+	PoolFoamController.Stop()
 	ObjectiveController.Stop()
+	-- Pool Foam pause is session-local; do not inherit a Studio debug pause.
+	workspace:SetAttribute("EntityPaused", false)
 	local state = getState()
 	state:SetAttribute("Level2_Phase", "CLEANING")
 
@@ -161,7 +174,7 @@ function Adapter.Cleanup()
 
 	destroyCompatibilityObjects()
 	restoreLobby()
-	restoreLevelOneRuntime()
+	restoreLevelOneRuntime(recoveringPersistedState)
 
 	workspace:SetAttribute("WorldGenerated", false)
 	workspace:SetAttribute("Level2Pumps", 0)
@@ -177,6 +190,8 @@ function Adapter.Cleanup()
 	state:SetAttribute("Level2_Phase", "IDLE")
 	state:SetAttribute("Level2_LightingMode", "OFF")
 	state:SetAttribute("Level2_PumpProgress", 0)
+	state:SetAttribute("Level2_HallCount", nil)
+	state:SetAttribute("Level2_Error", nil)
 end
 
 function Adapter.Build()
@@ -193,11 +208,16 @@ function Adapter.Build()
 	state:SetAttribute("Level2_Phase", "GENERATING_LAYOUT")
 	state:SetAttribute("Level2_Generation", generation)
 	state:SetAttribute("Level2_Seed", requestedSeed)
+	state:SetAttribute("Level2_RequestedSeed", requestedSeed)
+	state:SetAttribute("Level2_ResolvedSeed", nil)
+	state:SetAttribute("Level2_GenerationAttempt", nil)
+	state:SetAttribute("Level2_UsedFallback", false)
+	state:SetAttribute("Level2_FallbackBaseSeed", nil)
+	state:SetAttribute("Level2_Error", nil)
 	workspace:SetAttribute("WorldGenerated", false)
 	workspace:SetAttribute("LoadStage", "LEVEL_2_GENERATING_LAYOUT")
 	workspace:SetAttribute("Level2LightingOwnedByController", true)
 
-	setScriptsEnabled(LEGACY_POOLROOMS_SCRIPTS, false)
 	isolateLevelOneRuntime()
 	clearOwnedTerrain(nil)
 
@@ -205,6 +225,10 @@ function Adapter.Build()
 	-- path must re-raise after cleaning up.
 	local success, result = xpcall(function()
 		local layout = LayoutGenerator.Generate(requestedSeed)
+		state:SetAttribute("Level2_ResolvedSeed", layout.Seed)
+		state:SetAttribute("Level2_GenerationAttempt", layout.Attempt)
+		state:SetAttribute("Level2_UsedFallback", layout.FallbackUsed == true)
+		state:SetAttribute("Level2_FallbackBaseSeed", layout.FallbackBaseSeed)
 
 		state:SetAttribute("Level2_Phase", "BUILDING_WORLD")
 		workspace:SetAttribute("LoadStage", "LEVEL_2_BUILDING_WORLD")
@@ -216,15 +240,17 @@ function Adapter.Build()
 		-- platform is solid ground; GameManager re-places participants on it
 		-- moments later anyway.
 		local Players = game:GetService("Players")
-		local arrivalPosition = manifest.Arrival.ElevatorSpawn.Position
+		local arrivalSpawn = manifest.Arrival.ElevatorSpawn
+		local arrivalPosition = arrivalSpawn.Position
+		local arrivalLook = arrivalSpawn.CFrame.LookVector
 		local moved = 0
 		for _, player in ipairs(Players:GetPlayers()) do
 			local character = player.Character
 			local root = character and character:FindFirstChild("HumanoidRootPart")
 			if root then
 				moved += 1
-				character:PivotTo(CFrame.new(arrivalPosition
-					+ Vector3.new(((moved % 3) - 1) * 4, 4, math.floor(moved / 3) * 4)))
+				local offset = Vector3.new(((moved % 3) - 1) * 2.5, 4, math.floor(moved / 3) * 2.5)
+				character:PivotTo(CFrame.lookAt(arrivalPosition + offset, arrivalPosition + offset + arrivalLook))
 			end
 		end
 		storeLobby()
@@ -235,6 +261,14 @@ function Adapter.Build()
 		state:SetAttribute("Level2_HallCount", #layout.Halls)
 
 		ObjectiveController.Start(manifest, generation)
+		local poolFoamSession, poolFoamError = PoolFoamController.Start(manifest, generation)
+		if not poolFoamSession then
+			local message = "[Level 2] Pool Foam encounter did not start: " .. tostring(poolFoamError)
+			if PoolFoamConfiguration.Enabled == true then
+				error(message)
+			end
+			warn(message)
+		end
 
 		workspace:SetAttribute("SelectedLevel", 2)
 		workspace:SetAttribute("LoadStage", "READY")

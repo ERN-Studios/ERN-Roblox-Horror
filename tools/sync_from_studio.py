@@ -205,13 +205,10 @@ def select_studio(
         studios = payload.get("studios", [])
         matches = [studio for studio in studios if studio.get("name") == expected_name]
         if len(matches) == 1:
-            selected = matches[0]
-            client.call("set_active_studio", {"studio_id": selected["id"]})
-            return selected
+            return matches[0]
         if len(matches) > 1:
             active = [studio for studio in matches if studio.get("active")]
             if len(active) == 1:
-                client.call("set_active_studio", {"studio_id": active[0]["id"]})
                 return active[0]
             raise StudioMcpError(
                 f"More than one Studio instance is named {expected_name!r}: {matches!r}"
@@ -223,10 +220,18 @@ def select_studio(
     )
 
 
-def search_instances(client: StudioMcpClient, class_name: str) -> list[dict[str, Any]]:
+def search_instances(
+    client: StudioMcpClient, studio_id: str, class_name: str
+) -> list[dict[str, Any]]:
     text = client.call(
         "search_game_tree",
-        {"instance_type": class_name, "head_limit": 1000, "max_depth": 10},
+        {
+            "studio_id": studio_id,
+            "datamodel_type": "Edit",
+            "instance_type": class_name,
+            "head_limit": 1000,
+            "max_depth": 10,
+        },
     )
     items = json.loads(text)
     if not isinstance(items, list):
@@ -336,12 +341,13 @@ def sync(args: argparse.Namespace) -> dict[str, Any]:
     try:
         client.initialize()
         studio = select_studio(client, args.studio_name, args.connect_timeout)
-        state = client.call("get_studio_state")
+        studio_id = studio["id"]
+        state = client.call("get_studio_state", {"studio_id": studio_id})
         if "Available DataModels: Edit" not in state:
             raise StudioMcpError(f"Studio is not available in Edit mode: {state}")
 
-        scripts = search_instances(client, "LuaSourceContainer")
-        remotes = search_instances(client, "RemoteEvent")
+        scripts = search_instances(client, studio_id, "LuaSourceContainer")
+        remotes = search_instances(client, studio_id, "RemoteEvent")
         items = scripts + remotes
 
         seen_paths: set[str] = set()
@@ -372,6 +378,7 @@ def sync(args: argparse.Namespace) -> dict[str, Any]:
                 source = client.call(
                     "script_read",
                     {
+                        "studio_id": studio_id,
                         "target_file": f"game.{full_path}",
                         "should_read_entire_file": True,
                     },

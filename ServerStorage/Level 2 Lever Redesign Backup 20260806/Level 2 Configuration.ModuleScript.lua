@@ -1,7 +1,7 @@
 -- Level 2 Configuration
 -- Tunables for the Level 2 "Sunken Leisure Complex".
 --
--- Level 2 does not share Level 1's plan. Level 1 is a uniform 6x6 grid of
+-- Level 2 does not share Level 2's plan. Level 2 is a uniform 6x6 grid of
 -- identical 92-stud cells; Level 2 is a binary space partition of one large
 -- region into halls of very different sizes joined by real corridors.
 --
@@ -9,11 +9,11 @@
 -- and the terrain water appearance, so both levels feel like the same building.
 
 local Configuration = {
-	Version = 4,
+	Version = 2,
 	Theme = "Sunken Leisure Complex",
 
 	-- ── plan ────────────────────────────────────────────────────────────────
-	-- 1400 studs across. Level 1 is 552, so this is roughly 6x the floor area.
+	-- 1400 studs across. Level 2 is 552, so this is roughly 6x the floor area.
 	ComplexExtent = 1400,
 
 	-- The complex is shifted north so it can never intersect the persistent
@@ -33,12 +33,6 @@ local Configuration = {
 	MinimumHallSize = 85,
 	MinimumHallCount = 16,
 	GenerationAttempts = 40,
-	-- The requested seed's normal retry stream always runs first. Only a seed that
-	-- exhausts it enters this deterministic recovery sequence. Seed 101 is a
-	-- checked-in known-good baseline for this exact configuration; keep it in the
-	-- generator stress suite whenever plan tunables change.
-	GenerationFallbackSeeds = {101},
-	GenerationFallbackAttemptsPerSeed = 40,
 
 	CorridorWidth = 34,
 	CorridorWalkwayWidth = 8,
@@ -67,38 +61,24 @@ local Configuration = {
 	DeepPoolDepth = 4.5,
 	SlidePoolDepth = 6,
 	CorridorChannelDepth = 1.5,
-	-- Drainable corridors stay WADING depth: deep enough that a pump visibly
-	-- empties them, never deep enough to force swimming in a tunnel.
-	DrainableCorridorDepth = 1.8,
+	-- Drainable corridors are deep enough that draining them visibly changes
+	-- the space: flooded you swim across the surface, drained you walk the
+	-- channel floor between the entry and exit steps.
+	DrainableCorridorDepth = 6,
 
 	-- ── lighting ────────────────────────────────────────────────────────────
-	CeilingPanelBrightness = 1.085,
+	CeilingPanelBrightness = 1.55,
 	CeilingPanelRange = 44,
-	WallPanelBrightness = 0.665,
+	WallPanelBrightness = 0.95,
 	WallPanelRange = 28,
-	SkylightBrightness = 2.17,
+	SkylightBrightness = 3.1,
 	SkylightRange = 95,
 
 	-- ── slides ──────────────────────────────────────────────────────────────
 	SlidesPerHall = 3,
 	SlideTubeRadius = 7.5,
 	SlideSegments = 22,
-	SlideTubeSides = 8, -- legacy fallback only
-	SlideUseMeshTemplates = true,
-	SlideVisualSegmentMultiplier = 1.6,
-	-- Tight column spirals use extra visual slices without multiplying collision parts.
-	SlideHelixVisualSegments = 120,
-	SlideHelixVisualOverlap = .56,
-	SlideMeshOverlap = .65,
-	SlideGlossReflectance = .06,
-	SlideMouthReflectance = .08,
-	SlideMouthLength = 2.8,
-	SlideCollisionThickness = .6,
-	SlideCollisionFriction = .05,
-	-- Hidden collision may overlap farther than the decorative mesh so curved
-	-- flumes cannot open seams, and open slides keep a tall invisible guard lip.
-	SlideCollisionOverlap = 1.5,
-	SlideOpenSafetyWallHeight = 14,
+	SlideTubeSides = 8,
 }
 
 Configuration.Colors = {
@@ -143,5 +123,32 @@ Configuration.SoundSlots = {
 	{"Level 2 Kids Area Tone", false, "Dead, dry, carpeted-room tone"},
 }
 
+-- ── entity slots (RESERVED - nothing spawns yet) ---------------------------
+-- Space for one or two hostiles. When an entity is built, fill in a profile
+-- here and spawn it at the matching den marker the world builder creates:
+--   workspace["Level 2 Generated World"]["Level 2 Entity Nodes"]
+--     "Level 2 Entity Den A Spawn"  (deepest hall from the arrival)
+--     "Level 2 Entity Den B Spawn"  (second den, far from A)
+-- Patrol nodes (4 per hall) already exist under the same folder.
+Configuration.Entities = {
+	A = {
+		Enabled = false, -- flip when the entity exists
+		Name = "", -- e.g. "PoolStalker"
+		TemplateName = "", -- model name expected under ServerStorage.Level2Assets
+		WalkSpeed = 0,
+		ChaseSpeed = 0,
+		SightRange = 0,
+		HearingRange = 0,
+	},
+	B = {
+		Enabled = false,
+		Name = "",
+		TemplateName = "",
+		WalkSpeed = 0,
+		ChaseSpeed = 0,
+		SightRange = 0,
+		HearingRange = 0,
+	},
+}
 
 return Configuration

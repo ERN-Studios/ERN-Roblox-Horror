@@ -1,0 +1,5 @@
+NOT a script — this file mirrors a RemoteEvent object in Roblox Studio.
+
+Studio path: ReplicatedStorage.Level 2 Pool Foam Remotes.ClientReport
+Object type: RemoteEvent
+

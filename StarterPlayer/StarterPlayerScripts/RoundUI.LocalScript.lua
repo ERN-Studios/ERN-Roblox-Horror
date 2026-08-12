@@ -28,8 +28,19 @@ lobbyGrade.Parent = Lighting
 local function applyPlayerLighting()
  local inMaze = player:GetAttribute("InRound") == true
  local mazeGrade = Lighting:FindFirstChild("MongoGrade")
+ local selectedLevel = workspace:GetAttribute("SelectedLevel")
  local levelTwoWorld = workspace:FindFirstChild("Level 2 Generated World") or workspace:FindFirstChild("PoolroomsLevel2")
- local isLevelTwo = levelTwoWorld ~= nil and (workspace:GetAttribute("SelectedLevel") == 2 or inMaze)
+ local levelThreeWorld = workspace:FindFirstChild("Level 3 Generated World")
+ local isLevelTwo = levelTwoWorld ~= nil and (selectedLevel == 2 or inMaze)
+ local isLevelThree = levelThreeWorld ~= nil and (selectedLevel == 3 or inMaze)
+
+ if isLevelThree and workspace:GetAttribute("Level3LightingOwnedByController") == true then
+  -- The dedicated mall controller owns and restores this grade. Never let the
+  -- Level 1 darkness reassert itself over Level 3.
+  lobbyGrade.Enabled = false
+  if mazeGrade then mazeGrade.Enabled = false end
+  return
+ end
 
  if isLevelTwo and workspace:GetAttribute("Level2LightingOwnedByController") == true then
   lobbyGrade.Enabled = false
@@ -764,6 +775,13 @@ local function playObjective()
 	local run = objectiveRun
 
 	task.spawn(function()
+		if workspace:GetAttribute("SelectedLevel") ~= 1 then
+			-- Module-owned levels provide their own objective/readout. Leave no
+			-- empty Level 1 briefing backdrop and never show fuse instructions.
+			setMsg(nil)
+			label.Visible = false
+			return
+		end
 		setMsg("")
 		label.TextColor3 = DEFAULT_TEXT
 		label.Size = OBJECTIVE_SIZE
@@ -792,12 +810,7 @@ local function playObjective()
 			return base .. text
 		end
 
-		if workspace:GetAttribute("SelectedLevel") == 2 then
-			-- Level 2 (Sunken Leisure Complex) runs its own alert-based intro
-			-- from its objective controller; no typewriter here.
-			return
-		end
-			local built = typeInto("", "Find ZYNTRA power relays", 0.03)
+		local built = typeInto("", "Find ZYNTRA power relays", 0.03)
 		if not built then return end
 		task.wait(0.6)
 
@@ -1123,6 +1136,13 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
 		dead = false
 		setMsg("POOL ACCESS READY", Color3.fromRGB(105, 230, 210))
 
+	elseif ev == "level3access" then
+		loadingFrame.Visible = false
+		serverReadyForEntry = true
+		finishLoadingWhenReady()
+		dead = false
+		setMsg("SERVICE LEVEL ACCESS READY", Color3.fromRGB(95, 235, 215))
+
 	elseif ev == "elevator" then
 		loadingFrame.Visible = false
 		serverReadyForEntry = true
@@ -1216,7 +1236,8 @@ local function mimicLocalAlive()
  local char = player.Character
  local hum = char and char:FindFirstChildOfClass("Humanoid")
  local root = char and char:FindFirstChild("HumanoidRootPart")
- return char, hum, root, hum and hum.Health > 0 and root ~= nil
+ local levelOneActive = workspace:GetAttribute("SelectedLevel") == 1
+ return char, hum, root, levelOneActive and hum and hum.Health > 0 and root ~= nil
 end
 
 local function mimicTeammateNearby(root)
@@ -1430,7 +1451,7 @@ local function mimicBuild(sourcePlayer, spawnPos)
     local startToken = os.clock()
     steps:SetAttribute("StartToken", startToken)
     task.delay(0.25 + math.random() * 0.45, function()
-     if workspace:GetAttribute("SelectedLevel") ~= 2
+     if workspace:GetAttribute("SelectedLevel") == 1
       and model.Parent and moving == true and steps:GetAttribute("StartToken") == startToken then
       steps.TimePosition = math.random() * 0.28
       steps:Play()
@@ -1658,6 +1679,7 @@ end
 local function ambientCanScare()
  local _, _, _, alive = ambientCharacter()
  return alive
+  and workspace:GetAttribute("SelectedLevel") == 1
   and workspace:GetAttribute("RoundActive") == true
   and player:GetAttribute("InRound") == true
   and player:GetAttribute("Escaped") ~= true

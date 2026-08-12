@@ -97,9 +97,10 @@ local function button(parent, text, size, position)
 end
 
 local openButton = button(gui, "ZYNTRA // EQUIPMENT", UDim2.fromOffset(220, 42), UDim2.new(1, -238, 0, 20))
+openButton.Name = "ZyntraOpenButton"
 openButton.BackgroundColor3 = COLORS.bg
 openButton.TextColor3 = COLORS.accent
-outline(openButton, COLORS.accent, 0.22, 1.5)
+local openButtonOutline = outline(openButton, COLORS.accent, 0.22, 1.5)
 
 local main = Instance.new("Frame")
 main.Name = "Terminal"
@@ -128,7 +129,7 @@ local subtitle = label(header, "EQUIPMENT DEVELOPMENT TERMINAL", UDim2.new(0, 42
 
 local tokenLabel = label(header, "TOKENS  --", UDim2.fromOffset(190, 34), UDim2.new(1, -250, 0, 18), 18, COLORS.accent2, Enum.Font.GothamBold)
 tokenLabel.TextXAlignment = Enum.TextXAlignment.Right
-local closeButton = button(header, "×", UDim2.fromOffset(42, 36), UDim2.new(1, -54, 0, 16))
+local closeButton = button(header, "\u{00D7}", UDim2.fromOffset(42, 36), UDim2.new(1, -54, 0, 16))
 closeButton.TextSize = 25
 
 local tabBar = Instance.new("Frame")
@@ -696,10 +697,29 @@ end
 
 local function updateVisibility()
 	local inRound = player:GetAttribute("InRound") == true
-	openButton.Visible = not inRound or devAllowed
-	openButton.Text = inRound and devAllowed
-		and "ZYNTRA // DEV PHONE [M]"
-		or "ZYNTRA // EQUIPMENT"
+	local touchDevInLevel = inRound and devAllowed and UserInputService.TouchEnabled
+	openButton.Visible = not inRound or touchDevInLevel
+	if touchDevInLevel then
+		-- Keep a discreet phone-only escape hatch for whitelisted developers.
+		-- Desktop developers use M in levels, so no clickable HUD control is shown.
+		openButton.Text = "ZYNTRA // DEV"
+		openButton.Size = UDim2.fromOffset(136, 30)
+		openButton.Position = UDim2.new(1, -148, 0, 16)
+		openButton.TextSize = 11
+		openButton.BackgroundTransparency = 0.48
+		openButton.TextTransparency = 0.22
+		openButtonOutline.Transparency = 0.64
+		openButtonOutline.Thickness = 1
+	else
+		openButton.Text = "ZYNTRA // EQUIPMENT"
+		openButton.Size = UDim2.fromOffset(220, 42)
+		openButton.Position = UDim2.new(1, -238, 0, 20)
+		openButton.TextSize = 14
+		openButton.BackgroundTransparency = 0
+		openButton.TextTransparency = 0
+		openButtonOutline.Transparency = 0.22
+		openButtonOutline.Thickness = 1.5
+	end
 	if inRound and not devAllowed then setMainVisible(false) end
 	updateReentry()
 end
@@ -783,3 +803,4 @@ local function updateScale()
 end
 RunService.RenderStepped:Connect(updateScale)
 updateScale()
+

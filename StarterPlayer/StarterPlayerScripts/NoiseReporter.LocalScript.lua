@@ -123,7 +123,7 @@ end)
 -- report at 5Hz, only while actually moving
 task.spawn(function()
 	while task.wait(0.2) do
-		if not inRound() then continue end
+		if not inRound() or workspace:GetAttribute("SelectedLevel") ~= 1 then continue end
 		local char, hum = currentChar()
 		if not (char and hum and hum.Health > 0) then continue end
 

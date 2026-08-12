@@ -18,21 +18,30 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local SoundService = game:GetService("SoundService")
+local ContentProvider = game:GetService("ContentProvider")
 local RunService = game:GetService("RunService")
 
 local player = Players.LocalPlayer
 
 -- Looping beds: {library slot name, target volume}
 local AMBIENCE = {
-	{"Level 2 Room Tone", 0.35},
-	{"Level 2 Ventilation Hum", 0.18},
-	{"Level 2 Distant Water", 0.3},
+	{"Level 2 Room Tone", 0.18},
+	{"Level 2 Ventilation Hum", 0.09},
+	{"Level 2 Distant Water", 0.15},
 }
-local CUE_VOLUME = 0.6
+local CUE_SLOTS = {
+	"Level 2 Pump Start",
+	"Level 2 Drain Rush",
+	"Level 2 Pressure Door",
+	"Level 2 Slide Rush",
+}
+local CUE_VOLUME = 0.3
 local FADE_SECONDS = 1.5
+local ALLOWED_CUES = {}
+for _, slotName in ipairs(CUE_SLOTS) do ALLOWED_CUES[slotName] = true end
 
-local library = ReplicatedStorage:WaitForChild("Level 2 Sound Library", 30)
-local event = ReplicatedStorage:WaitForChild("Level 2 Sound Event", 30)
+local library = ReplicatedStorage:WaitForChild("Level 2 Sound Library")
+local event = ReplicatedStorage:WaitForChild("Level 2 Sound Event")
 
 local function resolveId(slotName)
 	local slot = library and library:FindFirstChild(slotName)
@@ -42,6 +51,33 @@ local function resolveId(slotName)
 	if raw:match("^%d+$") then return "rbxassetid://" .. raw end
 	return raw
 end
+
+-- Warm the authored one-shot clips while the player is still exploring, so
+-- a first-time cue does not get paused at position zero while its asset finishes loading.
+task.spawn(function()
+	local preloadSounds = {}
+	for _, slotName in ipairs(CUE_SLOTS) do
+		local id = resolveId(slotName)
+		if id then
+			local sound = Instance.new("Sound")
+			sound.Name = "Level 2 Preload - " .. slotName
+			sound.SoundId = id
+			sound.Volume = 0
+			sound.Parent = SoundService
+			table.insert(preloadSounds, sound)
+		end
+	end
+
+	if #preloadSounds > 0 then
+		pcall(function()
+			ContentProvider:PreloadAsync(preloadSounds)
+		end)
+	end
+
+	for _, sound in ipairs(preloadSounds) do
+		sound:Destroy()
+	end
+end)
 
 local function active()
 	return workspace:GetAttribute("SelectedLevel") == 2
@@ -87,21 +123,35 @@ RunService.Heartbeat:Connect(function(dt)
 end)
 
 -- One-shot cues from the server.
-if event then
-	event.OnClientEvent:Connect(function(cueName)
-		if not active() then return end
-		if typeof(cueName) ~= "string" then return end
-		local id = resolveId(cueName)
-		if not id then return end
-		local cue = Instance.new("Sound")
-		cue.Name = "Level 2 Cue - " .. cueName
-		cue.SoundId = id
-		cue.Volume = CUE_VOLUME
-		cue.Parent = SoundService
-		cue.Ended:Once(function() cue:Destroy() end)
-		cue:Play()
-		task.delay(20, function()
-			if cue.Parent then cue:Destroy() end
-		end)
+local function playCue(cueName)
+	if not active() then return end
+	if typeof(cueName) ~= "string" or not ALLOWED_CUES[cueName] then return end
+	local id = resolveId(cueName)
+	if not id then return end
+
+	local cue = Instance.new("Sound")
+	cue.Name = "Level 2 Cue - " .. cueName
+	cue.SoundId = id
+	cue.Volume = CUE_VOLUME
+	cue.Parent = SoundService
+
+	-- Initialize this specific Sound instance before Play(). A shared cached asset
+	-- may report IsLoaded while a fresh Sound can still pause at position zero.
+	pcall(function()
+		ContentProvider:PreloadAsync({cue})
+	end)
+	if not cue.Parent then return end
+	if not active() then cue:Destroy(); return end
+
+	cue:Play()
+
+	-- A fixed cleanup is intentionally used instead of Ended here. Some newly
+	-- uploaded audio can emit an early Ended transition while its first local
+	-- playback initializes, which would destroy the cue before it becomes audible.
+	task.delay(20, function()
+		if cue.Parent then cue:Destroy() end
 	end)
 end
+
+-- Waiting without a timeout prevents slow joins from silently losing all one-shots.
+local cueConnection = event.OnClientEvent:Connect(playCue)
