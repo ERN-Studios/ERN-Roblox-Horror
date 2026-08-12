@@ -772,18 +772,20 @@ end
 -- this hall: nothing bulky may block a door or the level exit.
 local function nearDoorApproach(hall, doors, x, z, range)
 	if not doors then return false end
-	range = range or 14
+	-- Vault-tunnel mouths are wider than doors; the strip must cover the
+	-- whole opening plus a flared column's radius.
+	range = range or 20
 	for _, doorX in ipairs(doors.North or {}) do
-		if math.abs(x - doorX) < range and z - hall.MinZ < 32 then return true end
+		if math.abs(x - doorX) < range and z - hall.MinZ < 36 then return true end
 	end
 	for _, doorX in ipairs(doors.South or {}) do
-		if math.abs(x - doorX) < range and hall.MaxZ - z < 32 then return true end
+		if math.abs(x - doorX) < range and hall.MaxZ - z < 36 then return true end
 	end
 	for _, doorZ in ipairs(doors.West or {}) do
-		if math.abs(z - doorZ) < range and x - hall.MinX < 32 then return true end
+		if math.abs(z - doorZ) < range and x - hall.MinX < 36 then return true end
 	end
 	for _, doorZ in ipairs(doors.East or {}) do
-		if math.abs(z - doorZ) < range and hall.MaxX - x < 32 then return true end
+		if math.abs(z - doorZ) < range and hall.MaxX - x < 36 then return true end
 	end
 	return false
 end
@@ -805,7 +807,7 @@ local function makeColonnade(parent, hall, depth, rows, doors)
 				or hall.Center + Vector3.new(offset, -(depth or 0), along)
 			position = Vector3.new(
 				dodgeSkylightX(hall, position.X, 13), position.Y, position.Z)
-			if nearDoorApproach(hall, doors, position.X, position.Z, 15) then
+			if nearDoorApproach(hall, doors, position.X, position.Z, 20) then
 				continue
 			end
 			-- The dodge can push two columns onto the same spot; skip rather
@@ -1218,6 +1220,11 @@ local function makeTubeFromPoints(parent, points, radius, color, name, openTop, 
 			local visual = template:Clone()
 			configureSlideVisual(visual, template, name .. " Visual " .. suffix,
 				base, radius, length, color, visualOverlap)
+			-- Near the tube ends both faces render, so nobody can see
+			-- through the shell while standing at a mouth.
+			if (index <= 3 or index >= #points - 4) and visual:IsA("MeshPart") then
+				visual.DoubleSided = true
+			end
 			visual.Parent = visuals
 
 			if not collisionPoints then
@@ -1274,6 +1281,9 @@ function makeSlideMouth(parent, name, startPoint, nextPoint, radius, color, tran
 	mouth.CanTouch = false
 	mouth.CanQuery = false
 	mouth.CastShadow = true
+	if mouth:IsA("MeshPart") then
+		mouth.DoubleSided = true
+	end
 	mouth:SetAttribute("Level2_SlideMouth", true)
 	mouth.Parent = parent
 	return mouth
@@ -1393,7 +1403,7 @@ local function makeSlideHall(parent, hall, index, doors)
 		for _, sz in ipairs({-1, 1}) do
 			local columnX = dodgeSkylightX(hall, center.X + sx * columnOffsetX, 20)
 			local columnZ = center.Z + sz * columnOffsetZ
-			if not nearDoorApproach(hall, doors, columnX, columnZ, 15) then
+			if not nearDoorApproach(hall, doors, columnX, columnZ, 20) then
 				makeColumn(hallFolder, Vector3.new(columnX, -depth, columnZ), height + depth, 9)
 			end
 		end
@@ -1467,6 +1477,7 @@ local function makeSlideHall(parent, hall, index, doors)
 	-- south-east water, fed by a short bridge from the east catwalk. Clear of
 	-- the deck, the flume lanes and the spiral stair by construction, so the
 	-- tube can never pierce any of them.
+	local helixBuilt = false
 	local helixAnchorX = dodgeSkylightX(hall, center.X + columnOffsetX, 34)
 	local helixRadius = math.min(16,
 		hall.MaxX - 16 - 6.6 - helixAnchorX,
@@ -1485,10 +1496,11 @@ local function makeSlideHall(parent, hall, index, doors)
 		for _, railSide in ipairs({-1, 1}) do
 			makeRail(hallFolder,
 				Vector3.new(hall.MaxX - 16, railY, center.Z + railSide * 3.2),
-				Vector3.new(helixTop.X - 1, railY, center.Z + railSide * 3.2),
+				Vector3.new(helixTop.X + 3.4, railY, center.Z + railSide * 3.2),
 				"Level 2 Slide Hall " .. index .. " Helix Catwalk "
 					.. (railSide < 0 and "Left" or "Right"))
 		end
+		helixBuilt = true
 	end
 
 	-- Spiral stair in the south-east corner + catwalk along the east wall.
@@ -1506,10 +1518,22 @@ local function makeSlideHall(parent, hall, index, doors)
 		Vector3.new(catwalkWidth, 2, math.abs(hall.MaxZ - 26 - catwalkZ1)), C.TileWarm,
 		Enum.NormalId:GetEnumItems(), 8)
 	eastCatwalk.CanCollide = true
-	makeRail(hallFolder,
-		Vector3.new(catwalkInnerX, railY, hall.MaxZ - 31),
-		Vector3.new(catwalkInnerX, railY, catwalkZ1),
-		"Level 2 Slide Hall " .. index .. " Catwalk")
+	if helixBuilt then
+		-- Leave the bridge junction open instead of fencing off the slide.
+		makeRail(hallFolder,
+			Vector3.new(catwalkInnerX, railY, hall.MaxZ - 31),
+			Vector3.new(catwalkInnerX, railY, center.Z + 4.5),
+			"Level 2 Slide Hall " .. index .. " Catwalk S")
+		makeRail(hallFolder,
+			Vector3.new(catwalkInnerX, railY, center.Z - 4.5),
+			Vector3.new(catwalkInnerX, railY, catwalkZ1),
+			"Level 2 Slide Hall " .. index .. " Catwalk N")
+	else
+		makeRail(hallFolder,
+			Vector3.new(catwalkInnerX, railY, hall.MaxZ - 31),
+			Vector3.new(catwalkInnerX, railY, catwalkZ1),
+			"Level 2 Slide Hall " .. index .. " Catwalk")
+	end
 
 	lightHall(hallFolder, hall, "SlideHall" .. index)
 
@@ -1956,9 +1980,9 @@ local function makeKidsSlideStructure(parent, hall, center, forward, index, long
 	fillLight.Shadows = false
 	fillLight.Parent = fillAnchor
 
-	-- The neutral fiberglass map still darkens its tint in skylight shadows.
-	local slideColor = Configuration.SlideColors[(index % #Configuration.SlideColors) + 1]
-		:Lerp(Color3.fromRGB(235, 235, 225), .48)
+	-- Kids slides wear their own room's colour, so the tube reads as part
+	-- of the room instead of imported fiberglass.
+	local slideColor = palette.Color:Lerp(Color3.new(1, 1, 1), .22)
 	local controlDrop = nano and .6 or (micro and 1 or 1.4)
 	local controlLift = nano and .8 or (micro and 1.4 or 2.2)
 	local slideModel = makeSlideTube(parent, p0,
@@ -3249,7 +3273,7 @@ local function decorateLargeHall(parent, hall, depth, index, doors)
 	local function claimSpot(fx, fz)
 		local x = dodgeSkylightX(hall, hall.Center.X + fx * hall.Width, 24)
 		local z = hall.Center.Z + fz * hall.Depth
-		if nearDoorApproach(hall, doors, x, z, 16) then return nil end
+		if nearDoorApproach(hall, doors, x, z, 20) then return nil end
 		if not pointClear(x, z, 26) then return nil end
 		return Vector3.new(x, 0, z)
 	end

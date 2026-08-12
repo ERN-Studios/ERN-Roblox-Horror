@@ -199,10 +199,12 @@ function Adapter.Build()
 	generation += 1
 
 	local state = getState()
+	-- The workspace attribute is a MANUAL testing override only. Never
+	-- write the random pick back — doing so froze the map on the first
+	-- round's seed for every round after it.
 	local requestedSeed = workspace:GetAttribute("Level2Seed")
 	if type(requestedSeed) ~= "number" then
 		requestedSeed = DateTime.now().UnixTimestampMillis % 2147483647
-		workspace:SetAttribute("Level2Seed", requestedSeed)
 	end
 
 	state:SetAttribute("Level2_Phase", "GENERATING_LAYOUT")
