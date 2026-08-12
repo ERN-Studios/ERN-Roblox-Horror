@@ -45,6 +45,10 @@ local function setPhase(activeSession: any, phase: string)
 	local state = stateFolder()
 	state:SetAttribute("Level3_RoomSongPhase", phase)
 	if phase == "BLACKOUT" then
+		-- Monotonic replicated edge: clients must hear the power-down cue even
+		-- when a fast timeline correction skips over their local phase poll.
+		state:SetAttribute("Level3_BlackoutSerial",
+			(state:GetAttribute("Level3_BlackoutSerial") or 0) + 1)
 		local startTime = activeSession.StartServerTime :: number
 		local untilTime = startTime + Configuration.MusicSequence.DurationSeconds
 			+ Configuration.MusicSequence.BlackoutSeconds
@@ -110,6 +114,7 @@ function Controller.Stop()
 	state:SetAttribute("Level3_RoomSongDuration", Configuration.MusicSequence.DurationSeconds)
 	state:SetAttribute("Level3_BlackoutDuration", Configuration.MusicSequence.BlackoutSeconds)
 	state:SetAttribute("Level3_BlackoutStartedAtServerTime", 0)
+	state:SetAttribute("Level3_BlackoutSerial", 0)
 	setBlackout(false, 0)
 end
 
@@ -135,6 +140,7 @@ function Controller.Start(manifest: any, generation: number)
 	state:SetAttribute("Level3_RoomSongAssetId", Configuration.Audio.RoomListeningSong)
 	state:SetAttribute("Level3_RoomSongDuration", Configuration.MusicSequence.DurationSeconds)
 	state:SetAttribute("Level3_BlackoutDuration", Configuration.MusicSequence.BlackoutSeconds)
+	state:SetAttribute("Level3_BlackoutSerial", 0)
 	setPhase(activeSession, "WAITING_FOR_ROUND")
 	activeSession.RoundConnection = workspace:GetAttributeChangedSignal("RoundActive"):Connect(function()
 		arm(activeSession)

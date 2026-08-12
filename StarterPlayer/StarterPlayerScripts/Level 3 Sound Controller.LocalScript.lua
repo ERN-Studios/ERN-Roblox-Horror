@@ -90,7 +90,8 @@ powerDown.SoundId = DEFAULT_AUDIO.PowerDown
 powerDown.Volume = 0.92
 powerDown.Looped = false
 powerDown.Parent = SoundService
-local lastSequencePhase = "STOPPED"
+local lastBlackoutActive = false
+local powerDownArmed = true
 
 local roomSong = Instance.new("Sound")
 roomSong.Name = "Level 3 - The Room is Listening"
@@ -152,12 +153,29 @@ local function isActive(): boolean
 		and (not state or state:GetAttribute("Level3_Phase") ~= "STOPPED")
 end
 
+local roomSongPhase: () -> string
+
 local function currentWorld(): Model?
 	local object = workspace:FindFirstChild(WORLD_NAME)
 	return if object and object:IsA("Model") then object else nil
 end
 
-local function roomSongPhase(): string
+local function playPowerDown()
+	if not isActive() then return end
+	powerDown.SoundId = resolveId("PowerDown") or DEFAULT_AUDIO.PowerDown
+	powerDown.TimePosition = 0
+	powerDown:Play()
+	-- Hold the cue for one update window; some timelines briefly expose the
+	-- replicated phase edge before the local round state has fully settled.
+	powerDownArmed = false
+end
+
+local function bindBlackoutSignal()
+	-- Blackout is sampled with the rest of the replicated Level 3 state below.
+	-- Keeping it in the central 10 Hz mixer makes rebuild/state-folder swaps safe.
+end
+
+roomSongPhase = function(): string
 	local value = stateAttribute("Level3_RoomSongPhase", nil)
 	return if type(value) == "string" then value else "STOPPED"
 end
@@ -558,6 +576,14 @@ RunService.Heartbeat:Connect(function(dt)
 		end
 	end
 	local sequencePhase = roomSongPhase()
+	local blackoutActive = stateAttribute("Level3_BlackoutActive", "Level3BlackoutActive") == true
+	if not blackoutActive then
+		powerDownArmed = true
+	end
+	if blackoutActive and powerDownArmed then
+		playPowerDown()
+	end
+	lastBlackoutActive = blackoutActive
 	if playing and nearest then fluorescentEmitter.Position = nearest.Position end
 	local humTarget = if playing and nearest and sequencePhase ~= "BLACKOUT"
 		then ((sequencePhase == "PLAYING" or sequencePhase == "ARMED") and 0.035 or 0.15) else 0
@@ -565,14 +591,9 @@ RunService.Heartbeat:Connect(function(dt)
 	if humTarget > 0 and not fluorescentHum.IsPlaying then fluorescentHum:Play() end
 	if humTarget == 0 and fluorescentHum.Volume < .003 and fluorescentHum.IsPlaying then fluorescentHum:Stop() end
 
-	if sequencePhase == "BLACKOUT" and lastSequencePhase ~= "BLACKOUT" then
-		powerDown.SoundId = resolveId("PowerDown") or DEFAULT_AUDIO.PowerDown
-		powerDown.TimePosition = 0
-		powerDown:Play()
-	end
-	if not playing and powerDown.IsPlaying then powerDown:Stop() end
-	lastSequencePhase = sequencePhase
+	bindBlackoutSignal()
 end)
 
 bindClientEvent()
+bindBlackoutSignal()
 refreshWorld()
