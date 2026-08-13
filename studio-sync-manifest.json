@@ -10,8 +10,8 @@
     "remoteEvents": 16,
     "total": 113,
     "created": 0,
-    "updated": 4,
-    "unchanged": 109
+    "updated": 1,
+    "unchanged": 112
   },
   "extraMirroredFilesNotInStudio": [],
   "items": [
@@ -189,7 +189,7 @@
       "file": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
       "bytes": 34147,
       "sha256": "6b4c4fe5949e31b2185261600714d8cc94dfa53f0932d24bbedf11b515fe08c6",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.PuzzleUI",
@@ -349,14 +349,14 @@
       "file": "ServerScriptService/Level 2 Systems/Level 2 Layout Generator.ModuleScript.lua",
       "bytes": 34287,
       "sha256": "48a6d7313689e2cb4c38ccc72e219299a89340e2b95af4d4146ddff7a56e4323",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 World Builder",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua",
-      "bytes": 182392,
-      "sha256": "00865e43ce37a69892f997d91c40019866ee6d8812f90ebc51add58f055df261",
+      "bytes": 183751,
+      "sha256": "4c5f68280986e5919cbfa008335bae5024b6487cd6d50dc0b9767aaa31ceb668",
       "status": "updated"
     },
     {
@@ -461,7 +461,7 @@
       "file": "ServerScriptService/Level 3 Systems/Level 3 Objective Controller.ModuleScript.lua",
       "bytes": 32471,
       "sha256": "4b45d4ad5c6f1eb96994e69e2ed541dbef37fbdb4cfd48f516d4b35dbb6a730c",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",

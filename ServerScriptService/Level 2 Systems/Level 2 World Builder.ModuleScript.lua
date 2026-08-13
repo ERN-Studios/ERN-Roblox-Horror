@@ -1403,6 +1403,31 @@ local function makeTubeFromPoints(parent, points, radius, color, name, openTop, 
 		end
 	end
 
+	-- Thin solid ribbons riding the OUTSIDE of the shell close the slivers
+	-- between segments on tight curves — a flat strip turned with the tube,
+	-- not another shell layer.
+	local function addSeamStrip(a, b, index)
+		local length = (b - a).Magnitude
+		if length <= .05 then return end
+		local base = CFrame.lookAt((a + b) * .5, b, Vector3.yAxis)
+		local strip = part(visuals, name .. " Seam " .. index,
+			base * CFrame.new(0, -radius * 1.02, 0),
+			Vector3.new(radius * 1.15, .35, length + 1.4), color, Enum.Material.SmoothPlastic)
+		strip.CanCollide = false
+		strip.CanTouch = false
+		strip.CanQuery = false
+		strip.CastShadow = false
+		if not openTop then
+			local crown = part(visuals, name .. " Seam Top " .. index,
+				base * CFrame.new(0, radius * 1.02, 0),
+				Vector3.new(radius * 1.15, .35, length + 1.4), color, Enum.Material.SmoothPlastic)
+			crown.CanCollide = false
+			crown.CanTouch = false
+			crown.CanQuery = false
+			crown.CastShadow = false
+		end
+	end
+
 	for index = 1, #points - 1 do
 		local a, b = points[index], points[index + 1]
 		local length = (b - a).Magnitude
@@ -1423,6 +1448,7 @@ local function makeTubeFromPoints(parent, points, radius, color, name, openTop, 
 
 			if not collisionPoints then
 				addCollisionSegment(a, b, index)
+				addSeamStrip(a, b, index)
 			end
 		end
 	end
@@ -1430,6 +1456,7 @@ local function makeTubeFromPoints(parent, points, radius, color, name, openTop, 
 	if collisionPoints then
 		for index = 1, #collisionPoints - 1 do
 			addCollisionSegment(collisionPoints[index], collisionPoints[index + 1], index)
+			addSeamStrip(collisionPoints[index], collisionPoints[index + 1], index)
 		end
 	end
 
@@ -1524,28 +1551,33 @@ local function makeHelixSlide(parent, columnPosition, helixRadius, topY, color, 
 	return visualPoints[1]
 end
 
--- A solid masonry cradle under a flume mouth: the tube visibly RESTS on
--- something, and solid blocks kill every see-through angle at the mouth
--- without stacking more shell layers.
-local function makeMouthCradle(parent, mouthPoint, towardPoint, radius, deckTop, name)
+-- A molded entry tub like a REAL water-park slide start (the reference
+-- photos): the seat sits at deck height, low shell walls wrap the mouth's
+-- sides, a rounded lip closes the back, and a colored seat slab covers the
+-- deck-to-shell transition. The tube's first stretch hides inside the deck
+-- slab, so no angle can see through it — solid geometry, no extra layers.
+local function makeEntryTub(parent, mouthPoint, towardPoint, radius, deckTop, color, name)
 	local flat = Vector3.new(towardPoint.X - mouthPoint.X, 0, towardPoint.Z - mouthPoint.Z)
 	if flat.Magnitude < .05 then flat = Vector3.new(0, 0, 1) end
 	local base = Vector3.new(mouthPoint.X, deckTop, mouthPoint.Z)
 	local frame = CFrame.lookAt(base, base + flat)
-	local plinthHeight = math.max(1, mouthPoint.Y - radius - deckTop + .7)
-	local plinth = tiledPart(parent, name .. " Cradle Base",
-		frame * CFrame.new(0, plinthHeight * .5, .5),
-		Vector3.new(radius * 2 + 3.2, plinthHeight, 7), C.TileWarm,
-		Enum.NormalId:GetEnumItems(), 7)
-	plinth.CanCollide = true
-	local cheekHeight = mouthPoint.Y - deckTop
-	for cheekSide = -1, 1, 2 do
-		local cheek = tiledPart(parent, name .. " Cradle Cheek",
-			frame * CFrame.new(cheekSide * (radius + 1.3), cheekHeight * .5, .5),
-			Vector3.new(1.8, cheekHeight, 7), C.TileWarm,
+	local wallHeight = radius + .8
+	for tubSide = -1, 1, 2 do
+		local wall = tiledPart(parent, name .. " Tub Wall",
+			frame * CFrame.new(tubSide * (radius + 1.05), wallHeight * .5, 3.6),
+			Vector3.new(1.6, wallHeight, 9.4), C.TileWarm,
 			Enum.NormalId:GetEnumItems(), 7)
-		cheek.CanCollide = true
+		wall.CanCollide = true
 	end
+	local lip = tiledPart(parent, name .. " Tub Lip",
+		frame * CFrame.new(0, 1, 7.8), Vector3.new(radius * 2 + 3.7, 2, 1.4),
+		C.TileWarm, Enum.NormalId:GetEnumItems(), 7)
+	lip.CanCollide = true
+	local seat = part(parent, name .. " Tub Seat",
+		frame * CFrame.new(0, .09, 1.8), Vector3.new(radius * 1.5, .18, 5.6),
+		color, Enum.Material.SmoothPlastic)
+	seat.CanCollide = false
+	seat.CanTouch = false
 end
 
 -- Very large slide halls need architectural rhythm or their authored play
@@ -1657,9 +1689,9 @@ local function makeSlideHall(parent, hall, index, doors)
 		if math.abs(lane) <= laneLimit then
 			local color = Configuration.SlideColors[((index + slide - 2) % #Configuration.SlideColors) + 1]
 			local laneX = center.X + lane
-			-- +2.4, not +1: the shell's underside must clear the 2-stud deck
-			-- slab, or the floor pokes visibly through the tube near the mouth.
-			local startPoint = Vector3.new(laneX, deckY + radius + 2.4, deckFront - 2)
+			-- Ride surface flush with the deck (real slide-entry style): the
+			-- shell's underside hides INSIDE the 2-stud deck slab.
+			local startPoint = Vector3.new(laneX, deckY + radius + .25, deckFront - 2)
 			local p1 = Vector3.new(laneX, deckY - 8, deckFront + hall.Depth * .18)
 			local p2 = Vector3.new(laneX, 15, center.Z + hall.Depth * .06)
 			local endZ = math.min(center.Z + hall.Depth * .26, hall.MaxZ - radius - 8)
@@ -1672,7 +1704,7 @@ local function makeSlideHall(parent, hall, index, doors)
 			makeSlideMouth(hallFolder,
 				"Level 2 Slide Hall " .. index .. " Flume Mouth " .. slide,
 				startPoint, p1, radius, color, .08)
-			makeMouthCradle(hallFolder, startPoint, p1, radius, deckY + 1,
+			makeEntryTub(hallFolder, startPoint, p1, radius, deckY + 1, color,
 				"Level 2 Slide Hall " .. index .. " Flume " .. slide)
 			table.insert(mouths, laneX)
 		end
@@ -1716,17 +1748,17 @@ local function makeSlideHall(parent, hall, index, doors)
 		local helixColor = Configuration.SlideColors[((index + 2) % #Configuration.SlideColors) + 1]
 		local helixColumn = Vector3.new(helixAnchorX, 0, center.Z)
 		makeColumn(hallFolder, Vector3.new(helixAnchorX, -depth, center.Z), height + depth, 9)
-		local helixTop = makeHelixSlide(hallFolder, helixColumn, helixRadius, deckY + 6.4,
+		local helixTop = makeHelixSlide(hallFolder, helixColumn, helixRadius, deckY + 7.6,
 			helixColor, "Level 2 Slide Hall " .. index .. " Helix")
 		local bridge = tiledPart(hallFolder, "Level 2 Slide Hall Helix Catwalk",
 			CFrame.new(Vector3.new((hall.MaxX - 16 + helixTop.X) * .5, deckY, center.Z)),
-			Vector3.new(math.max(4, hall.MaxX - 16 - helixTop.X + 2), 2, 10), C.TileWarm,
+			Vector3.new(math.max(4, hall.MaxX - 16 - helixTop.X + 2), 2, 14), C.TileWarm,
 			Enum.NormalId:GetEnumItems(), 8)
 		bridge.CanCollide = true
 		for _, railSide in ipairs({-1, 1}) do
 			makeRail(hallFolder,
-				Vector3.new(hall.MaxX - 16, railY, center.Z + railSide * 4.6),
-				Vector3.new(helixTop.X + 3.4, railY, center.Z + railSide * 4.6),
+				Vector3.new(hall.MaxX - 16, railY, center.Z + railSide * 6.6),
+				Vector3.new(helixTop.X + 3.4, railY, center.Z + railSide * 6.6),
 				"Level 2 Slide Hall " .. index .. " Helix Catwalk "
 					.. (railSide < 0 and "Left" or "Right"))
 		end
@@ -1752,10 +1784,10 @@ local function makeSlideHall(parent, hall, index, doors)
 		-- Leave the bridge junction open instead of fencing off the slide.
 		makeRail(hallFolder,
 			Vector3.new(catwalkInnerX, railY, hall.MaxZ - 31),
-			Vector3.new(catwalkInnerX, railY, center.Z + 4.5),
+			Vector3.new(catwalkInnerX, railY, center.Z + 7.5),
 			"Level 2 Slide Hall " .. index .. " Catwalk S")
 		makeRail(hallFolder,
-			Vector3.new(catwalkInnerX, railY, center.Z - 4.5),
+			Vector3.new(catwalkInnerX, railY, center.Z - 7.5),
 			Vector3.new(catwalkInnerX, railY, catwalkZ1),
 			"Level 2 Slide Hall " .. index .. " Catwalk N")
 	else
@@ -1778,7 +1810,7 @@ local function makeExitFlume(parent, layout, hall, deck)
 	local radius = 8
 	local boundsMaxX = layout.Bounds.MaxX
 	local shellX = boundsMaxX + 60
-	local startPoint = Vector3.new(hall.MaxX - 14, deck.DeckY + 10.4, deck.DeckZ)
+	local startPoint = Vector3.new(hall.MaxX - 14, deck.DeckY + 8.2, deck.DeckZ)
 
 	-- The forced eastern exit hall leaves only a short level lead-in. A densely
 	-- sampled monotone Bezier then commits immediately to a steep descent and
@@ -1820,8 +1852,8 @@ local function makeExitFlume(parent, layout, hall, deck)
 
 	local mouth = makeSlideMouth(parent, "Level 2 Exit Flume Mouth",
 		startPoint, tubePoints[2], radius, C.Emergency, .55)
-	makeMouthCradle(parent, startPoint, tubePoints[2], radius, deck.DeckY + 1,
-		"Level 2 Exit Flume")
+	makeEntryTub(parent, startPoint, tubePoints[2], radius, deck.DeckY + 1,
+		C.Emergency, "Level 2 Exit Flume")
 
 	-- The room floor is aligned to the hidden collision floor of the tube.
 	-- That removes the old four-stud ledge at the doorway.
@@ -3470,13 +3502,13 @@ local function makePlayTowerKit(parent, hall, depth, origin, yaw, topY, color, n
 		at(Vector3.new(6, topY + .1, -6.2)), name)
 	local landingHeight = 4.2 - depth + .4
 	makeSlideTube(parent,
-		at(Vector3.new(0, topY + 4.8, 6)),
-		at(Vector3.new(0, topY + 1.4, 14)),
+		at(Vector3.new(0, topY + 3.8, 6)),
+		at(Vector3.new(0, topY + 1.2, 14)),
 		at(Vector3.new(-2, landingHeight + 5, 17)),
 		at(Vector3.new(-6, landingHeight, 26)),
 		4.2, color, name .. " Slide", 24, true)
-	makeMouthCradle(parent, at(Vector3.new(0, topY + 4.8, 6)),
-		at(Vector3.new(0, topY + 1.4, 14)), 4.2, topY, name)
+	makeEntryTub(parent, at(Vector3.new(0, topY + 3.8, 6)),
+		at(Vector3.new(0, topY + 1.2, 14)), 4.2, topY, color, name)
 end
 
 -- Water halls earn real play furniture, randomized per hall: slide kits,
