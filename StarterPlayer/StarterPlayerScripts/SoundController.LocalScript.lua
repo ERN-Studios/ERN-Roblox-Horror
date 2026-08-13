@@ -19,6 +19,9 @@ local RS = game:GetService("ReplicatedStorage")
 local AMBIENCE_SOUND  = "rbxassetid://92576512092725" -- constant background drone/hum (2D, always playing)
 local BREATHING_SOUND = "" -- YOUR OWN winded breathing (2D) — fades in below 20% stamina
 local FOOTSTEP_WALK   = "rbxassetid://108141977175862" -- walking loop (the slower-cadence clip)
+local LOBBY_FOOTSTEP_SOUND = "" -- LOBBY-ONLY steps. Roblox's default loop and the
+-- round clips both read as squeaky in the tunnel, so the lobby ships silent;
+-- paste any clean footstep-loop id here and lobby walk/sprint use it.
 local FOOTSTEP_RUN    = "rbxassetid://133003345144597" -- running loop (the faster-cadence clip, natural pitch)
 local ALERT_SOUND     = "rbxassetid://118863512220494" -- plays while the maze is in ALERT (red lights) mode
 local ELEVATOR_SOUND  = "rbxassetid://72303878759145" -- the elevator ride, plays through the pre-round intro (2D)
@@ -488,8 +491,10 @@ RunService.Heartbeat:Connect(function(dt)
 	-- footsteps: a looping track that only plays while you MOVE and fades out when
 	-- you stop (so a long loop never drones on while standing, and never hard-cuts)
 	local footTarget, footSpeed = 0, nil
-	if player:GetAttribute("InRound") == true
-		and hum and root and workspace:GetAttribute("SelectedLevel") ~= 2 then
+	local inRound = player:GetAttribute("InRound") == true
+	local lobbySteps = not inRound and LOBBY_FOOTSTEP_SOUND ~= ""
+	if hum and root and (lobbySteps
+		or (inRound and workspace:GetAttribute("SelectedLevel") ~= 2)) then
 		local vel = root.AssemblyLinearVelocity
 		local flat = Vector3.new(vel.X, 0, vel.Z).Magnitude
 		local ws = hum.WalkSpeed
@@ -498,9 +503,16 @@ RunService.Heartbeat:Connect(function(dt)
 			-- (speeding a clip up to fake a run makes it chipmunk-high). Falls back
 			-- to the walk loop sped up only if no run clip is set.
 			local run = ws >= RUN_WALKSPEED
-			local wantId = run and (FOOTSTEP_RUN ~= "" and FOOTSTEP_RUN or FOOTSTEP_WALK) or FOOTSTEP_WALK
-			local wantSpeed = run and RUN_SPEEDUP or WALK_SPEEDUP
-			local wantVol = run and RUN_VOLUME or WALK_VOLUME
+			local wantId, wantSpeed, wantVol
+			if lobbySteps then
+				wantId = LOBBY_FOOTSTEP_SOUND
+				wantSpeed = run and RUN_SPEEDUP or WALK_SPEEDUP
+				wantVol = (run and RUN_VOLUME or WALK_VOLUME) * .8
+			else
+				wantId = run and (FOOTSTEP_RUN ~= "" and FOOTSTEP_RUN or FOOTSTEP_WALK) or FOOTSTEP_WALK
+				wantSpeed = run and RUN_SPEEDUP or WALK_SPEEDUP
+				wantVol = run and RUN_VOLUME or WALK_VOLUME
+			end
 			if wantId ~= "" then
 				if curStepId ~= wantId then
 					steps.SoundId = wantId; curStepId = wantId; steps:Play()

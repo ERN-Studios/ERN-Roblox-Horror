@@ -357,9 +357,14 @@ local function generateAttempt(seed)
 		if a.Area == b.Area then return a.Index < b.Index end
 		return a.Area > b.Area
 	end)
+	-- Slide halls need room for the deck, three flume lanes and the spiral:
+	-- anything smaller makes the tubes clip their own furniture.
 	local slideCandidates = {}
 	for _, hall in ipairs(bySize) do
-		if hall ~= arrival and hall.GraphDepth >= 1 then table.insert(slideCandidates, hall) end
+		if hall ~= arrival and hall.GraphDepth >= 1
+			and hall.Width >= 175 and hall.Depth >= 165 then
+			table.insert(slideCandidates, hall)
+		end
 	end
 	local eastExitHall = slideCandidates[1]
 	for _, hall in ipairs(slideCandidates) do

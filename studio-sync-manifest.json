@@ -10,8 +10,8 @@
     "remoteEvents": 16,
     "total": 113,
     "created": 0,
-    "updated": 10,
-    "unchanged": 103
+    "updated": 4,
+    "unchanged": 109
   },
   "extraMirroredFilesNotInStudio": [],
   "items": [
@@ -165,7 +165,7 @@
       "file": "StarterPlayer/StarterPlayerScripts/FlashlightController.LocalScript.lua",
       "bytes": 20515,
       "sha256": "d5596006f2bc4160bebc26bcf1dfe9c00eb899bfabaf8dc37ca9dac514ce3fd6",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.JumpscareUI",
@@ -187,8 +187,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.SoundController",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
-      "bytes": 33610,
-      "sha256": "4d1063e19028ab92f2c5dba9f458ccc7b593d9a58fe4d7b1351f13831c4aecbe",
+      "bytes": 34147,
+      "sha256": "6b4c4fe5949e31b2185261600714d8cc94dfa53f0932d24bbedf11b515fe08c6",
       "status": "updated"
     },
     {
@@ -285,7 +285,7 @@
       "file": "StarterPlayer/StarterPlayerScripts/Level 3 Reader Client.LocalScript.lua",
       "bytes": 18283,
       "sha256": "0c16667ac70220d1387f5d1b678900d59dc1c70b14c3512026a464863add8cb8",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller",
@@ -301,7 +301,7 @@
       "file": "StarterPlayer/StarterPlayerScripts/Level 3 Sound Controller.LocalScript.lua",
       "bytes": 25424,
       "sha256": "0c812236d5116238b9fde59b89122bdd185062618e6b696f93babae1710becb9",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "StarterPlayer.StarterCharacterScripts.DisableDefaultWalkingSound",
@@ -347,16 +347,16 @@
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Layout Generator",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Layout Generator.ModuleScript.lua",
-      "bytes": 34098,
-      "sha256": "366d74628313d4f0f614951ec52c9156bce35acf7542f0ffb12b57b1febd9fed",
-      "status": "unchanged"
+      "bytes": 34287,
+      "sha256": "48a6d7313689e2cb4c38ccc72e219299a89340e2b95af4d4146ddff7a56e4323",
+      "status": "updated"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 World Builder",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua",
-      "bytes": 180068,
-      "sha256": "2091755f8f2c303f32791294996aacafd433886505f75f064e917e8db392410b",
+      "bytes": 182392,
+      "sha256": "00865e43ce37a69892f997d91c40019866ee6d8812f90ebc51add58f055df261",
       "status": "updated"
     },
     {
@@ -445,7 +445,7 @@
       "file": "ServerScriptService/Level 3 Systems/Level 3 Configuration.ModuleScript.lua",
       "bytes": 7432,
       "sha256": "80696eb20a1b8f06a3b6b09790aaa381a72865a294acc25e78ba46e9c0416bc4",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
@@ -453,14 +453,14 @@
       "file": "ServerScriptService/Level 3 Systems/Level 3 World Builder.ModuleScript.lua",
       "bytes": 64673,
       "sha256": "625929ba624dacb52643b785db67f2e085b4c792933b920d107ed1872dfcea3a",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Objective Controller.ModuleScript.lua",
-      "bytes": 32466,
-      "sha256": "f9ef24d995958b4ea5e638e1378e2614cd6e25f4d34f72b3b6faf4121b8e31d4",
+      "bytes": 32471,
+      "sha256": "4b45d4ad5c6f1eb96994e69e2ed541dbef37fbdb4cfd48f516d4b35dbb6a730c",
       "status": "updated"
     },
     {
@@ -477,7 +477,7 @@
       "file": "ServerScriptService/Level 3 Systems/Level 3 Test Suite.ModuleScript.lua",
       "bytes": 32794,
       "sha256": "f2379be31ff68ee1ff4d0c35bd641e86cbd72977a51329ebc7c8055287b7844b",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Music Sequence Controller",
@@ -485,7 +485,7 @@
       "file": "ServerScriptService/Level 3 Systems/Level 3 Music Sequence Controller.ModuleScript.lua",
       "bytes": 9485,
       "sha256": "293b799316666a751177536a02356f1f3e92a86dd1f34318f8cf0fed5f9fdba4",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerStorage.LobbyBackup_20260731.GameManager",

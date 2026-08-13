@@ -341,7 +341,7 @@ local function skylightSlotsFor(hall)
 	local axis = (rotatable and pattern ~= "Round" and hallKey % 3 == 1) and "Z" or "X"
 
 	if pattern == "Round" then
-		local count = math.clamp(math.floor(hall.Width / 85), 1, 3)
+		local count = math.clamp(math.floor(hall.Width / 60), 2, 4)
 		local xs = {}
 		for slot = 1, count do
 			table.insert(xs, hall.MinX + (slot / (count + 1)) * hall.Width)
@@ -646,8 +646,8 @@ local function makeHallCeiling(parent, hall)
 		local templateFolder, variants = availableKidsRoundSkylightVariants(hall)
 		table.sort(variants, function(a, b) return a.ModuleSize > b.ModuleSize end)
 		local variant = variants[1]
-		local zFractions = #xs >= 3 and {-.2, .18, -.02}
-			or (#xs == 2 and {-.16, .18} or {0})
+		local zFractions = ({{0}, {-.16, .18}, {-.2, .18, -.02},
+			{-.22, .14, -.04, .24}})[#xs] or {0}
 		local openings = {}
 		for slotIndex, x in ipairs(xs) do
 			local half = variant.ModuleSize * .5
@@ -1237,9 +1237,19 @@ local function lightHall(parent, hall, index)
 		for cz = 1, rows do
 			local x = hall.Center.X - hall.Width * .5 + (cx / (columns + 1)) * hall.Width
 			local z = hall.Center.Z - hall.Depth * .5 + (cz / (rows + 1)) * hall.Depth
-			makeCeilingPanel(parent, Vector3.new(x, 0, z),
-				index .. "." .. cx .. "." .. cz,
-				Vector3.new(panelWidth, .55, 9), 0, height)
+			-- Never run a light panel through a column's capital.
+			local blocked = false
+			for _, sampleOffset in ipairs({-panelWidth * .35, 0, panelWidth * .35}) do
+				if columnNear(parent, x + sampleOffset, z, 12) then
+					blocked = true
+					break
+				end
+			end
+			if not blocked then
+				makeCeilingPanel(parent, Vector3.new(x, 0, z),
+					index .. "." .. cx .. "." .. cz,
+					Vector3.new(panelWidth, .55, 9), 0, height)
+			end
 		end
 	end
 end
@@ -1514,6 +1524,30 @@ local function makeHelixSlide(parent, columnPosition, helixRadius, topY, color, 
 	return visualPoints[1]
 end
 
+-- A solid masonry cradle under a flume mouth: the tube visibly RESTS on
+-- something, and solid blocks kill every see-through angle at the mouth
+-- without stacking more shell layers.
+local function makeMouthCradle(parent, mouthPoint, towardPoint, radius, deckTop, name)
+	local flat = Vector3.new(towardPoint.X - mouthPoint.X, 0, towardPoint.Z - mouthPoint.Z)
+	if flat.Magnitude < .05 then flat = Vector3.new(0, 0, 1) end
+	local base = Vector3.new(mouthPoint.X, deckTop, mouthPoint.Z)
+	local frame = CFrame.lookAt(base, base + flat)
+	local plinthHeight = math.max(1, mouthPoint.Y - radius - deckTop + .7)
+	local plinth = tiledPart(parent, name .. " Cradle Base",
+		frame * CFrame.new(0, plinthHeight * .5, .5),
+		Vector3.new(radius * 2 + 3.2, plinthHeight, 7), C.TileWarm,
+		Enum.NormalId:GetEnumItems(), 7)
+	plinth.CanCollide = true
+	local cheekHeight = mouthPoint.Y - deckTop
+	for cheekSide = -1, 1, 2 do
+		local cheek = tiledPart(parent, name .. " Cradle Cheek",
+			frame * CFrame.new(cheekSide * (radius + 1.3), cheekHeight * .5, .5),
+			Vector3.new(1.8, cheekHeight, 7), C.TileWarm,
+			Enum.NormalId:GetEnumItems(), 7)
+		cheek.CanCollide = true
+	end
+end
+
 -- Very large slide halls need architectural rhythm or their authored play
 -- equipment reads like a handful of prototypes in an empty box.  These high,
 -- wall-hugging frames add scale and shadow without entering navigation space.
@@ -1638,6 +1672,8 @@ local function makeSlideHall(parent, hall, index, doors)
 			makeSlideMouth(hallFolder,
 				"Level 2 Slide Hall " .. index .. " Flume Mouth " .. slide,
 				startPoint, p1, radius, color, .08)
+			makeMouthCradle(hallFolder, startPoint, p1, radius, deckY + 1,
+				"Level 2 Slide Hall " .. index .. " Flume " .. slide)
 			table.insert(mouths, laneX)
 		end
 	end
@@ -1680,17 +1716,17 @@ local function makeSlideHall(parent, hall, index, doors)
 		local helixColor = Configuration.SlideColors[((index + 2) % #Configuration.SlideColors) + 1]
 		local helixColumn = Vector3.new(helixAnchorX, 0, center.Z)
 		makeColumn(hallFolder, Vector3.new(helixAnchorX, -depth, center.Z), height + depth, 9)
-		local helixTop = makeHelixSlide(hallFolder, helixColumn, helixRadius, deckY + 5,
+		local helixTop = makeHelixSlide(hallFolder, helixColumn, helixRadius, deckY + 6.4,
 			helixColor, "Level 2 Slide Hall " .. index .. " Helix")
 		local bridge = tiledPart(hallFolder, "Level 2 Slide Hall Helix Catwalk",
 			CFrame.new(Vector3.new((hall.MaxX - 16 + helixTop.X) * .5, deckY, center.Z)),
-			Vector3.new(math.max(4, hall.MaxX - 16 - helixTop.X + 2), 2, 7), C.TileWarm,
+			Vector3.new(math.max(4, hall.MaxX - 16 - helixTop.X + 2), 2, 10), C.TileWarm,
 			Enum.NormalId:GetEnumItems(), 8)
 		bridge.CanCollide = true
 		for _, railSide in ipairs({-1, 1}) do
 			makeRail(hallFolder,
-				Vector3.new(hall.MaxX - 16, railY, center.Z + railSide * 3.2),
-				Vector3.new(helixTop.X + 3.4, railY, center.Z + railSide * 3.2),
+				Vector3.new(hall.MaxX - 16, railY, center.Z + railSide * 4.6),
+				Vector3.new(helixTop.X + 3.4, railY, center.Z + railSide * 4.6),
 				"Level 2 Slide Hall " .. index .. " Helix Catwalk "
 					.. (railSide < 0 and "Left" or "Right"))
 		end
@@ -1784,6 +1820,8 @@ local function makeExitFlume(parent, layout, hall, deck)
 
 	local mouth = makeSlideMouth(parent, "Level 2 Exit Flume Mouth",
 		startPoint, tubePoints[2], radius, C.Emergency, .55)
+	makeMouthCradle(parent, startPoint, tubePoints[2], radius, deck.DeckY + 1,
+		"Level 2 Exit Flume")
 
 	-- The room floor is aligned to the hidden collision floor of the tube.
 	-- That removes the old four-stud ledge at the doorway.
@@ -3268,10 +3306,10 @@ local function makeDivingTower(parent, hall, depth, origin, yaw, rng, index, boa
 	local stepRun, stepRise = 1.25, (top + depth) / stepCount
 	local stairBase = at(Vector3.new(-3.75 - stepCount * stepRun, -depth, 0))
 	local stairDirection = at(Vector3.new(1, 0, 0)) - origin
+	-- No side rails here: the board ledges hang off both flanks of this
+	-- stair, and rails would fence the boards off.
 	makeStairFlight(parent, stairBase, stairDirection, 5, stepCount,
 		"Level 2 Diving Tower Steps " .. index, stepRun, stepRise)
-	makeStairSideRails(parent, stairBase, stairDirection, 5, stepCount, stepRun, stepRise,
-		"Level 2 Diving Tower " .. index)
 	for boardIndex, boardHeight in ipairs(boardHeights) do
 		local color = BOARD_COLORS[((boardIndex - 1 + colorOffset) % #BOARD_COLORS) + 1]
 		if boardIndex == #boardHeights then
@@ -3437,6 +3475,8 @@ local function makePlayTowerKit(parent, hall, depth, origin, yaw, topY, color, n
 		at(Vector3.new(-2, landingHeight + 5, 17)),
 		at(Vector3.new(-6, landingHeight, 26)),
 		4.2, color, name .. " Slide", 24, true)
+	makeMouthCradle(parent, at(Vector3.new(0, topY + 4.8, 6)),
+		at(Vector3.new(0, topY + 1.4, 14)), 4.2, topY, name)
 end
 
 -- Water halls earn real play furniture, randomized per hall: slide kits,
@@ -4224,6 +4264,18 @@ function WorldBuilder.Build(layout, generation)
 	world:SetAttribute("Level2_SlideHallCount", #(layout.SlideHalls or {}))
 
 	waterRegionsRef = nil
+
+	-- No roof is ever navigable: PassThrough modifiers strip every ceiling
+	-- and skylight part from the pathfinding navmesh, so the entity can
+	-- neither spawn onto nor pace across the top of any room.
+	for _, descendant in ipairs(world:GetDescendants()) do
+		if descendant:IsA("BasePart") and (descendant.Name:find("Ceiling", 1, true)
+			or descendant.Name:find("Skylight", 1, true)) then
+			local modifier = Instance.new("PathfindingModifier")
+			modifier.PassThrough = true
+			modifier.Parent = descendant
+		end
+	end
 
 	return {
 		World = world,

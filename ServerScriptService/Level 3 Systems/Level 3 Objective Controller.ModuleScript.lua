@@ -571,9 +571,9 @@ local function validateManifest(manifest: AnyTable, generation: number)
 		assert(module.Prompt and module.Prompt:IsA("ProximityPrompt") and module.Prompt:IsDescendantOf(module.Model),
 			"Level 3 module is missing its ProximityPrompt")
 		assert(module.Core and module.Core:IsA("BasePart") and module.Core:IsDescendantOf(module.Model),
-			"Level 3 module is missing its Energon core")
+			"Level 3 CD is missing its jewel case core")
 		assert(module.Pedestal and module.Pedestal:IsA("BasePart") and module.Pedestal:IsDescendantOf(module.Model),
-			"Level 3 module is missing its pedestal")
+			"Level 3 CD is missing its placement marker")
 	end
 
 	assert(type(manifest.Doors) == "table",
@@ -622,9 +622,9 @@ end
 local function scheduleIntro(session: AnyTable)
 	local function fireIntro()
 		if not validSession(session) then return end
-		fireAlert(session, "ABANDONED MALL SERVICE LEVEL",
-			string.format("%d ENERGON RESONANCE MODULES DETECTED", session.ModuleGoal),
-			"RECOVER EVERY MODULE TO CALIBRATE THE EXIT READER", 3.4, nil)
+		fireAlert(session, "PARTY MUSIC OVERRIDE REQUIRED",
+			string.format("%d PARTY MIX CDS STILL PLAYING", session.ModuleGoal),
+			"COLLECT EVERY CD TO STOP THE LOOP AND REVEAL THE EXIT", 3.4, nil)
 	end
 	if validSession(session) then
 		session.IntroScheduled = true
@@ -739,8 +739,8 @@ function ObjectiveController.Start(manifest: AnyTable, generation: number): AnyT
 		ObjectText = escapePrompt.ObjectText,
 	}
 	escapePrompt.Enabled = false
-	escapePrompt.ActionText = "CALIBRATION REQUIRED"
-	escapePrompt.ObjectText = "ENERGON-LOCKED SERVICE EXIT"
+	escapePrompt.ActionText = "CD OVERRIDE REQUIRED"
+	escapePrompt.ObjectText = "PARTY AUDIO-LOCKED SERVICE EXIT"
 	local escapeConnection = escapePrompt.Triggered:Connect(function(player)
 		escapePlayer(session, player)
 	end)
