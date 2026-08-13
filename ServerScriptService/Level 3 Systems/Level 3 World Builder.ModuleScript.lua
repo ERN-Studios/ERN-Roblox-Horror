@@ -28,6 +28,7 @@ local TEXTURES = {
 	FinalExitDoor = contentTexture("FinalExitDoorTexture", Configuration.Textures.FinalExitDoor),
 	KidsDrawingsAtlas = contentTexture("KidsDrawingsAtlasTexture", Configuration.Textures.KidsDrawingsAtlas),
 	KidsNotesAtlas = contentTexture("KidsNotesAtlasTexture", Configuration.Textures.KidsNotesAtlas),
+	CDCoversAtlas = contentTexture("CDCoversAtlasTexture", Configuration.Textures.CDCoversAtlas),
 }
 
 local function folder(parent: Instance, name: string): Folder
@@ -156,8 +157,11 @@ local function makeWall(parent: Instance, room: {[string]: any}, side: string, h
 	local origin = worldPosition(room)
 	local h = roomHeight(room)
 	local t = Configuration.WallThickness
-	local doorW = Configuration.DoorWidth + 1
-	local doorH = Configuration.DoorHeight + 0.5
+	-- The room portal is the complete corridor cross-section. Its width and
+	-- height therefore match every tunnel exactly instead of shrinking to an
+	-- old door-sized opening at each room boundary.
+	local doorW = Configuration.CorridorWidth
+	local doorH = Configuration.CorridorHeight
 	local color = wallColor(room)
 	local wallpaper = usesWallpaper(room)
 	local horizontal = side == "North" or side == "South"
@@ -184,8 +188,12 @@ local function makeWall(parent: Instance, room: {[string]: any}, side: string, h
 			wallSize(sideLength + 0.1, h), color, face, wallpaper)
 		wallSegment(parent, "Level 3 " .. side .. " Wall B", cfAlong(offset, h * 0.5),
 			wallSize(sideLength + 0.1, h), color, face, wallpaper)
-		wallSegment(parent, "Level 3 " .. side .. " Lintel", cfAlong(0, doorH + (h - doorH) * 0.5),
-			wallSize(doorW, h - doorH), color, face, wallpaper)
+		local lintelHeight = h - doorH
+		if lintelHeight > .05 then
+			wallSegment(parent, "Level 3 " .. side .. " Lintel",
+				cfAlong(0, doorH + lintelHeight * .5),
+				wallSize(doorW, lintelHeight), color, face, wallpaper)
+		end
 	end
 end
 
@@ -344,18 +352,25 @@ local function makeTable(parent: Instance, cframe: CFrame, party: boolean, chair
 		local chairPosition = (cframe * CFrame.new(x, 2.28, side * 4.1)).Position
 		local tableTarget = (cframe * CFrame.new(x, 2.28, 0)).Position
 		local chairColor = CHAIR_COLORS[(chairIndex + styleIndex - 2) % #CHAIR_COLORS + 1]
+		-- The imported chair template's seat/back convention matches Roblox
+		-- LookVector. Point -Z directly at the tabletop; the old extra 180-degree
+		-- rotation made every chair look away from its table.
 		local chairCF = CFrame.lookAt(chairPosition, tableTarget)
-		-- The vetted mesh's visible front is authored along local +Z, opposite
-		-- Roblox CFrame.LookVector. Rotate the mesh so its seat faces the target.
-		chairCF *= CFrame.Angles(0, math.pi, 0)
 		local chair = cloneDecorMesh("PlasticPartyChairTemplate", parent, "Level 3 Vetted Plastic Party Chair",
 			chairCF, Vector3.new(2.55, 4.3, 2.58), chairColor)
+		if chair then
+			chair:SetAttribute("Level3_ChairTableTarget", tableTarget)
+			chair:SetAttribute("Level3_ChairFacingDot", chair.CFrame.LookVector:Dot((tableTarget - chairPosition).Unit))
+		end
 		if not chair then
 			local seat = part(parent, "Level 3 Party Chair", chairCF,
 				Vector3.new(2.4, 4.2, 2.5), chairColor, Enum.Material.SmoothPlastic)
 			decorative(seat)
+			seat:SetAttribute("Level3_ChairTableTarget", tableTarget)
+			seat:SetAttribute("Level3_ChairFacingDot", seat.CFrame.LookVector:Dot((tableTarget - chairPosition).Unit))
 		end
 	end
+	return top
 end
 
 local function makeShelf(parent: Instance, cframe: CFrame, width: number)
@@ -464,20 +479,19 @@ local function makeBunting(parent: Instance, room: {[string]: any})
 	end
 end
 
--- Roblox resamples uploaded raster images to a 1024x1024 delivery texture.
--- Both source atlases are 2x2 grids, so the runtime crop is exactly 512px.
-local ATLAS_CELL_SIZE = 512
+-- Roblox delivers both atlases at 1024x1024. Drawings V2 is a 4x4 grid
+-- (16 unique sheets: eight wholesome, eight subtly disturbing); notes remains 2x2.
 local ROOM_ART_COUNTS = {
-	BackOffice = 6,
-	BreakRoom = 3,
-	Maintenance = 7,
-	LoadingStore = 3,
-	PartyA = 6,
-	ChairStore = 4,
-	CityPlay = 8,
-	LostFound = 3,
-	PartyB = 5,
-	Records = 4,
+	BackOffice = 8,
+	BreakRoom = 5,
+	Maintenance = 9,
+	LoadingStore = 5,
+	PartyA = 8,
+	ChairStore = 6,
+	CityPlay = 10,
+	LostFound = 5,
+	PartyB = 8,
+	Records = 6,
 }
 local BUNTING_ROOMS = {
 	BackOffice = true,
@@ -519,9 +533,14 @@ local function makeKidsWallPaper(parent: Instance, name: string, position: Vecto
 	image.BorderSizePixel = 0
 	image.Size = UDim2.fromScale(1, 1)
 	image.Image = textureId
-	image.ImageRectSize = Vector2.new(ATLAS_CELL_SIZE, ATLAS_CELL_SIZE)
-	local cell = (atlasCell - 1) % 4
-	image.ImageRectOffset = Vector2.new((cell % 2) * ATLAS_CELL_SIZE, math.floor(cell / 2) * ATLAS_CELL_SIZE)
+	local gridSize = textureId == TEXTURES.KidsDrawingsAtlas and 4 or 2
+	local cellSize = 1024 / gridSize
+	image.ImageRectSize = Vector2.new(cellSize, cellSize)
+	local cell = (atlasCell - 1) % (gridSize * gridSize)
+	image.ImageRectOffset = Vector2.new((cell % gridSize) * cellSize, math.floor(cell / gridSize) * cellSize)
+	if textureId == TEXTURES.KidsDrawingsAtlas then
+		paper:SetAttribute("Level3_DrawingMood", cell < 8 and "Wholesome" or "Disturbing")
+	end
 	image.ScaleType = Enum.ScaleType.Fit
 	image.Parent = surface
 
@@ -568,10 +587,15 @@ local function makeRoomWallDecor(parent: Instance, room: {[string]: any},
 		local width = isNote and (2.1 + (artIndex % 2) * .35) or (3.15 + (artIndex % 3) * .34)
 		local height = isNote and (2.0 + ((artIndex + 1) % 2) * .3) or (2.85 + ((artIndex + 1) % 3) * .28)
 		local atlas = isNote and TEXTURES.KidsNotesAtlas or TEXTURES.KidsDrawingsAtlas
+		-- Alternate the drawing half deterministically: cells 1-8 are innocent,
+		-- cells 9-16 retain a normal childlike style with one unsettling detail.
+		local disturbing = (roomIndex + artIndex) % 2 == 0
+		local drawingCell = (disturbing and 8 or 0) + ((roomIndex * 3 + artIndex * 5) % 8) + 1
+		local atlasCell = isNote and ((roomIndex * 3 + artIndex) % 4 + 1) or drawingCell
 		makeKidsWallPaper(parent,
 			isNote and "Level 3 Kids Notes" or "Level 3 Child Drawing",
 			position, inward, Vector2.new(width, height), atlas,
-			(roomIndex * 3 + artIndex) % 4 + 1,
+			atlasCell,
 			math.rad(((roomIndex * 13 + artIndex * 7) % 11) - 5),
 			roomIndex * 17 + artIndex)
 	end
@@ -595,13 +619,15 @@ local function makeCorridorWallDecor(parent: Instance, startPoint: Vector3, endP
 			position += Vector3.new(side * wallInset, 4.15 + ((corridorIndex + artIndex) % 3) * .72, 0)
 			inward = Vector3.new(-side, 0, 0)
 		end
-		local isNote = (corridorIndex + artIndex) % 2 == 0
+		local isNote = (corridorIndex + artIndex) % 3 == 0
+		local disturbing = (corridorIndex + artIndex) % 2 == 0
+		local drawingCell = (disturbing and 8 or 0) + ((corridorIndex * 5 + artIndex * 3) % 8) + 1
 		makeKidsWallPaper(parent,
 			isNote and "Level 3 Corridor Kids Notes" or "Level 3 Corridor Child Drawing",
 			position, inward,
 			isNote and Vector2.new(2.05, 2.15) or Vector2.new(2.7, 2.55),
 			isNote and TEXTURES.KidsNotesAtlas or TEXTURES.KidsDrawingsAtlas,
-			(corridorIndex + artIndex * 2) % 4 + 1,
+			isNote and ((corridorIndex + artIndex * 2) % 4 + 1) or drawingCell,
 			math.rad(((corridorIndex * 9 + artIndex * 5) % 13) - 6),
 			corridorIndex * 23 + artIndex)
 	end
@@ -635,9 +661,52 @@ local function makeLooseBalloons(parent: Instance, center: Vector3, count: numbe
 	end
 end
 
+local function makeRoomSpeaker(parent: Instance, room: {[string]: any}, index: number)
+	local p = worldPosition(room)
+	local h = roomHeight(room)
+	local position = p + Vector3.new(-room.W * .5 + 2.0, math.min(h - 2.1, 8.4), -room.D * .5 + 2.0)
+	local facing = CFrame.lookAt(position, Vector3.new(p.X, position.Y - .4, p.Z))
+	local model = Instance.new("Model")
+	model.Name = string.format("Level 3 Room PA Speaker %02d", index)
+	model:SetAttribute("Level3_RoomSpeaker", true)
+	model:SetAttribute("Level3_RoomId", room.Id)
+	model.Parent = parent
+	local housing = part(model, "PA Speaker Housing", facing, Vector3.new(2.65, 1.85, .72),
+		Color3.fromRGB(47, 49, 46), Enum.Material.Metal)
+	decorative(housing)
+	local horn = part(model, "PA Speaker Grille", facing * CFrame.new(0, 0, -.39), Vector3.new(2.25, 1.46, .10),
+		Color3.fromRGB(19, 21, 20), Enum.Material.DiamondPlate)
+	decorative(horn)
+	local bracket = part(model, "PA Speaker Wall Bracket", facing * CFrame.new(0, 0, .52), Vector3.new(.72, .72, .42),
+		Color3.fromRGB(67, 67, 60), Enum.Material.Metal)
+	decorative(bracket)
+	local emitter = part(model, "PA Speaker Emitter", facing * CFrame.new(0, 0, -.52), Vector3.new(.16, .16, .16),
+		Color3.new(), Enum.Material.SmoothPlastic, 1)
+	decorative(emitter)
+	local sound = Instance.new("Sound")
+	sound.Name = "Level 3 Room Song Speaker"
+	sound.SoundId = Configuration.Audio.RoomListeningSong
+	sound.Volume = Configuration.MusicSequence.SpeakerVolume or .62
+	sound.Looped = false
+	sound.RollOffMode = Enum.RollOffMode.InverseTapered
+	sound.RollOffMinDistance = Configuration.MusicSequence.SpeakerMinDistance or 7
+	sound.RollOffMaxDistance = Configuration.MusicSequence.SpeakerMaxDistance or 48
+	sound.EmitterSize = 3
+	sound.Parent = emitter
+	local equalizer = Instance.new("EqualizerSoundEffect")
+	equalizer.Name = "Level 3 Distance Muffle"
+	equalizer.LowGain = 0
+	equalizer.MidGain = 0
+	equalizer.HighGain = 0
+	equalizer.Parent = sound
+end
+
 local function makeRoomProps(parent: Instance, room: {[string]: any}, index: number)
 	local p = worldPosition(room)
-	if room.Kind == "Exit" then return end
+	if room.Kind == "Exit" then
+		makeRoomSpeaker(parent, room, index)
+		return
+	end
 	local archetype = room.Decor or "SparseWelcome"
 	local layouts = {}
 
@@ -671,10 +740,18 @@ local function makeRoomProps(parent: Instance, room: {[string]: any}, index: num
 		layouts = {{-.25, .15, math.rad(90), 2}}
 	end
 
+	local moduleSocketCreated = false
 	for tableIndex, layout in ipairs(layouts) do
 		local tableCF = CFrame.new(p + Vector3.new(layout[1] * room.W, 0, layout[2] * room.D))
 			* CFrame.Angles(0, layout[3], 0)
 		makeTable(parent, tableCF, true, layout[4], index + tableIndex)
+		if room.Module and not moduleSocketCreated then
+			local socket = part(parent, "Level 3 CD Table Socket", tableCF * CFrame.new(0, 3.62, 0),
+				Vector3.new(2.8, .08, 2.8), Color3.new(), Enum.Material.SmoothPlastic, 1)
+			decorative(socket)
+			socket:SetAttribute("Level3_CDTableSocket", true)
+			moduleSocketCreated = true
+		end
 	end
 
 	local west = p + Vector3.new(-room.W * .5 + 6.5, 0, -room.D * .26)
@@ -691,6 +768,14 @@ local function makeRoomProps(parent: Instance, room: {[string]: any}, index: num
 	elseif archetype == "DanceFloor" then
 		makeLooseBalloons(parent, p, 3, index)
 	end
+	-- One deterministic feature room is conspicuously overloaded with balloons,
+	-- breaking the otherwise regular decoration rhythm without physics clutter.
+	if room.Id == "PartyB" then
+		makeBalloonCluster(parent, p + Vector3.new(-room.W * .32, 0, room.D * .27), index + 11, 11)
+		makeBalloonCluster(parent, p + Vector3.new(room.W * .31, 0, -room.D * .29), index + 17, 10)
+		makeLooseBalloons(parent, p + Vector3.new(0, 0, room.D * .15), 14, index + 23)
+	end
+	makeRoomSpeaker(parent, room, index)
 
 	for _, object in ipairs(parent:GetDescendants()) do
 		if object:IsA("BasePart") and (string.find(object.Name, "Table", 1, true)
@@ -825,8 +910,9 @@ local function makeHiddenExitPortal(parent: Instance, corridor: {[string]: any})
 	local center = corridor.StartPoint
 	local forward = corridor.Forward
 	local frameCF = CFrame.lookAt(center, center + forward)
-	local apertureW = Configuration.DoorWidth + 1
-	local apertureH = Configuration.DoorHeight + .5
+	-- The concealed wall seals the complete standardized tunnel mouth.
+	local apertureW = Configuration.CorridorWidth
+	local apertureH = Configuration.CorridorHeight
 	-- Match the Signal Hall side, not the pale exit corridor beyond it.
 	local falseWallColor = wallColor(corridor.A)
 	local falseWallWallpaper = usesWallpaper(corridor.A)
@@ -886,6 +972,8 @@ local function connectionMap(): {[string]: {[string]: boolean}}
 		map[a.Id][sideBetween(a, b)] = true
 		map[b.Id][sideBetween(b, a)] = true
 	end
+	-- The story-only Level 2 flume mouth opens behind the Level 3 spawn.
+	map.Arrival.West = true
 	return map
 end
 
@@ -933,127 +1021,181 @@ local function makeCorridor(parent: Instance, link: {[string]: any}, index: numb
 	local length = vector.Magnitude
 	local forward = vector.Unit
 	local center = (startPoint + endPoint) * .5
+	local tunnelWidth = Configuration.CorridorWidth
+	local tunnelHeight = Configuration.CorridorHeight
 	local model = Instance.new("Model")
 	model.Name = string.format("Level 3 Corridor %02d %s-%s", index, a.Id, b.Id)
+	model:SetAttribute("Level3_TunnelWidth", tunnelWidth)
+	model:SetAttribute("Level3_TunnelHeight", tunnelHeight)
 	model.Parent = parent
-	-- Only the room inside the final stairwell is hard-surface; every approach
-	-- corridor stays on the black party carpet.
+
+	-- Butt the tunnel kit cleanly against each room opening. The former full
+	-- wall-thickness overlap put coplanar lintels/pillars in the same space and
+	-- produced visible z-fighting. Floors/ceilings get a microscopic seal while
+	-- side walls stop just short of the room shell.
 	local floorColor, floorMaterial, floorTexture, studs = floorStyle("PartyHall")
-	local floorSize = horizontal and Vector3.new(length + 1, 1, Configuration.CorridorWidth)
-		or Vector3.new(Configuration.CorridorWidth, 1, length + 1)
+	local sealedLength = length + .04
+	-- Room shells own the opening jambs/lintel. Stop tunnel walls and ceiling
+	-- just before those shell volumes so no coplanar faces can shimmer.
+	local wallLength = math.max(.1, length - Configuration.WallThickness - .08)
+	local floorSize = horizontal and Vector3.new(sealedLength, 1, tunnelWidth)
+		or Vector3.new(tunnelWidth, 1, sealedLength)
 	local floorPart = part(model, "Level 3 Corridor Floor", CFrame.new(center - Vector3.new(0, .5, 0)),
 		floorSize, floorColor, floorMaterial)
 	if floorTexture then texture(floorPart, floorTexture, Enum.NormalId.Top, studs, studs) end
-	part(model, "Level 3 Corridor Ceiling", CFrame.new(center + Vector3.new(0, Configuration.RoomHeight, 0)),
-		horizontal and Vector3.new(length + 1, 1, Configuration.CorridorWidth)
-			or Vector3.new(Configuration.CorridorWidth, 1, length + 1), C.AgedWhite, Enum.Material.Plaster)
-	local corridorWallpaper = false
+	local ceilingSize = horizontal and Vector3.new(wallLength, 1, tunnelWidth)
+		or Vector3.new(tunnelWidth, 1, wallLength)
+	part(model, "Level 3 Corridor Ceiling",
+		CFrame.new(center + Vector3.new(0, tunnelHeight + .5, 0)),
+		ceilingSize, C.AgedWhite, Enum.Material.Plaster)
+
 	local wallColorValue = Color3.fromRGB(183, 78, 35)
 	if horizontal then
-		for _, z in ipairs({-Configuration.CorridorWidth * .5, Configuration.CorridorWidth * .5}) do
-			local wall = part(model, "Level 3 Corridor Wall", CFrame.new(center + Vector3.new(0, Configuration.RoomHeight * .5, z)),
-				Vector3.new(length + 1, Configuration.RoomHeight, Configuration.WallThickness), wallColorValue, Enum.Material.Plaster)
-			if corridorWallpaper then
-				texture(wall, TEXTURES.PastelWallpaper, z < 0 and Enum.NormalId.Front or Enum.NormalId.Back,
-					Configuration.TextureStuds.Wallpaper, Configuration.TextureStuds.Wallpaper, .08)
-			end
+		for _, z in ipairs({-tunnelWidth * .5, tunnelWidth * .5}) do
+			local wall = part(model, "Level 3 Corridor Wall",
+				CFrame.new(center + Vector3.new(0, tunnelHeight * .5, z)),
+				Vector3.new(wallLength, tunnelHeight, Configuration.WallThickness),
+				wallColorValue, Enum.Material.Plaster)
+			texture(wall, TEXTURES.OrangeWall, z < 0 and Enum.NormalId.Front or Enum.NormalId.Back,
+				Configuration.TextureStuds.OrangeWall, Configuration.TextureStuds.OrangeWall, .28)
 		end
 	else
-		for _, x in ipairs({-Configuration.CorridorWidth * .5, Configuration.CorridorWidth * .5}) do
-			local wall = part(model, "Level 3 Corridor Wall", CFrame.new(center + Vector3.new(x, Configuration.RoomHeight * .5, 0)),
-				Vector3.new(Configuration.WallThickness, Configuration.RoomHeight, length + 1), wallColorValue, Enum.Material.Plaster)
-			if corridorWallpaper then
-				texture(wall, TEXTURES.PastelWallpaper, x < 0 and Enum.NormalId.Right or Enum.NormalId.Left,
-					Configuration.TextureStuds.Wallpaper, Configuration.TextureStuds.Wallpaper, .08)
-			end
+		for _, x in ipairs({-tunnelWidth * .5, tunnelWidth * .5}) do
+			local wall = part(model, "Level 3 Corridor Wall",
+				CFrame.new(center + Vector3.new(x, tunnelHeight * .5, 0)),
+				Vector3.new(Configuration.WallThickness, tunnelHeight, wallLength),
+				wallColorValue, Enum.Material.Plaster)
+			texture(wall, TEXTURES.OrangeWall, x < 0 and Enum.NormalId.Right or Enum.NormalId.Left,
+				Configuration.TextureStuds.OrangeWall, Configuration.TextureStuds.OrangeWall, .28)
 		end
 	end
 	makeCorridorWallDecor(model, startPoint, endPoint, horizontal, index)
 	local fixtureCount = math.clamp(math.floor(length / 28), 1, 2)
 	for fixtureIndex = 1, fixtureCount do
 		local position = startPoint:Lerp(endPoint, fixtureIndex / (fixtureCount + 1))
-		makeFixture(model, position + Vector3.new(0, Configuration.RoomHeight - .85, 0),
+		makeFixture(model, position + Vector3.new(0, tunnelHeight - .85, 0),
 			"Staff", 400 + index * 4 + fixtureIndex, (index + fixtureIndex) % 9 == 0)
 	end
 	return {Model=model, Center=center, Forward=forward, Length=length, DoorType=link.Door,
 		A=a, B=b, DoorPosition=center, StartPoint=startPoint, EndPoint=endPoint,
-		WallColor=wallColorValue, Wallpaper=corridorWallpaper}
+		WallColor=wallColorValue, Wallpaper=false, Width=tunnelWidth, Height=tunnelHeight}
 end
 
-local function makeModule(parent: Instance, room: {[string]: any}, index: number): {[string]: any}
+local function makeModule(parent: Instance, room: {[string]: any}, index: number, roomModel: Instance): {[string]: any}
 	local model = Instance.new("Model")
-	model.Name = string.format("Energon Resonance Module %02d", index)
+	model.Name = string.format("Birthday Music CD %02d", index)
 	model:SetAttribute("Level3_ModuleIndex", index)
+	model:SetAttribute("Level3_CDIndex", index)
 	model:SetAttribute("Level3_ModuleRoom", room.Id)
 	model:SetAttribute("Level3_Collected", false)
 	model.Parent = parent
-	local p = worldPosition(room) + Vector3.new(room.W * .27, 0, -room.D * .27)
-	local pedestal = part(model, "Pedestal", CFrame.new(p + Vector3.new(0, 1.5, 0)),
-		Vector3.new(3.8, 3, 3.2), Color3.fromRGB(57, 59, 55), Enum.Material.Metal)
-	local body = part(model, "Module Body", CFrame.new(p + Vector3.new(0, 3.7, 0)),
-		Vector3.new(2.8, 1.5, 2.1), Color3.fromRGB(61, 67, 65), Enum.Material.Metal)
-	local core = part(model, "Energon Core", CFrame.new(p + Vector3.new(0, 3.75, -1.12)),
-		Vector3.new(1.25, .72, .12), C.Energon, Enum.Material.Neon, .04)
-	decorative(core)
-	local rearCore = part(model, "Energon Core Rear", CFrame.new(p + Vector3.new(0, 3.75, 1.12)),
-		Vector3.new(1.25, .72, .12), C.Energon, Enum.Material.Neon, .04)
-	decorative(rearCore)
-	for _, x in ipairs({-1.34, 1.34}) do
-		local marker = part(model, "Energon Side Marker", CFrame.new(p + Vector3.new(x, 3.7, 0)),
-			Vector3.new(.12, 1.1, 1.7), C.Energon, Enum.Material.Neon, .12)
-		decorative(marker)
-	end
-	for _, x in ipairs({-.9, .9}) do
-		local antenna = part(model, "Antenna", CFrame.new(p + Vector3.new(x, 5.1, 0)),
-			Vector3.new(.16, 2.2, .16), Color3.fromRGB(94, 96, 89), Enum.Material.Metal)
-		decorative(antenna)
-	end
-	local glow = Instance.new("PointLight")
-	glow.Name = "Energon Glow"
-	glow.Color = C.Energon
-	glow.Brightness = .8
-	glow.Range = 12
-	glow.Shadows = false
-	glow.Parent = core
+	local socket = roomModel:FindFirstChild("Level 3 CD Table Socket", true)
+	local baseCF = if socket and socket:IsA("BasePart")
+		then socket.CFrame * CFrame.new(0, .13, 0) * CFrame.Angles(0, math.rad((index * 17) % 31 - 15), 0)
+		else CFrame.new(worldPosition(room) + Vector3.new(0, 3.62, 0))
+	local pedestal = part(model, "CD Placement Marker", baseCF, Vector3.new(.1, .1, .1),
+		Color3.new(), Enum.Material.SmoothPlastic, 1)
+	decorative(pedestal)
+	local case = part(model, "Transparent Jewel Case", baseCF, Vector3.new(2.7, .18, 2.58),
+		Color3.fromRGB(224, 235, 236), Enum.Material.Glass, .28)
+	case.CanCollide = false
+	case.CanTouch = false
+	case.CanQuery = true
+	case.Reflectance = .08
+	local cover = part(model, "CD Cover Insert", baseCF * CFrame.new(0, .10, 0), Vector3.new(2.5, .035, 2.38),
+		Color3.fromRGB(231, 224, 195), Enum.Material.SmoothPlastic)
+	decorative(cover)
+	local surface = Instance.new("SurfaceGui")
+	surface.Name = "Level 3 CD Cover Surface"
+	surface.Face = Enum.NormalId.Top
+	surface.SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud
+	surface.PixelsPerStud = 120
+	surface.LightInfluence = .45
+	surface.AlwaysOnTop = false
+	surface.Parent = cover
+	local art = Instance.new("ImageLabel")
+	art.Name = "Level 3 CD Cover Art"
+	art.BackgroundTransparency = 1
+	art.BorderSizePixel = 0
+	art.Size = UDim2.fromScale(1, 1)
+	art.Image = TEXTURES.CDCoversAtlas
+	art.ImageRectSize = Vector2.new(512, 512)
+	local artCell = (index - 1) % 4
+	art.ImageRectOffset = Vector2.new((artCell % 2) * 512, math.floor(artCell / 2) * 512)
+	art.Parent = surface
+	local disc = part(model, "Party Mix Compact Disc", baseCF * CFrame.new(1.12, .16, .22)
+		* CFrame.Angles(0, 0, math.pi * .5), Vector3.new(.09, 1.72, 1.72),
+		Color3.fromRGB(176, 201, 214), Enum.Material.Metal)
+	disc.Shape = Enum.PartType.Cylinder
+	disc.Reflectance = .32
+	decorative(disc)
+	local hub = part(model, "Compact Disc Hub", disc.CFrame, Vector3.new(.105, .40, .40),
+		Color3.fromRGB(28, 30, 31), Enum.Material.SmoothPlastic)
+	hub.Shape = Enum.PartType.Cylinder
+	decorative(hub)
 	local prompt = Instance.new("ProximityPrompt")
 	prompt.Name = "CollectPrompt"
-	prompt.ActionText = "RECOVER MODULE"
-	prompt.ObjectText = "ENERGON RESONANCE MODULE"
-	prompt.HoldDuration = .45
-	prompt.MaxActivationDistance = 10
+	prompt.ActionText = "COLLECT CD"
+	prompt.ObjectText = string.format("PARTY MIX CD %02d", index)
+	prompt.HoldDuration = .35
+	prompt.MaxActivationDistance = 9
 	prompt.RequiresLineOfSight = true
 	prompt.KeyboardKeyCode = Enum.KeyCode.E
-	prompt.Parent = body
-	model.PrimaryPart = body
-	return {Index=index, RoomId=room.Id, Model=model, Prompt=prompt, Core=core, Pedestal=pedestal}
+	prompt.Parent = case
+	model.PrimaryPart = case
+	return {Index=index, RoomId=room.Id, Model=model, Prompt=prompt, Core=case, Pedestal=pedestal}
 end
 
 local function makeArrivalElevator(parent: Instance, room: {[string]: any}): (Model, BasePart, BasePart)
 	local p = worldPosition(room)
+	local visual = Instance.new("Model")
+	visual.Name = "Level 2 Exit Tube Remnant"
+	visual:SetAttribute("Level3_Level2ExitTube", true)
+	visual.Parent = parent
+	local tubeLength, radius, segments = 34, 6.6, 20
+	local mouthX = p.X - room.W * .5
+	local tubeCenterX = mouthX - tubeLength * .5
+	local centerY = p.Y + radius
+	for segment = 1, segments do
+		local angle = (segment - 1) / segments * math.pi * 2
+		local center = Vector3.new(tubeCenterX, centerY + math.sin(angle) * radius, p.Z + math.cos(angle) * radius)
+		local panel = part(visual, "Level 2 Exit Tube Shell",
+			CFrame.new(center) * CFrame.Angles(angle + math.pi * .5, 0, 0),
+			Vector3.new(tubeLength + .08, .48, (math.pi * 2 * radius / segments) + .20),
+			Color3.fromRGB(210, 204, 173), Enum.Material.CeramicTiles)
+		panel.CanCollide = segment >= 4 and segment <= 18
+	end
+	local tubeFloor = part(visual, "Level 2 Exit Tube Walkway", CFrame.new(tubeCenterX, p.Y - .44, p.Z),
+		Vector3.new(tubeLength + .2, .88, 9.8), Color3.fromRGB(196, 192, 166), Enum.Material.CeramicTiles)
+	tubeFloor.CanCollide = true
+	local field = part(visual, "One Way Pool Exit Field", CFrame.new(mouthX - tubeLength + .35, centerY, p.Z),
+		Vector3.new(.22, 11.5, 11.5), Color3.fromRGB(9, 13, 17), Enum.Material.SmoothPlastic, .08)
+	field.CanCollide = true
+	local warning = Instance.new("PointLight")
+	warning.Name = "Spent Transfer Warning"
+	warning.Color = Color3.fromRGB(180, 31, 24)
+	warning.Brightness = .65
+	warning.Range = 11
+	warning.Shadows = true
+	warning.Parent = field
+	-- Invisible compatibility elevator retained for GameManager choreography.
 	local model = Instance.new("Model")
 	model.Name = "Elevator"
 	model.Parent = workspace
-	part(model, "CabinBack", CFrame.new(p + Vector3.new(-room.W * .5 - 5, 6, 0)),
-		Vector3.new(1, 12, 14), C.Metal, Enum.Material.Metal)
-	part(model, "CabinFloor", CFrame.new(p + Vector3.new(-room.W * .5 - 1.8, -.35, 0)),
-		Vector3.new(7, .7, 14), Color3.fromRGB(72, 72, 67), Enum.Material.DiamondPlate)
-	for _, z in ipairs({-7, 7}) do
-		part(model, "CabinSide", CFrame.new(p + Vector3.new(-room.W * .5 - 1.8, 6, z)),
-			Vector3.new(7, 12, .8), C.Metal, Enum.Material.Metal)
-	end
-	local doorX = p.X - room.W * .5 + .25
-	local doorL = part(model, "DoorL", CFrame.new(doorX, p.Y + 5, p.Z - 2.25),
-		Vector3.new(.6, 10, 4.5), Color3.fromRGB(80, 83, 80), Enum.Material.Metal)
-	local doorR = part(model, "DoorR", CFrame.new(doorX, p.Y + 5, p.Z + 2.25),
-		Vector3.new(.6, 10, 4.5), Color3.fromRGB(80, 83, 80), Enum.Material.Metal)
+	local compatibilityCF = CFrame.new(mouthX - tubeLength + .6, p.Y + 5, p.Z)
+	local doorL = part(model, "DoorL", compatibilityCF, Vector3.new(.2, .2, .2), Color3.new(), Enum.Material.SmoothPlastic, 1)
+	local doorR = part(model, "DoorR", compatibilityCF, Vector3.new(.2, .2, .2), Color3.new(), Enum.Material.SmoothPlastic, 1)
+	decorative(doorL)
+	decorative(doorR)
 	model.PrimaryPart = doorL
-	local spawn = part(parent, "ElevatorSpawn", CFrame.lookAt(p + Vector3.new(-14, .25, 0), p + Vector3.new(1, .25, 0)),
-		Vector3.new(11, .5, 10), Color3.new(0,0,0), Enum.Material.SmoothPlastic, 1)
+	local spawnCF = CFrame.lookAt(p + Vector3.new(-room.W * .5 + 7.5, .25, 0), p + Vector3.new(2, .25, 0))
+	local spawn = part(parent, "ElevatorSpawn", spawnCF, Vector3.new(10, .5, 10),
+		Color3.new(), Enum.Material.SmoothPlastic, 1)
 	spawn.CanCollide = true
 	spawn:SetAttribute("Level3_CompatibilityMarker", true)
 	spawn.Parent = workspace
 	local mazeStart = part(parent, "MazeStart", spawn.CFrame, Vector3.new(2, .3, 2),
-		Color3.new(0,0,0), Enum.Material.SmoothPlastic, 1)
+		Color3.new(), Enum.Material.SmoothPlastic, 1)
 	mazeStart.CanCollide = false
 	mazeStart:SetAttribute("Level3_CompatibilityMarker", true)
 	mazeStart.Parent = workspace
@@ -1200,7 +1342,7 @@ function Builder.Build(generation: number): {[string]: any}
 	local roomsFolder = folder(world, "Rooms")
 	local corridorsFolder = folder(world, "Corridors")
 	local doorsFolder = folder(world, "Doors")
-	local modulesFolder = folder(world, "Energon Resonance Modules")
+	local modulesFolder = folder(world, "Birthday Music CDs")
 	local ambienceFolder = folder(world, "Ambient Emitters")
 	local openings = connectionMap()
 	local manifestRooms = {}
@@ -1219,9 +1361,11 @@ function Builder.Build(generation: number): {[string]: any}
 	-- stays open; only the concealed exit portal and final freight door remain.
 	local modules = {}
 	for _, room in ipairs(Configuration.Rooms) do
-		if room.Module then table.insert(modules, makeModule(modulesFolder, room, #modules + 1)) end
+		if room.Module then
+			table.insert(modules, makeModule(modulesFolder, room, #modules + 1, manifestRooms[room.Id]))
+		end
 	end
-	assert(#modules == Configuration.ModuleGoal, "Level 3 module goal does not match authored module rooms")
+	assert(#modules == Configuration.ModuleGoal, "Level 3 CD goal does not match authored CD rooms")
 	local arrivalRoom = roomById("Arrival")
 	local elevator, elevatorSpawn, mazeStart = makeArrivalElevator(world, arrivalRoom)
 	local escapePrompt, safeSpawn, exitPosition, finalExit = makeExitSet(world, roomById("Exit"))

@@ -18,6 +18,7 @@ local session: {
 	Phase: string,
 	Connection: RBXScriptConnection?,
 	RoundConnection: RBXScriptConnection?,
+	Cycle: number,
 }? = nil
 
 local function stateFolder(): Folder
@@ -111,7 +112,9 @@ local function arm(activeSession: any)
 	end
 	local startTime = workspace:GetServerTimeNow() + Configuration.MusicSequence.PreloadLeadSeconds
 	activeSession.StartServerTime = startTime
+	activeSession.Cycle += 1
 	local state = stateFolder()
+	state:SetAttribute("Level3_RoomSongCycle", activeSession.Cycle)
 	state:SetAttribute("Level3_RoomSongStartServerTime", startTime)
 	state:SetAttribute("Level3_RoomSongDuration", Configuration.MusicSequence.DurationSeconds)
 	state:SetAttribute("Level3_BlackoutDuration", Configuration.MusicSequence.BlackoutSeconds)
@@ -129,6 +132,13 @@ local function update(activeSession: any)
 		return
 	end
 
+	local state = stateFolder()
+	local progress = tonumber(state:GetAttribute("Level3_ModuleProgress")) or 0
+	local goal = tonumber(state:GetAttribute("Level3_ModuleGoal")) or Configuration.ModuleGoal
+	if progress >= goal then
+		setPhase(activeSession, "DONE")
+		return
+	end
 	local elapsed = workspace:GetServerTimeNow() - activeSession.StartServerTime
 	local songEnd = Configuration.MusicSequence.DurationSeconds
 	local blackoutEnd = songEnd + Configuration.MusicSequence.BlackoutSeconds
@@ -139,7 +149,13 @@ local function update(activeSession: any)
 	elseif elapsed < blackoutEnd then
 		setPhase(activeSession, "BLACKOUT")
 	else
-		setPhase(activeSession, "DONE")
+		-- The party loop is the pressure mechanic: after each exact 30-second
+		-- blackout, restart the synchronized song everywhere until all five CDs
+		-- have been removed from the tables.
+		setBlackout(false, 0)
+		activeSession.StartServerTime = nil
+		activeSession.Phase = "RESTARTING"
+		arm(activeSession)
 	end
 end
 
@@ -157,6 +173,7 @@ function Controller.Stop()
 	state:SetAttribute("Level3_BlackoutDuration", Configuration.MusicSequence.BlackoutSeconds)
 	state:SetAttribute("Level3_BlackoutStartedAtServerTime", 0)
 	state:SetAttribute("Level3_BlackoutSerial", 0)
+	state:SetAttribute("Level3_RoomSongCycle", 0)
 	setBlackout(false, 0)
 end
 
@@ -175,6 +192,7 @@ function Controller.Start(manifest: any, generation: number)
 		Phase = "STOPPED",
 		Connection = nil,
 		RoundConnection = nil,
+		Cycle = 0,
 	}
 	session = activeSession
 	local state = stateFolder()

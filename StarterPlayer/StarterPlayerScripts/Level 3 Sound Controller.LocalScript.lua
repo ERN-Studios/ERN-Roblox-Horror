@@ -28,6 +28,11 @@ local DEFAULT_AUDIO: {[string]: string} = {
 	WaterDrip = "rbxassetid://9126193223",
 	PowerDown = "rbxassetid://75561087895749",
 	RoomListeningSong = "rbxassetid://140244948455675",
+	ScareBalloonPop = "",
+	ScareChairScrape = "",
+	ScareChildGiggle = "",
+	ScarePAWhisper = "",
+	ScareRunningSteps = "",
 }
 
 local LIBRARY_ALIASES: {[string]: {string}} = {
@@ -38,6 +43,11 @@ local LIBRARY_ALIASES: {[string]: {string}} = {
 	WaterDrip = {"WaterDrip", "Level 3 Water Drip"},
 	PowerDown = {"PowerDown", "Level 3 Power Down"},
 	RoomListeningSong = {"RoomListeningSong", "The Room is Listening"},
+	ScareBalloonPop = {"ScareBalloonPop", "Level 3 Scare Balloon Pop"},
+	ScareChairScrape = {"ScareChairScrape", "Level 3 Scare Chair Scrape"},
+	ScareChildGiggle = {"ScareChildGiggle", "Level 3 Scare Child Giggle"},
+	ScarePAWhisper = {"ScarePAWhisper", "Level 3 Scare PA Whisper"},
+	ScareRunningSteps = {"ScareRunningSteps", "Level 3 Scare Running Steps"},
 }
 
 type AmbientRecord = {
@@ -99,6 +109,9 @@ roomSong.PlaybackSpeed = 1
 roomSong.Parent = SoundService
 local roomSongAsset = ""
 local roomSongPreloaded = false
+
+type RoomSongVoice = {Sound: Sound, Effect: EqualizerSoundEffect?}
+local roomSongSpeakers: {RoomSongVoice} = {}
 
 local liveOneShots = 0
 local windowStarted = os.clock()
@@ -225,9 +238,15 @@ end
 local function stopRoomSong()
 	roomSong.Volume = 0
 	if roomSong.IsPlaying then roomSong:Stop() end
+	for _, voice in ipairs(roomSongSpeakers) do
+		if voice.Sound.Parent then
+			voice.Sound.Volume = 0
+			if voice.Sound.IsPlaying then voice.Sound:Stop() end
+		end
+	end
 end
 
-local function updateRoomSong(dt: number)
+local function updateRoomSong(_dt: number)
 	local phase = roomSongPhase()
 	if not isActive() or (phase ~= "ARMED" and phase ~= "PLAYING") then
 		stopRoomSong()
@@ -249,24 +268,47 @@ local function updateRoomSong(dt: number)
 	end
 	local startValue = stateAttribute("Level3_RoomSongStartServerTime", nil)
 	local durationValue = stateAttribute("Level3_RoomSongDuration", nil)
-	if type(startValue) ~= "number" or type(durationValue) ~= "number" then return end
-	local position = workspace:GetServerTimeNow() - startValue
-	if position < 0 then
-		roomSong.Volume += (0 - roomSong.Volume) * math.clamp(dt / .3, 0, 1)
-		return
-	end
-	if position >= durationValue then
+	if type(startValue) ~= "number" or type(durationValue) ~= "number" then
 		stopRoomSong()
 		return
 	end
-	if not roomSong.IsPlaying then
-		pcall(function() roomSong.TimePosition = position end)
-		roomSong:Play()
-	elseif math.abs(roomSong.TimePosition - position) > .32 then
-		pcall(function() roomSong.TimePosition = position end)
+	local position = workspace:GetServerTimeNow() - startValue
+	if position < 0 or position >= durationValue then
+		stopRoomSong()
+		return
 	end
-	local wanted = targetSongVolume()
-	roomSong.Volume += (wanted - roomSong.Volume) * math.clamp(dt / 1.15, 0, 1)
+
+	-- Every room speaker follows the same server-time playhead. Roblox's 3D
+	-- rolloff provides the room-to-corridor fade, while the equalizer removes
+	-- highs at distance so the music sounds physically muffled through walls.
+	local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	for index = #roomSongSpeakers, 1, -1 do
+		local voice = roomSongSpeakers[index]
+		local sound = voice.Sound
+		if not sound.Parent then
+			table.remove(roomSongSpeakers, index)
+		else
+			if sound.SoundId ~= id then sound.SoundId = id end
+			if not sound.IsPlaying then
+				pcall(function() sound.TimePosition = position end)
+				sound:Play()
+			elseif math.abs(sound.TimePosition - position) > .32 then
+				pcall(function() sound.TimePosition = position end)
+			end
+			sound.Volume = 0.62
+			local distance = 0
+			local parentPart = sound.Parent
+			if root and root:IsA("BasePart") and parentPart and parentPart:IsA("BasePart") then
+				distance = (root.Position - parentPart.Position).Magnitude
+			end
+			if voice.Effect then
+				local far = math.clamp((distance - 9) / 38, 0, 1)
+				voice.Effect.HighGain = -17 * far
+				voice.Effect.MidGain = -6 * far
+				voice.Effect.LowGain = 0
+			end
+		end
+	end
 end
 
 local function generationMatches(payload: {[any]: any}): boolean
@@ -344,6 +386,11 @@ local CUES: {[string]: CueSpec} = {
 	DoorMovement = {Key="DoorMovement", Volume=0.34, Speed=1.00},
 	DoorLocked = {Key="DoorRattle", Volume=0.38, Speed=0.88},
 	PowerDown = {Key="PowerDown", Volume=0.92, Speed=1.00},
+	ScareBalloonPop = {Key="ScareBalloonPop", Volume=0.48, Speed=1.00},
+	ScareChairScrape = {Key="ScareChairScrape", Volume=0.52, Speed=0.94},
+	ScareChildGiggle = {Key="ScareChildGiggle", Volume=0.42, Speed=1.00},
+	ScarePAWhisper = {Key="ScarePAWhisper", Volume=0.46, Speed=1.00},
+	ScareRunningSteps = {Key="ScareRunningSteps", Volume=0.50, Speed=1.00},
 }
 
 local function playCue(cueValue: any, positionValue: any)
@@ -422,6 +469,22 @@ local function clearAmbience()
 	end
 	table.clear(ambience)
 	table.clear(ambienceBySound)
+	stopRoomSong()
+	table.clear(roomSongSpeakers)
+end
+
+local function tryAddRoomSongSpeaker(instance: Instance)
+	if not instance:IsA("Sound") or instance.Name ~= "Level 3 Room Song Speaker" then return end
+	for _, voice in ipairs(roomSongSpeakers) do
+		if voice.Sound == instance then return end
+	end
+	local effect = instance:FindFirstChildOfClass("EqualizerSoundEffect")
+	instance.Volume = 0
+	instance.Looped = false
+	instance.RollOffMode = Enum.RollOffMode.InverseTapered
+	instance.RollOffMinDistance = 7
+	instance.RollOffMaxDistance = 48
+	table.insert(roomSongSpeakers, {Sound=instance, Effect=effect})
 end
 
 local function bindWorld(world: Model?)
@@ -437,6 +500,7 @@ local function bindWorld(world: Model?)
 	if not world then return end
 	for _, descendant in ipairs(world:GetDescendants()) do
 		tryAddAmbience(descendant)
+		tryAddRoomSongSpeaker(descendant)
 		if descendant:IsA("BasePart") and descendant.Name == "Level 3 Room Floor" then
 			table.insert(roomRegions, {
 				Part = descendant,
@@ -452,6 +516,7 @@ local function bindWorld(world: Model?)
 		task.defer(function()
 			if world ~= boundWorld or not descendant:IsDescendantOf(world) then return end
 			tryAddAmbience(descendant)
+			tryAddRoomSongSpeaker(descendant)
 			if descendant:IsA("BasePart") and descendant.Name == "Level 3 Room Floor" then
 				table.insert(roomRegions, {
 					Part = descendant,
@@ -514,7 +579,8 @@ end
 -- Preload the small, allowlisted cue set. Empty/failed assets remain harmless.
 task.spawn(function()
 	local temporary: {Sound} = {}
-	for _, key in ipairs({"DoorRattle", "DoorMovement", "FluorescentHum", "PowerDown", "RoomListeningSong"}) do
+	for _, key in ipairs({"DoorRattle", "DoorMovement", "FluorescentHum", "PowerDown", "RoomListeningSong",
+		"ScareBalloonPop", "ScareChairScrape", "ScareChildGiggle", "ScarePAWhisper", "ScareRunningSteps"}) do
 		local id = resolveId(key)
 		if id then
 			local sound = Instance.new("Sound")

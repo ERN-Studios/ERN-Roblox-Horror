@@ -5,7 +5,7 @@
 -- damage source, or entity compatibility marker.
 
 local Configuration = {
-	Version = 8,
+	Version = 10,
 	WorldName = "Level 3 Generated World",
 	StateFolderName = "Level 3 State",
 	RemotesFolderName = "Level 3 Remotes",
@@ -15,7 +15,11 @@ local Configuration = {
 	WallThickness = 1.5,
 	FloorThickness = 1,
 	CeilingThickness = 1,
+	-- Every link uses one continuous, human-scale tunnel cross-section.
+	-- Room openings consume these exact outer dimensions so neither the ceiling
+	-- nor side walls step inward at a room boundary.
 	CorridorWidth = 14,
+	CorridorHeight = 10.5,
 	DoorWidth = 6,
 	DoorHeight = 8.5,
 	ModuleGoal = 5,
@@ -38,8 +42,9 @@ local Configuration = {
 		ConfettiTablecloth = "rbxassetid://103412925025303",
 		StaffDoor = "rbxassetid://127165696221846",
 		FinalExitDoor = "rbxassetid://120063024460642",
-		KidsDrawingsAtlas = "rbxassetid://96115479373798",
+		KidsDrawingsAtlas = "rbxassetid://134566516757424",
 		KidsNotesAtlas = "rbxassetid://88220592162381",
+		CDCoversAtlas = "rbxassetid://88160214591687",
 	},
 	Audio = {
 		FluorescentHum = "rbxassetid://92576512092725",
@@ -51,6 +56,12 @@ local Configuration = {
 		PowerDown = "rbxassetid://75561087895749",
 		-- Group-owned song uploaded specifically for the synchronized Level 3 sequence.
 		RoomListeningSong = "rbxassetid://140244948455675",
+		-- Reserved Level 3 scare slots. Add group-owned IDs when the sounds are ready.
+		ScareBalloonPop = "",
+		ScareChairScrape = "",
+		ScareChildGiggle = "",
+		ScarePAWhisper = "",
+		ScareRunningSteps = "",
 	},
 	MusicSequence = {
 		DurationSeconds = 180.035917,
@@ -61,6 +72,9 @@ local Configuration = {
 		RoomFadeDistance = 18,
 		VolumeFadeSeconds = 1.15,
 		TimelineDriftTolerance = 0.32,
+		SpeakerVolume = 0.62,
+		SpeakerMinDistance = 7,
+		SpeakerMaxDistance = 48,
 	},
 	Colors = {
 		Cream = Color3.fromRGB(205, 192, 157),
@@ -96,14 +110,14 @@ local Configuration = {
 		{Id="UtilityWest", Name="West Party Annex", Kind="PartyHall", Decor="DanceFloor", X=100, Z=105, W=80, D=70, H=16},
 		{Id="PartySpine", Name="Party Service Gallery", Kind="PartyHall", Decor="SparseGallery", X=300, Z=0, W=98, D=40, H=13},
 		{Id="Maintenance", Name="White Celebration Room", Kind="City", Decor="WhiteClassroom", X=195, Z=-105, W=68, D=64, H=11},
-		{Id="LoadingStore", Name="Orange Banquet Annex", Kind="Party", Decor="BanquetRows", X=195, Z=105, W=94, D=74, H=15, Module=true},
+		{Id="LoadingStore", Name="Orange Banquet Annex", Kind="Party", Decor="BanquetRows", X=195, Z=105, W=88, D=74, H=15, Module=true},
 		{Id="PartyA", Name="Party Room 03", Kind="Party", Decor="BirthdayCenter", X=300, Z=-105, W=108, D=78, H=16},
 		{Id="ChairStore", Name="White City Hall", Kind="City", Decor="CityCafe", X=300, Z=105, W=76, D=60, H=12.5},
 		{Id="CentralHall", Name="Parallel Party Gallery", Kind="PartyHall", Decor="SparseGallery", X=440, Z=0, W=76, D=44, H=12},
 		{Id="CityPlay", Name="Little Streets Room", Kind="City", Decor="KidsCluster", X=440, Z=-105, W=112, D=84, H=15, Module=true},
 		{Id="Janitor", Name="Orange Function Room", Kind="Party", Decor="AfterParty", X=440, Z=105, W=66, D=50, H=11.5},
 		{Id="LostFound", Name="White Atrium", Kind="City", Decor="WhiteAtrium", X=570, Z=0, W=88, D=62, H=16},
-		{Id="PartyB", Name="Abandoned Banquet Hall 07", Kind="Party", Decor="GrandBanquet", X=570, Z=-105, W=148, D=96, H=18, Module=true},
+		{Id="PartyB", Name="Abandoned Banquet Hall 07", Kind="Party", Decor="GrandBanquet", X=570, Z=-105, W=126, D=96, H=18, Module=true},
 		{Id="Records", Name="Orange Celebration Room", Kind="Party", Decor="AbandonedCelebration", X=570, Z=105, W=84, D=70, H=14, Module=true},
 		{Id="SignalHall", Name="East Party Passage", Kind="PartyHall", Decor="EmptyTransition", X=710, Z=0, W=78, D=40, H=11.5},
 		{Id="Exit", Name="Freight Elevator Chamber", Kind="Exit", Decor="Exit", X=820, Z=0, W=58, D=52, H=14},

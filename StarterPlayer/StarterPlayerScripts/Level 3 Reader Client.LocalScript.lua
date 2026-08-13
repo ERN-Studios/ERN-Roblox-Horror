@@ -63,7 +63,7 @@ title.BackgroundTransparency = 1
 title.Position = UDim2.fromOffset(10, 5)
 title.Size = UDim2.new(1, -20, 0, 18)
 title.Font = Enum.Font.Code
-title.Text = "> ENERGON READER"
+title.Text = "> EXIT DOOR READER"
 title.TextColor3 = ENERGON
 title.TextSize = 16
 title.TextXAlignment = Enum.TextXAlignment.Left
@@ -203,7 +203,6 @@ local function applyLayout()
 	local viewport = camera and camera.ViewportSize or Vector2.new(800, 600)
 	local narrow = viewport.X < 620
 	local mobileControls = viewport.X < 900
-	local stackToast = viewport.X < 1050
 	local width = math.floor(math.clamp(viewport.X * (narrow and 0.56 or 0.30), 184, 248))
 	-- Roblox's landscape touch controls occupy the right edge.  Put the reader
 	-- in the clear upper-left lane on phones/tablets; the flashlight and movement
@@ -222,9 +221,9 @@ local function applyLayout()
 	end
 	toggleButton.Size = UDim2.fromOffset(readerHidden and 190 or 92, 28)
 
-	local toastWidth = math.floor(math.clamp(viewport.X - 30, 228, 520))
-	toast.Position = UDim2.new(0.5, 0, 0, stackToast and 176 or 76)
-	toast.Size = UDim2.fromOffset(toastWidth, narrow and 76 or 68)
+	local toastWidth = math.floor(math.clamp(viewport.X - 40, 260, 410))
+	toast.Position = UDim2.new(0.5, 0, 0, 8)
+	toast.Size = UDim2.fromOffset(toastWidth, 52)
 	title.TextSize = narrow and 14 or 16
 	progressLabel.TextSize = narrow and 13 or 15
 	signalLabel.TextSize = narrow and 11 or 13
@@ -370,13 +369,13 @@ local function handleClientEvent(payload: any)
 		if progress >= goal then return end
 		local collector = cleanText(payload.CollectorName, "A TEAM MEMBER", 36)
 		showToast(
-			string.format("MODULE %02d RECOVERED", math.max(1, math.floor(tonumber(payload.ModuleIndex) or progress))),
-			collector .. " STRENGTHENED THE SHARED READER",
-			string.format("CALIBRATION %d/%d", math.min(progress, goal), goal),
-			2.5
+			string.format("CD %02d COLLECTED", math.max(1, math.floor(tonumber(payload.CDIndex or payload.ModuleIndex) or progress))),
+			string.format("%s  //  PARTY MUSIC %d/%d", collector, math.min(progress, goal), goal),
+			"",
+			1.8
 		)
 	elseif kind == "ExitUnlocked" then
-		showToast("READER CALIBRATED", "EXIT SIGNATURE LOCKED", "FOLLOW THE STABLE SIGNAL", 4.0)
+		showToast("ALL CDS COLLECTED", "MUSIC OVERRIDE ACCEPTED  //  FOLLOW EXIT SIGNAL", "", 3.0)
 	end
 end
 
@@ -425,7 +424,7 @@ local function updateReader(dt: number)
 	local index = math.clamp(progress + 1, 1, #ACCURACY_DEGREES)
 	local cells: {string} = {}
 	for cell = 1, goal do cells[cell] = if cell <= progress then "■" else "□" end
-	progressLabel.Text = string.format("[%s]  %d/%d", table.concat(cells), progress, goal)
+	progressLabel.Text = string.format("CDS [%s]  %d/%d", table.concat(cells), progress, goal)
 
 	local character = player.Character
 	local root = character and character:FindFirstChild("HumanoidRootPart")

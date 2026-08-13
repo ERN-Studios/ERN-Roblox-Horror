@@ -49,7 +49,7 @@ local function buildMount()
 	coreLight.Range = 38
 	coreLight.Angle = 38
 	coreLight.Color = Color3.fromRGB(255, 244, 214)
-	coreLight.Shadows = false -- close props/walls must not self-occlude the beam
+	coreLight.Shadows = true -- localized cone stops at walls instead of lighting whole parts through them
 	coreLight.Enabled = on
 	coreLight.Face = Enum.NormalId.Front
 	coreLight.Parent = mount
@@ -75,9 +75,9 @@ local function beamProfile(): (number, number, number, number, number, number, s
 	if workspace:GetAttribute("SelectedLevel") == 3 then
 		local blackout = workspace:GetAttribute("Level3BlackoutActive") == true
 		if blackout then
-			return 7.5, 58, 42, 1.85, 70, 92, "L3_BLACKOUT"
+			return 10.0, 66, 38, 2.25, 76, 82, "L3_BLACKOUT"
 		end
-		return 4.5, 52, 40, 1.05, 62, 86, "L3"
+		return 6.0, 58, 38, 1.30, 68, 78, "L3"
 	end
 	return 1.2, 38, 38, .3, 45, 75, "BASE"
 end
@@ -117,18 +117,9 @@ end)
 local rayParams = RaycastParams.new()
 rayParams.FilterType = Enum.RaycastFilterType.Exclude
 
--- Roblox's dynamic Lights can contribute very little on the extremely dark
--- prop albedos used by Level 1. A subtle, occluded near-field highlight keeps
--- the aimed surface/prop readable without glowing through walls or flattening
--- the whole maze. It follows the exact camera ray, including up/down.
-local nearHighlight = Instance.new("Highlight")
-nearHighlight.Name = "FlashlightNearField"
-nearHighlight.FillColor = Color3.fromRGB(255, 232, 185)
-nearHighlight.FillTransparency = 0.93
-nearHighlight.OutlineTransparency = 1
-nearHighlight.DepthMode = Enum.HighlightDepthMode.Occluded
-nearHighlight.Enabled = false
-nearHighlight.Parent = workspace
+-- Illumination is produced only by localized SpotLights. The removed
+-- Highlight adorned the entire hit floor/wall/ceiling part and looked exactly
+-- like Studio selection rather than a physical flashlight beam.
 
 -- bind AFTER the camera updates, so up/down tracking is exact
 RunService:BindToRenderStep("MongoFlashlight", Enum.RenderPriority.Camera.Value + 1, function(dt)
@@ -180,33 +171,6 @@ RunService:BindToRenderStep("MongoFlashlight", Enum.RenderPriority.Camera.Value 
 		end
 	end
 
-	if on then
-		local nearHit = workspace:Raycast(eye, aimCF.LookVector * 20, rayParams)
-		if nearHit then
-			local adornee = nearHit.Instance
-			local decor = workspace:FindFirstChild("Decor")
-			if decor and adornee:IsDescendantOf(decor) then
-				local node = adornee
-				while node.Parent and node.Parent ~= decor do node = node.Parent end
-				adornee = node
-			end
-			nearHighlight.Adornee = adornee
-			-- Level 3's dark carpet and blackout grade require a stronger—but still
-			-- occluded—near-field reflection. Other levels retain their old look.
-			if workspace:GetAttribute("SelectedLevel") == 3 then
-				local base = workspace:GetAttribute("Level3BlackoutActive") == true and .73 or .82
-				nearHighlight.FillTransparency = math.clamp(base + nearHit.Distance / 420, base, .89)
-			else
-				nearHighlight.FillTransparency = math.clamp(
-					0.898 + nearHit.Distance / 500, 0.904, 0.946)
-			end
-			nearHighlight.Enabled = true
-		else
-			nearHighlight.Enabled = false
-		end
-	else
-		nearHighlight.Enabled = false
-	end
 	if on then
 		aimSendClock += dt
 		if aimSendClock >= 1 / 15 then
@@ -484,7 +448,6 @@ local function updateRoundVisibility()
 	popupGui.Enabled = inRound
 	if not inRound and on then setLights(false) end
 	if not inRound then
-		nearHighlight.Enabled = false
 		popup.Visible = false
 	end
 end

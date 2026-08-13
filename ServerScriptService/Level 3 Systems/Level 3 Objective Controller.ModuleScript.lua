@@ -481,7 +481,7 @@ local function unlockExit(session: AnyTable)
 
 	local escapePrompt = session.Manifest.EscapePrompt
 	escapePrompt.ActionText = "ENTER FREIGHT ELEVATOR"
-	escapePrompt.ObjectText = "ENERGON EXIT ONLINE"
+	escapePrompt.ObjectText = "PARTY AUDIO OVERRIDE ACCEPTED"
 	escapePrompt.Enabled = true
 
 	firePayload(session, {
@@ -504,17 +504,16 @@ local function collectModule(session: AnyTable, module: AnyTable, player: Player
 	hideCollectedModule(session, module)
 	updateSharedState(session)
 
-	local position = if module.Core and module.Core.Parent then module.Core.Position else module.Model:GetPivot().Position
 	firePayload(session, {
 		Type = "ModuleCollected",
 		ModuleIndex = module.Index,
+		CDIndex = module.Index,
 		RoomId = module.RoomId,
 		CollectorUserId = player.UserId,
 		CollectorName = player.Name,
 		Progress = session.ModuleCount,
 		Goal = session.ModuleGoal,
 	})
-	fireSound(session, "ModuleCollected", position, nil)
 
 	if session.ModuleCount >= session.ModuleGoal then
 		unlockExit(session)

@@ -488,9 +488,8 @@ RunService.Heartbeat:Connect(function(dt)
 	-- footsteps: a looping track that only plays while you MOVE and fades out when
 	-- you stop (so a long loop never drones on while standing, and never hard-cuts)
 	local footTarget, footSpeed = 0, nil
-	local inLevel2Round = player:GetAttribute("InRound") == true
-		and workspace:GetAttribute("SelectedLevel") == 2
-	if hum and root and not inLevel2Round then
+	if player:GetAttribute("InRound") == true
+		and hum and root and workspace:GetAttribute("SelectedLevel") ~= 2 then
 		local vel = root.AssemblyLinearVelocity
 		local flat = Vector3.new(vel.X, 0, vel.Z).Magnitude
 		local ws = hum.WalkSpeed

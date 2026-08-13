@@ -42,8 +42,13 @@ local function assertPart(record: {[string]: any}, key: string, root: Instance):
 end
 
 function TestSuite.ValidateConfiguration(): {[string]: any}
-	assert(Configuration.Version >= 5, "Level 3 architecture/audio revision must be at least 5")
-	assert(Configuration.CorridorWidth == 14, "Level 3 corridors must remain 14 studs wide")
+	assert(Configuration.Version >= 10, "Level 3 CD/audio/arrival revision must be at least 10")
+	assert(Configuration.Textures.KidsDrawingsAtlas == "rbxassetid://134566516757424",
+		"Level 3 must use the expanded 4x4 kids-drawing atlas")
+	assert(Configuration.Textures.CDCoversAtlas == "rbxassetid://88160214591687",
+		"Level 3 must use the authored CD-cover atlas")
+	assert(Configuration.CorridorWidth == 14 and Configuration.CorridorHeight == 10.5,
+		"Level 3 corridors must remain one 14 x 10.5 stud tunnel cross-section")
 	assert(Configuration.DoorWidth == 6 and Configuration.DoorHeight == 8.5,
 		"Level 3 doors must remain the approved 6 x 8.5 studs")
 	assert(Configuration.ModuleGoal == 5, "Level 3 must require exactly five modules")
@@ -186,9 +191,9 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 		"Hidden exit wall must begin opaque, locked, queryable, and non-touching")
 	assert(hiddenWall.Material == Enum.Material.Plaster
 		and hiddenWall.Color == Color3.fromRGB(183, 78, 35)
-		and hiddenWall.Size == Vector3.new(Configuration.DoorWidth + 1,
-			Configuration.DoorHeight + .5, Configuration.WallThickness),
-		"Hidden exit wall must visually match the orange SignalHall portal")
+		and hiddenWall.Size == Vector3.new(Configuration.CorridorWidth,
+			Configuration.CorridorHeight, Configuration.WallThickness),
+		"Hidden exit wall must seal the complete standardized tunnel portal")
 	assert(typeof(portal.Position) == "Vector3" and (portal.Position - hiddenWall.Position).Magnitude <= Configuration.RoomHeight,
 		"ExitPortal position is invalid or detached from the wall")
 	assert(type(portal.FrameParts) == "table" and #portal.FrameParts == 8,
@@ -297,7 +302,14 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 
 	for _, module in ipairs(manifest.Modules) do
 		assert(module.Model.Parent and module.Prompt.Enabled and module.Prompt.Parent,
-			"Level 3 module record is incomplete")
+			"Level 3 CD record is incomplete")
+		assert(module.Prompt.ActionText == "COLLECT CD"
+			and string.find(module.Prompt.ObjectText, "PARTY MIX CD", 1, true),
+			"Level 3 objective must be presented as a birthday music CD")
+		assert(module.Model:FindFirstChild("Transparent Jewel Case", true)
+			and module.Model:FindFirstChild("Party Mix Compact Disc", true)
+			and module.Model:FindFirstChild("Level 3 CD Cover Surface", true),
+			"Level 3 CD collectible is missing its authored jewel-case visuals")
 	end
 
 	for _, instance in ipairs(world:GetDescendants()) do
@@ -317,8 +329,11 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 			stats.Textures += 1
 		end
 		if instance:IsA("SurfaceGui") then
-			assert(instance.Name == "Level 3 Kids Wall Art Surface"
-				and instance.Parent and instance.Parent:GetAttribute("Level3_KidsWallArt") == true,
+			local allowedDrawing = instance.Name == "Level 3 Kids Wall Art Surface"
+				and instance.Parent and instance.Parent:GetAttribute("Level3_KidsWallArt") == true
+			local allowedCD = instance.Name == "Level 3 CD Cover Surface"
+				and instance.Parent and instance.Parent.Name == "CD Cover Insert"
+			assert(allowedDrawing or allowedCD,
 				"Generated Level 3 SurfaceGui/sign is forbidden: " .. instance:GetFullName())
 		end
 		assert(not instance:IsA("TextLabel") and not instance:IsA("TextBox") and not instance:IsA("TextButton"),
@@ -377,8 +392,16 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 		local expectedWallColor = if BEIGE_ROOM_IDS[room.Id]
 			then Color3.fromRGB(220, 213, 187) else Color3.fromRGB(183, 78, 35)
 		for _, descendant in ipairs(roomModel:GetDescendants()) do
-			if descendant:IsA("BasePart") and (string.find(descendant.Name, " Wall", 1, true)
-				or string.find(descendant.Name, " Lintel", 1, true)) then
+			if descendant:IsA("BasePart") and (
+				string.find(descendant.Name, "Level 3 North Wall", 1, true)
+				or string.find(descendant.Name, "Level 3 South Wall", 1, true)
+				or string.find(descendant.Name, "Level 3 East Wall", 1, true)
+				or string.find(descendant.Name, "Level 3 West Wall", 1, true)
+				or string.find(descendant.Name, "Level 3 East Lintel", 1, true)
+				or string.find(descendant.Name, "Level 3 West Lintel", 1, true)
+				or string.find(descendant.Name, "Level 3 North Lintel", 1, true)
+				or string.find(descendant.Name, "Level 3 South Lintel", 1, true)
+			) then
 				assert(descendant.Color == expectedWallColor,
 					"Wrong wall palette in room " .. room.Id .. ": " .. descendant:GetFullName())
 				for _, child in ipairs(descendant:GetChildren()) do
@@ -413,6 +436,30 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 
 	local corridors = world:FindFirstChild("Corridors")
 	assert(corridors and corridors:IsA("Folder"), "Level 3 Corridors folder is missing")
+	assert(#corridors:GetChildren() == #Configuration.Links, "Level 3 corridor model count mismatch")
+	for _, corridorModel in ipairs(corridors:GetChildren()) do
+		assert(corridorModel:IsA("Model")
+			and corridorModel:GetAttribute("Level3_TunnelWidth") == Configuration.CorridorWidth
+			and corridorModel:GetAttribute("Level3_TunnelHeight") == Configuration.CorridorHeight,
+			"Level 3 corridor does not use the standardized tunnel profile: " .. corridorModel:GetFullName())
+		local floorPart = corridorModel:FindFirstChild("Level 3 Corridor Floor")
+		local ceilingPart = corridorModel:FindFirstChild("Level 3 Corridor Ceiling")
+		assert(floorPart and floorPart:IsA("BasePart")
+			and ceilingPart and ceilingPart:IsA("BasePart"),
+			"Level 3 tunnel is missing a continuous floor or ceiling: " .. corridorModel:GetFullName())
+		assert(approx(ceilingPart.Position.Y - ceilingPart.Size.Y * .5,
+			Configuration.WorldOrigin.Y + Configuration.CorridorHeight),
+			"Level 3 tunnel has inconsistent ceiling clearance: " .. corridorModel:GetFullName())
+		local wallCount = 0
+		for _, object in ipairs(corridorModel:GetChildren()) do
+			if object:IsA("BasePart") and object.Name == "Level 3 Corridor Wall" then
+				wallCount += 1
+				assert(approx(object.Size.Y, Configuration.CorridorHeight),
+					"Level 3 tunnel wall has inconsistent height: " .. corridorModel:GetFullName())
+			end
+		end
+		assert(wallCount == 2, "Level 3 tunnel must have exactly two continuous side walls")
+	end
 	for _, instance in ipairs(corridors:GetDescendants()) do
 		if instance:IsA("BasePart") and instance.Name == "Level 3 Corridor Wall" then
 			assert(instance.Color == Color3.fromRGB(183, 78, 35),

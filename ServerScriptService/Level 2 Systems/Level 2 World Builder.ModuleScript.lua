@@ -304,6 +304,8 @@ end
 -- Skylight slot layout for a hall — shared by the ceiling builder and the
 -- light placer, so a ceiling light can never be built inside a skylight
 -- opening (they used to coincide whenever the slot and light grids aligned).
+local availableKidsRoundSkylightVariants
+
 local function skylightSlotsFor(hall)
 	if isKids(hall) then return {}, 0 end
 	-- Skylights are accents, not the default ceiling of every room. Service,
@@ -319,16 +321,47 @@ local function skylightSlotsFor(hall)
 	-- Only one ordinary hall in six stays enclosed; sunlight is the default.
 	if not authoredSkylight and hallKey % 6 == 0 then return {}, 0 end
 
-	local slots = math.clamp(math.floor(hall.Width / 48), 1, 5)
+	-- Pattern and axis are decided HERE so the ceiling builder and the
+	-- column-dodging helpers always agree.
+	local roll = Random.new(hallKey + 4177):NextNumber()
+	local pattern = (authoredSkylight or roll < .3) and "Lines"
+		or roll < .48 and "Dashed"
+		or roll < .66 and "Punched"
+		or roll < .8 and "Centre"
+		or "Round"
+	if pattern == "Round" then
+		local _, variants = availableKidsRoundSkylightVariants(hall)
+		if #variants == 0 then pattern = "Punched" end
+	end
+	-- Strips may run crosswise only in colonnade-free archetypes, where no
+	-- column placement depends on X-band dodging.
+	local rotatable = hall.Archetype == "Ring Corridor"
+		or hall.Archetype == "Porthole Hall"
+		or hall.Archetype == "Spiral Stair Well"
+	local axis = (rotatable and pattern ~= "Round" and hallKey % 3 == 1) and "Z" or "X"
+
+	if pattern == "Round" then
+		local count = math.clamp(math.floor(hall.Width / 85), 1, 3)
+		local xs = {}
+		for slot = 1, count do
+			table.insert(xs, hall.MinX + (slot / (count + 1)) * hall.Width)
+		end
+		return xs, 30, "X", pattern
+	end
+	local along = axis == "X" and hall.Width or hall.Depth
+	local low = axis == "X" and hall.MinX or hall.MinZ
+	local slots = math.clamp(math.floor(along / 48), 1, 5)
 	local xs = {}
 	for slot = 1, slots do
-		table.insert(xs, hall.MinX + (slot / (slots + 1)) * hall.Width)
+		table.insert(xs, low + (slot / (slots + 1)) * along)
 	end
-	return xs, 12
+	return xs, 12, axis, pattern
 end
 
 local function overlapsSkylight(hall, x, width)
-	local xs, slotWidth = skylightSlotsFor(hall)
+	local xs, slotWidth, slotAxis = skylightSlotsFor(hall)
+	-- Crosswise strips have no X band to dodge.
+	if slotAxis == "Z" then return false end
 	for _, slotX in ipairs(xs) do
 		if math.abs(x - slotX) < (slotWidth + width) * .5 + 1.5 then
 			return true
@@ -348,7 +381,7 @@ local LEVEL2_KIDS_ROUND_SKYLIGHT_VARIANTS = {
 	{Name = "Level 2 Kids Round Skylight Module Large", ModuleSize = 36, Radius = 14},
 }
 
-local function availableKidsRoundSkylightVariants(hall)
+function availableKidsRoundSkylightVariants(hall)
 	local templateFolder = ServerStorage:FindFirstChild(LEVEL2_KIDS_ROUND_SKYLIGHT_TEMPLATES)
 	if not templateFolder then return nil, {} end
 
@@ -604,37 +637,142 @@ local function makeHallCeiling(parent, hall)
 		return
 	end
 
-	local xs, slotWidth = skylightSlotsFor(hall)
+	local xs, slotWidth, slotAxis, pattern = skylightSlotsFor(hall)
 	table.sort(xs)
 
-	-- Skylights are not always end-to-end lines any more: each hall rolls a
-	-- pattern — full lines, dashes, a checkerboard of punched openings, or a
-	-- single centre band. Column dodging still keys off the X bands, which
-	-- stay identical; only the open stretch along Z varies.
-	local hallKey = math.floor(tonumber(hall.LocalSeed) or tonumber(hall.Index) or 0)
-	local authored = hall.Archetype == "Skylight Hall" or hall.Role == "Slide Hall"
-	local patternRoll = Random.new(hallKey + 4177):NextNumber()
-	local pattern = (authored or patternRoll < .35) and "Lines"
-		or patternRoll < .6 and "Dashed"
-		or patternRoll < .85 and "Punched"
-		or "Centre"
+	if pattern == "Round" then
+		-- True circular skylights: the baked round modules (born in the kids
+		-- wing) recolored for the tiled halls, sealed with faint safety glass.
+		local templateFolder, variants = availableKidsRoundSkylightVariants(hall)
+		table.sort(variants, function(a, b) return a.ModuleSize > b.ModuleSize end)
+		local variant = variants[1]
+		local zFractions = #xs >= 3 and {-.2, .18, -.02}
+			or (#xs == 2 and {-.16, .18} or {0})
+		local openings = {}
+		for slotIndex, x in ipairs(xs) do
+			local half = variant.ModuleSize * .5
+			local z = math.clamp(
+				hall.Center.Z + (zFractions[slotIndex] or 0) * hall.Depth,
+				hall.MinZ + half + 4, hall.MaxZ - half - 4)
+			table.insert(openings, {X = x, Z = z, HalfSize = half})
+		end
+		local zCuts = {hall.MinZ, hall.MaxZ}
+		for _, opening in ipairs(openings) do
+			table.insert(zCuts, opening.Z - opening.HalfSize)
+			table.insert(zCuts, opening.Z + opening.HalfSize)
+		end
+		table.sort(zCuts)
+		for zIndex = 1, #zCuts - 1 do
+			local z0, z1 = zCuts[zIndex], zCuts[zIndex + 1]
+			if z1 - z0 > .05 then
+				local midpoint = (z0 + z1) * .5
+				local cursor = hall.MinX
+				for _, opening in ipairs(openings) do
+					if midpoint > opening.Z - opening.HalfSize - .02
+						and midpoint < opening.Z + opening.HalfSize + .02 then
+						if opening.X - opening.HalfSize > cursor + .05 then
+							local slab = tiledPart(parent, "Level 2 Hall Ceiling",
+								CFrame.new(Vector3.new(
+									(cursor + opening.X - opening.HalfSize) * .5,
+									height + 1, midpoint)),
+								Vector3.new(opening.X - opening.HalfSize - cursor, 2, z1 - z0),
+								color, {Enum.NormalId.Bottom}, 9)
+							slab.CanCollide = true
+						end
+						cursor = math.max(cursor, opening.X + opening.HalfSize)
+					end
+				end
+				if hall.MaxX - cursor > .05 then
+					local slab = tiledPart(parent, "Level 2 Hall Ceiling",
+						CFrame.new(Vector3.new((cursor + hall.MaxX) * .5, height + 1, midpoint)),
+						Vector3.new(hall.MaxX - cursor, 2, z1 - z0), color, {Enum.NormalId.Bottom}, 9)
+					slab.CanCollide = true
+				end
+			end
+		end
+		for index, opening in ipairs(openings) do
+			local template = templateFolder and templateFolder:FindFirstChild(variant.Name)
+			if template then
+				local module = template:Clone()
+				module.Name = "Level 2 Round Skylight Module " .. index
+				module.CFrame = CFrame.new(opening.X, height + 1, opening.Z)
+				module.Color = color
+				module.Material = Enum.Material.SmoothPlastic
+				module.MaterialVariant = ""
+				module.Transparency = 0
+				module.Anchored = true
+				module.CanCollide = true
+				pcall(function() module.UsePartColor = true end)
+				module.Parent = parent
+				addTexture(module, {Enum.NormalId.Bottom}, 9)
+				local pane = part(parent, "Level 2 Frosted Skylight Diffuser",
+					CFrame.new(opening.X, height + 1.72, opening.Z) * CFrame.Angles(0, 0, math.rad(90)),
+					Vector3.new(.32, variant.Radius * 2, variant.Radius * 2),
+					Color3.fromRGB(226, 242, 250), Enum.Material.Glass, .82)
+				pane.Shape = Enum.PartType.Cylinder
+				pane.CanCollide = true
+				pane.CanTouch = false
+				pane.CastShadow = false
+				pane.Reflectance = .04
+			else
+				local slab = tiledPart(parent, "Level 2 Hall Ceiling",
+					CFrame.new(Vector3.new(opening.X, height + 1, opening.Z)),
+					Vector3.new(opening.HalfSize * 2, 2, opening.HalfSize * 2),
+					color, {Enum.NormalId.Bottom}, 9)
+				slab.CanCollide = true
+			end
+		end
+		return
+	end
+
+	-- Strip patterns, axis-neutral: "along" runs down the strip positions,
+	-- "cross" runs along each strip's length.
+	local axisX = slotAxis ~= "Z"
+	local alongLow = axisX and hall.MinX or hall.MinZ
+	local alongHigh = axisX and hall.MaxX or hall.MaxZ
+	local crossLow = axisX and hall.MinZ or hall.MinX
+	local crossHigh = axisX and hall.MaxZ or hall.MaxX
+	local crossCenter = (crossLow + crossHigh) * .5
+
+	local function ceilingPiece(alongCenter, alongSize, crossPos, crossSize, isPane)
+		local cf, size
+		if axisX then
+			cf = CFrame.new(Vector3.new(alongCenter, height + 1, crossPos))
+			size = Vector3.new(alongSize, isPane and .6 or 2, crossSize)
+		else
+			cf = CFrame.new(Vector3.new(crossPos, height + 1, alongCenter))
+			size = Vector3.new(crossSize, isPane and .6 or 2, alongSize)
+		end
+		if isPane then
+			local pane = part(parent, "Level 2 Frosted Skylight Diffuser", cf, size,
+				Color3.fromRGB(218, 231, 226), Enum.Material.SmoothPlastic, 1)
+			pane.CanCollide = true
+			pane.CanTouch = false
+			pane.CastShadow = false
+			return pane
+		end
+		local slab = tiledPart(parent, "Level 2 Hall Ceiling", cf, size,
+			color, {Enum.NormalId.Bottom}, 9)
+		slab.CanCollide = true
+		return slab
+	end
 
 	local function openIntervals(slotIndex)
-		local minZ, maxZ = hall.MinZ + 2, hall.MaxZ - 2
-		local span = maxZ - minZ
+		local minC, maxC = crossLow + 2, crossHigh - 2
+		local span = maxC - minC
 		if pattern == "Lines" then
-			return {{minZ, maxZ}}
+			return {{minC, maxC}}
 		elseif pattern == "Centre" then
 			local bandWidth = span * .45
-			local mid = (minZ + maxZ) * .5
+			local mid = (minC + maxC) * .5
 			return {{mid - bandWidth * .5, mid + bandWidth * .5}}
 		elseif pattern == "Dashed" then
 			local count = math.clamp(math.floor(span / 70) + 2, 2, 4)
 			local step = span / count
 			local opens = {}
 			for dash = 1, count do
-				local z0 = minZ + (dash - 1) * step + step * .16
-				table.insert(opens, {z0, z0 + step * .68})
+				local c0 = minC + (dash - 1) * step + step * .16
+				table.insert(opens, {c0, c0 + step * .68})
 			end
 			return opens
 		end
@@ -646,55 +784,37 @@ local function makeHallCeiling(parent, hall)
 		local phase = slotIndex % 2 == 0 and step * .5 or 0
 		local opens = {}
 		for punch = 1, count do
-			local mid = minZ + (punch - .5) * step + phase
-			if mid + punchSize * .5 <= maxZ then
+			local mid = minC + (punch - .5) * step + phase
+			if mid + punchSize * .5 <= maxC then
 				table.insert(opens, {mid - punchSize * .5, mid + punchSize * .5})
 			end
 		end
 		return opens
 	end
 
-	local cursor = hall.MinX
+	local cursor = alongLow
 	for slotIndex, x in ipairs(xs) do
 		local segmentEnd = x - slotWidth * .5
 		if segmentEnd - cursor > .5 then
-			local slab = tiledPart(parent, "Level 2 Hall Ceiling",
-				CFrame.new(Vector3.new((cursor + segmentEnd) * .5, height + 1, hall.Center.Z)),
-				Vector3.new(segmentEnd - cursor, 2, hall.Depth), color, {Enum.NormalId.Bottom}, 9)
-			slab.CanCollide = true
+			ceilingPiece((cursor + segmentEnd) * .5, segmentEnd - cursor,
+				crossCenter, crossHigh - crossLow, false)
 		end
-		-- Open stretches read as fully OPEN cuts (invisible barrier for
-		-- containment); the rest of the strip is sealed with ceiling.
-		local zCursor = hall.MinZ
+		local cCursor = crossLow
 		for _, open in ipairs(openIntervals(slotIndex)) do
-			if open[1] - zCursor > .5 then
-				local infill = tiledPart(parent, "Level 2 Hall Ceiling",
-					CFrame.new(Vector3.new(x, height + 1, (zCursor + open[1]) * .5)),
-					Vector3.new(slotWidth, 2, open[1] - zCursor), color, {Enum.NormalId.Bottom}, 9)
-				infill.CanCollide = true
+			if open[1] - cCursor > .5 then
+				ceilingPiece(x, slotWidth, (cCursor + open[1]) * .5, open[1] - cCursor, false)
 			end
-			local pane = part(parent, "Level 2 Frosted Skylight Diffuser",
-				CFrame.new(Vector3.new(x, height + 1, (open[1] + open[2]) * .5)),
-				Vector3.new(slotWidth, .6, open[2] - open[1]), Color3.fromRGB(218, 231, 226),
-				Enum.Material.SmoothPlastic, 1)
-			pane.CanCollide = true
-			pane.CanTouch = false
-			pane.CastShadow = false
-			zCursor = open[2]
+			ceilingPiece(x, slotWidth, (open[1] + open[2]) * .5, open[2] - open[1], true)
+			cCursor = open[2]
 		end
-		if hall.MaxZ - zCursor > .5 then
-			local infill = tiledPart(parent, "Level 2 Hall Ceiling",
-				CFrame.new(Vector3.new(x, height + 1, (zCursor + hall.MaxZ) * .5)),
-				Vector3.new(slotWidth, 2, hall.MaxZ - zCursor), color, {Enum.NormalId.Bottom}, 9)
-			infill.CanCollide = true
+		if crossHigh - cCursor > .5 then
+			ceilingPiece(x, slotWidth, (cCursor + crossHigh) * .5, crossHigh - cCursor, false)
 		end
 		cursor = x + slotWidth * .5
 	end
-	if hall.MaxX - cursor > .5 then
-		local slab = tiledPart(parent, "Level 2 Hall Ceiling",
-			CFrame.new(Vector3.new((cursor + hall.MaxX) * .5, height + 1, hall.Center.Z)),
-			Vector3.new(hall.MaxX - cursor, 2, hall.Depth), color, {Enum.NormalId.Bottom}, 9)
-		slab.CanCollide = true
+	if alongHigh - cursor > .5 then
+		ceilingPiece((cursor + alongHigh) * .5, alongHigh - cursor,
+			crossCenter, crossHigh - crossLow, false)
 	end
 end
 
@@ -1503,7 +1623,9 @@ local function makeSlideHall(parent, hall, index, doors)
 		if math.abs(lane) <= laneLimit then
 			local color = Configuration.SlideColors[((index + slide - 2) % #Configuration.SlideColors) + 1]
 			local laneX = center.X + lane
-			local startPoint = Vector3.new(laneX, deckY + radius + 1, deckFront - 2)
+			-- +2.4, not +1: the shell's underside must clear the 2-stud deck
+			-- slab, or the floor pokes visibly through the tube near the mouth.
+			local startPoint = Vector3.new(laneX, deckY + radius + 2.4, deckFront - 2)
 			local p1 = Vector3.new(laneX, deckY - 8, deckFront + hall.Depth * .18)
 			local p2 = Vector3.new(laneX, 15, center.Z + hall.Depth * .06)
 			local endZ = math.min(center.Z + hall.Depth * .26, hall.MaxZ - radius - 8)
@@ -1511,7 +1633,8 @@ local function makeSlideHall(parent, hall, index, doors)
 			-- through it: end height = radius above the floor level.
 			local p3 = Vector3.new(laneX, radius - depth + .4, endZ)
 			makeSlideTube(hallFolder, startPoint, p1, p2, p3, radius, color,
-				"Level 2 Slide Hall " .. index .. " Flume " .. slide, Configuration.SlideSegments, true)
+				"Level 2 Slide Hall " .. index .. " Flume " .. slide,
+				Configuration.SlideSegments * 2, true)
 			makeSlideMouth(hallFolder,
 				"Level 2 Slide Hall " .. index .. " Flume Mouth " .. slide,
 				startPoint, p1, radius, color, .08)
@@ -1619,7 +1742,7 @@ local function makeExitFlume(parent, layout, hall, deck)
 	local radius = 8
 	local boundsMaxX = layout.Bounds.MaxX
 	local shellX = boundsMaxX + 60
-	local startPoint = Vector3.new(hall.MaxX - 14, deck.DeckY + 9, deck.DeckZ)
+	local startPoint = Vector3.new(hall.MaxX - 14, deck.DeckY + 10.4, deck.DeckZ)
 
 	-- The forced eastern exit hall leaves only a short level lead-in. A densely
 	-- sampled monotone Bezier then commits immediately to a steep descent and
@@ -2032,7 +2155,7 @@ local function makeKidsSlideStructure(parent, hall, center, forward, index, long
 	makeKidsFoamPart(parent, "Level 2 Kids Slide Side Guard " .. index,
 		CFrame.lookAt(sideGuardCenter, sideGuardCenter + forward),
 		Vector3.new(.8, sideGuardHeight, deckDepth - 1), mutedKidsColor(palette.Color, .28))
-	local p0 = entry + Vector3.new(0, deckY + radius * .9, 0)
+	local p0 = entry + Vector3.new(0, deckY + radius + .5, 0)
 	local p3 = exit + Vector3.new(0, .58 + radius * .9, 0)
 	-- One soft local fill preserves the fiberglass texture in the play tower's
 	-- deep shadow without raising exposure for the entire level.
@@ -3309,11 +3432,11 @@ local function makePlayTowerKit(parent, hall, depth, origin, yaw, topY, color, n
 		at(Vector3.new(6, topY + .1, -6.2)), name)
 	local landingHeight = 4.2 - depth + .4
 	makeSlideTube(parent,
-		at(Vector3.new(0, topY + 3.6, 6)),
-		at(Vector3.new(0, topY + .6, 14)),
+		at(Vector3.new(0, topY + 4.8, 6)),
+		at(Vector3.new(0, topY + 1.4, 14)),
 		at(Vector3.new(-2, landingHeight + 5, 17)),
 		at(Vector3.new(-6, landingHeight, 26)),
-		4.2, color, name .. " Slide", 12, true)
+		4.2, color, name .. " Slide", 24, true)
 end
 
 -- Water halls earn real play furniture, randomized per hall: slide kits,
