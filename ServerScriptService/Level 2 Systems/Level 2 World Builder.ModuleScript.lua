@@ -1372,9 +1372,16 @@ local function makeTubeFromPoints(parent, points, radius, color, name, openTop, 
 		local suffix = string.format("%03d", index)
 		local base = CFrame.lookAt((a + b) * .5, b, Vector3.yAxis)
 		local collisionLength = length + collisionOverlap
-		makeSlideCollisionPart(collisions, name .. " Collision Floor " .. suffix, base,
+		local floorPart = makeSlideCollisionPart(collisions,
+			name .. " Collision Floor " .. suffix, base,
 			Vector3.new(0, -radius * .9 - thickness * .5, 0),
 			Vector3.new(radius * 1.55, thickness, collisionLength))
+		-- The ride floor is VISIBLE in the slide's own colour: a continuous
+		-- coloured floor inside every flume that hides the deck and every
+		-- shell seam from the inside.
+		floorPart.Transparency = 0
+		floorPart.Color = color
+		floorPart.Material = Enum.Material.SmoothPlastic
 
 		local sideHeight, sideY
 		if openTop then
@@ -1403,31 +1410,6 @@ local function makeTubeFromPoints(parent, points, radius, color, name, openTop, 
 		end
 	end
 
-	-- Thin solid ribbons riding the OUTSIDE of the shell close the slivers
-	-- between segments on tight curves — a flat strip turned with the tube,
-	-- not another shell layer.
-	local function addSeamStrip(a, b, index)
-		local length = (b - a).Magnitude
-		if length <= .05 then return end
-		local base = CFrame.lookAt((a + b) * .5, b, Vector3.yAxis)
-		local strip = part(visuals, name .. " Seam " .. index,
-			base * CFrame.new(0, -radius * 1.02, 0),
-			Vector3.new(radius * 1.15, .35, length + 1.4), color, Enum.Material.SmoothPlastic)
-		strip.CanCollide = false
-		strip.CanTouch = false
-		strip.CanQuery = false
-		strip.CastShadow = false
-		if not openTop then
-			local crown = part(visuals, name .. " Seam Top " .. index,
-				base * CFrame.new(0, radius * 1.02, 0),
-				Vector3.new(radius * 1.15, .35, length + 1.4), color, Enum.Material.SmoothPlastic)
-			crown.CanCollide = false
-			crown.CanTouch = false
-			crown.CanQuery = false
-			crown.CastShadow = false
-		end
-	end
-
 	for index = 1, #points - 1 do
 		local a, b = points[index], points[index + 1]
 		local length = (b - a).Magnitude
@@ -1448,7 +1430,6 @@ local function makeTubeFromPoints(parent, points, radius, color, name, openTop, 
 
 			if not collisionPoints then
 				addCollisionSegment(a, b, index)
-				addSeamStrip(a, b, index)
 			end
 		end
 	end
@@ -1456,7 +1437,6 @@ local function makeTubeFromPoints(parent, points, radius, color, name, openTop, 
 	if collisionPoints then
 		for index = 1, #collisionPoints - 1 do
 			addCollisionSegment(collisionPoints[index], collisionPoints[index + 1], index)
-			addSeamStrip(collisionPoints[index], collisionPoints[index + 1], index)
 		end
 	end
 
@@ -1575,8 +1555,8 @@ local function makeEntryTub(parent, mouthPoint, towardPoint, radius, deckTop, co
 			Vector3.new(1.3, frontHeight, 5))
 		tubPiece("Tub Wall Back", Vector3.new(tubSide * (radius + .55), backHeight * .5, 6.4),
 			Vector3.new(1.3, backHeight, 4.6))
-		tubPiece("Tub Filler", Vector3.new(tubSide * (radius * .82 + .35), frontHeight * .5, -.3),
-			Vector3.new(radius * .5, frontHeight, 1.1), false)
+		tubPiece("Tub Filler", Vector3.new(tubSide * (radius * .95 + .3), frontHeight * .5, -.3),
+			Vector3.new(radius * .38, frontHeight, 1.1), false)
 	end
 	tubPiece("Tub Lip", Vector3.new(0, .8, 8.8), Vector3.new(radius * 2 + 2.4, 1.6, 1.2))
 	tubPiece("Tub Seat", Vector3.new(0, .09, 2), Vector3.new(radius * 1.5, .18, 6), false)
@@ -1693,7 +1673,7 @@ local function makeSlideHall(parent, hall, index, doors)
 			local laneX = center.X + lane
 			-- Ride surface flush with the deck (real slide-entry style): the
 			-- shell's underside hides INSIDE the 2-stud deck slab.
-			local startPoint = Vector3.new(laneX, deckY + radius + .25, deckFront - 2)
+			local startPoint = Vector3.new(laneX, deckY + radius + .9, deckFront - 2)
 			local p1 = Vector3.new(laneX, deckY - 8, deckFront + hall.Depth * .18)
 			local p2 = Vector3.new(laneX, 15, center.Z + hall.Depth * .06)
 			local endZ = math.min(center.Z + hall.Depth * .26, hall.MaxZ - radius - 8)
@@ -1812,7 +1792,7 @@ local function makeExitFlume(parent, layout, hall, deck)
 	local radius = 8
 	local boundsMaxX = layout.Bounds.MaxX
 	local shellX = boundsMaxX + 60
-	local startPoint = Vector3.new(hall.MaxX - 14, deck.DeckY + 8.2, deck.DeckZ)
+	local startPoint = Vector3.new(hall.MaxX - 14, deck.DeckY + 8.8, deck.DeckZ)
 
 	-- The forced eastern exit hall leaves only a short level lead-in. A densely
 	-- sampled monotone Bezier then commits immediately to a steep descent and
@@ -1915,7 +1895,9 @@ local function makeExitFlume(parent, layout, hall, deck)
 	-- tube's own colour closes every gap flush.
 	local function makeWallCollar(wallX, collarIndex)
 		local crossing = pathAtX(wallX)
-		local ringRadius = radius + 2.2
+		-- Inner edge stays OUTSIDE the bore (radius + .8): from inside the
+		-- tube the collar is invisible, it only seals the wall corners.
+		local ringRadius = radius + 3.6
 		for segment = 0, 7 do
 			local angle = segment / 8 * math.pi * 2
 			local collarPiece = part(parent,
@@ -1923,7 +1905,7 @@ local function makeExitFlume(parent, layout, hall, deck)
 				CFrame.new(wallX, crossing.Y + math.sin(angle) * ringRadius,
 					crossing.Z + math.cos(angle) * ringRadius)
 					* CFrame.Angles(angle, 0, 0),
-				Vector3.new(2.2, 6, ringRadius * math.pi * 2 / 8 + 1.2),
+				Vector3.new(2.2, 5.6, ringRadius * math.pi * 2 / 8 + 1.2),
 				C.TileCool, Enum.Material.SmoothPlastic)
 			collarPiece.CanCollide = false
 			collarPiece.CanTouch = false
@@ -3226,22 +3208,8 @@ local function dressHall(parent, hall, depth, doors, index, density)
 		end
 	end
 
-	-- Lifebuoys and a stopped clock on doorless wall stretches.
-	local buoyX = hall.Center.X + rng:NextNumber(-.3, .3) * hall.Width
-	if wallSpotClear(doors.North, buoyX) then
-		-- Clearly PROUD of the wall (walls and their skins vary in depth), with
-		-- a wall-coloured hub so it reads as a hanging RING, not a sunk disc.
-		local buoy = part(parent, "Level 2 Lifebuoy " .. index,
-			CFrame.new(Vector3.new(buoyX, 6.5, hall.MinZ + 2.75)) * CFrame.Angles(0, math.pi * .5, 0),
-			Vector3.new(.6, 3.6, 3.6), Color3.fromRGB(226, 96, 84), Enum.Material.SmoothPlastic)
-		buoy.Shape = Enum.PartType.Cylinder
-		buoy.CanCollide = false
-		local hub = part(parent, "Level 2 Lifebuoy Hub " .. index,
-			CFrame.new(Vector3.new(buoyX, 6.5, hall.MinZ + 2.72)) * CFrame.Angles(0, math.pi * .5, 0),
-			Vector3.new(.75, 1.9, 1.9), Color3.fromRGB(236, 238, 232), Enum.Material.SmoothPlastic)
-		hub.Shape = Enum.PartType.Cylinder
-		hub.CanCollide = false
-	end
+	-- A stopped clock on doorless wall stretches (lifebuoys removed on
+	-- request).
 	local clockX = hall.Center.X + rng:NextNumber(-.25, .25) * hall.Width
 	if rng:NextNumber() < .5 and wallSpotClear(doors.South, clockX) then
 		local face = part(parent, "Level 2 Stopped Clock " .. index,
@@ -3259,21 +3227,8 @@ local function dressHall(parent, hall, depth, doors, index, density)
 		minuteHand.CanCollide = false
 	end
 
-	-- Waterline grime on doorless wall stretches.
-	for grime = 1, math.clamp(math.floor(hall.Area / 24000 * density), 1, 4) do
-		local sideNorth = rng:NextInteger(0, 1) == 0
-		local grimeX = hall.Center.X + rng:NextNumber(-.34, .34) * hall.Width
-		local sideList = sideNorth and doors.North or doors.South
-		if wallSpotClear(sideList, grimeX) then
-			local grimeZ = sideNorth and hall.MinZ + 1.9 or hall.MaxZ - 1.9
-			local stain = part(parent, "Level 2 Waterline Grime " .. index .. "." .. grime,
-				CFrame.new(Vector3.new(grimeX, 1.1, grimeZ)),
-				Vector3.new(rng:NextNumber(7, 15), rng:NextNumber(2.4, 3.6), .18),
-				Color3.fromRGB(74, 96, 92), Enum.Material.Slate, .45)
-			stain.CanCollide = false
-			stain.CanTouch = false
-		end
-	end
+	-- (Waterline grime stains removed on request: they read as dark
+	-- see-through blocks on the walls.)
 end
 
 -- Diving/jumping board colours, in the requested order.
@@ -3532,13 +3487,13 @@ local function makePlayTowerKit(parent, hall, depth, origin, yaw, topY, color, n
 		at(Vector3.new(6, topY + .1, -6.2)), name)
 	local landingHeight = 4.2 - depth + .4
 	makeSlideTube(parent,
-		at(Vector3.new(0, topY + 3.8, 6)),
-		at(Vector3.new(0, topY + 1.2, 14)),
+		at(Vector3.new(0, topY + 4.4, 6)),
+		at(Vector3.new(0, topY + 1.4, 14)),
 		at(Vector3.new(-2, landingHeight + 5, 17)),
 		at(Vector3.new(-6, landingHeight, 26)),
 		4.2, color, name .. " Slide", 24, true)
-	makeEntryTub(parent, at(Vector3.new(0, topY + 3.8, 6)),
-		at(Vector3.new(0, topY + 1.2, 14)), 4.2, topY, color, name)
+	makeEntryTub(parent, at(Vector3.new(0, topY + 4.4, 6)),
+		at(Vector3.new(0, topY + 1.4, 14)), 4.2, topY, color, name)
 end
 
 -- Water halls earn real play furniture, randomized per hall: slide kits,
