@@ -1552,32 +1552,34 @@ local function makeHelixSlide(parent, columnPosition, helixRadius, topY, color, 
 end
 
 -- A molded entry tub like a REAL water-park slide start (the reference
--- photos): the seat sits at deck height, low shell walls wrap the mouth's
--- sides, a rounded lip closes the back, and a colored seat slab covers the
--- deck-to-shell transition. The tube's first stretch hides inside the deck
--- slab, so no angle can see through it — solid geometry, no extra layers.
+-- photos): everything in the SLIDE'S OWN colour and material, hugging the
+-- shell — tall cheeks beside the mouth stepping down to hip height around
+-- the seat, corner fillers closing the round-shell-to-flat-wall gap, and a
+-- low back lip. The tube's first stretch hides inside the deck slab, so no
+-- angle can see through it — solid geometry, no extra layers.
 local function makeEntryTub(parent, mouthPoint, towardPoint, radius, deckTop, color, name)
 	local flat = Vector3.new(towardPoint.X - mouthPoint.X, 0, towardPoint.Z - mouthPoint.Z)
 	if flat.Magnitude < .05 then flat = Vector3.new(0, 0, 1) end
 	local base = Vector3.new(mouthPoint.X, deckTop, mouthPoint.Z)
 	local frame = CFrame.lookAt(base, base + flat)
-	local wallHeight = radius + .8
-	for tubSide = -1, 1, 2 do
-		local wall = tiledPart(parent, name .. " Tub Wall",
-			frame * CFrame.new(tubSide * (radius + 1.05), wallHeight * .5, 3.6),
-			Vector3.new(1.6, wallHeight, 9.4), C.TileWarm,
-			Enum.NormalId:GetEnumItems(), 7)
-		wall.CanCollide = true
+	local function tubPiece(pieceName, offset, size, canCollide)
+		local piece = part(parent, name .. " " .. pieceName,
+			frame * CFrame.new(offset), size, color, Enum.Material.SmoothPlastic)
+		piece.CanCollide = canCollide ~= false
+		return piece
 	end
-	local lip = tiledPart(parent, name .. " Tub Lip",
-		frame * CFrame.new(0, 1, 7.8), Vector3.new(radius * 2 + 3.7, 2, 1.4),
-		C.TileWarm, Enum.NormalId:GetEnumItems(), 7)
-	lip.CanCollide = true
-	local seat = part(parent, name .. " Tub Seat",
-		frame * CFrame.new(0, .09, 1.8), Vector3.new(radius * 1.5, .18, 5.6),
-		color, Enum.Material.SmoothPlastic)
-	seat.CanCollide = false
-	seat.CanTouch = false
+	local frontHeight = radius + 1.2
+	local backHeight = math.max(2.2, radius * .55)
+	for tubSide = -1, 1, 2 do
+		tubPiece("Tub Wall Front", Vector3.new(tubSide * (radius + .55), frontHeight * .5, 1.9),
+			Vector3.new(1.3, frontHeight, 5))
+		tubPiece("Tub Wall Back", Vector3.new(tubSide * (radius + .55), backHeight * .5, 6.4),
+			Vector3.new(1.3, backHeight, 4.6))
+		tubPiece("Tub Filler", Vector3.new(tubSide * (radius * .82 + .35), frontHeight * .5, -.3),
+			Vector3.new(radius * .5, frontHeight, 1.1), false)
+	end
+	tubPiece("Tub Lip", Vector3.new(0, .8, 8.8), Vector3.new(radius * 2 + 2.4, 1.6, 1.2))
+	tubPiece("Tub Seat", Vector3.new(0, .09, 2), Vector3.new(radius * 1.5, .18, 6), false)
 end
 
 -- Very large slide halls need architectural rhythm or their authored play
@@ -1907,6 +1909,29 @@ local function makeExitFlume(parent, layout, hall, deck)
 	gatewayWall("Level 2 Gateway West Wall Lintel",
 		Vector3.new(westWallX, floorTop + apertureHeight + (gatewayHeight - apertureHeight) * .5, catchCenter.Z),
 		Vector3.new(1.5, gatewayHeight - apertureHeight, apertureWidth))
+
+	-- Snug collars where the tube crosses walls: the rectangular portals
+	-- leave corner daylight around a round tube, so an octagonal ring in the
+	-- tube's own colour closes every gap flush.
+	local function makeWallCollar(wallX, collarIndex)
+		local crossing = pathAtX(wallX)
+		local ringRadius = radius + 2.2
+		for segment = 0, 7 do
+			local angle = segment / 8 * math.pi * 2
+			local collarPiece = part(parent,
+				"Level 2 Exit Flume Wall Collar " .. collarIndex .. "." .. segment,
+				CFrame.new(wallX, crossing.Y + math.sin(angle) * ringRadius,
+					crossing.Z + math.cos(angle) * ringRadius)
+					* CFrame.Angles(angle, 0, 0),
+				Vector3.new(2.2, 6, ringRadius * math.pi * 2 / 8 + 1.2),
+				C.TileCool, Enum.Material.SmoothPlastic)
+			collarPiece.CanCollide = false
+			collarPiece.CanTouch = false
+		end
+	end
+	makeWallCollar(hall.MaxX, 1)
+	makeWallCollar(shellX, 2)
+	makeWallCollar(westWallX, 3)
 
 	-- The wooden door is centered on the far wall and faces the tube exit.
 	-- It is story-facing only; the player can always enter the room around it.
@@ -3204,27 +3229,32 @@ local function dressHall(parent, hall, depth, doors, index, density)
 	-- Lifebuoys and a stopped clock on doorless wall stretches.
 	local buoyX = hall.Center.X + rng:NextNumber(-.3, .3) * hall.Width
 	if wallSpotClear(doors.North, buoyX) then
-		-- Yaw (not roll): the ring's axis points OUT of the wall, so the disc
-		-- hangs flat against it instead of lying half-buried inside it.
+		-- Clearly PROUD of the wall (walls and their skins vary in depth), with
+		-- a wall-coloured hub so it reads as a hanging RING, not a sunk disc.
 		local buoy = part(parent, "Level 2 Lifebuoy " .. index,
-			CFrame.new(Vector3.new(buoyX, 6.5, hall.MinZ + 2.12)) * CFrame.Angles(0, math.pi * .5, 0),
+			CFrame.new(Vector3.new(buoyX, 6.5, hall.MinZ + 2.75)) * CFrame.Angles(0, math.pi * .5, 0),
 			Vector3.new(.6, 3.6, 3.6), Color3.fromRGB(226, 96, 84), Enum.Material.SmoothPlastic)
 		buoy.Shape = Enum.PartType.Cylinder
 		buoy.CanCollide = false
+		local hub = part(parent, "Level 2 Lifebuoy Hub " .. index,
+			CFrame.new(Vector3.new(buoyX, 6.5, hall.MinZ + 2.72)) * CFrame.Angles(0, math.pi * .5, 0),
+			Vector3.new(.75, 1.9, 1.9), Color3.fromRGB(236, 238, 232), Enum.Material.SmoothPlastic)
+		hub.Shape = Enum.PartType.Cylinder
+		hub.CanCollide = false
 	end
 	local clockX = hall.Center.X + rng:NextNumber(-.25, .25) * hall.Width
 	if rng:NextNumber() < .5 and wallSpotClear(doors.South, clockX) then
 		local face = part(parent, "Level 2 Stopped Clock " .. index,
-			CFrame.new(Vector3.new(clockX, height - 6, hall.MaxZ - 2.08)) * CFrame.Angles(0, math.pi * .5, 0),
+			CFrame.new(Vector3.new(clockX, height - 6, hall.MaxZ - 2.75)) * CFrame.Angles(0, math.pi * .5, 0),
 			Vector3.new(.5, 4.2, 4.2), Color3.fromRGB(238, 238, 228), Enum.Material.SmoothPlastic)
 		face.Shape = Enum.PartType.Cylinder
 		face.CanCollide = false
 		local hourHand = part(parent, "Level 2 Clock Hand H " .. index,
-			CFrame.new(Vector3.new(clockX, height - 6.6, hall.MaxZ - 2.5)),
+			CFrame.new(Vector3.new(clockX, height - 6.6, hall.MaxZ - 3.15)),
 			Vector3.new(.3, 1.3, .2), C.Void, Enum.Material.SmoothPlastic)
 		hourHand.CanCollide = false
 		local minuteHand = part(parent, "Level 2 Clock Hand M " .. index,
-			CFrame.new(Vector3.new(clockX + .6, height - 6, hall.MaxZ - 2.5)),
+			CFrame.new(Vector3.new(clockX + .6, height - 6, hall.MaxZ - 3.15)),
 			Vector3.new(1.4, .3, .2), C.Void, Enum.Material.SmoothPlastic)
 		minuteHand.CanCollide = false
 	end
