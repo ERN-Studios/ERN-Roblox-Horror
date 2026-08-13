@@ -73,7 +73,25 @@ local function ensureMount(player, char)
 	return mount
 end
 
+local function applyMountProfile(mount)
+	local level3 = workspace:GetAttribute("SelectedLevel") == 3
+	local blackout = level3 and workspace:GetAttribute("Level3BlackoutActive") == true
+	local core = mount:FindFirstChild("Core")
+	if core and core:IsA("SpotLight") then
+		core.Brightness = blackout and 7.5 or (level3 and 4.5 or 1.2)
+		core.Range = level3 and 52 or 38
+		core.Angle = level3 and 40 or 38
+	end
+	local spill = mount:FindFirstChild("Spill")
+	if spill and spill:IsA("SpotLight") then
+		spill.Brightness = blackout and 1.85 or (level3 and 1.05 or .3)
+		spill.Range = level3 and 62 or 45
+		spill.Angle = level3 and 86 or 75
+	end
+end
+
 local function setMountEnabled(mount, enabled)
+	applyMountProfile(mount)
 	for _, light in ipairs(mount:GetChildren()) do
 		if light:IsA("Light") then light.Enabled = enabled end
 	end
@@ -117,6 +135,7 @@ remote.OnServerEvent:Connect(function(player, value, payload)
 		local origin = (requested - head.Position).Magnitude <= 6 and requested or head.Position
 		if look.Magnitude < 0.9 then return end
 		local mount = ensureMount(player, char)
+		applyMountProfile(mount)
 		mount.CFrame = CFrame.lookAt(origin, origin + look.Unit)
 	end
 end)

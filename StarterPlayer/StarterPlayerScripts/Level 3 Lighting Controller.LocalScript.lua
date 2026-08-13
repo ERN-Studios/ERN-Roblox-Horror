@@ -15,7 +15,7 @@ local random = Random.new()
 local LEVEL = 3
 local WORLD_NAME = "Level 3 Generated World"
 local STATE_FOLDER_NAME = "Level 3 State"
-local MAX_FLICKER_FIXTURES = 8
+local MAX_FLICKER_FIXTURES = 10
 
 type LightingSnapshot = {
 	Brightness: number,
@@ -41,6 +41,8 @@ type FixtureRecord = {
 	Enabled: boolean,
 	NextAt: number,
 	RestoreAt: number,
+	Pulse: number,
+	NextPulseAt: number,
 }
 
 type SuppressedEffect = {
@@ -231,8 +233,10 @@ local function beginBlackout()
 	colorGrade.Enabled = true
 	bloom.Enabled = false
 	tween(Lighting, .35, {
-		Brightness = .025,
-		ExposureCompensation = -1.55,
+		-- Keep the unlit world black while allowing a handheld dynamic light to
+		-- survive the grade. The previous -1.55 exposure erased ~80% of its beam.
+		Brightness = .04,
+		ExposureCompensation = -.85,
 		Ambient = Color3.fromRGB(0, 0, 0),
 		OutdoorAmbient = Color3.fromRGB(0, 0, 0),
 		ColorShift_Top = Color3.new(0, 0, 0),
@@ -244,9 +248,9 @@ local function beginBlackout()
 		FogEnd = 115,
 	})
 	tween(colorGrade, .35, {
-		Brightness = -.14,
-		Contrast = .18,
-		Saturation = -.38,
+		Brightness = -.08,
+		Contrast = .13,
+		Saturation = -.32,
 		TintColor = Color3.fromRGB(104, 122, 132),
 	})
 	enforceBlackout()
@@ -289,8 +293,10 @@ local function tryAddFixture(instance: Instance)
 		Light = light,
 		Brightness = light.Brightness,
 		Enabled = light.Enabled,
-		NextAt = os.clock() + random:NextNumber(7, 18),
+		NextAt = os.clock() + random:NextNumber(4.5, 12),
 		RestoreAt = 0,
+		Pulse = 0,
+		NextPulseAt = 0,
 	}
 	fixtureByPart[instance] = record
 	table.insert(fixtures, record)
@@ -333,13 +339,13 @@ applyLevelGrade = function(unlocked: boolean)
 
 	local tint = if unlocked then Color3.fromRGB(216, 235, 214) else Color3.fromRGB(232, 219, 184)
 	local fog = if unlocked then Color3.fromRGB(93, 109, 101) else Color3.fromRGB(103, 99, 82)
-	local ambient = if unlocked then Color3.fromRGB(82, 90, 85) else Color3.fromRGB(88, 81, 68)
-	local outdoor = if unlocked then Color3.fromRGB(54, 62, 58) else Color3.fromRGB(56, 53, 46)
+	local ambient = if unlocked then Color3.fromRGB(92, 98, 94) else Color3.fromRGB(98, 91, 76)
+	local outdoor = if unlocked then Color3.fromRGB(62, 69, 65) else Color3.fromRGB(66, 61, 52)
 
 	tween(Lighting, 0.48, {
-		Brightness = if unlocked then 1.55 else 1.42,
+		Brightness = if unlocked then 1.64 else 1.54,
 		ClockTime = 1.5,
-		ExposureCompensation = if unlocked then -0.08 else -0.16,
+		ExposureCompensation = if unlocked then -0.02 else -0.06,
 		Ambient = ambient,
 		OutdoorAmbient = outdoor,
 		-- ColorShift is additive in Roblox; near-white values flatten and wash
@@ -355,9 +361,9 @@ applyLevelGrade = function(unlocked: boolean)
 		ShadowSoftness = 0.72,
 	})
 	tween(colorGrade, 0.48, {
-		Brightness = if unlocked then 0.005 else -0.015,
-		Contrast = if unlocked then 0.050 else 0.060,
-		Saturation = if unlocked then -0.06 else -0.09,
+		Brightness = if unlocked then 0.012 else 0.004,
+		Contrast = if unlocked then 0.040 else 0.045,
+		Saturation = if unlocked then -0.045 else -0.065,
 		TintColor = tint,
 	})
 	tween(bloom, 0.48, {
@@ -473,12 +479,24 @@ RunService.Heartbeat:Connect(function(dt)
 			table.remove(fixtures, index)
 		elseif record.RestoreAt > 0 and now >= record.RestoreAt then
 			record.Light.Brightness = record.Brightness
+			record.Part.Material = Enum.Material.Neon
 			record.RestoreAt = 0
-		elseif record.RestoreAt == 0 and now >= record.NextAt then
-			-- A short ballast dip, never a blackout or rapid strobe.
-			record.Light.Brightness = record.Brightness * random:NextNumber(0.42, 0.66)
-			record.RestoreAt = now + random:NextNumber(0.055, 0.13)
-			record.NextAt = now + random:NextNumber(8, 22)
+			if record.Pulse > 0 then
+				record.NextPulseAt = now + random:NextNumber(0.045, 0.12)
+			else
+				record.NextAt = now + random:NextNumber(5.5, 16)
+			end
+		elseif record.RestoreAt == 0 and record.Pulse > 0 and now >= record.NextPulseAt then
+			-- A failing ballast gives one or two clearly readable irregular blinks.
+			record.Light.Brightness = record.Brightness * random:NextNumber(0.03, 0.18)
+			record.Part.Material = Enum.Material.SmoothPlastic
+			record.Pulse -= 1
+			record.RestoreAt = now + random:NextNumber(0.075, 0.18)
+		elseif record.RestoreAt == 0 and record.Pulse == 0 and now >= record.NextAt then
+			record.Light.Brightness = record.Brightness * random:NextNumber(0.02, 0.14)
+			record.Part.Material = Enum.Material.SmoothPlastic
+			record.Pulse = random:NextInteger(0, 2)
+			record.RestoreAt = now + random:NextNumber(0.09, 0.24)
 		end
 	end
 end)

@@ -42,7 +42,7 @@ local function assertPart(record: {[string]: any}, key: string, root: Instance):
 end
 
 function TestSuite.ValidateConfiguration(): {[string]: any}
-	assert(Configuration.Version >= 4, "Level 3 decor/texture revision must be at least 4")
+	assert(Configuration.Version >= 5, "Level 3 architecture/audio revision must be at least 5")
 	assert(Configuration.CorridorWidth == 14, "Level 3 corridors must remain 14 studs wide")
 	assert(Configuration.DoorWidth == 6 and Configuration.DoorHeight == 8.5,
 		"Level 3 doors must remain the approved 6 x 8.5 studs")
@@ -181,13 +181,13 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 	local hiddenWall = assertPart(portal, "Wall", world)
 	assert(hiddenWall:GetAttribute("Level3_HiddenExitWall") == true,
 		"ExitPortal wall is missing Level3_HiddenExitWall")
-	assert(hiddenWall.Transparency == 0 and not hiddenWall.CanCollide and hiddenWall.CanQuery
+	assert(hiddenWall.Transparency == 0 and hiddenWall.CanCollide and hiddenWall.CanQuery
 		and not hiddenWall.CanTouch,
-		"Hidden exit wall must begin opaque, walk-through, queryable, and non-touching")
+		"Hidden exit wall must begin opaque, locked, queryable, and non-touching")
 	assert(hiddenWall.Material == Enum.Material.Plaster
 		and hiddenWall.Color == Color3.fromRGB(183, 78, 35)
-		and hiddenWall.Size == Vector3.new(Configuration.CorridorWidth,
-			Configuration.RoomHeight, Configuration.WallThickness),
+		and hiddenWall.Size == Vector3.new(Configuration.DoorWidth + 1,
+			Configuration.DoorHeight + .5, Configuration.WallThickness),
 		"Hidden exit wall must visually match the orange SignalHall portal")
 	assert(typeof(portal.Position) == "Vector3" and (portal.Position - hiddenWall.Position).Magnitude <= Configuration.RoomHeight,
 		"ExitPortal position is invalid or detached from the wall")
@@ -308,16 +308,19 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 			stats.Lights += 1
 			if instance.Shadows then stats.ShadowLights += 1 end
 			if instance.Name == "Level 3 Fluorescent Light" then
-				assert(instance.Brightness <= 1.50 and instance.Range <= 30,
-					"Level 3 fluorescent fixture exceeds the dim-light target")
+				assert(instance.Brightness <= 1.65 and instance.Range <= 34,
+					"Level 3 fluorescent fixture exceeds the readable-atmosphere target")
 			end
 		elseif instance:IsA("ProximityPrompt") then
 			stats.Prompts += 1
 		elseif instance:IsA("Texture") or instance:IsA("Decal") then
 			stats.Textures += 1
 		end
-		assert(not instance:IsA("SurfaceGui"),
-			"Generated Level 3 SurfaceGuis/signs are forbidden: " .. instance:GetFullName())
+		if instance:IsA("SurfaceGui") then
+			assert(instance.Name == "Level 3 Kids Wall Art Surface"
+				and instance.Parent and instance.Parent:GetAttribute("Level3_KidsWallArt") == true,
+				"Generated Level 3 SurfaceGui/sign is forbidden: " .. instance:GetFullName())
+		end
 		assert(not instance:IsA("TextLabel") and not instance:IsA("TextBox") and not instance:IsA("TextButton"),
 			"Generated Level 3 text UI is forbidden: " .. instance:GetFullName())
 		assert(not instance:IsA("Humanoid"), "Level 3 may not contain Humanoids/NPCs")
@@ -429,11 +432,11 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 	end
 	assert(stats.CorridorFloors == #Configuration.Links, "Level 3 corridor floor count mismatch")
 
-	local forbiddenDecor = {"Baseboard", "Shelf", "Carton", "Box", "Desk", "CRT", "Plant", "Utility Pipe", "Bunting"}
+	local forbiddenDecor = {"Baseboard", "Shelf", "Carton", "Box", "Desk", "CRT", "Plant", "Utility Pipe"}
 	for _, instance in ipairs(world:GetDescendants()) do
 		for _, fragment in ipairs(forbiddenDecor) do
 			assert(not string.find(instance.Name, fragment, 1, true),
-				"Revision 4 contains forbidden clutter: " .. instance:GetFullName())
+				"Revision 5 contains forbidden clutter: " .. instance:GetFullName())
 		end
 	end
 
@@ -490,9 +493,10 @@ function TestSuite.ValidateRuntime(expectedProgress: number): {[string]: any}
 			portalLight = instance
 		end
 	end
-	assert(hiddenWall and hiddenWall.Transparency == 0 and not hiddenWall.CanCollide
+	assert(hiddenWall and hiddenWall.Transparency == 0
+		and hiddenWall.CanCollide == (not unlocked)
 		and hiddenWall.CanQuery and not hiddenWall.CanTouch,
-		"Hidden exit wall changed its always-walk-through visual mask state")
+		"Hidden exit wall collision/reveal state does not match objective progress")
 	assert(#frameParts == 8 and portalLight,
 		"Hidden exit runtime reveal objects are incomplete")
 	assert(portalModel:GetAttribute("Level3_ExitUnlocked") == unlocked,
@@ -538,7 +542,7 @@ function TestSuite.ValidateRuntime(expectedProgress: number): {[string]: any}
 				"Settled door collision state is unsafe: " .. model:GetFullName())
 		end
 	end
-	assert(stableDoors == 0, "Revision 4 must not restore ordinary interactive Level 3 doors")
+	assert(stableDoors == 0, "Revision 5 must not restore ordinary interactive Level 3 doors")
 	return {Progress = expectedProgress, Frames = #frameParts, Doors = stableDoors}
 end
 

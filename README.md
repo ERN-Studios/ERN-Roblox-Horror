@@ -6,8 +6,9 @@ You spawn in a road-tunnel lobby, queue up a party at a launch station, and get
 teleported into a level. One life per round. Solve the level's objective while
 something hunts you — escape together, or watch your friends try.
 
-**Status:** Level 1 is **done**. Level 2 is **in progress**. Level 3 comes next —
-then we publish on Roblox.
+**Status:** Level 1 is **done**. Level 2's world is **built and in final polish**
+(hostile in development). Level 3 groundwork (music/blackout sequencing) has
+started — then we publish on Roblox.
 
 ## 🚇 The lobby ("Zyntra Transit — Powering the Future.")
 
@@ -56,37 +57,56 @@ Colour-coded floor cables run from the elevator trunk to every fuse box (yellow)
 and lever (orange) in separate lanes — follow the wires to navigate. A cabin
 poster teaches the colour code during the elevator ride.
 
-## 🩵 Level 2 — Sunken Leisure Complex (world done, entity pending)
+## 🩵 Level 2 — Sunken Leisure Complex (world built, in final polish)
 
-A bright, sunlit liminal poolrooms complex with its **own** generator — it
-shares only the tile texture and the water look with Level 1's palette of
-services. (The previous hand-authored Flooded Poolrooms level is preserved in
+A bright, sunlit liminal poolrooms **water park** with its **own** generator —
+it shares only the tile texture and the water look with Level 1. (The previous
+hand-authored Flooded Poolrooms level is preserved in
 `ServerStorage.Level2Backup_20260805`.)
 
-- **Binary space partition** of a 1400-stud region: 17–20 halls of wildly
-  different sizes joined by flooded **arch-tunnel corridors** (a vaulted ring
-  every 11 studs). Water covers the floor **wall-to-wall** in every pool hall —
-  shallow wading in most, swimmably deep in others, with stairs descending
-  from every doorway.
-- **Real sunlight**: the outer roof is translucent glass (no shadow), hall
-  ceilings carry genuine skylight slots, and the in-round grade is bright and
-  fog-free. Colonnades and tiled columns rise straight out of the water.
-- **Slide halls** (3): a mezzanine deck near the ceiling, straight parallel
-  flumes into the water, and a **helix slide wrapping a column**. The grand
-  hall carries the exit flume to a sealed **Level 4 gateway** placeholder.
-- **Kids wing**: 5 contiguous painted (untiled) rooms in 3 colors, connected
-  wall-to-wall, with soft-play blocks, a mini slide and a raised paddling pool.
+- **Binary space partition** of a 1400-stud region: ~45 halls capped at ~250
+  studs a side (`MaximumLeafSize`), joined by flooded **arch-tunnel corridors**.
+  A **fresh random seed every round**. Water covers the floor **wall-to-wall**
+  in every pool hall at **wading depth only** — nobody ever swims.
+- **Real sunlight**: translucent no-shadow glass roof, and per-hall **skylight
+  patterns** — full lines, dashes, a punched checkerboard, or a single centre
+  band — so no two ceilings read the same. Smooth trumpet-curved columns run
+  flush from floor to ceiling; a world-level column registry plus doorway
+  keep-out strips guarantee no pillar ever overlaps anything or blocks an exit.
+- **Play furniture in every water hall**, randomized per seed and
+  collision-verified: slide kits (straight railed stairs → platform on legs →
+  chute into the water), **diving towers** with blue/yellow/red/green boards at
+  several heights, play towers with tube flumes, railed overlooks, and a swarm
+  of **buoyant** noodles, beach balls, rings and rafts that bob and drift when
+  players wade into them (each spawned only in verified-open water).
+- **Slide halls** (3): mezzanine deck, straight parallel flumes, a dense
+  whole-turn spiral stair docking onto the east catwalk, and a **helix slide on
+  its own dedicated column** fed by a catwalk bridge. All slide shells render
+  double-sided with sealed mouths — no see-through angles. The grand hall
+  carries the exit flume east into a large gateway room (next-level
+  placeholder behind a story door).
+- **Kids wing**: cosy painted rooms with whole-room ankle-deep water, kids
+  slides in the room's own colour, a hex-packed **ball pit** (~370 balls), and
+  round roof skylights.
+- **Pump rooms**: raised walkway ring + centre pump island over shallow water,
+  with a diagonal three-board jump stand.
 - **Objective:** start **3 pump stations** — each drains a flooded corridor
   (terrain water actually removed) — then the pressure doors into the grand
   hall unseal; ride the exit flume from the top deck.
 - **Sound**: `Level 2 Sound Controller` + StringValue slots in
-  `ReplicatedStorage["Level 2 Sound Library"]` (paste an asset id, done).
-  Level 1 has the same setup. Server fires pump/drain/door/slide cues.
-- **Entity space reserved, nothing spawns yet**: two den markers (A deepest,
-  B far from A), 4 patrol nodes per hall, 30×19 doorways, and empty profile
-  stubs in `Configuration.Entities`.
+  `ReplicatedStorage["Level 2 Sound Library"]`. The lobby's squeaky default
+  footsteps are muted everywhere (the game's own clips play instead), and the
+  low-stamina breathing slot ships disabled (empty id — logic intact).
+- **Entity — the Pool Foam** is in active development: dens, per-hall patrol
+  nodes and spawn markers are generated, and the hostile stack (controller,
+  navigator with roof-safe floor probing, proxy rig, client effects) lives in
+  `Level 2 Systems`.
+- Every change is validated in live play sessions across 7 seeds by geometry
+  probes (clip scan, stair connections, swim depth, wedged props, exit
+  clearance) before it lands.
 - Tweak guide for collaborators: `ServerScriptService."Level 2 Systems".README
-  - LEVEL 2 TWEAKS`. Force a layout with the `Level2Seed` workspace attribute.
+  - LEVEL 2 TWEAKS`. Force a layout with the `Level2Seed` workspace attribute
+  (clear it for random — and it stays random now).
 
 ## ⌨️ Controls
 
@@ -163,11 +183,13 @@ Lock down / remove before publishing.
 
 - [x] **Level 1 — done** (maze, entity, puzzle, escape flow, cinematic kill,
       full audio/animation set, lobby + matchmaking around it)
-- [ ] **Level 2 — Sunken Leisure Complex** (world, objective, lighting and
-      sound scaffolding are in; remaining: 1–2 hostiles for the reserved dens,
-      sound-library asset ids, and a playtest pass. The previous Flooded
-      Poolrooms build is parked in `ServerStorage.Level2Backup_20260805`.)
-- [ ] **Level 3 — build** (bay 3 is sealed again and waiting)
+- [ ] **Level 2 — Sunken Leisure Complex** (world, play structures, objective,
+      lighting and sound scaffolding are in and probe-validated; remaining:
+      finish the Pool Foam hostile, sound-library asset ids, and a final
+      playtest pass. The previous Flooded Poolrooms build is parked in
+      `ServerStorage.Level2Backup_20260805`.)
+- [ ] **Level 3 — build** (bay 3 sealed and waiting; music-sequence /
+      blackout audio groundwork already underway in `Level 3 Systems`)
 - [ ] **Pre-publish pass**: restrict/remove DevCheats (key on UserId, not name),
       strip Studio-only test hooks, mold/stain texture slots, final audio slots
       (`LUNGE_SOUND`, `ENTITY_STEP_RUN`, `IDLE_SOUNDS`)

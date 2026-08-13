@@ -220,7 +220,7 @@ local function applyLayout()
 		toggleButton.AnchorPoint = Vector2.new(1, 0)
 		toggleButton.Position = UDim2.new(1, -10, 0, 175)
 	end
-	toggleButton.Size = UDim2.fromOffset(readerHidden and 218 or 82, 28)
+	toggleButton.Size = UDim2.fromOffset(readerHidden and 190 or 92, 28)
 
 	local toastWidth = math.floor(math.clamp(viewport.X - 30, 228, 520))
 	toast.Position = UDim2.new(0.5, 0, 0, stackToast and 176 or 76)
@@ -230,10 +230,20 @@ local function applyLayout()
 	signalLabel.TextSize = narrow and 11 or 13
 end
 
+local function inputHint(): string
+	local last = UserInputService:GetLastInputType()
+	if last.Name:find("Gamepad", 1, true) then return "[Y]" end
+	if last == Enum.UserInputType.Touch then return "TAP" end
+	return "[R]"
+end
+
 local function updateTogglePresentation()
-	toggleButton.Text = if readerHidden then "PRESS R / TAP TO OPEN EXIT READER" else "HIDE [R]"
+	local hint = inputHint()
+	toggleButton.Text = if readerHidden
+		then "OPEN EXIT READER  " .. hint
+		else "HIDE  " .. hint
 	toggleButton.TextColor3 = if readerHidden then TEXT else ENERGON
-	toggleButton.Size = UDim2.fromOffset(readerHidden and 218 or 82, 28)
+	toggleButton.Size = UDim2.fromOffset(readerHidden and 190 or 92, 28)
 end
 
 local function setReaderHidden(hidden: boolean)
@@ -252,7 +262,8 @@ ContextActionService:BindAction("Level3ToggleExitReader", function(_, inputState
 		return Enum.ContextActionResult.Sink
 	end
 	return Enum.ContextActionResult.Pass
-end, false, Enum.KeyCode.R)
+end, false, Enum.KeyCode.R, Enum.KeyCode.ButtonY)
+UserInputService.LastInputTypeChanged:Connect(updateTogglePresentation)
 updateTogglePresentation()
 
 local viewportConnection: RBXScriptConnection? = nil

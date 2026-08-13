@@ -45,6 +45,33 @@ local function setPhase(activeSession: any, phase: string)
 	local state = stateFolder()
 	state:SetAttribute("Level3_RoomSongPhase", phase)
 	if phase == "BLACKOUT" then
+		-- Leave one small, server-replicated environmental discontinuity behind:
+		-- during darkness, three harmless decorative chairs shift slightly.  It
+		-- rewards attentive players without introducing an NPC or a scripted attack.
+		if not activeSession.ChairsShifted then
+			activeSession.ChairsShifted = true
+			local chairs = {}
+			for _, object in ipairs(activeSession.World:GetDescendants()) do
+				if object:IsA("BasePart") and object.Name == "Level 3 Vetted Plastic Party Chair" then
+					table.insert(chairs, object)
+				end
+			end
+			table.sort(chairs, function(a, b)
+				if a.Position.X == b.Position.X then return a.Position.Z < b.Position.Z end
+				return a.Position.X < b.Position.X
+			end)
+			local selected = {chairs[math.max(1, math.floor(#chairs * .24))],
+				chairs[math.max(1, math.floor(#chairs * .57))],
+				chairs[math.max(1, math.floor(#chairs * .82))]}
+			for index, chair in ipairs(selected) do
+				if chair and chair.Parent and chair:GetAttribute("Level3_BlackoutShifted") ~= true then
+					chair.CFrame = chair.CFrame * CFrame.new((index - 2) * .55, 0, 1.15)
+						* CFrame.Angles(0, math.rad(index % 2 == 0 and 18 or -14), 0)
+					chair:SetAttribute("Level3_BlackoutShifted", true)
+				end
+			end
+		end
+
 		-- Monotonic replicated edge: clients must hear the power-down cue even
 		-- when a fast timeline correction skips over their local phase poll.
 		state:SetAttribute("Level3_BlackoutSerial",

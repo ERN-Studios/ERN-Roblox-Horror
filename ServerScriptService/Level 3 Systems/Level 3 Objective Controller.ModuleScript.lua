@@ -449,6 +449,11 @@ local function unlockExit(session: AnyTable)
 
 	local portal = session.Manifest.ExitPortal
 	portal.Model:SetAttribute("Level3_ExitUnlocked", true)
+	if portal.Wall and portal.Wall.Parent then
+		portal.Wall.CanCollide = false
+		portal.Wall.CanTouch = false
+		portal.Wall.CanQuery = true
+	end
 	for _, framePart in ipairs(portal.FrameParts) do
 		if framePart and framePart.Parent then
 			playTween(session, framePart, TweenInfo.new(0.60, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
@@ -525,10 +530,16 @@ local function escapePlayer(session: AnyTable, player: Player)
 	if not character or not root then return end
 
 	session.Escaping[player] = true
+	session.EscapeOrdinal = (session.EscapeOrdinal or 0) + 1
 	player:SetAttribute("Escaped", true)
 	root.AssemblyLinearVelocity = Vector3.zero
 	root.AssemblyAngularVelocity = Vector3.zero
-	character:PivotTo(session.Manifest.ExitSafeSpawn.CFrame * CFrame.new(0, 3, 0))
+	local slots = {
+		Vector3.new(-6, 3, -4), Vector3.new(0, 3, -4), Vector3.new(6, 3, -4),
+		Vector3.new(-6, 3, 4), Vector3.new(0, 3, 4), Vector3.new(6, 3, 4),
+	}
+	local slot = slots[((session.EscapeOrdinal - 1) % #slots) + 1]
+	character:PivotTo(session.Manifest.ExitSafeSpawn.CFrame * CFrame.new(slot))
 	fireSound(session, "Escape", session.Manifest.ExitPosition, player)
 	fireEscapeStatus(player)
 end
@@ -591,8 +602,8 @@ local function validateManifest(manifest: AnyTable, generation: number)
 		"Level 3 objective manifest is missing its hidden exit portal")
 	assert(portal.Wall and portal.Wall:IsA("BasePart") and portal.Wall:IsDescendantOf(portal.Model),
 		"Level 3 hidden exit portal is missing its wall")
-	assert(portal.Wall.CanCollide == false and portal.Wall.CanQuery == true,
-		"Level 3 hidden exit wall must be walk-through but ray-queryable")
+	assert(portal.Wall.CanCollide == true and portal.Wall.CanQuery == true,
+		"Level 3 hidden exit wall must begin solid and ray-queryable")
 	assert(type(portal.FrameParts) == "table" and #portal.FrameParts == 8,
 		"Level 3 hidden exit portal must contain eight reveal-frame pieces")
 	for _, framePart in ipairs(portal.FrameParts) do
@@ -655,6 +666,7 @@ function ObjectiveController.Start(manifest: AnyTable, generation: number): AnyT
 		ModuleGoal = #manifest.Modules,
 		ExitUnlocked = false,
 		Escaping = {},
+		EscapeOrdinal = 0,
 		IntroScheduled = false,
 	}
 	activeSession = session
@@ -701,6 +713,14 @@ function ObjectiveController.Start(manifest: AnyTable, generation: number): AnyT
 		end)
 		table.insert(session.Connections, connection)
 	end
+
+	local portal = manifest.ExitPortal
+	portal.Model:SetAttribute("Level3_ExitUnlocked", false)
+	portal.Wall.CanCollide = true
+	portal.Wall.CanTouch = false
+	portal.Wall.CanQuery = true
+	for _, framePart in ipairs(portal.FrameParts) do framePart.Transparency = 1 end
+	if portal.Light then portal.Light.Enabled = false end
 
 	local finalExit = manifest.FinalExit
 	if finalExit and finalExit.Parent then
@@ -783,6 +803,11 @@ function ObjectiveController.Stop()
 	local portal = session.Manifest.ExitPortal
 	if portal then
 		if portal.Model and portal.Model.Parent then portal.Model:SetAttribute("Level3_ExitUnlocked", false) end
+		if portal.Wall and portal.Wall.Parent then
+			portal.Wall.CanCollide = true
+			portal.Wall.CanTouch = false
+			portal.Wall.CanQuery = true
+		end
 		for _, framePart in ipairs(portal.FrameParts or {}) do
 			if framePart and framePart.Parent then framePart.Transparency = 1 end
 		end

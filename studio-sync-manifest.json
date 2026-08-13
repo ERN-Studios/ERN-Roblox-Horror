@@ -3,15 +3,15 @@
   "source": "Roblox Studio built-in MCP (.Source property read)",
   "studio": {
     "name": "Backrooms: No Way Out",
-    "id": "8d8343e4-4d2e-479a-9d26-f198e1561d5c"
+    "id": "510a575b-182f-44da-ad81-aa05621b7984"
   },
   "counts": {
     "scripts": 97,
     "remoteEvents": 16,
     "total": 113,
     "created": 0,
-    "updated": 2,
-    "unchanged": 111
+    "updated": 12,
+    "unchanged": 101
   },
   "extraMirroredFilesNotInStudio": [],
   "items": [
@@ -43,9 +43,9 @@
       "studioPath": "ServerScriptService.FlashlightSync",
       "className": "Script",
       "file": "ServerScriptService/FlashlightSync.Script.lua",
-      "bytes": 4952,
-      "sha256": "42cd0bf9184d2a3511cfa5178296b0d69d38fb45c6098bf6d4da05e4aabe47c7",
-      "status": "unchanged"
+      "bytes": 5647,
+      "sha256": "0953c8bede075f729b6bcb6df597e7ca496e25e7072f0b1db634f4529df10b4b",
+      "status": "updated"
     },
     {
       "studioPath": "ServerScriptService.EntityAI",
@@ -136,14 +136,6 @@
       "status": "unchanged"
     },
     {
-      "studioPath": "Workspace.Dummy.Animate",
-      "className": "LocalScript",
-      "file": "Workspace/Dummy/Animate.LocalScript.lua",
-      "bytes": 28802,
-      "sha256": "49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0",
-      "status": "unchanged"
-    },
-    {
       "studioPath": "Workspace.StarterCharacter.AnimateScript",
       "className": "LocalScript",
       "file": "Workspace/StarterCharacter/AnimateScript.LocalScript.lua",
@@ -152,33 +144,9 @@
       "status": "unchanged"
     },
     {
-      "studioPath": "StarterPlayer.StarterCharacterScripts.DisableDefaultWalkingSound",
+      "studioPath": "Workspace.Dummy.Animate",
       "className": "LocalScript",
-      "file": "StarterPlayer/StarterCharacterScripts/DisableDefaultWalkingSound.LocalScript.lua",
-      "bytes": 300,
-      "sha256": "b5309d09c60b9fb5ea319c24d34cbdc3b861fdb1726727a608944e528462e66f",
-      "status": "unchanged"
-    },
-    {
-      "studioPath": "StarterPlayer.StarterCharacterScripts.SetRunAnimation",
-      "className": "LocalScript",
-      "file": "StarterPlayer/StarterCharacterScripts/SetRunAnimation.LocalScript.lua",
-      "bytes": 654,
-      "sha256": "3f84b7c495f091703b0636958f6691c0c2f23c9c7f487e1a3637b3b0e7c37f07",
-      "status": "unchanged"
-    },
-    {
-      "studioPath": "StarterPlayer.StarterCharacterScripts.DanceEmote",
-      "className": "LocalScript",
-      "file": "StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua",
-      "bytes": 1349,
-      "sha256": "1c85fd6e901041587c388de9e1bb05501a08b1f6d2beb65ac3f227c8decf3a93",
-      "status": "unchanged"
-    },
-    {
-      "studioPath": "StarterPlayer.StarterCharacter.Animate",
-      "className": "LocalScript",
-      "file": "StarterPlayer/StarterCharacter/Animate.LocalScript.lua",
+      "file": "Workspace/Dummy/Animate.LocalScript.lua",
       "bytes": 28802,
       "sha256": "49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0",
       "status": "unchanged"
@@ -195,9 +163,9 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.FlashlightController",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/FlashlightController.LocalScript.lua",
-      "bytes": 19924,
-      "sha256": "ddf6f5b01fc10d50f4b7293cbd8e59bd218acd7fed37be13abee8cdaeec592c4",
-      "status": "unchanged"
+      "bytes": 21982,
+      "sha256": "ce9372db98fa70c21bd20cf5d664675fb35992dee40276a3e8783e6fa82462bd",
+      "status": "updated"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.JumpscareUI",
@@ -243,9 +211,9 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.SpectateController",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/SpectateController.LocalScript.lua",
-      "bytes": 6704,
-      "sha256": "df3252023f09c41bf36ef4b04b10bb0ca0bde211bd8096f3a7918e381e076796",
-      "status": "unchanged"
+      "bytes": 7112,
+      "sha256": "4f0cf21eb5f55f48bc64f97460a25f51cf53c6bfc302004500d359533b632e20",
+      "status": "updated"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.EntityShakeController",
@@ -315,24 +283,56 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 3 Reader Client.LocalScript.lua",
-      "bytes": 18016,
-      "sha256": "5e25e68755596a18f5ee48ab8e9a32c85a45167fa8303b3b0c0f40ae60959eb3",
-      "status": "unchanged"
+      "bytes": 18363,
+      "sha256": "7ea45169f890f0e345b8e19de140eb0f7f0ffc1ae7d27090c59b78b37a74e771",
+      "status": "updated"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 3 Lighting Controller.LocalScript.lua",
-      "bytes": 14951,
-      "sha256": "5f2af037d69c55b1f3ad7acf73fbbb9a0ed7cc63f25d824697b9e5ea2bc8f17f",
-      "status": "unchanged"
+      "bytes": 15761,
+      "sha256": "ac947820dfef41f90bfd89f8de10e93fde520d01c7858c3b56da1ce6c0cb78be",
+      "status": "updated"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Sound Controller",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 3 Sound Controller.LocalScript.lua",
-      "bytes": 22741,
-      "sha256": "ed54852a5b00971ba5940c6ec4167d4fdcaf205817ba219233c3d07f775df3c5",
+      "bytes": 22742,
+      "sha256": "68eeea4432a14aa3a6a1846448d5311318e7d4d09b802b12c9f326cc5586de9f",
+      "status": "updated"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterCharacterScripts.DisableDefaultWalkingSound",
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterCharacterScripts/DisableDefaultWalkingSound.LocalScript.lua",
+      "bytes": 300,
+      "sha256": "b5309d09c60b9fb5ea319c24d34cbdc3b861fdb1726727a608944e528462e66f",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterCharacterScripts.SetRunAnimation",
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterCharacterScripts/SetRunAnimation.LocalScript.lua",
+      "bytes": 654,
+      "sha256": "3f84b7c495f091703b0636958f6691c0c2f23c9c7f487e1a3637b3b0e7c37f07",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterCharacterScripts.DanceEmote",
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua",
+      "bytes": 1349,
+      "sha256": "1c85fd6e901041587c388de9e1bb05501a08b1f6d2beb65ac3f227c8decf3a93",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterCharacter.Animate",
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterCharacter/Animate.LocalScript.lua",
+      "bytes": 28802,
+      "sha256": "49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0",
       "status": "unchanged"
     },
     {
@@ -355,8 +355,8 @@
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 World Builder",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua",
-      "bytes": 172592,
-      "sha256": "d04d90842c2a8c0142400534116e63fde115fc574e05bd480344f8eb0dffc11e",
+      "bytes": 175628,
+      "sha256": "1189b779118a37db5274b8124207266c6b99d4c7bc17701ed4111675f8782946",
       "status": "updated"
     },
     {
@@ -373,7 +373,7 @@
       "file": "ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua",
       "bytes": 10840,
       "sha256": "6dcbef8d427a22075366f59e3dcdcadaddee548bcc6f0c9817e465bdff860353",
-      "status": "updated"
+      "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.README - LEVEL 2 TWEAKS",
@@ -443,25 +443,25 @@
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Configuration.ModuleScript.lua",
-      "bytes": 6238,
-      "sha256": "6595ab244e905254c42f4f01029c312a836363711f1c17203e5082828e3c47d4",
-      "status": "unchanged"
+      "bytes": 6876,
+      "sha256": "64d37979fe15a418584db602aed4ab1f2acd005dc12531f2c7296046bfe1f252",
+      "status": "updated"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 World Builder.ModuleScript.lua",
-      "bytes": 47260,
-      "sha256": "cf64c7be5a2d492d796e58b3311639cb531fd895adc3a9e0d370209393bb4537",
-      "status": "unchanged"
+      "bytes": 57820,
+      "sha256": "fd2e1150cdc8bb09bb9679f2588056e2d11e90a9c4166f33e918aab7c3325da9",
+      "status": "updated"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Objective Controller.ModuleScript.lua",
-      "bytes": 31698,
-      "sha256": "36c6e9ca697c69e756c5fd4d0353af83044f693ddcc7012cd8bc78ae21924fb7",
-      "status": "unchanged"
+      "bytes": 32604,
+      "sha256": "459654ea7b8c3777effc13cf80e89eca913b763ff6277203736d17cb1df4fdea",
+      "status": "updated"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
@@ -475,17 +475,17 @@
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Test Suite",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Test Suite.ModuleScript.lua",
-      "bytes": 29725,
-      "sha256": "6d6d174b2a21bb3641f5356089fa43e859683e88c1c28c52874b99ca51712bce",
-      "status": "unchanged"
+      "bytes": 29894,
+      "sha256": "68dbe0801a8b42c51dd7a3709b6e2f4439eecc6da0382d08d7e9e6a284dc075c",
+      "status": "updated"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Music Sequence Controller",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Music Sequence Controller.ModuleScript.lua",
-      "bytes": 7540,
-      "sha256": "f4ebe4c2bdc627af02461cba2322b4d2099d38da6a256d92a345ff9595f0226b",
-      "status": "unchanged"
+      "bytes": 8772,
+      "sha256": "e37a44e061cacaed52b442c1bb9e198d9b8a11d773afe5d181a0a5183fc6940f",
+      "status": "updated"
     },
     {
       "studioPath": "ServerStorage.LobbyBackup_20260731.GameManager",
@@ -808,22 +808,6 @@
       "status": "unchanged"
     },
     {
-      "studioPath": "RobloxReplicatedStorage.IntegrityCheckProcessorKey2_DynamicTranslationSender_LocalizationService",
-      "className": "RemoteEvent",
-      "file": "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_DynamicTranslationSender_LocalizationService.RemoteEvent.txt",
-      "bytes": 210,
-      "sha256": "e0b944c8cb924f2879742a665bcf4cdfedbb8ab699b4ed0d629cf2d5ec1a9474",
-      "status": "unchanged"
-    },
-    {
-      "studioPath": "RobloxReplicatedStorage.IntegrityCheckProcessorKey2_AutomaticAssetCaptureSender_LocalizationService",
-      "className": "RemoteEvent",
-      "file": "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_AutomaticAssetCaptureSender_LocalizationService.RemoteEvent.txt",
-      "bytes": 213,
-      "sha256": "9b95e9a8752b62a312fe5833af741b9b38691c26226f9c8465b55289b18e5bfc",
-      "status": "unchanged"
-    },
-    {
       "studioPath": "RobloxReplicatedStorage.IntegrityCheckProcessorKey2_LocalizationTableAnalyticsSender_LocalizationService",
       "className": "RemoteEvent",
       "file": "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_LocalizationTableAnalyticsSender_LocalizationService.RemoteEvent.txt",
@@ -837,6 +821,22 @@
       "file": "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_TextSafetyAnalyticsSender_LocalizationService.RemoteEvent.txt",
       "bytes": 211,
       "sha256": "d7149b0b3da5428845dfe6f941727138d00e6a58242255c5a70ada9a2749569b",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "RobloxReplicatedStorage.IntegrityCheckProcessorKey2_DynamicTranslationSender_LocalizationService",
+      "className": "RemoteEvent",
+      "file": "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_DynamicTranslationSender_LocalizationService.RemoteEvent.txt",
+      "bytes": 210,
+      "sha256": "e0b944c8cb924f2879742a665bcf4cdfedbb8ab699b4ed0d629cf2d5ec1a9474",
+      "status": "unchanged"
+    },
+    {
+      "studioPath": "RobloxReplicatedStorage.IntegrityCheckProcessorKey2_AutomaticAssetCaptureSender_LocalizationService",
+      "className": "RemoteEvent",
+      "file": "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_AutomaticAssetCaptureSender_LocalizationService.RemoteEvent.txt",
+      "bytes": 213,
+      "sha256": "9b95e9a8752b62a312fe5833af741b9b38691c26226f9c8465b55289b18e5bfc",
       "status": "unchanged"
     },
     {

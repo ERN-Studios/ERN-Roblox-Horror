@@ -25,7 +25,6 @@ local DEFAULT_AUDIO: {[string]: string} = {
 	HVAC = "rbxassetid://9125446543",
 	DoorRattle = "rbxassetid://9118901593",
 	DoorMovement = "rbxassetid://9119631915",
-	ReaderBeep = "rbxassetid://9119103325",
 	WaterDrip = "rbxassetid://9126193223",
 	PowerDown = "rbxassetid://75561087895749",
 	RoomListeningSong = "rbxassetid://140244948455675",
@@ -36,7 +35,6 @@ local LIBRARY_ALIASES: {[string]: {string}} = {
 	HVAC = {"HVAC", "Level 3 HVAC"},
 	DoorRattle = {"DoorRattle", "Level 3 Door Rattle"},
 	DoorMovement = {"DoorMovement", "Level 3 Door Movement"},
-	ReaderBeep = {"ReaderBeep", "Level 3 Reader Beep"},
 	WaterDrip = {"WaterDrip", "Level 3 Water Drip"},
 	PowerDown = {"PowerDown", "Level 3 Power Down"},
 	RoomListeningSong = {"RoomListeningSong", "The Room is Listening"},
@@ -64,35 +62,34 @@ local boundClientEvent: RemoteEvent? = nil
 local roomRegions: {RoomRegion} = {}
 local fluorescentDiffusers: {BasePart} = {}
 
-local fluorescentEmitter = Instance.new("Part")
-fluorescentEmitter.Name = "Level 3 Local Nearest Fluorescent Emitter"
-fluorescentEmitter.Size = Vector3.new(0.05, 0.05, 0.05)
-fluorescentEmitter.Transparency = 1
-fluorescentEmitter.Anchored = true
-fluorescentEmitter.CanCollide = false
-fluorescentEmitter.CanTouch = false
-fluorescentEmitter.CanQuery = false
-fluorescentEmitter.CastShadow = false
-fluorescentEmitter.Parent = workspace
-local fluorescentHum = Instance.new("Sound")
-fluorescentHum.Name = "Level 3 Nearest Fluorescent Hum"
-fluorescentHum.SoundId = DEFAULT_AUDIO.FluorescentHum
-fluorescentHum.Looped = true
-fluorescentHum.Volume = 0
-fluorescentHum.RollOffMode = Enum.RollOffMode.InverseTapered
-fluorescentHum.RollOffMinDistance = 4
-fluorescentHum.RollOffMaxDistance = 38
-fluorescentHum.Parent = fluorescentEmitter
+type FluorescentVoice = {Emitter: BasePart, Sound: Sound}
+local fluorescentVoices: {FluorescentVoice} = {}
+for voiceIndex = 1, 3 do
+	local emitter = Instance.new("Part")
+	emitter.Name = "Level 3 Local Fluorescent Emitter " .. voiceIndex
+	emitter.Size = Vector3.new(0.05, 0.05, 0.05)
+	emitter.Transparency = 1
+	emitter.Anchored = true
+	emitter.CanCollide = false
+	emitter.CanTouch = false
+	emitter.CanQuery = false
+	emitter.CastShadow = false
+	emitter.Parent = workspace
+	local hum = Instance.new("Sound")
+	hum.Name = "Level 3 Local Fluorescent Hum " .. voiceIndex
+	hum.SoundId = DEFAULT_AUDIO.FluorescentHum
+	hum.Looped = true
+	hum.Volume = 0
+	hum.RollOffMode = Enum.RollOffMode.InverseTapered
+	hum.RollOffMinDistance = 3
+	hum.RollOffMaxDistance = 34
+	hum.Parent = emitter
+	table.insert(fluorescentVoices, {Emitter=emitter, Sound=hum})
+end
 
-local powerDown = Instance.new("Sound")
-powerDown.Name = "Level 3 Power Down"
-powerDown.SoundId = DEFAULT_AUDIO.PowerDown
-powerDown.Volume = 0.92
-powerDown.Looped = false
-powerDown.Parent = SoundService
 local lastBlackoutActive = false
 local lastObservedRoomSongPhase = "STOPPED"
-local powerDownHoldUntil = 0
+local lastPowerDownAt = -math.huge
 
 local roomSong = Instance.new("Sound")
 roomSong.Name = "Level 3 - The Room is Listening"
@@ -163,10 +160,21 @@ end
 
 local function playPowerDown()
 	if not isActive() then return end
-	powerDown.SoundId = resolveId("PowerDown") or DEFAULT_AUDIO.PowerDown
-	powerDown.TimePosition = 0
-	powerDown:Play()
-	powerDownHoldUntil = os.clock() + 1.25
+	local now = os.clock()
+	if now - lastPowerDownAt < 1 then return end
+	lastPowerDownAt = now
+	local cue = Instance.new("Sound")
+	cue.Name = "Level 3 Power Down Transition"
+	cue.SoundId = resolveId("PowerDown") or DEFAULT_AUDIO.PowerDown
+	cue.Volume = 1
+	cue.Looped = false
+	cue.Parent = SoundService
+	cue.Ended:Once(function() if cue.Parent then cue:Destroy() end end)
+	Debris:AddItem(cue, 8)
+	task.spawn(function()
+		pcall(function() ContentProvider:PreloadAsync({cue}) end)
+		if cue.Parent and isActive() then cue:Play() end
+	end)
 end
 
 local function bindBlackoutSignal()
@@ -333,11 +341,8 @@ end
 
 type CueSpec = {Key: string, Volume: number, Speed: number}
 local CUES: {[string]: CueSpec} = {
-	ModuleCollected = {Key="ReaderBeep", Volume=0.31, Speed=1.06},
 	DoorMovement = {Key="DoorMovement", Volume=0.34, Speed=1.00},
 	DoorLocked = {Key="DoorRattle", Volume=0.38, Speed=0.88},
-	ExitUnlocked = {Key="ReaderBeep", Volume=0.42, Speed=1.20},
-	Escape = {Key="ReaderBeep", Volume=0.30, Speed=1.32},
 	PowerDown = {Key="PowerDown", Volume=0.92, Speed=1.00},
 }
 
@@ -347,12 +352,6 @@ local function playCue(cueValue: any, positionValue: any)
 	if not spec then return end
 	local position = if typeof(positionValue) == "Vector3" then positionValue :: Vector3 else nil
 	playOneShot(spec.Key, cueValue, position, spec.Volume, spec.Speed)
-	if cueValue == "ExitUnlocked" then
-		-- A quiet two-note confirmation, not a horror sting.
-		task.delay(0.18, function()
-			playOneShot("ReaderBeep", "ExitUnlockedSecond", nil, 0.27, 1.34)
-		end)
-	end
 end
 
 local function handleClientEvent(payload: any)
@@ -364,9 +363,7 @@ local function handleClientEvent(payload: any)
 		if workspace:GetAttribute("SelectedLevel") == LEVEL
 			and player:GetAttribute("InRound") == true
 			and player:GetAttribute("Escaped") ~= true then
-			powerDown.SoundId = resolveId("PowerDown") or DEFAULT_AUDIO.PowerDown
-			powerDown.TimePosition = 0
-			powerDown:Play()
+			playPowerDown()
 		end
 		return
 	end
@@ -517,7 +514,7 @@ end
 -- Preload the small, allowlisted cue set. Empty/failed assets remain harmless.
 task.spawn(function()
 	local temporary: {Sound} = {}
-	for _, key in ipairs({"DoorRattle", "DoorMovement", "ReaderBeep", "FluorescentHum", "PowerDown", "RoomListeningSong"}) do
+	for _, key in ipairs({"DoorRattle", "DoorMovement", "FluorescentHum", "PowerDown", "RoomListeningSong"}) do
 		local id = resolveId(key)
 		if id then
 			local sound = Instance.new("Sound")
@@ -578,21 +575,26 @@ RunService.Heartbeat:Connect(function(dt)
 	end
 	updateRoomSong(elapsed)
 	updateReaderCadence(now)
-	if os.clock() < powerDownHoldUntil and not powerDown.IsPlaying then
-		powerDown:Play()
-	end
 
 	local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-	local nearest: BasePart? = nil
-	local nearestDistance = math.huge
+	local nearestFixtures: {{Part: BasePart, Distance: number}} = {}
 	if root and root:IsA("BasePart") then
 		for index = #fluorescentDiffusers, 1, -1 do
 			local fixture = fluorescentDiffusers[index]
 			if not fixture.Parent then
 				table.remove(fluorescentDiffusers, index)
 			else
-				local distance = (fixture.Position - root.Position).Magnitude
-				if distance < nearestDistance then nearest, nearestDistance = fixture, distance end
+				local candidate = {Part=fixture, Distance=(fixture.Position - root.Position).Magnitude}
+				local inserted = false
+				for slot = 1, #nearestFixtures do
+					if candidate.Distance < nearestFixtures[slot].Distance then
+						table.insert(nearestFixtures, slot, candidate)
+						inserted = true
+						break
+					end
+				end
+				if not inserted then table.insert(nearestFixtures, candidate) end
+				if #nearestFixtures > #fluorescentVoices then table.remove(nearestFixtures) end
 			end
 		end
 	end
@@ -615,12 +617,17 @@ RunService.Heartbeat:Connect(function(dt)
 		lastObservedRoomSongPhase = sequencePhase
 		lastBlackoutActive = false
 	end
-	if playing and nearest then fluorescentEmitter.Position = nearest.Position end
-	local humTarget = if playing and nearest and sequencePhase ~= "BLACKOUT"
-		then ((sequencePhase == "PLAYING" or sequencePhase == "ARMED") and 0.035 or 0.15) else 0
-	fluorescentHum.Volume += (humTarget - fluorescentHum.Volume) * math.clamp(elapsed / .65, 0, 1)
-	if humTarget > 0 and not fluorescentHum.IsPlaying then fluorescentHum:Play() end
-	if humTarget == 0 and fluorescentHum.Volume < .003 and fluorescentHum.IsPlaying then fluorescentHum:Stop() end
+	for voiceIndex, voice in ipairs(fluorescentVoices) do
+		local candidate = nearestFixtures[voiceIndex]
+		if playing and candidate then voice.Emitter.Position = candidate.Part.Position end
+		local baseVolumes = {0.12, 0.075, 0.045}
+		local humTarget = if playing and candidate and sequencePhase ~= "BLACKOUT"
+			then baseVolumes[voiceIndex] * ((sequencePhase == "PLAYING" or sequencePhase == "ARMED") and .24 or 1)
+			else 0
+		voice.Sound.Volume += (humTarget - voice.Sound.Volume) * math.clamp(elapsed / .65, 0, 1)
+		if humTarget > 0 and not voice.Sound.IsPlaying then voice.Sound:Play() end
+		if humTarget == 0 and voice.Sound.Volume < .003 and voice.Sound.IsPlaying then voice.Sound:Stop() end
+	end
 
 	bindBlackoutSignal()
 end)

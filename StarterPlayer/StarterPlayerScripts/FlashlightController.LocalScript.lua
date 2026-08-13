@@ -23,6 +23,7 @@ local SWAY = 14         -- higher = snappier, lower = more lag/sway
 
 local mount, coreLight, spillLight
 local on = false
+local lastBeamProfile = ""
 local aimCF = nil
 local aimSendClock = 0
 
@@ -70,8 +71,48 @@ local function buildMount()
 	mount.Parent = workspace
 end
 
+local function beamProfile(): (number, number, number, number, number, number, string)
+	if workspace:GetAttribute("SelectedLevel") == 3 then
+		local blackout = workspace:GetAttribute("Level3BlackoutActive") == true
+		if blackout then
+			return 7.5, 58, 42, 1.85, 70, 92, "L3_BLACKOUT"
+		end
+		return 4.5, 52, 40, 1.05, 62, 86, "L3"
+	end
+	return 1.2, 38, 38, .3, 45, 75, "BASE"
+end
+
+local function applyBeamProfile()
+	local coreBrightness, coreRange, coreAngle, spillBrightness, spillRange, spillAngle, profile = beamProfile()
+	if profile == lastBeamProfile then return end
+	lastBeamProfile = profile
+	if coreLight then
+		coreLight.Brightness = coreBrightness
+		coreLight.Range = coreRange
+		coreLight.Angle = coreAngle
+	end
+	if spillLight then
+		spillLight.Brightness = spillBrightness
+		spillLight.Range = spillRange
+		spillLight.Angle = spillAngle
+	end
+end
+
 buildMount()
-workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(buildMount)
+applyBeamProfile()
+workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(function()
+	lastBeamProfile = ""
+	buildMount()
+	applyBeamProfile()
+end)
+workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(function()
+	lastBeamProfile = ""
+	applyBeamProfile()
+end)
+workspace:GetAttributeChangedSignal("Level3BlackoutActive"):Connect(function()
+	lastBeamProfile = ""
+	applyBeamProfile()
+end)
 
 local rayParams = RaycastParams.new()
 rayParams.FilterType = Enum.RaycastFilterType.Exclude
@@ -94,9 +135,12 @@ RunService:BindToRenderStep("MongoFlashlight", Enum.RenderPriority.Camera.Value 
 	local camera = workspace.CurrentCamera
 	if not camera then return end
 	if not (mount and mount.Parent == workspace) then
+		lastBeamProfile = ""
 		buildMount()
+		applyBeamProfile()
 		if not mount then return end
 	end
+	applyBeamProfile()
 
 	-- smooth the aim so the beam trails your turn like a held object
 	aimCF = aimCF and aimCF:Lerp(camera.CFrame, math.clamp(dt * SWAY, 0, 1))
@@ -147,9 +191,15 @@ RunService:BindToRenderStep("MongoFlashlight", Enum.RenderPriority.Camera.Value 
 				adornee = node
 			end
 			nearHighlight.Adornee = adornee
-			-- Keep the texture-readable near field, but at 30% of its old opacity.
-			nearHighlight.FillTransparency = math.clamp(
-				0.898 + nearHit.Distance / 500, 0.904, 0.946)
+			-- Level 3's dark carpet and blackout grade require a stronger—but still
+			-- occluded—near-field reflection. Other levels retain their old look.
+			if workspace:GetAttribute("SelectedLevel") == 3 then
+				local base = workspace:GetAttribute("Level3BlackoutActive") == true and .73 or .82
+				nearHighlight.FillTransparency = math.clamp(base + nearHit.Distance / 420, base, .89)
+			else
+				nearHighlight.FillTransparency = math.clamp(
+					0.898 + nearHit.Distance / 500, 0.904, 0.946)
+			end
 			nearHighlight.Enabled = true
 		else
 			nearHighlight.Enabled = false
@@ -498,11 +548,19 @@ end)
 -- one-shot event binding to go stale, and it works exactly the same whether
 -- you're alive, dead, or spectating (the beams live on THEIR heads, not yours)
 RunService.Heartbeat:Connect(function()
+	local level3 = workspace:GetAttribute("SelectedLevel") == 3
+	local blackout = level3 and workspace:GetAttribute("Level3BlackoutActive") == true
 	for char, beams in pairs(mateBeams) do
 		local flag = char:FindFirstChild("FlashlightOn")
 		local hum = char:FindFirstChildOfClass("Humanoid")
 		local shine = flag ~= nil and flag.Value == true
 			and hum ~= nil and hum.Health > 0
+		beams.core.Brightness = blackout and 7.5 or (level3 and 4.5 or 1.2)
+		beams.core.Range = level3 and 52 or 32
+		beams.core.Angle = level3 and 40 or 30
+		beams.spill.Brightness = blackout and 1.85 or (level3 and 1.05 or .24)
+		beams.spill.Range = level3 and 62 or 40
+		beams.spill.Angle = level3 and 86 or 70
 		beams.core.Enabled = shine
 		beams.spill.Enabled = shine
 	end

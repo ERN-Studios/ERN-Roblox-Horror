@@ -607,8 +607,55 @@ local function makeHallCeiling(parent, hall)
 	local xs, slotWidth = skylightSlotsFor(hall)
 	table.sort(xs)
 
+	-- Skylights are not always end-to-end lines any more: each hall rolls a
+	-- pattern — full lines, dashes, a checkerboard of punched openings, or a
+	-- single centre band. Column dodging still keys off the X bands, which
+	-- stay identical; only the open stretch along Z varies.
+	local hallKey = math.floor(tonumber(hall.LocalSeed) or tonumber(hall.Index) or 0)
+	local authored = hall.Archetype == "Skylight Hall" or hall.Role == "Slide Hall"
+	local patternRoll = Random.new(hallKey + 4177):NextNumber()
+	local pattern = (authored or patternRoll < .35) and "Lines"
+		or patternRoll < .6 and "Dashed"
+		or patternRoll < .85 and "Punched"
+		or "Centre"
+
+	local function openIntervals(slotIndex)
+		local minZ, maxZ = hall.MinZ + 2, hall.MaxZ - 2
+		local span = maxZ - minZ
+		if pattern == "Lines" then
+			return {{minZ, maxZ}}
+		elseif pattern == "Centre" then
+			local bandWidth = span * .45
+			local mid = (minZ + maxZ) * .5
+			return {{mid - bandWidth * .5, mid + bandWidth * .5}}
+		elseif pattern == "Dashed" then
+			local count = math.clamp(math.floor(span / 70) + 2, 2, 4)
+			local step = span / count
+			local opens = {}
+			for dash = 1, count do
+				local z0 = minZ + (dash - 1) * step + step * .16
+				table.insert(opens, {z0, z0 + step * .68})
+			end
+			return opens
+		end
+		-- Punched: square openings marching down the strip, alternate slots
+		-- phase-shifted for a checkerboard.
+		local punchSize = slotWidth + 4
+		local count = math.clamp(math.floor(span / (punchSize * 2.4)), 2, 6)
+		local step = span / count
+		local phase = slotIndex % 2 == 0 and step * .5 or 0
+		local opens = {}
+		for punch = 1, count do
+			local mid = minZ + (punch - .5) * step + phase
+			if mid + punchSize * .5 <= maxZ then
+				table.insert(opens, {mid - punchSize * .5, mid + punchSize * .5})
+			end
+		end
+		return opens
+	end
+
 	local cursor = hall.MinX
-	for _, x in ipairs(xs) do
+	for slotIndex, x in ipairs(xs) do
 		local segmentEnd = x - slotWidth * .5
 		if segmentEnd - cursor > .5 then
 			local slab = tiledPart(parent, "Level 2 Hall Ceiling",
@@ -616,15 +663,31 @@ local function makeHallCeiling(parent, hall)
 				Vector3.new(segmentEnd - cursor, 2, hall.Depth), color, {Enum.NormalId.Bottom}, 9)
 			slab.CanCollide = true
 		end
-		-- The slot reads as a fully OPEN cut — no visible glass. The barrier
-		-- part stays for containment but is completely invisible.
-		local pane = part(parent, "Level 2 Frosted Skylight Diffuser",
-			CFrame.new(Vector3.new(x, height + 1, hall.Center.Z)),
-			Vector3.new(slotWidth, .6, hall.Depth), Color3.fromRGB(218, 231, 226),
-			Enum.Material.SmoothPlastic, 1)
-		pane.CanCollide = true
-		pane.CanTouch = false
-		pane.CastShadow = false
+		-- Open stretches read as fully OPEN cuts (invisible barrier for
+		-- containment); the rest of the strip is sealed with ceiling.
+		local zCursor = hall.MinZ
+		for _, open in ipairs(openIntervals(slotIndex)) do
+			if open[1] - zCursor > .5 then
+				local infill = tiledPart(parent, "Level 2 Hall Ceiling",
+					CFrame.new(Vector3.new(x, height + 1, (zCursor + open[1]) * .5)),
+					Vector3.new(slotWidth, 2, open[1] - zCursor), color, {Enum.NormalId.Bottom}, 9)
+				infill.CanCollide = true
+			end
+			local pane = part(parent, "Level 2 Frosted Skylight Diffuser",
+				CFrame.new(Vector3.new(x, height + 1, (open[1] + open[2]) * .5)),
+				Vector3.new(slotWidth, .6, open[2] - open[1]), Color3.fromRGB(218, 231, 226),
+				Enum.Material.SmoothPlastic, 1)
+			pane.CanCollide = true
+			pane.CanTouch = false
+			pane.CastShadow = false
+			zCursor = open[2]
+		end
+		if hall.MaxZ - zCursor > .5 then
+			local infill = tiledPart(parent, "Level 2 Hall Ceiling",
+				CFrame.new(Vector3.new(x, height + 1, (zCursor + hall.MaxZ) * .5)),
+				Vector3.new(slotWidth, 2, hall.MaxZ - zCursor), color, {Enum.NormalId.Bottom}, 9)
+			infill.CanCollide = true
+		end
 		cursor = x + slotWidth * .5
 	end
 	if hall.MaxX - cursor > .5 then
@@ -1220,9 +1283,10 @@ local function makeTubeFromPoints(parent, points, radius, color, name, openTop, 
 			local visual = template:Clone()
 			configureSlideVisual(visual, template, name .. " Visual " .. suffix,
 				base, radius, length, color, visualOverlap)
-			-- Near the tube ends both faces render, so nobody can see
-			-- through the shell while standing at a mouth.
-			if (index <= 3 or index >= #points - 4) and visual:IsA("MeshPart") then
+			-- Every shell renders both faces: the playtests kept finding new
+			-- see-through angles (mid-tube, underside), so partial coverage
+			-- is not worth the saved triangles.
+			if visual:IsA("MeshPart") then
 				visual.DoubleSided = true
 			end
 			visual.Parent = visuals
@@ -1399,11 +1463,18 @@ local function makeSlideHall(parent, hall, index, doors)
 
 	local columnOffsetX = math.min(hall.Width * .30, hall.Width * .5 - 16)
 	local columnOffsetZ = math.min(hall.Depth * .30, hall.Depth * .5 - 16)
+	-- The grand hall's exit flume leaves east along the deck line; no
+	-- corner column may crowd that path or its mouth.
+	local flumeLineZ = hall.MinZ + Configuration.WallThickness * .5
+		+ math.min(46, hall.Depth * .3) * .5
 	for _, sx in ipairs({-1, 1}) do
 		for _, sz in ipairs({-1, 1}) do
 			local columnX = dodgeSkylightX(hall, center.X + sx * columnOffsetX, 20)
 			local columnZ = center.Z + sz * columnOffsetZ
-			if not nearDoorApproach(hall, doors, columnX, columnZ, 20) then
+			local blocksFlume = hall.IsGrand and sx == 1
+				and math.abs(columnZ - flumeLineZ) < 20
+			if not blocksFlume
+				and not nearDoorApproach(hall, doors, columnX, columnZ, 20) then
 				makeColumn(hallFolder, Vector3.new(columnX, -depth, columnZ), height + depth, 9)
 			end
 		end
@@ -1594,8 +1665,8 @@ local function makeExitFlume(parent, layout, hall, deck)
 	-- The room floor is aligned to the hidden collision floor of the tube.
 	-- That removes the old four-stud ledge at the doorway.
 	local floorTop = roomEntry.Y - radius * .9
-	local catchSize = 48
-	local gatewayHeight = 22
+	local catchSize = 78
+	local gatewayHeight = 30
 	local westWallX = roomEntry.X - roomPenetration
 	local catchCenter = Vector3.new(
 		westWallX + catchSize * .5,
@@ -1670,7 +1741,7 @@ local function makeExitFlume(parent, layout, hall, deck)
 		framePiece.CanCollide = true
 	end
 
-	makeCeilingPanel(parent, catchCenter, "Gateway", Vector3.new(30, .55, 10), 0, floorTop + gatewayHeight)
+	makeCeilingPanel(parent, catchCenter, "Gateway", Vector3.new(44, .55, 13), 0, floorTop + gatewayHeight)
 
 	local safeSpawnPosition = doorCenter - outward * 4 + Vector3.new(0, -doorHeight * .5 + .12, 0)
 	local safeSpawn = part(parent, "Level 2 Exit Safe Spawn",
@@ -2940,8 +3011,10 @@ local function dressHall(parent, hall, depth, doors, index, density)
 	-- Lifebuoys and a stopped clock on doorless wall stretches.
 	local buoyX = hall.Center.X + rng:NextNumber(-.3, .3) * hall.Width
 	if wallSpotClear(doors.North, buoyX) then
+		-- Yaw (not roll): the ring's axis points OUT of the wall, so the disc
+		-- hangs flat against it instead of lying half-buried inside it.
 		local buoy = part(parent, "Level 2 Lifebuoy " .. index,
-			CFrame.new(Vector3.new(buoyX, 6.5, hall.MinZ + 2.2)) * CFrame.Angles(0, 0, math.pi * .5),
+			CFrame.new(Vector3.new(buoyX, 6.5, hall.MinZ + 2.12)) * CFrame.Angles(0, math.pi * .5, 0),
 			Vector3.new(.6, 3.6, 3.6), Color3.fromRGB(226, 96, 84), Enum.Material.SmoothPlastic)
 		buoy.Shape = Enum.PartType.Cylinder
 		buoy.CanCollide = false
@@ -2949,7 +3022,7 @@ local function dressHall(parent, hall, depth, doors, index, density)
 	local clockX = hall.Center.X + rng:NextNumber(-.25, .25) * hall.Width
 	if rng:NextNumber() < .5 and wallSpotClear(doors.South, clockX) then
 		local face = part(parent, "Level 2 Stopped Clock " .. index,
-			CFrame.new(Vector3.new(clockX, height - 6, hall.MaxZ - 2.2)) * CFrame.Angles(0, 0, math.pi * .5),
+			CFrame.new(Vector3.new(clockX, height - 6, hall.MaxZ - 2.08)) * CFrame.Angles(0, math.pi * .5, 0),
 			Vector3.new(.5, 4.2, 4.2), Color3.fromRGB(238, 238, 228), Enum.Material.SmoothPlastic)
 		face.Shape = Enum.PartType.Cylinder
 		face.CanCollide = false

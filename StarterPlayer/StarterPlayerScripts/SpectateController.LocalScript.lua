@@ -128,6 +128,14 @@ RunService.RenderStepped:Connect(function(dt)
 	beamMount.CFrame = cam.CFrame
 	local fo = char:FindFirstChild("FlashlightOn")
 	local on = fo ~= nil and fo.Value
+	local level3 = workspace:GetAttribute("SelectedLevel") == 3
+	local blackout = level3 and workspace:GetAttribute("Level3BlackoutActive") == true
+	core.Brightness = blackout and 7.5 or (level3 and 4.5 or 5)
+	core.Range = level3 and 52 or 35
+	core.Angle = level3 and 40 or 32
+	spill.Brightness = blackout and 1.85 or (level3 and 1.05 or 1)
+	spill.Range = level3 and 62 or 45
+	spill.Angle = level3 and 86 or 75
 	core.Enabled = on
 	spill.Enabled = on
 end)
