@@ -68,26 +68,34 @@ currentChar = function()
 end
 
 local function applySpeed()
-	local _, hum = currentChar()
+	local character, hum = currentChar()
 	if not hum then return end
+	local desiredSpeed
 	if not inRound() then
 		-- Lobby sprint is unlimited: it uses the regular sprint speed without
 		-- touching the level stamina/exhaustion state.
 		state = sprinting and "sprint" or "walk"
-		hum.WalkSpeed = sprinting and SPRINT_SPEED or WALK_SPEED
+		desiredSpeed = sprinting and SPRINT_SPEED or WALK_SPEED
+		character:SetAttribute("Level2_DesiredWalkSpeed", desiredSpeed)
+		hum.WalkSpeed = desiredSpeed
 		return
 	end
 
 	if crouching then
 		state = "crouch"
-		hum.WalkSpeed = CROUCH_SPEED
+		desiredSpeed = CROUCH_SPEED
 	elseif sprinting and stamina > 0 and not exhausted then
 		state = "sprint"
-		hum.WalkSpeed = SPRINT_SPEED
+		desiredSpeed = SPRINT_SPEED
 	else
 		state = "walk"
-		hum.WalkSpeed = WALK_SPEED
+		desiredSpeed = WALK_SPEED
 	end
+	-- Publish the intended speed separately from WalkSpeed. Deferred property
+	-- signals can observe the slide controller's re-zero instead of this write;
+	-- the attribute gives every movement lock an unambiguous restore target.
+	character:SetAttribute("Level2_DesiredWalkSpeed", desiredSpeed)
+	hum.WalkSpeed = desiredSpeed
 end
 
 local function refreshSprint()
@@ -251,7 +259,8 @@ end)
 
 touchJumpButton.Activated:Connect(function()
 	if not inRound() then return end
-	local _, hum = currentChar()
+	local character, hum = currentChar()
+	if character and character:GetAttribute("Level2_ForcedSliding") == true then return end
 	if hum and hum.Health > 0 and hum:GetState() ~= Enum.HumanoidStateType.Dead then
 		hum.Jump = true
 		hum:ChangeState(Enum.HumanoidStateType.Jumping)
@@ -331,7 +340,8 @@ RunService.Heartbeat:Connect(function(dt)
 	if devUnlimited() then
 		stamina = staminaMax() -- dev cheat: never drains
 		exhausted = false
-	elseif state == "sprint" and moving then
+	elseif state == "sprint" and moving
+		and not (char and char:GetAttribute("Level2_ForcedSliding") == true) then
 		-- adrenaline: the Entity is (or was just) on you → stamina lasts 3x longer
 		stamina = stamina - (SPRINT_DRAIN / (adrenalized() and ADRENALINE_MUL or 1)) * dt
 		if stamina <= 0 then

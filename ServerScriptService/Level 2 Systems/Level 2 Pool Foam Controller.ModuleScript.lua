@@ -328,6 +328,14 @@ local function createEntity(session, id, slotId, spawnPosition, hallIndex, spawn
 		Target = nil,
 		WasMoving = false,
 		Reached = false,
+		NoProgressFor = 0,
+		RepathAttempts = 0,
+		StationaryFor = 0,
+		ProgressAnchor = spawnPosition,
+		ProgressGoal = nil,
+		ProgressGoalDistance = math.huge,
+		ProgressTarget = nil,
+		UnreachableUntil = {},
 		ActionSerial = 0,
 	}
 	configureModel(session, entity, model)
@@ -335,7 +343,11 @@ local function createEntity(session, id, slotId, spawnPosition, hallIndex, spawn
 	entity.Navigator = session.Navigator.new(model, session.Manifest, session.Configuration.Movement, {
 		RuntimeFolder = session.RuntimeFolder,
 	})
-	entity.Navigator:WarpTo(spawnPosition)
+	if not entity.Navigator:WarpTo(spawnPosition, nil, true) then
+		entity.Navigator:Destroy()
+		pcall(function() session.ProxyFactory.Destroy(model) end)
+		return nil, "Pool Foam spawn has no validated floor: " .. id
+	end
 	setEntityAnimation(entity, "Idle", true)
 	return entity
 end
@@ -502,14 +514,17 @@ local function entityLineOfSight(session, entity, character, targetPosition)
 	return result == nil or result.Instance:IsDescendantOf(character)
 end
 
-local function bestTarget(session, entity)
+local function bestTarget(session, entity, now)
 	local bestPlayer, bestRoot, bestDistance
 	bestDistance = math.huge
 	for _, player in ipairs(Players:GetPlayers()) do
 		local root = livingPlayer(session, player)
 		-- The opening statue trick is confined to the Kids Area. Once a pump is
 		-- online, the active entity may stalk through the connected complex.
-		if root and (session.Pumps >= 1 or positionInKids(session, root.Position)) then
+		local blockedUntil = entity.UnreachableUntil[player] or 0
+		if blockedUntil <= now then entity.UnreachableUntil[player] = nil end
+		if root and now >= blockedUntil
+			and (session.Pumps >= 1 or positionInKids(session, root.Position)) then
 			local distance = (root.Position - entity.Navigator:GetPosition()).Magnitude
 			if distance < bestDistance then
 				bestPlayer, bestRoot, bestDistance = player, root, distance
@@ -626,13 +641,19 @@ end
 local function choosePatrolPosition(session, entity)
 	local current = entity.Navigator:GetPosition()
 	local candidates = {}
+	local localCandidates = {}
+	local _, currentHallIndex = entity.Navigator:FindHall(current)
 	for _, node in ipairs(session.Nodes) do
 		if (node.Position - current).Magnitude > 7
 			and (not entity.PatrolPosition or (node.Position - entity.PatrolPosition).Magnitude > 1)
 		then
 			table.insert(candidates, node.Position)
+			if node.HallIndex == currentHallIndex then
+				table.insert(localCandidates, node.Position)
+			end
 		end
 	end
+	if #localCandidates > 0 then candidates = localCandidates end
 	if #candidates == 0 then
 		for _, hall in ipairs(session.KidsHalls) do table.insert(candidates, hallCenter(hall)) end
 	end
@@ -658,12 +679,22 @@ local function movementSpeed(session, hunting)
 	return base * multiplier
 end
 
+local function resetProgressWindow(entity, position, goal, resetAttempts)
+	entity.NoProgressFor = 0
+	entity.ProgressAnchor = position
+	entity.ProgressGoal = goal
+	entity.ProgressGoalDistance = goal and (goal - position).Magnitude or math.huge
+	if resetAttempts ~= false then entity.RepathAttempts = 0 end
+end
+
 local function updateEntity(session, entity, deltaTime, now)
 	local active = entityIsActive(session, entity)
 	setModelAttribute(entity.Model, "Level2_PoolFoamActiveMover", active)
 	if not active or session.Phase == PHASES.Dormant then
 		entity.Navigator:Stop()
 		entity.WasMoving = false
+		entity.StationaryFor = 0
+		resetProgressWindow(entity, entity.Navigator:GetPosition(), nil, true)
 		if entity.Observed then
 			setEntityAnimationPaused(entity, true)
 		else
@@ -679,10 +710,13 @@ local function updateEntity(session, entity, deltaTime, now)
 		setEntityAnimationPaused(entity, true)
 		return
 	end
-	setEntityAnimationPaused(entity, false)
 
-	local player, root, distance = bestTarget(session, entity)
+	local player, root, distance = bestTarget(session, entity, now)
 	local pursuing = player ~= nil
+	if entity.ProgressTarget ~= player then
+		entity.ProgressTarget = player
+		resetProgressWindow(entity, entity.Navigator:GetPosition(), entity.Navigator:GetGoal(), true)
+	end
 	entity.Target = pursuing and player or nil
 	if pursuing and instantKill(session, entity, player, distance, now) then
 		entity.WasMoving = false
@@ -693,8 +727,10 @@ local function updateEntity(session, entity, deltaTime, now)
 	if pursuing and distance <= stopDistance then
 		entity.Navigator:Stop()
 		entity.WasMoving = false
-		setEntityAnimation(entity, "Walk")
-		setEntityAnimationPaused(entity, true)
+		entity.StationaryFor = 0
+		resetProgressWindow(entity, entity.Navigator:GetPosition(), nil, true)
+		setEntityAnimation(entity, "Idle")
+		setEntityAnimationPaused(entity, false)
 		return
 	end
 	if now >= entity.NextGoalAt then
@@ -711,12 +747,61 @@ local function updateEntity(session, entity, deltaTime, now)
 	entity.Reached = entity.Navigator:Step(deltaTime, movementSpeed(session, hunting))
 	local after = entity.Navigator:GetPosition()
 	entity.WasMoving = (after - before).Magnitude > 0.002
-	-- One authored locomotion clip drives every stalking phase.
-	setEntityAnimation(entity, "Walk")
-	setEntityAnimationPaused(entity, not entity.WasMoving)
-	if entity.WasMoving and now >= entity.NextTrailAt then
-		entity.NextTrailAt = now + 0.7
-		createTrail(session, entity, before)
+	if entity.WasMoving then
+		entity.StationaryFor = 0
+		-- One authored locomotion clip drives every moving phase; the Hunt state
+		-- resolves to the same Walk track at its faster authored playback (and
+		-- the hunt proxy tint) without a stop/restart pose snap.
+		setEntityAnimation(entity, hunting and "Hunt" or "Walk")
+		setEntityAnimationPaused(entity, false)
+		if now >= entity.NextTrailAt then
+			entity.NextTrailAt = now + 0.7
+			createTrail(session, entity, before)
+		end
+	else
+		entity.StationaryFor += deltaTime
+		-- Step consumes reached intermediate waypoints in the same frame, so any
+		-- remaining zero-motion frame is genuine waiting/blockage and must be Idle.
+		setEntityAnimation(entity, "Idle")
+		setEntityAnimationPaused(entity, false)
+	end
+
+	local currentGoal = entity.Navigator:GetGoal()
+	if entity.Reached or not currentGoal then
+		resetProgressWindow(entity, after, nil, true)
+	else
+		if not entity.ProgressGoal or (currentGoal - entity.ProgressGoal).Magnitude > 1 then
+			resetProgressWindow(entity, after, currentGoal, true)
+		end
+		entity.NoProgressFor += deltaTime
+		local movement = session.Configuration.Movement or {}
+		local stuckSeconds = numberOr(movement.StuckRepathSeconds, 1.1, 0.35, 8)
+		if entity.NoProgressFor >= stuckSeconds then
+			local netTravel = (after - entity.ProgressAnchor).Magnitude
+			local currentDistance = (currentGoal - after).Magnitude
+			local goalProgress = entity.ProgressGoalDistance - currentDistance
+			if netTravel >= .5 or goalProgress >= .35 then
+				entity.RepathAttempts = 0
+			else
+				entity.RepathAttempts += 1
+				if entity.RepathAttempts == 1 then
+					entity.Navigator:SetGoal(currentGoal, true)
+				else
+					if pursuing and player then
+						local cooldown = numberOr(movement.UnreachableTargetCooldown, 3, 0.5, 30)
+						entity.UnreachableUntil[player] = now + cooldown
+						entity.Target = nil
+						entity.ProgressTarget = nil
+					end
+					entity.PatrolPosition = choosePatrolPosition(session, entity)
+					entity.Navigator:SetGoal(entity.PatrolPosition, true)
+					entity.RepathAttempts = 0
+					entity.NextGoalAt = now + numberOr(movement.UpdateInterval, 0.1, 0.05, 1)
+				end
+			end
+			local trackedGoal = entity.Navigator:GetGoal()
+			resetProgressWindow(entity, after, trackedGoal, false)
+		end
 	end
 end
 
@@ -724,7 +809,13 @@ local function refreshTemplate(session, entity)
 	if not session.ProxyFactory.IsTemporaryProxy(entity.Model) then return end
 	local template = session.ProxyFactory.ResolveTemplate(entity.SlotId, session.AssetsFolder)
 	if not template then return end
-	local pivot = entity.Model:GetPivot()
+	local oldModel = entity.Model
+	local oldNavigator = entity.Navigator
+	local oldAnimation = entity.Animation
+	local oldFoot = oldNavigator:GetPosition()
+	local oldFacing = oldNavigator:GetFacing()
+	local oldGoal = oldNavigator:GetGoal()
+	local pivot = oldModel:GetPivot()
 	local ok, replacement = pcall(function()
 		return session.ProxyFactory.Create(entity.SlotId, session.RuntimeFolder, {
 			CFrame = pivot,
@@ -737,17 +828,33 @@ local function refreshTemplate(session, entity)
 		warn("[Pool Foam] final template refresh failed for " .. entity.Id .. ": " .. tostring(replacement))
 		return
 	end
-	local oldModel = entity.Model
-	entity.Navigator:Destroy()
-	if entity.Animation then pcall(function() entity.Animation:Destroy() end) end
-	entity.Animation = nil
-	entity.AnimationPaused = false
-	entity.Model = replacement
+	if session.ProxyFactory.IsTemporaryProxy(replacement) then
+		pcall(function() session.ProxyFactory.Destroy(replacement) end)
+		warn("[Pool Foam] resolved template remained invalid for " .. entity.Id)
+		return
+	end
 	configureModel(session, entity, replacement)
-	entity.Animation = createAnimation(session, replacement, entity.SlotId)
-	entity.Navigator = session.Navigator.new(replacement, session.Manifest, session.Configuration.Movement, {
+	local replacementAnimation = createAnimation(session, replacement, entity.SlotId)
+	local replacementNavigator = session.Navigator.new(replacement, session.Manifest, session.Configuration.Movement, {
 		RuntimeFolder = session.RuntimeFolder,
 	})
+	if not replacementNavigator:WarpTo(oldFoot, oldFacing) then
+		replacementNavigator:Destroy()
+		if replacementAnimation then pcall(function() replacementAnimation:Destroy() end) end
+		pcall(function() session.ProxyFactory.Destroy(replacement) end)
+		warn("[Pool Foam] final template has no validated floor for " .. entity.Id)
+		return
+	end
+	if oldGoal then replacementNavigator:SetGoal(oldGoal, true) end
+
+	entity.Model = replacement
+	entity.Navigator = replacementNavigator
+	entity.Animation = replacementAnimation
+	entity.AnimationPaused = false
+	entity.StationaryFor = 0
+	resetProgressWindow(entity, replacementNavigator:GetPosition(), oldGoal, true)
+	oldNavigator:Destroy()
+	if oldAnimation then pcall(function() oldAnimation:Destroy() end) end
 	pcall(function() session.ProxyFactory.Destroy(oldModel) end)
 	setEntityAnimation(entity, entity.Observed and "Walk" or "Idle", true)
 	setEntityAnimationPaused(entity, entity.Observed)
@@ -987,6 +1094,8 @@ function Controller.GetDebugSnapshot()
 			Observers = table.clone(entity.Observers),
 			Active = entityIsActive(session, entity),
 			Moving = entity.WasMoving,
+			NoProgressFor = entity.NoProgressFor,
+			RepathAttempts = entity.RepathAttempts,
 			RevealRemaining = math.max(0, entity.RevealUntil - os.clock()),
 			Navigator = navigator,
 			TemporaryProxy = session.ProxyFactory.IsTemporaryProxy(entity.Model),

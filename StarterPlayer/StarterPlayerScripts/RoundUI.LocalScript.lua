@@ -591,7 +591,9 @@ end
 local function startSpectating()
  spectating = true
  spectateTarget = nil
- spectateBanner.Visible = true
+ -- The banner stays hidden: SpectateController owns the on-screen spectate
+ -- label, and showing this one too stacked two "no surviving signal"
+ -- messages on top of each other.
  updateSpectating()
 end
 
@@ -615,6 +617,14 @@ RunService.RenderStepped:Connect(function(dt)
   spectateClock = 0
   updateSpectating()
  end
+end)
+
+-- Emergency Re-entry loads a fresh gameplay character without firing any
+-- round status event, so the death/spectate state must clear on the new
+-- body itself — otherwise the spectate banner outlives the revival.
+player.CharacterAdded:Connect(function()
+ dead = false
+ stopSpectating()
 end)
 
 local function hideRoundEnding(immediate)

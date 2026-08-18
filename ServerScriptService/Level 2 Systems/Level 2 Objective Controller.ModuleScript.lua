@@ -166,14 +166,34 @@ local function openPressureDoors(session)
 	end
 
 	for _, record in ipairs(session.Manifest.PressureDoors) do
-		if record.Door and record.Door.Parent then
-			record.Door.CanCollide = false
-			record.Door.Transparency = .72
-			record.Door.Color = OPEN_COLOR
-			record.Door.Material = Enum.Material.Neon
+		local door = record.Door
+		if door and door.Parent then
+			-- Slide the heavy vertical door up into the roof void, matching its
+			-- sound cue. The old treatment (pale Neon at .72 transparency) left
+			-- a glowing white film across the whole doorway instead of opening
+			-- it. Collision drops immediately so nobody rides the door up.
+			door.CanCollide = false
+			local rise = Vector3.new(0, door.Size.Y + 6, 0)
+			local slideInfo = TweenInfo.new(3.4, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
+			local doorTween = TweenService:Create(door, slideInfo, {CFrame = door.CFrame + rise})
+			doorTween.Completed:Connect(function()
+				if door.Parent then door.Transparency = 1 end
+			end)
+			doorTween:Play()
+			local stripe = record.Stripe
+			if stripe and stripe.Parent then
+				stripe.Color = OPEN_COLOR
+				local stripeTween = TweenService:Create(stripe, slideInfo, {CFrame = stripe.CFrame + rise})
+				stripeTween.Completed:Connect(function()
+					if stripe.Parent then stripe.Transparency = 1 end
+				end)
+				stripeTween:Play()
+			end
 		end
-		-- The grand hall's approaches drain as the doors release.
-		drain(record)
+		-- The grand hall's approach corridors KEEP their water — only each
+		-- pump's own announced "DRAINING LOCAL SECTION" corridor ever drains.
+		-- Bulk-draining every pressure corridor here silently emptied half the
+		-- tunnel network at once.
 	end
 
 	local exit = session.Manifest.Exit

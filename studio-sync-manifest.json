@@ -6,12 +6,12 @@
     "id": "510a575b-182f-44da-ad81-aa05621b7984"
   },
   "counts": {
-    "scripts": 97,
+    "scripts": 99,
     "remoteEvents": 16,
-    "total": 113,
-    "created": 0,
-    "updated": 1,
-    "unchanged": 112
+    "total": 115,
+    "created": 2,
+    "updated": 3,
+    "unchanged": 110
   },
   "extraMirroredFilesNotInStudio": [],
   "items": [
@@ -75,8 +75,8 @@
       "studioPath": "ServerScriptService.GameManager",
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 44398,
-      "sha256": "e30b399110c459a7771808757db8a5e842fdf6e3f73f74e60b226db1e113727a",
+      "bytes": 44825,
+      "sha256": "034d8e76895bfdb690a974b050e55a8b6bec539d8937df80d1c7cbb37a79338c",
       "status": "unchanged"
     },
     {
@@ -155,8 +155,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/NoiseReporter.LocalScript.lua",
-      "bytes": 14254,
-      "sha256": "3076dac81cb223ae2f508535ced6ff547ac63732b73066539bdf6d023e706f8c",
+      "bytes": 14867,
+      "sha256": "a5aa8fc9f727dcb291d17f31e78e0bfe6ce6e4507795991c5b6f1451f8837bda",
       "status": "unchanged"
     },
     {
@@ -187,9 +187,9 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.SoundController",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
-      "bytes": 34147,
-      "sha256": "6b4c4fe5949e31b2185261600714d8cc94dfa53f0932d24bbedf11b515fe08c6",
-      "status": "unchanged"
+      "bytes": 34261,
+      "sha256": "6237cf7c1ed1c4193f5ef83a3349715f67dba8a299ebc809b0d8da70e0fa44b6",
+      "status": "updated"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.PuzzleUI",
@@ -203,9 +203,9 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.DevCheats",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/DevCheats.LocalScript.lua",
-      "bytes": 15380,
-      "sha256": "7b367f77b7a918207fb6856c510ba81b5063b49a4b80d4bc8677341a24b0080c",
-      "status": "unchanged"
+      "bytes": 15744,
+      "sha256": "38039abee7c885feceff465b532162695a1795d3769e83830ce0e43f19754dc5",
+      "status": "updated"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.SpectateController",
@@ -262,6 +262,14 @@
       "bytes": 5438,
       "sha256": "25b83a28d23c0f1fbee08ed7cc495982769a07bc24aa8726757c4330ef7723b8",
       "status": "unchanged"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Slide Controller",
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 2 Slide Controller.LocalScript.lua",
+      "bytes": 20620,
+      "sha256": "7ea4317a9ac03ba84cc8d2c97c5385d1f30cec79a12a4441adda27bcbab53c59",
+      "status": "created"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Objective UI",
@@ -339,8 +347,8 @@
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Configuration",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Configuration.ModuleScript.lua",
-      "bytes": 6366,
-      "sha256": "a3630b72dc7084c684a92dd8c304d7b50c1f0fab5685292e071af0756b20db75",
+      "bytes": 7466,
+      "sha256": "a3514b5ed01194f0f1ee547975ee181747407bd9e5f08f1a653a25d7d0febde3",
       "status": "unchanged"
     },
     {
@@ -355,9 +363,17 @@
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 World Builder",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua",
-      "bytes": 183146,
-      "sha256": "57ce41c2c2c5733b351b230d7542f7dd99280b3ff510ad4ada07a751dac3227d",
+      "bytes": 227493,
+      "sha256": "9b1c627fa85c61031def2f032d9373a83d9966f7c316e07ae4c4aaccde767d63",
       "status": "updated"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Slide Ragdoll Service",
+      "className": "Script",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Slide Ragdoll Service.Script.lua",
+      "bytes": 14564,
+      "sha256": "d4f6ef221916e10653ca02d4d1eaaa91e44037a3967a722db348bcbb04c59ba6",
+      "status": "created"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
@@ -371,8 +387,8 @@
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Round Adapter",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua",
-      "bytes": 10840,
-      "sha256": "6dcbef8d427a22075366f59e3dcdcadaddee548bcc6f0c9817e465bdff860353",
+      "bytes": 11027,
+      "sha256": "3ed9852aff7cb6b52986d7ec82cfdd63642f87221cbe47f76e73e0e3acb9a68b",
       "status": "unchanged"
     },
     {
@@ -387,16 +403,16 @@
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Configuration",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Configuration.ModuleScript.lua",
-      "bytes": 5649,
-      "sha256": "5f710b834eb7246b2dc113b8e7ab9de53bf5912e9b4c5cc21f9d9717b00caa05",
+      "bytes": 5735,
+      "sha256": "4db74af82a2a03aafd0b77948e30fedcccfafd6a842b14b680b307c0e66c8785",
       "status": "unchanged"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Proxy Factory",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Proxy Factory.ModuleScript.lua",
-      "bytes": 10615,
-      "sha256": "98082ee743a0f38b551cc241930927059eebbb8f0304a70ca85e736f8ccc39db",
+      "bytes": 11278,
+      "sha256": "759d388240f4079f06d06282923f76da8bbf0023af6d79415be48eb5d6a62a9a",
       "status": "unchanged"
     },
     {
@@ -411,8 +427,8 @@
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Navigator.ModuleScript.lua",
-      "bytes": 16760,
-      "sha256": "2745750bbea5e14ffb4c8206e9fab183c20dd48ab02e2ef5016ea700759535d3",
+      "bytes": 22974,
+      "sha256": "c18e6bb06acd380c9a0c0d50565c8f9706d18fc6810b3f6bdc065e88192a3d25",
       "status": "unchanged"
     },
     {
@@ -435,8 +451,8 @@
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Controller.ModuleScript.lua",
-      "bytes": 37982,
-      "sha256": "5dd9f9cafa75795b4c5eb64e14ce3ba15d86e3525800051ac30664b9f18f9a9a",
+      "bytes": 42354,
+      "sha256": "ad8256ada7c1ddaf25b5af4348043fd801cef218e4b7ec1398330152c4525f42",
       "status": "unchanged"
     },
     {

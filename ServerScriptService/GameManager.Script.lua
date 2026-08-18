@@ -403,8 +403,16 @@ local function placeSafelyInElevator(player, char)
  root.AssemblyAngularVelocity = Vector3.zero
  local ox = (math.random() - 0.5) * math.max(pad.Size.X - 4, 1)
  local oz = (math.random() - 0.5) * math.max(pad.Size.Z - 3, 1)
- local position = pad.Position + Vector3.new(ox, 4, oz)
- char:PivotTo(CFrame.lookAt(position, position + Vector3.new(1, 0, 0)))
+ local isLevel2Pad = pad:GetAttribute("Level2_CompatibilityMarker") == true
+ if isLevel2Pad then
+  local forward = Vector3.new(pad.CFrame.LookVector.X, 0, pad.CFrame.LookVector.Z).Unit
+  local side = Vector3.new(pad.CFrame.RightVector.X, 0, pad.CFrame.RightVector.Z).Unit
+  local position = pad.Position + side * ox + forward * oz + Vector3.new(0, 4, 0)
+  char:PivotTo(CFrame.lookAt(position, position + forward))
+ else
+  local position = pad.Position + Vector3.new(ox, 4, oz)
+  char:PivotTo(CFrame.lookAt(position, position + Vector3.new(1, 0, 0)))
+ end
 
  local shield = Instance.new("ForceField")
  shield.Name = "LobbyTransferShield"

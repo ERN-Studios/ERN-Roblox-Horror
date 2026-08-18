@@ -245,14 +245,20 @@ function Adapter.Build()
 		local arrivalSpawn = manifest.Arrival.ElevatorSpawn
 		local arrivalPosition = arrivalSpawn.Position
 		local arrivalLook = arrivalSpawn.CFrame.LookVector
+		local forward = Vector3.new(arrivalLook.X, 0, arrivalLook.Z).Unit
+		local side = Vector3.new(-forward.Z, 0, forward.X)
 		local moved = 0
 		for _, player in ipairs(Players:GetPlayers()) do
 			local character = player.Character
 			local root = character and character:FindFirstChild("HumanoidRootPart")
 			if root then
 				moved += 1
-				local offset = Vector3.new(((moved % 3) - 1) * 2.5, 4, math.floor(moved / 3) * 2.5)
-				character:PivotTo(CFrame.lookAt(arrivalPosition + offset, arrivalPosition + offset + arrivalLook))
+				local slot = moved - 1
+				local offset = side * (((slot % 3) - 1) * 2.5)
+					+ forward * (math.floor(slot / 3) * 2.5)
+					+ Vector3.new(0, 4, 0)
+				character:PivotTo(CFrame.lookAt(
+					arrivalPosition + offset, arrivalPosition + offset + forward))
 			end
 		end
 		storeLobby()

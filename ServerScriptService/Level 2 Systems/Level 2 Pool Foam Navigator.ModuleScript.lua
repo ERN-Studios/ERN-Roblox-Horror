@@ -5,6 +5,7 @@
 -- generated hall/corridor graph is the deterministic fallback.
 
 local PathfindingService = game:GetService("PathfindingService")
+local Players = game:GetService("Players")
 
 local Navigator = {}
 Navigator.__index = Navigator
@@ -19,6 +20,7 @@ local DEFAULTS = table.freeze({
 	FootClearance = 0.08,
 	FloorProbeAbove = 12,
 	FloorProbeDepth = 80,
+	MaxStepHeight = 3.5,
 })
 
 local function finiteNumber(value)
@@ -221,27 +223,61 @@ function Navigator.new(model, manifest, tuning, options)
 	local pivot = model:GetPivot()
 	local boundsCFrame, boundsSize = model:GetBoundingBox()
 	local bottomY = boundsCFrame.Position.Y - boundsSize.Y * 0.5
+	local authoredGroundOffset = model:GetAttribute("PoolFoamGroundOffset")
+	if not finiteNumber(authoredGroundOffset) or authoredGroundOffset < 0 then
+		authoredGroundOffset = model:GetAttribute("GroundOffset")
+	end
+	if not finiteNumber(authoredGroundOffset) or authoredGroundOffset < 0 then
+		authoredGroundOffset = math.max(0, pivot.Position.Y - bottomY)
+	end
+	authoredGroundOffset = math.clamp(authoredGroundOffset, 0, 24)
 
 	for _, descendant in ipairs(model:GetDescendants()) do
 		if descendant:IsA("BasePart") then
-			descendant.Anchored = true
 			descendant.AssemblyLinearVelocity = Vector3.zero
 			descendant.AssemblyAngularVelocity = Vector3.zero
 		end
 	end
+	model.PrimaryPart.Anchored = true
 
 	local raycastParams = RaycastParams.new()
 	raycastParams.FilterType = Enum.RaycastFilterType.Exclude
 	-- Ground the rig on the tiled basin floor. Treating Terrain water as the
 	-- floor made the proxy skate on the surface instead of wading through it.
 	raycastParams.IgnoreWater = true
+	raycastParams.RespectCanCollide = true
 	local exclusions = {model}
 	if manifest.EntityNodes then table.insert(exclusions, manifest.EntityNodes) end
 	local navigationFolder = manifest.World:FindFirstChild("Level 2 Navigation", true)
 	if navigationFolder then table.insert(exclusions, navigationFolder) end
 	local runtimeFolder = options.RuntimeFolder
-	if runtimeFolder and runtimeFolder ~= model.Parent then table.insert(exclusions, runtimeFolder) end
+	if runtimeFolder then table.insert(exclusions, runtimeFolder) end
 	raycastParams.FilterDescendantsInstances = exclusions
+	local overlapParams = OverlapParams.new()
+	overlapParams.FilterType = Enum.RaycastFilterType.Exclude
+	overlapParams.FilterDescendantsInstances = exclusions
+	overlapParams.MaxParts = 64
+	-- Ignore decorative/noncollidable query hits inside the capped result set;
+	-- otherwise 64 cosmetic pieces can hide the real wall behind them.
+	overlapParams.RespectCanCollide = true
+
+	local groundParts = {}
+	for _, descendant in ipairs(manifest.World:GetDescendants()) do
+		if descendant:IsA("BasePart")
+			and descendant.CanCollide
+			and descendant:GetAttribute("Level2_EntityGround") == true
+		then
+			table.insert(groundParts, descendant)
+		end
+	end
+	local floorRaycastParams
+	if #groundParts > 0 then
+		floorRaycastParams = RaycastParams.new()
+		floorRaycastParams.FilterType = Enum.RaycastFilterType.Include
+		floorRaycastParams.FilterDescendantsInstances = groundParts
+		floorRaycastParams.IgnoreWater = true
+		floorRaycastParams.RespectCanCollide = true
+	end
 
 	local self = setmetatable({
 		Model = model,
@@ -259,13 +295,17 @@ function Navigator.new(model, manifest, tuning, options)
 			FootClearance = readNumber(tuning, "FootClearance", DEFAULTS.FootClearance, 0, 3),
 			FloorProbeAbove = readNumber(tuning, "FloorProbeAbove", DEFAULTS.FloorProbeAbove, 3, 60),
 			FloorProbeDepth = readNumber(tuning, "FloorProbeDepth", DEFAULTS.FloorProbeDepth, 20, 300),
+			MaxStepHeight = readNumber(tuning, "MaxStepHeight", DEFAULTS.MaxStepHeight, 0.5, 12),
 		},
-		PivotAboveFoot = math.max(0, pivot.Position.Y - bottomY),
+		PivotAboveFoot = authoredGroundOffset,
 		FootPosition = Vector3.new(pivot.Position.X, bottomY, pivot.Position.Z),
 		Facing = Vector3.new(pivot.LookVector.X, 0, pivot.LookVector.Z).Magnitude > 0.001
 			and Vector3.new(pivot.LookVector.X, 0, pivot.LookVector.Z).Unit
 			or Vector3.new(0, 0, -1),
 		RaycastParams = raycastParams,
+		OverlapParams = overlapParams,
+		BaseExclusions = exclusions,
+		FloorRaycastParams = floorRaycastParams,
 		Waypoints = {},
 		WaypointIndex = 1,
 		Goal = nil,
@@ -273,9 +313,13 @@ function Navigator.new(model, manifest, tuning, options)
 		LastPathAt = -math.huge,
 		RequestId = 0,
 		Computing = false,
+		BlockedConnection = nil,
 		Destroyed = false,
 		Status = "IDLE",
 		LastFailure = nil,
+		HasGrounded = false,
+		LastSafeFoot = nil,
+		LastSafeFacing = nil,
 	}, Navigator)
 	return self
 end
@@ -291,37 +335,112 @@ function Navigator:_positionAllowed(position)
 	return index ~= nil and self.AllowedHallIndices[index] == true
 end
 
-function Navigator:_surfaceAt(position)
-	local origin = position + Vector3.new(0, self.Tuning.FloorProbeAbove, 0)
-	local result = workspace:Raycast(origin, Vector3.new(0, -self.Tuning.FloorProbeDepth, 0), self.RaycastParams)
-	-- In low-ceilinged rooms (kids wing) the probe origin can start ABOVE the
-	-- roof, so the ray lands on the rooftop and the rig snaps on top of the
-	-- room. Only accept surfaces near or below the intended position.
-	if result and result.Normal.Y > 0.15 and result.Position.Y <= position.Y + 6 then
-		return result.Position.Y
+function Navigator:_refreshObstacleFilters()
+	local exclusions = table.clone(self.BaseExclusions)
+	for _, player in ipairs(Players:GetPlayers()) do
+		if player.Character then table.insert(exclusions, player.Character) end
 	end
-	return position.Y
+	self.RaycastParams.FilterDescendantsInstances = exclusions
+	self.OverlapParams.FilterDescendantsInstances = exclusions
 end
 
-function Navigator:_placeFoot(position, facing)
+function Navigator:_surfaceAt(position, allowLargeStep)
+	local origin = position + Vector3.new(0, self.Tuning.FloorProbeAbove, 0)
+	local params = self.FloorRaycastParams or self.RaycastParams
+	local expectedFloorY = self.HasGrounded
+		and self.FootPosition.Y - self.Tuning.FootClearance
+		or position.Y - self.Tuning.FootClearance
+	local bestY
+	local bestDelta = math.huge
+	local remaining = self.Tuning.FloorProbeDepth
+	local rayOrigin = origin
+	for _ = 1, 16 do
+		if remaining <= .05 then break end
+		local result = workspace:Raycast(rayOrigin, Vector3.new(0, -remaining, 0), params)
+		if not result then break end
+		local delta = math.abs(result.Position.Y - expectedFloorY)
+		local valid = result.Instance.CanCollide
+			and result.Normal.Y >= .57
+			and result.Instance:GetAttribute("Level2_EntityGround") == true
+			and result.Instance:GetAttribute("Level2_NoEntityGround") ~= true
+			and (allowLargeStep == true or delta <= self.Tuning.MaxStepHeight)
+		if valid and delta < bestDelta then
+			bestY = result.Position.Y
+			bestDelta = delta
+		end
+		local travelled = math.max(.05, rayOrigin.Y - result.Position.Y + .05)
+		remaining -= travelled
+		rayOrigin = result.Position - Vector3.new(0, .05, 0)
+	end
+	return bestY
+end
+
+function Navigator:_clearAdvance(targetFoot)
+	self:_refreshObstacleFilters()
+	local displacement = Vector3.new(
+		targetFoot.X - self.FootPosition.X, 0, targetFoot.Z - self.FootPosition.Z)
+	local height = math.max(2, self.Tuning.AgentHeight - .3)
+	local size = Vector3.new(
+		math.max(1, self.Tuning.AgentRadius * 2 - .2), height,
+		math.max(1, self.Tuning.AgentRadius * 2 - .2))
+	if self.HasGrounded and displacement.Magnitude > .02 then
+		-- Sweep above the higher of the two support surfaces. This treats a
+		-- shallow authored step as floor while still checking full head room.
+		local bottomY = math.max(self.FootPosition.Y, targetFoot.Y) + .18
+		local origin = CFrame.new(self.FootPosition.X, bottomY + height * .5, self.FootPosition.Z)
+		local result = workspace:Blockcast(origin, size, displacement, self.RaycastParams)
+		if result and result.Distance < displacement.Magnitude - .03 then return false end
+	end
+
+	-- A high sweep can miss an obstacle after a step down, so independently
+	-- validate the complete body volume at the resolved destination.
+	local targetBox = CFrame.new(targetFoot + Vector3.new(0, height * .5 + .18, 0))
+	for _, hit in ipairs(workspace:GetPartBoundsInBox(targetBox, size, self.OverlapParams)) do
+		if hit.CanCollide then
+			local supportingGround = hit:GetAttribute("Level2_EntityGround") == true
+				and hit.CFrame.UpVector.Y > .7
+				and hit.Position.Y <= targetFoot.Y
+			if not supportingGround then return false end
+		end
+	end
+	return true
+end
+
+function Navigator:_placeFoot(position, facing, allowLargeStep)
 	if self.Destroyed or not (self.Model and self.Model.Parent) then return false end
-	local surfaceY = self:_surfaceAt(position)
+	local surfaceY = self:_surfaceAt(position, allowLargeStep)
+	if surfaceY == nil then
+		self.Status = "NO_FLOOR"
+		self.LastFailure = "no validated Level 2 floor"
+		return false
+	end
 	local foot = Vector3.new(position.X, surfaceY + self.Tuning.FootClearance, position.Z)
+	if not self:_clearAdvance(foot) then
+		self.Status = "BLOCKED"
+		self.LastFailure = "movement volume blocked"
+		return false
+	end
 	local flatFacing = facing and Vector3.new(facing.X, 0, facing.Z) or self.Facing
 	if flatFacing.Magnitude > 0.001 then self.Facing = flatFacing.Unit end
 	local pivotPosition = foot + Vector3.new(0, self.PivotAboveFoot, 0)
 	self.Model:PivotTo(CFrame.lookAt(pivotPosition, pivotPosition + self.Facing))
 	self.FootPosition = foot
+	self.HasGrounded = true
+	self.LastSafeFoot = foot
+	self.LastSafeFacing = self.Facing
+	self.Status = "MOVING"
+	self.LastFailure = nil
 	return true
 end
 
-function Navigator:WarpTo(position, facing)
+function Navigator:WarpTo(position, facing, allowLargeStep)
 	if not finiteVector3(position) then return false end
 	self:Stop()
-	return self:_placeFoot(position, facing)
+	return self:_placeFoot(position, facing, allowLargeStep == true)
 end
 
 function Navigator:_clearDirectLine(fromPosition, toPosition)
+	self:_refreshObstacleFilters()
 	local height = math.clamp(self.PivotAboveFoot * 0.5, 1.5, 5)
 	local origin = fromPosition + Vector3.new(0, height, 0)
 	local target = Vector3.new(toPosition.X, origin.Y, toPosition.Z)
@@ -350,6 +469,10 @@ end
 function Navigator:_requestPath(goal)
 	self.RequestId += 1
 	local requestId = self.RequestId
+	if self.BlockedConnection then
+		self.BlockedConnection:Disconnect()
+		self.BlockedConnection = nil
+	end
 	self.Computing = true
 	self.LastPathAt = os.clock()
 	self.LastRequestedGoal = goal
@@ -361,8 +484,9 @@ function Navigator:_requestPath(goal)
 				AgentRadius = self.Tuning.AgentRadius,
 				AgentHeight = self.Tuning.AgentHeight,
 				AgentCanJump = false,
+				AgentCanClimb = false,
 				WaypointSpacing = self.Tuning.WaypointSpacing,
-				Costs = {Water = 1},
+				Costs = {Water = 1, Level2Roof = math.huge},
 			})
 			path:ComputeAsync(self.FootPosition, goal)
 		end)
@@ -392,6 +516,18 @@ function Navigator:_requestPath(goal)
 		self.WaypointIndex = 1
 		self.Status = status
 		self.LastFailure = status == "NO_PATH" and tostring(failure or "no route") or nil
+		if status == "PATH" and path then
+			self.BlockedConnection = path.Blocked:Connect(function(blockedIndex)
+				if self.Destroyed or requestId ~= self.RequestId then return end
+				if blockedIndex >= self.WaypointIndex then
+					self.Waypoints = {}
+					self.WaypointIndex = 1
+					self.Status = "BLOCKED"
+					self.LastFailure = "computed path became blocked"
+					self.LastPathAt = -math.huge
+				end
+			end)
+		end
 		self.Computing = false
 	end)
 end
@@ -399,6 +535,18 @@ end
 function Navigator:SetGoal(goal, force)
 	if self.Destroyed or not finiteVector3(goal) or not self:_positionAllowed(goal) then return false end
 	self.Goal = goal
+	if force == true and self.Computing then
+		-- Invalidate the in-flight request so a watchdog retry is a real retry,
+		-- not a no-op that advances the controller's recovery stage.
+		self.RequestId += 1
+		self.Computing = false
+		self.Waypoints = {}
+		self.WaypointIndex = 1
+		if self.BlockedConnection then
+			self.BlockedConnection:Disconnect()
+			self.BlockedConnection = nil
+		end
+	end
 	local now = os.clock()
 	local moved = not self.LastRequestedGoal
 		or horizontalDistance(goal, self.LastRequestedGoal) >= self.Tuning.RepathDistance
@@ -416,6 +564,10 @@ function Navigator:Stop()
 	self.Status = "IDLE"
 	self.RequestId += 1
 	self.Computing = false
+	if self.BlockedConnection then
+		self.BlockedConnection:Disconnect()
+		self.BlockedConnection = nil
+	end
 end
 
 function Navigator:Step(deltaTime, speed)
@@ -423,6 +575,13 @@ function Navigator:Step(deltaTime, speed)
 	deltaTime = finiteNumber(deltaTime) and math.clamp(deltaTime, 0, 0.25) or 0
 	speed = finiteNumber(speed) and math.max(0, speed) or 0
 	local waypoint = self.Waypoints[self.WaypointIndex]
+	while waypoint do
+		local difference = Vector3.new(
+			waypoint.X - self.FootPosition.X, 0, waypoint.Z - self.FootPosition.Z)
+		if difference.Magnitude > self.Tuning.WaypointArrivalDistance then break end
+		self.WaypointIndex += 1
+		waypoint = self.Waypoints[self.WaypointIndex]
+	end
 	if not waypoint then
 		local reached = self.Goal ~= nil
 			and horizontalDistance(self.FootPosition, self.Goal) <= self.Tuning.WaypointArrivalDistance
@@ -437,19 +596,27 @@ function Navigator:Step(deltaTime, speed)
 	local current = self.FootPosition
 	local difference = Vector3.new(waypoint.X - current.X, 0, waypoint.Z - current.Z)
 	local distance = difference.Magnitude
-	if distance <= self.Tuning.WaypointArrivalDistance then
-		self.WaypointIndex += 1
-		return self.WaypointIndex > #self.Waypoints
-	end
 	if speed <= 0 or deltaTime <= 0 then return false end
 	local direction = difference.Unit
 	local travel = math.min(distance, speed * deltaTime)
-	self:_placeFoot(current + direction * travel, direction)
+	if not self:_placeFoot(current + direction * travel, direction) then
+		self.Waypoints = {}
+		self.WaypointIndex = 1
+		self.LastPathAt = -math.huge
+	end
 	return false
 end
 
 function Navigator:GetPosition()
 	return self.FootPosition
+end
+
+function Navigator:GetFacing()
+	return self.Facing
+end
+
+function Navigator:GetGoal()
+	return self.Goal
 end
 
 function Navigator:Face(position)
@@ -483,6 +650,9 @@ function Navigator:Destroy()
 	self.Layout = nil
 	self.HallByIndex = nil
 	self.RaycastParams = nil
+	self.OverlapParams = nil
+	self.BaseExclusions = nil
+	self.FloorRaycastParams = nil
 end
 
 return Navigator

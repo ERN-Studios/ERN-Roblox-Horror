@@ -45,13 +45,11 @@ local AUDIO_STATES: {[string]: boolean} = table.freeze({
 	Collapse = true,
 })
 
-local DEFAULT_CAPTIONS: {[string]: string} = table.freeze({
-	Cue = "[a faint ripple crosses the tiles]",
-	Reveal = "[the foam is standing where it should not be]",
-	Attack = "[the foam surges forward]",
-	Phase = "[the water grows unnaturally still]",
-	Decoy = "[something moves beneath the surface]",
-})
+-- Atmospheric whisper captions removed on request ("[the water grows
+-- unnaturally still]" and friends): no bracketed status lines anywhere in
+-- Level 2. The caption pipeline stays for explicitly authored server
+-- captions, but none are sent today and no defaults exist.
+local DEFAULT_CAPTIONS: {[string]: string} = table.freeze({})
 
 local remoteFolder: Folder? = nil
 local reportRemote: RemoteEvent? = nil

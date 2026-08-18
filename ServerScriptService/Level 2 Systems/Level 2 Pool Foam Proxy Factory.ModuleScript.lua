@@ -23,6 +23,10 @@ local SPIRE_COLOR = Color3.fromRGB(139, 181, 187)
 local SPIRE_LIGHT = Color3.fromRGB(203, 224, 220)
 local SPIRE_CORE = Color3.fromRGB(59, 133, 146)
 
+local function finiteNumber(value: any): boolean
+	return type(value) == "number" and value == value and value > -math.huge and value < math.huge
+end
+
 local function normalizeString(value: any): string
 	if type(value) ~= "string" then
 		return ""
@@ -260,6 +264,16 @@ function Factory.Create(slot: any, parent: Instance?, options: CreateOptions?): 
 
 	model.Name = createOptions.Name or string.format("Pool Foam %s", slotConfiguration.Id)
 	applyMetadata(model, slotConfiguration, isTemporaryProxy)
+	local groundOffset = model:GetAttribute("PoolFoamGroundOffset")
+	if not finiteNumber(groundOffset) or groundOffset < 0 then
+		groundOffset = model:GetAttribute("GroundOffset")
+	end
+	if not finiteNumber(groundOffset) or groundOffset < 0 then
+		local boundsCFrame, boundsSize = model:GetBoundingBox()
+		local bottomY = boundsCFrame.Position.Y - boundsSize.Y * .5
+		groundOffset = math.max(0, model.PrimaryPart.Position.Y - bottomY)
+	end
+	model:SetAttribute("PoolFoamGroundOffset", math.clamp(groundOffset, 0, 24))
 
 	local pivot = createOptions.CFrame or createOptions.Pivot
 	if pivot ~= nil then

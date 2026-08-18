@@ -193,6 +193,13 @@ local function startFlying()
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 	local root = character and character:FindFirstChild("HumanoidRootPart")
 	if not (character and humanoid and root) then return false end
+	-- Do not snapshot AutoRotate/PlatformStand in the middle of a slide
+	-- ragdoll. Waiting for its normal get-up avoids restoring a permanently
+	-- non-rotating developer character when fly mode is later disabled.
+	if character:GetAttribute("Level2_ForcedSliding") == true then
+		warn("[DevCheats] Finish the slide before enabling noclip fly")
+		return false
+	end
 
 	flying = true
 	collisionOriginal = {}

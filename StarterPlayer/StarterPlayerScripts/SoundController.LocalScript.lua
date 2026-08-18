@@ -776,6 +776,10 @@ local level2PlayerStepClock = 0
 local function level2ShallowWater(humanoid, root)
 	if player:GetAttribute("InRound") ~= true
 		or workspace:GetAttribute("SelectedLevel") ~= 2 then return false end
+	if player.Character
+		and player.Character:GetAttribute("Level2_ForcedSliding") == true then
+		return false
+	end
 	local state = humanoid:GetState()
 	if state == Enum.HumanoidStateType.Swimming
 		or state == Enum.HumanoidStateType.Freefall

@@ -550,9 +550,19 @@ local function generateAttempt(seed)
 
 	-- Each pump drains one corridor as visible feedback. Pick corridors that are
 	-- NOT the pressure doors and that sit near each pump.
+	-- Kids-wing corridors wear the kids tiles end to end and share the kids
+	-- rooms' wading-water surface; draining one reads as a broken kids room.
+	-- Hall roles are not assigned yet at this point, so kids membership comes
+	-- from the grown kids block itself. The visible pump feedback sticks to
+	-- plain corridors — the kids-area pump drains its nearest ordinary tunnel.
+	local kidsHallIndexes = {}
+	for _, hall in ipairs(layout.KidsArea or {}) do
+		kidsHallIndexes[hall.Index] = true
+	end
 	local drainables = {}
 	for _, corridor in ipairs(layout.Corridors) do
-		if corridor.Kind == "Open" and corridor.Length >= Configuration.MinimumDrainableLength then
+		if corridor.Kind == "Open" and corridor.Length >= Configuration.MinimumDrainableLength
+			and not kidsHallIndexes[corridor.A] and not kidsHallIndexes[corridor.B] then
 			table.insert(drainables, corridor)
 		end
 	end

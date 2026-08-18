@@ -45,7 +45,11 @@ local Configuration = {
 	GenerationFallbackAttemptsPerSeed = 40,
 
 	CorridorWidth = 34,
-	CorridorWalkwayWidth = 8,
+	-- Clear walking width of the slim ledge along one side of every tunnel,
+	-- measured inboard of the vault's arch ribs (the slab itself continues
+	-- outward under the arch feet to the tunnel wall). Keep it narrow: the
+	-- rib-free band ends roughly 11.3 studs from the corridor centreline.
+	CorridorWalkwayWidth = 2.2,
 	MaximumCorridorLength = 130,
 	MinimumDrainableLength = 40,
 
@@ -66,7 +70,12 @@ local Configuration = {
 	DoorHeight = 19,
 
 	-- Water covers the floor wall-to-wall in every pool hall, exactly like the
-	-- reference photos. No basins, no dry walkway rings.
+	-- reference photos — no sunken basins. Raised decks standing IN the water
+	-- are the one exception: pump rooms always carry their wide service ring,
+	-- and a seeded share of the plain halls get a slim dry walkway hugging
+	-- their walls (door-aware, with a submerged curb step on its inner edge).
+	HallEdgeWalkwayChance = .5,
+	HallEdgeWalkwayWidth = 4.5,
 	ShallowPoolDepth = 1.6,
 	-- Even the "deep" halls stay below the swim threshold: the whole level
 	-- is walkable water.
@@ -78,6 +87,9 @@ local Configuration = {
 	-- Drainable corridors stay WADING depth: deep enough that a pump visibly
 	-- empties them, never deep enough to force swimming in a tunnel.
 	DrainableCorridorDepth = 1.8,
+	-- Kids rooms keep their existing .9-stud wading layer, but recess it so its
+	-- surface meets corridor water at Y=.1 instead of forcing a swim-state step.
+	KidsWadingDepth = .8,
 
 	-- ── lighting ────────────────────────────────────────────────────────────
 	CeilingPanelBrightness = 1.085,
@@ -102,7 +114,10 @@ local Configuration = {
 	SlideMouthReflectance = .08,
 	SlideMouthLength = 2.8,
 	SlideCollisionThickness = .6,
+	-- Flat and shallow slide sections remain normally walkable. The controller
+	-- takes over only once a rider reaches a genuinely steep descent.
 	SlideCollisionFriction = .05,
+	SlideCollisionFrictionWeight = 1,
 	-- Hidden collision may overlap farther than the decorative mesh so curved
 	-- flumes cannot open seams, and open slides keep a tall invisible guard lip.
 	SlideCollisionOverlap = 1.5,
@@ -138,17 +153,26 @@ Configuration.SlideColors = {
 	Color3.fromRGB(78, 158, 214),
 }
 
--- Reserved audio slots. No published IDs yet; a future Level 2 sound controller
--- can resolve these by name from attributes exactly as Level 2 does.
+-- Authored slots mirrored by ReplicatedStorage["Level 2 Sound Library"].
+-- Looping beds and gameplay cues keep stable names; environmental one-shots are
+-- selected contextually by the client sound controller.
 Configuration.SoundSlots = {
 	{"Level 2 Room Tone", true, "Continuous hollow tiled-pool ambience"},
 	{"Level 2 Ventilation Hum", true, "Low mechanical ventilation bed"},
 	{"Level 2 Distant Water", true, "Large-room water movement and reverb"},
 	{"Level 2 Pump Start", false, "Heavy pump motor spinning up"},
 	{"Level 2 Drain Rush", false, "A corridor draining away"},
-	{"Level 2 Pressure Door", false, "Pressure door unsealing"},
+	{"Level 2 Pressure Door", false, "Heavy vertical steel pressure door opening"},
 	{"Level 2 Slide Rush", false, "Water and tile rush inside a flume"},
 	{"Level 2 Kids Area Tone", false, "Dead, dry, carpeted-room tone"},
+	{"Level 2 Water Drop", false, "Close drip from a corridor ceiling"},
+	{"Level 2 Distant Splash", false, "Unexplained splash in a distant wet hall"},
+	{"Level 2 Drain Gurgle", false, "Drain gurgle near a running pump"},
+	{"Level 2 Pipe Groan", false, "Distant building-pressure pipe groan"},
+	{"Level 2 Distant Monster-Like Pipe Groan 1", false, "Rare distant pipe groan variation"},
+	{"Level 2 Distant Monster-Like Pipe Groan 2", false, "Rare distant pipe groan variation"},
+	{"Level 2 Distant Monster-Like Pipe Groan 3", false, "Rare distant pipe groan variation"},
+	{"Level 2 Distant Monster-Like Pipe Groan 4", false, "Rare distant pipe groan variation"},
 }
 
 
