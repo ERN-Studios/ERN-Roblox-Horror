@@ -51,8 +51,8 @@
       "studioPath": "ServerScriptService.EntityAI",
       "className": "Script",
       "file": "ServerScriptService/EntityAI.Script.lua",
-      "bytes": 53716,
-      "sha256": "02665e099672fa4d1c497e9e0e10abd35939bf5b804139f03ef9927852ed14d7",
+      "bytes": 53845,
+      "sha256": "c3d6360d8e9361437114d77fe10e657b8534852a2df9b921ce8a517cb6e97afa",
       "status": "synced"
     },
     {
@@ -67,8 +67,8 @@
       "studioPath": "ServerScriptService.MazeGenerator",
       "className": "Script",
       "file": "ServerScriptService/MazeGenerator.Script.lua",
-      "bytes": 80072,
-      "sha256": "f7faa69d9661e4d8c41c64ef1627cccc52c82dcd61e9c75584702b2fb36356e4",
+      "bytes": 80863,
+      "sha256": "c7cdcdac89daf3880944ce54e27f870ef8e707e2e681dc80967766268d804061",
       "status": "synced"
     },
     {
@@ -187,8 +187,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.SoundController",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
-      "bytes": 44862,
-      "sha256": "790d923bfb11fb018e0f22e6c3c7056977c676c8a30b08a05fe425df084cb573",
+      "bytes": 45942,
+      "sha256": "0415fe9b91d4cf0cb711d935dabcf5574d05abe69fb2eba3726b0d68ebf7549d",
       "status": "synced"
     },
     {
@@ -203,8 +203,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.DevCheats",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/DevCheats.LocalScript.lua",
-      "bytes": 15744,
-      "sha256": "38039abee7c885feceff465b532162695a1795d3769e83830ce0e43f19754dc5",
+      "bytes": 15948,
+      "sha256": "75b76b14d643f8c0752a6c782a00ec86e08c70d2d6c144307b15954bd7abe0e8",
       "status": "synced"
     },
     {
@@ -219,8 +219,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.EntityShakeController",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/EntityShakeController.LocalScript.lua",
-      "bytes": 7258,
-      "sha256": "9d48a9dcaa2ce610befd08f451012bcd32f3efc2e3e2077002130a9825a34f8e",
+      "bytes": 7944,
+      "sha256": "7e6775748debdb6100178e1cb78ebd269ed8a9f0adf65aa54a6ac20206f0e078",
       "status": "synced"
     },
     {

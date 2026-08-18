@@ -30,6 +30,7 @@ local ENTITY_SOUND    = "rbxassetid://103206085469231" -- looping growl/drone em
 local DEATH_SOUND     = "rbxassetid://113822157484898" -- the scream ALIVE players hear when someone dies (positional at the kill)
 local JUMPSCARE_SOUND = "rbxassetid://140233243543479" -- the DYING player's OWN jumpscare sound (2D, only they hear it)
 local YELL_SOUND      = "rbxassetid://92808749593079" -- the Entity's roar when it shoves you off a pit beam (positional)
+local SPOT_SOUND      = "rbxassetid://82272419363488" -- the "spotted you!" scream when it first sees someone (positional)
 local LUNGE_SOUND     = "" -- plays as it winds up a lunge (telegraph, positional)
 local ENTITY_STEP_WALK = "rbxassetid://99809246525734" -- the Entity's footstep thump while walking (positional)
 local ENTITY_STEP_RUN  = "" -- the Entity's footstep thump while running/chasing (positional)
@@ -49,7 +50,7 @@ local SCREAM_SOUNDS   = {
 }
 
 -- ── tuning ────────────────────────────────────────────────
-local AMBIENCE_VOLUME   = 0.29 -- peak per-light hum volume (the old 2D bed sat at 0.48; ~40% down)
+local AMBIENCE_VOLUME   = 0.17 -- peak per-light hum volume (was 0.29; another ~40% down)
 local HUM_MIN_DISTANCE  = 6    -- full hum volume this close to a lit panel
 local HUM_MAX_DISTANCE  = 45   -- a panel is inaudible beyond this (panels sit ~48 studs apart)
 local HUM_POOL_SIZE     = 10   -- at most this many nearby panels carry a live hum Sound
@@ -86,7 +87,7 @@ local SCREAM_VOLUME    = 0.95  -- distant entity screams (positional at the Enti
 local CHASE_FADE       = 0.6   -- seconds to fade the chase loop in / out
 local TRACK_FADE       = 5     -- seconds to SLOWLY fade the chase music once it loses
 -- sight and is only tracking blindly (match TRACK_TIME)
-local SPOT_VOLUME      = 1      -- the "spotted you!" sting (reuses YELL_SOUND) fired as a chase begins
+local SPOT_VOLUME      = 1      -- the "spotted you!" sting (SPOT_SOUND) fired as a chase begins
 local LUNGE_VOLUME     = 1     -- the lunge telegraph (positional)
 local STEP_WALK_VOLUME = 0.72  -- entity walk thump
 local STEP_RUN_VOLUME  = 1.0   -- entity run thump
@@ -146,14 +147,16 @@ local function humDropAll()
 	table.clear(humCandidates)
 end
 
--- track every light panel in the maze (a panel is the BasePart holding a
--- SurfaceLight; MazeGenerator gives them no Name, so the SurfaceLight IS the
--- marker). Streaming adds/removes panels at any time, so watch descendants
+-- track the HUMMING light panels in the maze: MazeGenerator marks about half
+-- of the working fixtures with the HumSource attribute (plus the guaranteed
+-- lamps by the elevator) — only those buzz at all; the rest are silent even
+-- while lit. Streaming adds/removes panels at any time, so watch descendants
 -- rather than scanning once.
 local function humWatchMaze(maze)
 	humDropAll()
 	local function tryAdd(inst)
-		if inst:IsA("SurfaceLight") and inst.Parent and inst.Parent:IsA("BasePart") then
+		if inst:IsA("SurfaceLight") and inst.Parent and inst.Parent:IsA("BasePart")
+			and inst.Parent:GetAttribute("HumSource") == true then
 			humCandidates[inst] = inst.Parent
 		end
 	end
@@ -275,12 +278,12 @@ task.spawn(function()
 end)
 
 -- YOUR OWN jumpscare scream (2D): fired on the SAME Jumpscare remote as the
--- face image (JumpscareUI), so the sound and picture land together — no lag,
--- no double. Only the Entity firing this remote triggers it (pit falls don't).
+-- face image (JumpscareUI). The scream starts the INSTANT the Entity captures
+-- you ("capture" fires only to the caught player, the moment the grab lands);
+-- the face image and the fatal impact still land later in the cinematic.
 local jumpscareRemote = RS:WaitForChild("Remotes"):WaitForChild("Jumpscare")
 jumpscareRemote.OnClientEvent:Connect(function(eventName)
-	-- Capture starts silently; the scream lands on the authored fatal impact.
-	if eventName ~= "death" then return end
+	if eventName ~= "capture" then return end
 	if JUMPSCARE_SOUND == "" then return end
 	local s = Instance.new("Sound")
 	s.SoundId = JUMPSCARE_SOUND
@@ -370,6 +373,28 @@ if YELL_SOUND ~= "" then
 		local s = Instance.new("Sound")
 		s.SoundId = YELL_SOUND
 		s.Volume = YELL_VOLUME
+		s.RollOffMode = Enum.RollOffMode.InverseTapered
+		s.RollOffMinDistance = 10
+		s.RollOffMaxDistance = 200
+		s.Parent = er
+		s:Play()
+		s.Ended:Connect(function() s:Destroy() end)
+		task.delay(8, function() if s then s:Destroy() end end)
+	end)
+end
+
+-- the "spotted you!" scream: EntityAI bumps EntitySpotScream the moment it
+-- first SEES a player (the stationary first-sight howl), and everyone hears
+-- SPOT_SOUND positionally at the entity — a different voice from the pit roar
+if SPOT_SOUND ~= "" then
+	workspace:GetAttributeChangedSignal("EntitySpotScream"):Connect(function()
+		local entity = workspace:FindFirstChild("Entity")
+		local er = entity and entity:FindFirstChild("HumanoidRootPart")
+		if not er then return end
+		local s = Instance.new("Sound")
+		s.Name = "SpotScream"
+		s.SoundId = SPOT_SOUND
+		s.Volume = SPOT_VOLUME
 		s.RollOffMode = Enum.RollOffMode.InverseTapered
 		s.RollOffMinDistance = 10
 		s.RollOffMaxDistance = 200
@@ -481,11 +506,11 @@ local function refreshChase()
 	if chasing then
 		-- Freshly spotted (wasn't already engaged) → the positional sting.
 		local er = chase and chase.Parent
-		if not chasePrevEngaged and YELL_SOUND ~= "" and (os.clock() - chaseLastSpot) > 4
+		if not chasePrevEngaged and SPOT_SOUND ~= "" and (os.clock() - chaseLastSpot) > 4
 			and er and er:IsA("BasePart") then
 			chaseLastSpot = os.clock()
 			local spot = Instance.new("Sound")
-			spot.SoundId = YELL_SOUND
+			spot.SoundId = SPOT_SOUND
 			spot.Volume = 0
 			spot.RollOffMode = Enum.RollOffMode.InverseTapered
 			spot.RollOffMinDistance = 10
@@ -1138,3 +1163,4 @@ player:GetAttributeChangedSignal("InRound"):Connect(function()
 		level2PlayerStepClock = 0
 	end
 end)
+ 

@@ -118,7 +118,11 @@ task.spawn(function()
 		local items = workspace:FindFirstChild("PuzzleItems")
 		if items then
 			for _, child in ipairs(items:GetChildren()) do
-				if COLORS[child.Name] then tag(child, COLORS[child.Name]) end
+				-- the circuit build renames stations to FuseBox_01 / Lever_03 etc.
+				-- — strip the numeric suffix so ESP still recognizes them
+				local base = child.Name:match("^(.-)_%d+$") or child.Name
+				local color = COLORS[base]
+				if color then tag(child, color) end
 			end
 		end
 		local entity = workspace:FindFirstChild("Entity")

@@ -18,11 +18,14 @@ local player = Players.LocalPlayer
 
 -- ── tuning ────────────────────────────────────────────────
 local LURK_RANGE     = 42    -- within this (idle/roaming) a faint shake starts
-local LURK_MAX       = 0.18  -- max shake (studs) at point-blank while it lurks
+local LURK_MAX       = 0.34  -- max shake (studs) at point-blank while it lurks
+local LURK_CURVE     = 1.6   -- proximity exponent: barely-there at the range edge, strong up close
 local CHASE_RANGE    = 75    -- within this while chasing you feel its footfalls
-local CHASE_RUMBLE   = 0.10  -- constant low rumble while chased (scaled by nearness)
+local CHASE_RUMBLE   = 0.26  -- rumble while it hunts, scaled hard by nearness
+local CHASE_CURVE    = 1.4   -- proximity exponent for the chase rumble
+local CHASE_TARGET_MULT = 2.0 -- extra multiplier when it is chasing YOU specifically
 local STOMP_INTERVAL = 0.5   -- SECONDS BETWEEN FOOTSTEP STOMPS — match to the run sound/anim
-local STOMP_STRENGTH = 0.7   -- camera kick per stomp (studs) at point-blank
+local STOMP_STRENGTH = 0.85  -- camera kick per stomp (studs) at point-blank
 local DECAY          = 9     -- how fast a stomp kick fades
 local ALERT_SHAKE_DURATION = 1.25 -- first-sight howl camera shock
 local ALERT_SHAKE_STRENGTH = 0.48
@@ -80,12 +83,17 @@ RunService.RenderStepped:Connect(function(dt)
 		local state = workspace:GetAttribute("EntityState")
 		if state == "CHASE" or state == "TRACK" then -- TRACK = chasing you blind, still fast
 			if dist < CHASE_RANGE then
+				-- progressive proximity rumble, and the actual chase TARGET gets
+				-- it doubled on top — being hunted should feel violent up close
 				local prox = 1 - dist / CHASE_RANGE
-				ambient = prox * CHASE_RUMBLE
+				local targeted = player:GetAttribute("BeingChased") == true
+				ambient = (prox ^ CHASE_CURVE) * CHASE_RUMBLE
+					* (targeted and CHASE_TARGET_MULT or 1)
 				stompTimer += dt
 				if stompTimer >= STOMP_INTERVAL then
 					stompTimer -= STOMP_INTERVAL
-					impulse = math.min(1, impulse + prox) -- footstep punch
+					-- footstep punch — full force for the target, softer for bystanders
+					impulse = math.min(1, impulse + prox * (targeted and 1 or 0.65))
 				end
 			else
 				stompTimer = 0
@@ -93,7 +101,8 @@ RunService.RenderStepped:Connect(function(dt)
 		else
 			stompTimer = 0
 			if dist < LURK_RANGE then
-				ambient = (1 - dist / LURK_RANGE) * LURK_MAX
+				-- progressive tremble: grows steadily as it closes the distance
+				ambient = ((1 - dist / LURK_RANGE) ^ LURK_CURVE) * LURK_MAX
 			end
 		end
 	end

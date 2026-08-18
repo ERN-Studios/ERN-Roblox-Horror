@@ -1210,7 +1210,14 @@ local allLights = {} -- every WORKING light, for the entity-presence effect
 for x = 2, GRID, LIGHT_EVERY do
 	for z = 2, GRID, LIGHT_EVERY do
 		if not (x == ELEV_X and z == ELEV_Y) then -- skip the elevator cell
-			local isDead = math.random() < DEAD_CHANCE
+			-- Elevator surroundings guarantee: the fixture in front of the doors
+			-- (east) is always working, steadily lit and humming, and the fixture
+			-- one panel north is always working, humming AND flickering — so the
+			-- crew always steps out to an audible live lamp and a buzzing one,
+			-- whatever the random rolls said.
+			local elevSteady = (x == ELEV_X + LIGHT_EVERY and z == ELEV_Y)
+			local elevFlicker = (x == ELEV_X and z == ELEV_Y - LIGHT_EVERY)
+			local isDead = not (elevSteady or elevFlicker) and math.random() < DEAD_CHANCE
 
 			-- flush with the ceiling: bottom face sits 0.075 below the ceiling
 			-- plane (clear of it → no z-fight) and the opaque panel hides the
@@ -1247,7 +1254,12 @@ for x = 2, GRID, LIGHT_EVERY do
 
 			if not isDead then
 				table.insert(allLights, { panel = panel, light = light, pos = panel.Position })
-				if math.random() < FLICKER_CHANCE then
+				-- only about half the working fixtures actually buzz: the client's
+				-- SoundController hums exclusively from panels carrying HumSource
+				if elevSteady or elevFlicker or math.random() < 0.5 then
+					panel:SetAttribute("HumSource", true)
+				end
+				if elevFlicker or (not elevSteady and math.random() < FLICKER_CHANCE) then
 					table.insert(flicker, { panel, light })
 				end
 			end
