@@ -98,6 +98,21 @@ local blackoutApplied = false
 local blackoutLights: {BlackoutLightRecord} = {}
 local blackoutParts: {BlackoutPartRecord} = {}
 local blackoutPartSeen: {[BasePart]: boolean} = {}
+local blackoutFlickerPulse = -1
+local preBlackoutApplied = false
+local preBlackoutFlickerPulse = -1
+local recoveryFlickerApplied = false
+local recoveryFlickerPulse = -1
+local BLACKOUT_SCREAM_DURATION = 8.071836735
+local BLACKOUT_FLICKER_INTERVAL = 0.085
+local PRE_BLACKOUT_FLICKER_INTERVAL = 0.09
+local RECOVERY_FLICKER_INTERVAL = 0.085
+script:SetAttribute("Level3_BlackoutScreamFlickerActive", false)
+script:SetAttribute("Level3_BlackoutScreamFlickerPulse", -1)
+script:SetAttribute("Level3_PreBlackoutFlickerActive", false)
+script:SetAttribute("Level3_PreBlackoutFlickerPulse", -1)
+script:SetAttribute("Level3_RecoveryFlickerActive", false)
+script:SetAttribute("Level3_RecoveryFlickerPulse", -1)
 local applyLevelGrade: (boolean) -> ()
 
 local function cancelTweens()
@@ -169,6 +184,46 @@ local function blackoutRequested(): boolean
 	return value == true
 end
 
+local function preBlackoutRequested(): boolean
+	local state = stateFolder()
+	local value = state and state:GetAttribute("Level3_PreBlackoutActive")
+	if value == nil then value = workspace:GetAttribute("Level3PreBlackoutActive") end
+	return value == true or (state and state:GetAttribute("Level3_RoomSongPhase") == "PRE_BLACKOUT")
+end
+
+local function recoveryFlickerRequested(): boolean
+	local state = stateFolder()
+	local value = state and state:GetAttribute("Level3_RecoveryFlickerActive")
+	if value == nil then value = workspace:GetAttribute("Level3RecoveryFlickerActive") end
+	return value == true or (state and state:GetAttribute("Level3_RoomSongPhase") == "RECOVERY_FLICKER")
+end
+
+local function captureWorldLightBaseline()
+	table.clear(blackoutLights)
+	table.clear(blackoutParts)
+	table.clear(blackoutPartSeen)
+	local world = boundWorld
+	if not world then return end
+	for _, descendant in ipairs(world:GetDescendants()) do
+		if descendant:IsA("Light") then
+			table.insert(blackoutLights, {
+				Light = descendant,
+				Enabled = descendant.Enabled,
+				Brightness = descendant.Brightness,
+			})
+			local parent = descendant.Parent
+			if parent and parent:IsA("BasePart") and not blackoutPartSeen[parent] then
+				blackoutPartSeen[parent] = true
+				table.insert(blackoutParts, {
+					Part = parent,
+					Material = parent.Material,
+					Color = parent.Color,
+				})
+			end
+		end
+	end
+end
+
 local function restoreBlackoutWorld()
 	for _, record in ipairs(blackoutLights) do
 		if record.Light.Parent then
@@ -185,7 +240,18 @@ local function restoreBlackoutWorld()
 	table.clear(blackoutLights)
 	table.clear(blackoutParts)
 	table.clear(blackoutPartSeen)
+	blackoutFlickerPulse = -1
+	preBlackoutFlickerPulse = -1
+	recoveryFlickerPulse = -1
 	blackoutApplied = false
+	preBlackoutApplied = false
+	recoveryFlickerApplied = false
+	script:SetAttribute("Level3_BlackoutScreamFlickerActive", false)
+	script:SetAttribute("Level3_BlackoutScreamFlickerPulse", -1)
+	script:SetAttribute("Level3_PreBlackoutFlickerActive", false)
+	script:SetAttribute("Level3_PreBlackoutFlickerPulse", -1)
+	script:SetAttribute("Level3_RecoveryFlickerActive", false)
+	script:SetAttribute("Level3_RecoveryFlickerPulse", -1)
 end
 
 local function enforceBlackout()
@@ -195,40 +261,192 @@ local function enforceBlackout()
 			record.Light.Brightness = 0
 		end
 	end
+	for _, record in ipairs(blackoutParts) do
+		if record.Part.Parent then
+			record.Part.Material = Enum.Material.SmoothPlastic
+			record.Part.Color = Color3.fromRGB(13, 14, 15)
+		end
+	end
+	script:SetAttribute("Level3_BlackoutScreamFlickerActive", false)
 end
 
-local function beginBlackout()
-	if blackoutApplied then
+local function updateBlackoutFlicker()
+	if not blackoutApplied then return end
+	local state = stateFolder()
+	local startValue = state and state:GetAttribute("Level3_BlackoutScreamStartedAtServerTime")
+	local durationValue = state and state:GetAttribute("Level3_BlackoutScreamDuration")
+	local serialValue = state and state:GetAttribute("Level3_BlackoutSerial")
+	local startedAt = if type(startValue) == "number" then startValue else 0
+	local duration = if type(durationValue) == "number" and durationValue > 0
+		then durationValue else BLACKOUT_SCREAM_DURATION
+	local elapsed = workspace:GetServerTimeNow() - startedAt
+	if startedAt <= 0 or elapsed < 0 or elapsed >= duration then
+		if blackoutFlickerPulse ~= -1 then
+			blackoutFlickerPulse = -1
+			script:SetAttribute("Level3_BlackoutScreamFlickerPulse", -1)
+		end
 		enforceBlackout()
 		return
 	end
-	blackoutApplied = true
-	table.clear(blackoutLights)
-	table.clear(blackoutParts)
-	table.clear(blackoutPartSeen)
-	local world = boundWorld
-	if world then
-		for _, descendant in ipairs(world:GetDescendants()) do
-			if descendant:IsA("Light") then
-				table.insert(blackoutLights, {
-					Light = descendant,
-					Enabled = descendant.Enabled,
-					Brightness = descendant.Brightness,
-				})
-				local parent = descendant.Parent
-				if parent and parent:IsA("BasePart") and not blackoutPartSeen[parent] then
-					blackoutPartSeen[parent] = true
-					table.insert(blackoutParts, {
-						Part = parent,
-						Material = parent.Material,
-						Color = parent.Color,
-					})
-					parent.Material = Enum.Material.SmoothPlastic
-					parent.Color = Color3.fromRGB(13, 14, 15)
-				end
-			end
+
+	local pulse = math.floor(elapsed / BLACKOUT_FLICKER_INTERVAL)
+	if pulse == blackoutFlickerPulse then return end
+	blackoutFlickerPulse = pulse
+	local serial = if type(serialValue) == "number" then math.floor(serialValue) else 0
+	-- Shared server-time hashing gives every client the same violent, irregular
+	-- sequence without local waits drifting apart.
+	local lit = ((pulse * 37 + serial * 17 + 5) % 11) < 4 or pulse % 13 == 0
+	for _, record in ipairs(blackoutLights) do
+		if record.Light.Parent then
+			record.Light.Enabled = lit and record.Enabled
+			record.Light.Brightness = if lit then record.Brightness * 1.4 else 0
 		end
 	end
+	for _, record in ipairs(blackoutParts) do
+		if record.Part.Parent then
+			record.Part.Material = if lit then record.Material else Enum.Material.SmoothPlastic
+			record.Part.Color = if lit then record.Color else Color3.fromRGB(13, 14, 15)
+		end
+	end
+	script:SetAttribute("Level3_BlackoutScreamFlickerActive", true)
+	script:SetAttribute("Level3_BlackoutScreamFlickerPulse", pulse)
+end
+
+local function normalizeSubtleFixtures()
+	for _, record in ipairs(fixtures) do
+		if record.Light.Parent then
+			record.Light.Brightness = record.Brightness
+			record.Light.Enabled = record.Enabled
+		end
+		if record.Part.Parent then record.Part.Material = Enum.Material.Neon end
+		record.RestoreAt = 0
+		record.Pulse = 0
+		record.NextPulseAt = 0
+	end
+end
+
+local function beginPreBlackout()
+	if preBlackoutApplied or blackoutApplied or recoveryFlickerApplied then return end
+	normalizeSubtleFixtures()
+	captureWorldLightBaseline()
+	preBlackoutApplied = true
+	preBlackoutFlickerPulse = -1
+	script:SetAttribute("Level3_PreBlackoutFlickerActive", true)
+end
+
+local function updatePreBlackoutFlicker()
+	if not preBlackoutApplied then return end
+	local state = stateFolder()
+	local startValue = state and state:GetAttribute("Level3_PreBlackoutStartedAtServerTime")
+	local untilValue = state and state:GetAttribute("Level3_PreBlackoutUntilServerTime")
+	local serialValue = state and state:GetAttribute("Level3_PreBlackoutSerial")
+	local startedAt = if type(startValue) == "number" then startValue else 0
+	local untilTime = if type(untilValue) == "number" then untilValue else 0
+	local duration = math.max(.1, untilTime - startedAt)
+	local elapsed = workspace:GetServerTimeNow() - startedAt
+	if startedAt <= 0 or elapsed < 0 or elapsed >= duration then return end
+	local pulse = math.floor(elapsed / PRE_BLACKOUT_FLICKER_INTERVAL)
+	if pulse == preBlackoutFlickerPulse then return end
+	preBlackoutFlickerPulse = pulse
+	local progress = math.clamp(elapsed / duration, 0, 1)
+	local serial = if type(serialValue) == "number" then math.floor(serialValue) else 0
+	local offChance = .10 + progress * .67
+	for index, record in ipairs(blackoutLights) do
+		if record.Light.Parent then
+			local hash = ((pulse * 43 + index * 19 + serial * 11) % 100) / 100
+			local surge = (pulse + index * 3) % 17 == 0
+			local lit = record.Enabled and (hash > offChance or surge)
+			record.Light.Enabled = lit
+			record.Light.Brightness = if lit
+				then record.Brightness * (surge and 1.35 or math.max(.28, 1 - progress * .48)) else 0
+		end
+	end
+	for index, record in ipairs(blackoutParts) do
+		if record.Part.Parent then
+			local hash = ((pulse * 31 + index * 23 + serial * 7) % 100) / 100
+			local lit = hash > offChance or (pulse + index) % 19 == 0
+			record.Part.Material = if lit then record.Material else Enum.Material.SmoothPlastic
+			record.Part.Color = if lit then record.Color else Color3.fromRGB(22, 22, 20)
+		end
+	end
+	script:SetAttribute("Level3_PreBlackoutFlickerPulse", pulse)
+end
+
+local function endPreBlackout(reapplyGrade: boolean)
+	if not preBlackoutApplied then return end
+	restoreBlackoutWorld()
+	if reapplyGrade and active then applyLevelGrade(exitUnlocked()) end
+end
+
+local function beginRecoveryFlicker()
+	if recoveryFlickerApplied then return end
+	if preBlackoutApplied then endPreBlackout(false) end
+	if not blackoutApplied and #blackoutLights == 0 then captureWorldLightBaseline() end
+	blackoutApplied = false
+	recoveryFlickerApplied = true
+	recoveryFlickerPulse = -1
+	script:SetAttribute("Level3_BlackoutScreamFlickerActive", false)
+	script:SetAttribute("Level3_RecoveryFlickerActive", true)
+	cancelTweens()
+	applyLevelGrade(exitUnlocked())
+end
+
+local function updateRecoveryFlicker()
+	if not recoveryFlickerApplied then return end
+	local state = stateFolder()
+	local startValue = state and state:GetAttribute("Level3_RecoveryFlickerStartedAtServerTime")
+	local untilValue = state and state:GetAttribute("Level3_RecoveryFlickerUntilServerTime")
+	local startedAt = if type(startValue) == "number" then startValue else 0
+	local untilTime = if type(untilValue) == "number" then untilValue else 0
+	local duration = math.max(.1, untilTime - startedAt)
+	local elapsed = workspace:GetServerTimeNow() - startedAt
+	if startedAt <= 0 or elapsed < 0 then return end
+	local progress = math.clamp(elapsed / duration, 0, 1)
+	local pulse = math.floor(math.max(0, elapsed) / RECOVERY_FLICKER_INTERVAL)
+	if pulse == recoveryFlickerPulse then return end
+	recoveryFlickerPulse = pulse
+	for index, record in ipairs(blackoutLights) do
+		if record.Light.Parent then
+			local turnOnAt = .10 + (((index * 37) % 67) / 100)
+			local sputter = ((pulse * 29 + index * 17) % 13) < 3
+			local lit = record.Enabled and (progress >= .94 or (progress >= turnOnAt and not sputter))
+			record.Light.Enabled = lit
+			record.Light.Brightness = if lit then record.Brightness * math.min(1, .55 + progress * .55) else 0
+		end
+	end
+	for index, record in ipairs(blackoutParts) do
+		if record.Part.Parent then
+			local turnOnAt = .08 + (((index * 41) % 71) / 100)
+			local sputter = ((pulse * 23 + index * 13) % 11) < 2
+			local lit = progress >= .94 or (progress >= turnOnAt and not sputter)
+			record.Part.Material = if lit then record.Material else Enum.Material.SmoothPlastic
+			record.Part.Color = if lit then record.Color else Color3.fromRGB(13, 14, 15)
+		end
+	end
+	script:SetAttribute("Level3_RecoveryFlickerPulse", pulse)
+end
+
+local function endRecoveryFlicker(reapplyGrade: boolean)
+	if not recoveryFlickerApplied then return end
+	restoreBlackoutWorld()
+	if reapplyGrade and active then applyLevelGrade(exitUnlocked()) end
+end
+
+local function beginBlackout()
+	if blackoutApplied then return end
+	if recoveryFlickerApplied then endRecoveryFlicker(false) end
+	if preBlackoutApplied then
+		-- Keep the clean baseline captured at 2:25; never snapshot a fixture while
+		-- the warning flicker has it temporarily dimmed or switched off.
+		preBlackoutApplied = false
+		preBlackoutFlickerPulse = -1
+		script:SetAttribute("Level3_PreBlackoutFlickerActive", false)
+		script:SetAttribute("Level3_PreBlackoutFlickerPulse", -1)
+	else
+		normalizeSubtleFixtures()
+		captureWorldLightBaseline()
+	end
+	blackoutApplied = true
 	cancelTweens()
 	colorGrade.Enabled = true
 	bloom.Enabled = false
@@ -304,6 +522,7 @@ end
 
 local function bindWorld(world: Model?)
 	if world == boundWorld then return end
+	if blackoutApplied or preBlackoutApplied or recoveryFlickerApplied then restoreBlackoutWorld() end
 	if worldAddedConnection then worldAddedConnection:Disconnect() end
 	if worldRemovingConnection then worldRemovingConnection:Disconnect() end
 	worldAddedConnection = nil
@@ -372,16 +591,18 @@ applyLevelGrade = function(unlocked: boolean)
 		Threshold = 1.45,
 	})
 
-	for _, record in ipairs(fixtures) do
-		if record.Light.Parent then
-			record.Light.Enabled = true
-			record.Light.Brightness = record.Brightness
+	if not recoveryFlickerApplied then
+		for _, record in ipairs(fixtures) do
+			if record.Light.Parent then
+				record.Light.Enabled = true
+				record.Light.Brightness = record.Brightness
+			end
 		end
 	end
 end
 
 local function restoreLighting()
-	endBlackout(false)
+	if blackoutApplied or preBlackoutApplied or recoveryFlickerApplied then restoreBlackoutWorld() end
 	transitionSerial += 1
 	local serial = transitionSerial
 	local original = snapshot
@@ -440,7 +661,8 @@ end
 workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(refreshOwnership)
 workspace:GetAttributeChangedSignal("Level3LightingOwnedByController"):Connect(refreshOwnership)
 workspace:GetAttributeChangedSignal("Level3ExitUnlocked"):Connect(function()
-	if active and not blackoutApplied and lastExitUnlocked ~= exitUnlocked() then applyLevelGrade(exitUnlocked()) end
+	if active and not blackoutApplied and not preBlackoutApplied and not recoveryFlickerApplied
+		and lastExitUnlocked ~= exitUnlocked() then applyLevelGrade(exitUnlocked()) end
 end)
 player:GetAttributeChangedSignal("InRound"):Connect(refreshOwnership)
 workspace.ChildAdded:Connect(function(child)
@@ -459,20 +681,32 @@ RunService.Heartbeat:Connect(function(dt)
 	refreshOwnership()
 	if not active then return end
 	local wantsBlackout = blackoutRequested()
+	local wantsPreBlackout = preBlackoutRequested()
+	local wantsRecovery = recoveryFlickerRequested()
 	if wantsBlackout then
+		if recoveryFlickerApplied then endRecoveryFlicker(false) end
 		beginBlackout()
-	elseif blackoutApplied then
-		endBlackout(true)
+		updateBlackoutFlicker()
+	elseif wantsRecovery then
+		beginRecoveryFlicker()
+		updateRecoveryFlicker()
+	elseif wantsPreBlackout then
+		if blackoutApplied then endBlackout(true) end
+		if recoveryFlickerApplied then endRecoveryFlicker(true) end
+		beginPreBlackout()
+		updatePreBlackoutFlicker()
+	else
+		if blackoutApplied then endBlackout(true)
+		elseif preBlackoutApplied then endPreBlackout(true)
+		elseif recoveryFlickerApplied then endRecoveryFlicker(true) end
 	end
 	local unlocked = exitUnlocked()
-	if not blackoutApplied and unlocked ~= lastExitUnlocked then applyLevelGrade(unlocked) end
+	if not blackoutApplied and not preBlackoutApplied and not recoveryFlickerApplied
+		and unlocked ~= lastExitUnlocked then applyLevelGrade(unlocked) end
 
 	local now = os.clock()
 	for index = #fixtures, 1, -1 do
-		if blackoutApplied then
-			enforceBlackout()
-			break
-		end
+		if blackoutApplied or preBlackoutApplied or recoveryFlickerApplied then break end
 		local record = fixtures[index]
 		if not (record.Part.Parent and record.Light.Parent) then
 			fixtureByPart[record.Part] = nil

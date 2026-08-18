@@ -372,6 +372,7 @@ local BAT_FULL  = Color3.fromRGB(245, 245, 245)
 local BAT_EMPTY = Color3.fromRGB(235, 60, 50)
 
 local function setLights(state)
+ if state and player:GetAttribute("Level3_Hiding") == true then state = false end
  on = state
 	if coreLight then coreLight.Enabled = state end
 	if spillLight then spillLight.Enabled = state end
@@ -405,6 +406,7 @@ local function alive()
 end
 
 local function toggle()
+	if player:GetAttribute("Level3_Hiding") == true then return end
 	if player:GetAttribute("InRound") ~= true then return end
 	if not alive() then return end -- dead / spectating: no flashlight of your own
 	if on then
@@ -452,6 +454,9 @@ local function updateRoundVisibility()
 	end
 end
 player:GetAttributeChangedSignal("InRound"):Connect(updateRoundVisibility)
+player:GetAttributeChangedSignal("Level3_Hiding"):Connect(function()
+	if player:GetAttribute("Level3_Hiding") == true and on then setLights(false) end
+end)
 updateRoundVisibility()
 
 -- ── teammates' flashlights (visible to YOU) ───────────────

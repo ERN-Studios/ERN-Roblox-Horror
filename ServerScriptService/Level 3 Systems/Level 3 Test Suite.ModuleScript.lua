@@ -3,25 +3,23 @@
 -- gameplay and can be called from Studio Edit mode after WorldBuilder.Build.
 
 local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
+local LayoutGenerator = require(script.Parent:WaitForChild("Level 3 Layout Generator"))
+local CollectionService = game:GetService("CollectionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
 local ServerStorage = game:GetService("ServerStorage")
+local StarterPlayer = game:GetService("StarterPlayer")
 
 local TestSuite = {}
 
 local FORBIDDEN_NAME_FRAGMENTS = {"entity", "monster", "hostile", "npc", "chase"}
 local SIGN_NAME_FRAGMENTS = {"level 3 sign", "room plaque", "birthday banner", "intro directory"}
-local BEIGE_ROOM_IDS = {
-	BackOffice = true,
-	BreakRoom = true,
-	Maintenance = true,
-	ChairStore = true,
-	CityPlay = true,
-	LostFound = true,
-	Exit = true,
+local DISTRICT_THEME_IDS = {
+	City = true,
+	OrangeBlackParty = true,
+	RedParty = true,
 }
-local RED_PARTY_ROOMS = {PartyA = true, Records = true}
-local NEON_PARTY_ROOMS = {PartyB = true, UtilityWest = true, CentralHall = true}
+local GENERATOR_TEST_SEEDS = {1, 2, 17, 101, 7331, 65537, 424242, 1900813, 987654321}
 local LEVEL_ONE_RUNTIME_SCRIPTS = {"EntityAI", "EntityAnimation", "EntityKill", "PuzzleManager"}
 
 local function countMap(values: {[any]: any}): number
@@ -34,6 +32,10 @@ local function approx(a: number, b: number, tolerance: number?): boolean
 	return math.abs(a - b) <= (tolerance or 0.001)
 end
 
+local function planarDistance(a: Vector3, b: Vector3): number
+	return (Vector3.new(a.X, 0, a.Z) - Vector3.new(b.X, 0, b.Z)).Magnitude
+end
+
 local function assertPart(record: {[string]: any}, key: string, root: Instance): BasePart
 	local object = record[key]
 	assert(object and object:IsA("BasePart") and object:IsDescendantOf(root),
@@ -41,10 +43,92 @@ local function assertPart(record: {[string]: any}, key: string, root: Instance):
 	return object
 end
 
+function TestSuite.ValidateGeneratedLayouts(): {[string]: any}
+	assert(Configuration.Layout.DistrictCount == 3
+		and Configuration.Layout.RoomsPerDistrict >= 8
+		and Configuration.Layout.HideTableCount == Configuration.Layout.DistrictCount
+			* Configuration.Layout.RoomsPerDistrict,
+		"Level 3 procedural district sizing or hide-table contract is invalid")
+	local expectedRooms = Configuration.Layout.DistrictCount * Configuration.Layout.RoomsPerDistrict + 2
+	local layoutHashes = {}
+	local firstLayout = nil
+	for _, requestedSeed in ipairs(GENERATOR_TEST_SEEDS) do
+		local layout = LayoutGenerator.Generate(requestedSeed)
+		local repeated = LayoutGenerator.Generate(requestedSeed)
+		local valid, validationError = LayoutGenerator.Validate(layout)
+		assert(valid, string.format("Level 3 seed %d failed validation: %s",
+			requestedSeed, tostring(validationError)))
+		assert(layout.LayoutHash == repeated.LayoutHash
+			and layout.ResolvedSeed == repeated.ResolvedSeed
+			and layout.Attempt == repeated.Attempt
+			and layout.UsedFallbackSeed == repeated.UsedFallbackSeed,
+			"Level 3 generation must be deterministic for seed " .. requestedSeed)
+		assert(layout.RequestedSeed == requestedSeed
+			and layout.Version == LayoutGenerator.Version,
+			"Level 3 generator seed/version diagnostics are stale")
+		assert(#layout.Rooms == expectedRooms
+			and #layout.Districts == Configuration.Layout.DistrictCount
+			and #layout.ModuleRooms == Configuration.ModuleGoal
+			and #layout.Links - #layout.Rooms + 1 >= 3,
+			"Level 3 generated count/loop contract failed for seed " .. requestedSeed)
+
+		local hideSpots, modules, hiddenExits = 0, 0, 0
+		local seenThemes = {}
+		for _, room in ipairs(layout.Rooms) do
+			hideSpots += tonumber(room.HideSpotCount) or 0
+			if room.Module == true then modules += 1 end
+		end
+		for _, district in ipairs(layout.Districts) do
+			assert(DISTRICT_THEME_IDS[district.ThemeId] == true
+				and not seenThemes[district.ThemeId]
+				and #district.RoomIds == Configuration.Layout.RoomsPerDistrict,
+				"Level 3 generated district themes are missing, duplicated, or uneven")
+			seenThemes[district.ThemeId] = true
+		end
+		for _, link in ipairs(layout.Links) do
+			if link.Door == "HiddenExit" then hiddenExits += 1 end
+		end
+		assert(hideSpots == Configuration.Layout.HideTableCount
+			and modules == Configuration.ModuleGoal
+			and hiddenExits == 1
+			and countMap(seenThemes) == Configuration.Layout.DistrictCount,
+			"Level 3 generated objectives, hiding, or theme distribution is invalid")
+		assert(layout.RoomById[layout.Roles.ArrivalRoomId] ~= nil
+			and layout.RoomById[layout.Roles.ExitRoomId] ~= nil
+			and layout.RoomById[layout.Roles.SignalRoomId] ~= nil
+			and layout.RoomById[layout.Roles.MallManagerSpawnRoomId] ~= nil
+			and layout.Roles.SignalRoomId == layout.Roles.MallManagerSpawnRoomId
+			and layout.Roles.MallManagerSpawnRoomId ~= layout.Roles.ExitRoomId,
+			"Level 3 generated role metadata is incomplete or unsafe")
+		layoutHashes[layout.LayoutHash] = true
+		if firstLayout == nil then firstLayout = layout end
+	end
+	assert(countMap(layoutHashes) >= 4,
+		"Level 3 deterministic seed suite did not produce enough layout diversity")
+	local summaryLayout = firstLayout :: any
+	return {
+		Seeds = #GENERATOR_TEST_SEEDS,
+		UniqueLayouts = countMap(layoutHashes),
+		Rooms = #summaryLayout.Rooms,
+		Links = #summaryLayout.Links,
+		Modules = #summaryLayout.ModuleRooms,
+		Loops = #summaryLayout.Links - #summaryLayout.Rooms + 1,
+		HiddenExitLinks = 1,
+		GeneratorVersion = LayoutGenerator.Version,
+	}
+end
+
 function TestSuite.ValidateConfiguration(): {[string]: any}
-	assert(Configuration.Version >= 10, "Level 3 CD/audio/arrival revision must be at least 10")
-	assert(Configuration.Textures.KidsDrawingsAtlas == "rbxassetid://134566516757424",
-		"Level 3 must use the expanded 4x4 kids-drawing atlas")
+	assert(Configuration.Version >= 26, "Level 3 scream-lead and reduced-speed revision must be at least 26")
+	local devAccess = require(ReplicatedStorage:WaitForChild("DevAccess"))
+	assert(devAccess.IsLevel3TimelineOwner(9488575949)
+		and not devAccess.IsLevel3TimelineOwner(40920547)
+		and not devAccess.IsLevel3TimelineOwner(833029598),
+		"Level 3 timeline skip must remain exclusive to LaverSneglen")
+	assert(Configuration.Textures.KidsDrawingsAtlas == "rbxassetid://136455642832077"
+		and Configuration.Textures.KidsDrawingsWholesome25 == "rbxassetid://128767366284181"
+		and Configuration.Textures.KidsDrawingsDisturbing25 == "rbxassetid://132144680342985",
+		"Level 3 must use the original 16 plus both approved 25-cell transparent drawing atlases")
 	assert(Configuration.Textures.CDCoversAtlas == "rbxassetid://88160214591687",
 		"Level 3 must use the authored CD-cover atlas")
 	assert(Configuration.CorridorWidth == 14 and Configuration.CorridorHeight == 10.5,
@@ -53,10 +137,143 @@ function TestSuite.ValidateConfiguration(): {[string]: any}
 		"Level 3 doors must remain the approved 6 x 8.5 studs")
 	assert(Configuration.ModuleGoal == 5, "Level 3 must require exactly five modules")
 	assert(Configuration.MusicSequence.DurationSeconds == 180.035917
-		and Configuration.MusicSequence.BlackoutSeconds == 30,
-		"Level 3 room-song timing must match the complete three-minute master and 30-second blackout")
-	assert(Configuration.MusicSequence.CorridorVolume < Configuration.MusicSequence.RoomVolume,
-		"Level 3 room song must be quieter in corridors than inside rooms")
+		and Configuration.MusicSequence.BlackoutStartSeconds == 150
+		and Configuration.MusicSequence.PreBlackoutFlickerSeconds == 5
+		and Configuration.MusicSequence.BlackoutScreamLeadSeconds == 3
+		and Configuration.MusicSequence.BlackoutScreamLeadSeconds > 0
+		and Configuration.MusicSequence.BlackoutScreamLeadSeconds
+			< Configuration.MusicSequence.DurationSeconds - Configuration.MusicSequence.BlackoutStartSeconds
+		and Configuration.MusicSequence.PostSongBlackoutSeconds == 30
+		and approx(Configuration.MusicSequence.CycleEndSeconds,
+			Configuration.MusicSequence.DurationSeconds + Configuration.MusicSequence.PostSongBlackoutSeconds)
+		and approx(Configuration.MusicSequence.BlackoutSeconds,
+			Configuration.MusicSequence.CycleEndSeconds - Configuration.MusicSequence.BlackoutStartSeconds)
+		and Configuration.MusicSequence.RecoveryFlickerSeconds >= 3,
+		"Level 3 must warn at 2:25, black out at 2:30, scream during the final three song seconds, then hunt for 30 seconds")
+	assert(Configuration.MusicSequence.CorridorVolume < Configuration.MusicSequence.RoomVolume
+		and approx(Configuration.MusicSequence.SpeakerVolume, .30, .000001)
+		and approx(Configuration.MusicSequence.SpeakerMinDistance, 18, .000001)
+		and approx(Configuration.MusicSequence.SpeakerMaxDistance, 180, .000001)
+		and Configuration.MusicSequence.SpeakerMaxAudibleVoices == 2
+		and approx(Configuration.MusicSequence.SpeakerSecondaryVolumeScale, .25, .000001),
+		"Level 3 PA mix must cap synchronized speaker stacking at a restrained level")
+	local managerTuning = Configuration.MallManager
+	assert(type(managerTuning.SpawnRoomId) == "string"
+		and managerTuning.SpawnRoomId ~= ""
+		and managerTuning.SpawnRoomId ~= "Exit"
+		and managerTuning.SpawnMinimumDistance == 90
+		and managerTuning.SpawnPreferredDistance == 125
+		and managerTuning.SpawnMaximumDistance == 180
+		and managerTuning.SpawnGroupRadius >= 60,
+		"Mall Manager must spawn 90-180 studs from the densest player group")
+	assert(managerTuning.AgentRadius == 5
+		and managerTuning.SweepRadius == 5.25
+		and managerTuning.AgentRadius * 2 + 2 <= Configuration.CorridorWidth
+		and managerTuning.SweepRadius * 2 + 1 <= Configuration.CorridorWidth
+		and managerTuning.AgentHeight + .5 <= Configuration.CorridorHeight
+		and managerTuning.WaypointReachDistance <= managerTuning.AgentRadius * .25
+		and managerTuning.PathLookaheadWaypoints >= 3
+		and managerTuning.BlackoutPathLookaheadWaypoints > managerTuning.PathLookaheadWaypoints
+		and managerTuning.PathSampleHeight >= .25 and managerTuning.PathSampleHeight <= 1
+		and managerTuning.CorridorCenteringLead >= managerTuning.SweepRadius
+		and managerTuning.DirectPathRange <= 32
+		and managerTuning.BlackoutDirectPathRange > managerTuning.DirectPathRange
+		and managerTuning.MaxPathFailures == 3
+		and managerTuning.ObstructionRecoveryAttempts == 3
+		and managerTuning.ProgressResetDistance >= 8
+		and managerTuning.RecoveryBackoffDistance >= 2.5
+		and managerTuning.MaximumRecoveryTeleportDistance == 0,
+
+		"Mall Manager wall-clearance envelope does not safely fit the Level 3 corridors")
+	assert(managerTuning.MovementAcceleration >= 40
+		and managerTuning.MovementDeceleration > managerTuning.MovementAcceleration
+		and managerTuning.MaximumMovementDeltaSeconds <= .05
+		and managerTuning.TurnResponsiveness > 0
+		and managerTuning.BlackoutTurnResponsiveness > managerTuning.TurnResponsiveness
+		and managerTuning.ChaseVisualLossGraceSeconds >= .4
+		and managerTuning.ChaseVisualLossGraceSeconds <= 1.5
+		and managerTuning.MinimumAnimationSpeed <= managerTuning.Normal.PatrolSpeed / managerTuning.WalkReferenceSpeed
+		and managerTuning.PathRecomputeSeconds > managerTuning.BlackoutPathRecomputeSeconds
+		and managerTuning.BlackoutPathGoalMoveThreshold < managerTuning.PathGoalMoveThreshold
+		and managerTuning.BlackoutMovementAcceleration > managerTuning.MovementAcceleration
+		and managerTuning.BlackoutMovementDeceleration > managerTuning.MovementDeceleration
+		and managerTuning.MotionSnapshotRate >= 20
+		and managerTuning.MotionSnapshotRate <= 30
+		and managerTuning.MotionInterpolationDelaySeconds >= .05
+		and managerTuning.MotionInterpolationDelaySeconds <= .1
+		and managerTuning.MotionBufferSamples >= 6
+		and managerTuning.MotionBufferSamples <= 10
+		and managerTuning.MotionLongGapSeconds >= .25
+		and managerTuning.ContinuousAnimationPlaybackSpeed > 0
+		and managerTuning.SpawnGraceSeconds == 0
+		and managerTuning.PatrolPauseSeconds == 0,
+		"Mall Manager smoothing, continuous locomotion, or background-repath tuning is invalid")
+	assert(managerTuning.Blackout.VisionRange >= managerTuning.Normal.VisionRange * 2
+		and managerTuning.Blackout.HearingWalkRange >= managerTuning.Normal.HearingWalkRange * 2,
+		"Mall Manager blackout awareness must remain substantially increased")
+	assert(approx(managerTuning.Blackout.PatrolSpeed, 5.25, .000001)
+		and approx(managerTuning.Blackout.InvestigateSpeed, 12.6, .000001)
+		and approx(managerTuning.Blackout.SearchSpeed, 15.4, .000001)
+		and approx(managerTuning.Blackout.ChaseSpeed, 20.3, .000001)
+		and managerTuning.Blackout.ChaseSpeed < 26
+		and managerTuning.Blackout.ChaseSpeed > 16
+		and managerTuning.MaximumAnimationSpeed >= managerTuning.Blackout.ChaseSpeed / managerTuning.WalkReferenceSpeed,
+		"Mall Manager blackout movement profile must remain exactly 30 percent slower with matched animation")
+	assert(managerTuning.Normal.PatrolSpeed == 4.5
+		and managerTuning.Blackout.PatrolSpeed > managerTuning.Normal.PatrolSpeed,
+		"Mall Manager blackout wandering must remain deliberate and slower than a chase")
+	assert(managerTuning.Normal.PatrolSpeed < managerTuning.Normal.InvestigateSpeed
+		and managerTuning.Normal.InvestigateSpeed < managerTuning.Normal.SearchSpeed
+		and managerTuning.Normal.SearchSpeed < managerTuning.Normal.ChaseSpeed
+		and managerTuning.Blackout.PatrolSpeed < managerTuning.Blackout.InvestigateSpeed
+		and managerTuning.Blackout.InvestigateSpeed < managerTuning.Blackout.SearchSpeed
+		and managerTuning.Blackout.SearchSpeed < managerTuning.Blackout.ChaseSpeed,
+		"Mall Manager locomotion states must escalate from slow walk to chase")
+	local expectedFootsteps = {
+		{Name = "Mall Manager Walk Sound 1", Id = "rbxassetid://86969848436282", Time = 0.8},
+		{Name = "Mall Manager Walk Sound 2", Id = "rbxassetid://125163405380423", Time = 1.2},
+		{Name = "Mall Manager Walk Sound 3", Id = "rbxassetid://131363472955449", Time = 2.266667},
+		{Name = "Mall Manager Walk Sound 4", Id = "rbxassetid://128260682244977", Time = 2.666667},
+	}
+	assert(#managerTuning.FootstepSoundNames == 4 and #managerTuning.FootstepAnimationTimes == 4,
+		"Mall Manager must own exactly four walk sounds and four touchdown phases")
+	for index, expected in ipairs(expectedFootsteps) do
+		assert(managerTuning.FootstepSoundNames[index] == expected.Name
+			and Configuration.Audio[expected.Name] == expected.Id
+			and approx(managerTuning.FootstepAnimationTimes[index], expected.Time, .0001),
+			"Mall Manager footstep name, ID, or touchdown phase is stale at index " .. index)
+		if index > 1 then
+			assert(managerTuning.FootstepAnimationTimes[index] > managerTuning.FootstepAnimationTimes[index - 1],
+				"Mall Manager touchdown phases must be strictly increasing")
+		end
+	end
+	assert(managerTuning.FootstepAnimationTimes[4] < 2.9
+		and approx(managerTuning.FootstepVolume, 2.0, .000001)
+		and approx(managerTuning.FootstepRollOffMinDistance, 20, .000001)
+		and approx(managerTuning.FootstepRollOffMaxDistance, 90, .000001)
+		and managerTuning.FootstepRollOffMaxDistance > managerTuning.FootstepRollOffMinDistance,
+		"Mall Manager footstep spatial-audio tuning is invalid")
+	assert(Configuration.Audio.MallManagerBlackout == "rbxassetid://125407251695204"
+		and managerTuning.BlackoutScreamSoundName == "Mall Manager Walk Blackout Scream"
+		and approx(managerTuning.BlackoutScreamDurationSeconds, 8.071836735, .000001)
+		and approx(managerTuning.BlackoutScreamVolume, .90, .000001)
+		and approx(managerTuning.BlackoutScreamRollOffMinDistance, 22, .000001)
+		and approx(managerTuning.BlackoutScreamRollOffMaxDistance, 210, .000001)
+		and managerTuning.BlackoutScreamMaxLocalVoices == 1
+		and managerTuning.BlackoutScreamSourceMinimumDistance == 75
+		and managerTuning.BlackoutScreamSourcePreferredDistance == 115
+		and managerTuning.BlackoutScreamSourceMaximumDistance == 175
+		and managerTuning.BlackoutScreamMinimumStructuralOccluders == 2
+		and managerTuning.BlackoutScreamLowGain == 0
+		and managerTuning.BlackoutScreamMidGain == -9
+		and managerTuning.BlackoutScreamHighGain == -24,
+		"Mall Manager blackout scream must be one distant, structurally muffled corridor voice")
+	assert(Configuration.Audio.MallManagerBalloonScream == "rbxassetid://105088070261380"
+		and managerTuning.ChaseScreamSoundName == "Mall Manager Chase Scream 1"
+		and approx(managerTuning.ChaseScreamDurationSeconds, 22.569795918, .000001)
+		and managerTuning.ChaseScreamCooldownSeconds >= managerTuning.ChaseScreamDurationSeconds
+		and managerTuning.ChaseScreamRollOffMaxDistance > managerTuning.ChaseScreamRollOffMinDistance,
+		"Mall Manager chase scream tuning is stale or permits overlapping restarts")
 	assert(Configuration.Textures.StaffDoor == "rbxassetid://127165696221846",
 		"Level 3 StaffDoor must use the approved published texture")
 	assert(Configuration.Textures.PartyCarpetNeon == "rbxassetid://110230144446272"
@@ -66,6 +283,98 @@ function TestSuite.ValidateConfiguration(): {[string]: any}
 	local assets = ServerStorage:FindFirstChild("Level3Assets")
 	local furniture = assets and assets:FindFirstChild("FurnitureTemplates")
 	assert(furniture and furniture:IsA("Folder"), "Level 3 vetted furniture templates are missing")
+	local entityTemplates = assets and assets:FindFirstChild("EntityTemplates")
+	local managerTemplate = entityTemplates and entityTemplates:FindFirstChild(managerTuning.TemplateName)
+	assert(managerTemplate and managerTemplate:IsA("Model")
+		and managerTemplate.PrimaryPart and managerTemplate.PrimaryPart.Name == "HumanoidRootPart"
+		and managerTemplate:GetAttribute("RuntimeReady") == true
+		and (tonumber(managerTemplate:GetAttribute("RuntimeRevision")) or 0) >= 24,
+		"Mall Manager runtime-ready custom rig template is missing or stale")
+	local visualSmoother = StarterPlayer.StarterPlayerScripts:FindFirstChild("Level 3 Mall Manager Visual Smoother")
+	assert(visualSmoother and visualSmoother:IsA("LocalScript") and visualSmoother.Enabled,
+		"Mall Manager client visual smoother is missing or disabled")
+	local level3Remotes = ReplicatedStorage:FindFirstChild(Configuration.RemotesFolderName)
+	local motionRemote = level3Remotes and level3Remotes:FindFirstChild(Configuration.MallManagerMotionEventName)
+	assert(motionRemote and motionRemote:IsA("UnreliableRemoteEvent"),
+		"Mall Manager buffered-motion remote is missing or has the wrong class")
+	local hideRemote = level3Remotes and level3Remotes:FindFirstChild(Configuration.HideRequestEventName)
+	local hideClient = StarterPlayer.StarterPlayerScripts:FindFirstChild("Level 3 Table Hiding Client")
+	local hideController = ServerScriptService:FindFirstChild("Level 3 Systems")
+		and ServerScriptService["Level 3 Systems"]:FindFirstChild("Level 3 Hiding Controller")
+	assert(hideRemote and hideRemote:IsA("RemoteEvent")
+		and hideClient and hideClient:IsA("LocalScript") and hideClient.Enabled
+		and hideController and hideController:IsA("ModuleScript"),
+		"Level 3 cross-device hiding controllers or remote are missing")
+	assert(Configuration.Hiding.PromptHoldDuration == 0
+		and Configuration.Hiding.PromptMaxDistance >= 7
+		and Configuration.Hiding.HiddenRootHeight > 0
+		and Configuration.Hiding.SightOccluderSize.Y >= 3,
+		"Level 3 table-hiding interaction tuning is unsafe")
+	assert(managerTemplate:FindFirstChildOfClass("AnimationController")
+		and managerTemplate:FindFirstChildOfClass("AnimationController"):FindFirstChildOfClass("Animator"),
+		"Mall Manager template is missing AnimationController.Animator")
+	for _, object in ipairs(managerTemplate:GetDescendants()) do
+		assert(not object:IsA("Humanoid") and not object:IsA("BaseScript"),
+			"Mall Manager template must remain a scriptless custom bone rig")
+	end
+	local entityAnimations = assets and assets:FindFirstChild("EntityAnimations")
+	local managerAnimations = entityAnimations and entityAnimations:FindFirstChild("MallManager")
+	local walk = managerAnimations and managerAnimations:FindFirstChild("Walk")
+	assert(walk and walk:IsA("Animation") and walk.AnimationId == "rbxassetid://123012476898232",
+		"Mall Manager published walk reference is missing or stale")
+	local entitySounds = assets and assets:FindFirstChild("EntitySounds")
+	local managerSounds = entitySounds and entitySounds:FindFirstChild("MallManager")
+	assert(managerSounds and managerSounds:IsA("Folder") and #managerSounds:GetChildren() == 4,
+		"Mall Manager saved footstep prototypes are missing or duplicated")
+	for index, expected in ipairs(expectedFootsteps) do
+		local sound = managerSounds:FindFirstChild(expected.Name)
+		assert(sound and sound:IsA("Sound") and sound.SoundId == expected.Id
+			and sound.Looped == false and sound.PlayOnRemove == false
+			and approx(sound.PlaybackSpeed, 1) and approx(sound.Volume, managerTuning.FootstepVolume)
+			and sound.RollOffMode == Enum.RollOffMode.InverseTapered
+			and approx(sound.RollOffMinDistance, managerTuning.FootstepRollOffMinDistance)
+			and approx(sound.RollOffMaxDistance, managerTuning.FootstepRollOffMaxDistance)
+			and sound:GetAttribute("FootstepIndex") == index
+			and approx(tonumber(sound:GetAttribute("AnimationTime")) or -1, expected.Time, .0001),
+			"Saved Mall Manager footstep prototype is stale: " .. expected.Name)
+	end
+	local screamFolder = entitySounds and entitySounds:FindFirstChild("MallManagerScreams")
+	assert(screamFolder and screamFolder:IsA("Folder") and #screamFolder:GetChildren() == 2,
+		"Mall Manager saved scream prototypes are missing or duplicated")
+	local expectedScreams = {
+		{Name=managerTuning.BlackoutScreamSoundName, Id=Configuration.Audio.MallManagerBlackout,
+			Volume=managerTuning.BlackoutScreamVolume, Min=managerTuning.BlackoutScreamRollOffMinDistance,
+			Max=managerTuning.BlackoutScreamRollOffMaxDistance, Duration=managerTuning.BlackoutScreamDurationSeconds,
+			Muffled=true},
+		{Name=managerTuning.ChaseScreamSoundName, Id=Configuration.Audio.MallManagerBalloonScream,
+			Volume=managerTuning.ChaseScreamVolume, Min=managerTuning.ChaseScreamRollOffMinDistance,
+			Max=managerTuning.ChaseScreamRollOffMaxDistance, Duration=managerTuning.ChaseScreamDurationSeconds},
+	}
+	for _, expected in ipairs(expectedScreams) do
+		local sound = screamFolder:FindFirstChild(expected.Name)
+		assert(sound and sound:IsA("Sound") and sound.SoundId == expected.Id
+			and sound.Looped == false and sound.PlayOnRemove == false
+			and approx(sound.PlaybackSpeed, 1) and approx(sound.Volume, expected.Volume)
+			and sound.RollOffMode == Enum.RollOffMode.InverseTapered
+			and approx(sound.RollOffMinDistance, expected.Min)
+			and approx(sound.RollOffMaxDistance, expected.Max)
+			and sound:GetAttribute("Level3_MallManagerScreamPrototype") == true
+			and approx(tonumber(sound:GetAttribute("DurationSeconds")) or -1, expected.Duration, .000001),
+			"Saved Mall Manager scream prototype is stale: " .. expected.Name)
+		if expected.Muffled then
+			local equalizer = sound:FindFirstChildOfClass("EqualizerSoundEffect")
+			local reverb = sound:FindFirstChildOfClass("ReverbSoundEffect")
+			assert(equalizer and equalizer.LowGain == managerTuning.BlackoutScreamLowGain
+				and equalizer.MidGain == managerTuning.BlackoutScreamMidGain
+				and equalizer.HighGain == managerTuning.BlackoutScreamHighGain
+				and reverb and approx(reverb.Density, managerTuning.BlackoutScreamReverbDensity)
+				and approx(reverb.Diffusion, managerTuning.BlackoutScreamReverbDiffusion)
+				and approx(reverb.DecayTime, managerTuning.BlackoutScreamReverbDecayTime)
+				and approx(reverb.DryLevel, managerTuning.BlackoutScreamReverbDryLevel)
+				and approx(reverb.WetLevel, managerTuning.BlackoutScreamReverbWetLevel),
+				"Saved blackout scream is missing its distant wall-muffle effects")
+		end
+	end
 	for _, templateName in ipairs({"PlasticPartyChairTemplate", "FoldingTableTemplate"}) do
 		local template = furniture:FindFirstChild(templateName)
 		assert(template and template:IsA("MeshPart") and template:GetAttribute("Level3_VettedTemplate") == true,
@@ -75,74 +384,17 @@ function TestSuite.ValidateConfiguration(): {[string]: any}
 		end
 	end
 
-	local roomsById = {}
-	local moduleRooms = 0
-	for _, room in ipairs(Configuration.Rooms) do
-		assert(type(room.Id) == "string" and roomsById[room.Id] == nil,
-			"Level 3 room ids must be unique")
-		assert(room.W >= 28 and room.D >= 24, "Level 3 room is too small: " .. room.Id)
-		roomsById[room.Id] = room
-		if room.Module then moduleRooms += 1 end
-	end
-	assert(roomsById.Arrival and roomsById.Exit, "Level 3 requires authored Arrival and Exit rooms")
-	assert(moduleRooms == Configuration.ModuleGoal, "Every configured module needs one authored room")
-	for roomId in pairs(BEIGE_ROOM_IDS) do
-		assert(roomsById[roomId], "Unknown beige-wall room id in Level 3 tests: " .. roomId)
-	end
-	assert(not BEIGE_ROOM_IDS.Arrival, "Arrival must be orange so the visual revision is visible at spawn")
-
-	local adjacency = {}
-	for id in pairs(roomsById) do adjacency[id] = {} end
-	local edgeKeys = {}
-	local hiddenExitLinks = 0
-	for _, link in ipairs(Configuration.Links) do
-		assert(roomsById[link.A] and roomsById[link.B], "Level 3 link references an unknown room")
-		assert(link.A ~= link.B, "Level 3 link cannot connect a room to itself")
-		assert(link.Door == "Open" or link.Door == "Openable" or link.Door == "HiddenExit",
-			"Unsupported Level 3 link door type: " .. tostring(link.Door))
-		if link.Door == "HiddenExit" then
-			hiddenExitLinks += 1
-			assert((link.A == "SignalHall" and link.B == "Exit")
-				or (link.B == "SignalHall" and link.A == "Exit"),
-				"HiddenExit must be the authored SignalHall/Exit connection")
-		end
-		local key = link.A < link.B and (link.A .. "|" .. link.B) or (link.B .. "|" .. link.A)
-		assert(not edgeKeys[key], "Duplicate Level 3 link: " .. key)
-		edgeKeys[key] = true
-		table.insert(adjacency[link.A], link.B)
-		table.insert(adjacency[link.B], link.A)
-	end
-	assert(hiddenExitLinks == 1, "Level 3 must contain exactly one HiddenExit link")
-
-	local seen = {Arrival = true}
-	local queue = {"Arrival"}
-	local cursor = 1
-	while cursor <= #queue do
-		local id = queue[cursor]
-		cursor += 1
-		for _, neighbour in ipairs(adjacency[id]) do
-			if not seen[neighbour] then
-				seen[neighbour] = true
-				table.insert(queue, neighbour)
-			end
-		end
-	end
-	assert(countMap(seen) == #Configuration.Rooms, "Every Level 3 room must be reachable from Arrival")
-	assert(#Configuration.Links - #Configuration.Rooms + 1 >= 3,
-		"Level 3 must preserve at least three graph loops")
-	return {
-		Rooms = #Configuration.Rooms,
-		Links = #Configuration.Links,
-		Modules = moduleRooms,
-		Loops = #Configuration.Links - #Configuration.Rooms + 1,
-		HiddenExitLinks = hiddenExitLinks,
-	}
+	return TestSuite.ValidateGeneratedLayouts()
 end
 
 function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 	assert(type(manifest) == "table" and manifest.World and manifest.World:IsA("Model")
 		and manifest.World.Parent == workspace, "Level 3 manifest must point at its live world")
 	local world = manifest.World :: Model
+	local layout = manifest.Layout
+	assert(type(layout) == "table", "Level 3 manifest is missing its generated layout")
+	local layoutValid, layoutError = LayoutGenerator.Validate(layout)
+	assert(layoutValid, "Level 3 manifest layout is invalid: " .. tostring(layoutError))
 	assert(world.Name == Configuration.WorldName, "Level 3 world has the wrong generation name")
 	local liveWorlds = 0
 	for _, child in ipairs(workspace:GetChildren()) do
@@ -153,8 +405,76 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 		"Level 3 world/manifest generations do not match")
 	assert(world:GetAttribute("Level3_VisualRevision") == Configuration.Version,
 		"Level 3 world is missing the current visual revision stamp")
-	assert(countMap(manifest.Rooms) == #Configuration.Rooms, "Level 3 built room count mismatch")
-	assert(#manifest.Modules == Configuration.ModuleGoal, "Level 3 built module count mismatch")
+	local expectedHideTables = 0
+	for _, room in ipairs(layout.Rooms) do
+		expectedHideTables += tonumber(room.HideSpotCount) or 0
+	end
+	assert(world:GetAttribute("Level3_LayoutHash") == layout.LayoutHash
+		and world:GetAttribute("Level3_ResolvedSeed") == layout.ResolvedSeed
+		and world:GetAttribute("Level3_GeneratorVersion")
+			== (layout.Version or Configuration.Layout.GeneratorVersion),
+		"Level 3 world is missing procedural seed/hash diagnostics")
+	assert(world:GetAttribute("Level3_RoomCount") == #layout.Rooms
+		and world:GetAttribute("Level3_CorridorCount") == #layout.Links
+		and world:GetAttribute("Level3_DistrictCount") == #layout.Districts,
+		"Level 3 world procedural count attributes are stale")
+	assert(countMap(manifest.Rooms) == #layout.Rooms, "Level 3 built room count mismatch")
+	assert(#manifest.Modules == #layout.ModuleRooms
+		and #manifest.Modules == Configuration.ModuleGoal,
+		"Level 3 built module count mismatch")
+	assert(type(manifest.Corridors) == "table" and #manifest.Corridors == #layout.Links,
+		"Level 3 built corridor manifest count mismatch")
+	assert(type(manifest.HideTables) == "table" and #manifest.HideTables == expectedHideTables
+		and world:GetAttribute("Level3_HideTableCount") == expectedHideTables,
+		"Level 3 must build the generated layout's complete hiding-place set")
+	local hideIndices = {}
+	for index, anchor in ipairs(manifest.HideTables) do
+		local prompt = anchor:FindFirstChild("HideUnderTablePrompt")
+		assert(anchor:IsA("BasePart") and anchor:IsDescendantOf(world)
+			and anchor:GetAttribute("Level3_HideTableAnchor") == true
+			and anchor:GetAttribute("Level3_HideTableIndex") == index
+			and not hideIndices[index]
+			and prompt and prompt:IsA("ProximityPrompt")
+			and prompt.ActionText == "HIDE UNDER TABLE"
+			and prompt.KeyboardKeyCode == Enum.KeyCode.E
+			and prompt.GamepadKeyCode == Enum.KeyCode.ButtonX
+			and prompt.HoldDuration == Configuration.Hiding.PromptHoldDuration
+			and prompt.MaxActivationDistance == Configuration.Hiding.PromptMaxDistance,
+			"Level 3 hide table anchor/prompt is stale at index " .. index)
+		hideIndices[index] = true
+	end
+	local sightOccluders = 0
+	for _, object in ipairs(world:GetDescendants()) do
+		if object:IsA("BasePart") and object:GetAttribute("Level3_HideSightOccluder") == true then
+			sightOccluders += 1
+			assert(not object.CanCollide and not object.CanTouch and object.CanQuery and object.Transparency == 1,
+				"Level 3 hide sight occluder must be invisible, query-only, and nonblocking")
+		end
+	end
+	assert(sightOccluders == #manifest.HideTables,
+		"Level 3 must build one sight occluder per generated hiding table")
+	assert(type(manifest.BlackoutScreamOpenings) == "table"
+		and #manifest.BlackoutScreamOpenings == #layout.Links * 2
+		and world:GetAttribute("Level3_BlackoutScreamOpeningCount") == #layout.Links * 2,
+		"Level 3 must own exactly two blackout scream markers per generated corridor")
+	local openingKeys = {}
+	for index, corridor in ipairs(manifest.Corridors) do
+		assert(type(corridor.ScreamOpenings) == "table" and #corridor.ScreamOpenings == 2,
+			"Level 3 corridor is missing its two scream openings at index " .. index)
+		for openingIndex, opening in ipairs(corridor.ScreamOpenings) do
+			local side = if openingIndex == 1 then "A" else "B"
+			local expectedPoint = (if side == "A" then corridor.StartPoint else corridor.EndPoint)
+				+ Vector3.new(0, 4.2, 0)
+			local key = string.format("%02d%s", index, side)
+			assert(opening:IsA("Attachment") and opening:IsDescendantOf(corridor.Model)
+				and opening:GetAttribute("Level3_CorridorOpeningScreamEmitter") == true
+				and opening:GetAttribute("Level3_CorridorOpeningKey") == key
+				and (opening.WorldPosition - expectedPoint).Magnitude <= .02
+				and not openingKeys[key],
+				"Level 3 corridor scream opening is missing, duplicated, or misplaced: " .. key)
+			openingKeys[key] = true
+		end
+	end
 	assert(manifest.ExitGateway == nil, "Legacy ExitGateway must not survive the hidden-exit rebuild")
 	assert(type(manifest.ExitPortal) == "table", "Level 3 manifest is missing ExitPortal")
 	assert(manifest.EscapePrompt and manifest.EscapePrompt:IsA("ProximityPrompt")
@@ -162,6 +482,21 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 	assert(manifest.ExitSafeSpawn and manifest.ExitSafeSpawn:IsA("BasePart")
 		and manifest.ExitSafeSpawn:IsDescendantOf(world), "Level 3 exit safe spawn is incomplete")
 	assert(typeof(manifest.ExitPosition) == "Vector3", "Level 3 ExitPosition must be a Vector3")
+	assert(manifest.MallManagerSpawn and manifest.MallManagerSpawn:IsA("BasePart")
+		and manifest.MallManagerSpawn:IsDescendantOf(world)
+		and manifest.MallManagerSpawn:GetAttribute("Level3_MallManagerSpawn") == true
+		and manifest.MallManagerSpawn:GetAttribute("Level3_SpawnRoomId")
+			== layout.Roles.MallManagerSpawnRoomId,
+		"Level 3 Mall Manager spawn marker is missing or invalid")
+	assert(manifest.MallManagerRuntime and manifest.MallManagerRuntime:IsA("Folder")
+		and manifest.MallManagerRuntime:IsDescendantOf(world),
+		"Level 3 Mall Manager runtime folder is missing")
+	assert(not manifest.MallManagerSpawn.CanCollide and not manifest.MallManagerSpawn.CanTouch
+		and not manifest.MallManagerSpawn.CanQuery and manifest.MallManagerSpawn.Transparency == 1,
+		"Mall Manager spawn marker must remain invisible and noninteractive")
+	assert(planarDistance(manifest.MallManagerSpawn.Position, manifest.ElevatorSpawn.Position)
+		>= Configuration.MallManager.SpawnMinimumDistance,
+		"Mall Manager spawn marker is too close to player arrival")
 	assert(manifest.Elevator and manifest.ElevatorSpawn and manifest.MazeStart,
 		"Level 3 compatibility arrival is incomplete")
 	for _, marker in ipairs({manifest.Elevator, manifest.ElevatorSpawn, manifest.MazeStart}) do
@@ -184,13 +519,26 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 	assert(portal.Model and portal.Model:IsA("Model") and portal.Model:IsDescendantOf(world),
 		"Level 3 ExitPortal model is missing")
 	local hiddenWall = assertPart(portal, "Wall", world)
+	local hiddenExitLink = nil
+	for _, link in ipairs(layout.Links) do
+		if link.Door == "HiddenExit" then
+			hiddenExitLink = link
+			break
+		end
+	end
+	assert(hiddenExitLink and DISTRICT_THEME_IDS[hiddenExitLink.ThemeId] == true,
+		"Generated Level 3 layout is missing a themed HiddenExit link")
+	local expectedHiddenWallColor = if hiddenExitLink.ThemeId == "City"
+		then Color3.fromRGB(220, 213, 187)
+		elseif hiddenExitLink.ThemeId == "RedParty" then Color3.fromRGB(145, 58, 48)
+		else Color3.fromRGB(183, 78, 35)
 	assert(hiddenWall:GetAttribute("Level3_HiddenExitWall") == true,
 		"ExitPortal wall is missing Level3_HiddenExitWall")
 	assert(hiddenWall.Transparency == 0 and hiddenWall.CanCollide and hiddenWall.CanQuery
 		and not hiddenWall.CanTouch,
 		"Hidden exit wall must begin opaque, locked, queryable, and non-touching")
 	assert(hiddenWall.Material == Enum.Material.Plaster
-		and hiddenWall.Color == Color3.fromRGB(183, 78, 35)
+		and hiddenWall.Color == expectedHiddenWallColor
 		and hiddenWall.Size == Vector3.new(Configuration.CorridorWidth,
 			Configuration.CorridorHeight, Configuration.WallThickness),
 		"Hidden exit wall must seal the complete standardized tunnel portal")
@@ -310,6 +658,13 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 			and module.Model:FindFirstChild("Party Mix Compact Disc", true)
 			and module.Model:FindFirstChild("Level 3 CD Cover Surface", true),
 			"Level 3 CD collectible is missing its authored jewel-case visuals")
+		assert(type(module.PickupParts) == "table" and #module.PickupParts == 2,
+			"Level 3 CD must identify exactly two removable pickup parts")
+		for _, pickupPart in ipairs(module.PickupParts) do
+			assert(pickupPart:IsA("BasePart") and pickupPart:IsDescendantOf(module.Model)
+				and pickupPart:GetAttribute("Level3_CDPickupVisual") == true,
+				"Level 3 CD pickup-part manifest is stale")
+		end
 	end
 
 	for _, instance in ipairs(world:GetDescendants()) do
@@ -338,11 +693,16 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 		end
 		assert(not instance:IsA("TextLabel") and not instance:IsA("TextBox") and not instance:IsA("TextButton"),
 			"Generated Level 3 text UI is forbidden: " .. instance:GetFullName())
-		assert(not instance:IsA("Humanoid"), "Level 3 may not contain Humanoids/NPCs")
+		assert(not instance:IsA("Humanoid"),
+			"Level 3 generated content may not embed Humanoid-driven rigs")
 		assert(not instance:IsA("BaseScript"), "Level 3 world may not contain per-instance scripts")
 		local lowerName = string.lower(instance.Name)
+		local allowedNamedChaseVocal = instance:IsA("Sound")
+			and instance:GetAttribute("Level3_MallManagerChaseScream") == true
+			and instance:IsDescendantOf(manifest.MallManagerRuntime)
 		for _, fragment in ipairs(FORBIDDEN_NAME_FRAGMENTS) do
-			assert(not string.find(lowerName, fragment, 1, true),
+			local allowed = fragment == "chase" and allowedNamedChaseVocal
+			assert(allowed or not string.find(lowerName, fragment, 1, true),
 				"Forbidden Level 3 runtime name: " .. instance:GetFullName())
 		end
 		for _, fragment in ipairs(SIGN_NAME_FRAGMENTS) do
@@ -351,46 +711,68 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 		end
 	end
 
-	for _, room in ipairs(Configuration.Rooms) do
+	local expectedRoomThemes = {City=0, OrangeBlackParty=0, RedParty=0}
+	local expectedFloorThemes = {City=0, OrangeBlackParty=0, RedParty=0}
+	for _, room in ipairs(layout.Rooms) do
+		if expectedRoomThemes[room.ThemeId] ~= nil then
+			expectedRoomThemes[room.ThemeId] += 1
+			if room.Id ~= layout.Roles.ExitRoomId then
+				expectedFloorThemes[room.ThemeId] += 1
+			end
+		end
+	end
+	local observedRoomThemes = {City=0, OrangeBlackParty=0, RedParty=0}
+	for _, room in ipairs(layout.Rooms) do
 		local roomModel = manifest.Rooms[room.Id]
 		assert(roomModel and roomModel:IsA("Model"), "Level 3 room is missing: " .. room.Id)
+		assert(roomModel:GetAttribute("Level3_RoomId") == room.Id
+			and roomModel:GetAttribute("Level3_ThemeId") == room.ThemeId
+			and roomModel:GetAttribute("Level3_District") == (room.SectionIndex or 0),
+			"Level 3 room procedural metadata is stale: " .. room.Id)
 		local floorPart = roomModel:FindFirstChild("Level 3 Room Floor")
 		assert(floorPart and floorPart:IsA("BasePart"), "Level 3 room floor is missing: " .. room.Id)
 		stats.RoomFloors += 1
 		local floorTexture = floorPart:FindFirstChild("Level 3 Surface Texture")
-		if room.Id == "Exit" then
+		if room.Id == layout.Roles.ExitRoomId then
 			assert(floorPart.Material == Enum.Material.DiamondPlate and floorTexture == nil,
 				"Exit room must keep its explicit DiamondPlate floor exception")
 			stats.ExitFloors += 1
-		elseif BEIGE_ROOM_IDS[room.Id] then
-			assert(floorPart.Material == Enum.Material.Carpet and floorTexture and floorTexture:IsA("Texture")
+		elseif room.ThemeId == "City" then
+			assert(floorPart.Material == Enum.Material.Carpet
+				and floorTexture and floorTexture:IsA("Texture")
 				and floorTexture.Texture == Configuration.Textures.CityCarpet,
-				"Glossy pale room must use city carpet: " .. room.Id)
+				"City district room has the wrong carpet: " .. room.Id)
 			stats.CityFloors += 1
-		elseif RED_PARTY_ROOMS[room.Id] then
+		elseif room.ThemeId == "RedParty" then
 			assert(floorPart.Material == Enum.Material.Carpet
 				and floorTexture and floorTexture:IsA("Texture")
 				and floorTexture.Texture == Configuration.Textures.PartyCarpetRed,
-				"Authored red party room has the wrong carpet: " .. room.Id)
+				"Red party district room has the wrong carpet: " .. room.Id)
 			stats.PartyFloors += 1
 			stats.RedPartyFloors += 1
-		elseif NEON_PARTY_ROOMS[room.Id] then
+		elseif room.ThemeId == "OrangeBlackParty" then
 			assert(floorPart.Material == Enum.Material.Carpet
 				and floorTexture and floorTexture:IsA("Texture")
 				and floorTexture.Texture == Configuration.Textures.PartyCarpetNeon,
-				"Authored neon party room has the wrong carpet: " .. room.Id)
+				"Orange/black district room has the wrong carpet: " .. room.Id)
 			stats.PartyFloors += 1
 			stats.NeonPartyFloors += 1
 		else
-			assert(floorPart.Material == Enum.Material.Carpet and floorPart.Color == Configuration.Colors.DarkCarpet
+			assert(room.Id == layout.Roles.ArrivalRoomId
+				and floorPart.Material == Enum.Material.Carpet
 				and floorTexture and floorTexture:IsA("Texture")
 				and floorTexture.Texture == Configuration.Textures.PartyCarpet,
-				"Every other orange non-Exit room must use the original black party carpet: " .. room.Id)
+				"Only the generated arrival transition may use the original party carpet")
 			stats.PartyFloors += 1
 		end
 
-		local expectedWallColor = if BEIGE_ROOM_IDS[room.Id]
-			then Color3.fromRGB(220, 213, 187) else Color3.fromRGB(183, 78, 35)
+		local expectedWallColor = if room.ThemeId == "City"
+			then Color3.fromRGB(220, 213, 187)
+			elseif room.ThemeId == "RedParty" then Color3.fromRGB(145, 58, 48)
+			else Color3.fromRGB(183, 78, 35)
+		local expectedWallTexture = if room.ThemeId == "City"
+			then Configuration.Textures.PastelWallpaper else Configuration.Textures.OrangeWall
+		local structuralWalls, wallTextures = 0, 0
 		for _, descendant in ipairs(roomModel:GetDescendants()) do
 			if descendant:IsA("BasePart") and (
 				string.find(descendant.Name, "Level 3 North Wall", 1, true)
@@ -402,46 +784,59 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 				or string.find(descendant.Name, "Level 3 North Lintel", 1, true)
 				or string.find(descendant.Name, "Level 3 South Lintel", 1, true)
 			) then
+				structuralWalls += 1
 				assert(descendant.Color == expectedWallColor,
-					"Wrong wall palette in room " .. room.Id .. ": " .. descendant:GetFullName())
+					"Wrong generated wall palette in room " .. room.Id .. ": " .. descendant:GetFullName())
 				for _, child in ipairs(descendant:GetChildren()) do
-					local isWallpaper = child:IsA("Texture")
-						and child.Texture == Configuration.Textures.PastelWallpaper
-					local isOrangeFinish = child:IsA("Texture")
-						and child.Texture == Configuration.Textures.OrangeWall
-					assert((BEIGE_ROOM_IDS[room.Id] == true) == isWallpaper,
-						"Wallpaper/wall-color mismatch in room " .. room.Id)
-					if isOrangeFinish then
-						assert(not BEIGE_ROOM_IDS[room.Id], "Orange finish leaked into a glossy pale room")
-						stats.OrangeWallTextures += 1
+					if child:IsA("Texture") then
+						wallTextures += 1
+						assert(child.Texture == expectedWallTexture,
+							"Generated wall texture does not match room theme " .. room.ThemeId)
+						if child.Texture == Configuration.Textures.OrangeWall then
+							stats.OrangeWallTextures += 1
+						end
 					end
 				end
 			end
 		end
-		if BEIGE_ROOM_IDS[room.Id] then
-			stats.BeigeRooms += 1
-		else
-			stats.OrangeRooms += 1
+		assert(structuralWalls > 0 and wallTextures > 0,
+			"Level 3 generated room is missing themed structural wall surfaces: " .. room.Id)
+		if observedRoomThemes[room.ThemeId] ~= nil then
+			observedRoomThemes[room.ThemeId] += 1
 		end
+		if room.ThemeId == "City" then stats.BeigeRooms += 1 else stats.OrangeRooms += 1 end
 	end
-	assert(stats.OrangeRooms == 11 and stats.BeigeRooms == 7,
-		"Level 3 must contain exactly 11 orange rooms and 7 glossy pale rooms including the exit")
-	assert(stats.CityFloors == 6 and stats.ExitFloors == 1
-		and stats.PartyFloors == stats.RoomFloors - 7,
-		"Level 3 floor palette is inconsistent")
-	assert(stats.RedPartyFloors == 2 and stats.NeonPartyFloors == 3,
-		"Level 3 must preserve its authored red/neon carpet room variation")
+	for themeId, expected in pairs(expectedRoomThemes) do
+		assert(observedRoomThemes[themeId] == expected,
+			"Level 3 generated room theme count mismatch for " .. themeId)
+	end
+	assert(stats.RoomFloors == #layout.Rooms
+		and stats.ExitFloors == 1
+		and stats.CityFloors == expectedFloorThemes.City
+		and stats.RedPartyFloors == expectedFloorThemes.RedParty
+		and stats.NeonPartyFloors == expectedFloorThemes.OrangeBlackParty,
+		"Level 3 procedural room floor palette is inconsistent")
 	assert(stats.OrangeWallTextures > 0,
-		"Level 3 orange rooms are missing their generated worn-wall finish")
+		"Level 3 non-city rooms are missing their worn-wall finish")
 
+	local expectedCorridorThemes = {City=0, OrangeBlackParty=0, RedParty=0}
+	for _, link in ipairs(layout.Links) do
+		assert(expectedCorridorThemes[link.ThemeId] ~= nil,
+			"Generated Level 3 corridor has an unknown theme: " .. tostring(link.ThemeId))
+		expectedCorridorThemes[link.ThemeId] += 1
+	end
+	local observedCorridorThemes = {City=0, OrangeBlackParty=0, RedParty=0}
 	local corridors = world:FindFirstChild("Corridors")
 	assert(corridors and corridors:IsA("Folder"), "Level 3 Corridors folder is missing")
-	assert(#corridors:GetChildren() == #Configuration.Links, "Level 3 corridor model count mismatch")
+	assert(#corridors:GetChildren() == #layout.Links, "Level 3 generated corridor model count mismatch")
 	for _, corridorModel in ipairs(corridors:GetChildren()) do
+		local themeId = corridorModel:GetAttribute("Level3_ThemeId")
 		assert(corridorModel:IsA("Model")
+			and expectedCorridorThemes[themeId] ~= nil
 			and corridorModel:GetAttribute("Level3_TunnelWidth") == Configuration.CorridorWidth
 			and corridorModel:GetAttribute("Level3_TunnelHeight") == Configuration.CorridorHeight,
-			"Level 3 corridor does not use the standardized tunnel profile: " .. corridorModel:GetFullName())
+			"Level 3 corridor profile or procedural theme metadata is invalid: " .. corridorModel:GetFullName())
+		observedCorridorThemes[themeId] += 1
 		local floorPart = corridorModel:FindFirstChild("Level 3 Corridor Floor")
 		local ceilingPart = corridorModel:FindFirstChild("Level 3 Corridor Ceiling")
 		assert(floorPart and floorPart:IsA("BasePart")
@@ -450,34 +845,53 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 		assert(approx(ceilingPart.Position.Y - ceilingPart.Size.Y * .5,
 			Configuration.WorldOrigin.Y + Configuration.CorridorHeight),
 			"Level 3 tunnel has inconsistent ceiling clearance: " .. corridorModel:GetFullName())
-		local wallCount = 0
+		local expectedFloorTexture = if themeId == "City" then Configuration.Textures.CityCarpet
+			elseif themeId == "RedParty" then Configuration.Textures.PartyCarpetRed
+			else Configuration.Textures.PartyCarpetNeon
+		local floorTexture = floorPart:FindFirstChild("Level 3 Surface Texture")
+		assert(floorPart.Material == Enum.Material.Carpet
+			and floorTexture and floorTexture:IsA("Texture")
+			and floorTexture.Texture == expectedFloorTexture,
+			"Level 3 corridor floor does not match its generated district theme")
+		stats.CorridorFloors += 1
+
+		local expectedWallColor = if themeId == "City" then Color3.fromRGB(220, 213, 187)
+			elseif themeId == "RedParty" then Color3.fromRGB(145, 58, 48)
+			else Color3.fromRGB(183, 78, 35)
+		local expectedWallTexture = if themeId == "City"
+			then Configuration.Textures.PastelWallpaper else Configuration.Textures.OrangeWall
+		local wallCount, wallTextureCount = 0, 0
 		for _, object in ipairs(corridorModel:GetChildren()) do
 			if object:IsA("BasePart") and object.Name == "Level 3 Corridor Wall" then
 				wallCount += 1
-				assert(approx(object.Size.Y, Configuration.CorridorHeight),
-					"Level 3 tunnel wall has inconsistent height: " .. corridorModel:GetFullName())
+				assert(approx(object.Size.Y, Configuration.CorridorHeight)
+					and object.Color == expectedWallColor,
+					"Level 3 corridor wall height/palette is inconsistent: " .. corridorModel:GetFullName())
+				local horizontal = approx(floorPart.Size.Z, Configuration.CorridorWidth)
+				local centerOffset = if horizontal
+					then math.abs(object.Position.Z - floorPart.Position.Z)
+					else math.abs(object.Position.X - floorPart.Position.X)
+				local innerFaceOffset = centerOffset - Configuration.WallThickness * .5
+				assert(approx(innerFaceOffset, Configuration.CorridorWidth * .5, .03),
+					"Level 3 tunnel wall protrudes into the clear corridor opening: "
+						.. corridorModel:GetFullName())
+				for _, child in ipairs(object:GetChildren()) do
+					if child:IsA("Texture") then
+						wallTextureCount += 1
+						assert(child.Texture == expectedWallTexture,
+							"Level 3 corridor wall finish does not match its generated district")
+					end
+				end
 			end
 		end
-		assert(wallCount == 2, "Level 3 tunnel must have exactly two continuous side walls")
+		assert(wallCount == 2 and wallTextureCount == 2,
+			"Level 3 tunnel must have exactly two continuously themed side walls")
 	end
-	for _, instance in ipairs(corridors:GetDescendants()) do
-		if instance:IsA("BasePart") and instance.Name == "Level 3 Corridor Wall" then
-			assert(instance.Color == Color3.fromRGB(183, 78, 35),
-				"All Level 3 corridor walls must be orange")
-			for _, child in ipairs(instance:GetChildren()) do
-				assert(not (child:IsA("Texture") and child.Texture == Configuration.Textures.PastelWallpaper),
-					"Level 3 corridor walls must never use pastel wallpaper")
-			end
-		elseif instance:IsA("BasePart") and instance.Name == "Level 3 Corridor Floor" then
-			stats.CorridorFloors += 1
-			local floorTexture = instance:FindFirstChild("Level 3 Surface Texture")
-			assert(instance.Material == Enum.Material.Carpet and instance.Color == Configuration.Colors.DarkCarpet
-				and floorTexture and floorTexture:IsA("Texture")
-				and floorTexture.Texture == Configuration.Textures.PartyCarpet,
-				"All Level 3 corridors must use black party carpet")
-		end
+	for themeId, expected in pairs(expectedCorridorThemes) do
+		assert(observedCorridorThemes[themeId] == expected,
+			"Level 3 generated corridor theme count mismatch for " .. themeId)
 	end
-	assert(stats.CorridorFloors == #Configuration.Links, "Level 3 corridor floor count mismatch")
+	assert(stats.CorridorFloors == #layout.Links, "Level 3 generated corridor floor count mismatch")
 
 	local forbiddenDecor = {"Baseboard", "Shelf", "Carton", "Box", "Desk", "CRT", "Plant", "Utility Pipe"}
 	for _, instance in ipairs(world:GetDescendants()) do
@@ -487,10 +901,10 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 		end
 	end
 
-	assert(stats.BaseParts <= 4500, "Level 3 exceeded its BasePart budget")
+	assert(stats.BaseParts <= 3500, "Level 3 exceeded its procedural BasePart budget")
 	assert(stats.Collidable <= 1200, "Level 3 exceeded its collision budget")
-	assert(stats.Lights <= 90 and stats.ShadowLights <= 6, "Level 3 exceeded its lighting budget")
-	assert(stats.Prompts <= 48, "Level 3 exceeded its interaction budget")
+	assert(stats.Lights <= 120 and stats.ShadowLights <= 6, "Level 3 exceeded its procedural lighting budget")
+	assert(stats.Prompts <= 30, "Level 3 exceeded its procedural interaction budget")
 	return stats
 end
 
@@ -504,6 +918,132 @@ function TestSuite.CaptureLifecycleState(): {[string]: any}
 		Lobby = workspace:FindFirstChild("ServerLobby"),
 		Entity = workspace:FindFirstChild("Entity"),
 		Scripts = scripts,
+	}
+end
+
+function TestSuite.ValidateMallManagerRuntime(expectedPresent: boolean): {[string]: any}
+	assert(type(expectedPresent) == "boolean", "Mall Manager runtime test requires a presence boolean")
+	local world = workspace:FindFirstChild(Configuration.WorldName)
+	assert(world and world:IsA("Model"), "Mall Manager runtime test requires a live Level 3 world")
+	local state = ReplicatedStorage:FindFirstChild(Configuration.StateFolderName)
+	assert(state and state:IsA("Folder"), "Mall Manager runtime test requires Level 3 state")
+	local runtime = world:FindFirstChild("Mall Manager Runtime")
+	assert(runtime and runtime:IsA("Folder"), "Mall Manager runtime folder is missing")
+	local managers = {}
+	for _, object in ipairs(runtime:GetChildren()) do
+		if object:IsA("Model") and object:GetAttribute("Level3_MallManagerRuntime") == true then
+			table.insert(managers, object)
+		end
+	end
+	if not expectedPresent then
+		assert(#managers == 0, "Mall Manager must not exist before or after the post-song hunt")
+		assert(state:GetAttribute("Level3_MallManagerActive") == false
+			and workspace:GetAttribute("Level3MallManagerActive") == false,
+			"Mall Manager inactive state is not replicated")
+		return {State="OFF", Blackout=state:GetAttribute("Level3_BlackoutActive") == true, Parts=0, Bones=0}
+	end
+	assert(#managers == 1, "Level 3 hunt must own exactly one runtime Mall Manager")
+	local expectedBlackout = true
+	local manager = managers[1]
+	local root = manager:FindFirstChild("HumanoidRootPart")
+	local animationController = manager:FindFirstChildOfClass("AnimationController")
+	assert(manager.Name == Configuration.MallManager.RuntimeName
+		and manager.PrimaryPart == root and root and root:IsA("BasePart") and root.Anchored
+		and manager:GetAttribute("Level3_Generation") == world:GetAttribute("Level3_Generation")
+		and type(manager:GetAttribute("Level3_MallManagerSpawnSerial")) == "number",
+		"Mall Manager runtime root/pivot contract is invalid")
+	assert(animationController and animationController:FindFirstChildOfClass("Animator"),
+		"Mall Manager runtime animator is missing")
+	assert(manager:FindFirstChild("InitialPoses") == nil and manager:FindFirstChild("AnimSaves") == nil,
+		"Mall Manager runtime retained authoring-only data")
+	local footstepEmitter = root and root:FindFirstChild("Mall Manager Footstep Emitter")
+	assert(footstepEmitter and footstepEmitter:IsA("Attachment")
+		and footstepEmitter:GetAttribute("Level3_MallManagerFootstepEmitter") == true,
+		"Mall Manager runtime foot-height emitter is missing")
+	assert(#footstepEmitter:GetChildren() == 4,
+		"Mall Manager runtime must own exactly four walk Sound voices")
+	for index, name in ipairs(Configuration.MallManager.FootstepSoundNames) do
+		local sound = footstepEmitter:FindFirstChild(name)
+		assert(sound and sound:IsA("Sound") and sound.SoundId == Configuration.Audio[name]
+			and sound.Looped == false and sound.PlayOnRemove == false
+			and approx(sound.PlaybackSpeed, 1)
+			and approx(sound.Volume, Configuration.MallManager.FootstepVolume)
+			and sound.RollOffMode == Enum.RollOffMode.InverseTapered
+			and approx(sound.RollOffMinDistance, Configuration.MallManager.FootstepRollOffMinDistance)
+			and approx(sound.RollOffMaxDistance, Configuration.MallManager.FootstepRollOffMaxDistance)
+			and sound:GetAttribute("FootstepIndex") == index,
+			"Mall Manager runtime footstep voice is stale: " .. name)
+	end
+	local voiceEmitter = manager:FindFirstChild("Head", true)
+	assert(voiceEmitter and voiceEmitter:IsA("Bone")
+		and voiceEmitter:GetAttribute("Level3_MallManagerVoiceEmitter") == true,
+		"Mall Manager balloon-head voice emitter is missing")
+	local chaseScream = voiceEmitter:FindFirstChild(Configuration.MallManager.ChaseScreamSoundName)
+	assert(chaseScream and chaseScream:IsA("Sound")
+		and chaseScream.SoundId == Configuration.Audio.MallManagerBalloonScream
+		and chaseScream:GetAttribute("Level3_MallManagerChaseScream") == true
+		and chaseScream.Looped == false and chaseScream.PlayOnRemove == false
+		and approx(chaseScream.Volume, Configuration.MallManager.ChaseScreamVolume)
+		and approx(chaseScream.RollOffMinDistance, Configuration.MallManager.ChaseScreamRollOffMinDistance)
+		and approx(chaseScream.RollOffMaxDistance, Configuration.MallManager.ChaseScreamRollOffMaxDistance),
+		"Mall Manager runtime chase scream voice is stale")
+	local parts, bones = 0, 0
+	for _, object in ipairs(manager:GetDescendants()) do
+		if object:IsA("BasePart") then
+			parts += 1
+			assert(not object.CanCollide and not object.CanTouch and not object.CanQuery,
+				"Mall Manager runtime part is physically interactive: " .. object:GetFullName())
+		elseif object:IsA("Bone") then
+			bones += 1
+		end
+		assert(not object:IsA("Humanoid") and not object:IsA("BaseScript"),
+			"Mall Manager runtime must remain a scriptless custom bone rig")
+	end
+	assert(parts == 2 and bones == 22, "Mall Manager runtime rig topology is stale")
+	assert(CollectionService:HasTag(manager, "Level3HostileEntity"),
+		"Mall Manager runtime is missing its hostile collection tag")
+	assert(state:GetAttribute("Level3_MallManagerActive") == true
+		and workspace:GetAttribute("Level3MallManagerActive") == true,
+		"Mall Manager active state is not replicated")
+	assert(state:GetAttribute("Level3_MallManagerBlackoutBoosted") == expectedBlackout
+		and manager:GetAttribute("Level3_MallManagerBlackoutBoosted") == expectedBlackout,
+		"Mall Manager blackout profile is stale")
+	local expectedRange = if expectedBlackout
+		then Configuration.MallManager.Blackout.VisionRange else Configuration.MallManager.Normal.VisionRange
+	assert(state:GetAttribute("Level3_MallManagerAwarenessRange") == expectedRange,
+		"Mall Manager awareness range does not match the active lighting profile")
+	local spawnDistance = state:GetAttribute("Level3_MallManagerSpawnDistance") or 0
+	assert(spawnDistance >= Configuration.MallManager.SpawnMinimumDistance
+		and spawnDistance <= Configuration.MallManager.SpawnMaximumDistance + 1
+		and (state:GetAttribute("Level3_MallManagerSpawnGroupSize") or 0) >= 1
+		and state:GetAttribute("Level3_MallManagerSpawnRoomId") ~= "Exit"
+		and state:GetAttribute("Level3_MallManagerSpawnVisibleCount") == 0
+		and type(state:GetAttribute("Level3_MallManagerSpawnPathValidated")) == "boolean",
+		"Mall Manager grouped runtime spawn is not distant, hidden, and route-audited")
+	assert(type(state:GetAttribute("Level3_MallManagerFootstepSerial")) == "number"
+		and (state:GetAttribute("Level3_MallManagerFootstepSerial") or 0) >= 0
+		and type(state:GetAttribute("Level3_MallManagerLastFootstepName")) == "string",
+		"Mall Manager footstep diagnostics are missing")
+	assert(type(state:GetAttribute("Level3_MallManagerChaseScreamSerial")) == "number"
+		and (state:GetAttribute("Level3_MallManagerChaseScreamSerial") or 0) >= 0
+		and type(state:GetAttribute("Level3_MallManagerChaseScreamPlaying")) == "boolean"
+		and type(state:GetAttribute("Level3_MallManagerLastChaseScreamName")) == "string",
+		"Mall Manager chase scream diagnostics are missing")
+	local runtimeCorridors = world:FindFirstChild("Corridors")
+	assert(runtimeCorridors and runtimeCorridors:IsA("Folder"),
+		"Mall Manager runtime test requires generated corridor metadata")
+	local expectedOpeningCount = #runtimeCorridors:GetChildren() * 2
+	assert(state:GetAttribute("Level3_BlackoutScreamAssetId") == Configuration.Audio.MallManagerBlackout
+		and approx(state:GetAttribute("Level3_BlackoutScreamDuration") or 0,
+			Configuration.MallManager.BlackoutScreamDurationSeconds, .000001)
+		and state:GetAttribute("Level3_BlackoutScreamOpeningCount") == expectedOpeningCount,
+		"Level 3 blackout scream state is missing or stale")
+	return {
+		State = state:GetAttribute("Level3_MallManagerState"),
+		Blackout = expectedBlackout,
+		AwarenessRange = expectedRange,
+		Parts = parts,
+		Bones = bones,
 	}
 end
 
@@ -525,6 +1065,8 @@ function TestSuite.ValidateRuntime(expectedProgress: number): {[string]: any}
 		and workspace:GetAttribute("Level3ModuleGoal") == Configuration.ModuleGoal
 		and workspace:GetAttribute("Level3ExitUnlocked") == unlocked,
 		"Workspace Level 3 progress mirrors are stale")
+	local managerReport = TestSuite.ValidateMallManagerRuntime(
+		state:GetAttribute("Level3_MallManagerHuntActive") == true)
 
 	local portalModel = world:FindFirstChild("Level 3 Hidden Exit Portal", true)
 	assert(portalModel and portalModel:IsA("Model"), "Live Level 3 hidden exit portal is missing")
@@ -570,6 +1112,23 @@ function TestSuite.ValidateRuntime(expectedProgress: number): {[string]: any}
 			local prompt = model:FindFirstChild("CollectPrompt", true)
 			assert(prompt and prompt:IsA("ProximityPrompt") and prompt.Enabled ~= collected,
 				"Module prompt/collected state mismatch: " .. model:GetFullName())
+			local pickupVisuals, persistentDisplays = 0, 0
+			for _, object in ipairs(model:GetDescendants()) do
+				if object:IsA("BasePart") and object:GetAttribute("Level3_CDPickupVisual") == true then
+					pickupVisuals += 1
+					if collected then
+						assert(object.Transparency >= .99 and not object.CanCollide
+							and not object.CanTouch and not object.CanQuery,
+							"Collected CD disc/hub remains interactable or visible: " .. object:GetFullName())
+					end
+				elseif object:IsA("BasePart") and object:GetAttribute("Level3_CDPersistentDisplay") == true then
+					persistentDisplays += 1
+					assert(object.Transparency < .99,
+						"CD jewel case or illustrated cover disappeared: " .. object:GetFullName())
+				end
+			end
+			assert(pickupVisuals == 2 and persistentDisplays == 2,
+				"CD pickup/display ownership markers are incomplete: " .. model:GetFullName())
 		end
 	end
 	assert(collectedModules == expectedProgress, "Collected module model count is stale")
@@ -590,7 +1149,8 @@ function TestSuite.ValidateRuntime(expectedProgress: number): {[string]: any}
 		end
 	end
 	assert(stableDoors == 0, "Revision 5 must not restore ordinary interactive Level 3 doors")
-	return {Progress = expectedProgress, Frames = #frameParts, Doors = stableDoors}
+	return {Progress = expectedProgress, Frames = #frameParts, Doors = stableDoors,
+		MallManager = managerReport}
 end
 
 function TestSuite.ValidateCleanup(snapshot: {[string]: any}): {[string]: any}
@@ -626,8 +1186,18 @@ function TestSuite.ValidateCleanup(snapshot: {[string]: any}): {[string]: any}
 		and workspace:GetAttribute("Level3Modules") == 0
 		and workspace:GetAttribute("Level3ModuleGoal") == 0
 		and workspace:GetAttribute("Level3ExitUnlocked") == false
-		and workspace:GetAttribute("Level3LightingOwnedByController") == false,
+		and workspace:GetAttribute("Level3LightingOwnedByController") == false
+		and workspace:GetAttribute("Level3PreBlackoutActive") == false
+		and workspace:GetAttribute("Level3BlackoutActive") == false
+		and workspace:GetAttribute("Level3MallManagerHuntActive") == false
+		and workspace:GetAttribute("Level3RecoveryFlickerActive") == false
+		and workspace:GetAttribute("Level3MallManagerActive") == false
+		and workspace:GetAttribute("Level3MallManagerState") == "OFF"
+		and workspace:GetAttribute("Level3MallManagerBlackoutBoosted") == false
+		and workspace:GetAttribute("Level3HiddenPlayers") == 0,
 		"Cleanup did not reset Level 3 workspace state")
+	assert(#CollectionService:GetTagged("Level3HostileEntity") == 0,
+		"Cleanup left a tagged Mall Manager runtime behind")
 	for _, legacyName in ipairs({"Level3Pumps", "Level3PumpGoal", "Level3ExitPowered"}) do
 		assert(workspace:GetAttribute(legacyName) == nil,
 			"Cleanup retained legacy workspace attribute " .. legacyName)
@@ -640,8 +1210,40 @@ function TestSuite.ValidateCleanup(snapshot: {[string]: any}): {[string]: any}
 		and state:GetAttribute("Level3_ExitUnlocked") == false
 		and state:GetAttribute("Level3_ExitPosition") == nil
 		and state:GetAttribute("Level3_LightingMode") == "OFF"
+		and state:GetAttribute("Level3_PreBlackoutActive") == false
+		and state:GetAttribute("Level3_BlackoutActive") == false
+		and state:GetAttribute("Level3_MallManagerHuntActive") == false
+		and state:GetAttribute("Level3_RecoveryFlickerActive") == false
+		and state:GetAttribute("Level3_MallManagerActive") == false
+		and state:GetAttribute("Level3_MallManagerState") == "OFF"
+		and state:GetAttribute("Level3_MallManagerBlackoutBoosted") == false
+		and state:GetAttribute("Level3_MallManagerTargetUserId") == 0
+		and state:GetAttribute("Level3_MallManagerSpeed") == 0
+		and state:GetAttribute("Level3_MallManagerAwarenessRange") == 0
+		and state:GetAttribute("Level3_MallManagerFootstepSerial") == 0
+		and state:GetAttribute("Level3_MallManagerLastFootstepIndex") == 0
+		and state:GetAttribute("Level3_MallManagerLastFootstepName") == ""
+		and state:GetAttribute("Level3_MallManagerLastFootstepPhase") == 0
+		and state:GetAttribute("Level3_MallManagerChaseScreamSerial") == 0
+		and state:GetAttribute("Level3_MallManagerChaseScreamPlaying") == false
+		and state:GetAttribute("Level3_MallManagerLastChaseScreamAtServerTime") == 0
+		and state:GetAttribute("Level3_MallManagerLastChaseScreamName") == ""
+		and state:GetAttribute("Level3_BlackoutScreamOpeningCount") == 0
+		and state:GetAttribute("Level3_BlackoutScreamStartedAtServerTime") == 0
+		and state:GetAttribute("Level3_HiddenPlayers") == 0
+		and state:GetAttribute("Level3_MallManagerSpawnAnchorUserId") == 0
+		and state:GetAttribute("Level3_MallManagerSpawnGroupSize") == 0
+		and state:GetAttribute("Level3_MallManagerSpawnCycle") == 0
+		and state:GetAttribute("Level3_MallManagerSpawnSerial") == 0
+		and approx(state:GetAttribute("Level3_BlackoutScreamDuration") or 0,
+			Configuration.MallManager.BlackoutScreamDurationSeconds, .000001)
 		and state:GetAttribute("Level3_Error") == nil,
 		"Cleanup did not reset replicated Level 3 state")
+	for _, player in ipairs(game:GetService("Players"):GetPlayers()) do
+		assert(player:GetAttribute("Level3_Hiding") ~= true
+			and (player:GetAttribute("Level3_HideTableIndex") or 0) == 0,
+			"Cleanup left a player hidden under a destroyed table")
+	end
 	return {RestoredScripts = countMap(snapshot.Scripts)}
 end
 

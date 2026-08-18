@@ -1197,6 +1197,14 @@ task.spawn(function()
 					faceFlat(hrp.Position)
 					local ev = entity:FindFirstChild("PlayHowl")
 					if ev then ev:Fire() end
+					-- Only the player actually spotted receives the alert-shake serial.
+					-- Everyone still hears the spatial howl through EntityYell.
+					if visiblePlayer then
+						visiblePlayer:SetAttribute(
+							"Level1EntityAlertSerial",
+							(tonumber(visiblePlayer:GetAttribute("Level1EntityAlertSerial")) or 0) + 1
+						)
+					end
 					workspace:SetAttribute("EntityYell", (workspace:GetAttribute("EntityYell") or 0) + 1)
 					setChaseMarker(visiblePlayer)
 					workspace:SetAttribute("EntityState", "ALERT")

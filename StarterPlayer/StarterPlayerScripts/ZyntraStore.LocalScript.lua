@@ -11,6 +11,7 @@ local player = Players.LocalPlayer
 local Config = require(ReplicatedStorage:WaitForChild("ZyntraConfig"))
 local DevAccess = require(ReplicatedStorage:WaitForChild("DevAccess"))
 local devAllowed = DevAccess.IsAllowed(player)
+local level3TimelineOwner = DevAccess.IsLevel3TimelineOwner(player)
 local remotes = ReplicatedStorage:WaitForChild("Remotes")
 local getProfileRemote = remotes:WaitForChild("ZyntraGetProfile")
 local actionRemote = remotes:WaitForChild("ZyntraAction")
@@ -274,6 +275,15 @@ if devAllowed and pages.Dev then
 			Attribute = "DevCheatThirdPerson",
 		},
 	}
+	if level3TimelineOwner then
+		table.insert(controls, {
+			Name = "SKIP TO BLACKOUT WARNING",
+			Description = "Jumps the active Level 3 song to 2:25 for the five-second warning.",
+			Key = "K",
+			Command = "level3PreBlackout",
+			Action = true,
+		})
+	end
 
 	local playerScripts = player:WaitForChild("PlayerScripts")
 	local function sendDevCommand(command)
@@ -316,16 +326,50 @@ if devAllowed and pages.Dev then
 		description.TextTruncate = Enum.TextTruncate.AtEnd
 
 		local toggle = button(row, "OFF", UDim2.fromOffset(158, 36), UDim2.new(1, -172, 0, 6))
+		local function actionAvailable()
+			return workspace:GetAttribute("SelectedLevel") == 3
+				and workspace:GetAttribute("RoundActive") == true
+				and player:GetAttribute("InRound") == true
+		end
 		local function refresh()
-			local enabled = player:GetAttribute(info.Attribute) == true
-			toggle.Text = (enabled and "ON" or "OFF") .. "  //  " .. info.Key
-			toggle.TextColor3 = enabled and COLORS.accent or COLORS.muted
+			if info.Action then
+				local available = actionAvailable()
+				toggle.Text = (available and "SKIP" or "LEVEL 3 ONLY") .. "  //  " .. info.Key
+				toggle.TextColor3 = available and COLORS.accent or COLORS.muted
+				toggle.Active = available
+				toggle.AutoButtonColor = available
+			else
+				local enabled = player:GetAttribute(info.Attribute) == true
+				toggle.Text = (enabled and "ON" or "OFF") .. "  //  " .. info.Key
+				toggle.TextColor3 = enabled and COLORS.accent or COLORS.muted
+			end
 		end
 		toggle.Activated:Connect(function()
-			sendDevCommand(info.Command)
+			if not info.Action or actionAvailable() then sendDevCommand(info.Command) end
 		end)
-		player:GetAttributeChangedSignal(info.Attribute):Connect(refresh)
+		if info.Action then
+			workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(refresh)
+			workspace:GetAttributeChangedSignal("RoundActive"):Connect(refresh)
+			player:GetAttributeChangedSignal("InRound"):Connect(refresh)
+		else
+			player:GetAttributeChangedSignal(info.Attribute):Connect(refresh)
+		end
 		refresh()
+	end
+
+	if level3TimelineOwner then
+		player:GetAttributeChangedSignal("DevLevel3TimelineSerial"):Connect(function()
+			local status = tostring(player:GetAttribute("DevLevel3TimelineStatus") or "")
+			if status == "SKIPPED_TO_2_25" then
+				showStatus("Skipped to 2:25 — blackout warning started.", "success")
+			elseif status == "ALREADY_AT_OR_PAST_WARNING" then
+				showStatus("Already at or past the 2:25 warning.", "error")
+			elseif status == "OBJECTIVE_COMPLETE" then
+				showStatus("Level 3 is already complete.", "error")
+			else
+				showStatus("Level 3 skip unavailable: " .. status, "error")
+			end
+		end)
 	end
 end
 
@@ -598,22 +642,63 @@ end
 local hazmatPicker = makeColorPicker(colorsScroll, "Hazmat", "HAZMAT SUIT", "SetHazmatColor")
 local glowstickPicker = makeColorPicker(colorsScroll, "Glowstick", "GLOWSTICK LIGHT", "SetGlowstickColor")
 
+player:SetAttribute("ZyntraReentryOpen", nil)
+
+-- Re-entry is a true modal, separate from the store HUD. It stays centered and
+-- constrained on desktop, tablet and phone, and its input shield prevents dead
+-- players from clicking gameplay controls through the purchase card.
+local reentryGui = Instance.new("ScreenGui")
+reentryGui.Name = "ZyntraReentryModal"
+reentryGui.ResetOnSpawn = false
+reentryGui.IgnoreGuiInset = false
+reentryGui.DisplayOrder = 120
+reentryGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+reentryGui.Enabled = false
+reentryGui.Parent = player:WaitForChild("PlayerGui")
+
+local reentryShade = Instance.new("TextButton")
+reentryShade.Name = "InputShield"
+reentryShade.Size = UDim2.fromScale(1, 1)
+reentryShade.BackgroundColor3 = Color3.fromRGB(2, 4, 5)
+reentryShade.BackgroundTransparency = 0.36
+reentryShade.BorderSizePixel = 0
+reentryShade.Text = ""
+reentryShade.AutoButtonColor = false
+reentryShade.Active = true
+reentryShade.Modal = true
+reentryShade.ZIndex = 1
+reentryShade.Parent = reentryGui
+
 local reentry = Instance.new("Frame")
 reentry.Name = "EmergencyReentry"
-reentry.AnchorPoint = Vector2.new(0.5, 1)
-reentry.Position = UDim2.new(0.5, 0, 1, -42)
-reentry.Size = UDim2.fromOffset(440, 142)
+reentry.AnchorPoint = Vector2.new(0.5, 0.5)
+reentry.Position = UDim2.fromScale(0.5, 0.54)
+reentry.Size = UDim2.new(1, -32, 0, 164)
 reentry.BackgroundColor3 = COLORS.bg
 reentry.BorderSizePixel = 0
-reentry.Visible = false
-reentry.Parent = gui
+reentry.Visible = true
+reentry.ZIndex = 2
+reentry.Parent = reentryGui
+local reentryConstraint = Instance.new("UISizeConstraint")
+reentryConstraint.MinSize = Vector2.new(280, 164)
+reentryConstraint.MaxSize = Vector2.new(480, 164)
+reentryConstraint.Parent = reentry
 corner(reentry, 10)
 outline(reentry, COLORS.error, 0.15, 1.5)
-local reentryTitle = label(reentry, "EMERGENCY RE-ENTRY", UDim2.new(1, -32, 0, 28), UDim2.fromOffset(16, 12), 19, COLORS.text, Enum.Font.GothamBold)
-local reentryInfo = label(reentry, "The team has 15 seconds before the run is lost.", UDim2.new(1, -32, 0, 32), UDim2.fromOffset(16, 42), 13, COLORS.muted)
+local reentryTitle = label(reentry, "EMERGENCY RE-ENTRY", UDim2.new(1, -32, 0, 28), UDim2.fromOffset(16, 10), 19, COLORS.text, Enum.Font.GothamBold)
+reentryTitle.ZIndex = 3
+local reentryInfo = label(reentry, "The team has 15 seconds before the run is lost.", UDim2.new(1, -32, 0, 40), UDim2.fromOffset(16, 44), 13, COLORS.muted)
 reentryInfo.TextWrapped = true
-local reentryButton = button(reentry, "USE RE-ENTRY", UDim2.new(1, -32, 0, 42), UDim2.fromOffset(16, 88))
+reentryInfo.TextYAlignment = Enum.TextYAlignment.Top
+reentryInfo.ZIndex = 3
+local reentryButton = button(reentry, "USE RE-ENTRY", UDim2.new(1, -32, 0, 48), UDim2.fromOffset(16, 100))
 reentryButton.TextColor3 = COLORS.error
+reentryButton.TextScaled = true
+reentryButton.ZIndex = 3
+local reentryButtonTextConstraint = Instance.new("UITextSizeConstraint")
+reentryButtonTextConstraint.MinTextSize = 11
+reentryButtonTextConstraint.MaxTextSize = 14
+reentryButtonTextConstraint.Parent = reentryButton
 reentryButton.Activated:Connect(function()
 	if profile and profile.ReentryCredits > 0 then
 		actionRemote:FireServer("UseReentry")
@@ -631,7 +716,9 @@ local function updateReentry()
 	local inRound = player:GetAttribute("InRound") == true
 	local roundActive = workspace:GetAttribute("RoundActive") == true
 	local used = player:GetAttribute("ZyntraReentryUsed") == true
-	reentry.Visible = inRound and roundActive and reentryDead and not used
+	local shouldShow = inRound and roundActive and reentryDead and not used
+	reentryGui.Enabled = shouldShow
+	player:SetAttribute("ZyntraReentryOpen", shouldShow or nil)
 	local credits = profile and profile.ReentryCredits or 0
 	reentryButton.Text = credits > 0
 		and ("USE RE-ENTRY CREDIT  //  " .. credits .. " OWNED")

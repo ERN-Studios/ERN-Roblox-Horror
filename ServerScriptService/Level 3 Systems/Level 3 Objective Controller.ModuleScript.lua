@@ -425,19 +425,16 @@ end
 local function hideCollectedModule(session: AnyTable, module: AnyTable)
 	module.Prompt.Enabled = false
 	module.Model:SetAttribute("Level3_Collected", true)
-	for object, values in pairs(session.ModuleOriginals[module.Index].Objects) do
-		if object.Parent then
-			if values.Kind == "BasePart" and object:IsA("BasePart") and object ~= module.Pedestal then
-				object.CanCollide = false
-				object.CanTouch = false
-				object.CanQuery = false
-				playTween(session, object, TweenInfo.new(0.32, Enum.EasingStyle.Quad), {Transparency = 1})
-			elseif values.Kind == "Light" and object:IsA("Light") then
-				playTween(session, object, TweenInfo.new(0.24, Enum.EasingStyle.Quad), {Brightness = 0})
-				task.delay(0.25, function()
-					if liveSession(session) and object.Parent and object:IsA("Light") then object.Enabled = false end
-				end)
-			end
+	-- The jewel case and illustrated cover are persistent environmental evidence.
+	-- Only the physical disc and hub leave the table when the pickup succeeds.
+	local originals = session.ModuleOriginals[module.Index].Objects
+	for _, object in ipairs(module.PickupParts) do
+		local values = originals[object]
+		if object.Parent and values and values.Kind == "BasePart" and object:IsA("BasePart") then
+			object.CanCollide = false
+			object.CanTouch = false
+			object.CanQuery = false
+			playTween(session, object, TweenInfo.new(0.32, Enum.EasingStyle.Quad), {Transparency = 1})
 		end
 	end
 end
@@ -574,6 +571,13 @@ local function validateManifest(manifest: AnyTable, generation: number)
 			"Level 3 CD is missing its jewel case core")
 		assert(module.Pedestal and module.Pedestal:IsA("BasePart") and module.Pedestal:IsDescendantOf(module.Model),
 			"Level 3 CD is missing its placement marker")
+		assert(type(module.PickupParts) == "table" and #module.PickupParts == 2,
+			"Level 3 CD must expose exactly the disc and hub as pickup visuals")
+		for _, pickupPart in ipairs(module.PickupParts) do
+			assert(pickupPart:IsA("BasePart") and pickupPart:IsDescendantOf(module.Model)
+				and pickupPart:GetAttribute("Level3_CDPickupVisual") == true,
+				"Level 3 CD pickup visual is invalid")
+		end
 	end
 
 	assert(type(manifest.Doors) == "table",

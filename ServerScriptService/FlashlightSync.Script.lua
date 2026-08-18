@@ -116,11 +116,13 @@ remote.OnServerEvent:Connect(function(player, value, payload)
 		end
 		lastToggle[player] = now
 		if value and (not humanoid or humanoid.Health <= 0) then return end
+		if value and player:GetAttribute("Level3_Hiding") == true then value = false end
 		if player:GetAttribute("InRound") ~= true then value = false end
 		ensureFlag(char).Value = value
 		local mount = value and ensureMount(player, char) or mounts[player]
 		if mount then setMountEnabled(mount, value) end
 	elseif value == "aim" and typeof(payload) == "CFrame" then
+		if player:GetAttribute("Level3_Hiding") == true then return end
 		if not humanoid or humanoid.Health <= 0 then return end
 		if now - (lastAim[player] or -math.huge) < 1 / 30 then return end
 		lastAim[player] = now
@@ -141,6 +143,13 @@ remote.OnServerEvent:Connect(function(player, value, payload)
 end)
 
 Players.PlayerAdded:Connect(function(p)
+	p:GetAttributeChangedSignal("Level3_Hiding"):Connect(function()
+		if p:GetAttribute("Level3_Hiding") ~= true then return end
+		local char = p.Character
+		if char then ensureFlag(char).Value = false end
+		local mount = mounts[p]
+		if mount then setMountEnabled(mount, false) end
+	end)
 	p:GetAttributeChangedSignal("InRound"):Connect(function()
 		if p:GetAttribute("InRound") == true then return end
 		local char = p.Character
@@ -156,6 +165,13 @@ end)
 
 -- cover characters that spawned before this script connected
 for _, p in ipairs(Players:GetPlayers()) do
+	p:GetAttributeChangedSignal("Level3_Hiding"):Connect(function()
+		if p:GetAttribute("Level3_Hiding") ~= true then return end
+		local char = p.Character
+		if char then ensureFlag(char).Value = false end
+		local mount = mounts[p]
+		if mount then setMountEnabled(mount, false) end
+	end)
 	p.CharacterAdded:Connect(function(char)
 		removeMount(p)
 		ensureFlag(char)

@@ -32,6 +32,55 @@ local LOBBY_CONCRETE_MATERIALS = {
 	},
 }
 
+-- The Level 1 loading bay borrows the actual Level 1 material language.
+-- These are cosmetic-only and never alter the bay's queue geometry or triggers.
+local LEVEL_ONE_BAY_STYLE = {
+	wallTexture = "rbxassetid://87947439437597",
+	floorTexture = "rbxassetid://100093931957721",
+	ceilingTexture = "rbxassetid://91804597609254",
+	litFixtureTexture = "rbxassetid://135786374638992",
+	deadFixtureTexture = "rbxassetid://107766152992499",
+	wallColor = Color3.fromRGB(197, 180, 116),
+	floorColor = Color3.fromRGB(158, 144, 96),
+	ceilingColor = Color3.fromRGB(222, 214, 170),
+	lightColor = Color3.fromRGB(255, 244, 200),
+	tile = 6,
+}
+
+-- Lobby-only interpretations of the live Level 2 and Level 3 art direction.
+-- They deliberately reuse the games' real texture IDs and palettes, but none of
+-- their runtime names, tags, prompts, physics, or objective attributes.
+local LEVEL_TWO_BAY_STYLE = {
+	tileTexture = "rbxassetid://113211706146395",
+	tileTint = Color3.fromRGB(248, 242, 218),
+	wallColor = Color3.fromRGB(206, 221, 212),
+	floorColor = Color3.fromRGB(236, 227, 196),
+	ceilingColor = Color3.fromRGB(228, 224, 205),
+	metalColor = Color3.fromRGB(83, 96, 99),
+	railColor = Color3.fromRGB(196, 202, 205),
+	waterColor = Color3.fromRGB(48, 150, 159),
+	lightColor = Color3.fromRGB(255, 247, 210),
+	tile = 7,
+}
+
+local LEVEL_THREE_BAY_STYLE = {
+	partyCarpetTexture = "rbxassetid://110230144446272",
+	wallpaperTexture = "rbxassetid://96252806287644",
+	orangeWallTexture = "rbxassetid://128270554927663",
+	confettiTexture = "rbxassetid://103412925025303",
+	partyCarpetColor = Color3.fromRGB(13, 17, 24),
+	wallpaperColor = Color3.fromRGB(220, 213, 187),
+	orangeWallColor = Color3.fromRGB(183, 78, 35),
+	ceilingColor = Color3.fromRGB(218, 211, 184),
+	trimColor = Color3.fromRGB(74, 67, 56),
+	metalColor = Color3.fromRGB(70, 73, 72),
+	lightColor = Color3.fromRGB(255, 222, 181),
+	carpetTile = 22,
+	wallpaperTile = 18,
+	orangeWallTile = 22,
+	tableclothTile = 10,
+}
+
 local COLORS = {
 	concrete = Color3.fromRGB(116, 105, 82),
 	concreteDark = Color3.fromRGB(73, 68, 58),
@@ -70,6 +119,10 @@ local function addSurfaceTexture(part, spec, face)
 	texture.StudsPerTileU = spec.studsPerTile
 	texture.StudsPerTileV = spec.studsPerTile
 	texture.Color3 = Color3.new(1, 1, 1)
+	local circularOffsetU = part:GetAttribute("CircularTextureOffsetU")
+	if type(circularOffsetU) == "number" then
+		texture.OffsetStudsU = circularOffsetU
+	end
 	texture.Parent = part
 end
 
@@ -89,9 +142,15 @@ local function tagSurface(part, role)
 				Enum.NormalId.Back,
 			}
 		elseif role == "FloorConcrete" then
-			faces = { Enum.NormalId.Top }
+			-- Chamber floors are horizontal Cylinder parts whose upward circular cap
+			-- is local Right after the 90-degree rotation. Ordinary floors remain Top.
+			faces = { part.Shape == Enum.PartType.Cylinder and Enum.NormalId.Right or Enum.NormalId.Top }
 		elseif role == "Curb" then
 			faces = { Enum.NormalId.Top, Enum.NormalId.Left, Enum.NormalId.Right }
+		elseif part.Name == "CurvedChamberWall" then
+			-- The exterior faces void. One interior texture per leaf keeps the finer
+			-- circular shell inexpensive and avoids mirrored seams on its hidden back.
+			faces = { Enum.NormalId.Front }
 		elseif part.Size.X <= part.Size.Y and part.Size.X <= part.Size.Z then
 			faces = { Enum.NormalId.Left, Enum.NormalId.Right }
 		elseif part.Size.Y <= part.Size.Z then
@@ -155,6 +214,105 @@ local function addBoard(panel, face, titleText, subtitleText, titleColor)
 	subtitle.Parent = background
 
 	return title, subtitle
+end
+
+local function makeStationMonitorPart(parent, name, cf, size, color, material, shape)
+	local part = makePart(parent, name, cf, size, color, material)
+	part.CanCollide = false
+	part.CanTouch = false
+	part.CanQuery = false
+	part.CastShadow = false
+	if shape then
+		part.Shape = shape
+	end
+	part:SetAttribute("StationMonitorDecor", true)
+	return part
+end
+
+local function makeStationMonitorArm(parent, name, pointA, pointB, thickness)
+	local delta = pointB - pointA
+	local arm = makeStationMonitorPart(
+		parent,
+		name,
+		CFrame.lookAt((pointA + pointB) * 0.5, pointB),
+		Vector3.new(thickness, thickness, delta.Magnitude),
+		Color3.fromRGB(49, 55, 54),
+		Enum.Material.Metal
+	)
+	arm:SetAttribute("MonitorArm", true)
+	return arm
+end
+
+local function addMountedStationMonitor(parent, roomCenter, signPanel, index, accentColor)
+	local width, height = signPanel.Size.X, signPanel.Size.Y
+	local depth = 0.52
+	local capDiameter = height
+	local centerWidth = math.max(width - capDiameter, 0.5)
+	local backingOffset = 0.36
+	local backingColor = Color3.fromRGB(20, 25, 24)
+
+	local body = makeStationMonitorPart(
+		parent,
+		"Station" .. index .. "MonitorBacking",
+		signPanel.CFrame * CFrame.new(0, 0, backingOffset),
+		Vector3.new(centerWidth, height, depth),
+		backingColor,
+		Enum.Material.Metal
+	)
+	body:SetAttribute("RoundedMonitorBacking", true)
+
+	for _, direction in ipairs({ -1, 1 }) do
+		local cap = makeStationMonitorPart(
+			parent,
+			"Station" .. index .. (direction < 0 and "MonitorCapLeft" or "MonitorCapRight"),
+			signPanel.CFrame
+				* CFrame.new(direction * centerWidth * 0.5, 0, backingOffset)
+				* CFrame.Angles(0, math.rad(90), 0),
+			Vector3.new(depth, capDiameter, capDiameter),
+			backingColor,
+			Enum.Material.Metal,
+			Enum.PartType.Cylinder
+		)
+		cap:SetAttribute("RoundedMonitorBacking", true)
+	end
+
+	local radialOffset = signPanel.Position - roomCenter
+	local outward = Vector3.new(radialOffset.X, 0, radialOffset.Z).Unit
+	local wallPoint = roomCenter
+		+ outward * 26.72
+		+ Vector3.new(0, radialOffset.Y + 0.72, 0)
+	local wallPlate = makeStationMonitorPart(
+		parent,
+		"Station" .. index .. "MonitorWallPlate",
+		CFrame.lookAt(wallPoint, wallPoint - outward),
+		Vector3.new(2.25, 2.7, 0.34),
+		Color3.fromRGB(59, 64, 62),
+		Enum.Material.Metal
+	)
+	wallPlate:SetAttribute("MonitorWallMount", true)
+
+	local monitorHub = signPanel.CFrame:PointToWorldSpace(Vector3.new(0, 0, 0.48))
+	local elbow = signPanel.Position + outward * 2.35 + Vector3.new(0, 0.92, 0)
+	local wallHub = wallPoint - outward * 0.24
+	makeStationMonitorArm(parent, "Station" .. index .. "MonitorArmInner", monitorHub, elbow, 0.42)
+	makeStationMonitorArm(parent, "Station" .. index .. "MonitorArmWall", elbow, wallHub, 0.42)
+
+	for jointIndex, point in ipairs({ monitorHub, elbow, wallHub }) do
+		local joint = makeStationMonitorPart(
+			parent,
+			"Station" .. index .. "MonitorJoint" .. jointIndex,
+			CFrame.new(point),
+			Vector3.new(0.76, 0.76, 0.76),
+			jointIndex == 2 and accentColor:Lerp(Color3.fromRGB(70, 74, 71), 0.68)
+				or Color3.fromRGB(66, 71, 69),
+			Enum.Material.Metal,
+			Enum.PartType.Ball
+		)
+		joint:SetAttribute("MonitorArmJoint", true)
+	end
+
+	signPanel:SetAttribute("RoundedStationMonitor", true)
+	signPanel:SetAttribute("WallMountedMonitor", true)
 end
 
 local function addLamp(parent, center, x, z)
@@ -461,53 +619,95 @@ end
 local function addQueueStation(parent, roomCenter, index, offset, color, active, displayIndex, level)
 	local origin = roomCenter + offset
 	local stationScale = 1.4
-	local halfX, halfZ = 5.2 * stationScale, 4.3 * stationScale
 	local inwardZ = offset.Z < 0 and 1 or -1
 	local zoneCF = CFrame.lookAt(origin, origin + Vector3.new(0, 0, inwardZ))
+	local visualDiameter = 11.4 * 1.3
+	local queueRadius = visualDiameter * 0.5
 
+	-- The invisible detector matches the enlarged circular artwork. GameManager
+	-- reads QueueRadius and performs true radial containment.
 	local zone = makePart(
 		parent,
 		(active and "LaunchZone" or "FutureLaunchZone") .. index,
 		zoneCF,
-		Vector3.new(halfX * 2, 0.3, halfZ * 2),
+		Vector3.new(visualDiameter, 0.3, visualDiameter),
 		color,
-		Enum.Material.Neon,
-		active and 0.78 or 0.9
+		Enum.Material.SmoothPlastic,
+		1
 	)
 	zone.CanCollide = false
 	zone.CanTouch = false
 	zone.CanQuery = false
+	zone.CastShadow = false
+	zone:SetAttribute("QueueDetectorShape", "Circle")
+	zone:SetAttribute("QueueRadius", queueRadius)
+	zone:SetAttribute("CircularPadDiameter", visualDiameter)
 
-	for _, data in ipairs({
-		{Vector3.new(0, 0.35, -halfZ), Vector3.new(halfX * 2 + 0.6, 0.34, 0.34)},
-		{Vector3.new(0, 0.35, halfZ), Vector3.new(halfX * 2 + 0.6, 0.34, 0.34)},
-		{Vector3.new(-halfX, 0.35, 0), Vector3.new(0.34, 0.34, halfZ * 2 + 0.6)},
-		{Vector3.new(halfX, 0.35, 0), Vector3.new(0.34, 0.34, halfZ * 2 + 0.6)},
-	}) do
-		local rail = makePart(
-			parent,
-			"Station" .. index .. "Rail",
-			zoneCF * CFrame.new(data[1]),
-			data[2],
-			color,
-			Enum.Material.Neon,
-			active and 0.14 or 0.55
-		)
-		rail.CanCollide = false
-		rail.CanTouch = false
-		rail.CanQuery = false
-	end
+	-- A SurfaceGui gives the launch station a mathematically circular edge with
+	-- no polygon facets and far fewer parts than an arc made from tiny blocks.
+	local padVisual = makePart(
+		parent,
+		"Station" .. index .. "CircularPad",
+		zoneCF * CFrame.new(0, 0.27, 0),
+		Vector3.new(visualDiameter, 0.05, visualDiameter),
+		color,
+		Enum.Material.SmoothPlastic,
+		1
+	)
+	padVisual.CanCollide = false
+	padVisual.CanTouch = false
+	padVisual.CanQuery = false
+	padVisual.CastShadow = false
+	padVisual:SetAttribute("CircularLaunchVisual", true)
+	padVisual:SetAttribute("StationIndex", index)
+	padVisual:SetAttribute("Diameter", visualDiameter)
+	padVisual:SetAttribute("NearestCircleGap", 18 - visualDiameter)
+
+	local padGui = Instance.new("SurfaceGui")
+	padGui.Name = "CircularPadSurface"
+	padGui.Face = Enum.NormalId.Top
+	padGui.SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud
+	padGui.PixelsPerStud = 32
+	padGui.LightInfluence = 0
+	padGui.Brightness = active and 2 or 0.7
+	padGui.AlwaysOnTop = false
+	padGui.Parent = padVisual
+
+	local circle = Instance.new("Frame")
+	circle.Name = "Circle"
+	circle.Size = UDim2.fromScale(1, 1)
+	circle.BackgroundColor3 = color
+	circle.BackgroundTransparency = active and 0.78 or 0.91
+	circle.BorderSizePixel = 0
+	circle.Parent = padGui
+
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(1, 0)
+	corner.Parent = circle
+
+	local outline = Instance.new("UIStroke")
+	outline.Name = "CircularOutline"
+	outline.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	outline.Color = color
+	outline.Thickness = active and 11 or 8
+	outline.Transparency = active and 0.08 or 0.58
+	outline.LineJoinMode = Enum.LineJoinMode.Round
+	outline.Parent = circle
 
 	local signPosition = origin + Vector3.new(0, 5.2 * stationScale, (offset.Z < 0 and -5.1 or 5.1) * stationScale)
 	local signPanel = makePart(
 		parent,
 		"Station" .. index .. "Sign",
 		CFrame.lookAt(signPosition, origin + Vector3.new(0, 4.4, 0)),
-		Vector3.new(8.7 * stationScale, 3.1 * stationScale, 0.38),
+		Vector3.new(8.7 * stationScale, 3.1 * stationScale, 0.08),
 		COLORS.metal,
-		Enum.Material.Metal
+		Enum.Material.SmoothPlastic,
+		1
 	)
 	signPanel.CanCollide = false
+	signPanel.CanTouch = false
+	signPanel.CanQuery = false
+	signPanel.CastShadow = false
 
 	local title, subtitle = addBoard(
 		signPanel,
@@ -516,6 +716,29 @@ local function addQueueStation(parent, roomCenter, index, offset, color, active,
 		active and "ENTER TO HOST  •  MAX 6 PLAYERS" or "AWAITING LEVEL AUTHORIZATION",
 		color
 	)
+
+	local displayGui = signPanel:FindFirstChild("Display")
+	if displayGui and displayGui:IsA("SurfaceGui") then
+		displayGui.AlwaysOnTop = true
+		displayGui.MaxDistance = 90
+	end
+
+	local screen = title.Parent
+	screen.ClipsDescendants = false
+	local screenCorner = Instance.new("UICorner")
+	screenCorner.Name = "RoundedMonitorCorners"
+	screenCorner.CornerRadius = UDim.new(0.14, 0)
+	screenCorner.Parent = screen
+	local screenBorder = Instance.new("UIStroke")
+	screenBorder.Name = "RoundedMonitorBorder"
+	screenBorder.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	screenBorder.Color = Color3.fromRGB(78, 87, 84)
+	screenBorder.Thickness = 8
+	screenBorder.Transparency = 0.08
+	screenBorder.LineJoinMode = Enum.LineJoinMode.Round
+	screenBorder.Parent = screen
+
+	addMountedStationMonitor(parent, roomCenter, signPanel, index, color)
 
 	if not active then
 		return nil
@@ -531,6 +754,561 @@ local function addQueueStation(parent, roomCenter, index, offset, color, active,
 		color = color,
 		busy = false,
 	}
+end
+
+local function addLevelOneTexture(part, textureId, faces, tileU, tileV)
+	if textureId == "" then return end
+	for _, child in ipairs(part:GetChildren()) do
+		if child:IsA("Texture") and child.Name == "LobbyConcreteTexture" then
+			child:Destroy()
+		end
+	end
+	for _, face in ipairs(faces) do
+		local texture = Instance.new("Texture")
+		texture.Name = "Level1BayTexture"
+		texture.Texture = textureId
+		texture.Face = face
+		texture.StudsPerTileU = tileU
+		texture.StudsPerTileV = tileV or tileU
+		local circularOffsetU = part:GetAttribute("CircularTextureOffsetU")
+		if type(circularOffsetU) == "number" then
+			texture.OffsetStudsU = circularOffsetU
+		end
+		texture.Parent = part
+	end
+end
+
+local function makeLevelOneDecorPart(parent, name, cf, size, color, material)
+	local part = makePart(parent, name, cf, size, color, material)
+	part.CanCollide = false
+	part.CanTouch = false
+	part.CanQuery = false
+	part:SetAttribute("Level1BayDecor", true)
+	return part
+end
+
+local function addLevelOneChair(parent, name, seatCF, glitched)
+	local model = Instance.new("Model")
+	model.Name = name
+	model:SetAttribute("Level1BayDecor", true)
+	model:SetAttribute("GlitchedIntoWall", glitched == true)
+	model.Parent = parent
+
+	local upholstery = glitched and Color3.fromRGB(84, 70, 45) or Color3.fromRGB(104, 87, 48)
+	local metal = Color3.fromRGB(54, 53, 46)
+	makeLevelOneDecorPart(model, "Seat", seatCF, Vector3.new(3.5, 0.55, 3.4), upholstery, Enum.Material.Fabric)
+	makeLevelOneDecorPart(model, "Back", seatCF * CFrame.new(0, 2.1, 1.42), Vector3.new(3.5, 3.8, 0.48), upholstery, Enum.Material.Fabric)
+	for _, x in ipairs({-1.3, 1.3}) do
+		for _, z in ipairs({-1.2, 1.2}) do
+			makeLevelOneDecorPart(model, "Leg", seatCF * CFrame.new(x, -1.55, z), Vector3.new(0.28, 2.85, 0.28), metal, Enum.Material.Metal)
+		end
+	end
+	return model
+end
+
+local function styleLevelOneBay(roomModel, roomCenter, side, roomRadius, roomHeight)
+	-- Keep the authored cylinder and vestibule geometry exactly as-is. Only the
+	-- room-facing surface receives the Level 1 material, avoiding stacked or
+	-- hidden textures on the shell backs.
+	local surfaceByName = {
+		ChamberFloor = {"floor", Enum.NormalId.Right},
+		DoorThreshold = {"floor", Enum.NormalId.Top},
+		DoorVestibuleFloor = {"floor", Enum.NormalId.Top},
+		ChamberCeiling = {"ceiling", Enum.NormalId.Left},
+		DoorVestibuleCeiling = {"ceiling", Enum.NormalId.Bottom},
+		CurvedChamberWall = {"wall", Enum.NormalId.Front},
+	}
+
+	for _, object in ipairs(roomModel:GetChildren()) do
+		if object:IsA("BasePart") then
+			local spec = surfaceByName[object.Name]
+			if object.Name == "DoorVestibuleWall" then
+				spec = {
+					"wall",
+					object.Position.Z > roomCenter.Z and Enum.NormalId.Front or Enum.NormalId.Back,
+				}
+			end
+			if spec then
+				local role, face = spec[1], spec[2]
+				object.Material = Enum.Material.SmoothPlastic
+				if role == "wall" then
+					object.Color = LEVEL_ONE_BAY_STYLE.wallColor
+					object:SetAttribute("TunnelTextureRole", "Level1Wall")
+					addLevelOneTexture(object, LEVEL_ONE_BAY_STYLE.wallTexture, {face}, LEVEL_ONE_BAY_STYLE.tile)
+				elseif role == "floor" then
+					object.Color = LEVEL_ONE_BAY_STYLE.floorColor
+					object:SetAttribute("TunnelTextureRole", "Level1Floor")
+					addLevelOneTexture(object, LEVEL_ONE_BAY_STYLE.floorTexture, {face}, LEVEL_ONE_BAY_STYLE.tile)
+				else
+					object.Color = LEVEL_ONE_BAY_STYLE.ceilingColor
+					object:SetAttribute("TunnelTextureRole", "Level1Ceiling")
+					addLevelOneTexture(object, LEVEL_ONE_BAY_STYLE.ceilingTexture, {face}, 8)
+				end
+			end
+		end
+	end
+
+	-- Replace the generic transit bars with Level 1's broad fluorescent office
+	-- panels and shadowless downward SurfaceLights.
+	for _, child in ipairs(roomModel:GetChildren()) do
+		if child.Name == "ChamberLight" then
+			child:Destroy()
+		end
+	end
+	local fixtureOffsets = {
+		Vector2.new(-9, -8),
+		Vector2.new(9, -8),
+		Vector2.new(-9, 8),
+		Vector2.new(9, 8),
+	}
+	for fixtureIndex, offset in ipairs(fixtureOffsets) do
+		local panel = makePart(
+			roomModel,
+			string.format("Level1BayFluorescentFixture_%02d", fixtureIndex),
+			CFrame.new(roomCenter + Vector3.new(offset.X, roomHeight - 0.5, offset.Y)),
+			Vector3.new(7.5, 0.2, 3.8),
+			LEVEL_ONE_BAY_STYLE.lightColor,
+			Enum.Material.SmoothPlastic
+		)
+		panel.CanCollide = false
+		panel.CanTouch = false
+		panel.CanQuery = false
+		panel.CastShadow = false
+		panel:SetAttribute("Level1BayDecor", true)
+		addLevelOneTexture(
+			panel,
+			LEVEL_ONE_BAY_STYLE.litFixtureTexture,
+			{Enum.NormalId.Bottom},
+			7.5,
+			3.8
+		)
+		local light = Instance.new("SurfaceLight")
+		light.Name = "Level1FluorescentLight"
+		light.Face = Enum.NormalId.Bottom
+		light.Brightness = 0.7
+		light.Range = 28
+		light.Angle = 140
+		light.Color = LEVEL_ONE_BAY_STYLE.lightColor
+		light.Shadows = false
+		light.Parent = panel
+	end
+
+	local decor = Instance.new("Model")
+	decor.Name = "Level1BackroomsDecor"
+	decor:SetAttribute("Level1BayDecor", true)
+	decor.Parent = roomModel
+	local outward = Vector3.new(side, 0, 0)
+
+	-- Two abandoned office chairs sit outside every queue pad's footprint.
+	for index, z in ipairs({-4.5, 4.5}) do
+		local seatPosition = roomCenter + outward * 20.5 + Vector3.new(0, 2.05, z)
+		local seatCF = CFrame.lookAt(seatPosition, roomCenter + Vector3.new(0, 2.05, z))
+			* CFrame.Angles(0, math.rad(index == 1 and -9 or 12), 0)
+		addLevelOneChair(decor, "AbandonedOfficeChair" .. index, seatCF, false)
+	end
+
+	-- One chair and one filing cabinet deliberately intersect the curved shell:
+	-- visual "Backrooms geometry error" props, but fully non-colliding/querying.
+	local glitchZ = 10
+	local wallX = math.sqrt(math.max(0, roomRadius * roomRadius - glitchZ * glitchZ))
+	local glitchPosition = roomCenter + Vector3.new(side * (wallX + 0.55), 4.2, glitchZ)
+	local glitchCF = CFrame.lookAt(glitchPosition, roomCenter + Vector3.new(0, 4.2, glitchZ))
+		* CFrame.Angles(math.rad(18), 0, math.rad(68))
+	addLevelOneChair(decor, "WallGlitchedOfficeChair", glitchCF, true)
+
+	local cabinetPosition = roomCenter + Vector3.new(side * (wallX + 0.3), 4.8, -glitchZ)
+	local cabinetCF = CFrame.lookAt(cabinetPosition, roomCenter + Vector3.new(0, 4.8, -glitchZ))
+		* CFrame.Angles(math.rad(-8), math.rad(12), math.rad(-61))
+	makeLevelOneDecorPart(
+		decor,
+		"WallGlitchedFileCabinet",
+		cabinetCF,
+		Vector3.new(4.6, 7.2, 2.9),
+		Color3.fromRGB(78, 82, 73),
+		Enum.Material.Metal
+	)
+	for drawer = -1, 1 do
+		makeLevelOneDecorPart(
+			decor,
+			"GlitchedCabinetDrawer",
+			cabinetCF * CFrame.new(0, drawer * 2.05, -1.48),
+			Vector3.new(3.7, 1.55, 0.12),
+			Color3.fromRGB(42, 45, 41),
+			Enum.Material.Metal
+		)
+	end
+
+	roomModel:SetAttribute("Level1InspiredBay", true)
+	roomModel:SetAttribute("Level1BayStyleVersion", 1)
+end
+
+local function clearLobbyConcreteTextures(part)
+	for _, child in ipairs(part:GetChildren()) do
+		if child:IsA("Texture") and child.Name == "LobbyConcreteTexture" then
+			child:Destroy()
+		end
+	end
+end
+
+local function addLobbyThemeTexture(part, name, textureId, faces, tileU, tileV, tint, transparency)
+	clearLobbyConcreteTextures(part)
+	if textureId == "" then return end
+	for _, face in ipairs(faces) do
+		local image = Instance.new("Texture")
+		image.Name = name
+		image.Texture = textureId
+		image.Face = face
+		image.StudsPerTileU = tileU
+		image.StudsPerTileV = tileV or tileU
+		image.Color3 = tint or Color3.new(1, 1, 1)
+		image.Transparency = transparency or 0
+		local circularOffsetU = part:GetAttribute("CircularTextureOffsetU")
+		if type(circularOffsetU) == "number" then
+			image.OffsetStudsU = circularOffsetU
+		end
+		image.Parent = part
+	end
+end
+
+local function makeLobbyThemePart(parent, level, name, cframe, size, color, material, transparency)
+	local object = makePart(parent, name, cframe, size, color, material, transparency)
+	object.CanCollide = false
+	object.CanTouch = false
+	object.CanQuery = false
+	object:SetAttribute("LobbyBayDecorLevel", level)
+	return object
+end
+
+local function styleLevelTwoBay(roomModel, roomCenter, side, roomRadius, roomHeight)
+	local surfaces = {
+		ChamberFloor = {"floor", Enum.NormalId.Right},
+		DoorThreshold = {"floor", Enum.NormalId.Top},
+		DoorVestibuleFloor = {"floor", Enum.NormalId.Top},
+		ChamberCeiling = {"ceiling", Enum.NormalId.Left},
+		DoorVestibuleCeiling = {"ceiling", Enum.NormalId.Bottom},
+		CurvedChamberWall = {"wall", Enum.NormalId.Front},
+	}
+	for _, object in ipairs(roomModel:GetChildren()) do
+		if object:IsA("BasePart") then
+			local spec = surfaces[object.Name]
+			if object.Name == "DoorVestibuleWall" then
+				spec = {"wall", object.Position.Z > roomCenter.Z and Enum.NormalId.Front or Enum.NormalId.Back}
+			end
+			if spec then
+				local role, face = spec[1], spec[2]
+				object.Material = Enum.Material.SmoothPlastic
+				object.Color = role == "wall" and LEVEL_TWO_BAY_STYLE.wallColor
+					or role == "floor" and LEVEL_TWO_BAY_STYLE.floorColor
+					or LEVEL_TWO_BAY_STYLE.ceilingColor
+				object:SetAttribute("TunnelTextureRole", "LobbyPoolrooms" .. role)
+				addLobbyThemeTexture(object, "LobbyLevel2TileTexture",
+					LEVEL_TWO_BAY_STYLE.tileTexture, {face}, LEVEL_TWO_BAY_STYLE.tile,
+					LEVEL_TWO_BAY_STYLE.tile, LEVEL_TWO_BAY_STYLE.tileTint)
+			end
+		end
+	end
+
+	for _, child in ipairs(roomModel:GetChildren()) do
+		if child.Name == "ChamberLight" then child:Destroy() end
+	end
+	for fixtureIndex, z in ipairs({-8, 8}) do
+		local fixtureCF = CFrame.new(roomCenter + Vector3.new(0, roomHeight - 0.48, z))
+		local frame = makeLobbyThemePart(roomModel, 2, "Lobby L2 Pool Ceiling Frame " .. fixtureIndex,
+			fixtureCF, Vector3.new(20, .5, 6.5), LEVEL_TWO_BAY_STYLE.metalColor, Enum.Material.Metal)
+		frame.CastShadow = false
+		local diffuser = makeLobbyThemePart(roomModel, 2, "Lobby L2 Pool Ceiling Diffuser " .. fixtureIndex,
+			fixtureCF * CFrame.new(0, -.34, 0), Vector3.new(17, .18, 4.8),
+			LEVEL_TWO_BAY_STYLE.lightColor, Enum.Material.Neon, .08)
+		diffuser.CastShadow = false
+		local light = Instance.new("SurfaceLight")
+		light.Name = "Lobby L2 Pool Light"
+		light.Face = Enum.NormalId.Bottom
+		light.Color = LEVEL_TWO_BAY_STYLE.lightColor
+		light.Brightness = 1.085
+		light.Range = 44
+		light.Angle = 115
+		light.Shadows = false
+		light.Parent = diffuser
+	end
+
+	local decor = Instance.new("Model")
+	decor.Name = "LobbyLevel2PoolroomsDecor"
+	decor:SetAttribute("LobbyBayDecorLevel", 2)
+	decor.Parent = roomModel
+	local outward = Vector3.new(side, 0, 0)
+
+	-- Dry tile now dominates the bay. A very shallow, non-physical basin at
+	-- the far wall keeps a small Poolrooms reflection without changing movement.
+	local basinCenter = roomCenter + outward * 19.2
+	local basinApron = makeLobbyThemePart(decor, 2, "Lobby L2 Basin Tile Apron",
+		CFrame.new(basinCenter + Vector3.new(0, .305, 0)) * CFrame.Angles(0, 0, math.rad(90)),
+		Vector3.new(.05, 12.8, 12.8), LEVEL_TWO_BAY_STYLE.floorColor, Enum.Material.SmoothPlastic)
+	basinApron.Shape = Enum.PartType.Cylinder
+	basinApron.CastShadow = false
+	basinApron:SetAttribute("AestheticWaterBasin", true)
+	addLobbyThemeTexture(basinApron, "LobbyLevel2TileTexture", LEVEL_TWO_BAY_STYLE.tileTexture,
+		{Enum.NormalId.Right}, LEVEL_TWO_BAY_STYLE.tile, LEVEL_TWO_BAY_STYLE.tile,
+		LEVEL_TWO_BAY_STYLE.tileTint)
+
+	local basinBed = makeLobbyThemePart(decor, 2, "Lobby L2 Basin Bed",
+		CFrame.new(basinCenter + Vector3.new(0, .325, 0)) * CFrame.Angles(0, 0, math.rad(90)),
+		Vector3.new(.035, 10.8, 10.8), Color3.fromRGB(145, 194, 184), Enum.Material.SmoothPlastic)
+	basinBed.Shape = Enum.PartType.Cylinder
+	basinBed.CastShadow = false
+	basinBed:SetAttribute("AestheticWaterBasin", true)
+	addLobbyThemeTexture(basinBed, "LobbyLevel2BasinTileTexture", LEVEL_TWO_BAY_STYLE.tileTexture,
+		{Enum.NormalId.Right}, LEVEL_TWO_BAY_STYLE.tile, LEVEL_TWO_BAY_STYLE.tile,
+		Color3.fromRGB(205, 235, 226), .12)
+
+	local basinWater = makeLobbyThemePart(decor, 2, "Lobby L2 Basin Water",
+		CFrame.new(basinCenter + Vector3.new(0, .355, 0)) * CFrame.Angles(0, 0, math.rad(90)),
+		Vector3.new(.02, 10.2, 10.2), LEVEL_TWO_BAY_STYLE.waterColor, Enum.Material.Glass, .42)
+	basinWater.Shape = Enum.PartType.Cylinder
+	basinWater.Reflectance = .10
+	basinWater.CastShadow = false
+	basinWater:SetAttribute("AestheticWaterBasin", true)
+
+	-- One tiled pool column, kept decorative so it cannot obstruct queue pads.
+	local columnBase = roomCenter + outward * 20.5
+	local shaft = makeLobbyThemePart(decor, 2, "Lobby L2 Tiled Column",
+		CFrame.new(columnBase + Vector3.new(0, 4.6, 0)), Vector3.new(3.6, 9.2, 3.6),
+		LEVEL_TWO_BAY_STYLE.floorColor, Enum.Material.SmoothPlastic)
+	addLobbyThemeTexture(shaft, "LobbyLevel2TileTexture", LEVEL_TWO_BAY_STYLE.tileTexture,
+		Enum.NormalId:GetEnumItems(), LEVEL_TWO_BAY_STYLE.tile, LEVEL_TWO_BAY_STYLE.tile,
+		LEVEL_TWO_BAY_STYLE.tileTint)
+	for _, y in ipairs({.25, 8.95}) do
+		local flare = makeLobbyThemePart(decor, 2, "Lobby L2 Column Flare",
+			CFrame.new(columnBase + Vector3.new(0, y, 0)), Vector3.new(5.2, .5, 5.2),
+			LEVEL_TWO_BAY_STYLE.floorColor, Enum.Material.SmoothPlastic)
+		addLobbyThemeTexture(flare, "LobbyLevel2TileTexture", LEVEL_TWO_BAY_STYLE.tileTexture,
+			{Enum.NormalId.Top, Enum.NormalId.Front, Enum.NormalId.Back, Enum.NormalId.Left, Enum.NormalId.Right},
+			LEVEL_TWO_BAY_STYLE.tile, LEVEL_TWO_BAY_STYLE.tile, LEVEL_TWO_BAY_STYLE.tileTint)
+	end
+
+	-- Stainless pool ladder motif at the rear edge.
+	local ladderBase = basinCenter - outward * 4.45
+	for _, z in ipairs({-1.35, 1.35}) do
+		makeLobbyThemePart(decor, 2, "Lobby L2 Pool Ladder Rail",
+			CFrame.new(ladderBase + Vector3.new(0, 2.6, z)), Vector3.new(.38, 5.2, .38),
+			LEVEL_TWO_BAY_STYLE.railColor, Enum.Material.Metal)
+	end
+	for rung = 0, 3 do
+		makeLobbyThemePart(decor, 2, "Lobby L2 Pool Ladder Rung",
+			CFrame.new(ladderBase + Vector3.new(0, .9 + rung * 1.05, 0)), Vector3.new(.4, .32, 2.7),
+			LEVEL_TWO_BAY_STYLE.railColor, Enum.Material.Metal)
+	end
+
+	-- A dry faded lounger sits beyond the basin; the ball floats over its water.
+	local loungerPosition = roomCenter + outward * 19 + Vector3.new(0, .55, 9)
+	local loungerCF = CFrame.lookAt(loungerPosition, roomCenter + Vector3.new(0, .55, 9))
+	makeLobbyThemePart(decor, 2, "Lobby L2 Sunken Lounger Seat", loungerCF,
+		Vector3.new(2.6, .5, 6.4), Color3.fromRGB(108, 164, 181), Enum.Material.SmoothPlastic)
+	makeLobbyThemePart(decor, 2, "Lobby L2 Sunken Lounger Back",
+		loungerCF * CFrame.new(0, 1.4, -2.9) * CFrame.Angles(math.rad(-35), 0, 0),
+		Vector3.new(2.6, .4, 3.4), Color3.fromRGB(108, 164, 181), Enum.Material.SmoothPlastic)
+	local ball = makeLobbyThemePart(decor, 2, "Lobby L2 Pool Ball",
+		CFrame.new(basinCenter + Vector3.new(0, 1.25, 3.05)),
+		Vector3.new(2.3, 2.3, 2.3), Color3.fromRGB(238, 202, 84), Enum.Material.SmoothPlastic)
+	ball.Shape = Enum.PartType.Ball
+	local noodle = makeLobbyThemePart(decor, 2, "Lobby L2 Wall Glitched Pool Noodle",
+		CFrame.new(roomCenter + outward * (roomRadius + .2) + Vector3.new(0, 4.1, 12))
+			* CFrame.Angles(0, math.rad(18), math.rad(37)),
+		Vector3.new(6.2, .62, .62), Color3.fromRGB(96, 196, 132), Enum.Material.SmoothPlastic)
+	noodle.Shape = Enum.PartType.Cylinder
+
+	roomModel:SetAttribute("LobbyBayTheme", "Poolrooms")
+	roomModel:SetAttribute("LobbyBayStyleVersion", 2)
+end
+
+local function cloneLobbyLevelThreeFurniture(templateName, parent, name, cframe, size, color)
+	local assets = game:GetService("ServerStorage"):FindFirstChild("Level3Assets")
+	local templates = assets and assets:FindFirstChild("FurnitureTemplates")
+	local template = templates and templates:FindFirstChild(templateName)
+	if not template or not template:IsA("BasePart") then return nil end
+	local object = template:Clone()
+	object.Name = name
+	object.Anchored = true
+	object.CanCollide = false
+	object.CanTouch = false
+	object.CanQuery = false
+	object.CFrame = cframe
+	object.Size = size
+	if color then object.Color = color end
+	object:SetAttribute("LobbyBayDecorLevel", 3)
+	object.Parent = parent
+	return object
+end
+
+local function styleLevelThreeBay(roomModel, roomCenter, side, roomRadius, roomHeight)
+	local surfaces = {
+		ChamberFloor = {"floor", Enum.NormalId.Right},
+		DoorThreshold = {"floor", Enum.NormalId.Top},
+		DoorVestibuleFloor = {"floor", Enum.NormalId.Top},
+		ChamberCeiling = {"ceiling", Enum.NormalId.Left},
+		DoorVestibuleCeiling = {"ceiling", Enum.NormalId.Bottom},
+		CurvedChamberWall = {"wall", Enum.NormalId.Front},
+	}
+	local outward = Vector3.new(side, 0, 0)
+	for _, object in ipairs(roomModel:GetChildren()) do
+		if object:IsA("BasePart") then
+			local spec = surfaces[object.Name]
+			if object.Name == "DoorVestibuleWall" then
+				spec = {"wall", object.Position.Z > roomCenter.Z and Enum.NormalId.Front or Enum.NormalId.Back}
+			end
+			if spec then
+				local role, face = spec[1], spec[2]
+				clearLobbyConcreteTextures(object)
+				if role == "floor" then
+					object.Color = LEVEL_THREE_BAY_STYLE.partyCarpetColor
+					object.Material = Enum.Material.Carpet
+					object:SetAttribute("TunnelTextureRole", "LobbyMallPartyFloor")
+					addLobbyThemeTexture(object, "LobbyLevel3PartyCarpet",
+						LEVEL_THREE_BAY_STYLE.partyCarpetTexture, {face},
+						LEVEL_THREE_BAY_STYLE.carpetTile, LEVEL_THREE_BAY_STYLE.carpetTile)
+				elseif role == "ceiling" then
+					object.Color = LEVEL_THREE_BAY_STYLE.ceilingColor
+					object.Material = Enum.Material.Plaster
+					object:SetAttribute("TunnelTextureRole", "LobbyMallDropCeiling")
+				else
+					local rearAccent = object.Name == "CurvedChamberWall"
+						and (object.Position - roomCenter):Dot(outward) > roomRadius * .55
+					if rearAccent then
+						object.Color = LEVEL_THREE_BAY_STYLE.wallpaperColor
+						object.Material = Enum.Material.SmoothPlastic
+						object.Reflectance = .08
+						object:SetAttribute("TunnelTextureRole", "LobbyMallWallpaper")
+						addLobbyThemeTexture(object, "LobbyLevel3Wallpaper",
+							LEVEL_THREE_BAY_STYLE.wallpaperTexture, {face},
+							LEVEL_THREE_BAY_STYLE.wallpaperTile, LEVEL_THREE_BAY_STYLE.wallpaperTile,
+							Color3.new(1, 1, 1), .08)
+					else
+						object.Color = LEVEL_THREE_BAY_STYLE.orangeWallColor
+						object.Material = Enum.Material.Plaster
+						object:SetAttribute("TunnelTextureRole", "LobbyMallOrangeWall")
+						addLobbyThemeTexture(object, "LobbyLevel3OrangeWall",
+							LEVEL_THREE_BAY_STYLE.orangeWallTexture, {face},
+							LEVEL_THREE_BAY_STYLE.orangeWallTile, LEVEL_THREE_BAY_STYLE.orangeWallTile,
+							Color3.new(1, 1, 1), .28)
+					end
+				end
+			end
+		end
+	end
+
+	for _, child in ipairs(roomModel:GetChildren()) do
+		if child.Name == "ChamberLight" then child:Destroy() end
+	end
+
+	-- A real drop-ceiling read: restrained eight-stud metal seams on the authored
+	-- ceiling, followed by mismatched old fluorescent fittings.
+	for _, offset in ipairs({-16, -8, 0, 8, 16}) do
+		makeLobbyThemePart(roomModel, 3, "Lobby L3 Ceiling Grid",
+			CFrame.new(roomCenter + Vector3.new(offset, roomHeight - .75, 0)),
+			Vector3.new(.08, .04, 44), Color3.fromRGB(83, 79, 67), Enum.Material.Metal, .38)
+		makeLobbyThemePart(roomModel, 3, "Lobby L3 Ceiling Grid",
+			CFrame.new(roomCenter + Vector3.new(0, roomHeight - .75, offset)),
+			Vector3.new(44, .04, .08), Color3.fromRGB(83, 79, 67), Enum.Material.Metal, .38)
+	end
+	local fixtureOffsets = {
+		Vector2.new(-9, -8), Vector2.new(9, -8),
+		Vector2.new(-9, 8), Vector2.new(9, 8),
+	}
+	for index, offset in ipairs(fixtureOffsets) do
+		local dead = index == 4
+		local fixtureCF = CFrame.new(roomCenter + Vector3.new(offset.X, roomHeight - .92, offset.Y))
+		makeLobbyThemePart(roomModel, 3, "Lobby L3 Fluorescent Frame " .. index,
+			fixtureCF, Vector3.new(7.5, .32, 2.4), Color3.fromRGB(85, 84, 75), Enum.Material.Metal)
+		local diffuser = makeLobbyThemePart(roomModel, 3, "Lobby L3 Fluorescent Diffuser " .. index,
+			fixtureCF * CFrame.new(0, -.20, 0), Vector3.new(7.05, .14, 2.05),
+			dead and Color3.fromRGB(92, 88, 72) or LEVEL_THREE_BAY_STYLE.lightColor,
+			dead and Enum.Material.SmoothPlastic or Enum.Material.Neon, dead and .18 or .03)
+		if not dead then
+			local light = Instance.new("SurfaceLight")
+			light.Name = "Lobby L3 Party Fluorescent"
+			light.Face = Enum.NormalId.Bottom
+			light.Color = LEVEL_THREE_BAY_STYLE.lightColor
+			light.Brightness = 1.62
+			light.Range = 34
+			light.Angle = 128
+			light.Shadows = false
+			light.Parent = diffuser
+		end
+	end
+
+	local decor = Instance.new("Model")
+	decor.Name = "LobbyLevel3MallPartyDecor"
+	decor:SetAttribute("LobbyBayDecorLevel", 3)
+	decor.Parent = roomModel
+	local tablePosition = roomCenter + outward * 19
+	local tableCF = CFrame.lookAt(tablePosition, roomCenter)
+	local tableMesh = cloneLobbyLevelThreeFurniture("FoldingTableTemplate", decor,
+		"Lobby L3 Vetted Folding Table", tableCF * CFrame.new(0, 1.72, 0),
+		Vector3.new(11.2, 3.44, 4.35))
+	if not tableMesh then
+		tableMesh = makeLobbyThemePart(decor, 3, "Lobby L3 Folding Table",
+			tableCF * CFrame.new(0, 3, 0), Vector3.new(11.2, .5, 4.35),
+			Color3.fromRGB(201, 198, 185), Enum.Material.SmoothPlastic)
+	end
+	local tablecloth = makeLobbyThemePart(decor, 3, "Lobby L3 Confetti Tablecloth",
+		tableCF * CFrame.new(0, 3.48, 0), Vector3.new(11.45, .12, 4.62),
+		Color3.fromRGB(38, 153, 165), Enum.Material.Fabric)
+	addLobbyThemeTexture(tablecloth, "LobbyLevel3ConfettiTablecloth",
+		LEVEL_THREE_BAY_STYLE.confettiTexture, {Enum.NormalId.Top},
+		LEVEL_THREE_BAY_STYLE.tableclothTile, LEVEL_THREE_BAY_STYLE.tableclothTile,
+		Color3.new(1, 1, 1), .34)
+
+	local chairColors = {Color3.fromRGB(194, 157, 49), Color3.fromRGB(137, 45, 52)}
+	for index, localPosition in ipairs({Vector3.new(-2.7, 2.28, -4.1), Vector3.new(2.7, 2.28, 4.1)}) do
+		local chairPosition = (tableCF * CFrame.new(localPosition)).Position
+		local tableTarget = (tableCF * CFrame.new(localPosition.X, 2.28, 0)).Position
+		local chairCF = CFrame.lookAt(chairPosition, tableTarget)
+		local chair = cloneLobbyLevelThreeFurniture("PlasticPartyChairTemplate", decor,
+			"Lobby L3 Mismatched Party Chair " .. index, chairCF,
+			Vector3.new(2.55, 4.3, 2.58), chairColors[index])
+		if not chair then
+			makeLobbyThemePart(decor, 3, "Lobby L3 Mismatched Party Chair " .. index,
+				chairCF, Vector3.new(2.55, 4.3, 2.58), chairColors[index], Enum.Material.SmoothPlastic)
+		end
+	end
+
+	-- A crooked chair is deliberately swallowed by the shell: harmless visual
+	-- geometry corruption matching the party level's shifted furniture.
+	local glitchZ = 11
+	local wallX = math.sqrt(math.max(0, roomRadius * roomRadius - glitchZ * glitchZ))
+	local glitchPosition = roomCenter + Vector3.new(side * (wallX + .55), 4.2, glitchZ)
+	local glitchCF = CFrame.lookAt(glitchPosition, roomCenter + Vector3.new(0, 4.2, glitchZ))
+		* CFrame.Angles(math.rad(16), math.rad(-12), math.rad(68))
+	local glitchChair = cloneLobbyLevelThreeFurniture("PlasticPartyChairTemplate", decor,
+		"Lobby L3 Wall Glitched Party Chair", glitchCF,
+		Vector3.new(2.55, 4.3, 2.58), Color3.fromRGB(73, 129, 86))
+	if not glitchChair then
+		makeLobbyThemePart(decor, 3, "Lobby L3 Wall Glitched Party Chair",
+			glitchCF, Vector3.new(2.55, 4.3, 2.58), Color3.fromRGB(73, 129, 86), Enum.Material.SmoothPlastic)
+	end
+
+	local bouquetBase = roomCenter + outward * 18 + Vector3.new(0, 0, -10)
+	local balloonColors = {
+		Color3.fromRGB(187, 42, 52),
+		Color3.fromRGB(40, 104, 169),
+		Color3.fromRGB(210, 159, 37),
+	}
+	for index, offset in ipairs({
+		Vector3.new(-1.2, 7.1, 0), Vector3.new(.2, 8.2, .5), Vector3.new(1.35, 7.35, -.25),
+	}) do
+		local balloonPosition = bouquetBase + offset
+		local balloon = makeLobbyThemePart(decor, 3, "Lobby L3 Party Balloon " .. index,
+			CFrame.new(balloonPosition), Vector3.new(1.72, 2.36, 1.72),
+			balloonColors[index], Enum.Material.SmoothPlastic, .025)
+		balloon.Shape = Enum.PartType.Ball
+		balloon.Reflectance = .06
+		local stringLength = balloonPosition.Y - (roomCenter.Y + .3)
+		makeLobbyThemePart(decor, 3, "Lobby L3 Balloon String " .. index,
+			CFrame.new(balloonPosition.X, roomCenter.Y + .3 + stringLength * .5, balloonPosition.Z),
+			Vector3.new(.05, stringLength, .05), Color3.fromRGB(90, 87, 79), Enum.Material.Metal)
+	end
+
+	roomModel:SetAttribute("LobbyBayTheme", "MallBackroomsParty")
+	roomModel:SetAttribute("LobbyBayStyleVersion", 1)
 end
 
 local function addRoom(parent, center, level, side, zOffset, active, stations)
@@ -567,15 +1345,22 @@ local function addRoom(parent, center, level, side, zOffset, active, stations)
 	ceiling.Shape = Enum.PartType.Cylinder
 	tagSurface(ceiling, "Concrete")
 
-	local wallSegments = 28
-	local chord = 2 * roomRadius * math.sin(math.pi / wallSegments) + 0.35
+	-- A 64-leaf tangent ring reads as a circle at player distance while keeping
+	-- the exact 56-stud wall-center diameter. The old 28-leaf ring made long,
+	-- visibly flat wall bands. The .955 portal cut omits seven leaves and still
+	-- aligns with the existing 18.8-stud vestibule opening on either side.
+	local wallSegments = 64
+	local wallArcStep = (math.pi * 2 * roomRadius) / wallSegments
+	local chord = 2 * roomRadius * math.tan(math.pi / wallSegments) + 0.08
+	local doorwayDotCutoff = 0.955
 	local towardTunnel = Vector3.new(-side, 0, 0)
+	local visibleWallCount = 0
 	for i = 0, wallSegments - 1 do
 		local theta = (i / wallSegments) * math.pi * 2
 		local radial = Vector3.new(math.cos(theta), 0, math.sin(theta))
-		-- Continue the cylinder all the way around, omitting only the narrow
-		-- three-panel arc that lines up with the actual tunnel doorway.
-		if radial:Dot(towardTunnel) < 0.955 then
+		-- Preserve one engineered doorway bite; every other leaf follows the same
+		-- radius, so all six bays share one circular footprint.
+		if radial:Dot(towardTunnel) < doorwayDotCutoff then
 			local position = roomCenter + radial * roomRadius + Vector3.new(0, roomHeight * 0.5, 0)
 			local wall = makePart(
 				roomModel,
@@ -585,9 +1370,21 @@ local function addRoom(parent, center, level, side, zOffset, active, stations)
 				COLORS.concrete,
 				Enum.Material.Concrete
 			)
+			visibleWallCount += 1
+			wall:SetAttribute("CircularWallSegmentIndex", i + 1)
+			wall:SetAttribute("CircularWallSegmentCount", wallSegments)
+			wall:SetAttribute("CircularWallCenterRadius", roomRadius)
+			-- CFrame.lookAt makes local +X run opposite increasing polar angle.
+			-- Carry the artwork around the arc instead of restarting it per leaf.
+			wall:SetAttribute("CircularTextureOffsetU", -i * wallArcStep)
 			tagSurface(wall, "Concrete")
 		end
 	end
+	roomModel:SetAttribute("BayPlanShape", "Circle")
+	roomModel:SetAttribute("CircularBayDiameter", roomRadius * 2)
+	roomModel:SetAttribute("CircularWallSegments", wallSegments)
+	roomModel:SetAttribute("CircularVisibleWallCount", visibleWallCount)
+	roomModel:SetAttribute("CircularDoorwayDotCutoff", doorwayDotCutoff)
 
 	local tunnelEdgeX = side * 34
 	local roomEdgeX = side * 35
@@ -679,6 +1476,14 @@ local function addRoom(parent, center, level, side, zOffset, active, stations)
 		light.Parent = lamp
 	end
 
+	if level == 1 then
+		styleLevelOneBay(roomModel, roomCenter, side, roomRadius, roomHeight)
+	elseif level == 2 then
+		styleLevelTwoBay(roomModel, roomCenter, side, roomRadius, roomHeight)
+	elseif level == 3 then
+		styleLevelThreeBay(roomModel, roomCenter, side, roomRadius, roomHeight)
+	end
+
 	roomModel:SetAttribute("LevelNumber", level)
 	roomModel:SetAttribute("LevelEnabled", active)
 	return roomModel
@@ -721,7 +1526,7 @@ local function addDoorway(parent, center, level, side, zOffset, active)
 	addBoard(
 		header,
 		face,
-		"EXIT  •  LEVEL " .. level,
+		"LEVEL " .. level,
 		active and "4 QUEUES  •  MAX 6 EACH  •  10 SECOND LAUNCH" or "ANOMALOUS ACCESS POINT  •  NOT YET STABLE",
 		active and COLORS.green or COLORS.amber
 	)
@@ -735,7 +1540,7 @@ local function addDoorway(parent, center, level, side, zOffset, active)
 		Enum.Material.Metal
 	)
 	exitPanel.CanCollide = false
-	addBoard(exitPanel, face, "EXIT", active and "ACCESS READY" or "ACCESS PENDING", active and COLORS.green or COLORS.amber)
+	addBoard(exitPanel, face, "LEVEL " .. level, active and "ACCESS READY" or "ACCESS PENDING", active and COLORS.green or COLORS.amber)
 
 	if not active then
 		local blocker = makePart(
@@ -773,7 +1578,11 @@ function Builder.Build(center)
 	model.Name = "ServerLobby"
 	model.Parent = workspace
 	model:SetAttribute("LobbyStyle", "ZyntraTunnel")
-	model:SetAttribute("TextureVersion", 1)
+	model:SetAttribute("TextureVersion", 7)
+	model:SetAttribute("CircularBayGeometryVersion", 1)
+	model:SetAttribute("CircularLaunchPadVersion", 2)
+	model:SetAttribute("Level2DecorativeBasinVersion", 1)
+	model:SetAttribute("RoundedStationMonitorVersion", 2)
 
 	local geometry = Instance.new("Folder")
 	geometry.Name = "TunnelGeometry"

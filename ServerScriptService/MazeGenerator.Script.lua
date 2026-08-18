@@ -92,13 +92,16 @@ local CEILING_TILE = LIGHT_SIZE -- one repeat = one office tile = one light pane
 local LIGHT_TEXTURE      = "rbxassetid://135786374638992"  -- lit fixture face
 local DEAD_LIGHT_TEXTURE = "rbxassetid://107766152992499"  -- broken/dark fixture face
 
--- Optional elevator textures (your own decals)
-local ELEV_WALL_TEXTURE  = "rbxassetid://125879540003063" -- warm worn 1990s cabin panels
-local ELEV_CEILING_TEXTURE = "rbxassetid://119278377564096" -- matching aged ceiling grid
-local ELEV_FLOOR_TEXTURE = "rbxassetid://114910161826427" -- matching charcoal-brown vinyl tile
-local ELEV_DOOR_TEXTURE  = "rbxassetid://93847962634230" -- distinct aged bronze-grey doors/frame
-local ELEV_FLOOR_TILE = 8 -- one six-tile texture repeat across the cabin width
-local ELEV_CEILING_TILE = 4 -- fixed square grid; never stretches as cabin depth changes
+-- Level 1 elevator material set. The cabin/frame use a seamless brushed
+-- aluminum tile, while the two sliding leaves use a dedicated ImageGen door
+-- master with a centered join and pressed gunmetal panels.
+local ELEV_ALUMINUM_TEXTURE = "rbxassetid://100495024153306"
+local ELEV_WALL_TEXTURE = ELEV_ALUMINUM_TEXTURE
+local ELEV_CEILING_TEXTURE = ELEV_ALUMINUM_TEXTURE
+local ELEV_FLOOR_TEXTURE = ""
+local ELEV_DOOR_TEXTURE = "rbxassetid://140048817197891"
+local ELEV_FLOOR_TILE = 4
+local ELEV_CEILING_TILE = 4
 
 -- Optional MOLD overlay (your own decals, transparent PNGs) — up to 5 variants,
 -- picked at random per wall. Draw the mold hanging from the TOP of the image,
@@ -540,6 +543,39 @@ local function applyTexture(p, id, faces, tile, tint, tileV)
 	end
 end
 
+local function applyDoorLeafImage(p, face, useRightHalf)
+	if ELEV_DOOR_TEXTURE == "" then return end
+	local gui = Instance.new("SurfaceGui")
+	gui.Name = "ElevatorDoorSurface"
+	gui.Face = face
+	gui.AlwaysOnTop = false
+	gui.LightInfluence = 0.32
+	gui.Brightness = 0.82
+	-- A leaf is 4 x 10 studs. Clip the full 8 x 10 master at its normalized
+	-- midpoint instead of relying on upload pixel dimensions; Roblox may resize
+	-- an image internally, which made the old ImageRect midpoint drift.
+	gui.CanvasSize = Vector2.new(400, 1000)
+	gui.Parent = p
+
+	local clip = Instance.new("Frame")
+	clip.Name = "DoorLeafClip"
+	clip.Size = UDim2.fromScale(1, 1)
+	clip.BackgroundTransparency = 1
+	clip.BorderSizePixel = 0
+	clip.ClipsDescendants = true
+	clip.Parent = gui
+
+	local image = Instance.new("ImageLabel")
+	image.Name = "DoorLeafImage"
+	image.Size = UDim2.fromScale(2, 1)
+	image.Position = UDim2.fromScale(useRightHalf and -1 or 0, 0)
+	image.BackgroundTransparency = 1
+	image.BorderSizePixel = 0
+	image.Image = ELEV_DOOR_TEXTURE
+	image.ScaleType = Enum.ScaleType.Stretch
+	image.Parent = clip
+end
+
 local WALL_FACES = { Enum.NormalId.Front, Enum.NormalId.Back,
 	Enum.NormalId.Left, Enum.NormalId.Right }
 
@@ -633,7 +669,7 @@ workspace:SetAttribute("WALL_H", WALL_H)
 workspace:SetAttribute("ORIGIN", O)
 workspace:SetAttribute("ELEV_X", ELEV_X)
 workspace:SetAttribute("ELEV_Y", ELEV_Y)
-workspace:SetAttribute("LightMode", "NORMAL")   -- NORMAL · ALERT · BLACKOUT · ESCAPE (green guidance)
+workspace:SetAttribute("LightMode", "NORMAL")   -- NORMAL · ALERT · POWERDOWN · BLACKOUT · ESCAPE (dark exit phase)
 workspace:SetAttribute("FlickerBoost", 0)       -- higher = lights flicker more
 workspace:SetAttribute("EntitySpeedMul", 1)     -- entity speed multiplier
 
@@ -859,9 +895,9 @@ do
 	local elev = Instance.new("Model")
 	elev.Name = "Elevator"
 
-	local STEEL      = Color3.fromRGB(151, 137, 112) -- warm aged office-elevator metal
-	local STEEL_DARK = Color3.fromRGB(78, 69, 57)
-	local MARBLE     = Color3.fromRGB(45, 38, 31)    -- dark warm commercial floor backing
+	local STEEL      = Color3.fromRGB(184, 187, 190) -- cool commercial elevator aluminum
+	local STEEL_DARK = Color3.fromRGB(70, 75, 80)
+	local CABIN_FLOOR = Color3.fromRGB(42, 46, 50)
 	local CAB_W = 8 -- interior width — LONG and narrow, not wide
 
 	-- outer shell: same textured yellow walls as the rest of the maze
@@ -879,21 +915,27 @@ do
 	-- same brushed-steel texture on both the maze-facing and cabin-facing sides,
 	-- so every visible part of the doorway reads as one material.
 	for _, framePart in ipairs({ frameTop, frameSideA, frameSideB }) do
-		applyTexture(framePart, ELEV_DOOR_TEXTURE,
-			{ Enum.NormalId.Left, Enum.NormalId.Right }, 8, nil, 10)
+		applyTexture(framePart, ELEV_WALL_TEXTURE,
+			{ Enum.NormalId.Left, Enum.NormalId.Right }, 4,
+			Color3.fromRGB(118, 123, 128), 4)
 	end
 
 	-- sliding stainless doors (named for GameManager; they slide ±4 now). Thicker
 	-- than the 2-stud wall cavity (2.2) so no yellow shell can peek at the edges;
 	-- being wider than the fillers, an open door hides them inside it (no z-fight).
-	local doorL = part(Vector3.new(2.2, 10, 4), CFrame.new(x1 - 1, 5, cz - 2),
+	local doorL = part(Vector3.new(0.45, 10, 4), CFrame.new(x1 - 1, 5, cz - 2),
 		STEEL_DARK, Enum.Material.Metal, elev)
 	doorL.Name = "DoorL"
-	local doorR = part(Vector3.new(2.2, 10, 4), CFrame.new(x1 - 1, 5, cz + 2),
+	local doorR = part(Vector3.new(0.45, 10, 4), CFrame.new(x1 - 1, 5, cz + 2),
 		STEEL_DARK, Enum.Material.Metal, elev)
 	doorR.Name = "DoorR"
-	applyTexture(doorL, ELEV_DOOR_TEXTURE, WALL_FACES, 4, nil, 10)
-	applyTexture(doorR, ELEV_DOOR_TEXTURE, WALL_FACES, 4, nil, 10)
+	-- Each moving leaf shows its matching half of the single 4:5 master.
+	-- Swap halves on the opposite face so the complete door reads correctly
+	-- from both the cabin and the maze.
+	applyDoorLeafImage(doorL, Enum.NormalId.Left, false)
+	applyDoorLeafImage(doorL, Enum.NormalId.Right, true)
+	applyDoorLeafImage(doorR, Enum.NormalId.Left, true)
+	applyDoorLeafImage(doorR, Enum.NormalId.Right, false)
 
 	-- threshold GAP: a dark, near-flush band across the doorway — the shadow gap
 	-- between a building floor and the elevator car. Cosmetic (the carpet tile
@@ -902,8 +944,9 @@ do
 		Color3.fromRGB(8, 8, 10), Enum.Material.Metal, elev)
 	sill.CanCollide = false
 	sill.CanQuery = false
-	applyTexture(sill, ELEV_DOOR_TEXTURE,
-		{ Enum.NormalId.Top, Enum.NormalId.Left, Enum.NormalId.Right }, 8)
+	applyTexture(sill, ELEV_WALL_TEXTURE,
+		{ Enum.NormalId.Top, Enum.NormalId.Left, Enum.NormalId.Right }, 4,
+		Color3.fromRGB(105, 110, 115), 4)
 
 	elev.Parent = workspace
 
@@ -921,6 +964,56 @@ do
 	-- Rebuilt in place; walls sit flush with the 8-stud door opening so
 	-- nothing pokes through the yellow shell.
 	local cabin
+
+	local function refreshCableGuidePoster()
+		if not cabin then return end
+		local poster = cabin:FindFirstChild("CableGuidePoster")
+		if not poster then return end
+		local pg = poster:FindFirstChild("CableGuideSurface")
+		local paper = pg and pg:FindFirstChild("CableGuidePaper")
+		if not paper then return end
+
+		local count = math.clamp(
+			math.floor((tonumber(workspace:GetAttribute("Level1ActiveCircuitCount")) or 0) + 0.5),
+			0,
+			6
+		)
+		poster:SetAttribute("ActiveCircuitCount", count)
+		poster:SetAttribute("CableGuideVersion", 2)
+
+		for index = 1, 6 do
+			local row = paper:FindFirstChild(("CircuitRow%02d"):format(index))
+			if row then row.Visible = index <= count end
+		end
+
+		local summary = paper:FindFirstChild("CrewCircuitSummary")
+		if summary then
+			if count == 0 then
+				summary.Text = "CIRCUIT ALLOCATION PENDING // CREW ASSIGNMENT IN PROGRESS"
+			elseif count == 1 then
+				summary.Text = "1 ACTIVE CABLE // RED ONLY // FUSE BOX + LEVER AT OPPOSITE ENDS"
+			else
+				summary.Text = ("%d ACTIVE CABLES // EACH COLOUR LINKS ONE FUSE BOX + ONE LEVER"):format(count)
+			end
+		end
+
+		local clusterNote = paper:FindFirstChild("RelayHint")
+		if clusterNote then
+			clusterNote.Position = UDim2.new(0, 18, 0, 98 + count * 36)
+		end
+
+		local footer = paper:FindFirstChild("CircuitFocusHint")
+		if footer then
+			if count == 0 then
+				footer.Text = "ACTIVE COLOURS APPEAR WHEN THE ROUND STARTS"
+			elseif count == 1 then
+				footer.Text = "FOCUS ONLY ON RED // CHECK BOTH ENDS"
+			else
+				footer.Text = ("FOCUS ONLY ON THE %d COLOURS SHOWN // CHECK BOTH ENDS"):format(count)
+			end
+		end
+	end
+
 	local function buildCabin(depth)
 		depth = math.clamp(depth, 8, 18)
 		if cabin then cabin:Destroy() end
@@ -935,17 +1028,16 @@ do
 		local sideA = part(Vector3.new(depth, 10, 0.5), CFrame.new(bx, 5, cz - CAB_W / 2 - 0.25), STEEL, Enum.Material.Metal, cabin)
 		local sideB = part(Vector3.new(depth, 10, 0.5), CFrame.new(bx, 5, cz + CAB_W / 2 + 0.25), STEEL, Enum.Material.Metal, cabin)
 		local roof = part(Vector3.new(depth + 1, 1, CAB_W + 2), CFrame.new(bx - 0.25, 10.5, cz), STEEL_DARK, Enum.Material.Metal, cabin)
-		local floorP = part(Vector3.new(depth, 0.2, CAB_W), CFrame.new(bx, 0.1, cz), MARBLE, Enum.Material.Marble, cabin)
+		local floorP = part(Vector3.new(depth, 0.2, CAB_W), CFrame.new(bx, 0.1, cz), CABIN_FLOOR, Enum.Material.DiamondPlate, cabin)
 
-		-- optional custom cabin textures
-		-- The images already contain a complete wall/ceiling design. Put one copy
-		-- on each visible cabin face instead of repeating it every four studs (the
-		-- old setup produced seams, mirrored exterior copies and warped panels).
-		applyTexture(back, ELEV_WALL_TEXTURE, { Enum.NormalId.Right }, CAB_W + 1, nil, 10)
-		applyTexture(sideA, ELEV_WALL_TEXTURE, { Enum.NormalId.Back }, depth, nil, 10)
-		applyTexture(sideB, ELEV_WALL_TEXTURE, { Enum.NormalId.Front }, depth, nil, 10)
+		-- The generated aluminum is a square seamless tile. Keep it at the same
+		-- four-stud scale on every elevator surface so its grain never stretches
+		-- when the cabin changes depth for larger crews.
+		applyTexture(back, ELEV_WALL_TEXTURE, { Enum.NormalId.Right }, 4, nil, 4)
+		applyTexture(sideA, ELEV_WALL_TEXTURE, { Enum.NormalId.Back }, 4, nil, 4)
+		applyTexture(sideB, ELEV_WALL_TEXTURE, { Enum.NormalId.Front }, 4, nil, 4)
 		applyTexture(roof, ELEV_CEILING_TEXTURE, { Enum.NormalId.Bottom },
-			ELEV_CEILING_TILE, nil, ELEV_CEILING_TILE)
+			ELEV_CEILING_TILE, Color3.fromRGB(205, 208, 211), ELEV_CEILING_TILE)
 		applyTexture(floorP, ELEV_FLOOR_TEXTURE, { Enum.NormalId.Top }, ELEV_FLOOR_TILE)
 
 		local lightPanel = part(Vector3.new(2, 0.3, 2), CFrame.new(bx, 9.7, cz),
@@ -1005,7 +1097,9 @@ do
 			end
 		end
 
-		-- worn maintenance-routing poster: teaches cable colours in-world
+		-- Worn maintenance-routing poster. It owns six stable row containers, but
+		-- displays only the circuits that PuzzleManager actually generated for this
+		-- round's crew. Spectators and late joins therefore never add false colours.
 		do
 			local poster = part(
 				Vector3.new(0.12, 6.5, 7.2),
@@ -1019,13 +1113,15 @@ do
 			poster.CanQuery = false
 
 			local pg = Instance.new("SurfaceGui")
+			pg.Name = "CableGuideSurface"
 			pg.Face = Enum.NormalId.Right
 			pg.CanvasSize = Vector2.new(420, 400)
-			pg.LightInfluence = 0.55
-			pg.Brightness = 0.75
+			pg.LightInfluence = 0.25
+			pg.Brightness = 1.0
 			pg.Parent = poster
 
 			local paper = Instance.new("Frame")
+			paper.Name = "CableGuidePaper"
 			paper.Size = UDim2.fromScale(1, 1)
 			paper.BackgroundColor3 = Color3.fromRGB(72, 68, 52)
 			paper.BorderSizePixel = 0
@@ -1037,127 +1133,100 @@ do
 			outline.Parent = paper
 
 			local title = Instance.new("TextLabel")
-			title.Size = UDim2.new(1, -26, 0, 54)
-			title.Position = UDim2.new(0, 13, 0, 12)
+			title.Name = "Title"
+			title.Size = UDim2.new(1, -26, 0, 36)
+			title.Position = UDim2.new(0, 13, 0, 10)
 			title.BackgroundTransparency = 1
 			title.Font = Enum.Font.Code
-			title.Text = "MAINTENANCE ROUTING"
+			title.Text = "MAINTENANCE CABLE ROUTING"
 			title.TextColor3 = Color3.fromRGB(210, 202, 155)
-			title.TextSize = 27
+			title.TextSize = 23
 			title.TextXAlignment = Enum.TextXAlignment.Left
 			title.Parent = paper
 
 			local sub = Instance.new("TextLabel")
-			sub.Size = UDim2.new(1, -26, 0, 30)
-			sub.Position = UDim2.new(0, 13, 0, 57)
+			sub.Name = "CrewCircuitSummary"
+			sub.Size = UDim2.new(1, -26, 0, 40)
+			sub.Position = UDim2.new(0, 13, 0, 48)
 			sub.BackgroundTransparency = 1
 			sub.Font = Enum.Font.Code
-			sub.Text = "TRACE FLOOR CABLES FROM LIFT"
-			sub.TextColor3 = Color3.fromRGB(150, 145, 115)
-			sub.TextSize = 17
+			sub.Text = "CIRCUIT ALLOCATION PENDING // CREW ASSIGNMENT IN PROGRESS"
+			sub.TextColor3 = Color3.fromRGB(180, 178, 155)
+			sub.TextSize = 14
+			sub.TextWrapped = true
+			sub.TextYAlignment = Enum.TextYAlignment.Top
 			sub.TextXAlignment = Enum.TextXAlignment.Left
 			sub.Parent = paper
 
-			local function posterRow(y, color, label, sketch)
+			local function posterRow(index, color, label)
+				local row = Instance.new("Frame")
+				row.Name = ("CircuitRow%02d"):format(index)
+				row.Position = UDim2.new(0, 0, 0, 96 + (index - 1) * 36)
+				row.Size = UDim2.new(1, 0, 0, 34)
+				row.BackgroundTransparency = 1
+				row.Visible = false
+				row:SetAttribute("CircuitIndex", index)
+				row.Parent = paper
+
 				local wire = Instance.new("Frame")
-				wire.Position = UDim2.new(0, 18, 0, y + 19)
+				wire.Name = "Cable"
+				wire.Position = UDim2.new(0, 18, 0, 13)
 				wire.Size = UDim2.new(0, 105, 0, 8)
 				wire.BackgroundColor3 = color
 				wire.BorderSizePixel = 0
-				wire.Parent = paper
+				wire.Parent = row
 				local dot = Instance.new("Frame")
+				dot.Name = "Terminal"
 				dot.AnchorPoint = Vector2.new(0.5, 0.5)
-				dot.Position = UDim2.new(0, 122, 0, y + 23)
-				dot.Size = UDim2.new(0, 20, 0, 20)
+				dot.Position = UDim2.new(0, 122, 0, 17)
+				dot.Size = UDim2.new(0, 18, 0, 18)
 				dot.BackgroundColor3 = color
 				dot.BorderSizePixel = 0
-				dot.Parent = paper
+				dot.Parent = row
 				local dc = Instance.new("UICorner")
 				dc.CornerRadius = UDim.new(1, 0)
 				dc.Parent = dot
 
 				local txt = Instance.new("TextLabel")
-				txt.Position = UDim2.new(0, 145, 0, y)
-				txt.Size = UDim2.new(1, -160, 0, 46)
+				txt.Name = "CircuitName"
+				txt.Position = UDim2.new(0, 145, 0, 0)
+				txt.Size = UDim2.new(1, -160, 0, 34)
 				txt.BackgroundTransparency = 1
 				txt.Font = Enum.Font.Code
 				txt.Text = label
-				txt.TextColor3 = Color3.fromRGB(218, 212, 180)
-				txt.TextSize = 22
+				txt.TextColor3 = color
+				txt.TextSize = 19
 				txt.TextXAlignment = Enum.TextXAlignment.Left
-				txt.Parent = paper
-
-				local note = Instance.new("TextLabel")
-				note.Position = UDim2.new(0, 145, 0, y + 32)
-				note.Size = UDim2.new(1, -160, 0, 28)
-				note.BackgroundTransparency = 1
-				note.Font = Enum.Font.Code
-				note.Text = sketch
-				note.TextColor3 = color
-				note.TextSize = 16
-				note.TextXAlignment = Enum.TextXAlignment.Left
-				note.Parent = paper
+				txt.Parent = row
 			end
 
-			posterRow(100, Color3.fromRGB(205, 170, 35), "YELLOW = FUSE BOX", "[====]  POWER")
-			posterRow(190, Color3.fromRGB(205, 82, 30), "ORANGE = LEVER", "---/  RELEASE")
-			-- Warm ceiling-light clusters lead toward wall-mounted ZYNTRA relays,
-			-- deliberately using a different language from the cable routes.
-			do
-				local icon = Instance.new("Frame")
-				icon.Position = UDim2.new(0, 18, 0, 286)
-				icon.Size = UDim2.new(0, 112, 0, 50)
-				icon.BackgroundTransparency = 1
-				icon.Parent = paper
-				for i = 1, 5 do
-					local lamp = Instance.new("Frame")
-					local col = (i - 1) % 3
-					local row = math.floor((i - 1) / 3)
-					lamp.Position = UDim2.new(0, col * 34, 0, row * 27)
-					lamp.Size = UDim2.new(0, 24, 0, 17)
-					lamp.BackgroundColor3 = Color3.fromRGB(255, 246, 190)
-					lamp.BorderSizePixel = 0
-					lamp.Parent = icon
-					local lc = Instance.new("UICorner")
-					lc.CornerRadius = UDim.new(0, 3)
-					lc.Parent = lamp
-					local ls = Instance.new("UIStroke")
-					ls.Color = Color3.fromRGB(255, 232, 120)
-					ls.Thickness = 3
-					ls.Transparency = 0.25
-					ls.Parent = lamp
-				end
+			posterRow(1, Color3.fromRGB(255, 55, 55),  "01  RED CIRCUIT")
+			posterRow(2, Color3.fromRGB(55, 135, 255), "02  BLUE CIRCUIT")
+			posterRow(3, Color3.fromRGB(95, 255, 95),  "03  GREEN CIRCUIT")
+			posterRow(4, Color3.fromRGB(255, 220, 45), "04  YELLOW CIRCUIT")
+			posterRow(5, Color3.fromRGB(245, 70, 255), "05  MAGENTA CIRCUIT")
+			posterRow(6, Color3.fromRGB(20, 235, 235), "06  CYAN CIRCUIT")
 
-				local clusterTitle = Instance.new("TextLabel")
-				clusterTitle.Position = UDim2.new(0, 145, 0, 275)
-				clusterTitle.Size = UDim2.new(1, -158, 0, 44)
-				clusterTitle.BackgroundTransparency = 1
-				clusterTitle.Font = Enum.Font.Code
-				clusterTitle.Text = "WARM LIGHT CLUSTER"
-				clusterTitle.TextColor3 = Color3.fromRGB(230, 224, 195)
-				clusterTitle.TextSize = 20
-				clusterTitle.TextXAlignment = Enum.TextXAlignment.Left
-				clusterTitle.Parent = paper
-
-				local clusterNote = Instance.new("TextLabel")
-				clusterNote.Position = UDim2.new(0, 145, 0, 315)
-				clusterNote.Size = UDim2.new(1, -158, 0, 38)
-				clusterNote.BackgroundTransparency = 1
-				clusterNote.Font = Enum.Font.Code
-				clusterNote.Text = "= ZYNTRA RELAY NEARBY"
-				clusterNote.TextColor3 = Color3.fromRGB(255, 222, 105)
-				clusterNote.TextSize = 15
-				clusterNote.TextWrapped = true
-				clusterNote.TextXAlignment = Enum.TextXAlignment.Left
-				clusterNote.Parent = paper
-			end
+			local clusterNote = Instance.new("TextLabel")
+			clusterNote.Name = "RelayHint"
+			clusterNote.Position = UDim2.new(0, 18, 0, 98)
+			clusterNote.Size = UDim2.new(1, -36, 0, 36)
+			clusterNote.BackgroundTransparency = 1
+			clusterNote.Font = Enum.Font.Code
+			clusterNote.Text = "VERY BRIGHT CEILING CLUSTER = FUSE RELAY"
+			clusterNote.TextColor3 = Color3.fromRGB(255, 232, 145)
+			clusterNote.TextSize = 15
+			clusterNote.TextWrapped = true
+			clusterNote.TextXAlignment = Enum.TextXAlignment.Left
+			clusterNote.Parent = paper
 
 			local footer = Instance.new("TextLabel")
+			footer.Name = "CircuitFocusHint"
 			footer.Size = UDim2.new(1, -26, 0, 30)
 			footer.Position = UDim2.new(0, 13, 1, -34)
 			footer.BackgroundTransparency = 1
 			footer.Font = Enum.Font.Code
-			footer.Text = "LINES MAY SPLIT // DO NOT CUT"
+			footer.Text = "ACTIVE COLOURS APPEAR WHEN THE ROUND STARTS"
 			footer.TextColor3 = Color3.fromRGB(125, 122, 98)
 			footer.TextSize = 15
 			footer.TextXAlignment = Enum.TextXAlignment.Left
@@ -1168,6 +1237,7 @@ do
 		pad.Position = Vector3.new(bx, 0.5, cz)
 
 		cabin.Parent = elev
+		refreshCableGuidePoster()
 	end
 
 	local function cabinDepth()
@@ -1175,6 +1245,7 @@ do
 		return 8 + math.clamp(#Players:GetPlayers(), 1, 5) * 2
 	end
 	buildCabin(cabinDepth())
+	workspace:GetAttributeChangedSignal("Level1ActiveCircuitCount"):Connect(refreshCableGuidePoster)
 	Players.PlayerAdded:Connect(function()
 		task.delay(0.1, function() buildCabin(cabinDepth()) end)
 	end)
@@ -1871,8 +1942,8 @@ for _, f in ipairs(flicker) do
 	end)
 end
 
--- mode controller: ALERT pulses all lights red (continuous); NORMAL & BLACKOUT
--- are applied once on transition so the flicker/presence loops can own lights
+-- mode controller: ALERT pulses all lights red (continuous); NORMAL and
+-- the dark BLACKOUT/ESCAPE phases apply once so flicker loops can own lights
 task.spawn(function()
 	local prev = "NORMAL"
 	local phase = 0
@@ -1916,73 +1987,15 @@ task.spawn(function()
 				L.panel.Color = Color3.fromRGB(18, 18, 18)
 				L.panel.Material = Enum.Material.SmoothPlastic
 			end
-		elseif mode == "BLACKOUT" then
-			if prev ~= "BLACKOUT" then
-				-- Permanent full darkness: from here onward, the flashlight is essential.
+		elseif mode == "BLACKOUT" or mode == "ESCAPE" then
+			if prev ~= mode then
+				-- ESCAPE stays fully dark. The objective detector and exit compass
+				-- guide survivors without relighting a green ceiling route.
 				for _, L in ipairs(allLights) do
 					L.keep = false
 					L.light.Enabled = false
 					L.panel.Color = Color3.fromRGB(18, 18, 18)
 					L.panel.Material = Enum.Material.SmoothPlastic
-				end
-			end
-		elseif mode == "ESCAPE" then
-			-- someone made it out: ONE green LINE of ceiling lights lights up —
-			-- the actual walkable route from the elevator to the exit (BFS over
-			-- the real wall data, skipping pit fields). Panels on that route glow
-			-- green; every other light goes dark, so the line is unmissable.
-			if prev ~= "ESCAPE" then
-				local exitPos = workspace:GetAttribute("ExitPos")
-				local gx = exitPos and math.clamp(math.floor((exitPos.X - O) / CELL) + 1, 1, GRID) or GRID
-				local gz = exitPos and math.clamp(math.floor((exitPos.Z - O) / CELL) + 1, 1, GRID) or GRID
-
-				-- BFS from just outside the elevator doors to the exit's cell
-				local prevCell, seen = {}, {}
-				local q, head2 = { { ELEV_X + 1, ELEV_Y } }, 1
-				seen[key(ELEV_X + 1, ELEV_Y)] = true
-				while head2 <= #q do
-					local c = q[head2]; head2 += 1
-					local x, z = c[1], c[2]
-					if x == gx and z == gz then break end
-					local nbs = {}
-					if x < GRID and not wallV[x][z] then nbs[#nbs + 1] = { x + 1, z } end
-					if x > 1 and not wallV[x - 1][z] then nbs[#nbs + 1] = { x - 1, z } end
-					if z < GRID and not wallH[x][z] then nbs[#nbs + 1] = { x, z + 1 } end
-					if z > 1 and not wallH[x][z - 1] then nbs[#nbs + 1] = { x, z - 1 } end
-					for _, nb in ipairs(nbs) do
-						local k = key(nb[1], nb[2])
-						if not seen[k] and not pitCellSet[k]
-							and not (nb[1] == ELEV_X and nb[2] == ELEV_Y) then
-							seen[k] = true
-							prevCell[k] = c
-							q[#q + 1] = nb
-						end
-					end
-				end
-
-				-- walk the route back into a cell set
-				local onPath = {}
-				local cur = seen[key(gx, gz)] and { gx, gz } or nil
-				while cur do
-					onPath[key(cur[1], cur[2])] = true
-					cur = prevCell[key(cur[1], cur[2])]
-				end
-
-				for _, L in ipairs(allLights) do
-					local lx = math.clamp(math.floor((L.pos.X - O) / CELL) + 1, 1, GRID)
-					local lz = math.clamp(math.floor((L.pos.Z - O) / CELL) + 1, 1, GRID)
-					if onPath[key(lx, lz)] then
-						L.light.Enabled = true
-						L.light.Color = Color3.fromRGB(70, 255, 130)
-						L.light.Brightness = 1.6 -- bright: this IS the way out
-						L.panel.Color = Color3.fromRGB(60, 220, 110)
-						L.panel.Material = Enum.Material.Neon
-					else
-						-- off the route: dark, so the green line pops
-						L.light.Enabled = false
-						L.panel.Color = Color3.fromRGB(18, 18, 18)
-						L.panel.Material = Enum.Material.SmoothPlastic
-					end
 				end
 			end
 		else
@@ -2005,7 +2018,7 @@ task.spawn(function()
 	while true do
 		task.wait(0.4)
 		local mode = lightMode()
-		-- ESCAPE = the green guide line; the entity must not flip panels back on
+		-- ESCAPE stays fully dark; the entity must not flip ceiling panels back on
 		if mode ~= "ALERT" and mode ~= "ESCAPE" and mode ~= "POWERDOWN" then
 			local root = entity:FindFirstChild("HumanoidRootPart")
 			if root then

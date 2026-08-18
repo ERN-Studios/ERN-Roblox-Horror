@@ -4,9 +4,8 @@
 -- GameManager-facing lifecycle owner for Level 3. Everything Level 3 touches
 -- outside its generated world is acquired here and restored by Cleanup(): the
 -- persistent lobby, Level 1 server scripts, the Level 1 Workspace.Entity,
--- compatibility markers, replicated state, and workspace objective mirrors.
---
--- Level 3 intentionally has no EntityStart and no entity/NPC/AI runtime.
+-- compatibility markers, replicated state, objective mirrors, and the dedicated
+-- Level 3 Mall Manager runtime. Level 3 still never creates EntityStart.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -14,9 +13,12 @@ local ServerScriptService = game:GetService("ServerScriptService")
 local ServerStorage = game:GetService("ServerStorage")
 
 local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
+local LayoutGenerator = require(script.Parent:WaitForChild("Level 3 Layout Generator"))
 local WorldBuilder = require(script.Parent:WaitForChild("Level 3 World Builder"))
 local ObjectiveController = require(script.Parent:WaitForChild("Level 3 Objective Controller"))
 local MusicSequenceController = require(script.Parent:WaitForChild("Level 3 Music Sequence Controller"))
+local HidingController = require(script.Parent:WaitForChild("Level 3 Hiding Controller"))
+local MallManagerController = require(script.Parent:WaitForChild("Level 3 Mall Manager AI Controller"))
 
 local Adapter = {}
 
@@ -25,6 +27,8 @@ local generation = 0
 local levelOneScriptStates: {[BaseScript]: boolean}? = nil
 local storedLevelOneEntity: Instance? = nil
 local storedServerLobby: Instance? = nil
+local managerBlackoutConnection: RBXScriptConnection? = nil
+local managerLifecycleToken = 0
 
 local STORED_LOBBY_NAME = "Level 3 Stored Server Lobby"
 local STORED_LEVEL_ONE_ENTITY_NAME = "Level 3 Stored Level 1 Entity"
@@ -65,15 +69,26 @@ end
 local function ensureRemotes()
 	local remotes = ownedFolder(ReplicatedStorage, Configuration.RemotesFolderName)
 	local existing = remotes:FindFirstChild(Configuration.ClientEventName)
-	if existing and existing:IsA("RemoteEvent") then
-		return
+	if not (existing and existing:IsA("RemoteEvent")) then
+		if existing then existing:Destroy() end
+		local event = Instance.new("RemoteEvent")
+		event.Name = Configuration.ClientEventName
+		event.Parent = remotes
 	end
-	if existing then
-		existing:Destroy()
+	local hideRequest = remotes:FindFirstChild(Configuration.HideRequestEventName)
+	if not (hideRequest and hideRequest:IsA("RemoteEvent")) then
+		if hideRequest then hideRequest:Destroy() end
+		local event = Instance.new("RemoteEvent")
+		event.Name = Configuration.HideRequestEventName
+		event.Parent = remotes
 	end
-	local event = Instance.new("RemoteEvent")
-	event.Name = Configuration.ClientEventName
-	event.Parent = remotes
+	local motion = remotes:FindFirstChild(Configuration.MallManagerMotionEventName)
+	if not (motion and motion:IsA("UnreliableRemoteEvent")) then
+		if motion then motion:Destroy() end
+		local event = Instance.new("UnreliableRemoteEvent")
+		event.Name = Configuration.MallManagerMotionEventName
+		event.Parent = remotes
+	end
 end
 
 local function setScriptsEnabled(names: {string}, enabled: boolean)
@@ -177,10 +192,14 @@ local function destroyCompatibilityObjects()
 end
 
 local function destroyGeneratedWorlds()
-	local stale = workspace:FindFirstChild(Configuration.WorldName)
-	while stale do
-		stale:Destroy()
-		stale = workspace:FindFirstChild(Configuration.WorldName)
+	-- A failed procedural build may still be staged off-Workspace.  Sweep both
+	-- owners so a retry never inherits half-built rooms or retained Instances.
+	for _, parent in ipairs({workspace, ServerStorage}) do
+		local stale = parent:FindFirstChild(Configuration.WorldName)
+		while stale do
+			stale:Destroy()
+			stale = parent:FindFirstChild(Configuration.WorldName)
+		end
 	end
 end
 
@@ -204,8 +223,61 @@ local function stopMusicSequence()
 	end
 end
 
+local function stopMallManager()
+	local success, problem = pcall(MallManagerController.Stop)
+	if not success then
+		warn("[Level 3] Mall Manager cleanup failed: " .. tostring(problem))
+	end
+end
+
+local function disconnectManagerLifecycle()
+	managerLifecycleToken += 1
+	if managerBlackoutConnection and managerBlackoutConnection.Connected then
+		managerBlackoutConnection:Disconnect()
+	end
+	managerBlackoutConnection = nil
+end
+
+local function bindManagerToHunt(manifest: any, activeGeneration: number)
+	disconnectManagerLifecycle()
+	local token = managerLifecycleToken
+	local function sync()
+		if token ~= managerLifecycleToken or activeManifest ~= manifest
+			or not manifest.World or manifest.World.Parent ~= workspace then return end
+		local shouldExist = workspace:GetAttribute("Level3MallManagerHuntActive") == true
+			and workspace:GetAttribute("RoundActive") == true
+			and workspace:GetAttribute("SelectedLevel") == 3
+		if not shouldExist then
+			stopMallManager()
+			return
+		end
+		if MallManagerController.GetSnapshot() then return end
+		local ok, result = pcall(MallManagerController.Start, manifest, activeGeneration)
+		if not ok then
+			warn("[Level 3] Mall Manager hunt spawn failed: " .. tostring(result))
+			return
+		end
+		if result == nil then
+			-- Characters can briefly be unavailable on the exact edge. Retry only
+			-- while this same hunt generation is still authoritative.
+			task.delay(.35, function()
+				if token == managerLifecycleToken
+					and workspace:GetAttribute("Level3MallManagerHuntActive") == true then sync() end
+			end)
+		end
+	end
+	managerBlackoutConnection = workspace:GetAttributeChangedSignal("Level3MallManagerHuntActive"):Connect(sync)
+	sync()
+end
+
 local function validateManifest(manifest: any)
 	assert(type(manifest) == "table", "Level 3 world builder must return a manifest table")
+	local layout = manifest.Layout
+	assert(type(layout) == "table", "Level 3 manifest is missing its generated layout")
+	local layoutValid, layoutProblem = LayoutGenerator.Validate(layout)
+	assert(layoutValid, "Level 3 generated layout failed validation: " .. tostring(layoutProblem))
+	assert(manifest.World:GetAttribute("Level3_LayoutHash") == layout.LayoutHash,
+		"Level 3 world and manifest layout hashes do not match")
 	assert(manifest.World and manifest.World:IsA("Model") and manifest.World.Parent == workspace,
 		"Level 3 manifest is missing its live World model")
 	assert(manifest.World:GetAttribute("Level3_Generation") == generation,
@@ -219,6 +291,41 @@ local function validateManifest(manifest: any)
 		"Level 3 manifest is missing its MazeStart compatibility part")
 	assert(type(manifest.Modules) == "table" and #manifest.Modules == Configuration.ModuleGoal,
 		"Level 3 manifest module count does not match Configuration.ModuleGoal")
+	assert(type(manifest.Corridors) == "table" and #manifest.Corridors == #layout.Links,
+		"Level 3 manifest corridor count does not match its generated layout")
+	local expectedHideTables = tonumber(layout.HideSpotCount) or Configuration.Layout.HideTableCount
+	assert(type(manifest.HideTables) == "table" and #manifest.HideTables == expectedHideTables,
+		"Level 3 manifest hide-table count does not match its generated layout")
+	local hideIndices = {}
+	for _, anchor in ipairs(manifest.HideTables) do
+		assert(anchor:IsA("BasePart") and anchor:IsDescendantOf(manifest.World)
+			and anchor:GetAttribute("Level3_HideTableAnchor") == true,
+			"Level 3 hide table anchor is invalid")
+		local index = tonumber(anchor:GetAttribute("Level3_HideTableIndex"))
+		assert(index and index >= 1 and index <= expectedHideTables and not hideIndices[index],
+			"Level 3 hide table indices must be unique and contiguous")
+		hideIndices[index] = true
+		local prompt = anchor:FindFirstChild("HideUnderTablePrompt")
+		assert(prompt and prompt:IsA("ProximityPrompt"), "Level 3 hide table prompt is missing")
+	end
+	assert(type(manifest.BlackoutScreamOpenings) == "table"
+		and #manifest.BlackoutScreamOpenings == #manifest.Corridors * 2,
+		"Level 3 manifest requires two blackout scream markers per generated corridor")
+	for _, opening in ipairs(manifest.BlackoutScreamOpenings) do
+		assert(opening:IsA("Attachment") and opening:IsDescendantOf(manifest.World)
+			and opening:GetAttribute("Level3_CorridorOpeningScreamEmitter") == true,
+			"Level 3 blackout scream opening marker is invalid")
+	end
+	assert(manifest.MallManagerSpawn and manifest.MallManagerSpawn:IsA("BasePart")
+		and manifest.MallManagerSpawn:IsDescendantOf(manifest.World),
+		"Level 3 manifest is missing Mall Manager Spawn")
+	local spawnRoomId = manifest.MallManagerSpawn:GetAttribute("Level3_SpawnRoomId")
+	assert(type(spawnRoomId) == "string" and layout.RoomById[spawnRoomId]
+		and spawnRoomId ~= layout.Roles.ExitRoomId,
+		"Level 3 Mall Manager spawn role is invalid for the generated layout")
+	assert(manifest.MallManagerRuntime and manifest.MallManagerRuntime:IsA("Folder")
+		and manifest.MallManagerRuntime:IsDescendantOf(manifest.World),
+		"Level 3 manifest is missing Mall Manager Runtime")
 	assert(manifest.EscapePrompt and manifest.EscapePrompt:IsA("ProximityPrompt")
 		and manifest.EscapePrompt:IsDescendantOf(manifest.World),
 		"Level 3 manifest is missing its escape prompt")
@@ -249,6 +356,15 @@ end
 
 local function resetReplicatedState(levelState: Folder)
 	levelState:SetAttribute("Level3_Phase", "IDLE")
+	levelState:SetAttribute("Level3_RequestedSeed", 0)
+	levelState:SetAttribute("Level3_ResolvedSeed", 0)
+	levelState:SetAttribute("Level3_GenerationAttempt", 0)
+	levelState:SetAttribute("Level3_UsedFallback", false)
+	levelState:SetAttribute("Level3_LayoutHash", "")
+	levelState:SetAttribute("Level3_GeneratorVersion", LayoutGenerator.Version)
+	levelState:SetAttribute("Level3_GeneratedRoomCount", 0)
+	levelState:SetAttribute("Level3_GeneratedCorridorCount", 0)
+	levelState:SetAttribute("Level3_GeneratedDistrictCount", 0)
 	levelState:SetAttribute("Level3_ModuleProgress", 0)
 	levelState:SetAttribute("Level3_ModuleGoal", 0)
 	levelState:SetAttribute("Level3_ExitUnlocked", false)
@@ -257,10 +373,49 @@ local function resetReplicatedState(levelState: Folder)
 	levelState:SetAttribute("Level3_RoomSongPhase", "STOPPED")
 	levelState:SetAttribute("Level3_RoomSongStartServerTime", 0)
 	levelState:SetAttribute("Level3_RoomSongDuration", Configuration.MusicSequence.DurationSeconds)
+	levelState:SetAttribute("Level3_BlackoutStartSeconds", Configuration.MusicSequence.BlackoutStartSeconds)
+	levelState:SetAttribute("Level3_RoomSongStopSeconds", Configuration.MusicSequence.DurationSeconds)
+	levelState:SetAttribute("Level3_PreBlackoutDuration", Configuration.MusicSequence.PreBlackoutFlickerSeconds)
+	levelState:SetAttribute("Level3_PreBlackoutStartedAtServerTime", 0)
+	levelState:SetAttribute("Level3_PreBlackoutUntilServerTime", 0)
+	levelState:SetAttribute("Level3_PreBlackoutSerial", 0)
+	levelState:SetAttribute("Level3_PreBlackoutActive", false)
+	levelState:SetAttribute("Level3_PostSongBlackoutDuration", Configuration.MusicSequence.PostSongBlackoutSeconds)
+	levelState:SetAttribute("Level3_CycleEndSeconds", Configuration.MusicSequence.CycleEndSeconds)
+	levelState:SetAttribute("Level3_RecoveryFlickerDuration", Configuration.MusicSequence.RecoveryFlickerSeconds)
+	levelState:SetAttribute("Level3_RecoveryFlickerStartedAtServerTime", 0)
+	levelState:SetAttribute("Level3_RecoveryFlickerUntilServerTime", 0)
+	levelState:SetAttribute("Level3_RecoveryFlickerActive", false)
 	levelState:SetAttribute("Level3_BlackoutDuration", Configuration.MusicSequence.BlackoutSeconds)
 	levelState:SetAttribute("Level3_BlackoutStartedAtServerTime", 0)
 	levelState:SetAttribute("Level3_BlackoutUntilServerTime", 0)
 	levelState:SetAttribute("Level3_BlackoutActive", false)
+	levelState:SetAttribute("Level3_BlackoutScreamAssetId", Configuration.Audio.MallManagerBlackout)
+	levelState:SetAttribute("Level3_BlackoutScreamDuration", Configuration.MallManager.BlackoutScreamDurationSeconds)
+	levelState:SetAttribute("Level3_BlackoutScreamVolume", Configuration.MallManager.BlackoutScreamVolume)
+	levelState:SetAttribute("Level3_BlackoutScreamStartedAtServerTime", 0)
+	levelState:SetAttribute("Level3_MallManagerHuntActive", false)
+	levelState:SetAttribute("Level3_BlackoutScreamOpeningCount", 0)
+	levelState:SetAttribute("Level3_MallManagerActive", false)
+	levelState:SetAttribute("Level3_MallManagerState", "OFF")
+	levelState:SetAttribute("Level3_MallManagerBlackoutBoosted", false)
+	levelState:SetAttribute("Level3_MallManagerTargetUserId", 0)
+	levelState:SetAttribute("Level3_MallManagerSpeed", 0)
+	levelState:SetAttribute("Level3_MallManagerAwarenessRange", 0)
+	levelState:SetAttribute("Level3_MallManagerSpawnRoomId", Configuration.MallManager.SpawnRoomId)
+	levelState:SetAttribute("Level3_MallManagerSpawnDistance", 0)
+	levelState:SetAttribute("Level3_MallManagerSpawnAnchorUserId", 0)
+	levelState:SetAttribute("Level3_MallManagerSpawnGroupSize", 0)
+	levelState:SetAttribute("Level3_MallManagerSpawnCycle", 0)
+	levelState:SetAttribute("Level3_MallManagerSpawnSerial", 0)
+	levelState:SetAttribute("Level3_MallManagerPathStatus", "OFF")
+	levelState:SetAttribute("Level3_MallManagerAttackSerial", 0)
+	levelState:SetAttribute("Level3_MallManagerLastCaptureUserId", 0)
+	levelState:SetAttribute("Level3_MallManagerChaseScreamSerial", 0)
+	levelState:SetAttribute("Level3_MallManagerChaseScreamPlaying", false)
+	levelState:SetAttribute("Level3_MallManagerLastChaseScreamAtServerTime", 0)
+	levelState:SetAttribute("Level3_MallManagerLastChaseScreamName", "")
+	levelState:SetAttribute("Level3_HiddenPlayers", 0)
 	levelState:SetAttribute("Level3_Error", nil)
 end
 
@@ -272,6 +427,10 @@ function Adapter.Cleanup()
 		or ServerStorage:FindFirstChild(STORED_LOBBY_NAME) ~= nil
 	)
 
+	-- Stop lifecycle callbacks before blackout authority is torn down.
+	disconnectManagerLifecycle()
+	stopMallManager()
+	HidingController.Stop()
 	stopMusicSequence()
 	stopObjectiveController()
 	local levelState = state()
@@ -291,7 +450,14 @@ function Adapter.Cleanup()
 	workspace:SetAttribute("Level3ModuleGoal", 0)
 	workspace:SetAttribute("Level3ExitUnlocked", false)
 	workspace:SetAttribute("Level3LightingOwnedByController", false)
+	workspace:SetAttribute("Level3PreBlackoutActive", false)
 	workspace:SetAttribute("Level3BlackoutActive", false)
+	workspace:SetAttribute("Level3MallManagerHuntActive", false)
+	workspace:SetAttribute("Level3RecoveryFlickerActive", false)
+	workspace:SetAttribute("Level3MallManagerActive", false)
+	workspace:SetAttribute("Level3MallManagerState", "OFF")
+	workspace:SetAttribute("Level3MallManagerBlackoutBoosted", false)
+	workspace:SetAttribute("Level3HiddenPlayers", 0)
 	clearLegacyAttributes()
 
 	-- Preserve SelectedLevel throughout GameManager's result delay. Cleanup is
@@ -310,7 +476,23 @@ function Adapter.Build()
 	ensureRemotes()
 	clearLegacyAttributes()
 
-	levelState:SetAttribute("Level3_Phase", "BUILDING_WORLD")
+	-- Level3Seed is a manual reproducibility override only. Never write the
+	-- random production choice back or subsequent rounds would repeat the map.
+	local requestedSeed = workspace:GetAttribute("Level3Seed")
+	if type(requestedSeed) ~= "number" then
+		requestedSeed = DateTime.now().UnixTimestampMillis % 2147483647
+	end
+
+	levelState:SetAttribute("Level3_Phase", "GENERATING_LAYOUT")
+	levelState:SetAttribute("Level3_RequestedSeed", requestedSeed)
+	levelState:SetAttribute("Level3_ResolvedSeed", 0)
+	levelState:SetAttribute("Level3_GenerationAttempt", 0)
+	levelState:SetAttribute("Level3_UsedFallback", false)
+	levelState:SetAttribute("Level3_LayoutHash", "")
+	levelState:SetAttribute("Level3_GeneratorVersion", LayoutGenerator.Version)
+	levelState:SetAttribute("Level3_GeneratedRoomCount", 0)
+	levelState:SetAttribute("Level3_GeneratedCorridorCount", 0)
+	levelState:SetAttribute("Level3_GeneratedDistrictCount", 0)
 	levelState:SetAttribute("Level3_Generation", generation)
 	levelState:SetAttribute("Level3_ModuleProgress", 0)
 	levelState:SetAttribute("Level3_ModuleGoal", Configuration.ModuleGoal)
@@ -320,26 +502,86 @@ function Adapter.Build()
 	levelState:SetAttribute("Level3_RoomSongPhase", "WAITING_FOR_ROUND")
 	levelState:SetAttribute("Level3_RoomSongStartServerTime", 0)
 	levelState:SetAttribute("Level3_RoomSongDuration", Configuration.MusicSequence.DurationSeconds)
+	levelState:SetAttribute("Level3_BlackoutStartSeconds", Configuration.MusicSequence.BlackoutStartSeconds)
+	levelState:SetAttribute("Level3_RoomSongStopSeconds", Configuration.MusicSequence.DurationSeconds)
+	levelState:SetAttribute("Level3_PreBlackoutDuration", Configuration.MusicSequence.PreBlackoutFlickerSeconds)
+	levelState:SetAttribute("Level3_PreBlackoutStartedAtServerTime", 0)
+	levelState:SetAttribute("Level3_PreBlackoutUntilServerTime", 0)
+	levelState:SetAttribute("Level3_PreBlackoutSerial", 0)
+	levelState:SetAttribute("Level3_PreBlackoutActive", false)
+	levelState:SetAttribute("Level3_PostSongBlackoutDuration", Configuration.MusicSequence.PostSongBlackoutSeconds)
+	levelState:SetAttribute("Level3_CycleEndSeconds", Configuration.MusicSequence.CycleEndSeconds)
+	levelState:SetAttribute("Level3_RecoveryFlickerDuration", Configuration.MusicSequence.RecoveryFlickerSeconds)
+	levelState:SetAttribute("Level3_RecoveryFlickerStartedAtServerTime", 0)
+	levelState:SetAttribute("Level3_RecoveryFlickerUntilServerTime", 0)
+	levelState:SetAttribute("Level3_RecoveryFlickerActive", false)
 	levelState:SetAttribute("Level3_BlackoutDuration", Configuration.MusicSequence.BlackoutSeconds)
 	levelState:SetAttribute("Level3_BlackoutStartedAtServerTime", 0)
 	levelState:SetAttribute("Level3_BlackoutUntilServerTime", 0)
 	levelState:SetAttribute("Level3_BlackoutActive", false)
+	levelState:SetAttribute("Level3_BlackoutScreamAssetId", Configuration.Audio.MallManagerBlackout)
+	levelState:SetAttribute("Level3_BlackoutScreamDuration", Configuration.MallManager.BlackoutScreamDurationSeconds)
+	levelState:SetAttribute("Level3_BlackoutScreamVolume", Configuration.MallManager.BlackoutScreamVolume)
+	levelState:SetAttribute("Level3_BlackoutScreamStartedAtServerTime", 0)
+	levelState:SetAttribute("Level3_MallManagerHuntActive", false)
+	levelState:SetAttribute("Level3_BlackoutScreamOpeningCount", 0)
+	levelState:SetAttribute("Level3_MallManagerActive", false)
+	levelState:SetAttribute("Level3_MallManagerState", "OFF")
+	levelState:SetAttribute("Level3_MallManagerBlackoutBoosted", false)
+	levelState:SetAttribute("Level3_MallManagerTargetUserId", 0)
+	levelState:SetAttribute("Level3_MallManagerSpeed", 0)
+	levelState:SetAttribute("Level3_MallManagerAwarenessRange", 0)
+	levelState:SetAttribute("Level3_MallManagerSpawnRoomId", Configuration.MallManager.SpawnRoomId)
+	levelState:SetAttribute("Level3_MallManagerSpawnDistance", 0)
+	levelState:SetAttribute("Level3_MallManagerSpawnAnchorUserId", 0)
+	levelState:SetAttribute("Level3_MallManagerSpawnGroupSize", 0)
+	levelState:SetAttribute("Level3_MallManagerSpawnCycle", 0)
+	levelState:SetAttribute("Level3_MallManagerSpawnSerial", 0)
+	levelState:SetAttribute("Level3_MallManagerPathStatus", "OFF")
+	levelState:SetAttribute("Level3_MallManagerAttackSerial", 0)
+	levelState:SetAttribute("Level3_MallManagerLastCaptureUserId", 0)
+	levelState:SetAttribute("Level3_MallManagerChaseScreamSerial", 0)
+	levelState:SetAttribute("Level3_MallManagerChaseScreamPlaying", false)
+	levelState:SetAttribute("Level3_MallManagerLastChaseScreamAtServerTime", 0)
+	levelState:SetAttribute("Level3_MallManagerLastChaseScreamName", "")
+	levelState:SetAttribute("Level3_HiddenPlayers", 0)
 	levelState:SetAttribute("Level3_Error", nil)
 
 	workspace:SetAttribute("WorldGenerated", false)
-	workspace:SetAttribute("LoadStage", "LEVEL_3_BUILDING_WORLD")
+	workspace:SetAttribute("LoadStage", "LEVEL_3_GENERATING_LAYOUT")
 	workspace:SetAttribute("Level3Modules", 0)
 	workspace:SetAttribute("Level3ModuleGoal", Configuration.ModuleGoal)
 	workspace:SetAttribute("Level3ExitUnlocked", false)
 	workspace:SetAttribute("Level3LightingOwnedByController", true)
+	workspace:SetAttribute("Level3PreBlackoutActive", false)
 	workspace:SetAttribute("Level3BlackoutActive", false)
+	workspace:SetAttribute("Level3MallManagerHuntActive", false)
+	workspace:SetAttribute("Level3RecoveryFlickerActive", false)
+	workspace:SetAttribute("Level3MallManagerActive", false)
+	workspace:SetAttribute("Level3MallManagerState", "OFF")
+	workspace:SetAttribute("Level3MallManagerBlackoutBoosted", false)
+	workspace:SetAttribute("Level3HiddenPlayers", 0)
 
 	isolateLevelOneRuntime()
 
 	-- GameManager treats a raised error as a failed generation. Every failure
 	-- path therefore restores the lobby and Level 1 runtime before re-raising.
 	local success, result = xpcall(function()
-		local manifest = WorldBuilder.Build(generation)
+		local layout = LayoutGenerator.Generate(requestedSeed)
+		local layoutValid, layoutProblem = LayoutGenerator.Validate(layout)
+		assert(layoutValid, "Level 3 layout validation failed: " .. tostring(layoutProblem))
+		levelState:SetAttribute("Level3_ResolvedSeed", layout.ResolvedSeed)
+		levelState:SetAttribute("Level3_GenerationAttempt", layout.Attempt)
+		levelState:SetAttribute("Level3_UsedFallback", layout.UsedFallbackSeed == true)
+		levelState:SetAttribute("Level3_LayoutHash", layout.LayoutHash)
+		levelState:SetAttribute("Level3_GeneratorVersion", layout.Version or LayoutGenerator.Version)
+		levelState:SetAttribute("Level3_GeneratedRoomCount", #layout.Rooms)
+		levelState:SetAttribute("Level3_GeneratedCorridorCount", #layout.Links)
+		levelState:SetAttribute("Level3_GeneratedDistrictCount", #layout.Districts)
+
+		levelState:SetAttribute("Level3_Phase", "BUILDING_WORLD")
+		workspace:SetAttribute("LoadStage", "LEVEL_3_BUILDING_WORLD")
+		local manifest = WorldBuilder.Build(layout, generation)
 		validateManifest(manifest)
 		activeManifest = manifest
 
@@ -350,11 +592,18 @@ function Adapter.Build()
 
 		workspace:SetAttribute("SelectedLevel", 3)
 		levelState:SetAttribute("Level3_ExitPosition", manifest.ExitPosition)
+		levelState:SetAttribute("Level3_MallManagerSpawnRoomId",
+			manifest.Layout.Roles.MallManagerSpawnRoomId)
+		levelState:SetAttribute("Level3_BlackoutScreamOpeningCount", #manifest.BlackoutScreamOpenings)
 		levelState:SetAttribute("Level3_Phase", "READY")
 
 		-- READY is established first so the objective controller may replace it
 		-- with its more specific active phase without the adapter overwriting it.
 		ObjectiveController.Start(manifest, generation)
+		HidingController.Start(manifest, generation)
+		-- The Manager exists only for the final post-song hunt. Bind before Music
+		-- starts so the song-end edge can spawn it and recovery can remove it.
+		bindManagerToHunt(manifest, generation)
 		MusicSequenceController.Start(manifest, generation)
 
 		workspace:SetAttribute("LoadStage", "READY")

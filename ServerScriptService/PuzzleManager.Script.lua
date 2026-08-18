@@ -908,6 +908,7 @@ end
 -- ── round lifecycle ───────────────────────────────────────
 local function clearPuzzle()
 	if not session then
+		workspace:SetAttribute("Level1ActiveCircuitCount", nil)
 		workspace:SetAttribute("EntityObjectiveTarget", nil)
 		workspace:SetAttribute("EntityObjectiveStage", nil)
 		return
@@ -916,6 +917,7 @@ local function clearPuzzle()
 	for _, c in ipairs(session.conns) do pcall(function() c:Disconnect() end) end
 	if session.folder then session.folder:Destroy() end
 	session = nil
+	workspace:SetAttribute("Level1ActiveCircuitCount", nil)
 	workspace:SetAttribute("LightMode", "NORMAL")
 	workspace:SetAttribute("FlickerBoost", 0)
 	workspace:SetAttribute("EntitySpeedMul", 1)
@@ -938,8 +940,12 @@ local function startPuzzle()
 			roundPlayerSet[player] = true
 		end
 	end
-	local n = math.max(#roundPlayers, 1)
+	local n = math.clamp(#roundPlayers, 1, 6) -- one box, lever, and paired cable per player
 	local boxCount = n
+	-- Replicate the generated circuit count for the in-elevator guide. This is
+	-- deliberately tied to the frozen puzzle session, not total server players,
+	-- so spectators and players who join later cannot advertise nonexistent cables.
+	workspace:SetAttribute("Level1ActiveCircuitCount", boxCount)
 	local fusesNeeded = boxCount * FUSES_PER_BOX
 	local fuseCount = fusesNeeded * SPAWN_MULT
 	local leverCount = n
@@ -950,7 +956,7 @@ local function startPuzzle()
 
 	session = {
 		active = true, stage = "fuses", conns = {}, folder = folder,
-		boxes = {}, levers = {}, relays = {}, fuses = {}, carried = {}, exit = nil,
+		boxes = {}, levers = {}, circuits = {}, relays = {}, fuses = {}, carried = {}, exit = nil,
 		boxesDone = 0, boxCount = boxCount, latchMode = false,
 		escaped = {}, escapeAnnounced = false, -- who's out + first-escape latch
 		participants = roundPlayerSet,
@@ -1117,9 +1123,28 @@ local function startPuzzle()
 		end))
 	end
 
-	-- fuse boxes on walls, spread apart
-	for _, cf in ipairs(pickWallSpots(boxCount, 4 * CELLv, false, stations)) do
+	-- Fuse boxes on walls, spread apart. A relaxed second pass preserves the
+	-- exact one-box-per-player contract if the first spacing target is too strict.
+	local boxFrames = pickWallSpots(boxCount, 4 * CELLv, false, stations)
+	if #boxFrames < boxCount then
+		for _, fallbackCF in ipairs(pickWallSpots(boxCount - #boxFrames, 1.4 * CELLv, false, stations)) do
+			boxFrames[#boxFrames + 1] = fallbackCF
+		end
+	end
+	-- A 40x40 maze has far more valid walls than the six-player maximum. Keep
+	-- relaxing only the spacing until the gameplay count is exact; never create
+	-- an unmatched box/lever just because a random placement pass was unlucky.
+	local boxFallbackPass = 0
+	while #boxFrames < boxCount and boxFallbackPass < 8 do
+		boxFallbackPass += 1
+		for _, fallbackCF in ipairs(pickWallSpots(boxCount - #boxFrames, 8, false, stations)) do
+			boxFrames[#boxFrames + 1] = fallbackCF
+		end
+	end
+	assert(#boxFrames == boxCount, ("Level 1 could not place %d fuse boxes"):format(boxCount))
+	for boxIndex, cf in ipairs(boxFrames) do
 		local box = makeBox(cf, folder)
+		box.model.Name = ("FuseBox_%02d"):format(boxIndex)
 		table.insert(session.boxes, box)
 		table.insert(session.conns, box.prompt.Triggered:Connect(function(player)
 			if not session or not session.active or box.complete then return end
@@ -1177,16 +1202,36 @@ local function startPuzzle()
 			end
 		end))
 	end
-	session.boxCount = #session.boxes -- target = boxes actually placed
+	assert(#session.boxes == boxCount, "Level 1 fuse-box count changed during construction")
+	session.boxCount = boxCount
+	leverCount = boxCount -- every generated box receives exactly one paired lever
 
 	-- tell the clients to show the HUD NOW (before the heavier lever/wire build),
 	-- so the PuzzleUI doesn't lag behind the round start
 	status:FireAllClients("begin", session.boxCount * FUSES_PER_BOX, session.boxCount)
 
-	-- levers on walls near the edges, far apart, locked until the boxes are done
+	-- Levers on walls near the edges, far apart, locked until the boxes are done.
+	-- As with boxes, relax spacing only when needed so the pair count never drops.
 	local leverSpacing = math.max(6 * CELLv, 0.22 * SIZEv)
-	for _, cf in ipairs(pickWallSpots(leverCount, leverSpacing, true, stations)) do
+	local leverFrames = pickWallSpots(leverCount, leverSpacing, true, stations)
+	if #leverFrames < leverCount then
+		for _, fallbackCF in ipairs(pickWallSpots(leverCount - #leverFrames, 2 * CELLv, true, stations)) do
+			leverFrames[#leverFrames + 1] = fallbackCF
+		end
+	end
+	local leverFallbackPass = 0
+	while #leverFrames < leverCount and leverFallbackPass < 8 do
+		leverFallbackPass += 1
+		-- Final fallback may use any clear wall. Exact party scaling is more
+		-- important than keeping every lever inside the decorative edge band.
+		for _, fallbackCF in ipairs(pickWallSpots(leverCount - #leverFrames, 8, false, stations)) do
+			leverFrames[#leverFrames + 1] = fallbackCF
+		end
+	end
+	assert(#leverFrames == leverCount, ("Level 1 could not place %d levers"):format(leverCount))
+	for leverIndex, cf in ipairs(leverFrames) do
 		local lever = makeLever(cf, folder)
+		lever.model.Name = ("Lever_%02d"):format(leverIndex)
 		table.insert(session.levers, lever)
 		table.insert(session.conns, lever.prompt.Triggered:Connect(function()
 			if not session or not session.active or session.stage ~= "levers" then return end
@@ -1226,6 +1271,7 @@ local function startPuzzle()
 			end
 		end))
 	end
+	assert(#session.levers == session.boxCount, "Every fuse box must have exactly one paired lever")
 
 	-- CLUTCH: when a teammate dies or leaves, their lever latches ON for good and
 	-- the levers stop needing the 10s simultaneity — survivors just flip the rest
@@ -1317,17 +1363,33 @@ local function startPuzzle()
 	end
 	session.updateLeverLights()
 
-	-- ── fuse box → lever wire: a glowing floor cable you can follow, plus
-	-- matching coloured tags on the box and its paired lever
-	-- bold, distinct "wire" colours (pair 1 = red)
+	-- ── one fuse box ↔ one lever circuit per player ─────────────────
+	-- Every circuit passes the elevator threshold, so its unique colour is visible
+	-- the instant the doors open. Neon is intentionally restrained: readable in
+	-- darkness without turning hundreds of cable segments into actual light sources.
 	local WIRE_COLORS = {
-		Color3.fromRGB(230, 40, 40),  -- red
-		Color3.fromRGB(50, 120, 255), -- blue
-		Color3.fromRGB(50, 200, 70),  -- green
-		Color3.fromRGB(240, 210, 40), -- yellow
-		Color3.fromRGB(210, 70, 230), -- purple
-		Color3.fromRGB(0, 210, 210),  -- cyan
+		Color3.fromRGB(255, 55, 55),  -- red
+		Color3.fromRGB(55, 135, 255), -- blue
+		Color3.fromRGB(95, 255, 95),  -- green
+		Color3.fromRGB(255, 220, 45), -- yellow
+		Color3.fromRGB(245, 70, 255), -- magenta
+		Color3.fromRGB(20, 235, 235), -- cyan
 	}
+	local WIRE_COLOR_NAMES = { "RED", "BLUE", "GREEN", "YELLOW", "MAGENTA", "CYAN" }
+	-- Preserve every circuit hue while reducing the Neon value enough that global
+	-- Bloom no longer turns the floor route into a thick light beam.
+	local WIRE_RENDER_FACTOR = 0.58
+	local function renderedCableColor(color)
+		return Color3.new(
+			color.R * WIRE_RENDER_FACTOR,
+			color.G * WIRE_RENDER_FACTOR,
+			color.B * WIRE_RENDER_FACTOR
+		)
+	end
+	local currentCircuitIndex = 0
+	local currentCircuitName = ""
+	local currentCircuitParent = folder
+	local currentCircuitEdgeKeys = {}
 
 	local GRIDn = attr("GRID", 40)
 	local CELLn = attr("CELL", 24)
@@ -1444,6 +1506,7 @@ local function startPuzzle()
 			unit = flat.Unit,
 			half = flat.Magnitude * 0.5,
 			y = (a.Y + b.Y) * 0.5,
+			circuitIndex = currentCircuitIndex,
 		}
 	end
 
@@ -1454,7 +1517,8 @@ local function startPuzzle()
 		local center = (a + b) * 0.5
 		local perp = Vector3.new(-unit.Z, 0, unit.X)
 		for _, run in ipairs(occupiedRuns) do
-			if math.abs(center.Y - run.y) <= 0.12 and math.abs(unit:Dot(run.unit)) > 0.999 then
+			if run.circuitIndex ~= currentCircuitIndex
+				and math.abs(center.Y - run.y) <= 0.12 and math.abs(unit:Dot(run.unit)) > 0.999 then
 				local delta = run.center - center
 				if math.abs(delta:Dot(perp)) < 0.24 then
 					local along = delta:Dot(unit)
@@ -1467,18 +1531,38 @@ local function startPuzzle()
 		return false
 	end
 
+	local function circuitEdgeKey(a, b)
+		local function pointKey(p)
+			return ("%d,%d,%d"):format(
+				math.round(p.X * 20),
+				math.round(p.Y * 20),
+				math.round(p.Z * 20)
+			)
+		end
+		local ak, bk = pointKey(a), pointKey(b)
+		if bk < ak then ak, bk = bk, ak end
+		return ak .. "|" .. bk
+	end
+
 	local function makeRawPiece(a, b, color)
 		local len = (b - a).Magnitude
 		if len <= 0.05 then return end
+		local edgeKey = circuitEdgeKey(a, b)
+		if currentCircuitEdgeKeys[edgeKey] then return end
+		currentCircuitEdgeKeys[edgeKey] = true
 		local seg = Instance.new("Part")
+		seg.Name = "ObjectiveCable"
 		seg.Anchored = true
 		seg.CanCollide = false
 		seg.CanQuery = false
-		seg.Material = Enum.Material.SmoothPlastic
-		seg.Color = color
-		seg.Size = Vector3.new(0.25, 0.06, len)
+		seg.CanTouch = false
+		seg.Material = Enum.Material.Neon
+		seg.Color = renderedCableColor(color)
+		seg.Size = Vector3.new(0.34, 0.09, len)
 		seg.CFrame = CFrame.lookAt((a + b) / 2, b)
-		seg.Parent = folder
+		seg:SetAttribute("CircuitIndex", currentCircuitIndex)
+		seg:SetAttribute("CircuitId", currentCircuitName)
+		seg.Parent = currentCircuitParent or folder
 		registerRun(a, b)
 	end
 
@@ -1556,31 +1640,42 @@ local function startPuzzle()
 	local function layRiser(x, z, y0, y1, color)
 		local len = math.abs(y1 - y0)
 		if len <= 0.05 then return end
+		local a = Vector3.new(x, y0, z)
+		local b = Vector3.new(x, y1, z)
+		local edgeKey = circuitEdgeKey(a, b)
+		if currentCircuitEdgeKeys[edgeKey] then return end
+		currentCircuitEdgeKeys[edgeKey] = true
 		local seg = Instance.new("Part")
+		seg.Name = "ObjectiveCable"
 		seg.Anchored = true
 		seg.CanCollide = false
 		seg.CanQuery = false
-		seg.Material = Enum.Material.SmoothPlastic
-		seg.Color = color
-		seg.Size = Vector3.new(0.25, len, 0.25)
+		seg.CanTouch = false
+		seg.Material = Enum.Material.Neon
+		seg.Color = renderedCableColor(color)
+		seg.Size = Vector3.new(0.34, len, 0.34)
 		seg.CFrame = CFrame.new(x, (y0 + y1) / 2, z)
-		seg.Parent = folder
+		seg:SetAttribute("CircuitIndex", currentCircuitIndex)
+		seg:SetAttribute("CircuitId", currentCircuitName)
+		seg.Parent = currentCircuitParent or folder
 	end
 
 	-- run the cable from a floor vertex to directly under the wall object, then
 	-- UP into it, so it reads as actually connected (not just stopping nearby)
-	local function connectEnd(endVert, cf, color)
+	local function connectEnd(endVert, cf, color, terminalPosition)
 		local ev = Vector3.new(endVert.X, (floorY(endVert.X, endVert.Z) or 0) + 0.06, endVert.Z)
-		-- floor point flush against the wall, right under the object
-		local foot = (cf * CFrame.new(0, 0, -0.12)).Position
+		-- Use the visible colored jack as the true electrical endpoint. Older
+		-- routes climbed behind the casing, leaving the jack apparently floating.
+		local foot = terminalPosition or (cf * CFrame.new(0, 0, -0.12)).Position
 		local y0 = ev.Y
 		-- 90° L along the floor (X leg, then Z leg) — reach the wall base
 		local corner = Vector3.new(foot.X, y0, ev.Z)
 		laySeg(ev, corner, color)
 		laySeg(corner, Vector3.new(foot.X, y0, foot.Z), color)
-		-- climb the wall and STOP at the object's bottom (cf.Y is the centre,
-		-- body ~3 tall → bottom is 1.5 below) so it vanishes into it, no overshoot
-		layRiser(foot.X, foot.Z, y0, cf.Position.Y - 1.5, color)
+		-- climb into the exact glowing terminal. Legacy callers without a terminal
+		-- still stop at the lower casing edge.
+		local terminalY = terminalPosition and terminalPosition.Y or (cf.Position.Y - 1.5)
+		layRiser(foot.X, foot.Z, y0, terminalY, color)
 	end
 
 	-- does a straight floor run pass over a pit (no floor under it)?
@@ -1612,7 +1707,7 @@ local function startPuzzle()
 
 	-- fallback when the grid BFS can't route (e.g. a station tucked in an odd
 	-- spot): a plain right-angle L on the floor so a wire ALWAYS appears
-	local function layWireDirect(fromCF, toCF, color, connectStart, laneIndex)
+	local function layWireDirect(fromCF, toCF, color, connectStart, laneIndex, terminalPosition)
 		local a = (fromCF * CFrame.new(0, 0, -3)).Position
 		local b = (toCF * CFrame.new(0, 0, -3)).Position
 		local y = (floorY(a.X, a.Z) or 0) + 0.06
@@ -1646,16 +1741,16 @@ local function startPuzzle()
 				or sourceOnRun(q2, p2)
 			if not alreadyConnected then laySeg(source, p1, color) end
 		end
-		connectEnd(p2, toCF, color)
+		connectEnd(p2, toCF, color, terminalPosition)
 	end
 
-	local function layWire(fromCF, toCF, color, connectStart, laneIndex)
+	local function layWire(fromCF, toCF, color, connectStart, laneIndex, terminalPosition)
 		if not mazeModel then return end
 		local sx, sz = frontCell(fromCF)
 		local gx, gz = frontCell(toCF)
 		local cells = gridPath(sx, sz, gx, gz)
 		if not cells or #cells < 2 then
-			layWireDirect(fromCF, toCF, color, connectStart, laneIndex) -- BFS failed → guarantee a wire
+			layWireDirect(fromCF, toCF, color, connectStart, laneIndex, terminalPosition) -- BFS failed → guarantee a wire
 			return
 		end
 		local turns = turningPoints(cells)
@@ -1742,42 +1837,126 @@ local function startPuzzle()
 				laySeg(corner, first, color)
 			end
 		end
-		connectEnd(verts[#verts], toCF, color)
+		connectEnd(verts[#verts], toCF, color, terminalPosition)
 	end
 
-	-- A shared cable bundle begins just outside the starting elevator.
-	-- Yellow branches lead to fuse boxes; orange branches lead to lever circuits.
-	-- Every route owns a unique lane for its entire path. Fuse and lever routes
-	-- share the same global lane numbering, so equal local indices can never
-	-- collapse onto each other again after they leave the elevator.
+	-- One visible circuit per box/lever pair. The elevator witness point is a
+	-- middle point on the same cable—not a second cable or a disconnected legend.
 	local elevX = attr("ELEV_X", math.floor(GRIDn / 2))
 	local elevZ = attr("ELEV_Y", math.floor(GRIDn / 2))
 	local _, startWZ = cellWorld(math.clamp(elevX + 1, 1, GRIDn), elevZ)
 	local startWX = On + elevX * CELLn + 1.5 -- just outside the east-facing doors
 	local startY = (floorY(startWX, startWZ) or 0) + 0.06
-	local fuseCableStart = CFrame.lookAt(
-		Vector3.new(startWX, startY, startWZ - 1.1),
-		Vector3.new(startWX + 1, startY, startWZ - 1.1)
-	)
-	local leverCableStart = CFrame.lookAt(
-		Vector3.new(startWX + (#session.boxes + 1) * WIRE_LANE_GAP, startY, startWZ + 1.1),
-		Vector3.new(startWX + (#session.boxes + 1) * WIRE_LANE_GAP + 1, startY, startWZ + 1.1)
-	)
-	local FUSE_WIRE = Color3.fromRGB(205, 170, 35)   -- aged safety yellow
-	local LEVER_WIRE = Color3.fromRGB(205, 82, 30)   -- muted industrial orange
 
-	for laneIndex, box in ipairs(session.boxes) do
-		-- Fan each route out immediately instead of letting several different-length
-		-- connector pieces share the same centre line before their maze lanes split.
-		local routeStart = fuseCableStart
-			+ fuseCableStart.LookVector * ((laneIndex - 1) * WIRE_LANE_GAP)
-		layWire(routeStart, box.cf, FUSE_WIRE, false, laneIndex)
+	local function addCircuitJack(station, color, pairIndex)
+		station.model:SetAttribute("CircuitIndex", pairIndex)
+		station.model:SetAttribute("CircuitId", ("CIRCUIT_%02d"):format(pairIndex))
+		station.model:SetAttribute("CircuitColor", color)
+		station.model:SetAttribute("CircuitColorName", WIRE_COLOR_NAMES[pairIndex])
+
+		local isFuseBox = station.model.Name:find("^FuseBox") ~= nil
+		local jackY = isFuseBox and -1.76 or -1.88
+		local jackZ = isFuseBox and -1.43 or -0.73
+		local jack = build(station.cf, Vector3.new(isFuseBox and 2.65 or 2.45, 0.24, 0.22),
+			CFrame.new(0, jackY, jackZ), renderedCableColor(color), Enum.Material.Neon,
+			station.model, "CableJack")
+		station.cableTerminal = jack.Position
+		jack.CanCollide = false
+		jack.CanQuery = false
+		jack.CanTouch = false
+		local jackLight = Instance.new("PointLight")
+		jackLight.Name = "CableJackGlow"
+		jackLight.Color = color
+		jackLight.Brightness = 0.10
+		jackLight.Range = 4
+		jackLight.Shadows = false
+		jackLight.Parent = jack
+
+		local plate = build(station.cf, Vector3.new(2.25, 0.48, 0.16),
+			CFrame.new(0, jackY + 0.41, jackZ - 0.01), Color3.fromRGB(15, 16, 18),
+			Enum.Material.Metal, station.model, "CircuitLabel")
+		plate.CanCollide = false
+		plate.CanQuery = false
+		local gui = Instance.new("SurfaceGui")
+		gui.Face = Enum.NormalId.Front
+		gui.CanvasSize = Vector2.new(300, 70)
+		gui.LightInfluence = 0.2
+		gui.Parent = plate
+		local text = Instance.new("TextLabel")
+		text.Size = UDim2.fromScale(1, 1)
+		text.BackgroundTransparency = 1
+		text.Font = Enum.Font.Code
+		text.Text = ("CIRCUIT %02d"):format(pairIndex)
+		text.TextColor3 = color
+		text.TextScaled = true
+		text.Parent = gui
 	end
-	for laneIndex, lever in ipairs(session.levers) do
-		local routeStart = leverCableStart
-			+ leverCableStart.LookVector * ((laneIndex - 1) * WIRE_LANE_GAP)
-		layWire(routeStart, lever.cf, LEVER_WIRE, false, #session.boxes + laneIndex)
+
+	local pairCount = session.boxCount
+	assert(pairCount >= 1 and pairCount <= #WIRE_COLORS, "Circuit count exceeds the six-color palette")
+	assert(#session.boxes == pairCount and #session.levers == pairCount,
+		("Circuit pairing mismatch: %d boxes / %d levers / %d expected")
+			:format(#session.boxes, #session.levers, pairCount))
+
+	for pairIndex = 1, pairCount do
+		local box = session.boxes[pairIndex]
+		local lever = session.levers[pairIndex]
+		local color = WIRE_COLORS[pairIndex]
+		local circuitId = ("CIRCUIT_%02d"):format(pairIndex)
+		local circuit = Instance.new("Model")
+		circuit.Name = "CircuitCable_" .. string.format("%02d", pairIndex)
+		circuit:SetAttribute("CircuitIndex", pairIndex)
+		circuit:SetAttribute("CircuitId", circuitId)
+		circuit:SetAttribute("CircuitColor", color)
+		circuit:SetAttribute("CircuitColorName", WIRE_COLOR_NAMES[pairIndex])
+		circuit:SetAttribute("FuseBoxName", box.model.Name)
+		circuit:SetAttribute("LeverName", lever.model.Name)
+		circuit:SetAttribute("HasElevatorWitness", true)
+		circuit.Parent = folder
+		session.circuits[pairIndex] = circuit
+
+		currentCircuitIndex = pairIndex
+		currentCircuitName = circuitId
+		currentCircuitParent = circuit
+		currentCircuitEdgeKeys = {}
+		addCircuitJack(box, color, pairIndex)
+		addCircuitJack(lever, color, pairIndex)
+
+		local laneZ = startWZ + (pairIndex - (pairCount + 1) * 0.5) * 0.72
+		local witnessPosition = Vector3.new(startWX, startY, laneZ)
+		local witnessCF = CFrame.lookAt(witnessPosition, witnessPosition + Vector3.new(1, 0, 0))
+
+		local witness = Instance.new("Part")
+		witness.Name = "ElevatorVisibleCablePoint"
+		witness.Size = Vector3.new(0.46, 0.1, 0.46)
+		witness.CFrame = CFrame.new(witnessPosition)
+		witness.Anchored = true
+		witness.CanCollide = false
+		witness.CanQuery = false
+		witness.CanTouch = false
+		witness.Material = Enum.Material.Neon
+		witness.Color = renderedCableColor(color)
+		witness:SetAttribute("CircuitIndex", pairIndex)
+		witness:SetAttribute("CircuitId", circuitId)
+		witness.Parent = circuit
+		local witnessLight = Instance.new("PointLight")
+		witnessLight.Name = "CableThresholdGlow"
+		witnessLight.Color = color
+		witnessLight.Brightness = 0.04
+		witnessLight.Range = 3
+		witnessLight.Shadows = false
+		witnessLight.Parent = witness
+
+		-- These two routed halves share exactly one witness point and one circuit
+		-- model. Same-circuit overlaps remain coincident, so a route that doubles
+		-- back through a corridor still reads as one cable—not parallel duplicates.
+		layWire(witnessCF, box.cf, color, false, pairIndex, box.cableTerminal)
+		layWire(witnessCF, lever.cf, color, false, pairIndex, lever.cableTerminal)
 	end
+	currentCircuitIndex = 0
+	currentCircuitName = ""
+	currentCircuitParent = folder
+	currentCircuitEdgeKeys = {}
 
 	-- exit: a doorway in the OUTER BORDER wall (you're actually leaving), dim
 	-- and closed until the levers are pulled
@@ -1801,8 +1980,8 @@ local function startPuzzle()
 		p.CameraMode = Enum.CameraMode.Classic -- release first-person for spectate
 		p:SetAttribute("Escaped", true) -- spectate + EntityAI + the win check key off this
 
-		-- FIRST escape only, once per round: guidance lights go green (brighter
-		-- toward the exit) and everyone still inside gets the notification.
+		-- FIRST escape only, once per round: keep the maze dark and give
+		-- everyone still inside detector/compass guidance to the exit.
 		-- The round itself continues — GameManager ends it when every living
 		-- player has escaped (or everyone left inside is dead).
 		if not session.escapeAnnounced then
@@ -1896,7 +2075,7 @@ local function startPuzzle()
 			task.delay(duration, function()
 				if not session or not session.active or session.stage ~= "end" then return end
 
-				-- The maze stays dark. Only the green emergency route wakes up.
+				-- The maze stays dark; only the local exit hardware glows at close range.
 				local ex = session.exit
 				ex.open = true
 				ex.sign.Color = Color3.fromRGB(45, 255, 110)

@@ -75,6 +75,35 @@ local function normalizedAnimationId(value: any): string?
 	return nil
 end
 
+local function configuredAnimationSlots(value: any): { any }
+	local slots = {}
+	if type(value) == "table" then
+		-- Locomotion exposes exactly four stable authored slots. Blank/invalid
+		-- entries stay addressable in Configuration but are not loaded.
+		for slotIndex = 1, 4 do
+			local animationId = normalizedAnimationId(value[slotIndex])
+			if animationId ~= nil then
+				table.insert(slots, {SlotIndex = slotIndex, AnimationId = animationId})
+			end
+		end
+	else
+		local animationId = normalizedAnimationId(value)
+		if animationId ~= nil then
+			table.insert(slots, {SlotIndex = 1, AnimationId = animationId})
+		end
+	end
+	return slots
+end
+
+local function randomSeedForModel(model: Model): number
+	local seed = math.floor(tonumber(model:GetAttribute("Level2_Generation")) or 1)
+	local identity = tostring(model:GetAttribute(Configuration.Attributes.InstanceId) or model.Name)
+	for index = 1, #identity do
+		seed = (seed * 33 + string.byte(identity, index)) % 2147483647
+	end
+	return math.max(1, seed)
+end
+
 local function disconnectAll(connections: { RBXScriptConnection })
 	for _, connection in connections do
 		connection:Disconnect()
@@ -149,13 +178,18 @@ function AnimationAdapter:_ensureAnimator(): Animator?
 end
 
 function AnimationAdapter:_destroyTracks()
-	for _, track in self._tracks do
-		pcall(function()
-			track:Stop(0)
-			track:Destroy()
-		end)
+	for _, bank in self._trackBanks do
+		for _, record in bank do
+			pcall(function()
+				record.Track:Stop(0)
+				record.Track:Destroy()
+			end)
+		end
 	end
-	table.clear(self._tracks)
+	table.clear(self._trackBanks)
+	self._activeRecord = nil
+	self._model:SetAttribute(Configuration.Attributes.AnimationVariant or "PoolFoamAnimationVariant", nil)
+	self._model:SetAttribute(Configuration.Attributes.AnimationAssetId or "PoolFoamAnimationAssetId", nil)
 
 	if self._assetFolder ~= nil then
 		self._assetFolder:Destroy()
@@ -171,8 +205,8 @@ function AnimationAdapter:_loadTracks()
 	end
 
 	for _, state in Configuration.States do
-		local animationId = normalizedAnimationId(ids[state])
-		if animationId ~= nil then
+		local bank = {}
+		for _, slot in configuredAnimationSlots(ids[state]) do
 			local animator = self:_ensureAnimator()
 			if animator == nil then
 				return
@@ -186,8 +220,8 @@ function AnimationAdapter:_loadTracks()
 			end
 
 			local animation = Instance.new("Animation")
-			animation.Name = state
-			animation.AnimationId = animationId
+			animation.Name = state .. "_" .. tostring(slot.SlotIndex)
+			animation.AnimationId = slot.AnimationId
 			animation.Parent = self._assetFolder
 
 			local ok, loaded = pcall(function()
@@ -196,15 +230,22 @@ function AnimationAdapter:_loadTracks()
 			if ok and loaded ~= nil then
 				local track = loaded :: AnimationTrack
 				local trackConfiguration = Configuration.AnimationTracks[state]
-				track.Name = "PoolFoam_" .. state
+				track.Name = "PoolFoam_" .. state .. "_" .. tostring(slot.SlotIndex)
 				track.Looped = trackConfiguration.Looped
 				track.Priority = trackConfiguration.Priority
-				self._tracks[state] = track
+				table.insert(bank, {
+					Track = track,
+					State = state,
+					SlotIndex = slot.SlotIndex,
+					AnimationId = slot.AnimationId,
+				})
 			else
 				animation:Destroy()
-				warn(string.format("Pool Foam could not load %s animation for %s", state, self._slot.Id))
+				warn(string.format("Pool Foam could not load %s animation slot %d for %s",
+					state, slot.SlotIndex, self._slot.Id))
 			end
 		end
+		self._trackBanks[state] = bank
 	end
 end
 
@@ -227,31 +268,57 @@ function AnimationAdapter:_applyProxyVisual(state: string)
 end
 
 function AnimationAdapter:_resolvedTrackState(state: string): string
-	if self._tracks[state] ~= nil then
+	local bank = self._trackBanks[state]
+	if bank ~= nil and #bank > 0 then
 		return state
 	end
-	-- The current final rig has one locomotion clip. Hunt intentionally reuses
-	-- Walk without stopping/restarting, so a phase change cannot snap its pose.
-	if state == "Hunt" and self._tracks.Walk ~= nil then
+	-- Hunt reuses the selected Walk bank without stopping/restarting, so a
+	-- phase change or observation release cannot snap the held pose.
+	local walkBank = self._trackBanks.Walk
+	if state == "Hunt" and walkBank ~= nil and #walkBank > 0 then
 		return "Walk"
 	end
 	return state
 end
 
+function AnimationAdapter:_chooseRecord(trackState: string): any?
+	local bank = self._trackBanks[trackState]
+	if bank == nil or #bank == 0 then return nil end
+	if #bank == 1 then
+		self._lastVariantByState[trackState] = bank[1].SlotIndex
+		return bank[1]
+	end
+	local previousSlot = self._lastVariantByState[trackState]
+	local choices = {}
+	for _, record in bank do
+		if record.SlotIndex ~= previousSlot then table.insert(choices, record) end
+	end
+	if #choices == 0 then choices = bank end
+	local selected = choices[self._random:NextInteger(1, #choices)]
+	self._lastVariantByState[trackState] = selected.SlotIndex
+	return selected
+end
+
+function AnimationAdapter:_publishActiveRecord(record: any?)
+	self._activeRecord = record
+	self._model:SetAttribute(Configuration.Attributes.AnimationVariant or "PoolFoamAnimationVariant",
+		record and record.SlotIndex or nil)
+	self._model:SetAttribute(Configuration.Attributes.AnimationAssetId or "PoolFoamAnimationAssetId",
+		record and record.AnimationId or nil)
+end
+
 function AnimationAdapter:_applyPlaybackSpeed(state: string)
-	local trackState = self:_resolvedTrackState(state)
-	local track = self._tracks[trackState]
+	local record = self._activeRecord
+	local track = record and record.Track
 	if track == nil or not track.IsPlaying then return end
 	local trackConfiguration = Configuration.AnimationTracks[state]
-		or Configuration.AnimationTracks[trackState]
+		or Configuration.AnimationTracks[record.State]
 	local speed = self._paused and 0 or trackConfiguration.Speed
 	pcall(function() track:AdjustSpeed(speed) end)
 end
 
 function AnimationAdapter:_applyState(state: string, forceRestart: boolean?)
-	if self._destroyed then
-		return
-	end
+	if self._destroyed then return end
 
 	local restart = forceRestart == true
 	local targetTrackState = self:_resolvedTrackState(state)
@@ -262,23 +329,34 @@ function AnimationAdapter:_applyState(state: string, forceRestart: boolean?)
 		return
 	end
 
-	for trackState, track in self._tracks do
-		if trackState ~= targetTrackState and track.IsPlaying then
-			local previousConfiguration = Configuration.AnimationTracks[trackState]
-			pcall(function()
-				track:Stop(previousConfiguration.Fade)
-			end)
+	-- Walk and a Hunt fallback resolve to the same bank and must retain the
+	-- exact selected clip/time. A genuine exit and later re-entry chooses a
+	-- fresh non-repeating variant; repeated heartbeat SetState calls do not.
+	local targetRecord = nil
+	if not restart and self._activeRecord ~= nil
+		and self._activeRecord.State == targetTrackState
+	then
+		targetRecord = self._activeRecord
+	else
+		targetRecord = self:_chooseRecord(targetTrackState)
+	end
+
+	for _, bank in self._trackBanks do
+		for _, record in bank do
+			if record ~= targetRecord and record.Track.IsPlaying then
+				local previousConfiguration = Configuration.AnimationTracks[record.State]
+				pcall(function() record.Track:Stop(previousConfiguration.Fade) end)
+			end
 		end
 	end
 
-	local track = self._tracks[targetTrackState]
-	if track ~= nil then
+	self:_publishActiveRecord(targetRecord)
+	if targetRecord ~= nil then
+		local track = targetRecord.Track
 		local trackConfiguration = Configuration.AnimationTracks[state]
-			or Configuration.AnimationTracks[targetTrackState]
+			or Configuration.AnimationTracks[targetRecord.State]
 		pcall(function()
-			if restart and track.IsPlaying then
-				track:Stop(0)
-			end
+			if restart and track.IsPlaying then track:Stop(0) end
 			if restart or not track.IsPlaying then
 				track:Play(trackConfiguration.Fade, 1,
 					self._paused and 0 or trackConfiguration.Speed)
@@ -303,7 +381,10 @@ function AnimationAdapter.new(model: Model, slot: any?)
 	-- _applyState to take its same-state fast path, leaving an authored Idle
 	-- animation loaded but never played.
 	self._state = ""
-	self._tracks = {}
+	self._trackBanks = {}
+	self._lastVariantByState = {}
+	self._random = Random.new(randomSeedForModel(model))
+	self._activeRecord = nil
 	self._connections = {}
 	self._proxyVisuals = captureProxyVisuals(model)
 	self._animator = nil
@@ -405,6 +486,31 @@ function AnimationAdapter:Refresh(forceRestart: boolean?): string
 	state = state or "Idle"
 	self:_applyState(state, forceRestart)
 	return state
+end
+
+function AnimationAdapter:GetDebugSnapshot()
+	local record = self._activeRecord
+	local track = record and record.Track
+	local timePosition, length, playbackSpeed, isPlaying = 0, 0, 0, false
+	if track ~= nil then
+		pcall(function()
+			timePosition = track.TimePosition
+			length = track.Length
+			playbackSpeed = track.Speed
+			isPlaying = track.IsPlaying
+		end)
+	end
+	return {
+		State = self._state,
+		Paused = self._paused == true,
+		TrackState = record and record.State or nil,
+		VariantIndex = record and record.SlotIndex or nil,
+		AnimationId = record and record.AnimationId or nil,
+		TimePosition = timePosition,
+		Length = length,
+		PlaybackSpeed = playbackSpeed,
+		IsPlaying = isPlaying,
+	}
 end
 
 function AnimationAdapter:Destroy()

@@ -189,7 +189,7 @@ RunService.Heartbeat:Connect(function(dt)
     compassArrow.Rotation = math.deg(math.atan2(cross, dot))
    end
   end
-  receiverReadout.Text = "PATH DETECTED\nFOLLOW EXIT VECTOR"
+  receiverReadout.Text = "EXIT VECTOR LOCKED\nFOLLOW DIRECTION"
   return
  end
 
@@ -307,10 +307,10 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d)
 		setReceiver(true)
 		compassMode = true
 		compassArrow.Visible = true
-		receiverHeader.Text = "> EXIT ENERGY DETECTOR // PATH"
+		receiverHeader.Text = "> EXIT ENERGY DETECTOR // NAV"
 		receiverReadout.Position = UDim2.new(0, 86, 0, 45)
 		receiverReadout.Size = UDim2.new(1, -96, 0, 58)
-		receiverReadout.Text = "PATH DETECTED\nFOLLOW EXIT VECTOR"
+		receiverReadout.Text = "EXIT VECTOR LOCKED\nFOLLOW DIRECTION"
 
 	elseif ev == "exit" then
 		objectiveTitle.Text = "> EXIT ONLINE"

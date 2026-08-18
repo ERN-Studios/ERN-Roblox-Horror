@@ -25,9 +25,9 @@ local DEFAULT_AUDIO: {[string]: string} = {
 	HVAC = "rbxassetid://9125446543",
 	DoorRattle = "rbxassetid://9118901593",
 	DoorMovement = "rbxassetid://9119631915",
-	WaterDrip = "rbxassetid://9126193223",
-	PowerDown = "rbxassetid://75561087895749",
+	PowerDown = "",
 	RoomListeningSong = "rbxassetid://140244948455675",
+	MallManagerBlackoutScream = "rbxassetid://125407251695204",
 	ScareBalloonPop = "",
 	ScareChairScrape = "",
 	ScareChildGiggle = "",
@@ -40,9 +40,9 @@ local LIBRARY_ALIASES: {[string]: {string}} = {
 	HVAC = {"HVAC", "Level 3 HVAC"},
 	DoorRattle = {"DoorRattle", "Level 3 Door Rattle"},
 	DoorMovement = {"DoorMovement", "Level 3 Door Movement"},
-	WaterDrip = {"WaterDrip", "Level 3 Water Drip"},
 	PowerDown = {"PowerDown", "Level 3 Power Down"},
 	RoomListeningSong = {"RoomListeningSong", "The Room is Listening"},
+	MallManagerBlackoutScream = {"MallManagerBlackoutScream", "Mall Manager Walk Blackout Scream"},
 	ScareBalloonPop = {"ScareBalloonPop", "Level 3 Scare Balloon Pop"},
 	ScareChairScrape = {"ScareChairScrape", "Level 3 Scare Chair Scrape"},
 	ScareChildGiggle = {"ScareChildGiggle", "Level 3 Scare Child Giggle"},
@@ -112,6 +112,55 @@ local roomSongPreloaded = false
 
 type RoomSongVoice = {Sound: Sound, Effect: EqualizerSoundEffect?}
 local roomSongSpeakers: {RoomSongVoice} = {}
+local roomSongLastStartServerTime: number? = nil
+local roomSongLastHardSync: {[Sound]: number} = {}
+
+local BLACKOUT_SCREAM_NAME = "Mall Manager Walk Blackout Scream"
+local BLACKOUT_SCREAM_DURATION = 8.071836735
+local BLACKOUT_SCREAM_VOLUME = 0.90
+local BLACKOUT_SCREAM_MIN_DISTANCE = 22
+local BLACKOUT_SCREAM_MAX_DISTANCE = 210
+local BLACKOUT_SCREAM_MAX_VOICES = 1
+local BLACKOUT_SCREAM_SOURCE_MIN_DISTANCE = 75
+local BLACKOUT_SCREAM_SOURCE_PREFERRED_DISTANCE = 115
+local BLACKOUT_SCREAM_SOURCE_MAX_DISTANCE = 175
+local BLACKOUT_SCREAM_MIN_OCCLUDERS = 2
+local BLACKOUT_SCREAM_LOW_GAIN = 0
+local BLACKOUT_SCREAM_MID_GAIN = -9
+local BLACKOUT_SCREAM_HIGH_GAIN = -24
+local BLACKOUT_SCREAM_REVERB_DENSITY = 0.88
+local BLACKOUT_SCREAM_REVERB_DIFFUSION = 0.82
+local BLACKOUT_SCREAM_REVERB_DECAY = 2.2
+local BLACKOUT_SCREAM_REVERB_DRY = -3
+local BLACKOUT_SCREAM_REVERB_WET = -10
+local blackoutScreamEmitters: {Instance} = {}
+local blackoutScreamEmitterSeen: {[Instance]: boolean} = {}
+local mallManagerVoiceEmitter: Instance? = nil
+local blackoutScreamVoices: {Sound} = {}
+local lastBlackoutScreamSerial = 0
+script:SetAttribute("Level3_BlackoutScreamPlaying", false)
+script:SetAttribute("Level3_BlackoutScreamVoiceCount", 0)
+script:SetAttribute("Level3_BlackoutScreamSerial", 0)
+script:SetAttribute("Level3_BlackoutScreamSourceDistance", 0)
+script:SetAttribute("Level3_BlackoutScreamStructuralOccluders", 0)
+script:SetAttribute("Level3_BlackoutScreamOpeningKey", "")
+script:SetAttribute("Level3_RoomSongAudibleVoiceCount", 0)
+script:SetAttribute("Level3_RoomSongRunningVoiceCount", 0)
+script:SetAttribute("Level3_RoomSongPrimaryDistance", 0)
+script:SetAttribute("Level3_RoomSongTargetVolume", 0)
+
+-- Mirrors the server-side MusicSequence tuning. Only two nearby PA speakers
+-- contribute volume, preventing 18 synchronized voices from coherently stacking.
+local ROOM_SONG_SPEAKER_VOLUME = 0.30
+local ROOM_SONG_MIN_DISTANCE = 18
+local ROOM_SONG_MAX_DISTANCE = 180
+local ROOM_SONG_MAX_AUDIBLE_VOICES = 2
+local ROOM_SONG_SECONDARY_VOLUME_SCALE = 0.25
+local ROOM_SONG_VOLUME_FADE_SECONDS = 0.85
+local ROOM_SONG_HARD_SYNC_TOLERANCE = 0.85
+local ROOM_SONG_HARD_SYNC_COOLDOWN = 1.25
+local ROOM_SONG_MUFFLE_START = 24
+local ROOM_SONG_MUFFLE_RANGE = 136
 
 local liveOneShots = 0
 local windowStarted = os.clock()
@@ -171,14 +220,226 @@ local function currentWorld(): Model?
 	return if object and object:IsA("Model") then object else nil
 end
 
+local function emitterWorldPosition(emitter: Instance): Vector3?
+	if emitter:IsA("Attachment") then return emitter.WorldPosition end
+	if emitter:IsA("Bone") then return emitter.WorldPosition end
+	if emitter:IsA("BasePart") then return emitter.Position end
+	return nil
+end
+
+local function structuralOccluderCount(world: Model, origin: Vector3, target: Vector3): number
+	local offset = target - origin
+	if offset.Magnitude <= 2.1 then return 0 end
+	local direction = offset.Unit
+	local params = RaycastParams.new()
+	params.FilterType = Enum.RaycastFilterType.Include
+	params.FilterDescendantsInstances = {world}
+	params.IgnoreWater = true
+	params.RespectCanCollide = true
+	local cursor = origin
+	local count = 0
+	for _ = 1, 16 do
+		local remaining = target - cursor
+		if remaining:Dot(direction) <= 0 or remaining.Magnitude <= 2.1 then break end
+		local hit = workspace:Raycast(cursor, remaining, params)
+		if not hit then break end
+		local lowerName = hit.Instance.Name:lower()
+		if lowerName:find("wall", 1, true) or lowerName:find("door", 1, true) then
+			count += 1
+		end
+		-- Level 3 structural walls are 1.5 studs thick. Advancing two studs
+		-- prevents counting both faces of the same wall as separate rooms.
+		cursor = hit.Position + direction * 2
+	end
+	return count
+end
+
+local function tryAddBlackoutScreamEmitter(instance: Instance)
+	if instance:GetAttribute("Level3_MallManagerVoiceEmitter") == true
+		and (instance:IsA("Bone") or instance:IsA("Attachment")) then
+		mallManagerVoiceEmitter = instance
+		return
+	end
+	if instance:GetAttribute("Level3_CorridorOpeningScreamEmitter") ~= true
+		or (not instance:IsA("Attachment") and not instance:IsA("Bone"))
+		or blackoutScreamEmitterSeen[instance] then
+		return
+	end
+	blackoutScreamEmitterSeen[instance] = true
+	table.insert(blackoutScreamEmitters, instance)
+end
+
+local function clearBlackoutScream()
+	for _, sound in ipairs(blackoutScreamVoices) do
+		if sound.Parent then
+			if sound.IsPlaying then sound:Stop() end
+			sound:Destroy()
+		end
+	end
+	table.clear(blackoutScreamVoices)
+	script:SetAttribute("Level3_BlackoutScreamPlaying", false)
+	script:SetAttribute("Level3_BlackoutScreamVoiceCount", 0)
+	script:SetAttribute("Level3_BlackoutScreamSourceDistance", 0)
+	script:SetAttribute("Level3_BlackoutScreamStructuralOccluders", 0)
+	script:SetAttribute("Level3_BlackoutScreamOpeningKey", "")
+end
+
+local function playBlackoutScream(serial: number, startedAt: number, duration: number): boolean
+	clearBlackoutScream()
+	local phase = roomSongPhase()
+	if not isActive()
+		or (phase ~= "BLACKOUT_SONG" and phase ~= "BLACKOUT_HUNT")
+		or stateAttribute("Level3_BlackoutActive", "Level3BlackoutActive") ~= true then
+		return false
+	end
+	local id = resolveId("MallManagerBlackoutScream")
+	local world = currentWorld()
+	local characterRoot = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	if not id or not world or not (characterRoot and characterRoot:IsA("BasePart")) then return false end
+	local elapsed = math.max(0, workspace:GetServerTimeNow() - startedAt)
+	if elapsed >= duration then return false end
+
+	local listenerPosition = characterRoot.Position + Vector3.new(0, 1.2, 0)
+	local candidates: {any} = {}
+	for index = #blackoutScreamEmitters, 1, -1 do
+		local emitter = blackoutScreamEmitters[index]
+		local position = emitterWorldPosition(emitter)
+		if not emitter.Parent or not emitter:IsDescendantOf(world) or not position then
+			blackoutScreamEmitterSeen[emitter] = nil
+			table.remove(blackoutScreamEmitters, index)
+		else
+			local distance = (position - listenerPosition).Magnitude
+			local occluders = structuralOccluderCount(world, listenerPosition, position)
+			local tier = 3
+			if distance >= BLACKOUT_SCREAM_SOURCE_MIN_DISTANCE
+				and distance <= BLACKOUT_SCREAM_SOURCE_MAX_DISTANCE
+				and occluders >= BLACKOUT_SCREAM_MIN_OCCLUDERS then
+				tier = 0
+			elseif distance >= 60 and distance <= 190 and occluders >= 1 then
+				tier = 1
+			elseif distance <= BLACKOUT_SCREAM_MAX_DISTANCE then
+				tier = 2
+			end
+			table.insert(candidates, {
+				Emitter = emitter,
+				Distance = distance,
+				Occluders = occluders,
+				Tier = tier,
+				Score = math.abs(distance - BLACKOUT_SCREAM_SOURCE_PREFERRED_DISTANCE),
+				Key = tostring(emitter:GetAttribute("Level3_CorridorOpeningKey") or emitter.Name),
+			})
+		end
+	end
+	if #candidates == 0 then return false end
+	table.sort(candidates, function(a, b)
+		if a.Tier ~= b.Tier then return a.Tier < b.Tier end
+		if math.abs(a.Score - b.Score) > .001 then return a.Score < b.Score end
+		if a.Occluders ~= b.Occluders then return a.Occluders > b.Occluders end
+		return a.Key < b.Key
+	end)
+	local topCount = math.min(3, #candidates)
+	local selected = candidates[(serial - 1) % topCount + 1]
+	local emitter = selected.Emitter :: Instance
+
+	local volumeValue = stateAttribute("Level3_BlackoutScreamVolume", nil)
+	local screamVolume = if type(volumeValue) == "number" and volumeValue > 0
+		then volumeValue else BLACKOUT_SCREAM_VOLUME
+	local sound = Instance.new("Sound")
+	sound.Name = BLACKOUT_SCREAM_NAME
+	sound.SoundId = id
+	sound.Volume = screamVolume
+	sound.PlaybackSpeed = 1
+	sound.Looped = false
+	sound.PlayOnRemove = false
+	sound.RollOffMode = Enum.RollOffMode.InverseTapered
+	sound.RollOffMinDistance = BLACKOUT_SCREAM_MIN_DISTANCE
+	sound.RollOffMaxDistance = BLACKOUT_SCREAM_MAX_DISTANCE
+	sound:SetAttribute("Level3_MallManagerBlackoutScream", true)
+	sound:SetAttribute("BlackoutSerial", serial)
+	sound:SetAttribute("SourceIndex", 1)
+	sound:SetAttribute("SourceDistance", selected.Distance)
+	sound:SetAttribute("StructuralOccluders", selected.Occluders)
+
+	local equalizer = Instance.new("EqualizerSoundEffect")
+	equalizer.Name = "Level 3 Distant Wall Muffle"
+	equalizer.LowGain = BLACKOUT_SCREAM_LOW_GAIN
+	equalizer.MidGain = BLACKOUT_SCREAM_MID_GAIN
+	equalizer.HighGain = BLACKOUT_SCREAM_HIGH_GAIN
+	equalizer.Parent = sound
+	local reverb = Instance.new("ReverbSoundEffect")
+	reverb.Name = "Level 3 Distant Corridor Reverb"
+	reverb.Density = BLACKOUT_SCREAM_REVERB_DENSITY
+	reverb.Diffusion = BLACKOUT_SCREAM_REVERB_DIFFUSION
+	reverb.DecayTime = BLACKOUT_SCREAM_REVERB_DECAY
+	reverb.DryLevel = BLACKOUT_SCREAM_REVERB_DRY
+	reverb.WetLevel = BLACKOUT_SCREAM_REVERB_WET
+	reverb.Parent = sound
+
+	sound.Parent = emitter
+	table.insert(blackoutScreamVoices, sound)
+	local played = pcall(function()
+		sound:Play()
+		sound.TimePosition = elapsed
+	end)
+	if not played then
+		clearBlackoutScream()
+		return false
+	end
+	Debris:AddItem(sound, math.max(1, duration - elapsed + 1))
+	script:SetAttribute("Level3_BlackoutScreamPlaying", true)
+	script:SetAttribute("Level3_BlackoutScreamVoiceCount", math.min(#blackoutScreamVoices, BLACKOUT_SCREAM_MAX_VOICES))
+	script:SetAttribute("Level3_BlackoutScreamSerial", serial)
+	script:SetAttribute("Level3_BlackoutScreamSourceDistance", selected.Distance)
+	script:SetAttribute("Level3_BlackoutScreamStructuralOccluders", selected.Occluders)
+	script:SetAttribute("Level3_BlackoutScreamOpeningKey", selected.Key)
+	return true
+end
+
+local function updateBlackoutScream()
+	local serialValue = stateAttribute("Level3_BlackoutSerial", nil)
+	local serial = if type(serialValue) == "number" then math.floor(serialValue) else 0
+	if serial < lastBlackoutScreamSerial then
+		lastBlackoutScreamSerial = serial
+		clearBlackoutScream()
+	end
+	local phase = roomSongPhase()
+	if not isActive()
+		or (phase ~= "BLACKOUT_SONG" and phase ~= "BLACKOUT_HUNT")
+		or stateAttribute("Level3_BlackoutActive", "Level3BlackoutActive") ~= true then
+		clearBlackoutScream()
+		return
+	end
+	local startValue = stateAttribute("Level3_BlackoutScreamStartedAtServerTime", nil)
+	local durationValue = stateAttribute("Level3_BlackoutScreamDuration", nil)
+	local startedAt = if type(startValue) == "number" then startValue else 0
+	local duration = if type(durationValue) == "number" and durationValue > 0
+		then durationValue else BLACKOUT_SCREAM_DURATION
+	local screamElapsed = workspace:GetServerTimeNow() - startedAt
+	if startedAt <= 0 or screamElapsed >= duration then
+		-- A late join after the one-shot has expired acknowledges the edge instead
+		-- of retrying a dead stream ten times per second.
+		if serial > lastBlackoutScreamSerial then lastBlackoutScreamSerial = serial end
+		clearBlackoutScream()
+		return
+	end
+	if serial > 0 and serial ~= lastBlackoutScreamSerial then
+		if playBlackoutScream(serial, startedAt, duration) then
+			lastBlackoutScreamSerial = serial
+		end
+	end
+end
+
 local function playPowerDown()
 	if not isActive() then return end
+	local id = resolveId("PowerDown")
+	-- Keep the transition plumbing ready while the replacement asset slot is empty.
+	if not id then return end
 	local now = os.clock()
 	if now - lastPowerDownAt < 1 then return end
 	lastPowerDownAt = now
 	local cue = Instance.new("Sound")
 	cue.Name = "Level 3 Power Down Transition"
-	cue.SoundId = resolveId("PowerDown") or DEFAULT_AUDIO.PowerDown
+	cue.SoundId = id
 	cue.Volume = 1
 	cue.Looped = false
 	cue.Parent = SoundService
@@ -244,11 +505,18 @@ local function stopRoomSong()
 			if voice.Sound.IsPlaying then voice.Sound:Stop() end
 		end
 	end
+	roomSongLastStartServerTime = nil
+	table.clear(roomSongLastHardSync)
+	script:SetAttribute("Level3_RoomSongAudibleVoiceCount", 0)
+	script:SetAttribute("Level3_RoomSongRunningVoiceCount", 0)
+	script:SetAttribute("Level3_RoomSongPrimaryDistance", 0)
+	script:SetAttribute("Level3_RoomSongTargetVolume", 0)
 end
 
-local function updateRoomSong(_dt: number)
+local function updateRoomSong(dt: number)
 	local phase = roomSongPhase()
-	if not isActive() or (phase ~= "ARMED" and phase ~= "PLAYING") then
+	if not isActive() or (phase ~= "ARMED" and phase ~= "PLAYING"
+		and phase ~= "PRE_BLACKOUT" and phase ~= "BLACKOUT_SONG") then
 		stopRoomSong()
 		return
 	end
@@ -273,42 +541,101 @@ local function updateRoomSong(_dt: number)
 		return
 	end
 	local position = workspace:GetServerTimeNow() - startValue
-	if position < 0 or position >= durationValue then
+	local stopValue = stateAttribute("Level3_RoomSongStopSeconds", nil)
+	local stopSeconds = if type(stopValue) == "number" then stopValue else durationValue
+	if position < 0 or position >= math.min(durationValue, stopSeconds) then
 		stopRoomSong()
 		return
 	end
 
-	-- Every room speaker follows the same server-time playhead. Roblox's 3D
-	-- rolloff provides the room-to-corridor fade, while the equalizer removes
-	-- highs at distance so the music sounds physically muffled through walls.
+	-- Rank before touching playback. Only the nearest two PA speakers are allowed
+	-- to own decoders; K previously made all 18 compressed streams seek together.
+	local timelineChanged = roomSongLastStartServerTime == nil
+		or math.abs(startValue - roomSongLastStartServerTime) > .05
+	roomSongLastStartServerTime = startValue
+	local syncNow = os.clock()
 	local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	local ranked: {any} = {}
 	for index = #roomSongSpeakers, 1, -1 do
 		local voice = roomSongSpeakers[index]
 		local sound = voice.Sound
 		if not sound.Parent then
+			roomSongLastHardSync[sound] = nil
 			table.remove(roomSongSpeakers, index)
 		else
-			if sound.SoundId ~= id then sound.SoundId = id end
-			if not sound.IsPlaying then
-				pcall(function() sound.TimePosition = position end)
-				sound:Play()
-			elseif math.abs(sound.TimePosition - position) > .32 then
-				pcall(function() sound.TimePosition = position end)
+			if sound.SoundId ~= id then
+				sound.Volume = 0
+				if sound.IsPlaying then sound:Stop() end
+				sound.SoundId = id
+				roomSongLastHardSync[sound] = nil
 			end
-			sound.Volume = 0.62
-			local distance = 0
 			local parentPart = sound.Parent
 			if root and root:IsA("BasePart") and parentPart and parentPart:IsA("BasePart") then
-				distance = (root.Position - parentPart.Position).Magnitude
+				table.insert(ranked, {Voice=voice, Distance=(root.Position - parentPart.Position).Magnitude})
 			end
+		end
+	end
+	table.sort(ranked, function(a, b) return a.Distance < b.Distance end)
+	local rankBySound: {[Sound]: number} = {}
+	local distanceBySound: {[Sound]: number} = {}
+	for rank = 1, math.min(ROOM_SONG_MAX_AUDIBLE_VOICES, #ranked) do
+		local record = ranked[rank]
+		rankBySound[record.Voice.Sound] = rank
+		distanceBySound[record.Voice.Sound] = record.Distance
+	end
+
+	local audibleCount = 0
+	local runningCount = 0
+	local totalTargetVolume = 0
+	local blend = math.clamp(dt / ROOM_SONG_VOLUME_FADE_SECONDS, 0, 1)
+	for _, voice in ipairs(roomSongSpeakers) do
+		local sound = voice.Sound
+		local rank = rankBySound[sound]
+		if rank then
+			local lastSync = roomSongLastHardSync[sound] or -math.huge
+			local drifted = sound.IsPlaying and sound.IsLoaded
+				and math.abs(sound.TimePosition - position) > ROOM_SONG_HARD_SYNC_TOLERANCE
+			local maySync = syncNow - lastSync >= ROOM_SONG_HARD_SYNC_COOLDOWN
+			local shouldSync = (not sound.IsPlaying and maySync)
+				or (timelineChanged and sound.IsPlaying)
+				or (drifted and maySync)
+			if shouldSync then
+				-- Stamp before touching the stream so a buffering decoder cannot be
+				-- hammered by the ten-hertz mixer loop.
+				roomSongLastHardSync[sound] = syncNow
+				pcall(function()
+					if not sound.IsPlaying then
+						sound.TimePosition = position
+						sound:Play()
+					else
+						sound.TimePosition = position
+					end
+				end)
+			end
+			if sound.IsPlaying then runningCount += 1 end
+			local scale = if rank == 1 then 1 else ROOM_SONG_SECONDARY_VOLUME_SCALE
+			local targetVolume = ROOM_SONG_SPEAKER_VOLUME * scale
+			audibleCount += 1
+			totalTargetVolume += targetVolume
+			sound.Volume += (targetVolume - sound.Volume) * blend
 			if voice.Effect then
-				local far = math.clamp((distance - 9) / 38, 0, 1)
+				local distance = distanceBySound[sound] or 0
+				local far = math.clamp((distance - ROOM_SONG_MUFFLE_START) / ROOM_SONG_MUFFLE_RANGE, 0, 1)
 				voice.Effect.HighGain = -17 * far
 				voice.Effect.MidGain = -6 * far
 				voice.Effect.LowGain = 0
 			end
+		else
+			-- Muted speakers must not continue decoding in the background.
+			sound.Volume = 0
+			if sound.IsPlaying then sound:Stop() end
+			roomSongLastHardSync[sound] = nil
 		end
 	end
+	script:SetAttribute("Level3_RoomSongAudibleVoiceCount", audibleCount)
+	script:SetAttribute("Level3_RoomSongRunningVoiceCount", runningCount)
+	script:SetAttribute("Level3_RoomSongPrimaryDistance", if #ranked > 0 then ranked[1].Distance else 0)
+	script:SetAttribute("Level3_RoomSongTargetVolume", totalTargetVolume)
 end
 
 local function generationMatches(payload: {[any]: any}): boolean
@@ -439,7 +766,6 @@ local function ambientKind(sound: Sound): string
 	local lower = sound.Name:lower()
 	if lower:find("fluorescent", 1, true) then return "FluorescentHum" end
 	if lower:find("hvac", 1, true) then return "HVAC" end
-	if lower:find("drip", 1, true) then return "WaterDrip" end
 	return "Other"
 end
 
@@ -482,8 +808,8 @@ local function tryAddRoomSongSpeaker(instance: Instance)
 	instance.Volume = 0
 	instance.Looped = false
 	instance.RollOffMode = Enum.RollOffMode.InverseTapered
-	instance.RollOffMinDistance = 7
-	instance.RollOffMaxDistance = 48
+	instance.RollOffMinDistance = ROOM_SONG_MIN_DISTANCE
+	instance.RollOffMaxDistance = ROOM_SONG_MAX_DISTANCE
 	table.insert(roomSongSpeakers, {Sound=instance, Effect=effect})
 end
 
@@ -494,6 +820,11 @@ local function bindWorld(world: Model?)
 	worldAddedConnection = nil
 	worldRemovingConnection = nil
 	clearAmbience()
+	clearBlackoutScream()
+	table.clear(blackoutScreamEmitters)
+	table.clear(blackoutScreamEmitterSeen)
+	mallManagerVoiceEmitter = nil
+	lastBlackoutScreamSerial = 0
 	table.clear(roomRegions)
 	table.clear(fluorescentDiffusers)
 	boundWorld = world
@@ -501,6 +832,7 @@ local function bindWorld(world: Model?)
 	for _, descendant in ipairs(world:GetDescendants()) do
 		tryAddAmbience(descendant)
 		tryAddRoomSongSpeaker(descendant)
+		tryAddBlackoutScreamEmitter(descendant)
 		if descendant:IsA("BasePart") and descendant.Name == "Level 3 Room Floor" then
 			table.insert(roomRegions, {
 				Part = descendant,
@@ -517,6 +849,7 @@ local function bindWorld(world: Model?)
 			if world ~= boundWorld or not descendant:IsDescendantOf(world) then return end
 			tryAddAmbience(descendant)
 			tryAddRoomSongSpeaker(descendant)
+			tryAddBlackoutScreamEmitter(descendant)
 			if descendant:IsA("BasePart") and descendant.Name == "Level 3 Room Floor" then
 				table.insert(roomRegions, {
 					Part = descendant,
@@ -580,7 +913,7 @@ end
 task.spawn(function()
 	local temporary: {Sound} = {}
 	for _, key in ipairs({"DoorRattle", "DoorMovement", "FluorescentHum", "PowerDown", "RoomListeningSong",
-		"ScareBalloonPop", "ScareChairScrape", "ScareChildGiggle", "ScarePAWhisper", "ScareRunningSteps"}) do
+		"MallManagerBlackoutScream", "ScareBalloonPop", "ScareChairScrape", "ScareChildGiggle", "ScarePAWhisper", "ScareRunningSteps"}) do
 		local id = resolveId(key)
 		if id then
 			local sound = Instance.new("Sound")
@@ -627,7 +960,8 @@ RunService.Heartbeat:Connect(function(dt)
 		else
 				local sequencePhase = roomSongPhase()
 			local sequenceDuck = if sequencePhase == "PLAYING" or sequencePhase == "ARMED" then .20
-				elseif sequencePhase == "BLACKOUT" then .04 else 1
+				elseif sequencePhase == "PRE_BLACKOUT" then .14
+				elseif sequencePhase == "BLACKOUT_SONG" then .04 else 1
 			local target = if playing then record.TargetVolume * sequenceDuck else 0
 			if playing and record.Kind == "FluorescentHum" then
 				-- Slow ballast variation adds life without audible strobing.
@@ -640,6 +974,7 @@ RunService.Heartbeat:Connect(function(dt)
 		end
 	end
 	updateRoomSong(elapsed)
+	updateBlackoutScream()
 	updateReaderCadence(now)
 
 	local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
@@ -666,15 +1001,16 @@ RunService.Heartbeat:Connect(function(dt)
 	end
 	local sequencePhase = roomSongPhase()
 	local blackoutActive = stateAttribute("Level3_BlackoutActive", "Level3BlackoutActive") == true
-	if sequencePhase == "PLAYING" or sequencePhase == "ARMED" then
+	if sequencePhase == "PLAYING" or sequencePhase == "ARMED"
+		or sequencePhase == "PRE_BLACKOUT" or sequencePhase == "BLACKOUT_SONG" then
 		lastObservedRoomSongPhase = sequencePhase
-		lastBlackoutActive = false
-	elseif sequencePhase == "BLACKOUT" then
-		if lastObservedRoomSongPhase ~= "BLACKOUT" and playing then
+		lastBlackoutActive = sequencePhase == "BLACKOUT_SONG"
+	elseif sequencePhase == "BLACKOUT_HUNT" then
+		if lastObservedRoomSongPhase ~= "BLACKOUT_HUNT" and playing then
 			-- Phase replication is the audible edge; the blackout boolean still
 			-- owns all fixture/lighting state.
 			playPowerDown()
-			lastObservedRoomSongPhase = "BLACKOUT"
+			lastObservedRoomSongPhase = "BLACKOUT_HUNT"
 		end
 		-- If the player/round attributes arrive one frame after blackout,
 		-- leave the cue armed so the next mixer pass can still play it.
@@ -687,8 +1023,10 @@ RunService.Heartbeat:Connect(function(dt)
 		local candidate = nearestFixtures[voiceIndex]
 		if playing and candidate then voice.Emitter.Position = candidate.Part.Position end
 		local baseVolumes = {0.12, 0.075, 0.045}
-		local humTarget = if playing and candidate and sequencePhase ~= "BLACKOUT"
-			then baseVolumes[voiceIndex] * ((sequencePhase == "PLAYING" or sequencePhase == "ARMED") and .24 or 1)
+		local humTarget = if playing and candidate
+			and sequencePhase ~= "BLACKOUT_SONG" and sequencePhase ~= "BLACKOUT_HUNT"
+			then baseVolumes[voiceIndex]
+				* ((sequencePhase == "PLAYING" or sequencePhase == "ARMED" or sequencePhase == "PRE_BLACKOUT") and .24 or 1)
 			else 0
 		voice.Sound.Volume += (humTarget - voice.Sound.Volume) * math.clamp(elapsed / .65, 0, 1)
 		if humTarget > 0 and not voice.Sound.IsPlaying then voice.Sound:Play() end

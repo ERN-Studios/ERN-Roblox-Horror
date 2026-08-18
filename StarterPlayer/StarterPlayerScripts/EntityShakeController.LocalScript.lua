@@ -24,6 +24,9 @@ local CHASE_RUMBLE   = 0.10  -- constant low rumble while chased (scaled by near
 local STOMP_INTERVAL = 0.5   -- SECONDS BETWEEN FOOTSTEP STOMPS — match to the run sound/anim
 local STOMP_STRENGTH = 0.7   -- camera kick per stomp (studs) at point-blank
 local DECAY          = 9     -- how fast a stomp kick fades
+local ALERT_SHAKE_DURATION = 1.25 -- first-sight howl camera shock
+local ALERT_SHAKE_STRENGTH = 0.48
+local ALERT_SHAKE_ATTACK   = 0.08
 
 -- your own MOVEMENT head-bob (subtle, smooth; a little quicker + stronger when
 -- running). Lives here because this script owns Humanoid.CameraOffset — a second
@@ -34,17 +37,33 @@ local BOB_WALK_FREQ = 6      -- bob pace while walking (rad/s)
 local BOB_RUN_FREQ  = 9.5    -- bob pace while sprinting (slightly faster)
 local BOB_RUN_WS    = 22     -- WalkSpeed at/above which you count as running
 local BOB_SMOOTH    = 6      -- how fast the bob eases in / out (start, stop, gait change)
+local HIDDEN_CAMERA_OFFSET = Vector3.new(0, -2.25, 0)
 -- ──────────────────────────────────────────────────────────
 
 local impulse = 0     -- decaying footstep-kick amount
 local stompTimer = 0
 local bobT = 0        -- bob phase
 local bobAmp = 0      -- eased bob amplitude (0 when standing)
+local alertElapsed = math.huge
 
 local function humanoidNow()
 	local char = player.Character
 	return char and char:FindFirstChildOfClass("Humanoid"), char
 end
+
+-- EntityAI increments this attribute only on the player it has just noticed.
+-- This avoids shaking bystanders who merely hear the same positional howl.
+player:GetAttributeChangedSignal("Level1EntityAlertSerial"):Connect(function()
+	local hum = humanoidNow()
+	if workspace:GetAttribute("SelectedLevel") ~= 1
+		or workspace:GetAttribute("RoundActive") ~= true
+		or player:GetAttribute("InRound") ~= true
+		or player:GetAttribute("ReduceCameraShake") == true
+		or not hum or hum.Health <= 0 then
+		return
+	end
+	alertElapsed = 0
+end)
 
 RunService.RenderStepped:Connect(function(dt)
 	local hum, char = humanoidNow()
@@ -83,8 +102,9 @@ RunService.RenderStepped:Connect(function(dt)
 
 	-- your own movement head-bob: a smooth figure-eight (side sway + double-time
 	-- vertical), eased in and out so starting/stopping never snaps
+	local isHidden = player:GetAttribute("Level3_Hiding") == true
 	local bobTargetAmp, bobFreq = 0, BOB_WALK_FREQ
-	if myRoot and hum.Health > 0 then
+	if not isHidden and myRoot and hum.Health > 0 then
 		local vel = myRoot.AssemblyLinearVelocity
 		local flat = Vector3.new(vel.X, 0, vel.Z).Magnitude
 		if flat > 2 and hum.WalkSpeed > 0.1 then
@@ -100,11 +120,28 @@ RunService.RenderStepped:Connect(function(dt)
 		math.sin(bobT * 2) * bobAmp,        -- vertical bounce, one per step
 		0)
 
+	-- Target-only first-sight howl shock. It attacks quickly and decays before
+	-- chase stomps take over, including when the Entity spots you beyond LURK_RANGE.
+	local alertAmp = 0
+	if workspace:GetAttribute("SelectedLevel") ~= 1
+		or workspace:GetAttribute("RoundActive") ~= true
+		or player:GetAttribute("InRound") ~= true
+		or player:GetAttribute("ReduceCameraShake") == true
+		or hum.Health <= 0 then
+		alertElapsed = math.huge
+	elseif alertElapsed < ALERT_SHAKE_DURATION then
+		alertElapsed += dt
+		local attack = math.clamp(alertElapsed / ALERT_SHAKE_ATTACK, 0, 1)
+		local release = math.max(1 - alertElapsed / ALERT_SHAKE_DURATION, 0) ^ 1.7
+		alertAmp = ALERT_SHAKE_STRENGTH * attack * release
+	end
+
 	-- entity shake on top of the bob
-	local amp = ambient + impulse * STOMP_STRENGTH
-	local target = bob
+	local amp = ambient + impulse * STOMP_STRENGTH + alertAmp
+	local baseOffset = isHidden and HIDDEN_CAMERA_OFFSET or Vector3.zero
+	local target = baseOffset + bob
 	if amp >= 0.001 then
-		target = bob + Vector3.new(
+		target = baseOffset + bob + Vector3.new(
 			(math.random() * 2 - 1) * amp,
 			-- a stomp also dips the view downward a touch, like a heavy footfall
 			(math.random() * 2 - 1) * amp - impulse * STOMP_STRENGTH * 0.5,
@@ -122,6 +159,7 @@ end)
 
 -- clear any residual offset on respawn
 player.CharacterAdded:Connect(function(char)
+	alertElapsed = math.huge
 	local hum = char:WaitForChild("Humanoid")
 	hum.CameraOffset = Vector3.zero
 end)

@@ -137,7 +137,7 @@ toggleButton.BackgroundColor3 = PANEL
 toggleButton.BackgroundTransparency = 0.10
 toggleButton.BorderSizePixel = 0
 toggleButton.Font = Enum.Font.Code
-toggleButton.Text = "HIDE [R]"
+toggleButton.Text = "CLOSE READER [R]"
 toggleButton.TextColor3 = ENERGON
 toggleButton.TextSize = 12
 toggleButton.Visible = false
@@ -240,7 +240,7 @@ local function updateTogglePresentation()
 	local hint = inputHint()
 	toggleButton.Text = if readerHidden
 		then "OPEN EXIT READER  " .. hint
-		else "HIDE  " .. hint
+		else "CLOSE READER  " .. hint
 	toggleButton.TextColor3 = if readerHidden then TEXT else ENERGON
 	toggleButton.Size = UDim2.fromOffset(readerHidden and 190 or 92, 28)
 end

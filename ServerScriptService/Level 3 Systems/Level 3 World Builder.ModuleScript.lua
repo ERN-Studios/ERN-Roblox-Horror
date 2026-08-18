@@ -9,6 +9,10 @@ local ServerStorage = game:GetService("ServerStorage")
 local Builder = {}
 local C = Configuration.Colors
 
+-- Build-scoped layout authority.  The generated manifest supplies this table;
+-- Configuration.Rooms/Links remain only as a recovery fallback for old callers.
+local activeLayout: {[string]: any}? = nil
+
 local function contentTexture(slotName: string, fallback: string): string
 	local assets = ReplicatedStorage:FindFirstChild("Level 3 Assets")
 	local slot = assets and assets:FindFirstChild(slotName)
@@ -27,6 +31,8 @@ local TEXTURES = {
 	StaffDoor = contentTexture("StaffDoorTexture", Configuration.Textures.StaffDoor),
 	FinalExitDoor = contentTexture("FinalExitDoorTexture", Configuration.Textures.FinalExitDoor),
 	KidsDrawingsAtlas = contentTexture("KidsDrawingsAtlasTexture", Configuration.Textures.KidsDrawingsAtlas),
+	KidsDrawingsWholesome25 = contentTexture("KidsDrawingsWholesome25Texture", Configuration.Textures.KidsDrawingsWholesome25),
+	KidsDrawingsDisturbing25 = contentTexture("KidsDrawingsDisturbing25Texture", Configuration.Textures.KidsDrawingsDisturbing25),
 	KidsNotesAtlas = contentTexture("KidsNotesAtlasTexture", Configuration.Textures.KidsNotesAtlas),
 	CDCoversAtlas = contentTexture("CDCoversAtlasTexture", Configuration.Textures.CDCoversAtlas),
 }
@@ -79,7 +85,10 @@ local function texture(object: BasePart, textureId: string, face: Enum.NormalId,
 end
 
 local function roomById(id: string): {[string]: any}
-	for _, room in ipairs(Configuration.Rooms) do
+	local layout = activeLayout
+	if layout and layout.RoomById and layout.RoomById[id] then return layout.RoomById[id] end
+	local rooms = layout and layout.Rooms or Configuration.Rooms
+	for _, room in ipairs(rooms) do
 		if room.Id == id then return room end
 	end
 	error("Unknown Level 3 room: " .. id)
@@ -95,38 +104,34 @@ end
 
 local RED_PARTY_ROOMS = {PartyA = true, Records = true}
 local NEON_PARTY_ROOMS = {PartyB = true, UtilityWest = true, CentralHall = true}
+local CITY_ROOMS = {
+	BackOffice = true, BreakRoom = true, Maintenance = true, ChairStore = true,
+	CityPlay = true, LostFound = true, Exit = true,
+}
 
-local function floorStyle(kind: string, roomId: string?): (Color3, Enum.Material, string?, number)
-	if kind == "City" then
-		return Color3.fromRGB(190, 188, 166), Enum.Material.Carpet, TEXTURES.CityCarpet, Configuration.TextureStuds.CityCarpet
-	elseif kind == "Exit" then
+local function floorStyle(kind: string, roomId: string?, themeId: string?): (Color3, Enum.Material, string?, number)
+	if kind == "Exit" then
 		return Color3.fromRGB(70, 71, 66), Enum.Material.DiamondPlate, nil, 10
-	elseif roomId and RED_PARTY_ROOMS[roomId] then
+	elseif (themeId == "City" or themeId == "CityPlay") or (not themeId and kind == "City") then
+		return Color3.fromRGB(190, 188, 166), Enum.Material.Carpet, TEXTURES.CityCarpet, Configuration.TextureStuds.CityCarpet
+	elseif (themeId == "RedParty" or themeId == "RedCelebration") or (not themeId and roomId and RED_PARTY_ROOMS[roomId]) then
 		return Color3.fromRGB(111, 31, 27), Enum.Material.Carpet, TEXTURES.PartyCarpetRed, Configuration.TextureStuds.PartyCarpetRed
-	elseif roomId and NEON_PARTY_ROOMS[roomId] then
+	elseif (themeId == "OrangeBlackParty" or themeId == "OrangeParty") or (not themeId and roomId and NEON_PARTY_ROOMS[roomId]) then
 		return Color3.fromRGB(13, 17, 24), Enum.Material.Carpet, TEXTURES.PartyCarpetNeon, Configuration.TextureStuds.PartyCarpetNeon
 	end
 	return C.DarkCarpet, Enum.Material.Carpet, TEXTURES.PartyCarpet, Configuration.TextureStuds.PartyCarpet
 end
 
-local CITY_ROOMS = {
-	BackOffice = true,
-	BreakRoom = true,
-	Maintenance = true,
-	ChairStore = true,
-	CityPlay = true,
-	LostFound = true,
-	Exit = true,
-}
-
-local BEIGE_ROOMS = CITY_ROOMS
-
 local function usesWallpaper(room: {[string]: any}): boolean
-	return BEIGE_ROOMS[room.Id] == true
+	if room.WallStyle ~= nil then return room.WallStyle == "PastelWallpaper" end
+	if room.ThemeId ~= nil then return (room.ThemeId == "City" or room.ThemeId == "CityPlay") end
+	return CITY_ROOMS[room.Id] == true
 end
 
 local function wallColor(room: {[string]: any}): Color3
-	return usesWallpaper(room) and Color3.fromRGB(220, 213, 187) or Color3.fromRGB(183, 78, 35)
+	if usesWallpaper(room) then return Color3.fromRGB(220, 213, 187) end
+	if (room.ThemeId == "RedParty" or room.ThemeId == "RedCelebration") then return Color3.fromRGB(145, 58, 48) end
+	return Color3.fromRGB(183, 78, 35)
 end
 
 local function lightTone(kind: string): Color3
@@ -259,7 +264,9 @@ end
 local function makeRoomLights(parent: Instance, room: {[string]: any}, roomIndex: number)
 	local p = worldPosition(room)
 	local area = room.W * room.D
-	local targetCount = math.clamp(math.floor(area / 1800) + 1, 1, 6)
+	-- Procedural rooms stay readable without allowing the larger map to multiply
+	-- dynamic lights beyond the six-player server budget.
+	local targetCount = math.clamp(math.floor(area / 2200) + 1, 1, 4)
 	local columns = math.min(3, math.max(1, math.ceil(targetCount / 2)))
 	local rows = math.min(2, math.max(1, math.ceil(targetCount / columns)))
 	local n = 0
@@ -315,7 +322,7 @@ local function cloneDecorMesh(templateName: string, parent: Instance, name: stri
 	return object
 end
 
-local function makeTable(parent: Instance, cframe: CFrame, party: boolean, chairs: number, styleIndex: number)
+local function makeTable(parent: Instance, cframe: CFrame, party: boolean, chairs: number, styleIndex: number, allowHide: boolean)
 	local tableColor = TABLECLOTH_COLORS[(styleIndex - 1) % #TABLECLOTH_COLORS + 1]
 	local tableMesh = cloneDecorMesh("FoldingTableTemplate", parent, "Level 3 Vetted Folding Table",
 		cframe * CFrame.new(0, 1.72, 0), Vector3.new(11.2, 3.44, 4.35))
@@ -338,6 +345,38 @@ local function makeTable(parent: Instance, cframe: CFrame, party: boolean, chair
 	decorative(top)
 	texture(top, TEXTURES.ConfettiTablecloth, Enum.NormalId.Top,
 		Configuration.TextureStuds.Tablecloth, Configuration.TextureStuds.Tablecloth, .34)
+	if allowHide then
+		-- Exactly one table in every generated district room is an authoritative
+		-- hiding place. Additional furniture remains visual/collidable without
+		-- multiplying prompts, ray occluders, or server occupancy records.
+		local hideAnchor = part(parent, "Level 3 Hide Anchor",
+			cframe * CFrame.new(0, Configuration.Hiding.HiddenRootHeight, 0),
+			Configuration.Hiding.HideVolumeSize, Color3.new(), Enum.Material.SmoothPlastic, 1)
+		decorative(hideAnchor)
+		hideAnchor:SetAttribute("Level3_HideTableAnchor", true)
+		hideAnchor:SetAttribute("Level3_HideOccupiedUserId", 0)
+		local hidePrompt = Instance.new("ProximityPrompt")
+		hidePrompt.Name = "HideUnderTablePrompt"
+		hidePrompt.ActionText = "HIDE UNDER TABLE"
+		hidePrompt.ObjectText = "FOLDING TABLE"
+		hidePrompt.HoldDuration = Configuration.Hiding.PromptHoldDuration
+		hidePrompt.MaxActivationDistance = Configuration.Hiding.PromptMaxDistance
+		hidePrompt.RequiresLineOfSight = false
+		hidePrompt.KeyboardKeyCode = Enum.KeyCode.E
+		hidePrompt.GamepadKeyCode = Enum.KeyCode.ButtonX
+		hidePrompt.Enabled = false
+		hidePrompt.Parent = hideAnchor
+
+		local sightOccluder = part(parent, "Level 3 Hide Sight Occluder",
+			cframe * CFrame.new(0, Configuration.Hiding.SightOccluderSize.Y * .5, 0),
+			Configuration.Hiding.SightOccluderSize, Color3.new(), Enum.Material.SmoothPlastic, 1)
+		decorative(sightOccluder)
+		sightOccluder.CanCollide = false
+		sightOccluder.CanTouch = false
+		sightOccluder.CanQuery = true
+		sightOccluder:SetAttribute("Level3_HideSightOccluder", true)
+	end
+
 	-- Keep the folding legs and silhouette visible. The former four rigid skirt
 	-- panels read as a solid colored box rather than a disposable tablecloth.
 	chairs = math.clamp(math.ceil(chairs * .62), 2, 5)
@@ -479,20 +518,39 @@ local function makeBunting(parent: Instance, room: {[string]: any})
 	end
 end
 
--- Roblox delivers both atlases at 1024x1024. Drawings V2 is a 4x4 grid
--- (16 unique sheets: eight wholesome, eight subtly disturbing); notes remains 2x2.
+-- The drawing library contains the original 16-cell atlas plus two new
+-- 25-cell transparent atlases: exactly 25 wholesome and 25 disturbing variants.
+-- Density is intentionally uneven.  Three rooms become unnerving clusters,
+-- several contain only one to four pieces, and every unlisted room has none.
 local ROOM_ART_COUNTS = {
-	BackOffice = 8,
-	BreakRoom = 5,
-	Maintenance = 9,
-	LoadingStore = 5,
-	PartyA = 8,
-	ChairStore = 6,
-	CityPlay = 10,
-	LostFound = 5,
-	PartyB = 8,
-	Records = 6,
+	BackOffice = 4,
+	BreakRoom = 1,
+	Maintenance = 22,
+	LoadingStore = 3,
+	PartyA = 12,
+	CityPlay = 24,
+	LostFound = 2,
+	PartyB = 20,
+	Records = 14,
 }
+
+local drawingSerial = 0
+
+local function nextDrawingVariant(): (string, number)
+	drawingSerial += 1
+	local sequence = (drawingSerial - 1) % 66 + 1
+	-- The first 50 placements exhaust every new variant once.  Odd/even
+	-- sequencing interleaves innocent and disturbing art instead of grouping
+	-- an entire room into a single obvious horror category.
+	if sequence <= 50 then
+		local cell = math.floor((sequence - 1) / 2) + 1
+		if sequence % 2 == 1 then
+			return TEXTURES.KidsDrawingsWholesome25, cell
+		end
+		return TEXTURES.KidsDrawingsDisturbing25, cell
+	end
+	return TEXTURES.KidsDrawingsAtlas, sequence - 50
+end
 local BUNTING_ROOMS = {
 	BackOffice = true,
 	LoadingStore = true,
@@ -504,26 +562,25 @@ local BUNTING_ROOMS = {
 local function makeKidsWallPaper(parent: Instance, name: string, position: Vector3, inward: Vector3,
 	size: Vector2, textureId: string, atlasCell: number, rotation: number, seed: number)
 	local paperCF = CFrame.lookAt(position, position + inward) * CFrame.Angles(0, 0, rotation)
-	local paperColors = {
-		Color3.fromRGB(238, 231, 201),
-		Color3.fromRGB(224, 232, 216),
-		Color3.fromRGB(233, 216, 188),
-		Color3.fromRGB(216, 225, 232),
-	}
-	local paper = part(parent, name, paperCF, Vector3.new(size.X, size.Y, .026),
-		paperColors[seed % #paperColors + 1], Enum.Material.SmoothPlastic)
+	-- The image atlas carries true alpha.  This part is only a SurfaceGui carrier:
+	-- it must never read as a framed sheet glued over the underlying wall.
+	local paper = part(parent, name, paperCF, Vector3.new(size.X, size.Y, .008),
+		Color3.new(), Enum.Material.SmoothPlastic, 1)
 	decorative(paper)
-	paper.CanQuery = true
+	paper.Transparency = 1
+	paper.CanQuery = false
 	paper:SetAttribute("Level3_KidsWallArt", true)
+	paper:SetAttribute("Level3_TransparentWallArt", true)
 	paper:SetAttribute("Level3_AtlasCell", atlasCell)
 
 	local surface = Instance.new("SurfaceGui")
 	surface.Name = "Level 3 Kids Wall Art Surface"
 	surface.Face = Enum.NormalId.Front
 	surface.AlwaysOnTop = false
-	surface.LightInfluence = .72
+	-- Let the room light and wall color show through the crayon pigments.
+	surface.LightInfluence = .88
 	surface.SizingMode = Enum.SurfaceGuiSizingMode.PixelsPerStud
-	surface.PixelsPerStud = 72
+	surface.PixelsPerStud = 80
 	surface.ZOffset = 1
 	surface.Parent = paper
 
@@ -533,23 +590,36 @@ local function makeKidsWallPaper(parent: Instance, name: string, position: Vecto
 	image.BorderSizePixel = 0
 	image.Size = UDim2.fromScale(1, 1)
 	image.Image = textureId
-	local gridSize = textureId == TEXTURES.KidsDrawingsAtlas and 4 or 2
+	local gridSize = 2
+	if textureId == TEXTURES.KidsDrawingsAtlas then
+		gridSize = 4
+	elseif textureId == TEXTURES.KidsDrawingsWholesome25
+		or textureId == TEXTURES.KidsDrawingsDisturbing25 then
+		gridSize = 5
+	end
 	local cellSize = 1024 / gridSize
 	image.ImageRectSize = Vector2.new(cellSize, cellSize)
 	local cell = (atlasCell - 1) % (gridSize * gridSize)
 	image.ImageRectOffset = Vector2.new((cell % gridSize) * cellSize, math.floor(cell / gridSize) * cellSize)
 	if textureId == TEXTURES.KidsDrawingsAtlas then
 		paper:SetAttribute("Level3_DrawingMood", cell < 8 and "Wholesome" or "Disturbing")
+		paper:SetAttribute("Level3_DrawingLibraryIndex", cell + 1)
+	elseif textureId == TEXTURES.KidsDrawingsWholesome25 then
+		paper:SetAttribute("Level3_DrawingMood", "Wholesome")
+		paper:SetAttribute("Level3_DrawingLibraryIndex", 17 + cell)
+	elseif textureId == TEXTURES.KidsDrawingsDisturbing25 then
+		paper:SetAttribute("Level3_DrawingMood", "Disturbing")
+		paper:SetAttribute("Level3_DrawingLibraryIndex", 42 + cell)
 	end
 	image.ScaleType = Enum.ScaleType.Fit
 	image.Parent = surface
 
 	for tapeIndex, side in ipairs({-1, 1}) do
 		local tape = part(parent, "Level 3 Kids Drawing Tape",
-			paperCF * CFrame.new(side * size.X * .31, size.Y * .47, -.025)
+			paperCF * CFrame.new(side * size.X * .31, size.Y * .47, -.013)
 				* CFrame.Angles(0, 0, math.rad((seed + tapeIndex * 7) % 9 - 4)),
-			Vector3.new(math.min(.60, size.X * .22), .11, .014),
-			Color3.fromRGB(205, 185, 126), Enum.Material.SmoothPlastic, .13)
+			Vector3.new(math.min(.48, size.X * .18), .075, .008),
+			Color3.fromRGB(205, 185, 126), Enum.Material.SmoothPlastic, .28)
 		decorative(tape)
 	end
 end
@@ -560,16 +630,18 @@ local function makeRoomWallDecor(parent: Instance, room: {[string]: any},
 	if count <= 0 then return end
 	local p = worldPosition(room)
 	local h = roomHeight(room)
+	local sides = {"North", "South", "West", "East"}
+	local openSlots = {-0.39, -0.26, -0.16, 0.16, 0.26, 0.39}
+	local closedSlots = {-0.39, -0.26, -0.13, 0, 0.13, 0.26, 0.39}
 	for artIndex = 1, count do
-		local sideIndex = (roomIndex * 5 + artIndex * 3) % 4 + 1
-		local side = ({"North", "South", "West", "East"})[sideIndex]
+		local sideIndex = (roomIndex + artIndex - 2) % 4 + 1
+		local side = sides[sideIndex]
 		local horizontal = side == "North" or side == "South"
 		local span = horizontal and room.W or room.D
-		local alongFraction = (((roomIndex * 19 + artIndex * 37) % 61) / 60 - .5) * .64
-		if openings[side] and math.abs(alongFraction) < .14 then
-			alongFraction = alongFraction < 0 and -.23 or .23
-		end
-		local along = math.clamp(alongFraction * span, -span * .39, span * .39)
+		local sideOrdinal = math.floor((artIndex - 1) / 4)
+		local slots = openings[side] and openSlots or closedSlots
+		local alongFraction = slots[sideOrdinal % #slots + 1]
+		local along = alongFraction * span
 		local y = math.min(h - 2.15, 3.45 + ((roomIndex * 11 + artIndex * 17) % 29) / 29 * 3.3)
 		local position: Vector3
 		local inward: Vector3
@@ -586,11 +658,9 @@ local function makeRoomWallDecor(parent: Instance, room: {[string]: any},
 		local isNote = (artIndex + roomIndex) % 3 == 0
 		local width = isNote and (2.1 + (artIndex % 2) * .35) or (3.15 + (artIndex % 3) * .34)
 		local height = isNote and (2.0 + ((artIndex + 1) % 2) * .3) or (2.85 + ((artIndex + 1) % 3) * .28)
-		local atlas = isNote and TEXTURES.KidsNotesAtlas or TEXTURES.KidsDrawingsAtlas
-		-- Alternate the drawing half deterministically: cells 1-8 are innocent,
-		-- cells 9-16 retain a normal childlike style with one unsettling detail.
-		local disturbing = (roomIndex + artIndex) % 2 == 0
-		local drawingCell = (disturbing and 8 or 0) + ((roomIndex * 3 + artIndex * 5) % 8) + 1
+		local drawingAtlas, drawingCell = TEXTURES.KidsDrawingsAtlas, 1
+		if not isNote then drawingAtlas, drawingCell = nextDrawingVariant() end
+		local atlas = isNote and TEXTURES.KidsNotesAtlas or drawingAtlas
 		local atlasCell = isNote and ((roomIndex * 3 + artIndex) % 4 + 1) or drawingCell
 		makeKidsWallPaper(parent,
 			isNote and "Level 3 Kids Notes" or "Level 3 Child Drawing",
@@ -611,7 +681,7 @@ local function makeCorridorWallDecor(parent: Instance, startPoint: Vector3, endP
 		local side = ((corridorIndex + artIndex) % 2 == 0) and 1 or -1
 		local position = startPoint:Lerp(endPoint, alpha)
 		local inward: Vector3
-		local wallInset = Configuration.CorridorWidth * .5 - Configuration.WallThickness * .5 - .015
+		local wallInset = Configuration.CorridorWidth * .5 - .015
 		if horizontal then
 			position += Vector3.new(0, 4.15 + ((corridorIndex + artIndex) % 3) * .72, side * wallInset)
 			inward = Vector3.new(0, 0, -side)
@@ -620,13 +690,13 @@ local function makeCorridorWallDecor(parent: Instance, startPoint: Vector3, endP
 			inward = Vector3.new(-side, 0, 0)
 		end
 		local isNote = (corridorIndex + artIndex) % 3 == 0
-		local disturbing = (corridorIndex + artIndex) % 2 == 0
-		local drawingCell = (disturbing and 8 or 0) + ((corridorIndex * 5 + artIndex * 3) % 8) + 1
+		local drawingAtlas, drawingCell = TEXTURES.KidsDrawingsAtlas, 1
+		if not isNote then drawingAtlas, drawingCell = nextDrawingVariant() end
 		makeKidsWallPaper(parent,
 			isNote and "Level 3 Corridor Kids Notes" or "Level 3 Corridor Child Drawing",
 			position, inward,
 			isNote and Vector2.new(2.05, 2.15) or Vector2.new(2.7, 2.55),
-			isNote and TEXTURES.KidsNotesAtlas or TEXTURES.KidsDrawingsAtlas,
+			isNote and TEXTURES.KidsNotesAtlas or drawingAtlas,
 			isNote and ((corridorIndex + artIndex * 2) % 4 + 1) or drawingCell,
 			math.rad(((corridorIndex * 9 + artIndex * 5) % 13) - 6),
 			corridorIndex * 23 + artIndex)
@@ -686,11 +756,11 @@ local function makeRoomSpeaker(parent: Instance, room: {[string]: any}, index: n
 	local sound = Instance.new("Sound")
 	sound.Name = "Level 3 Room Song Speaker"
 	sound.SoundId = Configuration.Audio.RoomListeningSong
-	sound.Volume = Configuration.MusicSequence.SpeakerVolume or .62
+	sound.Volume = Configuration.MusicSequence.SpeakerVolume or .30
 	sound.Looped = false
 	sound.RollOffMode = Enum.RollOffMode.InverseTapered
-	sound.RollOffMinDistance = Configuration.MusicSequence.SpeakerMinDistance or 7
-	sound.RollOffMaxDistance = Configuration.MusicSequence.SpeakerMaxDistance or 48
+	sound.RollOffMinDistance = Configuration.MusicSequence.SpeakerMinDistance or 18
+	sound.RollOffMaxDistance = Configuration.MusicSequence.SpeakerMaxDistance or 180
 	sound.EmitterSize = 3
 	sound.Parent = emitter
 	local equalizer = Instance.new("EqualizerSoundEffect")
@@ -744,7 +814,9 @@ local function makeRoomProps(parent: Instance, room: {[string]: any}, index: num
 	for tableIndex, layout in ipairs(layouts) do
 		local tableCF = CFrame.new(p + Vector3.new(layout[1] * room.W, 0, layout[2] * room.D))
 			* CFrame.Angles(0, layout[3], 0)
-		makeTable(parent, tableCF, true, layout[4], index + tableIndex)
+		local hideCount = tonumber(room.HideSpotCount)
+		local allowHide = if hideCount ~= nil then tableIndex <= hideCount else true
+		makeTable(parent, tableCF, true, layout[4], index + tableIndex, allowHide)
 		if room.Module and not moduleSocketCreated then
 			local socket = part(parent, "Level 3 CD Table Socket", tableCF * CFrame.new(0, 3.62, 0),
 				Vector3.new(2.8, .08, 2.8), Color3.new(), Enum.Material.SmoothPlastic, 1)
@@ -770,7 +842,7 @@ local function makeRoomProps(parent: Instance, room: {[string]: any}, index: num
 	end
 	-- One deterministic feature room is conspicuously overloaded with balloons,
 	-- breaking the otherwise regular decoration rhythm without physics clutter.
-	if room.Id == "PartyB" then
+	if room.HeroRoom == true or room.Id == "PartyB" then
 		makeBalloonCluster(parent, p + Vector3.new(-room.W * .32, 0, room.D * .27), index + 11, 11)
 		makeBalloonCluster(parent, p + Vector3.new(room.W * .31, 0, -room.D * .29), index + 17, 10)
 		makeLooseBalloons(parent, p + Vector3.new(0, 0, room.D * .15), 14, index + 23)
@@ -965,15 +1037,18 @@ local function sideBetween(a: {[string]: any}, b: {[string]: any}): string
 end
 
 local function connectionMap(): {[string]: {[string]: boolean}}
+	local layout = activeLayout
+	local rooms = layout and layout.Rooms or Configuration.Rooms
+	local links = layout and layout.Links or Configuration.Links
 	local map = {}
-	for _, room in ipairs(Configuration.Rooms) do map[room.Id] = {} end
-	for _, link in ipairs(Configuration.Links) do
+	for _, room in ipairs(rooms) do map[room.Id] = {} end
+	for _, link in ipairs(links) do
 		local a, b = roomById(link.A), roomById(link.B)
 		map[a.Id][sideBetween(a, b)] = true
 		map[b.Id][sideBetween(b, a)] = true
 	end
 	-- The story-only Level 2 flume mouth opens behind the Level 3 spawn.
-	map.Arrival.West = true
+	if map.Arrival then map.Arrival.West = true end
 	return map
 end
 
@@ -982,11 +1057,13 @@ local function makeRoom(parent: Instance, room: {[string]: any}, openings: {[str
 	model.Name = string.format("%02d %s", index, room.Name)
 	model:SetAttribute("Level3_RoomId", room.Id)
 	model:SetAttribute("Level3_RoomKind", room.Kind)
+	model:SetAttribute("Level3_District", room.SectionIndex or 0)
+	model:SetAttribute("Level3_ThemeId", room.ThemeId or "Legacy")
 	model:SetAttribute("Level3_DecorArchetype", room.Decor or "Default")
 	model:SetAttribute("Level3_CeilingHeight", roomHeight(room))
 	model.Parent = parent
 	local p = worldPosition(room)
-	local color, material, textureId, studs = floorStyle(room.Kind, room.Id)
+	local color, material, textureId, studs = floorStyle(room.Kind, room.Id, room.ThemeId)
 	local floorPart = part(model, "Level 3 Room Floor", CFrame.new(p - Vector3.new(0, .5, 0)),
 		Vector3.new(room.W, Configuration.FloorThickness, room.D), color, material)
 	if textureId then texture(floorPart, textureId, Enum.NormalId.Top, studs, studs) end
@@ -1027,13 +1104,16 @@ local function makeCorridor(parent: Instance, link: {[string]: any}, index: numb
 	model.Name = string.format("Level 3 Corridor %02d %s-%s", index, a.Id, b.Id)
 	model:SetAttribute("Level3_TunnelWidth", tunnelWidth)
 	model:SetAttribute("Level3_TunnelHeight", tunnelHeight)
+	model:SetAttribute("Level3_District", link.SectionIndex or 0)
+	model:SetAttribute("Level3_ThemeId", link.ThemeId or a.ThemeId or "Legacy")
 	model.Parent = parent
 
 	-- Butt the tunnel kit cleanly against each room opening. The former full
 	-- wall-thickness overlap put coplanar lintels/pillars in the same space and
 	-- produced visible z-fighting. Floors/ceilings get a microscopic seal while
 	-- side walls stop just short of the room shell.
-	local floorColor, floorMaterial, floorTexture, studs = floorStyle("PartyHall")
+	local corridorTheme = link.ThemeId or a.ThemeId
+	local floorColor, floorMaterial, floorTexture, studs = floorStyle("PartyHall", nil, corridorTheme)
 	local sealedLength = length + .04
 	-- Room shells own the opening jambs/lintel. Stop tunnel walls and ceiling
 	-- just before those shell volumes so no coplanar faces can shimmer.
@@ -1043,34 +1123,64 @@ local function makeCorridor(parent: Instance, link: {[string]: any}, index: numb
 	local floorPart = part(model, "Level 3 Corridor Floor", CFrame.new(center - Vector3.new(0, .5, 0)),
 		floorSize, floorColor, floorMaterial)
 	if floorTexture then texture(floorPart, floorTexture, Enum.NormalId.Top, studs, studs) end
+
+	-- Every physical corridor mouth owns an exact, zero-geometry audio marker.
+	-- Clients select their nearest markers during the blackout scream, preserving
+	-- spatial direction without decoding fifty simultaneous copies of one asset.
+	local screamOpenings = {}
+	for openingIndex, entry in ipairs({{Side="A", Point=startPoint}, {Side="B", Point=endPoint}}) do
+		local opening = Instance.new("Attachment")
+		opening.Name = "Level 3 Corridor Opening " .. entry.Side
+		opening.CFrame = floorPart.CFrame:ToObjectSpace(CFrame.new(entry.Point + Vector3.new(0, 4.2, 0)))
+		opening:SetAttribute("Level3_CorridorOpeningScreamEmitter", true)
+		opening:SetAttribute("Level3_CorridorIndex", index)
+		opening:SetAttribute("Level3_CorridorOpeningSide", entry.Side)
+		opening:SetAttribute("Level3_CorridorOpeningKey", string.format("%02d%s", index, entry.Side))
+		opening:SetAttribute("Level3_CorridorDoorType", link.Door)
+		opening:SetAttribute("Level3_CorridorOpeningOrder", openingIndex)
+		opening.Parent = floorPart
+		table.insert(screamOpenings, opening)
+	end
 	local ceilingSize = horizontal and Vector3.new(wallLength, 1, tunnelWidth)
 		or Vector3.new(tunnelWidth, 1, wallLength)
 	part(model, "Level 3 Corridor Ceiling",
 		CFrame.new(center + Vector3.new(0, tunnelHeight + .5, 0)),
 		ceilingSize, C.AgedWhite, Enum.Material.Plaster)
 
-	local wallColorValue = Color3.fromRGB(183, 78, 35)
+	local corridorStyle = {
+		Id = "Corridor", ThemeId = corridorTheme,
+		WallStyle = link.WallStyle or a.WallStyle,
+	}
+	local corridorWallpaper = usesWallpaper(corridorStyle)
+	local wallColorValue = wallColor(corridorStyle)
+	local wallTexture = corridorWallpaper and TEXTURES.PastelWallpaper or TEXTURES.OrangeWall
+	local wallStuds = corridorWallpaper and Configuration.TextureStuds.Wallpaper or Configuration.TextureStuds.OrangeWall
+	local wallTransparency = corridorWallpaper and .08 or .28
+	local wallMaterial = corridorWallpaper and Enum.Material.SmoothPlastic or Enum.Material.Plaster
+	-- CorridorWidth is the clear interior width. Keep each inner wall face
+	-- flush with the 14-stud floor/ceiling and the matching room opening.
+	local wallCenterOffset = tunnelWidth * .5 + Configuration.WallThickness * .5
 	if horizontal then
-		for _, z in ipairs({-tunnelWidth * .5, tunnelWidth * .5}) do
+		for _, z in ipairs({-wallCenterOffset, wallCenterOffset}) do
 			local wall = part(model, "Level 3 Corridor Wall",
 				CFrame.new(center + Vector3.new(0, tunnelHeight * .5, z)),
 				Vector3.new(wallLength, tunnelHeight, Configuration.WallThickness),
-				wallColorValue, Enum.Material.Plaster)
-			texture(wall, TEXTURES.OrangeWall, z < 0 and Enum.NormalId.Front or Enum.NormalId.Back,
-				Configuration.TextureStuds.OrangeWall, Configuration.TextureStuds.OrangeWall, .28)
+				wallColorValue, wallMaterial)
+			texture(wall, wallTexture, z < 0 and Enum.NormalId.Front or Enum.NormalId.Back,
+				wallStuds, wallStuds, wallTransparency)
 		end
 	else
-		for _, x in ipairs({-tunnelWidth * .5, tunnelWidth * .5}) do
+		for _, x in ipairs({-wallCenterOffset, wallCenterOffset}) do
 			local wall = part(model, "Level 3 Corridor Wall",
 				CFrame.new(center + Vector3.new(x, tunnelHeight * .5, 0)),
 				Vector3.new(Configuration.WallThickness, tunnelHeight, wallLength),
-				wallColorValue, Enum.Material.Plaster)
-			texture(wall, TEXTURES.OrangeWall, x < 0 and Enum.NormalId.Right or Enum.NormalId.Left,
-				Configuration.TextureStuds.OrangeWall, Configuration.TextureStuds.OrangeWall, .28)
+				wallColorValue, wallMaterial)
+			texture(wall, wallTexture, x < 0 and Enum.NormalId.Right or Enum.NormalId.Left,
+				wallStuds, wallStuds, wallTransparency)
 		end
 	end
 	makeCorridorWallDecor(model, startPoint, endPoint, horizontal, index)
-	local fixtureCount = math.clamp(math.floor(length / 28), 1, 2)
+	local fixtureCount = 1
 	for fixtureIndex = 1, fixtureCount do
 		local position = startPoint:Lerp(endPoint, fixtureIndex / (fixtureCount + 1))
 		makeFixture(model, position + Vector3.new(0, tunnelHeight - .85, 0),
@@ -1078,7 +1188,8 @@ local function makeCorridor(parent: Instance, link: {[string]: any}, index: numb
 	end
 	return {Model=model, Center=center, Forward=forward, Length=length, DoorType=link.Door,
 		A=a, B=b, DoorPosition=center, StartPoint=startPoint, EndPoint=endPoint,
-		WallColor=wallColorValue, Wallpaper=false, Width=tunnelWidth, Height=tunnelHeight}
+		ScreamOpenings=screamOpenings,
+		WallColor=wallColorValue, Wallpaper=corridorWallpaper, Width=tunnelWidth, Height=tunnelHeight}
 end
 
 local function makeModule(parent: Instance, room: {[string]: any}, index: number, roomModel: Instance): {[string]: any}
@@ -1102,9 +1213,11 @@ local function makeModule(parent: Instance, room: {[string]: any}, index: number
 	case.CanTouch = false
 	case.CanQuery = true
 	case.Reflectance = .08
+	case:SetAttribute("Level3_CDPersistentDisplay", true)
 	local cover = part(model, "CD Cover Insert", baseCF * CFrame.new(0, .10, 0), Vector3.new(2.5, .035, 2.38),
 		Color3.fromRGB(231, 224, 195), Enum.Material.SmoothPlastic)
 	decorative(cover)
+	cover:SetAttribute("Level3_CDPersistentDisplay", true)
 	local surface = Instance.new("SurfaceGui")
 	surface.Name = "Level 3 CD Cover Surface"
 	surface.Face = Enum.NormalId.Top
@@ -1129,10 +1242,12 @@ local function makeModule(parent: Instance, room: {[string]: any}, index: number
 	disc.Shape = Enum.PartType.Cylinder
 	disc.Reflectance = .32
 	decorative(disc)
+	disc:SetAttribute("Level3_CDPickupVisual", true)
 	local hub = part(model, "Compact Disc Hub", disc.CFrame, Vector3.new(.105, .40, .40),
 		Color3.fromRGB(28, 30, 31), Enum.Material.SmoothPlastic)
 	hub.Shape = Enum.PartType.Cylinder
 	decorative(hub)
+	hub:SetAttribute("Level3_CDPickupVisual", true)
 	local prompt = Instance.new("ProximityPrompt")
 	prompt.Name = "CollectPrompt"
 	prompt.ActionText = "COLLECT CD"
@@ -1143,7 +1258,8 @@ local function makeModule(parent: Instance, room: {[string]: any}, index: number
 	prompt.KeyboardKeyCode = Enum.KeyCode.E
 	prompt.Parent = case
 	model.PrimaryPart = case
-	return {Index=index, RoomId=room.Id, Model=model, Prompt=prompt, Core=case, Pedestal=pedestal}
+	return {Index=index, RoomId=room.Id, Model=model, Prompt=prompt, Core=case, Pedestal=pedestal,
+		PickupParts={disc, hub}}
 end
 
 local function makeArrivalElevator(parent: Instance, room: {[string]: any}): (Model, BasePart, BasePart)
@@ -1313,6 +1429,19 @@ local function makeExitSet(parent: Instance, room: {[string]: any}): (ProximityP
 	return prompt, safeSpawn, lockCore.Position, model
 end
 
+local function makeMallManagerSpawn(parent: Instance, spawnRoomId: string): BasePart
+	local spawnRoom = roomById(spawnRoomId)
+	local floorPosition = worldPosition(spawnRoom)
+	local marker = part(parent, "Mall Manager Spawn",
+		CFrame.new(floorPosition + Vector3.new(0, .05, 0)), Vector3.new(2, .1, 2),
+		Color3.new(0, 0, 0), Enum.Material.SmoothPlastic, 1)
+	decorative(marker)
+	marker:SetAttribute("Level3_MallManagerSpawn", true)
+	marker:SetAttribute("Level3_SpawnRoomId", spawnRoom.Id)
+	marker:SetAttribute("Level3_FloorY", floorPosition.Y)
+	return marker
+end
+
 local function makeAmbientEmitter(parent: Instance, name: string, position: Vector3,
 	soundId: string, volume: number, maxDistance: number)
 	local emitter = part(parent, name, CFrame.new(position), Vector3.new(.2,.2,.2),
@@ -1330,67 +1459,122 @@ local function makeAmbientEmitter(parent: Instance, name: string, position: Vect
 	sound:Play()
 end
 
-function Builder.Build(generation: number): {[string]: any}
+function Builder.Build(layout: {[string]: any}, generation: number): {[string]: any}
+	assert(type(layout) == "table" and type(layout.Rooms) == "table" and type(layout.Links) == "table",
+		"Level 3 World Builder requires a validated generated layout")
+	activeLayout = layout
+	drawingSerial = 0
 	local existing = workspace:FindFirstChild(Configuration.WorldName)
 	if existing then existing:Destroy() end
+	local stagedExisting = ServerStorage:FindFirstChild(Configuration.WorldName)
+	if stagedExisting then stagedExisting:Destroy() end
 	local world = Instance.new("Model")
 	world.Name = Configuration.WorldName
 	world:SetAttribute("Level3_Generation", generation)
 	world:SetAttribute("Level3_VisualRevision", Configuration.Version)
-	world:SetAttribute("Level3_Theme", "Abandoned 1990s Mall Service Spaces")
-	world.Parent = workspace
+	world:SetAttribute("Level3_Theme", "Three District Abandoned Mall Backrooms")
+	world:SetAttribute("Level3_LayoutHash", layout.LayoutHash or "")
+	world:SetAttribute("Level3_ResolvedSeed", layout.ResolvedSeed or 0)
+	world:SetAttribute("Level3_GeneratorVersion", layout.GeneratorVersion or Configuration.Layout.GeneratorVersion)
+	-- Build away from Workspace so clients never stream a half-built maze.  The
+	-- loading screen remains authoritative until the completed model is published.
+	world.Parent = ServerStorage
 	local roomsFolder = folder(world, "Rooms")
 	local corridorsFolder = folder(world, "Corridors")
 	local doorsFolder = folder(world, "Doors")
 	local modulesFolder = folder(world, "Birthday Music CDs")
 	local ambienceFolder = folder(world, "Ambient Emitters")
+	local mallManagerRuntime = folder(world, "Mall Manager Runtime")
 	local openings = connectionMap()
 	local manifestRooms = {}
-	for index, room in ipairs(Configuration.Rooms) do
+	for index, room in ipairs(layout.Rooms) do
 		manifestRooms[room.Id] = makeRoom(roomsFolder, room, openings[room.Id], index)
+		if index % Configuration.Layout.BuildYieldEveryRooms == 0 then task.wait() end
 	end
 	local doors = {}
+	local corridors = {}
+	local blackoutScreamOpenings = {}
 	local exitPortal
-	for index, link in ipairs(Configuration.Links) do
+	for index, link in ipairs(layout.Links) do
 		local corridor = makeCorridor(corridorsFolder, link, index)
+		table.insert(corridors, corridor)
+		for _, opening in ipairs(corridor.ScreamOpenings) do
+			table.insert(blackoutScreamOpenings, opening)
+		end
 		if link.Door == "HiddenExit" then
 			exitPortal = makeHiddenExitPortal(doorsFolder, corridor)
 		end
+		if index % Configuration.Layout.BuildYieldEveryCorridors == 0 then task.wait() end
 	end
 	-- Revision 3 deliberately has no ordinary or fake doors. Every connection
 	-- stays open; only the concealed exit portal and final freight door remain.
 	local modules = {}
-	for _, room in ipairs(Configuration.Rooms) do
+	for _, room in ipairs(layout.Rooms) do
 		if room.Module then
 			table.insert(modules, makeModule(modulesFolder, room, #modules + 1, manifestRooms[room.Id]))
 		end
 	end
 	assert(#modules == Configuration.ModuleGoal, "Level 3 CD goal does not match authored CD rooms")
-	local arrivalRoom = roomById("Arrival")
+	local roles = layout.Roles or {}
+	local arrivalRoom = roomById(roles.ArrivalRoomId or "Arrival")
 	local elevator, elevatorSpawn, mazeStart = makeArrivalElevator(world, arrivalRoom)
-	local escapePrompt, safeSpawn, exitPosition, finalExit = makeExitSet(world, roomById("Exit"))
-	makeAmbientEmitter(ambienceFolder, "Level 3 HVAC Bed", worldPosition(roomById("Janitor"), 8),
+	local spawnRoomId = roles.MallManagerSpawnRoomId or roles.SignalRoomId or Configuration.MallManager.SpawnRoomId
+	local mallManagerSpawn = makeMallManagerSpawn(world, spawnRoomId)
+	local escapePrompt, safeSpawn, exitPosition, finalExit = makeExitSet(world, roomById(roles.ExitRoomId or "Exit"))
+	-- Publish the complete hierarchy once, then start spatial ambience.  This
+	-- avoids a room-by-room replication burst during procedural construction.
+	world.Parent = workspace
+	makeAmbientEmitter(ambienceFolder, "Level 3 HVAC Bed", worldPosition(roomById(roles.AmbientHVACRoomId or spawnRoomId), 8),
 		Configuration.Audio.HVAC, .10, 150)
-	makeAmbientEmitter(ambienceFolder, "Level 3 Distant Drip", worldPosition(roomById("LoadingStore"), 1),
-		Configuration.Audio.WaterDrip, .16, 75)
 	assert(exitPortal, "Level 3 build requires exactly one hidden exit portal")
-	world:SetAttribute("Level3_RoomCount", #Configuration.Rooms)
-	world:SetAttribute("Level3_CorridorCount", #Configuration.Links)
+	world:SetAttribute("Level3_RoomCount", #layout.Rooms)
+	world:SetAttribute("Level3_CorridorCount", #layout.Links)
+	world:SetAttribute("Level3_DistrictCount", #(layout.Districts or {}))
+	world:SetAttribute("Level3_BlackoutScreamOpeningCount", #blackoutScreamOpenings)
 	world:SetAttribute("Level3_ModuleCount", #modules)
-	-- Decorative helper calls intentionally strip collision. Reassert the one
-	-- tagged, low-cost tabletop collider after all room dressing is complete.
+	world:SetAttribute("Level3_MallManagerSpawnRoom", spawnRoomId)
+	-- Decorative helper calls intentionally strip interaction. Reassert the
+	-- tabletop collider, query-only sight cloth, and collect every hide anchor.
+	local hideTables = {}
 	for _, object in ipairs(world:GetDescendants()) do
 		if object:IsA("BasePart") and object:GetAttribute("Level3_TableCollision") == true then
 			object.CanCollide = true
 			object.CanTouch = false
 			object.CanQuery = true
+		elseif object:IsA("BasePart") and object:GetAttribute("Level3_HideSightOccluder") == true then
+			object.CanCollide = false
+			object.CanTouch = false
+			object.CanQuery = true
+		elseif object:IsA("BasePart") and object:GetAttribute("Level3_HideTableAnchor") == true then
+			object.CanCollide = false
+			object.CanTouch = false
+			object.CanQuery = false
+			table.insert(hideTables, object)
 		end
 	end
+	table.sort(hideTables, function(a, b)
+		if a.Position.X ~= b.Position.X then return a.Position.X < b.Position.X end
+		return a.Position.Z < b.Position.Z
+	end)
+	for index, anchor in ipairs(hideTables) do
+		anchor:SetAttribute("Level3_HideTableIndex", index)
+		local prompt = anchor:FindFirstChild("HideUnderTablePrompt")
+		if prompt and prompt:IsA("ProximityPrompt") then
+			prompt.ObjectText = string.format("FOLDING TABLE %02d", index)
+		end
+	end
+	world:SetAttribute("Level3_HideTableCount", #hideTables)
 	return {
 		World=world,
+		Layout=layout,
 		Rooms=manifestRooms,
+		Corridors=corridors,
+		BlackoutScreamOpenings=blackoutScreamOpenings,
 		Doors=doors,
 		Modules=modules,
+		MallManagerSpawn=mallManagerSpawn,
+		MallManagerRuntime=mallManagerRuntime,
+		HideTables=hideTables,
 		ExitPortal=exitPortal,
 		EscapePrompt=escapePrompt,
 		ExitSafeSpawn=safeSpawn,
