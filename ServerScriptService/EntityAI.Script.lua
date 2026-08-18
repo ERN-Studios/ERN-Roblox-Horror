@@ -4,7 +4,6 @@
 --           and PrimaryPart set. All parts CanCollide = false except the root.
 
 local Players = game:GetService("Players")
-local PathfindingService = game:GetService("PathfindingService")
 local RS = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
@@ -202,15 +201,17 @@ local YELL_WINDUP       = 0.6   -- pause after the roar before the push lands (s
 local YELL_SOUND_LEAD   = 0.5   -- start the SOUND this long before the anim (it has an inhale)
 local PIT_HOWL_TIME     = 2.2   -- finish the pit howl, then settle into Watch at the edge
 local YELL_EDGE_DIST    = 6     -- how close to the pit edge it must get before yelling
-local AGENT_RADIUS      = 8     -- pathfinding agent size — bigger keeps paths OFF the
--- walls / out of corners while NOT chasing (lurk/search
--- are pathfinding-driven). Chase uses the velocity
--- override, which still commits into corners after you.
-local AGENT_HEIGHT      = 8
-local WAYPOINT_TIME     = 1.5   -- seconds to reach one waypoint before re-planning
+-- distant scream broadcast: how often the Entity lets out one of the four
+-- "Level 1 Distant Entity Scream" takes (the ids live in SoundController).
+-- The SERVER picks the moment and the take so every player hears the same
+-- scream at the same time, positionally from wherever the Entity is.
+local SCREAM_MIN_GAP    = 22    -- min seconds between distant screams
+local SCREAM_MAX_GAP    = 55    -- max seconds between them
+local SCREAM_TAKES      = 4     -- number of scream slots SoundController exposes
 -- ──────────────────────────────────────────────────────────
 -- (The Entity's growl now lives with every other sound id in SoundController —
---  ENTITY_SOUND there. This script no longer owns any audio.)
+--  ENTITY_SOUND there. This script plays no audio itself; for the distant
+--  screams it only publishes WHICH take plays WHEN, via workspace attributes.)
 
 -- ── self fill-light ───────────────────────────────────────
 -- The maze runs on very low ambient (horror), so a model that isn't bright-
@@ -510,34 +511,6 @@ local function wallBetweenWide(targetPos)
 		end
 	end
 	return false
-end
-
--- wall-slide: if a wall is close AHEAD in the travel direction, project the
--- heading ONTO the wall so the entity slides along it (and rounds the corner)
--- instead of driving its face into it and lodging there. Three parallel rays
--- (centre + two offsets) so a corner the body would clip is caught too. `dir`
--- must be a unit XZ vector.
-local WALL_CLEARANCE = 5
-local slideParams = RaycastParams.new()
-slideParams.FilterType = Enum.RaycastFilterType.Include
-local function wallSlide(pos, dir)
-	local maze = workspace:FindFirstChild("Maze")
-	if not maze then return dir end
-	slideParams.FilterDescendantsInstances = { maze }
-	local side = Vector3.new(-dir.Z, 0, dir.X) -- perpendicular, horizontal
-	local origin0 = pos + Vector3.new(0, 2, 0)
-	for _, off in ipairs({ 0, 3.5, -3.5 }) do
-		local hit = workspace:Raycast(origin0 + side * off, dir * WALL_CLEARANCE, slideParams)
-		if hit and math.abs(hit.Normal.Y) < 0.5 then
-			local n = Vector3.new(hit.Normal.X, 0, hit.Normal.Z)
-			if n.Magnitude > 0.01 then
-				n = n.Unit
-				local slid = dir - n * dir:Dot(n) -- drop the into-wall component
-				if slid.Magnitude > 0.05 then return slid.Unit end
-			end
-		end
-	end
-	return dir
 end
 
 -- turn to face a target (flat), so it doesn't stare into the air at a pit player
@@ -1145,6 +1118,25 @@ local function setChaseMarker(player)
 	if player then player:SetAttribute("BeingChased", true) end
 	lastChaseTarget = player
 end
+
+-- distant scream scheduler: at a random cadence, publish which of the four
+-- scream takes plays. Every client's SoundController reacts to the
+-- EntityScream counter and plays SCREAM_SOUNDS[EntityScreamIndex] positionally
+-- at the Entity — one shared scream, heard by the whole server from the
+-- Entity's direction. Skipped while it is actively hunting someone (the chase
+-- soundscape owns those moments) and while the round isn't running.
+task.spawn(function()
+	while true do
+		task.wait(math.random(SCREAM_MIN_GAP, SCREAM_MAX_GAP))
+		if humanoid.Health <= 0 then break end
+		if workspace:GetAttribute("RoundActive") ~= true then continue end
+		if not root.Parent then continue end
+		local st = workspace:GetAttribute("EntityState")
+		if st == "ALERT" or st == "CHASE" or st == "YELL" or st == "TRACK" then continue end
+		workspace:SetAttribute("EntityScreamIndex", math.random(1, SCREAM_TAKES))
+		workspace:SetAttribute("EntityScream", (workspace:GetAttribute("EntityScream") or 0) + 1)
+	end
+end)
 
 task.spawn(function()
 	while task.wait(0.1) do

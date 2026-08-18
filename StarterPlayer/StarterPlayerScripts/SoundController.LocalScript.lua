@@ -16,7 +16,7 @@ local TweenService = game:GetService("TweenService")
 local RS = game:GetService("ReplicatedStorage")
 
 -- ── audio slots (every sound in the game) ─────────────────
-local AMBIENCE_SOUND  = "rbxassetid://92576512092725" -- constant background drone/hum (2D, always playing)
+local AMBIENCE_SOUND  = "rbxassetid://92576512092725" -- fluorescent hum, played FROM each lit ceiling panel (positional; off/dead panels are silent)
 local BREATHING_SOUND = "" -- YOUR OWN winded breathing (2D) — fades in below 20% stamina
 local FOOTSTEP_WALK   = "rbxassetid://108141977175862" -- walking loop (the slower-cadence clip)
 local LOBBY_FOOTSTEP_SOUND = "" -- LOBBY-ONLY steps. Roblox's default loop and the
@@ -37,9 +37,23 @@ local ENTITY_STEP_RUN  = "" -- the Entity's footstep thump while running/chasing
 -- Fill any of the 3 — it works with just one; empty slots are skipped.
 local IDLE_SOUNDS     = { "", "", "" }
 local CHASE_SOUND     = "rbxassetid://72818169474421" -- loops while the Entity is actively CHASING you (positional)
+-- distant entity screams, heard by EVERYONE on the server at the same moment,
+-- 3D from wherever the Entity is. EntityAI picks the timing and the take and
+-- publishes them (EntityScream / EntityScreamIndex attributes) so every player
+-- hears the SAME scream. Fill any of the 4; empty slots stay silent.
+local SCREAM_SOUNDS   = {
+	"", -- Level 1 Distant Entity Scream 1
+	"", -- Level 1 Distant Entity Scream 2
+	"", -- Level 1 Distant Entity Scream 3
+	"", -- Level 1 Distant Entity Scream 4
+}
 
 -- ── tuning ────────────────────────────────────────────────
-local AMBIENCE_VOLUME   = 0.48 -- slightly stronger room tone without masking cues
+local AMBIENCE_VOLUME   = 0.29 -- peak per-light hum volume (the old 2D bed sat at 0.48; ~40% down)
+local HUM_MIN_DISTANCE  = 6    -- full hum volume this close to a lit panel
+local HUM_MAX_DISTANCE  = 45   -- a panel is inaudible beyond this (panels sit ~48 studs apart)
+local HUM_POOL_SIZE     = 10   -- at most this many nearby panels carry a live hum Sound
+local HUM_RESCAN        = 0.35 -- seconds between "which panels are nearest" rescans
 local ELEVATOR_VOLUME   = 0.8  -- the elevator door-open / arrival sound (2D)
 local BREATH_START      = 0.2   -- stamina fraction at which winded breathing kicks in
 local BREATH_VOLUME     = 0.12  -- peak breath volume (turned down more)
@@ -68,6 +82,7 @@ local IDLE_VOLUME      = 0.7   -- the Entity's idle vocalisations (positional)
 local IDLE_MIN_GAP     = 6     -- min seconds between idle vocalisations
 local IDLE_MAX_GAP     = 14    -- max seconds between them
 local CHASE_VOLUME     = 0.85  -- the Entity's chase sound (positional, looping)
+local SCREAM_VOLUME    = 0.95  -- distant entity screams (positional at the Entity, map-wide)
 local CHASE_FADE       = 0.6   -- seconds to fade the chase loop in / out
 local TRACK_FADE       = 5     -- seconds to SLOWLY fade the chase music once it loses
 -- sight and is only tracking blindly (match TRACK_TIME)
@@ -91,24 +106,140 @@ local function makeLoop(id, vol)
 	return s
 end
 
--- ambience starts SILENT and fades in when the round begins — during the
--- elevator ride you hear the elevator, not the maze. `ambienceTarget` is set by
--- the round events below and eased toward in the main Heartbeat.
-local AMBIENCE_FADE = 4      -- ~seconds to ease the ambience in / out
+-- ── fluorescent hum: one positional loop per LIT ceiling panel ────────────
+-- The hum lives on the ceiling lights themselves: the closer you are to a lit
+-- panel, the louder THAT panel hums, and a panel that is off — broken from the
+-- start, mid-flicker, blacked out, powered down — is silent, so your ears tell
+-- you which nearby fixtures are live. Only the HUM_POOL_SIZE nearest panels
+-- within HUM_MAX_DISTANCE carry a Sound at any moment; the pool follows you.
+-- The hum starts SILENT and fades in when the round begins — during the
+-- elevator ride you hear the elevator, not the maze. `ambienceTarget` (0 or 1)
+-- is set by the round events below and eased toward in the main Heartbeat.
+local AMBIENCE_FADE = 4      -- ~seconds to ease the hums in / out
 local ambienceTarget = 0
-local ambience = makeLoop(AMBIENCE_SOUND, 0)
+local humMaster = 0          -- eased 0..1 master gain applied to every pooled hum
+local humCandidates = {}     -- SurfaceLight -> panel BasePart (every panel in the maze)
+local humPool = {}           -- SurfaceLight -> { panel, sound } (the nearest few)
 local breathing = makeLoop(BREATHING_SOUND, 0) -- long continuous loop, volume-ridden
 -- PRELOAD the looping sounds before playing them. A loop that isn't fully loaded
 -- re-buffers at the loop point, which is the "slight stop" you hear each cycle;
--- preloading makes the ambience loop seamlessly.
+-- preloading makes the hum copies and the breathing loop seamless.
 task.spawn(function()
 	local ContentProvider = game:GetService("ContentProvider")
 	local toLoad = {}
-	if AMBIENCE_SOUND ~= "" then table.insert(toLoad, ambience) end
+	if AMBIENCE_SOUND ~= "" then
+		-- warm the hum asset once so pooled copies start without a buffering gap
+		local warm = Instance.new("Sound")
+		warm.SoundId = AMBIENCE_SOUND
+		warm.Parent = SoundService
+		table.insert(toLoad, warm)
+		task.delay(20, function() warm:Destroy() end)
+	end
 	if BREATHING_SOUND ~= "" then table.insert(toLoad, breathing) end
 	if #toLoad > 0 then pcall(function() ContentProvider:PreloadAsync(toLoad) end) end
-	if AMBIENCE_SOUND ~= "" then ambience:Play() end
 	if BREATHING_SOUND ~= "" then breathing:Play() end -- loops silently; volume rides below
+end)
+
+local function humDropAll()
+	for _, entry in pairs(humPool) do entry.sound:Destroy() end
+	table.clear(humPool)
+	table.clear(humCandidates)
+end
+
+-- track every light panel in the maze (a panel is the BasePart holding a
+-- SurfaceLight; MazeGenerator gives them no Name, so the SurfaceLight IS the
+-- marker). Streaming adds/removes panels at any time, so watch descendants
+-- rather than scanning once.
+local function humWatchMaze(maze)
+	humDropAll()
+	local function tryAdd(inst)
+		if inst:IsA("SurfaceLight") and inst.Parent and inst.Parent:IsA("BasePart") then
+			humCandidates[inst] = inst.Parent
+		end
+	end
+	for _, inst in ipairs(maze:GetDescendants()) do tryAdd(inst) end
+	local addedConn = maze.DescendantAdded:Connect(tryAdd)
+	local removedConn = maze.DescendantRemoving:Connect(function(inst)
+		if humCandidates[inst] then
+			humCandidates[inst] = nil
+			local pooled = humPool[inst]
+			if pooled then
+				pooled.sound:Destroy()
+				humPool[inst] = nil
+			end
+		end
+	end)
+	maze.AncestryChanged:Connect(function(_, parent)
+		if parent == nil then -- round over, maze destroyed
+			addedConn:Disconnect()
+			removedConn:Disconnect()
+			humDropAll()
+		end
+	end)
+end
+
+workspace.ChildAdded:Connect(function(child)
+	if child.Name == "Maze" and child:IsA("Model") then humWatchMaze(child) end
+end)
+do
+	local maze = workspace:FindFirstChild("Maze")
+	if maze and maze:IsA("Model") then humWatchMaze(maze) end
+end
+
+-- keep the pool holding the nearest panels. Sounds are created/destroyed here;
+-- their volumes ride in the main Heartbeat so flicker cuts land frame-exact.
+task.spawn(function()
+	while true do
+		task.wait(HUM_RESCAN)
+		if AMBIENCE_SOUND == "" then continue end
+		local char = player.Character
+		local root = char and char:FindFirstChild("HumanoidRootPart")
+		local camera = workspace.CurrentCamera
+		local here = root and root.Position or (camera and camera.CFrame.Position)
+		if not here or next(humCandidates) == nil then
+			for light, entry in pairs(humPool) do
+				entry.sound:Destroy()
+				humPool[light] = nil
+			end
+			continue
+		end
+		local nearest = {}
+		for light, panel in pairs(humCandidates) do
+			if panel.Parent then
+				local d = (panel.Position - here).Magnitude
+				if d <= HUM_MAX_DISTANCE then
+					nearest[#nearest + 1] = { light = light, panel = panel, d = d }
+				end
+			end
+		end
+		table.sort(nearest, function(a, b) return a.d < b.d end)
+		local keep = {}
+		for i = 1, math.min(#nearest, HUM_POOL_SIZE) do
+			keep[nearest[i].light] = nearest[i].panel
+		end
+		for light, entry in pairs(humPool) do
+			if not keep[light] then
+				entry.sound:Destroy()
+				humPool[light] = nil
+			end
+		end
+		for light, panel in pairs(keep) do
+			if not humPool[light] then
+				local s = Instance.new("Sound")
+				s.Name = "FluorescentHum"
+				s.Looped = true
+				s.Volume = 0
+				s.SoundId = AMBIENCE_SOUND
+				s.RollOffMode = Enum.RollOffMode.InverseTapered
+				s.RollOffMinDistance = HUM_MIN_DISTANCE
+				s.RollOffMaxDistance = HUM_MAX_DISTANCE
+				s.PlaybackSpeed = 0.97 + math.random() * 0.06 -- decohere identical copies
+				s.Parent = panel
+				s:Play()
+				humPool[light] = { panel = panel, sound = s }
+			end
+		end
+	end
 end)
 
 -- alert siren: plays whenever the maze enters ALERT (red pulsing) mode
@@ -220,9 +351,9 @@ roundStatus.OnClientEvent:Connect(function(ev)
 			elevatorSound:Play()
 		end
 	elseif ev == "start" then
-		-- The office fluorescent drone belongs to level 1 only. Level 2 stays
+		-- The office fluorescent hum belongs to level 1 only. Level 2 stays
 		-- silent until its dedicated hollow poolroom ambience asset is supplied.
-		ambienceTarget = workspace:GetAttribute("SelectedLevel") == 1 and AMBIENCE_VOLUME or 0
+		ambienceTarget = workspace:GetAttribute("SelectedLevel") == 1 and 1 or 0
 	elseif ev == "win" or ev == "lose" or ev == "waiting" then
 		ambienceTarget = 0
 		elevatorSound:Stop() -- round over / reset (doors opening does NOT stop it)
@@ -275,6 +406,37 @@ task.spawn(function()
 		s.Ended:Connect(function() s:Destroy() end)
 		task.delay(12, function() if s then s:Destroy() end end)
 	end
+end)
+
+-- distant entity screams: EntityAI publishes EntityScreamIndex then bumps the
+-- EntityScream counter at a random cadence. Every client plays the SAME take
+-- positionally at the Entity, so the whole server shares one scream from the
+-- Entity's direction — audible clear across the maze, pushed "far away" in the
+-- mix by the same Linear-falloff + EQ recipe as the death scream.
+workspace:GetAttributeChangedSignal("EntityScream"):Connect(function()
+	local idx = workspace:GetAttribute("EntityScreamIndex")
+	local id = typeof(idx) == "number" and SCREAM_SOUNDS[idx] or nil
+	if not id or id == "" then return end
+	local entity = workspace:FindFirstChild("Entity")
+	local er = entity and entity:FindFirstChild("HumanoidRootPart")
+	if not er then return end
+	local s = Instance.new("Sound")
+	s.Name = "DistantScream"
+	s.SoundId = id
+	s.Volume = SCREAM_VOLUME
+	s.PlaybackSpeed = 0.97 + math.random() * 0.06
+	s.RollOffMode = Enum.RollOffMode.Linear
+	s.RollOffMinDistance = 60
+	s.RollOffMaxDistance = 2200
+	local eq = Instance.new("EqualizerSoundEffect")
+	eq.HighGain = -6
+	eq.MidGain = -2
+	eq.LowGain = 0
+	eq.Parent = s
+	s.Parent = er
+	s:Play()
+	s.Ended:Connect(function() s:Destroy() end)
+	task.delay(12, function() if s then s:Destroy() end end)
 end)
 
 -- the chase audio: when the Entity SPOTS you (EntityState → CHASE) it first
@@ -479,13 +641,17 @@ RunService.Heartbeat:Connect(function(dt)
 		breathing.Volume = breathI * BREATH_VOLUME
 	end
 
-	-- Level 2 deliberately has no fluorescent office drone. Re-check the
-	-- selected level every frame so a direct dev teleport also silences it.
+	-- fluorescent hum: ease the round-driven master, then let each pooled panel
+	-- hum only while its light is actually ON (a mid-flicker or blacked-out
+	-- panel goes silent the same frame). Level 2/3 have no maze; the per-frame
+	-- SelectedLevel gate also silences the hum on a direct dev teleport.
 	if AMBIENCE_SOUND ~= "" then
-		local effectiveAmbienceTarget = workspace:GetAttribute("SelectedLevel") == 1
-			and ambienceTarget or 0
-		ambience.Volume = ambience.Volume
-			+ (effectiveAmbienceTarget - ambience.Volume) * math.clamp(dt / AMBIENCE_FADE, 0, 1)
+		local target = workspace:GetAttribute("SelectedLevel") == 1 and ambienceTarget or 0
+		humMaster = humMaster + (target - humMaster) * math.clamp(dt / AMBIENCE_FADE, 0, 1)
+		for light, entry in pairs(humPool) do
+			entry.sound.Volume = (light.Enabled and entry.panel.Material == Enum.Material.Neon)
+				and AMBIENCE_VOLUME * humMaster or 0
+		end
 	end
 
 	-- footsteps: a looping track that only plays while you MOVE and fades out when
@@ -549,9 +715,10 @@ end
 if player.Character then hookFlashlightClick(player.Character) end
 player.CharacterAdded:Connect(hookFlashlightClick)
 
--- Use Roblox's own character footsteps in the lobby. During a level, mute that
--- loop so it cannot layer over this controller's custom carpet/water sounds.
-local DEFAULT_RUNNING_VOLUME = 0.65
+-- Roblox's own character footstep loop is muted EVERYWHERE, lobby included —
+-- the lobby uses the LOBBY_FOOTSTEP_SOUND slot above and rounds use this
+-- controller's custom carpet/water sounds, so the default loop may never layer
+-- over either. Re-asserted whenever anything else writes the Volume back up.
 local function configureDefaultSteps(char)
 	task.spawn(function()
 		local hrp = char:WaitForChild("HumanoidRootPart", 10)
@@ -559,7 +726,6 @@ local function configureDefaultSteps(char)
 		local running = hrp:WaitForChild("Running", 5)
 		if not running then return end
 
-		local lobbyVolume = running.Volume > 0 and running.Volume or DEFAULT_RUNNING_VOLUME
 		local changing = false
 		local function refresh()
 			if not running.Parent then return end
@@ -572,10 +738,8 @@ local function configureDefaultSteps(char)
 			if changing then return end
 			refresh()
 		end)
-		local roundConnection = player:GetAttributeChangedSignal("InRound"):Connect(refresh)
 		char.Destroying:Once(function()
 			volumeConnection:Disconnect()
-			roundConnection:Disconnect()
 		end)
 		refresh()
 	end)
@@ -773,22 +937,69 @@ level2WaterRay.IgnoreWater = false
 local level2PlayerLastPosition = nil
 local level2PlayerStepClock = 0
 
-local function level2ShallowWater(humanoid, root)
-	if player:GetAttribute("InRound") ~= true
-		or workspace:GetAttribute("SelectedLevel") ~= 2 then return false end
+-- dry-tile footsteps: the poolside sound for walking where there is NO water
+-- underfoot. The id lives in ReplicatedStorage["Level 2 Sound Library"] as the
+-- StringValue "Level 2 Player Dry Tile Walking Sound" (bare id or
+-- rbxassetid://, empty = silent), same as every other Level 2 library slot.
+-- Two alternating voices so quick steps never cut each other off.
+local LEVEL2_DRY_SLOT = "Level 2 Player Dry Tile Walking Sound"
+local LEVEL2_DRY_VOLUME = 0.4
+local level2DryTileId = nil
+local level2DryVoices = {}
+local level2DryCursor = 0
+for index = 1, 2 do
+	local voice = Instance.new("Sound")
+	voice.Name = "Level2PlayerDryTileVoice" .. index
+	voice.Looped = false
+	voice.Volume = 0
+	voice.Parent = SoundService
+	level2DryVoices[index] = voice
+end
+task.spawn(function()
+	local library = RS:WaitForChild("Level 2 Sound Library", 30)
+	if not library then return end
+	local slot = library:WaitForChild(LEVEL2_DRY_SLOT, 30)
+	if not (slot and slot:IsA("ValueBase")) then return end
+	local function refresh()
+		level2DryTileId = level2SoundId(slot.Value)
+	end
+	slot.Changed:Connect(refresh)
+	refresh()
+end)
+
+local function level2PlayDryStep(flatSpeed)
+	if not level2DryTileId then return end
+	level2DryCursor = level2DryCursor % #level2DryVoices + 1
+	local voice = level2DryVoices[level2DryCursor]
+	voice:Stop()
+	voice.SoundId = level2DryTileId
+	voice.Volume = LEVEL2_DRY_VOLUME * math.clamp(0.88 + flatSpeed / 42, 0.9, 1.18)
+	voice.PlaybackSpeed = 0.96 + math.random() * 0.08
+	voice:Play()
+end
+
+local function level2StopDrySteps()
+	for _, voice in ipairs(level2DryVoices) do voice:Stop() end
+end
+
+-- footing states in which NEITHER wet nor dry steps may play: slide rides have
+-- their own audio ("Level 2 Slide Rush"), and airborne/seated/dead make no
+-- footfalls of any kind
+local function level2FootingBlocked(humanoid)
 	if player.Character
 		and player.Character:GetAttribute("Level2_ForcedSliding") == true then
-		return false
+		return true
 	end
 	local state = humanoid:GetState()
-	if state == Enum.HumanoidStateType.Swimming
+	return state == Enum.HumanoidStateType.Swimming
 		or state == Enum.HumanoidStateType.Freefall
 		or state == Enum.HumanoidStateType.Jumping
 		or state == Enum.HumanoidStateType.FallingDown
 		or state == Enum.HumanoidStateType.Dead
-		or state == Enum.HumanoidStateType.Seated then
-		return false
-	end
+		or state == Enum.HumanoidStateType.Seated
+end
+
+local function level2ShallowWater(root)
 	level2WaterRay.FilterDescendantsInstances = { player.Character }
 	local hit = workspace:Raycast(root.Position + Vector3.new(0, 1.5, 0), Vector3.new(0, -6.5, 0), level2WaterRay)
 	if not hit or hit.Material ~= Enum.Material.Water then return false end
@@ -817,7 +1028,13 @@ RunService.Heartbeat:Connect(function(dt)
 		return
 	end
 	local flatSpeed = dt > 0 and displacement / dt or 0
-	if flatSpeed < 1.35 or not level2ShallowWater(hum, root) then
+	if flatSpeed < 1.35 or level2FootingBlocked(hum) then
+		level2PlayerStepClock = math.min(level2PlayerStepClock, 0.12)
+		return
+	end
+	local wet = level2ShallowWater(root)
+	if not wet and hum.FloorMaterial == Enum.Material.Air then
+		-- nothing underfoot at all (running off a deck edge): no steps
 		level2PlayerStepClock = math.min(level2PlayerStepClock, 0.12)
 		return
 	end
@@ -826,7 +1043,12 @@ RunService.Heartbeat:Connect(function(dt)
 	level2PlayerStepClock += dt
 	if level2PlayerStepClock >= cadence then
 		level2PlayerStepClock %= cadence
-		level2PlayerBank:play(0.97 + math.random() * 0.06, math.clamp(0.88 + flatSpeed / 42, 0.9, 1.18))
+		if wet then
+			level2PlayerBank:play(0.97 + math.random() * 0.06, math.clamp(0.88 + flatSpeed / 42, 0.9, 1.18))
+		else
+			-- dry tile: same cadence clock, the dedicated dry-tile take
+			level2PlayDryStep(flatSpeed)
+		end
 	end
 end)
 
@@ -837,15 +1059,17 @@ workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(function()
 		level2PlayerStepClock = 0
 	else
 		level2PlayerBank:stop()
+		level2StopDrySteps()
 	end
 end)
 
 player:GetAttributeChangedSignal("InRound"):Connect(function()
 	if player:GetAttribute("InRound") ~= true then
 		-- Do not let a custom fade or a water one-shot overlap the lobby's
-		-- restored Roblox character footsteps.
+		-- footstep handling.
 		steps.Volume = 0
 		level2PlayerBank:stop()
+		level2StopDrySteps()
 		level2PlayerLastPosition = nil
 		level2PlayerStepClock = 0
 	end

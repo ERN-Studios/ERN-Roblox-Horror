@@ -11,7 +11,6 @@
 
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
-local InsertService = game:GetService("InsertService")
 local PhysicsService = game:GetService("PhysicsService")
 
 -- The lobby owns server startup. Build the expensive world only when a queued
@@ -102,6 +101,11 @@ local ELEV_FLOOR_TEXTURE = ""
 local ELEV_DOOR_TEXTURE = "rbxassetid://140048817197891"
 local ELEV_FLOOR_TILE = 4
 local ELEV_CEILING_TILE = 4
+-- Level 1 Elevator Roof Texture: paste the uploaded decal id here to give the
+-- cabin's interior ceiling its OWN texture (generate it with the ChatGPT
+-- prompt from the update notes). While empty the roof falls back to the
+-- brushed aluminum set above.
+local ELEV_ROOF_TEXTURE = ""
 
 -- Optional MOLD overlay (your own decals, transparent PNGs) — up to 5 variants,
 -- picked at random per wall. Draw the mold hanging from the TOP of the image,
@@ -209,71 +213,9 @@ local ELEV_CLEAR = 2                  -- open cells on every side of the elevato
 local ELEV_X = math.floor(GRID / 2)
 local ELEV_Y = math.floor(GRID / 2)
 
--- ── resolve decal IDs → image IDs ─────────────────────────
--- Toolbox "Copy Asset ID" usually gives the DECAL id; Texture instances need
--- the underlying IMAGE id. Load the asset server-side and read the real id.
-local function resolveTexture(id)
-	-- ContentId properties resolve uploaded image/decal ids themselves. Returning
-	-- immediately prevents InsertService from ever blocking the level boot.
-	do return id end
-	-- Legacy resolver retained below for reference; this branch is unreachable.
-	if id == "" then return "" end
-	local numeric = tonumber(string.match(id, "%d+"))
-	if not numeric then return id end
-	local completed, ok, resolved = false, false, nil
-	-- LoadAsset can stall for a moderated/private id. Never let one cosmetic
-	-- image hold the whole level hostage: after 1.5s the ContentId is used as-is.
-	task.spawn(function()
-		ok, resolved = pcall(function()
-			local asset = InsertService:LoadAsset(numeric)
-			local decal = asset:FindFirstChildWhichIsA("Decal", true)
-			local tex = decal and decal.Texture
-			asset:Destroy()
-			return tex
-		end)
-		completed = true
-	end)
-	local deadline = os.clock() + 1.5
-	while not completed and os.clock() < deadline do task.wait() end
-	if completed and ok and resolved and resolved ~= "" then
-		return resolved
-	end
-	return id -- already an image id (or offline) — use as-is
-end
-
--- Asset loads yield. Resolving forty-plus decals serially delayed the entire map
--- (including elevator, fog and intro) for tens of seconds. A small worker pool
--- keeps startup bounded without hammering Roblox with every request at once.
-local function resolveArray(ids)
-	if #ids == 0 then return end
-	local nextIndex, finished = 1, 0
-	local workerCount = math.min(8, #ids)
-	for _ = 1, workerCount do
-		task.spawn(function()
-			while true do
-				local i = nextIndex
-				nextIndex += 1
-				if i > #ids then break end
-				ids[i] = resolveTexture(ids[i])
-			end
-			finished += 1
-		end)
-	end
-	while finished < workerCount do task.wait() end
-end
-
-local primaryTextures = {
-	WALL_TEXTURE, FLOOR_TEXTURE, CEILING_TEXTURE, LIGHT_TEXTURE,
-	DEAD_LIGHT_TEXTURE, ELEV_WALL_TEXTURE, ELEV_CEILING_TEXTURE,
-	ELEV_FLOOR_TEXTURE, ELEV_DOOR_TEXTURE,
-}
-resolveArray(primaryTextures)
-WALL_TEXTURE, FLOOR_TEXTURE, CEILING_TEXTURE, LIGHT_TEXTURE,
-	DEAD_LIGHT_TEXTURE, ELEV_WALL_TEXTURE, ELEV_CEILING_TEXTURE,
-	ELEV_FLOOR_TEXTURE, ELEV_DOOR_TEXTURE = table.unpack(primaryTextures)
-resolveArray(MOLD_TEXTURES)
-resolveArray(ARTWORK)
-resolveArray(STAIN_TEXTURES)
+-- (Texture ids are used as-is: ContentId properties resolve uploaded
+-- image/decal ids themselves, so the old InsertService resolver pass is gone —
+-- paste any uploaded decal id into the constants above and it just works.)
 
 -- pick a random mold decal, or nil if none configured
 local function pickMold()
@@ -1028,6 +970,7 @@ do
 		local sideA = part(Vector3.new(depth, 10, 0.5), CFrame.new(bx, 5, cz - CAB_W / 2 - 0.25), STEEL, Enum.Material.Metal, cabin)
 		local sideB = part(Vector3.new(depth, 10, 0.5), CFrame.new(bx, 5, cz + CAB_W / 2 + 0.25), STEEL, Enum.Material.Metal, cabin)
 		local roof = part(Vector3.new(depth + 1, 1, CAB_W + 2), CFrame.new(bx - 0.25, 10.5, cz), STEEL_DARK, Enum.Material.Metal, cabin)
+		roof.Name = "CabinRoof"
 		local floorP = part(Vector3.new(depth, 0.2, CAB_W), CFrame.new(bx, 0.1, cz), CABIN_FLOOR, Enum.Material.DiamondPlate, cabin)
 
 		-- The generated aluminum is a square seamless tile. Keep it at the same
@@ -1036,8 +979,15 @@ do
 		applyTexture(back, ELEV_WALL_TEXTURE, { Enum.NormalId.Right }, 4, nil, 4)
 		applyTexture(sideA, ELEV_WALL_TEXTURE, { Enum.NormalId.Back }, 4, nil, 4)
 		applyTexture(sideB, ELEV_WALL_TEXTURE, { Enum.NormalId.Front }, 4, nil, 4)
-		applyTexture(roof, ELEV_CEILING_TEXTURE, { Enum.NormalId.Bottom },
-			ELEV_CEILING_TILE, Color3.fromRGB(205, 208, 211), ELEV_CEILING_TILE)
+		if ELEV_ROOF_TEXTURE ~= "" then
+			-- the dedicated roof texture ships untinted — what you generate is
+			-- exactly what the cabin ceiling shows
+			applyTexture(roof, ELEV_ROOF_TEXTURE, { Enum.NormalId.Bottom },
+				ELEV_CEILING_TILE, nil, ELEV_CEILING_TILE)
+		else
+			applyTexture(roof, ELEV_CEILING_TEXTURE, { Enum.NormalId.Bottom },
+				ELEV_CEILING_TILE, Color3.fromRGB(205, 208, 211), ELEV_CEILING_TILE)
+		end
 		applyTexture(floorP, ELEV_FLOOR_TEXTURE, { Enum.NormalId.Top }, ELEV_FLOOR_TILE)
 
 		local lightPanel = part(Vector3.new(2, 0.3, 2), CFrame.new(bx, 9.7, cz),
@@ -1392,38 +1342,6 @@ task.spawn(function()
 		dpart(m, Vector3.new(1.3, 0.28, 0.32), CFrame.new(0, 0.62, -0.15), BLACK)              -- handset
 		dpart(m, Vector3.new(0.5, 0.1, 0.5), CFrame.new(0.15, 0.47, 0.2), Color3.fromRGB(60, 60, 64)) -- dial
 		m.PrimaryPart = base
-		return m
-	end
-
-	DECOR_BUILDERS.CardboardBox = function()
-		local m = Instance.new("Model"); m.Name = "CardboardBox"
-		local s = 2.4
-		local bh = s * 0.85                 -- body a touch shorter so the flaps read
-		local mat = Enum.Material.Fabric -- fibrous matte surface reads as worn cardboard
-		local body = dpart(m, Vector3.new(s, bh, s), CFrame.new(0, bh / 2, 0), CARD, mat)
-		-- four lid flaps hinged at the top rim, opened outward ~48°
-		local flap, ang = s * 0.55, math.rad(48)
-		local dz, dy = flap * 0.33, flap * 0.37 -- outward / upward offset of the flap centre
-		dpart(m, Vector3.new(s, 0.08, flap), CFrame.new(0, bh + dy, -s / 2 - dz) * CFrame.Angles(ang, 0, 0), CARD_DARK, mat)
-		dpart(m, Vector3.new(s, 0.08, flap), CFrame.new(0, bh + dy,  s / 2 + dz) * CFrame.Angles(-ang, 0, 0), CARD_DARK, mat)
-		dpart(m, Vector3.new(flap, 0.08, s), CFrame.new(-s / 2 - dz, bh + dy, 0) * CFrame.Angles(0, 0, -ang), CARD_DARK, mat)
-		dpart(m, Vector3.new(flap, 0.08, s), CFrame.new( s / 2 + dz, bh + dy, 0) * CFrame.Angles(0, 0, ang), CARD_DARK, mat)
-		-- a FULL box of files: many thin sheets packed in a neat row, standing up
-		-- out of the box (packed along Z, so you read a stack of many page edges)
-		local inner = s - 0.45
-		local sheets = 11
-		local paperCols = {
-			Color3.fromRGB(236, 232, 220), Color3.fromRGB(224, 214, 190),
-			Color3.fromRGB(212, 206, 192), Color3.fromRGB(230, 226, 214),
-		}
-		for i = 1, sheets do
-			local fz = -inner / 2 + (i - 0.5) * (inner / sheets)
-			local fhh = 0.8 + math.random() * 0.4 -- slight per-sheet height variation
-			dpart(m, Vector3.new(inner * 0.85, fhh, 0.05),
-				CFrame.new(0, bh + fhh / 2 - 0.15, fz),
-				paperCols[(i % #paperCols) + 1], mat)
-		end
-		m.PrimaryPart = body
 		return m
 	end
 
@@ -1814,12 +1732,15 @@ task.spawn(function()
 	decorFolder:SetAttribute("ClockDongMinSeconds", 180)
 	decorFolder:SetAttribute("ClockDongMaxSeconds", 300)
 	workspace:SetAttribute("DecorReady", true)
-	-- One synchronized, positional grandfather-clock strike every 3-5 minutes.
+	-- One synchronized, positional grandfather-clock strike every 3-5 minutes
+	-- (live-tunable via the ClockDong attributes above on workspace.Decor).
 	-- The stock bass sample is pitched down and reverberated into a metallic DONG;
 	-- no external audio asset is required.
 	task.spawn(function()
 		while decorFolder.Parent do
-			task.wait(math.random(180, 300))
+			local minGap = tonumber(decorFolder:GetAttribute("ClockDongMinSeconds")) or 180
+			local maxGap = tonumber(decorFolder:GetAttribute("ClockDongMaxSeconds")) or 300
+			task.wait(math.random(math.max(minGap, 10), math.max(maxGap, minGap, 10)))
 			local clocks = {}
 			for _, child in ipairs(decorFolder:GetChildren()) do
 				if child:IsA("Model") and child.Name == "GrandfatherClock" and child.PrimaryPart then
@@ -1982,7 +1903,6 @@ task.spawn(function()
 			while powerdownIndex < target do
 				powerdownIndex += 1
 				local L = powerdownOrder[powerdownIndex]
-				L.keep = false
 				L.light.Enabled = false
 				L.panel.Color = Color3.fromRGB(18, 18, 18)
 				L.panel.Material = Enum.Material.SmoothPlastic
@@ -1992,7 +1912,6 @@ task.spawn(function()
 				-- ESCAPE stays fully dark. The objective detector and exit compass
 				-- guide survivors without relighting a green ceiling route.
 				for _, L in ipairs(allLights) do
-					L.keep = false
 					L.light.Enabled = false
 					L.panel.Color = Color3.fromRGB(18, 18, 18)
 					L.panel.Material = Enum.Material.SmoothPlastic
@@ -2034,13 +1953,9 @@ task.spawn(function()
 						best.light.Enabled = true
 						best.panel.Material = Enum.Material.Neon
 						task.wait(0.08 + math.random() * 0.12)
-						-- return it to whatever its blackout state was
-						if best.keep then
-							best.light.Brightness = 0.28
-						else
-							best.light.Enabled = false
-							best.panel.Material = Enum.Material.SmoothPlastic
-						end
+						-- back to full blackout darkness
+						best.light.Enabled = false
+						best.panel.Material = Enum.Material.SmoothPlastic
 					end
 				else
 					local ahead = root.Position + root.CFrame.LookVector * 18

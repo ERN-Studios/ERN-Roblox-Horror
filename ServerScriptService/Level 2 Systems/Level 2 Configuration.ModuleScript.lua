@@ -164,6 +164,7 @@ Configuration.SoundSlots = {
 	{"Level 2 Drain Rush", false, "A corridor draining away"},
 	{"Level 2 Pressure Door", false, "Heavy vertical steel pressure door opening"},
 	{"Level 2 Slide Rush", false, "Water and tile rush inside a flume"},
+	{"Level 2 Player Dry Tile Walking Sound", false, "Player footstep on dry poolside tile (no water underfoot)"},
 	{"Level 2 Kids Area Tone", false, "Dead, dry, carpeted-room tone"},
 	{"Level 2 Water Drop", false, "Close drip from a corridor ceiling"},
 	{"Level 2 Distant Splash", false, "Unexplained splash in a distant wet hall"},

@@ -10,8 +10,8 @@
 --   • Every box full → the levers unlock. They're on walls near the map edges,
 --     spread apart, so the party must split. Flick them ALL within 10s.
 --   • Flicking a lever turns its light green (a signal to teammates on voice).
---   • Once all boxes are full there's a chance each 10s of ALERT: red pulsing
---     lights + sound. 50% on the first roll, 5% after.
+--   • Once every box is full the maze goes into permanent ALERT: red pulsing
+--     lights + sound until the levers finish the job.
 --   • All levers together → lights go dark (a few faintly stay on; the entity is
 --     a blinking beacon), the EXIT opens in the outer wall, and the entity moves
 --     to guard it. Reach the exit to win.
@@ -22,7 +22,6 @@
 
 local Players = game:GetService("Players")
 local RS = game:GetService("ReplicatedStorage")
-local PathfindingService = game:GetService("PathfindingService")
 local TweenService = game:GetService("TweenService")
 local Debris = game:GetService("Debris")
 
@@ -33,11 +32,6 @@ local NoiseRegistry = require(script.Parent:WaitForChild("NoiseRegistry"))
 local FUSES_PER_BOX = 1      -- fuses each box needs
 local SPAWN_MULT    = 2      -- fuses spawned = needed × this
 local LEVER_WINDOW  = 10     -- seconds all levers must be on together
-local ALERT_INTERVAL = 10    -- seconds between alert rolls
-local ALERT_DELAY_1  = 1.5   -- seconds before the FIRST roll (alert hits almost immediately)
-local ALERT_FIRST   = 1.00   -- alert chance on the first roll (guaranteed)
-local ALERT_AFTER   = 0.05   -- alert chance on every roll after
-local ALERT_TIME    = 30     -- seconds an alert lasts
 local FLICK_PER_FUSE = 0.6   -- FlickerBoost added per fuse inserted
 local SPEED_PER_FUSE = 0.06  -- EntitySpeedMul added per fuse inserted
 local END_SPEED_MUL  = 1.3   -- entity speed once the exit opens (finale boost)
@@ -1472,24 +1466,6 @@ local function startPuzzle()
 		end
 		turns[#turns + 1] = cells[#cells]
 		return turns
-	end
-
-	-- offset a straight run toward the nearer perpendicular wall (~2 studs off)
-	local function runOffset(a, b)
-		local along = (math.abs(b.X - a.X) > math.abs(b.Z - a.Z)) and "X" or "Z"
-		local mid = (a + b) / 2
-		local origin = Vector3.new(mid.X, (floorY(mid.X, mid.Z) or 0) + 3, mid.Z)
-		local pDir = (along == "X") and Vector3.new(0, 0, 1) or Vector3.new(1, 0, 0)
-		local rp = RaycastParams.new()
-		rp.FilterType = Enum.RaycastFilterType.Include
-		rp.FilterDescendantsInstances = { mazeModel }
-		local hp = workspace:Raycast(origin, pDir * CELLn, rp)
-		local hm = workspace:Raycast(origin, -pDir * CELLn, rp)
-		local dp = hp and (hp.Position - origin).Magnitude or math.huge
-		local dm = hm and (hm.Position - origin).Magnitude or math.huge
-		if dp <= dm and hp then return along, math.max(dp - 2, 0)
-		elseif hm then return along, -math.max(dm - 2, 0)
-		else return along, 0 end
 	end
 
 	-- Registry used by the final physical cable pass. Even with deterministic

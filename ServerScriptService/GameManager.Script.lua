@@ -313,22 +313,6 @@ local function loadGameplayCharacter(player)
  return ok
 end
 
--- Simple isolated server lobby with a large glowing launch square.
-local function makePart(parent, name, position, size, color, material, transparency)
- local part = Instance.new("Part")
- part.Name = name
- part.Anchored = true
- part.Size = size
- part.Position = position
- part.Color = color
- part.Material = material or Enum.Material.SmoothPlastic
- part.Transparency = transparency or 0
- part.TopSurface = Enum.SurfaceType.Smooth
- part.BottomSurface = Enum.SurfaceType.Smooth
- part.Parent = parent
- return part
-end
-
 local function buildLobby()
  return require(script.Parent:WaitForChild("TunnelLobbyBuilder")).Build(LOBBY_CENTER)
 end
@@ -860,6 +844,11 @@ local function playRound(participants)
   elevatorApi.open()
   fireGroup(participants, "level3access")
  else
+  -- The party roster is frozen, so the circuit count is already known. Publish
+  -- it NOW so the cabin's maintenance poster lists every cable (count + colour)
+  -- while the crew rides the elevator, instead of only after the doors open.
+  -- PuzzleManager re-asserts the same value when the puzzle actually starts.
+  workspace:SetAttribute("Level1ActiveCircuitCount", math.clamp(#participants, 1, 6))
   for t = ELEVATOR_TIME, 1, -1 do
    if aliveCount <= 0 then sendWipedPartyHome(); return end
    fireGroup(participants, "elevator", t)

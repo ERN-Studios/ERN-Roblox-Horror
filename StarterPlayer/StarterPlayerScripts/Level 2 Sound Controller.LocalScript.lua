@@ -72,6 +72,8 @@ for _, slotName in ipairs(CUE_SLOTS) do table.insert(PRELOAD_SLOTS, slotName) en
 for _, slotName in ipairs(RANDOM_AMBIENCE_SLOTS) do table.insert(PRELOAD_SLOTS, slotName) end
 -- Slidemouth owns these recordings exclusively; this controller only warms them.
 for _, slotName in ipairs(MONSTER_SLOTS) do table.insert(PRELOAD_SLOTS, slotName) end
+-- SoundController's footstep walker owns this slot; warm it with the rest.
+table.insert(PRELOAD_SLOTS, "Level 2 Player Dry Tile Walking Sound")
 
 local DEFAULT_CUE_VOLUME = 0.3
 local CUE_VOLUMES = {
@@ -79,8 +81,6 @@ local CUE_VOLUMES = {
 }
 local COMMON_FIRST_DELAY_MIN, COMMON_FIRST_DELAY_MAX = 3, 7
 local COMMON_DELAY_MIN, COMMON_DELAY_MAX = 6, 12
-local MONSTER_FIRST_DELAY = 30
-local MONSTER_DELAY_MIN, MONSTER_DELAY_MAX = 14, 22
 local FADE_SECONDS = 1.5
 local authoredBusyUntil = 0
 local ambientBusyUntil = 0
@@ -147,13 +147,9 @@ local ambientAnchors = {Corridor = {}, WetHall = {}, PumpPipe = {}}
 local ambientAnchorSeen = {}
 local ambientConnections = {}
 local nextCommonAt = math.huge
-local nextMonsterAt = math.huge
 local lastCommonKey
-local monsterBag = {}
-local lastMonsterSlot
 local lastSlidemouthWarningSerial = 0
 local lastSlidemouthScreamSerial = 0
-local wasSlidemouthActive = false
 
 local function disconnectAmbientConnections()
 	for _, connection in ipairs(ambientConnections) do
@@ -182,13 +178,9 @@ local function stopRandomSession()
 	ambientAnchors = {Corridor = {}, WetHall = {}, PumpPipe = {}}
 	ambientAnchorSeen = {}
 	nextCommonAt = math.huge
-	nextMonsterAt = math.huge
 	lastCommonKey = nil
-	monsterBag = {}
-	lastMonsterSlot = nil
 	lastSlidemouthWarningSerial = 0
 	lastSlidemouthScreamSerial = 0
-	wasSlidemouthActive = false
 	authoredBusyUntil = 0
 end
 
@@ -213,14 +205,11 @@ local function startRandomSession(world)
 	randomSessionActive = true
 	ambientWorld = world
 	nextCommonAt = os.clock() + rng:NextNumber(COMMON_FIRST_DELAY_MIN, COMMON_FIRST_DELAY_MAX)
-	nextMonsterAt = os.clock() + MONSTER_FIRST_DELAY
 	local slidemouthState = ReplicatedStorage:FindFirstChild("Level 2 State")
 	lastSlidemouthWarningSerial = slidemouthState
 		and (tonumber(slidemouthState:GetAttribute("Level2_SlidemouthWarningSerial")) or 0) or 0
 	lastSlidemouthScreamSerial = slidemouthState
 		and (tonumber(slidemouthState:GetAttribute("Level2_SlidemouthScreamSerial")) or 0) or 0
-	wasSlidemouthActive = slidemouthState
-		and slidemouthState:GetAttribute("Level2_SlidemouthActive") == true or false
 	for _, instance in ipairs(world:GetDescendants()) do
 		classifyAmbientAnchor(instance)
 	end
@@ -392,34 +381,9 @@ local function weightedCommonProfile(excludeLast)
 	return nil
 end
 
-local function nextMonsterSlot()
-	if #monsterBag == 0 then
-		for _, slotName in ipairs(MONSTER_SLOTS) do table.insert(monsterBag, slotName) end
-		for index = #monsterBag, 2, -1 do
-			local swapIndex = rng:NextInteger(1, index)
-			monsterBag[index], monsterBag[swapIndex] = monsterBag[swapIndex], monsterBag[index]
-		end
-		if #monsterBag > 1 and monsterBag[#monsterBag] == lastMonsterSlot then
-			monsterBag[#monsterBag], monsterBag[1] = monsterBag[1], monsterBag[#monsterBag]
-		end
-	end
-	local slotName = table.remove(monsterBag)
-	lastMonsterSlot = slotName
-	return slotName
-end
-
-local MONSTER_PROFILE = {
-	Anchor = "DistantPipe", AnchorMin = 85, AnchorMax = 175,
-	VerticalMin = 4, VerticalMax = 16,
-	Volume = 1.25, RollOffMin = 30, RollOffMax = 240,
-	PitchMin = .98, PitchMax = 1.02, BusySeconds = 10,
-}
-
-local function slidemouthOwnsMonsterLane()
-	-- The four monster recordings are pump responses only. Detached/random
-	-- corridor groans are permanently disabled.
-	return true
-end
+-- (The four "Distant Monster-Like Pipe Groan" recordings belong exclusively to
+--  the Slidemouth's pump responses — Level 2 Slidemouth Client plays them; this
+--  controller only preloads them and yields the ambient mix when one lands.)
 
 local function updateRandomAmbience()
 	if not syncRandomSession() then return end
@@ -429,44 +393,15 @@ local function updateRandomAmbience()
 		and (tonumber(slidemouthState:GetAttribute("Level2_SlidemouthWarningSerial")) or 0) or 0
 	local screamSerial = slidemouthState
 		and (tonumber(slidemouthState:GetAttribute("Level2_SlidemouthScreamSerial")) or 0) or 0
-	local slidemouthActive = slidemouthState
-		and slidemouthState:GetAttribute("Level2_SlidemouthActive") == true or false
 	local forcedScream = warningSerial > lastSlidemouthWarningSerial
 		or screamSerial > lastSlidemouthScreamSerial
-	if warningSerial < lastSlidemouthWarningSerial then
-		lastSlidemouthWarningSerial = warningSerial
-	elseif warningSerial > lastSlidemouthWarningSerial then
-		lastSlidemouthWarningSerial = warningSerial
-	end
-	if screamSerial < lastSlidemouthScreamSerial then
-		lastSlidemouthScreamSerial = screamSerial
-	elseif screamSerial > lastSlidemouthScreamSerial then
-		lastSlidemouthScreamSerial = screamSerial
-	end
-	wasSlidemouthActive = slidemouthActive
+	lastSlidemouthWarningSerial = warningSerial
+	lastSlidemouthScreamSerial = screamSerial
 	if forcedScream then
-		-- Remove any detached fake groan already sounding before the real
+		-- Remove any detached ambient one-shot already sounding before the real
 		-- creature's pump response starts.
 		clearAmbientEmitters()
 		ambientBusyUntil = now + 8
-		nextMonsterAt = now + 10
-	end
-	local slidemouthOwnsLane = slidemouthOwnsMonsterLane()
-	if slidemouthOwnsLane then
-		nextMonsterAt = math.max(nextMonsterAt, now + 2)
-	end
-
-	-- Monster groans get priority once due. If another sound is busy, keep them
-	-- due so they play as soon as the mix clears instead of losing the event.
-	if not slidemouthOwnsLane
-		and now >= nextMonsterAt
-		and now >= authoredBusyUntil
-		and now >= ambientBusyUntil then
-		if playRandomSound(nextMonsterSlot(), MONSTER_PROFILE) then
-			nextMonsterAt = os.clock() + rng:NextNumber(MONSTER_DELAY_MIN, MONSTER_DELAY_MAX)
-		else
-			nextMonsterAt = now + 2
-		end
 	end
 
 	if now >= nextCommonAt
@@ -500,7 +435,7 @@ local function ensureLoop(slotName, volume)
 	end
 	if loop.SoundId ~= id then loop.SoundId = id end
 	if not loop.IsPlaying then loop:Play() end
-	return loop, volume
+	return loop
 end
 
 RunService.Heartbeat:Connect(function(dt)
@@ -738,5 +673,4 @@ for _, attributeName in ipairs({"InRound", "Escaped"}) do
 	player:GetAttributeChangedSignal(attributeName):Connect(enforceLevel2AudioLifecycle)
 end
 
--- Waiting without a timeout prevents slow joins from silently losing all one-shots.
-local cueConnection = event.OnClientEvent:Connect(playCue)
+event.OnClientEvent:Connect(playCue)

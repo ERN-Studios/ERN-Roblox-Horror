@@ -39,7 +39,6 @@ local LEVEL_ONE_BAY_STYLE = {
 	floorTexture = "rbxassetid://100093931957721",
 	ceilingTexture = "rbxassetid://91804597609254",
 	litFixtureTexture = "rbxassetid://135786374638992",
-	deadFixtureTexture = "rbxassetid://107766152992499",
 	wallColor = Color3.fromRGB(197, 180, 116),
 	floorColor = Color3.fromRGB(158, 144, 96),
 	ceilingColor = Color3.fromRGB(222, 214, 170),
@@ -72,8 +71,6 @@ local LEVEL_THREE_BAY_STYLE = {
 	wallpaperColor = Color3.fromRGB(220, 213, 187),
 	orangeWallColor = Color3.fromRGB(183, 78, 35),
 	ceilingColor = Color3.fromRGB(218, 211, 184),
-	trimColor = Color3.fromRGB(74, 67, 56),
-	metalColor = Color3.fromRGB(70, 73, 72),
 	lightColor = Color3.fromRGB(255, 222, 181),
 	carpetTile = 22,
 	wallpaperTile = 18,
@@ -93,7 +90,6 @@ local COLORS = {
 	green = Color3.fromRGB(86, 255, 173),
 	amber = Color3.fromRGB(255, 183, 72),
 	red = Color3.fromRGB(255, 76, 60),
-	wallpaper = Color3.fromRGB(198, 185, 112),
 }
 
 local function makePart(parent, name, cf, size, color, material, transparency)
@@ -624,8 +620,10 @@ local function addQueueStation(parent, roomCenter, index, offset, color, active,
 	local visualDiameter = 11.4 * 1.3
 	local queueRadius = visualDiameter * 0.5
 
-	-- The invisible detector matches the enlarged circular artwork. GameManager
-	-- reads QueueRadius and performs true radial containment.
+	-- The invisible detector matches the enlarged circular artwork. NOTE:
+	-- GameManager's playerInsideZone currently does rectangular X/Z containment
+	-- on this square part — the QueueRadius/shape attributes below describe the
+	-- artwork, they are not read by any script yet.
 	local zone = makePart(
 		parent,
 		(active and "LaunchZone" or "FutureLaunchZone") .. index,
@@ -719,7 +717,10 @@ local function addQueueStation(parent, roomCenter, index, offset, color, active,
 
 	local displayGui = signPanel:FindFirstChild("Display")
 	if displayGui and displayGui:IsA("SurfaceGui") then
-		displayGui.AlwaysOnTop = true
+		-- AlwaysOnTop must stay FALSE: it made every station monitor render
+		-- through the chamber walls. LightInfluence=0 already keeps the screen
+		-- readable and glowing without skipping the depth test.
+		displayGui.AlwaysOnTop = false
 		displayGui.MaxDistance = 90
 	end
 
@@ -778,9 +779,12 @@ local function addLevelOneTexture(part, textureId, faces, tileU, tileV)
 	end
 end
 
-local function makeLevelOneDecorPart(parent, name, cf, size, color, material)
+local function makeLevelOneDecorPart(parent, name, cf, size, color, material, solid)
 	local part = makePart(parent, name, cf, size, color, material)
-	part.CanCollide = false
+	-- floor-standing furniture is SOLID so players cannot walk through it;
+	-- wall-glitched geometry stays intangible so it can never wedge anyone
+	-- into the chamber shell
+	part.CanCollide = solid == true
 	part.CanTouch = false
 	part.CanQuery = false
 	part:SetAttribute("Level1BayDecor", true)
@@ -794,13 +798,14 @@ local function addLevelOneChair(parent, name, seatCF, glitched)
 	model:SetAttribute("GlitchedIntoWall", glitched == true)
 	model.Parent = parent
 
+	local solid = not glitched
 	local upholstery = glitched and Color3.fromRGB(84, 70, 45) or Color3.fromRGB(104, 87, 48)
 	local metal = Color3.fromRGB(54, 53, 46)
-	makeLevelOneDecorPart(model, "Seat", seatCF, Vector3.new(3.5, 0.55, 3.4), upholstery, Enum.Material.Fabric)
-	makeLevelOneDecorPart(model, "Back", seatCF * CFrame.new(0, 2.1, 1.42), Vector3.new(3.5, 3.8, 0.48), upholstery, Enum.Material.Fabric)
+	makeLevelOneDecorPart(model, "Seat", seatCF, Vector3.new(3.5, 0.55, 3.4), upholstery, Enum.Material.Fabric, solid)
+	makeLevelOneDecorPart(model, "Back", seatCF * CFrame.new(0, 2.1, 1.42), Vector3.new(3.5, 3.8, 0.48), upholstery, Enum.Material.Fabric, solid)
 	for _, x in ipairs({-1.3, 1.3}) do
 		for _, z in ipairs({-1.2, 1.2}) do
-			makeLevelOneDecorPart(model, "Leg", seatCF * CFrame.new(x, -1.55, z), Vector3.new(0.28, 2.85, 0.28), metal, Enum.Material.Metal)
+			makeLevelOneDecorPart(model, "Leg", seatCF * CFrame.new(x, -1.55, z), Vector3.new(0.28, 2.85, 0.28), metal, Enum.Material.Metal, solid)
 		end
 	end
 	return model
@@ -970,9 +975,11 @@ local function addLobbyThemeTexture(part, name, textureId, faces, tileU, tileV, 
 	end
 end
 
-local function makeLobbyThemePart(parent, level, name, cframe, size, color, material, transparency)
+local function makeLobbyThemePart(parent, level, name, cframe, size, color, material, transparency, solid)
 	local object = makePart(parent, name, cframe, size, color, material, transparency)
-	object.CanCollide = false
+	-- floor-standing furniture is SOLID so players cannot walk through it;
+	-- ceiling fittings, basins and wall-glitched props stay intangible
+	object.CanCollide = solid == true
 	object.CanTouch = false
 	object.CanQuery = false
 	object:SetAttribute("LobbyBayDecorLevel", level)
@@ -1068,18 +1075,19 @@ local function styleLevelTwoBay(roomModel, roomCenter, side, roomRadius, roomHei
 	basinWater.CastShadow = false
 	basinWater:SetAttribute("AestheticWaterBasin", true)
 
-	-- One tiled pool column, kept decorative so it cannot obstruct queue pads.
+	-- One tiled pool column at the far wall, solid like real architecture (it
+	-- sits well clear of every queue pad).
 	local columnBase = roomCenter + outward * 20.5
 	local shaft = makeLobbyThemePart(decor, 2, "Lobby L2 Tiled Column",
 		CFrame.new(columnBase + Vector3.new(0, 4.6, 0)), Vector3.new(3.6, 9.2, 3.6),
-		LEVEL_TWO_BAY_STYLE.floorColor, Enum.Material.SmoothPlastic)
+		LEVEL_TWO_BAY_STYLE.floorColor, Enum.Material.SmoothPlastic, nil, true)
 	addLobbyThemeTexture(shaft, "LobbyLevel2TileTexture", LEVEL_TWO_BAY_STYLE.tileTexture,
 		Enum.NormalId:GetEnumItems(), LEVEL_TWO_BAY_STYLE.tile, LEVEL_TWO_BAY_STYLE.tile,
 		LEVEL_TWO_BAY_STYLE.tileTint)
 	for _, y in ipairs({.25, 8.95}) do
 		local flare = makeLobbyThemePart(decor, 2, "Lobby L2 Column Flare",
 			CFrame.new(columnBase + Vector3.new(0, y, 0)), Vector3.new(5.2, .5, 5.2),
-			LEVEL_TWO_BAY_STYLE.floorColor, Enum.Material.SmoothPlastic)
+			LEVEL_TWO_BAY_STYLE.floorColor, Enum.Material.SmoothPlastic, nil, true)
 		addLobbyThemeTexture(flare, "LobbyLevel2TileTexture", LEVEL_TWO_BAY_STYLE.tileTexture,
 			{Enum.NormalId.Top, Enum.NormalId.Front, Enum.NormalId.Back, Enum.NormalId.Left, Enum.NormalId.Right},
 			LEVEL_TWO_BAY_STYLE.tile, LEVEL_TWO_BAY_STYLE.tile, LEVEL_TWO_BAY_STYLE.tileTint)
@@ -1090,25 +1098,25 @@ local function styleLevelTwoBay(roomModel, roomCenter, side, roomRadius, roomHei
 	for _, z in ipairs({-1.35, 1.35}) do
 		makeLobbyThemePart(decor, 2, "Lobby L2 Pool Ladder Rail",
 			CFrame.new(ladderBase + Vector3.new(0, 2.6, z)), Vector3.new(.38, 5.2, .38),
-			LEVEL_TWO_BAY_STYLE.railColor, Enum.Material.Metal)
+			LEVEL_TWO_BAY_STYLE.railColor, Enum.Material.Metal, nil, true)
 	end
 	for rung = 0, 3 do
 		makeLobbyThemePart(decor, 2, "Lobby L2 Pool Ladder Rung",
 			CFrame.new(ladderBase + Vector3.new(0, .9 + rung * 1.05, 0)), Vector3.new(.4, .32, 2.7),
-			LEVEL_TWO_BAY_STYLE.railColor, Enum.Material.Metal)
+			LEVEL_TWO_BAY_STYLE.railColor, Enum.Material.Metal, nil, true)
 	end
 
 	-- A dry faded lounger sits beyond the basin; the ball floats over its water.
 	local loungerPosition = roomCenter + outward * 19 + Vector3.new(0, .55, 9)
 	local loungerCF = CFrame.lookAt(loungerPosition, roomCenter + Vector3.new(0, .55, 9))
 	makeLobbyThemePart(decor, 2, "Lobby L2 Sunken Lounger Seat", loungerCF,
-		Vector3.new(2.6, .5, 6.4), Color3.fromRGB(108, 164, 181), Enum.Material.SmoothPlastic)
+		Vector3.new(2.6, .5, 6.4), Color3.fromRGB(108, 164, 181), Enum.Material.SmoothPlastic, nil, true)
 	makeLobbyThemePart(decor, 2, "Lobby L2 Sunken Lounger Back",
 		loungerCF * CFrame.new(0, 1.4, -2.9) * CFrame.Angles(math.rad(-35), 0, 0),
-		Vector3.new(2.6, .4, 3.4), Color3.fromRGB(108, 164, 181), Enum.Material.SmoothPlastic)
+		Vector3.new(2.6, .4, 3.4), Color3.fromRGB(108, 164, 181), Enum.Material.SmoothPlastic, nil, true)
 	local ball = makeLobbyThemePart(decor, 2, "Lobby L2 Pool Ball",
 		CFrame.new(basinCenter + Vector3.new(0, 1.25, 3.05)),
-		Vector3.new(2.3, 2.3, 2.3), Color3.fromRGB(238, 202, 84), Enum.Material.SmoothPlastic)
+		Vector3.new(2.3, 2.3, 2.3), Color3.fromRGB(238, 202, 84), Enum.Material.SmoothPlastic, nil, true)
 	ball.Shape = Enum.PartType.Ball
 	local noodle = makeLobbyThemePart(decor, 2, "Lobby L2 Wall Glitched Pool Noodle",
 		CFrame.new(roomCenter + outward * (roomRadius + .2) + Vector3.new(0, 4.1, 12))
@@ -1120,7 +1128,7 @@ local function styleLevelTwoBay(roomModel, roomCenter, side, roomRadius, roomHei
 	roomModel:SetAttribute("LobbyBayStyleVersion", 2)
 end
 
-local function cloneLobbyLevelThreeFurniture(templateName, parent, name, cframe, size, color)
+local function cloneLobbyLevelThreeFurniture(templateName, parent, name, cframe, size, color, solid)
 	local assets = game:GetService("ServerStorage"):FindFirstChild("Level3Assets")
 	local templates = assets and assets:FindFirstChild("FurnitureTemplates")
 	local template = templates and templates:FindFirstChild(templateName)
@@ -1128,7 +1136,8 @@ local function cloneLobbyLevelThreeFurniture(templateName, parent, name, cframe,
 	local object = template:Clone()
 	object.Name = name
 	object.Anchored = true
-	object.CanCollide = false
+	-- floor furniture is SOLID; the wall-glitched chair stays intangible
+	object.CanCollide = solid == true
 	object.CanTouch = false
 	object.CanQuery = false
 	object.CFrame = cframe
@@ -1243,15 +1252,15 @@ local function styleLevelThreeBay(roomModel, roomCenter, side, roomRadius, roomH
 	local tableCF = CFrame.lookAt(tablePosition, roomCenter)
 	local tableMesh = cloneLobbyLevelThreeFurniture("FoldingTableTemplate", decor,
 		"Lobby L3 Vetted Folding Table", tableCF * CFrame.new(0, 1.72, 0),
-		Vector3.new(11.2, 3.44, 4.35))
+		Vector3.new(11.2, 3.44, 4.35), nil, true)
 	if not tableMesh then
 		tableMesh = makeLobbyThemePart(decor, 3, "Lobby L3 Folding Table",
 			tableCF * CFrame.new(0, 3, 0), Vector3.new(11.2, .5, 4.35),
-			Color3.fromRGB(201, 198, 185), Enum.Material.SmoothPlastic)
+			Color3.fromRGB(201, 198, 185), Enum.Material.SmoothPlastic, nil, true)
 	end
 	local tablecloth = makeLobbyThemePart(decor, 3, "Lobby L3 Confetti Tablecloth",
 		tableCF * CFrame.new(0, 3.48, 0), Vector3.new(11.45, .12, 4.62),
-		Color3.fromRGB(38, 153, 165), Enum.Material.Fabric)
+		Color3.fromRGB(38, 153, 165), Enum.Material.Fabric, nil, true)
 	addLobbyThemeTexture(tablecloth, "LobbyLevel3ConfettiTablecloth",
 		LEVEL_THREE_BAY_STYLE.confettiTexture, {Enum.NormalId.Top},
 		LEVEL_THREE_BAY_STYLE.tableclothTile, LEVEL_THREE_BAY_STYLE.tableclothTile,
@@ -1264,10 +1273,10 @@ local function styleLevelThreeBay(roomModel, roomCenter, side, roomRadius, roomH
 		local chairCF = CFrame.lookAt(chairPosition, tableTarget)
 		local chair = cloneLobbyLevelThreeFurniture("PlasticPartyChairTemplate", decor,
 			"Lobby L3 Mismatched Party Chair " .. index, chairCF,
-			Vector3.new(2.55, 4.3, 2.58), chairColors[index])
+			Vector3.new(2.55, 4.3, 2.58), chairColors[index], true)
 		if not chair then
 			makeLobbyThemePart(decor, 3, "Lobby L3 Mismatched Party Chair " .. index,
-				chairCF, Vector3.new(2.55, 4.3, 2.58), chairColors[index], Enum.Material.SmoothPlastic)
+				chairCF, Vector3.new(2.55, 4.3, 2.58), chairColors[index], Enum.Material.SmoothPlastic, nil, true)
 		end
 	end
 
@@ -1582,7 +1591,8 @@ function Builder.Build(center)
 	model:SetAttribute("CircularBayGeometryVersion", 1)
 	model:SetAttribute("CircularLaunchPadVersion", 2)
 	model:SetAttribute("Level2DecorativeBasinVersion", 1)
-	model:SetAttribute("RoundedStationMonitorVersion", 2)
+	model:SetAttribute("RoundedStationMonitorVersion", 3) -- v3: depth-tested monitors (no more through-wall screens)
+	model:SetAttribute("BayFurnitureCollisionVersion", 1) -- v1: floor furniture in the bays is solid
 
 	local geometry = Instance.new("Folder")
 	geometry.Name = "TunnelGeometry"
