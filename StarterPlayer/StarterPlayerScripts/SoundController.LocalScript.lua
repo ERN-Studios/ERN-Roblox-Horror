@@ -36,7 +36,7 @@ local ENTITY_STEP_RUN  = "" -- the Entity's footstep thump while running/chasing
 -- idle vocalisations played at random while the Entity just roams (positional).
 -- Fill any of the 3 — it works with just one; empty slots are skipped.
 local IDLE_SOUNDS     = { "", "", "" }
-local CHASE_SOUND     = "rbxassetid://72818169474421" -- loops while the Entity is actively CHASING you (positional)
+local CHASE_SOUND     = "rbxassetid://79246919959914" -- loops while the Entity is actively CHASING you (positional)
 -- distant entity screams, heard by EVERYONE on the server at the same moment,
 -- 3D from wherever the Entity is. EntityAI picks the timing and the take and
 -- publishes them (EntityScream / EntityScreamIndex attributes) so every player
@@ -439,81 +439,145 @@ workspace:GetAttributeChangedSignal("EntityScream"):Connect(function()
 	task.delay(12, function() if s then s:Destroy() end end)
 end)
 
--- the chase audio: when the Entity SPOTS you (EntityState → CHASE) it first
--- plays a "spotted you!" sting — the same sound as the yell — then the chase
--- loop fades in beneath it. Leaving CHASE fades the loop back out. Both fade
--- rather than snapping on/off.
-task.spawn(function()
-	local entity = workspace:WaitForChild("Entity", 60)
-	local er = entity and entity:WaitForChild("HumanoidRootPart", 15)
-	if not er then return end
+-- the chase audio: when the Entity SPOTS someone (EntityState → CHASE) it
+-- first plays a "spotted you!" sting, then the positional chase loop fades in.
+-- Level 1 can begin after a long lobby wait and can rebuild its Entity between
+-- rounds, so this binding follows every replacement instead of timing out once.
+local chaseEntity
+local chase
+local chaseFadeTween
+local chaseBindSerial = 0
+local chasePrevEngaged = false
+local chaseLastSpot = -999
 
-	local chase
-	if CHASE_SOUND ~= "" then
-		chase = Instance.new("Sound")
-		chase.Name = "ChaseSound"
-		chase.Looped = true
-		chase.Volume = 0
-		chase.SoundId = CHASE_SOUND
-		chase.RollOffMode = Enum.RollOffMode.InverseTapered
-		chase.RollOffMinDistance = 10
-		chase.RollOffMaxDistance = 200
-		chase.Parent = er
-	end
+local function chaseActive()
+	return workspace:GetAttribute("SelectedLevel") == 1
+		and workspace:GetAttribute("RoundActive") == true
+		and player:GetAttribute("InRound") == true
+		and player:GetAttribute("Escaped") ~= true
+		and player:GetAttribute("Spectating") ~= true
+		and player:GetAttribute("IsSpectating") ~= true
+end
 
-	local prevEngaged = false -- was CHASE or TRACK last time
-	local lastSpot = -999     -- cooldown so rapid re-acquires don't spam the sting
-	local fadeTween
-	local function fadeChase(target, dur)
-		if not chase then return end
-		if not chase.IsPlaying then chase:Play() end
-		if fadeTween then fadeTween:Cancel() end
-		fadeTween = TweenService:Create(chase, TweenInfo.new(dur, Enum.EasingStyle.Linear), { Volume = target })
-		fadeTween:Play()
-	end
+local function fadeChase(target, duration)
+	if not chase or not chase.Parent then return end
+	if not chase.IsPlaying then chase:Play() end
+	if chaseFadeTween then chaseFadeTween:Cancel() end
+	chaseFadeTween = TweenService:Create(
+		chase,
+		TweenInfo.new(duration, Enum.EasingStyle.Linear),
+		{Volume = target}
+	)
+	chaseFadeTween:Play()
+end
 
-	local function onState()
-		local st = workspace:GetAttribute("EntityState")
-		local alerting = (st == "ALERT") -- howl already owns the spotted sound
-		local chasing = (st == "CHASE")   -- actively sees you
-		local tracking = (st == "TRACK")  -- lost sight, hunting your last live position
+local function refreshChase()
+	local st = workspace:GetAttribute("EntityState")
+	local eligible = chaseActive()
+	local alerting = eligible and st == "ALERT"
+	local chasing = eligible and st == "CHASE"
+	local tracking = eligible and st == "TRACK"
 
-		if chasing then
-			-- freshly spotted (wasn't already engaged) → the "spotted you" sting
-			if not prevEngaged and YELL_SOUND ~= "" and (os.clock() - lastSpot) > 4 then
-				lastSpot = os.clock()
-				local spot = Instance.new("Sound")
-				spot.SoundId = YELL_SOUND
-				spot.Volume = 0
-				spot.RollOffMode = Enum.RollOffMode.InverseTapered
-				spot.RollOffMinDistance = 10
-				spot.RollOffMaxDistance = 200
-				spot.Parent = er
-				spot:Play()
-				TweenService:Create(spot, TweenInfo.new(0.25), { Volume = SPOT_VOLUME }):Play()
-				spot.Ended:Connect(function() spot:Destroy() end)
-				task.delay(8, function() if spot then spot:Destroy() end end)
-			end
-			fadeChase(CHASE_VOLUME, CHASE_FADE) -- rise to (or hold) full
-
-		elseif tracking then
-			-- lost sight but still coming → SLOWLY fade the music over the window;
-			-- if it re-spots you, the CHASE branch snaps it back up
-			fadeChase(0, TRACK_FADE)
-
-		elseif chase and chase.IsPlaying then
-			-- fully lost → finish the fade out and stop
-			fadeChase(0, CHASE_FADE)
-			task.delay(CHASE_FADE + 0.1, function()
-				local s = workspace:GetAttribute("EntityState")
-				if s ~= "CHASE" and s ~= "TRACK" then chase:Stop() end
-			end)
+	if chasing then
+		-- Freshly spotted (wasn't already engaged) → the positional sting.
+		local er = chase and chase.Parent
+		if not chasePrevEngaged and YELL_SOUND ~= "" and (os.clock() - chaseLastSpot) > 4
+			and er and er:IsA("BasePart") then
+			chaseLastSpot = os.clock()
+			local spot = Instance.new("Sound")
+			spot.SoundId = YELL_SOUND
+			spot.Volume = 0
+			spot.RollOffMode = Enum.RollOffMode.InverseTapered
+			spot.RollOffMinDistance = 10
+			spot.RollOffMaxDistance = 200
+			spot.Parent = er
+			spot:Play()
+			TweenService:Create(spot, TweenInfo.new(0.25), {Volume = SPOT_VOLUME}):Play()
+			spot.Ended:Connect(function() spot:Destroy() end)
+			task.delay(8, function() if spot.Parent then spot:Destroy() end end)
 		end
-		prevEngaged = alerting or chasing or tracking
+		fadeChase(CHASE_VOLUME, CHASE_FADE)
+	elseif tracking then
+		-- Lost sight but still tracking → slowly withdraw the chase loop.
+		fadeChase(0, TRACK_FADE)
+	elseif chase and chase.IsPlaying then
+		local boundSound = chase
+		fadeChase(0, CHASE_FADE)
+		task.delay(CHASE_FADE + 0.1, function()
+			if chase ~= boundSound or not boundSound.Parent then return end
+			local stateNow = workspace:GetAttribute("EntityState")
+			if not chaseActive() or (stateNow ~= "CHASE" and stateNow ~= "TRACK") then
+				boundSound:Stop()
+			end
+		end)
 	end
-	workspace:GetAttributeChangedSignal("EntityState"):Connect(onState)
-	onState()
+	chasePrevEngaged = alerting or chasing or tracking
+end
+
+local function unbindChaseEntity()
+	chaseBindSerial += 1
+	if chaseFadeTween then
+		chaseFadeTween:Cancel()
+		chaseFadeTween = nil
+	end
+	if chase then
+		chase:Destroy()
+		chase = nil
+	end
+	chaseEntity = nil
+	chasePrevEngaged = false
+end
+
+local function bindChaseEntity(entity)
+	if not (entity and entity:IsA("Model") and entity.Name == "Entity") then return end
+	if chaseEntity == entity and chase and chase.Parent then return end
+	unbindChaseEntity()
+	chaseEntity = entity
+	chaseBindSerial += 1
+	local serial = chaseBindSerial
+
+	task.spawn(function()
+		local er = entity:FindFirstChild("HumanoidRootPart") or entity:WaitForChild("HumanoidRootPart", 15)
+		if serial ~= chaseBindSerial or chaseEntity ~= entity or not (er and er:IsA("BasePart")) then return end
+		if CHASE_SOUND == "" then return end
+
+		local newChase = Instance.new("Sound")
+		newChase.Name = "ChaseSound"
+		newChase.Looped = true
+		newChase.Volume = 0
+		newChase.SoundId = CHASE_SOUND
+		newChase.RollOffMode = Enum.RollOffMode.InverseTapered
+		newChase.RollOffMinDistance = 10
+		newChase.RollOffMaxDistance = 200
+		newChase.Parent = er
+		chase = newChase
+
+		-- Warm the 31-second chase take before first contact so Play() is immediate.
+		task.spawn(function()
+			pcall(function()
+				game:GetService("ContentProvider"):PreloadAsync({newChase})
+			end)
+		end)
+		refreshChase()
+	end)
+end
+
+workspace:GetAttributeChangedSignal("EntityState"):Connect(refreshChase)
+workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(refreshChase)
+workspace:GetAttributeChangedSignal("RoundActive"):Connect(refreshChase)
+player:GetAttributeChangedSignal("InRound"):Connect(refreshChase)
+player:GetAttributeChangedSignal("Escaped"):Connect(refreshChase)
+player:GetAttributeChangedSignal("Spectating"):Connect(refreshChase)
+player:GetAttributeChangedSignal("IsSpectating"):Connect(refreshChase)
+workspace.ChildAdded:Connect(function(child)
+	if child.Name == "Entity" then bindChaseEntity(child) end
 end)
+workspace.ChildRemoved:Connect(function(child)
+	if child == chaseEntity then unbindChaseEntity() end
+end)
+
+local existingChaseEntity = workspace:FindFirstChild("Entity")
+if existingChaseEntity then bindChaseEntity(existingChaseEntity) end
 
 -- the lunge telegraph: EntityAI bumps EntityLunge when it winds up a pounce, and
 -- we play the cue POSITIONALLY at the entity (fires during the wind-up)

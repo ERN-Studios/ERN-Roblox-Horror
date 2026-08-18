@@ -105,7 +105,7 @@ local ELEV_CEILING_TILE = 4
 -- cabin's interior ceiling its OWN texture (generate it with the ChatGPT
 -- prompt from the update notes). While empty the roof falls back to the
 -- brushed aluminum set above.
-local ELEV_ROOF_TEXTURE = ""
+local ELEV_ROOF_TEXTURE = "rbxassetid://114582006074351"
 
 -- Optional MOLD overlay (your own decals, transparent PNGs) — up to 5 variants,
 -- picked at random per wall. Draw the mold hanging from the TOP of the image,

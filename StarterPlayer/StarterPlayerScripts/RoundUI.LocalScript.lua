@@ -7,6 +7,8 @@ local RunService = game:GetService("RunService")
 local UIS = game:GetService("UserInputService")
 local Lighting = game:GetService("Lighting")
 local TweenService = game:GetService("TweenService")
+local SoundService = game:GetService("SoundService")
+local ContentProvider = game:GetService("ContentProvider")
 
 local remotes = RS:WaitForChild("Remotes")
 local remote = remotes:WaitForChild("RoundStatus")
@@ -1674,7 +1676,20 @@ end)
 -- is committed, and every effect stays private to the targeted player.
 local AmbientTweenService = game:GetService("TweenService")
 local AmbientDebris = game:GetService("Debris")
+local AMBIENT_KNOCK_SOUND = "rbxassetid://133468930879347"
 local ambientBusy = false
+
+-- Warm the authored take once so a random scare never spends its short emitter
+-- lifetime waiting for the first network load.
+task.spawn(function()
+ local warm = Instance.new("Sound")
+ warm.Name = "Level 1 Random Knock Preload"
+ warm.SoundId = AMBIENT_KNOCK_SOUND
+ warm.Volume = 0
+ warm.Parent = SoundService
+ pcall(function() ContentProvider:PreloadAsync({warm}) end)
+ warm:Destroy()
+end)
 local ambientLastKind = nil
 local ambientNextAt = os.clock() + math.random(14, 22)
 local ambientLeverPressureUntil = 0
@@ -1768,27 +1783,22 @@ local function ambientKnocks()
  local side = math.random(0, 1) == 0 and -1 or 1
  local position = root.Position + right * side * math.random(13, 20)
   + forward * math.random(-7, 7) + Vector3.new(0, 2.7, 0)
- local emitter = ambientEmitter("DistantWallKnock", position, 3)
+ local emitter = ambientEmitter("DistantWallKnock", position, 10)
  local knock = Instance.new("Sound")
  knock.Name = "Knock"
- knock.SoundId = "rbxasset://sounds/clickfast.wav"
+ knock.SoundId = AMBIENT_KNOCK_SOUND
  knock.Volume = 0.50
- knock.PlaybackSpeed = 0.34 + math.random() * 0.08
+ knock.PlaybackSpeed = 1
  knock.RollOffMinDistance = 6
  knock.RollOffMaxDistance = 38
  knock.Parent = emitter
 
- local knocks = math.random(2, 3)
- for index = 1, knocks do
-  if not ambientCanScare() then break end
-  knock:Stop()
-  knock.TimePosition = 0
-  knock:Play()
-  task.wait(index == 1 and 0.22 or 0.48)
- end
- task.delay(0.55, function()
-  if knock.Parent then AmbientTweenService:Create(knock, TweenInfo.new(0.3), {Volume = 0}):Play() end
- end)
+ -- This upload is already a complete authored knocking take. Preload this
+ -- exact emitter, then play it once at natural pitch so the old clickfast
+ -- retrigger cannot chop off its tail.
+ pcall(function() ContentProvider:PreloadAsync({knock}) end)
+ if not emitter.Parent or not ambientCanScare() then return false end
+ knock:Play()
  return true
 end
 
