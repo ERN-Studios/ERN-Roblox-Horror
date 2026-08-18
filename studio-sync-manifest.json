@@ -51,8 +51,8 @@
       "studioPath": "ServerScriptService.EntityAI",
       "className": "Script",
       "file": "ServerScriptService/EntityAI.Script.lua",
-      "bytes": 53726,
-      "sha256": "a7d4a47e8d5fda0ae1732718f997cf34b51e43d502c90f66b475288f34829301",
+      "bytes": 53716,
+      "sha256": "02665e099672fa4d1c497e9e0e10abd35939bf5b804139f03ef9927852ed14d7",
       "status": "synced"
     },
     {
@@ -67,24 +67,24 @@
       "studioPath": "ServerScriptService.MazeGenerator",
       "className": "Script",
       "file": "ServerScriptService/MazeGenerator.Script.lua",
-      "bytes": 83407,
-      "sha256": "24d6025469ac9cecec5b7a92873bb22ce1dcf839df18f0add1ff2e2d3df863e4",
+      "bytes": 80044,
+      "sha256": "6c4641441d0ee578afbf9f5782ec39790ed72400dd757aaf028b7d41b0eb49aa",
       "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.GameManager",
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 44825,
-      "sha256": "034d8e76895bfdb690a974b050e55a8b6bec539d8937df80d1c7cbb37a79338c",
+      "bytes": 44711,
+      "sha256": "0308bc3ec1f356e13724d4e52c264d53ffeb9dd7335c2162905ccea12a11ef82",
       "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.PuzzleManager",
       "className": "Script",
       "file": "ServerScriptService/PuzzleManager.Script.lua",
-      "bytes": 82438,
-      "sha256": "c6baec595b10642a6f2f3e44cea8b1855d46812c5d58cd045e095e124bf52e8c",
+      "bytes": 81133,
+      "sha256": "54f227ccf176b21ff5a1e559471baff5609803a77c54349d97878854c7fec1ef",
       "status": "synced"
     },
     {
@@ -107,8 +107,8 @@
       "studioPath": "ServerScriptService.TunnelLobbyBuilder",
       "className": "ModuleScript",
       "file": "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
-      "bytes": 68078,
-      "sha256": "e33313287d305619fc91edde4db5e76605db9f013efaa26b4875d33df6fc461f",
+      "bytes": 69050,
+      "sha256": "fa766cd2590c7e27028d097472e0a972a11275ff6ee556c9e719467df4f388a6",
       "status": "synced"
     },
     {
@@ -187,8 +187,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.SoundController",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
-      "bytes": 34261,
-      "sha256": "6237cf7c1ed1c4193f5ef83a3349715f67dba8a299ebc809b0d8da70e0fa44b6",
+      "bytes": 42809,
+      "sha256": "4a64cda8f3aa393f53b789ee25bd09505f0ce970e3463e8b0737e63bbe7a0900",
       "status": "synced"
     },
     {
@@ -259,8 +259,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Sound Controller.LocalScript.lua",
-      "bytes": 25965,
-      "sha256": "3f539eacd52b408310f2e848e0abd3b990d79d3f809f00b2132e24e57e9b36ae",
+      "bytes": 23687,
+      "sha256": "860b0c43ca0adf22f053e4654bd1462883fa175b9bd2661ab3b43cc4024eac13",
       "status": "synced"
     },
     {
@@ -347,8 +347,8 @@
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Configuration",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Configuration.ModuleScript.lua",
-      "bytes": 8066,
-      "sha256": "fb93f32d224adceea1e34205a64375701ff54d183818ee9210e932f24acc4fa4",
+      "bytes": 8178,
+      "sha256": "e649c03d109ca4eb50446110dd76d03796db6fedf51be59c03e2cd702a9372cc",
       "status": "synced"
     },
     {
