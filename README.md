@@ -215,9 +215,29 @@ Everything below drives **live Roblox Studio and Blender** over MCP:
 - **Repo → Studio pushes**: `record_pending_push.py` marks repo-edited scripts
   as `pending-studio-push` in the manifest (remembering the hash Studio should
   still hold), and `push_repo_to_studio.py` applies exactly those entries
-  through `ScriptEditorService:UpdateSourceAsync` (chunked transfer, conflict
-  detection, verified read-back) — raw `.Source` writes leave LocalScripts
-  running stale bytecode. (`push_level1_to_studio.py` /
+  through `ScriptEditorService:UpdateSourceAsync` — raw `.Source` writes leave
+  LocalScripts running stale bytecode. The push is two-phase and refuses to
+  half-apply a batch:
+
+  ```
+  python tools/push_repo_to_studio.py --list    # offline: what is queued
+  python tools/push_repo_to_studio.py --audit   # read live Studio, classify, write nothing
+  python tools/push_repo_to_studio.py           # phase 1 check, then phase 2 write
+  ```
+
+  Phase 1 reads every queued script's live source and classifies it
+  (already-applied / ready / conflict); **any** conflict aborts before a single
+  byte is written (`--skip-conflicts` pushes the clean ones,
+  `--overwrite-conflicts` accepts Studio's copy as the baseline). Phase 2 stages
+  each source in a ServerStorage buffer, verifies its length, then swaps it in
+  through a callback that re-checks the baseline *inside* Studio — so a script
+  edited between the check and the write is never clobbered. Every pre-push
+  source is saved under `.studio-push-backups/<timestamp>/`, and the manifest is
+  rewritten atomically after each file.
+
+  While a push is queued, `pull_source_from_studio.py` **skips** those files
+  (their repo copies are newer than Studio); pass `--force` to discard the
+  unpushed edits instead. (`push_level1_to_studio.py` /
   `push_level2_poolrooms_to_studio.py` are kept for history but predate this.)
 - **Animation pipeline**: author/fix clips in Blender
   (`blender_mcp_client.py`, `build_*` scripts) → export retargeted keyframes

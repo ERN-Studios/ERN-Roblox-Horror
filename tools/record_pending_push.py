@@ -41,8 +41,10 @@ def main() -> int:
         print(f"  PENDING {item['file']} ({item.get('bytes')} -> {len(data)} bytes)")
         if args.dry_run:
             continue
-        # keep the ORIGINAL Studio hash when re-recording an already-pending file
-        if item.get("status") != "pending-studio-push":
+        # Keep the ORIGINAL Studio hash when re-recording a file that is already
+        # queued (or stuck in a conflict): the baseline must stay the source
+        # Studio actually holds, not an intermediate repo edit.
+        if item.get("status") not in ("pending-studio-push", "studio-push-conflict"):
             item["studioSha256Before"] = item.get("sha256")
         item["bytes"] = len(data)
         item["sha256"] = digest
