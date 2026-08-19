@@ -134,7 +134,10 @@ local function refreshValveHighlights()
 	if not objectives then return end
 	for _, valve in ipairs(objectives:GetChildren()) do
 		if valve:IsA("Model") and valve.Name:match("^Level 2 Pump Station") then
-			local color = valve:GetAttribute("VisionColor") or Color3.fromRGB(80, 220, 180)
+			-- Each station publishes its lever handle colour; use it so the dev
+			-- ESP distinguishes the three pumps instead of showing generic green.
+			local color = valve:GetAttribute("Level2_LeverHandleColorValue")
+				or Color3.fromRGB(80, 220, 180)
 			local highlight = Instance.new("Highlight")
 			highlight.Name = "ValveVisionHighlight"
 			highlight.Adornee = valve

@@ -183,8 +183,6 @@ local function playScream(screamKind)
 	local slotName = nextMonsterSlot()
 	local id = resolveId(slotName)
 	if not id then return false end
-	local pumps = tonumber(model:GetAttribute("Level2_SlidemouthPumps"))
-		or tonumber(workspace:GetAttribute("Level2Pumps")) or 2
 	local sound = Instance.new("Sound")
 	sound.Name = "Slidemouth Local Chase Scream - " .. slotName
 	sound.SoundId = id

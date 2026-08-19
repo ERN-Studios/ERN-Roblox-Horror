@@ -103,8 +103,6 @@ local function livingRecord(session, player)
 		or player.Parent ~= Players
 		or player:GetAttribute("InRound") ~= true
 		or player:GetAttribute("Escaped") == true
-		or player:GetAttribute("Spectating") == true
-		or player:GetAttribute("IsSpectating") == true
 	then
 		return nil
 	end

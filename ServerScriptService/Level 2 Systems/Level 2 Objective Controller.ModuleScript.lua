@@ -139,6 +139,8 @@ local function validateManifest(manifest)
 			"Level 2 pump is missing its ProximityPrompt")
 		assert(pump.Lamp and pump.Lamp:IsA("BasePart"), "Level 2 pump is missing its status lamp")
 	end
+	assert(type(manifest.PressureDoors) == "table",
+		"Level 2 objective manifest is missing its pressure door records")
 	assert(type(manifest.Exit) == "table", "Level 2 objective manifest has no exit")
 	assert(manifest.Exit.Trigger and manifest.Exit.Trigger:IsA("BasePart")
 		and manifest.Exit.Trigger:IsDescendantOf(manifest.World),
@@ -262,6 +264,10 @@ function ObjectiveController.Start(manifest, generation)
 			local level2State = state()
 			if level2State then
 				level2State:SetAttribute("Level2_PumpProgress", session.StartedCount)
+				-- The Slidemouth schedules its post-pump scream from this exact
+				-- timestamp (it previously fell back to "whenever I noticed").
+				level2State:SetAttribute("Level2_PumpStartedAt" .. tostring(session.StartedCount),
+					workspace:GetServerTimeNow())
 			end
 
 			-- Start the 12-second pump motor cue as soon as the lever engages.

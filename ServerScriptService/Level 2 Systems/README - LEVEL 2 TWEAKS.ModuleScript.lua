@@ -26,7 +26,7 @@
 --  Ceiling heights       WallHeight / SlideHallHeight / GrandSlideHallHeight
 --  Colors                Configuration.Colors (tiles) / KidsColors (3 kids
 --                        colors) / SlideColors (flume plastic)
---  Brightness of lights  CeilingPanelBrightness / SkylightBrightness
+--  Brightness of lights  CeilingPanelBrightness (skylights are real sunlight)
 --  Slides                SlidesPerHall / SlideTubeRadius
 --  Kids wing size        KidsAreaRoomCount
 --

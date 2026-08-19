@@ -90,8 +90,6 @@ local function livingRoundCharacter(player)
 	if player.Parent ~= Players
 		or player:GetAttribute("InRound") ~= true
 		or player:GetAttribute("Escaped") == true
-		or player:GetAttribute("Spectating") == true
-		or player:GetAttribute("IsSpectating") == true
 		or workspace:GetAttribute("SelectedLevel") ~= 2
 		or workspace:GetAttribute("RoundActive") ~= true
 	then

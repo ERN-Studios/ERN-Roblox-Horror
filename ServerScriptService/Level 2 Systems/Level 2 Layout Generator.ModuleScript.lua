@@ -184,19 +184,6 @@ local function bfs(layout, startHall, blockedCorridors)
 	return distances
 end
 
-local function shuffled(rng, source)
-	local result = table.clone(source)
-	for index = #result, 2, -1 do
-		local swap = rng:NextInteger(1, index)
-		result[index], result[swap] = result[swap], result[index]
-	end
-	return result
-end
-
-local function area(hall)
-	return rectWidth(hall) * rectDepth(hall)
-end
-
 local function separation(a, b)
 	local ac, bc = rectCenter(a), rectCenter(b)
 	return (ac - bc).Magnitude

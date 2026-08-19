@@ -133,8 +133,6 @@ local function active()
 		and workspace:GetAttribute("WorldGenerated") == true
 		and player:GetAttribute("InRound") == true
 		and player:GetAttribute("Escaped") ~= true
-		and player:GetAttribute("Spectating") ~= true
-		and player:GetAttribute("IsSpectating") ~= true
 end
 
 -- Contextual environmental one-shots. These are client-local and spatial so every

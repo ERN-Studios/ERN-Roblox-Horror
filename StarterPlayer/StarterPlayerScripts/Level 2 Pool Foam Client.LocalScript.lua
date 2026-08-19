@@ -146,8 +146,6 @@ local function activeCharacter(): (Model?, Humanoid?, BasePart?, Camera?)
 		or workspace:GetAttribute("RoundActive") ~= true
 		or player:GetAttribute("InRound") ~= true
 		or player:GetAttribute("Escaped") == true
-		or player:GetAttribute("Spectating") == true
-		or player:GetAttribute("IsSpectating") == true
 	then
 		return nil, nil, nil, nil
 	end
@@ -375,7 +373,7 @@ table.insert(connections, player.CharacterAdded:Connect(function()
 	resetPresentation()
 	task.defer(refreshTaggedEntities)
 end))
-for _, attribute in ipairs({"InRound", "Escaped", "Spectating", "IsSpectating"}) do
+for _, attribute in ipairs({"InRound", "Escaped"}) do
 	table.insert(connections, player:GetAttributeChangedSignal(attribute):Connect(function()
 		if not liveLevel2() then resetPresentation() end
 	end))
