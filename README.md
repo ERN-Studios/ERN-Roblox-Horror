@@ -212,9 +212,12 @@ Everything below drives **live Roblox Studio and Blender** over MCP:
 - `sync_from_studio.py` — the original full Studio → repo mirror. **Caveat:**
   its `script_read` calls can serve a stale editor buffer after programmatic
   source writes; prefer the pull tool above.
-- If a script write into Studio is ever needed, it must go through
-  `ScriptEditorService:UpdateSourceAsync` — raw `.Source` writes leave
-  LocalScripts running stale bytecode. (`push_level1_to_studio.py` /
+- **Repo → Studio pushes**: `record_pending_push.py` marks repo-edited scripts
+  as `pending-studio-push` in the manifest (remembering the hash Studio should
+  still hold), and `push_repo_to_studio.py` applies exactly those entries
+  through `ScriptEditorService:UpdateSourceAsync` (chunked transfer, conflict
+  detection, verified read-back) — raw `.Source` writes leave LocalScripts
+  running stale bytecode. (`push_level1_to_studio.py` /
   `push_level2_poolrooms_to_studio.py` are kept for history but predate this.)
 - **Animation pipeline**: author/fix clips in Blender
   (`blender_mcp_client.py`, `build_*` scripts) → export retargeted keyframes
