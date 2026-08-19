@@ -1,7 +1,9 @@
 # Handoff — project-wide code audit, ready to apply to Studio
 
-**Status: finished and pushed. 37 scripts are waiting to go into Studio, and
-that step can only run from the Windows PC.**
+**Status: DONE (2026-08-19). All 37 scripts were pushed into Studio and
+verified byte-for-byte, and the branch is merged into `main`. This file is kept
+for history — nothing in it is still pending.** For continuing work on Level 2,
+see `HANDOFF-LEVEL2.md`.
 
 Branch `claude/roblox-code-audit-di6qxi` · PR #1 · 8 commits · 48 files,
 +2029 / −932.
