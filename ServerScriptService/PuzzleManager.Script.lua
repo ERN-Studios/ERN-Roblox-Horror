@@ -151,24 +151,7 @@ local function eligibleCell()
 	local ELEV_X = attr("ELEV_X", 20)
 	local ELEV_Y = attr("ELEV_Y", 20)
 
-	local pits = {}
-	local pf = workspace:FindFirstChild("PitZones")
-	if pf then
-		for _, z in ipairs(pf:GetChildren()) do
-			if z.Name == "Zone" then
-				table.insert(pits, {
-					minX = z.Position.X - z.Size.X / 2, maxX = z.Position.X + z.Size.X / 2,
-					minZ = z.Position.Z - z.Size.Z / 2, maxZ = z.Position.Z + z.Size.Z / 2,
-				})
-			end
-		end
-	end
-	local function inPit(cx, cz)
-		for _, r in ipairs(pits) do
-			if cx > r.minX and cx < r.maxX and cz > r.minZ and cz < r.maxZ then return true end
-		end
-		return false
-	end
+	local pits = pitRects()
 
 	return function(edgeOnly)
 		local x = math.random(2, GRID - 1)
@@ -180,7 +163,7 @@ local function eligibleCell()
 		end
 		if math.max(math.abs(x - ELEV_X), math.abs(z - ELEV_Y)) <= 3 then return nil end
 		local c = cellCenter(x, z, CELL, O)
-		if inPit(c.X, c.Z) then return nil end
+		if inAnyPit(c.X, c.Z, pits) then return nil end
 		local fy = floorY(c.X, c.Z)
 		if not fy then return nil end
 		return Vector3.new(c.X, fy, c.Z)
@@ -359,10 +342,20 @@ local function updateCarriedFuse(player, count)
 		Brightness = 0.35,
 		Range = 5,
 	}):Play()
-	TweenService:Create(visual, TweenInfo.new(0.65, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-		Color = Color3.fromRGB(215, 178, 45),
-	}):Play()
+end
 
+-- One workspace sweep per puzzle build: every relay reuses the same
+-- SurfaceLight inventory instead of re-scanning every workspace descendant
+-- once per relay (up to 12 full scans over the finished 40x40 maze).
+local surfaceLightCache = nil
+local function workspaceSurfaceLights()
+	if surfaceLightCache then return surfaceLightCache end
+	local list = {}
+	for _, item in ipairs(workspace:GetDescendants()) do
+		if item:IsA("SurfaceLight") then list[#list + 1] = item end
+	end
+	surfaceLightCache = list
+	return list
 end
 
 -- Wall-mounted replacement for loose floor fuses. The relay remains in the
@@ -486,8 +479,8 @@ local function makeFuseRelay(cf, folder)
 	-- A restrained cluster of warm ceiling lamps helps exploration without
 	-- turning the relay into a beacon visible across the entire maze.
 	local candidates = {}
-	for _, item in ipairs(workspace:GetDescendants()) do
-		if item:IsA("SurfaceLight") and item.Parent and item.Parent:IsA("BasePart") then
+	for _, item in ipairs(workspaceSurfaceLights()) do
+		if item.Parent and item.Parent:IsA("BasePart") then
 			local distance = (item.Parent.Position - core.Position).Magnitude
 			if distance <= 100 then
 				candidates[#candidates + 1] = { light = item, distance = distance }
@@ -781,7 +774,6 @@ local function makeExit(cf, folder)
 	local model = Instance.new("Model")
 	model.Name = "Exit"
 	local FRAME = Color3.fromRGB(20, 28, 25)
-	local TRIM = Color3.fromRGB(70, 88, 75)
 
 	-- heavy outer portal frame; the original bright green energy field remains
 	build(cf, Vector3.new(1.05, 12.5, 1.25), CFrame.new(-3.75, 2, -0.5), FRAME, Enum.Material.Metal, model, "PostL")
@@ -901,6 +893,7 @@ end
 
 -- ── round lifecycle ───────────────────────────────────────
 local function clearPuzzle()
+	surfaceLightCache = nil -- the maze (and its lights) is rebuilt every round
 	if not session then
 		workspace:SetAttribute("Level1ActiveCircuitCount", nil)
 		workspace:SetAttribute("EntityObjectiveTarget", nil)
@@ -925,6 +918,10 @@ local function startPuzzle()
 	while workspace:GetAttribute("DecorReady") ~= true and os.clock() < decorDeadline do
 		task.wait(0.1)
 	end
+	-- The round can end (or be torn down) during the wait above; building a
+	-- ghost session for a dead round leaks its folder and connections until the
+	-- next round's clearPuzzle.
+	if workspace:GetAttribute("RoundActive") ~= true then return end
 
 	-- Only the party that stood in the lobby launch square owns this puzzle.
 	local roundPlayers, roundPlayerSet = {}, {}
@@ -955,6 +952,19 @@ local function startPuzzle()
 		escaped = {}, escapeAnnounced = false, -- who's out + first-escape latch
 		participants = roundPlayerSet,
 	}
+
+	-- Emergency Re-entry respawns a participant mid-round: their carried count
+	-- survives in session.carried, but the hand visual lived on the old
+	-- character, so rebuild it on every fresh body.
+	for _, participant in ipairs(roundPlayers) do
+		table.insert(session.conns, participant.CharacterAdded:Connect(function()
+			task.defer(function()
+				if session and session.active and session.participants[participant] then
+					updateCarriedFuse(participant, session.carried[participant] or 0)
+				end
+			end)
+		end))
+	end
 
 	local function updateEntityObjectiveTarget()
 		if not session or not session.active then return end
@@ -1227,8 +1237,11 @@ local function startPuzzle()
 		local lever = makeLever(cf, folder)
 		lever.model.Name = ("Lever_%02d"):format(leverIndex)
 		table.insert(session.levers, lever)
-		table.insert(session.conns, lever.prompt.Triggered:Connect(function()
+		table.insert(session.conns, lever.prompt.Triggered:Connect(function(player)
 			if not session or not session.active or session.stage ~= "levers" then return end
+			-- Same participant contract as the relays: only the launched party
+			-- may drive the exit circuit.
+			if session.participants[player] ~= true then return end
 			if lever.latched then return end
 
 			if lever.pullSound then lever.pullSound:Play() end
@@ -1943,7 +1956,7 @@ local function startPuzzle()
 	table.insert(session.conns, session.exit.trig.Touched:Connect(function(hit)
 		if not session or not session.exit.open then return end
 		local p = Players:GetPlayerFromCharacter(hit.Parent)
-		if not p or session.escaped[p] then return end
+		if not p or session.escaped[p] or session.participants[p] ~= true then return end
 		local char = p.Character
 		local hrp = char and char:FindFirstChild("HumanoidRootPart")
 		if not hrp then return end
@@ -1978,8 +1991,9 @@ local function startPuzzle()
 
 		-- All distribution boxes are live: the building enters a continuous
 		-- red overload alert until the levers divert power to the exit door.
+		-- The LightMode attribute alone drives every client (siren + red wash);
+		-- no remote event is needed.
 		workspace:SetAttribute("LightMode", "ALERT")
-		status:FireAllClients("alert")
 
 		-- Show POWER RESTORED for three seconds, then blink ALERT.
 		for _, poweredBox in ipairs(session.boxes) do
@@ -2067,15 +2081,23 @@ local function startPuzzle()
 	end
 end
 
--- watch the round flag set by GameManager
+-- watch the round flag set by GameManager. Levels 2/3 raise RoundActive too,
+-- but they own their own objectives — this fuse puzzle belongs to Level 1 only
+-- (without the guard it stalls 15s on DecorReady, then asserts on the missing
+-- Maze model every non-Level-1 round).
+local function isLevelOneRound()
+	local level = workspace:GetAttribute("SelectedLevel")
+	return level == nil or level == 1
+end
+
 workspace:GetAttributeChangedSignal("RoundActive"):Connect(function()
 	if workspace:GetAttribute("RoundActive") then
-		startPuzzle()
+		if isLevelOneRound() then startPuzzle() end
 	else
 		clearPuzzle()
 	end
 end)
 
-if workspace:GetAttribute("RoundActive") then startPuzzle() end
+if workspace:GetAttribute("RoundActive") and isLevelOneRound() then startPuzzle() end
 
 -- Lever countdown status events added for PuzzleUI.

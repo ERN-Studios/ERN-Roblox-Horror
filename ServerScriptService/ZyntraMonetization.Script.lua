@@ -157,13 +157,11 @@ end
 
 local function applyAttributes(player, data)
 	local step = Config.TokenPercentPerLevel
-	player:SetAttribute("ZyntraTokens", data.Tokens)
-	player:SetAttribute("ZyntraStaminaLevel", data.StaminaLevel)
-	player:SetAttribute("ZyntraBatteryLevel", data.BatteryLevel)
+	-- Raw profile numbers (tokens, levels, credits) travel only in the
+	-- ZyntraProfileChanged/ZyntraGetProfile payloads; gameplay consumes the two
+	-- derived multipliers plus the cosmetic colors below.
 	player:SetAttribute("ZyntraStaminaMultiplier", 1 + data.StaminaLevel * step)
 	player:SetAttribute("ZyntraBatteryMultiplier", 1 + data.BatteryLevel * step)
-	player:SetAttribute("ZyntraCompletedLevels", data.CompletedLevels)
-	player:SetAttribute("ZyntraReentryCredits", data.ReentryCredits)
 	player:SetAttribute("ZyntraHazmatColor", readColor(data.Colors.Hazmat, Config.Colors.HazmatDefault))
 	player:SetAttribute("ZyntraGlowstickColor", readColor(data.Colors.Glowstick, Config.Colors.GlowstickDefault))
 	if player:GetAttribute("InRound") == true and player:GetAttribute("ZyntraOwnsCosmeticEquipment") == true then

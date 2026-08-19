@@ -1,8 +1,10 @@
 -- DanceEmote
 -- Press G to toggle a looping dance. Cancels automatically when the player
 -- moves, jumps, or dies, so it can never fight the locomotion animations.
+-- Lobby-only: in a round G belongs to the glowstick drop (NoiseReporter).
 
 local UIS = game:GetService("UserInputService")
+local Players = game:GetService("Players")
 
 local DANCE_ID = "rbxassetid://108616760278872"
 local DANCE_KEY = Enum.KeyCode.G
@@ -27,6 +29,7 @@ end
 UIS.InputBegan:Connect(function(input, processed)
 	if processed then return end
 	if input.KeyCode ~= DANCE_KEY then return end
+	if Players.LocalPlayer:GetAttribute("InRound") == true then return end
 	if hum.Health <= 0 then return end
 
 	if track.IsPlaying then

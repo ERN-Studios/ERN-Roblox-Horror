@@ -68,6 +68,32 @@ local boxesLabel = makeLabel("FuseBoxStatus", 34)
 local carryLabel = makeLabel("FuseCarryStatus", 59)
 local leverLabel = makeLabel("LeverStatus", 84)
 
+-- Transient one-line feedback from the server ("Fuse extracted",
+-- "You have no fuses"), shown just above the objective panel.
+local msgLabel = Instance.new("TextLabel")
+msgLabel.Name = "PuzzleMessage"
+msgLabel.AnchorPoint = Vector2.new(1, 1)
+msgLabel.Position = UDim2.new(1, -18, 1, -136)
+msgLabel.Size = UDim2.new(0, 300, 0, 22)
+msgLabel.BackgroundTransparency = 1
+msgLabel.Font = Enum.Font.Code
+msgLabel.TextSize = 15
+msgLabel.TextXAlignment = Enum.TextXAlignment.Right
+msgLabel.TextColor3 = Color3.fromRGB(235, 220, 150)
+msgLabel.Visible = false
+msgLabel.Parent = gui
+
+local msgSerial = 0
+local function showMessage(text)
+	msgSerial += 1
+	local serial = msgSerial
+	msgLabel.Text = tostring(text)
+	msgLabel.Visible = true
+	task.delay(1.8, function()
+		if msgSerial == serial then msgLabel.Visible = false end
+	end)
+end
+
 -- Handheld exit-signal receiver
 local receiver = Instance.new("Frame")
 receiver.Name = "ExitEnergyDetector"
@@ -228,7 +254,10 @@ local function showCounters(on)
 	objectivePanel.Visible = on
 	boxesLabel.Visible = on
 	carryLabel.Visible = on
-	if not on then leverLabel.Visible = false end
+	if not on then
+		leverLabel.Visible = false
+		msgLabel.Visible = false
+	end
 end
 
 local function refreshLever()
@@ -279,6 +308,9 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d)
 
 	elseif ev == "carry" then
 		carryLabel.Text = "FUSES HELD  " .. a
+
+	elseif ev == "msg" then
+		showMessage(a)
 
 	elseif ev == "boxes" then
 		boxesLabel.Text = ("%s FUSE BOXES  %d/%d"):format(progressMeter(a, b), a, b)

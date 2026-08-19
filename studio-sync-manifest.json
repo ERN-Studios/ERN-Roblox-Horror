@@ -43,17 +43,19 @@
       "studioPath": "ServerScriptService.FlashlightSync",
       "className": "Script",
       "file": "ServerScriptService/FlashlightSync.Script.lua",
-      "bytes": 6366,
-      "sha256": "c60677492bece4173bbb84748adba10cd1d5d9d889e76572277de781ff001240",
-      "status": "synced"
+      "bytes": 6157,
+      "sha256": "729fcecbdd4fe1c78c54a89d6d4459e2a5824b7f532962d76ee2ccb736f7f184",
+      "status": "pending-studio-push",
+      "studioSha256Before": "c60677492bece4173bbb84748adba10cd1d5d9d889e76572277de781ff001240"
     },
     {
       "studioPath": "ServerScriptService.EntityAI",
       "className": "Script",
       "file": "ServerScriptService/EntityAI.Script.lua",
-      "bytes": 53845,
-      "sha256": "c3d6360d8e9361437114d77fe10e657b8534852a2df9b921ce8a517cb6e97afa",
-      "status": "synced"
+      "bytes": 54045,
+      "sha256": "b405631f0111c2d58674b5575f0187c1392cadfbd0403e9efa4e317b2611f1fc",
+      "status": "pending-studio-push",
+      "studioSha256Before": "c3d6360d8e9361437114d77fe10e657b8534852a2df9b921ce8a517cb6e97afa"
     },
     {
       "studioPath": "ServerScriptService.EntityKill",
@@ -67,9 +69,10 @@
       "studioPath": "ServerScriptService.MazeGenerator",
       "className": "Script",
       "file": "ServerScriptService/MazeGenerator.Script.lua",
-      "bytes": 80863,
-      "sha256": "c7cdcdac89daf3880944ce54e27f870ef8e707e2e681dc80967766268d804061",
-      "status": "synced"
+      "bytes": 81096,
+      "sha256": "551ae38f048398dda957a905954151ec99c8b7979e9dbdc5798e3bfdf430649c",
+      "status": "pending-studio-push",
+      "studioSha256Before": "c7cdcdac89daf3880944ce54e27f870ef8e707e2e681dc80967766268d804061"
     },
     {
       "studioPath": "ServerScriptService.GameManager",
@@ -84,9 +87,10 @@
       "studioPath": "ServerScriptService.PuzzleManager",
       "className": "Script",
       "file": "ServerScriptService/PuzzleManager.Script.lua",
-      "bytes": 81133,
-      "sha256": "54f227ccf176b21ff5a1e559471baff5609803a77c54349d97878854c7fec1ef",
-      "status": "synced"
+      "bytes": 82483,
+      "sha256": "6767600075ec294f10cf40a44bfcb5aca76b06ed2a5988f833aa20c8b8135e9a",
+      "status": "pending-studio-push",
+      "studioSha256Before": "54f227ccf176b21ff5a1e559471baff5609803a77c54349d97878854c7fec1ef"
     },
     {
       "studioPath": "ServerScriptService.EntityAnimation",
@@ -100,25 +104,28 @@
       "studioPath": "ServerScriptService.AvatarNormalize",
       "className": "Script",
       "file": "ServerScriptService/AvatarNormalize.Script.lua",
-      "bytes": 1987,
-      "sha256": "3f21d074e27c302c91a94791a47f659dd53d51ef618c9805edb56240f4f41d1b",
-      "status": "synced"
+      "bytes": 2304,
+      "sha256": "167c1ef0030b6584829e530a677c1a3740406a8baea5b3975b7857f3dc42d408",
+      "status": "pending-studio-push",
+      "studioSha256Before": "3f21d074e27c302c91a94791a47f659dd53d51ef618c9805edb56240f4f41d1b"
     },
     {
       "studioPath": "ServerScriptService.TunnelLobbyBuilder",
       "className": "ModuleScript",
       "file": "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
-      "bytes": 69050,
-      "sha256": "fa766cd2590c7e27028d097472e0a972a11275ff6ee556c9e719467df4f388a6",
-      "status": "synced"
+      "bytes": 69017,
+      "sha256": "7dea508e3e375569678aef42b4931503c0fc9792a7cedda85afe31f3b564bd09",
+      "status": "pending-studio-push",
+      "studioSha256Before": "fa766cd2590c7e27028d097472e0a972a11275ff6ee556c9e719467df4f388a6"
     },
     {
       "studioPath": "ServerScriptService.ZyntraMonetization",
       "className": "Script",
       "file": "ServerScriptService/ZyntraMonetization.Script.lua",
-      "bytes": 17511,
-      "sha256": "e1aa0187c9aa1245c3273f7cf59478e2f2f888553fdec9c4fc676db0525765d9",
-      "status": "synced"
+      "bytes": 17406,
+      "sha256": "437db92b834455a7cf9c20c952c39529bb2cfdcc3912f506754f5395a29dcad8",
+      "status": "pending-studio-push",
+      "studioSha256Before": "e1aa0187c9aa1245c3273f7cf59478e2f2f888553fdec9c4fc676db0525765d9"
     },
     {
       "studioPath": "ServerScriptService.Level2Generator",
@@ -180,25 +187,28 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.RoundUI",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
-      "bytes": 74113,
-      "sha256": "37fc4ebdb9eee7ceadf19d926bd15c0d72b61215d08ee05af7df58f59ad4516a",
-      "status": "synced"
+      "bytes": 74298,
+      "sha256": "f92d3a1edcee911bbc2f99dc6515415168787e0a3abac6d927940376ef57c101",
+      "status": "pending-studio-push",
+      "studioSha256Before": "37fc4ebdb9eee7ceadf19d926bd15c0d72b61215d08ee05af7df58f59ad4516a"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.SoundController",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
-      "bytes": 45942,
-      "sha256": "0415fe9b91d4cf0cb711d935dabcf5574d05abe69fb2eba3726b0d68ebf7549d",
-      "status": "synced"
+      "bytes": 45685,
+      "sha256": "b69e37c7ba054cd5ad53dbd30263b2c7a3a1826e52c598b367a0a388937819b1",
+      "status": "pending-studio-push",
+      "studioSha256Before": "0415fe9b91d4cf0cb711d935dabcf5574d05abe69fb2eba3726b0d68ebf7549d"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.PuzzleUI",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/PuzzleUI.LocalScript.lua",
-      "bytes": 11548,
-      "sha256": "6c7c73d06bd0fa699413242a7445410ab39873e02d10bce7080ba7c3db4566d1",
-      "status": "synced"
+      "bytes": 12446,
+      "sha256": "203afe76ebca26447399326d167e9e6e72ab804e29cf65720500982fc2b27d0c",
+      "status": "pending-studio-push",
+      "studioSha256Before": "6c7c73d06bd0fa699413242a7445410ab39873e02d10bce7080ba7c3db4566d1"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.DevCheats",
@@ -213,9 +223,10 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.SpectateController",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/SpectateController.LocalScript.lua",
-      "bytes": 7112,
-      "sha256": "4f0cf21eb5f55f48bc64f97460a25f51cf53c6bfc302004500d359533b632e20",
-      "status": "synced"
+      "bytes": 7800,
+      "sha256": "9cb4370bfdb270c760ebf397fb725f4e678c480aad24320cb65ef0dbfc5ce656",
+      "status": "pending-studio-push",
+      "studioSha256Before": "4f0cf21eb5f55f48bc64f97460a25f51cf53c6bfc302004500d359533b632e20"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.EntityShakeController",
@@ -237,9 +248,10 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
-      "bytes": 32873,
-      "sha256": "9ed50fb74ff7c630c04d286f38fa2ce09c3dc6caf6c8009261e8833881cbd488",
-      "status": "synced"
+      "bytes": 32757,
+      "sha256": "9fa6ec2baea4fafa79f1f436348c04d99397bbd339193459223fb3d76a9a9a95",
+      "status": "pending-studio-push",
+      "studioSha256Before": "9ed50fb74ff7c630c04d286f38fa2ce09c3dc6caf6c8009261e8833881cbd488"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 1 Sound Controller",
@@ -335,9 +347,10 @@
       "studioPath": "StarterPlayer.StarterCharacterScripts.DanceEmote",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua",
-      "bytes": 1349,
-      "sha256": "1c85fd6e901041587c388de9e1bb05501a08b1f6d2beb65ac3f227c8decf3a93",
-      "status": "synced"
+      "bytes": 1539,
+      "sha256": "1adfdded75ae74aba87cb74c69590e55219b2ac9e7f5adc1a7f535cceb39fa8b",
+      "status": "pending-studio-push",
+      "studioSha256Before": "1c85fd6e901041587c388de9e1bb05501a08b1f6d2beb65ac3f227c8decf3a93"
     },
     {
       "studioPath": "StarterPlayer.StarterCharacter.Animate",

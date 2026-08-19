@@ -9,6 +9,11 @@
 --
 -- NOTE: the fully permanent way is Studio → Game Settings → Avatar (set body-scale
 -- min/max to fixed). This script enforces it at runtime regardless of that.
+--
+-- STATUS: currently inert belt-and-braces. In-round characters all spawn from
+-- the single shared hazmat StarterCharacter rig (GameManager parks it only for
+-- lobby loads), so no player-controlled scale can reach this path today. Kept
+-- in case gameplay spawns ever go back to HumanoidDescription-based loads.
 
 local Players = game:GetService("Players")
 

@@ -371,6 +371,7 @@ local function shouldShowCursor()
  return player:GetAttribute("InRound") ~= true
   or queueShade.Visible
   or player:GetAttribute("DevPhoneOpen") == true
+  or player:GetAttribute("ZyntraReentryOpen") == true
 end
 
 local function refreshCursor()
@@ -383,13 +384,15 @@ end
 queueShade:GetPropertyChangedSignal("Visible"):Connect(refreshCursor)
 player:GetAttributeChangedSignal("InRound"):Connect(refreshCursor)
 player:GetAttributeChangedSignal("DevPhoneOpen"):Connect(refreshCursor)
+player:GetAttributeChangedSignal("ZyntraReentryOpen"):Connect(refreshCursor)
 refreshCursor()
 
 -- An open modal must keep the pointer free. Ordinary lobby play deliberately
 -- does not touch MouseBehavior here: Roblox uses its temporary right-button
 -- lock to rotate the Classic camera while RMB is held.
 RunService.RenderStepped:Connect(function()
- if UIS.MouseEnabled and (queueShade.Visible or player:GetAttribute("DevPhoneOpen") == true) then
+ if UIS.MouseEnabled and (queueShade.Visible or player:GetAttribute("DevPhoneOpen") == true
+  or player:GetAttribute("ZyntraReentryOpen") == true) then
   UIS.MouseBehavior = Enum.MouseBehavior.Default
   UIS.MouseIconEnabled = true
  end
