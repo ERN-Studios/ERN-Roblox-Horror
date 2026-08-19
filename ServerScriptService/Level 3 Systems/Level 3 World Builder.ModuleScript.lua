@@ -28,7 +28,6 @@ local TEXTURES = {
 	PastelWallpaper = contentTexture("PastelWallpaperTexture", Configuration.Textures.PastelWallpaper),
 	OrangeWall = contentTexture("OrangeWallTexture", Configuration.Textures.OrangeWall),
 	ConfettiTablecloth = contentTexture("ConfettiTableclothTexture", Configuration.Textures.ConfettiTablecloth),
-	StaffDoor = contentTexture("StaffDoorTexture", Configuration.Textures.StaffDoor),
 	FinalExitDoor = contentTexture("FinalExitDoorTexture", Configuration.Textures.FinalExitDoor),
 	KidsDrawingsAtlas = contentTexture("KidsDrawingsAtlasTexture", Configuration.Textures.KidsDrawingsAtlas),
 	KidsDrawingsWholesome25 = contentTexture("KidsDrawingsWholesome25Texture", Configuration.Textures.KidsDrawingsWholesome25),
@@ -199,20 +198,6 @@ local function makeWall(parent: Instance, room: {[string]: any}, side: string, h
 				cfAlong(0, doorH + lintelHeight * .5),
 				wallSize(doorW, lintelHeight), color, face, wallpaper)
 		end
-	end
-end
-
-local function makeBaseboard(parent: Instance, room: {[string]: any})
-	local p = worldPosition(room)
-	local y = 0.55
-	for _, data in ipairs({
-		{CFrame.new(p + Vector3.new(0, y, -room.D * .5 + .7)), Vector3.new(room.W - 1.4, 1.1, .28)},
-		{CFrame.new(p + Vector3.new(0, y, room.D * .5 - .7)), Vector3.new(room.W - 1.4, 1.1, .28)},
-		{CFrame.new(p + Vector3.new(-room.W * .5 + .7, y, 0)), Vector3.new(.28, 1.1, room.D - 1.4)},
-		{CFrame.new(p + Vector3.new(room.W * .5 - .7, y, 0)), Vector3.new(.28, 1.1, room.D - 1.4)},
-	}) do
-		local trim = part(parent, "Level 3 Baseboard", data[1], data[2], C.Trim, Enum.Material.WoodPlanks)
-		decorative(trim)
 	end
 end
 
@@ -410,44 +395,6 @@ local function makeTable(parent: Instance, cframe: CFrame, party: boolean, chair
 		end
 	end
 	return top
-end
-
-local function makeShelf(parent: Instance, cframe: CFrame, width: number)
-	for _, y in ipairs({1.2, 4.1, 7.0}) do
-		part(parent, "Level 3 Shelf", cframe * CFrame.new(0, y, 0),
-			Vector3.new(width, .35, 2.4), C.Metal, Enum.Material.Metal)
-	end
-	for _, x in ipairs({-width * .5 + .3, width * .5 - .3}) do
-		part(parent, "Level 3 Shelf Upright", cframe * CFrame.new(x, 4.1, 0),
-			Vector3.new(.4, 8.2, 2.2), C.Metal, Enum.Material.Metal)
-	end
-end
-
-local function makeBoxes(parent: Instance, base: CFrame, count: number)
-	local colors = {Color3.fromRGB(133, 102, 66), Color3.fromRGB(156, 122, 76), Color3.fromRGB(107, 83, 59)}
-	for i = 1, count do
-		local row = math.floor((i - 1) / 4)
-		local col = (i - 1) % 4
-		local size = Vector3.new(2.4 + (i % 2) * .7, 2.1 + (i % 3) * .4, 2.6)
-		part(parent, "Level 3 Storage Carton", base * CFrame.new(col * 3.3, size.Y * .5 + row * 2.9, 0),
-			size, colors[(i - 1) % #colors + 1], Enum.Material.Cardboard)
-	end
-end
-
-local function makeDesk(parent: Instance, cframe: CFrame, withCrt: boolean)
-	part(parent, "Level 3 Office Desk", cframe * CFrame.new(0, 2.7, 0),
-		Vector3.new(9, .6, 4), C.Wood, Enum.Material.WoodPlanks)
-	for _, x in ipairs({-4, 4}) do
-		part(parent, "Level 3 Desk Pedestal", cframe * CFrame.new(x, 1.35, 0),
-			Vector3.new(1, 2.7, 3.4), C.Wood, Enum.Material.WoodPlanks)
-	end
-	if withCrt then
-		part(parent, "Level 3 CRT Monitor", cframe * CFrame.new(1.6, 4.4, 0),
-			Vector3.new(3.4, 2.7, 2.6), Color3.fromRGB(91, 87, 73), Enum.Material.SmoothPlastic)
-		local screen = part(parent, "Level 3 CRT Screen", cframe * CFrame.new(1.6, 4.45, -1.33),
-			Vector3.new(2.5, 1.7, .08), Color3.fromRGB(24, 31, 29), Enum.Material.Glass, .12)
-		decorative(screen)
-	end
 end
 
 local function segmentBetween(parent: Instance, name: string, a: Vector3, b: Vector3,
@@ -703,17 +650,6 @@ local function makeCorridorWallDecor(parent: Instance, startPoint: Vector3, endP
 	end
 end
 
-local function makeFakePlant(parent: Instance, position: Vector3)
-	part(parent, "Level 3 Plant Pot", CFrame.new(position + Vector3.new(0, 1.1, 0)),
-		Vector3.new(2.2, 2.2, 2.2), Color3.fromRGB(104, 69, 50), Enum.Material.ClayRoofTiles)
-	for i = 1, 5 do
-		local leaf = part(parent, "Level 3 Fake Plant", CFrame.new(position + Vector3.new((i - 3) * .35, 3.2 + (i % 2), 0))
-			* CFrame.Angles(0, 0, math.rad((i - 3) * 18)), Vector3.new(.65, 4, 1.2),
-			Color3.fromRGB(54, 92, 54), Enum.Material.LeafyGrass)
-		decorative(leaf)
-	end
-end
-
 local function makeLooseBalloons(parent: Instance, center: Vector3, count: number, seed: number)
 	local colors = {Color3.fromRGB(187, 42, 52), Color3.fromRGB(40, 104, 169),
 		Color3.fromRGB(55, 139, 91), Color3.fromRGB(210, 159, 37), Color3.fromRGB(119, 61, 151)}
@@ -875,104 +811,6 @@ local function makeRoomStructure(parent: Instance, room: {[string]: any})
 			Vector3.new(room.W * .68, 1.5, 1.1), color:Lerp(Color3.new(0, 0, 0), .08), Enum.Material.Plaster)
 		beam.CanCollide = true
 	end
-end
-
-local function addDoorFrame(parent: Instance, frameCF: CFrame, color: Color3, wallColorValue: Color3, wallpaper: boolean)
-	local w, h = Configuration.DoorWidth, Configuration.DoorHeight
-	local jambWidth = .58
-	for _, x in ipairs({-w * .5 - jambWidth * .5, w * .5 + jambWidth * .5}) do
-		part(parent, "Level 3 Door Jamb", frameCF * CFrame.new(x, h * .5, 0),
-			Vector3.new(jambWidth, h + .5, .72), color, Enum.Material.Metal)
-	end
-	part(parent, "Level 3 Door Header", frameCF * CFrame.new(0, h + .25, 0),
-		Vector3.new(w + jambWidth * 2, .5, .72), color, Enum.Material.Metal)
-	local bulkheadHeight = Configuration.RoomHeight - (h + .5)
-	if bulkheadHeight > .05 then
-		local bulkhead = part(parent, "Level 3 Door Bulkhead",
-			frameCF * CFrame.new(0, h + .5 + bulkheadHeight * .5, 0),
-			Vector3.new(Configuration.CorridorWidth, bulkheadHeight, Configuration.WallThickness),
-			wallColorValue, Enum.Material.Plaster)
-		if wallpaper then
-			texture(bulkhead, TEXTURES.PastelWallpaper, Enum.NormalId.Front,
-				Configuration.TextureStuds.Wallpaper, Configuration.TextureStuds.Wallpaper, .08)
-			texture(bulkhead, TEXTURES.PastelWallpaper, Enum.NormalId.Back,
-				Configuration.TextureStuds.Wallpaper, Configuration.TextureStuds.Wallpaper, .08)
-		end
-	end
-	local fillerWidth = math.max(.1, (Configuration.CorridorWidth - (w + jambWidth * 2)) * .5)
-	for _, x in ipairs({-(w + jambWidth * 2) * .5 - fillerWidth * .5, (w + jambWidth * 2) * .5 + fillerWidth * .5}) do
-		local filler = part(parent, "Level 3 Door Side Filler", frameCF * CFrame.new(x, h * .5, 0),
-			Vector3.new(fillerWidth + .05, h + .5, Configuration.WallThickness), wallColorValue, Enum.Material.Plaster)
-		if wallpaper then
-			texture(filler, TEXTURES.PastelWallpaper, Enum.NormalId.Front,
-				Configuration.TextureStuds.Wallpaper, Configuration.TextureStuds.Wallpaper, .08)
-			texture(filler, TEXTURES.PastelWallpaper, Enum.NormalId.Back,
-				Configuration.TextureStuds.Wallpaper, Configuration.TextureStuds.Wallpaper, .08)
-		end
-	end
-end
-
-local function makeDoor(parent: Instance, id: string, floorPosition: Vector3,
-	forward: Vector3, doorType: string, title: string, wallColorValue: Color3?, wallpaper: boolean?): {[string]: any}
-	local model = Instance.new("Model")
-	model.Name = "Level 3 Door " .. id
-	model.Parent = parent
-	local w, h = Configuration.DoorWidth, Configuration.DoorHeight
-	local frameCF = CFrame.lookAt(floorPosition, floorPosition + forward)
-	addDoorFrame(model, frameCF, C.Metal, wallColorValue or C.MutedOrange, wallpaper == true)
-	local closed = frameCF * CFrame.new(0, h * .5, 0)
-	local leaf = part(model, "Door", closed, Vector3.new(w, h, .55),
-		Color3.fromRGB(112, 57, 37), Enum.Material.Metal)
-	texture(leaf, TEXTURES.StaffDoor, Enum.NormalId.Front, w, h)
-	texture(leaf, TEXTURES.StaffDoor, Enum.NormalId.Back, w, h)
-	local hinge = frameCF * CFrame.new(-w * .5, h * .5, 0)
-	local open = hinge * CFrame.Angles(0, math.rad(-94), 0) * CFrame.new(w * .5, 0, 0)
-	local handle = part(model, "Handle", closed * CFrame.new(w * .34, 0, -.45),
-		Vector3.new(.35, .35, .85), Color3.fromRGB(141, 126, 85), Enum.Material.Metal)
-	handle.Shape = Enum.PartType.Cylinder
-	decorative(handle)
-	local prompt = Instance.new("ProximityPrompt")
-	prompt.Name = "DoorPrompt"
-	prompt.ActionText = "OPEN"
-	prompt.ObjectText = title
-	prompt.HoldDuration = .15
-	prompt.MaxActivationDistance = 7
-	prompt.RequiresLineOfSight = true
-	prompt.KeyboardKeyCode = Enum.KeyCode.E
-	prompt.Parent = leaf
-	local movement = Instance.new("Sound")
-	movement.Name = "Door Movement"
-	movement.SoundId = Configuration.Audio.DoorMovement
-	movement.Volume = .32
-	movement.RollOffMaxDistance = 38
-	movement.Parent = leaf
-	model.PrimaryPart = leaf
-	model:SetAttribute("Level3_DoorId", id)
-	model:SetAttribute("Level3_DoorType", doorType)
-	model:SetAttribute("Level3_DoorOpen", false)
-	return {Id=id, Model=model, Leaf=leaf, Prompt=prompt, Closed=closed, Open=open, Type=doorType}
-end
-
-local function makeLockedDoor(parent: Instance, room: {[string]: any}, side: string, offset: number,
-	index: number): {[string]: any}
-	local p = worldPosition(room)
-	local t = Configuration.WallThickness
-	local floorPosition, forward
-	if side == "North" then floorPosition = p + Vector3.new(offset, 0, -room.D * .5 + t); forward = Vector3.new(0, 0, 1)
-	elseif side == "South" then floorPosition = p + Vector3.new(offset, 0, room.D * .5 - t); forward = Vector3.new(0, 0, -1)
-	elseif side == "West" then floorPosition = p + Vector3.new(-room.W * .5 + t, 0, offset); forward = Vector3.new(1, 0, 0)
-	else floorPosition = p + Vector3.new(room.W * .5 - t, 0, offset); forward = Vector3.new(-1, 0, 0) end
-	local record = makeDoor(parent, room.Id .. "_LOCKED_" .. index, floorPosition, forward, "Locked", "STAFF ACCESS",
-		wallColor(room), usesWallpaper(room))
-	record.Prompt.ActionText = "TRY HANDLE"
-	record.Prompt.HoldDuration = .2
-	local rattle = Instance.new("Sound")
-	rattle.Name = "Locked Handle Rattle"
-	rattle.SoundId = Configuration.Audio.DoorRattle
-	rattle.Volume = .38
-	rattle.RollOffMaxDistance = 32
-	rattle.Parent = record.Leaf
-	return record
 end
 
 local function makeHiddenExitPortal(parent: Instance, corridor: {[string]: any}): {[string]: any}
@@ -1475,7 +1313,7 @@ function Builder.Build(layout: {[string]: any}, generation: number): {[string]: 
 	world:SetAttribute("Level3_Theme", "Three District Abandoned Mall Backrooms")
 	world:SetAttribute("Level3_LayoutHash", layout.LayoutHash or "")
 	world:SetAttribute("Level3_ResolvedSeed", layout.ResolvedSeed or 0)
-	world:SetAttribute("Level3_GeneratorVersion", layout.GeneratorVersion or Configuration.Layout.GeneratorVersion)
+	world:SetAttribute("Level3_GeneratorVersion", layout.Version or Configuration.Layout.GeneratorVersion)
 	-- Build away from Workspace so clients never stream a half-built maze.  The
 	-- loading screen remains authoritative until the completed model is published.
 	world.Parent = ServerStorage

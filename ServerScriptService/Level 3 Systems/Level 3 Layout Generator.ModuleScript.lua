@@ -20,6 +20,16 @@ local MODULE_GOAL = 5
 local ENTRY_AND_GATEWAY_LINKS = 4
 local MAX_SEED = 2147483646
 
+-- The district sizing is structural: ROOMS_PER_DISTRICT is the 2x4 room grid.
+-- Configuration.Layout advertises the same numbers to the test suite and world
+-- builder, so a config edit that the generator cannot honor must fail loudly
+-- instead of silently generating the old shape.
+assert(Configuration.Layout.DistrictCount == DISTRICT_COUNT
+	and Configuration.Layout.RoomsPerDistrict == ROOMS_PER_DISTRICT
+	and ROOMS_PER_DISTRICT == GRID_ROWS * GRID_COLUMNS
+	and Configuration.Layout.GeneratorVersion == VERSION,
+	"Level 3 Configuration.Layout district sizing drifted from the generator's fixed grid")
+
 local DEFAULTS = {
 	GenerationAttempts = 24,
 	RetryStride = 104729,

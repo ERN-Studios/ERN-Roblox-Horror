@@ -570,22 +570,33 @@ local function navigationIgnored(session: any): {Instance}
 	return ignored
 end
 
+-- Filter params are rebuilt at most once per Heartbeat: the ignore list only
+-- changes when a character (re)spawns, while a single movement step can probe
+-- dozens of volumes (straight step + 10 avoidance angles + path lookahead).
+local function refreshNavigationFilters(session: any)
+	local ignored = navigationIgnored(session)
+	local raycast = RaycastParams.new()
+	raycast.FilterType = Enum.RaycastFilterType.Exclude
+	raycast.FilterDescendantsInstances = ignored
+	raycast.IgnoreWater = true
+	raycast.RespectCanCollide = true
+	session.NavigationRaycastParams = raycast
+	local overlap = OverlapParams.new()
+	overlap.FilterType = Enum.RaycastFilterType.Exclude
+	overlap.FilterDescendantsInstances = ignored
+	overlap.RespectCanCollide = true
+	overlap.MaxParts = 1
+	session.NavigationOverlapParams = overlap
+end
+
 local function navigationParams(session: any): RaycastParams
-	local params = RaycastParams.new()
-	params.FilterType = Enum.RaycastFilterType.Exclude
-	params.FilterDescendantsInstances = navigationIgnored(session)
-	params.IgnoreWater = true
-	params.RespectCanCollide = true
-	return params
+	if not session.NavigationRaycastParams then refreshNavigationFilters(session) end
+	return session.NavigationRaycastParams
 end
 
 local function navigationOverlapParams(session: any): OverlapParams
-	local params = OverlapParams.new()
-	params.FilterType = Enum.RaycastFilterType.Exclude
-	params.FilterDescendantsInstances = navigationIgnored(session)
-	params.RespectCanCollide = true
-	params.MaxParts = 1
-	return params
+	if not session.NavigationOverlapParams then refreshNavigationFilters(session) end
+	return session.NavigationOverlapParams
 end
 
 local function clearanceBox(groundPosition: Vector3): (CFrame, Vector3)
@@ -1460,7 +1471,7 @@ local function updateMovement(session: any, dt: number, now: number)
 		local exhausted = session.ConsecutiveObstructions >= Tuning.ObstructionRecoveryAttempts
 		if exhausted then
 			clearPath(session, "OBSTRUCTION_REPATH")
-			recoverToSafeSample(session, now)
+			resetBlockedRoute(session, now)
 		else
 			publishPathStatus(session, "LOCAL_AVOIDANCE_WAIT")
 		end
@@ -2055,6 +2066,7 @@ function Controller.Start(manifest: any, generation: number)
 	table.insert(session.Connections, RunService.Heartbeat:Connect(function(dt)
 		if not liveSession(session) then return end
 		local now = os.clock()
+		refreshNavigationFilters(session)
 		session.ThinkAccumulator += dt
 		local thinkInterval = if session.Blackout
 			then Tuning.BlackoutThinkIntervalSeconds else Tuning.ThinkIntervalSeconds
@@ -2164,7 +2176,6 @@ function Controller.DebugForcePatrolRoom(roomId: string)
 	session.ConsecutiveObstructions = 0
 	session.LastPathRequest = -math.huge
 	session.ProgressResetPosition = flat(session.Root.Position, session.FloorY)
-	session.SafeCFrames = {session.Model:GetPivot()}
 	publishState(session, "PATROL")
 	setGoal(session, destination, true)
 	return Controller.GetSnapshot()

@@ -23,8 +23,6 @@ local LIBRARY_NAME = "Level 3 Sound Library"
 local DEFAULT_AUDIO: {[string]: string} = {
 	FluorescentHum = "rbxassetid://92576512092725",
 	HVAC = "rbxassetid://9125446543",
-	DoorRattle = "rbxassetid://9118901593",
-	DoorMovement = "rbxassetid://9119631915",
 	PowerDown = "",
 	RoomListeningSong = "rbxassetid://140244948455675",
 	MallManagerBlackoutScream = "rbxassetid://125407251695204",
@@ -33,13 +31,13 @@ local DEFAULT_AUDIO: {[string]: string} = {
 	ScareChildGiggle = "",
 	ScarePAWhisper = "",
 	ScareRunningSteps = "",
+	ExitUnlocked = "",
+	Escape = "",
 }
 
 local LIBRARY_ALIASES: {[string]: {string}} = {
 	FluorescentHum = {"FluorescentHum", "Level 3 Fluorescent Hum"},
 	HVAC = {"HVAC", "Level 3 HVAC"},
-	DoorRattle = {"DoorRattle", "Level 3 Door Rattle"},
-	DoorMovement = {"DoorMovement", "Level 3 Door Movement"},
 	PowerDown = {"PowerDown", "Level 3 Power Down"},
 	RoomListeningSong = {"RoomListeningSong", "The Room is Listening"},
 	MallManagerBlackoutScream = {"MallManagerBlackoutScream", "Mall Manager Walk Blackout Scream"},
@@ -48,18 +46,14 @@ local LIBRARY_ALIASES: {[string]: {string}} = {
 	ScareChildGiggle = {"ScareChildGiggle", "Level 3 Scare Child Giggle"},
 	ScarePAWhisper = {"ScarePAWhisper", "Level 3 Scare PA Whisper"},
 	ScareRunningSteps = {"ScareRunningSteps", "Level 3 Scare Running Steps"},
+	ExitUnlocked = {"ExitUnlocked", "Level 3 Exit Unlocked"},
+	Escape = {"Escape", "Level 3 Escape"},
 }
 
 type AmbientRecord = {
 	Sound: Sound,
 	TargetVolume: number,
 	Kind: string,
-}
-
-type RoomRegion = {
-	Part: BasePart,
-	HalfX: number,
-	HalfZ: number,
 }
 
 local ambience: {AmbientRecord} = {}
@@ -69,7 +63,6 @@ local worldAddedConnection: RBXScriptConnection? = nil
 local worldRemovingConnection: RBXScriptConnection? = nil
 local clientEventConnection: RBXScriptConnection? = nil
 local boundClientEvent: RemoteEvent? = nil
-local roomRegions: {RoomRegion} = {}
 local fluorescentDiffusers: {BasePart} = {}
 
 type FluorescentVoice = {Emitter: BasePart, Sound: Sound}
@@ -97,7 +90,6 @@ for voiceIndex = 1, 3 do
 	table.insert(fluorescentVoices, {Emitter=emitter, Sound=hum})
 end
 
-local lastBlackoutActive = false
 local lastObservedRoomSongPhase = "STOPPED"
 local lastPowerDownAt = -math.huge
 
@@ -108,7 +100,6 @@ roomSong.Volume = 0
 roomSong.PlaybackSpeed = 1
 roomSong.Parent = SoundService
 local roomSongAsset = ""
-local roomSongPreloaded = false
 
 type RoomSongVoice = {Sound: Sound, Effect: EqualizerSoundEffect?}
 local roomSongSpeakers: {RoomSongVoice} = {}
@@ -135,7 +126,6 @@ local BLACKOUT_SCREAM_REVERB_DRY = -3
 local BLACKOUT_SCREAM_REVERB_WET = -10
 local blackoutScreamEmitters: {Instance} = {}
 local blackoutScreamEmitterSeen: {[Instance]: boolean} = {}
-local mallManagerVoiceEmitter: Instance? = nil
 local blackoutScreamVoices: {Sound} = {}
 local lastBlackoutScreamSerial = 0
 script:SetAttribute("Level3_BlackoutScreamPlaying", false)
@@ -257,7 +247,7 @@ end
 local function tryAddBlackoutScreamEmitter(instance: Instance)
 	if instance:GetAttribute("Level3_MallManagerVoiceEmitter") == true
 		and (instance:IsA("Bone") or instance:IsA("Attachment")) then
-		mallManagerVoiceEmitter = instance
+		-- The Mall Manager's own voice bone is never a corridor scream emitter.
 		return
 	end
 	if instance:GetAttribute("Level3_CorridorOpeningScreamEmitter") ~= true
@@ -292,7 +282,11 @@ local function playBlackoutScream(serial: number, startedAt: number, duration: n
 		or stateAttribute("Level3_BlackoutActive", "Level3BlackoutActive") ~= true then
 		return false
 	end
+	-- The server replicates the authoritative scream id; the local table is the
+	-- fallback so a Configuration.Audio change cannot silently desync clients.
 	local id = resolveId("MallManagerBlackoutScream")
+	local replicated = normalizeId(stateAttribute("Level3_BlackoutScreamAssetId", nil))
+	if replicated and replicated ~= "rbxassetid://0" then id = replicated end
 	local world = currentWorld()
 	local characterRoot = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 	if not id or not world or not (characterRoot and characterRoot:IsA("BasePart")) then return false end
@@ -451,11 +445,6 @@ local function playPowerDown()
 	end)
 end
 
-local function bindBlackoutSignal()
-	-- Blackout is sampled with the rest of the replicated Level 3 state below.
-	-- Keeping it in the central 10 Hz mixer makes rebuild/state-folder swaps safe.
-end
-
 roomSongPhase = function(): string
 	local value = stateAttribute("Level3_RoomSongPhase", nil)
 	return if type(value) == "string" then value else "STOPPED"
@@ -467,33 +456,6 @@ local function songAssetId(): string?
 	if normalized and normalized ~= "rbxassetid://0" then return normalized end
 	local resolved = resolveId("RoomListeningSong")
 	return if resolved ~= "rbxassetid://0" then resolved else nil
-end
-
-local function distanceFromRoom(position: Vector3): number
-	local closest = math.huge
-	for index = #roomRegions, 1, -1 do
-		local region = roomRegions[index]
-		if not region.Part.Parent then
-			table.remove(roomRegions, index)
-		else
-			local localPosition = region.Part.CFrame:PointToObjectSpace(position)
-			local dx = math.max(math.abs(localPosition.X) - region.HalfX, 0)
-			local dz = math.max(math.abs(localPosition.Z) - region.HalfZ, 0)
-			closest = math.min(closest, math.sqrt(dx * dx + dz * dz))
-		end
-	end
-	return closest
-end
-
-local function targetSongVolume(): number
-	local character = player.Character
-	local root = character and character:FindFirstChild("HumanoidRootPart")
-	if not (root and root:IsA("BasePart")) then return 0 end
-	local distance = distanceFromRoom(root.Position)
-	local fadeDistance = 18
-	local roomVolume, corridorVolume = .48, .045
-	local alpha = 1 - math.clamp(distance / fadeDistance, 0, 1)
-	return corridorVolume + (roomVolume - corridorVolume) * alpha
 end
 
 local function stopRoomSong()
@@ -527,11 +489,9 @@ local function updateRoomSong(dt: number)
 	end
 	if id ~= roomSongAsset then
 		roomSongAsset = id
-		roomSongPreloaded = false
 		roomSong.SoundId = id
 		task.spawn(function()
 			pcall(function() ContentProvider:PreloadAsync({roomSong}) end)
-			if roomSong.SoundId == id then roomSongPreloaded = true end
 		end)
 	end
 	local startValue = stateAttribute("Level3_RoomSongStartServerTime", nil)
@@ -710,14 +670,13 @@ end
 
 type CueSpec = {Key: string, Volume: number, Speed: number}
 local CUES: {[string]: CueSpec} = {
-	DoorMovement = {Key="DoorMovement", Volume=0.34, Speed=1.00},
-	DoorLocked = {Key="DoorRattle", Volume=0.38, Speed=0.88},
-	PowerDown = {Key="PowerDown", Volume=0.92, Speed=1.00},
 	ScareBalloonPop = {Key="ScareBalloonPop", Volume=0.48, Speed=1.00},
 	ScareChairScrape = {Key="ScareChairScrape", Volume=0.52, Speed=0.94},
 	ScareChildGiggle = {Key="ScareChildGiggle", Volume=0.42, Speed=1.00},
 	ScarePAWhisper = {Key="ScarePAWhisper", Volume=0.46, Speed=1.00},
 	ScareRunningSteps = {Key="ScareRunningSteps", Volume=0.50, Speed=1.00},
+	ExitUnlocked = {Key="ExitUnlocked", Volume=0.60, Speed=1.00},
+	Escape = {Key="Escape", Volume=0.50, Speed=1.00},
 }
 
 local function playCue(cueValue: any, positionValue: any)
@@ -823,9 +782,7 @@ local function bindWorld(world: Model?)
 	clearBlackoutScream()
 	table.clear(blackoutScreamEmitters)
 	table.clear(blackoutScreamEmitterSeen)
-	mallManagerVoiceEmitter = nil
 	lastBlackoutScreamSerial = 0
-	table.clear(roomRegions)
 	table.clear(fluorescentDiffusers)
 	boundWorld = world
 	if not world then return end
@@ -833,13 +790,7 @@ local function bindWorld(world: Model?)
 		tryAddAmbience(descendant)
 		tryAddRoomSongSpeaker(descendant)
 		tryAddBlackoutScreamEmitter(descendant)
-		if descendant:IsA("BasePart") and descendant.Name == "Level 3 Room Floor" then
-			table.insert(roomRegions, {
-				Part = descendant,
-				HalfX = descendant.Size.X * .5,
-				HalfZ = descendant.Size.Z * .5,
-			})
-		elseif descendant:IsA("BasePart") and descendant.Name == "Level 3 Fluorescent Diffuser"
+		if descendant:IsA("BasePart") and descendant.Name == "Level 3 Fluorescent Diffuser"
 			and descendant:FindFirstChild("Level 3 Fluorescent Light") then
 			table.insert(fluorescentDiffusers, descendant)
 		end
@@ -850,13 +801,7 @@ local function bindWorld(world: Model?)
 			tryAddAmbience(descendant)
 			tryAddRoomSongSpeaker(descendant)
 			tryAddBlackoutScreamEmitter(descendant)
-			if descendant:IsA("BasePart") and descendant.Name == "Level 3 Room Floor" then
-				table.insert(roomRegions, {
-					Part = descendant,
-					HalfX = descendant.Size.X * .5,
-					HalfZ = descendant.Size.Z * .5,
-				})
-			elseif descendant:IsA("BasePart") and descendant.Name == "Level 3 Fluorescent Diffuser"
+			if descendant:IsA("BasePart") and descendant.Name == "Level 3 Fluorescent Diffuser"
 				and descendant:FindFirstChild("Level 3 Fluorescent Light") then
 				table.insert(fluorescentDiffusers, descendant)
 			end
@@ -902,8 +847,6 @@ local function updateReaderCadence(now: number)
 	local range = 1 - math.clamp(flat.Magnitude / 650, 0, 1)
 	local calibration = progress / goal
 	local signal = math.clamp(facing * 0.68 + range * 0.32, 0, 1)
-	local unlocked = stateAttribute("Level3_ExitUnlocked", "Level3ExitUnlocked") == true
-
 	-- The reader is visual-only. Calibration, module recovery, and exit unlock
 	-- retain their explicit UI feedback, but the directional pulse never beeps.
 	nextReaderBeep = now + (if progress == 0 then 8 else math.clamp(5.0 - calibration * 3.2 - signal * 0.55, 1.25, 5))
@@ -912,7 +855,7 @@ end
 -- Preload the small, allowlisted cue set. Empty/failed assets remain harmless.
 task.spawn(function()
 	local temporary: {Sound} = {}
-	for _, key in ipairs({"DoorRattle", "DoorMovement", "FluorescentHum", "PowerDown", "RoomListeningSong",
+	for _, key in ipairs({"FluorescentHum", "PowerDown", "RoomListeningSong",
 		"MallManagerBlackoutScream", "ScareBalloonPop", "ScareChairScrape", "ScareChildGiggle", "ScarePAWhisper", "ScareRunningSteps"}) do
 		local id = resolveId(key)
 		if id then
@@ -1004,7 +947,6 @@ RunService.Heartbeat:Connect(function(dt)
 	if sequencePhase == "PLAYING" or sequencePhase == "ARMED"
 		or sequencePhase == "PRE_BLACKOUT" or sequencePhase == "BLACKOUT_SONG" then
 		lastObservedRoomSongPhase = sequencePhase
-		lastBlackoutActive = sequencePhase == "BLACKOUT_SONG"
 	elseif sequencePhase == "BLACKOUT_HUNT" then
 		if lastObservedRoomSongPhase ~= "BLACKOUT_HUNT" and playing then
 			-- Phase replication is the audible edge; the blackout boolean still
@@ -1012,12 +954,8 @@ RunService.Heartbeat:Connect(function(dt)
 			playPowerDown()
 			lastObservedRoomSongPhase = "BLACKOUT_HUNT"
 		end
-		-- If the player/round attributes arrive one frame after blackout,
-		-- leave the cue armed so the next mixer pass can still play it.
-		lastBlackoutActive = true
 	elseif not blackoutActive then
 		lastObservedRoomSongPhase = sequencePhase
-		lastBlackoutActive = false
 	end
 	for voiceIndex, voice in ipairs(fluorescentVoices) do
 		local candidate = nearestFixtures[voiceIndex]
@@ -1032,10 +970,7 @@ RunService.Heartbeat:Connect(function(dt)
 		if humTarget > 0 and not voice.Sound.IsPlaying then voice.Sound:Play() end
 		if humTarget == 0 and voice.Sound.Volume < .003 and voice.Sound.IsPlaying then voice.Sound:Stop() end
 	end
-
-	bindBlackoutSignal()
 end)
 
 bindClientEvent()
-bindBlackoutSignal()
 refreshWorld()
