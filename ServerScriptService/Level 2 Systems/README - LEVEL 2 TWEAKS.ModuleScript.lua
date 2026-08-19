@@ -22,6 +22,12 @@
 -- ── QUICK TWEAKS (all in Level 2 Configuration) ─────────────────────────
 --  World size            ComplexExtent (1400). Bigger = more halls.
 --  Room sizes            MinimumLeafSize / MaximumSplitDepth / EarlyStopChance
+--  Exit room size        ExitHallMinimumWidth / ExitHallMinimumDepth — the
+--                        floor for the hall the exit flume launches from.
+--                        Costs generation attempts only; the comment beside
+--                        them carries the measured cost. ExitHallMaximumShellGap
+--                        keeps that hall against the east shell so the flume's
+--                        level lead-in stays short.
 --  Water depths          ShallowPoolDepth / DeepPoolDepth / SlidePoolDepth
 --  Ceiling heights       WallHeight / SlideHallHeight / GrandSlideHallHeight
 --  Colors                Configuration.Colors (tiles) / KidsColors (3 kids
@@ -31,8 +37,13 @@
 --  Kids wing size        KidsAreaRoomCount
 --
 -- ── TESTING A SPECIFIC LAYOUT ───────────────────────────────────────────
---  Set workspace attribute "Level2Seed" to any number BEFORE launching a
---  round: same seed = identical world every time. Clear it for random.
+--  Set workspace attribute "Level2Seed" to any number >= 1 BEFORE launching
+--  a round: same seed = identical world every time.
+--  Set it to 0 — or clear it — for a fresh random map every round. 0, a
+--  negative value, and anything that is not a number all mean OFF. A round
+--  NEVER writes its random pick back into the attribute.
+--  ReplicatedStorage["Level 2 State"] shows which mode a round used:
+--  Level2_SeedPinned true/false, and Level2_ResolvedSeed for what it built.
 --  Dev keys (whitelisted): B esp+fast queue · V noclip fly · M dev phone.
 --
 -- ── SUNLIGHT / MOOD ─────────────────────────────────────────────────────

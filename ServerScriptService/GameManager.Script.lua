@@ -415,6 +415,19 @@ local function placeSafelyInElevator(player, char)
  shield.Visible = false
  shield.Parent = char
  task.delay(2.5, function()
+  -- Level 2's loading cover can outlive this fixed placement grace, and the
+  -- cover does not block input (loadingFrame sets neither .Active nor .Modal,
+  -- unlike queueShade). Unanchoring on the timer alone would hand back control
+  -- while the player is still looking at black, on an arrival deck ringed by
+  -- water. Hold until the round is actually live, which by construction is
+  -- after every client has dropped its cover. Levels 1 and 3 never enter this
+  -- branch: they are already out of the cover and inside the sealed cabin.
+  if activeLevel == 2 then
+   local deadline = os.clock() + 30
+   while workspace:GetAttribute("RoundActive") ~= true and os.clock() < deadline do
+    task.wait(0.1)
+   end
+  end
   if root.Parent and hum.Parent and hum.Health > 0 and inRound[player] then
    root.AssemblyLinearVelocity = Vector3.zero
    root.Anchored = false
@@ -557,6 +570,34 @@ local function fireGroup(group, ...)
  for _, player in ipairs(group) do
   if player.Parent then status:FireClient(player, ...) end
  end
+end
+
+-- Level 1 and Level 3 hide their stream-in behind an elevator ride, which holds
+-- the round back while the client pulls the world in. Level 2 has no ride, so its
+-- clients hold a loading cover instead and report here once the complex is
+-- actually around them. RoundStatus is otherwise server -> client only; this is
+-- the sole OnServerEvent on it, and it accepts nothing but the literal tag.
+local entryReady = {}
+status.OnServerEvent:Connect(function(player, message)
+ if message == "entryready" then entryReady[player] = true end
+end)
+Players.PlayerRemoving:Connect(function(player) entryReady[player] = nil end)
+
+local function armGroupEntry(group)
+ for _, player in ipairs(group) do entryReady[player] = nil end
+end
+
+local function waitForGroupEntry(group, timeout)
+ local deadline = os.clock() + timeout
+ while os.clock() < deadline do
+  local pending = 0
+  for _, player in ipairs(group) do
+   if player.Parent and not entryReady[player] then pending += 1 end
+  end
+  if pending == 0 then return true end
+  task.wait(0.1)
+ end
+ return false
 end
 
 local function privacyLabel(station)
@@ -843,8 +884,12 @@ local function playRound(participants)
 
  if aliveCount <= 0 then sendWipedPartyHome(); return end
  if activeLevel == 2 then
+  -- No elevator ride here, so the loading cover IS the ride: hold the round
+  -- until every client reports the complex has streamed in around it. The
+  -- timeout sits one second past the client's own 15s cap so a live client
+  -- always reports first, and a dead one can still never stall the round.
   fireGroup(participants, "poolaccess")
-  task.wait(1.25)
+  waitForGroupEntry(participants, 16)
  elseif activeLevel == 3 then
   -- A short service-elevator descent establishes the mall without replaying
   -- Level 1's fuse briefing. Level 3 owns its own objective presentation.
@@ -921,7 +966,8 @@ end
 local function launchStation(station, participants)
  station.busy = true
  setStationDisplay(station, "STARTING PRIVATE WORLD", #participants .. "/" .. (station.maxPlayers or MAX_PLAYERS_PER_STATION) .. " PLAYERS", station.color)
- fireGroup(participants, "loadinggame")
+ armGroupEntry(participants)
+ fireGroup(participants, "loadinggame", station.level or 1)
 
  if IS_STUDIO then
   if roundBusy then
@@ -1204,7 +1250,8 @@ if IS_RESERVED_ROUND_SERVER then
    player:SetAttribute("InRound", true)
    player:SetAttribute("Escaped", nil)
   end
-  fireGroup(participants, "loadinggame")
+  armGroupEntry(participants)
+  fireGroup(participants, "loadinggame", selectedLevel)
 
   if ensureWorld(participants, selectedLevel) then
    for _, player in ipairs(participants) do

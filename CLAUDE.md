@@ -73,6 +73,35 @@ flashlights render twice (client MateBeam + FlashlightSync mounts); Level 3
 room wall-art tables are keyed to retired room ids so generated rooms get no
 drawings; the Slidemouth controller is complete but nothing starts it.
 
+Also landed 2026-08-19 (Studio first, then mirrored, manifest updated):
+
+- **`Level2Seed = 0` no longer pins the map.** The guard was
+  `type(requestedSeed) ~= "number"`, and 0 is a number, so a zeroed attribute
+  silently rebuilt seed 0's layout every round. 0, negatives, NaN and
+  non-numbers now all mean "pick a random seed"; only a number ≥ 1 pins.
+  `Level2_SeedPinned` in the state folder shows which mode a round used.
+  **`Level 3 Round Adapter` still carries the identical bug** at its own seed
+  read — latent only, because no `Level3Seed` attribute is set today.
+- The exit-bearing Grand Slide Hall now has its own size floor
+  (`ExitHallMinimumWidth`/`Depth` = 210×200) plus `ExitHallMaximumShellGap`
+  = 80, and `GenerationAttempts` went 40 → 300 so the deterministic recovery
+  seed stays unreachable. Details and the measured numbers are in
+  `HANDOFF-LEVEL2.md`.
+- **The Level 1 Mimic clones the source player's character wholesale**
+  (`RoundUI.LocalScript`, `mimicBuild`), so anything parented to a character
+  rides onto the apparition. The Zyntra Supporter pass parents a BillboardGui to
+  the Head, and the Mimic was wearing it — a purchase badge over a monster, and
+  an instant tell. The clone now strips every `BillboardGui`. Remember this
+  before attaching anything new to a player character.
+- **Level 2 now holds a loading cover while the client streams in.** The screen
+  is shared (`RoundUI.LocalScript`), not per level; it is coloured by
+  `LOADING_PALETTES` and Level 2's is the water blue. `poolaccess` no longer
+  uncovers — the client reports `entryready` on the `RoundStatus` remote once
+  there is real ground under it, and GameManager holds the round until then,
+  the way the elevator ride holds Level 1. **Level 1 and Level 3 are
+  unchanged.** See `HANDOFF-LEVEL2.md` §2b, including the three independent
+  timeouts that stop the cover ever trapping a player.
+
 ## House rules
 
 - Do not remove or move in-game objects (walls, props, world geometry). Code

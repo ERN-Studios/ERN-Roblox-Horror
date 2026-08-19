@@ -398,6 +398,29 @@ RunService.RenderStepped:Connect(function()
  end
 end)
 
+-- The loading cover wears the colour of the level it is covering. Level 1 keeps
+-- its terminal green. Level 2 uses the complex's own water blue — Status is
+-- literally Configuration.Colors.Water from "Level 2 Configuration", and the
+-- other three are luminance-matched to the greens they replace (within .007 of
+-- relative luminance) so the screen reads with identical weight and contrast.
+local LOADING_PALETTES = {
+	[1] = {
+		Background = Color3.fromRGB(3, 5, 4),
+		Title = Color3.fromRGB(105, 230, 135),
+		Status = Color3.fromRGB(65, 165, 90),
+		TitleDone = Color3.fromRGB(125, 255, 155),
+	},
+	[2] = {
+		Background = Color3.fromRGB(3, 6, 8),
+		Title = Color3.fromRGB(105, 222, 238),
+		Status = Color3.fromRGB(48, 150, 159),
+		TitleDone = Color3.fromRGB(155, 244, 255),
+	},
+}
+local function loadingPaletteFor(level)
+	return LOADING_PALETTES[tonumber(level) or 0] or LOADING_PALETTES[1]
+end
+
 -- Immediate startup cover: the player sees this before a character or maze exists.
 local loadingFrame = Instance.new("Frame")
 loadingFrame.Name = "LevelLoading"
@@ -435,6 +458,14 @@ loadingStatus.TextColor3 = Color3.fromRGB(65, 165, 90)
 loadingStatus.Text = "GENERATING LEVEL"
 loadingStatus.ZIndex = 101
 loadingStatus.Parent = loadingFrame
+
+local activeLoadingPalette = loadingPaletteFor(1)
+local function applyLoadingPalette(level)
+	activeLoadingPalette = loadingPaletteFor(level)
+	loadingFrame.BackgroundColor3 = activeLoadingPalette.Background
+	loadingTitle.TextColor3 = activeLoadingPalette.Title
+	loadingStatus.TextColor3 = activeLoadingPalette.Status
+end
 
 -- Full-screen round payoff. It is intentionally separate from the objective bar so
 -- it scales cleanly on desktop, phone and tablet.
@@ -728,33 +759,94 @@ RunService.RenderStepped:Connect(function(dt)
 	loadingStatus.Text = loadingBaseText .. dots
 end)
 
+-- Set only on the level that holds its own cover, so the server can be told
+-- when this client is genuinely looking at the world instead of a guess.
+local entryAckPending = false
+
 local function finishLoadingWhenReady()
-	if loadingSequenceFinished and serverReadyForEntry then
-		loadingFrame.Visible = false
+	if not (loadingSequenceFinished and serverReadyForEntry) then return end
+	if loadingFrame.Visible then loadingFrame.Visible = false end
+	if entryAckPending then
+		entryAckPending = false
+		remote:FireServer("entryready")
 	end
 end
 
-task.spawn(function()
-	local stages = {
-		"LOCATING ANOMALOUS SPACE",
-		"ESTABLISHING ENTRY VECTOR",
-		"STABILIZING ENTRY ENERGY",
-		"VERIFYING CONTAINMENT",
-	}
-	for _, stage in ipairs(stages) do
-		loadingBaseText = stage
-		loadingClock = 0
-		task.wait(1.35)
-	end
+-- Re-runnable so a level can replay the whole sequence per round. The run token
+-- makes a new launch abandon an older sequence instead of letting the two fight
+-- over loadingBaseText.
+local loadingRun = 0
+local function startLoadingSequence()
+	loadingRun += 1
+	local run = loadingRun
+	loadingSequenceFinished = false
+	task.spawn(function()
+		local stages = {
+			"LOCATING ANOMALOUS SPACE",
+			"ESTABLISHING ENTRY VECTOR",
+			"STABILIZING ENTRY ENERGY",
+			"VERIFYING CONTAINMENT",
+		}
+		for _, stage in ipairs(stages) do
+			if loadingRun ~= run then return end
+			loadingBaseText = stage
+			loadingClock = 0
+			task.wait(1.35)
+		end
+		if loadingRun ~= run then return end
 
-	loadingTitle.Text = "> ENTRY STABILIZED SUCCESSFULLY"
-	loadingTitle.TextColor3 = Color3.fromRGB(125, 255, 155)
-	loadingBaseText = "MISSION IS A GO"
-	loadingClock = 0
-	task.wait(1.6)
-	loadingSequenceFinished = true
-	finishLoadingWhenReady()
-end)
+		loadingTitle.Text = "> ENTRY STABILIZED SUCCESSFULLY"
+		loadingTitle.TextColor3 = activeLoadingPalette.TitleDone
+		loadingBaseText = "MISSION IS A GO"
+		loadingClock = 0
+		task.wait(1.6)
+		if loadingRun ~= run then return end
+		loadingSequenceFinished = true
+		finishLoadingWhenReady()
+	end)
+end
+
+startLoadingSequence()
+
+-- Level 2 has no elevator ride to hide the stream-in behind, so its cover has to
+-- stay up until the complex is actually around the character. Solid ground under
+-- the root is the honest test — it is the very thing the server's anchored
+-- placement protects against, and it cannot pass while the arrival platform is
+-- still streaming. The timeout exists so a client that never streams is let in
+-- anyway rather than trapped behind the cover forever.
+local LEVEL_TWO_ENTRY_TIMEOUT = 15
+
+local function levelTwoGroundReady()
+	if not workspace:FindFirstChild("Level 2 Generated World") then return false end
+	local character = player.Character
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	if not root then return false end
+	local params = RaycastParams.new()
+	params.FilterType = Enum.RaycastFilterType.Exclude
+	params.FilterDescendantsInstances = {character}
+	return workspace:Raycast(root.Position + Vector3.yAxis * 5,
+		Vector3.new(0, -60, 0), params) ~= nil
+end
+
+local function waitForLevelTwoEntry()
+	local deadline = os.clock() + LEVEL_TWO_ENTRY_TIMEOUT
+	local requestedStream = false
+	while os.clock() < deadline do
+		local character = player.Character
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+		if root and not requestedStream then
+			requestedStream = true
+			task.spawn(function()
+				pcall(function()
+					player:RequestStreamAroundAsync(root.Position, 10)
+				end)
+			end)
+		end
+		if levelTwoGroundReady() then return true end
+		task.wait(0.15)
+	end
+	return false
+end
 
 -- Quiet built-in terminal key click; no uploaded audio asset required.
 local typeSound = Instance.new("Sound")
@@ -1133,22 +1225,64 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
 		queueStation = nil
 		queueSubmitting = false
 		setMsg("")
+		-- GameManager sends the level with this event because it sets
+		-- SelectedLevel later, inside ensureWorld — reading the attribute here
+		-- would paint the cover in the PREVIOUS round's colour.
+		local announcedLevel = tonumber(a)
+		local launchingLevel = announcedLevel
+			or workspace:GetAttribute("SelectedLevel") or 1
+		-- Only a launch whose level the server ANNOUNCED may arm the held cover.
+		-- The join-time status fire carries no level, and a player arriving then
+		-- is not in the party, so it would never receive the poolaccess that
+		-- releases the hold — it would sit behind a black screen forever.
+		local heldCover = announcedLevel == 2
+		entryAckPending = heldCover
+		applyLoadingPalette(launchingLevel)
 		loadingTitle.Text = "> ENTERING ANOMALOUS SPACE"
-		loadingTitle.TextColor3 = Color3.fromRGB(105, 230, 135)
-		loadingBaseText = "GENERATING WORLD"
 		loadingClock = 0
+		-- Level 2 replays the full staged sequence every round; it is the only
+		-- cover it gets. Every other level keeps the single generating line.
+		loadingBaseText = heldCover and "LOCATING ANOMALOUS SPACE" or "GENERATING WORLD"
+		-- Paint the status line BEFORE uncovering. RenderStepped only refreshes
+		-- it while the frame is visible, so revealing first shows one frame of
+		-- the PREVIOUS round's line.
+		loadingStatus.Text = loadingBaseText
 		loadingFrame.Visible = true
+		if heldCover then
+			serverReadyForEntry = false
+			startLoadingSequence()
+			-- Absolute backstop, independent of every event above: whatever goes
+			-- wrong upstream, this client is let into the world.
+			local guard = loadingRun
+			task.delay(LEVEL_TWO_ENTRY_TIMEOUT + 20, function()
+				if loadingRun == guard and loadingFrame.Visible then
+					loadingSequenceFinished = true
+					serverReadyForEntry = true
+					finishLoadingWhenReady()
+				end
+			end)
+		end
 
 	elseif ev == "loadfailed" then
 		loadingFrame.Visible = false
 		setMsg("WORLD GENERATION FAILED — RETURNING TO LOBBY", Color3.fromRGB(255, 100, 100))
 
 	elseif ev == "poolaccess" then
-		loadingFrame.Visible = false
-		serverReadyForEntry = true
-		finishLoadingWhenReady()
 		dead = false
 		setMsg("POOL ACCESS READY", Color3.fromRGB(105, 230, 210))
+		-- Do NOT uncover here. The world exists on the server, but with
+		-- StreamingEnabled the client is still pulling in a 60k-instance
+		-- complex; dropping the cover now is what put players in an empty room.
+		task.spawn(function()
+			local grounded = waitForLevelTwoEntry()
+			if not grounded then
+				-- Streaming never settled. Let them in regardless — a stuck
+				-- cover is worse than an unfinished one.
+				loadingSequenceFinished = true
+			end
+			serverReadyForEntry = true
+			finishLoadingWhenReady()
+		end)
 
 	elseif ev == "level3access" then
 		loadingFrame.Visible = false
@@ -1352,8 +1486,15 @@ local function mimicBuild(sourcePlayer, spawnPos)
  if not model then return nil end
  model.Name = "MimicApparition"
 
+ -- The clone inherits everything the source player is wearing, and that includes
+ -- the overhead BillboardGui the Zyntra Supporter pass parents to the Head. A
+ -- Mimic captioned ZYNTRA SUPPORTER is an instant tell, and it hangs a purchase
+ -- badge over a monster. Strip every overhead GUI rather than that one name, so
+ -- a future tag cannot quietly reintroduce the same leak. The Humanoid's own
+ -- name and health display are suppressed separately, just below.
  for _, item in ipairs(model:GetDescendants()) do
-  if item:IsA("LuaSourceContainer") or item:IsA("Tool") or item:IsA("ForceField") or item:IsA("Sound") then
+  if item:IsA("LuaSourceContainer") or item:IsA("Tool") or item:IsA("ForceField")
+   or item:IsA("Sound") or item:IsA("BillboardGui") then
    item:Destroy()
   elseif item:IsA("BasePart") then
    item.Anchored = false
