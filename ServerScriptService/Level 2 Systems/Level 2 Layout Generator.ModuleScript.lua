@@ -32,6 +32,20 @@ end
 local function rectWidth(rect) return rect.MaxX - rect.MinX end
 local function rectDepth(rect) return rect.MaxZ - rect.MinZ end
 
+-- Hall size floors, read through helpers so generateAttempt and validateLayout
+-- can never disagree about them. The exit hall can only ever be held to a
+-- LARGER floor than an ordinary slide hall, never a smaller one.
+local function slideHallMinimums()
+	return Configuration.SlideHallMinimumWidth or 175,
+		Configuration.SlideHallMinimumDepth or 165
+end
+
+local function exitHallMinimums()
+	local width, depth = slideHallMinimums()
+	return math.max(Configuration.ExitHallMinimumWidth or width, width),
+		math.max(Configuration.ExitHallMinimumDepth or depth, depth)
+end
+
 -- Keep the original random rolls whenever they fit. A 150-stud BSP leaf has
 -- only five studs of total jitter to spare after margins and MinimumHallSize,
 -- while the old code could independently consume fourteen studs on both sides.
@@ -335,7 +349,7 @@ local function generateAttempt(seed)
 		hall.ConnectionCount = #hall.Connections
 	end
 
-	-- The exit-bearing slide hall must be the easternmost eligible hall, not
+	-- The exit-bearing slide hall must be the easternmost ELIGIBLE hall, not
 	-- merely the easternmost of an area-first subset. This keeps its one-way
 	-- flume beside the east shell on every seed; the remaining two slide halls
 	-- still prefer the largest rooms and normal separation.
@@ -345,16 +359,31 @@ local function generateAttempt(seed)
 		return a.Area > b.Area
 	end)
 	-- Slide halls need room for the deck, three flume lanes and the spiral:
-	-- anything smaller makes the tubes clip their own furniture.
-	local slideCandidates = {}
+	-- anything smaller makes the tubes clip their own furniture. The exit hall
+	-- clears a larger floor again AND has to sit in the easternmost band —
+	-- picking a big hall further west would stretch the flume's level lead-in
+	-- to the shell into a long flat walk. A plan that cannot satisfy both is
+	-- rejected here and the next attempt seed is tried; both rules are
+	-- re-checked in validateLayout.
+	local slideMinimumWidth, slideMinimumDepth = slideHallMinimums()
+	local exitMinimumWidth, exitMinimumDepth = exitHallMinimums()
+	local maximumShellGap = Configuration.ExitHallMaximumShellGap or math.huge
+	local slideCandidates, exitCandidates = {}, {}
 	for _, hall in ipairs(bySize) do
 		if hall ~= arrival and hall.GraphDepth >= 1
-			and hall.Width >= 175 and hall.Depth >= 165 then
+			and hall.Width >= slideMinimumWidth and hall.Depth >= slideMinimumDepth then
 			table.insert(slideCandidates, hall)
+			if hall.Width >= exitMinimumWidth and hall.Depth >= exitMinimumDepth
+				and layout.Bounds.MaxX - hall.MaxX <= maximumShellGap then
+				table.insert(exitCandidates, hall)
+			end
 		end
 	end
-	local eastExitHall = slideCandidates[1]
-	for _, hall in ipairs(slideCandidates) do
+	if #exitCandidates == 0 then
+		return nil, "no eastern hall clears the exit hall minimum size"
+	end
+	local eastExitHall = exitCandidates[1]
+	for _, hall in ipairs(exitCandidates) do
 		if hall.MaxX > eastExitHall.MaxX
 			or (hall.MaxX == eastExitHall.MaxX and hall.Index < eastExitHall.Index) then
 			eastExitHall = hall
@@ -696,6 +725,20 @@ local function validateLayout(layout)
 	if not foundGrand or layout.GrandSlideHall.IsGrand ~= true then
 		return invalid("grand hall is not a marked slide hall")
 	end
+	local exitMinimumWidth, exitMinimumDepth = exitHallMinimums()
+	if not isFiniteNumber(layout.GrandSlideHall.Width)
+		or not isFiniteNumber(layout.GrandSlideHall.Depth)
+		or layout.GrandSlideHall.Width + INSET_EPSILON < exitMinimumWidth
+		or layout.GrandSlideHall.Depth + INSET_EPSILON < exitMinimumDepth then
+		return invalid("exit hall is below the exit hall minimum size")
+	end
+	local maximumShellGap = Configuration.ExitHallMaximumShellGap
+	if isFiniteNumber(maximumShellGap) and type(layout.Bounds) == "table"
+		and isFiniteNumber(layout.Bounds.MaxX)
+		and layout.Bounds.MaxX - layout.GrandSlideHall.MaxX
+			> maximumShellGap + INSET_EPSILON then
+		return invalid("exit hall is too far west of the east shell")
+	end
 
 	if type(layout.PumpHalls) ~= "table" or #layout.PumpHalls ~= 3 then
 		return invalid("pump hall count is invalid")
@@ -870,8 +913,15 @@ local function configuredAttemptCount(value, defaultValue)
 	return math.max(1, math.floor(numeric))
 end
 
-function LayoutGenerator.Generate(seed)
+-- options.AllowRandomRecovery is set by callers that picked the seed at random
+-- (i.e. no manual Level2Seed override). Those rounds get one more independently
+-- seeded stride before the checked-in recovery seeds, because those seeds build
+-- an IDENTICAL map every time they are reached. A pinned seed deliberately does
+-- not get that, so a pinned failure stays reproducible.
+function LayoutGenerator.Generate(seed, options)
 	seed = normalizeSeed(seed, true)
+	local allowRandomRecovery = type(options) == "table"
+		and options.AllowRandomRecovery == true
 	local lastError
 	local totalAttempts = 0
 
@@ -900,6 +950,18 @@ function LayoutGenerator.Generate(seed)
 	local primaryAttempts = configuredAttemptCount(Configuration.GenerationAttempts, 40)
 	local layout = trySequence(seed, primaryAttempts, nil)
 	if layout then return layout end
+
+	if allowRandomRecovery then
+		local recoverySeed = normalizeSeed(
+			DateTime.now().UnixTimestampMillis + Random.new():NextInteger(0, MAX_SEED - 1),
+			true
+		)
+		layout = trySequence(recoverySeed, primaryAttempts, nil)
+		if layout then
+			layout.RandomRecoverySeed = recoverySeed
+			return layout
+		end
+	end
 
 	local fallbackAttempts = configuredAttemptCount(
 		Configuration.GenerationFallbackAttemptsPerSeed,

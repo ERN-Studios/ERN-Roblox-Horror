@@ -131,8 +131,10 @@ hand-authored Flooded Poolrooms level is preserved in
   geometry probes (clip scan, stair connections, swim depth, wedged props, exit
   clearance) before it lands.
 - Tweak guide for collaborators: `ServerScriptService."Level 2 Systems".README
-  - LEVEL 2 TWEAKS`. Force a layout with the `Level2Seed` workspace attribute
-  (clear it for random — and it stays random now).
+  - LEVEL 2 TWEAKS`. Force a layout with the `Level2Seed` workspace attribute,
+  set to any number **≥ 1**. Set it to **0** — or clear it — for a fresh random
+  map every round; 0, negatives and non-numbers all mean OFF. A round never
+  writes its random pick back into the attribute.
 
 ## 🟣 Level 3 — Mall Backrooms Party (in development)
 

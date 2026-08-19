@@ -36,7 +36,15 @@ local Configuration = {
 	HallInsetJitter = 14,
 	MinimumHallSize = 85,
 	MinimumHallCount = 16,
-	GenerationAttempts = 40,
+	-- Exhausting this budget drops to the deterministic recovery seeds below, and
+	-- those build the SAME map every time — the one thing a random level must
+	-- never do. So the budget is sized from the measured acceptance rate, not
+	-- from taste. At the exit-hall floor below, 11.1% of candidate plans are
+	-- accepted (6000 samples), i.e. ~9 attempts to land, p99 42, and one
+	-- attempt costs ~0.23 ms. That puts a 300-attempt budget at well under one
+	-- in 10^12 rounds ever reaching a recovery seed, for ~70 ms of worst case.
+	-- Re-measure this if any hall-size or separation tunable changes.
+	GenerationAttempts = 300,
 	-- The requested seed's normal retry stream always runs first. Only a seed that
 	-- exhausts it enters this deterministic recovery sequence. Seed 101 is a
 	-- checked-in known-good baseline for this exact configuration; keep it in the
@@ -55,6 +63,23 @@ local Configuration = {
 
 	SlideHallCount = 3,
 	SlideHallSeparation = 320,
+	-- Every slide hall needs room for the deck, three flume lanes and the
+	-- spiral stair; below this the tubes clip their own furniture.
+	SlideHallMinimumWidth = 175,
+	SlideHallMinimumDepth = 165,
+	-- The one hall that carries the EXIT flume is held to a larger floor again,
+	-- so the room you escape from is never one of the cramped ones. It used to
+	-- share the 175x165 floor above, which let the escape room be the smallest
+	-- room that still fit a flume. Raising these costs generation attempts and
+	-- nothing else. Measured at 210x200 over 400 seeds: the exit hall lands
+	-- between 210x200 and 263x262, median 233x226.
+	ExitHallMinimumWidth = 210,
+	ExitHallMinimumDepth = 200,
+	-- The exit flume runs LEVEL from the exit hall's east wall out to the outer
+	-- shell before it plunges, so an exit hall chosen further west turns that
+	-- lead-in into a long flat walk inside the tube. Holding the hall in the
+	-- easternmost band keeps the lead-in short. Set very large to disable.
+	ExitHallMaximumShellGap = 80,
 	PumpSeparation = 300,
 	KidsAreaRoomCount = 5,
 

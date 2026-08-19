@@ -23,6 +23,29 @@ local storedLevelOneEntity
 local storedServerLobby
 
 local STORED_LOBBY_NAME = "Level 2 Stored Server Lobby"
+local MAX_SEED = 2147483647
+
+-- A manual override only counts when it is a real, usable seed. 0 is the OFF
+-- value — it is what the attribute holds once a tester clears it by typing a
+-- zero instead of deleting it, and the old `type(value) ~= "number"` guard
+-- accepted it as a pinned seed, so every round silently rebuilt seed 0's map.
+local function pinnedSeedOverride()
+	local requested = workspace:GetAttribute("Level2Seed")
+	if type(requested) ~= "number" then return nil end
+	if requested ~= requested then return nil end -- NaN
+	if requested < 1 or requested >= math.huge then return nil end
+	return math.floor(requested) % MAX_SEED
+end
+
+-- A fresh seed per round. The wall clock on its own repeats if two rounds start
+-- inside the same millisecond, and Random.new()'s entropy on its own can repeat
+-- across a server restart, so the clock, fresh entropy and the round counter
+-- all feed in. The result is NEVER written back to the Level2Seed attribute.
+local function randomRoundSeed(roundNumber)
+	local clockPart = DateTime.now().UnixTimestampMillis
+	local entropy = Random.new():NextInteger(0, MAX_SEED - 1)
+	return (clockPart + entropy + roundNumber * 7919) % (MAX_SEED - 1) + 1
+end
 
 -- Only the level should be loaded during a round: the persistent tunnel lobby
 -- is parked in ServerStorage while Level 2 is live and restored on cleanup,
@@ -205,15 +228,16 @@ function Adapter.Build()
 	-- The workspace attribute is a MANUAL testing override only. Never
 	-- write the random pick back — doing so froze the map on the first
 	-- round's seed for every round after it.
-	local requestedSeed = workspace:GetAttribute("Level2Seed")
-	if type(requestedSeed) ~= "number" then
-		requestedSeed = DateTime.now().UnixTimestampMillis % 2147483647
-	end
+	local pinnedSeed = pinnedSeedOverride()
+	local requestedSeed = pinnedSeed or randomRoundSeed(generation)
 
 	state:SetAttribute("Level2_Phase", "GENERATING_LAYOUT")
 	state:SetAttribute("Level2_Generation", generation)
 	state:SetAttribute("Level2_Seed", requestedSeed)
 	state:SetAttribute("Level2_RequestedSeed", requestedSeed)
+	-- Visible in the state folder so "why is the map the same?" is one glance.
+	state:SetAttribute("Level2_SeedPinned", pinnedSeed ~= nil)
+	state:SetAttribute("Level2_RandomRecoverySeed", nil)
 	state:SetAttribute("Level2_ResolvedSeed", nil)
 	state:SetAttribute("Level2_GenerationAttempt", nil)
 	state:SetAttribute("Level2_UsedFallback", false)
@@ -229,7 +253,12 @@ function Adapter.Build()
 	-- GameManager reads success only from whether this raises, so every failure
 	-- path must re-raise after cleaning up.
 	local success, result = xpcall(function()
-		local layout = LayoutGenerator.Generate(requestedSeed)
+		-- Only an unpinned round may fall back to another random stride; a pinned
+		-- seed keeps its deterministic recovery so a failure stays reproducible.
+		local layout = LayoutGenerator.Generate(requestedSeed, {
+			AllowRandomRecovery = pinnedSeed == nil,
+		})
+		state:SetAttribute("Level2_RandomRecoverySeed", layout.RandomRecoverySeed)
 		state:SetAttribute("Level2_ResolvedSeed", layout.Seed)
 		state:SetAttribute("Level2_GenerationAttempt", layout.Attempt)
 		state:SetAttribute("Level2_UsedFallback", layout.FallbackUsed == true)

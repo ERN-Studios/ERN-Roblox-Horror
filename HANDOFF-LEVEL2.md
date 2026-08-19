@@ -12,17 +12,23 @@ round; the Slidemouth has never started.** Nothing in the level is hand-placed
 
 ## 1. Two things that will confuse you before anything else
 
-**A pinned seed is currently active.** `workspace.Level2Seed = 240814`, so every
-Level 2 round builds the *identical* map. It is a manual testing override:
-Explorer → **Workspace** → Properties → **Attributes** → `Level2Seed`. Delete
-the attribute to get a fresh random layout per round. Confirmed live: the state
-folder reports `Level2_ResolvedSeed = 240814`, i.e. it generated on the first
-attempt with no fallback.
+**Every round generates a fresh map.** `workspace.Level2Seed` is a manual
+testing override: Explorer → **Workspace** → Properties → **Attributes** →
+`Level2Seed`. Set it to any number **≥ 1** to pin a layout and reproduce it
+exactly. Set it to **0**, delete it, or give it anything that is not a positive
+number, and the round picks a fresh random seed. Production leaves it at 0.
+
+This one bit hard. The old guard was `type(requestedSeed) ~= "number"`, so a
+`Level2Seed` of **0 counted as a real pinned seed** — and 0 is exactly what the
+attribute holds after a tester zeroes it instead of deleting it. Every round
+then silently rebuilt seed 0's map. Fixed 2026-08-19: `pinnedSeedOverride()` in
+[Level 2 Round Adapter.ModuleScript.lua](ServerScriptService/Level%202%20Systems/Level%202%20Round%20Adapter.ModuleScript.lua)
+now treats 0, negatives, NaN and non-numbers alike as OFF. The state folder
+reports `Level2_SeedPinned` so which mode a round used is one glance.
 
 Never write the random pick back into that attribute — a previous version did,
 and it froze the map on round one's seed for every round after it. The comment
-at [Level 2 Round Adapter.ModuleScript.lua:205](ServerScriptService/Level%202%20Systems/Level%202%20Round%20Adapter.ModuleScript.lua:205)
-says so; leave it there.
+above `Adapter.Build()`'s seed resolution says so; leave it there.
 
 **Studio is the source of truth, not the repo.** Make changes *in Studio*, then
 mirror them into the repo. Read `CLAUDE.md` before editing — the manifest and
@@ -35,10 +41,16 @@ on the Windows PC.
 
 `Level 2 Round Adapter.Build()` drives everything:
 
-1. Reads `Level2Seed` (or picks a random one from the clock).
+1. Reads `Level2Seed` if it pins one, else mixes the clock, fresh `Random.new()`
+   entropy and the round counter into a seed of its own.
 2. `LayoutGenerator.Generate(seed)` carves a BSP floor plan of a 1400-stud
-   region — ~45 halls joined by flooded arch-tunnel corridors. If a seed fails
-   all 40 attempts it falls back to the checked-in known-good seed `101`.
+   region — ~40 halls joined by flooded arch-tunnel corridors. Each attempt
+   strides the seed by 104729; the budget is `GenerationAttempts` (300).
+   Roughly 11% of candidate plans are accepted, so ~9 attempts is typical and
+   p99 is 42. An **unpinned** round that somehow exhausted the budget gets one
+   more independently seeded stride before the checked-in known-good seed `101`,
+   because seed 101 builds the same map every time it is reached. A pinned seed
+   skips that, so a pinned failure stays reproducible.
 3. `World Builder` turns the plan into parts, water, slides and props.
 4. `ObjectiveController.Start(manifest, generation)`.
 5. `PoolFoamController.Start(manifest, generation)`.
@@ -52,6 +64,63 @@ folder is the first place to look when a round misbehaves.
 beside it (terrain water genuinely removed, so the route physically changes) →
 with all three running the **pressure doors** into the Grand Slide Hall unseal →
 climb the spiral stair to the top deck and ride the **exit flume** out.
+
+**The Grand Slide Hall is the exit room, and it has a size floor of its own.**
+All three slide halls must clear `SlideHallMinimumWidth`/`Depth` (175×165); the
+one that carries the exit flume must additionally clear `ExitHallMinimumWidth`/
+`Depth` (210×200) and sit within `ExitHallMaximumShellGap` (80) studs of the
+east shell. The shell-gap rule is not decoration: the flume runs *level* from
+the hall's east wall out to the shell before it plunges, so an exit hall chosen
+further west turns that lead-in into a long flat walk inside the tube. Raising
+the size floor without it drags the hall ~290 studs west on a median seed.
+Measured over 400 seeds with both rules live, the exit hall lands between
+210×200 and 263×262 (median 233×226), always within 44 studs of the shell.
+
+---
+
+## 2b. Entering the level — the loading cover
+
+`StreamingEnabled` is **on**, so after the server finishes building, each client
+still has to stream ~70,000 instances in. Level 1 and Level 3 hide that behind an
+elevator ride, which also holds the round back until the doors open. Level 2 has
+no ride: it used to fire `poolaccess`, which dropped the loading screen
+*immediately*, wait 1.25 s, and start the round — so players arrived in a room
+that had not streamed yet. That is what "Level 2 has no loading screen" meant.
+
+Since 2026-08-19 the loading cover **is** Level 2's elevator ride:
+
+- `RoundUI.LocalScript` owns the screen. `LOADING_PALETTES` gives each level its
+  own colours — Level 1 keeps terminal green; Level 2 uses the complex's water
+  blue, where the status line is literally `Configuration.Colors.Water`
+  (`48, 150, 159`) and the other three are luminance-matched to the greens they
+  replace, so contrast is unchanged.
+- Level 2 replays the full staged sequence every round (`LOCATING ANOMALOUS
+  SPACE` → `ESTABLISHING ENTRY VECTOR` → `STABILIZING ENTRY ENERGY` →
+  `VERIFYING CONTAINMENT` → `MISSION IS A GO`, ≈7 s). Level 1 still runs that
+  sequence only once at join, exactly as before — **its behaviour is untouched.**
+- `poolaccess` no longer uncovers. The client waits until there is solid ground
+  under its own root inside `Level 2 Generated World` (the same thing the
+  server's anchored placement protects against), calls
+  `RequestStreamAroundAsync`, then reports `entryready` on the `RoundStatus`
+  remote. GameManager holds the round in `waitForGroupEntry` until every client
+  reports, mirroring the elevator ride.
+- **Three independent ways out, so the cover can never trap anyone:** the
+  client's 15 s readiness timeout, a 35 s absolute backstop armed with the
+  cover, and the server's own 16 s cap. A player who joins mid-load never arms
+  the hold at all — only a launch whose level the server *announced* does, since
+  the join-time status fire carries no level and that player is not in the party
+  that will receive `poolaccess`.
+- **The cover does not block input**, so the placement anchor had to follow it.
+  `placeSafelyInElevator` used to unanchor on a flat `task.delay(2.5, ...)`,
+  which was fine when the cover dropped at `poolaccess`. Now the cover outlives
+  that timer, so for Level 2 the release waits on `RoundActive` instead — which
+  is set only after every client has uncovered. Without this the player could
+  walk, blind and unshielded, off an arrival deck ringed by water. Levels 1 and
+  3 never enter that branch and are unchanged.
+
+Measured live with a real 70,960-instance world: cover up at 0.0 s, world built
+at 3.9 s, client acked 3.2 s after `poolaccess` — released by genuine readiness,
+not by timeout, for a ~7 s total cover.
 
 ---
 
@@ -157,11 +226,17 @@ one-switch rollback during playtesting.
 
 ## 7. Testing
 
-- Force a layout with the `Level2Seed` workspace attribute; clear it for random.
+- Force a layout with the `Level2Seed` workspace attribute (≥ 1); set it to 0 or
+  clear it for random.
 - Dev keys (whitelisted users): **B** esp + fast queue · **V** noclip fly ·
   **M** dev phone.
-- Read `ReplicatedStorage["Level 2 State"]` attributes to see the phase, the
-  seed actually resolved, and whether the fallback seed was used.
+- Read `ReplicatedStorage["Level 2 State"]` attributes to see the phase, whether
+  the seed was pinned (`Level2_SeedPinned`), the seed actually resolved, how
+  many attempts it took, and whether a recovery seed was used
+  (`Level2_RandomRecoverySeed`, `Level2_UsedFallback`).
+- To prove randomness, build five rounds back to back and compare
+  `Level2_ResolvedSeed` **and** the geometry — a differing seed alone does not
+  prove a differing map.
 - Changes here have historically been validated across multiple seeds with
   geometry probes — clip scan, stair connections, swim depth, wedged props, exit
   clearance — before landing. Keep doing that; one seed proves very little in a
@@ -181,4 +256,5 @@ particular), so a multi-round playtest is worth more than a single launch.
   `ServerStorage.Level2Backup_20260805` (the retired hand-authored Flooded
   Poolrooms level). Never audit or clean them, and never restore retired
   poolrooms/valve/blackout scripts into the active rewrite.
-- Clear the `Level2Seed` override before publishing.
+- Leave `Level2Seed` at 0 (or cleared) before publishing. 0 now means random —
+  it no longer pins the map the way it silently did before 2026-08-19.
