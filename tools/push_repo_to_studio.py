@@ -37,6 +37,7 @@ import hashlib
 import json
 import os
 import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -54,10 +55,17 @@ MANIFEST_PATH = PROJECT_ROOT / "studio-sync-manifest.json"
 BACKUP_ROOT = PROJECT_ROOT / ".studio-push-backups"
 STUDIO_NAME = "Backrooms: No Way Out"
 READ_CHUNK_LINES = 1400
+# Studio can briefly serve a stale .Source right after a write; re-read
+# the metadata and chunks together rather than failing the push.
+READ_ATTEMPTS = 4
+READ_RETRY_DELAY = 0.5
 # Kept well under the wire sizes the proven read path has demonstrated; the
 # staged-buffer transfer has no track record at larger request sizes.
 WRITE_CHUNK_BYTES = 24_000
 BUFFER_NAME = "__RepoPushBuffer"
+# A StringValue refuses assignments of 200k characters or more, so a staged
+# source larger than this spills into numbered child parts of the buffer.
+BUFFER_PART_MAX = 150_000
 SCRIPT_CLASSES = ("Script", "LocalScript", "ModuleScript")
 
 PATH_WALK_LUAU = """
@@ -119,9 +127,33 @@ if %s then
     buffer.Parent = storage
 end
 if not buffer then return "@@NO_BUFFER@@" end
-buffer.Value = buffer.Value .. %s
-return tostring(#buffer.Value)
+local chunk = %s
+local parts = 0
+local tail = buffer
+while true do
+    local nxt = buffer:FindFirstChild(tostring(parts + 1))
+    if not nxt then break end
+    parts += 1
+    tail = nxt
+end
+if #tail.Value + #chunk > __PART_MAX__ then
+    local part = Instance.new("StringValue")
+    part.Name = tostring(parts + 1)
+    part.Parent = buffer
+    parts += 1
+    tail = part
+end
+tail.Value = tail.Value .. chunk
+local total = #buffer.Value
+for i = 1, parts do
+    local part = buffer:FindFirstChild(tostring(i))
+    if part then total += #part.Value end
+end
+return tostring(total)
 """
+
+BUFFER_APPEND_LUAU = BUFFER_APPEND_LUAU.replace(
+    "__PART_MAX__", str(BUFFER_PART_MAX))
 
 # The apply is a compare-and-swap. UpdateSourceAsync hands the callback the live
 # source; re-hashing it there closes the window between the phase-1 read and
@@ -131,6 +163,13 @@ local storage = game:GetService("ServerStorage")
 local buffer = storage:FindFirstChild(%s)
 if not buffer then return "@@NO_BUFFER@@" end
 local newSource = buffer.Value
+local partIndex = 1
+while true do
+    local part = buffer:FindFirstChild(tostring(partIndex))
+    if not part then break end
+    newSource = newSource .. part.Value
+    partIndex += 1
+end
 if #newSource ~= %d then
     local got = #newSource
     buffer:Destroy()
@@ -166,6 +205,13 @@ local storage = game:GetService("ServerStorage")
 local buffer = storage:FindFirstChild(%s)
 if buffer then
     local size = #buffer.Value
+    local i = 1
+    while true do
+        local part = buffer:FindFirstChild(tostring(i))
+        if not part then break end
+        size += #part.Value
+        i += 1
+    end
     buffer:Destroy()
     return "@@CLEANED@@ " .. size
 end
@@ -233,35 +279,45 @@ def segments_of(item: dict) -> list[str]:
 
 
 def read_studio_source(client, studio_id: str, segments: list[str]) -> str:
-    """Read a script's live .Source, verified by length and djb2."""
-    seg_literals = ", ".join(luau_string(s) for s in segments)
-    meta = execute_luau(client, studio_id, READ_META_LUAU % seg_literals)
-    if meta == "@@MISSING@@":
-        raise StudioMcpError("script not found in Studio")
-    if meta.startswith("@@WRONG_CLASS@@"):
-        raise StudioMcpError(f"not a script instance ({meta.split(' ', 1)[-1]})")
-    parts = meta.split("\t")
-    if len(parts) != 4 or not all(p.isdigit() for p in parts[:3]):
-        raise StudioMcpError(f"unexpected metadata response: {meta!r}")
-    size, digest, line_count = (int(p) for p in parts[:3])
+    """Read a script's live .Source, verified by length and djb2.
 
-    chunks: list[str] = []
-    first = 1
-    while first <= line_count:
-        chunk = execute_luau(
-            client, studio_id, READ_CHUNK_LUAU % (seg_literals, first, READ_CHUNK_LINES)
-        )
-        if chunk == "@@MISSING@@":
-            raise StudioMcpError("script vanished mid-read")
-        chunks.append(chunk)
-        first += READ_CHUNK_LINES
-    source = "\n".join(chunks)
-    data = source.encode("utf-8")
-    if len(data) != size or djb2(data) != digest:
-        raise StudioMcpError(
-            f"chunked read failed verification ({len(data)}B vs {size}B reported)"
-        )
-    return source
+    Straight after UpdateSourceAsync, Studio can still serve the pre-write
+    source to one call and the fresh one to the next; that mismatch used to be
+    reported as a failed push even though the write had landed. Re-read instead
+    of trusting a single inconsistent metadata/chunk pair.
+    """
+    seg_literals = ", ".join(luau_string(s) for s in segments)
+    last_error = ""
+    for attempt in range(READ_ATTEMPTS):
+        meta = execute_luau(client, studio_id, READ_META_LUAU % seg_literals)
+        if meta == "@@MISSING@@":
+            raise StudioMcpError("script not found in Studio")
+        if meta.startswith("@@WRONG_CLASS@@"):
+            raise StudioMcpError(f"not a script instance ({meta.split(' ', 1)[-1]})")
+        parts = meta.split("\t")
+        if len(parts) != 4 or not all(p.isdigit() for p in parts[:3]):
+            raise StudioMcpError(f"unexpected metadata response: {meta!r}")
+        size, digest, line_count = (int(p) for p in parts[:3])
+
+        chunks: list[str] = []
+        first = 1
+        while first <= line_count:
+            chunk = execute_luau(
+                client, studio_id,
+                READ_CHUNK_LUAU % (seg_literals, first, READ_CHUNK_LINES))
+            if chunk == "@@MISSING@@":
+                raise StudioMcpError("script vanished mid-read")
+            chunks.append(chunk)
+            first += READ_CHUNK_LINES
+        source = "\n".join(chunks)
+        data = source.encode("utf-8")
+        if len(data) == size and djb2(data) == digest:
+            return source
+        last_error = (f"chunked read failed verification "
+                      f"({len(data)}B vs {size}B reported)")
+        if attempt + 1 < READ_ATTEMPTS:
+            time.sleep(READ_RETRY_DELAY)
+    raise StudioMcpError(last_error)
 
 
 def clean_buffer(client, studio_id: str) -> str:

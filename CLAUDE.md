@@ -56,8 +56,17 @@ Studio without touching anything real (needs a `luau` binary; see the file).
 
 Branch `claude/roblox-code-audit-di6qxi`, PR #1: a project-wide audit of ~45k
 lines — real bugs, dead code, removed-feature leftovers, duplicate work and
-optimizations. **37 scripts are queued for Studio and have not been applied
-yet.** Run the push from the PC to land them. The PR body is the full report.
+optimizations. **All 37 queued scripts were pushed into Studio on 2026-08-19
+and verified byte-for-byte; the manifest holds no pending entries.** The PR
+body is the full report.
+
+Landing them turned up three faults in the sync tooling, all now fixed:
+`select_studio` only retried one obsolete wording of StudioMCP's cold-start
+error and compared place names before Studio began appending `(placeId: N)`;
+the post-write verification could read stale metadata against fresh chunks and
+report a failed push that had in fact landed; and the staging buffer could not
+carry a source of 200k characters or more, which is why Level 2 World Builder
+(235,839 B) needed the buffer to spill into numbered child parts.
 
 Deliberately left alone and awaiting a decision from the owner: teammate
 flashlights render twice (client MateBeam + FlashlightSync mounts); Level 3
