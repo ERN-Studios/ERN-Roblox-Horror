@@ -308,9 +308,6 @@ end
 local function exitPosition(): Vector3?
 	local value = stateAttribute("Level3_ExitPosition", nil)
 	if typeof(value) == "Vector3" then return value :: Vector3 end
-	local world = currentWorld()
-	local finalDoor = world and world:FindFirstChild("Final Service Door", true)
-	if finalDoor and finalDoor:IsA("BasePart") then return finalDoor.Position end
 	return nil
 end
 

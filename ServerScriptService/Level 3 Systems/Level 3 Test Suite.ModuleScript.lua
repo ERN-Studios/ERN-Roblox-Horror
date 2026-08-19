@@ -133,8 +133,6 @@ function TestSuite.ValidateConfiguration(): {[string]: any}
 		"Level 3 must use the authored CD-cover atlas")
 	assert(Configuration.CorridorWidth == 14 and Configuration.CorridorHeight == 10.5,
 		"Level 3 corridors must remain one 14 x 10.5 stud tunnel cross-section")
-	assert(Configuration.DoorWidth == 6 and Configuration.DoorHeight == 8.5,
-		"Level 3 doors must remain the approved 6 x 8.5 studs")
 	assert(Configuration.ModuleGoal == 5, "Level 3 must require exactly five modules")
 	assert(Configuration.MusicSequence.DurationSeconds == 180.035917
 		and Configuration.MusicSequence.BlackoutStartSeconds == 150
@@ -180,9 +178,7 @@ function TestSuite.ValidateConfiguration(): {[string]: any}
 		and managerTuning.BlackoutDirectPathRange > managerTuning.DirectPathRange
 		and managerTuning.MaxPathFailures == 3
 		and managerTuning.ObstructionRecoveryAttempts == 3
-		and managerTuning.ProgressResetDistance >= 8
-		and managerTuning.RecoveryBackoffDistance >= 2.5
-		and managerTuning.MaximumRecoveryTeleportDistance == 0,
+		and managerTuning.ProgressResetDistance >= 8,
 
 		"Mall Manager wall-clearance envelope does not safely fit the Level 3 corridors")
 	assert(managerTuning.MovementAcceleration >= 40
@@ -274,8 +270,6 @@ function TestSuite.ValidateConfiguration(): {[string]: any}
 		and managerTuning.ChaseScreamCooldownSeconds >= managerTuning.ChaseScreamDurationSeconds
 		and managerTuning.ChaseScreamRollOffMaxDistance > managerTuning.ChaseScreamRollOffMinDistance,
 		"Mall Manager chase scream tuning is stale or permits overlapping restarts")
-	assert(Configuration.Textures.StaffDoor == "rbxassetid://127165696221846",
-		"Level 3 StaffDoor must use the approved published texture")
 	assert(Configuration.Textures.PartyCarpetNeon == "rbxassetid://110230144446272"
 		and Configuration.Textures.PartyCarpetRed == "rbxassetid://108064770913201"
 		and Configuration.Textures.OrangeWall == "rbxassetid://128270554927663",
@@ -584,69 +578,6 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 
 	assert(type(manifest.Doors) == "table" and #manifest.Doors == 0,
 		"Revision 3 must not generate ordinary or fake doors")
-	local doorIds = {}
-	for _, door in ipairs(manifest.Doors) do
-		assert(type(door.Id) == "string" and not doorIds[door.Id], "Level 3 door ids must be unique")
-		doorIds[door.Id] = true
-		assert(door.Type == "Openable" or door.Type == "Locked",
-			"HiddenExit must not be registered as a tweened door: " .. door.Id)
-		assert(door.Model and door.Model:IsA("Model") and door.Model:IsDescendantOf(world)
-			and door.Leaf and door.Leaf:IsA("BasePart") and door.Leaf:IsDescendantOf(door.Model)
-			and door.Prompt and door.Prompt:IsA("ProximityPrompt") and door.Prompt:IsDescendantOf(door.Leaf),
-			"Level 3 door record is incomplete: " .. door.Id)
-		assert(door.Leaf.Size == Vector3.new(Configuration.DoorWidth, Configuration.DoorHeight, .55),
-			"Level 3 door has the wrong leaf size: " .. door.Id)
-		assert(door.Leaf.Material == Enum.Material.Metal,
-			"Level 3 doors must use painted metal: " .. door.Id)
-		assert(typeof(door.Closed) == "CFrame" and typeof(door.Open) == "CFrame"
-			and (door.Closed.Position - door.Leaf.Position).Magnitude <= 0.001,
-			"Level 3 door closed/open transforms are invalid: " .. door.Id)
-		assert((door.Open.Position - door.Closed.Position).Magnitude >= Configuration.DoorWidth * 0.6,
-			"Level 3 open transform does not clear enough of the portal: " .. door.Id)
-
-		local bulkheads, sideFillers = 0, 0
-		local frontTexture, backTexture = false, false
-		for _, object in ipairs(door.Model:GetDescendants()) do
-			if object.Name == "Level 3 Door Bulkhead" and object:IsA("BasePart") then
-				bulkheads += 1
-				assert(object.CanCollide and object.Size.Y > 0
-					and approx(object.Position.Y + object.Size.Y * .5,
-						Configuration.WorldOrigin.Y + Configuration.RoomHeight, 0.05),
-					"Level 3 door bulkhead does not close the ceiling gap: " .. door.Id)
-			elseif object.Name == "Level 3 Door Side Filler" and object:IsA("BasePart") then
-				sideFillers += 1
-				assert(object.CanCollide, "Level 3 door side filler must block its gap: " .. door.Id)
-			elseif object:IsA("Texture") and object.Parent == door.Leaf
-				and object.Texture == Configuration.Textures.StaffDoor then
-				if object.Face == Enum.NormalId.Front then frontTexture = true end
-				if object.Face == Enum.NormalId.Back then backTexture = true end
-			end
-		end
-		assert(bulkheads == 1, "Level 3 door must have exactly one top bulkhead: " .. door.Id)
-		assert(sideFillers == 2, "Level 3 door must have exactly two side fillers: " .. door.Id)
-		assert(frontTexture and backTexture, "Level 3 StaffDoor texture must cover both faces: " .. door.Id)
-
-		if door.Type == "Openable" then
-			local overlap = OverlapParams.new()
-			overlap.FilterType = Enum.RaycastFilterType.Exclude
-			overlap.FilterDescendantsInstances = {door.Model}
-			overlap.MaxParts = 100
-			local clearanceSize = Vector3.new(
-				Configuration.DoorWidth - 0.6,
-				Configuration.DoorHeight - 0.4,
-				math.max(0.7, Configuration.WallThickness * 0.8)
-			)
-			-- Validate the shut doorway aperture. An open swing leaf deliberately
-			-- rests outside this clearance volume, so testing its CFrame would flag
-			-- the adjacent structural wall as a false obstruction.
-			for _, pose in ipairs({door.Closed}) do
-				for _, hit in ipairs(workspace:GetPartBoundsInBox(pose, clearanceSize, overlap)) do
-					assert(not hit.CanCollide,
-						"Static collision obstructs openable doorway " .. door.Id .. ": " .. hit:GetFullName())
-				end
-			end
-		end
-	end
 
 	for _, module in ipairs(manifest.Modules) do
 		assert(module.Model.Parent and module.Prompt.Enabled and module.Prompt.Parent,
@@ -1137,15 +1068,6 @@ function TestSuite.ValidateRuntime(expectedProgress: number): {[string]: any}
 	for _, model in ipairs(world:GetDescendants()) do
 		if model:IsA("Model") and model:GetAttribute("Level3_DoorId") ~= nil then
 			stableDoors += 1
-			local stateName = model:GetAttribute("Level3_DoorState")
-			assert(stateName == "OPEN" or stateName == "CLOSED" or stateName == "LOCKED",
-				"Door did not settle after its tween: " .. model:GetFullName())
-			local leaf = model:FindFirstChild("Door")
-			local prompt = model:FindFirstChild("DoorPrompt", true)
-			assert(leaf and leaf:IsA("BasePart") and prompt and prompt:IsA("ProximityPrompt")
-				and prompt.Enabled, "Settled door is missing an enabled prompt")
-			assert(leaf.CanCollide == (stateName ~= "OPEN"),
-				"Settled door collision state is unsafe: " .. model:GetFullName())
 		end
 	end
 	assert(stableDoors == 0, "Revision 5 must not restore ordinary interactive Level 3 doors")

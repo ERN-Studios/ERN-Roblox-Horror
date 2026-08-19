@@ -22,8 +22,6 @@ local Configuration = {
 	-- nor side walls step inward at a room boundary.
 	CorridorWidth = 14,
 	CorridorHeight = 10.5,
-	DoorWidth = 6,
-	DoorHeight = 8.5,
 	ModuleGoal = 5,
 	-- Seeded topology is generated only when a Level 3 party launches.  The
 	-- bounded district plan is larger than the former authored graph while still
@@ -70,7 +68,6 @@ local Configuration = {
 		PastelWallpaper = "rbxassetid://96252806287644",
 		OrangeWall = "rbxassetid://128270554927663",
 		ConfettiTablecloth = "rbxassetid://103412925025303",
-		StaffDoor = "rbxassetid://127165696221846",
 		FinalExitDoor = "rbxassetid://120063024460642",
 		KidsDrawingsAtlas = "rbxassetid://136455642832077",
 		KidsDrawingsWholesome25 = "rbxassetid://128767366284181",
@@ -83,7 +80,6 @@ local Configuration = {
 		HVAC = "rbxassetid://9125446543",
 		DoorRattle = "rbxassetid://9118901593",
 		DoorMovement = "rbxassetid://9119631915",
-		ReaderBeep = "rbxassetid://9119103325",
 		-- Reserved for the replacement lights-out cue.
 		PowerDown = "",
 		-- Group-owned song uploaded specifically for the synchronized Level 3 sequence.
@@ -94,6 +90,9 @@ local Configuration = {
 		ScareChildGiggle = "",
 		ScarePAWhisper = "",
 		ScareRunningSteps = "",
+		-- Reserved cues fired by the Objective Controller (exit unseal + escape).
+		ExitUnlocked = "",
+		Escape = "",
 		-- Exact group-owned Mall Manager walk uploads. Their names are preserved
 		-- verbatim in the saved Sound prototypes and runtime emitter.
 		["Mall Manager Walk Sound 1"] = "rbxassetid://86969848436282",
@@ -170,9 +169,6 @@ local Configuration = {
 		MaxPathFailures = 3,
 		ObstructionRecoveryAttempts = 3,
 		ProgressResetDistance = 8,
-		RecoveryBackoffDistance = 2.5,
-		-- Runtime recovery is navigation-only. The Manager must never visibly teleport backward.
-		MaximumRecoveryTeleportDistance = 0,
 		MovementAcceleration = 48,
 		MovementDeceleration = 72,
 		BlackoutMovementAcceleration = 96,
@@ -301,30 +297,13 @@ local Configuration = {
 		ExitVerticalOffset = 1.0,
 	},
 	Colors = {
-		Cream = Color3.fromRGB(205, 192, 157),
 		AgedWhite = Color3.fromRGB(218, 211, 184),
-		Beige = Color3.fromRGB(174, 155, 119),
 		DustyPeach = Color3.fromRGB(176, 99, 74),
-		MutedOrange = Color3.fromRGB(164, 79, 43),
-		OldTeal = Color3.fromRGB(57, 112, 105),
 		MutedBlue = Color3.fromRGB(66, 83, 124),
 		FadedGreen = Color3.fromRGB(91, 126, 83),
 		Burgundy = Color3.fromRGB(92, 43, 49),
 		DarkCarpet = Color3.fromRGB(18, 18, 22),
-		OfficeCarpet = Color3.fromRGB(78, 68, 61),
-		Concrete = Color3.fromRGB(102, 101, 91),
-		Linoleum = Color3.fromRGB(147, 145, 119),
-		Trim = Color3.fromRGB(74, 67, 56),
-		Metal = Color3.fromRGB(70, 73, 72),
-		Wood = Color3.fromRGB(103, 65, 42),
 		Energon = Color3.fromRGB(66, 244, 218),
-		Emergency = Color3.fromRGB(194, 48, 36),
-	},
-	Reader = {
-		UpdateInterval = 0.10,
-		MaximumRange = 650,
-		AccuracyDegrees = {155, 105, 64, 36, 18, 5},
-		DistanceNoise = {0.60, 0.42, 0.27, 0.15, 0.07, 0.0},
 	},
 	Rooms = {
 		{Id="Arrival", Name="Receiving Vestibule", Kind="PartyHall", Decor="SparseWelcome", X=0, Z=0, W=70, D=52, H=12.5},
@@ -387,7 +366,6 @@ table.freeze(Configuration.MallManager.Blackout)
 table.freeze(Configuration.MallManager)
 table.freeze(Configuration.Hiding)
 table.freeze(Configuration.Colors)
-table.freeze(Configuration.Reader)
 for _, room in ipairs(Configuration.Rooms) do table.freeze(room) end
 for _, link in ipairs(Configuration.Links) do table.freeze(link) end
 table.freeze(Configuration.Rooms)

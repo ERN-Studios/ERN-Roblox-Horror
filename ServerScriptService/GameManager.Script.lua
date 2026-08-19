@@ -139,6 +139,18 @@ devControl.OnServerEvent:Connect(function(player, command, enabled)
  elseif command == "noclip" then
   setServerNoclip(player, enabled == true)
   print("[GameManager] server noclip", enabled == true and "ON" or "OFF", "for", player.Name)
+ elseif command == "level3PreBlackout" then
+  if not DevAccess.IsLevel3TimelineOwner(player) then return end
+  local skip = ServerStorage:FindFirstChild("Level3DevSkipToPreBlackout")
+  local timelineStatus = "NOT_RUNNING"
+  if skip and skip:IsA("BindableFunction") then
+   local ok, _, reason = pcall(skip.Invoke, skip)
+   if ok and type(reason) == "string" then timelineStatus = reason end
+  end
+  player:SetAttribute("DevLevel3TimelineStatus", timelineStatus)
+  player:SetAttribute("DevLevel3TimelineSerial",
+   (tonumber(player:GetAttribute("DevLevel3TimelineSerial")) or 0) + 1)
+  print("[GameManager] Level 3 timeline skip:", timelineStatus, "for", player.Name)
  end
 end)
 
@@ -353,7 +365,7 @@ local function sanitizePersistedLevelState()
 end
 
 sanitizePersistedLevelState()
-local lobbyModel, lobbySpawn, lobbyStations = buildLobby()
+local _lobbyModel, lobbySpawn, lobbyStations = buildLobby()
 
 local function setStationDisplay(station, main, secondary, color)
  station.title.Text = main

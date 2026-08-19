@@ -147,7 +147,21 @@ def pull_source(
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--audit", action="store_true", help="report drift only")
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="also overwrite files queued for a Studio push (destroys those edits)",
+    )
     args = parser.parse_args()
+
+    # Files awaiting push_repo_to_studio.py are NEWER in the repo than in Studio.
+    # Pulling them would silently replace those edits with Studio's older source.
+    manifest_now = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+    protected = {
+        item["file"]
+        for item in manifest_now.get("items", [])
+        if item.get("status") in ("pending-studio-push", "studio-push-conflict")
+    }
 
     client = StudioMcpClient(find_mcp_batch())
     try:
@@ -217,8 +231,15 @@ def main() -> int:
         manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
         manifest_by_file = {item["file"]: item for item in manifest.get("items", [])}
 
+        skipped_protected: list[str] = []
         for path_key in drifted:
             segments, class_name, size, digest, line_count = studio_files[path_key]
+            candidate = repo_path_for(segments, class_name)
+            if candidate is not None and not args.force:
+                candidate_rel = candidate.relative_to(PROJECT_ROOT).as_posix()
+                if candidate_rel in protected:
+                    skipped_protected.append(candidate_rel)
+                    continue
             source = pull_source(client, studio_id, segments, line_count)
             data = source.encode("utf-8")
             if len(data) != size or djb2(data) != digest:
@@ -244,6 +265,19 @@ def main() -> int:
             entry["bytes"] = len(data)
             entry["sha256"] = hashlib.sha256(data).hexdigest()
             entry["status"] = "synced"
+
+        if skipped_protected:
+            print(
+                f"\n  SKIPPED {len(skipped_protected)} file(s) queued for a Studio "
+                "push — pulling them would replace your unpushed edits with "
+                "Studio's older source:"
+            )
+            for rel in skipped_protected:
+                print(f"    {rel}")
+            print(
+                "  Run tools/push_repo_to_studio.py first, or pass --force to "
+                "discard those edits."
+            )
 
         MANIFEST_PATH.write_text(
             json.dumps(manifest, indent=2) + "\n", encoding="utf-8", newline="\n"

@@ -357,7 +357,7 @@ roundStatus.OnClientEvent:Connect(function(ev)
 		-- The office fluorescent hum belongs to level 1 only. Level 2 stays
 		-- silent until its dedicated hollow poolroom ambience asset is supplied.
 		ambienceTarget = workspace:GetAttribute("SelectedLevel") == 1 and 1 or 0
-	elseif ev == "win" or ev == "lose" or ev == "waiting" then
+	elseif ev == "win" or ev == "lose" then
 		ambienceTarget = 0
 		elevatorSound:Stop() -- round over / reset (doors opening does NOT stop it)
 	end
@@ -480,8 +480,6 @@ local function chaseActive()
 		and workspace:GetAttribute("RoundActive") == true
 		and player:GetAttribute("InRound") == true
 		and player:GetAttribute("Escaped") ~= true
-		and player:GetAttribute("Spectating") ~= true
-		and player:GetAttribute("IsSpectating") ~= true
 end
 
 local function fadeChase(target, duration)
@@ -592,8 +590,6 @@ workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(refreshChase)
 workspace:GetAttributeChangedSignal("RoundActive"):Connect(refreshChase)
 player:GetAttributeChangedSignal("InRound"):Connect(refreshChase)
 player:GetAttributeChangedSignal("Escaped"):Connect(refreshChase)
-player:GetAttributeChangedSignal("Spectating"):Connect(refreshChase)
-player:GetAttributeChangedSignal("IsSpectating"):Connect(refreshChase)
 workspace.ChildAdded:Connect(function(child)
 	if child.Name == "Entity" then bindChaseEntity(child) end
 end)

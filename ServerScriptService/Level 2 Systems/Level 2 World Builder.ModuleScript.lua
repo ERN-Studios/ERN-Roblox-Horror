@@ -2736,7 +2736,7 @@ local function makeExitFlume(parent, layout, hall, deck)
 			plungeControl2, roomEntry, segment / 72))
 	end
 	local exitColor = C.TileCool
-	local tube = makeTubeFromPoints(parent, tubePoints, radius, exitColor,
+	makeTubeFromPoints(parent, tubePoints, radius, exitColor,
 		"Level 2 Exit Flume", false, .18, nil, nil, true)
 
 	local function pathAtX(targetX)
@@ -4202,6 +4202,9 @@ local function makeBuoyant(object, density)
 	object.CanCollide = true
 	object.CanTouch = true
 	object.CustomPhysicalProperties = PhysicalProperties.new(density or .22, .35, .45, 1, 1)
+	-- The Slidemouth's soft-shove sweep targets exactly this tag; without it no
+	-- floating toy ever reacts to the creature passing through.
+	object:SetAttribute("Level2_BuoyantProp", true)
 	return object
 end
 

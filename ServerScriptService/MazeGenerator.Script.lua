@@ -1887,13 +1887,19 @@ task.spawn(function()
 		local mode = lightMode()
 		if mode == "ALERT" then
 			phase += dt
+			-- Static red-alert properties are set once on the mode edge; only the
+			-- pulsing brightness needs rewriting on every 0.08s tick (~300 lights).
+			if prev ~= "ALERT" then
+				for _, L in ipairs(allLights) do
+					L.light.Enabled = true
+					L.light.Color = Color3.fromRGB(255, 45, 30)
+					L.panel.Color = Color3.fromRGB(120, 12, 10)
+					L.panel.Material = Enum.Material.Neon
+				end
+			end
 			local b = 0.12 + 0.55 * (0.5 + 0.5 * math.sin(phase * 1.6))
 			for _, L in ipairs(allLights) do
-				L.light.Enabled = true
-				L.light.Color = Color3.fromRGB(255, 45, 30)
 				L.light.Brightness = b
-				L.panel.Color = Color3.fromRGB(120, 12, 10)
-				L.panel.Material = Enum.Material.Neon
 			end
 		elseif mode == "POWERDOWN" then
 			if prev ~= "POWERDOWN" then

@@ -3,7 +3,6 @@
 --
 -- Server authority for the abandoned mall objective:
 --   * five shared Energon Resonance Modules;
---   * every interactive, locked, and final-access door;
 --   * final service-exit activation and per-player escape;
 --   * replicated progress used by the reader, audio, and HUD clients.
 --
@@ -21,9 +20,6 @@ type AnyTable = {[any]: any}
 local ObjectiveController = {}
 local activeSession: AnyTable? = nil
 
-local DOOR_MOVE_TIME = 0.55
-local DOOR_LOCK_COOLDOWN = 0.8
-local DOOR_BLOCK_DEPTH = 4.5
 local PROMPT_DISTANCE_ALLOWANCE = 2
 
 local function getOrCreateFolder(parent: Instance, name: string): Folder
@@ -63,10 +59,6 @@ local function disconnectAll(session: AnyTable)
 		disconnect(connection)
 	end
 	table.clear(session.Connections)
-	for _, runtime in pairs(session.DoorRuntime) do
-		disconnect(runtime.CompletionConnection)
-		runtime.CompletionConnection = nil
-	end
 end
 
 local function cancelTweens(session: AnyTable)
@@ -221,162 +213,6 @@ local function updateSharedState(session: AnyTable)
 	workspace:SetAttribute("Level3Modules", session.ModuleCount)
 	workspace:SetAttribute("Level3ModuleGoal", session.ModuleGoal)
 	workspace:SetAttribute("Level3ExitUnlocked", session.ExitUnlocked)
-end
-
-local function findDoorHandle(record: AnyTable): BasePart?
-	local handle = record.Model:FindFirstChild("Handle", true)
-	return if handle and handle:IsA("BasePart") then handle else nil
-end
-
-local function setDoorPrompt(runtime: AnyTable)
-	local record = runtime.Record
-	local prompt = record.Prompt
-	if record.Type == "Locked" then
-		prompt.ActionText = "TRY HANDLE"
-	else
-		prompt.ActionText = runtime.IsOpen and "CLOSE" or "OPEN"
-	end
-end
-
-local function playEmbeddedSound(record: AnyTable, soundName: string): boolean
-	local sound = record.Leaf:FindFirstChild(soundName)
-	if sound and sound:IsA("Sound") then
-		sound:Stop()
-		sound.TimePosition = 0
-		sound:Play()
-		return true
-	end
-	return false
-end
-
-local function doorwayOccupied(record: AnyTable): boolean
-	local params = OverlapParams.new()
-	params.FilterType = Enum.RaycastFilterType.Exclude
-	params.FilterDescendantsInstances = {record.Model}
-	params.MaxParts = 100
-	local size = Vector3.new(
-		Configuration.DoorWidth + 2,
-		Configuration.DoorHeight + 2,
-		DOOR_BLOCK_DEPTH
-	)
-	for _, hit in ipairs(workspace:GetPartBoundsInBox(record.Closed, size, params)) do
-		local character = hit:FindFirstAncestorOfClass("Model")
-		local player = character and Players:GetPlayerFromCharacter(character)
-		if player then
-			local liveCharacter = livingCharacter(player)
-			if liveCharacter == character then return true end
-		end
-	end
-	return false
-end
-
-local function completeDoorMovement(session: AnyTable, runtime: AnyTable, token: number, opened: boolean)
-	if not liveSession(session) or runtime.MoveToken ~= token then return end
-	local record = runtime.Record
-	-- A player may enter during the tween. Re-open instead of letting a closing
-	-- collidable leaf intersect their character.
-	if not opened and doorwayOccupied(record) then
-		runtime.IsOpen = true
-		runtime.Busy = false
-		record.Leaf.CFrame = record.Open
-		if runtime.Handle and runtime.Handle.Parent then
-			runtime.Handle.CFrame = record.Open * runtime.HandleLocal
-		end
-		record.Leaf.CanCollide = false
-		record.Model:SetAttribute("Level3_DoorOpen", true)
-		record.Model:SetAttribute("Level3_DoorState", "OPEN")
-		setDoorPrompt(runtime)
-		record.Prompt.Enabled = true
-		return
-	end
-	runtime.IsOpen = opened
-	runtime.Busy = false
-	record.Leaf.CanCollide = if opened then false else runtime.LeafCanCollide
-	record.Model:SetAttribute("Level3_DoorOpen", opened)
-	record.Model:SetAttribute("Level3_DoorState", opened and "OPEN" or "CLOSED")
-	setDoorPrompt(runtime)
-	record.Prompt.Enabled = true
-end
-
-local function moveDoor(session: AnyTable, runtime: AnyTable, player: Player)
-	if runtime.Busy then return end
-	local record = runtime.Record
-	local opening = not runtime.IsOpen
-	if not opening and doorwayOccupied(record) then
-		fireAlert(session, "DOORWAY BLOCKED", "CLEAR THE SERVICE DOOR", "MOVE AWAY BEFORE CLOSING", 1.2, player)
-		return
-	end
-	runtime.Busy = true
-	runtime.MoveToken += 1
-	local token = runtime.MoveToken
-	record.Prompt.Enabled = false
-	-- Leaves are non-colliding while animated so they cannot wedge a player.
-	record.Leaf.CanCollide = false
-	record.Model:SetAttribute("Level3_DoorState", "MOVING")
-	playEmbeddedSound(record, "Door Movement")
-	local target = opening and record.Open or record.Closed
-	local info = TweenInfo.new(DOOR_MOVE_TIME, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
-	local leafTween = playTween(session, record.Leaf, info, {CFrame = target})
-	if runtime.Handle and runtime.Handle.Parent then
-		playTween(session, runtime.Handle, info, {CFrame = target * runtime.HandleLocal})
-	end
-	disconnect(runtime.CompletionConnection)
-	if not leafTween then
-		completeDoorMovement(session, runtime, token, opening)
-		return
-	end
-	runtime.CompletionConnection = leafTween.Completed:Connect(function(playbackState)
-		disconnect(runtime.CompletionConnection)
-		runtime.CompletionConnection = nil
-		if playbackState == Enum.PlaybackState.Completed then
-			completeDoorMovement(session, runtime, token, opening)
-		elseif liveSession(session) and runtime.MoveToken == token then
-			runtime.Busy = false
-			record.Leaf.CanCollide = if runtime.IsOpen then false else runtime.LeafCanCollide
-			setDoorPrompt(runtime)
-			record.Prompt.Enabled = true
-		end
-	end)
-end
-
-local function lockedDoorFeedback(session: AnyTable, runtime: AnyTable, player: Player)
-	local now = os.clock()
-	local previous = runtime.LastLockedAt[player] or -math.huge
-	if runtime.Busy or now - previous < DOOR_LOCK_COOLDOWN then return end
-	runtime.LastLockedAt[player] = now
-	runtime.Busy = true
-	runtime.MoveToken += 1
-	local token = runtime.MoveToken
-	local record = runtime.Record
-	record.Prompt.Enabled = false
-	record.Model:SetAttribute("Level3_DoorState", "LOCKED_RESPONSE")
-	if not playEmbeddedSound(record, "Locked Handle Rattle") then
-		fireSound(session, "DoorLocked", record.Leaf.Position, player)
-	end
-	local shake = record.Closed * CFrame.new(0, 0, -0.10) * CFrame.Angles(0, math.rad(1.4), 0)
-	local outInfo = TweenInfo.new(0.075, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-	playTween(session, record.Leaf, outInfo, {CFrame = shake})
-	if runtime.Handle and runtime.Handle.Parent then
-		playTween(session, runtime.Handle, outInfo, {CFrame = shake * runtime.HandleLocal * CFrame.Angles(0, 0, math.rad(14))})
-	end
-
-	fireAlert(session, "STAFF ACCESS", "LOCKED FROM THE OTHER SIDE", "FIND ANOTHER ROUTE", 1.25, player)
-
-	task.delay(0.09, function()
-		if not liveSession(session) or runtime.MoveToken ~= token then return end
-		local backInfo = TweenInfo.new(0.12, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut)
-		playTween(session, record.Leaf, backInfo, {CFrame = record.Closed})
-		if runtime.Handle and runtime.Handle.Parent then
-			playTween(session, runtime.Handle, backInfo, {CFrame = record.Closed * runtime.HandleLocal})
-		end
-		task.delay(0.13, function()
-			if not liveSession(session) or runtime.MoveToken ~= token then return end
-			runtime.Busy = false
-			record.Model:SetAttribute("Level3_DoorState", "LOCKED")
-			setDoorPrompt(runtime)
-			record.Prompt.Enabled = true
-		end)
-	end)
 end
 
 local function captureModuleOriginals(module: AnyTable): AnyTable
@@ -582,23 +418,8 @@ local function validateManifest(manifest: AnyTable, generation: number)
 
 	assert(type(manifest.Doors) == "table",
 		"Level 3 objective manifest door records must be a table")
-	local doorIds: {[string]: boolean} = {}
-	for _, record in ipairs(manifest.Doors) do
-		assert(type(record) == "table" and type(record.Id) == "string" and record.Id ~= "",
-			"Level 3 objective manifest contains an invalid door record")
-		assert(not doorIds[record.Id], "Level 3 objective manifest has a duplicate door id")
-		doorIds[record.Id] = true
-		assert(record.Type == "Openable" or record.Type == "Locked",
-			"Level 3 door record has an unsupported type: " .. tostring(record.Type))
-		assert(record.Model and record.Model:IsA("Model") and record.Model:IsDescendantOf(manifest.World),
-			"Level 3 door model is missing from the generated world")
-		assert(record.Leaf and record.Leaf:IsA("BasePart") and record.Leaf:IsDescendantOf(record.Model),
-			"Level 3 door is missing its leaf")
-		assert(record.Prompt and record.Prompt:IsA("ProximityPrompt") and record.Prompt:IsDescendantOf(record.Model),
-			"Level 3 door is missing its ProximityPrompt")
-		assert(typeof(record.Closed) == "CFrame" and typeof(record.Open) == "CFrame",
-			"Level 3 door is missing closed/open transforms")
-	end
+	assert(#manifest.Doors == 0,
+		"Level 3 Revision 3 is doorless; unexpected door records in the manifest")
 	local portal = manifest.ExitPortal
 	assert(type(portal) == "table" and portal.Model and portal.Model:IsA("Model")
 		and portal.Model:IsDescendantOf(manifest.World),
@@ -662,7 +483,6 @@ function ObjectiveController.Start(manifest: AnyTable, generation: number): AnyT
 		ClientEvent = clientEvent,
 		Connections = {},
 		Tweens = {},
-		DoorRuntime = {},
 		ModuleOriginals = {},
 		Collected = {},
 		ModuleCount = 0,
@@ -673,40 +493,6 @@ function ObjectiveController.Start(manifest: AnyTable, generation: number): AnyT
 		IntroScheduled = false,
 	}
 	activeSession = session
-
-	for _, record in ipairs(manifest.Doors) do
-		local handle = findDoorHandle(record)
-		local runtime: AnyTable = {
-			Session = session,
-			Record = record,
-			Handle = handle,
-			HandleLocal = if handle then record.Closed:ToObjectSpace(handle.CFrame) else CFrame.identity,
-			LeafColor = record.Leaf.Color,
-			LeafMaterial = record.Leaf.Material,
-			LeafCanCollide = record.Leaf.CanCollide,
-			IsOpen = false,
-			Busy = false,
-			MoveToken = 0,
-			LastLockedAt = setmetatable({}, {__mode = "k"}),
-			CompletionConnection = nil,
-		}
-		session.DoorRuntime[record.Id] = runtime
-		record.Leaf.CFrame = record.Closed
-		if handle then handle.CFrame = record.Closed * runtime.HandleLocal end
-		record.Model:SetAttribute("Level3_DoorOpen", false)
-		record.Model:SetAttribute("Level3_DoorState", record.Type == "Locked" and "LOCKED" or "CLOSED")
-		setDoorPrompt(runtime)
-		record.Prompt.Enabled = true
-		local connection = record.Prompt.Triggered:Connect(function(player)
-			if not canUsePrompt(player, session, record.Prompt, record.Model) then return end
-			if record.Type == "Locked" then
-				lockedDoorFeedback(session, runtime, player)
-			else
-				moveDoor(session, runtime, player)
-			end
-		end)
-		table.insert(session.Connections, connection)
-	end
 
 	for _, module in ipairs(manifest.Modules) do
 		session.ModuleOriginals[module.Index] = captureModuleOriginals(module)
@@ -761,24 +547,6 @@ function ObjectiveController.Stop()
 	activeSession = nil
 	disconnectAll(session)
 	cancelTweens(session)
-
-	for _, runtime in pairs(session.DoorRuntime) do
-		local record = runtime.Record
-		if record.Leaf and record.Leaf.Parent then
-			record.Leaf.CFrame = record.Closed
-			record.Leaf.Color = runtime.LeafColor
-			record.Leaf.Material = runtime.LeafMaterial
-			record.Leaf.CanCollide = runtime.LeafCanCollide
-		end
-		if runtime.Handle and runtime.Handle.Parent then
-			runtime.Handle.CFrame = record.Closed * runtime.HandleLocal
-		end
-		if record.Prompt and record.Prompt.Parent then record.Prompt.Enabled = false end
-		if record.Model and record.Model.Parent then
-			record.Model:SetAttribute("Level3_DoorOpen", false)
-			record.Model:SetAttribute("Level3_DoorState", "INACTIVE")
-		end
-	end
 
 	for _, module in ipairs(session.Manifest.Modules) do
 		local originals = session.ModuleOriginals[module.Index]

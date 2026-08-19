@@ -68,14 +68,20 @@ local root = entity:WaitForChild("HumanoidRootPart")
 -- wait for the maze, drop it on the EntityStart corner, then release.
 root.Anchored = true
 task.spawn(function()
-	workspace:WaitForChild("Maze", 60)
-	local es = workspace:WaitForChild("EntityStart", 60)
-	task.wait(0.1)
-	if es then
-		local bbox, size = entity:GetBoundingBox()
-		local pivot = entity:GetPivot()
-		entity:PivotTo(CFrame.new(es.CFrame.X, 0.5 + (pivot.Y - (bbox.Y - size.Y / 2)), es.CFrame.Z))
+	-- Wait as long as it takes: lobby servers never generate a maze, and a
+	-- Studio-fallback server can idle between rounds. Unanchoring before the
+	-- floor exists drops the entity past FallenPartsDestroyHeight and every
+	-- later round runs with no entity.
+	local es = workspace:FindFirstChild("EntityStart")
+	while not es and root.Parent do
+		task.wait(0.25)
+		es = workspace:FindFirstChild("EntityStart")
 	end
+	if not (es and root.Parent) then return end
+	task.wait(0.1)
+	local bbox, size = entity:GetBoundingBox()
+	local pivot = entity:GetPivot()
+	entity:PivotTo(CFrame.new(es.CFrame.X, 0.5 + (pivot.Y - (bbox.Y - size.Y / 2)), es.CFrame.Z))
 	root.Anchored = false
 	-- CRITICAL: the SERVER must own the entity's physics forever. By default an
 	-- unanchored NPC near a player is simulated on THAT PLAYER'S machine — every
@@ -199,7 +205,6 @@ local YELL_DURATION     = 3     -- seconds the steady push lasts
 local YELL_COOLDOWN     = 10    -- min seconds between yells at the same player (> duration)
 local YELL_WINDUP       = 0.6   -- pause after the roar before the push lands (sync w/ anim)
 local YELL_SOUND_LEAD   = 0.5   -- start the SOUND this long before the anim (it has an inhale)
-local PIT_HOWL_TIME     = 2.2   -- finish the pit howl, then settle into Watch at the edge
 local YELL_EDGE_DIST    = 6     -- how close to the pit edge it must get before yelling
 -- distant scream broadcast: how often the Entity lets out one of the four
 -- "Level 1 Distant Entity Scream" takes (the ids live in SoundController).
@@ -226,6 +231,10 @@ local FILL_BRIGHTNESS = 1.1  -- per light (two lights, so a touch lower each)
 local FILL_RANGE      = 14
 for _, host in ipairs({ entity:FindFirstChild("Head"), root }) do
 	if host then
+		-- The entity model persists across EntityAI restarts (round cleanup only
+		-- toggles this script), so drop the previous run's light first.
+		local stale = host:FindFirstChild("FillLight")
+		if stale then stale:Destroy() end
 		local fill = Instance.new("PointLight")
 		fill.Name = "FillLight"
 		fill.Brightness = FILL_BRIGHTNESS
@@ -312,10 +321,12 @@ task.spawn(function()
 	local eyes = {}
 	for _, marker in ipairs({ eyeL, eyeR }) do
 		local ok, err = pcall(function()
-			-- the nearest REAL part to fasten to — a rigged model can have the
-			-- attachment sitting on a Bone, and welds only accept BaseParts
-			local host = marker:FindFirstAncestorWhichIsA("BasePart")
-				or entity:FindFirstChild("Head") or root
+			-- The persistent entity keeps last run's eye instances across EntityAI
+			-- restarts; clear them so lights and billboards never stack.
+			local staleGlow = marker:FindFirstChild("EyeGlow")
+			if staleGlow then staleGlow:Destroy() end
+			local staleLight = marker:FindFirstChild("EyeLight")
+			if staleLight then staleLight:Destroy() end
 
 			local dot
 			local glowHost
@@ -590,14 +601,14 @@ local function tryYell(char, hrp)
 	if p and lastYell[p] and now - lastYell[p] < YELL_COOLDOWN then return false end
 	if p then lastYell[p] = now end
 	-- mark the whole yell (lead + wind-up + push) so the chase sound goes quiet
-	yellActiveUntil = now + PIT_HOWL_TIME
+	yellActiveUntil = now + YELL_SOUND_LEAD + YELL_WINDUP + YELL_DURATION
 
 	task.spawn(function()
 		-- the roar SOUND has an inhale before the yell, so start it FIRST and
 		-- let the inhale play; then trigger the animation so the visual lands on
 		-- the actual yell (id lives in SoundController, keyed off this attribute)
 		workspace:SetAttribute("EntityYell", (workspace:GetAttribute("EntityYell") or 0) + 1)
-		local ev = entity:FindFirstChild("PlayHowl")
+		local ev = entity:FindFirstChild("PlayYell")
 		if ev then ev:Fire() end
 
 		-- wind up with the roar, THEN shove — so the push lands with the animation
@@ -1062,20 +1073,6 @@ local wanderRetargetAt = 0
 local wanderPauseUntil = 0
 local activeObjectiveTarget = nil
 local lastChaseTarget = nil -- who currently carries the BeingChased attribute
-
-local function livingPlayers()
-	local list = {}
-	for _, p in ipairs(Players:GetPlayers()) do
-		local c = p.Character
-		local h = c and c:FindFirstChildOfClass("Humanoid")
-		-- escaped players are out of the maze — never hunt toward the safe room
-		if p:GetAttribute("Escaped") ~= true
-			and h and h.Health > 0 and c:FindFirstChild("HumanoidRootPart") then
-			table.insert(list, p)
-		end
-	end
-	return list
-end
 
 local function wanderPos(now)
 	local objectiveTarget = workspace:GetAttribute("EntityObjectiveTarget")

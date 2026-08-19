@@ -142,41 +142,34 @@ remote.OnServerEvent:Connect(function(player, value, payload)
 	end
 end)
 
-Players.PlayerAdded:Connect(function(p)
+-- One wiring path for both joins and the startup catch-up loop, so neither
+-- can drift (the old copies diverged: pre-existing players never got the
+-- InRound watcher and kept a lit mount after their round ended).
+local function forceLightOff(p)
+	local char = p.Character
+	if char then ensureFlag(char).Value = false end
+	local mount = mounts[p]
+	if mount then setMountEnabled(mount, false) end
+end
+
+local function hookPlayer(p)
 	p:GetAttributeChangedSignal("Level3_Hiding"):Connect(function()
-		if p:GetAttribute("Level3_Hiding") ~= true then return end
-		local char = p.Character
-		if char then ensureFlag(char).Value = false end
-		local mount = mounts[p]
-		if mount then setMountEnabled(mount, false) end
+		if p:GetAttribute("Level3_Hiding") == true then forceLightOff(p) end
 	end)
 	p:GetAttributeChangedSignal("InRound"):Connect(function()
-		if p:GetAttribute("InRound") == true then return end
-		local char = p.Character
-		if char then ensureFlag(char).Value = false end
-		local mount = mounts[p]
-		if mount then setMountEnabled(mount, false) end
-	end)
-	p.CharacterAdded:Connect(function(char)
-		removeMount(p)
-		ensureFlag(char)
-	end)
-end)
-
--- cover characters that spawned before this script connected
-for _, p in ipairs(Players:GetPlayers()) do
-	p:GetAttributeChangedSignal("Level3_Hiding"):Connect(function()
-		if p:GetAttribute("Level3_Hiding") ~= true then return end
-		local char = p.Character
-		if char then ensureFlag(char).Value = false end
-		local mount = mounts[p]
-		if mount then setMountEnabled(mount, false) end
+		if p:GetAttribute("InRound") ~= true then forceLightOff(p) end
 	end)
 	p.CharacterAdded:Connect(function(char)
 		removeMount(p)
 		ensureFlag(char)
 	end)
 	if p.Character then ensureFlag(p.Character) end
+end
+
+Players.PlayerAdded:Connect(hookPlayer)
+-- cover characters that spawned before this script connected
+for _, p in ipairs(Players:GetPlayers()) do
+	hookPlayer(p)
 end
 
 Players.PlayerRemoving:Connect(function(player)

@@ -22,8 +22,23 @@ from typing import Any
 
 PROTOCOL_VERSION = "2024-11-05"
 SCRIPT_CLASSES = {"Script", "LocalScript", "ModuleScript"}
+
+# StudioMCP.exe needs a moment after launch before it can reach Studio's plugin;
+# the wording of that transient failure has changed between Studio builds.
+TRANSIENT_CONNECT_ERRORS = (
+    "Not connected to the WS host",
+    "Unable to reach Roblox Studio",
+)
+# Studio now reports instances as "Place Name (placeId: 123)"; older builds
+# reported a bare name. Strip the suffix so both forms compare equal.
+STUDIO_NAME_SUFFIX = re.compile(r"\s*\((?:placeId:[^)]*|[^)]*\.rbxlx?)\)\s*$")
 LINE_PREFIX = re.compile(r"^\s*\d+\N{RIGHTWARDS ARROW}")
 INVALID_WINDOWS_NAME = re.compile(r'[<>:"/\\|?*]')
+
+
+def studio_display_name(studio: dict[str, Any]) -> str:
+    """Compare Studio names ignoring the trailing place-id suffix."""
+    return STUDIO_NAME_SUFFIX.sub("", str(studio.get("name", ""))).strip()
 
 
 class StudioMcpError(RuntimeError):
@@ -198,12 +213,18 @@ def select_studio(
         try:
             payload = json.loads(client.call("list_roblox_studios"))
         except StudioMcpError as error:
-            if "Not connected to the WS host" not in str(error):
+            if not any(marker in str(error)
+                       for marker in TRANSIENT_CONNECT_ERRORS):
                 raise
             time.sleep(1)
             continue
         studios = payload.get("studios", [])
-        matches = [studio for studio in studios if studio.get("name") == expected_name]
+        matches = [
+            studio
+            for studio in studios
+            if expected_name
+            in (str(studio.get("name", "")), studio_display_name(studio))
+        ]
         if len(matches) == 1:
             return matches[0]
         if len(matches) > 1:

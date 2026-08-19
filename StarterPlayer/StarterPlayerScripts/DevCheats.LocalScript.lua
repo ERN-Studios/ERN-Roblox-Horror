@@ -407,6 +407,10 @@ local function dispatchCommand(command, requested)
 		setUnlimited(requested)
 	elseif command == "thirdPerson" then
 		setThirdPerson(requested)
+	elseif command == "level3PreBlackout" then
+		-- Timeline seeking is server-authoritative; GameManager verifies the
+		-- timeline owner and reports back via the DevLevel3Timeline* attributes.
+		fireDev("level3PreBlackout", true)
 	else
 		warn("[DevCheats] Unknown command: " .. tostring(command))
 	end

@@ -38,6 +38,8 @@ local targets = {}
 local idx = 1
 local spectated = nil -- the player whose POV we're in
 local hidden = nil    -- character whose parts we've hidden locally
+local hiddenParts = {} -- cached BaseParts of `hidden` (rebuilt on target change)
+local hiddenPartsConn = nil
 local snapCam = true  -- snap (not ease) on the first frame and whenever we switch target
 
 local function livingOthers()
@@ -81,6 +83,11 @@ local function unhide()
 		end
 		hidden = nil
 	end
+	table.clear(hiddenParts)
+	if hiddenPartsConn then
+		hiddenPartsConn:Disconnect()
+		hiddenPartsConn = nil
+	end
 end
 
 local function watch(i)
@@ -117,10 +124,23 @@ RunService.RenderStepped:Connect(function(dt)
 		cam.CFrame = cam.CFrame:Lerp(head.CFrame, math.clamp(dt * SMOOTH, 0, 1))
 	end
 
-	-- hide their body locally so it doesn't fill the screen (true first person)
-	if hidden ~= char then unhide(); hidden = char end
-	for _, d in ipairs(char:GetDescendants()) do
-		if d:IsA("BasePart") then d.LocalTransparencyModifier = 1 end
+	-- hide their body locally so it doesn't fill the screen (true first person).
+	-- The part list is cached per spectated character: a GetDescendants sweep
+	-- every RenderStepped allocated a fresh table 60x per second.
+	if hidden ~= char then
+		unhide()
+		hidden = char
+		table.clear(hiddenParts)
+		for _, d in ipairs(char:GetDescendants()) do
+			if d:IsA("BasePart") then hiddenParts[#hiddenParts + 1] = d end
+		end
+		if hiddenPartsConn then hiddenPartsConn:Disconnect() end
+		hiddenPartsConn = char.DescendantAdded:Connect(function(d)
+			if d:IsA("BasePart") then hiddenParts[#hiddenParts + 1] = d end
+		end)
+	end
+	for _, d in ipairs(hiddenParts) do
+		if d.Parent then d.LocalTransparencyModifier = 1 end
 	end
 
 	-- mirror their flashlight from the shared viewpoint

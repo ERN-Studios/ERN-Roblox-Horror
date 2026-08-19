@@ -31,7 +31,7 @@ local function applyPlayerLighting()
  local inMaze = player:GetAttribute("InRound") == true
  local mazeGrade = Lighting:FindFirstChild("MongoGrade")
  local selectedLevel = workspace:GetAttribute("SelectedLevel")
- local levelTwoWorld = workspace:FindFirstChild("Level 2 Generated World") or workspace:FindFirstChild("PoolroomsLevel2")
+ local levelTwoWorld = workspace:FindFirstChild("Level 2 Generated World")
  local levelThreeWorld = workspace:FindFirstChild("Level 3 Generated World")
  local isLevelTwo = levelTwoWorld ~= nil and (selectedLevel == 2 or inMaze)
  local isLevelThree = levelThreeWorld ~= nil and (selectedLevel == 3 or inMaze)
@@ -371,6 +371,7 @@ local function shouldShowCursor()
  return player:GetAttribute("InRound") ~= true
   or queueShade.Visible
   or player:GetAttribute("DevPhoneOpen") == true
+  or player:GetAttribute("ZyntraReentryOpen") == true
 end
 
 local function refreshCursor()
@@ -383,13 +384,15 @@ end
 queueShade:GetPropertyChangedSignal("Visible"):Connect(refreshCursor)
 player:GetAttributeChangedSignal("InRound"):Connect(refreshCursor)
 player:GetAttributeChangedSignal("DevPhoneOpen"):Connect(refreshCursor)
+player:GetAttributeChangedSignal("ZyntraReentryOpen"):Connect(refreshCursor)
 refreshCursor()
 
 -- An open modal must keep the pointer free. Ordinary lobby play deliberately
 -- does not touch MouseBehavior here: Roblox uses its temporary right-button
 -- lock to rotate the Classic camera while RMB is held.
 RunService.RenderStepped:Connect(function()
- if UIS.MouseEnabled and (queueShade.Visible or player:GetAttribute("DevPhoneOpen") == true) then
+ if UIS.MouseEnabled and (queueShade.Visible or player:GetAttribute("DevPhoneOpen") == true
+  or player:GetAttribute("ZyntraReentryOpen") == true) then
   UIS.MouseBehavior = Enum.MouseBehavior.Default
   UIS.MouseIconEnabled = true
  end
@@ -1120,6 +1123,9 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
 	elseif ev == "loadinggame" then
 		objectiveRun += 1
 		elevatorBriefingStarted = false
+		-- Re-arm the elevator shake for Studio-fallback servers that host
+		-- several rounds in a row ("start" only fires after the ride).
+		shakeScheduled = false
 		hideRoundEnding(true)
 		stopSpectating()
 		dead = false
@@ -1136,10 +1142,6 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
 	elseif ev == "loadfailed" then
 		loadingFrame.Visible = false
 		setMsg("WORLD GENERATION FAILED — RETURNING TO LOBBY", Color3.fromRGB(255, 100, 100))
-
-	elseif ev == "waiting" then
-		elevatorBriefingStarted = false
-		setMsg("Waiting for players…")
 
 	elseif ev == "poolaccess" then
 		loadingFrame.Visible = false
@@ -1238,7 +1240,6 @@ local MimicTweenService = game:GetService("TweenService")
 
 local MIMIC_ISOLATION_RADIUS = 70
 local MIMIC_FOLLOW_DISTANCE = 10
-local MIMIC_FLEE_TRIGGER = 10
 local MIMIC_DESPAWN_DISTANCE = 110
 local activeMimic = nil
 local mimicSerial = 0
@@ -1921,6 +1922,9 @@ local ambientScares = {
  footsteps = ambientFootsteps,
  knocks = ambientKnocks,
  lights = ambientLightDrop,
+ -- Not in the random rotation (ambientChooseKind), but registered so the
+ -- documented Studio DevAmbientScare hook can actually trigger it.
+ shadow = ambientShadow,
 }
 
 local function ambientChooseKind()

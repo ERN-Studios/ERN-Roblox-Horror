@@ -92,12 +92,10 @@ local Configuration = {
 	KidsWadingDepth = .8,
 
 	-- ── lighting ────────────────────────────────────────────────────────────
+	-- Natural light comes from the translucent glass roof (real sunlight), not
+	-- from artificial skylight fixtures — only the ceiling panels are tunable.
 	CeilingPanelBrightness = 1.085,
 	CeilingPanelRange = 44,
-	WallPanelBrightness = 0.665,
-	WallPanelRange = 28,
-	SkylightBrightness = 2.17,
-	SkylightRange = 95,
 
 	-- ── slides ──────────────────────────────────────────────────────────────
 	SlidesPerHall = 3,
@@ -111,8 +109,6 @@ local Configuration = {
 	SlideHelixVisualOverlap = .56,
 	SlideMeshOverlap = .65,
 	SlideGlossReflectance = .06,
-	SlideMouthReflectance = .08,
-	SlideMouthLength = 2.8,
 	SlideCollisionThickness = .6,
 	-- Flat and shallow slide sections remain normally walkable. The controller
 	-- takes over only once a rider reaches a genuinely steep descent.

@@ -1613,7 +1613,6 @@ function Builder.Build(center)
 	local tunnelLength = 280
 	local halfLength = tunnelLength * 0.5
 	local radius = 35
-	local shellBaseY = center.Y + 1
 	local shellSegments = 16
 	local shellChord = 2 * radius * math.sin(math.pi / shellSegments) + 0.6
 

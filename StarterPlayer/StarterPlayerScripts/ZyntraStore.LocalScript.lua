@@ -20,7 +20,6 @@ local profileChangedRemote = remotes:WaitForChild("ZyntraProfileChanged")
 local profile
 local currentTab = "Upgrades"
 local productButtons = {}
-local pickerControls = {}
 local reentryDead = false
 
 local COLORS = {
@@ -126,7 +125,7 @@ corner(header, 12)
 
 local title = label(header, "ZYNTRA", UDim2.new(0, 260, 0, 30), UDim2.fromOffset(24, 10), 24, COLORS.accent, Enum.Font.GothamBlack)
 title.Text = "ZYNTRA // RESEARCH"
-local subtitle = label(header, "EQUIPMENT DEVELOPMENT TERMINAL", UDim2.new(0, 420, 0, 20), UDim2.fromOffset(25, 40), 11, COLORS.muted, Enum.Font.Code)
+label(header, "EQUIPMENT DEVELOPMENT TERMINAL", UDim2.new(0, 420, 0, 20), UDim2.fromOffset(25, 40), 11, COLORS.muted, Enum.Font.Code)
 
 local tokenLabel = label(header, "TOKENS  --", UDim2.fromOffset(190, 34), UDim2.new(1, -250, 0, 18), 18, COLORS.accent2, Enum.Font.GothamBold)
 tokenLabel.TextXAlignment = Enum.TextXAlignment.Right
@@ -306,7 +305,7 @@ if devAllowed and pages.Dev then
 		corner(row, 8)
 		outline(row, COLORS.line, 0.4)
 
-		local heading = label(
+		label(
 			row,
 			info.Name,
 			UDim2.new(1, -190, 0, 24),
@@ -393,7 +392,7 @@ local function makeUpgradeCard(parent, xScale, titleText, description)
 	corner(card, 10)
 	outline(card, COLORS.line, 0.35)
 
-	local heading = label(card, titleText, UDim2.new(1, -36, 0, 34), UDim2.fromOffset(18, 18), 22, COLORS.text, Enum.Font.GothamBold)
+	label(card, titleText, UDim2.new(1, -36, 0, 34), UDim2.fromOffset(18, 18), 22, COLORS.text, Enum.Font.GothamBold)
 	local desc = label(card, description, UDim2.new(1, -36, 0, 72), UDim2.fromOffset(18, 60), 14, COLORS.muted)
 	desc.TextWrapped = true
 	desc.TextYAlignment = Enum.TextYAlignment.Top
@@ -526,7 +525,7 @@ local function makeColorPicker(parent, key, titleText, actionName)
 	corner(card, 9)
 	outline(card, COLORS.line, 0.4)
 
-	local heading = label(card, titleText, UDim2.new(1, -170, 0, 28), UDim2.fromOffset(16, 12), 18, COLORS.text, Enum.Font.GothamBold)
+	label(card, titleText, UDim2.new(1, -170, 0, 28), UDim2.fromOffset(16, 12), 18, COLORS.text, Enum.Font.GothamBold)
 	local preview = Instance.new("Frame")
 	preview.Position = UDim2.new(1, -148, 0, 12)
 	preview.Size = UDim2.fromOffset(48, 28)
@@ -635,7 +634,6 @@ local function makeColorPicker(parent, key, titleText, actionName)
 		lock.Text = text or "PASS REQUIRED"
 	end
 	state.Refresh()
-	pickerControls[key] = control
 	return control
 end
 
@@ -840,7 +838,7 @@ updateVisibility()
 local function toggleMain(requested)
 	local inRound = player:GetAttribute("InRound") == true
 	if inRound and not devAllowed then return end
-	local visible = typeof(requested) == "boolean" and requested or not main.Visible
+	local visible = if typeof(requested) == "boolean" then requested else not main.Visible
 	if visible and inRound and devAllowed then selectTab("Dev") end
 	setMainVisible(visible)
 	if main.Visible then showStatus("") end

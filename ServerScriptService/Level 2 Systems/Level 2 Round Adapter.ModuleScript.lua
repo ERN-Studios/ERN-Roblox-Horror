@@ -190,6 +190,9 @@ function Adapter.Cleanup()
 	state:SetAttribute("Level2_Phase", "IDLE")
 	state:SetAttribute("Level2_LightingMode", "OFF")
 	state:SetAttribute("Level2_PumpProgress", 0)
+	for pumpNumber = 1, 3 do
+		state:SetAttribute("Level2_PumpStartedAt" .. tostring(pumpNumber), nil)
+	end
 	state:SetAttribute("Level2_HallCount", nil)
 	state:SetAttribute("Level2_Error", nil)
 end
