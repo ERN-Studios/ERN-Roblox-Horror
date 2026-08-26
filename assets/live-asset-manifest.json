@@ -1,0 +1,138 @@
+{
+  "schemaVersion": 1,
+  "snapshotDate": "2026-08-26",
+  "experience": {
+    "name": "Backrooms: No Way Out",
+    "placeId": 131311258779917,
+    "universeId": 10559217407,
+    "creatorGroup": "ERN Roblox Studios",
+    "creatorGroupId": 1039373905
+  },
+  "sourcePack": {
+    "directory": "assets/source-packs/live-assets-2026-08-26",
+    "format": "split tar.gz",
+    "partSizeBytes": 655360,
+    "partCount": 159,
+    "archiveBytes": 103743813,
+    "archiveSha256": "4b083e73ec4606822299e245e2651f82dab48939a51f636aa5e9c6761405302e",
+    "verifiedSourceFileCount": 51,
+    "restoreCommand": "./tools/restore-live-assets.sh"
+  },
+  "directFiles": [
+    {
+      "path": "assets/sounds/level3/cd-collected.mp3",
+      "robloxAssetId": 84585027971879,
+      "gitBlobSha": "c8cdff1e7c9b174542e09b4fc39b968d2b3df93a",
+      "status": "verified previously and stored directly"
+    }
+  ],
+  "liveAssetIds": {
+    "briefings": {
+      "lobbySpeech": 121135469064341,
+      "lobbyRadioOn": 116864891394910,
+      "level1Speech": 110249611823719,
+      "level1RadioOn": 73198577463663,
+      "level2Speech": 139075030898721,
+      "level2RadioOn": 121765399252460,
+      "level3Speech": 113751783401897,
+      "level3RadioOn": 105627123289647
+    },
+    "level1Audio": {
+      "entityStep1": 130932521095399,
+      "entityStep2": 95916241222632,
+      "entitySpotScream": 82272419363488,
+      "entityChase": 79246919959914,
+      "randomKnock1": 133468930879347
+    },
+    "level2Audio": {
+      "waterDrop": 116103446006735,
+      "distantSplash": 102625239366222,
+      "drainGurgle": 105244893367809,
+      "pipeGroan": 116707880665577,
+      "pressureDoor": 113402173976510,
+      "pumpStart": 105491305106437,
+      "roomToneLow": 75214252175039,
+      "shallowFootsteps": [134239383236056, 121310030007635, 105900557574918],
+      "distantMonsterGroans": [93723101231893, 87666542035440, 120532580680571, 95187342487142],
+      "wadeSteps": [75800492736528, 115563372806578, 78524180373927, 96086593477646, 133142004005994, 121103648572050, 101190784903878]
+    },
+    "level2Images": {
+      "poolroomsTile": 113211706146395,
+      "kidsLagoonTile": 104777612561263,
+      "kidsCoral": 112141126668613,
+      "kidsSlideFiberglass": 112440572834374,
+      "kidsFoamVinyl": 118838034258275,
+      "kidsRubberFloor": 81337424580816,
+      "pumpMachinery": 71780598399274,
+      "poolNoodle": 78838707014603,
+      "lounger": 91296013464877,
+      "beachBall": 123196786081916,
+      "floatRing": 115464842856867,
+      "poolRaft": 119929960740617,
+      "slidemouthColor": 134465279157918,
+      "slidemouthMetalness": 109665213693149,
+      "slidemouthNormal": 125626213091169,
+      "slidemouthRoughness": 72551314664267
+    },
+    "level3Audio": {
+      "fluorescentHum": 92576512092725,
+      "roomListeningSong": 140244948455675,
+      "roomListeningSongReversed": 75285146479953,
+      "cdCollected": 84585027971879,
+      "mallManagerWalk": [86969848436282, 125163405380423, 131363472955449, 128260682244977],
+      "mallManagerBalloonScream": 105088070261380,
+      "mallManagerBlackout": 125407251695204
+    },
+    "level3Images": {
+      "partyCarpet": 92795890253148,
+      "partyCarpetNeon": 110230144446272,
+      "partyCarpetRed": 108064770913201,
+      "cityCarpet": 75635502248205,
+      "pastelWallpaper": 96252806287644,
+      "orangeWall": 128270554927663,
+      "confettiTablecloth": 103412925025303,
+      "finalExitDoor": 120063024460642,
+      "kidsDrawingsAtlas": 136455642832077,
+      "kidsDrawingsWholesome25": 128767366284181,
+      "kidsDrawingsDisturbing25": 132144680342985,
+      "kidsNotesAtlas": 81550568434150,
+      "cdCoversAtlas": 88160214591687,
+      "diskPlayerSurface": 92830391726737,
+      "crtScreenSurface": 106602270400755,
+      "mallManagerColor": 139917107442839
+    },
+    "modelsAndAnimations": {
+      "mallManagerMesh": 109940356128050,
+      "mallManagerWalkAnimation": 123012476898232,
+      "foldingTableMesh": 135921646304432,
+      "foldingTableTexture": 112282995723556,
+      "foldingChairMesh": 135253309610935
+    }
+  },
+  "unresolvedOrExternal": [
+    {
+      "scope": "workstation source bytes",
+      "status": "not archived",
+      "reason": "24 candidate files were macOS dataless cloud placeholders at snapshot time; no fabricated or zero-byte copies were committed"
+    },
+    {
+      "scope": "Level 2 shallow footsteps 2 and 3",
+      "assetIds": [121310030007635, 105900557574918],
+      "status": "Roblox-hosted dependency; no uniquely matched local original"
+    },
+    {
+      "scope": "Pool Foam primary model and SecretPartyStatue",
+      "status": "Roblox-hosted dependency; no verified local original"
+    },
+    {
+      "scope": "Roblox built-in or marketplace dependencies",
+      "examples": [9125446543, 9118901593, 9119631915],
+      "status": "referenced by asset ID, not locally owned source"
+    },
+    {
+      "scope": "complete place serialization",
+      "status": "missing",
+      "reason": "the repository mirrors scripts, selected remotes, manifests, and source assets but does not yet serialize all live instances, geometry, terrain, and properties"
+    }
+  ]
+}
