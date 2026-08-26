@@ -5,7 +5,7 @@
 -- navigation, awareness, attacks, and lifecycle are isolated from Level 1.
 
 local Configuration = {
-	Version = 26,
+	Version = 45,
 	WorldName = "Level 3 Generated World",
 	StateFolderName = "Level 3 State",
 	RemotesFolderName = "Level 3 Remotes",
@@ -44,6 +44,12 @@ local Configuration = {
 		MinimumGatewayGap = 38,
 		MaximumGatewayGap = 48,
 		MinimumCorridorLength = 18,
+		-- The concealed Signal Hall route is deliberately much longer than every
+		-- ordinary mall connector so the reversed PA master has time to unsettle players.
+		ExitCorridorLength = 560,
+		FinalHallHalfwayProgress = .50,
+		ExitCorridorSpeakerCount = 7,
+		ExitCorridorFixtureCount = 9,
 		RowHalfSpacing = 90,
 		ExtraLinksPerDistrict = 2,
 		MinimumModuleSeparation = 105,
@@ -74,6 +80,8 @@ local Configuration = {
 		KidsDrawingsDisturbing25 = "rbxassetid://132144680342985",
 		KidsNotesAtlas = "rbxassetid://81550568434150",
 		CDCoversAtlas = "rbxassetid://88160214591687",
+		DiskPlayerSurface = "rbxassetid://92830391726737",
+		CRTScreenSurface = "rbxassetid://106602270400755",
 	},
 	Audio = {
 		FluorescentHum = "rbxassetid://92576512092725",
@@ -84,6 +92,9 @@ local Configuration = {
 		PowerDown = "",
 		-- Group-owned song uploaded specifically for the synchronized Level 3 sequence.
 		RoomListeningSong = "rbxassetid://140244948455675",
+		-- Filled with the group upload of the reversed 180-second master.
+		RoomListeningSongReversed = "rbxassetid://75285146479953",
+		CDCollected = "rbxassetid://84585027971879",
 		-- Reserved Level 3 scare slots. Add group-owned IDs when the sounds are ready.
 		ScareBalloonPop = "",
 		ScareChairScrape = "",
@@ -114,12 +125,20 @@ local Configuration = {
 		BlackoutStartSeconds = 150,
 		PreBlackoutFlickerSeconds = 5,
 		BlackoutScreamLeadSeconds = 3,
+		-- One beat before the scream strips furniture and every handheld light.
+		-- Furniture stays collisionless for the hunt, returns visually for the final
+		-- two seconds, then regains collision exactly when the Manager despawns.
+		FurnitureRemovalLeadSeconds = 1,
+		HuntFinalFlashlightLockSeconds = 2,
 		PostSongBlackoutSeconds = 30,
 		BlackoutSeconds = 60.035917,
 		CycleEndSeconds = 210.035917,
 		RecoveryFlickerSeconds = 3.2,
 		PreloadLeadSeconds = 1.5,
 		RoomVolume = 0.48,
+		CompletionSongVolume = 0.34,
+		CompletionSongPitchOctave = 0.68,
+		CompletionDimSeconds = 5.5,
 		CorridorVolume = 0.045,
 		RoomFadeDistance = 18,
 		VolumeFadeSeconds = 1.15,
@@ -135,6 +154,10 @@ local Configuration = {
 	},
 	MallManager = {
 		TemplateName = "MallManagerTemplate",
+		-- NoiseReporter defines the real player sprint at 26 studs/second. The
+		-- blackout Manager must win a straight chase by exactly twenty percent.
+		PlayerRunSpeedReference = 26,
+		ChaseSpeedMultiplier = 1.20,
 		RuntimeName = "Mall Manager",
 		-- Signal Hall remains an authored emergency fallback only. Every real blackout
 		-- spawn is selected near a random member of the densest living player group.
@@ -142,6 +165,7 @@ local Configuration = {
 		SpawnMinimumDistance = 90,
 		SpawnPreferredDistance = 125,
 		SpawnMaximumDistance = 180,
+		FinalHallSpawnProgress = .40,
 		SpawnGroupRadius = 75,
 		SpawnRoomMargin = 10,
 		-- Radius 5 matches the animated root-relative body sway. The slightly
@@ -159,15 +183,24 @@ local Configuration = {
 		BlackoutDirectPathRange = 48,
 		GoalTolerance = 3.2,
 		PathGoalMoveThreshold = 7,
-		BlackoutPathGoalMoveThreshold = 5,
+		-- The hunt tracks a moving nearest-player goal. Refresh before a runner can
+		-- pull a stale route several studs behind them, without flooding PFS.
+		BlackoutPathGoalMoveThreshold = 3,
 		PathRecomputeSeconds = 0.45,
-		BlackoutPathRecomputeSeconds = 0.25,
+		BlackoutPathRecomputeSeconds = 0.20,
 		ThinkIntervalSeconds = 0.12,
 		BlackoutThinkIntervalSeconds = 0.10,
 		StuckSeconds = 0.85,
 		StuckDistance = 0.65,
 		MaxPathFailures = 3,
 		ObstructionRecoveryAttempts = 3,
+		-- LEVEL3_MANAGER_FURNITURE_NAV_20260821
+		-- Hold one avoidance side long enough to clear wide furniture instead of
+		-- choosing a new left/right answer every movement frame.
+		AvoidanceCommitSeconds = 1.35,
+		OverlapEscapeProbeDistance = 3.5,
+		FurniturePathLabel = "Level3ManagerFurniture",
+		FurniturePathPadding = 1.25,
 		ProgressResetDistance = 8,
 		MovementAcceleration = 48,
 		MovementDeceleration = 72,
@@ -269,8 +302,8 @@ local Configuration = {
 			PatrolSpeed = 5.25,
 			InvestigateSpeed = 12.6,
 			SearchSpeed = 15.4,
-			-- Player RUN is 26; 20.3 remains threatening but is now escapable on foot.
-			ChaseSpeed = 20.3,
+			-- 26 player RUN × 1.20 = 31.2 studs/second.
+			ChaseSpeed = 31.2,
 			VisionRange = 280,
 			FieldOfViewDegrees = 280,
 			ProximitySenseRange = 28,
@@ -323,7 +356,7 @@ local Configuration = {
 		{Id="PartyB", Name="Abandoned Banquet Hall 07", Kind="Party", Decor="GrandBanquet", X=570, Z=-105, W=126, D=96, H=18, Module=true},
 		{Id="Records", Name="Orange Celebration Room", Kind="Party", Decor="AbandonedCelebration", X=570, Z=105, W=84, D=70, H=14, Module=true},
 		{Id="SignalHall", Name="East Party Passage", Kind="PartyHall", Decor="EmptyTransition", X=710, Z=0, W=78, D=40, H=11.5},
-		{Id="Exit", Name="Freight Elevator Chamber", Kind="Exit", Decor="Exit", X=820, Z=0, W=58, D=52, H=14},
+		{Id="Exit", Name="Freight Elevator Chamber", Kind="Exit", Decor="Exit", X=1040, Z=0, W=58, D=52, H=14},
 	},
 	Links = {
 		{A="Arrival", B="StaffJunction", Door="Open"},

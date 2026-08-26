@@ -65,6 +65,11 @@ local function validRound(session: any): boolean
 		and workspace:GetAttribute("EntityPaused") ~= true
 end
 
+local function blackoutProfileRequested(): boolean
+	return workspace:GetAttribute("Level3BlackoutActive") == true
+		or workspace:GetAttribute("Level3FinalHallChaseActive") == true
+end
+
 local function publishMotion(session: any, dt: number, hardSnap: boolean?)
 	if not session.MotionRemote or not session.Model or not session.Model.Parent then return end
 	local interval = 1 / math.max(1, Tuning.MotionSnapshotRate)
@@ -193,6 +198,7 @@ end
 
 local function clearGoal(session: any)
 	session.FinalGoal = nil
+	session.ResolvedFinalGoal = nil
 	session.StrategicPoints = {}
 	session.StrategicIndex = 1
 	clearPath(session, "IDLE")
@@ -466,7 +472,8 @@ local function centerCorridorWaypoint(position: Vector3, floorY: number): Vector
 	local bestLateralDistance = math.huge
 	local lateralLimit = Configuration.CorridorWidth * .5 + .25
 	for _, link in ipairs(layoutLinks()) do
-		if link.Door ~= "HiddenExit" then
+		if link.Door ~= "HiddenExit"
+			or workspace:GetAttribute("Level3FinalHallChaseActive") == true then
 			local a, b = roomDefinition(link.A), roomDefinition(link.B)
 			if a and b then
 				local horizontal = math.abs(b.X - a.X) > math.abs(b.Z - a.Z)
@@ -585,7 +592,7 @@ local function refreshNavigationFilters(session: any)
 	overlap.FilterType = Enum.RaycastFilterType.Exclude
 	overlap.FilterDescendantsInstances = ignored
 	overlap.RespectCanCollide = true
-	overlap.MaxParts = 1
+	overlap.MaxParts = 16
 	session.NavigationOverlapParams = overlap
 end
 
@@ -608,10 +615,134 @@ local function clearanceBox(groundPosition: Vector3): (CFrame, Vector3)
 	return CFrame.new(center), size
 end
 
-local function volumeFits(session: any, groundPosition: Vector3, params: OverlapParams?): boolean
+-- LEVEL3_MANAGER_SHARED_FURNITURE_CLEARANCE_20260821
+-- Pathfinding, direct-path shortcuts, waypoint lookahead, and local steering must
+-- agree on the same inflated table-and-chair envelopes. These parts are
+-- deliberately non-collidable, so physics overlap queries alone cannot see them.
+-- PFS may return points exactly on a modifier boundary. Keep a small seam tolerance
+-- inside the authored 1.25-stud padding so tangent motion is not misread as overlap.
+local FURNITURE_CLEARANCE_EPSILON = .25
+
+local function collectFurnitureNavExclusions(world: Model): {BasePart}
+	local exclusions = {}
+	for _, object in ipairs(world:GetDescendants()) do
+		if object:IsA("BasePart")
+			and object:GetAttribute("Level3_ManagerFurnitureNavExclusion") == true then
+			table.insert(exclusions, object)
+		end
+	end
+	return exclusions
+end
+
+local function furnitureNavExclusionsAt(session: any, groundPosition: Vector3): {BasePart}
+	local blockers = {}
+	for _, exclusion in ipairs(session.FurnitureNavExclusions or {}) do
+		if exclusion.Parent then
+			local sample = Vector3.new(groundPosition.X, exclusion.Position.Y, groundPosition.Z)
+			local localPoint = exclusion.CFrame:PointToObjectSpace(sample)
+			if math.abs(localPoint.X) < exclusion.Size.X * .5 - FURNITURE_CLEARANCE_EPSILON
+				and math.abs(localPoint.Z) < exclusion.Size.Z * .5 - FURNITURE_CLEARANCE_EPSILON then
+				table.insert(blockers, exclusion)
+			end
+		end
+	end
+	return blockers
+end
+
+local function furnitureNavExclusionOnSegment(session: any,
+	startGround: Vector3, endGround: Vector3): BasePart?
+	for _, exclusion in ipairs(session.FurnitureNavExclusions or {}) do
+		if exclusion.Parent then
+			local sampleY = exclusion.Position.Y
+			local localStart = exclusion.CFrame:PointToObjectSpace(
+				Vector3.new(startGround.X, sampleY, startGround.Z))
+			local localFinish = exclusion.CFrame:PointToObjectSpace(
+				Vector3.new(endGround.X, sampleY, endGround.Z))
+			local delta = localFinish - localStart
+			local tMin = 0
+			local tMax = 1
+
+			local function clipAxis(origin: number, change: number, halfExtent: number): boolean
+				if math.abs(change) <= 1e-5 then
+					return math.abs(origin) < halfExtent
+				end
+				local enter = (-halfExtent - origin) / change
+				local leave = (halfExtent - origin) / change
+				if enter > leave then enter, leave = leave, enter end
+				tMin = math.max(tMin, enter)
+				tMax = math.min(tMax, leave)
+				return tMin < tMax
+			end
+
+			if clipAxis(localStart.X, delta.X,
+				math.max(.05, exclusion.Size.X * .5 - FURNITURE_CLEARANCE_EPSILON))
+				and clipAxis(localStart.Z, delta.Z,
+					math.max(.05, exclusion.Size.Z * .5 - FURNITURE_CLEARANCE_EPSILON)) then
+				return exclusion
+			end
+		end
+	end
+	return nil
+end
+
+local function segmentIntersectsFurnitureNavExclusion(session: any,
+	startGround: Vector3, endGround: Vector3): boolean
+	return furnitureNavExclusionOnSegment(session, startGround, endGround) ~= nil
+end
+
+local function overlappingNavigationParts(session: any, groundPosition: Vector3,
+	params: OverlapParams?): {BasePart}
 	local boxCFrame, size = clearanceBox(groundPosition)
 	local overlapParams = params or navigationOverlapParams(session)
-	return #workspace:GetPartBoundsInBox(boxCFrame, size, overlapParams) == 0
+	return workspace:GetPartBoundsInBox(boxCFrame, size, overlapParams)
+end
+
+local function publishPhysicalBlocker(session: any, blocker: BasePart, phase: string)
+	if session.Model and session.Model.Parent then
+		session.Model:SetAttribute("Level3_MallManagerLastPhysicalBlocker", blocker:GetFullName())
+		session.Model:SetAttribute("Level3_MallManagerLastPhysicalBlockerPhase", phase)
+	end
+end
+
+local function physicalVolumeClear(session: any, startGround: Vector3, endGround: Vector3): boolean
+	local overlapParams = navigationOverlapParams(session)
+	local startBlockers = overlappingNavigationParts(session, startGround, overlapParams)
+	if #startBlockers > 0 then
+		publishPhysicalBlocker(session, startBlockers[1], "START_OVERLAP")
+		return false
+	end
+	local endBlockers = overlappingNavigationParts(session, endGround, overlapParams)
+	if #endBlockers > 0 then
+		publishPhysicalBlocker(session, endBlockers[1], "END_OVERLAP")
+		return false
+	end
+	local direction = endGround - startGround
+	if direction.Magnitude <= .05 then return true end
+	-- Roblox rejects shape casts beyond 1,024 studs. A player can briefly be
+	-- teleported back to the distant lobby before their round flags settle, so
+	-- treat that impossible direct segment as blocked and let routing/retargeting
+	-- handle the next tick instead of emitting an error every Heartbeat.
+	if direction.Magnitude > 1000 then return false end
+	local castCFrame, size = clearanceBox(startGround)
+	local hit = workspace:Blockcast(castCFrame, size, direction, navigationParams(session))
+	if hit then
+		publishPhysicalBlocker(session, hit.Instance, "BLOCKCAST")
+		return false
+	end
+	return true
+end
+
+local function navigationBlockersAt(session: any, groundPosition: Vector3,
+	params: OverlapParams?): {BasePart}
+	local blockers = overlappingNavigationParts(session, groundPosition, params)
+	for _, exclusion in ipairs(furnitureNavExclusionsAt(session, groundPosition)) do
+		table.insert(blockers, exclusion)
+	end
+	return blockers
+end
+
+local function volumeFits(session: any, groundPosition: Vector3, params: OverlapParams?): boolean
+	return #navigationBlockersAt(session, groundPosition, params) == 0
 end
 
 local function volumeClear(session: any, startGround: Vector3, endGround: Vector3): boolean
@@ -622,15 +753,62 @@ local function volumeClear(session: any, startGround: Vector3, endGround: Vector
 	end
 	local direction = endGround - startGround
 	if direction.Magnitude <= .05 then return true end
-	local castCFrame, size = clearanceBox(startGround)
-	local hit = workspace:Blockcast(castCFrame, size, direction, navigationParams(session))
-	return hit == nil
+	if segmentIntersectsFurnitureNavExclusion(session, startGround, endGround) then
+		return false
+	end
+	return physicalVolumeClear(session, startGround, endGround)
+end
+
+-- LEVEL3_MANAGER_SAFE_GOAL_20260821
+-- Room centers and sensed targets may land inside a banquet table's inflated
+-- navigation envelope. Resolve them to the nearest reachable point on the
+-- approach side so the graph fallback never orders the Manager back into the
+-- obstacle it just escaped.
+local function navigationPointClear(session: any, groundPosition: Vector3): boolean
+	return volumeFits(session, groundPosition)
+end
+
+local SAFE_GOAL_RADII = {7, 10, 13, 16, 20, 24}
+local SAFE_GOAL_ANGLES = {0, 30, -30, 60, -60, 90, -90, 135, -135, 180}
+local function resolveNavigationGoal(session: any, desired: Vector3, reference: Vector3): Vector3
+	if navigationPointClear(session, desired) then return desired end
+	local approach = reference - desired
+	if approach.Magnitude <= .05 then approach = -session.Heading end
+	approach = approach.Unit
+	local best: Vector3? = nil
+	local bestScore = math.huge
+	for _, radius in ipairs(SAFE_GOAL_RADII) do
+		for _, degrees in ipairs(SAFE_GOAL_ANGLES) do
+			local direction = CFrame.fromAxisAngle(
+				Vector3.yAxis, math.rad(degrees)):VectorToWorldSpace(approach)
+			local candidate = desired + direction * radius
+			if navigationPointClear(session, candidate) then
+				local score = radius + planarDistance(reference, candidate) * .015
+					+ math.abs(degrees) * .0005
+				if volumeClear(session, reference, candidate) then score -= 1.5 end
+				if score < bestScore then
+					bestScore = score
+					best = candidate
+				end
+			end
+		end
+		if best then break end
+	end
+	return best or desired
 end
 
 local function rebuildStrategicRoute(session: any)
 	local finalGoal = session.FinalGoal
-	if not finalGoal then
+	local navigationGoal = session.ResolvedFinalGoal or finalGoal
+	if not finalGoal or not navigationGoal then
 		session.StrategicPoints = {}
+		session.StrategicIndex = 1
+		return
+	end
+	if session.FinalHallChase then
+		-- The finale is one straight, opened tunnel. Never route back through the
+		-- Signal Hall room center before following the moving players.
+		session.StrategicPoints = {navigationGoal}
 		session.StrategicIndex = 1
 		return
 	end
@@ -638,20 +816,21 @@ local function rebuildStrategicRoute(session: any)
 	local goalId = nearestRoomId(finalGoal)
 	local route = graphRoute(session, startId, goalId)
 	local points = {}
+	local reference = flat(session.Root.Position, session.FloorY)
 	local function appendPoint(point: Vector3?)
 		if point and (#points == 0 or planarDistance(points[#points], point) > .05) then
 			table.insert(points, point)
+			reference = point
 		end
 	end
 	-- Generated spawns and sensed goals may sit anywhere inside a room. Centre
 	-- through the current room and every graph room, including the goal room,
-	-- before steering to the exact final position. Without these two endpoint
-	-- centres, GRAPH_FALLBACK cuts diagonally into a wall beside the portal and
-	-- becomes motionless whenever PathfindingService cannot build a replacement.
+	-- but resolve a blocked room center to a clear point on the approach side.
 	for _, roomId in ipairs(route) do
-		appendPoint(roomCenter(roomId, session.FloorY))
+		local center = roomCenter(roomId, session.FloorY)
+		appendPoint(if center then resolveNavigationGoal(session, center, reference) else nil)
 	end
-	appendPoint(finalGoal)
+	appendPoint(navigationGoal)
 	session.StrategicPoints = points
 	session.StrategicIndex = 1
 end
@@ -668,6 +847,8 @@ local function setGoal(session: any, goal: Vector3?, force: boolean?)
 		or planarDistance(session.FinalGoal, grounded) >= goalThreshold
 	if not changed and not force then return end
 	session.FinalGoal = grounded
+	session.ResolvedFinalGoal = resolveNavigationGoal(
+		session, grounded, flat(session.Root.Position, session.FloorY))
 	rebuildStrategicRoute(session)
 	-- A moving chase target must never tear down a route that is still safe to
 	-- follow. Keep walking it while PathfindingService prepares a replacement,
@@ -681,13 +862,16 @@ end
 
 local function currentDestination(session: any): Vector3?
 	local finalGoal = session.FinalGoal
-	if not finalGoal then return nil end
+	local navigationGoal = session.ResolvedFinalGoal or finalGoal
+	if not finalGoal or not navigationGoal then return nil end
 	local currentGround = flat(session.Root.Position, session.FloorY)
-	if planarDistance(currentGround, finalGoal) <= Tuning.GoalTolerance then return finalGoal end
+	if planarDistance(currentGround, navigationGoal) <= Tuning.GoalTolerance then
+		return navigationGoal
+	end
 	local directRange = if session.Blackout then Tuning.BlackoutDirectPathRange else Tuning.DirectPathRange
-	if planarDistance(currentGround, finalGoal) <= directRange
-		and volumeClear(session, currentGround, finalGoal) then
-		return finalGoal
+	if planarDistance(currentGround, navigationGoal) <= directRange
+		and volumeClear(session, currentGround, navigationGoal) then
+		return navigationGoal
 	end
 	while session.StrategicIndex <= #session.StrategicPoints do
 		local point = session.StrategicPoints[session.StrategicIndex]
@@ -700,7 +884,7 @@ local function currentDestination(session: any): Vector3?
 			return point
 		end
 	end
-	return finalGoal
+	return navigationGoal
 end
 
 local function abandonFailedPatrol(session: any)
@@ -757,6 +941,9 @@ local function requestPath(session: any, destination: Vector3, force: boolean?)
 			AgentCanJump = false,
 			AgentCanClimb = false,
 			WaypointSpacing = Tuning.WaypointSpacing,
+			Costs = {
+				[Tuning.FurniturePathLabel] = math.huge,
+			},
 		})
 		local ok = pcall(function() path:ComputeAsync(origin, target) end)
 		if not liveSession(session) or session.PathToken ~= token then return end
@@ -1073,6 +1260,71 @@ local function nearestExposedPlayer(session: any): (Player?, BasePart?)
 	return selected, selectedRoot
 end
 
+local function trackNearestBlackoutPlayer(session: any, now: number): boolean
+	local nearestPlayer, nearestRoot = nearestExposedPlayer(session)
+	if not nearestPlayer or not nearestRoot then
+		if session.Attacking then
+			session.AttackToken += 1
+			session.Attacking = false
+			session.AttackCooldownUntil = now
+		end
+		publishTarget(session, nil)
+		session.LastKnownPosition = nil
+		session.LastSenseAt = -math.huge
+		session.SearchUntil = nil
+		session.PatrolGoal = nil
+		clearGoal(session)
+		publishState(session, "SEARCH")
+		session.StateFolder:SetAttribute("Level3_MallManagerTargetMode", "NO_EXPOSED_PLAYER")
+		session.StateFolder:SetAttribute("Level3_MallManagerTargetDistance", -1)
+		if session.Model and session.Model.Parent then
+			session.Model:SetAttribute("Level3_MallManagerTargetMode", "NO_EXPOSED_PLAYER")
+			session.Model:SetAttribute("Level3_MallManagerTargetDistance", -1)
+		end
+		return false
+	end
+
+	local switchedTarget = session.Target ~= nearestPlayer
+	if switchedTarget and session.Attacking then
+		-- A nearer player owns the chase immediately. Cancel the old windup so the
+		-- Manager never attacks a player it is no longer pursuing.
+		session.AttackToken += 1
+		session.Attacking = false
+		session.AttackCooldownUntil = now
+	end
+	publishTarget(session, nearestPlayer)
+
+	local targetPosition = flat(nearestRoot.Position, session.FloorY)
+	local velocity = Vector3.new(nearestRoot.AssemblyLinearVelocity.X, 0,
+		nearestRoot.AssemblyLinearVelocity.Z)
+	local lead = velocity * Tuning.BlackoutTargetLeadSeconds
+	if lead.Magnitude > Tuning.BlackoutTargetLeadMaximumDistance then
+		lead = lead.Unit * Tuning.BlackoutTargetLeadMaximumDistance
+	end
+	local predicted = targetPosition + lead
+	if volumeFits(session, predicted) then targetPosition = predicted end
+
+	session.LastKnownPosition = targetPosition
+	session.LastSenseAt = now
+	session.LastVisualAt = now
+	session.SearchUntil = nil
+	session.PatrolGoal = nil
+	session.AlertUntil = 0
+	setGoal(session, targetPosition, switchedTarget)
+
+	local distance = planarDistance(session.Root.Position, nearestRoot.Position)
+	session.StateFolder:SetAttribute("Level3_MallManagerTargetMode", "NEAREST_PLAYER")
+	session.StateFolder:SetAttribute("Level3_MallManagerTargetDistance", distance)
+	session.StateFolder:SetAttribute("Level3_MallManagerTargetPosition", targetPosition)
+	if session.Model and session.Model.Parent then
+		session.Model:SetAttribute("Level3_MallManagerTargetMode", "NEAREST_PLAYER")
+		session.Model:SetAttribute("Level3_MallManagerTargetDistance", distance)
+		session.Model:SetAttribute("Level3_MallManagerTargetPosition", targetPosition)
+	end
+	if not session.Attacking then publishState(session, "CHASE") end
+	return true
+end
+
 local function redirectHiddenTarget(session: any, hiddenPlayer: Player, now: number)
 	session.Suspicion[hiddenPlayer] = nil
 	session.AttackToken += 1
@@ -1132,6 +1384,14 @@ local function updateBrain(session: any, now: number, dt: number)
 		publishTarget(session, nil)
 		clearGoal(session)
 		publishState(session, "AWAKENING")
+		return
+	end
+	-- During the blackout hunt the Manager is supernatural: every think tick it
+	-- chooses the nearest eligible player and feeds that moving position straight
+	-- into the existing strategic/PFS route system. Normal non-blackout behavior
+	-- still uses sight, suspicion, hearing, memory, and search below.
+	if session.Blackout then
+		trackNearestBlackoutPlayer(session, now)
 		return
 	end
 	if session.Target and HidingController.IsHidden(session.Target, session.Generation) then
@@ -1355,7 +1615,7 @@ local function movementWaypoint(session: any, destination: Vector3, speed: numbe
 		for index = session.WaypointIndex + 1, maximumIndex do
 			local candidate = centerCorridorWaypoint(
 				flat(session.Path[index].Position, session.FloorY), session.FloorY)
-			if volumeClear(session, currentGround, candidate) then
+			if physicalVolumeClear(session, currentGround, candidate) then
 				bestIndex = index
 				bestPosition = candidate
 			else
@@ -1363,6 +1623,9 @@ local function movementWaypoint(session: any, destination: Vector3, speed: numbe
 			end
 		end
 		session.WaypointIndex = bestIndex
+		if session.Model and session.Model.Parent then
+			session.Model:SetAttribute("Level3_MallManagerWaypointTarget", bestPosition)
+		end
 		return bestPosition
 	end
 	if volumeClear(session, currentGround, destination) then return destination end
@@ -1387,29 +1650,157 @@ local function resetBlockedRoute(session: any, now: number)
 	publishPathStatus(session, "RECOVERY_REPATH")
 end
 
-local AVOIDANCE_ANGLES = {15, -15, 30, -30, 45, -45, 70, -70, 90, -90}
-local function clearSteeringStep(session: any, currentGround: Vector3, desired: Vector3,
-	distance: number): (Vector3?, Vector3?)
-	local straight = currentGround + desired * distance
-	if volumeClear(session, currentGround, straight) then return straight, desired end
+-- LEVEL3_MANAGER_FURNITURE_NAV_20260821
+-- LEVEL3_MANAGER_OVERLAP_COMMIT_20260821
+-- LEVEL3_MANAGER_OVERLAP_HYSTERESIS_20260821
+-- Commit to one side of a wide obstacle and explicitly walk out of an already
+-- overlapping clearance volume. The old frame-by-frame symmetric choice could
+-- alternate left/right forever, while volumeClear rejected every escape step.
+local AVOIDANCE_MAGNITUDES = {15, 30, 45, 70, 90, 120}
 
-	local bestPosition: Vector3? = nil
+local function setAvoidanceTelemetry(session: any, overlapEscape: boolean)
+	session.OverlapEscapeActive = overlapEscape
+	if session.Model and session.Model.Parent then
+		session.Model:SetAttribute("Level3_MallManagerAvoidanceSign", session.AvoidanceSign)
+		session.Model:SetAttribute("Level3_MallManagerOverlapEscapeActive", overlapEscape)
+	end
+end
+
+local function avoidanceOrder(session: any, desired: Vector3, now: number): {number}
+	local committed = session.AvoidanceSign ~= 0 and now < session.AvoidanceUntil
+	local preferredSign = session.AvoidanceSign
+	if not committed then
+		local cross = session.Heading:Cross(desired).Y
+		if math.abs(cross) > .04 then
+			preferredSign = if cross >= 0 then 1 else -1
+		else
+			preferredSign = if session.SpawnCycle % 2 == 0 then 1 else -1
+		end
+	end
+	local ordered = {}
+	for _, magnitude in ipairs(AVOIDANCE_MAGNITUDES) do
+		table.insert(ordered, preferredSign * magnitude)
+		table.insert(ordered, -preferredSign * magnitude)
+	end
+	return ordered
+end
+
+local function overlapEscapeDirection(session: any, currentGround: Vector3, desired: Vector3,
+	distance: number, blockers: {BasePart}, now: number): Vector3?
+	local away = Vector3.zero
+	for _, blocker in ipairs(blockers) do
+		local delta = currentGround - flat(blocker.Position, session.FloorY)
+		if delta.Magnitude > .05 then away += delta.Unit end
+	end
+	if away.Magnitude <= .05 then away = -desired end
+	away = away.Unit
+	local probeDistance = math.max(distance, Tuning.OverlapEscapeProbeDistance)
 	local bestDirection: Vector3? = nil
 	local bestScore = -math.huge
-	for _, degrees in ipairs(AVOIDANCE_ANGLES) do
+	local overlapParams = navigationOverlapParams(session)
+	local candidates = {0, 20, -20, 45, -45, 75, -75, 110, -110, 180}
+	for _, degrees in ipairs(candidates) do
+		local direction = CFrame.fromAxisAngle(
+			Vector3.yAxis, math.rad(degrees)):VectorToWorldSpace(away)
+		local probe = currentGround + direction * probeDistance
+		local remaining = #overlappingNavigationParts(session, probe, overlapParams)
+		local score = (#blockers - remaining) * 25
+			+ direction:Dot(away) * 4
+			+ direction:Dot(desired) * .30
+			+ direction:Dot(session.Heading) * .15
+		if score > bestScore then
+			bestScore = score
+			bestDirection = direction
+		end
+	end
+	if bestDirection then
+		local cross = desired:Cross(bestDirection).Y
+		session.AvoidanceSign = if cross >= 0 then 1 else -1
+		session.AvoidanceUntil = now + Tuning.AvoidanceCommitSeconds
+		setAvoidanceTelemetry(session, true)
+	end
+	return bestDirection
+end
+
+local function clearSteeringStep(session: any, currentGround: Vector3, desired: Vector3,
+	distance: number, now: number): (Vector3?, Vector3?)
+	local blockers = overlappingNavigationParts(session, currentGround)
+	if #blockers > 0 then
+		local escapeDirection = session.OverlapEscapeDirection
+		if escapeDirection then
+			local probeDistance = math.max(distance, Tuning.OverlapEscapeProbeDistance or distance)
+			local probeBlockers = overlappingNavigationParts(session, currentGround + escapeDirection * probeDistance)
+			if #probeBlockers > #blockers then
+				escapeDirection = nil
+			end
+		end
+		if not escapeDirection then
+			escapeDirection = overlapEscapeDirection(
+				session,
+				currentGround,
+				desired,
+				distance,
+				blockers,
+				now
+			)
+		end
+		if escapeDirection then
+			session.OverlapEscapeDirection = escapeDirection
+			session.AvoidanceUntil = now + (Tuning.AvoidanceCommitSeconds or 0.95)
+			setAvoidanceTelemetry(session, true)
+			return currentGround + escapeDirection * distance, escapeDirection
+		end
+	end
+
+	local committedEscape = session.OverlapEscapeDirection
+	if committedEscape and now < session.AvoidanceUntil then
+		local escapeTarget = currentGround + committedEscape * distance
+		if physicalVolumeClear(session, currentGround, escapeTarget) then
+			setAvoidanceTelemetry(session, true)
+			return escapeTarget, committedEscape
+		end
+	end
+
+	session.OverlapEscapeDirection = nil
+	setAvoidanceTelemetry(session, false)
+
+	local committed = session.AvoidanceSign ~= 0 and now < session.AvoidanceUntil
+	local straight = currentGround + desired * distance
+	local straightClear = physicalVolumeClear(session, currentGround, straight)
+	if straightClear and not committed then
+		session.AvoidanceSign = 0
+		return straight, desired
+	end
+
+	local bestPosition: Vector3? = if straightClear then straight else nil
+	local bestDirection: Vector3? = if straightClear then desired else nil
+	local bestDegrees = 0
+	local bestScore = if straightClear then 2 + desired:Dot(session.Heading) * .35 else -math.huge
+	for _, degrees in ipairs(avoidanceOrder(session, desired, now)) do
 		local candidateDirection = CFrame.fromAxisAngle(
 			Vector3.yAxis, math.rad(degrees)):VectorToWorldSpace(desired)
 		local candidate = currentGround + candidateDirection * distance
 		if volumeClear(session, currentGround, candidate) then
+			local sameCommittedSide = committed
+				and math.sign(degrees) == session.AvoidanceSign
 			local score = candidateDirection:Dot(desired) * 2
 				+ candidateDirection:Dot(session.Heading) * .35
 				- math.abs(degrees) * .001
+				+ (if sameCommittedSide then .55 else 0)
 			if score > bestScore then
 				bestScore = score
 				bestPosition = candidate
 				bestDirection = candidateDirection
+				bestDegrees = degrees
 			end
 		end
+	end
+	if bestDirection and bestDegrees ~= 0 then
+		session.AvoidanceSign = math.sign(bestDegrees)
+		session.AvoidanceUntil = now + Tuning.AvoidanceCommitSeconds
+		setAvoidanceTelemetry(session, false)
+	elseif not committed then
+		session.AvoidanceSign = 0
 	end
 	return bestPosition, bestDirection
 end
@@ -1465,7 +1856,7 @@ local function updateMovement(session: any, dt: number, now: number)
 	local direction = offset.Unit
 	local distance = math.min(offset.Magnitude, session.CurrentMoveSpeed * motionDt)
 	local proposed, steeredDirection = clearSteeringStep(
-		session, currentGround, direction, distance)
+		session, currentGround, direction, distance, now)
 	if distance <= .001 or not proposed or not steeredDirection then
 		session.ConsecutiveObstructions += 1
 		local exhausted = session.ConsecutiveObstructions >= Tuning.ObstructionRecoveryAttempts
@@ -1541,6 +1932,8 @@ local function resetPublishedState()
 	state:SetAttribute("Level3_MallManagerSpawnDistance", 0)
 	state:SetAttribute("Level3_MallManagerSpawnVisibleCount", 0)
 	state:SetAttribute("Level3_MallManagerSpawnPathValidated", false)
+	state:SetAttribute("Level3_MallManagerFinaleSpawn", false)
+	state:SetAttribute("Level3_MallManagerSpawnPosition", nil)
 	state:SetAttribute("Level3_MallManagerPathStatus", "OFF")
 	state:SetAttribute("Level3_MallManagerAttackSerial", 0)
 	state:SetAttribute("Level3_MallManagerLastCaptureUserId", 0)
@@ -1689,7 +2082,53 @@ local function spawnVisibilityCount(position: Vector3, records: {any}): number
 	return visible
 end
 
+local function chooseFinalHallSpawn(manifest: any, generation: number): any?
+	local records = eligibleSpawnPlayers()
+	if #records == 0 then return nil end
+	local hall = manifest.FinalHall
+	if type(hall) ~= "table" or not hall.SpawnMarker or not hall.SpawnMarker.Parent then return nil end
+	local state = stateFolder()
+	local cycle = math.floor(tonumber(state:GetAttribute("Level3_RoomSongCycle")) or 0)
+	local random = Random.new(generation * 7919 + cycle * 104729 + 20260824)
+	local position = Vector3.new(hall.SpawnMarker.Position.X, hall.FloorY, hall.SpawnMarker.Position.Z)
+	if not spawnVolumeFits(position, spawnOverlapParams(records)) then
+		warn("[Level 3 Mall Manager] authored final-hall spawn volume is blocked")
+		return nil
+	end
+	table.sort(records, function(a, b)
+		local aDistance = planarDistance(position, a.Position)
+		local bDistance = planarDistance(position, b.Position)
+		if math.abs(aDistance - bDistance) > .001 then return aDistance < bDistance end
+		return a.Player.UserId < b.Player.UserId
+	end)
+	local anchor = records[1]
+	local centroid = Vector3.zero
+	local nearestDistance = math.huge
+	for _, record in ipairs(records) do
+		centroid += record.Position
+		nearestDistance = math.min(nearestDistance, planarDistance(position, record.Position))
+	end
+	centroid /= #records
+	return {
+		Position = position,
+		Anchor = anchor,
+		GroupSize = #records,
+		Centroid = centroid,
+		Cycle = cycle,
+		RoomId = nearestRoomId(position),
+		Random = random,
+		PathValidated = true,
+		Visibility = spawnVisibilityCount(position, records),
+		NearestDistance = nearestDistance,
+		AnchorDistance = planarDistance(position, anchor.Position),
+		FinalHallChase = true,
+	}
+end
+
 local function chooseBlackoutSpawn(manifest: any, generation: number): any?
+	if workspace:GetAttribute("Level3FinalHallChaseActive") == true then
+		return chooseFinalHallSpawn(manifest, generation)
+	end
 	local records = eligibleSpawnPlayers()
 	if #records == 0 then return nil end
 	local state = stateFolder()
@@ -1878,6 +2317,7 @@ function Controller.Start(manifest: any, generation: number)
 		Generation = generation,
 		Manifest = manifest,
 		World = manifest.World,
+		FurnitureNavExclusions = collectFurnitureNavExclusions(manifest.World),
 		Model = model,
 		Root = root,
 		GroundOffset = groundOffset,
@@ -1902,7 +2342,9 @@ function Controller.Start(manifest: any, generation: number)
 		SpawnCycle = spawnData.Cycle,
 		SpawnRoomId = spawnData.RoomId,
 		Adjacency = buildAdjacency(),
+		FinalHallChase = spawnData.FinalHallChase == true,
 		FinalGoal = nil,
+		ResolvedFinalGoal = nil,
 		StrategicPoints = {},
 		StrategicIndex = 1,
 		Path = nil,
@@ -1929,6 +2371,10 @@ function Controller.Start(manifest: any, generation: number)
 		LastProgressAt = os.clock(),
 		ProgressResetPosition = flat(root.Position, floorY),
 		ConsecutiveObstructions = 0,
+		AvoidanceSign = 0,
+		AvoidanceUntil = 0,
+		OverlapEscapeActive = false,
+		OverlapEscapeDirection = nil,
 		WalkTrack = walkTrack,
 		WalkMoving = false,
 		WalkPoseHeld = false,
@@ -1980,6 +2426,8 @@ function Controller.Start(manifest: any, generation: number)
 	state:SetAttribute("Level3_MallManagerSpawnAnchorUserId", spawnData.Anchor.Player.UserId)
 	state:SetAttribute("Level3_MallManagerSpawnGroupSize", spawnData.GroupSize)
 	state:SetAttribute("Level3_MallManagerSpawnCycle", spawnData.Cycle)
+	state:SetAttribute("Level3_MallManagerFinaleSpawn", session.FinalHallChase)
+	state:SetAttribute("Level3_MallManagerSpawnPosition", spawnData.Position)
 	state:SetAttribute("Level3_MallManagerSpawnSerial", spawnSerial)
 	state:SetAttribute("Level3_MallManagerAttackSerial", 0)
 	state:SetAttribute("Level3_MallManagerLastCaptureUserId", 0)
@@ -1998,6 +2446,8 @@ function Controller.Start(manifest: any, generation: number)
 	model:SetAttribute("Level3_MallManagerSpawnAnchorUserId", spawnData.Anchor.Player.UserId)
 	model:SetAttribute("Level3_MallManagerSpawnGroupSize", spawnData.GroupSize)
 	model:SetAttribute("Level3_MallManagerSpawnCycle", spawnData.Cycle)
+	model:SetAttribute("Level3_MallManagerFinaleSpawn", session.FinalHallChase)
+	model:SetAttribute("Level3_MallManagerSpawnPosition", spawnData.Position)
 	model:SetAttribute("Level3_MallManagerSpawnSerial", spawnSerial)
 	model:SetAttribute("Level3_MallManagerAttackSerial", 0)
 	model:SetAttribute("Level3_MallManagerFootstepSerial", 0)
@@ -2029,9 +2479,12 @@ function Controller.Start(manifest: any, generation: number)
 	table.insert(session.Connections, workspace:GetAttributeChangedSignal("EntityPaused"):Connect(function()
 		if workspace:GetAttribute("EntityPaused") == true then dormant(session, "PAUSED") end
 	end))
-	table.insert(session.Connections, workspace:GetAttributeChangedSignal("Level3BlackoutActive"):Connect(function()
-		applyBlackout(session, workspace:GetAttribute("Level3BlackoutActive") == true)
-	end))
+	local function refreshBlackoutProfile()
+		applyBlackout(session, blackoutProfileRequested())
+	end
+	table.insert(session.Connections, workspace:GetAttributeChangedSignal("Level3BlackoutActive"):Connect(refreshBlackoutProfile))
+	table.insert(session.Connections,
+		workspace:GetAttributeChangedSignal("Level3FinalHallChaseActive"):Connect(refreshBlackoutProfile))
 	local function bindHideTarget(player: Player)
 		table.insert(session.Connections, player:GetAttributeChangedSignal("Level3_Hiding"):Connect(function()
 			if liveSession(session) and player:GetAttribute("Level3_Hiding") == true
@@ -2083,19 +2536,23 @@ function Controller.Start(manifest: any, generation: number)
 		updateFootsteps(session)
 	end))
 
-	applyBlackout(session, workspace:GetAttribute("Level3BlackoutActive") == true)
-	-- Seed only toward an exposed player. Hidden players may still define the dense
-	-- spawn group, but the Manager never receives their concealed location.
-	local seedPlayer, seedRoot = nearestExposedPlayer(session)
-	if seedPlayer and seedRoot then
-		session.LastKnownPosition = flat(seedRoot.Position, floorY)
-		session.LastSenseAt = os.clock()
-		setGoal(session, session.LastKnownPosition, true)
-	else
-		session.LastKnownPosition = nil
-		session.LastSenseAt = -math.huge
-	end
+	applyBlackout(session, blackoutProfileRequested())
 	roundChanged()
+	-- Acquire before the first Heartbeat so the spawned Manager already exposes
+	-- its target and begins the nearest-player route on the reveal frame.
+	if session.Blackout and validRound(session) then
+		trackNearestBlackoutPlayer(session, os.clock())
+	else
+		local seedPlayer, seedRoot = nearestExposedPlayer(session)
+		if seedPlayer and seedRoot then
+			session.LastKnownPosition = flat(seedRoot.Position, floorY)
+			session.LastSenseAt = os.clock()
+			setGoal(session, session.LastKnownPosition, true)
+		else
+			session.LastKnownPosition = nil
+			session.LastSenseAt = -math.huge
+		end
+	end
 	publishMotion(session, 0, true)
 	print(string.format("[Level 3 Mall Manager] hunt spawn %.1f studs from nearest player; group %d, room %s, blackout chase %.1f",
 		spawnDistance, spawnData.GroupSize, spawnData.RoomId, Tuning.Blackout.ChaseSpeed))
@@ -2111,6 +2568,7 @@ function Controller.GetSnapshot()
 		State = session.State,
 		TargetUserId = if session.Target then session.Target.UserId else 0,
 		Blackout = session.Blackout,
+		FinalHallChase = session.FinalHallChase,
 		Speed = currentSpeed(session),
 		DesiredSpeed = currentSpeed(session),
 		MovementSpeed = session.CurrentMoveSpeed,
@@ -2153,6 +2611,8 @@ function Controller.GetSnapshot()
 			then planarDistance(session.Root.Position, session.FinalGoal) else 0,
 		PathFailures = session.PathFailures,
 		ConsecutiveObstructions = session.ConsecutiveObstructions,
+		AvoidanceSign = session.AvoidanceSign,
+		OverlapEscapeActive = session.OverlapEscapeActive,
 		WaypointIndex = session.WaypointIndex,
 		WaypointCount = if session.Path then #session.Path else 0,
 	}

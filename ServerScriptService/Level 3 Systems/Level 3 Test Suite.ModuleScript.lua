@@ -1,6 +1,6 @@
 --!strict
--- Level 3 deterministic structural checks. These assertions never add runtime
--- gameplay and can be called from Studio Edit mode after WorldBuilder.Build.
+-- Level 3 deterministic structural checks. Layout/configuration checks are safe
+-- in Edit mode; ValidateWorld consumes a manifest built by the normal round flow.
 
 local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
 local LayoutGenerator = require(script.Parent:WaitForChild("Level 3 Layout Generator"))
@@ -30,6 +30,16 @@ end
 
 local function approx(a: number, b: number, tolerance: number?): boolean
 	return math.abs(a - b) <= (tolerance or 0.001)
+end
+
+local function containsArtifactFragment(name: string, fragment: string): boolean
+	local startIndex = string.find(name, fragment, 1, true)
+	if not startIndex then return false end
+	if fragment == "level 3 sign" then
+		local nextCharacter = string.sub(name, startIndex + #fragment, startIndex + #fragment)
+		return nextCharacter == "" or string.match(nextCharacter, "%a") == nil
+	end
+	return true
 end
 
 local function planarDistance(a: Vector3, b: Vector3): number
@@ -131,6 +141,18 @@ function TestSuite.ValidateConfiguration(): {[string]: any}
 		"Level 3 must use the original 16 plus both approved 25-cell transparent drawing atlases")
 	assert(Configuration.Textures.CDCoversAtlas == "rbxassetid://88160214591687",
 		"Level 3 must use the authored CD-cover atlas")
+	assert(Configuration.Version >= 43
+		and Configuration.Textures.CRTScreenSurface == "rbxassetid://106602270400755",
+		"Level 3 revision 43 must use the generated CRT phosphor screen")
+	assert(Configuration.Version >= 45,
+		"Level 3 revision 45 must use the doubled all-player finale hall")
+	assert(Configuration.Layout.ExitCorridorLength == 560
+		and Configuration.Layout.FinalHallHalfwayProgress == .50
+		and Configuration.Layout.ExitCorridorSpeakerCount == 7
+		and Configuration.Layout.ExitCorridorFixtureCount == 9
+		and Configuration.MallManager.FinalHallSpawnProgress == .40
+		and Configuration.MusicSequence.CompletionDimSeconds == 5.5,
+		"Level 3 must preserve the authored 560-stud finale geometry and fade tuning")
 	assert(Configuration.CorridorWidth == 14 and Configuration.CorridorHeight == 10.5,
 		"Level 3 corridors must remain one 14 x 10.5 stud tunnel cross-section")
 	assert(Configuration.ModuleGoal == 5, "Level 3 must require exactly five modules")
@@ -210,11 +232,12 @@ function TestSuite.ValidateConfiguration(): {[string]: any}
 	assert(approx(managerTuning.Blackout.PatrolSpeed, 5.25, .000001)
 		and approx(managerTuning.Blackout.InvestigateSpeed, 12.6, .000001)
 		and approx(managerTuning.Blackout.SearchSpeed, 15.4, .000001)
-		and approx(managerTuning.Blackout.ChaseSpeed, 20.3, .000001)
-		and managerTuning.Blackout.ChaseSpeed < 26
-		and managerTuning.Blackout.ChaseSpeed > 16
+		and approx(managerTuning.PlayerRunSpeedReference, 26, .000001)
+		and approx(managerTuning.ChaseSpeedMultiplier, 1.20, .000001)
+		and approx(managerTuning.Blackout.ChaseSpeed,
+			managerTuning.PlayerRunSpeedReference * managerTuning.ChaseSpeedMultiplier, .000001)
 		and managerTuning.MaximumAnimationSpeed >= managerTuning.Blackout.ChaseSpeed / managerTuning.WalkReferenceSpeed,
-		"Mall Manager blackout movement profile must remain exactly 30 percent slower with matched animation")
+		"Mall Manager blackout chase must remain exactly 20 percent faster than player RUN with matched animation")
 	assert(managerTuning.Normal.PatrolSpeed == 4.5
 		and managerTuning.Blackout.PatrolSpeed > managerTuning.Normal.PatrolSpeed,
 		"Mall Manager blackout wandering must remain deliberate and slower than a chase")
@@ -506,6 +529,28 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 		end
 		assert(markerCount == 1, "Level 3 rebuild left duplicate " .. markerName .. " markers")
 	end
+	local slide = world:FindFirstChild("Level 2 Exit Slide Continuation")
+	local arrivalPlan = layout.RoomById[layout.Roles.ArrivalRoomId]
+	local expectedMouth = Configuration.WorldOrigin + Vector3.new(
+		arrivalPlan.X - arrivalPlan.W * .5 + Configuration.WallThickness * .5 + .12,
+		8.05, arrivalPlan.Z)
+	local slideMouth = slide and slide:GetAttribute("Level3_SlideMouthPosition")
+	assert(slide and slide:IsA("Model")
+		and slide:GetAttribute("Level3_Level2ExitTube") == true
+		and slide:GetAttribute("Level3_DirectMallArrival") == true
+		and typeof(slideMouth) == "Vector3"
+		and ((slideMouth :: Vector3) - expectedMouth).Magnitude <= .02,
+		"Level 2 slide mouth must terminate directly at the Level 3 mall arrival wall")
+	local transitionSeals = 0
+	for _, object in ipairs(slide:GetDescendants()) do
+		if object:IsA("BasePart") and object:GetAttribute("Level3_TransitionWallSeal") == true then
+			transitionSeals += 1
+			assert(object.Material == Enum.Material.Plaster
+				and object.Color == Color3.fromRGB(183, 78, 35),
+				"Slide mouth seal must continue the Level 3 orange plaster wall")
+		end
+	end
+	assert(transitionSeals > 0, "Level 3 slide mouth is missing its mall-finished wall seal")
 	assert(workspace:FindFirstChild("EntityStart") == nil,
 		"Level 3 must never create the restricted EntityStart marker")
 
@@ -522,6 +567,44 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 	end
 	assert(hiddenExitLink and DISTRICT_THEME_IDS[hiddenExitLink.ThemeId] == true,
 		"Generated Level 3 layout is missing a themed HiddenExit link")
+	local hiddenExitCorridor = nil
+	for _, corridor in ipairs(manifest.Corridors) do
+		if corridor.DoorType == "HiddenExit" then
+			hiddenExitCorridor = corridor
+			break
+		end
+	end
+	assert(hiddenExitCorridor and hiddenExitCorridor.Model:IsA("Model")
+		and math.abs(hiddenExitCorridor.Length - Configuration.Layout.ExitCorridorLength) <= .1
+		and hiddenExitCorridor.Model:GetAttribute("Level3_ExitCorridor") == true,
+		"Hidden exit must be the exact authored 560-stud PA corridor")
+	local finalHall = manifest.FinalHall
+	assert(type(finalHall) == "table" and finalHall.Corridor == hiddenExitCorridor
+		and finalHall.Model == hiddenExitCorridor.Model
+		and finalHall.HalfwayMarker:GetAttribute("Level3_FinalHallHalfway") == true
+		and finalHall.SpawnMarker:GetAttribute("Level3_MallManagerFinaleSpawn") == true
+		and (finalHall.HalfwayMarker.Position
+			- finalHall.StartPoint:Lerp(finalHall.EndPoint, .50)).Magnitude <= .11
+		and (finalHall.SpawnMarker.Position
+			- finalHall.StartPoint:Lerp(finalHall.EndPoint, .40)).Magnitude <= .11
+		and finalHall.HalfwayMarker.Transparency == 1
+		and not finalHall.HalfwayMarker.CanCollide and not finalHall.HalfwayMarker.CanTouch
+		and not finalHall.HalfwayMarker.CanQuery
+		and finalHall.SpawnMarker.Transparency == 1
+		and not finalHall.SpawnMarker.CanCollide and not finalHall.SpawnMarker.CanTouch
+		and not finalHall.SpawnMarker.CanQuery,
+		"Final hall markers or normalized geometry are invalid")
+	local exitPASounds = 0
+	for _, object in ipairs(hiddenExitCorridor.Model:GetDescendants()) do
+		if object:IsA("Sound") and object.Name == "Level 3 Room Song Speaker"
+			and object:GetAttribute("Level3_ExitCorridorPA") == true then
+			exitPASounds += 1
+			assert(object:FindFirstChildOfClass("EqualizerSoundEffect"),
+				"Exit corridor PA speaker is missing its distance muffle")
+		end
+	end
+	assert(exitPASounds == Configuration.Layout.ExitCorridorSpeakerCount,
+		"Hidden exit corridor has the wrong PA speaker count")
 	local expectedHiddenWallColor = if hiddenExitLink.ThemeId == "City"
 		then Color3.fromRGB(220, 213, 187)
 		elseif hiddenExitLink.ThemeId == "RedParty" then Color3.fromRGB(145, 58, 48)
@@ -556,6 +639,16 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 		and not portal.Light.Enabled, "ExitPortal light must exist and start disabled")
 	assert(portal.Model:GetAttribute("Level3_ExitUnlocked") == false,
 		"ExitPortal must begin locked")
+	local authoredDiscPlayer = portal.DiscPlayer
+	assert(type(authoredDiscPlayer) == "table" and authoredDiscPlayer.Model:IsA("Model")
+		and authoredDiscPlayer.Model:GetAttribute("Level3_DiscPlayerVisualRevision") == 2,
+		"Signal Hall disc player must use the CRT/VCR cart revision")
+	local crtScreen = authoredDiscPlayer.Model:FindFirstChild("CRT Phosphor Screen", true)
+	local crtStatic = authoredDiscPlayer.Model:FindFirstChild("CRT Generated Static", true)
+	assert(crtScreen and crtScreen:IsA("BasePart") and crtScreen:GetAttribute("Level3_CRTScreen") == true
+		and crtStatic and crtStatic:IsA("ImageLabel")
+		and crtStatic.Image == Configuration.Textures.CRTScreenSurface,
+		"CRT/VCR cart is missing its generated phosphor screen")
 
 	local stats = {
 		BaseParts = 0,
@@ -567,6 +660,7 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 		OrangeRooms = 0,
 		BeigeRooms = 0,
 		RoomFloors = 0,
+		ArrivalMallFloors = 0,
 		PartyFloors = 0,
 		RedPartyFloors = 0,
 		NeonPartyFloors = 0,
@@ -602,6 +696,13 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 		if instance:IsA("BasePart") then
 			stats.BaseParts += 1
 			if instance.CanCollide then stats.Collidable += 1 end
+			if instance:GetAttribute("Level3_ManagerFurnitureNavExclusion") == true then
+				local modifier = instance:FindFirstChildOfClass("PathfindingModifier")
+				assert(instance.Anchored and not instance.CanCollide and instance.CanQuery
+					and modifier and modifier.Label == Configuration.MallManager.FurniturePathLabel
+					and modifier.PassThrough == false,
+					"Manager furniture exclusion must remain queryable and carry its blocking path label")
+			end
 		elseif instance:IsA("Light") then
 			stats.Lights += 1
 			if instance.Shadows then stats.ShadowLights += 1 end
@@ -619,10 +720,16 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 				and instance.Parent and instance.Parent:GetAttribute("Level3_KidsWallArt") == true
 			local allowedCD = instance.Name == "Level 3 CD Cover Surface"
 				and instance.Parent and instance.Parent.Name == "CD Cover Insert"
-			assert(allowedDrawing or allowedCD,
+			local allowedCRT = instance.Name == "CRT Status Screen Surface"
+				and instance.Parent and instance.Parent:GetAttribute("Level3_CRTScreen") == true
+				and instance:IsDescendantOf(manifest.DiscPlayer.Model)
+			assert(allowedDrawing or allowedCD or allowedCRT,
 				"Generated Level 3 SurfaceGui/sign is forbidden: " .. instance:GetFullName())
 		end
-		assert(not instance:IsA("TextLabel") and not instance:IsA("TextBox") and not instance:IsA("TextButton"),
+		local allowedDiscPlayerText = instance:IsA("TextLabel")
+			and instance:IsDescendantOf(manifest.DiscPlayer.Model)
+		assert(allowedDiscPlayerText
+			or (not instance:IsA("TextLabel") and not instance:IsA("TextBox") and not instance:IsA("TextButton")),
 			"Generated Level 3 text UI is forbidden: " .. instance:GetFullName())
 		assert(not instance:IsA("Humanoid"),
 			"Level 3 generated content may not embed Humanoid-driven rigs")
@@ -637,7 +744,7 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 				"Forbidden Level 3 runtime name: " .. instance:GetFullName())
 		end
 		for _, fragment in ipairs(SIGN_NAME_FRAGMENTS) do
-			assert(not string.find(lowerName, fragment, 1, true),
+			assert(not containsArtifactFragment(lowerName, fragment),
 				"Obsolete Level 3 sign artifact: " .. instance:GetFullName())
 		end
 	end
@@ -647,7 +754,8 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 	for _, room in ipairs(layout.Rooms) do
 		if expectedRoomThemes[room.ThemeId] ~= nil then
 			expectedRoomThemes[room.ThemeId] += 1
-			if room.Id ~= layout.Roles.ExitRoomId then
+			if room.Id ~= layout.Roles.ExitRoomId
+				and room.Id ~= layout.Roles.ArrivalRoomId then
 				expectedFloorThemes[room.ThemeId] += 1
 			end
 		end
@@ -664,7 +772,14 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 		assert(floorPart and floorPart:IsA("BasePart"), "Level 3 room floor is missing: " .. room.Id)
 		stats.RoomFloors += 1
 		local floorTexture = floorPart:FindFirstChild("Level 3 Surface Texture")
-		if room.Id == layout.Roles.ExitRoomId then
+		local arrivalMall = room.Id == layout.Roles.ArrivalRoomId
+		if arrivalMall then
+			assert(floorPart.Material == Enum.Material.Carpet
+				and floorTexture and floorTexture:IsA("Texture")
+				and floorTexture.Texture == Configuration.Textures.PartyCarpet,
+				"Arrival must use the original Level 3 mall party carpet")
+			stats.ArrivalMallFloors += 1
+		elseif room.Id == layout.Roles.ExitRoomId then
 			assert(floorPart.Material == Enum.Material.DiamondPlate and floorTexture == nil,
 				"Exit room must keep its explicit DiamondPlate floor exception")
 			stats.ExitFloors += 1
@@ -689,16 +804,20 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 			stats.PartyFloors += 1
 			stats.NeonPartyFloors += 1
 		else
-			assert(room.Id == layout.Roles.ArrivalRoomId
-				and floorPart.Material == Enum.Material.Carpet
-				and floorTexture and floorTexture:IsA("Texture")
-				and floorTexture.Texture == Configuration.Textures.PartyCarpet,
-				"Only the generated arrival transition may use the original party carpet")
-			stats.PartyFloors += 1
+			error("Unknown generated Level 3 floor theme: " .. tostring(room.ThemeId))
 		end
 
-		local expectedWallColor = if room.ThemeId == "City"
-			then Color3.fromRGB(220, 213, 187)
+		local ceilingPart = roomModel:FindFirstChild("Level 3 Room Ceiling")
+		assert(ceilingPart and ceilingPart:IsA("BasePart"),
+			"Level 3 room ceiling is missing: " .. room.Id)
+		if arrivalMall then
+			assert(ceilingPart.Material == Enum.Material.Plaster
+				and ceilingPart.Color == Configuration.Colors.AgedWhite
+				and ceilingPart:FindFirstChild("Level 3 Surface Texture") == nil,
+				"Arrival must use the Level 3 mall plaster ceiling")
+		end
+
+		local expectedWallColor = if room.ThemeId == "City" then Color3.fromRGB(220, 213, 187)
 			elseif room.ThemeId == "RedParty" then Color3.fromRGB(145, 58, 48)
 			else Color3.fromRGB(183, 78, 35)
 		local expectedWallTexture = if room.ThemeId == "City"
@@ -718,10 +837,14 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 				structuralWalls += 1
 				assert(descendant.Color == expectedWallColor,
 					"Wrong generated wall palette in room " .. room.Id .. ": " .. descendant:GetFullName())
+				if arrivalMall then
+					assert(descendant.Material == Enum.Material.Plaster,
+						"Arrival wall must use the Level 3 mall plaster finish: " .. descendant:GetFullName())
+				end
 				for _, child in ipairs(descendant:GetChildren()) do
 					if child:IsA("Texture") then
 						wallTextures += 1
-						assert(child.Texture == expectedWallTexture,
+						assert(expectedWallTexture ~= nil and child.Texture == expectedWallTexture,
 							"Generated wall texture does not match room theme " .. room.ThemeId)
 						if child.Texture == Configuration.Textures.OrangeWall then
 							stats.OrangeWallTextures += 1
@@ -731,17 +854,22 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 			end
 		end
 		assert(structuralWalls > 0 and wallTextures > 0,
-			"Level 3 generated room is missing themed structural wall surfaces: " .. room.Id)
+			"Level 3 generated room is missing or leaking themed wall surfaces: " .. room.Id)
 		if observedRoomThemes[room.ThemeId] ~= nil then
 			observedRoomThemes[room.ThemeId] += 1
 		end
-		if room.ThemeId == "City" then stats.BeigeRooms += 1 else stats.OrangeRooms += 1 end
+		if room.ThemeId == "City" then
+			stats.BeigeRooms += 1
+		else
+			stats.OrangeRooms += 1
+		end
 	end
 	for themeId, expected in pairs(expectedRoomThemes) do
 		assert(observedRoomThemes[themeId] == expected,
 			"Level 3 generated room theme count mismatch for " .. themeId)
 	end
 	assert(stats.RoomFloors == #layout.Rooms
+		and stats.ArrivalMallFloors == 1
 		and stats.ExitFloors == 1
 		and stats.CityFloors == expectedFloorThemes.City
 		and stats.RedPartyFloors == expectedFloorThemes.RedParty
@@ -826,16 +954,19 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 
 	local forbiddenDecor = {"Baseboard", "Shelf", "Carton", "Box", "Desk", "CRT", "Plant", "Utility Pipe"}
 	for _, instance in ipairs(world:GetDescendants()) do
+		local intentionalDiscPlayerAssembly = manifest.DiscPlayer and manifest.DiscPlayer.Model
+			and (instance == manifest.DiscPlayer.Model or instance:IsDescendantOf(manifest.DiscPlayer.Model))
 		for _, fragment in ipairs(forbiddenDecor) do
-			assert(not string.find(instance.Name, fragment, 1, true),
+			assert(intentionalDiscPlayerAssembly
+				or not string.find(instance.Name, fragment, 1, true),
 				"Revision 5 contains forbidden clutter: " .. instance:GetFullName())
 		end
 	end
 
 	assert(stats.BaseParts <= 3500, "Level 3 exceeded its procedural BasePart budget")
-	assert(stats.Collidable <= 1200, "Level 3 exceeded its collision budget")
+	assert(stats.Collidable <= 1250, "Level 3 exceeded its collision budget")
 	assert(stats.Lights <= 120 and stats.ShadowLights <= 6, "Level 3 exceeded its procedural lighting budget")
-	assert(stats.Prompts <= 30, "Level 3 exceeded its procedural interaction budget")
+	assert(stats.Prompts <= 32, "Level 3 exceeded its procedural interaction budget")
 	return stats
 end
 
@@ -944,13 +1075,27 @@ function TestSuite.ValidateMallManagerRuntime(expectedPresent: boolean): {[strin
 	assert(state:GetAttribute("Level3_MallManagerAwarenessRange") == expectedRange,
 		"Mall Manager awareness range does not match the active lighting profile")
 	local spawnDistance = state:GetAttribute("Level3_MallManagerSpawnDistance") or 0
-	assert(spawnDistance >= Configuration.MallManager.SpawnMinimumDistance
-		and spawnDistance <= Configuration.MallManager.SpawnMaximumDistance + 1
-		and (state:GetAttribute("Level3_MallManagerSpawnGroupSize") or 0) >= 1
-		and state:GetAttribute("Level3_MallManagerSpawnRoomId") ~= "Exit"
-		and state:GetAttribute("Level3_MallManagerSpawnVisibleCount") == 0
-		and type(state:GetAttribute("Level3_MallManagerSpawnPathValidated")) == "boolean",
-		"Mall Manager grouped runtime spawn is not distant, hidden, and route-audited")
+	local finaleSpawn = state:GetAttribute("Level3_FinalHallChaseActive") == true
+	if finaleSpawn then
+		local marker = world:FindFirstChild("Level 3 Mall Manager Finale Spawn", true)
+		local authoredSpawn = state:GetAttribute("Level3_MallManagerSpawnPosition")
+		assert(marker and marker:IsA("BasePart") and typeof(authoredSpawn) == "Vector3"
+			and (Vector3.new(authoredSpawn.X, 0, authoredSpawn.Z)
+				- Vector3.new(marker.Position.X, 0, marker.Position.Z)).Magnitude <= 1.5
+			and manager:GetAttribute("Level3_MallManagerFinaleSpawn") == true
+			and state:GetAttribute("Level3_MallManagerFinaleSpawn") == true
+			and (state:GetAttribute("Level3_MallManagerSpawnGroupSize") or 0) >= 1
+			and state:GetAttribute("Level3_MallManagerSpawnPathValidated") == true,
+			"Mall Manager finale spawn is not on its authored hall marker")
+	else
+		assert(spawnDistance >= Configuration.MallManager.SpawnMinimumDistance
+			and spawnDistance <= Configuration.MallManager.SpawnMaximumDistance + 1
+			and (state:GetAttribute("Level3_MallManagerSpawnGroupSize") or 0) >= 1
+			and state:GetAttribute("Level3_MallManagerSpawnRoomId") ~= "Exit"
+			and state:GetAttribute("Level3_MallManagerSpawnVisibleCount") == 0
+			and type(state:GetAttribute("Level3_MallManagerSpawnPathValidated")) == "boolean",
+			"Mall Manager grouped runtime spawn is not distant, hidden, and route-audited")
+	end
 	assert(type(state:GetAttribute("Level3_MallManagerFootstepSerial")) == "number"
 		and (state:GetAttribute("Level3_MallManagerFootstepSerial") or 0) >= 0
 		and type(state:GetAttribute("Level3_MallManagerLastFootstepName")) == "string",
@@ -1009,7 +1154,7 @@ function TestSuite.ValidateRuntime(expectedProgress: number): {[string]: any}
 			hiddenWall = instance
 		elseif instance:IsA("BasePart") and instance:GetAttribute("Level3_HiddenExitFrame") == true then
 			table.insert(frameParts, instance)
-		elseif instance:IsA("Light") then
+		elseif instance:IsA("Light") and instance.Name == "Hidden Exit Blue Spill" then
 			portalLight = instance
 		end
 	end
@@ -1030,7 +1175,40 @@ function TestSuite.ValidateRuntime(expectedProgress: number): {[string]: any}
 				"Hidden-exit frame became visible before 5/5 modules")
 		end
 	end
-	assert(portalLight.Enabled == unlocked, "Hidden-exit blue spill has the wrong enabled state")
+	assert(portalLight.Enabled == false,
+		"Hidden-exit blue spill must remain off during the lightless finale")
+	assert(state:GetAttribute("Level3_ExitGuideActive") == false
+		and state:GetAttribute("Level3_ExitGuideLampCount") == 0
+		and workspace:GetAttribute("Level3ExitGuideActive") == false,
+		"Exit breadcrumb lighting must remain disabled")
+	for _, object in ipairs(world:GetDescendants()) do
+		assert(object:GetAttribute("Level3_ExitGuideLight") ~= true
+			and object:GetAttribute("Level3_ExitGuideLamp") ~= true,
+			"Level 3 retained a forbidden exit-guide light tag")
+	end
+
+	local discPlayer = world:FindFirstChild("Level 3 Signal Hall Disc Player", true)
+	assert(discPlayer and discPlayer:IsA("Model"), "Live Level 3 Signal Hall disc player is missing")
+	assert(discPlayer:GetAttribute("Level3_CDInsertedCount") == expectedProgress
+		and discPlayer:GetAttribute("Level3_CDGoal") == Configuration.ModuleGoal,
+		"Disc player progress attributes are stale")
+	local insertPrompt = discPlayer:FindFirstChild("InsertCDPrompt", true)
+	assert(insertPrompt and insertPrompt:IsA("ProximityPrompt") and insertPrompt.Enabled == (not unlocked),
+		"Disc player insert prompt enabled state does not match inserted progress")
+	local indicatorCount, litIndicators, insertedVisuals = 0, 0, 0
+	for _, object in ipairs(discPlayer:GetDescendants()) do
+		if object:IsA("BasePart") and object:GetAttribute("Level3_CDIndicatorOn") ~= nil then
+			indicatorCount += 1
+			if object:GetAttribute("Level3_CDIndicatorOn") == true then litIndicators += 1 end
+		elseif object:IsA("BasePart") and object:GetAttribute("Level3_CDState") == "INSERTED" then
+			insertedVisuals += 1
+			assert(object.Transparency < .99, "Inserted CD visual remained hidden")
+		end
+	end
+	assert(indicatorCount == Configuration.ModuleGoal and litIndicators == expectedProgress
+		and insertedVisuals == expectedProgress,
+		"Disc player lights or inserted-disc visuals do not match inserted progress")
+
 	local escapePrompt = world:FindFirstChild("EscapePrompt", true)
 	assert(escapePrompt and escapePrompt:IsA("ProximityPrompt") and escapePrompt.Enabled == unlocked,
 		"Final escape prompt enabled state does not match module progress")
@@ -1062,7 +1240,14 @@ function TestSuite.ValidateRuntime(expectedProgress: number): {[string]: any}
 				"CD pickup/display ownership markers are incomplete: " .. model:GetFullName())
 		end
 	end
-	assert(collectedModules == expectedProgress, "Collected module model count is stale")
+	local collectedProgress = state:GetAttribute("Level3_CDCollectedProgress")
+	assert(type(collectedProgress) == "number" and collectedProgress >= expectedProgress
+		and collectedProgress <= Configuration.ModuleGoal,
+		"Collected CD progress is missing or lower than inserted progress")
+	assert(collectedModules == collectedProgress,
+		"Collected source-CD model count does not match replicated collected progress")
+	assert(state:GetAttribute("Level3_CDInsertedProgress") == expectedProgress,
+		"Explicit inserted CD progress is stale")
 
 	local stableDoors = 0
 	for _, model in ipairs(world:GetDescendants()) do

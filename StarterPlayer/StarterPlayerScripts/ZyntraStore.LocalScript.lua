@@ -844,6 +844,34 @@ local function toggleMain(requested)
 	if main.Visible then showStatus("") end
 end
 
+-- Lobby supply kiosks use the same Equipment dashboard instead of creating a
+-- second store interface. Prompts are bound dynamically because the server
+-- builder can replace the concourse after this LocalScript starts.
+local boundShopPrompts = setmetatable({}, { __mode = "k" })
+
+local function openKioskShop()
+	if player:GetAttribute("InRound") == true then return end
+	selectTab("Shop")
+	setMainVisible(true)
+	showStatus("")
+end
+
+local function bindShopPrompt(instance)
+	if not instance:IsA("ProximityPrompt") or instance.Name ~= "ZyntraShopPrompt" or boundShopPrompts[instance] then
+		return
+	end
+	boundShopPrompts[instance] = true
+	instance.Triggered:Connect(function(triggeringPlayer)
+		if triggeringPlayer and triggeringPlayer ~= player then return end
+		openKioskShop()
+	end)
+end
+
+for _, descendant in ipairs(workspace:GetDescendants()) do
+	bindShopPrompt(descendant)
+end
+workspace.DescendantAdded:Connect(bindShopPrompt)
+
 local devPhoneCommand
 if devAllowed then
 	local playerScripts = player:WaitForChild("PlayerScripts")

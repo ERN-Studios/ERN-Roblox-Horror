@@ -412,3 +412,61 @@ Players.PlayerRemoving:Connect(function(player)
 	collisionBaselines[player] = nil
 	generations[player] = nil
 end)
+
+-- LEVEL2_WATER_TEXTURES_IMAGEGEN_20260821
+-- ImageGen-authored water-prop surface set. Appended here because this existing
+-- server runtime survives Team Create and already follows Level 2 lifecycle.
+do
+	local WATER_TEXTURE_RULES = {
+		{Prefix = "Level 2 Lounger Seat ", Texture = "rbxassetid://91296013464877", Role = "Lounger", Tile = 3, Shine = .01},
+		{Prefix = "Level 2 Lounger Back ", Texture = "rbxassetid://91296013464877", Role = "Lounger", Tile = 3, Shine = .01},
+		{Prefix = "Level 2 Beach Ball ", Texture = "rbxassetid://123196786081916", Role = "BeachBall", Tile = 2.4, Shine = .08},
+		{Prefix = "Level 2 Pool Noodle ", Texture = "rbxassetid://78838707014603", Role = "PoolNoodle", Tile = 2, Shine = .015},
+		{Prefix = "Level 2 Pool Raft ", Texture = "rbxassetid://119929960740617", Role = "PoolRaft", Tile = 4, Shine = .06},
+		{Prefix = "Level 2 Pool Float Ring ", Texture = "rbxassetid://115464842856867", Role = "FloatRing", Tile = 3, Shine = .07},
+	}
+	local WATER_TEXTURE_PREFIX = "Level2WaterTexture_"
+
+	local function startsWith(value, prefix)
+		return string.sub(value, 1, #prefix) == prefix
+	end
+
+	local function applyWaterTexture(instance)
+		if not instance:IsA("BasePart") then return end
+		for _, rule in ipairs(WATER_TEXTURE_RULES) do
+			if startsWith(instance.Name, rule.Prefix) then
+				for _, child in ipairs(instance:GetChildren()) do
+					if child:IsA("Texture") and startsWith(child.Name, WATER_TEXTURE_PREFIX) then
+						child:Destroy()
+					end
+				end
+				instance.Material = Enum.Material.SmoothPlastic
+				instance.Reflectance = rule.Shine
+				for _, face in ipairs(Enum.NormalId:GetEnumItems()) do
+					local texture = Instance.new("Texture")
+					texture.Name = WATER_TEXTURE_PREFIX .. face.Name
+					texture.Texture = rule.Texture
+					texture.Face = face
+					texture.StudsPerTileU = rule.Tile
+					texture.StudsPerTileV = rule.Tile
+					texture.Color3 = instance.Color
+					texture.Transparency = 0
+					texture.ZIndex = 1
+					texture.Parent = instance
+				end
+				instance:SetAttribute("Level2_WaterPropTexture", rule.Texture)
+				instance:SetAttribute("Level2_WaterPropTextureRole", rule.Role)
+				instance:SetAttribute("Level2_WaterPropTextureSet", "ImageGen 2026-08-21")
+				return
+			end
+		end
+	end
+
+	for _, instance in ipairs(Workspace:GetDescendants()) do
+		applyWaterTexture(instance)
+	end
+	Workspace.DescendantAdded:Connect(function(instance)
+		task.defer(applyWaterTexture, instance)
+	end)
+end
+

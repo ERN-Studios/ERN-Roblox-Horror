@@ -326,6 +326,13 @@ local function validateManifest(manifest: any)
 	assert(manifest.MallManagerRuntime and manifest.MallManagerRuntime:IsA("Folder")
 		and manifest.MallManagerRuntime:IsDescendantOf(manifest.World),
 		"Level 3 manifest is missing Mall Manager Runtime")
+	assert(type(manifest.DiscPlayer) == "table" and manifest.DiscPlayer.Model
+		and manifest.DiscPlayer.Model:IsA("Model")
+		and manifest.DiscPlayer.Model:IsDescendantOf(manifest.World)
+		and manifest.DiscPlayer.Prompt:IsA("ProximityPrompt")
+		and type(manifest.DiscPlayer.Slots) == "table"
+		and #manifest.DiscPlayer.Slots == Configuration.ModuleGoal,
+		"Level 3 manifest is missing its five-slot Signal Hall disc player")
 	assert(manifest.EscapePrompt and manifest.EscapePrompt:IsA("ProximityPrompt")
 		and manifest.EscapePrompt:IsDescendantOf(manifest.World),
 		"Level 3 manifest is missing its escape prompt")
@@ -333,6 +340,19 @@ local function validateManifest(manifest: any)
 		and manifest.ExitSafeSpawn:IsDescendantOf(manifest.World),
 		"Level 3 manifest is missing its exit safe spawn")
 	assert(typeof(manifest.ExitPosition) == "Vector3", "Level 3 manifest is missing its exit position")
+	local finalHall = manifest.FinalHall
+	assert(type(finalHall) == "table" and finalHall.Model and finalHall.Model:IsA("Model")
+		and finalHall.Model:IsDescendantOf(manifest.World),
+		"Level 3 manifest is missing its generated final hall")
+	assert(type(finalHall.Length) == "number"
+		and math.abs(finalHall.Length - Configuration.Layout.ExitCorridorLength) <= .1,
+		"Level 3 final hall length does not match configuration")
+	assert(finalHall.HalfwayMarker and finalHall.HalfwayMarker:IsA("BasePart")
+		and finalHall.HalfwayMarker:GetAttribute("Level3_FinalHallHalfway") == true,
+		"Level 3 final hall halfway marker is invalid")
+	assert(finalHall.SpawnMarker and finalHall.SpawnMarker:IsA("BasePart")
+		and finalHall.SpawnMarker:GetAttribute("Level3_MallManagerFinaleSpawn") == true,
+		"Level 3 final hall Manager spawn marker is invalid")
 end
 
 local function movePlayersToArrival(manifest: any)
@@ -374,11 +394,22 @@ local function applyBaselineReplicatedState(levelState: Folder, overrides: {[str
 	end
 	levelState:SetAttribute("Level3_ModuleProgress", 0)
 	levelState:SetAttribute("Level3_ModuleGoal", o.ModuleGoal or 0)
+	levelState:SetAttribute("Level3_CDCollectedProgress", 0)
+	levelState:SetAttribute("Level3_CDInsertedProgress", 0)
+	levelState:SetAttribute("Level3_CDCarriedCount", 0)
+	levelState:SetAttribute("Level3_CDDroppedCount", 0)
 	levelState:SetAttribute("Level3_ExitUnlocked", false)
 	levelState:SetAttribute("Level3_ExitPosition", nil)
 	levelState:SetAttribute("Level3_LightingMode", o.LightingMode or "OFF")
 	levelState:SetAttribute("Level3_RoomSongPhase", o.RoomSongPhase or "STOPPED")
 	levelState:SetAttribute("Level3_RoomSongStartServerTime", 0)
+	levelState:SetAttribute("Level3_CompletionSongStartServerTime", 0)
+	levelState:SetAttribute("Level3_CompletionDimStartedAtServerTime", 0)
+	levelState:SetAttribute("Level3_CompletionDimDuration", Configuration.MusicSequence.CompletionDimSeconds)
+	levelState:SetAttribute("Level3_FinalHallEligibleCount", 0)
+	levelState:SetAttribute("Level3_FinalHallCrossedCount", 0)
+	levelState:SetAttribute("Level3_FinalHallChaseTriggered", false)
+	levelState:SetAttribute("Level3_FinalHallChaseActive", false)
 	levelState:SetAttribute("Level3_RoomSongDuration", Configuration.MusicSequence.DurationSeconds)
 	levelState:SetAttribute("Level3_BlackoutStartSeconds", Configuration.MusicSequence.BlackoutStartSeconds)
 	levelState:SetAttribute("Level3_RoomSongStopSeconds", Configuration.MusicSequence.DurationSeconds)
@@ -402,6 +433,9 @@ local function applyBaselineReplicatedState(levelState: Folder, overrides: {[str
 	levelState:SetAttribute("Level3_BlackoutScreamVolume", Configuration.MallManager.BlackoutScreamVolume)
 	levelState:SetAttribute("Level3_BlackoutScreamStartedAtServerTime", 0)
 	levelState:SetAttribute("Level3_MallManagerHuntActive", false)
+	levelState:SetAttribute("Level3_FurnitureTemporarilyRemoved", false)
+	levelState:SetAttribute("Level3_FurnitureCollisionSuppressed", false)
+	levelState:SetAttribute("Level3_FlashlightsSuppressed", false)
 	levelState:SetAttribute("Level3_BlackoutScreamOpeningCount", 0)
 	levelState:SetAttribute("Level3_MallManagerActive", false)
 	levelState:SetAttribute("Level3_MallManagerState", "OFF")
@@ -459,6 +493,9 @@ function Adapter.Cleanup()
 	workspace:SetAttribute("WorldGenerated", false)
 	workspace:SetAttribute("Level3Modules", 0)
 	workspace:SetAttribute("Level3ModuleGoal", 0)
+	workspace:SetAttribute("Level3CDsCollected", 0)
+	workspace:SetAttribute("Level3CDsCarried", 0)
+	workspace:SetAttribute("Level3CDsDropped", 0)
 	workspace:SetAttribute("Level3ExitUnlocked", false)
 	workspace:SetAttribute("Level3LightingOwnedByController", false)
 	workspace:SetAttribute("Level3PreBlackoutActive", false)
@@ -507,6 +544,9 @@ function Adapter.Build()
 	workspace:SetAttribute("LoadStage", "LEVEL_3_GENERATING_LAYOUT")
 	workspace:SetAttribute("Level3Modules", 0)
 	workspace:SetAttribute("Level3ModuleGoal", Configuration.ModuleGoal)
+	workspace:SetAttribute("Level3CDsCollected", 0)
+	workspace:SetAttribute("Level3CDsCarried", 0)
+	workspace:SetAttribute("Level3CDsDropped", 0)
 	workspace:SetAttribute("Level3ExitUnlocked", false)
 	workspace:SetAttribute("Level3LightingOwnedByController", true)
 	workspace:SetAttribute("Level3PreBlackoutActive", false)
@@ -557,8 +597,8 @@ function Adapter.Build()
 		-- with its more specific active phase without the adapter overwriting it.
 		ObjectiveController.Start(manifest, generation)
 		HidingController.Start(manifest, generation)
-		-- The Manager exists only for the final post-song hunt. Bind before Music
-		-- starts so the song-end edge can spawn it and recovery can remove it.
+		-- Bind once to the shared hunt authority. The music timeline may use it
+		-- before completion; the final-hall midpoint uses it for the finale chase.
 		bindManagerToHunt(manifest, generation)
 		MusicSequenceController.Start(manifest, generation)
 

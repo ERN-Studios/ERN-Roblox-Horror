@@ -9,6 +9,7 @@ local Lighting = game:GetService("Lighting")
 local TweenService = game:GetService("TweenService")
 local SoundService = game:GetService("SoundService")
 local ContentProvider = game:GetService("ContentProvider")
+local ContextActionService = game:GetService("ContextActionService")
 
 local remotes = RS:WaitForChild("Remotes")
 local remote = remotes:WaitForChild("RoundStatus")
@@ -848,19 +849,10 @@ local function waitForLevelTwoEntry()
 	return false
 end
 
--- Quiet built-in terminal key click; no uploaded audio asset required.
-local typeSound = Instance.new("Sound")
-typeSound.Name = "TerminalType"
-typeSound.SoundId = "rbxasset://sounds/clickfast.wav"
-typeSound.Volume = 0.12
-typeSound.PlaybackSpeed = 1.35
-typeSound.Parent = gui
-
 local DEFAULT_TEXT = Color3.fromRGB(235, 232, 222)
 local DEFAULT_SIZE = 26
 local DEFAULT_FONT = Enum.Font.GothamMedium
 local COMPACT_SIZE = UDim2.new(0, 620, 0, 48)
-local OBJECTIVE_SIZE = UDim2.new(0, 600, 0, 154)
 
 local function setMsg(text, color)
 	label.TextSize = DEFAULT_SIZE
@@ -874,125 +866,1235 @@ local function setMsg(text, color)
 	label.Visible = text ~= nil and text ~= ""
 end
 
-local objectiveRun = 0
-local elevatorBriefingStarted = false
+-- Level 1 command briefing. This replaces the old typed objective sequence and
+-- uses its own subtitle layer so the shared lobby/status label stays available.
+local LEVEL_ONE_BRIEFING_ID = "rbxassetid://110249611823719"
+local LEVEL_ONE_RADIO_CUE_ID = "rbxassetid://73198577463663"
+local LEVEL_ONE_BRIEFING_DELAY = 2.5 -- radio cue leads in; speech still begins about 2.5s after placement
+local LEVEL_TWO_BRIEFING_ID = "rbxassetid://139075030898721"
+local LEVEL_TWO_RADIO_CUE_ID = "rbxassetid://121765399252460"
+local LEVEL_TWO_BRIEFING_DELAY = 2.5 -- measured from the moment the Poolrooms cover clears
+local levelThreeBriefing = {
+	speechId = "rbxassetid://113751783401897",
+	radioId = "rbxassetid://105627123289647",
+	delay = 2.5, -- the two-second radio cue begins half a second after placement
+	run = 0,
+	preloaded = false,
+	started = false,
+}
 
-local function playObjective()
-	objectiveRun += 1
-	local run = objectiveRun
+-- One private Command Center transmission per lobby-server join. The server
+-- sends a dedicated ready-acknowledged event after this client has connected,
+-- so the announcement cannot be lost to RemoteEvent startup ordering.
+local lobbyBriefing = {
+	speechId = "rbxassetid://121135469064341",
+	radioId = "rbxassetid://116864891394910",
+	delay = 2.5,
+	radioLength = 1.032,
+	run = 0,
+	played = false,
+	pending = false,
+	active = false,
+	preloaded = false,
+	cues = {
+		{0.00, 1.28, "New arrival..."},
+		{1.28, 2.67, "Command Center here."},
+		{2.67, 6.03, "You have successfully arrived inside the Zyntra Transit Concourse—"},
+		{6.03, 9.92, "the Company's only stable gateway into the anomalous spaces."},
+		{9.92, 12.70, "Numbered level chambers line both sides of the tunnel."},
+		{12.70, 15.62, "Select an active chamber and enter its transit gate."},
+		{15.62, 19.44, "Set your team capacity and clearance, then remain inside the marked zone."},
+		{19.44, 22.29, "Transfer begins when your team is assembled."},
+		{22.29, 27.21, "Beyond the gate, follow your assigned briefing, stay together, and locate a route back."},
+		{27.21, 28.25, "Be advised..."},
+		{28.25, 31.17, "everything inside these spaces is highly classified."},
+		{31.17, 33.69, "No personal account may leave this facility."},
+		{33.69, 37.47, "Any disclosure will be treated as a containment breach."},
+		{37.47, 39.97, "If something on the other side recognizes you..."},
+		{39.97, 41.84, "do not assume it is human."},
+		{41.84, 43.54, "Proceed when ready."},
+		{43.54, 45.10, "Command Center, over and out."},
+	},
+}
+
+local guideGui = Instance.new("ScreenGui")
+guideGui.Name = "LevelOneGuideGui"
+guideGui.ResetOnSpawn = false
+guideGui.IgnoreGuiInset = false
+guideGui.DisplayOrder = 110
+guideGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+guideGui.Parent = player:WaitForChild("PlayerGui")
+
+local function roundAndStroke(parent, radius, color, transparency, thickness)
+	local uiCorner = Instance.new("UICorner")
+	uiCorner.CornerRadius = UDim.new(0, radius)
+	uiCorner.Parent = parent
+	local stroke = Instance.new("UIStroke")
+	stroke.Color = color
+	stroke.Transparency = transparency
+	stroke.Thickness = thickness
+	stroke.Parent = parent
+end
+
+local subtitleFrame = Instance.new("Frame")
+subtitleFrame.Name = "CommandSubtitles"
+subtitleFrame.AnchorPoint = Vector2.new(0.5, 1)
+subtitleFrame.Position = UDim2.new(0.5, 0, 1, -64)
+subtitleFrame.Size = UDim2.new(0.76, 0, 0, 96)
+subtitleFrame.BackgroundColor3 = Color3.fromRGB(4, 8, 6)
+subtitleFrame.BackgroundTransparency = 0.18
+subtitleFrame.BorderSizePixel = 0
+subtitleFrame.Visible = false
+subtitleFrame.ZIndex = 20
+subtitleFrame.Parent = guideGui
+roundAndStroke(subtitleFrame, 8, Color3.fromRGB(82, 224, 164), 0.38, 1.5)
+
+local subtitleConstraint = Instance.new("UISizeConstraint")
+subtitleConstraint.MinSize = Vector2.new(280, 88)
+subtitleConstraint.MaxSize = Vector2.new(860, 118)
+subtitleConstraint.Parent = subtitleFrame
+
+local subtitleSpeaker = Instance.new("TextLabel")
+subtitleSpeaker.Name = "Speaker"
+subtitleSpeaker.Position = UDim2.fromOffset(18, 8)
+subtitleSpeaker.Size = UDim2.new(1, -36, 0, 20)
+subtitleSpeaker.BackgroundTransparency = 1
+subtitleSpeaker.Font = Enum.Font.Code
+subtitleSpeaker.Text = "> COMMAND CENTER"
+subtitleSpeaker.TextColor3 = Color3.fromRGB(105, 238, 168)
+subtitleSpeaker.TextSize = 15
+subtitleSpeaker.TextXAlignment = Enum.TextXAlignment.Left
+subtitleSpeaker.ZIndex = 21
+subtitleSpeaker.Parent = subtitleFrame
+
+local subtitleText = Instance.new("TextLabel")
+subtitleText.Name = "Subtitle"
+subtitleText.Position = UDim2.fromOffset(18, 28)
+subtitleText.Size = UDim2.new(1, -36, 1, -36)
+subtitleText.BackgroundTransparency = 1
+subtitleText.Font = Enum.Font.GothamMedium
+subtitleText.Text = ""
+subtitleText.TextColor3 = Color3.fromRGB(240, 242, 235)
+subtitleText.TextSize = 20
+subtitleText.TextWrapped = true
+subtitleText.TextXAlignment = Enum.TextXAlignment.Left
+subtitleText.TextYAlignment = Enum.TextYAlignment.Center
+subtitleText.ZIndex = 21
+subtitleText.Parent = subtitleFrame
+
+local lobbySkipButton = Instance.new("TextButton")
+lobbySkipButton.Name = "LobbyBriefingSkip"
+lobbySkipButton.AnchorPoint = Vector2.new(0.5, 1)
+lobbySkipButton.Position = UDim2.new(0.5, 0, 1, -168)
+lobbySkipButton.Size = UDim2.fromOffset(420, 52)
+lobbySkipButton.BackgroundColor3 = Color3.fromRGB(6, 13, 11)
+lobbySkipButton.BackgroundTransparency = 0.06
+lobbySkipButton.BorderSizePixel = 0
+lobbySkipButton.AutoButtonColor = false
+lobbySkipButton.Active = true
+lobbySkipButton.Selectable = true
+lobbySkipButton.Text = ""
+lobbySkipButton.Visible = false
+lobbySkipButton.ZIndex = 30
+lobbySkipButton.Parent = guideGui
+roundAndStroke(lobbySkipButton, 10, Color3.fromRGB(80, 221, 177), 0.40, 1)
+
+do
+	local object = Instance.new("UIGradient")
+	object.Color = ColorSequence.new({
+		ColorSequenceKeypoint.new(0, Color3.fromRGB(8, 24, 20)),
+		ColorSequenceKeypoint.new(0.56, Color3.fromRGB(6, 14, 12)),
+		ColorSequenceKeypoint.new(1, Color3.fromRGB(5, 10, 9)),
+	})
+	object.Rotation = 0
+	object.Parent = lobbySkipButton
+end
+
+do
+	local object = Instance.new("Frame")
+	object.Name = "LiveAccent"
+	object.Position = UDim2.fromOffset(14, 20)
+	object.Size = UDim2.fromOffset(10, 10)
+	object.BackgroundColor3 = Color3.fromRGB(87, 245, 187)
+	object.BorderSizePixel = 0
+	object.ZIndex = 31
+	object.Parent = lobbySkipButton
+	roundAndStroke(object, 5, Color3.fromRGB(173, 255, 222), 0.28, 1)
+end
+
+do
+	local object = Instance.new("TextLabel")
+	object.Name = "LinkStatus"
+	object.Position = UDim2.fromOffset(34, 0)
+	object.Size = UDim2.new(0.53, -34, 1, 0)
+	object.BackgroundTransparency = 1
+	object.Font = Enum.Font.GothamMedium
+	object.Text = "COMMAND CENTER // LIVE"
+	object.TextColor3 = Color3.fromRGB(127, 213, 188)
+	object.TextSize = 12
+	object.TextXAlignment = Enum.TextXAlignment.Left
+	object.ZIndex = 31
+	object.Parent = lobbySkipButton
+end
+
+do
+	local object = Instance.new("Frame")
+	object.Name = "Divider"
+	object.AnchorPoint = Vector2.new(0, 0.5)
+	object.Position = UDim2.new(0.53, 0, 0.5, 0)
+	object.Size = UDim2.new(0, 1, 1, -18)
+	object.BackgroundColor3 = Color3.fromRGB(73, 151, 129)
+	object.BackgroundTransparency = 0.46
+	object.BorderSizePixel = 0
+	object.ZIndex = 31
+	object.Parent = lobbySkipButton
+end
+
+do
+	local object = Instance.new("TextLabel")
+	object.Name = "Action"
+	object.Position = UDim2.new(0.53, 14, 0, 0)
+	object.Size = UDim2.new(0.47, -60, 1, 0)
+	object.BackgroundTransparency = 1
+	object.Font = Enum.Font.GothamBold
+	object.Text = "SKIP BRIEFING"
+	object.TextColor3 = Color3.fromRGB(241, 250, 246)
+	object.TextSize = 14
+	object.TextXAlignment = Enum.TextXAlignment.Left
+	object.ZIndex = 31
+	object.Parent = lobbySkipButton
+end
+
+do
+	local object = Instance.new("Frame")
+	object.Name = "Keycap"
+	object.AnchorPoint = Vector2.new(1, 0.5)
+	object.Position = UDim2.new(1, -12, 0.5, 0)
+	object.Size = UDim2.fromOffset(34, 28)
+	object.BackgroundColor3 = Color3.fromRGB(17, 35, 30)
+	object.BackgroundTransparency = 0.04
+	object.BorderSizePixel = 0
+	object.ZIndex = 31
+	object.Parent = lobbySkipButton
+	roundAndStroke(object, 6, Color3.fromRGB(124, 238, 201), 0.34, 1)
+end
+
+do
+	local object = Instance.new("TextLabel")
+	object.Name = "Key"
+	object.Size = UDim2.fromScale(1, 1)
+	object.BackgroundTransparency = 1
+	object.Font = Enum.Font.GothamBold
+	object.Text = "K"
+	object.TextColor3 = Color3.fromRGB(185, 255, 226)
+	object.TextSize = 13
+	object.ZIndex = 32
+	object.Parent = lobbySkipButton.Keycap
+end
+
+lobbySkipButton.MouseEnter:Connect(function()
+	TweenService:Create(lobbySkipButton, TweenInfo.new(0.12), {
+		BackgroundColor3 = Color3.fromRGB(10, 27, 22),
+	}):Play()
+end)
+lobbySkipButton.MouseLeave:Connect(function()
+	TweenService:Create(lobbySkipButton, TweenInfo.new(0.12), {
+		BackgroundColor3 = Color3.fromRGB(6, 13, 11),
+	}):Play()
+end)
+
+local objectivesButton = Instance.new("TextButton")
+objectivesButton.Name = "ObjectivesButton"
+objectivesButton.Position = UDim2.fromOffset(12, 12)
+objectivesButton.Size = UDim2.fromOffset(154, 44)
+objectivesButton.BackgroundColor3 = Color3.fromRGB(8, 14, 9)
+objectivesButton.BackgroundTransparency = 0.12
+objectivesButton.BorderSizePixel = 0
+objectivesButton.AutoButtonColor = true
+objectivesButton.Active = true
+objectivesButton.Selectable = true
+objectivesButton.Font = Enum.Font.Code
+objectivesButton.Text = UIS.TouchEnabled and "OBJECTIVES" or "OBJECTIVES  [H]"
+objectivesButton.TextColor3 = Color3.fromRGB(120, 255, 175)
+objectivesButton.TextSize = 16
+objectivesButton.Visible = false
+objectivesButton.ZIndex = 30
+objectivesButton.Parent = guideGui
+roundAndStroke(objectivesButton, 8, Color3.fromRGB(105, 238, 168), 0.27, 1.5)
+
+local objectivesPanel = Instance.new("Frame")
+objectivesPanel.Name = "ObjectivesPanel"
+objectivesPanel.Position = UDim2.fromOffset(12, 64)
+objectivesPanel.Size = UDim2.fromOffset(420, 338)
+objectivesPanel.BackgroundColor3 = Color3.fromRGB(8, 14, 9)
+objectivesPanel.BackgroundTransparency = 0.06
+objectivesPanel.BorderSizePixel = 0
+objectivesPanel.Active = true
+objectivesPanel.Visible = false
+objectivesPanel.ZIndex = 30
+objectivesPanel.Parent = guideGui
+roundAndStroke(objectivesPanel, 10, Color3.fromRGB(105, 238, 168), 0.27, 1.5)
+
+local objectivesTitle = Instance.new("TextLabel")
+objectivesTitle.Name = "Title"
+objectivesTitle.Position = UDim2.fromOffset(16, 10)
+objectivesTitle.Size = UDim2.new(1, -68, 0, 32)
+objectivesTitle.BackgroundTransparency = 1
+objectivesTitle.Font = Enum.Font.Code
+objectivesTitle.Text = "> LEVEL 1 — ESCAPE PROCEDURE"
+objectivesTitle.TextColor3 = Color3.fromRGB(120, 255, 175)
+objectivesTitle.TextSize = 18
+objectivesTitle.TextXAlignment = Enum.TextXAlignment.Left
+objectivesTitle.ZIndex = 31
+objectivesTitle.Parent = objectivesPanel
+
+local objectivesClose = Instance.new("TextButton")
+objectivesClose.Name = "Close"
+objectivesClose.AnchorPoint = Vector2.new(1, 0)
+objectivesClose.Position = UDim2.new(1, -8, 0, 6)
+objectivesClose.Size = UDim2.fromOffset(40, 40)
+objectivesClose.BackgroundTransparency = 1
+objectivesClose.Font = Enum.Font.GothamBold
+objectivesClose.Text = "×"
+objectivesClose.TextColor3 = Color3.fromRGB(218, 237, 223)
+objectivesClose.TextSize = 26
+objectivesClose.ZIndex = 32
+objectivesClose.Parent = objectivesPanel
+
+local objectivesDivider = Instance.new("Frame")
+objectivesDivider.Name = "Divider"
+objectivesDivider.Position = UDim2.fromOffset(16, 50)
+objectivesDivider.Size = UDim2.new(1, -32, 0, 1)
+objectivesDivider.BackgroundColor3 = Color3.fromRGB(105, 238, 168)
+objectivesDivider.BackgroundTransparency = 0.45
+objectivesDivider.BorderSizePixel = 0
+objectivesDivider.ZIndex = 31
+objectivesDivider.Parent = objectivesPanel
+
+local objectivesBody = Instance.new("ScrollingFrame")
+objectivesBody.Name = "NumberedObjectives"
+objectivesBody.Position = UDim2.fromOffset(14, 60)
+objectivesBody.Size = UDim2.new(1, -28, 1, -72)
+objectivesBody.BackgroundTransparency = 1
+objectivesBody.BorderSizePixel = 0
+objectivesBody.CanvasSize = UDim2.new()
+objectivesBody.AutomaticCanvasSize = Enum.AutomaticSize.Y
+objectivesBody.ScrollBarThickness = 3
+objectivesBody.ScrollBarImageColor3 = Color3.fromRGB(105, 238, 168)
+objectivesBody.ScrollingDirection = Enum.ScrollingDirection.Y
+objectivesBody.ZIndex = 31
+objectivesBody.Parent = objectivesPanel
+
+local objectivesLayout = Instance.new("UIListLayout")
+objectivesLayout.Padding = UDim.new(0, 8)
+objectivesLayout.SortOrder = Enum.SortOrder.LayoutOrder
+objectivesLayout.Parent = objectivesBody
+
+local objectiveCopy = {
+	"Find a group of unusually bright ceiling lights. A fuse relay is nearby.",
+	"Interact with the relay to extract its fuse.",
+	"Follow the colored cables. Each circuit connects one fuse box to one lever, but the cable does not identify which end is which.",
+	"Insert one fuse into every fuse box.",
+	"After every box is powered, activate all levers within 10 seconds.",
+	"Follow the energy reader to the powered exit door.",
+	"Keep away from the entity. Do not engage.",
+}
+
+for index, copy in ipairs(objectiveCopy) do
+	local row = Instance.new("Frame")
+	row.Name = "Objective" .. index
+	row.Size = UDim2.new(1, -4, 0, 0)
+	row.AutomaticSize = Enum.AutomaticSize.Y
+	row.BackgroundTransparency = 1
+	row.LayoutOrder = index
+	row.ZIndex = 31
+	row.Parent = objectivesBody
+
+	local number = Instance.new("TextLabel")
+	number.Name = "Number"
+	number.Size = UDim2.fromOffset(28, 22)
+	number.BackgroundTransparency = 1
+	number.Font = Enum.Font.Code
+	number.Text = tostring(index) .. "."
+	number.TextColor3 = index == #objectiveCopy
+		and Color3.fromRGB(235, 220, 150)
+		or Color3.fromRGB(120, 255, 175)
+	number.TextSize = 15
+	number.TextXAlignment = Enum.TextXAlignment.Left
+	number.TextYAlignment = Enum.TextYAlignment.Top
+	number.ZIndex = 32
+	number.Parent = row
+
+	local description = Instance.new("TextLabel")
+	description.Name = "Description"
+	description.Position = UDim2.fromOffset(28, 0)
+	description.Size = UDim2.new(1, -32, 0, 0)
+	description.AutomaticSize = Enum.AutomaticSize.Y
+	description.BackgroundTransparency = 1
+	description.Font = Enum.Font.Code
+	description.Text = copy
+	description.TextColor3 = index == #objectiveCopy
+		and Color3.fromRGB(235, 220, 150)
+		or Color3.fromRGB(218, 237, 223)
+	description.TextSize = 14
+	description.TextWrapped = true
+	description.TextXAlignment = Enum.TextXAlignment.Left
+	description.TextYAlignment = Enum.TextYAlignment.Top
+	description.ZIndex = 32
+	description.Parent = row
+end
+
+local levelOneBriefingSound = Instance.new("Sound")
+levelOneBriefingSound.Name = "LevelOneCommandBriefing"
+levelOneBriefingSound.SoundId = LEVEL_ONE_BRIEFING_ID
+levelOneBriefingSound.Volume = 1
+levelOneBriefingSound.Looped = false
+levelOneBriefingSound.Parent = guideGui
+
+local levelOneRadioCue = Instance.new("Sound")
+levelOneRadioCue.Name = "LevelOneRadioOpen"
+levelOneRadioCue.SoundId = LEVEL_ONE_RADIO_CUE_ID
+levelOneRadioCue.Volume = 1
+levelOneRadioCue.Looped = false
+levelOneRadioCue.Parent = guideGui
+
+local levelTwoBriefingSound = Instance.new("Sound")
+levelTwoBriefingSound.Name = "LevelTwoCommandBriefing"
+levelTwoBriefingSound.SoundId = LEVEL_TWO_BRIEFING_ID
+levelTwoBriefingSound.Volume = 1
+levelTwoBriefingSound.Looped = false
+levelTwoBriefingSound.Parent = guideGui
+
+local levelTwoRadioCue = Instance.new("Sound")
+levelTwoRadioCue.Name = "LevelTwoRadioOpen"
+levelTwoRadioCue.SoundId = LEVEL_TWO_RADIO_CUE_ID
+levelTwoRadioCue.Volume = 1
+levelTwoRadioCue.Looped = false
+levelTwoRadioCue.Parent = guideGui
+
+levelThreeBriefing.sound = Instance.new("Sound")
+levelThreeBriefing.sound.Name = "LevelThreeCommandBriefing"
+levelThreeBriefing.sound.SoundId = levelThreeBriefing.speechId
+levelThreeBriefing.sound.Volume = 1
+levelThreeBriefing.sound.PlaybackSpeed = 1
+levelThreeBriefing.sound.Looped = false
+levelThreeBriefing.sound.Parent = guideGui
+
+levelThreeBriefing.pitch = Instance.new("PitchShiftSoundEffect")
+levelThreeBriefing.pitch.Name = "FailingCommsPitch"
+levelThreeBriefing.pitch.Octave = 1
+levelThreeBriefing.pitch.Parent = levelThreeBriefing.sound
+
+levelThreeBriefing.radio = Instance.new("Sound")
+levelThreeBriefing.radio.Name = "LevelThreeRadioOpen"
+levelThreeBriefing.radio.SoundId = levelThreeBriefing.radioId
+levelThreeBriefing.radio.Volume = 1
+levelThreeBriefing.radio.PlaybackSpeed = 1
+levelThreeBriefing.radio.Looped = false
+levelThreeBriefing.radio.Parent = guideGui
+
+lobbyBriefing.sound = Instance.new("Sound")
+lobbyBriefing.sound.Name = "LobbyCommandBriefing"
+lobbyBriefing.sound.SoundId = lobbyBriefing.speechId
+lobbyBriefing.sound.Volume = 1
+lobbyBriefing.sound.PlaybackSpeed = 1
+lobbyBriefing.sound.Looped = false
+lobbyBriefing.sound.Parent = guideGui
+
+lobbyBriefing.radio = Instance.new("Sound")
+lobbyBriefing.radio.Name = "LobbyRadioOpen"
+lobbyBriefing.radio.SoundId = lobbyBriefing.radioId
+lobbyBriefing.radio.Volume = 1
+lobbyBriefing.radio.PlaybackSpeed = 1
+lobbyBriefing.radio.Looped = false
+lobbyBriefing.radio.Parent = guideGui
+
+-- Cue starts were measured from the uploaded 46.99-second recording. Captions
+-- track Sound.TimePosition so loading or frame-rate delays cannot desync them.
+local briefingCues = {
+	{0.00, 3.46, "Team Alpha, this is Command Center. Stand by for briefing."},
+	{3.46, 7.72, "We know very little about this anomalous space, but we may have identified a way out."},
+	{7.72, 10.50, "Look for groups of unusually bright ceiling lights."},
+	{10.50, 12.93, "A fuse relay should be nearby."},
+	{12.93, 15.83, "Extract the fuses, then locate the colored cables."},
+	{15.83, 20.78, "Each cable connects a fuse box to a lever... but we cannot determine which end is which."},
+	{20.78, 25.86, "Power every fuse box first. Then, activate all levers within ten seconds."},
+	{25.86, 31.19, "Be advised... we are detecting movement inside the space that does not match your team."},
+	{31.19, 33.88, "We know nothing about the entity responsible."},
+	{33.88, 36.91, "If you see or hear anything unusual, stay alert."},
+	{36.91, 39.98, "Keep your distance... and do not engage."},
+	{39.98, 44.24, "Once the exit door is powered on, your energy reader will guide you to it."},
+	{44.24, 45.61, "Good luck, Team Alpha."},
+	{45.61, 47.10, "Command Center, over and out."},
+}
+
+local levelTwoBriefingCues = {
+	{0.00, 4.70, "Team Alpha, this is Command Center. Stand by for briefing."},
+	{4.70, 7.55, "Good work making it safely to Level Two."},
+	{7.55, 12.20, "This space appears to contain three inactive pump stations. Locate and activate all three."},
+	{12.20, 17.10, "Be advised... we have detected poolfoam-like entities near what appear to be children's play areas."},
+	{17.10, 18.65, "Avoid close contact."},
+	{18.65, 25.00, "Even more important: activating a pump appears to alert an unidentified, unusually large entity to your location."},
+	{25.00, 26.65, "Once a pump is running, move quickly."},
+	{26.65, 31.10, "After all three pumps are active, the main pool chamber should unlock."},
+	{31.10, 33.45, "Enter it, reach the upper floor, and locate the exit tube."},
+	{33.45, 37.75, "At that point... assume the entity knows where you are—and where you are headed."},
+	{37.75, 39.00, "Stay alert."},
+	{39.00, 41.30, "And I repeat: do not stop moving."},
+	{41.30, 42.55, "Good luck, Team Alpha."},
+	{42.55, 44.13, "Command Center, over and out."},
+}
+
+-- Timed against the uploaded 52.610612-second Level 3 recording.
+levelThreeBriefing.cues = {
+	{0.00, 3.90, "Team Alpha. Come in. This is Command Center. Stand by for briefing."},
+	{3.90, 8.50, "You've made it farther than we expected... And for that... I salute you."},
+	{8.50, 11.50, "Our comms link is deteriorating, so listen carefully."},
+	{11.50, 15.10, "Five compact discs, which may be CDs, are scattered throughout the space."},
+	{15.10, 19.60, "Recover them and bring them to the television and VCR unit near the sealed wall."},
+	{19.60, 21.90, "Every carrier must insert their own discs."},
+	{21.90, 24.70, "When all five are loaded, a hidden passage should appear."},
+	{24.70, 27.00, "A humanoid entity is searching the rooms."},
+	{27.00, 31.00, "When the disturbing song is over, it can locate your presence in an instance."},
+	{31.00, 32.70, "It hunts whoever is nearest."},
+	{32.70, 35.40, "Keep moving, and do not let it corner you."},
+	{35.40, 37.90, "If the music begins playing backwards..."},
+	{37.90, 40.70, "The passage is open, and you have to find it."},
+	{40.70, 43.90, "I have to say, that it's getting really dangerous now."},
+	{43.90, 46.40, "But remember... you are doing important research."},
+	{46.40, 48.80, "And your courage will never be forgotten."},
+	{48.80, 50.60, "Best of luck to you."},
+	{50.60, 52.65, "Command Center, over and out."},
+}
+
+-- Deterministic transmission damage keeps the instructions legible while the
+-- voice itself briefly drops, snaps upward and sags in pitch. PlaybackSpeed
+-- remains exactly one, so neither caption timing nor the speech pace changes.
+levelThreeBriefing.interference = {
+	{8.70, 9.28, "jitter"},
+	{14.78, 14.86, "cut"},
+	{27.65, 28.22, "jitter"},
+	{32.55, 32.63, "cut"},
+	{40.85, 41.42, "jitter"},
+	{46.55, 47.12, "jitter"},
+}
+levelThreeBriefing.jitterOctaves = {0.84, 1.07, 0.91, 1.02}
+
+local briefingRun = 0
+local briefingPreloaded = false
+local elevatorBriefingStarted = false
+local objectivesAvailable = false
+local levelTwoBriefingRun = 0
+local levelTwoBriefingPreloaded = false
+local levelTwoBriefingStarted = false
+player:SetAttribute("LevelOneBriefingActive", false)
+player:SetAttribute("LevelTwoBriefingActive", false)
+player:SetAttribute("LevelThreeBriefingActive", false)
+player:SetAttribute("LobbyBriefingActive", false)
+player:SetAttribute("LobbyBriefingPlayed", false)
+player:SetAttribute("LobbyBriefingSkipped", false)
+
+local function isLevelOneParticipant()
+	return workspace:GetAttribute("SelectedLevel") == 1
+		and player:GetAttribute("InRound") == true
+		and player:GetAttribute("Escaped") ~= true
+		and not dead
+end
+
+local function setObjectivesAvailable(available)
+	objectivesAvailable = available == true
+	objectivesButton.Visible = objectivesAvailable
+	if not objectivesAvailable then
+		objectivesPanel.Visible = false
+	end
+end
+
+local function setSubtitle(text)
+	subtitleText.Text = text or ""
+	subtitleFrame.Visible = text ~= nil and text ~= ""
+end
+
+function lobbyBriefing.isEligible()
+	local reservedRoundServer = game.PrivateServerId ~= "" and game.PrivateServerOwnerId == 0
+	return not reservedRoundServer
+		and player:GetAttribute("InRound") ~= true
+		and not dead
+end
+
+local function updateLobbySkipCopy(inputType)
+	inputType = inputType or UIS:GetLastInputType()
+	local inputName = inputType and inputType.Name or ""
+	local usingGamepad = string.find(inputName, "Gamepad", 1, true) ~= nil
+	local keycap = lobbySkipButton:FindFirstChild("Keycap") :: Frame
+	local keyLabel = keycap:FindFirstChild("Key") :: TextLabel
+	if usingGamepad or (UIS.GamepadEnabled and not UIS.KeyboardEnabled and not UIS.TouchEnabled) then
+		keycap.Visible = true
+		keyLabel.Text = "B"
+	elseif inputType == Enum.UserInputType.Touch or (UIS.TouchEnabled and not UIS.KeyboardEnabled) then
+		keycap.Visible = false
+	else
+		keycap.Visible = true
+		keyLabel.Text = "K"
+	end
+end
+
+function lobbyBriefing.hasArrived()
+	local character = player.Character
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	local lobby = workspace:FindFirstChild("ServerLobby")
+	local spawn = lobby and lobby:FindFirstChild("LobbySpawn")
+	return root ~= nil and root:IsA("BasePart")
+		and spawn ~= nil and spawn:IsA("BasePart")
+		and (root.Position - spawn.Position).Magnitude <= 30
+end
+
+function lobbyBriefing.preload()
+	if lobbyBriefing.preloaded then return true end
+	local ok = pcall(function()
+		ContentProvider:PreloadAsync({lobbyBriefing.radio, lobbyBriefing.sound})
+	end)
+	lobbyBriefing.preloaded = ok
+		and lobbyBriefing.radio.IsLoaded
+		and lobbyBriefing.sound.IsLoaded
+	return lobbyBriefing.preloaded
+end
+
+function lobbyBriefing.cancel()
+	lobbyBriefing.run += 1
+	local ownedSubtitle = lobbyBriefing.active
+	lobbyBriefing.pending = false
+	lobbyBriefing.active = false
+	lobbyBriefing.radio:Stop()
+	lobbyBriefing.sound:Stop()
+	player:SetAttribute("LobbyBriefingActive", false)
+	lobbySkipButton.Visible = false
+	if ownedSubtitle then setSubtitle(nil) end
+end
+
+function lobbyBriefing.skip()
+	if not lobbyBriefing.active then return false end
+	player:SetAttribute("LobbyBriefingSkipped", true)
+	lobbyBriefing.cancel()
+	return true
+end
+
+lobbySkipButton.Activated:Connect(function()
+	lobbyBriefing.skip()
+end)
+UIS.LastInputTypeChanged:Connect(updateLobbySkipCopy)
+updateLobbySkipCopy()
+
+local LOBBY_SKIP_ACTION = "SkipLobbyBriefing"
+ContextActionService:UnbindAction(LOBBY_SKIP_ACTION)
+ContextActionService:BindActionAtPriority(
+	LOBBY_SKIP_ACTION,
+	function(_, inputState)
+		if inputState ~= Enum.UserInputState.Begin then
+			return Enum.ContextActionResult.Pass
+		end
+		if UIS:GetFocusedTextBox() or not lobbyBriefing.active or not lobbySkipButton.Visible then
+			return Enum.ContextActionResult.Pass
+		end
+		return lobbyBriefing.skip()
+			and Enum.ContextActionResult.Sink
+			or Enum.ContextActionResult.Pass
+	end,
+	false,
+	Enum.ContextActionPriority.High.Value,
+	Enum.KeyCode.K,
+	Enum.KeyCode.ButtonB
+)
+
+function lobbyBriefing.playOnce()
+	if lobbyBriefing.played or not lobbyBriefing.isEligible() then return end
+	lobbyBriefing.played = true
+	lobbyBriefing.pending = true
+	player:SetAttribute("LobbyBriefingSkipped", false)
+	lobbyBriefing.run += 1
+	local run = lobbyBriefing.run
+	player:SetAttribute("LobbyBriefingPlayed", true)
+	player:SetAttribute("LobbyBriefingActive", false)
 
 	task.spawn(function()
-		if workspace:GetAttribute("SelectedLevel") ~= 1 then
-			-- Module-owned levels provide their own objective/readout. Leave no
-			-- empty Level 1 briefing backdrop and never show fuse instructions.
-			setMsg(nil)
-			label.Visible = false
+		lobbyBriefing.preload()
+		local arrivalDeadline = os.clock() + 20
+		while run == lobbyBriefing.run
+			and lobbyBriefing.isEligible()
+			and not lobbyBriefing.hasArrived()
+			and os.clock() < arrivalDeadline do
+			RunService.Heartbeat:Wait()
+		end
+		if run ~= lobbyBriefing.run
+			or not lobbyBriefing.isEligible()
+			or not lobbyBriefing.hasArrived() then
+			if run == lobbyBriefing.run then lobbyBriefing.cancel() end
 			return
 		end
-		setMsg("")
-		label.TextColor3 = DEFAULT_TEXT
-		label.Size = OBJECTIVE_SIZE
-		label.BackgroundTransparency = 0.72
-		label.Visible = true
 
-		local function alive()
-			return run == objectiveRun
+		lobbyBriefing.pending = false
+		lobbyBriefing.active = true
+		player:SetAttribute("LobbyBriefingActive", true)
+		updateLobbySkipCopy()
+		lobbySkipButton.Visible = true
+		local speechAt = os.clock() + lobbyBriefing.delay
+
+		local radioLength = lobbyBriefing.radio.TimeLength > 0.05
+			and lobbyBriefing.radio.TimeLength or lobbyBriefing.radioLength
+		local remaining = speechAt - radioLength - os.clock()
+		if remaining > 0 then task.wait(remaining) end
+		if run ~= lobbyBriefing.run or not lobbyBriefing.isEligible() then
+			if run == lobbyBriefing.run then lobbyBriefing.cancel() end
+			return
 		end
 
-		local function keyClick(speed)
-			typeSound:Stop()
-			typeSound.TimePosition = 0
-			typeSound.PlaybackSpeed = speed or (1.25 + math.random() * 0.2)
-			typeSound:Play()
-		end
-
-		local function typeInto(base, text, speed)
-			for i = 1, #text do
-				if not alive() then return nil end
-				label.Text = base .. text:sub(1, i) .. "."
-				keyClick()
-				task.wait(speed or 0.03)
+		lobbyBriefing.radio:Stop()
+		lobbyBriefing.radio.TimePosition = 0
+		local radioPlayed = pcall(function() lobbyBriefing.radio:Play() end)
+		if radioPlayed then
+			local radioStarted = lobbyBriefing.radio.IsPlaying
+			local radioStartDeadline = os.clock() + 0.5
+			local radioDeadline = os.clock() + radioLength + 1
+			while run == lobbyBriefing.run
+				and lobbyBriefing.isEligible()
+				and os.clock() < radioDeadline do
+				if lobbyBriefing.radio.IsPlaying then
+					radioStarted = true
+				elseif radioStarted or os.clock() >= radioStartDeadline then
+					break
+				end
+				RunService.Heartbeat:Wait()
 			end
-			label.Text = base .. text
-			return base .. text
+		end
+		remaining = speechAt - os.clock()
+		if remaining > 0 then task.wait(remaining) end
+		if run ~= lobbyBriefing.run or not lobbyBriefing.isEligible() then
+			if run == lobbyBriefing.run then lobbyBriefing.cancel() end
+			return
 		end
 
-		local built = typeInto("", "Find ZYNTRA power relays", 0.03)
-		if not built then return end
-		task.wait(0.6)
-
-		built = typeInto(built .. string.char(10), "Extract fuses and power every fuse box", 0.03)
-		if not built then return end
-		task.wait(0.6)
-
-		built = typeInto(built .. string.char(10), "Pull all levers to power the exit door", 0.03)
-		if not built then return end
-		task.wait(0.5)
-
-		built = typeInto(built .. string.char(10), "Then escape", 0.03)
-		if not built then return end
-
-		-- Blink a terminal-style dot for about three seconds.
-		for _ = 1, 4 do
-			if not alive() then return end
-			label.Text = built .. "."
-			task.wait(0.15)
-			label.Text = built
-			task.wait(0.15)
+		lobbyBriefing.sound:Stop()
+		lobbyBriefing.sound.TimePosition = 0
+		local played = pcall(function() lobbyBriefing.sound:Play() end)
+		if not played then
+			if run == lobbyBriefing.run then lobbyBriefing.cancel() end
+			return
 		end
 
-		if not alive() then return end
-		label.Text = ""
-
-		local warning = typeInto("", "If you hear it...", 0.035)
-		if not warning then return end
-		task.wait(0.6)
-
-		warning = typeInto(warning .. string.char(10), "Or even worse...", 0.035)
-		if not warning then return end
-		task.wait(0.6)
-
-		warning = typeInto(warning .. " ", "see it...", 0.035)
-		if not warning then return end
-		task.wait(0.8)
-
-		if not alive() then return end
-		label.Text = ""
-		label.TextColor3 = Color3.fromRGB(255, 25, 25)
-		label.TextSize = 96
-		label.Font = Enum.Font.GothamBlack
-		label.TextStrokeColor3 = Color3.fromRGB(255, 0, 0)
-		label.TextStrokeTransparency = 0.08
-
-		for i = 1, 3 do
-			if not alive() then return end
-			label.Text = ("RUN"):sub(1, i)
-			keyClick(0.9)
-			task.wait(0.12)
+		local currentText = nil
+		local playbackStarted = lobbyBriefing.sound.IsPlaying
+		local playbackStartDeadline = os.clock() + 4
+		local deadline = os.clock() + 50
+		while run == lobbyBriefing.run
+			and lobbyBriefing.isEligible()
+			and os.clock() < deadline do
+			local position = lobbyBriefing.sound.TimePosition
+			local cueText = nil
+			for _, cue in ipairs(lobbyBriefing.cues) do
+				if position >= cue[1] and position < cue[2] then
+					cueText = cue[3]
+					break
+				end
+			end
+			if cueText ~= currentText then
+				currentText = cueText
+				setSubtitle(cueText)
+			end
+			if lobbyBriefing.sound.IsPlaying then
+				playbackStarted = true
+			elseif playbackStarted or os.clock() >= playbackStartDeadline then
+				break
+			end
+			RunService.Heartbeat:Wait()
 		end
 
-		-- RUN stays visible while the exclamation points and glow blink.
-		for _ = 1, 2 do
-			if not alive() then return end
-			label.Text = "! RUN !"
-			label.TextTransparency = 0
-			label.TextStrokeTransparency = 0.06
-			task.wait(0.12)
-			label.Text = "  RUN  "
-			label.TextTransparency = 0.08
-			label.TextStrokeTransparency = 0.4
-			task.wait(0.12)
-		end
-
-		-- Give RUN the same short readable beat as the other briefing lines. The
-		-- sequence still starts only on an elevator countdown event, but it no
-		-- longer hangs on screen until the doors open.
-		if not alive() then return end
-		label.Text = "! RUN !"
-		task.wait(0.55)
-		if alive() then setMsg("") end
+		if run ~= lobbyBriefing.run then return end
+		lobbyBriefing.sound:Stop()
+		lobbyBriefing.active = false
+		player:SetAttribute("LobbyBriefingActive", false)
+		lobbySkipButton.Visible = false
+		setSubtitle(nil)
 	end)
 end
+
+task.spawn(lobbyBriefing.preload)
+player:GetAttributeChangedSignal("InRound"):Connect(function()
+	if player:GetAttribute("InRound") == true then lobbyBriefing.cancel() end
+end)
+
+local function preloadLevelOneBriefing()
+	if briefingPreloaded then return true end
+	local ok = pcall(function()
+		ContentProvider:PreloadAsync({levelOneRadioCue, levelOneBriefingSound})
+	end)
+	briefingPreloaded = ok and levelOneRadioCue.IsLoaded and levelOneBriefingSound.IsLoaded
+	return briefingPreloaded
+end
+
+task.spawn(preloadLevelOneBriefing)
+
+local function cancelLevelOneBriefing(hideObjectives)
+	briefingRun += 1
+	levelOneRadioCue:Stop()
+	levelOneBriefingSound:Stop()
+	player:SetAttribute("LevelOneBriefingActive", false)
+	setSubtitle(nil)
+	if hideObjectives then
+		setObjectivesAvailable(false)
+	end
+end
+
+local function toggleObjectives()
+	if objectivesAvailable and isLevelOneParticipant() then
+		objectivesPanel.Visible = not objectivesPanel.Visible
+	else
+		objectivesPanel.Visible = false
+	end
+end
+
+objectivesButton.Activated:Connect(toggleObjectives)
+objectivesClose.Activated:Connect(function()
+	objectivesPanel.Visible = false
+end)
+local OBJECTIVES_ACTION = "ToggleObjectiveHelp"
+ContextActionService:UnbindAction(OBJECTIVES_ACTION)
+ContextActionService:BindActionAtPriority(
+	OBJECTIVES_ACTION,
+	function(_, inputState)
+		if inputState ~= Enum.UserInputState.Begin then
+			return Enum.ContextActionResult.Pass
+		end
+		if UIS:GetFocusedTextBox() or not objectivesButton.Visible then
+			return Enum.ContextActionResult.Pass
+		end
+		toggleObjectives()
+		return Enum.ContextActionResult.Sink
+	end,
+	false,
+	Enum.ContextActionPriority.High.Value,
+	Enum.KeyCode.H
+)
+
+local function updateLevelOneGuideLayout()
+	local camera = workspace.CurrentCamera
+	local viewport = camera and camera.ViewportSize or Vector2.new(1280, 720)
+	local narrow = viewport.X < 700
+
+	objectivesButton.Size = narrow and UDim2.fromOffset(140, 40) or UDim2.fromOffset(154, 44)
+	objectivesButton.TextSize = narrow and 14 or 16
+	objectivesButton.Text = UIS.TouchEnabled and "OBJECTIVES" or "OBJECTIVES  [H]"
+	lobbySkipButton.Position = narrow
+		and UDim2.new(0.5, 0, 1, -212)
+		or UDim2.new(0.5, 0, 1, -168)
+	lobbySkipButton.Size = narrow and UDim2.new(1, -32, 0, 50) or UDim2.fromOffset(420, 52)
+	local skipLinkLabel = lobbySkipButton:FindFirstChild("LinkStatus") :: TextLabel
+	local skipActionLabel = lobbySkipButton:FindFirstChild("Action") :: TextLabel
+	skipLinkLabel.Text = narrow and "COMMAND // LIVE" or "COMMAND CENTER // LIVE"
+	skipLinkLabel.TextSize = narrow and 10 or 12
+	skipActionLabel.TextSize = narrow and 12 or 14
+
+	if narrow then
+		objectivesPanel.AnchorPoint = Vector2.new(0.5, 0)
+		objectivesPanel.Position = UDim2.new(0.5, 0, 0, 60)
+		objectivesPanel.Size = UDim2.new(1, -20, 0, math.max(240, math.min(360, viewport.Y - 92)))
+		objectivesTitle.TextSize = 15
+		subtitleFrame.Position = UDim2.new(0.5, 0, 1, -96)
+		subtitleFrame.Size = UDim2.new(1, -20, 0, 108)
+		subtitleText.TextSize = 16
+	else
+		objectivesPanel.AnchorPoint = Vector2.new(0, 0)
+		objectivesPanel.Position = UDim2.fromOffset(12, 64)
+		objectivesPanel.Size = UDim2.fromOffset(420, math.max(280, math.min(338, viewport.Y - 92)))
+		objectivesTitle.TextSize = 18
+		subtitleFrame.Position = UDim2.new(0.5, 0, 1, -64)
+		subtitleFrame.Size = UDim2.new(0.76, 0, 0, 96)
+		subtitleText.TextSize = 20
+	end
+end
+
+local viewportConnection = nil
+local function connectGuideViewport()
+	if viewportConnection then viewportConnection:Disconnect() end
+	local camera = workspace.CurrentCamera
+	if camera then
+		viewportConnection = camera:GetPropertyChangedSignal("ViewportSize"):Connect(updateLevelOneGuideLayout)
+	end
+	updateLevelOneGuideLayout()
+end
+workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(connectGuideViewport)
+connectGuideViewport()
+
+local function playLevelOneBriefing()
+	briefingRun += 1
+	local run = briefingRun
+	local speechAt = os.clock() + LEVEL_ONE_BRIEFING_DELAY
+	player:SetAttribute("LevelOneBriefingActive", false)
+	setObjectivesAvailable(false)
+	setSubtitle(nil)
+
+	task.spawn(function()
+		preloadLevelOneBriefing()
+
+		-- Asset 73198577463663 is exactly one second long. Start it early enough
+		-- that the radio opens immediately before the spoken briefing.
+		local radioLength = levelOneRadioCue.TimeLength > 0.05 and levelOneRadioCue.TimeLength or 1
+		local radioAt = speechAt - radioLength
+		local remaining = radioAt - os.clock()
+		if remaining > 0 then task.wait(remaining) end
+		if run ~= briefingRun or not isLevelOneParticipant() then return end
+
+		setMsg("")
+		levelOneRadioCue:Stop()
+		levelOneRadioCue.TimePosition = 0
+		local radioPlayed = pcall(function() levelOneRadioCue:Play() end)
+		if radioPlayed then
+			local radioStarted = levelOneRadioCue.IsPlaying
+			local radioStartDeadline = os.clock() + 0.5
+			local radioDeadline = os.clock() + radioLength + 1
+			while run == briefingRun and isLevelOneParticipant() and os.clock() < radioDeadline do
+				if levelOneRadioCue.IsPlaying then
+					radioStarted = true
+				elseif radioStarted or os.clock() >= radioStartDeadline then
+					break
+				end
+				RunService.Heartbeat:Wait()
+			end
+		else
+			-- If the cue cannot play, preserve the original speech timing.
+			local waitForSpeech = speechAt - os.clock()
+			if waitForSpeech > 0 then task.wait(waitForSpeech) end
+		end
+		if run ~= briefingRun or not isLevelOneParticipant() then return end
+
+		levelOneBriefingSound:Stop()
+		levelOneBriefingSound.TimePosition = 0
+		player:SetAttribute("LevelOneBriefingActive", true)
+		local played = pcall(function() levelOneBriefingSound:Play() end)
+		if not played then
+			player:SetAttribute("LevelOneBriefingActive", false)
+			if run == briefingRun and isLevelOneParticipant() then
+				setObjectivesAvailable(true)
+			end
+			return
+		end
+
+		local currentText = nil
+		local playbackStarted = levelOneBriefingSound.IsPlaying
+		local playbackStartDeadline = os.clock() + 4
+		local deadline = os.clock() + 52
+		while run == briefingRun and isLevelOneParticipant() and os.clock() < deadline do
+			local position = levelOneBriefingSound.TimePosition
+			local cueText = nil
+			for _, cue in ipairs(briefingCues) do
+				if position >= cue[1] and position < cue[2] then
+					cueText = cue[3]
+					break
+				end
+			end
+			if cueText ~= currentText then
+				currentText = cueText
+				setSubtitle(cueText)
+			end
+			if levelOneBriefingSound.IsPlaying then
+				playbackStarted = true
+			elseif playbackStarted or os.clock() >= playbackStartDeadline then
+				break
+			end
+			RunService.Heartbeat:Wait()
+		end
+
+		player:SetAttribute("LevelOneBriefingActive", false)
+		if run ~= briefingRun then return end
+		setSubtitle(nil)
+		if isLevelOneParticipant() then
+			setObjectivesAvailable(true)
+		end
+	end)
+end
+
+local function cancelLevelTwoBriefing()
+	levelTwoBriefingRun += 1
+	levelTwoRadioCue:Stop()
+	levelTwoBriefingSound:Stop()
+	player:SetAttribute("LevelTwoBriefingActive", false)
+	setSubtitle(nil)
+end
+
+local function isLevelTwoParticipant()
+	return workspace:GetAttribute("SelectedLevel") == 2
+		and workspace:GetAttribute("RoundActive") == true
+		and player:GetAttribute("InRound") == true
+		and player:GetAttribute("Escaped") ~= true
+		and not dead
+end
+
+local function preloadLevelTwoBriefing()
+	if levelTwoBriefingPreloaded then return true end
+	local ok = pcall(function()
+		ContentProvider:PreloadAsync({levelTwoRadioCue, levelTwoBriefingSound})
+	end)
+	levelTwoBriefingPreloaded = ok and levelTwoRadioCue.IsLoaded and levelTwoBriefingSound.IsLoaded
+	return levelTwoBriefingPreloaded
+end
+
+task.spawn(preloadLevelTwoBriefing)
+
+local function playLevelTwoBriefing()
+	levelTwoBriefingRun += 1
+	local run = levelTwoBriefingRun
+	local speechAt = os.clock() + LEVEL_TWO_BRIEFING_DELAY
+	player:SetAttribute("LevelTwoBriefingActive", false)
+	setSubtitle(nil)
+
+	task.spawn(function()
+		preloadLevelTwoBriefing()
+
+		local radioLength = levelTwoRadioCue.TimeLength > 0.05 and levelTwoRadioCue.TimeLength or 1
+		local remaining = speechAt - radioLength - os.clock()
+		if remaining > 0 then task.wait(remaining) end
+		if run ~= levelTwoBriefingRun or not isLevelTwoParticipant() then return end
+
+		setMsg("")
+		levelTwoRadioCue:Stop()
+		levelTwoRadioCue.TimePosition = 0
+		local radioPlayed = pcall(function() levelTwoRadioCue:Play() end)
+		if radioPlayed then
+			local radioStarted = levelTwoRadioCue.IsPlaying
+			local radioStartDeadline = os.clock() + 0.5
+			local radioDeadline = os.clock() + radioLength + 1
+			while run == levelTwoBriefingRun and isLevelTwoParticipant() and os.clock() < radioDeadline do
+				if levelTwoRadioCue.IsPlaying then
+					radioStarted = true
+				elseif radioStarted or os.clock() >= radioStartDeadline then
+					break
+				end
+				RunService.Heartbeat:Wait()
+			end
+		else
+			local waitForSpeech = speechAt - os.clock()
+			if waitForSpeech > 0 then task.wait(waitForSpeech) end
+		end
+		if run ~= levelTwoBriefingRun or not isLevelTwoParticipant() then return end
+
+		levelTwoBriefingSound:Stop()
+		levelTwoBriefingSound.TimePosition = 0
+		player:SetAttribute("LevelTwoBriefingActive", true)
+		local played = pcall(function() levelTwoBriefingSound:Play() end)
+		if not played then
+			player:SetAttribute("LevelTwoBriefingActive", false)
+			return
+		end
+
+		local currentText = nil
+		local playbackStarted = levelTwoBriefingSound.IsPlaying
+		local playbackStartDeadline = os.clock() + 4
+		local deadline = os.clock() + 50
+		while run == levelTwoBriefingRun and isLevelTwoParticipant() and os.clock() < deadline do
+			local position = levelTwoBriefingSound.TimePosition
+			local cueText = nil
+			for _, cue in ipairs(levelTwoBriefingCues) do
+				if position >= cue[1] and position < cue[2] then
+					cueText = cue[3]
+					break
+				end
+			end
+			if cueText ~= currentText then
+				currentText = cueText
+				setSubtitle(cueText)
+			end
+			if levelTwoBriefingSound.IsPlaying then
+				playbackStarted = true
+			elseif playbackStarted or os.clock() >= playbackStartDeadline then
+				break
+			end
+			RunService.Heartbeat:Wait()
+		end
+
+		player:SetAttribute("LevelTwoBriefingActive", false)
+		if run ~= levelTwoBriefingRun then return end
+		setSubtitle(nil)
+	end)
+end
+
+function levelThreeBriefing.resetInterference()
+	levelThreeBriefing.pitch.Octave = 1
+	levelThreeBriefing.sound.Volume = 1
+	levelThreeBriefing.sound.PlaybackSpeed = 1
+end
+
+function levelThreeBriefing.updateInterference(position)
+	local octave = 1
+	local volume = 1
+	for _, interference in ipairs(levelThreeBriefing.interference) do
+		if position >= interference[1] and position < interference[2] then
+			if interference[3] == "cut" then
+				volume = 0.03
+			else
+				local phase = math.floor((position - interference[1]) / 0.055)
+				octave = levelThreeBriefing.jitterOctaves[(phase % #levelThreeBriefing.jitterOctaves) + 1]
+			end
+			break
+		end
+	end
+	if math.abs(levelThreeBriefing.pitch.Octave - octave) > 0.001 then
+		levelThreeBriefing.pitch.Octave = octave
+	end
+	if math.abs(levelThreeBriefing.sound.Volume - volume) > 0.001 then
+		levelThreeBriefing.sound.Volume = volume
+	end
+end
+
+function levelThreeBriefing.cancel()
+	levelThreeBriefing.run += 1
+	levelThreeBriefing.radio:Stop()
+	levelThreeBriefing.sound:Stop()
+	levelThreeBriefing.resetInterference()
+	player:SetAttribute("LevelThreeBriefingActive", false)
+	setSubtitle(nil)
+end
+
+function levelThreeBriefing.isParticipant()
+	return workspace:GetAttribute("SelectedLevel") == 3
+		and workspace:GetAttribute("RoundActive") == true
+		and player:GetAttribute("InRound") == true
+		and player:GetAttribute("Escaped") ~= true
+		and not dead
+end
+
+function levelThreeBriefing.preload()
+	if levelThreeBriefing.preloaded then return true end
+	local ok = pcall(function()
+		ContentProvider:PreloadAsync({levelThreeBriefing.radio, levelThreeBriefing.sound})
+	end)
+	levelThreeBriefing.preloaded = ok
+		and levelThreeBriefing.radio.IsLoaded
+		and levelThreeBriefing.sound.IsLoaded
+	return levelThreeBriefing.preloaded
+end
+
+task.spawn(levelThreeBriefing.preload)
+
+function levelThreeBriefing.play()
+	levelThreeBriefing.run += 1
+	local run = levelThreeBriefing.run
+	local speechAt = os.clock() + levelThreeBriefing.delay
+	player:SetAttribute("LevelThreeBriefingActive", false)
+	levelThreeBriefing.resetInterference()
+	setSubtitle(nil)
+
+	task.spawn(function()
+		levelThreeBriefing.preload()
+
+		local radioLength = levelThreeBriefing.radio.TimeLength > 0.05
+			and levelThreeBriefing.radio.TimeLength or 2
+		local remaining = speechAt - radioLength - os.clock()
+		if remaining > 0 then task.wait(remaining) end
+		if run ~= levelThreeBriefing.run or not levelThreeBriefing.isParticipant() then return end
+
+		setMsg("")
+		levelThreeBriefing.radio:Stop()
+		levelThreeBriefing.radio.TimePosition = 0
+		local radioPlayed = pcall(function() levelThreeBriefing.radio:Play() end)
+		if radioPlayed then
+			local radioStarted = levelThreeBriefing.radio.IsPlaying
+			local radioStartDeadline = os.clock() + 0.5
+			local radioDeadline = os.clock() + radioLength + 1
+			while run == levelThreeBriefing.run
+				and levelThreeBriefing.isParticipant()
+				and os.clock() < radioDeadline do
+				if levelThreeBriefing.radio.IsPlaying then
+					radioStarted = true
+				elseif radioStarted or os.clock() >= radioStartDeadline then
+					break
+				end
+				RunService.Heartbeat:Wait()
+			end
+		else
+			local waitForSpeech = speechAt - os.clock()
+			if waitForSpeech > 0 then task.wait(waitForSpeech) end
+		end
+		if run ~= levelThreeBriefing.run or not levelThreeBriefing.isParticipant() then return end
+
+		levelThreeBriefing.sound:Stop()
+		levelThreeBriefing.sound.TimePosition = 0
+		levelThreeBriefing.resetInterference()
+		player:SetAttribute("LevelThreeBriefingActive", true)
+		local played = pcall(function() levelThreeBriefing.sound:Play() end)
+		if not played then
+			player:SetAttribute("LevelThreeBriefingActive", false)
+			levelThreeBriefing.resetInterference()
+			return
+		end
+
+		local currentText = nil
+		local playbackStarted = levelThreeBriefing.sound.IsPlaying
+		local playbackStartDeadline = os.clock() + 4
+		local deadline = os.clock() + 60
+		while run == levelThreeBriefing.run
+			and levelThreeBriefing.isParticipant()
+			and os.clock() < deadline do
+			local position = levelThreeBriefing.sound.TimePosition
+			levelThreeBriefing.updateInterference(position)
+			local cueText = nil
+			for _, cue in ipairs(levelThreeBriefing.cues) do
+				if position >= cue[1] and position < cue[2] then
+					cueText = cue[3]
+					break
+				end
+			end
+			if cueText ~= currentText then
+				currentText = cueText
+				setSubtitle(cueText)
+			end
+			if levelThreeBriefing.sound.IsPlaying then
+				playbackStarted = true
+			elseif playbackStarted or os.clock() >= playbackStartDeadline then
+				break
+			end
+			RunService.Heartbeat:Wait()
+		end
+
+		player:SetAttribute("LevelThreeBriefingActive", false)
+		levelThreeBriefing.resetInterference()
+		if run ~= levelThreeBriefing.run then return end
+		setSubtitle(nil)
+	end)
+end
+
+local function cancelAllCommandBriefings(hideLevelOneObjectives)
+	lobbyBriefing.cancel()
+	cancelLevelOneBriefing(hideLevelOneObjectives)
+	cancelLevelTwoBriefing()
+	levelThreeBriefing.cancel()
+end
+
+local function validateLevelTwoBriefing()
+	if not isLevelTwoParticipant() then
+		cancelLevelTwoBriefing()
+	end
+end
+workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(validateLevelTwoBriefing)
+workspace:GetAttributeChangedSignal("RoundActive"):Connect(validateLevelTwoBriefing)
+player:GetAttributeChangedSignal("InRound"):Connect(validateLevelTwoBriefing)
+player:GetAttributeChangedSignal("Escaped"):Connect(validateLevelTwoBriefing)
+
+function levelThreeBriefing.validate()
+	if not levelThreeBriefing.isParticipant() then
+		levelThreeBriefing.cancel()
+	end
+end
+workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(levelThreeBriefing.validate)
+workspace:GetAttributeChangedSignal("RoundActive"):Connect(levelThreeBriefing.validate)
+player:GetAttributeChangedSignal("InRound"):Connect(levelThreeBriefing.validate)
+player:GetAttributeChangedSignal("Escaped"):Connect(levelThreeBriefing.validate)
+
+local function validateLevelOneGuide()
+	if not isLevelOneParticipant() then
+		cancelLevelOneBriefing(true)
+	end
+end
+workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(validateLevelOneGuide)
+player:GetAttributeChangedSignal("InRound"):Connect(validateLevelOneGuide)
+player:GetAttributeChangedSignal("Escaped"):Connect(validateLevelOneGuide)
 
 -- Old, unstable elevator camera motion. It peaks after the one-second
 -- startup delay, then decays smoothly for ten seconds without moving the player.
@@ -1127,13 +2229,12 @@ end
 -- dead is declared with the player state above so the ending and spectate UI share it.
 
 remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
-	-- GameManager emits an elevator countdown tick every second. Those ticks must
-	-- not invalidate the objective coroutine that is meant to fill the ride.
-	if ev ~= "start" and ev ~= "elevator" then
-		objectiveRun += 1
-	end
-
 	if ev == "lobby" then
+		-- GameManager also uses "lobby" for queue resets. Preserve a welcome
+		-- transmission already in progress; its dedicated event is once-only.
+		if not lobbyBriefing.active and not lobbyBriefing.pending then
+			cancelAllCommandBriefings(true)
+		end
 		hideRoundEnding(true)
 		stopSpectating()
 		dead = false
@@ -1142,6 +2243,9 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
 		queueStation = nil
 		queueSubmitting = false
 		setMsg("") -- the in-world sign carries the idle lobby instruction
+
+	elseif ev == "lobbybriefing" then
+		lobbyBriefing.playOnce()
 
 	elseif ev == "queuehost" then
 		loadingFrame.Visible = false
@@ -1213,8 +2317,10 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
 		setMsg("GAME IN PROGRESS — WAIT FOR THE NEXT GROUP", Color3.fromRGB(255, 215, 120))
 
 	elseif ev == "loadinggame" then
-		objectiveRun += 1
+		cancelAllCommandBriefings(true)
 		elevatorBriefingStarted = false
+		levelTwoBriefingStarted = false
+		levelThreeBriefing.started = false
 		-- Re-arm the elevator shake for Studio-fallback servers that host
 		-- several rounds in a row ("start" only fires after the ride).
 		shakeScheduled = false
@@ -1264,6 +2370,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
 		end
 
 	elseif ev == "loadfailed" then
+		cancelAllCommandBriefings(true)
 		loadingFrame.Visible = false
 		setMsg("WORLD GENERATION FAILED — RETURNING TO LOBBY", Color3.fromRGB(255, 100, 100))
 
@@ -1299,7 +2406,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
 		dead = false
 		if not elevatorBriefingStarted then
 			elevatorBriefingStarted = true
-			playObjective()
+			playLevelOneBriefing()
 		end
 
 	elseif ev == "start" then
@@ -1309,12 +2416,20 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
 		serverReadyForEntry = true
 		finishLoadingWhenReady()
 		dead = false
-		objectiveRun += 1
 		setMsg("")
+		local selectedLevel = workspace:GetAttribute("SelectedLevel")
+		if selectedLevel == 2 and not levelTwoBriefingStarted then
+			levelTwoBriefingStarted = true
+			playLevelTwoBriefing()
+		elseif selectedLevel == 3 and not levelThreeBriefing.started then
+			levelThreeBriefing.started = true
+			levelThreeBriefing.play()
+		end
 
 	elseif ev == "death" then
 		if a == player.Name then
 			dead = true
+			cancelAllCommandBriefings(true)
 			task.delay(0.85, function()
 				if dead and player:GetAttribute("InRound") == true then startSpectating() end
 			end)
@@ -1324,6 +2439,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
 
 	elseif ev == "escape" then
 		if a == player.Name then
+			cancelAllCommandBriefings(true)
 			showRoundEnding(
 				("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"),
 				"SIGNAL LOST",
@@ -1340,6 +2456,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
 		end
 
 	elseif ev == "lose" then
+		cancelAllCommandBriefings(true)
 		stopSpectating()
 		local totalPlayers = math.max(1, math.floor(tonumber(c) or 1))
 		showRoundEnding(
@@ -1351,6 +2468,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
 		)
 
 	elseif ev == "win" then
+		cancelAllCommandBriefings(true)
 		stopSpectating()
 		local survivors = math.max(0, math.floor(tonumber(b) or 0))
 		local totalPlayers = math.max(1, math.floor(tonumber(c) or math.max(1, survivors)))
@@ -1363,6 +2481,10 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
 		)
 	end
 end)
+
+-- Announce readiness only after the handler and both Sound instances exist.
+-- GameManager answers with the unique once-per-player lobbybriefing event.
+remote:FireServer("lobbybriefingready")
 
 -- Responsive objective layout verified in play test.
 

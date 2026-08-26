@@ -58,6 +58,7 @@ local fastQueueOn = player:GetAttribute("DevFastQueue") == true
 local thirdPersonOn = false
 
 -- ESP (highlight through walls)
+-- LEVEL3_CD_DEV_ESP_20260821
 local COLORS = {
 	Fuse = Color3.fromRGB(255, 220, 60),
 	FuseRelay = Color3.fromRGB(255, 190, 55),
@@ -66,6 +67,8 @@ local COLORS = {
 	Exit = Color3.fromRGB(60, 255, 130),
 	Entity = Color3.fromRGB(255, 45, 45),
 	Level2Entity = Color3.fromRGB(255, 70, 45),
+	MallManager = Color3.fromRGB(255, 60, 205),
+	Level3CD = Color3.fromRGB(35, 230, 255),
 }
 
 -- Preserve the old developer behavior: ESP starts enabled, while every other
@@ -113,6 +116,19 @@ local function setEsp(requested)
 	print("[DevCheats] ESP " .. (enabled and "ON" or "OFF"))
 end
 
+local level3CDs = {}
+
+local function trackLevel3CD(instance)
+	if instance:IsA("Model") and typeof(instance:GetAttribute("Level3_CDIndex")) == "number" then
+		level3CDs[instance] = true
+	end
+end
+
+for _, descendant in ipairs(workspace:GetDescendants()) do
+	trackLevel3CD(descendant)
+end
+workspace.DescendantAdded:Connect(trackLevel3CD)
+
 task.spawn(function()
 	while true do
 		local items = workspace:FindFirstChild("PuzzleItems")
@@ -130,6 +146,31 @@ task.spawn(function()
 		for _, levelTwoEntity in ipairs(CollectionService:GetTagged("Level2HostileEntity")) do
 			if levelTwoEntity:IsA("Model") and levelTwoEntity:IsDescendantOf(workspace) then
 				tag(levelTwoEntity, COLORS.Level2Entity)
+			end
+		end
+		-- The Mall Manager only exists during Level 3's blackout hunt. Its server
+		-- runtime model already carries this replicated tag, so the same loop works
+		-- for late spawns, cleanup, and repeated song cycles without a name search.
+		for _, mallManager in ipairs(CollectionService:GetTagged("Level3HostileEntity")) do
+			if mallManager:IsA("Model") and mallManager:IsDescendantOf(workspace) then
+				tag(mallManager, COLORS.MallManager)
+			end
+		end
+		for levelThreeCD in pairs(level3CDs) do
+			if not levelThreeCD:IsDescendantOf(workspace) then
+				level3CDs[levelThreeCD] = nil
+			else
+				local cdState = levelThreeCD:GetAttribute("Level3_CDState")
+				local sourceAlreadyTaken = levelThreeCD:GetAttribute("Level3_CDSource") == true
+					and levelThreeCD:GetAttribute("Level3_Collected") == true
+				local hiddenState = cdState == "INSERTED" or cdState == "EMPTY"
+				if sourceAlreadyTaken or hiddenState then
+					local oldHighlight = levelThreeCD:FindFirstChild("DevESP")
+					if oldHighlight then oldHighlight:Destroy() end
+				else
+					-- WORLD, CARRIED, and DROPPED discs remain useful in the dev view.
+					tag(levelThreeCD, COLORS.Level3CD)
+				end
 			end
 		end
 		task.wait(0.5)

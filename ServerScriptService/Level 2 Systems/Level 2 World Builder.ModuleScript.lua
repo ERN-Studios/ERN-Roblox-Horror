@@ -2896,17 +2896,40 @@ local function makeExitFlume(parent, layout, hall, deck)
 	safeSpawn.CanCollide = false
 	safeSpawn.CanTouch = false
 
-	-- Completion is deliberately only at the door, after the player has ridden
-	-- the whole flume and entered the exit room.
-	local trigger = part(parent, "Level 2 Exit Trigger",
-		CFrame.new(doorCenter - outward * 3.5 + Vector3.new(0, -1, 0)),
-		Vector3.new(4, 12, 14), C.Emergency, Enum.Material.Neon, 1)
+	-- The gateway room remains fully intact. Completion is a transverse light
+	-- sheet embedded three studs before the tube's physical endpoint, forcing
+	-- every rider to pass through it before they can leave the slide.
+	local completionGreen = Color3.fromRGB(82, 255, 146)
+	local beamDistanceFromEnd = 3
+	local beamCenter = Vector3.new(roomEntry.X - beamDistanceFromEnd, floorTop + 8, catchCenter.Z)
+	local trigger = part(parent, "Level 2 Exit Completion Beam",
+		CFrame.new(beamCenter), Vector3.new(.48, 16, 15.5),
+		completionGreen, Enum.Material.Neon, .72)
 	trigger.CanCollide = false
-	trigger.CanTouch = true
+	trigger.CanTouch = false
 	trigger.CanQuery = false
+	trigger.CastShadow = false
+	trigger:SetAttribute("Level2_ExitCompletionBeam", true)
+	trigger:SetAttribute("Level2_BeamDistanceFromTubeEnd", beamDistanceFromEnd)
+
+	local beamLights = {}
+	for _, face in ipairs({Enum.NormalId.Left, Enum.NormalId.Right}) do
+		local glow = Instance.new("SurfaceLight")
+		glow.Name = "Level 2 Completion Beam Glow"
+		glow.Face = face
+		glow.Color = completionGreen
+		glow.Angle = 105
+		glow.Brightness = 1.15
+		glow.Range = 10
+		glow.Shadows = false
+		glow.Enabled = false
+		glow.Parent = trigger
+		table.insert(beamLights, glow)
+	end
 
 	return {
 		Trigger = trigger,
+		BeamLights = beamLights,
 		SafeSpawn = safeSpawn,
 		Mouth = mouth,
 		EndPosition = doorCenter,

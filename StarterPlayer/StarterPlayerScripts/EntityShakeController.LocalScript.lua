@@ -24,7 +24,8 @@ local CHASE_RANGE    = 75    -- within this while chasing you feel its footfalls
 local CHASE_RUMBLE   = 0.26  -- rumble while it hunts, scaled hard by nearness
 local CHASE_CURVE    = 1.4   -- proximity exponent for the chase rumble
 local CHASE_TARGET_MULT = 2.0 -- extra multiplier when it is chasing YOU specifically
-local STOMP_INTERVAL = 0.5   -- SECONDS BETWEEN FOOTSTEP STOMPS — match to the run sound/anim
+local STOMP_CHASE_INTERVAL = 0.34 -- matches the alternating chase-step audio
+local STOMP_TRACK_INTERVAL = 0.53 -- TRACK uses the fast walk cycle/audio
 local STOMP_STRENGTH = 0.85  -- camera kick per stomp (studs) at point-blank
 local DECAY          = 9     -- how fast a stomp kick fades
 local ALERT_SHAKE_DURATION = 1.25 -- first-sight howl camera shock
@@ -90,8 +91,10 @@ RunService.RenderStepped:Connect(function(dt)
 				ambient = (prox ^ CHASE_CURVE) * CHASE_RUMBLE
 					* (targeted and CHASE_TARGET_MULT or 1)
 				stompTimer += dt
-				if stompTimer >= STOMP_INTERVAL then
-					stompTimer -= STOMP_INTERVAL
+				local stompInterval = state == "CHASE"
+					and STOMP_CHASE_INTERVAL or STOMP_TRACK_INTERVAL
+				if stompTimer >= stompInterval then
+					stompTimer -= stompInterval
 					-- footstep punch — full force for the target, softer for bystanders
 					impulse = math.min(1, impulse + prox * (targeted and 1 or 0.65))
 				end

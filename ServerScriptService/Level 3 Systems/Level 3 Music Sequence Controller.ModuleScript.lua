@@ -1,14 +1,16 @@
 --!strict
 -- Level 3 Music Sequence Controller
--- Owns one authoritative server clock for the five-second warning, the 2:30
--- blackout while the song finishes, the final 30-second Mall Manager hunt, and
--- the uneven fluorescent recovery before the next synchronized song cycle.
+-- Owns one authoritative server clock that begins with the team's first CD
+-- collection, then drives the five-second warning, the 2:30 blackout while the
+-- song finishes, the final 30-second Mall Manager hunt, and the uneven
+-- fluorescent recovery before the next synchronized song cycle.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 
 local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
+local HidingController = require(script.Parent:WaitForChild("Level 3 Hiding Controller"))
 
 local Controller = {}
 
@@ -21,6 +23,9 @@ local session: {
 	RoundConnection: RBXScriptConnection?,
 	Cycle: number,
 	BlackoutScreamTriggered: boolean,
+	FurnitureRecords: {any},
+	FurnitureState: string,
+	FlashlightsSuppressed: boolean,
 }? = nil
 
 local function stateFolder(): Folder
@@ -62,6 +67,107 @@ local function setRecoveryFlicker(active: boolean, startedAt: number, untilTime:
 	state:SetAttribute("Level3_RecoveryFlickerStartedAtServerTime", if active then startedAt else 0)
 	state:SetAttribute("Level3_RecoveryFlickerUntilServerTime", if active then untilTime else 0)
 	workspace:SetAttribute("Level3RecoveryFlickerActive", active)
+end
+
+local function setFlashlightsSuppressed(activeSession: any, active: boolean)
+	active = active == true
+	if activeSession.FlashlightsSuppressed == active then return end
+	activeSession.FlashlightsSuppressed = active
+	stateFolder():SetAttribute("Level3_FlashlightsSuppressed", active)
+	workspace:SetAttribute("Level3FlashlightsSuppressed", active)
+end
+
+local function publishFurnitureState(stateName: string)
+	local removed = stateName == "REMOVED"
+	local collisionSuppressed = stateName ~= "RESTORED"
+	local state = stateFolder()
+	state:SetAttribute("Level3_FurnitureTemporarilyRemoved", removed)
+	state:SetAttribute("Level3_FurnitureCollisionSuppressed", collisionSuppressed)
+	workspace:SetAttribute("Level3FurnitureTemporarilyRemoved", removed)
+	workspace:SetAttribute("Level3FurnitureCollisionSuppressed", collisionSuppressed)
+end
+
+local function captureFurniture(activeSession: any)
+	if #activeSession.FurnitureRecords > 0 then return end
+	for _, object in ipairs(activeSession.World:GetDescendants()) do
+		if object:IsA("BasePart") and object:GetAttribute("Level3_TemporaryHuntFurniture") == true then
+			local visualRecords = {}
+			for _, visual in ipairs(object:GetDescendants()) do
+				if visual:IsA("Decal") or visual:IsA("Texture") then
+					table.insert(visualRecords, {Object=visual, Transparency=visual.Transparency})
+				end
+			end
+			table.insert(activeSession.FurnitureRecords, {
+				Part=object,
+				Transparency=object.Transparency,
+				CanCollide=object.CanCollide,
+				CanTouch=object.CanTouch,
+				CanQuery=object.CanQuery,
+				CastShadow=object.CastShadow,
+				Visuals=visualRecords,
+			})
+		end
+	end
+end
+
+local function setFurnitureState(activeSession: any, stateName: string)
+	if activeSession.FurnitureState == stateName then return end
+	if stateName ~= "RESTORED" then captureFurniture(activeSession) end
+	activeSession.FurnitureState = stateName
+	HidingController.SetFurnitureSuspended(stateName ~= "RESTORED")
+
+	for _, record in ipairs(activeSession.FurnitureRecords) do
+		local part = record.Part
+		if part and part.Parent and part:IsA("BasePart") then
+			if stateName == "REMOVED" then
+				part.Transparency = 1
+				part.CastShadow = false
+			else
+				part.Transparency = record.Transparency
+				part.CastShadow = record.CastShadow
+			end
+			if stateName == "RESTORED" then
+				part.CanCollide = record.CanCollide
+				part.CanTouch = record.CanTouch
+				part.CanQuery = record.CanQuery
+			else
+				part.CanCollide = false
+				part.CanTouch = false
+				part.CanQuery = false
+			end
+		end
+		for _, visualRecord in ipairs(record.Visuals) do
+			local visual = visualRecord.Object
+			if visual and visual.Parent and (visual:IsA("Decal") or visual:IsA("Texture")) then
+				visual.Transparency = if stateName == "REMOVED" then 1 else visualRecord.Transparency
+			end
+		end
+	end
+
+	publishFurnitureState(stateName)
+	if stateName == "RESTORED" then table.clear(activeSession.FurnitureRecords) end
+end
+
+local function updateBlackoutEdges(activeSession: any, elapsed: number)
+	local songEnd = Configuration.MusicSequence.DurationSeconds
+	local screamStart = songEnd - Configuration.MusicSequence.BlackoutScreamLeadSeconds
+	local removalStart = screamStart - Configuration.MusicSequence.FurnitureRemovalLeadSeconds
+	local huntEnd = Configuration.MusicSequence.CycleEndSeconds
+	local finalLockStart = huntEnd - Configuration.MusicSequence.HuntFinalFlashlightLockSeconds
+
+	if elapsed >= removalStart and elapsed < finalLockStart then
+		setFurnitureState(activeSession, "REMOVED")
+	elseif elapsed >= finalLockStart and elapsed < huntEnd then
+		-- Reappear for the final reveal, but remain physically absent until the
+		-- Manager despawns so neither the NPC nor a player can be trapped.
+		setFurnitureState(activeSession, "VISIBLE_GHOST")
+	else
+		setFurnitureState(activeSession, "RESTORED")
+	end
+
+	local firstLock = elapsed >= removalStart and elapsed < screamStart
+	local finalLock = elapsed >= finalLockStart and elapsed < huntEnd
+	setFlashlightsSuppressed(activeSession, firstLock or finalLock)
 end
 
 local function shiftBlackoutChairs(activeSession: any)
@@ -158,6 +264,8 @@ local function setPhase(activeSession: any, phase: string)
 		setHunt(false)
 		setRecoveryFlicker(false, 0, 0)
 		setBlackout(false, 0)
+		setFurnitureState(activeSession, "RESTORED")
+		setFlashlightsSuppressed(activeSession, false)
 	end
 end
 
@@ -168,11 +276,21 @@ local function arm(activeSession: any)
 		setPhase(activeSession, "WAITING_FOR_ROUND")
 		return
 	end
+
+	-- The normal room song must stay silent at spawn. CollectedCount is shared
+	-- across the whole round and only advances for a CD's first successful pickup,
+	-- so this gate starts one synchronized timeline without restarting for later CDs.
+	local state = stateFolder()
+	local collectedProgress = tonumber(state:GetAttribute("Level3_CDCollectedProgress")) or 0
+	if collectedProgress < 1 then
+		setPhase(activeSession, "WAITING_FOR_FIRST_CD")
+		return
+	end
+
 	local startTime = workspace:GetServerTimeNow() + Configuration.MusicSequence.PreloadLeadSeconds
 	activeSession.StartServerTime = startTime
 	activeSession.Cycle += 1
 	activeSession.BlackoutScreamTriggered = false
-	local state = stateFolder()
 	state:SetAttribute("Level3_RoomSongCycle", activeSession.Cycle)
 	state:SetAttribute("Level3_RoomSongStartServerTime", startTime)
 	state:SetAttribute("Level3_RoomSongDuration", Configuration.MusicSequence.DurationSeconds)
@@ -207,6 +325,8 @@ local function update(activeSession: any)
 	local goal = tonumber(state:GetAttribute("Level3_ModuleGoal")) or Configuration.ModuleGoal
 	if progress >= goal then
 		setPhase(activeSession, "DONE")
+		setFurnitureState(activeSession, "RESTORED")
+		setFlashlightsSuppressed(activeSession, false)
 		return
 	end
 	local elapsed = workspace:GetServerTimeNow() - activeSession.StartServerTime
@@ -236,18 +356,25 @@ local function update(activeSession: any)
 		activeSession.StartServerTime = nil
 		arm(activeSession)
 	end
+	updateBlackoutEdges(activeSession, elapsed)
 end
 
 function Controller.Stop()
 	local old = session
-	session = nil
 	if old then
 		if old.Connection then old.Connection:Disconnect() end
 		if old.RoundConnection then old.RoundConnection:Disconnect() end
+		setFurnitureState(old, "RESTORED")
+		setFlashlightsSuppressed(old, false)
 	end
+	session = nil
 	local state = stateFolder()
 	state:SetAttribute("Level3_RoomSongPhase", "STOPPED")
+	state:SetAttribute("Level3_ReversedRoomSongAssetId", Configuration.Audio.RoomListeningSongReversed)
+	state:SetAttribute("Level3_CompletionSongPitchOctave", Configuration.MusicSequence.CompletionSongPitchOctave)
+	state:SetAttribute("Level3_CompletionSongVolume", Configuration.MusicSequence.CompletionSongVolume)
 	state:SetAttribute("Level3_RoomSongStartServerTime", 0)
+	state:SetAttribute("Level3_CompletionSongStartServerTime", 0)
 	state:SetAttribute("Level3_RoomSongDuration", Configuration.MusicSequence.DurationSeconds)
 	state:SetAttribute("Level3_BlackoutStartSeconds", Configuration.MusicSequence.BlackoutStartSeconds)
 	state:SetAttribute("Level3_RoomSongStopSeconds", Configuration.MusicSequence.DurationSeconds)
@@ -294,6 +421,9 @@ function Controller.Start(manifest: any, generation: number)
 		RoundConnection = nil,
 		Cycle = 0,
 		BlackoutScreamTriggered = false,
+		FurnitureRecords = {},
+		FurnitureState = "RESTORED",
+		FlashlightsSuppressed = false,
 	}
 	session = activeSession
 	local devSkip = ServerStorage:FindFirstChild("Level3DevSkipToPreBlackout")
@@ -309,6 +439,9 @@ function Controller.Start(manifest: any, generation: number)
 	local state = stateFolder()
 	state:SetAttribute("Level3_RoomSongGeneration", generation)
 	state:SetAttribute("Level3_RoomSongAssetId", Configuration.Audio.RoomListeningSong)
+	state:SetAttribute("Level3_ReversedRoomSongAssetId", Configuration.Audio.RoomListeningSongReversed)
+	state:SetAttribute("Level3_CompletionSongPitchOctave", Configuration.MusicSequence.CompletionSongPitchOctave)
+	state:SetAttribute("Level3_CompletionSongVolume", Configuration.MusicSequence.CompletionSongVolume)
 	state:SetAttribute("Level3_RoomSongDuration", Configuration.MusicSequence.DurationSeconds)
 	state:SetAttribute("Level3_BlackoutStartSeconds", Configuration.MusicSequence.BlackoutStartSeconds)
 	state:SetAttribute("Level3_RoomSongStopSeconds", Configuration.MusicSequence.DurationSeconds)
@@ -357,6 +490,8 @@ function Controller.GetSnapshot()
 		BlackoutStart = Configuration.MusicSequence.BlackoutStartSeconds,
 		PreBlackoutDuration = Configuration.MusicSequence.PreBlackoutFlickerSeconds,
 		BlackoutScreamLead = Configuration.MusicSequence.BlackoutScreamLeadSeconds,
+		FurnitureState = activeSession.FurnitureState,
+		FlashlightsSuppressed = activeSession.FlashlightsSuppressed,
 		PreBlackoutActive = stateFolder():GetAttribute("Level3_PreBlackoutActive") == true,
 		BlackoutDuration = Configuration.MusicSequence.BlackoutSeconds,
 		HuntActive = stateFolder():GetAttribute("Level3_MallManagerHuntActive") == true,

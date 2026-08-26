@@ -9,7 +9,7 @@
 -- and the terrain water appearance, so both levels feel like the same building.
 
 local Configuration = {
-	Version = 4,
+	Version = 6,
 	Theme = "Sunken Leisure Complex",
 
 	-- ── plan ────────────────────────────────────────────────────────────────

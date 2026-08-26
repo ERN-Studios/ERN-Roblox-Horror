@@ -4,6 +4,7 @@
 -- easy to resize, texture, and extend when more levels are enabled.
 
 local Builder = {}
+local TweenService = game:GetService("TweenService")
 
 local LOBBY_CONCRETE_MATERIALS = {
 	Concrete = {
@@ -175,7 +176,25 @@ local function addBoard(panel, face, titleText, subtitleText, titleColor)
 	background.BackgroundColor3 = Color3.fromRGB(9, 12, 11)
 	background.BackgroundTransparency = 0.06
 	background.BorderSizePixel = 0
+	background.ClipsDescendants = true
 	background.Parent = gui
+
+	-- Every lobby display shares the same softened Zyntra enclosure treatment.
+	-- UICorner shapes the visible sign face while the rounded stroke preserves a
+	-- crisp silhouette at long tunnel distances.
+	local backgroundCorner = Instance.new("UICorner")
+	backgroundCorner.Name = "RoundedSignCorners"
+	backgroundCorner.CornerRadius = UDim.new(0.08, 0)
+	backgroundCorner.Parent = background
+
+	local backgroundBorder = Instance.new("UIStroke")
+	backgroundBorder.Name = "RoundedSignBorder"
+	backgroundBorder.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	backgroundBorder.Color = titleColor:Lerp(Color3.fromRGB(102, 112, 108), 0.38)
+	backgroundBorder.Thickness = 6
+	backgroundBorder.Transparency = 0.22
+	backgroundBorder.LineJoinMode = Enum.LineJoinMode.Round
+	backgroundBorder.Parent = background
 
 	local line = Instance.new("Frame")
 	line.Position = UDim2.new(0.04, 0, 0.74, 0)
@@ -184,6 +203,9 @@ local function addBoard(panel, face, titleText, subtitleText, titleColor)
 	line.BackgroundTransparency = 0.22
 	line.BorderSizePixel = 0
 	line.Parent = background
+	local lineCorner = Instance.new("UICorner")
+	lineCorner.CornerRadius = UDim.new(1, 0)
+	lineCorner.Parent = line
 
 	local title = Instance.new("TextLabel")
 	title.Name = "Title"
@@ -237,6 +259,106 @@ local function makeStationMonitorArm(parent, name, pointA, pointB, thickness)
 	)
 	arm:SetAttribute("MonitorArm", true)
 	return arm
+end
+
+local function makeWayfindingFixturePart(parent, name, cf, size, color, material, shape)
+	local part = makePart(parent, name, cf, size, color, material)
+	part.CanCollide = false
+	part.CanTouch = false
+	part.CanQuery = false
+	part.CastShadow = false
+	if shape then
+		part.Shape = shape
+	end
+	part:SetAttribute("WayfindingSignFixture", true)
+	return part
+end
+
+local function makeWayfindingArm(parent, name, pointA, pointB, thickness)
+	local delta = pointB - pointA
+	return makeWayfindingFixturePart(
+		parent,
+		name,
+		CFrame.lookAt((pointA + pointB) * 0.5, pointB),
+		Vector3.new(thickness, thickness, delta.Magnitude),
+		Color3.fromRGB(47, 53, 52),
+		Enum.Material.Metal
+	)
+end
+
+local function addMountedLevelSign(parent, center, panel, level, side, accentColor)
+	local width, height = panel.Size.Z, panel.Size.Y
+	local depth = 0.72
+	local centerWidth = math.max(width - height, 0.5)
+	local backingCF = panel.CFrame * CFrame.new(side * 0.32, 0, 0)
+	local backingColor = Color3.fromRGB(17, 22, 21)
+
+	local body = makeWayfindingFixturePart(
+		parent,
+		"Level" .. level .. "RoundedSignBody",
+		backingCF,
+		Vector3.new(depth, height, centerWidth),
+		backingColor,
+		Enum.Material.Metal
+	)
+	body:SetAttribute("RoundedLevelSignBacking", true)
+
+	for _, direction in ipairs({-1, 1}) do
+		local cap = makeWayfindingFixturePart(
+			parent,
+			"Level" .. level .. (direction < 0 and "RoundedSignCapA" or "RoundedSignCapB"),
+			backingCF * CFrame.new(0, 0, direction * centerWidth * 0.5),
+			Vector3.new(depth, height, height),
+			backingColor,
+			Enum.Material.Metal,
+			Enum.PartType.Cylinder
+		)
+		cap:SetAttribute("RoundedLevelSignBacking", true)
+	end
+
+	local signTopY = panel.Position.Y + height * 0.5
+	local armY = signTopY + 1.45
+	local wallX = center.X + side * 33.05
+	local signBackX = panel.Position.X + side * 0.42
+	for index, zDirection in ipairs({-1, 1}) do
+		local mountZ = panel.Position.Z + zDirection * width * 0.32
+		local wallPoint = Vector3.new(wallX, armY, mountZ)
+		local signPoint = Vector3.new(signBackX, armY, mountZ)
+		local hangerPoint = Vector3.new(signBackX, signTopY + 0.08, mountZ)
+		makeWayfindingArm(parent, "Level" .. level .. "SignCantilever" .. index, wallPoint, signPoint, 0.34)
+		makeWayfindingArm(parent, "Level" .. level .. "SignHanger" .. index, signPoint, hangerPoint, 0.28)
+		makeWayfindingFixturePart(
+			parent,
+			"Level" .. level .. "SignWallPlate" .. index,
+			CFrame.new(wallPoint),
+			Vector3.new(0.42, 2.15, 1.2),
+			Color3.fromRGB(58, 64, 62),
+			Enum.Material.Metal
+		)
+		makeWayfindingFixturePart(
+			parent,
+			"Level" .. level .. "SignJoint" .. index,
+			CFrame.new(signPoint),
+			Vector3.new(0.68, 0.68, 0.68),
+			Color3.fromRGB(68, 75, 72),
+			Enum.Material.Metal,
+			Enum.PartType.Ball
+		)
+	end
+
+	local accentRail = makeWayfindingFixturePart(
+		parent,
+		"Level" .. level .. "RoundedSignAccent",
+		backingCF * CFrame.new(-side * (depth * 0.5 + 0.04), -height * 0.5 + 0.16, 0),
+		Vector3.new(0.1, 0.14, width - height * 0.3),
+		accentColor,
+		Enum.Material.Neon
+	)
+	accentRail:SetAttribute("LevelSignAccentRail", true)
+
+	panel.Transparency = 1
+	panel:SetAttribute("RoundedLevelSign", true)
+	panel:SetAttribute("LintelMountedLevelSign", true)
 end
 
 local function addMountedStationMonitor(parent, roomCenter, signPanel, index, accentColor)
@@ -331,12 +453,14 @@ local function addLamp(parent, center, x, z)
 		Enum.Material.Neon
 	)
 	lens.CanCollide = false
+	lens.Color = Color3.fromRGB(255, 234, 191)
+	lens:SetAttribute("PartyCeilingLight", true)
 
 	local point = Instance.new("PointLight")
-	point.Color = Color3.fromRGB(255, 216, 144)
-	point.Brightness = 2.35
-	point.Range = 30
-	point.Shadows = true
+	point.Color = Color3.fromRGB(255, 230, 178)
+	point.Brightness = 1.25
+	point.Range = 24
+	point.Shadows = false
 	point.Parent = lens
 end
 
@@ -725,19 +849,7 @@ local function addQueueStation(parent, roomCenter, index, offset, color, active,
 	end
 
 	local screen = title.Parent
-	screen.ClipsDescendants = false
-	local screenCorner = Instance.new("UICorner")
-	screenCorner.Name = "RoundedMonitorCorners"
-	screenCorner.CornerRadius = UDim.new(0.14, 0)
-	screenCorner.Parent = screen
-	local screenBorder = Instance.new("UIStroke")
-	screenBorder.Name = "RoundedMonitorBorder"
-	screenBorder.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-	screenBorder.Color = Color3.fromRGB(78, 87, 84)
-	screenBorder.Thickness = 8
-	screenBorder.Transparency = 0.08
-	screenBorder.LineJoinMode = Enum.LineJoinMode.Round
-	screenBorder.Parent = screen
+	screen.ClipsDescendants = true
 
 	addMountedStationMonitor(parent, roomCenter, signPanel, index, color)
 
@@ -1532,24 +1644,15 @@ local function addDoorway(parent, center, level, side, zOffset, active)
 		Enum.Material.Metal
 	)
 	header.CanCollide = false
+	local accentColor = active and COLORS.green or COLORS.amber
+	addMountedLevelSign(parent, center, header, level, side, accentColor)
 	addBoard(
 		header,
 		face,
 		"LEVEL " .. level,
-		active and "4 QUEUES  •  MAX 6 EACH  •  10 SECOND LAUNCH" or "ANOMALOUS ACCESS POINT  •  NOT YET STABLE",
-		active and COLORS.green or COLORS.amber
+		active and "ACCESS READY  •  4 QUEUES  •  MAX 6 EACH" or "ANOMALOUS ACCESS POINT  •  NOT YET STABLE",
+		accentColor
 	)
-
-	local exitPanel = makePart(
-		parent,
-		"Level" .. level .. "ExitMarker",
-		CFrame.new(x - side * 7.58, center.Y + 19.15, z),
-		Vector3.new(0.36, 1.5, 8.5),
-		active and Color3.fromRGB(24, 96, 57) or Color3.fromRGB(100, 63, 24),
-		Enum.Material.Metal
-	)
-	exitPanel.CanCollide = false
-	addBoard(exitPanel, face, "LEVEL " .. level, active and "ACCESS READY" or "ACCESS PENDING", active and COLORS.green or COLORS.amber)
 
 	if not active then
 		local blocker = makePart(
@@ -1577,6 +1680,595 @@ local function addDoorway(parent, center, level, side, zOffset, active)
 	end
 end
 
+local function addConcourseBench(parent, center, side, zOffset)
+	local benchCenter = center + Vector3.new(side * 27.2, 0, zOffset)
+	local benchCF = CFrame.lookAt(benchCenter + Vector3.new(0, 2.25, 0), center + Vector3.new(0, 2.25, zOffset))
+	local wood = Color3.fromRGB(118, 88, 55)
+	local frame = Color3.fromRGB(42, 48, 47)
+
+	local seat = makePart(parent, "ConcourseBenchSeat", benchCF, Vector3.new(7.2, 0.55, 2.15), wood, Enum.Material.WoodPlanks)
+	seat:SetAttribute("LobbySocialProp", true)
+	local back = makePart(parent, "ConcourseBenchBack", benchCF * CFrame.new(0, 1.7, 0.82), Vector3.new(7.2, 3.15, 0.42), wood, Enum.Material.WoodPlanks)
+	back:SetAttribute("LobbySocialProp", true)
+	for _, x in ipairs({-2.65, 2.65}) do
+		for _, z in ipairs({-0.68, 0.68}) do
+			local leg = makePart(parent, "ConcourseBenchLeg", benchCF * CFrame.new(x, -1.22, z), Vector3.new(0.38, 2.2, 0.38), frame, Enum.Material.Metal)
+			leg:SetAttribute("LobbySocialProp", true)
+		end
+	end
+end
+
+
+local function addGameplayShopkeeper(parent, center, zOffset)
+	-- The same authored yellow hazmat rig players use in every level. It is
+	-- cloned as a deliberately inert display character so no gameplay scripts,
+	-- collisions, prompts, or movement controllers leak into the lobby.
+	local source = game:GetService("StarterPlayer"):FindFirstChild("StarterCharacter")
+		or game:GetService("ServerStorage"):FindFirstChild("StarterCharacter")
+	if not source or not source:IsA("Model") then
+		warn("[TunnelLobbyBuilder] Shared gameplay StarterCharacter was unavailable for the shopkeeper")
+		return nil
+	end
+
+	local character = source:Clone()
+	character.Name = "ZyntraShopkeeper"
+	character:SetAttribute("GameplayRigClone", true)
+	character:SetAttribute("StandardYellowAppearance", true)
+	character:SetAttribute("VisualOnly", true)
+
+	for _, descendant in ipairs(character:GetDescendants()) do
+		if descendant:IsA("BaseScript") or descendant:IsA("ModuleScript") or descendant:IsA("Tool") or descendant:IsA("ProximityPrompt") then
+			descendant:Destroy()
+		elseif descendant:IsA("BasePart") then
+			descendant.Anchored = true
+			descendant.CanCollide = false
+			descendant.CanTouch = false
+			descendant.CanQuery = false
+			descendant.Massless = true
+			descendant.CastShadow = true
+		end
+	end
+
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	if humanoid then
+		humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
+		humanoid.BreakJointsOnDeath = false
+		humanoid.AutoRotate = false
+	end
+
+	character.Parent = parent
+	-- A low staff platform and forward placement keep the authentic rig visible
+	-- above the counter without scaling or recoloring it.
+	local feetY = center.Y + 1.16
+	character:PivotTo(CFrame.lookAt(
+		Vector3.new(center.X + 29.15, feetY, center.Z + zOffset),
+		Vector3.new(center.X, feetY, center.Z + zOffset)
+	))
+	return character
+end
+
+local function addSupplyKiosk(parent, center)
+	local kiosk = Instance.new("Model")
+	kiosk.Name = "ZyntraSupplyKiosk"
+	kiosk:SetAttribute("VisualOnly", false)
+	kiosk:SetAttribute("ShopFunctional", true)
+	kiosk:SetAttribute("SupplyKioskVersion", 4)
+	kiosk:SetAttribute("Placement", "Right service ledge between Level 2 and Level 4")
+	kiosk.Parent = parent
+
+	local zOffset = -35
+	local metal = Color3.fromRGB(28, 34, 33)
+	local metalLight = Color3.fromRGB(50, 59, 57)
+	local cyan = Color3.fromRGB(73, 245, 204)
+	local warm = Color3.fromRGB(228, 214, 167)
+
+	local floorPad = makePart(
+		kiosk,
+		"ShopFloorPad",
+		CFrame.new(center + Vector3.new(29.6, 0.72, zOffset)),
+		Vector3.new(7.2, 0.16, 18),
+		Color3.fromRGB(45, 51, 48),
+		Enum.Material.DiamondPlate
+	)
+	floorPad:SetAttribute("ShopDecor", true)
+
+	local backWall = makePart(
+		kiosk,
+		"ShopBackWall",
+		CFrame.new(center + Vector3.new(32.55, 5.95, zOffset)),
+		Vector3.new(0.8, 10.6, 18),
+		metal,
+		Enum.Material.Metal
+	)
+	backWall:SetAttribute("ShopDecor", true)
+
+	for _, zSide in ipairs({-1, 1}) do
+		local sidePost = makePart(
+			kiosk,
+			"ShopSidePost",
+			CFrame.new(center + Vector3.new(29.75, 5.95, zOffset + zSide * 8.7)),
+			Vector3.new(6.4, 10.6, 0.65),
+			metalLight,
+			Enum.Material.Metal
+		)
+		sidePost:SetAttribute("ShopDecor", true)
+
+		local edgeGlow = makePart(
+			kiosk,
+			"ShopEdgeGlow",
+			CFrame.new(center + Vector3.new(26.5, 6.1, zOffset + zSide * 8.72)),
+			Vector3.new(0.18, 10.2, 0.18),
+			cyan,
+			Enum.Material.Neon,
+			0.08
+		)
+		edgeGlow.CanCollide = false
+		edgeGlow.CanTouch = false
+		edgeGlow.CanQuery = false
+		edgeGlow:SetAttribute("ShopDecor", true)
+	end
+
+	local canopy = makePart(
+		kiosk,
+		"ShopCanopy",
+		CFrame.new(center + Vector3.new(29.65, 11.35, zOffset)),
+		Vector3.new(7.2, 0.72, 18),
+		metal,
+		Enum.Material.Metal
+	)
+	canopy:SetAttribute("ShopDecor", true)
+
+	local counterFront = makePart(
+		kiosk,
+		"ShopCounterFront",
+		CFrame.new(center + Vector3.new(27.45, 2.15, zOffset)),
+		Vector3.new(1.05, 3.05, 15.3),
+		metal,
+		Enum.Material.Metal
+	)
+	counterFront:SetAttribute("ShopDecor", true)
+	local counterTop = makePart(
+		kiosk,
+		"ShopCounterTop",
+		CFrame.new(center + Vector3.new(27.7, 3.82, zOffset)),
+		Vector3.new(2.35, 0.42, 16.1),
+		metalLight,
+		Enum.Material.Metal
+	)
+	counterTop:SetAttribute("ShopDecor", true)
+
+	local counterGlow = makePart(
+		kiosk,
+		"ShopCounterGlow",
+		CFrame.new(center + Vector3.new(26.91, 2.9, zOffset)),
+		Vector3.new(0.12, 0.22, 14.2),
+		cyan,
+		Enum.Material.Neon
+	)
+	counterGlow.CanCollide = false
+	counterGlow.CanTouch = false
+	counterGlow.CanQuery = false
+	counterGlow:SetAttribute("ShopDecor", true)
+
+	local sign = makePart(
+		kiosk,
+		"ShopOverheadSign",
+		CFrame.new(center + Vector3.new(26.95, 9.3, zOffset)),
+		Vector3.new(0.36, 2.45, 12.2),
+		metal,
+		Enum.Material.Metal
+	)
+	sign.CanCollide = false
+	sign.CanTouch = false
+	sign.CanQuery = false
+	sign:SetAttribute("ShopDecor", true)
+	addBoard(
+		sign,
+		Enum.NormalId.Left,
+		"ZYNTRA SUPPLY",
+		"EQUIPMENT  •  UPGRADES  •  SUPPLIES",
+		cyan
+	)
+
+	local shelf = makePart(
+		kiosk,
+		"ShopDisplayShelf",
+		CFrame.new(center + Vector3.new(31.75, 5.9, zOffset)),
+		Vector3.new(1.15, 0.3, 14.5),
+		metalLight,
+		Enum.Material.Metal
+	)
+	shelf.CanCollide = false
+	shelf.CanTouch = false
+	shelf.CanQuery = false
+	shelf:SetAttribute("ShopDecor", true)
+
+	local productColors = {
+		Color3.fromRGB(255, 106, 86),
+		Color3.fromRGB(255, 213, 79),
+		Color3.fromRGB(75, 229, 141),
+		Color3.fromRGB(77, 190, 255),
+		Color3.fromRGB(182, 92, 255),
+	}
+	for index, productColor in ipairs(productColors) do
+		local product = makePart(
+			kiosk,
+			"DisplayProduct" .. index,
+			CFrame.new(center + Vector3.new(31.05, 6.65, zOffset - 6 + (index - 1) * 3)),
+			Vector3.new(1.15, 1.35 + (index % 2) * 0.35, 1.75),
+			productColor,
+			Enum.Material.SmoothPlastic
+		)
+		product.CanCollide = false
+		product.CanTouch = false
+		product.CanQuery = false
+		product:SetAttribute("ShopDecor", true)
+	end
+
+	local downlight = makePart(
+		kiosk,
+		"ShopDownlight",
+		CFrame.new(center + Vector3.new(29.2, 10.92, zOffset)),
+		Vector3.new(2.8, 0.12, 8.2),
+		warm,
+		Enum.Material.Neon
+	)
+	downlight.CanCollide = false
+	downlight.CanTouch = false
+	downlight.CanQuery = false
+	downlight:SetAttribute("ShopDecor", true)
+	local light = Instance.new("SurfaceLight")
+	light.Name = "ShopWarmLight"
+	light.Face = Enum.NormalId.Bottom
+	light.Color = warm
+	light.Brightness = 0.7
+	light.Range = 12
+	light.Angle = 100
+	light.Shadows = true
+	light.Parent = downlight
+
+	local accessTerminal = makePart(
+		kiosk,
+		"ShopAccessTerminal",
+		CFrame.new(center + Vector3.new(26.84, 4.65, zOffset + 5.45)),
+		Vector3.new(0.22, 1.45, 3.2),
+		metal,
+		Enum.Material.Metal
+	)
+	accessTerminal.CanCollide = false
+	accessTerminal.CanTouch = false
+	accessTerminal.CanQuery = false
+	accessTerminal:SetAttribute("ShopInteraction", true)
+	addBoard(accessTerminal, Enum.NormalId.Left, "SHOP", "PRESS  E", cyan)
+
+
+	local prompt = Instance.new("ProximityPrompt")
+	prompt.Name = "ZyntraShopPrompt"
+	prompt.ActionText = "OPEN SHOP"
+	prompt.ObjectText = "ZYNTRA SUPPLY"
+	prompt.KeyboardKeyCode = Enum.KeyCode.E
+	prompt.GamepadKeyCode = Enum.KeyCode.ButtonX
+	prompt.HoldDuration = 0
+	prompt.MaxActivationDistance = 10
+	prompt.RequiresLineOfSight = false
+	prompt.Style = Enum.ProximityPromptStyle.Default
+	prompt.Parent = accessTerminal
+
+	local staffPlatform = makePart(
+		kiosk,
+		"ShopkeeperPlatform",
+		CFrame.new(center + Vector3.new(29.15, 0.91, zOffset)),
+		Vector3.new(3.2, 0.5, 3.4),
+		metalLight,
+		Enum.Material.DiamondPlate
+	)
+	staffPlatform.CanCollide = false
+	staffPlatform.CanTouch = false
+	staffPlatform.CanQuery = false
+	staffPlatform:SetAttribute("ShopDecor", true)
+
+	-- The tunnel is intentionally dim, so a narrow warm key light illuminates
+	-- the suit and visor without bleaching the rest of the kiosk.
+	local keyLightMount = makePart(
+		kiosk,
+		"ShopkeeperKeyLightMount",
+		CFrame.new(center + Vector3.new(27.05, 6.1, zOffset)),
+		Vector3.new(0.1, 0.1, 0.1),
+		warm,
+		Enum.Material.SmoothPlastic,
+		1
+	)
+	keyLightMount.CanCollide = false
+	keyLightMount.CanTouch = false
+	keyLightMount.CanQuery = false
+	local keyLight = Instance.new("SpotLight")
+	keyLight.Name = "ShopkeeperKeyLight"
+	keyLight.Face = Enum.NormalId.Right
+	keyLight.Color = warm
+	keyLight.Brightness = 2.1
+	keyLight.Range = 9
+	keyLight.Angle = 82
+	keyLight.Shadows = false
+	keyLight.Parent = keyLightMount
+
+	addGameplayShopkeeper(kiosk, center, zOffset)
+	return kiosk
+end
+
+local function addPartyButton(parent, center)
+	local model = Instance.new("Model")
+	model.Name = "ZyntraPartyButton"
+	model:SetAttribute("PartyButtonVersion", 1)
+	model:SetAttribute("Placement", "Right wall between Level 2 and the supply kiosk")
+	model:SetAttribute("PartyModeDuration", 10)
+	model.Parent = parent
+
+	local zOffset = -51.5
+	local plate = makePart(
+		model,
+		"PartyButtonWallPlate",
+		CFrame.new(center + Vector3.new(33.35, 4.45, zOffset)),
+		Vector3.new(0.58, 4.5, 4.2),
+		Color3.fromRGB(27, 33, 32),
+		Enum.Material.Metal
+	)
+	plate.CanCollide = false
+	plate.CanTouch = false
+	plate.CanQuery = false
+	plate:SetAttribute("LobbyPartyControl", true)
+
+	local label = makePart(
+		model,
+		"PartyButtonLabel",
+		CFrame.new(center + Vector3.new(33.02, 6.35, zOffset)),
+		Vector3.new(0.16, 1.15, 3.55),
+		Color3.fromRGB(18, 24, 23),
+		Enum.Material.Metal
+	)
+	label.CanCollide = false
+	label.CanTouch = false
+	label.CanQuery = false
+	addBoard(
+		label,
+		Enum.NormalId.Left,
+		"???",
+		"UNMARKED CONTROL",
+		Color3.fromRGB(177, 89, 255)
+	)
+
+	local button = makePart(
+		model,
+		"PartyButton",
+		CFrame.new(center + Vector3.new(32.93, 4.05, zOffset)),
+		Vector3.new(0.72, 1.62, 1.62),
+		Color3.fromRGB(255, 125, 36),
+		Enum.Material.Neon
+	)
+	button.Shape = Enum.PartType.Cylinder
+	button.CanCollide = false
+	button.CanTouch = false
+	button.CanQuery = false
+	button:SetAttribute("LobbyPartyControl", true)
+	button:SetAttribute("PartyModeDuration", 10)
+
+	local glow = Instance.new("SurfaceLight")
+	glow.Name = "ButtonGlow"
+	glow.Face = Enum.NormalId.Left
+	glow.Color = button.Color
+	glow.Brightness = 1.25
+	glow.Range = 7
+	glow.Angle = 95
+	glow.Shadows = false
+	glow.Parent = button
+
+	local prompt = Instance.new("ProximityPrompt")
+	prompt.Name = "ZyntraPartyPrompt"
+	prompt.ActionText = "PRESS"
+	prompt.ObjectText = "UNMARKED WALL BUTTON"
+	prompt.KeyboardKeyCode = Enum.KeyCode.E
+	prompt.GamepadKeyCode = Enum.KeyCode.ButtonX
+	prompt.HoldDuration = 0
+	prompt.MaxActivationDistance = 9
+	prompt.RequiresLineOfSight = false
+	prompt.Style = Enum.ProximityPromptStyle.Default
+	prompt.Parent = button
+
+	return model
+end
+
+local function addLobbyConcourse(parent, center, lobbyModel)
+	local concourse = Instance.new("Model")
+	concourse.Name = "ZyntraDispatchConcourse"
+	concourse:SetAttribute("LobbyConcourseVersion", 6)
+	concourse.Parent = parent
+
+	-- A real arrival threshold makes the spawn read as a station instead of the
+	-- middle of an empty road. Posts stay on the curb, outside player traffic.
+	local gantryZ = -92.2
+	for _, side in ipairs({-1, 1}) do
+		makePart(
+			concourse,
+			"ArrivalGantryPost",
+			CFrame.new(center + Vector3.new(side * 18.2, 8.2, gantryZ)),
+			Vector3.new(0.8, 16.4, 0.8),
+			COLORS.metalLight,
+			Enum.Material.Metal
+		)
+		local foot = makePart(
+			concourse,
+			"ArrivalGantryFoot",
+			CFrame.new(center + Vector3.new(side * 18.2, 0.5, gantryZ)),
+			Vector3.new(2.2, 1, 2.2),
+			COLORS.metal,
+			Enum.Material.DiamondPlate
+		)
+		foot:SetAttribute("LobbyWayfinding", true)
+	end
+	makePart(
+		concourse,
+		"ArrivalGantryBeam",
+		CFrame.new(center + Vector3.new(0, 13.8, gantryZ)),
+		Vector3.new(37.2, 0.85, 0.85),
+		COLORS.metal,
+		Enum.Material.Metal
+	)
+
+	-- A small pedestrian crossing and two benches turn the dead middle stretch
+	-- into a readable waiting area without touching any bay or queue footprint.
+	for stripe = -4, 4 do
+		local crossing = makePart(
+			concourse,
+			"ConcourseCrossingStripe",
+			CFrame.new(center + Vector3.new(0, 0.045, 42 + stripe * 1.55)),
+			Vector3.new(30.4, 0.08, 0.72),
+			stripe % 2 == 0 and Color3.fromRGB(192, 178, 120) or Color3.fromRGB(132, 124, 91),
+			Enum.Material.SmoothPlastic,
+			0.12
+		)
+		crossing.CanCollide = false
+		crossing.CanTouch = false
+		crossing.CanQuery = false
+		crossing:SetAttribute("LobbyWayfinding", true)
+	end
+	addConcourseBench(concourse, center, -1, 54)
+	addConcourseBench(concourse, center, 1, 54)
+	addSupplyKiosk(concourse, center)
+	addPartyButton(concourse, center)
+
+	-- The signal console is a harmless lobby toy. It runs a synchronized light
+	-- wave down the road, giving waiting groups something to trigger together.
+	local consolePosition = center + Vector3.new(-27.2, 3.25, 35)
+	local consoleCF = CFrame.lookAt(consolePosition, center + Vector3.new(0, 3.25, 35))
+	local console = makePart(
+		concourse,
+		"ZyntraSignalConsole",
+		consoleCF,
+		Vector3.new(4.8, 6.2, 2.35),
+		Color3.fromRGB(35, 42, 41),
+		Enum.Material.Metal
+	)
+	console:SetAttribute("LobbySocialProp", true)
+	local screen = makePart(
+		concourse,
+		"ZyntraSignalConsoleScreen",
+		consoleCF * CFrame.new(0, 0.55, -1.21),
+		Vector3.new(4.05, 2.85, 0.12),
+		Color3.fromRGB(8, 14, 13),
+		Enum.Material.SmoothPlastic
+	)
+	screen.CanCollide = false
+	local signalTitle, signalSubtitle = addBoard(
+		screen,
+		Enum.NormalId.Front,
+		"SIGNAL SWEEP",
+		"PRESS TO PULSE THE TRANSIT LINE",
+		COLORS.green
+	)
+	local button = makePart(
+		concourse,
+		"SignalSweepButton",
+		consoleCF * CFrame.new(0, -1.8, -1.35),
+		Vector3.new(2.4, 0.72, 0.38),
+		Color3.fromRGB(45, 157, 112),
+		Enum.Material.Neon
+	)
+	button.CanCollide = false
+	button:SetAttribute("LobbySocialProp", true)
+	local prompt = Instance.new("ProximityPrompt")
+	prompt.Name = "SignalSweepPrompt"
+	prompt.ActionText = "RUN LIGHT SWEEP"
+	prompt.ObjectText = "ZYNTRA SIGNAL CONSOLE"
+	prompt.KeyboardKeyCode = Enum.KeyCode.E
+	prompt.GamepadKeyCode = Enum.KeyCode.ButtonX
+	prompt.HoldDuration = 0.2
+	prompt.MaxActivationDistance = 10
+	prompt.RequiresLineOfSight = false
+	prompt.Parent = button
+
+	local baseSignalColor = Color3.fromRGB(39, 126, 121)
+	local pulseSignalColor = Color3.fromRGB(86, 255, 173)
+	local signalGroups = {}
+	for z = -112, 112, 12 do
+		local group = {}
+		for _, side in ipairs({-1, 1}) do
+			local node = makePart(
+				concourse,
+				"TransitSignalNode",
+				CFrame.new(center + Vector3.new(side * 14.75, 0.13, z)),
+				Vector3.new(0.42, 0.12, 2.25),
+				baseSignalColor,
+				Enum.Material.Neon,
+				0.28
+			)
+			node.CanCollide = false
+			node.CanTouch = false
+			node.CanQuery = false
+			node:SetAttribute("LobbyWayfinding", true)
+			local glow = Instance.new("PointLight")
+			glow.Name = "SignalNodeGlow"
+			glow.Color = baseSignalColor
+			glow.Brightness = 0.04
+			glow.Range = 4
+			glow.Shadows = false
+			glow.Parent = node
+			table.insert(group, {Part = node, Light = glow})
+		end
+		table.insert(signalGroups, group)
+	end
+
+	local sweepBusy = false
+	prompt.Triggered:Connect(function()
+		if sweepBusy or not lobbyModel.Parent then return end
+		sweepBusy = true
+		prompt.Enabled = false
+		lobbyModel:SetAttribute("SignalSweepSerial", (lobbyModel:GetAttribute("SignalSweepSerial") or 0) + 1)
+		signalTitle.Text = "SIGNAL SWEEP ACTIVE"
+		signalSubtitle.Text = "FOLLOW THE LIGHT WAVE"
+		button.Color = pulseSignalColor
+
+		for groupIndex, group in ipairs(signalGroups) do
+			task.delay((groupIndex - 1) * 0.075, function()
+				for _, record in ipairs(group) do
+					if record.Part.Parent and record.Light.Parent then
+						TweenService:Create(record.Part, TweenInfo.new(0.12), {
+							Color = pulseSignalColor,
+							Transparency = 0,
+						}):Play()
+						TweenService:Create(record.Light, TweenInfo.new(0.12), {
+							Color = pulseSignalColor,
+							Brightness = 1.15,
+							Range = 11,
+						}):Play()
+						task.delay(0.48, function()
+							if record.Part.Parent and record.Light.Parent then
+								TweenService:Create(record.Part, TweenInfo.new(0.38), {
+									Color = baseSignalColor,
+									Transparency = 0.28,
+								}):Play()
+								TweenService:Create(record.Light, TweenInfo.new(0.38), {
+									Color = baseSignalColor,
+									Brightness = 0.04,
+									Range = 4,
+								}):Play()
+							end
+						end)
+					end
+				end
+			end)
+		end
+
+		task.delay(#signalGroups * 0.075 + 1.05, function()
+			if button.Parent then button.Color = Color3.fromRGB(45, 157, 112) end
+			if signalTitle.Parent then signalTitle.Text = "SIGNAL SWEEP" end
+			if signalSubtitle.Parent then signalSubtitle.Text = "PRESS TO PULSE THE TRANSIT LINE" end
+			if prompt.Parent then prompt.Enabled = true end
+			sweepBusy = false
+		end)
+	end)
+
+	return concourse
+end
+
 function Builder.Build(center)
 	local old = workspace:FindFirstChild("ServerLobby")
 	if old then
@@ -1587,7 +2279,15 @@ function Builder.Build(center)
 	model.Name = "ServerLobby"
 	model.Parent = workspace
 	model:SetAttribute("LobbyStyle", "ZyntraTunnel")
-	model:SetAttribute("TextureVersion", 7)
+	model:SetAttribute("TextureVersion", 9)
+	model:SetAttribute("LobbyAestheticRevision", 3)
+	model:SetAttribute("DispatchConcourseVersion", 6)
+	model:SetAttribute("SupplyKioskVersion", 4)
+	model:SetAttribute("PartyButtonVersion", 1)
+	model:SetAttribute("TunnelCurveRevision", 2)
+	model:SetAttribute("SignageRevision", 2)
+	model:SetAttribute("RoundedSignFacesVersion", 1)
+	model:SetAttribute("LevelSignMountVersion", 1)
 	model:SetAttribute("CircularBayGeometryVersion", 1)
 	model:SetAttribute("CircularLaunchPadVersion", 2)
 	model:SetAttribute("Level2DecorativeBasinVersion", 1)
@@ -1613,8 +2313,12 @@ function Builder.Build(center)
 	local tunnelLength = 280
 	local halfLength = tunnelLength * 0.5
 	local radius = 35
-	local shellSegments = 16
+	-- A 48-sided half-circle keeps both the concrete skin and black ribs visually
+	-- smooth at player scale while remaining lightweight static geometry.
+	local shellSegments = 48
+	local doorwayShellSegments = math.ceil(shellSegments / 8)
 	local shellChord = 2 * radius * math.sin(math.pi / shellSegments) + 0.6
+	model:SetAttribute("TunnelShellSegments", shellSegments)
 
 	-- Road, ledges, curbs, and lane paint.
 	local road = makePart(
@@ -1693,9 +2397,9 @@ function Builder.Build(center)
 		{90, halfLength},
 	}
 
-	-- Curved concrete shell. The two lowest panels on each side are segmented
-	-- around the level bays; full-length low panels would physically wall off
-	-- every doorway even though the decorative frames remained visible.
+	-- Curved concrete shell. The lowest 22.5-degree band on each side is
+	-- segmented around the level bays; full-length low panels would physically
+	-- wall off every doorway even though the decorative frames remained visible.
 	for i = 1, shellSegments - 1 do
 		local theta = math.pi * (i / shellSegments)
 		local position = center + Vector3.new(
@@ -1703,7 +2407,7 @@ function Builder.Build(center)
 			1 + math.sin(theta) * radius,
 			0
 		)
-		local segmentedAtDoors = i <= 2 or i >= shellSegments - 2
+		local segmentedAtDoors = i <= doorwayShellSegments or i >= shellSegments - doorwayShellSegments
 		local ranges = segmentedAtDoors and wallRanges or {{-halfLength, halfLength}}
 		for _, range in ipairs(ranges) do
 			local zMid = (range[1] + range[2]) * 0.5
@@ -1786,24 +2490,10 @@ function Builder.Build(center)
 		addLamp(lights, center, 9, z)
 	end
 
-	for z = -halfLength + 8, halfLength - 8, 12 do
-		for _, side in ipairs({-1, 1}) do
-			local marker = makePart(
-				lights,
-				"EmergencyCurbMarker",
-				CFrame.new(center + Vector3.new(side * 16.45, 0.7, z)),
-				Vector3.new(0.28, 0.45, 0.75),
-				z % 24 == 0 and COLORS.red or COLORS.amber,
-				Enum.Material.Neon
-			)
-			marker.CanCollide = false
-			local glow = Instance.new("PointLight")
-			glow.Color = marker.Color
-			glow.Brightness = 0.35
-			glow.Range = 6
-			glow.Parent = marker
-		end
-	end
+	-- Keep the road lighting purely Zyntra cyan; the old alternating red/amber
+	-- emergency curb markers competed with the level-room wayfinding.
+
+	addLobbyConcourse(detail, center, model)
 
 	local stations = {}
 	local levelDefs = {
@@ -1855,8 +2545,8 @@ function Builder.Build(center)
 	local welcome = makePart(
 		detail,
 		"ZyntraWelcomeBoard",
-		CFrame.new(center + Vector3.new(0, 13.5, -138.1)) * CFrame.Angles(0, math.pi, 0),
-		Vector3.new(26, 7.5, 0.55),
+		CFrame.new(center + Vector3.new(0, 18.1, -92.2)),
+		Vector3.new(32, 7.2, 0.55),
 		COLORS.metal,
 		Enum.Material.Metal
 	)
@@ -1864,8 +2554,15 @@ function Builder.Build(center)
 	addBoard(
 		welcome,
 		Enum.NormalId.Front,
-		"ZYNTRA TRANSIT ACCESS",
-		"POWERING THE FUTURE.  •  PROCEED TO AN AUTHORIZED LEVEL BAY",
+		"ZYNTRA\nTRANSIT GATES",
+		"LEVEL ACCESS IS THROUGH THE SIDE GATES",
+		COLORS.green
+	)
+	addBoard(
+		welcome,
+		Enum.NormalId.Back,
+		"ZYNTRA\nTRANSIT GATES",
+		"LEVEL ACCESS IS THROUGH THE SIDE GATES",
 		COLORS.green
 	)
 

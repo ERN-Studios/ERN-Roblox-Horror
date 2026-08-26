@@ -5,6 +5,8 @@
 local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
 
 local Builder = {}
 local C = Configuration.Colors
@@ -34,6 +36,8 @@ local TEXTURES = {
 	KidsDrawingsDisturbing25 = contentTexture("KidsDrawingsDisturbing25Texture", Configuration.Textures.KidsDrawingsDisturbing25),
 	KidsNotesAtlas = contentTexture("KidsNotesAtlasTexture", Configuration.Textures.KidsNotesAtlas),
 	CDCoversAtlas = contentTexture("CDCoversAtlasTexture", Configuration.Textures.CDCoversAtlas),
+	DiscPlayerPanel = contentTexture("DiscPlayerPanelTexture", Configuration.Textures.DiskPlayerSurface),
+	CRTScreen = contentTexture("CRTScreenTexture", Configuration.Textures.CRTScreenSurface),
 }
 
 local function folder(parent: Instance, name: string): Folder
@@ -98,6 +102,9 @@ local function worldPosition(room: {[string]: any}, y: number?): Vector3
 end
 
 local function roomHeight(room: {[string]: any}): number
+	-- The Poolrooms hand-off needs the same tall gateway proportions as Level 2.
+	-- Other generated rooms keep their authored/randomized mall ceiling heights.
+	if room.Id == "Arrival" then return 30 end
 	return tonumber(room.H) or Configuration.RoomHeight
 end
 
@@ -164,8 +171,9 @@ local function makeWall(parent: Instance, room: {[string]: any}, side: string, h
 	-- The room portal is the complete corridor cross-section. Its width and
 	-- height therefore match every tunnel exactly instead of shrinking to an
 	-- old door-sized opening at each room boundary.
-	local doorW = Configuration.CorridorWidth
-	local doorH = Configuration.CorridorHeight
+	local poolArrivalOpening = room.Id == "Arrival" and side == "West"
+	local doorW = poolArrivalOpening and 16.0 or Configuration.CorridorWidth
+	local doorH = poolArrivalOpening and 16.0 or Configuration.CorridorHeight
 	local color = wallColor(room)
 	local wallpaper = usesWallpaper(room)
 	local horizontal = side == "North" or side == "South"
@@ -316,18 +324,45 @@ local function makeTable(parent: Instance, cframe: CFrame, party: boolean, chair
 			Vector3.new(11.2, .5, 4.35), Color3.fromRGB(201, 198, 185), Enum.Material.SmoothPlastic)
 		decorative(tableMesh)
 	end
+	tableMesh:SetAttribute("Level3_TemporaryHuntFurniture", true)
 	-- Keep the detailed free mesh decorative, but add one simple invisible
 	-- tabletop collider so players cannot walk through the banquet tables.
 	local tableCollision = part(parent, "Level 3 Folding Table Collision", cframe * CFrame.new(0, 3.0, 0),
 		Vector3.new(11.0, .48, 4.15), Color3.new(), Enum.Material.SmoothPlastic, 1)
 	tableCollision:SetAttribute("Level3_TableCollision", true)
+	tableCollision:SetAttribute("Level3_TemporaryHuntFurniture", true)
 	tableCollision.CastShadow = false
+
+	-- LEVEL3_MANAGER_FURNITURE_NAV_20260821
+	-- PathfindingService needs the complete table-and-chair footprint, inflated
+	-- for the Manager's body, rather than only the thin tabletop collider.
+	local furnitureClearance = Configuration.MallManager.AgentRadius
+		+ Configuration.MallManager.FurniturePathPadding
+	local navExclusion = part(parent, "Level 3 Manager Furniture Nav Exclusion",
+		cframe * CFrame.new(0, Configuration.MallManager.AgentHeight * .5, 0),
+		Vector3.new(11.2 + furnitureClearance * 2,
+			Configuration.MallManager.AgentHeight,
+			10.8 + furnitureClearance * 2),
+		Color3.new(), Enum.Material.SmoothPlastic, 1)
+	decorative(navExclusion)
+	-- PathfindingModifier regions must remain queryable when Roblox bakes the nav
+	-- mesh. They stay non-collidable, invisible, untouchable, and are ignored by
+	-- the Manager's RespectCanCollide physical sweeps.
+	navExclusion.CanQuery = true
+	navExclusion:SetAttribute("Level3_ManagerFurnitureNavExclusion", true)
+	navExclusion:SetAttribute("Level3_TemporaryHuntFurniture", true)
+	local navModifier = Instance.new("PathfindingModifier")
+	navModifier.Name = "Level 3 Manager Furniture Path Modifier"
+	navModifier.Label = Configuration.MallManager.FurniturePathLabel
+	navModifier.PassThrough = false
+	navModifier.Parent = navExclusion
 
 	-- A thin top and four hanging skirts turn the clean folding-table mesh into
 	-- a believable disposable party tablecloth without multiplying textures.
 	local top = part(parent, "Level 3 Party Tablecloth Top", cframe * CFrame.new(0, 3.48, 0),
 		Vector3.new(11.45, .12, 4.62), tableColor, Enum.Material.Fabric)
 	decorative(top)
+	top:SetAttribute("Level3_TemporaryHuntFurniture", true)
 	texture(top, TEXTURES.ConfettiTablecloth, Enum.NormalId.Top,
 		Configuration.TextureStuds.Tablecloth, Configuration.TextureStuds.Tablecloth, .34)
 	if allowHide then
@@ -339,6 +374,7 @@ local function makeTable(parent: Instance, cframe: CFrame, party: boolean, chair
 			Configuration.Hiding.HideVolumeSize, Color3.new(), Enum.Material.SmoothPlastic, 1)
 		decorative(hideAnchor)
 		hideAnchor:SetAttribute("Level3_HideTableAnchor", true)
+		hideAnchor:SetAttribute("Level3_TemporaryHuntFurniture", true)
 		hideAnchor:SetAttribute("Level3_HideOccupiedUserId", 0)
 		local hidePrompt = Instance.new("ProximityPrompt")
 		hidePrompt.Name = "HideUnderTablePrompt"
@@ -360,6 +396,7 @@ local function makeTable(parent: Instance, cframe: CFrame, party: boolean, chair
 		sightOccluder.CanTouch = false
 		sightOccluder.CanQuery = true
 		sightOccluder:SetAttribute("Level3_HideSightOccluder", true)
+		sightOccluder:SetAttribute("Level3_TemporaryHuntFurniture", true)
 	end
 
 	-- Keep the folding legs and silhouette visible. The former four rigid skirt
@@ -383,6 +420,7 @@ local function makeTable(parent: Instance, cframe: CFrame, party: boolean, chair
 		local chair = cloneDecorMesh("PlasticPartyChairTemplate", parent, "Level 3 Vetted Plastic Party Chair",
 			chairCF, Vector3.new(2.55, 4.3, 2.58), chairColor)
 		if chair then
+			chair:SetAttribute("Level3_TemporaryHuntFurniture", true)
 			chair:SetAttribute("Level3_ChairTableTarget", tableTarget)
 			chair:SetAttribute("Level3_ChairFacingDot", chair.CFrame.LookVector:Dot((tableTarget - chairPosition).Unit))
 		end
@@ -390,6 +428,7 @@ local function makeTable(parent: Instance, cframe: CFrame, party: boolean, chair
 			local seat = part(parent, "Level 3 Party Chair", chairCF,
 				Vector3.new(2.4, 4.2, 2.5), chairColor, Enum.Material.SmoothPlastic)
 			decorative(seat)
+			seat:SetAttribute("Level3_TemporaryHuntFurniture", true)
 			seat:SetAttribute("Level3_ChairTableTarget", tableTarget)
 			seat:SetAttribute("Level3_ChairFacingDot", seat.CFrame.LookVector:Dot((tableTarget - chairPosition).Unit))
 		end
@@ -670,7 +709,8 @@ end
 local function makeRoomSpeaker(parent: Instance, room: {[string]: any}, index: number)
 	local p = worldPosition(room)
 	local h = roomHeight(room)
-	local position = p + Vector3.new(-room.W * .5 + 2.0, math.min(h - 2.1, 8.4), -room.D * .5 + 2.0)
+	local speakerY = room.Id == "Arrival" and h - 3.0 or math.min(h - 2.1, 8.4)
+	local position = p + Vector3.new(-room.W * .5 + 2.0, speakerY, -room.D * .5 + 2.0)
 	local facing = CFrame.lookAt(position, Vector3.new(p.X, position.Y - .4, p.Z))
 	local model = Instance.new("Model")
 	model.Name = string.format("Level 3 Room PA Speaker %02d", index)
@@ -707,9 +747,68 @@ local function makeRoomSpeaker(parent: Instance, room: {[string]: any}, index: n
 	equalizer.Parent = sound
 end
 
+
+local function makeExitCorridorSpeaker(parent: Instance, centerPoint: Vector3,
+	horizontal: boolean, side: number, index: number)
+	local wallInset = Configuration.CorridorWidth * .5 - .40
+	local y = Configuration.CorridorHeight - 2.15
+	local offset = if horizontal then Vector3.new(0, y, side * wallInset)
+		else Vector3.new(side * wallInset, y, 0)
+	local inward = if horizontal then Vector3.new(0, -.35, -side)
+		else Vector3.new(-side, -.35, 0)
+	local position = centerPoint + offset
+	local facing = CFrame.lookAt(position, position + inward)
+
+	local model = Instance.new("Model")
+	model.Name = string.format("Level 3 Exit Corridor PA Speaker %02d", index)
+	model:SetAttribute("Level3_RoomSpeaker", true)
+	model:SetAttribute("Level3_ExitCorridorPA", true)
+	model:SetAttribute("Level3_RoomId", "ExitCorridor")
+	model:SetAttribute("Level3_ExitCorridorPAIndex", index)
+	model.Parent = parent
+
+	local housing = part(model, "PA Speaker Housing", facing, Vector3.new(2.65, 1.85, .72),
+		Color3.fromRGB(42, 44, 42), Enum.Material.Metal)
+	decorative(housing)
+	local grille = part(model, "PA Speaker Grille", facing * CFrame.new(0, 0, -.39),
+		Vector3.new(2.25, 1.46, .10), Color3.fromRGB(14, 16, 15), Enum.Material.DiamondPlate)
+	decorative(grille)
+	local bracket = part(model, "PA Speaker Wall Bracket", facing * CFrame.new(0, 0, .52),
+		Vector3.new(.72, .72, .42), Color3.fromRGB(61, 61, 55), Enum.Material.Metal)
+	decorative(bracket)
+	local emitter = part(model, "PA Speaker Emitter", facing * CFrame.new(0, 0, -.52),
+		Vector3.new(.16, .16, .16), Color3.new(), Enum.Material.SmoothPlastic, 1)
+	decorative(emitter)
+
+	local sound = Instance.new("Sound")
+	sound.Name = "Level 3 Room Song Speaker"
+	sound.SoundId = Configuration.Audio.RoomListeningSong
+	sound.Volume = Configuration.MusicSequence.SpeakerVolume or .30
+	sound.Looped = false
+	sound.PlaybackSpeed = 1
+	sound.RollOffMode = Enum.RollOffMode.InverseTapered
+	sound.RollOffMinDistance = Configuration.MusicSequence.SpeakerMinDistance or 18
+	sound.RollOffMaxDistance = Configuration.MusicSequence.SpeakerMaxDistance or 180
+	sound.EmitterSize = 3
+	sound:SetAttribute("Level3_ExitCorridorPA", true)
+	sound:SetAttribute("Level3_ExitCorridorPAIndex", index)
+	sound.Parent = emitter
+
+	local equalizer = Instance.new("EqualizerSoundEffect")
+	equalizer.Name = "Level 3 Distance Muffle"
+	equalizer.LowGain = 0
+	equalizer.MidGain = 0
+	equalizer.HighGain = 0
+	equalizer.Parent = sound
+end
+
 local function makeRoomProps(parent: Instance, room: {[string]: any}, index: number)
 	local p = worldPosition(room)
-	if room.Kind == "Exit" then
+	if room.Id == "Arrival" then
+		-- Keep the direct slide-to-mall sightline open without a separate transfer bay.
+		makeRoomSpeaker(parent, room, index)
+		return
+	elseif room.Kind == "Exit" then
 		makeRoomSpeaker(parent, room, index)
 		return
 	end
@@ -813,6 +912,521 @@ local function makeRoomStructure(parent: Instance, room: {[string]: any})
 	end
 end
 
+local function makeHiddenExitDiscPlayerLegacy(parent: Instance, frameCF: CFrame): {[string]: any}
+	local model = Instance.new("Model")
+	model.Name = "Level 3 Signal Hall Disc Player"
+	model:SetAttribute("Level3_DiscPlayer", true)
+	model:SetAttribute("Level3_DiscPlayerVisualRevision", 1)
+	model:SetAttribute("Level3_DiscGoal", Configuration.ModuleGoal)
+	model:SetAttribute("Level3_DiscInserted", 0)
+	model:SetAttribute("Level3_DiscPlayerTextureSlot", "DiscPlayerPanelTexture")
+	model:SetAttribute("Level3_DiscPlayerTexture", TEXTURES.DiscPlayerPanel)
+	model.Parent = parent
+
+	-- frameCF looks from Signal Hall toward the concealed Exit corridor. Positive
+	-- local Z therefore places the console safely inside Signal Hall, beside the
+	-- fourteen-stud portal instead of obstructing the walk-through opening.
+	local consoleCF = frameCF * CFrame.new(-10, 0, 2.05)
+	local casing = Color3.fromRGB(27, 32, 33)
+	local casingEdge = Color3.fromRGB(58, 66, 65)
+	local panelColor = Color3.fromRGB(8, 13, 14)
+	local relayBlue = Color3.fromRGB(70, 170, 255)
+	local offBlue = Color3.fromRGB(12, 31, 39)
+
+	local floorPlate = part(model, "Disc Player Floor Plate",
+		consoleCF * CFrame.new(0, .13, 0), Vector3.new(6.2, .26, 3.25),
+		Color3.fromRGB(43, 48, 47), Enum.Material.DiamondPlate)
+	floorPlate:SetAttribute("Level3_DiscPlayerStructure", true)
+
+	local cabinet = part(model, "Disc Player Industrial Cabinet",
+		consoleCF * CFrame.new(0, 2.55, 0), Vector3.new(5.55, 5.10, 2.50),
+		casing, Enum.Material.Metal)
+	cabinet:SetAttribute("Level3_DiscPlayerStructure", true)
+	cabinet.Reflectance = .06
+	if TEXTURES.DiscPlayerPanel ~= "" then
+		for _, face in ipairs({Enum.NormalId.Left, Enum.NormalId.Right, Enum.NormalId.Top}) do
+			local bodySkin = texture(cabinet, TEXTURES.DiscPlayerPanel, face, 3.2, 3.2, .42)
+			bodySkin.Name = "Disc Player Generated Body Texture"
+		end
+	end
+
+	for _, x in ipairs({-2.66, 2.66}) do
+		local rail = part(model, "Disc Player Reinforced Edge",
+			consoleCF * CFrame.new(x, 2.55, 1.28), Vector3.new(.22, 5.02, .20),
+			casingEdge, Enum.Material.Metal)
+		decorative(rail)
+	end
+	for _, y in ipairs({.15, 5.02}) do
+		local cap = part(model, "Disc Player Reinforced Cap",
+			consoleCF * CFrame.new(0, y, 1.29), Vector3.new(5.46, .20, .20),
+			casingEdge, Enum.Material.Metal)
+		decorative(cap)
+	end
+
+	local frontPanel = part(model, "Disc Player Control Panel",
+		consoleCF * CFrame.new(0, 2.48, 1.31), Vector3.new(5.05, 4.42, .18),
+		panelColor, Enum.Material.Metal)
+	frontPanel.CanCollide = false
+	frontPanel.CanTouch = false
+	frontPanel.CanQuery = true
+	frontPanel:SetAttribute("Level3_DiscPlayerControlPanel", true)
+	if TEXTURES.DiscPlayerPanel ~= "" then
+		local generatedSkin = texture(frontPanel, TEXTURES.DiscPlayerPanel, Enum.NormalId.Back, 5.05, 4.42, .10)
+		generatedSkin.Name = "Disc Player Generated Panel Texture"
+	end
+
+	local displayGlass = part(model, "Disc Player Status Display",
+		consoleCF * CFrame.new(0, 4.25, 1.43), Vector3.new(4.35, .67, .08),
+		Color3.fromRGB(4, 17, 19), Enum.Material.Glass, .08)
+	decorative(displayGlass)
+	displayGlass:SetAttribute("Level3_DiscPlayerDisplay", true)
+	local displayGui = Instance.new("SurfaceGui")
+	displayGui.Name = "Disc Player Status Surface"
+	displayGui.Face = Enum.NormalId.Back
+	displayGui.SizingMode = Enum.SurfaceGuiSizingMode.FixedSize
+	displayGui.CanvasSize = Vector2.new(650, 100)
+	displayGui.LightInfluence = .10
+	displayGui.AlwaysOnTop = false
+	displayGui.Parent = displayGlass
+	local statusLabel = Instance.new("TextLabel")
+	statusLabel.Name = "Disc Player Status Label"
+	statusLabel.BackgroundTransparency = 1
+	statusLabel.Size = UDim2.fromScale(1, 1)
+	statusLabel.Font = Enum.Font.Code
+	statusLabel.Text = string.format("ZYNTRA TV/VCR RELAY  %d/%d", 0, Configuration.ModuleGoal)
+	statusLabel.TextColor3 = Color3.fromRGB(102, 241, 216)
+	statusLabel.TextStrokeColor3 = Color3.fromRGB(5, 15, 17)
+	statusLabel.TextStrokeTransparency = .52
+	statusLabel.TextScaled = true
+	statusLabel.Parent = displayGui
+
+	local instructionPlate = part(model, "Disc Player Instruction Plate",
+		consoleCF * CFrame.new(0, .74, 1.43), Vector3.new(4.35, .42, .08),
+		Color3.fromRGB(75, 80, 74), Enum.Material.Metal)
+	decorative(instructionPlate)
+	local instructionGui = Instance.new("SurfaceGui")
+	instructionGui.Name = "Disc Player Instruction Surface"
+	instructionGui.Face = Enum.NormalId.Back
+	instructionGui.SizingMode = Enum.SurfaceGuiSizingMode.FixedSize
+	instructionGui.CanvasSize = Vector2.new(650, 70)
+	instructionGui.LightInfluence = .28
+	instructionGui.AlwaysOnTop = false
+	instructionGui.Parent = instructionPlate
+	local instructionLabel = Instance.new("TextLabel")
+	instructionLabel.Name = "Disc Player Instruction Label"
+	instructionLabel.BackgroundTransparency = 1
+	instructionLabel.Size = UDim2.fromScale(1, 1)
+	instructionLabel.Font = Enum.Font.Code
+	instructionLabel.Text = "INSERT ALL PARTY MIX DISCS"
+	instructionLabel.TextColor3 = Color3.fromRGB(219, 211, 177)
+	instructionLabel.TextScaled = true
+	instructionLabel.Parent = instructionGui
+
+	local slots = {}
+	local slotSpacing = .86
+	for slotIndex = 1, Configuration.ModuleGoal do
+		local x = (slotIndex - (Configuration.ModuleGoal + 1) * .5) * slotSpacing
+		local receiver = part(model, string.format("Disc Player Slot %02d", slotIndex),
+			consoleCF * CFrame.new(x, 2.56, 1.44), Vector3.new(.70, 1.28, .10),
+			Color3.fromRGB(2, 5, 6), Enum.Material.Metal)
+		decorative(receiver)
+		receiver:SetAttribute("Level3_DiscPlayerSlot", true)
+		receiver:SetAttribute("Level3_DiscSlotIndex", slotIndex)
+		receiver:SetAttribute("Level3_DiscSlotFilled", false)
+
+		local discCF = consoleCF * CFrame.new(x, 2.57, 1.51) * CFrame.Angles(0, math.pi * .5, 0)
+		local insertedDisc = part(model, string.format("Inserted CD Slot Visual %02d", slotIndex),
+			discCF, Vector3.new(.10, .65, .65),
+			Color3.fromRGB(176, 201, 214), Enum.Material.Metal, 1)
+		insertedDisc.Shape = Enum.PartType.Cylinder
+		insertedDisc.Reflectance = .32
+		decorative(insertedDisc)
+		insertedDisc:SetAttribute("Level3_DiscPlayerInsertedVisual", true)
+		insertedDisc:SetAttribute("Level3_DiscSlotIndex", slotIndex)
+
+		local insertedHub = part(model, string.format("Inserted CD Slot Hub %02d", slotIndex),
+			discCF, Vector3.new(.12, .18, .18),
+			Color3.fromRGB(28, 30, 31), Enum.Material.SmoothPlastic, 1)
+		insertedHub.Shape = Enum.PartType.Cylinder
+		decorative(insertedHub)
+		insertedHub:SetAttribute("Level3_DiscPlayerInsertedVisual", true)
+		insertedHub:SetAttribute("Level3_DiscSlotIndex", slotIndex)
+
+		local indicator = part(model, string.format("Disc Slot Indicator %02d", slotIndex),
+			consoleCF * CFrame.new(x, 1.52, 1.46), Vector3.new(.28, .28, .14),
+			offBlue, Enum.Material.SmoothPlastic)
+		indicator.Shape = Enum.PartType.Ball
+		decorative(indicator)
+		indicator:SetAttribute("Level3_DiscSlotIndicator", true)
+		indicator:SetAttribute("Level3_DiscSlotIndex", slotIndex)
+		indicator:SetAttribute("Level3_DiscSlotFilled", false)
+		local indicatorLight = Instance.new("PointLight")
+		indicatorLight.Name = string.format("Disc Slot Status Light %02d", slotIndex)
+		indicatorLight.Color = relayBlue
+		indicatorLight.Brightness = .72
+		indicatorLight.Range = 4
+		indicatorLight.Shadows = false
+		indicatorLight.Enabled = false
+		indicatorLight:SetAttribute("Level3_DiscSlotIndicatorLight", true)
+		indicatorLight:SetAttribute("Level3_DiscSlotIndex", slotIndex)
+		indicatorLight.Parent = indicator
+
+		table.insert(slots, {
+			Index = slotIndex,
+			Receiver = receiver,
+			Disc = insertedDisc,
+			Hub = insertedHub,
+			Indicator = indicator,
+			Light = indicatorLight,
+		})
+	end
+
+	local prompt = Instance.new("ProximityPrompt")
+	prompt.Name = "InsertCDPrompt"
+	prompt.ActionText = "INSERT CARRIED CD"
+	prompt.ObjectText = string.format("PARTY MIX DISC PLAYER  %d/%d", 0, Configuration.ModuleGoal)
+	prompt.HoldDuration = .55
+	prompt.MaxActivationDistance = 9
+	prompt.RequiresLineOfSight = true
+	prompt.KeyboardKeyCode = Enum.KeyCode.E
+	prompt:SetAttribute("Level3_DiscInsertPrompt", true)
+	prompt.Parent = frontPanel
+
+	-- Wall-fed conduit and guarded service button sell this as old mall hardware.
+	local conduit = part(model, "Disc Player Wall Conduit",
+		consoleCF * CFrame.new(0, 5.55, -.50) * CFrame.Angles(0, 0, math.pi * .5),
+		Vector3.new(1.05, .46, .46), Color3.fromRGB(69, 73, 69), Enum.Material.Metal)
+	conduit.Shape = Enum.PartType.Cylinder
+	decorative(conduit)
+	local serviceButton = part(model, "Disc Player Service Button",
+		consoleCF * CFrame.new(2.05, 1.06, 1.46), Vector3.new(.44, .44, .14),
+		Color3.fromRGB(88, 37, 31), Enum.Material.SmoothPlastic)
+	serviceButton.Shape = Enum.PartType.Ball
+	decorative(serviceButton)
+
+	model.PrimaryPart = cabinet
+	return {
+		Model = model,
+		Prompt = prompt,
+		Slots = slots,
+		StatusLabel = statusLabel,
+		InstructionLabel = instructionLabel,
+		Position = frontPanel.Position,
+		ControlPanel = frontPanel,
+		TextureSlot = "DiscPlayerPanelTexture",
+	}
+end
+
+
+local function makeHiddenExitDiscPlayer(parent: Instance, frameCF: CFrame): {[string]: any}
+	local model = Instance.new("Model")
+	model.Name = "Level 3 Signal Hall Disc Player"
+	model:SetAttribute("Level3_DiscPlayer", true)
+	model:SetAttribute("Level3_DiscPlayerVisualRevision", 2)
+	model:SetAttribute("Level3_DiscGoal", Configuration.ModuleGoal)
+	model:SetAttribute("Level3_DiscInserted", 0)
+	model:SetAttribute("Level3_DiscPlayerTextureSlot", "DiscPlayerPanelTexture")
+	model:SetAttribute("Level3_DiscPlayerTexture", TEXTURES.DiscPlayerPanel)
+	model:SetAttribute("Level3_CRTScreenTexture", TEXTURES.CRTScreen)
+	model.Parent = parent
+
+	-- A battered school AV cart replaces the flat relay cabinet. frameCF looks
+	-- toward the concealed corridor, so local +Z is the player-facing side.
+	local consoleCF = frameCF * CFrame.new(-10.25, 0, 2.35)
+	local charcoal = Color3.fromRGB(24, 27, 28)
+	local edge = Color3.fromRGB(61, 65, 64)
+	local panel = Color3.fromRGB(9, 12, 13)
+	local rubber = Color3.fromRGB(13, 14, 14)
+	local offBlue = Color3.fromRGB(10, 27, 34)
+	local relayBlue = Color3.fromRGB(70, 170, 255)
+
+	local baseShelf = part(model, "AV Cart Lower Base",
+		consoleCF * CFrame.new(0, .72, 0), Vector3.new(5.55, .25, 2.92),
+		edge, Enum.Material.Metal)
+	baseShelf:SetAttribute("Level3_DiscPlayerStructure", true)
+
+	for _, x in ipairs({-2.25, 2.25}) do
+		for _, z in ipairs({-1.08, 1.08}) do
+			local fork = part(model, "AV Cart Caster Fork",
+				consoleCF * CFrame.new(x, .47, z), Vector3.new(.22, .50, .34),
+				edge, Enum.Material.Metal)
+			decorative(fork)
+			local wheel = part(model, "AV Cart Caster Wheel",
+				consoleCF * CFrame.new(x, .25, z), Vector3.new(.34, .70, .70),
+				rubber, Enum.Material.Rubber)
+			wheel.Shape = Enum.PartType.Cylinder
+			wheel.Reflectance = .02
+			decorative(wheel)
+			wheel:SetAttribute("Level3_AVCartCaster", true)
+		end
+	end
+
+	local cabinet = part(model, "AV Cart Locked Cabinet",
+		consoleCF * CFrame.new(0, 1.95, 0), Vector3.new(5.12, 2.45, 2.50),
+		charcoal, Enum.Material.Metal)
+	cabinet.Reflectance = .04
+	cabinet:SetAttribute("Level3_DiscPlayerStructure", true)
+	if TEXTURES.DiscPlayerPanel ~= "" then
+		for _, face in ipairs({Enum.NormalId.Left, Enum.NormalId.Right, Enum.NormalId.Top}) do
+			local skin = texture(cabinet, TEXTURES.DiscPlayerPanel, face, 3.0, 3.0, .38)
+			skin.Name = "AV Cart Generated Cabinet Texture"
+		end
+	end
+
+	for _, x in ipairs({-1.30, 1.30}) do
+		local door = part(model, "AV Cart Cabinet Door",
+			consoleCF * CFrame.new(x, 1.95, 1.29), Vector3.new(2.43, 2.15, .12),
+			Color3.fromRGB(31, 34, 34), Enum.Material.Metal)
+		decorative(door)
+		if TEXTURES.DiscPlayerPanel ~= "" then
+			local skin = texture(door, TEXTURES.DiscPlayerPanel, Enum.NormalId.Back, 2.4, 2.15, .35)
+			skin.Name = "AV Cart Generated Door Texture"
+		end
+	end
+	for _, x in ipairs({-.34, .34}) do
+		local handle = part(model, "AV Cart Recessed Handle",
+			consoleCF * CFrame.new(x, 1.95, 1.38), Vector3.new(.16, .92, .12),
+			Color3.fromRGB(8, 9, 9), Enum.Material.Metal)
+		decorative(handle)
+	end
+	local cabinetLock = part(model, "AV Cart Cabinet Lock",
+		consoleCF * CFrame.new(.62, 2.32, 1.39), Vector3.new(.22, .22, .12),
+		Color3.fromRGB(177, 164, 113), Enum.Material.Metal)
+	cabinetLock.Shape = Enum.PartType.Ball
+	decorative(cabinetLock)
+
+	local middleShelf = part(model, "AV Cart VCR Shelf",
+		consoleCF * CFrame.new(0, 3.32, 0), Vector3.new(5.55, .24, 2.92),
+		edge, Enum.Material.Metal)
+	middleShelf:SetAttribute("Level3_DiscPlayerStructure", true)
+	for _, x in ipairs({-2.48, 2.48}) do
+		local upright = part(model, "AV Cart Upright",
+			consoleCF * CFrame.new(x, 4.55, 0), Vector3.new(.20, 2.42, .20),
+			edge, Enum.Material.Metal)
+		decorative(upright)
+	end
+
+	local vcr = part(model, "ZYNTRA VCR CD Relay Deck",
+		consoleCF * CFrame.new(0, 4.15, 0), Vector3.new(4.55, 1.10, 2.10),
+		charcoal, Enum.Material.Metal)
+	vcr.Reflectance = .05
+	vcr:SetAttribute("Level3_VCRDeck", true)
+	if TEXTURES.DiscPlayerPanel ~= "" then
+		for _, face in ipairs({Enum.NormalId.Top, Enum.NormalId.Left, Enum.NormalId.Right}) do
+			local skin = texture(vcr, TEXTURES.DiscPlayerPanel, face, 2.4, 2.4, .34)
+			skin.Name = "VCR Generated Body Texture"
+		end
+	end
+
+	local controlPanel = part(model, "Disc Player Control Panel",
+		consoleCF * CFrame.new(0, 4.15, 1.11), Vector3.new(4.28, .80, .12),
+		panel, Enum.Material.Metal)
+	controlPanel.CanCollide = false
+	controlPanel.CanTouch = false
+	controlPanel.CanQuery = true
+	controlPanel:SetAttribute("Level3_DiscPlayerControlPanel", true)
+
+	local topShelf = part(model, "AV Cart Television Shelf",
+		consoleCF * CFrame.new(0, 5.48, 0), Vector3.new(5.60, .28, 3.02),
+		edge, Enum.Material.Metal)
+	topShelf:SetAttribute("Level3_DiscPlayerStructure", true)
+
+	local crtBody = part(model, "ZYNTRA CRT Television",
+		consoleCF * CFrame.new(0, 7.25, -.08), Vector3.new(5.15, 3.26, 2.65),
+		charcoal, Enum.Material.SmoothPlastic)
+	crtBody.Reflectance = .04
+	crtBody:SetAttribute("Level3_CRTTelevision", true)
+	if TEXTURES.DiscPlayerPanel ~= "" then
+		for _, face in ipairs({Enum.NormalId.Top, Enum.NormalId.Left, Enum.NormalId.Right}) do
+			local skin = texture(crtBody, TEXTURES.DiscPlayerPanel, face, 3.0, 3.0, .40)
+			skin.Name = "CRT Generated Body Texture"
+		end
+	end
+
+	local crtBezel = part(model, "CRT Thick Front Bezel",
+		consoleCF * CFrame.new(-.28, 7.35, 1.30), Vector3.new(4.35, 2.72, .22),
+		Color3.fromRGB(12, 15, 16), Enum.Material.SmoothPlastic)
+	decorative(crtBezel)
+	local screenGlass = part(model, "CRT Phosphor Screen",
+		consoleCF * CFrame.new(-.43, 7.40, 1.44), Vector3.new(3.58, 2.25, .12),
+		Color3.fromRGB(5, 11, 10), Enum.Material.Glass, .04)
+	screenGlass.Reflectance = .08
+	decorative(screenGlass)
+	screenGlass:SetAttribute("Level3_CRTScreen", true)
+	screenGlass:SetAttribute("Level3_CRTScreenTexture", TEXTURES.CRTScreen)
+
+	local screenGui = Instance.new("SurfaceGui")
+	screenGui.Name = "CRT Status Screen Surface"
+	screenGui.Face = Enum.NormalId.Back
+	screenGui.SizingMode = Enum.SurfaceGuiSizingMode.FixedSize
+	screenGui.CanvasSize = Vector2.new(800, 600)
+	screenGui.LightInfluence = .12
+	screenGui.AlwaysOnTop = false
+	screenGui.Parent = screenGlass
+
+	local staticImage = Instance.new("ImageLabel")
+	staticImage.Name = "CRT Generated Static"
+	staticImage.BackgroundColor3 = Color3.fromRGB(3, 7, 6)
+	staticImage.BorderSizePixel = 0
+	staticImage.Size = UDim2.fromScale(1, 1)
+	staticImage.Image = TEXTURES.CRTScreen
+	staticImage.ImageColor3 = Color3.fromRGB(181, 201, 187)
+	staticImage.ScaleType = Enum.ScaleType.Stretch
+	staticImage.ZIndex = 1
+	staticImage.Parent = screenGui
+
+	local statusLabel = Instance.new("TextLabel")
+	statusLabel.Name = "Disc Player Status Label"
+	statusLabel.BackgroundColor3 = Color3.fromRGB(1, 8, 9)
+	statusLabel.BackgroundTransparency = .20
+	statusLabel.BorderSizePixel = 0
+	statusLabel.Position = UDim2.fromScale(.04, .05)
+	statusLabel.Size = UDim2.fromScale(.92, .20)
+	statusLabel.Font = Enum.Font.Code
+	statusLabel.Text = string.format("ZYNTRA TV/VCR RELAY  %d/%d", 0, Configuration.ModuleGoal)
+	statusLabel.TextColor3 = Color3.fromRGB(102, 241, 216)
+	statusLabel.TextStrokeColor3 = Color3.fromRGB(2, 7, 8)
+	statusLabel.TextStrokeTransparency = .40
+	statusLabel.TextScaled = true
+	statusLabel.ZIndex = 3
+	statusLabel.Parent = screenGui
+
+	local instructionLabel = Instance.new("TextLabel")
+	instructionLabel.Name = "Disc Player Instruction Label"
+	instructionLabel.BackgroundColor3 = Color3.fromRGB(1, 6, 7)
+	instructionLabel.BackgroundTransparency = .28
+	instructionLabel.BorderSizePixel = 0
+	instructionLabel.Position = UDim2.fromScale(.07, .75)
+	instructionLabel.Size = UDim2.fromScale(.86, .17)
+	instructionLabel.Font = Enum.Font.Code
+	instructionLabel.Text = "INSERT CARRIED CDS INTO VCR"
+	instructionLabel.TextColor3 = Color3.fromRGB(219, 211, 177)
+	instructionLabel.TextStrokeColor3 = Color3.fromRGB(2, 6, 6)
+	instructionLabel.TextStrokeTransparency = .42
+	instructionLabel.TextScaled = true
+	instructionLabel.ZIndex = 3
+	instructionLabel.Parent = screenGui
+
+	local controlColumn = part(model, "CRT Side Control Column",
+		consoleCF * CFrame.new(1.93, 7.32, 1.43), Vector3.new(.35, 2.30, .13),
+		Color3.fromRGB(18, 21, 21), Enum.Material.SmoothPlastic)
+	decorative(controlColumn)
+	for buttonIndex = 1, 3 do
+		local button = part(model, "CRT Channel Button",
+			consoleCF * CFrame.new(1.93, 7.86 - buttonIndex * .36, 1.51),
+			Vector3.new(.15, .15, .08), Color3.fromRGB(68, 72, 69), Enum.Material.SmoothPlastic)
+		button.Shape = Enum.PartType.Ball
+		decorative(button)
+	end
+	local powerLED = part(model, "CRT Power LED",
+		consoleCF * CFrame.new(1.93, 6.47, 1.51), Vector3.new(.12, .12, .08),
+		Color3.fromRGB(67, 176, 139), Enum.Material.Neon)
+	powerLED.Shape = Enum.PartType.Ball
+	decorative(powerLED)
+
+	local slots = {}
+	local slotSpacing = .78
+	for slotIndex = 1, Configuration.ModuleGoal do
+		local x = (slotIndex - (Configuration.ModuleGoal + 1) * .5) * slotSpacing
+		local receiver = part(model, string.format("Disc Player Slot %02d", slotIndex),
+			consoleCF * CFrame.new(x, 4.28, 1.20), Vector3.new(.62, .16, .10),
+			Color3.fromRGB(1, 3, 4), Enum.Material.Metal)
+		decorative(receiver)
+		receiver:SetAttribute("Level3_DiscPlayerSlot", true)
+		receiver:SetAttribute("Level3_DiscSlotIndex", slotIndex)
+		receiver:SetAttribute("Level3_DiscSlotFilled", false)
+
+		local discCF = consoleCF * CFrame.new(x, 4.28, 1.27) * CFrame.Angles(0, math.pi * .5, 0)
+		local insertedDisc = part(model, string.format("Inserted CD Slot Visual %02d", slotIndex),
+			discCF, Vector3.new(.10, .56, .56),
+			Color3.fromRGB(176, 201, 214), Enum.Material.Metal, 1)
+		insertedDisc.Shape = Enum.PartType.Cylinder
+		insertedDisc.Reflectance = .32
+		decorative(insertedDisc)
+		insertedDisc:SetAttribute("Level3_DiscPlayerInsertedVisual", true)
+		insertedDisc:SetAttribute("Level3_DiscSlotIndex", slotIndex)
+
+		local insertedHub = part(model, string.format("Inserted CD Slot Hub %02d", slotIndex),
+			discCF, Vector3.new(.12, .15, .15),
+			Color3.fromRGB(24, 27, 28), Enum.Material.SmoothPlastic, 1)
+		insertedHub.Shape = Enum.PartType.Cylinder
+		decorative(insertedHub)
+		insertedHub:SetAttribute("Level3_DiscPlayerInsertedVisual", true)
+		insertedHub:SetAttribute("Level3_DiscSlotIndex", slotIndex)
+
+		local indicator = part(model, string.format("Disc Slot Indicator %02d", slotIndex),
+			consoleCF * CFrame.new(x, 3.86, 1.24), Vector3.new(.22, .22, .12),
+			offBlue, Enum.Material.SmoothPlastic)
+		indicator.Shape = Enum.PartType.Ball
+		decorative(indicator)
+		indicator:SetAttribute("Level3_DiscSlotIndicator", true)
+		indicator:SetAttribute("Level3_DiscSlotIndex", slotIndex)
+		indicator:SetAttribute("Level3_DiscSlotFilled", false)
+
+		local indicatorLight = Instance.new("PointLight")
+		indicatorLight.Name = string.format("Disc Slot Status Light %02d", slotIndex)
+		indicatorLight.Color = relayBlue
+		indicatorLight.Brightness = .78
+		indicatorLight.Range = 4.5
+		indicatorLight.Shadows = false
+		indicatorLight.Enabled = false
+		indicatorLight:SetAttribute("Level3_DiscSlotIndicatorLight", true)
+		indicatorLight:SetAttribute("Level3_DiscSlotIndex", slotIndex)
+		indicatorLight.Parent = indicator
+
+		table.insert(slots, {
+			Index = slotIndex,
+			Receiver = receiver,
+			Disc = insertedDisc,
+			Hub = insertedHub,
+			Indicator = indicator,
+			Light = indicatorLight,
+		})
+	end
+
+	local vcrDisplay = part(model, "VCR Clock Display",
+		consoleCF * CFrame.new(-1.58, 3.86, 1.24), Vector3.new(.58, .17, .08),
+		Color3.fromRGB(11, 44, 43), Enum.Material.Glass)
+	decorative(vcrDisplay)
+	local ejectButton = part(model, "VCR Eject Button",
+		consoleCF * CFrame.new(1.73, 3.88, 1.24), Vector3.new(.25, .18, .09),
+		Color3.fromRGB(75, 77, 73), Enum.Material.SmoothPlastic)
+	decorative(ejectButton)
+
+	local prompt = Instance.new("ProximityPrompt")
+	prompt.Name = "InsertCDPrompt"
+	prompt.ActionText = "INSERT CARRIED CD"
+	prompt.ObjectText = string.format("ZYNTRA TV/VCR RELAY  %d/%d", 0, Configuration.ModuleGoal)
+	prompt.HoldDuration = .55
+	prompt.MaxActivationDistance = 9
+	prompt.RequiresLineOfSight = true
+	prompt.KeyboardKeyCode = Enum.KeyCode.E
+	prompt:SetAttribute("Level3_DiscInsertPrompt", true)
+	prompt.Parent = controlPanel
+
+	-- A loose cable makes the mobile cart feel jury-rigged rather than built into the wall.
+	for segmentIndex = 1, 3 do
+		local cable = part(model, "AV Cart Trailing Power Cable",
+			consoleCF * CFrame.new(2.55 + segmentIndex * .16, 1.00 + segmentIndex * .45, -.72 - segmentIndex * .18)
+				* CFrame.Angles(0, 0, math.rad(-18)),
+			Vector3.new(.58, .10, .10), Color3.fromRGB(8, 9, 9), Enum.Material.Rubber)
+		cable.Shape = Enum.PartType.Cylinder
+		decorative(cable)
+	end
+
+	model.PrimaryPart = cabinet
+	return {
+		Model = model,
+		Prompt = prompt,
+		Slots = slots,
+		StatusLabel = statusLabel,
+		InstructionLabel = instructionLabel,
+		Position = controlPanel.Position,
+		ControlPanel = controlPanel,
+		TextureSlot = "DiscPlayerPanelTexture",
+	}
+end
+
 local function makeHiddenExitPortal(parent: Instance, corridor: {[string]: any}): {[string]: any}
 	local model = Instance.new("Model")
 	model.Name = "Level 3 Hidden Exit Portal"
@@ -864,8 +1478,9 @@ local function makeHiddenExitPortal(parent: Instance, corridor: {[string]: any})
 	light.Shadows = false
 	light.Enabled = false
 	light.Parent = frameParts[1]
+	local discPlayer = makeHiddenExitDiscPlayer(model, frameCF)
 	model:SetAttribute("Level3_ExitUnlocked", false)
-	return {Model=model, Wall=wall, FrameParts=frameParts, Light=light, Position=center}
+	return {Model=model, Wall=wall, FrameParts=frameParts, Light=light, Position=center, DiscPlayer=discPlayer}
 end
 
 local function sideBetween(a: {[string]: any}, b: {[string]: any}): string
@@ -906,7 +1521,8 @@ local function makeRoom(parent: Instance, room: {[string]: any}, openings: {[str
 		Vector3.new(room.W, Configuration.FloorThickness, room.D), color, material)
 	if textureId then texture(floorPart, textureId, Enum.NormalId.Top, studs, studs) end
 	part(model, "Level 3 Room Ceiling", CFrame.new(p + Vector3.new(0, roomHeight(room), 0)),
-		Vector3.new(room.W, Configuration.CeilingThickness, room.D), C.AgedWhite, Enum.Material.Plaster)
+		Vector3.new(room.W, Configuration.CeilingThickness, room.D),
+		C.AgedWhite, Enum.Material.Plaster)
 	for _, side in ipairs({"North", "South", "West", "East"}) do
 		makeWall(model, room, side, openings[side] == true)
 	end
@@ -1018,7 +1634,31 @@ local function makeCorridor(parent: Instance, link: {[string]: any}, index: numb
 		end
 	end
 	makeCorridorWallDecor(model, startPoint, endPoint, horizontal, index)
-	local fixtureCount = 1
+	local hiddenExit = link.Door == "HiddenExit"
+	local speakerCount = if hiddenExit then Configuration.Layout.ExitCorridorSpeakerCount else 0
+	if hiddenExit then
+		model:SetAttribute("Level3_ExitCorridor", true)
+		model:SetAttribute("Level3_ExitCorridorLength", length)
+		model:SetAttribute("Level3_ExitCorridorSpeakerCount", speakerCount)
+		-- Continuous waist-height service rails visually pull the eye toward the
+		-- distant freight door and make the doubled final passage feel intentionally authored.
+		for _, side in ipairs({-1, 1}) do
+			local railCF = if horizontal
+				then CFrame.new(center + Vector3.new(0, 2.25, side * (tunnelWidth * .5 - .08)))
+				else CFrame.new(center + Vector3.new(side * (tunnelWidth * .5 - .08), 2.25, 0))
+			local railSize = if horizontal then Vector3.new(wallLength, .14, .10)
+				else Vector3.new(.10, .14, wallLength)
+			local rail = part(model, "Level 3 Exit Corridor Service Rail", railCF, railSize,
+				Color3.fromRGB(43, 49, 48), Enum.Material.Metal)
+			decorative(rail)
+		end
+		for speakerIndex = 1, speakerCount do
+			local speakerPoint = startPoint:Lerp(endPoint, speakerIndex / (speakerCount + 1))
+			local side = if speakerIndex % 2 == 0 then 1 else -1
+			makeExitCorridorSpeaker(model, speakerPoint, horizontal, side, speakerIndex)
+		end
+	end
+	local fixtureCount = if hiddenExit then Configuration.Layout.ExitCorridorFixtureCount else 1
 	for fixtureIndex = 1, fixtureCount do
 		local position = startPoint:Lerp(endPoint, fixtureIndex / (fixtureCount + 1))
 		makeFixture(model, position + Vector3.new(0, tunnelHeight - .85, 0),
@@ -1103,50 +1743,210 @@ end
 local function makeArrivalElevator(parent: Instance, room: {[string]: any}): (Model, BasePart, BasePart)
 	local p = worldPosition(room)
 	local visual = Instance.new("Model")
-	visual.Name = "Level 2 Exit Tube Remnant"
+	visual.Name = "Level 2 Exit Slide Continuation"
 	visual:SetAttribute("Level3_Level2ExitTube", true)
+	visual:SetAttribute("Level3_ProgressionLandmark", true)
 	visual.Parent = parent
-	local tubeLength, radius, segments = 34, 6.6, 20
-	local mouthX = p.X - room.W * .5
-	local tubeCenterX = mouthX - tubeLength * .5
-	local centerY = p.Y + radius
-	for segment = 1, segments do
-		local angle = (segment - 1) / segments * math.pi * 2
-		local center = Vector3.new(tubeCenterX, centerY + math.sin(angle) * radius, p.Z + math.cos(angle) * radius)
-		local panel = part(visual, "Level 2 Exit Tube Shell",
-			CFrame.new(center) * CFrame.Angles(angle + math.pi * .5, 0, 0),
-			Vector3.new(tubeLength + .08, .48, (math.pi * 2 * radius / segments) + .20),
-			Color3.fromRGB(210, 204, 173), Enum.Material.CeramicTiles)
-		panel.CanCollide = segment >= 4 and segment <= 18
+
+	-- Rebuild the Level 2 hand-off at its real gateway scale. The bore begins
+	-- level with the landing-room floor, then curves upward as it recedes so the
+	-- player reads a physical slide rather than a flat portal or a black disc.
+	local tubeLength, rise, radius = 68, 26, 8
+	local pathSections, shellSegments = 18, 40
+	local wallX = p.X - room.W * .5
+	local mouthX = wallX + Configuration.WallThickness * .5 + .12
+	local centerY = p.Y + radius + .05
+	visual:SetAttribute("Level3_SlideMouthPosition", Vector3.new(mouthX, centerY, p.Z))
+	visual:SetAttribute("Level3_DirectMallArrival", true)
+	local shellColor = Color3.fromRGB(218, 226, 211)
+	local shellShadow = Color3.fromRGB(193, 207, 197)
+	local slipperyPhysics = PhysicalProperties.new(.7, .02, 0, 100, 1)
+	local pathPoints: {Vector3} = {}
+	for section = 0, pathSections do
+		local alpha = section / pathSections
+		table.insert(pathPoints, Vector3.new(
+			mouthX - tubeLength * alpha,
+			centerY + rise * alpha * alpha,
+			p.Z
+		))
 	end
-	local tubeFloor = part(visual, "Level 2 Exit Tube Walkway", CFrame.new(tubeCenterX, p.Y - .44, p.Z),
-		Vector3.new(tubeLength + .2, .88, 9.8), Color3.fromRGB(196, 192, 166), Enum.Material.CeramicTiles)
-	tubeFloor.CanCollide = true
-	local field = part(visual, "One Way Pool Exit Field", CFrame.new(mouthX - tubeLength + .35, centerY, p.Z),
-		Vector3.new(.22, 11.5, 11.5), Color3.fromRGB(9, 13, 17), Enum.Material.SmoothPlastic, .08)
+	for section = 1, pathSections do
+		local a, b = pathPoints[section], pathPoints[section + 1]
+		local segmentAxis = (b - a).Unit
+		local segmentCenter = (a + b) * .5
+		local segmentLength = (b - a).Magnitude
+		local radialZero = Vector3.zAxis
+		for shellIndex = 0, shellSegments - 1 do
+			local angle = (shellIndex + .5) / shellSegments * math.pi * 2
+			local radial = CFrame.fromAxisAngle(segmentAxis, angle)
+				:VectorToWorldSpace(radialZero).Unit
+			local tangent = segmentAxis:Cross(radial).Unit
+			local panel = part(visual, "Level 2 Exit Slide Fiberglass Shell",
+				CFrame.fromMatrix(segmentCenter + radial * radius, segmentAxis, radial, tangent),
+				Vector3.new(segmentLength + .14, .30,
+					2 * radius * math.tan(math.pi / shellSegments) + .06),
+				shellColor, Enum.Material.SmoothPlastic)
+			panel.CanCollide = true
+			panel.CanTouch = false
+			panel.CastShadow = false
+			panel.Reflectance = .025
+			panel.CustomPhysicalProperties = slipperyPhysics
+			panel:SetAttribute("Level3_ProgressionSlide", true)
+		end
+
+		local downSeed = -Vector3.yAxis
+		local radialDown = (downSeed - segmentAxis * downSeed:Dot(segmentAxis)).Unit
+		local floorTangent = segmentAxis:Cross(radialDown).Unit
+		local runout = part(visual, "Level 2 Exit Slide Runout",
+			CFrame.fromMatrix(segmentCenter + radialDown * (radius + .30),
+				segmentAxis, radialDown, floorTangent),
+			Vector3.new(segmentLength + .16, .60, 11.8),
+			shellShadow, Enum.Material.SmoothPlastic)
+		runout.CanCollide = true
+		runout.CastShadow = false
+		runout.Reflectance = .02
+		runout.CustomPhysicalProperties = slipperyPhysics
+		runout:SetAttribute("Level3_ProgressionSlide", true)
+		-- Keep the mouth visually clean; the wear rails begin one section inside.
+		if section > 1 then
+			for _, zOffset in ipairs({-3.7, 3.7}) do
+				local guide = part(visual, "Level 2 Exit Slide Wear Guide",
+					CFrame.fromMatrix(segmentCenter + radialDown * (radius - .10)
+						+ floorTangent * zOffset, segmentAxis, radialDown, floorTangent),
+					Vector3.new(segmentLength + .10, .10, .30),
+					Color3.fromRGB(71, 88, 85), Enum.Material.SmoothPlastic, .05)
+				decorative(guide)
+			end
+		end
+	end
+	visual:SetAttribute("Level3_SlideRise", rise)
+	visual:SetAttribute("Level3_SlideSlipback", true)
+	local rearPoint = pathPoints[#pathPoints]
+	local rearAxis = (rearPoint - pathPoints[#pathPoints - 1]).Unit
+
+	-- Fill only the four square aperture corners with wall-aligned slices.
+	-- The ordinary orange plaster finish continues around the slide mouth; the
+	-- tube's leading shell edge hides the sub-stud stepped inner boundary.
+	local sealCenter = Vector3.new(wallX, centerY, p.Z)
+	local sealHalfOpening = radius + .12
+	local sealOuterRadius = radius + .15
+	local sealRows = 96
+	local sealRowHeight = sealHalfOpening * 2 / sealRows
+	local sealOuterZ = sealHalfOpening + .08
+	local sealDepth = Configuration.WallThickness - .02
+	for rowIndex = 0, sealRows - 1 do
+		local y0 = -sealHalfOpening + rowIndex * sealRowHeight
+		local y1 = y0 + sealRowHeight
+		local yOffset = (y0 + y1) * .5
+		local farY = math.max(math.abs(y0), math.abs(y1))
+		local circleHalfWidth = math.sqrt(math.max(0,
+			sealOuterRadius * sealOuterRadius - farY * farY))
+		local innerZ = math.max(0, circleHalfWidth - .01)
+		local stripWidth = sealOuterZ - innerZ
+		local zOffset = (innerZ + sealOuterZ) * .5
+		for _, side in ipairs({-1, 1}) do
+			local sideName = side < 0 and "Left" or "Right"
+			local seal = part(visual,
+				"Level 3 West Wall Circular Aperture Fill " .. sideName,
+				CFrame.new(sealCenter + Vector3.new(0, yOffset, side * zOffset)),
+				Vector3.new(sealDepth, sealRowHeight + .03, stripWidth),
+				wallColor(room), Enum.Material.Plaster)
+			decorative(seal)
+			seal.CastShadow = false
+			seal:SetAttribute("Level3_TransitionWallSeal", true)
+		end
+	end
+
+	-- The physical safety stop sits far beyond the upward bend. A muted pale
+	-- shadow cap prevents outdoor sky from leaking through without reading as a portal.
+	local rearUp = (Vector3.yAxis - rearAxis * Vector3.yAxis:Dot(rearAxis)).Unit
+	local rearTangent = rearAxis:Cross(rearUp).Unit
+	local field = part(visual, "One Way Pool Exit Field",
+		CFrame.fromMatrix(rearPoint, rearAxis, rearUp, rearTangent),
+		Vector3.new(.42, 14.8, 14.8),
+		Color3.fromRGB(142, 153, 147), Enum.Material.SmoothPlastic, .02)
 	field.CanCollide = true
-	local warning = Instance.new("PointLight")
-	warning.Name = "Spent Transfer Warning"
-	warning.Color = Color3.fromRGB(180, 31, 24)
-	warning.Brightness = .65
-	warning.Range = 11
-	warning.Shadows = true
-	warning.Parent = field
+	field.CastShadow = true
+	field:SetAttribute("Level3_ReturnPathSealed", true)
+
+	local mouthLightAnchor = part(visual, "Poolrooms Slide Mouth Light Anchor",
+		CFrame.new(mouthX + 1.2, centerY + 1.0, p.Z),
+		Vector3.new(.2, .2, .2), Color3.new(), Enum.Material.SmoothPlastic, 1)
+	decorative(mouthLightAnchor)
+	local mouthGlow = Instance.new("PointLight")
+	mouthGlow.Name = "Poolrooms Slide Mouth Fill"
+	mouthGlow.Color = Color3.fromRGB(226, 235, 214)
+	mouthGlow.Brightness = .82
+	mouthGlow.Range = 30
+	mouthGlow.Shadows = false
+	mouthGlow.Parent = mouthLightAnchor
+
+	local depthLightAnchor = part(visual, "Poolrooms Slide Depth Light Anchor",
+		CFrame.new(pathPoints[math.floor(#pathPoints * .56)]),
+		Vector3.new(.2, .2, .2), Color3.new(), Enum.Material.SmoothPlastic, 1)
+	decorative(depthLightAnchor)
+	local depthGlow = Instance.new("PointLight")
+	depthGlow.Name = "Poolrooms Slide Indirect Depth Fill"
+	depthGlow.Color = Color3.fromRGB(194, 210, 201)
+	depthGlow.Brightness = .48
+	depthGlow.Range = 38
+	depthGlow.Shadows = false
+	depthGlow.Parent = depthLightAnchor
+
+	-- Low-friction parts communicate the material; this lightweight server loop
+	-- makes the one-way behavior deterministic for every avatar controller.
+	local slipAccumulator = 0
+	local slipConnection: RBXScriptConnection?
+	slipConnection = RunService.Heartbeat:Connect(function(deltaTime)
+		if not visual:IsDescendantOf(workspace) then
+			if slipConnection then slipConnection:Disconnect() end
+			return
+		end
+		slipAccumulator += deltaTime
+		if slipAccumulator < .08 then return end
+		slipAccumulator = 0
+		for _, player in ipairs(Players:GetPlayers()) do
+			local character = player.Character
+			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+			local root = character and character:FindFirstChild("HumanoidRootPart")
+			if humanoid and humanoid.Health > 0 and root and root:IsA("BasePart") then
+				local alpha = (mouthX - root.Position.X) / tubeLength
+				if alpha > .025 and alpha < .96
+					and math.abs(root.Position.Z - p.Z) < radius - .8 then
+					local pathY = centerY + rise * alpha * alpha
+					if math.abs(root.Position.Y - pathY) < radius + 2 then
+						local velocity = root.AssemblyLinearVelocity
+						root.AssemblyLinearVelocity = Vector3.new(
+							math.max(velocity.X, 20),
+							math.min(velocity.Y, -6),
+							velocity.Z * .55
+						)
+					end
+				end
+			end
+		end
+	end)
+
 	-- Invisible compatibility elevator retained for GameManager choreography.
 	local model = Instance.new("Model")
 	model.Name = "Elevator"
 	model.Parent = workspace
-	local compatibilityCF = CFrame.new(mouthX - tubeLength + .6, p.Y + 5, p.Z)
+	local compatibilityCF = CFrame.new(rearPoint)
 	local doorL = part(model, "DoorL", compatibilityCF, Vector3.new(.2, .2, .2), Color3.new(), Enum.Material.SmoothPlastic, 1)
 	local doorR = part(model, "DoorR", compatibilityCF, Vector3.new(.2, .2, .2), Color3.new(), Enum.Material.SmoothPlastic, 1)
 	decorative(doorL)
 	decorative(doorR)
 	model.PrimaryPart = doorL
-	local spawnCF = CFrame.lookAt(p + Vector3.new(-room.W * .5 + 7.5, .25, 0), p + Vector3.new(2, .25, 0))
+
+	-- Twenty-six studs of reveal distance frame the clean tube mouth on narrow
+	-- mobile screens while the forward vector still leads naturally into Level 3.
+	local spawnPosition = p + Vector3.new(-room.W * .5 + 26, .25, 0)
+	local spawnCF = CFrame.lookAt(spawnPosition, p + Vector3.new(2, .25, 0))
 	local spawn = part(parent, "ElevatorSpawn", spawnCF, Vector3.new(10, .5, 10),
 		Color3.new(), Enum.Material.SmoothPlastic, 1)
 	spawn.CanCollide = true
 	spawn:SetAttribute("Level3_CompatibilityMarker", true)
+	spawn:SetAttribute("Level3_FacesAwayFromPoolSlide", true)
 	spawn.Parent = workspace
 	local mazeStart = part(parent, "MazeStart", spawn.CFrame, Vector3.new(2, .3, 2),
 		Color3.new(), Enum.Material.SmoothPlastic, 1)
@@ -1333,6 +2133,7 @@ function Builder.Build(layout: {[string]: any}, generation: number): {[string]: 
 	local corridors = {}
 	local blackoutScreamOpenings = {}
 	local exitPortal
+	local finalHall
 	for index, link in ipairs(layout.Links) do
 		local corridor = makeCorridor(corridorsFolder, link, index)
 		table.insert(corridors, corridor)
@@ -1341,6 +2142,35 @@ function Builder.Build(layout: {[string]: any}, generation: number): {[string]: 
 		end
 		if link.Door == "HiddenExit" then
 			exitPortal = makeHiddenExitPortal(doorsFolder, corridor)
+			local halfwayProgress = Configuration.Layout.FinalHallHalfwayProgress or .50
+			local spawnProgress = Configuration.MallManager.FinalHallSpawnProgress or .40
+			local halfwayMarker = part(corridor.Model, "Level 3 Final Hall Halfway",
+				CFrame.new(corridor.StartPoint:Lerp(corridor.EndPoint, halfwayProgress) + Vector3.new(0, .05, 0)),
+				Vector3.new(2, .1, 2), Color3.new(0, 0, 0), Enum.Material.SmoothPlastic, 1)
+			decorative(halfwayMarker)
+			halfwayMarker:SetAttribute("Level3_FinalHallHalfway", true)
+			halfwayMarker:SetAttribute("Level3_FinalHallProgress", halfwayProgress)
+			local spawnMarker = part(corridor.Model, "Level 3 Mall Manager Finale Spawn",
+				CFrame.new(corridor.StartPoint:Lerp(corridor.EndPoint, spawnProgress) + Vector3.new(0, .05, 0)),
+				Vector3.new(2, .1, 2), Color3.new(0, 0, 0), Enum.Material.SmoothPlastic, 1)
+			decorative(spawnMarker)
+			spawnMarker:SetAttribute("Level3_MallManagerFinaleSpawn", true)
+			spawnMarker:SetAttribute("Level3_FinalHallProgress", spawnProgress)
+			finalHall = {
+				Corridor = corridor,
+				Model = corridor.Model,
+				StartPoint = corridor.StartPoint,
+				EndPoint = corridor.EndPoint,
+				Forward = corridor.Forward,
+				Length = corridor.Length,
+				Width = corridor.Width,
+				Height = corridor.Height,
+				FloorY = corridor.StartPoint.Y,
+				HalfwayProgress = halfwayProgress,
+				SpawnProgress = spawnProgress,
+				HalfwayMarker = halfwayMarker,
+				SpawnMarker = spawnMarker,
+			}
 		end
 		if index % Configuration.Layout.BuildYieldEveryCorridors == 0 then task.wait() end
 	end
@@ -1365,6 +2195,10 @@ function Builder.Build(layout: {[string]: any}, generation: number): {[string]: 
 	makeAmbientEmitter(ambienceFolder, "Level 3 HVAC Bed", worldPosition(roomById(roles.AmbientHVACRoomId or spawnRoomId), 8),
 		Configuration.Audio.HVAC, .10, 150)
 	assert(exitPortal, "Level 3 build requires exactly one hidden exit portal")
+	assert(finalHall, "Level 3 build requires exactly one final HiddenExit hall")
+	world:SetAttribute("Level3_FinalHallLength", finalHall.Length)
+	world:SetAttribute("Level3_FinalHallHalfwayProgress", finalHall.HalfwayProgress)
+	world:SetAttribute("Level3_FinalHallSpawnProgress", finalHall.SpawnProgress)
 	world:SetAttribute("Level3_RoomCount", #layout.Rooms)
 	world:SetAttribute("Level3_CorridorCount", #layout.Links)
 	world:SetAttribute("Level3_DistrictCount", #(layout.Districts or {}))
@@ -1414,10 +2248,12 @@ function Builder.Build(layout: {[string]: any}, generation: number): {[string]: 
 		MallManagerRuntime=mallManagerRuntime,
 		HideTables=hideTables,
 		ExitPortal=exitPortal,
+		DiscPlayer=exitPortal and exitPortal.DiscPlayer or nil,
 		EscapePrompt=escapePrompt,
 		ExitSafeSpawn=safeSpawn,
 		ExitPosition=exitPosition,
 		FinalExit=finalExit,
+		FinalHall=finalHall,
 		Elevator=elevator,
 		ElevatorSpawn=elevatorSpawn,
 		MazeStart=mazeStart,

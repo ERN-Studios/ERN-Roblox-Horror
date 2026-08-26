@@ -29,6 +29,7 @@ end
 
 local function roundAllowsHiding(session: any): boolean
 	return liveSession(session)
+		and session.FurnitureSuspended ~= true
 		and workspace:GetAttribute("SelectedLevel") == 3
 		and workspace:GetAttribute("RoundActive") == true
 end
@@ -295,6 +296,15 @@ function Controller.IsHidden(player: Player, generation: number?): boolean
 		and player:GetAttribute("Level3_Hiding") == true
 end
 
+function Controller.SetFurnitureSuspended(active: boolean): boolean
+	local session = activeSession
+	if not session or not liveSession(session) then return false end
+	session.FurnitureSuspended = active == true
+	if session.FurnitureSuspended then releaseAll(session, true) end
+	refreshPrompts(session)
+	return true
+end
+
 function Controller.Stop()
 	local session = activeSession
 	if not session then
@@ -337,6 +347,7 @@ function Controller.Start(manifest: any, generation: number)
 
 	local session: any = {
 		Active=true, Generation=generation, Manifest=manifest, World=manifest.World,
+		FurnitureSuspended=false,
 		Anchors={}, AnchorSet={}, Occupants={}, HiddenPlayers={}, LastAction={}, Connections={},
 	}
 	activeSession = session

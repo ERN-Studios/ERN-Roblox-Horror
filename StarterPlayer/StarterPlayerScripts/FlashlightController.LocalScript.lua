@@ -371,8 +371,13 @@ end
 local BAT_FULL  = Color3.fromRGB(245, 245, 245)
 local BAT_EMPTY = Color3.fromRGB(235, 60, 50)
 
+local function flashlightsSuppressed()
+ return workspace:GetAttribute("SelectedLevel") == 3
+  and workspace:GetAttribute("Level3FlashlightsSuppressed") == true
+end
+
 local function setLights(state)
- if state and player:GetAttribute("Level3_Hiding") == true then state = false end
+ if state and (player:GetAttribute("Level3_Hiding") == true or flashlightsSuppressed()) then state = false end
  on = state
 	if coreLight then coreLight.Enabled = state end
 	if spillLight then spillLight.Enabled = state end
@@ -380,6 +385,10 @@ local function setLights(state)
  for _, ray in ipairs(lightRays) do ray.Visible = state end
  remote:FireServer(state)
 end
+
+workspace:GetAttributeChangedSignal("Level3FlashlightsSuppressed"):Connect(function()
+ if flashlightsSuppressed() and on then setLights(false) end
+end)
 
 -- a low-battery WARNING flicker: briefly drop the beam `times` times then
 -- restore it. Purely visual — doesn't change the real on/off state, so it
@@ -406,6 +415,7 @@ local function alive()
 end
 
 local function toggle()
+	if flashlightsSuppressed() then return end
 	if player:GetAttribute("Level3_Hiding") == true then return end
 	if player:GetAttribute("InRound") ~= true then return end
 	if not alive() then return end -- dead / spectating: no flashlight of your own

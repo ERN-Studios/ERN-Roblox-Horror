@@ -13,7 +13,10 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
+local ContentProvider = game:GetService("ContentProvider")
+local SoundService = game:GetService("SoundService")
 local Terrain = workspace.Terrain
 
 local ObjectiveController = {}
@@ -24,13 +27,41 @@ local OPEN_COLOR = Color3.fromRGB(180, 218, 196)
 
 -- Pump audio is deliberately staged around the authored clip lengths.
 local DRAIN_RUSH_DELAY = 10
-local DRAIN_RUSH_DURATION = 12
+local DEFAULT_PUMP_START_DURATION = 11.572244897959184
 
 local function state()
 	return ReplicatedStorage:FindFirstChild("Level 2 State")
 end
 
+-- Resolve the live library slot once per generated round. This keeps the
+-- pressure gauge and final pressure-door release synchronized even if the
+-- authored pump recording is replaced later; the measured current clip length
+-- remains the fallback if an asset cannot be loaded on the server.
+local function pumpStartDuration()
+	local library = ReplicatedStorage:FindFirstChild("Level 2 Sound Library")
+	local slot = library and library:FindFirstChild("Level 2 Pump Start")
+	local raw = slot and slot:IsA("StringValue") and tostring(slot.Value) or ""
+	raw = raw:gsub("%s", "")
+	if raw:match("^%d+$") then raw = "rbxassetid://" .. raw end
+	if not raw:match("^rbxassetid://%d+$") then return DEFAULT_PUMP_START_DURATION end
+
+	local probe = Instance.new("Sound")
+	probe.Name = "Level 2 Pump Duration Probe"
+	probe.SoundId = raw
+	probe.Volume = 0
+	probe.Parent = SoundService
+	local loaded = pcall(function()
+		ContentProvider:PreloadAsync({probe})
+	end)
+	local duration = loaded and probe.IsLoaded and probe.TimeLength > .05
+		and probe.TimeLength or DEFAULT_PUMP_START_DURATION
+	probe:Destroy()
+	return math.clamp(duration, 1, 30)
+end
+
 local function disconnectAll(session)
+	for _, tween in ipairs(session.GaugeTweens or {}) do tween:Cancel() end
+	session.GaugeTweens = {}
 	for _, connection in ipairs(session.Connections or {}) do
 		connection:Disconnect()
 	end
@@ -39,10 +70,10 @@ end
 
 -- One-shot audio cue for the Level 2 Sound Controller. Cue names match the
 -- StringValue slots in ReplicatedStorage["Level 2 Sound Library"].
-local function fireSound(cue, player)
+local function fireSound(cue, player, context)
 	local event = ReplicatedStorage:FindFirstChild("Level 2 Sound Event")
 	if not event then return end
-	if player then event:FireClient(player, cue) else event:FireAllClients(cue) end
+	if player then event:FireClient(player, cue, context) else event:FireAllClients(cue, context) end
 end
 
 local function fireStatus(title, subtitle, instruction, holdSeconds)
@@ -138,13 +169,23 @@ local function validateManifest(manifest)
 		assert(pump.Prompt and pump.Prompt:IsA("ProximityPrompt") and pump.Prompt:IsDescendantOf(pump.Model),
 			"Level 2 pump is missing its ProximityPrompt")
 		assert(pump.Lamp and pump.Lamp:IsA("BasePart"), "Level 2 pump is missing its status lamp")
+		assert(pump.GaugeNeedlePivot and pump.GaugeNeedlePivot:IsA("BasePart")
+			and typeof(pump.GaugeNeedleZeroCFrame) == "CFrame"
+			and typeof(pump.GaugeNeedleFullCFrame) == "CFrame",
+			"Level 2 pump is missing its pressure-gauge needle animation")
+		assert(pump.GaugePressureValue and pump.GaugePressureValue:IsA("NumberValue")
+			and pump.GaugePressureText and pump.GaugePressureText:IsA("TextLabel"),
+			"Level 2 pump is missing its pressure-gauge readout")
 	end
 	assert(type(manifest.PressureDoors) == "table",
 		"Level 2 objective manifest is missing its pressure door records")
 	assert(type(manifest.Exit) == "table", "Level 2 objective manifest has no exit")
 	assert(manifest.Exit.Trigger and manifest.Exit.Trigger:IsA("BasePart")
-		and manifest.Exit.Trigger:IsDescendantOf(manifest.World),
-		"Level 2 exit trigger is missing from the generated world")
+		and manifest.Exit.Trigger:IsDescendantOf(manifest.World)
+		and manifest.Exit.Trigger.Name == "Level 2 Exit Completion Beam"
+		and manifest.Exit.Trigger.Material == Enum.Material.Neon
+		and manifest.Exit.Trigger:GetAttribute("Level2_ExitCompletionBeam") == true,
+		"Level 2 exit completion beam is missing from the generated world")
 	assert(manifest.Exit.SafeSpawn and manifest.Exit.SafeSpawn:IsA("BasePart")
 		and manifest.Exit.SafeSpawn:IsDescendantOf(manifest.World),
 		"Level 2 exit safe spawn is missing from the generated world")
@@ -154,6 +195,59 @@ local function drain(record)
 	if not record or not record.Water or record.Drained then return end
 	record.Drained = true
 	Terrain:FillBlock(record.Water.CFrame, record.Water.Size, Enum.Material.Air)
+end
+
+local function setGaugePressure(pump, pressure)
+	local clamped = math.clamp(tonumber(pressure) or 0, 0, 100)
+	if pump.Model and pump.Model.Parent then
+		pump.Model:SetAttribute("Level2_PressurePercent", clamped)
+		pump.Model:SetAttribute("Level2_PressureRestored", clamped >= 100)
+	end
+	if pump.GaugePressureValue and pump.GaugePressureValue.Parent then
+		pump.GaugePressureValue.Value = clamped
+	end
+	if pump.GaugePressureText and pump.GaugePressureText.Parent then
+		pump.GaugePressureText.Text = string.format("%d%%", math.floor(clamped + .5))
+	end
+end
+
+local function startPumpGauge(session, pump)
+	local duration = session.PumpSoundDuration
+	pump.GaugeNeedlePivot.CFrame = pump.GaugeNeedleZeroCFrame
+	setGaugePressure(pump, 0)
+
+	local pressureConnection = pump.GaugePressureValue:GetPropertyChangedSignal("Value"):Connect(function()
+		if activeSession == session and pump.Model.Parent
+			and pump.GaugePressureText and pump.GaugePressureText.Parent then
+			local pressure = math.clamp(pump.GaugePressureValue.Value, 0, 100)
+			pump.GaugePressureText.Text = string.format("%d%%", math.floor(pressure + .5))
+		end
+	end)
+	table.insert(session.Connections, pressureConnection)
+
+	local gaugeInfo = TweenInfo.new(duration, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
+	local needleTween = TweenService:Create(
+		pump.GaugeNeedlePivot,
+		gaugeInfo,
+		{CFrame = pump.GaugeNeedleFullCFrame}
+	)
+	local pressureTween = TweenService:Create(
+		pump.GaugePressureValue,
+		gaugeInfo,
+		{Value = 100}
+	)
+	table.insert(session.GaugeTweens, needleTween)
+	table.insert(session.GaugeTweens, pressureTween)
+	local completedConnection = pressureTween.Completed:Connect(function(playbackState)
+		if playbackState == Enum.PlaybackState.Completed
+			and validSession(session)
+			and pump.Model.Parent then
+			setGaugePressure(pump, 100)
+		end
+	end)
+	table.insert(session.Connections, completedConnection)
+	needleTween:Play()
+	pressureTween:Play()
 end
 
 local function openPressureDoors(session)
@@ -166,6 +260,17 @@ local function openPressureDoors(session)
 		level2State:SetAttribute("Level2_Phase", "EXIT_OPEN")
 		level2State:SetAttribute("Level2_LightingMode", "EXIT_OPEN")
 	end
+
+	local doorPositions = {}
+	for _, record in ipairs(session.Manifest.PressureDoors) do
+		if record.Door and record.Door.Parent then
+			table.insert(doorPositions, record.Door.Position)
+		end
+	end
+	-- Fire the authored opening cue in the same server frame that the gates
+	-- begin moving. Explicit positions keep it audible when distant doors have
+	-- not streamed into a particular client yet.
+	fireSound("Level 2 Pressure Door", nil, {DoorPositions = doorPositions})
 
 	for _, record in ipairs(session.Manifest.PressureDoors) do
 		local door = record.Door
@@ -203,8 +308,17 @@ local function openPressureDoors(session)
 		exit.Mouth.Color = OPEN_COLOR
 		exit.Mouth.Transparency = .35
 	end
+	if exit and exit.Trigger and exit.Trigger.Parent then
+		exit.Trigger.CanTouch = true
+		TweenService:Create(exit.Trigger,
+			TweenInfo.new(.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+			{Transparency = .18}
+		):Play()
+		for _, glow in ipairs(exit.BeamLights or {}) do
+			if glow and glow.Parent then glow.Enabled = true end
+		end
+	end
 
-	fireSound("Level 2 Pressure Door")
 	fireStatus(
 		"PRESSURE EQUALIZED",
 		"GRAND HALL UNSEALED",
@@ -219,10 +333,13 @@ function ObjectiveController.Start(manifest, generation)
 		Manifest = manifest,
 		Generation = generation,
 		Connections = {},
+		GaugeTweens = {},
+		DebugActivators = {},
 		Started = {},
 		StartedCount = 0,
 		DoorsOpen = false,
 		Escaping = {},
+		PumpSoundDuration = pumpStartDuration(),
 	}
 	activeSession = session
 
@@ -230,9 +347,18 @@ function ObjectiveController.Start(manifest, generation)
 	workspace:SetAttribute("Level2Pumps", 0)
 	workspace:SetAttribute("Level2PumpGoal", goal)
 	workspace:SetAttribute("Level2ExitPowered", false)
+	local level2State = state()
+	if level2State then
+		level2State:SetAttribute("Level2_PumpSoundDuration", session.PumpSoundDuration)
+	end
+	-- Build leaves the green curtain visible as a destination marker, but only
+	-- this live objective session may arm its touch signal.
+	manifest.Exit.Trigger.CanTouch = false
+	manifest.Exit.Trigger.Transparency = .72
+	for _, glow in ipairs(manifest.Exit.BeamLights or {}) do glow.Enabled = false end
 
 	for _, pump in ipairs(manifest.Pumps) do
-		local connection = pump.Prompt.Triggered:Connect(function(player)
+		local function activate(player)
 			if session.Started[pump.Index] or not canUsePump(player, session, pump) then return end
 			session.Started[pump.Index] = true
 			session.StartedCount += 1
@@ -270,8 +396,9 @@ function ObjectiveController.Start(manifest, generation)
 					workspace:GetServerTimeNow())
 			end
 
-			-- Start the 12-second pump motor cue as soon as the lever engages.
+			-- Start the authored pump motor cue as soon as the lever engages.
 			fireSound("Level 2 Pump Start", player)
+			startPumpGauge(session, pump)
 
 			local drained = manifest.Drains and manifest.Drains[pump.Index]
 			local isFinalPump = session.StartedCount >= goal
@@ -285,15 +412,16 @@ function ObjectiveController.Start(manifest, generation)
 					drain(drained)
 				end
 
-				-- The third pump's pressure doors stay sealed until the complete
-				-- drain-surge clip has finished: 10 + 12 = 22 seconds after pull.
-				if isFinalPump then
-					task.delay(DRAIN_RUSH_DURATION, function()
-						if not validSession(session) or session.StartedCount < goal then return end
-						openPressureDoors(session)
-					end)
-				end
 			end)
+
+			-- The final gates release exactly when the third pump's authored motor
+			-- clip and its matching 0-to-100 pressure sweep have completed.
+			if isFinalPump then
+				task.delay(session.PumpSoundDuration, function()
+					if not validSession(session) or session.StartedCount < goal then return end
+					openPressureDoors(session)
+				end)
+			end
 
 			fireStatus(
 				string.format("PUMP STATION %02d ONLINE", pump.Index),
@@ -303,7 +431,10 @@ function ObjectiveController.Start(manifest, generation)
 					or (drained and "DRAINING LOCAL SECTION" or "LOCATE REMAINING STATIONS"),
 				1.7
 			)
-		end)
+			return true
+		end
+		session.DebugActivators[pump.Index] = activate
+		local connection = pump.Prompt.Triggered:Connect(activate)
 		table.insert(session.Connections, connection)
 	end
 
@@ -326,31 +457,30 @@ function ObjectiveController.Start(manifest, generation)
 	end)
 	table.insert(session.Connections, escapeConnection)
 
-	-- Build() runs before anyone has InRound, so an immediate intro would reach
-	-- no one. Fire it once the round actually starts (or shortly after, if the
-	-- round was already live when this session started).
-	local function fireIntro()
-		if activeSession ~= session then return end
-		-- The opening briefing holds noticeably longer than in-round alerts.
-		fireStatus(
-			"SUNKEN LEISURE COMPLEX",
-			string.format("%d PUMP STATIONS OFFLINE", goal),
-			"START ALL PUMPS TO UNSEAL THE EXIT",
-			3
-		)
-	end
-	if workspace:GetAttribute("RoundActive") == true then
-		task.delay(2, fireIntro)
-	else
-		local introConnection
-		introConnection = workspace:GetAttributeChangedSignal("RoundActive"):Connect(function()
-			if workspace:GetAttribute("RoundActive") ~= true then return end
-			introConnection:Disconnect()
-			task.delay(4, fireIntro)
-		end)
-		table.insert(session.Connections, introConnection)
-	end
+	-- RoundUI now delivers the full Command Center briefing with radio cue and
+	-- subtitles. Keep this controller focused on pump and door progress alerts.
 	return session
+end
+
+function ObjectiveController.DebugActivatePump(index, player)
+	assert(RunService:IsStudio(), "DebugActivatePump is Studio-only")
+	local session = assert(activeSession, "Level 2 objective is not running")
+	local activate = assert(session.DebugActivators[tonumber(index)], "unknown Level 2 pump index")
+	return activate(player)
+end
+
+function ObjectiveController.DebugOpenExit()
+	assert(RunService:IsStudio(), "DebugOpenExit is Studio-only")
+	local session = assert(activeSession, "Level 2 objective is not running")
+	session.StartedCount = #session.Manifest.Pumps
+	openPressureDoors(session)
+	local trigger = session.Manifest.Exit.Trigger
+	return {
+		DoorsOpen = session.DoorsOpen,
+		CanTouch = trigger.CanTouch,
+		Transparency = trigger.Transparency,
+		Position = trigger.Position,
+	}
 end
 
 function ObjectiveController.Stop()

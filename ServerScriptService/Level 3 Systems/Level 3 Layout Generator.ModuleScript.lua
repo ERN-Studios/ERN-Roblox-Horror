@@ -45,6 +45,7 @@ local DEFAULTS = {
 	MinimumGatewayGap = 38,
 	MaximumGatewayGap = 48,
 	MinimumCorridorLength = 18,
+	ExitCorridorLength = 560,
 	RowHalfSpacing = 62,
 	ExtraLinksPerDistrict = 2,
 	MinimumModuleSeparation = 105,
@@ -94,6 +95,7 @@ local Tuning = {
 	MinimumGatewayGap = integerSetting("MinimumGatewayGap", DEFAULTS.MinimumGatewayGap, 24, 80),
 	MaximumGatewayGap = integerSetting("MaximumGatewayGap", DEFAULTS.MaximumGatewayGap, 24, 90),
 	MinimumCorridorLength = numberSetting("MinimumCorridorLength", DEFAULTS.MinimumCorridorLength, 12, 40),
+	ExitCorridorLength = numberSetting("ExitCorridorLength", DEFAULTS.ExitCorridorLength, 120, 720),
 	RowHalfSpacing = integerSetting("RowHalfSpacing", DEFAULTS.RowHalfSpacing, 48, 100),
 	ExtraLinksPerDistrict = integerSetting("ExtraLinksPerDistrict", DEFAULTS.ExtraLinksPerDistrict, 0, 3),
 	MinimumModuleSeparation = numberSetting("MinimumModuleSeparation", DEFAULTS.MinimumModuleSeparation, 60, 220),
@@ -386,7 +388,7 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 
 	local signalHall = layout.RoomById.SignalHall
 	if not signalHall then return nil, "SignalHall was not assigned" end
-	local exitGap = rng:NextInteger(Tuning.MinimumGatewayGap, Tuning.MaximumGatewayGap)
+	local exitGap = Tuning.ExitCorridorLength
 	local exitRoom = addRoom({
 		Id = "Exit",
 		Name = "Level 3 Exit",

@@ -13,6 +13,7 @@
 --       "Level 2 Pressure Door"  — the grand hall unseals
 --       "Level 2 Slide Rush"     — riding the exit flume
 -- 4. Ambience loops below play while you are in a Level 2 round.
+-- 5. Rare distant groans use their own shuffled lane and tiled-hall reverb.
 -- ═════════════════════════════════════════════════════════════════════════
 
 local Players = game:GetService("Players")
@@ -67,10 +68,33 @@ local COMMON_AMBIENCE = {
 		VerticalMin = 4, VerticalMax = 14, Volume = .31,
 		RollOffMin = 8, RollOffMax = 145, PitchMin = .98, PitchMax = 1.02, BusySeconds = 7},
 }
+local DISTANT_GROAN_PROFILE = {
+	Anchor = "DistantPipe",
+	AnchorMin = 80,
+	AnchorMax = 190,
+	VerticalMin = 4,
+	VerticalMax = 16,
+	Volume = .68,
+	RollOffMin = 18,
+	RollOffMax = 280,
+	PitchMin = .97,
+	PitchMax = 1.02,
+	BusySeconds = 15,
+	CleanupSeconds = 26,
+	Reverb = {
+		DecayTime = 5.2,
+		Density = .34,
+		Diffusion = .30,
+		DryLevel = -9,
+		WetLevel = -2,
+	},
+}
+local GROAN_FIRST_DELAY_MIN, GROAN_FIRST_DELAY_MAX = 10, 18
+local GROAN_DELAY_MIN, GROAN_DELAY_MAX = 24, 42
 local PRELOAD_SLOTS = {}
 for _, slotName in ipairs(CUE_SLOTS) do table.insert(PRELOAD_SLOTS, slotName) end
 for _, slotName in ipairs(RANDOM_AMBIENCE_SLOTS) do table.insert(PRELOAD_SLOTS, slotName) end
--- Slidemouth owns these recordings exclusively; this controller only warms them.
+-- Detached ambience and Slidemouth keep independent shuffle bags over these recordings.
 for _, slotName in ipairs(MONSTER_SLOTS) do table.insert(PRELOAD_SLOTS, slotName) end
 -- SoundController's footstep walker owns this slot; warm it with the rest.
 table.insert(PRELOAD_SLOTS, "Level 2 Player Dry Tile Walking Sound")
@@ -145,7 +169,10 @@ local ambientAnchors = {Corridor = {}, WetHall = {}, PumpPipe = {}}
 local ambientAnchorSeen = {}
 local ambientConnections = {}
 local nextCommonAt = math.huge
+local nextGroanAt = math.huge
 local lastCommonKey
+local distantGroanBag = {}
+local lastDistantGroanSlot
 local lastSlidemouthWarningSerial = 0
 local lastSlidemouthScreamSerial = 0
 
@@ -176,7 +203,10 @@ local function stopRandomSession()
 	ambientAnchors = {Corridor = {}, WetHall = {}, PumpPipe = {}}
 	ambientAnchorSeen = {}
 	nextCommonAt = math.huge
+	nextGroanAt = math.huge
 	lastCommonKey = nil
+	distantGroanBag = {}
+	lastDistantGroanSlot = nil
 	lastSlidemouthWarningSerial = 0
 	lastSlidemouthScreamSerial = 0
 	authoredBusyUntil = 0
@@ -203,6 +233,7 @@ local function startRandomSession(world)
 	randomSessionActive = true
 	ambientWorld = world
 	nextCommonAt = os.clock() + rng:NextNumber(COMMON_FIRST_DELAY_MIN, COMMON_FIRST_DELAY_MAX)
+	nextGroanAt = os.clock() + rng:NextNumber(GROAN_FIRST_DELAY_MIN, GROAN_FIRST_DELAY_MAX)
 	local slidemouthState = ReplicatedStorage:FindFirstChild("Level 2 State")
 	lastSlidemouthWarningSerial = slidemouthState
 		and (tonumber(slidemouthState:GetAttribute("Level2_SlidemouthWarningSerial")) or 0) or 0
@@ -319,6 +350,25 @@ local function ensureAmbientFolder()
 	return ambientFolder
 end
 
+local function takeDistantGroanSlot()
+	if #distantGroanBag == 0 then
+		for _, slotName in ipairs(MONSTER_SLOTS) do
+			table.insert(distantGroanBag, slotName)
+		end
+		for index = #distantGroanBag, 2, -1 do
+			local swapIndex = rng:NextInteger(1, index)
+			distantGroanBag[index], distantGroanBag[swapIndex] =
+				distantGroanBag[swapIndex], distantGroanBag[index]
+		end
+		if #distantGroanBag > 1
+			and distantGroanBag[#distantGroanBag] == lastDistantGroanSlot then
+			distantGroanBag[1], distantGroanBag[#distantGroanBag] =
+				distantGroanBag[#distantGroanBag], distantGroanBag[1]
+		end
+	end
+	return table.remove(distantGroanBag)
+end
+
 local function playRandomSound(slotName, profile)
 	if not syncRandomSession() then return false end
 	local id = resolveId(slotName)
@@ -348,10 +398,20 @@ local function playRandomSound(slotName, profile)
 	sound.RollOffMinDistance = profile.RollOffMin
 	sound.RollOffMaxDistance = profile.RollOffMax
 	sound.Parent = emitter
+	if profile.Reverb then
+		local reverb = Instance.new("ReverbSoundEffect")
+		reverb.Name = "Level 2 Distant Poolroom Reverb"
+		reverb.DecayTime = profile.Reverb.DecayTime
+		reverb.Density = profile.Reverb.Density
+		reverb.Diffusion = profile.Reverb.Diffusion
+		reverb.DryLevel = profile.Reverb.DryLevel
+		reverb.WetLevel = profile.Reverb.WetLevel
+		reverb.Parent = sound
+	end
 	sound:Play()
 
 	ambientBusyUntil = os.clock() + profile.BusySeconds
-	Debris:AddItem(emitter, 25)
+	Debris:AddItem(emitter, profile.CleanupSeconds or 25)
 	return true
 end
 
@@ -379,9 +439,9 @@ local function weightedCommonProfile(excludeLast)
 	return nil
 end
 
--- (The four "Distant Monster-Like Pipe Groan" recordings belong exclusively to
---  the Slidemouth's pump responses — Level 2 Slidemouth Client plays them; this
---  controller only preloads them and yields the ambient mix when one lands.)
+-- The four monster-like recordings also form a rare detached ambience lane.
+-- Slidemouth retains its own independent bag; a real pump response still clears
+-- detached ambience and temporarily owns the mix.
 
 local function updateRandomAmbience()
 	if not syncRandomSession() then return end
@@ -400,6 +460,20 @@ local function updateRandomAmbience()
 		-- creature's pump response starts.
 		clearAmbientEmitters()
 		ambientBusyUntil = now + 8
+	end
+
+	if now >= nextGroanAt
+		and now >= authoredBusyUntil
+		and now >= ambientBusyUntil then
+		local slotName = takeDistantGroanSlot()
+		if slotName and playRandomSound(slotName, DISTANT_GROAN_PROFILE) then
+			lastDistantGroanSlot = slotName
+			nextGroanAt = os.clock() + rng:NextNumber(GROAN_DELAY_MIN, GROAN_DELAY_MAX)
+		else
+			if slotName then table.insert(distantGroanBag, slotName) end
+			nextGroanAt = now + 2
+		end
+		return
 	end
 
 	if now >= nextCommonAt

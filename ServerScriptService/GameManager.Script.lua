@@ -56,6 +56,15 @@ workspace:SetAttribute("RoundActive", false)
 local IS_RESERVED_ROUND_SERVER = game.PrivateServerId ~= "" and game.PrivateServerOwnerId == 0
 local IS_STUDIO = RunService:IsStudio()
 
+-- Returning from a reserved level creates a fresh Player/client in the public
+-- lobby. GetJoinData is server-trusted, so this marker is the durable distinction
+-- between a new arrival (welcome once) and a party returning home (stay silent).
+local function isReturnToLobbyArrival(player)
+ local ok, joinData = pcall(function() return player:GetJoinData() end)
+ local teleportData = ok and joinData and joinData.TeleportData
+ return type(teleportData) == "table" and teleportData.ReturnToLobby == true
+end
+
 -- Levels that own a world module with a Build/Cleanup surface. Level 1 is the
 -- attribute-driven MazeGenerator and is deliberately not listed here.
 local LEVEL_GENERATORS = {
@@ -575,13 +584,29 @@ end
 -- Level 1 and Level 3 hide their stream-in behind an elevator ride, which holds
 -- the round back while the client pulls the world in. Level 2 has no ride, so its
 -- clients hold a loading cover instead and report here once the complex is
--- actually around them. RoundStatus is otherwise server -> client only; this is
--- the sole OnServerEvent on it, and it accepts nothing but the literal tag.
+-- actually around them. The lobby client also announces that its RoundStatus
+-- listener exists so its one-shot welcome cannot race the initial status fire.
 local entryReady = {}
+local lobbyBriefingReady = {}
 status.OnServerEvent:Connect(function(player, message)
- if message == "entryready" then entryReady[player] = true end
+ if message == "entryready" then
+  entryReady[player] = true
+ elseif message == "lobbybriefingready"
+  and not lobbyBriefingReady[player]
+  and not IS_RESERVED_ROUND_SERVER
+  and not isReturnToLobbyArrival(player)
+  and not inRound[player]
+  and player:GetAttribute("InRound") ~= true
+  and workspace:FindFirstChild("ServerLobby") then
+  -- Latch before firing so retries can never produce overlapping welcomes.
+  lobbyBriefingReady[player] = true
+  status:FireClient(player, "lobbybriefing")
+ end
 end)
-Players.PlayerRemoving:Connect(function(player) entryReady[player] = nil end)
+Players.PlayerRemoving:Connect(function(player)
+ entryReady[player] = nil
+ lobbyBriefingReady[player] = nil
+end)
 
 local function armGroupEntry(group)
  for _, player in ipairs(group) do entryReady[player] = nil end

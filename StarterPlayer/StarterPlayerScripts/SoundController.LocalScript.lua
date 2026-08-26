@@ -14,6 +14,7 @@ local RunService = game:GetService("RunService")
 local SoundService = game:GetService("SoundService")
 local TweenService = game:GetService("TweenService")
 local RS = game:GetService("ReplicatedStorage")
+local ContentProvider = game:GetService("ContentProvider")
 
 -- ── audio slots (every sound in the game) ─────────────────
 local AMBIENCE_SOUND  = "rbxassetid://92576512092725" -- fluorescent hum, played FROM each lit ceiling panel (positional; off/dead panels are silent)
@@ -32,8 +33,12 @@ local JUMPSCARE_SOUND = "rbxassetid://140233243543479" -- the DYING player's OWN
 local YELL_SOUND      = "rbxassetid://92808749593079" -- the Entity's roar when it shoves you off a pit beam (positional)
 local SPOT_SOUND      = "rbxassetid://82272419363488" -- the "spotted you!" scream when it first sees someone (positional)
 local LUNGE_SOUND     = "" -- plays as it winds up a lunge (telegraph, positional)
-local ENTITY_STEP_WALK = "rbxassetid://99809246525734" -- the Entity's footstep thump while walking (positional)
-local ENTITY_STEP_RUN  = "" -- the Entity's footstep thump while running/chasing (positional)
+local ENTITY_STEP_SOUNDS = { -- alternating left/right Entity steps (positional)
+	"rbxassetid://130932521095399", -- first step
+	"rbxassetid://95916241222632",  -- second step
+}
+-- Skip each file's leading silence so both impacts land at the same perceived time.
+local ENTITY_STEP_STARTS = {0.70, 0.23}
 -- idle vocalisations played at random while the Entity just roams (positional).
 -- Fill any of the 3 — it works with just one; empty slots are skipped.
 local IDLE_SOUNDS     = { "", "", "" }
@@ -55,7 +60,10 @@ local HUM_MIN_DISTANCE  = 6    -- full hum volume this close to a lit panel
 local HUM_MAX_DISTANCE  = 45   -- a panel is inaudible beyond this (panels sit ~48 studs apart)
 local HUM_POOL_SIZE     = 10   -- at most this many nearby panels carry a live hum Sound
 local HUM_RESCAN        = 0.35 -- seconds between "which panels are nearest" rescans
-local ELEVATOR_VOLUME   = 0.8  -- the elevator door-open / arrival sound (2D)
+local ELEVATOR_VOLUME   = 0.8  -- the elevator ride's normal 2D volume
+local ELEVATOR_BRIEFING_VOLUME = 0.52 -- gently duck the ride while Command Center speaks
+local ELEVATOR_DUCK_IN  = 0.25 -- quick fade so the first spoken word stays clear
+local ELEVATOR_DUCK_OUT = 0.65 -- softer return after the briefing
 local BREATH_START      = 0.2   -- stamina fraction at which winded breathing kicks in
 local BREATH_VOLUME     = 0.12  -- peak breath volume (turned down more)
 local BREATH_SMOOTH     = 2     -- how fast the breathing volume eases up / down
@@ -89,11 +97,14 @@ local TRACK_FADE       = 5     -- seconds to SLOWLY fade the chase music once it
 -- sight and is only tracking blindly (match TRACK_TIME)
 local SPOT_VOLUME      = 1      -- the "spotted you!" sting (SPOT_SOUND) fired as a chase begins
 local LUNGE_VOLUME     = 1     -- the lunge telegraph (positional)
-local STEP_WALK_VOLUME = 0.72  -- entity walk thump
-local STEP_RUN_VOLUME  = 1.0   -- entity run thump
-local STEP_WALK_INT    = 0.55  -- seconds between entity walk thumps
-local STEP_RUN_INT     = 0.32  -- seconds between entity run thumps
-local STEP_RUN_SPEED   = 20    -- entity speed at/above which it uses the run thump
+local STEP_WALK_VOLUME = 1.014 -- entity walk impact (30% louder)
+local STEP_RUN_VOLUME  = 1.30  -- entity chase impact (30% louder)
+local STEP_WALK_INT    = 0.53  -- seconds between alternating steps at the 8 stud/s walk
+local STEP_RUN_INT     = 0.34  -- seconds between alternating steps at the 27.2 stud/s chase
+local STEP_WALK_PLAYBACK = 0.98 -- weighty natural pitch while roaming/searching
+local STEP_RUN_PLAYBACK  = 1.09 -- tighter, more urgent attack while chasing
+local STEP_CADENCE_JITTER = 0.015
+local STEP_PITCH_JITTER   = 0.015
 -- ──────────────────────────────────────────────────────────
 
 local player = Players.LocalPlayer
@@ -338,7 +349,26 @@ end)
 -- ELEVATOR_TIME, ~19s). It also drives the ambience fade: the maze ambience is
 -- silent through the elevator ride and fades in when the round actually starts.
 local elevatorSound = Instance.new("Sound")
+elevatorSound.Name = "LevelOneElevatorRide"
+elevatorSound.Volume = ELEVATOR_VOLUME
 elevatorSound.Parent = SoundService
+
+local elevatorVolumeTween = nil
+local function refreshElevatorBriefingVolume()
+	if elevatorVolumeTween then elevatorVolumeTween:Cancel() end
+	local briefingActive = player:GetAttribute("LevelOneBriefingActive") == true
+	local target = briefingActive and ELEVATOR_BRIEFING_VOLUME or ELEVATOR_VOLUME
+	local duration = briefingActive and ELEVATOR_DUCK_IN or ELEVATOR_DUCK_OUT
+	elevatorVolumeTween = TweenService:Create(
+		elevatorSound,
+		TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
+		{Volume = target}
+	)
+	elevatorVolumeTween:Play()
+end
+player:GetAttributeChangedSignal("LevelOneBriefingActive"):Connect(refreshElevatorBriefingVolume)
+refreshElevatorBriefingVolume()
+
 roundStatus.OnClientEvent:Connect(function(ev)
 	if ev == "elevator" then
 		ambienceTarget = 0 -- silent during the ride
@@ -350,7 +380,7 @@ roundStatus.OnClientEvent:Connect(function(ev)
 		end
 		if ELEVATOR_SOUND ~= "" and not elevatorSound.IsPlaying then
 			elevatorSound.SoundId = ELEVATOR_SOUND
-			elevatorSound.Volume = ELEVATOR_VOLUME
+			refreshElevatorBriefingVolume()
 			elevatorSound:Play()
 		end
 	elseif ev == "start" then
@@ -620,43 +650,76 @@ if LUNGE_SOUND ~= "" then
 	end)
 end
 
--- the Entity's own footstep thumps: measured from its velocity, positional at the
--- entity, on a cadence — walk thump when strolling, run thump when chasing
+-- The Entity's two alternating steps. Both supplied clips are one-shot impacts
+-- with long tails and different leading silence, so each foot gets its own voice.
+-- Actual position delta suppresses fake stomps while the Entity is stuck.
 task.spawn(function()
-	if ENTITY_STEP_WALK == "" and ENTITY_STEP_RUN == "" then return end
+	if ENTITY_STEP_SOUNDS[1] == "" and ENTITY_STEP_SOUNDS[2] == "" then return end
 	local entity = workspace:WaitForChild("Entity", 60)
 	local er = entity and entity:WaitForChild("HumanoidRootPart", 15)
 	if not er then return end
-	local step = Instance.new("Sound")
-	step.Name = "EntityStep"
-	step.RollOffMode = Enum.RollOffMode.InverseTapered
-	step.RollOffMinDistance = 8
-	step.RollOffMaxDistance = 140
-	step.Parent = er
-	local clock = 0
+
+	local voices = {}
+	for index, id in ipairs(ENTITY_STEP_SOUNDS) do
+		local step = Instance.new("Sound")
+		step.Name = "EntityStep" .. index
+		step.SoundId = id
+		step.RollOffMode = Enum.RollOffMode.InverseTapered
+		step.RollOffMinDistance = 8
+		step.RollOffMaxDistance = 140
+		step.Parent = er
+		voices[index] = step
+	end
+	pcall(function()
+		ContentProvider:PreloadAsync(voices)
+	end)
+
+	local clock = math.huge -- land a step immediately when real movement begins
+	local nextInterval = STEP_WALK_INT
+	local nextFoot = 1
 	local lastPos = er.Position
+	local movementGrace = 0
 	RunService.Heartbeat:Connect(function(dt)
-		-- measure ACTUAL translation, not AssemblyLinearVelocity — the chase code
-		-- SETS the entity's velocity every frame, so when it's wedged against a
-		-- wall the velocity reads high while it isn't really moving. Position
-		-- delta is the truth: no real movement → no footstep thumps.
 		local now = er.Position
 		local moved = Vector3.new(now.X - lastPos.X, 0, now.Z - lastPos.Z).Magnitude
 		lastPos = now
 		local spd = (dt > 0) and (moved / dt) or 0
-		if spd < 3 then clock = 999; return end -- standing still (or stuck): silent
-		local run = spd >= STEP_RUN_SPEED
-		local id = run and ENTITY_STEP_RUN or ENTITY_STEP_WALK
-		local interval = run and STEP_RUN_INT or STEP_WALK_INT
-		if id == "" then return end
+		if spd >= 3 then
+			-- Physics replication can arrive in tiny bursts. Hold the moving state
+			-- briefly between packets so one real stride never becomes many first steps.
+			movementGrace = 0.14
+		else
+			movementGrace = math.max(0, movementGrace - dt)
+		end
+		if movementGrace <= 0 then
+			clock = math.huge
+			return
+		end
+
+		-- EntityAnimation uses Run only in CHASE. TRACK/SEARCH deliberately keeps
+		-- the walk cycle even when it moves faster, so key the gait to the same state.
+		local chasing = workspace:GetAttribute("EntityState") == "CHASE"
+		-- Use animation state for cadence rather than raw per-frame speed: networked
+		-- physics can arrive in bursts even while the visual movement is smooth.
+		local cadence = chasing and STEP_RUN_INT or STEP_WALK_INT
+
 		clock += dt
-		if clock >= interval then
-			clock = 0
-			step.SoundId = id
-			step.Volume = run and STEP_RUN_VOLUME or STEP_WALK_VOLUME
-			step.PlaybackSpeed = 0.94 + math.random() * 0.12
+		if clock < nextInterval then return end
+		clock = 0
+
+		local step = voices[nextFoot]
+		if step then
+			step:Stop()
+			step.TimePosition = ENTITY_STEP_STARTS[nextFoot]
+			step.Volume = chasing and STEP_RUN_VOLUME or STEP_WALK_VOLUME
+			local basePlayback = chasing and STEP_RUN_PLAYBACK or STEP_WALK_PLAYBACK
+			step.PlaybackSpeed = basePlayback
+				+ ((math.random() * 2 - 1) * STEP_PITCH_JITTER)
 			step:Play()
 		end
+		nextFoot = nextFoot == #voices and 1 or nextFoot + 1
+		nextInterval = math.max(0.1, cadence
+			+ ((math.random() * 2 - 1) * STEP_CADENCE_JITTER))
 	end)
 end)
 

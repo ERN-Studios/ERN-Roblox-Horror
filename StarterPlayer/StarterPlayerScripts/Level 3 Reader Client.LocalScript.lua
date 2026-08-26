@@ -359,20 +359,36 @@ local function handleClientEvent(payload: any)
 	if kind == "Alert" then
 		showToast(payload.Title, payload.Subtitle, payload.Instruction, payload.Duration)
 	elseif kind == "ModuleCollected" then
-		local progress = math.max(0, math.floor(tonumber(payload.Progress) or 0))
+		local progress = math.max(0, math.floor(tonumber(payload.CollectedProgress or payload.Progress) or 0))
 		local goal = math.max(1, math.floor(tonumber(payload.Goal) or 5))
-		-- The final collection is immediately followed by ExitUnlocked.  Let the
-		-- stronger calibrated-reader message own the single compact toast slot.
-		if progress >= goal then return end
 		local collector = cleanText(payload.CollectorName, "A TEAM MEMBER", 36)
 		showToast(
-			string.format("CD %02d COLLECTED", math.max(1, math.floor(tonumber(payload.CDIndex or payload.ModuleIndex) or progress))),
-			string.format("%s  //  PARTY MUSIC %d/%d", collector, math.min(progress, goal), goal),
-			"",
-			1.8
+			string.format("CD %02d SECURED", math.max(1, math.floor(tonumber(payload.CDIndex or payload.ModuleIndex) or progress))),
+			string.format("%s  //  FOUND %d/%d", collector, math.min(progress, goal), goal),
+			if payload.RecoveredDrop == true then "RECOVERED  //  CARRY IT TO THE DISC PLAYER"
+				else "CARRY IT TO THE DISC PLAYER",
+			2.2
 		)
+	elseif kind == "CDInserted" then
+		local progress = math.max(0, math.floor(tonumber(payload.InsertedCount or payload.Progress) or 0))
+		local goal = math.max(1, math.floor(tonumber(payload.Goal) or 5))
+		if progress >= goal then return end
+		local depositor = cleanText(payload.DepositorName, "A TEAM MEMBER", 36)
+		showToast(
+			string.format("DISC RELAY %d/%d", math.min(progress, goal), goal),
+			string.format("%s INSERTED %d CD%s", depositor,
+				math.max(1, math.floor(tonumber(payload.Count) or 1)),
+				(if math.floor(tonumber(payload.Count) or 1) == 1 then "" else "S")),
+			"OTHER HOLDERS MUST INSERT THEIRS",
+			2.3
+		)
+	elseif kind == "CDDropped" then
+		showToast("A CARRIED CD WAS DROPPED", "RECOVER IT AT THE PLAYER'S LAST POSITION", "", 2.4)
+	elseif kind == "CDTransferred" and payload.RecipientUserId == player.UserId then
+		showToast("TEAM CD TRANSFERRED", "A DEPARTING PLAYER'S CD IS NOW ON YOUR BACK",
+			"TAKE IT TO THE DISC PLAYER", 2.8)
 	elseif kind == "ExitUnlocked" then
-		showToast("ALL CDS COLLECTED", "MUSIC OVERRIDE ACCEPTED  //  FOLLOW EXIT SIGNAL", "", 3.0)
+		showToast("ALL CDS INSERTED", "WALL FRAME REVEALED  //  FOLLOW EXIT SIGNAL", "", 3.0)
 	end
 end
 
@@ -421,7 +437,7 @@ local function updateReader(dt: number)
 	local index = math.clamp(progress + 1, 1, #ACCURACY_DEGREES)
 	local cells: {string} = {}
 	for cell = 1, goal do cells[cell] = if cell <= progress then "■" else "□" end
-	progressLabel.Text = string.format("CDS [%s]  %d/%d", table.concat(cells), progress, goal)
+	progressLabel.Text = string.format("DISC RELAY [%s]  %d/%d", table.concat(cells), progress, goal)
 
 	local character = player.Character
 	local root = character and character:FindFirstChild("HumanoidRootPart")

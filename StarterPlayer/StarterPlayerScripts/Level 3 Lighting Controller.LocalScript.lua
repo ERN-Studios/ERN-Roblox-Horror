@@ -107,12 +107,18 @@ local BLACKOUT_SCREAM_DURATION = 8.071836735
 local BLACKOUT_FLICKER_INTERVAL = 0.085
 local PRE_BLACKOUT_FLICKER_INTERVAL = 0.09
 local RECOVERY_FLICKER_INTERVAL = 0.085
+local DEFAULT_COMPLETION_DIM_DURATION = 5.5
+local completionFadeActive = false
+local completionFadeEndsAtServerTime = 0
 script:SetAttribute("Level3_BlackoutScreamFlickerActive", false)
 script:SetAttribute("Level3_BlackoutScreamFlickerPulse", -1)
 script:SetAttribute("Level3_PreBlackoutFlickerActive", false)
 script:SetAttribute("Level3_PreBlackoutFlickerPulse", -1)
 script:SetAttribute("Level3_RecoveryFlickerActive", false)
 script:SetAttribute("Level3_RecoveryFlickerPulse", -1)
+script:SetAttribute("Level3_CompletionBlackoutActive", false)
+script:SetAttribute("Level3_CompletionDimActive", false)
+script:SetAttribute("Level3_CompletionDimProgress", 0)
 local applyLevelGrade: (boolean) -> ()
 
 local function cancelTweens()
@@ -177,11 +183,14 @@ local function exitUnlocked(): boolean
 	return value == true
 end
 
+-- LEVEL3_COMPLETION_BLACKOUT_GUIDE_20260821
 local function blackoutRequested(): boolean
 	local state = stateFolder()
 	local value = state and state:GetAttribute("Level3_BlackoutActive")
 	if value == nil then value = workspace:GetAttribute("Level3BlackoutActive") end
-	return value == true
+	-- Five CDs permanently hand lighting ownership to the exit breadcrumb mode;
+	-- the normal music timeline may enter DONE, but it cannot relight the mall.
+	return value == true or exitUnlocked()
 end
 
 local function preBlackoutRequested(): boolean
@@ -243,6 +252,8 @@ local function restoreBlackoutWorld()
 	blackoutFlickerPulse = -1
 	preBlackoutFlickerPulse = -1
 	recoveryFlickerPulse = -1
+	completionFadeActive = false
+	completionFadeEndsAtServerTime = 0
 	blackoutApplied = false
 	preBlackoutApplied = false
 	recoveryFlickerApplied = false
@@ -252,9 +263,27 @@ local function restoreBlackoutWorld()
 	script:SetAttribute("Level3_PreBlackoutFlickerPulse", -1)
 	script:SetAttribute("Level3_RecoveryFlickerActive", false)
 	script:SetAttribute("Level3_RecoveryFlickerPulse", -1)
+	script:SetAttribute("Level3_CompletionDimActive", false)
+	script:SetAttribute("Level3_CompletionDimProgress", 0)
+	script:SetAttribute("Level3_CompletionBlackoutActive", false)
 end
 
 local function enforceBlackout()
+	-- Streaming can deliver fixtures after the initial baseline snapshot. Sweep
+	-- the authoritative live world so completion can never leave a late light on.
+	if boundWorld then
+		for _, descendant in ipairs(boundWorld:GetDescendants()) do
+			if descendant:IsA("Light") then
+				descendant.Enabled = false
+				descendant.Brightness = 0
+				local parent = descendant.Parent
+				if parent and parent:IsA("BasePart") then
+					parent.Material = Enum.Material.SmoothPlastic
+					parent.Color = Color3.fromRGB(13, 14, 15)
+				end
+			end
+		end
+	end
 	for _, record in ipairs(blackoutLights) do
 		if record.Light.Parent then
 			record.Light.Enabled = false
@@ -267,11 +296,112 @@ local function enforceBlackout()
 			record.Part.Color = Color3.fromRGB(13, 14, 15)
 		end
 	end
+	completionFadeActive = false
+	script:SetAttribute("Level3_CompletionDimActive", false)
+	script:SetAttribute("Level3_CompletionDimProgress", if exitUnlocked() then 1 else 0)
+	script:SetAttribute("Level3_CompletionBlackoutActive", exitUnlocked())
 	script:SetAttribute("Level3_BlackoutScreamFlickerActive", false)
+end
+
+local function completionTiming(): (number, number, number)
+	local state = stateFolder()
+	local startValue = state and state:GetAttribute("Level3_CompletionDimStartedAtServerTime")
+	if type(startValue) ~= "number" or startValue <= 0 then
+		startValue = state and state:GetAttribute("Level3_CompletionSongStartServerTime")
+	end
+	local durationValue = state and state:GetAttribute("Level3_CompletionDimDuration")
+	local duration = if type(durationValue) == "number" and durationValue > .1
+		then durationValue else DEFAULT_COMPLETION_DIM_DURATION
+	local now = workspace:GetServerTimeNow()
+	local startedAt = if type(startValue) == "number" and startValue > 0 then startValue else now
+	return startedAt, duration, math.clamp((now - startedAt) / duration, 0, 1)
+end
+
+local function beginCompletionFade()
+	local startedAt, duration, progress = completionTiming()
+	local remaining = math.max(0, duration * (1 - progress))
+	completionFadeActive = remaining > .04
+	completionFadeEndsAtServerTime = startedAt + duration
+	script:SetAttribute("Level3_CompletionDimActive", completionFadeActive)
+	script:SetAttribute("Level3_CompletionDimProgress", progress)
+	script:SetAttribute("Level3_CompletionBlackoutActive", false)
+
+	local dark = Color3.fromRGB(13, 14, 15)
+	for _, record in ipairs(blackoutLights) do
+		if record.Light.Parent then
+			record.Light.Enabled = record.Enabled
+			record.Light.Brightness = record.Brightness * (1 - progress)
+			if completionFadeActive then tween(record.Light, remaining, {Brightness = 0}) end
+		end
+	end
+	for _, record in ipairs(blackoutParts) do
+		if record.Part.Parent then
+			record.Part.Material = record.Material
+			record.Part.Color = record.Color:Lerp(dark, progress)
+			if completionFadeActive then tween(record.Part, remaining, {Color = dark}) end
+		end
+	end
+
+	colorGrade.Enabled = true
+	bloom.Enabled = false
+	local targetBrightness = .04
+	local targetExposure = -.85
+	local targetAmbient = Color3.fromRGB(0, 0, 0)
+	local targetFog = Color3.fromRGB(2, 3, 4)
+	Lighting.Brightness = Lighting.Brightness + (targetBrightness - Lighting.Brightness) * progress
+	Lighting.ExposureCompensation = Lighting.ExposureCompensation
+		+ (targetExposure - Lighting.ExposureCompensation) * progress
+	Lighting.Ambient = Lighting.Ambient:Lerp(targetAmbient, progress)
+	Lighting.OutdoorAmbient = Lighting.OutdoorAmbient:Lerp(targetAmbient, progress)
+	Lighting.ColorShift_Top = Lighting.ColorShift_Top:Lerp(Color3.new(0, 0, 0), progress)
+	Lighting.ColorShift_Bottom = Lighting.ColorShift_Bottom:Lerp(Color3.new(0, 0, 0), progress)
+	Lighting.EnvironmentDiffuseScale *= 1 - progress
+	Lighting.EnvironmentSpecularScale += (.02 - Lighting.EnvironmentSpecularScale) * progress
+	Lighting.FogColor = Lighting.FogColor:Lerp(targetFog, progress)
+	Lighting.FogStart += (14 - Lighting.FogStart) * progress
+	Lighting.FogEnd += (115 - Lighting.FogEnd) * progress
+	colorGrade.Brightness += (-.08 - colorGrade.Brightness) * progress
+	colorGrade.Contrast += (.13 - colorGrade.Contrast) * progress
+	colorGrade.Saturation += (-.32 - colorGrade.Saturation) * progress
+	colorGrade.TintColor = colorGrade.TintColor:Lerp(Color3.fromRGB(104, 122, 132), progress)
+	if completionFadeActive then
+		tween(Lighting, remaining, {
+			Brightness = targetBrightness,
+			ExposureCompensation = targetExposure,
+			Ambient = targetAmbient,
+			OutdoorAmbient = targetAmbient,
+			ColorShift_Top = Color3.new(0, 0, 0),
+			ColorShift_Bottom = Color3.new(0, 0, 0),
+			EnvironmentDiffuseScale = 0,
+			EnvironmentSpecularScale = .02,
+			FogColor = targetFog,
+			FogStart = 14,
+			FogEnd = 115,
+		})
+		tween(colorGrade, remaining, {
+			Brightness = -.08,
+			Contrast = .13,
+			Saturation = -.32,
+			TintColor = Color3.fromRGB(104, 122, 132),
+		})
+	else
+		enforceBlackout()
+	end
 end
 
 local function updateBlackoutFlicker()
 	if not blackoutApplied then return end
+	if exitUnlocked() then
+		local _, duration, progress = completionTiming()
+		script:SetAttribute("Level3_CompletionDimProgress", progress)
+		if completionFadeActive
+			and workspace:GetServerTimeNow() < completionFadeEndsAtServerTime - .01
+			and progress < 1 then
+			return
+		end
+		if duration > 0 then enforceBlackout() end
+		return
+	end
 	local state = stateFolder()
 	local startValue = state and state:GetAttribute("Level3_BlackoutScreamStartedAtServerTime")
 	local durationValue = state and state:GetAttribute("Level3_BlackoutScreamDuration")
@@ -448,6 +578,10 @@ local function beginBlackout()
 	end
 	blackoutApplied = true
 	cancelTweens()
+	if exitUnlocked() then
+		beginCompletionFade()
+		return
+	end
 	colorGrade.Enabled = true
 	bloom.Enabled = false
 	tween(Lighting, .35, {
@@ -536,7 +670,30 @@ local function bindWorld(world: Model?)
 		-- The builder attaches the flicker attribute immediately after parenting.
 		-- Deferring one scheduler turn observes the completed fixture safely.
 		task.defer(function()
-			if world == boundWorld and descendant:IsDescendantOf(world) then tryAddFixture(descendant) end
+			if world ~= boundWorld or not descendant:IsDescendantOf(world) then return end
+			tryAddFixture(descendant)
+			if blackoutApplied and exitUnlocked() and descendant:IsA("Light") then
+				local _, duration, progress = completionTiming()
+				local remaining = duration * (1 - progress)
+				local parent = descendant.Parent
+				if completionFadeActive and remaining > .04 then
+					local baseline = descendant.Brightness
+					descendant.Brightness = baseline * (1 - progress)
+					tween(descendant, remaining, {Brightness = 0})
+					if parent and parent:IsA("BasePart") then
+						local dark = Color3.fromRGB(13, 14, 15)
+						parent.Color = parent.Color:Lerp(dark, progress)
+						tween(parent, remaining, {Color = dark})
+					end
+				else
+					descendant.Enabled = false
+					descendant.Brightness = 0
+					if parent and parent:IsA("BasePart") then
+						parent.Material = Enum.Material.SmoothPlastic
+						parent.Color = Color3.fromRGB(13, 14, 15)
+					end
+				end
+			end
 		end)
 	end)
 	worldRemovingConnection = world.AncestryChanged:Connect(function(_, parent)

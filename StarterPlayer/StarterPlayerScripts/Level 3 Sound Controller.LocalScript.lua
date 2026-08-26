@@ -25,6 +25,8 @@ local DEFAULT_AUDIO: {[string]: string} = {
 	HVAC = "rbxassetid://9125446543",
 	PowerDown = "",
 	RoomListeningSong = "rbxassetid://140244948455675",
+	RoomListeningSongReversed = "rbxassetid://75285146479953",
+	CDCollected = "rbxassetid://84585027971879",
 	MallManagerBlackoutScream = "rbxassetid://125407251695204",
 	ScareBalloonPop = "",
 	ScareChairScrape = "",
@@ -40,6 +42,8 @@ local LIBRARY_ALIASES: {[string]: {string}} = {
 	HVAC = {"HVAC", "Level 3 HVAC"},
 	PowerDown = {"PowerDown", "Level 3 Power Down"},
 	RoomListeningSong = {"RoomListeningSong", "The Room is Listening"},
+	RoomListeningSongReversed = {"RoomListeningSongReversed", "The Room is Listening Reversed", "Level 3 Room Song Reversed"},
+	CDCollected = {"CDCollected", "Level 3 CD Collected", "Level 3 CD Collect"},
 	MallManagerBlackoutScream = {"MallManagerBlackoutScream", "Mall Manager Walk Blackout Scream"},
 	ScareBalloonPop = {"ScareBalloonPop", "Level 3 Scare Balloon Pop"},
 	ScareChairScrape = {"ScareChairScrape", "Level 3 Scare Chair Scrape"},
@@ -101,9 +105,58 @@ roomSong.PlaybackSpeed = 1
 roomSong.Parent = SoundService
 local roomSongAsset = ""
 
-type RoomSongVoice = {Sound: Sound, Effect: EqualizerSoundEffect?}
+-- LEVEL3_REVERSED_COMPLETION_LOOP_20260821
+-- This is a dedicated 2D layer: the source file is already reversed, while
+-- PitchShiftSoundEffect lowers pitch without changing its tempo or loop length.
+local completionSong = Instance.new("Sound")
+completionSong.Name = "Level 3 - The Room is Listening Reversed"
+completionSong.Looped = true
+completionSong.Volume = 0
+completionSong.PlaybackSpeed = 1
+completionSong.Parent = SoundService
+local completionSongAsset = ""
+
+local completionPitch = Instance.new("PitchShiftSoundEffect")
+completionPitch.Name = "Level 3 Reversed Completion Pitch"
+completionPitch.Octave = .68
+completionPitch.Parent = completionSong
+local completionEqualizer = Instance.new("EqualizerSoundEffect")
+completionEqualizer.Name = "Level 3 Reversed Completion Muffle"
+completionEqualizer.LowGain = 2
+completionEqualizer.MidGain = -4
+completionEqualizer.HighGain = -13
+completionEqualizer.Parent = completionSong
+local completionReverb = Instance.new("ReverbSoundEffect")
+completionReverb.Name = "Level 3 Reversed Completion Reverb"
+completionReverb.Density = .86
+completionReverb.Diffusion = .78
+completionReverb.DecayTime = 4.2
+completionReverb.DryLevel = -2
+completionReverb.WetLevel = -9
+completionReverb.Parent = completionSong
+script:SetAttribute("Level3_CompletionSongPlaying", false)
+script:SetAttribute("Level3_CompletionSongPitchOctave", .68)
+
+
+type RoomSongVoice = {Sound: Sound, Effect: EqualizerSoundEffect?, PitchEffect: PitchShiftSoundEffect?}
+
+-- LEVEL3_CD_PITCH_SHIFT_20260821
+-- LEVEL3_CD_PITCH_DOWN_20260821
+-- PitchShiftSoundEffect lowers pitch without changing song tempo or the fixed blackout timeline.
+local CD_PITCH_EFFECT_NAME = "Level 3 CD Pitch Shift"
+local CD_PITCH_BASES = {1.000, 0.985, 0.970, 0.950, 0.925, 0.890}
+local CD_PITCH_DROP_SECONDS = 0.16
+local CD_PITCH_RISE_SECONDS = 0.16
+local CD_PITCH_SETTLE_SECONDS = 0.43
+local cdPitchProgress = 0
+local cdPitchGoal = 5
+local cdPitchBase = 1
+local cdPitchPulseStartedAt = -math.huge
+local cdPitchLastPulsedProgress = 0
+local cdPitchPulseSerial = 0
 local roomSongSpeakers: {RoomSongVoice} = {}
 local roomSongLastStartServerTime: number? = nil
+local roomSongLastMode = "STOPPED"
 local roomSongLastHardSync: {[Sound]: number} = {}
 
 local BLACKOUT_SCREAM_NAME = "Mall Manager Walk Blackout Scream"
@@ -193,6 +246,132 @@ local function stateAttribute(name: string, workspaceMirror: string?): any
 	local value = state and state:GetAttribute(name)
 	if value == nil and workspaceMirror then value = workspace:GetAttribute(workspaceMirror) end
 	return value
+end
+
+local function smoothStep(alpha: number): number
+	alpha = math.clamp(alpha, 0, 1)
+	return alpha * alpha * (3 - 2 * alpha)
+end
+
+local function cdPitchBaseFor(progress: number, goal: number): number
+	goal = math.max(1, math.floor(goal))
+	progress = math.clamp(math.floor(progress), 0, goal)
+	if goal == 5 then
+		return CD_PITCH_BASES[progress + 1]
+	end
+	local completion = progress / goal
+	return 1 - 0.11 * (completion ^ 1.2)
+end
+
+local function currentCDPitchOctave(now: number): number
+	local elapsed = now - cdPitchPulseStartedAt
+	local dropOctave = cdPitchBase * 0.84
+	local reboundOctave = cdPitchBase * 0.965
+	if elapsed < 0 then
+		return cdPitchBase
+	elseif elapsed < CD_PITCH_DROP_SECONDS then
+		local alpha = smoothStep(elapsed / CD_PITCH_DROP_SECONDS)
+		return cdPitchBase + (dropOctave - cdPitchBase) * alpha
+	elseif elapsed < CD_PITCH_DROP_SECONDS + CD_PITCH_RISE_SECONDS then
+		local alpha = smoothStep((elapsed - CD_PITCH_DROP_SECONDS) / CD_PITCH_RISE_SECONDS)
+		return dropOctave + (reboundOctave - dropOctave) * alpha
+	elseif elapsed < CD_PITCH_DROP_SECONDS + CD_PITCH_RISE_SECONDS + CD_PITCH_SETTLE_SECONDS then
+		local alpha = smoothStep((elapsed - CD_PITCH_DROP_SECONDS - CD_PITCH_RISE_SECONDS) / CD_PITCH_SETTLE_SECONDS)
+		return reboundOctave + (cdPitchBase - reboundOctave) * alpha
+	end
+	return cdPitchBase
+end
+
+local function ensureCDPitchEffect(sound: Sound): PitchShiftSoundEffect
+	local existing = sound:FindFirstChild(CD_PITCH_EFFECT_NAME)
+	if existing and existing:IsA("PitchShiftSoundEffect") then
+		existing.Enabled = true
+		return existing
+	end
+	local effect = Instance.new("PitchShiftSoundEffect")
+	effect.Name = CD_PITCH_EFFECT_NAME
+	effect.Enabled = true
+	effect.Octave = cdPitchBase
+	effect.Parent = sound
+	return effect
+end
+
+local function applyCDPitchProgress(rawProgress: any, rawGoal: any)
+	local progress = math.max(0, math.floor(tonumber(rawProgress) or 0))
+	local goal = math.max(1, math.floor(tonumber(rawGoal) or 5))
+	progress = math.min(progress, goal)
+	if progress < cdPitchProgress then
+		cdPitchLastPulsedProgress = progress
+		cdPitchPulseStartedAt = -math.huge
+	end
+	cdPitchProgress = progress
+	cdPitchGoal = goal
+	cdPitchBase = cdPitchBaseFor(progress, goal)
+end
+
+local function observeSharedCDPitch()
+	applyCDPitchProgress(
+		stateAttribute("Level3_CDCollectedProgress", "Level3CDsCollected"),
+		stateAttribute("Level3_ModuleGoal", "Level3ModuleGoal")
+	)
+end
+
+local function triggerCDPitch(rawProgress: any, rawGoal: any)
+	applyCDPitchProgress(rawProgress, rawGoal)
+	if cdPitchProgress > cdPitchLastPulsedProgress then
+		cdPitchLastPulsedProgress = cdPitchProgress
+		cdPitchPulseStartedAt = os.clock()
+		cdPitchPulseSerial += 1
+	end
+end
+
+local function resetCDPitch()
+	cdPitchProgress = 0
+	cdPitchGoal = 5
+	cdPitchBase = 1
+	cdPitchPulseStartedAt = -math.huge
+	cdPitchLastPulsedProgress = 0
+	for _, voice in ipairs(roomSongSpeakers) do
+		if voice.Sound.Parent then
+			voice.Sound.PlaybackSpeed = 1
+		end
+		if voice.PitchEffect and voice.PitchEffect.Parent then
+			voice.PitchEffect.Octave = 1
+		end
+	end
+	script:SetAttribute("Level3_CDPitchProgress", 0)
+	script:SetAttribute("Level3_CDPitchGoal", 5)
+	script:SetAttribute("Level3_CDPitchOctave", 1)
+	script:SetAttribute("Level3_CDPitchVoiceCount", 0)
+end
+
+local completionSongRequested: () -> boolean
+
+local function updateCDPitch(now: number)
+	observeSharedCDPitch()
+	local octave = math.clamp(currentCDPitchOctave(now), 0.5, 2)
+	if completionSongRequested and completionSongRequested() then
+		octave = math.clamp(tonumber(stateAttribute("Level3_CompletionSongPitchOctave", nil)) or .68, .5, 1)
+	end
+	local voiceCount = 0
+	roomSong.PlaybackSpeed = 1
+	for _, voice in ipairs(roomSongSpeakers) do
+		if voice.Sound.Parent then
+			voice.Sound.PlaybackSpeed = 1
+			local pitchEffect = voice.PitchEffect
+			if not pitchEffect or not pitchEffect.Parent then
+				pitchEffect = ensureCDPitchEffect(voice.Sound)
+				voice.PitchEffect = pitchEffect
+			end
+			pitchEffect.Octave = octave
+			voiceCount += 1
+		end
+	end
+	script:SetAttribute("Level3_CDPitchProgress", cdPitchProgress)
+	script:SetAttribute("Level3_CDPitchGoal", cdPitchGoal)
+	script:SetAttribute("Level3_CDPitchOctave", octave)
+	script:SetAttribute("Level3_CDPitchVoiceCount", voiceCount)
+	script:SetAttribute("Level3_CDPitchPulseSerial", cdPitchPulseSerial)
 end
 
 local function isActive(): boolean
@@ -458,6 +637,33 @@ local function songAssetId(): string?
 	return if resolved ~= "rbxassetid://0" then resolved else nil
 end
 
+
+completionSongRequested = function(): boolean
+	local value = stateAttribute("Level3_ExitUnlocked", "Level3ExitUnlocked")
+	return value == true
+end
+
+local function completionSongAssetId(): string?
+	local stateValue = stateAttribute("Level3_ReversedRoomSongAssetId", nil)
+	local normalized = normalizeId(stateValue)
+	if normalized and normalized ~= "rbxassetid://0" then return normalized end
+	local resolved = resolveId("RoomListeningSongReversed")
+	return if resolved ~= "rbxassetid://0" then resolved else nil
+end
+
+local function stopCompletionSong()
+	completionSong.Volume = 0
+	if completionSong.IsPlaying then completionSong:Stop() end
+	script:SetAttribute("Level3_CompletionSongPlaying", false)
+end
+
+local function updateCompletionSong(_dt: number)
+	-- The reversed track now uses the room PA voices. Keep this legacy 2D sound
+	-- silent so headphones do not hear a non-spatial duplicate.
+	completionSong.Volume = 0
+	if completionSong.IsPlaying then completionSong:Stop() end
+end
+
 local function stopRoomSong()
 	roomSong.Volume = 0
 	if roomSong.IsPlaying then roomSong:Stop() end
@@ -468,21 +674,24 @@ local function stopRoomSong()
 		end
 	end
 	roomSongLastStartServerTime = nil
+	roomSongLastMode = "STOPPED"
 	table.clear(roomSongLastHardSync)
 	script:SetAttribute("Level3_RoomSongAudibleVoiceCount", 0)
 	script:SetAttribute("Level3_RoomSongRunningVoiceCount", 0)
 	script:SetAttribute("Level3_RoomSongPrimaryDistance", 0)
 	script:SetAttribute("Level3_RoomSongTargetVolume", 0)
+	script:SetAttribute("Level3_CompletionSongPlaying", false)
 end
 
 local function updateRoomSong(dt: number)
+	local completion = completionSongRequested()
 	local phase = roomSongPhase()
-	if not isActive() or (phase ~= "ARMED" and phase ~= "PLAYING"
+	if not isActive() or (not completion and phase ~= "ARMED" and phase ~= "PLAYING"
 		and phase ~= "PRE_BLACKOUT" and phase ~= "BLACKOUT_SONG") then
 		stopRoomSong()
 		return
 	end
-	local id = songAssetId()
+	local id = if completion then completionSongAssetId() else songAssetId()
 	if not id then
 		stopRoomSong()
 		return
@@ -494,25 +703,42 @@ local function updateRoomSong(dt: number)
 			pcall(function() ContentProvider:PreloadAsync({roomSong}) end)
 		end)
 	end
-	local startValue = stateAttribute("Level3_RoomSongStartServerTime", nil)
+
+	local startValue = stateAttribute(
+		if completion then "Level3_CompletionSongStartServerTime" else "Level3_RoomSongStartServerTime",
+		nil
+	)
 	local durationValue = stateAttribute("Level3_RoomSongDuration", nil)
-	if type(startValue) ~= "number" or type(durationValue) ~= "number" then
+	if type(startValue) ~= "number" or type(durationValue) ~= "number"
+		or startValue <= 0 or durationValue <= 0 then
 		stopRoomSong()
 		return
 	end
-	local position = workspace:GetServerTimeNow() - startValue
-	local stopValue = stateAttribute("Level3_RoomSongStopSeconds", nil)
-	local stopSeconds = if type(stopValue) == "number" then stopValue else durationValue
-	if position < 0 or position >= math.min(durationValue, stopSeconds) then
+	local rawPosition = workspace:GetServerTimeNow() - startValue
+	if rawPosition < 0 then
 		stopRoomSong()
 		return
+	end
+	local position = rawPosition
+	if completion then
+		position = position % durationValue
+	else
+		local stopValue = stateAttribute("Level3_RoomSongStopSeconds", nil)
+		local stopSeconds = if type(stopValue) == "number" then stopValue else durationValue
+		if position >= math.min(durationValue, stopSeconds) then
+			stopRoomSong()
+			return
+		end
 	end
 
-	-- Rank before touching playback. Only the nearest two PA speakers are allowed
-	-- to own decoders; K previously made all 18 compressed streams seek together.
+	-- Both tracks use the identical nearest-two PA network. The completion master
+	-- loops in server time, so late joiners hear the same reversed bar in the same room.
+	local mode = if completion then "COMPLETION" else "ORIGINAL"
 	local timelineChanged = roomSongLastStartServerTime == nil
 		or math.abs(startValue - roomSongLastStartServerTime) > .05
+		or roomSongLastMode ~= mode
 	roomSongLastStartServerTime = startValue
+	roomSongLastMode = mode
 	local syncNow = os.clock()
 	local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 	local ranked: {any} = {}
@@ -529,6 +755,8 @@ local function updateRoomSong(dt: number)
 				sound.SoundId = id
 				roomSongLastHardSync[sound] = nil
 			end
+			sound.Looped = completion
+			sound.PlaybackSpeed = 1
 			local parentPart = sound.Parent
 			if root and root:IsA("BasePart") and parentPart and parentPart:IsA("BasePart") then
 				table.insert(ranked, {Voice=voice, Distance=(root.Position - parentPart.Position).Magnitude})
@@ -544,6 +772,10 @@ local function updateRoomSong(dt: number)
 		distanceBySound[record.Voice.Sound] = record.Distance
 	end
 
+	local primaryVolume = ROOM_SONG_SPEAKER_VOLUME
+	if completion then
+		primaryVolume = math.clamp(tonumber(stateAttribute("Level3_CompletionSongVolume", nil)) or .34, 0, 1)
+	end
 	local audibleCount = 0
 	local runningCount = 0
 	local totalTargetVolume = 0
@@ -560,21 +792,15 @@ local function updateRoomSong(dt: number)
 				or (timelineChanged and sound.IsPlaying)
 				or (drifted and maySync)
 			if shouldSync then
-				-- Stamp before touching the stream so a buffering decoder cannot be
-				-- hammered by the ten-hertz mixer loop.
 				roomSongLastHardSync[sound] = syncNow
 				pcall(function()
-					if not sound.IsPlaying then
-						sound.TimePosition = position
-						sound:Play()
-					else
-						sound.TimePosition = position
-					end
+					sound.TimePosition = position
+					if not sound.IsPlaying then sound:Play() end
 				end)
 			end
 			if sound.IsPlaying then runningCount += 1 end
 			local scale = if rank == 1 then 1 else ROOM_SONG_SECONDARY_VOLUME_SCALE
-			local targetVolume = ROOM_SONG_SPEAKER_VOLUME * scale
+			local targetVolume = primaryVolume * scale
 			audibleCount += 1
 			totalTargetVolume += targetVolume
 			sound.Volume += (targetVolume - sound.Volume) * blend
@@ -586,7 +812,6 @@ local function updateRoomSong(dt: number)
 				voice.Effect.LowGain = 0
 			end
 		else
-			-- Muted speakers must not continue decoding in the background.
 			sound.Volume = 0
 			if sound.IsPlaying then sound:Stop() end
 			roomSongLastHardSync[sound] = nil
@@ -596,6 +821,9 @@ local function updateRoomSong(dt: number)
 	script:SetAttribute("Level3_RoomSongRunningVoiceCount", runningCount)
 	script:SetAttribute("Level3_RoomSongPrimaryDistance", if #ranked > 0 then ranked[1].Distance else 0)
 	script:SetAttribute("Level3_RoomSongTargetVolume", totalTargetVolume)
+	script:SetAttribute("Level3_CompletionSongPlaying", completion and runningCount > 0)
+	script:SetAttribute("Level3_CompletionSongPitchOctave",
+		math.clamp(tonumber(stateAttribute("Level3_CompletionSongPitchOctave", nil)) or .68, .5, 1))
 end
 
 local function generationMatches(payload: {[any]: any}): boolean
@@ -670,6 +898,7 @@ end
 
 type CueSpec = {Key: string, Volume: number, Speed: number}
 local CUES: {[string]: CueSpec} = {
+	CDCollected = {Key="CDCollected", Volume=0.58, Speed=1.00},
 	ScareBalloonPop = {Key="ScareBalloonPop", Volume=0.48, Speed=1.00},
 	ScareChairScrape = {Key="ScareChairScrape", Volume=0.52, Speed=0.94},
 	ScareChildGiggle = {Key="ScareChildGiggle", Volume=0.42, Speed=1.00},
@@ -701,7 +930,9 @@ local function handleClientEvent(payload: any)
 		return
 	end
 	if not isActive() or not generationMatches(payload) then return end
-	if payload.Type == "Sound" then
+	if payload.Type == "ModuleCollected" then
+		triggerCDPitch(payload.Progress, payload.Goal)
+	elseif payload.Type == "Sound" then
 		playCue(payload.Cue, payload.Position)
 	end
 end
@@ -755,6 +986,8 @@ local function clearAmbience()
 	table.clear(ambience)
 	table.clear(ambienceBySound)
 	stopRoomSong()
+	stopCompletionSong()
+	resetCDPitch()
 	table.clear(roomSongSpeakers)
 end
 
@@ -764,12 +997,14 @@ local function tryAddRoomSongSpeaker(instance: Instance)
 		if voice.Sound == instance then return end
 	end
 	local effect = instance:FindFirstChildOfClass("EqualizerSoundEffect")
+	local pitchEffect = ensureCDPitchEffect(instance)
+	instance.PlaybackSpeed = 1
 	instance.Volume = 0
 	instance.Looped = false
 	instance.RollOffMode = Enum.RollOffMode.InverseTapered
 	instance.RollOffMinDistance = ROOM_SONG_MIN_DISTANCE
 	instance.RollOffMaxDistance = ROOM_SONG_MAX_DISTANCE
-	table.insert(roomSongSpeakers, {Sound=instance, Effect=effect})
+	table.insert(roomSongSpeakers, {Sound = instance, Effect = effect, PitchEffect = pitchEffect})
 end
 
 local function bindWorld(world: Model?)
@@ -855,7 +1090,7 @@ end
 -- Preload the small, allowlisted cue set. Empty/failed assets remain harmless.
 task.spawn(function()
 	local temporary: {Sound} = {}
-	for _, key in ipairs({"FluorescentHum", "PowerDown", "RoomListeningSong",
+	for _, key in ipairs({"FluorescentHum", "PowerDown", "RoomListeningSong", "RoomListeningSongReversed", "CDCollected",
 		"MallManagerBlackoutScream", "ScareBalloonPop", "ScareChairScrape", "ScareChildGiggle", "ScarePAWhisper", "ScareRunningSteps"}) do
 		local id = resolveId(key)
 		if id then
@@ -902,7 +1137,8 @@ RunService.Heartbeat:Connect(function(dt)
 			table.remove(ambience, index)
 		else
 				local sequencePhase = roomSongPhase()
-			local sequenceDuck = if sequencePhase == "PLAYING" or sequencePhase == "ARMED" then .20
+			local sequenceDuck = if completionSongRequested() then .04
+				elseif sequencePhase == "PLAYING" or sequencePhase == "ARMED" then .20
 				elseif sequencePhase == "PRE_BLACKOUT" then .14
 				elseif sequencePhase == "BLACKOUT_SONG" then .04 else 1
 			local target = if playing then record.TargetVolume * sequenceDuck else 0
@@ -917,6 +1153,8 @@ RunService.Heartbeat:Connect(function(dt)
 		end
 	end
 	updateRoomSong(elapsed)
+	updateCompletionSong(elapsed)
+	updateCDPitch(now)
 	updateBlackoutScream()
 	updateReaderCadence(now)
 
@@ -961,7 +1199,7 @@ RunService.Heartbeat:Connect(function(dt)
 		local candidate = nearestFixtures[voiceIndex]
 		if playing and candidate then voice.Emitter.Position = candidate.Part.Position end
 		local baseVolumes = {0.12, 0.075, 0.045}
-		local humTarget = if playing and candidate
+		local humTarget = if playing and candidate and not completionSongRequested()
 			and sequencePhase ~= "BLACKOUT_SONG" and sequencePhase ~= "BLACKOUT_HUNT"
 			then baseVolumes[voiceIndex]
 				* ((sequencePhase == "PLAYING" or sequencePhase == "ARMED" or sequencePhase == "PRE_BLACKOUT") and .24 or 1)
