@@ -1,0 +1,65 @@
+{
+  "set": "roblox-thumbnails-v5-carousel-highlight",
+  "created": "2026-08-27",
+  "universeId": "10559217407",
+  "placeId": "131311258779917",
+  "experience": "Backrooms: No Way Out",
+  "sourceOfTruth": "live Roblox Studio inspection and Studio-accurate v4 compositions",
+  "derivedFrom": "assets/marketing/roblox-thumbnails-v4-dark-horror",
+  "liveCarouselChanged": false,
+  "uploadStatus": "prepared-for-live-replacement",
+  "sourceDimensions": {
+    "width": 1672,
+    "height": 941,
+    "format": "PNG"
+  },
+  "uploadDimensions": {
+    "width": 1920,
+    "height": 1080,
+    "format": "JPEG",
+    "quality": 92
+  },
+  "images": [
+    {
+      "order": 1,
+      "level": 1,
+      "slug": "level1-entity-corner-chase",
+      "source": "01-level1-entity-corner-chase.png",
+      "upload": "01-level1-entity-corner-chase.jpg",
+      "highlight": "player, corrupted Entity, amber visor lights, and maze route"
+    },
+    {
+      "order": 2,
+      "level": 1,
+      "slug": "level1-entity-flashlight-ambush",
+      "source": "02-level1-entity-flashlight-ambush.png",
+      "upload": "02-level1-entity-flashlight-ambush.jpg",
+      "highlight": "flashlight beam, long claws, and amber visor lights"
+    },
+    {
+      "order": 3,
+      "level": 2,
+      "slug": "level2-pool-foam-kids-room",
+      "source": "03-level2-pool-foam-kids-room.png",
+      "upload": "03-level2-pool-foam-kids-room.jpg",
+      "highlight": "cyan water path, player, and colored faceless Pool Foam"
+    },
+    {
+      "order": 4,
+      "level": 2,
+      "slug": "level2-slidemouth-grand-slide-hall",
+      "source": "04-level2-slidemouth-grand-slide-hall.png",
+      "upload": "04-level2-slidemouth-grand-slide-hall.jpg",
+      "highlight": "Slidemouth teeth, pipe colors, player, and illuminated water route"
+    },
+    {
+      "order": 5,
+      "level": 3,
+      "slug": "level3-mall-manager-disc-relay",
+      "source": "05-level3-mall-manager-disc-relay.png",
+      "upload": "05-level3-mall-manager-disc-relay.jpg",
+      "highlight": "Mall Manager, player, CRT/VCR relay, and party-room props"
+    }
+  ]
+}
+
