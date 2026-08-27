@@ -2124,7 +2124,7 @@ end
 local function addPartyButton(parent, center)
 	local model = Instance.new("Model")
 	model.Name = "ZyntraPartyButton"
-	model:SetAttribute("PartyButtonVersion", 1)
+	model:SetAttribute("PartyButtonVersion", 2)
 	model:SetAttribute("Placement", "Right wall between Level 2 and the supply kiosk")
 	model:SetAttribute("PartyModeDuration", 10)
 	model.Parent = parent
@@ -2419,7 +2419,7 @@ function Builder.Build(center)
 	model:SetAttribute("DispatchConcourseVersion", 7)
 	model:SetAttribute("SupplyKioskVersion", 4)
 	model:SetAttribute("DonationLeaderboardVersion", 1)
-	model:SetAttribute("PartyButtonVersion", 1)
+	model:SetAttribute("PartyButtonVersion", 2)
 	model:SetAttribute("TunnelCurveRevision", 2)
 	model:SetAttribute("SignageRevision", 2)
 	model:SetAttribute("RoundedSignFacesVersion", 1)
