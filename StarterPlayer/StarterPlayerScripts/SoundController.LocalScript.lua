@@ -895,46 +895,34 @@ end
 if player.Character then configureDefaultSteps(player.Character) end
 player.CharacterAdded:Connect(configureDefaultSteps)
 
--- ── LEVEL 2 SHALLOW-WATER AUDIO ────────────────────────────────────────────
--- Runtime attributes/ValueBases remain useful for live tuning. These fallbacks
--- are the short "Mud Puddle Splash / Shallow Water Impacts" takes published by
--- the verified ProSoundEffects Creator Store account. They were runtime-preloaded
--- in this experience before being enabled here.
--- Put an override on ReplicatedStorage, Workspace, or ReplicatedStorage.Level2Audio
--- as Level2WadeStep1..7 / HeavyBootsSplash1..7 when a take is replaced.
-local LEVEL2_WADE_FALLBACK_IDS = {
-	"rbxassetid://9125703168",
-	"rbxassetid://9125702419",
-	"rbxassetid://9125702798",
-	"rbxassetid://9125702560",
-	"rbxassetid://9125702803",
-	"rbxassetid://9125702687",
-	"rbxassetid://9125702697",
+-- ── LEVEL 2 KNEE-DEEP WADE AUDIO ────────────────────────────────────────────
+-- These are complete human-wading phrases, not single puddle impacts. One core
+-- voice is therefore allowed to finish before another starts; retriggering a
+-- 2-3 second recording on every stride would chop its internal cadence and pile
+-- several splashes on top of each other. A quiet, single-voice underwater layer
+-- adds leg resistance without turning the mix into a swimming/bubble loop.
+--
+-- Runtime attributes/ValueBases remain useful for live tuning. Put overrides on
+-- ReplicatedStorage, Workspace, or ReplicatedStorage.Level2Audio as
+-- Level2WadeCore1..3 (the old Level2WadeStep1..3 aliases still work) and
+-- Level2WadeResistance. Fallbacks are provenance-clean ProSoundEffects Creator
+-- Store assets which were runtime-preloaded in this experience before use.
+local LEVEL2_WADE_CORE_SPECS = {
+	{ id = "rbxassetid://9120609652", duration = 2.368, gain = 1.00 },
+	{ id = "rbxassetid://9120609628", duration = 2.869333, gain = 0.96 },
+	{ id = "rbxassetid://9120609739", duration = 2.965333, gain = 0.94 },
 }
-
--- Per-take loudness matching keeps the shuffled bank consistent. Every source
--- starts with its impact, so trimming the opening would remove the actual step.
-local LEVEL2_WADE_SPECS = {
-	{ gain = 2.24, offset = 0 },
-	{ gain = 1.76, offset = 0 },
-	{ gain = 0.82, offset = 0 },
-	{ gain = 1.29, offset = 0 },
-	{ gain = 1.41, offset = 0 },
-	{ gain = 2.32, offset = 0 },
-	{ gain = 1.00, offset = 0 },
+local LEVEL2_WADE_RESISTANCE_SPEC = {
+	id = "rbxassetid://9120348019",
+	duration = 1.431083,
+	gain = 1.00,
 }
-
--- One upload can serve every Level 2 wade sound. Each boundary is sample-exact
--- in the 48 kHz WAV; 100 ms of silence separates adjacent segments.
-local LEVEL2_SFX_SPRITE_SEGMENTS = {
-	wade1 = { start = 0.000, duration = 1.186, gain = 1.585 },
-	wade2 = { start = 1.286, duration = 1.236, gain = 0.841 },
-	wade3 = { start = 2.622, duration = 0.916, gain = 1.000 },
-	wade4 = { start = 3.638, duration = 1.196, gain = 0.700 },
-	wade5 = { start = 4.934, duration = 1.146, gain = 1.245 },
-	wade6 = { start = 6.180, duration = 1.256, gain = 0.692 },
-	wade7 = { start = 7.536, duration = 1.106, gain = 2.661 },
-}
+local LEVEL2_WADE_CORE_VOLUME = 0.46
+local LEVEL2_WADE_RESISTANCE_VOLUME = 0.075
+local LEVEL2_WADE_PHRASE_GAP_MIN = 0.10
+local LEVEL2_WADE_PHRASE_GAP_MAX = 0.20
+local LEVEL2_WADE_RELEASE_GRACE = 0.18
+local LEVEL2_WADE_RELEASE_FADE = 0.16
 
 local function level2SoundId(raw)
 	if typeof(raw) == "number" then
@@ -973,16 +961,10 @@ local function level2Sources(model)
 	return sources
 end
 
-local function level2SpriteId(model)
-	for _, source in ipairs(level2Sources(model)) do
-		local id = level2ValueId(source, { "Level2SfxSpriteId" })
-		if id then return id end
-	end
-	return nil
-end
-
-local function level2TakeId(index, model)
+local function level2CoreId(index, model)
 	local names = {
+		"Level2WadeCore" .. index,
+		"Level2WadeCoreId" .. index,
 		"Level2WadeStep" .. index,
 		"Level2WadeStepId" .. index,
 		"HeavyBootsSplash" .. index,
@@ -993,7 +975,20 @@ local function level2TakeId(index, model)
 		local id = level2ValueId(source, names)
 		if id then return id end
 	end
-	return LEVEL2_WADE_FALLBACK_IDS[index]
+	local spec = LEVEL2_WADE_CORE_SPECS[index]
+	return spec and spec.id or nil
+end
+
+local function level2ResistanceId(model)
+	for _, source in ipairs(level2Sources(model)) do
+		local id = level2ValueId(source, {
+			"Level2WadeResistance",
+			"Level2WadeResistanceId",
+			"Level2UnderwaterMovement",
+		})
+		if id then return id end
+	end
+	return LEVEL2_WADE_RESISTANCE_SPEC.id
 end
 
 local function shuffleLevel2Bag(indices, previous)
@@ -1007,27 +1002,33 @@ local function shuffleLevel2Bag(indices, previous)
 	return indices
 end
 
-local function makeLevel2Bank(parent, name, baseVolume, model)
+local function makeLevel2WadeBank(parent, model)
 	local bank = {
-		voices = {},
 		bag = {},
-		cursor = 0,
 		lastTake = nil,
+		nextPhraseAt = 0,
+		playToken = 0,
+		releasing = false,
 	}
-	for index = 1, #LEVEL2_WADE_SPECS do
-		local voice = Instance.new("Sound")
-		voice.Name = name .. "Voice" .. index
-		voice.Looped = false
-		voice.Volume = 0
-		voice.Parent = parent
-		bank.voices[index] = voice
-	end
+	local core = Instance.new("Sound")
+	core.Name = "Level2PlayerWadeCore"
+	core.Looped = false
+	core.Volume = 0
+	core.Parent = parent
+	bank.core = core
 
-	function bank:nextTake(spriteAvailable)
+	local resistance = Instance.new("Sound")
+	resistance.Name = "Level2PlayerWadeResistance"
+	resistance.Looped = false
+	resistance.Volume = 0
+	resistance.Parent = parent
+	bank.resistance = resistance
+
+	function bank:nextTake()
 		if #self.bag == 0 then
 			local available = {}
-			for index = 1, #LEVEL2_WADE_SPECS do
-				if spriteAvailable or level2TakeId(index, model) then
+			for index = 1, #LEVEL2_WADE_CORE_SPECS do
+				if level2CoreId(index, model) then
 					available[#available + 1] = index
 				end
 			end
@@ -1040,73 +1041,117 @@ local function makeLevel2Bank(parent, name, baseVolume, model)
 	end
 
 	function bank:play(playbackSpeed, volumeScale)
-		local spriteId = level2SpriteId(model)
-		local take, id, startAt, duration, gain
-		if spriteId then
-			id = spriteId
-			take = self:nextTake(true)
-			local segment = take and LEVEL2_SFX_SPRITE_SEGMENTS["wade" .. take]
-			if not segment then return false end
-			startAt, duration, gain = segment.start, segment.duration, segment.gain
-		else
-			take = self:nextTake(false)
-			if not take then return false end
-			id = level2TakeId(take, model)
-			if not id then
-				self.bag = {}
-				return false
-			end
-			local spec = LEVEL2_WADE_SPECS[take]
-			startAt, gain = spec.offset, spec.gain
+		local now = os.clock()
+		if self.releasing or self.core.IsPlaying or now < self.nextPhraseAt then
+			return false
+		end
+		local take = self:nextTake()
+		local spec = take and LEVEL2_WADE_CORE_SPECS[take]
+		local id = take and level2CoreId(take, model)
+		if not (spec and id) then
+			self.bag = {}
+			return false
 		end
 
-		self.cursor = self.cursor % #self.voices + 1
-		local voice = self.voices[self.cursor]
 		local speed = playbackSpeed or 1
-		local token = (voice:GetAttribute("SpritePlayToken") or 0) + 1
-		voice:SetAttribute("SpritePlayToken", token)
-		voice:Stop()
-		voice.SoundId = id
-		voice.Volume = math.clamp(baseVolume * gain * (volumeScale or 1), 0, 2)
-		voice.PlaybackSpeed = speed
-		voice.TimePosition = startAt
-		voice:Play()
-		if duration then
-			task.delay(duration / speed, function()
-				if voice.Parent and voice:GetAttribute("SpritePlayToken") == token then
-					voice:Stop()
-				end
-			end)
+		local scale = volumeScale or 1
+		self.playToken += 1
+		self.core.SoundId = id
+		self.core.Volume = math.clamp(LEVEL2_WADE_CORE_VOLUME * spec.gain * scale, 0, 1.2)
+		self.core.PlaybackSpeed = speed
+		self.core.TimePosition = 0
+		self.core:Play()
+
+		local resistanceId = level2ResistanceId(model)
+		if resistanceId then
+			self.resistance:Stop()
+			self.resistance.SoundId = resistanceId
+			self.resistance.Volume = math.clamp(
+				LEVEL2_WADE_RESISTANCE_VOLUME * LEVEL2_WADE_RESISTANCE_SPEC.gain * scale,
+				0,
+				0.2
+			)
+			self.resistance.PlaybackSpeed = math.clamp(speed * 0.98, 0.86, 0.98)
+			self.resistance.TimePosition = 0
+			self.resistance:Play()
 		end
+
+		-- The known Store duration is a conservative fallback for a freshly
+		-- assigned Sound whose TimeLength has not populated yet. IsPlaying is a
+		-- second guard, so a longer runtime override can never be cut/restarted.
+		local duration = self.core.TimeLength > 0.1 and self.core.TimeLength or spec.duration
+		self.nextPhraseAt = now + duration / speed
+			+ math.random() * (LEVEL2_WADE_PHRASE_GAP_MAX - LEVEL2_WADE_PHRASE_GAP_MIN)
+			+ LEVEL2_WADE_PHRASE_GAP_MIN
 		return true
+	end
+
+	function bank:release()
+		if self.releasing or not (self.core.IsPlaying or self.resistance.IsPlaying) then return end
+		self.releasing = true
+		self.playToken += 1
+		local token = self.playToken
+		local coreFade = TweenService:Create(
+			self.core,
+			TweenInfo.new(LEVEL2_WADE_RELEASE_FADE, Enum.EasingStyle.Linear),
+			{Volume = 0}
+		)
+		local resistanceFade = TweenService:Create(
+			self.resistance,
+			TweenInfo.new(LEVEL2_WADE_RELEASE_FADE, Enum.EasingStyle.Linear),
+			{Volume = 0}
+		)
+		coreFade:Play()
+		resistanceFade:Play()
+		task.delay(LEVEL2_WADE_RELEASE_FADE, function()
+			if self.playToken ~= token then return end
+			self.core:Stop()
+			self.resistance:Stop()
+			self.releasing = false
+			-- The old phrase has been deliberately retired; only a short debounce
+			-- is needed if movement resumes, not the remainder of its old duration.
+			self.nextPhraseAt = os.clock() + 0.12
+		end)
 	end
 
 	function bank:stop()
 		self.bag = {}
-		for _, voice in ipairs(self.voices) do
-			voice:SetAttribute("SpritePlayToken", (voice:GetAttribute("SpritePlayToken") or 0) + 1)
-			voice:Stop()
-		end
+		self.playToken += 1
+		self.releasing = false
+		self.nextPhraseAt = 0
+		self.core.Volume = 0
+		self.resistance.Volume = 0
+		self.core:Stop()
+		self.resistance:Stop()
 	end
 
 	return bank
 end
 
-local level2PlayerBank = makeLevel2Bank(SoundService, "Level2PlayerWade", 0.36, nil)
+local level2PlayerBank = makeLevel2WadeBank(SoundService, nil)
 task.spawn(function()
-	-- Warm every take once. The bank changes SoundId per shuffled step, and
-	-- preloading here prevents the first splash of a round from arriving late.
+	-- Warm all three complete phrases and the shared underwater layer. The bank
+	-- changes SoundId between phrases, so this avoids a silent first wade.
 	local warmers = {}
-	for index = 1, #LEVEL2_WADE_SPECS do
-		local id = level2TakeId(index, nil)
+	for index = 1, #LEVEL2_WADE_CORE_SPECS do
+		local id = level2CoreId(index, nil)
 		if id then
 			local sound = Instance.new("Sound")
-			sound.Name = "Level2WadePreload" .. index
+			sound.Name = "Level2WadeCorePreload" .. index
 			sound.SoundId = id
 			sound.Volume = 0
 			sound.Parent = SoundService
 			warmers[#warmers + 1] = sound
 		end
+	end
+	local resistanceId = level2ResistanceId(nil)
+	if resistanceId then
+		local sound = Instance.new("Sound")
+		sound.Name = "Level2WadeResistancePreload"
+		sound.SoundId = resistanceId
+		sound.Volume = 0
+		sound.Parent = SoundService
+		warmers[#warmers + 1] = sound
 	end
 	if #warmers > 0 then
 		pcall(function() ContentProvider:PreloadAsync(warmers) end)
@@ -1118,6 +1163,7 @@ level2WaterRay.FilterType = Enum.RaycastFilterType.Exclude
 level2WaterRay.IgnoreWater = false
 local level2PlayerLastPosition = nil
 local level2PlayerStepClock = 0
+local level2WadeMovingUntil = 0
 
 -- dry-tile footsteps: the poolside sound for walking where there is NO water
 -- underfoot. The id lives in ReplicatedStorage["Level 2 Sound Library"] as the
@@ -1218,12 +1264,21 @@ local function level2WadeVolumeScale(humanoid)
 	return 0.94 -- walk
 end
 
+local function level2WadePlaybackSpeed(flatSpeed)
+	-- Keep pitch movement narrow and below natural speed for heavier boots. The
+	-- player's pace still nudges the authored phrase faster while sprinting.
+	local variation = (math.random() - 0.5) * 0.024
+	return math.clamp(0.88 + flatSpeed * 0.0035 + variation, 0.88, 0.98)
+end
+
 RunService.Heartbeat:Connect(function(dt)
 	local hum, root = aliveParts()
 	if player:GetAttribute("InRound") ~= true
 		or workspace:GetAttribute("SelectedLevel") ~= 2 or not hum or not root then
 		level2PlayerLastPosition = root and root.Position or nil
 		level2PlayerStepClock = 0
+		level2WadeMovingUntil = 0
+		level2PlayerBank:release()
 		return
 	end
 
@@ -1236,18 +1291,32 @@ RunService.Heartbeat:Connect(function(dt)
 	level2PlayerLastPosition = now
 	if displacement > 7 then
 		level2PlayerStepClock = 0
+		level2WadeMovingUntil = 0
+		level2PlayerBank:stop()
 		return
 	end
 	local flatSpeed = dt > 0 and displacement / dt or 0
-	if flatSpeed < 1.35 or level2FootingBlocked(hum) then
+	local footingBlocked = level2FootingBlocked(hum)
+	if flatSpeed < 1.35 or footingBlocked then
 		level2PlayerStepClock = math.min(level2PlayerStepClock, 0.12)
+		if footingBlocked then level2WadeMovingUntil = 0 end
+		if os.clock() >= level2WadeMovingUntil then level2PlayerBank:release() end
 		return
 	end
 	local wet = level2ShallowWater(root)
 	if not wet and hum.FloorMaterial == Enum.Material.Air then
 		-- nothing underfoot at all (running off a deck edge): no steps
 		level2PlayerStepClock = math.min(level2PlayerStepClock, 0.12)
+		level2WadeMovingUntil = 0
+		level2PlayerBank:release()
 		return
+	end
+	if wet then
+		level2WadeMovingUntil = os.clock() + LEVEL2_WADE_RELEASE_GRACE
+		level2StopDrySteps()
+	else
+		level2WadeMovingUntil = 0
+		level2PlayerBank:release()
 	end
 
 	local cadence = math.clamp(0.68 - flatSpeed * 0.015, 0.30, 0.56)
@@ -1255,7 +1324,12 @@ RunService.Heartbeat:Connect(function(dt)
 	if level2PlayerStepClock >= cadence then
 		level2PlayerStepClock %= cadence
 		if wet then
-			level2PlayerBank:play(0.97 + math.random() * 0.06, level2WadeVolumeScale(hum))
+			-- A stride is only the launch boundary. The bank itself owns phrase
+			-- duration/cooldown and rejects retriggers while its core is sounding.
+			level2PlayerBank:play(
+				level2WadePlaybackSpeed(flatSpeed),
+				level2WadeVolumeScale(hum)
+			)
 		else
 			-- dry tile: same cadence clock, the dedicated dry-tile take
 			level2PlayDryStep(flatSpeed)
@@ -1269,6 +1343,7 @@ workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(function()
 		steps.Volume = 0
 		level2PlayerStepClock = 0
 	else
+		level2WadeMovingUntil = 0
 		level2PlayerBank:stop()
 		level2StopDrySteps()
 	end
@@ -1283,5 +1358,6 @@ player:GetAttributeChangedSignal("InRound"):Connect(function()
 		level2StopDrySteps()
 		level2PlayerLastPosition = nil
 		level2PlayerStepClock = 0
+		level2WadeMovingUntil = 0
 	end
 end)

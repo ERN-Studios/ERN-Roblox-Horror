@@ -119,7 +119,8 @@ hand-authored Flooded Poolrooms level is preserved in
   `ReplicatedStorage["Level 2 Sound Library"]` — ambience beds, authored cues
   (the pressure door gets a spatial multi-emitter corridor echo), random
   contextual one-shots anchored to real world geometry, **wading footsteps**
-  (7-take shuffle bank driven by an actual water raycast) and a separate
+  (three complete human-wading phrases plus a quiet underwater-resistance
+  layer, driven by an actual water raycast) and a separate
   **dry-tile footstep slot** (`Level 2 Player Dry Tile Walking Sound`) for
   walking where there's no water underfoot.
 - **Hostiles in development:** the **Pool Foam** stack (controller, navigator
@@ -263,7 +264,8 @@ quick tests (don't sync the overrides):
 
 **Dev cheats** (`DevCheats.LocalScript` — whitelisted accounts only):
 `B` ESP + 3 s fast queue · `V` noclip fly · `P` pause entity · `I` push immunity ·
-`U` unlimited battery/stamina · `C` third person · `J` Zyntra developer phone · `M` dispatch mute.
+`U` unlimited battery/stamina · `C` third person · `J` Zyntra developer phone ·
+`M` mute/unmute the active dispatch · `N` stop the current dispatch briefing.
 Lock down / remove before publishing.
 
 ## 🗺️ Roadmap to release

@@ -171,7 +171,7 @@ local function selectTab(name)
 	end
 end
 
-local tabNames = { "Upgrades", "Shop", "Colors" }
+local tabNames = { "Upgrades", "Shop", "Donate", "Colors" }
 if devAllowed then table.insert(tabNames, "Dev") end
 for _, name in ipairs(tabNames) do
 	local tab = button(tabBar, string.upper(name), UDim2.fromOffset(150, 40))
@@ -504,6 +504,104 @@ makeProductCard("Tokens20", Config.Products.Tokens20, "Product")
 makeProductCard("EmergencyReentry", Config.Products.EmergencyReentry, "Product")
 makeProductCard("CosmeticEquipment", Config.Passes.CosmeticEquipment, "Pass")
 
+local supportIntro = label(
+	pages.Donate,
+	"OPTIONAL DONATION  •  REPEATABLE  •  NO GAMEPLAY ADVANTAGE",
+	UDim2.new(1, 0, 0, 24),
+	UDim2.fromOffset(4, 0),
+	13,
+	COLORS.accent,
+	Enum.Font.Code
+)
+supportIntro.TextXAlignment = Enum.TextXAlignment.Left
+local supportTotalLabel = label(
+	pages.Donate,
+	"YOUR RECORDED DONATIONS  0 R$",
+	UDim2.new(1, -8, 0, 24),
+	UDim2.fromOffset(4, 25),
+	13,
+	COLORS.accent2,
+	Enum.Font.GothamBold
+)
+supportTotalLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local supportScroll = Instance.new("ScrollingFrame")
+supportScroll.Position = UDim2.fromOffset(0, 58)
+supportScroll.Size = UDim2.new(1, 0, 1, -58)
+supportScroll.BackgroundTransparency = 1
+supportScroll.BorderSizePixel = 0
+supportScroll.ScrollBarThickness = 5
+supportScroll.ScrollBarImageColor3 = COLORS.accent
+supportScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+supportScroll.CanvasSize = UDim2.new()
+supportScroll.Parent = pages.Donate
+
+local supportGrid = Instance.new("UIGridLayout")
+supportGrid.CellSize = UDim2.new(0.5, -8, 0, 92)
+supportGrid.CellPadding = UDim2.fromOffset(12, 10)
+supportGrid.SortOrder = Enum.SortOrder.LayoutOrder
+supportGrid.Parent = supportScroll
+
+local function makeDonationCard(key, item)
+	local card = Instance.new("Frame")
+	card.Name = key
+	card.LayoutOrder = math.floor(tonumber(item.Order) or 0)
+	card.BackgroundColor3 = COLORS.card
+	card.BorderSizePixel = 0
+	card.Parent = supportScroll
+	corner(card, 9)
+	outline(card, COLORS.accent, 0.52)
+
+	local heading = label(
+		card,
+		item.Name,
+		UDim2.new(1, -24, 0, 28),
+		UDim2.fromOffset(12, 8),
+		16,
+		COLORS.text,
+		Enum.Font.GothamBold
+	)
+	heading.TextWrapped = true
+	local productId = math.floor(tonumber(item.Id) or 0)
+	local buy = button(card, tostring(item.Price) .. " R$  //  DONATE", UDim2.new(1, -24, 0, 36), UDim2.new(0, 12, 1, -44))
+	buy.TextColor3 = COLORS.accent2
+	productButtons[key] = buy
+	displayedProductPrices[key] = math.max(0, math.floor(tonumber(item.Price) or 0))
+	if productId <= 0 then
+		buy.Text = "COMING SOON"
+		buy.TextColor3 = COLORS.muted
+		buy.Active = false
+		buy.Selectable = false
+	else
+		task.spawn(function()
+			local ok, info = pcall(MarketplaceService.GetProductInfo, MarketplaceService, productId, Enum.InfoType.Product)
+			local price = ok and type(info) == "table" and tonumber(info.PriceInRobux) or nil
+			if price and price >= 0 and buy.Parent and buy.Active then
+				displayedProductPrices[key] = math.floor(price)
+				buy.Text = tostring(math.floor(price)) .. " R$  //  DONATE"
+			end
+		end)
+		buy.Activated:Connect(function()
+			MarketplaceService:PromptProductPurchase(player, productId)
+		end)
+	end
+	return card
+end
+
+local donationEntries = {}
+for key, item in pairs(Config.Donations or {}) do
+	donationEntries[#donationEntries + 1] = { Key = key, Item = item }
+end
+table.sort(donationEntries, function(a, b)
+	local aOrder = tonumber(a.Item.Order) or math.huge
+	local bOrder = tonumber(b.Item.Order) or math.huge
+	if aOrder == bOrder then return a.Key < b.Key end
+	return aOrder < bOrder
+end)
+for _, entry in ipairs(donationEntries) do
+	makeDonationCard(entry.Key, entry.Item)
+end
+
 local colorsScroll = Instance.new("ScrollingFrame")
 colorsScroll.Size = UDim2.fromScale(1, 1)
 colorsScroll.BackgroundTransparency = 1
@@ -762,6 +860,7 @@ local function refreshUI()
 		return
 	end
 	tokenLabel.Text = "TOKENS  " .. tostring(profile.Tokens)
+	supportTotalLabel.Text = "YOUR RECORDED DONATIONS  " .. tostring(profile.DonationRobux or 0) .. " R$"
 	staminaCard.Current.Text = "+" .. tostring(profile.StaminaPercent) .. "%"
 	staminaCard.Level.Text = "LEVEL " .. tostring(profile.StaminaLevel)
 	batteryCard.Current.Text = "+" .. tostring(profile.BatteryPercent) .. "%"

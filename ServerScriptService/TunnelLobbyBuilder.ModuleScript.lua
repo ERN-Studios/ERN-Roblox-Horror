@@ -238,14 +238,14 @@ end
 local function addDonationLeaderboard(parent, center)
 	local model = Instance.new("Model")
 	model.Name = "ZyntraDonationLeaderboardBoard"
-	model:SetAttribute("LeaderboardVersion", 1)
-	model:SetAttribute("RankingScope", "Developer product support recorded since August 2026")
+	model:SetAttribute("LeaderboardVersion", 2)
+	model:SetAttribute("RankingScope", "Donation Developer Products recorded since August 2026")
 	model.Parent = parent
 
 	local panel = makePart(
 		model,
 		"LeaderboardPanel",
-		CFrame.new(center + Vector3.new(-31.55, 7.15, -35)),
+		CFrame.new(center + Vector3.new(-30, 7.15, -35)),
 		Vector3.new(0.62, 12.6, 18),
 		Color3.fromRGB(25, 31, 30),
 		Enum.Material.Metal
@@ -253,6 +253,24 @@ local function addDonationLeaderboard(parent, center)
 	panel.CanCollide = false
 	panel.CanTouch = false
 	panel.CanQuery = false
+
+	-- Moving the display clear of the curved ceiling leaves a narrow space behind
+	-- it. Fill from the tunnel wall through the panel's front face with one solid,
+	-- invisible convex block: players cannot walk through the display or enter a
+	-- pocket behind it, and the main walkway still retains almost 13 studs.
+	local collision = makePart(
+		model,
+		"LeaderboardCollision",
+		CFrame.new(center + Vector3.new(-31.37, 7.05, -35)),
+		Vector3.new(3.36, 12.8, 18),
+		Color3.new(0, 0, 0),
+		Enum.Material.SmoothPlastic
+	)
+	collision.Transparency = 1
+	collision.CanCollide = true
+	collision.CanTouch = false
+	collision.CanQuery = true
+	collision.CastShadow = false
 
 	local gui = Instance.new("SurfaceGui")
 	gui.Name = "DonationLeaderboardDisplay"
@@ -284,7 +302,7 @@ local function addDonationLeaderboard(parent, center)
 	title.Size = UDim2.new(1, -76, 0, 58)
 	title.BackgroundTransparency = 1
 	title.Font = Enum.Font.GothamBlack
-	title.Text = "TOP SUPPORTERS"
+	title.Text = "TOP DONORS"
 	title.TextColor3 = COLORS.green
 	title.TextSize = 43
 	title.TextXAlignment = Enum.TextXAlignment.Left
@@ -296,7 +314,7 @@ local function addDonationLeaderboard(parent, center)
 	status.Size = UDim2.new(1, -80, 0, 30)
 	status.BackgroundTransparency = 1
 	status.Font = Enum.Font.Code
-	status.Text = "CONNECTING TO GLOBAL RANKINGS"
+	status.Text = "CONNECTING TO DONATION RANKINGS"
 	status.TextColor3 = Color3.fromRGB(215, 205, 165)
 	status.TextSize = 19
 	status.TextXAlignment = Enum.TextXAlignment.Left
@@ -320,7 +338,7 @@ local function addDonationLeaderboard(parent, center)
 		row.BackgroundTransparency = 0.12
 		row.BorderSizePixel = 0
 		row.Font = Enum.Font.Code
-		row.Text = rank == 1 and "NO SUPPORT PURCHASES YET" or ""
+		row.Text = rank == 1 and "NO DONATIONS RECORDED YET" or ""
 		row.TextColor3 = rank <= 3 and Color3.fromRGB(236, 224, 165) or Color3.fromRGB(201, 225, 214)
 		row.TextSize = 24
 		row.TextXAlignment = Enum.TextXAlignment.Left
@@ -2410,7 +2428,7 @@ function Builder.Build(center)
 	model:SetAttribute("LobbyAestheticRevision", 3)
 	model:SetAttribute("DispatchConcourseVersion", 7)
 	model:SetAttribute("SupplyKioskVersion", 4)
-	model:SetAttribute("DonationLeaderboardVersion", 1)
+	model:SetAttribute("DonationLeaderboardVersion", 2)
 	model:SetAttribute("PartyButtonVersion", 1)
 	model:SetAttribute("TunnelCurveRevision", 2)
 	model:SetAttribute("SignageRevision", 2)

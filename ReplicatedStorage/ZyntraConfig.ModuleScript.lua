@@ -4,7 +4,7 @@
 
 return {
 	DataStoreName = "ZyntraPlayerData_v1",
-	SupportLeaderboardDataStoreName = "ZyntraDonationLeaderboard_v1",
+	SupportLeaderboardDataStoreName = "ZyntraDonationLeaderboard_v2",
 	SupportLeaderboardSize = 10,
 	SupportLeaderboardRefreshSeconds = 90,
 	TokenPercentPerLevel = 0.05,
@@ -47,7 +47,6 @@ return {
 			Name = "4 Research Tokens",
 			Price = 49,
 			TokenGrant = 4,
-			CountsTowardSupportLeaderboard = true,
 			Description = "Adds 4 Research Tokens to your account. Spend each token on a permanent +5% upgrade to either Stamina Capacity or Battery Capacity.",
 		},
 		Tokens20 = {
@@ -56,7 +55,6 @@ return {
 			Name = "20 Research Tokens",
 			Price = 149,
 			TokenGrant = 20,
-			CountsTowardSupportLeaderboard = true,
 			Description = "Adds 20 Research Tokens to your account. Spend each token on a permanent +5% upgrade to either Stamina Capacity or Battery Capacity.",
 		},
 		EmergencyReentry = {
@@ -65,8 +63,56 @@ return {
 			Name = "Emergency Re-entry",
 			Price = 29,
 			ReentryGrant = 1,
-			CountsTowardSupportLeaderboard = true,
 			Description = "Adds 1 stored Emergency Re-entry credit. After dying during an active run, use it to rejoin once that round.",
+		},
+	},
+
+	-- Optional, repeatable donations with no gameplay grant. Keep these separate
+	-- from utility Developer Products so only intentional donations reach the
+	-- global leaderboard. All six products belong to this experience; any future
+	-- entry with a zero ID remains visibly disabled in the client.
+	Donations = {
+		DonationSignal = {
+			Id = 3710116814,
+			Order = 1,
+			Name = "ZYNTRA Donate — Signal",
+			Price = 10,
+			Description = "Optional, repeatable donation toward continued development of Backrooms: No Way Out. Grants no items or gameplay advantages.",
+		},
+		DonationSupply = {
+			Id = 3710116945,
+			Order = 2,
+			Name = "ZYNTRA Donate — Supply",
+			Price = 50,
+			Description = "Optional, repeatable donation toward continued development of Backrooms: No Way Out. Grants no items or gameplay advantages.",
+		},
+		DonationField = {
+			Id = 3710117017,
+			Order = 3,
+			Name = "ZYNTRA Donate — Field",
+			Price = 100,
+			Description = "Optional, repeatable donation toward continued development of Backrooms: No Way Out. Grants no items or gameplay advantages.",
+		},
+		DonationResearch = {
+			Id = 3710117070,
+			Order = 4,
+			Name = "ZYNTRA Donate — Research",
+			Price = 250,
+			Description = "Optional, repeatable donation toward continued development of Backrooms: No Way Out. Grants no items or gameplay advantages.",
+		},
+		DonationCommand = {
+			Id = 3710117099,
+			Order = 5,
+			Name = "ZYNTRA Donate — Command",
+			Price = 500,
+			Description = "Optional, repeatable donation toward continued development of Backrooms: No Way Out. Grants no items or gameplay advantages.",
+		},
+		DonationDirector = {
+			Id = 3710117136,
+			Order = 6,
+			Name = "ZYNTRA Donate — Director",
+			Price = 1000,
+			Description = "Optional, repeatable donation toward continued development of Backrooms: No Way Out. Grants no items or gameplay advantages.",
 		},
 	},
 

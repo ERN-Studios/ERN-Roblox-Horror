@@ -22,6 +22,8 @@ local dispatchAudio = {
 	group = SoundService:FindFirstChild("ZyntraDispatchAudio"),
 	pending = false,
 	pendingValue = nil,
+	transmissions = {},
+	transmissionSerial = 0,
 }
 if dispatchAudio.group and not dispatchAudio.group:IsA("SoundGroup") then
 	dispatchAudio.group:Destroy()
@@ -45,22 +47,68 @@ function dispatchAudio.preferenceUnavailable()
 		and not dispatchAudio.preferenceLoaded()
 end
 
+function dispatchAudio.hasActiveTransmission()
+	return next(dispatchAudio.transmissions) ~= nil
+end
+
+function dispatchAudio.currentTransmission()
+	local currentOwner = nil
+	local current = nil
+	for owner, transmission in pairs(dispatchAudio.transmissions) do
+		if current == nil or transmission.serial > current.serial then
+			currentOwner = owner
+			current = transmission
+		end
+	end
+	return currentOwner, current
+end
+
+function dispatchAudio.beginTransmission(owner, token, stopCallback)
+	dispatchAudio.transmissionSerial += 1
+	dispatchAudio.transmissions[owner] = {
+		token = token,
+		serial = dispatchAudio.transmissionSerial,
+		stop = stopCallback,
+	}
+	dispatchAudio.refresh()
+end
+
+function dispatchAudio.finishTransmission(owner, token)
+	local transmission = dispatchAudio.transmissions[owner]
+	if transmission == nil or transmission.token ~= token then return end
+	dispatchAudio.transmissions[owner] = nil
+	dispatchAudio.refresh()
+end
+
+function dispatchAudio.clearTransmission(owner)
+	if dispatchAudio.transmissions[owner] == nil then return end
+	dispatchAudio.transmissions[owner] = nil
+	dispatchAudio.refresh()
+end
+
 function dispatchAudio.refresh()
 	local loaded = dispatchAudio.preferenceLoaded()
 	local muted = player:GetAttribute("ZyntraMuteDispatch") == true
+	local active = dispatchAudio.hasActiveTransmission()
 	if dispatchAudio.pendingValue ~= nil then muted = dispatchAudio.pendingValue end
 	dispatchAudio.group.Volume = loaded and (muted and 0 or 1) or 0
 	if dispatchAudio.button then
 		dispatchAudio.button.Text = dispatchAudio.preferenceUnavailable() and "[M] DISPATCH: UNAVAILABLE"
 			or not loaded and "[M] DISPATCH: LOADING"
 			or dispatchAudio.pending and (muted and "[M] MUTING..." or "[M] UNMUTING...")
-			or muted and "[M] DISPATCH: MUTED"
-			or "[M] DISPATCH: ON"
+			or muted and "[M] UNMUTE DISPATCH"
+			or "[M] MUTE DISPATCH"
 		dispatchAudio.button.TextColor3 = muted
 			and Color3.fromRGB(255, 184, 105)
 			or Color3.fromRGB(105, 238, 168)
-		dispatchAudio.button.Active = loaded and not dispatchAudio.pending
+		dispatchAudio.button.Visible = active
+		dispatchAudio.button.Active = active and loaded and not dispatchAudio.pending
 		dispatchAudio.button.Selectable = dispatchAudio.button.Active
+	end
+	if dispatchAudio.stopButton then
+		dispatchAudio.stopButton.Visible = active
+		dispatchAudio.stopButton.Active = active
+		dispatchAudio.stopButton.Selectable = active
 	end
 end
 
@@ -81,7 +129,11 @@ function dispatchAudio.awaitPreference()
 end
 
 function dispatchAudio.requestToggle()
-	if dispatchAudio.pending or not dispatchAudio.preferenceLoaded() then return end
+	if not dispatchAudio.hasActiveTransmission()
+		or dispatchAudio.pending
+		or not dispatchAudio.preferenceLoaded() then
+		return false
+	end
 	dispatchAudio.pending = true
 	dispatchAudio.pendingValue = player:GetAttribute("ZyntraMuteDispatch") ~= true
 	dispatchAudio.refresh() -- mute/unmute the active transmission immediately
@@ -93,6 +145,19 @@ function dispatchAudio.requestToggle()
 			dispatchAudio.refresh()
 		end
 	end)
+	return true
+end
+
+function dispatchAudio.requestStop()
+	local owner, transmission = dispatchAudio.currentTransmission()
+	if owner == nil or transmission == nil then return false end
+
+	-- Retire this exact owner/token before invoking its callback. Any stale
+	-- coroutine can now only finish its old token and cannot hide a newer cue.
+	dispatchAudio.transmissions[owner] = nil
+	dispatchAudio.refresh()
+	transmission.stop()
+	return true
 end
 
 player:GetAttributeChangedSignal("ZyntraProfileLoaded"):Connect(dispatchAudio.refresh)
@@ -1183,16 +1248,53 @@ dispatchAudio.button.Text = "[M] DISPATCH: LOADING"
 dispatchAudio.button.TextColor3 = Color3.fromRGB(105, 238, 168)
 dispatchAudio.button.TextSize = 14
 dispatchAudio.button.ZIndex = 35
+dispatchAudio.button.Visible = false
 dispatchAudio.button.Parent = guideGui
 roundAndStroke(dispatchAudio.button, 8, Color3.fromRGB(80, 221, 177), 0.42, 1)
 dispatchAudio.button.Activated:Connect(function()
 	dispatchAudio.requestToggle()
 end)
 ContextActionService:BindAction("ZyntraToggleDispatchMute", function(_, inputState)
-	if UIS:GetFocusedTextBox() then return Enum.ContextActionResult.Pass end
-	if inputState == Enum.UserInputState.Begin then dispatchAudio.requestToggle() end
-	return Enum.ContextActionResult.Sink
+	if inputState ~= Enum.UserInputState.Begin
+		or UIS:GetFocusedTextBox()
+		or not dispatchAudio.hasActiveTransmission() then
+		return Enum.ContextActionResult.Pass
+	end
+	return dispatchAudio.requestToggle()
+		and Enum.ContextActionResult.Sink
+		or Enum.ContextActionResult.Pass
 end, false, Enum.KeyCode.M)
+
+dispatchAudio.stopButton = Instance.new("TextButton")
+dispatchAudio.stopButton.Name = "DispatchStopButton"
+dispatchAudio.stopButton.AnchorPoint = Vector2.new(1, 0)
+dispatchAudio.stopButton.Position = UDim2.new(1, -244, 0, 68)
+dispatchAudio.stopButton.Size = UDim2.fromOffset(168, 42)
+dispatchAudio.stopButton.BackgroundColor3 = Color3.fromRGB(18, 10, 8)
+dispatchAudio.stopButton.BackgroundTransparency = 0.08
+dispatchAudio.stopButton.BorderSizePixel = 0
+dispatchAudio.stopButton.AutoButtonColor = true
+dispatchAudio.stopButton.Font = Enum.Font.Code
+dispatchAudio.stopButton.Text = "[N] STOP DISPATCH"
+dispatchAudio.stopButton.TextColor3 = Color3.fromRGB(255, 184, 105)
+dispatchAudio.stopButton.TextSize = 14
+dispatchAudio.stopButton.ZIndex = 35
+dispatchAudio.stopButton.Visible = false
+dispatchAudio.stopButton.Parent = guideGui
+roundAndStroke(dispatchAudio.stopButton, 8, Color3.fromRGB(255, 156, 91), 0.42, 1)
+dispatchAudio.stopButton.Activated:Connect(function()
+	dispatchAudio.requestStop()
+end)
+ContextActionService:BindAction("ZyntraStopCurrentDispatch", function(_, inputState)
+	if inputState ~= Enum.UserInputState.Begin
+		or UIS:GetFocusedTextBox()
+		or not dispatchAudio.hasActiveTransmission() then
+		return Enum.ContextActionResult.Pass
+	end
+	return dispatchAudio.requestStop()
+		and Enum.ContextActionResult.Sink
+		or Enum.ContextActionResult.Pass
+end, false, Enum.KeyCode.N)
 dispatchAudio.refresh()
 
 local lobbySkipButton = Instance.new("TextButton")
@@ -1683,6 +1785,7 @@ end
 
 function lobbyBriefing.cancel()
 	lobbyBriefing.run += 1
+	dispatchAudio.clearTransmission("lobby")
 	local ownedSubtitle = lobbyBriefing.active
 	lobbyBriefing.pending = false
 	lobbyBriefing.active = false
@@ -1770,6 +1873,10 @@ function lobbyBriefing.playOnce()
 			return
 		end
 
+		dispatchAudio.beginTransmission("lobby", run, function()
+			if run ~= lobbyBriefing.run then return end
+			lobbyBriefing.cancel()
+		end)
 		lobbyBriefing.radio:Stop()
 		lobbyBriefing.radio.TimePosition = 0
 		local radioPlayed = pcall(function() lobbyBriefing.radio:Play() end)
@@ -1836,6 +1943,7 @@ function lobbyBriefing.playOnce()
 		player:SetAttribute("LobbyBriefingActive", false)
 		lobbySkipButton.Visible = false
 		setSubtitle(nil)
+		dispatchAudio.finishTransmission("lobby", run)
 	end)
 end
 
@@ -1857,6 +1965,7 @@ task.spawn(preloadLevelOneBriefing)
 
 local function cancelLevelOneBriefing(hideObjectives)
 	briefingRun += 1
+	dispatchAudio.clearTransmission("level1")
 	levelOneRadioCue:Stop()
 	levelOneBriefingSound:Stop()
 	player:SetAttribute("LevelOneBriefingActive", false)
@@ -1908,6 +2017,9 @@ local function updateLevelOneGuideLayout()
 	dispatchAudio.button.Position = narrow and UDim2.new(1, -10, 0, 70) or UDim2.new(1, -244, 0, 20)
 	dispatchAudio.button.Size = narrow and UDim2.fromOffset(154, 38) or UDim2.fromOffset(168, 42)
 	dispatchAudio.button.TextSize = narrow and 12 or 14
+	dispatchAudio.stopButton.Position = narrow and UDim2.new(1, -10, 0, 114) or UDim2.new(1, -244, 0, 68)
+	dispatchAudio.stopButton.Size = narrow and UDim2.fromOffset(154, 38) or UDim2.fromOffset(168, 42)
+	dispatchAudio.stopButton.TextSize = narrow and 12 or 14
 	lobbySkipButton.Position = narrow
 		and UDim2.new(0.5, 0, 1, -212)
 		or UDim2.new(0.5, 0, 1, -168)
@@ -1970,6 +2082,13 @@ local function playLevelOneBriefing()
 		if run ~= briefingRun or not isLevelOneParticipant() then return end
 
 		setMsg("")
+		dispatchAudio.beginTransmission("level1", run, function()
+			if run ~= briefingRun then return end
+			cancelLevelOneBriefing(false)
+			if isLevelOneParticipant() then
+				setObjectivesAvailable(true)
+			end
+		end)
 		levelOneRadioCue:Stop()
 		levelOneRadioCue.TimePosition = 0
 		local radioPlayed = pcall(function() levelOneRadioCue:Play() end)
@@ -1990,7 +2109,10 @@ local function playLevelOneBriefing()
 			local waitForSpeech = speechAt - os.clock()
 			if waitForSpeech > 0 then task.wait(waitForSpeech) end
 		end
-		if run ~= briefingRun or not isLevelOneParticipant() then return end
+		if run ~= briefingRun or not isLevelOneParticipant() then
+			dispatchAudio.finishTransmission("level1", run)
+			return
+		end
 
 		levelOneBriefingSound:Stop()
 		levelOneBriefingSound.TimePosition = 0
@@ -1998,6 +2120,7 @@ local function playLevelOneBriefing()
 		local played = pcall(function() levelOneBriefingSound:Play() end)
 		if not played then
 			player:SetAttribute("LevelOneBriefingActive", false)
+			dispatchAudio.finishTransmission("level1", run)
 			if run == briefingRun and isLevelOneParticipant() then
 				setObjectivesAvailable(true)
 			end
@@ -2030,6 +2153,7 @@ local function playLevelOneBriefing()
 		end
 
 		player:SetAttribute("LevelOneBriefingActive", false)
+		dispatchAudio.finishTransmission("level1", run)
 		if run ~= briefingRun then return end
 		setSubtitle(nil)
 		if isLevelOneParticipant() then
@@ -2040,6 +2164,7 @@ end
 
 local function cancelLevelTwoBriefing()
 	levelTwoBriefingRun += 1
+	dispatchAudio.clearTransmission("level2")
 	levelTwoRadioCue:Stop()
 	levelTwoBriefingSound:Stop()
 	player:SetAttribute("LevelTwoBriefingActive", false)
@@ -2082,6 +2207,10 @@ local function playLevelTwoBriefing()
 		if run ~= levelTwoBriefingRun or not isLevelTwoParticipant() then return end
 
 		setMsg("")
+		dispatchAudio.beginTransmission("level2", run, function()
+			if run ~= levelTwoBriefingRun then return end
+			cancelLevelTwoBriefing()
+		end)
 		levelTwoRadioCue:Stop()
 		levelTwoRadioCue.TimePosition = 0
 		local radioPlayed = pcall(function() levelTwoRadioCue:Play() end)
@@ -2101,7 +2230,10 @@ local function playLevelTwoBriefing()
 			local waitForSpeech = speechAt - os.clock()
 			if waitForSpeech > 0 then task.wait(waitForSpeech) end
 		end
-		if run ~= levelTwoBriefingRun or not isLevelTwoParticipant() then return end
+		if run ~= levelTwoBriefingRun or not isLevelTwoParticipant() then
+			dispatchAudio.finishTransmission("level2", run)
+			return
+		end
 
 		levelTwoBriefingSound:Stop()
 		levelTwoBriefingSound.TimePosition = 0
@@ -2109,6 +2241,7 @@ local function playLevelTwoBriefing()
 		local played = pcall(function() levelTwoBriefingSound:Play() end)
 		if not played then
 			player:SetAttribute("LevelTwoBriefingActive", false)
+			dispatchAudio.finishTransmission("level2", run)
 			return
 		end
 
@@ -2138,6 +2271,7 @@ local function playLevelTwoBriefing()
 		end
 
 		player:SetAttribute("LevelTwoBriefingActive", false)
+		dispatchAudio.finishTransmission("level2", run)
 		if run ~= levelTwoBriefingRun then return end
 		setSubtitle(nil)
 	end)
@@ -2173,6 +2307,7 @@ end
 
 function levelThreeBriefing.cancel()
 	levelThreeBriefing.run += 1
+	dispatchAudio.clearTransmission("level3")
 	levelThreeBriefing.radio:Stop()
 	levelThreeBriefing.sound:Stop()
 	levelThreeBriefing.resetInterference()
@@ -2220,6 +2355,10 @@ function levelThreeBriefing.play()
 		if run ~= levelThreeBriefing.run or not levelThreeBriefing.isParticipant() then return end
 
 		setMsg("")
+		dispatchAudio.beginTransmission("level3", run, function()
+			if run ~= levelThreeBriefing.run then return end
+			levelThreeBriefing.cancel()
+		end)
 		levelThreeBriefing.radio:Stop()
 		levelThreeBriefing.radio.TimePosition = 0
 		local radioPlayed = pcall(function() levelThreeBriefing.radio:Play() end)
@@ -2241,7 +2380,10 @@ function levelThreeBriefing.play()
 			local waitForSpeech = speechAt - os.clock()
 			if waitForSpeech > 0 then task.wait(waitForSpeech) end
 		end
-		if run ~= levelThreeBriefing.run or not levelThreeBriefing.isParticipant() then return end
+		if run ~= levelThreeBriefing.run or not levelThreeBriefing.isParticipant() then
+			dispatchAudio.finishTransmission("level3", run)
+			return
+		end
 
 		levelThreeBriefing.sound:Stop()
 		levelThreeBriefing.sound.TimePosition = 0
@@ -2251,6 +2393,7 @@ function levelThreeBriefing.play()
 		if not played then
 			player:SetAttribute("LevelThreeBriefingActive", false)
 			levelThreeBriefing.resetInterference()
+			dispatchAudio.finishTransmission("level3", run)
 			return
 		end
 
@@ -2284,6 +2427,7 @@ function levelThreeBriefing.play()
 
 		player:SetAttribute("LevelThreeBriefingActive", false)
 		levelThreeBriefing.resetInterference()
+		dispatchAudio.finishTransmission("level3", run)
 		if run ~= levelThreeBriefing.run then return end
 		setSubtitle(nil)
 	end)

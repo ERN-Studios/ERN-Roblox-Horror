@@ -54,12 +54,18 @@
       "roomToneLow": 75214252175039,
       "shallowFootsteps": [],
       "distantMonsterGroans": [93723101231893, 87666542035440, 120532580680571, 95187342487142],
-      "wadeSteps": [9125703168, 9125702419, 9125702798, 9125702560, 9125702803, 9125702687, 9125702697],
+      "wadeSteps": [9120609652, 9120609628, 9120609739],
+      "wadeResistanceLayer": 9120348019,
       "wadeStepSource": {
         "creator": "ProSoundEffects",
-        "collection": "Mud Puddle Splash Shallow Water Impacts Hits",
-        "license": "Roblox Creator Store",
-        "status": "runtime-preloaded and verified in this experience on 2026-08-27"
+        "creatorHandle": "@ProSoundEffects",
+        "coreCollection": "Water Wading Walking Through Shallow Pool, Bigger Splashes",
+        "resistanceCollection": "Underwater Movement, Bubbles, Muffled, Constant",
+        "coreDurationsSeconds": [2.368, 2.869333, 2.965333],
+        "resistanceDurationSeconds": 1.431083,
+        "license": "Roblox Creator Store; reference by asset ID, do not download and re-upload",
+        "ownership": "third-party Creator Store assets; not owned by ERN Roblox Studios",
+        "status": "current free/Get Audio listings and runtime-preloaded successfully in this experience on 2026-08-27"
       }
     },
     "level2Images": {
@@ -120,7 +126,7 @@
       "scope": "Level 2 wade steps",
       "assetIds": [75800492736528, 115563372806578, 78524180373927, 96086593477646, 133142004005994, 121103648572050, 101190784903878],
       "status": "archived on Roblox; removed from the live place and replaced with active Creator Store sounds",
-      "reason": "The source takes remain in the source pack, but quality review found only takes 2, 4, and 6 worth remastering; the active ProSoundEffects bank is the production fallback"
+      "reason": "The source takes remain in the source pack, but quality review found only takes 2, 4, and 6 worth remastering; the active replacement uses three complete ProSoundEffects wading phrases plus one quiet underwater-resistance layer"
     },
     {
       "scope": "workstation source bytes",
@@ -131,7 +137,7 @@
       "scope": "Level 2 legacy shallow footsteps",
       "assetIds": [134239383236056, 121310030007635, 105900557574918],
       "status": "archived on Roblox and unused by the active controller",
-      "reason": "The active shallow-water gait now uses the verified ProSoundEffects wade bank; the separate dry-tile library slot remains intentionally empty"
+      "reason": "The active shallow-water gait now uses the provenance-documented ProSoundEffects wade system; the separate dry-tile library slot remains intentionally empty"
     },
     {
       "scope": "Pool Foam primary model and SecretPartyStatue",

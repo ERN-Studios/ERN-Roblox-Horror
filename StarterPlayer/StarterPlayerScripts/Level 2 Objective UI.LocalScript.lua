@@ -9,6 +9,7 @@
 -- Tweak the colors/text below freely; nothing else reads this file.
 
 local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
 
 local player = Players.LocalPlayer
 
@@ -18,16 +19,29 @@ gui.ResetOnSpawn = false
 gui.DisplayOrder = 40
 gui.Parent = player:WaitForChild("PlayerGui")
 
--- Top-right, clear of the RoundUI top bar and the mobile touch cluster.
+-- Desktop uses the lower-right corner. Touch-only devices keep the original
+-- top-right placement so the panel cannot cover movement/action controls.
 local panel = Instance.new("Frame")
-panel.AnchorPoint = Vector2.new(1, 0)
-panel.Position = UDim2.new(1, -12, 0, 70)
 panel.Size = UDim2.new(0, 236, 0, 78)
 panel.BackgroundColor3 = Color3.fromRGB(6, 13, 15)
 panel.BackgroundTransparency = .16
 panel.BorderSizePixel = 0
 panel.Visible = false
 panel.Parent = gui
+
+local function updatePanelPlacement()
+	local touchOnly = UserInputService.TouchEnabled
+		and not UserInputService.KeyboardEnabled
+		and not UserInputService.GamepadEnabled
+	if touchOnly then
+		panel.AnchorPoint = Vector2.new(1, 0)
+		panel.Position = UDim2.new(1, -12, 0, 70)
+	else
+		panel.AnchorPoint = Vector2.new(1, 1)
+		panel.Position = UDim2.new(1, -18, 1, -18)
+	end
+end
+updatePanelPlacement()
 local panelSize = Instance.new("UISizeConstraint")
 panelSize.MinSize = Vector2.new(206, 72)
 panelSize.MaxSize = Vector2.new(236, 86)

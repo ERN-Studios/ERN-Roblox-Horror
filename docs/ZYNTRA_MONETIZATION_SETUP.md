@@ -1,6 +1,6 @@
 # Zyntra monetization: analyse og opsætningsguide
 
-Senest kontrolleret: 27. august 2026. Alle seks Creator Dashboard Asset IDs er indsat og verificeret mod experience `10559217407`.
+Senest kontrolleret: 27. august 2026. Alle 12 Creator Dashboard Asset IDs er indsat og verificeret mod experience `10559217407`.
 
 ## Anbefalet launch-katalog
 
@@ -14,6 +14,12 @@ Zyntras nuværende opdeling er grundlæggende rigtig: permanente fordele er Game
 | `Tokens4` | 4 Research Tokens | Developer Product | 49 R$ | `3707755089` | 4 tokens; kan købes igen |
 | `Tokens20` | 20 Research Tokens | Developer Product | 149 R$ | `3707755233` | 20 tokens; kan købes igen |
 | `EmergencyReentry` | Emergency Re-entry | Developer Product | 29 R$ | `3707755318` | 1 gemt re-entry-credit; kan købes igen |
+| `DonationSignal` | Donate Signal | Developer Product | 10 R$ | `3710116814` | Frivillig donation; ingen gameplay-fordel |
+| `DonationSupply` | Donate Supply | Developer Product | 50 R$ | `3710116945` | Frivillig donation; ingen gameplay-fordel |
+| `DonationField` | Donate Field | Developer Product | 100 R$ | `3710117017` | Frivillig donation; ingen gameplay-fordel |
+| `DonationResearch` | Donate Research | Developer Product | 250 R$ | `3710117070` | Frivillig donation; ingen gameplay-fordel |
+| `DonationCommand` | Donate Command | Developer Product | 500 R$ | `3710117099` | Frivillig donation; ingen gameplay-fordel |
+| `DonationDirector` | Donate Director | Developer Product | 1.000 R$ | `3710117136` | Frivillig donation; ingen gameplay-fordel |
 
 `Glowstick Customizer` er et anbefalet klarere kundenavn end det nuværende `Cosmetic Equipment Packs`, fordi passet kun indeholder glowstick-farven. Den interne nøgle kan fortsat hedde `CosmeticEquipment`.
 
@@ -51,16 +57,20 @@ Filnavne, full-resolution masters og det anvendte prompt-set er dokumenteret i `
 
 > Adds 1 stored Emergency Re-entry credit. After dying during an active run, use it to rejoin once that round.
 
+**Alle seks Donate-produkter**
+
+> Optional, repeatable donation toward continued development of Backrooms: No Way Out. Grants no items or gameplay advantages.
+
 ## Nuværende status i spillet
 
-- Alle seks køb er implementeret i UI og serverscript.
-- Alle seks `Id`-felter er udfyldt og verificeret mod den aktive experience.
+- Alle 12 køb er implementeret i UI og serverscript.
+- Alle 12 `Id`-felter er udfyldt og verificeret mod den aktive experience.
 - Data gemmes i `ZyntraPlayerData_v1`.
 - Én token giver permanent +5% til enten stamina- eller batterikapacitet uden maksimum.
 - Hver gennemført level giver 1 gratis token, også ved gentagne clears.
 - Supporterens 10 tokens og Advanced Equipments to +5%-grants gives kun én gang via gemte grant-flags.
 - Developer Products behandles centralt gennem `MarketplaceService.ProcessReceipt`.
-- En global Top Supporters-tavle summerer den præcise `CurrencySpent` fra nye Developer Product-receipts i `ZyntraDonationLeaderboard_v1`. Den er mærket "RECORDED SINCE AUG 2026", fordi Roblox ikke kan genafspille historiske receipts. Passes tælles ikke med.
+- En global Top Donors-tavle summerer kun den præcise `CurrencySpent` fra de seks dedikerede donationers receipts i `ZyntraDonationLeaderboard_v2`. Utility-produkter og passes tælles ikke med. Den nye v2-tavle migrerer bevidst ikke gamle utility-køb.
 - Supporter giver ikke længere adgang til hazmat-styling; den ligger udelukkende i Advanced Equipment.
 - Butikken henter aktuelle/personaliserede Roblox-priser og bruger Config-prisen som fallback.
 - Studio giver automatisk alle passes og starter spilleren med 25 tokens; Studio kan derfor ikke bevise, at rigtige køb virker.
@@ -122,9 +132,9 @@ Gentag dette for `Zyntra Supporter`, `Advanced Equipment` og `Glowstick Customiz
 
 Managed Pricing er automatisk aktivt for passes. Det kan give regionale priser helt ned til 30% af basisprisen. Anbefalingen er at beholde det aktivt, men kun når Zyntra-terminalen viser dynamiske priser.
 
-## Trin 3: opret de tre Developer Products
+## Trin 3: opret Developer Products
 
-Gentag dette for `4 Zyntra Research Tokens`, `20 Zyntra Research Tokens` og `Emergency Re-entry`:
+Gentag dette for de tre utility-produkter og de seks frivillige Donate-produkter:
 
 1. Gå til `Creations -> Backrooms: No Way Out -> Monetization -> Developer Products`.
 2. Klik `Create developer product`.
@@ -135,9 +145,9 @@ Gentag dette for `4 Zyntra Research Tokens`, `20 Zyntra Research Tokens` og `Eme
 
 Managed Pricing er ikke automatisk aktivt for Developer Products. Lad det være slået fra under den første end-to-end-test. Når UI'et henter rigtige runtime-priser, kan det aktiveres; Zyntra har ingen token-gifting/trading, så den normale regional-price-arbitrage-risiko er lav.
 
-## Trin 4: verificér de seks Asset IDs
+## Trin 4: verificér de 12 Asset IDs
 
-De seks Asset IDs er allerede indsat i `ReplicatedStorage/ZyntraConfig.ModuleScript.lua`:
+De 12 Asset IDs er allerede indsat i `ReplicatedStorage/ZyntraConfig.ModuleScript.lua`; donationerne ligger i den separate `Donations`-tabel.
 
 ```lua
 Passes = {
@@ -155,11 +165,11 @@ Products = {
 
 Roblox opkræver altid Dashboard-prisen. `Price` i ZyntraConfig er i øjeblikket kun fallback-/displaytekst og kan ikke styre den virkelige pris.
 
-## Trin 5: gør prisvisningen dynamisk før live launch
+## Trin 5: verificér den dynamiske prisvisning før live launch
 
-Den nuværende LocalScript viser hardcodede `49 R$`, `99 R$` og `149 R$`. Det kan være forkert på grund af Managed Pricing og Roblox Plus, der giver brugeren 10% rabat og 20% fra tredje måned. Roblox subsidierer Plus-rabatten, så creatorens normale indtjening ikke reduceres.
+LocalScriptet henter den aktuelle pris på klienten og falder kun tilbage til Config-prisen, hvis Roblox-opslaget fejler. Det er nødvendigt på grund af Managed Pricing og personaliserede priser.
 
-Hent derfor pris i `ZyntraStore.LocalScript.lua` med `MarketplaceService:GetProductInfoAsync()`:
+Den relevante implementering i `ZyntraStore.LocalScript.lua` svarer til:
 
 ```lua
 local infoType = kind == "Pass" and Enum.InfoType.GamePass or Enum.InfoType.Product
@@ -210,17 +220,17 @@ Hvis Developer Products også skal sælges på Roblox' eksterne Store-tab:
 
 ## Trin 7: launch-checkliste
 
-- [ ] Seks korrekte ikoner uploadet.
+- [ ] Ikoner uploadet til de produkter, der skal have egne billeder.
 - [ ] Tre passes oprettet under Zyntra-experiencen.
-- [ ] Tre Developer Products oprettet under Zyntra-experiencen.
+- [x] Ni Developer Products oprettet under Zyntra-experiencen.
 - [ ] Dashboard-priser og beskrivelser dobbelttjekket.
-- [x] Seks Asset IDs indsat og verificeret i `ZyntraConfig`.
+- [x] 12 Asset IDs indsat og verificeret i `ZyntraConfig`.
 - [x] Dynamisk prisvisning implementeret.
 - [ ] Dynamic Price Check bestået med testkonti.
 - [ ] Supporter-token-grant testet som one-time.
 - [ ] Advanced-grants testet som one-time.
 - [ ] Token receipts testet for gentagne køb, rejoin og duplicate receipt.
-- [ ] Top Supporters-tavlen testet med nye receipts, genstart og OrderedDataStore-fejl.
+- [ ] Top Donors-tavlen testet med donation-receipts, genstart og OrderedDataStore-fejl.
 - [ ] DataStore testet i publiceret version.
 - [ ] Emergency Re-entry-flow rettet og testet, før produktet sættes on-sale.
 - [ ] Purchase-/receipt-fejl logges til analytics eller telemetri.

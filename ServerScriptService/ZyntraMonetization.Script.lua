@@ -32,7 +32,7 @@ if not supportStatus then
 	supportStatus.Name = "Status"
 	supportStatus.Parent = supportFolder
 end
-supportStatus.Value = "CONNECTING TO GLOBAL RANKINGS"
+supportStatus.Value = "CONNECTING TO DONATION RANKINGS"
 
 local supportRows = {}
 for rank = 1, SUPPORT_LEADERBOARD_SIZE do
@@ -44,7 +44,7 @@ for rank = 1, SUPPORT_LEADERBOARD_SIZE do
 		row.Name = name
 		row.Parent = supportFolder
 	end
-	row.Value = rank == 1 and "NO SUPPORT PURCHASES YET" or ""
+	row.Value = rank == 1 and "NO DONATIONS RECORDED YET" or ""
 	supportRows[rank] = row
 end
 
@@ -92,13 +92,13 @@ end
 
 local function newProfile()
 	return {
-		Version = 2,
+		Version = 3,
 		Tokens = RunService:IsStudio() and Config.Studio.StartingTokens or 0,
 		StaminaLevel = 0,
 		BatteryLevel = 0,
 		CompletedLevels = 0,
 		ReentryCredits = 0,
-		SupportRobux = 0,
+		DonationRobux = 0,
 		Settings = {
 			MuteDispatch = false,
 		},
@@ -116,13 +116,16 @@ end
 
 local function normalizeProfile(data)
 	if type(data) ~= "table" then data = newProfile() end
-	data.Version = 2
+	data.Version = 3
 	data.Tokens = math.max(0, math.floor(tonumber(data.Tokens) or 0))
 	data.StaminaLevel = math.max(0, math.floor(tonumber(data.StaminaLevel) or 0))
 	data.BatteryLevel = math.max(0, math.floor(tonumber(data.BatteryLevel) or 0))
 	data.CompletedLevels = math.max(0, math.floor(tonumber(data.CompletedLevels) or 0))
 	data.ReentryCredits = math.max(0, math.floor(tonumber(data.ReentryCredits) or 0))
-	data.SupportRobux = math.max(0, math.floor(tonumber(data.SupportRobux) or 0))
+	-- Deliberately do not migrate the retired SupportRobux field: that value
+	-- included utility purchases. DonationRobux starts a clean, donation-only
+	-- accounting stream backed by the v2 OrderedDataStore.
+	data.DonationRobux = math.max(0, math.floor(tonumber(data.DonationRobux) or 0))
 	data.Settings = type(data.Settings) == "table" and data.Settings or {}
 	data.Settings.MuteDispatch = data.Settings.MuteDispatch == true
 	data.Colors = type(data.Colors) == "table" and data.Colors or {}
@@ -146,7 +149,7 @@ local function publicProfile(data)
 		BatteryPercent = data.BatteryLevel * 5,
 		CompletedLevels = data.CompletedLevels,
 		ReentryCredits = data.ReentryCredits,
-		SupportRobux = data.SupportRobux,
+		DonationRobux = data.DonationRobux,
 		MuteDispatch = data.Settings.MuteDispatch,
 		HazmatColor = readColor(data.Colors.Hazmat, Config.Colors.HazmatDefault),
 		GlowstickColor = readColor(data.Colors.Glowstick, Config.Colors.GlowstickDefault),
@@ -209,7 +212,7 @@ local function applyAttributes(player, data)
 	player:SetAttribute("ZyntraHazmatColor", readColor(data.Colors.Hazmat, Config.Colors.HazmatDefault))
 	player:SetAttribute("ZyntraGlowstickColor", readColor(data.Colors.Glowstick, Config.Colors.GlowstickDefault))
 	player:SetAttribute("ZyntraMuteDispatch", data.Settings.MuteDispatch)
-	player:SetAttribute("ZyntraSupportRobux", data.SupportRobux)
+	player:SetAttribute("ZyntraDonationRobux", data.DonationRobux)
 	if player:GetAttribute("InRound") == true and player:GetAttribute("ZyntraOwnsCosmeticEquipment") == true then
 		player:SetAttribute("GlowstickColor", player:GetAttribute("ZyntraGlowstickColor"))
 	end
@@ -315,18 +318,18 @@ local function publishSupportRows(entries)
 			local name = string.upper(supportPlayerName(entry.UserId))
 			supportRows[rank].Value = string.format("%02d   %s   •   %d R$", rank, name, entry.Value)
 		else
-			supportRows[rank].Value = rank == 1 and "NO SUPPORT PURCHASES YET" or ""
+			supportRows[rank].Value = rank == 1 and "NO DONATIONS RECORDED YET" or ""
 		end
 	end
-	-- Historical Marketplace receipts cannot be replayed, so this board starts
-	-- with the update that introduced receipt-side support totals.
-	supportStatus.Value = "RECORDED SINCE AUG 2026  •  LIVE"
+	-- Historical Marketplace receipts cannot be replayed. This clean v2 board
+	-- begins with the dedicated donation products, never utility purchases.
+	supportStatus.Value = "DONATIONS SINCE AUG 2026  •  LIVE"
 end
 
 local function studioSupportEntries()
 	local entries = {}
 	for player, session in pairs(sessions) do
-		local value = session.data and math.max(0, math.floor(tonumber(session.data.SupportRobux) or 0)) or 0
+		local value = session.data and math.max(0, math.floor(tonumber(session.data.DonationRobux) or 0)) or 0
 		if player.Parent and value > 0 then
 			entries[#entries + 1] = { UserId = player.UserId, Value = value }
 		end
@@ -367,7 +370,7 @@ local function refreshSupportLeaderboard()
 		publishSupportRows(entries)
 	else
 		warn("[Zyntra] Support leaderboard refresh failed:", failure)
-		supportStatus.Value = "GLOBAL RANKINGS TEMPORARILY UNAVAILABLE"
+		supportStatus.Value = "DONATION RANKINGS TEMPORARILY UNAVAILABLE"
 	end
 	supportRefreshRunning = false
 end
@@ -428,7 +431,7 @@ local function loadProfile(player)
 	player:SetAttribute("ZyntraProfileLoaded", true)
 	pushProfile(player)
 	task.spawn(function()
-		if syncSupportTotal(player.UserId, sessions[player] and sessions[player].data.SupportRobux or 0) then
+		if syncSupportTotal(player.UserId, sessions[player] and sessions[player].data.DonationRobux or 0) then
 			refreshSupportLeaderboard()
 		end
 	end)
@@ -607,9 +610,18 @@ MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(player, passI
 end)
 
 local productById = {}
-for key, product in pairs(Config.Products) do
-	if product.Id > 0 then productById[product.Id] = { Key = key, Product = product } end
+local function registerProductCatalog(catalog, kind)
+	for key, product in pairs(catalog or {}) do
+		local productId = math.floor(tonumber(product.Id) or 0)
+		if productId > 0 then
+			assert(not productById[productId],
+				string.format("Duplicate Zyntra Developer Product ID %d (%s)", productId, key))
+			productById[productId] = { Key = key, Kind = kind, Product = product }
+		end
+	end
 end
+registerProductCatalog(Config.Products, "Utility")
+registerProductCatalog(Config.Donations, "Donation")
 
 MarketplaceService.ProcessReceipt = function(receiptInfo)
 	local player = Players:GetPlayerByUserId(receiptInfo.PlayerId)
@@ -618,11 +630,20 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 		return Enum.ProductPurchaseDecision.NotProcessedYet
 	end
 
-	local alreadyGranted = false
-	local supportSpent = math.max(0, math.floor(tonumber(receiptInfo.CurrencySpent) or 0))
-	if RunService:IsStudio() and supportSpent <= 0 then
-		supportSpent = math.max(0, math.floor(tonumber(entry.Product.Price) or 0))
+	local donationSpent = 0
+	if entry.Kind == "Donation" then
+		local rawSpent = tonumber(receiptInfo.CurrencySpent)
+		if RunService:IsStudio() and (not rawSpent or rawSpent <= 0) then
+			rawSpent = tonumber(entry.Product.Price)
+		end
+		if not rawSpent or rawSpent ~= rawSpent or rawSpent <= 0 or rawSpent == math.huge then
+			warn("[Zyntra] Donation receipt has no valid CurrencySpent:", receiptInfo.PurchaseId)
+			return Enum.ProductPurchaseDecision.NotProcessedYet
+		end
+		donationSpent = math.floor(rawSpent)
 	end
+
+	local alreadyGranted = false
 	local changed = mutate(player, function(data)
 		for _, id in ipairs(data.ReceiptIds) do
 			if id == receiptInfo.PurchaseId then
@@ -632,8 +653,9 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 		end
 		table.insert(data.ReceiptIds, receiptInfo.PurchaseId)
 		while #data.ReceiptIds > 500 do table.remove(data.ReceiptIds, 1) end
-		if entry.Product.CountsTowardSupportLeaderboard == true and supportSpent > 0 then
-			data.SupportRobux += supportSpent
+		if entry.Kind == "Donation" then
+			data.DonationRobux += donationSpent
+			return true, string.format("Thank you — %d R$ added to your donation total.", donationSpent), "success"
 		end
 		if entry.Product.TokenGrant then
 			data.Tokens += entry.Product.TokenGrant
@@ -642,12 +664,12 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 			data.ReentryCredits += entry.Product.ReentryGrant
 			return true, "+1 Emergency Re-entry credit", "success"
 		end
-		return true, "Thank you for supporting ZYNTRA.", "success"
+		return true, "Purchase recorded.", "success"
 	end)
 	if changed or alreadyGranted then
-		if entry.Product.CountsTowardSupportLeaderboard == true then
+		if entry.Kind == "Donation" then
 			local session = sessions[player]
-			local total = session and session.data.SupportRobux or 0
+			local total = session and session.data.DonationRobux or 0
 			-- The profile mutation above is the authoritative receipt transaction.
 			-- OrderedDataStore is a derived display cache: never leave a paid receipt
 			-- retrying just because rankings are throttled or temporarily unavailable.
