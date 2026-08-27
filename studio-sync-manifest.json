@@ -112,8 +112,8 @@
       "studioPath": "ServerScriptService.TunnelLobbyBuilder",
       "className": "ModuleScript",
       "file": "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
-      "bytes": 94856,
-      "sha256": "3389cf19bc628cbb527de07d5ce3f8b93165a38aab32baf559a3951911e83ef5",
+      "bytes": 95246,
+      "sha256": "0188671bb95c5edda9d303a3915eb8cad532b44a7069674808b8716c6ca7cda3",
       "status": "synced"
     },
     {
@@ -976,8 +976,8 @@
       "studioPath": "ServerScriptService.LobbyPartyModeController",
       "className": "Script",
       "file": "ServerScriptService/LobbyPartyModeController.Script.lua",
-      "bytes": 6708,
-      "sha256": "52c6294b78eebe5f1363580d28329704be131f82eb0f91511686452affbdbb56",
+      "bytes": 7124,
+      "sha256": "790fad57bf00234e1ae66656227b8949b1917be257b3d4c3647b4e519d41c92c",
       "status": "synced"
     },
     {
