@@ -29,4 +29,9 @@ The generated compositions were exported to the final JPEG files above at Roblox
 
 ## Creator Hub publication
 
-Upload status and assigned Roblox media IDs should be recorded here after Creator Hub submission and moderation.
+Published on 2026-08-27.
+
+- Experience access: **Public** for eligible Roblox users; maturity remains **Ages 16+**.
+- Experience-detail carousel: all five images uploaded and verified cycling through positions 1–5 on the live Roblox page.
+- Public description: moderation-safe copy saved and verified on the live page.
+- Live page: https://www.roblox.com/games/131311258779917/Backrooms-No-Way-Out
