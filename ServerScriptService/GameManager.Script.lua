@@ -51,6 +51,7 @@ local LOBBY_CENTER = Vector3.new(0, 30, -760)
 Players.CharacterAutoLoads = false
 workspace:SetAttribute("GenerateWorld", false)
 workspace:SetAttribute("RoundActive", false)
+workspace:SetAttribute("PostWinIntermissionActive", false)
 
 -- A station launch creates a reserved server of this same place. Reserved servers
 -- run the maze directly; public servers remain lightweight four-station lobbies.
@@ -1167,6 +1168,7 @@ playRound = function(participants)
  end)
 
  local function sendWipedPartyHome()
+  workspace:SetAttribute("PostWinIntermissionActive", false)
   workspace:SetAttribute("RoundActive", false)
   zyntraReentry.OnInvoke = function() return false end
   for _, connection in ipairs(conns) do connection:Disconnect() end
@@ -1208,8 +1210,9 @@ playRound = function(participants)
   end
   elevatorApi.open()
  end
- workspace:SetAttribute("PuzzleWon", false)
- workspace:SetAttribute("RoundActive", true)
+  workspace:SetAttribute("PuzzleWon", false)
+  workspace:SetAttribute("PostWinIntermissionActive", false)
+  workspace:SetAttribute("RoundActive", true)
  local roundStartedAt = os.clock()
  fireGroup(participants, "start")
 
@@ -1231,11 +1234,14 @@ playRound = function(participants)
   task.wait(0.5)
  end
 
+ workspace:SetAttribute("PostWinIntermissionActive", result == "win")
  workspace:SetAttribute("RoundActive", false)
  zyntraReentry.OnInvoke = function() return false end
- workspace:SetAttribute("LightMode", "NORMAL")
- workspace:SetAttribute("FlickerBoost", 0)
- workspace:SetAttribute("EntitySpeedMul", 1)
+ if result ~= "win" then
+  workspace:SetAttribute("LightMode", "NORMAL")
+  workspace:SetAttribute("FlickerBoost", 0)
+  workspace:SetAttribute("EntitySpeedMul", 1)
+ end
  for _, connection in ipairs(conns) do connection:Disconnect() end
 
  -- Send consistent end-of-round statistics to every party member so the client
@@ -1250,6 +1256,12 @@ playRound = function(participants)
  end
  if result == "win" then
   local nextLevel, continuing, returning, postWinAborted = runPostWinIntermission(participants, elapsed, escapedCount)
+  -- RoundActive still stops hazards immediately, but the completed world and
+  -- its solved lighting remain intact for the full result countdown.
+  workspace:SetAttribute("PostWinIntermissionActive", false)
+  workspace:SetAttribute("LightMode", "NORMAL")
+  workspace:SetAttribute("FlickerBoost", 0)
+  workspace:SetAttribute("EntitySpeedMul", 1)
   if postWinAborted then return end
   if elevatorApi then elevatorApi.close() end
 

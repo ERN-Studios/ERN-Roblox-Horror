@@ -296,6 +296,8 @@ end
 
 local supportNameCache = {}
 local supportRefreshRunning = false
+local pendingSupportSync = {}
+local supportSyncWorkers = {}
 
 local function supportPlayerName(userId)
 	local cached = supportNameCache[userId]
@@ -387,11 +389,51 @@ local function syncSupportTotal(userId, total)
 	return ok
 end
 
+local queueSupportTotalSync
+queueSupportTotalSync = function(userId, total)
+	userId = math.floor(tonumber(userId) or 0)
+	total = math.max(0, math.floor(tonumber(total) or 0))
+	if userId <= 0 or total <= 0 then return end
+	pendingSupportSync[userId] = math.max(pendingSupportSync[userId] or 0, total)
+	if supportSyncWorkers[userId] then return end
+
+	supportSyncWorkers[userId] = true
+	task.spawn(function()
+		local lastAttempted = 0
+		for _, delaySeconds in ipairs({0, 1, 3, 8, 20}) do
+			if delaySeconds > 0 then task.wait(delaySeconds) end
+			local target = pendingSupportSync[userId]
+			if not target then break end
+			lastAttempted = target
+			if syncSupportTotal(userId, target) then
+				-- A newer receipt may have raised the requested total while UpdateAsync
+				-- yielded. Clear only the exact-or-older target we actually synced.
+				if (pendingSupportSync[userId] or 0) <= target then
+					pendingSupportSync[userId] = nil
+				end
+				refreshSupportLeaderboard()
+				break
+			end
+		end
+
+		supportSyncWorkers[userId] = nil
+		local newest = pendingSupportSync[userId]
+		if newest and newest > lastAttempted then
+			task.defer(queueSupportTotalSync, userId, newest)
+		end
+	end)
+end
+
 task.spawn(function()
 	task.wait(1)
 	refreshSupportLeaderboard()
 	while true do
 		task.wait(math.max(30, tonumber(Config.SupportLeaderboardRefreshSeconds) or 90))
+		-- Failed derived-cache writes stay dirty after their bounded immediate
+		-- retries. Re-arm one worker per donor before each scheduled board read.
+		for userId, total in pairs(pendingSupportSync) do
+			queueSupportTotalSync(userId, total)
+		end
 		refreshSupportLeaderboard()
 	end
 end)
@@ -430,11 +472,7 @@ local function loadProfile(player)
 	player:SetAttribute("ZyntraDispatchPreferenceLoaded", RunService:IsStudio() or persistent)
 	player:SetAttribute("ZyntraProfileLoaded", true)
 	pushProfile(player)
-	task.spawn(function()
-		if syncSupportTotal(player.UserId, sessions[player] and sessions[player].data.DonationRobux or 0) then
-			refreshSupportLeaderboard()
-		end
-	end)
+	queueSupportTotalSync(player.UserId, sessions[player] and sessions[player].data.DonationRobux or 0)
 end
 
 local function ownsPass(player, pass)
@@ -673,9 +711,7 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 			-- The profile mutation above is the authoritative receipt transaction.
 			-- OrderedDataStore is a derived display cache: never leave a paid receipt
 			-- retrying just because rankings are throttled or temporarily unavailable.
-			task.spawn(function()
-				if syncSupportTotal(player.UserId, total) then refreshSupportLeaderboard() end
-			end)
+			queueSupportTotalSync(player.UserId, total)
 		end
 		return Enum.ProductPurchaseDecision.PurchaseGranted
 	end
@@ -685,6 +721,10 @@ end
 Players.PlayerAdded:Connect(setupPlayer)
 for _, player in ipairs(Players:GetPlayers()) do setupPlayer(player) end
 Players.PlayerRemoving:Connect(function(player)
+	local session = sessions[player]
+	if session and session.data then
+		queueSupportTotalSync(player.UserId, session.data.DonationRobux)
+	end
 	sessions[player] = nil
 	mutationLocks[player] = nil
 	actionTimes[player] = nil

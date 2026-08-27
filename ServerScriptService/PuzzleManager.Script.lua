@@ -2093,9 +2093,22 @@ end
 workspace:GetAttributeChangedSignal("RoundActive"):Connect(function()
 	if workspace:GetAttribute("RoundActive") then
 		if isLevelOneRound() then startPuzzle() end
-	else
+	elseif workspace:GetAttribute("PostWinIntermissionActive") ~= true then
 		clearPuzzle()
 	end
+end)
+
+-- A win stops gameplay immediately but holds the solved circuit dressing for
+-- the 15-second completion screen. Release it when GameManager closes that
+-- intermission; GenerateWorld is a teardown fallback for aborted transitions.
+workspace:GetAttributeChangedSignal("PostWinIntermissionActive"):Connect(function()
+	if workspace:GetAttribute("PostWinIntermissionActive") ~= true
+		and workspace:GetAttribute("RoundActive") ~= true then
+		clearPuzzle()
+	end
+end)
+workspace:GetAttributeChangedSignal("GenerateWorld"):Connect(function()
+	if workspace:GetAttribute("GenerateWorld") ~= true then clearPuzzle() end
 end)
 
 if workspace:GetAttribute("RoundActive") and isLevelOneRound() then startPuzzle() end

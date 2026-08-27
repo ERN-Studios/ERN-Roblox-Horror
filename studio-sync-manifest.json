@@ -80,16 +80,16 @@
       "studioPath": "ServerScriptService.GameManager",
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 59743,
-      "sha256": "844538b0372bd3fb0f2a1f17142ad5664f233542caddd3b30e150fe7d15b6f21",
+      "bytes": 60376,
+      "sha256": "d5461657ce43910ba38d23d8337b32135318919d15d2e36f070c8c3fd085ac65",
       "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.PuzzleManager",
       "className": "Script",
       "file": "ServerScriptService/PuzzleManager.Script.lua",
-      "bytes": 82483,
-      "sha256": "6767600075ec294f10cf40a44bfcb5aca76b06ed2a5988f833aa20c8b8135e9a",
+      "bytes": 83167,
+      "sha256": "8f5ffbc77de163deed9d8af6d8907e63de83ee9e4cb236003c1f6c068d2470e4",
       "status": "synced"
     },
     {
@@ -120,8 +120,8 @@
       "studioPath": "ServerScriptService.ZyntraMonetization",
       "className": "Script",
       "file": "ServerScriptService/ZyntraMonetization.Script.lua",
-      "bytes": 24858,
-      "sha256": "62dc870664829a356413845e7924b9160da7dc06716e08efe64ae65c54c5a79b",
+      "bytes": 26356,
+      "sha256": "a00e0e225c9a634ac9a714c0fd9ff12221ecc2ec46945f4709ba8eb2e04117e3",
       "status": "synced"
     },
     {
