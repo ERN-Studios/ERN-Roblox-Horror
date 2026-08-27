@@ -5,6 +5,8 @@ FLASHING LIGHTS, LOUD SOUNDS, AND CHASE SCENES
 
 You are TEAM ALPHA.
 
+You work for ZYNTRA TECHNOLOGIES, a company that researches strange Backrooms spaces.
+
 Command Center has sent you into strange liminal spaces. Your mission is simple: solve each puzzle, find the exit, and make it back.
 
 But you are not alone.
@@ -31,7 +33,7 @@ PC and Mobile. Headphones recommended.
 ## Copy direction
 
 - Written in short sentences for quick reading on mobile.
-- Explains the role and goal before listing features.
+- Establishes Team Alpha as Zyntra Technologies researchers before explaining the goal.
 - Uses one simple objective per available level.
 - Builds suspense without graphic language.
 - Ends with a clear question instead of a dense development note.
