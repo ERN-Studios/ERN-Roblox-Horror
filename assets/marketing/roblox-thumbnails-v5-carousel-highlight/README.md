@@ -1,6 +1,6 @@
 # Roblox carousel v5 — highlighted horror set
 
-Generated on 2026-08-27 as the live-replacement candidate for the Roblox experience carousel. This set is derived from the Studio-accurate v4 dark-horror images and lifts only the most important story details for stronger small-thumbnail readability.
+Generated and published on 2026-08-27 as the live Roblox experience carousel. This set is derived from the Studio-accurate v4 dark-horror images and lifts only the most important story details for stronger small-thumbnail readability.
 
 ## Deliverables
 
@@ -22,5 +22,4 @@ The PNG files are the built-in ImageGen source edits (1672 × 941). The JPEG fil
 
 ## Publishing status
 
-This set is intended to replace the current live Roblox carousel. Update `thumbnail-manifest.json` after Creator Dashboard submission is verified.
-
+All five images replaced the previous Experience Detail Page carousel and were verified in sequence on the public Roblox experience page. The matching moderation-approved description is stored in `../roblox-experience-description.txt`.

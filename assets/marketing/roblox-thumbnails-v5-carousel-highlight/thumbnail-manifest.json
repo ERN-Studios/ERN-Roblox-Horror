@@ -6,8 +6,10 @@
   "experience": "Backrooms: No Way Out",
   "sourceOfTruth": "live Roblox Studio inspection and Studio-accurate v4 compositions",
   "derivedFrom": "assets/marketing/roblox-thumbnails-v4-dark-horror",
-  "liveCarouselChanged": false,
-  "uploadStatus": "prepared-for-live-replacement",
+  "liveCarouselChanged": true,
+  "uploadStatus": "published-live",
+  "published": "2026-08-27",
+  "publicCarouselVerified": true,
   "sourceDimensions": {
     "width": 1672,
     "height": 941,
@@ -62,4 +64,3 @@
     }
   ]
 }
-
