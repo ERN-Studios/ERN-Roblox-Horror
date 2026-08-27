@@ -2199,6 +2199,14 @@ local function addPartyButton(parent, center)
 	prompt.Style = Enum.ProximityPromptStyle.Default
 	prompt.Parent = button
 
+	-- Keep the E prompt as the primary interaction, but also support direct
+	-- mouse/touch activation. This makes the physical wall button reliable on
+	-- every client even if a custom UI temporarily hides Roblox's prompt.
+	local clickDetector = Instance.new("ClickDetector")
+	clickDetector.Name = "ZyntraPartyClick"
+	clickDetector.MaxActivationDistance = 12
+	clickDetector.Parent = button
+
 	return model
 end
 
