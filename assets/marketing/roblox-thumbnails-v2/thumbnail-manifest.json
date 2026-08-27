@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 2,
+  "experience": {
+    "name": "Backrooms: No Way Out",
+    "universeId": 10559217407,
+    "placeId": 131311258779917
+  },
+  "generatedAt": "2026-08-27",
+  "campaign": "gameplay-accurate-hazmat-v2",
+  "format": {
+    "width": 1920,
+    "height": 1080,
+    "aspectRatio": "16:9",
+    "mimeType": "image/jpeg",
+    "maximumRobloxUploadBytes": 3145728
+  },
+  "characterContinuity": "Mustard-yellow hooded hazmat coverall, black twin-lens respirator, black gloves and boots, compact dark equipment pack, cyan ZYNTRA accents; no exposed face or black tactical uniform.",
+  "creatorHub": {
+    "experienceDetailPageOrder": [
+      "01-level1-fuse-relay-hazmat.jpg",
+      "02-level1-lever-sync-hazmat.jpg",
+      "03-level2-pump-poolfoam-hazmat.jpg",
+      "04-level2-exit-tube-slidemouth-hazmat.jpg",
+      "05-level3-cd-relay-mall-manager-hazmat.jpg"
+    ],
+    "homePagePersonalizationCandidates": [
+      "01-level1-fuse-relay-hazmat.jpg",
+      "02-level1-lever-sync-hazmat.jpg",
+      "03-level2-pump-poolfoam-hazmat.jpg",
+      "04-level2-exit-tube-slidemouth-hazmat.jpg",
+      "05-level3-cd-relay-mall-manager-hazmat.jpg"
+    ],
+    "uploadStatus": "prepared",
+    "moderationStatus": "not_submitted",
+    "replacesLiveCampaign": false
+  },
+  "images": [
+    {
+      "order": 1,
+      "file": "01-level1-fuse-relay-hazmat.jpg",
+      "master": "01-level1-fuse-relay-hazmat.png",
+      "altText": "Two hazmat-suited players extract a fuse under bright ceiling lights as the Level 1 Entity approaches through the yellow maze.",
+      "level": 1,
+      "objective": "Extract a fuse from a marked relay.",
+      "sourceGeneratedImage": "/Users/zeanjuul4/.codex/generated_images/01a01f4b-1f57-7ae2-bcfa-795401d62c50/exec-3f3f4628-b7c6-4f95-84ab-65bd33644109.png",
+      "robloxMediaItemId": null
+    },
+    {
+      "order": 2,
+      "file": "02-level1-lever-sync-hazmat.jpg",
+      "master": "02-level1-lever-sync-hazmat.png",
+      "altText": "A hazmat team pulls separate cable-linked levers while the Level 1 Entity closes in behind them.",
+      "level": 1,
+      "objective": "Activate all powered levers within ten seconds.",
+      "sourceGeneratedImage": "/Users/zeanjuul4/.codex/generated_images/01a01f4b-1f57-7ae2-bcfa-795401d62c50/exec-019e9609-c4e9-4f01-9fdd-05549c46ba0a.png",
+      "robloxMediaItemId": null
+    },
+    {
+      "order": 3,
+      "file": "03-level2-pump-poolfoam-hazmat.jpg",
+      "master": "03-level2-pump-poolfoam-hazmat.png",
+      "altText": "Hazmat-suited players activate the first Poolrooms pump while pale Pool Foam entities emerge near the children's play structure.",
+      "level": 2,
+      "objective": "Activate all three pump stations.",
+      "sourceGeneratedImage": "/Users/zeanjuul4/.codex/generated_images/01a01f4b-1f57-7ae2-bcfa-795401d62c50/exec-e02b138f-9adf-4041-816a-1084ef24f928.png",
+      "robloxMediaItemId": null
+    },
+    {
+      "order": 4,
+      "file": "04-level2-exit-tube-slidemouth-hazmat.jpg",
+      "master": "04-level2-exit-tube-slidemouth-hazmat.png",
+      "altText": "A hazmat team races up the grand Poolrooms staircase toward the upper exit tube while Slidemouth charges through the water.",
+      "level": 2,
+      "objective": "Reach the upper-floor exit tube after powering the pumps.",
+      "sourceGeneratedImage": "/Users/zeanjuul4/.codex/generated_images/01a01f4b-1f57-7ae2-bcfa-795401d62c50/exec-c5a317e6-251b-4af6-8705-a57d002ecb8b.png",
+      "robloxMediaItemId": null
+    },
+    {
+      "order": 5,
+      "file": "05-level3-cd-relay-mall-manager-hazmat.jpg",
+      "master": "05-level3-cd-relay-mall-manager-hazmat.png",
+      "altText": "Hazmat-suited players insert carried CDs into a CRT and VCR relay as the Mall Manager approaches and the hidden PA corridor opens.",
+      "level": 3,
+      "objective": "Insert all five carried CDs to reveal the hidden passage.",
+      "sourceGeneratedImage": "/Users/zeanjuul4/.codex/generated_images/01a01f4b-1f57-7ae2-bcfa-795401d62c50/exec-8a60705a-edff-48d9-bd9e-39018e7bbbd1.png",
+      "robloxMediaItemId": null
+    }
+  ]
+}
