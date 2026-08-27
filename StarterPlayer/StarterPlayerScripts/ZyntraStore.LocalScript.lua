@@ -504,21 +504,11 @@ makeProductCard("Tokens20", Config.Products.Tokens20, "Product")
 makeProductCard("EmergencyReentry", Config.Products.EmergencyReentry, "Product")
 makeProductCard("CosmeticEquipment", Config.Passes.CosmeticEquipment, "Pass")
 
-local supportIntro = label(
-	pages.Donate,
-	"OPTIONAL DONATION  •  REPEATABLE  •  NO GAMEPLAY ADVANTAGE",
-	UDim2.new(1, 0, 0, 24),
-	UDim2.fromOffset(4, 0),
-	13,
-	COLORS.accent,
-	Enum.Font.Code
-)
-supportIntro.TextXAlignment = Enum.TextXAlignment.Left
 local supportTotalLabel = label(
 	pages.Donate,
 	"YOUR RECORDED DONATIONS  0 R$",
 	UDim2.new(1, -8, 0, 24),
-	UDim2.fromOffset(4, 25),
+	UDim2.fromOffset(4, 0),
 	13,
 	COLORS.accent2,
 	Enum.Font.GothamBold
@@ -526,8 +516,8 @@ local supportTotalLabel = label(
 supportTotalLabel.TextXAlignment = Enum.TextXAlignment.Left
 
 local supportScroll = Instance.new("ScrollingFrame")
-supportScroll.Position = UDim2.fromOffset(0, 58)
-supportScroll.Size = UDim2.new(1, 0, 1, -58)
+supportScroll.Position = UDim2.fromOffset(0, 32)
+supportScroll.Size = UDim2.new(1, 0, 1, -32)
 supportScroll.BackgroundTransparency = 1
 supportScroll.BorderSizePixel = 0
 supportScroll.ScrollBarThickness = 5
