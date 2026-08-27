@@ -126,7 +126,8 @@ prove all of the following in Studio:
   radius-5/height-10 agent.
 
 Return a concise cause-and-fix summary, the exact scripts changed, compile/test
-results, sampled navigation telemetry, and any remaining risk. Only publish or
-push after the live playtests pass and the Studio/repository mirror is verified.
+results, sampled navigation telemetry, and any remaining risk. Do not publish
+the Roblox experience and do not push Git; leave the verified changes locally
+for Codex to audit and finish.
 
 ---
