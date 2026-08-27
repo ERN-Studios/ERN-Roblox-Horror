@@ -92,21 +92,39 @@ function dispatchAudio.refresh()
 	local active = dispatchAudio.hasActiveTransmission()
 	if dispatchAudio.pendingValue ~= nil then muted = dispatchAudio.pendingValue end
 	dispatchAudio.group.Volume = loaded and (muted and 0 or 1) or 0
+	local hasSubtitle = dispatchAudio.subtitleCopy ~= nil and dispatchAudio.subtitleCopy ~= ""
+	if dispatchAudio.panel then
+		dispatchAudio.panel.Visible = active or hasSubtitle
+	end
+	if dispatchAudio.subtitleLabel then
+		dispatchAudio.subtitleLabel.Text = hasSubtitle
+			and dispatchAudio.subtitleCopy
+			or active and "ESTABLISHING COMMAND LINK..."
+			or ""
+		dispatchAudio.subtitleLabel.TextColor3 = hasSubtitle
+			and Color3.fromRGB(240, 242, 235)
+			or Color3.fromRGB(127, 190, 169)
+	end
+	if dispatchAudio.controls then
+		-- The controls belong to the briefing panel, including its radio lead-in;
+		-- they never float beside unrelated equipment UI.
+		dispatchAudio.controls.Visible = active
+	end
 	if dispatchAudio.button then
-		dispatchAudio.button.Text = dispatchAudio.preferenceUnavailable() and "[M] DISPATCH: UNAVAILABLE"
-			or not loaded and "[M] DISPATCH: LOADING"
-			or dispatchAudio.pending and (muted and "[M] MUTING..." or "[M] UNMUTING...")
-			or muted and "[M] UNMUTE DISPATCH"
-			or "[M] MUTE DISPATCH"
+		dispatchAudio.button.Text = dispatchAudio.preferenceUnavailable() and "[M]  OFFLINE"
+			or not loaded and "[M]  LOADING"
+			or dispatchAudio.pending and "[M]  SAVING"
+			or muted and "[M]  UNMUTE"
+			or "[M]  MUTE"
 		dispatchAudio.button.TextColor3 = muted
 			and Color3.fromRGB(255, 184, 105)
-			or Color3.fromRGB(105, 238, 168)
-		dispatchAudio.button.Visible = active
+			or Color3.fromRGB(137, 225, 194)
+		dispatchAudio.button.Visible = true
 		dispatchAudio.button.Active = active and loaded and not dispatchAudio.pending
 		dispatchAudio.button.Selectable = dispatchAudio.button.Active
 	end
 	if dispatchAudio.stopButton then
-		dispatchAudio.stopButton.Visible = active
+		dispatchAudio.stopButton.Visible = true
 		dispatchAudio.stopButton.Active = active
 		dispatchAudio.stopButton.Selectable = active
 	end
@@ -1199,6 +1217,7 @@ subtitleFrame.BorderSizePixel = 0
 subtitleFrame.Visible = false
 subtitleFrame.ZIndex = 20
 subtitleFrame.Parent = guideGui
+dispatchAudio.panel = subtitleFrame
 roundAndStroke(subtitleFrame, 8, Color3.fromRGB(82, 224, 164), 0.38, 1.5)
 
 local subtitleConstraint = Instance.new("UISizeConstraint")
@@ -1209,12 +1228,12 @@ subtitleConstraint.Parent = subtitleFrame
 local subtitleSpeaker = Instance.new("TextLabel")
 subtitleSpeaker.Name = "Speaker"
 subtitleSpeaker.Position = UDim2.fromOffset(18, 8)
-subtitleSpeaker.Size = UDim2.new(1, -36, 0, 20)
+subtitleSpeaker.Size = UDim2.new(1, -278, 0, 20)
 subtitleSpeaker.BackgroundTransparency = 1
 subtitleSpeaker.Font = Enum.Font.Code
-subtitleSpeaker.Text = "> COMMAND CENTER"
+subtitleSpeaker.Text = "> COMMAND CENTER  //  LIVE"
 subtitleSpeaker.TextColor3 = Color3.fromRGB(105, 238, 168)
-subtitleSpeaker.TextSize = 15
+subtitleSpeaker.TextSize = 13
 subtitleSpeaker.TextXAlignment = Enum.TextXAlignment.Left
 subtitleSpeaker.ZIndex = 21
 subtitleSpeaker.Parent = subtitleFrame
@@ -1233,24 +1252,45 @@ subtitleText.TextXAlignment = Enum.TextXAlignment.Left
 subtitleText.TextYAlignment = Enum.TextYAlignment.Center
 subtitleText.ZIndex = 21
 subtitleText.Parent = subtitleFrame
+dispatchAudio.subtitleLabel = subtitleText
+
+-- Briefing audio controls live inside the subtitle panel instead of floating by
+-- the equipment HUD. They deliberately read as two quiet terminal chips: easy
+-- to find while Command is live, absent everywhere else.
+dispatchAudio.controls = Instance.new("Frame")
+dispatchAudio.controls.Name = "BriefingControls"
+dispatchAudio.controls.AnchorPoint = Vector2.new(1, 0)
+dispatchAudio.controls.Position = UDim2.new(1, -12, 0, 7)
+dispatchAudio.controls.Size = UDim2.fromOffset(232, 28)
+dispatchAudio.controls.BackgroundTransparency = 1
+dispatchAudio.controls.BorderSizePixel = 0
+dispatchAudio.controls.Visible = false
+dispatchAudio.controls.ZIndex = 23
+dispatchAudio.controls.Parent = subtitleFrame
+
+local briefingControlsLayout = Instance.new("UIListLayout")
+briefingControlsLayout.FillDirection = Enum.FillDirection.Horizontal
+briefingControlsLayout.HorizontalAlignment = Enum.HorizontalAlignment.Right
+briefingControlsLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+briefingControlsLayout.Padding = UDim.new(0, 6)
+briefingControlsLayout.SortOrder = Enum.SortOrder.LayoutOrder
+briefingControlsLayout.Parent = dispatchAudio.controls
 
 dispatchAudio.button = Instance.new("TextButton")
 dispatchAudio.button.Name = "DispatchMuteButton"
-dispatchAudio.button.AnchorPoint = Vector2.new(1, 0)
-dispatchAudio.button.Position = UDim2.new(1, -244, 0, 20)
-dispatchAudio.button.Size = UDim2.fromOffset(168, 42)
-dispatchAudio.button.BackgroundColor3 = Color3.fromRGB(5, 13, 11)
-dispatchAudio.button.BackgroundTransparency = 0.08
+dispatchAudio.button.LayoutOrder = 1
+dispatchAudio.button.Size = UDim2.fromOffset(124, 28)
+dispatchAudio.button.BackgroundColor3 = Color3.fromRGB(10, 23, 19)
+dispatchAudio.button.BackgroundTransparency = 0.16
 dispatchAudio.button.BorderSizePixel = 0
 dispatchAudio.button.AutoButtonColor = true
-dispatchAudio.button.Font = Enum.Font.Code
-dispatchAudio.button.Text = "[M] DISPATCH: LOADING"
-dispatchAudio.button.TextColor3 = Color3.fromRGB(105, 238, 168)
-dispatchAudio.button.TextSize = 14
-dispatchAudio.button.ZIndex = 35
-dispatchAudio.button.Visible = false
-dispatchAudio.button.Parent = guideGui
-roundAndStroke(dispatchAudio.button, 8, Color3.fromRGB(80, 221, 177), 0.42, 1)
+dispatchAudio.button.Font = Enum.Font.GothamMedium
+dispatchAudio.button.Text = "[M]  LOADING"
+dispatchAudio.button.TextColor3 = Color3.fromRGB(137, 225, 194)
+dispatchAudio.button.TextSize = 11
+dispatchAudio.button.ZIndex = 24
+dispatchAudio.button.Parent = dispatchAudio.controls
+roundAndStroke(dispatchAudio.button, 6, Color3.fromRGB(86, 190, 154), 0.62, 1)
 dispatchAudio.button.Activated:Connect(function()
 	dispatchAudio.requestToggle()
 end)
@@ -1267,21 +1307,19 @@ end, false, Enum.KeyCode.M)
 
 dispatchAudio.stopButton = Instance.new("TextButton")
 dispatchAudio.stopButton.Name = "DispatchStopButton"
-dispatchAudio.stopButton.AnchorPoint = Vector2.new(1, 0)
-dispatchAudio.stopButton.Position = UDim2.new(1, -244, 0, 68)
-dispatchAudio.stopButton.Size = UDim2.fromOffset(168, 42)
-dispatchAudio.stopButton.BackgroundColor3 = Color3.fromRGB(18, 10, 8)
-dispatchAudio.stopButton.BackgroundTransparency = 0.08
+dispatchAudio.stopButton.LayoutOrder = 2
+dispatchAudio.stopButton.Size = UDim2.fromOffset(102, 28)
+dispatchAudio.stopButton.BackgroundColor3 = Color3.fromRGB(23, 15, 12)
+dispatchAudio.stopButton.BackgroundTransparency = 0.18
 dispatchAudio.stopButton.BorderSizePixel = 0
 dispatchAudio.stopButton.AutoButtonColor = true
-dispatchAudio.stopButton.Font = Enum.Font.Code
-dispatchAudio.stopButton.Text = "[N] STOP DISPATCH"
-dispatchAudio.stopButton.TextColor3 = Color3.fromRGB(255, 184, 105)
-dispatchAudio.stopButton.TextSize = 14
-dispatchAudio.stopButton.ZIndex = 35
-dispatchAudio.stopButton.Visible = false
-dispatchAudio.stopButton.Parent = guideGui
-roundAndStroke(dispatchAudio.stopButton, 8, Color3.fromRGB(255, 156, 91), 0.42, 1)
+dispatchAudio.stopButton.Font = Enum.Font.GothamMedium
+dispatchAudio.stopButton.Text = "[N]  STOP"
+dispatchAudio.stopButton.TextColor3 = Color3.fromRGB(232, 177, 126)
+dispatchAudio.stopButton.TextSize = 11
+dispatchAudio.stopButton.ZIndex = 24
+dispatchAudio.stopButton.Parent = dispatchAudio.controls
+roundAndStroke(dispatchAudio.stopButton, 6, Color3.fromRGB(209, 132, 77), 0.67, 1)
 dispatchAudio.stopButton.Activated:Connect(function()
 	dispatchAudio.requestStop()
 end)
@@ -1294,129 +1332,8 @@ ContextActionService:BindAction("ZyntraStopCurrentDispatch", function(_, inputSt
 	return dispatchAudio.requestStop()
 		and Enum.ContextActionResult.Sink
 		or Enum.ContextActionResult.Pass
-end, false, Enum.KeyCode.N)
+end, false, Enum.KeyCode.N, Enum.KeyCode.ButtonB)
 dispatchAudio.refresh()
-
-local lobbySkipButton = Instance.new("TextButton")
-lobbySkipButton.Name = "LobbyBriefingSkip"
-lobbySkipButton.AnchorPoint = Vector2.new(0.5, 1)
-lobbySkipButton.Position = UDim2.new(0.5, 0, 1, -168)
-lobbySkipButton.Size = UDim2.fromOffset(420, 52)
-lobbySkipButton.BackgroundColor3 = Color3.fromRGB(6, 13, 11)
-lobbySkipButton.BackgroundTransparency = 0.06
-lobbySkipButton.BorderSizePixel = 0
-lobbySkipButton.AutoButtonColor = false
-lobbySkipButton.Active = true
-lobbySkipButton.Selectable = true
-lobbySkipButton.Text = ""
-lobbySkipButton.Visible = false
-lobbySkipButton.ZIndex = 30
-lobbySkipButton.Parent = guideGui
-roundAndStroke(lobbySkipButton, 10, Color3.fromRGB(80, 221, 177), 0.40, 1)
-
-do
-	local object = Instance.new("UIGradient")
-	object.Color = ColorSequence.new({
-		ColorSequenceKeypoint.new(0, Color3.fromRGB(8, 24, 20)),
-		ColorSequenceKeypoint.new(0.56, Color3.fromRGB(6, 14, 12)),
-		ColorSequenceKeypoint.new(1, Color3.fromRGB(5, 10, 9)),
-	})
-	object.Rotation = 0
-	object.Parent = lobbySkipButton
-end
-
-do
-	local object = Instance.new("Frame")
-	object.Name = "LiveAccent"
-	object.Position = UDim2.fromOffset(14, 20)
-	object.Size = UDim2.fromOffset(10, 10)
-	object.BackgroundColor3 = Color3.fromRGB(87, 245, 187)
-	object.BorderSizePixel = 0
-	object.ZIndex = 31
-	object.Parent = lobbySkipButton
-	roundAndStroke(object, 5, Color3.fromRGB(173, 255, 222), 0.28, 1)
-end
-
-do
-	local object = Instance.new("TextLabel")
-	object.Name = "LinkStatus"
-	object.Position = UDim2.fromOffset(34, 0)
-	object.Size = UDim2.new(0.53, -34, 1, 0)
-	object.BackgroundTransparency = 1
-	object.Font = Enum.Font.GothamMedium
-	object.Text = "COMMAND CENTER // LIVE"
-	object.TextColor3 = Color3.fromRGB(127, 213, 188)
-	object.TextSize = 12
-	object.TextXAlignment = Enum.TextXAlignment.Left
-	object.ZIndex = 31
-	object.Parent = lobbySkipButton
-end
-
-do
-	local object = Instance.new("Frame")
-	object.Name = "Divider"
-	object.AnchorPoint = Vector2.new(0, 0.5)
-	object.Position = UDim2.new(0.53, 0, 0.5, 0)
-	object.Size = UDim2.new(0, 1, 1, -18)
-	object.BackgroundColor3 = Color3.fromRGB(73, 151, 129)
-	object.BackgroundTransparency = 0.46
-	object.BorderSizePixel = 0
-	object.ZIndex = 31
-	object.Parent = lobbySkipButton
-end
-
-do
-	local object = Instance.new("TextLabel")
-	object.Name = "Action"
-	object.Position = UDim2.new(0.53, 14, 0, 0)
-	object.Size = UDim2.new(0.47, -60, 1, 0)
-	object.BackgroundTransparency = 1
-	object.Font = Enum.Font.GothamBold
-	object.Text = "SKIP BRIEFING"
-	object.TextColor3 = Color3.fromRGB(241, 250, 246)
-	object.TextSize = 14
-	object.TextXAlignment = Enum.TextXAlignment.Left
-	object.ZIndex = 31
-	object.Parent = lobbySkipButton
-end
-
-do
-	local object = Instance.new("Frame")
-	object.Name = "Keycap"
-	object.AnchorPoint = Vector2.new(1, 0.5)
-	object.Position = UDim2.new(1, -12, 0.5, 0)
-	object.Size = UDim2.fromOffset(34, 28)
-	object.BackgroundColor3 = Color3.fromRGB(17, 35, 30)
-	object.BackgroundTransparency = 0.04
-	object.BorderSizePixel = 0
-	object.ZIndex = 31
-	object.Parent = lobbySkipButton
-	roundAndStroke(object, 6, Color3.fromRGB(124, 238, 201), 0.34, 1)
-end
-
-do
-	local object = Instance.new("TextLabel")
-	object.Name = "Key"
-	object.Size = UDim2.fromScale(1, 1)
-	object.BackgroundTransparency = 1
-	object.Font = Enum.Font.GothamBold
-	object.Text = "K"
-	object.TextColor3 = Color3.fromRGB(185, 255, 226)
-	object.TextSize = 13
-	object.ZIndex = 32
-	object.Parent = lobbySkipButton.Keycap
-end
-
-lobbySkipButton.MouseEnter:Connect(function()
-	TweenService:Create(lobbySkipButton, TweenInfo.new(0.12), {
-		BackgroundColor3 = Color3.fromRGB(10, 27, 22),
-	}):Play()
-end)
-lobbySkipButton.MouseLeave:Connect(function()
-	TweenService:Create(lobbySkipButton, TweenInfo.new(0.12), {
-		BackgroundColor3 = Color3.fromRGB(6, 13, 11),
-	}):Play()
-end)
 
 local objectivesButton = Instance.new("TextButton")
 objectivesButton.Name = "ObjectivesButton"
@@ -1733,8 +1650,8 @@ local function setObjectivesAvailable(available)
 end
 
 local function setSubtitle(text)
-	subtitleText.Text = text or ""
-	subtitleFrame.Visible = text ~= nil and text ~= ""
+	dispatchAudio.subtitleCopy = text or ""
+	dispatchAudio.refresh()
 end
 
 function lobbyBriefing.isEligible()
@@ -1743,23 +1660,6 @@ function lobbyBriefing.isEligible()
 	return player:GetAttribute("InRound") ~= true
 		and not dead
 		and workspace:FindFirstChild("ServerLobby") ~= nil
-end
-
-local function updateLobbySkipCopy(inputType)
-	inputType = inputType or UIS:GetLastInputType()
-	local inputName = inputType and inputType.Name or ""
-	local usingGamepad = string.find(inputName, "Gamepad", 1, true) ~= nil
-	local keycap = lobbySkipButton:FindFirstChild("Keycap") :: Frame
-	local keyLabel = keycap:FindFirstChild("Key") :: TextLabel
-	if usingGamepad or (UIS.GamepadEnabled and not UIS.KeyboardEnabled and not UIS.TouchEnabled) then
-		keycap.Visible = true
-		keyLabel.Text = "B"
-	elseif inputType == Enum.UserInputType.Touch or (UIS.TouchEnabled and not UIS.KeyboardEnabled) then
-		keycap.Visible = false
-	else
-		keycap.Visible = true
-		keyLabel.Text = "K"
-	end
 end
 
 function lobbyBriefing.hasArrived()
@@ -1792,7 +1692,6 @@ function lobbyBriefing.cancel()
 	lobbyBriefing.radio:Stop()
 	lobbyBriefing.sound:Stop()
 	player:SetAttribute("LobbyBriefingActive", false)
-	lobbySkipButton.Visible = false
 	if ownedSubtitle then setSubtitle(nil) end
 end
 
@@ -1802,34 +1701,6 @@ function lobbyBriefing.skip()
 	lobbyBriefing.cancel()
 	return true
 end
-
-lobbySkipButton.Activated:Connect(function()
-	lobbyBriefing.skip()
-end)
-UIS.LastInputTypeChanged:Connect(updateLobbySkipCopy)
-updateLobbySkipCopy()
-
-local LOBBY_SKIP_ACTION = "SkipLobbyBriefing"
-ContextActionService:UnbindAction(LOBBY_SKIP_ACTION)
-ContextActionService:BindActionAtPriority(
-	LOBBY_SKIP_ACTION,
-	function(_, inputState)
-		if inputState ~= Enum.UserInputState.Begin then
-			return Enum.ContextActionResult.Pass
-		end
-		if UIS:GetFocusedTextBox() or not lobbyBriefing.active or not lobbySkipButton.Visible then
-			return Enum.ContextActionResult.Pass
-		end
-		return lobbyBriefing.skip()
-			and Enum.ContextActionResult.Sink
-			or Enum.ContextActionResult.Pass
-	end,
-	false,
-	Enum.ContextActionPriority.High.Value,
-	Enum.KeyCode.K,
-	Enum.KeyCode.ButtonB
-)
-
 function lobbyBriefing.playOnce()
 	if lobbyBriefing.played or not lobbyBriefing.isEligible() then return end
 	lobbyBriefing.played = true
@@ -1860,8 +1731,6 @@ function lobbyBriefing.playOnce()
 		lobbyBriefing.pending = false
 		lobbyBriefing.active = true
 		player:SetAttribute("LobbyBriefingActive", true)
-		updateLobbySkipCopy()
-		lobbySkipButton.Visible = true
 		local speechAt = os.clock() + lobbyBriefing.delay
 
 		local radioLength = lobbyBriefing.radio.TimeLength > 0.05
@@ -1875,7 +1744,7 @@ function lobbyBriefing.playOnce()
 
 		dispatchAudio.beginTransmission("lobby", run, function()
 			if run ~= lobbyBriefing.run then return end
-			lobbyBriefing.cancel()
+			lobbyBriefing.skip()
 		end)
 		lobbyBriefing.radio:Stop()
 		lobbyBriefing.radio.TimePosition = 0
@@ -1941,7 +1810,6 @@ function lobbyBriefing.playOnce()
 		lobbyBriefing.sound:Stop()
 		lobbyBriefing.active = false
 		player:SetAttribute("LobbyBriefingActive", false)
-		lobbySkipButton.Visible = false
 		setSubtitle(nil)
 		dispatchAudio.finishTransmission("lobby", run)
 	end)
@@ -2014,37 +1882,38 @@ local function updateLevelOneGuideLayout()
 	objectivesButton.Size = narrow and UDim2.fromOffset(140, 40) or UDim2.fromOffset(154, 44)
 	objectivesButton.TextSize = narrow and 14 or 16
 	objectivesButton.Text = UIS.TouchEnabled and "OBJECTIVES" or "OBJECTIVES  [H]"
-	dispatchAudio.button.Position = narrow and UDim2.new(1, -10, 0, 70) or UDim2.new(1, -244, 0, 20)
-	dispatchAudio.button.Size = narrow and UDim2.fromOffset(154, 38) or UDim2.fromOffset(168, 42)
-	dispatchAudio.button.TextSize = narrow and 12 or 14
-	dispatchAudio.stopButton.Position = narrow and UDim2.new(1, -10, 0, 114) or UDim2.new(1, -244, 0, 68)
-	dispatchAudio.stopButton.Size = narrow and UDim2.fromOffset(154, 38) or UDim2.fromOffset(168, 42)
-	dispatchAudio.stopButton.TextSize = narrow and 12 or 14
-	lobbySkipButton.Position = narrow
-		and UDim2.new(0.5, 0, 1, -212)
-		or UDim2.new(0.5, 0, 1, -168)
-	lobbySkipButton.Size = narrow and UDim2.new(1, -32, 0, 50) or UDim2.fromOffset(420, 52)
-	local skipLinkLabel = lobbySkipButton:FindFirstChild("LinkStatus") :: TextLabel
-	local skipActionLabel = lobbySkipButton:FindFirstChild("Action") :: TextLabel
-	skipLinkLabel.Text = narrow and "COMMAND // LIVE" or "COMMAND CENTER // LIVE"
-	skipLinkLabel.TextSize = narrow and 10 or 12
-	skipActionLabel.TextSize = narrow and 12 or 14
 
 	if narrow then
+		dispatchAudio.controls.AnchorPoint = Vector2.new(1, 1)
+		dispatchAudio.controls.Position = UDim2.new(1, -6, 0, -6)
+		dispatchAudio.controls.Size = UDim2.fromOffset(232, 32)
+		dispatchAudio.button.Size = UDim2.fromOffset(124, 32)
+		dispatchAudio.stopButton.Size = UDim2.fromOffset(102, 32)
+		dispatchAudio.button.TextSize = 11
+		dispatchAudio.stopButton.TextSize = 11
 		objectivesPanel.AnchorPoint = Vector2.new(0.5, 0)
 		objectivesPanel.Position = UDim2.new(0.5, 0, 0, 60)
 		objectivesPanel.Size = UDim2.new(1, -20, 0, math.max(240, math.min(360, viewport.Y - 92)))
 		objectivesTitle.TextSize = 15
 		subtitleFrame.Position = UDim2.new(0.5, 0, 1, -96)
 		subtitleFrame.Size = UDim2.new(1, -20, 0, 108)
+		subtitleSpeaker.Size = UDim2.new(1, -36, 0, 20)
 		subtitleText.TextSize = 16
 	else
+		dispatchAudio.controls.AnchorPoint = Vector2.new(1, 0)
+		dispatchAudio.controls.Position = UDim2.new(1, -12, 0, 7)
+		dispatchAudio.controls.Size = UDim2.fromOffset(232, 28)
+		dispatchAudio.button.Size = UDim2.fromOffset(124, 28)
+		dispatchAudio.stopButton.Size = UDim2.fromOffset(102, 28)
+		dispatchAudio.button.TextSize = 11
+		dispatchAudio.stopButton.TextSize = 11
 		objectivesPanel.AnchorPoint = Vector2.new(0, 0)
 		objectivesPanel.Position = UDim2.fromOffset(12, 64)
 		objectivesPanel.Size = UDim2.fromOffset(420, math.max(280, math.min(338, viewport.Y - 92)))
 		objectivesTitle.TextSize = 18
 		subtitleFrame.Position = UDim2.new(0.5, 0, 1, -64)
 		subtitleFrame.Size = UDim2.new(0.76, 0, 0, 96)
+		subtitleSpeaker.Size = UDim2.new(1, -278, 0, 20)
 		subtitleText.TextSize = 20
 	end
 end
