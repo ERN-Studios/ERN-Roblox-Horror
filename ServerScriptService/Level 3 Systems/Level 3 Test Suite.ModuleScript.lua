@@ -4,11 +4,14 @@
 
 local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
 local LayoutGenerator = require(script.Parent:WaitForChild("Level 3 Layout Generator"))
+local HidingController = require(script.Parent:WaitForChild("Level 3 Hiding Controller"))
 local CollectionService = game:GetService("CollectionService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 local ServerScriptService = game:GetService("ServerScriptService")
 local ServerStorage = game:GetService("ServerStorage")
 local StarterPlayer = game:GetService("StarterPlayer")
+local Players = game:GetService("Players")
 
 local TestSuite = {}
 
@@ -187,6 +190,8 @@ function TestSuite.ValidateConfiguration(): {[string]: any}
 		and managerTuning.SpawnGroupRadius >= 60,
 		"Mall Manager must spawn 90-180 studs from the densest player group")
 	assert(managerTuning.AgentRadius == 5
+		and managerTuning.PathAgentRadius == 4
+		and managerTuning.PathAgentRadius <= managerTuning.AgentRadius
 		and managerTuning.SweepRadius == 5.25
 		and managerTuning.AgentRadius * 2 + 2 <= Configuration.CorridorWidth
 		and managerTuning.SweepRadius * 2 + 1 <= Configuration.CorridorWidth
@@ -1085,16 +1090,24 @@ function TestSuite.ValidateMallManagerRuntime(expectedPresent: boolean): {[strin
 			and manager:GetAttribute("Level3_MallManagerFinaleSpawn") == true
 			and state:GetAttribute("Level3_MallManagerFinaleSpawn") == true
 			and (state:GetAttribute("Level3_MallManagerSpawnGroupSize") or 0) >= 1
-			and state:GetAttribute("Level3_MallManagerSpawnPathValidated") == true,
+			and state:GetAttribute("Level3_MallManagerSpawnClearanceValidated") == true
+			and type(state:GetAttribute("Level3_MallManagerPathValidated")) == "boolean",
 			"Mall Manager finale spawn is not on its authored hall marker")
 	else
+		-- SpawnClearanceValidated is a genuine claim: every scored spawn
+		-- candidate passed spawnVolumeFits. Route reachability is proven
+		-- asynchronously — Level3_MallManagerPathValidated flips true only after
+		-- the authoritative volume sweep accepts a complete route to the resolved
+		-- goal, so at spawn time only its type is checked here; behavioral tests
+		-- assert it becomes true in bounded time.
 		assert(spawnDistance >= Configuration.MallManager.SpawnMinimumDistance
 			and spawnDistance <= Configuration.MallManager.SpawnMaximumDistance + 1
 			and (state:GetAttribute("Level3_MallManagerSpawnGroupSize") or 0) >= 1
 			and state:GetAttribute("Level3_MallManagerSpawnRoomId") ~= "Exit"
 			and state:GetAttribute("Level3_MallManagerSpawnVisibleCount") == 0
-			and type(state:GetAttribute("Level3_MallManagerSpawnPathValidated")) == "boolean",
-			"Mall Manager grouped runtime spawn is not distant, hidden, and route-audited")
+			and state:GetAttribute("Level3_MallManagerSpawnClearanceValidated") == true
+			and type(state:GetAttribute("Level3_MallManagerPathValidated")) == "boolean",
+			"Mall Manager grouped runtime spawn is not distant, hidden, and clearance-audited")
 	end
 	assert(type(state:GetAttribute("Level3_MallManagerFootstepSerial")) == "number"
 		and (state:GetAttribute("Level3_MallManagerFootstepSerial") or 0) >= 0
@@ -1352,6 +1365,1762 @@ function TestSuite.ValidateCleanup(snapshot: {[string]: any}): {[string]: any}
 			"Cleanup left a player hidden under a destroyed table")
 	end
 	return {RestoredScripts = countMap(snapshot.Scripts)}
+end
+
+-- ---------------------------------------------------------------------------
+-- LEVEL3_MANAGER_NAV_TESTS_20260827 — behavioral navigation coverage.
+-- ValidateNavigationLayouts is pure and Edit-mode safe; the telemetry and
+-- furniture checks consume a live play-session hunt (Controller.GetSnapshot()
+-- and the generated world) because there are no player mocks.
+-- ---------------------------------------------------------------------------
+
+-- Twenty deterministic layouts including every seed the fix contract names.
+local NAVIGATION_TEST_SEEDS = {
+	1, 2, 17, 101, 7331, 65537, 424242, 987654321, 1900813, 31337,
+	555001, 555002, 555003, 555004, 555005, 777101, 777102, 777103, 777104, 777105,
+}
+
+-- Mirrors the AI controller's room-bounds classification: distance to the
+-- room's floor rectangle, zero inside the bounds.
+local function roomRectangleDistance(room: {[string]: any}, x: number, z: number): number
+	local dx = math.max(math.abs(x - room.X) - room.W * .5, 0)
+	local dz = math.max(math.abs(z - room.Z) - room.D * .5, 0)
+	return math.sqrt(dx * dx + dz * dz)
+end
+
+local function classifyRoomByBounds(layout: {[string]: any}, x: number, z: number): string
+	local bestId = ""
+	local bestDistance = math.huge
+	for _, room in ipairs(layout.Rooms) do
+		local distance = roomRectangleDistance(room, x, z)
+		if distance < bestDistance then
+			bestDistance = distance
+			bestId = room.Id
+		end
+	end
+	return bestId
+end
+
+-- Mirrors the world builder's corridor endpoint derivation in layout space.
+local function corridorEndpoints(a: {[string]: any}, b: {[string]: any}): (number, number, number, number)
+	local horizontal = math.abs(b.X - a.X) > math.abs(b.Z - a.Z)
+	if horizontal then
+		local direction = if b.X > a.X then 1 else -1
+		return a.X + direction * a.W * .5, a.Z, b.X - direction * b.W * .5, b.Z
+	end
+	local direction = if b.Z > a.Z then 1 else -1
+	return a.X, a.Z + direction * a.D * .5, b.X, b.Z - direction * b.D * .5
+end
+
+function TestSuite.ValidateNavigationLayouts(): {[string]: any}
+	local requiredSeeds = {[101] = false, [7331] = false, [65537] = false, [1900813] = false}
+	assert(#NAVIGATION_TEST_SEEDS >= 20, "Navigation layout coverage requires at least 20 seeds")
+	for _, seed in ipairs(NAVIGATION_TEST_SEEDS) do
+		if requiredSeeds[seed] ~= nil then requiredSeeds[seed] = true end
+		local layout = LayoutGenerator.Generate(seed)
+		local valid, validationProblem = LayoutGenerator.Validate(layout)
+		assert(valid, string.format("Seed %d failed LayoutGenerator.Validate: %s",
+			seed, tostring(validationProblem)))
+		local roomById = layout.RoomById
+		-- Every room centre must classify to its own room.
+		for _, room in ipairs(layout.Rooms) do
+			assert(classifyRoomByBounds(layout, room.X, room.Z) == room.Id,
+				string.format("Seed %d: room %s centre classifies to the wrong room", seed, room.Id))
+			assert(roomRectangleDistance(room, room.X, room.Z) <= 0,
+				string.format("Seed %d: room %s centre is outside its own bounds", seed, room.Id))
+		end
+		-- Corridor mouths and midpoints must classify to the rooms they join —
+		-- the doorway misclassification that centre-distance produced.
+		local hiddenExitCount = 0
+		for _, link in ipairs(layout.Links) do
+			local a, b = roomById[link.A], roomById[link.B]
+			assert(a and b, string.format("Seed %d: link joins unknown rooms", seed))
+			local ax, az, bx, bz = corridorEndpoints(a, b)
+			if link.Door == "HiddenExit" then
+				hiddenExitCount += 1
+				assert(link.A == "SignalHall" and link.B == "Exit",
+					string.format("Seed %d: HiddenExit must join SignalHall to Exit", seed))
+			else
+				local startRoom = classifyRoomByBounds(layout, ax, az)
+				local finishRoom = classifyRoomByBounds(layout, bx, bz)
+				assert(startRoom == link.A,
+					string.format("Seed %d: corridor mouth at %s classifies to %s", seed, link.A, startRoom))
+				assert(finishRoom == link.B,
+					string.format("Seed %d: corridor mouth at %s classifies to %s", seed, link.B, finishRoom))
+				local middle = classifyRoomByBounds(layout, (ax + bx) * .5, (az + bz) * .5)
+				assert(middle == link.A or middle == link.B,
+					string.format("Seed %d: corridor midpoint %s-%s classifies to third room %s",
+						seed, link.A, link.B, middle))
+			end
+		end
+		assert(hiddenExitCount == 1,
+			string.format("Seed %d: expected exactly one HiddenExit link", seed))
+		-- The Manager's strategy graph excludes HiddenExit links: every room
+		-- except the sealed Exit must stay reachable from Arrival, and Exit
+		-- must not be.
+		local adjacency: {[string]: {string}} = {}
+		for _, room in ipairs(layout.Rooms) do adjacency[room.Id] = {} end
+		for _, link in ipairs(layout.Links) do
+			if link.Door ~= "HiddenExit" then
+				table.insert(adjacency[link.A], link.B)
+				table.insert(adjacency[link.B], link.A)
+			end
+		end
+		local seen: {[string]: boolean} = {Arrival = true}
+		local queue = {"Arrival"}
+		local cursor = 1
+		while cursor <= #queue do
+			local roomId = queue[cursor]
+			cursor += 1
+			for _, neighbour in ipairs(adjacency[roomId]) do
+				if not seen[neighbour] then
+					seen[neighbour] = true
+					table.insert(queue, neighbour)
+				end
+			end
+		end
+		for _, room in ipairs(layout.Rooms) do
+			if room.Id == "Exit" then
+				assert(not seen[room.Id],
+					string.format("Seed %d: strategy graph must not reach the sealed Exit", seed))
+			else
+				assert(seen[room.Id],
+					string.format("Seed %d: strategy graph cannot reach room %s", seed, room.Id))
+			end
+		end
+	end
+	for seed, covered in pairs(requiredSeeds) do
+		assert(covered, string.format("Required navigation seed %d was not exercised", seed))
+	end
+	return {Seeds = #NAVIGATION_TEST_SEEDS}
+end
+
+-- Asserts the live hunt telemetry contract on a Controller.GetSnapshot()
+-- table: single-flight computation, the five-per-second blackout request
+-- ceiling, state-aware furniture envelopes, honest validation flags, and the
+-- no-motionless-chase window.
+function TestSuite.ValidateManagerNavigationTelemetry(snapshot: {[string]: any}?,
+	requirePathValidated: boolean?): {[string]: any}
+	assert(type(snapshot) == "table", "Navigation telemetry requires a live Mall Manager snapshot")
+	local tuning = Configuration.MallManager
+	assert(type(snapshot.PeakConcurrentPathComputes) == "number"
+		and snapshot.PeakConcurrentPathComputes <= 1,
+		"Mall Manager ran more than one path computation in flight")
+	assert(type(snapshot.PathComputeSerial) == "number"
+		and type(snapshot.PathComputesLastSecond) == "number"
+		and snapshot.PathComputesLastSecond <= 5,
+		"Mall Manager exceeded five path computations in one second")
+	assert(type(snapshot.StrategicIndex) == "number" and snapshot.StrategicIndex >= 1
+		and type(snapshot.StrategicPointCount) == "number"
+		and type(snapshot.StrategicRebuildSerial) == "number"
+		and type(snapshot.StrategicGoalRevision) == "number"
+		and type(snapshot.StuckRecoveries) == "number"
+		and type(snapshot.RecoveryRepaths) == "number"
+		and type(snapshot.GenuineProgressSerial) == "number"
+		and type(snapshot.OverlapEscapeSearches) == "number",
+		"Mall Manager strategic, progress or escape telemetry is missing")
+	-- The escape ladder is a bounded state, clamped one step past exhaustion.
+	-- Unbounded retry pressure would show up here rather than in the honest
+	-- OverlapEscapeSearches total.
+	assert(type(snapshot.OverlapEscapeAttempts) == "number"
+		and snapshot.OverlapEscapeAttempts >= 0
+		and snapshot.OverlapEscapeAttempts <= tuning.ObstructionRecoveryAttempts + 1,
+		string.format("Mall Manager overlap escalation ladder is unbounded (%s)",
+			tostring(snapshot.OverlapEscapeAttempts)))
+	assert(snapshot.SpawnClearanceValidated == true,
+		"Mall Manager spawn was not clearance-validated")
+	assert(type(snapshot.PathValidated) == "boolean",
+		"Mall Manager path validation telemetry is missing")
+	if requirePathValidated then
+		assert(snapshot.PathValidated == true,
+			"Mall Manager never proved a genuine route to its resolved goal")
+	end
+	local suppressed = workspace:GetAttribute("Level3FurnitureCollisionSuppressed") == true
+	if suppressed then
+		assert(snapshot.FurnitureNavExclusionsActive == 0,
+			"Ghost furniture envelopes are still steering the Mall Manager")
+	else
+		assert(snapshot.FurnitureNavExclusionsActive == snapshot.FurnitureNavExclusionsTotal,
+			"Restored furniture envelopes are not all guarding navigation")
+	end
+	-- NOTE: no motionless-chase assertion here. A single snapshot's
+	-- LastProgressAgeSeconds is rearmed by recovery, so it can look healthy
+	-- while the rig has not moved at all. That claim is proven only by
+	-- ProbeChaseForwardProgress, which samples position, segment distance and
+	-- the route indices over time.
+	return {
+		PathComputeSerial = snapshot.PathComputeSerial,
+		PathComputesLastSecond = snapshot.PathComputesLastSecond,
+		PeakConcurrentPathComputes = snapshot.PeakConcurrentPathComputes,
+		PathValidated = snapshot.PathValidated,
+		FurnitureNavExclusionsActive = snapshot.FurnitureNavExclusionsActive,
+		FurnitureNavExclusionsTotal = snapshot.FurnitureNavExclusionsTotal,
+		StuckRecoveries = snapshot.StuckRecoveries,
+		RecoveryRepaths = snapshot.RecoveryRepaths,
+		GenuineProgressSerial = snapshot.GenuineProgressSerial,
+		StrategicGoalRevision = snapshot.StrategicGoalRevision,
+		OverlapEscapeAttempts = snapshot.OverlapEscapeAttempts,
+		OverlapEscapeSearches = snapshot.OverlapEscapeSearches,
+	}
+end
+
+-- Captures every temporary hunt furniture part's mutable properties, and the
+-- visibility of each Decal/Texture the furniture state machine drives, before a
+-- blackout cycle so restoration can be proven afterwards. Chair CFrames are
+-- deliberately not compared — shiftBlackoutChairs moves three chairs once per
+-- session by design.
+function TestSuite.CaptureFurnitureBaseline(world: Instance): {[string]: any}
+	assert(world and world.Parent == workspace, "Furniture baseline requires the live generated world")
+	local records = {}
+	local visualCount = 0
+	for _, object in ipairs(world:GetDescendants()) do
+		if object:IsA("BasePart") and object:GetAttribute("Level3_TemporaryHuntFurniture") == true then
+			local visuals = {}
+			for _, child in ipairs(object:GetDescendants()) do
+				if child:IsA("Decal") or child:IsA("Texture") then
+					table.insert(visuals, {
+						Object = child,
+						Parent = child.Parent,
+						Transparency = child.Transparency,
+					})
+					visualCount += 1
+				end
+			end
+			table.insert(records, {
+				Part = object,
+				Parent = object.Parent,
+				Name = object:GetFullName(),
+				Transparency = object.Transparency,
+				CanCollide = object.CanCollide,
+				CanTouch = object.CanTouch,
+				CanQuery = object.CanQuery,
+				CastShadow = object.CastShadow,
+				Visuals = visuals,
+			})
+		end
+	end
+	assert(#records > 0, "Level 3 world has no temporary hunt furniture to audit")
+	return {World = world, Records = records, VisualCount = visualCount}
+end
+
+function TestSuite.ValidateFurnitureRestored(baseline: {[string]: any}): {[string]: any}
+	assert(type(baseline) == "table" and type(baseline.Records) == "table",
+		"ValidateFurnitureRestored requires a CaptureFurnitureBaseline result")
+	local checked, visualsChecked = 0, 0
+	local missing, mismatched, visualMismatched = {}, {}, {}
+	for _, record in ipairs(baseline.Records) do
+		local part = record.Part
+		-- A destroyed or reparented part is a restoration FAILURE, never a
+		-- silent skip: losing furniture is exactly the regression this guards.
+		if not part or part.Parent ~= record.Parent or not part:IsDescendantOf(baseline.World) then
+			table.insert(missing, record.Name)
+		else
+			checked += 1
+			if part.Transparency ~= record.Transparency
+				or part.CanCollide ~= record.CanCollide
+				or part.CanTouch ~= record.CanTouch
+				or part.CanQuery ~= record.CanQuery
+				or part.CastShadow ~= record.CastShadow then
+				table.insert(mismatched, record.Name)
+			end
+			for _, visualRecord in ipairs(record.Visuals) do
+				local visual = visualRecord.Object
+				if not visual or visual.Parent ~= visualRecord.Parent
+					or not visual:IsDescendantOf(part) then
+					table.insert(missing, record.Name .. " (visual)")
+				else
+					visualsChecked += 1
+					if visual.Transparency ~= visualRecord.Transparency then
+						table.insert(visualMismatched, visual:GetFullName())
+					end
+				end
+			end
+		end
+	end
+	assert(#missing == 0, string.format(
+		"%d furniture part(s)/visual(s) went missing across the cycle; first: %s",
+		#missing, tostring(missing[1])))
+	assert(checked == #baseline.Records, string.format(
+		"Furniture audit covered %d of %d baseline parts", checked, #baseline.Records))
+	assert(#mismatched == 0, string.format(
+		"%d furniture part(s) did not restore their original properties; first: %s",
+		#mismatched, tostring(mismatched[1])))
+	assert(#visualMismatched == 0, string.format(
+		"%d furniture decal/texture(s) did not restore visibility; first: %s",
+		#visualMismatched, tostring(visualMismatched[1])))
+	assert(visualsChecked == (baseline.VisualCount or visualsChecked), string.format(
+		"Furniture visual audit covered %d of %d captured decals/textures",
+		visualsChecked, tostring(baseline.VisualCount)))
+	return {Checked = checked, VisualsChecked = visualsChecked}
+end
+
+-- ---------------------------------------------------------------------------
+-- Deterministic behavioral navigation probes. Each drives the LIVE controller
+-- and returns a time series, so no claim rests on a single self-reported
+-- snapshot. All scaffolding parts are destroyed before returning, including on
+-- failure. Every probe takes the Mall Manager controller module so the suite
+-- never has to require its sibling behind the Edit-mode require cache.
+-- ---------------------------------------------------------------------------
+
+local PROBE_BLOCK_HEIGHT = 6
+-- Just outside the SweepRadius 5.25 clearance square (whose corners reach 7.42)
+-- so the annulus is absent at the centre and present after any 3.5-stud probe.
+local PROBE_RING_RADIUS = 8.6
+
+local function assertStudioProbe(name: string)
+	assert(RunService:IsStudio(), name .. " is Studio-only")
+end
+
+-- The attack probes intentionally exercise the real capture path. Keep the
+-- character alive without weakening the controller's attack contract, then
+-- put every mutated player/character value back even when an assertion fails.
+local function protectPlayer(player: Player): {[string]: any}
+	assert(player.Parent == Players, "Probe player is no longer in Players")
+	assert(not HidingController.IsHidden(player),
+		"Probe player must be exposed; exit the hiding spot before navigation regression")
+	local character = assert(player.Character, "Probe requires a live character")
+	local humanoid = assert(character:FindFirstChildOfClass("Humanoid"),
+		"Probe character has no Humanoid")
+	local root = assert(character:FindFirstChild("HumanoidRootPart"),
+		"Probe character has no HumanoidRootPart") :: BasePart
+	assert(humanoid.Health > 0, "Probe character is already dead")
+	local record: {[string]: any} = {
+		Player = player,
+		Character = character,
+		Humanoid = humanoid,
+		Root = root,
+		Pivot = character:GetPivot(),
+		RootAnchored = root.Anchored,
+		RootLinearVelocity = root.AssemblyLinearVelocity,
+		RootAngularVelocity = root.AssemblyAngularVelocity,
+		Health = humanoid.Health,
+		BreakJointsOnDeath = humanoid.BreakJointsOnDeath,
+		DeadEnabled = humanoid:GetStateEnabled(Enum.HumanoidStateType.Dead),
+		InRound = player:GetAttribute("InRound"),
+		Escaped = player:GetAttribute("Escaped"),
+		KeepingAlive = true,
+	}
+	player:SetAttribute("InRound", true)
+	player:SetAttribute("Escaped", false)
+	humanoid.BreakJointsOnDeath = false
+	humanoid:SetStateEnabled(Enum.HumanoidStateType.Dead, false)
+	root.Anchored = true
+	record.HealthConnection = humanoid.HealthChanged:Connect(function(health)
+		if record.KeepingAlive and health <= 0 and humanoid.Parent then
+			humanoid.Health = math.max(record.Health, 1)
+		end
+	end)
+	return record
+end
+
+local function restoreProtectedPlayer(record: {[string]: any})
+	local player = record.Player
+	local character = record.Character
+	local humanoid = record.Humanoid
+	local root = record.Root
+	local characterIntact = player and player.Parent == Players
+		and player.Character == character
+		and character and character.Parent
+		and humanoid and humanoid.Parent == character
+		and root and root.Parent == character
+	local restoreOk: boolean, restoreError: any = false,
+		"Protected probe character was removed or replaced before restoration"
+	if characterIntact then
+		restoreOk, restoreError = pcall(function()
+			character:PivotTo(record.Pivot)
+			root.AssemblyLinearVelocity = record.RootLinearVelocity
+			root.AssemblyAngularVelocity = record.RootAngularVelocity
+			root.Anchored = record.RootAnchored
+			humanoid.BreakJointsOnDeath = record.BreakJointsOnDeath
+			humanoid.Health = math.min(record.Health, humanoid.MaxHealth)
+			humanoid:SetStateEnabled(Enum.HumanoidStateType.Dead, record.DeadEnabled)
+		end)
+	end
+	if player and player.Parent == Players then
+		-- SetAttribute(name, nil) removes the attribute, which restores an
+		-- originally absent value instead of silently changing it to false.
+		player:SetAttribute("InRound", record.InRound)
+		player:SetAttribute("Escaped", record.Escaped)
+	end
+	record.KeepingAlive = false
+	local connection = record.HealthConnection
+	if connection then connection:Disconnect() end
+	assert(restoreOk, "Failed to restore probe character state: " .. tostring(restoreError))
+end
+
+local function quiesceProtectedPlayer(Manager: {[string]: any}, record: {[string]: any})
+	local player = record.Player
+	if player and player.Parent == Players then
+		-- Make any already-scheduled windup fail livingPlayer before removing the
+		-- health guard. Otherwise the delayed attack callback can kill the restored
+		-- character just after the probe returns.
+		player:SetAttribute("InRound", false)
+		player:SetAttribute("Escaped", true)
+	end
+	local tuning = Configuration.MallManager
+	local deadline = os.clock() + math.max(
+		tonumber(tuning.AttackWindupSeconds) or 0,
+		tonumber(tuning.BlackoutAttackWindupSeconds) or 0) + .75
+	local lastSnapshot = nil
+	repeat
+		lastSnapshot = Manager.GetSnapshot and Manager.GetSnapshot() or nil
+		if not lastSnapshot
+			or (lastSnapshot.Attacking ~= true and (lastSnapshot.TargetUserId or 0) == 0) then break end
+		task.wait(.05)
+	until os.clock() >= deadline
+	assert(not lastSnapshot
+		or (lastSnapshot.Attacking ~= true and (lastSnapshot.TargetUserId or 0) == 0),
+		"Mall Manager attack/target did not quiesce before player-state restoration")
+	task.wait(.1)
+end
+
+type CleanupStep = {Name: string, Run: () -> ()}
+local function runCleanupSteps(steps: {CleanupStep})
+	-- Cleanup is a best-effort transaction: one failed step must not prevent the
+	-- remaining player, controller and scaffold state from being restored.
+	local failures = {}
+	for _, step in ipairs(steps) do
+		local ok, cleanupError = pcall(step.Run)
+		if not ok then
+			table.insert(failures, step.Name .. ": " .. tostring(cleanupError))
+		end
+	end
+	assert(#failures == 0, "Probe cleanup failed: " .. table.concat(failures, " | "))
+end
+
+local function probeScaffold()
+	assertStudioProbe("Navigation probe scaffolding")
+	local parts = {}
+	local scaffold = {}
+	function scaffold.add(name: string, cframe: CFrame, size: Vector3): BasePart
+		local part = Instance.new("Part")
+		part.Name = name
+		part.Anchored = true
+		part.CanCollide = true
+		part.Transparency = .55
+		part.Size = size
+		part.CFrame = cframe
+		part.Parent = workspace
+		table.insert(parts, part)
+		return part
+	end
+	function scaffold.clear()
+		for _, part in ipairs(parts) do
+			pcall(function() part:Destroy() end)
+		end
+		table.clear(parts)
+	end
+	return scaffold
+end
+
+local function sampleSeries(Manager: {[string]: any}, seconds: number, interval: number,
+	extra: ((any) -> {[string]: any})?): {any}
+	local series = {}
+	local startedAt = os.clock()
+	while os.clock() - startedAt < seconds do
+		local snapshot = Manager.GetSnapshot()
+		if snapshot then
+			local target = if (snapshot.TargetUserId or 0) > 0
+				then Players:GetPlayerByUserId(snapshot.TargetUserId) else nil
+			local targetCharacter = target and target.Character
+			local targetHumanoid = targetCharacter and targetCharacter:FindFirstChildOfClass("Humanoid")
+			local sample = {
+				T = os.clock() - startedAt,
+				Position = snapshot.Position,
+				State = snapshot.State,
+				PathStatus = snapshot.PathStatus,
+				MovementSpeed = snapshot.MovementSpeed,
+				LastActualStepDistance = snapshot.LastActualStepDistance,
+				WaypointIndex = snapshot.WaypointIndex,
+				WaypointCount = snapshot.WaypointCount,
+				StrategicIndex = snapshot.StrategicIndex,
+				StrategicRebuildSerial = snapshot.StrategicRebuildSerial,
+				StrategicGoalRevision = snapshot.StrategicGoalRevision,
+				PathSwapSerial = snapshot.PathSwapSerial,
+				GoalDistance = snapshot.GoalDistance,
+				GenuineProgressSerial = snapshot.GenuineProgressSerial,
+				LastGenuineProgressAgeSeconds = snapshot.LastGenuineProgressAgeSeconds,
+				StuckRecoveries = snapshot.StuckRecoveries,
+				RecoveryRepaths = snapshot.RecoveryRepaths,
+				OverlapEscapeAttempts = snapshot.OverlapEscapeAttempts,
+				OverlapEscapeSearches = snapshot.OverlapEscapeSearches,
+				OverlapEscapeActive = snapshot.OverlapEscapeActive,
+				ConsecutiveObstructions = snapshot.ConsecutiveObstructions,
+				PathComputesLastSecond = snapshot.PathComputesLastSecond,
+				PeakConcurrentPathComputes = snapshot.PeakConcurrentPathComputes,
+				ProgressBestDistance = snapshot.ProgressBestDistance,
+				ProgressCreditedDistance = snapshot.ProgressCreditedDistance,
+				TargetUserId = snapshot.TargetUserId,
+				Generation = snapshot.Generation,
+				SpawnSerial = snapshot.SpawnSerial,
+				AttackSerial = snapshot.AttackSerial,
+				LastCaptureUserId = snapshot.LastCaptureUserId,
+				TargetValid = target ~= nil
+					and target.Parent == Players
+					and target:GetAttribute("InRound") == true
+					and target:GetAttribute("Escaped") ~= true
+					and targetCharacter ~= nil
+					and targetCharacter.Parent ~= nil
+					and targetHumanoid ~= nil
+					and targetHumanoid.Health > 0,
+			}
+			if extra then
+				for key, value in pairs(extra(snapshot)) do sample[key] = value end
+			end
+			table.insert(series, sample)
+		end
+		task.wait(interval)
+	end
+	return series
+end
+
+local function seriesTravel(series: {any}): number
+	local travelled = 0
+	for index = 2, #series do
+		travelled += planarDistance(series[index - 1].Position, series[index].Position)
+	end
+	return travelled
+end
+
+local function maxPerFrameStep(series: {any}): number
+	local largest = 0
+	for _, sample in ipairs(series) do
+		largest = math.max(largest, sample.LastActualStepDistance or 0)
+	end
+	return largest
+end
+
+local function prepareStraightCorridorFixture(Manager: {[string]: any},
+	centeredStart: boolean?): {[string]: any}
+	local world = assert(workspace:FindFirstChild(Configuration.WorldName),
+		"Navigation fixture requires the generated world")
+	local corridors = assert(world:FindFirstChild("Corridors"),
+		"Navigation fixture requires generated corridors")
+	local candidates = {}
+	for _, corridor in ipairs(corridors:GetChildren()) do
+		if corridor:IsA("Model") and corridor:GetAttribute("Level3_ExitCorridor") ~= true then
+			local corridorCFrame, corridorSize = corridor:GetBoundingBox()
+			local horizontal = corridorSize.X > corridorSize.Z
+			local half = (if horizontal then corridorSize.X else corridorSize.Z) * .5
+			local span = math.min(30, half - 8)
+			if span >= 18 then
+				table.insert(candidates, {
+					Model = corridor,
+					CFrame = corridorCFrame,
+					Axis = if horizontal then corridorCFrame.RightVector else corridorCFrame.LookVector,
+					Span = span,
+				})
+			end
+		end
+	end
+	table.sort(candidates, function(a, b) return a.Span > b.Span end)
+	for _, candidate in ipairs(candidates) do
+		local startPoint = if centeredStart then candidate.CFrame.Position
+			else candidate.CFrame.Position - candidate.Axis * candidate.Span
+		local endPoint = candidate.CFrame.Position + candidate.Axis * candidate.Span
+		local prepared, snapshot = pcall(
+			Manager.DebugPrepareStraightPatrol, startPoint, endPoint)
+		if prepared and snapshot then
+			return {
+				Corridor = candidate.Model.Name,
+				Start = startPoint,
+				Destination = endPoint,
+				Snapshot = snapshot,
+			}
+		end
+	end
+	error("No long corridor was accepted by the production sweep", 0)
+end
+
+local function prepareOpenRoomFixture(Manager: {[string]: any}): {[string]: any}
+	local world = assert(workspace:FindFirstChild(Configuration.WorldName),
+		"Navigation fixture requires the generated world")
+	local rooms = assert(world:FindFirstChild("Rooms"),
+		"Navigation fixture requires generated rooms")
+	local candidates = {}
+	for _, room in ipairs(rooms:GetChildren()) do
+		if room:IsA("Model") and room:GetAttribute("Level3_RoomId") ~= "Exit" then
+			local roomCFrame, roomSize = room:GetBoundingBox()
+			table.insert(candidates, {
+				Model = room,
+				CFrame = roomCFrame,
+				Area = roomSize.X * roomSize.Z,
+			})
+		end
+	end
+	table.sort(candidates, function(a, b) return a.Area > b.Area end)
+	for _, candidate in ipairs(candidates) do
+		for _, axis in ipairs({
+			candidate.CFrame.RightVector,
+			-candidate.CFrame.RightVector,
+			candidate.CFrame.LookVector,
+			-candidate.CFrame.LookVector,
+		}) do
+			local startPoint = candidate.CFrame.Position
+			local endPoint = startPoint + axis * 18
+			local prepared, snapshot = pcall(
+				Manager.DebugPrepareStraightPatrol, startPoint, endPoint)
+			if prepared and snapshot then
+				return {
+					Room = candidate.Model.Name,
+					Start = startPoint,
+					Destination = endPoint,
+					Snapshot = snapshot,
+				}
+			end
+		end
+	end
+	error("No open room centre was accepted by the production sweep", 0)
+end
+
+-- PROBE 1 — normal-speed movement where every single frame advances less than
+-- PROGRESS_DISTANCE_EPSILON. Proves cumulative sub-epsilon gains are credited
+-- and do not false-trigger STUCK_REPATH.
+function TestSuite.ProbeSlowMovementProgress(Manager: {[string]: any},
+	roomId: string, seconds: number?): {[string]: any}
+	assertStudioProbe("ProbeSlowMovementProgress")
+	assert(type(Manager) == "table" and Manager.DebugForcePatrolRoom
+		and Manager.DebugPrepareStraightPatrol
+		and Manager.DebugSetBlackout and Manager.GetSnapshot,
+		"ProbeSlowMovementProgress requires the Mall Manager controller module")
+	assert(type(roomId) == "string" and roomId ~= "",
+		"ProbeSlowMovementProgress requires a fallback patrol room id")
+	local tuning = Configuration.MallManager
+	local before = assert(Manager.GetSnapshot(), "Mall Manager is not running")
+	-- PatrolSpeed on the Normal profile is 4.5 studs/second, and
+	-- MaximumMovementDeltaSeconds caps a frame at 0.05s, so a frame can advance
+	-- at most 4.5 * 0.05 = 0.225 studs — guaranteed below the 0.25 credit
+	-- epsilon regardless of frame rate. Players are made ineligible for the
+	-- duration so the brain stays in PATROL instead of re-acquiring a chase.
+	local restored = {}
+	for _, player in ipairs(Players:GetPlayers()) do
+		table.insert(restored, {Player = player, InRound = player:GetAttribute("InRound")})
+		player:SetAttribute("InRound", false)
+	end
+	local function restorePlayers()
+		for _, record in ipairs(restored) do
+			local player = record.Player
+			if player.Parent == Players then player:SetAttribute("InRound", record.InRound) end
+		end
+	end
+	local fixtureCorridor: string? = nil
+	local ok, series = pcall(function()
+		Manager.DebugSetBlackout(false)
+		local fixture = prepareStraightCorridorFixture(Manager, false)
+		fixtureCorridor = fixture.Corridor
+		task.wait(.25)
+		return sampleSeries(Manager, seconds or 6, .1)
+	end)
+	restorePlayers()
+	pcall(Manager.DebugSetBlackout, before.Blackout == true)
+	if before.TargetUserId == 0
+		and (before.State == "PATROL" or before.State == "PATROL_LISTEN")
+		and type(before.StrategicGoalRoomId) == "string"
+		and before.StrategicGoalRoomId ~= "" and before.StrategicGoalRoomId ~= "Exit" then
+		pcall(Manager.DebugForcePatrolRoom, before.StrategicGoalRoomId)
+	end
+	-- Let the original live target become eligible again before the caller
+	-- continues. DebugForcePatrolRoom is intentionally isolated to this probe;
+	-- the production brain owns reacquisition after cleanup.
+	task.wait(.35)
+	if not ok then error(series, 0) end
+	assert(#series >= 10, "Slow-movement probe collected too few samples")
+	local first, last = series[1], series[#series]
+	local travelled = seriesTravel(series)
+	local largestStep = maxPerFrameStep(series)
+	assert(travelled > 3,
+		string.format("Manager did not actually move during the slow probe (%.2f studs)", travelled))
+	assert(largestStep > 0 and largestStep < .25, string.format(
+		"Slow probe is not exercising the sub-epsilon path: largest frame step %.3f studs",
+		largestStep))
+	assert(last.GenuineProgressSerial > first.GenuineProgressSerial, string.format(
+		"Sub-epsilon movement was never credited as progress (%d -> %d)",
+		first.GenuineProgressSerial, last.GenuineProgressSerial))
+	assert(last.StuckRecoveries == first.StuckRecoveries, string.format(
+		"A steadily moving Manager false-triggered %d stuck repath(s)",
+		last.StuckRecoveries - first.StuckRecoveries))
+	local worstGenuineAge = 0
+	for _, sample in ipairs(series) do
+		worstGenuineAge = math.max(worstGenuineAge, sample.LastGenuineProgressAgeSeconds or 0)
+	end
+	assert(worstGenuineAge <= tuning.StuckSeconds, string.format(
+		"Credited progress lapsed for %.2fs while moving (StuckSeconds %.2f)",
+		worstGenuineAge, tuning.StuckSeconds))
+	return {
+		FixtureCorridor = fixtureCorridor,
+		Samples = #series,
+		TravelledStuds = travelled,
+		LargestFrameStep = largestStep,
+		GenuineProgressEvents = last.GenuineProgressSerial - first.GenuineProgressSerial,
+		StuckRecoveries = last.StuckRecoveries - first.StuckRecoveries,
+		WorstGenuineProgressAge = worstGenuineAge,
+		Series = series,
+	}
+end
+
+-- PROBE 2 — total overlap with no initially usable escape direction. Proves the
+-- escalation ladder is bounded, survives the obstruction repaths it triggers,
+-- and still recovers once the enclosure is removed.
+function TestSuite.ProbeTotalOverlapEscalation(Manager: {[string]: any},
+	seconds: number?): {[string]: any}
+	assertStudioProbe("ProbeTotalOverlapEscalation")
+	assert(type(Manager) == "table" and Manager.GetSnapshot and Manager.DebugNavigationProbe
+		and Manager.DebugForcePatrolRoom and Manager.DebugPrepareStraightPatrol
+		and Manager.DebugSetMovementPaused and Manager.DebugSetBlackout,
+		"ProbeTotalOverlapEscalation requires the Mall Manager controller module")
+	local tuning = Configuration.MallManager
+	local original = assert(Manager.GetSnapshot(), "Mall Manager is not running")
+	local originalBlackout = original.Blackout == true
+	local playerStates = {}
+	for _, player in ipairs(Players:GetPlayers()) do
+		table.insert(playerStates, {
+			Player = player,
+			InRound = player:GetAttribute("InRound"),
+			Escaped = player:GetAttribute("Escaped"),
+		})
+		player:SetAttribute("InRound", false)
+		player:SetAttribute("Escaped", true)
+	end
+	local scaffold = probeScaffold()
+	local movementPaused = false
+	local ok, result = pcall(function()
+		-- Blackout owns a nearest-player target every think tick. Because this
+		-- probe intentionally makes every player ineligible, use normal patrol so
+		-- DebugForcePatrolRoom remains the movement authority during the trap.
+		Manager.DebugSetBlackout(false)
+		-- Begin at the centre of a production-clear room. Corridor walls enter the
+		-- escape probe volume and make an otherwise symmetric synthetic minimum
+		-- depend on test order and the chosen goal direction.
+		local fixture = prepareOpenRoomFixture(Manager)
+		local start = assert(fixture.Snapshot, "Overlap fixture did not return a live snapshot")
+		local centre = Vector3.new(start.Position.X, start.Position.Y, start.Position.Z)
+		Manager.DebugSetMovementPaused(true)
+		movementPaused = true
+		-- Give the released Manager a deterministic, distant goal. Live players
+		-- are temporarily ineligible so target reacquisition cannot replace it.
+		local world = assert(workspace:FindFirstChild(Configuration.WorldName), "no world")
+		local rooms = assert(world:FindFirstChild("Rooms"), "Generated world has no rooms")
+		local recoveryRoomId, recoveryDistance = nil, 0
+		for _, room in ipairs(rooms:GetChildren()) do
+			local roomId = room:GetAttribute("Level3_RoomId")
+			if type(roomId) == "string" and roomId ~= "Exit" then
+				local roomCFrame = room:GetBoundingBox()
+				local roomPoint = Vector3.new(roomCFrame.Position.X, centre.Y, roomCFrame.Position.Z)
+				local separation = planarDistance(centre, roomPoint)
+				if separation > recoveryDistance
+					and Manager.DebugNavigationProbe(roomPoint).VolumeFits then
+					recoveryRoomId, recoveryDistance = roomId, separation
+				end
+			end
+		end
+		assert(recoveryRoomId and recoveryDistance > 20,
+			"Overlap probe found no distant, clear patrol destination")
+		-- A blocker-count LOCAL MINIMUM, not a plain shell. overlapEscapeDirection
+		-- accepts any candidate that reduces the blocker count, so an evenly
+		-- spaced ring is escapable by construction (measured: 12 at the centre,
+		-- 7 at every 3.5-stud probe point). Instead: a sparse core just inside
+		-- the sweep box so the Manager is genuinely overlapping, plus a dense
+		-- annulus just outside it so EVERY probe direction pulls in strictly
+		-- more blockers. No candidate direction is usable, which is the only
+		-- way the exhaustion branch can be reached.
+		for index, lateral in ipairs({-.45, .45}) do
+			-- Bias both core blockers east so production's away vector is exactly
+			-- west. The assertion below can then evaluate the exact same candidate
+			-- basis instead of assuming a global axis for a numerically symmetric sum.
+			local coreCentre = centre + Vector3.new(4.9, 3, lateral)
+			scaffold.add("ClaudeProbeCore" .. index, CFrame.new(coreCentre),
+				Vector3.new(1.5, PROBE_BLOCK_HEIGHT, 1.5))
+		end
+		for index = 1, 28 do
+			local angle = math.rad(index * (360 / 28))
+			local direction = Vector3.new(math.cos(angle), 0, math.sin(angle))
+			local ringCentre = centre + direction * PROBE_RING_RADIUS + Vector3.new(0, 3, 0)
+			scaffold.add("ClaudeProbeAnnulus" .. index, CFrame.new(ringCentre),
+				Vector3.new(2.2, PROBE_BLOCK_HEIGHT, 2.2))
+		end
+		task.wait(.2)
+		local enclosed = Manager.DebugNavigationProbe(centre)
+		assert(enclosed.PhysicalBlockers == 2 and enclosed.FurnitureBlockers == 0
+			and not enclosed.VolumeFits,
+			string.format("Overlap fixture expected only two core blockers, got %d physical/%d furniture",
+				enclosed.PhysicalBlockers, enclosed.FurnitureBlockers))
+		-- Prove the trap really is a local minimum before trusting the result.
+		local worstProbe = math.huge
+		local productionAway = -Vector3.xAxis
+		for _, degrees in ipairs({0, 20, -20, 45, -45, 75, -75, 110, -110, 180}) do
+			local direction = CFrame.fromAxisAngle(Vector3.yAxis,
+				math.rad(degrees)):VectorToWorldSpace(productionAway)
+			worstProbe = math.min(worstProbe,
+				Manager.DebugNavigationProbe(centre + direction * tuning.OverlapEscapeProbeDistance)
+					.TotalBlockers)
+		end
+		assert(worstProbe > enclosed.TotalBlockers, string.format(
+			"Overlap trap is escapable: centre has %d blockers but some direction has only %d",
+			enclosed.TotalBlockers, worstProbe))
+		assert(Manager.DebugForcePatrolRoom(recoveryRoomId),
+			"Manager did not accept the overlap recovery patrol goal")
+		local held = assert(Manager.GetSnapshot(), "Manager vanished before overlap release")
+		assert(planarDistance(held.Position, centre) <= .05,
+			"Manager moved while the overlap fixture was being assembled")
+		Manager.DebugSetMovementPaused(false)
+		movementPaused = false
+		local trapped = sampleSeries(Manager, seconds or 6, .15)
+		assert(#trapped >= 8, "Overlap probe collected too few trapped samples")
+		local maxLadder, maxSearches, sawRefusal = 0, 0, false
+		local statuses = {}
+		for _, sample in ipairs(trapped) do
+			maxLadder = math.max(maxLadder, sample.OverlapEscapeAttempts or 0)
+			maxSearches = math.max(maxSearches, sample.OverlapEscapeSearches or 0)
+			if (sample.OverlapEscapeAttempts or 0) > tuning.ObstructionRecoveryAttempts then
+				sawRefusal = true
+			end
+			statuses[sample.PathStatus] = (statuses[sample.PathStatus] or 0) + 1
+		end
+		-- The ladder must actually reach the exhausted state (the branch that
+		-- was unreachable before) and must stay clamped there.
+		assert(sawRefusal, string.format(
+			"Overlap escalation never reached exhaustion (ladder peaked at %d, cap %d)",
+			maxLadder, tuning.ObstructionRecoveryAttempts))
+		assert(maxLadder <= tuning.ObstructionRecoveryAttempts + 1, string.format(
+			"Overlap escalation ladder ran away to %d", maxLadder))
+		local trappedLast = trapped[#trapped]
+		local trappedFirst = trapped[1]
+		local windows = math.max(1, trappedLast.T - trappedFirst.T) / tuning.AvoidanceCommitSeconds
+		local searchDelta = (trappedLast.OverlapEscapeSearches or 0)
+			- (trappedFirst.OverlapEscapeSearches or 0)
+		-- Rate-limited retries: at most one new direction search per commit
+		-- window once exhausted, plus the initial ladder climb.
+		assert(searchDelta <= math.ceil(windows) + 2,
+			string.format("Overlap retries were not rate limited (%d searches over %.1fs)",
+				searchDelta, trappedLast.T - trappedFirst.T))
+		-- Recovery: remove the shell and prove it escapes and resumes.
+		scaffold.clear()
+		task.wait(.2)
+		local freed = sampleSeries(Manager, 4, .15)
+		assert(#freed >= 5, "Overlap probe collected too few recovery samples")
+		local freedLast = freed[#freed]
+		local escapedDistance = planarDistance(freed[1].Position, freedLast.Position)
+		local cleared = Manager.DebugNavigationProbe(freedLast.Position)
+		assert(freedLast.OverlapEscapeAttempts == 0 and cleared.VolumeFits, string.format(
+			"Manager never left the overlap after the shell was removed (ladder %d, fits %s)",
+			freedLast.OverlapEscapeAttempts, tostring(cleared.VolumeFits)))
+		assert(escapedDistance > 1
+			and freedLast.GenuineProgressSerial > trappedLast.GenuineProgressSerial,
+			string.format(
+			"Manager did not resume moving after recovery (%.2f studs, progress %d -> %d)",
+			escapedDistance, trappedLast.GenuineProgressSerial, freedLast.GenuineProgressSerial))
+		local statusList = {}
+		for status, count in pairs(statuses) do
+			table.insert(statusList, status .. "x" .. count)
+		end
+		table.sort(statusList)
+		return {
+			TrappedSamples = #trapped,
+			RecoverySamples = #freed,
+			LadderPeak = maxLadder,
+			LadderCap = tuning.ObstructionRecoveryAttempts + 1,
+			SearchesWhileTrapped = searchDelta,
+			ReachedExhaustion = sawRefusal,
+			TrappedStatuses = table.concat(statusList, ", "),
+			RecoveryTravelStuds = escapedDistance,
+			RecoveryLadder = freedLast.OverlapEscapeAttempts,
+			RecoveryRoomId = recoveryRoomId,
+			RecoveryGoalDistance = recoveryDistance,
+			FixtureRoom = fixture.Room,
+			TrappedSeries = trapped,
+			RecoverySeries = freed,
+		}
+	end)
+	if movementPaused then pcall(Manager.DebugSetMovementPaused, false) end
+	pcall(Manager.DebugSetBlackout, originalBlackout)
+	scaffold.clear()
+	for _, record in ipairs(playerStates) do
+		if record.Player.Parent == Players then
+			record.Player:SetAttribute("InRound", record.InRound)
+			record.Player:SetAttribute("Escaped", record.Escaped)
+		end
+	end
+	if not ok then error(result, 0) end
+	return result
+end
+
+-- PROBE 3 — a centreline projection blocked between the original PFS waypoint
+-- and its projection. Proves the movement-facing contract keeps the original
+-- point instead of stepping onto a blocked centreline.
+function TestSuite.ProbeBlockedProjection(Manager: {[string]: any}): {[string]: any}
+	assertStudioProbe("ProbeBlockedProjection")
+	assert(type(Manager) == "table" and Manager.DebugProjectWaypoint
+		and Manager.DebugMovementProjection,
+		"ProbeBlockedProjection requires the Mall Manager controller module")
+	local world = assert(workspace:FindFirstChild(Configuration.WorldName),
+		"ProbeBlockedProjection requires the live generated world")
+	local corridors = assert(world:FindFirstChild("Corridors"), "Generated world has no corridors")
+	local tuning = Configuration.MallManager
+	local scaffold = probeScaffold()
+	local ok, result = pcall(function()
+		-- Find an accepted centreline projection plus a clear current position at
+		-- least 24 studs down the same corridor. That separation lets the blocker
+		-- isolate the approach segment without touching either endpoint volume.
+		local best = nil
+		for _, corridorModel in ipairs(corridors:GetChildren()) do
+			if corridorModel:GetAttribute("Level3_ExitCorridor") ~= true then
+				local corridorCFrame, corridorSize = corridorModel:GetBoundingBox()
+				local horizontal = corridorSize.X > corridorSize.Z
+				local half = (if horizontal then corridorSize.X else corridorSize.Z) * .5
+				local axis = if horizontal then corridorCFrame.RightVector else corridorCFrame.LookVector
+				for _, along in ipairs({-half - 8, -half + 2, 0, half - 2, half + 8}) do
+					for step = 1, 14 do
+						for _, sign in ipairs({1, -1}) do
+							local offset = step * .5 * sign
+							local candidate = if horizontal
+								then Vector3.new(corridorCFrame.Position.X + along,
+									corridorCFrame.Position.Y, corridorCFrame.Position.Z + offset)
+								else Vector3.new(corridorCFrame.Position.X + offset,
+									corridorCFrame.Position.Y, corridorCFrame.Position.Z + along)
+							local report = Manager.DebugProjectWaypoint(candidate)
+							if report.Projected and not report.RetainedOriginal then
+								for _, distance in ipairs({36, 32, 28, 24}) do
+									for _, direction in ipairs({1, -1}) do
+										local current = report.UncheckedProjection + axis * distance * direction
+										local localCurrent = corridorCFrame:PointToObjectSpace(current)
+										local withinLength = math.abs(if horizontal
+											then localCurrent.X else localCurrent.Z) <= half + 1
+										local baseline = Manager.DebugMovementProjection(current, candidate)
+										if withinLength and baseline.UsedProjection
+											and not baseline.RetainedOriginal
+											and baseline.CurrentEndpointFits
+											and baseline.ProjectionEndpointFits
+											and baseline.ApproachSegmentClear
+											and (not best or distance > best.Distance) then
+											best = {
+												Distance = distance,
+												Current = current,
+												Original = report.Original,
+												Projection = report.UncheckedProjection,
+												Corridor = corridorModel.Name,
+											}
+										end
+									end
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+		assert(best, "Could not find a clear 24-stud movement projection fixture")
+		local current, original, projection = best.Current, best.Original, best.Projection
+		local approach = Vector3.new(projection.X - current.X, 0, projection.Z - current.Z)
+		assert(approach.Magnitude >= 24, "Projection fixture does not isolate its endpoints")
+		local approachUnit = approach.Unit
+		local blockerCentre = current + approach * .5
+		scaffold.add("ClaudeProbeProjectionBlocker",
+			CFrame.lookAt(Vector3.new(blockerCentre.X, blockerCentre.Y + PROBE_BLOCK_HEIGHT * .5, blockerCentre.Z),
+				Vector3.new(blockerCentre.X, blockerCentre.Y + PROBE_BLOCK_HEIGHT * .5, blockerCentre.Z)
+					+ approachUnit),
+			Vector3.new(tuning.SweepRadius * 2 + 2, PROBE_BLOCK_HEIGHT, .8))
+		task.wait(.2)
+		local blocked = Manager.DebugMovementProjection(current, original)
+		assert(blocked.UsedProjection,
+			"Probe waypoint stopped qualifying for centreline projection")
+		assert(blocked.CurrentEndpointFits and blocked.ProjectionEndpointFits,
+			"Approach blocker contaminated an endpoint volume")
+		assert(not blocked.ApproachSegmentClear,
+			"Probe did not actually block the current-to-projection approach segment")
+		assert(blocked.RetainedOriginal, string.format(
+			"Blocked movement approach still accepted the projection (approachClear=%s)",
+			tostring(blocked.ApproachSegmentClear)))
+		scaffold.clear()
+		task.wait(.2)
+		local restored = Manager.DebugMovementProjection(current, original)
+		assert(restored.UsedProjection and restored.ApproachSegmentClear
+			and not restored.RetainedOriginal,
+			"Movement projection did not resume once the approach blocker was removed")
+		return {
+			Corridor = best.Corridor,
+			CurrentPosition = current,
+			OriginalWaypoint = original,
+			Projection = projection,
+			ApproachDistance = approach.Magnitude,
+			SweepRadius = tuning.SweepRadius,
+			UsedProjection = blocked.UsedProjection,
+			BlockedRetainedOriginal = blocked.RetainedOriginal,
+			BlockedApproachSegmentClear = blocked.ApproachSegmentClear,
+			CurrentEndpointFits = blocked.CurrentEndpointFits,
+			ProjectionEndpointFits = blocked.ProjectionEndpointFits,
+			RestoredProjection = not restored.RetainedOriginal,
+		}
+	end)
+	scaffold.clear()
+	if not ok then error(result, 0) end
+	return result
+end
+
+-- A moving target may rebase the final strategic point, but that target motion
+-- is not Manager motion. Freeze only the rig transform while leaving the real
+-- brain, route and progress tracker live, then move one fixed target twice
+-- inside the same room and prove no genuine-progress credit is minted.
+function TestSuite.ProbeMovingTargetProgressIsolation(Manager: {[string]: any},
+	player: Player): {[string]: any}
+	assertStudioProbe("ProbeMovingTargetProgressIsolation")
+	assert(type(Manager) == "table" and Manager.GetSnapshot
+		and Manager.DebugNavigationProbe and Manager.DebugSetBlackout
+		and Manager.DebugSetMovementPaused,
+		"ProbeMovingTargetProgressIsolation requires the Mall Manager controller module")
+	local original = assert(Manager.GetSnapshot(), "Mall Manager is not running")
+	local originalBlackout = original.Blackout == true
+	local protected = protectPlayer(player)
+	local otherPlayers = {}
+	for _, candidate in ipairs(Players:GetPlayers()) do
+		if candidate ~= player then
+			table.insert(otherPlayers, {
+				Player = candidate,
+				InRound = candidate:GetAttribute("InRound"),
+				Escaped = candidate:GetAttribute("Escaped"),
+			})
+			candidate:SetAttribute("InRound", false)
+			candidate:SetAttribute("Escaped", true)
+		end
+	end
+	local paused = false
+	local ok, result = pcall(function()
+		local world = assert(workspace:FindFirstChild(Configuration.WorldName),
+			"Moving-target probe requires the generated world")
+		local rooms = assert(world:FindFirstChild("Rooms"),
+			"Moving-target probe requires generated rooms")
+		local fixture = nil
+		Manager.DebugSetMovementPaused(true)
+		paused = true
+		-- Build a same-room, production-sweep-approved straight fixture. Thirty
+		-- studs remains inside BlackoutDirectPathRange, while moving the target ten
+		-- studs toward the frozen Manager would exceed the progress epsilon under
+		-- the old constant final-goal key.
+		for _, room in ipairs(rooms:GetChildren()) do
+			if room:IsA("Model") and room:GetAttribute("Level3_RoomId") ~= "Exit" then
+				local roomCFrame = room:GetBoundingBox()
+				local start = roomCFrame.Position
+				for _, axis in ipairs({
+					roomCFrame.RightVector, -roomCFrame.RightVector,
+					roomCFrame.LookVector, -roomCFrame.LookVector,
+				}) do
+					local nearTarget = start + axis * 20
+					local farTarget = start + axis * 30
+					if Manager.DebugNavigationProbe(start).VolumeFits
+						and Manager.DebugNavigationProbe(nearTarget).VolumeFits
+						and Manager.DebugNavigationProbe(farTarget).VolumeFits then
+						local prepared = pcall(Manager.DebugPrepareStraightPatrol, start, farTarget)
+						if prepared then
+							fixture = {
+								Room = room.Name,
+								Start = start,
+								NearTarget = nearTarget,
+								FarTarget = farTarget,
+							}
+							break
+						end
+					end
+				end
+				if fixture then break end
+			end
+		end
+		assert(fixture, "Moving-target probe found no clear 30-stud direct-goal fixture")
+
+		Manager.DebugSetBlackout(true)
+		protected.Character:PivotTo(CFrame.new(Vector3.new(
+			fixture.FarTarget.X, protected.Root.Position.Y, fixture.FarTarget.Z)))
+		local deadline = os.clock() + 2
+		local acquired = nil
+		repeat
+			task.wait(.05)
+			acquired = Manager.GetSnapshot()
+		until acquired and acquired.State == "CHASE"
+			and acquired.TargetUserId == player.UserId
+			and acquired.StrategicIndex > acquired.StrategicPointCount
+			and type(acquired.ProgressObjectiveKey) == "string"
+			and string.sub(acquired.ProgressObjectiveKey, 1, 5) == "goal:"
+			or os.clock() >= deadline
+		assert(acquired and acquired.State == "CHASE" and acquired.TargetUserId == player.UserId,
+			"Moving-target probe did not acquire its isolated player")
+		assert(acquired.StrategicIndex > acquired.StrategicPointCount
+			and type(acquired.ProgressObjectiveKey) == "string"
+			and string.sub(acquired.ProgressObjectiveKey, 1, 5) == "goal:",
+			"Moving-target probe did not enter the direct-goal progress branch")
+		task.wait(.1)
+		local baseline = assert(Manager.GetSnapshot(), "Manager vanished before target rebase")
+		protected.Character:PivotTo(CFrame.new(Vector3.new(
+			fixture.NearTarget.X, protected.Root.Position.Y, fixture.NearTarget.Z)))
+		task.wait(.4)
+		local movedTarget = assert(Manager.GetSnapshot(), "Manager vanished after target rebase")
+		local managerDisplacement = planarDistance(baseline.Position, movedTarget.Position)
+		assert(movedTarget.StrategicGoalRevision > baseline.StrategicGoalRevision,
+			"Moving target did not revise the active strategic goal")
+		assert(managerDisplacement <= .05,
+			string.format("Paused Manager moved %.3f studs during target-only rebase",
+				managerDisplacement))
+		assert(movedTarget.StrategicIndex > movedTarget.StrategicPointCount
+			and type(movedTarget.ProgressObjectiveKey) == "string"
+			and string.sub(movedTarget.ProgressObjectiveKey, 1, 5) == "goal:",
+			"Target rebase left the direct-goal progress branch")
+		assert(movedTarget.ProgressObjectiveKey ~= baseline.ProgressObjectiveKey,
+			"Target rebase did not renew the final-goal progress objective key")
+		assert(movedTarget.GenuineProgressSerial == baseline.GenuineProgressSerial,
+			string.format("Target-only movement minted genuine progress (%d -> %d)",
+				baseline.GenuineProgressSerial, movedTarget.GenuineProgressSerial))
+		return {
+			FixtureRoom = fixture.Room,
+			TargetTravelStuds = planarDistance(fixture.FarTarget, fixture.NearTarget),
+			ManagerTravelStuds = managerDisplacement,
+			BaselineProgressKey = baseline.ProgressObjectiveKey,
+			MovedProgressKey = movedTarget.ProgressObjectiveKey,
+			GoalRevisionDelta = movedTarget.StrategicGoalRevision
+				- baseline.StrategicGoalRevision,
+			GenuineProgressDelta = movedTarget.GenuineProgressSerial
+				- baseline.GenuineProgressSerial,
+		}
+	end)
+	local cleanupOk, cleanupError = pcall(function()
+		runCleanupSteps({
+			{Name = "resume Manager movement", Run = function()
+				if paused then Manager.DebugSetMovementPaused(false) end
+			end},
+			{Name = "quiesce Manager target", Run = function()
+				quiesceProtectedPlayer(Manager, protected)
+			end},
+			{Name = "restore blackout profile", Run = function()
+				Manager.DebugSetBlackout(originalBlackout)
+			end},
+			{Name = "restore other player eligibility", Run = function()
+				for _, record in ipairs(otherPlayers) do
+					if record.Player.Parent == Players then
+						record.Player:SetAttribute("InRound", record.InRound)
+						record.Player:SetAttribute("Escaped", record.Escaped)
+					end
+				end
+			end},
+			{Name = "restore protected player", Run = function()
+				restoreProtectedPlayer(protected)
+			end},
+		})
+	end)
+	if not cleanupOk then
+		if not ok then
+			error(tostring(result) .. "\nMoving-target cleanup also failed: "
+				.. tostring(cleanupError), 0)
+		end
+		error(cleanupError, 0)
+	end
+	if not ok then error(result, 0) end
+	return result
+end
+
+-- PROBE 4 — an exposed player hugging a wall. Proves the Manager closes to a
+-- range that permits its attack, and that a wall between the two still refuses
+-- the attack.
+function TestSuite.ProbeWallHugAttack(Manager: {[string]: any}, player: Player,
+	seconds: number?): {[string]: any}
+	assertStudioProbe("ProbeWallHugAttack")
+	assert(type(Manager) == "table" and Manager.DebugAttackProbe and Manager.GetSnapshot
+		and Manager.DebugSetBlackout and Manager.DebugPrepareStraightPatrol,
+		"ProbeWallHugAttack requires the Mall Manager controller module")
+	local tuning = Configuration.MallManager
+	local original = assert(Manager.GetSnapshot(), "Mall Manager is not running")
+	local originalBlackout = original.Blackout == true
+	local protected = protectPlayer(player)
+	local character = protected.Character
+	local root = assert(character:FindFirstChild("HumanoidRootPart"), "Character has no root")
+	local otherPlayers = {}
+	for _, candidate in ipairs(Players:GetPlayers()) do
+		if candidate ~= player then
+			table.insert(otherPlayers, {
+				Player = candidate,
+				InRound = candidate:GetAttribute("InRound"),
+				Escaped = candidate:GetAttribute("Escaped"),
+			})
+			candidate:SetAttribute("InRound", false)
+			candidate:SetAttribute("Escaped", true)
+		end
+	end
+	local scaffold = probeScaffold()
+	local ok, result = pcall(function()
+		-- Isolate target ownership from LOS while the fixture is being placed.
+		-- The assertions below still use the real range/LOS attack gate; blackout
+		-- only guarantees this sole eligible player remains the chase target.
+		Manager.DebugSetBlackout(true)
+		local start = assert(Manager.GetSnapshot(), "Mall Manager is not running")
+		local startingAttackSerial = Manager.DebugAttackProbe(player).AttackSerial
+		-- Press the player against an authored structural room wall. Selecting
+		-- the part by ancestry/name avoids a ray accidentally treating furniture
+		-- or a temporary test part as the wall under test.
+		local world = assert(workspace:FindFirstChild(Configuration.WorldName), "no world")
+		local rooms = assert(world:FindFirstChild("Rooms"), "no rooms")
+		local hostRoom, hostWall, inward, hugPoint = nil, nil, nil, nil
+		local wallCandidates = {}
+		for _, roomModel in ipairs(rooms:GetChildren()) do
+			if roomModel:IsA("Model") and roomModel:GetAttribute("Level3_RoomId") ~= "Exit" then
+				local roomCFrame = roomModel:GetBoundingBox()
+				for _, candidate in ipairs(roomModel:GetDescendants()) do
+					if candidate:IsA("BasePart") and candidate.CanCollide
+						and candidate.Size.Y >= 6
+						and string.find(candidate.Name, " Wall", 1, true) then
+						local thinXAxis = candidate.Size.X < candidate.Size.Z
+						local candidateInward = if thinXAxis
+							then candidate.CFrame.RightVector else candidate.CFrame.LookVector
+						if (roomCFrame.Position - candidate.Position):Dot(candidateInward) < 0 then
+							candidateInward = -candidateInward
+						end
+						local halfThickness = (if thinXAxis
+							then candidate.Size.X else candidate.Size.Z) * .5
+						local face = candidate.Position + candidateInward * halfThickness
+						local candidateHug = face + candidateInward * 1.6
+						-- A real attack point just inside the room must fit the Manager's
+						-- full local sweep. Prefer a wall whose interior is already on the
+						-- Manager's side, instead of an arbitrary exterior wall across the room.
+						local attackPoint = face + candidateInward * (tuning.SweepRadius + .35)
+						local groundedAttackPoint = Vector3.new(
+							attackPoint.X, start.Position.Y, attackPoint.Z)
+						if Manager.DebugNavigationProbe(groundedAttackPoint).VolumeFits then
+							local sameSide = (start.Position - face):Dot(candidateInward) >= 0
+							table.insert(wallCandidates, {
+								Room = roomModel,
+								Wall = candidate,
+								Inward = candidateInward,
+								HugPoint = candidateHug,
+								AttackPoint = groundedAttackPoint,
+								Score = planarDistance(start.Position, groundedAttackPoint)
+									+ (if sameSide then 0 else 1000),
+							})
+						end
+					end
+				end
+			end
+		end
+		table.sort(wallCandidates, function(a, b) return a.Score < b.Score end)
+		for _, candidate in ipairs(wallCandidates) do
+			for _, approachDistance in ipairs({26, 20, 14}) do
+				local approachStart = candidate.AttackPoint
+					+ candidate.Inward * approachDistance
+				local prepared = pcall(Manager.DebugPrepareStraightPatrol,
+					approachStart, candidate.AttackPoint)
+				if prepared then
+					hostRoom, hostWall = candidate.Room, candidate.Wall
+					inward, hugPoint = candidate.Inward, candidate.HugPoint
+					break
+				end
+			end
+			if hostWall then break end
+		end
+		assert(hostRoom and hostWall and inward and hugPoint,
+			"no authored wall provided a clear same-room attack approach")
+		assert(hostWall:IsDescendantOf(hostRoom), "wall-hug fixture is not owned by its room")
+		character:PivotTo(CFrame.new(Vector3.new(hugPoint.X, root.Position.Y, hugPoint.Z)))
+		task.wait(.5)
+		local acquired = assert(Manager.GetSnapshot(), "Manager vanished at wall-hug target")
+		assert(acquired.TargetUserId == player.UserId,
+			"Wall-hug probe did not isolate the designated player as its target")
+		local series = sampleSeries(Manager, seconds or 10, .2, function()
+			local probe = Manager.DebugAttackProbe(player)
+			return {
+				AttackDistance = probe.Distance,
+				WithinAttackRange = probe.WithinAttackRange,
+				WithinConfirmRange = probe.WithinConfirmRange,
+				LineClearAtConfirmRange = probe.LineClearAtConfirmRange,
+				WouldInitiate = probe.WouldInitiate,
+				GoalResolvedAway = probe.GoalResolvedAwayFromTarget,
+				AttackSerial = probe.AttackSerial,
+				TargetUserId = probe.TargetUserId,
+				LastCaptureUserId = probe.LastCaptureUserId,
+			}
+		end)
+		assert(#series >= 8, "Wall-hug probe collected too few samples")
+		local closest, everInitiated, everInRange = math.huge, false, false
+		local greatestAttackSerial = startingAttackSerial
+		local completedCaptureUserId = 0
+		for _, sample in ipairs(series) do
+			closest = math.min(closest, sample.AttackDistance or math.huge)
+			if sample.WouldInitiate then everInitiated = true end
+			if sample.WithinConfirmRange then everInRange = true end
+			if (sample.AttackSerial or 0) > greatestAttackSerial then
+				greatestAttackSerial = sample.AttackSerial
+				completedCaptureUserId = sample.LastCaptureUserId or 0
+			end
+		end
+		local finalSample = series[#series]
+		assert(closest <= tuning.AttackConfirmRange, string.format(
+			"Wall-hugging player stayed uncatchable: closest approach %.2f studs (confirm range %.2f)",
+			closest, tuning.AttackConfirmRange))
+		assert(everInRange and everInitiated, string.format(
+			"Manager reached %.2f studs but never satisfied its attack gate", closest))
+		assert(greatestAttackSerial > startingAttackSerial, string.format(
+			"Wall-hug gate looked open but no real attack completed (serial %d -> %d)",
+			startingAttackSerial, greatestAttackSerial))
+		assert(completedCaptureUserId == player.UserId, string.format(
+			"Attack serial advanced for the wrong player (captured %s, expected %s)",
+			tostring(completedCaptureUserId), tostring(player.UserId)))
+		-- Now prove the wall still refuses attacks through it: interpose a slab
+		-- at a controlled, open, in-range position and re-run the real gate.
+		local live = assert(Manager.GetSnapshot(), "Manager vanished mid-probe")
+		local openPoint = live.Position + inward * (tuning.AttackRange - .35)
+		character:PivotTo(CFrame.new(Vector3.new(openPoint.X, root.Position.Y, openPoint.Z)))
+		task.wait(.15)
+		-- Rebase once after the teleport, then perform the open/walled/restored
+		-- ray checks synchronously in one server turn so Manager movement cannot
+		-- turn an out-of-range result into a false LOS success.
+		live = assert(Manager.GetSnapshot(), "Manager vanished before controlled LOS fixture")
+		openPoint = live.Position + inward * (tuning.AttackRange - .35)
+		character:PivotTo(CFrame.new(Vector3.new(openPoint.X, root.Position.Y, openPoint.Z)))
+		local openBeforeWall = Manager.DebugAttackProbe(player)
+		assert(openBeforeWall.WithinConfirmRange
+			and openBeforeWall.LineClearAtConfirmRange and openBeforeWall.WouldInitiate,
+			"Controlled unwalled attack fixture did not satisfy the real gate")
+		local toPlayer = Vector3.new(root.Position.X - live.Position.X, 0, root.Position.Z - live.Position.Z)
+		assert(toPlayer.Magnitude > 2, "Controlled attack fixture is too short for a separating wall")
+		local midpoint = Vector3.new(live.Position.X, (live.Position.Y + root.Position.Y) * .5,
+			live.Position.Z)
+			+ toPlayer.Unit * (toPlayer.Magnitude * .5)
+		scaffold.add("ClaudeProbeAttackWall",
+			CFrame.lookAt(midpoint, midpoint + toPlayer.Unit),
+			Vector3.new(14, 12, 1.5))
+		local walled = Manager.DebugAttackProbe(player)
+		scaffold.clear()
+		local unwalled = Manager.DebugAttackProbe(player)
+		assert(walled.WithinConfirmRange
+			and not walled.LineClearAtConfirmRange and not walled.WouldInitiate, string.format(
+			"A wall between Manager and player did not block the attack (distance %.2f)",
+			walled.Distance))
+		assert(unwalled.WithinConfirmRange
+			and unwalled.LineClearAtConfirmRange and unwalled.WouldInitiate, string.format(
+			"Removing the test wall did not restore the open attack gate (distance %.2f)",
+			unwalled.Distance))
+		return {
+			Samples = #series,
+			ClosestApproach = closest,
+			AttackRange = tuning.AttackRange,
+			AttackConfirmRange = tuning.AttackConfirmRange,
+			EverWithinConfirmRange = everInRange,
+			EverWouldInitiate = everInitiated,
+			StartingAttackSerial = startingAttackSerial,
+			CompletedAttackSerial = greatestAttackSerial,
+			CompletedCaptureUserId = completedCaptureUserId,
+			GoalResolvedAway = finalSample.GoalResolvedAway,
+			WalledLineClear = walled.LineClearAtConfirmRange,
+			WalledWouldInitiate = walled.WouldInitiate,
+			WalledDistance = walled.Distance,
+			UnwalledLineClear = unwalled.LineClearAtConfirmRange,
+			UnwalledWouldInitiate = unwalled.WouldInitiate,
+			HostRoom = hostRoom.Name,
+			HostWall = hostWall:GetFullName(),
+			Series = series,
+		}
+	end)
+	local cleanupOk, cleanupError = pcall(function()
+		runCleanupSteps({
+			{Name = "remove wall-hug scaffold", Run = scaffold.clear},
+			{Name = "quiesce Manager target", Run = function()
+				quiesceProtectedPlayer(Manager, protected)
+			end},
+			{Name = "restore blackout profile", Run = function()
+				Manager.DebugSetBlackout(originalBlackout)
+			end},
+			{Name = "restore protected player", Run = function()
+				restoreProtectedPlayer(protected)
+			end},
+			{Name = "restore other player eligibility", Run = function()
+				for _, record in ipairs(otherPlayers) do
+					if record.Player.Parent == Players then
+						record.Player:SetAttribute("InRound", record.InRound)
+						record.Player:SetAttribute("Escaped", record.Escaped)
+					end
+				end
+			end},
+		})
+	end)
+	if not cleanupOk then
+		if not ok then
+			error(tostring(result) .. "\nWall-hug cleanup also failed: "
+				.. tostring(cleanupError), 0)
+		end
+		error(cleanupError, 0)
+	end
+	if not ok then error(result, 0) end
+	return result
+end
+
+-- PROBE 5 — a live chase must make real forward progress over time. This is the
+-- time-series replacement for the old single-snapshot age assertion: a recovery
+-- timestamp alone cannot satisfy it, because position and route indices are
+-- sampled directly.
+function TestSuite.ProbeChaseForwardProgress(Manager: {[string]: any}, player: Player,
+	seconds: number?): {[string]: any}
+	assertStudioProbe("ProbeChaseForwardProgress")
+	assert(type(Manager) == "table" and Manager.GetSnapshot and Manager.DebugNavigationProbe
+		and Manager.DebugSetBlackout,
+		"ProbeChaseForwardProgress requires the Mall Manager controller module")
+	local tuning = Configuration.MallManager
+	local original = assert(Manager.GetSnapshot(), "Mall Manager is not running")
+	local originalBlackout = original.Blackout == true
+	local protected = protectPlayer(player)
+	local otherPlayers = {}
+	for _, candidate in ipairs(Players:GetPlayers()) do
+		if candidate ~= player then
+			table.insert(otherPlayers, {Player = candidate, InRound = candidate:GetAttribute("InRound")})
+			candidate:SetAttribute("InRound", false)
+		end
+	end
+	local function cleanup()
+		runCleanupSteps({
+			{Name = "quiesce Manager target", Run = function()
+				quiesceProtectedPlayer(Manager, protected)
+			end},
+			{Name = "restore blackout profile", Run = function()
+				Manager.DebugSetBlackout(originalBlackout)
+			end},
+			{Name = "restore other player eligibility", Run = function()
+				for _, record in ipairs(otherPlayers) do
+					if record.Player.Parent == Players then
+						record.Player:SetAttribute("InRound", record.InRound)
+					end
+				end
+			end},
+			{Name = "restore protected player", Run = function()
+				restoreProtectedPlayer(protected)
+			end},
+		})
+	end
+	local ok, result = pcall(function()
+		-- Blackout has a deterministic nearest-player target contract independent
+		-- of LOS. With every other player ineligible, this keeps the fixed target
+		-- in CHASE for the whole high-speed pathfinding probe instead of naturally
+		-- degrading to TRACKING when it is placed several rooms away.
+		Manager.DebugSetBlackout(true)
+		local start = assert(Manager.GetSnapshot(), "Mall Manager is not running")
+		local world = assert(workspace:FindFirstChild(Configuration.WorldName),
+			"Chase probe requires the live generated world")
+		local rooms = assert(world:FindFirstChild("Rooms"), "Generated world has no rooms")
+		local root = protected.Root :: BasePart
+		local destination, startingSeparation = nil, 0
+		for _, room in ipairs(rooms:GetChildren()) do
+			if room:GetAttribute("Level3_RoomId") ~= "Exit" then
+				local roomCFrame = room:GetBoundingBox()
+				local point = Vector3.new(roomCFrame.Position.X, root.Position.Y, roomCFrame.Position.Z)
+				local separation = planarDistance(start.Position, point)
+				if separation > startingSeparation
+					and Manager.DebugNavigationProbe(point).VolumeFits then
+					destination, startingSeparation = point, separation
+				end
+			end
+		end
+		assert(destination, "Chase probe found no clear authored room centre")
+		protected.Character:PivotTo(CFrame.new(destination))
+		local acquireDeadline = os.clock() + 3
+		repeat
+			task.wait(.1)
+			local acquired = Manager.GetSnapshot()
+			if acquired and acquired.State == "CHASE" and acquired.TargetUserId == player.UserId then break end
+		until os.clock() >= acquireDeadline
+		local acquired = assert(Manager.GetSnapshot(), "Manager vanished while acquiring chase target")
+		assert(acquired.State == "CHASE" and acquired.TargetUserId == player.UserId,
+			"Manager did not acquire the fixed chase target")
+		local acquiredSeparation = planarDistance(acquired.Position, root.Position)
+		local maximumSafeSeconds = (acquiredSeparation - tuning.AttackConfirmRange - 12)
+			/ math.max(tuning.Blackout.ChaseSpeed, 1)
+		local probeSeconds = math.min(seconds or 6, maximumSafeSeconds)
+		assert(probeSeconds >= 4, string.format(
+			"Chase fixture is only %.1f studs away after acquisition; cannot run a four-second probe",
+			acquiredSeparation))
+		local startingAttackSerial = acquired.AttackSerial or 0
+		local startingCaptureUserId = acquired.LastCaptureUserId or 0
+
+		local series = sampleSeries(Manager, probeSeconds, .05)
+		assert(#series >= 8, "Chase progress probe collected too few samples")
+		local first, last = series[1], series[#series]
+		local travelled = seriesTravel(series)
+		local chaseTravel, chaseSamples, movingSamples = 0, 0, 0
+		local maxPerSecond, maxPeak, routeAdvances = 0, 0, 0
+		local longestFreeze, freezeStartedAt = 0, nil
+		for index, sample in ipairs(series) do
+			assert(sample.State == "CHASE", string.format(
+				"Fixed-target chase left CHASE at %.2fs (%s)", sample.T, tostring(sample.State)))
+			assert(sample.TargetUserId == player.UserId and sample.TargetValid == true,
+				"Fixed-target chase lost or invalidated its designated player")
+			assert(sample.Generation == acquired.Generation and sample.SpawnSerial == acquired.SpawnSerial,
+				"Mall Manager respawned during the fixed-target chase")
+			chaseSamples += 1
+			if sample.State == "CHASE" and (sample.MovementSpeed or 0) > 1 then movingSamples += 1 end
+			maxPerSecond = math.max(maxPerSecond, sample.PathComputesLastSecond or 0)
+			maxPeak = math.max(maxPeak, sample.PeakConcurrentPathComputes or 0)
+			if index > 1 then
+				local previous = series[index - 1]
+				if sample.PathSwapSerial == previous.PathSwapSerial
+					and sample.WaypointIndex > previous.WaypointIndex then
+					routeAdvances += 1
+				end
+				if sample.StrategicRebuildSerial == previous.StrategicRebuildSerial
+					and sample.StrategicIndex > previous.StrategicIndex then
+					routeAdvances += 1
+				end
+				local step = planarDistance(previous.Position, sample.Position)
+				chaseTravel += step
+				if step <= .05 then
+					freezeStartedAt = freezeStartedAt or previous.T
+					longestFreeze = math.max(longestFreeze, sample.T - freezeStartedAt)
+				else
+					freezeStartedAt = nil
+				end
+			end
+		end
+		assert(chaseSamples == #series, string.format(
+			"Chase was not continuous (%d/%d samples in CHASE)", chaseSamples, #series))
+		assert(chaseTravel > 5, string.format(
+			"Chasing Manager only travelled %.2f studs during CHASE", chaseTravel))
+		assert(longestFreeze <= tuning.StuckSeconds + .25, string.format(
+			"Chasing Manager remained motionless for %.2fs (stuck budget %.2fs)",
+			longestFreeze, tuning.StuckSeconds))
+		assert(last.GenuineProgressSerial > first.GenuineProgressSerial, string.format(
+			"Chasing Manager never credited genuine progress (%d -> %d)",
+			first.GenuineProgressSerial, last.GenuineProgressSerial))
+		assert(maxPeak <= 1, "More than one path computation was in flight during the chase")
+		assert(maxPerSecond <= 5, string.format(
+			"Chase exceeded five path computations in one second (%d)", maxPerSecond))
+		assert(last.AttackSerial == startingAttackSerial
+			and last.LastCaptureUserId == startingCaptureUserId,
+			"Fixed-target chase entered an attack/capture despite its post-acquisition safety margin")
+		assert(maxPerFrameStep(series) <= tuning.Blackout.ChaseSpeed
+			* tuning.MaximumMovementDeltaSeconds + .01,
+			"Chase step exceeded the configured speed ceiling")
+		return {
+			Samples = #series,
+			ProbeSeconds = probeSeconds,
+			FixedTargetUserId = player.UserId,
+			FixedTargetDistance = acquiredSeparation,
+			TravelledStuds = travelled,
+			ChaseTravelStuds = chaseTravel,
+			ChaseSamples = chaseSamples,
+			MovingChaseSamples = movingSamples,
+			LongestFrozenChaseSeconds = longestFreeze,
+			RouteAdvances = routeAdvances,
+			GenuineProgressEvents = last.GenuineProgressSerial - first.GenuineProgressSerial,
+			StuckRecoveries = last.StuckRecoveries - first.StuckRecoveries,
+			RecoveryRepaths = last.RecoveryRepaths - first.RecoveryRepaths,
+			MaxPathComputesPerSecond = maxPerSecond,
+			PeakConcurrentPathComputes = maxPeak,
+			Series = series,
+		}
+	end)
+	local cleanupOk, cleanupError = pcall(cleanup)
+	if not cleanupOk then
+		if not ok then
+			error(tostring(result) .. "\nChase cleanup also failed: "
+				.. tostring(cleanupError), 0)
+		end
+		error(cleanupError, 0)
+	end
+	if not ok then error(result, 0) end
+	return result
+end
+
+-- Drives the real music-sequence furniture state machine through all three
+-- states. A seek across the blackout edge intentionally fires one-way scream
+-- and chair events, so this probe is restricted to a disposable Play session.
+-- The required callback is always invoked, including when an assertion fails.
+function TestSuite.ProbeFurnitureCycle(MusicController: {[string]: any},
+	world: Instance, cleanupAfter: (() -> ())?): {[string]: any}
+	assertStudioProbe("ProbeFurnitureCycle")
+	assert(type(cleanupAfter) == "function",
+		"ProbeFurnitureCycle requires an Adapter.Cleanup callback for its disposable session")
+	assert(type(MusicController) == "table" and MusicController.GetSnapshot
+		and MusicController.DebugSetElapsed,
+		"ProbeFurnitureCycle requires the Level 3 music sequence controller")
+	assert(world and world.Parent == workspace,
+		"ProbeFurnitureCycle requires the live generated world")
+	local original = assert(MusicController.GetSnapshot(),
+		"Level 3 music sequence is not running")
+	assert(type(original.StartServerTime) == "number",
+		"Level 3 music sequence has not been armed")
+	local music = Configuration.MusicSequence
+	local removalStart = music.DurationSeconds - music.BlackoutScreamLeadSeconds
+		- music.FurnitureRemovalLeadSeconds
+	local finalLockStart = music.CycleEndSeconds - music.HuntFinalFlashlightLockSeconds
+	local baseline: any = nil
+	local ok, result = pcall(function()
+		MusicController.DebugSetElapsed(math.max(0, removalStart - .5))
+		task.wait(.15)
+		local restoredBefore = assert(MusicController.GetSnapshot(), "music sequence vanished")
+		assert(restoredBefore.FurnitureState == "RESTORED",
+			"Furniture was not restored before the cycle baseline")
+		baseline = TestSuite.CaptureFurnitureBaseline(world)
+
+		MusicController.DebugSetElapsed(removalStart + .1)
+		task.wait(.15)
+		local removed = assert(MusicController.GetSnapshot(), "music sequence vanished at REMOVED")
+		assert(removed.FurnitureState == "REMOVED"
+			and workspace:GetAttribute("Level3FurnitureTemporarilyRemoved") == true
+			and workspace:GetAttribute("Level3FurnitureCollisionSuppressed") == true,
+			"Furniture REMOVED state/attributes are inconsistent")
+		for _, record in ipairs(baseline.Records) do
+			local part = record.Part
+			assert(part.Parent == record.Parent and part:IsDescendantOf(world),
+				"Furniture was reparented during REMOVED: " .. record.Name)
+			assert(part.Transparency == 1 and part.CastShadow == false
+				and part.CanCollide == false and part.CanTouch == false and part.CanQuery == false,
+				"Furniture did not become physically absent during REMOVED: " .. record.Name)
+			for _, visualRecord in ipairs(record.Visuals) do
+				assert(visualRecord.Object.Parent == visualRecord.Parent
+					and visualRecord.Object.Transparency == 1,
+					"Furniture visual did not disappear during REMOVED: " .. record.Name)
+			end
+		end
+
+		MusicController.DebugSetElapsed(finalLockStart + .1)
+		task.wait(.15)
+		local ghost = assert(MusicController.GetSnapshot(), "music sequence vanished at VISIBLE_GHOST")
+		assert(ghost.FurnitureState == "VISIBLE_GHOST"
+			and workspace:GetAttribute("Level3FurnitureTemporarilyRemoved") == false
+			and workspace:GetAttribute("Level3FurnitureCollisionSuppressed") == true,
+			"Furniture VISIBLE_GHOST state/attributes are inconsistent")
+		for _, record in ipairs(baseline.Records) do
+			local part = record.Part
+			assert(part.Parent == record.Parent
+				and part.Transparency == record.Transparency
+				and part.CastShadow == record.CastShadow
+				and part.CanCollide == false and part.CanTouch == false and part.CanQuery == false,
+				"Furniture ghost visibility/collision contract failed: " .. record.Name)
+			for _, visualRecord in ipairs(record.Visuals) do
+				assert(visualRecord.Object.Parent == visualRecord.Parent
+					and visualRecord.Object.Transparency == visualRecord.Transparency,
+					"Furniture visual did not reappear as a ghost: " .. record.Name)
+			end
+		end
+
+		MusicController.DebugSetElapsed(music.CycleEndSeconds + .1)
+		task.wait(.15)
+		local restored = assert(MusicController.GetSnapshot(), "music sequence vanished at RESTORED")
+		assert(restored.FurnitureState == "RESTORED"
+			and workspace:GetAttribute("Level3FurnitureTemporarilyRemoved") == false
+			and workspace:GetAttribute("Level3FurnitureCollisionSuppressed") == false,
+			"Furniture RESTORED state/attributes are inconsistent")
+		local restoredAudit = TestSuite.ValidateFurnitureRestored(baseline)
+		return {
+			PartsChecked = restoredAudit.Checked,
+			VisualsChecked = restoredAudit.VisualsChecked,
+			States = {"REMOVED", "VISIBLE_GHOST", "RESTORED"},
+			DisposableSessionConsumed = true,
+		}
+	end)
+	local cleanupOk, cleanupError = pcall(cleanupAfter :: () -> ())
+	if not cleanupOk then
+		if not ok then
+			error(tostring(result) .. "\nFurniture cleanup also failed: " .. tostring(cleanupError), 0)
+		end
+		error("Furniture cleanup failed: " .. tostring(cleanupError), 0)
+	end
+	if not ok then error(result, 0) end
+	return result
+end
+
+-- Strict live regression entry point. Missing fixtures are failures rather than
+-- "skips", so a green result means every behavioral contract actually ran.
+-- Pass {Manager=..., MusicController=..., Player=..., PatrolRoomId=..., World=...}.
+function TestSuite.RunNavigationRegression(context: {[string]: any}?): {[string]: any}
+	assertStudioProbe("RunNavigationRegression")
+	local options = assert(context, "RunNavigationRegression requires a live context")
+	assert(options.DisposableSession == true,
+		"RunNavigationRegression mutates one-way timeline edges; pass DisposableSession=true")
+	assert(type(options.Cleanup) == "function",
+		"RunNavigationRegression requires an idempotent Adapter.Cleanup callback")
+	local cleanupRan = false
+	local function cleanupOnce()
+		if cleanupRan then return end
+		(options.Cleanup :: () -> ())()
+		-- Mark success only after Cleanup returns. If it throws, the runner's
+		-- outer finally gets one more chance to dispose the generated session.
+		cleanupRan = true
+	end
+
+	local ok, payload = pcall(function()
+		local results: {[string]: any} = {}
+		local ran = {}
+
+		results.Layouts = TestSuite.ValidateNavigationLayouts()
+		table.insert(ran, "ValidateNavigationLayouts")
+
+		local Manager = options.Manager
+		assert(type(Manager) == "table" and Manager.GetSnapshot,
+			"RunNavigationRegression requires the Mall Manager controller")
+		local snapshot = assert(Manager.GetSnapshot(), "Mall Manager is not running")
+		local player = options.Player
+		assert(player and player:IsA("Player") and player.Parent == Players
+			and player.Character and player.Character:FindFirstChildOfClass("Humanoid"),
+			"RunNavigationRegression requires a live Player character")
+		assert(type(options.PatrolRoomId) == "string" and options.PatrolRoomId ~= "",
+			"RunNavigationRegression requires PatrolRoomId")
+		local MusicController = options.MusicController
+		assert(type(MusicController) == "table" and MusicController.GetSnapshot
+			and MusicController.DebugSetElapsed,
+			"RunNavigationRegression requires the music sequence controller")
+		local world = options.World or workspace:FindFirstChild(Configuration.WorldName)
+		assert(world and world:IsA("Model") and world.Parent == workspace,
+			"RunNavigationRegression requires the live generated world")
+		local function renewDisposableHuntWindow()
+			-- A complete regression run can outlive the authored 30-second hunt.
+			-- Rebase the disposable music timeline before each long live probe so a
+			-- Manager disappearing at the natural cycle edge cannot create an
+			-- order/timing-dependent failure. Furniture/timeline side effects are
+			-- precisely why Cleanup is mandatory for this runner.
+			MusicController.DebugSetElapsed(Configuration.MusicSequence.DurationSeconds + .1)
+			task.wait(.1)
+			assert(Manager.GetSnapshot(),
+				"Mall Manager did not remain active after renewing the disposable hunt window")
+		end
+
+		results.Telemetry = TestSuite.ValidateManagerNavigationTelemetry(
+			snapshot, options.RequirePathValidated ~= false)
+		table.insert(ran, "ValidateManagerNavigationTelemetry")
+
+		renewDisposableHuntWindow()
+		results.MovingTargetIsolation = TestSuite.ProbeMovingTargetProgressIsolation(
+			Manager, player)
+		table.insert(ran, "ProbeMovingTargetProgressIsolation")
+
+		renewDisposableHuntWindow()
+		results.ChaseProgress = TestSuite.ProbeChaseForwardProgress(
+			Manager, player, options.ChaseSeconds)
+		table.insert(ran, "ProbeChaseForwardProgress")
+
+		results.BlockedProjection = TestSuite.ProbeBlockedProjection(Manager)
+		table.insert(ran, "ProbeBlockedProjection")
+
+		renewDisposableHuntWindow()
+		results.SlowMovement = TestSuite.ProbeSlowMovementProgress(
+			Manager, options.PatrolRoomId, options.SlowSeconds)
+		table.insert(ran, "ProbeSlowMovementProgress")
+
+		renewDisposableHuntWindow()
+		results.WallHugAttack = TestSuite.ProbeWallHugAttack(
+			Manager, player, options.WallHugSeconds)
+		table.insert(ran, "ProbeWallHugAttack")
+
+		-- The overlap probe deliberately makes the live rig escape an artificial
+		-- local minimum. Run it only after every navigation probe that needs an
+		-- authored starting position; the following furniture probe performs no
+		-- Manager movement and then disposes the complete Level 3 session.
+		renewDisposableHuntWindow()
+		results.TotalOverlap = TestSuite.ProbeTotalOverlapEscalation(Manager, options.OverlapSeconds)
+		table.insert(ran, "ProbeTotalOverlapEscalation")
+
+		results.FurnitureCycle = TestSuite.ProbeFurnitureCycle(MusicController, world, cleanupOnce)
+		table.insert(ran, "ProbeFurnitureCycle")
+
+		return {Ran = ran, Results = results}
+	end)
+	local cleanupOk, cleanupError = pcall(cleanupOnce)
+	if not cleanupOk then
+		if not ok then
+			error(tostring(payload) .. "\nRegression cleanup also failed: " .. tostring(cleanupError), 0)
+		end
+		error("Regression cleanup failed: " .. tostring(cleanupError), 0)
+	end
+	if not ok then error(payload, 0) end
+	return payload
 end
 
 return TestSuite

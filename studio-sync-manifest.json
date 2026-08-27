@@ -464,8 +464,8 @@
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Configuration.ModuleScript.lua",
-      "bytes": 17028,
-      "sha256": "a0d3f6c469396564028c6b53d58353e0255c4d1c367a14aa912986e195e0ca3d",
+      "bytes": 17279,
+      "sha256": "85343ec9c6c8f6db7eba08d2c011219fe9e4cc2b32de10f4d37a5e42662a903d",
       "status": "synced"
     },
     {
@@ -496,8 +496,8 @@
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Test Suite",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Test Suite.ModuleScript.lua",
-      "bytes": 76032,
-      "sha256": "243c06790a36c682e326eaa54811614b3345b28526434bda38ae42f748bbf215",
+      "bytes": 157466,
+      "sha256": "53d8d33c436dea24ece0b66f1cfb2a7c37979ec943df209cf6f8e6004e3f42af",
       "status": "synced"
     },
     {
@@ -920,8 +920,8 @@
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Mall Manager AI Controller.ModuleScript.lua",
-      "bytes": 106955,
-      "sha256": "59f072680b9413ee0406c7690c08a31193827e268c495939a192c9aa0746dff5",
+      "bytes": 149108,
+      "sha256": "c12a39b852099d68ae0c5ebe469f7855ebf5e723085a008d0b7c329c6e23d33d",
       "status": "synced"
     },
     {

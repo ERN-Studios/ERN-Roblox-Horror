@@ -24,6 +24,10 @@ local activeSession: any = nil
 local activeLayout: any = nil
 local playChaseScream: (any) -> ()
 local stopChaseScream: (any) -> ()
+-- Forward declaration: corridor waypoint revalidation needs the shared
+-- full-segment clearance contract, which is defined with the navigation
+-- filters below.
+local volumeClear: (any, Vector3, Vector3) -> boolean
 
 local function stateFolder(): Folder
 	local existing = ReplicatedStorage:FindFirstChild(Configuration.StateFolderName)
@@ -110,6 +114,18 @@ local function profile(session: any): any
 	return if session.Blackout then Tuning.Blackout else Tuning.Normal
 end
 
+local function goalMoveThreshold(session: any): number
+	return if session.Blackout
+		then Tuning.BlackoutPathGoalMoveThreshold else Tuning.PathGoalMoveThreshold
+end
+
+-- The hard floor between ComputeAsync starts. In blackout this is
+-- BlackoutPathRecomputeSeconds = 0.20, i.e. at most five requests per second;
+-- forced recovery requests queue behind it instead of bypassing it.
+local function pathRequestInterval(session: any): number
+	return if session.Blackout then Tuning.BlackoutPathRecomputeSeconds else Tuning.PathRecomputeSeconds
+end
+
 local function currentSpeed(session: any): number
 	local stateName = session.State
 	local activeProfile = profile(session)
@@ -132,6 +148,20 @@ local function publishPathStatus(session: any, value: string)
 		session.Model:SetAttribute("Level3_MallManagerPathStatus", value)
 	end
 	session.StateFolder:SetAttribute("Level3_MallManagerPathStatus", value)
+end
+
+-- LEVEL3_MANAGER_GENUINE_PATH_VALIDATION_20260827
+-- Spawn selection only proves the spawn volume is clear. Reachability is
+-- published only after the authoritative 5.25-stud volume contract accepts a
+-- complete route (or a direct segment reaches the goal); a coarse PFS success
+-- using PathAgentRadius can never make this telemetry true by itself.
+local function markPathValidated(session: any)
+	if session.PathValidated then return end
+	session.PathValidated = true
+	session.StateFolder:SetAttribute("Level3_MallManagerPathValidated", true)
+	if session.Model and session.Model.Parent then
+		session.Model:SetAttribute("Level3_MallManagerPathValidated", true)
+	end
 end
 
 local function publishTarget(session: any, player: Player?)
@@ -187,8 +217,9 @@ local function clearPath(session: any, status: string?)
 	session.PathObject = nil
 	session.WaypointIndex = 1
 	session.PathGoal = nil
-	session.PathComputing = false
-	session.InFlightPathGoal = nil
+	-- PathComputing/InFlightPathGoal are owned exclusively by the compute task
+	-- so at most one ComputeAsync can ever be in flight; the bumped token makes
+	-- the running task discard its result.
 	session.PendingPathGoal = nil
 	session.PendingPathForce = false
 	disconnect(session.PathBlockedConnection)
@@ -196,11 +227,32 @@ local function clearPath(session: any, status: string?)
 	if status then publishPathStatus(session, status) end
 end
 
+local function resetOverlapEscapeState(session: any)
+	session.OverlapEscapeActive = false
+	session.OverlapEscapeDirection = nil
+	session.OverlapEscapeStartedAt = 0
+	session.OverlapEscapeBaselineBlockers = 0
+	session.OverlapEscapeBaselineGoalPoint = nil
+	session.OverlapEscapeBaselineGoalDistance = math.huge
+	session.OverlapEscapeNextRetryAt = 0
+	session.OverlapEscapeAttempts = 0
+	session.AvoidanceSign = 0
+	session.AvoidanceUntil = 0
+	if session.Model and session.Model.Parent then
+		session.Model:SetAttribute("Level3_MallManagerAvoidanceSign", 0)
+		session.Model:SetAttribute("Level3_MallManagerOverlapEscapeActive", false)
+	end
+end
+
 local function clearGoal(session: any)
 	session.FinalGoal = nil
 	session.ResolvedFinalGoal = nil
 	session.StrategicPoints = {}
+	session.StrategicRooms = {}
 	session.StrategicIndex = 1
+	session.StrategicStartRoomId = nil
+	session.StrategicGoalRoomId = nil
+	resetOverlapEscapeState(session)
 	clearPath(session, "IDLE")
 end
 
@@ -466,7 +518,8 @@ local function roomCenter(id: string, floorY: number): Vector3?
 	return Configuration.WorldOrigin + Vector3.new(room.X, floorY - Configuration.WorldOrigin.Y, room.Z)
 end
 
-local function centerCorridorWaypoint(position: Vector3, floorY: number): Vector3
+local function centerCorridorWaypoint(session: any, position: Vector3,
+	floorY: number, revalidate: boolean?): Vector3
 	local localPosition = position - Configuration.WorldOrigin
 	local bestProjection: Vector3? = nil
 	local bestLateralDistance = math.huge
@@ -505,7 +558,50 @@ local function centerCorridorWaypoint(position: Vector3, floorY: number): Vector
 			end
 		end
 	end
-	return bestProjection or flat(position, floorY)
+	local original = flat(position, floorY)
+	if not bestProjection then return original end
+	-- LEVEL3_MANAGER_WAYPOINT_REVALIDATION_20260827
+	-- The centreline is a preference, not a truth. A projection may only
+	-- replace its PFS waypoint when the whole lateral hop from the original
+	-- point to the projection passes the shared furniture-aware full-segment
+	-- clearance contract — endpoint occupancy alone can hide a blocker sitting
+	-- between the two. Otherwise the original waypoint stands, so a blocked
+	-- centreline can never replace or prematurely consume a valid PFS point.
+	if revalidate and planarDistance(bestProjection, original) > .05
+		and not volumeClear(session, original, bestProjection) then
+		return original
+	end
+	return bestProjection
+end
+
+-- Apply the second half of the projection contract used by live movement. The
+-- lateral PFS-point -> centreline hop is checked by centerCorridorWaypoint;
+-- this check covers the Manager's actual current position -> projected target
+-- segment. Keeping it in one helper prevents consumption, first-waypoint
+-- steering and the Studio regression probe from drifting apart.
+local function movementProjectedWaypoint(session: any, currentGround: Vector3,
+	originalPosition: Vector3): (Vector3, boolean, boolean)
+	local original = flat(originalPosition, session.FloorY)
+	local projected = centerCorridorWaypoint(session, original, session.FloorY, true)
+	local usedProjection = planarDistance(original, projected) > .05
+	local approachClear = not usedProjection or volumeClear(session, currentGround, projected)
+	if usedProjection and not approachClear then
+		return original, true, false
+	end
+	return projected, usedProjection, true
+end
+
+-- Planar distance from a position to the room's floor rectangle: zero inside
+-- the bounds, otherwise the distance to the nearest edge. Rooms never overlap,
+-- so containment is unambiguous; corridor positions resolve to whichever mouth
+-- is closer. Room-centre distance used to misclassify doorway positions beside
+-- large rooms.
+local function roomBoundsDistance(room: any, position: Vector3): number
+	local localX = position.X - Configuration.WorldOrigin.X
+	local localZ = position.Z - Configuration.WorldOrigin.Z
+	local dx = math.max(math.abs(localX - room.X) - room.W * .5, 0)
+	local dz = math.max(math.abs(localZ - room.Z) - room.D * .5, 0)
+	return math.sqrt(dx * dx + dz * dz)
 end
 
 local function nearestRoomId(position: Vector3): string
@@ -514,14 +610,21 @@ local function nearestRoomId(position: Vector3): string
 	local bestId = firstRoom.Id
 	local bestDistance = math.huge
 	for _, room in ipairs(rooms) do
-		local center = Configuration.WorldOrigin + Vector3.new(room.X, 0, room.Z)
-		local distance = planarDistance(position, center)
+		local distance = roomBoundsDistance(room, position)
 		if distance < bestDistance then
 			bestDistance = distance
 			bestId = room.Id
+			if distance <= 0 then break end
 		end
 	end
 	return bestId
+end
+
+local function roomIdContaining(position: Vector3): string?
+	for _, room in ipairs(layoutRooms()) do
+		if roomBoundsDistance(room, position) <= 0 then return room.Id end
+	end
+	return nil
 end
 
 local function buildAdjacency(): {[string]: {string}}
@@ -634,10 +737,30 @@ local function collectFurnitureNavExclusions(world: Model): {BasePart}
 	return exclusions
 end
 
+-- LEVEL3_MANAGER_FURNITURE_STATE_20260827
+-- The music sequence strips furniture for the hunt by setting CanCollide,
+-- CanTouch and CanQuery false on every Level3_TemporaryHuntFurniture part —
+-- these exclusion envelopes included — and only the RESTORED state sets them
+-- back. A part's live CanQuery is therefore the authoritative "this envelope
+-- still guards physically present furniture" signal across RESTORED, REMOVED
+-- and VISIBLE_GHOST, and it recovers instantly when objective completion
+-- restores furniture mid-hunt.
+local function furnitureNavExclusionActive(exclusion: BasePart): boolean
+	return exclusion.Parent ~= nil and exclusion.CanQuery == true
+end
+
+local function activeFurnitureNavExclusionCount(session: any): number
+	local count = 0
+	for _, exclusion in ipairs(session.FurnitureNavExclusions or {}) do
+		if furnitureNavExclusionActive(exclusion) then count += 1 end
+	end
+	return count
+end
+
 local function furnitureNavExclusionsAt(session: any, groundPosition: Vector3): {BasePart}
 	local blockers = {}
 	for _, exclusion in ipairs(session.FurnitureNavExclusions or {}) do
-		if exclusion.Parent then
+		if furnitureNavExclusionActive(exclusion) then
 			local sample = Vector3.new(groundPosition.X, exclusion.Position.Y, groundPosition.Z)
 			local localPoint = exclusion.CFrame:PointToObjectSpace(sample)
 			if math.abs(localPoint.X) < exclusion.Size.X * .5 - FURNITURE_CLEARANCE_EPSILON
@@ -652,7 +775,7 @@ end
 local function furnitureNavExclusionOnSegment(session: any,
 	startGround: Vector3, endGround: Vector3): BasePart?
 	for _, exclusion in ipairs(session.FurnitureNavExclusions or {}) do
-		if exclusion.Parent then
+		if furnitureNavExclusionActive(exclusion) then
 			local sampleY = exclusion.Position.Y
 			local localStart = exclusion.CFrame:PointToObjectSpace(
 				Vector3.new(startGround.X, sampleY, startGround.Z))
@@ -745,7 +868,7 @@ local function volumeFits(session: any, groundPosition: Vector3, params: Overlap
 	return #navigationBlockersAt(session, groundPosition, params) == 0
 end
 
-local function volumeClear(session: any, startGround: Vector3, endGround: Vector3): boolean
+volumeClear = function(session: any, startGround: Vector3, endGround: Vector3): boolean
 	local overlapParams = navigationOverlapParams(session)
 	if not volumeFits(session, startGround, overlapParams)
 		or not volumeFits(session, endGround, overlapParams) then
@@ -768,8 +891,39 @@ local function navigationPointClear(session: any, groundPosition: Vector3): bool
 	return volumeFits(session, groundPosition)
 end
 
-local SAFE_GOAL_RADII = {7, 10, 13, 16, 20, 24}
-local SAFE_GOAL_ANGLES = {0, 30, -30, 60, -60, 90, -90, 135, -135, 180}
+-- A clearance-resolved chase goal must stay on the target's reachable side of
+-- a wall. Without this visibility gate, the cheapest ring point can be on the
+-- Manager's side of the wall: it arrives, cannot attack through the wall, and
+-- then waits there forever instead of asking PFS to route around. Horizontal
+-- rays at torso/head heights ignore characters through navigationParams while
+-- still respecting the live collidable world. Physical furniture remains part
+-- of that world; its larger invisible navigation envelope is steering-only.
+local function navigationGoalLineClear(session: any, fromGround: Vector3,
+	toGround: Vector3): boolean
+	for _, height in ipairs({2.2, 4.2, 6}) do
+		local origin = fromGround + Vector3.new(0, height, 0)
+		local target = toGround + Vector3.new(0, height, 0)
+		if not workspace:Raycast(origin, target - origin, navigationParams(session)) then
+			return true
+		end
+	end
+	return false
+end
+
+-- LEVEL3_MANAGER_WALL_HUG_GOAL_20260827
+-- The near rings keep a wall-hugging exposed player catchable. 4.2 sits inside
+-- AttackRange (4.4) and clears the wall whenever the target root is >= ~1.05
+-- studs from the face; 4.75 clears at the deepest physically possible hug
+-- (root half-depth keeps centres >= ~0.5 from a face, and 4.75 + 0.5 >= the
+-- 5.25 sweep half-extent) while staying inside AttackConfirmRange (5.4), which
+-- beginAttack uses for initiation whenever the goal had to resolve away from
+-- the target. Every candidate is still clearance-checked, so nothing here can
+-- push the rig into a wall.
+local SAFE_GOAL_RADII = {4.2, 4.75, 5.5, 7, 10, 13, 16, 20, 24}
+local SAFE_GOAL_ANGLES = {
+	0, 30, -30, 45, -45, 60, -60, 90, -90,
+	120, -120, 135, -135, 150, -150, 180,
+}
 local function resolveNavigationGoal(session: any, desired: Vector3, reference: Vector3): Vector3
 	if navigationPointClear(session, desired) then return desired end
 	local approach = reference - desired
@@ -782,7 +936,8 @@ local function resolveNavigationGoal(session: any, desired: Vector3, reference: 
 			local direction = CFrame.fromAxisAngle(
 				Vector3.yAxis, math.rad(degrees)):VectorToWorldSpace(approach)
 			local candidate = desired + direction * radius
-			if navigationPointClear(session, candidate) then
+			if navigationPointClear(session, candidate)
+				and navigationGoalLineClear(session, candidate, desired) then
 				local score = radius + planarDistance(reference, candidate) * .015
 					+ math.abs(degrees) * .0005
 				if volumeClear(session, reference, candidate) then score -= 1.5 end
@@ -797,41 +952,97 @@ local function resolveNavigationGoal(session: any, desired: Vector3, reference: 
 	return best or desired
 end
 
-local function rebuildStrategicRoute(session: any)
+local function rebuildStrategicRoute(session: any, forceRebuild: boolean?)
 	local finalGoal = session.FinalGoal
 	local navigationGoal = session.ResolvedFinalGoal or finalGoal
 	if not finalGoal or not navigationGoal then
 		session.StrategicPoints = {}
+		session.StrategicRooms = {}
 		session.StrategicIndex = 1
+		session.StrategicStartRoomId = nil
+		session.StrategicGoalRoomId = nil
 		return
 	end
 	if session.FinalHallChase then
 		-- The finale is one straight, opened tunnel. Never route back through the
 		-- Signal Hall room center before following the moving players.
+		local previousGoal = session.StrategicPoints[1]
+		if not previousGoal or planarDistance(previousGoal, navigationGoal) > .05 then
+			session.StrategicGoalRevision += 1
+		end
 		session.StrategicPoints = {navigationGoal}
+		session.StrategicRooms = {}
 		session.StrategicIndex = 1
+		session.StrategicStartRoomId = nil
+		session.StrategicGoalRoomId = nil
 		return
 	end
 	local startId = nearestRoomId(session.Root.Position)
 	local goalId = nearestRoomId(finalGoal)
+	-- LEVEL3_MANAGER_STRATEGIC_CACHE_20260827
+	-- While the goal room is unchanged and the Manager is still on the cached
+	-- room sequence, a moving target only replaces the final point; progress
+	-- through the sequence never resets because the player moved inside their
+	-- room.
+	if not forceRebuild
+		and session.StrategicGoalRoomId == goalId
+		and #session.StrategicPoints > 0
+		and session.StrategicIndex <= #session.StrategicPoints then
+		local onRoute = startId == session.StrategicStartRoomId or startId == goalId
+		if not onRoute then
+			for _, roomId in ipairs(session.StrategicRooms) do
+				if roomId == startId then
+					onRoute = true
+					break
+				end
+			end
+		end
+		if onRoute then
+			local lastIndex = #session.StrategicPoints
+			if planarDistance(session.StrategicPoints[lastIndex], navigationGoal) > .05 then
+				session.StrategicGoalRevision += 1
+			end
+			session.StrategicPoints[lastIndex] = navigationGoal
+			return
+		end
+	end
+	session.StrategicRebuildSerial += 1
+	session.StrategicGoalRevision += 1
+	session.StrategicStartRoomId = startId
+	session.StrategicGoalRoomId = goalId
+	if startId == goalId then
+		-- Same-room targets are chased directly from the current position; the
+		-- room centre would only add a detour and reset progress.
+		session.StrategicPoints = {navigationGoal}
+		session.StrategicRooms = {goalId}
+		session.StrategicIndex = 1
+		return
+	end
 	local route = graphRoute(session, startId, goalId)
 	local points = {}
+	local pointRooms = {}
 	local reference = flat(session.Root.Position, session.FloorY)
-	local function appendPoint(point: Vector3?)
+	local function appendPoint(point: Vector3?, roomId: string)
 		if point and (#points == 0 or planarDistance(points[#points], point) > .05) then
 			table.insert(points, point)
+			table.insert(pointRooms, roomId)
 			reference = point
 		end
 	end
-	-- Generated spawns and sensed goals may sit anywhere inside a room. Centre
-	-- through the current room and every graph room, including the goal room,
-	-- but resolve a blocked room center to a clear point on the approach side.
-	for _, roomId in ipairs(route) do
+	-- Route from the current position: the current room's own centre is
+	-- skipped so a rebuild never orders the Manager backwards. Generated
+	-- spawns and sensed goals may sit anywhere inside a room, so a blocked
+	-- room center resolves to a clear point on the approach side.
+	for index = 2, #route do
+		local roomId = route[index]
 		local center = roomCenter(roomId, session.FloorY)
-		appendPoint(if center then resolveNavigationGoal(session, center, reference) else nil)
+		if center then
+			appendPoint(resolveNavigationGoal(session, center, reference), roomId)
+		end
 	end
-	appendPoint(navigationGoal)
+	appendPoint(navigationGoal, goalId)
 	session.StrategicPoints = points
+	session.StrategicRooms = pointRooms
 	session.StrategicIndex = 1
 end
 
@@ -841,10 +1052,8 @@ local function setGoal(session: any, goal: Vector3?, force: boolean?)
 		return
 	end
 	local grounded = flat(goal, session.FloorY)
-	local goalThreshold = if session.Blackout
-		then Tuning.BlackoutPathGoalMoveThreshold else Tuning.PathGoalMoveThreshold
 	local changed = not session.FinalGoal
-		or planarDistance(session.FinalGoal, grounded) >= goalThreshold
+		or planarDistance(session.FinalGoal, grounded) >= goalMoveThreshold(session)
 	if not changed and not force then return end
 	session.FinalGoal = grounded
 	session.ResolvedFinalGoal = resolveNavigationGoal(
@@ -866,19 +1075,39 @@ local function currentDestination(session: any): Vector3?
 	if not finalGoal or not navigationGoal then return nil end
 	local currentGround = flat(session.Root.Position, session.FloorY)
 	if planarDistance(currentGround, navigationGoal) <= Tuning.GoalTolerance then
+		markPathValidated(session)
 		return navigationGoal
 	end
 	local directRange = if session.Blackout then Tuning.BlackoutDirectPathRange else Tuning.DirectPathRange
 	if planarDistance(currentGround, navigationGoal) <= directRange
 		and volumeClear(session, currentGround, navigationGoal) then
+		-- This clear segment bypasses the cached room-centre route. Retire those
+		-- stale strategic objectives so progress is measured against the target we
+		-- actually move toward, not a room centre now behind the Manager.
+		session.StrategicIndex = #session.StrategicPoints + 1
+		markPathValidated(session)
 		return navigationGoal
+	end
+	-- Entering a routed room proves that room's centre point served its
+	-- purpose; jump the strategic index forward so progress stays monotonic
+	-- even when the Manager cuts a corner without touching the centre.
+	if #session.StrategicPoints > 1 and session.StrategicIndex <= #session.StrategicPoints then
+		local currentRoomId = roomIdContaining(currentGround)
+		if currentRoomId then
+			for index = #session.StrategicPoints, session.StrategicIndex, -1 do
+				if session.StrategicRooms[index] == currentRoomId then
+					local advanced = if index < #session.StrategicPoints then index + 1 else index
+					session.StrategicIndex = math.max(session.StrategicIndex, advanced)
+					break
+				end
+			end
+		end
 	end
 	while session.StrategicIndex <= #session.StrategicPoints do
 		local point = session.StrategicPoints[session.StrategicIndex]
 		if planarDistance(currentGround, point) <= Tuning.GoalTolerance then
 			session.PathFailures = 0
 			session.ConsecutiveObstructions = 0
-			session.ProgressResetPosition = currentGround
 			session.StrategicIndex += 1
 		else
 			return point
@@ -894,39 +1123,83 @@ local function abandonFailedPatrol(session: any)
 	end
 end
 
-local function requestPath(session: any, destination: Vector3, force: boolean?)
+-- LEVEL3_MANAGER_PATH_PIPELINE_20260827
+-- One ComputeAsync in flight, ever; a hard request floor that applies to
+-- forced recovery callers too (blackout: 0.20s, at most five requests per
+-- second); and coalesced moving-goal updates. A successful route is always
+-- installed first — the freshest materially different goal then schedules
+-- exactly one replacement computation instead of discarding the result.
+local requestPath: (any, Vector3, boolean?) -> ()
+
+-- Boundary slack for the half-open one-second request-rate window, so a burst
+-- spaced exactly at the 0.20s floor cannot report a phantom sixth request from
+-- os.clock rounding.
+local PATH_RATE_CLOCK_TOLERANCE = 1e-3
+
+local function schedulePathDispatch(session: any, delaySeconds: number)
+	if session.PathDispatchScheduled then return end
+	session.PathDispatchScheduled = true
+	task.delay(math.max(delaySeconds, 0), function()
+		session.PathDispatchScheduled = false
+		if not liveSession(session) then return end
+		local pending = session.PendingPathGoal
+		if pending then
+			requestPath(session, pending, session.PendingPathForce == true)
+		end
+	end)
+end
+
+local function dispatchPendingPath(session: any, computedDestination: Vector3)
+	local pending = session.PendingPathGoal
+	if not pending then return end
+	if session.PendingPathForce ~= true
+		and planarDistance(pending, computedDestination) < goalMoveThreshold(session) then
+		-- The route just computed already serves this goal well enough; the
+		-- movement loop re-requests once the target drifts a material amount.
+		session.PendingPathGoal = nil
+		session.PendingPathForce = false
+		return
+	end
+	schedulePathDispatch(session,
+		session.LastPathRequest + pathRequestInterval(session) - os.clock())
+end
+
+requestPath = function(session: any, destination: Vector3, force: boolean?)
 	if not liveSession(session) then return end
 	if session.PathComputing then
-		-- Never drop a materially fresher moving-target goal while an older
-		-- ComputeAsync is running, but do not enqueue the same goal every frame.
-		if not session.InFlightPathGoal
-			or planarDistance(session.InFlightPathGoal, destination) >= .05 then
-			session.PendingPathGoal = destination
-			session.PendingPathForce = session.PendingPathForce == true or force == true
-		end
+		-- Coalesce: keep only the newest goal while the single in-flight
+		-- ComputeAsync finishes; it dispatches after the result installs.
+		session.PendingPathGoal = destination
+		session.PendingPathForce = session.PendingPathForce == true or force == true
 		return
 	end
 	local now = os.clock()
-	local interval = if session.Blackout then Tuning.BlackoutPathRecomputeSeconds else Tuning.PathRecomputeSeconds
-	if not force and now - session.LastPathRequest < interval then
+	local interval = pathRequestInterval(session)
+	local elapsed = now - session.LastPathRequest
+	if elapsed < interval then
+		-- The floor is the hard request-rate contract, so it binds forced
+		-- recovery requests as well; the goal is queued, never dropped.
+		session.PendingPathGoal = destination
+		session.PendingPathForce = session.PendingPathForce == true or force == true
+		schedulePathDispatch(session, interval - elapsed)
 		return
 	end
+	if not force and session.Path and session.PathGoal
+		and planarDistance(session.PathGoal, destination) < goalMoveThreshold(session) then
+		return
+	end
+	session.PendingPathGoal = nil
+	session.PendingPathForce = false
 	session.LastPathRequest = now
 	session.PathComputing = true
 	session.InFlightPathGoal = destination
+	session.PathComputeSerial += 1
+	table.insert(session.PathComputeTimes, now)
+	while #session.PathComputeTimes > 0 and now - session.PathComputeTimes[1] > 2 do
+		table.remove(session.PathComputeTimes, 1)
+	end
 	session.PathToken += 1
 	local token = session.PathToken
-	local function schedulePending()
-		local pending = session.PendingPathGoal
-		local pendingForce = session.PendingPathForce == true
-		session.PendingPathGoal = nil
-		session.PendingPathForce = false
-		if pending and planarDistance(pending, destination) >= .05 then
-			task.defer(function()
-				if liveSession(session) then requestPath(session, pending, pendingForce or true) end
-			end)
-		end
-	end
 	-- Pathfinding positions represent the agent's ground contact, not the
 	-- custom rig's 4.1-stud pivot. Using the pivot in a low tunnel makes the
 	-- 10-stud agent appear to extend through the ceiling and returns NoPath.
@@ -935,24 +1208,35 @@ local function requestPath(session: any, destination: Vector3, force: boolean?)
 	local target = destination + Vector3.new(0, Tuning.PathSampleHeight, 0)
 	publishPathStatus(session, "COMPUTING")
 	task.spawn(function()
+		session.ActiveComputeCount += 1
+		session.PeakComputeCount = math.max(session.PeakComputeCount, session.ActiveComputeCount)
+		-- Furniture envelopes participate in PathfindingService only while the
+		-- furniture is physically present. During the hunt's REMOVED and
+		-- VISIBLE_GHOST windows the ghost volumes must not curve routes that
+		-- the shared clearance contract would accept.
+		local furnitureCosts: {[string]: number}? = nil
+		if workspace:GetAttribute("Level3FurnitureCollisionSuppressed") ~= true then
+			furnitureCosts = {[Tuning.FurniturePathLabel] = math.huge}
+		end
 		local path = PathfindingService:CreatePath({
-			AgentRadius = Tuning.AgentRadius,
+			-- PFS is only the coarse planner. The shared 5.25-stud sweep remains
+			-- authoritative; four studs avoids voxel-rounding NoPath in 14-stud halls.
+			AgentRadius = Tuning.PathAgentRadius,
 			AgentHeight = Tuning.AgentHeight,
 			AgentCanJump = false,
 			AgentCanClimb = false,
 			WaypointSpacing = Tuning.WaypointSpacing,
-			Costs = {
-				[Tuning.FurniturePathLabel] = math.huge,
-			},
+			Costs = furnitureCosts,
 		})
 		local ok = pcall(function() path:ComputeAsync(origin, target) end)
-		if not liveSession(session) or session.PathToken ~= token then return end
+		session.ActiveComputeCount -= 1
 		session.PathComputing = false
 		session.InFlightPathGoal = nil
-		local pending = session.PendingPathGoal
-		if pending and planarDistance(pending, destination) >= .05 then
-			publishPathStatus(session, "REFRESH_PENDING")
-			schedulePending()
+		if not liveSession(session) or session.PathToken ~= token then
+			if liveSession(session) and session.PendingPathGoal then
+				schedulePathDispatch(session,
+					session.LastPathRequest + pathRequestInterval(session) - os.clock())
+			end
 			return
 		end
 		if not ok or path.Status ~= Enum.PathStatus.Success then
@@ -962,6 +1246,7 @@ local function requestPath(session: any, destination: Vector3, force: boolean?)
 			-- when no PathfindingService route has ever succeeded.
 			publishPathStatus(session, if session.Path then "ROUTE_RETAINED" else "GRAPH_FALLBACK")
 			abandonFailedPatrol(session)
+			dispatchPendingPath(session, destination)
 			return
 		end
 		local waypoints = path:GetWaypoints()
@@ -969,6 +1254,7 @@ local function requestPath(session: any, destination: Vector3, force: boolean?)
 			session.PathFailures += 1
 			publishPathStatus(session, if session.Path then "ROUTE_RETAINED" else "GRAPH_FALLBACK")
 			abandonFailedPatrol(session)
+			dispatchPendingPath(session, destination)
 			return
 		end
 		-- The old route continued during ComputeAsync. Find its nearest point across
@@ -980,9 +1266,12 @@ local function requestPath(session: any, destination: Vector3, force: boolean?)
 			and goalDisplacement.Unit:Dot(session.Heading) < -.05
 		local nearestIndex = 2
 		local nearestDistance = math.huge
+		-- Distance heuristic only: rank the raw PFS waypoints. Centreline
+		-- projection (with full-segment revalidation) happens in the
+		-- forward-accept loop below, so an invalid projection can never skew
+		-- which waypoint counts as nearest.
 		for index = 2, #waypoints do
-			local candidate = centerCorridorWaypoint(
-				flat(waypoints[index].Position, session.FloorY), session.FloorY)
+			local candidate = flat(waypoints[index].Position, session.FloorY)
 			local distanceToCandidate = planarDistance(currentGround, candidate)
 			if distanceToCandidate < nearestDistance then
 				nearestDistance = distanceToCandidate
@@ -997,8 +1286,8 @@ local function requestPath(session: any, destination: Vector3, force: boolean?)
 			then Tuning.BlackoutPathLookaheadWaypoints else Tuning.PathLookaheadWaypoints
 		local finalProbe = math.min(#waypoints, nearestIndex + rebaseLookahead - 1)
 		for index = nearestIndex, finalProbe do
-			local candidate = centerCorridorWaypoint(
-				flat(waypoints[index].Position, session.FloorY), session.FloorY)
+			local candidate = centerCorridorWaypoint(session,
+				flat(waypoints[index].Position, session.FloorY), session.FloorY, true)
 			local displacement = candidate - currentGround
 			local forward = displacement.Magnitude <= Tuning.WaypointReachDistance * 1.5
 				or session.CurrentMoveSpeed <= .5
@@ -1010,7 +1299,7 @@ local function requestPath(session: any, destination: Vector3, force: boolean?)
 		end
 		if not initialIndex and session.Path then
 			publishPathStatus(session, "ROUTE_RETAINED")
-			schedulePending()
+			dispatchPendingPath(session, destination)
 			return
 		end
 		initialIndex = initialIndex or nearestIndex
@@ -1021,6 +1310,29 @@ local function requestPath(session: any, destination: Vector3, force: boolean?)
 		session.PathGoal = destination
 		session.PathFailures = 0
 		session.PathSwapSerial += 1
+		local resolvedGoal = session.ResolvedFinalGoal or session.FinalGoal
+		if not session.PathValidated and resolvedGoal
+			and planarDistance(destination, resolvedGoal) <= Tuning.GoalTolerance then
+			-- PFS deliberately plans with the slightly smaller PathAgentRadius to
+			-- avoid voxel-rounding NoPath in authored halls. Before calling the
+			-- route genuinely validated, replay every accepted segment through the
+			-- exact production sweep used by local steering, including the final
+			-- endpoint. This is performed only until validation succeeds.
+			local authoritativeRouteClear = true
+			local routePosition = currentGround
+			for index = initialIndex, #waypoints do
+				local routePoint = centerCorridorWaypoint(session,
+					flat(waypoints[index].Position, session.FloorY), session.FloorY, true)
+				if not volumeClear(session, routePosition, routePoint) then
+					authoritativeRouteClear = false
+					break
+				end
+				routePosition = routePoint
+			end
+			if authoritativeRouteClear and volumeClear(session, routePosition, destination) then
+				markPathValidated(session)
+			end
+		end
 		session.PathBlockedConnection = path.Blocked:Connect(function(blockedIndex)
 			if liveSession(session) and blockedIndex >= session.WaypointIndex then
 				session.PathFailures += 1
@@ -1031,7 +1343,7 @@ local function requestPath(session: any, destination: Vector3, force: boolean?)
 			end
 		end)
 		publishPathStatus(session, "READY")
-		schedulePending()
+		dispatchPendingPath(session, destination)
 	end)
 end
 
@@ -1042,6 +1354,11 @@ local function sightParams(session: any, targetCharacter: Model): RaycastParams
 	for _, player in ipairs(Players:GetPlayers()) do
 		local character = player.Character
 		if character and character ~= targetCharacter then table.insert(ignored, character) end
+	end
+	-- Navigation envelopes are invisible steering metadata, not physical sight
+	-- blockers. The real furniture parts remain queryable and still block LOS.
+	for _, exclusion in ipairs(session.FurnitureNavExclusions or {}) do
+		table.insert(ignored, exclusion)
 	end
 	params.FilterDescendantsInstances = ignored
 	params.IgnoreWater = true
@@ -1535,7 +1852,19 @@ end
 
 local function beginAttack(session: any, player: Player)
 	if session.Attacking or os.clock() < session.AttackCooldownUntil then return end
-	local clear = attackLineClear(session, player, Tuning.AttackRange)
+	-- LEVEL3_MANAGER_WALL_HUG_ATTACK_20260827
+	-- When the chase goal had to resolve away from the target (the target's
+	-- own clearance volume is blocked — pressed against a wall), the Manager
+	-- legitimately parks up to one resolved ring outside AttackRange. Initiate
+	-- from the existing AttackConfirmRange in that case; the confirm range,
+	-- windup, and line-of-sight ray still gate the actual kill, so a wall
+	-- between the two continues to block attacks.
+	local initiationRange = Tuning.AttackRange
+	if session.FinalGoal and session.ResolvedFinalGoal
+		and planarDistance(session.FinalGoal, session.ResolvedFinalGoal) > 1 then
+		initiationRange = Tuning.AttackConfirmRange
+	end
+	local clear = attackLineClear(session, player, initiationRange)
 	if not clear then return end
 	session.Attacking = true
 	session.AttackToken += 1
@@ -1577,7 +1906,14 @@ local function movementWaypoint(session: any, destination: Vector3, speed: numbe
 	if not session.Path or not session.PathObject then
 		-- Strategic destinations are adjacent authored room centers. A full-volume
 		-- clear sweep is a real centerline fallback even when the segment is long.
-		if volumeClear(session, currentGround, destination) then return destination end
+		if volumeClear(session, currentGround, destination) then
+			local resolvedGoal = session.ResolvedFinalGoal or session.FinalGoal
+			if resolvedGoal and planarDistance(destination, resolvedGoal)
+				<= Tuning.GoalTolerance then
+				markPathValidated(session)
+			end
+			return destination
+		end
 		requestPath(session, destination)
 		-- Keep advancing only through a verified short clear segment while the
 		-- first route computes; this removes the visible path-acquisition pause.
@@ -1595,7 +1931,15 @@ local function movementWaypoint(session: any, destination: Vector3, speed: numbe
 		speed * math.min(dt, Tuning.MaximumMovementDeltaSeconds) * 1.5)
 	while session.WaypointIndex <= #session.Path do
 		local waypoint = session.Path[session.WaypointIndex]
-		local position = centerCorridorWaypoint(flat(waypoint.Position, session.FloorY), session.FloorY)
+		-- Consumption must revalidate too: an invalid centreline projection
+		-- falls back to the original PFS point, so a blocked projection can
+		-- never make a still-distant waypoint look reached.
+		local originalPosition = flat(waypoint.Position, session.FloorY)
+		local position = movementProjectedWaypoint(session, currentGround, originalPosition)
+		-- A projected point may only make a PFS waypoint look reached when the
+		-- Manager's actual approach segment to that projection is clear as well.
+		-- Retained/original waypoints keep the normal PFS consumption behavior;
+		-- this extra check is specifically for the lateral centering preference.
 		if planarDistance(currentGround, position) <= dynamicReach then
 			session.WaypointIndex += 1
 		else
@@ -1605,17 +1949,21 @@ local function movementWaypoint(session: any, destination: Vector3, speed: numbe
 	if session.WaypointIndex <= #session.Path then
 		-- Small four-stud PFS zigzags made the visual rig twitch. Follow the
 		-- furthest clearance-checked point in a short lookahead window instead.
+		-- Every candidate runs the one shared clearance contract (physical
+		-- sweep plus state-aware furniture envelopes) and keeps its original
+		-- PFS waypoint when the centreline projection is blocked.
 		local bestIndex = session.WaypointIndex
-		local bestPosition = centerCorridorWaypoint(
-			flat(session.Path[bestIndex].Position, session.FloorY), session.FloorY)
+		local originalBestPosition = flat(session.Path[bestIndex].Position, session.FloorY)
+		local bestPosition = movementProjectedWaypoint(
+			session, currentGround, originalBestPosition)
 		local lookahead = if session.Blackout
 			then Tuning.BlackoutPathLookaheadWaypoints else Tuning.PathLookaheadWaypoints
 		local maximumIndex = math.min(#session.Path,
 			session.WaypointIndex + lookahead - 1)
 		for index = session.WaypointIndex + 1, maximumIndex do
-			local candidate = centerCorridorWaypoint(
-				flat(session.Path[index].Position, session.FloorY), session.FloorY)
-			if physicalVolumeClear(session, currentGround, candidate) then
+			local candidate = centerCorridorWaypoint(session,
+				flat(session.Path[index].Position, session.FloorY), session.FloorY, true)
+			if volumeClear(session, currentGround, candidate) then
 				bestIndex = index
 				bestPosition = candidate
 			else
@@ -1628,7 +1976,14 @@ local function movementWaypoint(session: any, destination: Vector3, speed: numbe
 		end
 		return bestPosition
 	end
-	if volumeClear(session, currentGround, destination) then return destination end
+	if volumeClear(session, currentGround, destination) then
+		local resolvedGoal = session.ResolvedFinalGoal or session.FinalGoal
+		if resolvedGoal and planarDistance(destination, resolvedGoal)
+			<= Tuning.GoalTolerance then
+			markPathValidated(session)
+		end
+		return destination
+	end
 	if session.PathComputing then
 		publishPathStatus(session, "WAITING_FOR_REPLACEMENT")
 		return nil
@@ -1641,22 +1996,48 @@ end
 local function resetBlockedRoute(session: any, now: number)
 	-- Navigation recovery only resets progress bookkeeping. It never rewinds,
 	-- teleports, or changes the rendered transform.
-	local currentGround = flat(session.Root.Position, session.FloorY)
-	session.LastProgressPosition = currentGround
+	--
+	-- LEVEL3_MANAGER_ESCALATION_SURVIVES_RECOVERY_20260827
+	-- This deliberately does NOT clear OverlapEscapeAttempts. Recovery fires
+	-- after ObstructionRecoveryAttempts refused steering frames — the very
+	-- frames the overlap ladder uses to escalate — so clearing it here made the
+	-- exhausted branch unreachable and produced an endless reset/repath loop.
+	-- The ladder now resets only where genuine improvement is proven: standing
+	-- clear of the overlap, a renewal backed by a measurable blocker or
+	-- goal-distance gain.
+	--
+	-- LastProgressAt is the stuck-timer baseline and is intentionally rearmed
+	-- so recovery gets a fresh window; LastGenuineProgressAt is left untouched
+	-- so recovery can never masquerade as movement in telemetry.
 	session.LastProgressAt = now
-	session.ProgressResetPosition = currentGround
+	session.ProgressObjectiveKey = nil
+	session.ProgressBestDistance = math.huge
+	session.ProgressCreditedDistance = math.huge
 	session.PathFailures = 0
 	session.ConsecutiveObstructions = 0
+	session.RecoveryRepaths += 1
 	publishPathStatus(session, "RECOVERY_REPATH")
 end
 
 -- LEVEL3_MANAGER_FURNITURE_NAV_20260821
 -- LEVEL3_MANAGER_OVERLAP_COMMIT_20260821
--- LEVEL3_MANAGER_OVERLAP_HYSTERESIS_20260821
+-- LEVEL3_MANAGER_OVERLAP_LIFETIME_20260827
 -- Commit to one side of a wide obstacle and explicitly walk out of an already
--- overlapping clearance volume. The old frame-by-frame symmetric choice could
--- alternate left/right forever, while volumeClear rejected every escape step.
+-- overlapping clearance volume. Every escape attempt has a fixed
+-- AvoidanceCommitSeconds deadline and must earn a measurable blocker-count or
+-- goal-distance improvement to be renewed; otherwise a new clearance-checked
+-- direction is chosen. Once ObstructionRecoveryAttempts directions have been
+-- replaced without a reduction, further local retries are rate-limited to one
+-- per commit window while the refused steps drive obstruction recovery
+-- repaths. The escalation ladder survives those recovery repaths — it resets
+-- only when the Manager stands fully outside the overlap or a renewal proves
+-- a real blocker/goal-distance reduction — so route-index bookkeeping can
+-- never silently defeat the escalation it is meant to trigger.
 local AVOIDANCE_MAGNITUDES = {15, 30, 45, 70, 90, 120}
+
+-- Shared minimum credited gain for both the escape ladder's goal-distance
+-- baseline and the stuck tracker's cumulative distance checkpoint.
+local PROGRESS_DISTANCE_EPSILON = .25
 
 local function setAvoidanceTelemetry(session: any, overlapEscape: boolean)
 	session.OverlapEscapeActive = overlapEscape
@@ -1685,6 +2066,17 @@ local function avoidanceOrder(session: any, desired: Vector3, now: number): {num
 	return ordered
 end
 
+-- An escape direction is usable while its probe strictly reduces the blocker
+-- count, or holds it while genuinely moving toward the goal. Blocker counts
+-- come from the shared contract, so non-collidable furniture envelopes count
+-- exactly when their furniture is physically present.
+local function escapeDirectionUsable(session: any, currentGround: Vector3, direction: Vector3,
+	desired: Vector3, probeDistance: number, blockerCount: number): boolean
+	local remaining = #navigationBlockersAt(session, currentGround + direction * probeDistance)
+	if remaining < blockerCount then return true end
+	return remaining <= blockerCount and direction:Dot(desired) > .25
+end
+
 local function overlapEscapeDirection(session: any, currentGround: Vector3, desired: Vector3,
 	distance: number, blockers: {BasePart}, now: number): Vector3?
 	local away = Vector3.zero
@@ -1697,20 +2089,23 @@ local function overlapEscapeDirection(session: any, currentGround: Vector3, desi
 	local probeDistance = math.max(distance, Tuning.OverlapEscapeProbeDistance)
 	local bestDirection: Vector3? = nil
 	local bestScore = -math.huge
-	local overlapParams = navigationOverlapParams(session)
 	local candidates = {0, 20, -20, 45, -45, 75, -75, 110, -110, 180}
 	for _, degrees in ipairs(candidates) do
 		local direction = CFrame.fromAxisAngle(
 			Vector3.yAxis, math.rad(degrees)):VectorToWorldSpace(away)
 		local probe = currentGround + direction * probeDistance
-		local remaining = #overlappingNavigationParts(session, probe, overlapParams)
-		local score = (#blockers - remaining) * 25
-			+ direction:Dot(away) * 4
-			+ direction:Dot(desired) * .30
-			+ direction:Dot(session.Heading) * .15
-		if score > bestScore then
-			bestScore = score
-			bestDirection = direction
+		local remaining = #navigationBlockersAt(session, probe)
+		local acceptable = remaining < #blockers
+			or (remaining <= #blockers and direction:Dot(desired) > .25)
+		if acceptable then
+			local score = (#blockers - remaining) * 25
+				+ direction:Dot(away) * 4
+				+ direction:Dot(desired) * .30
+				+ direction:Dot(session.Heading) * .15
+			if score > bestScore then
+				bestScore = score
+				bestDirection = direction
+			end
 		end
 	end
 	if bestDirection then
@@ -1724,49 +2119,98 @@ end
 
 local function clearSteeringStep(session: any, currentGround: Vector3, desired: Vector3,
 	distance: number, now: number): (Vector3?, Vector3?)
-	local blockers = overlappingNavigationParts(session, currentGround)
+	local blockers = navigationBlockersAt(session, currentGround)
 	if #blockers > 0 then
+		local probeDistance = math.max(distance, Tuning.OverlapEscapeProbeDistance)
+		local goalPoint = session.ResolvedFinalGoal or session.FinalGoal
+		-- Freeze the goal for one escape attempt. Measuring against the live
+		-- player position lets a player moving toward an embedded, motionless
+		-- Manager look like successful escape progress and reset the ladder.
+		local baselineGoalPoint = session.OverlapEscapeBaselineGoalPoint or goalPoint
+		local goalDistance = if baselineGoalPoint
+			then planarDistance(currentGround, baselineGoalPoint) else math.huge
 		local escapeDirection = session.OverlapEscapeDirection
 		if escapeDirection then
-			local probeDistance = math.max(distance, Tuning.OverlapEscapeProbeDistance or distance)
-			local probeBlockers = overlappingNavigationParts(session, currentGround + escapeDirection * probeDistance)
-			if #probeBlockers > #blockers then
+			-- Fixed deadline per attempt, then a measurable-improvement test.
+			local expired = now - session.OverlapEscapeStartedAt >= Tuning.AvoidanceCommitSeconds
+			local reducedBlockers = #blockers < session.OverlapEscapeBaselineBlockers
+			local closedOnGoal = goalDistance
+				<= session.OverlapEscapeBaselineGoalDistance - PROGRESS_DISTANCE_EPSILON
+			if not escapeDirectionUsable(session, currentGround, escapeDirection,
+				desired, probeDistance, #blockers) then
 				escapeDirection = nil
+			elseif expired then
+				if reducedBlockers or closedOnGoal then
+					-- The attempt earned its deadline: renew it as a fresh bounded
+					-- attempt against the current baselines. A direction that keeps
+					-- delivering measurable gains also clears the ladder.
+					session.OverlapEscapeStartedAt = now
+					session.OverlapEscapeBaselineBlockers = #blockers
+					session.OverlapEscapeBaselineGoalPoint = goalPoint
+					session.OverlapEscapeBaselineGoalDistance = if goalPoint
+						then planarDistance(currentGround, goalPoint) else math.huge
+					session.OverlapEscapeAttempts = 0
+				else
+					-- Deadline hit with nothing measurable to show for it.
+					escapeDirection = nil
+				end
 			end
 		end
 		if not escapeDirection then
+			if session.OverlapEscapeAttempts > Tuning.ObstructionRecoveryAttempts
+				and now < session.OverlapEscapeNextRetryAt then
+				-- Escalation exhausted. Refuse the step so obstruction recovery
+				-- repaths, and rate-limit further direction searches to one per
+				-- commit window. This stays bounded while still recovering on its
+				-- own if the geometry later opens up.
+				session.OverlapEscapeDirection = nil
+				setAvoidanceTelemetry(session, false)
+				return nil, nil
+			end
+			-- The ladder state is clamped one step past exhaustion so telemetry
+			-- stays bounded; OverlapEscapeSearches carries the honest total.
+			session.OverlapEscapeAttempts = math.min(session.OverlapEscapeAttempts + 1,
+				Tuning.ObstructionRecoveryAttempts + 1)
+			session.OverlapEscapeSearches += 1
+			session.OverlapEscapeNextRetryAt = now + Tuning.AvoidanceCommitSeconds
 			escapeDirection = overlapEscapeDirection(
-				session,
-				currentGround,
-				desired,
-				distance,
-				blockers,
-				now
-			)
+				session, currentGround, desired, distance, blockers, now)
+			if escapeDirection then
+				session.OverlapEscapeStartedAt = now
+				session.OverlapEscapeBaselineBlockers = #blockers
+				session.OverlapEscapeBaselineGoalPoint = goalPoint
+				session.OverlapEscapeBaselineGoalDistance = if goalPoint
+					then planarDistance(currentGround, goalPoint) else math.huge
+			elseif session.OverlapEscapeAttempts >= Tuning.ObstructionRecoveryAttempts then
+				-- The Nth failed search is itself exhaustion. Do not wait for an
+				-- (N+1)th steering frame: obstruction recovery clears the current
+				-- route on this same frame, so there may be no movement target left
+				-- to call clearSteeringStep again. Publish the bounded exhausted
+				-- sentinel immediately; later retries remain commit-window limited.
+				session.OverlapEscapeAttempts = Tuning.ObstructionRecoveryAttempts + 1
+			end
 		end
 		if escapeDirection then
 			session.OverlapEscapeDirection = escapeDirection
-			session.AvoidanceUntil = now + (Tuning.AvoidanceCommitSeconds or 0.95)
 			setAvoidanceTelemetry(session, true)
 			return currentGround + escapeDirection * distance, escapeDirection
 		end
+		setAvoidanceTelemetry(session, false)
+		return nil, nil
 	end
 
-	local committedEscape = session.OverlapEscapeDirection
-	if committedEscape and now < session.AvoidanceUntil then
-		local escapeTarget = currentGround + committedEscape * distance
-		if physicalVolumeClear(session, currentGround, escapeTarget) then
-			setAvoidanceTelemetry(session, true)
-			return escapeTarget, committedEscape
-		end
+	if session.OverlapEscapeDirection or session.OverlapEscapeAttempts > 0 then
+		-- Standing fully clear of the overlap is the primary proof the ladder
+		-- is done: end the attempt and hand control back to goal-directed
+		-- steering. Productive attempts reset at their measured deadline above;
+		-- ordinary progress bookkeeping and obstruction repaths leave it standing.
+		resetOverlapEscapeState(session)
 	end
-
-	session.OverlapEscapeDirection = nil
 	setAvoidanceTelemetry(session, false)
 
 	local committed = session.AvoidanceSign ~= 0 and now < session.AvoidanceUntil
 	local straight = currentGround + desired * distance
-	local straightClear = physicalVolumeClear(session, currentGround, straight)
+	local straightClear = volumeClear(session, currentGround, straight)
 	if straightClear and not committed then
 		session.AvoidanceSign = 0
 		return straight, desired
@@ -1805,7 +2249,145 @@ local function clearSteeringStep(session: any, currentGround: Vector3, desired: 
 	return bestPosition, bestDirection
 end
 
+-- LEVEL3_MANAGER_PROGRESS_TRACKER_20260827
+-- Stuck detection runs on every movement branch — waiting on a path, missing
+-- waypoint, obstruction recovery and normal stepping alike. Progress means
+-- route consumption (waypoint or strategic index advancing on the same route)
+-- or genuinely closing on the active movement objective; raw displacement is
+-- deliberately not a signal, so lateral circling cannot feed it.
+--
+-- LEVEL3_MANAGER_CUMULATIVE_PROGRESS_20260827
+-- Distance progress is measured with two fields, never one. ProgressBestDistance
+-- is the raw closest approach to the current objective; ProgressCreditedDistance
+-- is a checkpoint that only moves when a gain is actually credited. A single
+-- field silently swallowed every sub-epsilon frame: at PatrolSpeed 4.5 (~0.075
+-- studs per 60 Hz frame) or InvestigateSpeed 13 (~0.217) no frame ever clears
+-- 0.25 on its own, so the baseline crept along with the rig and a genuinely
+-- moving Manager false-triggered STUCK_REPATH every StuckSeconds. Holding the
+-- checkpoint until cumulative gain reaches the epsilon credits that motion.
+local function progressObjective(session: any, destination: Vector3): (string, Vector3)
+	if session.Path and session.WaypointIndex <= #session.Path then
+		return string.format("waypoint:%d:%d", session.PathSwapSerial, session.WaypointIndex),
+			flat(session.Path[session.WaypointIndex].Position, session.FloorY)
+	end
+	if session.StrategicIndex <= #session.StrategicPoints then
+		-- The cached route deliberately follows a moving player by replacing its
+		-- final point. Include that point's revision only while it is the active
+		-- objective: target motion then rebases the checkpoint instead of being
+		-- misreported as Manager movement, while intermediate room points remain
+		-- stable and continue accumulating sub-epsilon progress normally.
+		local goalRevision = if session.StrategicIndex == #session.StrategicPoints
+			then session.StrategicGoalRevision else 0
+		return string.format("strategic:%d:%d:%d",
+			session.StrategicRebuildSerial, session.StrategicIndex, goalRevision),
+			session.StrategicPoints[session.StrategicIndex]
+	end
+	-- Direct-clear routing retires the cached strategic points and falls through
+	-- here. Include the final-goal revision as well: otherwise a player moving
+	-- toward a motionless Manager lowers distance under the constant "goal" key
+	-- and is falsely credited as Manager movement.
+	return string.format("goal:%d", session.StrategicGoalRevision), destination
+end
+
+-- Genuine movement progress, and the only place that says so. Recovery
+-- bookkeeping rearms LastProgressAt (the stuck-timer baseline) but can never
+-- reach LastGenuineProgressAt or GenuineProgressSerial, so telemetry and tests
+-- can tell a moving Manager from one that merely repathed on the spot.
+local function noteNavigationProgress(session: any, now: number)
+	session.LastProgressAt = now
+	session.LastGenuineProgressAt = now
+	session.GenuineProgressSerial += 1
+	session.PathFailures = 0
+	session.ConsecutiveObstructions = 0
+	-- Do not reset the overlap ladder here. Route/waypoint consumption is valid
+	-- navigation progress but can occur without physical motion when PFS rebases
+	-- a trapped rig. Escape state is cleared only by the exact overlap contract:
+	-- a free volume, or a deadline renewal backed by measurable improvement.
+end
+
+local function trackNavigationProgress(session: any, now: number, destination: Vector3)
+	local currentGround = flat(session.Root.Position, session.FloorY)
+	local navigationGoal = session.ResolvedFinalGoal or session.FinalGoal
+	if navigationGoal and planarDistance(currentGround, navigationGoal) <= Tuning.GoalTolerance then
+		-- Arrived at the resolved navigation goal. Holding position here is the
+		-- brain's decision (attack range, search cadence, moving-goal refresh),
+		-- not a navigation failure for the stuck ladder to fight.
+		session.LastProgressAt = now
+		session.ProgressObjectiveKey = nil
+		session.ProgressBestDistance = math.huge
+		session.ProgressCreditedDistance = math.huge
+		return
+	end
+	local progressed = false
+	if session.PathSwapSerial == session.ProgressLastPathSwapSerial
+		and session.WaypointIndex > session.ProgressLastWaypointIndex then
+		progressed = true
+	end
+	if session.StrategicRebuildSerial == session.ProgressLastStrategicRebuildSerial
+		and session.StrategicIndex > session.ProgressLastStrategicIndex then
+		progressed = true
+	end
+	session.ProgressLastPathSwapSerial = session.PathSwapSerial
+	session.ProgressLastWaypointIndex = session.WaypointIndex
+	session.ProgressLastStrategicRebuildSerial = session.StrategicRebuildSerial
+	session.ProgressLastStrategicIndex = session.StrategicIndex
+
+	local key, target = progressObjective(session, destination)
+	local distance = planarDistance(currentGround, target)
+	if key ~= session.ProgressObjectiveKey then
+		-- A deliberate rebase: the objective itself changed (new route, next
+		-- waypoint, moved target), and advancing onto it was already credited
+		-- through the index signals above.
+		session.ProgressObjectiveKey = key
+		session.ProgressBestDistance = distance
+		session.ProgressCreditedDistance = distance
+	else
+		-- Raw best tracks the closest approach; the credited checkpoint holds
+		-- still until the accumulated gain against it clears the epsilon, so a
+		-- run of sub-epsilon frames adds up instead of being discarded.
+		if distance < session.ProgressBestDistance then
+			session.ProgressBestDistance = distance
+		end
+		if session.ProgressCreditedDistance - session.ProgressBestDistance
+			>= PROGRESS_DISTANCE_EPSILON then
+			session.ProgressCreditedDistance = session.ProgressBestDistance
+			progressed = true
+		end
+	end
+
+	if progressed then
+		noteNavigationProgress(session, now)
+		return
+	end
+	if now - session.LastProgressAt < Tuning.StuckSeconds then return end
+	-- No genuine progress across a whole stuck interval: repath, escalating to
+	-- a full recovery with a fresh strategic route when failures pile up.
+	session.LastProgressAt = now
+	session.StuckRecoveries += 1
+	session.PathFailures += 1
+	local exhausted = session.PathFailures >= Tuning.MaxPathFailures
+	clearPath(session, "STUCK_REPATH")
+	if exhausted then
+		resetBlockedRoute(session, now)
+		rebuildStrategicRoute(session, true)
+	end
+	requestPath(session, destination, true)
+end
+
 local function updateMovement(session: any, dt: number, now: number)
+	if session.DebugMovementPaused == true then
+		session.CurrentMoveSpeed = 0
+		session.LastActualStepDistance = 0
+		setWalk(session, false, 0)
+		-- Studio regression fixtures freeze only the transform. Keep the real
+		-- destination/progress bookkeeping alive so a moving target cannot receive
+		-- an unearned progress credit merely because the test paused locomotion.
+		local pausedDestination = currentDestination(session)
+		if pausedDestination then
+			trackNavigationProgress(session, now, pausedDestination)
+		end
+		return
+	end
 	if not validRound(session) then
 		session.CurrentMoveSpeed = 0
 		session.LastActualStepDistance = 0
@@ -1815,8 +2397,14 @@ local function updateMovement(session: any, dt: number, now: number)
 	local desiredSpeed = currentSpeed(session)
 	local destination = currentDestination(session)
 	if desiredSpeed <= 0 or not destination then
+		-- Nothing to move toward: hold the stuck timer open rather than
+		-- accusing a deliberately idle Manager of being stuck.
 		session.CurrentMoveSpeed = 0
 		session.LastActualStepDistance = 0
+		session.LastProgressAt = now
+		session.ProgressObjectiveKey = nil
+		session.ProgressBestDistance = math.huge
+		session.ProgressCreditedDistance = math.huge
 		setWalk(session, false, 0)
 		return
 	end
@@ -1828,19 +2416,46 @@ local function updateMovement(session: any, dt: number, now: number)
 	if session.PathGoal and planarDistance(session.PathGoal, destination) >= goalMoveThreshold then
 		requestPath(session, destination)
 	end
-	local movementTarget = movementWaypoint(session, destination, desiredSpeed, dt)
+	local currentGround = flat(session.Root.Position, session.FloorY)
+	local currentBlockers = navigationBlockersAt(session, currentGround)
+	if #currentBlockers == 0
+		and (session.OverlapEscapeDirection or session.OverlapEscapeAttempts > 0) then
+		-- Clear the ladder as soon as the actual occupied volume is free. This
+		-- cannot live only inside clearSteeringStep: when the resolved goal is
+		-- already within the tiny-target cutoff, updateMovement returns before
+		-- steering and would otherwise leave exhausted telemetry/state latched.
+		resetOverlapEscapeState(session)
+	end
+	local movementTarget: Vector3?
+	if #currentBlockers > 0 then
+		-- Overlap escape must run even while PFS is pending, returned no usable
+		-- waypoint, or consumed a tiny first waypoint at the current position.
+		-- Previously those branches returned before clearSteeringStep, producing an
+		-- endless COMPUTING/READY/FINAL_SEGMENT_BLOCKED loop without one escape
+		-- search. Give steering a goal-facing direction (or the current heading
+		-- when already at the resolved goal); its overlap logic chooses the actual
+		-- clearance-improving direction and owns bounded escalation.
+		movementTarget = destination
+		if planarDistance(currentGround, movementTarget) <= .05 then
+			movementTarget = currentGround + session.Heading
+				* math.max(1, Tuning.OverlapEscapeProbeDistance)
+		end
+	else
+		movementTarget = movementWaypoint(session, destination, desiredSpeed, dt)
+	end
 	if not movementTarget then
 		session.CurrentMoveSpeed = 0
 		session.LastActualStepDistance = 0
 		setWalk(session, false, 0)
+		trackNavigationProgress(session, now, destination)
 		return
 	end
-	local currentGround = flat(session.Root.Position, session.FloorY)
 	local offset = movementTarget - currentGround
 	if offset.Magnitude <= .05 then
 		session.CurrentMoveSpeed = 0
 		session.LastActualStepDistance = 0
 		setWalk(session, false, 0)
+		trackNavigationProgress(session, now, destination)
 		return
 	end
 
@@ -1869,6 +2484,7 @@ local function updateMovement(session: any, dt: number, now: number)
 		requestPath(session, destination, true)
 		session.LastActualStepDistance = 0
 		setWalk(session, false, 0)
+		trackNavigationProgress(session, now, destination)
 		return
 	end
 	direction = steeredDirection
@@ -1884,27 +2500,11 @@ local function updateMovement(session: any, dt: number, now: number)
 
 	local rootPosition = proposed + Vector3.new(0, session.GroundOffset, 0)
 	session.Root.CFrame = CFrame.lookAt(rootPosition, rootPosition + session.Heading)
-	session.ConsecutiveObstructions = 0
 	session.LastActualStepDistance = distance
 	setWalk(session, true, session.CurrentMoveSpeed)
-	if planarDistance(session.ProgressResetPosition, proposed) >= Tuning.ProgressResetDistance then
-		session.ProgressResetPosition = proposed
-		session.PathFailures = 0
-		session.ConsecutiveObstructions = 0
-	end
-
-	local actualGround = flat(session.Root.Position, session.FloorY)
-	if planarDistance(session.LastProgressPosition, actualGround) >= Tuning.StuckDistance then
-		session.LastProgressPosition = actualGround
-		session.LastProgressAt = now
-	elseif now - session.LastProgressAt >= Tuning.StuckSeconds then
-		session.LastProgressAt = now
-		session.PathFailures += 1
-		local exhausted = session.PathFailures >= Tuning.MaxPathFailures
-		clearPath(session, "STUCK_REPATH")
-		if exhausted then resetBlockedRoute(session, now) end
-		requestPath(session, destination, true)
-	end
+	-- The tracker owns every escalation-counter reset: a step that merely
+	-- displaces the rig sideways no longer counts as progress.
+	trackNavigationProgress(session, now, destination)
 end
 
 local function applyBlackout(session: any, active: boolean)
@@ -1931,7 +2531,8 @@ local function resetPublishedState()
 	state:SetAttribute("Level3_MallManagerSpawnRoomId", Tuning.SpawnRoomId)
 	state:SetAttribute("Level3_MallManagerSpawnDistance", 0)
 	state:SetAttribute("Level3_MallManagerSpawnVisibleCount", 0)
-	state:SetAttribute("Level3_MallManagerSpawnPathValidated", false)
+	state:SetAttribute("Level3_MallManagerSpawnClearanceValidated", false)
+	state:SetAttribute("Level3_MallManagerPathValidated", false)
 	state:SetAttribute("Level3_MallManagerFinaleSpawn", false)
 	state:SetAttribute("Level3_MallManagerSpawnPosition", nil)
 	state:SetAttribute("Level3_MallManagerPathStatus", "OFF")
@@ -2117,7 +2718,9 @@ local function chooseFinalHallSpawn(manifest: any, generation: number): any?
 		Cycle = cycle,
 		RoomId = nearestRoomId(position),
 		Random = random,
-		PathValidated = true,
+		-- The spawn volume was genuinely swept clear above; route reachability is
+		-- proven later by the authoritative full-route sweep (markPathValidated).
+		SpawnClearanceValidated = true,
 		Visibility = spawnVisibilityCount(position, records),
 		NearestDistance = nearestDistance,
 		AnchorDistance = planarDistance(position, anchor.Position),
@@ -2208,7 +2811,9 @@ local function chooseBlackoutSpawn(manifest: any, generation: number): any?
 	selected.Cycle = cycle
 	selected.RoomId = nearestRoomId(selected.Position)
 	selected.Random = random
-	selected.PathValidated = true
+	-- spawnVolumeFits gated every scored candidate; reachability is proven
+	-- later by the authoritative full-route sweep (markPathValidated).
+	selected.SpawnClearanceValidated = true
 	return selected
 end
 
@@ -2346,7 +2951,12 @@ function Controller.Start(manifest: any, generation: number)
 		FinalGoal = nil,
 		ResolvedFinalGoal = nil,
 		StrategicPoints = {},
+		StrategicRooms = {},
 		StrategicIndex = 1,
+		StrategicStartRoomId = nil,
+		StrategicGoalRoomId = nil,
+		StrategicRebuildSerial = 0,
+		StrategicGoalRevision = 0,
 		Path = nil,
 		PathObject = nil,
 		PathGoal = nil,
@@ -2355,10 +2965,16 @@ function Controller.Start(manifest: any, generation: number)
 		InFlightPathGoal = nil,
 		PendingPathGoal = nil,
 		PendingPathForce = false,
+		PathDispatchScheduled = false,
 		PathBlockedConnection = nil,
 		PathStatus = "BOOTING",
 		PathFailures = 0,
 		PathSwapSerial = 0,
+		PathComputeSerial = 0,
+		PathComputeTimes = {},
+		ActiveComputeCount = 0,
+		PeakComputeCount = 0,
+		PathValidated = false,
 		WaypointIndex = 1,
 		LastPathRequest = -math.huge,
 		Heading = (function()
@@ -2367,14 +2983,31 @@ function Controller.Start(manifest: any, generation: number)
 		end)(),
 		CurrentMoveSpeed = 0,
 		LastActualStepDistance = 0,
-		LastProgressPosition = flat(root.Position, floorY),
 		LastProgressAt = os.clock(),
-		ProgressResetPosition = flat(root.Position, floorY),
+		LastGenuineProgressAt = os.clock(),
+		GenuineProgressSerial = 0,
+		ProgressObjectiveKey = nil,
+		ProgressBestDistance = math.huge,
+		ProgressCreditedDistance = math.huge,
+		ProgressLastPathSwapSerial = 0,
+		ProgressLastWaypointIndex = 1,
+		ProgressLastStrategicRebuildSerial = 0,
+		ProgressLastStrategicIndex = 1,
+		StuckRecoveries = 0,
+		RecoveryRepaths = 0,
 		ConsecutiveObstructions = 0,
 		AvoidanceSign = 0,
 		AvoidanceUntil = 0,
 		OverlapEscapeActive = false,
 		OverlapEscapeDirection = nil,
+		OverlapEscapeStartedAt = 0,
+		OverlapEscapeBaselineBlockers = 0,
+		OverlapEscapeBaselineGoalPoint = nil,
+		OverlapEscapeBaselineGoalDistance = math.huge,
+		OverlapEscapeNextRetryAt = 0,
+		OverlapEscapeSearches = 0,
+		OverlapEscapeAttempts = 0,
+		DebugMovementPaused = false,
 		WalkTrack = walkTrack,
 		WalkMoving = false,
 		WalkPoseHeld = false,
@@ -2422,7 +3055,8 @@ function Controller.Start(manifest: any, generation: number)
 	state:SetAttribute("Level3_MallManagerSpawnRoomId", spawnData.RoomId)
 	state:SetAttribute("Level3_MallManagerSpawnDistance", spawnDistance)
 	state:SetAttribute("Level3_MallManagerSpawnVisibleCount", spawnData.Visibility)
-	state:SetAttribute("Level3_MallManagerSpawnPathValidated", spawnData.PathValidated == true)
+	state:SetAttribute("Level3_MallManagerSpawnClearanceValidated", spawnData.SpawnClearanceValidated == true)
+	state:SetAttribute("Level3_MallManagerPathValidated", false)
 	state:SetAttribute("Level3_MallManagerSpawnAnchorUserId", spawnData.Anchor.Player.UserId)
 	state:SetAttribute("Level3_MallManagerSpawnGroupSize", spawnData.GroupSize)
 	state:SetAttribute("Level3_MallManagerSpawnCycle", spawnData.Cycle)
@@ -2442,7 +3076,8 @@ function Controller.Start(manifest: any, generation: number)
 	workspace:SetAttribute("Level3MallManagerActive", true)
 	model:SetAttribute("Level3_MallManagerSpawnDistance", spawnDistance)
 	model:SetAttribute("Level3_MallManagerSpawnVisibleCount", spawnData.Visibility)
-	model:SetAttribute("Level3_MallManagerSpawnPathValidated", spawnData.PathValidated == true)
+	model:SetAttribute("Level3_MallManagerSpawnClearanceValidated", spawnData.SpawnClearanceValidated == true)
+	model:SetAttribute("Level3_MallManagerPathValidated", false)
 	model:SetAttribute("Level3_MallManagerSpawnAnchorUserId", spawnData.Anchor.Player.UserId)
 	model:SetAttribute("Level3_MallManagerSpawnGroupSize", spawnData.GroupSize)
 	model:SetAttribute("Level3_MallManagerSpawnCycle", spawnData.Cycle)
@@ -2468,7 +3103,10 @@ function Controller.Start(manifest: any, generation: number)
 			and workspace:GetAttribute("Level3MallManagerHuntActive") == true then
 			session.ActivatedAt = os.clock() + Tuning.SpawnGraceSeconds
 			session.LastProgressAt = os.clock()
-			session.LastProgressPosition = flat(root.Position, floorY)
+			session.LastGenuineProgressAt = os.clock()
+			session.ProgressObjectiveKey = nil
+			session.ProgressBestDistance = math.huge
+			session.ProgressCreditedDistance = math.huge
 			publishState(session, "AWAKENING")
 		else
 			session.ActivatedAt = math.huge
@@ -2567,6 +3205,8 @@ function Controller.GetSnapshot()
 		Model = session.Model,
 		State = session.State,
 		TargetUserId = if session.Target then session.Target.UserId else 0,
+		LastCaptureUserId = tonumber(session.StateFolder:GetAttribute(
+			"Level3_MallManagerLastCaptureUserId")) or 0,
 		Blackout = session.Blackout,
 		FinalHallChase = session.FinalHallChase,
 		Speed = currentSpeed(session),
@@ -2586,6 +3226,7 @@ function Controller.GetSnapshot()
 		SpawnGroupSize = session.SpawnGroupSize,
 		SpawnCycle = session.SpawnCycle,
 		Attacking = session.Attacking,
+		AttackSerial = session.AttackSerial,
 		WalkMoving = session.WalkMoving,
 		WalkPoseHeld = session.WalkPoseHeld,
 		WalkPlaybackSpeed = session.WalkPlaybackSpeed,
@@ -2607,14 +3248,56 @@ function Controller.GetSnapshot()
 		ChaseScreamTimePosition = session.ChaseScream.TimePosition,
 		LastChaseScreamAtServerTime = session.LastChaseScreamAtServerTime,
 		Position = session.Root.Position,
+		FinalGoal = session.FinalGoal,
+		ResolvedFinalGoal = session.ResolvedFinalGoal,
 		GoalDistance = if session.FinalGoal
 			then planarDistance(session.Root.Position, session.FinalGoal) else 0,
 		PathFailures = session.PathFailures,
 		ConsecutiveObstructions = session.ConsecutiveObstructions,
 		AvoidanceSign = session.AvoidanceSign,
 		OverlapEscapeActive = session.OverlapEscapeActive,
+		OverlapEscapeAttempts = session.OverlapEscapeAttempts,
+		OverlapEscapeSearches = session.OverlapEscapeSearches,
+		OverlapEscapeBaselineGoalPoint = session.OverlapEscapeBaselineGoalPoint,
+		OverlapEscapeBaselineGoalDistance = session.OverlapEscapeBaselineGoalDistance,
+		DebugMovementPaused = session.DebugMovementPaused == true,
 		WaypointIndex = session.WaypointIndex,
 		WaypointCount = if session.Path then #session.Path else 0,
+		PathComputeSerial = session.PathComputeSerial,
+		-- Half-open window: a request whose age has reached one second has left
+		-- it. The closed form counted six starts at 0/.2/.4/.6/.8/1.0 as one
+		-- second's worth; the tolerance absorbs os.clock jitter at the boundary
+		-- so an exactly-spaced burst cannot report a phantom sixth request.
+		PathComputesLastSecond = (function()
+			local now = os.clock()
+			local count = 0
+			for _, startedAt in ipairs(session.PathComputeTimes) do
+				if now - startedAt < 1 - PATH_RATE_CLOCK_TOLERANCE then count += 1 end
+			end
+			return count
+		end)(),
+		PeakConcurrentPathComputes = session.PeakComputeCount,
+		PathValidated = session.PathValidated == true,
+		SpawnClearanceValidated = session.StateFolder:GetAttribute(
+			"Level3_MallManagerSpawnClearanceValidated") == true,
+		StrategicIndex = session.StrategicIndex,
+		StrategicPointCount = #session.StrategicPoints,
+		StrategicGoalRoomId = session.StrategicGoalRoomId,
+		StrategicRebuildSerial = session.StrategicRebuildSerial,
+		StrategicGoalRevision = session.StrategicGoalRevision,
+		StuckRecoveries = session.StuckRecoveries,
+		RecoveryRepaths = session.RecoveryRepaths,
+		FurnitureNavExclusionsActive = activeFurnitureNavExclusionCount(session),
+		FurnitureNavExclusionsTotal = #(session.FurnitureNavExclusions or {}),
+		LastProgressAgeSeconds = os.clock() - session.LastProgressAt,
+		-- Only credited movement moves these two. Recovery rearms the stuck
+		-- timer above but cannot touch them, so a motionless Manager cannot
+		-- launder a repath into apparent progress.
+		LastGenuineProgressAgeSeconds = os.clock() - session.LastGenuineProgressAt,
+		GenuineProgressSerial = session.GenuineProgressSerial,
+		ProgressObjectiveKey = session.ProgressObjectiveKey,
+		ProgressBestDistance = session.ProgressBestDistance,
+		ProgressCreditedDistance = session.ProgressCreditedDistance,
 	}
 end
 
@@ -2635,10 +3318,181 @@ function Controller.DebugForcePatrolRoom(roomId: string)
 	session.PathFailures = 0
 	session.ConsecutiveObstructions = 0
 	session.LastPathRequest = -math.huge
-	session.ProgressResetPosition = flat(session.Root.Position, session.FloorY)
+	session.LastProgressAt = os.clock()
+	session.LastGenuineProgressAt = os.clock()
+	session.ProgressObjectiveKey = nil
+	session.ProgressBestDistance = math.huge
+	session.ProgressCreditedDistance = math.huge
+	resetOverlapEscapeState(session)
 	publishState(session, "PATROL")
 	setGoal(session, destination, true)
 	return Controller.GetSnapshot()
+end
+
+-- Studio-only deterministic movement fixture. It relocates the live rig to
+-- one end of a segment already accepted by the exact production clearance
+-- contract, then makes the other end its patrol goal. Behavioral tests can
+-- therefore isolate movement/progress rules without inheriting a wall, stale
+-- route, or recovery state from an earlier destructive probe.
+function Controller.DebugPrepareStraightPatrol(startPosition: Vector3, destination: Vector3)
+	assert(RunService:IsStudio(), "DebugPrepareStraightPatrol is Studio-only")
+	assert(typeof(startPosition) == "Vector3" and typeof(destination) == "Vector3",
+		"DebugPrepareStraightPatrol requires two Vector3 positions")
+	local session = assert(activeSession, "Mall Manager is not running")
+	local startGround = flat(startPosition, session.FloorY)
+	local destinationGround = flat(destination, session.FloorY)
+	local displacement = destinationGround - startGround
+	assert(displacement.Magnitude >= 12,
+		"DebugPrepareStraightPatrol requires a segment at least 12 studs long")
+	assert(volumeFits(session, startGround), "Debug straight-patrol start volume is blocked")
+	assert(volumeFits(session, destinationGround), "Debug straight-patrol destination is blocked")
+	assert(volumeClear(session, startGround, destinationGround),
+		"Debug straight-patrol segment is not clear under the production sweep")
+
+	publishTarget(session, nil)
+	table.clear(session.Suspicion)
+	session.LastKnownPosition = nil
+	session.LastSenseAt = -math.huge
+	session.WorldNoise = nil
+	session.SearchUntil = nil
+	session.PatrolGoal = destinationGround
+	session.PatrolWaitUntil = nil
+	session.ActivatedAt = 0
+	session.PathFailures = 0
+	session.ConsecutiveObstructions = 0
+	session.LastPathRequest = -math.huge
+	session.CurrentMoveSpeed = 0
+	session.LastActualStepDistance = 0
+	resetOverlapEscapeState(session)
+	clearPath(session, "DEBUG_STRAIGHT_PATROL")
+
+	local direction = displacement.Unit
+	session.Heading = direction
+	local rootPosition = startGround + Vector3.new(0, session.GroundOffset, 0)
+	session.Root.CFrame = CFrame.lookAt(rootPosition, rootPosition + direction)
+	publishState(session, "PATROL")
+	setGoal(session, destinationGround, true)
+	local now = os.clock()
+	session.LastProgressAt = now
+	session.LastGenuineProgressAt = now
+	session.ProgressObjectiveKey = nil
+	session.ProgressBestDistance = math.huge
+	session.ProgressCreditedDistance = math.huge
+	session.ProgressLastPathSwapSerial = session.PathSwapSerial
+	session.ProgressLastWaypointIndex = session.WaypointIndex
+	session.ProgressLastStrategicRebuildSerial = session.StrategicRebuildSerial
+	session.ProgressLastStrategicIndex = session.StrategicIndex
+	publishMotion(session, 0, true)
+	return Controller.GetSnapshot()
+end
+
+function Controller.DebugSetMovementPaused(paused: boolean)
+	assert(RunService:IsStudio(), "DebugSetMovementPaused is Studio-only")
+	local session = assert(activeSession, "Mall Manager is not running")
+	session.DebugMovementPaused = paused == true
+	if session.DebugMovementPaused then
+		session.CurrentMoveSpeed = 0
+		session.LastActualStepDistance = 0
+		setWalk(session, false, 0)
+	end
+	return Controller.GetSnapshot()
+end
+
+-- Studio-only clearance probe for behavioral navigation tests: reports how the
+-- live session's shared clearance contract classifies one ground position.
+function Controller.DebugNavigationProbe(position: Vector3)
+	assert(RunService:IsStudio(), "DebugNavigationProbe is Studio-only")
+	local session = assert(activeSession, "Mall Manager is not running")
+	local ground = flat(position, session.FloorY)
+	local physical = overlappingNavigationParts(session, ground)
+	local furniture = furnitureNavExclusionsAt(session, ground)
+	return {
+		PhysicalBlockers = #physical,
+		FurnitureBlockers = #furniture,
+		TotalBlockers = #physical + #furniture,
+		ActiveExclusions = activeFurnitureNavExclusionCount(session),
+		TotalExclusions = #(session.FurnitureNavExclusions or {}),
+		VolumeFits = volumeFits(session, ground),
+	}
+end
+
+-- Studio-only projection probe. Reports what the corridor-centreing rule wants
+-- for a raw PFS waypoint and what the revalidated movement-facing contract
+-- actually accepts, so a test can prove a blocked lateral segment retains the
+-- original waypoint instead of moving onto a blocked centreline.
+function Controller.DebugProjectWaypoint(position: Vector3)
+	assert(RunService:IsStudio(), "DebugProjectWaypoint is Studio-only")
+	local session = assert(activeSession, "Mall Manager is not running")
+	local original = flat(position, session.FloorY)
+	local unchecked = centerCorridorWaypoint(session, original, session.FloorY, false)
+	local revalidated = centerCorridorWaypoint(session, original, session.FloorY, true)
+	local projected = planarDistance(unchecked, original) > .05
+	return {
+		Original = original,
+		Projected = projected,
+		UncheckedProjection = unchecked,
+		Revalidated = revalidated,
+		RetainedOriginal = planarDistance(revalidated, original) <= .05,
+		LateralSegmentClear = if projected
+			then volumeClear(session, original, unchecked) else true,
+		ProjectionEndpointFits = if projected then volumeFits(session, unchecked) else true,
+	}
+end
+
+-- Studio-only probe for the exact helper used by waypoint consumption and the
+-- first active movement target. Unlike DebugProjectWaypoint, the supplied
+-- current position can be far enough from the projected target to isolate a
+-- blocker in the approach segment while both endpoint volumes remain clear.
+function Controller.DebugMovementProjection(currentPosition: Vector3, position: Vector3)
+	assert(RunService:IsStudio(), "DebugMovementProjection is Studio-only")
+	local session = assert(activeSession, "Mall Manager is not running")
+	local currentGround = flat(currentPosition, session.FloorY)
+	local original = flat(position, session.FloorY)
+	local unchecked = centerCorridorWaypoint(session, original, session.FloorY, false)
+	local accepted, usedProjection, approachClear = movementProjectedWaypoint(
+		session, currentGround, original)
+	return {
+		Current = currentGround,
+		Original = original,
+		UncheckedProjection = unchecked,
+		Accepted = accepted,
+		UsedProjection = usedProjection,
+		ApproachSegmentClear = approachClear,
+		CurrentEndpointFits = volumeFits(session, currentGround),
+		ProjectionEndpointFits = volumeFits(session, unchecked),
+		RetainedOriginal = planarDistance(accepted, original) <= .05,
+	}
+end
+
+-- Studio-only attack-gate probe. Runs the real attackLineClear contract so a
+-- test can show both halves of the wall-hug rule: the Manager closes to within
+-- the ranges that permit an attack, and a wall between the two still refuses it.
+function Controller.DebugAttackProbe(player: Player)
+	assert(RunService:IsStudio(), "DebugAttackProbe is Studio-only")
+	local session = assert(activeSession, "Mall Manager is not running")
+	local _, _, root = livingPlayer(player, session)
+	local distance = if root then planarDistance(session.Root.Position, root.Position) else math.huge
+	local confirmClear = attackLineClear(session, player, Tuning.AttackConfirmRange)
+	local rangeClear = attackLineClear(session, player, Tuning.AttackRange)
+	local goalResolvedAway = session.FinalGoal ~= nil and session.ResolvedFinalGoal ~= nil
+		and planarDistance(session.FinalGoal, session.ResolvedFinalGoal) > 1
+	return {
+		Distance = distance,
+		AttackRange = Tuning.AttackRange,
+		AttackConfirmRange = Tuning.AttackConfirmRange,
+		WithinAttackRange = distance <= Tuning.AttackRange,
+		WithinConfirmRange = distance <= Tuning.AttackConfirmRange,
+		LineClearAtAttackRange = rangeClear,
+		LineClearAtConfirmRange = confirmClear,
+		GoalResolvedAwayFromTarget = goalResolvedAway,
+		InitiationRange = if goalResolvedAway then Tuning.AttackConfirmRange else Tuning.AttackRange,
+		WouldInitiate = if goalResolvedAway then confirmClear else rangeClear,
+		Attacking = session.Attacking == true,
+		AttackSerial = session.AttackSerial,
+		TargetUserId = if session.Target then session.Target.UserId else 0,
+		LastCaptureUserId = tonumber(session.StateFolder:GetAttribute(
+			"Level3_MallManagerLastCaptureUserId")) or 0,
+	}
 end
 
 function Controller.DebugSetBlackout(active: boolean)

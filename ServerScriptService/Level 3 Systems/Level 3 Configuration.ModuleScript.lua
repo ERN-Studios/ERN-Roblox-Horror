@@ -171,6 +171,10 @@ local Configuration = {
 		-- Radius 5 matches the animated root-relative body sway. The slightly
 		-- larger local sweep preserves a visible buffer from walls and corners.
 		AgentRadius = 5,
+		-- Roblox's four-stud navmesh voxels reject a radius-five agent in the
+		-- authored 14-stud corridors even though the exact geometry fits. Route
+		-- with four studs, then enforce the true body envelope on every local sweep.
+		PathAgentRadius = 4,
 		SweepRadius = 5.25,
 		AgentHeight = 10,
 		WaypointSpacing = 4,
