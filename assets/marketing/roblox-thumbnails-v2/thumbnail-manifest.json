@@ -7,6 +7,7 @@
   },
   "generatedAt": "2026-08-27",
   "campaign": "gameplay-accurate-hazmat-v2",
+  "revision": "level1-entity-accuracy-1",
   "format": {
     "width": 1920,
     "height": 1080,
@@ -42,7 +43,7 @@
       "altText": "Two hazmat-suited players extract a fuse under bright ceiling lights as the Level 1 Entity approaches through the yellow maze.",
       "level": 1,
       "objective": "Extract a fuse from a marked relay.",
-      "sourceGeneratedImage": "/Users/zeanjuul4/.codex/generated_images/01a01f4b-1f57-7ae2-bcfa-795401d62c50/exec-3f3f4628-b7c6-4f95-84ab-65bd33644109.png",
+      "sourceGeneratedImage": "/Users/zeanjuul4/.codex/generated_images/01a01f4b-1f57-7ae2-bcfa-795401d62c50/exec-d99c5eff-b9ef-4316-b2e8-19bd6a233863.png",
       "robloxMediaItemId": null
     },
     {
@@ -52,7 +53,7 @@
       "altText": "A hazmat team pulls separate cable-linked levers while the Level 1 Entity closes in behind them.",
       "level": 1,
       "objective": "Activate all powered levers within ten seconds.",
-      "sourceGeneratedImage": "/Users/zeanjuul4/.codex/generated_images/01a01f4b-1f57-7ae2-bcfa-795401d62c50/exec-019e9609-c4e9-4f01-9fdd-05549c46ba0a.png",
+      "sourceGeneratedImage": "/Users/zeanjuul4/.codex/generated_images/01a01f4b-1f57-7ae2-bcfa-795401d62c50/exec-88d879b5-d20b-4b87-89c0-41f56372cf90.png",
       "robloxMediaItemId": null
     },
     {

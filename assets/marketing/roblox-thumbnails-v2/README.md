@@ -22,7 +22,7 @@ Every player uses the same recognizably blocky Roblox hazmat design: mustard-yel
 
 ## Generation references
 
-The built-in ImageGen workflow used the existing Level 1 Entity silhouette/jumpscare references, the Slidemouth turnaround, the Mall Manager front reference, the Level 2 pump material, and the approved first hazmat render as the continuity anchor for the remaining four images.
+The built-in ImageGen workflow used the definitive Level 1 full-body silhouette and buried screaming-face references, the Slidemouth turnaround, the Mall Manager front reference, the Level 2 pump material, and the approved first hazmat render as the continuity anchor for the remaining four images. The corrected Level 1 Entity has no glowing red eyes: it keeps the dense hand-scribbled strand body, extremely long arms and claws, and faint human scream hidden inside its head.
 
 ## Publication state
 
