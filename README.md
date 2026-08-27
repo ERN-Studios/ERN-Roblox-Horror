@@ -263,7 +263,7 @@ quick tests (don't sync the overrides):
 
 **Dev cheats** (`DevCheats.LocalScript` — whitelisted accounts only):
 `B` ESP + 3 s fast queue · `V` noclip fly · `P` pause entity · `I` push immunity ·
-`U` unlimited battery/stamina · `C` third person · `M` Zyntra developer phone.
+`U` unlimited battery/stamina · `C` third person · `J` Zyntra developer phone · `M` dispatch mute.
 Lock down / remove before publishing.
 
 ## 🗺️ Roadmap to release

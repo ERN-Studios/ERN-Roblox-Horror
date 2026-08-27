@@ -44,7 +44,7 @@
 --  NEVER writes its random pick back into the attribute.
 --  ReplicatedStorage["Level 2 State"] shows which mode a round used:
 --  Level2_SeedPinned true/false, and Level2_ResolvedSeed for what it built.
---  Dev keys (whitelisted): B esp+fast queue · V noclip fly · M dev phone.
+--  Dev keys (whitelisted): B esp+fast queue · V noclip fly · J dev phone.
 --
 -- ── SUNLIGHT / MOOD ─────────────────────────────────────────────────────
 --  StarterPlayerScripts."Level 2 Lighting Controller" owns the in-round

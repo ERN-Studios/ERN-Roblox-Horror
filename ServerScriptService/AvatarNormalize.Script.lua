@@ -4,7 +4,8 @@
 -- Forces every player to the DEFAULT avatar SIZE. Players' own Roblox avatars can
 -- be scaled huge or tiny (the body-scale sliders on their avatar), which would
 -- give them longer reach, a higher/lower camera, and inconsistent hitboxes vs the
--- Entity and the maze. We pin the R15 scale values to 1 so everyone is identical.
+-- Entity and the maze. We pin the R15 scale values to the authored suit so
+-- everyone is identical.
 -- (Their outfit / colours are kept — only the SIZE is normalised.)
 --
 -- NOTE: the fully permanent way is Studio → Game Settings → Avatar (set body-scale
@@ -17,8 +18,17 @@
 
 local Players = game:GetService("Players")
 
--- the four R15 body-scale NumberValues that live under the Humanoid
-local SCALES = { "BodyHeightScale", "BodyWidthScale", "BodyDepthScale", "HeadScale" }
+-- Match the authored gameplay rig exactly. BodyProportionScale is deliberately
+-- zero: Roblox defines 0 as the broad classic R15 shape and 1 as the narrow
+-- proportional shape, so treating every scale's default as 1 changes the suit.
+local SCALE_TARGETS = {
+	BodyHeightScale = 1,
+	BodyWidthScale = 1,
+	BodyDepthScale = 1,
+	HeadScale = 1,
+	BodyTypeScale = 1,
+	BodyProportionScale = 0,
+}
 
 local function normalize(char)
 	local player = Players:GetPlayerFromCharacter(char)
@@ -27,13 +37,13 @@ local function normalize(char)
 	if not player or player:GetAttribute("InRound") ~= true then return end
 	local hum = char:FindFirstChildOfClass("Humanoid")
 	if not hum then return end
-	for _, name in ipairs(SCALES) do
+	for name, target in pairs(SCALE_TARGETS) do
 		local o = hum:FindFirstChild(name)
 		if o and o:IsA("NumberValue") then
-			o.Value = 1 -- default size
+			o.Value = target
 			-- keep it pinned: a late-arriving appearance can re-write these
 			o:GetPropertyChangedSignal("Value"):Connect(function()
-				if o.Value ~= 1 then o.Value = 1 end
+				if o.Value ~= target then o.Value = target end
 			end)
 		end
 	end

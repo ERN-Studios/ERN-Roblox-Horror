@@ -130,7 +130,7 @@ return H:JSONEncode({
 })
 '''
 
-KEY_M = r'''
+KEY_J = r'''
 local H = game:GetService("HttpService")
 local player = game:GetService("Players").LocalPlayer
 local event = player.PlayerScripts:FindFirstChild("DevPhoneCommand")
@@ -312,9 +312,9 @@ def main() -> int:
             "server pause reset did not reach the phone",
         )
 
-        phone_open = call(client, studio_id, "Client", KEY_M)
-        print("KEY_M_OPEN", phone_open)
-        require(phone_open.get("visible") is True and phone_open.get("modal") is True, "M did not open the dev phone")
+        phone_open = call(client, studio_id, "Client", KEY_J)
+        print("KEY_J_OPEN", phone_open)
+        require(phone_open.get("visible") is True and phone_open.get("modal") is True, "J did not open the dev phone")
         require(phone_open.get("devVisible") is True and phone_open.get("mouseIcon") is True, "dev phone did not open as a usable modal")
 
         print("ESCAPE", call(client, studio_id, "Server", SET_ESCAPE))
@@ -324,12 +324,12 @@ def main() -> int:
         require(phone_closed.get("visible") is False and phone_closed.get("modal") is False, "escape did not close the dev phone")
         print("CLEAR_ESCAPE", call(client, studio_id, "Server", CLEAR_ESCAPE))
 
-        phone_reopened = call(client, studio_id, "Client", KEY_M)
-        print("KEY_M_REOPEN", phone_reopened)
-        require(phone_reopened.get("visible") is True, "M did not reopen the dev phone")
-        phone_closed_again = call(client, studio_id, "Client", KEY_M)
-        print("KEY_M_CLOSE", phone_closed_again)
-        require(phone_closed_again.get("visible") is False, "M did not close the dev phone")
+        phone_reopened = call(client, studio_id, "Client", KEY_J)
+        print("KEY_J_REOPEN", phone_reopened)
+        require(phone_reopened.get("visible") is True, "J did not reopen the dev phone")
+        phone_closed_again = call(client, studio_id, "Client", KEY_J)
+        print("KEY_J_CLOSE", phone_closed_again)
+        require(phone_closed_again.get("visible") is False, "J did not close the dev phone")
 
         print("CLEANUP_CLIENT", call(client, studio_id, "Client", CLEANUP))
         print("CLEANUP_SERVER", call(client, studio_id, "Server", CLEAR_ROUND))

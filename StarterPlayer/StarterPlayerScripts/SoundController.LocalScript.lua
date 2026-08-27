@@ -896,30 +896,44 @@ if player.Character then configureDefaultSteps(player.Character) end
 player.CharacterAdded:Connect(configureDefaultSteps)
 
 -- ── LEVEL 2 SHALLOW-WATER AUDIO ────────────────────────────────────────────
--- The seven user-owned takes are resolved at runtime. Put their uploaded IDs on
--- ReplicatedStorage, Workspace, or ReplicatedStorage.Level2Audio as
--- Level2WadeStep1..7 / HeavyBootsSplash1..7.
--- This deliberately contains no placeholder asset IDs.
+-- Runtime attributes/ValueBases remain useful for live tuning. These fallbacks
+-- are the short "Mud Puddle Splash / Shallow Water Impacts" takes published by
+-- the verified ProSoundEffects Creator Store account. They were runtime-preloaded
+-- in this experience before being enabled here.
+-- Put an override on ReplicatedStorage, Workspace, or ReplicatedStorage.Level2Audio
+-- as Level2WadeStep1..7 / HeavyBootsSplash1..7 when a take is replaced.
+local LEVEL2_WADE_FALLBACK_IDS = {
+	"rbxassetid://9125703168",
+	"rbxassetid://9125702419",
+	"rbxassetid://9125702798",
+	"rbxassetid://9125702560",
+	"rbxassetid://9125702803",
+	"rbxassetid://9125702687",
+	"rbxassetid://9125702697",
+}
+
+-- Per-take loudness matching keeps the shuffled bank consistent. Every source
+-- starts with its impact, so trimming the opening would remove the actual step.
 local LEVEL2_WADE_SPECS = {
-	{ gain = 1.585, offset = 0.35 },
-	{ gain = 0.841, offset = 0.30 },
-	{ gain = 1.000, offset = 0.62 },
-	{ gain = 0.700, offset = 0.34 },
-	{ gain = 1.245, offset = 0.39 },
-	{ gain = 0.692, offset = 0.28 },
-	{ gain = 2.661, offset = 0.43 },
+	{ gain = 2.24, offset = 0 },
+	{ gain = 1.76, offset = 0 },
+	{ gain = 0.82, offset = 0 },
+	{ gain = 1.29, offset = 0 },
+	{ gain = 1.41, offset = 0 },
+	{ gain = 2.32, offset = 0 },
+	{ gain = 1.00, offset = 0 },
 }
 
 -- One upload can serve every Level 2 wade sound. Each boundary is sample-exact
 -- in the 48 kHz WAV; 100 ms of silence separates adjacent segments.
 local LEVEL2_SFX_SPRITE_SEGMENTS = {
-	wade1 = { start = 0.000, duration = 1.186 },
-	wade2 = { start = 1.286, duration = 1.236 },
-	wade3 = { start = 2.622, duration = 0.916 },
-	wade4 = { start = 3.638, duration = 1.196 },
-	wade5 = { start = 4.934, duration = 1.146 },
-	wade6 = { start = 6.180, duration = 1.256 },
-	wade7 = { start = 7.536, duration = 1.106 },
+	wade1 = { start = 0.000, duration = 1.186, gain = 1.585 },
+	wade2 = { start = 1.286, duration = 1.236, gain = 0.841 },
+	wade3 = { start = 2.622, duration = 0.916, gain = 1.000 },
+	wade4 = { start = 3.638, duration = 1.196, gain = 0.700 },
+	wade5 = { start = 4.934, duration = 1.146, gain = 1.245 },
+	wade6 = { start = 6.180, duration = 1.256, gain = 0.692 },
+	wade7 = { start = 7.536, duration = 1.106, gain = 2.661 },
 }
 
 local function level2SoundId(raw)
@@ -979,7 +993,7 @@ local function level2TakeId(index, model)
 		local id = level2ValueId(source, names)
 		if id then return id end
 	end
-	return nil
+	return LEVEL2_WADE_FALLBACK_IDS[index]
 end
 
 local function shuffleLevel2Bag(indices, previous)
@@ -1033,7 +1047,7 @@ local function makeLevel2Bank(parent, name, baseVolume, model)
 			take = self:nextTake(true)
 			local segment = take and LEVEL2_SFX_SPRITE_SEGMENTS["wade" .. take]
 			if not segment then return false end
-			startAt, duration, gain = segment.start, segment.duration, LEVEL2_WADE_SPECS[take].gain
+			startAt, duration, gain = segment.start, segment.duration, segment.gain
 		else
 			take = self:nextTake(false)
 			if not take then return false end
@@ -1079,6 +1093,26 @@ local function makeLevel2Bank(parent, name, baseVolume, model)
 end
 
 local level2PlayerBank = makeLevel2Bank(SoundService, "Level2PlayerWade", 0.36, nil)
+task.spawn(function()
+	-- Warm every take once. The bank changes SoundId per shuffled step, and
+	-- preloading here prevents the first splash of a round from arriving late.
+	local warmers = {}
+	for index = 1, #LEVEL2_WADE_SPECS do
+		local id = level2TakeId(index, nil)
+		if id then
+			local sound = Instance.new("Sound")
+			sound.Name = "Level2WadePreload" .. index
+			sound.SoundId = id
+			sound.Volume = 0
+			sound.Parent = SoundService
+			warmers[#warmers + 1] = sound
+		end
+	end
+	if #warmers > 0 then
+		pcall(function() ContentProvider:PreloadAsync(warmers) end)
+	end
+	for _, sound in ipairs(warmers) do sound:Destroy() end
+end)
 local level2WaterRay = RaycastParams.new()
 level2WaterRay.FilterType = Enum.RaycastFilterType.Exclude
 level2WaterRay.IgnoreWater = false
@@ -1147,12 +1181,41 @@ local function level2FootingBlocked(humanoid)
 		or state == Enum.HumanoidStateType.Seated
 end
 
-local function level2ShallowWater(root)
-	level2WaterRay.FilterDescendantsInstances = { player.Character }
-	local hit = workspace:Raycast(root.Position + Vector3.new(0, 1.5, 0), Vector3.new(0, -6.5, 0), level2WaterRay)
+local function level2WaterAt(position, rootY)
+	local hit = workspace:Raycast(position + Vector3.new(0, 1.5, 0), Vector3.new(0, -6.5, 0), level2WaterRay)
 	if not hit or hit.Material ~= Enum.Material.Water then return false end
-	local rootAboveSurface = root.Position.Y - hit.Position.Y
+	local rootAboveSurface = rootY - hit.Position.Y
 	return rootAboveSurface >= 0.6 and rootAboveSurface <= 4.25
+end
+
+local function level2ShallowWater(root)
+	local character = player.Character
+	level2WaterRay.FilterDescendantsInstances = { character }
+
+	-- Sample the actual feet first. A root-only ray misclassified the narrow dry
+	-- ledges in Level 2 when the player's centre stayed over the ledge but a boot
+	-- landed in the water. R6 names are included for avatar compatibility.
+	local sampledFoot = false
+	if character then
+		for _, name in ipairs({ "LeftFoot", "RightFoot", "Left Leg", "Right Leg" }) do
+			local foot = character:FindFirstChild(name)
+			if foot and foot:IsA("BasePart") then
+				sampledFoot = true
+				if level2WaterAt(foot.Position, root.Position.Y) then return true end
+			end
+		end
+	end
+	if sampledFoot then return false end
+	return level2WaterAt(root.Position, root.Position.Y)
+end
+
+local function level2WadeVolumeScale(humanoid)
+	local character = player.Character
+	local intendedSpeed = character and character:GetAttribute("Level2_DesiredWalkSpeed")
+	if typeof(intendedSpeed) ~= "number" then intendedSpeed = humanoid.WalkSpeed end
+	if intendedSpeed <= 10.5 then return 0.68 end -- crouch
+	if intendedSpeed >= 22 then return 1.18 end -- sprint
+	return 0.94 -- walk
 end
 
 RunService.Heartbeat:Connect(function(dt)
@@ -1192,7 +1255,7 @@ RunService.Heartbeat:Connect(function(dt)
 	if level2PlayerStepClock >= cadence then
 		level2PlayerStepClock %= cadence
 		if wet then
-			level2PlayerBank:play(0.97 + math.random() * 0.06, math.clamp(0.88 + flatSpeed / 42, 0.9, 1.18))
+			level2PlayerBank:play(0.97 + math.random() * 0.06, level2WadeVolumeScale(hum))
 		else
 			-- dry tile: same cadence clock, the dedicated dry-tile take
 			level2PlayDryStep(flatSpeed)
@@ -1222,4 +1285,3 @@ player:GetAttributeChangedSignal("InRound"):Connect(function()
 		level2PlayerStepClock = 0
 	end
 end)
- 

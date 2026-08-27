@@ -10,7 +10,43 @@ local RunService = game:GetService("RunService")
 
 local Config = require(ReplicatedStorage:WaitForChild("ZyntraConfig"))
 local store = DataStoreService:GetDataStore(Config.DataStoreName)
+local supportStore = DataStoreService:GetOrderedDataStore(Config.SupportLeaderboardDataStoreName)
 local remotes = ReplicatedStorage:WaitForChild("Remotes")
+
+local SUPPORT_LEADERBOARD_SIZE = math.clamp(math.floor(tonumber(Config.SupportLeaderboardSize) or 10), 1, 25)
+local supportFolder = ReplicatedStorage:FindFirstChild("ZyntraDonationLeaderboard")
+if supportFolder and not supportFolder:IsA("Folder") then
+	supportFolder:Destroy()
+	supportFolder = nil
+end
+if not supportFolder then
+	supportFolder = Instance.new("Folder")
+	supportFolder.Name = "ZyntraDonationLeaderboard"
+	supportFolder.Parent = ReplicatedStorage
+end
+
+local supportStatus = supportFolder:FindFirstChild("Status")
+if supportStatus and not supportStatus:IsA("StringValue") then supportStatus:Destroy(); supportStatus = nil end
+if not supportStatus then
+	supportStatus = Instance.new("StringValue")
+	supportStatus.Name = "Status"
+	supportStatus.Parent = supportFolder
+end
+supportStatus.Value = "CONNECTING TO GLOBAL RANKINGS"
+
+local supportRows = {}
+for rank = 1, SUPPORT_LEADERBOARD_SIZE do
+	local name = string.format("Row%02d", rank)
+	local row = supportFolder:FindFirstChild(name)
+	if row and not row:IsA("StringValue") then row:Destroy(); row = nil end
+	if not row then
+		row = Instance.new("StringValue")
+		row.Name = name
+		row.Parent = supportFolder
+	end
+	row.Value = rank == 1 and "NO SUPPORT PURCHASES YET" or ""
+	supportRows[rank] = row
+end
 
 local function ensureRemote(className, name)
 	local existing = remotes:FindFirstChild(name)
@@ -56,12 +92,16 @@ end
 
 local function newProfile()
 	return {
-		Version = 1,
+		Version = 2,
 		Tokens = RunService:IsStudio() and Config.Studio.StartingTokens or 0,
 		StaminaLevel = 0,
 		BatteryLevel = 0,
 		CompletedLevels = 0,
 		ReentryCredits = 0,
+		SupportRobux = 0,
+		Settings = {
+			MuteDispatch = false,
+		},
 		Colors = {
 			Hazmat = colorData(Config.Colors.HazmatDefault),
 			Glowstick = colorData(Config.Colors.GlowstickDefault),
@@ -76,12 +116,15 @@ end
 
 local function normalizeProfile(data)
 	if type(data) ~= "table" then data = newProfile() end
-	data.Version = 1
+	data.Version = 2
 	data.Tokens = math.max(0, math.floor(tonumber(data.Tokens) or 0))
 	data.StaminaLevel = math.max(0, math.floor(tonumber(data.StaminaLevel) or 0))
 	data.BatteryLevel = math.max(0, math.floor(tonumber(data.BatteryLevel) or 0))
 	data.CompletedLevels = math.max(0, math.floor(tonumber(data.CompletedLevels) or 0))
 	data.ReentryCredits = math.max(0, math.floor(tonumber(data.ReentryCredits) or 0))
+	data.SupportRobux = math.max(0, math.floor(tonumber(data.SupportRobux) or 0))
+	data.Settings = type(data.Settings) == "table" and data.Settings or {}
+	data.Settings.MuteDispatch = data.Settings.MuteDispatch == true
 	data.Colors = type(data.Colors) == "table" and data.Colors or {}
 	data.Colors.Hazmat = colorData(readColor(data.Colors.Hazmat, Config.Colors.HazmatDefault))
 	data.Colors.Glowstick = colorData(readColor(data.Colors.Glowstick, Config.Colors.GlowstickDefault))
@@ -89,7 +132,7 @@ local function normalizeProfile(data)
 	data.Grants.Supporter = data.Grants.Supporter == true
 	data.Grants.AdvancedEquipment = data.Grants.AdvancedEquipment == true
 	data.ReceiptIds = type(data.ReceiptIds) == "table" and data.ReceiptIds or {}
-	while #data.ReceiptIds > 60 do table.remove(data.ReceiptIds, 1) end
+	while #data.ReceiptIds > 500 do table.remove(data.ReceiptIds, 1) end
 	return data
 end
 
@@ -103,6 +146,8 @@ local function publicProfile(data)
 		BatteryPercent = data.BatteryLevel * 5,
 		CompletedLevels = data.CompletedLevels,
 		ReentryCredits = data.ReentryCredits,
+		SupportRobux = data.SupportRobux,
+		MuteDispatch = data.Settings.MuteDispatch,
 		HazmatColor = readColor(data.Colors.Hazmat, Config.Colors.HazmatDefault),
 		GlowstickColor = readColor(data.Colors.Glowstick, Config.Colors.GlowstickDefault),
 		OwnsSupporter = false,
@@ -142,8 +187,7 @@ local function applyHazmatColor(player)
 	local character = player.Character
 	if not character or player:GetAttribute("InRound") ~= true then return end
 	local ownsAdvanced = player:GetAttribute("ZyntraOwnsAdvancedEquipment") == true
-	local ownsSupporter = player:GetAttribute("ZyntraOwnsSupporter") == true
-	if not ownsAdvanced and not ownsSupporter then return end
+	if not ownsAdvanced then return end
 	local color = player:GetAttribute("ZyntraHazmatColor") or Config.Colors.HazmatDefault
 	for _, object in ipairs(character:GetChildren()) do
 		if object:IsA("MeshPart") then
@@ -164,6 +208,8 @@ local function applyAttributes(player, data)
 	player:SetAttribute("ZyntraBatteryMultiplier", 1 + data.BatteryLevel * step)
 	player:SetAttribute("ZyntraHazmatColor", readColor(data.Colors.Hazmat, Config.Colors.HazmatDefault))
 	player:SetAttribute("ZyntraGlowstickColor", readColor(data.Colors.Glowstick, Config.Colors.GlowstickDefault))
+	player:SetAttribute("ZyntraMuteDispatch", data.Settings.MuteDispatch)
+	player:SetAttribute("ZyntraSupportRobux", data.SupportRobux)
 	if player:GetAttribute("InRound") == true and player:GetAttribute("ZyntraOwnsCosmeticEquipment") == true then
 		player:SetAttribute("GlowstickColor", player:GetAttribute("ZyntraGlowstickColor"))
 	end
@@ -245,8 +291,111 @@ local function mutate(player, transform)
 	return false, message
 end
 
+local supportNameCache = {}
+local supportRefreshRunning = false
+
+local function supportPlayerName(userId)
+	local cached = supportNameCache[userId]
+	if cached then return cached end
+	local online = Players:GetPlayerByUserId(userId)
+	if online then
+		cached = online.Name
+	else
+		local ok, result = pcall(Players.GetNameFromUserIdAsync, Players, userId)
+		cached = ok and tostring(result) or ("USER " .. tostring(userId))
+	end
+	supportNameCache[userId] = cached
+	return cached
+end
+
+local function publishSupportRows(entries)
+	for rank = 1, SUPPORT_LEADERBOARD_SIZE do
+		local entry = entries[rank]
+		if entry then
+			local name = string.upper(supportPlayerName(entry.UserId))
+			supportRows[rank].Value = string.format("%02d   %s   •   %d R$", rank, name, entry.Value)
+		else
+			supportRows[rank].Value = rank == 1 and "NO SUPPORT PURCHASES YET" or ""
+		end
+	end
+	-- Historical Marketplace receipts cannot be replayed, so this board starts
+	-- with the update that introduced receipt-side support totals.
+	supportStatus.Value = "RECORDED SINCE AUG 2026  •  LIVE"
+end
+
+local function studioSupportEntries()
+	local entries = {}
+	for player, session in pairs(sessions) do
+		local value = session.data and math.max(0, math.floor(tonumber(session.data.SupportRobux) or 0)) or 0
+		if player.Parent and value > 0 then
+			entries[#entries + 1] = { UserId = player.UserId, Value = value }
+		end
+	end
+	table.sort(entries, function(a, b)
+		if a.Value == b.Value then return a.UserId < b.UserId end
+		return a.Value > b.Value
+	end)
+	return entries
+end
+
+local function refreshSupportLeaderboard()
+	if supportRefreshRunning then return end
+	supportRefreshRunning = true
+	local entries = {}
+	local success = true
+	local failure
+	if RunService:IsStudio() then
+		entries = studioSupportEntries()
+	else
+		local ok, result = pcall(function()
+			return supportStore:GetSortedAsync(false, SUPPORT_LEADERBOARD_SIZE):GetCurrentPage()
+		end)
+		if ok then
+			for _, record in ipairs(result) do
+				local userId = tonumber(tostring(record.key):match("^u_(%d+)$"))
+				local value = math.max(0, math.floor(tonumber(record.value) or 0))
+				if userId and value > 0 then
+					entries[#entries + 1] = { UserId = userId, Value = value }
+				end
+			end
+		else
+			success = false
+			failure = result
+		end
+	end
+	if success then
+		publishSupportRows(entries)
+	else
+		warn("[Zyntra] Support leaderboard refresh failed:", failure)
+		supportStatus.Value = "GLOBAL RANKINGS TEMPORARILY UNAVAILABLE"
+	end
+	supportRefreshRunning = false
+end
+
+local function syncSupportTotal(userId, total)
+	total = math.max(0, math.floor(tonumber(total) or 0))
+	if RunService:IsStudio() or total <= 0 then return true end
+	local ok, err = pcall(function()
+		supportStore:UpdateAsync("u_" .. tostring(userId), function(current)
+			return math.max(math.floor(tonumber(current) or 0), total)
+		end)
+	end)
+	if not ok then warn("[Zyntra] Support leaderboard sync failed for", userId, err) end
+	return ok
+end
+
+task.spawn(function()
+	task.wait(1)
+	refreshSupportLeaderboard()
+	while true do
+		task.wait(math.max(30, tonumber(Config.SupportLeaderboardRefreshSeconds) or 90))
+		refreshSupportLeaderboard()
+	end
+end)
+
 local function loadProfile(player)
 	player:SetAttribute("ZyntraProfileLoaded", false)
+	player:SetAttribute("ZyntraDispatchPreferenceLoaded", false)
 	local data
 	local persistent = not RunService:IsStudio()
 	if RunService:IsStudio() then
@@ -272,8 +421,17 @@ local function loadProfile(player)
 	if not player.Parent then return end
 	sessions[player] = { data = normalizeProfile(data), persistent = persistent }
 	applyAttributes(player, sessions[player].data)
+	-- Studio's in-memory profile is authoritative for local testing. In a live
+	-- server, only expose the dispatch preference after a successful DataStore
+	-- read; a fallback profile must not unmute a returning player by accident.
+	player:SetAttribute("ZyntraDispatchPreferenceLoaded", RunService:IsStudio() or persistent)
 	player:SetAttribute("ZyntraProfileLoaded", true)
 	pushProfile(player)
+	task.spawn(function()
+		if syncSupportTotal(player.UserId, sessions[player] and sessions[player].data.SupportRobux or 0) then
+			refreshSupportLeaderboard()
+		end
+	end)
 end
 
 local function ownsPass(player, pass)
@@ -377,10 +535,8 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 			return true, "Battery increased by 5%.", "success"
 		end)
 	elseif action == "SetHazmatColor" then
-		local ownsAdvanced = player:GetAttribute("ZyntraOwnsAdvancedEquipment") == true
-		local ownsSupporter = player:GetAttribute("ZyntraOwnsSupporter") == true
-		if not ownsAdvanced and not ownsSupporter then
-			pushProfile(player, "Zyntra Supporter or Advanced Equipment is required.", "error")
+		if player:GetAttribute("ZyntraOwnsAdvancedEquipment") ~= true then
+			pushProfile(player, "Advanced Equipment is required.", "error")
 			return
 		end
 		local color = validColor(payload)
@@ -399,6 +555,13 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 		mutate(player, function(data)
 			data.Colors.Glowstick = colorData(color)
 			return true, "Glowstick color saved.", "success"
+		end)
+	elseif action == "SetMuteDispatch" then
+		if type(payload) ~= "boolean" then return end
+		mutate(player, function(data)
+			if data.Settings.MuteDispatch == payload then return false end
+			data.Settings.MuteDispatch = payload
+			return true, payload and "Dispatch audio muted." or "Dispatch audio enabled.", "success"
 		end)
 	elseif action == "UseReentry" then
 		local session = sessions[player]
@@ -456,6 +619,10 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 	end
 
 	local alreadyGranted = false
+	local supportSpent = math.max(0, math.floor(tonumber(receiptInfo.CurrencySpent) or 0))
+	if RunService:IsStudio() and supportSpent <= 0 then
+		supportSpent = math.max(0, math.floor(tonumber(entry.Product.Price) or 0))
+	end
 	local changed = mutate(player, function(data)
 		for _, id in ipairs(data.ReceiptIds) do
 			if id == receiptInfo.PurchaseId then
@@ -464,7 +631,10 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 			end
 		end
 		table.insert(data.ReceiptIds, receiptInfo.PurchaseId)
-		while #data.ReceiptIds > 60 do table.remove(data.ReceiptIds, 1) end
+		while #data.ReceiptIds > 500 do table.remove(data.ReceiptIds, 1) end
+		if entry.Product.CountsTowardSupportLeaderboard == true and supportSpent > 0 then
+			data.SupportRobux += supportSpent
+		end
 		if entry.Product.TokenGrant then
 			data.Tokens += entry.Product.TokenGrant
 			return true, "+" .. entry.Product.TokenGrant .. " Zyntra Research Tokens", "success"
@@ -472,9 +642,19 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 			data.ReentryCredits += entry.Product.ReentryGrant
 			return true, "+1 Emergency Re-entry credit", "success"
 		end
-		return false
+		return true, "Thank you for supporting ZYNTRA.", "success"
 	end)
 	if changed or alreadyGranted then
+		if entry.Product.CountsTowardSupportLeaderboard == true then
+			local session = sessions[player]
+			local total = session and session.data.SupportRobux or 0
+			-- The profile mutation above is the authoritative receipt transaction.
+			-- OrderedDataStore is a derived display cache: never leave a paid receipt
+			-- retrying just because rankings are throttled or temporarily unavailable.
+			task.spawn(function()
+				if syncSupportTotal(player.UserId, total) then refreshSupportLeaderboard() end
+			end)
+		end
 		return Enum.ProductPurchaseDecision.PurchaseGranted
 	end
 	return Enum.ProductPurchaseDecision.NotProcessedYet

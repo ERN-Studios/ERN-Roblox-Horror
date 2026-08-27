@@ -4,6 +4,9 @@
 
 return {
 	DataStoreName = "ZyntraPlayerData_v1",
+	SupportLeaderboardDataStoreName = "ZyntraDonationLeaderboard_v1",
+	SupportLeaderboardSize = 10,
+	SupportLeaderboardRefreshSeconds = 90,
 	TokenPercentPerLevel = 0.05,
 	LevelCompletionTokens = 1,
 
@@ -19,21 +22,21 @@ return {
 			Name = "Zyntra Supporter",
 			Price = 99,
 			TokenGrant = 10,
-			Description = "10 Research Tokens, supporter tag and custom hazmat styling.",
+			Description = "Receive 10 Research Tokens once and unlock a permanent ZYNTRA SUPPORTER tag.",
 		},
 		AdvancedEquipment = {
 			Id = 1945402536,
 			IconId = 82752249741977,
 			Name = "Advanced Equipment",
 			Price = 149,
-			Description = "+5% stamina, +5% battery and the hazmat color picker.",
+			Description = "Permanently unlock the hazmat color picker and receive one +5% upgrade to both Stamina Capacity and Battery Capacity.",
 		},
 		CosmeticEquipment = {
 			Id = 1946086261,
 			IconId = 96817218792472,
 			Name = "Glowstick Customizer",
 			Price = 99,
-			Description = "Unlocks the glowstick color picker.",
+			Description = "Permanently unlock the glowstick color picker for every glowstick you deploy. Cosmetic only.",
 		},
 	},
 
@@ -44,6 +47,8 @@ return {
 			Name = "4 Research Tokens",
 			Price = 49,
 			TokenGrant = 4,
+			CountsTowardSupportLeaderboard = true,
+			Description = "Adds 4 Research Tokens to your account. Spend each token on a permanent +5% upgrade to either Stamina Capacity or Battery Capacity.",
 		},
 		Tokens20 = {
 			Id = 3707755233,
@@ -51,6 +56,8 @@ return {
 			Name = "20 Research Tokens",
 			Price = 149,
 			TokenGrant = 20,
+			CountsTowardSupportLeaderboard = true,
+			Description = "Adds 20 Research Tokens to your account. Spend each token on a permanent +5% upgrade to either Stamina Capacity or Battery Capacity.",
 		},
 		EmergencyReentry = {
 			Id = 3707755318,
@@ -58,6 +65,8 @@ return {
 			Name = "Emergency Re-entry",
 			Price = 29,
 			ReentryGrant = 1,
+			CountsTowardSupportLeaderboard = true,
+			Description = "Adds 1 stored Emergency Re-entry credit. After dying during an active run, use it to rejoin once that round.",
 		},
 	},
 

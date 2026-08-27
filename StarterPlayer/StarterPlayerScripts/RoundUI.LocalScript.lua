@@ -17,6 +17,96 @@ local queueRemote = remotes:WaitForChild("ConfigureQueue")
 local player = Players.LocalPlayer
 local dead = false
 
+local dispatchAudio = {
+	action = remotes:WaitForChild("ZyntraAction"),
+	group = SoundService:FindFirstChild("ZyntraDispatchAudio"),
+	pending = false,
+	pendingValue = nil,
+}
+if dispatchAudio.group and not dispatchAudio.group:IsA("SoundGroup") then
+	dispatchAudio.group:Destroy()
+	dispatchAudio.group = nil
+end
+if not dispatchAudio.group then
+	dispatchAudio.group = Instance.new("SoundGroup")
+	dispatchAudio.group.Name = "ZyntraDispatchAudio"
+	dispatchAudio.group.Parent = SoundService
+end
+-- Fail quiet until the server has loaded the returning player's preference.
+-- A bounded wait below restores the audible default if profile loading fails.
+dispatchAudio.group.Volume = 0
+
+function dispatchAudio.preferenceLoaded()
+	return player:GetAttribute("ZyntraDispatchPreferenceLoaded") == true
+end
+
+function dispatchAudio.preferenceUnavailable()
+	return player:GetAttribute("ZyntraProfileLoaded") == true
+		and not dispatchAudio.preferenceLoaded()
+end
+
+function dispatchAudio.refresh()
+	local loaded = dispatchAudio.preferenceLoaded()
+	local muted = player:GetAttribute("ZyntraMuteDispatch") == true
+	if dispatchAudio.pendingValue ~= nil then muted = dispatchAudio.pendingValue end
+	dispatchAudio.group.Volume = loaded and (muted and 0 or 1) or 0
+	if dispatchAudio.button then
+		dispatchAudio.button.Text = dispatchAudio.preferenceUnavailable() and "[M] DISPATCH: UNAVAILABLE"
+			or not loaded and "[M] DISPATCH: LOADING"
+			or dispatchAudio.pending and (muted and "[M] MUTING..." or "[M] UNMUTING...")
+			or muted and "[M] DISPATCH: MUTED"
+			or "[M] DISPATCH: ON"
+		dispatchAudio.button.TextColor3 = muted
+			and Color3.fromRGB(255, 184, 105)
+			or Color3.fromRGB(105, 238, 168)
+		dispatchAudio.button.Active = loaded and not dispatchAudio.pending
+		dispatchAudio.button.Selectable = dispatchAudio.button.Active
+	end
+end
+
+function dispatchAudio.awaitPreference()
+	local deadline = os.clock() + 10
+	while not dispatchAudio.preferenceLoaded()
+		and not dispatchAudio.preferenceUnavailable()
+		and os.clock() < deadline do
+		RunService.Heartbeat:Wait()
+	end
+	if dispatchAudio.preferenceLoaded() then
+		dispatchAudio.refresh()
+	else
+		-- Continue the briefing and subtitles, but stay fail-quiet while the
+		-- persistent preference is unknown. A late profile load updates instantly.
+		dispatchAudio.refresh()
+	end
+end
+
+function dispatchAudio.requestToggle()
+	if dispatchAudio.pending or not dispatchAudio.preferenceLoaded() then return end
+	dispatchAudio.pending = true
+	dispatchAudio.pendingValue = player:GetAttribute("ZyntraMuteDispatch") ~= true
+	dispatchAudio.refresh() -- mute/unmute the active transmission immediately
+	dispatchAudio.action:FireServer("SetMuteDispatch", dispatchAudio.pendingValue)
+	task.delay(5, function()
+		if dispatchAudio.pending then
+			dispatchAudio.pending = false
+			dispatchAudio.pendingValue = nil
+			dispatchAudio.refresh()
+		end
+	end)
+end
+
+player:GetAttributeChangedSignal("ZyntraProfileLoaded"):Connect(dispatchAudio.refresh)
+player:GetAttributeChangedSignal("ZyntraDispatchPreferenceLoaded"):Connect(dispatchAudio.refresh)
+player:GetAttributeChangedSignal("ZyntraMuteDispatch"):Connect(function()
+	if dispatchAudio.pendingValue == nil
+		or player:GetAttribute("ZyntraMuteDispatch") == dispatchAudio.pendingValue then
+		dispatchAudio.pending = false
+		dispatchAudio.pendingValue = nil
+	end
+	dispatchAudio.refresh()
+end)
+dispatchAudio.refresh()
+
 -- Lighting is global on the server, but lobby players can coexist with a party
 -- inside the dark maze. This local pass keeps the lobby warm and readable while
 -- preserving the exact horror grade for active participants.
@@ -368,11 +458,13 @@ refreshQueuePanel()
 
 -- RoundUI is the sole cursor-policy owner. Lobby players need the mouse for the
 -- queue phone and Zyntra store; gameplay hides it unless a modal is open.
+local completion = {returnVisible = false}
 local function shouldShowCursor()
  return player:GetAttribute("InRound") ~= true
   or queueShade.Visible
   or player:GetAttribute("DevPhoneOpen") == true
   or player:GetAttribute("ZyntraReentryOpen") == true
+  or completion.returnVisible
 end
 
 local function refreshCursor()
@@ -393,7 +485,7 @@ refreshCursor()
 -- lock to rotate the Classic camera while RMB is held.
 RunService.RenderStepped:Connect(function()
  if UIS.MouseEnabled and (queueShade.Visible or player:GetAttribute("DevPhoneOpen") == true
-  or player:GetAttribute("ZyntraReentryOpen") == true) then
+  or player:GetAttribute("ZyntraReentryOpen") == true or completion.returnVisible) then
   UIS.MouseBehavior = Enum.MouseBehavior.Default
   UIS.MouseIconEnabled = true
  end
@@ -551,6 +643,41 @@ endHint.TextWrapped = true
 endHint.ZIndex = 123
 endHint.Parent = endFrame
 
+completion.button = Instance.new("TextButton")
+completion.button.Name = "ReturnToLobby"
+completion.button.AnchorPoint = Vector2.new(0.5, 0.5)
+completion.button.Position = UDim2.fromScale(0.5, 0.82)
+completion.button.Size = UDim2.new(0, 280, 0, 50)
+completion.button.BackgroundColor3 = Color3.fromRGB(13, 37, 29)
+completion.button.BackgroundTransparency = 0.08
+completion.button.BorderSizePixel = 0
+completion.button.AutoButtonColor = true
+completion.button.Active = false
+completion.button.Selectable = false
+completion.button.Modal = true
+completion.button.Font = Enum.Font.GothamBold
+completion.button.Text = "RETURN TO LOBBY"
+completion.button.TextColor3 = Color3.fromRGB(130, 255, 184)
+completion.button.TextSize = 17
+completion.button.TextTransparency = 1
+completion.button.Visible = false
+completion.button.ZIndex = 124
+completion.button.Parent = endFrame
+do
+	local object = Instance.new("UICorner")
+	object.CornerRadius = UDim.new(0, 8)
+	object.Parent = completion.button
+	object = Instance.new("UIStroke")
+	object.Color = Color3.fromRGB(105, 255, 165)
+	object.Transparency = 0.28
+	object.Thickness = 1.5
+	object.Parent = completion.button
+	object = Instance.new("UISizeConstraint")
+	object.MinSize = Vector2.new(210, 46)
+	object.MaxSize = Vector2.new(360, 54)
+	object.Parent = completion.button
+end
+
 local spectateBanner = Instance.new("TextLabel")
 spectateBanner.Name = "SpectateBanner"
 spectateBanner.AnchorPoint = Vector2.new(0.5, 1)
@@ -593,6 +720,64 @@ local function formatRoundTime(seconds)
  local total = math.max(0, math.floor(tonumber(seconds) or 0))
  return string.format("%02d:%02d", math.floor(total / 60), total % 60)
 end
+
+function completion.reset()
+	completion.deadline = nil
+	completion.nextLevel = nil
+	completion.serverSerial = nil
+	completion.pending = false
+	completion.returnVisible = false
+	completion.button.Visible = false
+	completion.button.Active = false
+	completion.button.Selectable = false
+	completion.button.Text = "RETURN TO LOBBY"
+	completion.button.TextTransparency = 1
+	refreshCursor()
+end
+
+function completion.start(deadline, nextLevel, serverSerial)
+	completion.deadline = tonumber(deadline) or (workspace:GetServerTimeNow() + 15)
+	completion.nextLevel = tonumber(nextLevel)
+	completion.serverSerial = tonumber(serverSerial)
+	completion.pending = false
+	completion.returnVisible = completion.serverSerial ~= nil
+	completion.button.Visible = completion.returnVisible
+	completion.button.Active = completion.returnVisible
+	completion.button.Selectable = completion.returnVisible
+	completion.button.Text = "RETURN TO LOBBY"
+	completion.button.TextTransparency = 1
+	if completion.returnVisible then
+		TweenService:Create(completion.button, TweenInfo.new(0.35), {TextTransparency = 0}):Play()
+	end
+	refreshCursor()
+end
+
+completion.button.Activated:Connect(function()
+	if completion.pending or not completion.returnVisible or not completion.serverSerial then return end
+	completion.pending = true
+	completion.button.Active = false
+	completion.button.Selectable = false
+	completion.button.Text = "RETURNING..."
+	remote:FireServer("returntolobby", completion.serverSerial)
+end)
+
+RunService.RenderStepped:Connect(function()
+	if not completion.deadline or not endFrame.Visible then return end
+	local remaining = math.max(0, math.ceil(completion.deadline - workspace:GetServerTimeNow()))
+	if completion.nextLevel then
+		endHint.Text = remaining > 0
+			and ("LEVEL " .. tostring(completion.nextLevel) .. " BEGINS IN " .. tostring(remaining))
+			or ("ENTERING LEVEL " .. tostring(completion.nextLevel))
+	else
+		endHint.Text = remaining > 0
+			and ("RETURNING TO LOBBY IN " .. tostring(remaining))
+			or "RETURNING TO LOBBY"
+	end
+	if remaining <= 0 then
+		completion.button.Active = false
+		completion.button.Selectable = false
+	end
+end)
 
 local function validSpectateTarget(candidate)
  if not candidate or candidate == player or candidate.Parent ~= Players then return false end
@@ -665,6 +850,7 @@ player.CharacterAdded:Connect(function()
 end)
 
 local function hideRoundEnding(immediate)
+ completion.reset()
  endingSerial += 1
  local token = endingSerial
  if immediate then
@@ -684,6 +870,7 @@ local function hideRoundEnding(immediate)
 end
 
 local function showRoundEnding(title, stats, hint, color, temporary)
+ completion.reset()
  endingSerial += 1
  local token = endingSerial
  color = color or Color3.fromRGB(115, 255, 170)
@@ -982,6 +1169,32 @@ subtitleText.TextYAlignment = Enum.TextYAlignment.Center
 subtitleText.ZIndex = 21
 subtitleText.Parent = subtitleFrame
 
+dispatchAudio.button = Instance.new("TextButton")
+dispatchAudio.button.Name = "DispatchMuteButton"
+dispatchAudio.button.AnchorPoint = Vector2.new(1, 0)
+dispatchAudio.button.Position = UDim2.new(1, -244, 0, 20)
+dispatchAudio.button.Size = UDim2.fromOffset(168, 42)
+dispatchAudio.button.BackgroundColor3 = Color3.fromRGB(5, 13, 11)
+dispatchAudio.button.BackgroundTransparency = 0.08
+dispatchAudio.button.BorderSizePixel = 0
+dispatchAudio.button.AutoButtonColor = true
+dispatchAudio.button.Font = Enum.Font.Code
+dispatchAudio.button.Text = "[M] DISPATCH: LOADING"
+dispatchAudio.button.TextColor3 = Color3.fromRGB(105, 238, 168)
+dispatchAudio.button.TextSize = 14
+dispatchAudio.button.ZIndex = 35
+dispatchAudio.button.Parent = guideGui
+roundAndStroke(dispatchAudio.button, 8, Color3.fromRGB(80, 221, 177), 0.42, 1)
+dispatchAudio.button.Activated:Connect(function()
+	dispatchAudio.requestToggle()
+end)
+ContextActionService:BindAction("ZyntraToggleDispatchMute", function(_, inputState)
+	if UIS:GetFocusedTextBox() then return Enum.ContextActionResult.Pass end
+	if inputState == Enum.UserInputState.Begin then dispatchAudio.requestToggle() end
+	return Enum.ContextActionResult.Sink
+end, false, Enum.KeyCode.M)
+dispatchAudio.refresh()
+
 local lobbySkipButton = Instance.new("TextButton")
 lobbySkipButton.Name = "LobbyBriefingSkip"
 lobbySkipButton.AnchorPoint = Vector2.new(0.5, 1)
@@ -1249,6 +1462,7 @@ levelOneBriefingSound.Name = "LevelOneCommandBriefing"
 levelOneBriefingSound.SoundId = LEVEL_ONE_BRIEFING_ID
 levelOneBriefingSound.Volume = 1
 levelOneBriefingSound.Looped = false
+levelOneBriefingSound.SoundGroup = dispatchAudio.group
 levelOneBriefingSound.Parent = guideGui
 
 local levelOneRadioCue = Instance.new("Sound")
@@ -1256,6 +1470,7 @@ levelOneRadioCue.Name = "LevelOneRadioOpen"
 levelOneRadioCue.SoundId = LEVEL_ONE_RADIO_CUE_ID
 levelOneRadioCue.Volume = 1
 levelOneRadioCue.Looped = false
+levelOneRadioCue.SoundGroup = dispatchAudio.group
 levelOneRadioCue.Parent = guideGui
 
 local levelTwoBriefingSound = Instance.new("Sound")
@@ -1263,6 +1478,7 @@ levelTwoBriefingSound.Name = "LevelTwoCommandBriefing"
 levelTwoBriefingSound.SoundId = LEVEL_TWO_BRIEFING_ID
 levelTwoBriefingSound.Volume = 1
 levelTwoBriefingSound.Looped = false
+levelTwoBriefingSound.SoundGroup = dispatchAudio.group
 levelTwoBriefingSound.Parent = guideGui
 
 local levelTwoRadioCue = Instance.new("Sound")
@@ -1270,6 +1486,7 @@ levelTwoRadioCue.Name = "LevelTwoRadioOpen"
 levelTwoRadioCue.SoundId = LEVEL_TWO_RADIO_CUE_ID
 levelTwoRadioCue.Volume = 1
 levelTwoRadioCue.Looped = false
+levelTwoRadioCue.SoundGroup = dispatchAudio.group
 levelTwoRadioCue.Parent = guideGui
 
 levelThreeBriefing.sound = Instance.new("Sound")
@@ -1278,6 +1495,7 @@ levelThreeBriefing.sound.SoundId = levelThreeBriefing.speechId
 levelThreeBriefing.sound.Volume = 1
 levelThreeBriefing.sound.PlaybackSpeed = 1
 levelThreeBriefing.sound.Looped = false
+levelThreeBriefing.sound.SoundGroup = dispatchAudio.group
 levelThreeBriefing.sound.Parent = guideGui
 
 levelThreeBriefing.pitch = Instance.new("PitchShiftSoundEffect")
@@ -1291,6 +1509,7 @@ levelThreeBriefing.radio.SoundId = levelThreeBriefing.radioId
 levelThreeBriefing.radio.Volume = 1
 levelThreeBriefing.radio.PlaybackSpeed = 1
 levelThreeBriefing.radio.Looped = false
+levelThreeBriefing.radio.SoundGroup = dispatchAudio.group
 levelThreeBriefing.radio.Parent = guideGui
 
 lobbyBriefing.sound = Instance.new("Sound")
@@ -1299,6 +1518,7 @@ lobbyBriefing.sound.SoundId = lobbyBriefing.speechId
 lobbyBriefing.sound.Volume = 1
 lobbyBriefing.sound.PlaybackSpeed = 1
 lobbyBriefing.sound.Looped = false
+lobbyBriefing.sound.SoundGroup = dispatchAudio.group
 lobbyBriefing.sound.Parent = guideGui
 
 lobbyBriefing.radio = Instance.new("Sound")
@@ -1307,6 +1527,7 @@ lobbyBriefing.radio.SoundId = lobbyBriefing.radioId
 lobbyBriefing.radio.Volume = 1
 lobbyBriefing.radio.PlaybackSpeed = 1
 lobbyBriefing.radio.Looped = false
+lobbyBriefing.radio.SoundGroup = dispatchAudio.group
 lobbyBriefing.radio.Parent = guideGui
 
 -- Cue starts were measured from the uploaded 46.99-second recording. Captions
@@ -1415,10 +1636,11 @@ local function setSubtitle(text)
 end
 
 function lobbyBriefing.isEligible()
-	local reservedRoundServer = game.PrivateServerId ~= "" and game.PrivateServerOwnerId == 0
-	return not reservedRoundServer
-		and player:GetAttribute("InRound") ~= true
+	-- PrivateServerId is server-only. GameManager already scopes the one-shot
+	-- event to a public lobby, so the client only needs local participation state.
+	return player:GetAttribute("InRound") ~= true
 		and not dead
+		and workspace:FindFirstChild("ServerLobby") ~= nil
 end
 
 local function updateLobbySkipCopy(inputType)
@@ -1516,6 +1738,7 @@ function lobbyBriefing.playOnce()
 	player:SetAttribute("LobbyBriefingActive", false)
 
 	task.spawn(function()
+		dispatchAudio.awaitPreference()
 		lobbyBriefing.preload()
 		local arrivalDeadline = os.clock() + 20
 		while run == lobbyBriefing.run
@@ -1682,6 +1905,9 @@ local function updateLevelOneGuideLayout()
 	objectivesButton.Size = narrow and UDim2.fromOffset(140, 40) or UDim2.fromOffset(154, 44)
 	objectivesButton.TextSize = narrow and 14 or 16
 	objectivesButton.Text = UIS.TouchEnabled and "OBJECTIVES" or "OBJECTIVES  [H]"
+	dispatchAudio.button.Position = narrow and UDim2.new(1, -10, 0, 70) or UDim2.new(1, -244, 0, 20)
+	dispatchAudio.button.Size = narrow and UDim2.fromOffset(154, 38) or UDim2.fromOffset(168, 42)
+	dispatchAudio.button.TextSize = narrow and 12 or 14
 	lobbySkipButton.Position = narrow
 		and UDim2.new(0.5, 0, 1, -212)
 		or UDim2.new(0.5, 0, 1, -168)
@@ -1732,6 +1958,7 @@ local function playLevelOneBriefing()
 	setSubtitle(nil)
 
 	task.spawn(function()
+		dispatchAudio.awaitPreference()
 		preloadLevelOneBriefing()
 
 		-- Asset 73198577463663 is exactly one second long. Start it early enough
@@ -1846,6 +2073,7 @@ local function playLevelTwoBriefing()
 	setSubtitle(nil)
 
 	task.spawn(function()
+		dispatchAudio.awaitPreference()
 		preloadLevelTwoBriefing()
 
 		local radioLength = levelTwoRadioCue.TimeLength > 0.05 and levelTwoRadioCue.TimeLength or 1
@@ -1982,6 +2210,7 @@ function levelThreeBriefing.play()
 	setSubtitle(nil)
 
 	task.spawn(function()
+		dispatchAudio.awaitPreference()
 		levelThreeBriefing.preload()
 
 		local radioLength = levelThreeBriefing.radio.TimeLength > 0.05
@@ -2228,7 +2457,7 @@ local function scheduleElevatorShake()
 end
 -- dead is declared with the player state above so the ending and spectate UI share it.
 
-remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
+remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 	if ev == "lobby" then
 		-- GameManager also uses "lobby" for queue resets. Preserve a welcome
 		-- transmission already in progress; its dedicated event is once-only.
@@ -2479,12 +2708,41 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e)
 			Color3.fromRGB(115, 255, 170),
 			false
 		)
+		completion.start(d, e, f)
+
+	elseif ev == "returnpending" then
+		if tonumber(a) == completion.serverSerial then
+			completion.pending = true
+			completion.button.Active = false
+			completion.button.Selectable = false
+			completion.button.Text = "RETURNING..."
+		end
+
+	elseif ev == "returnfailed" then
+		if tonumber(a) == completion.serverSerial and completion.deadline
+			and workspace:GetServerTimeNow() < completion.deadline then
+			completion.pending = false
+			completion.button.Active = true
+			completion.button.Selectable = true
+			completion.button.Text = "TRY RETURN TO LOBBY"
+		end
+
+	elseif ev == "transitionfailed" then
+		completion.deadline = nil
+		completion.pending = true
+		completion.button.Active = false
+		completion.button.Selectable = false
+		completion.button.Text = "RETURNING..."
+		endHint.Text = "NEXT LEVEL UNAVAILABLE  •  RETURNING TO LOBBY"
 	end
 end)
 
--- Announce readiness only after the handler and both Sound instances exist.
--- GameManager answers with the unique once-per-player lobbybriefing event.
-remote:FireServer("lobbybriefingready")
+-- Announce readiness only after the handler, sounds, and persisted mute setting
+-- are ready. This prevents a returning muted player hearing the opening cue.
+task.spawn(function()
+	dispatchAudio.awaitPreference()
+	remote:FireServer("lobbybriefingready")
+end)
 
 -- Responsive objective layout verified in play test.
 

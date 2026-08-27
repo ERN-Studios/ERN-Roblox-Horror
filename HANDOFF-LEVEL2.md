@@ -229,7 +229,7 @@ one-switch rollback during playtesting.
 - Force a layout with the `Level2Seed` workspace attribute (≥ 1); set it to 0 or
   clear it for random.
 - Dev keys (whitelisted users): **B** esp + fast queue · **V** noclip fly ·
-  **M** dev phone.
+  **J** dev phone; **M** dispatch mute.
 - Read `ReplicatedStorage["Level 2 State"]` attributes to see the phase, whether
   the seed was pinned (`Level2_SeedPinned`), the seed actually resolved, how
   many attempts it took, and whether a recovery seed was used

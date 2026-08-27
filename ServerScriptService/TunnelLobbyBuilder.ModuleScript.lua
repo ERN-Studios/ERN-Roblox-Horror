@@ -5,6 +5,7 @@
 
 local Builder = {}
 local TweenService = game:GetService("TweenService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local LOBBY_CONCRETE_MATERIALS = {
 	Concrete = {
@@ -232,6 +233,131 @@ local function addBoard(panel, face, titleText, subtitleText, titleColor)
 	subtitle.Parent = background
 
 	return title, subtitle
+end
+
+local function addDonationLeaderboard(parent, center)
+	local model = Instance.new("Model")
+	model.Name = "ZyntraDonationLeaderboardBoard"
+	model:SetAttribute("LeaderboardVersion", 1)
+	model:SetAttribute("RankingScope", "Developer product support recorded since August 2026")
+	model.Parent = parent
+
+	local panel = makePart(
+		model,
+		"LeaderboardPanel",
+		CFrame.new(center + Vector3.new(-31.55, 7.15, -35)),
+		Vector3.new(0.62, 12.6, 18),
+		Color3.fromRGB(25, 31, 30),
+		Enum.Material.Metal
+	)
+	panel.CanCollide = false
+	panel.CanTouch = false
+	panel.CanQuery = false
+
+	local gui = Instance.new("SurfaceGui")
+	gui.Name = "DonationLeaderboardDisplay"
+	gui.Face = Enum.NormalId.Right
+	gui.CanvasSize = Vector2.new(900, 660)
+	gui.LightInfluence = 0
+	gui.AlwaysOnTop = false
+	gui.Parent = panel
+
+	local background = Instance.new("Frame")
+	background.Size = UDim2.fromScale(1, 1)
+	background.BackgroundColor3 = Color3.fromRGB(6, 11, 10)
+	background.BackgroundTransparency = 0.03
+	background.BorderSizePixel = 0
+	background.Parent = gui
+	local backgroundCorner = Instance.new("UICorner")
+	backgroundCorner.CornerRadius = UDim.new(0, 26)
+	backgroundCorner.Parent = background
+	local border = Instance.new("UIStroke")
+	border.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	border.Color = COLORS.green
+	border.Thickness = 5
+	border.Transparency = 0.24
+	border.Parent = background
+
+	local title = Instance.new("TextLabel")
+	title.Name = "Title"
+	title.Position = UDim2.fromOffset(38, 22)
+	title.Size = UDim2.new(1, -76, 0, 58)
+	title.BackgroundTransparency = 1
+	title.Font = Enum.Font.GothamBlack
+	title.Text = "TOP SUPPORTERS"
+	title.TextColor3 = COLORS.green
+	title.TextSize = 43
+	title.TextXAlignment = Enum.TextXAlignment.Left
+	title.Parent = background
+
+	local status = Instance.new("TextLabel")
+	status.Name = "Status"
+	status.Position = UDim2.fromOffset(40, 78)
+	status.Size = UDim2.new(1, -80, 0, 30)
+	status.BackgroundTransparency = 1
+	status.Font = Enum.Font.Code
+	status.Text = "CONNECTING TO GLOBAL RANKINGS"
+	status.TextColor3 = Color3.fromRGB(215, 205, 165)
+	status.TextSize = 19
+	status.TextXAlignment = Enum.TextXAlignment.Left
+	status.Parent = background
+
+	local divider = Instance.new("Frame")
+	divider.Position = UDim2.fromOffset(38, 116)
+	divider.Size = UDim2.new(1, -76, 0, 3)
+	divider.BackgroundColor3 = COLORS.green
+	divider.BackgroundTransparency = 0.25
+	divider.BorderSizePixel = 0
+	divider.Parent = background
+
+	local rowLabels = {}
+	for rank = 1, 10 do
+		local row = Instance.new("TextLabel")
+		row.Name = string.format("Rank%02d", rank)
+		row.Position = UDim2.fromOffset(38, 128 + (rank - 1) * 50)
+		row.Size = UDim2.new(1, -76, 0, 42)
+		row.BackgroundColor3 = rank % 2 == 1 and Color3.fromRGB(15, 25, 22) or Color3.fromRGB(10, 17, 15)
+		row.BackgroundTransparency = 0.12
+		row.BorderSizePixel = 0
+		row.Font = Enum.Font.Code
+		row.Text = rank == 1 and "NO SUPPORT PURCHASES YET" or ""
+		row.TextColor3 = rank <= 3 and Color3.fromRGB(236, 224, 165) or Color3.fromRGB(201, 225, 214)
+		row.TextSize = 24
+		row.TextXAlignment = Enum.TextXAlignment.Left
+		row.Parent = background
+		local padding = Instance.new("UIPadding")
+		padding.PaddingLeft = UDim.new(0, 16)
+		padding.PaddingRight = UDim.new(0, 16)
+		padding.Parent = row
+		local corner = Instance.new("UICorner")
+		corner.CornerRadius = UDim.new(0, 8)
+		corner.Parent = row
+		rowLabels[rank] = row
+	end
+
+	task.spawn(function()
+		local values = ReplicatedStorage:WaitForChild("ZyntraDonationLeaderboard", 15)
+		if not values or not model.Parent then return end
+		local connections = {}
+		local function bind(value, render)
+			if not value or not value:IsA("StringValue") then return end
+			render(value.Value)
+			connections[#connections + 1] = value:GetPropertyChangedSignal("Value"):Connect(function()
+				if model.Parent then render(value.Value) end
+			end)
+		end
+		bind(values:FindFirstChild("Status"), function(value) status.Text = value end)
+		for rank, label in ipairs(rowLabels) do
+			bind(values:FindFirstChild(string.format("Row%02d", rank)), function(value) label.Text = value end)
+		end
+		connections[#connections + 1] = model.AncestryChanged:Connect(function(_, newParent)
+			if newParent then return end
+			for _, connection in ipairs(connections) do connection:Disconnect() end
+			table.clear(connections)
+		end)
+	end)
+
+	return model
 end
 
 local function makeStationMonitorPart(parent, name, cf, size, color, material, shape)
@@ -2133,6 +2259,7 @@ local function addLobbyConcourse(parent, center, lobbyModel)
 	addConcourseBench(concourse, center, -1, 54)
 	addConcourseBench(concourse, center, 1, 54)
 	addSupplyKiosk(concourse, center)
+	addDonationLeaderboard(concourse, center)
 	addPartyButton(concourse, center)
 
 	-- The signal console is a harmless lobby toy. It runs a synchronized light
@@ -2281,8 +2408,9 @@ function Builder.Build(center)
 	model:SetAttribute("LobbyStyle", "ZyntraTunnel")
 	model:SetAttribute("TextureVersion", 9)
 	model:SetAttribute("LobbyAestheticRevision", 3)
-	model:SetAttribute("DispatchConcourseVersion", 6)
+	model:SetAttribute("DispatchConcourseVersion", 7)
 	model:SetAttribute("SupplyKioskVersion", 4)
+	model:SetAttribute("DonationLeaderboardVersion", 1)
 	model:SetAttribute("PartyButtonVersion", 1)
 	model:SetAttribute("TunnelCurveRevision", 2)
 	model:SetAttribute("SignageRevision", 2)

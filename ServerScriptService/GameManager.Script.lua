@@ -45,6 +45,7 @@ local QUEUE_TIME = 10
 local FAST_QUEUE_TIME = 3
 local MAX_PLAYERS_PER_STATION = 6
 local ELEVATOR_TIME = 19
+local POST_WIN_SECONDS = 15
 local LOBBY_CENTER = Vector3.new(0, 30, -760)
 
 Players.CharacterAutoLoads = false
@@ -55,6 +56,7 @@ workspace:SetAttribute("RoundActive", false)
 -- run the maze directly; public servers remain lightweight four-station lobbies.
 local IS_RESERVED_ROUND_SERVER = game.PrivateServerId ~= "" and game.PrivateServerOwnerId == 0
 local IS_STUDIO = RunService:IsStudio()
+workspace:SetAttribute("ReservedRoundServer", IS_RESERVED_ROUND_SERVER)
 
 -- Returning from a reserved level creates a fresh Player/client in the public
 -- lobby. GetJoinData is server-trusted, so this marker is the durable distinction
@@ -167,6 +169,9 @@ local inRound = {}
 local roundBusy = false
 local worldReady = false
 local activeLevel = 1
+local postWinSerial = 0
+local activePostWin = nil
+local pendingTeleports = {}
 local elevatorApi = nil
 local mazeStart, entityStart, entity
 
@@ -312,15 +317,22 @@ local function loadLobbyCharacter(player)
   finishCharacterLoad()
   return false
  end
- local gameplayRig = StarterPlayer:FindFirstChild("StarterCharacter")
- if gameplayRig then gameplayRig.Parent = ServerStorage end
- local ok, err
- if description then
-  ok, err = pcall(player.LoadCharacterWithHumanoidDescriptionAsync, player, description:Clone())
- else
-  ok, err = pcall(player.LoadCharacterAsync, player)
+ local gameplayRig
+ local ok, err = xpcall(function()
+  gameplayRig = StarterPlayer:FindFirstChild("StarterCharacter")
+  if gameplayRig then gameplayRig.Parent = ServerStorage end
+  if description then
+   player:LoadCharacterWithHumanoidDescriptionAsync(description:Clone())
+  else
+   player:LoadCharacterAsync()
+  end
+ end, debug.traceback)
+ -- Always restore the authored gameplay rig and release the global character
+ -- load lock, even if cloning/loading a HumanoidDescription throws.
+ if gameplayRig and gameplayRig.Parent ~= StarterPlayer then
+  local restored, restoreError = pcall(function() gameplayRig.Parent = StarterPlayer end)
+  if not restored then warn("[GameManager] Could not restore StarterCharacter:", restoreError) end
  end
- if gameplayRig then gameplayRig.Parent = StarterPlayer end
  finishCharacterLoad()
  if not ok then warn("[GameManager] Lobby character load failed:", err) end
  return ok
@@ -500,6 +512,7 @@ Players.PlayerAdded:Connect(setupPlayer)
 for _, player in ipairs(Players:GetPlayers()) do setupPlayer(player) end
 Players.PlayerRemoving:Connect(function(player)
  inRound[player] = nil
+ lobbyDescriptions[player.UserId] = nil
  setServerNoclip(player, false)
  noclipState[player] = nil
  devControlRate[player] = nil
@@ -588,9 +601,17 @@ end
 -- listener exists so its one-shot welcome cannot race the initial status fire.
 local entryReady = {}
 local lobbyBriefingReady = {}
-status.OnServerEvent:Connect(function(player, message)
- if message == "entryready" then
+local handlePostWinReturnRequest
+status.OnServerEvent:Connect(function(player, message, requestSerial)
+ if message == "entryready"
+  and entryReady[player] == false
+  and roundBusy
+  and activeLevel == 2
+  and inRound[player] == true
+  and player:GetAttribute("InRound") == true then
   entryReady[player] = true
+ elseif message == "returntolobby" and handlePostWinReturnRequest then
+  handlePostWinReturnRequest(player, requestSerial)
  elseif message == "lobbybriefingready"
   and not lobbyBriefingReady[player]
   and not IS_RESERVED_ROUND_SERVER
@@ -606,23 +627,32 @@ end)
 Players.PlayerRemoving:Connect(function(player)
  entryReady[player] = nil
  lobbyBriefingReady[player] = nil
+ pendingTeleports[player] = nil
+ if activePostWin then
+  activePostWin.Eligible[player] = nil
+  activePostWin.Returning[player] = nil
+ end
 end)
 
 local function armGroupEntry(group)
- for _, player in ipairs(group) do entryReady[player] = nil end
+ for _, player in ipairs(group) do
+  if player.Parent then entryReady[player] = false else entryReady[player] = nil end
+ end
 end
 
 local function waitForGroupEntry(group, timeout)
  local deadline = os.clock() + timeout
+ local ready = false
  while os.clock() < deadline do
   local pending = 0
   for _, player in ipairs(group) do
    if player.Parent and not entryReady[player] then pending += 1 end
   end
-  if pending == 0 then return true end
+  if pending == 0 then ready = true break end
   task.wait(0.1)
  end
- return false
+ for _, player in ipairs(group) do entryReady[player] = nil end
+ return ready
 end
 
 local function privacyLabel(station)
@@ -776,57 +806,297 @@ local function cleanupLevelOneWorld()
  end)
 end
 
-local function returnGroupToLobby(group)
+local function livePlayers(group)
+	local result, seen = {}, {}
+	for _, player in ipairs(group or {}) do
+		if player and player.Parent == Players and not seen[player] then
+			seen[player] = true
+			result[#result + 1] = player
+		end
+	end
+	return result
+end
+
+local function cleanupActiveWorld()
 	clearGlowsticks()
-	-- LEVEL2 ROUND CLEANUP: restore the persistent lobby and release generated geometry.
-	local cleanupGenerator = LEVEL_GENERATORS[activeLevel]
+	local cleanupLevel = activeLevel
+	local cleanupGenerator = LEVEL_GENERATORS[cleanupLevel]
 	if cleanupGenerator then
-		Players.CharacterAutoLoads = true
-		local ok, err = pcall(function() require(script.Parent:WaitForChild(cleanupGenerator)).Cleanup() end)
-		if not ok then warn("[GameManager] Level " .. activeLevel .. " cleanup failed:", err) end
+		local ok, err = pcall(function()
+			require(script.Parent:WaitForChild(cleanupGenerator)).Cleanup()
+		end)
+		if not ok then warn("[GameManager] Level " .. cleanupLevel .. " cleanup failed:", err) end
 		worldReady = false
-		activeLevel = 1
 		elevatorApi, mazeStart, entityStart, entity = nil, nil, nil, nil
 	else
 		cleanupLevelOneWorld()
 	end
- -- A client can finish joining a reserved server after the party-arrival
- -- deadline. It is a spectator, but it must not be stranded when the round ends.
- local returnCandidates = IS_RESERVED_ROUND_SERVER and Players:GetPlayers() or group
- local live = {}
- for _, player in ipairs(returnCandidates) do
-  if player.Parent then live[#live + 1] = player end
- end
-
- -- Completed private rounds return to ordinary public matchmaking. If Roblox
- -- rejects a teleport, the local lobby remains a safe fallback.
- if IS_RESERVED_ROUND_SERVER and not IS_STUDIO and #live > 0 then
-  local options = Instance.new("TeleportOptions")
-  options:SetTeleportData({ReturnToLobby = true})
-  local ok, err = pcall(function()
-   TeleportService:TeleportAsync(game.PlaceId, live, options)
-  end)
-  if ok then return end
-  warn("GameManager: return-to-lobby teleport failed: " .. tostring(err))
- end
-
- for _, player in ipairs(live) do
-  inRound[player] = nil
-  player:SetAttribute("InRound", false)
-  player:SetAttribute("Escaped", nil)
-  player:SetAttribute("GlowstickSlot", nil)
-  player:SetAttribute("GlowstickColor", nil)
-  loadLobbyCharacter(player)
-  status:FireClient(player, "lobby")
- end
-
- -- Restore the game-wide baseline (set false at boot): lobby characters are
- -- loaded manually, and leaving auto-loads on lets the engine respawn a
- -- default rig instead of the lobby avatar.
- Players.CharacterAutoLoads = false
+	activeLevel = 1
+	workspace:SetAttribute("SelectedLevel", 1)
+	Players.CharacterAutoLoads = false
 end
 
-local function playRound(participants)
+local function returnPlayersToLocalLobby(group)
+	for _, player in ipairs(livePlayers(group)) do
+		inRound[player] = nil
+		player:SetAttribute("InRound", false)
+		player:SetAttribute("Escaped", nil)
+		player:SetAttribute("GlowstickSlot", nil)
+		player:SetAttribute("GlowstickColor", nil)
+		loadLobbyCharacter(player)
+		status:FireClient(player, "lobby")
+	end
+end
+
+local function registerPendingTeleport(group, destination, options, nextLevel)
+	for _, player in ipairs(group) do
+		pendingTeleports[player] = {
+			Destination = destination,
+			Options = options,
+			NextLevel = nextLevel,
+			Failures = 0,
+		}
+	end
+end
+
+local function clearPendingTeleport(group)
+	for _, player in ipairs(group) do pendingTeleports[player] = nil end
+end
+
+local function teleportPlayersToLobby(group)
+	local live = livePlayers(group)
+	if #live == 0 then return true, nil, live end
+	if not IS_RESERVED_ROUND_SERVER or IS_STUDIO then return false, "LOCAL_FALLBACK", live end
+	local options = Instance.new("TeleportOptions")
+	options:SetTeleportData({ReturnToLobby = true})
+	registerPendingTeleport(live, "lobby", options, nil)
+	local ok, err = pcall(function()
+		TeleportService:TeleportAsync(game.PlaceId, live, options)
+	end)
+	if not ok then clearPendingTeleport(live) end
+	return ok, err, live
+end
+
+local function teleportPlayersToNextLevel(group, nextLevel)
+	local live = livePlayers(group)
+	if #live == 0 then return true, nil, live end
+	if IS_STUDIO then return false, "STUDIO_LOCAL_TRANSITION", live end
+	local glowstickSlots = {}
+	for index, player in ipairs(live) do
+		local slot = math.clamp(math.floor(tonumber(player:GetAttribute("GlowstickSlot")) or index), 1, MAX_PLAYERS_PER_STATION)
+		glowstickSlots[tostring(player.UserId)] = slot
+	end
+	local options = Instance.new("TeleportOptions")
+	options.ShouldReserveServer = true
+	options:SetTeleportData({
+		BackroomsRound = true,
+		PartySize = #live,
+		Level = nextLevel,
+		LaunchToken = game.JobId .. ":progress:" .. tostring(nextLevel) .. ":" .. tostring(math.floor(os.clock() * 1000)),
+		GlowstickSlots = glowstickSlots,
+	})
+	registerPendingTeleport(live, "next", options, nextLevel)
+	local ok, err = pcall(function()
+		TeleportService:TeleportAsync(game.PlaceId, live, options)
+	end)
+	if not ok then clearPendingTeleport(live) end
+	return ok, err, live
+end
+
+local function returnGroupToLobby(group)
+	-- A late reserved-server arrival is a spectator, but must never be stranded.
+	local candidates = IS_RESERVED_ROUND_SERVER and Players:GetPlayers() or group
+	local ok, err, live = teleportPlayersToLobby(candidates)
+	if ok and IS_RESERVED_ROUND_SERVER and not IS_STUDIO then
+		-- Keep the completed map intact while Roblox transfers the party. The old
+		-- isolated server and its world disappear naturally after the last leave.
+		return true
+	end
+	if err ~= "LOCAL_FALLBACK" and #live > 0 then
+		warn("GameManager: return-to-lobby teleport failed: " .. tostring(err))
+	end
+	cleanupActiveWorld()
+	returnPlayersToLocalLobby(live)
+	return false
+end
+
+local playRound
+
+handlePostWinReturnRequest = function(player, requestSerial)
+	local session = activePostWin
+	if not session
+		or session.Closed
+		or type(requestSerial) ~= "number"
+		or requestSerial ~= session.Serial
+		or workspace:GetServerTimeNow() >= session.Deadline
+		or workspace:GetAttribute("RoundActive") == true
+		or activeLevel ~= session.Level
+		or session.Eligible[player] ~= true
+		or session.Returning[player] == true
+		or inRound[player] ~= true
+		or player:GetAttribute("InRound") ~= true
+		or player.Parent ~= Players then
+		return
+	end
+
+	-- Latch before any yield/TeleportAsync call; clients cannot choose the
+	-- destination, deadline, level, or another party member.
+	session.Returning[player] = true
+	status:FireClient(player, "returnpending", session.Serial)
+	if IS_RESERVED_ROUND_SERVER and not IS_STUDIO then
+		task.spawn(function()
+			local ok, err = teleportPlayersToLobby({player})
+			if not ok and activePostWin == session and not session.Closed and player.Parent == Players then
+				session.Returning[player] = nil
+				status:FireClient(player, "returnfailed", session.Serial)
+				warn("GameManager: early return-to-lobby failed for " .. player.Name .. ": " .. tostring(err))
+			end
+		end)
+	end
+end
+
+local function finishFailedTeleportLocally(player, reason)
+	pendingTeleports[player] = nil
+	if player.Parent ~= Players then return end
+	warn("GameManager: recovering stranded player in the local lobby: " .. player.Name .. " (" .. tostring(reason) .. ")")
+	status:FireClient(player, "transitionfailed")
+	-- A twice-failed early Return-to-Lobby transfer can arrive while the 15-second
+	-- post-win loop is still running. Abort that session before cleaning the world;
+	-- otherwise its deadline branch can later send the recovered party onward too.
+	local interruptedSession = activePostWin
+	if interruptedSession and not interruptedSession.Closed then
+		interruptedSession.Aborted = true
+		interruptedSession.Closed = true
+		activePostWin = nil
+	end
+	-- This is the final safety net after both the original transfer and its retry
+	-- were rejected. One cleanup is enough even if several players fail together.
+	local recoveryGroup = {player}
+	if worldReady then
+		recoveryGroup = Players:GetPlayers()
+		for _, stranded in ipairs(recoveryGroup) do pendingTeleports[stranded] = nil end
+		cleanupActiveWorld()
+	end
+	returnPlayersToLocalLobby(recoveryGroup)
+end
+
+local recoverFailedTeleport
+recoverFailedTeleport = function(player, record, placeId, failedOptions, reason)
+	if player.Parent ~= Players or pendingTeleports[player] ~= record then return end
+	if record.Failures < 1 then
+		record.Failures += 1
+		task.delay(1, function()
+			if player.Parent ~= Players or pendingTeleports[player] ~= record then return end
+			local options = failedOptions or record.Options
+			local destinationPlaceId = tonumber(placeId) or game.PlaceId
+			local ok, retryError = pcall(function()
+				TeleportService:TeleportAsync(destinationPlaceId, {player}, options)
+			end)
+			if not ok then
+				recoverFailedTeleport(player, record, destinationPlaceId, options, retryError)
+			end
+		end)
+		return
+	end
+
+	if record.Destination == "next" then
+		-- A player who cannot enter the next reserved server must still escape the
+		-- completed server. Fall back to a fresh lobby transfer with its own retry.
+		pendingTeleports[player] = nil
+		status:FireClient(player, "transitionfailed")
+		task.spawn(function()
+			local returned, returnError = teleportPlayersToLobby({player})
+			if not returned then finishFailedTeleportLocally(player, returnError) end
+		end)
+	else
+		task.spawn(finishFailedTeleportLocally, player, reason)
+	end
+end
+
+TeleportService.TeleportInitFailed:Connect(function(player, teleportResult, errorMessage, placeId, teleportOptions)
+	local record = pendingTeleports[player]
+	if not record then return end
+	warn("GameManager: teleport initialization failed for", player.Name, teleportResult, errorMessage)
+	recoverFailedTeleport(player, record, placeId, teleportOptions, errorMessage)
+end)
+
+local function runPostWinIntermission(participants, elapsed, escapedCount)
+	postWinSerial += 1
+	local nextLevel = activeLevel < MAX_LEVEL and activeLevel + 1 or nil
+	local deadline = workspace:GetServerTimeNow() + POST_WIN_SECONDS
+	local session = {
+		Serial = postWinSerial,
+		Level = activeLevel,
+		Deadline = deadline,
+		NextLevel = nextLevel,
+		Eligible = {},
+		Returning = {},
+		Closed = false,
+		Aborted = false,
+	}
+	for _, player in ipairs(participants) do
+		if player.Parent == Players then session.Eligible[player] = true end
+	end
+	activePostWin = session
+	fireGroup(participants, "win", elapsed, escapedCount, #participants, deadline, nextLevel, session.Serial)
+
+	while activePostWin == session and workspace:GetServerTimeNow() < deadline do
+		task.wait(0.1)
+	end
+	session.Closed = true
+	if activePostWin == session then activePostWin = nil end
+	if session.Aborted then
+		return nil, {}, {}, true
+	end
+
+	local continuing, returning = {}, {}
+	for player in pairs(session.Eligible) do
+		if player.Parent == Players then
+			if session.Returning[player] then
+				returning[#returning + 1] = player
+			else
+				continuing[#continuing + 1] = player
+			end
+		end
+	end
+	table.sort(continuing, function(a, b) return a.UserId < b.UserId end)
+	table.sort(returning, function(a, b) return a.UserId < b.UserId end)
+	return nextLevel, continuing, returning, false
+end
+
+local function continueStudioCampaign(participants, continuing, returning, nextLevel)
+	-- Studio cannot teleport. A mixed split cannot coexist with generators that
+	-- park the lobby, so an opt-out safely ends this editor-only local session.
+	if #returning > 0 or #continuing == 0 then
+		returnGroupToLobby(participants)
+		return
+	end
+
+	armGroupEntry(continuing)
+	fireGroup(continuing, "loadinggame", nextLevel)
+	cleanupActiveWorld()
+	for _, player in ipairs(continuing) do
+		inRound[player] = true
+		player:SetAttribute("InRound", true)
+		player:SetAttribute("Escaped", nil)
+	end
+	if not ensureWorld(continuing, nextLevel) then
+		fireGroup(continuing, "loadfailed")
+		returnGroupToLobby(continuing)
+		return
+	end
+	for _, player in ipairs(continuing) do
+		if player.Parent then
+			loadGameplayCharacter(player)
+			local character = player.Character or player.CharacterAdded:Wait()
+			placeSafelyInElevator(player, character)
+		end
+	end
+	task.wait(0.6)
+	playRound(continuing)
+end
+
+playRound = function(participants)
 	if LEVEL_GENERATORS[activeLevel] then Players.CharacterAutoLoads = false end
  local alive = {}
  local aliveCount = 0
@@ -978,9 +1248,58 @@ local function playRound(participants)
    if result == "win" then zyntraLevelCompleted:Fire(participant, activeLevel) end
   end
  end
- fireGroup(participants, result, elapsed, escapedCount, #participants)
+ if result == "win" then
+  local nextLevel, continuing, returning, postWinAborted = runPostWinIntermission(participants, elapsed, escapedCount)
+  if postWinAborted then return end
+  if elevatorApi then elevatorApi.close() end
+
+  if nextLevel then
+   if IS_STUDIO then
+    continueStudioCampaign(participants, continuing, returning, nextLevel)
+    return
+   end
+   if #continuing > 0 then
+    local moved, moveError = teleportPlayersToNextLevel(continuing, nextLevel)
+    if moved then
+     -- Everyone who is not progressing belongs in the lobby. This includes
+     -- opted-out participants plus late reserved-server arrivals/reconnects
+     -- that were never part of the frozen round roster.
+     local progressing = {}
+     for _, player in ipairs(continuing) do progressing[player] = true end
+     local lobbyBound = {}
+     for _, player in ipairs(Players:GetPlayers()) do
+      if not progressing[player] then lobbyBound[#lobbyBound + 1] = player end
+     end
+     if #lobbyBound > 0 then
+      task.spawn(function()
+       local returned, returnError, stillHere = teleportPlayersToLobby(lobbyBound)
+       if not returned and #stillHere > 0 then
+        warn("GameManager: non-progressing lobby transfer failed: " .. tostring(returnError))
+        cleanupActiveWorld()
+        returnPlayersToLocalLobby(stillHere)
+       end
+      end)
+     end
+     return
+    end
+    warn("GameManager: next-level teleport failed: " .. tostring(moveError))
+    fireGroup(continuing, "transitionfailed")
+   end
+   -- No continuer, or Roblox rejected the fresh reserved-server transition.
+   returnGroupToLobby(participants)
+   task.wait(1.6)
+   return
+  end
+
+  -- Level 3 is the current campaign endpoint.
+  returnGroupToLobby(participants)
+  task.wait(1.6)
+  return
+ end
+
+ fireGroup(participants, "lose", elapsed, escapedCount, #participants)
  task.wait(5.5)
- elevatorApi.close()
+ if elevatorApi then elevatorApi.close() end
  returnGroupToLobby(participants)
  task.wait(1.6)
 end

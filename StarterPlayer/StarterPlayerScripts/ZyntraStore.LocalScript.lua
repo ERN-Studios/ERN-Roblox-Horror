@@ -20,6 +20,7 @@ local profileChangedRemote = remotes:WaitForChild("ZyntraProfileChanged")
 local profile
 local currentTab = "Upgrades"
 local productButtons = {}
+local displayedProductPrices = {}
 local reentryDead = false
 
 local COLORS = {
@@ -194,7 +195,7 @@ selectTab(currentTab)
 if devAllowed and pages.Dev then
 	local devIntro = label(
 		pages.Dev,
-		"WHITELISTED DEVELOPER CONTROLS  //  PHONE: M",
+		"WHITELISTED DEVELOPER CONTROLS  //  PHONE: J",
 		UDim2.new(1, 0, 0, 34),
 		UDim2.fromOffset(4, 0),
 		14,
@@ -425,16 +426,17 @@ shopScroll.BackgroundTransparency = 1
 shopScroll.BorderSizePixel = 0
 shopScroll.ScrollBarThickness = 5
 shopScroll.ScrollBarImageColor3 = COLORS.accent
-shopScroll.CanvasSize = UDim2.fromOffset(0, 610)
+shopScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+shopScroll.CanvasSize = UDim2.new()
 shopScroll.Parent = pages.Shop
 
 local shopGrid = Instance.new("UIGridLayout")
-shopGrid.CellSize = UDim2.new(0.5, -8, 0, 188)
+shopGrid.CellSize = UDim2.new(0.5, -8, 0, 220)
 shopGrid.CellPadding = UDim2.fromOffset(12, 12)
 shopGrid.SortOrder = Enum.SortOrder.LayoutOrder
 shopGrid.Parent = shopScroll
 
-local function makeProductCard(key, item, kind, description)
+local function makeProductCard(key, item, kind)
 	local card = Instance.new("Frame")
 	card.Name = key
 	card.BackgroundColor3 = COLORS.card
@@ -461,12 +463,26 @@ local function makeProductCard(key, item, kind, description)
 	end
 	local heading = label(card, item.Name, UDim2.new(1, -118, 0, 42), UDim2.fromOffset(104, headingY), 18, COLORS.text, Enum.Font.GothamBold)
 	heading.TextWrapped = true
-	local desc = label(card, description or item.Description or "", UDim2.new(1, -118, 0, 48), UDim2.fromOffset(104, 72), 12, COLORS.muted)
+	local desc = label(card, item.Description or "", UDim2.new(1, -118, 0, 68), UDim2.fromOffset(104, 72), 12, COLORS.muted)
 	desc.TextWrapped = true
 	desc.TextYAlignment = Enum.TextYAlignment.Top
 	local buy = button(card, tostring(item.Price) .. " R$", UDim2.new(1, -28, 0, 38), UDim2.new(0, 14, 1, -50))
 	buy.TextColor3 = COLORS.accent2
 	productButtons[key] = buy
+	displayedProductPrices[key] = math.max(0, math.floor(tonumber(item.Price) or 0))
+	if tonumber(item.Id) and item.Id > 0 then
+		task.spawn(function()
+			local infoType = kind == "Pass" and Enum.InfoType.GamePass or Enum.InfoType.Product
+			local ok, info = pcall(MarketplaceService.GetProductInfo, MarketplaceService, item.Id, infoType)
+			local price = ok and type(info) == "table" and tonumber(info.PriceInRobux) or nil
+			-- Profile rendering may have marked a pass OWNED while this request was
+			-- in flight. Never replace that authoritative state with a late price.
+			if price and price >= 0 and buy.Parent and buy.Active then
+				displayedProductPrices[key] = math.floor(price)
+				buy.Text = tostring(math.floor(price)) .. " R$"
+			end
+		end)
+	end
 	buy.Activated:Connect(function()
 		if tonumber(item.Id) == nil or item.Id <= 0 then
 			showStatus(item.Name .. ": Product ID is not configured yet.", "error")
@@ -481,12 +497,12 @@ local function makeProductCard(key, item, kind, description)
 	return card
 end
 
-makeProductCard("Supporter", Config.Passes.Supporter, "Pass", "10 Research Tokens, supporter tag and custom hazmat styling.")
-makeProductCard("AdvancedEquipment", Config.Passes.AdvancedEquipment, "Pass", "+5% stamina, +5% battery and hazmat color picker.")
-makeProductCard("Tokens4", Config.Products.Tokens4, "Product", "Adds 4 permanent Research Tokens to your account.")
-makeProductCard("Tokens20", Config.Products.Tokens20, "Product", "Adds 20 permanent Research Tokens to your account.")
-makeProductCard("EmergencyReentry", Config.Products.EmergencyReentry, "Product", "A stored re-entry credit. Usable once per round after death.")
-makeProductCard("CosmeticEquipment", Config.Passes.CosmeticEquipment, "Pass", "Unlocks the glowstick color picker.")
+makeProductCard("Supporter", Config.Passes.Supporter, "Pass")
+makeProductCard("AdvancedEquipment", Config.Passes.AdvancedEquipment, "Pass")
+makeProductCard("Tokens4", Config.Products.Tokens4, "Product")
+makeProductCard("Tokens20", Config.Products.Tokens20, "Product")
+makeProductCard("EmergencyReentry", Config.Products.EmergencyReentry, "Product")
+makeProductCard("CosmeticEquipment", Config.Passes.CosmeticEquipment, "Pass")
 
 local colorsScroll = Instance.new("ScrollingFrame")
 colorsScroll.Size = UDim2.fromScale(1, 1)
@@ -720,7 +736,7 @@ local function updateReentry()
 	local credits = profile and profile.ReentryCredits or 0
 	reentryButton.Text = credits > 0
 		and ("USE RE-ENTRY CREDIT  //  " .. credits .. " OWNED")
-		or (tostring(Config.Products.EmergencyReentry.Price) .. " R$  //  BUY CREDIT")
+		or (tostring(displayedProductPrices.EmergencyReentry or Config.Products.EmergencyReentry.Price) .. " R$  //  BUY CREDIT")
 end
 
 local function bindCharacter(character)
@@ -765,8 +781,7 @@ local function refreshUI()
 		end
 	end
 
-	local ownsHazmatStyling = profile.OwnsAdvancedEquipment or profile.OwnsSupporter
-	hazmatPicker.SetLocked(not ownsHazmatStyling, "SUPPORTER OR ADVANCED EQUIPMENT REQUIRED")
+	hazmatPicker.SetLocked(not profile.OwnsAdvancedEquipment, "ADVANCED EQUIPMENT REQUIRED")
 	glowstickPicker.SetLocked(not profile.OwnsCosmeticEquipment, "GLOWSTICK CUSTOMIZER REQUIRED")
 	hazmatPicker.SetColor(profile.HazmatColor)
 	glowstickPicker.SetColor(profile.GlowstickColor)
@@ -802,7 +817,7 @@ local function updateVisibility()
 	openButton.Visible = not inRound or touchDevInLevel
 	if touchDevInLevel then
 		-- Keep a discreet phone-only escape hatch for whitelisted developers.
-		-- Desktop developers use M in levels, so no clickable HUD control is shown.
+		-- Desktop developers use J in levels, so no clickable HUD control is shown.
 		openButton.Text = "ZYNTRA // DEV"
 		openButton.Size = UDim2.fromOffset(136, 30)
 		openButton.Position = UDim2.new(1, -148, 0, 16)
@@ -826,7 +841,7 @@ local function updateVisibility()
 end
 player:GetAttributeChangedSignal("InRound"):Connect(function()
 	-- Do not carry an open shop across a character/world transition. Developers
-	-- can reopen directly on the DEV page with M once the round is ready.
+	-- can reopen directly on the DEV page with J once the round is ready.
 	setMainVisible(false)
 	updateVisibility()
 end)
@@ -896,7 +911,7 @@ closeButton.Activated:Connect(function() setMainVisible(false) end)
 
 UserInputService.InputBegan:Connect(function(input, processed)
 	if processed then return end
-	if input.KeyCode == Enum.KeyCode.M and devAllowed then
+	if input.KeyCode == Enum.KeyCode.J and devAllowed then
 		if devPhoneCommand then devPhoneCommand:Fire() else toggleMain() end
 	elseif input.KeyCode == Enum.KeyCode.Escape and main.Visible then
 		setMainVisible(false)

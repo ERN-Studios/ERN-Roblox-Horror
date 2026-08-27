@@ -1,6 +1,6 @@
 # Zyntra monetization: analyse og opsætningsguide
 
-Senest kontrolleret: 12. august 2026. Alle seks Creator Dashboard Asset IDs er nu indsat og verificeret mod experience `10559217407`.
+Senest kontrolleret: 27. august 2026. Alle seks Creator Dashboard Asset IDs er indsat og verificeret mod experience `10559217407`.
 
 ## Anbefalet launch-katalog
 
@@ -8,7 +8,7 @@ Zyntras nuværende opdeling er grundlæggende rigtig: permanente fordele er Game
 
 | Intern nøgle | Dashboard-navn | Roblox-type | Basispris | Asset ID | Spillerens køb |
 |---|---|---|---:|---:|---|
-| `Supporter` | Zyntra Supporter | Pass | 99 R$ | `1941938256` | 10 Research Tokens én gang, permanent supporter-tag og custom hazmat-styling |
+| `Supporter` | Zyntra Supporter | Pass | 99 R$ | `1941938256` | 10 Research Tokens én gang og permanent supporter-tag |
 | `AdvancedEquipment` | Advanced Equipment | Pass | 149 R$ | `1945402536` | Én permanent +5% stamina-opgradering, én permanent +5% batteri-opgradering og hazmat color picker |
 | `CosmeticEquipment` | Glowstick Customizer | Pass | 99 R$ | `1946086261` | Permanent glowstick color picker |
 | `Tokens4` | 4 Research Tokens | Developer Product | 49 R$ | `3707755089` | 4 tokens; kan købes igen |
@@ -29,27 +29,27 @@ Filnavne, full-resolution masters og det anvendte prompt-set er dokumenteret i `
 
 **Zyntra Supporter**
 
-> Receive 10 Zyntra Research Tokens once, a permanent ZYNTRA SUPPORTER tag, and custom hazmat styling.
+> Receive 10 Research Tokens once and unlock a permanent ZYNTRA SUPPORTER tag.
 
 **Advanced Equipment**
 
-> Permanently unlock the hazmat color picker and receive one +5% Stamina Capacity upgrade and one +5% Battery Capacity upgrade.
+> Permanently unlock the hazmat color picker and receive one +5% upgrade to both Stamina Capacity and Battery Capacity.
 
 **Glowstick Customizer**
 
-> Permanently unlock the glowstick color picker. Choose the color of the glowsticks you deploy.
+> Permanently unlock the glowstick color picker for every glowstick you deploy. Cosmetic only.
 
 **4 Zyntra Research Tokens**
 
-> Adds 4 Research Tokens to your account. Each token permanently upgrades either Stamina Capacity or Battery Capacity by +5%.
+> Adds 4 Research Tokens to your account. Spend each token on a permanent +5% upgrade to either Stamina Capacity or Battery Capacity.
 
 **20 Zyntra Research Tokens**
 
-> Adds 20 Research Tokens to your account. Each token permanently upgrades either Stamina Capacity or Battery Capacity by +5%.
+> Adds 20 Research Tokens to your account. Spend each token on a permanent +5% upgrade to either Stamina Capacity or Battery Capacity.
 
 **Emergency Re-entry**
 
-> Adds one stored Emergency Re-entry credit. After dying during an active run, use it once to rejoin. Maximum one re-entry per round.
+> Adds 1 stored Emergency Re-entry credit. After dying during an active run, use it to rejoin once that round.
 
 ## Nuværende status i spillet
 
@@ -60,6 +60,9 @@ Filnavne, full-resolution masters og det anvendte prompt-set er dokumenteret i `
 - Hver gennemført level giver 1 gratis token, også ved gentagne clears.
 - Supporterens 10 tokens og Advanced Equipments to +5%-grants gives kun én gang via gemte grant-flags.
 - Developer Products behandles centralt gennem `MarketplaceService.ProcessReceipt`.
+- En global Top Supporters-tavle summerer den præcise `CurrencySpent` fra nye Developer Product-receipts i `ZyntraDonationLeaderboard_v1`. Den er mærket "RECORDED SINCE AUG 2026", fordi Roblox ikke kan genafspille historiske receipts. Passes tælles ikke med.
+- Supporter giver ikke længere adgang til hazmat-styling; den ligger udelukkende i Advanced Equipment.
+- Butikken henter aktuelle/personaliserede Roblox-priser og bruger Config-prisen som fallback.
 - Studio giver automatisk alle passes og starter spilleren med 25 tokens; Studio kan derfor ikke bevise, at rigtige køb virker.
 - Zyntra-butikken viser tekstkort. Ikonerne bruges straks på Roblox' købssider, men kræver en senere `ImageLabel`-udvidelse for også at blive vist i spillets terminal.
 
@@ -182,7 +185,7 @@ Brug en testkonto, der ikke ejer passet:
 2. Kontrollér, at fordelen aktiveres uden rejoin.
 3. Rejoin og kontrollér, at fordelen stadig er aktiv.
 4. Kontrollér, at Supporter-tokenpakken og Advanced-grants ikke gives igen.
-5. Test både en Supporter-only spiller og en Advanced-only spiller; begge skal kunne åbne og gemme hazmat color pickeren.
+5. Test en Supporter-only spiller og kontrollér, at hazmat color pickeren er låst. Test derefter en Advanced-only spiller og kontrollér, at den kan åbnes og gemmes.
 
 ### Developer Products
 
@@ -212,10 +215,12 @@ Hvis Developer Products også skal sælges på Roblox' eksterne Store-tab:
 - [ ] Tre Developer Products oprettet under Zyntra-experiencen.
 - [ ] Dashboard-priser og beskrivelser dobbelttjekket.
 - [x] Seks Asset IDs indsat og verificeret i `ZyntraConfig`.
-- [ ] Dynamisk prisvisning implementeret og Dynamic Price Check bestået.
+- [x] Dynamisk prisvisning implementeret.
+- [ ] Dynamic Price Check bestået med testkonti.
 - [ ] Supporter-token-grant testet som one-time.
 - [ ] Advanced-grants testet som one-time.
 - [ ] Token receipts testet for gentagne køb, rejoin og duplicate receipt.
+- [ ] Top Supporters-tavlen testet med nye receipts, genstart og OrderedDataStore-fejl.
 - [ ] DataStore testet i publiceret version.
 - [ ] Emergency Re-entry-flow rettet og testet, før produktet sættes on-sale.
 - [ ] Purchase-/receipt-fejl logges til analytics eller telemetri.
