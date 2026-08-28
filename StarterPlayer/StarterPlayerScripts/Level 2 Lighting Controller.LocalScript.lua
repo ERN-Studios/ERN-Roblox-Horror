@@ -37,7 +37,12 @@ local lastApplied = 0
 local function active()
 	return workspace:GetAttribute("SelectedLevel") == 2
 		and player:GetAttribute("InRound") == true
-		and player:GetAttribute("Escaped") ~= true
+		-- LEVEL2_EXIT_TRANSITION_20260828: an Escaped rider is still physically
+		-- sliding down the exit flume until the server clears the transition
+		-- flag. Cutting Level 2 out at the completion sensor left the whole
+		-- ride silent and daylight-graded halfway down the tube.
+		and (player:GetAttribute("Escaped") ~= true
+			or player:GetAttribute("Level2_ExitTransition") == true)
 		and workspace:GetAttribute("Level2LightingOwnedByController") == true
 end
 

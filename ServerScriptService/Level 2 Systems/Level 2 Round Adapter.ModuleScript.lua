@@ -14,6 +14,7 @@ local WorldBuilder = require(script.Parent:WaitForChild("Level 2 World Builder")
 local ObjectiveController = require(script.Parent:WaitForChild("Level 2 Objective Controller"))
 local PoolFoamController = require(script.Parent:WaitForChild("Level 2 Pool Foam Controller"))
 local PoolFoamConfiguration = require(script.Parent:WaitForChild("Level 2 Pool Foam Configuration"))
+local SlidemouthController = require(script.Parent:WaitForChild("Level 2 Slidemouth Controller"))
 
 local Adapter = {}
 local activeManifest
@@ -165,6 +166,16 @@ local function clearOwnedTerrain(manifest)
 	Terrain:FillBlock(CFrame.new(center), size, Enum.Material.Air)
 end
 
+-- The live manifest for the round this adapter last built, or nil.
+--
+-- The deterministic test suites need the manifest the generator produced, and
+-- the only alternative was to build a SECOND world alongside the real one and
+-- measure that instead -- which tests the builder but not the round anybody
+-- actually plays. Read-only, and nil whenever no world is standing.
+function Adapter.GetManifest()
+	return activeManifest
+end
+
 function Adapter.Cleanup()
 	local recoveringPersistedState = levelOneScriptStates == nil and (
 		workspace:GetAttribute("SelectedLevel") == 2
@@ -173,6 +184,7 @@ function Adapter.Cleanup()
 		or ServerStorage:FindFirstChild("Level 2 Stored Level 1 Entity") ~= nil
 		or ServerStorage:FindFirstChild(STORED_LOBBY_NAME) ~= nil
 	)
+	SlidemouthController.Stop()
 	PoolFoamController.Stop()
 	ObjectiveController.Stop()
 	-- Pool Foam pause is session-local; do not inherit a Studio debug pause.
@@ -215,6 +227,8 @@ function Adapter.Cleanup()
 	state:SetAttribute("Level2_PumpProgress", 0)
 	for pumpNumber = 1, 3 do
 		state:SetAttribute("Level2_PumpStartedAt" .. tostring(pumpNumber), nil)
+		state:SetAttribute("Level2_PumpActivatorUserId" .. tostring(pumpNumber), nil)
+		state:SetAttribute("Level2_PumpActivatorPosition" .. tostring(pumpNumber), nil)
 	end
 	state:SetAttribute("Level2_HallCount", nil)
 	state:SetAttribute("Level2_Error", nil)
@@ -301,6 +315,10 @@ function Adapter.Build()
 		state:SetAttribute("Level2_HallCount", #layout.Halls)
 
 		ObjectiveController.Start(manifest, generation)
+		local slidemouthSession, slidemouthError = SlidemouthController.Start(manifest, generation)
+		if not slidemouthSession then
+			error("[Level 2] Slidemouth encounter did not start: " .. tostring(slidemouthError))
+		end
 		local poolFoamSession, poolFoamError = PoolFoamController.Start(manifest, generation)
 		if not poolFoamSession then
 			local message = "[Level 2] Pool Foam encounter did not start: " .. tostring(poolFoamError)

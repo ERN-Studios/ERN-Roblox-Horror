@@ -246,6 +246,10 @@ function TestSuite.ValidateConfiguration(): {[string]: any}
 	assert(managerTuning.Normal.PatrolSpeed == 4.5
 		and managerTuning.Blackout.PatrolSpeed > managerTuning.Normal.PatrolSpeed,
 		"Mall Manager blackout wandering must remain deliberate and slower than a chase")
+	assert(managerTuning.BlackoutSweepLegSeconds >= 15
+		and managerTuning.BlackoutSweepDistanceFactor >= 1.25
+		and managerTuning.BlackoutSweepSlackSeconds >= 5,
+		"Mall Manager blackout patrol legs need a distance-scaled timeout with recovery slack")
 	assert(managerTuning.Normal.PatrolSpeed < managerTuning.Normal.InvestigateSpeed
 		and managerTuning.Normal.InvestigateSpeed < managerTuning.Normal.SearchSpeed
 		and managerTuning.Normal.SearchSpeed < managerTuning.Normal.ChaseSpeed
@@ -1338,6 +1342,9 @@ function TestSuite.ValidateCleanup(snapshot: {[string]: any}): {[string]: any}
 		and state:GetAttribute("Level3_MallManagerState") == "OFF"
 		and state:GetAttribute("Level3_MallManagerBlackoutBoosted") == false
 		and state:GetAttribute("Level3_MallManagerTargetUserId") == 0
+		and state:GetAttribute("Level3_MallManagerTargetMode") == "NONE"
+		and state:GetAttribute("Level3_MallManagerTargetDistance") == -1
+		and state:GetAttribute("Level3_MallManagerTargetPosition") == nil
 		and state:GetAttribute("Level3_MallManagerSpeed") == 0
 		and state:GetAttribute("Level3_MallManagerAwarenessRange") == 0
 		and state:GetAttribute("Level3_MallManagerFootstepSerial") == 0
@@ -1535,14 +1542,16 @@ function TestSuite.ValidateManagerNavigationTelemetry(snapshot: {[string]: any}?
 		assert(snapshot.PathValidated == true,
 			"Mall Manager never proved a genuine route to its resolved goal")
 	end
-	local suppressed = workspace:GetAttribute("Level3FurnitureCollisionSuppressed") == true
-	if suppressed then
-		assert(snapshot.FurnitureNavExclusionsActive == 0,
-			"Ghost furniture envelopes are still steering the Mall Manager")
-	else
-		assert(snapshot.FurnitureNavExclusionsActive == snapshot.FurnitureNavExclusionsTotal,
-			"Restored furniture envelopes are not all guarding navigation")
-	end
+	-- LEVEL3_PERMANENT_FURNITURE_20260828
+	-- Furniture is never suppressed, so there is no longer a state in which some
+	-- envelopes are legitimately inactive. Every envelope guards navigation at
+	-- every moment of the round; anything less is the regression.
+	assert(snapshot.FurnitureNavExclusionsTotal > 0,
+		"Mall Manager sees no furniture navigation envelopes at all")
+	assert(snapshot.FurnitureNavExclusionsActive == snapshot.FurnitureNavExclusionsTotal,
+		string.format("Permanent furniture envelopes are not all guarding navigation (%s of %s)",
+			tostring(snapshot.FurnitureNavExclusionsActive),
+			tostring(snapshot.FurnitureNavExclusionsTotal)))
 	-- NOTE: no motionless-chase assertion here. A single snapshot's
 	-- LastProgressAgeSeconds is rearmed by recovery, so it can look healthy
 	-- while the rig has not moved at all. That claim is proven only by
@@ -1564,17 +1573,17 @@ function TestSuite.ValidateManagerNavigationTelemetry(snapshot: {[string]: any}?
 	}
 end
 
--- Captures every temporary hunt furniture part's mutable properties, and the
--- visibility of each Decal/Texture the furniture state machine drives, before a
--- blackout cycle so restoration can be proven afterwards. Chair CFrames are
--- deliberately not compared — shiftBlackoutChairs moves three chairs once per
--- session by design.
+-- Captures every permanent furniture part's mutable properties, and the
+-- visibility of each Decal/Texture under it, so a later audit can prove that
+-- nothing moved, vanished, faded or lost collision across a blackout cycle.
+-- Chair CFrames are compared too. ProbeFurniturePermanence validates the exact
+-- three authored blackout transforms before re-baselining only those poses.
 function TestSuite.CaptureFurnitureBaseline(world: Instance): {[string]: any}
 	assert(world and world.Parent == workspace, "Furniture baseline requires the live generated world")
 	local records = {}
 	local visualCount = 0
 	for _, object in ipairs(world:GetDescendants()) do
-		if object:IsA("BasePart") and object:GetAttribute("Level3_TemporaryHuntFurniture") == true then
+		if object:IsA("BasePart") and object:GetAttribute("Level3_PermanentFurniture") == true then
 			local visuals = {}
 			for _, child in ipairs(object:GetDescendants()) do
 				if child:IsA("Decal") or child:IsA("Texture") then
@@ -1586,21 +1595,117 @@ function TestSuite.CaptureFurnitureBaseline(world: Instance): {[string]: any}
 					visualCount += 1
 				end
 			end
+			-- Geometry, physics AND identity. Transparency and CanCollide alone
+			-- would pass a table that had been shoved three studs sideways,
+			-- resized to a sliver, unanchored so it drifts, or stripped of the
+			-- attributes and tags every other system finds it by -- all of which
+			-- are "the furniture is gone" from a player's point of view.
+			local attributes = {}
+			for key, value in pairs(object:GetAttributes()) do attributes[key] = value end
+			local tags = CollectionService:GetTags(object)
+			table.sort(tags)
 			table.insert(records, {
 				Part = object,
 				Parent = object.Parent,
 				Name = object:GetFullName(),
+				CFrame = object.CFrame,
+				Size = object.Size,
+				Anchored = object.Anchored,
 				Transparency = object.Transparency,
 				CanCollide = object.CanCollide,
 				CanTouch = object.CanTouch,
 				CanQuery = object.CanQuery,
 				CastShadow = object.CastShadow,
+				Attributes = attributes,
+				Tags = tags,
 				Visuals = visuals,
 			})
 		end
 	end
-	assert(#records > 0, "Level 3 world has no temporary hunt furniture to audit")
+	assert(#records > 0, "Level 3 world has no permanent furniture to audit")
 	return {World = world, Records = records, VisualCount = visualCount}
+end
+
+-- The single comparison both the per-edge sampling and the closing audit use, so
+-- they can never drift apart. Returns nil when the part still matches its
+-- baseline, or a human-readable reason when it does not.
+-- Occupancy is RUNTIME STATE that lives on a furniture part, not part of the
+-- part's identity: a hide anchor records who is under it, and someone hiding is
+-- the system working. Everything else -- every other attribute, every tag, the
+-- CFrame, the size, the anchoring -- is compared exactly.
+local VOLATILE_FURNITURE_ATTRIBUTES = {
+	Level3_HideOccupiedUserId = true,
+}
+
+function TestSuite.FurnitureDifference(record: {[string]: any}): string?
+	local part = record.Part
+	if not part or not part.Parent then return "was destroyed" end
+	if part.Parent ~= record.Parent then return "was reparented" end
+	if (part.CFrame.Position - record.CFrame.Position).Magnitude > 1e-3 then
+		return string.format("moved %.3f studs",
+			(part.CFrame.Position - record.CFrame.Position).Magnitude)
+	end
+	if (part.CFrame.LookVector - record.CFrame.LookVector).Magnitude > 1e-3
+		or (part.CFrame.UpVector - record.CFrame.UpVector).Magnitude > 1e-3 then
+		return "was rotated"
+	end
+	if (part.Size - record.Size).Magnitude > 1e-3 then
+		return string.format("was resized (%s -> %s)",
+			tostring(record.Size), tostring(part.Size))
+	end
+	if part.Anchored ~= record.Anchored then
+		return string.format("Anchored changed (%s -> %s)",
+			tostring(record.Anchored), tostring(part.Anchored))
+	end
+	if part.Transparency ~= record.Transparency then
+		return string.format("Transparency changed (%.3f -> %.3f)",
+			record.Transparency, part.Transparency)
+	end
+	if part.CanCollide ~= record.CanCollide then
+		return string.format("CanCollide changed (%s -> %s)",
+			tostring(record.CanCollide), tostring(part.CanCollide))
+	end
+	if part.CanTouch ~= record.CanTouch then
+		return string.format("CanTouch changed (%s -> %s)",
+			tostring(record.CanTouch), tostring(part.CanTouch))
+	end
+	if part.CanQuery ~= record.CanQuery then
+		return string.format("CanQuery changed (%s -> %s)",
+			tostring(record.CanQuery), tostring(part.CanQuery))
+	end
+	if part.CastShadow ~= record.CastShadow then return "CastShadow changed" end
+	local live = part:GetAttributes()
+	for key, value in pairs(record.Attributes) do
+		if live[key] ~= value and not VOLATILE_FURNITURE_ATTRIBUTES[key] then
+			return string.format("attribute %s changed (%s -> %s)",
+				key, tostring(value), tostring(live[key]))
+		end
+	end
+	for key, value in pairs(live) do
+		if record.Attributes[key] == nil and not VOLATILE_FURNITURE_ATTRIBUTES[key] then
+			return string.format("gained attribute %s = %s", key, tostring(value))
+		end
+	end
+	local liveTags = CollectionService:GetTags(part)
+	table.sort(liveTags)
+	if #liveTags ~= #record.Tags then
+		return string.format("tag count changed (%d -> %d)", #record.Tags, #liveTags)
+	end
+	for index, tag in ipairs(record.Tags) do
+		if liveTags[index] ~= tag then
+			return string.format("tag %s changed to %s", tag, tostring(liveTags[index]))
+		end
+	end
+	for _, visualRecord in ipairs(record.Visuals) do
+		local visual = visualRecord.Object
+		if not visual or visual.Parent ~= visualRecord.Parent then
+			return "lost a decal or texture"
+		end
+		if visual.Transparency ~= visualRecord.Transparency then
+			return "decal or texture transparency changed"
+		end
+	end
+	return nil
 end
 
 function TestSuite.ValidateFurnitureRestored(baseline: {[string]: any}): {[string]: any}
@@ -1616,12 +1721,9 @@ function TestSuite.ValidateFurnitureRestored(baseline: {[string]: any}): {[strin
 			table.insert(missing, record.Name)
 		else
 			checked += 1
-			if part.Transparency ~= record.Transparency
-				or part.CanCollide ~= record.CanCollide
-				or part.CanTouch ~= record.CanTouch
-				or part.CanQuery ~= record.CanQuery
-				or part.CastShadow ~= record.CastShadow then
-				table.insert(mismatched, record.Name)
+			local difference = TestSuite.FurnitureDifference(record)
+			if difference then
+				table.insert(mismatched, record.Name .. ": " .. difference)
 			end
 			for _, visualRecord in ipairs(record.Visuals) do
 				local visual = visualRecord.Object
@@ -2918,94 +3020,427 @@ function TestSuite.ProbeChaseForwardProgress(Manager: {[string]: any}, player: P
 	return result
 end
 
--- Drives the real music-sequence furniture state machine through all three
--- states. A seek across the blackout edge intentionally fires one-way scream
--- and chair events, so this probe is restricted to a disposable Play session.
--- The required callback is always invoked, including when an assertion fails.
-function TestSuite.ProbeFurnitureCycle(MusicController: {[string]: any},
-	world: Instance, cleanupAfter: (() -> ())?): {[string]: any}
-	assertStudioProbe("ProbeFurnitureCycle")
+-- LEVEL3_PERMANENT_FURNITURE_20260828
+-- Furniture is permanent scene topology, so the contract this probe proves is
+-- the opposite of the old REMOVED -> VISIBLE_GHOST -> RESTORED cycle: driving
+-- the real music sequence across the pre-blackout warning, the blackout, the
+-- scream edge, the Mall Manager hunt, the final lock and the recovery must
+-- leave every furniture part byte-identical in parent, transparency,
+-- CanCollide, CanTouch and CanQuery, must leave a hidden player hidden, must
+-- keep that hidden player off the Manager's target list, and must keep every
+-- furniture group guarding navigation while the Manager still makes progress.
+--
+-- Seeking across the blackout edge fires one-way scream and chair events, so
+-- this probe is restricted to a disposable Play session. The required cleanup
+-- callback is always invoked, including when an assertion fails.
+function TestSuite.ProbeFurniturePermanence(context: {[string]: any}?): {[string]: any}
+	assertStudioProbe("ProbeFurniturePermanence")
+	local options = assert(context, "ProbeFurniturePermanence requires a live context")
+	local MusicController = options.MusicController
+	local Manager = options.Manager
+	local world = options.World
+	local player = options.Player
+	local cleanupAfter = options.Cleanup
 	assert(type(cleanupAfter) == "function",
-		"ProbeFurnitureCycle requires an Adapter.Cleanup callback for its disposable session")
+		"ProbeFurniturePermanence requires an Adapter.Cleanup callback for its disposable session")
 	assert(type(MusicController) == "table" and MusicController.GetSnapshot
 		and MusicController.DebugSetElapsed,
-		"ProbeFurnitureCycle requires the Level 3 music sequence controller")
+		"ProbeFurniturePermanence requires the Level 3 music sequence controller")
+	assert(type(Manager) == "table" and Manager.GetSnapshot
+		and Manager.DebugBlackoutSweepLegSeconds,
+		"ProbeFurniturePermanence requires the Mall Manager controller module")
 	assert(world and world.Parent == workspace,
-		"ProbeFurnitureCycle requires the live generated world")
+		"ProbeFurniturePermanence requires the live generated world")
+	assert(player and player:IsA("Player") and player.Parent == Players
+		and player.Character and player.Character:FindFirstChildOfClass("Humanoid"),
+		"ProbeFurniturePermanence requires a live Player character to hide")
 	local original = assert(MusicController.GetSnapshot(),
 		"Level 3 music sequence is not running")
 	assert(type(original.StartServerTime) == "number",
 		"Level 3 music sequence has not been armed")
+
 	local music = Configuration.MusicSequence
-	local removalStart = music.DurationSeconds - music.BlackoutScreamLeadSeconds
-		- music.FurnitureRemovalLeadSeconds
-	local finalLockStart = music.CycleEndSeconds - music.HuntFinalFlashlightLockSeconds
+	local generation = world:GetAttribute("Level3_Generation")
+
+	-- One nav-exclusion envelope is authored per table group, so counting them
+	-- counts the groups. The count is captured rather than hard-coded: it is
+	-- asserted to stay constant across every timeline edge, which is the actual
+	-- contract ("furniture never leaves"), and it is reported so a layout change
+	-- that alters the group count is visible instead of silently tolerated.
+	local function furnitureGroups(): {BasePart}
+		local groups = {}
+		for _, object in ipairs(world:GetDescendants()) do
+			if object:IsA("BasePart")
+				and object:GetAttribute("Level3_ManagerFurnitureNavExclusion") == true then
+				table.insert(groups, object)
+			end
+		end
+		return groups
+	end
+	local groupEnvelopes = furnitureGroups()
+	local groupCount = #groupEnvelopes
+	assert(groupCount > 0, "Level 3 world has no furniture groups to audit")
+
 	local baseline: any = nil
+	local authoredShifts = 0
+	local expectedAuthoredShifts: {[BasePart]: CFrame} = {}
+	local seenAuthoredShifts: {[BasePart]: boolean} = {}
+	local representativeSweepDistance = 700
+	local representativeSweepBudget = 0
+	local hideAnchor: BasePart? = nil
+	local hidEntered = false
+	local samples = {}
+
 	local ok, result = pcall(function()
-		MusicController.DebugSetElapsed(math.max(0, removalStart - .5))
-		task.wait(.15)
-		local restoredBefore = assert(MusicController.GetSnapshot(), "music sequence vanished")
-		assert(restoredBefore.FurnitureState == "RESTORED",
-			"Furniture was not restored before the cycle baseline")
 		baseline = TestSuite.CaptureFurnitureBaseline(world)
-
-		MusicController.DebugSetElapsed(removalStart + .1)
-		task.wait(.15)
-		local removed = assert(MusicController.GetSnapshot(), "music sequence vanished at REMOVED")
-		assert(removed.FurnitureState == "REMOVED"
-			and workspace:GetAttribute("Level3FurnitureTemporarilyRemoved") == true
-			and workspace:GetAttribute("Level3FurnitureCollisionSuppressed") == true,
-			"Furniture REMOVED state/attributes are inconsistent")
+		-- Mirror the production chair selection and exact authored transforms. The
+		-- exception is deliberately narrow: exactly these three named chairs may
+		-- gain the marker and move by exactly this pose delta, once.
+		local chairRecords = {}
 		for _, record in ipairs(baseline.Records) do
-			local part = record.Part
-			assert(part.Parent == record.Parent and part:IsDescendantOf(world),
-				"Furniture was reparented during REMOVED: " .. record.Name)
-			assert(part.Transparency == 1 and part.CastShadow == false
-				and part.CanCollide == false and part.CanTouch == false and part.CanQuery == false,
-				"Furniture did not become physically absent during REMOVED: " .. record.Name)
-			for _, visualRecord in ipairs(record.Visuals) do
-				assert(visualRecord.Object.Parent == visualRecord.Parent
-					and visualRecord.Object.Transparency == 1,
-					"Furniture visual did not disappear during REMOVED: " .. record.Name)
+			if record.Part.Name == "Level 3 Vetted Plastic Party Chair" then
+				table.insert(chairRecords, record)
 			end
 		end
-
-		MusicController.DebugSetElapsed(finalLockStart + .1)
-		task.wait(.15)
-		local ghost = assert(MusicController.GetSnapshot(), "music sequence vanished at VISIBLE_GHOST")
-		assert(ghost.FurnitureState == "VISIBLE_GHOST"
-			and workspace:GetAttribute("Level3FurnitureTemporarilyRemoved") == false
-			and workspace:GetAttribute("Level3FurnitureCollisionSuppressed") == true,
-			"Furniture VISIBLE_GHOST state/attributes are inconsistent")
-		for _, record in ipairs(baseline.Records) do
-			local part = record.Part
-			assert(part.Parent == record.Parent
-				and part.Transparency == record.Transparency
-				and part.CastShadow == record.CastShadow
-				and part.CanCollide == false and part.CanTouch == false and part.CanQuery == false,
-				"Furniture ghost visibility/collision contract failed: " .. record.Name)
-			for _, visualRecord in ipairs(record.Visuals) do
-				assert(visualRecord.Object.Parent == visualRecord.Parent
-					and visualRecord.Object.Transparency == visualRecord.Transparency,
-					"Furniture visual did not reappear as a ghost: " .. record.Name)
+		table.sort(chairRecords, function(a, b)
+			if a.CFrame.Position.X == b.CFrame.Position.X then
+				return a.CFrame.Position.Z < b.CFrame.Position.Z
 			end
+			return a.CFrame.Position.X < b.CFrame.Position.X
+		end)
+		assert(#chairRecords >= 3,
+			"Level 3 world has fewer than three vetted party chairs for the authored scare")
+		local selectedRecords = {
+			chairRecords[math.max(1, math.floor(#chairRecords * .24))],
+			chairRecords[math.max(1, math.floor(#chairRecords * .57))],
+			chairRecords[math.max(1, math.floor(#chairRecords * .82))],
+		}
+		for index, record in ipairs(selectedRecords) do
+			local part = record.Part :: BasePart
+			assert(expectedAuthoredShifts[part] == nil,
+				"authored blackout chair selection resolved the same chair more than once")
+			expectedAuthoredShifts[part] = record.CFrame
+				* CFrame.new((index - 2) * .55, 0, 1.15)
+				* CFrame.Angles(0, math.rad(index % 2 == 0 and 18 or -14), 0)
 		end
 
-		MusicController.DebugSetElapsed(music.CycleEndSeconds + .1)
-		task.wait(.15)
-		local restored = assert(MusicController.GetSnapshot(), "music sequence vanished at RESTORED")
-		assert(restored.FurnitureState == "RESTORED"
-			and workspace:GetAttribute("Level3FurnitureTemporarilyRemoved") == false
-			and workspace:GetAttribute("Level3FurnitureCollisionSuppressed") == false,
-			"Furniture RESTORED state/attributes are inconsistent")
-		local restoredAudit = TestSuite.ValidateFurnitureRestored(baseline)
+		-- Prove the production timeout leaves enough time for a genuinely distant
+		-- but reachable patrol goal at the configured blackout walking speed.
+		representativeSweepBudget = Manager.DebugBlackoutSweepLegSeconds(
+			representativeSweepDistance)
+		local directTravel = representativeSweepDistance
+			/ Configuration.MallManager.Blackout.PatrolSpeed
+		assert(representativeSweepBudget >= directTravel
+			* Configuration.MallManager.BlackoutSweepDistanceFactor
+			+ Configuration.MallManager.BlackoutSweepSlackSeconds - .001,
+			"Mall Manager blackout sweep budget does not scale with route distance")
+
+		-- Hide the probe player under an authored anchor BEFORE the blackout so
+		-- the whole hunt is observed with an occupied hiding place.
+		hideAnchor = nil
+		for _, anchor in ipairs(world:GetDescendants()) do
+			if anchor:IsA("BasePart")
+				and anchor:GetAttribute("Level3_HideTableAnchor") == true
+				and anchor:GetAttribute("Level3_HideOccupiedUserId") == 0 then
+				hideAnchor = anchor
+				break
+			end
+		end
+		assert(hideAnchor, "Level 3 world has no free hide table anchor")
+		-- tryEnter enforces a real distance gate (PromptMaxDistance plus slack),
+		-- so the probe has to walk the character to the table rather than just
+		-- asking to hide from wherever it happens to be standing.
+		local character = player.Character
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+		assert(root, "probe player has no HumanoidRootPart")
+		character:PivotTo(CFrame.new((hideAnchor :: BasePart).Position + Vector3.new(0, 3, 0)))
+		task.wait(.3)
+		local entered, hideError = HidingController.DebugEnter(player, hideAnchor :: BasePart)
+		assert(entered, "Probe player could not hide under a table: " .. tostring(hideError))
+		hidEntered = true
+		assert(HidingController.IsHidden(player, generation),
+			"Probe player did not register as hidden before the blackout")
+
+		-- Every timeline edge the old furniture machine used to mutate, plus the
+		-- edges either side of it, sampled in chronological order.
+		local screamStart = music.DurationSeconds - music.BlackoutScreamLeadSeconds
+		local firstLockStart = screamStart - music.PreScreamFlashlightLockSeconds
+		local finalLockStart = music.CycleEndSeconds - music.HuntFinalFlashlightLockSeconds
+		local edges = {
+			{Name = "PRE_BLACKOUT", Elapsed = math.max(0, music.BlackoutStartSeconds
+				- music.PreBlackoutFlickerSeconds + .1)},
+			{Name = "BLACKOUT_SONG", Elapsed = music.BlackoutStartSeconds + .1},
+			{Name = "PRE_SCREAM_FLASHLIGHT_LOCK", Elapsed = firstLockStart + .1},
+			{Name = "BLACKOUT_SCREAM", Elapsed = screamStart + .1},
+			{Name = "HUNT", Elapsed = music.DurationSeconds + .1},
+			{Name = "HUNT_FINAL_LOCK", Elapsed = finalLockStart + .1},
+			{Name = "RECOVERY", Elapsed = music.CycleEndSeconds + .1},
+		}
+
+		for _, edge in ipairs(edges) do
+			MusicController.DebugSetElapsed(edge.Elapsed)
+			task.wait(.2)
+
+			-- 1. Every furniture part is untouched, in place, and still queryable.
+			for _, record in ipairs(baseline.Records) do
+				assert(record.Part and record.Part:IsDescendantOf(world),
+					string.format("Furniture left the world at %s: %s", edge.Name, record.Name))
+				local difference = TestSuite.FurnitureDifference(record)
+				-- The blackout deliberately nudges three party chairs. That is an
+				-- authored scare that MOVES furniture, not the removal machine
+				-- this probe exists to keep buried, and the part marks itself when
+				-- it happens. It is allowed exactly once per chair, the new pose is
+				-- re-baselined so any FURTHER movement still fails, and every other
+				-- property is re-checked against the original baseline afterwards.
+				if difference
+					and record.Part:GetAttribute("Level3_BlackoutShifted") == true
+					and record.Attributes.Level3_BlackoutShifted ~= true then
+					local expected = expectedAuthoredShifts[record.Part]
+					assert(expected ~= nil, string.format(
+						"non-authored furniture claimed a blackout shift: %s", record.Name))
+					assert(seenAuthoredShifts[record.Part] ~= true, string.format(
+						"authored blackout chair shifted twice: %s", record.Name))
+					local liveCFrame = record.Part.CFrame
+					assert((liveCFrame.Position - expected.Position).Magnitude <= 1e-3
+						and (liveCFrame.LookVector - expected.LookVector).Magnitude <= 1e-3
+						and (liveCFrame.UpVector - expected.UpVector).Magnitude <= 1e-3,
+						string.format("authored blackout chair used the wrong transform: %s",
+							record.Name))
+					seenAuthoredShifts[record.Part] = true
+					authoredShifts += 1
+					-- Re-baseline ONLY what the scare is allowed to change: the pose
+					-- and the marker it sets. Copying the whole attribute table here
+					-- would swallow any other attribute that happened to change on the
+					-- same edge -- including one being stripped -- and because this is
+					-- the same record the closing audit compares against, it would
+					-- swallow it there too.
+					record.CFrame = record.Part.CFrame
+					record.Attributes.Level3_BlackoutShifted =
+						record.Part:GetAttribute("Level3_BlackoutShifted")
+					difference = TestSuite.FurnitureDifference(record)
+				end
+				assert(not difference, string.format("Furniture %s at %s: %s",
+					record.Name, edge.Name, tostring(difference)))
+			end
+
+			-- 2. Every furniture group still guards navigation.
+			local liveGroups = furnitureGroups()
+			assert(#liveGroups == groupCount, string.format(
+				"Furniture group count changed at %s (%d -> %d)",
+				edge.Name, groupCount, #liveGroups))
+
+			-- 3. The hidden player stays hidden, and is not the Manager's target.
+			assert(player.Parent == Players, "Probe player left during the furniture probe")
+			assert(player:GetAttribute("Level3_Hiding") == true,
+				"Hidden player lost the Level3_Hiding attribute at " .. edge.Name)
+			assert(HidingController.IsHidden(player, generation),
+				"Hidden player was ejected from their table at " .. edge.Name)
+			assert((hideAnchor :: BasePart):GetAttribute("Level3_HideOccupiedUserId") == player.UserId,
+				"Hide anchor stopped recording its occupant at " .. edge.Name)
+			local hidingSnapshot = HidingController.GetSnapshot()
+			assert(hidingSnapshot ~= nil, "Hiding controller stopped running at " .. edge.Name)
+			assert((hidingSnapshot.HiddenCount or 0) >= 1,
+				"Hiding controller reported no hidden players at " .. edge.Name)
+
+			local managerSnapshot = Manager.GetSnapshot()
+			local targetUserId = managerSnapshot and managerSnapshot.TargetUserId or 0
+			assert(targetUserId ~= player.UserId, string.format(
+				"Mall Manager targeted a hidden player at %s (userId %d)",
+				edge.Name, targetUserId))
+
+			local exclusionsActive = managerSnapshot and managerSnapshot.FurnitureNavExclusionsActive
+			local exclusionsTotal = managerSnapshot and managerSnapshot.FurnitureNavExclusionsTotal
+			if managerSnapshot then
+				assert(exclusionsActive == exclusionsTotal, string.format(
+					"Furniture navigation envelopes stopped guarding at %s (%s of %s active)",
+					edge.Name, tostring(exclusionsActive), tostring(exclusionsTotal)))
+				assert(exclusionsTotal == groupCount, string.format(
+					"Manager sees %s furniture envelopes but the world has %d groups at %s",
+					tostring(exclusionsTotal), groupCount, edge.Name))
+			end
+
+			table.insert(samples, {
+				Edge = edge.Name,
+				Elapsed = edge.Elapsed,
+				FurnitureGroups = #liveGroups,
+				HiddenPlayers = hidingSnapshot and hidingSnapshot.HiddenCount or 0,
+				ManagerPresent = managerSnapshot ~= nil,
+				ManagerTargetUserId = targetUserId,
+				ManagerPosition = managerSnapshot and managerSnapshot.Position or nil,
+				ManagerGenuineProgressSerial = managerSnapshot
+					and managerSnapshot.GenuineProgressSerial or nil,
+				FurnitureNavExclusionsActive = exclusionsActive,
+				FurnitureNavExclusionsTotal = exclusionsTotal,
+			})
+		end
+
+		-- 4. Manager progress with EVERY player hidden.
+		--
+		-- This is the case that used to be excused rather than tested: with the
+		-- only player under a table, the Manager had nothing to chase, so the
+		-- movement assertion was dropped and the frozen-on-the-spot behaviour it
+		-- would have caught shipped. Having nothing to chase is not licence to
+		-- stop -- the hunt still sweeps the mall, it just never targets or
+		-- attacks anyone who is hidden. Both halves are asserted here.
+		MusicController.DebugSetElapsed(music.DurationSeconds + .1)
+		task.wait(.25)
+		assert(HidingController.IsHidden(player, generation),
+			"probe player stopped being hidden before the all-hidden patrol probe")
+		for _, candidate in ipairs(Players:GetPlayers()) do
+			local character = candidate.Character
+			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+			if candidate:GetAttribute("InRound") == true
+				and candidate:GetAttribute("Escaped") ~= true
+				and humanoid and humanoid.Health > 0 then
+				assert(HidingController.IsHidden(candidate, generation), string.format(
+					"all-hidden patrol is not all-hidden: %s remains exposed", candidate.Name))
+			end
+		end
+		local hiddenSeconds = tonumber(options.HiddenPatrolSeconds) or 6
+		local hiddenMotion = {}
+		local hiddenStart = assert(Manager.GetSnapshot(),
+			"Mall Manager is not present for the all-hidden patrol probe")
+		local hiddenLast = hiddenStart.Position
+		local hiddenTravelled = 0
+		local hiddenStates = {}
+		local hiddenDeadline = os.clock() + hiddenSeconds
+		while os.clock() < hiddenDeadline do
+			task.wait(.1)
+			local snapshot = Manager.GetSnapshot()
+			if not snapshot then break end
+			local step = (snapshot.Position - hiddenLast).Magnitude
+			hiddenTravelled += step
+			hiddenLast = snapshot.Position
+			hiddenStates[snapshot.State or "?"] = (hiddenStates[snapshot.State or "?"] or 0) + 1
+			table.insert(hiddenMotion, {
+				Position = snapshot.Position,
+				Step = step,
+				State = snapshot.State,
+				TargetUserId = snapshot.TargetUserId,
+				GenuineProgressSerial = snapshot.GenuineProgressSerial,
+			})
+			-- Exclusion has to hold for every single sample, not just at the
+			-- edges: a hidden player must never become a target or be attacked.
+			assert((snapshot.TargetUserId or 0) == 0,
+				"Mall Manager acquired a target during the all-hidden patrol")
+			assert(snapshot.TargetMode == "NO_EXPOSED_PLAYER", string.format(
+				"Mall Manager reported target mode %s during the all-hidden patrol",
+				tostring(snapshot.TargetMode)))
+			assert(snapshot.TargetDistance == -1 and snapshot.TargetPosition == nil,
+				"Mall Manager retained target distance/position while every player was hidden")
+			assert(HidingController.IsHidden(player, generation),
+				"the hidden player was ejected during the all-hidden patrol")
+			assert(snapshot.FurnitureNavExclusionsActive == snapshot.FurnitureNavExclusionsTotal,
+				"Furniture navigation envelopes lapsed during the all-hidden patrol")
+		end
+		assert(#hiddenMotion >= 5, string.format(
+			"All-hidden patrol probe collected only %d samples", #hiddenMotion))
+		assert(hiddenTravelled > 4, string.format(
+			"Mall Manager stood still while every player was hidden (%.2f studs in %.1fs)",
+			hiddenTravelled, hiddenSeconds))
+		local hiddenNet = (hiddenLast - hiddenStart.Position).Magnitude
+		assert(hiddenNet > 2, string.format(
+			"Mall Manager oscillated without net progress while every player was hidden"
+			.. " (%.2f studs net of %.2f travelled)", hiddenNet, hiddenTravelled))
+		local hiddenEnd = assert(Manager.GetSnapshot(),
+			"Mall Manager vanished during the all-hidden patrol probe")
+		assert(hiddenEnd.GenuineProgressSerial > hiddenStart.GenuineProgressSerial,
+			"Mall Manager moved without recording genuine patrol progress while all players were hidden")
+
+		-- 5. Manager progress with a legitimate target, for comparison.
+		pcall(HidingController.DebugExit, player)
+		task.wait(.4)
+		assert(not HidingController.IsHidden(player, generation),
+			"probe player could not be released from hiding for the progress probe")
+		MusicController.DebugSetElapsed(music.DurationSeconds + .1)
+		task.wait(.25)
+		local progressSeconds = tonumber(options.ProgressSeconds) or 6
+		local motion = {}
+		local startSnapshot = Manager.GetSnapshot()
+		assert(startSnapshot, "Mall Manager is not present for the furniture progress probe")
+		local lastPosition = startSnapshot.Position
+		local travelled = 0
+		local largestStep = 0
+		local deadline = os.clock() + progressSeconds
+		while os.clock() < deadline do
+			task.wait(.1)
+			local snapshot = Manager.GetSnapshot()
+			if not snapshot then break end
+			local step = (snapshot.Position - lastPosition).Magnitude
+			travelled += step
+			largestStep = math.max(largestStep, step)
+			lastPosition = snapshot.Position
+			table.insert(motion, {
+				Position = snapshot.Position,
+				Step = step,
+				GenuineProgressSerial = snapshot.GenuineProgressSerial,
+				PathStatus = snapshot.PathStatus,
+				TargetUserId = snapshot.TargetUserId,
+				FurnitureNavExclusionsActive = snapshot.FurnitureNavExclusionsActive,
+			})
+			assert(snapshot.FurnitureNavExclusionsActive == snapshot.FurnitureNavExclusionsTotal,
+				"Furniture navigation envelopes lapsed during the progress probe")
+		end
+		assert(#motion >= 5, string.format(
+			"Furniture progress probe collected only %d samples", #motion))
+		assert(travelled > 4, string.format(
+			"Mall Manager did not move around the permanent furniture (%.2f studs in %.1fs)",
+			travelled, progressSeconds))
+		-- Oscillation guard: a rig bouncing off a table racks up distance without
+		-- going anywhere, so require real net displacement as well as travel.
+		local netDisplacement = (lastPosition - startSnapshot.Position).Magnitude
+		assert(netDisplacement > 2, string.format(
+			"Mall Manager oscillated without net progress (%.2f studs net of %.2f travelled)",
+			netDisplacement, travelled))
+		local endSnapshot = assert(Manager.GetSnapshot(),
+			"Mall Manager vanished during the furniture progress probe")
+		assert(endSnapshot.GenuineProgressSerial > startSnapshot.GenuineProgressSerial,
+			"Mall Manager logged no genuine progress events around the permanent furniture")
+
+		-- The scare is exactly three deterministic chairs by design. Both missing
+		-- shifts and extra furniture movement are regressions.
+		assert(authoredShifts == 3, string.format(
+			"%d vetted chairs were shifted by the blackout; the authored scare requires exactly three",
+			authoredShifts))
+		for part in pairs(expectedAuthoredShifts) do
+			assert(seenAuthoredShifts[part] == true,
+				"an authored blackout chair never received its validated shift: " .. part:GetFullName())
+		end
+
+		-- 6. Nothing in the entire run mutated furniture. Re-use the shared audit
+		-- so this probe and ValidateFurnitureRestored can never disagree.
+		local audit = TestSuite.ValidateFurnitureRestored(baseline)
+
 		return {
-			PartsChecked = restoredAudit.Checked,
-			VisualsChecked = restoredAudit.VisualsChecked,
-			States = {"REMOVED", "VISIBLE_GHOST", "RESTORED"},
+			PartsChecked = audit.Checked,
+			VisualsChecked = audit.VisualsChecked,
+			FurnitureGroups = groupCount,
+			AuthoredChairShifts = authoredShifts,
+			RepresentativeSweepDistance = representativeSweepDistance,
+			RepresentativeSweepBudgetSeconds = representativeSweepBudget,
+			EdgesChecked = #samples,
+			Edges = samples,
+			HiddenThroughout = true,
+			HiddenPatrolSeconds = hiddenSeconds,
+			HiddenPatrolTravelledStuds = hiddenTravelled,
+			HiddenPatrolNetDisplacement = hiddenNet,
+			HiddenPatrolSamples = #hiddenMotion,
+			HiddenPatrolStates = hiddenStates,
+			HiddenPatrolGenuineProgressGained = (hiddenEnd.GenuineProgressSerial or 0)
+				- (hiddenStart.GenuineProgressSerial or 0),
+			HiddenPatrolMotion = hiddenMotion,
+			ManagerTravelledStuds = travelled,
+			ManagerNetDisplacement = netDisplacement,
+			ManagerLargestFrameStep = largestStep,
+			ManagerProgressSamples = #motion,
+			ManagerGenuineProgressGained = endSnapshot.GenuineProgressSerial
+				- startSnapshot.GenuineProgressSerial,
+			Motion = motion,
 			DisposableSessionConsumed = true,
 		}
 	end)
+
+	if hidEntered then pcall(HidingController.DebugExit, player) end
 	local cleanupOk, cleanupError = pcall(cleanupAfter :: () -> ())
 	if not cleanupOk then
 		if not ok then
@@ -3101,14 +3536,22 @@ function TestSuite.RunNavigationRegression(context: {[string]: any}?): {[string]
 
 		-- The overlap probe deliberately makes the live rig escape an artificial
 		-- local minimum. Run it only after every navigation probe that needs an
-		-- authored starting position; the following furniture probe performs no
-		-- Manager movement and then disposes the complete Level 3 session.
+		-- authored starting position; the furniture probe below drives the rig
+		-- itself and then disposes the complete Level 3 session.
 		renewDisposableHuntWindow()
 		results.TotalOverlap = TestSuite.ProbeTotalOverlapEscalation(Manager, options.OverlapSeconds)
 		table.insert(ran, "ProbeTotalOverlapEscalation")
 
-		results.FurnitureCycle = TestSuite.ProbeFurnitureCycle(MusicController, world, cleanupOnce)
-		table.insert(ran, "ProbeFurnitureCycle")
+		results.FurniturePermanence = TestSuite.ProbeFurniturePermanence({
+			MusicController = MusicController,
+			Manager = Manager,
+			World = world,
+			Player = player,
+			ProgressSeconds = options.FurnitureProgressSeconds,
+			HiddenPatrolSeconds = options.FurnitureHiddenPatrolSeconds,
+			Cleanup = cleanupOnce,
+		})
+		table.insert(ran, "ProbeFurniturePermanence")
 
 		return {Ran = ran, Results = results}
 	end)

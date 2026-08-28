@@ -164,9 +164,26 @@ local function markPathValidated(session: any)
 	end
 end
 
+local function publishTargetTelemetry(session: any, mode: string, distance: number,
+	position: Vector3?)
+	session.StateFolder:SetAttribute("Level3_MallManagerTargetMode", mode)
+	session.StateFolder:SetAttribute("Level3_MallManagerTargetDistance", distance)
+	session.StateFolder:SetAttribute("Level3_MallManagerTargetPosition", position)
+	if session.Model and session.Model.Parent then
+		session.Model:SetAttribute("Level3_MallManagerTargetMode", mode)
+		session.Model:SetAttribute("Level3_MallManagerTargetDistance", distance)
+		session.Model:SetAttribute("Level3_MallManagerTargetPosition", position)
+	end
+end
+
 local function publishTarget(session: any, player: Player?)
 	if player and HidingController.IsHidden(player, session.Generation) then player = nil end
-	if session.Target == player then return end
+	if session.Target == player then
+		-- Nil is also a telemetry state. Re-publish it even when the target field is
+		-- already nil so an old mode/position can never survive a dormant edge.
+		if not player then publishTargetTelemetry(session, "NONE", -1, nil) end
+		return
+	end
 	local old = session.Target
 	session.Target = player
 	if not player then stopChaseScream(session) end
@@ -181,6 +198,7 @@ local function publishTarget(session: any, player: Player?)
 	if session.Model and session.Model.Parent then
 		session.Model:SetAttribute("Level3_MallManagerTargetUserId", userId)
 	end
+	if not player then publishTargetTelemetry(session, "NONE", -1, nil) end
 end
 
 local function publishState(session: any, stateName: string)
@@ -737,14 +755,15 @@ local function collectFurnitureNavExclusions(world: Model): {BasePart}
 	return exclusions
 end
 
--- LEVEL3_MANAGER_FURNITURE_STATE_20260827
--- The music sequence strips furniture for the hunt by setting CanCollide,
--- CanTouch and CanQuery false on every Level3_TemporaryHuntFurniture part —
--- these exclusion envelopes included — and only the RESTORED state sets them
--- back. A part's live CanQuery is therefore the authoritative "this envelope
--- still guards physically present furniture" signal across RESTORED, REMOVED
--- and VISIBLE_GHOST, and it recovers instantly when objective completion
--- restores furniture mid-hunt.
+-- LEVEL3_PERMANENT_FURNITURE_20260828
+-- Furniture is permanent scene topology. It is never stripped, ghosted or made
+-- collisionless, so every exclusion envelope guards physically present
+-- furniture for the whole round and the Manager plans around all of it,
+-- blackout and hunt included. The predicate is kept (rather than inlined as
+-- `true`) because an envelope can still legitimately leave the world when its
+-- generation is torn down mid-frame; CanQuery is asserted rather than merely
+-- read, so a regression that silently un-queries an envelope shows up here
+-- instead of quietly shrinking the navigation topology.
 local function furnitureNavExclusionActive(exclusion: BasePart): boolean
 	return exclusion.Parent ~= nil and exclusion.CanQuery == true
 end
@@ -1046,6 +1065,20 @@ local function rebuildStrategicRoute(session: any, forceRebuild: boolean?)
 	session.StrategicIndex = 1
 end
 
+-- Where the Manager will actually STOP for the current goal.
+--
+-- `FinalGoal` is what the brain asked for; `ResolvedFinalGoal` is where
+-- navigation could legally stand, which `resolveNavigationGoal` displaces onto a
+-- ring of up to 24 studs when the raw point is inside a wall or a furniture
+-- exclusion. Every mover and the arrival test in `trackNavigationProgress` use
+-- the resolved point, so anything asking "have we arrived?" has to use it too.
+-- Comparing against the raw point instead is a silent freeze: the Manager parks
+-- on the resolved point, the raw point stays several studs away, the goal is
+-- never retired and no new one is ever chosen.
+local function arrivalGoal(session: any): Vector3?
+	return session.ResolvedFinalGoal or session.FinalGoal
+end
+
 local function setGoal(session: any, goal: Vector3?, force: boolean?)
 	if not goal then
 		clearGoal(session)
@@ -1210,14 +1243,13 @@ requestPath = function(session: any, destination: Vector3, force: boolean?)
 	task.spawn(function()
 		session.ActiveComputeCount += 1
 		session.PeakComputeCount = math.max(session.PeakComputeCount, session.ActiveComputeCount)
-		-- Furniture envelopes participate in PathfindingService only while the
-		-- furniture is physically present. During the hunt's REMOVED and
-		-- VISIBLE_GHOST windows the ghost volumes must not curve routes that
-		-- the shared clearance contract would accept.
-		local furnitureCosts: {[string]: number}? = nil
-		if workspace:GetAttribute("Level3FurnitureCollisionSuppressed") ~= true then
-			furnitureCosts = {[Tuning.FurniturePathLabel] = math.huge}
-		end
+		-- Furniture is physically present for the entire round, so its envelopes
+		-- always participate in PathfindingService. This is unconditional now:
+		-- the old Level3FurnitureCollisionSuppressed read let the planner route
+		-- straight through tables during the hunt, which the shared 5.25-stud
+		-- physical sweep then refused — the Manager stalled against furniture it
+		-- had been told was not there.
+		local furnitureCosts: {[string]: number} = {[Tuning.FurniturePathLabel] = math.huge}
 		local path = PathfindingService:CreatePath({
 			-- PFS is only the coarse planner. The shared 5.25-stud sweep remains
 			-- authoritative; four studs avoids voxel-rounding NoPath in 14-stud halls.
@@ -1525,6 +1557,14 @@ local function chooseSearchGoal(session: any, now: number)
 	setGoal(session, clampSearchPoint(session, candidate), true)
 end
 
+local function blackoutSweepLegDuration(distance: number): number
+	local directTravelSeconds = math.max(0, distance)
+		/ math.max(Tuning.Blackout.PatrolSpeed, .1)
+	return math.max(Tuning.BlackoutSweepLegSeconds,
+		directTravelSeconds * Tuning.BlackoutSweepDistanceFactor
+			+ Tuning.BlackoutSweepSlackSeconds)
+end
+
 local function choosePatrolGoal(session: any, now: number)
 	local candidates = {}
 	for _, room in ipairs(layoutRooms()) do
@@ -1553,6 +1593,8 @@ local function choosePatrolGoal(session: any, now: number)
 		center.Z + session.Random:NextNumber(-rangeZ, rangeZ)
 	)
 	session.PatrolWaitUntil = nil
+	session.PatrolLegUntil = now + blackoutSweepLegDuration(
+		planarDistance(session.Root.Position, session.PatrolGoal))
 	setGoal(session, session.PatrolGoal, true)
 	publishState(session, "PATROL")
 end
@@ -1589,15 +1631,33 @@ local function trackNearestBlackoutPlayer(session: any, now: number): boolean
 		session.LastKnownPosition = nil
 		session.LastSenseAt = -math.huge
 		session.SearchUntil = nil
-		session.PatrolGoal = nil
-		clearGoal(session)
-		publishState(session, "SEARCH")
-		session.StateFolder:SetAttribute("Level3_MallManagerTargetMode", "NO_EXPOSED_PLAYER")
-		session.StateFolder:SetAttribute("Level3_MallManagerTargetDistance", -1)
-		if session.Model and session.Model.Parent then
-			session.Model:SetAttribute("Level3_MallManagerTargetMode", "NO_EXPOSED_PLAYER")
-			session.Model:SetAttribute("Level3_MallManagerTargetDistance", -1)
+		-- LEVEL3_FURNITURE_PERMANENCE_20260828
+		-- Everyone is hidden. This used to clearGoal() and publish the STRING
+		-- "SEARCH" while holding no destination, so the Manager stood on the spot
+		-- with a walk animation playing until somebody came out -- and because the
+		-- blackout branch returns before the whole patrol/search half of the brain,
+		-- nothing downstream could ever give it one. It now sweeps the mall for
+		-- real: hidden players stay excluded from targeting and from attacks (that
+		-- is `nearestExposedPlayer` above and `attackLineClear` below, both
+		-- unchanged), but the hunt keeps moving over them.
+		local sweepGoal = arrivalGoal(session)
+		if session.PatrolGoal and (not sweepGoal
+			or planarDistance(session.Root.Position, sweepGoal) <= Tuning.GoalTolerance + 1) then
+			session.PatrolGoal = nil
 		end
+		-- Second, independent reason to move on: a sweep leg that has taken longer
+		-- than any honest walk across the mall is stuck, whether or not the
+		-- distance test agrees. Without this the hunt can still stall on a goal
+		-- navigation quietly gave up on.
+		if session.PatrolGoal and session.PatrolLegUntil and now >= session.PatrolLegUntil then
+			session.PatrolGoal = nil
+		end
+		if not session.PatrolGoal then
+			choosePatrolGoal(session, now)
+		else
+			publishState(session, "PATROL")
+		end
+		publishTargetTelemetry(session, "NO_EXPOSED_PLAYER", -1, nil)
 		return false
 	end
 
@@ -1630,14 +1690,7 @@ local function trackNearestBlackoutPlayer(session: any, now: number): boolean
 	setGoal(session, targetPosition, switchedTarget)
 
 	local distance = planarDistance(session.Root.Position, nearestRoot.Position)
-	session.StateFolder:SetAttribute("Level3_MallManagerTargetMode", "NEAREST_PLAYER")
-	session.StateFolder:SetAttribute("Level3_MallManagerTargetDistance", distance)
-	session.StateFolder:SetAttribute("Level3_MallManagerTargetPosition", targetPosition)
-	if session.Model and session.Model.Parent then
-		session.Model:SetAttribute("Level3_MallManagerTargetMode", "NEAREST_PLAYER")
-		session.Model:SetAttribute("Level3_MallManagerTargetDistance", distance)
-		session.Model:SetAttribute("Level3_MallManagerTargetPosition", targetPosition)
-	end
+	publishTargetTelemetry(session, "NEAREST_PLAYER", distance, targetPosition)
 	if not session.Attacking then publishState(session, "CHASE") end
 	return true
 end
@@ -1815,8 +1868,9 @@ local function updateBrain(session: any, now: number, dt: number)
 	end
 
 	publishTarget(session, nil)
-	if session.PatrolGoal
-		and planarDistance(session.Root.Position, session.PatrolGoal) <= Tuning.GoalTolerance + 1 then
+	local reachedPatrol = arrivalGoal(session)
+	if session.PatrolGoal and (not reachedPatrol
+		or planarDistance(session.Root.Position, reachedPatrol) <= Tuning.GoalTolerance + 1) then
 		if not session.PatrolWaitUntil then
 			session.PatrolWaitUntil = now + Tuning.PatrolPauseSeconds
 			clearGoal(session)
@@ -2526,6 +2580,9 @@ local function resetPublishedState()
 	state:SetAttribute("Level3_MallManagerState", "OFF")
 	state:SetAttribute("Level3_MallManagerBlackoutBoosted", false)
 	state:SetAttribute("Level3_MallManagerTargetUserId", 0)
+	state:SetAttribute("Level3_MallManagerTargetMode", "NONE")
+	state:SetAttribute("Level3_MallManagerTargetDistance", -1)
+	state:SetAttribute("Level3_MallManagerTargetPosition", nil)
 	state:SetAttribute("Level3_MallManagerSpeed", 0)
 	state:SetAttribute("Level3_MallManagerAwarenessRange", 0)
 	state:SetAttribute("Level3_MallManagerSpawnRoomId", Tuning.SpawnRoomId)
@@ -3205,6 +3262,9 @@ function Controller.GetSnapshot()
 		Model = session.Model,
 		State = session.State,
 		TargetUserId = if session.Target then session.Target.UserId else 0,
+		TargetMode = session.StateFolder:GetAttribute("Level3_MallManagerTargetMode"),
+		TargetDistance = session.StateFolder:GetAttribute("Level3_MallManagerTargetDistance"),
+		TargetPosition = session.StateFolder:GetAttribute("Level3_MallManagerTargetPosition"),
 		LastCaptureUserId = tonumber(session.StateFolder:GetAttribute(
 			"Level3_MallManagerLastCaptureUserId")) or 0,
 		Blackout = session.Blackout,
@@ -3299,6 +3359,13 @@ function Controller.GetSnapshot()
 		ProgressBestDistance = session.ProgressBestDistance,
 		ProgressCreditedDistance = session.ProgressCreditedDistance,
 	}
+end
+
+-- Studio probes use the exact production budget function so a future tuning
+-- change cannot make the test and the controller agree on different formulas.
+function Controller.DebugBlackoutSweepLegSeconds(distance: number): number
+	assert(RunService:IsStudio(), "DebugBlackoutSweepLegSeconds is Studio-only")
+	return blackoutSweepLegDuration(tonumber(distance) or 0)
 end
 
 function Controller.DebugForcePatrolRoom(roomId: string)

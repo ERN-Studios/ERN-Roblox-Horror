@@ -3,6 +3,12 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UIDevice = require(ReplicatedStorage:WaitForChild("UIDevice"))
+
+-- Captions whose text depends on the touch form factor (they drop key names
+-- on a phone or tablet). Each registers itself so a form-factor change can
+-- rebuild it instead of leaving whatever it was constructed with.
+local deviceCaptionRefreshers = {}
 local MarketplaceService = game:GetService("MarketplaceService")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
@@ -195,7 +201,8 @@ selectTab(currentTab)
 if devAllowed and pages.Dev then
 	local devIntro = label(
 		pages.Dev,
-		"WHITELISTED DEVELOPER CONTROLS  //  PHONE: J",
+		UIDevice.IsTouch() and "WHITELISTED DEVELOPER CONTROLS"
+			or "WHITELISTED DEVELOPER CONTROLS  //  PHONE: J",
 		UDim2.new(1, 0, 0, 34),
 		UDim2.fromOffset(4, 0),
 		14,
@@ -241,7 +248,12 @@ if devAllowed and pages.Dev then
 		},
 		{
 			Name = "NOCLIP FLY",
-			Description = "Fly through geometry with WASD, Space and Left Ctrl.",
+			-- WASD / Space / Left Ctrl are the only keyboard-movement strings in
+			-- any client file. On touch the same cheat is driven by the on-screen
+			-- stick, so the caption must not name keys the device has not got.
+			Description = UIDevice.IsTouch()
+				and "Fly through geometry using the movement stick."
+				or "Fly through geometry with WASD, Space and Left Ctrl.",
 			Key = "V",
 			Command = "noclip",
 			Attribute = "DevCheatNoclip",
@@ -334,13 +346,16 @@ if devAllowed and pages.Dev then
 		local function refresh()
 			if info.Action then
 				local available = actionAvailable()
-				toggle.Text = (available and "SKIP" or "LEVEL 3 ONLY") .. "  //  " .. info.Key
+				-- info.Key is a keyboard binding. On a phone or tablet it names a
+				-- key that does not exist, so UIDevice drops it entirely.
+				toggle.Text = UIDevice.Caption(
+					available and "SKIP" or "LEVEL 3 ONLY", "//  " .. info.Key)
 				toggle.TextColor3 = available and COLORS.accent or COLORS.muted
 				toggle.Active = available
 				toggle.AutoButtonColor = available
 			else
 				local enabled = player:GetAttribute(info.Attribute) == true
-				toggle.Text = (enabled and "ON" or "OFF") .. "  //  " .. info.Key
+				toggle.Text = UIDevice.Caption(enabled and "ON" or "OFF", "//  " .. info.Key)
 				toggle.TextColor3 = enabled and COLORS.accent or COLORS.muted
 			end
 		end
@@ -355,6 +370,7 @@ if devAllowed and pages.Dev then
 			player:GetAttributeChangedSignal(info.Attribute):Connect(refresh)
 		end
 		refresh()
+		table.insert(deviceCaptionRefreshers, refresh)
 	end
 
 	if level3TimelineOwner then
@@ -898,18 +914,41 @@ local function setMainVisible(visible)
 	-- RoundUI uses this modal flag to release the cursor only while the
 	-- whitelisted in-round phone is actually open.
 	player:SetAttribute("DevPhoneOpen", devAllowed and main.Visible or nil)
+	-- The terminal is a modal: while it is up it covers the movement controls,
+	-- so the on-screen cluster must stand down rather than take taps through it.
+	-- DevPhoneOpen only ever covered the whitelisted dev case, so the ordinary
+	-- store had no such signal at all.
+	player:SetAttribute("ZyntraStoreOpen", main.Visible or nil)
 end
 
 local function updateVisibility()
 	local inRound = player:GetAttribute("InRound") == true
 	local touchDevInLevel = inRound and devAllowed and UserInputService.TouchEnabled
 	openButton.Visible = not inRound or touchDevInLevel
+	local layout = UIDevice.Layout()
+	if layout.IsTouch then
+		-- The right edge is owned by the game's RUN/JUMP/GLOW/FLASHLIGHT
+		-- cluster on handhelds. Keep this lobby entry point in the small strip
+		-- above it and end it just before the control column; this also leaves
+		-- the briefing card's safe content band unobstructed below.
+		local requestedWidth = touchDevInLevel and 136
+			or (layout.Class == "tablet" and 220 or 184)
+		local availableWidth = math.max(1, layout.Zones.Controls.Left - layout.SafeLeft - 8)
+		local buttonWidth = math.min(requestedWidth, availableWidth)
+		local buttonHeight = touchDevInLevel and 30
+			or (layout.Class == "tablet" and 42 or 36)
+		openButton.Size = UDim2.fromOffset(buttonWidth, buttonHeight)
+		openButton.Position = UDim2.fromOffset(
+			math.max(layout.SafeLeft, layout.Zones.Controls.Left - buttonWidth - 8),
+			8)
+	else
+		openButton.Size = UDim2.fromOffset(220, 42)
+		openButton.Position = UDim2.new(1, -238, 0, 20)
+	end
 	if touchDevInLevel then
 		-- Keep a discreet phone-only escape hatch for whitelisted developers.
 		-- Desktop developers use J in levels, so no clickable HUD control is shown.
 		openButton.Text = "ZYNTRA // DEV"
-		openButton.Size = UDim2.fromOffset(136, 30)
-		openButton.Position = UDim2.new(1, -148, 0, 16)
 		openButton.TextSize = 11
 		openButton.BackgroundTransparency = 0.48
 		openButton.TextTransparency = 0.22
@@ -917,9 +956,7 @@ local function updateVisibility()
 		openButtonOutline.Thickness = 1
 	else
 		openButton.Text = "ZYNTRA // EQUIPMENT"
-		openButton.Size = UDim2.fromOffset(220, 42)
-		openButton.Position = UDim2.new(1, -238, 0, 20)
-		openButton.TextSize = 14
+		openButton.TextSize = layout.IsTouch and layout.Class ~= "tablet" and 12 or 14
 		openButton.BackgroundTransparency = 0
 		openButton.TextTransparency = 0
 		openButtonOutline.Transparency = 0.22
@@ -1027,13 +1064,44 @@ workspace:GetAttributeChangedSignal("RoundActive"):Connect(function()
 	end
 end)
 
-local lastViewport = Vector2.zero
+-- The terminal was a fixed 840x610 shrunk by a UIScale with a 0.56 FLOOR. On a
+-- 375-wide portrait phone the required scale is 375/900 = 0.42, so the clamp
+-- left the panel 100+ px wider than the screen -- and scaling further would
+-- have made 11px body text illegible anyway. The panel now RESIZES instead of
+-- only scaling: it takes the safe area on small screens and keeps its authored
+-- 840x610 composition wherever that fits.
+local STORE_DESIGN_WIDTH, STORE_DESIGN_HEIGHT = 840, 610
 local function updateScale()
-	local camera = workspace.CurrentCamera
-	if not camera or camera.ViewportSize == lastViewport then return end
-	lastViewport = camera.ViewportSize
-	mainScale.Scale = math.clamp(math.min(lastViewport.X / 900, lastViewport.Y / 680), 0.56, 1)
+	local layout = UIDevice.Layout()
+	local availableWidth = layout.SafeRight - layout.SafeLeft
+	local availableHeight = layout.SafeBottom - layout.SafeTop
+	if availableWidth >= STORE_DESIGN_WIDTH and availableHeight >= STORE_DESIGN_HEIGHT then
+		main.Size = UDim2.fromOffset(STORE_DESIGN_WIDTH, STORE_DESIGN_HEIGHT)
+		mainScale.Scale = 1
+		return
+	end
+	-- Reflow to the space that exists, then apply only the gentle scale needed
+	-- to keep the internal fixed-offset children in proportion. 0.78 is the
+	-- floor at which the 11px row text is still readable; below that the panel
+	-- keeps its real size and the content scrolls.
+	local width = math.min(STORE_DESIGN_WIDTH, availableWidth)
+	local height = math.min(STORE_DESIGN_HEIGHT, availableHeight)
+	local fit = math.min(width / STORE_DESIGN_WIDTH, height / STORE_DESIGN_HEIGHT)
+	mainScale.Scale = math.clamp(fit, 0.78, 1)
+	main.Size = UDim2.fromOffset(
+		math.floor(width / mainScale.Scale),
+		math.floor(height / mainScale.Scale))
 end
-RunService.RenderStepped:Connect(updateScale)
+UIDevice.Changed:Connect(function()
+	updateScale()
+	updateVisibility()
+	-- The dev-page captions drop their key names on a touch form factor, so
+	-- a form-factor change has to rebuild every row, not just resize the
+	-- panel. Each row registered a refresh when it was built.
+	for _, refresh in ipairs(deviceCaptionRefreshers) do
+		local ok, err = pcall(refresh)
+		if not ok then warn("[ZyntraStore] caption refresh failed: " .. tostring(err)) end
+	end
+end)
 updateScale()
 

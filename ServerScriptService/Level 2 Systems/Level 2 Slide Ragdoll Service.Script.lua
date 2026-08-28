@@ -196,7 +196,10 @@ local function matchingLegacySocket(character, motor)
 end
 
 local function floorUnderPlayer(player, character, humanoid, root)
-	local world = Workspace:FindFirstChild("Level 2 Generated World")
+	local selectedLevel = Workspace:GetAttribute("SelectedLevel")
+	local world = selectedLevel == 3
+		and Workspace:FindFirstChild("Level 3 Generated World")
+		or Workspace:FindFirstChild("Level 2 Generated World")
 	if not world then return nil end
 	local exclusions = {character}
 	for _, otherPlayer in ipairs(Players:GetPlayers()) do
@@ -214,18 +217,37 @@ local function floorUnderPlayer(player, character, humanoid, root)
 		root.Position + Vector3.yAxis * .5,
 		Vector3.new(0, -distance, 0), params)
 	local floor = result and result.Instance
-	if not floor or not floor:IsDescendantOf(world)
-		or floor:GetAttribute("Level2_SlideFloor") ~= true then
+	local validFloor = floor and ((selectedLevel == 2
+		and floor:GetAttribute("Level2_SlideFloor") == true)
+		or (selectedLevel == 3
+			and floor:GetAttribute("Level3_ProgressionSlide") == true))
+	if not floor or not floor:IsDescendantOf(world) or not validFloor then
 		return nil
 	end
-	local direction = floor:GetAttribute("Level2_SlideDirection")
-	if typeof(direction) ~= "Vector3" or direction.Magnitude < .5 then
-		direction = floor.CFrame.LookVector
+	local direction
+	if selectedLevel == 3 then
+		-- Level 3's continuation panels carry no Level2_SlideDirection and their
+		-- LookVector is horizontal, so the Level 2 convention cannot be reused.
+		-- The CLIENT reads travel down this bore as -RightVector, so this reads it
+		-- the same way and then applies the SAME steepness gate below. Returning
+		-- early instead accepted every one of the bore's ~670 panels, including
+		-- the near-flat runout at its mouth -- ordinary walkable mall floor, on
+		-- which a player could ask to be ragdolled and have the collisions dropped
+		-- off their whole rig for thirty seconds.
+		direction = -floor.CFrame.RightVector
+	else
+		direction = floor:GetAttribute("Level2_SlideDirection")
+		if typeof(direction) ~= "Vector3" or direction.Magnitude < .5 then
+			direction = floor.CFrame.LookVector
+		end
 	end
 	direction = direction.Unit
 	-- Metadata may select stronger exit-tube handling, but it must not allow a
 	-- shallow floor to start a ragdoll that the client correctly rejected.
-	if -direction.Y < .18 then return nil end
+	-- Match the client controller's STEEP_ENTER contract exactly. Accepting a
+	-- shallower forged Begin here could leave the server ragdolled while the
+	-- client correctly refuses to enter a slide.
+	if -direction.Y < .20 then return nil end
 	return floor
 end
 
@@ -236,6 +258,12 @@ local function restoreAliveSession(player, session)
 	local humanoid = session.Humanoid
 	if player.Character ~= character or humanoid.Health <= 0
 		or not character.Parent then
+		-- The watchdog can no longer see this session after the assignment above.
+		-- Release its exact baseline here so a dead/replaced rig is not retained by
+		-- the snapshot table until the player's next slide or disconnect.
+		if collisionBaselines[player] == session.Baseline then
+			collisionBaselines[player] = nil
+		end
 		return
 	end
 
@@ -255,13 +283,24 @@ local function restoreAliveSession(player, session)
 	character:SetAttribute("Level2_RagdollServerActive", nil)
 	local function restoreCollision()
 		if player.Character ~= character or humanoid.Health <= 0
-			or sessions[player] ~= nil
-			or generations[player] ~= session.Generation then return end
-		if session.Root.Parent then session.Root.CanCollide = session.RootCanCollide end
-		if session.Head and session.Head.Parent then
-			session.Head.CanCollide = session.HeadCanCollide
+			or not character.Parent then
+			if collisionBaselines[player] == session.Baseline then
+				collisionBaselines[player] = nil
+			end
+			return
 		end
-		collisionBaselines[player] = nil
+		-- A newer session on this same rig owns the shared baseline and its own
+		-- delayed restore. Never let this older callback clear or restore it.
+		if sessions[player] ~= nil
+			or generations[player] ~= session.Generation then return end
+		for _, snapshot in ipairs(session.Collisions) do
+			if snapshot.Part.Parent then
+				snapshot.Part.CanCollide = snapshot.CanCollide
+			end
+		end
+		if collisionBaselines[player] == session.Baseline then
+			collisionBaselines[player] = nil
+		end
 	end
 	-- Leave the root box disabled through the first get-up frames. Restoring it
 	-- while the limp body overlaps a floor can launch the player violently.
@@ -281,11 +320,22 @@ local function dropDeadSession(player, session)
 	-- race when BreakJointsOnDeath is false.
 end
 
+-- LEVEL2_EXIT_TRANSITION_20260828
+-- An Escaped player is normally out of the round and must not be ragdolled.
+-- The one exception is the exit transition: after crossing the completion
+-- sensor the rider is Escaped but still physically sliding down the tube into
+-- Level 3, and cutting the ragdoll there would stand them upright mid-flume.
+local function roundExcludesPlayer(player)
+	return player:GetAttribute("Escaped") == true
+		and player:GetAttribute("Level2_ExitTransition") ~= true
+end
+
 local function beginSession(player)
 	if sessions[player] then return end
-	if Workspace:GetAttribute("SelectedLevel") ~= 2
+	local selectedLevel = Workspace:GetAttribute("SelectedLevel")
+	if (selectedLevel ~= 2 and selectedLevel ~= 3)
 		or player:GetAttribute("InRound") ~= true
-		or player:GetAttribute("Escaped") == true then
+		or roundExcludesPlayer(player) then
 		return
 	end
 	local character = player.Character
@@ -302,10 +352,17 @@ local function beginSession(player)
 	if not baseline or baseline.Character ~= character then
 		baseline = {
 			Character = character,
-			RootCanCollide = root.CanCollide,
 			Head = character:FindFirstChild("Head"),
+			Collisions = {},
 		}
-		baseline.HeadCanCollide = baseline.Head and baseline.Head.CanCollide or false
+		for _, descendant in ipairs(character:GetDescendants()) do
+			if descendant:IsA("BasePart") then
+				table.insert(baseline.Collisions, {
+					Part = descendant,
+					CanCollide = descendant.CanCollide,
+				})
+			end
+		end
 		collisionBaselines[player] = baseline
 	end
 	local session = {
@@ -313,12 +370,12 @@ local function beginSession(player)
 		Humanoid = humanoid,
 		Root = root,
 		Head = baseline.Head,
+		Baseline = baseline,
 		StartedAt = os.clock(),
 		Generation = generations[player],
 		Joints = {},
 		Motors = {},
-		RootCanCollide = baseline.RootCanCollide,
-		HeadCanCollide = baseline.HeadCanCollide,
+		Collisions = baseline.Collisions,
 		RequiresNeck = humanoid.RequiresNeck,
 	}
 	sessions[player] = session
@@ -364,7 +421,13 @@ local function beginSession(player)
 		end
 	end
 
-	root.CanCollide = false
+	-- Match the predicting client exactly. Some avatar packages make every limb
+	-- collidable; once those joints are released the body can span the narrow
+	-- flume and lock itself against both walls. One rounded head contact is
+	-- enough to keep a visible tumble on the fiberglass without that wedge.
+	for _, snapshot in ipairs(session.Collisions) do
+		if snapshot.Part.Parent then snapshot.Part.CanCollide = false end
+	end
 	if session.Head then session.Head.CanCollide = true end
 	character:SetAttribute("Level2_RagdollServerActive", true)
 end
@@ -374,7 +437,15 @@ remote.OnServerEvent:Connect(function(player, action)
 		beginSession(player)
 	elseif action == "End" then
 		local session = sessions[player]
-		if session then restoreAliveSession(player, session) end
+		-- The completed exit ride is server-authoritative and can last for
+		-- minutes. Ignore both a premature production client and a forged remote
+		-- while that causal transition remains active. Return Lobby, level change,
+		-- death, or transfer clears the authoritative state and the watchdog owns
+		-- restoration from there.
+		local transitionActive = Workspace:GetAttribute("SelectedLevel") == 2
+			and player:GetAttribute("InRound") == true
+			and player:GetAttribute("Level2_ExitTransition") == true
+		if session and not transitionActive then restoreAliveSession(player, session) end
 	end
 end)
 
@@ -388,11 +459,17 @@ RunService.Heartbeat:Connect(function(deltaTime)
 		local alive = humanoid.Parent and humanoid.Health > 0
 		if not alive or player.Character ~= session.Character then
 			dropDeadSession(player, session)
-		elseif Workspace:GetAttribute("SelectedLevel") ~= 2
+		elseif (Workspace:GetAttribute("SelectedLevel") ~= 2
+			and Workspace:GetAttribute("SelectedLevel") ~= 3)
 			or player:GetAttribute("InRound") ~= true
-			or player:GetAttribute("Escaped") == true
+			or roundExcludesPlayer(player)
 			or session.Root.Anchored
-			or os.clock() - session.StartedAt > MAX_RAGDOLL_SECONDS then
+			-- The ordinary watchdog still recovers a lost client End event, but an
+			-- escaped rider can legitimately remain in the recycled continuation
+			-- tube for minutes while teammates finish and during the 15-second vote.
+			-- Level/round/return-lobby state above ends that session causally.
+			or (os.clock() - session.StartedAt > MAX_RAGDOLL_SECONDS
+				and player:GetAttribute("Level2_ExitTransition") ~= true) then
 			restoreAliveSession(player, session)
 		end
 	end

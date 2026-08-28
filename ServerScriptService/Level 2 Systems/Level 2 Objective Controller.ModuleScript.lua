@@ -29,6 +29,28 @@ local OPEN_COLOR = Color3.fromRGB(180, 218, 196)
 local DRAIN_RUSH_DELAY = 10
 local DEFAULT_PUMP_START_DURATION = 11.572244897959184
 
+-- LEVEL2_EXIT_TRANSITION_20260828
+-- After crossing the completion sensor a rider keeps physically sliding for the
+-- whole post-win decision window. GameManager's POST_WIN_SECONDS is 15; at the
+-- one-way soft speed cap of 105 studs/s that is 1575 studs of tube, so the
+-- builder is required to lay down a comfortable margin beyond it. Nothing here
+-- reads GameManager, so the number is asserted rather than assumed.
+local MINIMUM_TRANSITION_LENGTH = 2000
+
+-- Recovery tuning. Coming off the path and stalling on it are separate faults
+-- with separate graces, because they read differently in a server-side copy of
+-- a client-owned character: leaving the bore is unambiguous, whereas "stopped"
+-- has to be told apart from ordinary replication jitter.
+local TRANSITION_OFFPATH_GRACE = 1.5
+local TRANSITION_STALL_GRACE = 3
+-- Movement below this per quarter-second sample is not riding. The transition
+-- grade never produces anything near it — the ride settles around 20-25 studs
+-- per sample — so the margin against jitter is an order of magnitude.
+local TRANSITION_STALL_DISTANCE = 2
+-- Speed a recovered rider resumes at: immediately moving, but well under the
+-- one-way soft cap so a recovery never reads as a launch.
+local TRANSITION_RECOVERY_SPEED = 70
+
 local function state()
 	return ReplicatedStorage:FindFirstChild("Level 2 State")
 end
@@ -180,15 +202,58 @@ local function validateManifest(manifest)
 	assert(type(manifest.PressureDoors) == "table",
 		"Level 2 objective manifest is missing its pressure door records")
 	assert(type(manifest.Exit) == "table", "Level 2 objective manifest has no exit")
-	assert(manifest.Exit.Trigger and manifest.Exit.Trigger:IsA("BasePart")
-		and manifest.Exit.Trigger:IsDescendantOf(manifest.World)
-		and manifest.Exit.Trigger.Name == "Level 2 Exit Completion Beam"
-		and manifest.Exit.Trigger.Material == Enum.Material.Neon
-		and manifest.Exit.Trigger:GetAttribute("Level2_ExitCompletionBeam") == true,
-		"Level 2 exit completion beam is missing from the generated world")
+	-- LEVEL2_EXIT_TRANSITION_20260828
+	-- The completion sensors are permanently invisible and unlit. Assert that
+	-- here rather than trusting the builder: a sensor that renders is an instant
+	-- tell, and it has regressed before by way of a well-meaning tween.
+	for _, entry in ipairs({
+		{Part = manifest.Exit.Trigger, Label = "completion sensor"},
+		{Part = manifest.Exit.Backstop, Label = "completion backstop"},
+	}) do
+		local sensor = entry.Part
+		assert(sensor and sensor:IsA("BasePart") and sensor:IsDescendantOf(manifest.World)
+			and sensor:GetAttribute("Level2_ExitCompletionBeam") == true,
+			"Level 2 exit " .. entry.Label .. " is missing from the generated world")
+		assert(sensor.Transparency == 1 and sensor.CastShadow == false
+			and sensor.CanCollide == false,
+			"Level 2 exit " .. entry.Label .. " must be invisible and non-colliding")
+		-- Roblox parents a TouchTransmitter to any part with a live .Touched
+		-- connection, so "no children" is the wrong question. What must never
+		-- come back is emissive decoration: this sensor is invisible, forever.
+		for _, child in ipairs(sensor:GetChildren()) do
+			assert(not child:IsA("Light") and not child:IsA("ParticleEmitter")
+				and not child:IsA("Beam") and not child:IsA("Decal")
+				and not child:IsA("SurfaceGui") and not child:IsA("BillboardGui"),
+				"Level 2 exit " .. entry.Label .. " must carry no lights or decoration ("
+					.. child.ClassName .. ")")
+		end
+		local thickness = sensor:GetAttribute("Level2_ExitCompletionSensorThickness")
+		assert(type(thickness) == "number" and thickness >= 8,
+			"Level 2 exit " .. entry.Label .. " is too thin to catch a fast slider")
+	end
 	assert(manifest.Exit.SafeSpawn and manifest.Exit.SafeSpawn:IsA("BasePart")
 		and manifest.Exit.SafeSpawn:IsDescendantOf(manifest.World),
-		"Level 2 exit safe spawn is missing from the generated world")
+		"Level 2 exit recovery spawn is missing from the generated world")
+	assert(typeof(manifest.Exit.TransitionEnd) == "Vector3"
+		and type(manifest.Exit.TransitionLength) == "number"
+		and manifest.Exit.TransitionLength >= MINIMUM_TRANSITION_LENGTH,
+		string.format("Level 2 exit transition must run at least %d studs past completion",
+			MINIMUM_TRANSITION_LENGTH))
+	assert(typeof(manifest.Exit.FlumeBoundsCenter) == "Vector3"
+		and typeof(manifest.Exit.FlumeBoundsSize) == "Vector3",
+		"Level 2 exit is missing the flume envelope the recovery watchdog needs")
+	assert(type(manifest.Exit.PathPoints) == "table" and #manifest.Exit.PathPoints >= 2,
+		"Level 2 exit is missing the authored path the recovery watchdog measures against")
+	assert(type(manifest.Exit.BoreRadius) == "number" and manifest.Exit.BoreRadius > 0,
+		"Level 2 exit is missing its bore radius")
+	local recycle = manifest.Exit.Recycle
+	assert(type(recycle) == "table"
+		and type(recycle.TriggerY) == "number" and type(recycle.DeltaY) == "number"
+		and type(recycle.LandingY) == "number" and type(recycle.Radius) == "number"
+		and type(recycle.CenterX) == "number" and type(recycle.CenterZ) == "number",
+		"Level 2 exit is missing the recycle geometry that makes the ride endless")
+	assert(recycle.DeltaY > 0 and recycle.Turns and recycle.Turns >= 3,
+		"Level 2 exit recycle needs at least three turns so a recycled rider keeps a full turn of margin")
 end
 
 local function drain(record)
@@ -308,15 +373,11 @@ local function openPressureDoors(session)
 		exit.Mouth.Color = OPEN_COLOR
 		exit.Mouth.Transparency = .35
 	end
-	if exit and exit.Trigger and exit.Trigger.Parent then
-		exit.Trigger.CanTouch = true
-		TweenService:Create(exit.Trigger,
-			TweenInfo.new(.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-			{Transparency = .18}
-		):Play()
-		for _, glow in ipairs(exit.BeamLights or {}) do
-			if glow and glow.Parent then glow.Enabled = true end
-		end
+	-- Arming the exit is a pure CanTouch change. The sensors stay at
+	-- Transparency 1 with no lights forever; the only thing the player ever sees
+	-- change is the flume mouth on the top deck, which is the actual signpost.
+	for _, sensor in ipairs({exit and exit.Trigger, exit and exit.Backstop}) do
+		if sensor and sensor.Parent then sensor.CanTouch = true end
 	end
 
 	fireStatus(
@@ -339,6 +400,7 @@ function ObjectiveController.Start(manifest, generation)
 		StartedCount = 0,
 		DoorsOpen = false,
 		Escaping = {},
+		Transitioning = {},
 		PumpSoundDuration = pumpStartDuration(),
 	}
 	activeSession = session
@@ -351,11 +413,15 @@ function ObjectiveController.Start(manifest, generation)
 	if level2State then
 		level2State:SetAttribute("Level2_PumpSoundDuration", session.PumpSoundDuration)
 	end
-	-- Build leaves the green curtain visible as a destination marker, but only
-	-- this live objective session may arm its touch signal.
-	manifest.Exit.Trigger.CanTouch = false
-	manifest.Exit.Trigger.Transparency = .72
-	for _, glow in ipairs(manifest.Exit.BeamLights or {}) do glow.Enabled = false end
+	-- The sensors are invisible for the whole round; only this live objective
+	-- session may arm their touch signal. Transparency is re-asserted rather
+	-- than merely left alone so a hot-reload or a stale saved place cannot leave
+	-- a visible slab hanging in the bore.
+	for _, sensor in ipairs({manifest.Exit.Trigger, manifest.Exit.Backstop}) do
+		sensor.CanTouch = false
+		sensor.Transparency = 1
+		sensor.CastShadow = false
+	end
 
 	for _, pump in ipairs(manifest.Pumps) do
 		local function activate(player)
@@ -392,8 +458,14 @@ function ObjectiveController.Start(manifest, generation)
 				level2State:SetAttribute("Level2_PumpProgress", session.StartedCount)
 				-- The Slidemouth schedules its post-pump scream from this exact
 				-- timestamp (it previously fell back to "whenever I noticed").
-				level2State:SetAttribute("Level2_PumpStartedAt" .. tostring(session.StartedCount),
+				local pumpSequence = session.StartedCount
+				level2State:SetAttribute("Level2_PumpStartedAt" .. tostring(pumpSequence),
 					workspace:GetServerTimeNow())
+				level2State:SetAttribute("Level2_PumpActivatorUserId" .. tostring(pumpSequence), player.UserId)
+				local character = player.Character
+				local root = character and character:FindFirstChild("HumanoidRootPart")
+				level2State:SetAttribute("Level2_PumpActivatorPosition" .. tostring(pumpSequence),
+					root and root.Position or pump.Model:GetPivot().Position)
 			end
 
 			-- Start the authored pump motor cue as soon as the lever engages.
@@ -438,24 +510,303 @@ function ObjectiveController.Start(manifest, generation)
 		table.insert(session.Connections, connection)
 	end
 
-	local escapeConnection = manifest.Exit.Trigger.Touched:Connect(function(hit)
-		if activeSession ~= session or not session.DoorsOpen then return end
-		local character = hit:FindFirstAncestorOfClass("Model")
-		local player = character and Players:GetPlayerFromCharacter(character)
-		if not player or not validPlayer(player, session) or session.Escaping[player] then return end
-		local liveCharacter, _, root = livingCharacter(player)
+	-- LEVEL2_EXIT_TRANSITION_20260828
+	-- Completion no longer ends the ride. The player is marked Escaped for the
+	-- round result, but their momentum is left completely alone: no velocity
+	-- zeroing, no PivotTo. Level2_ExitTransition is the companion flag that
+	-- tells the slide controller, the ragdoll service and the UI that this
+	-- Escaped player is still physically inside the tube, so the ride continues
+	-- straight through the 15-second decision window and into Level 3.
+	local function completeFor(player, character)
+		if session.Escaping[player] then return end
+		local liveCharacter = livingCharacter(player)
 		if liveCharacter ~= character then return end
-		-- Touch fires for several character parts.  Lock the player before moving
-		-- them so crossing the doorway can only complete the level once.
 		session.Escaping[player] = true
+		session.Transitioning[player] = {
+			StartedAt = os.clock(),
+			LastPosition = nil,
+			Travelled = 0,
+			OffPathFor = 0,
+			StalledFor = 0,
+			Recoveries = 0,
+		}
+		session.ExitSweepPrevious[player] = nil
+		player:SetAttribute("Level2_ExitServerRecycleCount", nil)
+		player:SetAttribute("Level2_ExitRecoveryCount", nil)
 		player:SetAttribute("Escaped", true)
-		root.AssemblyLinearVelocity = Vector3.zero
-		root.AssemblyAngularVelocity = Vector3.zero
-		liveCharacter:PivotTo(manifest.Exit.SafeSpawn.CFrame * CFrame.new(0, 3, 0))
+		player:SetAttribute("Level2_ExitTransition", true)
 		fireSound("Level 2 Slide Rush", player)
 		fireEscape(player)
+	end
+
+	for _, sensor in ipairs({manifest.Exit.Trigger, manifest.Exit.Backstop}) do
+		local escapeConnection = sensor.Touched:Connect(function(hit)
+			if activeSession ~= session or not session.DoorsOpen then return end
+			local character = hit:FindFirstAncestorOfClass("Model")
+			local player = character and Players:GetPlayerFromCharacter(character)
+			-- Touch fires for several character parts, and both sensors fire for
+			-- the same pass; completeFor latches so only the first one counts.
+			if not player or not validPlayer(player, session) then return end
+			completeFor(player, character)
+		end)
+		table.insert(session.Connections, escapeConnection)
+	end
+
+	-- .Touched is retained as the cheap common path, but a client-owned rider can
+	-- cross even a thick sensor between two server physics samples. Sweep the
+	-- HumanoidRootPart segment through each sensor's oriented box as the authority
+	-- backstop. Large unrelated teleports are rejected using the replicated
+	-- velocity plus a generous hitch margin, so placing a player elsewhere in the
+	-- world cannot accidentally complete the level.
+	local function segmentIntersectsSensor(fromWorld, toWorld, sensor)
+		local from = sensor.CFrame:PointToObjectSpace(fromWorld)
+		local to = sensor.CFrame:PointToObjectSpace(toWorld)
+		local delta = to - from
+		local half = sensor.Size * .5 + Vector3.new(3, 3, 3)
+		local minimum, maximum = 0, 1
+		local function clip(origin, direction, extent)
+			if math.abs(direction) < 1e-6 then
+				return math.abs(origin) <= extent
+			end
+			local near = (-extent - origin) / direction
+			local far = (extent - origin) / direction
+			if near > far then near, far = far, near end
+			minimum = math.max(minimum, near)
+			maximum = math.min(maximum, far)
+			return minimum <= maximum
+		end
+		return clip(from.X, delta.X, half.X)
+			and clip(from.Y, delta.Y, half.Y)
+			and clip(from.Z, delta.Z, half.Z)
+	end
+
+	session.ExitSweepPrevious = {}
+	local sweepConnection = RunService.Heartbeat:Connect(function(deltaTime)
+		if activeSession ~= session then return end
+		if not session.DoorsOpen then
+			table.clear(session.ExitSweepPrevious)
+			return
+		end
+		for _, player in ipairs(Players:GetPlayers()) do
+			local character, _, root = livingCharacter(player)
+			if not character or not root or not validPlayer(player, session) then
+				session.ExitSweepPrevious[player] = nil
+				continue
+			end
+			local position = root.Position
+			local previous = session.ExitSweepPrevious[player]
+			session.ExitSweepPrevious[player] = position
+			if not previous then continue end
+			local distance = (position - previous).Magnitude
+			local plausibleDistance = math.max(80,
+				root.AssemblyLinearVelocity.Magnitude * math.max(deltaTime, 1 / 60) * 4 + 24)
+			if distance > plausibleDistance then continue end
+			for _, sensor in ipairs({manifest.Exit.Trigger, manifest.Exit.Backstop}) do
+				if sensor.Parent and segmentIntersectsSensor(previous, position, sensor) then
+					completeFor(player, character)
+					break
+				end
+			end
+		end
 	end)
-	table.insert(session.Connections, escapeConnection)
+	table.insert(session.Connections, sweepConnection)
+
+	-- ── keeping a rider on the ride ───────────────────────────────────
+	-- A bounding box around a helix proves nothing: the box contains the whole
+	-- cylinder the helix sweeps, so a rider who falls down the middle of the drum
+	-- satisfies it the entire way to the floor. This measures the two things that
+	-- actually decide whether someone is still riding:
+	--
+	--   ON PATH  — distance to the authored polyline, within the bore plus a
+	--              tolerance for the server/client position gap.
+	--   PROGRESS — ground actually covered. A rider sitting still on the path is
+	--              stuck, and stuck is a fault even though containment is happy.
+	--
+	-- The answer to either failing is to put the rider BACK ON the ride, at the
+	-- recycle landing point with the tangent's momentum. Ending the transition is
+	-- reserved for someone who cannot be recovered at all.
+	local pathPoints = manifest.Exit.PathPoints
+	local recycle = manifest.Exit.Recycle
+	local pathTolerance = manifest.Exit.BoreRadius + 14
+
+	local function distanceToPath(position)
+		local best = math.huge
+		for index = 1, #pathPoints - 1 do
+			local a = pathPoints[index]
+			local ab = pathPoints[index + 1] - a
+			local lengthSquared = ab:Dot(ab)
+			local t = lengthSquared > 1e-6
+				and math.clamp((position - a):Dot(ab) / lengthSquared, 0, 1) or 0
+			local distance = (position - (a + ab * t)).Magnitude
+			if distance < best then
+				best = distance
+				if best <= pathTolerance then return best end
+			end
+		end
+		return best
+	end
+
+	-- The recycle landing point sits on the helix at the entry angle, one turn
+	-- above the trigger, with a full turn of bore still below it. The tangent is
+	-- the direction of travel there: the helix winds with DECREASING angle, so it
+	-- is the derivative with respect to -angle, plus the descent.
+	local landingAngle = math.pi * .5
+	local recycleLanding = Vector3.new(
+		recycle.CenterX + math.cos(landingAngle) * recycle.Radius,
+		recycle.LandingY,
+		recycle.CenterZ + math.sin(landingAngle) * recycle.Radius)
+	local recycleTangent = (Vector3.new(
+		math.sin(landingAngle) * recycle.Radius,
+		-recycle.DeltaY / (2 * math.pi),
+		-math.cos(landingAngle) * recycle.Radius)).Unit
+
+	-- The recycle itself normally happens on the CLIENT, which owns the
+	-- character's physics; a server PivotTo would fight its prediction and the
+	-- slide controller's own teleport guard. The ride must not DEPEND on a client
+	-- script running, though, so the server performs the identical one-turn lift
+	-- as a backstop once a rider has fallen well past the point the client should
+	-- have acted at -- half a turn, about three seconds of margin before the
+	-- bottom of the drum. For a server-owned character (the probe rig, or a rider
+	-- whose ownership has been taken) this is the only recycle there is.
+	local recycleFloorY = recycle.TriggerY - recycle.DeltaY * .5
+
+	local function serverRecycle(character, root)
+		local position = root.Position
+		if position.Y > recycleFloorY then return false end
+		local offset = Vector3.new(position.X - recycle.CenterX, 0, position.Z - recycle.CenterZ)
+		-- Only a rider actually in the drum wall may be lifted. Someone falling
+		-- down the middle is a recovery case, not a recycle case.
+		if math.abs(offset.Magnitude - recycle.Radius) > manifest.Exit.BoreRadius + 6 then
+			return false
+		end
+		local velocity = root.AssemblyLinearVelocity
+		local spin = root.AssemblyAngularVelocity
+		character:PivotTo(character:GetPivot() + Vector3.new(0, recycle.DeltaY, 0))
+		root.AssemblyLinearVelocity = velocity
+		root.AssemblyAngularVelocity = spin
+		return true
+	end
+
+	local function placeBackOnRide(character, root)
+		root.AssemblyAngularVelocity = Vector3.zero
+		character:PivotTo(CFrame.lookAt(recycleLanding + Vector3.new(0, 3, 0),
+			recycleLanding + Vector3.new(0, 3, 0) + recycleTangent))
+		root.AssemblyLinearVelocity = recycleTangent * TRANSITION_RECOVERY_SPEED
+	end
+
+	local recoveryAccumulator = 0
+	local recoveryConnection = RunService.Heartbeat:Connect(function(deltaTime)
+		if activeSession ~= session then return end
+		recoveryAccumulator += deltaTime
+		if recoveryAccumulator < .25 then return end
+		local step = recoveryAccumulator
+		recoveryAccumulator = 0
+		for player, record in pairs(session.Transitioning) do
+			local character, humanoid, root = livingCharacter(player)
+			if not character or not root or not humanoid then
+				-- Dead, or between characters. The latch is deliberately KEPT: the
+				-- round has not resolved and this player is still a rider, so their
+				-- transition has to survive the respawn. Re-entry happens on
+				-- CharacterAdded below, not here.
+				record.OffPathFor = 0
+				record.StalledFor = 0
+				record.LastPosition = nil
+			else
+				if serverRecycle(character, root) then
+					-- The lift is exactly one helix turn, so the rider lands back
+					-- on the authored path travelling in the same direction. It is
+					-- not movement, so it must not be counted as progress and must
+					-- not be measured as a jump off the path.
+					record.LastPosition = nil
+					record.OffPathFor = 0
+					record.StalledFor = 0
+					record.ServerRecycles = (record.ServerRecycles or 0) + 1
+					player:SetAttribute("Level2_ExitServerRecycleCount", record.ServerRecycles)
+					continue
+				end
+				local position = root.Position
+				local moved = record.LastPosition
+					and (position - record.LastPosition).Magnitude or nil
+				record.LastPosition = position
+				record.Travelled += moved or 0
+
+				if distanceToPath(position) <= pathTolerance then
+					record.OffPathFor = 0
+				else
+					record.OffPathFor += step
+				end
+				-- Nil moved means this is the first sample since a respawn or since
+				-- completion; there is nothing to compare against yet, so it counts
+				-- as movement rather than as a stall.
+				if not moved or moved > TRANSITION_STALL_DISTANCE then
+					record.StalledFor = 0
+				else
+					record.StalledFor += step
+				end
+
+				if record.OffPathFor > TRANSITION_OFFPATH_GRACE
+					or record.StalledFor > TRANSITION_STALL_GRACE then
+					record.OffPathFor = 0
+					record.StalledFor = 0
+					record.LastPosition = nil
+					record.Recoveries += 1
+					player:SetAttribute("Level2_ExitRecoveryCount", record.Recoveries)
+					-- The ride is intentionally unbounded. A finite lifetime recovery
+					-- budget eventually parked a valid early finisher simply because
+					-- their teammates took longer. Keep repairing seam/replication
+					-- faults until GameManager causally clears the transition for a
+					-- Return Lobby choice or the next level.
+					placeBackOnRide(character, root)
+				end
+			end
+		end
+	end)
+	table.insert(session.Connections, recoveryConnection)
+
+	-- A rider who dies mid-transition keeps the latch, so when their character
+	-- comes back they are put straight back on the ride instead of being stranded
+	-- somewhere with Escaped set and nothing left to do. The same watcher handles
+	-- the opposite decision: GameManager clears Level2_ExitTransition when a rider
+	-- presses RETURN TO LOBBY, and that has to stop the ride rather than leave it
+	-- looping under someone who has already opted out.
+	local function watchRespawn(player)
+		table.insert(session.Connections,
+			player:GetAttributeChangedSignal("Level2_ExitTransition"):Connect(function()
+				if activeSession ~= session then return end
+				if player:GetAttribute("Level2_ExitTransition") == true then return end
+				if not session.Transitioning[player] then return end
+				session.Transitioning[player] = nil
+				player:SetAttribute("Level2_ExitServerRecycleCount", nil)
+				player:SetAttribute("Level2_ExitRecoveryCount", nil)
+				local character, _, root = livingCharacter(player)
+				if character and root then
+					root.AssemblyLinearVelocity = Vector3.zero
+					root.AssemblyAngularVelocity = Vector3.zero
+					character:PivotTo(manifest.Exit.SafeSpawn.CFrame * CFrame.new(0, 3, 0))
+				end
+			end))
+		local connection = player.CharacterAdded:Connect(function(character)
+			if activeSession ~= session then return end
+			if not session.Transitioning[player] then return end
+			local root = character:WaitForChild("HumanoidRootPart", 10)
+			local humanoid = character:FindFirstChildOfClass("Humanoid")
+			if not root or not humanoid then return end
+			-- Let the spawn placement everything else does settle first, otherwise
+			-- it lands on top of this one.
+			task.wait(.35)
+			local record = session.Transitioning[player]
+			if activeSession ~= session or not record or not root.Parent then return end
+			placeBackOnRide(character, root)
+			record.LastPosition = nil
+			record.OffPathFor = 0
+			record.StalledFor = 0
+		end)
+		table.insert(session.Connections, connection)
+	end
+	for _, player in ipairs(Players:GetPlayers()) do
+		watchRespawn(player)
+	end
+	table.insert(session.Connections, Players.PlayerAdded:Connect(watchRespawn))
 
 	-- RoundUI now delivers the full Command Center briefing with radio cue and
 	-- subtitles. Keep this controller focused on pump and door progress alerts.
@@ -467,6 +818,50 @@ function ObjectiveController.DebugActivatePump(index, player)
 	local session = assert(activeSession, "Level 2 objective is not running")
 	local activate = assert(session.DebugActivators[tonumber(index)], "unknown Level 2 pump index")
 	return activate(player)
+end
+
+-- Completion is deliberately once-per-player-per-round: session.Escaping latches
+-- so both sensors and every touching limb collapse into a single escape. That
+-- makes the exit un-retestable inside one generated round, so the transition
+-- suite clears the latch between probes. Studio-only, like every other Debug*.
+function ObjectiveController.DebugResetCompletion(player)
+	assert(RunService:IsStudio(), "DebugResetCompletion is Studio-only")
+	local session = assert(activeSession, "Level 2 objective is not running")
+	if player then
+		session.Escaping[player] = nil
+		session.Transitioning[player] = nil
+		-- A Studio probe repositions the character before launching it. Retaining
+		-- the pre-reset sweep endpoint can turn that placement into a synthetic
+		-- segment through the completion beam, completing before the ride starts.
+		session.ExitSweepPrevious[player] = nil
+		player:SetAttribute("Escaped", nil)
+		player:SetAttribute("Level2_ExitTransition", nil)
+		player:SetAttribute("Level2_ExitServerRecycleCount", nil)
+		player:SetAttribute("Level2_ExitRecoveryCount", nil)
+	else
+		-- Clear Escaped too. Without it the exit can never re-fire (validPlayer
+		-- rejects an Escaped player) and any rider still mid-transition is left
+		-- flagged Escaped with the transition already torn down.
+		for tracked in pairs(session.Escaping) do
+			if tracked.Parent then
+				tracked:SetAttribute("Escaped", nil)
+				tracked:SetAttribute("Level2_ExitTransition", nil)
+				tracked:SetAttribute("Level2_ExitServerRecycleCount", nil)
+				tracked:SetAttribute("Level2_ExitRecoveryCount", nil)
+			end
+		end
+		for tracked in pairs(session.Transitioning) do
+			if tracked.Parent then
+				tracked:SetAttribute("Level2_ExitTransition", nil)
+				tracked:SetAttribute("Level2_ExitServerRecycleCount", nil)
+				tracked:SetAttribute("Level2_ExitRecoveryCount", nil)
+			end
+		end
+		session.Escaping = {}
+		session.Transitioning = {}
+		table.clear(session.ExitSweepPrevious)
+	end
+	return true
 end
 
 function ObjectiveController.DebugOpenExit()
@@ -485,6 +880,16 @@ end
 
 function ObjectiveController.Stop()
 	if not activeSession then return end
+	-- The transition flag is a live-ride marker. It must never outlive the
+	-- session that set it, or a later round would start with a player the slide
+	-- controller still believes is mid-transition.
+	for player in pairs(activeSession.Transitioning or {}) do
+		if player.Parent then
+			player:SetAttribute("Level2_ExitTransition", nil)
+			player:SetAttribute("Level2_ExitServerRecycleCount", nil)
+			player:SetAttribute("Level2_ExitRecoveryCount", nil)
+		end
+	end
 	disconnectAll(activeSession)
 	activeSession = nil
 end

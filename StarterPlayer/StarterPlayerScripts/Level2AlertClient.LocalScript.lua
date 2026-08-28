@@ -3,6 +3,7 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UIDevice = require(ReplicatedStorage:WaitForChild("UIDevice"))
 local TweenService = game:GetService("TweenService")
 
 local player = Players.LocalPlayer
@@ -14,6 +15,12 @@ gui.IgnoreGuiInset = false
 gui.ResetOnSpawn = false
 gui.DisplayOrder = 80
 gui.Parent = player:WaitForChild("PlayerGui")
+
+local function syncDispatchSuppression()
+	gui.Enabled = player:GetAttribute("ZyntraDispatchClientActive") ~= true
+end
+player:GetAttributeChangedSignal("ZyntraDispatchClientActive"):Connect(syncDispatchSuppression)
+syncDispatchSuppression()
 
 local shade = Instance.new("Frame")
 shade.Size = UDim2.fromScale(1, 1)
@@ -31,14 +38,16 @@ panel.BackgroundTransparency = .12
 panel.BorderSizePixel = 0
 panel.Parent = shade
 local panelSize = Instance.new("UISizeConstraint")
-panelSize.MinSize = Vector2.new(180, 104)
+-- 104 is taller than the band a landscape phone leaves clear of the movement
+-- controls, and a UISizeConstraint MinSize silently overrides the clamp above.
+panelSize.MinSize = Vector2.new(180, 56)
 panelSize.MaxSize = Vector2.new(560, 140)
 panelSize.Parent = panel
 
 local cameraViewportConnection
 local function applySafePanelLayout()
-	local camera = workspace.CurrentCamera
-	local viewport = camera and camera.ViewportSize or Vector2.new(1280, 720)
+	local layout = UIDevice.Layout()
+	local viewport = layout.Viewport
 	if viewport.X < 600 then
 		panel.AnchorPoint = Vector2.new(.5, 0)
 		panel.Position = UDim2.new(.5, 0, 0, 158)
@@ -51,6 +60,24 @@ local function applySafePanelLayout()
 		panel.AnchorPoint = Vector2.new(.5, .5)
 		panel.Position = UDim2.fromScale(.43, .24)
 		panel.Size = UDim2.new(.56, 0, 0, 132)
+	end
+
+	-- On a touch device the panel has to fit the band that is clear of the
+	-- movement controls. A phone in landscape leaves only about 65 usable
+	-- vertical pixels there, and the authored 118px panel ran straight into the
+	-- thumbstick's activation region, so the height is clamped to the band and
+	-- the copy scales with it.
+	if layout.IsTouch then
+		-- Fit the strip that is clear of BOTH movement zones: above the
+		-- thumbstick's activation region, and left of the control column. The
+		-- authored 118px panel ran into the thumbstick, and a full-width one ran
+		-- under the GLOW button.
+		local band = layout.TopBand
+		panel.AnchorPoint = Vector2.new(0, 0)
+		panel.Position = UDim2.fromOffset(band.Left, UIDevice.TopOffsetFor(gui, band.Top))
+		panel.Size = UDim2.fromOffset(
+			math.max(180, band.Width),
+			math.max(56, math.min(panel.Size.Y.Offset, band.Height)))
 	end
 end
 
@@ -66,6 +93,7 @@ local function bindCurrentCamera()
 	applySafePanelLayout()
 end
 workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(bindCurrentCamera)
+UIDevice.Changed:Connect(applySafePanelLayout)
 bindCurrentCamera()
 
 local stroke = Instance.new("UIStroke")

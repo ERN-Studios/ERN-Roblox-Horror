@@ -1896,7 +1896,7 @@ local function addSupplyKiosk(parent, center)
 	kiosk.Name = "ZyntraSupplyKiosk"
 	kiosk:SetAttribute("VisualOnly", false)
 	kiosk:SetAttribute("ShopFunctional", true)
-	kiosk:SetAttribute("SupplyKioskVersion", 4)
+	kiosk:SetAttribute("SupplyKioskVersion", 5)
 	kiosk:SetAttribute("Placement", "Right service ledge between Level 2 and Level 4")
 	kiosk.Parent = parent
 
@@ -2009,8 +2009,8 @@ local function addSupplyKiosk(parent, center)
 	addBoard(
 		sign,
 		Enum.NormalId.Left,
-		"ZYNTRA SUPPLY",
-		"EQUIPMENT  •  UPGRADES  •  SUPPLIES",
+		"SHOP",
+		"",
 		cyan
 	)
 
@@ -2089,7 +2089,7 @@ local function addSupplyKiosk(parent, center)
 	local prompt = Instance.new("ProximityPrompt")
 	prompt.Name = "ZyntraShopPrompt"
 	prompt.ActionText = "OPEN SHOP"
-	prompt.ObjectText = "ZYNTRA SUPPLY"
+	prompt.ObjectText = "SHOP"
 	prompt.KeyboardKeyCode = Enum.KeyCode.E
 	prompt.GamepadKeyCode = Enum.KeyCode.ButtonX
 	prompt.HoldDuration = 0
@@ -2142,17 +2142,17 @@ end
 local function addPartyButton(parent, center)
 	local model = Instance.new("Model")
 	model.Name = "ZyntraPartyButton"
-	model:SetAttribute("PartyButtonVersion", 1)
-	model:SetAttribute("Placement", "Right wall between Level 2 and the supply kiosk")
+	model:SetAttribute("PartyButtonVersion", 3)
+	model:SetAttribute("Placement", "Right wall beyond Level 6 near the far tunnel end")
 	model:SetAttribute("PartyModeDuration", 10)
 	model.Parent = parent
 
-	local zOffset = -51.5
+	local zOffset = 108
 	local plate = makePart(
 		model,
 		"PartyButtonWallPlate",
-		CFrame.new(center + Vector3.new(33.35, 4.45, zOffset)),
-		Vector3.new(0.58, 4.5, 4.2),
+		CFrame.new(center + Vector3.new(33.35, 4.05, zOffset)),
+		Vector3.new(0.42, 2.4, 2.4),
 		Color3.fromRGB(27, 33, 32),
 		Enum.Material.Metal
 	)
@@ -2160,25 +2160,6 @@ local function addPartyButton(parent, center)
 	plate.CanTouch = false
 	plate.CanQuery = false
 	plate:SetAttribute("LobbyPartyControl", true)
-
-	local label = makePart(
-		model,
-		"PartyButtonLabel",
-		CFrame.new(center + Vector3.new(33.02, 6.35, zOffset)),
-		Vector3.new(0.16, 1.15, 3.55),
-		Color3.fromRGB(18, 24, 23),
-		Enum.Material.Metal
-	)
-	label.CanCollide = false
-	label.CanTouch = false
-	label.CanQuery = false
-	addBoard(
-		label,
-		Enum.NormalId.Left,
-		"???",
-		"UNMARKED CONTROL",
-		Color3.fromRGB(177, 89, 255)
-	)
 
 	local button = makePart(
 		model,
@@ -2216,6 +2197,14 @@ local function addPartyButton(parent, center)
 	prompt.RequiresLineOfSight = false
 	prompt.Style = Enum.ProximityPromptStyle.Default
 	prompt.Parent = button
+
+	-- Keep the E prompt as the primary interaction, but also support direct
+	-- mouse/touch activation. This makes the physical wall button reliable on
+	-- every client even if a custom UI temporarily hides Roblox's prompt.
+	local clickDetector = Instance.new("ClickDetector")
+	clickDetector.Name = "ZyntraPartyClick"
+	clickDetector.MaxActivationDistance = 12
+	clickDetector.Parent = button
 
 	return model
 end
@@ -2427,9 +2416,9 @@ function Builder.Build(center)
 	model:SetAttribute("TextureVersion", 9)
 	model:SetAttribute("LobbyAestheticRevision", 3)
 	model:SetAttribute("DispatchConcourseVersion", 7)
-	model:SetAttribute("SupplyKioskVersion", 4)
+	model:SetAttribute("SupplyKioskVersion", 5)
 	model:SetAttribute("DonationLeaderboardVersion", 2)
-	model:SetAttribute("PartyButtonVersion", 1)
+	model:SetAttribute("PartyButtonVersion", 3)
 	model:SetAttribute("TunnelCurveRevision", 2)
 	model:SetAttribute("SignageRevision", 2)
 	model:SetAttribute("RoundedSignFacesVersion", 1)

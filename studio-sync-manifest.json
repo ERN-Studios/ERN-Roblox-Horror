@@ -1,17 +1,17 @@
 {
   "formatVersion": 1,
-  "source": "Roblox Studio built-in MCP (.Source property read)",
+  "source": "Roblox Studio built-in MCP: .rbxmx payload -> game:GetObjects -> loadstring compile check -> ScriptEditorService:UpdateSourceAsync -> .Source re-read and FNV-1a verified",
   "studio": {
     "name": "Backrooms: No Way Out",
     "id": "7ccaf8b2-9e54-4709-8caa-91e1bce8b5b0"
   },
   "counts": {
-    "scripts": 108,
+    "scripts": 111,
     "remoteEvents": 13,
-    "total": 121,
-    "created": 2,
-    "updated": 26,
-    "unchanged": 93
+    "total": 124,
+    "created": 0,
+    "updated": 7,
+    "unchanged": 117
   },
   "extraMirroredFilesNotInStudio": [
     "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_AutomaticAssetCaptureSender_LocalizationService.RemoteEvent.txt",
@@ -32,8 +32,8 @@
       "studioPath": "ReplicatedStorage.ZyntraConfig",
       "className": "ModuleScript",
       "file": "ReplicatedStorage/ZyntraConfig.ModuleScript.lua",
-      "bytes": 4087,
-      "sha256": "71947d34c1a97408f9561eb2e382bc3e66512e1d8d9fec8f3fc7a6cc569bc934",
+      "bytes": 3709,
+      "sha256": "4c6778df58c1208ddce35c8ee69c8d2a4b4a1219262b0aaeb8ca2d1207606069",
       "status": "synced"
     },
     {
@@ -80,8 +80,8 @@
       "studioPath": "ServerScriptService.GameManager",
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 60376,
-      "sha256": "d5461657ce43910ba38d23d8337b32135318919d15d2e36f070c8c3fd085ac65",
+      "bytes": 78160,
+      "sha256": "8aa61f3124cb549fab7a977c0244e0915bc48c6947a0288ab83445e18df3954b",
       "status": "synced"
     },
     {
@@ -112,16 +112,16 @@
       "studioPath": "ServerScriptService.TunnelLobbyBuilder",
       "className": "ModuleScript",
       "file": "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
-      "bytes": 95517,
-      "sha256": "6e19a7e81786d38b15d7fe10785e0245266dc6611d4cc13ca2f392d6706a0449",
+      "bytes": 95466,
+      "sha256": "ce964f8a684c2719cd2939255046866acbb05091c1f1c0ae1f10c9285b645d3c",
       "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.ZyntraMonetization",
       "className": "Script",
       "file": "ServerScriptService/ZyntraMonetization.Script.lua",
-      "bytes": 27672,
-      "sha256": "e2b799e511db3e388696ca4689b0b7a624cb3f2805095fb564fb35908025ad0b",
+      "bytes": 69702,
+      "sha256": "0b9ff1fbe4d3cb2c42908cb74436f7e568e5f860f3d8f1c82efcfb3f56b29d1c",
       "status": "synced"
     },
     {
@@ -160,16 +160,16 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/NoiseReporter.LocalScript.lua",
-      "bytes": 14867,
-      "sha256": "a5aa8fc9f727dcb291d17f31e78e0bfe6ce6e4507795991c5b6f1451f8837bda",
+      "bytes": 20411,
+      "sha256": "0fa7d789d4c3ec35832bf8d946bf98d3f8ced082272fda74b4d65231f3200059",
       "status": "synced"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.FlashlightController",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/FlashlightController.LocalScript.lua",
-      "bytes": 21209,
-      "sha256": "4ca9e0a0c8d25e2ddd74ba678637b45f498efe8ec5cf21035194ef1b8e97e959",
+      "bytes": 24808,
+      "sha256": "95c5ee4a16fe7ee6573b9a02f26ac4303d1447a1c3d4650cda6cd10c3591e560",
       "status": "synced"
     },
     {
@@ -184,24 +184,24 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.RoundUI",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
-      "bytes": 134496,
-      "sha256": "d15fcf41c24c5f9a653b4b0709c01fe8c5278ef8f3d864122726790e62a9b1be",
+      "bytes": 158711,
+      "sha256": "2cd2b84f39cfb32421839dfdd15fe69ecb20dfa491aad880d00b357c77ebcd8f",
       "status": "synced"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.SoundController",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
-      "bytes": 53923,
-      "sha256": "ca61f49b950daaec3bd62360ec50094b4583a4034f3b7d787528220841d897ee",
+      "bytes": 59350,
+      "sha256": "eb8ee7bab4ad79c6701fe2230486f0c2ff8738f3c2b0c2995c66edd840af3d3a",
       "status": "synced"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.PuzzleUI",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/PuzzleUI.LocalScript.lua",
-      "bytes": 12446,
-      "sha256": "203afe76ebca26447399326d167e9e6e72ab804e29cf65720500982fc2b27d0c",
+      "bytes": 15262,
+      "sha256": "5e56b8687486d66d6f7733000f116a133e9f4eff3c663eccf56e917f094b185f",
       "status": "synced"
     },
     {
@@ -216,8 +216,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.SpectateController",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/SpectateController.LocalScript.lua",
-      "bytes": 7800,
-      "sha256": "9cb4370bfdb270c760ebf397fb725f4e678c480aad24320cb65ef0dbfc5ce656",
+      "bytes": 13387,
+      "sha256": "e378c547f4ccdbb3e8b9b99b51fd4361f00cde84a773994c564e529fef3eacc4",
       "status": "synced"
     },
     {
@@ -232,16 +232,16 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level2AlertClient",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level2AlertClient.LocalScript.lua",
-      "bytes": 8087,
-      "sha256": "061bc85f40ab6505ecf9a512ff440b59162938566649f0294d74d8e2de43a428",
+      "bytes": 9436,
+      "sha256": "fac25c5cbd51d719ca884438518256e7f3fb44020760c6731e5cdf7a715db532",
       "status": "synced"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
-      "bytes": 37095,
-      "sha256": "61b118b4f70660117c6401cc5e54d5999a60ab1775c8b067eff397c5a13df0ed",
+      "bytes": 40777,
+      "sha256": "4a886d0e6ccd0957f82824e6bf2f0ff83ef06ae8641ab60a0f186dfd9a7c7468",
       "status": "synced"
     },
     {
@@ -256,32 +256,32 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Lighting Controller",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Lighting Controller.LocalScript.lua",
-      "bytes": 5252,
-      "sha256": "cfca5cbdd22f45605e83545901438e4f454bc70b590ede0fc6dfccd875c627c3",
+      "bytes": 5591,
+      "sha256": "3526af9143f0ce1c5d80aad30dcecba8bd7f0156f542aa5381a8a7adc72d1657",
       "status": "synced"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Sound Controller.LocalScript.lua",
-      "bytes": 25833,
-      "sha256": "5dff8708f3d3f43e0102f09676e52dbcb4942ff839c41f13180d7196c450b131",
+      "bytes": 26597,
+      "sha256": "a77a09068c6f8e91b505451b41cf3a64ec6978a2fe4120dadc5dde0463655b5c",
       "status": "synced"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Slide Controller",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Slide Controller.LocalScript.lua",
-      "bytes": 20620,
-      "sha256": "7ea4317a9ac03ba84cc8d2c97c5385d1f30cec79a12a4441adda27bcbab53c59",
+      "bytes": 29866,
+      "sha256": "29c6458b044f39bbc3d59748ae9fc321e5dbb927405743f3bb9d1f3963980f1d",
       "status": "synced"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Objective UI",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua",
-      "bytes": 5211,
-      "sha256": "766ec49b4b8a47d7d34fb4d0de0228f39cc7816b06cfd6bcc831f9b19b4321ac",
+      "bytes": 6848,
+      "sha256": "c01dc3a6cfa3586692eb053035137b976f48e490eec25de99db23ad4383bf36f",
       "status": "synced"
     },
     {
@@ -296,8 +296,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 3 Reader Client.LocalScript.lua",
-      "bytes": 19025,
-      "sha256": "d6d198ffffdfdb0dd89df397b8479d5f808c774251af68fd3b8267baf3001573",
+      "bytes": 22277,
+      "sha256": "eb2963bdb48ed3a2cbf61fbfb36cad5b71985eb320deaf79c86b776f3557f2ed",
       "status": "synced"
     },
     {
@@ -368,32 +368,32 @@
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 World Builder",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua",
-      "bytes": 236686,
-      "sha256": "48bfdf81f3fc68d2c6a5ae387505ee98b6895551d9f1d35835c56a1a9754b496",
+      "bytes": 247924,
+      "sha256": "2ef8392af7e8cc1898bc739d01c1a1c4bd1bb39bd8168d00b228de4443947c42",
       "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Slide Ragdoll Service",
       "className": "Script",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Slide Ragdoll Service.Script.lua",
-      "bytes": 17014,
-      "sha256": "b5b9752a189baee3ca1ca61a9d6b519e6d1cc81bce4cfebdac8154641cd34ae1",
+      "bytes": 20814,
+      "sha256": "791b9463166af950c455391b16fccbded37e9960f8b9e4c58589ea73b6a090fa",
       "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Objective Controller.ModuleScript.lua",
-      "bytes": 19456,
-      "sha256": "67ac0b771513a82bca573fef248f69d5d58d5fdeba76187b3f9bf08bc960fba2",
+      "bytes": 38528,
+      "sha256": "e7143ec311787d456f54601a4894d7846493547807caa38f208bf8a93b3b6371",
       "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Round Adapter",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua",
-      "bytes": 12739,
-      "sha256": "88fe48f8b0046a64169da830dc6da3a7100f4169f6cadc2481e6c9c9a815878a",
+      "bytes": 13682,
+      "sha256": "2f1ff99a0a25a0441fbc567dab3970a2e86b06ca7894b1ed2d2159b93574d7e0",
       "status": "synced"
     },
     {
@@ -432,8 +432,8 @@
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Navigator.ModuleScript.lua",
-      "bytes": 22974,
-      "sha256": "c18e6bb06acd380c9a0c0d50565c8f9706d18fc6810b3f6bdc065e88192a3d25",
+      "bytes": 24791,
+      "sha256": "0ab9cfeb53fe3a49b617b75fbe6dadbeee1f8f7fb2b8e018e5503e67d953ab15",
       "status": "synced"
     },
     {
@@ -464,16 +464,16 @@
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Configuration.ModuleScript.lua",
-      "bytes": 17279,
-      "sha256": "85343ec9c6c8f6db7eba08d2c011219fe9e4cc2b32de10f4d37a5e42662a903d",
+      "bytes": 17747,
+      "sha256": "10fe40c4f579d67dd47d2bb57f70b6a9d8cf7be8b819ee43b96e1ee0d495f4db",
       "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 World Builder.ModuleScript.lua",
-      "bytes": 103469,
-      "sha256": "9e06546b9d979db8ecdab39daa2534c5b441cdbbff588b19775d1ef77ff286fe",
+      "bytes": 108043,
+      "sha256": "0c81bdaa08398c7c8142e3d38b8c5742179bff17a892c549d989f90e1820a048",
       "status": "synced"
     },
     {
@@ -488,24 +488,24 @@
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Round Adapter.ModuleScript.lua",
-      "bytes": 27709,
-      "sha256": "2bb3531e8c298806e0c2febb6386b86643fb1eedb5c4268315dad4774d1fdf0e",
+      "bytes": 28669,
+      "sha256": "9ec16b893e63e7617c77487992f16bf890c4147cb719b91ac2ecf2fa1154d648",
       "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Test Suite",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Test Suite.ModuleScript.lua",
-      "bytes": 157466,
-      "sha256": "53d8d33c436dea24ece0b66f1cfb2a7c37979ec943df209cf6f8e6004e3f42af",
+      "bytes": 178541,
+      "sha256": "72f5b82a5c1b53962e9743761054ecc13ef8944c37fc668e7ac93172ef73b428",
       "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Music Sequence Controller",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Music Sequence Controller.ModuleScript.lua",
-      "bytes": 25216,
-      "sha256": "85464c42840ccefe53b37e6b5d40f3f4b9d6036023bc3b0df15a7fffe960089a",
+      "bytes": 22350,
+      "sha256": "5b537a0fca880c29aa68d031f320a6912779c66e4d587c38a99b75c716f348d3",
       "status": "synced"
     },
     {
@@ -818,7 +818,7 @@
       "file": "ReplicatedStorage/Level2AlertEvent.RemoteEvent.txt",
       "bytes": 148,
       "sha256": "d2d89a5dcd9f10a184aa9d2019c99d89148a1f34c10a6de3550a990287b0341b",
-      "status": "unchanged"
+      "status": "synced"
     },
     {
       "studioPath": "ReplicatedStorage.Level 2 Sound Event",
@@ -826,7 +826,7 @@
       "file": "ReplicatedStorage/Level 2 Sound Event.RemoteEvent.txt",
       "bytes": 151,
       "sha256": "0ba809f3fd9e16ffa9df434397aeecf995100bd68140856e69113c62d8f4443d",
-      "status": "unchanged"
+      "status": "synced"
     },
     {
       "studioPath": "ReplicatedStorage.Remotes.ReportNoise",
@@ -834,7 +834,7 @@
       "file": "ReplicatedStorage/Remotes/ReportNoise.RemoteEvent.txt",
       "bytes": 433,
       "sha256": "d401c12504541bcd6429628945f25c6640a18ef14800e4baac30dc6028e61f82",
-      "status": "unchanged"
+      "status": "synced"
     },
     {
       "studioPath": "ReplicatedStorage.Remotes.ToggleFlashlight",
@@ -842,7 +842,7 @@
       "file": "ReplicatedStorage/Remotes/ToggleFlashlight.RemoteEvent.txt",
       "bytes": 456,
       "sha256": "da41e03f2bcf356e13a5b840ec7508d99c312bb8a07ceb9353cbadeaea81b216",
-      "status": "unchanged"
+      "status": "synced"
     },
     {
       "studioPath": "ReplicatedStorage.Remotes.Jumpscare",
@@ -850,7 +850,7 @@
       "file": "ReplicatedStorage/Remotes/Jumpscare.RemoteEvent.txt",
       "bytes": 287,
       "sha256": "068d83d9ce039cf5463c14220281cd81551d798a2e904b0032e02497c15582c8",
-      "status": "unchanged"
+      "status": "synced"
     },
     {
       "studioPath": "ReplicatedStorage.Remotes.RoundStatus",
@@ -858,7 +858,7 @@
       "file": "ReplicatedStorage/Remotes/RoundStatus.RemoteEvent.txt",
       "bytes": 288,
       "sha256": "c04870c6bd6b7fac25e394f12b69c13cb705155f5d9d495b430214c0debb6f46",
-      "status": "unchanged"
+      "status": "synced"
     },
     {
       "studioPath": "ReplicatedStorage.Remotes.PuzzleStatus",
@@ -866,7 +866,7 @@
       "file": "ReplicatedStorage/Remotes/PuzzleStatus.RemoteEvent.txt",
       "bytes": 293,
       "sha256": "fb3fef07cca8935942f386596e3a31179b31adf436e897e65ba973e233e42523",
-      "status": "unchanged"
+      "status": "synced"
     },
     {
       "studioPath": "ReplicatedStorage.Remotes.DevControl",
@@ -874,7 +874,7 @@
       "file": "ReplicatedStorage/Remotes/DevControl.RemoteEvent.txt",
       "bytes": 501,
       "sha256": "7d670338de017f22083de64b847b9b8c1f2c63a11dc93c8f8ffc60eab2a445ad",
-      "status": "unchanged"
+      "status": "synced"
     },
     {
       "studioPath": "ReplicatedStorage.Remotes.DropGlowstick",
@@ -882,7 +882,7 @@
       "file": "ReplicatedStorage/Remotes/DropGlowstick.RemoteEvent.txt",
       "bytes": 245,
       "sha256": "86458c8756ae1a2f91c93a642d3da93fd077d24ac6ad6698873b92ae84cb0194",
-      "status": "unchanged"
+      "status": "synced"
     },
     {
       "studioPath": "ReplicatedStorage.Level 2 Pool Foam Remotes.ClientReport",
@@ -890,7 +890,7 @@
       "file": "ReplicatedStorage/Level 2 Pool Foam Remotes/ClientReport.RemoteEvent.txt",
       "bytes": 171,
       "sha256": "0c43f7f0767d158e450b0d5bab2add9650a26dcf1bbe4e9a810a0bb4010a65ee",
-      "status": "unchanged"
+      "status": "synced"
     },
     {
       "studioPath": "ReplicatedStorage.Level 2 Pool Foam Remotes.ClientEvent",
@@ -898,7 +898,7 @@
       "file": "ReplicatedStorage/Level 2 Pool Foam Remotes/ClientEvent.RemoteEvent.txt",
       "bytes": 170,
       "sha256": "f8c6ce631bbf6ab6e69966618e76d4359465010bbe69b86b454646f3cbac48a3",
-      "status": "unchanged"
+      "status": "synced"
     },
     {
       "studioPath": "ReplicatedStorage.Level 3 Remotes.ClientEvent",
@@ -906,30 +906,30 @@
       "file": "ReplicatedStorage/Level 3 Remotes/ClientEvent.RemoteEvent.txt",
       "bytes": 160,
       "sha256": "58c0db0a2621b63c09704a8d2d1e3bbe31ee80929c9ce9dd06cc7b2a96d293fc",
-      "status": "unchanged"
+      "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Slidemouth Controller",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Slidemouth Controller.ModuleScript.lua",
-      "bytes": 43636,
-      "sha256": "2e1870de270dd654a446c8284ec7c83208745ddae1559d2f074eb60c85092306",
+      "bytes": 45293,
+      "sha256": "6ae8f3671500b1d1c205d77469f7602cf6db10983f035a3011c993c13544be22",
       "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Mall Manager AI Controller.ModuleScript.lua",
-      "bytes": 149108,
-      "sha256": "c12a39b852099d68ae0c5ebe469f7855ebf5e723085a008d0b7c329c6e23d33d",
+      "bytes": 152720,
+      "sha256": "6b4663ac391bf557ec27670cadc820acc2cb6edb384d802554c0b16cf29382d3",
       "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Hiding Controller",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Hiding Controller.ModuleScript.lua",
-      "bytes": 16432,
-      "sha256": "7da762f75cac0cc1f4b9a57bc8fcb11f5465eebe5df37736d4b7530ae4a6b9f4",
+      "bytes": 16435,
+      "sha256": "aa03130983ae62f383003217f4bfc480180609cbbecf11cd62e5e5ec17f193f2",
       "status": "synced"
     },
     {
@@ -952,16 +952,16 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Table Hiding Client",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 3 Table Hiding Client.LocalScript.lua",
-      "bytes": 4322,
-      "sha256": "2b69a5f7e9cea7265e89ced8d6c7f2debbf0cc8f2713ba1eea566cc589e91971",
+      "bytes": 6287,
+      "sha256": "bcdce09b97ea9155552484891a67a7fcafc1ef22be44aa8a21c1cdf0958ee5b5",
       "status": "synced"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Slidemouth Client",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Slidemouth Client.LocalScript.lua",
-      "bytes": 9044,
-      "sha256": "aae4350953fb24c7e5bf99da69b842a3f64445f195dda3ff84a0439ec51ea5a3",
+      "bytes": 9372,
+      "sha256": "1f6f81df549b4cecfaaf83490c7f61dc0a2182f6cf1208ac2af4010e745f762d",
       "status": "synced"
     },
     {
@@ -976,8 +976,8 @@
       "studioPath": "ServerScriptService.LobbyPartyModeController",
       "className": "Script",
       "file": "ServerScriptService/LobbyPartyModeController.Script.lua",
-      "bytes": 6708,
-      "sha256": "52c6294b78eebe5f1363580d28329704be131f82eb0f91511686452affbdbb56",
+      "bytes": 7124,
+      "sha256": "790fad57bf00234e1ae66656227b8949b1917be257b3d4c3647b4e519d41c92c",
       "status": "synced"
     },
     {
@@ -986,7 +986,31 @@
       "file": "ReplicatedStorage/Level 3 Remotes/Level3HideRequest.RemoteEvent.txt",
       "bytes": 165,
       "sha256": "19deb874115fb53555fb3fc4e9e66733fe278dad0fc84c5758882c25d0b38529",
-      "status": "created"
+      "status": "synced"
+    },
+    {
+      "studioPath": "ReplicatedStorage.UIDevice",
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/UIDevice.ModuleScript.lua",
+      "bytes": 22560,
+      "sha256": "0ce89942f57e4e6b11c614d4edebbf41ee8ff664180ce34698c77df5d1dc1476",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ReplicatedStorage.UIRegression",
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
+      "bytes": 35530,
+      "sha256": "873f4bcf614b07cbbe8acb32059dff1ee97dac033fd74e453151a338513f496a",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Exit Transition Test Suite",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 2 Systems/Level 2 Exit Transition Test Suite.ModuleScript.lua",
+      "bytes": 44233,
+      "sha256": "2c6023dd74fd3bc4d1e5da87678375107f134c03752b806f76446eb717f4e3fa",
+      "status": "synced"
     }
   ]
 }

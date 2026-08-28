@@ -14,6 +14,7 @@ local Workspace = game:GetService("Workspace")
 local player = Players.LocalPlayer
 local remotes = ReplicatedStorage:WaitForChild("Remotes")
 local ragdollRemote = remotes:WaitForChild("Level2SlideRagdoll", 15)
+local level3SlideStream = remotes:WaitForChild("Level3SlideStream", 15)
 
 local ENTER_SLOPE = .20
 local RELEASE_SLOPE = .12
@@ -42,6 +43,38 @@ raycastParams.RespectCanCollide = true
 local activeSlide
 local pendingRestore
 
+-- GameManager keeps a Level 2 continuer anchored and covered until this client
+-- can see real Level 3 bore collision. RequestStreamAroundAsync completion by
+-- itself is not treated as readiness; a nearby tagged BasePart must exist too.
+if level3SlideStream and level3SlideStream:IsA("RemoteEvent") then
+	level3SlideStream.OnClientEvent:Connect(function(action, token, position, timeout)
+		if action ~= "request" or type(token) ~= "string"
+			or typeof(position) ~= "Vector3" then return end
+		task.spawn(function()
+			local budget = math.clamp(tonumber(timeout) or 6, 1, 12)
+			pcall(function() player:RequestStreamAroundAsync(position, budget) end)
+			local ready = false
+			local deadline = os.clock() + budget
+			repeat
+				local world = Workspace:FindFirstChild("Level 3 Generated World")
+				local tube = world and world:FindFirstChild("Level 2 Exit Slide Continuation", true)
+				if tube and tube:GetAttribute("Level3_Level2ExitTube") == true then
+					for _, object in ipairs(tube:GetDescendants()) do
+						if object:IsA("BasePart") and object.CanCollide
+							and object:GetAttribute("Level3_ProgressionSlide") == true
+							and (object.Position - position).Magnitude <= 28 then
+							ready = true
+							break
+						end
+					end
+				end
+				if not ready then task.wait(.05) end
+			until ready or os.clock() >= deadline
+			level3SlideStream:FireServer("ack", token, ready)
+		end)
+	end)
+end
+
 local LEGACY_ANATOMY = {
 	neck = true,
 	waist = true,
@@ -58,10 +91,22 @@ local function isLegacyAnatomyMotor(motor)
 	return motor:IsA("Motor6D") and LEGACY_ANATOMY[normalized] == true
 end
 
+-- LEVEL2_EXIT_TRANSITION_20260828
+-- Escaping normally ends the ride. The exit transition is the one case where it
+-- must not: after crossing the completion sensor the rider is Escaped but still
+-- physically sliding down the tube for the whole 15-second decision window, so
+-- the slide stays live until the server clears Level2_ExitTransition.
 local function levelIsActive()
-	return Workspace:GetAttribute("SelectedLevel") == 2
-		and player:GetAttribute("InRound") == true
-		and player:GetAttribute("Escaped") ~= true
+	local selectedLevel = Workspace:GetAttribute("SelectedLevel")
+	if player:GetAttribute("InRound") ~= true then return false end
+	if selectedLevel == 2 then
+		return player:GetAttribute("Escaped") ~= true
+			or player:GetAttribute("Level2_ExitTransition") == true
+	end
+	-- Level 3's arrival bore is the physical continuation of this same slide.
+	-- Reuse the real joint-releasing controller instead of making the freshly
+	-- loaded character a rigid PlatformStand mannequin at the server seam.
+	return selectedLevel == 3 and player:GetAttribute("Escaped") ~= true
 end
 
 local function setWalkSpeed(slide, speed)
@@ -233,14 +278,23 @@ local function releaseBodyJoints(slide)
 		end
 	end
 
-	table.insert(slide.Collisions, {
-		Part = slide.Root,
-		CanCollide = slide.Root.CanCollide,
-	})
-	slide.Root.CanCollide = false
+	-- Avatar packages are not consistent about limb collision. The current
+	-- R15 body, for example, arrives with every arm, leg and torso collidable;
+	-- releasing those joints inside a 16-stud bore makes the rig brace across
+	-- the tube and absorb a 105 stud/s launch. Snapshot the complete body and
+	-- use one rounded contact (the head) while sliding. This keeps the tumble
+	-- physical without letting custom player models wedge themselves in place.
+	for _, descendant in ipairs(slide.Character:GetDescendants()) do
+		if descendant:IsA("BasePart") then
+			table.insert(slide.Collisions, {
+				Part = descendant,
+				CanCollide = descendant.CanCollide,
+			})
+			descendant.CanCollide = false
+		end
+	end
 	local head = slide.Character:FindFirstChild("Head")
 	if head and head:IsA("BasePart") then
-		table.insert(slide.Collisions, {Part = head, CanCollide = head.CanCollide})
 		head.CanCollide = true
 	end
 end
@@ -279,10 +333,62 @@ local function destroyForce(slide)
 	slide.Attachment = nil
 end
 
+local function exitTransitionOwnsSlide(slide)
+	return slide and slide.OneWay
+		and Workspace:GetAttribute("SelectedLevel") == 2
+		and player:GetAttribute("InRound") == true
+		and player:GetAttribute("Level2_ExitTransition") == true
+end
+
+local function installDriveForce(slide)
+	destroyForce(slide)
+	if not slide.Root.Parent then return false end
+	local attachment = Instance.new("Attachment")
+	attachment.Name = "Level 2 Ragdoll Slide Force Attachment"
+	attachment.Parent = slide.Root
+	local actuator = Instance.new("VectorForce")
+	actuator.Name = "Level 2 Ragdoll Downhill Force"
+	actuator.Attachment0 = attachment
+	actuator.RelativeTo = Enum.ActuatorRelativeTo.World
+	actuator.ApplyAtCenterOfMass = true
+	actuator.Force = slide.Direction * slide.MechanismMass
+		* (slide.OneWay and EXIT_DRIVE_ACCELERATION or OPEN_DRIVE_ACCELERATION)
+	actuator.Parent = slide.Root
+	slide.Attachment = attachment
+	slide.Actuator = actuator
+	return true
+end
+
+-- A server recovery is an authoritative correction back onto the endless
+-- helix. The client may already have entered COASTING and destroyed its force
+-- during the server's off-path grace, so rebasing LastPosition alone is not
+-- enough: rebuild the actuator and re-arm every contact timer as one operation.
+local function resumeExitDrive(slide, direction)
+	if not exitTransitionOwnsSlide(slide) then return false end
+	if typeof(direction) == "Vector3" and direction.Magnitude > .1 then
+		slide.Direction = direction.Unit
+	end
+	slide.Phase = "ACTIVE"
+	slide.LastContact = os.clock()
+	slide.ShallowSince = nil
+	slide.GroundedSince = nil
+	slide.CoastStarted = nil
+	slide.RunoutStarted = nil
+	return installDriveForce(slide)
+end
+
 local function finishSliding(restore, supported)
 	local slide = activeSlide
 	if not slide then return end
+	-- During the completed Level 2 ride the server owns the lifecycle. Lost
+	-- floor contact, a temporary anchor, or a forged/local End must not stand the
+	-- rider up inside the continuation tube. Return Lobby/level transfer clears
+	-- the transition first, after which the ordinary cleanup path is available.
+	if restore and exitTransitionOwnsSlide(slide) then return end
 	activeSlide = nil
+	if slide.Character and slide.Character.Parent then
+		slide.Character:SetAttribute("Level2_ExitRecycleCount", nil)
+	end
 	for _, connection in ipairs(slide.Connections) do connection:Disconnect() end
 	destroyForce(slide)
 
@@ -381,19 +487,7 @@ local function startSliding(character, humanoid, root, direction, oneWay)
 	humanoid.PlatformStand = true
 	humanoid:ChangeState(Enum.HumanoidStateType.Physics)
 
-	local attachment = Instance.new("Attachment")
-	attachment.Name = "Level 2 Ragdoll Slide Force Attachment"
-	attachment.Parent = root
-	local actuator = Instance.new("VectorForce")
-	actuator.Name = "Level 2 Ragdoll Downhill Force"
-	actuator.Attachment0 = attachment
-	actuator.RelativeTo = Enum.ActuatorRelativeTo.World
-	actuator.ApplyAtCenterOfMass = true
-	actuator.Force = direction * slide.MechanismMass
-		* (oneWay and EXIT_DRIVE_ACCELERATION or OPEN_DRIVE_ACCELERATION)
-	actuator.Parent = root
-	slide.Attachment = attachment
-	slide.Actuator = actuator
+	installDriveForce(slide)
 
 	if ragdollRemote and ragdollRemote:IsA("RemoteEvent") then
 		ragdollRemote:FireServer("Begin")
@@ -426,7 +520,13 @@ local function slideFloorUnder(character, humanoid, root)
 	local distance = humanoid.HipHeight + root.Size.Y * .5 + 4
 	local result = Workspace:Raycast(origin, Vector3.new(0, -distance, 0), raycastParams)
 	local floor = result and result.Instance
-	if not floor or floor:GetAttribute("Level2_SlideFloor") ~= true then return nil end
+	if not floor then return nil end
+	if floor:GetAttribute("Level3_ProgressionSlide") == true then
+		-- Continuation panels use local X from mouth to rear; travel is the
+		-- inverse, downhill toward the mall.
+		return -floor.CFrame.RightVector, true, floor
+	end
+	if floor:GetAttribute("Level2_SlideFloor") ~= true then return nil end
 	local direction = floor:GetAttribute("Level2_SlideDirection")
 	if typeof(direction) ~= "Vector3" or direction.Magnitude < .5 then
 		direction = floor.CFrame.LookVector
@@ -443,6 +543,71 @@ local function supportedUnder(character, humanoid, root)
 	return result ~= nil and result.Normal.Y >= .60
 end
 
+-- LEVEL2_EXIT_RECYCLE_20260828
+-- The exit transition has to last an arbitrary multiplayer wait: a first rider
+-- can be circling for minutes while the rest of the party finishes Level 2. A
+-- tube long enough for that in static geometry would be tens of thousands of
+-- parts, so instead the rider RECYCLES around three turns of helix.
+--
+-- The lift is exact, not a blend. The helix is uniform, so the bore one full
+-- turn up is the same shape at the same path tangent, and the rider's velocity
+-- carries over untouched. The tube is a closed sleeve, so there is nothing
+-- outside it to parallax against and give the jump away.
+--
+-- This runs on the CLIENT because the client owns the character's physics; a
+-- server PivotTo would be fought by client prediction and would look like a
+-- rubber-band. It also has to update the slide's own LastPosition, or the
+-- teleport guard immediately below would read the lift as an external teleport
+-- and end the ride.
+local recycleModel = nil
+local function exitRecycleModel()
+	if recycleModel and recycleModel.Parent then return recycleModel end
+	recycleModel = nil
+	local world = Workspace:FindFirstChild("Level 2 Generated World")
+	if not world then return nil end
+	for _, object in ipairs(world:GetDescendants()) do
+		if object:GetAttribute("Level2_RecycleActive") == true then
+			recycleModel = object
+			break
+		end
+	end
+	return recycleModel
+end
+
+local function applyExitRecycle(slide, character, root)
+	if not slide or not slide.OneWay then return false end
+	if player:GetAttribute("Level2_ExitTransition") ~= true then return false end
+	local model = exitRecycleModel()
+	if not model then return false end
+	local triggerY = model:GetAttribute("Level2_RecycleTriggerY")
+	local deltaY = model:GetAttribute("Level2_RecycleDeltaY")
+	if type(triggerY) ~= "number" or type(deltaY) ~= "number" or deltaY <= 0 then
+		return false
+	end
+	if root.Position.Y > triggerY then return false end
+	-- Only lift a rider who is actually inside the drum wall. Someone who has
+	-- fallen down the middle must be recovered by the server, not looped.
+	local centerX = model:GetAttribute("Level2_HelixCenterX")
+	local centerZ = model:GetAttribute("Level2_HelixCenterZ")
+	local helixRadius = model:GetAttribute("Level2_HelixRadius")
+	local bore = model:GetAttribute("Level2_FlumeBoreRadius") or 8
+	if type(centerX) == "number" and type(centerZ) == "number" and type(helixRadius) == "number" then
+		local offset = Vector2.new(root.Position.X - centerX, root.Position.Z - centerZ)
+		if math.abs(offset.Magnitude - helixRadius) > bore + 4 then return false end
+	end
+	local lift = Vector3.new(0, deltaY, 0)
+	local velocity = root.AssemblyLinearVelocity
+	local spin = root.AssemblyAngularVelocity
+	character:PivotTo(character:GetPivot() + lift)
+	root.AssemblyLinearVelocity = velocity
+	root.AssemblyAngularVelocity = spin
+	-- Keep the guard below consistent with the lift we just performed.
+	slide.LastPosition = root.Position
+	slide.RecycleCount = (slide.RecycleCount or 0) + 1
+	character:SetAttribute("Level2_ExitRecycleCount", slide.RecycleCount)
+	return true
+end
+
 RunService.PreSimulation:Connect(function(deltaTime)
 	local character = player.Character
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
@@ -453,13 +618,29 @@ RunService.PreSimulation:Connect(function(deltaTime)
 		return
 	end
 	if root.Anchored then
+		if activeSlide and exitTransitionOwnsSlide(activeSlide) then
+			activeSlide.LastPosition = root.Position
+			return
+		end
 		finishSliding(true, false)
 		return
 	end
 	if activeSlide and activeSlide.Character ~= character then finishSliding(false, false) end
+	if activeSlide then applyExitRecycle(activeSlide, character, root) end
 	if activeSlide and (root.Position - activeSlide.LastPosition).Magnitude > 20 then
-		finishSliding(true, false)
-		return
+		if activeSlide.OneWay
+			and player:GetAttribute("Level2_ExitTransition") == true then
+			-- The server recovery backstop may put an escaped rider back on the
+			-- authored helix. Treat that authoritative correction exactly like the
+			-- client recycle: keep the ragdoll session and rebase the teleport guard.
+			-- Return Lobby clears the transition first, so real route changes still
+			-- finish and send End normally.
+			activeSlide.LastPosition = root.Position
+			resumeExitDrive(activeSlide)
+		else
+			finishSliding(true, false)
+			return
+		end
 	end
 
 	local direction, oneWay = slideFloorUnder(character, humanoid, root)
@@ -473,6 +654,13 @@ RunService.PreSimulation:Connect(function(deltaTime)
 
 	local slide = activeSlide
 	if not slide then return end
+	-- The authoritative transition can outlive a short loss of contact. If this
+	-- client coasted before the server correction replicated, make the state
+	-- self-healing even when the correction was shorter than the teleport guard.
+	if exitTransitionOwnsSlide(slide)
+		and (slide.Phase ~= "ACTIVE" or not slide.Actuator) then
+		resumeExitDrive(slide, direction)
+	end
 	slide.LastPosition = root.Position
 	slide.Humanoid.Jump = false
 	slide.Humanoid:Move(Vector3.zero, false)
@@ -486,7 +674,11 @@ RunService.PreSimulation:Connect(function(deltaTime)
 			slide.LastContact = now
 			slide.OneWay = slide.OneWay or oneWay
 			if downhill < RELEASE_SLOPE then
-				if slide.OneWay then
+				if exitTransitionOwnsSlide(slide) then
+					-- Completion has committed the endless descent. A shallow or
+					-- delayed contact sample is replication jitter, not a runout.
+					slide.LastContact = now
+				elseif slide.OneWay then
 					-- The exit's shallow runout is too short to stand a full-speed
 					-- ragdoll up safely. Brake it first, then recover in the catch room.
 					startRunoutBraking(slide)
@@ -503,7 +695,13 @@ RunService.PreSimulation:Connect(function(deltaTime)
 			local blended = slide.Direction:Lerp(direction, alpha)
 			if blended.Magnitude > .1 then slide.Direction = blended.Unit end
 		elseif now - slide.LastContact > CONTACT_GRACE_SECONDS then
-			startCoasting(slide)
+			if exitTransitionOwnsSlide(slide) then
+				-- Keep driving until the server recovery watchdog places the rider
+				-- back on the authored helix; do not destroy the force meanwhile.
+				slide.LastContact = now
+			else
+				startCoasting(slide)
+			end
 		end
 
 		if slide.Phase == "ACTIVE" and slide.Actuator then

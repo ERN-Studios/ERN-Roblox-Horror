@@ -21,7 +21,8 @@ local DECELERATION = 40
 local TARGET_REFRESH = .2
 local ATTACK_DISTANCE = 5.25
 local ATTACK_COOLDOWN = 1.1
-local PUMP_SCREAM_DELAY = 5
+local PUMP_ONE_GROAN_DELAY = 1.25
+local SPAWN_GROAN_DELAY = .35
 local PROGRESS_WINDOW = .75
 local BUOYANT_SHOVE_COOLDOWN = .16
 local BUOYANT_SHOVE_MIN_SPEED = 28
@@ -131,6 +132,9 @@ end
 local function makeRayParams(session)
 	local exclusions = {session.RuntimeFolder}
 	if session.Manifest.EntityNodes then table.insert(exclusions, session.Manifest.EntityNodes) end
+	for _, object in ipairs(session.BuoyantProps or {}) do
+		if object.Parent then table.insert(exclusions, object) end
+	end
 	for _, player in ipairs(Players:GetPlayers()) do
 		if player.Character then table.insert(exclusions, player.Character) end
 	end
@@ -201,13 +205,31 @@ local function collectAnchors(manifest)
 	return anchors
 end
 
-local function rankedSpawnCandidates(session, records, recovery)
+local function pumpActivatorPosition(pumpNumber)
+	local state = stateFolder()
+	if not state then return nil end
+	local userId = tonumber(state:GetAttribute("Level2_PumpActivatorUserId" .. tostring(pumpNumber)))
+	if userId and userId > 0 then
+		local player = Players:GetPlayerByUserId(userId)
+		local character = player and player.Character
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+		if root and root:IsA("BasePart") then return root.Position end
+	end
+	local captured = state:GetAttribute("Level2_PumpActivatorPosition" .. tostring(pumpNumber))
+	return typeof(captured) == "Vector3" and captured or nil
+end
+
+local function rankedSpawnCandidates(session, records, recovery, focusPosition)
 	local candidates = {}
 	for _, anchor in ipairs(session.Anchors) do
 		if anchor.Part.Parent then
 			local minimum = math.huge
-			for _, record in ipairs(records) do
-				minimum = math.min(minimum, horizontalDistance(anchor.Position, record.Root.Position))
+			if not recovery and typeof(focusPosition) == "Vector3" then
+				minimum = horizontalDistance(anchor.Position, focusPosition)
+			else
+				for _, record in ipairs(records) do
+					minimum = math.min(minimum, horizontalDistance(anchor.Position, record.Root.Position))
+				end
 			end
 			if minimum == math.huge then minimum = 185 end
 			local hidden = not positionObserved(session, anchor.Position, records)
@@ -217,6 +239,13 @@ local function rankedSpawnCandidates(session, records, recovery)
 					or hidden and minimum >= 25 and 3
 					or minimum >= 40 and minimum <= 180 and 2
 					or 1
+			elseif typeof(focusPosition) == "Vector3" then
+				-- Roughly two authored rooms from the player who pulled Pump 2.
+				category = hidden and minimum >= 95 and minimum <= 220 and 5
+					or hidden and minimum >= 70 and minimum <= 280 and 4
+					or minimum >= 95 and minimum <= 220 and 3
+					or hidden and 2
+					or 1
 			else
 				category = hidden and minimum >= 140 and minimum <= 260 and 5
 					or hidden and minimum >= 120 and minimum <= 320 and 4
@@ -224,7 +253,7 @@ local function rankedSpawnCandidates(session, records, recovery)
 					or hidden and 2
 					or 1
 			end
-			local ideal = recovery and 90 or 185
+			local ideal = recovery and 90 or (typeof(focusPosition) == "Vector3" and 150 or 185)
 			local score = category * 10000 - math.abs(minimum - ideal)
 			if anchor.IsCenter and not recovery then score += 500 end
 			if anchor.IsDen and not recovery then score += 25 end
@@ -368,7 +397,7 @@ end
 
 local function spawnEntity(session)
 	local records = livingRecords(session)
-	local candidates = rankedSpawnCandidates(session, records, false)
+	local candidates = rankedSpawnCandidates(session, records, false, pumpActivatorPosition(2))
 	if #candidates == 0 then return nil, "no Level 2 entity navigation anchors" end
 	local model, modelError = cloneModel(session)
 	if not model then return nil, modelError end
@@ -688,7 +717,8 @@ local function schedulePumpScream(session, pumpNumber)
 	if not finiteNumber(startedAt) or startedAt <= 0 then
 		startedAt = workspace:GetServerTimeNow()
 	end
-	local dueAt = startedAt + PUMP_SCREAM_DELAY
+	local groanDelay = pumpNumber == 1 and PUMP_ONE_GROAN_DELAY or SPAWN_GROAN_DELAY
+	local dueAt = startedAt + groanDelay
 	session.PumpScreamScheduled[pumpNumber] = dueAt
 	local capturedPosition = pumpNumber == 1 and choosePumpScreamPosition(session) or nil
 	task.spawn(function()
@@ -903,8 +933,9 @@ end
 
 local function shoveBuoyantProps(session, before, after, now)
 	local params = session.SoftObstacleParams
-	local folder = session.Manifest.BuoyantProps
-	if not (params and folder and folder.Parent and session.Model and session.Model.PrimaryPart) then return end
+	local buoyantProps = session.BuoyantProps
+	if not (params and buoyantProps and #buoyantProps > 0
+		and session.Model and session.Model.PrimaryPart) then return end
 
 	local travel = Vector3.new(after.X - before.X, 0, after.Z - before.Z)
 	local direction
@@ -928,7 +959,7 @@ local function shoveBuoyantProps(session, before, after, now)
 		if not (object:IsA("BasePart")
 			and object:GetAttribute("Level2_BuoyantProp") == true
 			and not object.Anchored
-			and object:IsDescendantOf(folder)) then continue end
+			and object:IsDescendantOf(session.Manifest.World)) then continue end
 		local previousShove = session.SoftShoveTimes[object]
 		if previousShove and now - previousShove < BUOYANT_SHOVE_COOLDOWN then continue end
 		session.SoftShoveTimes[object] = now
@@ -1078,13 +1109,19 @@ function Controller.Start(manifest, generation)
 		WanderMoveDeadline = 0,
 		LastWanderAnchor = nil,
 		SoftObstacleParams = nil,
+		BuoyantProps = {},
 		SoftShoveTimes = setmetatable({}, {__mode = "k"}),
 		ShovedProps = 0,
 	}
-	if manifest.BuoyantProps and manifest.BuoyantProps:IsA("Folder") then
+	for _, descendant in ipairs(manifest.World:GetDescendants()) do
+		if descendant:IsA("BasePart") and descendant:GetAttribute("Level2_BuoyantProp") == true then
+			table.insert(session.BuoyantProps, descendant)
+		end
+	end
+	if #session.BuoyantProps > 0 then
 		local softParams = OverlapParams.new()
 		softParams.FilterType = Enum.RaycastFilterType.Include
-		softParams.FilterDescendantsInstances = {manifest.BuoyantProps}
+		softParams.FilterDescendantsInstances = session.BuoyantProps
 		softParams.MaxParts = 64
 		softParams.RespectCanCollide = false
 		session.SoftObstacleParams = softParams

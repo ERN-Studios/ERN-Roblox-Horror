@@ -2712,10 +2712,18 @@ local function makeSlideHall(parent, hall, index, doors)
 	return {Folder = hallFolder, DeckY = deckY, DeckZ = deckZ, DeckDepth = deckDepth}
 end
 
--- A deliberately one-way exit route: a steep, low-grip flume carries players
--- through a real opening and into a room they can physically enter.  The
--- terminal doorway is intentionally at the far end, so completion cannot fire
--- the moment a player merely steps into the tube.
+-- LEVEL2_EXIT_TRANSITION_20260828
+-- The exit route is one continuous ride into Level 3, not a short chute into a
+-- waiting room. A rider leaves the top deck, takes the authored plunge, crosses
+-- an invisible completion sensor, and then keeps sliding down a long enclosed
+-- transition helix for the whole 15-second decision window. Nothing about that
+-- ride tells the player they have "arrived": there is no visible end, no
+-- exposed void, and no teleport out of the tube.
+--
+-- The former gateway room survives as the EMERGENCY RECOVERY CHAMBER. It is
+-- fully sealed now (its west aperture is walled in, because no tube enters it
+-- any more) and it is relocated clear of the transition helix. Nothing routes a
+-- player there except the objective controller's explicit recovery path.
 local function makeExitFlume(parent, layout, hall, deck)
 	local radius = 8
 	local boundsMaxX = layout.Bounds.MaxX
@@ -2724,20 +2732,182 @@ local function makeExitFlume(parent, layout, hall, deck)
 
 	-- The forced eastern exit hall leaves only a short level lead-in. A densely
 	-- sampled monotone Bezier commits the rider once the tube actually begins
-	-- descending, then finishes with a horizontal run-out without coarse seams.
-	local roomPenetration = 7
-	local roomEntry = Vector3.new(shellX + 34 + roomPenetration, 4, deck.DeckZ)
-	local plungeStart = Vector3.new(roomEntry.X - 120, startPoint.Y, deck.DeckZ)
+	-- descending, then hands off to the transition helix without coarse seams.
+	-- ── the genuinely endless continuation ──────────────────────────────────
+	-- A straight descending transfer leads into a wide descending helix that the
+	-- rider RECYCLES around, so the ride has no time limit at all.
+	--
+	-- The recycle is exact rather than approximate. This helix is uniform: the
+	-- point at turn fraction t+1 is the point at t displaced by exactly
+	-- (0, -descentPerTurn, 0), because the angle differs by a whole 2*pi. So
+	-- lifting a rider one full turn puts them in a bore of identical shape, at
+	-- an identical path tangent, and their velocity needs no adjustment at all.
+	-- Nothing outside the tube is visible through a closed sleeve, so there is
+	-- no parallax to betray the jump: the ride simply never ends.
+	--
+	-- That is what makes an arbitrary multiplayer wait survivable without
+	-- thousands of parts. A first rider can circle here for minutes while the
+	-- rest of the party finishes, and the geometry stays at three turns.
+	--
+	-- Grade is the other load-bearing number. The Slide Controller drops a
+	-- one-way rider into RUNOUT_BRAKING as soon as the floor's downhill
+	-- component falls under RELEASE_SLOPE (.12), so every segment from the
+	-- plunge's exit tangent onward stays well above it. TRANSITION_GRADE is the
+	-- sine of the descent angle along the path.
+	local TRANSITION_GRADE = .21
+	local TRANSITION_TRANSFER_RUN = 250
+	local TRANSITION_HELIX_RADIUS = 96
+	-- Three turns is the minimum that gives the recycle a full turn of bore
+	-- ABOVE the landing point and a full turn BELOW the trigger. The rider
+	-- circles turns one and two forever; turn three exists only so that a client
+	-- which somehow fails to recycle still has a whole turn of real tube (about
+	-- eleven seconds) before it meets the solid end stop, instead of a void.
+	-- The bottom sits near y = -428, comfortably above the -500
+	-- FallenPartsDestroyHeight that would otherwise delete a rider outright.
+	local TRANSITION_HELIX_TURNS = 3
+	-- Visual step is chosen from the helix sagitta: r*(1-cos(theta/2)) stays
+	-- under a tenth of a stud, so the bore reads as a smooth curve rather than a
+	-- faceted drum.
+	local TRANSITION_VISUAL_STEP_DEGREES = 6
+
+	local plungeEnd = Vector3.new(shellX + 41, 4, deck.DeckZ)
+	local plungeStart = Vector3.new(plungeEnd.X - 120, startPoint.Y, deck.DeckZ)
 	local plungeControl1 = plungeStart + Vector3.new(24, -2, 0)
-	local plungeControl2 = roomEntry - Vector3.new(34, 0, 0)
+	-- The plunge used to finish on a HORIZONTAL run-out, because it used to end
+	-- in a room. It now hands over to the transition, so its exit tangent has to
+	-- match the transition grade: a flat tail would drop a one-way rider into
+	-- RUNOUT_BRAKING and stop the ride dead a few studs past completion.
+	local plungeExitRise = 34 * TRANSITION_GRADE / math.sqrt(1 - TRANSITION_GRADE ^ 2)
+	local plungeControl2 = plungeEnd + Vector3.new(-34, plungeExitRise, 0)
 	local tubePoints = {startPoint, plungeStart}
 	for segment = 1, 72 do
 		table.insert(tubePoints, bezier(plungeStart, plungeControl1,
-			plungeControl2, roomEntry, segment / 72))
+			plungeControl2, plungeEnd, segment / 72))
 	end
 	local exitColor = C.TileCool
-	makeTubeFromPoints(parent, tubePoints, radius, exitColor,
+
+	local transitionPoints = {}
+	local function addTransitionPoint(point)
+		local previous = transitionPoints[#transitionPoints] or tubePoints[#tubePoints]
+		if (point - previous).Magnitude > .05 then
+			table.insert(transitionPoints, point)
+		end
+	end
+
+	-- Transfer: continue the plunge's heading (+X) while dropping at the
+	-- transition grade, so the handover carries no direction discontinuity.
+	local transferSteps = 18
+	for step = 1, transferSteps do
+		local along = TRANSITION_TRANSFER_RUN * step / transferSteps
+		addTransitionPoint(Vector3.new(
+			plungeEnd.X + along,
+			plungeEnd.Y - along * TRANSITION_GRADE,
+			plungeEnd.Z))
+	end
+
+	-- Helix: entered tangentially at the end of the transfer, winding away from
+	-- the recovery chamber. Descent per turn is the grade applied to the arc
+	-- length, which keeps the slope identical to the transfer run.
+	local helixEntry = transitionPoints[#transitionPoints]
+	local helixCenter = Vector3.new(helixEntry.X, helixEntry.Y, helixEntry.Z - TRANSITION_HELIX_RADIUS)
+	local helixCircumference = 2 * math.pi * TRANSITION_HELIX_RADIUS
+	local descentPerTurn = helixCircumference * TRANSITION_GRADE
+	local helixSteps = math.ceil(TRANSITION_HELIX_TURNS * 360 / TRANSITION_VISUAL_STEP_DEGREES)
+	for step = 1, helixSteps do
+		local turnFraction = TRANSITION_HELIX_TURNS * step / helixSteps
+		local angle = math.pi * .5 - turnFraction * math.pi * 2
+		addTransitionPoint(Vector3.new(
+			helixCenter.X + math.cos(angle) * TRANSITION_HELIX_RADIUS,
+			helixEntry.Y - turnFraction * descentPerTurn,
+			helixCenter.Z + math.sin(angle) * TRANSITION_HELIX_RADIUS))
+	end
+
+	for _, point in ipairs(transitionPoints) do
+		table.insert(tubePoints, point)
+	end
+
+	-- Collision follows the visual polyline exactly, as every other slide in the
+	-- level does. Subsampling it was tried and rejected: on the helix a coarser
+	-- stride leaves straight floor segments chording a curve, which opens real
+	-- holes between consecutive floors for a rider to drop through.
+	local flumeModel = makeTubeFromPoints(parent, tubePoints, radius, exitColor,
 		"Level 2 Exit Flume", false, .18, nil, nil, true)
+
+	-- ── recycle + corridor metadata ─────────────────────────────────────────
+	-- Published on the flume model so the CLIENT can perform the recycle (it
+	-- owns the character's physics; a server PivotTo would fight it and trip the
+	-- Slide Controller's own teleport guard), and so the SERVER can test whether
+	-- a rider is still on the path analytically instead of with a bounding box.
+	--
+	-- The rider circles between the end of turn one and the end of turn two.
+	-- Crossing the trigger lifts them exactly one turn, back to the landing Y.
+	local helixTopY = helixEntry.Y
+	local helixBottomY = helixEntry.Y - descentPerTurn * TRANSITION_HELIX_TURNS
+	local recycleTriggerY = helixEntry.Y - descentPerTurn * (TRANSITION_HELIX_TURNS - 1)
+	flumeModel:SetAttribute("Level2_RecycleActive", true)
+	flumeModel:SetAttribute("Level2_RecycleTriggerY", recycleTriggerY)
+	flumeModel:SetAttribute("Level2_RecycleDeltaY", descentPerTurn)
+	flumeModel:SetAttribute("Level2_HelixCenterX", helixCenter.X)
+	flumeModel:SetAttribute("Level2_HelixCenterZ", helixCenter.Z)
+	flumeModel:SetAttribute("Level2_HelixRadius", TRANSITION_HELIX_RADIUS)
+	flumeModel:SetAttribute("Level2_HelixTopY", helixTopY)
+	flumeModel:SetAttribute("Level2_HelixBottomY", helixBottomY)
+	flumeModel:SetAttribute("Level2_FlumeBoreRadius", radius)
+
+	-- The closed-tube outlet cap makeTubeFromPoints builds is decorative
+	-- (CanCollide false on both its branches), so the last segment's forward
+	-- face is open. Level 3's continuation seals its own far end with a solid
+	-- part for exactly this reason; the transition gets the same treatment, so
+	-- reaching the bottom is a stop rather than an exit into the void.
+	local transitionStart = transitionPoints[1]
+	local transitionEnd = tubePoints[#tubePoints]
+	do
+		local tail = tubePoints[#tubePoints - 1]
+		local axis = (transitionEnd - tail).Unit
+		local up = Vector3.yAxis - axis * axis:Dot(Vector3.yAxis)
+		if up.Magnitude < .05 then up = Vector3.zAxis end
+		up = up.Unit
+		local side = axis:Cross(up).Unit
+		local stopThickness = 2
+		-- Keep the cap inside the flume model. Besides making ownership/cleanup
+		-- explicit, the transition validator (and any streaming consumer) can now
+		-- discover the complete physical route from manifest.Exit.FlumeModel.
+		local stop = part(flumeModel, "Level 2 Exit Transition End Stop",
+			-- Overlap the final tube plane by half a stud. The old cap was centred
+			-- four studs beyond it, leaving a 2.65-stud collision gap even though
+			-- both parts looked visually adjacent from inside the sleeve.
+			CFrame.fromMatrix(transitionEnd + axis * (stopThickness * .25), axis, up, side),
+			Vector3.new(stopThickness, radius * 2 + 2, radius * 2 + 2),
+			C.TileCool, Enum.Material.SmoothPlastic)
+		stop.CanCollide = true
+		stop.CanTouch = false
+		stop.CanQuery = false
+		stop.CastShadow = false
+		stop:SetAttribute("Level2_ExitTransitionEndStop", true)
+	end
+	local transitionLength = 0
+	for index = 74, #tubePoints - 1 do
+		transitionLength += (tubePoints[index + 1] - tubePoints[index]).Magnitude
+	end
+
+	-- An axis-aligned envelope around the entire ride. The objective
+	-- controller's recovery watchdog asks "is this rider still inside the
+	-- flume?" against this box rather than raycasting for a slide floor every
+	-- frame: the server's copy of a client-owned character lags at 100+ studs a
+	-- second, and a single missed ray would end the transition on a rider who
+	-- was doing nothing wrong.
+	local boundsMin = tubePoints[1]
+	local boundsMax = tubePoints[1]
+	for _, point in ipairs(tubePoints) do
+		boundsMin = Vector3.new(math.min(boundsMin.X, point.X),
+			math.min(boundsMin.Y, point.Y), math.min(boundsMin.Z, point.Z))
+		boundsMax = Vector3.new(math.max(boundsMax.X, point.X),
+			math.max(boundsMax.Y, point.Y), math.max(boundsMax.Z, point.Z))
+	end
+	local boundsPadding = radius + 24
+	local flumeBoundsCenter = (boundsMin + boundsMax) * .5
+	local flumeBoundsSize = (boundsMax - boundsMin)
+		+ Vector3.one * boundsPadding * 2
 
 	local function pathAtX(targetX)
 		for pointIndex = 1, #tubePoints - 1 do
@@ -2757,22 +2927,27 @@ local function makeExitFlume(parent, layout, hall, deck)
 	local mouth = makeEntryTub(parent, startPoint, tubePoints[2], radius, deck.DeckY + 1,
 		exitColor, "Level 2 Exit Flume", true, false)
 
-	-- The room floor is aligned to the hidden collision floor of the tube.
-	-- That removes the old four-stud ledge at the doorway.
-	local floorTop = roomEntry.Y - radius * .9
+	-- ── emergency recovery chamber ──────────────────────────────────────────
+	-- The old gateway room, sealed and moved clear of the helix. It exists only
+	-- as a destination for the objective controller's recovery path (a rider who
+	-- dies, is teleported, or otherwise leaves the tube mid-transition). It is
+	-- deliberately not on any walkable route.
+	local floorTop = plungeEnd.Y - radius * .9
 	local catchSize = 78
 	local gatewayHeight = 30
-	local westWallX = roomEntry.X - roomPenetration
+	local RECOVERY_CHAMBER_Z_OFFSET = 300
+	local recoveryZ = deck.DeckZ + RECOVERY_CHAMBER_Z_OFFSET
+	local westWallX = plungeEnd.X - 7
 	local catchCenter = Vector3.new(
 		westWallX + catchSize * .5,
 		floorTop + gatewayHeight * .5,
-		deck.DeckZ
+		recoveryZ
 	)
 
 	local function gatewayWall(name, position, size)
-		-- Extend upward without moving the authored bottom or tube aperture. The
-		-- old walls only touched the ceiling to floating-point precision, which
-		-- exposed a bright perimeter line at shadow-map grazing angles.
+		-- Extend upward without moving the authored bottom. The old walls only
+		-- touched the ceiling to floating-point precision, which exposed a bright
+		-- perimeter line at shadow-map grazing angles.
 		local ceilingSeal = .35
 		position += Vector3.yAxis * ceilingSeal * .5
 		size = Vector3.new(size.X, size.Y + ceilingSeal, size.Z)
@@ -2781,47 +2956,35 @@ local function makeExitFlume(parent, layout, hall, deck)
 		return wall
 	end
 
-	local floor = tiledPart(parent, "Level 2 Gateway Floor",
+	local floor = tiledPart(parent, "Level 2 Recovery Chamber Floor",
 		CFrame.new(catchCenter.X, floorTop - .75, catchCenter.Z),
 		Vector3.new(catchSize, 1.5, catchSize), C.TileWarm, {Enum.NormalId.Top}, 9)
 	floor.CanCollide = true
 	floor:SetAttribute("Level2_EntityGround", true)
-	local ceiling = tiledPart(parent, "Level 2 Gateway Ceiling",
+	local ceiling = tiledPart(parent, "Level 2 Recovery Chamber Ceiling",
 		CFrame.new(catchCenter.X, floorTop + gatewayHeight + .75, catchCenter.Z),
 		Vector3.new(catchSize + 1.7, 1.5, catchSize + 1.7),
 		C.TileCool, {Enum.NormalId.Bottom}, 9)
 	ceiling.CanCollide = true
 
-	-- North, south, and east stay sealed.  The west wall is deliberately split
-	-- into shoulders and a lintel, leaving a centered tube-sized aperture.
-	gatewayWall("Level 2 Gateway North Wall",
+	-- Every side is sealed. The west wall used to carry a tube-sized aperture;
+	-- no tube arrives here any more, so leaving the hole would only expose the
+	-- void to a recovered player.
+	gatewayWall("Level 2 Recovery Chamber North Wall",
 		catchCenter + Vector3.new(0, 0, -catchSize * .5),
 		Vector3.new(catchSize, gatewayHeight, 1.5))
-	gatewayWall("Level 2 Gateway South Wall",
+	gatewayWall("Level 2 Recovery Chamber South Wall",
 		catchCenter + Vector3.new(0, 0, catchSize * .5),
 		Vector3.new(catchSize, gatewayHeight, 1.5))
-	gatewayWall("Level 2 Gateway East Wall",
+	gatewayWall("Level 2 Recovery Chamber East Wall",
 		catchCenter + Vector3.new(catchSize * .5, 0, 0),
 		Vector3.new(1.5, gatewayHeight, catchSize))
+	gatewayWall("Level 2 Recovery Chamber West Wall",
+		Vector3.new(westWallX, catchCenter.Y, catchCenter.Z),
+		Vector3.new(1.5, gatewayHeight, catchSize))
 
-	local apertureWidth = radius * 2 + 3
-	local apertureHeight = 18
-	local shoulderWidth = (catchSize - apertureWidth) * .5
-	local shoulderOffset = apertureWidth * .5 + shoulderWidth * .5
-	gatewayWall("Level 2 Gateway West Wall North Shoulder",
-		Vector3.new(westWallX, catchCenter.Y, catchCenter.Z - shoulderOffset),
-		Vector3.new(1.5, gatewayHeight, shoulderWidth))
-	gatewayWall("Level 2 Gateway West Wall South Shoulder",
-		Vector3.new(westWallX, catchCenter.Y, catchCenter.Z + shoulderOffset),
-		Vector3.new(1.5, gatewayHeight, shoulderWidth))
-	gatewayWall("Level 2 Gateway West Wall Lintel",
-		Vector3.new(westWallX, floorTop + apertureHeight + (gatewayHeight - apertureHeight) * .5, catchCenter.Z),
-		Vector3.new(1.5, gatewayHeight - apertureHeight, apertureWidth))
-
-	-- Tube-axis annuli close the rectangular portal corners while keeping every
-	-- inner face outside the radius-eight fiberglass shell. Aligning the ring
-	-- to the live path tangent is essential at the steep containment crossing;
-	-- a wall-aligned circle cuts into the bore there.
+	-- The grand hall's east wall is still crossed by the tube, so it still needs
+	-- its tube-axis collar; the recovery chamber no longer does.
 	local function makeWallCollar(wallX, wallThickness, collarIndex)
 		local crossing, direction = pathAtX(wallX)
 		local axis = direction.Unit
@@ -2859,10 +3022,9 @@ local function makeExitFlume(parent, layout, hall, deck)
 		end
 	end
 	makeWallCollar(hall.MaxX, Configuration.WallThickness, 1)
-	makeWallCollar(westWallX, 1.5, 3)
 
-	-- The wooden door is centered on the far wall and faces the tube exit.
-	-- It is story-facing only; the player can always enter the room around it.
+	-- The wooden door is centered on the far wall and faces into the chamber.
+	-- It is story-facing only and opens onto nothing.
 	local outward = Vector3.new(1, 0, 0)
 	local doorWidth, doorHeight = 12, 14
 	local doorCenter = Vector3.new(
@@ -2895,48 +3057,87 @@ local function makeExitFlume(parent, layout, hall, deck)
 		C.Emergency, Enum.Material.Neon, 1)
 	safeSpawn.CanCollide = false
 	safeSpawn.CanTouch = false
+	safeSpawn:SetAttribute("Level2_ExitRecoverySpawn", true)
 
-	-- The gateway room remains fully intact. Completion is a transverse light
-	-- sheet embedded three studs before the tube's physical endpoint, forcing
-	-- every rider to pass through it before they can leave the slide.
-	local completionGreen = Color3.fromRGB(82, 255, 146)
-	local beamDistanceFromEnd = 3
-	local beamCenter = Vector3.new(roomEntry.X - beamDistanceFromEnd, floorTop + 8, catchCenter.Z)
+	-- ── completion sensor ───────────────────────────────────────────────────
+	-- Permanently invisible: Transparency 1, no lights of any kind, no shadow,
+	-- never tweened. The objective controller may only toggle CanTouch. It is
+	-- deliberately thick along the tube axis so a rider travelling at the
+	-- one-way speed cap cannot tunnel between two physics frames: at the 105
+	-- stud/s soft cap a 60 Hz step covers 1.75 studs, and Roblox may coalesce
+	-- several steps, so the sensor spans a whole multiple of that.
+	local COMPLETION_SENSOR_THICKNESS = 9
+	local sensorCenterPoint, sensorDirection = pathAtX(plungeEnd.X - 26)
+	local sensorAxis = sensorDirection.Unit
+	local sensorUp = Vector3.yAxis - sensorAxis * sensorAxis:Dot(Vector3.yAxis)
+	if sensorUp.Magnitude < .05 then sensorUp = Vector3.zAxis end
+	sensorUp = sensorUp.Unit
+	local sensorSide = sensorAxis:Cross(sensorUp).Unit
 	local trigger = part(parent, "Level 2 Exit Completion Beam",
-		CFrame.new(beamCenter), Vector3.new(.48, 16, 15.5),
-		completionGreen, Enum.Material.Neon, .72)
+		CFrame.fromMatrix(sensorCenterPoint, sensorAxis, sensorUp, sensorSide),
+		Vector3.new(COMPLETION_SENSOR_THICKNESS, radius * 2 + 2, radius * 2 + 2),
+		C.TileCool, Enum.Material.SmoothPlastic, 1)
 	trigger.CanCollide = false
 	trigger.CanTouch = false
 	trigger.CanQuery = false
 	trigger.CastShadow = false
 	trigger:SetAttribute("Level2_ExitCompletionBeam", true)
-	trigger:SetAttribute("Level2_BeamDistanceFromTubeEnd", beamDistanceFromEnd)
+	trigger:SetAttribute("Level2_ExitCompletionSensorThickness", COMPLETION_SENSOR_THICKNESS)
 
-	local beamLights = {}
-	for _, face in ipairs({Enum.NormalId.Left, Enum.NormalId.Right}) do
-		local glow = Instance.new("SurfaceLight")
-		glow.Name = "Level 2 Completion Beam Glow"
-		glow.Face = face
-		glow.Color = completionGreen
-		glow.Angle = 105
-		glow.Brightness = 1.15
-		glow.Range = 10
-		glow.Shadows = false
-		glow.Enabled = false
-		glow.Parent = trigger
-		table.insert(beamLights, glow)
-	end
+	-- A second, larger backstop sits one tube-diameter further down the bore.
+	-- Touched is the only signal Roblox gives here, and a single sensor that
+	-- misses (a rider hugging the chamfer, an unlucky frame) would silently cost
+	-- the player the level. The controller treats either sensor as completion.
+	local backstopPoint, backstopDirection = pathAtX(plungeEnd.X - 6)
+	local backstopAxis = backstopDirection.Unit
+	local backstopUp = Vector3.yAxis - backstopAxis * backstopAxis:Dot(Vector3.yAxis)
+	if backstopUp.Magnitude < .05 then backstopUp = Vector3.zAxis end
+	backstopUp = backstopUp.Unit
+	local backstopSide = backstopAxis:Cross(backstopUp).Unit
+	local backstop = part(parent, "Level 2 Exit Completion Backstop",
+		CFrame.fromMatrix(backstopPoint, backstopAxis, backstopUp, backstopSide),
+		Vector3.new(COMPLETION_SENSOR_THICKNESS, radius * 2 + 2, radius * 2 + 2),
+		C.TileCool, Enum.Material.SmoothPlastic, 1)
+	backstop.CanCollide = false
+	backstop.CanTouch = false
+	backstop.CanQuery = false
+	backstop.CastShadow = false
+	backstop:SetAttribute("Level2_ExitCompletionBeam", true)
+	backstop:SetAttribute("Level2_ExitCompletionSensorThickness", COMPLETION_SENSOR_THICKNESS)
 
 	return {
 		Trigger = trigger,
-		BeamLights = beamLights,
+		Backstop = backstop,
 		SafeSpawn = safeSpawn,
 		Mouth = mouth,
 		EndPosition = doorCenter,
 		StartPoint = startPoint,
-		RoomEntry = roomEntry,
+		RoomEntry = plungeEnd,
 		RoomFloorTop = floorTop,
 		Door = woodenDoor,
+		TransitionStart = transitionStart,
+		TransitionEnd = transitionEnd,
+		TransitionLength = transitionLength,
+		FlumeBoundsCenter = flumeBoundsCenter,
+		FlumeBoundsSize = flumeBoundsSize,
+		FlumeModel = flumeModel,
+		-- The authored path itself. The recovery watchdog measures distance to
+		-- THIS rather than to a bounding box: an axis-aligned box around a helix
+		-- contains the entire cylinder it sweeps, so a rider falling down the
+		-- middle of the drum passes a box test the whole way to the floor.
+		PathPoints = tubePoints,
+		BoreRadius = radius,
+		Recycle = {
+			TriggerY = recycleTriggerY,
+			DeltaY = descentPerTurn,
+			LandingY = recycleTriggerY + descentPerTurn,
+			CenterX = helixCenter.X,
+			CenterZ = helixCenter.Z,
+			Radius = TRANSITION_HELIX_RADIUS,
+			TopY = helixTopY,
+			BottomY = helixBottomY,
+			Turns = TRANSITION_HELIX_TURNS,
+		},
 		HallWallGap = {
 			center = startPoint.Z,
 			width = portalHalfWidth * 2,

@@ -9,6 +9,7 @@
 
 local Players = game:GetService("Players")
 local RS = game:GetService("ReplicatedStorage")
+local UIDevice = require(RS:WaitForChild("UIDevice"))
 local UIS = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
@@ -199,12 +200,24 @@ local warned50, warned25 = false, false
 local popupGui = Instance.new("ScreenGui")
 popupGui.Name = "FlashlightPopup"
 popupGui.ResetOnSpawn = false
+popupGui.DisplayOrder = 60
 popupGui.Enabled = player:GetAttribute("InRound") == true
 popupGui.Parent = player:WaitForChild("PlayerGui")
 local popup = Instance.new("TextLabel")
 popup.AnchorPoint = Vector2.new(0.5, 1)
 popup.Position = UDim2.new(0.5, 0, 1, -26)
 popup.Size = UDim2.new(0, 360, 0, 34)
+-- 360px overflows a 375-wide portrait screen once margins are counted, and the
+-- bottom edge lands on the movement controls. Both are fixed from the layout.
+local function applyPopupLayout()
+	local layout = UIDevice.Layout()
+	popup.Size = UDim2.new(0, math.min(360, layout.SafeRight - layout.SafeLeft), 0, 34)
+	if layout.IsTouch then
+		popup.Position = UDim2.new(0.5, 0, 0, layout.SafeBottom - 8)
+	else
+		popup.Position = UDim2.new(0.5, 0, 1, -26)
+	end
+end
 popup.BackgroundColor3 = Color3.new(0, 0, 0)
 popup.BackgroundTransparency = 0.35
 popup.BorderSizePixel = 0
@@ -215,6 +228,8 @@ popup.Text = ""
 popup.Visible = false
 popup.Parent = popupGui
 local pc = Instance.new("UICorner"); pc.CornerRadius = UDim.new(0, 6); pc.Parent = popup
+applyPopupLayout()
+UIDevice.Changed:Connect(applyPopupLayout)
 
 local popupToken = 0
 local function showPopup(text, seconds)
@@ -239,6 +254,31 @@ batBody.BackgroundTransparency = 1
 batBody.BorderSizePixel = 0
 batBody.Parent = popupGui
 
+-- The torch used to sit in the bottom-LEFT corner, which on a touch device is
+-- entirely inside the dynamic thumbstick's activation region: a fully
+-- transparent, Active 72x136 button laid over the movement stick. It only
+-- failed to steal the finger because its ScreenGui happened to sit below
+-- TouchGui in DisplayOrder -- an accident, and one this rework removes by
+-- raising that DisplayOrder. So on touch it joins the right-hand control
+-- column, in the slot NoiseReporter reserves for it. On desktop, where there is
+-- no thumbstick and no touch target, it stays exactly where it was.
+local function applyFlashlightLayout()
+	local layout = UIDevice.Layout()
+	if layout.IsTouch then
+		local tablet = layout.Class == "tablet"
+		local edge = tablet and 26 or 22
+		local buttonSize = tablet and 76 or 64
+		local secondColumn = edge + buttonSize + (tablet and 18 or 16)
+		batBody.AnchorPoint = Vector2.new(1, 1)
+		batBody.Size = UDim2.fromOffset(tablet and 72 or 58, tablet and 72 or 58)
+		batBody.Position = UDim2.new(1, -secondColumn, 1, -edge)
+	else
+		batBody.AnchorPoint = Vector2.new(0, 1)
+		batBody.Size = UDim2.fromOffset(72, 136)
+		batBody.Position = UDim2.new(0, 12, 1, -10)
+	end
+end
+
 -- Touch-only hit target over the existing flashlight symbol. It remains absent
 -- from mouse/keyboard devices, so the PC F-key control is unchanged.
 local touchFlashButton = Instance.new("TextButton")
@@ -249,9 +289,48 @@ touchFlashButton.Text = ""
 touchFlashButton.AutoButtonColor = false
 touchFlashButton.Active = true
 touchFlashButton.Selectable = false
-touchFlashButton.Visible = UIS.TouchEnabled or (RunService:IsStudio() and workspace:GetAttribute("ForceTouchUI") == true)
 touchFlashButton.ZIndex = 20
 touchFlashButton.Parent = batBody
+-- Visible AND Active move together: an invisible-but-Active button keeps
+-- swallowing taps, which is exactly how this one competed with the thumbstick.
+-- The hit target is fully transparent, so leaving it Active while every other
+-- on-screen control has stood down makes it an invisible tap sink over the
+-- HUD -- and at the raised DisplayOrder 60 it now wins those taps. It stands
+-- down on exactly the states the movement cluster does.
+local function flashlightTargetAvailable()
+	if not UIDevice.IsTouch() then return false end
+	if player:GetAttribute("InRound") ~= true then return false end
+	if player:GetAttribute("Escaped") == true then return false end
+	if player:GetAttribute("Level3_Hiding") == true then return false end
+	if player:GetAttribute("Spectating") == true then return false end
+	if player:GetAttribute("ZyntraStoreOpen") == true then return false end
+	if player:GetAttribute("DevPhoneOpen") == true then return false end
+	if player:GetAttribute("ZyntraReentryOpen") == true then return false end
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	return humanoid ~= nil and humanoid.Health > 0
+end
+
+local function applyFlashlightTouchTarget()
+	UIDevice.SetInteractive(touchFlashButton, flashlightTargetAvailable())
+end
+for _, attribute in ipairs({"InRound", "Escaped", "Level3_Hiding", "Spectating",
+	"ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen"}) do
+	player:GetAttributeChangedSignal(attribute):Connect(function()
+		applyFlashlightTouchTarget()
+	end)
+end
+player.CharacterAdded:Connect(function(character)
+	local humanoid = character:WaitForChild("Humanoid", 8)
+	if humanoid then humanoid.Died:Connect(applyFlashlightTouchTarget) end
+	applyFlashlightTouchTarget()
+end)
+applyFlashlightTouchTarget()
+applyFlashlightLayout()
+UIDevice.Changed:Connect(function()
+	applyFlashlightTouchTarget()
+	applyFlashlightLayout()
+end)
 
 local torch = Instance.new("Frame")
 torch.Name = "Silhouette"

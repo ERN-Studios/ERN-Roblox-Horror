@@ -247,11 +247,24 @@ function Navigator.new(model, manifest, tuning, options)
 	raycastParams.IgnoreWater = true
 	raycastParams.RespectCanCollide = true
 	local exclusions = {model}
-	if manifest.EntityNodes then table.insert(exclusions, manifest.EntityNodes) end
+	local exclusionSet = {[model] = true}
+	local function addExclusion(instance)
+		if typeof(instance) ~= "Instance" or exclusionSet[instance] then return end
+		exclusionSet[instance] = true
+		table.insert(exclusions, instance)
+	end
+	addExclusion(manifest.EntityNodes)
 	local navigationFolder = manifest.World:FindFirstChild("Level 2 Navigation", true)
-	if navigationFolder then table.insert(exclusions, navigationFolder) end
+	addExclusion(navigationFolder)
 	local runtimeFolder = options.RuntimeFolder
-	if runtimeFolder then table.insert(exclusions, runtimeFolder) end
+	addExclusion(runtimeFolder)
+	for _, instance in ipairs(options.ObstacleExclusions or {}) do addExclusion(instance) end
+	-- Loose rafts, rings, noodles, balls and floaties are intentionally soft
+	-- props. They may be shoved by the creature, but never invalidate a route
+	-- or make its body sweep oscillate at a doorway.
+	for _, descendant in ipairs(manifest.World:GetDescendants()) do
+		if descendant:GetAttribute("Level2_BuoyantProp") == true then addExclusion(descendant) end
+	end
 	raycastParams.FilterDescendantsInstances = exclusions
 	local overlapParams = OverlapParams.new()
 	overlapParams.FilterType = Enum.RaycastFilterType.Exclude
@@ -287,6 +300,8 @@ function Navigator.new(model, manifest, tuning, options)
 		AllowedHallIndices = normalizeAllowed(options.AllowedHallIndices),
 		Tuning = {
 			AgentRadius = readNumber(tuning, "AgentRadius", DEFAULTS.AgentRadius, 0.5, 12),
+			PathAgentRadius = readNumber(tuning, "PathAgentRadius",
+				readNumber(tuning, "AgentRadius", DEFAULTS.AgentRadius, 0.5, 12), 0.5, 12),
 			AgentHeight = readNumber(tuning, "AgentHeight", DEFAULTS.AgentHeight, 2, 24),
 			WaypointSpacing = readNumber(tuning, "WaypointSpacing", DEFAULTS.WaypointSpacing, 1, 24),
 			WaypointArrivalDistance = readNumber(tuning, "WaypointArrivalDistance", DEFAULTS.WaypointArrivalDistance, 0.2, 8),
@@ -481,7 +496,7 @@ function Navigator:_requestPath(goal)
 		local path
 		local success, failure = pcall(function()
 			path = PathfindingService:CreatePath({
-				AgentRadius = self.Tuning.AgentRadius,
+				AgentRadius = self.Tuning.PathAgentRadius,
 				AgentHeight = self.Tuning.AgentHeight,
 				AgentCanJump = false,
 				AgentCanClimb = false,
@@ -530,6 +545,34 @@ function Navigator:_requestPath(goal)
 		end
 		self.Computing = false
 	end)
+end
+
+function Navigator:SetGraphGoal(goal, force)
+	if self.Destroyed or not finiteVector3(goal) or not self:_positionAllowed(goal) then return false end
+	self.Goal = goal
+	local now = os.clock()
+	local moved = not self.LastRequestedGoal
+		or horizontalDistance(goal, self.LastRequestedGoal) >= self.Tuning.RepathDistance
+	local stale = now - self.LastPathAt >= self.Tuning.RepathInterval
+	if force ~= true and not moved and not stale and #self.Waypoints > 0 then return true end
+
+	-- A graph recovery is deliberately synchronous and authoritative. Invalidate
+	-- any older PathfindingService result so it cannot overwrite this corridor-
+	-- centered route a frame later.
+	self.RequestId += 1
+	self.Computing = false
+	if self.BlockedConnection then
+		self.BlockedConnection:Disconnect()
+		self.BlockedConnection = nil
+	end
+	local points, status = self:_fallbackWaypoints(goal)
+	self.Waypoints = points
+	self.WaypointIndex = 1
+	self.LastRequestedGoal = goal
+	self.LastPathAt = now
+	self.Status = status
+	self.LastFailure = status == "NO_PATH" and "no generated-hall graph route" or nil
+	return status ~= "NO_PATH"
 end
 
 function Navigator:SetGoal(goal, force)

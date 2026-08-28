@@ -10,6 +10,7 @@
 
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
+local UIDevice = require(game:GetService("ReplicatedStorage"):WaitForChild("UIDevice"))
 
 local player = Players.LocalPlayer
 
@@ -18,6 +19,12 @@ gui.Name = "Level2ObjectiveGui"
 gui.ResetOnSpawn = false
 gui.DisplayOrder = 40
 gui.Parent = player:WaitForChild("PlayerGui")
+
+local function syncDispatchSuppression()
+	gui.Enabled = player:GetAttribute("ZyntraDispatchClientActive") ~= true
+end
+player:GetAttributeChangedSignal("ZyntraDispatchClientActive"):Connect(syncDispatchSuppression)
+syncDispatchSuppression()
 
 -- Desktop uses the lower-right corner. Touch-only devices keep the original
 -- top-right placement so the panel cannot cover movement/action controls.
@@ -29,19 +36,41 @@ panel.BorderSizePixel = 0
 panel.Visible = false
 panel.Parent = gui
 
+-- This file already had the correct three-way form-factor test; it just never
+-- re-ran it. Placement now comes from the shared helper and refreshes whenever
+-- the viewport, inset or form factor changes.
 local function updatePanelPlacement()
-	local touchOnly = UserInputService.TouchEnabled
-		and not UserInputService.KeyboardEnabled
-		and not UserInputService.GamepadEnabled
-	if touchOnly then
-		panel.AnchorPoint = Vector2.new(1, 0)
-		panel.Position = UDim2.new(1, -12, 0, 70)
+	local layout = UIDevice.Layout()
+	if layout.IsTouch then
+		-- Top of the safe band, not 34px into it: the Level 2 alert panel owns
+		-- the strip below (its narrow layout starts at y=158) and the two used to
+		-- overlap by 20px whenever an alert was up.
+		-- The top band belongs to the Level 2 alert banner, which on a landscape
+		-- phone fills the whole 65px that is clear of the movement controls. The
+		-- objective panel instead takes the lane BETWEEN the two movement zones,
+		-- stacked above the stamina bar, where it is clear of both at any height.
+		local corridor = layout.Corridor
+		if corridor.Width >= 150 then
+			panel.AnchorPoint = Vector2.new(0.5, 1)
+			panel.Size = UDim2.new(0, math.min(236, corridor.Width), 0, 78)
+			panel.Position = UDim2.new(0, (corridor.Left + corridor.Right) * .5,
+				1, -UIDevice.BottomOffsetFor(gui, layout.Height - 40))
+		else
+			-- Portrait: the corridor is too narrow, so use the safe band. The
+			-- Level 2 alert banner takes the TOP of that band, so the objective
+			-- panel takes the bottom of it; they used to be stacked at the same
+			-- y and overlapped whenever an announcement was on screen.
+			panel.AnchorPoint = Vector2.new(1, 1)
+			panel.Position = UDim2.new(1, -12, 0,
+				UIDevice.TopOffsetFor(gui, layout.SafeBottom))
+		end
 	else
 		panel.AnchorPoint = Vector2.new(1, 1)
 		panel.Position = UDim2.new(1, -18, 1, -18)
 	end
 end
 updatePanelPlacement()
+UIDevice.Changed:Connect(updatePanelPlacement)
 local panelSize = Instance.new("UISizeConstraint")
 panelSize.MinSize = Vector2.new(206, 72)
 panelSize.MaxSize = Vector2.new(236, 86)

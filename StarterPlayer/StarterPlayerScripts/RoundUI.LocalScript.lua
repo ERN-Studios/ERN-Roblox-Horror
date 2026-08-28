@@ -11,6 +11,7 @@ local SoundService = game:GetService("SoundService")
 local ContentProvider = game:GetService("ContentProvider")
 local ContextActionService = game:GetService("ContextActionService")
 
+local UIDevice = require(RS:WaitForChild("UIDevice"))
 local remotes = RS:WaitForChild("Remotes")
 local remote = remotes:WaitForChild("RoundStatus")
 local queueRemote = remotes:WaitForChild("ConfigureQueue")
@@ -18,6 +19,10 @@ local player = Players.LocalPlayer
 local dead = false
 
 local dispatchAudio = {
+	-- The COMMAND CENTER accent. Every dispatch readout uses this exact value in
+	-- every state so the controls stay part of the transmission. A table field
+	-- rather than a file local: this script is at Luau's 200-local ceiling.
+	accent = Color3.fromRGB(105, 238, 168),
 	action = remotes:WaitForChild("ZyntraAction"),
 	claimLobbyBriefing = remotes:WaitForChild("ZyntraClaimLobbyBriefing"),
 	group = SoundService:FindFirstChild("ZyntraDispatchAudio"),
@@ -36,7 +41,7 @@ if not dispatchAudio.group then
 	dispatchAudio.group.Parent = SoundService
 end
 -- Fail quiet until the server has loaded the returning player's preference.
--- A bounded wait below restores the audible default if profile loading fails.
+-- A failed/unknown profile remains silent; a late successful load updates it.
 dispatchAudio.group.Volume = 0
 
 function dispatchAudio.preferenceLoaded()
@@ -49,6 +54,10 @@ function dispatchAudio.preferenceUnavailable()
 end
 
 function dispatchAudio.hasActiveTransmission()
+	if RunService:IsStudio()
+		and player:GetAttribute("UIRegressionForceDispatchActive") == true then
+		return true
+	end
 	return next(dispatchAudio.transmissions) ~= nil
 end
 
@@ -91,6 +100,11 @@ function dispatchAudio.refresh()
 	local loaded = dispatchAudio.preferenceLoaded()
 	local muted = player:GetAttribute("ZyntraMuteDispatch") == true
 	local active = dispatchAudio.hasActiveTransmission()
+	-- Other level HUDs use this client-local authority to yield their screen
+	-- space for the briefing, then restore themselves as soon as Command stops.
+	if player:GetAttribute("ZyntraDispatchClientActive") ~= active then
+		player:SetAttribute("ZyntraDispatchClientActive", active)
+	end
 	if dispatchAudio.pendingValue ~= nil then muted = dispatchAudio.pendingValue end
 	dispatchAudio.group.Volume = loaded and (muted and 0 or 1) or 0
 	local hasSubtitle = dispatchAudio.subtitleCopy ~= nil and dispatchAudio.subtitleCopy ~= ""
@@ -112,22 +126,40 @@ function dispatchAudio.refresh()
 		dispatchAudio.controls.Visible = active
 	end
 	if dispatchAudio.button then
-		dispatchAudio.button.Text = dispatchAudio.preferenceUnavailable() and "[M]  OFFLINE"
-			or not loaded and "[M]  LOADING"
-			or dispatchAudio.pending and "[M]  SAVING"
-			or muted and "[M]  UNMUTE"
-			or "[M]  MUTE"
-		dispatchAudio.button.TextColor3 = muted
-			and Color3.fromRGB(255, 184, 105)
-			or Color3.fromRGB(137, 225, 194)
+		-- Full words, always. The "[M]" prefix is a keyboard binding and is
+		-- therefore supplied by UIDevice, which returns nothing at all on a phone
+		-- or tablet no matter what input was used most recently.
+		local muteWord = dispatchAudio.preferenceUnavailable() and "DISPATCH OFFLINE"
+			or not loaded and "LOADING DISPATCH"
+			or dispatchAudio.pending and "SAVING"
+			or muted and "UNMUTE DISPATCH"
+			or "MUTE DISPATCH"
+		local binding = UIDevice.Binding("[M]")
+		dispatchAudio.button.Text = binding ~= "" and (binding .. "  " .. muteWord) or muteWord
+		-- ONE colour, in every state. This is the COMMAND CENTER line's own
+		-- cyan-green, and MUTE / UNMUTE / SAVING / DISPATCH OFFLINE all wear it,
+		-- so the controls read as part of the transmission rather than as chrome
+		-- bolted onto it. An amber "muted" tint was tried and rejected: a second
+		-- accent in a two-line panel reads as a warning, which muting is not.
+		-- State is carried by the WORD and by the dimming below, never by hue.
+		dispatchAudio.button.TextColor3 = dispatchAudio.accent
+		-- The label IS the state readout: DISPATCH OFFLINE, LOADING DISPATCH and
+		-- SAVING are things the player needs to SEE. Hiding the control in those
+		-- states (which SetInteractive would do) makes three of the five states
+		-- invisible, so it is only dimmed and disabled, never removed.
+		local ready = active and loaded and not dispatchAudio.pending
 		dispatchAudio.button.Visible = true
-		dispatchAudio.button.Active = active and loaded and not dispatchAudio.pending
-		dispatchAudio.button.Selectable = dispatchAudio.button.Active
+		dispatchAudio.button.TextTransparency = ready and 0 or .45
+		UIDevice.SetEnabled(dispatchAudio.button, ready)
 	end
 	if dispatchAudio.stopButton then
+		local stopBinding = UIDevice.Binding("[N]", "[B]")
+		dispatchAudio.stopButton.TextColor3 = dispatchAudio.accent
+		dispatchAudio.stopButton.Text = stopBinding ~= ""
+			and (stopBinding .. "  STOP DISPATCH") or "STOP DISPATCH"
 		dispatchAudio.stopButton.Visible = true
-		dispatchAudio.stopButton.Active = active
-		dispatchAudio.stopButton.Selectable = active
+		dispatchAudio.stopButton.TextTransparency = active and 0 or .45
+		UIDevice.SetEnabled(dispatchAudio.stopButton, active)
 	end
 end
 
@@ -157,7 +189,7 @@ function dispatchAudio.requestToggle()
 	dispatchAudio.pendingValue = player:GetAttribute("ZyntraMuteDispatch") ~= true
 	dispatchAudio.refresh() -- mute/unmute the active transmission immediately
 	dispatchAudio.action:FireServer("SetMuteDispatch", dispatchAudio.pendingValue)
-	task.delay(5, function()
+	task.delay(12, function()
 		if dispatchAudio.pending then
 			dispatchAudio.pending = false
 			dispatchAudio.pendingValue = nil
@@ -189,6 +221,14 @@ player:GetAttributeChangedSignal("ZyntraMuteDispatch"):Connect(function()
 	end
 	dispatchAudio.refresh()
 end)
+-- The captions carry a keyboard binding on desktop and none on touch, so they
+-- have to be rebuilt whenever the form factor changes -- a keyboard being
+-- attached to a tablet, or ForceTouchUI being toggled during a device test.
+-- Without this the labels keep whatever they were built with.
+UIDevice.Changed:Connect(function() dispatchAudio.refresh() end)
+if RunService:IsStudio() then
+	player:GetAttributeChangedSignal("UIRegressionForceDispatchActive"):Connect(dispatchAudio.refresh)
+end
 dispatchAudio.refresh()
 
 -- Lighting is global on the server, but lobby players can coexist with a party
@@ -483,6 +523,9 @@ local function applyQueueDeviceLayout()
  end
 end
 applyQueueDeviceLayout()
+-- Built once at load in the old code, so a form-factor change after start
+-- left the party panel in the wrong layout for the rest of the session.
+UIDevice.Changed:Connect(applyQueueDeviceLayout)
 
 local queueStation = nil
 local queueSizeValue = 6
@@ -542,7 +585,11 @@ refreshQueuePanel()
 
 -- RoundUI is the sole cursor-policy owner. Lobby players need the mouse for the
 -- queue phone and Zyntra store; gameplay hides it unless a modal is open.
-local completion = {returnVisible = false}
+-- `compact`, `color`, `corner`, `stroke` and `sizeConstraint` all belong to the
+-- result screen and all live here rather than as file locals: this script sits
+-- on Luau's 200-local limit for a chunk's main body.
+local completion = {returnVisible = false, compact = false,
+	color = Color3.fromRGB(115, 255, 170)}
 local function shouldShowCursor()
  return player:GetAttribute("InRound") ~= true
   or queueShade.Visible
@@ -657,6 +704,20 @@ endFrame.Visible = false
 endFrame.ZIndex = 120
 endFrame.Parent = gui
 
+-- LEVEL2_EXIT_TRANSITION_20260828
+-- The result screen has two shapes. Wipes retain the full-bleed blackout. A win
+-- uses a compact card so the completed map remains visibly present throughout
+-- the fifteen-second decision window; Level 2 riders use the same shape while
+-- they continue through the exit flume.
+completion.corner = Instance.new("UICorner")
+completion.corner.CornerRadius = UDim.new(0, 0)
+completion.corner.Parent = endFrame
+completion.stroke = Instance.new("UIStroke")
+completion.stroke.Color = Color3.fromRGB(105, 255, 165)
+completion.stroke.Thickness = 1.5
+completion.stroke.Transparency = 1
+completion.stroke.Parent = endFrame
+
 local endFlash = Instance.new("Frame")
 endFlash.Name = "SignalFlash"
 endFlash.Size = UDim2.fromScale(1, 1)
@@ -760,7 +821,138 @@ do
 	object.MinSize = Vector2.new(210, 46)
 	object.MaxSize = Vector2.new(360, 54)
 	object.Parent = completion.button
+	completion.sizeConstraint = object
 end
+
+-- Which shape the result screen is wearing, and in what accent, so a viewport
+-- or orientation change can re-measure the card without waiting for the next
+-- result to arrive.
+function completion.applyLayout(compact, color)
+ completion.compact = compact
+ completion.color = color or completion.color
+
+ if not compact then
+  endFrame.AnchorPoint = Vector2.new(0, 0)
+  endFrame.Position = UDim2.fromScale(0, 0)
+  endFrame.Size = UDim2.fromScale(1, 1)
+  completion.corner.CornerRadius = UDim.new(0, 0)
+  completion.stroke.Transparency = 1
+  endFlash.Visible = true
+  endLine.Visible = true
+
+  endTitle.AnchorPoint = Vector2.new(0.5, 0.5)
+  endTitle.Position = UDim2.fromScale(0.5, 0.43)
+  endTitle.Size = UDim2.new(0.88, 0, 0.18, 0)
+  endTitle.TextXAlignment = Enum.TextXAlignment.Center
+  endTitle.TextWrapped = true
+  -- Min BEFORE Max. A UITextSizeConstraint with Min > Max is invalid, and the
+  -- compact branch below drops Max to ~20, so restoring only Max here would
+  -- leave the pair inverted on the way back to full bleed.
+  endTitleSize.MinTextSize = 24
+  endTitleSize.MaxTextSize = 62
+
+  -- Fixed 44px and 32px boxes at 0.63 and 0.72 of the height are 63px apart on
+  -- a 720px screen and 32px apart on a 353px one, where the two boxes genuinely
+  -- collided. The rows scale with the viewport so the stack stays separated.
+  local viewportHeight = UIDevice.Layout().Height
+  local statsHeight = math.clamp(viewportHeight * .06, 22, 44)
+  local hintHeight = math.clamp(viewportHeight * .045, 18, 32)
+
+  endStats.AnchorPoint = Vector2.new(0.5, 0.5)
+  endStats.Position = UDim2.fromScale(0.5, 0.63)
+  endStats.Size = UDim2.new(0.86, 0, 0, statsHeight)
+  endStats.TextSize = math.clamp(math.floor(statsHeight * .58), 14, 25)
+  endStats.TextXAlignment = Enum.TextXAlignment.Center
+  endStats.TextTruncate = Enum.TextTruncate.None
+
+  endHint.AnchorPoint = Vector2.new(0.5, 0.5)
+  endHint.Position = UDim2.fromScale(0.5, 0.72)
+  endHint.Size = UDim2.new(0.86, 0, 0, hintHeight)
+  endHint.TextSize = math.clamp(math.floor(hintHeight * .55), 12, 17)
+  endHint.TextXAlignment = Enum.TextXAlignment.Center
+  endHint.TextTruncate = Enum.TextTruncate.None
+
+  completion.button.AnchorPoint = Vector2.new(0.5, 0.5)
+  completion.button.Position = UDim2.fromScale(0.5, 0.82)
+  completion.button.Size = UDim2.new(0, 280, 0, 50)
+  completion.button.TextSize = 17
+  completion.sizeConstraint.MinSize = Vector2.new(210, 46)
+  completion.sizeConstraint.MaxSize = Vector2.new(360, 54)
+  return
+ end
+
+ -- The card lives in the band UIDevice guarantees is clear of the thumbstick
+ -- activation region, the control column and the jump button, so RETURN TO
+ -- LOBBY stays tappable on a phone without sitting on a movement control. On
+ -- the smallest landscape that band is about 478x88, which is what makes this
+ -- a horizontal card with the button beside the text rather than under it.
+ local layout = UIDevice.Layout()
+ local band = layout.TopBand
+ local pad = 10
+ -- 460 is the widest the card is allowed to be: any more and it stops
+ -- reading as a card and starts reading as a banner across the ride.
+ local width = math.clamp(math.min(band.Width, 460), 240, 460)
+ local height = math.clamp(band.Height, 62, 88)
+ local buttonHeight = layout.IsTouch and 44
+		or math.clamp(height - pad * 2, 32, 44)
+ local buttonWidth = width < 380 and 124 or 150
+ local textWidth = math.max(80, width - pad * 3 - buttonWidth)
+ local centreX = (band.Left + band.Right) * .5
+
+ endFrame.AnchorPoint = Vector2.new(0.5, 0)
+ endFrame.Position = UDim2.new(0, centreX, 0, UIDevice.TopOffsetFor(gui, band.Top))
+ endFrame.Size = UDim2.fromOffset(width, height)
+ completion.corner.CornerRadius = UDim.new(0, 10)
+ completion.stroke.Color = completion.color
+ completion.stroke.Transparency = 0.35
+ endFlash.Visible = false
+ endLine.Visible = false
+
+ local roomy = height >= 80
+ local titleHeight = roomy and 20 or 18
+ local rowHeight = roomy and 16 or 14
+ local rowGap = roomy and 4 or 2
+ local top = math.max(4, (height - (titleHeight + rowHeight * 2 + rowGap * 2)) * .5)
+
+ endTitle.AnchorPoint = Vector2.new(0, 0)
+ endTitle.Position = UDim2.fromOffset(pad, top)
+ endTitle.Size = UDim2.fromOffset(textWidth, titleHeight)
+ endTitle.TextXAlignment = Enum.TextXAlignment.Left
+ endTitle.TextWrapped = false
+ -- The card's title row is 18-20px tall, well under the full-bleed floor of 24.
+ -- Lowering Min first keeps the constraint valid; leaving it at 24 would either
+ -- paint a 24px title across the button beside it or make the constraint itself
+ -- throw out of showRoundEnding before the result screen is ever shown.
+ endTitleSize.MinTextSize = math.min(12, titleHeight)
+ endTitleSize.MaxTextSize = titleHeight
+
+ endStats.AnchorPoint = Vector2.new(0, 0)
+ endStats.Position = UDim2.fromOffset(pad, top + titleHeight + rowGap)
+ endStats.Size = UDim2.fromOffset(textWidth, rowHeight)
+ endStats.TextSize = rowHeight - 2
+ endStats.TextXAlignment = Enum.TextXAlignment.Left
+ endStats.TextTruncate = Enum.TextTruncate.AtEnd
+
+ endHint.AnchorPoint = Vector2.new(0, 0)
+ endHint.Position = UDim2.fromOffset(pad, top + titleHeight + rowHeight + rowGap * 2)
+ endHint.Size = UDim2.fromOffset(textWidth, rowHeight)
+ endHint.TextSize = rowHeight - 2
+ endHint.TextXAlignment = Enum.TextXAlignment.Left
+ endHint.TextTruncate = Enum.TextTruncate.AtEnd
+
+ completion.button.AnchorPoint = Vector2.new(1, 0.5)
+ completion.button.Position = UDim2.new(1, -pad, 0.5, 0)
+ completion.button.Size = UDim2.fromOffset(buttonWidth, buttonHeight)
+ completion.button.TextSize = buttonWidth < 140 and 13 or 15
+ completion.sizeConstraint.MinSize = Vector2.new(100, 30)
+ completion.sizeConstraint.MaxSize = Vector2.new(buttonWidth, buttonHeight)
+end
+
+-- Both shapes are viewport-dependent, so a resize or an orientation change
+-- re-measures whichever one is currently up.
+UIDevice.Changed:Connect(function()
+ if endFrame.Visible then completion.applyLayout(completion.compact, completion.color) end
+end)
 
 local spectateBanner = Instance.new("TextLabel")
 spectateBanner.Name = "SpectateBanner"
@@ -953,18 +1145,26 @@ local function hideRoundEnding(immediate)
  end)
 end
 
-local function showRoundEnding(title, stats, hint, color, temporary)
+local function showRoundEnding(title, stats, hint, color, temporary, keepWorldVisible)
  completion.reset()
  endingSerial += 1
  local token = endingSerial
  color = color or Color3.fromRGB(115, 255, 170)
+ -- Every completed level keeps its solved world visible for the server's full
+ -- fifteen-second decision window.  Level 2 riders also need this shape while
+ -- they are physically travelling through the continuation flume.  Failure
+ -- results retain the full-screen treatment so they still read as a wipe.
+ local compact = keepWorldVisible == true
+	 or (keepWorldVisible == nil
+		 and player:GetAttribute("Level2_ExitTransition") == true)
+ completion.applyLayout(compact, color)
  loadingFrame.Visible = false
  queueShade.Visible = false
  label.Visible = false
  endFrame.Visible = true
  endFrame.BackgroundTransparency = 1
  endFlash.BackgroundColor3 = color
- endFlash.BackgroundTransparency = 0.08
+ endFlash.BackgroundTransparency = compact and 1 or 0.08
  endTitle.Text = title
  endTitle.TextColor3 = color
  endTitle.TextTransparency = 1
@@ -984,18 +1184,31 @@ local function showRoundEnding(title, stats, hint, color, temporary)
  exitChime.TimePosition = 0
  exitThud:Play()
  task.delay(0.12, function() if endFrame.Visible then exitChime:Play() end end)
- TweenService:Create(endFlash, TweenInfo.new(0.7, Enum.EasingStyle.Quad), {BackgroundTransparency = 1}):Play()
- TweenService:Create(endFrame, TweenInfo.new(0.42, Enum.EasingStyle.Quad), {BackgroundTransparency = 0.08}):Play()
+ if not compact then
+  TweenService:Create(endFlash, TweenInfo.new(0.7, Enum.EasingStyle.Quad), {BackgroundTransparency = 1}):Play()
+ end
+ -- 0.22 rather than 0.08: legible as a card, and the flume still reads through
+ -- it. The full-bleed value would be just as much of a blackout at card size.
+ TweenService:Create(endFrame, TweenInfo.new(0.42, Enum.EasingStyle.Quad),
+  {BackgroundTransparency = compact and 0.22 or 0.08}):Play()
  TweenService:Create(endTitle, TweenInfo.new(0.48), {TextTransparency = 0, TextStrokeTransparency = 0.35}):Play()
  TweenService:Create(endStats, TweenInfo.new(0.42), {TextTransparency = 0}):Play()
  TweenService:Create(endHint, TweenInfo.new(0.55), {TextTransparency = 0}):Play()
- TweenService:Create(endLine, TweenInfo.new(0.55, Enum.EasingStyle.Quart), {Size = UDim2.new(0.70, 0, 0, 2)}):Play()
+ if not compact then
+  TweenService:Create(endLine, TweenInfo.new(0.55, Enum.EasingStyle.Quart), {Size = UDim2.new(0.70, 0, 0, 2)}):Play()
+ end
 
  if temporary then
   task.delay(2.75, function()
    if endingSerial ~= token then return end
    hideRoundEnding(false)
    task.delay(0.5, function()
+    -- LEVEL2_EXIT_TRANSITION_20260828: a Level 2 escapee is still physically
+    -- riding the exit flume through the whole decision window. Spectating them
+    -- out of their own body mid-slide is exactly the "removed or obscured"
+    -- behaviour the continuous transition is meant to replace, so hold off
+    -- until the server clears the transition marker.
+    if player:GetAttribute("Level2_ExitTransition") == true then return end
     if player:GetAttribute("InRound") == true and (dead or player:GetAttribute("Escaped") == true) then
      startSpectating()
     end
@@ -1009,10 +1222,14 @@ if RunService:IsStudio() then
   local mode = tostring(player:GetAttribute("DevRoundEnding") or ""):lower()
   if mode:find("escape", 1, true) then
    showRoundEnding(("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"), "SIGNAL LOST", "WAITING FOR THE OTHERS", Color3.fromRGB(115, 255, 170), true)
-  elseif mode:find("win", 1, true) then
-   showRoundEnding(("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"), "TIME 03:42  •  SURVIVORS 2/3", "RETURNING TO BASE", Color3.fromRGB(115, 255, 170), false)
+	elseif mode:find("win", 1, true) then
+		showRoundEnding(("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"), "TIME 03:42  •  SURVIVORS 2/3", "RETURNING TO BASE", Color3.fromRGB(115, 255, 170), false, true)
+		-- Exercise the complete production win state in UIRegression: the compact
+		-- card is not valid unless its countdown and Return to Lobby action are
+		-- present too. A negative serial is intentionally Studio-only.
+		completion.start(workspace:GetServerTimeNow() + 15, nil, -1)
   elseif mode:find("lose", 1, true) then
-   showRoundEnding("NO ONE FOUND A WAY OUT", "TIME 04:17  •  SURVIVORS 0/3", "RETURNING TO BASE", Color3.fromRGB(255, 82, 72), false)
+   showRoundEnding("NO ONE FOUND A WAY OUT", "TIME 04:17  •  SURVIVORS 0/3", "RETURNING TO BASE", Color3.fromRGB(255, 82, 72), false, false)
   elseif mode:find("hide", 1, true) then
    hideRoundEnding(true)
   end
@@ -1166,6 +1383,7 @@ local lobbyBriefing = {
 	run = 0,
 	played = false,
 	persistedStarted = false,
+	readySent = false,
 	pending = false,
 	active = false,
 	preloaded = false,
@@ -1224,7 +1442,10 @@ dispatchAudio.panel = subtitleFrame
 roundAndStroke(subtitleFrame, 8, Color3.fromRGB(82, 224, 164), 0.38, 1.5)
 
 local subtitleConstraint = Instance.new("UISizeConstraint")
-subtitleConstraint.MinSize = Vector2.new(280, 88)
+-- 280 is wider than a 375px portrait screen allows once the 20px margins the
+-- narrow layout applies are taken off, which forced the panel over its own
+-- bounds. 240 fits every viewport in the regression matrix.
+subtitleConstraint.MinSize = Vector2.new(240, 88)
 subtitleConstraint.MaxSize = Vector2.new(860, 118)
 subtitleConstraint.Parent = subtitleFrame
 
@@ -1278,22 +1499,27 @@ briefingControlsLayout.VerticalAlignment = Enum.VerticalAlignment.Center
 briefingControlsLayout.Padding = UDim.new(0, 6)
 briefingControlsLayout.SortOrder = Enum.SortOrder.LayoutOrder
 briefingControlsLayout.Parent = dispatchAudio.controls
+dispatchAudio.layout = briefingControlsLayout
 
+-- MUTE / STOP are terminal readouts, not buttons. They carry the COMMAND
+-- CENTER label's own colour, font and weight -- no panel, no border, no
+-- rounded chip -- so they read as two more lines of the transmission. The
+-- tappable area is the full 44px-tall row behind the text, which is invisible
+-- but comfortably larger than the glyphs.
 dispatchAudio.button = Instance.new("TextButton")
 dispatchAudio.button.Name = "DispatchMuteButton"
 dispatchAudio.button.LayoutOrder = 1
-dispatchAudio.button.Size = UDim2.fromOffset(124, 28)
-dispatchAudio.button.BackgroundColor3 = Color3.fromRGB(10, 23, 19)
-dispatchAudio.button.BackgroundTransparency = 0.16
+dispatchAudio.button.Size = UDim2.fromOffset(148, 30)
+dispatchAudio.button.BackgroundTransparency = 1
 dispatchAudio.button.BorderSizePixel = 0
-dispatchAudio.button.AutoButtonColor = true
-dispatchAudio.button.Font = Enum.Font.GothamMedium
-dispatchAudio.button.Text = "[M]  LOADING"
-dispatchAudio.button.TextColor3 = Color3.fromRGB(137, 225, 194)
-dispatchAudio.button.TextSize = 11
+dispatchAudio.button.AutoButtonColor = false
+dispatchAudio.button.Font = Enum.Font.Code
+dispatchAudio.button.Text = "MUTE DISPATCH"
+dispatchAudio.button.TextColor3 = Color3.fromRGB(105, 238, 168)
+dispatchAudio.button.TextSize = 13
+dispatchAudio.button.TextXAlignment = Enum.TextXAlignment.Right
 dispatchAudio.button.ZIndex = 24
 dispatchAudio.button.Parent = dispatchAudio.controls
-roundAndStroke(dispatchAudio.button, 6, Color3.fromRGB(86, 190, 154), 0.62, 1)
 dispatchAudio.button.Activated:Connect(function()
 	dispatchAudio.requestToggle()
 end)
@@ -1311,18 +1537,17 @@ end, false, Enum.KeyCode.M)
 dispatchAudio.stopButton = Instance.new("TextButton")
 dispatchAudio.stopButton.Name = "DispatchStopButton"
 dispatchAudio.stopButton.LayoutOrder = 2
-dispatchAudio.stopButton.Size = UDim2.fromOffset(102, 28)
-dispatchAudio.stopButton.BackgroundColor3 = Color3.fromRGB(23, 15, 12)
-dispatchAudio.stopButton.BackgroundTransparency = 0.18
+dispatchAudio.stopButton.Size = UDim2.fromOffset(148, 30)
+dispatchAudio.stopButton.BackgroundTransparency = 1
 dispatchAudio.stopButton.BorderSizePixel = 0
-dispatchAudio.stopButton.AutoButtonColor = true
-dispatchAudio.stopButton.Font = Enum.Font.GothamMedium
-dispatchAudio.stopButton.Text = "[N]  STOP"
-dispatchAudio.stopButton.TextColor3 = Color3.fromRGB(232, 177, 126)
-dispatchAudio.stopButton.TextSize = 11
+dispatchAudio.stopButton.AutoButtonColor = false
+dispatchAudio.stopButton.Font = Enum.Font.Code
+dispatchAudio.stopButton.Text = "STOP DISPATCH"
+dispatchAudio.stopButton.TextColor3 = Color3.fromRGB(105, 238, 168)
+dispatchAudio.stopButton.TextSize = 13
+dispatchAudio.stopButton.TextXAlignment = Enum.TextXAlignment.Right
 dispatchAudio.stopButton.ZIndex = 24
 dispatchAudio.stopButton.Parent = dispatchAudio.controls
-roundAndStroke(dispatchAudio.stopButton, 6, Color3.fromRGB(209, 132, 77), 0.67, 1)
 dispatchAudio.stopButton.Activated:Connect(function()
 	dispatchAudio.requestStop()
 end)
@@ -1644,12 +1869,28 @@ local function isLevelOneParticipant()
 		and not dead
 end
 
+-- The one rule for whether the OBJECTIVES button is on screen.
+--
+-- On touch the panel takes UIDevice's whole safe band, which begins above the
+-- button; the panel is Active, so wherever they overlap the button stops
+-- responding to the tap that would close it. They are alternatives rather than
+-- companions -- the panel carries its own Close -- so the button stands down
+-- while the panel is up. On desktop the panel sits below the button and both
+-- stay available.
+local function refreshObjectivesButton()
+	if not objectivesAvailable then
+		objectivesButton.Visible = false
+		return
+	end
+	objectivesButton.Visible = not (UIDevice.IsTouch() and objectivesPanel.Visible)
+end
+
 local function setObjectivesAvailable(available)
 	objectivesAvailable = available == true
-	objectivesButton.Visible = objectivesAvailable
 	if not objectivesAvailable then
 		objectivesPanel.Visible = false
 	end
+	refreshObjectivesButton()
 end
 
 local function setSubtitle(text)
@@ -1735,9 +1976,27 @@ function lobbyBriefing.playOnce()
 			return
 		end
 
-		local claimed, shouldPlay = pcall(function()
-			return dispatchAudio.claimLobbyBriefing:InvokeServer()
-		end)
+		-- InvokeServer may lose its response after UpdateAsync has committed. The
+		-- server deliberately retains one stable claim token for this session, so
+		-- make bounded, non-overlapping retries and let it recover that exact
+		-- commit. Do not use isEligible() here: a successful-but-lost first call
+		-- already flips the persisted attribute to true before the recovery call.
+		local claimed, shouldPlay = false, false
+		for _, retryDelay in ipairs({0, .35, .8, 1.5}) do
+			if retryDelay > 0 then task.wait(retryDelay) end
+			if run ~= lobbyBriefing.run
+				or player:GetAttribute("InRound") == true
+				or dead
+				or not dispatchAudio.preferenceLoaded()
+				or not workspace:FindFirstChild("ServerLobby")
+				or not lobbyBriefing.hasArrived() then
+				break
+			end
+			claimed, shouldPlay = pcall(function()
+				return dispatchAudio.claimLobbyBriefing:InvokeServer()
+			end)
+			if claimed and shouldPlay == true then break end
+		end
 		if not claimed or shouldPlay ~= true then
 			if run == lobbyBriefing.run then lobbyBriefing.cancel() end
 			return
@@ -1864,11 +2123,13 @@ local function toggleObjectives()
 	else
 		objectivesPanel.Visible = false
 	end
+	refreshObjectivesButton()
 end
 
 objectivesButton.Activated:Connect(toggleObjectives)
 objectivesClose.Activated:Connect(function()
 	objectivesPanel.Visible = false
+	refreshObjectivesButton()
 end)
 local OBJECTIVES_ACTION = "ToggleObjectiveHelp"
 ContextActionService:UnbindAction(OBJECTIVES_ACTION)
@@ -1878,7 +2139,10 @@ ContextActionService:BindActionAtPriority(
 		if inputState ~= Enum.UserInputState.Begin then
 			return Enum.ContextActionResult.Pass
 		end
-		if UIS:GetFocusedTextBox() or not objectivesButton.Visible then
+		-- Availability, not button visibility: on touch the button hides itself
+		-- while the panel is open, and gating on it would make the binding a
+		-- one-way door that could open the panel but never close it.
+		if UIS:GetFocusedTextBox() or not objectivesAvailable then
 			return Enum.ContextActionResult.Pass
 		end
 		toggleObjectives()
@@ -1890,48 +2154,228 @@ ContextActionService:BindActionAtPriority(
 )
 
 local function updateLevelOneGuideLayout()
-	local camera = workspace.CurrentCamera
-	local viewport = camera and camera.ViewportSize or Vector2.new(1280, 720)
-	local narrow = viewport.X < 700
+	local layout = UIDevice.Layout()
+	local viewport = layout.Viewport
+	local narrow = layout.Narrow
+	local touch = layout.IsTouch
 
 	objectivesButton.Size = narrow and UDim2.fromOffset(140, 40) or UDim2.fromOffset(154, 44)
 	objectivesButton.TextSize = narrow and 14 or 16
-	objectivesButton.Text = UIS.TouchEnabled and "OBJECTIVES" or "OBJECTIVES  [H]"
+	objectivesButton.Text = UIDevice.Caption("OBJECTIVES", "[H]")
 
-	if narrow then
-		dispatchAudio.controls.AnchorPoint = Vector2.new(1, 1)
-		dispatchAudio.controls.Position = UDim2.new(1, -6, 0, -6)
-		dispatchAudio.controls.Size = UDim2.fromOffset(232, 32)
-		dispatchAudio.button.Size = UDim2.fromOffset(124, 32)
-		dispatchAudio.stopButton.Size = UDim2.fromOffset(102, 32)
-		dispatchAudio.button.TextSize = 11
-		dispatchAudio.stopButton.TextSize = 11
+	-- The objectives panel is Active and nearly full-bleed, so on touch it is the
+	-- single most likely element to swallow the movement controls. It takes the
+	-- safe band EXACTLY -- no minimum-height floor, because a floor is what
+	-- silently defeated the first attempt at this clamp and put a 160px panel
+	-- back on top of the thumbstick at 667x375.
+	if touch then
+		local band = layout.TopBand
+		objectivesPanel.AnchorPoint = Vector2.new(0, 0)
+		objectivesPanel.Position = UDim2.fromOffset(band.Left,
+			UIDevice.TopOffsetFor(guideGui, band.Top))
+		objectivesPanel.Size = UDim2.fromOffset(band.Width, band.Height)
+		-- The panel takes the WHOLE safe band on touch, which starts 8px under
+		-- the top inset -- above the button that opened it. On a phone's 36px
+		-- inset the two overlap, and the panel is Active, so the button it covers
+		-- stops responding. They are alternatives rather than companions: the
+		-- panel carries its own Close, so the button stands down while it is up.
+		refreshObjectivesButton()
+		objectivesTitle.TextSize = narrow and 15 or 18
+		subtitleText.TextSize = narrow and 16 or 20
+	elseif narrow then
 		objectivesPanel.AnchorPoint = Vector2.new(0.5, 0)
 		objectivesPanel.Position = UDim2.new(0.5, 0, 0, 60)
 		objectivesPanel.Size = UDim2.new(1, -20, 0, math.max(240, math.min(360, viewport.Y - 92)))
 		objectivesTitle.TextSize = 15
-		subtitleFrame.Position = UDim2.new(0.5, 0, 1, -96)
-		subtitleFrame.Size = UDim2.new(1, -20, 0, 108)
-		subtitleSpeaker.Size = UDim2.new(1, -36, 0, 20)
 		subtitleText.TextSize = 16
 	else
-		dispatchAudio.controls.AnchorPoint = Vector2.new(1, 0)
-		dispatchAudio.controls.Position = UDim2.new(1, -12, 0, 7)
-		dispatchAudio.controls.Size = UDim2.fromOffset(232, 28)
-		dispatchAudio.button.Size = UDim2.fromOffset(124, 28)
-		dispatchAudio.stopButton.Size = UDim2.fromOffset(102, 28)
-		dispatchAudio.button.TextSize = 11
-		dispatchAudio.stopButton.TextSize = 11
 		objectivesPanel.AnchorPoint = Vector2.new(0, 0)
 		objectivesPanel.Position = UDim2.fromOffset(12, 64)
 		objectivesPanel.Size = UDim2.fromOffset(420, math.max(280, math.min(338, viewport.Y - 92)))
 		objectivesTitle.TextSize = 18
-		subtitleFrame.Position = UDim2.new(0.5, 0, 1, -64)
-		subtitleFrame.Size = UDim2.new(0.76, 0, 0, 96)
-		subtitleSpeaker.Size = UDim2.new(1, -278, 0, 20)
+		subtitleText.TextSize = 20
+	end
+
+	-- The briefing panel was the single biggest overlap offender: at 0.76 width
+	-- anchored 64px off the bottom it landed straight on RUN and JUMP in every
+	-- level. On touch it now takes UIDevice's safe band -- the largest rectangle
+	-- clear of BOTH the thumbstick and the control column -- and is sized to it,
+	-- because a landscape phone leaves only about 80 vertical pixels there and
+	-- the authored 108px panel simply does not fit.
+	-- ── the briefing panel and its two readouts ──────────────────────────────
+	-- These three rectangles -- speaker line, MUTE/STOP readouts, subtitle --
+	-- share one panel, and the previous version simply placed them and hoped.
+	-- It did not hold: the subtitle box spanned everything below y=28 while the
+	-- readouts sat at y=6, so on every viewport the two genuinely overlapped,
+	-- and on the smallest landscape a stacked pair of 44px rows was 92px tall
+	-- inside an 88px panel. So the space is now RESERVED rather than assumed:
+	-- whichever arrangement is chosen, the subtitle is given what is left over
+	-- and nothing is allowed to sit on anything else.
+	--
+	-- Row sizes are driven by the longest caption each form factor can produce
+	-- ("[M]  UNMUTE DISPATCH" on desktop, "UNMUTE DISPATCH" on touch, where the
+	-- binding is never printed) and by the 44px touch-target floor.
+	local preferredRowWidth = touch and 168 or 190
+	local minimumRowWidth = touch and 132 or 162
+	local preferredRowHeight = touch and 44 or 30
+	-- The labels stay visually subtle, but their transparent input rectangles
+	-- never fall below Roblox's 44px touch-target floor.
+	local minimumRowHeight = touch and 44 or 26
+	local SPEAKER_MINIMUM = 110
+	local PANEL_MARGIN = 12
+	local TEXT_INSET = 18
+
+	local band = layout.TopBand
+	local baseHeight = narrow and 108 or 96
+	if touch then
+		-- The band IS the ceiling on touch. The authored 108 is taller than the
+		-- 87px band a landscape phone leaves, and starting the search there put
+		-- the panel 21px into the thumbstick's activation region -- the exact
+		-- defect the band exists to prevent.
+		baseHeight = math.clamp(baseHeight, 64, math.max(64, band.Height))
+	end
+	local maximumHeight = touch and math.max(baseHeight, math.min(160, band.Height))
+		or math.max(baseHeight, math.min(160, viewport.Y - 220))
+	local panelWidth = math.clamp(
+		touch and band.Width or (narrow and (viewport.X - 20) or math.floor(viewport.X * .76)),
+		240, 860)
+
+	-- Candidates, most wanted first. `columns` 2 puts the readouts side by side;
+	-- 1 stacks them. `ownBand` drops them below the speaker line instead of
+	-- beside it, which is what a portrait phone needs and what a short landscape
+	-- panel cannot afford.
+	local candidates = {}
+	for _, ownBand in ipairs({false, true}) do
+		for _, columns in ipairs({2, 1}) do
+			for _, width in ipairs({preferredRowWidth, minimumRowWidth}) do
+				for _, height in ipairs({preferredRowHeight, minimumRowHeight}) do
+					table.insert(candidates, {
+						Columns = columns, Width = width, Height = height, OwnBand = ownBand,
+					})
+				end
+			end
+		end
+	end
+
+	local function measure(candidate, height)
+		local controlsWidth = candidate.Columns == 2
+			and candidate.Width * 2 + 10 or candidate.Width
+		local controlsHeight = candidate.Columns == 2
+			and candidate.Height or candidate.Height * 2 + 4
+		if controlsWidth > panelWidth - PANEL_MARGIN * 2 then return nil end
+		-- A short touch band cannot spare the desktop's six-pixel lead-in: two
+		-- 44px targets already consume most of a 75px landscape-phone panel. Keep
+		-- the side-by-side targets two pixels from the top and let the subtitle
+		-- start exactly at their lower edge. The controls and copy remain visually
+		-- separate (the controls occupy the right of the speaker row), while the
+		-- transparent hitboxes stay fully inside the panel.
+		local controlsTop = candidate.OwnBand and 30 or (touch and 2 or 6)
+		local speakerWidth = candidate.OwnBand
+			and (panelWidth - TEXT_INSET - PANEL_MARGIN)
+			or (panelWidth - TEXT_INSET - PANEL_MARGIN - controlsWidth - 10)
+		if speakerWidth < SPEAKER_MINIMUM then return nil end
+		-- MUTE/STOP share the top row with the speaker readout, while the actual
+		-- briefing keeps the full panel width underneath. Restricting it to the
+		-- narrow speaker column made real 58-113 character cues clip on landscape
+		-- phones even though the rectangles themselves did not overlap.
+		local textTop = math.max(28, controlsTop + controlsHeight + (touch and 0 or 2))
+		local textHeight = height - textTop - (touch and 4 or 6)
+		if textHeight < (touch and 20 or 22) then return nil end
+		return {
+			ControlsWidth = controlsWidth,
+			ControlsHeight = controlsHeight,
+			ControlsTop = controlsTop,
+			SpeakerWidth = speakerWidth,
+			TextWidth = panelWidth - TEXT_INSET * 2,
+			TextTop = textTop,
+			TextHeight = textHeight,
+			Candidate = candidate,
+		}
+	end
+
+	-- Grow the panel before compromising the layout: a portrait phone has 300+
+	-- spare pixels of safe band and no reason to squeeze a subtitle into 22 of
+	-- them. A landscape phone has none, and falls through to the second pass.
+	local panelHeight, fit
+	for height = baseHeight, maximumHeight, 6 do
+		for _, candidate in ipairs(candidates) do
+			local measured = measure(candidate, height)
+			if measured and measured.TextHeight >= 40 then
+				panelHeight, fit = height, measured
+				break
+			end
+		end
+		if fit then break end
+	end
+	if not fit then
+		-- Nothing fits comfortably, so take the arrangement that leaves the most
+		-- subtitle, breaking ties by the preference order above.
+		panelHeight = touch and math.max(64, math.min(baseHeight, band.Height)) or baseHeight
+		for _, candidate in ipairs(candidates) do
+			local measured = measure(candidate, panelHeight)
+			if measured and (not fit or measured.TextHeight > fit.TextHeight) then
+				fit = measured
+			end
+		end
+	end
+	if not fit then
+		-- Unreachable with the candidate set above, but a panel with no room for
+		-- its own controls must still not paint them on top of the subtitle.
+		fit = {
+			ControlsWidth = minimumRowWidth, ControlsHeight = minimumRowHeight,
+			ControlsTop = 6, SpeakerWidth = SPEAKER_MINIMUM,
+			TextWidth = panelWidth - TEXT_INSET * 2,
+			TextTop = 52, TextHeight = math.max(12, panelHeight - 58),
+			Candidate = {Columns = 1, Width = minimumRowWidth, Height = minimumRowHeight},
+		}
+	end
+
+	if touch then
+		subtitleFrame.AnchorPoint = Vector2.new(0, 0)
+		subtitleFrame.Position = UDim2.fromOffset(band.Left,
+			UIDevice.TopOffsetFor(guideGui, band.Top))
+	else
+		subtitleFrame.AnchorPoint = Vector2.new(0.5, 1)
+		subtitleFrame.Position = UDim2.new(0.5, 0, 1, narrow and -96 or -64)
+	end
+	subtitleFrame.Size = UDim2.fromOffset(panelWidth, panelHeight)
+	-- The constraint used to clamp height to 118 and width to 860 behind the
+	-- layout's back, which is how a panel could end up a different size from the
+	-- one every child was measured against. It now states the same numbers.
+	subtitleConstraint.MinSize = Vector2.new(panelWidth, panelHeight)
+	subtitleConstraint.MaxSize = Vector2.new(panelWidth, panelHeight)
+
+	local rowWidth = fit.Candidate.Width
+	local rowHeight = fit.Candidate.Height
+	dispatchAudio.button.Size = UDim2.fromOffset(rowWidth, rowHeight)
+	dispatchAudio.stopButton.Size = UDim2.fromOffset(rowWidth, rowHeight)
+	dispatchAudio.button.TextSize = touch and 14 or 13
+	dispatchAudio.stopButton.TextSize = touch and 14 or 13
+
+	dispatchAudio.layout.FillDirection = fit.Candidate.Columns == 2
+		and Enum.FillDirection.Horizontal or Enum.FillDirection.Vertical
+	dispatchAudio.layout.HorizontalAlignment = Enum.HorizontalAlignment.Right
+	dispatchAudio.controls.AnchorPoint = Vector2.new(1, 0)
+	dispatchAudio.controls.Position = UDim2.new(1, -PANEL_MARGIN, 0, fit.ControlsTop)
+	dispatchAudio.controls.Size = UDim2.fromOffset(fit.ControlsWidth, fit.ControlsHeight)
+
+	subtitleSpeaker.Position = UDim2.fromOffset(TEXT_INSET, 8)
+	subtitleSpeaker.Size = UDim2.fromOffset(fit.SpeakerWidth, 20)
+	subtitleText.Position = UDim2.fromOffset(TEXT_INSET, fit.TextTop)
+	subtitleText.Size = UDim2.fromOffset(fit.TextWidth, fit.TextHeight)
+	-- A short strip gets a smaller face rather than a clipped sentence.
+	if fit.TextHeight <= 32 then
+		subtitleText.TextSize = 12
+	elseif fit.TextHeight < 40 then
+		subtitleText.TextSize = 13
+	elseif touch or narrow then
+		subtitleText.TextSize = 16
+	else
 		subtitleText.TextSize = 20
 	end
 end
+
+UIDevice.Changed:Connect(updateLevelOneGuideLayout)
 
 local viewportConnection = nil
 local function connectGuideViewport()
@@ -2324,6 +2768,21 @@ local function cancelAllCommandBriefings(hideLevelOneObjectives)
 	levelThreeBriefing.cancel()
 end
 
+-- Studio-only hook for the UI regression matrix. A live transmission re-shows
+-- the subtitle panel on every subtitle cue, so a layout scenario that needs the
+-- panel DOWN cannot just set Visible = false and scan: it has to end the
+-- transmission, exactly the way the STOP readout does. Without this the matrix
+-- reports the briefing panel colliding with whatever it was asked to measure,
+-- which is a race in the harness rather than a defect in the HUD.
+if RunService:IsStudio() then
+	player:GetAttributeChangedSignal("UIRegressionSilenceDispatch"):Connect(function()
+		if player:GetAttribute("UIRegressionSilenceDispatch") ~= true then return end
+		dispatchAudio.requestStop()
+		cancelAllCommandBriefings(true)
+		player:SetAttribute("UIRegressionSilenceDispatch", nil)
+	end)
+end
+
 local function validateLevelTwoBriefing()
 	if not isLevelTwoParticipant() then
 		cancelLevelTwoBriefing()
@@ -2352,6 +2811,18 @@ end
 workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(validateLevelOneGuide)
 player:GetAttributeChangedSignal("InRound"):Connect(validateLevelOneGuide)
 player:GetAttributeChangedSignal("Escaped"):Connect(validateLevelOneGuide)
+
+-- LEVEL2_EXIT_TRANSITION_20260828
+-- The exit ride suppresses the escaped-player spectate view while it is live.
+-- When it ends WITHOUT a level transition — an emergency recovery to the sealed
+-- chamber, or the round closing out around the rider — fall through to the
+-- normal view rather than leaving them staring down a tube with no UI.
+player:GetAttributeChangedSignal("Level2_ExitTransition"):Connect(function()
+	if player:GetAttribute("Level2_ExitTransition") == true then return end
+	if player:GetAttribute("InRound") == true and player:GetAttribute("Escaped") == true then
+		startSpectating()
+	end
+end)
 
 -- Old, unstable elevator camera motion. It peaks after the one-second
 -- startup delay, then decays smoothly for ten seconds without moving the player.
@@ -2721,6 +3192,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 			"TIME " .. formatRoundTime(a) .. "  •  SURVIVORS 0/" .. totalPlayers,
 			"RETURNING TO BASE",
 			Color3.fromRGB(255, 82, 72),
+			false,
 			false
 		)
 
@@ -2734,7 +3206,8 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 			"TIME " .. formatRoundTime(a) .. "  •  SURVIVORS " .. survivors .. "/" .. totalPlayers,
 			"RETURNING TO BASE",
 			Color3.fromRGB(115, 255, 170),
-			false
+			false,
+			true
 		)
 		completion.start(d, e, f)
 
@@ -2765,12 +3238,29 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 	end
 end)
 
--- Announce readiness only after the handler, sounds, and persisted mute setting
--- are ready. This prevents a returning muted player hearing the opening cue.
-task.spawn(function()
-	dispatchAudio.awaitPreference()
+-- Announce readiness only after the persisted preference has ACTUALLY loaded.
+-- A fixed timeout used to send this too early on a slow DataStore read; the
+-- server then fired its one-shot event while this client was still ineligible,
+-- permanently losing a new player's welcome for that session. Attribute and
+-- lobby listeners make the gate event-driven without ever defaulting audible.
+function lobbyBriefing.trySendReady()
+	if lobbyBriefing.readySent
+		or player:GetAttribute("ZyntraDispatchPreferenceLoaded") ~= true
+		or player:GetAttribute("ZyntraLobbyBriefingPlayed") == true
+		or player:GetAttribute("InRound") == true
+		or not workspace:FindFirstChild("ServerLobby") then
+		return
+	end
+	lobbyBriefing.readySent = true
 	remote:FireServer("lobbybriefingready")
+end
+player:GetAttributeChangedSignal("ZyntraDispatchPreferenceLoaded"):Connect(lobbyBriefing.trySendReady)
+player:GetAttributeChangedSignal("ZyntraLobbyBriefingPlayed"):Connect(lobbyBriefing.trySendReady)
+player:GetAttributeChangedSignal("InRound"):Connect(lobbyBriefing.trySendReady)
+workspace.ChildAdded:Connect(function(child)
+	if child.Name == "ServerLobby" then lobbyBriefing.trySendReady() end
 end)
+task.defer(lobbyBriefing.trySendReady)
 
 -- Responsive objective layout verified in play test.
 

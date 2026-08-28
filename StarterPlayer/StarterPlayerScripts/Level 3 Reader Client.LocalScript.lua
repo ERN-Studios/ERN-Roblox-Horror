@@ -6,6 +6,7 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UIDevice = require(ReplicatedStorage:WaitForChild("UIDevice"))
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local UserInputService = game:GetService("UserInputService")
@@ -198,51 +199,108 @@ toastBody.TextYAlignment = Enum.TextYAlignment.Top
 toastBody.ZIndex = 21
 toastBody.Parent = toast
 
+local TOGGLE_WIDTH = 190
+local TOGGLE_HEIGHT = 28
+
 local function applyLayout()
-	local camera = workspace.CurrentCamera
-	local viewport = camera and camera.ViewportSize or Vector2.new(800, 600)
+	local layoutInfo = UIDevice.Layout()
+	local viewport = layoutInfo.Viewport
 	local narrow = viewport.X < 620
-	local mobileControls = viewport.X < 900
+	local mobileControls = layoutInfo.IsTouch
 	local width = math.floor(math.clamp(viewport.X * (narrow and 0.56 or 0.30), 184, 248))
-	-- Roblox's landscape touch controls occupy the right edge.  Put the reader
-	-- in the clear upper-left lane on phones/tablets; the flashlight and movement
-	-- controls remain lower on that side.
-	panel.AnchorPoint = if mobileControls then Vector2.new(0, 0) else Vector2.new(1, 0)
-	panel.Position = if mobileControls
-		then UDim2.fromOffset(10, 64)
-		else UDim2.new(1, -10, 0, 70)
-	panel.Size = UDim2.fromOffset(width, 101)
+	local panelHeight = 101
+	local compactLandscape = false
+	local panelLeft, panelTop = 10, 70
+	local toggleLeft, toggleTop = 10, 175
+
 	if mobileControls then
+		local band = layoutInfo.TopBand
+		width = math.min(width, band.Width)
+		panelLeft = band.Left
+		panelTop = band.Top
+		-- A landscape phone cannot stack a 101px reader and a 28px toggle in
+		-- its ~90px top band. It has ample WIDTH, so place the fixed-size toggle
+		-- beside a compact reader instead. Portrait stacks them normally.
+		local sideBySide = not layoutInfo.Portrait
+			and band.Width >= width + TOGGLE_WIDTH + 8
+		if sideBySide then
+			compactLandscape = true
+			panelHeight = math.max(58, math.min(82, band.Height))
+			toggleLeft = panelLeft + width + 8
+			toggleTop = panelTop + math.max(0, math.floor((panelHeight - TOGGLE_HEIGHT) * .5))
+		else
+			toggleLeft = panelLeft
+			toggleTop = panelTop + panelHeight + 6
+			if toggleTop + TOGGLE_HEIGHT > band.Bottom then
+				panelHeight = math.max(58, band.Height - TOGGLE_HEIGHT - 6)
+				toggleTop = panelTop + panelHeight + 6
+			end
+		end
+		panel.AnchorPoint = Vector2.new(0, 0)
+		panel.Position = UDim2.fromOffset(panelLeft,
+			UIDevice.TopOffsetFor(gui, panelTop))
 		toggleButton.AnchorPoint = Vector2.new(0, 0)
-		toggleButton.Position = UDim2.fromOffset(10, 169)
+		toggleButton.Position = UDim2.fromOffset(toggleLeft,
+			UIDevice.TopOffsetFor(gui, toggleTop))
 	else
+		panel.AnchorPoint = Vector2.new(1, 0)
+		panel.Position = UDim2.new(1, -10, 0, 70)
 		toggleButton.AnchorPoint = Vector2.new(1, 0)
 		toggleButton.Position = UDim2.new(1, -10, 0, 175)
 	end
-	toggleButton.Size = UDim2.fromOffset(readerHidden and 190 or 92, 28)
+	panel.Size = UDim2.fromOffset(width, panelHeight)
+	toggleButton.Size = UDim2.fromOffset(TOGGLE_WIDTH, TOGGLE_HEIGHT)
+
+	if compactLandscape then
+		title.Position = UDim2.fromOffset(8, 2)
+		title.Size = UDim2.new(1, -16, 0, 12)
+		progressLabel.Position = UDim2.fromOffset(8, 15)
+		progressLabel.Size = UDim2.new(1, -16, 0, 12)
+		track.Position = UDim2.fromOffset(9, 29)
+		track.Size = UDim2.new(1, -18, 0, 11)
+		centerLine.Size = UDim2.fromOffset(2, 7)
+		needle.Size = UDim2.fromOffset(4, 10)
+		signalLabel.Position = UDim2.fromOffset(8, 43)
+		signalLabel.Size = UDim2.new(1, -16, 1, -45)
+		title.TextSize = 11
+		progressLabel.TextSize = 10
+		signalLabel.TextSize = 9
+	else
+		title.Position = UDim2.fromOffset(10, 5)
+		title.Size = UDim2.new(1, -20, 0, 18)
+		progressLabel.Position = UDim2.fromOffset(10, 26)
+		progressLabel.Size = UDim2.new(1, -20, 0, 18)
+		track.Position = UDim2.fromOffset(12, 51)
+		track.Size = UDim2.new(1, -24, 0, 19)
+		centerLine.Size = UDim2.fromOffset(2, 13)
+		needle.Size = UDim2.fromOffset(5, 17)
+		signalLabel.Position = UDim2.fromOffset(10, 75)
+		signalLabel.Size = UDim2.new(1, -20, 0, 19)
+		title.TextSize = narrow and 14 or 16
+		progressLabel.TextSize = narrow and 13 or 15
+		signalLabel.TextSize = narrow and 11 or 13
+	end
 
 	local toastWidth = math.floor(math.clamp(viewport.X - 40, 260, 410))
 	toast.Position = UDim2.new(0.5, 0, 0, 8)
 	toast.Size = UDim2.fromOffset(toastWidth, 52)
-	title.TextSize = narrow and 14 or 16
-	progressLabel.TextSize = narrow and 13 or 15
-	signalLabel.TextSize = narrow and 11 or 13
 end
 
-local function inputHint(): string
-	local last = UserInputService:GetLastInputType()
-	if last.Name:find("Gamepad", 1, true) then return "[Y]" end
-	if last == Enum.UserInputType.Touch then return "TAP" end
-	return "[R]"
-end
+-- This control used to be sized from its own state (190 open / 92 closed) and
+-- captioned from the LAST INPUT TYPE. Both were wrong. The size change made the
+-- button jump under the finger every time it was pressed, and last-input meant
+-- one stray mouse event on a phone put "[R]" on a device with no R key -- and
+-- one screen touch on a desktop replaced "[R]" with "TAP".
+--
+-- Now: ONE constant width and one anchored position for both states, and the
+-- binding comes from UIDevice, which answers on form factor alone.
 
 local function updateTogglePresentation()
-	local hint = inputHint()
 	toggleButton.Text = if readerHidden
-		then "OPEN EXIT READER  " .. hint
-		else "CLOSE READER  " .. hint
+		then UIDevice.Caption("OPEN EXIT READER", "[R]", "[Y]")
+		else UIDevice.Caption("CLOSE READER", "[R]", "[Y]")
 	toggleButton.TextColor3 = if readerHidden then TEXT else ENERGON
-	toggleButton.Size = UDim2.fromOffset(readerHidden and 190 or 92, 28)
+	toggleButton.Size = UDim2.fromOffset(TOGGLE_WIDTH, TOGGLE_HEIGHT)
 end
 
 local function setReaderHidden(hidden: boolean)
@@ -262,7 +320,13 @@ ContextActionService:BindAction("Level3ToggleExitReader", function(_, inputState
 	end
 	return Enum.ContextActionResult.Pass
 end, false, Enum.KeyCode.R, Enum.KeyCode.ButtonY)
-UserInputService.LastInputTypeChanged:Connect(updateTogglePresentation)
+-- Rebuild on UIDevice.Changed, which fires for viewport, inset, form factor,
+-- and (on desktop only) last-input changes. On a phone this can never fire for
+-- an input flip, which is the whole point.
+UIDevice.Changed:Connect(function()
+	updateTogglePresentation()
+	applyLayout()
+end)
 updateTogglePresentation()
 
 local viewportConnection: RBXScriptConnection? = nil
@@ -295,9 +359,16 @@ local function numberAttribute(name: string, workspaceMirror: string?, fallback:
 end
 
 local function isActive(): boolean
-	return workspace:GetAttribute("SelectedLevel") == LEVEL
+	local levelActive = workspace:GetAttribute("SelectedLevel") == LEVEL
 		and player:GetAttribute("InRound") == true
 		and player:GetAttribute("Escaped") ~= true
+	if RunService:IsStudio()
+		and player:GetAttribute("UIRegressionForceLevel3Reader") == true then
+		levelActive = true
+	end
+	return levelActive
+		and player:GetAttribute("ZyntraDispatchClientActive") ~= true
+		and player:GetAttribute("Level3_Hiding") ~= true
 end
 
 local function currentWorld(): Model?
@@ -339,6 +410,10 @@ local function showToast(titleText: any, subtitle: any, instruction: any, durati
 	toastBody.TextTransparency = 0
 	toastStroke.Transparency = 0.18
 	toast.Visible = true
+	-- The alert owns the same safe top band for its brief lifetime. Do not draw
+	-- the reader underneath it; updateReader restores both controls afterwards.
+	panel.Visible = false
+	toggleButton.Visible = false
 	local hold = math.clamp(if type(duration) == "number" then duration else 2.4, 0.8, 6)
 	task.delay(hold, function()
 		if serial ~= toastSerial or not toast.Parent then return end
@@ -424,8 +499,13 @@ end
 
 local function updateReader(dt: number)
 	local active = isActive()
-	panel.Visible = active and not readerHidden
-	toggleButton.Visible = active
+	local hidden = readerHidden
+	if RunService:IsStudio() then
+		local forced = player:GetAttribute("UIRegressionForceReaderHidden")
+		if type(forced) == "boolean" then hidden = forced end
+	end
+	panel.Visible = active and not hidden and not toast.Visible
+	toggleButton.Visible = active and not toast.Visible
 	if not active then
 		toastSerial += 1
 		toast.Visible = false

@@ -46,6 +46,11 @@ local LEGACY_LEVEL_THREE_ATTRIBUTES = {
 	"Level3Pumps",
 	"Level3PumpGoal",
 	"Level3ExitPowered",
+	-- Retired with the furniture state machine (LEVEL3_PERMANENT_FURNITURE_20260828).
+	-- Cleared rather than merely abandoned so a place saved mid-hunt under the old
+	-- build cannot keep advertising suppressed furniture to anything that looks.
+	"Level3FurnitureTemporarilyRemoved",
+	"Level3FurnitureCollisionSuppressed",
 }
 
 local function ownedFolder(parent: Instance, name: string): Folder
@@ -379,6 +384,11 @@ end
 -- values that differ between "fresh round" and "idle" arrive as overrides.
 local function applyBaselineReplicatedState(levelState: Folder, overrides: {[string]: any}?)
 	local o = overrides or {}
+	-- Retired with the furniture state machine (LEVEL3_PERMANENT_FURNITURE_20260828).
+	-- The state folder is a saved place object, so a stale replicated flag would
+	-- otherwise outlive the code that wrote it.
+	levelState:SetAttribute("Level3_FurnitureTemporarilyRemoved", nil)
+	levelState:SetAttribute("Level3_FurnitureCollisionSuppressed", nil)
 	levelState:SetAttribute("Level3_Phase", o.Phase or "IDLE")
 	levelState:SetAttribute("Level3_RequestedSeed", o.RequestedSeed or 0)
 	levelState:SetAttribute("Level3_ResolvedSeed", 0)
@@ -433,8 +443,6 @@ local function applyBaselineReplicatedState(levelState: Folder, overrides: {[str
 	levelState:SetAttribute("Level3_BlackoutScreamVolume", Configuration.MallManager.BlackoutScreamVolume)
 	levelState:SetAttribute("Level3_BlackoutScreamStartedAtServerTime", 0)
 	levelState:SetAttribute("Level3_MallManagerHuntActive", false)
-	levelState:SetAttribute("Level3_FurnitureTemporarilyRemoved", false)
-	levelState:SetAttribute("Level3_FurnitureCollisionSuppressed", false)
 	levelState:SetAttribute("Level3_FlashlightsSuppressed", false)
 	levelState:SetAttribute("Level3_BlackoutScreamOpeningCount", 0)
 	levelState:SetAttribute("Level3_MallManagerActive", false)
@@ -462,6 +470,16 @@ end
 
 local function resetReplicatedState(levelState: Folder)
 	applyBaselineReplicatedState(levelState, nil)
+end
+
+-- The live manifest for the round this adapter last built, or nil.
+--
+-- The deterministic test suites need the manifest the generator produced, and
+-- the only alternative was to build a SECOND world alongside the real one and
+-- measure that instead -- which tests the builder but not the round anybody
+-- actually plays. Read-only, and nil whenever no world is standing.
+function Adapter.GetManifest()
+	return activeManifest
 end
 
 function Adapter.Cleanup()

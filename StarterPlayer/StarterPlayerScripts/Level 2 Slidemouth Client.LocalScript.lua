@@ -141,12 +141,22 @@ local function playWarningScream(position, pumpNumber)
 	local sound = Instance.new("Sound")
 	sound.Name = "Slidemouth Pump " .. pumpNumber .. " Response - " .. slotName
 	sound.SoundId = id
-	sound.Volume = pumpNumber >= 3 and 3.6 or (pumpNumber == 2 and 3.25 or 3.1)
+	sound.Volume = pumpNumber >= 3 and 3.6 or (pumpNumber == 2 and 3.25 or 3.35)
 	sound.PlaybackSpeed = rng:NextNumber(.97, 1.03)
 	sound.RollOffMode = Enum.RollOffMode.InverseTapered
-	sound.RollOffMinDistance = 90
-	sound.RollOffMaxDistance = 560
+	sound.RollOffMinDistance = pumpNumber == 1 and 130 or 90
+	sound.RollOffMaxDistance = pumpNumber == 1 and 900 or 560
 	sound.Parent = emitter
+	if pumpNumber == 1 then
+		local reverb = Instance.new("ReverbSoundEffect")
+		reverb.Name = "Level 2 Corridor Amplification"
+		reverb.DecayTime = 5.5
+		reverb.Density = .92
+		reverb.Diffusion = .96
+		reverb.DryLevel = -2
+		reverb.WetLevel = -1
+		reverb.Parent = sound
+	end
 	warningVoice = sound
 	sound:Play()
 	Debris:AddItem(emitter, 20)
@@ -260,4 +270,4 @@ local function applyAnimation(deltaTime)
 end
 
 RunService.Heartbeat:Connect(updateAudio)
-RunService.PreRender:Connect(applyAnimation)
+RunService.Heartbeat:Connect(applyAnimation)

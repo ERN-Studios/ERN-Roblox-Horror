@@ -404,6 +404,37 @@ local function scatterAt(char, pad, randomFacing)
  char:PivotTo(CFrame.new(pad.Position + Vector3.new(ox, 3.2, oz)) * CFrame.Angles(0, facing, 0))
 end
 
+-- RequestStreamAroundAsync decides whether a character lands on a floor or
+-- through one. Start it before moving the character, then await that SAME request
+-- before release. Keeping completion and success separate matters: pcall can
+-- finish with an error, and an errored request must never be reported as streamed.
+-- The wall-clock guard means even a hung engine call cannot anchor a player
+-- forever; callers warn and release safely when the request fails or times out.
+local STREAM_AROUND_TIMEOUT = 6
+
+local function beginStreamAround(player, position, timeOut)
+ local state = {Done = false, Succeeded = false}
+ task.spawn(function()
+  state.Succeeded = pcall(function()
+   player:RequestStreamAroundAsync(position, timeOut)
+  end)
+  state.Done = true
+ end)
+ return state
+end
+local level3SlideStream = remotes:FindFirstChild("Level3SlideStream")
+if not level3SlideStream then
+ level3SlideStream = Instance.new("RemoteEvent")
+ level3SlideStream.Name = "Level3SlideStream"
+ level3SlideStream.Parent = remotes
+end
+
+local function awaitStreamAround(state, timeOut)
+ local deadline = os.clock() + timeOut + 2
+ while not state.Done and os.clock() < deadline do task.wait(0.1) end
+ return state.Done and state.Succeeded
+end
+
 local function placeSafelyInElevator(player, char)
  local pad = workspace:FindFirstChild("ElevatorSpawn")
  local root = char and char:WaitForChild("HumanoidRootPart", 8)
@@ -413,9 +444,7 @@ local function placeSafelyInElevator(player, char)
  -- The lobby and maze are far apart. Keep the character server-anchored while
  -- the client streams the elevator region so it cannot fall through an unloaded floor.
  pad.CanCollide = true -- invisible emergency floor inside the cabin
- task.spawn(function()
-  pcall(function() player:RequestStreamAroundAsync(pad.Position, 6) end)
- end)
+ local streamed = beginStreamAround(player, pad.Position, STREAM_AROUND_TIMEOUT)
  root.Anchored = true
  root.AssemblyLinearVelocity = Vector3.zero
  root.AssemblyAngularVelocity = Vector3.zero
@@ -437,6 +466,13 @@ local function placeSafelyInElevator(player, char)
  shield.Visible = false
  shield.Parent = char
  task.delay(2.5, function()
+  -- Streaming is awaited rather than fired and forgotten, but a timeout is not
+  -- a reason to strand anyone: the character stays anchored for the grace below
+  -- either way, and an un-streamed release is still better than a permanent one.
+  local didStream = awaitStreamAround(streamed, STREAM_AROUND_TIMEOUT)
+  if not didStream then
+   warn("GameManager: elevator region did not stream in for " .. player.Name)
+  end
   -- Level 2's loading cover can outlive this fixed placement grace, and the
   -- cover does not block input (loadingFrame sets neither .Active nor .Modal,
   -- unlike queueShade). Unanchoring on the timer alone would hand back control
@@ -459,6 +495,204 @@ local function placeSafelyInElevator(player, char)
  return true
 end
 
+-- LEVEL2_EXIT_TRANSITION_20260828
+-- Level 2's exit is one continuous slide into Level 3. A player who rode it out
+-- resumes near the REAR of Level 3's continuation bore, already moving, and
+-- physically slides the rest of the way into the mall. The alternative -- the
+-- old placeSafelyInElevator -- stands them up on a pad facing away from the
+-- tube, which reads as a teleport and throws away the whole transition.
+--
+-- The resume frame is published by the Level 3 World Builder as attributes on
+-- the continuation model, so this function needs no knowledge of its geometry.
+-- Every failure path falls through to placeSafelyInElevator: an arrival that
+-- cannot find the tube must still put the player somewhere solid.
+local LEVEL_TWO_TUBE_ENTRY_MODE = "level2-exit-tube"
+
+-- How the party that playRound is about to run ARRIVED. Set immediately before
+-- every playRound call so the level-3 opening can tell a service-elevator
+-- descent apart from a party that is already halfway down the continuation bore.
+local roundEntryMode = nil
+
+-- onCharacter defers a placeSafelyInElevator for anyone in a round, which is
+-- right for a respawn but wrong when the round-entry code is ABOUT to place the
+-- character itself. Left alone it would fire a frame after the Level 3 slide
+-- resume and drag the rider off the bore onto the spawn pad, silently undoing
+-- the whole continuous transition.
+local pendingExplicitPlacement = {}
+
+-- A rider placed in Level 3's bore stays anchored until the mall around them is
+-- actually live. Holding the release here rather than on a fixed timer is the
+-- difference between sliding out into a running level and sliding out into a
+-- world whose objective, hiding and music controllers have not been armed yet.
+local pendingSlideRelease = {}
+
+-- RequestStreamAroundAsync returning without an exception does not prove that
+-- the destination exists on the client. Level 3's bore therefore has a small
+-- tokenized client acknowledgement: the client requests the region itself and
+-- replies only after a tagged collidable slide part near the resume point is
+-- actually present. A stale/forged token cannot release another placement.
+local slideStreamSerial = 0
+local pendingSlideStream = {}
+
+level3SlideStream.OnServerEvent:Connect(function(player, action, token, ready)
+ if action ~= "ack" or type(token) ~= "string" or type(ready) ~= "boolean" then return end
+ local state = pendingSlideStream[player]
+ if not state or state.Token ~= token or state.Done then return end
+ state.Done = true
+ state.Ready = ready
+end)
+
+local function beginVerifiedBoreStream(player, position)
+ slideStreamSerial += 1
+ local state = {
+  Token = table.concat({game.JobId, tostring(player.UserId), tostring(slideStreamSerial)}, ":"),
+  Done = false,
+  Ready = false,
+ }
+ pendingSlideStream[player] = state
+ level3SlideStream:FireClient(player, "request", state.Token, position, STREAM_AROUND_TIMEOUT)
+ return state
+end
+
+local function awaitVerifiedBoreStream(player, state)
+ local deadline = os.clock() + STREAM_AROUND_TIMEOUT + 2
+ while pendingSlideStream[player] == state and not state.Done
+  and os.clock() < deadline do
+  task.wait(.05)
+ end
+ if pendingSlideStream[player] == state then pendingSlideStream[player] = nil end
+ return state.Done and state.Ready
+end
+
+local function levelThreeSlideResume()
+ local world = workspace:FindFirstChild("Level 3 Generated World")
+ if not world then return nil end
+ for _, object in ipairs(world:GetDescendants()) do
+  if object:GetAttribute("Level3_Level2ExitTube") == true then
+   local position = object:GetAttribute("Level3_SlideResumePosition")
+   local tangent = object:GetAttribute("Level3_SlideResumeTangent")
+   local velocity = object:GetAttribute("Level3_SlideResumeVelocity")
+   if typeof(position) == "Vector3" and typeof(tangent) == "Vector3"
+    and typeof(velocity) == "Vector3" and tangent.Magnitude > .1 then
+    return {Position = position, Tangent = tangent.Unit, Velocity = velocity}
+   end
+   return nil
+  end
+ end
+ return nil
+end
+
+local function placeAtLevelThreeSlideResume(player, char)
+ local resume = levelThreeSlideResume()
+ if not resume then return false end
+ local root = char and char:WaitForChild("HumanoidRootPart", 8)
+ local hum = char and char:FindFirstChildOfClass("Humanoid")
+ if not (root and hum and hum.Health > 0) then return false end
+
+ root.Anchored = true
+ root.AssemblyLinearVelocity = Vector3.zero
+ root.AssemblyAngularVelocity = Vector3.zero
+ char:PivotTo(CFrame.lookAt(resume.Position, resume.Position + resume.Tangent))
+ local shield = Instance.new("ForceField")
+ shield.Name = "LobbyTransferShield"
+ shield.Visible = false
+ shield.Parent = char
+
+ -- Stream the bore in before handing the character over; resuming into an
+ -- unloaded region drops the rider through the tube floor. This is an actual
+ -- local-geometry acknowledgement, not pcall completion from the server API.
+ local streamed = beginVerifiedBoreStream(player, resume.Position)
+
+	local released = false
+	local preparation = {Started = false, Done = false, Streamed = false}
+	local function prepare()
+		if not preparation.Started then
+			preparation.Started = true
+			preparation.Streamed = awaitVerifiedBoreStream(player, streamed)
+			preparation.Done = true
+		else
+			local deadline = os.clock() + STREAM_AROUND_TIMEOUT + 2
+			while not preparation.Done and os.clock() < deadline do task.wait(.05) end
+		end
+		return preparation.Done and preparation.Streamed
+	end
+	local function release(prepareOnly)
+		local didStream = prepare()
+		if prepareOnly then return didStream end
+		if released then return didStream end
+		released = true
+		pendingSlideRelease[player] = nil
+		if not didStream then
+			warn("GameManager: Level 3 bore was not locally ready for " .. player.Name
+				.. "; using the solid arrival elevator fallback")
+			-- Keep the root anchored while the ordinary placement takes over. Its
+			-- emergency cabin floor and bounded release are safer than handing an
+			-- unstreamed character to gravity.
+			if root.Parent and hum.Parent and hum.Health > 0 and inRound[player] then
+				placeSafelyInElevator(player, char)
+			end
+		elseif root.Parent and hum.Parent and hum.Health > 0 and inRound[player] then
+			root.Anchored = false
+   -- Hand the ride back with real momentum so the rider continues down the
+   -- bore instead of starting from rest on a steep slope.
+   root.AssemblyLinearVelocity = resume.Velocity
+		end
+		if shield.Parent then shield:Destroy() end
+		return didStream
+	end
+	pendingSlideRelease[player] = release
+ -- Backstop. Nothing in this file may leave a player anchored forever, however
+ -- the round that was supposed to release them ends up failing.
+	task.delay(25, function()
+		if pendingSlideRelease[player] == release then
+			task.spawn(function() release(false) end)
+		end
+	end)
+	return true
+end
+
+local function prepareSlideResume(group)
+	local remaining = 0
+	for _, player in ipairs(group) do
+		local release = pendingSlideRelease[player]
+		if release then
+			remaining += 1
+			task.spawn(function()
+				release(true)
+				remaining -= 1
+			end)
+		end
+	end
+	local deadline = os.clock() + STREAM_AROUND_TIMEOUT + 3
+	while remaining > 0 and os.clock() < deadline do task.wait(.05) end
+	return remaining == 0
+end
+
+local function releaseSlideResume(group)
+	for _, player in ipairs(group) do
+		local release = pendingSlideRelease[player]
+		if release then release(false) end
+	end
+end
+
+-- Every arrival funnels through here so the tube path and the fallback can
+-- never diverge between the Studio in-place route and the reserved-server one.
+local function placeOnLevelEntry(player, char, useSlideResume)
+ -- The latch holds the CHARACTER being placed, not just the player, so a later
+ -- respawn still receives its ordinary elevator placement.
+ pendingExplicitPlacement[player] = char
+ local placed = useSlideResume and placeAtLevelThreeSlideResume(player, char)
+ if not placed then placed = placeSafelyInElevator(player, char) end
+ -- Released two resumptions later, never in this one. onCharacter's fallback is
+ -- deferred, so clearing the latch inline reopens exactly the race it closes.
+ task.defer(function()
+  task.defer(function()
+   if pendingExplicitPlacement[player] == char then pendingExplicitPlacement[player] = nil end
+  end)
+ end)
+ return placed
+end
+
 local function onCharacter(player, char)
  if inRound[player] then
   player.CameraMode = Enum.CameraMode.LockFirstPerson
@@ -471,7 +705,19 @@ local function onCharacter(player, char)
  end
  task.defer(function()
   if inRound[player] then
-   if worldReady then placeSafelyInElevator(player, char) end
+	-- A completed Level 2 rider is placed by the objective controller back
+	-- onto the exact helix tangent after a transition respawn. The ordinary
+	-- elevator fallback would otherwise race that placement and anchor the
+	-- character away from the ride.
+	if activeLevel == 2 and player:GetAttribute("Level2_ExitTransition") == true then
+		return
+	end
+   -- Round entry places this character explicitly; do not race it. `true` means
+   -- a placement is armed but its character is not known yet.
+   local pending = pendingExplicitPlacement[player]
+   if worldReady and pending ~= true and pending ~= char then
+    placeSafelyInElevator(player, char)
+   end
   else
    scatterAt(char, lobbySpawn, false)
   end
@@ -495,6 +741,7 @@ local function setupPlayer(player)
  inRound[player] = nil
  player:SetAttribute("InRound", false)
  player:SetAttribute("Escaped", nil)
+ player:SetAttribute("Level2_ExitTransition", nil)
  player:SetAttribute("GlowstickSlot", nil)
  player:SetAttribute("GlowstickColor", nil)
  player.CharacterAdded:Connect(function(char) onCharacter(player, char) end)
@@ -626,6 +873,9 @@ status.OnServerEvent:Connect(function(player, message, requestSerial)
  end
 end)
 Players.PlayerRemoving:Connect(function(player)
+ pendingExplicitPlacement[player] = nil
+ pendingSlideRelease[player] = nil
+ pendingSlideStream[player] = nil
  entryReady[player] = nil
  lobbyBriefingReady[player] = nil
  pendingTeleports[player] = nil
@@ -842,6 +1092,7 @@ local function returnPlayersToLocalLobby(group)
 		inRound[player] = nil
 		player:SetAttribute("InRound", false)
 		player:SetAttribute("Escaped", nil)
+		player:SetAttribute("Level2_ExitTransition", nil)
 		player:SetAttribute("GlowstickSlot", nil)
 		player:SetAttribute("GlowstickColor", nil)
 		loadLobbyCharacter(player)
@@ -878,7 +1129,7 @@ local function teleportPlayersToLobby(group)
 	return ok, err, live
 end
 
-local function teleportPlayersToNextLevel(group, nextLevel)
+local function teleportPlayersToNextLevel(group, nextLevel, entryMode)
 	local live = livePlayers(group)
 	if #live == 0 then return true, nil, live end
 	if IS_STUDIO then return false, "STUDIO_LOCAL_TRANSITION", live end
@@ -893,6 +1144,11 @@ local function teleportPlayersToNextLevel(group, nextLevel)
 		BackroomsRound = true,
 		PartySize = #live,
 		Level = nextLevel,
+		-- LEVEL2_EXIT_TRANSITION_20260828: the whole continuing party left
+		-- Level 2 down the exit flume (the win condition requires every
+		-- surviving participant to have escaped), so the next server resumes
+		-- them inside Level 3's continuation bore rather than on a spawn pad.
+		EntryMode = entryMode,
 		LaunchToken = game.JobId .. ":progress:" .. tostring(nextLevel) .. ":" .. tostring(math.floor(os.clock() * 1000)),
 		GlowstickSlots = glowstickSlots,
 	})
@@ -945,6 +1201,9 @@ handlePostWinReturnRequest = function(player, requestSerial)
 	session.Returning[player] = true
 	status:FireClient(player, "returnpending", session.Serial)
 	if IS_RESERVED_ROUND_SERVER and not IS_STUDIO then
+		-- Keep the endless ride authoritative until Roblox accepts the transfer.
+		-- Clearing it before TeleportAsync made a transient failure irreversibly
+		-- delete the objective's transition record and strand the player.
 		task.spawn(function()
 			local ok, err = teleportPlayersToLobby({player})
 			if not ok and activePostWin == session and not session.Closed and player.Parent == Players then
@@ -953,12 +1212,30 @@ handlePostWinReturnRequest = function(player, requestSerial)
 				warn("GameManager: early return-to-lobby failed for " .. player.Name .. ": " .. tostring(err))
 			end
 		end)
+	else
+		-- Studio has no TeleportService destination. Park the opted-out rider in
+		-- Level 2's recovery chamber until the local fallback resolves at deadline.
+		player:SetAttribute("Level2_ExitTransition", nil)
 	end
 end
 
 local function finishFailedTeleportLocally(player, reason)
+	local failedRecord = pendingTeleports[player]
 	pendingTeleports[player] = nil
 	if player.Parent ~= Players then return end
+	-- A failed early opt-out is recoverable: keep this one player on the ride and
+	-- let them continue with the party. Never abort the shared post-win session or
+	-- remove the completed map before its server deadline.
+	local livePostWin = activePostWin
+	if failedRecord and failedRecord.Destination == "lobby"
+		and livePostWin and not livePostWin.Closed
+		and livePostWin.Eligible[player] == true then
+		livePostWin.Returning[player] = nil
+		status:FireClient(player, "returnfailed", livePostWin.Serial)
+		warn("GameManager: Return Lobby failed twice; keeping " .. player.Name
+			.. " in the campaign (" .. tostring(reason) .. ")")
+		return
+	end
 	warn("GameManager: recovering stranded player in the local lobby: " .. player.Name .. " (" .. tostring(reason) .. ")")
 	status:FireClient(player, "transitionfailed")
 	-- A twice-failed early Return-to-Lobby transfer can arrive while the 15-second
@@ -1065,7 +1342,7 @@ local function runPostWinIntermission(participants, elapsed, escapedCount)
 	return nextLevel, continuing, returning, false
 end
 
-local function continueStudioCampaign(participants, continuing, returning, nextLevel)
+local function continueStudioCampaign(participants, continuing, returning, nextLevel, entryMode)
 	-- Studio cannot teleport. A mixed split cannot coexist with generators that
 	-- park the lobby, so an opt-out safely ends this editor-only local session.
 	if #returning > 0 or #continuing == 0 then
@@ -1080,17 +1357,21 @@ local function continueStudioCampaign(participants, continuing, returning, nextL
 		inRound[player] = true
 		player:SetAttribute("InRound", true)
 		player:SetAttribute("Escaped", nil)
+		player:SetAttribute("Level2_ExitTransition", nil)
 	end
 	if not ensureWorld(continuing, nextLevel) then
 		fireGroup(continuing, "loadfailed")
 		returnGroupToLobby(continuing)
 		return
 	end
+	local useSlideResume = entryMode == LEVEL_TWO_TUBE_ENTRY_MODE and nextLevel == 3
+	roundEntryMode = useSlideResume and LEVEL_TWO_TUBE_ENTRY_MODE or nil
 	for _, player in ipairs(continuing) do
 		if player.Parent then
+			pendingExplicitPlacement[player] = true
 			loadGameplayCharacter(player)
 			local character = player.Character or player.CharacterAdded:Wait()
-			placeSafelyInElevator(player, character)
+			placeOnLevelEntry(player, character, useSlideResume)
 		end
 	end
 	task.wait(0.6)
@@ -1104,21 +1385,82 @@ playRound = function(participants)
  local conns = {}
  local participantSet = {}
  local reentryUsed = {}
+	local transitionRespawnToken = {}
+	local roundLifecycleOpen = true
+ -- LEVEL2_EXIT_TRANSITION_20260828
+ -- The route the party took out of Level 2 is latched AT the completion event.
+ -- Reconstructing it afterwards from player attributes is wrong: by the time the
+ -- post-win countdown ends a rider may have died, been recovered to the chamber,
+ -- or opted out, and none of that changes how the party left.
+ local exitTubeRoute = false
 
- local function hookLife(player, hum)
+	local function closeRoundLifecycle()
+		if not roundLifecycleOpen then return end
+		roundLifecycleOpen = false
+		table.clear(transitionRespawnToken)
+		for _, connection in ipairs(conns) do connection:Disconnect() end
+		table.clear(conns)
+	end
+
+	local scheduleTransitionRespawn
+	local function hookLife(player, hum)
   conns[#conns + 1] = hum.Died:Connect(function()
    if alive[player] then
     alive[player] = nil
     aliveCount -= 1
     local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
     fireGroup(participants, "death", player.Name, root and root.Position or nil)
+		if scheduleTransitionRespawn then scheduleTransitionRespawn(player) end
    end
   end)
  end
 
+	-- CharacterAutoLoads is intentionally disabled for generated levels, so the
+	-- objective controller's CharacterAdded recovery cannot happen by itself.
+	-- GameManager owns the reload, while the objective owns the exact ride frame.
+	-- Every yield is fenced by one token plus the same round/transition state.
+	scheduleTransitionRespawn = function(player)
+		if not roundLifecycleOpen or activeLevel ~= 2
+			or participantSet[player] ~= true
+			or player.Parent ~= Players
+			or inRound[player] ~= true
+			or player:GetAttribute("InRound") ~= true
+			or player:GetAttribute("Level2_ExitTransition") ~= true then
+			return
+		end
+		local token = {}
+		transitionRespawnToken[player] = token
+		task.spawn(function()
+			task.wait(.1)
+			if not roundLifecycleOpen or transitionRespawnToken[player] ~= token
+				or player.Parent ~= Players or inRound[player] ~= true
+				or player:GetAttribute("Level2_ExitTransition") ~= true then return end
+			if not loadGameplayCharacter(player) then return end
+			local character = player.Character
+			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+			local root = character and character:FindFirstChild("HumanoidRootPart")
+			if not roundLifecycleOpen or transitionRespawnToken[player] ~= token
+				or player.Parent ~= Players or inRound[player] ~= true
+				or player:GetAttribute("Level2_ExitTransition") ~= true
+				or not humanoid or humanoid.Health <= 0 or not root then return end
+			transitionRespawnToken[player] = nil
+			if not alive[player] then
+				alive[player] = true
+				aliveCount += 1
+				hookLife(player, humanoid)
+			end
+		end)
+	end
+
  for _, player in ipairs(participants) do
   participantSet[player] = true
   player:SetAttribute("ZyntraReentryUsed", false)
+  if activeLevel == 2 then
+   if player:GetAttribute("Level2_ExitTransition") == true then exitTubeRoute = true end
+   conns[#conns + 1] = player:GetAttributeChangedSignal("Level2_ExitTransition"):Connect(function()
+    if player:GetAttribute("Level2_ExitTransition") == true then exitTubeRoute = true end
+   end)
+  end
   local char = player.Parent and player.Character
   local hum = char and char:FindFirstChildOfClass("Humanoid")
   local root = char and char:FindFirstChild("HumanoidRootPart")
@@ -1143,6 +1485,7 @@ playRound = function(participants)
   reentryUsed[player] = true
   player:SetAttribute("ZyntraReentryUsed", true)
   player:SetAttribute("Escaped", nil)
+  player:SetAttribute("Level2_ExitTransition", nil)
   if not loadGameplayCharacter(player) then
    reentryUsed[player] = nil
    player:SetAttribute("ZyntraReentryUsed", false)
@@ -1164,6 +1507,7 @@ playRound = function(participants)
 
  conns[#conns + 1] = Players.PlayerRemoving:Connect(function(player)
   participantSet[player] = nil
+	transitionRespawnToken[player] = nil
   if alive[player] then alive[player] = nil; aliveCount -= 1 end
  end)
 
@@ -1171,7 +1515,7 @@ playRound = function(participants)
   workspace:SetAttribute("PostWinIntermissionActive", false)
   workspace:SetAttribute("RoundActive", false)
   zyntraReentry.OnInvoke = function() return false end
-  for _, connection in ipairs(conns) do connection:Disconnect() end
+	closeRoundLifecycle()
   fireGroup(participants, "lose", 0, 0, #participants)
   task.wait(5)
   elevatorApi.close()
@@ -1187,6 +1531,25 @@ playRound = function(participants)
   -- always reports first, and a dead one can still never stall the round.
   fireGroup(participants, "poolaccess")
   waitForGroupEntry(participants, 16)
+	elseif activeLevel == 3 and roundEntryMode == LEVEL_TWO_TUBE_ENTRY_MODE then
+  -- LEVEL2_EXIT_TRANSITION_20260828
+  -- This party is already inside the continuation bore. Replaying the service
+  -- elevator would put a descending-lift countdown over a moving slide and,
+  -- worse, hold the mall inert for seven seconds underneath them. So the mall is
+  -- brought fully live FIRST and only then is the ride handed back: by the time
+  -- anyone moves, the objective, hiding and music controllers are all armed.
+		-- Placement started streaming while the new world was being prepared. Wait
+		-- for every bounded request while riders are still anchored and covered.
+		-- Then arm Level 3, give its controllers one heartbeat to observe the
+		-- authority change, release everyone together, and only then remove the
+		-- loading cover / begin the round timer.
+		prepareSlideResume(participants)
+		workspace:SetAttribute("PuzzleWon", false)
+		workspace:SetAttribute("PostWinIntermissionActive", false)
+		workspace:SetAttribute("RoundActive", true)
+		RunService.Heartbeat:Wait()
+		releaseSlideResume(participants)
+		fireGroup(participants, "level3access")
  elseif activeLevel == 3 then
   -- A short service-elevator descent establishes the mall without replaying
   -- Level 1's fuse briefing. Level 3 owns its own objective presentation.
@@ -1242,7 +1605,10 @@ playRound = function(participants)
   workspace:SetAttribute("FlickerBoost", 0)
   workspace:SetAttribute("EntitySpeedMul", 1)
  end
- for _, connection in ipairs(conns) do connection:Disconnect() end
+	-- Keep only Level 2's transition lifecycle alive through the 15-second
+	-- result window so a rider who dies in the continuing tube is reloaded onto
+	-- it. Hazards are already stopped by RoundActive=false.
+	if result ~= "win" or activeLevel ~= 2 then closeRoundLifecycle() end
 
  -- Send consistent end-of-round statistics to every party member so the client
  -- can present the escape as a real payoff instead of a one-line notification.
@@ -1256,6 +1622,7 @@ playRound = function(participants)
  end
  if result == "win" then
   local nextLevel, continuing, returning, postWinAborted = runPostWinIntermission(participants, elapsed, escapedCount)
+	closeRoundLifecycle()
   -- RoundActive still stops hazards immediately, but the completed world and
   -- its solved lighting remain intact for the full result countdown.
   workspace:SetAttribute("PostWinIntermissionActive", false)
@@ -1266,12 +1633,21 @@ playRound = function(participants)
   if elevatorApi then elevatorApi.close() end
 
   if nextLevel then
+   -- LEVEL2_EXIT_TRANSITION_20260828: everyone continuing out of Level 2 left
+   -- down the exit flume and is still flagged mid-transition, so Level 3
+   -- resumes them inside its continuation bore. Decided once, here, so the
+   -- Studio in-place route and the reserved-server route cannot disagree.
+   -- The entry mode describes the ROUTE the party took, not per-player state,
+   -- so one straggler recovered to the chamber (or killed mid-transition) must
+   -- not downgrade everyone else's arrival to a stand-up spawn.
+   local entryMode = (activeLevel == 2 and nextLevel == 3 and exitTubeRoute)
+    and LEVEL_TWO_TUBE_ENTRY_MODE or nil
    if IS_STUDIO then
-    continueStudioCampaign(participants, continuing, returning, nextLevel)
+    continueStudioCampaign(participants, continuing, returning, nextLevel, entryMode)
     return
    end
    if #continuing > 0 then
-    local moved, moveError = teleportPlayersToNextLevel(continuing, nextLevel)
+    local moved, moveError = teleportPlayersToNextLevel(continuing, nextLevel, entryMode)
     if moved then
      -- Everyone who is not progressing belongs in the lobby. This includes
      -- opted-out participants plus late reserved-server arrivals/reconnects
@@ -1336,10 +1712,14 @@ local function launchStation(station, participants)
   roundBusy = true
   clearGlowsticks()
   assignGlowstickSlots(participants)
+  -- A round started from the lobby is never a continuation, whatever the last
+  -- one was; leaving a stale route here would skip Level 3's elevator descent.
+  roundEntryMode = nil
   for _, player in ipairs(participants) do
    inRound[player] = true
    player:SetAttribute("InRound", true)
    player:SetAttribute("Escaped", nil)
+   player:SetAttribute("Level2_ExitTransition", nil)
   end
   if ensureWorld(participants, station.level or 1) then
    for _, player in ipairs(participants) do
@@ -1605,16 +1985,21 @@ if IS_RESERVED_ROUND_SERVER then
    inRound[player] = true
    player:SetAttribute("InRound", true)
    player:SetAttribute("Escaped", nil)
+   player:SetAttribute("Level2_ExitTransition", nil)
   end
   armGroupEntry(participants)
   fireGroup(participants, "loadinggame", selectedLevel)
 
+  local useSlideResume = selectedLevel == 3
+   and data ~= nil and data.EntryMode == LEVEL_TWO_TUBE_ENTRY_MODE
+  roundEntryMode = useSlideResume and LEVEL_TWO_TUBE_ENTRY_MODE or nil
   if ensureWorld(participants, selectedLevel) then
    for _, player in ipairs(participants) do
     if player.Parent then
+     pendingExplicitPlacement[player] = true
      loadGameplayCharacter(player)
      local char = player.Character or player.CharacterAdded:Wait()
-     placeSafelyInElevator(player, char)
+     placeOnLevelEntry(player, char, useSlideResume)
     end
    end
    task.wait(0.6)

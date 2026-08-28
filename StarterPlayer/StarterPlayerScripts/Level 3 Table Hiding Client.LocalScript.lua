@@ -5,6 +5,8 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local UIDevice = require(ReplicatedStorage:WaitForChild("UIDevice"))
 local UserInputService = game:GetService("UserInputService")
 
 local player = Players.LocalPlayer
@@ -78,7 +80,9 @@ leave.AutoButtonColor = true
 leave.Font = Enum.Font.GothamBold
 leave.TextColor3 = Color3.fromRGB(236, 248, 243)
 leave.TextScaled = true
-leave.Text = if UserInputService.TouchEnabled then "LEAVE HIDING  //  TAP" else "LEAVE HIDING  //  E"
+-- Captioned once at load in the old build, so a tablet that gained a keyboard
+-- kept reading "TAP" forever. It is now rebuilt on every UIDevice.Changed.
+leave.Text = "LEAVE HIDING"
 leave.Parent = gui
 local leaveCorner = Instance.new("UICorner")
 leaveCorner.CornerRadius = UDim.new(0, 10)
@@ -89,6 +93,41 @@ leaveStroke.Transparency = .05
 leaveStroke.Thickness = 2
 leaveStroke.Parent = leave
 
+-- Both panels were fixed-size (360 and 330 wide). At 375x667 the leave button
+-- ran under the JUMP control and the message ran to within 7px of both edges.
+-- They now size to the safe width and sit inside the safe content band.
+local function applyHidingLayout()
+	local layout = UIDevice.Layout()
+	if layout.IsTouch then
+		local band = layout.TopBand
+		local centre = (band.Left + band.Right) * .5
+		local landscape = not layout.Portrait
+		local leaveHeight = landscape and 44 or 52
+		local gap = 6
+		local messageHeight = landscape and 30 or 42
+		if messageHeight + gap + leaveHeight > band.Height then
+			messageHeight = math.max(22, band.Height - gap - leaveHeight)
+		end
+		message.AnchorPoint = Vector2.new(.5, 0)
+		message.Position = UDim2.fromOffset(centre, band.Top)
+		message.Size = UDim2.fromOffset(math.min(360, band.Width), messageHeight)
+		leave.AnchorPoint = Vector2.new(.5, 0)
+		leave.Position = UDim2.fromOffset(centre, band.Top + messageHeight + gap)
+		leave.Size = UDim2.fromOffset(math.min(330, band.Width), leaveHeight)
+	else
+		local available = layout.SafeRight - layout.SafeLeft
+		message.AnchorPoint = Vector2.new(.5, 0)
+		message.Size = UDim2.new(0, math.min(360, available), 0, 42)
+		message.Position = UDim2.new(.5, 0, 0, 45)
+		leave.AnchorPoint = Vector2.new(.5, 1)
+		leave.Size = UDim2.new(0, math.min(330, available), 0, 58)
+		leave.Position = UDim2.new(.5, 0, 1, -54)
+	end
+	leave.Text = UIDevice.Caption("LEAVE HIDING", "//  E", "//  B")
+end
+applyHidingLayout()
+UIDevice.Changed:Connect(applyHidingLayout)
+
 local function requestExit()
 	if not hiding or not requestRemote then return end
 	requestRemote:FireServer("EXIT")
@@ -98,6 +137,10 @@ local function apply()
 	local shouldHide = player:GetAttribute("Level3_Hiding") == true
 		and player:GetAttribute("InRound") == true
 		and workspace:GetAttribute("SelectedLevel") == 3
+	if RunService:IsStudio()
+		and player:GetAttribute("UIRegressionForceHiding") == true then
+		shouldHide = true
+	end
 	if shouldHide == hiding then
 		gui.Enabled = shouldHide
 		return
@@ -118,6 +161,9 @@ UserInputService.InputBegan:Connect(function(input, processed)
 end)
 
 player:GetAttributeChangedSignal("Level3_Hiding"):Connect(apply)
+if RunService:IsStudio() then
+	player:GetAttributeChangedSignal("UIRegressionForceHiding"):Connect(apply)
+end
 player:GetAttributeChangedSignal("InRound"):Connect(apply)
 workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(apply)
 player.CharacterAdded:Connect(function()

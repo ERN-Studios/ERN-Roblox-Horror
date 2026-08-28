@@ -6,13 +6,16 @@
 -- (your own is off). Q / E cycle between survivors. Clears when you respawn.
 
 local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UIS = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
+local UIDevice = require(ReplicatedStorage:WaitForChild("UIDevice"))
 
 local gui = Instance.new("ScreenGui")
 gui.Name = "SpectateGui"
 gui.ResetOnSpawn = false
+gui.DisplayOrder = 58
 gui.Parent = player:WaitForChild("PlayerGui")
 
 local label = Instance.new("TextLabel")
@@ -29,6 +32,36 @@ label.Visible = false
 label.Text = ""
 label.Parent = gui
 local lc = Instance.new("UICorner"); lc.CornerRadius = UDim.new(0, 6); lc.Parent = label
+
+-- Touch has no Q/E, and until now had no way to change who it was watching at
+-- all: the label simply named bindings that do not exist on a phone. Two arrows
+-- sit either side of the caption, inside the same safe band, and are the only
+-- spectate affordance a touch player ever sees.
+local ARROW_LEFT = utf8.char(0x2039)
+local ARROW_RIGHT = utf8.char(0x203A)
+local function makeCycleButton(name, glyph)
+	local button = Instance.new("TextButton")
+	button.Name = name
+	button.AnchorPoint = Vector2.new(0.5, 1)
+	button.BackgroundColor3 = Color3.new(0, 0, 0)
+	button.BackgroundTransparency = 0.4
+	button.BorderSizePixel = 0
+	button.AutoButtonColor = true
+	button.Font = Enum.Font.GothamBold
+	button.Text = glyph
+	button.TextColor3 = Color3.fromRGB(220, 220, 220)
+	button.TextSize = 22
+	button.Visible = false
+	button.Active = false
+	button.Parent = gui
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(0, 6)
+	corner.Parent = button
+	return button
+end
+local applySpectateLayout
+local prevButton = makeCycleButton("SpectatePrevious", ARROW_LEFT)
+local nextButton = makeCycleButton("SpectateNext", ARROW_RIGHT)
 
 local SMOOTH = 11     -- how fast the POV eases toward their head — high enough to
 -- follow, low enough to filter out the walk/idle head-bob jitter
@@ -103,7 +136,9 @@ local function watch(i)
 	idx = ((i - 1) % #targets) + 1
 	if spectated ~= targets[idx] then unhide(); snapCam = true end -- reveal prev body, snap to new POV
 	spectated = targets[idx]
-	label.Text = "POV: " .. spectated.Name .. "   (Q / E to switch)"
+	-- The binding half of this caption comes from UIDevice, so a phone sees
+	-- only the name and uses the arrows beside it.
+	label.Text = UIDevice.Caption("POV: " .. spectated.Name, "(Q / E to switch)")
 end
 
 -- drive the POV camera + borrowed flashlight every frame while spectating
@@ -160,17 +195,73 @@ RunService.RenderStepped:Connect(function(dt)
 	spill.Enabled = on
 end)
 
+-- The label was a fixed 420px box anchored 20px off the bottom. On a 375-wide
+-- portrait screen that ran 45px off both edges, and on any touch device it sat
+-- squarely on the movement controls. It now sizes to the safe width and lives
+-- in the safe content band, with the arrows flanking it on touch.
+local ARROW_WIDTH = 44
+applySpectateLayout = function()
+	local layout = UIDevice.Layout()
+	local touch = layout.IsTouch
+	-- Spectating hides the stamina bar, so on touch the caption takes the lane
+	-- between the two movement zones -- the only place on a landscape phone with
+	-- room for a label plus two arrows. Portrait's corridor is too narrow for
+	-- that, so it falls back to the safe band.
+	local corridor = layout.Corridor
+	local useCorridor = touch and corridor.Width >= 240
+	local available = useCorridor and corridor.Width or (layout.SafeRight - layout.SafeLeft)
+	local arrowRoom = touch and (ARROW_WIDTH + 8) * 2 or 0
+	local width = math.min(420, available - arrowRoom)
+	local bottom = touch and (useCorridor and (layout.Height - 18) or layout.SafeBottom)
+		or (layout.Height - 20)
+	-- Centre on the SAFE RECT, not on the screen. The safe rect is off-centre
+	-- whenever the control column eats the right edge (landscape), and centring
+	-- a 420px label on 0.5 pushed it straight back under the controls.
+	local centre = useCorridor and (corridor.Left + corridor.Right) * .5
+		or (touch and (layout.SafeLeft + layout.SafeRight) * .5 or nil)
+	label.Size = UDim2.new(0, width, 0, 30)
+	label.Position = centre and UDim2.fromOffset(centre, bottom)
+		or UDim2.new(0.5, 0, 0, bottom)
+	for _, entry in ipairs({{prevButton, -1}, {nextButton, 1}}) do
+		local button, side = entry[1], entry[2]
+		local offset = side * (width * .5 + 8 + ARROW_WIDTH * .5)
+		button.Size = UDim2.fromOffset(ARROW_WIDTH, 44)
+		button.Position = centre and UDim2.fromOffset(centre + offset, bottom)
+			or UDim2.new(0.5, offset, 0, bottom)
+	end
+	local showArrows = touch and spectating
+	UIDevice.SetInteractive(prevButton, showArrows)
+	UIDevice.SetInteractive(nextButton, showArrows)
+end
+
+prevButton.Activated:Connect(function() if spectating then watch(idx - 1) end end)
+nextButton.Activated:Connect(function() if spectating then watch(idx + 1) end end)
+UIDevice.Changed:Connect(function()
+	applySpectateLayout()
+	-- The POV caption carries the Q/E binding on desktop and not on touch,
+	-- so a form-factor change has to rebuild it, not just move it.
+	if spectating and spectated then watch(idx) end
+end)
+
 local function startSpectate()
 	if spectating or not workspace:GetAttribute("RoundActive") then return end
 	spectating = true
+	-- Publish the state. "Spectating" was already being READ by the Level 2
+	-- Slidemouth client and (now) by the movement cluster, but nothing had ever
+	-- written it, so both checks were dead.
+	player:SetAttribute("Spectating", true)
 	label.Visible = true
+	applySpectateLayout()
 	watch(1)
 end
 
 local function stopSpectate()
 	spectating = false
+	player:SetAttribute("Spectating", nil)
 	spectated = nil
 	label.Visible = false
+	UIDevice.SetInteractive(prevButton, false)
+	UIDevice.SetInteractive(nextButton, false)
 	unhide()
 	core.Enabled = false; spill.Enabled = false
 	beamMount.Parent = nil
@@ -191,13 +282,33 @@ end
 if player.Character then onChar(player.Character) end
 player.CharacterAdded:Connect(onChar)
 
--- ESCAPING also puts you in spectate: you're alive (parked in the safe room)
--- but the round goes on — watch the teammates still inside until it ends
-player:GetAttributeChangedSignal("Escaped"):Connect(function()
+-- ESCAPING also puts you in spectate: you're alive but out of play, and the
+-- round goes on — watch the teammates still inside until it ends.
+--
+-- LEVEL2_EXIT_TRANSITION_20260828: not while the exit ride is still happening.
+-- A Level 2 escapee keeps physically sliding down the transition flume for the
+-- whole decision window, so taking their camera away the instant they cross the
+-- completion sensor would hide the very thing they are doing. Spectate waits
+-- until the server clears Level2_ExitTransition.
+local function syncSpectateForEscape()
 	if player:GetAttribute("Escaped") == true then
+		-- Still riding the Level 2 exit flume: their own body is the thing worth
+		-- watching, so spectate waits for the server to end the transition.
+		if player:GetAttribute("Level2_ExitTransition") == true then return end
 		startSpectate()
+		return
 	end
-end)
+	-- Escaped cleared. In the normal flow that coincides with a fresh character
+	-- and onChar stops spectating, but the attribute can also be cleared on its
+	-- own (a Zyntra re-entry, a campaign hand-off). Without this the player
+	-- stays flagged Spectating for the rest of the round -- which now also
+	-- keeps the whole movement cluster disabled, because it gates on that flag.
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if humanoid and humanoid.Health > 0 then stopSpectate() end
+end
+player:GetAttributeChangedSignal("Escaped"):Connect(syncSpectateForEscape)
+player:GetAttributeChangedSignal("Level2_ExitTransition"):Connect(syncSpectateForEscape)
 
 UIS.InputBegan:Connect(function(input, processed)
 	if processed or not spectating then return end

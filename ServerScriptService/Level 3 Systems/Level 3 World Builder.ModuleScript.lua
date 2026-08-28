@@ -324,13 +324,13 @@ local function makeTable(parent: Instance, cframe: CFrame, party: boolean, chair
 			Vector3.new(11.2, .5, 4.35), Color3.fromRGB(201, 198, 185), Enum.Material.SmoothPlastic)
 		decorative(tableMesh)
 	end
-	tableMesh:SetAttribute("Level3_TemporaryHuntFurniture", true)
+	tableMesh:SetAttribute("Level3_PermanentFurniture", true)
 	-- Keep the detailed free mesh decorative, but add one simple invisible
 	-- tabletop collider so players cannot walk through the banquet tables.
 	local tableCollision = part(parent, "Level 3 Folding Table Collision", cframe * CFrame.new(0, 3.0, 0),
 		Vector3.new(11.0, .48, 4.15), Color3.new(), Enum.Material.SmoothPlastic, 1)
 	tableCollision:SetAttribute("Level3_TableCollision", true)
-	tableCollision:SetAttribute("Level3_TemporaryHuntFurniture", true)
+	tableCollision:SetAttribute("Level3_PermanentFurniture", true)
 	tableCollision.CastShadow = false
 
 	-- LEVEL3_MANAGER_FURNITURE_NAV_20260821
@@ -350,7 +350,7 @@ local function makeTable(parent: Instance, cframe: CFrame, party: boolean, chair
 	-- the Manager's RespectCanCollide physical sweeps.
 	navExclusion.CanQuery = true
 	navExclusion:SetAttribute("Level3_ManagerFurnitureNavExclusion", true)
-	navExclusion:SetAttribute("Level3_TemporaryHuntFurniture", true)
+	navExclusion:SetAttribute("Level3_PermanentFurniture", true)
 	local navModifier = Instance.new("PathfindingModifier")
 	navModifier.Name = "Level 3 Manager Furniture Path Modifier"
 	navModifier.Label = Configuration.MallManager.FurniturePathLabel
@@ -362,7 +362,7 @@ local function makeTable(parent: Instance, cframe: CFrame, party: boolean, chair
 	local top = part(parent, "Level 3 Party Tablecloth Top", cframe * CFrame.new(0, 3.48, 0),
 		Vector3.new(11.45, .12, 4.62), tableColor, Enum.Material.Fabric)
 	decorative(top)
-	top:SetAttribute("Level3_TemporaryHuntFurniture", true)
+	top:SetAttribute("Level3_PermanentFurniture", true)
 	texture(top, TEXTURES.ConfettiTablecloth, Enum.NormalId.Top,
 		Configuration.TextureStuds.Tablecloth, Configuration.TextureStuds.Tablecloth, .34)
 	if allowHide then
@@ -374,7 +374,7 @@ local function makeTable(parent: Instance, cframe: CFrame, party: boolean, chair
 			Configuration.Hiding.HideVolumeSize, Color3.new(), Enum.Material.SmoothPlastic, 1)
 		decorative(hideAnchor)
 		hideAnchor:SetAttribute("Level3_HideTableAnchor", true)
-		hideAnchor:SetAttribute("Level3_TemporaryHuntFurniture", true)
+		hideAnchor:SetAttribute("Level3_PermanentFurniture", true)
 		hideAnchor:SetAttribute("Level3_HideOccupiedUserId", 0)
 		local hidePrompt = Instance.new("ProximityPrompt")
 		hidePrompt.Name = "HideUnderTablePrompt"
@@ -396,7 +396,7 @@ local function makeTable(parent: Instance, cframe: CFrame, party: boolean, chair
 		sightOccluder.CanTouch = false
 		sightOccluder.CanQuery = true
 		sightOccluder:SetAttribute("Level3_HideSightOccluder", true)
-		sightOccluder:SetAttribute("Level3_TemporaryHuntFurniture", true)
+		sightOccluder:SetAttribute("Level3_PermanentFurniture", true)
 	end
 
 	-- Keep the folding legs and silhouette visible. The former four rigid skirt
@@ -420,7 +420,7 @@ local function makeTable(parent: Instance, cframe: CFrame, party: boolean, chair
 		local chair = cloneDecorMesh("PlasticPartyChairTemplate", parent, "Level 3 Vetted Plastic Party Chair",
 			chairCF, Vector3.new(2.55, 4.3, 2.58), chairColor)
 		if chair then
-			chair:SetAttribute("Level3_TemporaryHuntFurniture", true)
+			chair:SetAttribute("Level3_PermanentFurniture", true)
 			chair:SetAttribute("Level3_ChairTableTarget", tableTarget)
 			chair:SetAttribute("Level3_ChairFacingDot", chair.CFrame.LookVector:Dot((tableTarget - chairPosition).Unit))
 		end
@@ -428,7 +428,7 @@ local function makeTable(parent: Instance, cframe: CFrame, party: boolean, chair
 			local seat = part(parent, "Level 3 Party Chair", chairCF,
 				Vector3.new(2.4, 4.2, 2.5), chairColor, Enum.Material.SmoothPlastic)
 			decorative(seat)
-			seat:SetAttribute("Level3_TemporaryHuntFurniture", true)
+			seat:SetAttribute("Level3_PermanentFurniture", true)
 			seat:SetAttribute("Level3_ChairTableTarget", tableTarget)
 			seat:SetAttribute("Level3_ChairFacingDot", seat.CFrame.LookVector:Dot((tableTarget - chairPosition).Unit))
 		end
@@ -1748,11 +1748,21 @@ local function makeArrivalElevator(parent: Instance, room: {[string]: any}): (Mo
 	visual:SetAttribute("Level3_ProgressionLandmark", true)
 	visual.Parent = parent
 
-	-- Rebuild the Level 2 hand-off at its real gateway scale. The bore begins
-	-- level with the landing-room floor, then curves upward as it recedes so the
-	-- player reads a physical slide rather than a flat portal or a black disc.
-	local tubeLength, rise, radius = 68, 26, 8
-	local pathSections, shellSegments = 18, 40
+	-- LEVEL2_EXIT_TRANSITION_20260828
+	-- This is the far end of Level 2's exit flume, not a decorative stub. A
+	-- player who chose to continue resumes near the REAR of this bore, still
+	-- moving, and physically slides the rest of the way out into the mall. That
+	-- requires a real run: enough length for the arrival to read as the tail of
+	-- one long ride, and enough rise that the resume point is genuinely downhill.
+	-- The bore still finishes level with the landing-room floor so the outlet is
+	-- a slide mouth rather than a drop.
+	local tubeLength, rise, radius = 230, 66, 8
+	-- This curve changes slope gradually; 32 longitudinal sections keep each
+	-- collision span under eight studs, while a 20-sided bore is already visually
+	-- round at this radius. The former 44x40 tessellation created 1,760 shell
+	-- colliders for this one prop and pushed the whole level past both its part
+	-- and collision budgets without improving the ride.
+	local pathSections, shellSegments = 32, 20
 	local wallX = p.X - room.W * .5
 	local mouthX = wallX + Configuration.WallThickness * .5 + .12
 	local centerY = p.Y + radius + .05
@@ -1821,6 +1831,29 @@ local function makeArrivalElevator(parent: Instance, room: {[string]: any}): (Mo
 	end
 	visual:SetAttribute("Level3_SlideRise", rise)
 	visual:SetAttribute("Level3_SlideSlipback", true)
+	visual:SetAttribute("Level3_SlideLength", tubeLength)
+
+	-- The resume frame: where a continuing Level 2 rider re-enters the world.
+	-- It sits just inside the rear safety cap, on the bore axis, with the
+	-- tangent pointing down the slide toward the mall. GameManager places the
+	-- character here and gives it this velocity, so the ride continues instead
+	-- of restarting as a stand-up spawn somewhere else.
+	local RESUME_ALPHA = .93
+	local RESUME_SPEED = 62
+	local resumePosition = Vector3.new(
+		mouthX - tubeLength * RESUME_ALPHA,
+		centerY + rise * RESUME_ALPHA * RESUME_ALPHA,
+		p.Z)
+	-- Direction of TRAVEL, which is -d/dalpha: the path is
+	-- x = mouthX - tubeLength*alpha, so riding toward the mouth means alpha
+	-- decreasing and x increasing. Negating only the Y term (as an earlier
+	-- version did) points the rider back up the bore; the slip loop then
+	-- silently corrected their velocity while they faced the wrong way.
+	local resumeTangent = Vector3.new(tubeLength, -2 * rise * RESUME_ALPHA, 0).Unit
+	visual:SetAttribute("Level3_SlideResumePosition", resumePosition)
+	visual:SetAttribute("Level3_SlideResumeTangent", resumeTangent)
+	visual:SetAttribute("Level3_SlideResumeVelocity", resumeTangent * RESUME_SPEED)
+	visual:SetAttribute("Level3_SlideResumeSpeed", RESUME_SPEED)
 	local rearPoint = pathPoints[#pathPoints]
 	local rearAxis = (rearPoint - pathPoints[#pathPoints - 1]).Unit
 
@@ -1830,7 +1863,10 @@ local function makeArrivalElevator(parent: Instance, room: {[string]: any}): (Mo
 	local sealCenter = Vector3.new(wallX, centerY, p.Z)
 	local sealHalfOpening = radius + .12
 	local sealOuterRadius = radius + .15
-	local sealRows = 96
+	-- The leading shell edge hides the stepped inner boundary. Twenty rows keep
+	-- every step below one stud without spending 192 decorative parts on a wall
+	-- aperture the player only sees while moving at slide speed.
+	local sealRows = 20
 	local sealRowHeight = sealHalfOpening * 2 / sealRows
 	local sealOuterZ = sealHalfOpening + .08
 	local sealDepth = Configuration.WallThickness - .02
@@ -1895,11 +1931,25 @@ local function makeArrivalElevator(parent: Instance, room: {[string]: any}): (Mo
 
 	-- Low-friction parts communicate the material; this lightweight server loop
 	-- makes the one-way behavior deterministic for every avatar controller.
+	-- Fast enough to read as the tail of a long slide; slow enough that the
+	-- arrival into the mall is survivable and controllable.
+	local SLIDE_MINIMUM_SPEED = 48
 	local slipAccumulator = 0
 	local slipConnection: RBXScriptConnection?
 	slipConnection = RunService.Heartbeat:Connect(function(deltaTime)
 		if not visual:IsDescendantOf(workspace) then
 			if slipConnection then slipConnection:Disconnect() end
+			-- The world can be torn down with a rider still in the bore. Release
+			-- every PlatformStand this loop set, or that player stays a ragdoll
+			-- for the rest of their session.
+			for _, player in ipairs(Players:GetPlayers()) do
+				local character = player.Character
+				local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+				if humanoid and character:GetAttribute("Level3_ProgressionSliding") == true then
+					humanoid.PlatformStand = false
+					character:SetAttribute("Level3_ProgressionSliding", nil)
+				end
+			end
 			return
 		end
 		slipAccumulator += deltaTime
@@ -1911,16 +1961,44 @@ local function makeArrivalElevator(parent: Instance, room: {[string]: any}): (Mo
 			local root = character and character:FindFirstChild("HumanoidRootPart")
 			if humanoid and humanoid.Health > 0 and root and root:IsA("BasePart") then
 				local alpha = (mouthX - root.Position.X) / tubeLength
-				if alpha > .025 and alpha < .96
-					and math.abs(root.Position.Z - p.Z) < radius - .8 then
-					local pathY = centerY + rise * alpha * alpha
-					if math.abs(root.Position.Y - pathY) < radius + 2 then
+				local pathY = centerY + rise * alpha * alpha
+				local insideBore = alpha > .025 and alpha < .99
+					and math.abs(root.Position.Z - p.Z) < radius - .8
+					and math.abs(root.Position.Y - pathY) < radius + 2
+				if insideBore then
+					-- LEVEL2_EXIT_TRANSITION_20260828
+					-- This is the tail of Level 2's flume, so it has to ride like
+					-- one. PlatformStand takes the humanoid controller out of the
+					-- way: without it the character stays in Running, resists the
+					-- imposed velocity and WALKS the bore at about 16 studs/s,
+					-- which reads as a corridor rather than the end of a slide.
+					if not humanoid.PlatformStand then
+						humanoid.PlatformStand = true
+						character:SetAttribute("Level3_ProgressionSliding", true)
+					end
+					-- Push along the live path tangent rather than world +X, so
+					-- the steep rear section drives the rider forward instead of
+					-- straight down into the shell.
+					local tangent = Vector3.new(tubeLength, -2 * rise * alpha, 0).Unit
+					-- The shared slide controller owns production client physics and
+					-- releases the actual body joints. Keep this velocity write only as
+					-- a server fallback until its replicated ragdoll session is live.
+					if character:GetAttribute("Level2_RagdollServerActive") ~= true then
 						local velocity = root.AssemblyLinearVelocity
-						root.AssemblyLinearVelocity = Vector3.new(
-							math.max(velocity.X, 20),
-							math.min(velocity.Y, -6),
-							velocity.Z * .55
-						)
+						local along = velocity:Dot(tangent)
+						local lateral = velocity - tangent * along
+						root.AssemblyLinearVelocity = tangent * math.max(along, SLIDE_MINIMUM_SPEED)
+							+ lateral * .35
+					end
+				elseif character:GetAttribute("Level3_ProgressionSliding") == true then
+					-- Out of the bore: hand control straight back. Leaving
+					-- PlatformStand set would drop the arriving player onto the
+					-- mall floor as an inert ragdoll.
+					-- If the shared ragdoll service is still live, let its client End
+					-- restore joints and humanoid state atomically instead of racing it.
+					if character:GetAttribute("Level2_RagdollServerActive") ~= true then
+						humanoid.PlatformStand = false
+						character:SetAttribute("Level3_ProgressionSliding", nil)
 					end
 				end
 			end

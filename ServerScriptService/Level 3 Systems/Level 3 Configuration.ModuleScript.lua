@@ -125,10 +125,12 @@ local Configuration = {
 		BlackoutStartSeconds = 150,
 		PreBlackoutFlickerSeconds = 5,
 		BlackoutScreamLeadSeconds = 3,
-		-- One beat before the scream strips furniture and every handheld light.
-		-- Furniture stays collisionless for the hunt, returns visually for the final
-		-- two seconds, then regains collision exactly when the Manager despawns.
-		FurnitureRemovalLeadSeconds = 1,
+		-- How long before the distant scream every handheld light cuts out. This
+		-- used to be named for a furniture removal that no longer happens —
+		-- furniture is permanent scene topology now (see the Music Sequence
+		-- Controller's LEVEL3_PERMANENT_FURNITURE_20260828 note). The blackout
+		-- timing itself is unchanged: one beat of darkness before the scream.
+		PreScreamFlashlightLockSeconds = 1,
 		HuntFinalFlashlightLockSeconds = 2,
 		PostSongBlackoutSeconds = 30,
 		BlackoutSeconds = 60.035917,
@@ -231,6 +233,12 @@ local Configuration = {
 		-- The blackout-only Manager begins moving on the reveal frame and never idles at patrol goals.
 		SpawnGraceSeconds = 0,
 		PatrolPauseSeconds = 0,
+		-- Absolute floor for a blackout sweep leg. The controller extends this by
+		-- direct distance / patrol speed, a detour factor, and slack; a fixed 20s
+		-- deadline is shorter than even several healthy adjacent-room routes.
+		BlackoutSweepLegSeconds = 20,
+		BlackoutSweepDistanceFactor = 1.5,
+		BlackoutSweepSlackSeconds = 8,
 		NoiseLifetimeSeconds = 4,
 		CrouchHearingMultiplier = 0.18,
 		SearchPointRadius = 18,

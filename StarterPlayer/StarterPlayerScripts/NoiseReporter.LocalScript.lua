@@ -11,6 +11,7 @@ local remote = RS:WaitForChild("Remotes"):WaitForChild("ReportNoise")
 local glowstickRemote = RS:WaitForChild("Remotes"):WaitForChild("DropGlowstick")
 local player = Players.LocalPlayer
 local DevAccess = require(RS:WaitForChild("DevAccess"))
+local UIDevice = require(RS:WaitForChild("UIDevice"))
 local devAllowed = DevAccess.IsAllowed(player)
 local function inRound() return player:GetAttribute("InRound") == true end
 
@@ -162,6 +163,11 @@ local BAR_FADE      = 5     -- how fast the bar fades in / out
 local gui = Instance.new("ScreenGui")
 gui.Name = "StaminaGui"
 gui.ResetOnSpawn = false
+-- Roblox's TouchGui sits at DisplayOrder 5. This cluster used to sit at the
+-- default 0, which put our JUMP button UNDERNEATH Roblox's own -- two jump
+-- buttons stacked to within nine pixels, with the ungated default one taking
+-- every tap. We now own the jump control outright and draw above the default.
+gui.DisplayOrder = 60
 -- Keep the container alive in the lobby for the mobile RUN button. The actual
 -- stamina bar remains fully hidden there, and the level-only controls are
 -- hidden explicitly by updateRoundState().
@@ -171,8 +177,9 @@ gui.Parent = player:WaitForChild("PlayerGui")
 -- Compact touch control cluster. Keyboard/controller paths remain unchanged.
 -- RUN and JUMP form the right column; POV sits above the upright flashlight
 -- immediately to their left, keeping the camera-dragging area clear.
-local touchControlsVisible = UIS.TouchEnabled
-	or (RunService:IsStudio() and workspace:GetAttribute("ForceTouchUI") == true)
+-- Form factor, not last input, and re-read on every UIDevice.Changed rather
+-- than captured once at load.
+local function touchControls() return UIDevice.IsTouch() end
 
 local function makeTouchButton(name, text)
 	local button = Instance.new("TextButton")
@@ -187,7 +194,7 @@ local function makeTouchButton(name, text)
 	button.TextColor3 = Color3.fromRGB(235, 238, 232)
 	button.TextSize = 17
 	button.TextWrapped = true
-	button.Visible = touchControlsVisible
+	button.Visible = touchControls()
 	button.ZIndex = 20
 	button.Parent = gui
 
@@ -207,38 +214,59 @@ local touchJumpButton = makeTouchButton("TouchJump", "JUMP  ↑")
 local touchPOVButton, povStroke = makeTouchButton("TouchPOV", "POV\n1ST")
 local touchGlowButton = makeTouchButton("TouchDropGlowstick", "DROP\nGLOW")
 touchPOVButton.TextSize = 13
-touchPOVButton.Visible = touchControlsVisible and devAllowed
+touchPOVButton.Visible = touchControls() and devAllowed
 touchGlowButton.TextSize = 12
 
-local lastControlViewport = Vector2.new(-1, -1)
+-- The whole cluster is laid out from UIDevice's reserved control column, so
+-- every other HUD element in the game can avoid exactly the rectangle these
+-- buttons actually occupy. The flashlight toggle joins this column too (it used
+-- to sit bottom-left, inside the movement thumbstick's activation region).
+local FLASHLIGHT_SLOT_HEIGHT = 58
 local function applyTouchControlLayout()
-	if not touchControlsVisible then return end
-	local camera = workspace.CurrentCamera
-	local viewport = camera and camera.ViewportSize or Vector2.new(1280, 720)
-	if viewport == lastControlViewport then return end
-	lastControlViewport = viewport
+	if not touchControls() then return end
+	local layout = UIDevice.Layout()
+	local tablet = layout.Class == "tablet"
+	local edge = tablet and 26 or 22
+	local buttonSize = tablet and 76 or 64
+	local gap = tablet and 18 or 14
+	local secondColumn = edge + buttonSize + (tablet and 18 or 16)
+	local bottom = edge + (layout.Height - layout.SafeBottom > edge and 0 or 0)
 
-	local phone = viewport.Y < 700
-	local edge = phone and 22 or 28
-	local buttonSize = phone and 64 or 76
-	local gap = phone and 14 or 18
-	local leftColumn = edge + buttonSize + (phone and 16 or 18)
-	local flashlightHeight = phone and 106 or 128
-
-	touchJumpButton.Position = UDim2.new(1, -edge, 1, -edge)
+	touchJumpButton.Position = UDim2.new(1, -edge, 1, -bottom)
 	touchJumpButton.Size = UDim2.fromOffset(buttonSize, buttonSize)
-	touchRunButton.Position = UDim2.new(1, -edge, 1, -(edge + buttonSize + gap))
+	-- In a round our JUMP owns the bottom-right slot and Roblox's is suppressed,
+	-- so RUN sits directly above it. In the LOBBY the default jump is restored
+	-- (it is the only jump there), and it occupies roughly the slot ours would
+	-- have -- so RUN lifts clear of the engine's own button rather than sitting
+	-- on top of it.
+	local runStack = bottom + buttonSize + gap
+	if not inRound() then
+		local jumpZone = layout.Zones.Jump
+		runStack = math.max(runStack, layout.Height - jumpZone.Top + gap)
+	end
+	touchRunButton.Position = UDim2.new(1, -edge, 1, -runStack)
 	touchRunButton.Size = UDim2.fromOffset(buttonSize, buttonSize)
-	touchPOVButton.Position = UDim2.new(1, -leftColumn, 1, -(edge + flashlightHeight + (phone and 12 or 14)))
-	touchPOVButton.Size = UDim2.fromOffset(phone and 58 or 72, phone and 48 or 54)
-	touchGlowButton.Position = UDim2.new(1, -leftColumn, 1, -(edge + flashlightHeight + buttonSize + gap))
-	touchGlowButton.Size = UDim2.fromOffset(phone and 58 or 72, phone and 58 or 72)
-	touchRunButton.TextSize = phone and 16 or 18
-	touchJumpButton.TextSize = phone and 15 or 17
+	-- Second column: GLOW on top of POV, both clear of the jump/run column and
+	-- of the flashlight slot that FlashlightController now occupies below them.
+	touchPOVButton.Position = UDim2.new(1, -secondColumn,
+		1, -(bottom + FLASHLIGHT_SLOT_HEIGHT + (tablet and 14 or 12)))
+	touchPOVButton.Size = UDim2.fromOffset(tablet and 72 or 58, tablet and 54 or 48)
+	touchGlowButton.Position = UDim2.new(1, -secondColumn,
+		1, -(bottom + FLASHLIGHT_SLOT_HEIGHT + buttonSize + gap))
+	touchGlowButton.Size = UDim2.fromOffset(tablet and 72 or 58, tablet and 72 or 58)
+	touchRunButton.TextSize = tablet and 18 or 16
+	touchJumpButton.TextSize = tablet and 17 or 15
 end
 
 applyTouchControlLayout()
-RunService.RenderStepped:Connect(applyTouchControlLayout)
+UIDevice.Changed:Connect(applyTouchControlLayout)
+
+-- This game draws its own JUMP, with round/death/hiding gating the default
+-- control knows nothing about, so Roblox's is suppressed while ours is the
+-- owner. Ownership is per-round, NOT permanent: the cluster deliberately
+-- provides no jump in the lobby, and suppressing the default there as well
+-- would leave a touch player in the tunnel hub with no way to jump at all.
+-- updateRoundState below re-evaluates this on every state change.
 
 local touchSprintToggled = false
 local function showRunEnabled(enabled)
@@ -303,6 +331,34 @@ local staBg = Instance.new("Frame")
 staBg.AnchorPoint = Vector2.new(0.5, 1)
 staBg.Position = UDim2.new(0.5, 0, 1, -22)
 staBg.Size = UDim2.new(0, BAR_W, 0, BAR_H)
+-- The fixed 300px bar overflowed a 375-wide portrait screen and sat on top of
+-- the movement zone. It is now capped to the safe width and lifted into the
+-- content band on touch.
+local function applyStaminaLayout()
+	local layout = UIDevice.Layout()
+	staBg.AnchorPoint = Vector2.new(0.5, 1)
+	if not layout.IsTouch then
+		staBg.Size = UDim2.new(0, BAR_W, 0, BAR_H)
+		staBg.Position = UDim2.new(0.5, 0, 1, -22)
+		return
+	end
+	-- On touch the bar lives in the lane BETWEEN the two movement zones. A
+	-- landscape phone leaves only about 65 vertical pixels clear above the
+	-- controls -- not enough to share with the alert banner -- but the corridor
+	-- down the middle is free at any height.
+	local corridor = layout.Corridor
+	if corridor.Width >= 120 then
+		local width = math.min(BAR_W, corridor.Width)
+		staBg.Size = UDim2.new(0, width, 0, BAR_H)
+		staBg.Position = UDim2.new(0, (corridor.Left + corridor.Right) * .5,
+			1, -UIDevice.BottomOffsetFor(gui, layout.Height - 18))
+	else
+		-- Portrait: the corridor is narrow, so fall back to the safe band.
+		staBg.Size = UDim2.new(0, math.min(BAR_W, layout.SafeRight - layout.SafeLeft), 0, BAR_H)
+		staBg.Position = UDim2.new(0.5, 0,
+			1, -UIDevice.BottomOffsetFor(gui, layout.SafeBottom - 10))
+	end
+end
 staBg.BackgroundColor3 = Color3.new(0, 0, 0)
 staBg.BackgroundTransparency = 1 -- starts hidden (full stamina)
 staBg.BorderSizePixel = 0
@@ -318,6 +374,8 @@ staFill.BackgroundTransparency = 1
 staFill.BorderSizePixel = 0
 staFill.Parent = staBg
 local fc = Instance.new("UICorner"); fc.CornerRadius = UDim.new(0, 4); fc.Parent = staFill
+applyStaminaLayout()
+UIDevice.Changed:Connect(applyStaminaLayout)
 
 local barShown = 0 -- eased 0–1 visibility
 
@@ -371,13 +429,48 @@ RunService.Heartbeat:Connect(function(dt)
 	staFill.BackgroundTransparency = 1 - barShown
 end)
 
+-- Every state in which the movement cluster must not be usable. Hiding alone is
+-- not enough: a TextButton left Active keeps swallowing taps through a
+-- transparent background, so all four go through UIDevice.SetInteractive, which
+-- clears Active/Selectable/Modal as well as Visible.
+local function controlsAvailable()
+	if not touchControls() then return false end
+	if not inRound() then return false end
+	if player:GetAttribute("Escaped") == true then return false end
+	if player:GetAttribute("Level3_Hiding") == true then return false end
+	if player:GetAttribute("Spectating") == true then return false end
+	-- A modal owns the screen: the store terminal, the dev phone, the Zyntra
+	-- re-entry prompt, or the post-round panel.
+	if player:GetAttribute("ZyntraStoreOpen") == true then return false end
+	if player:GetAttribute("DevPhoneOpen") == true then return false end
+	if player:GetAttribute("ZyntraReentryOpen") == true then return false end
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if not humanoid or humanoid.Health <= 0 then return false end
+	return true
+end
+
 local function updateRoundState()
 	local active = inRound()
+	local usable = controlsAvailable()
 	gui.Enabled = true
-	touchRunButton.Visible = touchControlsVisible
-	touchJumpButton.Visible = touchControlsVisible and active
-	touchPOVButton.Visible = touchControlsVisible and devAllowed and active
-	touchGlowButton.Visible = touchControlsVisible and active
+	-- RUN stays available in the lobby (it is how a player sprints to a station)
+	-- but is gated on every other unavailable state once a round starts.
+	UIDevice.SetInteractive(touchRunButton, touchControls() and (usable or not active))
+	UIDevice.SetInteractive(touchJumpButton, usable)
+	UIDevice.SetInteractive(touchPOVButton, usable and devAllowed)
+	UIDevice.SetInteractive(touchGlowButton, usable)
+	-- Own the jump control only while in a round. In the lobby the default
+	-- touch jump comes back, because that is the only jump there is there.
+	UIDevice.SuppressDefaultJump(touchControls() and active)
+	-- The RUN slot depends on whether the engine's jump button is showing.
+	applyTouchControlLayout()
+	-- Stamina is only meaningful while the player is the one running. Dead,
+	-- escaped or spectating, the bar is stale information sitting in the same
+	-- band as the spectate caption, so it stands down with the controls.
+	staBg.Visible = active
+		and player:GetAttribute("Escaped") ~= true
+		and player:GetAttribute("Spectating") ~= true
 	if not active then
 		lastGlowstickDrop = -math.huge
 		shiftSprintHeld, touchSprintHeld = false, false
@@ -388,4 +481,16 @@ local function updateRoundState()
 	end
 end
 player:GetAttributeChangedSignal("InRound"):Connect(updateRoundState)
+for _, attribute in ipairs({"Escaped", "Level3_Hiding", "Spectating",
+	"ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen"}) do
+	player:GetAttributeChangedSignal(attribute):Connect(updateRoundState)
+end
+UIDevice.Changed:Connect(updateRoundState)
+local function bindLife(character)
+	local humanoid = character:WaitForChild("Humanoid", 8)
+	if humanoid then humanoid.Died:Connect(updateRoundState) end
+	updateRoundState()
+end
+if player.Character then task.spawn(bindLife, player.Character) end
+player.CharacterAdded:Connect(bindLife)
 updateRoundState()

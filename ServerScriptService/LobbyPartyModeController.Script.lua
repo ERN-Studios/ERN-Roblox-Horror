@@ -16,6 +16,7 @@ local PALETTE = {
 
 local active = false
 local boundPrompts = setmetatable({}, { __mode = "k" })
+local boundClicks = setmetatable({}, { __mode = "k" })
 
 local function collectCeilingLights()
 	local lobby = workspace:FindFirstChild("ServerLobby")
@@ -221,7 +222,24 @@ local function bindPrompt(instance)
 	end)
 end
 
-for _, descendant in ipairs(workspace:GetDescendants()) do
-	bindPrompt(descendant)
+local function bindClick(instance)
+	if not instance:IsA("ClickDetector")
+		or instance.Name ~= "ZyntraPartyClick"
+		or boundClicks[instance] then
+		return
+	end
+	boundClicks[instance] = true
+	instance.MouseClick:Connect(function()
+		task.spawn(runParty, instance)
+	end)
 end
-workspace.DescendantAdded:Connect(bindPrompt)
+
+local function bindControl(instance)
+	bindPrompt(instance)
+	bindClick(instance)
+end
+
+for _, descendant in ipairs(workspace:GetDescendants()) do
+	bindControl(descendant)
+end
+workspace.DescendantAdded:Connect(bindControl)

@@ -2,6 +2,7 @@
 
 local Players = game:GetService("Players")
 local RS = game:GetService("ReplicatedStorage")
+local UIDevice = require(RS:WaitForChild("UIDevice"))
 local RunService = game:GetService("RunService")
 
 local remote = RS:WaitForChild("Remotes"):WaitForChild("PuzzleStatus")
@@ -12,7 +13,14 @@ gui.Name = "PuzzleGui"
 gui.ResetOnSpawn = false
 gui.IgnoreGuiInset = true
 gui.DisplayOrder = 18
+
 gui.Parent = player:WaitForChild("PlayerGui")
+
+local function syncDispatchSuppression()
+	gui.Enabled = player:GetAttribute("ZyntraDispatchClientActive") ~= true
+end
+player:GetAttributeChangedSignal("ZyntraDispatchClientActive"):Connect(syncDispatchSuppression)
+syncDispatchSuppression()
 
 -- Level 1 now uses the same compact terminal-card language as Level 2 instead
 -- of three unrelated floating counters.
@@ -371,3 +379,55 @@ workspace:GetAttributeChangedSignal("RoundActive"):Connect(function()
 		showCounters(false)
 	end
 end)
+
+-- LEVEL2_EXIT_TRANSITION_20260828 sibling change: responsive Level 1 HUD.
+-- The objective panel (300x112, bottom-right) and the receiver (310x116,
+-- bottom-left+132) were fixed-size and, at 667x375, overlapped each other AND
+-- the RUN/JUMP column. Desktop keeps the authored lower-right composition; on
+-- touch both panels move into UIDevice's safe content band and shrink to fit.
+local function applyPuzzleLayout()
+	local layout = UIDevice.Layout()
+	local available = layout.SafeRight - layout.SafeLeft
+	if layout.IsTouch then
+		-- The bottom of a touch screen belongs to the movement controls, so both
+		-- panels live in the strip above the thumbstick's activation region. On
+		-- a landscape phone that strip is only about 90 pixels tall, which is
+		-- the real constraint these two 112/116px panels had never been sized
+		-- against; they are fitted to it rather than allowed to overflow.
+		local band = layout.TopBand
+		local gutter = 12
+		local panelWidth = math.min(300, math.floor((band.Width - gutter) * .5))
+		local messageHeight = 22
+		local panelHeight = math.max(56, math.min(112, band.Height - messageHeight - 6))
+		-- band.* are ABSOLUTE screen coordinates; this ScreenGui sets
+		-- IgnoreGuiInset, so its own y = 0 is one inset higher. Convert, or every
+		-- panel lands an inset off in whichever direction the gui is configured.
+		local messageY = UIDevice.TopOffsetFor(gui, band.Top)
+		local panelY = UIDevice.TopOffsetFor(gui, band.Top + messageHeight + 4)
+
+		msgLabel.AnchorPoint = Vector2.new(1, 0)
+		msgLabel.Size = UDim2.new(0, panelWidth, 0, messageHeight)
+		msgLabel.Position = UDim2.fromOffset(band.Right, messageY)
+
+		objectivePanel.AnchorPoint = Vector2.new(1, 0)
+		objectivePanel.Size = UDim2.new(0, panelWidth, 0, panelHeight)
+		objectivePanel.Position = UDim2.fromOffset(band.Right, panelY)
+
+		receiver.AnchorPoint = Vector2.new(0, 0)
+		receiver.Size = UDim2.new(0, panelWidth, 0, panelHeight)
+		receiver.Position = UDim2.fromOffset(band.Left, panelY)
+	else
+		objectivePanel.AnchorPoint = Vector2.new(1, 1)
+		objectivePanel.Size = UDim2.new(0, 300, 0, 112)
+		objectivePanel.Position = UDim2.new(1, -18, 1, -18)
+		msgLabel.AnchorPoint = Vector2.new(1, 1)
+		msgLabel.Size = UDim2.new(0, 300, 0, 22)
+		msgLabel.Position = UDim2.new(1, -18, 1, -136)
+		receiver.AnchorPoint = Vector2.new(0, 1)
+		receiver.Size = UDim2.new(0, math.min(310, available - 320), 0, 116)
+		receiver.Position = UDim2.new(0, 132, 1, -16)
+	end
+end
+
+applyPuzzleLayout()
+UIDevice.Changed:Connect(applyPuzzleLayout)

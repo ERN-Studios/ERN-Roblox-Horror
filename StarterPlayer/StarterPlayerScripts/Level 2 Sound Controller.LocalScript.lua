@@ -153,10 +153,16 @@ end)
 
 local function active()
 	return workspace:GetAttribute("SelectedLevel") == 2
-		and workspace:GetAttribute("RoundActive") == true
+		and (workspace:GetAttribute("RoundActive") == true
+			or player:GetAttribute("Level2_ExitTransition") == true)
 		and workspace:GetAttribute("WorldGenerated") == true
 		and player:GetAttribute("InRound") == true
-		and player:GetAttribute("Escaped") ~= true
+		-- LEVEL2_EXIT_TRANSITION_20260828: an Escaped rider is still physically
+		-- sliding down the exit flume until the server clears the transition
+		-- flag. Cutting Level 2 out at the completion sensor left the whole
+		-- ride silent and daylight-graded halfway down the tube.
+		and (player:GetAttribute("Escaped") ~= true
+			or player:GetAttribute("Level2_ExitTransition") == true)
 end
 
 -- Contextual environmental one-shots. These are client-local and spatial so every
@@ -253,7 +259,12 @@ local function randomActive()
 		and workspace:GetAttribute("RoundActive") == true
 		and workspace:GetAttribute("WorldGenerated") == true
 		and player:GetAttribute("InRound") == true
-		and player:GetAttribute("Escaped") ~= true
+		-- LEVEL2_EXIT_TRANSITION_20260828: an Escaped rider is still physically
+		-- sliding down the exit flume until the server clears the transition
+		-- flag. Cutting Level 2 out at the completion sensor left the whole
+		-- ride silent and daylight-graded halfway down the tube.
+		and (player:GetAttribute("Escaped") ~= true
+			or player:GetAttribute("Level2_ExitTransition") == true)
 		and workspace:FindFirstChild("Level 2 Generated World") ~= nil
 end
 
@@ -741,7 +752,7 @@ end
 for _, attributeName in ipairs({"SelectedLevel", "RoundActive", "WorldGenerated"}) do
 	workspace:GetAttributeChangedSignal(attributeName):Connect(enforceLevel2AudioLifecycle)
 end
-for _, attributeName in ipairs({"InRound", "Escaped"}) do
+for _, attributeName in ipairs({"InRound", "Escaped", "Level2_ExitTransition"}) do
 	player:GetAttributeChangedSignal(attributeName):Connect(enforceLevel2AudioLifecycle)
 end
 

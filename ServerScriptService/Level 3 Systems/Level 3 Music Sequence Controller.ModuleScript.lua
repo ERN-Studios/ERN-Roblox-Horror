@@ -10,7 +10,6 @@ local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 
 local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
-local HidingController = require(script.Parent:WaitForChild("Level 3 Hiding Controller"))
 
 local Controller = {}
 
@@ -23,8 +22,6 @@ local session: {
 	RoundConnection: RBXScriptConnection?,
 	Cycle: number,
 	BlackoutScreamTriggered: boolean,
-	FurnitureRecords: {any},
-	FurnitureState: string,
 	FlashlightsSuppressed: boolean,
 }? = nil
 
@@ -77,95 +74,22 @@ local function setFlashlightsSuppressed(activeSession: any, active: boolean)
 	workspace:SetAttribute("Level3FlashlightsSuppressed", active)
 end
 
-local function publishFurnitureState(stateName: string)
-	local removed = stateName == "REMOVED"
-	local collisionSuppressed = stateName ~= "RESTORED"
-	local state = stateFolder()
-	state:SetAttribute("Level3_FurnitureTemporarilyRemoved", removed)
-	state:SetAttribute("Level3_FurnitureCollisionSuppressed", collisionSuppressed)
-	workspace:SetAttribute("Level3FurnitureTemporarilyRemoved", removed)
-	workspace:SetAttribute("Level3FurnitureCollisionSuppressed", collisionSuppressed)
-end
-
-local function captureFurniture(activeSession: any)
-	if #activeSession.FurnitureRecords > 0 then return end
-	for _, object in ipairs(activeSession.World:GetDescendants()) do
-		if object:IsA("BasePart") and object:GetAttribute("Level3_TemporaryHuntFurniture") == true then
-			local visualRecords = {}
-			for _, visual in ipairs(object:GetDescendants()) do
-				if visual:IsA("Decal") or visual:IsA("Texture") then
-					table.insert(visualRecords, {Object=visual, Transparency=visual.Transparency})
-				end
-			end
-			table.insert(activeSession.FurnitureRecords, {
-				Part=object,
-				Transparency=object.Transparency,
-				CanCollide=object.CanCollide,
-				CanTouch=object.CanTouch,
-				CanQuery=object.CanQuery,
-				CastShadow=object.CastShadow,
-				Visuals=visualRecords,
-			})
-		end
-	end
-end
-
-local function setFurnitureState(activeSession: any, stateName: string)
-	if activeSession.FurnitureState == stateName then return end
-	if stateName ~= "RESTORED" then captureFurniture(activeSession) end
-	activeSession.FurnitureState = stateName
-	HidingController.SetFurnitureSuspended(stateName ~= "RESTORED")
-
-	for _, record in ipairs(activeSession.FurnitureRecords) do
-		local part = record.Part
-		if part and part.Parent and part:IsA("BasePart") then
-			if stateName == "REMOVED" then
-				part.Transparency = 1
-				part.CastShadow = false
-			else
-				part.Transparency = record.Transparency
-				part.CastShadow = record.CastShadow
-			end
-			if stateName == "RESTORED" then
-				part.CanCollide = record.CanCollide
-				part.CanTouch = record.CanTouch
-				part.CanQuery = record.CanQuery
-			else
-				part.CanCollide = false
-				part.CanTouch = false
-				part.CanQuery = false
-			end
-		end
-		for _, visualRecord in ipairs(record.Visuals) do
-			local visual = visualRecord.Object
-			if visual and visual.Parent and (visual:IsA("Decal") or visual:IsA("Texture")) then
-				visual.Transparency = if stateName == "REMOVED" then 1 else visualRecord.Transparency
-			end
-		end
-	end
-
-	publishFurnitureState(stateName)
-	if stateName == "RESTORED" then table.clear(activeSession.FurnitureRecords) end
-end
-
+-- LEVEL3_PERMANENT_FURNITURE_20260828
+-- Furniture is permanent scene topology: tables, tablecloths, chairs, hide
+-- anchors, sight occluders and the Manager's navigation exclusion envelopes
+-- stay parented, visible, collidable and queryable for the whole round. The
+-- former REMOVED -> VISIBLE_GHOST -> RESTORED machine that lived here is gone,
+-- and with it the furniture suspension that ejected hidden players. This
+-- function now owns exactly one edge: the two flashlight blackout locks.
 local function updateBlackoutEdges(activeSession: any, elapsed: number)
 	local songEnd = Configuration.MusicSequence.DurationSeconds
 	local screamStart = songEnd - Configuration.MusicSequence.BlackoutScreamLeadSeconds
-	local removalStart = screamStart - Configuration.MusicSequence.FurnitureRemovalLeadSeconds
+	local firstLockStart = screamStart
+		- Configuration.MusicSequence.PreScreamFlashlightLockSeconds
 	local huntEnd = Configuration.MusicSequence.CycleEndSeconds
 	local finalLockStart = huntEnd - Configuration.MusicSequence.HuntFinalFlashlightLockSeconds
 
-	if elapsed >= removalStart and elapsed < finalLockStart then
-		setFurnitureState(activeSession, "REMOVED")
-	elseif elapsed >= finalLockStart and elapsed < huntEnd then
-		-- Reappear for the final reveal, but remain physically absent until the
-		-- Manager despawns so neither the NPC nor a player can be trapped.
-		setFurnitureState(activeSession, "VISIBLE_GHOST")
-	else
-		setFurnitureState(activeSession, "RESTORED")
-	end
-
-	local firstLock = elapsed >= removalStart and elapsed < screamStart
+	local firstLock = elapsed >= firstLockStart and elapsed < screamStart
 	local finalLock = elapsed >= finalLockStart and elapsed < huntEnd
 	setFlashlightsSuppressed(activeSession, firstLock or finalLock)
 end
@@ -264,7 +188,6 @@ local function setPhase(activeSession: any, phase: string)
 		setHunt(false)
 		setRecoveryFlicker(false, 0, 0)
 		setBlackout(false, 0)
-		setFurnitureState(activeSession, "RESTORED")
 		setFlashlightsSuppressed(activeSession, false)
 	end
 end
@@ -325,7 +248,6 @@ local function update(activeSession: any)
 	local goal = tonumber(state:GetAttribute("Level3_ModuleGoal")) or Configuration.ModuleGoal
 	if progress >= goal then
 		setPhase(activeSession, "DONE")
-		setFurnitureState(activeSession, "RESTORED")
 		setFlashlightsSuppressed(activeSession, false)
 		return
 	end
@@ -364,7 +286,6 @@ function Controller.Stop()
 	if old then
 		if old.Connection then old.Connection:Disconnect() end
 		if old.RoundConnection then old.RoundConnection:Disconnect() end
-		setFurnitureState(old, "RESTORED")
 		setFlashlightsSuppressed(old, false)
 	end
 	session = nil
@@ -421,8 +342,6 @@ function Controller.Start(manifest: any, generation: number)
 		RoundConnection = nil,
 		Cycle = 0,
 		BlackoutScreamTriggered = false,
-		FurnitureRecords = {},
-		FurnitureState = "RESTORED",
 		FlashlightsSuppressed = false,
 	}
 	session = activeSession
@@ -490,7 +409,6 @@ function Controller.GetSnapshot()
 		BlackoutStart = Configuration.MusicSequence.BlackoutStartSeconds,
 		PreBlackoutDuration = Configuration.MusicSequence.PreBlackoutFlickerSeconds,
 		BlackoutScreamLead = Configuration.MusicSequence.BlackoutScreamLeadSeconds,
-		FurnitureState = activeSession.FurnitureState,
 		FlashlightsSuppressed = activeSession.FlashlightsSuppressed,
 		PreBlackoutActive = stateFolder():GetAttribute("Level3_PreBlackoutActive") == true,
 		BlackoutDuration = Configuration.MusicSequence.BlackoutSeconds,

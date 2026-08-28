@@ -871,37 +871,63 @@ local function configureDefaultSteps(char)
 	task.spawn(function()
 		local hrp = char:WaitForChild("HumanoidRootPart", 10)
 		if not hrp then return end
-		local running = hrp:WaitForChild("Running", 5)
-		if not running then return end
 
-		local changing = false
-		local function refresh()
-			if not running.Parent then return end
-			changing = true
-			running.Volume = 0
-			changing = false
+		local destroyed = false
+		local soundRecords = {}
+		local function disconnectRunning(sound)
+			local record = soundRecords[sound]
+			if not record then return end
+			soundRecords[sound] = nil
+			for _, connection in ipairs(record.connections) do connection:Disconnect() end
+		end
+		local function bind(candidate)
+			if destroyed or not (candidate and candidate:IsA("Sound"))
+				or candidate.Name ~= "Running" or soundRecords[candidate] then return end
+			local record = { changing = false, connections = {} }
+			soundRecords[candidate] = record
+			local function refresh()
+				if destroyed or not candidate.Parent or record.changing then return end
+				if candidate.Volume ~= 0 then
+					record.changing = true
+					candidate.Volume = 0
+					record.changing = false
+				end
+			end
+			record.connections[#record.connections + 1] = candidate:GetPropertyChangedSignal("Volume"):Connect(refresh)
+			record.connections[#record.connections + 1] = candidate.Destroying:Connect(function()
+				disconnectRunning(candidate)
+			end)
+			record.connections[#record.connections + 1] = candidate.AncestryChanged:Connect(function()
+				if candidate.Parent and candidate:IsDescendantOf(hrp) then return end
+				disconnectRunning(candidate)
+			end)
+			refresh()
 		end
 
-		local volumeConnection = running:GetPropertyChangedSignal("Volume"):Connect(function()
-			if changing then return end
-			refresh()
-		end)
+		-- Roblox can create or replace Running well after the old five-second
+		-- timeout (especially after avatar/sound-system rebuilds). Keep listening
+		-- for the lifetime of this character so its default steps can never layer.
+		local descendantConnection = hrp.DescendantAdded:Connect(bind)
+		for _, descendant in ipairs(hrp:GetDescendants()) do bind(descendant) end
 		char.Destroying:Once(function()
-			volumeConnection:Disconnect()
+			destroyed = true
+			descendantConnection:Disconnect()
+			local sounds = {}
+			for sound in pairs(soundRecords) do sounds[#sounds + 1] = sound end
+			for _, sound in ipairs(sounds) do disconnectRunning(sound) end
 		end)
-		refresh()
 	end)
 end
 if player.Character then configureDefaultSteps(player.Character) end
 player.CharacterAdded:Connect(configureDefaultSteps)
 
 -- ── LEVEL 2 KNEE-DEEP WADE AUDIO ────────────────────────────────────────────
--- The useful impact in each recording lands near its beginning even though the
--- uploaded file may retain a long quiet tail. Treating TimeLength as a phrase
--- cooldown produced one audible step followed by several metres of silence.
--- Five rotating voices now launch one take per real stride; the quiet tails can
--- overlap without cutting off the next footfall. A single low resistance loop
--- supplies the continuous knee-deep body while the player keeps moving.
+-- The three uploads are complete multi-step phrases with different leading
+-- silence and loudness. Playing each at zero made the audible onset drift by
+-- almost a second, which sounded like missing strides. Measured windows below
+-- isolate and level one heavy wade from each phrase. Five rotating voices launch
+-- a take per real stride, while a low resistance loop supplies the continuous
+-- knee-deep body as the player pushes through the water.
 --
 -- Runtime attributes/ValueBases remain useful for live tuning. Put overrides on
 -- ReplicatedStorage, Workspace, or ReplicatedStorage.Level2Audio as
@@ -909,20 +935,23 @@ player.CharacterAdded:Connect(configureDefaultSteps)
 -- Level2WadeResistance. Fallbacks are provenance-clean ProSoundEffects Creator
 -- Store assets which were runtime-preloaded in this experience before use.
 local LEVEL2_WADE_CORE_SPECS = {
-	{ id = "rbxassetid://9120609652", duration = 2.368, gain = 1.00 },
-	{ id = "rbxassetid://9120609628", duration = 2.869333, gain = 0.96 },
-	{ id = "rbxassetid://9120609739", duration = 2.965333, gain = 0.94 },
+	-- These uploads are multi-second phrases, not sample-tight one-shots. Start
+	-- each at its measured first wade and stop before a later phrase/quiet tail.
+	{ id = "rbxassetid://9120609652", duration = 2.368, startOffset = 0.43, stopOffset = 1.08, fadeSource = 0.12, gain = 1.00 },
+	{ id = "rbxassetid://9120609628", duration = 2.869333, startOffset = 1.28, stopOffset = 1.78, fadeSource = 0.10, gain = 0.74 },
+	{ id = "rbxassetid://9120609739", duration = 2.965333, startOffset = 0.55, stopOffset = 0.98, fadeSource = 0.10, gain = 2.60 },
 }
 local LEVEL2_WADE_RESISTANCE_SPEC = {
 	id = "rbxassetid://9120348019",
 	duration = 1.431083,
 	gain = 1.00,
 }
-local LEVEL2_WADE_CORE_VOLUME = 0.46
-local LEVEL2_WADE_RESISTANCE_VOLUME = 0.075
+local LEVEL2_WADE_CORE_VOLUME = 0.49
+local LEVEL2_WADE_RESISTANCE_VOLUME = 0.095
 local LEVEL2_WADE_CORE_VOICE_COUNT = 5
 local LEVEL2_WADE_RELEASE_GRACE = 0.18
 local LEVEL2_WADE_RELEASE_FADE = 0.16
+local LEVEL2_WADE_SURFACE_CHANGE_FADE = 0.08
 
 local function level2SoundId(raw)
 	if typeof(raw) == "number" then
@@ -1011,6 +1040,8 @@ local function makeLevel2WadeBank(parent, model)
 		resistanceTween = nil,
 	}
 	bank.cores = {}
+	bank.coreTokens = {}
+	bank.coreTweens = {}
 	for index = 1, LEVEL2_WADE_CORE_VOICE_COUNT do
 		local core = Instance.new("Sound")
 		core.Name = "Level2PlayerWadeCore" .. index
@@ -1018,6 +1049,7 @@ local function makeLevel2WadeBank(parent, model)
 		core.Volume = 0
 		core.Parent = parent
 		bank.cores[index] = core
+		bank.coreTokens[index] = 0
 	end
 
 	local resistance = Instance.new("Sound")
@@ -1055,14 +1087,49 @@ local function makeLevel2WadeBank(parent, model)
 		local speed = playbackSpeed or 1
 		local scale = volumeScale or 1
 		self.coreCursor = self.coreCursor % #self.cores + 1
-		local core = self.cores[self.coreCursor]
+		local coreIndex = self.coreCursor
+		local core = self.cores[coreIndex]
+		self.coreTokens[coreIndex] += 1
+		local coreToken = self.coreTokens[coreIndex]
+		if self.coreTweens[coreIndex] then
+			self.coreTweens[coreIndex]:Cancel()
+			self.coreTweens[coreIndex] = nil
+		end
 		self.playToken += 1
 		core:Stop()
 		core.SoundId = id
-		core.Volume = math.clamp(LEVEL2_WADE_CORE_VOLUME * spec.gain * scale, 0, 1.2)
+		local usesBundledTake = id == spec.id
+		local takeGain = usesBundledTake and spec.gain or 1
+		core.Volume = math.clamp(LEVEL2_WADE_CORE_VOLUME * takeGain * scale, 0, 1.2)
 		core.PlaybackSpeed = speed
-		core.TimePosition = 0
+		local startOffset = usesBundledTake and spec.startOffset or 0
+		core.TimePosition = math.clamp(startOffset or 0, 0, math.max(0, spec.duration - 0.05))
 		core:Play()
+
+		-- Only retain the single useful wade from each longer recording. Aligning
+		-- these measured onsets removes the perceived missing stride; the short
+		-- fade prevents both hard cuts and a second splash leaking into dry steps.
+		-- Unknown runtime overrides retain their full authored take because these
+		-- waveform offsets are valid only for the bundled fallback IDs.
+		local windowSeconds = usesBundledTake
+			and math.max(0.18, (spec.stopOffset - spec.startOffset) / math.max(speed, 0.05))
+		local fadeSeconds = usesBundledTake
+			and math.min(windowSeconds * 0.35, spec.fadeSource / math.max(speed, 0.05))
+		if windowSeconds and fadeSeconds then task.delay(math.max(0.04, windowSeconds - fadeSeconds), function()
+			if self.coreTokens[coreIndex] ~= coreToken or not core.Parent or not core.IsPlaying then return end
+			local tween = TweenService:Create(
+				core,
+				TweenInfo.new(fadeSeconds, Enum.EasingStyle.Linear),
+				{Volume = 0}
+			)
+			self.coreTweens[coreIndex] = tween
+			tween:Play()
+			task.delay(fadeSeconds, function()
+				if self.coreTokens[coreIndex] ~= coreToken then return end
+				core:Stop()
+				self.coreTweens[coreIndex] = nil
+			end)
+		end) end
 
 		local resistanceId = level2ResistanceId(model)
 		if resistanceId then
@@ -1088,7 +1155,36 @@ local function makeLevel2WadeBank(parent, model)
 		return true
 	end
 
-	function bank:release()
+	function bank:fadeCores(fadeSeconds)
+		fadeSeconds = math.max(0.01, tonumber(fadeSeconds) or LEVEL2_WADE_SURFACE_CHANGE_FADE)
+		for index, core in ipairs(self.cores) do
+			self.coreTokens[index] += 1
+			local token = self.coreTokens[index]
+			if self.coreTweens[index] then
+				self.coreTweens[index]:Cancel()
+				self.coreTweens[index] = nil
+			end
+			if core.IsPlaying and core.Volume > 0 then
+				local tween = TweenService:Create(
+					core,
+					TweenInfo.new(fadeSeconds, Enum.EasingStyle.Linear),
+					{Volume = 0}
+				)
+				self.coreTweens[index] = tween
+				tween:Play()
+				task.delay(fadeSeconds, function()
+					if self.coreTokens[index] ~= token then return end
+					core:Stop()
+					self.coreTweens[index] = nil
+				end)
+			else
+				core:Stop()
+			end
+		end
+	end
+
+	function bank:release(stopCoreVoices)
+		if stopCoreVoices then self:fadeCores(LEVEL2_WADE_SURFACE_CHANGE_FADE) end
 		if not self.resistance.IsPlaying or self.resistanceTween then return end
 		self.playToken += 1
 		local token = self.playToken
@@ -1112,7 +1208,12 @@ local function makeLevel2WadeBank(parent, model)
 			self.resistanceTween:Cancel()
 			self.resistanceTween = nil
 		end
-		for _, core in ipairs(self.cores) do
+		for index, core in ipairs(self.cores) do
+			self.coreTokens[index] += 1
+			if self.coreTweens[index] then
+				self.coreTweens[index]:Cancel()
+				self.coreTweens[index] = nil
+			end
 			core.Volume = 0
 			core:Stop()
 		end
@@ -1159,6 +1260,7 @@ level2WaterRay.IgnoreWater = false
 local level2PlayerLastPosition = nil
 local level2PlayerStepClock = 0
 local level2WadeMovingUntil = 0
+local level2PlayerWasWet = false
 
 -- Dry-tile footsteps: the poolside sound for walking where there is NO water
 -- underfoot. An authored library id still overrides this, while an empty slot
@@ -1306,7 +1408,8 @@ RunService.Heartbeat:Connect(function(dt)
 		level2PlayerLastPosition = root and root.Position or nil
 		level2PlayerStepClock = 0
 		level2WadeMovingUntil = 0
-		level2PlayerBank:release()
+		level2PlayerBank:release(level2PlayerWasWet)
+		level2PlayerWasWet = false
 		level2StopDrySteps()
 		return
 	end
@@ -1318,10 +1421,21 @@ RunService.Heartbeat:Connect(function(dt)
 	end
 	local displacement = Vector3.new(now.X - level2PlayerLastPosition.X, 0, now.Z - level2PlayerLastPosition.Z).Magnitude
 	level2PlayerLastPosition = now
-	if displacement > 7 then
+	local intendedSpeed = player.Character and player.Character:GetAttribute("Level2_DesiredWalkSpeed")
+	if typeof(intendedSpeed) ~= "number" then intendedSpeed = 0 end
+	-- A fixed seven-stud threshold treated a normal low-FPS sprint frame as a
+	-- teleport. Scale the allowance with elapsed time so long render stalls
+	-- cannot manufacture a teleport reset.
+	-- At ordinary frame times a real relocation still clears immediately.
+	local teleportThreshold = math.max(
+		7,
+		2 + math.max(26, hum.WalkSpeed, intendedSpeed) * math.max(dt, 0) * 1.75
+	)
+	if displacement > teleportThreshold then
 		level2PlayerStepClock = 0
 		level2WadeMovingUntil = 0
 		level2PlayerBank:stop()
+		level2PlayerWasWet = false
 		level2StopDrySteps()
 		return
 	end
@@ -1329,8 +1443,13 @@ RunService.Heartbeat:Connect(function(dt)
 	local footingBlocked = level2FootingBlocked(hum)
 	if flatSpeed < 1.35 or footingBlocked then
 		level2PlayerStepClock = math.min(level2PlayerStepClock, 0.12)
-		if footingBlocked then level2WadeMovingUntil = 0 end
-		if os.clock() >= level2WadeMovingUntil then level2PlayerBank:release() end
+		if footingBlocked then
+			level2WadeMovingUntil = 0
+			level2PlayerBank:release(level2PlayerWasWet)
+			level2PlayerWasWet = false
+		elseif os.clock() >= level2WadeMovingUntil then
+			level2PlayerBank:release()
+		end
 		level2StopDrySteps()
 		return
 	end
@@ -1339,16 +1458,19 @@ RunService.Heartbeat:Connect(function(dt)
 		-- nothing underfoot at all (running off a deck edge): no steps
 		level2PlayerStepClock = math.min(level2PlayerStepClock, 0.12)
 		level2WadeMovingUntil = 0
-		level2PlayerBank:release()
+		level2PlayerBank:release(level2PlayerWasWet)
+		level2PlayerWasWet = false
 		level2StopDrySteps()
 		return
 	end
 	if wet then
+		level2PlayerWasWet = true
 		level2WadeMovingUntil = os.clock() + LEVEL2_WADE_RELEASE_GRACE
 		level2StopDrySteps()
 	else
 		level2WadeMovingUntil = 0
-		level2PlayerBank:release()
+		level2PlayerBank:release(level2PlayerWasWet)
+		level2PlayerWasWet = false
 	end
 
 	local cadence = math.clamp(0.68 - flatSpeed * 0.015, 0.30, 0.56)
@@ -1377,6 +1499,7 @@ workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(function()
 	else
 		level2WadeMovingUntil = 0
 		level2PlayerBank:stop()
+		level2PlayerWasWet = false
 		level2StopDrySteps()
 	end
 end)
@@ -1391,5 +1514,6 @@ player:GetAttributeChangedSignal("InRound"):Connect(function()
 		level2PlayerLastPosition = nil
 		level2PlayerStepClock = 0
 		level2WadeMovingUntil = 0
+		level2PlayerWasWet = false
 	end
 end)
