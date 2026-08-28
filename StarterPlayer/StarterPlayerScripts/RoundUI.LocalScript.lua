@@ -19,6 +19,7 @@ local dead = false
 
 local dispatchAudio = {
 	action = remotes:WaitForChild("ZyntraAction"),
+	claimLobbyBriefing = remotes:WaitForChild("ZyntraClaimLobbyBriefing"),
 	group = SoundService:FindFirstChild("ZyntraDispatchAudio"),
 	pending = false,
 	pendingValue = nil,
@@ -1153,9 +1154,10 @@ local levelThreeBriefing = {
 	started = false,
 }
 
--- One private Command Center transmission per lobby-server join. The server
--- sends a dedicated ready-acknowledged event after this client has connected,
--- so the announcement cannot be lost to RemoteEvent startup ordering.
+-- One private Command Center welcome across the player's lifetime. The server
+-- sends a dedicated ready-acknowledged event after profile loading, and the
+-- durable Zyntra profile retires the welcome as soon as its first transmission
+-- begins. Level briefings remain repeatable because they contain gameplay info.
 local lobbyBriefing = {
 	speechId = "rbxassetid://121135469064341",
 	radioId = "rbxassetid://116864891394910",
@@ -1163,6 +1165,7 @@ local lobbyBriefing = {
 	radioLength = 1.032,
 	run = 0,
 	played = false,
+	persistedStarted = false,
 	pending = false,
 	active = false,
 	preloaded = false,
@@ -1656,10 +1659,14 @@ end
 
 function lobbyBriefing.isEligible()
 	-- PrivateServerId is server-only. GameManager already scopes the one-shot
-	-- event to a public lobby, so the client only needs local participation state.
+	-- event to a public lobby. Unknown/failed profile state stays fail-quiet so a
+	-- returning player can never hear the welcome again because a load timed out.
 	return player:GetAttribute("InRound") ~= true
 		and not dead
 		and workspace:FindFirstChild("ServerLobby") ~= nil
+		and dispatchAudio.preferenceLoaded()
+		and (lobbyBriefing.persistedStarted
+			or player:GetAttribute("ZyntraLobbyBriefingPlayed") ~= true)
 end
 
 function lobbyBriefing.hasArrived()
@@ -1728,8 +1735,16 @@ function lobbyBriefing.playOnce()
 			return
 		end
 
+		local claimed, shouldPlay = pcall(function()
+			return dispatchAudio.claimLobbyBriefing:InvokeServer()
+		end)
+		if not claimed or shouldPlay ~= true then
+			if run == lobbyBriefing.run then lobbyBriefing.cancel() end
+			return
+		end
 		lobbyBriefing.pending = false
 		lobbyBriefing.active = true
+		lobbyBriefing.persistedStarted = true
 		player:SetAttribute("LobbyBriefingActive", true)
 		local speechAt = os.clock() + lobbyBriefing.delay
 

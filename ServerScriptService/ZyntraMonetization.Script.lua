@@ -59,6 +59,7 @@ local function ensureRemote(className, name)
 end
 
 local getProfileRemote = ensureRemote("RemoteFunction", "ZyntraGetProfile")
+local claimLobbyBriefingRemote = ensureRemote("RemoteFunction", "ZyntraClaimLobbyBriefing")
 local actionRemote = ensureRemote("RemoteEvent", "ZyntraAction")
 local profileChangedRemote = ensureRemote("RemoteEvent", "ZyntraProfileChanged")
 
@@ -92,7 +93,7 @@ end
 
 local function newProfile()
 	return {
-		Version = 3,
+		Version = 4,
 		Tokens = RunService:IsStudio() and Config.Studio.StartingTokens or 0,
 		StaminaLevel = 0,
 		BatteryLevel = 0,
@@ -101,6 +102,7 @@ local function newProfile()
 		DonationRobux = 0,
 		Settings = {
 			MuteDispatch = false,
+			LobbyBriefingPlayed = false,
 		},
 		Colors = {
 			Hazmat = colorData(Config.Colors.HazmatDefault),
@@ -115,8 +117,9 @@ local function newProfile()
 end
 
 local function normalizeProfile(data)
-	if type(data) ~= "table" then data = newProfile() end
-	data.Version = 3
+	local existingProfile = type(data) == "table"
+	if not existingProfile then data = newProfile() end
+	data.Version = 4
 	data.Tokens = math.max(0, math.floor(tonumber(data.Tokens) or 0))
 	data.StaminaLevel = math.max(0, math.floor(tonumber(data.StaminaLevel) or 0))
 	data.BatteryLevel = math.max(0, math.floor(tonumber(data.BatteryLevel) or 0))
@@ -128,6 +131,13 @@ local function normalizeProfile(data)
 	data.DonationRobux = math.max(0, math.floor(tonumber(data.DonationRobux) or 0))
 	data.Settings = type(data.Settings) == "table" and data.Settings or {}
 	data.Settings.MuteDispatch = data.Settings.MuteDispatch == true
+	if data.Settings.LobbyBriefingPlayed == nil then
+		-- Anyone with legacy saved data has already logged in before this lifetime
+		-- welcome existed; do not replay it once merely because schema v4 deployed.
+		data.Settings.LobbyBriefingPlayed = existingProfile
+	else
+		data.Settings.LobbyBriefingPlayed = data.Settings.LobbyBriefingPlayed == true
+	end
 	data.Colors = type(data.Colors) == "table" and data.Colors or {}
 	data.Colors.Hazmat = colorData(readColor(data.Colors.Hazmat, Config.Colors.HazmatDefault))
 	data.Colors.Glowstick = colorData(readColor(data.Colors.Glowstick, Config.Colors.GlowstickDefault))
@@ -151,6 +161,7 @@ local function publicProfile(data)
 		ReentryCredits = data.ReentryCredits,
 		DonationRobux = data.DonationRobux,
 		MuteDispatch = data.Settings.MuteDispatch,
+		LobbyBriefingPlayed = data.Settings.LobbyBriefingPlayed,
 		HazmatColor = readColor(data.Colors.Hazmat, Config.Colors.HazmatDefault),
 		GlowstickColor = readColor(data.Colors.Glowstick, Config.Colors.GlowstickDefault),
 		OwnsSupporter = false,
@@ -212,6 +223,7 @@ local function applyAttributes(player, data)
 	player:SetAttribute("ZyntraHazmatColor", readColor(data.Colors.Hazmat, Config.Colors.HazmatDefault))
 	player:SetAttribute("ZyntraGlowstickColor", readColor(data.Colors.Glowstick, Config.Colors.GlowstickDefault))
 	player:SetAttribute("ZyntraMuteDispatch", data.Settings.MuteDispatch)
+	player:SetAttribute("ZyntraLobbyBriefingPlayed", data.Settings.LobbyBriefingPlayed)
 	player:SetAttribute("ZyntraDonationRobux", data.DonationRobux)
 	if player:GetAttribute("InRound") == true and player:GetAttribute("ZyntraOwnsCosmeticEquipment") == true then
 		player:SetAttribute("GlowstickColor", player:GetAttribute("ZyntraGlowstickColor"))
@@ -387,6 +399,21 @@ local function syncSupportTotal(userId, total)
 	end)
 	if not ok then warn("[Zyntra] Support leaderboard sync failed for", userId, err) end
 	return ok
+end
+
+claimLobbyBriefingRemote.OnServerInvoke = function(player)
+	-- The welcome is a lifetime one-shot. Serialize its claim through the same
+	-- profile lock and UpdateAsync path as purchases/settings, and fail quiet if
+	-- persistence is unavailable. Returning players therefore cannot hear it due
+	-- to a transient fallback profile, and two overlapping requests cannot win.
+	local didClaim = false
+	local changed = mutate(player, function(data)
+		didClaim = data.Settings.LobbyBriefingPlayed ~= true
+		if not didClaim then return false end
+		data.Settings.LobbyBriefingPlayed = true
+		return true
+	end)
+	return changed == true and didClaim == true
 end
 
 local queueSupportTotalSync
