@@ -9,8 +9,8 @@ somebody spends a Zyntra **Emergency Re-entry**, which puts you back on your
 feet in the SAME round. Solve the level's objective while something hunts you —
 escape together, or watch your friends try.
 
-**Release status (2026-08-30): the verified Roblox release is live; GitHub
-mirror finalization is the only remaining gate.** Studio place version
+**Release status (2026-08-30): the verified Roblox release is live and mirrored
+on GitHub.** Studio place version
 **v1641** was published, and the public experience page now shows the exact
 title `BACKROOMS: STAY QUIET [CO-OP HORROR]` plus the approved spoiler-free
 description. The full Slidemouth suite
@@ -21,8 +21,8 @@ an authoritative **105-stud/s** ragdoll crossing and a separate **75-second**
 recycle ride, while the Level 3 navigation/furniture regression is green. The
 Studio mirror compiled and matched **114/114 scripts both before and after** the
 repository-history integration, with no gameplay residue left in Edit. The
-remaining release-record step is committing this publication state and
-verifying `origin/main` on GitHub.
+intended history is integrated on `main` and the release record has been pushed
+to and verified against `origin/main`.
 
 Level 3 — the **Mall Backrooms Party** — has its core systems in place (layout
 generator, Mall Manager AI, hiding, music/blackout cycle) and is still being
@@ -480,7 +480,7 @@ keeps the remaining external release gates visible.
 | pre-integration whole-place compile + Studio/repo parity | 114/114 compiled and matched; 0 drift or missing | **PASS** |
 | post-integration whole-place compile + final Studio/repo parity | 114/114 compiled and matched; 0 drift, missing, extra or residue | **PASS** |
 | Roblox Studio publish + live Creator Dashboard title/description | place v1641 published; exact public title and description verified | **PASS** |
-| repository integration + GitHub push | remote history integrated locally; push not performed | **PENDING** |
+| repository integration + GitHub push | intended history integrated; `main` pushed and verified on `origin/main` | **PASS** |
 | `tools/tests/test_push_repo_to_studio.py` end-to-end round-trips | not executed — no `luau` binary on this machine | **NOT RUN** |
 
 The Slidemouth result is the full suite, not a reduced cosmetic-size run. The
@@ -490,9 +490,9 @@ keeps the hard 1–2 room-hop spawn admission, multiplayer commit-time
 revalidation, production-speed substep mutation proof and strict traversal
 criteria intact.
 
-The remaining pending rows are external actions and are deliberately not
-inferred from local state. This candidate is not described as published until
-the live place, metadata and remote Git commit are each verified.
+All external release gates were verified independently: Studio reported the
+published place version, the public Roblox page exposed the exact metadata, and
+the remote Git branch resolved to the pushed release history.
 
 | Suite | Where | What it covers |
 |---|---|---|
@@ -663,7 +663,7 @@ Left Ctrl" to "using the movement stick".
 - [x] Publish verified Roblox Studio place version **v1641**
 - [x] Save and verify the exact live title
       `BACKROOMS: STAY QUIET [CO-OP HORROR]` and the approved description
-- [ ] Integrate the intended repository history, commit and push `main` to GitHub
+- [x] Integrate the intended repository history, commit and push `main` to GitHub
 
 The current Level 3 systems — generated layout, Mall Manager, hiding,
 music/blackout cycle, persistent furniture and reader UI — are included, but
@@ -672,8 +672,8 @@ intentionally offers only the route back to the lobby.
 
 `ROBLOX_GAME_DESCRIPTION.md` is the canonical spoiler-free Creator Dashboard
 copy. `assets/marketing/roblox-experience-description.txt` mirrors it byte for
-byte; the `.md` beside it documents that relationship. Roblox publication is
-verified; only the GitHub push remains pending in this release record.
+byte; the `.md` beside it documents that relationship. Roblox publication,
+public metadata and the GitHub mirror are all verified for this release.
 
 ### Known verification limits
 
