@@ -3,7 +3,7 @@
   "source": "Roblox Studio built-in MCP: .rbxmx payload -> game:GetObjects -> side-effect-free compile probe -> ScriptEditorService:UpdateSourceAsync -> .Source re-read and verified byte for byte; reconciled against tools/verify_studio_parity.py",
   "finalNewlineContract": "Entries flagged studioTrailingNewline hold exactly the canonical repo file plus one extra trailing newline in Studio. Exact landings remove the flag. Current flagged entry count: 11. Manifest hashes always describe the canonical repo file, never Studio's transport bytes.",
   "studio": {
-    "name": "Backrooms: No Way Out",
+    "name": "BACKROOMS: STAY QUIET [CO-OP HORROR]",
     "id": "7ccaf8b2-9e54-4709-8caa-91e1bce8b5b0"
   },
   "counts": {

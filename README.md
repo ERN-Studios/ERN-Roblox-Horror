@@ -9,17 +9,20 @@ somebody spends a Zyntra **Emergency Re-entry**, which puts you back on your
 feet in the SAME round. Solve the level's objective while something hunts you —
 escape together, or watch your friends try.
 
-**Release-candidate status (2026-08-30): internal QA is in progress; this
-checkout has not yet been published.** Verified so far: the full Slidemouth suite
+**Release status (2026-08-30): the verified Roblox release is live; GitHub
+mirror finalization is the only remaining gate.** Studio place version
+**v1641** was published, and the public experience page now shows the exact
+title `BACKROOMS: STAY QUIET [CO-OP HORROR]` plus the approved spoiler-free
+description. The full Slidemouth suite
 passes **391 checks with 0 failures** at the authored model scale, the round-
 completion suite passes **397/0**, the UI suite passes **200/0**, and the touch-
 target matrix passes **262/0**. Level 2's invisible exit sensors have also passed
 an authoritative **105-stud/s** ragdoll crossing and a separate **75-second**
 recycle ride, while the Level 3 navigation/furniture regression is green. The
-pre-integration Studio mirror compiled and matched **114/114 scripts**; that
-compile/parity sweep must be repeated after repository integration. Roblox
-publication, the live title/description update and the GitHub push remain
-release gates rather than completed work.
+Studio mirror compiled and matched **114/114 scripts both before and after** the
+repository-history integration, with no gameplay residue left in Edit. The
+remaining release-record step is committing this publication state and
+verifying `origin/main` on GitHub.
 
 Level 3 — the **Mall Backrooms Party** — has its core systems in place (layout
 generator, Mall Manager AI, hiding, music/blackout cycle) and is still being
@@ -475,9 +478,9 @@ keeps the remaining external release gates visible.
 | Level 3 navigation + furniture | 20 navigation seeds; 9 lanes; 321 furniture parts preserved | **PASS** |
 | responsive-device visual sweep | Galaxy A06, iPhone 17 Pro, iPhone 17 portrait, iPad Pro M5 | **PASS** |
 | pre-integration whole-place compile + Studio/repo parity | 114/114 compiled and matched; 0 drift or missing | **PASS** |
-| post-integration whole-place compile + final Studio/repo parity | pending the final release sweep | **PENDING** |
-| Roblox Studio publish + live Creator Dashboard title/description | not performed from this checkout | **PENDING** |
-| repository integration + GitHub push | not performed | **PENDING** |
+| post-integration whole-place compile + final Studio/repo parity | 114/114 compiled and matched; 0 drift, missing, extra or residue | **PASS** |
+| Roblox Studio publish + live Creator Dashboard title/description | place v1641 published; exact public title and description verified | **PASS** |
+| repository integration + GitHub push | remote history integrated locally; push not performed | **PENDING** |
 | `tools/tests/test_push_repo_to_studio.py` end-to-end round-trips | not executed — no `luau` binary on this machine | **NOT RUN** |
 
 The Slidemouth result is the full suite, not a reduced cosmetic-size run. The
@@ -487,9 +490,9 @@ keeps the hard 1–2 room-hop spawn admission, multiplayer commit-time
 revalidation, production-speed substep mutation proof and strict traversal
 criteria intact.
 
-Pending rows are deliberately not inferred from an earlier run. They must be
-re-recorded after the final Studio sync and repository integration before this
-candidate can be described as published.
+The remaining pending rows are external actions and are deliberately not
+inferred from local state. This candidate is not described as published until
+the live place, metadata and remote Git commit are each verified.
 
 | Suite | Where | What it covers |
 |---|---|---|
@@ -655,10 +658,10 @@ Left Ctrl" to "using the movement stick".
 - [x] Level 2 wet/dry movement-audio cadence and Level 3 navigation/furniture
       regression
 - [x] Pre-integration whole-place compile and Studio/repo parity: **114/114**
-- [ ] Repeat whole-place compile, Studio/repo parity and residue checks after
-      repository integration
-- [ ] Publish the verified place from Roblox Studio
-- [ ] Save and verify the exact live title
+- [x] Post-integration whole-place compile, Studio/repo parity and residue
+      checks: **114/114**, no drift/missing/extra and no live test residue
+- [x] Publish verified Roblox Studio place version **v1641**
+- [x] Save and verify the exact live title
       `BACKROOMS: STAY QUIET [CO-OP HORROR]` and the approved description
 - [ ] Integrate the intended repository history, commit and push `main` to GitHub
 
@@ -669,8 +672,8 @@ intentionally offers only the route back to the lobby.
 
 `ROBLOX_GAME_DESCRIPTION.md` is the canonical spoiler-free Creator Dashboard
 copy. `assets/marketing/roblox-experience-description.txt` mirrors it byte for
-byte; the `.md` beside it documents that relationship. External publication and
-the GitHub push remain pending until every unchecked gate above is verified.
+byte; the `.md` beside it documents that relationship. Roblox publication is
+verified; only the GitHub push remains pending in this release record.
 
 ### Known verification limits
 
