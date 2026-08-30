@@ -949,7 +949,11 @@ local LEVEL2_WADE_RESISTANCE_SPEC = {
 local LEVEL2_WADE_CORE_VOLUME = 0.49
 local LEVEL2_WADE_RESISTANCE_VOLUME = 0.095
 local LEVEL2_WADE_CORE_VOICE_COUNT = 5
-local LEVEL2_WADE_RELEASE_GRACE = 0.18
+-- Brief direction changes in knee-deep water can drive measured horizontal
+-- speed below the movement threshold for a few frames. Keep the cadence phase
+-- alive across that physical deceleration; resetting it made the next footfall
+-- wait a whole fresh stride and produced an otherwise unexplained ~0.8s hole.
+local LEVEL2_WADE_RELEASE_GRACE = 0.30
 local LEVEL2_WADE_RELEASE_FADE = 0.16
 local LEVEL2_WADE_SURFACE_CHANGE_FADE = 0.08
 
@@ -1035,7 +1039,14 @@ local function makeLevel2WadeBank(parent, model)
 	local bank = {
 		bag = {},
 		lastTake = nil,
-		coreCursor = 0,
+		-- Voices are permanently grouped by take. Reassigning SoundId on every
+		-- stride can force a fresh streaming/decode wait even after a nominal
+		-- preload, which turns a 0.44-second cadence into audible 0.8-0.9-second
+		-- holes. Two voices for the common takes (and one for the shortest take)
+		-- are enough to overlap their trimmed windows without ever rebinding the
+		-- bundled assets during movement.
+		coresByTake = {},
+		takeCursors = {},
 		playToken = 0,
 		resistanceTween = nil,
 	}
@@ -1043,19 +1054,24 @@ local function makeLevel2WadeBank(parent, model)
 	bank.coreTokens = {}
 	bank.coreTweens = {}
 	for index = 1, LEVEL2_WADE_CORE_VOICE_COUNT do
+		local takeIndex = (index - 1) % #LEVEL2_WADE_CORE_SPECS + 1
 		local core = Instance.new("Sound")
 		core.Name = "Level2PlayerWadeCore" .. index
 		core.Looped = false
 		core.Volume = 0
+		core.SoundId = level2CoreId(takeIndex, model) or ""
 		core.Parent = parent
 		bank.cores[index] = core
 		bank.coreTokens[index] = 0
+		bank.coresByTake[takeIndex] = bank.coresByTake[takeIndex] or {}
+		table.insert(bank.coresByTake[takeIndex], index)
 	end
 
 	local resistance = Instance.new("Sound")
 	resistance.Name = "Level2PlayerWadeResistance"
 	resistance.Looped = true
 	resistance.Volume = 0
+	resistance.SoundId = level2ResistanceId(model) or ""
 	resistance.Parent = parent
 	bank.resistance = resistance
 
@@ -1086,8 +1102,10 @@ local function makeLevel2WadeBank(parent, model)
 
 		local speed = playbackSpeed or 1
 		local scale = volumeScale or 1
-		self.coreCursor = self.coreCursor % #self.cores + 1
-		local coreIndex = self.coreCursor
+		local pool = self.coresByTake[take]
+		if not pool or #pool == 0 then return false end
+		self.takeCursors[take] = (self.takeCursors[take] or 0) % #pool + 1
+		local coreIndex = pool[self.takeCursors[take]]
 		local core = self.cores[coreIndex]
 		self.coreTokens[coreIndex] += 1
 		local coreToken = self.coreTokens[coreIndex]
@@ -1097,7 +1115,9 @@ local function makeLevel2WadeBank(parent, model)
 		end
 		self.playToken += 1
 		core:Stop()
-		core.SoundId = id
+		-- Runtime overrides are still honoured, but the bundled path (normal live
+		-- play) is already bound and preloaded, so this branch never churns IDs.
+		if core.SoundId ~= id then core.SoundId = id end
 		local usesBundledTake = id == spec.id
 		local takeGain = usesBundledTake and spec.gain or 1
 		core.Volume = math.clamp(LEVEL2_WADE_CORE_VOLUME * takeGain * scale, 0, 1.2)
@@ -1226,33 +1246,12 @@ end
 
 local level2PlayerBank = makeLevel2WadeBank(SoundService, nil)
 task.spawn(function()
-	-- Warm all three complete phrases and the shared underwater layer. The bank
-	-- changes SoundId between phrases, so this avoids a silent first wade.
-	local warmers = {}
-	for index = 1, #LEVEL2_WADE_CORE_SPECS do
-		local id = level2CoreId(index, nil)
-		if id then
-			local sound = Instance.new("Sound")
-			sound.Name = "Level2WadeCorePreload" .. index
-			sound.SoundId = id
-			sound.Volume = 0
-			sound.Parent = SoundService
-			warmers[#warmers + 1] = sound
-		end
-	end
-	local resistanceId = level2ResistanceId(nil)
-	if resistanceId then
-		local sound = Instance.new("Sound")
-		sound.Name = "Level2WadeResistancePreload"
-		sound.SoundId = resistanceId
-		sound.Volume = 0
-		sound.Parent = SoundService
-		warmers[#warmers + 1] = sound
-	end
-	if #warmers > 0 then
-		pcall(function() ContentProvider:PreloadAsync(warmers) end)
-	end
-	for _, sound in ipairs(warmers) do sound:Destroy() end
+	-- Preload the exact persistent instances that will play. A disposable warmer
+	-- proves an asset can load, but it does not guarantee that a different Sound
+	-- which rebinds that id on the stride frame can begin immediately.
+	local sounds = table.clone(level2PlayerBank.cores)
+	table.insert(sounds, level2PlayerBank.resistance)
+	pcall(function() ContentProvider:PreloadAsync(sounds) end)
 end)
 local level2WaterRay = RaycastParams.new()
 level2WaterRay.FilterType = Enum.RaycastFilterType.Exclude
@@ -1442,14 +1441,19 @@ RunService.Heartbeat:Connect(function(dt)
 	local flatSpeed = dt > 0 and displacement / dt or 0
 	local footingBlocked = level2FootingBlocked(hum)
 	if flatSpeed < 1.35 or footingBlocked then
-		level2PlayerStepClock = math.min(level2PlayerStepClock, 0.12)
 		if footingBlocked then
+			level2PlayerStepClock = 0
 			level2WadeMovingUntil = 0
 			level2PlayerBank:release(level2PlayerWasWet)
 			level2PlayerWasWet = false
 		elseif os.clock() >= level2WadeMovingUntil then
+			level2PlayerStepClock = 0
 			level2PlayerBank:release()
 		end
+		-- During the short release grace, deliberately retain the accumulated
+		-- cadence phase. If movement resumes, the next real displacement completes
+		-- the stride instead of starting from zero; no sound is emitted while the
+		-- player is actually stationary.
 		level2StopDrySteps()
 		return
 	end

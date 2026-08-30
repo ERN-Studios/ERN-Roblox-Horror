@@ -109,6 +109,52 @@ openButton.BackgroundColor3 = COLORS.bg
 openButton.TextColor3 = COLORS.accent
 local openButtonOutline = outline(openButton, COLORS.accent, 0.22, 1.5)
 
+-- C5_ZYNTRA_OPEN_BUTTON_20260829 -- WHAT SHIPPED BROKEN.
+-- This lobby entry point was 36px tall on a phone (30 for the whitelisted dev
+-- variant, 42 on a tablet) and right-aligned to the SAME edge as RoundUI's
+-- queue-host modal. Measured on a Galaxy A06 (705x338, inset 0,58) it occupied
+-- (345,8)-(529,44) while QueueHostPanel.CloseQueue occupied (479,14)-(523,58):
+-- a 44x30 overlap. A TextButton left Active keeps taking taps through a
+-- transparent background, so this button was also eating the modal's Close.
+--
+-- Both halves are fixed VISUALLY rather than by input priority, which is what
+-- the owner asked for:
+--   1. no touch state of this control is ever shorter than TOUCH_MIN_TAP_HEIGHT;
+--   2. the control is not drawn at all while the queue host modal is up. RoundUI
+--      publishes that as player:GetAttribute("QueueModalOpen"); a missing or
+--      non-true value means "no modal", so this degrades to the old behaviour if
+--      the attribute is never written.
+local TOUCH_MIN_TAP_HEIGHT = 44
+local QUEUE_MODAL_ATTRIBUTE = "QueueModalOpen"
+
+-- C4A_ZYNTRA_OPENER_VS_BRIEFING_20260829 -- WHAT SHIPPED BROKEN.
+-- The dispatch briefing panel and this opener were drawn in the SAME rectangle
+-- and neither knew about the other. RoundUI pins CommandSubtitles to UIDevice's
+-- TopBand on touch; on a Galaxy A06 (705x338, GUI inset 0,58) that band is
+-- (12,66)-(529,141), its MUTE/STOP readouts occupy (171,68)-(517,112), and this
+-- button occupies (345,66)-(529,110) -- entirely inside the briefing. The panel
+-- draws above it (LevelOneGuideGui DisplayOrder 110 against ZyntraStore's 55)
+-- but is not itself Active, so every tap that missed MUTE or STOP fell through
+-- a visibly opaque briefing onto an invisible ZYNTRA // EQUIPMENT button.
+--
+-- Same remedy as the queue modal above, same shape: RoundUI publishes the
+-- panel's OWN visibility as this attribute and the opener is not drawn while it
+-- is true. A missing or non-true value means "no briefing", so this degrades to
+-- the old behaviour if the attribute is never written.
+local BRIEFING_ATTRIBUTE = "DispatchBriefingOpen"
+
+local function queueModalOpen()
+	return player:GetAttribute(QUEUE_MODAL_ATTRIBUTE) == true
+end
+
+local function briefingOpen()
+	return player:GetAttribute(BRIEFING_ATTRIBUTE) == true
+end
+
+local function modalBlocksStore()
+	return queueModalOpen() or briefingOpen()
+end
+
 local main = Instance.new("Frame")
 main.Name = "Terminal"
 main.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -201,15 +247,41 @@ selectTab(currentTab)
 if devAllowed and pages.Dev then
 	local devIntro = label(
 		pages.Dev,
-		UIDevice.IsTouch() and "WHITELISTED DEVELOPER CONTROLS"
-			or "WHITELISTED DEVELOPER CONTROLS  //  PHONE: J",
+		"WHITELISTED DEVELOPER CONTROLS",
 		UDim2.new(1, 0, 0, 34),
 		UDim2.fromOffset(4, 0),
 		14,
 		COLORS.accent,
 		Enum.Font.Code
 	)
+	-- Named, because it could not be addressed otherwise: `label()` leaves the
+	-- default "TextLabel", and the Dev page holds several of them.
+	devIntro.Name = "DevIntro"
 	devIntro.TextWrapped = true
+	-- C4B_DEV_CAPTION_LIVE_INPUT_20260829 -- WHAT SHIPPED BROKEN.
+	-- This heading was built from a ONE-TIME UIDevice.IsTouch() read, and that was
+	-- the wrong question twice over.
+	--
+	-- Wrong PREDICATE: IsTouch() is a FORM FACTOR test -- "phone or tablet" -- and
+	-- UIDevice answers it false for any touchscreen that ALSO reports a mouse and
+	-- a keyboard. A touchscreen laptop, a Surface, a tablet in a keyboard case:
+	-- all of them were served "PHONE: J", a key glyph, on a device whose player
+	-- reaches for the screen. SuppressesKeyboardGlyphs() is the question that
+	-- actually decides whether a key glyph may be drawn at all, and it is true the
+	-- moment a touchscreen exists at all. It is what UIDevice.Caption already uses
+	-- for the ON/OFF rows below, so the heading and the rows now agree.
+	--
+	-- Wrong LIFETIME: it was resolved once, at construction, so pairing or
+	-- unpairing a keyboard or a mouse afterwards left the stale caption on screen
+	-- forever. It is re-derived from UIDevice.Changed now, which fires on exactly
+	-- those hardware transitions.
+	local function refreshDevIntro()
+		devIntro.Text = UIDevice.SuppressesKeyboardGlyphs()
+			and "WHITELISTED DEVELOPER CONTROLS"
+			or "WHITELISTED DEVELOPER CONTROLS  //  PHONE: J"
+	end
+	refreshDevIntro()
+	table.insert(deviceCaptionRefreshers, refreshDevIntro)
 
 	local devScroll = Instance.new("ScrollingFrame")
 	devScroll.Name = "DevControls"
@@ -251,9 +323,13 @@ if devAllowed and pages.Dev then
 			-- WASD / Space / Left Ctrl are the only keyboard-movement strings in
 			-- any client file. On touch the same cheat is driven by the on-screen
 			-- stick, so the caption must not name keys the device has not got.
-			Description = UIDevice.IsTouch()
-				and "Fly through geometry using the movement stick."
-				or "Fly through geometry with WASD, Space and Left Ctrl.",
+			-- Same fault as the heading above (C4B_DEV_CAPTION_LIVE_INPUT_20260829):
+			-- this was one IsTouch() read baked into the table at construction. BOTH
+			-- strings are carried now and which one is drawn is decided per refresh
+			-- by SuppressesKeyboardGlyphs(), so a hybrid device gets the stick copy
+			-- and a keyboard attached mid-session changes the row.
+			Description = "Fly through geometry with WASD, Space and Left Ctrl.",
+			TouchDescription = "Fly through geometry using the movement stick.",
 			Key = "V",
 			Command = "noclip",
 			Attribute = "DevCheatNoclip",
@@ -335,9 +411,26 @@ if devAllowed and pages.Dev then
 			11,
 			COLORS.muted
 		)
+		-- Named for the same reason as DevIntro: the row's title label and this one
+		-- were both the default "TextLabel", so neither could be addressed.
+		description.Name = "Description"
 		description.TextTruncate = Enum.TextTruncate.AtEnd
+		if info.TouchDescription then
+			-- A row whose copy names keys follows the LIVE input mode, exactly like
+			-- the ON/OFF caption beside it. Registered with the shared refresher list
+			-- so UIDevice.Changed rebuilds it; resolved once here so the row is right
+			-- on the very first frame rather than one signal later.
+			local function refreshDescription()
+				description.Text = UIDevice.SuppressesKeyboardGlyphs()
+					and info.TouchDescription
+					or info.Description
+			end
+			refreshDescription()
+			table.insert(deviceCaptionRefreshers, refreshDescription)
+		end
 
 		local toggle = button(row, "OFF", UDim2.fromOffset(158, 36), UDim2.new(1, -172, 0, 6))
+		toggle.Name = "Toggle"
 		local function actionAvailable()
 			return workspace:GetAttribute("SelectedLevel") == 3
 				and workspace:GetAttribute("RoundActive") == true
@@ -467,11 +560,30 @@ local function makeProductCard(key, item, kind)
 	icon.Position = UDim2.fromOffset(14, 18)
 	icon.BackgroundColor3 = COLORS.bg
 	icon.BorderSizePixel = 0
-	icon.Image = item.IconId and ("rbxassetid://" .. tostring(item.IconId)) or ""
+	local iconId = tonumber(item.IconId) or 0
+	icon.Image = iconId > 0 and ("rbxassetid://" .. tostring(iconId)) or ""
 	icon.ScaleType = Enum.ScaleType.Crop
 	icon.Parent = card
 	corner(icon, 38)
 	outline(icon, COLORS.accent, 0.35, 1.5)
+	-- A product without an approved image gets a deliberately authored text mark,
+	-- never a stale or unrelated Marketplace thumbnail. Supporter uses this path
+	-- after retiring its old hazmat artwork.
+	if iconId <= 0 then
+		local monogram = Instance.new("TextLabel")
+		monogram.Name = "ProductMonogram"
+		monogram.Size = UDim2.fromScale(1, 1)
+		monogram.BackgroundTransparency = 1
+		monogram.Font = Enum.Font.GothamBlack
+		monogram.Text = type(item.IconText) == "string" and item.IconText or "Z//"
+		monogram.TextColor3 = COLORS.accent
+		monogram.TextScaled = true
+		monogram.Parent = icon
+		local textConstraint = Instance.new("UITextSizeConstraint")
+		textConstraint.MinTextSize = 12
+		textConstraint.MaxTextSize = 20
+		textConstraint.Parent = monogram
+	end
 
 	local headingY = kind == "Pass" and 28 or 16
 	if kind == "Pass" then
@@ -910,7 +1022,9 @@ task.spawn(function()
 end)
 
 local function setMainVisible(visible)
-	main.Visible = visible == true
+	-- Keep the invariant at the final write as well as at each input path. This
+	-- makes a future caller unable to bypass queue/briefing mutual exclusion.
+	main.Visible = visible == true and not modalBlocksStore()
 	-- RoundUI uses this modal flag to release the cursor only while the
 	-- whitelisted in-round phone is actually open.
 	player:SetAttribute("DevPhoneOpen", devAllowed and main.Visible or nil)
@@ -924,7 +1038,23 @@ end
 local function updateVisibility()
 	local inRound = player:GetAttribute("InRound") == true
 	local touchDevInLevel = inRound and devAllowed and UserInputService.TouchEnabled
-	openButton.Visible = not inRound or touchDevInLevel
+	local blockedByModal = modalBlocksStore()
+	-- The full terminal is part of the same modal-exclusion contract as its
+	-- opener. If a queue or visible briefing is raised over an already-open
+	-- terminal, close it and clear both modal attributes before updating input.
+	if blockedByModal and main.Visible then
+		setMainVisible(false)
+	end
+	-- Visible = false alone was never enough: an Active TextButton keeps taking
+	-- taps through its own transparent background, which is how this control was
+	-- swallowing the queue modal's Close. SetInteractive clears Active/Selectable
+	-- with it, so a hidden button is genuinely gone from the input stack.
+	-- Two independent suppressors, both of which own this same strip of screen:
+	-- the queue host modal, and the dispatch briefing panel. Either one being up
+	-- takes the opener off the screen AND out of the input stack.
+	UIDevice.SetInteractive(openButton,
+		(not inRound or touchDevInLevel)
+			and not blockedByModal)
 	local layout = UIDevice.Layout()
 	if layout.IsTouch then
 		-- The right edge is owned by the game's RUN/JUMP/GLOW/FLASHLIGHT
@@ -935,8 +1065,14 @@ local function updateVisibility()
 			or (layout.Class == "tablet" and 220 or 184)
 		local availableWidth = math.max(1, layout.Zones.Controls.Left - layout.SafeLeft - 8)
 		local buttonWidth = math.min(requestedWidth, availableWidth)
-		local buttonHeight = touchDevInLevel and 30
-			or (layout.Class == "tablet" and 42 or 36)
+		-- The authored 30/36/42 heights were ALL below the 44px tap target this
+		-- game holds every other touch control to, which is why the dev variant in
+		-- particular was almost unhittable. The floor is applied here, once, so no
+		-- future per-class tweak can drop back under it. The TOP edge stays at
+		-- y = 8 (= TopBand.Top once the 58px inset is added), so the button grows
+		-- DOWNWARD into the safe band and never up under the Roblox topbar.
+		local buttonHeight = math.max(TOUCH_MIN_TAP_HEIGHT, touchDevInLevel and 30
+			or (layout.Class == "tablet" and 42 or 36))
 		openButton.Size = UDim2.fromOffset(buttonWidth, buttonHeight)
 		openButton.Position = UDim2.fromOffset(
 			math.max(layout.SafeLeft, layout.Zones.Controls.Left - buttonWidth - 8),
@@ -971,6 +1107,8 @@ player:GetAttributeChangedSignal("InRound"):Connect(function()
 	setMainVisible(false)
 	updateVisibility()
 end)
+player:GetAttributeChangedSignal(QUEUE_MODAL_ATTRIBUTE):Connect(updateVisibility)
+player:GetAttributeChangedSignal(BRIEFING_ATTRIBUTE):Connect(updateVisibility)
 player:GetAttributeChangedSignal("ZyntraReentryUsed"):Connect(updateReentry)
 workspace:GetAttributeChangedSignal("RoundActive"):Connect(updateReentry)
 setMainVisible(false)
@@ -980,6 +1118,10 @@ local function toggleMain(requested)
 	local inRound = player:GetAttribute("InRound") == true
 	if inRound and not devAllowed then return end
 	local visible = if typeof(requested) == "boolean" then requested else not main.Visible
+	if visible and modalBlocksStore() then
+		setMainVisible(false)
+		return
+	end
 	if visible and inRound and devAllowed then selectTab("Dev") end
 	setMainVisible(visible)
 	if main.Visible then showStatus("") end
@@ -991,10 +1133,28 @@ end
 local boundShopPrompts = setmetatable({}, { __mode = "k" })
 
 local function openKioskShop()
-	if player:GetAttribute("InRound") == true then return end
+	if player:GetAttribute("InRound") == true or modalBlocksStore() then return end
 	selectTab("Shop")
 	setMainVisible(true)
 	showStatus("")
+end
+
+-- Studio-only input seam for UIRegression. It exercises the exact production
+-- toggle and kiosk paths without needing a whitelisted account or fake input.
+if RunService:IsStudio() then
+	local probe = Instance.new("BindableFunction")
+	probe.Name = "UIRegressionZyntraStoreProbe"
+	probe.OnInvoke = function(action)
+		if action == "open" then
+			toggleMain(true)
+		elseif action == "kiosk" then
+			openKioskShop()
+		elseif action == "close" then
+			setMainVisible(false)
+		end
+		return main.Visible
+	end
+	probe.Parent = gui
 end
 
 local function bindShopPrompt(instance)

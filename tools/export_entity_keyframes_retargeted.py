@@ -108,7 +108,7 @@ def studio_rest() -> dict[str, list[float]]:
     try:
         client.initialize()
         time.sleep(3)
-        select_studio(client, "Backrooms: No Way Out", 20)
+        select_studio(client, "BACKROOMS: STAY QUIET [CO-OP HORROR]", 20)
         encoded = client.call("execute_luau", {
             "datamodel_type": "Edit",
             "code": '''local H=game:GetService("HttpService")

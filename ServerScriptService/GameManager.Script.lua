@@ -12,6 +12,45 @@ local PhysicsService = game:GetService("PhysicsService")
 local Lighting = game:GetService("Lighting")
 local DevAccess = require(RS:WaitForChild("DevAccess"))
 
+-- Every rule about what a finished level leads to, who the destination is still
+-- waiting for and who owns an unfinished transfer lives in ONE module. The
+-- completion path below calls Routing.* on every win; nothing here used to
+-- require it, so every win could error. The numbers the module owns were also
+-- duplicated as locals further down, so a suite could pass against one value
+-- while production ran another.
+local Routing = require(script.Parent:WaitForChild("Round Completion Routing"))
+-- require() caches ONE module table per server, so stamping this host's name
+-- into it lets the test suite -- which requires the same ModuleScript and
+-- therefore holds the same table -- prove that GameManager really loaded it
+-- rather than re-deriving the completion rules inline. The attribute is the
+-- same claim in a form the client and the console can see.
+Routing.LoadedBy = script:GetFullName()
+workspace:SetAttribute(Routing.LoadedAttribute, Routing.Version)
+do
+	-- A live answering probe rather than a stored value. OnInvoke cannot be
+	-- serialised into the place file, and the numbers below are read out of the
+	-- module at the moment of the call, so a reply is proof that this running
+	-- host both loaded the module and is using it for the completion rules.
+	local routingProbe = ServerStorage:FindFirstChild(Routing.ProbeName)
+	if not routingProbe or not routingProbe:IsA("BindableFunction") then
+		if routingProbe then routingProbe:Destroy() end
+		routingProbe = Instance.new("BindableFunction")
+		routingProbe.Name = Routing.ProbeName
+		routingProbe.Parent = ServerStorage
+	end
+	routingProbe.OnInvoke = function()
+		return {
+			Host = script:GetFullName(),
+			Version = Routing.Version,
+			MaxLevel = Routing.MaxLevel,
+			PostWinSeconds = Routing.PostWinSeconds,
+			NextAfterOne = Routing.NextLevel(1),
+			NextAfterTwo = Routing.NextLevel(2),
+			EndsAtThree = Routing.NextLevel(Routing.MaxLevel) == nil,
+		}
+	end
+end
+
 local zyntraLevelCompleted = ServerStorage:FindFirstChild("ZyntraLevelCompleted")
 if not zyntraLevelCompleted then
  zyntraLevelCompleted = Instance.new("BindableEvent")
@@ -45,7 +84,6 @@ local QUEUE_TIME = 10
 local FAST_QUEUE_TIME = 3
 local MAX_PLAYERS_PER_STATION = 6
 local ELEVATOR_TIME = 19
-local POST_WIN_SECONDS = 15
 local LOBBY_CENTER = Vector3.new(0, 30, -760)
 
 Players.CharacterAutoLoads = false
@@ -74,7 +112,6 @@ local LEVEL_GENERATORS = {
  [2] = "Level2Generator",
  [3] = "Level3Generator",
 }
-local MAX_LEVEL = 3
 
 -- Always-on server authority for every developer command. Unlike the Level 1
 -- entity script, GameManager remains active in both levels.
@@ -850,6 +887,7 @@ end
 local entryReady = {}
 local lobbyBriefingReady = {}
 local handlePostWinReturnRequest
+local handlePostWinContinueRequest
 status.OnServerEvent:Connect(function(player, message, requestSerial)
  if message == "entryready"
   and entryReady[player] == false
@@ -860,6 +898,8 @@ status.OnServerEvent:Connect(function(player, message, requestSerial)
   entryReady[player] = true
  elseif message == "returntolobby" and handlePostWinReturnRequest then
   handlePostWinReturnRequest(player, requestSerial)
+ elseif message == "continuenow" and handlePostWinContinueRequest then
+  handlePostWinContinueRequest(player, requestSerial)
  elseif message == "lobbybriefingready"
   and not lobbyBriefingReady[player]
   and not IS_RESERVED_ROUND_SERVER
@@ -878,10 +918,17 @@ Players.PlayerRemoving:Connect(function(player)
  pendingSlideStream[player] = nil
  entryReady[player] = nil
  lobbyBriefingReady[player] = nil
- pendingTeleports[player] = nil
+ -- The player left, which is what the claim existed to achieve. Resolving it
+ -- through Routing -- rather than reaching into the record here -- is what
+ -- makes a LATE TeleportInitFailed for the same request a no-op instead of a
+ -- second transfer attempt at a ghost.
+ Routing.ResolveTransfer(pendingTeleports, player, Routing.Succeeded)
  if activePostWin then
-  activePostWin.Eligible[player] = nil
-  activePostWin.Returning[player] = nil
+  -- Membership of a result window is FROZEN. Only the decision moves, and only
+  -- for somebody who had not already chosen: leaving is how a Continue or a
+  -- Back completes, and erasing them here is what made the settlement tell the
+  -- destination to expect one fewer player than was really coming.
+  Routing.NoteDeparture(activePostWin.Roster, player)
  end
 end)
 
@@ -970,7 +1017,7 @@ local function connectElevator()
 end
 
 local function ensureWorld(group, requestedLevel)
- local level = math.clamp(math.floor(tonumber(requestedLevel) or 1), 1, MAX_LEVEL)
+ local level = Routing.ClampLevel(requestedLevel)
  if worldReady and activeLevel == level then return true end
  activeLevel = level
  workspace:SetAttribute("SelectedLevel", level)
@@ -1100,63 +1147,305 @@ local function returnPlayersToLocalLobby(group)
 	end
 end
 
-local function registerPendingTeleport(group, destination, options, nextLevel)
+-- One authoritative transfer per player, with an EXPLICIT lifecycle. Every path
+-- that can send somebody somewhere claims them FIRST; a second path finds them
+-- already claimed and leaves them alone. The claim is taken before any yield so
+-- a resumed thread cannot slip between the check and the write.
+--
+-- A claim is PENDING until something resolves it. "TeleportAsync did not throw"
+-- is not success: TeleportInitFailed can arrive seconds later. The old code
+-- treated an in-flight claim as a finished transfer, closed the result window
+-- around it, and had nothing left to recover the player with when the failure
+-- finally landed. Routing owns the state machine so those interleavings can be
+-- asserted without a real teleport.
+local function claimForTransfer(group)
+	local claimed = {}
+	-- ONE timestamp for the whole batch, taken before the loop: it is the anchor
+	-- every bounded thing about these claims is measured from, and a claim that
+	-- never reaches an attempt has nothing else to be dated by.
+	local at = os.clock()
+	for _, player in ipairs(livePlayers(group)) do
+		if (Routing.ClaimTransfer(pendingTeleports, player, "claim", at)) then
+			claimed[#claimed + 1] = player
+		end
+	end
+	return claimed
+end
+
+-- A transfer DESCRIPTOR is everything needed to rebuild an equivalent request:
+-- the reservation to join, and the teleport payload minus its attempt id. A
+-- retry rebuilds from this under a FRESH id rather than re-sending the options
+-- object that already failed -- reusing it would make the retry's failure
+-- callback indistinguishable from the original's, which is exactly how a
+-- duplicate report used to be counted twice.
+local function buildTransferOptions(descriptor, attemptId)
+	local options = Instance.new("TeleportOptions")
+	if type(descriptor.AccessCode) == "string" and descriptor.AccessCode ~= "" then
+		-- Join the reservation the session already made, so a player who pressed
+		-- Continue at once and a party member who let the countdown run out arrive
+		-- in the SAME next-level server.
+		options.ReservedServerAccessCode = descriptor.AccessCode
+	elseif descriptor.ReserveServer then
+		options.ShouldReserveServer = true
+	end
+	local payload = table.clone(descriptor.Data)
+	payload.TransferAttemptId = attemptId
+	options:SetTeleportData(payload)
+	return options
+end
+
+-- One TeleportAsync call is one attempt. Every player on it is recorded against
+-- that id, and the id rides in the teleport data, so TeleportInitFailed can be
+-- matched to the attempt that produced it rather than to whatever claim happens
+-- to be current when it lands.
+-- EVERY pre-dispatch step is inside this, and the attempt is stamped whether or
+-- not the request could be built.
+--
+-- buildTransferOptions used to run outside any protection. Instance.new and
+-- SetTeleportData can both throw -- a payload Roblox refuses to serialise is
+-- enough -- and the throw propagated out of the spawned continue thread, which
+-- simply died. The players it had already CLAIMED were left pending with no
+-- attempt id and no attempt stamp: invisible to the watchdog, and re-dated by
+-- the settlement on every poll. That was an endpoint waiting forever.
+--
+-- Now the claim always carries a real attempt, so an unbuildable request is
+-- reported as the synchronous failure it is and earns the same retry, fallback
+-- and surrender any other refused dispatch does.
+local function dispatchTransfer(group, descriptor)
+	local attemptId = Routing.NewAttemptId()
+	local at = os.clock()
+	local built, options = pcall(buildTransferOptions, descriptor, attemptId)
 	for _, player in ipairs(group) do
-		pendingTeleports[player] = {
-			Destination = destination,
-			Options = options,
-			NextLevel = nextLevel,
-			Failures = 0,
-		}
+		Routing.BeginAttempt(pendingTeleports, player, descriptor.Kind, attemptId,
+			built and options or nil, game.PlaceId, at, descriptor)
+	end
+	if not built then
+		return false, "TELEPORT_REQUEST_UNBUILDABLE: " .. tostring(options), attemptId
+	end
+	local ok, err = pcall(function()
+		TeleportService:TeleportAsync(game.PlaceId, group, options)
+	end)
+	if ok then
+		-- Roblox has taken it. Re-anchor the stale clock to NOW rather than to
+		-- before the call: TeleportAsync yields, and on the cohort schedule the
+		-- whole budget is six seconds, so charging the yield to the attempt
+		-- would re-dispatch underneath a transfer that had just succeeded.
+		--
+		-- `at` is handed in as the DISPATCH instant so Routing can clamp how far
+		-- the re-anchor may travel. Without it the horizon this session already
+		-- promised the destination -- deadline + CohortArrivalHorizonSeconds --
+		-- was not a bound at all: however long TeleportAsync yielded was added to
+		-- the retry's arrival, and the destination had stopped staging by then.
+		local acceptedAt = os.clock()
+		for _, player in ipairs(group) do
+			Routing.RestampAttempt(pendingTeleports, player, attemptId, acceptedAt, at)
+		end
+	end
+	return ok, err, attemptId
+end
+
+-- There is NO TeleportService destination on this server at all -- Studio, or a
+-- public lobby server that already owns the lobby these players want. Nothing
+-- was dispatched and nothing can be retried, so the claim is resolved directly:
+-- the settlement sweep may now take the player (a failed claim owns nobody).
+--
+-- This is the ONLY remaining direct resolution. A rejection of a real dispatch
+-- goes through reportDispatchFailure below.
+local function releaseUndispatchedClaims(group)
+	for _, player in ipairs(group) do
+		Routing.ResolveTransfer(pendingTeleports, player, Routing.Failed)
 	end
 end
 
-local function clearPendingTeleport(group)
-	for _, player in ipairs(group) do pendingTeleports[player] = nil end
+local function stillHere(player)
+	return player.Parent == Players
+end
+
+-- The completed world may only be released once no player who is still on this
+-- server holds an unresolved claim. Anything else deletes the ground out from
+-- under somebody Roblox has not actually moved yet.
+-- Declared here because the watchdog, the settlement wait, the reserved-server
+-- teardown guard and the failure recovery all hand players to it.
+local finishFailedTeleportLocally
+
+-- THE watchdog. Not one per endpoint, and not a check an endpoint has to
+-- remember to run: a single sweep owns every unfinished transfer on this
+-- server, whatever path opened it.
+--
+-- Roblox can produce neither PlayerRemoving nor TeleportInitFailed for a
+-- request it silently dropped. Before this, such a claim stayed pending
+-- forever: the settlement wait ran its expiry pass five seconds BEFORE anything
+-- could be stale, and the Level 3 and loss endpoints waited 1.6 seconds and
+-- never ran settlement at all. Every timing below comes from Routing, so the
+-- sweep interval, the stale threshold and the endpoint wait cannot drift apart.
+-- The sweep, the failure policy and the settlement loop all live in
+-- Routing.NewTransferRuntime now, built below once teleportPlayersToLobby
+-- exists. Keeping them here is what let the timeout path and the callback path
+-- drift into two different policies with nothing able to test either: the suite
+-- could reach Routing's pure rules but never the code that ACTED on them.
+-- (`transfers` itself is forward-declared above reportDispatchFailure.)
+
+-- A dispatch Roblox refused, or a request that could not be built, reported
+-- through THE runtime -- the same door TeleportInitFailed comes through.
+--
+-- Marking the claim Failed here instead (which is what both wrappers used to
+-- do) skipped the entire policy: no retry, no lobby fallback for a refused
+-- next-level transfer, no surrender to local recovery. Declared before the
+-- wrappers and resolved through the `transfers` upvalue, which is built below.
+local transfers
+local function reportDispatchFailure(group, attemptId, err)
+	for _, player in ipairs(group) do
+		transfers:ReportDispatchFailure(player, attemptId, err)
+	end
 end
 
 local function teleportPlayersToLobby(group)
-	local live = livePlayers(group)
+	local live = claimForTransfer(group)
 	if #live == 0 then return true, nil, live end
-	if not IS_RESERVED_ROUND_SERVER or IS_STUDIO then return false, "LOCAL_FALLBACK", live end
-	local options = Instance.new("TeleportOptions")
-	options:SetTeleportData({ReturnToLobby = true})
-	registerPendingTeleport(live, "lobby", options, nil)
-	local ok, err = pcall(function()
-		TeleportService:TeleportAsync(game.PlaceId, live, options)
-	end)
-	if not ok then clearPendingTeleport(live) end
+	if not IS_RESERVED_ROUND_SERVER or IS_STUDIO then
+		releaseUndispatchedClaims(live)
+		return false, "LOCAL_FALLBACK", live
+	end
+	local ok, err, attemptId = dispatchTransfer(live, {
+		Kind = "lobby",
+		Data = {ReturnToLobby = true},
+	})
+	if not ok then reportDispatchFailure(live, attemptId, err) end
 	return ok, err, live
 end
 
-local function teleportPlayersToNextLevel(group, nextLevel, entryMode)
-	local live = livePlayers(group)
+-- THE transfer runtime. Everything the completion path does with a failed or
+-- silent transfer goes through this object, and the suite builds the SAME
+-- object over a fake clock and a scripted dispatcher. That is the point: the
+-- previous suite could assert what Routing.RetryPlan SAID and never what
+-- GameManager DID with it, so the timeout path quietly grew a second policy.
+transfers = Routing.NewTransferRuntime({
+	Claims = pendingTeleports,
+	Now = os.clock,
+	Delay = task.delay,
+	Spawn = task.spawn,
+	Wait = task.wait,
+	Present = stillHere,
+	Dispatch = function(player, descriptor)
+		return dispatchTransfer({player}, descriptor)
+	end,
+	LobbyTransfer = function(player)
+		local ok, err = teleportPlayersToLobby({player})
+		return ok, err
+	end,
+	Surrender = function(player, reason)
+		finishFailedTeleportLocally(player, reason)
+	end,
+	Notify = function(player, ...)
+		status:FireClient(player, ...)
+	end,
+	Warn = function(text) warn("GameManager: " .. text) end,
+	Reserved = IS_RESERVED_ROUND_SERVER,
+	Studio = IS_STUDIO,
+})
+
+-- THE watchdog. Not one per endpoint, and not a check an endpoint has to
+-- remember to run: a single sweep owns every unfinished transfer on this
+-- server, whatever path opened it. Roblox can produce neither PlayerRemoving
+-- nor TeleportInitFailed for a request it silently dropped.
+task.spawn(function()
+	while true do
+		-- The SHORTEST threshold in play, not the lobby one: a cohort attempt
+		-- that has to be retried inside the destination's staging window cannot
+		-- wait a full lobby sweep to be noticed.
+		task.wait(Routing.SweepIntervalSeconds())
+		transfers:Sweep("watchdog")
+	end
+end)
+
+-- What every endpoint calls before it lets go. Returns (settled, stranded);
+-- `settled == false` is NOT advisory and no caller may drop it.
+local function awaitTransferSettlement(endpoint)
+	return transfers:AwaitSettlement(endpoint)
+end
+
+-- A settlement that did not resolve means players on this server are still
+-- unaccounted for. In a reserved round server the completed world is the only
+-- floor they have, so it is HELD: no cleanup, and the round does not roll on.
+-- ForceSettle has already handed every one of them to local recovery, which
+-- keeps retrying the lobby, so nobody is merely abandoned here.
+local function holdCompletedWorld(stranded, endpoint)
+	warn(string.format(
+		"GameManager: the %s endpoint could not settle %d transfer(s); holding the completed world",
+		tostring(endpoint), #stranded))
+	workspace:SetAttribute("CompletionSettlementHeld", true)
+	workspace:SetAttribute("CompletionStrandedCount", #stranded)
+	return Routing.TeardownPlan({
+		Accepted = false,
+		Reserved = IS_RESERVED_ROUND_SERVER,
+		Studio = IS_STUDIO,
+	}) == "keep-world"
+end
+
+-- `plan` is the ONE result window this transfer belongs to: its reservation,
+-- its session id, its decision deadline and its current head count. Every
+-- continuer out of a given win carries the same identity, whether they pressed
+-- Continue in the first second or the countdown carried them. Sizing each
+-- packet by the players in THAT ONE transfer is what made the first arrival
+-- start the round and turned everybody after them into a spectator, so the
+-- cohort below is the session's, not this batch's.
+local function teleportPlayersToNextLevel(group, plan)
+	local live = claimForTransfer(group)
 	if #live == 0 then return true, nil, live end
-	if IS_STUDIO then return false, "STUDIO_LOCAL_TRANSITION", live end
+	if IS_STUDIO then
+		-- Studio has no TeleportService destination, so nothing was dispatched and
+		-- there is nothing to retry: the claims are released directly.
+		--
+		-- This read `failPendingTeleport(live)` -- a name that no longer exists
+		-- anywhere in this file. It was renamed to releaseUndispatchedClaims when
+		-- the synchronous-failure path was routed through the transfer runtime,
+		-- and this one call site was missed. Luau resolves it as a global, so it
+		-- was nil, and every Studio next-level transition raised
+		-- "attempt to call a nil value" out of the completion path.
+		releaseUndispatchedClaims(live)
+		return false, "STUDIO_LOCAL_TRANSITION", live
+	end
+	-- Building the descriptor is a pre-dispatch step like any other, and it
+	-- reads player attributes: it can throw. A throw here used to kill the
+	-- calling thread with the claims already taken and no attempt on them.
+	local builtDescriptor, descriptor = pcall(function()
 	local glowstickSlots = {}
 	for index, player in ipairs(live) do
 		local slot = math.clamp(math.floor(tonumber(player:GetAttribute("GlowstickSlot")) or index), 1, MAX_PLAYERS_PER_STATION)
 		glowstickSlots[tostring(player.UserId)] = slot
 	end
-	local options = Instance.new("TeleportOptions")
-	options.ShouldReserveServer = true
-	options:SetTeleportData({
-		BackroomsRound = true,
-		PartySize = #live,
-		Level = nextLevel,
-		-- LEVEL2_EXIT_TRANSITION_20260828: the whole continuing party left
-		-- Level 2 down the exit flume (the win condition requires every
-		-- surviving participant to have escaped), so the next server resumes
-		-- them inside Level 3's continuation bore rather than on a spawn pad.
-		EntryMode = entryMode,
-		LaunchToken = game.JobId .. ":progress:" .. tostring(nextLevel) .. ":" .. tostring(math.floor(os.clock() * 1000)),
-		GlowstickSlots = glowstickSlots,
-	})
-	registerPendingTeleport(live, "next", options, nextLevel)
-	local ok, err = pcall(function()
-		TeleportService:TeleportAsync(game.PlaceId, live, options)
+	return {
+		Kind = "next",
+		AccessCode = plan.AccessCode,
+		ReserveServer = not (type(plan.AccessCode) == "string" and plan.AccessCode ~= ""),
+		Data = Routing.ArrivalPacket({
+			Level = plan.NextLevel,
+			-- LEVEL2_EXIT_TRANSITION_20260828: the whole continuing party left
+			-- Level 2 down the exit flume (the win condition requires every
+			-- surviving participant to have escaped), so the next server resumes
+			-- them inside Level 3's continuation bore rather than on a spawn pad.
+			EntryMode = plan.EntryMode,
+			SessionId = plan.SessionId,
+			-- Counted from the FROZEN roster, so a continuer who has already
+			-- departed and left this server is still counted. The settlement
+			-- packet is marked Final and carries the exact head count.
+			Expected = plan.Expected,
+			Deadline = plan.Deadline,
+			Final = plan.Final,
+			GlowstickSlots = glowstickSlots,
+			LaunchToken = plan.SessionId,
+		}),
+	}
 	end)
-	if not ok then clearPendingTeleport(live) end
+	if not builtDescriptor then
+		-- Give the claims a real attempt anyway, so the ordinary failure policy
+		-- owns them instead of leaving claims nothing will ever report on.
+		local ok, err, attemptId = dispatchTransfer(live, {Kind = "next", Data = nil})
+		reportDispatchFailure(live, attemptId, "NEXT_DESCRIPTOR_FAILED: " .. tostring(descriptor))
+		return false, "NEXT_DESCRIPTOR_FAILED: " .. tostring(descriptor), live
+	end
+	local ok, err, attemptId = dispatchTransfer(live, descriptor)
+	if not ok then reportDispatchFailure(live, attemptId, err) end
 	return ok, err, live
 end
 
@@ -1164,13 +1453,34 @@ local function returnGroupToLobby(group)
 	-- A late reserved-server arrival is a spectator, but must never be stranded.
 	local candidates = IS_RESERVED_ROUND_SERVER and Players:GetPlayers() or group
 	local ok, err, live = teleportPlayersToLobby(candidates)
-	if ok and IS_RESERVED_ROUND_SERVER and not IS_STUDIO then
+	local plan = Routing.TeardownPlan({
+		Accepted = ok,
+		Reserved = IS_RESERVED_ROUND_SERVER,
+		Studio = IS_STUDIO,
+	})
+	if plan == "released" then
 		-- Keep the completed map intact while Roblox transfers the party. The old
 		-- isolated server and its world disappear naturally after the last leave.
 		return true
 	end
 	if err ~= "LOCAL_FALLBACK" and #live > 0 then
 		warn("GameManager: return-to-lobby teleport failed: " .. tostring(err))
+	end
+	if plan == "keep-world" then
+		-- No lobby exists here to recover into, so the finished world is the only
+		-- floor these players have. Hand each of them to the per-player retry and
+		-- leave the map standing.
+		--
+		-- Except anybody the transfer runtime already owns. A refused dispatch now
+		-- earns its retry through Routing rather than being marked failed on the
+		-- spot, so a live claim here means an attempt is already scheduled;
+		-- surrendering them as well would resolve that claim out from under it.
+		for _, player in ipairs(live) do
+			if not Routing.ClaimOwns(pendingTeleports[player]) then
+				finishFailedTeleportLocally(player, err)
+			end
+		end
+		return false
 	end
 	cleanupActiveWorld()
 	returnPlayersToLocalLobby(live)
@@ -1188,8 +1498,8 @@ handlePostWinReturnRequest = function(player, requestSerial)
 		or workspace:GetServerTimeNow() >= session.Deadline
 		or workspace:GetAttribute("RoundActive") == true
 		or activeLevel ~= session.Level
-		or session.Eligible[player] ~= true
-		or session.Returning[player] == true
+		or not Routing.InRoster(session.Roster, player)
+		or Routing.DecisionOf(session.Roster, player) ~= Routing.Deciding
 		or inRound[player] ~= true
 		or player:GetAttribute("InRound") ~= true
 		or player.Parent ~= Players then
@@ -1197,8 +1507,9 @@ handlePostWinReturnRequest = function(player, requestSerial)
 	end
 
 	-- Latch before any yield/TeleportAsync call; clients cannot choose the
-	-- destination, deadline, level, or another party member.
-	session.Returning[player] = true
+	-- destination, deadline, level, or another party member. RecordDecision is
+	-- the only writer, and it refuses a second press by itself.
+	if not Routing.RecordDecision(session.Roster, player, Routing.Returning) then return end
 	status:FireClient(player, "returnpending", session.Serial)
 	if IS_RESERVED_ROUND_SERVER and not IS_STUDIO then
 		-- Keep the endless ride authoritative until Roblox accepts the transfer.
@@ -1206,9 +1517,16 @@ handlePostWinReturnRequest = function(player, requestSerial)
 		-- delete the objective's transition record and strand the player.
 		task.spawn(function()
 			local ok, err = teleportPlayersToLobby({player})
-			if not ok and activePostWin == session and not session.Closed and player.Parent == Players then
-				session.Returning[player] = nil
-				status:FireClient(player, "returnfailed", session.Serial)
+			if not ok and Routing.ClaimOwns(pendingTeleports[player]) then
+				-- Refused, and the runtime is retrying it. The decision stands
+				-- until that lineage ends; finishFailedTeleportLocally gives the
+				-- choice back if it ends badly while the window is still open.
+				warn("GameManager: early return-to-lobby was refused for " .. player.Name
+					.. "; the transfer runtime is retrying it (" .. tostring(err) .. ")")
+			elseif not ok and activePostWin == session and not session.Closed and player.Parent == Players then
+				if Routing.ClearDecision(session.Roster, player) then
+					status:FireClient(player, "returnfailed", session.Serial)
+				end
 				warn("GameManager: early return-to-lobby failed for " .. player.Name .. ": " .. tostring(err))
 			end
 		end)
@@ -1219,25 +1537,165 @@ handlePostWinReturnRequest = function(player, requestSerial)
 	end
 end
 
-local function finishFailedTeleportLocally(player, reason)
-	local failedRecord = pendingTeleports[player]
-	pendingTeleports[player] = nil
+-- The next-level server is reserved ONCE per post-win session, by whoever
+-- continues first, and everyone after them joins the same reservation. Without
+-- this, an immediate Continue and a timed-out Continue would each reserve their
+-- own server and split the party across two of them.
+local function reserveNextLevelServer(session)
+	if session.NextServerCode then return session.NextServerCode end
+	if session.ReservingServer then
+		-- Another continuer got here first; wait for their reservation.
+		local deadline = os.clock() + 12
+		while session.ReservingServer and os.clock() < deadline do task.wait(0.1) end
+		return session.NextServerCode
+	end
+	session.ReservingServer = true
+	local ok, code = pcall(function()
+		return (TeleportService:ReserveServer(game.PlaceId))
+	end)
+	session.ReservingServer = false
+	if ok and type(code) == "string" and code ~= "" then
+		session.NextServerCode = code
+		return code
+	end
+	warn("GameManager: could not reserve the next-level server: " .. tostring(code))
+	return nil
+end
+
+-- How many players this session should still deliver to the destination.
+-- Counted from the FROZEN roster, so a player who pressed Continue, departed
+-- and left this server is still counted -- they are on their way there.
+local function sessionExpectedContinuers(session)
+	return Routing.ExpectedContinuers(session.Roster, stillHere)
+end
+
+-- Continue advances THIS player immediately. It never waits on the rest of the
+-- party: the fifteen-second countdown is the auto-continue deadline for anyone
+-- who has not chosen, not a barrier the early presser has to sit behind. What
+-- it does NOT do any more is travel alone: the packet carries the session's
+-- reservation, id, deadline and head count, so the destination stages this
+-- player until the source's window has closed and then admits the whole cohort
+-- into one round.
+handlePostWinContinueRequest = function(player, requestSerial)
+	local session = activePostWin
+	if not session
+		or session.Closed
+		or session.NextLevel == nil
+		or type(requestSerial) ~= "number"
+		or requestSerial ~= session.Serial
+		or workspace:GetServerTimeNow() >= session.Deadline
+		or workspace:GetAttribute("RoundActive") == true
+		or activeLevel ~= session.Level
+		or not Routing.InRoster(session.Roster, player)
+		or Routing.DecisionOf(session.Roster, player) ~= Routing.Deciding
+		or inRound[player] ~= true
+		or player:GetAttribute("InRound") ~= true
+		or player.Parent ~= Players then
+		return
+	end
+	-- Latch before any yield so a repeated press cannot start two transfers.
+	-- RecordDecision refuses the second press by itself, so this is also the
+	-- guard against a double-click racing its own spawned thread.
+	if not Routing.RecordDecision(session.Roster, player, Routing.Continuing) then return end
+	if IS_STUDIO then
+		-- Studio has no TeleportService destination; the local campaign route
+		-- runs once at settlement and carries this player with it.
+		return
+	end
+	task.spawn(function()
+		local code = reserveNextLevelServer(session)
+		if activePostWin ~= session or session.Aborted or player.Parent ~= Players then return end
+		if not code then
+			if Routing.ClearDecision(session.Roster, player) then
+				status:FireClient(player, "continuefailed", session.Serial)
+			end
+			return
+		end
+		local moved, moveError = teleportPlayersToNextLevel({player}, {
+			NextLevel = session.NextLevel,
+			EntryMode = session.EntryMode,
+			AccessCode = code,
+			SessionId = session.Id,
+			Deadline = session.Deadline,
+			Expected = sessionExpectedContinuers(session),
+			Final = false,
+		})
+		if moved then
+			-- Terminal. From here the settlement counts them as coming, whether or
+			-- not they are still connected to this server a moment from now.
+			Routing.MarkDeparted(session.Roster, player)
+		elseif Routing.ClaimOwns(pendingTeleports[player]) then
+			-- The dispatch was refused, and the runtime took the failure: a retry
+			-- (or a lobby fallback) already owns this player. Giving them their
+			-- choice back here would let a second press open a competing claim
+			-- while the first is still in flight.
+			warn("GameManager: immediate Continue was refused for " .. player.Name
+				.. "; the transfer runtime is retrying it (" .. tostring(moveError) .. ")")
+		else
+			if Routing.ClearDecision(session.Roster, player) and player.Parent == Players then
+				status:FireClient(player, "continuefailed", session.Serial)
+			end
+			warn("GameManager: immediate Continue failed for " .. player.Name
+				.. ": " .. tostring(moveError))
+		end
+	end)
+end
+
+-- The last resort, after the original transfer, its one retry and (for a
+-- next-level transfer) its lobby fallback were all rejected.
+--
+-- In a RESERVED round server there is no local lobby to recover into: deleting
+-- the completed world here would take the ground out from under a player Roblox
+-- has refused to move. So the world stays, the client is told, and the lobby
+-- transfer keeps being retried on a slow schedule until it takes or the player
+-- leaves. Only the public/Studio server, which really does own a lobby, falls
+-- back to standing the player up in it.
+local LOCAL_RECOVERY_RETRY_SECONDS = 8
+local strandedRetryToken = {}
+
+local function retryStrandedLobbyTransfer(player)
+	local token = {}
+	strandedRetryToken[player] = token
+	task.delay(LOCAL_RECOVERY_RETRY_SECONDS, function()
+		if strandedRetryToken[player] ~= token or player.Parent ~= Players then return end
+		strandedRetryToken[player] = nil
+		if Routing.ClaimOwns(pendingTeleports[player]) then return end
+		local returned = teleportPlayersToLobby({player})
+		if not returned and player.Parent == Players then
+			retryStrandedLobbyTransfer(player)
+		end
+	end)
+end
+
+function finishFailedTeleportLocally(player, reason)
+	local failedDestination = (Routing.DescriptorOf(pendingTeleports, player) or {}).Kind
+	Routing.ResolveTransfer(pendingTeleports, player, Routing.Failed)
 	if player.Parent ~= Players then return end
-	-- A failed early opt-out is recoverable: keep this one player on the ride and
-	-- let them continue with the party. Never abort the shared post-win session or
-	-- remove the completed map before its server deadline.
+	-- A failed early opt-out is recoverable while the window is still open: keep
+	-- this one player on the ride and let them choose again. Never abort the
+	-- shared post-win session or remove the completed map before its deadline.
 	local livePostWin = activePostWin
-	if failedRecord and failedRecord.Destination == "lobby"
+	if failedDestination == "lobby"
 		and livePostWin and not livePostWin.Closed
-		and livePostWin.Eligible[player] == true then
-		livePostWin.Returning[player] = nil
+		and workspace:GetServerTimeNow() < livePostWin.Deadline
+		and Routing.ClearDecision(livePostWin.Roster, player) then
 		status:FireClient(player, "returnfailed", livePostWin.Serial)
 		warn("GameManager: Return Lobby failed twice; keeping " .. player.Name
 			.. " in the campaign (" .. tostring(reason) .. ")")
 		return
 	end
-	warn("GameManager: recovering stranded player in the local lobby: " .. player.Name .. " (" .. tostring(reason) .. ")")
+	warn("GameManager: transfer surrendered for " .. player.Name
+		.. " (" .. tostring(reason) .. ")")
 	status:FireClient(player, "transitionfailed")
+
+	if IS_RESERVED_ROUND_SERVER and not IS_STUDIO then
+		-- Keep the finished world; it is the only floor this player has. The
+		-- settlement sweep already skipped them -- a failed claim owns nobody --
+		-- so this retry is the single authority they have left.
+		retryStrandedLobbyTransfer(player)
+		return
+	end
+
 	-- A twice-failed early Return-to-Lobby transfer can arrive while the 15-second
 	-- post-win loop is still running. Abort that session before cleaning the world;
 	-- otherwise its deadline branch can later send the recovered party onward too.
@@ -1247,99 +1705,111 @@ local function finishFailedTeleportLocally(player, reason)
 		interruptedSession.Closed = true
 		activePostWin = nil
 	end
-	-- This is the final safety net after both the original transfer and its retry
-	-- were rejected. One cleanup is enough even if several players fail together.
+	-- One cleanup is enough even if several players fail together.
 	local recoveryGroup = {player}
 	if worldReady then
 		recoveryGroup = Players:GetPlayers()
-		for _, stranded in ipairs(recoveryGroup) do pendingTeleports[stranded] = nil end
+		for _, stranded in ipairs(recoveryGroup) do
+			Routing.ReleaseTransfer(pendingTeleports, stranded)
+		end
 		cleanupActiveWorld()
 	end
 	returnPlayersToLocalLobby(recoveryGroup)
 end
 
-local recoverFailedTeleport
-recoverFailedTeleport = function(player, record, placeId, failedOptions, reason)
-	if player.Parent ~= Players or pendingTeleports[player] ~= record then return end
-	if record.Failures < 1 then
-		record.Failures += 1
-		task.delay(1, function()
-			if player.Parent ~= Players or pendingTeleports[player] ~= record then return end
-			local options = failedOptions or record.Options
-			local destinationPlaceId = tonumber(placeId) or game.PlaceId
-			local ok, retryError = pcall(function()
-				TeleportService:TeleportAsync(destinationPlaceId, {player}, options)
-			end)
-			if not ok then
-				recoverFailedTeleport(player, record, destinationPlaceId, options, retryError)
-			end
-		end)
-		return
-	end
-
-	if record.Destination == "next" then
-		-- A player who cannot enter the next reserved server must still escape the
-		-- completed server. Fall back to a fresh lobby transfer with its own retry.
-		pendingTeleports[player] = nil
-		status:FireClient(player, "transitionfailed")
-		task.spawn(function()
-			local returned, returnError = teleportPlayersToLobby({player})
-			if not returned then finishFailedTeleportLocally(player, returnError) end
-		end)
-	else
-		task.spawn(finishFailedTeleportLocally, player, reason)
-	end
-end
-
+-- Roblox can report the same failed request more than once, and can report one
+-- the caller has already given up on -- including a next-level report that
+-- lands after the fallback has already opened a fresh LOBBY claim for the same
+-- player. The runtime matches the report to the attempt that produced it and
+-- does nothing for anything else, so a stale or duplicate report is a no-op
+-- instead of a second failure charged to an unrelated claim.
+--
+-- Acting on the plan lives in Routing.NewTransferRuntime, NOT here, so that the
+-- silent-transfer sweep enters exactly the same policy. It used to not: an
+-- attempt Roblox merely dropped went straight to local recovery and lost the
+-- one next-level retry an identically failed but REPORTED attempt would keep.
 TeleportService.TeleportInitFailed:Connect(function(player, teleportResult, errorMessage, placeId, teleportOptions)
-	local record = pendingTeleports[player]
-	if not record then return end
-	warn("GameManager: teleport initialization failed for", player.Name, teleportResult, errorMessage)
-	recoverFailedTeleport(player, record, placeId, teleportOptions, errorMessage)
+	local attemptId = Routing.AttemptIdOf(teleportOptions)
+	if transfers:ReportFailure(player, attemptId, teleportOptions, errorMessage) then
+		warn("GameManager: teleport initialization failed for", player.Name, teleportResult, errorMessage)
+	end
 end)
 
-local function runPostWinIntermission(participants, elapsed, escapedCount)
+local function runPostWinIntermission(participants, elapsed, escapedCount, entryMode)
 	postWinSerial += 1
-	local nextLevel = activeLevel < MAX_LEVEL and activeLevel + 1 or nil
-	local deadline = workspace:GetServerTimeNow() + POST_WIN_SECONDS
+	local nextLevel = Routing.NextLevel(activeLevel)
+	local deadline = workspace:GetServerTimeNow() + Routing.PostWinSeconds
+	local roster = Routing.NewRoster((function()
+		local members = {}
+		for _, player in ipairs(participants) do
+			if player.Parent == Players then members[#members + 1] = player end
+		end
+		return members
+	end)())
 	local session = {
 		Serial = postWinSerial,
+		-- One result window is one session. Every continuer out of it travels
+		-- under this id, into the reservation this session made, so the
+		-- destination can recognise them as one party rather than as a stream of
+		-- unrelated parties of one.
+		Id = Routing.SessionId(game.JobId, postWinSerial),
 		Level = activeLevel,
 		Deadline = deadline,
 		NextLevel = nextLevel,
-		Eligible = {},
-		Returning = {},
+		-- FROZEN membership. Decisions move; membership does not. A continuer who
+		-- departs and leaves this server stays in the roster, which is what keeps
+		-- the head count the destination is told truthful.
+		Roster = roster,
+		EntryMode = entryMode,
+		NextServerCode = nil,
+		ReservingServer = false,
 		Closed = false,
 		Aborted = false,
 	}
-	for _, player in ipairs(participants) do
-		if player.Parent == Players then session.Eligible[player] = true end
-	end
 	activePostWin = session
 	fireGroup(participants, "win", elapsed, escapedCount, #participants, deadline, nextLevel, session.Serial)
 
-	while activePostWin == session and workspace:GetServerTimeNow() < deadline do
+	-- Settled = every member of the frozen roster has decided, or is no longer
+	-- here to decide. A disconnect settles the window instead of holding the rest
+	-- of the party at a screen nobody is going to answer.
+	local function settled()
+		return Routing.Settled(roster, stillHere)
+	end
+	while activePostWin == session
+		and workspace:GetServerTimeNow() < session.Deadline
+		and not settled() do
 		task.wait(0.1)
 	end
 	session.Closed = true
 	if activePostWin == session then activePostWin = nil end
 	if session.Aborted then
-		return nil, {}, {}, true
+		return {Aborted = true, Session = session, Continuing = {}, Returning = {}}
 	end
 
-	local continuing, returning = {}, {}
-	for player in pairs(session.Eligible) do
-		if player.Parent == Players then
-			if session.Returning[player] then
-				returning[#returning + 1] = player
-			else
-				continuing[#continuing + 1] = player
-			end
-		end
-	end
+	local continuing, returning, departed, gone = Routing.Partition(roster, stillHere)
 	table.sort(continuing, function(a, b) return a.UserId < b.UserId end)
 	table.sort(returning, function(a, b) return a.UserId < b.UserId end)
-	return nextLevel, continuing, returning, false
+	-- The settlement packet is the authoritative head count for this session, and
+	-- it is read off the frozen roster rather than off who is still connected:
+	-- everyone who already departed on an immediate Continue, plus everyone the
+	-- countdown is carrying now. Counting live players instead is what let a
+	-- departed early continuer vanish from the cohort and the destination start
+	-- its round before the rest of the party had landed.
+	local cohort = Routing.ExpectedContinuers(roster, stillHere)
+	print(string.format(
+		"[GameManager] result window %d settled: %d continuing, %d departed, %d returning, %d gone -> cohort %d",
+		session.Serial, #continuing, #departed, #returning, #gone, cohort))
+	return {
+		Aborted = false,
+		Session = session,
+		NextLevel = nextLevel,
+		Continuing = continuing,
+		Returning = returning,
+		Departed = departed,
+		Gone = gone,
+		AccessCode = session.NextServerCode,
+		Cohort = cohort,
+	}
 end
 
 local function continueStudioCampaign(participants, continuing, returning, nextLevel, entryMode)
@@ -1511,6 +1981,11 @@ playRound = function(participants)
   if alive[player] then alive[player] = nil; aliveCount -= 1 end
  end)
 
+ -- The party was wiped before the round proper began. This is the Loss endpoint
+ -- reached by a different road, and it settles like every other one: it used to
+ -- wait a fixed 1.6 seconds and return, so a transfer Roblox merely dropped was
+ -- left pending with the completed world torn down around its player and
+ -- nobody on this server still answering for them.
  local function sendWipedPartyHome()
   workspace:SetAttribute("PostWinIntermissionActive", false)
   workspace:SetAttribute("RoundActive", false)
@@ -1518,8 +1993,10 @@ playRound = function(participants)
 	closeRoundLifecycle()
   fireGroup(participants, "lose", 0, 0, #participants)
   task.wait(5)
-  elevatorApi.close()
+  if elevatorApi then elevatorApi.close() end
   returnGroupToLobby(participants)
+  local settled, stranded = awaitTransferSettlement(Routing.Endpoints.Loss)
+  if not settled then holdCompletedWorld(stranded, Routing.Endpoints.Loss) end
   task.wait(1.6)
  end
 
@@ -1621,7 +2098,19 @@ playRound = function(participants)
   end
  end
  if result == "win" then
-  local nextLevel, continuing, returning, postWinAborted = runPostWinIntermission(participants, elapsed, escapedCount)
+  -- LEVEL2_EXIT_TRANSITION_20260828: everyone continuing out of Level 2 left
+  -- down the exit flume (the win condition requires every surviving participant
+  -- to have escaped), so the next server resumes them inside Level 3's
+  -- continuation bore rather than on a spawn pad. Decided BEFORE the window
+  -- opens: an immediate Continue departs during it and has to arrive exactly
+  -- the way a timed-out continuer will. The entry mode describes the ROUTE the
+  -- party took, not per-player state, so one straggler recovered to the chamber
+  -- must not downgrade everyone else's arrival.
+  local entryMode = (activeLevel == 2 and Routing.NextLevel(activeLevel) == 3
+   and exitTubeRoute) and LEVEL_TWO_TUBE_ENTRY_MODE or nil
+  local outcome = runPostWinIntermission(participants, elapsed, escapedCount, entryMode)
+  local nextLevel = outcome.NextLevel
+  local continuing, returning = outcome.Continuing, outcome.Returning
 	closeRoundLifecycle()
   -- RoundActive still stops hazards immediately, but the completed world and
   -- its solved lighting remain intact for the full result countdown.
@@ -1629,45 +2118,57 @@ playRound = function(participants)
   workspace:SetAttribute("LightMode", "NORMAL")
   workspace:SetAttribute("FlickerBoost", 0)
   workspace:SetAttribute("EntitySpeedMul", 1)
-  if postWinAborted then return end
+  if outcome.Aborted then return end
   if elevatorApi then elevatorApi.close() end
 
   if nextLevel then
-   -- LEVEL2_EXIT_TRANSITION_20260828: everyone continuing out of Level 2 left
-   -- down the exit flume and is still flagged mid-transition, so Level 3
-   -- resumes them inside its continuation bore. Decided once, here, so the
-   -- Studio in-place route and the reserved-server route cannot disagree.
-   -- The entry mode describes the ROUTE the party took, not per-player state,
-   -- so one straggler recovered to the chamber (or killed mid-transition) must
-   -- not downgrade everyone else's arrival to a stand-up spawn.
-   local entryMode = (activeLevel == 2 and nextLevel == 3 and exitTubeRoute)
-    and LEVEL_TWO_TUBE_ENTRY_MODE or nil
    if IS_STUDIO then
     continueStudioCampaign(participants, continuing, returning, nextLevel, entryMode)
     return
    end
    if #continuing > 0 then
-    local moved, moveError = teleportPlayersToNextLevel(continuing, nextLevel, entryMode)
+    local moved, moveError = teleportPlayersToNextLevel(continuing, {
+     NextLevel = nextLevel,
+     EntryMode = entryMode,
+     AccessCode = outcome.AccessCode,
+     SessionId = outcome.Session.Id,
+     Deadline = outcome.Session.Deadline,
+     -- Exact now, and marked as such: everybody who left on an immediate
+     -- Continue plus everybody the countdown is carrying.
+     Expected = outcome.Cohort,
+     Final = true,
+    })
     if moved then
      -- Everyone who is not progressing belongs in the lobby. This includes
      -- opted-out participants plus late reserved-server arrivals/reconnects
-     -- that were never part of the frozen round roster.
+     -- that were never part of the frozen round roster. Anyone already in
+     -- flight -- an early Continue, or an early Back to Lobby still resolving
+     -- -- holds a live transfer claim and is skipped here and by
+     -- claimForTransfer. A FAILED claim owns nobody, so a player whose early
+     -- transfer was rejected is swept here rather than left behind.
      local progressing = {}
      for _, player in ipairs(continuing) do progressing[player] = true end
-     local lobbyBound = {}
-     for _, player in ipairs(Players:GetPlayers()) do
-      if not progressing[player] then lobbyBound[#lobbyBound + 1] = player end
-     end
+     local lobbyBound = Routing.LobbyBound(Players:GetPlayers(), progressing, pendingTeleports)
      if #lobbyBound > 0 then
       task.spawn(function()
-       local returned, returnError, stillHere = teleportPlayersToLobby(lobbyBound)
-       if not returned and #stillHere > 0 then
+       local returned, returnError, remaining = teleportPlayersToLobby(lobbyBound)
+       if not returned and #remaining > 0 then
         warn("GameManager: non-progressing lobby transfer failed: " .. tostring(returnError))
-        cleanupActiveWorld()
-        returnPlayersToLocalLobby(stillHere)
+        for _, player in ipairs(remaining) do
+         -- Skip anybody the runtime is already retrying; see returnGroupToLobby.
+         if not Routing.ClaimOwns(pendingTeleports[player]) then
+          finishFailedTeleportLocally(player, returnError)
+         end
+        end
        end
       end)
      end
+     -- Hold the finished world until every claim this session opened has
+     -- resolved. An early Back or early Continue can still be in flight, and
+     -- if Roblox rejects it now, the recovery path above is the only authority
+     -- left for that player -- it must not be standing in a deleted map.
+     local settled, stranded = awaitTransferSettlement(Routing.Endpoints.Continuation)
+     if not settled then holdCompletedWorld(stranded, Routing.Endpoints.Continuation) end
      return
     end
     warn("GameManager: next-level teleport failed: " .. tostring(moveError))
@@ -1675,12 +2176,18 @@ playRound = function(participants)
    end
    -- No continuer, or Roblox rejected the fresh reserved-server transition.
    returnGroupToLobby(participants)
+   local settled, stranded = awaitTransferSettlement(Routing.Endpoints.Fallback)
+   if not settled then holdCompletedWorld(stranded, Routing.Endpoints.Fallback) end
    task.wait(1.6)
    return
   end
 
-  -- Level 3 is the current campaign endpoint.
+  -- Level 3 is the current campaign endpoint. It settles like every other one:
+  -- waiting 1.6 seconds and returning left a silently-dropped transfer pending
+  -- with nobody left to answer for it.
   returnGroupToLobby(participants)
+  local settled, stranded = awaitTransferSettlement(Routing.Endpoints.Level3)
+  if not settled then holdCompletedWorld(stranded, Routing.Endpoints.Level3) end
   task.wait(1.6)
   return
  end
@@ -1689,6 +2196,8 @@ playRound = function(participants)
  task.wait(5.5)
  if elevatorApi then elevatorApi.close() end
  returnGroupToLobby(participants)
+ local settled, stranded = awaitTransferSettlement(Routing.Endpoints.Loss)
+ if not settled then holdCompletedWorld(stranded, Routing.Endpoints.Loss) end
  task.wait(1.6)
 end
 
@@ -1746,14 +2255,21 @@ local function launchStation(station, participants)
   glowstickSlots[tostring(player.UserId)] = index
  end
  options.ShouldReserveServer = true
- options:SetTeleportData({
-  BackroomsRound = true,
-  PartySize = #participants,
-  Station = station.index,
-   Level = station.level or 1,
-  LaunchToken = game.JobId .. ":" .. station.index .. ":" .. math.floor(os.clock() * 1000),
+ -- A station launch is a session too, and a complete one: the whole party
+ -- leaves in a single transfer, so the destination is told the exact cohort and
+ -- that no more are coming. It admits them as soon as they have all landed.
+ local launchToken = game.JobId .. ":station" .. station.index
+  .. ":" .. math.floor(os.clock() * 1000)
+ local packet = Routing.ArrivalPacket({
+  Level = station.level or 1,
+  SessionId = launchToken,
+  Expected = #participants,
+  Final = true,
   GlowstickSlots = glowstickSlots,
+  LaunchToken = launchToken,
  })
+ packet.Station = station.index
+ options:SetTeleportData(packet)
  local ok, err = pcall(function()
   TeleportService:TeleportAsync(game.PlaceId, participants, options)
  end)
@@ -1951,36 +2467,94 @@ local function runStation(station)
  end
 end
 
-local function roundTeleportData()
+-- Every arrival's OWN packet. Admission is decided from the session each player
+-- travelled under, not from whichever packet happened to be read first: an
+-- immediate continuer and a timed-out continuer now carry the same session id,
+-- and both belong in the same round.
+local function arrivalEntries()
+ local entries = {}
  for _, player in ipairs(Players:GetPlayers()) do
   local ok, joinData = pcall(function() return player:GetJoinData() end)
-  local data = ok and joinData and joinData.TeleportData
-  if type(data) == "table" and data.BackroomsRound == true then return data end
+  entries[#entries + 1] = {
+   Member = player,
+   Data = ok and joinData and joinData.TeleportData or nil,
+  }
  end
- return nil
+ return entries
+end
+
+-- Stage arrivals until the source's decision window has closed (plus a bounded
+-- transport grace), or until the session's full cohort is here, then admit
+-- everybody who came from that session as ONE party.
+--
+-- The old code waited for PartySize players and started the round; because each
+-- continuer travelled as a party of one, that meant the first arrival started
+-- the round and everybody after them -- a later manual Continue, and every
+-- player the 15-second countdown carried -- landed into roundBusy and was
+-- initialised as a spectator.
+local function stageArrivingParty()
+ local startedAt = os.clock()
+ local firstArrivalAt = nil
+ local announced = nil
+ while true do
+  local group = Routing.SelectArrivalSession(arrivalEntries())
+  local arrived = group and #group.Members or 0
+  if arrived > 0 and not firstArrivalAt then firstArrivalAt = os.clock() end
+  local decision, reason = Routing.ArrivalDecision({
+   Now = os.clock(),
+   StartedAt = startedAt,
+   FirstArrivalAt = firstArrivalAt,
+   ServerNow = workspace:GetServerTimeNow(),
+   Deadline = group and group.Deadline or nil,
+   Arrived = arrived,
+   Expected = group and group.Expected or nil,
+   CohortHorizon = group and group.CohortHorizon or nil,
+   Final = group and group.Final or false,
+  })
+  if decision ~= "wait" then
+   print(string.format("[GameManager] admission: %s (%s) -- %d arrived, expecting %s",
+    decision, tostring(reason), arrived, tostring(group and group.Expected)))
+   return decision, group
+  end
+  if announced ~= reason then
+   announced = reason
+   print(string.format("[GameManager] staging arrivals: %s (%d here, expecting %s)",
+    tostring(reason), arrived, tostring(group and group.Expected)))
+  end
+  task.wait(0.2)
+ end
 end
 
 if IS_RESERVED_ROUND_SERVER then
  task.spawn(function()
-  -- Hold characters behind the loading screen until the whole teleported party
-  -- has arrived, then generate exactly one isolated world for that group.
-  local arrivalDeadline = os.clock() + 30
-  while #Players:GetPlayers() == 0 and os.clock() < arrivalDeadline do task.wait(0.2) end
+  -- Hold characters behind the loading screen until the source's result window
+  -- has closed and the whole cohort has landed, then generate exactly one
+  -- isolated world for that group.
+  local decision, group = stageArrivingParty()
+  if decision ~= "admit" or not group then return end
 
-  local data = roundTeleportData()
-  local selectedLevel = math.clamp(math.floor(tonumber(data and data.Level) or 1), 1, MAX_LEVEL)
-  local expected = math.clamp(tonumber(data and data.PartySize) or 1, 1, MAX_PLAYERS_PER_STATION)
-  local partyDeadline = os.clock() + 12
-  while #Players:GetPlayers() < expected and os.clock() < partyDeadline do task.wait(0.2) end
-
-  local participants = Players:GetPlayers()
+  local selectedLevel = Routing.ClampLevel(group.Level)
+  local participants = {}
+  for _, player in ipairs(group.Members) do
+   if player.Parent == Players then participants[#participants + 1] = player end
+  end
   table.sort(participants, function(a, b) return a.UserId < b.UserId end)
   while #participants > MAX_PLAYERS_PER_STATION do table.remove(participants) end
   if #participants == 0 then return end
 
+  local glowstickSlots = nil
+  for _, entry in ipairs(arrivalEntries()) do
+   local data = entry.Data
+   if type(data) == "table" and data.RoundSessionId == group.SessionId
+    and type(data.GlowstickSlots) == "table" then
+    glowstickSlots = data.GlowstickSlots
+    break
+   end
+  end
+
   roundBusy = true
   clearGlowsticks()
-  assignGlowstickSlots(participants, data and data.GlowstickSlots)
+  assignGlowstickSlots(participants, glowstickSlots)
   for _, player in ipairs(participants) do
    inRound[player] = true
    player:SetAttribute("InRound", true)
@@ -1991,7 +2565,7 @@ if IS_RESERVED_ROUND_SERVER then
   fireGroup(participants, "loadinggame", selectedLevel)
 
   local useSlideResume = selectedLevel == 3
-   and data ~= nil and data.EntryMode == LEVEL_TWO_TUBE_ENTRY_MODE
+   and group.EntryMode == LEVEL_TWO_TUBE_ENTRY_MODE
   roundEntryMode = useSlideResume and LEVEL_TWO_TUBE_ENTRY_MODE or nil
   if ensureWorld(participants, selectedLevel) then
    for _, player in ipairs(participants) do

@@ -199,8 +199,41 @@ toastBody.TextYAlignment = Enum.TextYAlignment.Top
 toastBody.ZIndex = 21
 toastBody.Parent = toast
 
+-- C4_READER_TOUCH_CONTROLS_20260829 -- WHAT SHIPPED BROKEN.
+-- The reader's one control was 190x28 on every form factor. 28px is well under
+-- a usable tap target, and the STACKED touch arrangement (panel, then toggle
+-- 6px under it) was selected whenever panel + toggle did not fit SIDE BY SIDE
+-- at the panel's FULL width -- and then simply overflowed the band it was
+-- handed. Measured at 568x320 the clear band is 380x69 at (12,66): the stack
+-- ran to y=174, i.e. 39px BELOW the band and inside the thumbstick's activation
+-- region, so the control was at once too small to hit and sitting on movement
+-- input.
+--
+-- The shape that prevents it:
+--   * a touch control is TOUCH_TOGGLE_HEIGHT tall, never less;
+--   * side-by-side is reached by NARROWING the panel (never below
+--     READER_MIN_WIDTH) instead of falling through to a stack that cannot fit;
+--   * stacking is used only when the band genuinely holds
+--     READER_PANEL_HEIGHT + READER_GAP + the toggle height;
+--   * nothing is ever placed past band.Right or band.Bottom;
+--   * OPEN and CLOSE remain ONE control in ONE place -- its size and position
+--     are derived from the LAYOUT alone and never from readerHidden, so the
+--     button cannot move or resize under the finger that just pressed it.
 local TOGGLE_WIDTH = 190
 local TOGGLE_HEIGHT = 28
+local TOUCH_TOGGLE_WIDTH = 150
+local TOUCH_TOGGLE_HEIGHT = 44
+local READER_PANEL_HEIGHT = 101
+local READER_PANEL_MIN_HEIGHT = 58
+local READER_MIN_WIDTH = 150
+local READER_GAP = 6
+
+-- The one place the control's footprint is decided. Both states read it, so
+-- "OPEN" and "CLOSE" are guaranteed identical in size.
+local function toggleMetrics(): (number, number)
+	if UIDevice.IsTouch() then return TOUCH_TOGGLE_WIDTH, TOUCH_TOGGLE_HEIGHT end
+	return TOGGLE_WIDTH, TOGGLE_HEIGHT
+end
 
 local function applyLayout()
 	local layoutInfo = UIDevice.Layout()
@@ -208,33 +241,43 @@ local function applyLayout()
 	local narrow = viewport.X < 620
 	local mobileControls = layoutInfo.IsTouch
 	local width = math.floor(math.clamp(viewport.X * (narrow and 0.56 or 0.30), 184, 248))
-	local panelHeight = 101
+	local panelHeight = READER_PANEL_HEIGHT
 	local compactLandscape = false
 	local panelLeft, panelTop = 10, 70
 	local toggleLeft, toggleTop = 10, 175
+	local toggleWidth, toggleHeight = toggleMetrics()
 
 	if mobileControls then
 		local band = layoutInfo.TopBand
 		width = math.min(width, band.Width)
 		panelLeft = band.Left
 		panelTop = band.Top
-		-- A landscape phone cannot stack a 101px reader and a 28px toggle in
-		-- its ~90px top band. It has ample WIDTH, so place the fixed-size toggle
-		-- beside a compact reader instead. Portrait stacks them normally.
-		local sideBySide = not layoutInfo.Portrait
-			and band.Width >= width + TOGGLE_WIDTH + 8
-		if sideBySide then
-			compactLandscape = true
-			panelHeight = math.max(58, math.min(82, band.Height))
-			toggleLeft = panelLeft + width + 8
-			toggleTop = panelTop + math.max(0, math.floor((panelHeight - TOGGLE_HEIGHT) * .5))
-		else
+		-- The arrangement is chosen by whether the band can HOLD the stack, not by
+		-- whether side-by-side happens to fit at the panel's authored width. That
+		-- inversion is what let the old stack run off the bottom of the band.
+		if band.Height >= READER_PANEL_HEIGHT + READER_GAP + toggleHeight then
+			-- Tall band: portrait phones and every tablet. Stack, as authored.
+			panelHeight = READER_PANEL_HEIGHT
 			toggleLeft = panelLeft
-			toggleTop = panelTop + panelHeight + 6
-			if toggleTop + TOGGLE_HEIGHT > band.Bottom then
-				panelHeight = math.max(58, band.Height - TOGGLE_HEIGHT - 6)
-				toggleTop = panelTop + panelHeight + 6
-			end
+			toggleTop = panelTop + panelHeight + READER_GAP
+		else
+			-- Short band: a landscape phone, ~69-75px tall but 380-517px wide. The
+			-- PANEL yields the width the 44px control needs; the control is then
+			-- centred on the panel and clamped so it cannot pass band.Right or
+			-- band.Bottom even on a band shorter than the panel's own minimum.
+			compactLandscape = true
+			width = math.max(READER_MIN_WIDTH,
+				math.min(width, band.Width - toggleWidth - READER_GAP))
+			toggleWidth = math.min(toggleWidth,
+				math.max(0, band.Right - (panelLeft + width + READER_GAP)))
+			-- Floored: the band's own bottom edge is a third of a viewport and comes
+			-- through fractional, and a control asserted to the pixel must not.
+			panelHeight = math.max(READER_PANEL_MIN_HEIGHT,
+				math.min(82, math.floor(band.Height)))
+			toggleLeft = panelLeft + width + READER_GAP
+			toggleTop = math.min(
+				panelTop + math.max(0, math.floor((panelHeight - toggleHeight) * .5)),
+				math.max(panelTop, math.floor(band.Bottom) - toggleHeight))
 		end
 		panel.AnchorPoint = Vector2.new(0, 0)
 		panel.Position = UDim2.fromOffset(panelLeft,
@@ -249,7 +292,7 @@ local function applyLayout()
 		toggleButton.Position = UDim2.new(1, -10, 0, 175)
 	end
 	panel.Size = UDim2.fromOffset(width, panelHeight)
-	toggleButton.Size = UDim2.fromOffset(TOGGLE_WIDTH, TOGGLE_HEIGHT)
+	toggleButton.Size = UDim2.fromOffset(toggleWidth, toggleHeight)
 
 	if compactLandscape then
 		title.Position = UDim2.fromOffset(8, 2)
@@ -295,12 +338,16 @@ end
 -- Now: ONE constant width and one anchored position for both states, and the
 -- binding comes from UIDevice, which answers on form factor alone.
 
-local function updateTogglePresentation()
-	toggleButton.Text = if readerHidden
+local function updateTogglePresentation(hiddenOverride: boolean?)
+	local presentedHidden = if type(hiddenOverride) == "boolean" then hiddenOverride else readerHidden
+	toggleButton.Text = if presentedHidden
 		then UIDevice.Caption("OPEN EXIT READER", "[R]", "[Y]")
 		else UIDevice.Caption("CLOSE READER", "[R]", "[Y]")
-	toggleButton.TextColor3 = if readerHidden then TEXT else ENERGON
-	toggleButton.Size = UDim2.fromOffset(TOGGLE_WIDTH, TOGGLE_HEIGHT)
+	toggleButton.TextColor3 = if presentedHidden then TEXT else ENERGON
+	-- Deliberately NO size write here. The footprint belongs to applyLayout and
+	-- to applyLayout only; writing the desktop constants from this state-change
+	-- path is what used to shrink a phone's 44px control back to 28px the first
+	-- time it was tapped.
 end
 
 local function setReaderHidden(hidden: boolean)
@@ -503,6 +550,9 @@ local function updateReader(dt: number)
 	if RunService:IsStudio() then
 		local forced = player:GetAttribute("UIRegressionForceReaderHidden")
 		if type(forced) == "boolean" then hidden = forced end
+		-- Keep the test-only presentation in lockstep with the test-only visibility
+		-- override. Production input still writes the real readerHidden state.
+		updateTogglePresentation(hidden)
 	end
 	panel.Visible = active and not hidden and not toast.Visible
 	toggleButton.Visible = active and not toast.Visible

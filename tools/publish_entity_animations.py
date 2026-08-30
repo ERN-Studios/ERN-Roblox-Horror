@@ -152,7 +152,7 @@ def main() -> int:
     try:
         client.initialize()
         time.sleep(3)
-        select_studio(client, "Backrooms: No Way Out", 20)
+        select_studio(client, "BACKROOMS: STAY QUIET [CO-OP HORROR]", 20)
         for filename in ACTION_FILES:
             source = SOURCE_DIR / filename
             response = client.call(

@@ -1,4 +1,4 @@
-# Backrooms: No Way Out — working notes for Claude Code
+# BACKROOMS: STAY QUIET [CO-OP HORROR] — working notes for Claude Code
 
 ## Where this session is running matters
 

@@ -158,12 +158,64 @@ local function restoreLevelOneRuntime(forceEnableScripts)
 	levelOneScriptStates = nil
 end
 
+-- Remove ONLY the terrain Level 2 wrote, and give back the global water look.
+--
+-- This used to clear one block of ComplexExtent + 700 -- 2100 x 200 x 2100 studs
+-- centred on the complex -- whatever Level 2 had actually written. Anything
+-- else with terrain inside that volume was erased along with the poolrooms, and
+-- the volume is far larger than the level itself.
+--
+-- It does not have to guess: `addWater` in the World Builder is the ONLY place
+-- Level 2 writes terrain, and it records every region it fills. So the exact
+-- set of regions is on the manifest, and clearing those is both complete and
+-- scoped. The margin covers terrain's 4-stud voxel grid, which does not align
+-- to the authored rectangles.
+--
+-- The wide block survives ONLY as the no-manifest fallback -- recovering after a
+-- crash or a reload, where nothing recorded what was written and the alternative
+-- is leaving a flooded complex behind. That path is announced, because it is the
+-- one that can take terrain that was never ours.
+local TERRAIN_VOXEL_MARGIN = 8
+
 local function clearOwnedTerrain(manifest)
-	local extent = Configuration.ComplexExtent
-	local center = manifest and manifest.TerrainCenter or Vector3.new(
-		Configuration.WorldCenterX or 0, -16, Configuration.WorldCenterZ or 0)
-	local size = manifest and manifest.TerrainSize or Vector3.new(extent + 700, 200, extent + 700)
-	Terrain:FillBlock(CFrame.new(center), size, Enum.Material.Air)
+	local regions = manifest and manifest.WaterRegions
+	if type(regions) == "table" and #regions > 0 then
+		local margin = Vector3.new(TERRAIN_VOXEL_MARGIN, TERRAIN_VOXEL_MARGIN, TERRAIN_VOXEL_MARGIN)
+		for _, region in ipairs(regions) do
+			if typeof(region.CFrame) == "CFrame" and typeof(region.Size) == "Vector3" then
+				Terrain:FillBlock(region.CFrame, region.Size + margin, Enum.Material.Air)
+			end
+		end
+	else
+		local extent = Configuration.ComplexExtent
+		local center = manifest and manifest.TerrainCenter or Vector3.new(
+			Configuration.WorldCenterX or 0, -16, Configuration.WorldCenterZ or 0)
+		local size = manifest and manifest.TerrainSize
+			or Vector3.new(extent + 700, 200, extent + 700)
+		warn("[Level 2] no recorded water regions; clearing the whole declared"
+			.. " terrain block as a recovery fallback")
+		Terrain:FillBlock(CFrame.new(center), size, Enum.Material.Air)
+	end
+
+	-- The global water APPEARANCE is not Level 2's to keep. Restore whatever was
+	-- there before this build, so the lobby and the other levels stop inheriting
+	-- the poolrooms' water.
+	local previous = manifest and manifest.PreviousWaterAppearance
+	if type(previous) == "table" then
+		if typeof(previous.WaterColor) == "Color3" then Terrain.WaterColor = previous.WaterColor end
+		if type(previous.WaterTransparency) == "number" then
+			Terrain.WaterTransparency = previous.WaterTransparency
+		end
+		if type(previous.WaterReflectance) == "number" then
+			Terrain.WaterReflectance = previous.WaterReflectance
+		end
+		if type(previous.WaterWaveSize) == "number" then
+			Terrain.WaterWaveSize = previous.WaterWaveSize
+		end
+		if type(previous.WaterWaveSpeed) == "number" then
+			Terrain.WaterWaveSpeed = previous.WaterWaveSpeed
+		end
+	end
 end
 
 -- The live manifest for the round this adapter last built, or nil.

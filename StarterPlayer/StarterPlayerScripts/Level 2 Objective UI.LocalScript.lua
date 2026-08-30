@@ -29,6 +29,7 @@ syncDispatchSuppression()
 -- Desktop uses the lower-right corner. Touch-only devices keep the original
 -- top-right placement so the panel cannot cover movement/action controls.
 local panel = Instance.new("Frame")
+panel.Name = "Level2ObjectivePanel"
 panel.Size = UDim2.new(0, 236, 0, 78)
 panel.BackgroundColor3 = Color3.fromRGB(6, 13, 15)
 panel.BackgroundTransparency = .16
@@ -72,7 +73,7 @@ end
 updatePanelPlacement()
 UIDevice.Changed:Connect(updatePanelPlacement)
 local panelSize = Instance.new("UISizeConstraint")
-panelSize.MinSize = Vector2.new(206, 72)
+panelSize.MinSize = Vector2.new(150, 72)
 panelSize.MaxSize = Vector2.new(236, 86)
 panelSize.Parent = panel
 

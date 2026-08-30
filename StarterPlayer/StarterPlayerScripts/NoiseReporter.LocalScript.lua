@@ -26,6 +26,10 @@ local shiftSprintHeld, touchSprintHeld = false, false
 local GLOWSTICK_COOLDOWN = 5
 local lastGlowstickDrop = -math.huge
 local currentChar
+-- Forward-declared exactly like currentChar above: the death/respawn reset a
+-- few lines down has to clear the touch SNEAK toggle, and the toggle itself is
+-- built later with the rest of the touch cluster.
+local showSneakEngaged
 
 local function dropGlowstick()
 	if not inRound() or os.clock() - lastGlowstickDrop < GLOWSTICK_COOLDOWN then return end
@@ -127,6 +131,9 @@ player.CharacterAdded:Connect(function()
 	task.wait(0.5)
 	shiftSprintHeld, touchSprintHeld = false, false
 	sprinting, crouching = false, false
+	-- The touch SNEAK latch and its lit ring go with the crouch they stand for,
+	-- or the button reads "sneaking" over a character that is standing up.
+	if showSneakEngaged then showSneakEngaged(false) end
 	applySpeed()
 end)
 
@@ -216,6 +223,12 @@ local touchGlowButton = makeTouchButton("TouchDropGlowstick", "DROP\nGLOW")
 touchPOVButton.TextSize = 13
 touchPOVButton.Visible = touchControls() and devAllowed
 touchGlowButton.TextSize = 12
+-- Touch crouch. Same helper, same column, same layout pass as the rest of the
+-- cluster. The label is constant: the engaged state is carried by the stroke
+-- and tint below, the way POV carries its own, and NO key glyph is shown --
+-- LeftControl stays a keyboard-only affordance.
+local touchSneakButton, sneakStroke = makeTouchButton("TouchSneakHold", "SNEAK")
+touchSneakButton:SetAttribute("SneakEngaged", false)
 
 -- The whole cluster is laid out from UIDevice's reserved control column, so
 -- every other HUD element in the game can avoid exactly the rectangle these
@@ -246,6 +259,13 @@ local function applyTouchControlLayout()
 	end
 	touchRunButton.Position = UDim2.new(1, -edge, 1, -runStack)
 	touchRunButton.Size = UDim2.fromOffset(buttonSize, buttonSize)
+	-- SNEAK stacks directly above RUN in the same right-hand column, measured
+	-- from runStack so it inherits the lobby lift and can never land on RUN.
+	-- The whole stack (edge + JUMP + gap + RUN + gap + SNEAK = 242 phone /
+	-- 290 tablet) still fits inside the control column UIDevice reserves
+	-- (290 / 330), so nothing else in the HUD has to move to make room.
+	touchSneakButton.Position = UDim2.new(1, -edge, 1, -(runStack + buttonSize + gap))
+	touchSneakButton.Size = UDim2.fromOffset(buttonSize, buttonSize)
 	-- Second column: GLOW on top of POV, both clear of the jump/run column and
 	-- of the flashlight slot that FlashlightController now occupies below them.
 	touchPOVButton.Position = UDim2.new(1, -secondColumn,
@@ -256,6 +276,7 @@ local function applyTouchControlLayout()
 	touchGlowButton.Size = UDim2.fromOffset(tablet and 72 or 58, tablet and 72 or 58)
 	touchRunButton.TextSize = tablet and 18 or 16
 	touchJumpButton.TextSize = tablet and 17 or 15
+	touchSneakButton.TextSize = tablet and 17 or 15
 end
 
 applyTouchControlLayout()
@@ -269,11 +290,30 @@ UIDevice.Changed:Connect(applyTouchControlLayout)
 -- updateRoundState below re-evaluates this on every state change.
 
 local touchSprintToggled = false
+local touchSneakToggled = false
 local function showRunEnabled(enabled)
 	touchRunButton.BackgroundTransparency = enabled and 0.25 or 0.52
 	touchRunButton.TextColor3 = enabled and Color3.fromRGB(125, 255, 175) or Color3.fromRGB(235, 238, 232)
 	runStroke.Color = enabled and Color3.fromRGB(125, 255, 175) or Color3.fromRGB(220, 228, 218)
 	touchRunButton.Text = enabled and "RUN  ON" or "RUN  »"
+end
+
+-- SNEAK is a TOGGLE, not a hold like RUN, and deliberately so: crouch-silent is
+-- a SUSTAINED stealth state -- you hold it for a whole corridor while the
+-- Entity sweeps past -- so a hold-to-crouch button would pin the very thumb the
+-- player needs on the thumbstick to steer, leaving a touch player able to be
+-- silent OR moving but never both. RUN can be hold-shaped because a sprint is a
+-- burst; sneaking is not. Tap to enter crouch, tap again to leave it.
+showSneakEngaged = function(engaged)
+	touchSneakToggled = engaged
+	touchSneakButton.BackgroundTransparency = engaged and 0.25 or 0.52
+	touchSneakButton.TextColor3 = engaged and Color3.fromRGB(150, 205, 255)
+		or Color3.fromRGB(235, 238, 232)
+	sneakStroke.Color = engaged and Color3.fromRGB(150, 205, 255)
+		or Color3.fromRGB(220, 228, 218)
+	-- The supported way to observe the toggle from outside this script (the UI
+	-- regression suite reads it instead of reaching for a local).
+	touchSneakButton:SetAttribute("SneakEngaged", engaged)
 end
 
 -- Tap once to sprint, tap again to stop. A held GUI touch no longer steals
@@ -283,6 +323,15 @@ touchRunButton.Activated:Connect(function()
 	touchSprintHeld = touchSprintToggled
 	showRunEnabled(touchSprintToggled)
 	refreshSprint()
+end)
+
+-- Drives the SAME `crouching` upvalue the LeftControl path drives, through the
+-- SAME applySpeed(), so speed and LOUDNESS.crouch stay in exactly one place.
+touchSneakButton.Activated:Connect(function()
+	if not inRound() then return end
+	showSneakEngaged(not touchSneakToggled)
+	crouching = touchSneakToggled
+	applySpeed()
 end)
 
 touchJumpButton.Activated:Connect(function()
@@ -458,6 +507,9 @@ local function updateRoundState()
 	-- but is gated on every other unavailable state once a round starts.
 	UIDevice.SetInteractive(touchRunButton, touchControls() and (usable or not active))
 	UIDevice.SetInteractive(touchJumpButton, usable)
+	-- SNEAK is a level-only control: there is nothing to crouch away from in the
+	-- lobby, and applySpeed() ignores crouch out of a round anyway.
+	UIDevice.SetInteractive(touchSneakButton, usable)
 	UIDevice.SetInteractive(touchPOVButton, usable and devAllowed)
 	UIDevice.SetInteractive(touchGlowButton, usable)
 	-- Own the jump control only while in a round. In the lobby the default
@@ -477,6 +529,7 @@ local function updateRoundState()
 		sprinting, crouching = false, false
 		touchSprintToggled = false
 		showRunEnabled(false)
+		showSneakEngaged(false)
 		applySpeed()
 	end
 end

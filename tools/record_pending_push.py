@@ -13,9 +13,24 @@ Usage:
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
+import sys
 from pathlib import Path
+
+
+# A default Windows console is cp1252 and raises UnicodeEncodeError on anything
+# it cannot represent -- including from argparse's --help, which renders the
+# module docstring. Degrading those characters is always better than aborting a
+# release tool, so replace rather than raise. Everything this file prints is
+# ASCII anyway; this is the belt to that braces.
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(errors="replace")
+    except (AttributeError, ValueError, OSError):
+        pass
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
+from studio_source_contract import normalize, sha256_of  # noqa: E402
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_PATH = PROJECT_ROOT / "studio-sync-manifest.json"
@@ -33,8 +48,9 @@ def main() -> int:
         if not path.exists():
             print(f"  MISSING FILE {item['file']}")
             continue
-        data = path.read_text(encoding="utf-8").replace("\r\n", "\n").encode("utf-8")
-        digest = hashlib.sha256(data).hexdigest()
+        text = normalize(path.read_text(encoding="utf-8"))
+        data = text.encode("utf-8")
+        digest = sha256_of(text)
         if digest == item.get("sha256"):
             continue
         changed += 1

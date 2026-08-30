@@ -1,6 +1,6 @@
 -- ZyntraConfig
 -- Central product catalogue and balance values. IDs map to products created
--- under the Backrooms: No Way Out experience in Creator Dashboard.
+-- under the BACKROOMS: STAY QUIET [CO-OP HORROR] experience in Creator Dashboard.
 
 return {
 	DataStoreName = "ZyntraPlayerData_v1",
@@ -18,7 +18,11 @@ return {
 	Passes = {
 		Supporter = {
 			Id = 1941938256,
-			IconId = 112088662679534,
+			-- The previous asset was hazmat-themed and did not represent Supporter.
+			-- Keep it retired until an approved replacement exists; the client renders
+			-- this neutral Zyntra monogram instead of inventing or uploading artwork.
+			IconId = 0,
+			IconText = "Z//S",
 			Name = "Zyntra Supporter",
 			Price = 99,
 			TokenGrant = 10,
@@ -77,42 +81,42 @@ return {
 			Order = 1,
 			Name = "ZYNTRA Donate — Signal",
 			Price = 10,
-			Description = "Donate to the continued development of Backrooms: No Way Out.",
+			Description = "Donate to the continued development of BACKROOMS: STAY QUIET [CO-OP HORROR].",
 		},
 		DonationSupply = {
 			Id = 3710116945,
 			Order = 2,
 			Name = "ZYNTRA Donate — Supply",
 			Price = 50,
-			Description = "Donate to the continued development of Backrooms: No Way Out.",
+			Description = "Donate to the continued development of BACKROOMS: STAY QUIET [CO-OP HORROR].",
 		},
 		DonationField = {
 			Id = 3710117017,
 			Order = 3,
 			Name = "ZYNTRA Donate — Field",
 			Price = 100,
-			Description = "Donate to the continued development of Backrooms: No Way Out.",
+			Description = "Donate to the continued development of BACKROOMS: STAY QUIET [CO-OP HORROR].",
 		},
 		DonationResearch = {
 			Id = 3710117070,
 			Order = 4,
 			Name = "ZYNTRA Donate — Research",
 			Price = 250,
-			Description = "Donate to the continued development of Backrooms: No Way Out.",
+			Description = "Donate to the continued development of BACKROOMS: STAY QUIET [CO-OP HORROR].",
 		},
 		DonationCommand = {
 			Id = 3710117099,
 			Order = 5,
 			Name = "ZYNTRA Donate — Command",
 			Price = 500,
-			Description = "Donate to the continued development of Backrooms: No Way Out.",
+			Description = "Donate to the continued development of BACKROOMS: STAY QUIET [CO-OP HORROR].",
 		},
 		DonationDirector = {
 			Id = 3710117136,
 			Order = 6,
 			Name = "ZYNTRA Donate — Director",
 			Price = 1000,
-			Description = "Donate to the continued development of Backrooms: No Way Out.",
+			Description = "Donate to the continued development of BACKROOMS: STAY QUIET [CO-OP HORROR].",
 		},
 	},
 

@@ -1221,6 +1221,59 @@ local function hiddenColumnSeamYaw(hall, x, z)
 	return math.atan2(-nearestDirection.Z, nearestDirection.X)
 end
 
+-- The column base's COLLIDABLE shape, built the same way whatever the visual
+-- flare turned out to be.
+--
+-- Roblox discarded most of the open trumpet when generating either Default or
+-- precise MeshPart collision, so the base is described by nested primitive
+-- cylinders: deterministic, inside every sampled profile row, and they let
+-- players contact the complete molded curve instead of clipping through a single
+-- low curb to the central shaft.
+--
+-- It is a FUNCTION rather than an inline block because the fallback path needs
+-- exactly the same bands. Before this, a column whose mesh asset arrived got
+-- these five bands while a column whose asset delivery failed got five entirely
+-- different collidable rings -- different diameters, heights and offsets, and
+-- collision on the visual parts themselves. Same seed, different physics and
+-- different navmesh, decided by whether an asset download succeeded. That is
+-- exactly the non-determinism the seed contract promises does not exist.
+local function addColumnBaseFlareCollision(parent, position, radius, flareLength, entry)
+	for bandIndex, band in ipairs(COLUMN_FLARE_COLLISION_BANDS) do
+		local collisionHeight = flareLength * band.Height
+		local collisionDiameter = radius * band.Radius * 2 * COLUMN_FLARE_COLLISION_INSET
+		local collision = part(parent,
+			string.format("Level 2 Column Base Flare Collision %02d", bandIndex),
+			CFrame.new(position + Vector3.new(0, collisionHeight * .5, 0))
+				* CFrame.Angles(0, 0, math.pi * .5),
+			Vector3.new(collisionHeight, collisionDiameter, collisionDiameter),
+			Color3.new(1, 1, 1), Enum.Material.SmoothPlastic, 1)
+		collision.Shape = Enum.PartType.Cylinder
+		collision.CanCollide = true
+		collision.CanTouch = false
+		collision.CanQuery = true
+		collision.CastShadow = false
+		collision:SetAttribute("Level2_ColumnCollision", true)
+		-- GROUND, not wall. These five nested cylinders are the column's trumpet
+		-- SKIRT, and the outermost of them is 0.076 studs tall -- a lip you would
+		-- not notice underfoot. Tagged Level2_NoEntityGround they were absolute
+		-- walls at every column base: the Slidemouth's movement-volume test
+		-- refuses any collidable hit that is not steppable, so a 16.3-stud body
+		-- box could not pass a colonnade whose flares leave a 15.6-stud gap, and
+		-- it stopped dead. Measured on a real generated world: 353 of 400 steps
+		-- BLOCKED, "movement volume blocked", zero traversals ever reaching their
+		-- goal on any of four seeds.
+		--
+		-- The navigator ALREADY knows which of these is a step and which is a
+		-- wall -- `_isSteppable` is `isEntityGround(part) and top <= footY +
+		-- MaxStepHeight`. Tagging them as ground hands that decision to the one
+		-- place that owns it, instead of duplicating MaxStepHeight over here: the
+		-- short outer bands become steps, and the tall inner bands (and the shaft
+		-- behind them) stay the walls they should always have been.
+		collision:SetAttribute("Level2_EntityGround", true)
+		table.insert(entry.Parts, collision)
+	end
+end
+
 local function makeColumn(parent, position, height, radius, essential, seamYaw)
 	radius = radius or 6
 	local placed = columnRegistryFor(parent)
@@ -1293,30 +1346,7 @@ local function makeColumn(parent, position, height, radius, essential, seamYaw)
 				flare.Parent = parent
 				table.insert(entry.Parts, flare)
 				if endpoint.ShaftDirection > 0 then
-					-- Roblox discarded most of the open trumpet when generating either
-					-- Default or precise MeshPart collision.  Nested primitive cylinders
-					-- are deterministic, remain inside every sampled profile row, and let
-					-- players contact the complete molded curve instead of clipping through
-					-- a single low curb to the central shaft.
-					for bandIndex, band in ipairs(COLUMN_FLARE_COLLISION_BANDS) do
-						local collisionHeight = flareLength * band.Height
-						local collisionDiameter = radius * band.Radius * 2
-							* COLUMN_FLARE_COLLISION_INSET
-						local collision = part(parent,
-							string.format("Level 2 Column Base Flare Collision %02d", bandIndex),
-							CFrame.new(position + Vector3.new(0, collisionHeight * .5, 0))
-								* CFrame.Angles(0, 0, math.pi * .5),
-							Vector3.new(collisionHeight, collisionDiameter, collisionDiameter),
-							Color3.new(1, 1, 1), Enum.Material.SmoothPlastic, 1)
-						collision.Shape = Enum.PartType.Cylinder
-						collision.CanCollide = true
-						collision.CanTouch = false
-						collision.CanQuery = true
-						collision.CastShadow = false
-						collision:SetAttribute("Level2_ColumnCollision", true)
-						collision:SetAttribute("Level2_NoEntityGround", true)
-						table.insert(entry.Parts, collision)
-					end
+					addColumnBaseFlareCollision(parent, position, radius, flareLength, entry)
 				end
 			else
 				-- Asset delivery failure must not abort an otherwise valid layout.
@@ -1335,14 +1365,18 @@ local function makeColumn(parent, position, height, radius, essential, seamYaw)
 						Vector3.new(ringHeight + .12, radius * scale, radius * scale),
 						COLUMN_FLARE_COLOR, Enum.Material.CeramicTiles)
 					flare.Shape = Enum.PartType.Cylinder
-					flare.CanCollide = endpoint.ShaftDirection > 0
+					-- DECORATION ONLY, exactly like the mesh flare it stands in for.
+					-- These rings used to carry the collision themselves, which is
+					-- what made the collidable world depend on asset delivery.
+					flare.CanCollide = false
 					flare.CanTouch = false
-					flare.CanQuery = endpoint.ShaftDirection > 0
-					if endpoint.ShaftDirection > 0 then
-						flare:SetAttribute("Level2_ColumnCollision", true)
-						flare:SetAttribute("Level2_NoEntityGround", true)
-					end
+					flare.CanQuery = false
 					table.insert(entry.Parts, flare)
+				end
+				if endpoint.ShaftDirection > 0 then
+					-- The same five bands the mesh path builds, so the physical and
+					-- navigable world is a pure function of the seed.
+					addColumnBaseFlareCollision(parent, position, radius, flareLength, entry)
 				end
 			end
 		end
@@ -1402,6 +1436,43 @@ local function nearDoorApproach(hall, doors, x, z, range)
 	return false
 end
 
+-- The generated graph fallback uses a hub-and-spoke route inside every hall:
+-- the two centre axes form the hub, then an axis-aligned spoke reaches each
+-- doorway. Reserve that complete route for the Slidemouth's square body while
+-- placing structural decoration. Door-mouth clearance alone protects only the
+-- first 36 studs; seed 404 still needed nine expensive A* furniture detours in
+-- the room interiors and exceeded the strict eight-second planning contract.
+local function nearHallNavigationRoute(hall, doors, x, z, range)
+	range = range or 16
+	if math.abs(x - hall.Center.X) < range
+		or math.abs(z - hall.Center.Z) < range then
+		return true
+	end
+	local function nearSegment(ax, az, bx, bz)
+		local dx, dz = bx - ax, bz - az
+		local denominator = dx * dx + dz * dz
+		local projection = denominator > 0 and math.clamp(
+			((x - ax) * dx + (z - az) * dz) / denominator, 0, 1) or 0
+		local closestX = ax + dx * projection
+		local closestZ = az + dz * projection
+		local offsetX, offsetZ = x - closestX, z - closestZ
+		return offsetX * offsetX + offsetZ * offsetZ < range * range
+	end
+	for _, doorX in ipairs((doors and doors.North) or {}) do
+		if nearSegment(doorX, hall.MinZ, doorX, hall.Center.Z) then return true end
+	end
+	for _, doorX in ipairs((doors and doors.South) or {}) do
+		if nearSegment(doorX, hall.MaxZ, doorX, hall.Center.Z) then return true end
+	end
+	for _, doorZ in ipairs((doors and doors.West) or {}) do
+		if nearSegment(hall.MinX, doorZ, hall.Center.X, doorZ) then return true end
+	end
+	for _, doorZ in ipairs((doors and doors.East) or {}) do
+		if nearSegment(hall.MaxX, doorZ, hall.Center.X, doorZ) then return true end
+	end
+	return false
+end
+
 -- Rows of columns rising out of the water — the reference-photo colonnades.
 local function makeColonnade(parent, hall, depth, rows, doors)
 	local alongX = hall.Width >= hall.Depth
@@ -1420,7 +1491,8 @@ local function makeColonnade(parent, hall, depth, rows, doors)
 			local safeX, safeZ = dodgeSkylight(hall, position.X, position.Z, 13)
 			if not safeX then continue end
 			position = Vector3.new(safeX, position.Y, safeZ)
-			if nearDoorApproach(hall, doors, position.X, position.Z, 20) then
+			if nearDoorApproach(hall, doors, position.X, position.Z, 20)
+				or nearHallNavigationRoute(hall, doors, position.X, position.Z, 17) then
 				continue
 			end
 			-- The dodge can push two columns onto the same spot; skip rather
@@ -1638,6 +1710,105 @@ local function makeSpiralStair(parent, center, baseY, topY, radius, name)
 			previousGuardTop = guardTop
 		end
 	end
+end
+
+-- A spiral built on the room centre makes that centre an attractive but
+-- impossible graph waypoint: its column, stacked treads and outer guard rail
+-- occupy the exact point every generated-hall fallback route crosses. Keep
+-- the FULL 13-stud set piece, but dock it in a proven door-safe quadrant and
+-- leave a measured square-body channel through the middle of the hall. Halls
+-- that cannot prove that contract are deterministically re-dressed as a
+-- Porthole Hall before anything is built; the stair is never silently shrunk,
+-- clipped through a wall, or allowed to poison generation.
+local function spiralStairPlacement(hall, doors)
+	local radius = 13
+	local structureRadius = radius * 1.75
+	local bodyRouteClearance = 11
+	local inflatedRadius = structureRadius + bodyRouteClearance
+	local wallMargin = 3
+	-- Each axis needs room for the structure at the wall AND its body-inflated
+	-- envelope on the two centre lines used by generated graph routes.
+	if hall.Width < 2 * (structureRadius + wallMargin + inflatedRadius)
+		or hall.Depth < 2 * (structureRadius + wallMargin + inflatedRadius) then
+		return nil
+	end
+	local maximumOffsetX = hall.Width * .5 - structureRadius - wallMargin
+	local maximumOffsetZ = hall.Depth * .5 - structureRadius - wallMargin
+	local signs = {
+		Vector3.new(1, 0, -1), Vector3.new(-1, 0, 1),
+		Vector3.new(1, 0, 1), Vector3.new(-1, 0, -1),
+	}
+	local first = math.floor(tonumber(hall.LocalSeed) or tonumber(hall.Index) or 1)
+	first = first % #signs + 1
+
+	local function distanceToSegment(point, a, b)
+		local span = b - a
+		local denominator = span.X * span.X + span.Z * span.Z
+		local projection = denominator > 0 and math.clamp(
+			((point.X - a.X) * span.X + (point.Z - a.Z) * span.Z) / denominator,
+			0, 1) or 0
+		local closest = a + span * projection
+		return Vector2.new(point.X - closest.X, point.Z - closest.Z).Magnitude
+	end
+
+	local function candidateSafe(candidate)
+		if candidate.X - structureRadius < hall.MinX + wallMargin
+			or candidate.X + structureRadius > hall.MaxX - wallMargin
+			or candidate.Z - structureRadius < hall.MinZ + wallMargin
+			or candidate.Z + structureRadius > hall.MaxZ - wallMargin then
+			return false
+		end
+		-- Preserve both centre lines, not merely the centre point. Graph fallback
+		-- routes travel from every door to one of these two orthogonal lanes.
+		if math.abs(candidate.X - hall.Center.X) < inflatedRadius
+			or math.abs(candidate.Z - hall.Center.Z) < inflatedRadius then
+			return false
+		end
+		local function clearDoorRoutes(values, aFor, bFor)
+			for _, cross in ipairs(values or {}) do
+				if distanceToSegment(candidate, aFor(cross), bFor(cross)) < inflatedRadius then
+					return false
+				end
+			end
+			return true
+		end
+		return clearDoorRoutes(doors and doors.North,
+			function(cross) return Vector3.new(cross, 0, hall.MinZ) end,
+			function(cross) return Vector3.new(cross, 0, hall.Center.Z) end)
+			and clearDoorRoutes(doors and doors.South,
+				function(cross) return Vector3.new(cross, 0, hall.MaxZ) end,
+				function(cross) return Vector3.new(cross, 0, hall.Center.Z) end)
+			and clearDoorRoutes(doors and doors.West,
+				function(cross) return Vector3.new(hall.MinX, 0, cross) end,
+				function(cross) return Vector3.new(hall.Center.X, 0, cross) end)
+			and clearDoorRoutes(doors and doors.East,
+				function(cross) return Vector3.new(hall.MaxX, 0, cross) end,
+				function(cross) return Vector3.new(hall.Center.X, 0, cross) end)
+	end
+
+	local xOffsets = {
+		maximumOffsetX,
+		(maximumOffsetX + inflatedRadius) * .5,
+		inflatedRadius,
+	}
+	local zOffsets = {
+		maximumOffsetZ,
+		(maximumOffsetZ + inflatedRadius) * .5,
+		inflatedRadius,
+	}
+	for offset = 0, #signs - 1 do
+		local sign = signs[(first + offset - 1) % #signs + 1]
+		for _, offsetX in ipairs(xOffsets) do
+			for _, offsetZ in ipairs(zOffsets) do
+				local candidate = hall.Center
+					+ Vector3.new(sign.X * offsetX, 0, sign.Z * offsetZ)
+				if candidateSafe(candidate) then
+					return candidate, radius, structureRadius
+				end
+			end
+		end
+	end
+	return nil
 end
 
 local function makeCeilingPanel(parent, position, index, panelSize, yaw, height)
@@ -2430,7 +2601,7 @@ end
 -- Very large slide halls need architectural rhythm or their authored play
 -- equipment reads like a handful of prototypes in an empty box.  These high,
 -- wall-hugging frames add scale and shadow without entering navigation space.
-local function makeSlideHallScaleFrames(parent, hall, height, poolDepth, hallIndex)
+local function makeSlideHallScaleFrames(parent, hall, height, poolDepth, hallIndex, doors)
 	local alongX = hall.Width >= hall.Depth
 	local longLength = alongX and hall.Width or hall.Depth
 	local shortLength = alongX and hall.Depth or hall.Width
@@ -2477,6 +2648,16 @@ local function makeSlideHallScaleFrames(parent, hall, height, poolDepth, hallInd
 		beam.CanQuery = false
 
 		for sideIndex, pilasterPosition in ipairs(pierPositions) do
+			-- A wall-hugging pier can still sit directly on a doorway's long
+			-- hall-centre spoke. Seed 202 did exactly that in Slide Hall 2: frame
+			-- 01's west pier occupied the only body-certified 7 -> 10 route and
+			-- made every replan return to the same obstruction. Keep the harmless
+			-- ceiling beam and opposite pier, but omit any pier that intersects the
+			-- same generated hub-and-spoke lane reserved by the other hall dressers.
+			if nearHallNavigationRoute(hall, doors,
+				pilasterPosition.X, pilasterPosition.Z, 16) then
+				continue
+			end
 			local pilasterSize = alongX
 				and Vector3.new(5, pilasterHeight, 6)
 				or Vector3.new(6, pilasterHeight, 5)
@@ -2524,7 +2705,7 @@ local function makeSlideHall(parent, hall, index, doors)
 			end
 		end
 	end
-	makeSlideHallScaleFrames(hallFolder, hall, height, depth, index)
+	makeSlideHallScaleFrames(hallFolder, hall, height, depth, index, doors)
 
 	-- Top deck along the north edge.
 	local deckY = height - 22
@@ -3532,6 +3713,39 @@ local function makeKidsHall(parent, hall, index, doors, kidsPumpIndex)
 	for _, doorX in ipairs(doors.South or {}) do
 		reserveDoor("South doorway", Vector3.new(doorX, 0, hall.MaxZ - 16), doorwayClearWidth, 32)
 	end
+	-- Kids set pieces use their own reservation solver and therefore never saw
+	-- nearHallNavigationRoute. Reserve the same hub-and-spoke contract as real
+	-- AABBs before the ball pit, slide, crawl frames, foam clusters or entity
+	-- spawn claim a pocket. Seed 404's ball pit was centred on this lane and made
+	-- the otherwise-valid 1 -> 39 route throw its plan away after 798 studs.
+	local navigationWidth = 24
+	-- The spokes below already reserve every real door-to-centre route.  Keep
+	-- only their shared central junction here: reserving two full-room bars as
+	-- well double-counted those routes and left seed 202's four-door Kids room
+	-- with no legal Slide Tower pocket.
+	reserveDoor("Navigation hub", center, navigationWidth, navigationWidth)
+	local function reserveVerticalSpoke(label, doorX, edgeZ)
+		local midpointZ = (edgeZ + hall.Center.Z) * .5
+		reserveDoor(label, Vector3.new(doorX, 0, midpointZ),
+			navigationWidth, math.abs(edgeZ - hall.Center.Z))
+	end
+	local function reserveHorizontalSpoke(label, doorZ, edgeX)
+		local midpointX = (edgeX + hall.Center.X) * .5
+		reserveDoor(label, Vector3.new(midpointX, 0, doorZ),
+			math.abs(edgeX - hall.Center.X), navigationWidth)
+	end
+	for _, doorX in ipairs(doors.North or {}) do
+		reserveVerticalSpoke("North navigation spoke", doorX, hall.MinZ)
+	end
+	for _, doorX in ipairs(doors.South or {}) do
+		reserveVerticalSpoke("South navigation spoke", doorX, hall.MaxZ)
+	end
+	for _, doorZ in ipairs(doors.West or {}) do
+		reserveHorizontalSpoke("West navigation spoke", doorZ, hall.MinX)
+	end
+	for _, doorZ in ipairs(doors.East or {}) do
+		reserveHorizontalSpoke("East navigation spoke", doorZ, hall.MaxX)
+	end
 	if containsPump then
 		table.insert(zones, {
 			Label = "Pump interaction",
@@ -4482,13 +4696,28 @@ local function dressHall(parent, hall, depth, doors, index, density)
 	if depth <= 2.2 and hall.Role ~= "Slide Hall" then
 		local loungers = math.clamp(math.floor(hall.Area / 30000 * density), 1, 3)
 		for lounger = 1, loungers do
-			local lx = rng:NextNumber(-.36, .36) * hall.Width
-			local lz = rng:NextNumber(-.36, .36) * hall.Depth
-			local yaw = rng:NextNumber() * math.pi * 2
-			local roll = rng:NextNumber() < .35 and math.rad(rng:NextNumber(30, 70)) or 0
+			local frame
+			for _ = 1, 12 do
+				local lx = rng:NextNumber(-.36, .36) * hall.Width
+				local lz = rng:NextNumber(-.36, .36) * hall.Depth
+				local yaw = rng:NextNumber() * math.pi * 2
+				local roll = rng:NextNumber() < .35
+					and math.rad(rng:NextNumber(30, 70)) or 0
+				local position = hall.Center + Vector3.new(lx, -depth + .9, lz)
+				-- The solid 6.4-stud seat used to bypass the same route guard every
+				-- larger structure obeys. Seed 202 put Lounger 23.1 directly on a
+				-- hall-centre spoke, so an otherwise certified 1 -> 29 graph route
+				-- repeatedly replanned into the same chair. Reserve the seat's whole
+				-- rotated footprint around the authored hub/spokes before placing it.
+				if not nearDoorApproach(hall, doors, position.X, position.Z, 22)
+					and not nearHallNavigationRoute(hall, doors,
+						position.X, position.Z, 21) then
+					frame = CFrame.new(position) * CFrame.Angles(0, yaw, roll)
+					break
+				end
+			end
+			if not frame then continue end
 			local seatColor = faded(Configuration.SlideColors[rng:NextInteger(1, #Configuration.SlideColors)])
-			local frame = CFrame.new(hall.Center + Vector3.new(lx, -depth + .9, lz))
-				* CFrame.Angles(0, yaw, roll)
 			local seat = part(parent, "Level 2 Lounger Seat " .. index .. "." .. lounger,
 				frame, Vector3.new(2.6, .5, 6.4), seatColor, Enum.Material.SmoothPlastic)
 			seat.CanCollide = true
@@ -4914,6 +5143,7 @@ local function decorateLargeHall(parent, hall, depth, index, doors)
 			hall.Center.X + fx * hall.Width, hall.Center.Z + fz * hall.Depth, 24)
 		if not x then return nil end
 		if nearDoorApproach(hall, doors, x, z, 20) then return nil end
+		if nearHallNavigationRoute(hall, doors, x, z, 17) then return nil end
 		if not pointClear(x, z, 26) then return nil end
 		return Vector3.new(x, 0, z)
 	end
@@ -4948,7 +5178,15 @@ local function decorateLargeHall(parent, hall, depth, index, doors)
 				local samples = offset.Magnitude > 14 and {.45, .75, 1} or {1}
 				for _, fraction in ipairs(samples) do
 					local point = (frame * CFrame.new(offset * fraction)).Position
-					if not pointClear(point.X, point.Z, 16)
+					-- The origin was door-safe, but a long chute or stair could rotate
+					-- its FAR END straight across that same doorway. Seed 303's Diving
+					-- Well did exactly that: the slide kit plus its flanking columns
+					-- sealed the east exit for the Slidemouth. Every sampled spine
+					-- point must preserve the full-scale body's doorway approach too,
+					-- not merely remain inside the hall.
+					if nearDoorApproach(hall, doors, point.X, point.Z, 22)
+						or nearHallNavigationRoute(hall, doors, point.X, point.Z, 17)
+						or not pointClear(point.X, point.Z, 16)
 						or math.abs(point.X - hall.Center.X) > hall.Width * .5 - wallMargin
 						or math.abs(point.Z - hall.Center.Z) > hall.Depth * .5 - wallMargin then
 						fits = false
@@ -5314,6 +5552,22 @@ end
 -- ── build ───────────────────────────────────────────────────────────────────
 
 function WorldBuilder.Build(layout, generation)
+	-- These five are GLOBAL Terrain properties, not Level 2's own. Level 2 has
+	-- always set them and never given them back, so every other level and the
+	-- lobby inherited the poolrooms' water look for the rest of the session --
+	-- the first round of Level 2 permanently restyled the whole place.
+	--
+	-- Capture what was there BEFORE overwriting, and hand it to the manifest so
+	-- Adapter.Cleanup can put it back. Captured every Build (not once at load)
+	-- because a rebuild after a cleanup must capture the RESTORED values, not
+	-- Level 2's own.
+	local previousWater = {
+		WaterColor = Terrain.WaterColor,
+		WaterTransparency = Terrain.WaterTransparency,
+		WaterReflectance = Terrain.WaterReflectance,
+		WaterWaveSize = Terrain.WaterWaveSize,
+		WaterWaveSpeed = Terrain.WaterWaveSpeed,
+	}
 	Terrain.WaterColor = C.Water
 	Terrain.WaterTransparency = .24
 	Terrain.WaterReflectance = .08
@@ -5365,6 +5619,37 @@ function WorldBuilder.Build(layout, generation)
 			table.insert(doorsByHall[south.Index].North, corridor.Cross)
 		end
 	end
+
+	-- Resolve Spiral eligibility before hall names, ceilings, lighting and
+	-- dressing read Archetype. An unsuitable roll becomes a deterministic
+	-- Porthole Hall; this keeps the generator total and preserves the full-size
+	-- stair contract for every hall that actually advertises one.
+	local spiralPlacements = {}
+	local spiralRolls, spiralRerouted = 0, 0
+	for _, hall in ipairs(layout.Halls) do
+		if hall.Archetype == "Spiral Stair Well" then
+			spiralRolls += 1
+			local center, radius, structureRadius =
+				spiralStairPlacement(hall, doorsByHall[hall.Index])
+			if center then
+				spiralPlacements[hall.Index] = {
+					Center = center,
+					Radius = radius,
+					StructureRadius = structureRadius,
+				}
+				hall.SpiralCenter = center
+				hall.SpiralRadius = radius
+				hall.SpiralStructureRadius = structureRadius
+			else
+				spiralRerouted += 1
+				hall.Archetype = "Porthole Hall"
+				hall.SpiralRerouted = true
+			end
+		end
+	end
+	world:SetAttribute("Level2_SpiralRolls", spiralRolls)
+	world:SetAttribute("Level2_SpiralsBuilt", spiralRolls - spiralRerouted)
+	world:SetAttribute("Level2_SpiralsRerouted", spiralRerouted)
 
 	local slideDecks = {}
 	local exit
@@ -5452,7 +5737,14 @@ function WorldBuilder.Build(layout, generation)
 			elseif archetype == "Pump Station" then
 				decoratePumpHall(hallModel, hall, hall.Index, doorsByHall[hall.Index])
 			elseif archetype == "Spiral Stair Well" then
-				makeSpiralStair(hallModel, hall.Center, -(depth or 1) + .5, height - 12, 13,
+				local placement = assert(spiralPlacements[hall.Index],
+					"retained Spiral Stair Well has no proven placement")
+				local spiralCenter = placement.Center
+				local spiralRadius = placement.Radius
+				hallModel:SetAttribute("Level2_SpiralOffsetX", spiralCenter.X - hall.Center.X)
+				hallModel:SetAttribute("Level2_SpiralOffsetZ", spiralCenter.Z - hall.Center.Z)
+				hallModel:SetAttribute("Level2_SpiralRadius", spiralRadius)
+				makeSpiralStair(hallModel, spiralCenter, -(depth or 1) + .5, height - 12, spiralRadius,
 					"Level 2 Stair Well " .. hall.Index)
 			elseif archetype == "Skylight Hall" then
 				-- The real skylight slots already daylight this hall; add columns.
@@ -5676,7 +5968,13 @@ function WorldBuilder.Build(layout, generation)
 		Arrival = arrival,
 		EntityDen = den,
 		EntityNodes = entityFolder,
+		-- The per-hall centre nodes. They were built and named for entity use
+		-- from the start but never reachable from the manifest, so no consumer
+		-- could ever see them.
+		Navigation = navigationFolder,
 		WaterRegions = waterRegions,
+		-- What the global Terrain water looked like before this build touched it.
+		PreviousWaterAppearance = previousWater,
 		TerrainCenter = terrainCenter,
 		TerrainSize = terrainSize,
 		Generation = generation,

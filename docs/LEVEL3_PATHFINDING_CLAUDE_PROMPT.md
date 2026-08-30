@@ -4,7 +4,7 @@ Copy everything below this line into Claude:
 
 ---
 
-You are working on the Roblox experience **Backrooms: No Way Out**, place ID
+You are working on the Roblox experience **BACKROOMS: STAY QUIET [CO-OP HORROR]**, place ID
 `131311258779917`. Fix Level 3 Mall Manager pathfinding in the live Studio
 place and mirror the verified source back to the repository. Do not redesign
 the monster or change unrelated gameplay.

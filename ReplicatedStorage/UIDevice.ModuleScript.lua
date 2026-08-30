@@ -43,6 +43,19 @@ local function forcedTouch(): boolean
 	return RunService:IsStudio() and workspace:GetAttribute("ForceTouchUI") == true
 end
 
+-- The same idea one step further: a Studio-only VIEWPORT override, so the whole
+-- HUD can be measured at phone and tablet sizes from a script. The Device
+-- Simulator has to be set before entering Play and cannot be driven from Luau,
+-- which makes a full device matrix impossible to automate without this.
+local function forcedViewport(): Vector2?
+	if not RunService:IsStudio() then return nil end
+	local override = workspace:GetAttribute("UIRegressionViewport")
+	if typeof(override) == "Vector2" and override.X >= 240 and override.Y >= 240 then
+		return override
+	end
+	return nil
+end
+
 -- "Phone or tablet" means a touchscreen with no POINTER. MouseEnabled is the
 -- right discriminator here, not KeyboardEnabled: a real phone or tablet reports
 -- no mouse even when a Bluetooth keyboard is paired, while a desktop with a
@@ -156,7 +169,9 @@ local layout: any = nil
 --                   movement, which is why no interactive HUD may sit there.
 local function computeLayout(): any
 	local camera = workspace.CurrentCamera
-	local viewport = camera and camera.ViewportSize or Vector2.new(1280, 720)
+	local viewport = forcedViewport()
+		or (camera and camera.ViewportSize)
+		or Vector2.new(1280, 720)
 	local width, height = viewport.X, viewport.Y
 	local inset = GuiService:GetGuiInset()
 	local portrait = height > width
@@ -271,6 +286,68 @@ local function computeLayout(): any
 		contentRight = width - 12
 	end
 
+	-- Where a MODAL may live: the largest rectangle clear of every movement
+	-- affordance at once -- thumbstick, control column AND jump -- inside the
+	-- safe area.
+	--
+	-- The queue panel used to pick its own spot from ONE zone (right of the
+	-- thumbstick, else above it) and one screen edge. On a 705x338 Galaxy A06
+	-- that put a 380-wide panel at x 290..670 while the control column owns
+	-- x 537..705: Plus, Privacy, Create and half of Close were underneath RUN,
+	-- JUMP, GLOW and FLASHLIGHT. A modal must not negotiate with one zone; it
+	-- must never enter any of them.
+	local MODAL_GUTTER = 8
+	local function clearsZones(rect): boolean
+		if not touchFormFactor then return true end
+		for _, zone in ipairs({thumbstick, controls,
+			{Left = jumpLeft, Right = jumpLeft + jumpSize,
+			 Top = jumpTop, Bottom = jumpTop + jumpSize}}) do
+			if rect.Left < zone.Right and rect.Right > zone.Left
+				and rect.Top < zone.Bottom and rect.Bottom > zone.Top then
+				return false
+			end
+		end
+		return true
+	end
+	local modalCandidates = {
+		-- Full width, above whichever zone starts higher. Portrait wins here.
+		{Left = 12, Right = width - 12, Top = bandTop,
+		 Bottom = math.min(thumbstick.Top, controls.Top) - MODAL_GUTTER},
+		-- Left of the column, above the stick.
+		{Left = 12, Right = controls.Left - MODAL_GUTTER, Top = bandTop,
+		 Bottom = thumbstick.Top - MODAL_GUTTER},
+		-- The vertical corridor between the two zones, full height. Landscape
+		-- wins here: the column reaches nearly to the top, so the first two
+		-- candidates collapse and only the lane down the middle survives.
+		{Left = thumbstick.Right + MODAL_GUTTER, Right = controls.Left - MODAL_GUTTER,
+		 Top = bandTop, Bottom = height - bottomSafe},
+	}
+	if not touchFormFactor then
+		modalCandidates = {{Left = 12, Right = width - 12, Top = bandTop,
+			Bottom = height - bottomSafe}}
+	end
+	local modalArea
+	for _, candidate in ipairs(modalCandidates) do
+		candidate.Width = math.max(0, candidate.Right - candidate.Left)
+		candidate.Height = math.max(0, candidate.Bottom - candidate.Top)
+		if clearsZones(candidate)
+			and (modalArea == nil
+				or candidate.Width * candidate.Height > modalArea.Width * modalArea.Height) then
+			modalArea = candidate
+		end
+	end
+	-- Every viewport this game supports produces at least one clear candidate,
+	-- but a modal must still have somewhere to go if one ever does not.
+	if modalArea == nil then
+		modalArea = {Left = 12, Right = width - 12, Top = bandTop,
+			Bottom = height - bottomSafe}
+		modalArea.Width = math.max(0, modalArea.Right - modalArea.Left)
+		modalArea.Height = math.max(0, modalArea.Bottom - modalArea.Top)
+	end
+	-- A modal narrower or shorter than this cannot hold a 44px control stack,
+	-- so callers are told rather than left to silently squeeze one.
+	modalArea.Fits = modalArea.Width >= 200 and modalArea.Height >= 240
+
 	return {
 		Viewport = viewport,
 		Width = width,
@@ -289,6 +366,7 @@ local function computeLayout(): any
 		SafeRight = contentRight,
 		Corridor = corridor,
 		TopBand = topBand,
+		ModalArea = modalArea,
 		Zones = {
 			Thumbstick = thumbstick,
 			Controls = controls,
@@ -505,6 +583,9 @@ do
 
 	if RunService:IsStudio() then
 		workspace:GetAttributeChangedSignal("ForceTouchUI"):Connect(function() refresh(true) end)
+		workspace:GetAttributeChangedSignal("UIRegressionViewport"):Connect(function()
+			refresh(true)
+		end)
 	end
 end
 

@@ -156,7 +156,7 @@ def main() -> int:
     try:
         client.initialize()
         time.sleep(3)
-        studio = select_studio(client, "Backrooms: No Way Out", 20)
+        studio = select_studio(client, "BACKROOMS: STAY QUIET [CO-OP HORROR]", 20)
         studio_id = studio["id"]
 
         prepared: list[tuple[str, str, str]] = []

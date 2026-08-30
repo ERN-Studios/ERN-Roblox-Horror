@@ -1,13 +1,13 @@
 @echo off
 REM Apply the queued repo changes into the open Roblox Studio place.
-REM Run this ON THE WINDOWS PC, with Studio open on "Backrooms: No Way Out".
+REM Run this ON THE WINDOWS PC, with Studio open on "BACKROOMS: STAY QUIET [CO-OP HORROR]".
 REM Double-clicking is fine; the window stays open at the end.
 
 setlocal
 cd /d "%~dp0\.."
 
 echo ============================================================
-echo   Backrooms: No Way Out  --  apply repo changes to Studio
+echo   BACKROOMS: STAY QUIET [CO-OP HORROR]  --  apply repo changes to Studio
 echo ============================================================
 echo.
 

@@ -114,7 +114,7 @@ def main() -> int:
     try:
         client.initialize()
         time.sleep(3)
-        select_studio(client, "Backrooms: No Way Out", 20)
+        select_studio(client, "BACKROOMS: STAY QUIET [CO-OP HORROR]", 20)
         print("START", client.call("start_stop_play", {"is_start": True}))
         started = True
         time.sleep(8)

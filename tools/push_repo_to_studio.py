@@ -2,7 +2,7 @@
 
 Counterpart to pull_source_from_studio.py for the rare Studio-write direction.
 Targets manifest entries whose status is "pending-studio-push": each such entry
-records the NEW repo content (bytes/sha256) plus "studioSha256Before" — the
+records the NEW repo content (bytes/sha256) plus "studioSha256Before" -- the
 hash Studio is expected to still hold.
 
 The run is deliberately two-phase, because a half-applied batch in a live place
@@ -16,11 +16,11 @@ is worse than no batch at all:
                        ServerStorage StringValue and applied with
                        ScriptEditorService:UpdateSourceAsync, which is also used
                        as a compare-and-swap: the callback re-checks the baseline
-                       inside Studio, closing the read→write race. Length is
+                       inside Studio, closing the read->write race. Length is
                        verified before the write and the source re-read after it.
 
 Sources are read through execute_luau (never script_read, which can serve a
-stale editor buffer after programmatic writes — see project memory).
+stale editor buffer after programmatic writes -- see project memory).
 
 Usage:
     python tools/push_repo_to_studio.py                 # classify, then push
@@ -41,6 +41,17 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
+
+# A default Windows console is cp1252 and raises UnicodeEncodeError on anything
+# it cannot represent -- including from argparse's --help, which renders the
+# module docstring. Degrading those characters is always better than aborting a
+# release tool, so replace rather than raise. Everything this file prints is
+# ASCII anyway; this is the belt to that braces.
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(errors="replace")
+    except (AttributeError, ValueError, OSError):
+        pass
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from sync_from_studio import (  # noqa: E402
@@ -49,11 +60,23 @@ from sync_from_studio import (  # noqa: E402
     find_mcp_batch,
     select_studio,
 )
+from studio_source_contract import (  # noqa: E402
+    DRIFTED,
+    apply_trailing_newline_verdict,
+    classify,
+    describe,
+    equivalent,
+    matches_hash,
+    normalize,
+    permits_trailing_newline,
+    refresh_trailing_newline_metadata,
+    sha256_of,
+)
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_PATH = PROJECT_ROOT / "studio-sync-manifest.json"
 BACKUP_ROOT = PROJECT_ROOT / ".studio-push-backups"
-STUDIO_NAME = "Backrooms: No Way Out"
+STUDIO_NAME = "BACKROOMS: STAY QUIET [CO-OP HORROR]"
 READ_CHUNK_LINES = 1400
 # Studio can briefly serve a stale .Source right after a write; re-read
 # the metadata and chunks together rather than failing the push.
@@ -249,7 +272,57 @@ def djb2(data: bytes) -> int:
 
 
 def sha256(text: str) -> str:
-    return hashlib.sha256(text.encode("utf-8")).hexdigest()
+    """The manifest's hash of a mirrored file, via the shared contract."""
+    return sha256_of(text)
+
+
+def classify_pending(item: dict, desired: str, live: str) -> tuple[str, str]:
+    """Phase-1 verdict for one pending entry, and why.
+
+    "repo-drift" -- the mirrored file no longer matches its manifest entry
+    "already"    -- Studio already holds this source, under the shared contract
+    "ready"      -- Studio still holds the recorded baseline; safe to write
+    "conflict"   -- Studio holds something else
+
+    Pulled out of main() on purpose: this is the decision the whole push turns
+    on, and it is the thing tools/tests/test_studio_source_contract.py drives
+    directly, without a Studio.
+    """
+    allow_newline = permits_trailing_newline(item)
+    if sha256(desired) != item["sha256"]:
+        return "repo-drift", ("repo file no longer matches its manifest entry "
+                              "-- re-run record_pending_push.py")
+    if equivalent(desired, live, allow_trailing_newline=allow_newline):
+        return "already", describe(desired, live, allow_trailing_newline=allow_newline)
+    if matches_hash(item["studioSha256Before"], live, allow_trailing_newline=allow_newline):
+        return "ready", "Studio still holds the recorded baseline"
+    return "conflict", (f"Studio drifted from the recorded baseline (live "
+                        f"{sha256(live)[:12]}, expected "
+                        f"{item['studioSha256Before'][:12]}); "
+                        + describe(desired, live, allow_trailing_newline=allow_newline))
+
+
+def verify_written(item: dict, desired: str, reread: str) -> tuple[bool, str]:
+    """Post-write verification, under the SAME contract as the checks above."""
+    allow_newline = permits_trailing_newline(item)
+    ok = equivalent(desired, reread, allow_trailing_newline=allow_newline)
+    return ok, describe(desired, reread, allow_trailing_newline=allow_newline)
+
+
+def record_landed_source(item: dict, desired: str, landed: str) -> str:
+    """Update the transport-newline flag after a verified Studio landing."""
+    verdict = classify(
+        desired,
+        landed,
+        allow_trailing_newline=permits_trailing_newline(item),
+    )
+    if verdict == DRIFTED:
+        raise StudioMcpError(
+            "cannot record an unverified Studio landing: "
+            + describe(desired, landed, allow_trailing_newline=False)
+        )
+    apply_trailing_newline_verdict(item, verdict)
+    return verdict
 
 
 def studio_id_of(selected: object) -> str:
@@ -394,15 +467,16 @@ def push_source(client, studio_id: str, segments: list[str], source: str,
     if result.startswith("@@SHORT@@"):
         raise StudioMcpError(
             f"staged source was truncated ({result.split(' ', 1)[-1]}B of {len(data)}B)"
-            " — live script left untouched")
+            " -- live script left untouched")
     if result.startswith("@@DRIFT@@"):
         raise StudioMcpError(
-            "Studio changed this script between the check and the write — not applied")
+            "Studio changed this script between the check and the write -- not applied")
     raise StudioMcpError(f"UpdateSourceAsync failed: {result}")
 
 
 def write_manifest(manifest: dict) -> None:
     """Atomic: a crash mid-write must never destroy the recorded baselines."""
+    refresh_trailing_newline_metadata(manifest)
     temporary = MANIFEST_PATH.with_name(MANIFEST_PATH.name + ".tmp")
     temporary.write_text(
         json.dumps(manifest, indent=2) + "\n", encoding="utf-8", newline="\n")
@@ -479,31 +553,30 @@ def main() -> int:
         stale = clean_buffer(client, studio_id)
         if stale.startswith("@@CLEANED@@"):
             print(f"  note: removed a stale {BUFFER_NAME} left in ServerStorage "
-                  f"({stale.split(' ', 1)[-1]} bytes) — a previous run was interrupted")
+                  f"({stale.split(' ', 1)[-1]} bytes) -- a previous run was interrupted")
 
-        # ── phase 1: classify everything, write nothing ──────────────────
-        print("\nPhase 1 — checking live Studio sources (no writes):", flush=True)
+        # -- phase 1: classify everything, write nothing ------------------
+        print("\nPhase 1 -- checking live Studio sources (no writes):", flush=True)
         ready, already, problems = [], [], []
         for index, item in enumerate(pending, start=1):
             label = f"[{index}/{len(pending)}] {item['file']}"
-            desired = (PROJECT_ROOT / item["file"]).read_text(
-                encoding="utf-8").replace("\r\n", "\n")
+            desired = normalize((PROJECT_ROOT / item["file"]).read_text(encoding="utf-8"))
             if sha256(desired) != item["sha256"]:
                 problems.append((item, "repo file no longer matches its manifest "
-                                       "entry — re-run record_pending_push.py"))
+                                       "entry -- re-run record_pending_push.py"))
                 print(f"  {label}: REPO DRIFT", flush=True)
                 continue
             try:
                 live = read_studio_source(client, studio_id, segments_of(item))
             except StudioMcpError as error:
                 problems.append((item, str(error)))
-                print(f"  {label}: ERROR — {error}", flush=True)
+                print(f"  {label}: ERROR -- {error}", flush=True)
                 continue
-            live_sha = sha256(live)
-            if live_sha == item["sha256"]:
-                already.append(item)
-                print(f"  {label}: already applied", flush=True)
-            elif live_sha == item["studioSha256Before"]:
+            verdict, why = classify_pending(item, desired, live)
+            if verdict == "already":
+                already.append((item, desired, live))
+                print(f"  {label}: already applied ({why})", flush=True)
+            elif verdict == "ready":
                 ready.append((item, desired, live))
                 print(f"  {label}: ready", flush=True)
             elif args.overwrite_conflicts:
@@ -511,9 +584,7 @@ def main() -> int:
                 print(f"  {label}: ready (overwriting Studio's drifted copy)",
                       flush=True)
             else:
-                problems.append((item, f"Studio drifted from the recorded baseline "
-                                       f"(live {live_sha[:12]}, expected "
-                                       f"{item['studioSha256Before'][:12]})"))
+                problems.append((item, why))
                 print(f"  {label}: CONFLICT", flush=True)
 
         print(f"\nready: {len(ready)}   already applied: {len(already)}   "
@@ -536,34 +607,40 @@ def main() -> int:
             write_manifest(manifest)
             return 1
 
-        # ── phase 2: write ───────────────────────────────────────────────
+        # -- phase 2: write -----------------------------------------------
         stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
         pushed = 0
         failed: list[tuple[dict, str]] = []
         if already:
-            for item in already:
+            for item, desired, live in already:
+                record_landed_source(item, desired, live)
                 item["status"] = "synced"
                 item.pop("studioSha256Before", None)
             write_manifest(manifest)
 
         if ready:
-            print(f"\nPhase 2 — writing {len(ready)} script(s):", flush=True)
+            print(f"\nPhase 2 -- writing {len(ready)} script(s):", flush=True)
         for index, (item, desired, live) in enumerate(ready, start=1):
             label = f"[{index}/{len(ready)}] {item['file']}"
             saved = backup(item, live, stamp)
             try:
                 push_source(client, studio_id, segments_of(item), desired, live)
                 reread = read_studio_source(client, studio_id, segments_of(item))
-                if sha256(reread) != item["sha256"]:
+                # Post-write verification uses the SAME contract as the checks
+                # above. A write that lands with the permitted trailing newline
+                # on a flagged entry verifies; anything else fails the push.
+                verified, why = verify_written(item, desired, reread)
+                if not verified:
                     raise StudioMcpError(
-                        "post-write verification failed; the pre-push source is at "
-                        f"{saved}")
+                        f"post-write verification failed ({why}); "
+                        f"the pre-push source is at {saved}")
             except StudioMcpError as error:
                 failed.append((item, str(error)))
-                print(f"  {label}: FAILED — {error}", flush=True)
+                print(f"  {label}: FAILED -- {error}", flush=True)
                 continue
             item["status"] = "synced"
             item.pop("studioSha256Before", None)
+            record_landed_source(item, desired, reread)
             write_manifest(manifest)
             pushed += 1
             print(f"  {label}: pushed ({len(desired.encode('utf-8'))} bytes)",

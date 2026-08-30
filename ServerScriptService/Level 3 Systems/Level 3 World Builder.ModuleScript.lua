@@ -885,7 +885,11 @@ local function makeRoomProps(parent: Instance, room: {[string]: any}, index: num
 	makeRoomSpeaker(parent, room, index)
 
 	for _, object in ipairs(parent:GetDescendants()) do
-		if object:IsA("BasePart") and (string.find(object.Name, "Table", 1, true)
+		-- The detailed meshes are decorative, but the explicitly tagged invisible
+		-- tabletop is gameplay collision. Never let this broad name sweep strip it.
+		if object:IsA("BasePart")
+			and object:GetAttribute("Level3_TableCollision") ~= true
+			and (string.find(object.Name, "Table", 1, true)
 			or string.find(object.Name, "Chair", 1, true)) then
 			decorative(object)
 		end

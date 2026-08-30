@@ -1,7 +1,7 @@
 """Audit and pull drifted script sources from Roblox Studio into the repo.
 
 Reads .Source directly through execute_luau (never script_read, which can
-return stale text after .Source writes — see project memory), compares every
+return stale text after .Source writes -- see project memory), compares every
 mirrored Lua script against the repo copy, and rewrites repo files whose
 Studio source differs. Updates studio-sync-manifest.json entries (bytes,
 sha256, status) for every file it pulls.
@@ -20,6 +20,17 @@ import re
 import sys
 from pathlib import Path
 
+
+# A default Windows console is cp1252 and raises UnicodeEncodeError on anything
+# it cannot represent -- including from argparse's --help, which renders the
+# module docstring. Degrading those characters is always better than aborting a
+# release tool, so replace rather than raise. Everything this file prints is
+# ASCII anyway; this is the belt to that braces.
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(errors="replace")
+    except (AttributeError, ValueError, OSError):
+        pass
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from sync_from_studio import (  # noqa: E402
@@ -31,7 +42,17 @@ from sync_from_studio import (  # noqa: E402
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_PATH = PROJECT_ROOT / "studio-sync-manifest.json"
-STUDIO_NAME = "Backrooms: No Way Out"
+
+from studio_source_contract import (  # noqa: E402
+    EXACT,
+    TRAILING_NEWLINE,
+    apply_trailing_newline_verdict,
+    classify,
+    normalize,
+    permits_trailing_newline,
+    refresh_trailing_newline_metadata,
+)
+STUDIO_NAME = "BACKROOMS: STAY QUIET [CO-OP HORROR]"
 SERVICES = (
     "ServerScriptService",
     "StarterPlayer",
@@ -113,6 +134,22 @@ def djb2(data: bytes) -> int:
     return h
 
 
+def apply_observed_newline_verdicts(
+    manifest_by_file: dict[str, dict], observations: dict[str, str]
+) -> int:
+    """Record exact/+LF facts gathered by the read-only enumeration pass."""
+    changed = 0
+    for rel, verdict in observations.items():
+        entry = manifest_by_file.get(rel)
+        if entry is None:
+            continue
+        before = permits_trailing_newline(entry)
+        apply_trailing_newline_verdict(entry, verdict)
+        if before != permits_trailing_newline(entry):
+            changed += 1
+    return changed
+
+
 def repo_path_for(segments: list[str], class_name: str) -> Path | None:
     for segment in segments:
         if INVALID_WINDOWS_NAME.search(segment) or segment.endswith((" ", ".")):
@@ -166,7 +203,11 @@ def main() -> int:
     client = StudioMcpClient(find_mcp_batch())
     try:
         client.initialize()
-        studio_id = select_studio(client, STUDIO_NAME, 20.0)
+        selected_studio = select_studio(client, STUDIO_NAME, 20.0)
+        studio_id_value = selected_studio.get("id")
+        if studio_id_value is None:
+            raise StudioMcpError("Selected Studio session has no id")
+        studio_id = str(studio_id_value)
 
         service_list = ", ".join(luau_string(s) for s in SERVICES)
         listing = execute_luau(client, studio_id, ENUMERATE_LUAU % service_list)
@@ -185,19 +226,42 @@ def main() -> int:
                 int(line_count),
             )
 
+        audit_manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+        audit_by_file = {item["file"]: item for item in audit_manifest.get("items", [])}
+
         drifted: list[str] = []
         unmappable: list[str] = []
         matched = 0
+        permitted: list[str] = []
+        observed_newline_verdicts: dict[str, str] = {}
         for path_key, (segments, class_name, size, digest, _) in studio_files.items():
             destination = repo_path_for(segments, class_name)
             if destination is None:
                 unmappable.append(path_key)
                 continue
             if destination.exists():
-                text = destination.read_text(encoding="utf-8").replace("\r\n", "\n")
+                text = normalize(destination.read_text(encoding="utf-8"))
                 data = text.encode("utf-8")
                 if len(data) == size and djb2(data) == digest:
                     matched += 1
+                    rel = destination.relative_to(PROJECT_ROOT).as_posix()
+                    if rel in audit_by_file:
+                        observed_newline_verdicts[rel] = EXACT
+                    continue
+                # Not byte-identical. Under the shared contract a FLAGGED entry
+                # may be exactly the repo text plus one trailing newline -- and
+                # nothing else. This is the only tolerance in the whole audit.
+                rel = destination.relative_to(PROJECT_ROOT).as_posix()
+                entry = audit_by_file.get(rel)
+                allow = permits_trailing_newline(entry)
+                candidate = text + "\n"
+                if (allow and len(candidate.encode("utf-8")) == size
+                        and djb2(candidate.encode("utf-8")) == digest
+                        and classify(text, candidate, allow_trailing_newline=True)
+                        == TRAILING_NEWLINE):
+                    matched += 1
+                    permitted.append(rel)
+                    observed_newline_verdicts[rel] = TRAILING_NEWLINE
                     continue
             drifted.append(path_key)
 
@@ -218,6 +282,11 @@ def main() -> int:
 
         print(f"Studio scripts: {len(studio_files)}  matched: {matched}  "
               f"drifted/missing in repo: {len(drifted)}")
+        if permitted:
+            print(f"  ({len(permitted)} matched under the permitted trailing-newline "
+                  "contract; every one of them is flagged in the manifest)")
+            for rel in sorted(permitted):
+                print(f"    +1 LF in Studio  {rel}")
         for path_key in drifted:
             print(f"  DRIFT  {path_key.replace('|', '.')}")
         for path_key in unmappable:
@@ -225,11 +294,24 @@ def main() -> int:
         for orphan in orphans:
             print(f"  ORPHAN (in repo, not in Studio)  {orphan}")
 
-        if args.audit or not drifted:
+        stale_flag_facts = [
+            rel
+            for rel, verdict in observed_newline_verdicts.items()
+            if permits_trailing_newline(audit_by_file.get(rel))
+            != (verdict == TRAILING_NEWLINE)
+        ]
+        for rel in stale_flag_facts:
+            print(f"  FLAG FACT CHANGED  {rel}")
+
+        if args.audit or (not drifted and not stale_flag_facts):
             return 0
 
         manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
         manifest_by_file = {item["file"]: item for item in manifest.get("items", [])}
+
+        apply_observed_newline_verdicts(
+            manifest_by_file, observed_newline_verdicts
+        )
 
         skipped_protected: list[str] = []
         for path_key in drifted:
@@ -265,11 +347,13 @@ def main() -> int:
             entry["bytes"] = len(data)
             entry["sha256"] = hashlib.sha256(data).hexdigest()
             entry["status"] = "synced"
+            entry.pop("studioSha256Before", None)
+            apply_trailing_newline_verdict(entry, EXACT)
 
         if skipped_protected:
             print(
                 f"\n  SKIPPED {len(skipped_protected)} file(s) queued for a Studio "
-                "push — pulling them would replace your unpushed edits with "
+                "push -- pulling them would replace your unpushed edits with "
                 "Studio's older source:"
             )
             for rel in skipped_protected:
@@ -279,6 +363,7 @@ def main() -> int:
                 "discard those edits."
             )
 
+        refresh_trailing_newline_metadata(manifest)
         MANIFEST_PATH.write_text(
             json.dumps(manifest, indent=2) + "\n", encoding="utf-8", newline="\n"
         )

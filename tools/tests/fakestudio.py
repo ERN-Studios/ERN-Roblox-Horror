@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import os
 import subprocess
+import tempfile
 import sys
 from pathlib import Path
 
@@ -186,9 +187,25 @@ class FakeStudio:
     def execute(self, code: str) -> str:
         self.calls += 1
         program = PRELUDE.replace("__STATE_IN__", self._state_in()).replace("__CODE__", code)
-        script = SCRATCH / "_fakestudio_run.luau"
-        script.write_text(program, encoding="utf-8")
-        proc = subprocess.run([str(LUAU), str(script)], capture_output=True, text=True)
+        # A UNIQUE file under the system temp dir, deleted in a finally.
+        #
+        # This used to write `tools/tests/_fakestudio_run.luau` -- one fixed path
+        # inside the repo, rewritten on every call and never removed. It left a
+        # 585 KB scratch program sitting in the working tree (only .gitignore kept
+        # it out of commits), and two suites running at once would overwrite each
+        # other's program mid-run. A tempfile removes both problems and leaves the
+        # checkout clean whether the run passes, fails, or raises.
+        handle, temp_path = tempfile.mkstemp(prefix="fakestudio_", suffix=".luau", text=True)
+        os.close(handle)
+        script = Path(temp_path)
+        try:
+            script.write_text(program, encoding="utf-8")
+            proc = subprocess.run([str(LUAU), str(script)], capture_output=True, text=True)
+        finally:
+            try:
+                script.unlink()
+            except OSError:
+                pass
         if proc.returncode != 0:
             raise RuntimeError(f"luau failed:\n{proc.stdout}\n{proc.stderr}")
         stdout = proc.stdout

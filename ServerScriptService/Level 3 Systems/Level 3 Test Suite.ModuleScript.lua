@@ -705,7 +705,11 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 		if instance:IsA("BasePart") then
 			stats.BaseParts += 1
 			if instance.CanCollide then stats.Collidable += 1 end
-			if instance:GetAttribute("Level3_ManagerFurnitureNavExclusion") == true then
+			if instance:GetAttribute("Level3_TableCollision") == true then
+				assert(instance.Anchored and instance.Transparency == 1
+					and instance.CanCollide and instance.CanQuery and not instance.CanTouch,
+					"Folding-table gameplay collision was stripped by decorative setup")
+			elseif instance:GetAttribute("Level3_ManagerFurnitureNavExclusion") == true then
 				local modifier = instance:FindFirstChildOfClass("PathfindingModifier")
 				assert(instance.Anchored and not instance.CanCollide and instance.CanQuery
 					and modifier and modifier.Label == Configuration.MallManager.FurniturePathLabel

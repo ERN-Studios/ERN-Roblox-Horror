@@ -3,11 +3,13 @@
   "created": "2026-08-27",
   "universeId": "10559217407",
   "placeId": "131311258779917",
-  "experience": "Backrooms: No Way Out",
+  "experience": "BACKROOMS: STAY QUIET [CO-OP HORROR]",
   "sourceOfTruth": "live Roblox Studio inspection and Studio-accurate v4 compositions",
   "derivedFrom": "assets/marketing/roblox-thumbnails-v4-dark-horror",
-  "liveCarouselChanged": false,
-  "uploadStatus": "prepared-for-live-replacement",
+  "liveCarouselChanged": true,
+  "uploadStatus": "published-live",
+  "published": "2026-08-27",
+  "publicCarouselVerified": true,
   "sourceDimensions": {
     "width": 1672,
     "height": 941,
@@ -26,7 +28,7 @@
       "slug": "level1-entity-corner-chase",
       "source": "01-level1-entity-corner-chase.png",
       "upload": "01-level1-entity-corner-chase.jpg",
-      "highlight": "player, corrupted Entity, amber visor lights, and maze route"
+      "highlight": "player, corrupted Entity, amber visor lights, and maze geometry"
     },
     {
       "order": 2,
@@ -50,7 +52,7 @@
       "slug": "level2-slidemouth-grand-slide-hall",
       "source": "04-level2-slidemouth-grand-slide-hall.png",
       "upload": "04-level2-slidemouth-grand-slide-hall.jpg",
-      "highlight": "Slidemouth teeth, pipe colors, player, and illuminated water route"
+      "highlight": "Slidemouth teeth, pipe colors, player, and reflected water lighting"
     },
     {
       "order": 5,
@@ -58,7 +60,7 @@
       "slug": "level3-mall-manager-disc-relay",
       "source": "05-level3-mall-manager-disc-relay.png",
       "upload": "05-level3-mall-manager-disc-relay.jpg",
-      "highlight": "Mall Manager, player, CRT/VCR relay, and party-room props"
+      "highlight": "Mall Manager, player, CRT glow, and party-room props"
     }
   ]
 }

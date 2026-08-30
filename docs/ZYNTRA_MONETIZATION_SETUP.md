@@ -14,12 +14,12 @@ Zyntras nuværende opdeling er grundlæggende rigtig: permanente fordele er Game
 | `Tokens4` | 4 Research Tokens | Developer Product | 49 R$ | `3707755089` | 4 tokens; kan købes igen |
 | `Tokens20` | 20 Research Tokens | Developer Product | 149 R$ | `3707755233` | 20 tokens; kan købes igen |
 | `EmergencyReentry` | Emergency Re-entry | Developer Product | 29 R$ | `3707755318` | 1 gemt re-entry-credit; kan købes igen |
-| `DonationSignal` | Donate Signal | Developer Product | 10 R$ | `3710116814` | Frivillig donation; ingen gameplay-fordel |
-| `DonationSupply` | Donate Supply | Developer Product | 50 R$ | `3710116945` | Frivillig donation; ingen gameplay-fordel |
-| `DonationField` | Donate Field | Developer Product | 100 R$ | `3710117017` | Frivillig donation; ingen gameplay-fordel |
-| `DonationResearch` | Donate Research | Developer Product | 250 R$ | `3710117070` | Frivillig donation; ingen gameplay-fordel |
-| `DonationCommand` | Donate Command | Developer Product | 500 R$ | `3710117099` | Frivillig donation; ingen gameplay-fordel |
-| `DonationDirector` | Donate Director | Developer Product | 1.000 R$ | `3710117136` | Frivillig donation; ingen gameplay-fordel |
+| `DonationSignal` | Donate Signal | Developer Product | 10 R$ | `3710116814` | Donation til spillets fortsatte udvikling |
+| `DonationSupply` | Donate Supply | Developer Product | 50 R$ | `3710116945` | Donation til spillets fortsatte udvikling |
+| `DonationField` | Donate Field | Developer Product | 100 R$ | `3710117017` | Donation til spillets fortsatte udvikling |
+| `DonationResearch` | Donate Research | Developer Product | 250 R$ | `3710117070` | Donation til spillets fortsatte udvikling |
+| `DonationCommand` | Donate Command | Developer Product | 500 R$ | `3710117099` | Donation til spillets fortsatte udvikling |
+| `DonationDirector` | Donate Director | Developer Product | 1.000 R$ | `3710117136` | Donation til spillets fortsatte udvikling |
 
 `Glowstick Customizer` er et anbefalet klarere kundenavn end det nuværende `Cosmetic Equipment Packs`, fordi passet kun indeholder glowstick-farven. Den interne nøgle kan fortsat hedde `CosmeticEquipment`.
 
@@ -59,7 +59,7 @@ Filnavne, full-resolution masters og det anvendte prompt-set er dokumenteret i `
 
 **Alle seks Donate-produkter**
 
-> Optional, repeatable donation toward continued development of Backrooms: No Way Out. Grants no items or gameplay advantages.
+> Donate toward the continued development of BACKROOMS: STAY QUIET [CO-OP HORROR].
 
 ## Nuværende status i spillet
 
@@ -109,10 +109,10 @@ Før salg anbefales et 45-60 sekunders vindue, auto-use efter en godkendt receip
 
 Spillet skal være publiceret og tilgængeligt på Roblox, før passes kan oprettes.
 
-1. Åbn den korrekte Studio-version af `Backrooms: No Way Out`.
+1. Åbn den korrekte Studio-version af `BACKROOMS: STAY QUIET [CO-OP HORROR]`.
 2. Vælg `File -> Publish to Roblox`.
 3. Kontrollér, at Creator/Group og experience er den samme, som monetization skal udgives under.
-4. Åbn [Creator Dashboard](https://create.roblox.com/dashboard/creations) og vælg den nuværende experience `Backrooms: No Way Out`.
+4. Åbn [Creator Dashboard](https://create.roblox.com/dashboard/creations) og vælg den nuværende experience `BACKROOMS: STAY QUIET [CO-OP HORROR]`.
 
 Opret alle produkter under den samme experience. Roblox deaktiverede cross-game-salg af passes og Developer Products den 30. maj 2026.
 
@@ -120,7 +120,7 @@ Opret alle produkter under den samme experience. Roblox deaktiverede cross-game-
 
 Gentag dette for `Zyntra Supporter`, `Advanced Equipment` og `Glowstick Customizer`:
 
-1. Gå til `Creations -> Backrooms: No Way Out -> Monetization -> Passes`.
+1. Gå til `Creations -> BACKROOMS: STAY QUIET [CO-OP HORROR] -> Monetization -> Passes`.
 2. Klik `Create pass`.
 3. Upload det matchende 512 x 512 PNG-ikon fra `assets/monetization/icons-512`.
 4. Indsæt navn og beskrivelse fra tabellen ovenfor.
@@ -136,7 +136,7 @@ Managed Pricing er automatisk aktivt for passes. Det kan give regionale priser h
 
 Gentag dette for de tre utility-produkter og de seks frivillige Donate-produkter:
 
-1. Gå til `Creations -> Backrooms: No Way Out -> Monetization -> Developer Products`.
+1. Gå til `Creations -> BACKROOMS: STAY QUIET [CO-OP HORROR] -> Monetization -> Developer Products`.
 2. Klik `Create developer product`.
 3. Upload det matchende 512 x 512 PNG-ikon.
 4. Indsæt navn, beskrivelse og basispris.

@@ -73,7 +73,7 @@ def main() -> int:
     started = False
     try:
         client.initialize(); time.sleep(3)
-        select_studio(client, "Backrooms: No Way Out", 20)
+        select_studio(client, "BACKROOMS: STAY QUIET [CO-OP HORROR]", 20)
         print(client.call("start_stop_play", {"is_start": True})); started = True
         time.sleep(7)
         print(client.call("execute_luau", {"datamodel_type": "Server", "code": SETUP}))

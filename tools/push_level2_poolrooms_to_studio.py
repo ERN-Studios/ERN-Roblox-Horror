@@ -51,7 +51,7 @@ def main() -> int:
     try:
         client.initialize()
         time.sleep(2)
-        studio = select_studio(client, "Backrooms: No Way Out", 20)
+        studio = select_studio(client, "BACKROOMS: STAY QUIET [CO-OP HORROR]", 20)
         studio_id = studio["id"]
         state = client.call("get_studio_state", {"studio_id": studio_id})
         if "Current Studio Mode: Edit" not in state:

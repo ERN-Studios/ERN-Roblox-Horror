@@ -501,11 +501,38 @@ local function protect(player: Player, keepOwnership: boolean?)
 		PlatformStand = humanoid.PlatformStand,
 		AutoRotate = humanoid.AutoRotate,
 		TookOwnership = false,
+		OwnedAssemblyRoots = {} :: {BasePart},
 	}
 	if not keepOwnership then
 		saved.TookOwnership = pcall(function() (root :: BasePart):SetNetworkOwner(nil) end)
 	end
 	return saved
+end
+
+-- Ragdoll activation splits the character into several independently simulated
+-- assemblies. Claim each live assembly root after that split, rather than
+-- assuming the HumanoidRootPart claim made before ragdoll still covers every
+-- limb. The high-speed probe is only meaningful when the server owns every
+-- assembly whose velocity it authors.
+local function claimRagdollAssemblies(saved: any): {BasePart}
+	local roots = {} :: {BasePart}
+	local seen: {[BasePart]: boolean} = {}
+	for _, object in ipairs(saved.Character:GetDescendants()) do
+		if object:IsA("BasePart") then
+			local root = object.AssemblyRootPart or object
+			if not seen[root] then
+				seen[root] = true
+				local canSet, reason = root:CanSetNetworkOwnership()
+				assert(canSet, string.format(
+					"cannot claim ragdoll assembly %s: %s", root:GetFullName(), tostring(reason)))
+				root:SetNetworkOwner(nil)
+				table.insert(roots, root)
+			end
+		end
+	end
+	assert(#roots > 0, "the active ragdoll exposed no physical assemblies")
+	saved.OwnedAssemblyRoots = roots
+	return roots
 end
 
 -- Place a probe rider at a position with NO residual momentum, and give the
@@ -570,12 +597,28 @@ local function restore(player: Player, saved: any)
 	if saved.Character.Parent and saved.Humanoid.Health > 0 then
 		saved.Humanoid.PlatformStand = saved.PlatformStand
 		saved.Humanoid.AutoRotate = saved.AutoRotate
-		saved.Root.AssemblyLinearVelocity = Vector3.zero
-		saved.Root.AssemblyAngularVelocity = Vector3.zero
+		-- The high-speed probe drives every ragdoll assembly. Clear every one on
+		-- restore as well; clearing only HumanoidRootPart can leave a detached limb
+		-- carrying probe momentum into the lobby placement.
+		for _, object in ipairs(saved.Character:GetDescendants()) do
+			if object:IsA("BasePart") then
+				object.AssemblyLinearVelocity = Vector3.zero
+				object.AssemblyAngularVelocity = Vector3.zero
+			end
+		end
 		saved.Character:PivotTo(saved.CFrame)
 	end
 	if saved.TookOwnership then
-		pcall(function() saved.Root:SetNetworkOwnershipAuto() end)
+		local restored: {[BasePart]: boolean} = {}
+		for _, root in ipairs(saved.OwnedAssemblyRoots) do
+			if root.Parent and not restored[root] then
+				restored[root] = true
+				pcall(function() root:SetNetworkOwnershipAuto() end)
+			end
+		end
+		if saved.Root.Parent and not restored[saved.Root] then
+			pcall(function() saved.Root:SetNetworkOwnershipAuto() end)
+		end
 	end
 end
 
@@ -595,11 +638,14 @@ function TestSuite.ProbeHighSpeedCompletion(manifest: any, player: Player, speed
 	local PROBE_NAME = "ProbeHighSpeedCompletion"
 
 	claimRide(manifest, PROBE_NAME)
-	-- Measure the production client-owned ride. Taking server ownership disables
-	-- the LocalScript's VectorForce; after joints release, a velocity written to
-	-- just the root subassembly is absorbed by the ragdoll constraints and the
-	-- old probe stopped at ~5 studs/s without ever approaching the sensor.
-	local saved = protect(player, true)
+	-- This probe measures the authoritative completion detector, not the client
+	-- ride motor (the 75-second probe below covers that separately). Give the
+	-- server deterministic ownership and launch every ragdoll assembly at the
+	-- same velocity. Writing only HumanoidRootPart on a client-owned ragdoll is a
+	-- non-authoritative one-frame suggestion; it was intermittently overwritten
+	-- before the rider reached either sensor and misreported that harness stall as
+	-- a tunnelling failure.
+	local saved = protect(player, false)
 	local result
 	local ok, failure = pcall(function()
 		local launchFloor = floors[start - launchGap]
@@ -621,11 +667,25 @@ function TestSuite.ProbeHighSpeedCompletion(manifest: any, player: Player, speed
 			and os.clock() < ragdollDeadline do task.wait(.05) end
 		assert(saved.Character:GetAttribute("Level2_RagdollServerActive") == true,
 			"the production slide controller did not enter its ragdoll session")
-		saved.Root.AssemblyLinearVelocity = direction * launchSpeed
+		local ownedAssemblies = claimRagdollAssemblies(saved)
+		for _, root in ipairs(ownedAssemblies) do
+			root.AssemblyLinearVelocity = direction * launchSpeed
+			root.AssemblyAngularVelocity = Vector3.zero
+		end
+		-- Observe a real physics step under server authority. Merely recording the
+		-- value assigned above would let this test pass even if ownership were
+		-- immediately reclaimed and the launch overwritten before the sensor.
+		RunService.Heartbeat:Wait()
+		local observedLaunchSpeed = saved.Root.AssemblyLinearVelocity.Magnitude
+		local minimumObservedSpeed = launchSpeed * .75
+		assert(observedLaunchSpeed >= minimumObservedSpeed, string.format(
+			"high-speed probe never reached its required speed after a physics step" ..
+			" (observed %.1f, required %.1f, requested %.1f studs/s)",
+			observedLaunchSpeed, minimumObservedSpeed, launchSpeed))
 
 		local deadline = os.clock() + 8
 		local completedAt, speedAtCompletion, positionAtCompletion
-		local peakSpeed = 0
+		local peakSpeed = observedLaunchSpeed
 		while os.clock() < deadline do
 			task.wait(.05)
 			peakSpeed = math.max(peakSpeed, saved.Root.AssemblyLinearVelocity.Magnitude)
@@ -652,6 +712,9 @@ function TestSuite.ProbeHighSpeedCompletion(manifest: any, player: Player, speed
 			"completion teleported the rider to within %.0f studs of the recovery spawn", moved))
 		result = {
 			LaunchSpeed = launchSpeed,
+			ObservedLaunchSpeed = observedLaunchSpeed,
+			MinimumObservedSpeed = minimumObservedSpeed,
+			OwnedAssemblies = #ownedAssemblies,
 			PeakSpeed = peakSpeed,
 			SpeedAtCompletion = speedAtCompletion,
 			SpeedAfterCompletion = afterSpeed,

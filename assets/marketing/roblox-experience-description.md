@@ -1,37 +1,30 @@
-# Backrooms: No Way Out — Roblox experience description
+# Roblox experience description
+
+The canonical Creator Dashboard copy is
+[`ROBLOX_GAME_DESCRIPTION.md`](../../ROBLOX_GAME_DESCRIPTION.md). The plain-text
+upload mirror is `roblox-experience-description.txt`; keep its content identical
+to the canonical file.
+
+**Experience title:** `BACKROOMS: STAY QUIET [CO-OP HORROR]`
+
+The description is intentionally lore-led. It must not reveal objectives,
+required item counts, puzzle solutions, routes, exits, or entity-defeat steps.
 
 ```text
-⚠️ FLASHING LIGHTS, LOUD SOUNDS & CHASE SCENES ⚠️
+⚠️ FLASHING LIGHTS • LOUD NOISES • SUDDEN CHASES
 
-You are TEAM ALPHA.
+📡 ZYNTRA intercepted a signal from a place that doesn't exist.
+Command Center sent your team to trace it.
 
-Command Center has sent you into strange places that should not exist. Your mission is simple: solve each puzzle, find the exit, and make it back.
+Then the signal started using your names.
 
-But you are not alone.
+The halls remember every sound. The lights lead deeper. Something on the other side is waiting for you to answer.
 
-🟨 LEVEL 1 — Restore the power and activate the levers.
-🟦 LEVEL 2 — Start all three pumps and reach the exit slide.
-🟥 LEVEL 3 — Find five CDs and escape the Mall Manager.
+👁️ Stay together. Stay quiet. Don't trust the static.
+🤝 1–6 PLAYER CO-OP HORROR
+📱 PC + MOBILE
+🎧 HEADPHONES RECOMMENDED
 
-🔦 Explore mysterious liminal spaces
-🧩 Solve puzzles with your team
-👁️ Hide from entities that hunt you
-📡 Listen to Command Center for clues
-🤝 Play solo or with up to 6 players
-
-Stay together. Listen carefully. Keep moving.
-The deeper you go, the weaker the signal becomes...
-
-Can Team Alpha make it back before Command Center goes silent?
-
-EARLY ACCESS — Levels 1–3 available now.
-PC + Mobile | Headphones recommended
+THE TRANSMISSION IS STILL LIVE.
+Will you follow it?
 ```
-
-## Copy direction
-
-- Written in short sentences for quick reading on mobile.
-- Explains the role and goal before listing features.
-- Uses one simple objective per available level.
-- Builds suspense without graphic language.
-- Ends with a clear question instead of a dense development note.

@@ -54,11 +54,24 @@ function dispatchAudio.preferenceUnavailable()
 end
 
 function dispatchAudio.hasActiveTransmission()
-	if RunService:IsStudio()
-		and player:GetAttribute("UIRegressionForceDispatchActive") == true then
-		return true
+	local ambient = next(dispatchAudio.transmissions) ~= nil
+	if RunService:IsStudio() then
+		-- The twin of the force flag, and the reason it exists: a Studio session
+		-- comes up with the first-login lobby briefing already running, so
+		-- "clear the force flag" does NOT reach an idle screen. A device matrix
+		-- that assumed it did was asserting against a briefing it could not see
+		-- and could not stop -- the panel is drawn by a file-local table with no
+		-- outside handle. This hides the AMBIENT transmission only, so a matrix
+		-- can establish a real off-state; the force flag still adds one on top,
+		-- and neither exists outside Studio.
+		if player:GetAttribute("UIRegressionSuppressDispatch") == true then
+			ambient = false
+		end
+		if player:GetAttribute("UIRegressionForceDispatchActive") == true then
+			return true
+		end
 	end
-	return next(dispatchAudio.transmissions) ~= nil
+	return ambient
 end
 
 function dispatchAudio.currentTransmission()
@@ -108,8 +121,51 @@ function dispatchAudio.refresh()
 	if dispatchAudio.pendingValue ~= nil then muted = dispatchAudio.pendingValue end
 	dispatchAudio.group.Volume = loaded and (muted and 0 or 1) or 0
 	local hasSubtitle = dispatchAudio.subtitleCopy ~= nil and dispatchAudio.subtitleCopy ~= ""
+	-- The suppression hook has to reach the SUBTITLE as well as the audio, or it
+	-- suppresses nothing a regression matrix can see: a briefing whose line is
+	-- already on screen keeps the panel up through `hasSubtitle` long after
+	-- hasActiveTransmission() has been made to answer false. Studio only, and
+	-- the force flag still wins over it.
+	if RunService:IsStudio()
+		and player:GetAttribute("UIRegressionSuppressDispatch") == true
+		and player:GetAttribute("UIRegressionForceDispatchActive") ~= true
+	then
+		hasSubtitle = false
+	end
+	-- C4A_BRIEFING_VS_QUEUE_20260829 -- WHAT SHIPPED BROKEN.
+	-- The briefing panel and the queue host modal were two independent modals
+	-- that knew nothing about each other, so both could be on screen at once. On
+	-- touch this panel is pinned to UIDevice's TopBand -- (12,66) 517x75 on a
+	-- 705x338 Galaxy A06 -- and it lives in LevelOneGuideGui at DisplayOrder 110
+	-- while the queue shade is RoundGui at DisplayOrder 100: the briefing drew
+	-- straight OVER an open party dialog, and its MUTE/STOP readouts took the
+	-- taps that belonged to the modal underneath.
+	--
+	-- Queue and the full Zyntra terminal win, in BOTH directions, out of ONE
+	-- expression: a briefing raised while either modal is up never draws, and a
+	-- modal opened over a live briefing hides it. Nothing is torn down -- the
+	-- transmission, its cue timer and ZyntraDispatchClientActive are untouched --
+	-- so closing the modal brings the panel back mid-sentence.
+	--
+	-- `dispatchAudio.queueModalOpen` is mirrored from queueShade.Visible at the
+	-- one property-changed signal that every show and every hide path already
+	-- lands on, so a path that forgets to clear it is not expressible. It is a
+	-- table field rather than a file local for two reasons: `queueShade` is
+	-- declared hundreds of lines BELOW this function and is not in scope here,
+	-- and this script sits on Luau's 200-local ceiling for its main chunk.
+	local shown = (active or hasSubtitle)
+		and dispatchAudio.queueModalOpen ~= true
+		and player:GetAttribute("ZyntraStoreOpen") ~= true
 	if dispatchAudio.panel then
-		dispatchAudio.panel.Visible = active or hasSubtitle
+		dispatchAudio.panel.Visible = shown
+	end
+	-- Published for ZyntraStore, whose lobby opener sits inside this same TopBand
+	-- rectangle and has to stand down while the briefing owns it. Derived from
+	-- `shown` -- the very value the panel itself is given -- so the flag and the
+	-- pixels cannot drift apart, and it is cleared by that same expression on
+	-- every path that lowers the panel.
+	if player:GetAttribute("DispatchBriefingOpen") ~= shown then
+		player:SetAttribute("DispatchBriefingOpen", shown)
 	end
 	if dispatchAudio.subtitleLabel then
 		dispatchAudio.subtitleLabel.Text = hasSubtitle
@@ -122,8 +178,9 @@ function dispatchAudio.refresh()
 	end
 	if dispatchAudio.controls then
 		-- The controls belong to the briefing panel, including its radio lead-in;
-		-- they never float beside unrelated equipment UI.
-		dispatchAudio.controls.Visible = active
+		-- they never float beside unrelated equipment UI -- and never outlive the
+		-- panel itself, including where the queue modal has suppressed it.
+		dispatchAudio.controls.Visible = active and shown
 	end
 	if dispatchAudio.button then
 		-- Full words, always. The "[M]" prefix is a keyboard binding and is
@@ -144,11 +201,19 @@ function dispatchAudio.refresh()
 		-- State is carried by the WORD and by the dimming below, never by hue.
 		dispatchAudio.button.TextColor3 = dispatchAudio.accent
 		-- The label IS the state readout: DISPATCH OFFLINE, LOADING DISPATCH and
-		-- SAVING are things the player needs to SEE. Hiding the control in those
-		-- states (which SetInteractive would do) makes three of the five states
-		-- invisible, so it is only dimmed and disabled, never removed.
-		local ready = active and loaded and not dispatchAudio.pending
-		dispatchAudio.button.Visible = true
+		-- SAVING are things the player needs to SEE. All four of those states
+		-- happen while a transmission is ACTIVE, so they survive the rule below:
+		-- the control is only ever dimmed and disabled while Command is live,
+		-- never removed mid-briefing.
+		local ready = active and shown and loaded and not dispatchAudio.pending
+		-- WHAT SHIPPED BROKEN: `Visible = true`, unconditionally and forever. The
+		-- readouts belong to the briefing and to nothing else, but they were left
+		-- mounted after it ended -- alive inside a hidden parent, still reported by
+		-- any pass that walks descendants, and one stray `controls.Visible = true`
+		-- away from painting MUTE DISPATCH over a level with no dispatch in it.
+		-- They now exist EXACTLY while the transmission does; the parent frame
+		-- below is hidden on the same condition, so the two can never disagree.
+		dispatchAudio.button.Visible = active and shown
 		dispatchAudio.button.TextTransparency = ready and 0 or .45
 		UIDevice.SetEnabled(dispatchAudio.button, ready)
 	end
@@ -157,9 +222,12 @@ function dispatchAudio.refresh()
 		dispatchAudio.stopButton.TextColor3 = dispatchAudio.accent
 		dispatchAudio.stopButton.Text = stopBinding ~= ""
 			and (stopBinding .. "  STOP DISPATCH") or "STOP DISPATCH"
-		dispatchAudio.stopButton.Visible = true
+		-- Same rule as MUTE above: present exactly while the briefing is, gone the
+		-- moment it is not. STOP has no dimmed-but-informative state at all -- an
+		-- inactive STOP DISPATCH is a control that would do nothing if tapped.
+		dispatchAudio.stopButton.Visible = active and shown
 		dispatchAudio.stopButton.TextTransparency = active and 0 or .45
-		UIDevice.SetEnabled(dispatchAudio.stopButton, active)
+		UIDevice.SetEnabled(dispatchAudio.stopButton, active and shown)
 	end
 end
 
@@ -226,8 +294,10 @@ end)
 -- attached to a tablet, or ForceTouchUI being toggled during a device test.
 -- Without this the labels keep whatever they were built with.
 UIDevice.Changed:Connect(function() dispatchAudio.refresh() end)
+player:GetAttributeChangedSignal("ZyntraStoreOpen"):Connect(dispatchAudio.refresh)
 if RunService:IsStudio() then
 	player:GetAttributeChangedSignal("UIRegressionForceDispatchActive"):Connect(dispatchAudio.refresh)
+	player:GetAttributeChangedSignal("UIRegressionSuppressDispatch"):Connect(dispatchAudio.refresh)
 end
 dispatchAudio.refresh()
 
@@ -436,7 +506,9 @@ local function queueButton(name, text, position, size)
  return button, buttonStroke
 end
 
-local queueTitle = queueText("HostTitle", "CREATE YOUR PARTY", UDim2.new(0.06, 0, 0, 16), UDim2.new(0.88, 0, 0, 38), 31, Color3.fromRGB(116, 255, 178))
+-- 0.76, not 0.88: at 0.88 the title runs underneath the close button in the
+-- top-right corner, which the panel's own internal overlap check now catches.
+local queueTitle = queueText("HostTitle", "CREATE YOUR PARTY", UDim2.new(0.06, 0, 0, 16), UDim2.new(0.76, 0, 0, 38), 31, Color3.fromRGB(116, 255, 178))
 queueTitle.TextXAlignment = Enum.TextXAlignment.Center
 local queueStationLabel = queueText("StationLabel", "STATION", UDim2.new(0.10, 0, 0, 57), UDim2.new(0.80, 0, 0, 24), 18, Color3.fromRGB(151, 171, 155))
 queueStationLabel.TextXAlignment = Enum.TextXAlignment.Center
@@ -464,62 +536,258 @@ local queueHint = queueText("CancelHint", "STEP OUT OF THE SQUARE TO CANCEL", UD
 queueHint.TextXAlignment = Enum.TextXAlignment.Center
 
 local function applyQueueDeviceLayout()
- if UIS.TouchEnabled then
-  -- Phones and tablets get their own compact landscape-safe arrangement.
-  queuePanel.Size = UDim2.fromScale(0.78, 0.74)
-  queueConstraint.MinSize = Vector2.new(300, 280)
-  queueConstraint.MaxSize = Vector2.new(380, 286)
-  -- Do not place a full-screen input-catching box over the mobile controls.
+ local queueLayout = UIDevice.Layout()
+
+ -- -- ONE ordered row stack, driven by the panel's ACTUAL height ------------
+ -- WHAT SHIPPED BROKEN: every row in both branches was placed at a FIXED y
+ -- offset measured against the panel's TALLEST size -- except CREATE PARTY,
+ -- which was anchored to the panel's BOTTOM ("1, -78"). Those two conventions
+ -- agree at exactly one height. At 1920x1080 the desktop panel is 470x370 and
+ -- they do agree. At 705x338 the 0.82 height scale collapses onto the size
+ -- constraint's 330px floor, PRIVACY TOGGLE stays at its fixed 224..272 while
+ -- CREATE PARTY rides the bottom edge up to 252..302, and the two overlap by
+ -- twenty pixels. Measured on a real short desktop viewport; shipped that way.
+ --
+ -- Rows now carry the heights they were authored with -- that is where the
+ -- 44px touch floor lives, and nothing here ever shrinks one -- and the GAPS
+ -- between them absorb the difference, from the authored spacing at full
+ -- height down to a stated minimum. Two rows cannot overlap, because no row is
+ -- ever placed anywhere except directly beneath the one above it.
+ --
+ -- A nested function, not a file-level one: this script sits exactly on Luau's
+ -- ceiling of 200 local registers for its main chunk, and one more name at
+ -- that level stops the whole file compiling.
+ local function layoutQueueRows(panelHeight, bottomPad, minimumBottomPad, rows)
+  -- Trailing OPTIONAL rows are dropped, last first, while even the minimum
+  -- spacing overflows the panel. The cancel hint is the only one: it repeats
+  -- what the X button already offers, so dropping it beats letting it hang
+  -- outside the panel -- or letting it shove CREATE PARTY out of one.
+  local live = #rows
+  while live > 0 and rows[live].Optional do
+   local minimum = minimumBottomPad
+   for index = 1, live do minimum += rows[index].Height + rows[index].MinGap end
+   if minimum <= panelHeight then break end
+   rows[live].Control.Visible = false
+   live -= 1
+  end
+  local rowTotal, naturalGaps, minimumGaps = 0, bottomPad, minimumBottomPad
+  for index = 1, live do
+   rowTotal += rows[index].Height
+   naturalGaps += rows[index].Gap
+   minimumGaps += rows[index].MinGap
+  end
+  -- t = 1 reproduces the authored spacing to the pixel -- which is exactly what
+  -- the 470x370 desktop panel at 1920x1080 and the 260px touch panel at
+  -- 705x338 both get -- and t = 0 packs the stack down to its stated minimum.
+  -- Every value between the two is a valid, non-overlapping layout.
+  local spare = naturalGaps - minimumGaps
+  local t = spare > 0
+   and math.clamp((panelHeight - rowTotal - minimumGaps) / spare, 0, 1)
+   or 1
+  local y = 0
+  for index = 1, live do
+   local row = rows[index]
+   y += row.MinGap + math.floor((row.Gap - row.MinGap) * t + 0.5)
+   if row.Control then row.Control.Visible = true end
+   row.Apply(y, row.Height)
+   y += row.Height
+  end
+  return y
+ end
+
+ -- UIDevice.IsTouch(), not UserInputService.TouchEnabled: the form-factor
+ -- question has one answer in this game, and only the former honours the
+ -- Studio-only override the regression matrix drives. Reading TouchEnabled here
+ -- meant the whole touch branch was untestable from Luau.
+ if UIDevice.IsTouch() then
+  -- Phones and tablets get their own compact landscape-safe arrangement. Every
+  -- interactive control in it is at least 44x44: a thumb does not get smaller
+  -- because the screen did, and the previous 32x32 close button, 40px steppers,
+  -- 38px privacy toggle and 42px create button were all under the floor.
+  -- INSIDE the modal area, never negotiating with a movement zone.
+  --
+  -- This used to pick a spot from ONE zone: to the right of the thumbstick if
+  -- the screen was wide enough, above it otherwise. On a 705x338 Galaxy A06 the
+  -- first branch fires -- 290 + 380 = 670 <= 697 -- and puts the panel at
+  -- x 290..670 while the control column owns x 537..705. Plus, Privacy, Create
+  -- and half of Close were sitting under RUN, JUMP, GLOW and FLASHLIGHT. The
+  -- panel now takes the rectangle UIDevice guarantees is clear of every
+  -- movement affordance at once, and is sized to fit it.
+  local area = queueLayout.ModalArea
+  local queueWidth = math.floor(math.min(380, area.Width))
+  -- One rule, not a max/min sandwich: the row stack below is 260px at its
+  -- authored spacing and 251px packed, so ask for 280 and take whatever the
+  -- area can actually give. The stack absorbs the difference either way.
+  local queueHeight = math.floor(math.min(280, area.Height))
+  queuePanel.AnchorPoint = Vector2.new(0, 0)
+  queueConstraint.MinSize = Vector2.new(queueWidth, queueHeight)
+  queueConstraint.MaxSize = Vector2.new(queueWidth, queueHeight)
+  queuePanel.Size = UDim2.fromOffset(queueWidth, queueHeight)
+  queuePanel.Position = UDim2.fromOffset(
+   math.floor(area.Left + (area.Width - queueWidth) * 0.5),
+   math.floor(area.Top + (area.Height - queueHeight) * 0.5))
+  -- Do not place a full-screen input-catching box over the mobile controls --
+  -- and do not let the panel itself sink touches meant for them either. Its
+  -- BUTTONS stay Active and tappable; the frame behind them does not.
   queueShade.BackgroundTransparency = 1
   queueShade.Active = false
+  queuePanel.Active = false
 
-  queueClose.Position = UDim2.new(1, -39, 0, 7)
-  queueClose.Size = UDim2.fromOffset(32, 32)
-  queueClose.TextSize = 20
-  queueTitle.Position = UDim2.new(0.06, 0, 0, 10)
-  queueTitle.Size = UDim2.new(0.88, 0, 0, 32)
-  queueTitle.TextSize = 22
-  queueStationLabel.Position = UDim2.new(0.10, 0, 0, 43)
-  queueStationLabel.Size = UDim2.new(0.80, 0, 0, 19)
-  queueStationLabel.TextSize = 12
-
-  queueSizeCaption.Position = UDim2.new(0.08, 0, 0, 70)
-  queueSizeCaption.Size = UDim2.new(0.84, 0, 0, 18)
-  queueSizeCaption.TextSize = 13
-  queueMinus.Position = UDim2.new(0.12, 0, 0, 92)
-  queueMinus.Size = UDim2.new(0.18, 0, 0, 40)
-  queueMinus.TextSize = 18
-  queueCount.Position = UDim2.new(0.36, 0, 0, 89)
-  queueCount.Size = UDim2.new(0.28, 0, 0, 46)
-  queueCount.TextSize = 32
-  queuePlus.Position = UDim2.new(0.70, 0, 0, 92)
-  queuePlus.Size = UDim2.new(0.18, 0, 0, 40)
-  queuePlus.TextSize = 18
-
-  queuePrivacyCaption.Position = UDim2.new(0.08, 0, 0, 143)
-  queuePrivacyCaption.Size = UDim2.new(0.84, 0, 0, 18)
-  queuePrivacyCaption.TextSize = 13
-  queuePrivacyButton.Position = UDim2.new(0.10, 0, 0, 164)
-  queuePrivacyButton.Size = UDim2.new(0.80, 0, 0, 38)
-  queuePrivacyButton.TextSize = 14
-  queueSubmit.Position = UDim2.new(0.10, 0, 0, 216)
-  queueSubmit.Size = UDim2.new(0.80, 0, 0, 42)
+  -- Offsets, not fractions. A fraction of a 380px panel and a fraction of the
+  -- 239px one a landscape phone can actually spare are different sizes, and the
+  -- narrow case is what pushed the steppers under the 44px floor.
+  queueClose.AnchorPoint = Vector2.new(1, 0)
+  queueClose.Position = UDim2.new(1, -6, 0, 6)
+  queueClose.Size = UDim2.fromOffset(44, 44)
+  queueClose.TextSize = 24
+  queuePlus.AnchorPoint = Vector2.new(1, 0)
+  queueTitle.TextSize = 18
+  queueStationLabel.TextSize = 11
+  queueSizeCaption.TextSize = 12
+  queueMinus.TextSize = 22
+  queueCount.TextSize = 30
+  queuePlus.TextSize = 22
+  queuePrivacyCaption.TextSize = 12
+  queuePrivacyButton.TextSize = 15
   queueSubmit.TextSize = 16
-  queueHint.Position = UDim2.new(0.08, 0, 0, 265)
-  queueHint.Size = UDim2.new(0.84, 0, 0, 14)
   queueHint.TextSize = 10
-  queueHint.Text = "WALK OUT OR TAP × TO CANCEL"
+  queueHint.Text = "WALK OUT OR TAP X TO CANCEL"
+
+  -- The stepper row is the only place the width actually binds, so it is
+  -- derived rather than fixed. A hard 56/56 pair with the count taking
+  -- "1, -160" goes NEGATIVE below 160px of panel -- a 568x320 landscape phone
+  -- leaves 156 -- and a negative size renders as nothing at all, so the player
+  -- count silently disappears instead of merely being tight.
+  local stepper = math.clamp(math.floor((queueWidth - 30) / 3), 44, 56)
+  local countLeft = 10 + stepper + 6
+  local countWidth = math.max(24, queueWidth - 20 - stepper * 2 - 12)
+  -- Title and station stop clear of the close button, which reaches down to
+  -- y = 50: at full width both rows run underneath a 44x44 X.
+  layoutQueueRows(queueHeight, 4, 4, {
+   {Height = 26, Gap = 8, MinGap = 6, Control = queueTitle, Apply = function(y, h)
+    queueTitle.Position = UDim2.new(0, 10, 0, y)
+    queueTitle.Size = UDim2.new(1, -66, 0, h)
+   end},
+   {Height = 14, Gap = 2, MinGap = 2, Control = queueStationLabel, Apply = function(y, h)
+    queueStationLabel.Position = UDim2.new(0, 10, 0, y)
+    queueStationLabel.Size = UDim2.new(1, -66, 0, h)
+   end},
+   {Height = 14, Gap = 4, MinGap = 3, Control = queueSizeCaption, Apply = function(y, h)
+    queueSizeCaption.Position = UDim2.new(0, 10, 0, y)
+    queueSizeCaption.Size = UDim2.new(1, -20, 0, h)
+   end},
+   {Height = 46, Gap = 4, MinGap = 3, Apply = function(y, h)
+    queueMinus.Position = UDim2.new(0, 10, 0, y)
+    queueMinus.Size = UDim2.fromOffset(stepper, h)
+    queueCount.Position = UDim2.new(0, countLeft, 0, y)
+    queueCount.Size = UDim2.fromOffset(countWidth, h)
+    queuePlus.Position = UDim2.new(1, -10, 0, y)
+    queuePlus.Size = UDim2.fromOffset(stepper, h)
+   end},
+   {Height = 14, Gap = 4, MinGap = 3, Control = queuePrivacyCaption, Apply = function(y, h)
+    queuePrivacyCaption.Position = UDim2.new(0, 10, 0, y)
+    queuePrivacyCaption.Size = UDim2.new(1, -20, 0, h)
+   end},
+   {Height = 46, Gap = 4, MinGap = 3, Control = queuePrivacyButton, Apply = function(y, h)
+    queuePrivacyButton.Position = UDim2.new(0, 10, 0, y)
+    queuePrivacyButton.Size = UDim2.new(1, -20, 0, h)
+   end},
+   {Height = 48, Gap = 6, MinGap = 4, Control = queueSubmit, Apply = function(y, h)
+    queueSubmit.Position = UDim2.new(0, 10, 0, y)
+    queueSubmit.Size = UDim2.new(1, -20, 0, h)
+   end},
+   {Height = 12, Gap = 4, MinGap = 3, Optional = true, Control = queueHint,
+    Apply = function(y, h)
+    queueHint.Position = UDim2.new(0, 10, 0, y)
+    queueHint.Size = UDim2.new(1, -20, 0, h)
+   end},
+  })
  else
-  -- Preserve the existing desktop proportions exactly.
-  queuePanel.Size = UDim2.fromScale(0.86, 0.82)
-  queueConstraint.MaxSize = Vector2.new(470, 370)
-  queueConstraint.MinSize = Vector2.new(320, 330)
+  -- The desktop proportions, restored in FULL. This branch used to set only
+  -- the panel, the close button and the hint text, so every control the touch
+  -- branch had moved kept its phone geometry once a device override had been
+  -- applied -- the two layouts leaked into each other. It also left the title
+  -- at its original 0.88 width, which runs underneath the close button; 0.76
+  -- ends clear of it.
+  queuePanel.Active = true
+  queuePanel.AnchorPoint = Vector2.new(0.5, 0.5)
+  queuePanel.Position = UDim2.fromScale(0.5, 0.5)
+  -- Offsets, and the constraint states the SAME numbers. A scale size with a
+  -- min/max constraint means the panel's real height is decided behind the
+  -- layout's back -- 0.86x0.82 reads as 606x277 at 705x338 and is then silently
+  -- clamped to 470x330 -- which is precisely how a stack measured for 370 came
+  -- to be drawn into 330 and overlap itself.
+  local queueWidth = math.clamp(math.floor(queueLayout.Width * .86), 320, 470)
+  local queueHeight = math.clamp(math.floor(queueLayout.Height * .82), 330, 370)
+  queueConstraint.MinSize = Vector2.new(queueWidth, queueHeight)
+  queueConstraint.MaxSize = Vector2.new(queueWidth, queueHeight)
+  queuePanel.Size = UDim2.fromOffset(queueWidth, queueHeight)
   queueShade.BackgroundTransparency = 0.38
   queueShade.Active = true
+
+  -- Reset the anchors the touch branch sets. Position and Size alone are not
+  -- enough: an anchored child moved back to a top-left offset without clearing
+  -- its AnchorPoint lands half its own width off, and that is exactly the leak
+  -- the comment above is about.
+  queueClose.AnchorPoint = Vector2.new(0, 0)
+  queuePlus.AnchorPoint = Vector2.new(0, 0)
   queueClose.Position = UDim2.new(1, -46, 0, 10)
   queueClose.Size = UDim2.fromOffset(34, 34)
   queueClose.TextSize = 24
+  queueTitle.TextSize = 31
+  queueStationLabel.TextSize = 18
+  queueSizeCaption.TextSize = 19
+  queueMinus.TextSize = 21
+  queueCount.TextSize = 44
+  queuePlus.TextSize = 21
+  queuePrivacyCaption.TextSize = 19
+  queuePrivacyButton.TextSize = 18
+  queueSubmit.TextSize = 21
+  queueHint.TextSize = 14
   queueHint.Text = "STEP OUT OF THE SQUARE TO CANCEL"
+
+  layoutQueueRows(queueHeight, 7, 6, {
+   {Height = 38, Gap = 16, MinGap = 8, Control = queueTitle, Apply = function(y, h)
+    queueTitle.Position = UDim2.new(0.06, 0, 0, y)
+    queueTitle.Size = UDim2.new(0.76, 0, 0, h)
+   end},
+   {Height = 24, Gap = 3, MinGap = 2, Control = queueStationLabel, Apply = function(y, h)
+    queueStationLabel.Position = UDim2.new(0.10, 0, 0, y)
+    queueStationLabel.Size = UDim2.new(0.80, 0, 0, h)
+   end},
+   {Height = 24, Gap = 13, MinGap = 6, Control = queueSizeCaption, Apply = function(y, h)
+    queueSizeCaption.Position = UDim2.new(0.08, 0, 0, y)
+    queueSizeCaption.Size = UDim2.new(0.84, 0, 0, h)
+   end},
+   -- The count sits two pixels proud of the steppers and four taller, which is
+   -- an optical adjustment for a 44px numeral against two 21px glyphs. The
+   -- row's MinGap is 4 so those two pixels can never eat the caption above it.
+   {Height = 52, Gap = 6, MinGap = 4, Apply = function(y, h)
+    queueMinus.Position = UDim2.new(0.10, 0, 0, y)
+    queueMinus.Size = UDim2.new(0.20, 0, 0, h)
+    queueCount.Position = UDim2.new(0.37, 0, 0, y - 2)
+    queueCount.Size = UDim2.new(0.26, 0, 0, h + 4)
+    queuePlus.Position = UDim2.new(0.70, 0, 0, y)
+    queuePlus.Size = UDim2.new(0.20, 0, 0, h)
+   end},
+   {Height = 24, Gap = 18, MinGap = 8, Control = queuePrivacyCaption, Apply = function(y, h)
+    queuePrivacyCaption.Position = UDim2.new(0.08, 0, 0, y)
+    queuePrivacyCaption.Size = UDim2.new(0.84, 0, 0, h)
+   end},
+   {Height = 48, Gap = 6, MinGap = 4, Control = queuePrivacyButton, Apply = function(y, h)
+    queuePrivacyButton.Position = UDim2.new(0.10, 0, 0, y)
+    queuePrivacyButton.Size = UDim2.new(0.80, 0, 0, h)
+   end},
+   {Height = 50, Gap = 20, MinGap = 8, Control = queueSubmit, Apply = function(y, h)
+    queueSubmit.Position = UDim2.new(0.10, 0, 0, y)
+    queueSubmit.Size = UDim2.new(0.80, 0, 0, h)
+   end},
+   {Height = 16, Gap = 5, MinGap = 4, Optional = true, Control = queueHint,
+    Apply = function(y, h)
+    queueHint.Position = UDim2.new(0.08, 0, 0, y)
+    queueHint.Size = UDim2.new(0.84, 0, 0, h)
+   end},
+  })
  end
 end
 applyQueueDeviceLayout()
@@ -585,10 +853,10 @@ refreshQueuePanel()
 
 -- RoundUI is the sole cursor-policy owner. Lobby players need the mouse for the
 -- queue phone and Zyntra store; gameplay hides it unless a modal is open.
--- `compact`, `color`, `corner`, `stroke` and `sizeConstraint` all belong to the
--- result screen and all live here rather than as file locals: this script sits
--- on Luau's 200-local limit for a chunk's main body.
-local completion = {returnVisible = false, compact = false,
+-- `color`, the two action buttons and their shared list all belong to the
+-- result screen and live here rather than as file locals: this script sits on
+-- Luau's 200-local limit for a chunk's main body.
+local completion = {returnVisible = false,
 	color = Color3.fromRGB(115, 255, 170)}
 local function shouldShowCursor()
  return player:GetAttribute("InRound") ~= true
@@ -605,6 +873,38 @@ local function refreshCursor()
  UIS.MouseIconEnabled = visible
 end
 
+-- The queue modal announces itself. ZyntraStore has to hide its own open button
+-- while this panel is up -- two lobby modals stacked on a 705x338 phone is one
+-- modal too many -- and that contract is only as strong as the flag behind it.
+--
+-- WHAT SHIPPED BROKEN: nothing published the state at all, so the store had no
+-- way to know. The flag is deliberately derived from the ONE property that every
+-- show and every hide path already writes, instead of from the fourteen call
+-- sites that write it: `queuehost` opens the panel; construction, the X button,
+-- showRoundEnding and the lobby / queueconfigured / queueconfigclosed /
+-- queuewaitinghost / queueprivate / queuefull / lobbycancel / spectating /
+-- loadinggame events all close it -- and every single one of them lands here.
+-- A path that forgets to clear the flag is therefore not expressible: cancelling
+-- the party, the host walking out of the square, and the round starting are all
+-- just `queueShade.Visible = false`, and this fires on each of them.
+player:SetAttribute("QueueModalOpen", queueShade.Visible)
+-- ...and the dispatch briefing yields to this panel from the SAME choke point.
+-- WHAT SHIPPED BROKEN: nothing connected the two, so a lobby briefing drew its
+-- own panel over an open party dialog and a party dialog opened underneath a
+-- live briefing. Mirroring the state HERE rather than at the fourteen call
+-- sites is what makes the exclusion hold on every one of them -- cancelling the
+-- party, the host stepping out of the square and the round starting are all
+-- just `queueShade.Visible = false`, and each of them lands on this signal.
+-- See C4A_BRIEFING_VS_QUEUE_20260829 in dispatchAudio.refresh for the rule.
+dispatchAudio.queueModalOpen = queueShade.Visible
+queueShade:GetPropertyChangedSignal("Visible"):Connect(function()
+ player:SetAttribute("QueueModalOpen", queueShade.Visible)
+ dispatchAudio.queueModalOpen = queueShade.Visible
+ -- Raise or lower the briefing to match, and republish DispatchBriefingOpen
+ -- with it. Both flags are written from this one handler, so they can never
+ -- disagree and neither can be left stuck by a path that only touches one.
+ dispatchAudio.refresh()
+end)
 queueShade:GetPropertyChangedSignal("Visible"):Connect(refreshCursor)
 player:GetAttributeChangedSignal("InRound"):Connect(refreshCursor)
 player:GetAttributeChangedSignal("DevPhoneOpen"):Connect(refreshCursor)
@@ -704,19 +1004,13 @@ endFrame.Visible = false
 endFrame.ZIndex = 120
 endFrame.Parent = gui
 
--- LEVEL2_EXIT_TRANSITION_20260828
--- The result screen has two shapes. Wipes retain the full-bleed blackout. A win
--- uses a compact card so the completed map remains visibly present throughout
--- the fifteen-second decision window; Level 2 riders use the same shape while
--- they continue through the exit flume.
-completion.corner = Instance.new("UICorner")
-completion.corner.CornerRadius = UDim.new(0, 0)
-completion.corner.Parent = endFrame
-completion.stroke = Instance.new("UIStroke")
-completion.stroke.Color = Color3.fromRGB(105, 255, 165)
-completion.stroke.Thickness = 1.5
-completion.stroke.Transparency = 1
-completion.stroke.Parent = endFrame
+-- The result screen is ONE shape: a full-bleed overlay, for wins and for wipes
+-- alike. It carried a second, compact "card" variant for a while so a finished
+-- map stayed visible behind it; that variant is gone, and with it the pair of
+-- divergent layout branches that had to be kept in step. The Level 2 exit ride
+-- is unaffected -- the flume, the respawn handoff and the spectate hold-off are
+-- all driven by the Level2_ExitTransition attribute on the server, never by the
+-- shape of this overlay.
 
 local endFlash = Instance.new("Frame")
 endFlash.Name = "SignalFlash"
@@ -788,170 +1082,170 @@ endHint.TextWrapped = true
 endHint.ZIndex = 123
 endHint.Parent = endFrame
 
-completion.button = Instance.new("TextButton")
-completion.button.Name = "ReturnToLobby"
-completion.button.AnchorPoint = Vector2.new(0.5, 0.5)
-completion.button.Position = UDim2.fromScale(0.5, 0.82)
-completion.button.Size = UDim2.new(0, 280, 0, 50)
-completion.button.BackgroundColor3 = Color3.fromRGB(13, 37, 29)
-completion.button.BackgroundTransparency = 0.08
-completion.button.BorderSizePixel = 0
-completion.button.AutoButtonColor = true
-completion.button.Active = false
-completion.button.Selectable = false
-completion.button.Modal = true
-completion.button.Font = Enum.Font.GothamBold
-completion.button.Text = "RETURN TO LOBBY"
-completion.button.TextColor3 = Color3.fromRGB(130, 255, 184)
-completion.button.TextSize = 17
-completion.button.TextTransparency = 1
-completion.button.Visible = false
-completion.button.ZIndex = 124
-completion.button.Parent = endFrame
+-- Two actions, built identically and laid out together so neither can drift.
+-- Both are DIRECT children of endFrame rather than sitting inside a container:
+-- UIRegression asserts the internal composition of RoundEnding, and a wrapper
+-- frame would hide the two buttons from exactly the overlap test they most
+-- need. Text is TextScaled between 11 and 18 so "BACK TO LOBBY" cannot spill
+-- out of a narrow phone button.
 do
-	local object = Instance.new("UICorner")
-	object.CornerRadius = UDim.new(0, 8)
-	object.Parent = completion.button
-	object = Instance.new("UIStroke")
-	object.Color = Color3.fromRGB(105, 255, 165)
-	object.Transparency = 0.28
-	object.Thickness = 1.5
-	object.Parent = completion.button
-	object = Instance.new("UISizeConstraint")
-	object.MinSize = Vector2.new(210, 46)
-	object.MaxSize = Vector2.new(360, 54)
-	object.Parent = completion.button
-	completion.sizeConstraint = object
+local function makeCompletionButton(name, text)
+	local button = Instance.new("TextButton")
+	button.Name = name
+	button.AnchorPoint = Vector2.new(0.5, 0.5)
+	button.Position = UDim2.fromScale(0.5, 0.83)
+	button.Size = UDim2.fromOffset(240, 48)
+	button.BackgroundColor3 = Color3.fromRGB(13, 37, 29)
+	button.BackgroundTransparency = 0.08
+	button.BorderSizePixel = 0
+	button.AutoButtonColor = true
+	button.Active = false
+	button.Selectable = false
+	button.Modal = true
+	button.Font = Enum.Font.GothamBold
+	button.Text = text
+	button.TextColor3 = Color3.fromRGB(130, 255, 184)
+	button.TextScaled = true
+	button.TextTransparency = 1
+	button.Visible = false
+	button.ZIndex = 124
+	button.Parent = endFrame
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(0, 8)
+	corner.Parent = button
+	local stroke = Instance.new("UIStroke")
+	stroke.Color = Color3.fromRGB(105, 255, 165)
+	stroke.Transparency = 0.28
+	stroke.Thickness = 1.5
+	stroke.Parent = button
+	local padding = Instance.new("UIPadding")
+	padding.PaddingLeft = UDim.new(0, 10)
+	padding.PaddingRight = UDim.new(0, 10)
+	padding.PaddingTop = UDim.new(0, 8)
+	padding.PaddingBottom = UDim.new(0, 8)
+	padding.Parent = button
+	local textSize = Instance.new("UITextSizeConstraint")
+	textSize.MinTextSize = 11
+	textSize.MaxTextSize = 18
+	textSize.Parent = button
+	return button
+end
+
+completion.continueButton = makeCompletionButton("ContinueRun", "CONTINUE")
+completion.button = makeCompletionButton("ReturnToLobby", "BACK TO LOBBY")
+completion.buttons = {completion.continueButton, completion.button}
+completion.continueButton:SetAttribute("CompletionAction", "continuenow")
+completion.continueButton:SetAttribute("CompletionPressedText", "CONTINUING...")
+completion.button:SetAttribute("CompletionAction", "returntolobby")
+completion.button:SetAttribute("CompletionPressedText", "RETURNING...")
 end
 
 -- Which shape the result screen is wearing, and in what accent, so a viewport
 -- or orientation change can re-measure the card without waiting for the next
 -- result to arrive.
-function completion.applyLayout(compact, color)
- completion.compact = compact
+function completion.applyLayout(color)
  completion.color = color or completion.color
+ endFrame.AnchorPoint = Vector2.new(0, 0)
+ endFrame.Position = UDim2.fromScale(0, 0)
+ endFrame.Size = UDim2.fromScale(1, 1)
+ endFlash.Visible = true
+ endLine.Visible = true
 
- if not compact then
-  endFrame.AnchorPoint = Vector2.new(0, 0)
-  endFrame.Position = UDim2.fromScale(0, 0)
-  endFrame.Size = UDim2.fromScale(1, 1)
-  completion.corner.CornerRadius = UDim.new(0, 0)
-  completion.stroke.Transparency = 1
-  endFlash.Visible = true
-  endLine.Visible = true
+ endTitle.AnchorPoint = Vector2.new(0.5, 0.5)
+ endTitle.Position = UDim2.fromScale(0.5, 0.43)
+ endTitle.Size = UDim2.new(0.88, 0, 0.18, 0)
+ endTitle.TextXAlignment = Enum.TextXAlignment.Center
+ endTitle.TextWrapped = true
+ -- Min BEFORE Max: a UITextSizeConstraint with Min > Max is invalid, and it
+ -- throws out of showRoundEnding before the screen is ever shown.
+ endTitleSize.MinTextSize = 24
+ endTitleSize.MaxTextSize = 62
 
-  endTitle.AnchorPoint = Vector2.new(0.5, 0.5)
-  endTitle.Position = UDim2.fromScale(0.5, 0.43)
-  endTitle.Size = UDim2.new(0.88, 0, 0.18, 0)
-  endTitle.TextXAlignment = Enum.TextXAlignment.Center
-  endTitle.TextWrapped = true
-  -- Min BEFORE Max. A UITextSizeConstraint with Min > Max is invalid, and the
-  -- compact branch below drops Max to ~20, so restoring only Max here would
-  -- leave the pair inverted on the way back to full bleed.
-  endTitleSize.MinTextSize = 24
-  endTitleSize.MaxTextSize = 62
+ -- Fixed 44px and 32px boxes at 0.63 and 0.72 of the height are 63px apart on
+ -- a 720px screen and 32px apart on a 353px one, where the two boxes genuinely
+ -- collided. The rows scale with the viewport so the stack stays separated.
+ local deviceLayout = UIDevice.Layout()
+ local viewportHeight = deviceLayout.Height
+ local statsHeight = math.clamp(viewportHeight * .06, 22, 44)
+ local hintHeight = math.clamp(viewportHeight * .045, 18, 32)
 
-  -- Fixed 44px and 32px boxes at 0.63 and 0.72 of the height are 63px apart on
-  -- a 720px screen and 32px apart on a 353px one, where the two boxes genuinely
-  -- collided. The rows scale with the viewport so the stack stays separated.
-  local viewportHeight = UIDevice.Layout().Height
-  local statsHeight = math.clamp(viewportHeight * .06, 22, 44)
-  local hintHeight = math.clamp(viewportHeight * .045, 18, 32)
+ endStats.AnchorPoint = Vector2.new(0.5, 0.5)
+ endStats.Position = UDim2.fromScale(0.5, 0.63)
+ endStats.Size = UDim2.new(0.86, 0, 0, statsHeight)
+ endStats.TextSize = math.clamp(math.floor(statsHeight * .58), 14, 25)
+ endStats.TextXAlignment = Enum.TextXAlignment.Center
+ endStats.TextTruncate = Enum.TextTruncate.None
 
-  endStats.AnchorPoint = Vector2.new(0.5, 0.5)
-  endStats.Position = UDim2.fromScale(0.5, 0.63)
-  endStats.Size = UDim2.new(0.86, 0, 0, statsHeight)
-  endStats.TextSize = math.clamp(math.floor(statsHeight * .58), 14, 25)
-  endStats.TextXAlignment = Enum.TextXAlignment.Center
-  endStats.TextTruncate = Enum.TextTruncate.None
+ endHint.AnchorPoint = Vector2.new(0.5, 0.5)
+ endHint.Position = UDim2.fromScale(0.5, 0.72)
+ endHint.Size = UDim2.new(0.86, 0, 0, hintHeight)
+ endHint.TextSize = math.clamp(math.floor(hintHeight * .55), 12, 17)
+ endHint.TextXAlignment = Enum.TextXAlignment.Center
+ endHint.TextTruncate = Enum.TextTruncate.None
 
-  endHint.AnchorPoint = Vector2.new(0.5, 0.5)
-  endHint.Position = UDim2.fromScale(0.5, 0.72)
-  endHint.Size = UDim2.new(0.86, 0, 0, hintHeight)
-  endHint.TextSize = math.clamp(math.floor(hintHeight * .55), 12, 17)
-  endHint.TextXAlignment = Enum.TextXAlignment.Center
-  endHint.TextTruncate = Enum.TextTruncate.None
+ -- The action row. One button is centred; two share a row, and fall back to a
+ -- stack when the row would squeeze either below a comfortable tap size.
+ -- UIListLayout is deliberately not used here: see makeCompletionButton.
+ local visible = {}
+ for _, button in ipairs(completion.buttons) do
+  if button.Visible then table.insert(visible, button) end
+ end
+ if #visible == 0 then return end
+ -- A phone in landscape is only ~375 tall, and .075 of that is 28px. The floor
+ -- has to be the 44px minimum tap target on any touch device, or the result
+ -- screen ships actions nobody can reliably hit.
+ local buttonHeight = math.clamp(math.floor(viewportHeight * .075),
+  deviceLayout.IsTouch and 44 or 40, 54)
+ local gap = math.clamp(math.floor(viewportHeight * .022), 10, 18)
+ local rowWidth = math.min(deviceLayout.Width * .86, 620)
+ local paired = math.floor((rowWidth - gap) * .5)
+ local stacked = #visible > 1 and paired < 168
 
-  completion.button.AnchorPoint = Vector2.new(0.5, 0.5)
-  completion.button.Position = UDim2.fromScale(0.5, 0.82)
-  completion.button.Size = UDim2.new(0, 280, 0, 50)
-  completion.button.TextSize = 17
-  completion.sizeConstraint.MinSize = Vector2.new(210, 46)
-  completion.sizeConstraint.MaxSize = Vector2.new(360, 54)
-  return
+ -- The row is positioned from the COUNTDOWN'S REAL BOTTOM EDGE, not from a
+ -- fixed fraction of the height. A stacked pair anchored at .80 of a 390x844
+ -- portrait overlapped the countdown by 11px, and by 19px at 375x667, because
+ -- the two were laid out against the viewport independently and nothing ever
+ -- compared them.
+ local hintBottom = viewportHeight * .72 + hintHeight * .5
+ local rowHeight = stacked and (buttonHeight * 2 + gap) or buttonHeight
+ local bottomLimit = viewportHeight - rowHeight - 8
+ local preferred = viewportHeight * (stacked and .80 or .83) - rowHeight * .5
+ local rowTop = math.max(preferred, hintBottom + gap)
+ if rowTop > bottomLimit then
+  -- Not enough room for the full gap. Keep the row on screen and take the
+  -- separation down to whatever is left, never below zero.
+  rowTop = math.max(bottomLimit, math.min(rowTop, hintBottom + 2))
  end
 
- -- The card lives in the band UIDevice guarantees is clear of the thumbstick
- -- activation region, the control column and the jump button, so RETURN TO
- -- LOBBY stays tappable on a phone without sitting on a movement control. On
- -- the smallest landscape that band is about 478x88, which is what makes this
- -- a horizontal card with the button beside the text rather than under it.
- local layout = UIDevice.Layout()
- local band = layout.TopBand
- local pad = 10
- -- 460 is the widest the card is allowed to be: any more and it stops
- -- reading as a card and starts reading as a banner across the ride.
- local width = math.clamp(math.min(band.Width, 460), 240, 460)
- local height = math.clamp(band.Height, 62, 88)
- local buttonHeight = layout.IsTouch and 44
-		or math.clamp(height - pad * 2, 32, 44)
- local buttonWidth = width < 380 and 124 or 150
- local textWidth = math.max(80, width - pad * 3 - buttonWidth)
- local centreX = (band.Left + band.Right) * .5
-
- endFrame.AnchorPoint = Vector2.new(0.5, 0)
- endFrame.Position = UDim2.new(0, centreX, 0, UIDevice.TopOffsetFor(gui, band.Top))
- endFrame.Size = UDim2.fromOffset(width, height)
- completion.corner.CornerRadius = UDim.new(0, 10)
- completion.stroke.Color = completion.color
- completion.stroke.Transparency = 0.35
- endFlash.Visible = false
- endLine.Visible = false
-
- local roomy = height >= 80
- local titleHeight = roomy and 20 or 18
- local rowHeight = roomy and 16 or 14
- local rowGap = roomy and 4 or 2
- local top = math.max(4, (height - (titleHeight + rowHeight * 2 + rowGap * 2)) * .5)
-
- endTitle.AnchorPoint = Vector2.new(0, 0)
- endTitle.Position = UDim2.fromOffset(pad, top)
- endTitle.Size = UDim2.fromOffset(textWidth, titleHeight)
- endTitle.TextXAlignment = Enum.TextXAlignment.Left
- endTitle.TextWrapped = false
- -- The card's title row is 18-20px tall, well under the full-bleed floor of 24.
- -- Lowering Min first keeps the constraint valid; leaving it at 24 would either
- -- paint a 24px title across the button beside it or make the constraint itself
- -- throw out of showRoundEnding before the result screen is ever shown.
- endTitleSize.MinTextSize = math.min(12, titleHeight)
- endTitleSize.MaxTextSize = titleHeight
-
- endStats.AnchorPoint = Vector2.new(0, 0)
- endStats.Position = UDim2.fromOffset(pad, top + titleHeight + rowGap)
- endStats.Size = UDim2.fromOffset(textWidth, rowHeight)
- endStats.TextSize = rowHeight - 2
- endStats.TextXAlignment = Enum.TextXAlignment.Left
- endStats.TextTruncate = Enum.TextTruncate.AtEnd
-
- endHint.AnchorPoint = Vector2.new(0, 0)
- endHint.Position = UDim2.fromOffset(pad, top + titleHeight + rowHeight + rowGap * 2)
- endHint.Size = UDim2.fromOffset(textWidth, rowHeight)
- endHint.TextSize = rowHeight - 2
- endHint.TextXAlignment = Enum.TextXAlignment.Left
- endHint.TextTruncate = Enum.TextTruncate.AtEnd
-
- completion.button.AnchorPoint = Vector2.new(1, 0.5)
- completion.button.Position = UDim2.new(1, -pad, 0.5, 0)
- completion.button.Size = UDim2.fromOffset(buttonWidth, buttonHeight)
- completion.button.TextSize = buttonWidth < 140 and 13 or 15
- completion.sizeConstraint.MinSize = Vector2.new(100, 30)
- completion.sizeConstraint.MaxSize = Vector2.new(buttonWidth, buttonHeight)
+ if #visible == 1 then
+  local width = math.clamp(math.floor(rowWidth * .55), 180, 340)
+  visible[1].Size = UDim2.fromOffset(width, buttonHeight)
+  visible[1].Position = UDim2.fromOffset(
+   math.floor(deviceLayout.Width * .5), math.floor(rowTop + buttonHeight * .5))
+ elseif stacked then
+  local width = math.clamp(math.floor(rowWidth), 160, 340)
+  local centreX = math.floor(deviceLayout.Width * .5)
+  visible[1].Size = UDim2.fromOffset(width, buttonHeight)
+  visible[1].Position = UDim2.fromOffset(centreX, math.floor(rowTop + buttonHeight * .5))
+  visible[2].Size = UDim2.fromOffset(width, buttonHeight)
+  visible[2].Position = UDim2.fromOffset(centreX,
+   math.floor(rowTop + buttonHeight + gap + buttonHeight * .5))
+ else
+  -- Side by side, symmetrical about the centre.
+  local offset = math.floor((paired + gap) * .5)
+  local centreX = math.floor(deviceLayout.Width * .5)
+  local centreY = math.floor(rowTop + buttonHeight * .5)
+  visible[1].Size = UDim2.fromOffset(paired, buttonHeight)
+  visible[1].Position = UDim2.fromOffset(centreX - offset, centreY)
+  visible[2].Size = UDim2.fromOffset(paired, buttonHeight)
+  visible[2].Position = UDim2.fromOffset(centreX + offset, centreY)
+ end
 end
 
--- Both shapes are viewport-dependent, so a resize or an orientation change
--- re-measures whichever one is currently up.
+-- The layout is viewport-dependent, so a resize or an orientation change
+-- re-measures it.
 UIDevice.Changed:Connect(function()
- if endFrame.Visible then completion.applyLayout(completion.compact, completion.color) end
+ if endFrame.Visible then completion.applyLayout(completion.color) end
 end)
 
 local spectateBanner = Instance.new("TextLabel")
@@ -1003,39 +1297,75 @@ function completion.reset()
 	completion.serverSerial = nil
 	completion.pending = false
 	completion.returnVisible = false
-	completion.button.Visible = false
-	completion.button.Active = false
-	completion.button.Selectable = false
-	completion.button.Text = "RETURN TO LOBBY"
-	completion.button.TextTransparency = 1
+	completion.continueButton.Text = "CONTINUE"
+	completion.button.Text = "BACK TO LOBBY"
+	for _, button in ipairs(completion.buttons) do
+		button.Visible = false
+		button.Active = false
+		button.Selectable = false
+		button.TextTransparency = 1
+	end
 	refreshCursor()
 end
 
+-- `nextLevel` is the server's decision, and it is the ONLY thing that puts a
+-- Continue action on screen. The last level reports no next level, so it shows
+-- Back to Lobby alone and cannot route anyone to a level that does not exist.
 function completion.start(deadline, nextLevel, serverSerial)
 	completion.deadline = tonumber(deadline) or (workspace:GetServerTimeNow() + 15)
 	completion.nextLevel = tonumber(nextLevel)
 	completion.serverSerial = tonumber(serverSerial)
 	completion.pending = false
 	completion.returnVisible = completion.serverSerial ~= nil
+	completion.continueButton.Text = "CONTINUE"
+	completion.button.Text = "BACK TO LOBBY"
+	completion.continueButton.Visible = completion.returnVisible
+		and completion.nextLevel ~= nil
 	completion.button.Visible = completion.returnVisible
-	completion.button.Active = completion.returnVisible
-	completion.button.Selectable = completion.returnVisible
-	completion.button.Text = "RETURN TO LOBBY"
-	completion.button.TextTransparency = 1
-	if completion.returnVisible then
-		TweenService:Create(completion.button, TweenInfo.new(0.35), {TextTransparency = 0}):Play()
+	for _, button in ipairs(completion.buttons) do
+		button.Active = button.Visible
+		button.Selectable = button.Visible
+		button.TextTransparency = 1
+		if button.Visible then
+			TweenService:Create(button, TweenInfo.new(0.35), {TextTransparency = 0}):Play()
+		end
 	end
+	-- Re-measure: the row is one button wide on the last level and two on every
+	-- other, and start() is what decides which.
+	if endFrame.Visible then completion.applyLayout(completion.color) end
 	refreshCursor()
 end
 
-completion.button.Activated:Connect(function()
-	if completion.pending or not completion.returnVisible or not completion.serverSerial then return end
+-- One handler for both actions. Which remote message a button sends is read
+-- from the button itself, so the wiring is inspectable state rather than two
+-- separate closures that can quietly be swapped.
+function completion.activate(button)
+	if completion.pending or not completion.returnVisible or not completion.serverSerial then
+		return false
+	end
+	if not button.Visible or not button.Active then return false end
+	local action = button:GetAttribute("CompletionAction")
+	if type(action) ~= "string" then return false end
+	-- Continue cannot route past the last level: the server sends no next level
+	-- there, and this is the second, client-side guard on the same rule.
+	if action == "continuenow" and completion.nextLevel == nil then return false end
 	completion.pending = true
-	completion.button.Active = false
-	completion.button.Selectable = false
-	completion.button.Text = "RETURNING..."
-	remote:FireServer("returntolobby", completion.serverSerial)
-end)
+	for _, other in ipairs(completion.buttons) do
+		other.Active = false
+		other.Selectable = false
+	end
+	button.Text = button:GetAttribute("CompletionPressedText") or button.Text
+	-- The server advances as soon as every remaining player has chosen; the
+	-- countdown stays as the backstop for anyone who never presses anything.
+	remote:FireServer(action, completion.serverSerial)
+	return true
+end
+
+for _, completionButton in ipairs(completion.buttons) do
+	completionButton.Activated:Connect(function()
+		completion.activate(completionButton)
+	end)
+end
 
 RunService.RenderStepped:Connect(function()
 	if not completion.deadline or not endFrame.Visible then return end
@@ -1050,8 +1380,10 @@ RunService.RenderStepped:Connect(function()
 			or "RETURNING TO LOBBY"
 	end
 	if remaining <= 0 then
-		completion.button.Active = false
-		completion.button.Selectable = false
+		for _, button in ipairs(completion.buttons) do
+			button.Active = false
+			button.Selectable = false
+		end
 	end
 end)
 
@@ -1145,26 +1477,19 @@ local function hideRoundEnding(immediate)
  end)
 end
 
-local function showRoundEnding(title, stats, hint, color, temporary, keepWorldVisible)
+local function showRoundEnding(title, stats, hint, color, temporary)
  completion.reset()
  endingSerial += 1
  local token = endingSerial
  color = color or Color3.fromRGB(115, 255, 170)
- -- Every completed level keeps its solved world visible for the server's full
- -- fifteen-second decision window.  Level 2 riders also need this shape while
- -- they are physically travelling through the continuation flume.  Failure
- -- results retain the full-screen treatment so they still read as a wipe.
- local compact = keepWorldVisible == true
-	 or (keepWorldVisible == nil
-		 and player:GetAttribute("Level2_ExitTransition") == true)
- completion.applyLayout(compact, color)
+ completion.applyLayout(color)
  loadingFrame.Visible = false
  queueShade.Visible = false
  label.Visible = false
  endFrame.Visible = true
  endFrame.BackgroundTransparency = 1
  endFlash.BackgroundColor3 = color
- endFlash.BackgroundTransparency = compact and 1 or 0.08
+ endFlash.BackgroundTransparency = 0.08
  endTitle.Text = title
  endTitle.TextColor3 = color
  endTitle.TextTransparency = 1
@@ -1184,19 +1509,13 @@ local function showRoundEnding(title, stats, hint, color, temporary, keepWorldVi
  exitChime.TimePosition = 0
  exitThud:Play()
  task.delay(0.12, function() if endFrame.Visible then exitChime:Play() end end)
- if not compact then
-  TweenService:Create(endFlash, TweenInfo.new(0.7, Enum.EasingStyle.Quad), {BackgroundTransparency = 1}):Play()
- end
- -- 0.22 rather than 0.08: legible as a card, and the flume still reads through
- -- it. The full-bleed value would be just as much of a blackout at card size.
+ TweenService:Create(endFlash, TweenInfo.new(0.7, Enum.EasingStyle.Quad), {BackgroundTransparency = 1}):Play()
  TweenService:Create(endFrame, TweenInfo.new(0.42, Enum.EasingStyle.Quad),
-  {BackgroundTransparency = compact and 0.22 or 0.08}):Play()
+  {BackgroundTransparency = 0.08}):Play()
  TweenService:Create(endTitle, TweenInfo.new(0.48), {TextTransparency = 0, TextStrokeTransparency = 0.35}):Play()
  TweenService:Create(endStats, TweenInfo.new(0.42), {TextTransparency = 0}):Play()
  TweenService:Create(endHint, TweenInfo.new(0.55), {TextTransparency = 0}):Play()
- if not compact then
-  TweenService:Create(endLine, TweenInfo.new(0.55, Enum.EasingStyle.Quart), {Size = UDim2.new(0.70, 0, 0, 2)}):Play()
- end
+ TweenService:Create(endLine, TweenInfo.new(0.55, Enum.EasingStyle.Quart), {Size = UDim2.new(0.70, 0, 0, 2)}):Play()
 
  if temporary then
   task.delay(2.75, function()
@@ -1218,18 +1537,33 @@ local function showRoundEnding(title, stats, hint, color, temporary, keepWorldVi
 end
 
 if RunService:IsStudio() then
+ -- Studio-only press hook for UIRegression: drives the real handler, so the
+ -- assertion covers the production routing rather than a stand-in for it.
+ player:GetAttributeChangedSignal("UIRegressionCompletionPress"):Connect(function()
+  local wanted = player:GetAttribute("UIRegressionCompletionPress")
+  if type(wanted) ~= "string" or wanted == "" then return end
+  for _, button in ipairs(completion.buttons) do
+   if button.Name == wanted then completion.activate(button) end
+  end
+ end)
  player:GetAttributeChangedSignal("DevRoundEnding"):Connect(function()
   local mode = tostring(player:GetAttribute("DevRoundEnding") or ""):lower()
   if mode:find("escape", 1, true) then
    showRoundEnding(("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"), "SIGNAL LOST", "WAITING FOR THE OTHERS", Color3.fromRGB(115, 255, 170), true)
-	elseif mode:find("win", 1, true) then
-		showRoundEnding(("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"), "TIME 03:42  •  SURVIVORS 2/3", "RETURNING TO BASE", Color3.fromRGB(115, 255, 170), false, true)
-		-- Exercise the complete production win state in UIRegression: the compact
-		-- card is not valid unless its countdown and Return to Lobby action are
-		-- present too. A negative serial is intentionally Studio-only.
+	-- "winfinal" is tested BEFORE "win": find() is a substring match and the
+	-- final-level mode would otherwise be swallowed by the ordinary one.
+	elseif mode:find("winfinal", 1, true) then
+		-- The last level: no next level exists, so no Continue action does either.
+		showRoundEnding(("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 3) .. " CLEARED"), "TIME 05:08  •  SURVIVORS 2/3", "RETURNING TO BASE", Color3.fromRGB(115, 255, 170), false)
 		completion.start(workspace:GetServerTimeNow() + 15, nil, -1)
+	elseif mode:find("win", 1, true) then
+		showRoundEnding(("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"), "TIME 03:42  •  SURVIVORS 2/3", "RETURNING TO BASE", Color3.fromRGB(115, 255, 170), false)
+		-- Exercise the complete production win state in UIRegression: the overlay
+		-- is not valid unless its countdown and BOTH actions are present too. A
+		-- negative serial is intentionally Studio-only.
+		completion.start(workspace:GetServerTimeNow() + 15, 2, -1)
   elseif mode:find("lose", 1, true) then
-   showRoundEnding("NO ONE FOUND A WAY OUT", "TIME 04:17  •  SURVIVORS 0/3", "RETURNING TO BASE", Color3.fromRGB(255, 82, 72), false, false)
+   showRoundEnding("NO ONE FOUND A WAY OUT", "TIME 04:17  •  SURVIVORS 0/3", "RETURNING TO BASE", Color3.fromRGB(255, 82, 72), false)
   elseif mode:find("hide", 1, true) then
    hideRoundEnding(true)
   end
@@ -1861,6 +2195,7 @@ player:SetAttribute("LevelThreeBriefingActive", false)
 player:SetAttribute("LobbyBriefingActive", false)
 player:SetAttribute("LobbyBriefingPlayed", false)
 player:SetAttribute("LobbyBriefingSkipped", false)
+player:SetAttribute("LevelOneGuideObjectivesOpen", nil)
 
 local function isLevelOneParticipant()
 	return workspace:GetAttribute("SelectedLevel") == 1
@@ -1875,9 +2210,14 @@ end
 -- button; the panel is Active, so wherever they overlap the button stops
 -- responding to the tap that would close it. They are alternatives rather than
 -- companions -- the panel carries its own Close -- so the button stands down
--- while the panel is up. On desktop the panel sits below the button and both
--- stay available.
+-- while the panel is up. Its published state also lets PuzzleUI yield its
+-- lower-right counter stack while this larger help panel owns that corner.
 local function refreshObjectivesButton()
+	local panelOpen = objectivesAvailable and objectivesPanel.Visible
+	local published = panelOpen and true or nil
+	if player:GetAttribute("LevelOneGuideObjectivesOpen") ~= published then
+		player:SetAttribute("LevelOneGuideObjectivesOpen", published)
+	end
 	if not objectivesAvailable then
 		objectivesButton.Visible = false
 		return
@@ -2153,15 +2493,84 @@ ContextActionService:BindActionAtPriority(
 	Enum.KeyCode.H
 )
 
+-- The longest line the dispatch panel can ever be asked to render, read off the
+-- cue tables themselves so it cannot drift from the script, plus the face
+-- chooser that measures against it. The layout below sizes the subtitle face
+-- against THIS rather than against the current line: a face chosen per cue
+-- would jump between sentences, and a face chosen from the box alone is how the
+-- panel came to overflow at all.
+--
+-- Both hang off `dispatchAudio` rather than becoming file-level locals, and the
+-- reason is not style. This script sits exactly at Luau's ceiling of 200 local
+-- registers for its main chunk: five more names here and the whole file stops
+-- compiling with "Out of local registers". Anything added at this level from
+-- now on has to go onto an existing table.
+dispatchAudio.longestLine = (function()
+	local longest = ""
+	for _, set in ipairs({briefingCues, levelTwoBriefingCues, levelThreeBriefing.cues, lobbyBriefing.cues}) do
+		for _, cue in ipairs(set or {}) do
+			local caption = cue[3]
+			if type(caption) == "string" and #caption > #longest then longest = caption end
+		end
+	end
+	return longest
+end)()
+
+-- Layout headroom for a 1.6x localisation of the longest authored cue. The
+-- runtime stays English today, but measuring only that copy left otherwise
+-- valid 44px touch controls sitting above text that overflowed its own label
+-- on the smallest supported phones.
+dispatchAudio.fitProbe = "Noch wichtiger: das Aktivieren einer Pumpstation alarmiert offenbar eine bislang nicht identifizierte, ungewoehnlich grosse Entitaet und verraet ihr eure derzeitige Position sofort."
+
+-- TextService:GetTextSize is the SYNCHRONOUS measurement API. The layout runs
+-- from UIDevice.Changed and from a viewport signal, and yielding in there would
+-- let a second layout pass start inside the first, so GetTextBoundsAsync is the
+-- wrong tool here even though it is the newer one. Measured against each other
+-- on this panel they agree exactly.
+dispatchAudio.faceThatFits = function(ceiling, width, height)
+	-- 9/8 are emergency rungs used only when an ultra-short landscape safe band
+	-- leaves 24px under two mandatory 44px touch targets. They keep the full cue
+	-- inside its label instead of drawing across the controls or movement zone.
+	local faces = {20, 16, 13, 12, 11, 10, 9, 8}
+	for _, size in ipairs(faces) do
+		if size <= ceiling then
+			local needed = game:GetService("TextService"):GetTextSize(
+				dispatchAudio.fitProbe, size, subtitleText.Font,
+				Vector2.new(width, 100000))
+			if needed.Y <= height then return size end
+		end
+	end
+	return faces[#faces]
+end
+
 local function updateLevelOneGuideLayout()
 	local layout = UIDevice.Layout()
 	local viewport = layout.Viewport
 	local narrow = layout.Narrow
 	local touch = layout.IsTouch
 
-	objectivesButton.Size = narrow and UDim2.fromOffset(140, 40) or UDim2.fromOffset(154, 44)
+	-- A touch target never goes under 44px, whatever the narrow layout does to
+	-- the rest of the panel. The narrow branch used to shrink OBJECTIVES to
+	-- 140x40 and the panel's close button was 40x40 everywhere, which is under
+	-- the floor on exactly the devices that need it most. Desktop keeps its
+	-- original compact sizes; nothing here grows a mouse-driven control.
+	local touchFloor = touch and 44 or nil
+	objectivesButton.Size = narrow
+		and UDim2.fromOffset(140, touchFloor or 40)
+		or UDim2.fromOffset(154, 44)
 	objectivesButton.TextSize = narrow and 14 or 16
 	objectivesButton.Text = UIDevice.Caption("OBJECTIVES", "[H]")
+	objectivesClose.Size = UDim2.fromOffset(touchFloor or 40, touchFloor or 40)
+	if touch then
+		objectivesButton.AnchorPoint = Vector2.new(0, 0)
+		objectivesButton.Position = UDim2.fromOffset(12, 12)
+	else
+		-- PuzzleUI owns the final 140px at the bottom-right. Keep this guide
+		-- immediately to its left while closed; opening the guide publishes a
+		-- modal flag so PuzzleUI yields the corner to the panel below.
+		objectivesButton.AnchorPoint = Vector2.new(1, 1)
+		objectivesButton.Position = UDim2.new(1, -(18 + 140 + 10), 1, -18)
+	end
 
 	-- The objectives panel is Active and nearly full-bleed, so on touch it is the
 	-- single most likely element to swallow the movement controls. It takes the
@@ -2183,15 +2592,17 @@ local function updateLevelOneGuideLayout()
 		objectivesTitle.TextSize = narrow and 15 or 18
 		subtitleText.TextSize = narrow and 16 or 20
 	elseif narrow then
-		objectivesPanel.AnchorPoint = Vector2.new(0.5, 0)
-		objectivesPanel.Position = UDim2.new(0.5, 0, 0, 60)
-		objectivesPanel.Size = UDim2.new(1, -20, 0, math.max(240, math.min(360, viewport.Y - 92)))
+		objectivesPanel.AnchorPoint = Vector2.new(1, 1)
+		objectivesPanel.Position = UDim2.new(1, -10, 1, -70)
+		objectivesPanel.Size = UDim2.new(1, -20, 0,
+			math.max(120, math.min(360, viewport.Y - 82)))
 		objectivesTitle.TextSize = 15
 		subtitleText.TextSize = 16
 	else
-		objectivesPanel.AnchorPoint = Vector2.new(0, 0)
-		objectivesPanel.Position = UDim2.fromOffset(12, 64)
-		objectivesPanel.Size = UDim2.fromOffset(420, math.max(280, math.min(338, viewport.Y - 92)))
+		objectivesPanel.AnchorPoint = Vector2.new(1, 1)
+		objectivesPanel.Position = UDim2.new(1, -18, 1, -70)
+		objectivesPanel.Size = UDim2.fromOffset(420,
+			math.max(120, math.min(338, viewport.Y - 82)))
 		objectivesTitle.TextSize = 18
 		subtitleText.TextSize = 20
 	end
@@ -2224,21 +2635,55 @@ local function updateLevelOneGuideLayout()
 	local SPEAKER_MINIMUM = 110
 	local PANEL_MARGIN = 12
 	local TEXT_INSET = 18
+	-- The touch row never gives up its 44px hit target. On the shortest supported
+	-- landscape band the lead-in is already gone; removing only the fallback's
+	-- ornamental top/bottom padding leaves 44px for controls plus the measured
+	-- authored copy without crossing into movement space.
+	local ROW_HARD_FLOOR = minimumRowHeight
 
 	local band = layout.TopBand
+	-- ── the BAND is the ceiling, and it is enforced in ONE place ─────────────
+	-- WHAT SHIPPED BROKEN: the last-resort block at the bottom of this function
+	-- sized the panel to its CONTENT -- `textTop + minimumText + bottomPad` --
+	-- and never once compared the result to the band it had to live in. On a
+	-- 568x320 landscape phone that is 98px of readouts-plus-copy inside a
+	-- TopBand under 89px tall, so the panel hung out of its own band and down
+	-- into the thumbstick's activation region: the exact defect the band exists
+	-- to prevent. It read GREEN the whole time because BriefingFitMatrix only
+	-- ever checked the panel's INTERNALS against each other -- never the panel
+	-- against the screen, the band, or a movement zone.
+	--
+	-- BAND_CEILING is computed once, here, and NOTHING below may return a panel
+	-- taller than it. `measure` refuses candidates over it, both fallbacks clamp
+	-- to it, and the placement clamps again. Because the panel is pinned to the
+	-- band's own origin on touch, a panel that fits the band is inside a
+	-- rectangle UIDevice has already proved clear of the thumbstick, the control
+	-- column and JUMP -- so "fits the band" and "clears every movement zone"
+	-- become the same assertion.
+	local BAND_CEILING = touch and math.max(48, math.floor(band.Height))
+		or math.max(48, viewport.Y - (narrow and 96 or 64) - PANEL_MARGIN)
 	local baseHeight = narrow and 108 or 96
-	if touch then
-		-- The band IS the ceiling on touch. The authored 108 is taller than the
-		-- 87px band a landscape phone leaves, and starting the search there put
-		-- the panel 21px into the thumbstick's activation region -- the exact
-		-- defect the band exists to prevent.
-		baseHeight = math.clamp(baseHeight, 64, math.max(64, band.Height))
-	end
-	local maximumHeight = touch and math.max(baseHeight, math.min(160, band.Height))
+	-- The band IS the ceiling on touch. The authored 108 is taller than the 87px
+	-- band a landscape phone leaves, and starting the search there put the panel
+	-- 21px into the thumbstick's activation region -- the exact defect the band
+	-- exists to prevent.
+	--
+	-- Both bounds are clamped to BAND_CEILING rather than to `band.Height`, and
+	-- the difference is not cosmetic: band heights come out FRACTIONAL (94.67 on
+	-- a 705x338 Galaxy A06), and an unfloored start height is then one pixel over
+	-- an integer ceiling, so `measure` would refuse every candidate and the whole
+	-- growth pass would silently fall through to the salvage pass below on real
+	-- hardware while still passing on any viewport that divides evenly.
+	baseHeight = math.clamp(baseHeight, math.min(64, BAND_CEILING), BAND_CEILING)
+	local maximumHeight = touch and math.max(baseHeight, math.min(160, BAND_CEILING))
 		or math.max(baseHeight, math.min(160, viewport.Y - 220))
 	local panelWidth = math.clamp(
 		touch and band.Width or (narrow and (viewport.X - 20) or math.floor(viewport.X * .76)),
 		240, 860)
+	-- The 240 floor above is a READABILITY floor, and on touch it is allowed to
+	-- ask for more width than the band actually has. It never wins: the band is
+	-- the outer boundary of this panel on both axes, not just the vertical one.
+	if touch then panelWidth = math.min(panelWidth, math.floor(band.Width)) end
 
 	-- Candidates, most wanted first. `columns` 2 puts the readouts side by side;
 	-- 1 stacks them. `ownBand` drops them below the speaker line instead of
@@ -2256,6 +2701,25 @@ local function updateLevelOneGuideLayout()
 			end
 		end
 	end
+	-- The same matrix with the lead-in DROPPED, kept in a separate list and
+	-- tried only after every full-furniture arrangement has failed.
+	--
+	-- "> COMMAND CENTER  //  LIVE" is the one piece of this panel that carries
+	-- nothing the copy does not already carry, so it is the first thing to go
+	-- when a band is too short to hold it beside two 44px readouts. Keeping it
+	-- in a SEPARATE list rather than merging it into `candidates` is the part
+	-- that matters: merged, a lead-in-less shape could win on a viewport that
+	-- fits the full one today, which would be a silent visual regression on
+	-- every device currently passing. Separated, nothing that fits today moves.
+	local compressed = {}
+	for _, candidate in ipairs(candidates) do
+		if not candidate.OwnBand then
+			table.insert(compressed, {
+				Columns = candidate.Columns, Width = candidate.Width,
+				Height = candidate.Height, OwnBand = false, SpeakerHidden = true,
+			})
+		end
+	end
 
 	local function measure(candidate, height)
 		local controlsWidth = candidate.Columns == 2
@@ -2263,6 +2727,8 @@ local function updateLevelOneGuideLayout()
 		local controlsHeight = candidate.Columns == 2
 			and candidate.Height or candidate.Height * 2 + 4
 		if controlsWidth > panelWidth - PANEL_MARGIN * 2 then return nil end
+		-- The band wins before anything else is even considered.
+		if height > BAND_CEILING then return nil end
 		-- A short touch band cannot spare the desktop's six-pixel lead-in: two
 		-- 44px targets already consume most of a 75px landscape-phone panel. Keep
 		-- the side-by-side targets two pixels from the top and let the subtitle
@@ -2270,10 +2736,13 @@ local function updateLevelOneGuideLayout()
 		-- separate (the controls occupy the right of the speaker row), while the
 		-- transparent hitboxes stay fully inside the panel.
 		local controlsTop = candidate.OwnBand and 30 or (touch and 2 or 6)
-		local speakerWidth = candidate.OwnBand
-			and (panelWidth - TEXT_INSET - PANEL_MARGIN)
-			or (panelWidth - TEXT_INSET - PANEL_MARGIN - controlsWidth - 10)
-		if speakerWidth < SPEAKER_MINIMUM then return nil end
+		local speakerWidth = 0
+		if not candidate.SpeakerHidden then
+			speakerWidth = candidate.OwnBand
+				and (panelWidth - TEXT_INSET - PANEL_MARGIN)
+				or (panelWidth - TEXT_INSET - PANEL_MARGIN - controlsWidth - 10)
+			if speakerWidth < SPEAKER_MINIMUM then return nil end
+		end
 		-- MUTE/STOP share the top row with the speaker readout, while the actual
 		-- briefing keeps the full panel width underneath. Restricting it to the
 		-- narrow speaker column made real 58-113 character cues clip on landscape
@@ -2297,10 +2766,11 @@ local function updateLevelOneGuideLayout()
 	-- spare pixels of safe band and no reason to squeeze a subtitle into 22 of
 	-- them. A landscape phone has none, and falls through to the second pass.
 	local panelHeight, fit
+	local desiredTextHeight = touch and layout.Portrait and 66 or 40
 	for height = baseHeight, maximumHeight, 6 do
 		for _, candidate in ipairs(candidates) do
 			local measured = measure(candidate, height)
-			if measured and measured.TextHeight >= 40 then
+			if measured and measured.TextHeight >= desiredTextHeight then
 				panelHeight, fit = height, measured
 				break
 			end
@@ -2311,6 +2781,11 @@ local function updateLevelOneGuideLayout()
 		-- Nothing fits comfortably, so take the arrangement that leaves the most
 		-- subtitle, breaking ties by the preference order above.
 		panelHeight = touch and math.max(64, math.min(baseHeight, band.Height)) or baseHeight
+		-- ...but never taller than the band. `math.max(64, ...)` above is a
+		-- readability floor and it used to be the LAST word, so on a band under
+		-- 64px it quietly handed back a panel taller than the screen space it
+		-- was given. The band is the last word now.
+		panelHeight = math.min(panelHeight, BAND_CEILING)
 		for _, candidate in ipairs(candidates) do
 			local measured = measure(candidate, panelHeight)
 			if measured and (not fit or measured.TextHeight > fit.TextHeight) then
@@ -2319,16 +2794,113 @@ local function updateLevelOneGuideLayout()
 		end
 	end
 	if not fit then
-		-- Unreachable with the candidate set above, but a panel with no room for
-		-- its own controls must still not paint them on top of the subtitle.
+		-- Still nothing, at the full height of the band: drop the lead-in and try
+		-- the same arrangements again. This is what rescues a 568x320 landscape
+		-- phone -- 380x89 of band -- from the content-sized panel below. With
+		-- "> COMMAND CENTER // LIVE" gone, the two 44px readouts take the top row
+		-- outright, the copy takes everything under them, and the whole panel
+		-- comes to 46 + copy + 4 instead of the 98 that overflowed the band.
+		for _, candidate in ipairs(compressed) do
+			local measured = measure(candidate, panelHeight)
+			if measured and (not fit or measured.TextHeight > fit.TextHeight) then
+				fit = measured
+			end
+		end
+	end
+	if not fit then
+		-- REACHABLE, despite what this comment used to claim. `measure` refuses any
+		-- candidate whose subtitle would come out under 20px, so a short landscape
+		-- band -- 568x320 is the one that found this -- can reject every candidate
+		-- in all three passes above and land here.
+		--
+		-- It used to hand back `math.max(12, panelHeight - 58)`, and a twelve-pixel
+		-- subtitle box is not a layout: a TextLabel does not clip its own overflow,
+		-- so two lines of copy simply rendered outside the box, upward, across the
+		-- MUTE/STOP row that abuts its top edge.
+		--
+		-- WHAT SHIPPED BROKEN, and it is the whole of C3: this block sized the
+		-- panel to its CONTENT and stopped there -- `panelHeight = math.max(
+		-- panelHeight, textTop + minimumText + bottomPad)` -- with no reference
+		-- to the band anywhere in it. At 568x320 that is 30 + 44 + 22 + 4 = 100
+		-- against a TopBand under 89, so the panel grew straight out of the band
+		-- and into the thumbstick's activation region while every existing
+		-- assertion (which only compared the panel's children to each other)
+		-- stayed green. The panel is now bounded by BAND_CEILING FIRST and the
+		-- content is fitted into whatever that leaves.
+		--
+		-- The order in which things give is fixed and deliberate:
+		--   1. the lead-in, already dropped by the pass above;
+		--   2. the readouts' own 30px band -- they move up onto the top row;
+		--   3. ornamental fallback padding (the touch target itself stays 44px).
+		-- The copy never gives, because a briefing whose sentence renders
+		-- outside its own panel is the failure this whole block exists to stop.
+		--
+		-- The copy's floor is MEASURED against the longest AUTHORED cue at the
+		-- smallest face on the ladder, never hard-coded: a hard-coded 20 left the
+		-- 568x320 band two pixels short of its own copy. It is deliberately NOT
+		-- measured against the 1.6x synthetic localisation string -- that string
+		-- is headroom for a translation nobody has shipped, and sizing the panel
+		-- for it would shrink the readouts on devices that render English fine.
+		--
+		-- The readouts stay SIDE BY SIDE wherever the width allows. An earlier
+		-- version handed back a one-column candidate (which makes the list
+		-- vertical) while reserving a single row's HEIGHT for it, so the two
+		-- targets stacked into a one-row box and the second one hung outside.
+		local bottomPad = touch and 1 or 6
+		local textWidth = panelWidth - TEXT_INSET * 2
+		local sideBySide = minimumRowWidth * 2 + 10 <= panelWidth - PANEL_MARGIN * 2
+		local columns = sideBySide and 2 or 1
+		local controlsWidth = sideBySide and (minimumRowWidth * 2 + 10) or minimumRowWidth
+		local controlsTop = touch and 0 or 6
+		local needed = game:GetService("TextService"):GetTextSize(
+			dispatchAudio.longestLine, 11, subtitleText.Font,
+			Vector2.new(textWidth, 100000)).Y
+		local minimumText = math.max(touch and 20 or 22, needed)
+		-- Ask for what the content wants, then let the band cut it down.
+		local rowSpan = function(row)
+			return columns == 2 and row or row * 2 + 4
+		end
+		panelHeight = math.clamp(
+			controlsTop + rowSpan(minimumRowHeight) + minimumText + bottomPad,
+			math.min(panelHeight or 0, BAND_CEILING), BAND_CEILING)
+		local row = minimumRowHeight
+		while row > ROW_HARD_FLOOR
+			and controlsTop + rowSpan(row) + minimumText + bottomPad > panelHeight do
+			row -= 2
+		end
+		local controlsHeight = rowSpan(row)
+		local textTop = controlsTop + controlsHeight
 		fit = {
-			ControlsWidth = minimumRowWidth, ControlsHeight = minimumRowHeight,
-			ControlsTop = 6, SpeakerWidth = SPEAKER_MINIMUM,
-			TextWidth = panelWidth - TEXT_INSET * 2,
-			TextTop = 52, TextHeight = math.max(12, panelHeight - 58),
-			Candidate = {Columns = 1, Width = minimumRowWidth, Height = minimumRowHeight},
+			ControlsWidth = controlsWidth, ControlsHeight = controlsHeight,
+			ControlsTop = controlsTop,
+			SpeakerWidth = 0,
+			TextWidth = textWidth,
+			TextTop = textTop,
+			TextHeight = math.max(0, panelHeight - textTop - bottomPad),
+			Candidate = {Columns = columns, Width = minimumRowWidth, Height = row,
+				OwnBand = false, SpeakerHidden = true},
 		}
 	end
+
+	-- THE BAND WINS, ALWAYS -- stated once, at the end, where nothing can get
+	-- past it. Every pass above already respects BAND_CEILING, so this is the
+	-- guarantee rather than the mechanism; the subtitle box is re-derived from
+	-- the clamped height so a clamp can never leave the copy hanging outside the
+	-- panel it was measured against.
+	panelHeight = math.min(panelHeight, BAND_CEILING)
+	fit.TextHeight = math.max(0,
+		math.min(fit.TextHeight, panelHeight - fit.TextTop - (touch and 1 or 6)))
+	-- The lead-in exists only where the arrangement actually reserved room for
+	-- it. Left Visible at zero width it is an invisible zero-size label that
+	-- every rect-walking pass still dutifully reports.
+	subtitleSpeaker.Visible = fit.SpeakerWidth >= SPEAKER_MINIMUM
+	-- Which rung of the ladder this viewport landed on, published so a
+	-- regression can assert the SHAPE and not merely the absence of an overlap:
+	-- "full" keeps "> COMMAND CENTER // LIVE", "compact" has dropped it to fit
+	-- the band. Every desktop and every portrait touch size is "full".
+	subtitleFrame:SetAttribute("BriefingFitMode",
+		subtitleSpeaker.Visible and "full" or "compact")
+	subtitleFrame:SetAttribute("BriefingBandCeiling", BAND_CEILING)
 
 	if touch then
 		subtitleFrame.AnchorPoint = Vector2.new(0, 0)
@@ -2363,16 +2935,32 @@ local function updateLevelOneGuideLayout()
 	subtitleSpeaker.Size = UDim2.fromOffset(fit.SpeakerWidth, 20)
 	subtitleText.Position = UDim2.fromOffset(TEXT_INSET, fit.TextTop)
 	subtitleText.Size = UDim2.fromOffset(fit.TextWidth, fit.TextHeight)
-	-- A short strip gets a smaller face rather than a clipped sentence.
+	-- A short strip gets a smaller face rather than a clipped sentence -- and
+	-- whether it IS clipped is now measured, not inferred from the box's height
+	-- class. The ladder below used to end here: a 42px box on a portrait phone
+	-- took the 16px face because the box was "tall enough", and the longest
+	-- authored cue needs 48px at that face. Nothing clipped it; the third line
+	-- rendered outside the box, over the MUTE/STOP row that abuts its top edge.
+	local ceiling
 	if fit.TextHeight <= 32 then
-		subtitleText.TextSize = 12
+		ceiling = 12
 	elseif fit.TextHeight < 40 then
-		subtitleText.TextSize = 13
+		ceiling = 13
 	elseif touch or narrow then
-		subtitleText.TextSize = 16
+		ceiling = 16
 	else
-		subtitleText.TextSize = 20
+		ceiling = 20
 	end
+	subtitleText.TextSize = dispatchAudio.faceThatFits(ceiling, fit.TextWidth, fit.TextHeight)
+
+	-- The BINDING GLYPHS live in dispatchAudio.refresh, and until now nothing
+	-- re-ran it when the form factor changed. UIDevice.Binding returns "" the
+	-- moment a touchscreen exists, so "[M]  MUTE DISPATCH" was correct when the
+	-- captions were first built and stayed on screen afterwards -- a key glyph
+	-- on a phone, naming a key the device has not got. This is the one signal
+	-- that fires on a form-factor change, so the captions are rebuilt from it.
+	-- refresh() never calls back into the layout, so there is no cycle here.
+	dispatchAudio.refresh()
 end
 
 UIDevice.Changed:Connect(updateLevelOneGuideLayout)
@@ -3192,7 +3780,6 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 			"TIME " .. formatRoundTime(a) .. "  •  SURVIVORS 0/" .. totalPlayers,
 			"RETURNING TO BASE",
 			Color3.fromRGB(255, 82, 72),
-			false,
 			false
 		)
 
@@ -3206,8 +3793,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 			"TIME " .. formatRoundTime(a) .. "  •  SURVIVORS " .. survivors .. "/" .. totalPlayers,
 			"RETURNING TO BASE",
 			Color3.fromRGB(115, 255, 170),
-			false,
-			true
+			false
 		)
 		completion.start(d, e, f)
 
@@ -3219,13 +3805,30 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 			completion.button.Text = "RETURNING..."
 		end
 
+	elseif ev == "continuefailed" then
+		if tonumber(a) == completion.serverSerial and completion.deadline
+			and workspace:GetServerTimeNow() < completion.deadline then
+			-- The transfer did not start. Re-arm both actions; the countdown is
+			-- still running and will carry this player onward if they do nothing.
+			completion.pending = false
+			completion.continueButton.Text = "TRY CONTINUE"
+			completion.button.Text = "BACK TO LOBBY"
+			for _, button in ipairs(completion.buttons) do
+				button.Active = button.Visible
+				button.Selectable = button.Visible
+			end
+		end
+
 	elseif ev == "returnfailed" then
 		if tonumber(a) == completion.serverSerial and completion.deadline
 			and workspace:GetServerTimeNow() < completion.deadline then
 			completion.pending = false
-			completion.button.Active = true
-			completion.button.Selectable = true
-			completion.button.Text = "TRY RETURN TO LOBBY"
+			completion.continueButton.Text = "CONTINUE"
+			completion.button.Text = "TRY BACK TO LOBBY"
+			for _, button in ipairs(completion.buttons) do
+				button.Active = button.Visible
+				button.Selectable = button.Visible
+			end
 		end
 
 	elseif ev == "transitionfailed" then
