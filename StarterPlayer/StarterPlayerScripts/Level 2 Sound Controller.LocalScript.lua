@@ -13,8 +13,6 @@
 --       "Level 2 Pressure Door"  — the grand hall unseals
 --       "Level 2 Slide Rush"     — riding the exit flume
 -- 4. Ambience loops below play while you are in a Level 2 round.
--- 5. Rare monster groans keep their shuffled timing/reverb but come only from
---    the spawned Pool Slide humanoid, never a detached/random monster emitter.
 -- ═════════════════════════════════════════════════════════════════════════
 
 local Players = game:GetService("Players")
@@ -40,12 +38,6 @@ local CUE_SLOTS = {
 	"Level 2 Pressure Door",
 	"Level 2 Slide Rush",
 }
-local MONSTER_SLOTS = {
-	"Level 2 Distant Monster-Like Pipe Groan 1",
-	"Level 2 Distant Monster-Like Pipe Groan 2",
-	"Level 2 Distant Monster-Like Pipe Groan 3",
-	"Level 2 Distant Monster-Like Pipe Groan 4",
-}
 local RANDOM_AMBIENCE_SLOTS = {
 	"Level 2 Water Drop",
 	"Level 2 Drain Gurgle",
@@ -65,29 +57,9 @@ local COMMON_AMBIENCE = {
 		VerticalMin = 4, VerticalMax = 14, Volume = .31,
 		RollOffMin = 8, RollOffMax = 145, PitchMin = .98, PitchMax = 1.02, BusySeconds = 7},
 }
-local DISTANT_GROAN_PROFILE = {
-	Volume = .68,
-	RollOffMin = 18,
-	RollOffMax = 280,
-	PitchMin = .97,
-	PitchMax = 1.02,
-	BusySeconds = 15,
-	CleanupSeconds = 26,
-	Reverb = {
-		DecayTime = 5.2,
-		Density = .34,
-		Diffusion = .30,
-		DryLevel = -9,
-		WetLevel = -2,
-	},
-}
-local GROAN_FIRST_DELAY_MIN, GROAN_FIRST_DELAY_MAX = 10, 18
-local GROAN_DELAY_MIN, GROAN_DELAY_MAX = 24, 42
 local PRELOAD_SLOTS = {}
 for _, slotName in ipairs(CUE_SLOTS) do table.insert(PRELOAD_SLOTS, slotName) end
 for _, slotName in ipairs(RANDOM_AMBIENCE_SLOTS) do table.insert(PRELOAD_SLOTS, slotName) end
--- These recordings belong exclusively to the spawned Pool Slide humanoid.
-for _, slotName in ipairs(MONSTER_SLOTS) do table.insert(PRELOAD_SLOTS, slotName) end
 -- SoundController's footstep walker owns this slot; warm it with the rest.
 table.insert(PRELOAD_SLOTS, "Level 2 Player Dry Tile Walking Sound")
 
@@ -167,31 +139,7 @@ local ambientAnchors = {Corridor = {}, WetHall = {}, PumpPipe = {}}
 local ambientAnchorSeen = {}
 local ambientConnections = {}
 local nextCommonAt = math.huge
-local nextGroanAt = math.huge
 local lastCommonKey
-local distantGroanBag = {}
-local lastDistantGroanSlot
-local poolSlideModel
-local poolSlideRoot
-local poolSlideVoice
-local poolSlideEmitter
-local poolSlideConnections = {}
-
-local function clearPoolSlideVoice()
-	if poolSlideVoice then poolSlideVoice:Destroy() end
-	if poolSlideEmitter then poolSlideEmitter:Destroy() end
-	poolSlideVoice = nil
-	poolSlideEmitter = nil
-end
-
-local function clearPoolSlideSource()
-	for _, connection in ipairs(poolSlideConnections) do connection:Disconnect() end
-	poolSlideConnections = {}
-	clearPoolSlideVoice()
-	poolSlideModel = nil
-	poolSlideRoot = nil
-	nextGroanAt = math.huge
-end
 
 local function disconnectAmbientConnections()
 	for _, connection in ipairs(ambientConnections) do
@@ -203,9 +151,6 @@ end
 local function clearAmbientEmitters()
 	if ambientFolder and ambientFolder.Parent then ambientFolder:Destroy() end
 	ambientFolder = nil
-	-- Authored pump/door cues still briefly own the mix, including the real
-	-- creature's currently playing groan. They do not change its random cadence.
-	clearPoolSlideVoice()
 	ambientBusyUntil = 0
 end
 
@@ -218,16 +163,12 @@ local function stopRandomSession()
 	disconnectAmbientConnections()
 	clearAmbientEmitters()
 	clearSpatialCueEmitters()
-	clearPoolSlideSource()
 	ambientWorld = nil
 	randomSessionActive = false
 	ambientAnchors = {Corridor = {}, WetHall = {}, PumpPipe = {}}
 	ambientAnchorSeen = {}
 	nextCommonAt = math.huge
-	nextGroanAt = math.huge
 	lastCommonKey = nil
-	distantGroanBag = {}
-	lastDistantGroanSlot = nil
 	authoredBusyUntil = 0
 end
 
@@ -293,48 +234,6 @@ local function rootPart()
 	local root = character and character:FindFirstChild("HumanoidRootPart")
 	if not (humanoid and humanoid.Health > 0 and root) then return nil end
 	return root
-end
-
-local function eligiblePoolSlide(model)
-	return model and model:IsA("Model") and ambientWorld
-		and model:IsDescendantOf(ambientWorld)
-		and model:GetAttribute("Level2_PoolSlideActive") == true
-end
-
-local function locatePoolSlide()
-	local runtime = ambientWorld and ambientWorld:FindFirstChild("Level 2 Pool Slide Runtime")
-	local model = runtime and runtime:FindFirstChild("Level 2 Pool Slide")
-	if eligiblePoolSlide(model) then return model end
-	for _, tagged in ipairs(CollectionService:GetTagged("Level2PoolSlideEntity")) do
-		if eligiblePoolSlide(tagged) then return tagged end
-	end
-	return nil
-end
-
-local function syncPoolSlideSource()
-	local model = locatePoolSlide()
-	local root = model and (model:FindFirstChild("RootPart", true)
-		or model:FindFirstChild("HumanoidRootPart", true) or model.PrimaryPart)
-	if not (root and root:IsA("BasePart") and root:IsDescendantOf(model)) then
-		model, root = nil, nil
-	end
-	if model ~= poolSlideModel or root ~= poolSlideRoot then
-		clearPoolSlideSource()
-		poolSlideModel, poolSlideRoot = model, root
-		if model then
-			nextGroanAt = os.clock() + rng:NextNumber(GROAN_FIRST_DELAY_MIN, GROAN_FIRST_DELAY_MAX)
-			local function checkSource()
-				if not eligiblePoolSlide(model) or not root:IsDescendantOf(model) then
-					clearPoolSlideSource()
-				end
-			end
-			table.insert(poolSlideConnections, model.AncestryChanged:Connect(checkSource))
-			table.insert(poolSlideConnections, root.AncestryChanged:Connect(checkSource))
-			table.insert(poolSlideConnections, model:GetAttributeChangedSignal("Level2_PoolSlideActive"):Connect(checkSource))
-		end
-	end
-	if poolSlideEmitter and not poolSlideEmitter.Parent then clearPoolSlideVoice() end
-	return poolSlideModel ~= nil
 end
 
 local function pumpPipeIsRunning(pipe)
@@ -412,25 +311,6 @@ local function ensureAmbientFolder()
 	return ambientFolder
 end
 
-local function takeDistantGroanSlot()
-	if #distantGroanBag == 0 then
-		for _, slotName in ipairs(MONSTER_SLOTS) do
-			table.insert(distantGroanBag, slotName)
-		end
-		for index = #distantGroanBag, 2, -1 do
-			local swapIndex = rng:NextInteger(1, index)
-			distantGroanBag[index], distantGroanBag[swapIndex] =
-				distantGroanBag[swapIndex], distantGroanBag[index]
-		end
-		if #distantGroanBag > 1
-			and distantGroanBag[#distantGroanBag] == lastDistantGroanSlot then
-			distantGroanBag[1], distantGroanBag[#distantGroanBag] =
-				distantGroanBag[#distantGroanBag], distantGroanBag[1]
-		end
-	end
-	return table.remove(distantGroanBag)
-end
-
 local function playRandomSound(slotName, profile)
 	if not syncRandomSession() then return false end
 	local id = resolveId(slotName)
@@ -477,45 +357,6 @@ local function playRandomSound(slotName, profile)
 	return true
 end
 
-local function playPoolSlideGroan(slotName)
-	if not syncRandomSession() or not syncPoolSlideSource() then return false end
-	local id = resolveId(slotName)
-	if not (id and rootPart()) then return false end
-	local model, root = poolSlideModel, poolSlideRoot
-	if not eligiblePoolSlide(model) or not root:IsDescendantOf(model) then return false end
-	clearPoolSlideVoice()
-	local emitter = Instance.new("Attachment")
-	emitter.Name = "Level 2 Pool Slide Local Groan Emitter"
-	emitter:SetAttribute("Level2_ClientOnlyAudio", true)
-	emitter.Parent = root
-	local head = model:FindFirstChild("Head", true)
-	if head and head:IsA("Bone") then
-		emitter.Position = root.CFrame:PointToObjectSpace(head.TransformedWorldCFrame.Position)
-	end
-	-- Parenting to the actual body's RootPart follows every PivotTo/movement
-	-- throughout playback. Missing/streamed-out bodies never use a random origin.
-	poolSlideEmitter = emitter
-	local profile = DISTANT_GROAN_PROFILE
-	local sound = Instance.new("Sound")
-	sound.Name = "Level 2 Pool Slide Groan - " .. slotName
-	sound.SoundId = id
-	sound.Volume = profile.Volume
-	sound.PlaybackSpeed = rng:NextNumber(profile.PitchMin, profile.PitchMax)
-	sound.RollOffMode = Enum.RollOffMode.InverseTapered
-	sound.RollOffMinDistance = profile.RollOffMin
-	sound.RollOffMaxDistance = profile.RollOffMax
-	sound.Parent = emitter
-	local reverb = Instance.new("ReverbSoundEffect")
-	reverb.Name = "Level 2 Distant Poolroom Reverb"
-	for property, value in pairs(profile.Reverb) do reverb[property] = value end
-	reverb.Parent = sound
-	poolSlideVoice = sound
-	sound:Play()
-	ambientBusyUntil = os.clock() + profile.BusySeconds
-	Debris:AddItem(emitter, profile.CleanupSeconds)
-	return true
-end
-
 local function commonProfileEligible(profile)
 	return profile.Anchor ~= "RunningPump" or hasRunningPumpAnchor()
 end
@@ -546,21 +387,6 @@ end
 local function updateRandomAmbience()
 	if not syncRandomSession() then return end
 	local now = os.clock()
-	local hasPoolSlide = syncPoolSlideSource()
-
-	if hasPoolSlide and now >= nextGroanAt
-		and now >= authoredBusyUntil
-		and now >= ambientBusyUntil then
-		local slotName = takeDistantGroanSlot()
-		if slotName and playPoolSlideGroan(slotName) then
-			lastDistantGroanSlot = slotName
-			nextGroanAt = os.clock() + rng:NextNumber(GROAN_DELAY_MIN, GROAN_DELAY_MAX)
-		else
-			if slotName then table.insert(distantGroanBag, slotName) end
-			nextGroanAt = now + 2
-		end
-		return
-	end
 
 	if now >= nextCommonAt
 		and now >= authoredBusyUntil

@@ -6,31 +6,49 @@
 -- point of the plugin: level design happens in Edit, and stopping to enter Play
 -- for every room-size change is what makes tuning not happen at all.
 --
+-- EDIT MODE ONLY. While a simulation is running the panel refuses to read or
+-- write and says so. Two reasons, and the second is the important one:
+--
+--   1. Studio plugins keep running when you press Play, but they stay bound to
+--      the EDIT DataModel. An override written from here during Play would land
+--      on objects the running game cannot see, so it would look like the panel
+--      did nothing.
+--   2. Worse, that write WOULD persist into the place once Play stops -- a
+--      change made while looking at a running game, silently applied to the
+--      saved place. Use the in-game panel (K) for tuning during a round.
+--
 -- It writes ONLY MasterTuning attributes. It never edits a configuration module,
--- never touches world geometry, and never changes a value outside the range the
+-- never touches world geometry, and never sets a value outside the range the
 -- registry declares -- Master.Coerce is the same clamp the server applies.
 --
 -- Install with:  python plugin/build_plugin.py
 -- Studio picks it up on the next restart, or immediately via Plugins > Manage.
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 
 local WIDGET_ID = "MongoTVMasterTuning"
 local ROW_HEIGHT = 24
 local HEADER_HEIGHT = 26
+local RUN_STATE_POLL = 1
 
-local toolbar = plugin:CreateToolbar("MongoTV")
 -- No icon: the rbxasset:// paths for Studio's own icons move between versions,
 -- and a missing one logs "Unable to load plugin icon" on every Studio start
 -- without telling you which plugin did it. A text button cannot fail.
+local toolbar = plugin:CreateToolbar("MongoTV")
 local button = toolbar:CreateButton("Master Tuning",
-	"Justér niveaustørrelser, entiteter og timings uden at starte spillet", "")
+	"Tune level sizes, entities and timings without starting the game", "")
 
 local widget = plugin:CreateDockWidgetPluginGui(
 	WIDGET_ID,
 	DockWidgetPluginGuiInfo.new(Enum.InitialDockState.Right, false, false, 360, 520, 300, 320))
 widget.Title = "MongoTV -- Master Tuning"
 widget.Name = WIDGET_ID
+
+--- Edit mode only. IsRunning() is true for Play, Run and Play Solo alike.
+local function editable(): boolean
+	return not RunService:IsRunning()
+end
 
 -- ------------------------------------------------------------------- theming
 
@@ -112,6 +130,7 @@ local function makeHeader(text: string, dim: boolean?)
 	label.Font = if dim then Enum.Font.SourceSans else Enum.Font.SourceSansBold
 	label.TextSize = if dim then 13 else 15
 	label.TextXAlignment = Enum.TextXAlignment.Left
+	label.TextWrapped = true
 	label.TextColor3 = colour(if dim then "DimmedText" else "BrightText")
 	label.Text = text
 	label.LayoutOrder = nextOrder()
@@ -133,6 +152,7 @@ local function makeRow(Master: any, entry: any)
 	row.Parent = scroll
 
 	local label = Instance.new("TextLabel")
+	label.Name = entry.Key
 	label.Size = UDim2.new(1, -132, 1, 0)
 	label.BackgroundTransparency = 1
 	label.Font = Enum.Font.SourceSans
@@ -142,8 +162,6 @@ local function makeRow(Master: any, entry: any)
 	label.TextColor3 = colour(if overridden then "BrightText" else "MainText")
 	label.Text = (if overridden then "\u{25CF} " else "") .. entry.Label
 	label.Parent = row
-
-	label.Name = entry.Key
 
 	local box = Instance.new("TextBox")
 	box.Size = UDim2.new(0, 74, 1, -4)
@@ -167,29 +185,10 @@ local function makeRow(Master: any, entry: any)
 	reset.TextColor3 = colour(if overridden then "MainText" else "DimmedText")
 	reset.Font = Enum.Font.SourceSans
 	reset.TextSize = 12
-	reset.Text = "Nulstil"
+	reset.Text = "Reset"
 	reset.AutoButtonColor = overridden
 	reset.Active = overridden
 	reset.Parent = row
-
-	box.FocusLost:Connect(function(enterPressed)
-		if not enterPressed then
-			refresh()
-			return
-		end
-		local wanted = Master.Coerce(entry.Key, box.Text)
-		if wanted == nil then
-			status.Text = string.format("'%s' er ikke et tal. %s uændret.", box.Text, entry.Label)
-			refresh()
-			return
-		end
-		local ok, problem = Master.SetOverride(entry.Key, wanted)
-		status.Text = if ok
-			then string.format("%s = %s%s", entry.Label, tostring(wanted),
-				if entry.Live then "" else "  (ved næste runde-opbygning)")
-			else ("Afvist: " .. tostring(problem))
-		refresh()
-	end)
 
 	-- A note, or the rebuild warning, gets its own dim line. Only a handful of
 	-- entries carry a note, so this costs almost nothing and says the one thing a
@@ -204,15 +203,43 @@ local function makeRow(Master: any, entry: any)
 		note.TextWrapped = true
 		note.AutomaticSize = Enum.AutomaticSize.Y
 		note.TextColor3 = colour("DimmedText")
-		note.Text = "    " .. (entry.Note or "Træder i kraft ved næste runde-opbygning.")
+		note.Text = "    " .. (entry.Note or "Takes effect on the next round build.")
 		note.LayoutOrder = nextOrder()
 		note.Parent = scroll
 	end
 
+	box.FocusLost:Connect(function(enterPressed)
+		if not enterPressed then
+			refresh()
+			return
+		end
+		if not editable() then
+			status.Text = "Stop the simulation first -- this panel is Edit mode only."
+			refresh()
+			return
+		end
+		local wanted = Master.Coerce(entry.Key, box.Text)
+		if wanted == nil then
+			status.Text = string.format("'%s' is not a number. %s unchanged.", box.Text, entry.Label)
+			refresh()
+			return
+		end
+		local ok, problem = Master.SetOverride(entry.Key, wanted)
+		status.Text = if ok
+			then string.format("%s = %s%s", entry.Label, tostring(wanted),
+				if entry.Live then "" else "  (on the next round build)")
+			else ("Refused: " .. tostring(problem))
+		refresh()
+	end)
+
 	reset.MouseButton1Click:Connect(function()
 		if not overridden then return end
+		if not editable() then
+			status.Text = "Stop the simulation first -- this panel is Edit mode only."
+			return
+		end
 		Master.SetOverride(entry.Key, nil)
-		status.Text = entry.Label .. " nulstillet til " .. tostring(default or "standard") .. "."
+		status.Text = entry.Label .. " reset to " .. tostring(default or "its default") .. "."
 		refresh()
 	end)
 end
@@ -225,11 +252,25 @@ function refresh()
 		if not child:IsA("UIListLayout") and not child:IsA("UIPadding") then child:Destroy() end
 	end
 
+	-- Refuse to render the controls at all while a simulation is running, rather
+	-- than showing values that belong to the edit place while the user is looking
+	-- at a running game.
+	if not editable() then
+		status.Text = "Edit mode only."
+		makeHeader("Simulation is running")
+		makeHeader("This panel edits the SAVED place, not the running game, so its "
+			.. "values would not match what you are looking at -- and the write would "
+			.. "persist once you stop.", true)
+		makeHeader("Stop the simulation to use it, or press K in-game for the "
+			.. "developer tuning panel, which does reach the live round.", true)
+		return
+	end
+
 	local Master = loadRegistry()
 	if not Master then
-		status.Text = "Fandt ikke ReplicatedStorage.MasterConfiguration."
-		makeHeader("Modulet mangler")
-		makeHeader("Åbn stedet med MasterConfiguration i ReplicatedStorage.", true)
+		status.Text = "ReplicatedStorage.MasterConfiguration was not found."
+		makeHeader("Registry missing")
+		makeHeader("Open the place that has MasterConfiguration in ReplicatedStorage.", true)
 		return
 	end
 
@@ -251,7 +292,7 @@ function refresh()
 	end
 
 	if status.Text == "" then
-		status.Text = string.format("%d justerbare værdier, %d overstyret.",
+		status.Text = string.format("%d tunable values, %d overridden.",
 			#Master.Entries, overrides)
 	end
 end
@@ -285,6 +326,25 @@ end
 watchFolder()
 ReplicatedStorage.ChildAdded:Connect(function(child)
 	if child.Name == "MasterTuning" then watchFolder() end
+end)
+
+-- Studio gives a plugin no "play started" signal, so the run state is polled --
+-- once a second, and only while the widget is open, so it costs nothing when it
+-- is closed. Without this the panel would keep showing live controls after the
+-- user pressed Play.
+task.spawn(function()
+	local lastEditable = editable()
+	while true do
+		task.wait(RUN_STATE_POLL)
+		local now = editable()
+		if now ~= lastEditable then
+			lastEditable = now
+			if widget.Enabled then
+				status.Text = ""
+				refresh()
+			end
+		end
+	end
 end)
 
 if widget.Enabled then refresh() end
