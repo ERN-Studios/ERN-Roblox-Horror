@@ -52,18 +52,83 @@ stale editor buffer after a programmatic write.
 `tools/tests/test_push_repo_to_studio.py` verifies the push tool against a fake
 Studio without touching anything real (needs a `luau` binary; see the file).
 
+## There is a code knowledge graph — use it before grepping
+
+`graphify-out/` holds a graph of this codebase: every script, the symbols in it,
+and what calls what. It is built by the `graphify` CLI (already on PATH) with no
+LLM cost. **Start here instead of grepping blind** — it answers "what touches
+this?" and "how does A reach B?" in one call.
+
+```
+graphify explain "Level 2 Round Adapter"    # what a node is and what it neighbours
+graphify path "GameManager" "Pool Foam Navigator"   # how one reaches the other
+graphify update . --force                   # rebuild after code changes
+```
+
+`graphify-out/GRAPH_REPORT.md` is the human-readable summary: node and edge
+counts, and the named community hubs, which is the fastest map of the project's
+actual structure. `graphify-out/graph.html` is an interactive view.
+
+Five things to know:
+
+- **Check freshness first.** The report records the commit it was built from.
+  Compare it with `git rev-parse HEAD`; a stale graph will confidently describe
+  code that no longer exists. On 2026-09-02 its top community hubs were still
+  named after the Slidemouth and Pool Slide encounters, both long deleted.
+- **`--force` is required after deletions.** `graphify update` refuses to write a
+  graph with fewer nodes than the last one unless forced, which is exactly the
+  case after a refactor that removes code.
+- **Run it only at the repo root.** Running it inside a service folder leaves a
+  nested `graphify-out/` inside the Studio mirror — four of those had accumulated
+  by 2026-09-02, 42 MB of stale duplicates. All `graphify-out/` paths are
+  gitignored at any depth, so they never reach GitHub, but they do clutter the
+  mirror the sync tools walk.
+- **`.graphifyignore` keeps retired code out.** `ServerStorage/Archive/` is real,
+  parseable Lua, so graphify indexed it: 442 of 2475 nodes (18%), and two of the
+  graph's largest communities were named after the retired Slidemouth. The
+  archive is now excluded by `.graphifyignore` at the repo root — the files are
+  untouched on disk, they just no longer answer searches with dead code. Note
+  the file is only consulted on `--force`; a plain `update` leaves old nodes in
+  place until you force a rescan.
+- **The graph under-covers 12 files, and one of them is GameManager.** The
+  extractor stops part-way through a file it cannot fully parse and keeps
+  whatever it got, reporting only a `syntax errors ... partially extracted`
+  warning. Across the mirror it reaches 81% of Lua lines, but the misses are
+  concentrated:
+
+  | Script | Lines | Symbols in graph |
+  |---|---:|---:|
+  | GameManager | 2640 | 4 |
+  | Level 3 Test Suite | 3577 | 9 |
+  | Level 3 Mall Manager AI Controller | 3586 | 44 |
+  | Level 3 Lighting Controller | 896 | 1 |
+
+  So **a graph query that returns nothing about GameManager is not evidence that
+  GameManager does not touch the thing** — grep those four directly. The reported
+  error line is where the parser gave up, not the cause: the constructs sitting on
+  those lines (`export type`, `(): boolean?`, `x.y += 1`) all parse fine in
+  isolation, and it is not CRLF or non-ASCII either. graphify ships as a compiled
+  binary, so this is a property of the tool, not something to fix here.
+
 ## Current state (2026-09-02)
 
-`main` is at the Pool Slide sync and is level with `origin/main`. The place
-holds **134 scripts + 13 RemoteEvents**; the manifest has no pending entries.
-Verified on 2026-09-02: parity 128 exact + 6 permitted-newline, 0 drift, and
-`studio_compile_probe.luau` at 134/134.
+`main` is level with `origin/main`. The place holds **91 scripts + 14
+RemoteEvents**; the manifest has no pending entries. Verified 2026-09-02:
+`studio_compile_probe.luau` at 91/91, and repo and Studio agreeing on all 91
+script paths with an identical djb2 (`61ddeaf6`).
 
-**Level 2's Slidemouth was retired on 2026-08-31** and replaced by the **Pool
-Slide**, which spawns at the second pump. `Level 2 Round Adapter` requires it
-and treats a failed start as a hard error. The old encounter is intact in
-`ServerStorage.Level2RetiredSlidemouth_20260831` — and so is its 391-check test
-suite, which means **Level 2's live hostile currently has no test coverage**.
+**Level 2 has exactly one hostile: Pool Foam.** Two others came and went. The
+Slidemouth was retired on 2026-08-31 in favour of the Pool Slide; the Pool Slide
+was measured on 2026-09-02 to never once spawn successfully on a generated map —
+its failing spawn retried forever and cost 78% of the server's frame budget
+(13 FPS, 59 with it paused) — and was deleted entirely, backups included.
+
+> **Pool Foam has no test suite.** The only hostile suite this project ever had
+> went into the archive with the Slidemouth
+> (`ServerStorage.Archive.Level2RetiredSlidemouth_20260831`, 391 checks). The
+> Pool Slide was built without one and failed in every round for days without
+> anyone noticing, until a frame-time measurement found it. That is the argument
+> for writing one.
 
 **Level 3's seed guard was fixed on 2026-09-02** to match Level 2's, and now
 publishes `Level3_SeedPinned`.
