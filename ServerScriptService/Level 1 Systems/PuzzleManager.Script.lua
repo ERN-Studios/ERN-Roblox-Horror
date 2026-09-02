@@ -26,7 +26,9 @@ local TweenService = game:GetService("TweenService")
 local Debris = game:GetService("Debris")
 
 local status = RS:WaitForChild("Remotes"):WaitForChild("PuzzleStatus")
-local NoiseRegistry = require(script.Parent:WaitForChild("NoiseRegistry"))
+-- ServerScriptService, not script.Parent: this script moved into the
+-- "Level 1 Systems" folder on 2026-09-02 and NoiseRegistry stayed in the root.
+local NoiseRegistry = require(game:GetService("ServerScriptService"):WaitForChild("NoiseRegistry"))
 
 -- ── tuning ────────────────────────────────────────────────
 local Master = require(game:GetService("ReplicatedStorage"):WaitForChild("MasterConfiguration"))

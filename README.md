@@ -380,20 +380,29 @@ number copied into this README — is authoritative.
 ServerScriptService/
   GameManager.Script.lua            lobby queue, reserved servers, round loop
   TunnelLobbyBuilder.ModuleScript   the tunnel lobby + launch stations
-  MazeGenerator.Script.lua          Level 1: maze, pits, elevator, lights, decor
-  PuzzleManager.Script.lua          Level 1: fuses → boxes → levers → exit
-  EntityAI / EntityAnimation / EntityKill      Level 1 entity (AI, clips, kill)
+  Level 1 Systems/                  Level 1: maze/pits/elevator generator, the
+                                    fuse-box-lever puzzle, and the entity's AI,
+                                    animation and kill sequence
   Level2Generator.ModuleScript      Level 2: doorway into "Level 2 Systems"
   Level 2 Systems/                  Level 2: config, BSP layout, world builder,
-                                    pump objective, slides + ragdoll, Pool Foam
-                                    + Pool Slide hostiles, exit-transition
-                                    test suite, tweak README
+                                    pump objective, slides + ragdoll, the Pool
+                                    Foam hostile, exit-transition test suite,
+                                    tweak README
   Round Completion Routing.ModuleScript   post-win routing rules (pure)
   Round Completion Test Suite.ModuleScript  assertions for those rules
   Level3Generator.ModuleScript      Level 3: doorway into "Level 3 Systems"
   Level 3 Systems/                  Level 3: config, layout, world builder, Mall
                                     Manager AI, hiding, music cycle, test suite
   FlashlightSync / AvatarNormalize / NoiseRegistry   shared services
+
+Level 1's five runtime scripts were gathered into `Level 1 Systems` on
+2026-09-02 so all three levels read the same way. Anything looking them up by
+name must use a RECURSIVE `FindFirstChild(name, true)`: the non-recursive form
+returns nil from a folder and every one of those call sites fails silently on
+nil, which is how a Level 2/3 round once came to start Level 1's fuse puzzle
+server-side. `NoiseRegistry` deliberately stayed in the root as a shared
+service, so the moved scripts reach it through `ServerScriptService`, never
+`script.Parent`.
 StarterPlayer/
   StarterCharacter/                 hazmat gameplay rig (+ Animate)
   StarterCharacterScripts/          run anim, muted default steps, dance emote

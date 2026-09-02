@@ -52,43 +52,11 @@
       "status": "synced"
     },
     {
-      "studioPath": "ServerScriptService.EntityAI",
-      "className": "Script",
-      "file": "ServerScriptService/EntityAI.Script.lua",
-      "bytes": 54366,
-      "sha256": "c4f7d9ac895271bc27775057253e8edc252ffb639e4efa3edd8116c5b2d81451",
-      "status": "synced"
-    },
-    {
-      "studioPath": "ServerScriptService.EntityKill",
-      "className": "Script",
-      "file": "ServerScriptService/EntityKill.Script.lua",
-      "bytes": 8222,
-      "sha256": "d619de5b241f02f7b4fdc362db902715873566deffcf328c77f879287b2bc0de",
-      "status": "synced"
-    },
-    {
-      "studioPath": "ServerScriptService.MazeGenerator",
-      "className": "Script",
-      "file": "ServerScriptService/MazeGenerator.Script.lua",
-      "bytes": 81272,
-      "sha256": "ec33085544643d7906be8b3084cbc0f5195a13ae65176cdce226fdaff756778e",
-      "status": "synced"
-    },
-    {
       "studioPath": "ServerScriptService.GameManager",
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
       "bytes": 109007,
       "sha256": "334bdfc8e028d16367feb524ad628581e877b486cdae38deea0e751d2e476fb2",
-      "status": "synced"
-    },
-    {
-      "studioPath": "ServerScriptService.PuzzleManager",
-      "className": "Script",
-      "file": "ServerScriptService/PuzzleManager.Script.lua",
-      "bytes": 83371,
-      "sha256": "05b6fe53f3f524d83ff85cfd0ef11455ad048761f55da704376099e3b71fca95",
       "status": "synced"
     },
     {
@@ -105,14 +73,6 @@
       "file": "ServerScriptService/Round Completion Test Suite.ModuleScript.lua",
       "bytes": 133216,
       "sha256": "fc726333b1c18e40f7c0c702a275f7f5f350b1739c20632fc9c2e6ff3d71fe24",
-      "status": "synced"
-    },
-    {
-      "studioPath": "ServerScriptService.EntityAnimation",
-      "className": "Script",
-      "file": "ServerScriptService/EntityAnimation.Script.lua",
-      "bytes": 5696,
-      "sha256": "4c55c053b785bb1bfbe7076584ae0aeea064147a076162525d2d08f8dd4b8e9c",
       "status": "synced"
     },
     {
@@ -1006,6 +966,46 @@
       "file": "ServerStorage/Archive/Level2RetiredPoolSlide_20260902/Level 2 Pool Slide Dev ESP.LocalScript.lua",
       "bytes": 6405,
       "sha256": "7768ac2aa49dd7be0c05b85d26fc66b4af0174c883d73a05eef8472d9828deb5",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 1 Systems.MazeGenerator",
+      "className": "Script",
+      "file": "ServerScriptService/Level 1 Systems/MazeGenerator.Script.lua",
+      "bytes": 81272,
+      "sha256": "ec33085544643d7906be8b3084cbc0f5195a13ae65176cdce226fdaff756778e",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 1 Systems.PuzzleManager",
+      "className": "Script",
+      "file": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
+      "bytes": 83546,
+      "sha256": "e5659f3e923a030ec448874f58ef0f53284398bea974dac4b5eb5303ad672bdf",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 1 Systems.EntityAI",
+      "className": "Script",
+      "file": "ServerScriptService/Level 1 Systems/EntityAI.Script.lua",
+      "bytes": 54875,
+      "sha256": "698396ee48068999c7a13d08e36879b2125e5d71d9aa33bedd24700a757d582b",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 1 Systems.EntityAnimation",
+      "className": "Script",
+      "file": "ServerScriptService/Level 1 Systems/EntityAnimation.Script.lua",
+      "bytes": 5696,
+      "sha256": "4c55c053b785bb1bfbe7076584ae0aeea064147a076162525d2d08f8dd4b8e9c",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 1 Systems.EntityKill",
+      "className": "Script",
+      "file": "ServerScriptService/Level 1 Systems/EntityKill.Script.lua",
+      "bytes": 8222,
+      "sha256": "d619de5b241f02f7b4fdc362db902715873566deffcf328c77f879287b2bc0de",
       "status": "synced"
     }
   ]

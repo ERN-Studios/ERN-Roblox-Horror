@@ -68,6 +68,21 @@ suite, which means **Level 2's live hostile currently has no test coverage**.
 **Level 3's seed guard was fixed on 2026-09-02** to match Level 2's, and now
 publishes `Level3_SeedPinned`.
 
+**Level 1's five runtime scripts moved into `ServerScriptService."Level 1 Systems"`
+on 2026-09-02** so all three levels read the same way: MazeGenerator,
+PuzzleManager, EntityAI, EntityAnimation, EntityKill.
+
+Two rules follow from that move, and both have already bitten this project once:
+
+- **Look them up recursively.** `ServerScriptService:FindFirstChild(name)` returns
+  nil from inside a folder, and all seven call sites that do this fail SILENTLY
+  on nil -- their loops simply do nothing. That is how every Level 2/3 round once
+  came to start Level 1's fuse puzzle server-side. Pass `true`.
+- **`script.Parent` is no longer ServerScriptService** for those five. They reach
+  the shared services in the root (`NoiseRegistry`, and anything added later)
+  through `game:GetService("ServerScriptService")`. Two `script.Parent` lookups
+  were missed on the first pass and yielded forever until the console showed it.
+
 ### History — the 2026-08-19 audit (done, kept for context)
 
 Branch `claude/roblox-code-audit-di6qxi`, PR #1 (merged): a project-wide audit of ~45k

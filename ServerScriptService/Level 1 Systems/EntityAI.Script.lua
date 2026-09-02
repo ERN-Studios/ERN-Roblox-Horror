@@ -11,10 +11,18 @@ local RunService = game:GetService("RunService")
 -- wrong object type, empty, or errors, we don't want it to kill the whole
 -- entity + noise pipeline (that also leaves ReportNoise unconnected → its
 -- queue exhausts). Load defensively and fall back to a no-op (hearing off).
+-- ServerScriptService, not script.Parent: this script lives in the
+-- "Level 1 Systems" folder since 2026-09-02, while NoiseRegistry stayed in the
+-- root as a shared service. script.Parent yielded here forever.
+--
+-- And a TIMEOUT, because the fallback below was unreachable without one:
+-- WaitForChild with no timeout does not error, it yields, so the pcall never
+-- returned and "hearing disabled" could never actually happen.
+local ServerScriptService = game:GetService("ServerScriptService")
 local NoiseRegistry
 do
 	local ok, mod = pcall(function()
-		return require(script.Parent:WaitForChild("NoiseRegistry"))
+		return require(ServerScriptService:WaitForChild("NoiseRegistry", 10))
 	end)
 	if ok and type(mod) == "table" and mod.Add then
 		NoiseRegistry = mod
