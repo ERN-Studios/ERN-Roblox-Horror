@@ -1933,44 +1933,138 @@ dispatchAudio.refresh()
 local objectivesButton = Instance.new("TextButton")
 objectivesButton.Name = "ObjectivesButton"
 objectivesButton.Position = UDim2.fromOffset(12, 12)
-objectivesButton.Size = UDim2.fromOffset(154, 44)
-objectivesButton.BackgroundColor3 = Color3.fromRGB(8, 14, 9)
-objectivesButton.BackgroundTransparency = 0.12
+objectivesButton.Size = UDim2.fromOffset(256, 36)
+objectivesButton.BackgroundColor3 = Color3.fromRGB(14, 20, 17)
+objectivesButton.BackgroundTransparency = 0.04
 objectivesButton.BorderSizePixel = 0
-objectivesButton.AutoButtonColor = true
+objectivesButton.AutoButtonColor = false
 objectivesButton.Active = true
 objectivesButton.Selectable = true
-objectivesButton.Font = Enum.Font.Code
-objectivesButton.Text = UIS.TouchEnabled and "OBJECTIVES" or "OBJECTIVES  [H]"
-objectivesButton.TextColor3 = Color3.fromRGB(120, 255, 175)
-objectivesButton.TextSize = 16
+objectivesButton.Font = Enum.Font.GothamBold
+objectivesButton.Text = ""
+objectivesButton.TextColor3 = Color3.fromRGB(230, 237, 232)
+objectivesButton.TextSize = 13
 objectivesButton.Visible = false
 objectivesButton.ZIndex = 30
 objectivesButton.Parent = guideGui
-roundAndStroke(objectivesButton, 8, Color3.fromRGB(105, 238, 168), 0.27, 1.5)
+roundAndStroke(objectivesButton, 9, Color3.fromRGB(75, 94, 83), 0.28, 1)
+
+dispatchAudio.objectivesButtonSetup = (function()
+	local gradient = Instance.new("UIGradient")
+	gradient.Color = ColorSequence.new({
+		ColorSequenceKeypoint.new(0, Color3.fromRGB(20, 29, 24)),
+		ColorSequenceKeypoint.new(1, Color3.fromRGB(10, 14, 12)),
+	})
+	gradient.Parent = objectivesButton
+
+	local accent = Instance.new("Frame")
+	accent.Name = "Accent"
+	accent.Position = UDim2.fromOffset(0, 8)
+	accent.Size = UDim2.new(0, 3, 1, -16)
+	accent.BackgroundColor3 = Color3.fromRGB(83, 204, 145)
+	accent.BorderSizePixel = 0
+	accent.ZIndex = 31
+	accent.Parent = objectivesButton
+	local accentCorner = Instance.new("UICorner")
+	accentCorner.CornerRadius = UDim.new(1, 0)
+	accentCorner.Parent = accent
+
+	local label = Instance.new("TextLabel")
+	label.Name = "BriefLabel"
+	label.Position = UDim2.fromOffset(17, 0)
+	label.Size = UDim2.new(1, -66, 1, 0)
+	label.BackgroundTransparency = 1
+	label.Font = Enum.Font.GothamBold
+	label.Text = "MISSION BRIEF"
+	label.TextColor3 = Color3.fromRGB(223, 232, 226)
+	label.TextSize = 12
+	label.TextXAlignment = Enum.TextXAlignment.Left
+	label.ZIndex = 31
+	label.Parent = objectivesButton
+
+	local keycap = Instance.new("Frame")
+	keycap.Name = "Keycap"
+	keycap.AnchorPoint = Vector2.new(1, 0.5)
+	keycap.Position = UDim2.new(1, -7, 0.5, 0)
+	keycap.Size = UDim2.fromOffset(28, 24)
+	keycap.BackgroundColor3 = Color3.fromRGB(29, 39, 34)
+	keycap.BorderSizePixel = 0
+	keycap.ZIndex = 31
+	keycap.Parent = objectivesButton
+	local keyCorner = Instance.new("UICorner")
+	keyCorner.CornerRadius = UDim.new(0, 6)
+	keyCorner.Parent = keycap
+	local keyStroke = Instance.new("UIStroke")
+	keyStroke.Color = Color3.fromRGB(101, 127, 113)
+	keyStroke.Transparency = 0.35
+	keyStroke.Thickness = 1
+	keyStroke.Parent = keycap
+
+	local key = Instance.new("TextLabel")
+	key.Name = "Key"
+	key.Size = UDim2.fromScale(1, 1)
+	key.BackgroundTransparency = 1
+	key.Font = Enum.Font.GothamBold
+	key.Text = "H"
+	key.TextColor3 = Color3.fromRGB(139, 218, 172)
+	key.TextSize = 11
+	key.ZIndex = 32
+	key.Parent = keycap
+end)()
+
+objectivesButton.MouseEnter:Connect(function()
+	objectivesButton.BackgroundColor3 = Color3.fromRGB(25, 34, 29)
+end)
+objectivesButton.MouseLeave:Connect(function()
+	objectivesButton.BackgroundColor3 = Color3.fromRGB(14, 20, 17)
+end)
 
 local objectivesPanel = Instance.new("Frame")
 objectivesPanel.Name = "ObjectivesPanel"
 objectivesPanel.Position = UDim2.fromOffset(12, 64)
-objectivesPanel.Size = UDim2.fromOffset(420, 338)
-objectivesPanel.BackgroundColor3 = Color3.fromRGB(8, 14, 9)
-objectivesPanel.BackgroundTransparency = 0.06
+objectivesPanel.Size = UDim2.fromOffset(420, 360)
+objectivesPanel.BackgroundColor3 = Color3.fromRGB(8, 12, 10)
+objectivesPanel.BackgroundTransparency = 0.035
 objectivesPanel.BorderSizePixel = 0
 objectivesPanel.Active = true
 objectivesPanel.Visible = false
 objectivesPanel.ZIndex = 30
 objectivesPanel.Parent = guideGui
-roundAndStroke(objectivesPanel, 10, Color3.fromRGB(105, 238, 168), 0.27, 1.5)
+roundAndStroke(objectivesPanel, 12, Color3.fromRGB(75, 94, 83), 0.25, 1)
+
+dispatchAudio.objectivesPanelSetup = (function()
+	local gradient = Instance.new("UIGradient")
+	gradient.Color = ColorSequence.new({
+		ColorSequenceKeypoint.new(0, Color3.fromRGB(18, 25, 21)),
+		ColorSequenceKeypoint.new(0.58, Color3.fromRGB(10, 15, 12)),
+		ColorSequenceKeypoint.new(1, Color3.fromRGB(6, 9, 8)),
+	})
+	gradient.Rotation = 90
+	gradient.Parent = objectivesPanel
+
+	local eyebrow = Instance.new("TextLabel")
+	eyebrow.Name = "Eyebrow"
+	eyebrow.Position = UDim2.fromOffset(18, 9)
+	eyebrow.Size = UDim2.new(1, -82, 0, 14)
+	eyebrow.BackgroundTransparency = 1
+	eyebrow.Font = Enum.Font.Code
+	eyebrow.Text = "FIELD BRIEF  //  LEVEL 1"
+	eyebrow.TextColor3 = Color3.fromRGB(100, 188, 143)
+	eyebrow.TextSize = 10
+	eyebrow.TextXAlignment = Enum.TextXAlignment.Left
+	eyebrow.ZIndex = 31
+	eyebrow.Parent = objectivesPanel
+end)()
 
 local objectivesTitle = Instance.new("TextLabel")
 objectivesTitle.Name = "Title"
-objectivesTitle.Position = UDim2.fromOffset(16, 10)
-objectivesTitle.Size = UDim2.new(1, -68, 0, 32)
+objectivesTitle.Position = UDim2.fromOffset(18, 24)
+objectivesTitle.Size = UDim2.new(1, -82, 0, 30)
 objectivesTitle.BackgroundTransparency = 1
-objectivesTitle.Font = Enum.Font.Code
-objectivesTitle.Text = "> LEVEL 1 — ESCAPE PROCEDURE"
-objectivesTitle.TextColor3 = Color3.fromRGB(120, 255, 175)
-objectivesTitle.TextSize = 18
+objectivesTitle.Font = Enum.Font.GothamBold
+objectivesTitle.Text = "ESCAPE PROCEDURE"
+objectivesTitle.TextColor3 = Color3.fromRGB(232, 239, 234)
+objectivesTitle.TextSize = 20
 objectivesTitle.TextXAlignment = Enum.TextXAlignment.Left
 objectivesTitle.ZIndex = 31
 objectivesTitle.Parent = objectivesPanel
@@ -1978,92 +2072,120 @@ objectivesTitle.Parent = objectivesPanel
 local objectivesClose = Instance.new("TextButton")
 objectivesClose.Name = "Close"
 objectivesClose.AnchorPoint = Vector2.new(1, 0)
-objectivesClose.Position = UDim2.new(1, -8, 0, 6)
-objectivesClose.Size = UDim2.fromOffset(40, 40)
-objectivesClose.BackgroundTransparency = 1
+objectivesClose.Position = UDim2.new(1, -10, 0, 10)
+objectivesClose.Size = UDim2.fromOffset(36, 36)
+objectivesClose.BackgroundColor3 = Color3.fromRGB(25, 33, 29)
+objectivesClose.BackgroundTransparency = 0.08
+objectivesClose.BorderSizePixel = 0
+objectivesClose.AutoButtonColor = true
 objectivesClose.Font = Enum.Font.GothamBold
 objectivesClose.Text = "×"
-objectivesClose.TextColor3 = Color3.fromRGB(218, 237, 223)
-objectivesClose.TextSize = 26
+objectivesClose.TextColor3 = Color3.fromRGB(176, 191, 182)
+objectivesClose.TextSize = 20
 objectivesClose.ZIndex = 32
 objectivesClose.Parent = objectivesPanel
+roundAndStroke(objectivesClose, 8, Color3.fromRGB(84, 101, 92), 0.46, 1)
 
 local objectivesDivider = Instance.new("Frame")
 objectivesDivider.Name = "Divider"
-objectivesDivider.Position = UDim2.fromOffset(16, 50)
-objectivesDivider.Size = UDim2.new(1, -32, 0, 1)
-objectivesDivider.BackgroundColor3 = Color3.fromRGB(105, 238, 168)
-objectivesDivider.BackgroundTransparency = 0.45
+objectivesDivider.Position = UDim2.fromOffset(18, 62)
+objectivesDivider.Size = UDim2.new(1, -36, 0, 1)
+objectivesDivider.BackgroundColor3 = Color3.fromRGB(72, 91, 80)
+objectivesDivider.BackgroundTransparency = 0.30
 objectivesDivider.BorderSizePixel = 0
 objectivesDivider.ZIndex = 31
 objectivesDivider.Parent = objectivesPanel
 
 local objectivesBody = Instance.new("ScrollingFrame")
 objectivesBody.Name = "NumberedObjectives"
-objectivesBody.Position = UDim2.fromOffset(14, 60)
-objectivesBody.Size = UDim2.new(1, -28, 1, -72)
+objectivesBody.Position = UDim2.fromOffset(16, 74)
+objectivesBody.Size = UDim2.new(1, -32, 1, -88)
 objectivesBody.BackgroundTransparency = 1
 objectivesBody.BorderSizePixel = 0
 objectivesBody.CanvasSize = UDim2.new()
 objectivesBody.AutomaticCanvasSize = Enum.AutomaticSize.Y
-objectivesBody.ScrollBarThickness = 3
-objectivesBody.ScrollBarImageColor3 = Color3.fromRGB(105, 238, 168)
+objectivesBody.ScrollBarThickness = 2
+objectivesBody.ScrollBarImageColor3 = Color3.fromRGB(91, 138, 111)
 objectivesBody.ScrollingDirection = Enum.ScrollingDirection.Y
 objectivesBody.ZIndex = 31
 objectivesBody.Parent = objectivesPanel
 
 local objectivesLayout = Instance.new("UIListLayout")
-objectivesLayout.Padding = UDim.new(0, 8)
+objectivesLayout.Padding = UDim.new(0, 10)
 objectivesLayout.SortOrder = Enum.SortOrder.LayoutOrder
 objectivesLayout.Parent = objectivesBody
 
 local objectiveCopy = {
-	"Find a group of unusually bright ceiling lights. A fuse relay is nearby.",
-	"Interact with the relay to extract its fuse.",
-	"Follow the colored cables. Each circuit connects one fuse box to one lever, but the cable does not identify which end is which.",
-	"Insert one fuse into every fuse box.",
-	"After every box is powered, activate all levers within 10 seconds.",
-	"Follow the energy reader to the powered exit door.",
-	"Keep away from the entity. Do not engage.",
+	{badge = "01", copy = "<b>Locate the fuse relays</b>\nSearch beneath unusually bright ceiling lights and extract each fuse."},
+	{badge = "02", copy = "<b>Restore the circuits</b>\nFollow the colored cables and insert one fuse into every fuse box."},
+	{badge = "03", copy = "<b>Synchronize the levers</b>\nOnce every box is powered, activate all levers within 10 seconds."},
+	{badge = "04", copy = "<b>Find the powered exit</b>\nFollow the energy reader to the exit door."},
+	{badge = "!", warning = true, copy = "<b>Threat protocol</b>\nKeep your distance from the entity. Do not engage."},
 }
 
-for index, copy in ipairs(objectiveCopy) do
+for index, step in ipairs(objectiveCopy) do
 	local row = Instance.new("Frame")
 	row.Name = "Objective" .. index
-	row.Size = UDim2.new(1, -4, 0, 0)
+	row.Size = UDim2.new(1, -6, 0, 0)
 	row.AutomaticSize = Enum.AutomaticSize.Y
-	row.BackgroundTransparency = 1
+	row.BackgroundColor3 = step.warning
+		and Color3.fromRGB(42, 34, 20)
+		or Color3.fromRGB(18, 25, 21)
+	row.BackgroundTransparency = 0.42
+	row.BorderSizePixel = 0
 	row.LayoutOrder = index
 	row.ZIndex = 31
 	row.Parent = objectivesBody
+	step.rowSetup = (function()
+		local corner = Instance.new("UICorner")
+		corner.CornerRadius = UDim.new(0, 7)
+		corner.Parent = row
+		local stroke = Instance.new("UIStroke")
+		stroke.Color = step.warning
+			and Color3.fromRGB(139, 111, 58)
+			or Color3.fromRGB(56, 72, 63)
+		stroke.Transparency = 0.48
+		stroke.Thickness = 1
+		stroke.Parent = row
+	end)()
 
 	local number = Instance.new("TextLabel")
 	number.Name = "Number"
-	number.Size = UDim2.fromOffset(28, 22)
-	number.BackgroundTransparency = 1
-	number.Font = Enum.Font.Code
-	number.Text = tostring(index) .. "."
-	number.TextColor3 = index == #objectiveCopy
-		and Color3.fromRGB(235, 220, 150)
-		or Color3.fromRGB(120, 255, 175)
-	number.TextSize = 15
-	number.TextXAlignment = Enum.TextXAlignment.Left
-	number.TextYAlignment = Enum.TextYAlignment.Top
+	number.Position = UDim2.fromOffset(8, 8)
+	number.Size = UDim2.fromOffset(30, 30)
+	number.BackgroundColor3 = step.warning
+		and Color3.fromRGB(78, 59, 29)
+		or Color3.fromRGB(28, 47, 37)
+	number.BackgroundTransparency = 0.12
+	number.BorderSizePixel = 0
+	number.Font = Enum.Font.GothamBold
+	number.Text = step.badge
+	number.TextColor3 = step.warning
+		and Color3.fromRGB(224, 188, 111)
+		or Color3.fromRGB(111, 216, 161)
+	number.TextSize = 11
 	number.ZIndex = 32
 	number.Parent = row
+	step.badgeSetup = (function()
+		local corner = Instance.new("UICorner")
+		corner.CornerRadius = UDim.new(0, 7)
+		corner.Parent = number
+	end)()
 
 	local description = Instance.new("TextLabel")
 	description.Name = "Description"
-	description.Position = UDim2.fromOffset(28, 0)
-	description.Size = UDim2.new(1, -32, 0, 0)
+	description.Position = UDim2.fromOffset(48, 7)
+	description.Size = UDim2.new(1, -58, 0, 0)
 	description.AutomaticSize = Enum.AutomaticSize.Y
 	description.BackgroundTransparency = 1
-	description.Font = Enum.Font.Code
-	description.Text = copy
-	description.TextColor3 = index == #objectiveCopy
-		and Color3.fromRGB(235, 220, 150)
-		or Color3.fromRGB(218, 237, 223)
-	description.TextSize = 14
+	description.Font = Enum.Font.GothamMedium
+	description.RichText = true
+	description.Text = step.copy
+	description.TextColor3 = step.warning
+		and Color3.fromRGB(224, 202, 151)
+		or Color3.fromRGB(204, 216, 208)
+	description.TextSize = 13
+	description.LineHeight = 1.08
 	description.TextWrapped = true
 	description.TextXAlignment = Enum.TextXAlignment.Left
 	description.TextYAlignment = Enum.TextYAlignment.Top
@@ -2270,8 +2392,12 @@ local function refreshObjectivesButton()
 		objectivesPanel.Visible = false
 		return
 	end
-	objectivesButton.Visible = not (UIDevice.IsTouch()
-		and (objectivesPanel.Visible or player:GetAttribute("DispatchBriefingOpen") == true))
+	-- The compact card and its MISSION BRIEF footer are one composition. Once the
+	-- full brief is open, the panel's own close control takes over; leaving the
+	-- footer below it is the duplicate slab that made the old HUD feel broken.
+	objectivesButton.Visible = not panelOpen
+		and not (UIDevice.IsTouch()
+			and player:GetAttribute("DispatchBriefingOpen") == true)
 end
 UIDevice.OnScreenOwningModalChanged(function()
 	refreshObjectivesButton()
@@ -2642,27 +2768,33 @@ local function updateLevelOneGuideLayout()
 	local narrow = layout.Narrow
 	local touch = layout.IsTouch
 
-	-- A touch target never goes under 44px, whatever the narrow layout does to
-	-- the rest of the panel. The narrow branch used to shrink OBJECTIVES to
-	-- 140x40 and the panel's close button was 40x40 everywhere, which is under
-	-- the floor on exactly the devices that need it most. Desktop keeps its
-	-- original compact sizes; nothing here grows a mouse-driven control.
+	-- A touch target never goes under 44px. Pointer gets a quiet 256x36 footer:
+	-- together with PuzzleUI's 36px chevron and their 8px gap it is exactly the
+	-- 300px width of the live objective card above.
 	local touchFloor = touch and 44 or nil
-	objectivesButton.Size = narrow
-		and UDim2.fromOffset(140, touchFloor or 40)
-		or UDim2.fromOffset(154, 44)
-	objectivesButton.TextSize = narrow and 14 or 16
-	objectivesButton.Text = UIDevice.Caption("OBJECTIVES", "[H]")
+	objectivesButton.Size = touch
+		and UDim2.fromOffset(168, 44)
+		or UDim2.fromOffset(256, 36)
+	objectivesButton.TextSize = touch and 13 or 12
+	objectivesButton.Text = ""
 	objectivesClose.Size = UDim2.fromOffset(touchFloor or 40, touchFloor or 40)
+	local briefLabel = objectivesButton:FindFirstChild("BriefLabel")
+	local briefKeycap = objectivesButton:FindFirstChild("Keycap")
+	if briefLabel then
+		briefLabel.Position = touch and UDim2.fromOffset(12, 0) or UDim2.fromOffset(17, 0)
+		briefLabel.Size = touch and UDim2.new(1, -24, 1, 0) or UDim2.new(1, -66, 1, 0)
+		briefLabel.TextXAlignment = touch and Enum.TextXAlignment.Center or Enum.TextXAlignment.Left
+		briefLabel.TextSize = touch and 12 or 12
+	end
+	if briefKeycap then briefKeycap.Visible = not touch end
 	if touch then
 		objectivesButton.AnchorPoint = Vector2.new(0, 0)
 		objectivesButton.Position = UDim2.fromOffset(12, 12)
 	else
-		-- PuzzleUI owns the final 140px at the bottom-right. Keep this guide
-		-- immediately to its left while closed; opening the guide publishes a
-		-- modal flag so PuzzleUI yields the corner to the panel below.
+		-- PuzzleUI owns the final 36px at the bottom-right. This guide completes
+		-- the footer row immediately to its left.
 		objectivesButton.AnchorPoint = Vector2.new(1, 1)
-		objectivesButton.Position = UDim2.new(1, -(18 + 140 + 10), 1, -18)
+		objectivesButton.Position = UDim2.new(1, -(18 + 36 + 8), 1, -18)
 	end
 
 	-- The objectives panel is Active and nearly full-bleed, so on touch it is the
@@ -2698,19 +2830,19 @@ local function updateLevelOneGuideLayout()
 		-- The height now comes from the space the panel is actually anchored
 		-- inside: the safe height, less the 70px it is lifted and the 8px gutter
 		-- it keeps at the top.
-		local anchoredRoom = math.floor(layout.Safe.Height - 70 - 8)
+		local anchoredRoom = math.floor(layout.Safe.Height - 18 - 8)
 		objectivesPanel.AnchorPoint = Vector2.new(1, 1)
 		if narrow then
-			objectivesPanel.Position = UDim2.new(1, -10, 1, -70)
+			objectivesPanel.Position = UDim2.new(1, -10, 1, -10)
 			objectivesPanel.Size = UDim2.new(1, -20, 0,
 				math.max(120, math.min(360, anchoredRoom)))
-			objectivesTitle.TextSize = 15
+			objectivesTitle.TextSize = 17
 			subtitleText.TextSize = 16
 		else
-			objectivesPanel.Position = UDim2.new(1, -18, 1, -70)
+			objectivesPanel.Position = UDim2.new(1, -18, 1, -18)
 			objectivesPanel.Size = UDim2.fromOffset(420,
-				math.max(120, math.min(338, anchoredRoom)))
-			objectivesTitle.TextSize = 18
+				math.max(120, math.min(360, anchoredRoom)))
+			objectivesTitle.TextSize = 20
 			subtitleText.TextSize = 20
 		end
 	end

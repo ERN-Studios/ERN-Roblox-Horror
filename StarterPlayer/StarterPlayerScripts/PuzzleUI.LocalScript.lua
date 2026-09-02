@@ -59,8 +59,8 @@ local LAYOUT = {
 	-- C_L1_TOGGLE_AND_MESSAGE_OWN_THEIR_RECTANGLES_20260831 for that composition,
 	-- and the TouchToggleSize block below for the figures it uses.
 	Margin = 18,
-	ToggleWidth = 140,
-	ToggleHeight = 30,
+	ToggleWidth = 36,
+	ToggleHeight = 36,
 	ToggleGap = 8,
 	MessageHeight = 22,
 	MessageGap = 4,
@@ -113,12 +113,12 @@ local LAYOUT = {
 	-- C2 row metrics. The NATURAL tier reproduces the authored 300x112 panel
 	-- exactly when all four rows are visible (6 + 25 + 2 + 3*23 + 2*2 + 6 = 112);
 	-- the COMPACT tier is the stated minimum a row may shrink to.
-	PadX = 13, PadTop = 6, PadBottom = 6,
-	TitleHeight = 25, RowHeight = 23, RowGap = 2,
-	TitleTextSize = 17, RowTextSize = 15,
-	CompactPadX = 10, CompactPadTop = 4, CompactPadBottom = 4,
+	PadX = 16, PadTop = 27, PadBottom = 9,
+	TitleHeight = 22, RowHeight = 21, RowGap = 3,
+	TitleTextSize = 16, RowTextSize = 13,
+	CompactPadX = 12, CompactPadTop = 21, CompactPadBottom = 7,
 	CompactTitleHeight = 18, CompactRowHeight = 16,
-	CompactTitleTextSize = 14, CompactRowTextSize = 12,
+	CompactTitleTextSize = 13, CompactRowTextSize = 11,
 }
 
 -- Forward declaration: the row helpers and the visibility helpers below all
@@ -134,20 +134,88 @@ objectivePanel.Name = "Level1Objectives"
 objectivePanel.AnchorPoint = Vector2.new(1, 1)
 objectivePanel.Position = UDim2.new(1, -18, 1, -18)
 objectivePanel.Size = UDim2.new(0, 300, 0, 112)
-objectivePanel.BackgroundColor3 = Color3.fromRGB(8, 14, 9)
-objectivePanel.BackgroundTransparency = 0.18
+objectivePanel.BackgroundColor3 = Color3.fromRGB(9, 13, 11)
+objectivePanel.BackgroundTransparency = 0.08
 objectivePanel.BorderSizePixel = 0
 objectivePanel.Visible = false
 objectivePanel.Parent = gui
 
 local panelCorner = Instance.new("UICorner")
-panelCorner.CornerRadius = UDim.new(0, 8)
+panelCorner.CornerRadius = UDim.new(0, 10)
 panelCorner.Parent = objectivePanel
 local panelStroke = Instance.new("UIStroke")
-panelStroke.Color = Color3.fromRGB(105, 238, 168)
-panelStroke.Transparency = 0.27
-panelStroke.Thickness = 1.4
+panelStroke.Color = Color3.fromRGB(75, 94, 83)
+panelStroke.Transparency = 0.28
+panelStroke.Thickness = 1
 panelStroke.Parent = objectivePanel
+
+-- A quiet field-brief hierarchy keeps the live objective readable without
+-- turning the corner of the screen into a glowing terminal.
+LAYOUT.visualSetup = (function()
+	local gradient = Instance.new("UIGradient")
+	gradient.Color = ColorSequence.new({
+		ColorSequenceKeypoint.new(0, Color3.fromRGB(16, 23, 19)),
+		ColorSequenceKeypoint.new(1, Color3.fromRGB(7, 10, 9)),
+	})
+	gradient.Rotation = 90
+	gradient.Parent = objectivePanel
+
+	local accent = Instance.new("Frame")
+	accent.Name = "SignalAccent"
+	accent.Position = UDim2.fromOffset(0, 12)
+	accent.Size = UDim2.new(0, 3, 1, -24)
+	accent.BackgroundColor3 = Color3.fromRGB(83, 204, 145)
+	accent.BackgroundTransparency = 0.14
+	accent.BorderSizePixel = 0
+	accent.Parent = objectivePanel
+	local accentCorner = Instance.new("UICorner")
+	accentCorner.CornerRadius = UDim.new(1, 0)
+	accentCorner.Parent = accent
+
+	local eyebrow = Instance.new("TextLabel")
+	eyebrow.Name = "Eyebrow"
+	eyebrow.Position = UDim2.fromOffset(16, 7)
+	eyebrow.Size = UDim2.new(1, -80, 0, 13)
+	eyebrow.BackgroundTransparency = 1
+	eyebrow.Font = Enum.Font.Code
+	eyebrow.Text = "LEVEL 1  //  ACTIVE OBJECTIVE"
+	eyebrow.TextColor3 = Color3.fromRGB(101, 177, 139)
+	eyebrow.TextSize = 10
+	eyebrow.TextXAlignment = Enum.TextXAlignment.Left
+	eyebrow.Parent = objectivePanel
+
+	local progress = Instance.new("Frame")
+	progress.Name = "ProgressTrack"
+	progress.AnchorPoint = Vector2.new(0, 1)
+	progress.Position = UDim2.new(0, 16, 1, -3)
+	progress.Size = UDim2.new(1, -32, 0, 3)
+	progress.BackgroundColor3 = Color3.fromRGB(52, 63, 57)
+	progress.BackgroundTransparency = 0.28
+	progress.BorderSizePixel = 0
+	progress.Parent = objectivePanel
+	local progressCorner = Instance.new("UICorner")
+	progressCorner.CornerRadius = UDim.new(1, 0)
+	progressCorner.Parent = progress
+
+	local fill = Instance.new("Frame")
+	fill.Name = "Fill"
+	fill.Size = UDim2.fromScale(0, 1)
+	fill.BackgroundColor3 = Color3.fromRGB(83, 204, 145)
+	fill.BorderSizePixel = 0
+	fill.Parent = progress
+	local fillCorner = Instance.new("UICorner")
+	fillCorner.CornerRadius = UDim.new(1, 0)
+	fillCorner.Parent = fill
+end)()
+
+function LAYOUT.SetProgress(current, total, colour)
+	local track = objectivePanel:FindFirstChild("ProgressTrack")
+	local fill = track and track:FindFirstChild("Fill")
+	if not fill then return end
+	local denominator = math.max(1, tonumber(total) or 1)
+	fill.Size = UDim2.fromScale(math.clamp((tonumber(current) or 0) / denominator, 0, 1), 1)
+	if colour then fill.BackgroundColor3 = colour end
+end
 
 local objectiveTitle = Instance.new("TextLabel")
 objectiveTitle.Name = "ObjectiveTitle"
@@ -155,9 +223,9 @@ objectiveTitle.BackgroundTransparency = 1
 -- Seeded from the contract; layoutObjectiveRows owns these from here on. (C2)
 objectiveTitle.Position = UDim2.new(0, LAYOUT.PadX, 0, LAYOUT.PadTop)
 objectiveTitle.Size = UDim2.new(1, -LAYOUT.PadX * 2, 0, LAYOUT.TitleHeight)
-objectiveTitle.Font = Enum.Font.Code
-objectiveTitle.Text = "> POWER RESTORATION"
-objectiveTitle.TextColor3 = Color3.fromRGB(120, 255, 175)
+objectiveTitle.Font = Enum.Font.GothamBold
+objectiveTitle.Text = "POWER RESTORATION"
+objectiveTitle.TextColor3 = Color3.fromRGB(231, 238, 233)
 objectiveTitle.TextSize = LAYOUT.TitleTextSize
 objectiveTitle.TextXAlignment = Enum.TextXAlignment.Left
 -- WRAPPED, and its height is measured. At 568x320 the objectives column is
@@ -177,14 +245,14 @@ local function makeLabel(name)
 	label.Size = UDim2.new(1, -LAYOUT.PadX * 2, 0, LAYOUT.RowHeight)
 	label.BackgroundTransparency = 1
 	label.BorderSizePixel = 0
-	label.Font = Enum.Font.Code
+	label.Font = Enum.Font.GothamMedium
 	label.TextSize = LAYOUT.RowTextSize
 	label.TextXAlignment = Enum.TextXAlignment.Left
 	-- Same as the title: "Levers: 0/3  -  NO TIME LIMIT" and
 	-- "EXIT POWERED - FIND THE DOOR" both need two lines in a 156px column.
 	label.TextWrapped = true
 	label.TextYAlignment = Enum.TextYAlignment.Top
-	label.TextColor3 = Color3.fromRGB(218, 237, 223)
+	label.TextColor3 = Color3.fromRGB(201, 213, 205)
 	label.Visible = false
 	label.Parent = objectivePanel
 	return label
@@ -193,6 +261,8 @@ end
 local boxesLabel = makeLabel("FuseBoxStatus")
 local carryLabel = makeLabel("FuseCarryStatus")
 local leverLabel = makeLabel("LeverStatus")
+boxesLabel.TextColor3 = Color3.fromRGB(127, 218, 166)
+carryLabel.TextColor3 = Color3.fromRGB(142, 159, 149)
 
 -- FORWARD-DECLARED, and built with the other widgets further down. On touch the
 -- transient message is a measured ROW of the same stack as the objective rows,
@@ -210,24 +280,31 @@ objectivesToggle.Name = "Level1ObjectivesToggle"
 objectivesToggle.AnchorPoint = Vector2.new(1, 1)
 objectivesToggle.Position = UDim2.new(1, -LAYOUT.Margin, 1, -LAYOUT.Margin)
 objectivesToggle.Size = UDim2.fromOffset(LAYOUT.ToggleWidth, LAYOUT.ToggleHeight)
-objectivesToggle.BackgroundColor3 = Color3.fromRGB(8, 14, 9)
-objectivesToggle.BackgroundTransparency = 0.18
+objectivesToggle.BackgroundColor3 = Color3.fromRGB(14, 20, 17)
+objectivesToggle.BackgroundTransparency = 0.04
 objectivesToggle.BorderSizePixel = 0
-objectivesToggle.AutoButtonColor = true
-objectivesToggle.Font = Enum.Font.Code
-objectivesToggle.Text = "OBJECTIVES  -"
-objectivesToggle.TextColor3 = Color3.fromRGB(120, 255, 175)
-objectivesToggle.TextSize = 14
+objectivesToggle.AutoButtonColor = false
+objectivesToggle.Font = Enum.Font.GothamBold
+objectivesToggle.Text = "v"
+objectivesToggle.TextColor3 = Color3.fromRGB(155, 208, 178)
+objectivesToggle.TextSize = 17
 objectivesToggle.Visible = false
 objectivesToggle.Parent = gui
 local objectivesToggleCorner = Instance.new("UICorner")
-objectivesToggleCorner.CornerRadius = UDim.new(0, 8)
+objectivesToggleCorner.CornerRadius = UDim.new(0, 9)
 objectivesToggleCorner.Parent = objectivesToggle
 local objectivesToggleStroke = Instance.new("UIStroke")
-objectivesToggleStroke.Color = Color3.fromRGB(105, 238, 168)
-objectivesToggleStroke.Transparency = 0.27
-objectivesToggleStroke.Thickness = 1.4
+objectivesToggleStroke.Color = Color3.fromRGB(75, 94, 83)
+objectivesToggleStroke.Transparency = 0.28
+objectivesToggleStroke.Thickness = 1
 objectivesToggleStroke.Parent = objectivesToggle
+
+objectivesToggle.MouseEnter:Connect(function()
+	objectivesToggle.BackgroundColor3 = Color3.fromRGB(24, 33, 28)
+end)
+objectivesToggle.MouseLeave:Connect(function()
+	objectivesToggle.BackgroundColor3 = Color3.fromRGB(14, 20, 17)
+end)
 
 local countersActive = false
 local objectivesCollapsed = false
@@ -262,10 +339,10 @@ local TextService = game:GetService("TextService")
 -- nothing else. It is a parameter rather than a lookup because the whole-stack
 -- pass and the single-row re-check have to agree on it, and the stack pass knows
 -- it a row at a time.
-local function rowTextHeight(text, face, floor, padX, width, reserve)
+local function rowTextHeight(text, face, floor, padX, width, reserve, font)
 	local copyWidth = math.max(24,
 		(width or LAYOUT.ObjectivesWidth) - padX * 2 - (reserve or 0))
-	return math.max(floor, TextService:GetTextSize(text, face, Enum.Font.Code,
+	return math.max(floor, TextService:GetTextSize(text, face, font or Enum.Font.Code,
 		Vector2.new(copyWidth, 100000)).Y)
 end
 
@@ -391,7 +468,7 @@ local function walkObjectiveStack(compact, width, apply)
 		first = false
 		local face, floor = rowFaceAndFloor(label, compact)
 		local rowReserve = (y < toggleBottom) and reserve or 0
-		local height = rowTextHeight(label.Text, face, floor, padX, width, rowReserve)
+		local height = rowTextHeight(label.Text, face, floor, padX, width, rowReserve, label.Font)
 		if apply then
 			label.Position = UDim2.new(0, padX, 0, y)
 			label.Size = UDim2.new(1, -padX * 2 - rowReserve, 0, height)
@@ -429,6 +506,18 @@ local function layoutObjectiveRows(available)
 	table.clear(objectiveRowReserve)
 	local height = walkObjectiveStack(compact, objectivePanelWidth, true)
 	objectivePanel.Size = UDim2.fromOffset(objectivePanelWidth, height)
+	local eyebrow = objectivePanel:FindFirstChild("Eyebrow")
+	if eyebrow then
+		eyebrow.Position = UDim2.fromOffset(compact and LAYOUT.CompactPadX or LAYOUT.PadX,
+			compact and 4 or 7)
+		eyebrow.TextSize = compact and 9 or 10
+	end
+	local progress = objectivePanel:FindFirstChild("ProgressTrack")
+	if progress then
+		local pad = compact and LAYOUT.CompactPadX or LAYOUT.PadX
+		progress.Position = UDim2.new(0, pad, 1, -3)
+		progress.Size = UDim2.new(1, -pad * 2, 0, 3)
+	end
 	return height
 end
 
@@ -480,7 +569,7 @@ local function setObjectiveText(label, text, colour)
 	-- the relayout that copy actually requires. An unchanged height means an
 	-- unchanged stack, so the reserves below this row are unchanged too.
 	if rowTextHeight(text, face, floor, padX, objectivePanelWidth,
-		objectiveRowReserve[label]) ~= objectiveRowGiven[label] then
+		objectiveRowReserve[label], label.Font) ~= objectiveRowGiven[label] then
 		applyPuzzleLayout()
 	end
 end
@@ -848,13 +937,8 @@ local leverLatchMode = false
 -- not lost: the row it sits beside is the objective title. On desktop the toggle
 -- is the corner element with 140px of its own and keeps the full caption.
 local function refreshToggleCaption()
-	if objectiveToggleInPanel then
-		objectivesToggle.Text = objectivesCollapsed and "+" or "-"
-		objectivesToggle.TextSize = 22
-	else
-		objectivesToggle.Text = objectivesCollapsed and "OBJECTIVES  +" or "OBJECTIVES  -"
-		objectivesToggle.TextSize = 14
-	end
+	objectivesToggle.Text = objectivesCollapsed and "^" or "v"
+	objectivesToggle.TextSize = objectiveToggleInPanel and 20 or 17
 end
 
 -- One place decides what the objectives column shows. The panel is visible only
@@ -900,16 +984,16 @@ local function refreshLever()
 	-- against the label's "Label" default on the frame the row first appears.
 	local text, colour
 	if leverLatchMode then
-		text = ("Levers: %d/%d  •  NO TIME LIMIT"):format(leverActive, leverTotal)
+		text = ("SYNC LEVERS   %d / %d  •  NO TIME LIMIT"):format(leverActive, leverTotal)
 		colour = Color3.fromRGB(170, 225, 255)
 	elseif leverActive > 0 and leverEndsAt > 0 then
 		local remaining = math.max(leverEndsAt - os.clock(), 0)
-		text = ("Levers: %d/%d  •  %.1fs"):format(leverActive, leverTotal, remaining)
+		text = ("SYNC LEVERS   %d / %d  •  %.1fs"):format(leverActive, leverTotal, remaining)
 		colour = remaining <= 3
 			and Color3.fromRGB(255, 105, 105)
 			or Color3.fromRGB(255, 220, 130)
 	else
-		text = ("Levers: %d/%d"):format(leverActive, leverTotal)
+		text = ("SYNC LEVERS   %d / %d"):format(leverActive, leverTotal)
 		colour = Color3.fromRGB(245, 245, 245)
 	end
 
@@ -950,31 +1034,34 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d)
 		-- Every copy change goes through setObjectiveText, which writes the text
 		-- and only then re-measures the stack. These three run before
 		-- showCounters(true), which is the pass that places the rows.
-		setObjectiveText(objectiveTitle, "> POWER RESTORATION", Color3.fromRGB(120, 255, 175))
-		setObjectiveText(carryLabel, "FUSES HELD  0")
-		setObjectiveText(boxesLabel, ("%s FUSE BOXES  0/%d"):format(progressMeter(0, b), b))
+		setObjectiveText(objectiveTitle, "POWER RESTORATION", Color3.fromRGB(231, 238, 233))
+		setObjectiveText(carryLabel, "FUSES CARRIED   0")
+		setObjectiveText(boxesLabel, ("RESTORE FUSE BOXES   0 / %d"):format(b))
+		LAYOUT.SetProgress(0, b, Color3.fromRGB(83, 204, 145))
 		leverPhase = false
 		showCounters(true)
 
 	elseif ev == "carry" then
-		setObjectiveText(carryLabel, "FUSES HELD  " .. a)
+		setObjectiveText(carryLabel, "FUSES CARRIED   " .. a)
 
 	elseif ev == "msg" then
 		showMessage(a)
 
 	elseif ev == "boxes" then
-		setObjectiveText(boxesLabel, ("%s FUSE BOXES  %d/%d"):format(progressMeter(a, b), a, b))
+		setObjectiveText(boxesLabel, ("RESTORE FUSE BOXES   %d / %d"):format(a, b))
+		LAYOUT.SetProgress(a, b, Color3.fromRGB(83, 204, 145))
 
 	elseif ev == "levers" then
 		-- "> EXIT CIRCUIT" is shorter than "> POWER RESTORATION", so this shrinks
 		-- the title row on a narrow column; it is written before refreshLever so
 		-- the pass that lever row triggers measures the title it will hold.
-		setObjectiveText(objectiveTitle, "> EXIT CIRCUIT", Color3.fromRGB(170, 225, 255))
+		setObjectiveText(objectiveTitle, "EXIT CIRCUIT", Color3.fromRGB(221, 235, 241))
 		leverPhase = true
 		leverActive = 0
 		leverTotal = a or 0
 		leverEndsAt = 0
 		leverLatchMode = false
+		LAYOUT.SetProgress(0, leverTotal, Color3.fromRGB(112, 190, 223))
 		refreshLever()
 
 	elseif ev == "lever" then
@@ -985,13 +1072,15 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d)
 		leverEndsAt = (not leverLatchMode and (c or 0) > 0)
 			and (os.clock() + c)
 			or 0
+		LAYOUT.SetProgress(leverActive, leverTotal, Color3.fromRGB(112, 190, 223))
 		refreshLever()
 
 	elseif ev == "escape" then
 		enterNavMode()
 
 	elseif ev == "exit" then
-		setObjectiveText(objectiveTitle, "> EXIT ONLINE", Color3.fromRGB(120, 255, 160))
+		setObjectiveText(objectiveTitle, "EXIT ONLINE", Color3.fromRGB(203, 239, 216))
+		LAYOUT.SetProgress(1, 1, Color3.fromRGB(98, 221, 148))
 		enterNavMode()
 		leverPhase = false
 		-- Copy first, then the row is shown, then the stack is placed. Written the
@@ -999,7 +1088,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d)
 		-- replaces, and "EXIT POWERED — FIND THE DOOR" is two lines wherever the
 		-- column is narrow.
 		local appearing = not leverLabel.Visible
-		setObjectiveText(leverLabel, "EXIT POWERED — FIND THE DOOR", Color3.fromRGB(120, 255, 160))
+		setObjectiveText(leverLabel, "FOLLOW THE READER TO THE EXIT", Color3.fromRGB(120, 224, 161))
 		leverLabel.Visible = true
 		if appearing then applyPuzzleLayout() end
 	end
@@ -1240,13 +1329,12 @@ function applyPuzzleLayout()
 	local columnLeft = columnRight - objectivePanelWidth
 	-- The toggle's reserved sub-rectangle of the panel: a TouchToggleSize square
 	-- in the top-right corner of the panel's content box, padX in from the panel's
-	-- right edge and padTop down from its top. The stack walk that just ran left
-	-- exactly this rectangle empty -- it is the reserve every row whose top is
-	-- above panelTop + padTop + TouchToggleSize was narrowed by -- so the two
-	-- agree by using the same tier's padding, which layoutObjectiveRows has
-	-- already published in objectiveCompact.
-	local padX = objectiveCompact and LAYOUT.CompactPadX or LAYOUT.PadX
-	local padTop = objectiveCompact and LAYOUT.CompactPadTop or LAYOUT.PadTop
+	-- right edge. Keep the control on the original touch inset so it remains clear
+	-- of device chrome. The row walker still reserves the larger title band
+	-- introduced by the field-brief eyebrow, which leaves the actual control extra
+	-- breathing room instead of letting it collide with copy.
+	local padX = objectiveCompact and 10 or 13
+	local padTop = objectiveCompact and 4 or 6
 
 	objectivesToggle.AnchorPoint = Vector2.new(1, 0)
 	objectivesToggle.Size = UDim2.fromOffset(LAYOUT.TouchToggleSize, LAYOUT.TouchToggleSize)

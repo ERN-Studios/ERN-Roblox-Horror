@@ -271,10 +271,6 @@ local function configureModel(session, entity, model)
 	setModelAttribute(model, "Level2_KidsHallIndex", entity.HallIndex)
 	setModelAttribute(model, "Level2_PoolFoamObserved", false)
 	setModelAttribute(model, "Level2_PoolFoamActiveMover", false)
-	setModelAttribute(model, "Level2_PoolFoamChasing", entity.ChaseTriggered == true)
-	setModelAttribute(model, "Level2_PoolFoamRampFrozen", entity.SpeedRampFrozen == true)
-	setModelAttribute(model, "Level2_PoolFoamChaseTargetUserId",
-		entity.ChaseTarget and entity.ChaseTarget.UserId or 0)
 	if session.Configuration.GenericHostileTag then
 		CollectionService:AddTag(model, session.Configuration.GenericHostileTag)
 	end
@@ -324,13 +320,6 @@ local function createEntity(session, id, slotId, spawnPosition, hallIndex, spawn
 		Observers = {},
 		ObservedSince = nil,
 		RevealUntil = 0,
-		ChaseTriggered = false,
-		ChaseTriggeredAt = nil,
-		ChaseGraceUntil = 0,
-		ChaseTarget = nil,
-		SpeedRampBonus = 0,
-		SpeedRampFrozen = false,
-		LastDesiredSpeed = 0,
 		NextGoalAt = 0,
 		NextTrailAt = 0,
 		PatrolPosition = nil,
@@ -439,20 +428,6 @@ local function phaseRecord(session, phase)
 	return typeof(record) == "table" and record or {}
 end
 
-local function observationFreezes(session)
-	return (session.Configuration.Observation or {}).FreezeWhileObserved == true
-end
-
-local function activeCount(session)
-	local record = phaseRecord(session, session.Phase)
-	local total = #session.Entities
-	return math.clamp(math.floor(numberOr(record.MaximumActive, total, 0, total)), 0, total)
-end
-
-local function entityIsActive(session, entity)
-	return entity.SpawnOrdinal <= activeCount(session)
-end
-
 local function desiredPhase(session, now)
 	if session.ForcedPhase then return session.ForcedPhase end
 	local pumps = math.max(0, math.floor(tonumber(workspace:GetAttribute("Level2Pumps")) or 0))
@@ -499,7 +474,7 @@ local function setPhase(session, phase, now)
 		if phase == PHASES.Dormant then
 			setEntityAnimationPaused(entity, false)
 			setEntityAnimation(entity, "Idle")
-		elseif entity.Observed and observationFreezes(session) then
+		elseif entity.Observed then
 			setEntityAnimationPaused(entity, true)
 		else
 			setEntityAnimationPaused(entity, false)
@@ -521,25 +496,6 @@ local function setTargeted(session, player)
 	if player and player.Parent == Players then player:SetAttribute("Level2_PoolFoamTargeted", true) end
 end
 
-local function setChaseTarget(entity, player)
-	if entity.ChaseTarget == player then return end
-	entity.ChaseTarget = player
-	setModelAttribute(entity.Model, "Level2_PoolFoamChaseTargetUserId",
-		player and player.Parent == Players and player.UserId or 0)
-end
-
-local function resetThreatState(entity)
-	entity.ChaseTriggered = false
-	entity.ChaseTriggeredAt = nil
-	entity.ChaseGraceUntil = 0
-	entity.SpeedRampBonus = 0
-	entity.SpeedRampFrozen = false
-	entity.LastDesiredSpeed = 0
-	setChaseTarget(entity, nil)
-	setModelAttribute(entity.Model, "Level2_PoolFoamChasing", false)
-	setModelAttribute(entity.Model, "Level2_PoolFoamRampFrozen", false)
-end
-
 local function entityLineOfSight(session, entity, character, targetPosition)
 	local origin = entity.Model:GetPivot().Position + Vector3.new(0, 1.8, 0)
 	local offset = targetPosition - origin
@@ -557,23 +513,6 @@ local function entityLineOfSight(session, entity, character, targetPosition)
 end
 
 local function bestTarget(session, entity, now)
-	-- A direct observer owns the chase until that player is no longer eligible or
-	-- the navigator proves them temporarily unreachable. This avoids multiplayer
-	-- target thrashing when two cameras cross the entity on adjacent reports.
-	local preferredPlayer = entity.ChaseTriggered and entity.ChaseTarget or nil
-	if preferredPlayer then
-		local preferredRoot = livingPlayer(session, preferredPlayer)
-		local blockedUntil = entity.UnreachableUntil[preferredPlayer] or 0
-		if blockedUntil <= now then entity.UnreachableUntil[preferredPlayer] = nil end
-		if preferredRoot and now >= blockedUntil
-			and (session.Pumps >= 1 or positionInKids(session, preferredRoot.Position))
-		then
-			return preferredPlayer, preferredRoot,
-				(preferredRoot.Position - entity.Navigator:GetPosition()).Magnitude
-		end
-		setChaseTarget(entity, nil)
-	end
-
 	local bestPlayer, bestRoot, bestDistance
 	bestDistance = math.huge
 	for _, player in ipairs(Players:GetPlayers()) do
@@ -590,25 +529,25 @@ local function bestTarget(session, entity, now)
 			end
 		end
 	end
-	if entity.ChaseTriggered and bestPlayer then setChaseTarget(entity, bestPlayer) end
 	return bestPlayer, bestRoot, bestDistance
+end
+
+local function usesHuntPace(session)
+	local pumps = session.Pumps
+	local record = phaseRecord(session, session.Phase)
+	local debugUnlock = session.ForcedPhase == PHASES.Pressure or session.ForcedPhase == PHASES.Finale
+	return (pumps >= 2 or debugUnlock)
+		and session.Phase ~= PHASES.Dormant
+		and record.AllowAttacks ~= false
 end
 
 local function instantKill(session, entity, player, distance, now)
 	local movement = session.Configuration.Movement or {}
 	local killDistance = numberOr(movement.KillDistance, 5.5, 1, 20)
-	-- Before the first validated look, this is a stalking encounter: it may close
-	-- distance and build speed, but the player has not triggered lethal pursuit.
-	if not entity.ChaseTriggered then return false end
-	-- Preserve the authored phase boundary as well. A look may reveal/latch the
-	-- chase in Foreshadow, but contact only becomes lethal once attacks unlock.
-	if phaseRecord(session, session.Phase).AllowAttacks == false then return false end
 	if distance > killDistance then return false end
-	-- The legacy statue mode keeps looking as a defense. The Pool Noodle's current
-	-- mode does the opposite: a validated look starts the chase, with only a short
-	-- one-shot grace window so the transition is readable rather than an instant hit.
-	if now < entity.ChaseGraceUntil then return false end
-	if observationFreezes(session) and (entity.Observed or now < entity.RevealUntil) then return false end
+	-- Looking at the creature remains a reliable defense. The half-second
+	-- caught-moving overrun is a visual scare, never a hidden lethal wind-up.
+	if entity.Observed or now < entity.RevealUntil then return false end
 
 	-- Revalidate at the instant of contact. This makes a death authoritative,
 	-- prevents stale/dead/spectating targets, and blocks kills through walls.
@@ -646,45 +585,6 @@ local function instantKill(session, entity, player, distance, now)
 	return true
 end
 
-local function observedChaseTarget(session, entity, players)
-	local position = entity.Navigator:GetPosition()
-	local bestPlayer, bestDistance
-	bestDistance = math.huge
-	for _, player in ipairs(players) do
-		local root = livingPlayer(session, player)
-		if root then
-			local separation = (root.Position - position).Magnitude
-			if separation < bestDistance
-				or (math.abs(separation - bestDistance) <= 0.001
-					and bestPlayer and player.UserId < bestPlayer.UserId)
-			then
-				bestPlayer, bestDistance = player, separation
-			end
-		end
-	end
-	return bestPlayer
-end
-
-local function triggerChase(session, entity, players, now)
-	if entity.ChaseTriggered then
-		-- Preserve a living chase target. If it vanished between reports, a new
-		-- genuine observer can take ownership without clearing the hunt latch.
-		if entity.ChaseTarget and livingPlayer(session, entity.ChaseTarget) then return end
-	else
-		entity.ChaseTriggered = true
-		entity.ChaseTriggeredAt = now
-		local observation = session.Configuration.Observation or {}
-		entity.ChaseGraceUntil = now + numberOr(observation.ChaseGraceSeconds, 0.45, 0, 2)
-		local ramp = (session.Configuration.Movement or {}).SpeedRamp or {}
-		entity.SpeedRampFrozen = ramp.FreezeOnChase ~= false
-		setModelAttribute(entity.Model, "Level2_PoolFoamChasing", true)
-		setModelAttribute(entity.Model, "Level2_PoolFoamRampFrozen", entity.SpeedRampFrozen)
-		-- Re-plan immediately toward the player who actually caused the reveal.
-		entity.NextGoalAt = 0
-	end
-	setChaseTarget(entity, observedChaseTarget(session, entity, players))
-end
-
 local function updateObservation(session, entity, now)
 	local rawObserved, players = session.Observer:IsModelObserved(entity.Model)
 	local wasObserved = entity.Observed
@@ -711,16 +611,7 @@ local function updateObservation(session, entity, now)
 	setModelAttribute(entity.Model, "Level2_PoolFoamObserved", entity.Observed)
 	if entity.Observed then
 		entity.ObservedSince = entity.ObservedSince or now
-		if observation.TriggerChaseOnObserve ~= false
-			and rawObserved
-			and session.Phase ~= PHASES.Dormant
-			and entityIsActive(session, entity)
-		then
-			triggerChase(session, entity, players, now)
-		end
-		if not observationFreezes(session) then
-			entity.RevealUntil = 0
-		elseif not wasObserved then
+		if not wasObserved then
 			if entity.WasMoving then
 				local duration = numberOr(observation.RevealOverrunSeconds, 0.5, 0, 0.75)
 				entity.RevealUntil = now + duration
@@ -768,25 +659,22 @@ local function choosePatrolPosition(session, entity)
 	return candidates[session.Random:NextInteger(1, #candidates)]
 end
 
-local function movementSpeed(session, entity, hunting, rampDeltaTime)
+local function activeCount(session)
+	local record = phaseRecord(session, session.Phase)
+	local total = #session.Entities
+	return math.clamp(math.floor(numberOr(record.MaximumActive, total, 0, total)), 0, total)
+end
+
+local function entityIsActive(session, entity)
+	return entity.SpawnOrdinal <= activeCount(session)
+end
+
+local function movementSpeed(session, hunting)
 	local movement = session.Configuration.Movement or {}
 	local speeds = movement.Speeds or {}
 	local base = hunting and numberOr(speeds.Hunt, 3.0, 0, 40) or numberOr(speeds.Stalk, 3.0, 0, 30)
 	local multiplier = numberOr(phaseRecord(session, session.Phase).SpeedMultiplier, 1, 0, 3)
-	local ramp = movement.SpeedRamp or {}
-	if ramp.Enabled ~= false and not entity.SpeedRampFrozen and rampDeltaTime > 0 then
-		local acceleration = numberOr(ramp.AccelerationPerSecond, 0.65, 0, 8)
-		local maximumBonus = numberOr(ramp.MaximumBonus, 12, 0, 30)
-		entity.SpeedRampBonus = math.min(maximumBonus,
-			entity.SpeedRampBonus + acceleration * rampDeltaTime)
-	end
-	local speed = base * multiplier + entity.SpeedRampBonus
-	if entity.ChaseTriggered then
-		speed = math.max(speed, numberOr(ramp.ChaseMinimumSpeed, 13, 0, 40))
-	end
-	speed = math.min(speed, numberOr(ramp.MaximumSpeed, 22, 1, 40))
-	entity.LastDesiredSpeed = speed
-	return speed
+	return base * multiplier
 end
 
 local function resetProgressWindow(entity, position, goal, resetAttempts)
@@ -805,8 +693,7 @@ local function updateEntity(session, entity, deltaTime, now)
 		entity.WasMoving = false
 		entity.StationaryFor = 0
 		resetProgressWindow(entity, entity.Navigator:GetPosition(), nil, true)
-		resetThreatState(entity)
-		if entity.Observed and observationFreezes(session) then
+		if entity.Observed then
 			setEntityAnimationPaused(entity, true)
 		else
 			setEntityAnimationPaused(entity, false)
@@ -814,7 +701,7 @@ local function updateEntity(session, entity, deltaTime, now)
 		end
 		return
 	end
-	if observationFreezes(session) and entity.Observed and now >= entity.RevealUntil then
+	if entity.Observed and now >= entity.RevealUntil then
 		-- Do not stop the navigator or change animation state. Holding the active
 		-- track at speed zero preserves both its route and exact caught pose.
 		entity.WasMoving = false
@@ -833,14 +720,11 @@ local function updateEntity(session, entity, deltaTime, now)
 		entity.WasMoving = false
 		return
 	end
-	-- Walk/ramp is the pre-look state. Hunt begins only at the one-way gaze
-	-- latch, so pump progression cannot silently skip the encounter's tell.
-	local hunting = pursuing and entity.ChaseTriggered
+	local hunting = pursuing and usesHuntPace(session)
 	local stopDistance = numberOr((session.Configuration.Movement or {}).TargetStopDistance, 4.5, 1, 20)
 	if pursuing and distance <= stopDistance then
 		entity.Navigator:Stop()
 		entity.WasMoving = false
-		entity.LastDesiredSpeed = 0
 		entity.StationaryFor = 0
 		resetProgressWindow(entity, entity.Navigator:GetPosition(), nil, true)
 		setEntityAnimation(entity, "Idle")
@@ -858,8 +742,7 @@ local function updateEntity(session, entity, deltaTime, now)
 	end
 
 	local before = entity.Navigator:GetPosition()
-	entity.Reached = entity.Navigator:Step(deltaTime,
-		movementSpeed(session, entity, hunting, pursuing and deltaTime or 0))
+	entity.Reached = entity.Navigator:Step(deltaTime, movementSpeed(session, hunting))
 	local after = entity.Navigator:GetPosition()
 	entity.WasMoving = (after - before).Magnitude > 0.002
 	if entity.WasMoving then
@@ -905,7 +788,6 @@ local function updateEntity(session, entity, deltaTime, now)
 					if pursuing and player then
 						local cooldown = numberOr(movement.UnreachableTargetCooldown, 3, 0.5, 30)
 						entity.UnreachableUntil[player] = now + cooldown
-						if entity.ChaseTarget == player then setChaseTarget(entity, nil) end
 						entity.Target = nil
 						entity.ProgressTarget = nil
 					end
@@ -972,9 +854,8 @@ local function refreshTemplate(session, entity)
 	oldNavigator:Destroy()
 	if oldAnimation then pcall(function() oldAnimation:Destroy() end) end
 	pcall(function() session.ProxyFactory.Destroy(oldModel) end)
-	local freezes = observationFreezes(session) and entity.Observed
-	setEntityAnimation(entity, entity.WasMoving and (entity.ChaseTriggered and "Hunt" or "Walk") or "Idle", true)
-	setEntityAnimationPaused(entity, freezes)
+	setEntityAnimation(entity, entity.Observed and "Walk" or "Idle", true)
+	setEntityAnimationPaused(entity, entity.Observed)
 	fireClientEvent(session, "TemplateResolved", {
 		EntityId = entity.Id,
 		Slot = entity.SlotId,
@@ -1214,12 +1095,6 @@ function Controller.GetDebugSnapshot()
 			NoProgressFor = entity.NoProgressFor,
 			RepathAttempts = entity.RepathAttempts,
 			RevealRemaining = math.max(0, entity.RevealUntil - os.clock()),
-			Chasing = entity.ChaseTriggered,
-			ChaseTargetUserId = entity.ChaseTarget and entity.ChaseTarget.UserId or 0,
-			ChaseElapsed = entity.ChaseTriggeredAt and os.clock() - entity.ChaseTriggeredAt or 0,
-			SpeedRampBonus = entity.SpeedRampBonus,
-			SpeedRampFrozen = entity.SpeedRampFrozen,
-			DesiredSpeed = entity.LastDesiredSpeed,
 			Navigator = navigator,
 			TemporaryProxy = session.ProxyFactory.IsTemporaryProxy(entity.Model),
 		})

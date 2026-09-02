@@ -1,7 +1,7 @@
 --!strict
 -- Level 3 Table Hiding Client
--- Mobile/desktop leave control, replicated under-table crouch pose, and a
--- camera point physically inside the table. Entry uses one cross-device prompt.
+-- Mobile/desktop leave control. EntityShakeController exclusively owns the
+-- under-table CameraOffset. Entry uses one cross-device ProximityPrompt.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -14,127 +14,6 @@ local playerGui = player:WaitForChild("PlayerGui")
 local requestRemote: RemoteEvent? = nil
 
 local hiding = false
-
--- This is a runtime-authored R15 crouch pose rather than a borrowed animation
--- asset. Every client evaluates it for every replicated hidden player, which is
--- the AnimationConstraint-safe way to make the same tucked silhouette visible
--- to the owner, teammates, and spectators. Motor6D is retained for older rigs.
-local RAD = math.rad
-local CROUCH_POSE = {
-	Root = CFrame.new(0, -0.92, 0.12) * CFrame.Angles(RAD(-8), 0, 0),
-	Waist = CFrame.Angles(RAD(-34), 0, 0),
-	Neck = CFrame.Angles(RAD(23), 0, 0),
-	LeftHip = CFrame.Angles(RAD(106), RAD(7), RAD(-4)),
-	RightHip = CFrame.Angles(RAD(106), RAD(-7), RAD(4)),
-	LeftKnee = CFrame.Angles(RAD(-121), 0, 0),
-	RightKnee = CFrame.Angles(RAD(-121), 0, 0),
-	LeftAnkle = CFrame.Angles(RAD(18), 0, 0),
-	RightAnkle = CFrame.Angles(RAD(18), 0, 0),
-	LeftShoulder = CFrame.Angles(RAD(31), RAD(-5), RAD(-17)),
-	RightShoulder = CFrame.Angles(RAD(31), RAD(5), RAD(17)),
-	LeftElbow = CFrame.Angles(RAD(-64), 0, RAD(-5)),
-	RightElbow = CFrame.Angles(RAD(-64), 0, RAD(5)),
-}
-local jointCache = setmetatable({}, {__mode = "k"})
-local posedCharacters = setmetatable({}, {__mode = "k"})
-
-local function jointsFor(character: Model): {Instance}
-	local cached = jointCache[character]
-	if cached then return cached end
-	local joints = {}
-	for _, object in ipairs(character:GetDescendants()) do
-		if (object:IsA("AnimationConstraint") or object:IsA("Motor6D"))
-			and CROUCH_POSE[object.Name] ~= nil then
-			table.insert(joints, object)
-		end
-	end
-	jointCache[character] = joints
-	return joints
-end
-
-local function writeJointTransform(joint: Instance, transform: CFrame)
-	if joint:IsA("AnimationConstraint") then
-		joint.Transform = transform
-	elseif joint:IsA("Motor6D") then
-		joint.Transform = transform
-	end
-end
-
--- Animator writes first; PreSimulation owns the final tucked pose for this
--- frame. Hidden state is replicated on Player, so remote bodies pose locally
--- too even though AnimationConstraint.Transform itself is not networked.
-RunService.PreSimulation:Connect(function()
-	local active = {}
-	if workspace:GetAttribute("SelectedLevel") == 3 then
-		local breathing = CFrame.Angles(RAD(math.sin(os.clock() * 1.55) * 0.7), 0, 0)
-		for _, targetPlayer in ipairs(Players:GetPlayers()) do
-			local character = targetPlayer.Character
-			if targetPlayer:GetAttribute("Level3_Hiding") == true
-				and character and character.Parent then
-				active[character] = true
-				posedCharacters[character] = true
-				for _, joint in ipairs(jointsFor(character)) do
-					local transform = CROUCH_POSE[joint.Name]
-					if joint.Name == "Waist" then transform = transform * breathing end
-					writeJointTransform(joint, transform)
-				end
-			end
-		end
-	end
-	for character in pairs(posedCharacters) do
-		if not active[character] then
-			for _, joint in ipairs(jointsFor(character)) do
-				writeJointTransform(joint, CFrame.new())
-			end
-			posedCharacters[character] = nil
-		end
-	end
-end)
-
--- A custom camera point is replicated by the server at the physical hide
--- anchor. Hide only the local head/torso with LocalTransparencyModifier so the
--- near plane stays clean; Transparency is never changed, so everyone else
--- continues to see the player's crouched body.
-local localClipOriginal = {}
-local CLIP_PARTS = {Head=true, UpperTorso=true, LowerTorso=true}
-local function setLocalCameraClipping(active: boolean)
-	if not active then
-		for object, transparency in pairs(localClipOriginal) do
-			if object.Parent then object.LocalTransparencyModifier = transparency end
-		end
-		table.clear(localClipOriginal)
-		return
-	end
-	local character = player.Character
-	if not character then return end
-	for _, object in ipairs(character:GetDescendants()) do
-		if object:IsA("BasePart")
-			and (CLIP_PARTS[object.Name] == true or object.Parent:IsA("Accessory")) then
-			if localClipOriginal[object] == nil then
-				localClipOriginal[object] = object.LocalTransparencyModifier
-			end
-			object.LocalTransparencyModifier = 1
-		end
-	end
-end
-
-RunService:BindToRenderStep("Level3UnderTableCamera",
-	Enum.RenderPriority.Camera.Value + 1, function()
-		if player:GetAttribute("Level3_Hiding") ~= true then return end
-		local camera = workspace.CurrentCamera
-		if not camera then return end
-		local cameraPosition = player:GetAttribute("Level3_HideCameraPosition")
-		if typeof(cameraPosition) ~= "Vector3" then
-			local character = player.Character
-			local root = character and character:FindFirstChild("HumanoidRootPart")
-			if not root or not root:IsA("BasePart") then return end
-			cameraPosition = root.Position + Vector3.new(0, -0.45, 0)
-		end
-		setLocalCameraClipping(true)
-		local rotation = camera.CFrame.Rotation
-		camera.CFrame = CFrame.new(cameraPosition) * rotation
-		camera.Focus = CFrame.new(cameraPosition + camera.CFrame.LookVector * 12)
-	end)
 
 local gui = Instance.new("ScreenGui")
 gui.Name = "Level3TableHideUI"
@@ -265,12 +144,11 @@ local function apply()
 	end
 	if shouldHide == hiding then
 		gui.Enabled = shouldHide
-		setLocalCameraClipping(player:GetAttribute("Level3_Hiding") == true)
 		return
 	end
 	hiding = shouldHide
 	gui.Enabled = hiding
-	setLocalCameraClipping(player:GetAttribute("Level3_Hiding") == true)
+	-- CameraOffset is applied by EntityShakeController so there is only one writer.
 end
 
 leave.Activated:Connect(requestExit)
@@ -290,7 +168,6 @@ end
 player:GetAttributeChangedSignal("InRound"):Connect(apply)
 workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(apply)
 player.CharacterAdded:Connect(function()
-	setLocalCameraClipping(false)
 	hiding = false
 	task.defer(apply)
 end)

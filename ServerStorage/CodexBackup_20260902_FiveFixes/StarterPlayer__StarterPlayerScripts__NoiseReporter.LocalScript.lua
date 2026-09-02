@@ -103,31 +103,16 @@ local function applySpeed()
 	hum.WalkSpeed = desiredSpeed
 end
 
-local function keyboardSprintHeld()
-	-- Physical key state remains reliable when a Roblox core control (such as
-	-- Shift Lock) consumes the event before this script sees it.
-	return UIS:IsKeyDown(Enum.KeyCode.LeftShift)
-		or UIS:IsKeyDown(Enum.KeyCode.RightShift)
-end
-
 local function refreshSprint()
 	sprinting = shiftSprintHeld or touchSprintHeld
 	applySpeed()
 end
 
 UIS.InputBegan:Connect(function(input, processed)
-	local isSprintKey = input.KeyCode == Enum.KeyCode.LeftShift
-		or input.KeyCode == Enum.KeyCode.RightShift
-	if isSprintKey then
-		-- Never bind gameplay shortcuts while typing, but accept Shift even when a
-		-- Roblox core action marked it processed.
-		if UIS:GetFocusedTextBox() then return end
-		shiftSprintHeld = true
-		refreshSprint()
-		return
-	end
 	if processed then return end
-	if inRound() and input.KeyCode == Enum.KeyCode.LeftControl then
+	if input.KeyCode == Enum.KeyCode.LeftShift then
+		shiftSprintHeld = true; refreshSprint()
+	elseif inRound() and input.KeyCode == Enum.KeyCode.LeftControl then
 		crouching = true; applySpeed()
 	elseif inRound() and (input.KeyCode == Enum.KeyCode.G or input.KeyCode == Enum.KeyCode.ButtonX) then
 		dropGlowstick()
@@ -135,10 +120,8 @@ UIS.InputBegan:Connect(function(input, processed)
 end)
 
 UIS.InputEnded:Connect(function(input)
-	if input.KeyCode == Enum.KeyCode.LeftShift or input.KeyCode == Enum.KeyCode.RightShift then
-		-- Releasing one Shift key must not cancel the other.
-		shiftSprintHeld = keyboardSprintHeld()
-		refreshSprint()
+	if input.KeyCode == Enum.KeyCode.LeftShift then
+		shiftSprintHeld = false; refreshSprint()
 	elseif input.KeyCode == Enum.KeyCode.LeftControl then
 		crouching = false; applySpeed()
 	end
@@ -146,11 +129,8 @@ end)
 
 player.CharacterAdded:Connect(function()
 	task.wait(0.5)
-	-- The immediate CharacterAdded UI hook below already clears the old avatar's
-	-- touch latch. Preserve a new RUN tap made during this startup delay instead
-	-- of silently turning it off while leaving the button lit.
-	shiftSprintHeld = keyboardSprintHeld()
-	sprinting, crouching = shiftSprintHeld or touchSprintHeld, false
+	shiftSprintHeld, touchSprintHeld = false, false
+	sprinting, crouching = false, false
 	-- The touch SNEAK latch and its lit ring go with the crouch they stand for,
 	-- or the button reads "sneaking" over a character that is standing up.
 	if showSneakEngaged then showSneakEngaged(false) end
@@ -511,23 +491,7 @@ RunService.Heartbeat:Connect(function(dt)
 	if not inRound() then
 		stamina = staminaMax()
 		exhausted = false
-
-		-- Lobby sprint is unlimited and self-healing. Keep input state as the source
-		-- of truth and repair WalkSpeed if avatar loading or a core script restores
-		-- Roblox's default speed while the player is still holding RUN.
-		local physicalShift = UIS:GetFocusedTextBox() == nil and keyboardSprintHeld()
-		if shiftSprintHeld ~= physicalShift then shiftSprintHeld = physicalShift end
-		sprinting = shiftSprintHeld or touchSprintHeld
-		state = sprinting and "sprint" or "walk"
-		local character, hum = currentChar()
-		local desiredSpeed = sprinting and SPRINT_SPEED or WALK_SPEED
-		if character and hum and hum.Health > 0 then
-			if character:GetAttribute("Level2_DesiredWalkSpeed") ~= desiredSpeed then
-				character:SetAttribute("Level2_DesiredWalkSpeed", desiredSpeed)
-			end
-			if hum.WalkSpeed ~= desiredSpeed then hum.WalkSpeed = desiredSpeed end
-		end
-
+		state = "walk"
 		player:SetAttribute("Stamina", 1)
 		barShown = 0
 		staBg.BackgroundTransparency = 1
@@ -612,7 +576,6 @@ local function modalOwnsScreen()
 		or player:GetAttribute("QueueModalOpen") == true
 end
 
-local wasRoundActive = inRound()
 local function updateRoundState()
 	local active = inRound()
 	local usable = controlsAvailable()
@@ -641,18 +604,13 @@ local function updateRoundState()
 		and player:GetAttribute("Spectating") ~= true
 	if not active then
 		lastGlowstickDrop = -math.huge
-		-- Reset level-only latches once on the round→lobby transition. Ordinary
-		-- lobby UI/layout refreshes must not switch RUN off underneath the player.
-		if wasRoundActive then
-			shiftSprintHeld, touchSprintHeld = keyboardSprintHeld(), false
-			sprinting, crouching = shiftSprintHeld, false
-			touchSprintToggled = false
-			showRunEnabled(false)
-			showSneakEngaged(false)
-		end
+		shiftSprintHeld, touchSprintHeld = false, false
+		sprinting, crouching = false, false
+		touchSprintToggled = false
+		showRunEnabled(false)
+		showSneakEngaged(false)
 		applySpeed()
 	end
-	wasRoundActive = active
 end
 player:GetAttributeChangedSignal("InRound"):Connect(updateRoundState)
 for _, attribute in ipairs({"Escaped", "Level3_Hiding", "Spectating",

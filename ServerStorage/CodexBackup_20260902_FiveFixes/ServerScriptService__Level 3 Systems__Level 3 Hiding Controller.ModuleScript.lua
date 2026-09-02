@@ -27,9 +27,13 @@ local function liveSession(session: any): boolean
 		and world:GetAttribute("Level3_Generation") == session.Generation
 end
 
+-- Hiding is available for the whole Level 3 round. The blackout and the Mall
+-- Manager hunt deliberately do NOT suspend it: furniture is permanent, so a
+-- player who is under a table stays under that table through the hunt, which is
+-- the point of hiding. The old SetFurnitureSuspended entry point ejected every
+-- hidden player and disabled the prompts exactly when they mattered most.
 local function roundAllowsHiding(session: any): boolean
 	return liveSession(session)
-		and session.FurnitureSuspended ~= true
 		and workspace:GetAttribute("SelectedLevel") == 3
 		and workspace:GetAttribute("RoundActive") == true
 end
@@ -83,42 +87,62 @@ local function refreshPrompts(session: any)
 	end
 end
 
--- The hidden character stays replicated and visible. Only physical collision is
--- suppressed while its anchored rig is folded inside the table; transparency,
--- textures, particles, and lights are deliberately untouched.
-local function captureCollisionState(character: Model): {any}
+local function captureAppearance(character: Model): {any}
 	local saved = {}
 	for _, object in ipairs(character:GetDescendants()) do
 		if object:IsA("BasePart") then
 			table.insert(saved, {
-				Object=object,
-				CanCollide=object.CanCollide,
-				CanTouch=object.CanTouch,
-				CanQuery=object.CanQuery,
+				Object=object, Kind="BasePart", Transparency=object.Transparency,
+				CanCollide=object.CanCollide, CanTouch=object.CanTouch, CanQuery=object.CanQuery,
 			})
+		elseif object:IsA("Decal") or object:IsA("Texture") then
+			table.insert(saved, {Object=object, Kind="Transparency", Transparency=object.Transparency})
+		elseif object:IsA("Light") or object:IsA("ParticleEmitter")
+			or object:IsA("Trail") or object:IsA("Beam") then
+			table.insert(saved, {Object=object, Kind="Enabled", Enabled=object.Enabled})
 		end
 	end
 	return saved
 end
 
-local function suppressCollision(saved: {any})
+local function concealAppearance(saved: {any})
 	for _, record in ipairs(saved) do
 		local object = record.Object
-		if object and object.Parent and object:IsA("BasePart") then
-			object.CanCollide = false
-			object.CanTouch = false
-			object.CanQuery = false
+		if object and object.Parent then
+			if record.Kind == "BasePart" and object:IsA("BasePart") then
+				object.Transparency = 1
+				object.CanCollide = false
+				object.CanTouch = false
+				object.CanQuery = false
+			elseif record.Kind == "Transparency"
+				and (object:IsA("Decal") or object:IsA("Texture")) then
+				object.Transparency = 1
+			elseif record.Kind == "Enabled"
+				and (object:IsA("Light") or object:IsA("ParticleEmitter")
+					or object:IsA("Trail") or object:IsA("Beam")) then
+				object.Enabled = false
+			end
 		end
 	end
 end
 
-local function restoreCollision(saved: {any})
+local function restoreAppearance(saved: {any})
 	for _, record in ipairs(saved) do
 		local object = record.Object
-		if object and object.Parent and object:IsA("BasePart") then
-			object.CanCollide = record.CanCollide
-			object.CanTouch = record.CanTouch
-			object.CanQuery = record.CanQuery
+		if object and object.Parent then
+			if record.Kind == "BasePart" and object:IsA("BasePart") then
+				object.Transparency = record.Transparency
+				object.CanCollide = record.CanCollide
+				object.CanTouch = record.CanTouch
+				object.CanQuery = record.CanQuery
+			elseif record.Kind == "Transparency"
+				and (object:IsA("Decal") or object:IsA("Texture")) then
+				object.Transparency = record.Transparency
+			elseif record.Kind == "Enabled"
+				and (object:IsA("Light") or object:IsA("ParticleEmitter")
+					or object:IsA("Trail") or object:IsA("Beam")) then
+				object.Enabled = record.Enabled
+			end
 		end
 	end
 end
@@ -129,7 +153,6 @@ local function releasePlayer(session: any, player: Player, moveOutside: boolean)
 		if player.Parent == Players then
 			player:SetAttribute("Level3_Hiding", false)
 			player:SetAttribute("Level3_HideTableIndex", 0)
-			player:SetAttribute("Level3_HideCameraPosition", nil)
 		end
 		return false
 	end
@@ -143,7 +166,7 @@ local function releasePlayer(session: any, player: Player, moveOutside: boolean)
 		root.AssemblyAngularVelocity = Vector3.zero
 	end
 
-	restoreCollision(record.CollisionState)
+	restoreAppearance(record.Appearance)
 	if humanoid and humanoid.Parent then
 		humanoid.AutoRotate = record.AutoRotate
 		humanoid.WalkSpeed = record.WalkSpeed
@@ -163,7 +186,6 @@ local function releasePlayer(session: any, player: Player, moveOutside: boolean)
 		player:SetAttribute("Level3_Hiding", false)
 		player:SetAttribute("Level3_HideTableIndex", 0)
 		player:SetAttribute("Level3_HideGeneration", 0)
-		player:SetAttribute("Level3_HideCameraPosition", nil)
 	end
 	if record.Anchor and record.Anchor.Parent then refreshPrompt(session, record.Anchor) end
 	updateHiddenCount(session)
@@ -196,16 +218,11 @@ local function tryEnter(session: any, player: Player, anchor: BasePart): (boolea
 	session.LastAction[player] = now
 	local localPosition = anchor.CFrame:PointToObjectSpace(root.Position)
 	local exitSide = if localPosition.Z >= 0 then 1 else -1
-	local sideRotation = CFrame.Angles(0, if exitSide > 0 then math.pi else 0, 0)
-	local exitCFrame = anchor.CFrame
-		* CFrame.new(0, Tuning.ExitVerticalOffset, exitSide * Tuning.ExitOffsetZ)
-		* sideRotation
-	local hiddenCFrame = anchor.CFrame * sideRotation
-	local cameraPosition = anchor.CFrame:PointToWorldSpace(Vector3.new(0, -0.45, 0))
-	local collisionState = captureCollisionState(character)
+	local exitCFrame = anchor.CFrame * CFrame.new(0, Tuning.ExitVerticalOffset, exitSide * Tuning.ExitOffsetZ)
+	local appearance = captureAppearance(character)
 	local record = {
 		Player=player, Character=character, Humanoid=humanoid, Root=root, Anchor=anchor,
-		Generation=session.Generation, ExitCFrame=exitCFrame, CollisionState=collisionState,
+		Generation=session.Generation, ExitCFrame=exitCFrame, Appearance=appearance,
 		AutoRotate=humanoid.AutoRotate, WalkSpeed=humanoid.WalkSpeed,
 		JumpPower=humanoid.JumpPower, JumpHeight=humanoid.JumpHeight,
 		DisplayDistanceType=humanoid.DisplayDistanceType, RootAnchored=root.Anchored,
@@ -215,7 +232,7 @@ local function tryEnter(session: any, player: Player, anchor: BasePart): (boolea
 	session.Occupants[anchor] = player
 	refreshPrompt(session, anchor)
 
-	character:PivotTo(hiddenCFrame)
+	character:PivotTo(anchor.CFrame)
 	root.AssemblyLinearVelocity = Vector3.zero
 	root.AssemblyAngularVelocity = Vector3.zero
 	root.Anchored = true
@@ -224,15 +241,12 @@ local function tryEnter(session: any, player: Player, anchor: BasePart): (boolea
 	humanoid.JumpPower = 0
 	humanoid.JumpHeight = 0
 	humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
-	suppressCollision(collisionState)
+	concealAppearance(appearance)
 
 	player:SetAttribute("BeingChased", false)
 	player:SetAttribute("Level3_HideGeneration", session.Generation)
 	player:SetAttribute("Level3_HideTableIndex",
 		tonumber(anchor:GetAttribute("Level3_HideTableIndex")) or 0)
-	-- Replicated before the state edge so the local camera cannot spend one
-	-- visible frame above the tabletop.
-	player:SetAttribute("Level3_HideCameraPosition", cameraPosition)
 	player:SetAttribute("Level3_Hiding", true)
 	updateHiddenCount(session)
 	return true, "HIDDEN"
@@ -242,7 +256,6 @@ local function bindPlayer(session: any, player: Player)
 	player:SetAttribute("Level3_Hiding", false)
 	player:SetAttribute("Level3_HideTableIndex", 0)
 	player:SetAttribute("Level3_HideGeneration", 0)
-	player:SetAttribute("Level3_HideCameraPosition", nil)
 	table.insert(session.Connections, player.CharacterRemoving:Connect(function(character)
 		local record = session.HiddenPlayers[player]
 		if record and record.Character == character then releasePlayer(session, player, false) end
@@ -252,7 +265,6 @@ local function bindPlayer(session: any, player: Player)
 		player:SetAttribute("Level3_Hiding", false)
 		player:SetAttribute("Level3_HideTableIndex", 0)
 		player:SetAttribute("Level3_HideGeneration", 0)
-		player:SetAttribute("Level3_HideCameraPosition", nil)
 		local humanoid = character:FindFirstChildOfClass("Humanoid")
 		if humanoid then
 			table.insert(session.Connections, humanoid.Died:Connect(function()
@@ -288,15 +300,6 @@ function Controller.IsHidden(player: Player, generation: number?): boolean
 		and player:GetAttribute("Level3_Hiding") == true
 end
 
-function Controller.SetFurnitureSuspended(active: boolean): boolean
-	local session = activeSession
-	if not session or not liveSession(session) then return false end
-	session.FurnitureSuspended = active == true
-	if session.FurnitureSuspended then releaseAll(session, true) end
-	refreshPrompts(session)
-	return true
-end
-
 function Controller.Stop()
 	local session = activeSession
 	if not session then
@@ -304,7 +307,6 @@ function Controller.Stop()
 			player:SetAttribute("Level3_Hiding", false)
 			player:SetAttribute("Level3_HideTableIndex", 0)
 			player:SetAttribute("Level3_HideGeneration", 0)
-			player:SetAttribute("Level3_HideCameraPosition", nil)
 		end
 		workspace:SetAttribute("Level3HiddenPlayers", 0)
 		return
@@ -340,7 +342,6 @@ function Controller.Start(manifest: any, generation: number)
 
 	local session: any = {
 		Active=true, Generation=generation, Manifest=manifest, World=manifest.World,
-		FurnitureSuspended=false,
 		Anchors={}, AnchorSet={}, Occupants={}, HiddenPlayers={}, LastAction={}, Connections={},
 	}
 	activeSession = session
@@ -414,3 +415,4 @@ function Controller.DebugExit(player: Player): boolean
 end
 
 return Controller
+

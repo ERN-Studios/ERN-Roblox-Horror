@@ -41,9 +41,7 @@ local BOB_WALK_FREQ = 6      -- bob pace while walking (rad/s)
 local BOB_RUN_FREQ  = 9.5    -- bob pace while sprinting (slightly faster)
 local BOB_RUN_WS    = 22     -- WalkSpeed at/above which you count as running
 local BOB_SMOOTH    = 6      -- how fast the bob eases in / out (start, stop, gait change)
--- Level 3 Table Hiding Client owns the exact world-space under-table POV.
--- Keep this writer neutral while hidden; it still suppresses locomotion bob.
-local HIDDEN_CAMERA_OFFSET = Vector3.zero
+local HIDDEN_CAMERA_OFFSET = Vector3.new(0, -2.25, 0)
 -- ──────────────────────────────────────────────────────────
 
 local impulse = 0     -- decaying footstep-kick amount

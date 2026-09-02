@@ -17,14 +17,16 @@ local roundStatus = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Roun
 -- Set this after the ElevenLabs track has been uploaded under ERN Roblox
 -- Studios and permitted for this universe. A numeric TrackAssetId attribute on
 -- this LocalScript overrides the constant, which keeps Studio auditioning easy.
-local DEFAULT_TRACK_ASSET_ID = ""
+local DEFAULT_TRACK_ASSET_ID = "89997163439780"
 
-local BASE_VOLUME = 0.22
+-- Keep the mastered music behind lobby dialogue, UI, and environmental audio.
+local BASE_VOLUME = 0.12
 local BRIEFING_DUCK_MULTIPLIER = 0.24
 local FADE_IN_SECONDS = 3.5
 local FADE_OUT_SECONDS = 1.4
 local DUCK_IN_SECONDS = 0.30
 local DUCK_OUT_SECONDS = 1.15
+local LOOP_START_SECONDS = 35
 local LOOP_CROSSFADE_SECONDS = 0.80
 local MIN_CROSSFADE_TRACK_SECONDS = 12
 local PRELOAD_TIMEOUT_SECONDS = 10
@@ -74,6 +76,15 @@ local function configuredTrackId()
 		or normalizeAssetId(DEFAULT_TRACK_ASSET_ID)
 end
 
+local function loopStartFor(sound)
+	local length = sound.TimeLength
+	if length <= 0 then return LOOP_START_SECONDS end
+	if length - LOOP_START_SECONDS >= MIN_CROSSFADE_TRACK_SECONDS then
+		return LOOP_START_SECONDS
+	end
+	return 0
+end
+
 local function stopDecks(resetPosition)
 	for _, sound in ipairs(decks) do
 		sound:Stop()
@@ -108,7 +119,9 @@ end
 
 local function beginDeck(index)
 	local sound = decks[index]
-	sound.TimePosition = 0
+	-- The mastered file opens with a deliberately near-silent bed. Start every
+	-- deck at the musical entrance so both the first play and later loops skip it.
+	sound.TimePosition = loopStartFor(sound)
 	sound:Play()
 end
 
@@ -229,7 +242,7 @@ RunService.Heartbeat:Connect(function(deltaTime)
 		local following = decks[nextIndex]
 		local length = active.TimeLength
 
-		if not crossfading and length >= MIN_CROSSFADE_TRACK_SECONDS
+		if not crossfading and length - loopStartFor(active) >= MIN_CROSSFADE_TRACK_SECONDS
 			and active.IsPlaying
 			and active.TimePosition >= length - LOOP_CROSSFADE_SECONDS then
 			following:Stop()

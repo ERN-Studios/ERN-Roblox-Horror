@@ -90,15 +90,9 @@ local COLORS = {
 	metalLight = Color3.fromRGB(62, 66, 62),
 	paint = Color3.fromRGB(222, 207, 140),
 	green = Color3.fromRGB(86, 255, 173),
-	zyntraCyan = Color3.fromRGB(73, 245, 204),
 	amber = Color3.fromRGB(255, 183, 72),
 	red = Color3.fromRGB(255, 76, 60),
 }
-
--- Roblox Texture instances are diffuse overlays and have no roughness channel.
--- A lightly reflective SmoothPlastic backing gives the existing concrete image
--- the requested sealed/glossy finish while preserving its texture and geometry.
-local TUNNEL_GLOSS_REFLECTANCE = 0.12
 
 local function makePart(parent, name, cf, size, color, material, transparency)
 	local p = Instance.new("Part")
@@ -166,14 +160,6 @@ local function tagSurface(part, role)
 			addSurfaceTexture(part, spec, face)
 		end
 	end
-	return part
-end
-
-local function applyGlossyTunnelFinish(part)
-	part.Material = Enum.Material.SmoothPlastic
-	part.Reflectance = TUNNEL_GLOSS_REFLECTANCE
-	part:SetAttribute("GlossyTunnelFinish", true)
-	part:SetAttribute("GlossyTunnelReflectance", TUNNEL_GLOSS_REFLECTANCE)
 	return part
 end
 
@@ -247,179 +233,6 @@ local function addBoard(panel, face, titleText, subtitleText, titleColor)
 	subtitle.Parent = background
 
 	return title, subtitle
-end
-
--- Future gates use a dedicated portrait display instead of the short, generic
--- information-board layout. This keeps "COMING SOON" readable from the tunnel
--- while preserving the sealed DiamondPlate door as the physical blocker.
-local function addComingSoonBoard(panel, face, level)
-	local gui = Instance.new("SurfaceGui")
-	gui.Name = "ComingSoonDisplay"
-	gui.Face = face or Enum.NormalId.Front
-	gui.CanvasSize = Vector2.new(900, 690)
-	gui.LightInfluence = 0
-	gui.Brightness = 1.35
-	gui.AlwaysOnTop = false
-	gui.MaxDistance = 130
-	gui:SetAttribute("ComingSoonGateVersion", 1)
-	gui:SetAttribute("FutureLevel", level)
-	gui.Parent = panel
-
-	local background = Instance.new("Frame")
-	background.Name = "Screen"
-	background.Position = UDim2.fromScale(0.035, 0.045)
-	background.Size = UDim2.fromScale(0.93, 0.91)
-	background.BackgroundColor3 = Color3.fromRGB(7, 12, 11)
-	background.BackgroundTransparency = 0.02
-	background.BorderSizePixel = 0
-	background.ClipsDescendants = true
-	background.Parent = gui
-
-	local backgroundCorner = Instance.new("UICorner")
-	backgroundCorner.CornerRadius = UDim.new(0, 28)
-	backgroundCorner.Parent = background
-
-	local backgroundBorder = Instance.new("UIStroke")
-	backgroundBorder.Name = "AmberGateBorder"
-	backgroundBorder.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-	backgroundBorder.Color = COLORS.amber
-	backgroundBorder.Thickness = 5
-	backgroundBorder.Transparency = 0.18
-	backgroundBorder.LineJoinMode = Enum.LineJoinMode.Round
-	backgroundBorder.Parent = background
-
-	local backgroundGradient = Instance.new("UIGradient")
-	backgroundGradient.Color = ColorSequence.new({
-		ColorSequenceKeypoint.new(0, Color3.fromRGB(15, 25, 22)),
-		ColorSequenceKeypoint.new(0.58, Color3.fromRGB(8, 14, 12)),
-		ColorSequenceKeypoint.new(1, Color3.fromRGB(5, 8, 8)),
-	})
-	backgroundGradient.Rotation = 90
-	backgroundGradient.Parent = background
-
-	local kicker = Instance.new("TextLabel")
-	kicker.Name = "GateKicker"
-	kicker.Position = UDim2.fromScale(0.055, 0.052)
-	kicker.Size = UDim2.fromScale(0.61, 0.075)
-	kicker.BackgroundTransparency = 1
-	kicker.Font = Enum.Font.Code
-	kicker.Text = string.format("ZYNTRA TRANSIT // GATE %02d", level)
-	kicker.TextColor3 = COLORS.zyntraCyan
-	kicker.TextSize = 24
-	kicker.TextXAlignment = Enum.TextXAlignment.Left
-	kicker.Parent = background
-
-	local statusPill = Instance.new("Frame")
-	statusPill.Name = "RouteStatus"
-	statusPill.Position = UDim2.fromScale(0.705, 0.045)
-	statusPill.Size = UDim2.fromScale(0.235, 0.09)
-	statusPill.BackgroundColor3 = COLORS.amber
-	statusPill.BackgroundTransparency = 0.05
-	statusPill.BorderSizePixel = 0
-	statusPill.Parent = background
-	local statusCorner = Instance.new("UICorner")
-	statusCorner.CornerRadius = UDim.new(1, 0)
-	statusCorner.Parent = statusPill
-	local statusText = Instance.new("TextLabel")
-	statusText.Name = "Status"
-	statusText.Size = UDim2.fromScale(1, 1)
-	statusText.BackgroundTransparency = 1
-	statusText.Font = Enum.Font.Code
-	statusText.Text = "ROUTE PENDING"
-	statusText.TextColor3 = Color3.fromRGB(29, 24, 13)
-	statusText.TextSize = 19
-	statusText.Parent = statusPill
-
-	local upperDivider = Instance.new("Frame")
-	upperDivider.Name = "UpperDivider"
-	upperDivider.Position = UDim2.fromScale(0.055, 0.175)
-	upperDivider.Size = UDim2.fromScale(0.89, 0.006)
-	upperDivider.BackgroundColor3 = COLORS.amber
-	upperDivider.BackgroundTransparency = 0.18
-	upperDivider.BorderSizePixel = 0
-	upperDivider.Parent = background
-
-	local title = Instance.new("TextLabel")
-	title.Name = "Title"
-	title.Position = UDim2.fromScale(0.05, 0.235)
-	title.Size = UDim2.fromScale(0.9, 0.2)
-	title.BackgroundTransparency = 1
-	title.Font = Enum.Font.GothamBlack
-	title.Text = "COMING SOON"
-	title.TextColor3 = COLORS.amber
-	title.TextSize = 86
-	title.TextWrapped = false
-	title.Parent = background
-
-	local levelStatus = Instance.new("TextLabel")
-	levelStatus.Name = "LevelStatus"
-	levelStatus.Position = UDim2.fromScale(0.07, 0.47)
-	levelStatus.Size = UDim2.fromScale(0.86, 0.09)
-	levelStatus.BackgroundTransparency = 1
-	levelStatus.Font = Enum.Font.Code
-	levelStatus.Text = string.format("LEVEL %d IS CURRENTLY IN DEVELOPMENT", level)
-	levelStatus.TextColor3 = Color3.fromRGB(227, 218, 177)
-	levelStatus.TextSize = 28
-	levelStatus.TextWrapped = false
-	levelStatus.Parent = background
-
-	local progressTrack = Instance.new("Frame")
-	progressTrack.Name = "CalibrationTrack"
-	progressTrack.Position = UDim2.fromScale(0.15, 0.625)
-	progressTrack.Size = UDim2.fromScale(0.7, 0.025)
-	progressTrack.BackgroundColor3 = Color3.fromRGB(54, 62, 58)
-	progressTrack.BackgroundTransparency = 0.22
-	progressTrack.BorderSizePixel = 0
-	progressTrack.Parent = background
-	local trackCorner = Instance.new("UICorner")
-	trackCorner.CornerRadius = UDim.new(1, 0)
-	trackCorner.Parent = progressTrack
-	for index = 1, 5 do
-		local segment = Instance.new("Frame")
-		segment.Name = "PendingSegment" .. index
-		segment.Position = UDim2.fromScale((index - 1) * 0.205, 0)
-		segment.Size = UDim2.fromScale(0.18, 1)
-		segment.BackgroundColor3 = index == 1 and COLORS.zyntraCyan or COLORS.amber
-		segment.BackgroundTransparency = 0.16 + (index - 1) * 0.1
-		segment.BorderSizePixel = 0
-		segment.Parent = progressTrack
-		local segmentCorner = Instance.new("UICorner")
-		segmentCorner.CornerRadius = UDim.new(1, 0)
-		segmentCorner.Parent = segment
-	end
-
-	local routeStatus = Instance.new("TextLabel")
-	routeStatus.Name = "RouteCalibration"
-	routeStatus.Position = UDim2.fromScale(0.08, 0.69)
-	routeStatus.Size = UDim2.fromScale(0.84, 0.08)
-	routeStatus.BackgroundTransparency = 1
-	routeStatus.Font = Enum.Font.Code
-	routeStatus.Text = "ROUTE CALIBRATION IN PROGRESS"
-	routeStatus.TextColor3 = Color3.fromRGB(174, 188, 180)
-	routeStatus.TextSize = 23
-	routeStatus.Parent = background
-
-	local lowerDivider = Instance.new("Frame")
-	lowerDivider.Name = "LowerDivider"
-	lowerDivider.Position = UDim2.fromScale(0.055, 0.815)
-	lowerDivider.Size = UDim2.fromScale(0.89, 0.004)
-	lowerDivider.BackgroundColor3 = COLORS.zyntraCyan
-	lowerDivider.BackgroundTransparency = 0.68
-	lowerDivider.BorderSizePixel = 0
-	lowerDivider.Parent = background
-
-	local footer = Instance.new("TextLabel")
-	footer.Name = "Footer"
-	footer.Position = UDim2.fromScale(0.08, 0.845)
-	footer.Size = UDim2.fromScale(0.84, 0.07)
-	footer.BackgroundTransparency = 1
-	footer.Font = Enum.Font.Code
-	footer.Text = "MORE LEVELS ARE ON THE WAY"
-	footer.TextColor3 = Color3.fromRGB(142, 157, 150)
-	footer.TextSize = 21
-	footer.Parent = background
-
-	return gui
 end
 
 local function addDonationLeaderboard(parent, center)
@@ -780,15 +593,15 @@ local function addLamp(parent, center, x, z)
 		"WarmTunnelLight",
 		CFrame.new(center + Vector3.new(x, 29.45, z)),
 		Vector3.new(6.8, 0.22, 1.1),
-		COLORS.zyntraCyan,
+		Color3.fromRGB(255, 220, 145),
 		Enum.Material.Neon
 	)
 	lens.CanCollide = false
+	lens.Color = Color3.fromRGB(255, 234, 191)
 	lens:SetAttribute("PartyCeilingLight", true)
-	lens:SetAttribute("BaseLightPalette", "ZyntraCyan")
 
 	local point = Instance.new("PointLight")
-	point.Color = COLORS.zyntraCyan
+	point.Color = Color3.fromRGB(255, 230, 178)
 	point.Brightness = 1.25
 	point.Range = 24
 	point.Shadows = false
@@ -1165,8 +978,8 @@ local function addQueueStation(parent, roomCenter, index, offset, color, active,
 	local title, subtitle = addBoard(
 		signPanel,
 		Enum.NormalId.Front,
-		active and ("STATION " .. (displayIndex or index) .. "  •  0/6") or ("STATION " .. (displayIndex or index) .. "  •  COMING SOON"),
-		active and "ENTER TO HOST  •  MAX 6 PLAYERS" or ("LEVEL " .. (level or "?") .. "  •  ROUTE IN DEVELOPMENT"),
+		active and ("STATION " .. (displayIndex or index) .. "  •  0/6") or ("STATION " .. (displayIndex or index) .. "  •  OFFLINE"),
+		active and "ENTER TO HOST  •  MAX 6 PLAYERS" or "AWAITING LEVEL AUTHORIZATION",
 		color
 	)
 
@@ -1904,7 +1717,7 @@ local function addRoom(parent, center, level, side, zOffset, active, stations)
 	}
 	for index, offset in ipairs(offsets) do
 		local queueId = (level - 1) * 4 + index
-		local station = addQueueStation(roomModel, roomCenter, queueId, offset, active and stationColors[index] or COLORS.amber, active, index, level)
+		local station = addQueueStation(roomModel, roomCenter, queueId, offset, active and stationColors[index] or COLORS.red, active, index, level)
 		if station then
 			stations[queueId] = station
 		end
@@ -1916,15 +1729,15 @@ local function addRoom(parent, center, level, side, zOffset, active, stations)
 			"ChamberLight",
 			CFrame.new(roomCenter + Vector3.new(x, roomHeight - 0.55, 0)),
 			Vector3.new(11.2, 0.22, 1.8),
-			active and Color3.fromRGB(229, 239, 221) or Color3.fromRGB(196, 139, 64),
+			active and Color3.fromRGB(229, 239, 221) or Color3.fromRGB(255, 87, 67),
 			Enum.Material.Neon,
-			active and 0 or 0.42
+			active and 0 or 0.35
 		)
 		lamp.CanCollide = false
 		local light = Instance.new("PointLight")
-		light.Color = active and Color3.fromRGB(226, 236, 214) or Color3.fromRGB(255, 183, 72)
-		light.Brightness = active and 1.25 or 0.28
-		light.Range = active and 31 or 21
+		light.Color = active and Color3.fromRGB(226, 236, 214) or Color3.fromRGB(255, 82, 66)
+		light.Brightness = active and 1.25 or 0.65
+		light.Range = 31
 		light.Parent = lamp
 	end
 
@@ -1981,7 +1794,7 @@ local function addDoorway(parent, center, level, side, zOffset, active)
 		header,
 		face,
 		"LEVEL " .. level,
-		active and "ACCESS READY  •  4 QUEUES  •  MAX 6 EACH" or "COMING SOON  •  NEW LEVEL IN DEVELOPMENT",
+		active and "ACCESS READY  •  4 QUEUES  •  MAX 6 EACH" or "ANOMALOUS ACCESS POINT  •  NOT YET STABLE",
 		accentColor
 	)
 
@@ -1995,57 +1808,19 @@ local function addDoorway(parent, center, level, side, zOffset, active)
 			Enum.Material.DiamondPlate
 		)
 		tagSurface(blocker, "Metal")
-		blocker:SetAttribute("FutureLevelGate", true)
-		blocker:SetAttribute("FutureLevel", level)
-		blocker:SetAttribute("ComingSoonGateVersion", 1)
-
-		local displayPanel = makePart(
-			parent,
-			"Level" .. level .. "ComingSoonPanel",
-			CFrame.new(x - side * (blocker.Size.X * 0.5 + 0.14), center.Y + 7, z),
-			Vector3.new(0.16, 11.9, 15.9),
-			Color3.fromRGB(9, 14, 13),
-			Enum.Material.Metal
+		local blockedTitle, blockedSubtitle = addBoard(
+			blocker,
+			face,
+			"ACCESS UNSTABLE",
+			"STILL TRYING TO BREACH THIS ANOMALOUS SPACE",
+			COLORS.red
 		)
-		displayPanel.CanCollide = false
-		displayPanel.CanTouch = false
-		displayPanel.CanQuery = false
-		displayPanel.CastShadow = false
-		displayPanel:SetAttribute("FutureLevelGate", true)
-		displayPanel:SetAttribute("FutureLevel", level)
-		displayPanel:SetAttribute("ComingSoonGateVersion", 1)
-		addComingSoonBoard(displayPanel, face, level)
-
-		local frontX = displayPanel.Position.X - side * (displayPanel.Size.X * 0.5 + 0.05)
-		local railColor = Color3.fromRGB(255, 183, 72)
-		for _, zDirection in ipairs({ -1, 1 }) do
-			local rail = makePart(
-				parent,
-				"Level" .. level .. "ComingSoonVerticalRail",
-				CFrame.new(frontX, displayPanel.Position.Y, z + zDirection * 7.78),
-				Vector3.new(0.1, 11.5, 0.18),
-				railColor,
-				Enum.Material.Neon
-			)
-			rail.CanCollide = false
-			rail.CanTouch = false
-			rail.CanQuery = false
-			rail.CastShadow = false
-		end
-		for _, yDirection in ipairs({ -1, 1 }) do
-			local rail = makePart(
-				parent,
-				"Level" .. level .. "ComingSoonHorizontalRail",
-				CFrame.new(frontX, displayPanel.Position.Y + yDirection * 5.72, z),
-				Vector3.new(0.1, 0.18, 15.4),
-				railColor,
-				Enum.Material.Neon
-			)
-			rail.CanCollide = false
-			rail.CanTouch = false
-			rail.CanQuery = false
-			rail.CastShadow = false
-		end
+		blockedTitle.TextScaled = false
+		blockedTitle.TextSize = 58
+		blockedTitle.TextWrapped = false
+		blockedSubtitle.TextScaled = false
+		blockedSubtitle.TextSize = 26
+		blockedSubtitle.TextWrapped = false
 	end
 end
 
@@ -2638,15 +2413,13 @@ function Builder.Build(center)
 	model.Name = "ServerLobby"
 	model.Parent = workspace
 	model:SetAttribute("LobbyStyle", "ZyntraTunnel")
-	model:SetAttribute("TextureVersion", 10)
-	model:SetAttribute("LobbyAestheticRevision", 4)
+	model:SetAttribute("TextureVersion", 9)
+	model:SetAttribute("LobbyAestheticRevision", 3)
 	model:SetAttribute("DispatchConcourseVersion", 7)
 	model:SetAttribute("SupplyKioskVersion", 5)
 	model:SetAttribute("DonationLeaderboardVersion", 2)
 	model:SetAttribute("PartyButtonVersion", 3)
 	model:SetAttribute("TunnelCurveRevision", 2)
-	model:SetAttribute("TunnelGlossVersion", 1)
-	model:SetAttribute("CeilingLightPalette", "ZyntraCyan")
 	model:SetAttribute("SignageRevision", 2)
 	model:SetAttribute("RoundedSignFacesVersion", 1)
 	model:SetAttribute("LevelSignMountVersion", 1)
@@ -2783,7 +2556,6 @@ function Builder.Build(center)
 				Enum.Material.Concrete
 			)
 			tagSurface(panel, "Concrete")
-			applyGlossyTunnelFinish(panel)
 		end
 	end
 
@@ -2800,7 +2572,6 @@ function Builder.Build(center)
 				Enum.Material.Concrete
 			)
 			tagSurface(wall, "Concrete")
-			applyGlossyTunnelFinish(wall)
 		end
 		for _, z in ipairs(doorwayZ) do
 			local lintel = makePart(
@@ -2812,7 +2583,6 @@ function Builder.Build(center)
 				Enum.Material.Concrete
 			)
 			tagSurface(lintel, "Concrete")
-			applyGlossyTunnelFinish(lintel)
 		end
 	end
 

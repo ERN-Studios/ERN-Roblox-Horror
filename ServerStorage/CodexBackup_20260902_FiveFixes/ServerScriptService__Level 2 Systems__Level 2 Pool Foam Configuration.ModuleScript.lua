@@ -65,17 +65,13 @@ local Configuration = {
 		AcquireSeconds = 0.10,
 		ReleaseSeconds = 0.24,
 		NearThreatDistance = 18,
-		-- A real, server-validated camera look permanently starts this entity's hunt.
-		-- The latch makes the transition immune to report/camera-edge flicker.
-		TriggerChaseOnObserve = true,
-		ChaseGraceSeconds = 0.45,
-		-- Legacy statue reveal tuning remains available if FreezeWhileObserved is
-		-- enabled again. The Pool Noodle's current mechanic chases while visible.
+		-- Every genuine look-back gets a short readable movement reveal. Observation
+		-- release hysteresis prevents camera-edge flicker from repeatedly granting it.
 		RevealOverrunSeconds = 0.50,
 		RevealOverrunCooldown = 0.0,
 		RequireServerLineOfSight = true,
 		ServerLineOfSightInterval = 0.12,
-		FreezeWhileObserved = false,
+		FreezeWhileObserved = true,
 	},
 
 	Movement = {
@@ -100,17 +96,6 @@ local Configuration = {
 		MaxStepHeight = 3.5,
 		StuckRepathSeconds = 1.1,
 		UnreachableTargetCooldown = 3.0,
-		-- While an active Pool Noodle has not yet been looked at, its stalking
-		-- speed rises continuously. The first validated look freezes the earned
-		-- bonus and changes to Hunt pace; it never toggles with camera-edge noise.
-		SpeedRamp = {
-			Enabled = true,
-			AccelerationPerSecond = 0.65,
-			MaximumBonus = 12.0,
-			MaximumSpeed = 22.0,
-			ChaseMinimumSpeed = 13.0,
-			FreezeOnChase = true,
-		},
 		Speeds = {
 			Dormant = 0,
 			Stalk = 7.5,

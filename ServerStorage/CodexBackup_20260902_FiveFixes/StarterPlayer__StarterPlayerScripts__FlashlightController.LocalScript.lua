@@ -123,9 +123,7 @@ rayParams.FilterType = Enum.RaycastFilterType.Exclude
 -- like Studio selection rather than a physical flashlight beam.
 
 -- bind AFTER the camera updates, so up/down tracking is exact
--- Level3UnderTableCamera finalizes a hidden player's camera at Camera + 1.
--- Aim one priority later so the torch always originates from that real POV.
-RunService:BindToRenderStep("MongoFlashlight", Enum.RenderPriority.Camera.Value + 2, function(dt)
+RunService:BindToRenderStep("MongoFlashlight", Enum.RenderPriority.Camera.Value + 1, function(dt)
 	local camera = workspace.CurrentCamera
 	if not camera then return end
 	if not (mount and mount.Parent == workspace) then
@@ -357,6 +355,7 @@ local function flashlightTargetAvailable()
 	if not UIDevice.IsTouch() then return false end
 	if player:GetAttribute("InRound") ~= true then return false end
 	if player:GetAttribute("Escaped") == true then return false end
+	if player:GetAttribute("Level3_Hiding") == true then return false end
 	if player:GetAttribute("Spectating") == true then return false end
 	if player:GetAttribute("ZyntraStoreOpen") == true then return false end
 	if player:GetAttribute("DevPhoneOpen") == true then return false end
@@ -529,7 +528,7 @@ local function flashlightsSuppressed()
 end
 
 local function setLights(state)
- if state and flashlightsSuppressed() then state = false end
+ if state and (player:GetAttribute("Level3_Hiding") == true or flashlightsSuppressed()) then state = false end
  on = state
 	if coreLight then coreLight.Enabled = state end
 	if spillLight then spillLight.Enabled = state end
@@ -568,6 +567,7 @@ end
 
 local function toggle()
 	if flashlightsSuppressed() then return end
+	if player:GetAttribute("Level3_Hiding") == true then return end
 	if player:GetAttribute("InRound") ~= true then return end
 	if not alive() then return end -- dead / spectating: no flashlight of your own
 	if on then
@@ -615,6 +615,9 @@ local function updateRoundVisibility()
 	end
 end
 player:GetAttributeChangedSignal("InRound"):Connect(updateRoundVisibility)
+player:GetAttributeChangedSignal("Level3_Hiding"):Connect(function()
+	if player:GetAttribute("Level3_Hiding") == true and on then setLights(false) end
+end)
 updateRoundVisibility()
 
 -- ── teammates' flashlights (visible to YOU) ───────────────
