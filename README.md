@@ -445,8 +445,10 @@ Everything below drives **live Roblox Studio and Blender** over MCP:
 
   While a push is queued, `pull_source_from_studio.py` **skips** those files
   (their repo copies are newer than Studio); pass `--force` to discard the
-  unpushed edits instead. (`push_level1_to_studio.py` /
-  `push_level2_poolrooms_to_studio.py` are kept for history but predate this.)
+  unpushed edits instead. (`push_level1_to_studio.py` and
+  `push_level2_poolrooms_to_studio.py` predated this path and were removed on
+  2026-09-02; they are still in git history if the old behaviour is ever
+  wanted.)
 - **When the MCP proxy is out of date**, every tool above fails with
   `Client proxy is out of date, restart to update` and cannot reach the place at
   all. The fallback transport keeps the one property that matters — the bytes

@@ -328,9 +328,9 @@ def record_landed_source(item: dict, desired: str, landed: str) -> str:
 def studio_id_of(selected: object) -> str:
     """select_studio returns the whole studio record; the tools disagree on this.
 
-    push_level1_to_studio.py (which pushed this place successfully) uses
-    selected["id"], while pull_source_from_studio.py passes the record straight
-    through. Accept either shape so a write can never be misrouted.
+    The retired push_level1_to_studio.py used selected["id"], while
+    pull_source_from_studio.py passes the record straight through. Accept either
+    shape so a write can never be misrouted.
     """
     if isinstance(selected, dict):
         identifier = selected.get("id")

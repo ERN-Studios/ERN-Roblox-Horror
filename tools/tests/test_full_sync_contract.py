@@ -517,12 +517,24 @@ counts = live["counts"]
 check(counts["scripts"] + counts["remoteEvents"] == counts["total"] == len(live["items"]),
       "counts still reconcile",
       f"{counts['scripts']}+{counts['remoteEvents']} vs {counts['total']}/{len(live['items'])}")
-# 134 since the 2026-08-31 Pool Slide work: the Slidemouth trio moved out of the
-# live tree into ServerStorage.Level2RetiredSlidemouth_20260831, three Pool Slide
-# scripts replaced them, and five new backup folders added twenty archive copies.
-check(counts["scripts"] == 134 and counts["remoteEvents"] == 13,
-      "and are the 134 scripts + 13 remotes this place holds",
-      f"{counts['scripts']}+{counts['remoteEvents']}")
+# The script COUNT is not an invariant -- it was 114, then 134 after the Pool
+# Slide work, then 107 once the two oldest backup folders were deleted. Pinning
+# it only detects change, and it was already stale twice in one day. What must
+# hold is that the manifest and the checkout describe the SAME set of scripts,
+# in BOTH directions: an entry with no file is caught above, and a .lua on disk
+# with no entry is caught here. That second direction is the one that bit us --
+# the retired Slidemouth trio sat in the tree, mirrored and unlisted, until a
+# parity run called them orphans.
+mirrored = {entry["file"] for entry in live["items"]}
+on_disk = {
+    path.relative_to(project_root).as_posix()
+    for service in ("ReplicatedStorage", "ServerScriptService", "ServerStorage",
+                    "StarterPlayer", "Workspace")
+    for path in (project_root / service).rglob("*.lua")
+}
+check(on_disk <= mirrored,
+      "every .lua in the mirrored services is listed in the manifest",
+      "unlisted: " + ", ".join(sorted(on_disk - mirrored)[:4]))
 
 print()
 if failures:

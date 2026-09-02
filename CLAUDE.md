@@ -125,9 +125,22 @@ Also landed 2026-08-19 (Studio first, then mirrored, manifest updated):
 
 ## House rules
 
-- Do not remove or move in-game objects (walls, props, world geometry). Code
-  only, unless asked.
-- `ServerStorage/*Backup*` folders are intentional archives — never audit or
-  clean them.
+- Do not remove or move in-game objects (walls, props, world geometry) unless
+  asked. When asked, list what you propose to remove and get a decision per
+  item first — never delete on your own judgement.
+- **`ServerStorage.Archive` holds every retired backup**, gathered there on
+  2026-09-02 so the root stays readable. Do not audit, clean or "tidy" its
+  contents. Two folders were deleted that day by explicit decision
+  (`LobbyBackup_20260731`, `Level2Backup_20260805`); both are recoverable from
+  git history at `c2b7527`.
+- **The loose MeshPart templates in the ServerStorage root are generated, not
+  authored.** `Level 2 World Builder` builds them through
+  `AssetService:CreateMeshPartAsync` and parents them there. Its Lua cache is
+  module-local and dies with the VM while the MeshPart is saved with the place,
+  so it used to leak one copy per Studio session — 21 duplicates had built up
+  by 2026-09-02. Both template loaders now adopt an existing copy by name and
+  MeshId first. If duplicates reappear, that adoption has been broken.
+- `ServerStorage.Project Mirror` is an unused third-party free-model asset
+  (credits Dragonfire1710, boatbomber), not project code and not a backup.
 - Testing vs production values are documented in README.md; both are currently
   at production settings.

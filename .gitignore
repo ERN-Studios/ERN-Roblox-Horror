@@ -29,3 +29,6 @@ Backrooms Stay Quiet/
 
 # Agent-harness telemetri, ikke spilindhold
 .claude-flow/
+
+# graphify-vaerktoejets output, ikke spilindhold
+graphify-out/
