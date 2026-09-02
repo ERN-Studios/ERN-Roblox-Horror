@@ -24,9 +24,18 @@ repository-history integration, with no gameplay residue left in Edit. The
 intended history is integrated on `main` and the release record has been pushed
 to and verified against `origin/main`.
 
+**Since that release (2026-08-31):** Level 2's **Slidemouth was retired and
+replaced by the Pool Slide**, which spawns at the second pump and which the
+Level 2 Round Adapter now starts as a hard requirement. The place holds **134
+scripts** rather than the 114 the release record below describes, and the
+Slidemouth's 391-check suite went into `ServerStorage` with it — the Pool Slide
+has no suite yet. Every dated result in this file is accurate for the date it
+names; none of them has been re-run against the current tree.
+
 Level 3 — the **Mall Backrooms Party** — has its core systems in place (layout
-generator, Mall Manager AI, hiding, music/blackout cycle) and is still being
-built out. It is the current campaign endpoint: there is no Level 4.
+generator, Mall Manager AI, hiding, music/blackout cycle, CD collection into a
+five-slot Signal Hall disc player, districts, and a final-hall chase) and is
+still being built out. It is the current campaign endpoint: there is no Level 4.
 
 ### Finishing a level
 
@@ -218,10 +227,38 @@ hand-authored Flooded Poolrooms level is preserved in
   for walking where there's no water underfoot.
 - **Hostiles:** the **Pool Foam** stack (controller, navigator with roof-safe
   floor probing, observer, proxy rig, animation adapter, client effects) and the
-  **Slidemouth** (its own controller + client, tied to the pump/slide soundscape
-  with warning/scream serials and four monster-groan recordings). Dens, per-hall
-  patrol nodes, hall-centre navigation nodes and spawn markers are generated,
-  and all three anchor kinds are reachable from the world manifest.
+  **Pool Slide**, a large humanoid that **replaced the Slidemouth on
+  2026-08-31**. Dens, per-hall patrol nodes, hall-centre navigation nodes and
+  spawn markers are generated, and all three anchor kinds are reachable from the
+  world manifest.
+- **The Pool Slide arrives at the SECOND pump.** Its trigger is the count of
+  *distinct started pumps*, read independently of the station index or order, so
+  the order the party works the map in cannot change when it shows up. The
+  anchor is chosen from the generated navigation nodes under one hard rule —
+  **at least 60 studs from every living participant**, not merely from the
+  player who started the pump. Concealment and a distance near 100 studs from
+  that activator only rank *inside* the admitted set.
+- **A candidate is certified for the BODY, not for the graph.** An anchor is
+  accepted only once `_centreRoute` — the same body/step/sweep certification the
+  live route installer runs — can carry the rig to the target. An accepted
+  `SetGraphGoal` or a bare graph connection does not establish that this body
+  fits. Exceeding `CENTRING_QUERY_BUDGET` (72,000) fails CLOSED. Candidates are
+  validated while the model is parented to `ServerStorage`, so a rejected one
+  never flashes on a client, and every living player's position is re-read
+  immediately before the commit, so somebody walking into the chosen room during
+  a validation yield invalidates it.
+- Walk 10 / run 24 studs per second (running inside 120 studs), attack at 5.5
+  studs horizontally and 7 vertically behind a line-of-sight check, one spawn
+  per round latched **before** replication. It needs the imported
+  `ServerStorage.Level2Assets["Level 2 Pool Slide Template"]`.
+
+  The retired Slidemouth is preserved intact in
+  `ServerStorage.Level2RetiredSlidemouth_20260831` — controller, client and its
+  full test suite. The **room-hop** subsection immediately below describes that
+  retired encounter and is kept because the Pool Slide's own admission rule was
+  reasoned out from it. The step-handling and substep subsections after it are
+  **still live**: they describe `Level 2 Pool Foam Navigator`, which both
+  hostiles share.
 - **Slidemouth appearance is measured in ROOM HOPS**, not studs. A hall is
   85–270 studs on a side and one corridor hop spans ~110–330 studs, so a fixed
   stud band meant "two rooms away" on one seed and "same room, far corner" on
@@ -256,14 +293,21 @@ hand-authored Flooded Poolrooms level is preserved in
   `MaxTravelStep` (0.9), each running the full floor resolve and body-volume
   test, capped at 12 pieces so an absurd delta fails CLOSED rather than falling
   back to one unvalidated leap.
-- **Tests:** `Level 2 Slidemouth Test Suite` runs against a real generated
-  world. It derives every spawn property (room, hop counts, occupancy, line of
-  sight, proximity) **independently** from the anchor's world position rather
-  than trusting the controller, drives the real spawn through a real pump
-  transition, and includes a movement race and an eligibility drop-out. Its
-  ledge probe builds controlled ledges at known rises and samples authored
-  edges across every family, and only accepts a refusal when it can confirm
-  real geometry in the way or a genuinely missing floor.
+- **Tests — and the gap the retirement opened.** `Level 2 Slidemouth Test Suite`
+  ran against a real generated world, deriving every spawn property (room, hop
+  counts, occupancy, line of sight, proximity) **independently** from the
+  anchor's world position rather than trusting the controller, driving the real
+  spawn through a real pump transition, and including a movement race and an
+  eligibility drop-out. Its ledge probe built controlled ledges at known rises
+  and sampled authored edges across every family, accepting a refusal only when
+  it could confirm real geometry in the way or a genuinely missing floor.
+
+  **That suite went into the archive with the Slidemouth on 2026-08-31, and the
+  Pool Slide has no replacement.** Level 2's live hostile therefore has no
+  coverage of its spawn admission, its body-route certification, its commit-time
+  revalidation or its attack gate — which is exactly the set of rules that took
+  several rewrites to get right on the encounter it replaced.
+  `Level 2 Exit Transition Test Suite` still covers the exit geometry.
 - Every change is validated in live play sessions across multiple seeds by
   geometry probes (clip scan, stair connections, swim depth, wedged props, exit
   clearance) before it lands.
@@ -290,6 +334,18 @@ out (`Level 3 Systems`):
   synchronized song cycle.
 - **Hiding**: server-validated **under-table hiding** with prompts, occupancy
   and character restoration.
+- **The objective**: collect CDs scattered through the mall and insert them into
+  the **five-slot disc player** in the Signal Hall (`Configuration.ModuleGoal`
+  is 5). The state folder tracks collected, inserted, carried and dropped counts
+  separately, so a CD dropped on a death is not silently lost from the total.
+- **The final hall**: a generated exit corridor with a halfway marker that
+  triggers the Mall Manager's **finale chase**, and a validated Manager spawn
+  marker of its own.
+- **`Level3Seed`** pins the layout for reproduction, on the same contract as
+  Level 2: a number **≥ 1** pins, while 0, negatives, NaN and non-numbers all
+  mean "pick a random seed". `Level3_SeedPinned` in the state folder shows which
+  mode a round used. (Before 2026-09-02 the guard was `type(v) ~= "number"`,
+  which accepted 0 and would have pinned every round to seed 0's mall.)
 - Its own lighting/sound controllers, reader client, and a large in-Studio
   **test suite** (`Level 3 Test Suite`).
 
@@ -315,7 +371,7 @@ comparison from a fresh fingerprint of the live place rather than trusting the
 manifest it is checking. What ships is what is in Studio; the repo is the
 reviewable copy of it, not a write-only mirror. Folders mirror the Studio
 Explorer 1:1, and `studio-sync-manifest.json` records the canonical sha256 of
-every mirrored file. The current manifest contains **114 scripts and 13
+every mirrored file. The current manifest contains **134 scripts and 13
 RemoteEvents**. Its `studioTrailingNewline` count is transport-derived and can
 change after an exact landing, so the manifest's live `counts` field — not a
 number copied into this README — is authoritative.
@@ -330,8 +386,8 @@ ServerScriptService/
   Level2Generator.ModuleScript      Level 2: doorway into "Level 2 Systems"
   Level 2 Systems/                  Level 2: config, BSP layout, world builder,
                                     pump objective, slides + ragdoll, Pool Foam
-                                    + Slidemouth hostiles, Slidemouth test
-                                    suite, tweak README
+                                    + Pool Slide hostiles, exit-transition
+                                    test suite, tweak README
   Round Completion Routing.ModuleScript   post-win routing rules (pure)
   Round Completion Test Suite.ModuleScript  assertions for those rules
   Level3Generator.ModuleScript      Level 3: doorway into "Level 3 Systems"
@@ -419,7 +475,7 @@ Everything below drives **live Roblox Studio and Blender** over MCP:
   exact / permitted-newline / drift / missing / extra. It deliberately does
   **not** reuse the manifest's sha256: a check that reads the record it is
   checking only proves the record is self-consistent.
-- **Compile check.** `tools/studio_compile_probe.luau` compiles all 114 scripts
+- **Compile check.** `tools/studio_compile_probe.luau` compiles all 134 scripts
   without running any of them, by wrapping each source as
   `return function() ... end` and `require`ing the wrapper — the body is
   compiled, and the function is never called.

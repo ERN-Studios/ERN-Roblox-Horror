@@ -52,9 +52,25 @@ stale editor buffer after a programmatic write.
 `tools/tests/test_push_repo_to_studio.py` verifies the push tool against a fake
 Studio without touching anything real (needs a `luau` binary; see the file).
 
-## Current state (2026-08-19)
+## Current state (2026-09-02)
 
-Branch `claude/roblox-code-audit-di6qxi`, PR #1: a project-wide audit of ~45k
+`main` is at the Pool Slide sync and is level with `origin/main`. The place
+holds **134 scripts + 13 RemoteEvents**; the manifest has no pending entries.
+Verified on 2026-09-02: parity 128 exact + 6 permitted-newline, 0 drift, and
+`studio_compile_probe.luau` at 134/134.
+
+**Level 2's Slidemouth was retired on 2026-08-31** and replaced by the **Pool
+Slide**, which spawns at the second pump. `Level 2 Round Adapter` requires it
+and treats a failed start as a hard error. The old encounter is intact in
+`ServerStorage.Level2RetiredSlidemouth_20260831` — and so is its 391-check test
+suite, which means **Level 2's live hostile currently has no test coverage**.
+
+**Level 3's seed guard was fixed on 2026-09-02** to match Level 2's, and now
+publishes `Level3_SeedPinned`.
+
+### History — the 2026-08-19 audit (done, kept for context)
+
+Branch `claude/roblox-code-audit-di6qxi`, PR #1 (merged): a project-wide audit of ~45k
 lines — real bugs, dead code, removed-feature leftovers, duplicate work and
 optimizations. **All 37 queued scripts were pushed into Studio on 2026-08-19
 and verified byte-for-byte; the manifest holds no pending entries.** The PR
@@ -71,7 +87,9 @@ carry a source of 200k characters or more, which is why Level 2 World Builder
 Deliberately left alone and awaiting a decision from the owner: teammate
 flashlights render twice (client MateBeam + FlashlightSync mounts); Level 3
 room wall-art tables are keyed to retired room ids so generated rooms get no
-drawings; the Slidemouth controller is complete but nothing starts it.
+drawings. ~~The Slidemouth controller is complete but nothing starts it~~ —
+settled 2026-08-31 by retiring it in favour of the Pool Slide, which left the
+open question above: the replacement has no test suite.
 
 Also landed 2026-08-19 (Studio first, then mirrored, manifest updated):
 
@@ -80,8 +98,11 @@ Also landed 2026-08-19 (Studio first, then mirrored, manifest updated):
   silently rebuilt seed 0's layout every round. 0, negatives, NaN and
   non-numbers now all mean "pick a random seed"; only a number ≥ 1 pins.
   `Level2_SeedPinned` in the state folder shows which mode a round used.
-  **`Level 3 Round Adapter` still carries the identical bug** at its own seed
-  read — latent only, because no `Level3Seed` attribute is set today.
+  **`Level 3 Round Adapter` carried the identical bug** at its own seed read —
+  latent, because no `Level3Seed` attribute was set. Fixed 2026-09-02 with the
+  same `pinnedSeedOverride` helper, plus a `Level3_SeedPinned` readback and a
+  random path that lands in [1, MAX_SEED - 1] so it cannot produce the 0 the
+  guard rejects.
 - The exit-bearing Grand Slide Hall now has its own size floor
   (`ExitHallMinimumWidth`/`Depth` = 210×200) plus `ExitHallMaximumShellGap`
   = 80, and `GenerationAttempts` went 40 → 300 so the deterministic recovery

@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "snapshotDate": "2026-08-26",
   "experience": {
-    "name": "Backrooms: No Way Out",
+    "name": "BACKROOMS: STAY QUIET [CO-OP HORROR]",
     "placeId": 131311258779917,
     "universeId": 10559217407,
     "creatorGroup": "ERN Roblox Studios",
@@ -53,15 +53,28 @@
       "pumpStart": 105491305106437,
       "roomToneLow": 75214252175039,
       "shallowFootsteps": [],
-      "distantMonsterGroans": [93723101231893, 87666542035440, 120532580680571, 95187342487142],
-      "wadeSteps": [9120609652, 9120609628, 9120609739],
+      "distantMonsterGroans": [
+        93723101231893,
+        87666542035440,
+        120532580680571,
+        95187342487142
+      ],
+      "wadeSteps": [
+        9120609652,
+        9120609628,
+        9120609739
+      ],
       "wadeResistanceLayer": 9120348019,
       "wadeStepSource": {
         "creator": "ProSoundEffects",
         "creatorHandle": "@ProSoundEffects",
         "coreCollection": "Water Wading Walking Through Shallow Pool, Bigger Splashes",
         "resistanceCollection": "Underwater Movement, Bubbles, Muffled, Constant",
-        "coreDurationsSeconds": [2.368, 2.869333, 2.965333],
+        "coreDurationsSeconds": [
+          2.368,
+          2.869333,
+          2.965333
+        ],
         "resistanceDurationSeconds": 1.431083,
         "license": "Roblox Creator Store; reference by asset ID, do not download and re-upload",
         "ownership": "third-party Creator Store assets; not owned by ERN Roblox Studios",
@@ -91,7 +104,12 @@
       "roomListeningSong": 140244948455675,
       "roomListeningSongReversed": 75285146479953,
       "cdCollected": 84585027971879,
-      "mallManagerWalk": [86969848436282, 125163405380423, 131363472955449, 128260682244977],
+      "mallManagerWalk": [
+        86969848436282,
+        125163405380423,
+        131363472955449,
+        128260682244977
+      ],
       "mallManagerBalloonScream": 105088070261380,
       "mallManagerBlackout": 125407251695204
     },
@@ -124,7 +142,15 @@
   "unresolvedOrExternal": [
     {
       "scope": "Level 2 wade steps",
-      "assetIds": [75800492736528, 115563372806578, 78524180373927, 96086593477646, 133142004005994, 121103648572050, 101190784903878],
+      "assetIds": [
+        75800492736528,
+        115563372806578,
+        78524180373927,
+        96086593477646,
+        133142004005994,
+        121103648572050,
+        101190784903878
+      ],
       "status": "archived on Roblox; removed from the live place and replaced with active Creator Store sounds",
       "reason": "The source takes remain in the source pack, but quality review found only takes 2, 4, and 6 worth remastering; the active replacement uses three complete ProSoundEffects wading phrases plus one quiet underwater-resistance layer"
     },
@@ -135,7 +161,11 @@
     },
     {
       "scope": "Level 2 legacy shallow footsteps",
-      "assetIds": [134239383236056, 121310030007635, 105900557574918],
+      "assetIds": [
+        134239383236056,
+        121310030007635,
+        105900557574918
+      ],
       "status": "archived on Roblox and unused by the active controller",
       "reason": "The active shallow-water gait now uses the provenance-documented ProSoundEffects wade system; the separate dry-tile library slot remains intentionally empty"
     },
@@ -145,7 +175,11 @@
     },
     {
       "scope": "Roblox built-in or marketplace dependencies",
-      "examples": [9125446543, 9118901593, 9119631915],
+      "examples": [
+        9125446543,
+        9118901593,
+        9119631915
+      ],
       "status": "referenced by asset ID, not locally owned source"
     },
     {

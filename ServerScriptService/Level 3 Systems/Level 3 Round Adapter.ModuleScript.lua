@@ -32,6 +32,21 @@ local managerLifecycleToken = 0
 
 local STORED_LOBBY_NAME = "Level 3 Stored Server Lobby"
 local STORED_LEVEL_ONE_ENTITY_NAME = "Level 3 Stored Level 1 Entity"
+local MAX_SEED = 2147483647
+
+-- A manual override only counts when it is a real, usable seed. 0 is the OFF
+-- value -- it is what a tester leaves behind by typing a zero instead of
+-- deleting the attribute, and the old `type(value) ~= "number"` guard accepted
+-- it as a pinned seed, so every round would silently rebuild seed 0's mall.
+-- Level 2 shipped exactly this bug and was fixed on 2026-08-19; this is the same
+-- fix, kept deliberately identical to Level 2 Round Adapter's pinnedSeedOverride.
+local function pinnedSeedOverride(): number?
+	local requested = workspace:GetAttribute("Level3Seed")
+	if type(requested) ~= "number" then return nil end
+	if requested ~= requested then return nil end -- NaN
+	if requested < 1 or requested >= math.huge then return nil end
+	return math.floor(requested) % MAX_SEED
+end
 
 -- These are the active Level 1 services in the clean project baseline. They
 -- must not keep running after their world has been replaced by Level 3.
@@ -391,6 +406,9 @@ local function applyBaselineReplicatedState(levelState: Folder, overrides: {[str
 	levelState:SetAttribute("Level3_FurnitureCollisionSuppressed", nil)
 	levelState:SetAttribute("Level3_Phase", o.Phase or "IDLE")
 	levelState:SetAttribute("Level3_RequestedSeed", o.RequestedSeed or 0)
+	-- Visible in the state folder so "why is the map the same?" is one glance,
+	-- the same readback Level 2 publishes as Level2_SeedPinned.
+	levelState:SetAttribute("Level3_SeedPinned", o.SeedPinned == true)
 	levelState:SetAttribute("Level3_ResolvedSeed", 0)
 	levelState:SetAttribute("Level3_GenerationAttempt", 0)
 	levelState:SetAttribute("Level3_UsedFallback", false)
@@ -544,14 +562,16 @@ function Adapter.Build()
 
 	-- Level3Seed is a manual reproducibility override only. Never write the
 	-- random production choice back or subsequent rounds would repeat the map.
-	local requestedSeed = workspace:GetAttribute("Level3Seed")
-	if type(requestedSeed) ~= "number" then
-		requestedSeed = DateTime.now().UnixTimestampMillis % 2147483647
-	end
+	-- The random path lands in [1, MAX_SEED - 1] so it can never produce the
+	-- same 0 the override guard rejects.
+	local pinnedSeed = pinnedSeedOverride()
+	local requestedSeed = pinnedSeed
+		or (DateTime.now().UnixTimestampMillis % (MAX_SEED - 1) + 1)
 
 	applyBaselineReplicatedState(levelState, {
 		Phase = "GENERATING_LAYOUT",
 		RequestedSeed = requestedSeed,
+		SeedPinned = pinnedSeed ~= nil,
 		Generation = generation,
 		ModuleGoal = Configuration.ModuleGoal,
 		LightingMode = "NORMAL",

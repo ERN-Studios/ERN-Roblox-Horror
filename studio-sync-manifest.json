@@ -1,7 +1,7 @@
 {
   "formatVersion": 1,
   "source": "Roblox Studio built-in MCP: .rbxmx payload -> game:GetObjects -> side-effect-free compile probe -> ScriptEditorService:UpdateSourceAsync -> .Source re-read and verified byte for byte; reconciled against tools/verify_studio_parity.py",
-  "finalNewlineContract": "Entries flagged studioTrailingNewline hold exactly the canonical repo file plus one extra trailing newline in Studio. Exact landings remove the flag. Current flagged entry count: 6. Manifest hashes always describe the canonical repo file, never Studio's transport bytes.",
+  "finalNewlineContract": "Entries flagged studioTrailingNewline hold exactly the canonical repo file plus one extra trailing newline in Studio. Exact landings remove the flag. Current flagged entry count: 5. Manifest hashes always describe the canonical repo file, never Studio's transport bytes.",
   "studio": {
     "name": "BACKROOMS: STAY QUIET [CO-OP HORROR]",
     "id": "7ccaf8b2-9e54-4709-8caa-91e1bce8b5b0"
@@ -10,7 +10,7 @@
     "scripts": 134,
     "remoteEvents": 13,
     "total": 147,
-    "studioTrailingNewline": 6
+    "studioTrailingNewline": 5
   },
   "extraMirroredFilesNotInStudio": [
     "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_AutomaticAssetCaptureSender_LocalizationService.RemoteEvent.txt",
@@ -506,10 +506,9 @@
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Round Adapter.ModuleScript.lua",
-      "bytes": 28669,
-      "sha256": "9ec16b893e63e7617c77487992f16bf890c4147cb719b91ac2ecf2fa1154d648",
-      "status": "synced",
-      "studioTrailingNewline": true
+      "bytes": 29809,
+      "sha256": "6b2517cfe91259c7a0d3798ebf1688cf86a22c685576def74ce6a2213996c6b7",
+      "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Test Suite",
