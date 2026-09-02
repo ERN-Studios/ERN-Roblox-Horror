@@ -986,7 +986,11 @@ end
 function TestSuite.CaptureLifecycleState(): {[string]: any}
 	local scripts = {}
 	for _, name in ipairs(LEVEL_ONE_RUNTIME_SCRIPTS) do
-		local object = ServerScriptService:FindFirstChild(name)
+		-- Recursive since Level 1's scripts moved into a folder on 2026-09-02.
+		-- This suite deliberately keeps its own list and its own lookup rather
+		-- than borrowing the adapters' -- a check that reuses the code it is
+		-- checking only proves the code agrees with itself.
+		local object = ServerScriptService:FindFirstChild(name, true)
 		if object and object:IsA("BaseScript") then scripts[object] = object.Enabled end
 	end
 	return {

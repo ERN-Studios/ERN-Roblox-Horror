@@ -100,7 +100,12 @@ end
 
 local function setScriptsEnabled(names, enabled)
 	for _, name in ipairs(names) do
-		local object = ServerScriptService:FindFirstChild(name)
+		-- Recursive: Level 1's runtime scripts moved into a "Level 1 Systems"
+		-- folder on 2026-09-02, and a non-recursive lookup would silently return
+		-- nil there -- which is exactly how every Level 2/3 round once came to
+		-- start Level 1's fuse puzzle server-side. Recursive works from either
+		-- layout, so this cannot break again on the next reorganisation.
+		local object = ServerScriptService:FindFirstChild(name, true)
 		if object and object:IsA("BaseScript") then
 			object.Enabled = enabled
 		end
@@ -120,7 +125,12 @@ end
 local function isolateLevelOneRuntime()
 	levelOneScriptStates = {}
 	for _, name in ipairs(LEVEL_ONE_RUNTIME_SCRIPTS) do
-		local object = ServerScriptService:FindFirstChild(name)
+		-- Recursive: Level 1's runtime scripts moved into a "Level 1 Systems"
+		-- folder on 2026-09-02, and a non-recursive lookup would silently return
+		-- nil there -- which is exactly how every Level 2/3 round once came to
+		-- start Level 1's fuse puzzle server-side. Recursive works from either
+		-- layout, so this cannot break again on the next reorganisation.
+		local object = ServerScriptService:FindFirstChild(name, true)
 		if object and object:IsA("BaseScript") then
 			levelOneScriptStates[object] = object.Enabled
 			object.Enabled = false

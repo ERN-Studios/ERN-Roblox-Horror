@@ -79,8 +79,8 @@
       "studioPath": "ServerScriptService.GameManager",
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 108635,
-      "sha256": "baab0793b80d496e7b69289f9794ef8c52cb28a1120ab4fcebfe76ec29c21f79",
+      "bytes": 109007,
+      "sha256": "334bdfc8e028d16367feb524ad628581e877b486cdae38deea0e751d2e476fb2",
       "status": "synced"
     },
     {
@@ -410,8 +410,8 @@
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Round Adapter",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua",
-      "bytes": 16553,
-      "sha256": "b4aeb822a4eb6b9a46b71575b212c9f95e58b52efc681c422431d3ddb66a6a19",
+      "bytes": 17295,
+      "sha256": "6182f5db183bb9f787f4549b460da6c939359a1f243604a8614eaaedab436474",
       "status": "synced"
     },
     {
@@ -506,16 +506,16 @@
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Round Adapter.ModuleScript.lua",
-      "bytes": 29809,
-      "sha256": "6b2517cfe91259c7a0d3798ebf1688cf86a22c685576def74ce6a2213996c6b7",
+      "bytes": 30551,
+      "sha256": "362cf32d432dd97ca501c3b0925dd7e88fc9323c59ed67dc4db04a25c35b84f5",
       "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Test Suite",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Test Suite.ModuleScript.lua",
-      "bytes": 178823,
-      "sha256": "8593e17b4ab29da634afda7b222a26122ce7dcf1cfc09b968ae65240020a3fa6",
+      "bytes": 179104,
+      "sha256": "1fd96de6a1aaf3ec52345007af519a48cd3a4ef86915c7767e52bf6de30b315f",
       "status": "synced"
     },
     {

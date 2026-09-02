@@ -1138,8 +1138,13 @@ local function cleanupLevelOneWorld()
  -- Re-arm the one-shot generator for Studio/fallback servers. The public game
  -- normally leaves this reserved server after a round, but a failed teleport
  -- must still return to a clean lobby and remain capable of another test.
- local generatorScript = script.Parent:FindFirstChild("MazeGenerator")
- local entityScript = script.Parent:FindFirstChild("EntityAI")
+ -- Recursive: Level 1's runtime scripts moved into a "Level 1 Systems"
+ -- folder on 2026-09-02, and a non-recursive lookup would silently return
+ -- nil there -- which is exactly how every Level 2/3 round once came to
+ -- start Level 1's fuse puzzle server-side. Recursive works from either
+ -- layout, so this cannot break again on the next reorganisation.
+ local generatorScript = script.Parent:FindFirstChild("MazeGenerator", true)
+ local entityScript = script.Parent:FindFirstChild("EntityAI", true)
  if generatorScript and generatorScript:IsA("Script") then generatorScript.Disabled = true end
  if entityScript and entityScript:IsA("Script") then entityScript.Disabled = true end
  task.defer(function()
