@@ -169,16 +169,17 @@ RunService.Heartbeat:Connect(function()
 end)
 
 -- ── tuning ────────────────────────────────────────────────
-local SIGHT_RANGE       = 650   -- effectively unlimited — only walls and the cone stop it
-local SIGHT_RANGE_LIT   = 1100  -- when the player's flashlight is on
+local Master = require(game:GetService("ReplicatedStorage"):WaitForChild("MasterConfiguration"))
+local SIGHT_RANGE       = Master.Effective("L1_EntitySightRange", 650)   -- effectively unlimited — only walls and the cone stop it
+local SIGHT_RANGE_LIT   = Master.Effective("L1_EntitySightRangeLit", 1100)  -- flashlight on
 local SIGHT_ANGLE       = math.rad(135) -- half-angle of the vision cone
-local HEAR_RANGE        = 220
-local SPEED_LURK        = 8
+local HEAR_RANGE        = Master.Effective("L1_EntityHearRange", 220)
+local SPEED_LURK        = Master.Effective("L1_EntityLurkSpeed", 8)
 local SPEED_INVESTIGATE = 8     -- heard a player: normal walk, never a proximity speed-up
-local SPEED_CHASE       = 27.2  -- just faster than a sprinting player (sprint = 26)
+local SPEED_CHASE       = Master.Effective("L1_EntityChaseSpeed", 27.2)  -- sprint is 26
 local SPEED_LOST        = 17    -- alert search pace after LOS is broken
 local SEARCH_TIME       = 12
-local TRACK_TIME        = 5     -- after LOSING sight it still knows your live position this long
+local TRACK_TIME        = Master.Effective("L1_EntityTrackSeconds", 5)     -- keeps your live position this long after losing sight
 local SPOT_HOWL_TIME    = 2.2   -- 66 frames at 30 fps: finish howl before chase
 local SPOT_COOLDOWN     = 7     -- avoids repeated howls on rapid reacquisition
 
@@ -192,7 +193,7 @@ local LUNGE_UP_SPEED    = 42    -- visible arc without Humanoid's default jump i
 local LUNGE_MAX_TIME    = 0.82  -- lets the stronger jump complete before the safety stop
 local LUNGE_RECOVER     = 0.35  -- brief dead stop after it lands (kills the ice-slide)
 local LUNGE_COOLDOWN    = 10    -- min seconds between lunges (from wind-up start)
-local LUNGE_CHANCE      = 0.35  -- rolled once per close-range opportunity
+local LUNGE_CHANCE      = Master.Effective("L1_EntityLungeChance", 0.35)  -- rolled once per close-range opportunity
 
 -- yell: it can't walk onto the pit beams, so it first WALKS TO THE PIT EDGE
 -- nearest you, faces you, winds up, then roars and shoves you off with a STEADY

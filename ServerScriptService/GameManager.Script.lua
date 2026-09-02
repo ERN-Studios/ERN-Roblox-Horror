@@ -80,10 +80,11 @@ if not dropGlowstick then
  dropGlowstick.Parent = remotes
 end
 
-local QUEUE_TIME = 10
+local Master = require(game:GetService("ReplicatedStorage"):WaitForChild("MasterConfiguration"))
+local QUEUE_TIME = Master.Effective("Lobby_QueueSeconds", 10)
 local FAST_QUEUE_TIME = 3
 local MAX_PLAYERS_PER_STATION = 6
-local ELEVATOR_TIME = 19
+local ELEVATOR_TIME = Master.Effective("Lobby_ElevatorSeconds", 19)
 local LOBBY_CENTER = Vector3.new(0, 30, -760)
 
 Players.CharacterAutoLoads = false

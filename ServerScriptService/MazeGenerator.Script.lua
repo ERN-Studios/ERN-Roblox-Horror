@@ -41,15 +41,16 @@ do
 end
 
 -- ── tuning ────────────────────────────────────────────────
-local GRID       = 40      -- maze is GRID x GRID cells
-local CELL       = 24      -- studs per cell (corridor width)
+local Master = require(game:GetService("ReplicatedStorage"):WaitForChild("MasterConfiguration"))
+local GRID       = Master.Effective("L1_Grid", 40)      -- maze is GRID x GRID cells
+local CELL       = Master.Effective("L1_Cell", 24)      -- studs per cell (corridor width)
 local WALL_H     = 14      -- wall/ceiling height
 local WALL_T     = 2       -- wall thickness
 local SEED       = nil     -- set a number (e.g. 1337) for the same maze every run
 
 -- density variation — tuned corridor-first: tight maze by default, with
 -- occasional distinct open rooms instead of everything blending open
-local OPENNESS    = 0.32   -- base wall-removal chance in average areas
+local OPENNESS    = Master.Effective("L1_Openness", 0.32)   -- base wall-removal chance
 local NOISE_SCALE = 6      -- cells per density blob (smaller = smaller open pockets)
 local PLAZA_T     = 0.8    -- density above this = fully open plaza (rarer now)
 local PLAZA_R     = 3      -- radius (cells) of the one GUARANTEED plaza
@@ -57,7 +58,7 @@ local PLAZA_R     = 3      -- radius (cells) of the one GUARANTEED plaza
 -- pitfall ZONES: big multi-cell hole fields. Each zone is one open room
 -- (internal walls removed) filled with a continuous grid of square holes
 -- separated by narrow walkable beams, all over one shared deep shaft.
-local PIT_ZONES      = 2     -- hole fields per level (always at least this many)
+local PIT_ZONES      = Master.Effective("L1_PitZones", 2)     -- hole fields per level
 local PIT_ZONE_CELLS = 6     -- zone size in MAZE CELLS per axis (1 cell = 24 studs).
 -- 6 → 144×144 studs → 6×6 = 36 big holes. Max ~12.
 local PIT_HOLE       = 12    -- hole size in studs

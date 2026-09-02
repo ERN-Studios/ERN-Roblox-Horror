@@ -8,6 +8,7 @@
 -- overlapping doors or producing diagonal corridors.
 
 local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
+local Master = require(game:GetService("ReplicatedStorage"):WaitForChild("MasterConfiguration"))
 
 local LayoutGenerator = {}
 
@@ -55,71 +56,84 @@ local DEFAULTS = {
 	ExitDepth = 52,
 }
 
-local configuredLayout = if type((Configuration :: any).Layout) == "table"
-	then (Configuration :: any).Layout else {}
+-- Resolved on every Generate, not once at module load.
+--
+-- A master-panel override of room size has to show up on the NEXT round
+-- build. Resolved at load it would need a whole server restart instead --
+-- in Studio a stop/start of Play, in production never.
+local function resolveTuning()
+	local configuredLayout = Master.Overlay(
+		if type((Configuration :: any).Layout) == "table"
+			then (Configuration :: any).Layout else {},
+		"L3Layout")
 
-local function integerSetting(name, defaultValue, minimum, maximum)
-	local value = tonumber(configuredLayout[name])
-	if value == nil then value = defaultValue end
-	value = math.floor(value)
-	return math.clamp(value, minimum, maximum)
-end
-
-local function numberSetting(name, defaultValue, minimum, maximum)
-	local value = tonumber(configuredLayout[name])
-	if value == nil then value = defaultValue end
-	return math.clamp(value, minimum, maximum)
-end
-
-local fallbackSeeds = {}
-if type(configuredLayout.FallbackSeeds) == "table" then
-	for _, value in ipairs(configuredLayout.FallbackSeeds) do
-		local numeric = tonumber(value)
-		if numeric then table.insert(fallbackSeeds, math.floor(math.abs(numeric)) % MAX_SEED) end
+	local function integerSetting(name, defaultValue, minimum, maximum)
+		local value = tonumber(configuredLayout[name])
+		if value == nil then value = defaultValue end
+		value = math.floor(value)
+		return math.clamp(value, minimum, maximum)
 	end
-end
-if #fallbackSeeds == 0 then fallbackSeeds = table.clone(DEFAULTS.FallbackSeeds) end
 
-local Tuning = {
-	GenerationAttempts = integerSetting("GenerationAttempts", DEFAULTS.GenerationAttempts, 1, 100),
-	RetryStride = integerSetting("RetryStride", DEFAULTS.RetryStride, 1, MAX_SEED - 1),
-	FallbackSeeds = fallbackSeeds,
-	MinimumRoomWidth = integerSetting("MinimumRoomWidth", DEFAULTS.MinimumRoomWidth, 48, 100),
-	MaximumRoomWidth = integerSetting("MaximumRoomWidth", DEFAULTS.MaximumRoomWidth, 48, 120),
-	MinimumRoomDepth = integerSetting("MinimumRoomDepth", DEFAULTS.MinimumRoomDepth, 40, 90),
-	MaximumRoomDepth = integerSetting("MaximumRoomDepth", DEFAULTS.MaximumRoomDepth, 40, 100),
-	MinimumRoomHeight = integerSetting("MinimumRoomHeight", DEFAULTS.MinimumRoomHeight, 10, 16),
-	MaximumRoomHeight = integerSetting("MaximumRoomHeight", DEFAULTS.MaximumRoomHeight, 10, 18),
-	MinimumInternalGap = integerSetting("MinimumInternalGap", DEFAULTS.MinimumInternalGap, 18, 60),
-	MaximumInternalGap = integerSetting("MaximumInternalGap", DEFAULTS.MaximumInternalGap, 18, 70),
-	MinimumGatewayGap = integerSetting("MinimumGatewayGap", DEFAULTS.MinimumGatewayGap, 24, 80),
-	MaximumGatewayGap = integerSetting("MaximumGatewayGap", DEFAULTS.MaximumGatewayGap, 24, 90),
-	MinimumCorridorLength = numberSetting("MinimumCorridorLength", DEFAULTS.MinimumCorridorLength, 12, 40),
-	ExitCorridorLength = numberSetting("ExitCorridorLength", DEFAULTS.ExitCorridorLength, 120, 720),
-	RowHalfSpacing = integerSetting("RowHalfSpacing", DEFAULTS.RowHalfSpacing, 48, 100),
-	ExtraLinksPerDistrict = integerSetting("ExtraLinksPerDistrict", DEFAULTS.ExtraLinksPerDistrict, 0, 3),
-	MinimumModuleSeparation = numberSetting("MinimumModuleSeparation", DEFAULTS.MinimumModuleSeparation, 60, 220),
-	ArrivalWidth = integerSetting("ArrivalWidth", DEFAULTS.ArrivalWidth, 52, 90),
-	ArrivalDepth = integerSetting("ArrivalDepth", DEFAULTS.ArrivalDepth, 44, 80),
-	ExitWidth = integerSetting("ExitWidth", DEFAULTS.ExitWidth, 48, 80),
-	ExitDepth = integerSetting("ExitDepth", DEFAULTS.ExitDepth, 44, 76),
-}
+	local function numberSetting(name, defaultValue, minimum, maximum)
+		local value = tonumber(configuredLayout[name])
+		if value == nil then value = defaultValue end
+		return math.clamp(value, minimum, maximum)
+	end
 
-if Tuning.MinimumRoomWidth > Tuning.MaximumRoomWidth then
-	Tuning.MinimumRoomWidth, Tuning.MaximumRoomWidth = Tuning.MaximumRoomWidth, Tuning.MinimumRoomWidth
+	local fallbackSeeds = {}
+	if type(configuredLayout.FallbackSeeds) == "table" then
+		for _, value in ipairs(configuredLayout.FallbackSeeds) do
+			local numeric = tonumber(value)
+			if numeric then table.insert(fallbackSeeds, math.floor(math.abs(numeric)) % MAX_SEED) end
+		end
+	end
+	if #fallbackSeeds == 0 then fallbackSeeds = table.clone(DEFAULTS.FallbackSeeds) end
+
+	local Tuning = {
+		GenerationAttempts = integerSetting("GenerationAttempts", DEFAULTS.GenerationAttempts, 1, 100),
+		RetryStride = integerSetting("RetryStride", DEFAULTS.RetryStride, 1, MAX_SEED - 1),
+		FallbackSeeds = fallbackSeeds,
+		MinimumRoomWidth = integerSetting("MinimumRoomWidth", DEFAULTS.MinimumRoomWidth, 48, 100),
+		MaximumRoomWidth = integerSetting("MaximumRoomWidth", DEFAULTS.MaximumRoomWidth, 48, 120),
+		MinimumRoomDepth = integerSetting("MinimumRoomDepth", DEFAULTS.MinimumRoomDepth, 40, 90),
+		MaximumRoomDepth = integerSetting("MaximumRoomDepth", DEFAULTS.MaximumRoomDepth, 40, 100),
+		MinimumRoomHeight = integerSetting("MinimumRoomHeight", DEFAULTS.MinimumRoomHeight, 10, 16),
+		MaximumRoomHeight = integerSetting("MaximumRoomHeight", DEFAULTS.MaximumRoomHeight, 10, 18),
+		MinimumInternalGap = integerSetting("MinimumInternalGap", DEFAULTS.MinimumInternalGap, 18, 60),
+		MaximumInternalGap = integerSetting("MaximumInternalGap", DEFAULTS.MaximumInternalGap, 18, 70),
+		MinimumGatewayGap = integerSetting("MinimumGatewayGap", DEFAULTS.MinimumGatewayGap, 24, 80),
+		MaximumGatewayGap = integerSetting("MaximumGatewayGap", DEFAULTS.MaximumGatewayGap, 24, 90),
+		MinimumCorridorLength = numberSetting("MinimumCorridorLength", DEFAULTS.MinimumCorridorLength, 12, 40),
+		ExitCorridorLength = numberSetting("ExitCorridorLength", DEFAULTS.ExitCorridorLength, 120, 720),
+		RowHalfSpacing = integerSetting("RowHalfSpacing", DEFAULTS.RowHalfSpacing, 48, 100),
+		ExtraLinksPerDistrict = integerSetting("ExtraLinksPerDistrict", DEFAULTS.ExtraLinksPerDistrict, 0, 3),
+		MinimumModuleSeparation = numberSetting("MinimumModuleSeparation", DEFAULTS.MinimumModuleSeparation, 60, 220),
+		ArrivalWidth = integerSetting("ArrivalWidth", DEFAULTS.ArrivalWidth, 52, 90),
+		ArrivalDepth = integerSetting("ArrivalDepth", DEFAULTS.ArrivalDepth, 44, 80),
+		ExitWidth = integerSetting("ExitWidth", DEFAULTS.ExitWidth, 48, 80),
+		ExitDepth = integerSetting("ExitDepth", DEFAULTS.ExitDepth, 44, 76),
+	}
+
+	if Tuning.MinimumRoomWidth > Tuning.MaximumRoomWidth then
+		Tuning.MinimumRoomWidth, Tuning.MaximumRoomWidth = Tuning.MaximumRoomWidth, Tuning.MinimumRoomWidth
+	end
+	if Tuning.MinimumRoomDepth > Tuning.MaximumRoomDepth then
+		Tuning.MinimumRoomDepth, Tuning.MaximumRoomDepth = Tuning.MaximumRoomDepth, Tuning.MinimumRoomDepth
+	end
+	if Tuning.MinimumRoomHeight > Tuning.MaximumRoomHeight then
+		Tuning.MinimumRoomHeight, Tuning.MaximumRoomHeight = Tuning.MaximumRoomHeight, Tuning.MinimumRoomHeight
+	end
+	if Tuning.MinimumInternalGap > Tuning.MaximumInternalGap then
+		Tuning.MinimumInternalGap, Tuning.MaximumInternalGap = Tuning.MaximumInternalGap, Tuning.MinimumInternalGap
+	end
+	if Tuning.MinimumGatewayGap > Tuning.MaximumGatewayGap then
+		Tuning.MinimumGatewayGap, Tuning.MaximumGatewayGap = Tuning.MaximumGatewayGap, Tuning.MinimumGatewayGap
+	end
+
+	return Tuning
 end
-if Tuning.MinimumRoomDepth > Tuning.MaximumRoomDepth then
-	Tuning.MinimumRoomDepth, Tuning.MaximumRoomDepth = Tuning.MaximumRoomDepth, Tuning.MinimumRoomDepth
-end
-if Tuning.MinimumRoomHeight > Tuning.MaximumRoomHeight then
-	Tuning.MinimumRoomHeight, Tuning.MaximumRoomHeight = Tuning.MaximumRoomHeight, Tuning.MinimumRoomHeight
-end
-if Tuning.MinimumInternalGap > Tuning.MaximumInternalGap then
-	Tuning.MinimumInternalGap, Tuning.MaximumInternalGap = Tuning.MaximumInternalGap, Tuning.MinimumInternalGap
-end
-if Tuning.MinimumGatewayGap > Tuning.MaximumGatewayGap then
-	Tuning.MinimumGatewayGap, Tuning.MaximumGatewayGap = Tuning.MaximumGatewayGap, Tuning.MinimumGatewayGap
-end
+
+local Tuning = resolveTuning()
 
 local DISTRICT_DEFINITIONS = {
 	{
@@ -905,6 +919,7 @@ function LayoutGenerator.Validate(layout)
 end
 
 function LayoutGenerator.Generate(requestedSeed)
+	Tuning = resolveTuning()
 	local normalizedRequested = normalizeSeed(requestedSeed)
 	local failures = {}
 	for attempt = 1, Tuning.GenerationAttempts do

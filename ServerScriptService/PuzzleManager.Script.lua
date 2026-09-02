@@ -29,11 +29,12 @@ local status = RS:WaitForChild("Remotes"):WaitForChild("PuzzleStatus")
 local NoiseRegistry = require(script.Parent:WaitForChild("NoiseRegistry"))
 
 -- ── tuning ────────────────────────────────────────────────
+local Master = require(game:GetService("ReplicatedStorage"):WaitForChild("MasterConfiguration"))
 local FUSES_PER_BOX = 1      -- fuses each box needs
-local SPAWN_MULT    = 2      -- fuses spawned = needed × this
-local LEVER_WINDOW  = 10     -- seconds all levers must be on together
+local SPAWN_MULT    = Master.Effective("L1_FuseSpawnMultiplier", 2)  -- fuses spawned = needed x this
+local LEVER_WINDOW  = Master.Effective("L1_LeverWindowSeconds", 10)  -- seconds all levers must be on together
 local FLICK_PER_FUSE = 0.6   -- FlickerBoost added per fuse inserted
-local SPEED_PER_FUSE = 0.06  -- EntitySpeedMul added per fuse inserted
+local SPEED_PER_FUSE = Master.Effective("L1_SpeedPerFuse", 0.06)  -- EntitySpeedMul added per fuse
 local END_SPEED_MUL  = 1.3   -- entity speed once the exit opens (finale boost)
 local ENTITY_AREA_CELLS = 5  -- entity appears ~this many cells from the box
 local EDGE_BAND      = 3      -- levers/exit spawn within this many cells of an edge

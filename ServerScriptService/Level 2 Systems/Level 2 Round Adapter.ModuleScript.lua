@@ -15,6 +15,7 @@ local ObjectiveController = require(script.Parent:WaitForChild("Level 2 Objectiv
 local PoolFoamController = require(script.Parent:WaitForChild("Level 2 Pool Foam Controller"))
 local PoolFoamConfiguration = require(script.Parent:WaitForChild("Level 2 Pool Foam Configuration"))
 local PoolSlideController = require(script.Parent:WaitForChild("Level 2 Pool Slide Controller"))
+local Master = require(ReplicatedStorage:WaitForChild("MasterConfiguration"))
 
 local Adapter = {}
 local activeManifest
@@ -289,6 +290,12 @@ end
 function Adapter.Build()
 	Adapter.Cleanup()
 	generation += 1
+
+	-- Developer overrides land in the configuration before anything reads it.
+	-- Level 2 Configuration is the one config table that is NOT frozen, so this
+	-- writes in place; ApplyInto restores the authored value when an override
+	-- is cleared rather than leaving the last one stuck.
+	Master.ApplyInto(Configuration, "L2")
 
 	local state = getState()
 	-- The workspace attribute is a MANUAL testing override only. Never

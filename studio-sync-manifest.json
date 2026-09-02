@@ -7,9 +7,9 @@
     "id": "7ccaf8b2-9e54-4709-8caa-91e1bce8b5b0"
   },
   "counts": {
-    "scripts": 107,
+    "scripts": 108,
     "remoteEvents": 13,
-    "total": 120,
+    "total": 121,
     "studioTrailingNewline": 5
   },
   "extraMirroredFilesNotInStudio": [
@@ -55,8 +55,8 @@
       "studioPath": "ServerScriptService.EntityAI",
       "className": "Script",
       "file": "ServerScriptService/EntityAI.Script.lua",
-      "bytes": 54045,
-      "sha256": "b405631f0111c2d58674b5575f0187c1392cadfbd0403e9efa4e317b2611f1fc",
+      "bytes": 54366,
+      "sha256": "c4f7d9ac895271bc27775057253e8edc252ffb639e4efa3edd8116c5b2d81451",
       "status": "synced"
     },
     {
@@ -71,24 +71,24 @@
       "studioPath": "ServerScriptService.MazeGenerator",
       "className": "Script",
       "file": "ServerScriptService/MazeGenerator.Script.lua",
-      "bytes": 81096,
-      "sha256": "551ae38f048398dda957a905954151ec99c8b7979e9dbdc5798e3bfdf430649c",
+      "bytes": 81272,
+      "sha256": "ec33085544643d7906be8b3084cbc0f5195a13ae65176cdce226fdaff756778e",
       "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.GameManager",
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 107008,
-      "sha256": "3c05633d1bfb62cebd6cdc197b2bfc1246f94c46c0c5b43039df9f589c6aaf32",
+      "bytes": 107188,
+      "sha256": "cc7ec6dfb270f27598bc1c22a7c5acd73796e4e972432140c56983506411bd60",
       "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.PuzzleManager",
       "className": "Script",
       "file": "ServerScriptService/PuzzleManager.Script.lua",
-      "bytes": 83167,
-      "sha256": "8f5ffbc77de163deed9d8af6d8907e63de83ee9e4cb236003c1f6c068d2470e4",
+      "bytes": 83371,
+      "sha256": "05b6fe53f3f524d83ff85cfd0ef11455ad048761f55da704376099e3b71fca95",
       "status": "synced"
     },
     {
@@ -410,8 +410,8 @@
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Round Adapter",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua",
-      "bytes": 16113,
-      "sha256": "a7e67c419f005bea38e9556e6de8c1359456f84522bae9756c598b1d71ff771c",
+      "bytes": 16516,
+      "sha256": "01926bbc0e4badfa3d566a84d8506c032567e1d16f0833730eda1782087f5aa7",
       "status": "synced"
     },
     {
@@ -715,8 +715,8 @@
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Mall Manager AI Controller.ModuleScript.lua",
-      "bytes": 152720,
-      "sha256": "6b4663ac391bf557ec27670cadc820acc2cb6edb384d802554c0b16cf29382d3",
+      "bytes": 153421,
+      "sha256": "480fa798d289cfb80a62d544389b2de14cc6e84b8467c60f14a287b552489bfb",
       "status": "synced"
     },
     {
@@ -732,8 +732,8 @@
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Layout Generator",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Layout Generator.ModuleScript.lua",
-      "bytes": 32467,
-      "sha256": "7d46b3cd1bdeecb5b4f81246b6c1c0dc3072ac609138fbcaa985d415a8136afe",
+      "bytes": 33030,
+      "sha256": "4eab932c97da159924445162125ed80864bd62df7a185d75d61e9354a08a2f77",
       "status": "synced"
     },
     {
@@ -982,6 +982,14 @@
       "file": "ServerStorage/Archive/Level2RetiredSlidemouth_20260831/Level 2 Slidemouth Client.LocalScript.lua",
       "bytes": 9372,
       "sha256": "1f6f81df549b4cecfaaf83490c7f61dc0a2182f6cf1208ac2af4010e745f762d",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ReplicatedStorage.MasterConfiguration",
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/MasterConfiguration.ModuleScript.lua",
+      "bytes": 21208,
+      "sha256": "d2b426761029e4f757a8633ee53f65123f9726364a5f11da2ba176ee392908d6",
       "status": "synced"
     }
   ]

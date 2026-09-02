@@ -17,7 +17,20 @@ local ServerStorage = game:GetService("ServerStorage")
 
 local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
 local HidingController = require(script.Parent:WaitForChild("Level 3 Hiding Controller"))
-local Tuning = Configuration.MallManager
+local Master = require(game:GetService("ReplicatedStorage"):WaitForChild("MasterConfiguration"))
+
+-- Re-resolved on every Start so a master-panel change reaches the next hunt
+-- rather than waiting for a server restart. Configuration.MallManager and both
+-- of its profiles are frozen on purpose, so this overlays COPIES; the frozen
+-- originals are never written to and stay the record of what was authored.
+local function resolveTuning()
+	local merged = table.clone(Configuration.MallManager)
+	merged.Normal = Master.Overlay(Configuration.MallManager.Normal, "L3Manager")
+	merged.Blackout = Master.Overlay(Configuration.MallManager.Blackout, "L3ManagerBlackout")
+	return merged
+end
+
+local Tuning = resolveTuning()
 
 local Controller = {}
 local activeSession: any = nil
@@ -2935,6 +2948,7 @@ end
 
 function Controller.Start(manifest: any, generation: number)
 	Controller.Stop()
+	Tuning = resolveTuning()
 	assert(type(manifest) == "table" and manifest.World and manifest.World:IsA("Model")
 		and manifest.World.Parent == workspace, "Mall Manager requires a live Level 3 manifest")
 	assert(manifest.World:GetAttribute("Level3_Generation") == generation,
