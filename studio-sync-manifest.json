@@ -7,9 +7,9 @@
     "id": "7ccaf8b2-9e54-4709-8caa-91e1bce8b5b0"
   },
   "counts": {
-    "scripts": 108,
-    "remoteEvents": 13,
-    "total": 121,
+    "scripts": 109,
+    "remoteEvents": 14,
+    "total": 123,
     "studioTrailingNewline": 5
   },
   "extraMirroredFilesNotInStudio": [
@@ -79,8 +79,8 @@
       "studioPath": "ServerScriptService.GameManager",
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 107188,
-      "sha256": "cc7ec6dfb270f27598bc1c22a7c5acd73796e4e972432140c56983506411bd60",
+      "bytes": 108635,
+      "sha256": "baab0793b80d496e7b69289f9794ef8c52cb28a1120ab4fcebfe76ec29c21f79",
       "status": "synced"
     },
     {
@@ -675,8 +675,8 @@
       "studioPath": "ReplicatedStorage.Remotes.DevControl",
       "className": "RemoteEvent",
       "file": "ReplicatedStorage/Remotes/DevControl.RemoteEvent.txt",
-      "bytes": 501,
-      "sha256": "7d670338de017f22083de64b847b9b8c1f2c63a11dc93c8f8ffc60eab2a445ad",
+      "bytes": 840,
+      "sha256": "dbd7924fe5a7e22f42f21b8b78844f8ab8074feb0115362824f76e3741ab8aae",
       "status": "synced"
     },
     {
@@ -990,6 +990,22 @@
       "file": "ReplicatedStorage/MasterConfiguration.ModuleScript.lua",
       "bytes": 21208,
       "sha256": "d2b426761029e4f757a8633ee53f65123f9726364a5f11da2ba176ee392908d6",
+      "status": "synced"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.MasterTuningClient",
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/MasterTuningClient.LocalScript.lua",
+      "bytes": 10611,
+      "sha256": "d5f8e12230f1bad28563386e4d2d5e33c62997c39e8d05a582e1bb59c78f327a",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ReplicatedStorage.Remotes.DevTuning",
+      "className": "RemoteEvent",
+      "file": "ReplicatedStorage/Remotes/DevTuning.RemoteEvent.txt",
+      "bytes": 917,
+      "sha256": "cf0ed6289143bbf873ebfc26307e6e62d7db82c7df12ece9b39d240a6b9d6efd",
       "status": "synced"
     }
   ]

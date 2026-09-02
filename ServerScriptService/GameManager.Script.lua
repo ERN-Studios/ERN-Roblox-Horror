@@ -218,6 +218,35 @@ devControl.OnServerEvent:Connect(function(player, command, enabled)
  end
 end)
 
+-- Numeric developer tuning, on its OWN remote.
+--
+-- DevControl carries `(command: string, enabled: boolean)` and refuses anything
+-- else. Seven commands rest on that check; widening it to also carry numbers
+-- would loosen the gate for all of them to serve one new caller. A separate
+-- remote keeps its own contract narrow instead, and still shares DevAccess and
+-- the same rate bucket.
+--
+-- The client is never the authority on what is a legal value: Master.SetOverride
+-- runs Master.Coerce again here, against the registry's own range.
+local devTuning = remotes:WaitForChild("DevTuning")
+devTuning.OnServerEvent:Connect(function(player, key, value)
+ if not DevAccess.IsAllowed(player) then return end
+ if type(key) ~= "string" then return end
+ if value ~= nil and type(value) ~= "number" then return end
+ if not allowDevControl(player) then return end
+ local applied, problem = Master.SetOverride(key, value)
+ -- The answer rides back on the player rather than over the remote: the panel
+ -- rebuilds itself from the replicated attributes anyway, so a reply channel
+ -- would be a second source of truth for the same fact.
+ player:SetAttribute("DevTuningStatus", if applied then "OK" else tostring(problem))
+ player:SetAttribute("DevTuningSerial",
+  (tonumber(player:GetAttribute("DevTuningSerial")) or 0) + 1)
+ if applied then
+  print(string.format("[GameManager] tuning %s = %s by %s",
+   key, tostring(value), player.Name))
+ end
+end)
+
 local inRound = {}
 local roundBusy = false
 local worldReady = false

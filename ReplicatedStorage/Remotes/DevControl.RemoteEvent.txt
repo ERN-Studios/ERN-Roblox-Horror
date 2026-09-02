@@ -1,12 +1,18 @@
-NOT a script — this is an object you insert in Studio.
+NOT a script -- this is an object you insert in Studio.
 
 Right-click the "Remotes" folder (under ReplicatedStorage)
-→ Insert Object → RemoteEvent → rename to: DevControl
+-> Insert Object -> RemoteEvent -> rename to: DevControl
+Name is case-sensitive -- must be exactly "DevControl".
 
-Used by: DevCheats (client) → EntityAI (server)
-Purpose: the P dev-cheat pauses/unpauses the Entity.
-Name is case-sensitive — must be exactly "DevControl".
+Carries (command: string, enabled: boolean) -- booleans only, by design.
+  DevCheats (client) -> GameManager (server)
 
-TESTING ONLY — this is part of the DevCheats system. Remove both
-(this RemoteEvent + DevCheats) before publishing, or the pause can
-be triggered by any client.
+Commands: fastQueue, pauseEntity, immunePush, noclip, level2PumpPair,
+level3PreBlackout. Numeric tuning goes over DevTuning instead, so this contract
+can stay narrow.
+
+Developer-gated, not testing-only. The handler in GameManager checks
+DevAccess.IsAllowed by immutable UserId, type-checks the payload, and rate-limits
+to 12 calls per second per player. It ships with the game: an earlier version of
+this note said to remove it before publishing, which is no longer true and was
+never done.

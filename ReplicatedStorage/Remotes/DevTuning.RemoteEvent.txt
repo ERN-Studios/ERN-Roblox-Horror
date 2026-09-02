@@ -1,0 +1,18 @@
+NOT a script -- this is an object you insert in Studio.
+
+Right-click the "Remotes" folder (under ReplicatedStorage)
+-> Insert Object -> RemoteEvent -> rename to: DevTuning
+Name is case-sensitive -- must be exactly "DevTuning".
+
+Carries (key: string, value: number?) for the master tuning panel:
+  MasterTuningClient (client) -> GameManager (server) -> MasterConfiguration
+
+Deliberately NOT part of DevControl. That remote carries
+(command: string, enabled: boolean) and refuses anything else; seven commands
+rest on that check, and widening it to also carry numbers would loosen the gate
+for all of them to serve one new caller.
+
+Developer-gated, not testing-only: the server handler checks DevAccess.IsAllowed
+by immutable UserId, shares DevControl's 12-per-second rate bucket, and re-clamps
+every value against the registry through Master.Coerce. A client that fires this
+without being whitelisted changes nothing.
