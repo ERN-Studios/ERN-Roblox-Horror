@@ -14,7 +14,6 @@ local WorldBuilder = require(script.Parent:WaitForChild("Level 2 World Builder")
 local ObjectiveController = require(script.Parent:WaitForChild("Level 2 Objective Controller"))
 local PoolFoamController = require(script.Parent:WaitForChild("Level 2 Pool Foam Controller"))
 local PoolFoamConfiguration = require(script.Parent:WaitForChild("Level 2 Pool Foam Configuration"))
-local PoolSlideController = require(script.Parent:WaitForChild("Level 2 Pool Slide Controller"))
 local Master = require(ReplicatedStorage:WaitForChild("MasterConfiguration"))
 
 local Adapter = {}
@@ -237,7 +236,6 @@ function Adapter.Cleanup()
 		or ServerStorage:FindFirstChild("Level 2 Stored Level 1 Entity") ~= nil
 		or ServerStorage:FindFirstChild(STORED_LOBBY_NAME) ~= nil
 	)
-	PoolSlideController.Stop()
 	PoolFoamController.Stop()
 	ObjectiveController.Stop()
 	-- Pool Foam pause is session-local; do not inherit a Studio debug pause.
@@ -374,10 +372,11 @@ function Adapter.Build()
 		state:SetAttribute("Level2_HallCount", #layout.Halls)
 
 		ObjectiveController.Start(manifest, generation)
-		local poolSlideSession, poolSlideError = PoolSlideController.Start(manifest, generation)
-		if not poolSlideSession then
-			error("[Level 2] Pool Slide encounter did not start: " .. tostring(poolSlideError))
-		end
+		-- The Pool Slide encounter was removed on 2026-09-02. It never once
+		-- succeeded in spawning on a generated map -- every attempt failed the
+		-- body-route certification and retried forever, costing 78% of the frame
+		-- budget (13 FPS, measured). Pool Foam is Level 2's only hostile now.
+		-- The retired code is in ServerStorage.Archive.Level2RetiredPoolSlide_20260902.
 		local poolFoamSession, poolFoamError = PoolFoamController.Start(manifest, generation)
 		if not poolFoamSession then
 			local message = "[Level 2] Pool Foam encounter did not start: " .. tostring(poolFoamError)

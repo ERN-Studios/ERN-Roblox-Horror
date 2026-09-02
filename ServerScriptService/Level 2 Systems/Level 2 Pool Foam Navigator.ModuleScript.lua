@@ -407,7 +407,11 @@ function Navigator.new(model, manifest, tuning, options)
 			WaypointArrivalDistance = readNumber(tuning, "WaypointArrivalDistance", DEFAULTS.WaypointArrivalDistance, 0.2, 8),
 			RepathDistance = readNumber(tuning, "RepathDistance", DEFAULTS.RepathDistance, 0.5, 50),
 			RepathInterval = readNumber(tuning, "RepathInterval", DEFAULTS.RepathInterval, 0.1, 10),
-			-- Opt-in for the Pool Slide. Other encounters keep their tested policy.
+			-- Opt-in route policy. The Pool Slide was its only user and was removed
+			-- on 2026-09-02, so this is now always false and every StableRoutes
+			-- branch below takes its else path -- which is Pool Foam's own tested
+			-- behaviour. Left in place deliberately: removing the branches is a
+			-- large diff through tuned navigation for no runtime gain.
 			StableRoutes = tuning.StableRoutes == true,
 			PathRequestTimeout = readNumber(tuning, "PathRequestTimeout", 8, 2, 30),
 			FootClearance = readNumber(tuning, "FootClearance", DEFAULTS.FootClearance, 0, 3),

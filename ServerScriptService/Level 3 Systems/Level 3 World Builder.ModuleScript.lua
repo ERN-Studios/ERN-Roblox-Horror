@@ -2028,7 +2028,6 @@ local function makeArrivalElevator(parent: Instance, room: {[string]: any}): (Mo
 		Color3.new(), Enum.Material.SmoothPlastic, 1)
 	spawn.CanCollide = true
 	spawn:SetAttribute("Level3_CompatibilityMarker", true)
-	spawn:SetAttribute("Level3_FacesAwayFromPoolSlide", true)
 	spawn.Parent = workspace
 	local mazeStart = part(parent, "MazeStart", spawn.CFrame, Vector3.new(2, .3, 2),
 		Color3.new(), Enum.Material.SmoothPlastic, 1)

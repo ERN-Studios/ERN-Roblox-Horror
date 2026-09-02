@@ -20,10 +20,11 @@ local ROW_HEIGHT = 24
 local HEADER_HEIGHT = 26
 
 local toolbar = plugin:CreateToolbar("MongoTV")
-local button = toolbar:CreateButton(
-	"Master Tuning",
-	"Justér niveaustørrelser, entiteter og timings uden at starte spillet",
-	"rbxasset://textures/StudioSharedUI/settings@2x.png")
+-- No icon: the rbxasset:// paths for Studio's own icons move between versions,
+-- and a missing one logs "Unable to load plugin icon" on every Studio start
+-- without telling you which plugin did it. A text button cannot fail.
+local button = toolbar:CreateButton("Master Tuning",
+	"Justér niveaustørrelser, entiteter og timings uden at starte spillet", "")
 
 local widget = plugin:CreateDockWidgetPluginGui(
 	WIDGET_ID,
