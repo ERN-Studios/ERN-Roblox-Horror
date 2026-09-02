@@ -371,10 +371,11 @@ comparison from a fresh fingerprint of the live place rather than trusting the
 manifest it is checking. What ships is what is in Studio; the repo is the
 reviewable copy of it, not a write-only mirror. Folders mirror the Studio
 Explorer 1:1, and `studio-sync-manifest.json` records the canonical sha256 of
-every mirrored file. The current manifest contains **134 scripts and 13
-RemoteEvents**. Its `studioTrailingNewline` count is transport-derived and can
-change after an exact landing, so the manifest's live `counts` field — not a
-number copied into this README — is authoritative.
+every mirrored file. Its `counts` field — not a number copied into this
+README — is authoritative for how many scripts and RemoteEvents the place
+holds, and `studioTrailingNewline` is transport-derived and can change after an
+exact landing. A count written into prose here goes stale the first time a
+script is added, and has done so repeatedly.
 
 ```
 ServerScriptService/
@@ -486,8 +487,8 @@ Everything below drives **live Roblox Studio and Blender** over MCP:
   exact / permitted-newline / drift / missing / extra. It deliberately does
   **not** reuse the manifest's sha256: a check that reads the record it is
   checking only proves the record is self-consistent.
-- **Compile check.** `tools/studio_compile_probe.luau` compiles all 134 scripts
-  without running any of them, by wrapping each source as
+- **Compile check.** `tools/studio_compile_probe.luau` compiles every script in
+  the place without running any of them, by wrapping each source as
   `return function() ... end` and `require`ing the wrapper — the body is
   compiled, and the function is never called.
 

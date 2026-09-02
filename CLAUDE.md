@@ -112,10 +112,19 @@ Five things to know:
 
 ## Current state (2026-09-02)
 
-`main` is level with `origin/main`. The place holds **91 scripts + 14
-RemoteEvents**; the manifest has no pending entries. Verified 2026-09-02:
-`studio_compile_probe.luau` at 91/91, and repo and Studio agreeing on all 91
-script paths with an identical djb2 (`61ddeaf6`).
+`main` is level with `origin/main` and the manifest has no pending entries.
+**Do not copy the script count into prose** — it has been wrong here three
+times (114, then 134, then 91, now 101). `studio-sync-manifest.json`'s `counts`
+field is the only place it is true; read it there.
+
+Verified 2026-09-02 after the round-start fixes: `studio_compile_probe.luau`
+compiles every script in the place, and `pull_source_from_studio.py --audit`
+reports 0 drift with every manifest entry `synced`.
+
+**Studio is edited from more than this session.** A Codex session changed 12
+scripts in the place on 2026-09-02 that the repo knew nothing about; its own
+backups sit in the ServerStorage root as `CodexBackup_20260902_*`. Run the
+audit before you edit, not just before you commit.
 
 **Level 2 has exactly one hostile: Pool Foam.** Two others came and went. The
 Slidemouth was retired on 2026-08-31 in favour of the Pool Slide; the Pool Slide
