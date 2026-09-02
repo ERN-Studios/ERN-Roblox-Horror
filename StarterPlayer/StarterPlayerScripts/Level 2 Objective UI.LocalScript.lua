@@ -22,8 +22,10 @@ gui.Parent = player:WaitForChild("PlayerGui")
 
 local function syncDispatchSuppression()
 	gui.Enabled = player:GetAttribute("ZyntraDispatchClientActive") ~= true
+		and not UIDevice.ScreenOwningModalOpen()
 end
 player:GetAttributeChangedSignal("ZyntraDispatchClientActive"):Connect(syncDispatchSuppression)
+UIDevice.OnScreenOwningModalChanged(syncDispatchSuppression)
 syncDispatchSuppression()
 
 -- Desktop uses the lower-right corner. Touch-only devices keep the original
@@ -40,42 +42,47 @@ panel.Parent = gui
 -- This file already had the correct three-way form-factor test; it just never
 -- re-ran it. Placement now comes from the shared helper and refreshes whenever
 -- the viewport, inset or form factor changes.
+-- Declared BEFORE the placement function that writes it: a UISizeConstraint
+-- states the same numbers the placement chose, so it cannot clamp the panel to
+-- a size nothing was measured against.
+local panelSize = Instance.new("UISizeConstraint")
+panelSize.MinSize = Vector2.new(150, 72)
+panelSize.MaxSize = Vector2.new(236, 86)
+panelSize.Parent = panel
+
+-- C_OBJECTIVES_UPPER_RIGHT_20260830 -- WHAT SHIPPED BROKEN.
+-- On a landscape handheld this panel was CENTRED IN THE CORRIDOR between the
+-- two movement zones and anchored 40px off the bottom -- i.e. bottom-centre,
+-- directly between the player's thumbs -- and in portrait it sat at the bottom
+-- of the top band. Neither is the upper right, and neither agreed with Level 1
+-- or Level 3, which had their own two different answers.
+--
+-- All three now share UIDevice.TopRightPanel: top of the TRUE safe area (past
+-- the topbar AND past a landscape sensor housing), right-aligned to the
+-- highest movement-safe right edge, and given back the height that actually
+-- fits. Desktop keeps its authored lower-right composition unchanged.
 local function updatePanelPlacement()
 	local layout = UIDevice.Layout()
 	if layout.IsTouch then
-		-- Top of the safe band, not 34px into it: the Level 2 alert panel owns
-		-- the strip below (its narrow layout starts at y=158) and the two used to
-		-- overlap by 20px whenever an alert was up.
-		-- The top band belongs to the Level 2 alert banner, which on a landscape
-		-- phone fills the whole 65px that is clear of the movement controls. The
-		-- objective panel instead takes the lane BETWEEN the two movement zones,
-		-- stacked above the stamina bar, where it is clear of both at any height.
-		local corridor = layout.Corridor
-		if corridor.Width >= 150 then
-			panel.AnchorPoint = Vector2.new(0.5, 1)
-			panel.Size = UDim2.new(0, math.min(236, corridor.Width), 0, 78)
-			panel.Position = UDim2.new(0, (corridor.Left + corridor.Right) * .5,
-				1, -UIDevice.BottomOffsetFor(gui, layout.Height - 40))
-		else
-			-- Portrait: the corridor is too narrow, so use the safe band. The
-			-- Level 2 alert banner takes the TOP of that band, so the objective
-			-- panel takes the bottom of it; they used to be stacked at the same
-			-- y and overlapped whenever an announcement was on screen.
-			panel.AnchorPoint = Vector2.new(1, 1)
-			panel.Position = UDim2.new(1, -12, 0,
-				UIDevice.TopOffsetFor(gui, layout.SafeBottom))
-		end
+		local column = UIDevice.ObjectiveColumn(2)
+		panel.AnchorPoint = Vector2.new(0, 0)
+		-- The constraint has to state the same numbers the placement used, or it
+		-- silently clamps the panel to a size nothing was measured against.
+		panelSize.MinSize = Vector2.new(column.Width, column.Height)
+		panelSize.MaxSize = Vector2.new(column.Width, column.Height)
+		panel.Size = UDim2.fromOffset(column.Width, column.Height)
+		-- Absolute -> this gui's local offsets, in BOTH axes.
+		panel.Position = UIDevice.LocalPosition(gui, column.Left, column.Top)
 	else
 		panel.AnchorPoint = Vector2.new(1, 1)
+		panelSize.MinSize = Vector2.new(150, 72)
+		panelSize.MaxSize = Vector2.new(236, 86)
+		panel.Size = UDim2.new(0, 236, 0, 78)
 		panel.Position = UDim2.new(1, -18, 1, -18)
 	end
 end
 updatePanelPlacement()
 UIDevice.Changed:Connect(updatePanelPlacement)
-local panelSize = Instance.new("UISizeConstraint")
-panelSize.MinSize = Vector2.new(150, 72)
-panelSize.MaxSize = Vector2.new(236, 86)
-panelSize.Parent = panel
 
 local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(0, 6)
@@ -138,7 +145,14 @@ hintSize.Parent = hint
 local function refresh()
 	local inLevel = workspace:GetAttribute("SelectedLevel") == 2
 		and player:GetAttribute("InRound") == true
-	panel.Visible = inLevel
+	-- The completion announcement is the one panel that shares this band, and
+	-- on a phone whose band is too narrow to hold both it says so rather than
+	-- drawing across the objective column. It is transient (five seconds at
+	-- most) and restates this very state, so standing down is the right yield.
+	-- Where there IS room -- tablets, roomy landscape phones -- the attribute is
+	-- never set and both stay on screen, reflowed side by side.
+	local alertOwnsBand = player:GetAttribute("Level2AlertOwnsBand") == true
+	panel.Visible = inLevel and not alertOwnsBand
 	if not inLevel then return end
 
 	local goal = math.clamp(math.floor(tonumber(workspace:GetAttribute("Level2PumpGoal")) or 3), 1, 12)
@@ -180,4 +194,8 @@ for _, attribute in ipairs({"SelectedLevel", "Level2Pumps", "Level2PumpGoal", "L
 	workspace:GetAttributeChangedSignal(attribute):Connect(refresh)
 end
 player:GetAttributeChangedSignal("InRound"):Connect(refresh)
+player:GetAttributeChangedSignal("Level2AlertOwnsBand"):Connect(refresh)
+-- A viewport or form-factor change can move the alert from "fits beside" to
+-- "owns the band" and back, so the panel's visibility follows the layout too.
+UIDevice.Changed:Connect(refresh)
 refresh()

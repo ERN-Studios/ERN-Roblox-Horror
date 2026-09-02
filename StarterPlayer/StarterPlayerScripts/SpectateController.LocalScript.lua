@@ -212,13 +212,21 @@ applySpectateLayout = function()
 	local available = useCorridor and corridor.Width or (layout.SafeRight - layout.SafeLeft)
 	local arrowRoom = touch and (ARROW_WIDTH + 8) * 2 or 0
 	local width = math.min(420, available - arrowRoom)
-	local bottom = touch and (useCorridor and (layout.Height - 18) or layout.SafeBottom)
-		or (layout.Height - 20)
+	local absoluteBottom = touch
+		and (useCorridor and (layout.Display.Bottom - 18) or layout.SafeBottom)
+		or (layout.Display.Bottom - 20)
 	-- Centre on the SAFE RECT, not on the screen. The safe rect is off-centre
 	-- whenever the control column eats the right edge (landscape), and centring
 	-- a 420px label on 0.5 pushed it straight back under the controls.
-	local centre = useCorridor and (corridor.Left + corridor.Right) * .5
+	local absoluteCentre = useCorridor and (corridor.Left + corridor.Right) * .5
 		or (touch and (layout.SafeLeft + layout.SafeRight) * .5 or nil)
+	-- Both figures are ABSOLUTE and both need converting; the old code passed
+	-- them straight in as gui offsets, so X was wrong on any device with a
+	-- horizontal safe inset and Y was wrong by the topbar on every device.
+	local centre, bottom = nil, select(2, UIDevice.LocalOffset(gui, 0, absoluteBottom))
+	if absoluteCentre then
+		centre = select(1, UIDevice.LocalOffset(gui, absoluteCentre, 0))
+	end
 	label.Size = UDim2.new(0, width, 0, 30)
 	label.Position = centre and UDim2.fromOffset(centre, bottom)
 		or UDim2.new(0.5, 0, 0, bottom)

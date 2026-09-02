@@ -475,7 +475,13 @@ for entry in live["items"]:
             or contract.sha256_of(expected) != entry["sha256"]):
         describe_failures.append(entry["file"])
 
-check(crlf_seen >= 57,
+# Like the trailing-newline count below, the NUMBER of CRLF files is a checkout
+# accident, not an invariant: git rewrites line endings on checkout while the
+# pull tool writes LF, so every pull moves it (59 before the 2026-09-02 pull, 48
+# after). What must hold is that this production pass is still exercised against
+# real CRLF content at all -- at zero it proves nothing that the synthetic
+# fixtures in test_studio_source_contract.py do not already cover.
+check(crlf_seen > 0,
       "the production checkout really does hold the CRLF files this guards",
       f"{crlf_seen} CRLF of {len(live['items'])}")
 check(not reconcile_failures,
@@ -511,8 +517,11 @@ counts = live["counts"]
 check(counts["scripts"] + counts["remoteEvents"] == counts["total"] == len(live["items"]),
       "counts still reconcile",
       f"{counts['scripts']}+{counts['remoteEvents']} vs {counts['total']}/{len(live['items'])}")
-check(counts["scripts"] == 114 and counts["remoteEvents"] == 13,
-      "and are the 114 scripts + 13 remotes this place holds",
+# 134 since the 2026-08-31 Pool Slide work: the Slidemouth trio moved out of the
+# live tree into ServerStorage.Level2RetiredSlidemouth_20260831, three Pool Slide
+# scripts replaced them, and five new backup folders added twenty archive copies.
+check(counts["scripts"] == 134 and counts["remoteEvents"] == 13,
+      "and are the 134 scripts + 13 remotes this place holds",
       f"{counts['scripts']}+{counts['remoteEvents']}")
 
 print()

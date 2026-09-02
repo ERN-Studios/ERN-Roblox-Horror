@@ -448,6 +448,9 @@ local function dispatchCommand(command, requested)
 		setUnlimited(requested)
 	elseif command == "thirdPerson" then
 		setThirdPerson(requested)
+	elseif command == "level2PumpPair" then
+		-- One server-owned sequence: first available lever now, second in 5s.
+		fireDev("level2PumpPair", true)
 	elseif command == "level3PreBlackout" then
 		-- Timeline seeking is server-authoritative; GameManager verifies the
 		-- timeline owner and reports back via the DevLevel3Timeline* attributes.

@@ -213,7 +213,11 @@ local function applyPopupLayout()
 	local layout = UIDevice.Layout()
 	popup.Size = UDim2.new(0, math.min(360, layout.SafeRight - layout.SafeLeft), 0, 34)
 	if layout.IsTouch then
-		popup.Position = UDim2.new(0.5, 0, 0, layout.SafeBottom - 8)
+		-- SafeBottom is ABSOLUTE. Handing it over as a gui offset put the popup
+		-- one topbar below where it was computed to sit.
+		local x, y = UIDevice.LocalOffset(popupGui,
+			(layout.Safe.Left + layout.Safe.Right) * .5, layout.SafeBottom - 8)
+		popup.Position = UDim2.fromOffset(x, y)
 	else
 		popup.Position = UDim2.new(0.5, 0, 1, -26)
 	end
@@ -254,28 +258,66 @@ batBody.BackgroundTransparency = 1
 batBody.BorderSizePixel = 0
 batBody.Parent = popupGui
 
+-- Built up here and parented to the torch art further down, because the layout
+-- pass below sizes that drawing to whatever slot the cluster hands it and runs
+-- before the art itself exists.
+local torchScale = Instance.new("UIScale")
+torchScale.Scale = 0.72
+
+-- Whether this frame is currently tagged as part of the movement cluster.
+-- C_CONTROL_ZONE_INVALIDATION_20260831: the registration follows the FORM
+-- FACTOR rather than being done once at load. On a pointer device this frame is
+-- not a movement control at all -- it is a bottom-LEFT battery readout with no
+-- touch target over it -- and leaving it tagged put the corner of the screen
+-- furthest from the cluster inside the rectangle every HUD dodges. Latched, so a
+-- relayout that changes nothing does not churn the zone; and reversible, because
+-- a tablet leaving its keyboard case flips the form factor without a restart.
+local flashlightRegistered = false
+
 -- The torch used to sit in the bottom-LEFT corner, which on a touch device is
 -- entirely inside the dynamic thumbstick's activation region: a fully
 -- transparent, Active 72x136 button laid over the movement stick. It only
 -- failed to steal the finger because its ScreenGui happened to sit below
 -- TouchGui in DisplayOrder -- an accident, and one this rework removes by
--- raising that DisplayOrder. So on touch it joins the right-hand control
--- column, in the slot NoiseReporter reserves for it. On desktop, where there is
--- no thumbstick and no touch target, it stays exactly where it was.
+-- raising that DisplayOrder. So on touch it takes a slot in the movement
+-- cluster. On desktop, where there is no thumbstick and no touch target, it
+-- stays exactly where it was.
+--
+-- C_SHORT_SCREEN_CLUSTER_20260831: the slot is READ from UIDevice's control
+-- plan, not re-derived here. This file used to keep its own copy of the edge,
+-- button-size and second-column constants and repeat NoiseReporter's arithmetic
+-- to arrive at the same corner -- one layout written out three times, in three
+-- files, which is exactly the arrangement that cannot survive the cluster
+-- reflowing into a row on a short landscape screen.
 local function applyFlashlightLayout()
 	local layout = UIDevice.Layout()
+	if layout.IsTouch ~= flashlightRegistered then
+		flashlightRegistered = layout.IsTouch
+		if flashlightRegistered then
+			UIDevice.RegisterControlRect("FlashlightPower", batBody)
+		else
+			UIDevice.UnregisterControlRect(batBody)
+		end
+	end
 	if layout.IsTouch then
-		local tablet = layout.Class == "tablet"
-		local edge = tablet and 26 or 22
-		local buttonSize = tablet and 76 or 64
-		local secondColumn = edge + buttonSize + (tablet and 18 or 16)
+		local slot = layout.ControlPlan.Slots.FlashlightPower
 		batBody.AnchorPoint = Vector2.new(1, 1)
-		batBody.Size = UDim2.fromOffset(tablet and 72 or 58, tablet and 72 or 58)
-		batBody.Position = UDim2.new(1, -secondColumn, 1, -edge)
+		batBody.Size = UDim2.fromOffset(slot.Width, slot.Height)
+		batBody.Position = UDim2.new(1, -slot.Right, 1, -slot.Bottom)
+		-- The torch ART is a fixed 160x48 drawing rotated upright, so it is the
+		-- SLOT that changes size under it. 0.72 was chosen against the 58px slot
+		-- the column gives it: 160 * 0.72 is 115, very nearly twice the slot, and
+		-- the overhang is deliberate -- the torch reads as a torch rather than as
+		-- a 58px icon. Held to that same proportion, the row's smaller cell keeps
+		-- the look instead of hanging a 115px drawing over a 45px button and up
+		-- into the readout's headroom. The column is untouched by this:
+		-- min(0.72, 58 * 2 / 160) is 0.72, and the tablet's 72px slot likewise.
+		torchScale.Scale = math.min(0.72, slot.Height * 2 / 160)
 	else
 		batBody.AnchorPoint = Vector2.new(0, 1)
 		batBody.Size = UDim2.fromOffset(72, 136)
 		batBody.Position = UDim2.new(0, 12, 1, -10)
+		torchScale.Scale = 0.72
 	end
 end
 
@@ -297,6 +339,18 @@ touchFlashButton.Parent = batBody
 -- on-screen control has stood down makes it an invisible tap sink over the
 -- HUD -- and at the raised DisplayOrder 60 it now wins those taps. It stands
 -- down on exactly the states the movement cluster does.
+-- C_LIVE_CONTROL_RECTS_20260831: the flashlight's hit target is part of the
+-- movement cluster, so it registers its rectangle like the rest of them. It is
+-- the BODY that is measured, not the transparent hit box, because the body is
+-- what the player sees and reaches for. The registration itself lives in
+-- applyFlashlightLayout, which is where the form factor is already known.
+
+-- Keep the production shade itself in the availability predicate. The shared
+-- QueueModalOpen attribute remains the fallback contract, but its listener and
+-- the shade listener have no guaranteed ordering; relying on the attribute
+-- alone leaves an invisible DisplayOrder-60 tap target alive for that gap.
+local queueShadeVisible = player:GetAttribute("QueueModalOpen") == true
+
 local function flashlightTargetAvailable()
 	if not UIDevice.IsTouch() then return false end
 	if player:GetAttribute("InRound") ~= true then return false end
@@ -306,6 +360,8 @@ local function flashlightTargetAvailable()
 	if player:GetAttribute("ZyntraStoreOpen") == true then return false end
 	if player:GetAttribute("DevPhoneOpen") == true then return false end
 	if player:GetAttribute("ZyntraReentryOpen") == true then return false end
+	-- The party dialog owns the screen too; this list had three of the four.
+	if queueShadeVisible or player:GetAttribute("QueueModalOpen") == true then return false end
 	local character = player.Character
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 	return humanoid ~= nil and humanoid.Health > 0
@@ -315,11 +371,29 @@ local function applyFlashlightTouchTarget()
 	UIDevice.SetInteractive(touchFlashButton, flashlightTargetAvailable())
 end
 for _, attribute in ipairs({"InRound", "Escaped", "Level3_Hiding", "Spectating",
-	"ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen"}) do
+	"ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen", "QueueModalOpen"}) do
 	player:GetAttributeChangedSignal(attribute):Connect(function()
 		applyFlashlightTouchTarget()
 	end)
 end
+-- QueueModalOpen is derived from QueueHostShade.Visible. Listening only to the
+-- derived attribute adds a second deferred signal hop: for two frames the
+-- DisplayOrder-60 flashlight target can still sit above a newly opened party
+-- modal. Watch production's actual choke point too, so the target stands down
+-- on the very next Heartbeat while the attribute remains the shared contract
+-- for every other screen-owning modal.
+task.spawn(function()
+	local playerGui = player:WaitForChild("PlayerGui")
+	local roundGui = playerGui:WaitForChild("RoundGui", 15)
+	local queueShade = roundGui and roundGui:WaitForChild("QueueHostShade", 15)
+	if not queueShade then return end
+	queueShadeVisible = queueShade.Visible
+	queueShade:GetPropertyChangedSignal("Visible"):Connect(function()
+		queueShadeVisible = queueShade.Visible
+		applyFlashlightTouchTarget()
+	end)
+	applyFlashlightTouchTarget()
+end)
 player.CharacterAdded:Connect(function(character)
 	local humanoid = character:WaitForChild("Humanoid", 8)
 	if humanoid then humanoid.Died:Connect(applyFlashlightTouchTarget) end
@@ -340,8 +414,6 @@ torch.Size = UDim2.new(0, 160, 0, 48)
 torch.BackgroundTransparency = 1
 torch.Rotation = -90 -- upright, with the lens/rays at the top
 torch.Parent = batBody
-local torchScale = Instance.new("UIScale")
-torchScale.Scale = 0.72
 torchScale.Parent = torch
 
 local function outline(frame, radius)

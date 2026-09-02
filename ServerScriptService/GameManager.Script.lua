@@ -188,6 +188,20 @@ devControl.OnServerEvent:Connect(function(player, command, enabled)
  elseif command == "noclip" then
   setServerNoclip(player, enabled == true)
   print("[GameManager] server noclip", enabled == true and "ON" or "OFF", "for", player.Name)
+ elseif command == "level2PumpPair" then
+  if not enabled then return end
+  local systems = script.Parent:FindFirstChild("Level 2 Systems")
+  local objective = systems and systems:FindFirstChild("Level 2 Objective Controller")
+  local ok = false
+  if objective and objective:IsA("ModuleScript") then
+   ok = pcall(function() require(objective).DevActivatePumpPair(player) end)
+  end
+  if not ok then
+   player:SetAttribute("DevLevel2PumpBusy", false)
+   player:SetAttribute("DevLevel2PumpStatus", "UNAVAILABLE")
+   player:SetAttribute("DevLevel2PumpSerial",
+    (tonumber(player:GetAttribute("DevLevel2PumpSerial")) or 0) + 1)
+  end
  elseif command == "level3PreBlackout" then
   if not DevAccess.IsLevel3TimelineOwner(player) then return end
   local skip = ServerStorage:FindFirstChild("Level3DevSkipToPreBlackout")

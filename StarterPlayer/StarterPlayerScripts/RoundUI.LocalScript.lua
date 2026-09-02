@@ -613,7 +613,16 @@ local function applyQueueDeviceLayout()
   -- and half of Close were sitting under RUN, JUMP, GLOW and FLASHLIGHT. The
   -- panel now takes the rectangle UIDevice guarantees is clear of every
   -- movement affordance at once, and is sized to fit it.
-  local area = queueLayout.ModalArea
+  -- C_QUEUE_USES_THE_MODAL_VIEWPORT_20260831. ModalArea is the rectangle clear
+  -- of every movement affordance, and it was the right answer while this dialog
+  -- left the controls live underneath it. It does not any more: the dialog is a
+  -- screen-owning modal and now stands movement down like the Zyntra terminal,
+  -- so there is no thumbstick, no cluster and no engine jump to dodge -- and
+  -- ModalArea's own 8px gutter is narrower than the 12px one every other modal
+  -- in the game keeps, which put this panel 4px outside the authored modal
+  -- rectangle on three portrait phones. It takes ModalViewport, the same
+  -- rectangle the terminal takes, for the same reason.
+  local area = queueLayout.ModalViewport
   local queueWidth = math.floor(math.min(380, area.Width))
   -- One rule, not a max/min sandwich: the row stack below is 260px at its
   -- authored spacing and 251px packed, so ask for 280 and take whatever the
@@ -623,7 +632,12 @@ local function applyQueueDeviceLayout()
   queueConstraint.MinSize = Vector2.new(queueWidth, queueHeight)
   queueConstraint.MaxSize = Vector2.new(queueWidth, queueHeight)
   queuePanel.Size = UDim2.fromOffset(queueWidth, queueHeight)
-  queuePanel.Position = UDim2.fromOffset(
+  -- ModalArea is ABSOLUTE, and this gui ignores the topbar inset, so its
+  -- origin is the display's top -- 58px above the coordinate ModalArea is
+  -- expressed in. Written as a raw offset the panel landed a whole topbar high:
+  -- measured on a Galaxy A06 the modal resolved to y -50..214 with its Close
+  -- button at y -44..0, i.e. entirely underneath the Roblox topbar.
+  queuePanel.Position = UIDevice.LocalPosition(gui,
    math.floor(area.Left + (area.Width - queueWidth) * 0.5),
    math.floor(area.Top + (area.Height - queueHeight) * 0.5))
   -- Do not place a full-screen input-catching box over the mobile controls --
@@ -897,8 +911,27 @@ player:SetAttribute("QueueModalOpen", queueShade.Visible)
 -- just `queueShade.Visible = false`, and each of them lands on this signal.
 -- See C4A_BRIEFING_VS_QUEUE_20260829 in dispatchAudio.refresh for the rule.
 dispatchAudio.queueModalOpen = queueShade.Visible
+-- C_QUEUE_MODAL_TAKES_THE_CONTROLS_20260831 -- WHAT SHIPPED BROKEN.
+--
+-- QueueModalOpen is one of the four flags UIDevice.ScreenOwningModalOpen()
+-- answers to -- the Level 3 reader stands down for it, the Zyntra opener hides
+-- for it -- but nothing ever stood the MOVEMENT controls down, so the party
+-- dialog was the one screen-owning modal in the game with a live thumbstick and
+-- a live JUMP under it. Measured on a 568x320 landscape phone with the short-
+-- screen row cluster: QueueModalOpen=true, TouchMovementSuppressed=false, and
+-- CREATE PARTY overlapping the control row by nine pixels -- a tap meant for the
+-- dialog landing on a movement button.
+--
+-- It suppresses now, from the same one choke point every show and hide already
+-- lands on, so a path that forgets is not expressible. Touch only: UIDevice
+-- ignores the request on a pointer device, where a modal has never taken
+-- movement away.
+UIDevice.SuppressTouchMovement(UIDevice.ScreenOwningModalOpen())
 queueShade:GetPropertyChangedSignal("Visible"):Connect(function()
  player:SetAttribute("QueueModalOpen", queueShade.Visible)
+ -- Zyntra/re-entry may still own the screen when this shade closes. Movement
+ -- follows the combined published modal state, never whichever caller ran last.
+ UIDevice.SuppressTouchMovement(UIDevice.ScreenOwningModalOpen())
  dispatchAudio.queueModalOpen = queueShade.Visible
  -- Raise or lower the briefing to match, and republish DispatchBriefingOpen
  -- with it. Both flags are written from this one handler, so they can never
@@ -2222,8 +2255,30 @@ local function refreshObjectivesButton()
 		objectivesButton.Visible = false
 		return
 	end
-	objectivesButton.Visible = not (UIDevice.IsTouch() and objectivesPanel.Visible)
+	-- C_DISPATCH_COMPACT_20260830: the compact briefing panel is pinned to the
+	-- top left of the safe band and this button sits at (12, 12) inside it. They
+	-- were always adjacent -- the full-band panel covered the same corner -- but
+	-- a panel is not a reason to leave a live control underneath one, and this
+	-- is the same remedy the Zyntra opener already uses for the same strip of
+	-- screen: the button is not drawn while the briefing owns it, and comes
+	-- straight back when Command stops.
+	-- The guide stands down entirely under a screen-owning modal. This gui is
+	-- DisplayOrder 110, well above the terminal's 55, so both the panel and the
+	-- button painted over an open terminal and -- being Active -- took its taps.
+	if UIDevice.ScreenOwningModalOpen() then
+		objectivesButton.Visible = false
+		objectivesPanel.Visible = false
+		return
+	end
+	objectivesButton.Visible = not (UIDevice.IsTouch()
+		and (objectivesPanel.Visible or player:GetAttribute("DispatchBriefingOpen") == true))
 end
+UIDevice.OnScreenOwningModalChanged(function()
+	refreshObjectivesButton()
+end)
+player:GetAttributeChangedSignal("DispatchBriefingOpen"):Connect(function()
+	refreshObjectivesButton()
+end)
 
 local function setObjectivesAvailable(available)
 	objectivesAvailable = available == true
@@ -2527,20 +2582,58 @@ dispatchAudio.fitProbe = "Noch wichtiger: das Aktivieren einer Pumpstation alarm
 -- let a second layout pass start inside the first, so GetTextBoundsAsync is the
 -- wrong tool here even though it is the newer one. Measured against each other
 -- on this panel they agree exactly.
-dispatchAudio.faceThatFits = function(ceiling, width, height)
-	-- 9/8 are emergency rungs used only when an ultra-short landscape safe band
-	-- leaves 24px under two mandatory 44px touch targets. They keep the full cue
-	-- inside its label instead of drawing across the controls or movement zone.
-	local faces = {20, 16, 13, 12, 11, 10, 9, 8}
+-- The readable floor, and it is a FLOOR rather than a preference.
+--
+-- WHAT SHIPPED BROKEN: the face ladder ended at 9 and 8, described as
+-- "emergency rungs". They were reached in ordinary use -- every portrait phone
+-- in the matrix rendered its briefing at 8px -- because the ladder was the only
+-- thing that gave way when the box was short. 8px Gotham on a phone is not a
+-- caption, it is a smudge, and the compact panel bought its size with it.
+--
+-- The ladder now stops at HARD_FACE. What gives instead is the LAYOUT: the
+-- panel's own fit search below refuses any arrangement whose copy box cannot
+-- hold the cue at READABLE_FACE, tries a wider rung, then a taller panel, and
+-- only then accepts HARD_FACE. Width and height are cheap; legibility is not.
+dispatchAudio.READABLE_FACE = 11
+dispatchAudio.HARD_FACE = 10
+
+-- What the panel must actually hold at runtime is the copy that is ON it. The
+-- 1.6x localisation probe stays, but as a STRESS case the regression matrix
+-- drives, not as the thing every live layout is sized against -- sizing every
+-- device for a translation nobody has shipped is what pushed real English
+-- briefings down to 8px.
+dispatchAudio.fitCopy = function()
+	-- THE STRING THAT IS ON SCREEN. The label is the authority, not the
+	-- transmission's cached copy: a cue set by any path at all -- including the
+	-- regression harness, which writes the label directly -- has to be the thing
+	-- the box is sized for, or the panel is fitted to one sentence and rendered
+	-- with another.
+	local label = dispatchAudio.subtitleLabel
+	if label and type(label.Text) == "string" and label.Text ~= "" then
+		return label.Text
+	end
+	local copy = dispatchAudio.subtitleCopy
+	if type(copy) == "string" and copy ~= "" then return copy end
+	return dispatchAudio.longestLine
+end
+
+dispatchAudio.faceThatFits = function(ceiling, width, height, text)
+	local measured = text or dispatchAudio.fitCopy()
+	local faces = {20, 16, 13, 12, 11, 10}
 	for _, size in ipairs(faces) do
-		if size <= ceiling then
+		if size <= ceiling and size >= dispatchAudio.HARD_FACE then
 			local needed = game:GetService("TextService"):GetTextSize(
-				dispatchAudio.fitProbe, size, subtitleText.Font,
-				Vector2.new(width, 100000))
+				measured, size, subtitleText.Font, Vector2.new(width, 100000))
 			if needed.Y <= height then return size end
 		end
 	end
-	return faces[#faces]
+	return dispatchAudio.HARD_FACE
+end
+
+-- How tall a copy box has to be to hold `text` at `face` and `width`.
+dispatchAudio.copyHeightFor = function(text, face, width)
+	return game:GetService("TextService"):GetTextSize(
+		text, face, subtitleText.Font, Vector2.new(math.max(1, width), 100000)).Y
 end
 
 local function updateLevelOneGuideLayout()
@@ -2580,8 +2673,7 @@ local function updateLevelOneGuideLayout()
 	if touch then
 		local band = layout.TopBand
 		objectivesPanel.AnchorPoint = Vector2.new(0, 0)
-		objectivesPanel.Position = UDim2.fromOffset(band.Left,
-			UIDevice.TopOffsetFor(guideGui, band.Top))
+		objectivesPanel.Position = UIDevice.LocalPosition(guideGui, band.Left, band.Top)
 		objectivesPanel.Size = UDim2.fromOffset(band.Width, band.Height)
 		-- The panel takes the WHOLE safe band on touch, which starts 8px under
 		-- the top inset -- above the button that opened it. On a phone's 36px
@@ -2591,20 +2683,36 @@ local function updateLevelOneGuideLayout()
 		refreshObjectivesButton()
 		objectivesTitle.TextSize = narrow and 15 or 18
 		subtitleText.TextSize = narrow and 16 or 20
-	elseif narrow then
-		objectivesPanel.AnchorPoint = Vector2.new(1, 1)
-		objectivesPanel.Position = UDim2.new(1, -10, 1, -70)
-		objectivesPanel.Size = UDim2.new(1, -20, 0,
-			math.max(120, math.min(360, viewport.Y - 82)))
-		objectivesTitle.TextSize = 15
-		subtitleText.TextSize = 16
 	else
+		-- C_L1_GUIDE_HEIGHT_FROM_THE_FRAME_20260831 -- WHAT SHIPPED BROKEN.
+		--
+		-- Both pointer branches sized this panel from `viewport.Y`, the CAMERA
+		-- height, while anchoring it 70px off the bottom of a gui whose frame is
+		-- the CoreUI safe area. Those are not the same rectangle: on a 831x418
+		-- window with a 58px topbar the frame is 360 tall, so 418 - 82 = 336
+		-- was drawn from a bottom edge only 290px down and the panel's title ran
+		-- 46px ABOVE the top of the screen, under the topbar. It never showed on
+		-- a 1080p monitor because 1080 - 82 is smaller than the 338 cap there;
+		-- it is every windowed and every emulated desktop that loses the title.
+		--
+		-- The height now comes from the space the panel is actually anchored
+		-- inside: the safe height, less the 70px it is lifted and the 8px gutter
+		-- it keeps at the top.
+		local anchoredRoom = math.floor(layout.Safe.Height - 70 - 8)
 		objectivesPanel.AnchorPoint = Vector2.new(1, 1)
-		objectivesPanel.Position = UDim2.new(1, -18, 1, -70)
-		objectivesPanel.Size = UDim2.fromOffset(420,
-			math.max(120, math.min(338, viewport.Y - 82)))
-		objectivesTitle.TextSize = 18
-		subtitleText.TextSize = 20
+		if narrow then
+			objectivesPanel.Position = UDim2.new(1, -10, 1, -70)
+			objectivesPanel.Size = UDim2.new(1, -20, 0,
+				math.max(120, math.min(360, anchoredRoom)))
+			objectivesTitle.TextSize = 15
+			subtitleText.TextSize = 16
+		else
+			objectivesPanel.Position = UDim2.new(1, -18, 1, -70)
+			objectivesPanel.Size = UDim2.fromOffset(420,
+				math.max(120, math.min(338, anchoredRoom)))
+			objectivesTitle.TextSize = 18
+			subtitleText.TextSize = 20
+		end
 	end
 
 	-- The briefing panel was the single biggest overlap offender: at 0.76 width
@@ -2626,8 +2734,21 @@ local function updateLevelOneGuideLayout()
 	-- Row sizes are driven by the longest caption each form factor can produce
 	-- ("[M]  UNMUTE DISPATCH" on desktop, "UNMUTE DISPATCH" on touch, where the
 	-- binding is never printed) and by the 44px touch-target floor.
-	local preferredRowWidth = touch and 168 or 190
-	local minimumRowWidth = touch and 132 or 162
+	-- C_DISPATCH_COMPACT_20260830 -- WHAT SHIPPED BROKEN.
+	-- On touch this panel took the WHOLE safe band: 768x117 on a 956x440 iPhone
+	-- 16 Pro Max, i.e. 80% of the width and 27% of the height, for two readouts
+	-- and one sentence. It read as a full-screen takeover rather than a radio
+	-- caption. The rows themselves were 168x44 with 13-14px type, sized for a
+	-- desktop-width band.
+	--
+	-- The compact target is stated once, here, and the ladder below is only
+	-- allowed to exceed it where the AUTHORED COPY genuinely does not fit:
+	-- width first (a wider panel keeps the two readouts side by side and the
+	-- copy on two lines), height only after every width has failed. On the
+	-- reference device that lands 560x100 -- 59% x 23% -- and smaller phones
+	-- take the least extra the measured text needs.
+	local preferredRowWidth = touch and 148 or 190
+	local minimumRowWidth = touch and 120 or 162
 	local preferredRowHeight = touch and 44 or 30
 	-- The labels stay visually subtle, but their transparent input rectangles
 	-- never fall below Roblox's 44px touch-target floor.
@@ -2641,7 +2762,25 @@ local function updateLevelOneGuideLayout()
 	-- authored copy without crossing into movement space.
 	local ROW_HARD_FLOOR = minimumRowHeight
 
+	-- ── WHERE THE BRIEFING LIVES ─────────────────────────────────────────────
+	-- The top band, while it can hold one. It frequently cannot: on a 705x338
+	-- phone under a 58px topbar the strip above the thumbstick's activation
+	-- region is 37px, and two mandatory 44px readouts do not fit in 37px. The
+	-- old code met that by flooring the ceiling at 48 -- i.e. by allowing the
+	-- panel to be TALLER THAN THE BAND -- so it hung into the thumbstick, which
+	-- is precisely the defect the band exists to prevent.
+	--
+	-- Where the band cannot hold the panel, the briefing moves to ModalArea:
+	-- UIDevice's largest rectangle clear of EVERY movement zone. On a landscape
+	-- phone that is the lane between the thumbstick and the control column,
+	-- which is 345px tall where the band is 70. The panel never grows past its
+	-- home, and its home is never a place a thumb is driving the character from.
+	local BRIEFING_MIN_HEIGHT = 80
 	local band = layout.TopBand
+	if touch and band.Height < BRIEFING_MIN_HEIGHT
+		and layout.ModalArea.Height > band.Height then
+		band = layout.ModalArea
+	end
 	-- ── the BAND is the ceiling, and it is enforced in ONE place ─────────────
 	-- WHAT SHIPPED BROKEN: the last-resort block at the bottom of this function
 	-- sized the panel to its CONTENT -- `textTop + minimumText + bottomPad` --
@@ -2660,8 +2799,18 @@ local function updateLevelOneGuideLayout()
 	-- rectangle UIDevice has already proved clear of the thumbstick, the control
 	-- column and JUMP -- so "fits the band" and "clears every movement zone"
 	-- become the same assertion.
-	local BAND_CEILING = touch and math.max(48, math.floor(band.Height))
+	-- NO FLOOR on touch. `math.max(48, ...)` here was the mechanism by which a
+	-- panel escaped its own band on the shortest screens; the home rect chosen
+	-- above is now big enough that a floor is not needed, and if it ever is not,
+	-- a short panel is the correct answer and an overflowing one is not.
+	local BAND_LIMIT = touch and math.floor(band.Height)
 		or math.max(48, viewport.Y - (narrow and 96 or 64) - PANEL_MARGIN)
+	-- The compact height target: 23% of the viewport, never more than 100px,
+	-- and never past the band. 100 on the 440px reference device, 86 at 375,
+	-- 73 at 320. Desktop is untouched -- it has the room and always had.
+	local COMPACT_CEILING = touch
+		and math.max(64, math.min(100, math.floor(viewport.Y * .23))) or BAND_LIMIT
+	local BAND_CEILING = math.min(BAND_LIMIT, COMPACT_CEILING)
 	local baseHeight = narrow and 108 or 96
 	-- The band IS the ceiling on touch. The authored 108 is taller than the 87px
 	-- band a landscape phone leaves, and starting the search there put the panel
@@ -2677,13 +2826,27 @@ local function updateLevelOneGuideLayout()
 	baseHeight = math.clamp(baseHeight, math.min(64, BAND_CEILING), BAND_CEILING)
 	local maximumHeight = touch and math.max(baseHeight, math.min(160, BAND_CEILING))
 		or math.max(baseHeight, math.min(160, viewport.Y - 220))
-	local panelWidth = math.clamp(
-		touch and band.Width or (narrow and (viewport.X - 20) or math.floor(viewport.X * .76)),
-		240, 860)
-	-- The 240 floor above is a READABILITY floor, and on touch it is allowed to
-	-- ask for more width than the band actually has. It never wins: the band is
-	-- the outer boundary of this panel on both axes, not just the vertical one.
-	if touch then panelWidth = math.min(panelWidth, math.floor(band.Width)) end
+	-- The COMPACT width target, and the ladder that is allowed to leave it.
+	-- 59% of the viewport, never more than 560, never under the 240 readability
+	-- floor, never wider than the band. 560 on the reference device.
+	local compactWidth = touch
+		and math.min(math.floor(band.Width),
+			math.max(240, math.min(560, math.floor(viewport.X * .59))))
+		or math.clamp(narrow and (viewport.X - 20) or math.floor(viewport.X * .76), 240, 860)
+	local widthLadder = {compactWidth}
+	if touch then
+		-- Two rungs, and only two. The first buys back exactly enough width to
+		-- keep MUTE and STOP side by side at their preferred size
+		-- (148 + 148 + 10 + 2*12 = 330); the second is the band itself. Widening
+		-- is tried BEFORE growing taller because a taller panel costs the player
+		-- screen, while a wider one costs almost nothing on a landscape phone.
+		local sideBySide = math.min(math.floor(band.Width),
+			preferredRowWidth * 2 + 10 + PANEL_MARGIN * 2)
+		if sideBySide > compactWidth then table.insert(widthLadder, sideBySide) end
+		local full = math.floor(band.Width)
+		if full > widthLadder[#widthLadder] then table.insert(widthLadder, full) end
+	end
+	local panelWidth = compactWidth
 
 	-- Candidates, most wanted first. `columns` 2 puts the readouts side by side;
 	-- 1 stacks them. `ownBand` drops them below the speaker line instead of
@@ -2721,11 +2884,20 @@ local function updateLevelOneGuideLayout()
 		end
 	end
 
+	-- The face this pass insists on, declared BEFORE `measure` because `measure`
+	-- closes over it. READABLE first; the whole width/height search runs at
+	-- that, and only a device that cannot achieve it anywhere drops to HARD --
+	-- which is 10, never 8.
+	local requiredFace = dispatchAudio.READABLE_FACE
+
 	local function measure(candidate, height)
 		local controlsWidth = candidate.Columns == 2
 			and candidate.Width * 2 + 10 or candidate.Width
+		-- 6, because the UIListLayout that stacks them uses 6. It said 4, so a
+		-- stacked pair was measured 2px shorter than it renders and the two
+		-- readouts overflowed the row they were given.
 		local controlsHeight = candidate.Columns == 2
-			and candidate.Height or candidate.Height * 2 + 4
+			and candidate.Height or candidate.Height * 2 + 6
 		if controlsWidth > panelWidth - PANEL_MARGIN * 2 then return nil end
 		-- The band wins before anything else is even considered.
 		if height > BAND_CEILING then return nil end
@@ -2749,6 +2921,14 @@ local function updateLevelOneGuideLayout()
 		-- phones even though the rectangles themselves did not overlap.
 		local textTop = math.max(28, controlsTop + controlsHeight + (touch and 0 or 2))
 		local textHeight = height - textTop - (touch and 4 or 6)
+		-- THE READABILITY GATE. A candidate is refused unless its copy box can
+		-- hold the live cue at the face this pass is asking for. That is what
+		-- turns "never silently drop to 8px" into a property of the search
+		-- instead of a hope: the ladder below tries a wider panel, then a taller
+		-- one, then the same search again at the hard floor.
+		local copyWidth = panelWidth - TEXT_INSET * 2
+		if textHeight < dispatchAudio.copyHeightFor(
+			dispatchAudio.fitCopy(), requiredFace, copyWidth) then return nil end
 		if textHeight < (touch and 20 or 22) then return nil end
 		return {
 			ControlsWidth = controlsWidth,
@@ -2766,32 +2946,85 @@ local function updateLevelOneGuideLayout()
 	-- spare pixels of safe band and no reason to squeeze a subtitle into 22 of
 	-- them. A landscape phone has none, and falls through to the second pass.
 	local panelHeight, fit
+	-- The ceiling actually enforced at the end. It starts as the compact target
+	-- and can only ever be raised by the salvage pass, and then only as far as
+	-- the MEASURED authored copy needs and never past the band. Nothing else in
+	-- this function may write it.
+	local effectiveCeiling = BAND_CEILING
 	local desiredTextHeight = touch and layout.Portrait and 66 or 40
-	for height = baseHeight, maximumHeight, 6 do
-		for _, candidate in ipairs(candidates) do
-			local measured = measure(candidate, height)
-			if measured and measured.TextHeight >= desiredTextHeight then
-				panelHeight, fit = height, measured
-				break
+	-- WIDTH FIRST. Each rung of the ladder gets the full comfortable-fit search
+	-- and then the best-effort search; only when a rung yields nothing at all
+	-- does the next, wider one get a turn. On the reference device the first
+	-- rung -- the 560px compact target -- wins outright and the ladder is never
+	-- climbed.
+	for _, face in ipairs({dispatchAudio.READABLE_FACE, dispatchAudio.HARD_FACE}) do
+	requiredFace = face
+	for ladderIndex, width in ipairs(widthLadder) do
+		panelWidth = width
+		for height = baseHeight, maximumHeight, 6 do
+			for _, candidate in ipairs(candidates) do
+				local measured = measure(candidate, height)
+				if measured and measured.TextHeight >= desiredTextHeight then
+					panelHeight, fit = height, measured
+					break
+				end
+			end
+			if fit then break end
+		end
+		if not fit then
+			-- Nothing fits comfortably at this width, so take the arrangement
+			-- that leaves the most subtitle, breaking ties by the preference
+			-- order above.
+			local best = touch and math.max(64, math.min(baseHeight, band.Height)) or baseHeight
+			-- ...but never taller than the ceiling. `math.max(64, ...)` above is
+			-- a readability floor and it used to be the LAST word, so on a band
+			-- under 64px it quietly handed back a panel taller than the screen
+			-- space it was given. The ceiling is the last word now.
+			best = math.min(best, BAND_CEILING)
+			for _, candidate in ipairs(candidates) do
+				local measured = measure(candidate, best)
+				if measured and (not fit or measured.TextHeight > fit.TextHeight) then
+					panelHeight, fit = best, measured
+				end
+			end
+			-- ...and the LEAD-IN-LESS arrangements in the same pass, not only as
+			-- a last rescue.
+			--
+			-- WHAT THIS FIXES. The compressed list used to be tried only when
+			-- every full-furniture candidate had failed outright, which was the
+			-- right order for a panel that could grow. For a panel with a compact
+			-- CEILING it inverted the file's own stated priority. Measured on a
+			-- 390x844 portrait phone: the side-by-side readouts need 306px and the
+			-- panel is 330 wide, so the speaker lead-in cannot sit beside them and
+			-- every OwnBand=false candidate was refused; OwnBand=true then won by
+			-- dropping the readouts onto their own 30px band, leaving the actual
+			-- briefing 22 pixels. The lead-in survived and the sentence did not --
+			-- the exact trade the salvage block below says must never be made.
+			--
+			-- Now both lists compete on the same measure, and because `>` is
+			-- strict and `candidates` is iterated first, the lead-in still wins
+			-- every tie. Nothing that fits today with its lead-in loses it: at
+			-- 956x440 both arrangements yield a 46px copy box and the full one is
+			-- kept. At 390x844 the compressed arrangement yields 50px against 22
+			-- and takes it.
+			for _, candidate in ipairs(compressed) do
+				local measured = measure(candidate, best)
+				if measured and (not fit or measured.TextHeight > fit.TextHeight) then
+					panelHeight, fit = best, measured
+				end
 			end
 		end
 		if fit then break end
+		-- Exhausted: keep the widest rung for the compressed and salvage passes
+		-- below, which are what rescue the very smallest landscape phones.
+		if ladderIndex == #widthLadder then panelWidth = width end
+	end
+	if fit then break end
 	end
 	if not fit then
-		-- Nothing fits comfortably, so take the arrangement that leaves the most
-		-- subtitle, breaking ties by the preference order above.
-		panelHeight = touch and math.max(64, math.min(baseHeight, band.Height)) or baseHeight
-		-- ...but never taller than the band. `math.max(64, ...)` above is a
-		-- readability floor and it used to be the LAST word, so on a band under
-		-- 64px it quietly handed back a panel taller than the screen space it
-		-- was given. The band is the last word now.
-		panelHeight = math.min(panelHeight, BAND_CEILING)
-		for _, candidate in ipairs(candidates) do
-			local measured = measure(candidate, panelHeight)
-			if measured and (not fit or measured.TextHeight > fit.TextHeight) then
-				fit = measured
-			end
-		end
+		panelHeight = math.min(
+			touch and math.max(64, math.min(baseHeight, band.Height)) or baseHeight,
+			BAND_CEILING)
 	end
 	if not fit then
 		-- Still nothing, at the full height of the band: drop the lead-in and try
@@ -2852,17 +3085,28 @@ local function updateLevelOneGuideLayout()
 		local columns = sideBySide and 2 or 1
 		local controlsWidth = sideBySide and (minimumRowWidth * 2 + 10) or minimumRowWidth
 		local controlsTop = touch and 0 or 6
-		local needed = game:GetService("TextService"):GetTextSize(
-			dispatchAudio.longestLine, 11, subtitleText.Font,
-			Vector2.new(textWidth, 100000)).Y
+		-- The LIVE cue at the hard floor. Sizing this to the 1.6x localisation
+		-- probe is what used to make an English briefing pay for a translation
+		-- nobody has shipped; the probe is a matrix stress case now.
+		local needed = dispatchAudio.copyHeightFor(
+			dispatchAudio.fitCopy(), dispatchAudio.HARD_FACE, textWidth)
 		local minimumText = math.max(touch and 20 or 22, needed)
 		-- Ask for what the content wants, then let the band cut it down.
+		-- 6, matching the UIListLayout that stacks them. The other copy of this
+		-- arithmetic said 4 and was fixed with it; a stacked pair measured two
+		-- pixels short is a pair whose second readout hangs out of its row.
 		local rowSpan = function(row)
-			return columns == 2 and row or row * 2 + 4
+			return columns == 2 and row or row * 2 + 6
 		end
-		panelHeight = math.clamp(
-			controlsTop + rowSpan(minimumRowHeight) + minimumText + bottomPad,
-			math.min(panelHeight or 0, BAND_CEILING), BAND_CEILING)
+		-- THE ONE PLACE the compact target may be exceeded, and only by exactly
+		-- what `minimumText` -- a TextService measurement of the longest AUTHORED
+		-- cue at the smallest face on the ladder -- turns out to require. The
+		-- band is still the hard bound: a phone too small for both the readouts
+		-- and its copy gets a taller panel, never one outside its own band.
+		local wanted = controlsTop + rowSpan(minimumRowHeight) + minimumText + bottomPad
+		effectiveCeiling = math.min(BAND_LIMIT, math.max(BAND_CEILING, wanted))
+		panelHeight = math.clamp(wanted,
+			math.min(panelHeight or 0, effectiveCeiling), effectiveCeiling)
 		local row = minimumRowHeight
 		while row > ROW_HARD_FLOOR
 			and controlsTop + rowSpan(row) + minimumText + bottomPad > panelHeight do
@@ -2882,12 +3126,61 @@ local function updateLevelOneGuideLayout()
 		}
 	end
 
+	-- C_DISPATCH_NO_TALLER_THAN_ITS_COPY_20260831.
+	--
+	-- Every pass above answers "how tall may this panel be" and then takes that
+	-- height. None of them asks whether the copy actually NEEDS it. On a
+	-- 338x705 portrait phone the comfortable search finds nothing (its copy box
+	-- would have to be 66px and the width does not allow it), so the second pass
+	-- takes `best` -- the compact ceiling, 100 -- and measures the arrangement
+	-- at exactly that, leaving a 50px copy box for a sentence that occupies 36.
+	-- Eight of those pixels are the panel simply being bigger than it has to be
+	-- on a phone whose owner asked for the opposite.
+	--
+	-- So the height is now trimmed to what the arrangement needs, one pixel at a
+	-- time, under two conditions that keep it honest:
+	--   * `measure` must still accept the arrangement, which is what refuses any
+	--     height whose copy box cannot hold the live cue at the required face;
+	--   * the FACE the panel finally achieves must not drop. Height buys
+	--     legibility here -- the ceiling ladder below reads 16px from a 40px box
+	--     and 13 from a 39px one -- and trading a readable sentence for eight
+	--     pixels of chrome is the opposite of the trade being made.
+	-- Touch only. The desktop composition is authored, sits in a corner with
+	-- room to spare, and nobody asked for it to change.
+	if touch and fit then
+		local function achievedFace(measured)
+			local faceCeiling
+			if measured.TextHeight <= 32 then faceCeiling = 12
+			elseif measured.TextHeight < 40 then faceCeiling = 13
+			elseif touch or narrow then faceCeiling = 16
+			else faceCeiling = 20 end
+			return math.max(dispatchAudio.HARD_FACE, dispatchAudio.faceThatFits(
+				faceCeiling, measured.TextWidth, measured.TextHeight))
+		end
+		local current = measure(fit.Candidate, panelHeight)
+		if current then
+			local wantedFace = achievedFace(current)
+			-- ONE pixel, not two. A 2px step lands on whichever parity it
+			-- started from, so a panel whose copy needed 88 stopped at 90 and
+			-- was two pixels bigger than it had any reason to be -- on the two
+			-- tablets, where the search happens to start even.
+			local trimmed = panelHeight
+			while trimmed - 1 > 0 do
+				local smaller = measure(fit.Candidate, trimmed - 1)
+				if not smaller or achievedFace(smaller) < wantedFace then break end
+				trimmed -= 1
+				fit = smaller
+			end
+			panelHeight = trimmed
+		end
+	end
+
 	-- THE BAND WINS, ALWAYS -- stated once, at the end, where nothing can get
 	-- past it. Every pass above already respects BAND_CEILING, so this is the
 	-- guarantee rather than the mechanism; the subtitle box is re-derived from
 	-- the clamped height so a clamp can never leave the copy hanging outside the
 	-- panel it was measured against.
-	panelHeight = math.min(panelHeight, BAND_CEILING)
+	panelHeight = math.min(panelHeight, effectiveCeiling)
 	fit.TextHeight = math.max(0,
 		math.min(fit.TextHeight, panelHeight - fit.TextTop - (touch and 1 or 6)))
 	-- The lead-in exists only where the arrangement actually reserved room for
@@ -2900,12 +3193,18 @@ local function updateLevelOneGuideLayout()
 	-- the band. Every desktop and every portrait touch size is "full".
 	subtitleFrame:SetAttribute("BriefingFitMode",
 		subtitleSpeaker.Visible and "full" or "compact")
-	subtitleFrame:SetAttribute("BriefingBandCeiling", BAND_CEILING)
+	subtitleFrame:SetAttribute("BriefingBandCeiling", effectiveCeiling)
+	-- Published so a regression can assert the COMPACT CONTRACT itself and not
+	-- merely the absence of an overlap: what the compact target was, and whether
+	-- this viewport had to leave it (and in which axis) to fit its own copy.
+	subtitleFrame:SetAttribute("BriefingCompactCeiling", COMPACT_CEILING)
+	subtitleFrame:SetAttribute("BriefingCompactWidth", compactWidth)
+	subtitleFrame:SetAttribute("BriefingWidthRung",
+		table.find(widthLadder, panelWidth) or #widthLadder)
 
 	if touch then
 		subtitleFrame.AnchorPoint = Vector2.new(0, 0)
-		subtitleFrame.Position = UDim2.fromOffset(band.Left,
-			UIDevice.TopOffsetFor(guideGui, band.Top))
+		subtitleFrame.Position = UIDevice.LocalPosition(guideGui, band.Left, band.Top)
 	else
 		subtitleFrame.AnchorPoint = Vector2.new(0.5, 1)
 		subtitleFrame.Position = UDim2.new(0.5, 0, 1, narrow and -96 or -64)
@@ -2921,8 +3220,23 @@ local function updateLevelOneGuideLayout()
 	local rowHeight = fit.Candidate.Height
 	dispatchAudio.button.Size = UDim2.fromOffset(rowWidth, rowHeight)
 	dispatchAudio.stopButton.Size = UDim2.fromOffset(rowWidth, rowHeight)
-	dispatchAudio.button.TextSize = touch and 14 or 13
-	dispatchAudio.stopButton.TextSize = touch and 14 or 13
+	-- 12, not 14. The readouts keep their full 44px transparent hit rectangle;
+	-- only the GLYPHS get smaller, which is what makes a 148px row hold
+	-- "DISPATCH OFFLINE" and the whole panel read as a caption rather than a
+	-- menu. Desktop is unchanged at 13.
+	dispatchAudio.button.TextSize = touch and 12 or 13
+	dispatchAudio.stopButton.TextSize = touch and 12 or 13
+
+	-- Subtler chrome on a handheld: the panel is a radio caption over the game,
+	-- not a dialog. A lighter fill and a fainter rule, and the same numbers on
+	-- desktop as before.
+	subtitleFrame.BackgroundTransparency = touch and 0.30 or 0.18
+	local panelRule = subtitleFrame:FindFirstChildOfClass("UIStroke")
+	if panelRule then
+		panelRule.Transparency = touch and 0.55 or 0.38
+		panelRule.Thickness = touch and 1 or 1.5
+	end
+	subtitleSpeaker.TextSize = touch and 11 or 13
 
 	dispatchAudio.layout.FillDirection = fit.Candidate.Columns == 2
 		and Enum.FillDirection.Horizontal or Enum.FillDirection.Vertical
@@ -2951,7 +3265,13 @@ local function updateLevelOneGuideLayout()
 	else
 		ceiling = 20
 	end
-	subtitleText.TextSize = dispatchAudio.faceThatFits(ceiling, fit.TextWidth, fit.TextHeight)
+	subtitleText.TextWrapped = true
+	subtitleText.TextSize = math.max(dispatchAudio.HARD_FACE,
+		dispatchAudio.faceThatFits(ceiling, fit.TextWidth, fit.TextHeight))
+	-- Published so the matrix can assert the CONTRACT -- which face was
+	-- required and which was achieved -- rather than only the pixels.
+	subtitleFrame:SetAttribute("BriefingRequiredFace", requiredFace)
+	subtitleFrame:SetAttribute("BriefingFace", subtitleText.TextSize)
 
 	-- The BINDING GLYPHS live in dispatchAudio.refresh, and until now nothing
 	-- re-ran it when the form factor changed. UIDevice.Binding returns "" the
@@ -2961,6 +3281,20 @@ local function updateLevelOneGuideLayout()
 	-- that fires on a form-factor change, so the captions are rebuilt from it.
 	-- refresh() never calls back into the layout, so there is no cycle here.
 	dispatchAudio.refresh()
+end
+
+-- Studio-only relayout seam. The regression harness sets a stress cue by
+-- writing the subtitle label directly, and the panel is SIZED FOR THE COPY --
+-- so without a way to say "that changed", the matrix measured a box fitted to
+-- the previous sentence and reported the new one as overflowing it.
+if RunService:IsStudio() then
+	local relayout = Instance.new("BindableFunction")
+	relayout.Name = "UIRegressionRelayoutGuide"
+	relayout.OnInvoke = function()
+		updateLevelOneGuideLayout()
+		return subtitleText.TextSize
+	end
+	relayout.Parent = guideGui
 end
 
 UIDevice.Changed:Connect(updateLevelOneGuideLayout)

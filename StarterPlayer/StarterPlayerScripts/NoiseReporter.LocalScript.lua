@@ -188,6 +188,12 @@ gui.Parent = player:WaitForChild("PlayerGui")
 -- than captured once at load.
 local function touchControls() return UIDevice.IsTouch() end
 
+-- C_LIVE_CONTROL_RECTS_20260831. Every button this file builds registers its
+-- own rectangle with UIDevice, so `Zones.Controls` is the union of what is
+-- ACTUALLY drawn instead of a 168x290 block guessed at the display's corner.
+-- The guess was 290px tall; the real stack on a landscape phone starts far
+-- lower, and every objective readout was being pushed toward screen centre to
+-- dodge a rectangle that was mostly empty.
 local function makeTouchButton(name, text)
 	local button = Instance.new("TextButton")
 	button.Name = name
@@ -230,53 +236,72 @@ touchGlowButton.TextSize = 12
 local touchSneakButton, sneakStroke = makeTouchButton("TouchSneakHold", "SNEAK")
 touchSneakButton:SetAttribute("SneakEngaged", false)
 
--- The whole cluster is laid out from UIDevice's reserved control column, so
--- every other HUD element in the game can avoid exactly the rectangle these
--- buttons actually occupy. The flashlight toggle joins this column too (it used
--- to sit bottom-left, inside the movement thumbstick's activation region).
-local FLASHLIGHT_SLOT_HEIGHT = 58
+-- Registered AFTER all five exist, so the union is never partial.
+for _, entry in ipairs({
+	{"TouchRunHold", touchRunButton}, {"TouchJump", touchJumpButton},
+	{"TouchPOV", touchPOVButton}, {"TouchDropGlowstick", touchGlowButton},
+	{"TouchSneakHold", touchSneakButton},
+}) do
+	UIDevice.RegisterControlRect(entry[1], entry[2])
+end
+
+-- The whole cluster is laid out from UIDevice's control PLAN, so every other HUD
+-- element in the game can avoid exactly the rectangle these buttons occupy. The
+-- flashlight toggle takes its slot from the same plan (it used to sit
+-- bottom-left, inside the movement thumbstick's activation region).
+--
+-- C_SHORT_SCREEN_CLUSTER_20260831 -- WHAT SHIPPED BROKEN.
+--
+-- The edge / buttonSize / gap arithmetic used to live here, a second copy of it
+-- lived in FlashlightController, and a third lived in UIDevice to build the
+-- reserved rectangle from. All three agreed on a vertical stack 242px tall. On a
+-- 568x320 landscape phone the safe area is 262px tall, so the cluster owned the
+-- screen and the objective readout -- which needs 56px above it -- abandoned the
+-- safe right edge and drew itself in the middle of the display instead.
+--
+-- The arrangement is now UIDevice's decision, because UIDevice is the only place
+-- that knows what has to fit above it, and this file positions whatever it is
+-- handed. On a screen with room the plan is the column, unchanged to the pixel.
+-- On a short landscape screen it is a row along the bottom edge, sized to the
+-- daylight between the thumbstick's activation region and the safe right edge,
+-- which reserves 67px instead of 242.
+local function placeTouchControl(button, slot, bottomOverride)
+	button.Position = UDim2.new(1, -slot.Right, 1, -(bottomOverride or slot.Bottom))
+	button.Size = UDim2.fromOffset(slot.Width, slot.Height)
+	if slot.TextSize then button.TextSize = slot.TextSize end
+end
+
 local function applyTouchControlLayout()
 	if not touchControls() then return end
 	local layout = UIDevice.Layout()
-	local tablet = layout.Class == "tablet"
-	local edge = tablet and 26 or 22
-	local buttonSize = tablet and 76 or 64
-	local gap = tablet and 18 or 14
-	local secondColumn = edge + buttonSize + (tablet and 18 or 16)
-	local bottom = edge + (layout.Height - layout.SafeBottom > edge and 0 or 0)
+	local plan = layout.ControlPlan
+	local slots = plan.Slots
 
-	touchJumpButton.Position = UDim2.new(1, -edge, 1, -bottom)
-	touchJumpButton.Size = UDim2.fromOffset(buttonSize, buttonSize)
-	-- In a round our JUMP owns the bottom-right slot and Roblox's is suppressed,
-	-- so RUN sits directly above it. In the LOBBY the default jump is restored
-	-- (it is the only jump there), and it occupies roughly the slot ours would
-	-- have -- so RUN lifts clear of the engine's own button rather than sitting
-	-- on top of it.
-	local runStack = bottom + buttonSize + gap
+	-- In a round our JUMP owns the thumb-nearest slot and Roblox's is suppressed.
+	-- In the LOBBY the default jump is restored (it is the only jump there) and it
+	-- occupies roughly that same slot, so RUN -- the one control the lobby leaves
+	-- usable -- lifts clear of the engine's button rather than sitting on it.
+	-- Measured through BottomOffsetFor, because the lift converts an ABSOLUTE
+	-- edge into this gui's own bottom-relative offsets and the gui is inset to
+	-- the safe area, not to the display.
+	local runBottom = slots.TouchRunHold.Bottom
 	if not inRound() then
-		local jumpZone = layout.Zones.Jump
-		runStack = math.max(runStack, layout.Height - jumpZone.Top + gap)
+		runBottom = math.max(runBottom,
+			UIDevice.BottomOffsetFor(gui, layout.Zones.Jump.Top) + plan.Gap)
 	end
-	touchRunButton.Position = UDim2.new(1, -edge, 1, -runStack)
-	touchRunButton.Size = UDim2.fromOffset(buttonSize, buttonSize)
-	-- SNEAK stacks directly above RUN in the same right-hand column, measured
-	-- from runStack so it inherits the lobby lift and can never land on RUN.
-	-- The whole stack (edge + JUMP + gap + RUN + gap + SNEAK = 242 phone /
-	-- 290 tablet) still fits inside the control column UIDevice reserves
-	-- (290 / 330), so nothing else in the HUD has to move to make room.
-	touchSneakButton.Position = UDim2.new(1, -edge, 1, -(runStack + buttonSize + gap))
-	touchSneakButton.Size = UDim2.fromOffset(buttonSize, buttonSize)
-	-- Second column: GLOW on top of POV, both clear of the jump/run column and
-	-- of the flashlight slot that FlashlightController now occupies below them.
-	touchPOVButton.Position = UDim2.new(1, -secondColumn,
-		1, -(bottom + FLASHLIGHT_SLOT_HEIGHT + (tablet and 14 or 12)))
-	touchPOVButton.Size = UDim2.fromOffset(tablet and 72 or 58, tablet and 54 or 48)
-	touchGlowButton.Position = UDim2.new(1, -secondColumn,
-		1, -(bottom + FLASHLIGHT_SLOT_HEIGHT + buttonSize + gap))
-	touchGlowButton.Size = UDim2.fromOffset(tablet and 72 or 58, tablet and 72 or 58)
-	touchRunButton.TextSize = tablet and 18 or 16
-	touchJumpButton.TextSize = tablet and 17 or 15
-	touchSneakButton.TextSize = tablet and 17 or 15
+	local lift = runBottom - slots.TouchRunHold.Bottom
+
+	placeTouchControl(touchJumpButton, slots.TouchJump)
+	placeTouchControl(touchRunButton, slots.TouchRunHold, runBottom)
+	-- SNEAK stacks directly above RUN in the COLUMN, so it inherits the lobby
+	-- lift and can never land on it. In the ROW it sits beside RUN instead and
+	-- takes no lift: it is hidden in the lobby, and lifting it there would push a
+	-- hidden button into the readout's headroom for no one's benefit.
+	local sneakBottom = slots.TouchSneakHold.Bottom
+	if plan.Mode == "column" then sneakBottom += lift end
+	placeTouchControl(touchSneakButton, slots.TouchSneakHold, sneakBottom)
+	placeTouchControl(touchPOVButton, slots.TouchPOV)
+	placeTouchControl(touchGlowButton, slots.TouchDropGlowstick)
 end
 
 applyTouchControlLayout()
@@ -380,6 +405,19 @@ local staBg = Instance.new("Frame")
 staBg.AnchorPoint = Vector2.new(0.5, 1)
 staBg.Position = UDim2.new(0.5, 0, 1, -22)
 staBg.Size = UDim2.new(0, BAR_W, 0, BAR_H)
+-- The rectangle the objective readout will occupy on this device, asked for at
+-- the WIDEST footprint any level declares. Read from UIDevice.ObjectivePanelSize
+-- rather than copied out of it, so a level that grows its panel moves the bar out
+-- of the way instead of quietly ending up underneath it.
+local function objectiveReserve()
+	local width, height = 0, 0
+	for _, size in pairs(UIDevice.ObjectivePanelSize) do
+		width = math.max(width, size.X)
+		height = math.max(height, size.Y)
+	end
+	return UIDevice.TopRightPanel(width, height)
+end
+
 -- The fixed 300px bar overflowed a 375-wide portrait screen and sat on top of
 -- the movement zone. It is now capped to the safe width and lifted into the
 -- content band on touch.
@@ -396,17 +434,38 @@ local function applyStaminaLayout()
 	-- controls -- not enough to share with the alert banner -- but the corridor
 	-- down the middle is free at any height.
 	local corridor = layout.Corridor
+	-- Both branches place an ABSOLUTE centre and an ABSOLUTE bottom, and both are
+	-- converted. The X used to be written straight in as a gui offset (and in
+	-- portrait as a 0.5 scale of the GUI, which is the housing's centre rather
+	-- than the safe area's whenever a device has a horizontal inset).
+	local centre, bottom
 	if corridor.Width >= 120 then
-		local width = math.min(BAR_W, corridor.Width)
-		staBg.Size = UDim2.new(0, width, 0, BAR_H)
-		staBg.Position = UDim2.new(0, (corridor.Left + corridor.Right) * .5,
-			1, -UIDevice.BottomOffsetFor(gui, layout.Height - 18))
+		staBg.Size = UDim2.new(0, math.min(BAR_W, corridor.Width), 0, BAR_H)
+		centre = (corridor.Left + corridor.Right) * .5
+		bottom = layout.Display.Bottom - 18
 	else
-		-- Portrait: the corridor is narrow, so fall back to the safe band.
-		staBg.Size = UDim2.new(0, math.min(BAR_W, layout.SafeRight - layout.SafeLeft), 0, BAR_H)
-		staBg.Position = UDim2.new(0.5, 0,
-			1, -UIDevice.BottomOffsetFor(gui, layout.SafeBottom - 10))
+		-- Portrait, or a SHORT landscape screen where the cluster now spans the
+		-- bottom edge and closes the corridor entirely. Fall back to the safe
+		-- band -- but keep out of the objective readout, which since
+		-- C_OBJECTIVE_ALWAYS_THE_SAFE_EDGE_20260831 genuinely owns the upper-right
+		-- corner and is a full 101px tall there. A 300px bar centred on a 568px
+		-- screen reaches x 434 and the readout starts at 312, so the two crossed:
+		-- the stamina bar was drawn straight through the objective text.
+		--
+		-- Capped only when the two actually share a band. In portrait the bar sits
+		-- hundreds of pixels below the readout and keeps its full width.
+		bottom = layout.SafeBottom - 10
+		local right = layout.Safe.Right
+		local reserve = objectiveReserve()
+		if reserve.Height > 0 and bottom > reserve.Top and bottom - BAR_H < reserve.Bottom then
+			right = math.min(right, reserve.Left - 8)
+		end
+		local lane = math.max(0, right - layout.Safe.Left)
+		staBg.Size = UDim2.new(0, math.min(BAR_W, lane), 0, BAR_H)
+		centre = (layout.Safe.Left + right) * .5
 	end
+	staBg.Position = UDim2.new(0, select(1, UIDevice.LocalOffset(gui, centre, 0)),
+		1, -UIDevice.BottomOffsetFor(gui, bottom))
 end
 staBg.BackgroundColor3 = Color3.new(0, 0, 0)
 staBg.BackgroundTransparency = 1 -- starts hidden (full stamina)
@@ -493,10 +552,28 @@ local function controlsAvailable()
 	if player:GetAttribute("ZyntraStoreOpen") == true then return false end
 	if player:GetAttribute("DevPhoneOpen") == true then return false end
 	if player:GetAttribute("ZyntraReentryOpen") == true then return false end
+	-- ...and the party dialog, which was the one screen-owning modal missing
+	-- from this list while `modalOwnsScreen` below already carried it. The two
+	-- disagreeing is how the cluster stayed drawn under a modal that UIDevice,
+	-- the Level 3 reader and the Zyntra opener all treat as owning the screen.
+	if player:GetAttribute("QueueModalOpen") == true then return false end
 	local character = player.Character
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 	if not humanoid or humanoid.Health <= 0 then return false end
 	return true
+end
+
+-- A modal owns the screen whether or not a round is running. `controlsAvailable`
+-- answers false out of a round for a different reason -- there is no round --
+-- and the RUN exception below rides on that, so the lobby's RUN button stayed
+-- live and Active underneath the Zyntra terminal, competing with a modal that
+-- now uses the whole safe area. Stated separately so the exception cannot
+-- swallow it.
+local function modalOwnsScreen()
+	return player:GetAttribute("ZyntraStoreOpen") == true
+		or player:GetAttribute("DevPhoneOpen") == true
+		or player:GetAttribute("ZyntraReentryOpen") == true
+		or player:GetAttribute("QueueModalOpen") == true
 end
 
 local function updateRoundState()
@@ -504,8 +581,10 @@ local function updateRoundState()
 	local usable = controlsAvailable()
 	gui.Enabled = true
 	-- RUN stays available in the lobby (it is how a player sprints to a station)
-	-- but is gated on every other unavailable state once a round starts.
-	UIDevice.SetInteractive(touchRunButton, touchControls() and (usable or not active))
+	-- but is gated on every other unavailable state once a round starts -- and,
+	-- in or out of a round, on no modal owning the screen.
+	UIDevice.SetInteractive(touchRunButton,
+		touchControls() and (usable or not active) and not modalOwnsScreen())
 	UIDevice.SetInteractive(touchJumpButton, usable)
 	-- SNEAK is a level-only control: there is nothing to crouch away from in the
 	-- lobby, and applySpeed() ignores crouch out of a round anyway.
@@ -535,7 +614,7 @@ local function updateRoundState()
 end
 player:GetAttributeChangedSignal("InRound"):Connect(updateRoundState)
 for _, attribute in ipairs({"Escaped", "Level3_Hiding", "Spectating",
-	"ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen"}) do
+	"ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen", "QueueModalOpen"}) do
 	player:GetAttributeChangedSignal(attribute):Connect(updateRoundState)
 end
 UIDevice.Changed:Connect(updateRoundState)

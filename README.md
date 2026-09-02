@@ -346,6 +346,7 @@ StarterPlayer/
                                     spectate, slides, scares…
 ReplicatedStorage/Remotes/          RemoteEvents (.txt markers)
 ReplicatedStorage/UIDevice          form factor + safe-area layout for the HUD
+                                    (`Safe`, `ModalViewport`, `TopRightPanel`)
 ReplicatedStorage/UIRegression      the HUD regression matrix (see Testing)
 assets/                             source assets: textures · sounds · models ·
                                     banners · animations (FBX + keyframes) · blender
@@ -471,8 +472,14 @@ keeps the remaining external release gates visible.
 |---|---|---|
 | `Level 2 Slidemouth Test Suite` | 391 checks, 0 failed, authored scale | **PASS** |
 | `Round Completion Test Suite` | 397 checks, 0 failed | **PASS** |
-| `UIRegression` | 200 checks, 0 failed | **PASS** |
-| `UIRegression.TouchTargetMatrix` | 262 checks, 0 failed | **PASS** |
+| `UIRegression.RunAll` | 21 scenarios, 0 failed | **PASS** |
+| &nbsp;&nbsp;↳ `QueueModalMatrix` | 695 checks, 0 failed | **PASS** |
+| &nbsp;&nbsp;↳ `BriefingFitMatrix` | 244 checks, 0 failed | **PASS** |
+| &nbsp;&nbsp;↳ `BriefingExclusionMatrix` | 88 checks, 0 failed | **PASS** |
+| &nbsp;&nbsp;↳ `ObjectiveCornerMatrix` *(new)* | 152 checks, 0 failed | **PASS** |
+| &nbsp;&nbsp;↳ `DispatchCompactMatrix` *(new)* | 115 checks, 0 failed | **PASS** |
+| &nbsp;&nbsp;↳ `ZyntraTerminalFitMatrix` *(new)* | 557 checks, 0 failed | **PASS** |
+| `UIRegression.TouchTargetMatrix` | 408 checks, 0 failed | **PASS** |
 | Level 2 exit transition | 2 invisible sensors; 105-stud/s authoritative crossing; 75-second recycled ride | **PASS** |
 | Level 2 movement audio | 3 wet runs and 1 dry-tile run; no wet gap above 0.480 s | **PASS** |
 | Level 3 navigation + furniture | 20 navigation seeds; 9 lanes; 321 furniture parts preserved | **PASS** |
@@ -498,7 +505,13 @@ the remote Git branch resolved to the pushed release history.
 |---|---|---|
 | `Level 2 Slidemouth Test Suite` | `ServerScriptService."Level 2 Systems"` | **The spawn contract, enforced at the commit** — "1 to 2 rooms from the nearest player" used to be three different rules in three places and none of them hard: the ranking DEMOTED an out-of-window room instead of refusing it (and two of the demoted tiers outranked a room inside the window), the commit-time re-check re-tested occupancy and studs but never re-measured hops, and the pump-three escalation carried a third paraphrase with no hop bound at all. There is now ONE predicate and the suite runs the very function the commit calls, comparing its answer against a room graph the suite walks itself — including a tie one hop from two players, a saturated map where the only correct answer is to WAIT, and a party that MOVES between the ranking and the commit. **The substep floor resolve at the fastest production stride** — `PumpThree x MaxStepDelta` = 3.6 studs, read from the controller rather than copied, on two constructed lanes sized so one unvalidated leap straddles the feature and .9-stud substeps cannot: a 1.2-stud rise the creature must STAND on, and a 2.0-stud trench six studs above the floor it must REFUSE. The pre-rewrite navigator is kept as an in-suite mutant that calls the same `_placeFoot` with the loop removed, so the two must disagree. **Pause isolation over a loaded incumbent** — a borrowed session is parked, written over, thrown at, and handed back: the true PRE-ARM baseline is restored field for field, the navigator's `Path.Blocked` binding and its in-flight computation are restored under a documented contract, a failed pause leaves the incumbent running and a failed resume leaves the handle unconsumed, parked sessions are visible to the residue checks and stoppable by handle, and a scream pending before the pause fires exactly once afterwards at its PRESERVED REMAINING delay. Plus spawn selection re-derived independently of the controller — room, hop counts, pump hops, distance, sight and **tier**, plus the documented ordering; the production spawn path with the movement race **injected between the ranking and the commit** and eligibility read through the controller's own gate; the repaired failure modes (context-free ranking, bounded retreat, fail-closed sweep); ledge crossing on controlled rises and authored edges, where every attempted probe must end up crossed or verifiably refused |
 | `Round Completion Test Suite` | `ServerScriptService` | Seven groups, including **Cohort timing, claim anchors and synchronous failures**: a source party and its destination driven over ONE fake clock so a silent continuer's bounded retry is proved to land before the destination admits; a claim that never reaches a dispatch reaching finite settlement; repeated and concurrent `ForceSettle` proved idempotent; and synchronous dispatch rejections proved to enter the same retry/fallback/surrender policy a `TeleportInitFailed` callback does. Plus the post-win routing rules and the frozen roster; proof that the **running GameManager** loaded, uses the routing module and keeps no completion or transfer state of its own; the source→destination admission handshake replayed with the production `PlayerRemoving` step (early continuer departs mid-window, later manual Continue, timeout continuer, quitters, Back users, duplicate packets, bootstrap); the attempt-correlated failure path with real `TeleportOptions` (duplicate report, stale report after fallback, stale options never retried); and the completed-world teardown rule |
-| `UIRegression` | `ReplicatedStorage` | `BriefingExclusionMatrix()` — the dispatch briefing, the queue host modal and the Zyntra store opener, which all own the same strip of screen: a seven-state machine driven in BOTH orders (a modal raised over a live briefing, and a briefing raised under a modal already up) at two viewports, asserting the two published flags, the pixels they are derived from, that the opener leaves the INPUT STACK and not merely the screen, that the transmission itself is never torn down by suppressing its panel, and that no rect anywhere under the briefing panel overlaps any rect anywhere under the modal. Plus the developer page's captions against `UIDevice.SuppressesKeyboardGlyphs()` in both modes and back again, so a caption cannot be decided once at build time; `QueueModalMatrix()` — the lobby queue panel resolved arithmetically across thirteen device sizes, behind a calibration gate that first proves the resolver reproduces the engine at the real viewport; `BriefingFitMatrix()` — the dispatch briefing panel measured with `TextService:GetTextBoundsAsync` on portrait and small-landscape phones, proving the longest authored cue neither clips its box nor overlaps the MUTE/STOP row that abuts it; the HUD scenario matrix (including the lobby queue panel's five controls), the completion overlay's actions and routing, a viewport fit matrix across desktop, tablet and phone in both orientations, and `TouchTargetMatrix()` — a tap-size, interactivity and keyboard-glyph sweep across six phone and tablet sizes **including the Galaxy A06's 705×338**, plus a geometry pass at the real viewport with the touch layout applied. The two halves are split on purpose: under the viewport override Studio still renders at its real window size, so position-based assertions only mean something in the real-viewport pass |
+| `UIRegression` | `ReplicatedStorage` | **`ZyntraTerminalFitMatrix()`** — the Zyntra Equipment/Research terminal opened through its OWN production toggle at ten device sizes, every tab including DEV selected through the production `selectTab`: the terminal inside `UIDevice.ModalViewport` (the true safe area, not the HUD band it used to be sized from and collapse in), header/tabs/content/status all positive, non-overlapping and inside the panel, a usable page height, every tab reachable (the bar scrolls when they do not fit) and in its authored order, every card and dev row contained horizontally with a scroll for the overflow, every touch action ≥ 44 × 44, no keyboard glyph, and the opener plus every movement control — the game's cluster AND the engine's own thumbstick — proved to have stood down while the modal is up. The shell is resolved analytically behind the usual calibration gate; grid- and list-laid-out internals are measured live and compared only against other live rectangles. **`ObjectiveCornerMatrix()`** — Level 1, Level 2 and Level 3's objective readouts forced into every state at the same ten sizes, asserting the upper-right anchor itself (top of the true safe area; right-aligned to the screen's safe edge or to the control column, whichever is the highest movement-safe edge for that height), no movement-zone entry, the Level 2 alert reflowing beside it or mutually excluding it, and the Level 3 contract in full: no separate CLOSE control exists, the panel is the control on touch and inert on desktop, the hidden state exposes only a wordless ≥ 44 × 44 restore chip at the same anchor, and restoring brings the panel back. **`DispatchCompactMatrix()`** — the phone briefing's maximum footprint: 560 × 100 absolutely on a 956 × 440 iPhone 16 Pro Max, and elsewhere bounded by the compact target the layout publishes plus the rung it reports climbing, never a quarter of the height, never a fifth of the screen, with both readouts ≥ 44 × 44 and the longest authored cue still fitting its box. Plus `BriefingExclusionMatrix()` — the dispatch briefing, the queue host modal and the Zyntra store opener, which all own the same strip of screen: a seven-state machine driven in BOTH orders (a modal raised over a live briefing, and a briefing raised under a modal already up) at two viewports, asserting the two published flags, the pixels they are derived from, that the opener leaves the INPUT STACK and not merely the screen, that the transmission itself is never torn down by suppressing its panel, and that no rect anywhere under the briefing panel overlaps any rect anywhere under the modal. Plus the developer page's captions against `UIDevice.SuppressesKeyboardGlyphs()` in both modes and back again, so a caption cannot be decided once at build time; `QueueModalMatrix()` — the lobby queue panel resolved arithmetically across thirteen device sizes, behind a calibration gate that first proves the resolver reproduces the engine at the real viewport; `BriefingFitMatrix()` — the dispatch briefing panel measured with `TextService:GetTextBoundsAsync` on portrait and small-landscape phones, proving the longest authored cue neither clips its box nor overlaps the MUTE/STOP row that abuts it; the HUD scenario matrix (including the lobby queue panel's five controls), the completion overlay's actions and routing, a viewport fit matrix across desktop, tablet and phone in both orientations, and `TouchTargetMatrix()` — a tap-size, interactivity and keyboard-glyph sweep across six phone and tablet sizes **including the Galaxy A06's 705×338**, plus a geometry pass at the real viewport with the touch layout applied. The two halves are split on purpose: under the viewport override Studio still renders at its real window size, so position-based assertions only mean something in the real-viewport pass |
+
+The three matrices added on 2026-08-30 (`ObjectiveCornerMatrix`,
+`DispatchCompactMatrix`, `ZyntraTerminalFitMatrix`) run from `RunAll` like the
+rest — they own the `UIRegressionViewport` / `ForceTouchUI` /
+`UIRegressionSafeInsets` overrides themselves and restore all three on every
+exit path, error included, and each asserts that it did.
 
 ```lua
 -- server
@@ -523,6 +536,9 @@ print((require(game.ReplicatedStorage.UIRegression).TouchTargetMatrix()))
 print((require(game.ReplicatedStorage.UIRegression).QueueModalMatrix()))
 print((require(game.ReplicatedStorage.UIRegression).BriefingFitMatrix()))
 print((require(game.ReplicatedStorage.UIRegression).BriefingExclusionMatrix()))
+print((require(game.ReplicatedStorage.UIRegression).ObjectiveCornerMatrix()))
+print((require(game.ReplicatedStorage.UIRegression).DispatchCompactMatrix()))
+print((require(game.ReplicatedStorage.UIRegression).ZyntraTerminalFitMatrix()))
 ```
 
 A four-seed sweep runs for several minutes. `execute_luau` gives up long before
@@ -576,6 +592,25 @@ reached in a published place.
 | `UIRegressionForceDispatchActive` | player | `hasActiveTransmission()` answers true, so the briefing panel can be raised without waiting for a real cue |
 | `UIRegressionSuppressDispatch` | player | hides the AMBIENT transmission *and its subtitle*, so a matrix can establish a genuinely idle screen |
 | `UIRegressionViewport` / `ForceTouchUI` | workspace | UIDevice reports a simulated size / form factor |
+| `UIRegressionSafeInsets` | workspace | `Rect(left, top, right, bottom)`; UIDevice reports that device safe area instead of its modelled one. Studio on a PC measures no sensor housing, so without this no matrix could prove the layout honours one — the iPhone rows set `(59, 0, 59, 21)` landscape and `(0, 0, 0, 34)` portrait |
+| `UIRegressionForceLevel3Reader` / `UIRegressionForceReaderHidden` | player | forces the Level 3 exit reader active, and forces its hidden/visible state, so both halves of the tap-to-hide contract can be driven |
+
+`ZyntraStore` also publishes a Studio-only `BindableFunction`
+(`UIRegressionZyntraStoreProbe`) that drives the terminal through its **own**
+production entry points — `open`, `close`, `kiosk`, `tabs`, `tab:<name>` and
+`relayout` all call `toggleMain` / `openKioskShop` / `selectTab` /
+`applyTerminalLayout` rather than re-implementing them, so a matrix cannot pass
+against a reimplementation of tab switching that the player never runs.
+
+**A module local is not observable from a matrix.** Studio's `execute_luau`
+— which is what drives every device sweep here — runs in a **separate `require`
+cache** from the running LocalScripts: a module required from there is a
+different table with its own upvalues. Proved directly, by replacing
+`UIDevice.Layout` on the harness-side table and invoking the store's own
+relayout probe, which called the patched function zero times. Anything a matrix
+must assert therefore has to live in shared state (an attribute or an instance
+property), which is why `UIDevice.SuppressTouchMovement` publishes
+`TouchMovementSuppressed` on the player rather than keeping a boolean.
 
 `UIRegressionSuppressDispatch` was added because clearing the force flag does
 **not** reach an idle screen: a Studio session comes up with the first-login

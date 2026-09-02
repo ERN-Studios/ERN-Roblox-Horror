@@ -14,7 +14,7 @@ local WorldBuilder = require(script.Parent:WaitForChild("Level 2 World Builder")
 local ObjectiveController = require(script.Parent:WaitForChild("Level 2 Objective Controller"))
 local PoolFoamController = require(script.Parent:WaitForChild("Level 2 Pool Foam Controller"))
 local PoolFoamConfiguration = require(script.Parent:WaitForChild("Level 2 Pool Foam Configuration"))
-local SlidemouthController = require(script.Parent:WaitForChild("Level 2 Slidemouth Controller"))
+local PoolSlideController = require(script.Parent:WaitForChild("Level 2 Pool Slide Controller"))
 
 local Adapter = {}
 local activeManifest
@@ -236,7 +236,7 @@ function Adapter.Cleanup()
 		or ServerStorage:FindFirstChild("Level 2 Stored Level 1 Entity") ~= nil
 		or ServerStorage:FindFirstChild(STORED_LOBBY_NAME) ~= nil
 	)
-	SlidemouthController.Stop()
+	PoolSlideController.Stop()
 	PoolFoamController.Stop()
 	ObjectiveController.Stop()
 	-- Pool Foam pause is session-local; do not inherit a Studio debug pause.
@@ -367,9 +367,9 @@ function Adapter.Build()
 		state:SetAttribute("Level2_HallCount", #layout.Halls)
 
 		ObjectiveController.Start(manifest, generation)
-		local slidemouthSession, slidemouthError = SlidemouthController.Start(manifest, generation)
-		if not slidemouthSession then
-			error("[Level 2] Slidemouth encounter did not start: " .. tostring(slidemouthError))
+		local poolSlideSession, poolSlideError = PoolSlideController.Start(manifest, generation)
+		if not poolSlideSession then
+			error("[Level 2] Pool Slide encounter did not start: " .. tostring(poolSlideError))
 		end
 		local poolFoamSession, poolFoamError = PoolFoamController.Start(manifest, generation)
 		if not poolFoamSession then

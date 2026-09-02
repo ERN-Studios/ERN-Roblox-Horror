@@ -68,6 +68,9 @@ local ROUTE_ABANDON_FAILURES = 4
 -- how many times it may do so WITHOUT ever getting closer to its goal.
 local ROUTE_RETREAT_STUDS = 16
 local MAX_ROUTE_RETREATS = 5
+-- Recheck a proved obstruction cheaply; never rebuild the whole blocked route
+-- just because time passed. Doors can open while the player stands still.
+local CLEARANCE_RECHECK_INTERVAL = 3
 -- Validated positions kept for the retreat recovery, and the furthest it may
 -- ever walk back along them.
 local TRAIL_LIMIT = 48
@@ -404,6 +407,9 @@ function Navigator.new(model, manifest, tuning, options)
 			WaypointArrivalDistance = readNumber(tuning, "WaypointArrivalDistance", DEFAULTS.WaypointArrivalDistance, 0.2, 8),
 			RepathDistance = readNumber(tuning, "RepathDistance", DEFAULTS.RepathDistance, 0.5, 50),
 			RepathInterval = readNumber(tuning, "RepathInterval", DEFAULTS.RepathInterval, 0.1, 10),
+			-- Opt-in for the Pool Slide. Other encounters keep their tested policy.
+			StableRoutes = tuning.StableRoutes == true,
+			PathRequestTimeout = readNumber(tuning, "PathRequestTimeout", 8, 2, 30),
 			FootClearance = readNumber(tuning, "FootClearance", DEFAULTS.FootClearance, 0, 3),
 			FloorProbeAbove = readNumber(tuning, "FloorProbeAbove", DEFAULTS.FloorProbeAbove, 3, 60),
 			FloorProbeDepth = readNumber(tuning, "FloorProbeDepth", DEFAULTS.FloorProbeDepth, 20, 300),
@@ -433,6 +439,14 @@ function Navigator.new(model, manifest, tuning, options)
 		LastPathAt = -math.huge,
 		RequestId = 0,
 		Computing = false,
+		RouteInstallCount = 0,
+		RouteRejectedCount = 0,
+		RoutePrefixSkips = 0,
+		InstalledGoal = nil,
+		BlockedGoalApproach = nil,
+		BlockedProbeFrom = nil,
+		BlockedProbeTarget = nil,
+		NextClearanceProbeAt = 0,
 		BlockedConnection = nil,
 		-- The Path the connection above belongs to. Recorded because a pause has
 		-- to be able to REBUILD the binding, and a connection alone cannot be
@@ -1242,7 +1256,10 @@ end
 --
 -- `shouldAbort` is asked between chunks so a superseded path request stops
 -- paying for a route nobody will use.
-function Navigator:_centreRoute(points, shouldAbort)
+function Navigator:_centreRoute(points, shouldAbort, startPosition)
+	-- A request can yield while the incumbent keeps walking. All passes must
+	-- certify from ONE origin; the finished plan is joined to the live foot.
+	local routeOrigin = startPosition
 	local stats = {
 		Points = #points, Moved = 0, Kept = 0, Inserted = 0,
 		Unresolved = 0, Queries = 0, WorstShift = 0, Aborted = false,
@@ -1267,7 +1284,7 @@ function Navigator:_centreRoute(points, shouldAbort)
 	-- then sweeps every surviving segment, so nothing is skipped unvalidated.
 	if #points > 2 then
 		local thinned = {}
-		local anchor = self.FootPosition
+		local anchor = routeOrigin or self.FootPosition
 		for index = 1, #points do
 			local point = points[index]
 			local keep = index == #points
@@ -1307,7 +1324,7 @@ function Navigator:_centreRoute(points, shouldAbort)
 	-- Pass 1: every point except the goal is moved to somewhere the body fits.
 	local centred = {}
 	local centredFeet = {}
-	local previous = self.FootPosition
+	local previous = routeOrigin or self.FootPosition
 	local goalStandableForRoute = true
 	for index = 1, #points do
 		local point = points[index]
@@ -1386,7 +1403,7 @@ function Navigator:_centreRoute(points, shouldAbort)
 	-- the ones that fail. A pair of clear standing positions does not by itself
 	-- mean the body can get from one to the other.
 	local repaired = {}
-	local cursorFoot = self.FootPosition
+	local cursorFoot = routeOrigin or self.FootPosition
 	for index = 1, #centred do
 		local point = centred[index]
 		-- A generated navigation node can itself sit inside decoration (seed
@@ -1537,10 +1554,11 @@ function Navigator:DebugCentreRoute(points)
 	return self:_centreRoute(points, nil)
 end
 
-function Navigator:_fallbackWaypoints(goal)
-	local route = graphRoute(self.Layout, self.HallByIndex, self.AllowedHallIndices, self.FootPosition, goal)
+function Navigator:_fallbackWaypoints(goal, startPosition)
+	local origin = startPosition or self.FootPosition
+	local route = graphRoute(self.Layout, self.HallByIndex, self.AllowedHallIndices, origin, goal)
 	if route and #route > 0 then return route, "GRAPH" end
-	if self:_positionAllowed(goal) and self:_clearDirectLine(self.FootPosition, goal) then
+	if self:_positionAllowed(goal) and self:_clearDirectLine(origin, goal) then
 		return {goal}, "DIRECT"
 	end
 	return {}, "NO_PATH"
@@ -1596,7 +1614,8 @@ function Navigator:_bindBlocked(path)
 		-- future segments remain guarded by every `_placeFoot` and will be
 		-- revalidated when they become current.
 		local target = self.Waypoints[self.WaypointIndex]
-		local targetOk, targetFoot = target and self:_standableAt(target)
+		local targetOk, targetFoot
+		if target then targetOk, targetFoot = self:_standableAt(target) end
 		if targetOk and self:_bodySweepClear(self.FootPosition, targetFoot) then
 			return
 		end
@@ -1615,13 +1634,210 @@ function Navigator:HasBlockedConnection(): boolean
 	return self.BlockedConnection ~= nil
 end
 
+function Navigator:_reachedGoal()
+	if not self.Goal then return false end
+	local target = self.Goal
+	-- An approach belongs to the goal it was certified for, not to a player
+	-- who has since walked away from that pump/column.
+	local approachGoal = self.InstalledGoal or self.LastRequestedGoal
+	if self.GoalApproach and approachGoal
+		and horizontalDistance(self.Goal, approachGoal) <= self.Tuning.WaypointArrivalDistance
+		and math.abs(self.Goal.Y-approachGoal.Y) < self.Tuning.MaxStepHeight then
+		target = self.GoalApproach
+	end
+	return horizontalDistance(self.FootPosition, target) <= self.Tuning.WaypointArrivalDistance
+		and math.abs(self.FootPosition.Y-target.Y) <= 7
+end
+
+local function fullyCertified(stats)
+	return type(stats) == "table" and stats.Aborted == false
+		and stats.Unwalkable == 0 and stats.Unresolved == 0
+		and finiteNumber(stats.Queries) and stats.Queries < CENTRING_QUERY_BUDGET
+end
+
+function Navigator:_waitingForClearance()
+	return self.Tuning.StableRoutes and self.BlockedGoalApproach ~= nil
+		and self.InstalledGoal ~= nil and self.Goal ~= nil
+		and horizontalDistance(self.Goal,self.InstalledGoal) < self.Tuning.RepathDistance
+		and math.abs(self.Goal.Y-self.InstalledGoal.Y) < self.Tuning.MaxStepHeight
+		and horizontalDistance(self.FootPosition,self.BlockedGoalApproach) <= self.Tuning.WaypointArrivalDistance
+end
+
+function Navigator:_probeBlockedClearance()
+	if not self:_waitingForClearance() or self.Computing
+		or os.clock() < self.NextClearanceProbeAt then return false end
+	self.NextClearanceProbeAt = os.clock() + CLEARANCE_RECHECK_INTERVAL
+	local from, target = self.BlockedProbeFrom, self.BlockedProbeTarget
+	if not finiteVector3(from) or not finiteVector3(target)
+		or horizontalDistance(from,target) > 256 then return false end
+	-- These are the actual last-safe foot and obstructed endpoint recorded by
+	-- the prefix walk. Probe the same floor/step/body contract without moving.
+	if not self:_walkingEdgeClear(from,target) then return false end
+	self.BlockedGoalApproach = nil
+	self.BlockedProbeFrom = nil
+	self.BlockedProbeTarget = nil
+	self.NextClearanceProbeAt = 0
+	self.LastPathAt = -math.huge
+	return true
+end
+
+function Navigator:_stableNeedsPath(goal, force)
+	local age = os.clock() - self.LastPathAt
+	if self.Computing and age >= self.Tuning.PathRequestTimeout then
+		-- A hung async calculation cannot own navigation forever. Late results
+		-- are invalidated without deleting a route that is still being walked.
+		self.RequestId += 1
+		self.Computing = false
+	end
+	if self.Computing then return false end
+	if force == true then return true end
+	if self:_probeBlockedClearance() then return true end
+	if age < self.Tuning.RepathInterval then return false end
+	local moved = not self.LastRequestedGoal
+		or horizontalDistance(goal, self.LastRequestedGoal) >= self.Tuning.RepathDistance
+		or math.abs(goal.Y - self.LastRequestedGoal.Y) >= self.Tuning.MaxStepHeight
+	return moved or (not self.Waypoints[self.WaypointIndex]
+		and not self:_reachedGoal() and not self:_waitingForClearance())
+end
+
+-- Some authored vault ribs are lower than the unchanged 16-stud giant.
+-- Follow only the independently certified prefix to that opening, then wait
+-- for a reachable target instead of repeatedly running into it or clipping.
+function Navigator:_reachablePrefix(points, origin, goal, deadline)
+	local prefix, foot, queries = {}, origin, 0
+	local blocked = false
+	local blockedFrom, blockedTarget
+	for index = 1, math.min(#points,16) do
+		if os.clock() >= deadline or queries >= 4096 then break end
+		local point = points[index]
+		local span = horizontalDistance(foot,point)
+		if span > 256 then break end
+		local clear, reached, used = self:_walkingEdgeClear(foot,point)
+		queries += used or 0
+		if reached and horizontalDistance(foot,reached) > .05 then
+			table.insert(prefix,reached)
+			foot = reached
+		end
+		if not clear then
+			blocked, blockedFrom, blockedTarget = true, foot, point
+			break
+		end
+	end
+	if blocked and #prefix > 0 and horizontalDistance(origin,foot) >= 2
+		and horizontalDistance(foot,goal) < horizontalDistance(origin,goal)-1 then
+		return prefix, foot, blockedFrom, blockedTarget
+	end
+	if blocked and self:_bodyBoxClear(origin) then
+		-- Already at the last safe standing position. Waiting here must not
+		-- become another zero-length route/recovery loop.
+		return {origin}, origin, blockedFrom, blockedTarget
+	end
+	return nil
+end
+
+-- Centring can add several individually safe detours whose combined polyline
+-- doubles back on itself. String-pull that certified route before installing
+-- it: remove a bend only when the entire replacement edge satisfies the same
+-- floor, step and full-body checks as walking. Necessary wall detours survive.
+-- The original certified suffix remains usable if the extra work budget ends.
+function Navigator:_smoothStableRoute(points, origin, deadline)
+	local result, from, first, queries = {}, origin, 1, 0
+	while first <= #points do
+		if queries >= 8192 or os.clock() >= deadline then
+			for rest=first,#points do table.insert(result,points[rest]) end
+			break
+		end
+		local chosen = first
+		for index=math.min(#points,first+15),first+1,-1 do
+			if queries >= 8192 or os.clock() >= deadline then break end
+			if horizontalDistance(from,points[index]) <= 128 then
+				local clear, reached, used = self:_walkingEdgeClear(from,points[index])
+				queries += used or 0
+				if clear and reached and math.abs(reached.Y-points[index].Y) <= self.Tuning.MaxStepHeight then
+					chosen = index
+					break
+				end
+			end
+		end
+		table.insert(result,points[chosen])
+		from, first = points[chosen], chosen+1
+	end
+	return result
+end
+
+-- Splice a new certified route to where the entity is NOW. Prefer the furthest
+-- reachable prefix point, so graph routes do not send it back to a hall hub it
+-- already passed. Every shortcut uses the full floor/step/body contract, never
+-- line of sight alone. Bounds keep this non-yielding commit small and atomic.
+function Navigator:_joinStableRoute(points, requestStart)
+	local from = self.FootPosition
+	local segmentStart, nearestPoint = requestStart, requestStart
+	local nearestIndex, minimum = 1, math.huge
+	-- Find current progress on the polyline even after a long async delay.
+	-- Scanning only the first N points can still choose a point already behind.
+	for index, point in ipairs(points) do
+		local edge = Vector3.new(point.X-segmentStart.X, 0, point.Z-segmentStart.Z)
+		local offset = Vector3.new(from.X-segmentStart.X, 0, from.Z-segmentStart.Z)
+		local alpha = edge.Magnitude > .001 and math.clamp(offset:Dot(edge)/edge:Dot(edge),0,1) or 1
+		local projected = segmentStart:Lerp(point, alpha)
+		local separation = horizontalDistance(from, projected)
+		if separation <= minimum + .001 then
+			minimum, nearestIndex, nearestPoint = separation, index, projected
+		end
+		segmentStart = point
+	end
+	for index = math.min(#points, nearestIndex + 15), nearestIndex, -1 do
+		local candidate = points[index]
+		if horizontalDistance(from, candidate) <= 128 then
+			local clear = self:_walkingEdgeClear(from, candidate)
+			if clear then
+				local joined = {}
+				for rest = index, #points do table.insert(joined, points[rest]) end
+				return joined, index - 1
+			end
+		end
+	end
+	-- A long certified segment may end outside the join budget. Join a short
+	-- distance ahead of its projection instead of rewinding to its old start.
+	local endpoint = points[nearestIndex]
+	if endpoint then
+		local span = horizontalDistance(nearestPoint, endpoint)
+		local ahead = span > .001 and nearestPoint:Lerp(endpoint, math.min(1,12/span)) or endpoint
+		if horizontalDistance(from,ahead) <= 128 and self:_walkingEdgeClear(from,ahead) then
+			local joined = {ahead}
+			for rest=nearestIndex,#points do table.insert(joined,points[rest]) end
+			return joined, nearestIndex-1
+		end
+	end
+	return nil, 0
+end
+
+function Navigator:_rejectStableRoute(reason)
+	self.RouteRejectedCount += 1
+	self.LastFailure = reason
+	self.Computing = false
+	local nextPoint = self.Waypoints[self.WaypointIndex]
+	-- Keep a healthy incumbent or a certified arrival. An invalid replacement
+	-- must not erase useful progress or send the rig onto an unverified route.
+	if (nextPoint and self:_walkingEdgeClear(self.FootPosition, nextPoint))
+		or self:_reachedGoal() then return end
+	self.Waypoints = {}
+	self.WaypointIndex = 1
+	self.GoalApproach = nil
+	self.Status = "NO_PATH"
+end
+
 function Navigator:_requestPath(goal, graphOnly)
 	self.RequestId += 1
 	local requestId = self.RequestId
+	local stable = self.Tuning.StableRoutes
+	local requestStart = self.FootPosition
+	local previousBlockedPath = self.BlockedPath
 	self:_clearBlocked()
 	self.Computing = true
 	self.LastPathAt = os.clock()
 	self.LastRequestedGoal = goal
+	local deadline = self.LastPathAt + self.Tuning.PathRequestTimeout
 
 	task.spawn(function()
 		local path
@@ -1639,7 +1855,7 @@ function Navigator:_requestPath(goal, graphOnly)
 					WaypointSpacing = self.Tuning.WaypointSpacing,
 					Costs = {Water = 1, Level2Roof = math.huge},
 				})
-				path:ComputeAsync(self.FootPosition, goal)
+				path:ComputeAsync(stable and requestStart or self.FootPosition, goal)
 			end)
 		end
 		if self.Destroyed or requestId ~= self.RequestId then return end
@@ -1648,7 +1864,7 @@ function Navigator:_requestPath(goal, graphOnly)
 		local status = "PATH_FAILED"
 		if success and path and path.Status == Enum.PathStatus.Success then
 			for _, waypoint in ipairs(path:GetWaypoints()) do
-				if horizontalDistance(waypoint.Position, self.FootPosition) > self.Tuning.WaypointArrivalDistance then
+				if horizontalDistance(waypoint.Position, stable and requestStart or self.FootPosition) > self.Tuning.WaypointArrivalDistance then
 					table.insert(points, waypoint.Position)
 				end
 			end
@@ -1656,11 +1872,11 @@ function Navigator:_requestPath(goal, graphOnly)
 			if self:_pathPointsAllowed(points) then
 				status = "PATH"
 			else
-				points, status = self:_fallbackWaypoints(goal)
+				points, status = self:_fallbackWaypoints(goal, stable and requestStart or nil)
 				failure = "path left allowed halls"
 			end
 		else
-			points, status = self:_fallbackWaypoints(goal)
+			points, status = self:_fallbackWaypoints(goal, stable and requestStart or nil)
 		end
 
 		if self.Destroyed or requestId ~= self.RequestId then return end
@@ -1674,12 +1890,20 @@ function Navigator:_requestPath(goal, graphOnly)
 		-- Runs HERE, in the request thread, after ComputeAsync has already
 		-- yielded -- never on a Step. It is budgeted, it yields, and it aborts
 		-- the moment a newer request supersedes this one.
+		local proposedApproach
+		local blockedApproach
+		local blockedProbeFrom, blockedProbeTarget
 		if #points > 0 then
 			local shouldAbort = function()
 				return self.Destroyed or requestId ~= self.RequestId
+					or (stable and os.clock() >= deadline)
 			end
-			local centred, centringStats = self:_centreRoute(points, shouldAbort)
+			local centred, centringStats = self:_centreRoute(points, shouldAbort, stable and requestStart or nil)
 			if self.Destroyed or requestId ~= self.RequestId then return end
+			if stable and type(centringStats) ~= "table" then
+				self:_rejectStableRoute("route certification missing")
+				return
+			end
 			self.LastCentring = centringStats
 			if not centringStats.Aborted then points = centred end
 
@@ -1705,14 +1929,17 @@ function Navigator:_requestPath(goal, graphOnly)
 			-- segment the body cannot sweep through, the graph route is centred
 			-- too and whichever is actually walkable wins. Ties go to the
 			-- computed route, which is the better-shaped one.
-			if centringStats.Unwalkable and centringStats.Unwalkable > 0
-				and not centringStats.Aborted then
-				local graphPoints, graphStatus = self:_fallbackWaypoints(goal)
+			if (stable and not fullyCertified(centringStats) and not graphOnly
+				and status ~= "GRAPH" and not shouldAbort())
+				or (not stable and centringStats.Unwalkable and centringStats.Unwalkable > 0
+					and not centringStats.Aborted) then
+				local graphPoints, graphStatus = self:_fallbackWaypoints(goal, stable and requestStart or nil)
 				if #graphPoints > 0 then
-					local graphCentred, graphStats = self:_centreRoute(graphPoints, shouldAbort)
+					local graphCentred, graphStats = self:_centreRoute(graphPoints, shouldAbort, stable and requestStart or nil)
 					if self.Destroyed or requestId ~= self.RequestId then return end
-					if not graphStats.Aborted
-						and graphStats.Unwalkable < centringStats.Unwalkable then
+					if (stable and fullyCertified(graphStats))
+						or (not stable and not graphStats.Aborted
+							and graphStats.Unwalkable < centringStats.Unwalkable) then
 						points = graphCentred
 						status = graphStatus
 						self.LastCentring = graphStats
@@ -1747,14 +1974,15 @@ function Navigator:_requestPath(goal, graphOnly)
 			-- unaffected, and this can never let the rig stop early, because the
 			-- stand-in is by construction the closest standable point the pass
 			-- could find to the goal.
-			self.GoalApproach = nil
+			if not stable then self.GoalApproach = nil end
 			local goalStandable = self:_standableAt(goal)
 			if not goalStandable then
 				local approachIndex
 				for index = #points - 1, 1, -1 do
 					local candidate = points[index]
 					if self:_standableAt(candidate) then
-						self.GoalApproach = candidate
+						proposedApproach = candidate
+						if not stable then self.GoalApproach = candidate end
 						approachIndex = index
 						break
 					end
@@ -1772,6 +2000,60 @@ function Navigator:_requestPath(goal, graphOnly)
 			end
 		end
 
+		if stable then
+			local latestGoal = self.Goal
+			local plannedDirection = Vector3.new(goal.X-self.FootPosition.X,0,goal.Z-self.FootPosition.Z)
+			local latestDirection = latestGoal and Vector3.new(latestGoal.X-self.FootPosition.X,0,latestGoal.Z-self.FootPosition.Z)
+			if latestDirection and horizontalDistance(goal,latestGoal) >= self.Tuning.RepathDistance
+				and (plannedDirection:Dot(latestDirection) < 0
+					or horizontalDistance(goal,latestGoal) > math.max(24,latestDirection.Magnitude*.5)) then
+				-- Do not install an obsolete chase in the opposite direction. Small
+				-- target movement is handled by the normal throttled next request.
+				self.Waypoints = {}
+				self.GoalApproach = nil
+				self:_rejectStableRoute("target changed direction during planning")
+				return
+			end
+			local stats = self.LastCentring
+			local valid = #points > 0 and fullyCertified(stats) and os.clock() < deadline
+			-- A partial candidate never displaces a healthy incumbent. Only build
+			-- one when there is no route left, and validate every step anew.
+			if not valid and #points > 0 and not self.Waypoints[self.WaypointIndex]
+				and type(stats) == "table" and stats.Aborted == false
+				and stats.Unwalkable and stats.Unwalkable > 0
+				and os.clock() < deadline then
+				local prefix, endpoint, probeFrom, probeTarget =
+					self:_reachablePrefix(points,requestStart,goal,deadline)
+				if prefix then
+					points, blockedApproach, proposedApproach = prefix, endpoint, nil
+					blockedProbeFrom, blockedProbeTarget = probeFrom, probeTarget
+					status, valid = "PARTIAL", true
+				end
+			end
+			local joined, skipped
+			if valid then
+				if not blockedApproach then points = self:_smoothStableRoute(points,requestStart,deadline) end
+				joined, skipped = self:_joinStableRoute(points, requestStart)
+			end
+			if not joined then
+				self:_rejectStableRoute(valid and "new route cannot join current foot safely"
+					or "replacement route incomplete, blocked, or timed out")
+				if previousBlockedPath and self.Waypoints[self.WaypointIndex] then
+					self:_bindBlocked(previousBlockedPath)
+				end
+				return
+			end
+			points = joined
+			self.GoalApproach = proposedApproach
+			self.InstalledGoal = goal
+			self.BlockedGoalApproach = blockedApproach
+			self.BlockedProbeFrom = blockedProbeFrom
+			self.BlockedProbeTarget = blockedProbeTarget
+			self.NextClearanceProbeAt = blockedApproach
+				and os.clock() + CLEARANCE_RECHECK_INTERVAL or 0
+			self.RouteInstallCount += 1
+			self.RoutePrefixSkips += skipped
+		end
 		self.Waypoints = points
 		self.WaypointIndex = 1
 		-- A fresh route gets fresh allowances. Carrying a spent skip budget into
@@ -1791,11 +2073,17 @@ end
 function Navigator:SetGraphGoal(goal, force)
 	if self.Destroyed or not finiteVector3(goal) or not self:_positionAllowed(goal) then return false end
 	self.Goal = goal
+	if self.Tuning.StableRoutes and force ~= true then
+		if self:_stableNeedsPath(goal, false) then self:_requestPath(goal, true) end
+		return true
+	end
 	if force == true and self.Computing then
 		self.RequestId += 1
 		self.Computing = false
-		self.Waypoints = {}
-		self.WaypointIndex = 1
+		if not self.Tuning.StableRoutes then
+			self.Waypoints = {}
+			self.WaypointIndex = 1
+		end
 		self:_clearBlocked()
 	end
 	local now = os.clock()
@@ -1815,13 +2103,19 @@ end
 function Navigator:SetGoal(goal, force)
 	if self.Destroyed or not finiteVector3(goal) or not self:_positionAllowed(goal) then return false end
 	self.Goal = goal
+	if self.Tuning.StableRoutes and force ~= true then
+		if self:_stableNeedsPath(goal, false) then self:_requestPath(goal) end
+		return true
+	end
 	if force == true and self.Computing then
 		-- Invalidate the in-flight request so a watchdog retry is a real retry,
 		-- not a no-op that advances the controller's recovery stage.
 		self.RequestId += 1
 		self.Computing = false
-		self.Waypoints = {}
-		self.WaypointIndex = 1
+		if not self.Tuning.StableRoutes then
+			self.Waypoints = {}
+			self.WaypointIndex = 1
+		end
 		self:_clearBlocked()
 	end
 	local now = os.clock()
@@ -1849,6 +2143,11 @@ function Navigator:Stop()
 	self.BestGoalDistance = math.huge
 	self.GoalApproach = nil
 	self:_clearBlocked()
+	self.InstalledGoal = nil
+	self.BlockedGoalApproach = nil
+	self.BlockedProbeFrom = nil
+	self.BlockedProbeTarget = nil
+	self.NextClearanceProbeAt = 0
 end
 
 -- Where to sidestep when the straight stride and the progress-guarded steer
@@ -1926,8 +2225,14 @@ function Navigator:Step(deltaTime, speed)
 		-- occupy; it is nil whenever the goal itself can be stood on, which is
 		-- the ordinary case. Same tolerance either way.
 		local arrivalTarget = self.GoalApproach or self.Goal
-		local reached = self.Goal ~= nil
-			and horizontalDistance(self.FootPosition, arrivalTarget) <= self.Tuning.WaypointArrivalDistance
+		local reached = self.Tuning.StableRoutes and self:_reachedGoal()
+			or (not self.Tuning.StableRoutes and self.Goal ~= nil
+				and horizontalDistance(self.FootPosition, arrivalTarget) <= self.Tuning.WaypointArrivalDistance)
+		if self:_waitingForClearance() and not self:_probeBlockedClearance() then
+			self.Status = "WAITING_FOR_CLEARANCE"
+			return false
+		end
+		if self.Tuning.StableRoutes and reached then self.Status = "ARRIVED" end
 		if self.Goal and not reached and not self.Computing
 			and os.clock() - self.LastPathAt >= self.Tuning.RepathInterval
 		then
@@ -2464,6 +2769,13 @@ function Navigator:GetDebugSnapshot()
 		-- route installation from a creature that has stopped making progress.
 		-- LastPathAt is written at the start of every current request.
 		RequestStartedAt = self.LastPathAt,
+		RequestId = self.RequestId,
+		Reached = self:_reachedGoal(),
+		WaitingForClearance = self:_waitingForClearance(),
+		RouteInstalls = self.RouteInstallCount,
+		RejectedRoutes = self.RouteRejectedCount,
+		PrefixSkips = self.RoutePrefixSkips,
+		NextWaypoint = self.Waypoints[self.WaypointIndex],
 		WaypointIndex = self.WaypointIndex,
 		WaypointCount = #self.Waypoints,
 		Goal = self.Goal,

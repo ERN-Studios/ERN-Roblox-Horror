@@ -18,6 +18,7 @@ local TweenService = game:GetService("TweenService")
 local ContentProvider = game:GetService("ContentProvider")
 local SoundService = game:GetService("SoundService")
 local Terrain = workspace.Terrain
+local DevAccess = require(ReplicatedStorage:WaitForChild("DevAccess"))
 
 local ObjectiveController = {}
 local activeSession
@@ -28,6 +29,9 @@ local OPEN_COLOR = Color3.fromRGB(180, 218, 196)
 -- Pump audio is deliberately staged around the authored clip lengths.
 local DRAIN_RUSH_DELAY = 10
 local DEFAULT_PUMP_START_DURATION = 11.572244897959184
+local DEV_PUMP_INTERVAL = 5
+local DEV_PUMP_REQUEST_COOLDOWN = 1
+local DEV_PUMP_CAPABILITY = {}
 
 -- LEVEL2_EXIT_TRANSITION_20260828
 -- After crossing the completion sensor a rider keeps physically sliding for the
@@ -172,6 +176,24 @@ local function canUsePump(player, session, pump)
 		if result and not result.Instance:IsDescendantOf(pump.Model) then return false end
 	end
 	return true
+end
+
+local function canDevUsePump(player, session, pump)
+	-- This private capability path is the only proximity bypass. Normal prompt
+	-- interactions and the existing Studio DebugActivatePump keep canUsePump.
+	return DevAccess.IsAllowed(player) and validPlayer(player, session)
+		and workspace:GetAttribute("WorldGenerated") == true
+		and livingCharacter(player) ~= nil
+		and pump.Prompt.Enabled and pump.Prompt:IsDescendantOf(session.Manifest.World)
+		and pump.Model:IsDescendantOf(session.Manifest.World)
+end
+
+local function publishDevPumpStatus(player, message, busy)
+	if player.Parent ~= Players then return end
+	if busy ~= nil then player:SetAttribute("DevLevel2PumpBusy", busy) end
+	player:SetAttribute("DevLevel2PumpStatus", message)
+	player:SetAttribute("DevLevel2PumpSerial",
+		(tonumber(player:GetAttribute("DevLevel2PumpSerial")) or 0) + 1)
 end
 
 local function validateManifest(manifest)
@@ -396,6 +418,7 @@ function ObjectiveController.Start(manifest, generation)
 		Connections = {},
 		GaugeTweens = {},
 		DebugActivators = {},
+		DevPumpLastRequest = {},
 		Started = {},
 		StartedCount = 0,
 		DoorsOpen = false,
@@ -424,8 +447,11 @@ function ObjectiveController.Start(manifest, generation)
 	end
 
 	for _, pump in ipairs(manifest.Pumps) do
-		local function activate(player)
-			if session.Started[pump.Index] or not canUsePump(player, session, pump) then return end
+		local function activate(player, capability)
+			if session.Started[pump.Index] then return end
+			if capability == DEV_PUMP_CAPABILITY then
+				if not canDevUsePump(player, session, pump) then return end
+			elseif not canUsePump(player, session, pump) then return end
 			session.Started[pump.Index] = true
 			session.StartedCount += 1
 
@@ -813,6 +839,111 @@ function ObjectiveController.Start(manifest, generation)
 	return session
 end
 
+-- Developer-only remote lever test. It runs the very same actuator as a real
+-- interaction, preserving all gauge, sound, objective, drain and door timing.
+function ObjectiveController.DevActivatePumpPair(player)
+	if typeof(player) ~= "Instance" or not player:IsA("Player")
+		or not DevAccess.IsAllowed(player) then return false, "NOT_ALLOWED" end
+	local session = activeSession
+	if not session or not validPlayer(player, session)
+		or workspace:GetAttribute("WorldGenerated") ~= true then
+		publishDevPumpStatus(player, "LEVEL_2_ONLY", false)
+		return false, "LEVEL_2_ONLY"
+	end
+	local character, humanoid, root = livingCharacter(player)
+	if not character then
+		publishDevPumpStatus(player, "MUST_BE_ALIVE", false)
+		return false, "MUST_BE_ALIVE"
+	end
+	local now = os.clock()
+	local lastRequest = session.DevPumpLastRequest[player]
+	if lastRequest and now - lastRequest < DEV_PUMP_REQUEST_COOLDOWN then
+		return false, "THROTTLED"
+	end
+	session.DevPumpLastRequest[player] = now
+	if session.DevPumpSequence then
+		publishDevPumpStatus(player, "SEQUENCE_BUSY", session.DevPumpSequence.Player == player)
+		return false, "SEQUENCE_BUSY"
+	end
+	local available = {}
+	for _, pump in ipairs(session.Manifest.Pumps) do
+		if not session.Started[pump.Index] and canDevUsePump(player, session, pump) then
+			table.insert(available, pump)
+		end
+	end
+	table.sort(available, function(a,b) return a.Index < b.Index end)
+	if #available < 2 then
+		publishDevPumpStatus(player, "NEED_TWO_AVAILABLE_PUMPS", false)
+		return false, "NEED_TWO_AVAILABLE_PUMPS"
+	end
+	local first, second = available[1], available[2]
+	local sequence = {Player = player, Character = character, Connections = {}, Done = false}
+	session.DevPumpSequence = sequence
+	local function finish(message)
+		if sequence.Done then return end
+		sequence.Done = true
+		for _, connection in ipairs(sequence.Connections) do connection:Disconnect() end
+		table.clear(sequence.Connections)
+		if session.DevPumpSequence == sequence then session.DevPumpSequence = nil end
+		publishDevPumpStatus(player, message, false)
+	end
+	sequence.Finish = finish
+	local function stillValid()
+		local currentCharacter, currentHumanoid, currentRoot = livingCharacter(player)
+		return not sequence.Done and activeSession == session
+			and validPlayer(player, session) and DevAccess.IsAllowed(player)
+			and workspace:GetAttribute("WorldGenerated") == true
+			and currentCharacter == character and currentHumanoid == humanoid and currentRoot == root
+	end
+	local function watch(signal, callback)
+		table.insert(sequence.Connections, signal:Connect(callback))
+	end
+	watch(humanoid.Died, function() finish("CANCELLED_PLAYER_DIED") end)
+	watch(player.CharacterRemoving, function(removing)
+		if removing == character then finish("CANCELLED_CHARACTER_CHANGED") end
+	end)
+	watch(Players.PlayerRemoving, function(removing)
+		if removing == player then finish("CANCELLED_PLAYER_LEFT") end
+	end)
+	for _, attribute in ipairs({"SelectedLevel", "RoundActive", "WorldGenerated"}) do
+		watch(workspace:GetAttributeChangedSignal(attribute), function()
+			finish("CANCELLED_ROUND_OR_PLAYER_CHANGED")
+		end)
+	end
+	for _, attribute in ipairs({"InRound", "Escaped"}) do
+		watch(player:GetAttributeChangedSignal(attribute), function()
+			finish("CANCELLED_ROUND_OR_PLAYER_CHANGED")
+		end)
+	end
+	watch(session.Manifest.World:GetAttributeChangedSignal("Level2_Generation"), function()
+		finish("CANCELLED_ROUND_OR_PLAYER_CHANGED")
+	end)
+	watch(session.Manifest.World.AncestryChanged, function()
+		finish("CANCELLED_ROUND_OR_PLAYER_CHANGED")
+	end)
+	local function pull(pump)
+		local ok, activated = pcall(session.DebugActivators[pump.Index], player, DEV_PUMP_CAPABILITY)
+		return ok and activated == true
+	end
+	local firstStartedAt = os.clock()
+	if not pull(first) then
+		finish("FIRST_PUMP_UNAVAILABLE")
+		return false, "FIRST_PUMP_UNAVAILABLE"
+	end
+	publishDevPumpStatus(player, "FIRST_PULLED_SECOND_IN_5_SECONDS", true)
+	task.delay(math.max(0, firstStartedAt + DEV_PUMP_INTERVAL - os.clock()), function()
+		if sequence.Done then return end
+		if not stillValid() then finish("CANCELLED_ROUND_OR_PLAYER_CHANGED") return end
+		-- If someone pulled the reserved second lever meanwhile, do NOT silently
+		-- substitute the third lever and trigger an unintended extra encounter.
+		if session.Started[second.Index] then finish("SECOND_ALREADY_RUNNING") return end
+		if pull(second) then
+			finish("TWO_PUMPS_PULLED")
+		else finish("SECOND_PUMP_UNAVAILABLE") end
+	end)
+	return true, "FIRST_PULLED_SECOND_IN_5_SECONDS"
+end
+
 function ObjectiveController.DebugActivatePump(index, player)
 	assert(RunService:IsStudio(), "DebugActivatePump is Studio-only")
 	local session = assert(activeSession, "Level 2 objective is not running")
@@ -880,6 +1011,9 @@ end
 
 function ObjectiveController.Stop()
 	if not activeSession then return end
+	if activeSession.DevPumpSequence then
+		activeSession.DevPumpSequence.Finish("CANCELLED_ROUND_ENDED")
+	end
 	-- The transition flag is a live-ride marker. It must never outlive the
 	-- session that set it, or a later round would start with a player the slide
 	-- controller still believes is mid-transition.

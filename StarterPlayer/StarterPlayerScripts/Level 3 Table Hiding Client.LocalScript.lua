@@ -108,11 +108,12 @@ local function applyHidingLayout()
 		if messageHeight + gap + leaveHeight > band.Height then
 			messageHeight = math.max(22, band.Height - gap - leaveHeight)
 		end
+		-- Absolute -> gui offsets, both axes.
 		message.AnchorPoint = Vector2.new(.5, 0)
-		message.Position = UDim2.fromOffset(centre, band.Top)
+		message.Position = UIDevice.LocalPosition(gui, centre, band.Top)
 		message.Size = UDim2.fromOffset(math.min(360, band.Width), messageHeight)
 		leave.AnchorPoint = Vector2.new(.5, 0)
-		leave.Position = UDim2.fromOffset(centre, band.Top + messageHeight + gap)
+		leave.Position = UIDevice.LocalPosition(gui, centre, band.Top + messageHeight + gap)
 		leave.Size = UDim2.fromOffset(math.min(330, band.Width), leaveHeight)
 	else
 		local available = layout.SafeRight - layout.SafeLeft

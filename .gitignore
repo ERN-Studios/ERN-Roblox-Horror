@@ -23,3 +23,9 @@ tools/tests/luau
 
 # Pre-push copies of Studio scripts, written by tools/push_repo_to_studio.py
 .studio-push-backups/
+
+# Obsidian-vault (genereret spejl af repoet, ~120 MB) — holdes lokal
+Backrooms Stay Quiet/
+
+# Agent-harness telemetri, ikke spilindhold
+.claude-flow/
