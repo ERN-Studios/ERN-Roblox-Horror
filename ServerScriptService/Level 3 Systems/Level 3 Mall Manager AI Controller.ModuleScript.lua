@@ -42,6 +42,27 @@ local stopChaseScream: (any) -> ()
 -- filters below.
 local volumeClear: (any, Vector3, Vector3) -> boolean
 
+-- ServerStorage assets can be absent from a place file, and WaitForChild with
+-- no timeout yields instead of erroring. Every caller below is reached from
+-- Controller.Start, which Level 3 Round Adapter's sync() runs inside a pcall,
+-- so an unbounded yield means that pcall NEVER returns: the hunt silently
+-- never spawns, the adapter's own "Mall Manager hunt spawn failed" warn never
+-- prints, and every later hunt edge parks another thread. Fail loudly.
+local ASSET_WAIT = 10
+
+local function requireAsset(root: Instance, ...: string): Instance
+	local node: Instance = root
+	for _, name in ipairs({ ... }) do
+		local found = node:WaitForChild(name, ASSET_WAIT)
+		if not found then
+			error(string.format("Mall Manager assets: %s.%s missing after %d s",
+				node:GetFullName(), name, ASSET_WAIT), 0)
+		end
+		node = found
+	end
+	return node
+end
+
 local function stateFolder(): Folder
 	local existing = ReplicatedStorage:FindFirstChild(Configuration.StateFolderName)
 	if existing and existing:IsA("Folder") then return existing end
@@ -350,8 +371,7 @@ local function setWalk(session: any, moving: boolean, speed: number)
 end
 
 local function loadFootstepSounds(root: BasePart, groundOffset: number): (Attachment, {Sound})
-	local prototypes = ServerStorage:WaitForChild("Level3Assets")
-		:WaitForChild("EntitySounds"):WaitForChild("MallManager")
+	local prototypes = requireAsset(ServerStorage, "Level3Assets", "EntitySounds", "MallManager")
 	local emitter = Instance.new("Attachment")
 	emitter.Name = "Mall Manager Footstep Emitter"
 	emitter.Position = Vector3.new(0, -groundOffset + Tuning.FootstepEmitterHeight, 0)
@@ -391,8 +411,7 @@ local function loadFootstepSounds(root: BasePart, groundOffset: number): (Attach
 end
 
 local function loadChaseScream(model: Model): (Bone, Sound)
-	local prototypes = ServerStorage:WaitForChild("Level3Assets")
-		:WaitForChild("EntitySounds"):WaitForChild("MallManagerScreams")
+	local prototypes = requireAsset(ServerStorage, "Level3Assets", "EntitySounds", "MallManagerScreams")
 	local headObject = model:FindFirstChild("Head", true)
 	assert(headObject and headObject:IsA("Bone"), "Mall Manager rig is missing its balloon Head bone")
 	local head = headObject :: Bone
@@ -2656,9 +2675,8 @@ end
 local function loadWalk(model: Model): AnimationTrack?
 	local controller = model:FindFirstChildOfClass("AnimationController")
 	local animator = controller and controller:FindFirstChildOfClass("Animator")
-	local assets = ServerStorage:WaitForChild("Level3Assets")
-	local animations = assets:WaitForChild("EntityAnimations"):WaitForChild("MallManager")
-	local walk = animations:WaitForChild("Walk")
+	local animations = requireAsset(ServerStorage, "Level3Assets", "EntityAnimations", "MallManager")
+	local walk = requireAsset(animations, "Walk")
 	assert(animator and animator:IsA("Animator"), "Mall Manager template is missing AnimationController.Animator")
 	assert(walk:IsA("Animation") and walk.AnimationId ~= "", "Mall Manager Walk animation reference is missing")
 	local ok, result = pcall(function() return animator:LoadAnimation(walk) end)
@@ -2889,9 +2907,7 @@ end
 
 local function cloneManager(manifest: any, spawnPosition: Vector3, facePosition: Vector3,
 	spawnRoomId: string): (Model, BasePart, number)
-	local assets = ServerStorage:WaitForChild("Level3Assets")
-	local templates = assets:WaitForChild("EntityTemplates")
-	local template = templates:WaitForChild(Tuning.TemplateName)
+	local template = requireAsset(ServerStorage, "Level3Assets", "EntityTemplates", Tuning.TemplateName)
 	assert(template:IsA("Model") and template.PrimaryPart, "Mall Manager template must be a Model with PrimaryPart")
 	assert(template:GetAttribute("RuntimeReady") == true, "Mall Manager template has not passed runtime validation")
 	local model = template:Clone()

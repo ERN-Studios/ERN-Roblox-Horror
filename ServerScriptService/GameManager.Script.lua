@@ -428,6 +428,35 @@ local function loadGameplayCharacter(player)
  return ok
 end
 
+-- CharacterAutoLoads is off, so a player whose load fails has no Character at
+-- all and `player.CharacterAdded:Wait()` never fires -- no timeout, no error.
+-- The round-start loops are serial, so ONE failed load used to park the whole
+-- thread: playRound never ran, roundBusy never cleared, and everyone else sat
+-- behind the loading cover forever. Only Level 2 has a client-side backstop
+-- (RoundUI's 35 s absolute cover lift); Levels 1 and 3 have none.
+--
+-- Everyone still in the server has to make it into the round, so this retries
+-- instead of skipping. It gives up only once the player has actually left.
+local CHARACTER_LOAD_ATTEMPTS = 4
+local CHARACTER_LOAD_TIMEOUT = 6
+
+local function spawnGameplayCharacter(player)
+ for attempt = 1, CHARACTER_LOAD_ATTEMPTS do
+  if player.Parent ~= Players then return nil end
+  loadGameplayCharacter(player)
+  -- task.wait returns real elapsed seconds. Do NOT use os.clock here: in the
+  -- Studio server datamodel it measures CPU time, not wall time.
+  local waited = 0
+  while not player.Character and player.Parent == Players and waited < CHARACTER_LOAD_TIMEOUT do
+   waited += task.wait()
+  end
+  if player.Character then return player.Character end
+  warn(string.format("[GameManager] No gameplay character for %s (attempt %d/%d)",
+   player.Name, attempt, CHARACTER_LOAD_ATTEMPTS))
+ end
+ return nil
+end
+
 local function buildLobby()
  return require(script.Parent:WaitForChild("TunnelLobbyBuilder")).Build(LOBBY_CENTER)
 end
@@ -893,7 +922,12 @@ local function stationAllowsPlayer(station, player)
   return player:IsFriendsWith(station.host.UserId)
  end)
  local allowed = ok and isFriend == true
- station.friendCache[player.UserId] = allowed
+ -- Only a DEFINITIVE answer is worth caching. A throttled or failed web call
+ -- returns ok == false, which is indistinguishable here from "not a friend",
+ -- and caching that locked a real friend out for the rest of the countdown --
+ -- long enough for the party to launch without them. Still fail closed for
+ -- this tick; just let the next once-per-second poll retry the call.
+ if ok then station.friendCache[player.UserId] = allowed end
  return allowed
 end
 
@@ -1888,9 +1922,8 @@ local function continueStudioCampaign(participants, continuing, returning, nextL
 	for _, player in ipairs(continuing) do
 		if player.Parent then
 			pendingExplicitPlacement[player] = true
-			loadGameplayCharacter(player)
-			local character = player.Character or player.CharacterAdded:Wait()
-			placeOnLevelEntry(player, character, useSlideResume)
+			local character = spawnGameplayCharacter(player)
+			if character then placeOnLevelEntry(player, character, useSlideResume) end
 		end
 	end
 	task.wait(0.6)
@@ -2005,12 +2038,12 @@ playRound = function(participants)
   player:SetAttribute("ZyntraReentryUsed", true)
   player:SetAttribute("Escaped", nil)
   player:SetAttribute("Level2_ExitTransition", nil)
-  if not loadGameplayCharacter(player) then
+  local char = spawnGameplayCharacter(player)
+  if not char then
    reentryUsed[player] = nil
    player:SetAttribute("ZyntraReentryUsed", false)
    return false
   end
-  local char = player.Character or player.CharacterAdded:Wait()
   local hum = char:FindFirstChildOfClass("Humanoid")
   if not hum or hum.Health <= 0 or not placeSafelyInElevator(player, char) then
    reentryUsed[player] = nil
@@ -2282,9 +2315,8 @@ local function launchStation(station, participants)
   if ensureWorld(participants, station.level or 1) then
    for _, player in ipairs(participants) do
     if player.Parent then
-     loadGameplayCharacter(player)
-     local char = player.Character or player.CharacterAdded:Wait()
-     placeSafelyInElevator(player, char)
+     local char = spawnGameplayCharacter(player)
+     if char then placeSafelyInElevator(player, char) end
     end
    end
    task.wait(0.6)
@@ -2620,9 +2652,8 @@ if IS_RESERVED_ROUND_SERVER then
    for _, player in ipairs(participants) do
     if player.Parent then
      pendingExplicitPlacement[player] = true
-     loadGameplayCharacter(player)
-     local char = player.Character or player.CharacterAdded:Wait()
-     placeOnLevelEntry(player, char, useSlideResume)
+     local char = spawnGameplayCharacter(player)
+     if char then placeOnLevelEntry(player, char, useSlideResume) end
     end
    end
    task.wait(0.6)

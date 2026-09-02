@@ -44,8 +44,12 @@ local function pinnedSeedOverride(): number?
 	local requested = workspace:GetAttribute("Level3Seed")
 	if type(requested) ~= "number" then return nil end
 	if requested ~= requested then return nil end -- NaN
-	if requested < 1 or requested >= math.huge then return nil end
-	return math.floor(requested) % MAX_SEED
+	-- Reject out of range rather than wrapping. `% MAX_SEED` silently aliased
+	-- the top of the documented "any number >= 1" range: 2147483647 built
+	-- seed 0's map, 2147483648 built seed 1's. MAX_SEED is finite, so this
+	-- bound also subsumes the old math.huge check.
+	if requested < 1 or requested >= MAX_SEED then return nil end
+	return math.floor(requested)
 end
 
 -- These are the active Level 1 services in the clean project baseline. They
