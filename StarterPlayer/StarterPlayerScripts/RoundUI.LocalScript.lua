@@ -1921,6 +1921,9 @@ end)
 ContextActionService:BindAction("ZyntraStopCurrentDispatch", function(_, inputState)
 	if inputState ~= Enum.UserInputState.Begin
 		or UIS:GetFocusedTextBox()
+		-- ButtonB belongs to the advertised table-exit control while hiding.
+		-- Let that gameplay action pass without also stopping the dispatch.
+		or player:GetAttribute("Level3_Hiding") == true
 		or not dispatchAudio.hasActiveTransmission() then
 		return Enum.ContextActionResult.Pass
 	end

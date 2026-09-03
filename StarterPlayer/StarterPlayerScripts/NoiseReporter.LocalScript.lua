@@ -1,14 +1,16 @@
 -- NoiseReporter
 -- PASTE INTO: StarterPlayer → StarterPlayerScripts → Insert Object → LocalScript → rename to "NoiseReporter"
--- Shift = sprint (loud), Ctrl = crouch (silent), walking = quiet.
+-- Shift = sprint (loud); Ctrl / gamepad L3 / touch SNEAK = crouch (silent).
 
 local Players = game:GetService("Players")
 local RS = game:GetService("ReplicatedStorage")
 local UIS = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
-local remote = RS:WaitForChild("Remotes"):WaitForChild("ReportNoise")
-local glowstickRemote = RS:WaitForChild("Remotes"):WaitForChild("DropGlowstick")
+local remotes = RS:WaitForChild("Remotes")
+local remote = remotes:WaitForChild("ReportNoise")
+local glowstickRemote = remotes:WaitForChild("DropGlowstick")
+local crouchRemote = remotes:WaitForChild("SetCrouching")
 local player = Players.LocalPlayer
 local DevAccess = require(RS:WaitForChild("DevAccess"))
 local UIDevice = require(RS:WaitForChild("UIDevice"))
@@ -23,6 +25,9 @@ local LOUDNESS = { sprint = 1.0, walk = 0.45, crouch = 0.0 }
 local state = "walk"
 local sprinting, crouching = false, false
 local shiftSprintHeld, touchSprintHeld = false, false
+local keyboardCrouchHeld, controllerCrouchToggled, touchSneakToggled = false, false, false
+local lastPublishedCrouch: boolean? = nil
+local crouchRequestSerial = 0
 local GLOWSTICK_COOLDOWN = 5
 local lastGlowstickDrop = -math.huge
 local currentChar
@@ -32,7 +37,10 @@ local currentChar
 local showSneakEngaged
 
 local function dropGlowstick()
-	if not inRound() or os.clock() - lastGlowstickDrop < GLOWSTICK_COOLDOWN then return end
+	-- ButtonX also exits a Level 3 table. Never let that one press spawn a
+	-- glowstick underneath the table while the hide controller is releasing us.
+	if not inRound() or player:GetAttribute("Level3_Hiding") == true
+		or os.clock() - lastGlowstickDrop < GLOWSTICK_COOLDOWN then return end
 	local char, hum = currentChar()
 	if not (char and hum and hum.Health > 0) then return end
 	lastGlowstickDrop = os.clock()
@@ -72,6 +80,56 @@ currentChar = function()
 	return char, char and char:FindFirstChild("Humanoid")
 end
 
+local CROUCH_BLOCKED_STATES = {
+	[Enum.HumanoidStateType.Dead] = true,
+	[Enum.HumanoidStateType.FallingDown] = true,
+	[Enum.HumanoidStateType.Freefall] = true,
+	[Enum.HumanoidStateType.Jumping] = true,
+	[Enum.HumanoidStateType.Climbing] = true,
+	[Enum.HumanoidStateType.Physics] = true,
+	[Enum.HumanoidStateType.PlatformStanding] = true,
+	[Enum.HumanoidStateType.Ragdoll] = true,
+	[Enum.HumanoidStateType.Seated] = true,
+	[Enum.HumanoidStateType.Swimming] = true,
+}
+
+local function movementAvailable()
+	if not inRound() or player:GetAttribute("Escaped") == true
+		or player:GetAttribute("Level3_Hiding") == true
+		or player:GetAttribute("Spectating") == true
+		or player:GetAttribute("ZyntraStoreOpen") == true
+		or player:GetAttribute("DevPhoneOpen") == true
+		or player:GetAttribute("ZyntraReentryOpen") == true
+		or player:GetAttribute("QueueModalOpen") == true then
+		return false
+	end
+	local character, humanoid = currentChar()
+	return character ~= nil and humanoid ~= nil and humanoid.Health > 0
+end
+
+local function crouchAllowed()
+	if not movementAvailable() or workspace:GetAttribute("RoundActive") ~= true then return false end
+	local character, humanoid = currentChar()
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	return character ~= nil and humanoid ~= nil and root ~= nil
+		and root:IsA("BasePart") and not root.Anchored
+		and character:GetAttribute("Level2_ForcedSliding") ~= true
+		and character:GetAttribute("Level2_RagdollServerActive") ~= true
+		and CROUCH_BLOCKED_STATES[humanoid:GetState()] ~= true
+end
+
+local function publishCrouch(active)
+	active = active == true
+	-- Local prediction removes a network round-trip from the owner's camera and
+	-- pose. Other clients deliberately ignore this local-only attribute and use
+	-- the server-owned Crouching attribute below.
+	player:SetAttribute("LocalCrouching", active)
+	if lastPublishedCrouch == active then return end
+	lastPublishedCrouch = active
+	crouchRequestSerial += 1
+	crouchRemote:FireServer(active, crouchRequestSerial)
+end
+
 local function applySpeed()
 	local character, hum = currentChar()
 	if not hum then return end
@@ -100,14 +158,64 @@ local function applySpeed()
 	-- signals can observe the slide controller's re-zero instead of this write;
 	-- the attribute gives every movement lock an unambiguous restore target.
 	character:SetAttribute("Level2_DesiredWalkSpeed", desiredSpeed)
+	-- The hide controller and the Level 2 slide own physical movement while
+	-- these locks are active. Keep their restore target current without fighting
+	-- their authoritative WalkSpeed = 0 writes.
+	if player:GetAttribute("Level3_Hiding") == true
+		or character:GetAttribute("Level2_ForcedSliding") == true
+		or character:GetAttribute("Level2_RagdollServerActive") == true then
+		return
+	end
 	hum.WalkSpeed = desiredSpeed
 end
+
+local function refreshCrouch()
+	local requested = keyboardCrouchHeld or controllerCrouchToggled or touchSneakToggled
+	crouching = requested and crouchAllowed()
+	publishCrouch(crouching)
+	applySpeed()
+end
+
+local function cancelCrouch()
+	keyboardCrouchHeld = false
+	controllerCrouchToggled = false
+	if showSneakEngaged then
+		showSneakEngaged(false)
+	else
+		touchSneakToggled = false
+	end
+	crouching = false
+	publishCrouch(false)
+	applySpeed()
+end
+
+-- Server acknowledgements keep the owner's predicted pose/speed honest when a
+-- request is rejected (for example because another server system anchored the
+-- root in the same frame). Replicated false transitions also cover later
+-- server-side cancellation without waiting for another local input.
+crouchRemote.OnClientEvent:Connect(function(acceptedState, responseSerial)
+	if typeof(acceptedState) ~= "boolean" or typeof(responseSerial) ~= "number" then return end
+	-- A lifecycle clear carries the latest request the server had processed when
+	-- it happened. If we have since issued a newer transition, that older clear
+	-- is stale and the response to our newer request is the one that decides.
+	if responseSerial ~= crouchRequestSerial then return end
+	if acceptedState == false and (crouching or keyboardCrouchHeld
+		or controllerCrouchToggled or touchSneakToggled) then
+		cancelCrouch()
+	end
+end)
 
 local function keyboardSprintHeld()
 	-- Physical key state remains reliable when a Roblox core control (such as
 	-- Shift Lock) consumes the event before this script sees it.
 	return UIS:IsKeyDown(Enum.KeyCode.LeftShift)
 		or UIS:IsKeyDown(Enum.KeyCode.RightShift)
+end
+
+local function keyboardCrouchHeldNow()
+	-- Releasing one Control key must not stand up while the other remains held.
+	return UIS:IsKeyDown(Enum.KeyCode.LeftControl)
+		or UIS:IsKeyDown(Enum.KeyCode.RightControl)
 end
 
 local function refreshSprint()
@@ -127,8 +235,16 @@ UIS.InputBegan:Connect(function(input, processed)
 		return
 	end
 	if processed then return end
-	if inRound() and input.KeyCode == Enum.KeyCode.LeftControl then
-		crouching = true; applySpeed()
+	if input.KeyCode == Enum.KeyCode.Space and crouching then
+		cancelCrouch()
+	elseif (input.KeyCode == Enum.KeyCode.LeftControl
+		or input.KeyCode == Enum.KeyCode.RightControl) and crouchAllowed() then
+		keyboardCrouchHeld = true
+		refreshCrouch()
+	elseif input.KeyCode == Enum.KeyCode.ButtonL3
+		and (controllerCrouchToggled or crouchAllowed()) then
+		controllerCrouchToggled = not controllerCrouchToggled
+		refreshCrouch()
 	elseif inRound() and (input.KeyCode == Enum.KeyCode.G or input.KeyCode == Enum.KeyCode.ButtonX) then
 		dropGlowstick()
 	end
@@ -139,8 +255,10 @@ UIS.InputEnded:Connect(function(input)
 		-- Releasing one Shift key must not cancel the other.
 		shiftSprintHeld = keyboardSprintHeld()
 		refreshSprint()
-	elseif input.KeyCode == Enum.KeyCode.LeftControl then
-		crouching = false; applySpeed()
+	elseif input.KeyCode == Enum.KeyCode.LeftControl
+		or input.KeyCode == Enum.KeyCode.RightControl then
+		keyboardCrouchHeld = keyboardCrouchHeldNow()
+		refreshCrouch()
 	end
 end)
 
@@ -150,10 +268,13 @@ player.CharacterAdded:Connect(function()
 	-- touch latch. Preserve a new RUN tap made during this startup delay instead
 	-- of silently turning it off while leaving the button lit.
 	shiftSprintHeld = keyboardSprintHeld()
-	sprinting, crouching = shiftSprintHeld or touchSprintHeld, false
+	sprinting = shiftSprintHeld or touchSprintHeld
+	keyboardCrouchHeld, controllerCrouchToggled, crouching = false, false, false
+	lastPublishedCrouch = nil
 	-- The touch SNEAK latch and its lit ring go with the crouch they stand for,
 	-- or the button reads "sneaking" over a character that is standing up.
 	if showSneakEngaged then showSneakEngaged(false) end
+	publishCrouch(false)
 	applySpeed()
 end)
 
@@ -335,7 +456,6 @@ UIDevice.Changed:Connect(applyTouchControlLayout)
 -- updateRoundState below re-evaluates this on every state change.
 
 local touchSprintToggled = false
-local touchSneakToggled = false
 local function showRunEnabled(enabled)
 	touchRunButton.BackgroundTransparency = enabled and 0.25 or 0.52
 	touchRunButton.TextColor3 = enabled and Color3.fromRGB(125, 255, 175) or Color3.fromRGB(235, 238, 232)
@@ -373,10 +493,9 @@ end)
 -- Drives the SAME `crouching` upvalue the LeftControl path drives, through the
 -- SAME applySpeed(), so speed and LOUDNESS.crouch stay in exactly one place.
 touchSneakButton.Activated:Connect(function()
-	if not inRound() then return end
+	if not crouchAllowed() and not touchSneakToggled then return end
 	showSneakEngaged(not touchSneakToggled)
-	crouching = touchSneakToggled
-	applySpeed()
+	refreshCrouch()
 end)
 
 touchJumpButton.Activated:Connect(function()
@@ -384,6 +503,7 @@ touchJumpButton.Activated:Connect(function()
 	local character, hum = currentChar()
 	if character and character:GetAttribute("Level2_ForcedSliding") == true then return end
 	if hum and hum.Health > 0 and hum:GetState() ~= Enum.HumanoidStateType.Dead then
+		if crouching then cancelCrouch() end
 		hum.Jump = true
 		hum:ChangeState(Enum.HumanoidStateType.Jumping)
 	end
@@ -579,24 +699,7 @@ end)
 -- clears Active/Selectable/Modal as well as Visible.
 local function controlsAvailable()
 	if not touchControls() then return false end
-	if not inRound() then return false end
-	if player:GetAttribute("Escaped") == true then return false end
-	if player:GetAttribute("Level3_Hiding") == true then return false end
-	if player:GetAttribute("Spectating") == true then return false end
-	-- A modal owns the screen: the store terminal, the dev phone, the Zyntra
-	-- re-entry prompt, or the post-round panel.
-	if player:GetAttribute("ZyntraStoreOpen") == true then return false end
-	if player:GetAttribute("DevPhoneOpen") == true then return false end
-	if player:GetAttribute("ZyntraReentryOpen") == true then return false end
-	-- ...and the party dialog, which was the one screen-owning modal missing
-	-- from this list while `modalOwnsScreen` below already carried it. The two
-	-- disagreeing is how the cluster stayed drawn under a modal that UIDevice,
-	-- the Level 3 reader and the Zyntra opener all treat as owning the screen.
-	if player:GetAttribute("QueueModalOpen") == true then return false end
-	local character = player.Character
-	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-	if not humanoid or humanoid.Health <= 0 then return false end
-	return true
+	return movementAvailable()
 end
 
 -- A modal owns the screen whether or not a round is running. `controlsAvailable`
@@ -616,6 +719,10 @@ local wasRoundActive = inRound()
 local function updateRoundState()
 	local active = inRound()
 	local usable = controlsAvailable()
+	if not movementAvailable() and (crouching or keyboardCrouchHeld
+		or controllerCrouchToggled or touchSneakToggled) then
+		cancelCrouch()
+	end
 	gui.Enabled = true
 	-- RUN stays available in the lobby (it is how a player sprints to a station)
 	-- but is gated on every other unavailable state once a round starts -- and,
@@ -645,11 +752,16 @@ local function updateRoundState()
 		-- lobby UI/layout refreshes must not switch RUN off underneath the player.
 		if wasRoundActive then
 			shiftSprintHeld, touchSprintHeld = keyboardSprintHeld(), false
-			sprinting, crouching = shiftSprintHeld, false
+			sprinting = shiftSprintHeld
+			cancelCrouch()
 			touchSprintToggled = false
 			showRunEnabled(false)
-			showSneakEngaged(false)
 		end
+		applySpeed()
+	elseif player:GetAttribute("Level3_Hiding") ~= true then
+		-- The hiding controller restores the speed it captured on entry. Reapply
+		-- the CURRENT aggregate input state on exit so crouch -> hide -> stand
+		-- cannot leave the player stuck at the old 8-stud crouch speed.
 		applySpeed()
 	end
 	wasRoundActive = active
@@ -662,7 +774,20 @@ end
 UIDevice.Changed:Connect(updateRoundState)
 local function bindLife(character)
 	local humanoid = character:WaitForChild("Humanoid", 8)
-	if humanoid then humanoid.Died:Connect(updateRoundState) end
+	if humanoid then
+		humanoid.Died:Connect(updateRoundState)
+		humanoid.StateChanged:Connect(function(_, newState)
+			if crouching and CROUCH_BLOCKED_STATES[newState] then cancelCrouch() end
+		end)
+	end
+	local function cancelForLevel2Lock()
+		if crouching and (character:GetAttribute("Level2_ForcedSliding") == true
+			or character:GetAttribute("Level2_RagdollServerActive") == true) then
+			cancelCrouch()
+		end
+	end
+	character:GetAttributeChangedSignal("Level2_ForcedSliding"):Connect(cancelForLevel2Lock)
+	character:GetAttributeChangedSignal("Level2_RagdollServerActive"):Connect(cancelForLevel2Lock)
 	updateRoundState()
 end
 if player.Character then task.spawn(bindLife, player.Character) end

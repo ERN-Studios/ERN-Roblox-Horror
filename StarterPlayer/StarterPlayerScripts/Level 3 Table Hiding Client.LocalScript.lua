@@ -1,6 +1,6 @@
 --!strict
 -- Level 3 Table Hiding Client
--- Mobile/desktop leave control, replicated under-table crouch pose, and a
+-- Mobile/desktop leave control, the shared all-client crouch animation, and a
 -- camera point physically inside the table. Entry uses one cross-device prompt.
 
 local Players = game:GetService("Players")
@@ -15,10 +15,11 @@ local requestRemote: RemoteEvent? = nil
 
 local hiding = false
 
--- This is a runtime-authored R15 crouch pose rather than a borrowed animation
--- asset. Every client evaluates it for every replicated hidden player, which is
--- the AnimationConstraint-safe way to make the same tucked silhouette visible
--- to the owner, teammates, and spectators. Motor6D is retained for older rigs.
+-- This is the game's canonical runtime-authored R15 crouch animation. Its base
+-- pose is the exact under-table silhouette; ordinary crouching layers a small,
+-- low gait over that same pose while moving. Every client evaluates it for
+-- every replicated crouching/hidden player because AnimationConstraint.Transform
+-- itself does not replicate. There is deliberately only one pose writer.
 local RAD = math.rad
 local CROUCH_POSE = {
 	Root = CFrame.new(0, -0.92, 0.12) * CFrame.Angles(RAD(-8), 0, 0),
@@ -36,7 +37,7 @@ local CROUCH_POSE = {
 	RightElbow = CFrame.Angles(RAD(-64), 0, RAD(5)),
 }
 local jointCache = setmetatable({}, {__mode = "k"})
-local posedCharacters = setmetatable({}, {__mode = "k"})
+local poseStates = setmetatable({}, {__mode = "k"})
 
 local function jointsFor(character: Model): {Instance}
 	local cached = jointCache[character]
@@ -60,33 +61,118 @@ local function writeJointTransform(joint: Instance, transform: CFrame)
 	end
 end
 
--- Animator writes first; PreSimulation owns the final tucked pose for this
--- frame. Hidden state is replicated on Player, so remote bodies pose locally
--- too even though AnimationConstraint.Transform itself is not networked.
-RunService.PreSimulation:Connect(function()
-	local active = {}
-	if workspace:GetAttribute("SelectedLevel") == 3 then
-		local breathing = CFrame.Angles(RAD(math.sin(os.clock() * 1.55) * 0.7), 0, 0)
-		for _, targetPlayer in ipairs(Players:GetPlayers()) do
-			local character = targetPlayer.Character
-			if targetPlayer:GetAttribute("Level3_Hiding") == true
-				and character and character.Parent then
-				active[character] = true
-				posedCharacters[character] = true
-				for _, joint in ipairs(jointsFor(character)) do
-					local transform = CROUCH_POSE[joint.Name]
-					if joint.Name == "Waist" then transform = transform * breathing end
-					writeJointTransform(joint, transform)
-				end
-			end
-		end
+local function isCrouching(targetPlayer: Player): boolean
+	-- The owner predicts locally for immediate camera/pose response while every
+	-- other observer waits for the server-owned attribute. Local truth must also
+	-- own EXIT so a stale replicated true cannot hold our body down for one RTT.
+	if targetPlayer == player then
+		return targetPlayer:GetAttribute("LocalCrouching") == true
 	end
-	for character in pairs(posedCharacters) do
-		if not active[character] then
+	return targetPlayer:GetAttribute("Crouching") == true
+end
+
+local function poseAllowed(targetPlayer: Player, character: Model): (boolean, boolean)
+	local hidden = workspace:GetAttribute("SelectedLevel") == 3
+		and targetPlayer:GetAttribute("Level3_Hiding") == true
+	local ordinaryCrouch = targetPlayer:GetAttribute("InRound") == true
+		and workspace:GetAttribute("RoundActive") == true
+		and isCrouching(targetPlayer)
+	if not hidden and not ordinaryCrouch then return false, false end
+	if not hidden and (character:GetAttribute("Level2_ForcedSliding") == true
+		or character:GetAttribute("Level2_RagdollServerActive") == true) then
+		return false, false
+	end
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	return humanoid ~= nil and humanoid.Health > 0, hidden
+end
+
+local function animatedTransform(jointName: string, hidden: boolean,
+	phase: number, gaitWeight: number): CFrame
+	local transform = CROUCH_POSE[jointName]
+	local stride = if hidden then 0 else math.sin(phase) * gaitWeight
+	local counterStride = if hidden then 0 else math.sin(phase + math.pi) * gaitWeight
+	if jointName == "Root" then
+		transform *= CFrame.new(0, -math.abs(math.sin(phase * 2)) * .035 * gaitWeight, 0)
+	elseif jointName == "Waist" then
+		local breath = math.sin(os.clock() * 1.55) * .7
+		transform *= CFrame.Angles(RAD(breath), RAD(stride * 1.4), RAD(stride * 1.1))
+	elseif jointName == "LeftHip" then
+		transform *= CFrame.Angles(RAD(stride * 8), 0, RAD(-stride * 1.5))
+	elseif jointName == "RightHip" then
+		transform *= CFrame.Angles(RAD(counterStride * 8), 0, RAD(-counterStride * 1.5))
+	elseif jointName == "LeftKnee" then
+		transform *= CFrame.Angles(RAD(math.max(0, -stride) * -9), 0, 0)
+	elseif jointName == "RightKnee" then
+		transform *= CFrame.Angles(RAD(math.max(0, -counterStride) * -9), 0, 0)
+	elseif jointName == "LeftAnkle" then
+		transform *= CFrame.Angles(RAD(stride * -4), 0, 0)
+	elseif jointName == "RightAnkle" then
+		transform *= CFrame.Angles(RAD(counterStride * -4), 0, 0)
+	elseif jointName == "LeftShoulder" then
+		transform *= CFrame.Angles(RAD(counterStride * 3.5), 0, RAD(stride * 1.5))
+	elseif jointName == "RightShoulder" then
+		transform *= CFrame.Angles(RAD(stride * 3.5), 0, RAD(counterStride * 1.5))
+	end
+	return transform
+end
+
+-- Animator writes first; PreSimulation owns the final crouch for this frame.
+-- Weight and gait are eased, so entering/exiting never snaps and a stationary
+-- crouch settles back to the exact Level 3 hiding pose instead of skating.
+RunService.PreSimulation:Connect(function(deltaTime)
+	local seen = {}
+	for _, targetPlayer in ipairs(Players:GetPlayers()) do
+		local character = targetPlayer.Character
+		if not character or not character.Parent then continue end
+		seen[character] = true
+		local active, hidden = poseAllowed(targetPlayer, character)
+		local poseState = poseStates[character]
+		if not poseState and not active then continue end
+		if not poseState then
+			poseState = {Weight=0, GaitWeight=0, Phase=0}
+			poseStates[character] = poseState
+		end
+
+		local root = character:FindFirstChild("HumanoidRootPart")
+		local flatSpeed = 0
+		if active and not hidden and root and root:IsA("BasePart") then
+			local velocity = root.AssemblyLinearVelocity
+			flatSpeed = Vector3.new(velocity.X, 0, velocity.Z).Magnitude
+		end
+		local gaitTarget = active and not hidden and flatSpeed > .75 and 1 or 0
+		local gaitAlpha = math.clamp(deltaTime * 10, 0, 1)
+		poseState.GaitWeight += (gaitTarget - poseState.GaitWeight) * gaitAlpha
+		if gaitTarget > 0 then
+			poseState.Phase += deltaTime * 7.5 * math.clamp(flatSpeed / 8, .5, 1.35)
+		end
+		if hidden then
+			-- The server has already pivoted the rig inside solid furniture. Land on
+			-- the proven hide pose immediately; only ordinary crouch uses the blend.
+			poseState.Weight = 1
+			poseState.GaitWeight = 0
+		else
+			local poseAlpha = math.clamp(deltaTime * (active and 16 or 12), 0, 1)
+			poseState.Weight += ((active and 1 or 0) - poseState.Weight) * poseAlpha
+		end
+
+		for _, joint in ipairs(jointsFor(character)) do
+			local desired = animatedTransform(joint.Name, hidden,
+				poseState.Phase, poseState.GaitWeight)
+			writeJointTransform(joint, CFrame.new():Lerp(desired, poseState.Weight))
+		end
+		if not active and poseState.Weight < .002 then
 			for _, joint in ipairs(jointsFor(character)) do
 				writeJointTransform(joint, CFrame.new())
 			end
-			posedCharacters[character] = nil
+			poseStates[character] = nil
+		end
+	end
+	for character in pairs(poseStates) do
+		if not seen[character] then
+			for _, joint in ipairs(jointsFor(character)) do
+				writeJointTransform(joint, CFrame.new())
+			end
+			poseStates[character] = nil
 		end
 	end
 end)
@@ -275,7 +361,11 @@ end
 
 leave.Activated:Connect(requestExit)
 UserInputService.InputBegan:Connect(function(input, processed)
-	if processed or not hiding then return end
+	if not hiding then return end
+	-- RoundUI can consume B to dismiss a transmission. While hidden, B is also
+	-- the advertised leave control, so it must still release the table in that
+	-- same frame instead of making the player press it twice.
+	if processed and input.KeyCode ~= Enum.KeyCode.ButtonB then return end
 	if input.KeyCode == Enum.KeyCode.E
 		or input.KeyCode == Enum.KeyCode.ButtonB
 		or input.KeyCode == Enum.KeyCode.ButtonX then

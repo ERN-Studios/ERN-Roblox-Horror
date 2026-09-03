@@ -1532,7 +1532,13 @@ local function acquireHeardTarget(session: any): (Player?, BasePart?)
 			local velocity = Vector3.new(root.AssemblyLinearVelocity.X, 0, root.AssemblyLinearVelocity.Z).Magnitude
 			if velocity >= 2 then
 				local hearingRange: number
-				if humanoid.WalkSpeed <= 10.5 then
+				-- WalkSpeed is authored by the owning client for responsive movement and
+				-- does not reliably mirror back to the server. Crouch State Server owns
+				-- this replicated attribute, so hearing uses the same validated state
+				-- that every client uses to render the crouched player.
+				-- Measured speed is the anti-spoof backstop: a client cannot keep
+				-- crouch-range hearing while actually sprinting at a forged speed.
+				if player:GetAttribute("Crouching") == true and velocity <= 11 then
 					hearingRange = activeProfile.HearingWalkRange * Tuning.CrouchHearingMultiplier
 				elseif velocity >= 20 or humanoid.WalkSpeed >= 24 then
 					hearingRange = activeProfile.HearingSprintRange

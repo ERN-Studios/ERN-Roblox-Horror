@@ -7,9 +7,9 @@
     "id": "7ccaf8b2-9e54-4709-8caa-91e1bce8b5b0"
   },
   "counts": {
-    "scripts": 101,
+    "scripts": 102,
     "remoteEvents": 14,
-    "total": 115,
+    "total": 116,
     "studioTrailingNewline": 4
   },
   "extraMirroredFilesNotInStudio": [
@@ -136,8 +136,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/NoiseReporter.LocalScript.lua",
-      "bytes": 29515,
-      "sha256": "2330eeebba0683d52e80604283d43201547773a582fbd3f196948d4142936a66",
+      "bytes": 34298,
+      "sha256": "ad6d410cc9d7ae27d8db3f97b0857c82abafaaba7c38e5d1ffd52132496b9422",
       "status": "synced"
     },
     {
@@ -160,8 +160,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.RoundUI",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
-      "bytes": 215823,
-      "sha256": "6cb9433727ba5fc86395d839eedbc9ce559ce5efb6a1a38dd41faa93eb0ca710",
+      "bytes": 216016,
+      "sha256": "c7ff2e187fc679dc553b53ca383da9af22389cff636787a77af02bf085daa9b9",
       "status": "synced"
     },
     {
@@ -200,8 +200,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.EntityShakeController",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/EntityShakeController.LocalScript.lua",
-      "bytes": 8236,
-      "sha256": "c90ad844f58b63e3a6a5bd22d182dd20edbd7ac81186371e2d0b8d5c873a25f9",
+      "bytes": 9221,
+      "sha256": "02eb93db8690bfbc3b8e66e3c79165801e5c495bf893e4e09354a905c754a670",
       "status": "synced"
     },
     {
@@ -675,8 +675,8 @@
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Mall Manager AI Controller.ModuleScript.lua",
-      "bytes": 154090,
-      "sha256": "d3a46a40db2b0ab7af0bf93f54c41c26a3890476c87b83e97bc306f42fd3c247",
+      "bytes": 154557,
+      "sha256": "fc2e9f503d60476c5b4c7385ab50c6f52c833e252b8c50e2618ac168098fb182",
       "status": "synced"
     },
     {
@@ -707,8 +707,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Table Hiding Client",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 3 Table Hiding Client.LocalScript.lua",
-      "bytes": 11210,
-      "sha256": "1bc1c12e9016d181f6bf64150ae08ffbf12a5d35ee5fa1fdcabb747656b9b6d7",
+      "bytes": 15408,
+      "sha256": "c5ae9e9a207c2eadbf5cd03b5fe7b2b3849fb658f017bc9cf2f7e5dc45abeba1",
       "status": "synced"
     },
     {
@@ -813,8 +813,7 @@
       "file": "StarterPlayer/StarterPlayerScripts/MasterTuningClient.LocalScript.lua",
       "bytes": 10613,
       "sha256": "cc2c3c5c4a3f5edabb216939605d148b15e060de54f7ea9341acfc96125fa47d",
-      "status": "pending-studio-push",
-      "studioSha256Before": "d5f8e12230f1bad28563386e4d2d5e33c62997c39e8d05a582e1bb59c78f327a"
+      "status": "synced"
     },
     {
       "studioPath": "ReplicatedStorage.Remotes.DevTuning",
@@ -942,6 +941,14 @@
       "file": "ServerStorage/CodexBackup_20260902_ComingSoonGates/TunnelLobbyBuilder_PreComingSoon.ModuleScript.lua",
       "bytes": 96252,
       "sha256": "80ed54db4d80a88ffe7c9dfb2f1c0413b14f6204eeb3c132f34ca21590940512",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ServerScriptService.Crouch State Server",
+      "className": "Script",
+      "file": "ServerScriptService/Crouch State Server.Script.lua",
+      "bytes": 6714,
+      "sha256": "2a474a0d3a18e5e97d53e2e0dced5fbe502663220684357d50f697f73300dffc",
       "status": "synced"
     }
   ]

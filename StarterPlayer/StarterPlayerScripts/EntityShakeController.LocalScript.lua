@@ -37,13 +37,19 @@ local ALERT_SHAKE_ATTACK   = 0.08
 -- writer would fight it.
 local BOB_WALK_AMP  = 0.05   -- bob size (studs) while walking — keep it subtle
 local BOB_RUN_AMP   = 0.09   -- bob size while sprinting (slightly stronger)
+local BOB_CROUCH_AMP = 0.025 -- restrained movement while the body stays tucked
 local BOB_WALK_FREQ = 6      -- bob pace while walking (rad/s)
 local BOB_RUN_FREQ  = 9.5    -- bob pace while sprinting (slightly faster)
+local BOB_CROUCH_FREQ = 4.5
 local BOB_RUN_WS    = 22     -- WalkSpeed at/above which you count as running
 local BOB_SMOOTH    = 6      -- how fast the bob eases in / out (start, stop, gait change)
 -- Level 3 Table Hiding Client owns the exact world-space under-table POV.
 -- Keep this writer neutral while hidden; it still suppresses locomotion bob.
 local HIDDEN_CAMERA_OFFSET = Vector3.zero
+-- Matches the canonical crouch pose's Root translation. EntityShakeController
+-- remains the sole CameraOffset writer, so normal crouch lowers smoothly without
+-- fighting bob/shake or the Level 3 world-space hide camera.
+local CROUCH_CAMERA_OFFSET = Vector3.new(0, -0.92, 0.12)
 -- ──────────────────────────────────────────────────────────
 
 local impulse = 0     -- decaying footstep-kick amount
@@ -117,14 +123,25 @@ RunService.RenderStepped:Connect(function(dt)
 	-- your own movement head-bob: a smooth figure-eight (side sway + double-time
 	-- vertical), eased in and out so starting/stopping never snaps
 	local isHidden = player:GetAttribute("Level3_Hiding") == true
+	local isCrouching = not isHidden and player:GetAttribute("InRound") == true
+		and workspace:GetAttribute("RoundActive") == true
+		-- This is the owner's camera, so prediction is the visual truth in both
+		-- directions. The server attribute is for remote observers and AI.
+		and player:GetAttribute("LocalCrouching") == true
+		and char:GetAttribute("Level2_ForcedSliding") ~= true
+		and char:GetAttribute("Level2_RagdollServerActive") ~= true
 	local bobTargetAmp, bobFreq = 0, BOB_WALK_FREQ
 	if not isHidden and myRoot and hum.Health > 0 then
 		local vel = myRoot.AssemblyLinearVelocity
 		local flat = Vector3.new(vel.X, 0, vel.Z).Magnitude
 		if flat > 2 and hum.WalkSpeed > 0.1 then
 			local running = hum.WalkSpeed >= BOB_RUN_WS
-			bobTargetAmp = running and BOB_RUN_AMP or BOB_WALK_AMP
-			bobFreq = running and BOB_RUN_FREQ or BOB_WALK_FREQ
+			if isCrouching then
+				bobTargetAmp, bobFreq = BOB_CROUCH_AMP, BOB_CROUCH_FREQ
+			else
+				bobTargetAmp = running and BOB_RUN_AMP or BOB_WALK_AMP
+				bobFreq = running and BOB_RUN_FREQ or BOB_WALK_FREQ
+			end
 		end
 	end
 	bobAmp = bobAmp + (bobTargetAmp - bobAmp) * math.clamp(dt * BOB_SMOOTH, 0, 1)
@@ -152,7 +169,8 @@ RunService.RenderStepped:Connect(function(dt)
 
 	-- entity shake on top of the bob
 	local amp = ambient + impulse * STOMP_STRENGTH + alertAmp
-	local baseOffset = isHidden and HIDDEN_CAMERA_OFFSET or Vector3.zero
+	local baseOffset = if isHidden then HIDDEN_CAMERA_OFFSET
+		elseif isCrouching then CROUCH_CAMERA_OFFSET else Vector3.zero
 	local target = baseOffset + bob
 	if amp >= 0.001 then
 		target = baseOffset + bob + Vector3.new(
