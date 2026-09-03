@@ -86,8 +86,6 @@ local Configuration = {
 	Audio = {
 		FluorescentHum = "rbxassetid://92576512092725",
 		HVAC = "rbxassetid://9125446543",
-		DoorRattle = "rbxassetid://9118901593",
-		DoorMovement = "rbxassetid://9119631915",
 		-- Reserved for the replacement lights-out cue.
 		PowerDown = "",
 		-- Group-owned song uploaded specifically for the synchronized Level 3 sequence.
@@ -113,8 +111,6 @@ local Configuration = {
 		-- Group-owned Mall Manager vocals. Blackout is reproduced spatially from
 		-- corridor-opening markers; chase remains attached to the balloon head.
 		MallManagerBalloonScream = "rbxassetid://105088070261380",
-		MallManagerAlert = "",
-		MallManagerCapture = "",
 		MallManagerBlackout = "rbxassetid://125407251695204",
 	},
 	MusicSequence = {
@@ -142,9 +138,6 @@ local Configuration = {
 		CompletionSongPitchOctave = 0.68,
 		CompletionDimSeconds = 5.5,
 		CorridorVolume = 0.045,
-		RoomFadeDistance = 18,
-		VolumeFadeSeconds = 1.15,
-		TimelineDriftTolerance = 0.32,
 		-- Only the two nearest synchronized PA speakers contribute to the local
 		-- mix. This prevents coherent stacking while preserving coverage in the
 		-- largest rooms and a faint bleed from the next room.
@@ -197,7 +190,6 @@ local Configuration = {
 		ThinkIntervalSeconds = 0.12,
 		BlackoutThinkIntervalSeconds = 0.10,
 		StuckSeconds = 0.85,
-		StuckDistance = 0.65,
 		MaxPathFailures = 3,
 		ObstructionRecoveryAttempts = 3,
 		-- LEVEL3_MANAGER_FURNITURE_NAV_20260821

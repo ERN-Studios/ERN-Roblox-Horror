@@ -2,12 +2,15 @@
 -- Central product catalogue and balance values. IDs map to products created
 -- under the BACKROOMS: STAY QUIET [CO-OP HORROR] experience in Creator Dashboard.
 
+local TokenPercentPerLevel = 0.05
+local PCT = ("+%d%%"):format(math.floor(TokenPercentPerLevel * 100 + 0.5))
+
 return {
 	DataStoreName = "ZyntraPlayerData_v1",
 	SupportLeaderboardDataStoreName = "ZyntraDonationLeaderboard_v2",
 	SupportLeaderboardSize = 10,
 	SupportLeaderboardRefreshSeconds = 90,
-	TokenPercentPerLevel = 0.05,
+	TokenPercentPerLevel = TokenPercentPerLevel,
 	LevelCompletionTokens = 1,
 
 	Studio = {
@@ -33,7 +36,7 @@ return {
 			IconId = 82752249741977,
 			Name = "Advanced Equipment",
 			Price = 149,
-			Description = "Permanently unlock the hazmat color picker and receive one +5% upgrade to both Stamina Capacity and Battery Capacity.",
+			Description = "Permanently unlock the hazmat color picker and receive one " .. PCT .. " upgrade to both Stamina Capacity and Battery Capacity.",
 		},
 		CosmeticEquipment = {
 			Id = 1946086261,
@@ -51,7 +54,7 @@ return {
 			Name = "4 Research Tokens",
 			Price = 49,
 			TokenGrant = 4,
-			Description = "Adds 4 Research Tokens to your account. Spend each token on a permanent +5% upgrade to either Stamina Capacity or Battery Capacity.",
+			Description = "Adds 4 Research Tokens to your account. Spend each token on a permanent " .. PCT .. " upgrade to either Stamina Capacity or Battery Capacity.",
 		},
 		Tokens20 = {
 			Id = 3707755233,
@@ -59,7 +62,7 @@ return {
 			Name = "20 Research Tokens",
 			Price = 149,
 			TokenGrant = 20,
-			Description = "Adds 20 Research Tokens to your account. Spend each token on a permanent +5% upgrade to either Stamina Capacity or Battery Capacity.",
+			Description = "Adds 20 Research Tokens to your account. Spend each token on a permanent " .. PCT .. " upgrade to either Stamina Capacity or Battery Capacity.",
 		},
 		EmergencyReentry = {
 			Id = 3707755318,

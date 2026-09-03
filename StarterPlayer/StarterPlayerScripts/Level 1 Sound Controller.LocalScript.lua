@@ -37,6 +37,20 @@ local function resolveId(slotName)
 	return raw
 end
 
+local resolvedIds = {}
+local hookedSlots = {}
+local function getId(slotName)
+	if resolvedIds[slotName] == nil then
+		local slot = library and library:FindFirstChild(slotName)
+		if slot and slot:IsA("StringValue") and not hookedSlots[slotName] then
+			hookedSlots[slotName] = true
+			slot.Changed:Connect(function() resolvedIds[slotName] = nil end)
+		end
+		resolvedIds[slotName] = resolveId(slotName) or false
+	end
+	return resolvedIds[slotName] or nil
+end
+
 local function active()
 	local level = workspace:GetAttribute("SelectedLevel")
 	return (level == 1 or level == nil)
@@ -45,7 +59,7 @@ end
 
 local loops = {}
 local function ensureLoop(slotName)
-	local id = resolveId(slotName)
+	local id = getId(slotName)
 	if not id then return nil end
 	local loop = loops[slotName]
 	if not loop then
@@ -63,17 +77,20 @@ end
 
 RunService.Heartbeat:Connect(function(dt)
 	local blend = math.clamp(dt / FADE_SECONDS, 0, 1)
+	local isActive = active()
 	for _, entry in ipairs(AMBIENCE) do
 		local slotName, volume = entry[1], entry[2]
-		if active() then
+		if isActive then
 			local loop = ensureLoop(slotName)
-			if loop then
+			if loop and math.abs(volume - loop.Volume) >= 1e-3 then
 				loop.Volume += (volume - loop.Volume) * blend
 			end
 		else
 			local loop = loops[slotName]
 			if loop then
-				loop.Volume += (0 - loop.Volume) * blend
+				if math.abs(loop.Volume) >= 1e-3 then
+					loop.Volume += (0 - loop.Volume) * blend
+				end
 				if loop.Volume < .01 and loop.IsPlaying then loop:Stop() end
 			end
 		end

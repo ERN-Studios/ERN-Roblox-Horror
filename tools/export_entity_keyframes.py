@@ -1,4 +1,9 @@
-"""Bake Blender actions into compact Roblox KeyframeSequence source data."""
+"""DEPRECATED: superseded by export_entity_keyframes_retargeted.py, which fixes
+the reversed arm motion this exporter's world-axis-swap shortcut produces (see
+that file's docstring for why).
+
+Bake Blender actions into compact Roblox KeyframeSequence source data.
+"""
 
 from __future__ import annotations
 

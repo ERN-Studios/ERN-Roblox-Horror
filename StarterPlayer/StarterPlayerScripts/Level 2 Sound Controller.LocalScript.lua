@@ -77,7 +77,7 @@ local ALLOWED_CUES = {}
 for _, slotName in ipairs(CUE_SLOTS) do ALLOWED_CUES[slotName] = true end
 
 local library = ReplicatedStorage:WaitForChild("Level 2 Sound Library")
-local event = ReplicatedStorage:WaitForChild("Level 2 Sound Event")
+local event = ReplicatedStorage:WaitForChild("Level 2 Remotes"):WaitForChild("Level 2 Sound Event")
 
 local function resolveId(slotName)
 	local slot = library and library:FindFirstChild(slotName)

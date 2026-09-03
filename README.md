@@ -395,6 +395,37 @@ ServerScriptService/
   Level 3 Systems/                  Level 3: config, layout, world builder, Mall
                                     Manager AI, hiding, music cycle, test suite
   FlashlightSync / AvatarNormalize / NoiseRegistry   shared services
+ServerStorage/                      retired backups (`Archive`, `CodexBackup_*`)
+                                    plus an unused third-party asset (`Project
+                                    Mirror`); see House rules
+Workspace/                          mirrored rig notes/scripts: the `Entity` rig
+                                    doc, `Dummy`, `StarterCharacter` (+ Animate)
+StarterPlayer/
+  StarterCharacter/                 hazmat gameplay rig (+ Animate)
+  StarterCharacterScripts/          run anim, muted default steps, dance emote
+  StarterPlayerScripts/             HUD, audio hub (SoundController), per-level
+                                    sound/lighting controllers, flashlight,
+                                    spectate, slides, scares…
+ReplicatedStorage/Remotes/          shared RemoteEvents (.txt markers); per-level
+                                    ones sit in `Level 2 Remotes/`, `Level 2 Pool
+                                    Foam Remotes/` and `Level 3 Remotes/`
+ReplicatedStorage/UIDevice          form factor + safe-area layout for the HUD
+                                    (`Safe`, `ModalViewport`, `TopRightPanel`)
+ReplicatedStorage/UIRegression      the HUD regression matrix (see Testing)
+RobloxReplicatedStorage/            four Roblox-engine-owned LocalizationService
+                                    remotes, mirrored as a record only
+assets/                             source assets: textures · sounds · models ·
+                                    banners · animations (FBX + keyframes) · blender
+tools/                              Studio/Blender MCP pipeline (see below)
+artifacts/                          captured screenshots from automated playtests
+docs/                               audits and one-off design docs: this audit,
+                                    Level 3 pathfinding notes, Zyntra
+                                    monetization setup
+plugin/                             Studio dock plugin
+                                    (`MasterTuningPlugin.server.lua`) +
+                                    `build_plugin.py` installer; intentionally
+                                    outside the mirror/manifest
+```
 
 Level 1's five runtime scripts were gathered into `Level 1 Systems` on
 2026-09-02 so all three levels read the same way. Anything looking them up by
@@ -404,21 +435,6 @@ nil, which is how a Level 2/3 round once came to start Level 1's fuse puzzle
 server-side. `NoiseRegistry` deliberately stayed in the root as a shared
 service, so the moved scripts reach it through `ServerScriptService`, never
 `script.Parent`.
-StarterPlayer/
-  StarterCharacter/                 hazmat gameplay rig (+ Animate)
-  StarterCharacterScripts/          run anim, muted default steps, dance emote
-  StarterPlayerScripts/             HUD, audio hub (SoundController), per-level
-                                    sound/lighting controllers, flashlight,
-                                    spectate, slides, scares…
-ReplicatedStorage/Remotes/          RemoteEvents (.txt markers)
-ReplicatedStorage/UIDevice          form factor + safe-area layout for the HUD
-                                    (`Safe`, `ModalViewport`, `TopRightPanel`)
-ReplicatedStorage/UIRegression      the HUD regression matrix (see Testing)
-assets/                             source assets: textures · sounds · models ·
-                                    banners · animations (FBX + keyframes) · blender
-tools/                              Studio/Blender MCP pipeline (see below)
-artifacts/                          captured screenshots from automated playtests
-```
 
 ## 🔧 Tooling (MCP pipeline)
 
@@ -742,6 +758,9 @@ developer phone · `M` mute/unmute the active dispatch · `N` stop the current
 dispatch briefing. These controls are restricted by immutable UserId and
 revalidated server-side; they are not general-player controls.
 
+The Master Tuning panel (`MasterTuningClient.LocalScript`, same whitelist)
+opens with `F4`.
+
 The developer page's captions follow `UIDevice.SuppressesKeyboardGlyphs()`, not
 `IsTouch()`, and are re-rendered on `UIDevice.Changed`. The difference matters
 for a handheld that reports a keyboard — a tablet in a case, a hybrid: it is
@@ -749,6 +768,18 @@ for a handheld that reports a keyboard — a tablet in a case, a hybrid: it is
 has not got. With glyphs suppressed the intro drops its `//  PHONE: J`, every
 toggle drops its `//  <key>`, and the noclip row changes from "WASD, Space and
 Left Ctrl" to "using the movement stick".
+
+### Developer tuning
+
+`ReplicatedStorage.MasterConfiguration` is a registry of developer-tunable
+values (level sizes, entity timings, and more): each entry names a config
+module's field, its allowed range, and whether a change is live or needs the
+next round build, without holding the value itself. Overrides live as
+`ReplicatedStorage.MasterTuning` attributes, refreshed against
+`MasterTuning.Defaults` every round build. Whitelisted developers open the
+in-game panel with `F4` (`MasterTuningClient.LocalScript`), which sends every
+change over the `DevTuning` remote so the server re-checks `DevAccess` and
+re-clamps against the registry's range.
 
 ## 🚀 Release-candidate checklist
 

@@ -626,6 +626,7 @@ applyStaminaLayout()
 UIDevice.Changed:Connect(applyStaminaLayout)
 
 local barShown = 0 -- eased 0–1 visibility
+local lastFrac, lastExhausted = -1, nil -- last values written; -1/nil force the first frame to write
 
 RunService.Heartbeat:Connect(function(dt)
 	if not inRound() then
@@ -680,17 +681,24 @@ RunService.Heartbeat:Connect(function(dt)
 	end
 
 	local frac = stamina / staminaMax()
-	-- publish stamina (0–1) so SoundController can drive the winded-breathing sound
-	player:SetAttribute("Stamina", frac)
+	if exhausted ~= lastExhausted or math.abs(frac - lastFrac) > 0.001 then
+		lastFrac, lastExhausted = frac, exhausted
+		-- publish stamina (0–1) so SoundController can drive the winded-breathing sound
+		player:SetAttribute("Stamina", frac)
 
-	-- bar: width + white→red colour (solid red while exhausted), fade with use
-	staFill.Size = UDim2.new(frac, -4, 1, -4)
-	staFill.BackgroundColor3 = exhausted and STA_EMPTY
-		or STA_FULL:Lerp(STA_EMPTY, math.clamp(1 - frac, 0, 1) * 0.85)
+		-- bar: width + white→red colour (solid red while exhausted), fade with use
+		staFill.Size = UDim2.new(frac, -4, 1, -4)
+		staFill.BackgroundColor3 = exhausted and STA_EMPTY
+			or STA_FULL:Lerp(STA_EMPTY, math.clamp(1 - frac, 0, 1) * 0.85)
+	end
 	local wantShown = (frac < 0.999) and 1 or 0
 	barShown = barShown + (wantShown - barShown) * math.clamp(dt * BAR_FADE, 0, 1)
-	staBg.BackgroundTransparency = 1 - barShown * (1 - BAR_BG_ALPHA)
-	staFill.BackgroundTransparency = 1 - barShown
+	if math.abs(wantShown - barShown) < 0.002 then
+		barShown = wantShown -- settled; stop re-dirtying the GUI every frame
+	else
+		staBg.BackgroundTransparency = 1 - barShown * (1 - BAR_BG_ALPHA)
+		staFill.BackgroundTransparency = 1 - barShown
+	end
 end)
 
 -- Every state in which the movement cluster must not be usable. Hiding alone is

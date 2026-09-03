@@ -10,7 +10,9 @@ studio-sync.rbxl.lock
 *.exe
 *.msi
 
-# local stash for downloads/installers that ended up in the repo folder
+# local stash for downloads/installers that ended up in the repo folder —
+# it also holds the studio-parity-*.txt dumps backing README's compile/parity
+# PASS rows, so a cleanup pass must not delete them
 _local/
 
 # Python bytecode (tools/)

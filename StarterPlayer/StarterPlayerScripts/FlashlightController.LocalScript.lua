@@ -10,6 +10,7 @@
 local Players = game:GetService("Players")
 local RS = game:GetService("ReplicatedStorage")
 local UIDevice = require(RS:WaitForChild("UIDevice"))
+local Profiles = require(RS:WaitForChild("FlashlightProfiles"))
 local UIS = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
@@ -44,11 +45,8 @@ local function buildMount()
 	mount.CanQuery = false
 	mount.Transparency = 1
 
-	-- tight bright core: the actual "beam" (tune Range to taste; ~27–35)
+	-- tight bright core: the actual "beam" (numbers live in FlashlightProfiles)
 	coreLight = Instance.new("SpotLight")
-	coreLight.Brightness = 1.2
-	coreLight.Range = 38
-	coreLight.Angle = 38
 	coreLight.Color = Color3.fromRGB(255, 244, 214)
 	coreLight.Shadows = true -- localized cone stops at walls instead of lighting whole parts through them
 	coreLight.Enabled = on
@@ -57,9 +55,6 @@ local function buildMount()
 
 	-- wide dim spill: what your eye reads as the "cone of light"
 	spillLight = Instance.new("SpotLight")
-	spillLight.Brightness = 0.3
-	spillLight.Range = 45
-	spillLight.Angle = 75
 	spillLight.Color = Color3.fromRGB(255, 240, 205)
 	spillLight.Shadows = false
 	spillLight.Enabled = on
@@ -72,31 +67,11 @@ local function buildMount()
 	mount.Parent = workspace
 end
 
-local function beamProfile(): (number, number, number, number, number, number, string)
-	if workspace:GetAttribute("SelectedLevel") == 3 then
-		local blackout = workspace:GetAttribute("Level3BlackoutActive") == true
-		if blackout then
-			return 10.0, 66, 38, 2.25, 76, 82, "L3_BLACKOUT"
-		end
-		return 6.0, 58, 38, 1.30, 68, 78, "L3"
-	end
-	return 1.2, 38, 38, .3, 45, 75, "BASE"
-end
-
 local function applyBeamProfile()
-	local coreBrightness, coreRange, coreAngle, spillBrightness, spillRange, spillAngle, profile = beamProfile()
+	local profile = Profiles.Current()
 	if profile == lastBeamProfile then return end
 	lastBeamProfile = profile
-	if coreLight then
-		coreLight.Brightness = coreBrightness
-		coreLight.Range = coreRange
-		coreLight.Angle = coreAngle
-	end
-	if spillLight then
-		spillLight.Brightness = spillBrightness
-		spillLight.Range = spillRange
-		spillLight.Angle = spillAngle
-	end
+	Profiles.Apply(Profiles.Own, profile, coreLight, spillLight)
 end
 
 buildMount()
@@ -121,6 +96,11 @@ rayParams.FilterType = Enum.RaycastFilterType.Exclude
 -- Illumination is produced only by localized SpotLights. The removed
 -- Highlight adorned the entire hit floor/wall/ceiling part and looked exactly
 -- like Studio selection rather than a physical flashlight beam.
+
+-- Cached so the per-frame suppression below skips the name build, the
+-- FindFirstChild lookup and GetChildren() once the instance is found.
+local REPLICATED_SELF_NAME = "ReplicatedFlashlight_" .. player.UserId
+local replicatedSelf, replicatedLights = nil, {}
 
 -- bind AFTER the camera updates, so up/down tracking is exact
 -- Level3UnderTableCamera finalizes a hidden player's camera at Camera + 1.
@@ -167,11 +147,17 @@ RunService:BindToRenderStep("MongoFlashlight", Enum.RenderPriority.Camera.Value 
 	-- The server mount lets other players see this flashlight. Suppress only the
 	-- local player's replicated copy so their own camera never receives the same
 	-- two SpotLights twice; this is a client-local property override.
-	local replicatedSelf = workspace:FindFirstChild("ReplicatedFlashlight_" .. player.UserId)
-	if replicatedSelf then
-		for _, item in ipairs(replicatedSelf:GetChildren()) do
-			if item:IsA("Light") then item.Enabled = false end
+	if not (replicatedSelf and replicatedSelf.Parent == workspace) then
+		replicatedSelf = workspace:FindFirstChild(REPLICATED_SELF_NAME)
+		replicatedLights = {}
+		if replicatedSelf then
+			for _, item in ipairs(replicatedSelf:GetChildren()) do
+				if item:IsA("Light") then table.insert(replicatedLights, item) end
+			end
 		end
+	end
+	for _, item in ipairs(replicatedLights) do
+		item.Enabled = false
 	end
 
 	if on then
@@ -623,6 +609,7 @@ updateRoundVisibility()
 -- beam to every OTHER character's head that follows their flag, so you see
 -- teammates' lights sweeping around the maze.
 local mateBeams = {} -- [character] = { core = ..., spill = ... }
+local lastMateProfile -- last applied profile name; nil forces a re-apply
 
 local function attachMateBeam(char)
 	task.spawn(function()
@@ -632,9 +619,6 @@ local function attachMateBeam(char)
 
 		local core = Instance.new("SpotLight")
 		core.Name = "MateBeamCore"
-		core.Brightness = 1.2
-		core.Range = 32
-		core.Angle = 30
 		core.Color = Color3.fromRGB(255, 244, 214)
 		core.Shadows = true
 		core.Face = Enum.NormalId.Front -- follows where their head points
@@ -643,9 +627,6 @@ local function attachMateBeam(char)
 
 		local spill = Instance.new("SpotLight")
 		spill.Name = "MateBeamSpill"
-		spill.Brightness = 0.24
-		spill.Range = 40
-		spill.Angle = 70
 		spill.Color = Color3.fromRGB(255, 240, 205)
 		spill.Shadows = false
 		spill.Face = Enum.NormalId.Front
@@ -653,6 +634,7 @@ local function attachMateBeam(char)
 		spill.Parent = head
 
 		mateBeams[char] = { core = core, spill = spill }
+		lastMateProfile = nil -- new beam still has default values; force a re-apply
 		char.AncestryChanged:Connect(function(_, parent)
 			if not parent then mateBeams[char] = nil end -- character gone
 		end)
@@ -674,19 +656,15 @@ end)
 -- one-shot event binding to go stale, and it works exactly the same whether
 -- you're alive, dead, or spectating (the beams live on THEIR heads, not yours)
 RunService.Heartbeat:Connect(function()
-	local level3 = workspace:GetAttribute("SelectedLevel") == 3
-	local blackout = level3 and workspace:GetAttribute("Level3BlackoutActive") == true
+	local profile = Profiles.Current()
+	local profileChanged = profile ~= lastMateProfile
+	lastMateProfile = profile
 	for char, beams in pairs(mateBeams) do
 		local flag = char:FindFirstChild("FlashlightOn")
 		local hum = char:FindFirstChildOfClass("Humanoid")
 		local shine = flag ~= nil and flag.Value == true
 			and hum ~= nil and hum.Health > 0
-		beams.core.Brightness = blackout and 7.5 or (level3 and 4.5 or 1.2)
-		beams.core.Range = level3 and 52 or 32
-		beams.core.Angle = level3 and 40 or 30
-		beams.spill.Brightness = blackout and 1.85 or (level3 and 1.05 or .24)
-		beams.spill.Range = level3 and 62 or 40
-		beams.spill.Angle = level3 and 86 or 70
+		if profileChanged then Profiles.Apply(Profiles.Mate, profile, beams.core, beams.spill) end
 		beams.core.Enabled = shine
 		beams.spill.Enabled = shine
 	end

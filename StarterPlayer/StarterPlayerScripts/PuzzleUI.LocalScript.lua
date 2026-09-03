@@ -554,7 +554,7 @@ end
 -- through a helper that deliberately ignores hidden labels would drop exactly
 -- the write that matters -- the one that arrives while the row is still down.
 local function setObjectiveText(label, text, colour)
-	if colour then label.TextColor3 = colour end
+	if colour and label.TextColor3 ~= colour then label.TextColor3 = colour end
 	text = tostring(text)
 	if label.Text == text then return end
 	label.Text = text
@@ -928,6 +928,7 @@ local leverActive = 0
 local leverTotal = 0
 local leverEndsAt = 0
 local leverLatchMode = false
+local leverLatchDone = false
 
 -- The toggle's caption follows the rectangle it has to fit in, which is why it
 -- is decided here and not where the collapsed state changes. Inside the panel
@@ -978,6 +979,8 @@ end)
 
 local function refreshLever()
 	if not leverPhase then return end
+	-- Skip the per-frame rebuild once the latch text is already showing.
+	if leverLatchMode and leverLatchDone then return end
 	-- The copy is decided BEFORE anything is laid out. The old order made the
 	-- row visible and called applyPuzzleLayout() here, then wrote the text
 	-- below, so the stack was measured against the string being replaced --
@@ -1009,6 +1012,7 @@ local function refreshLever()
 		leverLabel.Visible = true
 		applyPuzzleLayout()
 	end
+	leverLatchDone = leverLatchMode
 end
 
 RunService.RenderStepped:Connect(refreshLever)
@@ -1069,6 +1073,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d)
 		leverActive = a or 0
 		leverTotal = b or leverTotal
 		leverLatchMode = d == true
+		leverLatchDone = false
 		leverEndsAt = (not leverLatchMode and (c or 0) > 0)
 			and (os.clock() + c)
 			or 0

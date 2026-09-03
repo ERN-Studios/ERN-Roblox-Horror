@@ -503,19 +503,29 @@ local function startSliding(character, humanoid, root, direction, oneWay)
 	end))
 end
 
-local function exclusionsFor(character)
-	local exclusions = {character}
+-- The floor probes exclude every player character (the rider's own and the
+-- rest of the party). That set only changes on roster events, so it is rebuilt
+-- there rather than on both raycasts every PreSimulation frame of the round.
+local function refreshRaycastFilter()
+	local exclusions = {}
 	for _, otherPlayer in ipairs(Players:GetPlayers()) do
 		local otherCharacter = otherPlayer.Character
-		if otherCharacter and otherCharacter ~= character then
-			table.insert(exclusions, otherCharacter)
-		end
+		if otherCharacter then table.insert(exclusions, otherCharacter) end
 	end
-	return exclusions
+	raycastParams.FilterDescendantsInstances = exclusions
 end
 
+local function watchRosterFor(otherPlayer)
+	otherPlayer.CharacterAdded:Connect(refreshRaycastFilter)
+	otherPlayer.CharacterRemoving:Connect(function() task.defer(refreshRaycastFilter) end)
+	refreshRaycastFilter()
+end
+
+Players.PlayerAdded:Connect(watchRosterFor)
+Players.PlayerRemoving:Connect(function() task.defer(refreshRaycastFilter) end)
+for _, otherPlayer in ipairs(Players:GetPlayers()) do watchRosterFor(otherPlayer) end
+
 local function slideFloorUnder(character, humanoid, root)
-	raycastParams.FilterDescendantsInstances = exclusionsFor(character)
 	local origin = root.Position + Vector3.yAxis * .5
 	local distance = humanoid.HipHeight + root.Size.Y * .5 + 4
 	local result = Workspace:Raycast(origin, Vector3.new(0, -distance, 0), raycastParams)
@@ -535,7 +545,6 @@ local function slideFloorUnder(character, humanoid, root)
 end
 
 local function supportedUnder(character, humanoid, root)
-	raycastParams.FilterDescendantsInstances = exclusionsFor(character)
 	local distance = humanoid.HipHeight + root.Size.Y * .5 + 5
 	local result = Workspace:Raycast(
 		root.Position + Vector3.yAxis * .5,

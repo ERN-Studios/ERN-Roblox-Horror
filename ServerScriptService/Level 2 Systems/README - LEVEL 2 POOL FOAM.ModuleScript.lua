@@ -145,7 +145,8 @@ Suggested state mapping for final animation names:
 7. Confirm watched close contact stays safe, including throughout the 0.50-second
    reveal overrun; turning away inside 5.5 studs then kills immediately, including
    through a ForceField.
-8. Run `POOL_FOAM_TEST_PLAN.md` before removing any remaining proxy assets.
+8. Manually verify every behaviour above before removing any remaining
+   proxy assets -- Pool Foam has no automated test suite yet (CLAUDE.md).
 
 The temporary proxies are intentionally replaceable art, not a second gameplay
 implementation. Do not edit controller code merely to swap the final rig.

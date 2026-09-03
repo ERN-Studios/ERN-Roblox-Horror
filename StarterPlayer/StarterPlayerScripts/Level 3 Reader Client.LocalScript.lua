@@ -270,7 +270,8 @@ toastBody.Parent = toast
 --   * the panel narrows rather than overflowing, never below READER_MIN_WIDTH;
 --   * the panel's footprint is derived from the LAYOUT alone and never from
 --     readerHidden, so it cannot move or resize under the finger on it.
-local READER_PANEL_HEIGHT = 101
+-- Read from UIDevice.ObjectivePanelSize[3], not copied, so this can't drift.
+local READER_PANEL_HEIGHT = UIDevice.ObjectivePanelSize[3].Y
 local READER_PANEL_MIN_HEIGHT = 58
 local READER_MIN_WIDTH = 150
 
@@ -299,7 +300,7 @@ local function applyLayout()
 	local viewport = layoutInfo.Viewport
 	local narrow = viewport.X < 620
 	local mobileControls = layoutInfo.IsTouch
-	local width = math.floor(math.clamp(viewport.X * (narrow and 0.56 or 0.30), 184, 248))
+	local width = math.floor(math.clamp(viewport.X * (narrow and 0.56 or 0.30), 184, UIDevice.ObjectivePanelSize[3].X))
 	local panelHeight = READER_PANEL_HEIGHT
 	local compactLandscape = false
 

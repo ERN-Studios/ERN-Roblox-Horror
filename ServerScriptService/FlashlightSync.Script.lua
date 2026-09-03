@@ -7,6 +7,7 @@ local Players = game:GetService("Players")
 local RS = game:GetService("ReplicatedStorage")
 
 local remote = RS:WaitForChild("Remotes"):WaitForChild("ToggleFlashlight")
+local Profiles = require(RS:WaitForChild("FlashlightProfiles"))
 local mounts = {}
 local lastAim = {}
 local lastToggle = {}
@@ -46,9 +47,6 @@ local function ensureMount(player, char)
 
 	local core = Instance.new("SpotLight")
 	core.Name = "Core"
-	core.Brightness = 1.2
-	core.Range = 38
-	core.Angle = 38
 	core.Color = Color3.fromRGB(255, 244, 214)
 	core.Shadows = false
 	core.Face = Enum.NormalId.Front
@@ -57,14 +55,12 @@ local function ensureMount(player, char)
 
 	local spill = Instance.new("SpotLight")
 	spill.Name = "Spill"
-	spill.Brightness = 0.3
-	spill.Range = 45
-	spill.Angle = 75
 	spill.Color = Color3.fromRGB(255, 240, 205)
 	spill.Shadows = false
 	spill.Face = Enum.NormalId.Front
 	spill.Enabled = false
 	spill.Parent = mount
+	Profiles.Apply(Profiles.Mount, "BASE", core, spill)
 
 	local head = char and char:FindFirstChild("Head")
 	if head then mount.CFrame = head.CFrame end
@@ -74,20 +70,7 @@ local function ensureMount(player, char)
 end
 
 local function applyMountProfile(mount)
-	local level3 = workspace:GetAttribute("SelectedLevel") == 3
-	local blackout = level3 and workspace:GetAttribute("Level3BlackoutActive") == true
-	local core = mount:FindFirstChild("Core")
-	if core and core:IsA("SpotLight") then
-		core.Brightness = blackout and 7.5 or (level3 and 4.5 or 1.2)
-		core.Range = level3 and 52 or 38
-		core.Angle = level3 and 40 or 38
-	end
-	local spill = mount:FindFirstChild("Spill")
-	if spill and spill:IsA("SpotLight") then
-		spill.Brightness = blackout and 1.85 or (level3 and 1.05 or .3)
-		spill.Range = level3 and 62 or 45
-		spill.Angle = level3 and 86 or 75
-	end
+	Profiles.Apply(Profiles.Mount, Profiles.Current(), mount:FindFirstChild("Core"), mount:FindFirstChild("Spill"))
 end
 
 local function setMountEnabled(mount, enabled)

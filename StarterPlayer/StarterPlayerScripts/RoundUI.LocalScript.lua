@@ -335,35 +335,6 @@ local function applyPlayerLighting()
   return
  end
 
-
- if isLevelTwo then
-  lobbyGrade.Enabled = false
-  if mazeGrade then mazeGrade.Enabled = false end
-  Lighting.ClockTime = 14
-  Lighting.FogColor = Color3.fromRGB(216, 217, 195)
-  Lighting.FogStart = 100000
-  Lighting.FogEnd = 100000
-
-  if levelTwoWorld:GetAttribute("ValveColorWashActive") == true then
-   local valveColor = levelTwoWorld:GetAttribute("ValveColorWashColor")
-   if typeof(valveColor) == "Color3" then
-    Lighting.Brightness = 1.95
-    Lighting.Ambient = Color3.fromRGB(92, 90, 78):Lerp(valveColor, .30)
-    Lighting.OutdoorAmbient = Color3.fromRGB(102, 100, 88):Lerp(valveColor, .22)
-    Lighting.ColorShift_Top = Color3.new(1, 1, 1):Lerp(valveColor, .42)
-    Lighting.ColorShift_Bottom = valveColor:Lerp(Color3.new(0, 0, 0), .76)
-    return
-   end
-  end
-
-  Lighting.Ambient = Color3.fromRGB(92, 90, 78)
-  Lighting.OutdoorAmbient = Color3.fromRGB(102, 100, 88)
-  Lighting.Brightness = 1.75
-  Lighting.ColorShift_Top = Color3.fromRGB(255, 246, 220)
-  Lighting.ColorShift_Bottom = Color3.fromRGB(20, 29, 28)
-  return
- end
-
  Lighting.ColorShift_Top = Color3.new(0, 0, 0)
  Lighting.ColorShift_Bottom = Color3.new(0, 0, 0)
  if inMaze then
@@ -1400,25 +1371,44 @@ for _, completionButton in ipairs(completion.buttons) do
 	end)
 end
 
-RunService.RenderStepped:Connect(function()
-	if not completion.deadline or not endFrame.Visible then return end
-	local remaining = math.max(0, math.ceil(completion.deadline - workspace:GetServerTimeNow()))
-	if completion.nextLevel then
-		endHint.Text = remaining > 0
-			and ("LEVEL " .. tostring(completion.nextLevel) .. " BEGINS IN " .. tostring(remaining))
-			or ("ENTERING LEVEL " .. tostring(completion.nextLevel))
-	else
-		endHint.Text = remaining > 0
-			and ("RETURNING TO LOBBY IN " .. tostring(remaining))
-			or "RETURNING TO LOBBY"
-	end
-	if remaining <= 0 then
-		for _, button in ipairs(completion.buttons) do
-			button.Active = false
-			button.Selectable = false
+-- `remaining` only ticks once a second; cache it (and the expired state) so
+-- the Text write and the button-disable loop only run when something changed.
+-- Scoped in a do-block: this chunk sits at Luau's 200-local register limit,
+-- and block locals hand their registers back at `end` (the closure keeps them).
+do
+	local completionLastDeadline = nil
+	local completionLastRemaining = nil
+	local completionButtonsDisabled = false
+
+	RunService.RenderStepped:Connect(function()
+		if not completion.deadline or not endFrame.Visible then return end
+		if completion.deadline ~= completionLastDeadline then
+			completionLastDeadline = completion.deadline
+			completionLastRemaining = nil
+			completionButtonsDisabled = false
 		end
-	end
-end)
+		local remaining = math.max(0, math.ceil(completion.deadline - workspace:GetServerTimeNow()))
+		if remaining ~= completionLastRemaining then
+			completionLastRemaining = remaining
+			if completion.nextLevel then
+				endHint.Text = remaining > 0
+					and ("LEVEL " .. tostring(completion.nextLevel) .. " BEGINS IN " .. tostring(remaining))
+					or ("ENTERING LEVEL " .. tostring(completion.nextLevel))
+			else
+				endHint.Text = remaining > 0
+					and ("RETURNING TO LOBBY IN " .. tostring(remaining))
+					or "RETURNING TO LOBBY"
+			end
+		end
+		if remaining <= 0 and not completionButtonsDisabled then
+			completionButtonsDisabled = true
+			for _, button in ipairs(completion.buttons) do
+				button.Active = false
+				button.Selectable = false
+			end
+		end
+	end)
+end
 
 local function validSpectateTarget(candidate)
  if not candidate or candidate == player or candidate.Parent ~= Players then return false end
@@ -1608,12 +1598,25 @@ local serverReadyForEntry = false
 local loadingClock = 0
 local loadingBaseText = "LOCATING ANOMALOUS SPACE"
 
-RunService.RenderStepped:Connect(function(dt)
-	if not loadingFrame.Visible then return end
-	loadingClock += dt
-	local dots = string.rep(".", math.floor(loadingClock * 2) % 4)
-	loadingStatus.Text = loadingBaseText .. dots
-end)
+-- Dots only change twice a second; skip the rebuild/write unless the dot
+-- count or the base text actually moved since last frame.
+-- Scoped in a do-block: this chunk sits at Luau's 200-local register limit,
+-- and block locals hand their registers back at `end` (the closure keeps them).
+do
+	local loadingLastBaseText = nil
+	local loadingLastDotsCount = nil
+
+	RunService.RenderStepped:Connect(function(dt)
+		if not loadingFrame.Visible then return end
+		loadingClock += dt
+		local dotsCount = math.floor(loadingClock * 2) % 4
+		if dotsCount ~= loadingLastDotsCount or loadingBaseText ~= loadingLastBaseText then
+			loadingLastDotsCount = dotsCount
+			loadingLastBaseText = loadingBaseText
+			loadingStatus.Text = loadingBaseText .. string.rep(".", dotsCount)
+		end
+	end)
+end
 
 -- Set only on the level that holds its own cover, so the server can be told
 -- when this client is genuinely looking at the world instead of a guess.

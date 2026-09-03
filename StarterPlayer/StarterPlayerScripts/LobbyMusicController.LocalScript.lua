@@ -215,6 +215,9 @@ configureTrack()
 
 RunService.Heartbeat:Connect(function(deltaTime)
 	local audible = shouldPlay()
+	-- Idle and fully faded: nothing below would change anything. masterVolume
+	-- must have reached exactly 0, or the next fade-in reads it as a duck.
+	if not audible and not musicStarted and masterVolume <= 0 then return end
 	if audible then beginMusicIfReady() end
 
 	local targetVolume = 0

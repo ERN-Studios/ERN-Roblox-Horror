@@ -13,7 +13,9 @@ local Configuration = {
 	Theme = "Sunken Leisure Complex",
 
 	-- ── plan ────────────────────────────────────────────────────────────────
-	-- 1400 studs across. Level 1 is 552, so this is roughly 6x the floor area.
+	-- 1400 studs across. Level 1's floor width is MazeGenerator's GRID x CELL
+	-- (Master keys L1_Grid / L1_Cell, defaults 40 x 24) -- recompute rather
+	-- than trust a fixed multiple; L1_Grid can be retuned live.
 	ComplexExtent = 1400,
 
 	-- The complex is shifted north so it can never intersect the persistent

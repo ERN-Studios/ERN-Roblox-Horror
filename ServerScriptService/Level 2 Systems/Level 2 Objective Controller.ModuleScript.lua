@@ -97,13 +97,15 @@ end
 -- One-shot audio cue for the Level 2 Sound Controller. Cue names match the
 -- StringValue slots in ReplicatedStorage["Level 2 Sound Library"].
 local function fireSound(cue, player, context)
-	local event = ReplicatedStorage:FindFirstChild("Level 2 Sound Event")
+	local folder = ReplicatedStorage:FindFirstChild("Level 2 Remotes")
+	local event = folder and folder:FindFirstChild("Level 2 Sound Event")
 	if not event then return end
 	if player then event:FireClient(player, cue, context) else event:FireAllClients(cue, context) end
 end
 
 local function fireStatus(title, subtitle, instruction, holdSeconds)
-	local event = ReplicatedStorage:FindFirstChild("Level2AlertEvent")
+	local folder = ReplicatedStorage:FindFirstChild("Level 2 Remotes")
+	local event = folder and folder:FindFirstChild("Level 2 Alert Event")
 	if not event then return end
 	for _, player in ipairs(Players:GetPlayers()) do
 		if player:GetAttribute("InRound") then

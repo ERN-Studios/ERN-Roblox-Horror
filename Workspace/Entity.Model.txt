@@ -20,9 +20,11 @@ The Blender source and import/export artifacts are mirrored under:
 - assets/blender/entity_v2_before_ground_kill_2026-08-03.blend
 - assets/models/entity_v3_fingers.fbx
 - assets/animations/entity/keyframes_v3
-- assets/animations/entity/published-assets-v5.json
-- assets/animations/entity/published-assets-v6-walk.json
-- assets/animations/entity/published-assets-v6-actions.json
-- assets/animations/entity/published-assets-v7-actions.json
-- assets/animations/entity/published-assets-v8-actions.json
-- assets/animations/entity/published-assets-v9-actions.json
+- assets/animations/entity/published-assets-v5.json (superseded)
+- assets/animations/entity/published-assets-v6-walk.json (superseded)
+- assets/animations/entity/published-assets-v6-actions.json (superseded)
+- assets/animations/entity/published-assets-v7-actions.json (superseded)
+- assets/animations/entity/published-assets-v8-actions.json (superseded)
+- assets/animations/entity/published-assets-v9-actions.json (superseded)
+- assets/animations/entity/published-assets-v10-full.json (current --
+  EntityAnimation.Script.lua's live animation ids all resolve here)

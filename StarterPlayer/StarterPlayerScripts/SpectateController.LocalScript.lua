@@ -11,6 +11,7 @@ local UIS = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
 local UIDevice = require(ReplicatedStorage:WaitForChild("UIDevice"))
+local Profiles = require(ReplicatedStorage:WaitForChild("FlashlightProfiles"))
 
 local gui = Instance.new("ScreenGui")
 gui.Name = "SpectateGui"
@@ -74,6 +75,7 @@ local hidden = nil    -- character whose parts we've hidden locally
 local hiddenParts = {} -- cached BaseParts of `hidden` (rebuilt on target change)
 local hiddenPartsConn = nil
 local snapCam = true  -- snap (not ease) on the first frame and whenever we switch target
+local lastBeamProfile, lastOn = nil, nil -- cached borrowed-beam state; nil forces the first write
 
 local function livingOthers()
 	local list = {}
@@ -101,11 +103,9 @@ beamMount.CanCollide = false
 beamMount.CanQuery = false
 beamMount.Transparency = 1
 local core = Instance.new("SpotLight")
-core.Brightness = 5; core.Range = 35; core.Angle = 32
 core.Color = Color3.fromRGB(255, 244, 214); core.Shadows = true
 core.Face = Enum.NormalId.Front; core.Enabled = false; core.Parent = beamMount
 local spill = Instance.new("SpotLight")
-spill.Brightness = 1; spill.Range = 45; spill.Angle = 75
 spill.Color = Color3.fromRGB(255, 240, 205); spill.Shadows = false
 spill.Face = Enum.NormalId.Front; spill.Enabled = false; spill.Parent = beamMount
 
@@ -171,11 +171,14 @@ RunService.RenderStepped:Connect(function(dt)
 		end
 		if hiddenPartsConn then hiddenPartsConn:Disconnect() end
 		hiddenPartsConn = char.DescendantAdded:Connect(function(d)
-			if d:IsA("BasePart") then hiddenParts[#hiddenParts + 1] = d end
+			if d:IsA("BasePart") then
+				hiddenParts[#hiddenParts + 1] = d
+				d.LocalTransparencyModifier = 1
+			end
 		end)
-	end
-	for _, d in ipairs(hiddenParts) do
-		if d.Parent then d.LocalTransparencyModifier = 1 end
+		for _, d in ipairs(hiddenParts) do
+			if d.Parent then d.LocalTransparencyModifier = 1 end
+		end
 	end
 
 	-- mirror their flashlight from the shared viewpoint
@@ -183,16 +186,13 @@ RunService.RenderStepped:Connect(function(dt)
 	beamMount.CFrame = cam.CFrame
 	local fo = char:FindFirstChild("FlashlightOn")
 	local on = fo ~= nil and fo.Value
-	local level3 = workspace:GetAttribute("SelectedLevel") == 3
-	local blackout = level3 and workspace:GetAttribute("Level3BlackoutActive") == true
-	core.Brightness = blackout and 7.5 or (level3 and 4.5 or 5)
-	core.Range = level3 and 52 or 35
-	core.Angle = level3 and 40 or 32
-	spill.Brightness = blackout and 1.85 or (level3 and 1.05 or 1)
-	spill.Range = level3 and 62 or 45
-	spill.Angle = level3 and 86 or 75
-	core.Enabled = on
-	spill.Enabled = on
+	local profile = Profiles.Current()
+	if profile ~= lastBeamProfile or on ~= lastOn then
+		Profiles.Apply(Profiles.Spectate, profile, core, spill)
+		core.Enabled = on
+		spill.Enabled = on
+		lastBeamProfile, lastOn = profile, on
+	end
 end)
 
 -- The label was a fixed 420px box anchored 20px off the bottom. On a 375-wide
@@ -272,6 +272,7 @@ local function stopSpectate()
 	UIDevice.SetInteractive(nextButton, false)
 	unhide()
 	core.Enabled = false; spill.Enabled = false
+	lastBeamProfile, lastOn = nil, nil -- force a fresh write next time spectate resumes
 	beamMount.Parent = nil
 	local cam = workspace.CurrentCamera
 	local hum = player.Character and player.Character:FindFirstChildOfClass("Humanoid")

@@ -1,4 +1,9 @@
-"""Export each gameplay action from the current Blender file as a Roblox FBX."""
+"""DEPRECATED: no remaining callers in this repo; superseded by the keyframe-JSON
+pipeline (export_entity_keyframes_retargeted.py -> publish_entity_animations.py),
+which replaced this FBX-export step entirely.
+
+Export each gameplay action from the current Blender file as a Roblox FBX.
+"""
 
 from __future__ import annotations
 

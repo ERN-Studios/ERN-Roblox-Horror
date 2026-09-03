@@ -14,6 +14,8 @@ local Config = require(ReplicatedStorage:WaitForChild("ZyntraConfig"))
 local store = DataStoreService:GetDataStore(Config.DataStoreName)
 local supportStore = DataStoreService:GetOrderedDataStore(Config.SupportLeaderboardDataStoreName)
 local remotes = ReplicatedStorage:WaitForChild("Remotes")
+local PERCENT_PER_LEVEL = math.floor(Config.TokenPercentPerLevel * 100 + 0.5)
+local PCT = PERCENT_PER_LEVEL .. "%"
 
 local SUPPORT_LEADERBOARD_SIZE = math.clamp(math.floor(tonumber(Config.SupportLeaderboardSize) or 10), 1, 25)
 local supportFolder = ReplicatedStorage:FindFirstChild("ZyntraDonationLeaderboard")
@@ -295,8 +297,8 @@ local function publicProfile(data)
 		Tokens = data.Tokens,
 		StaminaLevel = data.StaminaLevel,
 		BatteryLevel = data.BatteryLevel,
-		StaminaPercent = data.StaminaLevel * 5,
-		BatteryPercent = data.BatteryLevel * 5,
+		StaminaPercent = data.StaminaLevel * PERCENT_PER_LEVEL,
+		BatteryPercent = data.BatteryLevel * PERCENT_PER_LEVEL,
 		CompletedLevels = data.CompletedLevels,
 		ReentryCredits = data.ReentryCredits,
 		DonationRobux = data.DonationRobux,
@@ -1179,7 +1181,7 @@ local function refreshPasses(player)
 			data.Grants.AdvancedEquipment = true
 			data.StaminaLevel += 1
 			data.BatteryLevel += 1
-			return true, "Advanced Equipment: +5% stamina and +5% battery", "success"
+			return true, "Advanced Equipment: +" .. PCT .. " stamina and +" .. PCT .. " battery", "success"
 		end)
 	end
 	if cosmetic and player:GetAttribute("InRound") == true then
@@ -1562,10 +1564,10 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 			data.Tokens -= 1
 			if action == "UpgradeStamina" then
 				data.StaminaLevel += 1
-				return true, "Stamina increased by 5%.", "success"
+				return true, "Stamina increased by " .. PCT .. ".", "success"
 			end
 			data.BatteryLevel += 1
-			return true, "Battery increased by 5%.", "success"
+			return true, "Battery increased by " .. PCT .. ".", "success"
 		end)
 	elseif action == "SetHazmatColor" then
 		if player:GetAttribute("ZyntraOwnsAdvancedEquipment") ~= true then

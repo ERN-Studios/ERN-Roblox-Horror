@@ -1,6 +1,6 @@
 -- Master Tuning -- the in-game half of the tuning panel.
 --
--- Opens with K, for whitelisted developers only. The Studio plugin covers level
+-- Opens with F4, for whitelisted developers only. The Studio plugin covers level
 -- design in Edit; this covers the things you can only judge while playing --
 -- how fast the entity actually feels, whether a hall reads as too big from
 -- inside it.

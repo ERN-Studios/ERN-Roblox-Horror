@@ -105,35 +105,6 @@ roomSong.PlaybackSpeed = 1
 roomSong.Parent = SoundService
 local roomSongAsset = ""
 
--- LEVEL3_REVERSED_COMPLETION_LOOP_20260821
--- This is a dedicated 2D layer: the source file is already reversed, while
--- PitchShiftSoundEffect lowers pitch without changing its tempo or loop length.
-local completionSong = Instance.new("Sound")
-completionSong.Name = "Level 3 - The Room is Listening Reversed"
-completionSong.Looped = true
-completionSong.Volume = 0
-completionSong.PlaybackSpeed = 1
-completionSong.Parent = SoundService
-local completionSongAsset = ""
-
-local completionPitch = Instance.new("PitchShiftSoundEffect")
-completionPitch.Name = "Level 3 Reversed Completion Pitch"
-completionPitch.Octave = .68
-completionPitch.Parent = completionSong
-local completionEqualizer = Instance.new("EqualizerSoundEffect")
-completionEqualizer.Name = "Level 3 Reversed Completion Muffle"
-completionEqualizer.LowGain = 2
-completionEqualizer.MidGain = -4
-completionEqualizer.HighGain = -13
-completionEqualizer.Parent = completionSong
-local completionReverb = Instance.new("ReverbSoundEffect")
-completionReverb.Name = "Level 3 Reversed Completion Reverb"
-completionReverb.Density = .86
-completionReverb.Diffusion = .78
-completionReverb.DecayTime = 4.2
-completionReverb.DryLevel = -2
-completionReverb.WetLevel = -9
-completionReverb.Parent = completionSong
 script:SetAttribute("Level3_CompletionSongPlaying", false)
 script:SetAttribute("Level3_CompletionSongPitchOctave", .68)
 
@@ -651,19 +622,6 @@ local function completionSongAssetId(): string?
 	return if resolved ~= "rbxassetid://0" then resolved else nil
 end
 
-local function stopCompletionSong()
-	completionSong.Volume = 0
-	if completionSong.IsPlaying then completionSong:Stop() end
-	script:SetAttribute("Level3_CompletionSongPlaying", false)
-end
-
-local function updateCompletionSong(_dt: number)
-	-- The reversed track now uses the room PA voices. Keep this legacy 2D sound
-	-- silent so headphones do not hear a non-spatial duplicate.
-	completionSong.Volume = 0
-	if completionSong.IsPlaying then completionSong:Stop() end
-end
-
 local function stopRoomSong()
 	roomSong.Volume = 0
 	if roomSong.IsPlaying then roomSong:Stop() end
@@ -986,7 +944,6 @@ local function clearAmbience()
 	table.clear(ambience)
 	table.clear(ambienceBySound)
 	stopRoomSong()
-	stopCompletionSong()
 	resetCDPitch()
 	table.clear(roomSongSpeakers)
 end
@@ -1118,6 +1075,9 @@ player:GetAttributeChangedSignal("InRound"):Connect(function()
 	if isActive() then nextReaderBeep = os.clock() + 2.5 end
 end)
 
+local FLUORESCENT_BASE_VOLUMES = {0.12, 0.075, 0.045}
+local nearestFixtureParts: {BasePart} = {}
+local nearestFixtureDistances: {number} = {}
 local accumulated = 0
 RunService.Heartbeat:Connect(function(dt)
 	accumulated += dt
@@ -1153,30 +1113,33 @@ RunService.Heartbeat:Connect(function(dt)
 		end
 	end
 	updateRoomSong(elapsed)
-	updateCompletionSong(elapsed)
 	updateCDPitch(now)
 	updateBlackoutScream()
 	updateReaderCadence(now)
 
 	local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-	local nearestFixtures: {{Part: BasePart, Distance: number}} = {}
+	local nearestFixtureCount = 0
 	if root and root:IsA("BasePart") then
+		local nearestCap = #fluorescentVoices
 		for index = #fluorescentDiffusers, 1, -1 do
 			local fixture = fluorescentDiffusers[index]
 			if not fixture.Parent then
 				table.remove(fluorescentDiffusers, index)
 			else
-				local candidate = {Part=fixture, Distance=(fixture.Position - root.Position).Magnitude}
-				local inserted = false
-				for slot = 1, #nearestFixtures do
-					if candidate.Distance < nearestFixtures[slot].Distance then
-						table.insert(nearestFixtures, slot, candidate)
-						inserted = true
-						break
-					end
+				local distance = (fixture.Position - root.Position).Magnitude
+				local slot = 1
+				while slot <= nearestFixtureCount and nearestFixtureDistances[slot] <= distance do
+					slot += 1
 				end
-				if not inserted then table.insert(nearestFixtures, candidate) end
-				if #nearestFixtures > #fluorescentVoices then table.remove(nearestFixtures) end
+				if slot <= nearestCap then
+					for shift = math.min(nearestFixtureCount, nearestCap - 1), slot, -1 do
+						nearestFixtureParts[shift + 1] = nearestFixtureParts[shift]
+						nearestFixtureDistances[shift + 1] = nearestFixtureDistances[shift]
+					end
+					nearestFixtureParts[slot] = fixture
+					nearestFixtureDistances[slot] = distance
+					if nearestFixtureCount < nearestCap then nearestFixtureCount += 1 end
+				end
 			end
 		end
 	end
@@ -1196,12 +1159,11 @@ RunService.Heartbeat:Connect(function(dt)
 		lastObservedRoomSongPhase = sequencePhase
 	end
 	for voiceIndex, voice in ipairs(fluorescentVoices) do
-		local candidate = nearestFixtures[voiceIndex]
-		if playing and candidate then voice.Emitter.Position = candidate.Part.Position end
-		local baseVolumes = {0.12, 0.075, 0.045}
-		local humTarget = if playing and candidate and not completionSongRequested()
+		local candidatePart = if voiceIndex <= nearestFixtureCount then nearestFixtureParts[voiceIndex] else nil
+		if playing and candidatePart then voice.Emitter.Position = candidatePart.Position end
+		local humTarget = if playing and candidatePart and not completionSongRequested()
 			and sequencePhase ~= "BLACKOUT_SONG" and sequencePhase ~= "BLACKOUT_HUNT"
-			then baseVolumes[voiceIndex]
+			then FLUORESCENT_BASE_VOLUMES[voiceIndex]
 				* ((sequencePhase == "PLAYING" or sequencePhase == "ARMED" or sequencePhase == "PRE_BLACKOUT") and .24 or 1)
 			else 0
 		voice.Sound.Volume += (humTarget - voice.Sound.Volume) * math.clamp(elapsed / .65, 0, 1)

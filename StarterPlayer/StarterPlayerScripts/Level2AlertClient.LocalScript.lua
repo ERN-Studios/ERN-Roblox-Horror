@@ -8,7 +8,7 @@ local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 
 local player = Players.LocalPlayer
-local event = ReplicatedStorage:WaitForChild("Level2AlertEvent")
+local event = ReplicatedStorage:WaitForChild("Level 2 Remotes"):WaitForChild("Level 2 Alert Event")
 
 local gui = Instance.new("ScreenGui")
 gui.Name = "Level2AlertGui"

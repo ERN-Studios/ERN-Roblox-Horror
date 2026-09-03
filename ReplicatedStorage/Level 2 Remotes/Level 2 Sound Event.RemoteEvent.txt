@@ -1,4 +1,4 @@
 NOT a script — this file mirrors a RemoteEvent object in Roblox Studio.
 
-Studio path: ReplicatedStorage.Level 2 Sound Event
+Studio path: ReplicatedStorage.Level 2 Remotes.Level 2 Sound Event
 Object type: RemoteEvent

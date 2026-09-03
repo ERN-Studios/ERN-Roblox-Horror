@@ -96,12 +96,14 @@ local function beginCapture(entity, duration, deathAt)
 	local started = os.clock()
 	local char = player.Character
 	local head = char and char:FindFirstChild("Head")
+	-- Resolved once: recursive per-frame lookups here hit during the
+	-- heaviest frame of the kill sequence.
+	local entityHead = entity:FindFirstChild("Head", true)
+	local entityRoot = entity:FindFirstChild("HumanoidRootPart", true)
 
 	RunService:BindToRenderStep(CAMERA_BIND, Enum.RenderPriority.Camera.Value + 1, function()
 		if not (capturing and entity.Parent and head and head.Parent) then return end
 		local elapsed = os.clock() - started
-		local entityHead = entity:FindFirstChild("Head", true)
-		local entityRoot = entity:FindFirstChild("HumanoidRootPart", true)
 		local target = entityHead and entityHead:IsA("BasePart") and entityHead.Position
 			or entityHead and (entityHead:IsA("Bone") or entityHead:IsA("Attachment")) and entityHead.WorldPosition
 			or (entityRoot and entityRoot.Position + Vector3.new(0, 2.7, 0))

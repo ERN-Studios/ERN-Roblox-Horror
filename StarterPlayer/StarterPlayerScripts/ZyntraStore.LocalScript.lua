@@ -16,6 +16,7 @@ local CollectionService = game:GetService("CollectionService")
 
 local player = Players.LocalPlayer
 local Config = require(ReplicatedStorage:WaitForChild("ZyntraConfig"))
+local PCT = ("+%d%%"):format(math.floor(Config.TokenPercentPerLevel * 100 + 0.5))
 local DevAccess = require(ReplicatedStorage:WaitForChild("DevAccess"))
 local devAllowed = DevAccess.IsAllowed(player)
 local level3TimelineOwner = DevAccess.IsLevel3TimelineOwner(player)
@@ -770,7 +771,7 @@ end
 
 local upgradeIntro = label(
 	pages.Upgrades,
-	"Every Research Token permanently adds +5%. There is no maximum level.",
+	"Every Research Token permanently adds " .. PCT .. ". There is no maximum level.",
 	UDim2.new(1, 0, 0, 42),
 	UDim2.fromOffset(4, 0),
 	15,
@@ -828,7 +829,7 @@ local function makeUpgradeCard(parent, order, titleText, description)
 	current.Name = "Percent"
 	local level = label(card, "LEVEL 0", UDim2.new(1, -36, 0, 24), UDim2.fromOffset(18, 222), 13, COLORS.muted, Enum.Font.Code)
 	level.Name = "Level"
-	local spend = button(card, "SPEND 1 TOKEN  //  +5%", UDim2.new(1, -36, 0, 48), UDim2.new(0, 18, 1, -66))
+	local spend = button(card, "SPEND 1 TOKEN  //  " .. PCT, UDim2.new(1, -36, 0, 48), UDim2.new(0, 18, 1, -66))
 	spend.Name = "Spend"
 	spend.BackgroundColor3 = Color3.fromRGB(21, 55, 53)
 	spend.TextWrapped = true
