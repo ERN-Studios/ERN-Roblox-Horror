@@ -157,6 +157,32 @@ Two rules follow from that move, and both have already bitten this project once:
   through `game:GetService("ServerScriptService")`. Two `script.Parent` lookups
   were missed on the first pass and yielded forever until the console showed it.
 
+### Added 2026-09-03 (afternoon session)
+
+- **GameManager owns the Level 1 entity outside Level 1 rounds.**
+  `setLevelOneEntityActive(false)` at boot and after every cleanup stores
+  `Workspace.Entity` in ServerStorage as `Lobby Stored Level 1 Entity` (root
+  anchored) and disables EntityAI, EntityAnimation and EntityKill; `ensureWorld`
+  brings it back before `GenerateWorld`. The saved place still holds the entity
+  in Workspace; that is fine, boot moves it. The Level 2/3 adapters keep their
+  own isolate/restore for their rounds.
+- **RoundUI sits exactly at Luau 200-register limit.** Its main chunk has 200
+  top-level locals; one more fails to compile ("Out of local registers"). Put new
+  state in a `do ... end` block (the closure keeps it as an upvalue), and run the
+  compile probe after every RoundUI edit.
+- **Flashlight beam numbers live in `ReplicatedStorage.FlashlightProfiles`**
+  (`Own`, `Mount`, `Mate`, `Spectate` x `BASE` / `L3` / `L3_BLACKOUT`). The sets
+  differ on purpose (they are what each script carried); the double-render is
+  still an open owner decision.
+- **Level 2 remotes** are in `ReplicatedStorage."Level 2 Remotes"` (`Level 2
+  Alert Event`, `Level 2 Sound Event`); Pool Foam keeps its own folder.
+- **New scripts cannot be pushed by the tools.** Create them in Studio first via
+  `execute_luau` + `UpdateSourceAsync`, then add the manifest item with
+  `sha256_of` / `canonical_bytes` from `tools/studio_source_contract.py`.
+- **`require` inside `execute_luau` is a separate module instance**, even on a
+  play session Server datamodel: module-local session state is invisible there.
+  Read attributes and instances instead.
+
 ### History — the 2026-08-19 audit (done, kept for context)
 
 Branch `claude/roblox-code-audit-di6qxi`, PR #1 (merged): a project-wide audit of ~45k
