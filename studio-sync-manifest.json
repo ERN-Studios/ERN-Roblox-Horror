@@ -811,9 +811,10 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.MasterTuningClient",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/MasterTuningClient.LocalScript.lua",
-      "bytes": 10611,
-      "sha256": "d5f8e12230f1bad28563386e4d2d5e33c62997c39e8d05a582e1bb59c78f327a",
-      "status": "synced"
+      "bytes": 10613,
+      "sha256": "cc2c3c5c4a3f5edabb216939605d148b15e060de54f7ea9341acfc96125fa47d",
+      "status": "pending-studio-push",
+      "studioSha256Before": "d5f8e12230f1bad28563386e4d2d5e33c62997c39e8d05a582e1bb59c78f327a"
     },
     {
       "studioPath": "ReplicatedStorage.Remotes.DevTuning",

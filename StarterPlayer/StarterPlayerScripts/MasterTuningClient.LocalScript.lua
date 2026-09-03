@@ -264,7 +264,7 @@ function render()
 		row(entry)
 	end
 	if status.Text == "" then
-		status.Text = string.format("%d værdier, %d overstyret. K lukker.",
+		status.Text = string.format("%d værdier, %d overstyret. F4 lukker.",
 			#Master.Entries, overridden)
 	end
 end
@@ -305,4 +305,4 @@ end
 ContextActionService:BindAction("MongoTVMasterTuning", function(_, state)
 	if state == Enum.UserInputState.Begin then toggle() end
 	return Enum.ContextActionResult.Sink
-end, false, Enum.KeyCode.K)
+end, false, Enum.KeyCode.F4)
