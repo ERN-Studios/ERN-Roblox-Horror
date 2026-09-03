@@ -496,7 +496,36 @@ local function sanitizePersistedLevelState()
  end
 end
 
+-- Workspace.Entity is saved with the place, and EntityAI, EntityKill and
+-- EntityAnimation take it at server start with no round gate -- so the Level 1
+-- entity stood in every lobby, able to see, howl and kill on touch. Outside a
+-- Level 1 world it lives in ServerStorage with those three scripts disabled,
+-- the way the Level 2/3 adapters isolate it for their own rounds; ensureWorld
+-- brings it back before GenerateWorld. Disabling a Script also stops one that
+-- started before this ran, and re-enabling restarts it clean -- the one-shot
+-- re-arm cleanupLevelOneWorld used to do for EntityAI by hand.
+local LEVEL_ONE_ENTITY_SCRIPTS = {"EntityAI", "EntityAnimation", "EntityKill"}
+local STORED_LEVEL_ONE_ENTITY_NAME = "Lobby Stored Level 1 Entity"
+
+local function setLevelOneEntityActive(active)
+ local entity = active and ServerStorage:FindFirstChild(STORED_LEVEL_ONE_ENTITY_NAME)
+  or workspace:FindFirstChild("Entity")
+ if entity then
+  -- Its Studio spot has no floor under it. Anchored, it cannot fall while
+  -- EntityAI is off; EntityAI releases it once the maze floor exists.
+  local root = entity:FindFirstChild("HumanoidRootPart")
+  if root then root.Anchored = true end
+  entity.Name = active and "Entity" or STORED_LEVEL_ONE_ENTITY_NAME
+  entity.Parent = active and workspace or ServerStorage
+ end
+ for _, name in ipairs(LEVEL_ONE_ENTITY_SCRIPTS) do
+  local object = script.Parent:FindFirstChild(name, true)
+  if object and object:IsA("BaseScript") then object.Enabled = active end
+ end
+end
+
 sanitizePersistedLevelState()
+setLevelOneEntityActive(false)
 local _lobbyModel, lobbySpawn, lobbyStations = buildLobby()
 
 local function setStationDisplay(station, main, secondary, color)
@@ -1117,6 +1146,7 @@ local function ensureWorld(group, requestedLevel)
   end
  else
   workspace:SetAttribute("LoadStage", "GENERATING_WORLD")
+  setLevelOneEntityActive(true)
   workspace:SetAttribute("GenerateWorld", true)
   local deadline = os.clock() + 180
   while workspace:GetAttribute("WorldGenerated") ~= true and os.clock() < deadline do task.wait(0.25) end
@@ -1178,12 +1208,9 @@ local function cleanupLevelOneWorld()
  -- start Level 1's fuse puzzle server-side. Recursive works from either
  -- layout, so this cannot break again on the next reorganisation.
  local generatorScript = script.Parent:FindFirstChild("MazeGenerator", true)
- local entityScript = script.Parent:FindFirstChild("EntityAI", true)
  if generatorScript and generatorScript:IsA("Script") then generatorScript.Disabled = true end
- if entityScript and entityScript:IsA("Script") then entityScript.Disabled = true end
  task.defer(function()
   if generatorScript and generatorScript.Parent then generatorScript.Disabled = false end
-  if entityScript and entityScript.Parent then entityScript.Disabled = false end
  end)
 end
 
@@ -1212,6 +1239,7 @@ local function cleanupActiveWorld()
 	else
 		cleanupLevelOneWorld()
 	end
+	setLevelOneEntityActive(false)
 	activeLevel = 1
 	workspace:SetAttribute("SelectedLevel", 1)
 	Players.CharacterAutoLoads = false

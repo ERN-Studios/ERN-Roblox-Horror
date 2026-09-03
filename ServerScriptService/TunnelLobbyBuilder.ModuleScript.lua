@@ -1981,7 +1981,8 @@ local function addDoorway(parent, center, level, side, zOffset, active)
 		header,
 		face,
 		"LEVEL " .. level,
-		active and "ACCESS READY  •  4 QUEUES  •  MAX 6 EACH" or "COMING SOON  •  NEW LEVEL IN DEVELOPMENT",
+		-- An open door carries no subtitle; the queue/capacity line was dropped.
+		not active and "COMING SOON  •  NEW LEVEL IN DEVELOPMENT" or nil,
 		accentColor
 	)
 

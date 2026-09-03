@@ -316,6 +316,9 @@ local function addSupporterTag(player, character)
 	local old = head:FindFirstChild("ZyntraSupporterTag")
 	if old then old:Destroy() end
 	if player:GetAttribute("ZyntraOwnsSupporter") ~= true then return end
+	-- A lobby badge only: inside a level it would mark its wearer to the whole
+	-- party. Ownership and benefits are untouched.
+	if player:GetAttribute("InRound") == true then return end
 
 	local billboard = Instance.new("BillboardGui")
 	billboard.Name = "ZyntraSupporterTag"
@@ -1217,6 +1220,7 @@ local function setupPlayer(player)
 		end)
 	end)
 	player:GetAttributeChangedSignal("InRound"):Connect(function()
+		if player.Character then task.defer(addSupporterTag, player, player.Character) end
 		if player:GetAttribute("InRound") == true then
 			if player:GetAttribute("ZyntraOwnsCosmeticEquipment") == true then
 				player:SetAttribute("GlowstickColor", player:GetAttribute("ZyntraGlowstickColor"))

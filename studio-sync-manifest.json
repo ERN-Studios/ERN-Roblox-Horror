@@ -1,7 +1,7 @@
 {
   "formatVersion": 1,
   "source": "Roblox Studio built-in MCP: .rbxmx payload -> game:GetObjects -> side-effect-free compile probe -> ScriptEditorService:UpdateSourceAsync -> .Source re-read and verified byte for byte; reconciled against tools/verify_studio_parity.py",
-  "finalNewlineContract": "Entries flagged studioTrailingNewline hold exactly the canonical repo file plus one extra trailing newline in Studio. Exact landings remove the flag. Current flagged entry count: 4. Manifest hashes always describe the canonical repo file, never Studio's transport bytes.",
+  "finalNewlineContract": "Entries flagged studioTrailingNewline hold exactly the canonical repo file plus one extra trailing newline in Studio. Exact landings remove the flag. Current flagged entry count: 3. Manifest hashes always describe the canonical repo file, never Studio's transport bytes.",
   "studio": {
     "name": "BACKROOMS: STAY QUIET [CO-OP HORROR]",
     "id": "7ccaf8b2-9e54-4709-8caa-91e1bce8b5b0"
@@ -10,7 +10,7 @@
     "scripts": 102,
     "remoteEvents": 14,
     "total": 116,
-    "studioTrailingNewline": 4
+    "studioTrailingNewline": 3
   },
   "extraMirroredFilesNotInStudio": [
     "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_AutomaticAssetCaptureSender_LocalizationService.RemoteEvent.txt",
@@ -55,8 +55,8 @@
       "studioPath": "ServerScriptService.GameManager",
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 110620,
-      "sha256": "3d56284401710ebdb0a96316d4c27e1d32bbcce9294cbb5b5f00756139446b05",
+      "bytes": 111992,
+      "sha256": "00253e1b5e36b1e5da17022d55efa2ef80bf20ead8b00661f897d7674a4a4daf",
       "status": "synced"
     },
     {
@@ -87,18 +87,17 @@
       "studioPath": "ServerScriptService.TunnelLobbyBuilder",
       "className": "ModuleScript",
       "file": "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
-      "bytes": 104067,
-      "sha256": "7e9cbce4f71c8c4a60b87c45b62ee4d3b8dbae4a3084fd8e87be830a50672d5e",
+      "bytes": 104104,
+      "sha256": "f2519fd67cd4908bfe221c7f51a56cc48a1e6da5100a4e8ddb007f7382c4e0d9",
       "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.ZyntraMonetization",
       "className": "Script",
       "file": "ServerScriptService/ZyntraMonetization.Script.lua",
-      "bytes": 69702,
-      "sha256": "0b9ff1fbe4d3cb2c42908cb74436f7e568e5f860f3d8f1c82efcfb3f56b29d1c",
-      "status": "synced",
-      "studioTrailingNewline": true
+      "bytes": 69972,
+      "sha256": "dcc9c6b86fa5f5dfd06070d477cb81ebb6621c8a5e91bac797d40a8c06c49da9",
+      "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.Level2Generator",
