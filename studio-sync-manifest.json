@@ -87,8 +87,8 @@
       "studioPath": "ServerScriptService.TunnelLobbyBuilder",
       "className": "ModuleScript",
       "file": "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
-      "bytes": 112704,
-      "sha256": "649d6616c2e72c6bf31a66c42736727fb16241a2e1f3902ea7cad395b170b02f",
+      "bytes": 112643,
+      "sha256": "7e8916069b77f5f89cb1fc6fd10a43ab883960b7f53246037c68707873024d82",
       "status": "synced"
     },
     {

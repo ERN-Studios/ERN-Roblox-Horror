@@ -2140,7 +2140,7 @@ local function addSupplyKiosk(parent, center)
 	kiosk:SetAttribute("ShopFunctional", true)
 	kiosk:SetAttribute("SupplyKioskVersion", 6)
 	kiosk:SetAttribute("Placement", "Right service ledge between Level 2 and Level 4")
-	kiosk:SetAttribute("ArtDirection", "Zyntra field exchange / premium survival outfitter")
+	kiosk:SetAttribute("ArtDirection", "Zyntra premium survival shop")
 	kiosk.Parent = parent
 
 	local zOffset = -35
@@ -2288,7 +2288,7 @@ local function addSupplyKiosk(parent, center)
 	local signTitle, signSubtitle = addBoard(
 		sign,
 		Enum.NormalId.Left,
-		"ZYNTRA // FIELD EXCHANGE",
+		"SHOP",
 		"EQUIPMENT  •  UPGRADES  •  RECOVERY",
 		cyan
 	)
@@ -2537,7 +2537,7 @@ local function addSupplyKiosk(parent, center)
 	)
 	accessTerminal:SetAttribute("ShopInteraction", true)
 	accessTerminal:SetAttribute("InteractionRole", "OpenZyntraStore")
-	addBoard(accessTerminal, Enum.NormalId.Left, "OPEN STORE", "PRESS  E  //  EQUIPMENT", cyan)
+	addBoard(accessTerminal, Enum.NormalId.Left, "OPEN SHOP", "PRESS  E  //  EQUIPMENT", cyan)
 	for _, ySide in ipairs({ -1, 1 }) do
 		neonStrip(
 			"ShopTerminalRail",
@@ -2552,7 +2552,7 @@ local function addSupplyKiosk(parent, center)
 	local prompt = Instance.new("ProximityPrompt")
 	prompt.Name = "ZyntraShopPrompt"
 	prompt.ActionText = "OPEN SHOP"
-	prompt.ObjectText = "ZYNTRA FIELD EXCHANGE"
+	prompt.ObjectText = "SHOP"
 	prompt.KeyboardKeyCode = Enum.KeyCode.E
 	prompt.GamepadKeyCode = Enum.KeyCode.ButtonX
 	prompt.HoldDuration = 0
@@ -2572,7 +2572,7 @@ local function addSupplyKiosk(parent, center)
 		0.12,
 		true
 	)
-	addBoard(approach, Enum.NormalId.Top, "FIELD SUPPLY", "APPROACH TERMINAL", cyan)
+	addBoard(approach, Enum.NormalId.Top, "SHOP ACCESS", "APPROACH TERMINAL", cyan)
 	for _, xSide in ipairs({ -1, 1 }) do
 		neonStrip(
 			"ShopApproachEdge",
