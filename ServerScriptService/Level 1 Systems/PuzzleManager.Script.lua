@@ -30,6 +30,23 @@ local status = RS:WaitForChild("Remotes"):WaitForChild("PuzzleStatus")
 -- "Level 1 Systems" folder on 2026-09-02 and NoiseRegistry stayed in the root.
 local NoiseRegistry = require(game:GetService("ServerScriptService"):WaitForChild("NoiseRegistry"))
 
+-- The party-wide escape announcement, on the SHARED RoundStatus remote that
+-- Level 2 and Level 3 already fire (PuzzleStatus above only drives this level's
+-- own objective HUD). Level 1 never fired it, so its party learned who got out
+-- only at the result screen -- and only ever about the first one. Per recipient
+-- and in-round only, the same shape both other levels use: a lobby player has no
+-- business hearing a reserved round's escapes.
+local function fireEscapeStatus(player)
+	local remotes = RS:FindFirstChild("Remotes")
+	local roundStatus = remotes and remotes:FindFirstChild("RoundStatus")
+	if not roundStatus or not roundStatus:IsA("RemoteEvent") then return end
+	for _, recipient in ipairs(Players:GetPlayers()) do
+		if recipient:GetAttribute("InRound") == true then
+			roundStatus:FireClient(recipient, "escape", player.Name)
+		end
+	end
+end
+
 -- ── tuning ────────────────────────────────────────────────
 local Master = require(game:GetService("ReplicatedStorage"):WaitForChild("MasterConfiguration"))
 local FUSES_PER_BOX = 1      -- fuses each box needs
@@ -1971,6 +1988,11 @@ local function startPuzzle()
 		hrp.Anchored = true -- parked: they spectate from here, no wandering the void
 		p.CameraMode = Enum.CameraMode.Classic -- release first-person for spectate
 		p:SetAttribute("Escaped", true) -- spectate + EntityAI + the win check key off this
+
+		-- EVERY escape is announced to the party, by name. Level 2 and Level 3
+		-- have always done this; Level 1 latched the whole announcement behind
+		-- the first one, so the second and third escapee left in silence.
+		fireEscapeStatus(p)
 
 		-- FIRST escape only, once per round: keep the maze dark and give
 		-- everyone still inside detector/compass guidance to the exit.

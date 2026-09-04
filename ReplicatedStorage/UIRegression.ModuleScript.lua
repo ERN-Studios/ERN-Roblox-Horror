@@ -458,6 +458,13 @@ local INTERNAL_PANELS = {
 	-- the matrix measured the shade and nothing inside it -- which is how five
 	-- interactive controls stayed under the 44px floor unnoticed.
 	QueueHostPanel = true,
+	-- The PARTY DOWN card. Its title, the line naming who fell last, the
+	-- countdown bar and readout and the two actions are all siblings in one
+	-- fixed box -- and one of those actions opens a Robux prompt, so the pair
+	-- landing on each other is the worst version of this defect. It also has to
+	-- be listed here for its children to be rectangles at all: the card sits
+	-- inside a full-bleed overlay, which `collect` does not descend into.
+	PartyDownCard = true,
 	-- The terminal's header, for the same reason one level further in.
 	-- `collectDrawnChildren` emits ONE rectangle for a child that draws itself
 	-- and does not descend into it, so with only `Terminal` listed the header
@@ -471,7 +478,10 @@ local INTERNAL_PANELS = {
 -- Patterns that name a key a phone or tablet does not have. Matched against
 -- every visible string; a hit on a touch form factor is a failure.
 local KEYBOARD_PATTERNS = {
-	"%[%u%]",            -- [M] [N] [R] [Y] [H] [B] [E] [Q] [V]
+	-- [M] [N] [R] [Y] [H] [B] [E] [Q] [V], and the two-letter shoulder glyphs
+	-- [RB] / [LB]: the one-letter form was the only one matched, so the
+	-- flashlight's new gamepad caption would have printed on a phone unnoticed.
+	"%[%u%u?%]",
 	"%f[%w]WASD%f[%W]",
 	"Left Ctrl",
 	"LeftControl",
@@ -938,6 +948,10 @@ local function resetScenario(inRound: boolean?)
 	player:SetAttribute("UIRegressionForceReaderHidden", nil)
 	player:SetAttribute("UIRegressionForceDispatchActive", nil)
 	player:SetAttribute("UIRegressionForceHiding", nil)
+	-- Same reason as DevRoundEnding below: the PARTY DOWN card stays up for its
+	-- whole fifteen seconds, which is long enough to cover several rows, so the
+	-- seam is cleared HERE rather than only in the row that raises it.
+	player:SetAttribute("DevPartyDown", nil)
 	-- RoundUI owns the result card state. Drive its Studio-only hide hook so a
 	-- preceding win/loss scenario cannot leak into the next matrix row.
 	player:SetAttribute("DevRoundEnding", "hide")
@@ -1290,6 +1304,37 @@ function UIRegression.Scenarios(): {any}
 			RoundEndingMode = "fullscreen", Setup = function()
 			resetScenario(true)
 			player:SetAttribute("DevRoundEnding", "lose")
+		end},
+		-- The 15-second wipe window. The card is RoundUI's own, driven through
+		-- the same kind of Studio-only attribute seam the result overlay uses, so
+		-- this measures the production card and not a stand-in for it. The
+		-- purchase button is deliberately NOT required: it only appears while the
+		-- player may actually re-enter, which needs a live round the harness must
+		-- not fake, and the decline button is the one every dead player gets.
+		{Name = "party-down-card", Requires = {
+			"PartyDownCard", "PartyDownTitle", "PartyDownFallen",
+			"PartyDownTimer", "PartyDownDecline",
+			-- ONE purchase surface. ZyntraStore's own EMERGENCY RE-ENTRY modal
+			-- carries the identical action, and the card is the reason it stands
+			-- down for the whole window; the two of them stacked is a player
+			-- buying twice, which is the most expensive way this can fail. The
+			-- GUI is named, not the frame inside it: "EmergencyReentry" is also
+			-- the store's own product card, three panels away.
+		}, Forbids = {"ZyntraReentryModal"}, TouchTargets = {"PartyDownDecline"},
+			-- The countdown is a FIXED TextSize inside a card that shrinks with
+			-- the viewport, so it is the label in here that can outgrow its box.
+			TextFitTargets = {"PartyDownDecline", "PartyDownTimer"},
+			-- The 0.6s arming IS the accidental-purchase guard, and `Active` is
+			-- otherwise only ever read on a touch pass -- so on every desktop run
+			-- the one thing this card exists to get right went unasserted.
+			RequiresActive = {"PartyDownDecline"}, Setup = function()
+			-- resetScenario clears DevPartyDown, so this always fires a change.
+			resetScenario(true)
+			player:SetAttribute("InRound", true)
+			player:SetAttribute("DevPartyDown", 15)
+			-- Past the 0.6s accidental-purchase arming delay, so the row is
+			-- measured in the state a player can actually press.
+			task.wait(.7)
 		end},
 	}
 end
@@ -2023,6 +2068,9 @@ local BORROWED_PLAYER_ATTRIBUTES = {
 	"UIRegressionSilenceDispatch", "UIRegressionSuppressDispatch",
 	"DevRoundEnding", "InRound", "Escaped", "Spectating", "Level3_Hiding",
 	"ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen", "QueueModalOpen",
+	-- The PARTY DOWN seam, same shape as DevRoundEnding: the party-down row
+	-- writes it, so the row has to put it back.
+	"DevPartyDown",
 }
 -- OUTPUTS production derives from those inputs. They are restored with
 -- everything else, but they are not held to the snapshot afterwards: production
@@ -2031,6 +2079,11 @@ local BORROWED_PLAYER_ATTRIBUTES = {
 local DERIVED_PLAYER_ATTRIBUTES = {
 	"Level2AlertOwnsBand", "LevelOneGuideObjectivesOpen", "DispatchBriefingOpen",
 	"TouchMovementSuppressed",
+	-- RoundUI publishes both of these from the party-down window itself, and
+	-- ZyntraStore reads them to stand its own re-entry modal down. They are NOT
+	-- the same fact: the card flag says a card is drawn (it frees the cursor),
+	-- the window flag outlives it once NO THANKS is pressed.
+	"PartyDownCardOpen", "PartyDownWindowOpen",
 }
 local BORROWED_GUIS = {
 	"PuzzleGui", "Level2ObjectiveGui", "Level2AlertGui", "Level3ReaderGui",
@@ -8542,6 +8595,20 @@ function Fit.bodyRunAll(lease): (string, number)
 		for _, fragment in ipairs(scenario.Forbids or {}) do
 			if findRect(fragment) then
 				table.insert(contractProblems, "STATE LEAK: " .. fragment .. " should be hidden")
+			end
+		end
+		-- A control that is DRAWN but not PRESSABLE. `Active` was read in exactly
+		-- one place -- touchTargetProblems, inside the touch-only branch below --
+		-- so a button that never arms passed every desktop run by existing. The
+		-- PARTY DOWN card's 0.6s arming delay is the case that needs saying out
+		-- loud: it is the whole accidental-purchase guard, and a bug that leaves
+		-- it stuck inert is a card the player cannot answer at all.
+		for _, fragment in ipairs(scenario.RequiresActive or {}) do
+			local rect = findRect(fragment)
+			if not rect then
+				table.insert(contractProblems, "INERT: " .. fragment .. " was not measured")
+			elseif not rect.Active then
+				table.insert(contractProblems, "INERT: " .. fragment .. " is drawn but not Active")
 			end
 		end
 		if layout.IsTouch then

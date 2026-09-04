@@ -78,6 +78,35 @@ local Configuration = {
 		FreezeWhileObserved = false,
 	},
 
+	-- Pool Foam listens to the shared ServerScriptService.NoiseRegistry — the
+	-- same list Level 1's Entity hears: player footsteps reported by
+	-- NoiseReporter, plus Level 2's pump motors. Hearing only decides WHOM the
+	-- entity walks toward and where it patrols. The look-triggered chase latch,
+	-- its grace window and the speed ramp are untouched by everything in here.
+	Hearing = {
+		Enabled = true,
+		-- Studs, scaled per sound by that sound's loudness inside
+		-- NoiseRegistry.GetBest: a sprint (1.0) is heard this far, a running
+		-- pump (2.0) twice as far, a walk (0.45) less than half.
+		HearingRange = 120,
+		-- A player standing where a heard noise came from counts as this
+		-- fraction of their true distance while a target is picked, so a noisy
+		-- player 100 studs away is chosen over a silent one at 60. Everyone
+		-- unheard keeps plain nearest-distance, and 1.0 turns the preference off
+		-- without turning hearing off. The TRUE distance still decides stopping
+		-- and killing — this weight never reaches those.
+		NoiseWeight = 0.55,
+		-- How close a player has to be to the noise for it to count as theirs.
+		-- Wider than a room, so a sprinter who has moved on since the report is
+		-- still credited; narrow enough that a pump does not brand a bystander
+		-- in the next hall.
+		AttributionRadius = 35,
+		-- Sounds age out after NoiseRegistry's own DECAY (5 s, shared with
+		-- Level 1); the controller prunes the list once per session tick. A
+		-- heard target is re-picked every tick like a distance target, so noise
+		-- can never pin the encounter on one player.
+	},
+
 	Movement = {
 		UpdateInterval = 0.10,
 		RepathInterval = 0.55,

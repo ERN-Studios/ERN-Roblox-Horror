@@ -43,7 +43,7 @@ local Suite = {}
 -- instead of shrinking the total nobody was watching.
 local EXPECTED_CHECKS = {
 	["Round completion routing rules"] = {full = 39},
-	["Production host loads the routing module"] = {["with-source"] = 25, ["no-source"] = 8},
+	["Production host loads the routing module"] = {["with-source"] = 26, ["no-source"] = 8},
 	["Post-win admission: one window, one round"] = {full = 59},
 	["Transfer claims, attempts and failure reports"] = {full = 45},
 	["Completed-world teardown"] = {full = 12},
@@ -426,8 +426,25 @@ function Suite.Host()
 		note(report, "MUTATION PROOF: dropping the `at` argument at the RestampAttempt call site,"
 			.. " or the CohortHorizon field in stageArrivingParty, fails these -- and both are"
 			.. " places the routing module cannot defend itself.")
+
+		-- A5. PARTY DOWN. The fifteen seconds between the last death and the loss
+		-- endpoint are the only window in which an Emergency Re-entry can still
+		-- save the run, and the round loop used to poll them in complete silence.
+		-- Both halves of the contract are asserted together because a card that
+		-- is raised and never cleared is worse than no card: a re-entry that
+		-- revives the party would leave every client still counting down.
+		-- The clear is asserted at its CALL SITES, not at the one fire inside
+		-- clearPartyDown: the regression that matters is the recovery branch
+		-- losing its call, and the fire itself would still be in the file.
+		local partyDownClears = select(2, source:gsub("clearPartyDown%(%)", ""))
+		check(report, source:find('fireGroup(participants, "partydown", 15, lastDeathName)', 1, true) ~= nil
+			and source:find("wipeDeadline = nil%s+clearPartyDown%(%)") ~= nil
+			and partyDownClears >= 4,
+			"the host announces the wipe window by name and clears it again",
+			"partydown is not fired with the name, or the window is not cleared on"
+				.. " re-entry recovery, teardown and the post-loop exit")
 	else
-		note(report, "skipped 17 source-shape checks: Source is not readable here")
+		note(report, "skipped 18 source-shape checks: Source is not readable here")
 	end
 
 	return report

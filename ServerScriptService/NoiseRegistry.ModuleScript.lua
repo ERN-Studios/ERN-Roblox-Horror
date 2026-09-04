@@ -8,6 +8,11 @@ local LOUDNESS = {
 	walk = 0.45,
 	crouch = 0.0,
 	relay = 1.35, -- metal release + electrical snap from a fuse extraction
+	-- Level 2's pump motor: a running machine, not a footstep. Loudness scales
+	-- both the score and the audible range in GetBest, so this carries about
+	-- twice as far as a sprint. Level 1 never emits this name, so its numbers
+	-- above are exactly what they were.
+	pump = 2.0,
 }
 local DECAY = 5
 
@@ -31,6 +36,14 @@ function NoiseRegistry.Prune()
 			table.remove(sounds, i)
 		end
 	end
+end
+
+-- One global list serves every level, and only one level is ever live, so the
+-- level tearing its round down drops the whole list. Level 2's Pool Foam
+-- controller calls this from Controller.Stop; nothing else does. Level 1 has no
+-- teardown hook and does not need one — DECAY empties the list on its own.
+function NoiseRegistry.Clear()
+	table.clear(sounds)
 end
 
 function NoiseRegistry.GetBest(fromPos, maxRange)

@@ -86,15 +86,43 @@ Filnavne, full-resolution masters og det anvendte prompt-set er dokumenteret i `
 - 4 Research Tokens
 - 20 Research Tokens
 
-### Opret, men behold off-sale indtil re-entry-flowet er rettet
+### Opret, men behold off-sale indtil vindueslængden er besluttet og testet
 
-Emergency Re-entry har i øjeblikket tre problemer:
+De tre oprindelige problemer, opdateret 4. september 2026:
 
-1. Wipe-/købsvinduet er kun cirka 15 sekunder.
-2. Et køb giver først en credit; spilleren skal derefter nå at trykke igen for at bruge den.
-3. Spilleren bliver respawnet, før DataStore-mutationens credit-forbrug er bekræftet. En save-fejl kan derfor give et gratis respawn.
+1. **Stadig åbent.** Wipe-/købsvinduet er kun 15 sekunder. `playRound` i
+   `GameManager` sætter `wipeDeadline = os.clock() + 15`, og hele købet —
+   prompt, betaling og `ProcessReceipt` — skal nå at ske inden for det. 45-60
+   sekunder er stadig anbefalingen, men det er en gameplay-beslutning: det
+   forlænger også den tid en helt udslettet gruppe står stille.
+2. **Rettet.** Et køb, der lander mens spilleren stadig er død i en aktiv runde,
+   bruger nu credit'en med det samme. `ProcessReceipt` kalder `useReentry` i en
+   `task.spawn`, efter at credit'en er givet, og kun når spilleren opfylder
+   præcis de samme betingelser som butikkens knap: `InRound`, `RoundActive`,
+   ikke `ZyntraReentryUsed`, og ingen levende Humanoid. Der skal ikke trykkes to
+   gange længere.
+3. **Rettet.** Credit'en reserveres nu FØR respawnet. `useReentry` trækker
+   credit'en i `mutate()`, kalder derefter `ZyntraReentry`-BindableFunction og
+   lægger credit'en tilbage, hvis respawnet afvises. En fejlet save kan ikke
+   længere give et gratis respawn; det værst tænkelige udfald er en credit brugt
+   på et afvist respawn, og det tilfælde tilbagefører sig selv. Refunderingen er
+   nøglet på et token pr. forsøg, så et forsøg, der bliver afløst, gentaget
+   eller afbrudt af at spilleren forlader serveren, aldrig kan give credit to
+   gange. Selve tilbageførslen prøves op til tre gange, fordi en enkelt
+   DataStore-fejl ellers ville forvandle "respawn afvist" til "betalt credit
+   væk"; lykkes ingen af dem, står der en `[Zyntra] Re-entry refund FAILED`
+   i output med spillerens userId, så credit'en kan gives tilbage manuelt.
 
-Før salg anbefales et 45-60 sekunders vindue, auto-use efter en godkendt receipt og et atomisk reserve/consume-flow med rollback ved afvist respawn.
+Samme vindue viser nu også et PARTY DOWN-kort: serveren sender `partydown` med
+15 sekunder og navnet på den sidst døde, og `partydownclear`, når en re-entry
+bringer nogen tilbage, eller runden rives ned. Kortet gør vinduet synligt, hvilket
+er en forudsætning for, at produktet overhovedet kan sælges inden for det.
+
+**Tilbage før on-sale:** beslut vindueslængden (punkt 1), og kør derefter en
+rigtig end-to-end-test i en publiceret server: køb midt i wipe-vinduet og
+verificér, at respawnet sker uden et ekstra tryk, at credit'en trækkes præcis én
+gang, og at et køb, der lander efter vinduet er lukket, giver credit'en tilbage
+i stedet for at forsvinde.
 
 ## Økonomisk analyse
 
@@ -165,6 +193,48 @@ Products = {
 
 Roblox opkræver altid Dashboard-prisen. `Price` i ZyntraConfig er i øjeblikket kun fallback-/displaytekst og kan ikke styre den virkelige pris.
 
+## Trin 4b: opret de fire badges
+
+Badges er gratis at oprette og koster ingen Robux. De uddeles serverside af
+`ZyntraMonetization` på `ZyntraLevelCompleted`-signalet, altså i samme øjeblik
+spilleren får sit gratis token for et clear.
+
+| Intern nøgle i `Config.Badges` | Foreslået badge-navn | Uddeles når |
+|---|---|---|
+| `FirstClearLevel1` | Level 1 Cleared | Spilleren slipper ud af Level 1 første gang |
+| `FirstClearLevel2` | Level 2 Cleared | Spilleren slipper ud af Level 2 første gang |
+| `FirstClearLevel3` | Level 3 Cleared | Spilleren slipper ud af Level 3 første gang |
+| `CampaignComplete` | Campaign Complete | Alle tre levels er clearet mindst én gang — ikke det samme som at cleare Level 3 |
+
+1. Gå til `Creations -> BACKROOMS: STAY QUIET [CO-OP HORROR] -> Badges`.
+2. Klik `Create badge`, upload et ikon, indsæt navn og beskrivelse.
+3. På badgets tile: `... -> Copy Asset ID`.
+4. Indsæt id'et i `ReplicatedStorage/ZyntraConfig.ModuleScript.lua` under
+   `Badges` på den matchende nøgle.
+
+```lua
+Badges = {
+	FirstClearLevel1 = 0,
+	FirstClearLevel2 = 0,
+	FirstClearLevel3 = 0,
+	CampaignComplete = 0,
+},
+```
+
+`0` betyder "ikke oprettet endnu" og slår uddelingen helt fra: der kaldes ikke
+`BadgeService`, og der gemmes ingenting. Der må ikke gættes et id — et id, der
+ikke hører til denne experience, bliver afvist ved hver uddeling. `AwardBadge`
+returnerer `false` i stedet for at fejle i den slags tilfælde (badge slået fra,
+badge hører til en anden place, throttling, spilleren er gået), så koden læser
+returværdien og ikke kun pcall'ens: den skriver kun i `AwardedBadges`, når
+badget faktisk blev uddelt, og ellers logger den `[Zyntra] AwardBadge failed`
+og prøver igen ved næste clear.
+
+Profilen husker selv, hvad den har uddelt (`AwardedBadges`), og hvilke levels
+kontoen har clearet (`LevelsCleared`). `UserHasBadgeAsync` kaldes kun, når vores
+egen optegnelse siger "ikke uddelt endnu", så konti, der clearede et level før
+badges fandtes, ikke får en ny notifikation ved hvert clear.
+
 ## Trin 5: verificér den dynamiske prisvisning før live launch
 
 LocalScriptet henter den aktuelle pris på klienten og falder kun tilbage til Config-prisen, hvis Roblox-opslaget fejler. Det er nødvendigt på grund af Managed Pricing og personaliserede priser.
@@ -232,7 +302,9 @@ Hvis Developer Products også skal sælges på Roblox' eksterne Store-tab:
 - [ ] Token receipts testet for gentagne køb, rejoin og duplicate receipt.
 - [ ] Top Donors-tavlen testet med donation-receipts, genstart og OrderedDataStore-fejl.
 - [ ] DataStore testet i publiceret version.
-- [ ] Emergency Re-entry-flow rettet og testet, før produktet sættes on-sale.
+- [x] Emergency Re-entry: reserve-før-respawn og auto-use efter godkendt receipt implementeret.
+- [ ] Emergency Re-entry: vindueslængden besluttet og flowet testet i en publiceret server, før produktet sættes on-sale.
+- [ ] Fire badges oprettet på Creator Dashboard og deres asset-ids indsat i `Config.Badges`.
 - [ ] Purchase-/receipt-fejl logges til analytics eller telemetri.
 - [ ] Shop-copy forklarer tydeligt, at hvert token giver +5% til ét valgt system.
 

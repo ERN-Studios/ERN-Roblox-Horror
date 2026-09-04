@@ -8,6 +8,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local UIDevice = require(ReplicatedStorage:WaitForChild("UIDevice"))
 local UserInputService = game:GetService("UserInputService")
+local ProximityPromptService = game:GetService("ProximityPromptService")
 
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
@@ -336,6 +337,51 @@ end
 applyHidingLayout()
 UIDevice.Changed:Connect(applyHidingLayout)
 
+-- LEVEL3_MANAGER_TABLE_CHECK_20260904
+-- The Mall Manager kneels at one hiding table and gives whoever is under it a
+-- short window to leave. The server publishes which table (by its
+-- Level3_HideTableIndex) and when the window closes, in server-time, so only
+-- that table's occupants are warned. This reuses the existing hidden banner
+-- rather than adding a second panel over an already tight mobile layout.
+local HIDDEN_TEXT = "HIDDEN UNDER TABLE"
+local HIDDEN_COLOR = Color3.fromRGB(186, 245, 225)
+local HIDDEN_STROKE = Color3.fromRGB(79, 183, 157)
+local WARNING_TEXT = "SOMETHING IS LOOKING UNDER THE TABLE"
+local WARNING_COLOR = Color3.fromRGB(255, 226, 226)
+local WARNING_STROKE = Color3.fromRGB(226, 74, 74)
+local level3State: Instance? = nil
+
+local function tableCheckWarned(): boolean
+	local state = level3State
+	if not state or not hiding then return false end
+	local index = tonumber(state:GetAttribute("Level3_MallManagerTableCheckIndex")) or 0
+	if index == 0 or index ~= (tonumber(player:GetAttribute("Level3_HideTableIndex")) or 0) then
+		return false
+	end
+	local endsAt = tonumber(state:GetAttribute("Level3_MallManagerTableCheckEndsAt")) or 0
+	return workspace:GetServerTimeNow() < endsAt
+end
+
+local function refreshWarning()
+	local warned = tableCheckWarned()
+	message.Text = if warned then WARNING_TEXT else HIDDEN_TEXT
+	message.TextColor3 = if warned then WARNING_COLOR else HIDDEN_COLOR
+	messageStroke.Color = if warned then WARNING_STROKE else HIDDEN_STROKE
+	shade.BackgroundTransparency = if warned then .5 else .76
+end
+
+-- The window closes on a timestamp, not an attribute edge, so this has to tick.
+-- It costs two attribute reads a frame while hidden and returns immediately the
+-- rest of the time.
+RunService.Heartbeat:Connect(function()
+	if not hiding and message.Text == HIDDEN_TEXT then return end
+	refreshWarning()
+end)
+
+task.spawn(function()
+	level3State = ReplicatedStorage:WaitForChild("Level 3 State")
+end)
+
 local function requestExit()
 	if not hiding or not requestRemote then return end
 	requestRemote:FireServer("EXIT")
@@ -349,14 +395,26 @@ local function apply()
 		and player:GetAttribute("UIRegressionForceHiding") == true then
 		shouldHide = true
 	end
+	-- Two players share a table, so the anchor's prompt stays Enabled while the
+	-- second lane is free. Without this the FIRST occupant sits under the table
+	-- looking at a HIDE UNDER TABLE prompt that can only ever answer
+	-- ALREADY_HIDDEN -- and the core prompt UI binds its KeyboardKeyCode, which
+	-- for this prompt is E, the advertised leave key, so E arrives here already
+	-- game-processed and is dropped. A hidden player is anchored at WalkSpeed 0
+	-- and cannot use any prompt anyway, so all of them go away for the duration.
+	-- ProximityPromptService.Enabled is a client-only property (LocalScript
+	-- writes only); it does not replicate, and nothing else in the game sets it.
+	ProximityPromptService.Enabled = not shouldHide
 	if shouldHide == hiding then
 		gui.Enabled = shouldHide
 		setLocalCameraClipping(player:GetAttribute("Level3_Hiding") == true)
+		refreshWarning()
 		return
 	end
 	hiding = shouldHide
 	gui.Enabled = hiding
 	setLocalCameraClipping(player:GetAttribute("Level3_Hiding") == true)
+	refreshWarning()
 end
 
 leave.Activated:Connect(requestExit)

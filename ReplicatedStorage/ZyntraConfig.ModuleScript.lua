@@ -123,6 +123,20 @@ return {
 		},
 	},
 
+	-- Roblox badges, created on the Creator Dashboard under this same experience.
+	-- 0 means "not created yet" and disables that award completely: no
+	-- BadgeService call is made and nothing is recorded, so pasting the real id
+	-- in later starts awarding it with no other change. Never invent an id here;
+	-- an id that does not belong to this experience fails every award silently.
+	Badges = {
+		FirstClearLevel1 = 0,
+		FirstClearLevel2 = 0,
+		FirstClearLevel3 = 0,
+		-- Awarded the first time all three levels have been cleared at least
+		-- once, which is NOT the same as clearing Level 3.
+		CampaignComplete = 0,
+	},
+
 	Colors = {
 		HazmatDefault = Color3.fromRGB(210, 174, 58),
 		GlowstickDefault = Color3.fromRGB(65, 145, 255),

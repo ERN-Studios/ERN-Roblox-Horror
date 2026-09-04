@@ -6,6 +6,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 local DataStoreService = game:GetService("DataStoreService")
 local MarketplaceService = game:GetService("MarketplaceService")
+local BadgeService = game:GetService("BadgeService")
 local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
 local MessagingService = game:GetService("MessagingService")
@@ -120,6 +121,12 @@ local function newProfile()
 		StaminaLevel = 0,
 		BatteryLevel = 0,
 		CompletedLevels = 0,
+		-- Which levels have been cleared at least once (string keys so the
+		-- DataStore never turns this into a sparse array), and which badges have
+		-- already been handed out. The badge set is what makes an award
+		-- idempotent without asking Roblox on every clear.
+		LevelsCleared = {},
+		AwardedBadges = {},
 		ReentryCredits = 0,
 		DonationRobux = 0,
 		Settings = {
@@ -152,6 +159,25 @@ local function normalizeProfile(data)
 	data.StaminaLevel = math.max(0, math.floor(tonumber(data.StaminaLevel) or 0))
 	data.BatteryLevel = math.max(0, math.floor(tonumber(data.BatteryLevel) or 0))
 	data.CompletedLevels = math.max(0, math.floor(tonumber(data.CompletedLevels) or 0))
+	-- Both sets are rebuilt from a KNOWN key set, so a corrupt or hand-edited
+	-- save can neither grow the profile without bound nor claim a badge that
+	-- this build does not know about. Numeric level keys from an older write are
+	-- accepted once and re-saved as strings.
+	local levelsCleared = {}
+	local savedLevels = type(data.LevelsCleared) == "table" and data.LevelsCleared or {}
+	for level = 1, 3 do
+		local levelKey = tostring(level)
+		if savedLevels[levelKey] == true or savedLevels[level] == true then
+			levelsCleared[levelKey] = true
+		end
+	end
+	data.LevelsCleared = levelsCleared
+	local awardedBadges = {}
+	local savedBadges = type(data.AwardedBadges) == "table" and data.AwardedBadges or {}
+	for badgeKey in pairs(Config.Badges or {}) do
+		if savedBadges[badgeKey] == true then awardedBadges[badgeKey] = true end
+	end
+	data.AwardedBadges = awardedBadges
 	data.ReentryCredits = math.max(0, math.floor(tonumber(data.ReentryCredits) or 0))
 	-- Deliberately do not migrate the retired SupportRobux field: that value
 	-- included utility purchases. DonationRobux starts a clean, donation-only
@@ -300,6 +326,9 @@ local function publicProfile(data)
 		StaminaPercent = data.StaminaLevel * PERCENT_PER_LEVEL,
 		BatteryPercent = data.BatteryLevel * PERCENT_PER_LEVEL,
 		CompletedLevels = data.CompletedLevels,
+		-- Carried so campaign progress is observable from a client without
+		-- reading the DataStore; nothing in the UI consumes it yet.
+		LevelsCleared = data.LevelsCleared,
 		ReentryCredits = data.ReentryCredits,
 		DonationRobux = data.DonationRobux,
 		MuteDispatch = data.Settings.MuteDispatch,
@@ -1545,6 +1574,134 @@ local function persistDispatchTargetOnLeave(player, session, queue)
 	return false
 end
 
+-- ---------------------------------------------------------------------------
+-- Emergency Re-entry: reserve the credit, THEN ask for the respawn
+-- ---------------------------------------------------------------------------
+-- The old order invoked the respawn first and spent the credit afterwards, so a
+-- DataStore write that failed behind an accepted respawn left the player holding
+-- both. Reserving first inverts the failure: the worst case is now a credit
+-- spent on a respawn that was refused, and that case refunds itself.
+--
+-- The refund is keyed on a per-attempt token and is only ever paid against the
+-- attempt that is still current, so a superseded attempt, a repeated call, or a
+-- player whose session ended mid-flow (the token dies with the session) can
+-- never be credited twice for one reservation.
+local reentryAttempts = {}
+
+-- The exact conditions the store's re-entry button uses to show itself, read
+-- server-side: in a live round, dead, and the round's one re-entry unspent.
+local function reentryEligible(player)
+	if not player.Parent then return false end
+	if player:GetAttribute("InRound") ~= true then return false end
+	if workspace:GetAttribute("RoundActive") ~= true then return false end
+	if player:GetAttribute("ZyntraReentryUsed") == true then return false end
+	-- GameManager's OnInvoke also refuses an escapee, so this has to as well:
+	-- these conditions gate the AUTO-use after a purchase, and every condition
+	-- missing here is a credit spent on a respawn that is then refused.
+	if player:GetAttribute("Escaped") == true then return false end
+	local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+	return humanoid == nil or humanoid.Health <= 0
+end
+
+local function useReentry(player)
+	local session = sessions[player]
+	if not session then return false end
+	-- One attempt at a time. Without this, a second click during the yielding
+	-- respawn would reserve a second credit that the first attempt's refund
+	-- would then decline to pay back.
+	if reentryAttempts[player] then return false end
+	if session.data.ReentryCredits < 1 then
+		pushProfile(player, "You do not have an Emergency Re-entry credit.", "error")
+		return false
+	end
+	local reentry = ServerStorage:FindFirstChild("ZyntraReentry")
+	if not reentry or not reentry:IsA("BindableFunction") then
+		pushProfile(player, "Re-entry is not available right now.", "error")
+		return false
+	end
+
+	local token = {}
+	reentryAttempts[player] = token
+	local reserved = mutate(player, function(data)
+		if data.ReentryCredits < 1 then
+			return false, "You do not have an Emergency Re-entry credit.", "error"
+		end
+		data.ReentryCredits -= 1
+		-- Deliberately no message: the credit is only RESERVED here. Announcing
+		-- success now is how a player would read "activated" one frame before
+		-- being told the respawn was refused. The push still carries the new
+		-- credit count, so the store button updates either way.
+		return true
+	end)
+	if not reserved then
+		-- Nothing was spent, so there is nothing to give back.
+		if reentryAttempts[player] == token then reentryAttempts[player] = nil end
+		return false
+	end
+
+	local ok, accepted = pcall(reentry.Invoke, reentry, player)
+	if reentryAttempts[player] ~= token then return ok and accepted == true end
+	reentryAttempts[player] = nil
+	if ok and accepted == true then
+		pushProfile(player, "Emergency Re-entry activated.", "success")
+		return true
+	end
+
+	-- The refund is a delta, so it cannot go through mutateIdempotent: replaying
+	-- a `+= 1` whose write in fact committed would hand out a credit nobody paid
+	-- for. It gets a small bounded retry instead, because one transient
+	-- DataStore error must not turn "respawn refused" into "paid credit
+	-- destroyed" -- and if all three attempts fail, the warn is the only trace
+	-- left, so it names the userId to make the credit reconcilable by hand.
+	local function refund(data)
+		data.ReentryCredits += 1
+		return true, "Re-entry is only available after death during an active round.", "error"
+	end
+	for attempt = 1, 3 do
+		if mutate(player, refund) then return false end
+		if not player.Parent or sessions[player] ~= session then break end
+		if attempt < 3 then task.wait(0.35) end
+	end
+	warn("[Zyntra] Re-entry refund FAILED; owes 1 ReentryCredit to userId", player.UserId)
+	return false
+end
+
+-- One Roblox badge, decided from OUR record first. UserHasBadgeAsync is asked
+-- only when we have no record of the award, which keeps an account that earned
+-- the badge before this shipped from being re-awarded (and re-notified) on every
+-- later clear. Everything yields inside task.spawn and every Roblox call is
+-- wrapped, so a throttled or failing badge service can neither block nor fail
+-- the profile write that reported the clear.
+local function awardBadge(player, badgeKey)
+	local badgeId = math.floor(tonumber(Config.Badges and Config.Badges[badgeKey]) or 0)
+	if badgeId <= 0 then return end
+	local session = sessions[player]
+	if not session or session.data.AwardedBadges[badgeKey] == true then return end
+	task.spawn(function()
+		local asked, owns = pcall(BadgeService.UserHasBadgeAsync, BadgeService, player.UserId, badgeId)
+		if not (asked and owns == true) then
+			-- BOTH returns matter. pcall's second value is AwardBadge's own
+			-- boolean, and AwardBadge RETURNS false rather than throwing for the
+			-- ordinary refusals: badge disabled, badge not owned by this place,
+			-- award throttled, player gone. Reading only pcall's ok would record
+			-- an award that never happened -- and that record is checked first on
+			-- every later clear, so the badge would never be retried again.
+			local ok, awarded = pcall(BadgeService.AwardBadge, BadgeService, player.UserId, badgeId)
+			if not ok or awarded ~= true then
+				warn("[Zyntra] AwardBadge failed for", player.Name, badgeKey, awarded)
+				return
+			end
+		end
+		-- Recording the award is a target state, not a delta, so a retried write
+		-- cannot hand anything out twice: the idempotent path is the right one.
+		mutateIdempotent(player, function(data)
+			if data.AwardedBadges[badgeKey] == true then return false end
+			data.AwardedBadges[badgeKey] = true
+			return true
+		end, true)
+	end)
+end
+
 actionRemote.OnServerEvent:Connect(function(player, action, payload)
 	if type(action) ~= "string" or not sessions[player] then return end
 	-- Dispatch preference is an idempotent target state with its own coalescing
@@ -1592,36 +1749,31 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 			return true, "Glowstick color saved.", "success"
 		end)
 	elseif action == "UseReentry" then
-		local session = sessions[player]
-		if not session or session.data.ReentryCredits < 1 then
-			pushProfile(player, "You do not have an Emergency Re-entry credit.", "error")
-			return
-		end
-		local reentry = ServerStorage:FindFirstChild("ZyntraReentry")
-		if not reentry or not reentry:IsA("BindableFunction") then
-			pushProfile(player, "Re-entry is not available right now.", "error")
-			return
-		end
-		local ok, accepted = pcall(reentry.Invoke, reentry, player)
-		if not ok or accepted ~= true then
-			pushProfile(player, "Re-entry is only available after death during an active round.", "error")
-			return
-		end
-		mutate(player, function(data)
-			if data.ReentryCredits < 1 then return false, "Re-entry credit was not consumed.", "error" end
-			data.ReentryCredits -= 1
-			return true, "Emergency Re-entry activated.", "success"
-		end)
+		useReentry(player)
 	end
 end)
 
-levelCompletedEvent.Event:Connect(function(player)
+levelCompletedEvent.Event:Connect(function(player, level)
 	if not player or not player:IsA("Player") or not sessions[player] then return end
+	-- GameManager fires this once per escapee with the level they just cleared.
+	local cleared = math.floor(tonumber(level) or 0)
+	local tracked = cleared >= 1 and cleared <= 3
 	mutate(player, function(data)
 		data.Tokens += Config.LevelCompletionTokens
 		data.CompletedLevels += 1
+		if tracked then data.LevelsCleared[tostring(cleared)] = true end
 		return true, "+1 Zyntra Research Token for completing the level.", "success"
 	end)
+	if not tracked then return end
+	-- Badges hang off the write above rather than replacing it: awardBadge is
+	-- non-blocking and every failure inside it is contained, so a badge that
+	-- cannot be granted never costs the player the token they earned.
+	awardBadge(player, "FirstClearLevel" .. cleared)
+	local session = sessions[player]
+	local levelsCleared = session and session.data.LevelsCleared
+	if levelsCleared and levelsCleared["1"] and levelsCleared["2"] and levelsCleared["3"] then
+		awardBadge(player, "CampaignComplete")
+	end
 end)
 
 MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(player, passId, purchased)
@@ -1696,6 +1848,16 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 		return true, "Purchase recorded.", "success"
 	end)
 	if changed or alreadyGranted then
+		if changed and entry.Product.ReentryGrant then
+			-- The wipe window is fifteen seconds long. A player who buys a credit
+			-- inside it has no time to find the button a second time, so a FRESH
+			-- grant spends itself the moment it lands if the buyer is still dead in
+			-- a live round. Spawned: the receipt is already committed above and must
+			-- be acknowledged now, not after a respawn has finished yielding.
+			task.spawn(function()
+				if reentryEligible(player) then useReentry(player) end
+			end)
+		end
 		if entry.Kind == "Donation" then
 			local session = sessions[player]
 			local total = session and session.data.DonationRobux or 0
@@ -1782,6 +1944,9 @@ local function finalizePlayerSession(player)
 	sessions[player] = nil
 	mutationLocks[player] = nil
 	actionTimes[player] = nil
+	-- Dropping the token is what stops a refund landing for a reservation whose
+	-- player is gone: no session, no second credit.
+	reentryAttempts[player] = nil
 	dispatchMuteQueues[player] = nil
 	briefingClaims[player] = nil
 	pendingDispatchSnapshots[player.UserId] = nil

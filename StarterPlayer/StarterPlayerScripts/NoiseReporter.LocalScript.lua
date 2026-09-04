@@ -24,7 +24,7 @@ local LOUDNESS = { sprint = 1.0, walk = 0.45, crouch = 0.0 }
 
 local state = "walk"
 local sprinting, crouching = false, false
-local shiftSprintHeld, touchSprintHeld = false, false
+local shiftSprintHeld, touchSprintHeld, gamepadSprintHeld = false, false, false
 local keyboardCrouchHeld, controllerCrouchToggled, touchSneakToggled = false, false, false
 local lastPublishedCrouch: boolean? = nil
 local crouchRequestSerial = 0
@@ -205,11 +205,37 @@ crouchRemote.OnClientEvent:Connect(function(acceptedState, responseSerial)
 	end
 end)
 
+-- The ONE definition of "the player is asking to sprint", across all three input
+-- families. Every place that used to spell out `shiftSprintHeld or
+-- touchSprintHeld` reads this instead, so a fourth source can never again be
+-- added to one of them and missed in the other three -- which is exactly how
+-- gamepad players ended up unable to sprint at all.
+local function sprintRequested()
+	return shiftSprintHeld or touchSprintHeld or gamepadSprintHeld
+end
+
 local function keyboardSprintHeld()
 	-- Physical key state remains reliable when a Roblox core control (such as
 	-- Shift Lock) consumes the event before this script sees it.
 	return UIS:IsKeyDown(Enum.KeyCode.LeftShift)
 		or UIS:IsKeyDown(Enum.KeyCode.RightShift)
+end
+
+local function gamepadSprintDown()
+	-- The physical read behind the ButtonL2 latch, and it exists for the same
+	-- reason keyboardSprintHeld does: InputEnded is not guaranteed. A trigger
+	-- held while the window loses focus, or while the controller is unplugged,
+	-- never sends its release, and the lobby Heartbeat below would then force
+	-- SPRINT_SPEED every frame with no way back to walking.
+	-- Every connected slot, not just Gamepad1: InputBegan latches on whichever
+	-- pad the press came from, so a repair that only ever asked Gamepad1 would
+	-- clear a Gamepad2 player's latch on every lobby frame. An unplugged
+	-- controller is simply absent from this list, which is the release the
+	-- missing InputEnded never sent.
+	for _, gamepad in ipairs(UIS:GetConnectedGamepads()) do
+		if UIS:IsGamepadButtonDown(gamepad, Enum.KeyCode.ButtonL2) then return true end
+	end
+	return false
 end
 
 local function keyboardCrouchHeldNow()
@@ -219,11 +245,21 @@ local function keyboardCrouchHeldNow()
 end
 
 local function refreshSprint()
-	sprinting = shiftSprintHeld or touchSprintHeld
+	sprinting = sprintRequested()
 	applySpeed()
 end
 
 UIS.InputBegan:Connect(function(input, processed)
+	-- Hold-to-sprint on the LEFT TRIGGER. ButtonA stays Roblox's own jump,
+	-- ButtonL3 is crouch and ButtonX is the glowstick; L2 was unused across the
+	-- whole project. Read before the `processed` gate for the same reason Shift
+	-- is: this is a movement modifier, not a UI action, and a core control that
+	-- claimed the press must not silently disable sprinting.
+	if input.KeyCode == Enum.KeyCode.ButtonL2 then
+		gamepadSprintHeld = true
+		refreshSprint()
+		return
+	end
 	local isSprintKey = input.KeyCode == Enum.KeyCode.LeftShift
 		or input.KeyCode == Enum.KeyCode.RightShift
 	if isSprintKey then
@@ -255,6 +291,9 @@ UIS.InputEnded:Connect(function(input)
 		-- Releasing one Shift key must not cancel the other.
 		shiftSprintHeld = keyboardSprintHeld()
 		refreshSprint()
+	elseif input.KeyCode == Enum.KeyCode.ButtonL2 then
+		gamepadSprintHeld = false
+		refreshSprint()
 	elseif input.KeyCode == Enum.KeyCode.LeftControl
 		or input.KeyCode == Enum.KeyCode.RightControl then
 		keyboardCrouchHeld = keyboardCrouchHeldNow()
@@ -268,7 +307,8 @@ player.CharacterAdded:Connect(function()
 	-- touch latch. Preserve a new RUN tap made during this startup delay instead
 	-- of silently turning it off while leaving the button lit.
 	shiftSprintHeld = keyboardSprintHeld()
-	sprinting = shiftSprintHeld or touchSprintHeld
+	gamepadSprintHeld = gamepadSprintDown()
+	sprinting = sprintRequested()
 	keyboardCrouchHeld, controllerCrouchToggled, crouching = false, false, false
 	lastPublishedCrouch = nil
 	-- The touch SNEAK latch and its lit ring go with the crouch they stand for,
@@ -281,7 +321,12 @@ end)
 -- report at 5Hz, only while actually moving
 task.spawn(function()
 	while task.wait(0.2) do
-		if not inRound() or workspace:GetAttribute("SelectedLevel") ~= 1 then continue end
+		-- Level 1's Entity and Level 2's Pool Foam both hear the shared
+		-- NoiseRegistry: EntityAI drains this remote during a Level 1 round, the
+		-- live Pool Foam session drains it during a Level 2 one. Level 3's Mall
+		-- Manager does not listen at all, so reporting there is pure traffic.
+		local level = workspace:GetAttribute("SelectedLevel")
+		if not inRound() or (level ~= 1 and level ~= 2) then continue end
 		local char, hum = currentChar()
 		if not (char and hum and hum.Health > 0) then continue end
 
@@ -638,7 +683,11 @@ RunService.Heartbeat:Connect(function(dt)
 		-- Roblox's default speed while the player is still holding RUN.
 		local physicalShift = UIS:GetFocusedTextBox() == nil and keyboardSprintHeld()
 		if shiftSprintHeld ~= physicalShift then shiftSprintHeld = physicalShift end
-		sprinting = shiftSprintHeld or touchSprintHeld
+		-- Same repair for the left trigger: a missed InputEnded would otherwise
+		-- leave the latch stuck on and pin WalkSpeed to SPRINT_SPEED forever.
+		local physicalTrigger = gamepadSprintDown()
+		if gamepadSprintHeld ~= physicalTrigger then gamepadSprintHeld = physicalTrigger end
+		sprinting = sprintRequested()
 		state = sprinting and "sprint" or "walk"
 		local character, hum = currentChar()
 		local desiredSpeed = sprinting and SPRINT_SPEED or WALK_SPEED
@@ -759,8 +808,12 @@ local function updateRoundState()
 		-- Reset level-only latches once on the round→lobby transition. Ordinary
 		-- lobby UI/layout refreshes must not switch RUN off underneath the player.
 		if wasRoundActive then
+			-- The touch latch is a UI toggle and is dropped. Shift and the left
+			-- trigger are PHYSICAL holds, so a player who leaves a round still
+			-- holding one keeps sprinting in the lobby instead of stopping dead
+			-- until they let go and press again.
 			shiftSprintHeld, touchSprintHeld = keyboardSprintHeld(), false
-			sprinting = shiftSprintHeld
+			sprinting = sprintRequested()
 			cancelCrouch()
 			touchSprintToggled = false
 			showRunEnabled(false)

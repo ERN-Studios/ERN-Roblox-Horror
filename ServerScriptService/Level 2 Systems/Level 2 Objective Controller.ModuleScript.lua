@@ -17,8 +17,26 @@ local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local ContentProvider = game:GetService("ContentProvider")
 local SoundService = game:GetService("SoundService")
+local ServerScriptService = game:GetService("ServerScriptService")
 local Terrain = workspace.Terrain
 local DevAccess = require(ReplicatedStorage:WaitForChild("DevAccess"))
+
+-- A running pump motor is the loudest thing in Level 2, and Pool Foam listens to
+-- the shared registry. NoiseRegistry lives in the ServerScriptService ROOT, not
+-- in this folder. A missing module must never stop the objective, so the stub
+-- just means nothing hears the pumps.
+local NoiseRegistry
+do
+	local ok, result = pcall(function()
+		return require(ServerScriptService:WaitForChild("NoiseRegistry", 10))
+	end)
+	if ok and type(result) == "table" and result.Add then
+		NoiseRegistry = result
+	else
+		warn("[Level 2] NoiseRegistry unavailable; pumps make no noise: " .. tostring(result))
+		NoiseRegistry = {Add = function() end}
+	end
+end
 
 local ObjectiveController = {}
 local activeSession
@@ -29,6 +47,11 @@ local OPEN_COLOR = Color3.fromRGB(180, 218, 196)
 -- Pump audio is deliberately staged around the authored clip lengths.
 local DRAIN_RUSH_DELAY = 10
 local DEFAULT_PUMP_START_DURATION = 11.572244897959184
+-- Registry entries decay after five seconds, so a motor that runs for the whole
+-- authored clip has to keep announcing itself or Pool Foam stops hearing it
+-- halfway through. Two seconds is well inside that decay and is six re-adds for
+-- an 11.6-second clip.
+local PUMP_NOISE_INTERVAL = 2
 local DEV_PUMP_INTERVAL = 5
 local DEV_PUMP_REQUEST_COOLDOWN = 1
 local DEV_PUMP_CAPABILITY = {}
@@ -499,6 +522,18 @@ function ObjectiveController.Start(manifest, generation)
 			-- Start the authored pump motor cue as soon as the lever engages.
 			fireSound("Level 2 Pump Start", player)
 			startPumpGauge(session, pump)
+
+			-- The motor is heard as well as played: it is the one noise in Level 2
+			-- that pulls Pool Foam toward the objective the players just advanced.
+			-- It runs for exactly as long as the authored clip does.
+			task.spawn(function()
+				local noisePosition = pump.Model:GetPivot().Position
+				local silentAt = os.clock() + session.PumpSoundDuration
+				while validSession(session) and os.clock() < silentAt do
+					NoiseRegistry.Add(noisePosition, "pump")
+					task.wait(PUMP_NOISE_INTERVAL)
+				end
+			end)
 
 			local drained = manifest.Drains and manifest.Drains[pump.Index]
 			local isFinalPump = session.StartedCount >= goal

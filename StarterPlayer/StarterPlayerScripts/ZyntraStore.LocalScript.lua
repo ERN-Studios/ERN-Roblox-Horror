@@ -1613,13 +1613,40 @@ local function updateReentry()
 	local roundActive = workspace:GetAttribute("RoundActive") == true
 	local used = player:GetAttribute("ZyntraReentryUsed") == true
 	local shouldShow = inRound and roundActive and reentryDead and not used
-	reentryGui.Enabled = shouldShow
-	player:SetAttribute("ZyntraReentryOpen", shouldShow or nil)
+	-- C_PARTY_DOWN_ONE_PURCHASE_SURFACE_20260904: RoundUI's PARTY DOWN card
+	-- carries the same re-entry action for the 15-second wipe window. For that
+	-- whole WINDOW this panel stands down -- two purchase surfaces for one
+	-- product, stacked (RoundGui is DisplayOrder 100, this modal 120), is how a
+	-- player ends up buying twice, and declining the card must not simply pop
+	-- this one up in its place.
+	--
+	-- The published modal flag follows what is actually DRAWN, though, never the
+	-- window: it is what frees the cursor and stands the touch movement cluster
+	-- down, and asserting it for a window with no card on screen left a declined
+	-- player with a forced cursor over a stood-down HUD for fifteen seconds.
+	local windowOpen = player:GetAttribute("PartyDownWindowOpen") == true
+	local cardOpen = player:GetAttribute("PartyDownCardOpen") == true
+	reentryGui.Enabled = shouldShow and not windowOpen
+	player:SetAttribute("ZyntraReentryOpen",
+		(reentryGui.Enabled or cardOpen) and true or nil)
 	local credits = profile and profile.ReentryCredits or 0
 	reentryButton.Text = credits > 0
 		and ("USE RE-ENTRY CREDIT  //  " .. credits .. " OWNED")
 		or (tostring(displayedProductPrices.EmergencyReentry or Config.Products.EmergencyReentry.Price) .. " R$  //  BUY CREDIT")
+	-- The smallest public surface for the card, which is in another script and
+	-- cannot see this file's `profile`, its live-fetched price or Config. Three
+	-- numbers, written from the one function every profile change, death,
+	-- re-entry and round transition already lands on -- including the spawn call
+	-- below, so they are published before any round can be lost. Reading them
+	-- rather than requiring ZyntraConfig is what keeps RoundUI from yielding on
+	-- a WaitForChild in the middle of its own chunk.
+	player:SetAttribute("ZyntraReentryCredits", credits)
+	player:SetAttribute("ZyntraReentryPrice",
+		displayedProductPrices.EmergencyReentry or Config.Products.EmergencyReentry.Price)
+	player:SetAttribute("ZyntraReentryProductId", Config.Products.EmergencyReentry.Id)
 end
+player:GetAttributeChangedSignal("PartyDownCardOpen"):Connect(updateReentry)
+player:GetAttributeChangedSignal("PartyDownWindowOpen"):Connect(updateReentry)
 
 local function bindCharacter(character)
 	reentryDead = false

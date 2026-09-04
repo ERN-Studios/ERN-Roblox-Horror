@@ -288,6 +288,24 @@ local function onChar(char)
 	hum.Died:Connect(startSpectate)
 end
 
+-- C_ONE_SPECTATE_CAMERA_20260904: this file is now the ONLY writer of the
+-- spectate camera -- RoundUI used to fight it with a CameraType.Custom ticker
+-- of its own, and that ticker was also the only thing that unlocked the camera
+-- when a round ended underneath a dead player. startSpectate already refuses
+-- outside an active round; this is the matching exit, so the POV cannot outlive
+-- the round while the result screen counts down and nothing has respawned
+-- anybody yet. Respawn (onChar) and the Escaped paths still stop it too.
+--
+-- GUARDED ON `spectating`, because this fires on EVERY client at every round
+-- end -- lobby players and living participants included -- and stopSpectate
+-- writes CameraType.Custom and CameraSubject unconditionally. JumpscareUI owns
+-- a CameraType.Scriptable kill cam, so a player dying on the same frame the
+-- round closes out would have had their kill sequence knocked back to the
+-- default camera halfway through it.
+workspace:GetAttributeChangedSignal("RoundActive"):Connect(function()
+	if spectating and workspace:GetAttribute("RoundActive") ~= true then stopSpectate() end
+end)
+
 if player.Character then onChar(player.Character) end
 player.CharacterAdded:Connect(onChar)
 

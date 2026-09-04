@@ -336,6 +336,28 @@ function TestSuite.ValidateConfiguration(): {[string]: any}
 		and Configuration.Hiding.HiddenRootHeight > 0
 		and Configuration.Hiding.SightOccluderSize.Y >= 3,
 		"Level 3 table-hiding interaction tuning is unsafe")
+	-- Two players share one table. Both lanes plus a body's width have to fit
+	-- inside the hide volume, and the sight occluder still has to cover them.
+	assert(Configuration.Hiding.HideOccupantCap == 2
+		and Configuration.Hiding.HideOccupantLateralOffset > 0
+		and Configuration.Hiding.HideOccupantLateralOffset * 2 + 2
+			<= Configuration.Hiding.HideVolumeSize.X
+		and Configuration.Hiding.HideOccupantLateralOffset * 2 + 2
+			<= Configuration.Hiding.SightOccluderSize.X,
+		"Level 3 shared-table occupancy does not fit two players under one table")
+	-- The Mall Manager's table check must stay a tactic-preserving mechanic:
+	-- never certain, rate-limited, announced, and survivable.
+	local tableCheck = Configuration.TableCheck
+	assert(tableCheck.SweepBiasChance > 0 and tableCheck.SweepBiasChance < 1
+		and tableCheck.GlobalIntervalSeconds > 0
+		and tableCheck.AnchorCooldownSeconds >= 20
+		and tableCheck.ReactionWindowSeconds >= 1
+		and tableCheck.FlushImmunitySeconds > 0
+		and tableCheck.StartRange >= Configuration.MallManager.AttackRange
+		and tableCheck.SoundRollOffMaxDistance > tableCheck.SoundRollOffMinDistance
+		and type(Configuration.Audio[tableCheck.SoundName]) == "string"
+		and Configuration.Audio[tableCheck.SoundName] ~= "",
+		"Level 3 table-check tuning is omniscient, unannounced, or names a missing cue")
 	assert(managerTemplate:FindFirstChildOfClass("AnimationController")
 		and managerTemplate:FindFirstChildOfClass("AnimationController"):FindFirstChildOfClass("Animator"),
 		"Mall Manager template is missing AnimationController.Animator")
@@ -1363,6 +1385,8 @@ function TestSuite.ValidateCleanup(snapshot: {[string]: any}): {[string]: any}
 		and state:GetAttribute("Level3_MallManagerChaseScreamPlaying") == false
 		and state:GetAttribute("Level3_MallManagerLastChaseScreamAtServerTime") == 0
 		and state:GetAttribute("Level3_MallManagerLastChaseScreamName") == ""
+		and state:GetAttribute("Level3_MallManagerTableCheckIndex") == 0
+		and state:GetAttribute("Level3_MallManagerTableCheckEndsAt") == 0
 		and state:GetAttribute("Level3_BlackoutScreamOpeningCount") == 0
 		and state:GetAttribute("Level3_BlackoutScreamStartedAtServerTime") == 0
 		and state:GetAttribute("Level3_HiddenPlayers") == 0
@@ -3028,6 +3052,245 @@ function TestSuite.ProbeChaseForwardProgress(Manager: {[string]: any}, player: P
 	return result
 end
 
+-- PROBE — one table, two occupants, a third refused, and the Mall Manager's
+-- flush. This needs THREE live in-round players (Studio: Test > Clients and
+-- Servers > Players = 3): "a third is refused" cannot be asserted without a
+-- third body. The third does not have to be near the table -- tryEnter reaches
+-- its cap test before any eligibility or distance test -- but it does have to
+-- exist. Pass {World=..., Manager=... (optional), Players=... (optional)}.
+function TestSuite.ProbeSharedTableHiding(context: {[string]: any}?): {[string]: any}
+	assertStudioProbe("ProbeSharedTableHiding")
+	local options = assert(context, "ProbeSharedTableHiding requires a live context")
+	local world = options.World
+	assert(world and world:IsA("Model") and world.Parent == workspace,
+		"ProbeSharedTableHiding requires the live generated world")
+	local Manager = options.Manager
+	local generation = world:GetAttribute("Level3_Generation")
+	assert(HidingController.GetSnapshot() ~= nil,
+		"ProbeSharedTableHiding requires a running Level 3 hiding session")
+	local cap = Configuration.Hiding.HideOccupantCap
+	assert(cap == 2, "ProbeSharedTableHiding assumes the authored two-player cap")
+
+	local candidates = if type(options.Players) == "table"
+		then options.Players else Players:GetPlayers()
+	local participants = {}
+	for _, candidate in ipairs(candidates) do
+		local character = candidate.Character
+		local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+		if candidate.Parent == Players and candidate:GetAttribute("InRound") == true
+			and candidate:GetAttribute("Escaped") ~= true
+			and humanoid and humanoid.Health > 0 and root and root:IsA("BasePart")
+			and not HidingController.IsHidden(candidate) then
+			table.insert(participants, {Player = candidate, Character = character})
+		end
+	end
+	assert(#participants >= cap + 1, string.format(
+		"ProbeSharedTableHiding needs %d live in-round players to prove a full table refuses"
+		.. " the next one; start the Studio play session with %d players (found %d)",
+		cap + 1, cap + 1, #participants))
+
+	local anchor: BasePart? = nil
+	for _, object in ipairs(world:GetDescendants()) do
+		if object:IsA("BasePart")
+			and object:GetAttribute("Level3_HideTableAnchor") == true
+			and object:GetAttribute("Level3_HideOccupiedUserId") == 0 then
+			anchor = object
+			break
+		end
+	end
+	assert(anchor, "Level 3 world has no free hide table anchor")
+	local hideAnchor = anchor :: BasePart
+	local promptObject = hideAnchor:FindFirstChild("HideUnderTablePrompt")
+	assert(promptObject and promptObject:IsA("ProximityPrompt"),
+		"Level 3 hide table anchor is missing its prompt")
+	local prompt = promptObject :: ProximityPrompt
+
+	local restore = {}
+	for _, record in ipairs(participants) do
+		table.insert(restore, {Character = record.Character, CFrame = record.Character:GetPivot()})
+	end
+	local approach = CFrame.new(hideAnchor.Position + Vector3.new(0, 3, 0))
+	-- OccupiedCount is a whole-session count of non-empty anchors, and the
+	-- participant filter only excludes players who are ALREADY hidden -- it does
+	-- not demand an empty mall. Measure the delta this probe causes instead of
+	-- assuming it starts from zero, or a fourth player under another table fails
+	-- the shared-table assertion for something unrelated to shared tables.
+	local baseOccupied = assert(HidingController.GetSnapshot(),
+		"the hiding session vanished before the probe began").OccupiedCount
+	-- A live hunt would legitimately find and flush these occupants mid-assertion
+	-- (this probe even asks the Manager for an attack verdict below, so a hunt may
+	-- well be running). Steps 5-7 call FlushAnchor directly rather than going
+	-- through the Manager, so suspending checks costs the probe nothing. Restored
+	-- in the cleanup below, pass or fail, exactly as ProbeFurniturePermanence does.
+	local suspendChecks = type(Manager) == "table"
+		and Manager.DebugSetTableChecksEnabled ~= nil
+	if suspendChecks then Manager.DebugSetTableChecksEnabled(false) end
+
+	local ok, result = pcall(function()
+		local first = participants[1].Player
+		local second = participants[2].Player
+		local third = participants[3].Player
+
+		-- 1. The table fills up one lane at a time and the prompt only closes at
+		--    the cap. tryEnter enforces the real distance gate, so each hider has
+		--    to be standing at the table.
+		for slotIndex = 1, cap do
+			participants[slotIndex].Character:PivotTo(approach)
+			task.wait(.3)
+			local accepted, reason = HidingController.DebugEnter(
+				participants[slotIndex].Player, hideAnchor)
+			assert(accepted, string.format(
+				"occupant %d was refused by a table with room: %s", slotIndex, tostring(reason)))
+			assert(HidingController.IsHidden(participants[slotIndex].Player, generation),
+				string.format("occupant %d did not register as hidden", slotIndex))
+			assert(HidingController.OccupantCount(hideAnchor) == slotIndex,
+				"the shared table did not count its occupants")
+			local snapshot = assert(HidingController.GetSnapshot(),
+				"the hiding session vanished mid-probe")
+			assert(snapshot.HiddenCount >= slotIndex
+				and snapshot.OccupiedCount == baseOccupied + 1,
+				string.format("filling one table should occupy exactly one anchor more"
+					.. " than the %d already occupied; the session reports %s",
+					baseOccupied, tostring(snapshot.OccupiedCount)))
+			assert(prompt.Enabled == (slotIndex < cap), string.format(
+				"hide prompt Enabled was %s with %d of %d occupants",
+				tostring(prompt.Enabled), slotIndex, cap))
+		end
+
+		-- 2. Two occupants, two lanes, two camera points. Sharing either would
+		--    put one player's head inside the other's.
+		local firstCamera = first:GetAttribute("Level3_HideCameraPosition")
+		local secondCamera = second:GetAttribute("Level3_HideCameraPosition")
+		local lateralSpan = Configuration.Hiding.HideOccupantLateralOffset * 2
+		assert(typeof(firstCamera) == "Vector3" and typeof(secondCamera) == "Vector3"
+			and (firstCamera - secondCamera).Magnitude >= lateralSpan - .01,
+			"shared-table occupants did not each get their own camera point")
+		local firstLocal = hideAnchor.CFrame:PointToObjectSpace(
+			participants[1].Character:GetPivot().Position)
+		local secondLocal = hideAnchor.CFrame:PointToObjectSpace(
+			participants[2].Character:GetPivot().Position)
+		local halfWidth = Configuration.Hiding.HideVolumeSize.X * .5
+		assert(firstLocal.X * secondLocal.X < 0
+			and math.abs(firstLocal.X) <= halfWidth and math.abs(secondLocal.X) <= halfWidth,
+			"shared-table occupants were not offset onto opposite lanes inside the hide volume")
+		assert(first:GetAttribute("Level3_HideTableIndex")
+			== second:GetAttribute("Level3_HideTableIndex"),
+			"shared-table occupants disagree about which table they are under")
+
+		-- 3. The cap actually refuses the next player, and refusing changes nothing.
+		local refused, refusedReason = HidingController.DebugEnter(third, hideAnchor)
+		assert(refused == false and refusedReason == "OCCUPIED", string.format(
+			"a third player was not refused by a full table (accepted=%s, reason=%s)",
+			tostring(refused), tostring(refusedReason)))
+		assert(not HidingController.IsHidden(third, generation)
+			and HidingController.OccupantCount(hideAnchor) == cap,
+			"a refused entry still changed the table's occupancy")
+
+		-- 4. Release is per occupant: one leaving must not disturb the other, and
+		--    the freed lane must be reusable.
+		assert(HidingController.DebugExit(first), "the first occupant could not leave")
+		assert(not HidingController.IsHidden(first, generation),
+			"the first occupant is still hidden after leaving")
+		assert(HidingController.IsHidden(second, generation)
+			and second:GetAttribute("Level3_Hiding") == true,
+			"releasing one occupant ejected the other")
+		assert(HidingController.OccupantCount(hideAnchor) == 1
+			and hideAnchor:GetAttribute("Level3_HideOccupiedUserId") == second.UserId
+			and prompt.Enabled == true,
+			"the half-empty table did not re-point its occupancy or re-open its prompt")
+		participants[1].Character:PivotTo(approach)
+		-- LastAction is stamped on ENTRY and never refreshed by a release, so the
+		-- rejoin races the action cooldown -- measured on os.clock, which is CPU
+		-- time on the Studio server and can advance a fraction of the wall time a
+		-- task.wait burns. Poll until the cooldown is genuinely spent instead of
+		-- sleeping a fixed wall duration and hoping; any other refusal fails at once.
+		local rejoined, rejoinReason = false, "COOLDOWN"
+		local rejoinDeadline = os.clock() + Configuration.Hiding.ActionCooldownSeconds + 2
+		repeat
+			task.wait(.1)
+			rejoined, rejoinReason = HidingController.DebugEnter(first, hideAnchor)
+		until rejoined or rejoinReason ~= "COOLDOWN" or os.clock() > rejoinDeadline
+		assert(rejoined and HidingController.OccupantCount(hideAnchor) == cap,
+			"the freed lane was not reusable: " .. tostring(rejoinReason))
+
+		-- 5. The flush. Everyone still under the table leaves on the side AWAY
+		--    from the Manager and carries the head-start immunity out with them.
+		local managerSide = hideAnchor.CFrame:PointToWorldSpace(Vector3.new(0, 0, 12))
+		local flushed = HidingController.FlushAnchor(hideAnchor, managerSide)
+		assert(#flushed == cap, string.format(
+			"FlushAnchor ejected %d of %d occupants", #flushed, cap))
+		for slotIndex = 1, cap do
+			local record = participants[slotIndex]
+			assert(not HidingController.IsHidden(record.Player, generation)
+				and record.Player:GetAttribute("Level3_Hiding") ~= true
+				and (record.Player:GetAttribute("Level3_HideTableIndex") or 0) == 0,
+				"a flushed player was left in the hiding state")
+			assert(HidingController.IsFlushImmune(record.Player),
+				"a flushed player did not receive the head-start immunity")
+			local exitLocal = hideAnchor.CFrame:PointToObjectSpace(
+				record.Character:GetPivot().Position)
+			assert(exitLocal.Z <= -1, string.format(
+				"a flushed player was pushed toward the Manager (local Z %.2f)", exitLocal.Z))
+		end
+		assert(HidingController.OccupantCount(hideAnchor) == 0
+			and hideAnchor:GetAttribute("Level3_HideOccupiedUserId") == 0
+			and prompt.Enabled == true,
+			"the flushed table did not release its occupancy")
+
+		-- 6. Immunity means the attack itself is refused, not merely recorded.
+		local attackProbe = nil
+		if type(Manager) == "table" and Manager.GetSnapshot and Manager.DebugAttackProbe
+			and Manager.GetSnapshot() ~= nil then
+			attackProbe = Manager.DebugAttackProbe(first)
+			assert(attackProbe.LineClearAtConfirmRange == false
+				and attackProbe.WouldInitiate == false,
+				"the Mall Manager would still attack a player it flushed one frame ago")
+		end
+
+		-- 7. And it is a head start, not permanent safety. os.clock is CPU time
+		--    on the Studio server, so poll it rather than sleeping a wall-clock
+		--    duration that may not have advanced it far enough.
+		local immunityStart = workspace:GetServerTimeNow()
+		local immunityDeadline = os.clock() + Configuration.TableCheck.FlushImmunitySeconds + 2
+		while HidingController.IsFlushImmune(first) and os.clock() < immunityDeadline do
+			task.wait(.1)
+		end
+		assert(not HidingController.IsFlushImmune(first),
+			"flush immunity never expired")
+		-- ...and it lasts the advertised number of SECONDS, not the same number of
+		-- CPU seconds. Measured against server time, the clock the reaction window
+		-- and the client banner both use; a regression to os.clock stretches a 1.5 s
+		-- head start into several seconds of real running and fails here.
+		local immunityWall = workspace:GetServerTimeNow() - immunityStart
+		assert(immunityWall <= Configuration.TableCheck.FlushImmunitySeconds + 1.5,
+			string.format("flush immunity ran %.2f wall seconds for a %.2f second head"
+				.. " start; it is being measured on a clock the player never experiences",
+				immunityWall, Configuration.TableCheck.FlushImmunitySeconds))
+
+		return {
+			Anchor = hideAnchor:GetFullName(),
+			TableIndex = tonumber(hideAnchor:GetAttribute("Level3_HideTableIndex")) or 0,
+			OccupantCap = cap,
+			Participants = #participants,
+			Flushed = #flushed,
+			FlushImmunitySeconds = Configuration.TableCheck.FlushImmunitySeconds,
+			ImmunityWallSeconds = immunityWall,
+			AttackRefusedWhileImmune = attackProbe ~= nil,
+		}
+	end)
+
+	if suspendChecks then pcall(Manager.DebugSetTableChecksEnabled, true) end
+	for _, record in ipairs(participants) do
+		pcall(HidingController.DebugExit, record.Player)
+	end
+	for _, saved in ipairs(restore) do
+		if saved.Character and saved.Character.Parent then saved.Character:PivotTo(saved.CFrame) end
+	end
+	if not ok then error(result, 0) end
+	return result
+end
+
 -- LEVEL3_PERMANENT_FURNITURE_20260828
 -- Furniture is permanent scene topology, so the contract this probe proves is
 -- the opposite of the old REMOVED -> VISIBLE_GHOST -> RESTORED cycle: driving
@@ -3055,7 +3318,7 @@ function TestSuite.ProbeFurniturePermanence(context: {[string]: any}?): {[string
 		and MusicController.DebugSetElapsed,
 		"ProbeFurniturePermanence requires the Level 3 music sequence controller")
 	assert(type(Manager) == "table" and Manager.GetSnapshot
-		and Manager.DebugBlackoutSweepLegSeconds,
+		and Manager.DebugBlackoutSweepLegSeconds and Manager.DebugSetTableChecksEnabled,
 		"ProbeFurniturePermanence requires the Mall Manager controller module")
 	assert(world and world.Parent == workspace,
 		"ProbeFurniturePermanence requires the live generated world")
@@ -3100,6 +3363,12 @@ function TestSuite.ProbeFurniturePermanence(context: {[string]: any}?): {[string
 	local samples = {}
 
 	local ok, result = pcall(function()
+		-- This probe parks a player under a table for the whole timeline and
+		-- asserts they are still there at every edge. The Mall Manager's table
+		-- check would legitimately find and flush them mid-assertion, so checks
+		-- are suspended here and restored in the cleanup below, pass or fail.
+		-- ProbeSharedTableHiding is what covers the check and flush themselves.
+		Manager.DebugSetTableChecksEnabled(false)
 		baseline = TestSuite.CaptureFurnitureBaseline(world)
 		-- Mirror the production chair selection and exact authored transforms. The
 		-- exception is deliberately narrow: exactly these three named chairs may
@@ -3448,6 +3717,7 @@ function TestSuite.ProbeFurniturePermanence(context: {[string]: any}?): {[string
 		}
 	end)
 
+	pcall(Manager.DebugSetTableChecksEnabled, true)
 	if hidEntered then pcall(HidingController.DebugExit, player) end
 	local cleanupOk, cleanupError = pcall(cleanupAfter :: () -> ())
 	if not cleanupOk then

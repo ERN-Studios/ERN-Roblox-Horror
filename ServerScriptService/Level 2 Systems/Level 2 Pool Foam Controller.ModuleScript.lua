@@ -9,7 +9,30 @@ local CollectionService = game:GetService("CollectionService")
 local Debris = game:GetService("Debris")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
+local ServerScriptService = game:GetService("ServerScriptService")
 local ServerStorage = game:GetService("ServerStorage")
+
+-- Hearing. NoiseRegistry lives in the ServerScriptService ROOT, not in this
+-- folder, so it is reached through the service (script.Parent is "Level 2
+-- Systems"). A missing or broken module must not stop the encounter: the stub
+-- simply leaves Pool Foam deaf, exactly like EntityAI's own fallback.
+local NoiseRegistry
+do
+	local ok, result = pcall(function()
+		return require(ServerScriptService:WaitForChild("NoiseRegistry", 10))
+	end)
+	if ok and type(result) == "table" and result.Add then
+		NoiseRegistry = result
+	else
+		warn("[Pool Foam] NoiseRegistry unavailable; hearing disabled: " .. tostring(result))
+		NoiseRegistry = {
+			Add = function() end,
+			Prune = function() end,
+			Clear = function() end,
+			GetBest = function() return nil end,
+		}
+	end
+end
 
 local Controller = {}
 local activeSession
@@ -45,6 +68,11 @@ local PHASES = table.freeze({
 })
 
 local AUDIO_STATES = {"Idle", "Walk", "Caught", "Hunt", "Attack", "Collapse"}
+
+-- The only noise names a CLIENT may claim, exactly as EntityAI whitelists them
+-- for Level 1. Everything else in NoiseRegistry's vocabulary (a fuse relay, a
+-- pump motor) is server-authored and must not be spoofable from a report.
+local CLIENT_NOISE = table.freeze({walk = true, sprint = true})
 
 local function finiteNumber(value)
 	return typeof(value) == "number" and value == value and value > -math.huge and value < math.huge
@@ -487,6 +515,31 @@ local function desiredPhase(session, now)
 	return PHASES.Dormant
 end
 
+-- WHO IS BEING HUNTED (2026-09-04).
+--
+-- `Level2_PoolFoamTargeted` and `BeingChased` are per-PLAYER marks, but every
+-- generated Kids Area owns its own Pool Foam and each of them can hold a chase
+-- target at the same time, so the marks are REFERENCE COUNTED: a player carries
+-- them while ANY entity is hunting them and loses them only when the last one
+-- lets go. The waiting readers are NoiseReporter (adrenaline — triple stamina
+-- while chased) and EntityShakeController (camera shake).
+--
+-- BeingChased is cleared to false rather than nil, matching how Level 3's Mall
+-- Manager and Hiding Controller release it; every reader tests `== true`.
+local function markChased(session, player, delta)
+	if not player then return end
+	local count = math.max(0, (session.ChaseMarks[player] or 0) + delta)
+	session.ChaseMarks[player] = count > 0 and count or nil
+	if player.Parent ~= Players then return end
+	if count > 0 then
+		player:SetAttribute("Level2_PoolFoamTargeted", true)
+		player:SetAttribute("BeingChased", true)
+	else
+		player:SetAttribute("Level2_PoolFoamTargeted", nil)
+		player:SetAttribute("BeingChased", false)
+	end
+end
+
 local function setPhase(session, phase, now)
 	if session.Phase == phase then return end
 	session.Phase = phase
@@ -505,7 +558,11 @@ local function setPhase(session, phase, now)
 			setEntityAnimationPaused(entity, false)
 		end
 	end
-	if session.TargetedPlayer and session.TargetedPlayer.Parent == Players then
+	-- The kill marker below is a one-frame flash owned by instantKill. A player
+	-- an entity is genuinely hunting holds the same attribute through the
+	-- reference count, so releasing the marker must not take theirs with it.
+	if session.TargetedPlayer and session.TargetedPlayer.Parent == Players
+		and not session.ChaseMarks[session.TargetedPlayer] then
 		session.TargetedPlayer:SetAttribute("Level2_PoolFoamTargeted", nil)
 	end
 	session.TargetedPlayer = nil
@@ -514,7 +571,8 @@ end
 
 local function setTargeted(session, player)
 	if session.TargetedPlayer == player then return end
-	if session.TargetedPlayer and session.TargetedPlayer.Parent == Players then
+	if session.TargetedPlayer and session.TargetedPlayer.Parent == Players
+		and not session.ChaseMarks[session.TargetedPlayer] then
 		session.TargetedPlayer:SetAttribute("Level2_PoolFoamTargeted", nil)
 	end
 	session.TargetedPlayer = player
@@ -523,9 +581,15 @@ end
 
 local function setChaseTarget(entity, player)
 	if entity.ChaseTarget == player then return end
+	local previous = entity.ChaseTarget
 	entity.ChaseTarget = player
 	setModelAttribute(entity.Model, "Level2_PoolFoamChaseTargetUserId",
 		player and player.Parent == Players and player.UserId or 0)
+	-- An entity only ever holds a chase target while it is actually chasing
+	-- (every caller either just latched ChaseTriggered or is clearing), so this
+	-- transition IS the acquire/release of the player's hunted marks.
+	markChased(entity.Session, previous, -1)
+	markChased(entity.Session, player, 1)
 end
 
 local function resetThreatState(entity)
@@ -556,6 +620,18 @@ local function entityLineOfSight(session, entity, character, targetPosition)
 	return result == nil or result.Instance:IsDescendantOf(character)
 end
 
+-- The loudest recent sound this entity can hear, or nil. NoiseRegistry.GetBest
+-- already ranks by loudness over distance AND scales the audible range by
+-- loudness, so one call answers both "is anything audible from here" and "which
+-- of them is worth walking to". Entries older than the registry's decay are
+-- dropped by the Prune in updateSession, so this is always recent.
+local function heardNoise(session, entity)
+	local hearing = session.Configuration.Hearing or {}
+	if hearing.Enabled == false then return nil end
+	return NoiseRegistry.GetBest(entity.Navigator:GetPosition(),
+		numberOr(hearing.HearingRange, 120, 0, 600))
+end
+
 local function bestTarget(session, entity, now)
 	-- A direct observer owns the chase until that player is no longer eligible or
 	-- the navigator proves them temporarily unreachable. This avoids multiplayer
@@ -568,14 +644,31 @@ local function bestTarget(session, entity, now)
 		if preferredRoot and now >= blockedUntil
 			and (session.Pumps >= 1 or positionInKids(session, preferredRoot.Position))
 		then
+			-- A locked chase is not a hearing decision, and this branch runs for
+			-- most of a chase. Without this write the readback below would keep
+			-- reporting the last full evaluation's answer — usually a stale
+			-- `true` — for as long as the chase lasts.
+			setModelAttribute(entity.Model, "Level2_PoolFoamHeardTarget", false)
 			return preferredPlayer, preferredRoot,
 				(preferredRoot.Position - entity.Navigator:GetPosition()).Magnitude
 		end
 		setChaseTarget(entity, nil)
 	end
 
-	local bestPlayer, bestRoot, bestDistance
-	bestDistance = math.huge
+	-- Hearing STEERS, distance decides. A player standing where a recent noise
+	-- came from counts as nearer than they are, so a sprinter or someone at a
+	-- running pump is chosen over a closer, silent teammate. The true distance
+	-- is what leaves this function, so stopping and killing are unaffected — and
+	-- because the whole choice is remade on every think tick, a noise can never
+	-- pin the entity to one player.
+	local hearing = session.Configuration.Hearing or {}
+	local noise = heardNoise(session, entity)
+	local noiseWeight = numberOr(hearing.NoiseWeight, 0.55, 0.05, 1)
+	local attribution = numberOr(hearing.AttributionRadius, 35, 0, 300)
+	local heardBest = false
+
+	local bestPlayer, bestRoot, bestDistance, bestScore
+	bestDistance, bestScore = math.huge, math.huge
 	for _, player in ipairs(Players:GetPlayers()) do
 		local root = livingPlayer(session, player)
 		-- The opening statue trick is confined to the Kids Area. Once a pump is
@@ -585,11 +678,15 @@ local function bestTarget(session, entity, now)
 		if root and now >= blockedUntil
 			and (session.Pumps >= 1 or positionInKids(session, root.Position)) then
 			local distance = (root.Position - entity.Navigator:GetPosition()).Magnitude
-			if distance < bestDistance then
-				bestPlayer, bestRoot, bestDistance = player, root, distance
+			local heard = noise ~= nil and (root.Position - noise.pos).Magnitude <= attribution
+			local score = heard and distance * noiseWeight or distance
+			if score < bestScore then
+				bestPlayer, bestRoot, bestDistance, bestScore = player, root, distance, score
+				heardBest = heard
 			end
 		end
 	end
+	setModelAttribute(entity.Model, "Level2_PoolFoamHeardTarget", heardBest)
 	if entity.ChaseTriggered and bestPlayer then setChaseTarget(entity, bestPlayer) end
 	return bestPlayer, bestRoot, bestDistance
 end
@@ -747,6 +844,28 @@ end
 
 local function choosePatrolPosition(session, entity)
 	local current = entity.Navigator:GetPosition()
+	-- Investigate before wandering. A pump motor is a noise with nobody standing
+	-- at it, and every player can be an invalid target at once (all of them on
+	-- the unreachable cooldown, or outside the Kids Area before the first pump),
+	-- so walking toward what it heard is strictly better than a random node.
+	--
+	-- Walk to the nearest PATROL NODE, never to the raw heard position: that is a
+	-- player root or a pump model's pivot, and a pump pivot commonly sits inside
+	-- the pump body where no path can solve. SetGoal accepts it either way (the
+	-- navigator is built without AllowedHallIndices, so _positionAllowed is
+	-- unconditional), so an unreachable goal fails silently — and because the
+	-- pump re-announces every 2 s the stuck-repath below would hand back the same
+	-- dead point for the whole motor run. session.Nodes are the only positions
+	-- this encounter knows are standable and inside an allowed hall.
+	local noise = heardNoise(session, entity)
+	if noise then
+		local nearest, nearestDistance = nil, math.huge
+		for _, node in ipairs(session.Nodes) do
+			local distance = (node.Position - noise.pos).Magnitude
+			if distance < nearestDistance then nearest, nearestDistance = node.Position, distance end
+		end
+		if nearest and (nearest - current).Magnitude > 7 then return nearest end
+	end
 	local candidates = {}
 	local localCandidates = {}
 	local _, currentHallIndex = entity.Navigator:FindHall(current)
@@ -1006,6 +1125,11 @@ local function updateSession(session, deltaTime)
 	if not session.RoundStartedAt then session.RoundStartedAt = now end
 	session.Pumps = math.max(0, math.floor(tonumber(workspace:GetAttribute("Level2Pumps")) or 0))
 	setPhase(session, desiredPhase(session, now), now)
+	-- Age the shared noise list once per tick, exactly as Level 1's EntityAI
+	-- does. Without this nothing ever drops out of it and every sound is "recent"
+	-- forever. Level 1's own scripts are disabled for the whole of a Level 2
+	-- round, so this session is the only pruner while it is running.
+	NoiseRegistry.Prune()
 
 	session.ObservationAccumulator += deltaTime
 	local observationInterval = numberOr((session.Configuration.Movement or {}).UpdateInterval, 0.1, 0.05, 0.5)
@@ -1018,6 +1142,52 @@ local function updateSession(session, deltaTime)
 	if now >= session.NextTemplateRefreshAt then
 		session.NextTemplateRefreshAt = now + 3
 		for _, entity in ipairs(session.Entities) do refreshTemplate(session, entity) end
+	end
+end
+
+-- Level 1's EntityAI owns Remotes.ReportNoise during a Level 1 round, and the
+-- Round Adapter disables it for the whole of Level 2 (isolateLevelOneRuntime),
+-- so nothing was draining the remote here: the client reports were arriving with
+-- no listener.
+--
+-- Connected at MODULE scope, once, for exactly the reason EntityAI documents at
+-- its own intake: a RemoteEvent every client fires at 5 Hz with ZERO
+-- OnServerEvent connections piles the invocations up until Roblox drops them
+-- with "invocation queue exhausted" in the log. Controller.Start returns early
+-- on a dozen paths — Configuration.Enabled = false, the dev toggle, every
+-- manifest/proxy/navigator/observer error — and a session-scoped connection
+-- would leave a whole round undrained on any of them.
+--
+-- Validation matches EntityAI's: the client says which STATE it is in and the
+-- server decides the position, the loudness and whether it is plausible.
+do
+	local remotes = ReplicatedStorage:FindFirstChild("Remotes")
+	local report = remotes and remotes:FindFirstChild("ReportNoise")
+	if not (report and report:IsA("RemoteEvent")) then
+		warn("[Pool Foam] Remotes.ReportNoise is missing; player noise is not heard")
+	else
+		local lastReport = {}
+		report.OnServerEvent:Connect(function(player, stateName)
+			-- With no live session (any other level, or Pool Foam disabled) the
+			-- queue is still drained; it is simply heard by nobody.
+			local session = activeSession
+			if not session or not sessionAlive(session) then return end
+			if (session.Configuration.Hearing or {}).Enabled == false then return end
+			if type(stateName) ~= "string" or not CLIENT_NOISE[stateName] then return end
+			local now = os.clock()
+			if lastReport[player] and now - lastReport[player] < 0.15 then return end
+			lastReport[player] = now
+			local root = livingPlayer(session, player)
+			if not root then return end
+			local speed = Vector3.new(root.AssemblyLinearVelocity.X, 0,
+				root.AssemblyLinearVelocity.Z).Magnitude
+			if speed < 2 then return end
+			if stateName == "sprint" and speed < 12 then return end
+			NoiseRegistry.Add(root.Position, stateName)
+		end)
+		Players.PlayerRemoving:Connect(function(player)
+			lastReport[player] = nil
+		end)
 	end
 end
 
@@ -1116,6 +1286,8 @@ function Controller.Start(manifest, generation)
 		ObservationAccumulator = 1,
 		EventSerial = 0,
 		TargetedPlayer = nil,
+		-- player -> how many entities are currently hunting them (see markChased)
+		ChaseMarks = {},
 	}
 	activeSession = session
 
@@ -1145,6 +1317,7 @@ function Controller.Start(manifest, generation)
 	end))
 	table.insert(session.Connections, Players.PlayerRemoving:Connect(function(player)
 		if session.TargetedPlayer == player then session.TargetedPlayer = nil end
+		session.ChaseMarks[player] = nil
 	end))
 	fireClientEvent(session, "Started", {Duration = 0, EntityCount = #session.Entities})
 	return session
@@ -1163,7 +1336,18 @@ function Controller.Stop()
 		if player:GetAttribute("Level2_PoolFoamTargeted") ~= nil then
 			player:SetAttribute("Level2_PoolFoamTargeted", nil)
 		end
+		-- A hunted player must never carry the mark out of the round: it is worth
+		-- triple stamina in NoiseReporter and a permanent camera shake in
+		-- EntityShakeController.
+		if player:GetAttribute("BeingChased") == true then
+			player:SetAttribute("BeingChased", false)
+		end
 	end
+	table.clear(session.ChaseMarks)
+	-- The registry is global and this round's footsteps and pump motors must not
+	-- be audible in the next one. Only a Level 2 round reaches this function, and
+	-- no other level's round is live while it does.
+	if NoiseRegistry.Clear then NoiseRegistry.Clear() end
 	for _, connection in ipairs(session.Connections) do connection:Disconnect() end
 	for _, entity in ipairs(session.Entities) do
 		if entity.Navigator then entity.Navigator:Destroy() end

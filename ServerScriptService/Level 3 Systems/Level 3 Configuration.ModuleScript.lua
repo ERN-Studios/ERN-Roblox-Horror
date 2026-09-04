@@ -332,6 +332,41 @@ local Configuration = {
 		SightOccluderSize = Vector3.new(11.1, 3.35, 4.3),
 		ExitOffsetZ = 5.8,
 		ExitVerticalOffset = 1.0,
+		-- Two players share one table. Slot 1 sits on the anchor's -X side and
+		-- slot 2 on +X, so both bodies, both camera points and both exit lanes
+		-- stay inside the 8.6-stud hide volume without overlapping.
+		HideOccupantCap = 2,
+		HideOccupantLateralOffset = 2.0,
+	},
+	-- LEVEL3_MANAGER_TABLE_CHECK_20260904
+	-- The Mall Manager kneels at an occupied hiding table during a hunt, warns
+	-- whoever is under it, then flushes them out. Hiding stays a real tactic:
+	-- the sweep bias is a chance rather than omniscience, checks are rate-limited
+	-- both globally and per table, and a flush is a head start, not a kill.
+	TableCheck = {
+		-- Chance that a fresh sweep leg aims at an occupied table instead of a
+		-- random room. 1 would make the Manager omniscient.
+		SweepBiasChance = 0.5,
+		-- Floor between two table checks anywhere in the mall.
+		GlobalIntervalSeconds = 18,
+		-- Floor before the SAME table may be checked again.
+		AnchorCooldownSeconds = 25,
+		-- How close the Manager must get to the anchor before the check starts.
+		-- Measured to the anchor CENTRE, and the table's own navigation envelope
+		-- plus the 5.25-stud body sweep already hold the Manager 9-12 studs off
+		-- it, so anything much tighter than this simply never fires.
+		StartRange = 14,
+		-- The warning window. Leaving on your own during it is allowed and safe.
+		ReactionWindowSeconds = 2.0,
+		-- Head start handed to everyone a flush ejects: attacks refuse them for
+		-- this long, so being found under a table is never an instant kill.
+		FlushImmunitySeconds = 1.5,
+		-- Cue played at the table when the check starts. This names a key of
+		-- Configuration.Audio above; no new asset ids are introduced here.
+		SoundName = "MallManagerBlackout",
+		SoundVolume = 0.8,
+		SoundRollOffMinDistance = 12,
+		SoundRollOffMaxDistance = 90,
 	},
 	Colors = {
 		AgedWhite = Color3.fromRGB(218, 211, 184),
@@ -402,6 +437,7 @@ table.freeze(Configuration.MallManager.Normal)
 table.freeze(Configuration.MallManager.Blackout)
 table.freeze(Configuration.MallManager)
 table.freeze(Configuration.Hiding)
+table.freeze(Configuration.TableCheck)
 table.freeze(Configuration.Colors)
 for _, room in ipairs(Configuration.Rooms) do table.freeze(room) end
 for _, link in ipairs(Configuration.Links) do table.freeze(link) end

@@ -31,10 +31,17 @@ local function resolveTuning()
 end
 
 local Tuning = resolveTuning()
+-- Table-check tuning is deliberately NOT master-overlaid: it is a fairness
+-- contract (warning window, immunity, cooldowns), not a difficulty dial.
+local TableCheckTuning = Configuration.TableCheck
 
 local Controller = {}
 local activeSession: any = nil
 local activeLayout: any = nil
+-- Studio probes only (DebugSetTableChecksEnabled). Module-level rather than
+-- per-session so a probe can suspend checks BEFORE the hunt spawns its Manager,
+-- and so Controller.Start does not silently undo the probe's own setup.
+local debugTableChecksSuspended = false
 local playChaseScream: (any) -> ()
 local stopChaseScream: (any) -> ()
 -- Forward declaration: corridor waypoint revalidation needs the shared
@@ -261,6 +268,19 @@ local function publishProfile(session: any)
 		session.Model:SetAttribute("Level3_MallManagerAwarenessRange", activeProfile.VisionRange)
 		session.Model:SetAttribute("Level3_MallManagerSpeed", currentSpeed(session))
 	end
+end
+
+-- LEVEL3_MANAGER_TABLE_CHECK_20260904
+-- What the clients need to render a table check: which hiding table the Manager
+-- is kneeling at (its Level3_HideTableIndex, 0 for none) and when the reaction
+-- window closes, in workspace:GetServerTimeNow() terms so a client can compare
+-- it directly. Nothing is written onto the anchor itself -- hide anchors are
+-- Level3_PermanentFurniture and the furniture audit reads new attributes on
+-- them as tampering.
+local function publishTableCheck(session: any, anchor: BasePart?, endsAtServerTime: number)
+	local index = if anchor then (tonumber(anchor:GetAttribute("Level3_HideTableIndex")) or 0) else 0
+	session.StateFolder:SetAttribute("Level3_MallManagerTableCheckIndex", index)
+	session.StateFolder:SetAttribute("Level3_MallManagerTableCheckEndsAt", endsAtServerTime)
 end
 
 local function clearPath(session: any, status: string?)
@@ -1603,7 +1623,62 @@ local function blackoutSweepLegDuration(distance: number): number
 			+ Tuning.BlackoutSweepSlackSeconds)
 end
 
+-- Which occupied table, if any, this sweep leg should aim at. Three independent
+-- gates keep the Manager from being omniscient: table checks can be off, the
+-- global interval has to have elapsed, and the bias only wins a coin flip
+-- (TableCheck.SweepBiasChance). A table on per-anchor cooldown is never a
+-- candidate, so the same hiding place is not farmed.
+local function chooseTableCheckAnchor(session: any, now: number): BasePart?
+	if debugTableChecksSuspended then return nil end
+	-- Nothing may be aimed at before the spawn grace has elapsed; the Manager is
+	-- still being revealed, and Controller.Start seeds a route on that frame.
+	if now < session.ActivatedAt then return nil end
+	if now < session.NextTableCheckAt then return nil end
+	local candidates = {}
+	for _, anchor in ipairs(HidingController.GetOccupiedAnchors(session.Generation)) do
+		if now >= (session.AnchorCheckCooldown[anchor] or 0) then
+			table.insert(candidates, anchor)
+		end
+	end
+	-- The coin flip is drawn only when there is something to bias toward, so a
+	-- round where nobody hides consumes exactly the RNG stream it always did.
+	if #candidates == 0 then return nil end
+	if session.Random:NextNumber() > TableCheckTuning.SweepBiasChance then return nil end
+	return candidates[session.Random:NextInteger(1, #candidates)]
+end
+
+-- A leg aimed at a table that never arrived still costs that table its cooldown.
+-- Only beginTableCheck clears TargetAnchor on success, so a TargetAnchor still
+-- set when the next goal is chosen means the last attempt was abandoned -- the
+-- leg timed out, or the chase reclaimed the Manager. Without charging it here,
+-- the very next draw can pick the same unreachable anchor (the global interval
+-- is only consumed by an actual check), and the sweep ping-pongs at one table
+-- instead of covering the mall. Charged BEFORE the next draw, so that draw
+-- filters it out; charging at selection time would make updateTableCheck reject
+-- the anchor it had just chosen.
+local function abandonTableCheckTarget(session: any, now: number)
+	local anchor = session.TableCheckTargetAnchor
+	if not anchor then return end
+	session.TableCheckTargetAnchor = nil
+	session.AnchorCheckCooldown[anchor] = now + TableCheckTuning.AnchorCooldownSeconds
+end
+
 local function choosePatrolGoal(session: any, now: number)
+	abandonTableCheckTarget(session, now)
+	local checkAnchor = chooseTableCheckAnchor(session, now)
+	if checkAnchor then
+		-- Same sweep-leg bookkeeping as an ordinary room goal, so the distance
+		-- and leg-timeout escapes below still rescue a table the Manager cannot
+		-- actually reach.
+		session.TableCheckTargetAnchor = checkAnchor
+		session.PatrolGoal = flat(checkAnchor.Position, session.FloorY)
+		session.PatrolWaitUntil = nil
+		session.PatrolLegUntil = now + blackoutSweepLegDuration(
+			planarDistance(session.Root.Position, session.PatrolGoal))
+		setGoal(session, session.PatrolGoal, true)
+		publishState(session, "PATROL")
+		return
+	end
 	local candidates = {}
 	for _, room in ipairs(layoutRooms()) do
 		if room.Id ~= "Arrival" and room.Id ~= "Exit" then
@@ -1657,6 +1732,53 @@ local function nearestExposedPlayer(session: any): (Player?, BasePart?)
 	return selected, selectedRoot
 end
 
+-- LEVEL3_MANAGER_TABLE_CHECK_20260904
+-- The hunt is co-extensive with the blackout, and the blackout branch of the
+-- brain returns before the whole patrol half, so choosePatrolGoal's sweep bias
+-- only ever runs in a round where EVERY living player is hidden. One teammate
+-- still out running would otherwise make hiding perfectly safe for everyone
+-- else -- the feature would be inert in exactly the case it exists for. This is
+-- the same leg, taken mid-hunt.
+--
+-- It is only ever taken toward a table that is CLOSER than the nearest exposed
+-- player, so the Manager never turns away from a chase it is about to win, and
+-- the detour is dropped the moment that stops being true. Note the coin flip in
+-- chooseTableCheckAnchor only staggers the start here (a failed draw is retried
+-- on the next think tick); the rate limits that make hiding a real tactic are
+-- TableCheck.GlobalIntervalSeconds and the per-anchor cooldown.
+local function tableCheckDetour(session: any, now: number, exposedDistance: number): boolean
+	local anchor = session.TableCheckTargetAnchor
+	if anchor then
+		if anchor.Parent
+			and HidingController.OccupantCount(anchor) > 0
+			and (session.PatrolLegUntil == nil or now < session.PatrolLegUntil)
+			and planarDistance(session.Root.Position, anchor.Position) < exposedDistance then
+			-- Steering already owns the goal; only the state has to be held.
+			publishState(session, "PATROL")
+			return true
+		end
+		abandonTableCheckTarget(session, now)
+		session.PatrolGoal = nil
+		return false
+	end
+	if session.Attacking then return false end
+	anchor = chooseTableCheckAnchor(session, now)
+	if not anchor
+		or planarDistance(session.Root.Position, anchor.Position) >= exposedDistance then
+		return false
+	end
+	session.TableCheckTargetAnchor = anchor
+	session.PatrolGoal = flat(anchor.Position, session.FloorY)
+	session.PatrolWaitUntil = nil
+	session.PatrolLegUntil = now + blackoutSweepLegDuration(
+		planarDistance(session.Root.Position, session.PatrolGoal))
+	publishTarget(session, nil)
+	setGoal(session, session.PatrolGoal, true)
+	publishState(session, "PATROL")
+	publishTargetTelemetry(session, "TABLE_CHECK_DETOUR", exposedDistance, session.PatrolGoal)
+	return true
+end
+
 local function trackNearestBlackoutPlayer(session: any, now: number): boolean
 	local nearestPlayer, nearestRoot = nearestExposedPlayer(session)
 	if not nearestPlayer or not nearestRoot then
@@ -1699,6 +1821,12 @@ local function trackNearestBlackoutPlayer(session: any, now: number): boolean
 		return false
 	end
 
+	local exposedDistance = planarDistance(session.Root.Position, nearestRoot.Position)
+	-- Somebody is still out there, but a table with people under it is nearer:
+	-- take the check on the way. Re-evaluated every think tick, so the chase
+	-- reclaims the Manager as soon as the runner is the closer of the two.
+	if tableCheckDetour(session, now, exposedDistance) then return false end
+
 	local switchedTarget = session.Target ~= nearestPlayer
 	if switchedTarget and session.Attacking then
 		-- A nearer player owns the chase immediately. Cancel the old windup so the
@@ -1727,8 +1855,7 @@ local function trackNearestBlackoutPlayer(session: any, now: number): boolean
 	session.AlertUntil = 0
 	setGoal(session, targetPosition, switchedTarget)
 
-	local distance = planarDistance(session.Root.Position, nearestRoot.Position)
-	publishTargetTelemetry(session, "NEAREST_PLAYER", distance, targetPosition)
+	publishTargetTelemetry(session, "NEAREST_PLAYER", exposedDistance, targetPosition)
 	if not session.Attacking then publishState(session, "CHASE") end
 	return true
 end
@@ -1931,8 +2058,98 @@ local function facePosition(session: any, position: Vector3)
 	session.Root.CFrame = CFrame.lookAt(current, current + session.Heading)
 end
 
+local function endTableCheck(session: any, flush: boolean)
+	local anchor = session.TableCheckAnchor
+	session.TableCheckAnchor = nil
+	session.TableCheckEndsAt = 0
+	if session.TableCheckSound then
+		session.TableCheckSound:Destroy()
+		session.TableCheckSound = nil
+	end
+	publishTableCheck(session, nil, 0)
+	if not anchor then return end
+	session.AnchorCheckCooldown[anchor] = os.clock() + TableCheckTuning.AnchorCooldownSeconds
+	if flush and anchor.Parent then
+		-- Everyone still under the table comes out on the far side, with the
+		-- immunity the Hiding Controller grants them. Leaving during the window
+		-- was the safe option; this is the consequence of not taking it.
+		HidingController.FlushAnchor(anchor, session.Root.Position)
+	end
+end
+
+local function beginTableCheck(session: any, anchor: BasePart, now: number)
+	session.TableCheckAnchor = anchor
+	-- The reaction window is the one clock a player is SHOWN -- the client counts
+	-- its banner down against this exact number -- and os.clock is CPU time in the
+	-- server datamodel, materially behind the wall clock. Measuring the window on
+	-- os.clock while publishing a server-time deadline would show a 2.0 s promise
+	-- and enforce something else. The internal rate limits stay on os.clock, like
+	-- every other cooldown in this file: nobody is shown those.
+	session.TableCheckEndsAt = workspace:GetServerTimeNow()
+		+ TableCheckTuning.ReactionWindowSeconds
+	session.NextTableCheckAt = now + TableCheckTuning.GlobalIntervalSeconds
+	session.TableCheckTargetAnchor = nil
+	clearGoal(session)
+	facePosition(session, anchor.Position)
+	-- currentSpeed() returns 0 for TABLE_CHECK, so updateMovement holds the rig
+	-- still and stops the walk cycle for the whole window. That stationary beat
+	-- IS the crouch; the client smoother has no animation hook to drive.
+	publishState(session, "TABLE_CHECK")
+	publishTableCheck(session, anchor, session.TableCheckEndsAt)
+	local soundId = Configuration.Audio[TableCheckTuning.SoundName]
+	if type(soundId) == "string" and soundId ~= "" then
+		local cue = Instance.new("Sound")
+		cue.Name = "Level3MallManagerTableCheck"
+		cue.SoundId = soundId
+		cue.Volume = TableCheckTuning.SoundVolume
+		cue.Looped = false
+		cue.RollOffMode = Enum.RollOffMode.InverseTapered
+		cue.RollOffMinDistance = TableCheckTuning.SoundRollOffMinDistance
+		cue.RollOffMaxDistance = TableCheckTuning.SoundRollOffMaxDistance
+		cue.Parent = anchor
+		cue:Play()
+		session.TableCheckSound = cue
+	end
+end
+
+-- Returns true while a check owns the Manager: the brain, the attack test and
+-- ordinary steering all stand down for the reaction window.
+local function updateTableCheck(session: any, now: number): boolean
+	if session.TableCheckAnchor then
+		if not validRound(session) or not session.TableCheckAnchor.Parent then
+			endTableCheck(session, false)
+			return false
+		end
+		-- Server time: TableCheckEndsAt is the value the occupants' banner counts
+		-- down against, so the flush lands when the warning says it will.
+		if workspace:GetServerTimeNow() < session.TableCheckEndsAt then return true end
+		endTableCheck(session, true)
+		return false
+	end
+	if debugTableChecksSuspended or not validRound(session) then return false end
+	if now < session.ActivatedAt then return false end
+	-- Only a sweep may turn into a check. A chase or an attack is never
+	-- interrupted by a table the Manager happens to walk past.
+	if session.State ~= "PATROL" and session.State ~= "PATROL_LISTEN" then return false end
+	local anchor = session.TableCheckTargetAnchor
+	if not anchor or not anchor.Parent
+		or HidingController.OccupantCount(anchor) <= 0
+		or now < (session.AnchorCheckCooldown[anchor] or 0) then
+		session.TableCheckTargetAnchor = nil
+		return false
+	end
+	if planarDistance(session.Root.Position, anchor.Position) > TableCheckTuning.StartRange then
+		return false
+	end
+	beginTableCheck(session, anchor, now)
+	return true
+end
+
 local function attackLineClear(session: any, player: Player, maximumRange: number): (boolean, Humanoid?)
 	if HidingController.IsHidden(player, session.Generation) then return false, nil end
+	-- A flushed player gets a head start, never an instant kill: the Manager can
+	-- chase and be right on top of them, but the attack itself is refused.
+	if HidingController.IsFlushImmune(player) then return false, nil end
 	local character, humanoid, root = livingPlayer(player, session)
 	if not character or not humanoid or not root then return false, nil end
 	if planarDistance(session.Root.Position, root.Position) > maximumRange
@@ -2641,6 +2858,8 @@ local function resetPublishedState()
 	state:SetAttribute("Level3_MallManagerChaseScreamPlaying", false)
 	state:SetAttribute("Level3_MallManagerLastChaseScreamAtServerTime", 0)
 	state:SetAttribute("Level3_MallManagerLastChaseScreamName", "")
+	state:SetAttribute("Level3_MallManagerTableCheckIndex", 0)
+	state:SetAttribute("Level3_MallManagerTableCheckEndsAt", 0)
 	workspace:SetAttribute("Level3MallManagerActive", false)
 	workspace:SetAttribute("Level3MallManagerState", "OFF")
 	workspace:SetAttribute("Level3MallManagerBlackoutBoosted", false)
@@ -2664,6 +2883,16 @@ function Controller.Stop()
 		end
 		stopChaseScream(session)
 		stopWalkForCleanup(session)
+		-- An in-flight table check dies with the round: no flush, no lingering
+		-- cue at a table that is about to be destroyed.
+		if session.TableCheckSound then
+			session.TableCheckSound:Destroy()
+			session.TableCheckSound = nil
+		end
+		session.TableCheckAnchor = nil
+		session.TableCheckTargetAnchor = nil
+		session.TableCheckEndsAt = 0
+		if session.AnchorCheckCooldown then table.clear(session.AnchorCheckCooldown) end
 		if session.Model and session.Model.Parent then
 			CollectionService:RemoveTag(session.Model, "Level3HostileEntity")
 			session.Model:Destroy()
@@ -3126,6 +3355,16 @@ function Controller.Start(manifest: any, generation: number)
 		AttackToken = 0,
 		AttackCooldownUntil = 0,
 		AttackSerial = 0,
+		-- Table check (LEVEL3_MANAGER_TABLE_CHECK_20260904). TargetAnchor is the
+		-- table this sweep leg is aimed at; Anchor is the one being checked right
+		-- now. Both are cleared by Controller.Stop, along with the cue and the
+		-- replicated state, so nothing survives a round.
+		TableCheckAnchor = nil,
+		TableCheckTargetAnchor = nil,
+		TableCheckEndsAt = 0,
+		TableCheckSound = nil,
+		NextTableCheckAt = 0,
+		AnchorCheckCooldown = {},
 		WorldNoise = nil,
 		MotionRemote = motionRemote,
 		MotionSequence = 0,
@@ -3251,6 +3490,15 @@ function Controller.Start(manifest: any, generation: number)
 		if not liveSession(session) then return end
 		local now = os.clock()
 		refreshNavigationFilters(session)
+		if updateTableCheck(session, now) then
+			-- Kneeling at a table. Speed is 0 for TABLE_CHECK so updateMovement
+			-- holds position and parks the walk cycle; perception and attacks are
+			-- skipped entirely for the reaction window.
+			updateMovement(session, dt, now)
+			publishMotion(session, dt, false)
+			updateFootsteps(session)
+			return
+		end
 		session.ThinkAccumulator += dt
 		local thinkInterval = if session.Blackout
 			then Tuning.BlackoutThinkIntervalSeconds else Tuning.ThinkIntervalSeconds
@@ -3323,6 +3571,14 @@ function Controller.GetSnapshot()
 		SpawnCycle = session.SpawnCycle,
 		Attacking = session.Attacking,
 		AttackSerial = session.AttackSerial,
+		TableCheckActive = session.TableCheckAnchor ~= nil,
+		TableCheckIndex = if session.TableCheckAnchor
+			then (tonumber(session.TableCheckAnchor:GetAttribute("Level3_HideTableIndex")) or 0)
+			else 0,
+		TableCheckTargetIndex = if session.TableCheckTargetAnchor
+			then (tonumber(session.TableCheckTargetAnchor:GetAttribute("Level3_HideTableIndex")) or 0)
+			else 0,
+		TableChecksSuspended = debugTableChecksSuspended,
 		WalkMoving = session.WalkMoving,
 		WalkPoseHeld = session.WalkPoseHeld,
 		WalkPlaybackSpeed = session.WalkPlaybackSpeed,
@@ -3497,6 +3753,21 @@ function Controller.DebugSetMovementPaused(paused: boolean)
 		session.CurrentMoveSpeed = 0
 		session.LastActualStepDistance = 0
 		setWalk(session, false, 0)
+	end
+	return Controller.GetSnapshot()
+end
+
+-- Studio-only. Probes that park a player under a table to observe something
+-- ELSE (furniture permanence, the all-hidden sweep) would otherwise have that
+-- player found and flushed mid-assertion. Suspending checks ends any in flight
+-- without flushing; re-enabling restores production behaviour.
+function Controller.DebugSetTableChecksEnabled(enabled: boolean)
+	assert(RunService:IsStudio(), "DebugSetTableChecksEnabled is Studio-only")
+	debugTableChecksSuspended = enabled ~= true
+	local session = activeSession
+	if debugTableChecksSuspended and session and session.Active == true then
+		if session.TableCheckAnchor then endTableCheck(session, false) end
+		session.TableCheckTargetAnchor = nil
 	end
 	return Controller.GetSnapshot()
 end

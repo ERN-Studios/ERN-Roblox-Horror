@@ -333,6 +333,36 @@ touchFlashButton.Parent = batBody
 -- what the player sees and reaches for. The registration itself lives in
 -- applyFlashlightLayout, which is where the form factor is already known.
 
+-- C_GAMEPAD_FLASHLIGHT_20260904: a controller had no way to switch the light on
+-- at all. The hit target above is gated on UIDevice.IsTouch and the only other
+-- control was the F key, so a gamepad-only player walked the whole level in the
+-- dark. ButtonR1 toggles it (see the InputBegan handler), and this is the
+-- caption that says so. The binding text comes from UIDevice, which prints the
+-- gamepad glyph only on a pointer device where a gamepad is the LIVE input and
+-- nothing at all on a touchscreen -- so desktop and phone are unchanged.
+local bindingCaption = Instance.new("TextLabel")
+bindingCaption.Name = "FlashlightBinding"
+bindingCaption.AnchorPoint = Vector2.new(0.5, 1)
+bindingCaption.Position = UDim2.new(0.5, 0, 0, -2)
+bindingCaption.Size = UDim2.fromOffset(72, 16)
+bindingCaption.BackgroundTransparency = 1
+bindingCaption.Font = Enum.Font.Code
+bindingCaption.TextSize = 14
+bindingCaption.TextColor3 = Color3.fromRGB(235, 236, 240)
+bindingCaption.TextStrokeColor3 = Color3.new(0, 0, 0)
+bindingCaption.TextStrokeTransparency = 0.4
+bindingCaption.Text = ""
+bindingCaption.Visible = false
+bindingCaption.ZIndex = 21
+bindingCaption.Parent = batBody
+
+local function applyFlashlightBinding()
+	local text = UIDevice.Binding(nil, "[RB]")
+	bindingCaption.Text = text
+	bindingCaption.Visible = text ~= ""
+end
+applyFlashlightBinding()
+
 -- Keep the production shade itself in the availability predicate. The shared
 -- QueueModalOpen attribute remains the fallback contract, but its listener and
 -- the shade listener have no guaranteed ordering; relying on the attribute
@@ -391,6 +421,9 @@ applyFlashlightLayout()
 UIDevice.Changed:Connect(function()
 	applyFlashlightTouchTarget()
 	applyFlashlightLayout()
+	-- UIDevice fires this on LastInputTypeChanged too, which is exactly when a
+	-- player picks up or puts down the controller.
+	applyFlashlightBinding()
 end)
 
 local torch = Instance.new("Frame")
@@ -575,7 +608,12 @@ end)
 
 UIS.InputBegan:Connect(function(input, processed)
 	if processed then return end
-	if input.KeyCode == Enum.KeyCode.F then toggle() end
+	-- Same handler for both: ButtonR1 is the gamepad's F. `toggle` already
+	-- carries every guard (suppressed, out of round, dead, flat battery), so the
+	-- controller cannot reach a state the keyboard cannot.
+	if input.KeyCode == Enum.KeyCode.F or input.KeyCode == Enum.KeyCode.ButtonR1 then
+		toggle()
+	end
 end)
 
 -- on (re)spawn: light off, battery back to FULL (so it refills each round reset),

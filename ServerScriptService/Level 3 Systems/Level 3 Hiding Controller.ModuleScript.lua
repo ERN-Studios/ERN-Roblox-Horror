@@ -9,9 +9,19 @@ local RunService = game:GetService("RunService")
 
 local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
 local Tuning = Configuration.Hiding
+local TableCheckTuning = Configuration.TableCheck
 
 local Controller = {}
 local activeSession: any = nil
+
+-- Slot 1 sits on the anchor's -X side, slot 2 on +X, both inside the 8.6-stud
+-- hide volume. Body pose, camera point and exit lane all use the same number so
+-- two occupants never share a spot.
+-- ponytail: two lanes hard-coded, matching HideOccupantCap = 2. A larger cap
+-- needs a real lane layout here, not another sign flip.
+local function slotLateral(slot: number): number
+	return (if slot % 2 == 1 then -1 else 1) * Tuning.HideOccupantLateralOffset
+end
 
 local function disconnect(connection: RBXScriptConnection?)
 	if connection and connection.Connected then connection:Disconnect() end
@@ -68,13 +78,22 @@ local function updateHiddenCount(session: any)
 	workspace:SetAttribute("Level3HiddenPlayers", count)
 end
 
+-- Level3_HideOccupiedUserId names the FIRST occupant and stays the only
+-- occupancy attribute on the anchor: hide anchors are Level3_PermanentFurniture
+-- and the furniture audit treats every other attribute on them as identity, so
+-- a second one would read as furniture being tampered with. Anything the
+-- clients need beyond "someone is under there" is published in the state folder.
+local function occupantsOf(session: any, anchor: BasePart): {Player}
+	return session.Occupants[anchor] or {}
+end
+
 local function refreshPrompt(session: any, anchor: BasePart)
 	local prompt = promptFor(anchor)
 	if not prompt then return end
-	local occupied = session.Occupants[anchor] ~= nil
+	local occupants = occupantsOf(session, anchor)
 	anchor:SetAttribute("Level3_HideOccupiedUserId",
-		if occupied then (session.Occupants[anchor] :: Player).UserId else 0)
-	prompt.Enabled = roundAllowsHiding(session) and not occupied
+		if #occupants > 0 then (occupants[1] :: Player).UserId else 0)
+	prompt.Enabled = roundAllowsHiding(session) and #occupants < Tuning.HideOccupantCap
 end
 
 local function refreshPrompts(session: any)
@@ -158,7 +177,11 @@ local function releasePlayer(session: any, player: Player, moveOutside: boolean)
 	end
 
 	session.HiddenPlayers[player] = nil
-	if session.Occupants[record.Anchor] == player then session.Occupants[record.Anchor] = nil end
+	local occupants = session.Occupants[record.Anchor]
+	if occupants then
+		local index = table.find(occupants, player)
+		if index then table.remove(occupants, index) end
+	end
 	if player.Parent == Players then
 		player:SetAttribute("Level3_Hiding", false)
 		player:SetAttribute("Level3_HideTableIndex", 0)
@@ -182,7 +205,9 @@ local function tryEnter(session: any, player: Player, anchor: BasePart): (boolea
 		return false, "INVALID_TABLE"
 	end
 	if session.HiddenPlayers[player] then return false, "ALREADY_HIDDEN" end
-	if session.Occupants[anchor] then return false, "OCCUPIED" end
+	local occupants = session.Occupants[anchor]
+	if not occupants then return false, "INVALID_TABLE" end
+	if #occupants >= Tuning.HideOccupantCap then return false, "OCCUPIED" end
 	local now = os.clock()
 	if now - (session.LastAction[player] or -math.huge) < Tuning.ActionCooldownSeconds then
 		return false, "COOLDOWN"
@@ -193,18 +218,36 @@ local function tryEnter(session: any, player: Player, anchor: BasePart): (boolea
 		return false, "TOO_FAR"
 	end
 
+	-- Lowest free lane, so a released occupant's slot is reused rather than
+	-- leaving a permanent gap under a table that still looks half empty.
+	local usedSlots: {[number]: boolean} = {}
+	for _, occupant in ipairs(occupants) do
+		local occupantRecord = session.HiddenPlayers[occupant]
+		if occupantRecord then usedSlots[occupantRecord.Slot] = true end
+	end
+	local slot: number? = nil
+	for candidate = 1, Tuning.HideOccupantCap do
+		if not usedSlots[candidate] then slot = candidate break end
+	end
+	if not slot then return false, "OCCUPIED" end
+
 	session.LastAction[player] = now
+	local lateral = slotLateral(slot)
 	local localPosition = anchor.CFrame:PointToObjectSpace(root.Position)
 	local exitSide = if localPosition.Z >= 0 then 1 else -1
 	local sideRotation = CFrame.Angles(0, if exitSide > 0 then math.pi else 0, 0)
 	local exitCFrame = anchor.CFrame
-		* CFrame.new(0, Tuning.ExitVerticalOffset, exitSide * Tuning.ExitOffsetZ)
+		* CFrame.new(lateral, Tuning.ExitVerticalOffset, exitSide * Tuning.ExitOffsetZ)
 		* sideRotation
-	local hiddenCFrame = anchor.CFrame * sideRotation
-	local cameraPosition = anchor.CFrame:PointToWorldSpace(Vector3.new(0, -0.45, 0))
+	-- The lateral offset is applied in ANCHOR space, before the facing rotation,
+	-- so slot 1 is always the same physical side of the table no matter which
+	-- way the player crawled in from.
+	local hiddenCFrame = anchor.CFrame * CFrame.new(lateral, 0, 0) * sideRotation
+	local cameraPosition = anchor.CFrame:PointToWorldSpace(Vector3.new(lateral, -0.45, 0))
 	local collisionState = captureCollisionState(character)
 	local record = {
 		Player=player, Character=character, Humanoid=humanoid, Root=root, Anchor=anchor,
+		Slot=slot,
 		Generation=session.Generation, ExitCFrame=exitCFrame, CollisionState=collisionState,
 		AutoRotate=humanoid.AutoRotate, WalkSpeed=humanoid.WalkSpeed,
 		JumpPower=humanoid.JumpPower, JumpHeight=humanoid.JumpHeight,
@@ -212,7 +255,7 @@ local function tryEnter(session: any, player: Player, anchor: BasePart): (boolea
 	}
 	-- Reserve first; no yield occurs between reservation and the replicated state edge.
 	session.HiddenPlayers[player] = record
-	session.Occupants[anchor] = player
+	table.insert(occupants, player)
 	refreshPrompt(session, anchor)
 
 	character:PivotTo(hiddenCFrame)
@@ -342,6 +385,9 @@ function Controller.Start(manifest: any, generation: number)
 		Active=true, Generation=generation, Manifest=manifest, World=manifest.World,
 		FurnitureSuspended=false,
 		Anchors={}, AnchorSet={}, Occupants={}, HiddenPlayers={}, LastAction={}, Connections={},
+		-- Set by FlushAnchor. A flushed player is refused by the Mall Manager's
+		-- attack checks until this clock, so being found is a head start.
+		FlushImmuneUntil={},
 	}
 	activeSession = session
 	for _, anchor in ipairs(manifest.HideTables) do
@@ -352,6 +398,9 @@ function Controller.Start(manifest: any, generation: number)
 		assert(prompt, "Level 3 hide table is missing its prompt")
 		table.insert(session.Anchors, anchor)
 		session.AnchorSet[anchor] = true
+		-- Every valid anchor owns a list from the start, so "no list" means
+		-- "not one of ours" everywhere below instead of "empty".
+		session.Occupants[anchor] = {}
 		table.insert(session.Connections, (prompt :: ProximityPrompt).Triggered:Connect(function(player)
 			tryEnter(session, player, anchor)
 		end))
@@ -376,6 +425,7 @@ function Controller.Start(manifest: any, generation: number)
 	table.insert(session.Connections, Players.PlayerRemoving:Connect(function(player)
 		releasePlayer(session, player, false)
 		session.LastAction[player] = nil
+		session.FlushImmuneUntil[player] = nil
 	end))
 	for _, player in ipairs(Players:GetPlayers()) do bindPlayer(session, player) end
 	refreshPrompts(session)
@@ -383,11 +433,79 @@ function Controller.Start(manifest: any, generation: number)
 	return session
 end
 
+-- How many players are under one anchor right now. 0 also covers "not a live
+-- anchor of the running session", which is what every caller wants.
+function Controller.OccupantCount(anchor: BasePart): number
+	local session = activeSession
+	if not session or not liveSession(session) then return 0 end
+	return #occupantsOf(session, anchor)
+end
+
+-- Anchors holding at least one hidden player, in authored anchor order so the
+-- Mall Manager's candidate list is deterministic for a given seed.
+function Controller.GetOccupiedAnchors(generation: number?): {BasePart}
+	local result = {}
+	local session = activeSession
+	if not session or not liveSession(session) then return result end
+	if generation ~= nil and session.Generation ~= generation then return result end
+	for _, anchor in ipairs(session.Anchors) do
+		if anchor.Parent and #occupantsOf(session, anchor) > 0 then
+			table.insert(result, anchor)
+		end
+	end
+	return result
+end
+
+-- The end of the Mall Manager's table check. Reuses releasePlayer's exact
+-- restore path with moveOutside; the only differences are the exit lane, forced
+-- to the side of the table AWAY from `awayFrom`, and the short immunity every
+-- flushed player carries out with them. Returns who was actually ejected.
+function Controller.FlushAnchor(anchor: BasePart, awayFrom: Vector3?): {Player}
+	local flushed = {}
+	local session = activeSession
+	if not session or not liveSession(session) then return flushed end
+	local occupants = session.Occupants[anchor]
+	if not occupants or #occupants == 0 or not anchor.Parent then return flushed end
+	-- Server time, not os.clock: os.clock is CPU time in the server datamodel and
+	-- runs materially behind the wall clock, so a 1.5 "second" head start measured
+	-- on it is not 1.5 seconds of running. The Manager's reaction window is on the
+	-- same clock, so the promise the player is shown is the promise enforced.
+	-- LastAction and the anchor cooldowns stay on os.clock: nobody is shown those.
+	local now = workspace:GetServerTimeNow()
+	-- releasePlayer mutates the list, so iterate a copy.
+	for _, player in ipairs(table.clone(occupants)) do
+		local record = session.HiddenPlayers[player]
+		if record then
+			if awayFrom then
+				local localPosition = anchor.CFrame:PointToObjectSpace(awayFrom)
+				local exitSide = if localPosition.Z >= 0 then -1 else 1
+				local sideRotation = CFrame.Angles(0, if exitSide > 0 then math.pi else 0, 0)
+				record.ExitCFrame = anchor.CFrame
+					* CFrame.new(slotLateral(record.Slot or 1), Tuning.ExitVerticalOffset,
+						exitSide * Tuning.ExitOffsetZ)
+					* sideRotation
+			end
+			session.FlushImmuneUntil[player] = now + TableCheckTuning.FlushImmunitySeconds
+			if releasePlayer(session, player, true) then table.insert(flushed, player) end
+		end
+	end
+	return flushed
+end
+
+function Controller.IsFlushImmune(player: Player): boolean
+	local session = activeSession
+	if not session or not liveSession(session) then return false end
+	local expiry = session.FlushImmuneUntil[player]
+	return expiry ~= nil and workspace:GetServerTimeNow() < expiry
+end
+
 function Controller.GetSnapshot()
 	local session = activeSession
 	if not session then return nil end
 	local occupied = 0
-	for _ in pairs(session.Occupants) do occupied += 1 end
+	for _, occupants in pairs(session.Occupants) do
+		if #occupants > 0 then occupied += 1 end
+	end
 	return {
 		Generation=session.Generation,
 		HiddenCount=(function()
@@ -397,6 +515,7 @@ function Controller.GetSnapshot()
 		end)(),
 		TableCount=#session.Anchors,
 		OccupiedCount=occupied,
+		OccupantCap=Tuning.HideOccupantCap,
 	}
 end
 

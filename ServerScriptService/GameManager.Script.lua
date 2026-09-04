@@ -1974,9 +1974,24 @@ playRound = function(participants)
  -- or opted out, and none of that changes how the party left.
  local exitTubeRoute = false
 
+ -- PARTY DOWN. Everybody is down and the fifteen seconds before the run is lost
+ -- are the only window in which an Emergency Re-entry can still save it. The
+ -- round loop used to poll that window in complete silence, so nothing told the
+ -- party it was running or who had just fallen. The card is fired once when the
+ -- window opens and cleared the moment anyone is alive again -- or the round is
+ -- torn down under it, so no client is left holding a card for a dead round.
+ local lastDeathName = nil
+ local partyDownOpen = false
+ local function clearPartyDown()
+  if not partyDownOpen then return end
+  partyDownOpen = false
+  fireGroup(participants, "partydownclear")
+ end
+
 	local function closeRoundLifecycle()
 		if not roundLifecycleOpen then return end
 		roundLifecycleOpen = false
+		clearPartyDown()
 		table.clear(transitionRespawnToken)
 		for _, connection in ipairs(conns) do connection:Disconnect() end
 		table.clear(conns)
@@ -1989,6 +2004,7 @@ playRound = function(participants)
     alive[player] = nil
     aliveCount -= 1
     local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    lastDeathName = player.Name -- whoever fell last names the PARTY DOWN card
     fireGroup(participants, "death", player.Name, root and root.Position or nil)
 		if scheduleTransitionRespawn then scheduleTransitionRespawn(player) end
    end
@@ -2088,7 +2104,11 @@ playRound = function(participants)
  conns[#conns + 1] = Players.PlayerRemoving:Connect(function(player)
   participantSet[player] = nil
 	transitionRespawnToken[player] = nil
-  if alive[player] then alive[player] = nil; aliveCount -= 1 end
+  -- A party emptied by the last survivor LEAVING was not emptied by a death, so
+  -- the remembered name would be stale -- the PARTY DOWN card would name someone
+  -- who fell minutes earlier and has been spectating since. Clearing it makes
+  -- the client fall back to its nameless, party-wide caption.
+  if alive[player] then alive[player] = nil; aliveCount -= 1; lastDeathName = nil end
  end)
 
  -- The party was wiped before the round proper began. This is the Loss endpoint
@@ -2171,10 +2191,21 @@ playRound = function(participants)
  while true do
   if workspace:GetAttribute("PuzzleWon") then result = "win" break end
   if aliveCount <= 0 then
-   wipeDeadline = wipeDeadline or (os.clock() + 15)
-   if os.clock() >= wipeDeadline then result = "lose" break end
+   if not wipeDeadline then
+    wipeDeadline = os.clock() + 15
+    partyDownOpen = true
+    fireGroup(participants, "partydown", 15, lastDeathName)
+   end
+   if os.clock() >= wipeDeadline then
+    -- The client treats "lose" as its own clear, so the card needs no
+    -- separate teardown on this exit.
+    partyDownOpen = false
+    result = "lose"
+    break
+   end
   else
    wipeDeadline = nil
+   clearPartyDown()
   end
   local anyEscaped, anyInside = false, false
   for player in pairs(alive) do
@@ -2184,6 +2215,11 @@ playRound = function(participants)
   task.wait(0.5)
  end
 
+ -- A win can be declared while the window is still open (PuzzleWon is checked
+ -- first, and Level 2's exit transition can set it with nobody standing). That
+ -- win defers closeRoundLifecycle past the entire result countdown, so the card
+ -- has to come down here rather than wait for the teardown.
+ clearPartyDown()
  workspace:SetAttribute("PostWinIntermissionActive", result == "win")
  workspace:SetAttribute("RoundActive", false)
  zyntraReentry.OnInvoke = function() return false end

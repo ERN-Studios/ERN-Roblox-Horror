@@ -194,6 +194,55 @@ Two rules follow from that move, and both have already bitten this project once:
   its own reactions are its only state. Setup steps and env vars are in its README. Zapier was rejected because
   its Discord forum trigger fires on every reply and does not deliver the post body.
 
+Afternoon batch (see `HANDOVER-2026-09-04.md` for the verification record):
+
+- **PARTY DOWN contract on `RoundStatus`.** When the last living player dies,
+  GameManager fires `"partydown", 15, lastDeathName` once (name is nil when the
+  party emptied by a *leave*), and `"partydownclear"` when a re-entry raises
+  `aliveCount` or the round is torn down under the window; `"lose"` is its own
+  clear. RoundUI renders the card in a `do ... end` block (register limit) and
+  reads the store's credit/price/product id from client-local player attributes
+  `ZyntraReentryCredits` / `ZyntraReentryPrice` / `ZyntraReentryProductId` that
+  ZyntraStore publishes -- never trust those server-side. `PartyDownCardOpen`
+  (card drawn) and `PartyDownWindowOpen` (window owns the purchase) are two
+  different facts; ZyntraStore's own re-entry modal stands down on the second.
+- **Emergency Re-entry reserves the credit before it respawns** (`useReentry` in
+  ZyntraMonetization): reserve -> Invoke `ServerStorage.ZyntraReentry` -> refund
+  keyed on a per-attempt token, three retries then a `[Zyntra] Re-entry refund
+  FAILED` warn. `ProcessReceipt` auto-uses a fresh credit when the buyer is
+  dead in a live round (`reentryEligible`, a superset of OnInvoke's refusals).
+- **Badges** are keyed in `ReplicatedStorage.ZyntraConfig.Badges`
+  (`FirstClearLevel1/2/3`, `CampaignComplete`); 0 = disabled. The profile now
+  carries `LevelsCleared` (string keys) and `AwardedBadges`. `AwardBadge`
+  RETURNS false rather than throwing for a wrong/disabled id -- read the return,
+  never record an award on pcall's ok alone.
+- **Pool Foam hears `NoiseRegistry`** (config block `Hearing` in its
+  Configuration). The `Remotes.ReportNoise` intake is module-scope in the
+  controller (EntityAI is disabled for the whole of Level 2, so nothing else
+  drains that remote there); NoiseReporter reports on levels 1 and 2. Hearing
+  only steers `bestTarget`/`choosePatrolPosition`; the look-latch is untouched.
+  `BeingChased` / `Level2_PoolFoamTargeted` are reference-counted across the
+  five entities (`markChased`) and cleared to false in `Controller.Stop`.
+- **Level 3 hiding holds two per table** (`Hiding.HideOccupantCap`, lanes at
+  ±`HideOccupantLateralOffset` in anchor space); the Table Hiding Client sets
+  `ProximityPromptService.Enabled = false` while hidden so E cannot re-trigger
+  a prompt. **The Mall Manager checks tables** (`Configuration.TableCheck`):
+  state `TABLE_CHECK`, `Level3_MallManagerTableCheckIndex/EndsAt` in the state
+  folder (server time), 2 s reaction window, flush through
+  `HidingController.FlushAnchor` to the far side with `FlushImmunitySeconds`
+  of attack immunity, per-anchor and global cooldowns, and a mid-hunt detour
+  only toward a table closer than the nearest exposed player.
+- **Gamepad:** L2 (hold) sprints, R1 toggles the flashlight; `sprintRequested()`
+  in NoiseReporter is the one definition of "asking to sprint".
+- **RoundUI no longer writes the spectate camera**; SpectateController is the
+  only writer and stops itself when `RoundActive` goes false (guarded on its own
+  `spectating` flag so JumpscareUI's kill cam is not knocked back).
+- **Playtest hooks that bypass the DevAccess remote gate:**
+  `ServerStorage.ZyntraReentry:Invoke(player)`,
+  `ServerStorage.Level3DevSkipToPreBlackout:Invoke()`, and a ProximityPrompt only
+  shows/triggers while inside the camera frustum (point a Scriptable camera at it
+  first). The station recipe is in the project memory (`mongotv-playtest-recipe`).
+
 ### History — the 2026-08-19 audit (done, kept for context)
 
 Branch `claude/roblox-code-audit-di6qxi`, PR #1 (merged): a project-wide audit of ~45k

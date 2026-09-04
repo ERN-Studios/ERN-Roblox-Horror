@@ -848,6 +848,11 @@ local function shouldShowCursor()
   or queueShade.Visible
   or player:GetAttribute("DevPhoneOpen") == true
   or player:GetAttribute("ZyntraReentryOpen") == true
+  -- The PARTY DOWN card is this file's own modal and frees its own cursor. It
+  -- does reach ZyntraReentryOpen as well, but only via ZyntraStore's listener
+  -- on a deferred attribute hop -- a modal owned here must not need another
+  -- script to have run before it can be clicked.
+  or player:GetAttribute("PartyDownCardOpen") == true
   or completion.returnVisible
 end
 
@@ -913,6 +918,7 @@ queueShade:GetPropertyChangedSignal("Visible"):Connect(refreshCursor)
 player:GetAttributeChangedSignal("InRound"):Connect(refreshCursor)
 player:GetAttributeChangedSignal("DevPhoneOpen"):Connect(refreshCursor)
 player:GetAttributeChangedSignal("ZyntraReentryOpen"):Connect(refreshCursor)
+player:GetAttributeChangedSignal("PartyDownCardOpen"):Connect(refreshCursor)
 refreshCursor()
 
 -- An open modal must keep the pointer free. Ordinary lobby play deliberately
@@ -920,7 +926,8 @@ refreshCursor()
 -- lock to rotate the Classic camera while RMB is held.
 RunService.RenderStepped:Connect(function()
  if UIS.MouseEnabled and (queueShade.Visible or player:GetAttribute("DevPhoneOpen") == true
-  or player:GetAttribute("ZyntraReentryOpen") == true or completion.returnVisible) then
+  or player:GetAttribute("ZyntraReentryOpen") == true
+  or player:GetAttribute("PartyDownCardOpen") == true or completion.returnVisible) then
   UIS.MouseBehavior = Enum.MouseBehavior.Default
   UIS.MouseIconEnabled = true
  end
@@ -1252,25 +1259,10 @@ UIDevice.Changed:Connect(function()
  if endFrame.Visible then completion.applyLayout(completion.color) end
 end)
 
-local spectateBanner = Instance.new("TextLabel")
-spectateBanner.Name = "SpectateBanner"
-spectateBanner.AnchorPoint = Vector2.new(0.5, 1)
-spectateBanner.Position = UDim2.new(0.5, 0, 1, -28)
-spectateBanner.Size = UDim2.new(0.72, 0, 0, 42)
-spectateBanner.BackgroundColor3 = Color3.fromRGB(3, 7, 5)
-spectateBanner.BackgroundTransparency = 0.30
-spectateBanner.BorderSizePixel = 0
-spectateBanner.Font = Enum.Font.Code
-spectateBanner.Text = "SPECTATING  •  SEARCHING FOR SIGNAL"
-spectateBanner.TextColor3 = Color3.fromRGB(115, 255, 170)
-spectateBanner.TextSize = 20
-spectateBanner.TextWrapped = true
-spectateBanner.Visible = false
-spectateBanner.ZIndex = 118
-spectateBanner.Parent = gui
-local spectateCorner = Instance.new("UICorner")
-spectateCorner.CornerRadius = UDim.new(0, 7)
-spectateCorner.Parent = spectateBanner
+-- C_ONE_SPECTATE_CAMERA_20260904: the SpectateBanner that used to live here is
+-- gone. It was built, worded and hidden, and nothing ever set it Visible --
+-- SpectateController owns the on-screen spectate label, and showing this one as
+-- well stacked two "no surviving signal" messages on top of each other.
 
 local exitThud = Instance.new("Sound")
 exitThud.Name = "ExitThresholdThud"
@@ -1287,8 +1279,6 @@ exitChime.Parent = gui
 
 local endingSerial = 0
 local spectating = false
-local spectateTarget = nil
-local spectateClock = 0
 
 local function formatRoundTime(seconds)
  local total = math.max(0, math.floor(tonumber(seconds) or 0))
@@ -1410,71 +1400,32 @@ do
 	end)
 end
 
-local function validSpectateTarget(candidate)
- if not candidate or candidate == player or candidate.Parent ~= Players then return false end
- if candidate:GetAttribute("InRound") ~= true or candidate:GetAttribute("Escaped") == true then return false end
- local character = candidate.Character
- local humanoid = character and character:FindFirstChildOfClass("Humanoid")
- return humanoid ~= nil and humanoid.Health > 0
-end
-
-local function chooseSpectateTarget()
- for _, candidate in ipairs(Players:GetPlayers()) do
-  if validSpectateTarget(candidate) then return candidate end
- end
- return nil
-end
-
-local function updateSpectating()
- if not spectating then return end
- if not validSpectateTarget(spectateTarget) then spectateTarget = chooseSpectateTarget() end
- local camera = workspace.CurrentCamera
- if spectateTarget and camera then
-  local humanoid = spectateTarget.Character and spectateTarget.Character:FindFirstChildOfClass("Humanoid")
-  if humanoid then
-   camera.CameraType = Enum.CameraType.Custom
-   camera.CameraSubject = humanoid
-   spectateBanner.Text = "SPECTATING  •  " .. string.upper(spectateTarget.DisplayName)
-  end
- else
-  spectateBanner.Text = "SPECTATING  •  NO SURVIVING SIGNAL"
- end
-end
-
+-- C_ONE_SPECTATE_CAMERA_20260904 -- WHAT SHIPPED BROKEN.
+--
+-- TWO scripts drove the spectate camera off the same Humanoid.Died.
+-- SpectateController takes a full first-person POV: CameraType.Scriptable and
+-- the watched player's head CFrame written EVERY RenderStepped, plus the POV
+-- lock, Q/E switching, the hidden body and the borrowed flashlight. This file
+-- picked its own target and wrote CameraType.Custom + CameraSubject on a 0.35s
+-- ticker. Whichever ran last won that frame, so a dead player's view flipped
+-- between a locked first-person POV and an orbit camera on somebody else.
+--
+-- The camera half is gone from here. What is left is the FLAG half, which other
+-- parts of this file genuinely read (`dead`) and which is also the cleanup path
+-- after an Emergency Re-entry respawn -- SpectateController does not listen for
+-- the round ending, so it now stops itself on RoundActive going false.
 local function startSpectating()
  spectating = true
- spectateTarget = nil
- -- The banner stays hidden: SpectateController owns the on-screen spectate
- -- label, and showing this one too stacked two "no surviving signal"
- -- messages on top of each other.
- updateSpectating()
 end
 
 local function stopSpectating()
  spectating = false
- spectateTarget = nil
- spectateBanner.Visible = false
- local camera = workspace.CurrentCamera
- local character = player.Character
- local humanoid = character and character:FindFirstChildOfClass("Humanoid")
- if camera then
-  camera.CameraType = Enum.CameraType.Custom
-  if humanoid then camera.CameraSubject = humanoid end
- end
 end
-
-RunService.RenderStepped:Connect(function(dt)
- if not spectating then return end
- spectateClock += dt
- if spectateClock >= 0.35 then
-  spectateClock = 0
-  updateSpectating()
- end
-end)
 
 -- Emergency Re-entry loads a fresh gameplay character without firing any
 -- round status event, so the death/spectate state must clear on the new
--- body itself — otherwise the spectate banner outlives the revival.
+-- body itself — otherwise `dead` outlives the revival and every HUD gated on
+-- it stays hidden for a player who is walking around again.
 player.CharacterAdded:Connect(function()
  dead = false
  stopSpectating()
@@ -4221,9 +4172,10 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 			task.delay(0.85, function()
 				if dead and player:GetAttribute("InRound") == true then startSpectating() end
 			end)
-		elseif spectating and spectateTarget and a == spectateTarget.Name then
-			spectateTarget = nil
 		end
+		-- A teammate dying used to drop this file's own spectate target so the
+		-- ticker would re-pick. There is no target here any more:
+		-- SpectateController owns the POV and re-picks on its own.
 
 	elseif ev == "escape" then
 		if a == player.Name then
@@ -4235,9 +4187,19 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 				Color3.fromRGB(115, 255, 170),
 				true
 			)
-		elseif player:GetAttribute("Escaped") ~= true then
-			local msg = "One player has successfully escaped. Follow the green lights to safety."
+		elseif player:GetAttribute("InRound") == true
+			and player:GetAttribute("Escaped") ~= true then
+			-- The escaper's NAME was already in `a` and was thrown away, so every
+			-- escape after the first read "One player has successfully escaped" --
+			-- and the server only ever announced the first one anyway. It now
+			-- fires per escape on every level, so the line has to say who.
+			-- The InRound guard is PuzzleUI's: a lobby player watching the next
+			-- group's round start must never inherit their party's messages.
+			local msg = tostring(a) .. " found a way out. Follow the green lights."
 			setMsg(msg, Color3.fromRGB(150, 235, 175))
+			-- Replaces rather than stacks: setMsg owns the one status line, and
+			-- the delayed clear only fires while its OWN text is still showing,
+			-- so a second escape's message is not wiped by the first one's timer.
 			task.delay(8, function()
 				if label.Text == msg then setMsg("") end
 			end)
@@ -4312,6 +4274,385 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		endHint.Text = "NEXT LEVEL UNAVAILABLE  •  RETURNING TO LOBBY"
 	end
 end)
+
+-- ── PARTY DOWN ─────────────────────────────────────────────────────────────
+-- The window that opens when the LAST living player dies: the run is not lost
+-- yet, and an Emergency Re-entry brings somebody back. The server opens it on
+-- the RoundStatus remote with ("partydown", seconds, whoFellLast) and closes it
+-- with ("partydownclear") when the party survived it; a real wipe arrives as
+-- the ordinary "lose".
+--
+-- It listens on its OWN connection to the same remote rather than growing a
+-- branch inside the handler above. That keeps every piece of its state -- and
+-- every register it costs -- inside this do-block: this chunk sits at Luau's
+-- 200-local limit, and block locals hand their registers back at `end` while
+-- the closures keep them as upvalues. Everything else is a field of one table
+-- for the same reason.
+do
+	local GuiService = game:GetService("GuiService")
+	-- The product id, its price and the credit count are all read from the three
+	-- attributes ZyntraStore publishes out of its own updateReentry -- the same
+	-- one function that already runs at spawn, on every death, on every profile
+	-- change and on every round transition, so they are set long before a wipe.
+	--
+	-- Requiring ZyntraConfig here instead would put an UNBOUNDED WaitForChild
+	-- four thousand lines into this chunk, and everything below this block waits
+	-- behind it: the readiness announce (whose own note says sending it late
+	-- permanently loses a new player's welcome), the Mimic, the ambient scares
+	-- and the PuzzleStatus wiring. Every other dependency in this file is
+	-- resolved in the first sixteen lines precisely so a missing instance fails
+	-- before any UI is built rather than halfway through it.
+
+	local function corner(instance, radius)
+		local shape = Instance.new("UICorner")
+		shape.CornerRadius = UDim.new(0, radius)
+		shape.Parent = instance
+	end
+
+	local pd = {
+		-- os.clock(), NOT the server clock: the window is 15 wall-clock seconds
+		-- from the moment this client heard about it, so a laggy or late remote
+		-- shortens the bar rather than desynchronising it.
+		deadline = nil,
+		window = 15,
+		armAt = 0,
+		armed = false,
+		declined = false,
+		lastSeconds = nil,
+		statusText = nil,
+	}
+
+	pd.frame = Instance.new("Frame")
+	pd.frame.Name = "PartyDownOverlay"
+	pd.frame.Size = UDim2.fromScale(1, 1)
+	pd.frame.BackgroundColor3 = Color3.fromRGB(6, 2, 3)
+	-- Dimmed, not blacked out. The player is watching a teammate's POV through
+	-- SpectateController and the point of the window is that they can still see
+	-- what is happening to the run they are being asked to pay for.
+	pd.frame.BackgroundTransparency = 0.45
+	pd.frame.BorderSizePixel = 0
+	pd.frame.Active = true
+	pd.frame.Visible = false
+	pd.frame.ZIndex = 112
+	pd.frame.Parent = gui
+
+	pd.card = Instance.new("Frame")
+	pd.card.Name = "PartyDownCard"
+	pd.card.AnchorPoint = Vector2.new(0.5, 0.5)
+	pd.card.Position = UDim2.fromScale(0.5, 0.5)
+	pd.card.Size = UDim2.new(1, -32, 0, 268)
+	pd.card.BackgroundColor3 = Color3.fromRGB(9, 5, 6)
+	pd.card.BackgroundTransparency = 0.06
+	pd.card.BorderSizePixel = 0
+	pd.card.ZIndex = 113
+	pd.card.Parent = pd.frame
+	corner(pd.card, 10)
+	pd.cardSize = Instance.new("UISizeConstraint")
+	pd.cardSize.MinSize = Vector2.new(280, 268)
+	pd.cardSize.MaxSize = Vector2.new(460, 268)
+	pd.cardSize.Parent = pd.card
+	pd.cardStroke = Instance.new("UIStroke")
+	pd.cardStroke.Color = Color3.fromRGB(255, 82, 72)
+	pd.cardStroke.Transparency = 0.2
+	pd.cardStroke.Thickness = 1.5
+	pd.cardStroke.Parent = pd.card
+	-- A 268px card does not fit a 320-tall landscape phone. One UIScale, driven
+	-- from the viewport, keeps the whole card on screen instead of cropping the
+	-- decline button off the bottom of it.
+	pd.cardScale = Instance.new("UIScale")
+	pd.cardScale.Parent = pd.card
+
+	pd.title = Instance.new("TextLabel")
+	pd.title.Name = "PartyDownTitle"
+	pd.title.Position = UDim2.fromOffset(16, 14)
+	pd.title.Size = UDim2.new(1, -32, 0, 42)
+	pd.title.BackgroundTransparency = 1
+	pd.title.Font = Enum.Font.GothamBlack
+	pd.title.Text = "PARTY DOWN"
+	pd.title.TextColor3 = Color3.fromRGB(255, 82, 72)
+	pd.title.TextScaled = true
+	pd.title.TextXAlignment = Enum.TextXAlignment.Left
+	pd.title.ZIndex = 114
+	pd.title.Parent = pd.card
+	pd.titleSize = Instance.new("UITextSizeConstraint")
+	pd.titleSize.MinTextSize = 20
+	pd.titleSize.MaxTextSize = 38
+	pd.titleSize.Parent = pd.title
+
+	pd.fallen = Instance.new("TextLabel")
+	pd.fallen.Name = "PartyDownFallen"
+	pd.fallen.Position = UDim2.fromOffset(16, 60)
+	pd.fallen.Size = UDim2.new(1, -32, 0, 24)
+	pd.fallen.BackgroundTransparency = 1
+	pd.fallen.Font = Enum.Font.Code
+	pd.fallen.Text = "THE WHOLE PARTY IS DOWN"
+	pd.fallen.TextColor3 = Color3.fromRGB(198, 176, 176)
+	pd.fallen.TextSize = 15
+	pd.fallen.TextTruncate = Enum.TextTruncate.AtEnd
+	pd.fallen.TextXAlignment = Enum.TextXAlignment.Left
+	pd.fallen.ZIndex = 114
+	pd.fallen.Parent = pd.card
+
+	pd.track = Instance.new("Frame")
+	pd.track.Name = "PartyDownTrack"
+	pd.track.Position = UDim2.fromOffset(16, 94)
+	pd.track.Size = UDim2.new(1, -32, 0, 8)
+	pd.track.BackgroundColor3 = Color3.fromRGB(48, 20, 20)
+	pd.track.BorderSizePixel = 0
+	pd.track.ZIndex = 114
+	pd.track.Parent = pd.card
+	corner(pd.track, 4)
+
+	pd.fill = Instance.new("Frame")
+	pd.fill.Name = "PartyDownFill"
+	pd.fill.Size = UDim2.fromScale(1, 1)
+	pd.fill.BackgroundColor3 = Color3.fromRGB(255, 82, 72)
+	pd.fill.BorderSizePixel = 0
+	pd.fill.ZIndex = 115
+	pd.fill.Parent = pd.track
+	corner(pd.fill, 4)
+
+	pd.timer = Instance.new("TextLabel")
+	pd.timer.Name = "PartyDownTimer"
+	pd.timer.Position = UDim2.fromOffset(16, 108)
+	pd.timer.Size = UDim2.new(1, -32, 0, 26)
+	pd.timer.BackgroundTransparency = 1
+	pd.timer.Font = Enum.Font.Code
+	pd.timer.Text = "15 SECONDS LEFT"
+	pd.timer.TextColor3 = Color3.fromRGB(255, 140, 130)
+	pd.timer.TextSize = 20
+	pd.timer.TextXAlignment = Enum.TextXAlignment.Left
+	pd.timer.ZIndex = 114
+	pd.timer.Parent = pd.card
+
+	local function makeButton(name, y, height, text, colour)
+		local button = Instance.new("TextButton")
+		button.Name = name
+		button.Position = UDim2.fromOffset(16, y)
+		button.Size = UDim2.new(1, -32, 0, height)
+		button.BackgroundColor3 = Color3.fromRGB(24, 14, 15)
+		button.BackgroundTransparency = 0.05
+		button.BorderSizePixel = 0
+		button.AutoButtonColor = true
+		-- Both start INERT and are armed 0.6s after the card appears: this card
+		-- lands on a player who is already mashing a key at a death screen, and
+		-- one of the two buttons opens a Robux purchase prompt.
+		button.Active = false
+		button.Selectable = false
+		button.Modal = true
+		button.Font = Enum.Font.GothamBold
+		button.Text = text
+		button.TextColor3 = colour
+		button.TextScaled = true
+		button.ZIndex = 114
+		button.Parent = pd.card
+		corner(button, 8)
+		local stroke = Instance.new("UIStroke")
+		stroke.Color = colour
+		stroke.Transparency = 0.35
+		stroke.Thickness = 1.5
+		stroke.Parent = button
+		local padding = Instance.new("UIPadding")
+		padding.PaddingLeft = UDim.new(0, 10)
+		padding.PaddingRight = UDim.new(0, 10)
+		padding.PaddingTop = UDim.new(0, 8)
+		padding.PaddingBottom = UDim.new(0, 8)
+		padding.Parent = button
+		local textSize = Instance.new("UITextSizeConstraint")
+		textSize.MinTextSize = 11
+		textSize.MaxTextSize = 18
+		textSize.Parent = button
+		return button
+	end
+
+	pd.reentry = makeButton("PartyDownReentry", 146, 48, "USE RE-ENTRY",
+		Color3.fromRGB(255, 120, 110))
+	pd.decline = makeButton("PartyDownDecline", 206, 44, "NO THANKS",
+		Color3.fromRGB(186, 196, 190))
+
+	function pd.applyLayout()
+		local deviceLayout = UIDevice.Layout()
+		pd.cardScale.Scale = math.clamp((deviceLayout.Height - 24) / 268, 0.6, 1)
+	end
+	pd.applyLayout()
+	UIDevice.Changed:Connect(function()
+		if pd.frame.Visible then pd.applyLayout() end
+	end)
+
+	-- Eligibility is the same three facts ZyntraStore's own re-entry modal reads,
+	-- and the credit count, price and product id come from the three attributes
+	-- it publishes -- its `profile` is file-local and this card cannot see it.
+	function pd.refresh()
+		if not pd.frame.Visible then return end
+		local eligible = player:GetAttribute("InRound") == true
+			and workspace:GetAttribute("RoundActive") == true
+			and player:GetAttribute("ZyntraReentryUsed") ~= true
+		local credits = tonumber(player:GetAttribute("ZyntraReentryCredits")) or 0
+		pd.reentry.Visible = eligible
+		pd.reentry.Active = eligible and pd.armed
+		pd.reentry.Selectable = pd.reentry.Active
+		pd.reentry.Text = credits > 0
+			and ("USE RE-ENTRY CREDIT  //  " .. credits .. " OWNED")
+			-- No published price means ZyntraStore has not run at all, which is
+			-- also the state in which the purchase below refuses to prompt. The
+			-- button says so rather than printing "nil R$".
+			or (tostring(tonumber(player:GetAttribute("ZyntraReentryPrice")) or "--")
+				.. " R$  //  BUY CREDIT")
+		pd.decline.Active = pd.armed
+		pd.decline.Selectable = pd.armed
+	end
+
+	-- The CARD comes and goes; the WINDOW is what `pd.deadline` says. Declining
+	-- takes the card away without ending the window, so the re-entry surface
+	-- stays claimed (ZyntraStore's own modal must not pop straight back up in
+	-- its place) and the countdown carries on in the status line.
+	--
+	-- Hence TWO published flags, not one. They mean different things the instant
+	-- NO THANKS is pressed, and the one flag that used to carry both meanings was
+	-- read as "a modal is up": a declined player kept a forced-visible cursor, a
+	-- suppressed touch movement cluster and an unavailable flashlight for the
+	-- rest of the window with nothing on screen at all. CardOpen is exactly
+	-- "this card is drawn" and follows the frame it names; WindowOpen is "the
+	-- wipe window owns the re-entry purchase" and outlives the card.
+	function pd.setCardVisible(visible)
+		pd.frame.Visible = visible
+		player:SetAttribute("PartyDownCardOpen", visible or nil)
+		if visible then
+			pd.applyLayout()
+			pd.refresh()
+		elseif GuiService.SelectedObject == pd.decline
+			or GuiService.SelectedObject == pd.reentry then
+			GuiService.SelectedObject = nil
+		end
+	end
+
+	function pd.show(seconds, faller)
+		-- Lobby players never see it, whatever the server sent.
+		if player:GetAttribute("InRound") ~= true then return end
+		pd.window = math.max(1, tonumber(seconds) or 15)
+		pd.deadline = os.clock() + pd.window
+		pd.declined = false
+		pd.armed = false
+		pd.armAt = os.clock() + 0.6
+		pd.lastSeconds = nil
+		pd.fill.Size = UDim2.fromScale(1, 1)
+		pd.fallen.Text = type(faller) == "string" and faller ~= ""
+			and (string.upper(faller) .. " WAS THE LAST TO FALL")
+			or "THE WHOLE PARTY IS DOWN"
+		player:SetAttribute("PartyDownWindowOpen", true)
+		pd.setCardVisible(true)
+	end
+
+	function pd.hide()
+		if pd.statusText and label.Text == pd.statusText then setMsg("") end
+		pd.statusText = nil
+		pd.deadline = nil
+		pd.declined = false
+		pd.armed = false
+		pd.lastSeconds = nil
+		pd.setCardVisible(false)
+		player:SetAttribute("PartyDownWindowOpen", nil)
+	end
+
+	pd.reentry.Activated:Connect(function()
+		if not pd.reentry.Active then return end
+		-- ZyntraStore's rule, exactly: spend a stored credit if there is one,
+		-- otherwise open the product prompt, otherwise say it is not configured.
+		if (tonumber(player:GetAttribute("ZyntraReentryCredits")) or 0) > 0 then
+			dispatchAudio.action:FireServer("UseReentry")
+			return
+		end
+		local productId = tonumber(player:GetAttribute("ZyntraReentryProductId")) or 0
+		if productId <= 0 then
+			setMsg("Emergency Re-entry Product ID is not configured yet.",
+				Color3.fromRGB(255, 120, 110))
+			return
+		end
+		game:GetService("MarketplaceService"):PromptProductPurchase(player, productId)
+	end)
+
+	pd.decline.Activated:Connect(function()
+		if not pd.decline.Active then return end
+		pd.declined = true
+		pd.lastSeconds = nil -- force the status line to be written this frame
+		pd.setCardVisible(false)
+	end)
+
+	RunService.RenderStepped:Connect(function()
+		if not pd.deadline then return end
+		local left = pd.deadline - os.clock()
+		pd.fill.Size = UDim2.fromScale(math.clamp(left / pd.window, 0, 1), 1)
+		if not pd.armed and left > 0 and os.clock() >= pd.armAt then
+			pd.armed = true
+			pd.refresh()
+			-- Gamepad selection lands on the DECLINE button and only once the
+			-- pair is armed -- selecting an inactive button drops the selection,
+			-- and pre-selecting the purchase is the accident this guards.
+			if pd.frame.Visible and UIDevice.LastInput() == "Gamepad" then
+				GuiService.SelectedObject = pd.decline
+			end
+		end
+		local remaining = math.max(0, math.ceil(left))
+		if remaining ~= pd.lastSeconds then
+			pd.lastSeconds = remaining
+			local unit = remaining == 1 and " SECOND LEFT" or " SECONDS LEFT"
+			pd.timer.Text = tostring(remaining) .. unit
+			if pd.declined then
+				pd.statusText = "PARTY DOWN  •  " .. remaining .. unit
+				setMsg(pd.statusText, Color3.fromRGB(255, 120, 110))
+			end
+		end
+		if left <= 0 then
+			-- Time is up on THIS clock. Stand the actions down at once -- a
+			-- credit bought now cannot be spent on this round -- but leave the
+			-- card up: the server settles the round with lose/partydownclear and
+			-- its own deadline may land a moment after ours. The five-second
+			-- grace is the backstop for an event that never arrives at all, so a
+			-- dropped one cannot leave the card up for the rest of the round.
+			if pd.armed then
+				pd.armed = false
+				pd.armAt = math.huge -- and it never re-arms inside this window
+				pd.refresh()
+			end
+			if left <= -5 then pd.hide() end
+		end
+	end)
+
+	remote.OnClientEvent:Connect(function(ev, a, b)
+		if ev == "partydown" then
+			pd.show(a, b)
+		elseif ev == "partydownclear" or ev == "lose" or ev == "win"
+			or ev == "start" or ev == "lobby" or ev == "loadinggame" then
+			pd.hide()
+		elseif ev == "reentry" and a == player.Name then
+			-- Somebody else coming back does not end the window; the server
+			-- closes it with partydownclear when it survives. Our own re-entry
+			-- does: there is nothing left on this card to press.
+			pd.hide()
+		end
+	end)
+
+	player:GetAttributeChangedSignal("InRound"):Connect(function()
+		if player:GetAttribute("InRound") ~= true then pd.hide() end
+	end)
+	player:GetAttributeChangedSignal("ZyntraReentryUsed"):Connect(pd.refresh)
+	player:GetAttributeChangedSignal("ZyntraReentryCredits"):Connect(pd.refresh)
+	workspace:GetAttributeChangedSignal("RoundActive"):Connect(pd.refresh)
+
+	if RunService:IsStudio() then
+		-- Studio-only drive for UIRegression's party-down row, the same seam the
+		-- result overlay uses: a positive number opens the real card, anything
+		-- else closes it.
+		player:GetAttributeChangedSignal("DevPartyDown"):Connect(function()
+			local seconds = tonumber(player:GetAttribute("DevPartyDown"))
+			if seconds and seconds > 0 then
+				pd.show(seconds, "DEV TESTER")
+			else
+				pd.hide()
+			end
+		end)
+	end
+end
 
 -- Announce readiness only after the persisted preference has ACTUALLY loaded.
 -- A fixed timeout used to send this too early on a slow DataStore read; the
