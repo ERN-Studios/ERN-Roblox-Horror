@@ -183,6 +183,16 @@ Two rules follow from that move, and both have already bitten this project once:
   play session Server datamodel: module-local session state is invisible there.
   Read attributes and instances instead.
 
+### Added 2026-09-04
+
+- **Discord -> Trello bot** lives in `tools/discord_trello_bot/` (Python, discord.py,
+  runs as a Render Background Worker). A forum post in #bugs becomes a card in
+  *To Do* with label Bug; one in #feedback becomes a card in *Ideas* with label
+  Feedback. The bot reacts with eyes when the card exists and with a tick, a reply
+  and a *Fixed* forum tag when the card reaches *Done* (polled every minute);
+  its own reactions are its only state. Setup steps and env vars are in its README. Zapier was rejected because
+  its Discord forum trigger fires on every reply and does not deliver the post body.
+
 ### History — the 2026-08-19 audit (done, kept for context)
 
 Branch `claude/roblox-code-audit-di6qxi`, PR #1 (merged): a project-wide audit of ~45k

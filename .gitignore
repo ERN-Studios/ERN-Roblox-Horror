@@ -34,3 +34,6 @@ Backrooms Stay Quiet/
 
 # graphify-vaerktoejets output, ikke spilindhold
 graphify-out/
+
+# local secrets (Discord/Trello bot)
+.env
