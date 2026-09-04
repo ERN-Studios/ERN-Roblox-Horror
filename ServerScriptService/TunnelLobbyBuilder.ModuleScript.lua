@@ -181,7 +181,11 @@ local function addBoard(panel, face, titleText, subtitleText, titleColor)
 	local gui = Instance.new("SurfaceGui")
 	gui.Name = "Display"
 	gui.Face = face or Enum.NormalId.Front
-	gui.CanvasSize = Vector2.new(900, 300)
+	-- Roblox caps a label's font at 100 px, so a title can only grow by
+	-- shrinking the canvas it is drawn on. A subtitle-less sign (the open-level
+	-- doors) uses half the canvas, which doubles the title on the same face.
+	local canvasScale = subtitleText and 1 or 0.5
+	gui.CanvasSize = Vector2.new(900, 300) * canvasScale
 	gui.LightInfluence = 0
 	gui.AlwaysOnTop = false
 	gui.Parent = panel
@@ -206,26 +210,30 @@ local function addBoard(panel, face, titleText, subtitleText, titleColor)
 	backgroundBorder.Name = "RoundedSignBorder"
 	backgroundBorder.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 	backgroundBorder.Color = titleColor:Lerp(Color3.fromRGB(102, 112, 108), 0.38)
-	backgroundBorder.Thickness = 6
+	backgroundBorder.Thickness = 6 * canvasScale
 	backgroundBorder.Transparency = 0.22
 	backgroundBorder.LineJoinMode = Enum.LineJoinMode.Round
 	backgroundBorder.Parent = background
 
-	local line = Instance.new("Frame")
-	line.Position = UDim2.new(0.04, 0, 0.74, 0)
-	line.Size = UDim2.new(0.92, 0, 0, 4)
-	line.BackgroundColor3 = titleColor
-	line.BackgroundTransparency = 0.22
-	line.BorderSizePixel = 0
-	line.Parent = background
-	local lineCorner = Instance.new("UICorner")
-	lineCorner.CornerRadius = UDim.new(1, 0)
-	lineCorner.Parent = line
+	-- The divider only earns its place above a subtitle. A sign with just a
+	-- title (the open-level doors) lets the title fill the face instead.
+	if subtitleText then
+		local line = Instance.new("Frame")
+		line.Position = UDim2.new(0.04, 0, 0.74, 0)
+		line.Size = UDim2.new(0.92, 0, 0, 4)
+		line.BackgroundColor3 = titleColor
+		line.BackgroundTransparency = 0.22
+		line.BorderSizePixel = 0
+		line.Parent = background
+		local lineCorner = Instance.new("UICorner")
+		lineCorner.CornerRadius = UDim.new(1, 0)
+		lineCorner.Parent = line
+	end
 
 	local title = Instance.new("TextLabel")
 	title.Name = "Title"
 	title.Position = UDim2.new(0.035, 0, 0.06, 0)
-	title.Size = UDim2.new(0.93, 0, 0.58, 0)
+	title.Size = UDim2.new(0.93, 0, subtitleText and 0.58 or 0.88, 0)
 	title.BackgroundTransparency = 1
 	title.Font = Enum.Font.GothamBold
 	title.Text = titleText
