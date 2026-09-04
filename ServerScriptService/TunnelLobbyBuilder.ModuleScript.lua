@@ -98,7 +98,7 @@ local COLORS = {
 -- Roblox Texture instances are diffuse overlays and have no roughness channel.
 -- A lightly reflective SmoothPlastic backing gives the existing concrete image
 -- the requested sealed/glossy finish while preserving its texture and geometry.
-local TUNNEL_GLOSS_REFLECTANCE = 0.12
+local TUNNEL_GLOSS_REFLECTANCE = 0.16
 
 local function makePart(parent, name, cf, size, color, material, transparency)
 	local p = Instance.new("Part")
@@ -253,6 +253,10 @@ end
 -- information-board layout. This keeps "COMING SOON" readable from the tunnel
 -- while preserving the sealed DiamondPlate door as the physical blocker.
 local function addComingSoonBoard(panel, face, level)
+	-- Level 4 is the active development target. Later future levels stay at
+	-- their initial planning stage until work on them begins.
+	local filledSegmentCount = level == 4 and 3 or 1
+
 	local gui = Instance.new("SurfaceGui")
 	gui.Name = "ComingSoonDisplay"
 	gui.Face = face or Enum.NormalId.Front
@@ -261,8 +265,9 @@ local function addComingSoonBoard(panel, face, level)
 	gui.Brightness = 1.35
 	gui.AlwaysOnTop = false
 	gui.MaxDistance = 130
-	gui:SetAttribute("ComingSoonGateVersion", 1)
+	gui:SetAttribute("ComingSoonGateVersion", 2)
 	gui:SetAttribute("FutureLevel", level)
+	gui:SetAttribute("ProgressSegments", filledSegmentCount)
 	gui.Parent = panel
 
 	local background = Instance.new("Frame")
@@ -280,9 +285,9 @@ local function addComingSoonBoard(panel, face, level)
 	backgroundCorner.Parent = background
 
 	local backgroundBorder = Instance.new("UIStroke")
-	backgroundBorder.Name = "AmberGateBorder"
+	backgroundBorder.Name = "RedGateBorder"
 	backgroundBorder.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-	backgroundBorder.Color = COLORS.amber
+	backgroundBorder.Color = COLORS.red
 	backgroundBorder.Thickness = 5
 	backgroundBorder.Transparency = 0.18
 	backgroundBorder.LineJoinMode = Enum.LineJoinMode.Round
@@ -346,7 +351,7 @@ local function addComingSoonBoard(panel, face, level)
 	title.BackgroundTransparency = 1
 	title.Font = Enum.Font.GothamBlack
 	title.Text = "COMING SOON"
-	title.TextColor3 = COLORS.amber
+	title.TextColor3 = COLORS.red
 	title.TextSize = 86
 	title.TextWrapped = false
 	title.Parent = background
@@ -375,13 +380,15 @@ local function addComingSoonBoard(panel, face, level)
 	trackCorner.CornerRadius = UDim.new(1, 0)
 	trackCorner.Parent = progressTrack
 	for index = 1, 5 do
+		local filled = index <= filledSegmentCount
 		local segment = Instance.new("Frame")
-		segment.Name = "PendingSegment" .. index
+		segment.Name = (filled and "FilledSegment" or "PendingSegment") .. index
 		segment.Position = UDim2.fromScale((index - 1) * 0.205, 0)
 		segment.Size = UDim2.fromScale(0.18, 1)
-		segment.BackgroundColor3 = index == 1 and COLORS.zyntraCyan or COLORS.amber
-		segment.BackgroundTransparency = 0.16 + (index - 1) * 0.1
+		segment.BackgroundColor3 = filled and COLORS.red or Color3.fromRGB(84, 91, 87)
+		segment.BackgroundTransparency = filled and 0.05 or 0.68
 		segment.BorderSizePixel = 0
+		segment:SetAttribute("Filled", filled)
 		segment.Parent = progressTrack
 		local segmentCorner = Instance.new("UICorner")
 		segmentCorner.CornerRadius = UDim.new(1, 0)
@@ -813,6 +820,7 @@ local function addTunnelEndBarricade(parent, center, zOffset, inward, seed)
 		Enum.Material.Concrete
 	)
 	tagSurface(backstop, "ConcreteAlt")
+	applyGlossyTunnelFinish(backstop)
 
 	-- A single continuous collider guarantees that players cannot squeeze
 	-- through small natural gaps in the furniture wall.
@@ -1975,7 +1983,7 @@ local function addDoorway(parent, center, level, side, zOffset, active)
 		Enum.Material.Metal
 	)
 	header.CanCollide = false
-	local accentColor = active and COLORS.green or COLORS.amber
+	local accentColor = active and COLORS.green or COLORS.red
 	addMountedLevelSign(parent, center, header, level, side, accentColor)
 	addBoard(
 		header,
@@ -1998,7 +2006,7 @@ local function addDoorway(parent, center, level, side, zOffset, active)
 		tagSurface(blocker, "Metal")
 		blocker:SetAttribute("FutureLevelGate", true)
 		blocker:SetAttribute("FutureLevel", level)
-		blocker:SetAttribute("ComingSoonGateVersion", 1)
+		blocker:SetAttribute("ComingSoonGateVersion", 2)
 
 		local displayPanel = makePart(
 			parent,
@@ -2014,11 +2022,11 @@ local function addDoorway(parent, center, level, side, zOffset, active)
 		displayPanel.CastShadow = false
 		displayPanel:SetAttribute("FutureLevelGate", true)
 		displayPanel:SetAttribute("FutureLevel", level)
-		displayPanel:SetAttribute("ComingSoonGateVersion", 1)
+		displayPanel:SetAttribute("ComingSoonGateVersion", 2)
 		addComingSoonBoard(displayPanel, face, level)
 
 		local frontX = displayPanel.Position.X - side * (displayPanel.Size.X * 0.5 + 0.05)
-		local railColor = Color3.fromRGB(255, 183, 72)
+		local railColor = COLORS.red
 		for _, zDirection in ipairs({ -1, 1 }) do
 			local rail = makePart(
 				parent,
@@ -2122,200 +2130,421 @@ local function addSupplyKiosk(parent, center)
 	kiosk.Name = "ZyntraSupplyKiosk"
 	kiosk:SetAttribute("VisualOnly", false)
 	kiosk:SetAttribute("ShopFunctional", true)
-	kiosk:SetAttribute("SupplyKioskVersion", 5)
+	kiosk:SetAttribute("SupplyKioskVersion", 6)
 	kiosk:SetAttribute("Placement", "Right service ledge between Level 2 and Level 4")
+	kiosk:SetAttribute("ArtDirection", "Zyntra field exchange / premium survival outfitter")
 	kiosk.Parent = parent
 
 	local zOffset = -35
-	local metal = Color3.fromRGB(28, 34, 33)
-	local metalLight = Color3.fromRGB(50, 59, 57)
-	local cyan = Color3.fromRGB(73, 245, 204)
-	local warm = Color3.fromRGB(228, 214, 167)
+	local metal = Color3.fromRGB(20, 27, 29)
+	local metalMid = Color3.fromRGB(37, 48, 49)
+	local metalLight = Color3.fromRGB(67, 78, 76)
+	local blackGlass = Color3.fromRGB(5, 12, 14)
+	local cyan = COLORS.zyntraCyan
+	local amber = COLORS.amber
+	local warm = Color3.fromRGB(255, 224, 166)
+	local red = Color3.fromRGB(255, 88, 68)
 
-	local floorPad = makePart(
-		kiosk,
+	local function offsetCF(x, y, z, rx, ry, rz)
+		return CFrame.new(center + Vector3.new(x, y, zOffset + z))
+			* CFrame.Angles(math.rad(rx or 0), math.rad(ry or 0), math.rad(rz or 0))
+	end
+
+	local function shopPart(name, cf, size, color, material, transparency, visualOnly)
+		local part = makePart(kiosk, name, cf, size, color, material, transparency)
+		part:SetAttribute("ShopDecor", true)
+		if visualOnly == true then
+			part.CanCollide = false
+			part.CanTouch = false
+			part.CanQuery = false
+		end
+		return part
+	end
+
+	local function neonStrip(name, cf, size, color, brightness, range, face)
+		local strip = shopPart(name, cf, size, color, Enum.Material.Neon, 0.03, true)
+		if brightness and brightness > 0 then
+			local light = Instance.new("SurfaceLight")
+			light.Name = name .. "Light"
+			light.Face = face or Enum.NormalId.Left
+			light.Color = color
+			light.Brightness = brightness
+			light.Range = range or 8
+			light.Angle = 105
+			light.Shadows = false
+			light.Parent = strip
+		end
+		return strip
+	end
+
+	-- Architectural shell: a recessed equipment booth with a strong silhouette
+	-- that is readable from the road and still leaves the service path open.
+	local floorPad = shopPart(
 		"ShopFloorPad",
-		CFrame.new(center + Vector3.new(29.6, 0.72, zOffset)),
-		Vector3.new(7.2, 0.16, 18),
-		Color3.fromRGB(45, 51, 48),
+		offsetCF(29.55, 0.69, 0),
+		Vector3.new(7.7, 0.18, 19.5),
+		Color3.fromRGB(38, 46, 45),
 		Enum.Material.DiamondPlate
 	)
-	floorPad:SetAttribute("ShopDecor", true)
+	floorPad:SetAttribute("PremiumShopFloor", true)
 
-	local backWall = makePart(
-		kiosk,
+	local backWall = shopPart(
 		"ShopBackWall",
-		CFrame.new(center + Vector3.new(32.55, 5.95, zOffset)),
-		Vector3.new(0.8, 10.6, 18),
+		offsetCF(32.78, 6.2, 0),
+		Vector3.new(0.65, 11.3, 19.5),
 		metal,
 		Enum.Material.Metal
 	)
-	backWall:SetAttribute("ShopDecor", true)
+	backWall:SetAttribute("PremiumShopShell", true)
 
-	for _, zSide in ipairs({-1, 1}) do
-		local sidePost = makePart(
-			kiosk,
-			"ShopSidePost",
-			CFrame.new(center + Vector3.new(29.75, 5.95, zOffset + zSide * 8.7)),
-			Vector3.new(6.4, 10.6, 0.65),
+	local innerBack = shopPart(
+		"ShopRecessBackdrop",
+		offsetCF(32.42, 6.35, 0),
+		Vector3.new(0.12, 9.9, 17.8),
+		blackGlass,
+		Enum.Material.SmoothPlastic,
+		0,
+		true
+	)
+	innerBack.Reflectance = 0.18
+
+	for _, zSide in ipairs({ -1, 1 }) do
+		shopPart(
+			"ShopSideWing",
+			offsetCF(29.65, 6.2, zSide * 9.55),
+			Vector3.new(7.4, 11.3, 0.72),
+			metalMid,
+			Enum.Material.Metal
+		)
+		shopPart(
+			"ShopFaceColumn",
+			offsetCF(26.02, 6.1, zSide * 9.5),
+			Vector3.new(0.62, 11.5, 0.62),
 			metalLight,
 			Enum.Material.Metal
 		)
-		sidePost:SetAttribute("ShopDecor", true)
-
-		local edgeGlow = makePart(
-			kiosk,
-			"ShopEdgeGlow",
-			CFrame.new(center + Vector3.new(26.5, 6.1, zOffset + zSide * 8.72)),
-			Vector3.new(0.18, 10.2, 0.18),
+		neonStrip(
+			"ShopPortalVerticalGlow",
+			offsetCF(25.68, 6.15, zSide * 9.5),
+			Vector3.new(0.13, 10.8, 0.18),
 			cyan,
-			Enum.Material.Neon,
-			0.08
+			0.34,
+			8,
+			Enum.NormalId.Left
 		)
-		edgeGlow.CanCollide = false
-		edgeGlow.CanTouch = false
-		edgeGlow.CanQuery = false
-		edgeGlow:SetAttribute("ShopDecor", true)
+		shopPart(
+			"ShopHazardCap",
+			offsetCF(25.78, 1.05, zSide * 9.5),
+			Vector3.new(0.38, 1.05, 1.05),
+			amber,
+			Enum.Material.Metal
+		)
 	end
 
-	local canopy = makePart(
-		kiosk,
+	local canopy = shopPart(
 		"ShopCanopy",
-		CFrame.new(center + Vector3.new(29.65, 11.35, zOffset)),
-		Vector3.new(7.2, 0.72, 18),
+		offsetCF(29.5, 11.8, 0, 0, 0, -3),
+		Vector3.new(8.1, 0.8, 19.6),
 		metal,
 		Enum.Material.Metal
 	)
-	canopy:SetAttribute("ShopDecor", true)
-
-	local counterFront = makePart(
-		kiosk,
-		"ShopCounterFront",
-		CFrame.new(center + Vector3.new(27.45, 2.15, zOffset)),
-		Vector3.new(1.05, 3.05, 15.3),
-		metal,
+	canopy:SetAttribute("PremiumShopShell", true)
+	shopPart(
+		"ShopCanopyFascia",
+		offsetCF(25.95, 11.45, 0),
+		Vector3.new(0.72, 1.22, 19.5),
+		metalMid,
 		Enum.Material.Metal
 	)
-	counterFront:SetAttribute("ShopDecor", true)
-	local counterTop = makePart(
-		kiosk,
-		"ShopCounterTop",
-		CFrame.new(center + Vector3.new(27.7, 3.82, zOffset)),
-		Vector3.new(2.35, 0.42, 16.1),
-		metalLight,
-		Enum.Material.Metal
-	)
-	counterTop:SetAttribute("ShopDecor", true)
-
-	local counterGlow = makePart(
-		kiosk,
-		"ShopCounterGlow",
-		CFrame.new(center + Vector3.new(26.91, 2.9, zOffset)),
-		Vector3.new(0.12, 0.22, 14.2),
+	neonStrip(
+		"ShopPortalTopGlow",
+		offsetCF(25.56, 11.05, 0),
+		Vector3.new(0.14, 0.16, 18.5),
 		cyan,
-		Enum.Material.Neon
+		0.28,
+		10,
+		Enum.NormalId.Left
 	)
-	counterGlow.CanCollide = false
-	counterGlow.CanTouch = false
-	counterGlow.CanQuery = false
-	counterGlow:SetAttribute("ShopDecor", true)
 
-	local sign = makePart(
-		kiosk,
+	-- Layered masthead: clear at a glance, but grounded in the same ZYNTRA
+	-- transit language as the doors and objective terminals.
+	local sign = shopPart(
 		"ShopOverheadSign",
-		CFrame.new(center + Vector3.new(26.95, 9.3, zOffset)),
-		Vector3.new(0.36, 2.45, 12.2),
+		offsetCF(25.56, 9.45, 0),
+		Vector3.new(0.3, 2.7, 14.8),
 		metal,
-		Enum.Material.Metal
+		Enum.Material.Metal,
+		0,
+		true
 	)
-	sign.CanCollide = false
-	sign.CanTouch = false
-	sign.CanQuery = false
-	sign:SetAttribute("ShopDecor", true)
-	addBoard(
+	local signTitle, signSubtitle = addBoard(
 		sign,
 		Enum.NormalId.Left,
-		"SHOP",
-		"",
+		"ZYNTRA // FIELD EXCHANGE",
+		"EQUIPMENT  •  UPGRADES  •  RECOVERY",
 		cyan
 	)
-
-	local shelf = makePart(
-		kiosk,
-		"ShopDisplayShelf",
-		CFrame.new(center + Vector3.new(31.75, 5.9, zOffset)),
-		Vector3.new(1.15, 0.3, 14.5),
-		metalLight,
-		Enum.Material.Metal
-	)
-	shelf.CanCollide = false
-	shelf.CanTouch = false
-	shelf.CanQuery = false
-	shelf:SetAttribute("ShopDecor", true)
-
-	local productColors = {
-		Color3.fromRGB(255, 106, 86),
-		Color3.fromRGB(255, 213, 79),
-		Color3.fromRGB(75, 229, 141),
-		Color3.fromRGB(77, 190, 255),
-		Color3.fromRGB(182, 92, 255),
-	}
-	for index, productColor in ipairs(productColors) do
-		local product = makePart(
-			kiosk,
-			"DisplayProduct" .. index,
-			CFrame.new(center + Vector3.new(31.05, 6.65, zOffset - 6 + (index - 1) * 3)),
-			Vector3.new(1.15, 1.35 + (index % 2) * 0.35, 1.75),
-			productColor,
-			Enum.Material.SmoothPlastic
+	signTitle:SetAttribute("ShopMasthead", true)
+	signSubtitle:SetAttribute("ShopMasthead", true)
+	neonStrip("ShopSignTopTrim", offsetCF(25.38, 10.92, 0), Vector3.new(0.12, 0.13, 15.2), amber, nil, nil)
+	neonStrip("ShopSignBottomTrim", offsetCF(25.38, 7.98, 0), Vector3.new(0.12, 0.13, 15.2), cyan, nil, nil)
+	for marker = -3, 3 do
+		neonStrip(
+			"ShopHeaderMarker",
+			offsetCF(25.34, 11.25, marker * 2.2),
+			Vector3.new(0.12, 0.22, 0.72),
+			marker == 0 and amber or cyan,
+			nil,
+			nil
 		)
-		product.CanCollide = false
-		product.CanTouch = false
-		product.CanQuery = false
-		product:SetAttribute("ShopDecor", true)
 	end
 
-	local downlight = makePart(
-		kiosk,
-		"ShopDownlight",
-		CFrame.new(center + Vector3.new(29.2, 10.92, zOffset)),
-		Vector3.new(2.8, 0.12, 8.2),
-		warm,
-		Enum.Material.Neon
-	)
-	downlight.CanCollide = false
-	downlight.CanTouch = false
-	downlight.CanQuery = false
-	downlight:SetAttribute("ShopDecor", true)
-	local light = Instance.new("SurfaceLight")
-	light.Name = "ShopWarmLight"
-	light.Face = Enum.NormalId.Bottom
-	light.Color = warm
-	light.Brightness = 0.7
-	light.Range = 12
-	light.Angle = 100
-	light.Shadows = true
-	light.Parent = downlight
+	-- Recessed merchandise bays use recognizable field gear instead of colored
+	-- blocks. The displays are deliberately non-interactive; the real purchase
+	-- entry point remains the single audited terminal below.
+	local productBays = {
+		{ z = -5.7, title = "LUMEN KIT", subtitle = "FIELD LIGHT // MK II", accent = cyan },
+		{ z = 0, title = "SIGNAL KIT", subtitle = "TEAM COMMS // SYNC", accent = amber },
+		{ z = 5.7, title = "RECOVERY", subtitle = "EMERGENCY // RE-ENTRY", accent = red },
+	}
+	for index, bay in ipairs(productBays) do
+		local recess = shopPart(
+			"ProductBay" .. index .. "Recess",
+			offsetCF(32.22, 6.1, bay.z),
+			Vector3.new(0.26, 4.9, 4.55),
+			Color3.fromRGB(10, 18, 19),
+			Enum.Material.SmoothPlastic,
+			0,
+			true
+		)
+		recess.Reflectance = 0.12
+		shopPart(
+			"ProductBay" .. index .. "Shelf",
+			offsetCF(31.15, 4.35, bay.z),
+			Vector3.new(2.25, 0.22, 4.35),
+			metalLight,
+			Enum.Material.Metal,
+			0,
+			true
+		)
+		neonStrip(
+			"ProductBay" .. index .. "ShelfGlow",
+			offsetCF(30.0, 4.23, bay.z),
+			Vector3.new(0.11, 0.12, 4),
+			bay.accent,
+			0.12,
+			4,
+			Enum.NormalId.Left
+		)
+		for _, zEdge in ipairs({ -1, 1 }) do
+			neonStrip(
+				"ProductBay" .. index .. "Edge",
+				offsetCF(32.04, 6.1, bay.z + zEdge * 2.17),
+				Vector3.new(0.12, 4.55, 0.1),
+				bay.accent,
+				nil,
+				nil
+			)
+		end
+		local card = shopPart(
+			"ProductBay" .. index .. "Info",
+			offsetCF(31.96, 8.08, bay.z),
+			Vector3.new(0.16, 1.05, 3.95),
+			metal,
+			Enum.Material.Metal,
+			0,
+			true
+		)
+		addBoard(card, Enum.NormalId.Left, bay.title, bay.subtitle, bay.accent)
+	end
 
-	local accessTerminal = makePart(
-		kiosk,
-		"ShopAccessTerminal",
-		CFrame.new(center + Vector3.new(26.84, 4.65, zOffset + 5.45)),
-		Vector3.new(0.22, 1.45, 3.2),
+	-- Physical product silhouettes.
+	local flashlightBody = shopPart(
+		"DisplayLumenFlashlight",
+		offsetCF(30.75, 5.35, -5.7),
+		Vector3.new(1.75, 0.62, 0.62),
+		metalLight,
+		Enum.Material.Metal,
+		0,
+		true
+	)
+	flashlightBody.Shape = Enum.PartType.Cylinder
+	local flashlightLens = shopPart(
+		"DisplayLumenLens",
+		offsetCF(29.84, 5.35, -5.7),
+		Vector3.new(0.16, 0.72, 0.72),
+		cyan,
+		Enum.Material.Neon,
+		0.04,
+		true
+	)
+	flashlightLens.Shape = Enum.PartType.Cylinder
+	shopPart("DisplayLumenGrip", offsetCF(30.92, 4.92, -5.7, 0, 0, -18), Vector3.new(0.45, 0.92, 0.48), metal, Enum.Material.Metal, 0, true)
+
+	local radio = shopPart(
+		"DisplaySignalRadio",
+		offsetCF(30.72, 5.4, 0),
+		Vector3.new(1.25, 1.65, 1.75),
+		metalLight,
+		Enum.Material.Metal,
+		0,
+		true
+	)
+	shopPart("DisplaySignalScreen", offsetCF(30.06, 5.56, 0), Vector3.new(0.08, 0.62, 1.14), cyan, Enum.Material.Neon, 0.12, true)
+	shopPart("DisplaySignalAntenna", offsetCF(30.72, 6.72, -0.58, 0, 0, 8), Vector3.new(0.14, 1.25, 0.14), metalLight, Enum.Material.Metal, 0, true)
+	for zDot = -1, 1 do
+		shopPart("DisplaySignalDial", offsetCF(30.02, 4.95, zDot * 0.45), Vector3.new(0.12, 0.24, 0.24), amber, Enum.Material.Neon, 0, true).Shape = Enum.PartType.Cylinder
+	end
+
+	local recoveryCase = shopPart(
+		"DisplayRecoveryCase",
+		offsetCF(30.74, 5.35, 5.7),
+		Vector3.new(1.28, 1.55, 2.2),
+		Color3.fromRGB(111, 54, 45),
+		Enum.Material.Metal,
+		0,
+		true
+	)
+	recoveryCase:SetAttribute("DisplayProduct", "EmergencyReentry")
+	shopPart("RecoveryCrossVertical", offsetCF(30.08, 5.35, 5.7), Vector3.new(0.1, 0.92, 0.27), red, Enum.Material.Neon, 0, true)
+	shopPart("RecoveryCrossHorizontal", offsetCF(30.08, 5.35, 5.7), Vector3.new(0.1, 0.28, 0.86), red, Enum.Material.Neon, 0, true)
+	shopPart("RecoveryCaseHandle", offsetCF(30.72, 6.28, 5.7), Vector3.new(0.3, 0.34, 1.15), metalLight, Enum.Material.Metal, 0, true)
+
+	-- Storage canisters and industrial utility details give the booth a used,
+	-- believable service-station density without dirtying the clean sci-fi read.
+	for index, z in ipairs({ -8.1, 8.1 }) do
+		shopPart(
+			"ShopUtilityShelf" .. index,
+			offsetCF(31.25, 3.05, z),
+			Vector3.new(2.2, 0.22, 2.15),
+			metalLight,
+			Enum.Material.Metal,
+			0,
+			true
+		)
+		for canister = -1, 1 do
+			local can = shopPart(
+				"ShopSupplyCanister",
+				offsetCF(31.05, 3.72, z + canister * 0.62),
+				Vector3.new(0.92, 0.68, 0.68),
+				canister == -1 and metalLight or Color3.fromRGB(95, 88, 58),
+				Enum.Material.Metal,
+				0,
+				true
+			)
+			can.Shape = Enum.PartType.Cylinder
+			neonStrip(
+				"ShopCanisterBand",
+				offsetCF(30.57, 3.72, z + canister * 0.62),
+				Vector3.new(0.06, 0.74, 0.74),
+				index == 1 and cyan or amber,
+				nil,
+				nil
+			).Shape = Enum.PartType.Cylinder
+		end
+	end
+
+	-- Counter with a lit telemetry window, product scanner and protected terminal.
+	local counterFront = shopPart(
+		"ShopCounterFront",
+		offsetCF(27.0, 2.2, 0),
+		Vector3.new(1.25, 3.35, 15.7),
 		metal,
 		Enum.Material.Metal
 	)
-	accessTerminal.CanCollide = false
-	accessTerminal.CanTouch = false
-	accessTerminal.CanQuery = false
-	accessTerminal:SetAttribute("ShopInteraction", true)
-	addBoard(accessTerminal, Enum.NormalId.Left, "SHOP", "PRESS  E", cyan)
+	counterFront:SetAttribute("PremiumShopCounter", true)
+	shopPart(
+		"ShopCounterTop",
+		offsetCF(27.62, 4.02, 0),
+		Vector3.new(2.65, 0.4, 16.35),
+		metalLight,
+		Enum.Material.Metal
+	)
+	neonStrip("ShopCounterTopGlow", offsetCF(26.25, 3.82, 0), Vector3.new(0.12, 0.16, 15.55), cyan, 0.18, 7, Enum.NormalId.Left)
+	neonStrip("ShopCounterBottomGlow", offsetCF(26.33, 0.62, 0), Vector3.new(0.1, 0.12, 14.8), amber, nil, nil)
 
+	local telemetryGlass = shopPart(
+		"ShopCounterTelemetryGlass",
+		offsetCF(26.34, 2.1, -2.2),
+		Vector3.new(0.09, 1.9, 8.5),
+		Color3.fromRGB(17, 53, 52),
+		Enum.Material.Glass,
+		0.32,
+		true
+	)
+	telemetryGlass.Reflectance = 0.18
+	for index = 1, 7 do
+		local height = 0.35 + ((index * 3) % 5) * 0.22
+		neonStrip(
+			"TelemetryBar" .. index,
+			offsetCF(26.27, 1.48 + height * 0.5, -5.35 + index * 0.78),
+			Vector3.new(0.06, height, 0.32),
+			index == 7 and amber or cyan,
+			nil,
+			nil
+		)
+	end
+
+	for index = 1, 3 do
+		local cabinet = shopPart(
+			"ShopCounterCabinet" .. index,
+			offsetCF(26.32, 2.08, 4.15 + index * 1.45),
+			Vector3.new(0.09, 1.75, 1.22),
+			metalMid,
+			Enum.Material.Metal,
+			0,
+			true
+		)
+		shopPart(
+			"ShopCounterCabinetHandle" .. index,
+			cabinet.CFrame * CFrame.new(-0.08, 0.48, 0),
+			Vector3.new(0.08, 0.08, 0.62),
+			index == 3 and amber or cyan,
+			Enum.Material.Neon,
+			0,
+			true
+		)
+	end
+
+	local scannerPad = shopPart(
+		"ShopProductScanner",
+		offsetCF(26.78, 4.24, 0.5),
+		Vector3.new(1.15, 0.08, 2.45),
+		blackGlass,
+		Enum.Material.Glass,
+		0.18,
+		true
+	)
+	scannerPad.Reflectance = 0.28
+	neonStrip("ShopScannerLine", offsetCF(26.72, 4.31, 0.5), Vector3.new(0.75, 0.05, 0.1), amber, nil, nil)
+
+	local accessTerminal = shopPart(
+		"ShopAccessTerminal",
+		offsetCF(25.93, 5.05, 6.05, 0, 0, 0),
+		Vector3.new(0.34, 2.25, 3.65),
+		metal,
+		Enum.Material.Metal,
+		0,
+		true
+	)
+	accessTerminal:SetAttribute("ShopInteraction", true)
+	accessTerminal:SetAttribute("InteractionRole", "OpenZyntraStore")
+	addBoard(accessTerminal, Enum.NormalId.Left, "OPEN STORE", "PRESS  E  //  EQUIPMENT", cyan)
+	for _, ySide in ipairs({ -1, 1 }) do
+		neonStrip(
+			"ShopTerminalRail",
+			offsetCF(25.73, 5.05 + ySide * 1.2, 6.05),
+			Vector3.new(0.12, 0.1, 3.9),
+			ySide == 1 and amber or cyan,
+			nil,
+			nil
+		)
+	end
 
 	local prompt = Instance.new("ProximityPrompt")
 	prompt.Name = "ZyntraShopPrompt"
 	prompt.ActionText = "OPEN SHOP"
-	prompt.ObjectText = "SHOP"
+	prompt.ObjectText = "ZYNTRA FIELD EXCHANGE"
 	prompt.KeyboardKeyCode = Enum.KeyCode.E
 	prompt.GamepadKeyCode = Enum.KeyCode.ButtonX
 	prompt.HoldDuration = 0
@@ -2324,44 +2553,92 @@ local function addSupplyKiosk(parent, center)
 	prompt.Style = Enum.ProximityPromptStyle.Default
 	prompt.Parent = accessTerminal
 
-	local staffPlatform = makePart(
-		kiosk,
-		"ShopkeeperPlatform",
-		CFrame.new(center + Vector3.new(29.15, 0.91, zOffset)),
-		Vector3.new(3.2, 0.5, 3.4),
-		metalLight,
-		Enum.Material.DiamondPlate
+	-- A small floor approach zone makes the store legible even when the tunnel
+	-- is crowded, without adding queue rails that could obstruct players.
+	local approach = shopPart(
+		"ShopApproachInlay",
+		offsetCF(22.65, 0.08, 4.2),
+		Vector3.new(5.2, 0.06, 7.4),
+		Color3.fromRGB(19, 32, 32),
+		Enum.Material.SmoothPlastic,
+		0.12,
+		true
 	)
-	staffPlatform.CanCollide = false
-	staffPlatform.CanTouch = false
-	staffPlatform.CanQuery = false
-	staffPlatform:SetAttribute("ShopDecor", true)
+	addBoard(approach, Enum.NormalId.Top, "FIELD SUPPLY", "APPROACH TERMINAL", cyan)
+	for _, xSide in ipairs({ -1, 1 }) do
+		neonStrip(
+			"ShopApproachEdge",
+			offsetCF(22.65 + xSide * 2.55, 0.12, 4.2),
+			Vector3.new(0.1, 0.05, 7.5),
+			cyan,
+			nil,
+			nil
+		)
+	end
 
-	-- The tunnel is intentionally dim, so a narrow warm key light illuminates
-	-- the suit and visor without bleaching the rest of the kiosk.
-	local keyLightMount = makePart(
-		kiosk,
+	local staffPlatform = shopPart(
+		"ShopkeeperPlatform",
+		offsetCF(29.35, 0.94, -3.25),
+		Vector3.new(3.6, 0.52, 4.2),
+		metalLight,
+		Enum.Material.DiamondPlate,
+		0,
+		true
+	)
+	staffPlatform:SetAttribute("ShopkeeperDisplay", true)
+	for _, zSide in ipairs({ -1, 1 }) do
+		neonStrip(
+			"ShopkeeperPlatformGlow",
+			offsetCF(27.52, 1.02, -3.25 + zSide * 2.0),
+			Vector3.new(0.12, 0.14, 0.85),
+			amber,
+			nil,
+			nil
+		)
+	end
+
+	-- Warm keys preserve the human focal point while cyan display lights make
+	-- the gear bays feel premium. Brightness stays below the lobby fixtures.
+	for index, z in ipairs({ -5.7, 0, 5.7 }) do
+		local downlight = neonStrip(
+			"ShopDisplayDownlight" .. index,
+			offsetCF(29.85, 10.72, z),
+			Vector3.new(2.7, 0.12, 3.6),
+			index == 2 and warm or cyan,
+			nil,
+			nil
+		)
+		local light = Instance.new("SurfaceLight")
+		light.Name = "ShopDisplayLight" .. index
+		light.Face = Enum.NormalId.Bottom
+		light.Color = index == 2 and warm or cyan
+		light.Brightness = index == 2 and 0.65 or 0.42
+		light.Range = 10
+		light.Angle = 92
+		light.Shadows = index == 2
+		light.Parent = downlight
+	end
+
+	local keyLightMount = shopPart(
 		"ShopkeeperKeyLightMount",
-		CFrame.new(center + Vector3.new(27.05, 6.1, zOffset)),
+		offsetCF(27.0, 6.5, -3.25),
 		Vector3.new(0.1, 0.1, 0.1),
 		warm,
 		Enum.Material.SmoothPlastic,
-		1
+		1,
+		true
 	)
-	keyLightMount.CanCollide = false
-	keyLightMount.CanTouch = false
-	keyLightMount.CanQuery = false
 	local keyLight = Instance.new("SpotLight")
 	keyLight.Name = "ShopkeeperKeyLight"
 	keyLight.Face = Enum.NormalId.Right
 	keyLight.Color = warm
-	keyLight.Brightness = 2.1
+	keyLight.Brightness = 1.9
 	keyLight.Range = 9
-	keyLight.Angle = 82
+	keyLight.Angle = 76
 	keyLight.Shadows = false
 	keyLight.Parent = keyLightMount
 
-	addGameplayShopkeeper(kiosk, center, zOffset)
+	addGameplayShopkeeper(kiosk, center, zOffset - 3.25)
 	return kiosk
 end
 
@@ -2640,13 +2917,13 @@ function Builder.Build(center)
 	model.Parent = workspace
 	model:SetAttribute("LobbyStyle", "ZyntraTunnel")
 	model:SetAttribute("TextureVersion", 10)
-	model:SetAttribute("LobbyAestheticRevision", 4)
-	model:SetAttribute("DispatchConcourseVersion", 7)
-	model:SetAttribute("SupplyKioskVersion", 5)
+	model:SetAttribute("LobbyAestheticRevision", 5)
+	model:SetAttribute("DispatchConcourseVersion", 8)
+	model:SetAttribute("SupplyKioskVersion", 6)
 	model:SetAttribute("DonationLeaderboardVersion", 2)
 	model:SetAttribute("PartyButtonVersion", 3)
 	model:SetAttribute("TunnelCurveRevision", 2)
-	model:SetAttribute("TunnelGlossVersion", 1)
+	model:SetAttribute("TunnelGlossVersion", 2)
 	model:SetAttribute("CeilingLightPalette", "ZyntraCyan")
 	model:SetAttribute("SignageRevision", 2)
 	model:SetAttribute("RoundedSignFacesVersion", 1)
