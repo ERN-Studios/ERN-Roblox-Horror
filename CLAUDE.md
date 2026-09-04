@@ -186,7 +186,8 @@ Two rules follow from that move, and both have already bitten this project once:
 ### Added 2026-09-04
 
 - **Discord -> Trello bot** lives in `tools/discord_trello_bot/` (Python, discord.py,
-  runs as a Render Background Worker). A forum post in #bugs becomes a card in
+  run by hand on the owner's PC for now; a Render Background Worker is the
+  planned host, see its README). A forum post in #bugs becomes a card in
   *To Do* with label Bug; one in #feedback becomes a card in *Ideas* with label
   Feedback. The bot reacts with eyes when the card exists and with a tick, a reply
   and a *Fixed* forum tag when the card reaches *Done* (polled every minute);
