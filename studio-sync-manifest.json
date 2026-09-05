@@ -143,16 +143,16 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.RoundUI",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
-      "bytes": 230969,
-      "sha256": "0d054d522d541c13b2ae485c8788f66508937dc4c39fc0227b23562d6d1f7475",
+      "bytes": 227827,
+      "sha256": "5e4ee9a79d5814d5cfb3ff90e81e54abab7b58e08f3f44fbf68997e14d086337",
       "status": "synced"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.SoundController",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
-      "bytes": 60450,
-      "sha256": "132ce38c9db13356e6771bbd590364266a6e799cb759ae7e6ece4f47558912b7",
+      "bytes": 62298,
+      "sha256": "0675083878fde8e6f0a8b9220e1c5abeda417e81b14a40c652a5e4045f46f5e5",
       "status": "synced"
     },
     {

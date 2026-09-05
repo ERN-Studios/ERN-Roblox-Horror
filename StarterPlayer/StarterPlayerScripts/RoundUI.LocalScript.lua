@@ -4846,17 +4846,6 @@ local function mimicBuild(sourcePlayer, spawnPos)
  end
  local walkTrack = loadTrack(walkId)
  local runTrack = loadTrack(runId)
- local steps = Instance.new("Sound")
- steps.Name = "MimicFootsteps"
- steps.SoundId = "rbxasset://sounds/action_footsteps_plastic.mp3"
- steps.Volume = 0.27 -- 50% louder than before
- local mimicStepSpeed = 0.78 + math.random() * 0.10
- steps.PlaybackSpeed = mimicStepSpeed
- steps.Looped = true
- steps.RollOffMinDistance = 5
- steps.RollOffMaxDistance = 46
- steps.Parent = root
-
  local rightShoulder = model:FindFirstChild("RightShoulder", true) or model:FindFirstChild("Right Shoulder", true)
  local leftShoulder = model:FindFirstChild("LeftShoulder", true) or model:FindFirstChild("Left Shoulder", true)
  local rightElbow = model:FindFirstChild("RightElbow", true)
@@ -4910,25 +4899,6 @@ local function mimicBuild(sourcePlayer, spawnPos)
    task.delay(0.1, function()
     if model.Parent and moving == false then applyStillPose() end
    end)
-  end
-  if on then
-   steps.PlaybackSpeed = sprinting and 1.23 or mimicStepSpeed
-   if not steps.IsPlaying then
-    -- A random phase and delayed start keep these steps unmistakably separate
-    -- from the local player's own walking loop.
-    local startToken = os.clock()
-    steps:SetAttribute("StartToken", startToken)
-    task.delay(0.25 + math.random() * 0.45, function()
-     if workspace:GetAttribute("SelectedLevel") == 1
-      and model.Parent and moving == true and steps:GetAttribute("StartToken") == startToken then
-      steps.TimePosition = math.random() * 0.28
-      steps:Play()
-     end
-    end)
-   end
-  else
-   steps:SetAttribute("StartToken", os.clock())
-   steps:Stop()
   end
  end
  setMoving(false, false)
@@ -5188,47 +5158,6 @@ local function ambientEmitter(name, position, lifetime)
  return emitter
 end
 
-local function ambientFootsteps()
- -- Level 2 owns its real shallow-water/entity step mix in SoundController.
- -- Do not layer the dry plastic fake-footstep scare over that soundscape.
- if workspace:GetAttribute("SelectedLevel") == 2 then return false end
- local _, _, root, alive = ambientCharacter()
- if not alive then return false end
- local backward = -ambientFlatUnit(root.CFrame.LookVector)
- local right = ambientFlatUnit(root.CFrame.RightVector, Vector3.new(1, 0, 0))
- local startPosition = root.Position + backward * math.random(11, 17)
-  + right * math.random(-6, 6) + Vector3.new(0, 1.1, 0)
- local emitter = ambientEmitter("DistantFootsteps", startPosition, 4.2)
- local sound = Instance.new("Sound")
- sound.Name = "Footsteps"
- sound.SoundId = "rbxasset://sounds/action_footsteps_plastic.mp3"
- sound.Volume = 0.33 -- 50% louder than before
- sound.PlaybackSpeed = 0.78 + math.random() * 0.10
- sound.Looped = true
- sound.RollOffMinDistance = 6
- sound.RollOffMaxDistance = 48
- sound.Parent = emitter
-
- local startDelay = 0.25 + math.random() * 0.45
- local drift = backward * math.random(6, 10) + right * math.random(-4, 4)
- task.delay(startDelay, function()
-  if not emitter.Parent then return end
-  -- The separate start delay, phase and speed prevent synchronization with
-  -- the player's own footsteps.
-  sound.TimePosition = math.random() * 0.28
-  sound:Play()
-  AmbientTweenService:Create(emitter, TweenInfo.new(2.45, Enum.EasingStyle.Linear), {
-   CFrame = emitter.CFrame + drift,
-  }):Play()
- end)
- task.delay(startDelay + 1.95, function()
-  if sound.Parent then
-   AmbientTweenService:Create(sound, TweenInfo.new(0.52), {Volume = 0}):Play()
-  end
- end)
- return true
-end
-
 local function ambientKnocks()
  -- Level 2 owns its own soundscape; keep the Level 1 wall-knock scare out.
  if workspace:GetAttribute("SelectedLevel") == 2 then return false end
@@ -5374,7 +5303,6 @@ local function ambientShadow()
  return true
 end
 local ambientScares = {
- footsteps = ambientFootsteps,
  knocks = ambientKnocks,
  lights = ambientLightDrop,
  -- Not in the random rotation (ambientChooseKind), but registered so the
@@ -5383,15 +5311,9 @@ local ambientScares = {
 }
 
 local function ambientChooseKind()
- local roll = math.random(1, 100)
- local kind = roll <= 34 and "footsteps"
-  or roll <= 54 and "knocks"
-  or roll <= 81 and "lights"
-  or "footsteps"
+ local kind = math.random(1, 100) <= 50 and "knocks" or "lights"
  if kind == ambientLastKind then
-  local alternatives = {"footsteps", "knocks", "lights"}
-  table.remove(alternatives, table.find(alternatives, kind))
-  kind = alternatives[math.random(1, #alternatives)]
+  kind = kind == "knocks" and "lights" or "knocks"
  end
  return kind
 end
@@ -5404,10 +5326,6 @@ local function ambientTrigger(kind)
  local ok, started = pcall(scare)
  if not ok then warn("[Ambient Scare] " .. kind .. " failed: " .. tostring(started)) end
  if ok and started then ambientLastKind = kind end
- if (not ok or not started) and kind ~= "footsteps" and ambientCanScare() then
-  pcall(ambientFootsteps)
-  ambientLastKind = "footsteps"
- end
  ambientBusy = false
  return ok and started == true
 end
@@ -5438,7 +5356,7 @@ if ambientPuzzleStatus and ambientPuzzleStatus:IsA("RemoteEvent") then
 end
 
 -- Studio test hook: set the local player's DevAmbientScare attribute to
--- footsteps, knocks, lights or shadow (append any suffix to repeat one type).
+-- knocks, lights or shadow (append any suffix to repeat one type).
 if RunService:IsStudio() then
  player:GetAttributeChangedSignal("DevAmbientScare"):Connect(function()
   local raw = tostring(player:GetAttribute("DevAmbientScare") or ""):lower()

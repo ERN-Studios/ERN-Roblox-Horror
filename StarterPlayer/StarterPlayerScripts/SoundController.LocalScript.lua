@@ -95,7 +95,9 @@ local SCREAM_VOLUME    = 0.95  -- distant entity screams (positional at the Enti
 local CHASE_FADE       = 0.6   -- seconds to fade the chase loop in / out
 local TRACK_FADE       = 5     -- seconds to SLOWLY fade the chase music once it loses
 -- sight and is only tracking blindly (match TRACK_TIME)
-local SPOT_VOLUME      = 1      -- the "spotted you!" sting (SPOT_SOUND) fired as a chase begins
+local SPOT_VOLUME      = 1.20   -- clear at long sight range without becoming a non-spatial jumpscare
+local SPOT_MIN_DISTANCE = 60    -- full-volume radius; then a predictable linear falloff
+local SPOT_MAX_DISTANCE = 2200  -- covers Level 1's full 960x960-stud footprint and diagonal
 local LUNGE_VOLUME     = 1     -- the lunge telegraph (positional)
 local STEP_WALK_VOLUME = 1.014 -- entity walk impact (30% louder)
 local STEP_RUN_VOLUME  = 1.30  -- entity chase impact (30% louder)
@@ -413,25 +415,89 @@ if YELL_SOUND ~= "" then
 	end)
 end
 
--- the "spotted you!" scream: EntityAI bumps EntitySpotScream the moment it
--- first SEES a player (the stationary first-sight howl), and everyone hears
--- SPOT_SOUND positionally at the entity — a different voice from the pit roar
+-- the "spotted you!" scream: Level 1 can see 650 studs normally and 1100
+-- studs when a flashlight exposes the player. The former 200-stud hard cutoff
+-- made a valid long-range detection nearly silent (or completely silent).
+--
+-- EntityAI publishes the exact howl position before it bumps EntitySpotScream.
+-- We play from a tiny local world emitter at that position. This stays true 3D
+-- audio even if StreamingEnabled has streamed the distant Entity model out for
+-- this client; the entity is stationary for the whole first-sight howl.
+local lastSpotScreamAt = -math.huge
+
+local function playEntitySpotScream(fallbackEmitter, fadeIn)
+	if SPOT_SOUND == "" or (os.clock() - lastSpotScreamAt) < 4 then return false end
+
+	local emitter = fallbackEmitter
+	local holder = nil
+	if not (emitter and emitter:IsA("BasePart") and emitter.Parent) then
+		local spotPosition = workspace:GetAttribute("EntitySpotPosition")
+		if typeof(spotPosition) ~= "Vector3" then
+			local entity = workspace:FindFirstChild("Entity")
+			emitter = entity and entity:FindFirstChild("HumanoidRootPart")
+		else
+			holder = Instance.new("Part")
+			holder.Name = "Level1SpotScreamEmitter"
+			holder.Size = Vector3.new(0.2, 0.2, 0.2)
+			holder.CFrame = CFrame.new(spotPosition)
+			holder.Transparency = 1
+			holder.Anchored = true
+			holder.CanCollide = false
+			holder.CanTouch = false
+			holder.CanQuery = false
+			holder.CastShadow = false
+			holder.Parent = workspace
+			emitter = holder
+		end
+	end
+	if not emitter then return false end
+
+	lastSpotScreamAt = os.clock()
+	local s = Instance.new("Sound")
+	s.Name = "SpotScream"
+	s.SoundId = SPOT_SOUND
+	s.Volume = fadeIn and 0 or SPOT_VOLUME
+	-- Linear rolloff preserves left/right world direction while keeping the
+	-- scream intelligible at both normal and flashlight-enhanced sight ranges.
+	s.RollOffMode = Enum.RollOffMode.Linear
+	s.RollOffMinDistance = SPOT_MIN_DISTANCE
+	s.RollOffMaxDistance = SPOT_MAX_DISTANCE
+	s.Parent = emitter
+	s:Play()
+	if fadeIn then
+		TweenService:Create(s, TweenInfo.new(0.25), {Volume = SPOT_VOLUME}):Play()
+	end
+
+	local cleaned = false
+	local function cleanup()
+		if cleaned then return end
+		cleaned = true
+		if holder and holder.Parent then
+			holder:Destroy()
+		elseif s.Parent then
+			s:Destroy()
+		end
+	end
+	s.Ended:Connect(cleanup)
+	task.delay(12, cleanup)
+	return true
+end
+
+-- Preload the authored transient so the important first attack is not lost to
+-- a cold asset fetch on a player's first encounter.
 if SPOT_SOUND ~= "" then
+	task.spawn(function()
+		local warm = Instance.new("Sound")
+		warm.Name = "Level1SpotScreamPreload"
+		warm.SoundId = SPOT_SOUND
+		warm.Volume = 0
+		warm.Parent = SoundService
+		pcall(function() ContentProvider:PreloadAsync({warm}) end)
+		warm:Destroy()
+	end)
+
 	workspace:GetAttributeChangedSignal("EntitySpotScream"):Connect(function()
-		local entity = workspace:FindFirstChild("Entity")
-		local er = entity and entity:FindFirstChild("HumanoidRootPart")
-		if not er then return end
-		local s = Instance.new("Sound")
-		s.Name = "SpotScream"
-		s.SoundId = SPOT_SOUND
-		s.Volume = SPOT_VOLUME
-		s.RollOffMode = Enum.RollOffMode.InverseTapered
-		s.RollOffMinDistance = 10
-		s.RollOffMaxDistance = 200
-		s.Parent = er
-		s:Play()
-		s.Ended:Connect(function() s:Destroy() end)
-		task.delay(8, function() if s then s:Destroy() end end)
+		playEntitySpotScream(nil, false)
 	end)
 end
 
@@ -503,7 +569,6 @@ local chase
 local chaseFadeTween
 local chaseBindSerial = 0
 local chasePrevEngaged = false
-local chaseLastSpot = -999
 
 local function chaseActive()
 	return workspace:GetAttribute("SelectedLevel") == 1
@@ -534,20 +599,10 @@ local function refreshChase()
 	if chasing then
 		-- Freshly spotted (wasn't already engaged) → the positional sting.
 		local er = chase and chase.Parent
-		if not chasePrevEngaged and SPOT_SOUND ~= "" and (os.clock() - chaseLastSpot) > 4
-			and er and er:IsA("BasePart") then
-			chaseLastSpot = os.clock()
-			local spot = Instance.new("Sound")
-			spot.SoundId = SPOT_SOUND
-			spot.Volume = 0
-			spot.RollOffMode = Enum.RollOffMode.InverseTapered
-			spot.RollOffMinDistance = 10
-			spot.RollOffMaxDistance = 200
-			spot.Parent = er
-			spot:Play()
-			TweenService:Create(spot, TweenInfo.new(0.25), {Volume = SPOT_VOLUME}):Play()
-			spot.Ended:Connect(function() spot:Destroy() end)
-			task.delay(8, function() if spot.Parent then spot:Destroy() end end)
+		if not chasePrevEngaged and er and er:IsA("BasePart") then
+			-- Fallback for a direct CHASE transition. The shared helper keeps this
+			-- path's spatial mix identical and de-duplicates it from the ALERT howl.
+			playEntitySpotScream(er, true)
 		end
 		fadeChase(CHASE_VOLUME, CHASE_FADE)
 	elseif tracking then
