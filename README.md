@@ -677,30 +677,25 @@ content and are written to fail rather than pass quietly. Four exist:
 Test Suite` and `UIRegression`. **No hostile has one** — Level 1's entity never
 did, and Level 2's only hostile suite went into the archive with the Slidemouth.
 
-**Last measured — 2026-09-04**, after that day's ten-change batch and before the
-2026-09-05 batch. These are the numbers to re-measure, not to trust:
+**Last measured — 2026-09-05**, after the second audit batch (`1cf26df`).
+These are the numbers to re-measure, not to trust:
 
 | Check | Result | Outcome |
 |---|---|---|
-| `tools/studio_compile_probe.luau` over the whole place | every script compiled | **PASS** |
+| `tools/studio_compile_probe.luau` over the whole place | 101/101 compiled | **PASS** |
 | `Round Completion Test Suite.RunAll()` | 398 checks, 0 failed | **PASS** |
-| `Level 3 Test Suite.ValidateConfiguration()` | passes with the new occupancy and table-check asserts | **PASS** |
-| `UIRegression.RunAll()` | 22 scenarios; 23 failures, all pre-existing | **KNOWN FAILURES** |
-| Level 2 play: chase, wipe window, pumps, win path | see `HANDOVER-2026-09-04.md` for the per-check record | **PASS** |
-| Level 3 play: hiding and table check | as above | **PASS** |
+| `Level 3 Test Suite.ValidateConfiguration()` | passes with the occupancy and table-check asserts (measured 2026-09-04) | **PASS** |
+| `UIRegression.RunAll()` (fresh play session, lobby) | 22 scenarios, 1 failed: the `objectives-panel` row, which now names the queue host panel it finds up; the Zyntra terminal fit matrix incl. the SETTINGS tab 1405/0 | **1 KNOWN FAILURE** |
+| Level 2 play: pump cue, lethal-pump banner, exit bearing, proximity latch | see `HANDOVER-2026-09-05.md` for the per-check record | **PASS** |
+| Level 3 play: scream strobe under 3 flashes/s, `ReduceFlashing` swell | as above | **PASS** |
 | `tools/tests/test_push_repo_to_studio.py` end-to-end round-trips | not executed — no `luau` binary on this machine | **NOT RUN** |
 
-The 23 UIRegression failures are two known rows, both older than that batch: 22
-in the Zyntra terminal's DEV tab, where `ZyntraStore` stands a level-gated row
-down with the caption `"LEVEL <n> ONLY"` and the harness's list of recognised
-stand-down captions does not contain that string, so it counts the row as
-neither reachable nor stood down; and the `objectives-panel` row, which reports
-`RoundGui.QueueHostPanel.CreateParty` as a tappable rect while its parent
-`QueueHostShade` is hidden. Both were the harness, not gameplay, and both were
-fixed in the 2026-09-05 batch: `Fit.ZyntraDisabledCaptions` now carries the
-`"LEVEL %d+ ONLY"` family (and `"WAITING"`), and the `objectives-panel` scenario
-declares `Forbids = {"QueueHostPanel"}`. **Re-measure rather than trusting the
-23** — the number above predates both fixes.
+The single UIRegression failure is the `objectives-panel` row: since the 2026-09-05
+batch it forbids `QueueHostPanel`, and in a fresh lobby the collector still finds
+that panel's CreateParty button as a tappable rect while its parent shade is hidden
+— a defect in either the panel's visibility state or the rect collector, older than
+both batches. The 22 Dev-tab rows that used to fail were a missing `LEVEL n ONLY`
+entry in the harness's stand-down caption list, fixed the same day.
 
 **Historical, for the 2026-08-30 release (v1641):** the Slidemouth suite passed
 391/0 at authored scale, `Round Completion` 397/0, the UI suite 200/0 and the

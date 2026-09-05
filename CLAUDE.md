@@ -243,6 +243,57 @@ Afternoon batch (see `HANDOVER-2026-09-04.md` for the verification record):
   shows/triggers while inside the camera frustum (point a Scriptable camera at it
   first). The station recipe is in the project memory (`mongotv-playtest-recipe`).
 
+### Added 2026-09-05
+
+Batch 2 of the deep audit (`docs/AUDIT-2026-09-04.md`); the record is
+`HANDOVER-2026-09-05.md`.
+
+- **More than one Claude session works in this checkout and in Studio at the
+  same time.** On 2026-09-05 another session patched badge ids into
+  `ZyntraConfig` in both the working copy and Studio, left `assets/badges/`
+  and `docs/EMERGENCY_REENTRY_VALIDATION_2026-09-05.md` untracked, and pushed
+  `EntityAI` / `SoundController` / `RoundUI` edits straight into Studio. Before
+  a push: `git status` for foreign untracked files, `pull --audit`, and expect
+  the push tool to report a CONFLICT for any script the other session touched —
+  merge their Studio change into the working copy first (chunk checksums over
+  `execute_luau` find it), never `--overwrite-conflicts` blind.
+- **Accessibility contract:** `ZyntraConfig.AccessibilitySettings` lists the
+  four keys (`ReduceCameraShake`, `ReduceFlashing`, `CaptionsEnabled`, hidden
+  `DisableCaptions`). Key = profile `Settings` field = player attribute name =
+  the only payload `ZyntraAction "SetAccessibility" {Key, Enabled}` accepts.
+  The Zyntra terminal's SETTINGS tab is the UI and it is lobby-only (the
+  terminal opener stands down in rounds), an open product decision.
+- **DataStore write discipline in ZyntraMonetization:** a transform that
+  returns false now CANCELS `UpdateAsync` (callback returns nil); the session
+  copy adopts the profile the callback read. Never write a transform that
+  mutates `current` and then returns false. Write-bearing actions have a 1 s
+  per-action window; mute and accessibility writes sit behind escalating/6 s
+  floors; a pass read that never answers returns nil ("unknown"), never false.
+- **Pool Foam has a server proximity latch** (`Observation.ProximityLatch*`:
+  8 studs, 7 s, standing still under 3 studs/s) as a backstop against a client
+  that never reports a look. It only ever adds a latch. The look-latch is still
+  the mechanic; `FreezeWhileObserved` is false and the statue branches never run.
+- **Level 1 prompts are revalidated server-side** by `canUsePrompt` in
+  PuzzleManager (shaped like Level 2's `canUsePump`); a dead or escaped
+  participant can no longer trigger relays, boxes or levers.
+- **Level 3 blackout scream strobe** runs at `BLACKOUT_FLICKER_INTERVAL` 0.17 s
+  (under 3 whole-scene flashes/s; 0.15 is the arithmetic floor, do not go
+  below); with `ReduceFlashing` the strobe becomes a cosine swell. The
+  blackout sweep is 2/s, not event-driven, because the server flips Lights
+  inside the world when CDs go in.
+- **Level 2 cues:** `workspace.Level2FoamLethal` flips true at the pump that
+  enables attacks; the pump motor is a 3D cue at the pump for everyone
+  (`Level 2 Sound Controller.playPositionalCue`); `workspace.Level2_ExitPosition`
+  drives the objective panel's bearing once the doors are powered.
+- **UIRegression:** `Fit.ZyntraDisabledCaptions` now recognises `LEVEL n ONLY`
+  (the 22 Dev-tab rows), the objectives-panel row forbids `QueueHostPanel`,
+  and the terminal fit matrix covers the SETTINGS tab. Configuring a queue over
+  the remote instead of the CreateParty button leaves the host panel open and
+  fails that row — restart play before measuring.
+- **`HANDOFF-LEVEL2.md` is deleted**; README's "How a Level 2 round runs" holds
+  what was still true. `docs/AUDIT-2026-09-04.md` lists what remains open
+  (robustness, controller and Pool Foam audio are Trello cards).
+
 ### History — the 2026-08-19 audit (done, kept for context)
 
 Branch `claude/roblox-code-audit-di6qxi`, PR #1 (merged): a project-wide audit of ~45k
