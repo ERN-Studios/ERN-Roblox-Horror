@@ -698,10 +698,18 @@ RunService.Heartbeat:Connect(function(dt)
 			if hum.WalkSpeed ~= desiredSpeed then hum.WalkSpeed = desiredSpeed end
 		end
 
-		player:SetAttribute("Stamina", 1)
+		-- Lobby stamina never moves, so these three used to be written on every
+		-- single lobby frame. Compare before writing instead. Deliberately NOT
+		-- through lastFrac/lastExhausted: those are the in-round bar's dirty
+		-- cache, and priming them to 1/false here would make the first in-round
+		-- frame (frac is exactly 1, stamina is reset just above) skip the block
+		-- that repairs staFill's Size and BackgroundColor3 -- leaving last
+		-- round's stale narrow red bar behind the moment anything shows the bar
+		-- at full stamina.
+		if player:GetAttribute("Stamina") ~= 1 then player:SetAttribute("Stamina", 1) end
 		barShown = 0
-		staBg.BackgroundTransparency = 1
-		staFill.BackgroundTransparency = 1
+		if staBg.BackgroundTransparency ~= 1 then staBg.BackgroundTransparency = 1 end
+		if staFill.BackgroundTransparency ~= 1 then staFill.BackgroundTransparency = 1 end
 		return
 	end
 	local char = player.Character

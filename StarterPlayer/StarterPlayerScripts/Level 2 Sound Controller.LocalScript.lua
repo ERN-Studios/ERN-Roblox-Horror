@@ -66,6 +66,11 @@ table.insert(PRELOAD_SLOTS, "Level 2 Player Dry Tile Walking Sound")
 local DEFAULT_CUE_VOLUME = 0.3
 local CUE_VOLUMES = {
     ["Level 2 Pressure Door"] = 1.1,
+    -- Played spatially at the pump (see playPositionalCue), so this is what a
+    -- listener standing at the lever hears — the activator used to hear a flat
+    -- 2D 0.3 and must not be blasted for the party's benefit. Distance does the
+    -- rest of the work through the rolloff.
+    ["Level 2 Pump Start"] = 0.45,
 }
 local COMMON_FIRST_DELAY_MIN, COMMON_FIRST_DELAY_MAX = 3, 7
 local COMMON_DELAY_MIN, COMMON_DELAY_MAX = 6, 12
@@ -79,13 +84,27 @@ for _, slotName in ipairs(CUE_SLOTS) do ALLOWED_CUES[slotName] = true end
 local library = ReplicatedStorage:WaitForChild("Level 2 Sound Library")
 local event = ReplicatedStorage:WaitForChild("Level 2 Remotes"):WaitForChild("Level 2 Sound Event")
 
+-- Memoised per slot, HITS ONLY. The library StringValues are authored, not
+-- runtime-edited, and the ambience Heartbeat asks for all three of its slots on
+-- every frame of a live Level 2 round — a folder lookup, a tostring, a :gsub and
+-- a :match, 180 times a second, to recompute three values that are fixed for the
+-- session. A miss is deliberately not cached: this script can run before the
+-- library's StringValues have replicated, and a negative memo would leave that
+-- slot silent for the whole session. An empty slot therefore keeps costing
+-- exactly what it costs today.
+-- Consequence worth knowing during a playtest: editing a library StringValue
+-- while the place is running no longer re-points a loop that is already playing.
+local resolvedIds = {}
 local function resolveId(slotName)
+	local cached = resolvedIds[slotName]
+	if cached then return cached end
 	local slot = library and library:FindFirstChild(slotName)
 	local raw = slot and slot:IsA("StringValue") and slot.Value or ""
 	raw = tostring(raw):gsub("%s", "")
 	if raw == "" then return nil end
-	if raw:match("^%d+$") then return "rbxassetid://" .. raw end
-	return raw
+	local id = raw:match("^%d+$") and ("rbxassetid://" .. raw) or raw
+	resolvedIds[slotName] = id
+	return id
 end
 
 -- Warm the authored one-shot clips while the player is still exploring, so
@@ -592,6 +611,64 @@ local function playPressureDoorCue(id, context)
 	return true
 end
 
+-- A one-shot the server placed somewhere in the world. The position travels
+-- WITH the cue for the same reason the pressure door's does: StreamingEnabled
+-- may keep the emitting model out of this client's DataModel entirely, so there
+-- is nothing here to look up and parent to.
+--
+-- LEVEL2_PUMP_IS_LOUD_20260905. The pump motor is the loudest event in Level 2
+-- and the one that pulls Pool Foam onto the objective, and it used to be fired
+-- to the ACTIVATOR ALONE and played flat and 2D. A teammate two halls over
+-- learned that a pump had started from a text banner, could not tell which
+-- direction it came from, and never heard what the monster was hearing.
+--
+-- The plateau is wide enough that "nearby" is one loudness rather than a ramp
+-- that doubles every few steps, and the maximum is level-sized so a teammate a
+-- few halls away still hears the motor — quieter, which is the point: the party
+-- should be able to judge how far off the danger is.
+local POSITIONAL_ROLLOFF_MIN = 60
+local POSITIONAL_ROLLOFF_MAX = 600
+local function playPositionalCue(cueName, id, position)
+	local emitter = spatialEmitter("Level 2 Cue Emitter - " .. cueName, position)
+	local cue = Instance.new("Sound")
+	authoredCues[cue] = true
+	cue.Name = "Level 2 Cue - " .. cueName
+	cue.SoundId = id
+	-- CUE_VOLUMES is what a listener INSIDE the rolloff plateau hears, i.e. the
+	-- person standing at the source. There is no blanket spatial gain: a cue that
+	-- needs to carry gets its own louder entry, so making the party hear something
+	-- can never quietly multiply what the nearest player hears.
+	cue.Volume = CUE_VOLUMES[cueName] or DEFAULT_CUE_VOLUME
+	cue.RollOffMode = Enum.RollOffMode.InverseTapered
+	cue.RollOffMinDistance = POSITIONAL_ROLLOFF_MIN
+	cue.RollOffMaxDistance = POSITIONAL_ROLLOFF_MAX
+	cue.Parent = emitter
+
+	pcall(function()
+		ContentProvider:PreloadAsync({cue})
+	end)
+	-- Preload yields, so the round can have ended underneath us. Unlike the 2D
+	-- path there is a Part to take with it.
+	if not cue.Parent or not emitter.Parent or not active() then
+		authoredCues[cue] = nil
+		if emitter.Parent then emitter:Destroy() end
+		return true
+	end
+
+	clearAmbientEmitters()
+	cue:Play()
+	local duration = cue.TimeLength > 0 and cue.TimeLength or 12
+	authoredBusyUntil = math.max(authoredBusyUntil, os.clock() + duration)
+
+	-- Same fixed cleanup as the 2D path, but long enough for the pump motor:
+	-- that clip can run up to 30 s and the gauge sweep is timed to it.
+	task.delay(math.max(20, duration + 2), function()
+		authoredCues[cue] = nil
+		if emitter.Parent then emitter:Destroy() end
+	end)
+	return true
+end
+
 -- One-shot cues from the server.
 local function playCue(cueName, context)
 	if not active() then return end
@@ -599,6 +676,10 @@ local function playCue(cueName, context)
 	local id = resolveId(cueName)
 	if not id then return end
 	if cueName == "Level 2 Pressure Door" and playPressureDoorCue(id, context) then
+		return
+	end
+	if typeof(context) == "table" and typeof(context.Position) == "Vector3"
+		and playPositionalCue(cueName, id, context.Position) then
 		return
 	end
 

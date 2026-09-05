@@ -9,38 +9,38 @@ somebody spends a Zyntra **Emergency Re-entry**, which puts you back on your
 feet in the SAME round. Solve the level's objective while something hunts you —
 escape together, or watch your friends try.
 
-**Release status (2026-08-30): the verified Roblox release is live and mirrored
-on GitHub.** Studio place version
-**v1641** was published, and the public experience page now shows the exact
-title `BACKROOMS: STAY QUIET [CO-OP HORROR]` plus the approved spoiler-free
-description. The full Slidemouth suite
-passes **391 checks with 0 failures** at the authored model scale, the round-
-completion suite passes **397/0**, the UI suite passes **200/0**, and the touch-
-target matrix passes **262/0**. Level 2's invisible exit sensors have also passed
-an authoritative **105-stud/s** ragdoll crossing and a separate **75-second**
-recycle ride, while the Level 3 navigation/furniture regression is green. The
-Studio mirror compiled and matched **114/114 scripts both before and after** the
-repository-history integration, with no gameplay residue left in Edit. The
-intended history is integrated on `main` and the release record has been pushed
-to and verified against `origin/main`.
+**Last published build: place version v1641 (2026-08-30)**, live on Roblox under
+the exact title `BACKROOMS: STAY QUIET [CO-OP HORROR]` with the approved
+spoiler-free description, and mirrored on GitHub. The place has moved a long way
+since — Level 2's hostile roster, Level 1's script layout, the Zyntra store and
+Level 3's hiding mechanics all changed after it — so read v1641 as *the last
+thing published*, not as a description of what is in Studio today. Every dated
+result in this file is accurate for the date it names and has not been re-run
+since.
 
-**Since that release (2026-08-31):** Level 2's **Slidemouth was retired and
-replaced by the Pool Slide**, which spawns at the second pump and which the
-Level 2 Round Adapter now starts as a hard requirement. The place holds **134
-scripts** rather than the 114 the release record below describes, and the
-Slidemouth's 391-check suite went into `ServerStorage` with it — the Pool Slide
-has no suite yet. Every dated result in this file is accurate for the date it
-names; none of them has been re-run against the current tree.
+**Level 2 has exactly one hostile: Pool Foam.** Two others came and went. The
+Slidemouth was retired on 2026-08-31; the Pool Slide that replaced it was
+measured on 2026-09-02 never once to spawn successfully on a generated map — its
+failing spawn retried forever and cost 78% of the server's frame budget (13 FPS,
+59 with it paused) — and was deleted, backups included. The Slidemouth's code
+and its 391-check suite are preserved in
+`ServerStorage.Archive.Level2RetiredSlidemouth_20260831`. **Pool Foam has no
+suite of its own**, which is the largest open test gap in the project: the Pool
+Slide was built without one and failed in every round for days before a
+frame-time measurement found it.
 
 Level 3 — the **Mall Backrooms Party** — has its core systems in place (layout
-generator, Mall Manager AI, hiding, music/blackout cycle, CD collection into a
-five-slot Signal Hall disc player, districts, and a final-hall chase) and is
-still being built out. It is the current campaign endpoint: there is no Level 4.
+generator, Mall Manager AI, under-table hiding, music/blackout cycle, CD
+collection into a five-slot Signal Hall disc player, districts, and a final-hall
+chase) and is still being built out. It is the campaign endpoint: there is no
+Level 4.
 
 ### Finishing a level
 
 One **full-screen result overlay** for every outcome, on every level — there is
-no second "card" shape. Levels 1 and 2 offer exactly two actions, **CONTINUE**
+no second overlay shape. (The PARTY DOWN card at the bottom of this list is not
+an outcome; it is the window *before* one.) Levels 1 and 2 offer exactly two
+actions, **CONTINUE**
 and **BACK TO LOBBY**; Level 3 is the campaign's last level and offers **BACK TO
 LOBBY** alone, with no route to a Level 4.
 
@@ -105,13 +105,23 @@ LOBBY** alone, with no route to a Level 4.
   and landscape phones and stack on portrait, always at least 44px tall on
   touch, always clear of the countdown, with no keyboard glyphs on touch
   devices.
+- **A wipe opens a 15-second PARTY DOWN window before the loss overlay.** When
+  the last living player goes down, GameManager fires `"partydown"` on the
+  `RoundStatus` remote with the window length and the name of whoever fell last
+  (nil if the party emptied by a *leave*), and RoundUI draws a card offering a
+  Zyntra **Emergency Re-entry** — a held credit, or the re-entry product — next
+  to NO THANKS, both inert for the first 0.6 s so a panicking player cannot
+  mis-tap. A re-entry raises the alive count and fires `"partydownclear"`, which
+  is also what a teardown under the window sends; if nobody re-enters, the window
+  ends in the normal `"lose"` and its overlay.
 
 ## 🚇 The lobby ("Zyntra Transit — Powering the Future.")
 
 - A persistent tunnel lobby built at server start (`TunnelLobbyBuilder`). You walk
   around in your **own Roblox avatar** (third person, jumping allowed, dance emote
   on `G`).
-- Six **level bays**; bays **1–3 are active**, 4–6 are sealed ("ACCESS UNSTABLE").
+- Six **level bays**; bays **1–3 are active**, 4–6 are sealed behind a red
+  DiamondPlate door reading **COMING SOON — NEW LEVEL IN DEVELOPMENT**.
   Each bay is themed after its level (yellow office, poolrooms tile, mall party)
   and has four **launch stations** — wall-mounted monitors on articulated arms
   over circular launch pads. Step onto a pad to host, pick **party size (1–6)**
@@ -175,17 +185,21 @@ target every minute. Glowing eyes (amber → **red when hunting**), ballistic
 **5-second cinematic ground-pin kill** with a first-person kill camera, synced
 scream, and fade to spectate.
 
-## 🩵 Level 2 — Sunken Leisure Complex (world built, hostiles live)
+## 🩵 Level 2 — Sunken Leisure Complex (world built, hostile live)
 
 A bright, sunlit liminal poolrooms **water park** with its **own** generator —
-it shares only the tile texture and the water look with Level 1. (The previous
-hand-authored Flooded Poolrooms level is preserved in
-`ServerStorage.Level2Backup_20260805`.)
+it shares only the tile texture and the water look with Level 1. Nothing in the
+level is hand-placed: it is all generated from a seed, so every change is a value
+in a file. (The earlier hand-authored Flooded Poolrooms level was deleted on
+2026-09-02 by explicit decision; it is recoverable from git history at `c2b7527`.)
 
-- **Binary space partition** of a 1400-stud region: ~45 halls capped at ~250
-  studs a side (`MaximumLeafSize`), joined by flooded **arch-tunnel corridors**.
-  A **fresh random seed every round**. Water covers the floor **wall-to-wall**
-  in every pool hall at **wading depth only** — nobody ever swims.
+- **Binary space partition** of a 1400-stud region, joined by flooded
+  **arch-tunnel corridors**. A plan is rejected unless it yields at least
+  `MinimumHallCount` (16) halls; no leaf exceeds `MaximumLeafSize` (310), so
+  halls top out around 250 studs a side, with a rare 270 from an unsplittable
+  leaf. A **fresh random seed every round**. Water covers the floor
+  **wall-to-wall** in every pool hall at **wading depth only** — nobody ever
+  swims.
 - **Real sunlight**: translucent no-shadow glass roof, and per-hall **skylight
   patterns** — full lines, dashes, a punched checkerboard, or a single centre
   band — so no two ceilings read the same. Smooth trumpet-curved columns run
@@ -225,97 +239,152 @@ hand-authored Flooded Poolrooms level is preserved in
   actual water raycast) and a separate **dry-tile footstep slot**
   (`Level 2 Player Dry Tile Walking Sound`, which ships with a bundled fallback)
   for walking where there's no water underfoot.
-- **Hostiles:** the **Pool Foam** stack (controller, navigator with roof-safe
-  floor probing, observer, proxy rig, animation adapter, client effects) and the
-  **Pool Slide**, a large humanoid that **replaced the Slidemouth on
-  2026-08-31**. Dens, per-hall patrol nodes, hall-centre navigation nodes and
-  spawn markers are generated, and all three anchor kinds are reachable from the
-  world manifest.
-- **The Pool Slide arrives at the SECOND pump.** Its trigger is the count of
-  *distinct started pumps*, read independently of the station index or order, so
-  the order the party works the map in cannot change when it shows up. The
-  anchor is chosen from the generated navigation nodes under one hard rule —
-  **at least 60 studs from every living participant**, not merely from the
-  player who started the pump. Concealment and a distance near 100 studs from
-  that activator only rank *inside* the admitted set.
-- **A candidate is certified for the BODY, not for the graph.** An anchor is
-  accepted only once `_centreRoute` — the same body/step/sweep certification the
-  live route installer runs — can carry the rig to the target. An accepted
-  `SetGraphGoal` or a bare graph connection does not establish that this body
-  fits. Exceeding `CENTRING_QUERY_BUDGET` (72,000) fails CLOSED. Candidates are
-  validated while the model is parented to `ServerStorage`, so a rejected one
-  never flashes on a client, and every living player's position is re-read
-  immediately before the commit, so somebody walking into the chosen room during
-  a validation yield invalidates it.
-- Walk 10 / run 24 studs per second (running inside 120 studs), attack at 5.5
-  studs horizontally and 7 vertically behind a line-of-sight check, one spawn
-  per round latched **before** replication. It needs the imported
-  `ServerStorage.Level2Assets["Level 2 Pool Slide Template"]`.
-
-  The retired Slidemouth is preserved intact in
-  `ServerStorage.Level2RetiredSlidemouth_20260831` — controller, client and its
-  full test suite. The **room-hop** subsection immediately below describes that
-  retired encounter and is kept because the Pool Slide's own admission rule was
-  reasoned out from it. The step-handling and substep subsections after it are
-  **still live**: they describe `Level 2 Pool Foam Navigator`, which both
-  hostiles share.
-- **Slidemouth appearance is measured in ROOM HOPS**, not studs. A hall is
-  85–270 studs on a side and one corridor hop spans ~110–330 studs, so a fixed
-  stud band meant "two rooms away" on one seed and "same room, far corner" on
-  the next. The selector walks the same hall graph the navigator does —
-  pressure-door gate included — so a finite hop count also proves the creature
-  can reach the party from there. It **never uses a room a living player is
-  standing in**, requires 1–2 rooms from the NEAREST living player, and past a
-  proximity floor. Those are **hard admissions, not preferences**: an anchor
-  outside the window is refused, never demoted into a lower tier that some other
-  ranking term can promote back out of. Pump proximity and line of sight rank
-  only INSIDE the admitted set and can never reach a room the room rule
-  excluded. The same predicate runs again immediately before the commit, against
-  live player positions re-read at that moment — so a player who walks into the
-  chosen room during the validation yield invalidates it. If nothing is
-  admissible the spawn **waits**; it never takes a least-bad room and never
-  spawns anyway.
+- **The hostile is Pool Foam, and it is the only one.** The stack is a
+  controller, a navigator with roof-safe floor probing, an observer, a proxy
+  factory, an animation adapter and a client effects script, all in
+  `ServerScriptService."Level 2 Systems"`. Dens, per-hall patrol nodes,
+  hall-centre navigation nodes and spawn markers are generated with the world and
+  reachable from its manifest.
+- **It stalks whether or not you look, and looking is what arms it.** One
+  server-owned clone stands in each generated Kids Area room (five with the
+  current layout). An active clone walks toward the nearest eligible player the
+  whole time, accelerating as it goes; being seen does not stop it. What a
+  validated look does is *latch the chase* — `ChaseTriggered`, one way, never
+  released — which freezes the earned speed bonus, raises the floor to
+  `SpeedRamp.ChaseMinimumSpeed` (13) and is the precondition for the creature
+  ever being allowed to kill.
+- **Contact is lethal only once four things hold.** `instantKill` needs the
+  chase latched, `AllowAttacks` for the current phase (pump 2 onward), a
+  distance inside `Movement.KillDistance` (5.5 studs), the one-shot
+  `ChaseGraceSeconds` (0.45) window already past, and a server line-of-sight
+  re-check at the instant of contact — then it is instant death, no wind-up.
+  The server owns movement, observation, lethal contact, targeting and cleanup;
+  the client only reports its camera.
+- **A server proximity latch backs up the client reports.** Every payload check
+  in the observer validates where the camera *is*, not where it points, so a
+  client whose honestly-shaped reports simply never cover a foam model would
+  never latch a chase and would be permanently unkillable. Independently of all
+  reports, an active clone that keeps one living, eligible player inside
+  `Observation.ProximityLatchRadius` (26 studs) with a clear server line of
+  sight for `ProximityLatchSeconds` (2.5) latches the chase exactly as a look
+  does. It can only *add* a latch — never clear one, never shorten the grace
+  window, never touch `entity.Observed`. `ProximityLatchEnabled = false` turns
+  it off.
+- **The statue mechanic exists in the code but is switched off.**
+  `Observation.FreezeWhileObserved = false`, so the freeze-on-observe path —
+  continue 0.5 s (`RevealOverrunSeconds`), pause the AnimationTrack at that
+  exact `TimePosition`, hold the pose until the watcher looks away — is
+  unreachable in the shipped configuration. Every freeze branch in the
+  controller is gated on `observationFreezes(session)`. Read that flag before
+  believing any "it only moves when unobserved" description of this creature.
+- **The pumps pace it.** `PhaseOrder` runs `Dormant → Foreshadow → Pressure →
+  Finale`, gated on how many pumps are running: nothing is active until the first
+  pump, attacks are off until the second, and the last phase adds a speed
+  multiplier. The pre-latch acceleration above is `Movement.SpeedRamp`
+  (`AccelerationPerSecond` 0.65, `MaximumBonus` 12, capped at `MaximumSpeed` 22)
+  and `FreezeOnChase` is what stops it toggling on camera-edge noise. Dormant
+  and inactive clones ramp nothing.
+- **It hears the shared `NoiseRegistry`** (`Hearing` in
+  `Level 2 Pool Foam Configuration`, range 120 studs). Sprinting players and the
+  running pump motors both report; hearing only steers *whom* it targets and
+  where it patrols — it never overrides the look-latch.
+  `BeingChased` and `Level2_PoolFoamTargeted` are reference-counted across the
+  clones and cleared on death, target drop and `Controller.Stop`.
+- **Its art is deliberately temporary.** Drop `PoolFoamPrimaryTemplate` and
+  `PoolFoamSecondaryTemplate` Models under `ServerStorage.Level2Assets` and they
+  are picked up on the next Level 2 load; full instructions live in
+  `ServerScriptService."Level 2 Systems"."README - LEVEL 2 POOL FOAM"`.
+  `PoolFoamConfiguration.Enabled = false` is the one-switch rollback for a
+  playtest.
 - **Step handling.** The navigator resolves the **highest reachable** surface
-  under its feet and treats authored ground within one step height as floor
-  rather than as a wall, so stair risers, corridor curbs and deck edges are
-  crossed instead of jammed against. A blocked stride steers through an
-  authored angle ladder — but only into a placement that CLOSES the distance to
-  the current waypoint, so the creature either makes progress or is honestly
-  blocked and can never orbit a wall reporting movement. A wedged creature backs
-  out along **positions it has already stood on**, each step revalidated — there
-  is no teleport recovery.
-- **A stride is validated in pieces, not just at its endpoint.** At the fastest
-  chase speed one frame asks for 3.6 studs (36 studs/s x the controller's own
-  0.1 s clamp), and the authored features the creature has to negotiate are
-  1.2 / 1.4 / 0.8-stud pool and stair edges and 0.70–0.80 curbs. A single
-  placement straddles all of them: both ends sit on the low slab and the riser
-  between was never sampled. The stride is now walked in pieces of at most
-  `MaxTravelStep` (0.9), each running the full floor resolve and body-volume
-  test, capped at 12 pieces so an absurd delta fails CLOSED rather than falling
-  back to one unvalidated leap.
-- **Tests — and the gap the retirement opened.** `Level 2 Slidemouth Test Suite`
-  ran against a real generated world, deriving every spawn property (room, hop
-  counts, occupancy, line of sight, proximity) **independently** from the
-  anchor's world position rather than trusting the controller, driving the real
-  spawn through a real pump transition, and including a movement race and an
-  eligibility drop-out. Its ledge probe built controlled ledges at known rises
-  and sampled authored edges across every family, accepting a refusal only when
-  it could confirm real geometry in the way or a genuinely missing floor.
+  under its feet and treats authored ground within one step height
+  (`MaxStepHeight`, 3.5) as floor rather than as a wall, so stair risers,
+  corridor curbs and deck edges are crossed instead of jammed against. A blocked
+  stride steers through an authored angle ladder — but only into a placement that
+  CLOSES the distance to the current waypoint, so the creature either makes
+  progress or is honestly blocked and can never orbit a wall reporting movement.
+  A wedged creature backs out along **positions it has already stood on**, each
+  step revalidated — there is no teleport recovery.
+- **A stride is validated in pieces, not just at its endpoint.** The authored
+  features it has to negotiate are 1.2 / 1.4 / 0.8-stud pool and stair edges and
+  0.70–0.80 curbs, and at speed a single frame's placement straddles all of them:
+  both ends sit on the low slab and the riser between is never sampled. The
+  stride is walked in pieces of at most `MaxTravelStep` (0.9), each running the
+  full floor resolve and body-volume test, capped at 12 pieces so an absurd delta
+  fails CLOSED rather than falling back to one unvalidated leap.
+- **Pool Foam has no test suite, and that is the known risk.** Level 2's live
+  hostile has no coverage of its look-latch, its phase gating, its hearing or its
+  lethal contact. `Level 2 Exit Transition Test Suite` covers the exit geometry
+  and nothing else in the level. The only hostile suite this project ever had
+  went into the archive with the Slidemouth (391 checks); the encounter built
+  after it without one failed in every round for days before anyone noticed.
 
-  **That suite went into the archive with the Slidemouth on 2026-08-31, and the
-  Pool Slide has no replacement.** Level 2's live hostile therefore has no
-  coverage of its spawn admission, its body-route certification, its commit-time
-  revalidation or its attack gate — which is exactly the set of rules that took
-  several rewrites to get right on the encounter it replaced.
-  `Level 2 Exit Transition Test Suite` still covers the exit geometry.
-- Every change is validated in live play sessions across multiple seeds by
-  geometry probes (clip scan, stair connections, swim depth, wedged props, exit
-  clearance) before it lands.
-- Tweak guide for collaborators: `ServerScriptService."Level 2 Systems".README
-  - LEVEL 2 TWEAKS`. Force a layout with the `Level2Seed` workspace attribute,
-  set to any number **≥ 1**. Set it to **0** — or clear it — for a fresh random
-  map every round; 0, negatives and non-numbers all mean OFF. A round never
-  writes its random pick back into the attribute.
+### How a Level 2 round runs
+
+`Level 2 Round Adapter.Build()` drives it: resolve the seed →
+`LayoutGenerator.Generate(seed)` → `World Builder` → `ObjectiveController.Start`
+→ `PoolFoamController.Start`. `Cleanup()` stops both and tears the world down.
+
+- **Seeding.** `workspace.Level2Seed` is a manual testing override: Explorer →
+  **Workspace** → Properties → **Attributes**. A whole number from **1 to
+  2,147,483,646** pins a layout and reproduces it exactly. **0** — which is what
+  the attribute holds after a tester zeroes it instead of deleting it — plus
+  negatives, NaN, out-of-range values and non-numbers all mean **random**. A
+  round never writes its random pick back into the attribute; a previous version
+  did, and froze every server on round one's map. `Level3Seed` reads the same
+  contract.
+- **The generator retries.** Each attempt strides the seed by 104729 within a
+  budget of `GenerationAttempts` (300). Roughly 11% of candidate plans are
+  accepted, so ~9 attempts is typical and p99 is 42. An **unpinned** round that
+  somehow exhausted the budget takes one more independently seeded stride before
+  falling back to the checked-in known-good seed `101`. A pinned seed skips the
+  fallback, so a pinned failure stays reproducible.
+- **The Grand Slide Hall is the exit room and has its own size floor.** All three
+  slide halls must clear `SlideHallMinimumWidth`/`Depth` (175×165); the one
+  carrying the exit flume must additionally clear `ExitHallMinimumWidth`/`Depth`
+  (210×200) and sit within `ExitHallMaximumShellGap` (80) studs of the east
+  shell. The shell-gap rule is not decoration: the flume runs *level* from the
+  hall's east wall out to the shell before it plunges, so an exit hall further
+  west turns the lead-in into a long flat walk inside the tube. Measured over 400
+  seeds with both rules live, the exit hall lands between 210×200 and 263×262
+  (median 233×226), always within 44 studs of the shell.
+- **The state folder is the first place to look.** `ReplicatedStorage["Level 2
+  State"]` carries `Level2_Phase`, `Level2_Seed`, `Level2_ResolvedSeed`,
+  `Level2_SeedPinned`, `Level2_UsedFallback`, `Level2_RandomRecoverySeed`,
+  `Level2_PumpProgress` and `Level2_HallCount` as attributes. To prove randomness,
+  build five rounds back to back and compare `Level2_ResolvedSeed` **and** the
+  geometry — a differing seed alone does not prove a differing map.
+- **Entering the level is held by the loading cover, not by a timer.**
+  `StreamingEnabled` is on, so after the server finishes building, each client
+  still has ~70,000 instances to stream. Level 1 and Level 3 hide that behind the
+  elevator ride; Level 2 uses the shared loading screen in `RoundUI.LocalScript`
+  instead, coloured from `LOADING_PALETTES` (Level 2's status line is literally
+  `Configuration.Colors.Water`). `poolaccess` does **not** uncover: the client
+  waits until there is solid ground under its own root inside `Level 2 Generated
+  World`, calls `RequestStreamAroundAsync`, then reports `entryready` on the
+  `RoundStatus` remote, and GameManager holds the round until every client has.
+  Three independent ways out stop the cover ever trapping anyone — the client's
+  15 s readiness timeout, a 35 s absolute backstop armed with the cover, and the
+  server's own 16 s cap — and a player who joins mid-load never arms the hold at
+  all. Because the cover does not block input, Level 2's placement anchor
+  releases on `RoundActive` rather than on a flat delay, so nobody can walk blind
+  off an arrival deck ringed by water. **Levels 1 and 3 are unchanged.** Measured
+  live against a 70,960-instance world: cover up at 0.0 s, world built at 3.9 s,
+  client acked 3.2 s after `poolaccess` — released by genuine readiness, not by
+  timeout.
+- **Sound slots are content, not code.** `ReplicatedStorage["Level 2 Sound
+  Library"]` holds one StringValue per slot; paste an asset id in and it works.
+  Several are still empty, and some of the empty ones have **no code reference at
+  all** — the swim-stroke pair in particular has nothing left to trigger it now
+  that water is wading depth wall-to-wall. Grep the slot name before you go
+  looking for audio: filling an unreferenced slot changes nothing.
+- **Validate across seeds, not on one.** Changes here have historically been
+  landed only after live play sessions on several seeds with geometry probes —
+  clip scan, stair connections, swim depth, wedged props, exit clearance. One
+  seed proves very little in a procedurally generated level.
+- Tweak guide for collaborators: `ServerScriptService."Level 2 Systems"."README
+  - LEVEL 2 TWEAKS"` — about 95% of the tunable values live in `Level 2
+  Configuration`.
 
 ## 🟣 Level 3 — Mall Backrooms Party (in development)
 
@@ -333,7 +402,16 @@ out (`Level 3 Systems`):
   Mall Manager **hunt** → uneven fluorescent recovery, then the next
   synchronized song cycle.
 - **Hiding**: server-validated **under-table hiding** with prompts, occupancy
-  and character restoration.
+  and character restoration. **Two players fit under one table**
+  (`Hiding.HideOccupantCap`), on lanes either side of the anchor; a hidden player
+  has `ProximityPromptService` switched off so `E` cannot re-fire the prompt they
+  are already inside.
+- **The Mall Manager checks tables** (`Configuration.TableCheck`): it biases its
+  sweep toward occupied tables, enters a `TABLE_CHECK` state with a two-second
+  warning on the occupants' hide banner, then flushes them out to the far side
+  with a short window of attack immunity. Per-table and global cooldowns stop it
+  camping one table, and a mid-hunt detour is only allowed toward a table closer
+  than the nearest exposed player.
 - **The objective**: collect CDs scattered through the mall and insert them into
   the **five-slot disc player** in the Signal Hall (`Configuration.ModuleGoal`
   is 5). The state folder tracks collected, inserted, carried and dropped counts
@@ -342,12 +420,13 @@ out (`Level 3 Systems`):
   triggers the Mall Manager's **finale chase**, and a validated Manager spawn
   marker of its own.
 - **`Level3Seed`** pins the layout for reproduction, on the same contract as
-  Level 2: a number **≥ 1** pins, while 0, negatives, NaN and non-numbers all
-  mean "pick a random seed". `Level3_SeedPinned` in the state folder shows which
-  mode a round used. (Before 2026-09-02 the guard was `type(v) ~= "number"`,
-  which accepted 0 and would have pinned every round to seed 0's mall.)
+  Level 2: a whole number from **1 to 2,147,483,646** pins, while 0, negatives,
+  NaN, out-of-range values and non-numbers all mean "pick a random seed".
+  `Level3_SeedPinned` in the state folder shows which mode a round used. (Before
+  2026-09-02 the guard was `type(v) ~= "number"`, which accepted 0 and would have
+  pinned every round to seed 0's mall.)
 - Its own lighting/sound controllers, reader client, and a large in-Studio
-  **test suite** (`Level 3 Test Suite`).
+  **test suite** (`Level 3 Test Suite`) — see Testing below for its entry points.
 
 ## ⌨️ Controls
 
@@ -360,6 +439,32 @@ out (`Level 3 Systems`):
 | `Q` / `E` | Spectate while dead / escaped — full first-person POV of survivors |
 | `G` | **In a round:** drop a glowstick. **In the lobby:** dance emote |
 | Touch | On-screen **RUN / JUMP / SNEAK** buttons + flashlight tap target. SNEAK is the touch crouch (toggle, silent movement) — the keyboard's `Ctrl`. The **POV** button is dev-only (`devAllowed`) and is not a general player control |
+| Gamepad | **L2** (hold) sprints, **R1** toggles the flashlight. `sprintRequested()` in `NoiseReporter` is the single definition of "asking to sprint", and re-reads the hardware so a stuck trigger cannot pin the lobby to sprint speed. Code-reviewed only — no controller has been on the machine |
+
+### Accessibility
+
+The switches live in the **Zyntra terminal's SETTINGS tab**, reached through the
+on-screen `ZYNTRA // EQUIPMENT` opener (`J` is a dev-only shortcut to the same
+panel) — the fifth tab, after Upgrades / Shop / Donate / Colors. The rows are
+generated from `ReplicatedStorage.ZyntraConfig.AccessibilitySettings`, an
+ordered array whose `Key` is *both* the player attribute the client reads and
+the `profile.Settings` field it saves under, so a row, the server's allow-list
+and the readers cannot drift apart. Toggling one fires
+`SetAccessibility {Key, Enabled}` on the Zyntra action remote; the server
+persists it and republishes the attribute.
+
+| Key | Default | Honoured by |
+|---|---|---|
+| `ReduceCameraShake` | off | `EntityShakeController` (proximity tremble, chase rumble, footstep punch — head-bob and crouch are untouched), `Level 2 Pool Foam Client` |
+| `ReduceFlashing` | off | `Level 3 Lighting Controller` (the blackout strobe becomes a smooth dim; no snap to black), `Level 2 Pool Foam Client` |
+| `CaptionsEnabled` | **on** | Pool Foam's client captions |
+
+`DisableCaptions` is the older half of the caption pair, still read as
+`DisableCaptions ~= true and CaptionsEnabled ~= false`. It is marked `Hidden` in
+the config and deliberately not drawn — two rows would contradict each other —
+but it is still persisted so old saves keep working. Adding a switch is a config
+line, not a UI edit; a default must never be flipped to the opposite of what its
+readers already assume.
 
 ## 🗂️ Repository layout
 
@@ -394,21 +499,29 @@ ServerScriptService/
   Level3Generator.ModuleScript      Level 3: doorway into "Level 3 Systems"
   Level 3 Systems/                  Level 3: config, layout, world builder, Mall
                                     Manager AI, hiding, music cycle, test suite
+  ZyntraMonetization.Script.lua     tokens, upgrades, Emergency Re-entry, badges
+  LobbyPartyModeController.Script.lua  lobby party mode
+  Crouch State Server.Script.lua    server side of sneak
   FlashlightSync / AvatarNormalize / NoiseRegistry   shared services
-ServerStorage/                      retired backups (`Archive`, `CodexBackup_*`)
-                                    plus an unused third-party asset (`Project
-                                    Mirror`); see House rules
-Workspace/                          mirrored rig notes/scripts: the `Entity` rig
-                                    doc, `Dummy`, `StarterCharacter` (+ Animate)
+ServerStorage/                      retired backups (`Archive/`, two
+                                    `CodexBackup_20260902_*` folders) plus an
+                                    unused third-party asset (`Project Mirror`);
+                                    see House rules in CLAUDE.md
+Workspace/                          one marker file for the `Entity` rig; the rig
+                                    itself is model data, not mirrored source
 StarterPlayer/
   StarterCharacter/                 hazmat gameplay rig (+ Animate)
   StarterCharacterScripts/          run anim, muted default steps, dance emote
   StarterPlayerScripts/             HUD, audio hub (SoundController), per-level
                                     sound/lighting controllers, flashlight,
                                     spectate, slides, scares…
-ReplicatedStorage/Remotes/          shared RemoteEvents (.txt markers); per-level
-                                    ones sit in `Level 2 Remotes/`, `Level 2 Pool
-                                    Foam Remotes/` and `Level 3 Remotes/`
+ReplicatedStorage/Remotes/          the eight shared RemoteEvents (.txt markers):
+                                    RoundStatus, PuzzleStatus, ReportNoise,
+                                    ToggleFlashlight, DropGlowstick, Jumpscare,
+                                    DevControl, DevTuning. Per-level ones sit in
+                                    `Level 2 Remotes/` (Level 2 Alert Event,
+                                    Level 2 Sound Event), `Level 2 Pool Foam
+                                    Remotes/` and `Level 3 Remotes/`
 ReplicatedStorage/UIDevice          form factor + safe-area layout for the HUD
                                     (`Safe`, `ModalViewport`, `TopRightPanel`)
 ReplicatedStorage/UIRegression      the HUD regression matrix (see Testing)
@@ -416,16 +529,23 @@ RobloxReplicatedStorage/            four Roblox-engine-owned LocalizationService
                                     remotes, mirrored as a record only
 assets/                             source assets: textures · sounds · models ·
                                     banners · animations (FBX + keyframes) · blender
-tools/                              Studio/Blender MCP pipeline (see below)
+tools/                              Studio/Blender MCP pipeline (see below), plus
+                                    `discord_trello_bot/` — the #bugs/#feedback
+                                    forum-to-Trello bot (own README)
 artifacts/                          captured screenshots from automated playtests
-docs/                               audits and one-off design docs: this audit,
-                                    Level 3 pathfinding notes, Zyntra
-                                    monetization setup
+docs/                               audits and one-off design docs: the dated
+                                    AUDIT-*.md files, Level 3 pathfinding notes,
+                                    Zyntra monetization setup
 plugin/                             Studio dock plugin
                                     (`MasterTuningPlugin.server.lua`) +
                                     `build_plugin.py` installer; intentionally
                                     outside the mirror/manifest
 ```
+
+At the repo root, `CLAUDE.md` is the working brief for anyone (or anything)
+editing this place — the sync rules, the current state and the house rules live
+there, not here. The dated `HANDOVER-*.md` files are per-session records of what
+shipped and how it was verified.
 
 Level 1's five runtime scripts were gathered into `Level 1 Systems` on
 2026-09-02 so all three levels read the same way. Anything looking them up by
@@ -469,6 +589,11 @@ Everything below drives **live Roblox Studio and Blender** over MCP:
   source is saved under `.studio-push-backups/<timestamp>/`, and the manifest is
   rewritten atomically after each file.
 
+  **A script that does not exist in Studio yet cannot be pushed by these tools.**
+  Create it in Studio first (`execute_luau` + `UpdateSourceAsync`), then add its
+  manifest item with `sha256_of` / `canonical_bytes` from
+  `tools/studio_source_contract.py`.
+
   While a push is queued, `pull_source_from_studio.py` **skips** those files
   (their repo copies are newer than Studio); pass `--force` to discard the
   unpushed edits instead. (`push_level1_to_studio.py` and
@@ -491,7 +616,7 @@ Everything below drives **live Roblox Studio and Blender** over MCP:
   back with **CRLF** line endings, so the apply step normalises before writing —
   without that every file lands one byte per line too long. And a raw `.Source`
   write refuses any string of **200,000 characters or more**, which Level 2
-  World Builder (248,130) exceeds; `UpdateSourceAsync` does not.
+  World Builder is far past; `UpdateSourceAsync` does not.
 
   Afterwards, `tools/record_synced_source.py <dump> <file> ...` writes the
   manifest entry — and refuses unless the parity dump below already shows Studio
@@ -547,49 +672,51 @@ synthesized pending queue the suite needs and runs anywhere.
 ## 🧪 In-Studio test suites
 
 The gameplay and UI suites run inside a Play session against real generated
-content and are written to fail rather than pass quietly. The same table also
-keeps the remaining external release gates visible.
+content and are written to fail rather than pass quietly. Four exist:
+`Round Completion Test Suite`, `Level 3 Test Suite`, `Level 2 Exit Transition
+Test Suite` and `UIRegression`. **No hostile has one** — Level 1's entity never
+did, and Level 2's only hostile suite went into the archive with the Slidemouth.
 
-**Verified release-candidate results — 2026-08-30:**
+**Last measured — 2026-09-04**, after that day's ten-change batch and before the
+2026-09-05 batch. These are the numbers to re-measure, not to trust:
 
-| Suite | Result | Outcome |
+| Check | Result | Outcome |
 |---|---|---|
-| `Level 2 Slidemouth Test Suite` | 391 checks, 0 failed, authored scale | **PASS** |
-| `Round Completion Test Suite` | 397 checks, 0 failed | **PASS** |
-| `UIRegression.RunAll` | 21 scenarios, 0 failed | **PASS** |
-| &nbsp;&nbsp;↳ `QueueModalMatrix` | 695 checks, 0 failed | **PASS** |
-| &nbsp;&nbsp;↳ `BriefingFitMatrix` | 244 checks, 0 failed | **PASS** |
-| &nbsp;&nbsp;↳ `BriefingExclusionMatrix` | 88 checks, 0 failed | **PASS** |
-| &nbsp;&nbsp;↳ `ObjectiveCornerMatrix` *(new)* | 152 checks, 0 failed | **PASS** |
-| &nbsp;&nbsp;↳ `DispatchCompactMatrix` *(new)* | 115 checks, 0 failed | **PASS** |
-| &nbsp;&nbsp;↳ `ZyntraTerminalFitMatrix` *(new)* | 557 checks, 0 failed | **PASS** |
-| `UIRegression.TouchTargetMatrix` | 408 checks, 0 failed | **PASS** |
-| Level 2 exit transition | 2 invisible sensors; 105-stud/s authoritative crossing; 75-second recycled ride | **PASS** |
-| Level 2 movement audio | 3 wet runs and 1 dry-tile run; no wet gap above 0.480 s | **PASS** |
-| Level 3 navigation + furniture | 20 navigation seeds; 9 lanes; 321 furniture parts preserved | **PASS** |
-| responsive-device visual sweep | Galaxy A06, iPhone 17 Pro, iPhone 17 portrait, iPad Pro M5 | **PASS** |
-| pre-integration whole-place compile + Studio/repo parity | 114/114 compiled and matched; 0 drift or missing | **PASS** |
-| post-integration whole-place compile + final Studio/repo parity | 114/114 compiled and matched; 0 drift, missing, extra or residue | **PASS** |
-| Roblox Studio publish + live Creator Dashboard title/description | place v1641 published; exact public title and description verified | **PASS** |
-| repository integration + GitHub push | intended history integrated; `main` pushed and verified on `origin/main` | **PASS** |
+| `tools/studio_compile_probe.luau` over the whole place | every script compiled | **PASS** |
+| `Round Completion Test Suite.RunAll()` | 398 checks, 0 failed | **PASS** |
+| `Level 3 Test Suite.ValidateConfiguration()` | passes with the new occupancy and table-check asserts | **PASS** |
+| `UIRegression.RunAll()` | 22 scenarios; 23 failures, all pre-existing | **KNOWN FAILURES** |
+| Level 2 play: chase, wipe window, pumps, win path | see `HANDOVER-2026-09-04.md` for the per-check record | **PASS** |
+| Level 3 play: hiding and table check | as above | **PASS** |
 | `tools/tests/test_push_repo_to_studio.py` end-to-end round-trips | not executed — no `luau` binary on this machine | **NOT RUN** |
 
-The Slidemouth result is the full suite, not a reduced cosmetic-size run. The
-monster remains at its authored `MODEL_SCALE = 1`; navigation/body clearance is
-validated independently from its separate **5.25-stud attack reach**. The suite
-keeps the hard 1–2 room-hop spawn admission, multiplayer commit-time
-revalidation, production-speed substep mutation proof and strict traversal
-criteria intact.
+The 23 UIRegression failures are two known rows, both older than that batch: 22
+in the Zyntra terminal's DEV tab, where `ZyntraStore` stands a level-gated row
+down with the caption `"LEVEL <n> ONLY"` and the harness's list of recognised
+stand-down captions does not contain that string, so it counts the row as
+neither reachable nor stood down; and the `objectives-panel` row, which reports
+`RoundGui.QueueHostPanel.CreateParty` as a tappable rect while its parent
+`QueueHostShade` is hidden. Both were the harness, not gameplay, and both were
+fixed in the 2026-09-05 batch: `Fit.ZyntraDisabledCaptions` now carries the
+`"LEVEL %d+ ONLY"` family (and `"WAITING"`), and the `objectives-panel` scenario
+declares `Forbids = {"QueueHostPanel"}`. **Re-measure rather than trusting the
+23** — the number above predates both fixes.
 
-All external release gates were verified independently: Studio reported the
-published place version, the public Roblox page exposed the exact metadata, and
-the remote Git branch resolved to the pushed release history.
+**Historical, for the 2026-08-30 release (v1641):** the Slidemouth suite passed
+391/0 at authored scale, `Round Completion` 397/0, the UI suite 200/0 and the
+touch-target matrix 262/0; Level 2's exit sensors passed a 105-stud/s
+authoritative crossing and a 75-second recycle ride; the Level 3
+navigation/furniture regression was green; and the place compiled and matched
+the mirror before and after the repository-history integration. Those runs
+describe a place that has since changed substantially — the Slidemouth suite in
+particular no longer exists outside the archive.
 
 | Suite | Where | What it covers |
 |---|---|---|
-| `Level 2 Slidemouth Test Suite` | `ServerScriptService."Level 2 Systems"` | **The spawn contract, enforced at the commit** — "1 to 2 rooms from the nearest player" used to be three different rules in three places and none of them hard: the ranking DEMOTED an out-of-window room instead of refusing it (and two of the demoted tiers outranked a room inside the window), the commit-time re-check re-tested occupancy and studs but never re-measured hops, and the pump-three escalation carried a third paraphrase with no hop bound at all. There is now ONE predicate and the suite runs the very function the commit calls, comparing its answer against a room graph the suite walks itself — including a tie one hop from two players, a saturated map where the only correct answer is to WAIT, and a party that MOVES between the ranking and the commit. **The substep floor resolve at the fastest production stride** — `PumpThree x MaxStepDelta` = 3.6 studs, read from the controller rather than copied, on two constructed lanes sized so one unvalidated leap straddles the feature and .9-stud substeps cannot: a 1.2-stud rise the creature must STAND on, and a 2.0-stud trench six studs above the floor it must REFUSE. The pre-rewrite navigator is kept as an in-suite mutant that calls the same `_placeFoot` with the loop removed, so the two must disagree. **Pause isolation over a loaded incumbent** — a borrowed session is parked, written over, thrown at, and handed back: the true PRE-ARM baseline is restored field for field, the navigator's `Path.Blocked` binding and its in-flight computation are restored under a documented contract, a failed pause leaves the incumbent running and a failed resume leaves the handle unconsumed, parked sessions are visible to the residue checks and stoppable by handle, and a scream pending before the pause fires exactly once afterwards at its PRESERVED REMAINING delay. Plus spawn selection re-derived independently of the controller — room, hop counts, pump hops, distance, sight and **tier**, plus the documented ordering; the production spawn path with the movement race **injected between the ranking and the commit** and eligibility read through the controller's own gate; the repaired failure modes (context-free ranking, bounded retreat, fail-closed sweep); ledge crossing on controlled rises and authored edges, where every attempted probe must end up crossed or verifiably refused |
 | `Round Completion Test Suite` | `ServerScriptService` | Seven groups, including **Cohort timing, claim anchors and synchronous failures**: a source party and its destination driven over ONE fake clock so a silent continuer's bounded retry is proved to land before the destination admits; a claim that never reaches a dispatch reaching finite settlement; repeated and concurrent `ForceSettle` proved idempotent; and synchronous dispatch rejections proved to enter the same retry/fallback/surrender policy a `TeleportInitFailed` callback does. Plus the post-win routing rules and the frozen roster; proof that the **running GameManager** loaded, uses the routing module and keeps no completion or transfer state of its own; the source→destination admission handshake replayed with the production `PlayerRemoving` step (early continuer departs mid-window, later manual Continue, timeout continuer, quitters, Back users, duplicate packets, bootstrap); the attempt-correlated failure path with real `TeleportOptions` (duplicate report, stale report after fallback, stale options never retried); and the completed-world teardown rule |
-| `UIRegression` | `ReplicatedStorage` | **`ZyntraTerminalFitMatrix()`** — the Zyntra Equipment/Research terminal opened through its OWN production toggle at ten device sizes, every tab including DEV selected through the production `selectTab`: the terminal inside `UIDevice.ModalViewport` (the true safe area, not the HUD band it used to be sized from and collapse in), header/tabs/content/status all positive, non-overlapping and inside the panel, a usable page height, every tab reachable (the bar scrolls when they do not fit) and in its authored order, every card and dev row contained horizontally with a scroll for the overflow, every touch action ≥ 44 × 44, no keyboard glyph, and the opener plus every movement control — the game's cluster AND the engine's own thumbstick — proved to have stood down while the modal is up. The shell is resolved analytically behind the usual calibration gate; grid- and list-laid-out internals are measured live and compared only against other live rectangles. **`ObjectiveCornerMatrix()`** — Level 1, Level 2 and Level 3's objective readouts forced into every state at the same ten sizes, asserting the upper-right anchor itself (top of the true safe area; right-aligned to the screen's safe edge or to the control column, whichever is the highest movement-safe edge for that height), no movement-zone entry, the Level 2 alert reflowing beside it or mutually excluding it, and the Level 3 contract in full: no separate CLOSE control exists, the panel is the control on touch and inert on desktop, the hidden state exposes only a wordless ≥ 44 × 44 restore chip at the same anchor, and restoring brings the panel back. **`DispatchCompactMatrix()`** — the phone briefing's maximum footprint: 560 × 100 absolutely on a 956 × 440 iPhone 16 Pro Max, and elsewhere bounded by the compact target the layout publishes plus the rung it reports climbing, never a quarter of the height, never a fifth of the screen, with both readouts ≥ 44 × 44 and the longest authored cue still fitting its box. Plus `BriefingExclusionMatrix()` — the dispatch briefing, the queue host modal and the Zyntra store opener, which all own the same strip of screen: a seven-state machine driven in BOTH orders (a modal raised over a live briefing, and a briefing raised under a modal already up) at two viewports, asserting the two published flags, the pixels they are derived from, that the opener leaves the INPUT STACK and not merely the screen, that the transmission itself is never torn down by suppressing its panel, and that no rect anywhere under the briefing panel overlaps any rect anywhere under the modal. Plus the developer page's captions against `UIDevice.SuppressesKeyboardGlyphs()` in both modes and back again, so a caption cannot be decided once at build time; `QueueModalMatrix()` — the lobby queue panel resolved arithmetically across thirteen device sizes, behind a calibration gate that first proves the resolver reproduces the engine at the real viewport; `BriefingFitMatrix()` — the dispatch briefing panel measured with `TextService:GetTextBoundsAsync` on portrait and small-landscape phones, proving the longest authored cue neither clips its box nor overlaps the MUTE/STOP row that abuts it; the HUD scenario matrix (including the lobby queue panel's five controls), the completion overlay's actions and routing, a viewport fit matrix across desktop, tablet and phone in both orientations, and `TouchTargetMatrix()` — a tap-size, interactivity and keyboard-glyph sweep across six phone and tablet sizes **including the Galaxy A06's 705×338**, plus a geometry pass at the real viewport with the touch layout applied. The two halves are split on purpose: under the viewport override Studio still renders at its real window size, so position-based assertions only mean something in the real-viewport pass |
+| `UIRegression` | `ReplicatedStorage` | **`ZyntraTerminalFitMatrix()`** — the Zyntra Equipment/Research terminal opened through its OWN production toggle at ten device sizes, every tab including DEV selected through the production `selectTab`: the terminal inside `UIDevice.ModalViewport` (the true safe area, not the HUD band it used to be sized from and collapse in), header/tabs/content/status all positive, non-overlapping and inside the panel, a usable page height, every tab reachable (the bar scrolls when they do not fit) and in its authored order, every card and dev row contained horizontally with a scroll for the overflow, every touch action ≥ 44 × 44, no keyboard glyph, and the opener plus every movement control — the game's cluster AND the engine's own thumbstick — proved to have stood down while the modal is up. The shell is resolved analytically behind the usual calibration gate; grid- and list-laid-out internals are measured live and compared only against other live rectangles. **`ObjectiveCornerMatrix()`** — Level 1, Level 2 and Level 3's objective readouts forced into every state at the same ten sizes, asserting the upper-right anchor itself (top of the true safe area; right-aligned to the screen's safe edge or to the control column, whichever is the highest movement-safe edge for that height), no movement-zone entry, the Level 2 alert reflowing beside it or mutually excluding it, and the Level 3 contract in full: no separate CLOSE control exists, the panel is the control on touch and inert on desktop, the hidden state exposes only a wordless ≥ 44 × 44 restore chip at the same anchor, and restoring brings the panel back. **`DispatchCompactMatrix()`** — the phone briefing's maximum footprint: 560 × 100 absolutely on a 956 × 440 iPhone 16 Pro Max, and elsewhere bounded by the compact target the layout publishes plus the rung it reports climbing, never a quarter of the height, never a fifth of the screen, with both readouts ≥ 44 × 44 and the longest authored cue still fitting its box. Plus `BriefingExclusionMatrix()` — the dispatch briefing, the queue host modal and the Zyntra store opener, which all own the same strip of screen: a seven-state machine driven in BOTH orders (a modal raised over a live briefing, and a briefing raised under a modal already up) at two viewports, asserting the two published flags, the pixels they are derived from, that the opener leaves the INPUT STACK and not merely the screen, that the transmission itself is never torn down by suppressing its panel, and that no rect anywhere under the briefing panel overlaps any rect anywhere under the modal. Plus the developer page's captions against `UIDevice.SuppressesKeyboardGlyphs()` in both modes and back again, so a caption cannot be decided once at build time; `QueueModalMatrix()` — the lobby queue panel resolved arithmetically across thirteen device sizes, behind a calibration gate that first proves the resolver reproduces the engine at the real viewport; `BriefingFitMatrix()` — the dispatch briefing panel measured with `TextService:GetTextBoundsAsync` on portrait and small-landscape phones, proving the longest authored cue neither clips its box nor overlaps the MUTE/STOP row that abuts it; the HUD scenario matrix (including the lobby queue panel's five controls), the completion overlay's actions and routing, a viewport fit matrix across desktop, tablet and phone in both orientations, and `TouchTargetMatrix()` — a tap-size, interactivity and keyboard-glyph sweep across six phone and tablet sizes **including the Galaxy A06's 705×338**, plus a geometry pass at the real viewport with the touch layout applied. The two halves are split on purpose: under the viewport override Studio still renders at its real window size, so position-based assertions only mean something in the real-viewport pass. Four more lanes run from `RunAll` alongside those: `SafeAreaMatrix()`, `ControlZoneMatrix()` (last, because it is the only lane that parents an instance into the live HUD at the real viewport), `ExclusionTimingMatrix()` and `HarnessLockMatrix()` — the last two go last of all, since they stand the run's own harness lock aside to test it and put it back |
+| `Level 3 Test Suite` | `ServerScriptService."Level 3 Systems"` | Assert-based, no `RunAll` — call the entry point you want. Static, needing no world: `ValidateConfiguration()` (config values, saved sound prototypes with their muffle effects, vetted furniture templates carrying no scripts), `ValidateGeneratedLayouts()` and `ValidateNavigationLayouts()` across the generator's own seed list. Against a built world: `ValidateWorld(manifest)`, `ValidateMallManagerRuntime()`, `ValidateRuntime(progress)` and `ValidateCleanup(snapshot)`. `RunNavigationRegression(context)` needs more than a world — it asserts a live context table (`DisposableSession = true`, an idempotent `Cleanup` callback, `Manager`, a `Player` with a character, `PatrolRoomId`, `MusicController`, `World`) and throws on its first statement without one, so it cannot be called bare. Plus targeted probes the Mall Manager's movement was written against — `ProbeSlowMovementProgress`, `ProbeBlockedProjection`, `ProbeWallHugAttack`, `ProbeChaseForwardProgress`, `ProbeMovingTargetProgressIsolation` — and `ProbeSharedTableHiding()` (needs three players to prove the cap refuses a third) and `ProbeFurniturePermanence()` |
+| `Level 2 Exit Transition Test Suite` | `ServerScriptService."Level 2 Systems"` | The only automated coverage Level 2 has. Geometry against a real manifest: `ValidateCompletionSensors`, `ValidateTransitionGeometry` (every floor from the completion sensor on stays steep enough to keep a one-way rider sliding, overlaps its neighbour so there is no hole, and carries the one-way flag), `ValidateRecycleGeometry`, `ValidateRecoveryChamber`, `ValidateExitGeometry`, `ValidateLevelThreeResume`. Plus live probes needing a player: `ProbeHighSpeedCompletion`, `ProbeTransitionRideDuration`, `ProbeLevelThreeSlideOut`. **It does not touch Pool Foam** |
 
 The three matrices added on 2026-08-30 (`ObjectiveCornerMatrix`,
 `DispatchCompactMatrix`, `ZyntraTerminalFitMatrix`) run from `RunAll` like the
@@ -597,58 +724,101 @@ rest — they own the `UIRegressionViewport` / `ForceTouchUI` /
 `UIRegressionSafeInsets` overrides themselves and restore all three on every
 exit path, error included, and each asserts that it did.
 
+### Running them
+
+**Server**, from a Play session's Server context. The two level suites assert
+their way through and throw on the first failure, so "it returned" is the pass
+signal; `Round Completion` returns a report string and a failure count instead.
+Note that a `require` issued from `execute_luau` gets its **own module
+instance** — the adapter you build here is not the one GameManager is running,
+so read state back from attributes and instances, never from module locals.
+
 ```lua
--- server
-local Adapter = require(game.ServerScriptService["Level 2 Systems"]["Level 2 Round Adapter"])
-Adapter.Build()
-print((require(game.ServerScriptService["Level 2 Systems"]["Level 2 Slidemouth Test Suite"])
-    .RunAll(Adapter.GetManifest())))
+-- Shared post-win routing. Pure: no world, no players needed.
 print((require(game.ServerScriptService["Round Completion Test Suite"]).RunAll()))
 
--- four generated worlds, one seed each
-for _, seed in ipairs({101, 202, 303, 404}) do
-    workspace:SetAttribute("Level2Seed", seed)
-    Adapter.Build()
-    print((require(game.ServerScriptService["Level 2 Systems"]["Level 2 Slidemouth Test Suite"])
-        .RunAll(Adapter.GetManifest())))
+-- Level 2: build a world, then check the exit geometry against its manifest.
+local L2 = require(game.ServerScriptService["Level 2 Systems"]["Level 2 Round Adapter"])
+local Exit = require(game.ServerScriptService["Level 2 Systems"]["Level 2 Exit Transition Test Suite"])
+L2.Build()
+local manifest = L2.GetManifest()
+for _, check in ipairs({"ValidateCompletionSensors", "ValidateTransitionGeometry",
+        "ValidateRecycleGeometry", "ValidateRecoveryChamber", "ValidateExitGeometry"}) do
+    Exit[check](manifest)
 end
-workspace:SetAttribute("Level2Seed", nil)
+print("Level 2 exit geometry passed")
+L2.Cleanup()
 
--- client
-print((require(game.ReplicatedStorage.UIRegression).RunAll()))
-print((require(game.ReplicatedStorage.UIRegression).TouchTargetMatrix()))
-print((require(game.ReplicatedStorage.UIRegression).QueueModalMatrix()))
-print((require(game.ReplicatedStorage.UIRegression).BriefingFitMatrix()))
-print((require(game.ReplicatedStorage.UIRegression).BriefingExclusionMatrix()))
-print((require(game.ReplicatedStorage.UIRegression).ObjectiveCornerMatrix()))
-print((require(game.ReplicatedStorage.UIRegression).DispatchCompactMatrix()))
-print((require(game.ReplicatedStorage.UIRegression).ZyntraTerminalFitMatrix()))
+-- Level 3: configuration and layout checks need no world.
+local L3 = require(game.ServerScriptService["Level 3 Systems"]["Level 3 Test Suite"])
+L3.ValidateConfiguration()      -- config, saved prototypes, vetted furniture
+L3.ValidateGeneratedLayouts()   -- the layout generator across its seed list
+L3.ValidateNavigationLayouts()
+print("Level 3 static checks passed")
+
+-- Level 3 with a world: build first, then the world pass. Cleanup runs even
+-- when a check throws, so a failed run does not strand a generated mall.
+local L3Adapter = require(game.ServerScriptService["Level 3 Systems"]["Level 3 Round Adapter"])
+L3Adapter.Build()
+local ok, err = pcall(function()
+    L3.ValidateWorld(L3Adapter.GetManifest())
+    -- RunNavigationRegression is NOT callable from here: it asserts on a live
+    -- context table {DisposableSession=true, Cleanup, Manager, Player,
+    -- PatrolRoomId, MusicController, World} and throws on its first statement
+    -- without one. See the suite's own header for how to assemble it.
+end)
+L3Adapter.Cleanup()   -- always, or the generated world is stranded in the session
+assert(ok, err)
+print("Level 3 world checks passed")
 ```
 
-A four-seed sweep runs for several minutes. `execute_luau` gives up long before
-that, so drive it off the caller with a **finite** deadline and poll the result
-— never a bare loop, which can wedge the editor:
+**Client**, from a Play session's Client context. `RunAllSummary()` is the one
+call to make from `execute_luau`: it is the same run as `RunAll()` with the
+passing lines dropped, bounded so it fits back through the MCP boundary, and it
+reports whether the harness lock was left clean.
+
+```lua
+print((require(game.ReplicatedStorage.UIRegression).RunAllSummary()))
+
+-- One lane at a time, compactly, when a summary points at one:
+print((require(game.ReplicatedStorage.UIRegression).Compact("ZyntraTerminalFitMatrix")))
+```
+
+**The whole place, without running any of it:** `tools/studio_compile_probe.luau`
+compiles every script by wrapping each source as `return function() ... end` and
+`require`ing the wrapper. Run it after any RoundUI edit — that file sits exactly
+at Luau's 200-local-register limit in its main chunk.
+
+**The mirror:** `python tools/pull_source_from_studio.py --audit` must report 0
+drift with every manifest entry `synced` before a session ends, and
+`tools/studio_parity_probe.luau` + `python tools/verify_studio_parity.py <dump>`
+prove it again from a fresh fingerprint rather than from the manifest.
+
+A multi-seed sweep of a level suite runs for many minutes and `execute_luau`
+gives up long before that, so drive it off the caller with a **finite** deadline
+and poll the result — never a bare loop, which can wedge the editor:
 
 ```lua
 _G.Sweep = {Status = "running", Lines = {}}
 task.spawn(function()
-    -- BEWARE: os.clock() here is PROCESSOR time, not wall time. The four-seed
-    -- sweep finished reporting 343 "seconds" after roughly 25 minutes on the
-    -- clock, so a budget expressed this way is far looser than it reads. It is
-    -- a runaway backstop, not a schedule. The REAL bound is the fixed list of
+    -- BEWARE: os.clock() here is PROCESSOR time, not wall time. A four-seed
+    -- sweep once finished reporting 343 "seconds" after roughly 25 minutes on
+    -- the clock, so a budget expressed this way is far looser than it reads. It
+    -- is a runaway backstop, not a schedule. The REAL bound is the fixed list of
     -- seeds: the loop is finite whatever the timer does, which is the property
     -- that matters. Never write the timer as the only thing stopping a loop.
     local deadline = os.clock() + 900
     for _, seed in ipairs({101, 202, 303, 404}) do
         if os.clock() > deadline then break end
-        -- ... build, RunAll, append to _G.Sweep.Lines ...
+        -- ... set Level2Seed, build, run, append to _G.Sweep.Lines ...
     end
+    workspace:SetAttribute("Level2Seed", nil)
     _G.Sweep.Status = "done"
 end)
 ```
 
-Poll `_G.Sweep` from a second `execute_luau` call. Expect the full sweep to take
-**20–30 minutes of wall time**; each seed is a world build plus a `RunAll`.
+Poll `_G.Sweep` from a second `execute_luau` call. Expect **20–30 minutes of
+wall time** for four seeds; each one is a full world build plus the checks.
 
 `UIRegression.RunAll()` measures the viewport Studio is actually rendering, so
 the full HUD matrix still wants the **Device Simulator**, set before entering
@@ -707,13 +877,18 @@ the matrix asserts it reached idle both before and after the sweep.
 
 ## 🧪 Testing vs production values
 
-Both are currently at **production** values. Override locally in Studio for
-quick tests (don't sync the overrides):
+Everything is currently at **production** values. Override locally in Studio for
+quick tests (don't sync the overrides). All three read through
+`MasterConfiguration`, so the tuning panel can move them without an edit:
 
 | Script | Setting | Testing | Production |
 |---|---|---|---|
-| MazeGenerator | `GRID` | `10` | `40` |
-| GameManager | `ELEVATOR_TIME` | `2` | `19` (matches the elevator sound) |
+| `Level 1 Systems`/MazeGenerator | `GRID` (`L1_Grid`) | `10` | `40` — the maze is GRID × GRID cells |
+| GameManager | `ELEVATOR_TIME` (`Lobby_ElevatorSeconds`) | `2` | `19` (matches the elevator sound) |
+| GameManager | `QUEUE_TIME` (`Lobby_QueueSeconds`) | — | `10` — the lobby countdown once a party fills |
+
+`FAST_QUEUE_TIME` (3 s) is not a testing override: it is what the `B` dev cheat
+switches the countdown to, and it is whitelist-gated.
 
 ### Dispatch briefings
 
@@ -753,10 +928,16 @@ survival ranking, and nothing about round performance affects it.
 **Dev cheats** (`DevCheats.LocalScript` — whitelisted accounts only):
 `B` ESP + 3 s fast queue (one key, both toggles — this is deliberate, not a
 copy-paste in the captions) · `V` noclip fly · `P` pause entity · `I` push
-immunity · `U` unlimited battery/stamina · `C` third person · `J` Zyntra
-developer phone · `M` mute/unmute the active dispatch · `N` stop the current
-dispatch briefing. These controls are restricted by immutable UserId and
-revalidated server-side; they are not general-player controls.
+immunity · `U` unlimited battery/stamina · `C` third person. `J` opens the
+Zyntra developer phone (`ZyntraStore.LocalScript`, same gate). These controls
+are restricted by immutable UserId and revalidated server-side; they are not
+general-player controls.
+
+`M` (mute/unmute the active dispatch) and `N` / gamepad `B` (stop the current
+briefing) are **not** dev cheats: `RoundUI` binds them for everyone, and only
+while a transmission is actually playing. `N`'s handler passes `ButtonB` through
+untouched while `Level3_Hiding` is set, so the advertised table-exit control
+still works.
 
 The Master Tuning panel (`MasterTuningClient.LocalScript`, same whitelist)
 opens with `F4`.
@@ -781,41 +962,41 @@ in-game panel with `F4` (`MasterTuningClient.LocalScript`), which sends every
 change over the `DevTuning` remote so the server re-checks `DevAccess` and
 re-clamps against the registry's range.
 
-## 🚀 Release-candidate checklist
+## 🚀 Before the next publish
 
-- [x] Slidemouth full suite at authored scale: **391/0**, with its hard room-hop
-      spawn and strict traversal contracts intact
-- [x] Shared completion/routing suite: **397/0**
-- [x] UI and touch-target suites: **200/0** and **262/0**
-- [x] Level 2 invisible exit geometry, authoritative high-speed crossing and
-      75-second recycle ride
-- [x] Level 2 wet/dry movement-audio cadence and Level 3 navigation/furniture
-      regression
-- [x] Pre-integration whole-place compile and Studio/repo parity: **114/114**
-- [x] Post-integration whole-place compile, Studio/repo parity and residue
-      checks: **114/114**, no drift/missing/extra and no live test residue
-- [x] Publish verified Roblox Studio place version **v1641**
-- [x] Save and verify the exact live title
-      `BACKROOMS: STAY QUIET [CO-OP HORROR]` and the approved description
-- [x] Integrate the intended repository history, commit and push `main` to GitHub
+The 2026-08-30 gates were all met for v1641 — the place published, the exact
+live title and description saved and verified, the history integrated and `main`
+pushed. What that checklist cannot do is carry forward: the place has changed on
+most days since. Re-run these before the next publish rather than reading the
+old ticks:
 
-The current Level 3 systems — generated layout, Mall Manager, hiding,
-music/blackout cycle, persistent furniture and reader UI — are included, but
-the level remains open to future content work. **There is no Level 4**; Level 3
-intentionally offers only the route back to the lobby.
+- [ ] `tools/studio_compile_probe.luau` over the whole place
+- [ ] `pull_source_from_studio.py --audit` reports 0 drift, every entry `synced`
+- [ ] `tools/studio_parity_probe.luau` + `verify_studio_parity.py` agree
+      independently of the manifest
+- [ ] `Round Completion Test Suite.RunAll()` in a Play session
+- [ ] `UIRegression.RunAllSummary()` in a Play session, with the two known
+      harness rows either fixed or explicitly accepted
+- [ ] `Level 3 Test Suite.ValidateConfiguration()` and the layout checks
+- [ ] `Level 2 Exit Transition Test Suite` against a freshly built world
+- [ ] A multi-seed Level 2 playtest — one seed proves very little here
+- [ ] `Level2Seed` and `Level3Seed` cleared (or 0) so no server ships pinned
+
+**There is no Level 4**; Level 3 intentionally offers only the route back to the
+lobby. Its systems — generated layout, Mall Manager, hiding, music/blackout
+cycle, persistent furniture and reader UI — are in, and the level remains open to
+content work.
 
 `ROBLOX_GAME_DESCRIPTION.md` is the canonical spoiler-free Creator Dashboard
 copy. `assets/marketing/roblox-experience-description.txt` mirrors it byte for
-byte; the `.md` beside it documents that relationship. Roblox publication,
-public metadata and the GitHub mirror are all verified for this release.
+byte; the `.md` beside it documents that relationship.
 
 ### Known verification limits
 
-The earlier monster-size hypothesis and the old traversal-failure report are
-superseded. Slidemouth now passes the full **391/0** suite at authored scale;
-the navigation/body checks and separate **5.25-stud attack reach** remain
-intentional rather than being hidden by cosmetic scaling or weakened tests.
-
+- **Level 2's hostile has no automated coverage at all.** Pool Foam's look-latch,
+  phase gating, hearing and lethal contact are proved only by playing the level.
+  The one encounter this project built without a suite failed silently in every
+  round for days.
 - **Cross-server transfers are untested.** Studio has no TeleportService
   destination, so nothing here has watched a real reserved server take a party.
   What IS tested is every decision either side of that call: the session
@@ -826,6 +1007,16 @@ intentional rather than being hidden by cosmetic scaling or weakened tests.
   session.** Dispatch mute and the one-time lobby-briefing claim are persisted
   by the game, but the first live leave/rejoin remains the external verification
   of account persistence and service availability.
-- Some optional Level 1/Level 3 audio-polish slots remain content work. Level 2
-  wet footsteps and their resistance layer are implemented, and dry-tile
-  footsteps have a bundled fallback when no custom asset is configured.
+- Some optional Level 1/Level 3 audio-polish slots remain content work, and
+  **every Pool Foam audio slot is empty** — the encounter is deliberately correct
+  without media, but it is currently silent. Level 2 wet footsteps and their
+  resistance layer are implemented, and dry-tile footsteps have a bundled
+  fallback when no custom asset is configured.
+- **Gamepad bindings are code-reviewed only** (no controller on the machine), as
+  is Level 1's per-escape announcement with a second player. `ProbeSharedTableHiding`
+  needs three players to prove the Level 3 table cap refuses a third.
+- **The Emergency Re-entry product exists but is not on sale.** The owner has to
+  switch it on in the Creator Dashboard, and the four badge ids in
+  `ReplicatedStorage.ZyntraConfig.Badges` are still 0, which means disabled —
+  `AwardBadge` returns false for a disabled id rather than throwing, so read the
+  return value, never `pcall`'s ok alone.

@@ -142,19 +142,15 @@ local function inFrustum(cameraCFrame, verticalFov, viewport, point, maximumDist
 		and math.abs(localPoint.Y) <= depth * verticalTangent
 end
 
-local function visibleByRay(origin, point, character, targetModel, exclusions, epsilon)
+-- The params and the filter table are owned by the observer and reused. This
+-- used to allocate a RaycastParams AND a fresh filter table per SAMPLE — up to
+-- five per target per player per entity per tick — for a value whose only
+-- per-call difference is the character. The raycasts themselves are irreducible;
+-- the allocations were not. See Observer:_prepareRay, which is what refills the
+-- filter (and still drops exclusions that have been destroyed since).
+local function visibleByRay(params, origin, point, targetModel, epsilon)
 	local offset = point - origin
 	if offset.Magnitude <= epsilon then return true end
-	local params = RaycastParams.new()
-	params.FilterType = Enum.RaycastFilterType.Exclude
-	-- Terrain water is transparent for gameplay sight. It must not make a
-	-- clearly visible foam entity appear occluded to the server.
-	params.IgnoreWater = true
-	local filter = {character}
-	for _, instance in ipairs(exclusions) do
-		if instance and instance.Parent then table.insert(filter, instance) end
-	end
-	params.FilterDescendantsInstances = filter
 	local result = workspace:Raycast(origin, offset, params)
 	if not result then return true end
 	return targetModel ~= nil and result.Instance:IsDescendantOf(targetModel)
@@ -174,8 +170,15 @@ function Observer.new(manifest, generation, tuning)
 
 	local exclusions = {}
 	if manifest.EntityNodes then table.insert(exclusions, manifest.EntityNodes) end
-	local navigation = manifest.World:FindFirstChild("Level 2 Navigation", true)
+	local navigation = manifest.Navigation
+		or manifest.World:FindFirstChild("Level 2 Navigation", true)
 	if navigation then table.insert(exclusions, navigation) end
+
+	local rayParams = RaycastParams.new()
+	rayParams.FilterType = Enum.RaycastFilterType.Exclude
+	-- Terrain water is transparent for gameplay sight. It must not make a
+	-- clearly visible foam entity appear occluded to the server.
+	rayParams.IgnoreWater = true
 
 	local self = setmetatable({
 		Manifest = manifest,
@@ -205,6 +208,11 @@ function Observer.new(manifest, generation, tuning)
 		Attempts = {},
 		Connections = {},
 		Exclusions = exclusions,
+		-- One reused occlusion ray setup for the whole observer. _prepareRay
+		-- refills RayFilter once per player per tick; visibleByRay never
+		-- allocates.
+		RayParams = rayParams,
+		RayFilter = {},
 		Destroyed = false,
 		Stats = {
 			Accepted = 0,
@@ -291,10 +299,27 @@ function Observer:_consume(player, payload)
 	self.Stats.Accepted += 1
 end
 
+-- Point the reused ray setup at one character. Exclusions that have been
+-- destroyed since the last call are dropped here exactly as they were when the
+-- filter was rebuilt per ray, so a torn-down navigation folder cannot linger in
+-- the filter for the rest of the session.
+function Observer:_prepareRay(character)
+	local filter = self.RayFilter
+	table.clear(filter)
+	table.insert(filter, character)
+	for _, instance in ipairs(self.Exclusions) do
+		if instance and instance.Parent then table.insert(filter, instance) end
+	end
+	self.RayParams.FilterDescendantsInstances = filter
+end
+
+-- `character` is kept in the signature as the statement of whose view this is;
+-- the ray no longer takes it, because _prepareRay has already installed it as
+-- the first entry of the reused filter and every caller runs that first.
 function Observer:_viewSees(character, cameraCFrame, fieldOfView, viewport, samples, targetModel)
 	for _, point in ipairs(samples) do
 		if inFrustum(cameraCFrame, fieldOfView, viewport, point, self.Tuning.MaximumObserveDistance)
-			and visibleByRay(cameraCFrame.Position, point, character, targetModel, self.Exclusions, self.Tuning.OcclusionEpsilon)
+			and visibleByRay(self.RayParams, cameraCFrame.Position, point, targetModel, self.Tuning.OcclusionEpsilon)
 		then
 			return true
 		end
@@ -305,6 +330,7 @@ end
 function Observer:_playerSees(player, samples, targetModel, now)
 	local character, _, _, head = livingRoundCharacter(player)
 	if not character then return false end
+	self:_prepareRay(character)
 	local report = self.Reports[player]
 	if report and now - report.ReceivedAt <= self.Tuning.ReportMaxAge
 		and (report.CameraCFrame.Position - head.Position).Magnitude <= self.Tuning.MaxCameraDistance

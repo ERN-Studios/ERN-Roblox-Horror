@@ -52,6 +52,44 @@ local DEFAULT_PUMP_START_DURATION = 11.572244897959184
 -- halfway through. Two seconds is well inside that decay and is six re-adds for
 -- an 11.6-second clip.
 local PUMP_NOISE_INTERVAL = 2
+
+-- LEVEL2_LETHAL_PUMP_20260905
+-- Level 2's danger curve is real and the player could never perceive it. At one
+-- pump Pool Foam wakes five entities with AllowAttacks = false, so contact
+-- cannot kill; at two, the Pressure phase turns attacks on. Nothing announced
+-- that: the alert for pump 2 read exactly like the alert for pump 1, and the
+-- phase change fired a client event with an empty sound id. A party that
+-- survived a harmless brush after pump 1 had been actively TAUGHT the things are
+-- not dangerous, one pump before they became lethal.
+--
+-- The threshold is read from Pool Foam's own phase table rather than written
+-- down twice, so retuning the encounter cannot leave the warning pointing at the
+-- wrong pump. Pool Foam Configuration is a pure data module with no side
+-- effects; a missing or broken one falls back to the authored 2 and the
+-- objective still runs.
+local LETHAL_PUMP_COUNT = 2
+do
+	local ok, configuration = pcall(function()
+		return require(script.Parent:WaitForChild("Level 2 Pool Foam Configuration", 10))
+	end)
+	local phases = ok and type(configuration) == "table" and configuration.Phases
+	if type(phases) == "table" then
+		local lowest
+		for _, record in pairs(phases) do
+			if type(record) == "table" and record.AllowAttacks == true
+				and type(record.MinimumPumps) == "number"
+				and (not lowest or record.MinimumPumps < lowest)
+			then
+				lowest = record.MinimumPumps
+			end
+		end
+		if lowest and lowest >= 1 then LETHAL_PUMP_COUNT = math.floor(lowest) end
+	else
+		warn("[Level 2] Pool Foam phases unavailable; lethal-pump warning falls back to pump "
+			.. tostring(LETHAL_PUMP_COUNT))
+	end
+end
+
 local DEV_PUMP_INTERVAL = 5
 local DEV_PUMP_REQUEST_COOLDOWN = 1
 local DEV_PUMP_CAPABILITY = {}
@@ -366,6 +404,13 @@ local function openPressureDoors(session)
 	if session.DoorsOpen or not validSession(session) then return end
 	session.DoorsOpen = true
 	workspace:SetAttribute("Level2ExitPowered", true)
+	-- The danger flag is set where the danger actually turns on, not only where
+	-- the pump counter happens to land on LETHAL_PUMP_COUNT. Pool Foam reads
+	-- Level2ExitPowered straight into Finale with AllowAttacks true, and
+	-- DebugOpenExit reaches this function without ever running a pump's activate
+	-- closure — which would have shown a playtester a safe-looking panel while
+	-- the foam was lethal.
+	workspace:SetAttribute("Level2FoamLethal", true)
 
 	local level2State = state()
 	if level2State then
@@ -420,6 +465,20 @@ local function openPressureDoors(session)
 		exit.Mouth.Color = OPEN_COLOR
 		exit.Mouth.Transparency = .35
 	end
+
+	-- LEVEL2_EXIT_BEARING_20260905
+	-- Level 1 publishes workspace.ExitPos and Level 3 Level3_ExitPosition, and
+	-- both give the party a bearing home. Level 2 — the largest generated space
+	-- in the game, streaming in around the player, and the stretch where Pool
+	-- Foam is fastest — published only the boolean above and the words "CLIMB TO
+	-- THE TOP DECK". This is what the objective panel points at. Mouth is NOT
+	-- asserted by validateManifest, so fall back to the authored flume path's
+	-- first point, which is; if neither exists the panel keeps its static hint.
+	local exitPosition = (exit and exit.Mouth and exit.Mouth.Parent and exit.Mouth.Position)
+		or (exit and exit.PathPoints and exit.PathPoints[1])
+	if typeof(exitPosition) == "Vector3" then
+		workspace:SetAttribute("Level2_ExitPosition", exitPosition)
+	end
 	-- Arming the exit is a pure CanTouch change. The sensors stay at
 	-- Transparency 1 with no lights forever; the only thing the player ever sees
 	-- change is the flume mouth on the top deck, which is the actual signpost.
@@ -457,6 +516,11 @@ function ObjectiveController.Start(manifest, generation)
 	workspace:SetAttribute("Level2Pumps", 0)
 	workspace:SetAttribute("Level2PumpGoal", goal)
 	workspace:SetAttribute("Level2ExitPowered", false)
+	-- Both of these are round state. A stale exit position would aim the new
+	-- round's compass at the previous world, and a stale lethal flag would warn
+	-- about a danger that has not been unlocked yet.
+	workspace:SetAttribute("Level2_ExitPosition", nil)
+	workspace:SetAttribute("Level2FoamLethal", false)
 	local level2State = state()
 	if level2State then
 		level2State:SetAttribute("Level2_PumpSoundDuration", session.PumpSoundDuration)
@@ -519,8 +583,13 @@ function ObjectiveController.Start(manifest, generation)
 					root and root.Position or pump.Model:GetPivot().Position)
 			end
 
-			-- Start the authored pump motor cue as soon as the lever engages.
-			fireSound("Level 2 Pump Start", player)
+			-- Start the authored pump motor cue as soon as the lever engages —
+			-- for EVERYONE, at the pump, in 3D. This used to address the
+			-- activator alone and play flat, so the loudest event in the level
+			-- was inaudible to the rest of the party. The position is sent
+			-- because StreamingEnabled may keep the pump model out of a distant
+			-- client's DataModel, exactly as the pressure doors already do.
+			fireSound("Level 2 Pump Start", nil, {Position = pump.Model:GetPivot().Position})
 			startPumpGauge(session, pump)
 
 			-- The motor is heard as well as played: it is the one noise in Level 2
@@ -558,13 +627,25 @@ function ObjectiveController.Start(manifest, generation)
 				end)
 			end
 
+			-- LEVEL2_LETHAL_PUMP_20260905. This is the pump that turns Pool Foam
+			-- lethal (see LETHAL_PUMP_COUNT). The banner says so once, and the
+			-- flag stays up on the objective panel for the rest of the round, so
+			-- the escalation the encounter has always had is finally legible.
+			-- >= rather than ==, and keyed on the flag rather than on the count,
+			-- because the counter is also assigned non-incrementally (DebugOpenExit
+			-- jumps it straight to the goal). A skipped count still announces once.
+			local turnedLethal = session.StartedCount >= LETHAL_PUMP_COUNT
+				and workspace:GetAttribute("Level2FoamLethal") ~= true
+			if turnedLethal then workspace:SetAttribute("Level2FoamLethal", true) end
+
 			fireStatus(
 				string.format("PUMP STATION %02d ONLINE", pump.Index),
 				string.format("%d OF %d STATIONS RUNNING", session.StartedCount, goal),
-				isFinalPump
-					and "EQUALIZING PRESSURE"
-					or (drained and "DRAINING LOCAL SECTION" or "LOCATE REMAINING STATIONS"),
-				1.7
+				(turnedLethal and "THE WATER IS NO LONGER SAFE")
+					or (isFinalPump and "EQUALIZING PRESSURE")
+					or (drained and "DRAINING LOCAL SECTION")
+					or "LOCATE REMAINING STATIONS",
+				turnedLethal and 2.8 or 1.7
 			)
 			return true
 		end
@@ -644,6 +725,11 @@ function ObjectiveController.Start(manifest, generation)
 	end
 
 	session.ExitSweepPrevious = {}
+	-- Built once, like the identical literals at session setup. This used to be a
+	-- fresh two-element table inside the per-player loop of a Heartbeat that runs
+	-- from the moment the doors open to the end of the round; nothing mutates
+	-- manifest.Exit for the life of the session.
+	local exitSensors = {manifest.Exit.Trigger, manifest.Exit.Backstop}
 	local sweepConnection = RunService.Heartbeat:Connect(function(deltaTime)
 		if activeSession ~= session then return end
 		if not session.DoorsOpen then
@@ -664,7 +750,7 @@ function ObjectiveController.Start(manifest, generation)
 			local plausibleDistance = math.max(80,
 				root.AssemblyLinearVelocity.Magnitude * math.max(deltaTime, 1 / 60) * 4 + 24)
 			if distance > plausibleDistance then continue end
-			for _, sensor in ipairs({manifest.Exit.Trigger, manifest.Exit.Backstop}) do
+			for _, sensor in ipairs(exitSensors) do
 				if sensor.Parent and segmentIntersectsSensor(previous, position, sensor) then
 					completeFor(player, character)
 					break

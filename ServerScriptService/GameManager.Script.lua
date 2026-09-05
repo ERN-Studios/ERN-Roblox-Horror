@@ -2074,6 +2074,24 @@ playRound = function(participants)
   entity:PivotTo(CFrame.new(entityStart.CFrame.X, 0.5 + bottomToPivot, entityStart.CFrame.Z))
  end
 
+ -- Both calls below yield for a long time -- spawnGameplayCharacter retries a
+ -- character load four times at six seconds each, and placeSafelyInElevator
+ -- waits up to eight more for a HumanoidRootPart -- so the round can end
+ -- underneath this thread. Nothing used to re-check that: the stale closure
+ -- returned true into a round already lost, ZyntraMonetization read "accepted"
+ -- and never refunded, and the player was told "Emergency Re-entry activated"
+ -- moments before the loss screen. Fence every yield the way the Level 2
+ -- transition respawn above fences its own.
+ local function reentryRoundOpen(player)
+  return roundLifecycleOpen
+   and workspace:GetAttribute("RoundActive") == true
+   and participantSet[player] == true
+   and player.Parent == Players
+ end
+ local function abandonReentry(player)
+  reentryUsed[player] = nil
+  player:SetAttribute("ZyntraReentryUsed", false)
+ end
  zyntraReentry.OnInvoke = function(player)
   if not participantSet[player] or not player.Parent or alive[player] then return false end
   if workspace:GetAttribute("RoundActive") ~= true or player:GetAttribute("Escaped") == true then return false end
@@ -2084,14 +2102,26 @@ playRound = function(participants)
   player:SetAttribute("Level2_ExitTransition", nil)
   local char = spawnGameplayCharacter(player)
   if not char then
-   reentryUsed[player] = nil
-   player:SetAttribute("ZyntraReentryUsed", false)
+   abandonReentry(player)
+   return false
+  end
+  if not reentryRoundOpen(player) then
+   -- The round ended while the character was loading. Do not place anyone in a
+   -- world that is being torn down; just report the refusal so the credit is
+   -- refunded. The lobby avatar is NOT loaded here: the teardown owns it (it
+   -- clears inRound and calls loadLobbyCharacter for every participant still in
+   -- the server), and loadLobbyCharacter refuses while inRound is set anyway, so
+   -- a call here is either a no-op or a second character load racing that one.
+   abandonReentry(player)
    return false
   end
   local hum = char:FindFirstChildOfClass("Humanoid")
   if not hum or hum.Health <= 0 or not placeSafelyInElevator(player, char) then
-   reentryUsed[player] = nil
-   player:SetAttribute("ZyntraReentryUsed", false)
+   abandonReentry(player)
+   return false
+  end
+  if not reentryRoundOpen(player) then
+   abandonReentry(player)
    return false
   end
   alive[player] = true

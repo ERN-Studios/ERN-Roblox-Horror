@@ -163,6 +163,54 @@ local function makePrompt(parent, action, obj, dist)
 	return pp
 end
 
+-- MaxActivationDistance, RequiresLineOfSight and HoldDuration are all enforced
+-- by the CLIENT's ProximityPrompt, so a Triggered signal proves nothing about
+-- where the player was standing or whether they were alive. Levels 2 and 3
+-- re-validate every trigger server-side (Level 2 Objective Controller's
+-- canUsePump, Level 3's canUsePrompt); Level 1 did not, so an exploit client
+-- could extract every relay, deposit every fuse and pull every lever from the
+-- elevator room -- or from the safe room after already escaping. Same shape as
+-- canUsePump: living participant who has not escaped, live prompt inside this
+-- round's folder, in range, and (when the prompt asks for it) line of sight.
+local function canUsePrompt(player, prompt, model)
+	if not (session and session.active) then return false end
+	if session.participants[player] ~= true then return false end
+	if session.escaped[player] or player:GetAttribute("Escaped") == true then return false end
+	if not (prompt and prompt.Enabled and session.folder and prompt:IsDescendantOf(session.folder)) then
+		return false
+	end
+
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	if not (character and character.Parent and humanoid and humanoid.Health > 0 and root) then
+		return false
+	end
+
+	-- relay prompts hang off an Attachment on the cabinet door; box and lever
+	-- prompts sit directly on a BasePart
+	local host = prompt.Parent
+	local target
+	if host and host:IsA("Attachment") then
+		target = host.WorldPosition
+	elseif host and host:IsA("BasePart") then
+		target = host.Position
+	end
+	if not target then return false end
+	if (root.Position - target).Magnitude > prompt.MaxActivationDistance + 2 then return false end
+
+	if prompt.RequiresLineOfSight then
+		local originPart = character:FindFirstChild("Head") or root
+		local params = RaycastParams.new()
+		params.FilterType = Enum.RaycastFilterType.Exclude
+		params.FilterDescendantsInstances = { character }
+		params.IgnoreWater = true
+		local result = workspace:Raycast(originPart.Position, target - originPart.Position, params)
+		if result and not result.Instance:IsDescendantOf(model) then return false end
+	end
+	return true
+end
+
 -- candidate cells avoiding pits + the elevator room
 local function eligibleCell()
 	local GRID = attr("GRID", 40)
@@ -1060,7 +1108,7 @@ local function startPuzzle()
 		local owningSession = session
 		table.insert(session.conns, relay.prompt.Triggered:Connect(function(player)
 			if session ~= owningSession or not session.active or relay.extracting or relay.extracted then return end
-			if session.participants[player] ~= true then return end
+			if not canUsePrompt(player, relay.prompt, relay.model) then return end
 			relay.extracting = true
 			relay.prompt.Enabled = false
 			relay.label.Text = "RELEASING  //  STAND BY"
@@ -1172,6 +1220,7 @@ local function startPuzzle()
 		table.insert(session.boxes, box)
 		table.insert(session.conns, box.prompt.Triggered:Connect(function(player)
 			if not session or not session.active or box.complete then return end
+			if not canUsePrompt(player, box.prompt, box.model) then return end
 			local have = session.carried[player] or 0
 			if have <= 0 then
 				status:FireClient(player, "msg", "You have no fuses")
@@ -1259,9 +1308,9 @@ local function startPuzzle()
 		table.insert(session.levers, lever)
 		table.insert(session.conns, lever.prompt.Triggered:Connect(function(player)
 			if not session or not session.active or session.stage ~= "levers" then return end
-			-- Same participant contract as the relays: only the launched party
-			-- may drive the exit circuit.
-			if session.participants[player] ~= true then return end
+			-- Same contract as the relays: only a living, present member of the
+			-- launched party may drive the exit circuit.
+			if not canUsePrompt(player, lever.prompt, lever.model) then return end
 			if lever.latched then return end
 
 			if lever.pullSound then lever.pullSound:Play() end

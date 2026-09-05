@@ -168,7 +168,24 @@ RunService.RenderStepped:Connect(function(dt)
 	end
 
 	-- entity shake on top of the bob
-	local amp = ambient + impulse * STOMP_STRENGTH + alertAmp
+	--
+	-- ReduceCameraShake covers ALL of it, and this is the one place that can say
+	-- so. The flag used to be read in exactly two places -- the alert listener
+	-- above and the alertAmp branch -- and both of them only suppressed the
+	-- first-sight howl shock, so a player who had asked for no camera shake still
+	-- got the proximity tremble (LURK_MAX), the chase rumble (CHASE_RUMBLE,
+	-- doubled while targeted) and the per-footstep punch (STOMP_STRENGTH, every
+	-- STOMP_CHASE_INTERVAL while chased) at full strength: essentially all of the
+	-- motion the setting names. Scaling the SUM is what makes that impossible to
+	-- get wrong again -- a future shake source added above this line is covered
+	-- by construction rather than by remembering to check the flag.
+	--
+	-- Head-bob and the crouch/hide offsets are deliberately NOT scaled: they are
+	-- pose, not shake, and removing them would change where the camera sits
+	-- rather than how much it jitters. The downward stomp dip below rides inside
+	-- the same `amp >= 0.001` branch, so it goes with the shake.
+	local shakeScale = if player:GetAttribute("ReduceCameraShake") == true then 0 else 1
+	local amp = (ambient + impulse * STOMP_STRENGTH + alertAmp) * shakeScale
 	local baseOffset = if isHidden then HIDDEN_CAMERA_OFFSET
 		elseif isCrouching then CROUCH_CAMERA_OFFSET else Vector3.zero
 	local target = baseOffset + bob

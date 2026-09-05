@@ -410,17 +410,11 @@ local function isPaused()
 		or workspace:GetAttribute("EntityKillActive") == true
 end
 
--- safety net for the push-immunity dev cheat: an immune player never keeps a
--- YellPush, even one applied the instant before they toggled immunity on
-RunService.Heartbeat:Connect(function()
-	for _, p in ipairs(Players:GetPlayers()) do
-		if p:GetAttribute("DevPushImmune") ~= true then continue end
-		local char = p.Character
-		local hrp = char and char:FindFirstChild("HumanoidRootPart")
-		local push = hrp and hrp:FindFirstChild("YellPush")
-		if push then push:Destroy() end
-	end
-end)
+-- (No Heartbeat safety net for the push-immunity dev cheat any more: it polled
+-- every player every frame for an attribute that is nil in production, and the
+-- window it guarded is already closed by the DevPushImmune check in tryYell,
+-- which runs with no yield between it and the YellPush it creates. Toggling
+-- immunity ON while a push is already in flight now waits out YELL_DURATION.)
 
 -- puzzle difficulty: PuzzleManager raises this as fuses are inserted
 local function speedMul() return workspace:GetAttribute("EntitySpeedMul") or 1 end
@@ -1205,6 +1199,10 @@ task.spawn(function()
 							(tonumber(visiblePlayer:GetAttribute("Level1EntityAlertSerial")) or 0) + 1
 						)
 					end
+					-- Publish the exact stationary howl position first. Clients use this
+					-- streaming-safe snapshot as a 3D emitter even when the far-away Entity
+					-- model itself has not streamed in yet.
+					workspace:SetAttribute("EntitySpotPosition", root.Position)
 					workspace:SetAttribute("EntitySpotScream", (workspace:GetAttribute("EntitySpotScream") or 0) + 1)
 					setChaseMarker(visiblePlayer)
 					workspace:SetAttribute("EntityState", "ALERT")

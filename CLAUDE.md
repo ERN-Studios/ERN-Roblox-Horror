@@ -281,8 +281,9 @@ Also landed 2026-08-19 (Studio first, then mirrored, manifest updated):
 - The exit-bearing Grand Slide Hall now has its own size floor
   (`ExitHallMinimumWidth`/`Depth` = 210×200) plus `ExitHallMaximumShellGap`
   = 80, and `GenerationAttempts` went 40 → 300 so the deterministic recovery
-  seed stays unreachable. Details and the measured numbers are in
-  `HANDOFF-LEVEL2.md`.
+  seed stays unreachable. Details and the measured numbers are in README.md
+  under "How a Level 2 round runs", and in the comments around
+  `GenerationAttempts` in `Level 2 Configuration`.
 - **The Level 1 Mimic clones the source player's character wholesale**
   (`RoundUI.LocalScript`, `mimicBuild`), so anything parented to a character
   rides onto the apparition. The Zyntra Supporter pass parents a BillboardGui to
@@ -295,8 +296,9 @@ Also landed 2026-08-19 (Studio first, then mirrored, manifest updated):
   uncovers — the client reports `entryready` on the `RoundStatus` remote once
   there is real ground under it, and GameManager holds the round until then,
   the way the elevator ride holds Level 1. **Level 1 and Level 3 are
-  unchanged.** See `HANDOFF-LEVEL2.md` §2b, including the three independent
-  timeouts that stop the cover ever trapping a player.
+  unchanged.** README.md's "How a Level 2 round runs" carries the rest,
+  including the three independent timeouts that stop the cover ever trapping a
+  player.
 
 ## House rules
 
@@ -317,5 +319,5 @@ Also landed 2026-08-19 (Studio first, then mirrored, manifest updated):
   MeshId first. If duplicates reappear, that adoption has been broken.
 - `ServerStorage.Project Mirror` is an unused third-party free-model asset
   (credits Dragonfire1710, boatbomber), not project code and not a backup.
-- Testing vs production values are documented in README.md; both are currently
-  at production settings.
+- Testing vs production values are documented in README.md; every one of them is
+  currently at its production setting.

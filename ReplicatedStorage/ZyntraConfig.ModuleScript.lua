@@ -129,12 +129,55 @@ return {
 	-- in later starts awarding it with no other change. Never invent an id here;
 	-- an id that does not belong to this experience fails every award silently.
 	Badges = {
-		FirstClearLevel1 = 0,
-		FirstClearLevel2 = 0,
-		FirstClearLevel3 = 0,
+		FirstClearLevel1 = 2788462628933614,
+		FirstClearLevel2 = 349186155479685,
+		FirstClearLevel3 = 457908347698355,
 		-- Awarded the first time all three levels have been cleared at least
 		-- once, which is NOT the same as clearing Level 3.
-		CampaignComplete = 0,
+		CampaignComplete = 2318404539475574,
+	},
+
+	-- Accessibility switches, in the order a settings surface should list them.
+	-- Key is BOTH the player attribute the client reads and the profile.Settings
+	-- field it is saved under, so these strings must keep matching their readers
+	-- exactly: ReduceCameraShake (EntityShakeController, Level 2 Pool Foam
+	-- Client), ReduceFlashing (Level 2 Pool Foam Client, Level 3 Lighting
+	-- Controller) and the two caption names (Level 2 Pool Foam Client).
+	-- Default is what a profile that never touched the switch
+	-- publishes -- captions are ON unless a player turns them off, everything
+	-- else is off -- so a default must never be changed to the opposite of what
+	-- its readers already assume.
+	AccessibilitySettings = {
+		{
+			Key = "ReduceCameraShake",
+			Label = "Reduce camera shake",
+			Description = "Removes the entity's proximity tremble, chase rumble and footstep punch. Head-bob and crouch are unaffected.",
+			Default = false,
+		},
+		{
+			Key = "ReduceFlashing",
+			Label = "Reduce flashing lights",
+			Description = "Softens the strobing and full-screen flashes an encounter can throw at you.",
+			Default = false,
+		},
+		{
+			Key = "CaptionsEnabled",
+			Label = "Show captions",
+			Description = "Shows on-screen captions for sounds you would otherwise only hear.",
+			Default = true,
+		},
+		-- The older half of the same caption pair, still read by the Pool Foam
+		-- client (`DisableCaptions ~= true and CaptionsEnabled ~= false`). It is
+		-- persisted and published so an existing save keeps working, but a UI
+		-- that rendered both rows would contradict itself: show CaptionsEnabled
+		-- and skip every entry marked Hidden.
+		{
+			Key = "DisableCaptions",
+			Label = "Hide captions",
+			Description = "Legacy switch kept for older saves. Use Show captions instead.",
+			Default = false,
+			Hidden = true,
+		},
 	},
 
 	Colors = {

@@ -5974,7 +5974,19 @@ function WorldBuilder.Build(layout, generation)
 	-- PathfindingService that an otherwise solid part may be traversed. The
 	-- navigator assigns this label an infinite cost and also rejects these
 	-- surfaces during its independent floor validation.
+	-- Yielded like every other stage of this build. The finished world is around
+	-- 71,000 instances and this was the one pass that walked all of them in a
+	-- single frame. GetDescendants returns a snapshot, so a modifier parented
+	-- during a yield can neither be revisited nor missed. The budget is in TIME
+	-- rather than instances on purpose: a fixed count that yields often enough
+	-- for a big world adds whole seconds of wall time to a small one, and this
+	-- pass costs tens of milliseconds, not seconds.
+	local yieldAt = os.clock() + 0.008
 	for _, descendant in ipairs(world:GetDescendants()) do
+		if os.clock() >= yieldAt then
+			task.wait()
+			yieldAt = os.clock() + 0.008
+		end
 		if descendant:IsA("BasePart") and (descendant.Name:find("Ceiling", 1, true)
 			or descendant.Name:find("Skylight", 1, true)
 			or descendant.Name:find("Roof", 1, true)) then

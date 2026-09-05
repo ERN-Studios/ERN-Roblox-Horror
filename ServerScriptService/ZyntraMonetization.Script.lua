@@ -18,6 +18,16 @@ local remotes = ReplicatedStorage:WaitForChild("Remotes")
 local PERCENT_PER_LEVEL = math.floor(Config.TokenPercentPerLevel * 100 + 0.5)
 local PCT = PERCENT_PER_LEVEL .. "%"
 
+-- The accessibility switches, resolved once. The list is the whole contract:
+-- every key here is persisted in profile.Settings, published as a player
+-- attribute of the same name, carried in the public profile, and is the only
+-- key SetAccessibility will accept.
+local ACCESSIBILITY_SETTINGS = Config.AccessibilitySettings or {}
+local ACCESSIBILITY_BY_KEY = {}
+for _, setting in ipairs(ACCESSIBILITY_SETTINGS) do
+	ACCESSIBILITY_BY_KEY[setting.Key] = setting
+end
+
 local SUPPORT_LEADERBOARD_SIZE = math.clamp(math.floor(tonumber(Config.SupportLeaderboardSize) or 10), 1, 25)
 local supportFolder = ReplicatedStorage:FindFirstChild("ZyntraDonationLeaderboard")
 if supportFolder and not supportFolder:IsA("Folder") then
@@ -77,6 +87,7 @@ end
 
 local sessions = {}
 local mutationLocks = {}
+-- player -> { [action window key] = os.clock() of the last accepted call }.
 local actionTimes = {}
 local dispatchMuteQueues = {}
 local briefingClaims = {}
@@ -244,6 +255,14 @@ local function normalizeProfile(data)
 	local claimId = data.Settings.LobbyBriefingClaimId
 	data.Settings.LobbyBriefingClaimId = data.Settings.LobbyBriefingPlayed == true
 		and type(claimId) == "string" and #claimId <= 128 and claimId or nil
+	-- Accessibility switches are a fixed, config-driven key set: a hand-edited
+	-- save can neither add keys nor push a non-boolean into a player attribute,
+	-- and an untouched switch lands on its documented default.
+	for _, setting in ipairs(ACCESSIBILITY_SETTINGS) do
+		local value = data.Settings[setting.Key]
+		if type(value) ~= "boolean" then value = setting.Default == true end
+		data.Settings[setting.Key] = value
+	end
 	data.Colors = type(data.Colors) == "table" and data.Colors or {}
 	data.Colors.Hazmat = colorData(readColor(data.Colors.Hazmat, Config.Colors.HazmatDefault))
 	data.Colors.Glowstick = colorData(readColor(data.Colors.Glowstick, Config.Colors.GlowstickDefault))
@@ -317,9 +336,37 @@ local function dispatchClaimCanFinalize(settings, sessionId, sessionEpoch)
 	return false
 end
 
+-- Reads one accessibility switch off a profile without assuming it has been
+-- normalized yet, so the default is applied in exactly one place.
+local function accessibilityValue(data, setting)
+	local value = data and data.Settings and data.Settings[setting.Key]
+	if type(value) ~= "boolean" then value = setting.Default == true end
+	return value
+end
+
+-- The switch a player just flipped lives here until its coalesced write lands.
+-- Declared this early because EVERY mutation has to consult it: mutate() and
+-- mutateIdempotent() replace session.data wholesale with the store's copy, and
+-- that copy does not carry the pending toggle -- so an unrelated write (a mute
+-- toggle, a level-completion token grant, or the switch's own in-flight write
+-- after a second flip) republished the OLD value into the attribute the
+-- gameplay readers consume, turning the shake back on for up to a write floor.
+local accessibilityQueues = setmetatable({}, { __mode = "k" })
+
+-- Re-assert the pending targets over a profile that was just read back, so the
+-- attributes published from it match what the player last asked for. Targets
+-- stay in the queue for the session, so once a write has landed this is a no-op.
+local function reassertPendingAccessibility(player, data)
+	local queue = accessibilityQueues[player]
+	if not queue or not data or not data.Settings then return end
+	for settingKey, settingValue in pairs(queue.desired) do
+		data.Settings[settingKey] = settingValue
+	end
+end
+
 local function publicProfile(data)
 	if not data then return nil end
-	return {
+	local result = {
 		Tokens = data.Tokens,
 		StaminaLevel = data.StaminaLevel,
 		BatteryLevel = data.BatteryLevel,
@@ -339,6 +386,10 @@ local function publicProfile(data)
 		OwnsAdvancedEquipment = false,
 		OwnsCosmeticEquipment = false,
 	}
+	for _, setting in ipairs(ACCESSIBILITY_SETTINGS) do
+		result[setting.Key] = accessibilityValue(data, setting)
+	end
+	return result
 end
 
 local function addSupporterTag(player, character)
@@ -399,6 +450,12 @@ local function applyAttributes(player, data)
 	player:SetAttribute("ZyntraMuteDispatch", data.Settings.MuteDispatch)
 	player:SetAttribute("ZyntraLobbyBriefingPlayed", data.Settings.LobbyBriefingPlayed)
 	player:SetAttribute("ZyntraDonationRobux", data.DonationRobux)
+	-- Accessibility switches are published under their own bare names because
+	-- that is what the client readers already ask for (ReduceCameraShake,
+	-- ReduceFlashing, CaptionsEnabled, DisableCaptions) -- do not prefix them.
+	for _, setting in ipairs(ACCESSIBILITY_SETTINGS) do
+		player:SetAttribute(setting.Key, accessibilityValue(data, setting))
+	end
 	if player:GetAttribute("InRound") == true and player:GetAttribute("ZyntraOwnsCosmeticEquipment") == true then
 		player:SetAttribute("GlowstickColor", player:GetAttribute("ZyntraGlowstickColor"))
 	end
@@ -589,19 +646,38 @@ local function mutate(player, transform)
 			releaseMutation(player)
 			return false, "DataStore is unavailable; try again shortly"
 		end
+		-- A transform that returns false REFUSED the action: no token to spend, a
+		-- colour that is already saved, a receipt already granted. Returning nil
+		-- from the callback CANCELS the update, so a refusal costs a read instead
+		-- of a write -- the old code committed one either way, which is what let a
+		-- player with zero tokens spend the server's DataStore budget by clicking.
+		-- The profile the callback read is still adopted below, so the session copy
+		-- ends as fresh as a committed write would have left it. This is only safe
+		-- while no transform on this path mutates `current` and then returns false;
+		-- keep it that way.
+		local observed
+		local cancelled = false
 		local ok, result = pcall(function()
 			return store:UpdateAsync("u_" .. player.UserId, function(current)
 				current = normalizeProfile(current)
 				changed, message, tone = transform(current)
+				observed = current
+				cancelled = changed ~= true
+				if cancelled then return nil end
 				return current
 			end)
 		end)
 		success = ok
-		if ok then resultData = normalizeProfile(result) else message = tostring(result) end
+		if ok then
+			resultData = cancelled and observed or normalizeProfile(result)
+		else
+			message = tostring(result)
+		end
 	end
 
 	if success and resultData then
 		session.data = resultData
+		reassertPendingAccessibility(player, resultData)
 		if session.dispatchSessionId
 			and resultData.Settings.MuteDispatchSessionId ~= session.dispatchSessionId then
 			session.dispatchLeaseActive = false
@@ -749,10 +825,19 @@ local function mutateIdempotent(player, transform, suppressPush)
 			local attemptChanged = false
 			local attemptMessage
 			local attemptTone
+			local observed
+			local cancelled = false
 			local ok, result = pcall(function()
 				return store:UpdateAsync("u_" .. player.UserId, function(current)
 					current = normalizeProfile(current)
 					attemptChanged, attemptMessage, attemptTone = transform(current)
+					observed = current
+					-- Same no-op rule as mutate(): a target-state transform that
+					-- reports no change (already claimed, already awarded, a newer
+					-- session owns the value) cancels its update instead of
+					-- committing a write that changes nothing.
+					cancelled = attemptChanged ~= true
+					if cancelled then return nil end
 					return current
 				end)
 			end)
@@ -761,7 +846,7 @@ local function mutateIdempotent(player, transform, suppressPush)
 				changed = attemptChanged == true
 				message = attemptMessage
 				tone = attemptTone
-				resultData = normalizeProfile(result)
+				resultData = cancelled and observed or normalizeProfile(result)
 				break
 			end
 			message = tostring(result)
@@ -772,6 +857,7 @@ local function mutateIdempotent(player, transform, suppressPush)
 
 	if success and resultData and sessions[player] == session then
 		session.data = resultData
+		reassertPendingAccessibility(player, resultData)
 		if session.dispatchSessionId
 			and resultData.Settings.MuteDispatchSessionId ~= session.dispatchSessionId then
 			session.dispatchLeaseActive = false
@@ -1176,22 +1262,61 @@ local function loadProfile(player, loadState)
 	queueSupportTotalSync(player.UserId, sessions[player] and sessions[player].data.DonationRobux or 0)
 end
 
+-- A throw and a "no" used to collapse into the same false, and that false
+-- latched for the whole session: one MarketplaceService blip at join cost a
+-- paying Supporter their tag, their pickers and their grant until they rejoined.
+-- Retry the throw a few times, and answer nil -- NOT false -- when Roblox never
+-- answered at all, so a caller can tell "does not own" from "do not know".
+local PASS_RETRY_DELAYS = {0, 1, 3}
 local function ownsPass(player, pass)
 	if RunService:IsStudio() and Config.Studio.GrantAllPasses then return true end
 	if not pass or tonumber(pass.Id) == nil or pass.Id <= 0 then return false end
-	local ok, result = pcall(MarketplaceService.UserOwnsGamePassAsync, MarketplaceService, player.UserId, pass.Id)
-	if not ok then
-		warn("[Zyntra] Pass ownership check failed:", pass.Name, result)
-		return false
+	local lastError
+	for _, delaySeconds in ipairs(PASS_RETRY_DELAYS) do
+		if delaySeconds > 0 then task.wait(delaySeconds) end
+		if not player.Parent then return nil end
+		local ok, result = pcall(MarketplaceService.UserOwnsGamePassAsync, MarketplaceService, player.UserId, pass.Id)
+		if ok then return result == true end
+		lastError = result
 	end
-	return result == true
+	warn("[Zyntra] Pass ownership check failed:", pass.Name, lastError)
+	return nil
+end
+
+-- A finished purchase is the strongest answer this server will ever get.
+-- UserOwnsGamePassAsync caches per server and commonly still reads false for a
+-- while after PromptGamePassPurchaseFinished, so the purchase is latched here
+-- and wins over every later ownership read for the rest of the session; no
+-- retry loop can beat that cache.
+local passPurchases = setmetatable({}, { __mode = "k" })
+-- Set when a read failed outright, so a bounded background re-check can pick the
+-- pass up later instead of leaving the player locked out until they rejoin.
+local passReadFailed = setmetatable({}, { __mode = "k" })
+-- How many of those re-checks a player has already been given. The cap is what
+-- stops a MarketplaceService outage becoming a permanent poll.
+local passRechecks = setmetatable({}, { __mode = "k" })
+local PASS_RECHECK_DELAY = 20
+local PASS_RECHECK_LIMIT = 3
+
+local function passOwnership(player, key, pass)
+	local purchases = passPurchases[player]
+	if purchases and purchases[key] then return true end
+	local answer = ownsPass(player, pass)
+	if answer == nil then
+		passReadFailed[player] = true
+		-- Unknown: keep whatever this session already published rather than
+		-- downgrading an owner to false.
+		return player:GetAttribute("ZyntraOwns" .. key) == true
+	end
+	return answer
 end
 
 local function refreshPasses(player)
 	if not sessions[player] then return end
-	local supporter = ownsPass(player, Config.Passes.Supporter)
-	local advanced = ownsPass(player, Config.Passes.AdvancedEquipment)
-	local cosmetic = ownsPass(player, Config.Passes.CosmeticEquipment)
+	passReadFailed[player] = nil
+	local supporter = passOwnership(player, "Supporter", Config.Passes.Supporter)
+	local advanced = passOwnership(player, "AdvancedEquipment", Config.Passes.AdvancedEquipment)
+	local cosmetic = passOwnership(player, "CosmeticEquipment", Config.Passes.CosmeticEquipment)
 	player:SetAttribute("ZyntraOwnsSupporter", supporter)
 	player:SetAttribute("ZyntraOwnsAdvancedEquipment", advanced)
 	player:SetAttribute("ZyntraOwnsCosmeticEquipment", cosmetic)
@@ -1219,6 +1344,20 @@ local function refreshPasses(player)
 	if player.Character then
 		task.defer(addSupporterTag, player, player.Character)
 		task.defer(applyHazmatColor, player)
+	end
+	-- A read that never answered leaves a paying player without their pass, and
+	-- nothing else re-asks. It cannot be left to "the next action that needs the
+	-- pass" either: the store locks its colour picker on this very attribute and
+	-- returns before firing the remote, so the one action that would trigger a
+	-- re-check is exactly the one the client refuses to send -- and the Supporter
+	-- pass has no such action at all. Re-ask in the background, a few times, then
+	-- stop. A successful pass clears passReadFailed above and schedules no more.
+	local rechecks = passRechecks[player] or 0
+	if passReadFailed[player] and rechecks < PASS_RECHECK_LIMIT then
+		passRechecks[player] = rechecks + 1
+		task.delay(PASS_RECHECK_DELAY, function()
+			if sessions[player] and passReadFailed[player] then refreshPasses(player) end
+		end)
 	end
 	pushProfile(player)
 end
@@ -1267,6 +1406,11 @@ getProfileRemote.OnServerInvoke = function(player)
 	return enrichedPublicProfile(player)
 end
 
+local function sameColorData(saved, wanted)
+	return type(saved) == "table"
+		and saved.R == wanted.R and saved.G == wanted.G and saved.B == wanted.B
+end
+
 local function validColor(value)
 	if typeof(value) ~= "Color3" then return nil end
 	local h, s, v = value:ToHSV()
@@ -1274,6 +1418,17 @@ local function validColor(value)
 	v = math.clamp(v, 0.35, 1)
 	return Color3.fromHSV(h, s, v)
 end
+
+-- Back-to-back mute writes escalate toward Roblox's one-write-per-six-seconds
+-- guidance for a single key. A client that alternates true/false is never a
+-- duplicate, so without this floor every toggle it sends becomes a real
+-- UpdateAsync on that player's profile key -- about 72 a minute, indefinitely,
+-- out of a server budget of 60 + 10 per player. The first toggle after a quiet
+-- spell still commits at the old responsive pace; only a stream of them slows
+-- down, and the queue folds everything that arrives while it waits into the one
+-- write that follows, so nothing is lost and the client stays optimistic.
+local MUTE_WRITE_FLOORS = {0.75, 2, 6}
+local MUTE_WRITE_STREAK_RESET_SECONDS = 30
 
 local queueMuteDispatch
 local function muteQueueActive(player, queue)
@@ -1308,7 +1463,10 @@ local function runMuteDispatchQueue(player, queue)
 		queue.processingDesired = desired
 		queue.processingRevision = revision
 
-		local remaining = 0.75 - (os.clock() - queue.lastAttemptFinishedAt)
+		local idle = os.clock() - queue.lastAttemptFinishedAt
+		if idle > MUTE_WRITE_STREAK_RESET_SECONDS then queue.writeStreak = 0 end
+		local streak = math.floor(tonumber(queue.writeStreak) or 0)
+		local remaining = MUTE_WRITE_FLOORS[math.clamp(streak + 1, 1, #MUTE_WRITE_FLOORS)] - idle
 		if remaining > 0 then task.wait(remaining) end
 		if not muteQueueActive(player, queue) then break end
 		desired, revision = takeLatestMuteDesired(queue, desired, revision)
@@ -1386,6 +1544,9 @@ local function runMuteDispatchQueue(player, queue)
 			-- retries may yield for seconds, and that time must not permit another
 			-- write to begin immediately when it returns.
 			queue.lastAttemptFinishedAt = os.clock()
+			-- Only an attempt that actually opened a write counts toward the floor;
+			-- an acknowledged duplicate above never reaches this branch.
+			queue.writeStreak = math.min(streak + 1, #MUTE_WRITE_FLOORS)
 			if success then
 				queue.uncertain = false
 				queue.lastAcknowledged = targetApplied and desired or nil
@@ -1431,6 +1592,7 @@ queueMuteDispatch = function(player, desired)
 			closing = false,
 			uncertain = false,
 			lastAttemptFinishedAt = -math.huge,
+			writeStreak = 0,
 			lastAcknowledged = nil,
 			processingDesired = nil,
 			processingRevision = nil,
@@ -1702,6 +1864,92 @@ local function awardBadge(player, badgeKey)
 	end)
 end
 
+-- Accessibility switches persist like the dispatch mute and for the same
+-- reason: they are target state, not deltas, and a client can flip one as fast
+-- as it likes. The attribute and the session copy move immediately (the client
+-- stays optimistic), while ONE deferred write commits whatever the newest
+-- target is -- so forty flips cost one write, not forty. The first change after
+-- a quiet spell writes at once; only a follow-up inside the floor waits. A
+-- player who quits inside the floor is covered by the flush in
+-- finalizePlayerSessionBody, which commits the same targets before the session
+-- closes -- without it the second change of a session was simply lost.
+local ACCESSIBILITY_WRITE_FLOOR = 6
+
+-- Target state, not a delta: writing the same value twice is a no-op, so this
+-- transform reports "no change" and mutateIdempotent cancels the update.
+-- The caller hands over the LIVE queue, so snapshot it first (that copy cannot
+-- yield): the write below can, and a switch flipped while it does must not be
+-- added to a table this is still iterating.
+local function writeAccessibilityTargets(player, desired)
+	local targets = {}
+	for settingKey, settingValue in pairs(desired) do
+		targets[settingKey] = settingValue
+	end
+	return mutateIdempotent(player, function(data)
+		local changed = false
+		for settingKey, settingValue in pairs(targets) do
+			if data.Settings[settingKey] ~= settingValue then
+				data.Settings[settingKey] = settingValue
+				changed = true
+			end
+		end
+		return changed
+	end, true)
+end
+
+local function queueAccessibilityWrite(player, key, value)
+	local queue = accessibilityQueues[player]
+	if not queue then
+		queue = { running = false, dirty = false, desired = {}, lastWriteAt = -math.huge }
+		accessibilityQueues[player] = queue
+	end
+	-- The target is remembered HERE and not read back out of session.data later:
+	-- any unrelated profile write landing in between replaces session.data with
+	-- the store's copy, which does not have this toggle in it yet. Keeping every
+	-- key toggled this session also means the next write re-asserts them all, so
+	-- a value that was overwritten that way heals itself.
+	queue.desired[key] = value
+	queue.dirty = true
+	if queue.running then return end
+	queue.running = true
+	task.spawn(function()
+		while queue.dirty do
+			local remaining = ACCESSIBILITY_WRITE_FLOOR - (os.clock() - queue.lastWriteAt)
+			if remaining > 0 then task.wait(remaining) end
+			local session = sessions[player]
+			if not session or session.closing or not player.Parent
+				or accessibilityQueues[player] ~= queue then break end
+			-- Snapshot AFTER the wait (writeAccessibilityTargets takes it): every
+			-- toggle that arrived while we waited is already in queue.desired, so
+			-- they all commit in this one write.
+			queue.dirty = false
+			writeAccessibilityTargets(player, queue.desired)
+			-- Rate-limit from completion, as the dispatch queue does.
+			queue.lastWriteAt = os.clock()
+		end
+		queue.running = false
+	end)
+end
+
+-- Actions that open a DataStore write get a window a human click fits in;
+-- everything else keeps the responsive one. UseReentry is deliberately NOT in
+-- here: it is a single press inside the fifteen-second wipe window, it refuses
+-- itself in memory when there is no credit, and reentryAttempts already allows
+-- only one at a time.
+-- SetAccessibility belongs here even though its DataStore write is coalesced
+-- behind a six-second floor: every accepted call still republishes sixteen
+-- attributes and a whole profile packet, and a client alternating true/false is
+-- never a duplicate. One human click per switch per second is plenty.
+local WRITE_BEARING_ACTIONS = {
+	UpgradeStamina = true,
+	UpgradeBattery = true,
+	SetHazmatColor = true,
+	SetGlowstickColor = true,
+	SetAccessibility = true,
+}
+local ACTION_WINDOW = 0.12
+local WRITE_ACTION_WINDOW = 1
+
 actionRemote.OnServerEvent:Connect(function(player, action, payload)
 	if type(action) ~= "string" or not sessions[player] then return end
 	-- Dispatch preference is an idempotent target state with its own coalescing
@@ -1712,10 +1960,35 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 		return
 	end
 	local now = os.clock()
-	if now - (actionTimes[player] or 0) < 0.12 then return end
-	actionTimes[player] = now
+	-- The window is PER ACTION, not per player. One shared timestamp turned two
+	-- legitimate consecutive clicks on different controls -- UPGRADE STAMINA then
+	-- UPGRADE BATTERY, HAZMAT SAVE then GLOWSTICK SAVE -- into one click plus a
+	-- dead button, which at a one-second window is a human interval. Accessibility
+	-- switches key on the switch as well, because the settings page is a column of
+	-- them; an unknown key falls into the shared bucket so a spammer cannot grow
+	-- this table.
+	local windowKey = action
+	if action == "SetAccessibility" and type(payload) == "table"
+		and ACCESSIBILITY_BY_KEY[payload.Key] then
+		windowKey = "SetAccessibility:" .. payload.Key
+	end
+	local times = actionTimes[player]
+	if not times then
+		times = {}
+		actionTimes[player] = times
+	end
+	local window = WRITE_BEARING_ACTIONS[action] and WRITE_ACTION_WINDOW or ACTION_WINDOW
+	if now - (times[windowKey] or 0) < window then return end
+	times[windowKey] = now
 
 	if action == "UpgradeStamina" or action == "UpgradeBattery" then
+		-- Refuse in memory FIRST. The in-transform check below stays as the
+		-- cross-server race guard, but reaching it costs a DataStore write, and a
+		-- player with zero tokens could once drive one of those per click.
+		if sessions[player].data.Tokens < 1 then
+			pushProfile(player, "You need 1 Zyntra Research Token.", "error")
+			return
+		end
 		mutate(player, function(data)
 			if data.Tokens < 1 then return false, "You need 1 Zyntra Research Token.", "error" end
 			data.Tokens -= 1
@@ -1733,8 +2006,20 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 		end
 		local color = validColor(payload)
 		if not color then return end
+		local wanted = colorData(color)
+		local session = sessions[player]
+		if not session then return end
+		-- A colour that is already saved is acknowledged, not written. The same
+		-- check inside the transform stays as the cross-server race guard.
+		if sameColorData(session.data.Colors.Hazmat, wanted) then
+			pushProfile(player, "Hazmat color saved.", "success")
+			return
+		end
 		mutate(player, function(data)
-			data.Colors.Hazmat = colorData(color)
+			if sameColorData(data.Colors.Hazmat, wanted) then
+				return false, "Hazmat color saved.", "success"
+			end
+			data.Colors.Hazmat = wanted
 			return true, "Hazmat color saved.", "success"
 		end)
 	elseif action == "SetGlowstickColor" then
@@ -1744,10 +2029,36 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 		end
 		local color = validColor(payload)
 		if not color then return end
+		local wanted = colorData(color)
+		local session = sessions[player]
+		if not session then return end
+		if sameColorData(session.data.Colors.Glowstick, wanted) then
+			pushProfile(player, "Glowstick color saved.", "success")
+			return
+		end
 		mutate(player, function(data)
-			data.Colors.Glowstick = colorData(color)
+			if sameColorData(data.Colors.Glowstick, wanted) then
+				return false, "Glowstick color saved.", "success"
+			end
+			data.Colors.Glowstick = wanted
 			return true, "Glowstick color saved.", "success"
 		end)
+	elseif action == "SetAccessibility" then
+		if type(payload) ~= "table" or type(payload.Enabled) ~= "boolean"
+			or type(payload.Key) ~= "string" then return end
+		local setting = ACCESSIBILITY_BY_KEY[payload.Key]
+		if not setting then return end
+		local session = sessions[player]
+		if not session or session.closing then return end
+		-- Idempotent: an unchanged switch is not a write and not a packet.
+		if accessibilityValue(session.data, setting) == payload.Enabled then return end
+		session.data.Settings[setting.Key] = payload.Enabled
+		-- Record the target BEFORE anything publishes it: from here on, a mutation
+		-- finishing on another thread re-asserts it instead of overwriting it with
+		-- the store's older copy (reassertPendingAccessibility).
+		queueAccessibilityWrite(player, setting.Key, payload.Enabled)
+		applyAttributes(player, session.data)
+		pushProfile(player, setting.Label .. (payload.Enabled and ": on" or ": off"), "success")
 	elseif action == "UseReentry" then
 		useReentry(player)
 	end
@@ -1778,8 +2089,18 @@ end)
 
 MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(player, passId, purchased)
 	if not purchased then return end
-	for _, pass in pairs(Config.Passes) do
+	for key, pass in pairs(Config.Passes) do
 		if pass.Id > 0 and pass.Id == passId then
+			-- Latch the purchase BEFORE refreshing: Roblox has just told us this
+			-- player paid, and its own ownership cache may still say otherwise for
+			-- seconds. Without the latch a 99 R$ purchase can grant nothing until
+			-- the player rejoins.
+			local purchases = passPurchases[player]
+			if not purchases then
+				purchases = {}
+				passPurchases[player] = purchases
+			end
+			purchases[key] = true
 			task.spawn(refreshPasses, player)
 			break
 		end
@@ -1884,6 +2205,17 @@ local function finalizePlayerSessionBody(player)
 	end
 	local session = sessions[player]
 	local muteQueue = dispatchMuteQueues[player]
+	-- Accessibility switches wait up to ACCESSIBILITY_WRITE_FLOOR for their
+	-- coalesced write, and nothing else on this path writes session.data -- the
+	-- final save below carries only the dispatch preference. So commit the pending
+	-- targets HERE, while the session is still open (mutateIdempotent refuses a
+	-- closing one). Without it a player who flipped a second switch and quit
+	-- inside the floor lost that change for good.
+	local accessibility = accessibilityQueues[player]
+	if session and not session.closing and accessibility and accessibility.dirty then
+		accessibility.dirty = false
+		writeAccessibilityTargets(player, accessibility.desired)
+	end
 	local dispatchPersisted = true
 	if muteQueue then
 		-- Stop a sleeping worker before it can begin an obsolete write. The last
@@ -1902,8 +2234,11 @@ local function finalizePlayerSessionBody(player)
 	-- writer (a higher input epoch still wins inside UpdateAsync).
 	while mutationLocks[player] do task.wait() end
 	if session then
+		-- Deliberately the BASE floor and not the escalated one: this is the
+		-- session's single final write, and BindToClose has 25 seconds to fit
+		-- every departing player into.
 		local remaining = muteQueue
-			and 0.75 - (os.clock() - muteQueue.lastAttemptFinishedAt) or 0
+			and MUTE_WRITE_FLOORS[1] - (os.clock() - muteQueue.lastAttemptFinishedAt) or 0
 		if remaining > 0 then task.wait(remaining) end
 		dispatchPersisted = persistDispatchTargetOnLeave(player, session, muteQueue)
 	end

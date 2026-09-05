@@ -356,6 +356,13 @@ local function createEntity(session, id, slotId, spawnPosition, hallIndex, spawn
 		ChaseTriggeredAt = nil,
 		ChaseGraceUntil = 0,
 		ChaseTarget = nil,
+		-- Server-side latch backstop: who this entity has been standing in clear
+		-- view of, and since when. Independent of any client report.
+		ProximityDwellPlayer = nil,
+		ProximityDwellSince = 0,
+		-- The loudest sound this entity can hear, refreshed once per think tick
+		-- instead of once per Heartbeat per reader.
+		HeardNoise = nil,
 		SpeedRampBonus = 0,
 		SpeedRampFrozen = false,
 		LastDesiredSpeed = 0,
@@ -596,6 +603,8 @@ local function resetThreatState(entity)
 	entity.ChaseTriggered = false
 	entity.ChaseTriggeredAt = nil
 	entity.ChaseGraceUntil = 0
+	entity.ProximityDwellPlayer = nil
+	entity.ProximityDwellSince = 0
 	entity.SpeedRampBonus = 0
 	entity.SpeedRampFrozen = false
 	entity.LastDesiredSpeed = 0
@@ -613,7 +622,14 @@ local function entityLineOfSight(session, entity, character, targetPosition)
 	params.IgnoreWater = true
 	local exclusions = {entity.Model}
 	if session.Manifest.EntityNodes then table.insert(exclusions, session.Manifest.EntityNodes) end
-	local navigation = session.Manifest.World:FindFirstChild("Level 2 Navigation", true)
+	-- The builder already hands the navigation folder over in the manifest. This
+	-- used to be a RECURSIVE FindFirstChild over the finished world, and the
+	-- world's first child is the geometry subtree that holds essentially all
+	-- ~71,000 of its instances — so every blocked kill attempt walked the whole
+	-- level, once per Heartbeat, for as long as the target stayed cornered. The
+	-- Navigator and the Observer both read the manifest field; this was the odd
+	-- one out.
+	local navigation = session.Manifest.Navigation
 	if navigation then table.insert(exclusions, navigation) end
 	params.FilterDescendantsInstances = exclusions
 	local result = workspace:Raycast(origin, offset, params)
@@ -662,7 +678,12 @@ local function bestTarget(session, entity, now)
 	-- because the whole choice is remade on every think tick, a noise can never
 	-- pin the entity to one player.
 	local hearing = session.Configuration.Hearing or {}
-	local noise = heardNoise(session, entity)
+	-- Refreshed once per think tick in updateSession, not recomputed here.
+	-- bestTarget runs per entity on every Heartbeat, and GetBest is a linear
+	-- scan with a Vector3 magnitude per entry over a list that settles around
+	-- 150 sounds — six times the scanning for a value that only ever steers a
+	-- goal chosen on the 0.1 s boundary.
+	local noise = entity.HeardNoise
 	local noiseWeight = numberOr(hearing.NoiseWeight, 0.55, 0.05, 1)
 	local attribution = numberOr(hearing.AttributionRadius, 35, 0, 300)
 	local heardBest = false
@@ -782,6 +803,102 @@ local function triggerChase(session, entity, players, now)
 	setChaseTarget(entity, observedChaseTarget(session, entity, players))
 end
 
+-- SERVER BACKSTOP FOR THE CHASE LATCH (2026-09-05).
+--
+-- Observation itself stays report-driven — see the Observer's own note, and the
+-- ProximityLatch block in the configuration. The problem this closes is narrower
+-- than "the client decides what it sees": it is that the client decides whether
+-- the entity is ever ALLOWED TO KILL. triggerChase fires only on a validated
+-- look, instantKill refuses without the latch, and every payload check in the
+-- Observer validates the camera's ORIGIN while validating nothing about its
+-- direction. A client that reports honestly-shaped frames pointed away from
+-- every foam model is unkillable for the whole round, alone or when the entity
+-- is on them and nobody else is looking.
+--
+-- So: independently of every report, an active entity that keeps one living,
+-- targetable, roughly STATIONARY player inside ProximityLatchRadius with a clear
+-- server line of sight for ProximityLatchSeconds latches the chase, exactly as a
+-- look does. This can only ADD a latch — it never clears one, never shortens the
+-- grace window and never touches entity.Observed, so the statue/freeze semantics
+-- and the speed ramp are unchanged.
+--
+-- The two narrow gates matter, and the configuration block explains why: an
+-- un-latched entity ALREADY walks up to the nearest eligible player and parks at
+-- TargetStopDistance, so a wide radius or a short dwell would latch everybody
+-- within seconds of contact and delete the look-reveal beat. A player who is
+-- moving is never latched here; one who stands in the open with the foam on them
+-- for seconds, never looking, is.
+--
+-- Cost is one raycast per active entity per think tick (0.1 s): a single
+-- candidate is chosen first, and only that one is traced.
+local function updateProximityLatch(session, entity, now)
+	local observation = session.Configuration.Observation or {}
+	if observation.ProximityLatchEnabled == false
+		or entity.ChaseTriggered
+		or session.Phase == PHASES.Dormant
+		or not entityIsActive(session, entity)
+	then
+		entity.ProximityDwellPlayer = nil
+		return
+	end
+
+	local radius = numberOr(observation.ProximityLatchRadius, 8, 4, 200)
+	local maximumSpeed = numberOr(observation.ProximityLatchMaximumSpeed, 3, 0, 100)
+	local position = entity.Navigator:GetPosition()
+	local function dwellable(player)
+		local root, _, character = livingPlayer(session, player)
+		-- The same eligibility the hunt itself uses: before the first pump this
+		-- encounter is confined to the Kids Area, so a player it may not chase
+		-- must not be able to arm it either.
+		if not (root and character
+			and (session.Pumps >= 1 or positionInKids(session, root.Position)))
+		then
+			return nil
+		end
+		local distance = (root.Position - position).Magnitude
+		if distance > radius then return nil end
+		local velocity = root.AssemblyLinearVelocity
+		if Vector3.new(velocity.X, 0, velocity.Z).Magnitude > maximumSpeed then return nil end
+		return root, character, distance
+	end
+
+	-- The incumbent keeps the clock. Picking "whoever is nearest THIS tick" meant
+	-- any teammate who crossed the radius for a single 0.1 s tick reset a nearly
+	-- complete dwell to zero — so two players standing together were immune, which
+	-- is exactly the immunity this backstop exists to close.
+	local candidate, candidateRoot, candidateCharacter
+	if entity.ProximityDwellPlayer then
+		local root, character = dwellable(entity.ProximityDwellPlayer)
+		if root then
+			candidate, candidateRoot, candidateCharacter = entity.ProximityDwellPlayer, root, character
+		end
+	end
+	if not candidate then
+		local candidateDistance = math.huge
+		for _, player in ipairs(Players:GetPlayers()) do
+			local root, character, distance = dwellable(player)
+			if root and distance < candidateDistance then
+				candidate, candidateRoot, candidateCharacter = player, root, character
+				candidateDistance = distance
+			end
+		end
+	end
+
+	if not candidate or not entityLineOfSight(session, entity, candidateCharacter, candidateRoot.Position) then
+		entity.ProximityDwellPlayer = nil
+		return
+	end
+	if entity.ProximityDwellPlayer ~= candidate then
+		entity.ProximityDwellPlayer = candidate
+		entity.ProximityDwellSince = now
+		return
+	end
+	local dwell = numberOr(observation.ProximityLatchSeconds, 7, 0.25, 60)
+	if now - entity.ProximityDwellSince < dwell then return end
+	entity.ProximityDwellPlayer = nil
+	triggerChase(session, entity, {candidate}, now)
+end
+
 local function updateObservation(session, entity, now)
 	local rawObserved, players = session.Observer:IsModelObserved(entity.Model)
 	local wasObserved = entity.Observed
@@ -857,7 +974,7 @@ local function choosePatrolPosition(session, entity)
 	-- pump re-announces every 2 s the stuck-repath below would hand back the same
 	-- dead point for the whole motor run. session.Nodes are the only positions
 	-- this encounter knows are standable and inside an allowed hall.
-	local noise = heardNoise(session, entity)
+	local noise = entity.HeardNoise
 	if noise then
 		local nearest, nearestDistance = nil, math.huge
 		for _, node in ipairs(session.Nodes) do
@@ -1135,7 +1252,16 @@ local function updateSession(session, deltaTime)
 	local observationInterval = numberOr((session.Configuration.Movement or {}).UpdateInterval, 0.1, 0.05, 0.5)
 	if session.ObservationAccumulator >= observationInterval then
 		session.ObservationAccumulator = 0
-		for _, entity in ipairs(session.Entities) do updateObservation(session, entity, now) end
+		for _, entity in ipairs(session.Entities) do
+			-- One hearing scan per entity per THINK TICK, not per Heartbeat.
+			-- bestTarget (every frame) and choosePatrolPosition (already gated on
+			-- this same interval) both read the cached value.
+			entity.HeardNoise = heardNoise(session, entity)
+			updateObservation(session, entity, now)
+			-- After the report path, so a genuine look always owns the latch and
+			-- the backstop simply finds it already triggered.
+			updateProximityLatch(session, entity, now)
+		end
 	end
 	for _, entity in ipairs(session.Entities) do updateEntity(session, entity, math.min(deltaTime, 0.1), now) end
 

@@ -361,7 +361,12 @@ local function selectTab(name)
 	end
 end
 
-local tabNames = { "Upgrades", "Shop", "Donate", "Colors" }
+-- SETTINGS is the accessibility surface, and it is a TAB rather than a section
+-- of Colors because it is the only page here that is not about equipment: the
+-- client has honoured ReduceCameraShake and ReduceFlashing for months with no
+-- way for a player to reach either. Kept last before DEV so the equipment pages
+-- stay in their authored order.
+local tabNames = { "Upgrades", "Shop", "Donate", "Colors", "Settings" }
 if devAllowed then table.insert(tabNames, "Dev") end
 for order, name in ipairs(tabNames) do
 	local tab = button(tabBar, string.upper(name), UDim2.fromOffset(150, 40))
@@ -1537,6 +1542,227 @@ end
 
 local hazmatPicker = makeColorPicker(colorsScroll, "Hazmat", "HAZMAT SUIT", "SetHazmatColor")
 local glowstickPicker = makeColorPicker(colorsScroll, "Glowstick", "GLOWSTICK LIGHT", "SetGlowstickColor")
+
+-- ACCESSIBILITY SETTINGS -- the page that closes a hole this project has had
+-- open for months. Every switch listed here is a PLAYER ATTRIBUTE the client
+-- already reads -- EntityShakeController's ReduceCameraShake, the Level 3
+-- blackout's and Pool Foam's ReduceFlashing, the caption flags -- and a
+-- repo-wide search for a writer found none: readers only, on all four. A
+-- photosensitive or motion-sensitive player had no way to reach any of them.
+-- This page is the writer.
+--
+-- The list is ZyntraConfig.AccessibilitySettings, an ORDERED array of
+-- {Key, Label} whose Key is the exact attribute name the readers use, so the
+-- page, the server's allow-list and the client readers cannot drift apart:
+-- adding a switch is a config line rather than a UI edit. If the config does
+-- not carry the list yet, the two switches the client genuinely implements
+-- today are used, so this page is never empty and never offers a control that
+-- nothing honours.
+--
+-- The whole page is one do...end block on purpose. Nothing outside needs a
+-- handle on it, and this LocalScript already carries a large number of
+-- chunk-scope names against Luau's 200-local ceiling -- the same reason
+-- `layoutHooks` and `contract` exist at all.
+do
+	local settingRows = {}
+	for _, entry in ipairs(Config.AccessibilitySettings or {}) do
+		-- HIDDEN ENTRIES ARE SKIPPED, at the config's own instruction. DisableCaptions
+		-- is the older half of a caption pair the Pool Foam client still reads as
+		-- `DisableCaptions ~= true and CaptionsEnabled ~= false`; it is persisted so
+		-- old saves keep working, but drawing both rows would offer the player two
+		-- controls that contradict each other.
+		if type(entry) == "table" and type(entry.Key) == "string" and entry.Key ~= ""
+			and entry.Hidden ~= true then
+			table.insert(settingRows, {
+				Key = entry.Key,
+				Label = tostring(entry.Label or entry.Key),
+				Description = if type(entry.Description) == "string"
+					then entry.Description else "",
+				Default = entry.Default == true,
+			})
+		end
+	end
+	if #settingRows == 0 then
+		-- LOCAL, and that word is load-bearing. ZyntraMonetization builds its
+		-- SetAccessibility allow-list from this SAME config table, so with the list
+		-- absent the server refuses every key and a row that only fired the remote
+		-- would sit on its optimistic value until the 12 s fallback snapped it
+		-- back -- a switch that looks like it works and does nothing, which is
+		-- worse than no page. Every reader of these two keys is a LocalScript
+		-- reading this player (EntityShakeController, the Level 3 blackout, Pool
+		-- Foam), so writing the attribute here IS the state for the session. It
+		-- just does not persist across a rejoin, which is exactly the half the
+		-- server owns and cannot do without its config.
+		settingRows = {
+			{Key = "ReduceCameraShake", Label = "Reduce camera shake", Default = false,
+				Local = true,
+				Description = "Removes the entity's proximity tremble, chase rumble and"
+					.. " footstep punch. Head-bob and crouch are unaffected."},
+			{Key = "ReduceFlashing", Label = "Reduce flashing lights", Default = false,
+				Local = true,
+				Description = "Replaces the Level 3 blackout strobe with a smooth dim, and"
+					.. " keeps every fixture from snapping to black."},
+		}
+	end
+
+	local settingsScroll = Instance.new("ScrollingFrame")
+	-- NAMED, like the other four page scrolls: the default "ScrollingFrame" is
+	-- not something a failure report can point at.
+	settingsScroll.Name = "AccessibilityRows"
+	settingsScroll.Size = UDim2.fromScale(1, 1)
+	settingsScroll.BackgroundTransparency = 1
+	settingsScroll.BorderSizePixel = 0
+	settingsScroll.ScrollBarThickness = 5
+	settingsScroll.ScrollBarImageColor3 = COLORS.accent
+	settingsScroll.AutomaticCanvasSize = Enum.AutomaticSize.Y
+	settingsScroll.CanvasSize = UDim2.new()
+	settingsScroll.Parent = pages.Settings
+	contract.scroll("Settings", settingsScroll)
+	local settingsLayout = Instance.new("UIListLayout")
+	settingsLayout.Padding = UDim.new(0, 8)
+	settingsLayout.SortOrder = Enum.SortOrder.LayoutOrder
+	settingsLayout.Parent = settingsScroll
+	local settingsPadding = Instance.new("UIPadding")
+	settingsPadding.PaddingRight = UDim.new(0, 8)
+	settingsPadding.Parent = settingsScroll
+
+	for order, entry in ipairs(settingRows) do
+		local row = Instance.new("Frame")
+		row.Name = entry.Key
+		row.LayoutOrder = order
+		row.Size = UDim2.new(1, 0, 0, 48)
+		row.BackgroundColor3 = COLORS.card
+		row.BorderSizePixel = 0
+		row.Parent = settingsScroll
+		corner(row, 8)
+		outline(row, COLORS.line, 0.4)
+
+		local rowTitle = label(row, entry.Label, UDim2.new(1, -190, 0, 24),
+			UDim2.fromOffset(14, 4), 14, COLORS.text, Enum.Font.GothamBold)
+		rowTitle.Name = "RowTitle"
+		local description = label(row, entry.Description, UDim2.new(1, -190, 0, 18),
+			UDim2.fromOffset(14, 27), 11, COLORS.muted)
+		description.Name = "Description"
+		-- WRAPPED, never truncated, for the same reason the DEV rows are: a
+		-- setting whose explanation is ellipsized mid-sentence is a setting the
+		-- player has to guess at. The ROW grows and the page scrolls.
+		description.TextWrapped = true
+		description.TextYAlignment = Enum.TextYAlignment.Top
+		description.Visible = entry.Description ~= ""
+
+		local toggle = button(row, "OFF", UDim2.fromOffset(158, 36), UDim2.new(1, -172, 0, 6))
+		toggle.Name = "Toggle"
+		-- Keyed by the ATTRIBUTE NAME, so a row that stops writing the switch it
+		-- names cannot still look correct to the terminal's own contract.
+		contract.card("Settings", entry.Key, row, toggle)
+
+		local function currentValue()
+			if entry.Pending ~= nil then return entry.Pending end
+			local value = player:GetAttribute(entry.Key)
+			-- Before the profile lands the attribute is nil, and nil is NOT "off"
+			-- for every switch -- captions default ON. The config states each
+			-- default, so falling straight through to `== true` would draw the
+			-- caption row as OFF for the first seconds of every session and invite
+			-- a player to turn on something that is already on.
+			if value == nil then return entry.Default == true end
+			return value == true
+		end
+		local function refresh()
+			local enabled = currentValue()
+			-- ON / OFF and nothing else. The control stays reachable while a write
+			-- is in flight -- pressing it again is simply the opposite request --
+			-- so it never needs one of the terminal's stood-down captions and the
+			-- 44px floor applies to it in every state it has.
+			toggle.Text = enabled and "ON" or "OFF"
+			toggle.TextColor3 = enabled and COLORS.accent or COLORS.muted
+		end
+		toggle.Activated:Connect(function()
+			local wanted = not currentValue()
+			entry.Pending = wanted
+			entry.Serial = (entry.Serial or 0) + 1
+			local serial = entry.Serial
+			-- OPTIMISTIC, exactly like RoundUI's MUTE DISPATCH: the row answers on
+			-- the frame it is pressed and the server's attribute write either
+			-- confirms it or puts it back. Every reader is a LocalScript reading
+			-- this player, so the local reflection is not a lie about the state --
+			-- it is the state, until the server disagrees.
+			refresh()
+			-- Only the config-absent fallback rows write the attribute here. On the
+			-- normal path the server is the writer and a local write would be a
+			-- second, unauthoritative one; see the fallback block above for why
+			-- these two cannot wait for it.
+			if entry.Local then player:SetAttribute(entry.Key, wanted) end
+			actionRemote:FireServer("SetAccessibility", {Key = entry.Key, Enabled = wanted})
+			task.delay(12, function()
+				-- The server never answered. Fall back to whatever the attribute
+				-- actually says rather than leaving the row asserting a change that
+				-- may not have happened.
+				if entry.Serial == serial and entry.Pending ~= nil then
+					entry.Pending = nil
+					refresh()
+				end
+			end)
+		end)
+		player:GetAttributeChangedSignal(entry.Key):Connect(function()
+			if entry.Pending == nil or player:GetAttribute(entry.Key) == entry.Pending then
+				entry.Pending = nil
+			end
+			refresh()
+		end)
+		refresh()
+
+		-- The same give-way ladder as the DEV row, and it shares `fit.DevStacked`
+		-- for the same reason: the question that flag answers is whether the
+		-- content box is too narrow to keep a readable copy column BESIDE a
+		-- control, which is a property of the terminal and not of one page. The
+		-- row's height is derived from the measured copy in both arrangements, and
+		-- the control is never drawn under the terminal's own tap floor.
+		table.insert(layoutHooks, function(fit)
+			local tap = math.max(fit.Tap, 36)
+			local pad = 14
+			local titleFace = fit.DevStacked and 13 or 14
+			local descFace = 11
+			rowTitle.TextSize = titleFace
+			description.TextSize = descFace
+			local copyWidth
+			local toggleWidth = 0
+			if fit.DevStacked then
+				copyWidth = fit.ContentWidth - 8 - pad * 2
+			else
+				toggleWidth = math.min(158, math.max(110, fit.ContentWidth - 240))
+				copyWidth = fit.ContentWidth - 8 - pad * 2 - toggleWidth - 12
+			end
+			local titleFloor = if fit.DevStacked then 18 else 20
+			local titleHeight = math.max(titleFloor,
+				textHeightFor(rowTitle.Text, titleFace, rowTitle.Font, copyWidth))
+			-- A row without an explanation contributes no explanation height at
+			-- all, rather than an empty box that still takes a line.
+			local descHeight = if not description.Visible then 0
+				else math.max(14,
+					textHeightFor(description.Text, descFace, description.Font, copyWidth))
+			local descTop = 6 + titleHeight + 2
+			rowTitle.Position = UDim2.fromOffset(pad, 6)
+			description.Position = UDim2.fromOffset(pad, descTop)
+			local copyBottom = descTop + descHeight
+			if fit.DevStacked then
+				rowTitle.Size = UDim2.new(1, -pad * 2, 0, titleHeight)
+				description.Size = UDim2.new(1, -pad * 2, 0, math.max(1, descHeight))
+				local toggleTop = copyBottom + 8
+				toggle.Size = UDim2.new(1, -pad * 2, 0, tap)
+				toggle.Position = UDim2.new(0, pad, 0, toggleTop)
+				row.Size = UDim2.new(1, 0, 0, toggleTop + tap + 8)
+			else
+				rowTitle.Size = UDim2.fromOffset(copyWidth, titleHeight)
+				description.Size = UDim2.fromOffset(copyWidth, math.max(1, descHeight))
+				local height = math.max(copyBottom + 6, tap + 12)
+				toggle.Size = UDim2.fromOffset(toggleWidth, tap)
+				toggle.Position = UDim2.new(1, -(toggleWidth + pad), 0,
+					math.floor((height - tap) / 2))
+				row.Size = UDim2.new(1, 0, 0, height)
+			end
+		end)
+	end
+end
 
 player:SetAttribute("ZyntraReentryOpen", nil)
 

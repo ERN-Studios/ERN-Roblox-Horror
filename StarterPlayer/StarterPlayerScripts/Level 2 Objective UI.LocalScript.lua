@@ -3,12 +3,15 @@
 -- Level 1's PuzzleUI panels (dark panel, Code font, green-on-black readout).
 --
 -- Entirely attribute-driven — the server already publishes everything:
---   workspace.Level2Pumps        pumps started so far
---   workspace.Level2PumpGoal     total pumps this round
---   workspace.Level2ExitPowered  pressure doors open
+--   workspace.Level2Pumps         pumps started so far
+--   workspace.Level2PumpGoal      total pumps this round
+--   workspace.Level2ExitPowered   pressure doors open
+--   workspace.Level2FoamLethal    the pump that unlocks Pool Foam's attacks has run
+--   workspace.Level2_ExitPosition the flume mouth, published when the doors open
 -- Tweak the colors/text below freely; nothing else reads this file.
 
 local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local UIDevice = require(game:GetService("ReplicatedStorage"):WaitForChild("UIDevice"))
 
@@ -142,6 +145,49 @@ hintSize.MinTextSize = 9
 hintSize.MaxTextSize = 14
 hintSize.Parent = hint
 
+local POWERED_HINT = "TAKE TOP-DECK FLUME"
+
+-- LEVEL2_EXIT_BEARING_20260905
+-- Level 1 has the detector compass and Level 3 the reader needle. Once the
+-- pressure doors open, all Level 2 gave the party for the largest generated
+-- space in the game was those three words — during the stretch where Pool Foam
+-- is at its Finale speed and separated players have no way to regroup on the
+-- exit. Camera-relative, eight-point, in words rather than arrow glyphs so it
+-- renders in Code on every device. Falls back to the static hint whenever the
+-- server has published no position (older build, or a manifest with no mouth).
+local BEARINGS = {"AHEAD", "AHEAD-R", "RIGHT", "BEHIND-R", "BEHIND", "BEHIND-L", "LEFT", "AHEAD-L"}
+
+local function exitBearingText()
+	local exitPosition = workspace:GetAttribute("Level2_ExitPosition")
+	if typeof(exitPosition) ~= "Vector3" then return nil end
+	local character = player.Character
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	local camera = workspace.CurrentCamera
+	if not root or not camera then return nil end
+	local delta = exitPosition - root.Position
+	local flat = Vector3.new(delta.X, 0, delta.Z)
+	local look = camera.CFrame.LookVector
+	local forward = Vector3.new(look.X, 0, look.Z)
+	-- Standing under the flume mouth leaves a near-zero flat vector whose bearing
+	-- spins with every step. Inside this radius the exit is not something you
+	-- navigate to any more, it is something you climb, so hand the line back to
+	-- the static instruction.
+	if flat.Magnitude < 12 or forward.Magnitude < .01 then return nil end
+	flat, forward = flat.Unit, forward.Unit
+	-- Positive angle means the exit is to the RIGHT of where the camera looks,
+	-- matching PuzzleUI's compass-arrow convention.
+	local angle = math.deg(math.atan2(forward.X * flat.Z - forward.Z * flat.X, forward:Dot(flat)))
+	local index = math.floor((angle % 360) / 45 + .5) % 8 + 1
+	-- The bearing is horizontal; the exit is on the top deck. Keep the one
+	-- instruction that matters in the line rather than replacing it — the
+	-- completion alert says "CLIMB TO THE TOP DECK" and the panel must not
+	-- contradict it.
+	return string.format("FLUME %dM %s%s",
+		math.floor(delta.Magnitude + .5),
+		BEARINGS[index],
+		delta.Y > 15 and " - CLIMB" or "")
+end
+
 local function refresh()
 	local inLevel = workspace:GetAttribute("SelectedLevel") == 2
 		and player:GetAttribute("InRound") == true
@@ -170,9 +216,20 @@ local function refresh()
 		title.TextColor3 = Color3.fromRGB(140, 255, 180)
 		meter.Text = "PRESSURE RELEASED"
 		meter.TextColor3 = Color3.fromRGB(140, 255, 180)
-		hint.Text = "TAKE TOP-DECK FLUME"
+		hint.Text = exitBearingText() or POWERED_HINT
 		hint.TextColor3 = Color3.fromRGB(140, 255, 180)
 		stroke.Color = Color3.fromRGB(120, 255, 170)
+	elseif workspace:GetAttribute("Level2FoamLethal") == true then
+		-- LEVEL2_LETHAL_PUMP_20260905. The pump that unlocks Pool Foam's attacks
+		-- used to read exactly like the one before it. The panel now carries the
+		-- danger for the rest of the round; the meter above still says how many
+		-- stations are left, so no objective information is lost.
+		title.Text = "> PUMP NETWORK"
+		title.TextColor3 = Color3.fromRGB(126, 224, 235)
+		meter.TextColor3 = Color3.fromRGB(218, 237, 223)
+		hint.Text = "WATER NO LONGER SAFE"
+		hint.TextColor3 = Color3.fromRGB(255, 138, 120)
+		stroke.Color = Color3.fromRGB(255, 116, 96)
 	else
 		title.Text = "> PUMP NETWORK"
 		title.TextColor3 = Color3.fromRGB(126, 224, 235)
@@ -190,7 +247,21 @@ local function refresh()
 	end
 end
 
-for _, attribute in ipairs({"SelectedLevel", "Level2Pumps", "Level2PumpGoal", "Level2ExitPowered"}) do
+-- The panel is otherwise entirely signal-driven; the bearing is the one thing
+-- that changes while nothing else does, so it gets its own throttled tick at the
+-- same 0.22 s cadence Level 1's detector uses. It does nothing at all until the
+-- doors are open and the panel is on screen.
+local bearingClock = 0
+RunService.Heartbeat:Connect(function(deltaTime)
+	if not panel.Visible or workspace:GetAttribute("Level2ExitPowered") ~= true then return end
+	bearingClock += deltaTime
+	if bearingClock < .22 then return end
+	bearingClock = 0
+	hint.Text = exitBearingText() or POWERED_HINT
+end)
+
+for _, attribute in ipairs({"SelectedLevel", "Level2Pumps", "Level2PumpGoal", "Level2ExitPowered",
+	"Level2FoamLethal"}) do
 	workspace:GetAttributeChangedSignal(attribute):Connect(refresh)
 end
 player:GetAttributeChangedSignal("InRound"):Connect(refresh)

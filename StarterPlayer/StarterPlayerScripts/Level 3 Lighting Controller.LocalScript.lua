@@ -98,15 +98,58 @@ local blackoutApplied = false
 local blackoutLights: {BlackoutLightRecord} = {}
 local blackoutParts: {BlackoutPartRecord} = {}
 local blackoutPartSeen: {[BasePart]: boolean} = {}
+-- enforceBlackout used to walk the WHOLE generated mall on every throttled
+-- Heartbeat -- 12.5 times a second for the ~52 s of each blackout that is not
+-- the scream, and then continuously for the rest of the round once five CDs
+-- unlock the exit. It is a sweep, not a tick: nothing changes between passes
+-- unless the world does.
+--
+-- `blackoutSweptUnlocked` holds the exitUnlocked() value the last full sweep
+-- ran for, and `nil` means a sweep is due now. Everything on THIS client that
+-- can put a lit fixture back -- a fresh baseline, a late-streamed Light, the
+-- end of a flicker pass -- writes nil here, so those cases are corrected on the
+-- very next tick rather than eventually.
+--
+-- The interval is what covers the writers this client cannot see coming.
+-- `Level 3 Objective Controller` is a SERVER module and it writes Lights inside
+-- the same world (`slot.Light.Enabled = active` as CDs go into the VCR, and
+-- restoreModule putting a module's Enabled/Brightness back); those arrive as
+-- replicated property changes on instances that already exist, so they fire no
+-- DescendantAdded and nothing local marks the sweep due. The old code hid that
+-- behind brute force. This is still a poll -- deliberately -- but at 2 passes a
+-- second instead of 12.5, which is where the cost was.
+local BLACKOUT_SWEEP_SAFETY_INTERVAL = 0.5
+local blackoutSweptUnlocked: boolean? = nil
+local blackoutSweptAt = 0
 local blackoutFlickerPulse = -1
 local preBlackoutApplied = false
 local preBlackoutFlickerPulse = -1
 local recoveryFlickerApplied = false
 local recoveryFlickerPulse = -1
 local BLACKOUT_SCREAM_DURATION = 8.071836735
-local BLACKOUT_FLICKER_INTERVAL = 0.085
+-- PHOTOSENSITIVITY. updateBlackoutFlicker computes ONE `lit` for the whole mall
+-- and applies it to every fixture at once, so each pulse is a full-screen
+-- luminance flip. The hash lights ~4 of every 11 pulses plus every 13th -- up
+-- to ~0.45 flashes per pulse -- and the published guidance is no more than
+-- three flashes a second over a large area, so the interval floor is
+-- 0.45 / 3 = 0.15 s. This was 0.085 (about 4.5 flashes a second, over the
+-- threshold every blackout and again every 3.5 minutes for the whole level);
+-- 0.17 keeps a margin and still reads as a violent stutter rather than a fade.
+--
+-- The other two passes keep their authored cadence on purpose:
+-- updatePreBlackoutFlicker and updateRecoveryFlicker fold the light INDEX into
+-- their hash, so they are desynchronised per-fixture flicker and their
+-- aggregate luminance is comparatively smooth. What they do gain is the
+-- ReduceFlashing floor below.
+local BLACKOUT_FLICKER_INTERVAL = 0.17
 local PRE_BLACKOUT_FLICKER_INTERVAL = 0.09
 local RECOVERY_FLICKER_INTERVAL = 0.085
+-- ReduceFlashing does not gate the strobe slower still, it REPLACES it: no
+-- fixture is switched off, no material is swapped, and the mall breathes
+-- between this floor and full over REDUCED_FLASH_PERIOD seconds. The darkness
+-- and the scream timing are untouched; only the on/off edge is gone.
+local REDUCED_FLASH_FLOOR = 0.4
+local REDUCED_FLASH_PERIOD = 1.1
 local DEFAULT_COMPLETION_DIM_DURATION = 5.5
 local completionFadeActive = false
 local completionFadeEndsAtServerTime = 0
@@ -183,6 +226,12 @@ local function exitUnlocked(): boolean
 	return value == true
 end
 
+-- The player's own accessibility switch, read LIVE rather than cached: the
+-- Zyntra terminal writes it mid-round and the very next pulse has to honour it.
+local function reduceFlashing(): boolean
+	return player:GetAttribute("ReduceFlashing") == true
+end
+
 -- LEVEL3_COMPLETION_BLACKOUT_GUIDE_20260821
 local function blackoutRequested(): boolean
 	local state = stateFolder()
@@ -211,6 +260,8 @@ local function captureWorldLightBaseline()
 	table.clear(blackoutLights)
 	table.clear(blackoutParts)
 	table.clear(blackoutPartSeen)
+	-- A fresh baseline is a fresh world, so the next enforceBlackout sweeps it.
+	blackoutSweptUnlocked = nil
 	local world = boundWorld
 	if not world then return end
 	for _, descendant in ipairs(world:GetDescendants()) do
@@ -249,6 +300,7 @@ local function restoreBlackoutWorld()
 	table.clear(blackoutLights)
 	table.clear(blackoutParts)
 	table.clear(blackoutPartSeen)
+	blackoutSweptUnlocked = nil
 	blackoutFlickerPulse = -1
 	preBlackoutFlickerPulse = -1
 	recoveryFlickerPulse = -1
@@ -269,6 +321,26 @@ local function restoreBlackoutWorld()
 end
 
 local function enforceBlackout()
+	-- ON CHANGE, or on the safety interval -- never once per throttled frame.
+	-- Both non-flicker paths in updateBlackoutFlicker land here every 0.08 s and
+	-- everything below is idempotent, so a pass whose inputs have not moved is
+	-- pure waste. exitUnlocked() is the guard as well as an input: it is the only
+	-- thing the published attributes at the foot of this function vary on, so a
+	-- mid-blackout unlock re-sweeps without any extra signal being wired up.
+	local unlocked = exitUnlocked()
+	-- SERVER TIME, like every other bound in this file's blackout logic. Roblox's
+	-- os.clock() is CPU time, not wall time, so a 0.5 s deadline written against
+	-- it stretches on a loaded client -- and this deadline is the worst-case
+	-- window in which a fixture the SERVER relit (the Objective Controller's VCR
+	-- slot indicators) stays visible through the blackout. os.clock is fine at
+	-- :763/:987 below, where the drift is a feel value; it is not fine here.
+	local now = workspace:GetServerTimeNow()
+	if blackoutSweptUnlocked == unlocked
+		and now - blackoutSweptAt < BLACKOUT_SWEEP_SAFETY_INTERVAL then
+		return
+	end
+	blackoutSweptUnlocked = unlocked
+	blackoutSweptAt = now
 	-- Streaming can deliver fixtures after the initial baseline snapshot. Sweep
 	-- the authoritative live world so completion can never leave a late light on.
 	if boundWorld then
@@ -298,8 +370,8 @@ local function enforceBlackout()
 	end
 	completionFadeActive = false
 	script:SetAttribute("Level3_CompletionDimActive", false)
-	script:SetAttribute("Level3_CompletionDimProgress", if exitUnlocked() then 1 else 0)
-	script:SetAttribute("Level3_CompletionBlackoutActive", exitUnlocked())
+	script:SetAttribute("Level3_CompletionDimProgress", if unlocked then 1 else 0)
+	script:SetAttribute("Level3_CompletionBlackoutActive", unlocked)
 	script:SetAttribute("Level3_BlackoutScreamFlickerActive", false)
 end
 
@@ -413,6 +485,9 @@ local function updateBlackoutFlicker()
 	if startedAt <= 0 or elapsed < 0 or elapsed >= duration then
 		if blackoutFlickerPulse ~= -1 then
 			blackoutFlickerPulse = -1
+			-- The pass that just ended left fixtures lit, so the sweep below has
+			-- real work to do -- exactly once.
+			blackoutSweptUnlocked = nil
 			script:SetAttribute("Level3_BlackoutScreamFlickerPulse", -1)
 		end
 		enforceBlackout()
@@ -420,6 +495,33 @@ local function updateBlackoutFlicker()
 	end
 
 	local pulse = math.floor(elapsed / BLACKOUT_FLICKER_INTERVAL)
+	if reduceFlashing() then
+		-- A smooth swell, never a full-scene on/off: every fixture keeps its own
+		-- material and colour and none of them reaches zero, so the scream still
+		-- lands as a wave of darkness with no strobe edge in it. Written every
+		-- throttled frame rather than once per pulse, because the whole point is
+		-- that it is continuous.
+		local level = REDUCED_FLASH_FLOOR + (1 - REDUCED_FLASH_FLOOR)
+			* (.5 - .5 * math.cos(elapsed * (math.pi * 2) / REDUCED_FLASH_PERIOD))
+		for _, record in ipairs(blackoutLights) do
+			if record.Light.Parent then
+				record.Light.Enabled = record.Enabled
+				record.Light.Brightness = record.Brightness * level
+			end
+		end
+		for _, record in ipairs(blackoutParts) do
+			if record.Part.Parent then
+				record.Part.Material = record.Material
+				record.Part.Color = Color3.fromRGB(13, 14, 15):Lerp(record.Color, level)
+			end
+		end
+		-- Not -1, so the branch above knows a pass has touched the world and marks
+		-- the sweep due when the scream ends.
+		blackoutFlickerPulse = pulse
+		script:SetAttribute("Level3_BlackoutScreamFlickerActive", true)
+		script:SetAttribute("Level3_BlackoutScreamFlickerPulse", pulse)
+		return
+	end
 	if pulse == blackoutFlickerPulse then return end
 	blackoutFlickerPulse = pulse
 	local serial = if type(serialValue) == "number" then math.floor(serialValue) else 0
@@ -481,22 +583,30 @@ local function updatePreBlackoutFlicker()
 	local progress = math.clamp(elapsed / duration, 0, 1)
 	local serial = if type(serialValue) == "number" then math.floor(serialValue) else 0
 	local offChance = .10 + progress * .67
+	-- This pass is already desynchronised per fixture, so it is not the
+	-- whole-screen strobe the scream is. ReduceFlashing still takes the on/off
+	-- EDGE out of it: an unlit fixture dips to this fraction of its baseline and
+	-- keeps its material instead of snapping to black.
+	local dimFloor = if reduceFlashing() then REDUCED_FLASH_FLOOR else 0
 	for index, record in ipairs(blackoutLights) do
 		if record.Light.Parent then
 			local hash = ((pulse * 43 + index * 19 + serial * 11) % 100) / 100
 			local surge = (pulse + index * 3) % 17 == 0
 			local lit = record.Enabled and (hash > offChance or surge)
-			record.Light.Enabled = lit
+			record.Light.Enabled = lit or (dimFloor > 0 and record.Enabled)
 			record.Light.Brightness = if lit
-				then record.Brightness * (surge and 1.35 or math.max(.28, 1 - progress * .48)) else 0
+				then record.Brightness * (surge and 1.35 or math.max(.28, 1 - progress * .48))
+				else record.Brightness * dimFloor
 		end
 	end
 	for index, record in ipairs(blackoutParts) do
 		if record.Part.Parent then
 			local hash = ((pulse * 31 + index * 23 + serial * 7) % 100) / 100
 			local lit = hash > offChance or (pulse + index) % 19 == 0
-			record.Part.Material = if lit then record.Material else Enum.Material.SmoothPlastic
-			record.Part.Color = if lit then record.Color else Color3.fromRGB(22, 22, 20)
+			record.Part.Material = if lit or dimFloor > 0
+				then record.Material else Enum.Material.SmoothPlastic
+			record.Part.Color = if lit then record.Color
+				else Color3.fromRGB(22, 22, 20):Lerp(record.Color, dimFloor)
 		end
 	end
 	script:SetAttribute("Level3_PreBlackoutFlickerPulse", pulse)
@@ -535,13 +645,18 @@ local function updateRecoveryFlicker()
 	local pulse = math.floor(math.max(0, elapsed) / RECOVERY_FLICKER_INTERVAL)
 	if pulse == recoveryFlickerPulse then return end
 	recoveryFlickerPulse = pulse
+	-- Same rule as the pre-blackout pass: desynchronised already, so the cadence
+	-- stands, but ReduceFlashing removes the snap to black.
+	local dimFloor = if reduceFlashing() then REDUCED_FLASH_FLOOR else 0
 	for index, record in ipairs(blackoutLights) do
 		if record.Light.Parent then
 			local turnOnAt = .10 + (((index * 37) % 67) / 100)
 			local sputter = ((pulse * 29 + index * 17) % 13) < 3
 			local lit = record.Enabled and (progress >= .94 or (progress >= turnOnAt and not sputter))
-			record.Light.Enabled = lit
-			record.Light.Brightness = if lit then record.Brightness * math.min(1, .55 + progress * .55) else 0
+			record.Light.Enabled = lit or (dimFloor > 0 and record.Enabled)
+			record.Light.Brightness = if lit
+				then record.Brightness * math.min(1, .55 + progress * .55)
+				else record.Brightness * dimFloor
 		end
 	end
 	for index, record in ipairs(blackoutParts) do
@@ -549,8 +664,10 @@ local function updateRecoveryFlicker()
 			local turnOnAt = .08 + (((index * 41) % 71) / 100)
 			local sputter = ((pulse * 23 + index * 13) % 11) < 2
 			local lit = progress >= .94 or (progress >= turnOnAt and not sputter)
-			record.Part.Material = if lit then record.Material else Enum.Material.SmoothPlastic
-			record.Part.Color = if lit then record.Color else Color3.fromRGB(13, 14, 15)
+			record.Part.Material = if lit or dimFloor > 0
+				then record.Material else Enum.Material.SmoothPlastic
+			record.Part.Color = if lit then record.Color
+				else Color3.fromRGB(13, 14, 15):Lerp(record.Color, dimFloor)
 		end
 	end
 	script:SetAttribute("Level3_RecoveryFlickerPulse", pulse)
@@ -577,6 +694,10 @@ local function beginBlackout()
 		captureWorldLightBaseline()
 	end
 	blackoutApplied = true
+	-- The pre-blackout branch above deliberately keeps its clean baseline, so
+	-- captureWorldLightBaseline did not run on that path and nothing else has
+	-- marked the sweep due.
+	blackoutSweptUnlocked = nil
 	cancelTweens()
 	if exitUnlocked() then
 		beginCompletionFade()
@@ -672,6 +793,14 @@ local function bindWorld(world: Model?)
 		task.defer(function()
 			if world ~= boundWorld or not descendant:IsDescendantOf(world) then return end
 			tryAddFixture(descendant)
+			if blackoutApplied and descendant:IsA("Light") then
+				-- UNGATED, unlike the completion handling below it. A Light that
+				-- streams in during an ORDINARY blackout is exactly the case
+				-- enforceBlackout's sweep exists for, and marking the sweep due here
+				-- is what lets that sweep stop running every frame the rest of the
+				-- time. It costs one boolean write per late fixture.
+				blackoutSweptUnlocked = nil
+			end
 			if blackoutApplied and exitUnlocked() and descendant:IsA("Light") then
 				local _, duration, progress = completionTiming()
 				local remaining = duration * (1 - progress)

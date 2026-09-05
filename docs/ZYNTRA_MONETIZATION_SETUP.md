@@ -86,15 +86,24 @@ Filnavne, full-resolution masters og det anvendte prompt-set er dokumenteret i `
 - 4 Research Tokens
 - 20 Research Tokens
 
-### Opret, men behold off-sale indtil vindueslængden er besluttet og testet
+### Emergency Re-entry — 15 sekunder valgt og Studio-test bestået
+
+Kontrolleret 5. september 2026: produkt `3707755318` stod allerede **on-sale**
+i Creator Dashboard med basispris **29 R$** og Managed pricing aktivt. Ingen
+salgsindstilling eller pris blev ændret. Wipe-vinduet beholder **15 sekunder**,
+som ejeren tidligere ønskede. De tre tests fra Trello samt en sen receipt
+bestod i Studio; se [testbeviset](EMERGENCY_REENTRY_VALIDATION_2026-09-05.md).
+Der blev ikke brugt rigtige Robux eller testet en rigtig betaling i en
+publiceret server.
 
 De tre oprindelige problemer, opdateret 4. september 2026:
 
-1. **Stadig åbent.** Wipe-/købsvinduet er kun 15 sekunder. `playRound` i
+1. **Besluttet 5. september: behold 15 sekunder.** `playRound` i
    `GameManager` sætter `wipeDeadline = os.clock() + 15`, og hele købet —
-   prompt, betaling og `ProcessReceipt` — skal nå at ske inden for det. 45-60
-   sekunder er stadig anbefalingen, men det er en gameplay-beslutning: det
-   forlænger også den tid en helt udslettet gruppe står stille.
+   prompt, betaling og `ProcessReceipt` — skal nå at ske inden for det, hvis
+   købet skal redde netop den runde. 45-60 sekunder var den tidligere
+   anbefaling; ejerens valg er 15 sekunder. Et køb efter udløbet gemmer en
+   credit til senere brug. Begge timing-udfald blev observeret i Studio.
 2. **Rettet.** Et køb, der lander mens spilleren stadig er død i en aktiv runde,
    bruger nu credit'en med det samme. `ProcessReceipt` kalder `useReentry` i en
    `task.spawn`, efter at credit'en er givet, og kun når spilleren opfylder
@@ -118,8 +127,8 @@ Samme vindue viser nu også et PARTY DOWN-kort: serveren sender `partydown` med
 bringer nogen tilbage, eller runden rives ned. Kortet gør vinduet synligt, hvilket
 er en forudsætning for, at produktet overhovedet kan sælges inden for det.
 
-**Tilbage før on-sale:** beslut vindueslængden (punkt 1), og kør derefter en
-rigtig end-to-end-test i en publiceret server: køb midt i wipe-vinduet og
+**Ikke dækket af Studio-testen:** en rigtig end-to-end-betaling i en
+publiceret server. Ved en sådan test skal man købe midt i wipe-vinduet og
 verificér, at respawnet sker uden et ekstra tryk, at credit'en trækkes præcis én
 gang, og at et køb, der lander efter vinduet er lukket, giver credit'en tilbage
 i stedet for at forsvinde.
@@ -195,16 +204,30 @@ Roblox opkræver altid Dashboard-prisen. `Price` i ZyntraConfig er i øjeblikket
 
 ## Trin 4b: opret de fire badges
 
-Badges er gratis at oprette og koster ingen Robux. De uddeles serverside af
+De første fem badges pr. experience pr. GMT-døgn er gratis; derefter koster
+hvert ekstra badge 100 Robux. Disse fire blev oprettet 5. september 2026 uden
+Robux-betaling. De uddeles serverside af
 `ZyntraMonetization` på `ZyntraLevelCompleted`-signalet, altså i samme øjeblik
 spilleren får sit gratis token for et clear.
 
-| Intern nøgle i `Config.Badges` | Foreslået badge-navn | Uddeles når |
-|---|---|---|
-| `FirstClearLevel1` | Level 1 Cleared | Spilleren slipper ud af Level 1 første gang |
-| `FirstClearLevel2` | Level 2 Cleared | Spilleren slipper ud af Level 2 første gang |
-| `FirstClearLevel3` | Level 3 Cleared | Spilleren slipper ud af Level 3 første gang |
-| `CampaignComplete` | Campaign Complete | Alle tre levels er clearet mindst én gang — ikke det samme som at cleare Level 3 |
+| Intern nøgle i `Config.Badges` | Oprettet badge-navn | Badge ID | Uddeles når |
+|---|---|---|---|
+| `FirstClearLevel1` | Level 1 Cleared | `2788462628933614` | Spilleren slipper ud af Level 1 første gang |
+| `FirstClearLevel2` | Level 2 Cleared | `349186155479685` | Spilleren slipper ud af Level 2 første gang |
+| `FirstClearLevel3` | Level 3 Cleared | `457908347698355` | Spilleren slipper ud af Level 3 første gang |
+| `CampaignComplete` | Stay Quiet | `2318404539475574` | Alle tre levels er clearet mindst én gang — ikke det samme som at cleare Level 3 |
+
+Alle fire står Active i Dashboardet. Uploadklare 512×512 PNG-ikoner og
+originaler ligger i [assets/badges](../assets/badges/README.md). Mall-badget
+bruger `level-3-cleared-map-v2.png`, skabt ud fra screenshots af det faktiske
+Level 3; den forkastede rulletrappe-version må ikke uploades.
+
+De fire id'er er indsat og kontrolleret i både repo og Studio. Den åbne
+Studio-version blev publiceret som **v1755** med ejerens udtrykkelige tilladelse.
+Roblox BadgeService bekræftede alle fire navne og `IsEnabled=true`; alle fire
+uploadede ikoner var synlige i Dashboardet ved den afsluttende kontrol. Ingen test
+uddeler badges til ejerens konto. Repoets øvrige ventende ændringer blev ikke
+skubbet til Studio; Config-manifestet bevarer den separate pending-status.
 
 1. Gå til `Creations -> BACKROOMS: STAY QUIET [CO-OP HORROR] -> Badges`.
 2. Klik `Create badge`, upload et ikon, indsæt navn og beskrivelse.
@@ -214,10 +237,10 @@ spilleren får sit gratis token for et clear.
 
 ```lua
 Badges = {
-	FirstClearLevel1 = 0,
-	FirstClearLevel2 = 0,
-	FirstClearLevel3 = 0,
-	CampaignComplete = 0,
+	FirstClearLevel1 = 2788462628933614,
+	FirstClearLevel2 = 349186155479685,
+	FirstClearLevel3 = 457908347698355,
+	CampaignComplete = 2318404539475574,
 },
 ```
 
@@ -267,6 +290,8 @@ Brug en testkonto, der ikke ejer passet:
 4. Kontrollér, at Supporter-tokenpakken og Advanced-grants ikke gives igen.
 5. Test en Supporter-only spiller og kontrollér, at hazmat color pickeren er låst. Test derefter en Advanced-only spiller og kontrollér, at den kan åbnes og gemmes.
 
+Punkt 2 er det, der plejede at kunne fejle uden spor: `UserOwnsGamePassAsync` cacher pr. server og svarer ofte stadig `false` lige efter købet. Serveren låser derfor købet fast, når `PromptGamePassPurchaseFinished` melder `purchased = true`, og lader det vinde over enhver senere ejerskabslæsning i den session. Et ejerskabsopslag der kaster, prøves igen (0/1/3 s) og ender som "ved ikke" i stedet for "ejer ikke", så et udfald ved join ikke længere kan fjerne et pass resten af sessionen. Svarer Roblox stadig ikke, spørger serveren af sig selv igen i baggrunden — op til tre gange med 20 sekunders mellemrum — og holder op, så snart et opslag svarer. Det kan ikke overlades til "den næste handling, der kræver passet": butikken låser sin farvevælger på netop den attribut og sender derfor slet ikke handlingen, og Supporter-passet har ingen handling overhovedet.
+
 ### Developer Products
 
 Test med et billigt testprodukt og en testkonto. Rigtige testkøb bruger rigtige Robux.
@@ -303,8 +328,9 @@ Hvis Developer Products også skal sælges på Roblox' eksterne Store-tab:
 - [ ] Top Donors-tavlen testet med donation-receipts, genstart og OrderedDataStore-fejl.
 - [ ] DataStore testet i publiceret version.
 - [x] Emergency Re-entry: reserve-før-respawn og auto-use efter godkendt receipt implementeret.
-- [ ] Emergency Re-entry: vindueslængden besluttet og flowet testet i en publiceret server, før produktet sættes on-sale.
-- [ ] Fire badges oprettet på Creator Dashboard og deres asset-ids indsat i `Config.Badges`.
+- [x] Emergency Re-entry: 15 sekunder valgt; Trello-testene bestået i Studio; eksisterende on-sale/29 R$ verificeret.
+- [ ] Emergency Re-entry: rigtig betaling og DataStore-forløb testet i en publiceret server.
+- [x] Fire badges oprettet på Creator Dashboard og deres asset-ids indsat i `Config.Badges`; publiceret i v1755.
 - [ ] Purchase-/receipt-fejl logges til analytics eller telemetri.
 - [ ] Shop-copy forklarer tydeligt, at hvert token giver +5% til ét valgt system.
 
@@ -314,9 +340,34 @@ Brug ikke en subscription ved første launch. Roblox-subscriptions er månedlige
 
 En senere `Zyntra Research Membership` kan give mening, hvis I vil tilbyde en reel løbende fordel, eksempelvis 10 tokens pr. betalingsmåned og et aktivt medlemsbadge. En ugentlig udbetaling kræver jeres egen periodisering, DataStore-felter, offline catch-up og serverkontrol af aktiv status. Subscription-fordele skal fjernes eller deaktiveres, når abonnementet ikke længere er aktivt.
 
+## Tilgængelighedskontakter (server-kontrakten)
+
+Profilen bærer nu de fire tilgængelighedskontakter, klienten allerede læste, men som intet kunne sætte. Listen står ordnet i `ZyntraConfig.AccessibilitySettings`, og den liste er hele kontrakten: hver `Key` er både feltet i `profile.Settings`, navnet på den player-attribut klienten læser, og den eneste nøgle serveren accepterer.
+
+| Key | Label | Default | Læses af |
+|---|---|---|---|
+| `ReduceCameraShake` | Reduce camera shake | `false` | EntityShakeController, Level 2 Pool Foam Client |
+| `ReduceFlashing` | Reduce flashing lights | `false` | Level 2 Pool Foam Client, Level 3 Lighting Controller |
+| `CaptionsEnabled` | Show captions | `true` | Level 2 Pool Foam Client |
+| `DisableCaptions` | Hide captions (`Hidden = true`) | `false` | Level 2 Pool Foam Client |
+
+Hver post har desuden en `Description`, som kun er UI-tekst; serveren bruger kun `Key` og `Default`.
+
+- `CaptionsEnabled` og `DisableCaptions` er to halvdele af den samme gamle kontakt (`DisableCaptions ~= true and CaptionsEnabled ~= false`). Begge gemmes og publiceres, så eksisterende saves stadig virker, men en UI må kun vise den ene: spring hver post over, der er markeret `Hidden`. Derfor er `CaptionsEnabled` også den eneste med `Default = true` — en default må aldrig vendes om til det modsatte af det, læserne antager.
+- Attributterne sættes uden præfiks (`ReduceCameraShake`, ikke `ZyntraReduceCameraShake`), fordi det er de navne, de eksisterende klientlæsere spørger om. De publiceres ved profil-load og ved hver ændring, og de ligger også i `publicProfile`-payloaden.
+- Klienten skriver dem via `ZyntraAction` med `"SetAccessibility"` og payload `{ Key = <string>, Enabled = <boolean> }`. Serveren validerer nøglen mod listen, ignorerer en uændret værdi helt, sætter attributten med det samme (optimistisk UI) og samler selve DataStore-skrivningen: første ændring skrives straks, følgende ændringer inden for 6 sekunder foldes ind i én skrivning. Forlader spilleren serveren inde i det vindue, skrives de ventende værdier alligevel, før sessionen lukkes.
+
+## Skrivebudget for DataStore
+
+Roblox' budget er 60 + 10 × spillere skrivninger i minuttet, og vejledningen for én nøgle er én skrivning pr. 6 sekunder. Tre ting holder klient-drevne handlinger inden for det:
+
+- Et afvist `ZyntraAction` (ingen tokens, en farve der allerede er gemt, en receipt der allerede er indløst) åbner ikke længere en skrivning: `mutate`/`mutateIdempotent` annullerer `UpdateAsync` ved at returnere `nil`, når transformen melder "ingen ændring".
+- Handlinger der kan skrive (`UpgradeStamina`, `UpgradeBattery`, `SetHazmatColor`, `SetGlowstickColor`, `SetAccessibility`) har et vindue på 1 sekund; resten beholder de responsive 120 ms. Vinduet er pr. handling — og for tilgængelighed pr. kontakt — så to forskellige knapper trykket lige efter hinanden begge bliver til noget. Ét fælles tidsstempel ville gøre det andet tryk til en død knap i et helt sekund.
+- `SetMuteDispatch` er stadig undtaget fra vinduet, men køen eskalerer sit gulv 0,75 → 2 → 6 sekunder ved skrivninger i træk og nulstiller efter 30 sekunders ro, så vedvarende spam koster ~1 skrivning pr. 6 sekunder på spillerens egen nøgle.
+
 ## Kodepunkter
 
-- Produktkatalog og ID-felter: `ReplicatedStorage/ZyntraConfig.ModuleScript.lua`
+- Produktkatalog, ID-felter og tilgængelighedslisten: `ReplicatedStorage/ZyntraConfig.ModuleScript.lua`
 - Persistence, pass-grants og receipts: `ServerScriptService/ZyntraMonetization.Script.lua`
 - Shop, prompts og nuværende prisdisplay: `StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua`
 - Level-belønning og re-entry: `ServerScriptService/GameManager.Script.lua`
@@ -333,3 +384,4 @@ En senere `Zyntra Research Membership` kan give mening, hvis I vil tilbyde en re
 - [Player data and purchasing systems](https://create.roblox.com/docs/cloud-services/data-stores/player-data-purchasing)
 - [MarketplaceService](https://create.roblox.com/docs/reference/engine/classes/MarketplaceService)
 - [Publish games and places](https://create.roblox.com/docs/production/publishing/publish-games-and-places)
+- [Badges](https://create.roblox.com/docs/production/publishing/badges)

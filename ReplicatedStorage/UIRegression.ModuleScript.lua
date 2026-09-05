@@ -1115,7 +1115,21 @@ function UIRegression.Scenarios(): {any}
 				return child.Name == "ObjectivesButton"
 			end)
 		end},
-		{Name = "objectives-panel", Requires = "ObjectivesPanel", Setup = function()
+		-- FORBIDS THE QUEUE PANEL, and that is a diagnosis rather than a tidy-up.
+		-- Both rect collectors require a visible chain, so a QueueHostPanel
+		-- rectangle turning up in THIS row's scan means the queue shade genuinely
+		-- was up while it ran -- and the only production route there is the
+		-- "queuehost" event GameManager fires the moment the operator's avatar is
+		-- the first body in a station's queue zone (and again after every
+		-- resetStation). resetScenario hides the shade but leaves RoundUI's
+		-- queueStation and the server-side host relation standing, so the game can
+		-- raise the modal again mid-sweep. Naming it here reports a recurrence as
+		-- STATE LEAK -- what it is -- instead of as a geometry failure on the
+		-- objectives panel. Deliberately NOT hidden in resetScenario: the
+		-- queue-host-panel row runs the same reset and would then fail VACUOUS,
+		-- because revealGui only writes direct children of RoundGui.
+		{Name = "objectives-panel", Requires = "ObjectivesPanel",
+			Forbids = {"QueueHostPanel"}, Setup = function()
 			-- The objectives panel is nearly full-bleed AND Active, so it is the
 			-- single most likely thing to swallow the movement controls. It was
 			-- not in the original matrix, which is exactly why its touch case
@@ -1690,6 +1704,12 @@ local PAGE_CONTENT = {
 	-- passed.
 	Donate = {Rows = 0, Actions = 0},
 	Colors = {Rows = 2, Actions = 8},
+	-- The accessibility page, and this literal is the LAST RESORT rather than the
+	-- contract. Like Donate, the real count is derived from ZyntraConfig at the
+	-- point of use (the visible entries of AccessibilitySettings); 2 is what the
+	-- store's emergency two-key fallback draws, so it only stands when the config
+	-- carries no list at all. A Settings page that built nothing fails here.
+	Settings = {Rows = 2, Actions = 2},
 	Dev = {Rows = 7, Actions = 7},
 }
 
@@ -4960,18 +4980,32 @@ Fit.DonationTierKeys = {
 -- inactive without one of these has died silently, which is the failure this
 -- names; an action that carries one and is still Active is a control the player
 -- can press when the store has already said they cannot.
-Fit.ZyntraDisabledCaptions = {"OWNED", "COMING SOON", "LEVEL 3 ONLY"}
+--
+-- LUA PATTERNS, not literal substrings, and that is the fix for the 22 Dev-tab
+-- failures this list was producing on its own. The store builds a level-gated
+-- dev row's caption as `"LEVEL " .. (info.Level or 3) .. " ONLY"`, and PULL TWO
+-- PUMPS carries Level = 2 -- so it renders "LEVEL 2 ONLY", Active = false, and
+-- the literal "LEVEL 3 ONLY" never matched it. That row was reported twice per
+-- device (once as "out of the input stack with no stated reason" and once in
+-- the per-page accounting, 8 authored against 7 reachable and 0 stood down)
+-- across the 11 rows of Fit.Devices: 11 x 2 = 22. The busy caption for the same
+-- row is "WAITING 5s", which is the same shape and the same silence, so it is
+-- named here too. Nothing in production changed; the harness was wrong.
+Fit.ZyntraDisabledCaptions = {"OWNED", "COMING SOON", "LEVEL %d+ ONLY", "WAITING"}
 
 -- HOW MANY OF A PAGE'S CARD ACTIONS THE PLAYER CAN PRESS, where that number is
 -- a property of the build and not of the tester's save file.
 --
--- Shop and Dev are deliberately ABSENT rather than given a number: what the Shop
--- offers depends on what this account already owns, and the Dev page's skip rows
--- go inactive outside Level 3. A literal for either would encode one machine's
--- state as the contract and fail honestly-built terminals on every other. They
--- are held to the complete accounting instead -- reachable plus stood-down-with-
--- a-reason equals the whole authored contract -- which is a statement about the
--- terminal rather than about the account.
+-- Shop, Dev and Settings are deliberately ABSENT rather than given a number:
+-- what the Shop offers depends on what this account already owns, the Dev
+-- page's skip rows go inactive outside Level 3, and the Settings list is
+-- configuration. A literal for any of them would encode one machine's state as
+-- the contract and fail honestly-built terminals on every other. They are held
+-- to the complete accounting instead -- reachable plus stood-down-with-a-reason
+-- equals the whole authored contract -- which is a statement about the terminal
+-- rather than about the account. Settings has no stood-down state at all: an
+-- accessibility toggle is reachable in both of its positions, so the accounting
+-- there reduces to "every authored switch can be pressed".
 Fit.ZyntraExpectedActive = {
 	-- The two upgrade cards. Neither is ever taken out of the input stack: a
 	-- player short of tokens still presses SPEND and is told so.
@@ -4988,7 +5022,11 @@ Fit.ZyntraExpectedActive = {
 function Fit.zyntraDisabledReason(button): string?
 	local text = tostring((button :: any).Text or "")
 	for _, caption in ipairs(Fit.ZyntraDisabledCaptions) do
-		if text:find(caption, 1, true) then return caption end
+		-- The MATCHED TEXT is returned, not the pattern that found it, so a
+		-- failure line still says "LEVEL 2 ONLY" and names the row a reader can
+		-- go and look at.
+		local first, last = text:find(caption)
+		if first then return text:sub(first, last) end
 	end
 	return nil
 end
@@ -5170,7 +5208,10 @@ function Fit.bodyZyntraTerminalFitMatrix(): (string, number)
 		-- set is stated here, and whether DEV belongs in it is answered by
 		-- DevAccess -- the module the store itself consults -- rather than by the
 		-- store's own report of what it happens to have built.
-		local expectedTabs = {"Upgrades", "Shop", "Donate", "Colors"}
+		-- SETTINGS is the accessibility page. It is in the authored set for every
+		-- account, developer or not, so it is named here rather than left to the
+		-- whitelist branch below.
+		local expectedTabs = {"Upgrades", "Shop", "Donate", "Colors", "Settings"}
 		local devExpected = DevAccess.IsAllowed(player)
 		if devExpected then table.insert(expectedTabs, "Dev") end
 		local tabList = {}
@@ -5557,6 +5598,45 @@ function Fit.bodyZyntraTerminalFitMatrix(): (string, number)
 					-- store builds its cards from.
 					local tiers = donationTierCount()
 					expectedRows = {Rows = tiers, Actions = tiers}
+				end
+				if name == "Settings" then
+					-- SAME IDIOM, and for the same reason Donate does not use its
+					-- PAGE_CONTENT literal: the authored switch count is
+					-- ZyntraConfig.AccessibilitySettings minus the entries it marks
+					-- Hidden. A literal 2 here would be exactly what the store's
+					-- emergency two-key fallback draws, so the one failure this
+					-- check exists to catch -- the config list going missing and the
+					-- page silently dropping to that fallback -- would pass clean.
+					-- The PAGE_CONTENT floor stands only when the config carries no
+					-- list at all, which is the case the fallback answers.
+					local switches = 0
+					for _, entry in ipairs(ZyntraConfig.AccessibilitySettings or {}) do
+						if type(entry) == "table" and entry.Hidden ~= true then
+							switches += 1
+						end
+					end
+					if switches > 0 then
+						expectedRows = {Rows = switches, Actions = switches}
+					end
+					-- The count alone cannot see the Hidden filter INVERTING -- four
+					-- rows drawn still clears a floor of three -- and Hidden is not
+					-- cosmetic: DisableCaptions and CaptionsEnabled are two halves of
+					-- one caption pair, so a terminal that draws both offers the
+					-- player contradicting switches. Rows are named by their
+					-- attribute key, so this is a lookup.
+					if scroll then
+						local shown: string? = nil
+						for _, entry in ipairs(ZyntraConfig.AccessibilitySettings or {}) do
+							if type(entry) == "table" and entry.Hidden == true
+								and type(entry.Key) == "string"
+								and scroll:FindFirstChild(entry.Key) then
+								shown = entry.Key
+							end
+						end
+						record(shown == nil,
+							device.Name .. " / Settings: no switch the config marks Hidden"
+							.. " is drawn", shown)
+					end
 				end
 				if expectedRows and scroll then
 					local drawn, actions = 0, 0

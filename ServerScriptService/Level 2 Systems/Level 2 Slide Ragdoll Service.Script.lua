@@ -542,8 +542,22 @@ do
 	for _, instance in ipairs(Workspace:GetDescendants()) do
 		applyWaterTexture(instance)
 	end
+	-- Reject synchronously; defer only what could match. This fires for EVERY
+	-- instance any level parents into Workspace — a Level 2 build alone is on the
+	-- order of 71,000 — and the defer bought nothing, because applyWaterTexture's
+	-- own first statement is this same IsA test and the builder sets Name and
+	-- Color before parenting. The name test is here for the same reason: all six
+	-- rules are plain prefix compares, so a character limb or a corridor wall is
+	-- rejected without ever reaching the scheduler.
+	local function couldMatch(instance)
+		if not instance:IsA("BasePart") then return false end
+		for _, rule in ipairs(WATER_TEXTURE_RULES) do
+			if startsWith(instance.Name, rule.Prefix) then return true end
+		end
+		return false
+	end
 	Workspace.DescendantAdded:Connect(function(instance)
-		task.defer(applyWaterTexture, instance)
+		if couldMatch(instance) then task.defer(applyWaterTexture, instance) end
 	end)
 end
 

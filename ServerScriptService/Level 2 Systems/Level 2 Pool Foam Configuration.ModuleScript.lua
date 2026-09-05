@@ -69,6 +69,44 @@ local Configuration = {
 		-- The latch makes the transition immune to report/camera-edge flicker.
 		TriggerChaseOnObserve = true,
 		ChaseGraceSeconds = 0.45,
+		-- SERVER BACKSTOP FOR THE LATCH (2026-09-05).
+		--
+		-- `Observed` above stays report-driven on purpose: the freeze/statue
+		-- semantics need the player's REAL camera, and OR-ing in a server head
+		-- view would freeze an entity whose watcher is legitimately looking away.
+		-- But the LATCH must not be the client's decision alone. A client that
+		-- sends perfectly well-formed reports (right protocol and generation,
+		-- increasing sequence, camera origin at its own head) whose look
+		-- direction simply never covers a foam model never trips
+		-- TriggerChaseOnObserve, and instantKill refuses to fire without the
+		-- latch — so that player is permanently unkillable by Level 2's only
+		-- hostile.
+		--
+		-- Independently of every client report, an ACTIVE entity that keeps one
+		-- living, targetable player inside ProximityLatchRadius studs with a
+		-- clear server line of sight, and BELOW ProximityLatchMaximumSpeed, for
+		-- ProximityLatchSeconds latches the chase exactly as a look does.
+		-- Nothing here can release a latch or make one harder to earn; it can
+		-- only add one.
+		--
+		-- Read the movement code before retuning these. An un-latched active
+		-- entity already pursues the nearest eligible player and PARKS at
+		-- Movement.TargetStopDistance (4.5) — so proximity is not something a
+		-- player chooses, and a wide radius plus a short dwell would make this
+		-- backstop the primary latch and delete the look-reveal beat entirely.
+		-- The two gates that do the real work are therefore:
+		--   * the radius is barely wider than the entity's own stop distance, so
+		--     "inside it" means the thing is standing on you, not in the room;
+		--   * the candidate must be roughly STATIONARY. A player who is walking,
+		--     fleeing or working is never latched by proximity — only one who
+		--     lets the foam sit on them for seconds while never looking at it,
+		--     which is the camper and the report-spoofer, not honest play.
+		-- Set ProximityLatchEnabled = false for a one-switch rollback.
+		ProximityLatchEnabled = true,
+		ProximityLatchSeconds = 7,
+		ProximityLatchRadius = 8,
+		-- Flat (XZ) stud/s. Roblox walk speed is 16, so this is "standing".
+		ProximityLatchMaximumSpeed = 3,
 		-- Legacy statue reveal tuning remains available if FreezeWhileObserved is
 		-- enabled again. The Pool Noodle's current mechanic chases while visible.
 		RevealOverrunSeconds = 0.50,
