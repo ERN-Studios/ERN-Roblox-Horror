@@ -436,12 +436,26 @@ function Suite.Host()
 		-- The clear is asserted at its CALL SITES, not at the one fire inside
 		-- clearPartyDown: the regression that matters is the recovery branch
 		-- losing its call, and the fire itself would still be in the file.
+		-- The fire is matched as a SHAPE, not as literal text: the window length,
+		-- the spacing, and the name of the local carrying the last death are all
+		-- free to change without being regressions. What stays pinned is that a
+		-- REAL name argument is passed -- a bare fireGroup(participants,
+		-- "partydown", 15) fails, and so does a stubbed-out literal nil, which is
+		-- the bug this check was written for -- and that the window it announces
+		-- is the same number wipeDeadline counts to, so retuning one and not the
+		-- other cannot ship a client countdown that disagrees with the server's
+		-- own loss endpoint.
 		local partyDownClears = select(2, source:gsub("clearPartyDown%(%)", ""))
-		check(report, source:find('fireGroup(participants, "partydown", 15, lastDeathName)', 1, true) ~= nil
+		local partyDownWindow, partyDownName = source:match(
+			'fireGroup%(participants,%s*"partydown",%s*(%d+),%s*([%w_%.]+)%s*%)')
+		local wipeWindow = source:match("wipeDeadline = os%.clock%(%) %+ (%d+)")
+		check(report, partyDownName ~= nil and partyDownName ~= "nil"
+			and partyDownWindow == wipeWindow
 			and source:find("wipeDeadline = nil%s+clearPartyDown%(%)") ~= nil
 			and partyDownClears >= 4,
 			"the host announces the wipe window by name and clears it again",
-			"partydown is not fired with the name, or the window is not cleared on"
+			"partydown is not fired with a name, or announces a window other than the"
+				.. " one wipeDeadline counts to, or the window is not cleared on"
 				.. " re-entry recovery, teardown and the post-loop exit")
 	else
 		note(report, "skipped 18 source-shape checks: Source is not readable here")

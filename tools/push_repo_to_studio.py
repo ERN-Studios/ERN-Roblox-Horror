@@ -17,7 +17,10 @@ is worse than no batch at all:
                        ScriptEditorService:UpdateSourceAsync, which is also used
                        as a compare-and-swap: the callback re-checks the baseline
                        inside Studio, closing the read->write race. Length is
-                       verified before the write and the source re-read after it.
+                       verified before the write, the source re-read after it,
+                       and the landed source is then COMPILED in Studio (see
+                       compile_check) so a syntax error can never be reported as
+                       a clean push.
 
 Sources are read through execute_luau (never script_read, which can serve a
 stale editor buffer after programmatic writes -- see project memory).
@@ -86,6 +89,7 @@ READ_RETRY_DELAY = 0.5
 # staged-buffer transfer has no track record at larger request sizes.
 WRITE_CHUNK_BYTES = 24_000
 BUFFER_NAME = "__RepoPushBuffer"
+COMPILE_PROBE_NAME = "__RepoPushCompileProbe"
 # A StringValue refuses assignments of 200k characters or more, so a staged
 # source larger than this spills into numbered child parts of the buffer.
 BUFFER_PART_MAX = 150_000
@@ -223,8 +227,58 @@ if not ok then return "@@WRITE_FAILED@@ " .. tostring(err) end
 return "@@OK@@"
 """
 
+# UpdateSourceAsync proves the bytes landed; it says nothing about whether they
+# PARSE, so a syntax error used to be reported as a clean push. There is no
+# scriptable "compile this string" in Studio -- loadstring is gated behind a
+# place setting this project leaves off, and require compiles AND runs -- so the
+# landed source is wrapped as
+#
+#     return function() <source> end
+#
+# and required: compiling the wrapper compiles the whole body (a syntax error
+# anywhere makes require raise) while require only hands back the function and
+# never calls it, so nothing the script does actually happens. Same trick as
+# tools/studio_compile_probe.luau, one script at a time, and the wrapper is
+# built from cur.Source inside Studio so nothing has to be sent back over.
+COMPILE_LUAU = PATH_WALK_LUAU + CLASS_GUARD_LUAU + """
+local storage = game:GetService("ServerStorage")
+local stale = storage:FindFirstChild(%s)
+if stale then stale:Destroy() end
+local wrapped = "return function()\\n" .. cur.Source .. "\\nend"
+local probe = Instance.new("ModuleScript")
+probe.Name = %s
+probe.Parent = storage
+local staged, stageError = pcall(function()
+    game:GetService("ScriptEditorService"):UpdateSourceAsync(probe, function()
+        return wrapped
+    end)
+end)
+if not staged then
+    probe:Destroy()
+    return "@@NOT_STAGED@@ " .. tostring(stageError)
+end
+if probe.Source ~= wrapped then
+    probe:Destroy()
+    return "@@NOT_STAGED@@ the wrapper did not land in the probe"
+end
+local ok, err = pcall(require, probe)
+probe:Destroy()
+if ok then return "@@COMPILED@@" end
+return "@@FAILED@@ " .. tostring(err)
+"""
+
+# Sweeps BOTH scratch instances a killed run can leave in ServerStorage. The
+# probe matters more than the buffer: it is a ModuleScript, so sync_from_studio
+# would mirror an orphan into the repo as a real script file plus a manifest
+# entry, while the buffer is a StringValue the mirror ignores.
 CLEAN_BUFFER_LUAU = """
 local storage = game:GetService("ServerStorage")
+local removed = {}
+local probe = storage:FindFirstChild(%s)
+if probe then
+    probe:Destroy()
+    table.insert(removed, %s)
+end
 local buffer = storage:FindFirstChild(%s)
 if buffer then
     local size = #buffer.Value
@@ -236,9 +290,10 @@ if buffer then
         i += 1
     end
     buffer:Destroy()
-    return "@@CLEANED@@ " .. size
+    table.insert(removed, %s .. " (" .. size .. " bytes)")
 end
-return "@@NONE@@"
+if #removed == 0 then return "@@NONE@@" end
+return "@@CLEANED@@ " .. table.concat(removed, ", ")
 """
 
 
@@ -394,8 +449,38 @@ def read_studio_source(client, studio_id: str, segments: list[str]) -> str:
 
 
 def clean_buffer(client, studio_id: str) -> str:
+    """Remove the staging buffer and the compile probe, if either survived."""
+    probe_literal = luau_string(COMPILE_PROBE_NAME)
+    buffer_literal = luau_string(BUFFER_NAME)
     return execute_luau(
-        client, studio_id, CLEAN_BUFFER_LUAU % luau_string(BUFFER_NAME))
+        client, studio_id,
+        CLEAN_BUFFER_LUAU % (probe_literal, probe_literal,
+                             buffer_literal, buffer_literal))
+
+
+def compile_check(client, studio_id: str, segments: list[str]) -> str:
+    """Compile the source Studio now holds, without running it.
+
+    Returns "" when it compiles, otherwise the reason. Run AFTER the post-write
+    verification: the bytes are already in Studio by then, so a failure here is
+    news about the source, never a reason to call the transfer failed.
+    """
+    probe_literal = luau_string(COMPILE_PROBE_NAME)
+    result = execute_luau(
+        client,
+        studio_id,
+        COMPILE_LUAU % (", ".join(luau_string(s) for s in segments),
+                        probe_literal, probe_literal),
+    )
+    if result == "@@COMPILED@@":
+        return ""
+    if result.startswith("@@FAILED@@"):
+        return (result[len("@@FAILED@@"):].strip()
+                or "require() raised without a message")
+    if result.startswith("@@NOT_STAGED@@"):
+        return ("the compile probe could not be staged: "
+                + result[len("@@NOT_STAGED@@"):].strip())
+    return f"unexpected compile response: {result!r}"
 
 
 def push_source(client, studio_id: str, segments: list[str], source: str,
@@ -546,14 +631,15 @@ def main() -> int:
         return 0
 
     client = StudioMcpClient(find_mcp_batch())
+    studio_id = ""
     try:
         client.initialize()
         studio_id = studio_id_of(select_studio(client, args.studio_name, 20.0))
 
         stale = clean_buffer(client, studio_id)
         if stale.startswith("@@CLEANED@@"):
-            print(f"  note: removed a stale {BUFFER_NAME} left in ServerStorage "
-                  f"({stale.split(' ', 1)[-1]} bytes) -- a previous run was interrupted")
+            print(f"  note: removed stale {stale.split(' ', 1)[-1]} from "
+                  f"ServerStorage -- a previous run was interrupted")
 
         # -- phase 1: classify everything, write nothing ------------------
         print("\nPhase 1 -- checking live Studio sources (no writes):", flush=True)
@@ -611,6 +697,8 @@ def main() -> int:
         stamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
         pushed = 0
         failed: list[tuple[dict, str]] = []
+        broken: list[tuple[dict, str]] = []
+        unchecked: list[tuple[dict, str]] = []
         if already:
             for item, desired, live in already:
                 record_landed_source(item, desired, live)
@@ -645,6 +733,23 @@ def main() -> int:
             pushed += 1
             print(f"  {label}: pushed ({len(desired.encode('utf-8'))} bytes)",
                   flush=True)
+            # The bytes are in Studio and the manifest already says so. Whether
+            # they COMPILE is a separate fact, and a silent one until now.
+            # A transport failure here says NOTHING about the source, so it is
+            # kept apart from a real compile failure: calling a dead bridge
+            # "does not compile" would send the operator after a healthy script.
+            try:
+                trouble = compile_check(client, studio_id, segments_of(item))
+            except StudioMcpError as error:
+                unchecked.append((item, str(error)))
+                print(f"  {label}: compile check could not run -- {error}",
+                      flush=True)
+            else:
+                if trouble:
+                    broken.append((item, trouble))
+                    print(f"  {label}: COMPILE FAILED: {trouble}", flush=True)
+                else:
+                    print(f"  {label}: compiled", flush=True)
 
         for item, _ in problems:
             item["status"] = "studio-push-conflict"
@@ -656,8 +761,26 @@ def main() -> int:
             print(f"Pre-push sources saved under {BACKUP_ROOT / stamp}")
         for item, reason in failed:
             print(f"  FAILED {item['file']}: {reason}")
-        return 1 if (problems or failed) else 0
+        if broken:
+            print(f"\n!! {pushed} pushed, {len(broken)} do not compile "
+                  f"-- fix and push again")
+            for item, reason in broken:
+                print(f"  !! {item['file']}: {reason}")
+        if unchecked:
+            print(f"\n!! {len(unchecked)} could not be checked -- the compile "
+                  f"probe never ran; re-check with tools/studio_compile_probe.luau")
+            for item, reason in unchecked:
+                print(f"  !! {item['file']}: {reason}")
+        return 1 if (problems or failed or broken or unchecked) else 0
     finally:
+        # Belt to the startup sweep's braces: a Ctrl-C or a single timed-out
+        # call must not leave the probe ModuleScript in the place for the NEXT
+        # pull to mirror -- and the next run of this tool may never come.
+        if studio_id:
+            try:
+                clean_buffer(client, studio_id)
+            except Exception:  # noqa: BLE001 - cleanup must not mask the exit
+                pass
         client.close()
 
 

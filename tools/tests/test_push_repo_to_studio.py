@@ -27,7 +27,7 @@ entry's Studio copy is the repo text plus exactly one "\\n".
 `--fixture-only` builds that repo, proves its invariants and exits -- no luau
 needed, so the fixture itself is verifiable on a machine that cannot run the
 interpreter. Without the flag the suite needs a real luau binary; if it is
-missing every TEST is still ENUMERATED, the fifteen that reach Studio are
+missing every TEST is still ENUMERATED, the sixteen that reach Studio are
 reported as "not executed", the two that never do (TEST 8, TEST 15) still run,
 and the whole run exits NON-ZERO. It never looks green without having run.
 """
@@ -64,6 +64,31 @@ MANIFEST_NAME = "studio-sync-manifest.json"
 REAL_MANIFEST_TEXT = (REPO / MANIFEST_NAME).read_text(encoding="utf-8")
 
 # ---------------------------------------------------------------------------
+# `require`, which fakestudio's DataModel does not provide.
+# ---------------------------------------------------------------------------
+# push_repo_to_studio's compile check leans on the one thing in Studio that
+# compiles a source without running it: wrap it as `return function() ... end`,
+# require the wrapper, throw the function away. The fake DataModel has no
+# require at all, so without this every pushed script would come back
+# "COMPILE FAILED: attempt to call a nil value" and TEST 18 would pass for the
+# wrong reason. Compile for real through the interpreter already in the loop --
+# a stub that just returned success would make the check untested.
+FAKE_REQUIRE_LUAU = r"""
+function require(module)
+    local compile = loadstring or load
+    if not compile then
+        error("fakestudio require: this luau build has neither loadstring nor load", 0)
+    end
+    local chunk, err = compile(module.Source, module.Name)
+    if not chunk then error(err, 0) end
+    return chunk()
+end
+"""
+
+fakestudio.PRELUDE = fakestudio.PRELUDE.replace(
+    "__STATE_IN__", FAKE_REQUIRE_LUAU + "\n__STATE_IN__", 1)
+
+# ---------------------------------------------------------------------------
 # The synthesized queue.
 # ---------------------------------------------------------------------------
 # Chosen for spread, not at random: 1 KB to 242 KB, all three script classes,
@@ -75,12 +100,14 @@ QUEUE_FILES = [
     "ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua",
     # required by TESTS 2, 6, 9, 10, 11, 12
     "ServerScriptService/GameManager.Script.lua",
-    "ServerScriptService/EntityAI.Script.lua",
+    # these two moved into "Level 1 Systems" on 2026-09-02; the tests match them
+    # by endswith(), so only these two literals had to follow them
+    "ServerScriptService/Level 1 Systems/EntityAI.Script.lua",
     "ReplicatedStorage/UIDevice.ModuleScript.lua",
     # studioTrailingNewline entry, with spaces in the path
     "ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua",
     # required by TEST 6 (the script deliberately missing from Studio)
-    "ServerScriptService/EntityKill.Script.lua",
+    "ServerScriptService/Level 1 Systems/EntityKill.Script.lua",
     # studioTrailingNewline entry
     "StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua",
     # required by TEST 5 (hostile content round-trip)
@@ -100,7 +127,7 @@ FIXTURE_TRAILING_NEWLINE_FILES = {
 REQUIRED_BY_TESTS = [
     "ServerScriptService/GameManager.Script.lua",
     "StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua",
-    "ServerScriptService/EntityKill.Script.lua",
+    "ServerScriptService/Level 1 Systems/EntityKill.Script.lua",
     "ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua",
 ]
 
@@ -337,6 +364,29 @@ def seed(studio: fakestudio.FakeStudio, items: list[dict], repo_root: Path,
         file = item["file"]
         content = overrides[file] if file in overrides else seeded_text(repo_root, file)
         studio.add_script(item["studioPath"], item["className"], content)
+
+
+def stage_only(repo_root: Path, suffix: str, content: str, label: str) -> dict:
+    """Reduce the queue to ONE file, holding exactly `content`.
+
+    The file is written and its manifest entry re-recorded the way
+    record_pending_push.py would; every other pending entry drops back to
+    synced, so the caller's push touches this one script and nothing else.
+    """
+    entry = require_item(pending_items(repo_root),
+                         lambda i: i["file"].endswith(suffix), label)
+    (repo_root / entry["file"]).write_bytes(canonical_bytes(content))
+    manifest = json.loads((repo_root / MANIFEST_NAME).read_text(encoding="utf-8"))
+    for item in manifest["items"]:
+        if item["file"] == entry["file"]:
+            item["bytes"] = len(canonical_bytes(content))
+            item["sha256"] = sha256_of(content)
+        elif item.get("status") == "pending-studio-push":
+            item["status"] = "synced"
+            item.pop("studioSha256Before", None)
+    (repo_root / MANIFEST_NAME).write_text(
+        json.dumps(manifest, indent=2) + "\n", encoding="utf-8", newline="\n")
+    return entry
 
 
 # ---------------------------------------------------------------------------
@@ -619,25 +669,8 @@ def test_hostile_content() -> None:
             repo_case = fresh_repo()
             tool_case = load_tool(repo_case)
             studio_case = fakestudio.FakeStudio()
-            entry = require_item(
-                pending_items(repo_case),
-                lambda i: i["file"].endswith("DanceEmote.LocalScript.lua"),
-                f"TEST 5 target for {label!r}")
-            # write the hostile content and re-record the manifest entry for it
-            (repo_case / entry["file"]).write_bytes(canonical_bytes(content))
-            manifest_case = json.loads(
-                (repo_case / MANIFEST_NAME).read_text(encoding="utf-8"))
-            for item in manifest_case["items"]:
-                if item["file"] == entry["file"]:
-                    item["bytes"] = len(canonical_bytes(content))
-                    item["sha256"] = sha256_of(content)
-                elif item.get("status") == "pending-studio-push":
-                    item["status"] = "synced"
-                    item.pop("studioSha256Before", None)
-            (repo_case / MANIFEST_NAME).write_text(
-                json.dumps(manifest_case, indent=2) + "\n",
-                encoding="utf-8", newline="\n")
-
+            entry = stage_only(repo_case, "DanceEmote.LocalScript.lua", content,
+                               f"TEST 5 target for {label!r}")
             studio_case.add_script(entry["studioPath"], entry["className"],
                                    seeded_text(repo_case, entry["file"]))
             fakestudio.install(tool_case, studio_case)
@@ -909,7 +942,7 @@ def test_backslash_path() -> None:
     check("backslash --file path is normalized and matches", code16 == 0, f"exit={code16}")
 
 
-@test(17, "stale buffer from a previous crash is cleaned at startup")
+@test(17, "stale buffer and compile probe from a previous crash are cleaned at startup")
 def test_stale_buffer() -> None:
     repo17 = fresh_repo()
     tool17 = load_tool(repo17)
@@ -918,6 +951,10 @@ def test_stale_buffer() -> None:
     seed(studio17, items17, repo17)
     studio17.objects[("ServerStorage", "__RepoPushBuffer")] = (
         "StringValue", "left over junk", "V")
+    # The probe is the one that MUST be swept: it is a ModuleScript, so
+    # sync_from_studio would mirror an orphan into the repo as a real script.
+    studio17.objects[("ServerStorage", "__RepoPushCompileProbe")] = (
+        "ModuleScript", "return function()\nprint(1)\nend", "S")
     fakestudio.install(tool17, studio17)
     sys.argv = ["push_repo_to_studio.py", "--audit"]
     code17 = tool17.main()
@@ -925,9 +962,56 @@ def test_stale_buffer() -> None:
           code17 == 0, f"exit={code17}")
     check("stale buffer removed at startup",
           ("ServerStorage", "__RepoPushBuffer") not in studio17.objects)
+    check("stale compile probe removed at startup",
+          ("ServerStorage", "__RepoPushCompileProbe") not in studio17.objects)
     changed17 = [i["file"] for i in items17
                  if studio17.source_of(i["studioPath"]) != seeded_text(repo17, i["file"])]
     check("--audit wrote no script sources", not changed17, str(changed17[:3]))
+
+
+@test(18, "a pushed script that does not compile is reported, not passed as clean")
+def test_compile_failure() -> None:
+    repo18 = fresh_repo()
+    tool18 = load_tool(repo18)
+    studio18 = fakestudio.FakeStudio()
+    # unbalanced parenthesis: lands as bytes perfectly, parses never
+    broken18 = 'local x = (1 +\nprint("never runs")\n'
+    entry18 = stage_only(repo18, "DanceEmote.LocalScript.lua", broken18,
+                         "TEST 18 target (DanceEmote)")
+    studio18.add_script(entry18["studioPath"], entry18["className"],
+                        seeded_text(repo18, entry18["file"]))
+    fakestudio.install(tool18, studio18)
+    sys.argv = ["push_repo_to_studio.py"]
+    code18 = tool18.main()
+    check("a syntax error in a pushed script makes the tool exit non-zero",
+          code18 == 1, f"exit={code18}")
+    check("the bytes still landed (the push itself succeeded)",
+          studio18.source_of(entry18["studioPath"]) == broken18)
+    m18 = json.loads((repo18 / MANIFEST_NAME).read_text(encoding="utf-8"))
+    e18 = require_item(m18["items"], lambda i: i["file"] == entry18["file"],
+                       "TEST 18 manifest entry")
+    check("the manifest still records what Studio actually holds",
+          e18.get("status") == "synced" and "studioSha256Before" not in e18,
+          str(e18.get("status")))
+    probes = [p for p in studio18.objects if p[-1] == tool18.COMPILE_PROBE_NAME]
+    check("no compile probe left behind in ServerStorage", not probes, str(probes))
+
+    # Positive control through the IDENTICAL path. Without it this test passes
+    # whenever the probe fails for any reason at all -- a fake `require` that
+    # cannot compile anything would look exactly like a syntax error, and the
+    # test named after this change would be green having proved nothing.
+    repo18b = fresh_repo()
+    tool18b = load_tool(repo18b)
+    studio18b = fakestudio.FakeStudio()
+    entry18b = stage_only(repo18b, "DanceEmote.LocalScript.lua",
+                          'print("fine")\n', "TEST 18 positive control")
+    studio18b.add_script(entry18b["studioPath"], entry18b["className"],
+                         seeded_text(repo18b, entry18b["file"]))
+    fakestudio.install(tool18b, studio18b)
+    sys.argv = ["push_repo_to_studio.py"]
+    code18b = tool18b.main()
+    check("a source that DOES compile pushes clean through the same check",
+          code18b == 0, f"exit={code18b}")
 
 
 # ---------------------------------------------------------------------------

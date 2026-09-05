@@ -5,6 +5,9 @@ recorded sha256 and rewrites the entry to the new content, remembering the
 previous hash as "studioSha256Before" (what Studio is still expected to hold).
 push_repo_to_studio.py consumes exactly these entries.
 
+Also reports mirrored script files that no manifest item claims -- a NEW script
+cannot be pushed by these tools -- and exits 1 when it finds any.
+
 Usage:
     python tools/record_pending_push.py            # record all mismatches
     python tools/record_pending_push.py --dry-run  # report only
@@ -31,9 +34,42 @@ for _stream in (sys.stdout, sys.stderr):
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from studio_source_contract import normalize, sha256_of  # noqa: E402
+from pull_source_from_studio import SERVICES  # noqa: E402
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_PATH = PROJECT_ROOT / "studio-sync-manifest.json"
+
+SCRIPT_SUFFIXES = (".Script.lua", ".LocalScript.lua", ".ModuleScript.lua")
+# Backups, the knowledge graph's scratch output and the retired-code archive are
+# all real .lua on disk but none of them mirror a live Studio instance.
+SKIP_DIR_NAMES = (".studio-push-backups", "graphify-out")
+SKIP_PREFIXES = ("ServerStorage/Archive/",)
+
+
+def find_unknown(known: set[str]) -> list[str]:
+    """Mirrored script files on disk that no manifest item claims.
+
+    Roots are pull_source_from_studio's SERVICES (the mirrored services) UNION
+    whatever the manifest items name: SERVICES alone would miss a folder the
+    manifest still uses, and the manifest alone misses a service that holds no
+    item yet -- today Workspace and RobloxReplicatedStorage, which is exactly
+    where a first new script would hide.
+    """
+    unknown = []
+    for root in sorted(set(SERVICES) | {file.split("/", 1)[0] for file in known}):
+        for path in sorted((PROJECT_ROOT / root).rglob("*.lua")):
+            rel = path.relative_to(PROJECT_ROOT).as_posix()
+            if not rel.endswith(SCRIPT_SUFFIXES) or rel in known:
+                continue
+            # Match on the repo-relative path: path.parts carries the ancestors
+            # of the checkout too, so a repo cloned under a directory named
+            # graphify-out would skip every file and report nothing.
+            if rel.startswith(SKIP_PREFIXES) or any(
+                part in SKIP_DIR_NAMES for part in rel.split("/")
+            ):
+                continue
+            unknown.append(rel)
+    return unknown
 
 
 def main() -> int:
@@ -73,7 +109,15 @@ def main() -> int:
         print(f"Manifest updated: {changed} file(s) marked pending-studio-push.")
     elif not changed:
         print("No repo-side script edits detected; manifest untouched.")
-    return 0
+
+    unknown = find_unknown({item["file"] for item in manifest.get("items", [])})
+    for rel in unknown:
+        print(
+            f"UNKNOWN {rel} -- not in the manifest; create it in Studio first "
+            "(execute_luau + UpdateSourceAsync), then add the manifest item "
+            "(see CLAUDE.md 'New scripts cannot be pushed by the tools')"
+        )
+    return 1 if unknown else 0
 
 
 if __name__ == "__main__":
