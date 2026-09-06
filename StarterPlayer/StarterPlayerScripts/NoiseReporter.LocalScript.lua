@@ -25,6 +25,7 @@ local LOUDNESS = { sprint = 1.0, walk = 0.45, crouch = 0.0 }
 local state = "walk"
 local sprinting, crouching = false, false
 local shiftSprintHeld, touchSprintHeld, gamepadSprintHeld = false, false, false
+local windowFocused = true
 local keyboardCrouchHeld, controllerCrouchToggled, touchSneakToggled = false, false, false
 local lastPublishedCrouch: boolean? = nil
 local crouchRequestSerial = 0
@@ -217,6 +218,7 @@ end
 local function keyboardSprintHeld()
 	-- Physical key state remains reliable when a Roblox core control (such as
 	-- Shift Lock) consumes the event before this script sees it.
+	if not windowFocused then return false end
 	return UIS:IsKeyDown(Enum.KeyCode.LeftShift)
 		or UIS:IsKeyDown(Enum.KeyCode.RightShift)
 end
@@ -225,13 +227,13 @@ local function gamepadSprintDown()
 	-- The physical read behind the ButtonL2 latch, and it exists for the same
 	-- reason keyboardSprintHeld does: InputEnded is not guaranteed. A trigger
 	-- held while the window loses focus, or while the controller is unplugged,
-	-- never sends its release, and the lobby Heartbeat below would then force
-	-- SPRINT_SPEED every frame with no way back to walking.
+	-- never sends its release. Heartbeat repairs this in the lobby AND a round.
 	-- Every connected slot, not just Gamepad1: InputBegan latches on whichever
 	-- pad the press came from, so a repair that only ever asked Gamepad1 would
-	-- clear a Gamepad2 player's latch on every lobby frame. An unplugged
+	-- clear a Gamepad2 player's latch on every frame. An unplugged
 	-- controller is simply absent from this list, which is the release the
 	-- missing InputEnded never sent.
+	if not windowFocused then return false end
 	for _, gamepad in ipairs(UIS:GetConnectedGamepads()) do
 		if UIS:IsGamepadButtonDown(gamepad, Enum.KeyCode.ButtonL2) then return true end
 	end
@@ -248,6 +250,15 @@ local function refreshSprint()
 	sprinting = sprintRequested()
 	applySpeed()
 end
+
+UIS.WindowFocusReleased:Connect(function()
+	windowFocused = false
+	shiftSprintHeld, gamepadSprintHeld = false, false
+	refreshSprint()
+end)
+UIS.WindowFocused:Connect(function()
+	windowFocused = true -- the next Heartbeat reads the current hardware state
+end)
 
 UIS.InputBegan:Connect(function(input, processed)
 	-- Hold-to-sprint on the LEFT TRIGGER. ButtonA stays Roblox's own jump,
@@ -674,6 +685,14 @@ local barShown = 0 -- eased 0–1 visibility
 local lastFrac, lastExhausted = -1, nil -- last values written; -1/nil force the first frame to write
 
 RunService.Heartbeat:Connect(function(dt)
+	-- InputEnded can be lost on disconnect/focus loss in any phase. Reconcile
+	-- physical holds without changing the independent touch RUN toggle.
+	local physicalShift = UIS:GetFocusedTextBox() == nil and keyboardSprintHeld()
+	local physicalTrigger = gamepadSprintDown()
+	if shiftSprintHeld ~= physicalShift or gamepadSprintHeld ~= physicalTrigger then
+		shiftSprintHeld, gamepadSprintHeld = physicalShift, physicalTrigger
+		refreshSprint() -- also repairs the in-round state used by stamina/noise
+	end
 	if not inRound() then
 		stamina = staminaMax()
 		exhausted = false
@@ -681,12 +700,6 @@ RunService.Heartbeat:Connect(function(dt)
 		-- Lobby sprint is unlimited and self-healing. Keep input state as the source
 		-- of truth and repair WalkSpeed if avatar loading or a core script restores
 		-- Roblox's default speed while the player is still holding RUN.
-		local physicalShift = UIS:GetFocusedTextBox() == nil and keyboardSprintHeld()
-		if shiftSprintHeld ~= physicalShift then shiftSprintHeld = physicalShift end
-		-- Same repair for the left trigger: a missed InputEnded would otherwise
-		-- leave the latch stuck on and pin WalkSpeed to SPRINT_SPEED forever.
-		local physicalTrigger = gamepadSprintDown()
-		if gamepadSprintHeld ~= physicalTrigger then gamepadSprintHeld = physicalTrigger end
 		sprinting = sprintRequested()
 		state = sprinting and "sprint" or "walk"
 		local character, hum = currentChar()
@@ -862,3 +875,5 @@ end
 if player.Character then task.spawn(bindLife, player.Character) end
 player.CharacterAdded:Connect(bindLife)
 updateRoundState()
+-- Client-local readiness: all gameplay input and lifecycle handlers are wired.
+player:SetAttribute("RoundEntryControlsReady", true)

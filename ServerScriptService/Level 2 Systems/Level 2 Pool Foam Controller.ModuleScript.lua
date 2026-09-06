@@ -265,7 +265,82 @@ local function setModelAttribute(model, name, value)
 	end
 end
 
+-- AUDIO RUNTIME BEGIN: one server-owned point source, independent of tracks.
+local function normalizedAudioId(value)
+	if finiteNumber(value) and value > 0 and value % 1 == 0 then value = tostring(value) end
+	if typeof(value) ~= "string" then return nil end
+	local digits = value:match("^rbxassetid://(%d+)$") or value:match("^(%d+)$")
+	if not digits or not digits:find("[1-9]") then return nil end
+	return "rbxassetid://" .. digits
+end
+
+local function destroyEntityAudio(entity)
+	local audio = entity.Audio
+	entity.Audio = nil
+	if audio and audio.Attachment then audio.Attachment:Destroy() end
+end
+
+local function updateEntityAudio(entity)
+	local configuration = entity.Session.Configuration
+	local tuning = configuration.Audio or {}
+	local state = entity.AudioState or "Idle"
+	local ids = configuration.AudioIds and configuration.AudioIds[entity.SlotId] or {}
+	local volume = tuning.LoopVolumes and tuning.LoopVolumes[state]
+	local assetId = tuning.Enabled ~= false and volume ~= nil and normalizedAudioId(ids[state]) or nil
+	local paused = entity.AnimationPaused == true
+	local audio = entity.Audio
+	if not audio then
+		audio = {}
+		entity.Audio = audio
+	end
+	local key = (assetId or "") .. ":" .. state .. ":" .. tostring(paused)
+	if audio.Key == key then return end
+	audio.Key = key
+	-- No yields, loading waits or retries in the AI tick. Blank/invalid IDs stay
+	-- silent; an unavailable permitted asset is left to the engine's loader.
+	local ok, failure = pcall(function()
+		local sound = audio.Sound
+		if not assetId or paused then
+			if sound and audio.Playing then sound:Pause() end
+			audio.Playing = false
+			return
+		end
+		if not sound then
+			local root = entity.Model.PrimaryPart
+			if not root then return end
+			local attachment = Instance.new("Attachment")
+			attachment.Name = "PoolFoamAudioEmitter"
+			audio.Attachment = attachment
+			attachment.Parent = root
+			sound = Instance.new("Sound")
+			audio.Sound = sound
+			sound.Name = "PoolFoamMovement"
+			sound.Looped = true
+			sound.RollOffMode = Enum.RollOffMode.InverseTapered
+			sound.RollOffMinDistance = numberOr(tuning.RollOffMinDistance, 12, 1, 100)
+			sound.RollOffMaxDistance = numberOr(tuning.RollOffMaxDistance, 110, sound.RollOffMinDistance + 1, 500)
+			sound.Parent = attachment
+		end
+		sound.Volume = numberOr(volume, 0, 0, 0.5)
+		if sound.SoundId ~= assetId then
+			sound:Stop()
+			sound.SoundId = assetId
+			sound:Play()
+		elseif not audio.Playing then
+			sound:Resume()
+		end
+		audio.Playing = true
+	end)
+	if not ok and not audio.Warned then
+		audio.Warned = true
+		warn("[Pool Foam] movement audio unavailable for " .. entity.Id .. ": " .. tostring(failure))
+	end
+end
+-- AUDIO RUNTIME END
+
 local function setEntityAnimation(entity, state, force)
+	entity.AudioState = state
+	updateEntityAudio(entity)
 	if entity.Animation then
 		local ok, failure = pcall(function() entity.Animation:SetState(state, force == true) end)
 		if not ok then
@@ -286,6 +361,7 @@ local function setEntityAnimationPaused(entity, value)
 		if not ok then warn("[Pool Foam] animation pause failed: " .. tostring(failure)) end
 	end
 	entity.AnimationPaused = paused
+	updateEntityAudio(entity)
 	local attributes = entity.Session.Configuration.Attributes or {}
 	setModelAttribute(entity.Model, attributes.AnimationPaused or "PoolFoamAnimationPaused", paused)
 end
@@ -740,8 +816,8 @@ local function instantKill(session, entity, player, distance, now)
 	local attackId = tostring(session.Generation) .. ":" .. entity.Id .. ":" .. tostring(entity.ActionSerial)
 	entity.Navigator:Stop()
 	entity.Navigator:Face(liveRoot.Position)
-	setEntityAnimation(entity, "Walk")
 	setEntityAnimationPaused(entity, true)
+	setEntityAnimation(entity, "Walk")
 	setModelAttribute(entity.Model,
 		(session.Configuration.Attributes or {}).ActionSerial or "ActionSerial", entity.ActionSerial)
 	setTargeted(session, player)
@@ -755,6 +831,10 @@ local function instantKill(session, entity, player, distance, now)
 		InstantKill = true,
 		Duration = 0.65,
 		AudioState = "Attack",
+		Volume = (session.Configuration.Audio or {}).Enabled == false and 0
+			or numberOr((session.Configuration.Audio or {}).AttackVolume, 0.24, 0, 0.35),
+		TargetCharacter = character,
+		ServerTime = workspace:GetServerTimeNow(),
 	}, player)
 
 	-- Direct health assignment is intentional: contact is lethal even through a
@@ -1199,6 +1279,7 @@ local function refreshTemplate(session, entity)
 	end
 	if oldGoal then replacementNavigator:SetGoal(oldGoal, true) end
 
+	destroyEntityAudio(entity)
 	entity.Model = replacement
 	entity.Navigator = replacementNavigator
 	entity.Animation = replacementAnimation
@@ -1478,6 +1559,7 @@ function Controller.Stop()
 	for _, entity in ipairs(session.Entities) do
 		if entity.Navigator then entity.Navigator:Destroy() end
 		if entity.Animation then pcall(function() entity.Animation:Destroy() end) end
+		destroyEntityAudio(entity)
 	end
 	if session.Observer then session.Observer:Destroy() end
 	if session.RuntimeFolder and session.RuntimeFolder.Parent then session.RuntimeFolder:Destroy() end

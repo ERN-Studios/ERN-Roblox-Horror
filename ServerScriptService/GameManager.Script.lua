@@ -10,6 +10,7 @@ local ServerStorage = game:GetService("ServerStorage")
 local Debris = game:GetService("Debris")
 local PhysicsService = game:GetService("PhysicsService")
 local Lighting = game:GetService("Lighting")
+local MemoryStoreService = game:GetService("MemoryStoreService")
 local DevAccess = require(RS:WaitForChild("DevAccess"))
 
 -- Every rule about what a finished level leads to, who the destination is still
@@ -19,6 +20,13 @@ local DevAccess = require(RS:WaitForChild("DevAccess"))
 -- duplicated as locals further down, so a suite could pass against one value
 -- while production ran another.
 local Routing = require(script.Parent:WaitForChild("Round Completion Routing"))
+local Loading = require(script.Parent:WaitForChild("Round Loading Runtime"))
+local activeEntry, loadingRuntime, recoverFailedEntry, cleanupActiveWorld
+local failedReservedEntry = false
+local characterLoadOwner = {}
+local loadingFailures = {}
+local destinationArrivalEvidence = {}
+workspace:SetAttribute("RoundLoadingRuntimeVersion", Loading.Version)
 -- require() caches ONE module table per server, so stamping this host's name
 -- into it lets the test suite -- which requires the same ModuleScript and
 -- therefore holds the same table -- prove that GameManager really loaded it
@@ -366,15 +374,14 @@ end)
 -- current Roblox HumanoidDescription; entering a level deliberately uses the
 -- StarterCharacter again.
 local lobbyDescriptions = {}
-local characterLoadBusy = false
+local characterLoads = Loading.NewCharacterGate(task.wait)
 
-local function beginCharacterLoad()
- while characterLoadBusy do task.wait() end
- characterLoadBusy = true
+local function beginCharacterLoad(allowed)
+ return characterLoads:Acquire(allowed)
 end
 
-local function finishCharacterLoad()
- characterLoadBusy = false
+local function finishCharacterLoad(token)
+ characterLoads:Release(token)
 end
 
 local function loadLobbyCharacter(player)
@@ -394,9 +401,10 @@ local function loadLobbyCharacter(player)
  -- LoadCharacterWithHumanoidDescriptionAsync still builds on a configured
  -- StarterCharacter. Temporarily park the hazmat gameplay rig while the load is
  -- serialized, otherwise its suit meshes remain underneath the lobby avatar.
- beginCharacterLoad()
+ local loadToken = beginCharacterLoad(function() return player.Parent == Players and not inRound[player] end)
+ if not loadToken then return false end
  if not (player.Parent and not inRound[player]) then
-  finishCharacterLoad()
+   finishCharacterLoad(loadToken)
   return false
  end
  local gameplayRig
@@ -415,15 +423,16 @@ local function loadLobbyCharacter(player)
   local restored, restoreError = pcall(function() gameplayRig.Parent = StarterPlayer end)
   if not restored then warn("[GameManager] Could not restore StarterCharacter:", restoreError) end
  end
- finishCharacterLoad()
+ finishCharacterLoad(loadToken)
  if not ok then warn("[GameManager] Lobby character load failed:", err) end
  return ok
 end
 
-local function loadGameplayCharacter(player)
- beginCharacterLoad()
+local function loadGameplayCharacter(player, allowed)
+ local loadToken = beginCharacterLoad(allowed)
+ if not loadToken then return false end
  local ok, err = pcall(player.LoadCharacterAsync, player)
- finishCharacterLoad()
+ finishCharacterLoad(loadToken)
  if not ok then warn("[GameManager] Gameplay character load failed:", err) end
  return ok
 end
@@ -435,22 +444,29 @@ end
 -- behind the loading cover forever. Only Level 2 has a client-side backstop
 -- (RoundUI's 35 s absolute cover lift); Levels 1 and 3 have none.
 --
--- Everyone still in the server has to make it into the round, so this retries
--- instead of skipping. It gives up only once the player has actually left.
+-- The entry runtime owns the actual sixty-second deadline, INCLUDING this
+-- serialized engine call. A timed-out caller never frees another worker's lock.
 local CHARACTER_LOAD_ATTEMPTS = 4
 local CHARACTER_LOAD_TIMEOUT = 6
 
-local function spawnGameplayCharacter(player)
+local function spawnGameplayCharacter(player, attempt, lifecycleOpen)
+ local function allowed()
+  return player.Parent == Players and (not attempt or attempt:IsOpen())
+   and (not lifecycleOpen or lifecycleOpen())
+ end
  for attempt = 1, CHARACTER_LOAD_ATTEMPTS do
-  if player.Parent ~= Players then return nil end
-  loadGameplayCharacter(player)
-  -- task.wait returns real elapsed seconds. Do NOT use os.clock here: in the
-  -- Studio server datamodel it measures CPU time, not wall time.
+  if not allowed() then return nil end
+  local previous = player.Character
+  local loaded = loadGameplayCharacter(player, allowed)
   local waited = 0
-  while not player.Character and player.Parent == Players and waited < CHARACTER_LOAD_TIMEOUT do
+  while allowed() and waited < CHARACTER_LOAD_TIMEOUT do
+   local character = player.Character
+   local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+   local root = character and character:FindFirstChild("HumanoidRootPart")
+   if loaded and character and character ~= previous and character.Parent and humanoid
+    and humanoid.Health > 0 and root then return character end
    waited += task.wait()
   end
-  if player.Character then return player.Character end
   warn(string.format("[GameManager] No gameplay character for %s (attempt %d/%d)",
    player.Name, attempt, CHARACTER_LOAD_ATTEMPTS))
  end
@@ -575,9 +591,11 @@ local function awaitStreamAround(state, timeOut)
 end
 
 local function placeSafelyInElevator(player, char)
+ local entry = activeEntry
  local pad = workspace:FindFirstChild("ElevatorSpawn")
  local root = char and char:WaitForChild("HumanoidRootPart", 8)
  local hum = char and char:FindFirstChildOfClass("Humanoid")
+ if player.Character ~= char or (entry and (activeEntry ~= entry or entry.State == "failed")) then return false end
  if not (pad and root and hum and hum.Health > 0) then return false end
 
  -- The lobby and maze are far apart. Keep the character server-anchored while
@@ -625,6 +643,8 @@ local function placeSafelyInElevator(player, char)
     task.wait(0.1)
    end
   end
+  while entry and entry.State == "loading" do task.wait(.1) end
+  if player.Character ~= char or (entry and (activeEntry ~= entry or entry.State == "failed")) then return end
   if root.Parent and hum.Parent and hum.Health > 0 and inRound[player] then
    root.AssemblyLinearVelocity = Vector3.zero
    root.Anchored = false
@@ -722,10 +742,12 @@ local function levelThreeSlideResume()
 end
 
 local function placeAtLevelThreeSlideResume(player, char)
+ local entry = activeEntry
  local resume = levelThreeSlideResume()
  if not resume then return false end
  local root = char and char:WaitForChild("HumanoidRootPart", 8)
  local hum = char and char:FindFirstChildOfClass("Humanoid")
+ if player.Character ~= char or (entry and (activeEntry ~= entry or entry.State == "failed")) then return false end
  if not (root and hum and hum.Health > 0) then return false end
 
  root.Anchored = true
@@ -756,6 +778,7 @@ local function placeAtLevelThreeSlideResume(player, char)
 		return preparation.Done and preparation.Streamed
 	end
 	local function release(prepareOnly)
+		if player.Character ~= char or (entry and (activeEntry ~= entry or entry.State == "failed")) then return false end
 		local didStream = prepare()
 		if prepareOnly then return didStream end
 		if released then return didStream end
@@ -784,27 +807,11 @@ local function placeAtLevelThreeSlideResume(player, char)
  -- the round that was supposed to release them ends up failing.
 	task.delay(25, function()
 		if pendingSlideRelease[player] == release then
+			if entry and (activeEntry ~= entry or entry.State ~= "ready") then return end
 			task.spawn(function() release(false) end)
 		end
 	end)
 	return true
-end
-
-local function prepareSlideResume(group)
-	local remaining = 0
-	for _, player in ipairs(group) do
-		local release = pendingSlideRelease[player]
-		if release then
-			remaining += 1
-			task.spawn(function()
-				release(true)
-				remaining -= 1
-			end)
-		end
-	end
-	local deadline = os.clock() + STREAM_AROUND_TIMEOUT + 3
-	while remaining > 0 and os.clock() < deadline do task.wait(.05) end
-	return remaining == 0
 end
 
 local function releaseSlideResume(group)
@@ -825,6 +832,7 @@ local function placeOnLevelEntry(player, char, useSlideResume)
  -- Released two resumptions later, never in this one. onCharacter's fallback is
  -- deferred, so clearing the latch inline reopens exactly the race it closes.
  task.defer(function()
+  if player.Character ~= char then return end
   task.defer(function()
    if pendingExplicitPlacement[player] == char then pendingExplicitPlacement[player] = nil end
   end)
@@ -843,6 +851,13 @@ local function onCharacter(player, char)
   player.CameraMaxZoomDistance = 18
  end
  task.defer(function()
+  if player.Character ~= char then return end
+  local owner = characterLoadOwner[player]
+  if (owner and owner.State == "failed") or (failedReservedEntry and loadingFailures[player]) then
+   local root = char:FindFirstChild("HumanoidRootPart")
+   if root then root.Anchored = true end
+   return
+  end
   if inRound[player] then
 	-- A completed Level 2 rider is placed by the objective controller back
 	-- onto the exact helix tangent after a transition respawn. The ordinary
@@ -883,9 +898,26 @@ local function setupPlayer(player)
  player:SetAttribute("Level2_ExitTransition", nil)
  player:SetAttribute("GlowstickSlot", nil)
  player:SetAttribute("GlowstickColor", nil)
+ local joined, joinData = pcall(function() return player:GetJoinData() end)
+ local packet = joined and joinData and joinData.TeleportData
+ if IS_RESERVED_ROUND_SERVER then
+  -- PlayerAdded can be followed by PlayerRemoving before the admission loop's
+  -- next poll. Retain its own packet as arrival evidence; current presence is
+  -- still measured independently, so an old Player instance cannot count twice.
+  destinationArrivalEvidence[#destinationArrivalEvidence + 1] = {Member = player, Data = packet}
+ end
+ if type(packet) == "table" and packet.ReturnToLobby == true
+  and type(packet.LoadingError) == "string" then
+  player:SetAttribute("RoundLoadingError", packet.LoadingError == "LOADING_TIMEOUT" and "timeout" or "failed")
+ end
  player.CharacterAdded:Connect(function(char) onCharacter(player, char) end)
  task.defer(function()
   if not player.Parent then return end
+  if failedReservedEntry then
+   status:FireClient(player, "loadfailed", "LOADING_TIMEOUT")
+   if recoverFailedEntry then recoverFailedEntry(nil, "LOADING_TIMEOUT", {player}) end
+   return
+  end
   if not IS_RESERVED_ROUND_SERVER and not player.Character then loadLobbyCharacter(player) end
   local initialStatus = "lobby"
   if IS_RESERVED_ROUND_SERVER then
@@ -991,18 +1023,12 @@ end
 -- clients hold a loading cover instead and report here once the complex is
 -- actually around them. The lobby client also announces that its RoundStatus
 -- listener exists so its one-shot welcome cannot race the initial status fire.
-local entryReady = {}
 local lobbyBriefingReady = {}
 local handlePostWinReturnRequest
 local handlePostWinContinueRequest
 status.OnServerEvent:Connect(function(player, message, requestSerial)
- if message == "entryready"
-  and entryReady[player] == false
-  and roundBusy
-  and activeLevel == 2
-  and inRound[player] == true
-  and player:GetAttribute("InRound") == true then
-  entryReady[player] = true
+  if message == "entryready" and activeEntry then
+   activeEntry:Acknowledge(player, requestSerial)
  elseif message == "returntolobby" and handlePostWinReturnRequest then
   handlePostWinReturnRequest(player, requestSerial)
  elseif message == "continuenow" and handlePostWinContinueRequest then
@@ -1023,7 +1049,8 @@ Players.PlayerRemoving:Connect(function(player)
  pendingExplicitPlacement[player] = nil
  pendingSlideRelease[player] = nil
  pendingSlideStream[player] = nil
- entryReady[player] = nil
+ characterLoadOwner[player] = nil
+ loadingFailures[player] = nil
  lobbyBriefingReady[player] = nil
  -- The player left, which is what the claim existed to achieve. Resolving it
  -- through Routing -- rather than reaching into the record here -- is what
@@ -1038,27 +1065,6 @@ Players.PlayerRemoving:Connect(function(player)
   Routing.NoteDeparture(activePostWin.Roster, player)
  end
 end)
-
-local function armGroupEntry(group)
- for _, player in ipairs(group) do
-  if player.Parent then entryReady[player] = false else entryReady[player] = nil end
- end
-end
-
-local function waitForGroupEntry(group, timeout)
- local deadline = os.clock() + timeout
- local ready = false
- while os.clock() < deadline do
-  local pending = 0
-  for _, player in ipairs(group) do
-   if player.Parent and not entryReady[player] then pending += 1 end
-  end
-  if pending == 0 then ready = true break end
-  task.wait(0.1)
- end
- for _, player in ipairs(group) do entryReady[player] = nil end
- return ready
-end
 
 local function privacyLabel(station)
  return station.privacy == "friends" and "FRIENDS ONLY" or "PUBLIC"
@@ -1123,7 +1129,8 @@ local function connectElevator()
  return api
 end
 
-local function ensureWorld(group, requestedLevel)
+local function ensureWorld(group, requestedLevel, attempt)
+ if attempt and not attempt:IsOpen() then return false end
  local level = Routing.ClampLevel(requestedLevel)
  if worldReady and activeLevel == level then return true end
  activeLevel = level
@@ -1149,16 +1156,21 @@ local function ensureWorld(group, requestedLevel)
   setLevelOneEntityActive(true)
   workspace:SetAttribute("GenerateWorld", true)
   local deadline = os.clock() + 180
-  while workspace:GetAttribute("WorldGenerated") ~= true and os.clock() < deadline do task.wait(0.25) end
+  while workspace:GetAttribute("WorldGenerated") ~= true and os.clock() < deadline
+   and (not attempt or attempt:IsOpen()) do task.wait(0.25) end
   if workspace:GetAttribute("WorldGenerated") ~= true then
    warn("GameManager: world generation timed out")
    return false
   end
  end
+ if attempt and not attempt:IsOpen() then return false end
  elevatorApi = connectElevator()
  mazeStart = workspace:WaitForChild("MazeStart", 30)
+ if attempt and not attempt:IsOpen() then return false end
  entityStart = level == 1 and workspace:WaitForChild("EntityStart", 30) or nil
+ if attempt and not attempt:IsOpen() then return false end
  entity = level == 1 and workspace:WaitForChild("Entity", 30) or nil
+ if attempt and not attempt:IsOpen() then return false end
  worldReady = elevatorApi ~= nil and mazeStart ~= nil
  workspace:SetAttribute("LoadStage", worldReady and "READY" or "WORLD_ERROR")
  return worldReady
@@ -1225,7 +1237,7 @@ local function livePlayers(group)
 	return result
 end
 
-local function cleanupActiveWorld()
+cleanupActiveWorld = function()
 	clearGlowsticks()
 	local cleanupLevel = activeLevel
 	local cleanupGenerator = LEVEL_GENERATORS[cleanupLevel]
@@ -1253,8 +1265,13 @@ local function returnPlayersToLocalLobby(group)
 		player:SetAttribute("Level2_ExitTransition", nil)
 		player:SetAttribute("GlowstickSlot", nil)
 		player:SetAttribute("GlowstickColor", nil)
-		loadLobbyCharacter(player)
 		status:FireClient(player, "lobby")
+		if loadingFailures[player] then status:FireClient(player, "loadfailed", loadingFailures[player]) end
+		-- UI and a usable existing rig recover before another yielding avatar load.
+		local character = player.Character
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+		if root then root.Anchored = false; scatterAt(character, lobbySpawn, false) end
+		task.spawn(function() loadLobbyCharacter(player) end)
 	end
 end
 
@@ -1419,7 +1436,7 @@ local function teleportPlayersToLobby(group)
 	end
 	local ok, err, attemptId = dispatchTransfer(live, {
 		Kind = "lobby",
-		Data = {ReturnToLobby = true},
+		Data = {ReturnToLobby = true, LoadingError = loadingFailures[live[1]]},
 	})
 	if not ok then reportDispatchFailure(live, attemptId, err) end
 	return ok, err, live
@@ -1598,7 +1615,196 @@ local function returnGroupToLobby(group)
 	return false
 end
 
+-- Failed entry is terminal. The notice/transfer does not wait for a yielding
+-- builder or avatar loader. Studio cleanup waits for the builder's ownership to
+-- finish so a late Build cannot put a world back over the recovered lobby.
+recoverFailedEntry = function(attempt, reason, arrivals)
+ local group = arrivals or (IS_RESERVED_ROUND_SERVER and Players:GetPlayers() or attempt.Members)
+ if IS_RESERVED_ROUND_SERVER then failedReservedEntry = true end
+ workspace:SetAttribute("RoundActive", false)
+ workspace:SetAttribute("RoundLoadingState", "failed")
+ workspace:SetAttribute("LoadStage", "WORLD_ERROR")
+ zyntraReentry.OnInvoke = function() return false end
+ for _, player in ipairs(livePlayers(group)) do
+  loadingFailures[player] = reason
+  player:SetAttribute("RoundLoadingError", reason == "LOADING_TIMEOUT" and "timeout" or "failed")
+  pendingExplicitPlacement[player] = nil
+  pendingSlideRelease[player] = nil
+  pendingSlideStream[player] = nil
+   status:FireClient(player, "entrycancel", {Token = attempt and attempt.Token})
+  status:FireClient(player, "loadfailed", reason)
+  if IS_STUDIO or not IS_RESERVED_ROUND_SERVER then
+   inRound[player] = nil
+   player:SetAttribute("InRound", false)
+   player.CameraMode = Enum.CameraMode.Classic
+   player.CameraMinZoomDistance, player.CameraMaxZoomDistance = 8, 18
+   local character = player.Character
+   local root = character and character:FindFirstChild("HumanoidRootPart")
+   -- If Build is still parking/restoring the lobby, keep the existing rig
+   -- protected at its current position. The player is already out of gameplay
+   -- and sees the error; restoration below alone may release/reload it.
+   if root then
+    root.Anchored = true
+    root.AssemblyLinearVelocity = Vector3.zero
+   end
+   status:FireClient(player, "lobby")
+  end
+ end
+ task.spawn(function()
+  if IS_RESERVED_ROUND_SERVER and not IS_STUDIO then
+   returnGroupToLobby(group)
+   local settled, stranded = awaitTransferSettlement(Routing.Endpoints.Fallback)
+   if not settled then holdCompletedWorld(stranded, Routing.Endpoints.Fallback) end
+   return
+  end
+  while attempt and attempt.WorldWorkerDone == false do task.wait(.1) end
+  returnGroupToLobby(group)
+  if not attempt or activeEntry == attempt then roundBusy = false end
+ end)
+end
+
+loadingRuntime = Loading.New({
+ Identity = game.JobId .. ":entry", Now = os.clock,
+ Spawn = task.spawn, Delay = task.delay, Wait = task.wait,
+ Present = function(player) return player.Parent == Players end,
+ Validate = function(player, expected)
+  local character = player.Character
+  local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+  local root = character and character:FindFirstChild("HumanoidRootPart")
+  return inRound[player] == true and player:GetAttribute("InRound") == true
+   and character == expected.Character and character.Parent ~= nil
+   and humanoid ~= nil and humanoid.Health > 0 and root ~= nil
+   and (root.Position - expected.Position).Magnitude <= 20
+ end,
+ Prepare = function(player, attempt, expected)
+  status:FireClient(player, "entryprepare", {
+   Token = attempt.Token, Level = expected.Level, Character = expected.Character,
+   Position = expected.Position, Deadline = workspace:GetServerTimeNow() + attempt:Remaining(),
+  })
+ end,
+ Failed = function(attempt, reason) recoverFailedEntry(attempt, reason) end,
+ Warn = function(message) warn("[GameManager] entry worker failed: " .. message) end,
+})
+
+local function beginGroupLoading(group)
+ activeEntry = loadingRuntime:Begin(group)
+ workspace:SetAttribute("RoundLoadingState", "loading")
+ workspace:SetAttribute("RoundLoadingToken", activeEntry.Token)
+ workspace:SetAttribute("RoundLoadingDeadline", workspace:GetServerTimeNow() + activeEntry:Remaining())
+ for _, player in ipairs(group) do
+  loadingFailures[player] = nil
+  player:SetAttribute("RoundLoadingError", nil)
+ end
+ return activeEntry
+end
+
+local function prepareGroupLoading(attempt, group, level, useSlideResume)
+ if not attempt:IsOpen() then return false end
+ attempt:SetMembers(group)
+ for _, player in ipairs(group) do
+  if player.Parent == Players then
+   inRound[player] = true
+   player:SetAttribute("InRound", true)
+   player:SetAttribute("Escaped", nil)
+   player:SetAttribute("Level2_ExitTransition", nil)
+  end
+ end
+ fireGroup(group, "loadinggame", level)
+ attempt.WorldWorkerDone = false
+ local ran, built = attempt:Run(function()
+  local ok, result = pcall(ensureWorld, group, level, attempt)
+  attempt.WorldWorkerDone = true
+  if not ok then error(result) end
+  return result
+ end)
+ if not ran then return false end
+ if not built then attempt:Fail("WORLD_LOAD_FAILED"); return false end
+ roundEntryMode = useSlideResume and LEVEL_TWO_TUBE_ENTRY_MODE or nil
+ for _, player in ipairs(group) do
+  if not attempt:IsOpen() then return false end
+  if player.Parent == Players then
+   pendingExplicitPlacement[player] = true
+   local completed, character = attempt:Run(function()
+    characterLoadOwner[player] = attempt
+    local ok, result = pcall(spawnGameplayCharacter, player, attempt)
+    if characterLoadOwner[player] == attempt then characterLoadOwner[player] = nil end
+    if not ok then error(result) end
+    return result
+   end)
+   if not completed then return false end
+   if player.Parent == Players then
+    if not character then attempt:Fail("CHARACTER_LOAD_FAILED"); return false end
+    local placedOk, placed = attempt:Run(function()
+     if not attempt:IsOpen() then return false end
+     return placeOnLevelEntry(player, character, useSlideResume)
+    end)
+    if not placedOk then return false end
+    if not placed or not attempt:IsOpen() then attempt:Fail("ENTRY_PLACEMENT_FAILED"); return false end
+    local root = character:FindFirstChild("HumanoidRootPart")
+    if not root then attempt:Fail("ENTRY_PLACEMENT_FAILED"); return false end
+    root.Anchored = true
+    attempt:Prepare(player, character, level, root.Position)
+   end
+  end
+ end
+ if not attempt:AwaitReady() or not attempt:Commit() then return false end
+ -- The common acknowledgement now proves the actual tube/fallback destination.
+ -- Feed that result to the existing release closure; its old timer cannot turn
+ -- an unready stream into a post-start fallback.
+ for _, player in ipairs(group) do
+  local stream = pendingSlideStream[player]
+  if stream and attempt.Expected[player] then stream.Done = true; stream.Ready = true end
+ end
+ workspace:SetAttribute("RoundLoadingState", "ready")
+ fireGroup(group, "entryreleased", {Token = attempt.Token})
+ return true
+end
+
 local playRound
+
+local cohortMap = MemoryStoreService:GetHashMap("RoundArrivalCohortsV1")
+local cohortWrites = {}
+local function publishFinalCohort(session)
+ if IS_STUDIO or not session.NextLevel then return end
+ if cohortWrites[session.Id] then return end
+ local ids = {}
+ for _, member in ipairs(Routing.RosterMembers(session.Roster)) do
+  local decision = Routing.DecisionOf(session.Roster, member)
+  if decision == Routing.Continuing or (decision == Routing.Deciding and stillHere(member)) then
+   ids[#ids + 1] = member.UserId
+  end
+ end
+ local snapshot = Loading.CohortSnapshot(session.Id, session.NextLevel, ids)
+ local write = {Finished = false}
+ cohortWrites[session.Id] = write
+ -- The window must not be held by a MemoryStore request. Each request remains
+ -- the sole writer until it returns; retry only completed failures, for 60s.
+ task.spawn(function()
+  local deadline = os.clock() + Loading.TimeoutSeconds
+  repeat
+   local ok, stored = pcall(cohortMap.SetAsync, cohortMap, session.Id, snapshot, 120)
+   if ok and stored then write.Finished = true; return end
+   task.wait(1)
+  until os.clock() >= deadline
+  warn("[GameManager] Could not publish final arrival cohort " .. session.Id)
+  write.Finished = true
+ end)
+end
+
+game:BindToClose(function()
+ if IS_STUDIO then return end
+ -- When every member Continues immediately, the final source player can leave
+ -- before the intermission loop wakes. Preserve the final cohort before this
+ -- server closes; do not open a second request if its writer is already yielding.
+ if activePostWin then publishFinalCohort(activePostWin) end
+ local deadline = os.clock() + 25
+ while os.clock() < deadline do
+  local pending = false
+  for _, write in pairs(cohortWrites) do if not write.Finished then pending = true break end end
+  if not pending then return end
+  task.wait(.1)
+ end
+end)
 
 handlePostWinReturnRequest = function(player, requestSerial)
 	local session = activePostWin
@@ -1907,6 +2113,7 @@ local function runPostWinIntermission(participants, elapsed, escapedCount, entry
 	-- departed early continuer vanish from the cohort and the destination start
 	-- its round before the rest of the party had landed.
 	local cohort = Routing.ExpectedContinuers(roster, stillHere)
+	publishFinalCohort(session)
 	print(string.format(
 		"[GameManager] result window %d settled: %d continuing, %d departed, %d returning, %d gone -> cohort %d",
 		session.Serial, #continuing, #departed, #returning, #gone, cohort))
@@ -1931,31 +2138,19 @@ local function continueStudioCampaign(participants, continuing, returning, nextL
 		return
 	end
 
-	armGroupEntry(continuing)
-	fireGroup(continuing, "loadinggame", nextLevel)
-	cleanupActiveWorld()
-	for _, player in ipairs(continuing) do
-		inRound[player] = true
-		player:SetAttribute("InRound", true)
-		player:SetAttribute("Escaped", nil)
-		player:SetAttribute("Level2_ExitTransition", nil)
-	end
-	if not ensureWorld(continuing, nextLevel) then
-		fireGroup(continuing, "loadfailed")
-		returnGroupToLobby(continuing)
-		return
-	end
-	local useSlideResume = entryMode == LEVEL_TWO_TUBE_ENTRY_MODE and nextLevel == 3
-	roundEntryMode = useSlideResume and LEVEL_TWO_TUBE_ENTRY_MODE or nil
-	for _, player in ipairs(continuing) do
-		if player.Parent then
-			pendingExplicitPlacement[player] = true
-			local character = spawnGameplayCharacter(player)
-			if character then placeOnLevelEntry(player, character, useSlideResume) end
-		end
-	end
-	task.wait(0.6)
-	playRound(continuing)
+ local attempt = beginGroupLoading(continuing)
+ fireGroup(continuing, "loadinggame", nextLevel)
+ attempt.WorldWorkerDone = false
+ local cleaned = attempt:Run(function()
+  local ok, err = pcall(cleanupActiveWorld)
+  attempt.WorldWorkerDone = true
+  if not ok then error(err) end
+ end)
+ if not cleaned then return end
+ local useSlideResume = entryMode == LEVEL_TWO_TUBE_ENTRY_MODE and nextLevel == 3
+ if prepareGroupLoading(attempt, continuing, nextLevel, useSlideResume) then
+  playRound(continuing)
+ end
 end
 
 playRound = function(participants)
@@ -2031,7 +2226,11 @@ playRound = function(participants)
 			if not roundLifecycleOpen or transitionRespawnToken[player] ~= token
 				or player.Parent ~= Players or inRound[player] ~= true
 				or player:GetAttribute("Level2_ExitTransition") ~= true then return end
-			if not loadGameplayCharacter(player) then return end
+			if not loadGameplayCharacter(player, function()
+				return roundLifecycleOpen and transitionRespawnToken[player] == token
+					and player.Parent == Players and inRound[player] == true
+					and player:GetAttribute("Level2_ExitTransition") == true
+			end) then return end
 			local character = player.Character
 			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 			local root = character and character:FindFirstChild("HumanoidRootPart")
@@ -2100,7 +2299,7 @@ playRound = function(participants)
   player:SetAttribute("ZyntraReentryUsed", true)
   player:SetAttribute("Escaped", nil)
   player:SetAttribute("Level2_ExitTransition", nil)
-  local char = spawnGameplayCharacter(player)
+  local char = spawnGameplayCharacter(player, nil, function() return reentryRoundOpen(player) end)
   if not char then
    abandonReentry(player)
    return false
@@ -2167,7 +2366,7 @@ playRound = function(participants)
   -- timeout sits one second past the client's own 15s cap so a live client
   -- always reports first, and a dead one can still never stall the round.
   fireGroup(participants, "poolaccess")
-  waitForGroupEntry(participants, 16)
+  -- The shared entry barrier has already verified every client.
 	elseif activeLevel == 3 and roundEntryMode == LEVEL_TWO_TUBE_ENTRY_MODE then
   -- LEVEL2_EXIT_TRANSITION_20260828
   -- This party is already inside the continuation bore. Replaying the service
@@ -2180,7 +2379,7 @@ playRound = function(participants)
 		-- Then arm Level 3, give its controllers one heartbeat to observe the
 		-- authority change, release everyone together, and only then remove the
 		-- loading cover / begin the round timer.
-		prepareSlideResume(participants)
+		-- The shared entry barrier verified the tube before this activation.
 		workspace:SetAttribute("PuzzleWon", false)
 		workspace:SetAttribute("PostWinIntermissionActive", false)
 		workspace:SetAttribute("RoundActive", true)
@@ -2383,43 +2582,28 @@ end
 local function launchStation(station, participants)
  station.busy = true
  setStationDisplay(station, "STARTING PRIVATE WORLD", #participants .. "/" .. (station.maxPlayers or MAX_PLAYERS_PER_STATION) .. " PLAYERS", station.color)
- armGroupEntry(participants)
  fireGroup(participants, "loadinggame", station.level or 1)
 
  if IS_STUDIO then
   if roundBusy then
    setStationDisplay(station, "STUDIO WORLD BUSY", "WAIT FOR THE ACTIVE TEST", Color3.fromRGB(255, 210, 90))
    task.wait(2)
+   fireGroup(participants, "lobbycancel")
    station.busy = false
    return
   end
 
   roundBusy = true
+  local attempt = beginGroupLoading(participants)
   clearGlowsticks()
   assignGlowstickSlots(participants)
   -- A round started from the lobby is never a continuation, whatever the last
   -- one was; leaving a stale route here would skip Level 3's elevator descent.
   roundEntryMode = nil
-  for _, player in ipairs(participants) do
-   inRound[player] = true
-   player:SetAttribute("InRound", true)
-   player:SetAttribute("Escaped", nil)
-   player:SetAttribute("Level2_ExitTransition", nil)
-  end
-  if ensureWorld(participants, station.level or 1) then
-   for _, player in ipairs(participants) do
-    if player.Parent then
-     local char = spawnGameplayCharacter(player)
-     if char then placeSafelyInElevator(player, char) end
-    end
-   end
-   task.wait(0.6)
+  if prepareGroupLoading(attempt, participants, station.level or 1, false) then
    playRound(participants)
-  else
-   fireGroup(participants, "loadfailed")
-   returnGroupToLobby(participants)
   end
-  roundBusy = false
+  if not activeEntry or activeEntry.State ~= "failed" then roundBusy = false end
   station.busy = false
   return
  end
@@ -2667,16 +2851,50 @@ end
 -- the round and everybody after them -- a later manual Continue, and every
 -- player the 15-second countdown carried -- landed into roundBusy and was
 -- initialised as a spectator.
-local function stageArrivingParty()
+local function stageArrivingParty(attempt)
+ local cohortReads = {}
+ local arrivals = Loading.NewArrivalTracker(Routing.SelectArrivalSession)
+ local observedArrivals = 0
  local startedAt = os.clock()
  local firstArrivalAt = nil
  local announced = nil
- while true do
-  local group = Routing.SelectArrivalSession(arrivalEntries())
+ while attempt:IsOpen() do
+  for index = observedArrivals + 1, #destinationArrivalEvidence do
+   arrivals:RememberArrival(destinationArrivalEvidence[index])
+  end
+  observedArrivals = #destinationArrivalEvidence
+  local entries = arrivalEntries()
+  arrivals:Observe(entries)
+  local group = Routing.SelectArrivalSession(entries)
+  if group and not group.Final and group.Deadline then
+   local read = cohortReads[group.SessionId]
+   if not read then read = {Busy = false, NextAt = 0}; cohortReads[group.SessionId] = read end
+   if not read.Busy and not read.Value and os.clock() >= read.NextAt then
+    read.Busy = true
+    task.spawn(function()
+     local ok, value = pcall(cohortMap.GetAsync, cohortMap, group.SessionId)
+     read.Busy = false
+     read.NextAt = os.clock() + 1
+     if ok and Loading.ReadCohort(value, group.SessionId, group.Level) then read.Value = value end
+    end)
+   end
+   local ids, count = Loading.ReadCohort(read.Value, group.SessionId, group.Level)
+   if ids then
+    group.Expected, group.Final = count, true
+    group.CohortUserIds = ids
+    local members = {}
+    for _, member in ipairs(group.Members) do
+     if ids[member.UserId] then members[#members + 1] = member end
+    end
+    group.Members = members
+   end
+  end
+  group = arrivals:Apply(group)
   local arrived = group and #group.Members or 0
   if arrived > 0 and not firstArrivalAt then firstArrivalAt = os.clock() end
   local decision, reason = Routing.ArrivalDecision({
    Now = os.clock(),
+   LoadingDeadline = attempt.Deadline,
    StartedAt = startedAt,
    FirstArrivalAt = firstArrivalAt,
    ServerNow = workspace:GetServerTimeNow(),
@@ -2698,6 +2916,7 @@ local function stageArrivingParty()
   end
   task.wait(0.2)
  end
+ return "abandon", nil
 end
 
 if IS_RESERVED_ROUND_SERVER then
@@ -2705,8 +2924,9 @@ if IS_RESERVED_ROUND_SERVER then
   -- Hold characters behind the loading screen until the source's result window
   -- has closed and the whole cohort has landed, then generate exactly one
   -- isolated world for that group.
-  local decision, group = stageArrivingParty()
-  if decision ~= "admit" or not group then return end
+  local attempt = beginGroupLoading({})
+  local decision, group = stageArrivingParty(attempt)
+  if decision ~= "admit" or not group then attempt:Fail("ARRIVAL_LOAD_FAILED"); return end
 
   local selectedLevel = Routing.ClampLevel(group.Level)
   local participants = {}
@@ -2715,7 +2935,7 @@ if IS_RESERVED_ROUND_SERVER then
   end
   table.sort(participants, function(a, b) return a.UserId < b.UserId end)
   while #participants > MAX_PLAYERS_PER_STATION do table.remove(participants) end
-  if #participants == 0 then return end
+  if #participants == 0 then attempt:Fail("PARTY_LEFT"); return end
 
   local glowstickSlots = nil
   for _, entry in ipairs(arrivalEntries()) do
@@ -2730,31 +2950,11 @@ if IS_RESERVED_ROUND_SERVER then
   roundBusy = true
   clearGlowsticks()
   assignGlowstickSlots(participants, glowstickSlots)
-  for _, player in ipairs(participants) do
-   inRound[player] = true
-   player:SetAttribute("InRound", true)
-   player:SetAttribute("Escaped", nil)
-   player:SetAttribute("Level2_ExitTransition", nil)
-  end
-  armGroupEntry(participants)
-  fireGroup(participants, "loadinggame", selectedLevel)
-
   local useSlideResume = selectedLevel == 3
    and group.EntryMode == LEVEL_TWO_TUBE_ENTRY_MODE
   roundEntryMode = useSlideResume and LEVEL_TWO_TUBE_ENTRY_MODE or nil
-  if ensureWorld(participants, selectedLevel) then
-   for _, player in ipairs(participants) do
-    if player.Parent then
-     pendingExplicitPlacement[player] = true
-     local char = spawnGameplayCharacter(player)
-     if char then placeOnLevelEntry(player, char, useSlideResume) end
-    end
-   end
-   task.wait(0.6)
+  if prepareGroupLoading(attempt, participants, selectedLevel, useSlideResume) then
    playRound(participants)
-  else
-   fireGroup(participants, "loadfailed")
-   returnGroupToLobby(participants)
   end
   roundBusy = false
  end)

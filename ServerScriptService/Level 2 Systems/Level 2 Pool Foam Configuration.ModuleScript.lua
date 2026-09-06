@@ -217,7 +217,19 @@ local Configuration = {
 		},
 	},
 
+	-- One positional movement voice per entity. Idle is optional; Caught,
+	-- Collapse and Secondary remain reserved until those cues are authored.
+	Audio = {
+		Enabled = true,
+		RollOffMinDistance = 12,
+		RollOffMaxDistance = 110,
+		LoopVolumes = { Idle = 0.06, Walk = 0.18, Hunt = 0.24 },
+		AttackVolume = 0.24,
+	},
+
 	-- Empty IDs are deliberate: gameplay must remain correct without media.
+	-- First delivery needs Primary Walk/Hunt loops and a short Attack one-shot.
+	-- All currently spawned clones use Primary; do not invent placeholder IDs.
 	AudioIds = {
 		Primary = {
 			Idle = "",

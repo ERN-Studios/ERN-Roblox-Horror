@@ -355,12 +355,12 @@ function Suite.Host()
 		for _ in source:gmatch("if%s+not%s+settled%s+then%s+holdCompletedWorld") do
 			honoured += 1
 		end
-		check(report, settlementCalls == 5,
-			"every one of the five endpoint exits settles", tostring(settlementCalls))
+		check(report, settlementCalls == 6,
+			"all five completion exits and loading failure settle", tostring(settlementCalls))
 		check(report, captured == settlementCalls,
 			"and none of them discards the settlement result",
 			string.format("%d of %d captured", captured, settlementCalls))
-		check(report, honoured == 5,
+		check(report, honoured == 6,
 			"and every one of them holds the completed world when it does not resolve",
 			tostring(honoured))
 
@@ -418,9 +418,10 @@ function Suite.Host()
 			"RestampAttempt is missing or called without the dispatch anchor")
 		check(report, source:find("transfers:ReportDispatchFailure", 1, true) ~= nil,
 			"and reports synchronous dispatch rejections into the runtime")
-		local staging = source:match("local function stageArrivingParty%b()(.-)\n[ \t]*end\n")
+		local staging = source:match("local function stageArrivingParty%b()(.-)\nif IS_RESERVED_ROUND_SERVER")
 		check(report, staging ~= nil
-			and staging:find("CohortHorizon = group and group.CohortHorizon", 1, true) ~= nil,
+			and staging:find("CohortHorizon = group and group.CohortHorizon", 1, true) ~= nil
+            and staging:find("LoadingDeadline = attempt.Deadline", 1, true) ~= nil,
 			"and the destination hands the source's declared horizon to ArrivalDecision",
 			staging == nil and "stageArrivingParty body not found" or "CohortHorizon not forwarded")
 		note(report, "MUTATION PROOF: dropping the `at` argument at the RestampAttempt call site,"

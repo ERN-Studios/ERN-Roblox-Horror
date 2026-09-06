@@ -48,6 +48,13 @@ function dispatchAudio.preferenceLoaded()
 	return player:GetAttribute("ZyntraDispatchPreferenceLoaded") == true
 end
 
+function dispatchAudio.inputBlocked()
+	local navigation = game:GetService("GuiService")
+	return navigation.MenuIsOpen or navigation.SelectedObject ~= nil
+		or UIDevice.ScreenOwningModalOpen()
+		or player:GetAttribute("PartyDownCardOpen") == true
+end
+
 function dispatchAudio.preferenceUnavailable()
 	return player:GetAttribute("ZyntraProfileLoaded") == true
 		and not dispatchAudio.preferenceLoaded()
@@ -191,7 +198,7 @@ function dispatchAudio.refresh()
 			or dispatchAudio.pending and "SAVING"
 			or muted and "UNMUTE DISPATCH"
 			or "MUTE DISPATCH"
-		local binding = UIDevice.Binding("[M]")
+		local binding = UIDevice.Binding("[M]", "[LB]")
 		dispatchAudio.button.Text = binding ~= "" and (binding .. "  " .. muteWord) or muteWord
 		-- ONE colour, in every state. This is the COMMAND CENTER line's own
 		-- cyan-green, and MUTE / UNMUTE / SAVING / DISPATCH OFFLINE all wear it,
@@ -1569,17 +1576,13 @@ do
 	end)
 end
 
--- Set only on the level that holds its own cover, so the server can be told
--- when this client is genuinely looking at the world instead of a guess.
-local entryAckPending = false
+-- All levels share the server's party barrier. Only an explicit successful
+-- release can lift the cover; the sequence below is presentation, never proof.
+local entryState = {Active = false, Token = nil, Error = nil}
 
 local function finishLoadingWhenReady()
-	if not (loadingSequenceFinished and serverReadyForEntry) then return end
+	if entryState.Active or not (loadingSequenceFinished and serverReadyForEntry) then return end
 	if loadingFrame.Visible then loadingFrame.Visible = false end
-	if entryAckPending then
-		entryAckPending = false
-		remote:FireServer("entryready")
-	end
 end
 
 -- Re-runnable so a level can replay the whole sequence per round. The run token
@@ -1605,9 +1608,9 @@ local function startLoadingSequence()
 		end
 		if loadingRun ~= run then return end
 
-		loadingTitle.Text = "> ENTRY STABILIZED SUCCESSFULLY"
+		loadingTitle.Text = "> SYNCHRONIZING PARTY"
 		loadingTitle.TextColor3 = activeLoadingPalette.TitleDone
-		loadingBaseText = "MISSION IS A GO"
+		loadingBaseText = "WAITING FOR EVERYONE TO LOAD"
 		loadingClock = 0
 		task.wait(1.6)
 		if loadingRun ~= run then return end
@@ -1618,45 +1621,7 @@ end
 
 startLoadingSequence()
 
--- Level 2 has no elevator ride to hide the stream-in behind, so its cover has to
--- stay up until the complex is actually around the character. Solid ground under
--- the root is the honest test — it is the very thing the server's anchored
--- placement protects against, and it cannot pass while the arrival platform is
--- still streaming. The timeout exists so a client that never streams is let in
--- anyway rather than trapped behind the cover forever.
-local LEVEL_TWO_ENTRY_TIMEOUT = 15
-
-local function levelTwoGroundReady()
-	if not workspace:FindFirstChild("Level 2 Generated World") then return false end
-	local character = player.Character
-	local root = character and character:FindFirstChild("HumanoidRootPart")
-	if not root then return false end
-	local params = RaycastParams.new()
-	params.FilterType = Enum.RaycastFilterType.Exclude
-	params.FilterDescendantsInstances = {character}
-	return workspace:Raycast(root.Position + Vector3.yAxis * 5,
-		Vector3.new(0, -60, 0), params) ~= nil
-end
-
-local function waitForLevelTwoEntry()
-	local deadline = os.clock() + LEVEL_TWO_ENTRY_TIMEOUT
-	local requestedStream = false
-	while os.clock() < deadline do
-		local character = player.Character
-		local root = character and character:FindFirstChild("HumanoidRootPart")
-		if root and not requestedStream then
-			requestedStream = true
-			task.spawn(function()
-				pcall(function()
-					player:RequestStreamAroundAsync(root.Position, 10)
-				end)
-			end)
-		end
-		if levelTwoGroundReady() then return true end
-		task.wait(0.15)
-	end
-	return false
-end
+-- Round Entry Client owns stream/ground/asset readiness and tokenized acks.
 
 local DEFAULT_TEXT = Color3.fromRGB(235, 232, 222)
 local DEFAULT_SIZE = 26
@@ -1847,13 +1812,14 @@ end)
 ContextActionService:BindAction("ZyntraToggleDispatchMute", function(_, inputState)
 	if inputState ~= Enum.UserInputState.Begin
 		or UIS:GetFocusedTextBox()
+		or dispatchAudio.inputBlocked()
 		or not dispatchAudio.hasActiveTransmission() then
 		return Enum.ContextActionResult.Pass
 	end
 	return dispatchAudio.requestToggle()
 		and Enum.ContextActionResult.Sink
 		or Enum.ContextActionResult.Pass
-end, false, Enum.KeyCode.M)
+end, false, Enum.KeyCode.M, Enum.KeyCode.ButtonL1)
 
 dispatchAudio.stopButton = Instance.new("TextButton")
 dispatchAudio.stopButton.Name = "DispatchStopButton"
@@ -1875,6 +1841,7 @@ end)
 ContextActionService:BindAction("ZyntraStopCurrentDispatch", function(_, inputState)
 	if inputState ~= Enum.UserInputState.Begin
 		or UIS:GetFocusedTextBox()
+		or dispatchAudio.inputBlocked()
 		-- ButtonB belongs to the advertised table-exit control while hiding.
 		-- Let that gameplay action pass without also stopping the dispatch.
 		or player:GetAttribute("Level3_Hiding") == true
@@ -2620,7 +2587,7 @@ ContextActionService:BindActionAtPriority(
 		-- Availability, not button visibility: on touch the button hides itself
 		-- while the panel is open, and gating on it would make the binding a
 		-- one-way door that could open the panel but never close it.
-		if UIS:GetFocusedTextBox() or not objectivesAvailable then
+		if UIS:GetFocusedTextBox() or not objectivesAvailable or dispatchAudio.inputBlocked() then
 			return Enum.ContextActionResult.Pass
 		end
 		toggleObjectives()
@@ -2628,7 +2595,7 @@ ContextActionService:BindActionAtPriority(
 	end,
 	false,
 	Enum.ContextActionPriority.High.Value,
-	Enum.KeyCode.H
+	Enum.KeyCode.H, Enum.KeyCode.DPadUp
 )
 
 -- The longest line the dispatch panel can ever be asked to render, read off the
@@ -2743,7 +2710,12 @@ local function updateLevelOneGuideLayout()
 		briefLabel.TextXAlignment = touch and Enum.TextXAlignment.Center or Enum.TextXAlignment.Left
 		briefLabel.TextSize = touch and 12 or 12
 	end
-	if briefKeycap then briefKeycap.Visible = not touch end
+	if briefKeycap then
+		local binding = UIDevice.Binding("H", "↑")
+		briefKeycap.Visible = binding ~= ""
+		local key = briefKeycap:FindFirstChild("Key")
+		if key then key.Text = binding end
+	end
 	if touch then
 		objectivesButton.AnchorPoint = Vector2.new(0, 0)
 		objectivesButton.Position = UDim2.fromOffset(12, 12)
@@ -3969,6 +3941,9 @@ end
 
 remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 	if ev == "lobby" then
+		entryState.Active = false
+		entryState.Token = nil
+		loadingRun += 1
 		-- GameManager also uses "lobby" for queue resets. Preserve a welcome
 		-- transmission already in progress; its dedicated event is once-only.
 		if not lobbyBriefing.active and not lobbyBriefing.pending then
@@ -3981,7 +3956,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		queueShade.Visible = false
 		queueStation = nil
 		queueSubmitting = false
-		setMsg("") -- the in-world sign carries the idle lobby instruction
+		setMsg(entryState.Error or "") -- retain a failed launch's explanation in the lobby
 
 	elseif ev == "lobbybriefing" then
 		lobbyBriefing.playOnce()
@@ -4056,6 +4031,10 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		setMsg("GAME IN PROGRESS — WAIT FOR THE NEXT GROUP", Color3.fromRGB(255, 215, 120))
 
 	elseif ev == "loadinggame" then
+		entryState.Active = true
+		entryState.Token = nil
+		entryState.Error = nil
+		serverReadyForEntry = false
 		cancelAllCommandBriefings(true)
 		elevatorBriefingStarted = false
 		levelTwoBriefingStarted = false
@@ -4076,71 +4055,71 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		local announcedLevel = tonumber(a)
 		local launchingLevel = announcedLevel
 			or workspace:GetAttribute("SelectedLevel") or 1
-		-- Only a launch whose level the server ANNOUNCED may arm the held cover.
-		-- The join-time status fire carries no level, and a player arriving then
-		-- is not in the party, so it would never receive the poolaccess that
-		-- releases the hold — it would sit behind a black screen forever.
-		local heldCover = announcedLevel == 2
-		entryAckPending = heldCover
 		applyLoadingPalette(launchingLevel)
 		loadingTitle.Text = "> ENTERING ANOMALOUS SPACE"
 		loadingClock = 0
-		-- Level 2 replays the full staged sequence every round; it is the only
-		-- cover it gets. Every other level keeps the single generating line.
-		loadingBaseText = heldCover and "LOCATING ANOMALOUS SPACE" or "GENERATING WORLD"
+		loadingBaseText = "PREPARING YOUR PARTY"
 		-- Paint the status line BEFORE uncovering. RenderStepped only refreshes
 		-- it while the frame is visible, so revealing first shows one frame of
 		-- the PREVIOUS round's line.
 		loadingStatus.Text = loadingBaseText
 		loadingFrame.Visible = true
-		if heldCover then
-			serverReadyForEntry = false
-			startLoadingSequence()
-			-- Absolute backstop, independent of every event above: whatever goes
-			-- wrong upstream, this client is let into the world.
-			local guard = loadingRun
-			task.delay(LEVEL_TWO_ENTRY_TIMEOUT + 20, function()
-				if loadingRun == guard and loadingFrame.Visible then
-					loadingSequenceFinished = true
-					serverReadyForEntry = true
-					finishLoadingWhenReady()
-				end
-			end)
+		startLoadingSequence()
+
+	elseif ev == "entryprepare" then
+		if entryState.Active and type(a) == "table" then
+			entryState.Token = a.Token
+		end
+
+	elseif ev == "entryreleased" then
+		if entryState.Active and type(a) == "table" and a.Token == entryState.Token then
+			entryState.Active = false
+			loadingRun += 1
+			loadingSequenceFinished = true
+			serverReadyForEntry = true
+			finishLoadingWhenReady()
+		end
+
+	elseif ev == "entrycancel" then
+		if type(a) == "table" and a.Token == entryState.Token then
+			entryState.Active = false
+			entryState.Token = nil
+			loadingRun += 1
 		end
 
 	elseif ev == "loadfailed" then
+		entryState.Active = false
+		entryState.Token = nil
+		entryState.Error = a == "LOADING_TIMEOUT"
+			and "LOADING TIMED OUT AFTER 60 SECONDS — PLEASE TRY AGAIN"
+			or "ROUND LOADING FAILED — PLEASE TRY AGAIN"
+		loadingRun += 1
 		cancelAllCommandBriefings(true)
 		loadingFrame.Visible = false
-		setMsg("WORLD GENERATION FAILED — RETURNING TO LOBBY", Color3.fromRGB(255, 100, 100))
+		setMsg(a == "LOADING_TIMEOUT"
+			and "LOADING TIMED OUT (60s) — RETURNING YOUR PARTY TO LOBBY"
+			or "ROUND COULD NOT LOAD — RETURNING YOUR PARTY TO LOBBY", Color3.fromRGB(255, 100, 100))
 
 	elseif ev == "poolaccess" then
 		dead = false
 		setMsg("POOL ACCESS READY", Color3.fromRGB(105, 230, 210))
-		-- Do NOT uncover here. The world exists on the server, but with
-		-- StreamingEnabled the client is still pulling in a 60k-instance
-		-- complex; dropping the cover now is what put players in an empty room.
-		task.spawn(function()
-			local grounded = waitForLevelTwoEntry()
-			if not grounded then
-				-- Streaming never settled. Let them in regardless — a stuck
-				-- cover is worse than an unfinished one.
-				loadingSequenceFinished = true
-			end
-			serverReadyForEntry = true
-			finishLoadingWhenReady()
-		end)
+		-- The shared entry barrier releases this cover for the whole party.
 
 	elseif ev == "level3access" then
-		loadingFrame.Visible = false
-		serverReadyForEntry = true
-		finishLoadingWhenReady()
+		if not entryState.Active then
+			loadingSequenceFinished = true
+			serverReadyForEntry = true
+			finishLoadingWhenReady()
+		end
 		dead = false
 		setMsg("SERVICE LEVEL ACCESS READY", Color3.fromRGB(95, 235, 215))
 
 	elseif ev == "elevator" then
-		loadingFrame.Visible = false
-		serverReadyForEntry = true
-		finishLoadingWhenReady()
+		if not entryState.Active then
+			loadingSequenceFinished = true
+			serverReadyForEntry = true
+			finishLoadingWhenReady()
+		end
 		scheduleElevatorShake()
 		dead = false
 		if not elevatorBriefingStarted then
@@ -4149,6 +4128,11 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		end
 
 	elseif ev == "start" then
+		entryState.Active = false
+		entryState.Token = nil
+		entryState.Error = nil
+		loadingRun += 1
+		loadingSequenceFinished = true
 		hideRoundEnding(true)
 		stopSpectating()
 		shakeScheduled = false
@@ -5376,3 +5360,23 @@ task.spawn(function()
   end
  end
 end)
+
+-- The entry client waits for the actual HUD bindings and listeners to exist.
+player:SetAttribute("RoundEntryUIReady", true)
+
+-- A failed reserved-server launch carries its category back to the lobby.
+-- The attribute survives a join-time remote arriving before this script loads.
+do
+	local function restoreLoadingError()
+		local reason = player:GetAttribute("RoundLoadingError")
+		if type(reason) ~= "string" or reason == "" or entryState.Active then return end
+		entryState.Error = (reason == "LOADING_TIMEOUT" or reason == "timeout")
+			and "LOADING TIMED OUT AFTER 60 SECONDS — PLEASE TRY AGAIN"
+			or "ROUND LOADING FAILED — PLEASE TRY AGAIN"
+		loadingRun += 1
+		loadingFrame.Visible = false
+		setMsg(entryState.Error, Color3.fromRGB(255, 100, 100))
+	end
+	player:GetAttributeChangedSignal("RoundLoadingError"):Connect(restoreLoadingError)
+	restoreLoadingError()
+end

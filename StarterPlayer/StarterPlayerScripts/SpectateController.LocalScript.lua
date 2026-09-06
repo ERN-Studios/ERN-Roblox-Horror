@@ -3,11 +3,12 @@
 --
 -- When you die during a round you FULLY take a living teammate's POV: locked
 -- first person from their eyes (no free-look), and you see THEIR flashlight beam
--- (your own is off). Q / E cycle between survivors. Clears when you respawn.
+-- (your own is off). Q / E or D-pad left/right cycle survivors. Clears on respawn.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UIS = game:GetService("UserInputService")
+local GuiService = game:GetService("GuiService")
 local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
 local UIDevice = require(ReplicatedStorage:WaitForChild("UIDevice"))
@@ -77,6 +78,13 @@ local hiddenPartsConn = nil
 local snapCam = true  -- snap (not ease) on the first frame and whenever we switch target
 local lastBeamProfile, lastOn = nil, nil -- cached borrowed-beam state; nil forces the first write
 
+local function cycleAvailable()
+	return spectating and not GuiService.MenuIsOpen
+		and UIS:GetFocusedTextBox() == nil
+		and not UIDevice.ScreenOwningModalOpen()
+		and player:GetAttribute("PartyDownCardOpen") ~= true
+end
+
 local function livingOthers()
 	local list = {}
 	for _, p in ipairs(Players:GetPlayers()) do
@@ -138,7 +146,7 @@ local function watch(i)
 	spectated = targets[idx]
 	-- The binding half of this caption comes from UIDevice, so a phone sees
 	-- only the name and uses the arrows beside it.
-	label.Text = UIDevice.Caption("POV: " .. spectated.Name, "(Q / E to switch)")
+	label.Text = UIDevice.Caption("POV: " .. spectated.Name, "(Q / E to switch)", "(D-pad ← / →)")
 end
 
 -- drive the POV camera + borrowed flashlight every frame while spectating
@@ -237,13 +245,16 @@ applySpectateLayout = function()
 		button.Position = centre and UDim2.fromOffset(centre + offset, bottom)
 			or UDim2.new(0.5, offset, 0, bottom)
 	end
-	local showArrows = touch and spectating
+	local showArrows = touch and cycleAvailable()
 	UIDevice.SetInteractive(prevButton, showArrows)
 	UIDevice.SetInteractive(nextButton, showArrows)
 end
 
-prevButton.Activated:Connect(function() if spectating then watch(idx - 1) end end)
-nextButton.Activated:Connect(function() if spectating then watch(idx + 1) end end)
+prevButton.Activated:Connect(function() if cycleAvailable() then watch(idx - 1) end end)
+nextButton.Activated:Connect(function() if cycleAvailable() then watch(idx + 1) end end)
+UIDevice.OnScreenOwningModalChanged(function() applySpectateLayout() end)
+player:GetAttributeChangedSignal("PartyDownCardOpen"):Connect(function() applySpectateLayout() end)
+GuiService:GetPropertyChangedSignal("MenuIsOpen"):Connect(function() applySpectateLayout() end)
 UIDevice.Changed:Connect(function()
 	applySpectateLayout()
 	-- The POV caption carries the Q/E binding on desktop and not on touch,
@@ -338,10 +349,12 @@ player:GetAttributeChangedSignal("Escaped"):Connect(syncSpectateForEscape)
 player:GetAttributeChangedSignal("Level2_ExitTransition"):Connect(syncSpectateForEscape)
 
 UIS.InputBegan:Connect(function(input, processed)
-	if processed or not spectating then return end
-	if input.KeyCode == Enum.KeyCode.E then
+	-- D-pad belongs to GUI navigation while a selection exists, including
+	-- Roblox's own selection mode. Never both navigate and switch the camera.
+	if processed or not cycleAvailable() or GuiService.SelectedObject ~= nil then return end
+	if input.KeyCode == Enum.KeyCode.E or input.KeyCode == Enum.KeyCode.DPadRight then
 		watch(idx + 1)
-	elseif input.KeyCode == Enum.KeyCode.Q then
+	elseif input.KeyCode == Enum.KeyCode.Q or input.KeyCode == Enum.KeyCode.DPadLeft then
 		watch(idx - 1)
 	end
 end)

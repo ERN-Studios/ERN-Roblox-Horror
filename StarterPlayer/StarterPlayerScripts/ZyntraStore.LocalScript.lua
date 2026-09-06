@@ -1955,8 +1955,11 @@ end)
 -- bounce straight back into updateVisibility.
 local updateVisibility
 local refreshingVisibility = false
+local terminalNavigation = {}
 
 local function setMainVisible(visible)
+	local wasVisible = main.Visible
+	local selectionBefore = terminalNavigation.selected()
 	-- Keep the invariant at the final write as well as at each input path. This
 	-- makes a future caller unable to bypass queue/briefing mutual exclusion.
 	main.Visible = visible == true and not modalBlocksStore()
@@ -1993,6 +1996,87 @@ local function setMainVisible(visible)
 	-- so a tap landing on the terminal's top-right corner reached a button that
 	-- toggled the terminal shut. updateVisibility owns the full predicate.
 	if not refreshingVisibility and updateVisibility then updateVisibility() end
+	terminalNavigation.changed(wasVisible, selectionBefore)
+end
+
+-- Scoped so controller focus does not consume the main chunk's local budget.
+do
+	local GuiService = game:GetService("GuiService")
+	local ContextActionService = game:GetService("ContextActionService")
+	local closeAction = "ZyntraCloseTerminal"
+	local previousSelection
+	local focusSerial = 0
+
+	local function selectable(object)
+		if not object or not object:IsA("GuiObject") or not object.Selectable
+			or not object:IsDescendantOf(gui.Parent) then return false end
+		local ancestor = object
+		while ancestor and ancestor ~= gui.Parent do
+			if ancestor:IsA("GuiObject") and not ancestor.Visible then return false end
+			if ancestor:IsA("ScreenGui") and not ancestor.Enabled then return false end
+			ancestor = ancestor.Parent
+		end
+		return true
+	end
+
+	function terminalNavigation.selected()
+		return GuiService.SelectedObject
+	end
+
+	function terminalNavigation.focus()
+		if not main.Visible or GuiService.MenuIsOpen
+			or UserInputService:GetFocusedTextBox() ~= nil
+			or UIDevice.LastInput() ~= "Gamepad" then return end
+		local selected = GuiService.SelectedObject
+		if selected and selected:IsDescendantOf(main) and selectable(selected) then return end
+		local tab = tabButtons[currentTab] or closeButton
+		-- Kiosks open Shop; the in-round dev phone opens Dev. Reveal that tab
+		-- before selecting it, including when the tab bar is horizontally scrolled.
+		if tab.Parent == tabBar then
+			local left = tab.AbsolutePosition.X - tabBar.AbsolutePosition.X
+			local overflow = left + tab.AbsoluteSize.X - tabBar.AbsoluteSize.X
+			local offset = left < 0 and left or math.max(0, overflow)
+			tabBar.CanvasPosition = Vector2.new(math.max(0, tabBar.CanvasPosition.X + offset), 0)
+		end
+		GuiService.SelectedObject = tab
+	end
+
+	function terminalNavigation.changed(wasVisible, selectionBefore)
+		if wasVisible == main.Visible then return end
+		focusSerial += 1
+		local serial = focusSerial
+		if main.Visible then
+			previousSelection = selectionBefore
+			ContextActionService:BindActionAtPriority(closeAction, function(_, inputState)
+				if not main.Visible or GuiService.MenuIsOpen
+					or UserInputService:GetFocusedTextBox() ~= nil then
+					return Enum.ContextActionResult.Pass
+				end
+				if inputState == Enum.UserInputState.Begin then setMainVisible(false) end
+				return Enum.ContextActionResult.Sink
+			end, false, Enum.ContextActionPriority.High.Value, Enum.KeyCode.ButtonB)
+			task.defer(terminalNavigation.focus)
+		else
+			ContextActionService:UnbindAction(closeAction)
+			local restore = previousSelection
+			previousSelection = nil
+			-- Another modal may already own selection. Restore only focus that
+			-- belonged to this terminal, and only after its opener is visible again.
+			if selectionBefore and selectionBefore:IsDescendantOf(main)
+				and (GuiService.SelectedObject == selectionBefore or GuiService.SelectedObject == nil) then
+				GuiService.SelectedObject = nil
+				task.defer(function()
+					if serial == focusSerial and not main.Visible and not GuiService.MenuIsOpen
+						and GuiService.SelectedObject == nil and selectable(restore) then
+						GuiService.SelectedObject = restore
+					end
+				end)
+			end
+		end
+	end
+	UserInputService.LastInputTypeChanged:Connect(function()
+		if main.Visible then task.defer(terminalNavigation.focus) end
+	end)
 end
 
 function updateVisibility()

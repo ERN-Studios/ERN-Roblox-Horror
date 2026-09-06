@@ -35,7 +35,7 @@ local Routing = {}
 -- Bumped whenever the rules below change shape. GameManager publishes this on
 -- Workspace at load and answers a live probe with it, which is how the suite
 -- proves the production host really requires this module.
-Routing.Version = "2026-08-29.3"
+Routing.Version = "2026-09-06.1"
 Routing.LoadedAttribute = "RoundCompletionRoutingVersion"
 -- The host also answers a BindableFunction under this name in ServerStorage. An
 -- OnInvoke handler cannot be saved into a place file, so a reply can only come
@@ -518,9 +518,15 @@ function Routing.SelectArrivalSession(entries)
 			-- before that happened, then says a smaller number -- and the old
 			-- "smallest estimate wins" rule applied it over the final count and
 			-- started the round with a player still in transit.
-			local authority = Routing.PacketAuthority(data)
 			local expected = tonumber(data.ExpectedContinuers)
-			if expected then expected = math.max(0, math.floor(expected)) end
+			if not expected or expected ~= expected or math.abs(expected) == math.huge
+				or expected < 0 or expected % 1 ~= 0 then expected = nil end
+			-- A final flag without an exact usable count is only an unconfirmed
+			-- arrival. It cannot promote an earlier estimate to final, or make a
+			-- later valid final packet compare its number with a nil head count.
+			-- Keep zero supported: an empty final cohort is legitimate metadata,
+			-- and ArrivalDecision still refuses to start a round with nobody in it.
+			local authority = expected ~= nil and Routing.PacketAuthority(data) or Routing.EstimateAuthority
 			if authority > group.Authority then
 				group.Authority = authority
 				group.Final = authority == Routing.FinalAuthority
@@ -532,7 +538,7 @@ function Routing.SelectArrivalSession(entries)
 					if group.Expected == nil or expected < group.Expected then
 						group.Expected = expected
 					end
-				elseif expected > group.Expected then
+				elseif group.Expected == nil or expected > group.Expected then
 					-- Two authoritative packets should be identical. If they are
 					-- not, wait for the larger: admitting early is the failure
 					-- that costs a player their round.
@@ -582,6 +588,19 @@ end
 -- packet declares (clamped to the destination's own), and by the local staging
 -- cap underneath it.
 function Routing.ArrivalDecision(state)
+	-- Current loading hosts pass the one deadline shared with generation and
+	-- character/client readiness. Never convert a missing final roster or a short
+	-- cohort into permission to start. The legacy branch below supports packets
+	-- and deterministic completion simulations without that loading contract.
+	if type(state.LoadingDeadline) == "number" then
+		if state.Now >= state.LoadingDeadline then return "abandon", "loading deadline reached" end
+		if state.Final == true and type(state.Expected) == "number"
+			and state.Expected > 0 and state.Arrived >= state.Expected then
+			return "admit", "the full cohort arrived"
+		end
+		return "wait", state.Final == true and "waiting for the complete cohort"
+			or "waiting for the source's final cohort"
+	end
 	-- Two clocks on purpose. The caps are measured on the DESTINATION's own
 	-- monotonic clock, because that is the only one it can trust; the source's
 	-- decision deadline is compared on the shared server clock both ends read.

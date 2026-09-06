@@ -62,6 +62,9 @@ local reportClock = 0
 local captionSerial = 0
 local activeAttackId: string? = nil
 local revealGeneration: number? = nil
+local attackGeneration: number? = nil
+local lastAttackSerial = 0
+local transientSounds: {[Sound]: boolean} = {}
 
 local oldGui = playerGui:FindFirstChild("Level2PoolFoamGui")
 if oldGui then oldGui:Destroy() end
@@ -190,7 +193,13 @@ local function showCaption(text: unknown, duration: unknown)
 	end)
 end
 
-local function resetPresentation()
+local function resetPresentation(preserveHitTail: boolean?)
+	for sound, isHit in pairs(transientSounds) do
+		if not (preserveHitTail and isHit) then
+			transientSounds[sound] = nil
+			sound:Destroy()
+		end
+	end
 	captionSerial += 1
 	caption.Visible = false
 	activeEffect = nil
@@ -210,9 +219,8 @@ local function resetPresentation()
 end
 
 local function normalizedSoundId(value: string): string?
-	if value:match("^%d+$") then return "rbxassetid://" .. value end
-	if value:match("^rbxassetid://%d+$") then return value end
-	return nil
+	local digits = value:match("^rbxassetid://(%d+)$") or value:match("^(%d+)$")
+	return if digits and digits:find("[1-9]") then "rbxassetid://" .. digits else nil
 end
 
 local function playSound(kind: string, payload: {[any]: any})
@@ -235,6 +243,9 @@ local function playSound(kind: string, payload: {[any]: any})
 	sound.Volume = math.clamp(typeof(payload.Volume) == "number" and payload.Volume or 0.19, 0, 0.35)
 	sound.PlaybackSpeed = math.clamp(typeof(payload.PlaybackSpeed) == "number" and payload.PlaybackSpeed or 1, 0.75, 1.25)
 	sound.Parent = SoundService
+	transientSounds[sound] = payload.Type == "AttackHit" or payload.Kind == "AttackHit"
+	sound.Destroying:Once(function() transientSounds[sound] = nil end)
+	sound.Ended:Once(function() sound:Destroy() end)
 	sound:Play()
 	Debris:AddItem(sound, 8)
 end
@@ -263,11 +274,36 @@ local function matchesAttack(payload: {[any]: any}): boolean
 end
 
 local function handleClientEvent(payload: unknown)
-	if typeof(payload) ~= "table" or not liveLevel2() then return end
+	if typeof(payload) ~= "table" then return end
 	local event = payload :: {[any]: any}
 	if event.Protocol ~= nil and event.Protocol ~= PROTOCOL then return end
+	local generation = currentGeneration()
+	if generation == nil or event.Generation ~= generation then return end
 	local rawKind = event.Type or event.Kind
 	if typeof(rawKind) ~= "string" then return end
+	local live = liveLevel2()
+	if rawKind == "AttackHit" then
+		-- Death can replicate before this target-only event. Authenticate its
+		-- generation, current body and short server-time window instead of asking
+		-- the victim to still be alive; a late hit must not follow a re-entry.
+		local sentAt, serial = event.ServerTime, event.Serial
+		if player.Character == nil or event.TargetUserId ~= player.UserId or event.TargetCharacter ~= player.Character
+			or workspace:GetAttribute("SelectedLevel") ~= 2
+			or workspace:GetAttribute("RoundActive") ~= true
+			or typeof(sentAt) ~= "number" or sentAt ~= sentAt
+			or typeof(serial) ~= "number" or serial ~= serial or serial % 1 ~= 0
+		then return end
+		local age = workspace:GetServerTimeNow() - sentAt
+		if age < -0.5 or age > 3 then return end
+		if attackGeneration ~= generation then
+			attackGeneration = generation
+			lastAttackSerial = 0
+		end
+		if serial <= lastAttackSerial then return end
+		lastAttackSerial = serial
+	elseif not live then
+		return
+	end
 
 	-- Compatibility aliases keep older server presentation calls harmless while
 	-- the supported public contract remains Cue/Reveal/Attack/Phase/Decoy.
@@ -291,6 +327,7 @@ local function handleClientEvent(payload: unknown)
 	end
 
 	playSound(kind, event)
+	if not live then return end -- The death/spectate UI owns presentation now.
 	showCaption(captionFor(kind, event), event.CaptionDuration)
 	if kind == "Cue" then
 		if event.Emphasis == true then beginEffect(0.23, intensity, -0.45, 0.012, -0.02, 0.007) end
@@ -375,7 +412,11 @@ table.insert(connections, player.CharacterAdded:Connect(function()
 end))
 for _, attribute in ipairs({"InRound", "Escaped"}) do
 	table.insert(connections, player:GetAttributeChangedSignal(attribute):Connect(function()
-		if not liveLevel2() then resetPresentation() end
+		if not liveLevel2() then
+			local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+			local death = attribute == "InRound" and humanoid ~= nil and humanoid.Health <= 0
+			resetPresentation(death)
+		end
 	end))
 end
 table.insert(connections, workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(function()
