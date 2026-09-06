@@ -1638,26 +1638,16 @@ local function styleLevelThreeBay(roomModel, roomCenter, side, roomRadius, roomH
 					object.Material = Enum.Material.Plaster
 					object:SetAttribute("TunnelTextureRole", "LobbyMallDropCeiling")
 				else
-					local rearAccent = object.Name == "CurvedChamberWall"
-						and (object.Position - roomCenter):Dot(outward) > roomRadius * .55
-					if rearAccent then
-						object.Color = LEVEL_THREE_BAY_STYLE.wallpaperColor
-						object.Material = Enum.Material.SmoothPlastic
-						object.Reflectance = .08
-						object:SetAttribute("TunnelTextureRole", "LobbyMallWallpaper")
-						addLobbyThemeTexture(object, "LobbyLevel3Wallpaper",
-							LEVEL_THREE_BAY_STYLE.wallpaperTexture, {face},
-							LEVEL_THREE_BAY_STYLE.wallpaperTile, LEVEL_THREE_BAY_STYLE.wallpaperTile,
-							Color3.new(1, 1, 1), .08)
-					else
-						object.Color = LEVEL_THREE_BAY_STYLE.orangeWallColor
-						object.Material = Enum.Material.Plaster
-						object:SetAttribute("TunnelTextureRole", "LobbyMallOrangeWall")
-						addLobbyThemeTexture(object, "LobbyLevel3OrangeWall",
-							LEVEL_THREE_BAY_STYLE.orangeWallTexture, {face},
-							LEVEL_THREE_BAY_STYLE.orangeWallTile, LEVEL_THREE_BAY_STYLE.orangeWallTile,
-							Color3.new(1, 1, 1), .28)
-					end
+					-- Carry the entrance's existing red/orange plaster finish around
+					-- the entire chamber; the rear wall no longer swaps to wallpaper.
+					object.Color = LEVEL_THREE_BAY_STYLE.orangeWallColor
+					object.Material = Enum.Material.Plaster
+					object.Reflectance = 0
+					object:SetAttribute("TunnelTextureRole", "LobbyMallOrangeWall")
+					addLobbyThemeTexture(object, "LobbyLevel3OrangeWall",
+						LEVEL_THREE_BAY_STYLE.orangeWallTexture, {face},
+						LEVEL_THREE_BAY_STYLE.orangeWallTile, LEVEL_THREE_BAY_STYLE.orangeWallTile,
+						Color3.new(1, 1, 1), .28)
 				end
 			end
 		end
@@ -1776,7 +1766,7 @@ local function styleLevelThreeBay(roomModel, roomCenter, side, roomRadius, roomH
 	end
 
 	roomModel:SetAttribute("LobbyBayTheme", "MallBackroomsParty")
-	roomModel:SetAttribute("LobbyBayStyleVersion", 1)
+	roomModel:SetAttribute("LobbyBayStyleVersion", 2)
 end
 
 local function addRoom(parent, center, level, side, zOffset, active, stations)

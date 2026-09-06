@@ -420,10 +420,9 @@ end
 leave.Activated:Connect(requestExit)
 UserInputService.InputBegan:Connect(function(input, processed)
 	if not hiding then return end
-	-- RoundUI can consume B to dismiss a transmission. While hidden, B is also
-	-- the advertised leave control, so it must still release the table in that
-	-- same frame instead of making the player press it twice.
-	if processed and input.KeyCode ~= Enum.KeyCode.ButtonB then return end
+	-- UI owns processed input. RoundUI passes B through while hiding, so an
+	-- unprocessed B still exits, but closing a menu must not release cover.
+	if processed or UserInputService:GetFocusedTextBox() ~= nil then return end
 	if input.KeyCode == Enum.KeyCode.E
 		or input.KeyCode == Enum.KeyCode.ButtonB
 		or input.KeyCode == Enum.KeyCode.ButtonX then
