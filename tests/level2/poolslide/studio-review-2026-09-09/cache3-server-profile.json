@@ -1,0 +1,4635 @@
+{
+  "Version": 2,
+  "SessionStartTime": 1788979100928,
+  "SessionEndTime": 1788979121074,
+  "GCFuncId": 43,
+  "Categories": [
+    {
+      "Name": "delayedThreads",
+      "NodeId": 1
+    },
+    {
+      "Name": "Completed",
+      "NodeId": 358
+    },
+    {
+      "Name": "Uncategorized",
+      "NodeId": 448
+    },
+    {
+      "Name": "OnServerEvent",
+      "NodeId": 152
+    },
+    {
+      "Name": "DescendantAdded",
+      "NodeId": 304
+    },
+    {
+      "Name": "ValueChanged",
+      "NodeId": 316
+    },
+    {
+      "Name": "callAsyncCallback",
+      "NodeId": 322
+    },
+    {
+      "Name": "deferredThreads",
+      "NodeId": 200
+    },
+    {
+      "Name": "WaitingScripts",
+      "NodeId": 38
+    },
+    {
+      "Name": "Heartbeat",
+      "NodeId": 20
+    }
+  ],
+  "Nodes": [
+    {
+      "TotalDuration": 4246798,
+      "FunctionIds": [
+        1,
+        23,
+        9
+      ],
+      "NodeIds": [
+        2,
+        27,
+        10
+      ]
+    },
+    {
+      "TotalDuration": 332065,
+      "FunctionIds": [
+        2
+      ],
+      "NodeIds": [
+        3
+      ]
+    },
+    {
+      "TotalDuration": 332065,
+      "FunctionIds": [
+        3,
+        180
+      ],
+      "NodeIds": [
+        4,
+        477
+      ]
+    },
+    {
+      "TotalDuration": 327030,
+      "FunctionIds": [
+        4
+      ],
+      "NodeIds": [
+        5
+      ]
+    },
+    {
+      "TotalDuration": 327030,
+      "FunctionIds": [
+        67,
+        5,
+        6
+      ],
+      "NodeIds": [
+        164,
+        6,
+        7
+      ]
+    },
+    {
+      "TotalDuration": 2534
+    },
+    {
+      "TotalDuration": 14709,
+      "FunctionIds": [
+        7,
+        8,
+        42
+      ],
+      "NodeIds": [
+        8,
+        9,
+        363
+      ]
+    },
+    {
+      "TotalDuration": 9574
+    },
+    {
+      "TotalDuration": 2611
+    },
+    {
+      "TotalDuration": 3896545,
+      "FunctionIds": [
+        10,
+        12,
+        60
+      ],
+      "NodeIds": [
+        11,
+        13,
+        157
+      ]
+    },
+    {
+      "TotalDuration": 2425742,
+      "FunctionIds": [
+        34,
+        11,
+        94
+      ],
+      "NodeIds": [
+        210,
+        12,
+        228
+      ]
+    },
+    {
+      "TotalDuration": 2340014,
+      "FunctionIds": [
+        48,
+        33,
+        34,
+        44
+      ],
+      "NodeIds": [
+        80,
+        128,
+        277,
+        70
+      ]
+    },
+    {
+      "TotalDuration": 1457974,
+      "FunctionIds": [
+        3
+      ],
+      "NodeIds": [
+        14
+      ]
+    },
+    {
+      "TotalDuration": 1457974,
+      "FunctionIds": [
+        13
+      ],
+      "NodeIds": [
+        15
+      ]
+    },
+    {
+      "TotalDuration": 1457974,
+      "FunctionIds": [
+        144,
+        14,
+        15
+      ],
+      "NodeIds": [
+        384,
+        16,
+        381
+      ]
+    },
+    {
+      "TotalDuration": 1252962,
+      "FunctionIds": [
+        161,
+        98,
+        105,
+        28,
+        15
+      ],
+      "NodeIds": [
+        427,
+        255,
+        288,
+        33,
+        17
+      ]
+    },
+    {
+      "TotalDuration": 13748,
+      "FunctionIds": [
+        16
+      ],
+      "NodeIds": [
+        18
+      ]
+    },
+    {
+      "TotalDuration": 13748,
+      "FunctionIds": [
+        17,
+        51
+      ],
+      "NodeIds": [
+        19,
+        276
+      ]
+    },
+    {
+      "TotalDuration": 5126
+    },
+    {
+      "TotalDuration": 1382084,
+      "FunctionIds": [
+        164,
+        150,
+        9,
+        29
+      ],
+      "NodeIds": [
+        430,
+        398,
+        21,
+        36
+      ]
+    },
+    {
+      "TotalDuration": 1372129,
+      "FunctionIds": [
+        18,
+        149,
+        153,
+        10,
+        63
+      ],
+      "NodeIds": [
+        22,
+        396,
+        401,
+        173,
+        160
+      ]
+    },
+    {
+      "TotalDuration": 68139,
+      "FunctionIds": [
+        19
+      ],
+      "NodeIds": [
+        23
+      ]
+    },
+    {
+      "TotalDuration": 65576,
+      "FunctionIds": [
+        83,
+        20,
+        51,
+        104,
+        159
+      ],
+      "NodeIds": [
+        248,
+        24,
+        418,
+        320,
+        420
+      ]
+    },
+    {
+      "TotalDuration": 54122,
+      "FunctionIds": [
+        21,
+        101,
+        103,
+        166,
+        95
+      ],
+      "NodeIds": [
+        25,
+        284,
+        307,
+        432,
+        244
+      ]
+    },
+    {
+      "TotalDuration": 19215,
+      "FunctionIds": [
+        83,
+        51,
+        22,
+        167,
+        8
+      ],
+      "NodeIds": [
+        368,
+        376,
+        26,
+        433,
+        337
+      ]
+    },
+    {
+      "TotalDuration": 4226
+    },
+    {
+      "TotalDuration": 18188,
+      "FunctionIds": [
+        146,
+        69,
+        24,
+        122
+      ],
+      "NodeIds": [
+        393,
+        172,
+        28,
+        335
+      ]
+    },
+    {
+      "TotalDuration": 13143,
+      "FunctionIds": [
+        3
+      ],
+      "NodeIds": [
+        29
+      ]
+    },
+    {
+      "TotalDuration": 13143,
+      "FunctionIds": [
+        25
+      ],
+      "NodeIds": [
+        30
+      ]
+    },
+    {
+      "TotalDuration": 13143,
+      "FunctionIds": [
+        8,
+        26
+      ],
+      "NodeIds": [
+        151,
+        31
+      ]
+    },
+    {
+      "TotalDuration": 1294,
+      "FunctionIds": [
+        27
+      ],
+      "NodeIds": [
+        32
+      ]
+    },
+    {
+      "TotalDuration": 1294
+    },
+    {
+      "TotalDuration": 805463,
+      "FunctionIds": [
+        16,
+        55,
+        47
+      ],
+      "NodeIds": [
+        34,
+        135,
+        69
+      ]
+    },
+    {
+      "TotalDuration": 487520,
+      "FunctionIds": [
+        17,
+        51,
+        68
+      ],
+      "NodeIds": [
+        35,
+        334,
+        171
+      ]
+    },
+    {
+      "TotalDuration": 460256
+    },
+    {
+      "TotalDuration": 2545,
+      "FunctionIds": [
+        30
+      ],
+      "NodeIds": [
+        37
+      ]
+    },
+    {
+      "TotalDuration": 2545
+    },
+    {
+      "TotalDuration": 455695,
+      "FunctionIds": [
+        116,
+        9
+      ],
+      "NodeIds": [
+        452,
+        39
+      ]
+    },
+    {
+      "TotalDuration": 453152,
+      "FunctionIds": [
+        10,
+        12
+      ],
+      "NodeIds": [
+        40,
+        249
+      ]
+    },
+    {
+      "TotalDuration": 451884,
+      "FunctionIds": [
+        11,
+        31
+      ],
+      "NodeIds": [
+        43,
+        41
+      ]
+    },
+    {
+      "TotalDuration": 1159,
+      "FunctionIds": [
+        32
+      ],
+      "NodeIds": [
+        42
+      ]
+    },
+    {
+      "TotalDuration": 1159
+    },
+    {
+      "TotalDuration": 449362,
+      "FunctionIds": [
+        48,
+        33,
+        34,
+        52,
+        44
+      ],
+      "NodeIds": [
+        101,
+        44,
+        51,
+        98,
+        59
+      ]
+    },
+    {
+      "TotalDuration": 193015,
+      "FunctionIds": [
+        34,
+        41
+      ],
+      "NodeIds": [
+        45,
+        56
+      ]
+    },
+    {
+      "TotalDuration": 186256,
+      "FunctionIds": [
+        35,
+        36
+      ],
+      "NodeIds": [
+        46,
+        48
+      ]
+    },
+    {
+      "TotalDuration": 117854,
+      "FunctionIds": [
+        17,
+        51
+      ],
+      "NodeIds": [
+        47,
+        95
+      ]
+    },
+    {
+      "TotalDuration": 98492
+    },
+    {
+      "TotalDuration": 68402,
+      "FunctionIds": [
+        50,
+        37,
+        38,
+        39,
+        42
+      ],
+      "NodeIds": [
+        94,
+        49,
+        50,
+        54,
+        57
+      ]
+    },
+    {
+      "TotalDuration": 10082
+    },
+    {
+      "TotalDuration": 51940,
+      "FunctionIds": [
+        42
+      ],
+      "NodeIds": [
+        96
+      ]
+    },
+    {
+      "TotalDuration": 16967,
+      "FunctionIds": [
+        35,
+        36
+      ],
+      "NodeIds": [
+        99,
+        52
+      ]
+    },
+    {
+      "TotalDuration": 3817,
+      "FunctionIds": [
+        37,
+        38,
+        42
+      ],
+      "NodeIds": [
+        53,
+        141,
+        132
+      ]
+    },
+    {
+      "TotalDuration": 1267
+    },
+    {
+      "TotalDuration": 1280,
+      "FunctionIds": [
+        40
+      ],
+      "NodeIds": [
+        55
+      ]
+    },
+    {
+      "TotalDuration": 1280
+    },
+    {
+      "TotalDuration": 6759
+    },
+    {
+      "TotalDuration": 2551,
+      "FunctionIds": [
+        43
+      ],
+      "NodeIds": [
+        58
+      ]
+    },
+    {
+      "TotalDuration": 2551
+    },
+    {
+      "TotalDuration": 160231,
+      "FunctionIds": [
+        35,
+        36,
+        45
+      ],
+      "NodeIds": [
+        62,
+        60,
+        66
+      ]
+    },
+    {
+      "TotalDuration": 57163,
+      "FunctionIds": [
+        37,
+        38
+      ],
+      "NodeIds": [
+        134,
+        61
+      ]
+    },
+    {
+      "TotalDuration": 48370,
+      "FunctionIds": [
+        100,
+        42
+      ],
+      "NodeIds": [
+        263,
+        64
+      ]
+    },
+    {
+      "TotalDuration": 44238,
+      "FunctionIds": [
+        17,
+        51
+      ],
+      "NodeIds": [
+        63,
+        262
+      ]
+    },
+    {
+      "TotalDuration": 40655
+    },
+    {
+      "TotalDuration": 4829,
+      "FunctionIds": [
+        43
+      ],
+      "NodeIds": [
+        65
+      ]
+    },
+    {
+      "TotalDuration": 4829
+    },
+    {
+      "TotalDuration": 58830,
+      "FunctionIds": [
+        38,
+        46
+      ],
+      "NodeIds": [
+        68,
+        67
+      ]
+    },
+    {
+      "TotalDuration": 25272
+    },
+    {
+      "TotalDuration": 32300,
+      "FunctionIds": [
+        42,
+        43
+      ],
+      "NodeIds": [
+        143,
+        259
+      ]
+    },
+    {
+      "TotalDuration": 183638,
+      "FunctionIds": [
+        68,
+        37,
+        107
+      ],
+      "NodeIds": [
+        325,
+        169,
+        332
+      ]
+    },
+    {
+      "TotalDuration": 1882678,
+      "FunctionIds": [
+        35,
+        36,
+        43,
+        45
+      ],
+      "NodeIds": [
+        71,
+        73,
+        156,
+        78
+      ]
+    },
+    {
+      "TotalDuration": 1031990,
+      "FunctionIds": [
+        17,
+        51,
+        43
+      ],
+      "NodeIds": [
+        72,
+        166,
+        215
+      ]
+    },
+    {
+      "TotalDuration": 1005170
+    },
+    {
+      "TotalDuration": 363241,
+      "FunctionIds": [
+        50,
+        37,
+        38,
+        39,
+        53,
+        42,
+        43
+      ],
+      "NodeIds": [
+        209,
+        75,
+        74,
+        196,
+        167,
+        165,
+        213
+      ]
+    },
+    {
+      "TotalDuration": 289078,
+      "FunctionIds": [
+        54,
+        42,
+        43
+      ],
+      "NodeIds": [
+        168,
+        76,
+        225
+      ]
+    },
+    {
+      "TotalDuration": 61674
+    },
+    {
+      "TotalDuration": 52494,
+      "FunctionIds": [
+        43
+      ],
+      "NodeIds": [
+        77
+      ]
+    },
+    {
+      "TotalDuration": 51237
+    },
+    {
+      "TotalDuration": 477934,
+      "FunctionIds": [
+        38,
+        46
+      ],
+      "NodeIds": [
+        79,
+        122
+      ]
+    },
+    {
+      "TotalDuration": 312285,
+      "FunctionIds": [
+        54,
+        42,
+        43
+      ],
+      "NodeIds": [
+        127,
+        123,
+        170
+      ]
+    },
+    {
+      "TotalDuration": 431446,
+      "FunctionIds": [
+        49
+      ],
+      "NodeIds": [
+        81
+      ]
+    },
+    {
+      "TotalDuration": 431446,
+      "FunctionIds": [
+        34,
+        56,
+        41,
+        44
+      ],
+      "NodeIds": [
+        119,
+        137,
+        140,
+        82
+      ]
+    },
+    {
+      "TotalDuration": 395265,
+      "FunctionIds": [
+        35,
+        36,
+        43,
+        45
+      ],
+      "NodeIds": [
+        89,
+        83,
+        145,
+        86
+      ]
+    },
+    {
+      "TotalDuration": 106933,
+      "FunctionIds": [
+        37,
+        38,
+        53
+      ],
+      "NodeIds": [
+        91,
+        84,
+        118
+      ]
+    },
+    {
+      "TotalDuration": 84641,
+      "FunctionIds": [
+        42,
+        43
+      ],
+      "NodeIds": [
+        92,
+        85
+      ]
+    },
+    {
+      "TotalDuration": 2534
+    },
+    {
+      "TotalDuration": 146259,
+      "FunctionIds": [
+        38,
+        43,
+        93,
+        46
+      ],
+      "NodeIds": [
+        88,
+        139,
+        226,
+        87
+      ]
+    },
+    {
+      "TotalDuration": 60818
+    },
+    {
+      "TotalDuration": 75460,
+      "FunctionIds": [
+        54,
+        42
+      ],
+      "NodeIds": [
+        264,
+        149
+      ]
+    },
+    {
+      "TotalDuration": 139497,
+      "FunctionIds": [
+        17,
+        51,
+        57
+      ],
+      "NodeIds": [
+        90,
+        155,
+        138
+      ]
+    },
+    {
+      "TotalDuration": 133071
+    },
+    {
+      "TotalDuration": 18680
+    },
+    {
+      "TotalDuration": 9554,
+      "FunctionIds": [
+        43
+      ],
+      "NodeIds": [
+        93
+      ]
+    },
+    {
+      "TotalDuration": 9554
+    },
+    {
+      "TotalDuration": 2549
+    },
+    {
+      "TotalDuration": 14131
+    },
+    {
+      "TotalDuration": 5317,
+      "FunctionIds": [
+        43
+      ],
+      "NodeIds": [
+        97
+      ]
+    },
+    {
+      "TotalDuration": 5317
+    },
+    {
+      "TotalDuration": 10393
+    },
+    {
+      "TotalDuration": 13150,
+      "FunctionIds": [
+        17,
+        51
+      ],
+      "NodeIds": [
+        100,
+        208
+      ]
+    },
+    {
+      "TotalDuration": 10617
+    },
+    {
+      "TotalDuration": 66140,
+      "FunctionIds": [
+        49
+      ],
+      "NodeIds": [
+        102
+      ]
+    },
+    {
+      "TotalDuration": 66140,
+      "FunctionIds": [
+        34,
+        44
+      ],
+      "NodeIds": [
+        112,
+        103
+      ]
+    },
+    {
+      "TotalDuration": 63609,
+      "FunctionIds": [
+        35,
+        36,
+        45
+      ],
+      "NodeIds": [
+        106,
+        109,
+        104
+      ]
+    },
+    {
+      "TotalDuration": 20519,
+      "FunctionIds": [
+        38,
+        46
+      ],
+      "NodeIds": [
+        105,
+        108
+      ]
+    },
+    {
+      "TotalDuration": 12356
+    },
+    {
+      "TotalDuration": 20587,
+      "FunctionIds": [
+        17
+      ],
+      "NodeIds": [
+        107
+      ]
+    },
+    {
+      "TotalDuration": 20587
+    },
+    {
+      "TotalDuration": 5044
+    },
+    {
+      "TotalDuration": 22503,
+      "FunctionIds": [
+        37,
+        38
+      ],
+      "NodeIds": [
+        117,
+        110
+      ]
+    },
+    {
+      "TotalDuration": 18677,
+      "FunctionIds": [
+        42,
+        43
+      ],
+      "NodeIds": [
+        270,
+        111
+      ]
+    },
+    {
+      "TotalDuration": 1363
+    },
+    {
+      "TotalDuration": 2531,
+      "FunctionIds": [
+        35,
+        36
+      ],
+      "NodeIds": [
+        272,
+        113
+      ]
+    },
+    {
+      "TotalDuration": 1261,
+      "FunctionIds": [
+        38
+      ],
+      "NodeIds": [
+        114
+      ]
+    },
+    {
+      "TotalDuration": 1261,
+      "FunctionIds": [
+        42
+      ],
+      "NodeIds": [
+        115
+      ]
+    },
+    {
+      "TotalDuration": 1261,
+      "FunctionIds": [
+        43
+      ],
+      "NodeIds": [
+        116
+      ]
+    },
+    {
+      "TotalDuration": 1261
+    },
+    {
+      "TotalDuration": 3826
+    },
+    {
+      "TotalDuration": 2568
+    },
+    {
+      "TotalDuration": 24077,
+      "FunctionIds": [
+        35,
+        36
+      ],
+      "NodeIds": [
+        120,
+        125
+      ]
+    },
+    {
+      "TotalDuration": 13527,
+      "FunctionIds": [
+        17
+      ],
+      "NodeIds": [
+        121
+      ]
+    },
+    {
+      "TotalDuration": 13527
+    },
+    {
+      "TotalDuration": 155258
+    },
+    {
+      "TotalDuration": 38651,
+      "FunctionIds": [
+        43
+      ],
+      "NodeIds": [
+        124
+      ]
+    },
+    {
+      "TotalDuration": 38651
+    },
+    {
+      "TotalDuration": 9281,
+      "FunctionIds": [
+        37,
+        38,
+        39
+      ],
+      "NodeIds": [
+        126,
+        280,
+        146
+      ]
+    },
+    {
+      "TotalDuration": 6751
+    },
+    {
+      "TotalDuration": 5307
+    },
+    {
+      "TotalDuration": 7390,
+      "FunctionIds": [
+        34,
+        41
+      ],
+      "NodeIds": [
+        129,
+        265
+      ]
+    },
+    {
+      "TotalDuration": 6129,
+      "FunctionIds": [
+        35,
+        36
+      ],
+      "NodeIds": [
+        130,
+        260
+      ]
+    },
+    {
+      "TotalDuration": 3672,
+      "FunctionIds": [
+        17
+      ],
+      "NodeIds": [
+        131
+      ]
+    },
+    {
+      "TotalDuration": 3672
+    },
+    {
+      "TotalDuration": 1259,
+      "FunctionIds": [
+        43
+      ],
+      "NodeIds": [
+        133
+      ]
+    },
+    {
+      "TotalDuration": 1259
+    },
+    {
+      "TotalDuration": 8793
+    },
+    {
+      "TotalDuration": 133049,
+      "FunctionIds": [
+        179,
+        68,
+        107,
+        46
+      ],
+      "NodeIds": [
+        471,
+        412,
+        345,
+        136
+      ]
+    },
+    {
+      "TotalDuration": 111684
+    },
+    {
+      "TotalDuration": 1264
+    },
+    {
+      "TotalDuration": 1278
+    },
+    {
+      "TotalDuration": 2356
+    },
+    {
+      "TotalDuration": 8041
+    },
+    {
+      "TotalDuration": 1291,
+      "FunctionIds": [
+        43
+      ],
+      "NodeIds": [
+        142
+      ]
+    },
+    {
+      "TotalDuration": 1291
+    },
+    {
+      "TotalDuration": 5105,
+      "FunctionIds": [
+        43
+      ],
+      "NodeIds": [
+        144
+      ]
+    },
+    {
+      "TotalDuration": 5105
+    },
+    {
+      "TotalDuration": 1282
+    },
+    {
+      "TotalDuration": 1267,
+      "FunctionIds": [
+        40
+      ],
+      "NodeIds": [
+        147
+      ]
+    },
+    {
+      "TotalDuration": 1267,
+      "FunctionIds": [
+        58
+      ],
+      "NodeIds": [
+        148
+      ]
+    },
+    {
+      "TotalDuration": 1267
+    },
+    {
+      "TotalDuration": 6859,
+      "FunctionIds": [
+        43
+      ],
+      "NodeIds": [
+        150
+      ]
+    },
+    {
+      "TotalDuration": 6859
+    },
+    {
+      "TotalDuration": 6793
+    },
+    {
+      "TotalDuration": 12763,
+      "FunctionIds": [
+        9
+      ],
+      "NodeIds": [
+        153
+      ]
+    },
+    {
+      "TotalDuration": 12763,
+      "FunctionIds": [
+        59
+      ],
+      "NodeIds": [
+        154
+      ]
+    },
+    {
+      "TotalDuration": 12763,
+      "FunctionIds": [
+        135
+      ],
+      "NodeIds": [
+        354
+      ]
+    },
+    {
+      "TotalDuration": 2431
+    },
+    {
+      "TotalDuration": 1034
+    },
+    {
+      "TotalDuration": 12829,
+      "FunctionIds": [
+        61
+      ],
+      "NodeIds": [
+        158
+      ]
+    },
+    {
+      "TotalDuration": 12829,
+      "FunctionIds": [
+        118,
+        62
+      ],
+      "NodeIds": [
+        328,
+        159
+      ]
+    },
+    {
+      "TotalDuration": 9052
+    },
+    {
+      "TotalDuration": 1288644,
+      "FunctionIds": [
+        64
+      ],
+      "NodeIds": [
+        161
+      ]
+    },
+    {
+      "TotalDuration": 1284770,
+      "FunctionIds": [
+        65,
+        51,
+        71,
+        138,
+        126,
+        143
+      ],
+      "NodeIds": [
+        162,
+        470,
+        177,
+        365,
+        340,
+        378
+      ]
+    },
+    {
+      "TotalDuration": 1270,
+      "FunctionIds": [
+        66
+      ],
+      "NodeIds": [
+        163
+      ]
+    },
+    {
+      "TotalDuration": 1270
+    },
+    {
+      "TotalDuration": 2532,
+      "FunctionIds": [
+        8
+      ],
+      "NodeIds": [
+        214
+      ]
+    },
+    {
+      "TotalDuration": 1157
+    },
+    {
+      "TotalDuration": 6374
+    },
+    {
+      "TotalDuration": 3797
+    },
+    {
+      "TotalDuration": 6980
+    },
+    {
+      "TotalDuration": 154611
+    },
+    {
+      "TotalDuration": 5147
+    },
+    {
+      "TotalDuration": 5384
+    },
+    {
+      "TotalDuration": 1271
+    },
+    {
+      "TotalDuration": 1266,
+      "FunctionIds": [
+        31
+      ],
+      "NodeIds": [
+        174
+      ]
+    },
+    {
+      "TotalDuration": 1266,
+      "FunctionIds": [
+        32
+      ],
+      "NodeIds": [
+        175
+      ]
+    },
+    {
+      "TotalDuration": 1266,
+      "FunctionIds": [
+        70
+      ],
+      "NodeIds": [
+        176
+      ]
+    },
+    {
+      "TotalDuration": 1266
+    },
+    {
+      "TotalDuration": 1254770,
+      "FunctionIds": [
+        81,
+        51,
+        155,
+        134,
+        72,
+        88,
+        74,
+        90,
+        121,
+        152
+      ],
+      "NodeIds": [
+        192,
+        351,
+        403,
+        352,
+        178,
+        219,
+        181,
+        222,
+        331,
+        400
+      ]
+    },
+    {
+      "TotalDuration": 944363,
+      "FunctionIds": [
+        83,
+        73
+      ],
+      "NodeIds": [
+        437,
+        179
+      ]
+    },
+    {
+      "TotalDuration": 928154,
+      "FunctionIds": [
+        35,
+        87,
+        27,
+        125
+      ],
+      "NodeIds": [
+        198,
+        216,
+        180,
+        339
+      ]
+    },
+    {
+      "TotalDuration": 185866
+    },
+    {
+      "TotalDuration": 75081,
+      "FunctionIds": [
+        51,
+        139,
+        31
+      ],
+      "NodeIds": [
+        410,
+        366,
+        182
+      ]
+    },
+    {
+      "TotalDuration": 62290,
+      "FunctionIds": [
+        75
+      ],
+      "NodeIds": [
+        183
+      ]
+    },
+    {
+      "TotalDuration": 62290,
+      "FunctionIds": [
+        76
+      ],
+      "NodeIds": [
+        184
+      ]
+    },
+    {
+      "TotalDuration": 61016,
+      "FunctionIds": [
+        5,
+        77
+      ],
+      "NodeIds": [
+        185,
+        186
+      ]
+    },
+    {
+      "TotalDuration": 33963
+    },
+    {
+      "TotalDuration": 25980,
+      "FunctionIds": [
+        110,
+        5,
+        120,
+        124,
+        78,
+        31
+      ],
+      "NodeIds": [
+        310,
+        327,
+        330,
+        338,
+        187,
+        189
+      ]
+    },
+    {
+      "TotalDuration": 1635,
+      "FunctionIds": [
+        5
+      ],
+      "NodeIds": [
+        188
+      ]
+    },
+    {
+      "TotalDuration": 1635
+    },
+    {
+      "TotalDuration": 2310,
+      "FunctionIds": [
+        79
+      ],
+      "NodeIds": [
+        190
+      ]
+    },
+    {
+      "TotalDuration": 2310,
+      "FunctionIds": [
+        80
+      ],
+      "NodeIds": [
+        191
+      ]
+    },
+    {
+      "TotalDuration": 2310
+    },
+    {
+      "TotalDuration": 170114,
+      "FunctionIds": [
+        82
+      ],
+      "NodeIds": [
+        193
+      ]
+    },
+    {
+      "TotalDuration": 168850,
+      "FunctionIds": [
+        160,
+        97,
+        83,
+        84
+      ],
+      "NodeIds": [
+        424,
+        246,
+        194,
+        195
+      ]
+    },
+    {
+      "TotalDuration": 156508
+    },
+    {
+      "TotalDuration": 2500
+    },
+    {
+      "TotalDuration": 1292,
+      "FunctionIds": [
+        51
+      ],
+      "NodeIds": [
+        197
+      ]
+    },
+    {
+      "TotalDuration": 1292
+    },
+    {
+      "TotalDuration": 306854,
+      "FunctionIds": [
+        17,
+        51
+      ],
+      "NodeIds": [
+        199,
+        469
+      ]
+    },
+    {
+      "TotalDuration": 297084
+    },
+    {
+      "TotalDuration": 6451,
+      "FunctionIds": [
+        9
+      ],
+      "NodeIds": [
+        201
+      ]
+    },
+    {
+      "TotalDuration": 6451,
+      "FunctionIds": [
+        12
+      ],
+      "NodeIds": [
+        202
+      ]
+    },
+    {
+      "TotalDuration": 6451,
+      "FunctionIds": [
+        3
+      ],
+      "NodeIds": [
+        203
+      ]
+    },
+    {
+      "TotalDuration": 6451,
+      "FunctionIds": [
+        13
+      ],
+      "NodeIds": [
+        204
+      ]
+    },
+    {
+      "TotalDuration": 6451,
+      "FunctionIds": [
+        14,
+        31
+      ],
+      "NodeIds": [
+        266,
+        205
+      ]
+    },
+    {
+      "TotalDuration": 2673,
+      "FunctionIds": [
+        85
+      ],
+      "NodeIds": [
+        206
+      ]
+    },
+    {
+      "TotalDuration": 2673,
+      "FunctionIds": [
+        86,
+        70
+      ],
+      "NodeIds": [
+        207,
+        462
+      ]
+    },
+    {
+      "TotalDuration": 1268
+    },
+    {
+      "TotalDuration": 2533
+    },
+    {
+      "TotalDuration": 1266
+    },
+    {
+      "TotalDuration": 1259,
+      "FunctionIds": [
+        36
+      ],
+      "NodeIds": [
+        211
+      ]
+    },
+    {
+      "TotalDuration": 1259,
+      "FunctionIds": [
+        38
+      ],
+      "NodeIds": [
+        212
+      ]
+    },
+    {
+      "TotalDuration": 1259
+    },
+    {
+      "TotalDuration": 1183
+    },
+    {
+      "TotalDuration": 1264
+    },
+    {
+      "TotalDuration": 1271
+    },
+    {
+      "TotalDuration": 424443,
+      "FunctionIds": [
+        36,
+        45
+      ],
+      "NodeIds": [
+        217,
+        241
+      ]
+    },
+    {
+      "TotalDuration": 228437,
+      "FunctionIds": [
+        37,
+        38,
+        39,
+        53
+      ],
+      "NodeIds": [
+        221,
+        218,
+        472,
+        417
+      ]
+    },
+    {
+      "TotalDuration": 180863,
+      "FunctionIds": [
+        100,
+        54,
+        42
+      ],
+      "NodeIds": [
+        375,
+        247,
+        239
+      ]
+    },
+    {
+      "TotalDuration": 6268,
+      "FunctionIds": [
+        56,
+        89
+      ],
+      "NodeIds": [
+        464,
+        220
+      ]
+    },
+    {
+      "TotalDuration": 2432,
+      "FunctionIds": [
+        113
+      ],
+      "NodeIds": [
+        314
+      ]
+    },
+    {
+      "TotalDuration": 40913
+    },
+    {
+      "TotalDuration": 27795,
+      "FunctionIds": [
+        51,
+        54,
+        91
+      ],
+      "NodeIds": [
+        309,
+        350,
+        223
+      ]
+    },
+    {
+      "TotalDuration": 13855,
+      "FunctionIds": [
+        51,
+        131,
+        83,
+        8,
+        92
+      ],
+      "NodeIds": [
+        374,
+        397,
+        474,
+        369,
+        224
+      ]
+    },
+    {
+      "TotalDuration": 1259
+    },
+    {
+      "TotalDuration": 2523
+    },
+    {
+      "TotalDuration": 3812,
+      "FunctionIds": [
+        43
+      ],
+      "NodeIds": [
+        227
+      ]
+    },
+    {
+      "TotalDuration": 3812
+    },
+    {
+      "TotalDuration": 84469,
+      "FunctionIds": [
+        44
+      ],
+      "NodeIds": [
+        229
+      ]
+    },
+    {
+      "TotalDuration": 84469,
+      "FunctionIds": [
+        35,
+        36,
+        45
+      ],
+      "NodeIds": [
+        236,
+        230,
+        234
+      ]
+    },
+    {
+      "TotalDuration": 28549,
+      "FunctionIds": [
+        37,
+        38
+      ],
+      "NodeIds": [
+        275,
+        231
+      ]
+    },
+    {
+      "TotalDuration": 25011,
+      "FunctionIds": [
+        42
+      ],
+      "NodeIds": [
+        232
+      ]
+    },
+    {
+      "TotalDuration": 8656,
+      "FunctionIds": [
+        43
+      ],
+      "NodeIds": [
+        233
+      ]
+    },
+    {
+      "TotalDuration": 8656
+    },
+    {
+      "TotalDuration": 25113,
+      "FunctionIds": [
+        38,
+        46
+      ],
+      "NodeIds": [
+        235,
+        238
+      ]
+    },
+    {
+      "TotalDuration": 15145,
+      "FunctionIds": [
+        100,
+        54
+      ],
+      "NodeIds": [
+        295,
+        296
+      ]
+    },
+    {
+      "TotalDuration": 30807,
+      "FunctionIds": [
+        17,
+        51
+      ],
+      "NodeIds": [
+        237,
+        274
+      ]
+    },
+    {
+      "TotalDuration": 28282
+    },
+    {
+      "TotalDuration": 9968
+    },
+    {
+      "TotalDuration": 5045,
+      "FunctionIds": [
+        43
+      ],
+      "NodeIds": [
+        240
+      ]
+    },
+    {
+      "TotalDuration": 5045
+    },
+    {
+      "TotalDuration": 194748,
+      "FunctionIds": [
+        53,
+        38,
+        46
+      ],
+      "NodeIds": [
+        326,
+        242,
+        243
+      ]
+    },
+    {
+      "TotalDuration": 126241,
+      "FunctionIds": [
+        100,
+        54,
+        42
+      ],
+      "NodeIds": [
+        463,
+        413,
+        475
+      ]
+    },
+    {
+      "TotalDuration": 61702
+    },
+    {
+      "TotalDuration": 3758,
+      "FunctionIds": [
+        96
+      ],
+      "NodeIds": [
+        245
+      ]
+    },
+    {
+      "TotalDuration": 1267
+    },
+    {
+      "TotalDuration": 1258
+    },
+    {
+      "TotalDuration": 2577
+    },
+    {
+      "TotalDuration": 2580
+    },
+    {
+      "TotalDuration": 1268,
+      "FunctionIds": [
+        3
+      ],
+      "NodeIds": [
+        250
+      ]
+    },
+    {
+      "TotalDuration": 1268,
+      "FunctionIds": [
+        13
+      ],
+      "NodeIds": [
+        251
+      ]
+    },
+    {
+      "TotalDuration": 1268,
+      "FunctionIds": [
+        14
+      ],
+      "NodeIds": [
+        252
+      ]
+    },
+    {
+      "TotalDuration": 1268,
+      "FunctionIds": [
+        98
+      ],
+      "NodeIds": [
+        253
+      ]
+    },
+    {
+      "TotalDuration": 1268,
+      "FunctionIds": [
+        99
+      ],
+      "NodeIds": [
+        254
+      ]
+    },
+    {
+      "TotalDuration": 1268
+    },
+    {
+      "TotalDuration": 99184,
+      "FunctionIds": [
+        15
+      ],
+      "NodeIds": [
+        256
+      ]
+    },
+    {
+      "TotalDuration": 99184,
+      "FunctionIds": [
+        16,
+        47
+      ],
+      "NodeIds": [
+        257,
+        282
+      ]
+    },
+    {
+      "TotalDuration": 71589,
+      "FunctionIds": [
+        17,
+        51
+      ],
+      "NodeIds": [
+        258,
+        357
+      ]
+    },
+    {
+      "TotalDuration": 66538
+    },
+    {
+      "TotalDuration": 1279
+    },
+    {
+      "TotalDuration": 2457,
+      "FunctionIds": [
+        38
+      ],
+      "NodeIds": [
+        261
+      ]
+    },
+    {
+      "TotalDuration": 2457
+    },
+    {
+      "TotalDuration": 3583
+    },
+    {
+      "TotalDuration": 1261
+    },
+    {
+      "TotalDuration": 1300
+    },
+    {
+      "TotalDuration": 1261
+    },
+    {
+      "TotalDuration": 3778,
+      "FunctionIds": [
+        15
+      ],
+      "NodeIds": [
+        267
+      ]
+    },
+    {
+      "TotalDuration": 3778,
+      "FunctionIds": [
+        16
+      ],
+      "NodeIds": [
+        268
+      ]
+    },
+    {
+      "TotalDuration": 3778,
+      "FunctionIds": [
+        51
+      ],
+      "NodeIds": [
+        269
+      ]
+    },
+    {
+      "TotalDuration": 3778
+    },
+    {
+      "TotalDuration": 1258,
+      "FunctionIds": [
+        43
+      ],
+      "NodeIds": [
+        271
+      ]
+    },
+    {
+      "TotalDuration": 1258
+    },
+    {
+      "TotalDuration": 1270,
+      "FunctionIds": [
+        17
+      ],
+      "NodeIds": [
+        273
+      ]
+    },
+    {
+      "TotalDuration": 1270
+    },
+    {
+      "TotalDuration": 1259
+    },
+    {
+      "TotalDuration": 3538
+    },
+    {
+      "TotalDuration": 8622
+    },
+    {
+      "TotalDuration": 1255,
+      "FunctionIds": [
+        35
+      ],
+      "NodeIds": [
+        278
+      ]
+    },
+    {
+      "TotalDuration": 1255,
+      "FunctionIds": [
+        17
+      ],
+      "NodeIds": [
+        279
+      ]
+    },
+    {
+      "TotalDuration": 1255
+    },
+    {
+      "TotalDuration": 1263,
+      "FunctionIds": [
+        43
+      ],
+      "NodeIds": [
+        281
+      ]
+    },
+    {
+      "TotalDuration": 1263
+    },
+    {
+      "TotalDuration": 26339,
+      "FunctionIds": [
+        37
+      ],
+      "NodeIds": [
+        283
+      ]
+    },
+    {
+      "TotalDuration": 26339
+    },
+    {
+      "TotalDuration": 9973,
+      "FunctionIds": [
+        102
+      ],
+      "NodeIds": [
+        285
+      ]
+    },
+    {
+      "TotalDuration": 9973,
+      "FunctionIds": [
+        103
+      ],
+      "NodeIds": [
+        286
+      ]
+    },
+    {
+      "TotalDuration": 8710,
+      "FunctionIds": [
+        131,
+        104
+      ],
+      "NodeIds": [
+        347,
+        287
+      ]
+    },
+    {
+      "TotalDuration": 6143,
+      "FunctionIds": [
+        51
+      ],
+      "NodeIds": [
+        425
+      ]
+    },
+    {
+      "TotalDuration": 329286,
+      "FunctionIds": [
+        106
+      ],
+      "NodeIds": [
+        289
+      ]
+    },
+    {
+      "TotalDuration": 329286,
+      "FunctionIds": [
+        178,
+        99,
+        28,
+        15
+      ],
+      "NodeIds": [
+        468,
+        419,
+        290,
+        298
+      ]
+    },
+    {
+      "TotalDuration": 304850,
+      "FunctionIds": [
+        16,
+        55,
+        47
+      ],
+      "NodeIds": [
+        293,
+        301,
+        291
+      ]
+    },
+    {
+      "TotalDuration": 76092,
+      "FunctionIds": [
+        68,
+        37,
+        107,
+        142
+      ],
+      "NodeIds": [
+        377,
+        292,
+        303,
+        372
+      ]
+    },
+    {
+      "TotalDuration": 64401
+    },
+    {
+      "TotalDuration": 166672,
+      "FunctionIds": [
+        17,
+        51,
+        68
+      ],
+      "NodeIds": [
+        294,
+        297,
+        364
+      ]
+    },
+    {
+      "TotalDuration": 154626
+    },
+    {
+      "TotalDuration": 1271
+    },
+    {
+      "TotalDuration": 1258
+    },
+    {
+      "TotalDuration": 2596
+    },
+    {
+      "TotalDuration": 18079,
+      "FunctionIds": [
+        16,
+        47
+      ],
+      "NodeIds": [
+        299,
+        379
+      ]
+    },
+    {
+      "TotalDuration": 12920,
+      "FunctionIds": [
+        17
+      ],
+      "NodeIds": [
+        300
+      ]
+    },
+    {
+      "TotalDuration": 12920
+    },
+    {
+      "TotalDuration": 60943,
+      "FunctionIds": [
+        107,
+        46
+      ],
+      "NodeIds": [
+        435,
+        302
+      ]
+    },
+    {
+      "TotalDuration": 48001
+    },
+    {
+      "TotalDuration": 3827,
+      "FunctionIds": [
+        54
+      ],
+      "NodeIds": [
+        408
+      ]
+    },
+    {
+      "TotalDuration": 1192,
+      "FunctionIds": [
+        108
+      ],
+      "NodeIds": [
+        305
+      ]
+    },
+    {
+      "TotalDuration": 1192,
+      "FunctionIds": [
+        109
+      ],
+      "NodeIds": [
+        306
+      ]
+    },
+    {
+      "TotalDuration": 1192
+    },
+    {
+      "TotalDuration": 7252,
+      "FunctionIds": [
+        51,
+        8,
+        92
+      ],
+      "NodeIds": [
+        321,
+        308,
+        465
+      ]
+    },
+    {
+      "TotalDuration": 1256
+    },
+    {
+      "TotalDuration": 6498
+    },
+    {
+      "TotalDuration": 9846,
+      "FunctionIds": [
+        141,
+        31
+      ],
+      "NodeIds": [
+        371,
+        311
+      ]
+    },
+    {
+      "TotalDuration": 4826,
+      "FunctionIds": [
+        111
+      ],
+      "NodeIds": [
+        312
+      ]
+    },
+    {
+      "TotalDuration": 4826,
+      "FunctionIds": [
+        112
+      ],
+      "NodeIds": [
+        313
+      ]
+    },
+    {
+      "TotalDuration": 4826
+    },
+    {
+      "TotalDuration": 1329,
+      "FunctionIds": [
+        114
+      ],
+      "NodeIds": [
+        315
+      ]
+    },
+    {
+      "TotalDuration": 1329
+    },
+    {
+      "TotalDuration": 2334,
+      "FunctionIds": [
+        23
+      ],
+      "NodeIds": [
+        317
+      ]
+    },
+    {
+      "TotalDuration": 2334,
+      "FunctionIds": [
+        115
+      ],
+      "NodeIds": [
+        318
+      ]
+    },
+    {
+      "TotalDuration": 2334,
+      "FunctionIds": [
+        62
+      ],
+      "NodeIds": [
+        319
+      ]
+    },
+    {
+      "TotalDuration": 2334
+    },
+    {
+      "TotalDuration": 2639
+    },
+    {
+      "TotalDuration": 1265
+    },
+    {
+      "TotalDuration": 10289,
+      "FunctionIds": [
+        116
+      ],
+      "NodeIds": [
+        323
+      ]
+    },
+    {
+      "TotalDuration": 10289,
+      "FunctionIds": [
+        117
+      ],
+      "NodeIds": [
+        324
+      ]
+    },
+    {
+      "TotalDuration": 10289,
+      "FunctionIds": [
+        170,
+        31
+      ],
+      "NodeIds": [
+        442,
+        439
+      ]
+    },
+    {
+      "TotalDuration": 10137
+    },
+    {
+      "TotalDuration": 1261
+    },
+    {
+      "TotalDuration": 7465
+    },
+    {
+      "TotalDuration": 1256,
+      "FunctionIds": [
+        119
+      ],
+      "NodeIds": [
+        329
+      ]
+    },
+    {
+      "TotalDuration": 1256
+    },
+    {
+      "TotalDuration": 1257
+    },
+    {
+      "TotalDuration": 3990
+    },
+    {
+      "TotalDuration": 12803,
+      "FunctionIds": [
+        100,
+        54
+      ],
+      "NodeIds": [
+        370,
+        333
+      ]
+    },
+    {
+      "TotalDuration": 10192
+    },
+    {
+      "TotalDuration": 7757
+    },
+    {
+      "TotalDuration": 2518,
+      "FunctionIds": [
+        123
+      ],
+      "NodeIds": [
+        336
+      ]
+    },
+    {
+      "TotalDuration": 2518
+    },
+    {
+      "TotalDuration": 5065
+    },
+    {
+      "TotalDuration": 1245
+    },
+    {
+      "TotalDuration": 4719
+    },
+    {
+      "TotalDuration": 18102,
+      "FunctionIds": [
+        127
+      ],
+      "NodeIds": [
+        341
+      ]
+    },
+    {
+      "TotalDuration": 18102,
+      "FunctionIds": [
+        128
+      ],
+      "NodeIds": [
+        342
+      ]
+    },
+    {
+      "TotalDuration": 16842,
+      "FunctionIds": [
+        129,
+        132
+      ],
+      "NodeIds": [
+        343,
+        348
+      ]
+    },
+    {
+      "TotalDuration": 14311,
+      "FunctionIds": [
+        130
+      ],
+      "NodeIds": [
+        344
+      ]
+    },
+    {
+      "TotalDuration": 14311
+    },
+    {
+      "TotalDuration": 2592,
+      "FunctionIds": [
+        100,
+        54
+      ],
+      "NodeIds": [
+        434,
+        346
+      ]
+    },
+    {
+      "TotalDuration": 1329
+    },
+    {
+      "TotalDuration": 1309
+    },
+    {
+      "TotalDuration": 1258,
+      "FunctionIds": [
+        133
+      ],
+      "NodeIds": [
+        349
+      ]
+    },
+    {
+      "TotalDuration": 1258
+    },
+    {
+      "TotalDuration": 1281
+    },
+    {
+      "TotalDuration": 3881
+    },
+    {
+      "TotalDuration": 6403,
+      "FunctionIds": [
+        51,
+        139
+      ],
+      "NodeIds": [
+        353,
+        466
+      ]
+    },
+    {
+      "TotalDuration": 3807
+    },
+    {
+      "TotalDuration": 6311,
+      "FunctionIds": [
+        145,
+        133
+      ],
+      "NodeIds": [
+        390,
+        355
+      ]
+    },
+    {
+      "TotalDuration": 3801,
+      "FunctionIds": [
+        51,
+        83,
+        8
+      ],
+      "NodeIds": [
+        411,
+        423,
+        356
+      ]
+    },
+    {
+      "TotalDuration": 1267
+    },
+    {
+      "TotalDuration": 1257
+    },
+    {
+      "TotalDuration": 1255,
+      "FunctionIds": [
+        23
+      ],
+      "NodeIds": [
+        359
+      ]
+    },
+    {
+      "TotalDuration": 1255,
+      "FunctionIds": [
+        136
+      ],
+      "NodeIds": [
+        360
+      ]
+    },
+    {
+      "TotalDuration": 1255,
+      "FunctionIds": [
+        137
+      ],
+      "NodeIds": [
+        361
+      ]
+    },
+    {
+      "TotalDuration": 1255,
+      "FunctionIds": [
+        5
+      ],
+      "NodeIds": [
+        362
+      ]
+    },
+    {
+      "TotalDuration": 1255
+    },
+    {
+      "TotalDuration": 1265
+    },
+    {
+      "TotalDuration": 6684
+    },
+    {
+      "TotalDuration": 3924,
+      "FunctionIds": [
+        158
+      ],
+      "NodeIds": [
+        414
+      ]
+    },
+    {
+      "TotalDuration": 8885,
+      "FunctionIds": [
+        140
+      ],
+      "NodeIds": [
+        367
+      ]
+    },
+    {
+      "TotalDuration": 5105,
+      "FunctionIds": [
+        162
+      ],
+      "NodeIds": [
+        428
+      ]
+    },
+    {
+      "TotalDuration": 1266
+    },
+    {
+      "TotalDuration": 3696
+    },
+    {
+      "TotalDuration": 2611
+    },
+    {
+      "TotalDuration": 1358
+    },
+    {
+      "TotalDuration": 1445,
+      "FunctionIds": [
+        51
+      ],
+      "NodeIds": [
+        373
+      ]
+    },
+    {
+      "TotalDuration": 1445
+    },
+    {
+      "TotalDuration": 3784
+    },
+    {
+      "TotalDuration": 2539
+    },
+    {
+      "TotalDuration": 3809
+    },
+    {
+      "TotalDuration": 1271
+    },
+    {
+      "TotalDuration": 2841
+    },
+    {
+      "TotalDuration": 5159,
+      "FunctionIds": [
+        37,
+        142
+      ],
+      "NodeIds": [
+        380,
+        406
+      ]
+    },
+    {
+      "TotalDuration": 3797
+    },
+    {
+      "TotalDuration": 1269,
+      "FunctionIds": [
+        16
+      ],
+      "NodeIds": [
+        382
+      ]
+    },
+    {
+      "TotalDuration": 1269,
+      "FunctionIds": [
+        17
+      ],
+      "NodeIds": [
+        383
+      ]
+    },
+    {
+      "TotalDuration": 1269
+    },
+    {
+      "TotalDuration": 203743,
+      "FunctionIds": [
+        28
+      ],
+      "NodeIds": [
+        385
+      ]
+    },
+    {
+      "TotalDuration": 203743,
+      "FunctionIds": [
+        16,
+        55,
+        47
+      ],
+      "NodeIds": [
+        388,
+        391,
+        386
+      ]
+    },
+    {
+      "TotalDuration": 40351,
+      "FunctionIds": [
+        37,
+        107,
+        142
+      ],
+      "NodeIds": [
+        387,
+        426,
+        421
+      ]
+    },
+    {
+      "TotalDuration": 36292
+    },
+    {
+      "TotalDuration": 134024,
+      "FunctionIds": [
+        17,
+        51,
+        68
+      ],
+      "NodeIds": [
+        389,
+        460,
+        461
+      ]
+    },
+    {
+      "TotalDuration": 130318
+    },
+    {
+      "TotalDuration": 1251
+    },
+    {
+      "TotalDuration": 29368,
+      "FunctionIds": [
+        68,
+        46
+      ],
+      "NodeIds": [
+        438,
+        392
+      ]
+    },
+    {
+      "TotalDuration": 24277
+    },
+    {
+      "TotalDuration": 1256,
+      "FunctionIds": [
+        147
+      ],
+      "NodeIds": [
+        394
+      ]
+    },
+    {
+      "TotalDuration": 1256,
+      "FunctionIds": [
+        148
+      ],
+      "NodeIds": [
+        395
+      ]
+    },
+    {
+      "TotalDuration": 1256
+    },
+    {
+      "TotalDuration": 4011
+    },
+    {
+      "TotalDuration": 1304
+    },
+    {
+      "TotalDuration": 6135,
+      "FunctionIds": [
+        151,
+        156
+      ],
+      "NodeIds": [
+        399,
+        404
+      ]
+    },
+    {
+      "TotalDuration": 1274
+    },
+    {
+      "TotalDuration": 4307
+    },
+    {
+      "TotalDuration": 10069,
+      "FunctionIds": [
+        163,
+        54,
+        154
+      ],
+      "NodeIds": [
+        429,
+        409,
+        402
+      ]
+    },
+    {
+      "TotalDuration": 3676,
+      "FunctionIds": [
+        51
+      ],
+      "NodeIds": [
+        405
+      ]
+    },
+    {
+      "TotalDuration": 1269
+    },
+    {
+      "TotalDuration": 4861
+    },
+    {
+      "TotalDuration": 1259
+    },
+    {
+      "TotalDuration": 1362,
+      "FunctionIds": [
+        157
+      ],
+      "NodeIds": [
+        407
+      ]
+    },
+    {
+      "TotalDuration": 1362
+    },
+    {
+      "TotalDuration": 2560
+    },
+    {
+      "TotalDuration": 1257
+    },
+    {
+      "TotalDuration": 1266
+    },
+    {
+      "TotalDuration": 1277
+    },
+    {
+      "TotalDuration": 2519
+    },
+    {
+      "TotalDuration": 1255
+    },
+    {
+      "TotalDuration": 1270,
+      "FunctionIds": [
+        91
+      ],
+      "NodeIds": [
+        415
+      ]
+    },
+    {
+      "TotalDuration": 1270,
+      "FunctionIds": [
+        131
+      ],
+      "NodeIds": [
+        416
+      ]
+    },
+    {
+      "TotalDuration": 1270
+    },
+    {
+      "TotalDuration": 1277
+    },
+    {
+      "TotalDuration": 2313
+    },
+    {
+      "TotalDuration": 2541
+    },
+    {
+      "TotalDuration": 1314
+    },
+    {
+      "TotalDuration": 2660,
+      "FunctionIds": [
+        51
+      ],
+      "NodeIds": [
+        422
+      ]
+    },
+    {
+      "TotalDuration": 2660
+    },
+    {
+      "TotalDuration": 1257
+    },
+    {
+      "TotalDuration": 1297
+    },
+    {
+      "TotalDuration": 1059
+    },
+    {
+      "TotalDuration": 1399
+    },
+    {
+      "TotalDuration": 1219
+    },
+    {
+      "TotalDuration": 1265
+    },
+    {
+      "TotalDuration": 2545
+    },
+    {
+      "TotalDuration": 1275,
+      "FunctionIds": [
+        165
+      ],
+      "NodeIds": [
+        431
+      ]
+    },
+    {
+      "TotalDuration": 1275
+    },
+    {
+      "TotalDuration": 11384
+    },
+    {
+      "TotalDuration": 1259
+    },
+    {
+      "TotalDuration": 1263
+    },
+    {
+      "TotalDuration": 1262,
+      "FunctionIds": [
+        100
+      ],
+      "NodeIds": [
+        436
+      ]
+    },
+    {
+      "TotalDuration": 1262
+    },
+    {
+      "TotalDuration": 7283
+    },
+    {
+      "TotalDuration": 1258
+    },
+    {
+      "TotalDuration": 2528,
+      "FunctionIds": [
+        168,
+        171
+      ],
+      "NodeIds": [
+        440,
+        443
+      ]
+    },
+    {
+      "TotalDuration": 1262,
+      "FunctionIds": [
+        169
+      ],
+      "NodeIds": [
+        441
+      ]
+    },
+    {
+      "TotalDuration": 1262
+    },
+    {
+      "TotalDuration": 1361
+    },
+    {
+      "TotalDuration": 1266,
+      "FunctionIds": [
+        172
+      ],
+      "NodeIds": [
+        444
+      ]
+    },
+    {
+      "TotalDuration": 1266,
+      "FunctionIds": [
+        31
+      ],
+      "NodeIds": [
+        445
+      ]
+    },
+    {
+      "TotalDuration": 1266,
+      "FunctionIds": [
+        173
+      ],
+      "NodeIds": [
+        446
+      ]
+    },
+    {
+      "TotalDuration": 1266,
+      "FunctionIds": [
+        174
+      ],
+      "NodeIds": [
+        447
+      ]
+    },
+    {
+      "TotalDuration": 1266
+    },
+    {
+      "TotalDuration": 5029,
+      "FunctionIds": [
+        1
+      ],
+      "NodeIds": [
+        449
+      ]
+    },
+    {
+      "TotalDuration": 5029,
+      "FunctionIds": [
+        175
+      ],
+      "NodeIds": [
+        450
+      ]
+    },
+    {
+      "TotalDuration": 5029,
+      "FunctionIds": [
+        8
+      ],
+      "NodeIds": [
+        451
+      ]
+    },
+    {
+      "TotalDuration": 1269
+    },
+    {
+      "TotalDuration": 2543,
+      "FunctionIds": [
+        176,
+        117
+      ],
+      "NodeIds": [
+        453,
+        456
+      ]
+    },
+    {
+      "TotalDuration": 1277,
+      "FunctionIds": [
+        31
+      ],
+      "NodeIds": [
+        454
+      ]
+    },
+    {
+      "TotalDuration": 1277,
+      "FunctionIds": [
+        177
+      ],
+      "NodeIds": [
+        455
+      ]
+    },
+    {
+      "TotalDuration": 1277
+    },
+    {
+      "TotalDuration": 1266,
+      "FunctionIds": [
+        31
+      ],
+      "NodeIds": [
+        457
+      ]
+    },
+    {
+      "TotalDuration": 1266,
+      "FunctionIds": [
+        171
+      ],
+      "NodeIds": [
+        458
+      ]
+    },
+    {
+      "TotalDuration": 1266,
+      "FunctionIds": [
+        172
+      ],
+      "NodeIds": [
+        459
+      ]
+    },
+    {
+      "TotalDuration": 1266
+    },
+    {
+      "TotalDuration": 1152
+    },
+    {
+      "TotalDuration": 1265
+    },
+    {
+      "TotalDuration": 1405
+    },
+    {
+      "TotalDuration": 2980
+    },
+    {
+      "TotalDuration": 1293
+    },
+    {
+      "TotalDuration": 1094
+    },
+    {
+      "TotalDuration": 1337,
+      "FunctionIds": [
+        140
+      ],
+      "NodeIds": [
+        467
+      ]
+    },
+    {
+      "TotalDuration": 1337
+    },
+    {
+      "TotalDuration": 1269
+    },
+    {
+      "TotalDuration": 3836
+    },
+    {
+      "TotalDuration": 1285
+    },
+    {
+      "TotalDuration": 2181
+    },
+    {
+      "TotalDuration": 2528,
+      "FunctionIds": [
+        51
+      ],
+      "NodeIds": [
+        473
+      ]
+    },
+    {
+      "TotalDuration": 2528
+    },
+    {
+      "TotalDuration": 1284
+    },
+    {
+      "TotalDuration": 1255,
+      "FunctionIds": [
+        43
+      ],
+      "NodeIds": [
+        476
+      ]
+    },
+    {
+      "TotalDuration": 1255
+    },
+    {
+      "TotalDuration": 5035,
+      "FunctionIds": [
+        181
+      ],
+      "NodeIds": [
+        478
+      ]
+    },
+    {
+      "TotalDuration": 5035,
+      "FunctionIds": [
+        31
+      ],
+      "NodeIds": [
+        479
+      ]
+    },
+    {
+      "TotalDuration": 5035,
+      "FunctionIds": [
+        182
+      ],
+      "NodeIds": [
+        480
+      ]
+    },
+    {
+      "TotalDuration": 5035
+    }
+  ],
+  "Functions": [
+    {
+      "Name": "Unknown",
+      "Flags": 0,
+      "TotalDuration": 337094
+    },
+    {
+      "Source": "AssistantCommand",
+      "Line": 105,
+      "Flags": 0,
+      "TotalDuration": 332065
+    },
+    {
+      "Source": "[C]",
+      "Name": "xpcall",
+      "Flags": 0,
+      "TotalDuration": 1805866
+    },
+    {
+      "Source": "AssistantCommand",
+      "Line": 107,
+      "Flags": 0,
+      "TotalDuration": 327030
+    },
+    {
+      "Source": "[C]",
+      "Name": "Instance.SetAttribute",
+      "Flags": 0,
+      "TotalDuration": 46852
+    },
+    {
+      "Source": "AssistantCommand",
+      "Name": "snapshot",
+      "Line": 35,
+      "Flags": 0,
+      "TotalDuration": 14709
+    },
+    {
+      "Source": "[C]",
+      "Name": "Instance.GetAttributes",
+      "Flags": 0,
+      "TotalDuration": 9574
+    },
+    {
+      "Source": "[C]",
+      "Name": "Instance.FindFirstChild",
+      "Flags": 0,
+      "TotalDuration": 23221
+    },
+    {
+      "Name": "GameManager",
+      "Flags": 0,
+      "TotalDuration": 5741040
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Line": 1848,
+      "Flags": 0,
+      "TotalDuration": 2878892
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "_centreRoute",
+      "Line": 1263,
+      "Flags": 0,
+      "TotalDuration": 2789376
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Line": 1981,
+      "Flags": 0,
+      "TotalDuration": 1465693
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "runRequest",
+      "Line": 1983,
+      "Flags": 0,
+      "TotalDuration": 1465693
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "_centreRoute",
+      "Line": 1333,
+      "Flags": 0,
+      "TotalDuration": 1258008
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "_standableAt",
+      "Line": 1009,
+      "Flags": 0,
+      "TotalDuration": 136058
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "_surfaceAt",
+      "Line": 574,
+      "Flags": 0,
+      "TotalDuration": 891520
+    },
+    {
+      "Source": "[C]",
+      "Name": "WorldRoot.Raycast",
+      "Flags": 0,
+      "TotalDuration": 2484735
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Controller",
+      "Line": 767,
+      "Flags": 0,
+      "TotalDuration": 68139
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Controller",
+      "Name": "heartbeat",
+      "Line": 668,
+      "Flags": 0,
+      "TotalDuration": 65576
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Controller",
+      "Name": "updateModel",
+      "Line": 595,
+      "Flags": 0,
+      "TotalDuration": 54122
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Controller",
+      "Name": "motion",
+      "Line": 127,
+      "Flags": 0,
+      "TotalDuration": 19215
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Rig Adapter",
+      "Name": "Motion",
+      "Line": 107,
+      "Flags": 0,
+      "TotalDuration": 4226
+    },
+    {
+      "Name": "TEMP_Pump3NativeServer",
+      "Flags": 0,
+      "TotalDuration": 21777
+    },
+    {
+      "Source": "ServerScriptService.TEMP_Pump3NativeServer",
+      "Line": 86,
+      "Flags": 0,
+      "TotalDuration": 13143
+    },
+    {
+      "Source": "ServerScriptService.TEMP_Pump3NativeServer",
+      "Line": 87,
+      "Flags": 0,
+      "TotalDuration": 13143
+    },
+    {
+      "Source": "ServerScriptService.TEMP_Pump3NativeServer",
+      "Name": "place",
+      "Line": 51,
+      "Flags": 0,
+      "TotalDuration": 1294
+    },
+    {
+      "Source": "[C]",
+      "Name": "PVInstance.PivotTo",
+      "Flags": 0,
+      "TotalDuration": 187160
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "_walkingEdgeClear",
+      "Line": 720,
+      "Flags": 0,
+      "TotalDuration": 1314056
+    },
+    {
+      "Name": "ServerStarterScript",
+      "Flags": 0,
+      "TotalDuration": 2545
+    },
+    {
+      "Source": "CorePackages.Packages._Index.Rodux.Rodux.Store",
+      "Line": 99,
+      "Flags": 0,
+      "TotalDuration": 2545
+    },
+    {
+      "Source": "[C]",
+      "Name": "pcall",
+      "Flags": 0,
+      "TotalDuration": 85896
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Line": 1855,
+      "Flags": 0,
+      "TotalDuration": 2425
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "_centredWaypoint",
+      "Line": 951,
+      "Flags": 0,
+      "TotalDuration": 200405
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "_standableAt",
+      "Line": 939,
+      "Flags": 0,
+      "TotalDuration": 238474
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "_surfaceAt",
+      "Line": 507,
+      "Flags": 0,
+      "TotalDuration": 1724701
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "_bodyBoxClear",
+      "Line": 581,
+      "Flags": 0,
+      "TotalDuration": 893303
+    },
+    {
+      "Source": "[C]",
+      "Name": "WorldRoot.GetPartBoundsInBox",
+      "Flags": 0,
+      "TotalDuration": 440964
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "_refreshObstacleFilters",
+      "Line": 498,
+      "Flags": 0,
+      "TotalDuration": 1279898
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "_isSteppable",
+      "Line": 559,
+      "Flags": 0,
+      "TotalDuration": 6367
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "partTopY",
+      "Line": 130,
+      "Flags": 0,
+      "TotalDuration": 2547
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "corridorCentreSeed",
+      "Line": 871,
+      "Flags": 0,
+      "TotalDuration": 16061
+    },
+    {
+      "Source": "[C]",
+      "Flags": 0,
+      "TotalDuration": 146516
+    },
+    {
+      "Source": "GC",
+      "Name": "GC",
+      "Flags": 0,
+      "TotalDuration": 169175
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "_walkingEdgeClear",
+      "Line": 650,
+      "Flags": 0,
+      "TotalDuration": 2586252
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "_bodySweepClear",
+      "Line": 597,
+      "Flags": 0,
+      "TotalDuration": 923403
+    },
+    {
+      "Source": "[C]",
+      "Name": "WorldRoot.Blockcast",
+      "Flags": 0,
+      "TotalDuration": 502024
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "_bodyBoxClear",
+      "Line": 649,
+      "Flags": 0,
+      "TotalDuration": 331579
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "_clearanceDetour",
+      "Line": 1239,
+      "Flags": 0,
+      "TotalDuration": 497586
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "_clearanceDetourAtStep",
+      "Line": 1047,
+      "Flags": 0,
+      "TotalDuration": 497586
+    },
+    {
+      "Source": "[C]",
+      "Name": "Instance.Name",
+      "Flags": 0,
+      "TotalDuration": 3815
+    },
+    {
+      "Source": "[C]",
+      "Name": "Instance.GetAttribute",
+      "Flags": 0,
+      "TotalDuration": 98737
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "corridorContaining",
+      "Line": 895,
+      "Flags": 0,
+      "TotalDuration": 10393
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "_bodyVolume",
+      "Line": 568,
+      "Flags": 0,
+      "TotalDuration": 8903
+    },
+    {
+      "Source": "[C]",
+      "Name": "Players.GetPlayers",
+      "Flags": 0,
+      "TotalDuration": 35296
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "_bodySweepClear",
+      "Line": 666,
+      "Flags": 0,
+      "TotalDuration": 223360
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "_positionAllowed",
+      "Line": 492,
+      "Flags": 0,
+      "TotalDuration": 2557
+    },
+    {
+      "Source": "[C]",
+      "Name": "BasePart.CanCollide",
+      "Flags": 0,
+      "TotalDuration": 1278
+    },
+    {
+      "Source": "[C]",
+      "Name": "BasePart.Size",
+      "Flags": 0,
+      "TotalDuration": 1267
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Observer",
+      "Line": 228,
+      "Flags": 0,
+      "TotalDuration": 12763
+    },
+    {
+      "Source": "ServerScriptService.GameManager",
+      "Line": 2963,
+      "Flags": 0,
+      "TotalDuration": 12829
+    },
+    {
+      "Source": "ServerScriptService.GameManager",
+      "Name": "runStation",
+      "Line": 2711,
+      "Flags": 0,
+      "TotalDuration": 12829
+    },
+    {
+      "Source": "[C]",
+      "Name": "TextLabel.Text",
+      "Flags": 0,
+      "TotalDuration": 11386
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "Line": 1532,
+      "Flags": 0,
+      "TotalDuration": 1288644
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "Name": "updateSession",
+      "Line": 1314,
+      "Flags": 0,
+      "TotalDuration": 1284770
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "Name": "heardNoise",
+      "Line": 720,
+      "Flags": 0,
+      "TotalDuration": 1270
+    },
+    {
+      "Source": "ServerScriptService.NoiseRegistry",
+      "Name": "GetBest",
+      "Line": 49,
+      "Flags": 0,
+      "TotalDuration": 1270
+    },
+    {
+      "Source": "AssistantCommand",
+      "Name": "encounter",
+      "Line": 24,
+      "Flags": 0,
+      "TotalDuration": 2532
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "planningCheckpoint",
+      "Line": 321,
+      "Flags": 0,
+      "TotalDuration": 28518
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
+      "Line": 598,
+      "Flags": 0,
+      "TotalDuration": 1271
+    },
+    {
+      "Source": "[C]",
+      "Name": "Path.ComputeAsync",
+      "Flags": 0,
+      "TotalDuration": 2671
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "Name": "updateEntity",
+      "Line": 1116,
+      "Flags": 0,
+      "TotalDuration": 1254770
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "Step",
+      "Line": 2212,
+      "Flags": 0,
+      "TotalDuration": 944363
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "_placeFoot",
+      "Line": 714,
+      "Flags": 0,
+      "TotalDuration": 928154
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "Name": "setEntityAnimation",
+      "Line": 341,
+      "Flags": 0,
+      "TotalDuration": 75081
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "Line": 345,
+      "Flags": 0,
+      "TotalDuration": 62290
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Animation Adapter",
+      "Name": "SetState",
+      "Line": 461,
+      "Flags": 0,
+      "TotalDuration": 61016
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Animation Adapter",
+      "Name": "_applyState",
+      "Line": 320,
+      "Flags": 0,
+      "TotalDuration": 25980
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Animation Adapter",
+      "Name": "_publishActiveRecord",
+      "Line": 302,
+      "Flags": 0,
+      "TotalDuration": 1635
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Animation Adapter",
+      "Line": 358,
+      "Flags": 0,
+      "TotalDuration": 2310
+    },
+    {
+      "Source": "[C]",
+      "Name": "AnimationTrack.Play",
+      "Flags": 0,
+      "TotalDuration": 2310
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "Name": "createTrail",
+      "Line": 529,
+      "Flags": 0,
+      "TotalDuration": 170114
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "Name": "createEffectPart",
+      "Line": 507,
+      "Flags": 0,
+      "TotalDuration": 168850
+    },
+    {
+      "Source": "[C]",
+      "Name": "Instance.Parent",
+      "Flags": 0,
+      "TotalDuration": 170178
+    },
+    {
+      "Source": "[C]",
+      "Name": "Debris.AddItem",
+      "Flags": 0,
+      "TotalDuration": 2500
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Line": 1992,
+      "Flags": 0,
+      "TotalDuration": 2673
+    },
+    {
+      "Source": "[C]",
+      "Name": "PathfindingService.CreatePath",
+      "Flags": 0,
+      "TotalDuration": 1268
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "_clearAdvance",
+      "Line": 679,
+      "Flags": 0,
+      "TotalDuration": 424443
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "SetGoal",
+      "Line": 2114,
+      "Flags": 0,
+      "TotalDuration": 6268
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "_stableNeedsPath",
+      "Line": 1688,
+      "Flags": 0,
+      "TotalDuration": 2432
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "Name": "bestTarget",
+      "Line": 727,
+      "Flags": 0,
+      "TotalDuration": 27795
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "Name": "livingPlayer",
+      "Line": 168,
+      "Flags": 0,
+      "TotalDuration": 15125
+    },
+    {
+      "Source": "[C]",
+      "Name": "Humanoid.Health",
+      "Flags": 0,
+      "TotalDuration": 2353
+    },
+    {
+      "Source": "[C]",
+      "Name": "new",
+      "Flags": 0,
+      "TotalDuration": 3812
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "_joinStableRoute",
+      "Line": 1778,
+      "Flags": 0,
+      "TotalDuration": 84469
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "Step",
+      "Line": 2382,
+      "Flags": 0,
+      "TotalDuration": 3758
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "_waitingForClearance",
+      "Line": 1732,
+      "Flags": 0,
+      "TotalDuration": 1267
+    },
+    {
+      "Source": "[C]",
+      "Name": "CollectionService.AddTag",
+      "Flags": 0,
+      "TotalDuration": 1258
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "_centredWaypoint",
+      "Line": 1021,
+      "Flags": 0,
+      "TotalDuration": 100452
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "corridorCentreSeed",
+      "Line": 941,
+      "Flags": 0,
+      "TotalDuration": 3809
+    },
+    {
+      "Source": "[C]",
+      "Name": "Player.Character",
+      "Flags": 0,
+      "TotalDuration": 13187
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Controller",
+      "Name": "beginAttack",
+      "Line": 562,
+      "Flags": 0,
+      "TotalDuration": 9973
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Controller",
+      "Name": "attackReach",
+      "Line": 547,
+      "Flags": 0,
+      "TotalDuration": 9973
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Controller",
+      "Name": "livingRecord",
+      "Line": 94,
+      "Flags": 0,
+      "TotalDuration": 15962
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Controller",
+      "Name": "roundReady",
+      "Line": 83,
+      "Flags": 0,
+      "TotalDuration": 8782
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "_clearanceDetour",
+      "Line": 1309,
+      "Flags": 0,
+      "TotalDuration": 329286
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "_clearanceDetourAtStep",
+      "Line": 1117,
+      "Flags": 0,
+      "TotalDuration": 329286
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "_refreshObstacleFilters",
+      "Line": 543,
+      "Flags": 0,
+      "TotalDuration": 21883
+    },
+    {
+      "Name": "LobbyPartyModeController",
+      "Flags": 0,
+      "TotalDuration": 1192
+    },
+    {
+      "Source": "ServerScriptService.LobbyPartyModeController",
+      "Name": "bindControl",
+      "Line": 237,
+      "Flags": 0,
+      "TotalDuration": 1192
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Animation Adapter",
+      "Name": "_applyPlaybackSpeed",
+      "Line": 310,
+      "Flags": 0,
+      "TotalDuration": 9846
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Animation Adapter",
+      "Line": 317,
+      "Flags": 0,
+      "TotalDuration": 4826
+    },
+    {
+      "Source": "[C]",
+      "Name": "AnimationTrack.AdjustSpeed",
+      "Flags": 0,
+      "TotalDuration": 4826
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "_probeBlockedClearance",
+      "Line": 1670,
+      "Flags": 0,
+      "TotalDuration": 1329
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "_waitingForClearance",
+      "Line": 1662,
+      "Flags": 0,
+      "TotalDuration": 1329
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
+      "Line": 369,
+      "Flags": 0,
+      "TotalDuration": 2334
+    },
+    {
+      "Name": "asset",
+      "Flags": 2,
+      "TotalDuration": 12832
+    },
+    {
+      "Source": "sabuiltin_Assistant.rbxm.Assistant.Packages._Index.DMNetworking.DMNetworking.Implementations.StudioNetworking",
+      "Line": 308,
+      "Flags": 0,
+      "TotalDuration": 11555
+    },
+    {
+      "Source": "ServerScriptService.GameManager",
+      "Name": "launchStation",
+      "Line": 2582,
+      "Flags": 0,
+      "TotalDuration": 1256
+    },
+    {
+      "Source": "ServerScriptService.GameManager",
+      "Line": 2156,
+      "Flags": 0,
+      "TotalDuration": 1256
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Animation Adapter",
+      "Name": "_resolvedTrackState",
+      "Line": 270,
+      "Flags": 0,
+      "TotalDuration": 1257
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "Name": "movementSpeed",
+      "Line": 1087,
+      "Flags": 0,
+      "TotalDuration": 3990
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
+      "Line": 612,
+      "Flags": 0,
+      "TotalDuration": 2518
+    },
+    {
+      "Source": "[C]",
+      "Name": "Terrain.FillBlock",
+      "Flags": 0,
+      "TotalDuration": 2518
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Animation Adapter",
+      "Name": "_applyProxyVisual",
+      "Line": 252,
+      "Flags": 0,
+      "TotalDuration": 1245
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "_recordTrail",
+      "Line": 706,
+      "Flags": 0,
+      "TotalDuration": 4719
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "Name": "updateObservation",
+      "Line": 982,
+      "Flags": 0,
+      "TotalDuration": 18102
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Observer",
+      "Name": "IsModelObserved",
+      "Line": 377,
+      "Flags": 0,
+      "TotalDuration": 18102
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Observer",
+      "Name": "_observe",
+      "Line": 361,
+      "Flags": 0,
+      "TotalDuration": 16842
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Observer",
+      "Name": "targetSamples",
+      "Line": 109,
+      "Flags": 0,
+      "TotalDuration": 14311
+    },
+    {
+      "Source": "[C]",
+      "Name": "Model.GetBoundingBox",
+      "Flags": 0,
+      "TotalDuration": 14311
+    },
+    {
+      "Source": "[C]",
+      "Name": "Instance.FindFirstChildOfClass",
+      "Flags": 0,
+      "TotalDuration": 3883
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Observer",
+      "Name": "_playerSees",
+      "Line": 330,
+      "Flags": 0,
+      "TotalDuration": 1258
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Observer",
+      "Name": "livingRoundCharacter",
+      "Line": 89,
+      "Flags": 0,
+      "TotalDuration": 5059
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "Name": "setEntityAnimationPaused",
+      "Line": 357,
+      "Flags": 0,
+      "TotalDuration": 6403
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Observer",
+      "Name": "_consume",
+      "Line": 245,
+      "Flags": 0,
+      "TotalDuration": 6311
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
+      "Line": 391,
+      "Flags": 0,
+      "TotalDuration": 1255
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
+      "Name": "setGaugePressure",
+      "Line": 350,
+      "Flags": 0,
+      "TotalDuration": 1255
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "Name": "updateProximityLatch",
+      "Line": 914,
+      "Flags": 0,
+      "TotalDuration": 3924
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "Name": "updateEntityAudio",
+      "Line": 283,
+      "Flags": 0,
+      "TotalDuration": 10222
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "Name": "normalizedAudioId",
+      "Line": 269,
+      "Flags": 0,
+      "TotalDuration": 6442
+    },
+    {
+      "Source": "[C]",
+      "Name": "AnimationTrack.IsPlaying",
+      "Flags": 0,
+      "TotalDuration": 1358
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "_isSteppable",
+      "Line": 627,
+      "Flags": 0,
+      "TotalDuration": 5467
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "Name": "desiredPhase",
+      "Line": 567,
+      "Flags": 0,
+      "TotalDuration": 2841
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "_smoothStableRoute",
+      "Line": 1817,
+      "Flags": 0,
+      "TotalDuration": 203743
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Observer",
+      "Name": "finiteCFrame",
+      "Line": 49,
+      "Flags": 0,
+      "TotalDuration": 1251
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
+      "Line": 624,
+      "Flags": 0,
+      "TotalDuration": 1256
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
+      "Name": "openPressureDoors",
+      "Line": 403,
+      "Flags": 0,
+      "TotalDuration": 1256
+    },
+    {
+      "Source": "[C]",
+      "Name": "BasePart.Color",
+      "Flags": 0,
+      "TotalDuration": 1256
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
+      "Line": 847,
+      "Flags": 0,
+      "TotalDuration": 4011
+    },
+    {
+      "Name": "RobloxReactProfiling",
+      "Flags": 2,
+      "TotalDuration": 6135
+    },
+    {
+      "Source": "sabuiltin_Debugger.rbxm.Debugger.Packages._Index.ReactReconciler.ReactReconciler.RobloxReactProfiling",
+      "Line": 52,
+      "Flags": 0,
+      "TotalDuration": 1274
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "Name": "instantKill",
+      "Line": 791,
+      "Flags": 0,
+      "TotalDuration": 4307
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
+      "Line": 733,
+      "Flags": 0,
+      "TotalDuration": 10069
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
+      "Name": "validSession",
+      "Line": 192,
+      "Flags": 0,
+      "TotalDuration": 3676
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "Name": "GetGoal",
+      "Line": 2550,
+      "Flags": 0,
+      "TotalDuration": 1269
+    },
+    {
+      "Source": "sabuiltin_Assistant.rbxm.Assistant.Packages._Index.ReactReconciler.ReactReconciler.RobloxReactProfiling",
+      "Line": 52,
+      "Flags": 0,
+      "TotalDuration": 4861
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "partTopY",
+      "Line": 131,
+      "Flags": 0,
+      "TotalDuration": 1362
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "Name": "dwellable",
+      "Line": 928,
+      "Flags": 0,
+      "TotalDuration": 1270
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Controller",
+      "Name": "setPhase",
+      "Line": 140,
+      "Flags": 0,
+      "TotalDuration": 1314
+    },
+    {
+      "Source": "[C]",
+      "Name": "Part.Shape",
+      "Flags": 0,
+      "TotalDuration": 1297
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "corridorContaining",
+      "Line": 965,
+      "Flags": 0,
+      "TotalDuration": 1219
+    },
+    {
+      "Source": "[C]",
+      "Name": "match",
+      "Flags": 0,
+      "TotalDuration": 1265
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
+      "Name": "segmentIntersectsSensor",
+      "Line": 705,
+      "Flags": 0,
+      "TotalDuration": 2545
+    },
+    {
+      "Name": "Level 2 Slide Ragdoll Service",
+      "Flags": 0,
+      "TotalDuration": 1275
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Slide Ragdoll Service",
+      "Line": 453,
+      "Flags": 0,
+      "TotalDuration": 1275
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "GetDebugSnapshot",
+      "Line": 2935,
+      "Flags": 0,
+      "TotalDuration": 11384
+    },
+    {
+      "Source": "[C]",
+      "Name": "Object.IsA",
+      "Flags": 0,
+      "TotalDuration": 1259
+    },
+    {
+      "Source": "sabuiltin_Assistant.rbxm.Assistant.Packages._Index.AssistantUI.AssistantUI.Generated.Bridges.ExecuteLuauBridge",
+      "Line": 97,
+      "Flags": 0,
+      "TotalDuration": 1262
+    },
+    {
+      "Source": "sabuiltin_Assistant.rbxm.Assistant.Packages._Index.AssistantUI.AssistantUI.Actions.ExecuteLuauActions",
+      "Name": "loadCodeAsync",
+      "Line": 18,
+      "Flags": 0,
+      "TotalDuration": 1262
+    },
+    {
+      "Source": "sabuiltin_Assistant.rbxm.Assistant.Packages._Index.DMNetworking.DMNetworking.Implementations.StudioNetworking",
+      "Name": "_makeKey",
+      "Line": 137,
+      "Flags": 0,
+      "TotalDuration": 1361
+    },
+    {
+      "Source": "sabuiltin_Assistant.rbxm.Assistant.Packages._Index.AssistantUI.AssistantUI.Generated.Bridges.ExecuteLuauBridge",
+      "Line": 105,
+      "Flags": 0,
+      "TotalDuration": 2532
+    },
+    {
+      "Source": "sabuiltin_Assistant.rbxm.Assistant.Packages._Index.AssistantUI.AssistantUI.Actions.ExecuteLuauActions",
+      "Name": "runCodeAsync",
+      "Line": 27,
+      "Flags": 0,
+      "TotalDuration": 2532
+    },
+    {
+      "Source": "sabuiltin_Assistant.rbxm.Assistant.Packages._Index.AssistantUI.AssistantUI.Actions.ExecuteLuauActions",
+      "Line": 32,
+      "Flags": 0,
+      "TotalDuration": 1266
+    },
+    {
+      "Source": "sabuiltin_Assistant.rbxm.Assistant.Packages._Index.AssistantUI.AssistantUI.Util.CommandExecution",
+      "Name": "runCode",
+      "Line": 24,
+      "Flags": 0,
+      "TotalDuration": 1266
+    },
+    {
+      "Source": "AssistantCommand",
+      "Line": 1,
+      "Flags": 0,
+      "TotalDuration": 5029
+    },
+    {
+      "Source": "sabuiltin_Assistant.rbxm.Assistant.Packages._Index.AssistantUI.AssistantUI.Util.CommandExecution",
+      "Line": 30,
+      "Flags": 0,
+      "TotalDuration": 1277
+    },
+    {
+      "Source": "sabuiltin_Assistant.rbxm.Assistant.Src.Util.Resources.StudioEnvironment",
+      "Line": 413,
+      "Flags": 0,
+      "TotalDuration": 1277
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "popFrontier",
+      "Line": 1168,
+      "Flags": 0,
+      "TotalDuration": 1269
+    },
+    {
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "_bodyVolume",
+      "Line": 636,
+      "Flags": 0,
+      "TotalDuration": 2181
+    },
+    {
+      "Source": "AssistantCommand",
+      "Name": "finish",
+      "Line": 79,
+      "Flags": 0,
+      "TotalDuration": 5035
+    },
+    {
+      "Source": "AssistantCommand",
+      "Name": "stopAndRequest",
+      "Line": 54,
+      "Flags": 0,
+      "TotalDuration": 5035
+    },
+    {
+      "Source": "[C]",
+      "Name": "ScriptProfilerService.ServerStop",
+      "Flags": 0,
+      "TotalDuration": 5035
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"Removed\":[{\"Bytes\":16184,\"Path\":\"ServerScriptService.TEMP_Pump3NativeServer\",\"Token\":\"pump3-budget-20260909-native-5\"},{\"Bytes\":1568,\"Path\":\"StarterPlayer.StarterPlayerScripts.TEMP_Pump3NativeClient\",\"Token\":\"pump3-budget-20260909-native-5\"}],\"Place\":131311258779917,\"Version\":1809,\"RecoveredFrom\":\"tests/level2/poolslide/studio-review-2026-09-09/\"}"
+    }
+  ],
+  "isError": false
+}

@@ -1,0 +1,165 @@
+{
+  "schemaVersion": 1,
+  "snapshotDate": "2026-08-31",
+  "experience": {
+    "placeId": 131311258779917,
+    "universeId": 10559217407,
+    "creatorGroupId": 1039373905
+  },
+  "templatePath": "ServerStorage.Level2Assets.Level 2 Pool Slide Template",
+  "runtimeEncounter": {
+    "updatedDate": "2026-08-31",
+    "spawnAfterDistinctPumps": 2,
+    "replaces": "Slidemouth",
+    "audio": "Four existing monster groans, randomized on the actual humanoid RootPart attachment",
+    "note": "Template attributes below describe the original unchanged import, not the current trigger"
+  },
+  "templateInstanceCount": 138,
+  "classCounts": {
+    "Model": 1,
+    "MeshPart": 7,
+    "Motor6D": 7,
+    "Folder": 1,
+    "CFrameValue": 96,
+    "AnimationController": 1,
+    "Part": 1,
+    "Bone": 24
+  },
+  "templateAttributes": {
+    "AgentHeight": 16,
+    "Level2_PoolSlideMeshParts": 7,
+    "RBX_ReimportId": "00d88fd1-a0ea-4b9f-a767-4568c1d87fcd",
+    "GroundOffset": 0.15981149673461914,
+    "Level2_PoolSlideForwardAxis": "-Z",
+    "Level2_PoolSlideSourceTriangles": 47749,
+    "Level2_PoolSlideBones": 24,
+    "Level2_PoolSlideTextureStyle": "Vivid clean; no algae, seaweed, grime or corrosion",
+    "Level2_PoolSlideTemplate": true,
+    "Level2_PoolSlideVersion": "vivid-clean-third-pump-2026-08-31",
+    "AgentRadius": 7.600174522399902
+  },
+  "meshes": [
+    {
+      "name": "PoolSlide_Body_01",
+      "meshId": "rbxassetid://131054089284103",
+      "textureId": "rbxassetid://115627890780670",
+      "material": "SmoothPlastic",
+      "size": [
+        7.557575702667236,
+        8.288320541381836,
+        2.7454473972320557
+      ]
+    },
+    {
+      "name": "PoolSlide_Body_02",
+      "meshId": "rbxassetid://115498682088205",
+      "textureId": "rbxassetid://115627890780670",
+      "material": "SmoothPlastic",
+      "size": [
+        7.654900074005127,
+        8.295551300048828,
+        2.7330119609832764
+      ]
+    },
+    {
+      "name": "PoolSlide_Flange_Bolts_DarkMetal_01",
+      "meshId": "rbxassetid://72102440335601",
+      "textureId": "",
+      "material": "Metal",
+      "size": [
+        3.7428996562957764,
+        1.3352570533752441,
+        2.269737958908081
+      ]
+    },
+    {
+      "name": "PoolSlide_Foot_Blue_Vivid_2093E3_01",
+      "meshId": "rbxassetid://91113200421779",
+      "textureId": "rbxassetid://127574824965827",
+      "material": "SmoothPlastic",
+      "size": [
+        2.1422040462493896,
+        1.7014975547790527,
+        2.559666633605957
+      ]
+    },
+    {
+      "name": "PoolSlide_Foot_Yellow_Vivid_FCC920_01",
+      "meshId": "rbxassetid://70844090686981",
+      "textureId": "rbxassetid://137085409031980",
+      "material": "SmoothPlastic",
+      "size": [
+        2.1422040462493896,
+        1.7001605033874512,
+        2.4908037185668945
+      ]
+    },
+    {
+      "name": "PoolSlide_Leg_Blue_Vivid_2093E3_01",
+      "meshId": "rbxassetid://94647739164123",
+      "textureId": "rbxassetid://127574824965827",
+      "material": "SmoothPlastic",
+      "size": [
+        1.4754337072372437,
+        7.755074501037598,
+        2.796842575073242
+      ]
+    },
+    {
+      "name": "PoolSlide_Leg_Yellow_Vivid_FCC920_01",
+      "meshId": "rbxassetid://71030232551151",
+      "textureId": "rbxassetid://137085409031980",
+      "material": "SmoothPlastic",
+      "size": [
+        1.4936678409576416,
+        7.759914398193359,
+        2.8543179035186768
+      ]
+    }
+  ],
+  "animationMode": "Local Bone.Transform playback; no published AnimationId",
+  "animations": [
+    {
+      "name": "Level 2 Pool Slide Idle Keyframes",
+      "file": "keyframes/idle.json",
+      "frames": 121,
+      "durationSeconds": 4.0,
+      "sha256": "8ab19b0bf482806ea59d9d7b0c3ea7aaafdfc5403843dd438e6c17b61c5dadcf"
+    },
+    {
+      "name": "Level 2 Pool Slide Walk Keyframes",
+      "file": "keyframes/walk.json",
+      "frames": 32,
+      "durationSeconds": 1.03333333,
+      "sha256": "713c00a0339755ee98e39e2fd481bb2da9b782bc6225e47e53c0246d8377c0fb"
+    },
+    {
+      "name": "Level 2 Pool Slide Run Keyframes",
+      "file": "keyframes/run.json",
+      "frames": 20,
+      "durationSeconds": 0.63333333,
+      "sha256": "0df5be515164308b593cb003bdbb651da3d00ea4f6705e4d0becb5b9ac34565a"
+    }
+  ],
+  "sourcePack": {
+    "format": "split tar.gz",
+    "partSizeBytes": 655360,
+    "partCount": 21,
+    "archiveBytes": 13281813,
+    "archiveSha256": "5cb130d0bfd4656d6d5f83e9b95ba11d8669b2250e21da13f787a56e953653a3",
+    "verifiedSourceFileCount": 41,
+    "restoreCommand": "python3 tools/restore-poolslide-assets.py",
+    "directory": "assets/level2/poolslide/source-pack"
+  },
+  "recovery": {
+    "bundle": "recovery-bundle.json",
+    "helper": "reconstruct_poolslide.luau",
+    "status": "offline checks only; Studio visual skin-binding recovery untested",
+    "requiresOriginalAssetAccess": true,
+    "limitations": [
+      "Reserved RBX_ importer attributes are archived but not replayed.",
+      "Model scale metadata is not captured; absolute part/bone transforms and dimensions are captured.",
+      "FBX reimport or full saved place remains the definitive recovery fallback."
+    ]
+  }
+}

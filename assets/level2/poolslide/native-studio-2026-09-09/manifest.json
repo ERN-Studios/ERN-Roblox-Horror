@@ -1,0 +1,16 @@
+{
+  "format": "Roblox-native-rbxm",
+  "path": "ServerStorage.Level2Assets.Level 2 Pool Slide Template",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "observedVersion": 1793,
+  "bytes": 76255,
+  "hashDjb2": 92721504,
+  "sha256": "2e9e5d6e56fa2f634eef3ec055a831c2213966366291b86f8fdb631c7d23a2b1",
+  "sourceSnapshotSha256": "486ba8190253d548062ddef6287ad63845c5cca1042ad9bb07bcde15ebb61f6b",
+  "scope": "Entity template only; not a whole-place backup",
+  "file": "level2-pool-slide-template.rbxm",
+  "conversion": "Lossless hex decoding only; no Studio import or mutation",
+  "roundTripImportVerified": false,
+  "wholePlaceBackup": false
+}

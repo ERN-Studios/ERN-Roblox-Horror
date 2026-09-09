@@ -1,0 +1,178 @@
+{
+  "UTC": "2026-09-09T18:41:48Z",
+  "GetAnimationMemoryAsync": {
+    "Ok": true,
+    "Value": {
+      "Name": "AnimationMemory",
+      "Children": [
+        {
+          "Owners": [
+            {
+              "Name": "Workspace.Level 2 Generated World.Level 2 Pool Foam Runtime.Level 2 Pool Foam Primary_01.AnimationController.Animator",
+              "ClassName": "Animator"
+            },
+            {
+              "Name": "Workspace.Level 2 Generated World.Level 2 Pool Foam Runtime.Level 2 Pool Foam Primary_02.AnimationController.Animator",
+              "ClassName": "Animator"
+            },
+            {
+              "Name": "Workspace.Level 2 Generated World.Level 2 Pool Foam Runtime.Level 2 Pool Foam Primary_03.AnimationController.Animator",
+              "ClassName": "Animator"
+            },
+            {
+              "Name": "Workspace.Level 2 Generated World.Level 2 Pool Foam Runtime.Level 2 Pool Foam Primary_04.AnimationController.Animator",
+              "ClassName": "Animator"
+            },
+            {
+              "Name": "Workspace.Level 2 Generated World.Level 2 Pool Foam Runtime.Level 2 Pool Foam Primary_05.AnimationController.Animator",
+              "ClassName": "Animator"
+            }
+          ],
+          "AssetId": "rbxassetid://75270256720943",
+          "Name": "rbxassetid://75270256720943",
+          "Size": 29948
+        },
+        {
+          "Owners": [
+            {
+              "Name": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide.AnimationController.Animator",
+              "ClassName": "Animator"
+            }
+          ],
+          "AssetId": "rbxassetid://71870594656450",
+          "Name": "rbxassetid://71870594656450",
+          "Size": 6273
+        },
+        {
+          "Owners": [
+            {
+              "Name": "Workspace.LaverSneglen.Humanoid.Animator",
+              "ClassName": "Animator"
+            }
+          ],
+          "AssetId": "http://www.roblox.com/asset/?id=14366558676",
+          "Name": "http://www.roblox.com/asset/?id=14366558676",
+          "Size": 878
+        },
+        {
+          "Owners": [
+            {
+              "Name": "Workspace.LaverSneglen.Humanoid.Animator",
+              "ClassName": "Animator"
+            }
+          ],
+          "AssetId": "http://www.roblox.com/asset/?id=507766388",
+          "Name": "http://www.roblox.com/asset/?id=507766388",
+          "Size": 138877
+        }
+      ],
+      "Size": 175976
+    }
+  },
+  "EntityExists": true,
+  "GetUnparentedInstancesAsync": {
+    "Ok": true,
+    "Value": {
+      "Name": "UnparentedInstances",
+      "Children": [
+        {
+          "Name": "ServerScriptService.Crouch State Server",
+          "Children": [
+            {
+              "Name": "Model",
+              "Size": 1
+            },
+            {
+              "Name": "Part",
+              "Size": 1
+            }
+          ],
+          "Size": 2
+        },
+        {
+          "Name": "ServerScriptService.GameManager",
+          "Children": [
+            {
+              "Name": "HumanoidDescription",
+              "Size": 1
+            }
+          ],
+          "Size": 1
+        },
+        {
+          "Name": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
+          "Children": [
+            {
+              "Name": "Tween",
+              "Size": 6
+            }
+          ],
+          "Size": 6
+        },
+        {
+          "Name": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Animation Adapter",
+          "Children": [
+            {
+              "Name": "AnimationTrack",
+              "Size": 5
+            }
+          ],
+          "Size": 5
+        },
+        {
+          "Name": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+          "Children": [
+            {
+              "Name": "Path",
+              "Size": 3
+            }
+          ],
+          "Size": 3
+        },
+        {
+          "Name": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+          "Children": [
+            {
+              "Name": "Path",
+              "Size": 2
+            }
+          ],
+          "Size": 2
+        },
+        {
+          "Name": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+          "Children": [
+            {
+              "Name": "Path",
+              "Size": 1
+            }
+          ],
+          "Size": 1
+        },
+        {
+          "Name": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Rig Adapter",
+          "Children": [
+            {
+              "Name": "AnimationTrack",
+              "Size": 4
+            }
+          ],
+          "Size": 4
+        },
+        {
+          "Name": "ServerScriptService.TEMP_Pump3NativeServer",
+          "Children": [
+            {
+              "Name": "RemoteEvent",
+              "Size": 1
+            }
+          ],
+          "Size": 1
+        }
+      ],
+      "Size": 25
+    }
+  },
+  "Pumps": 3,
+  "RoundActive": true
+}

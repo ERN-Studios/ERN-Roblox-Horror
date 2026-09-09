@@ -38,6 +38,15 @@ local CUE_SLOTS = {
 	"Level 2 Pressure Door",
 	"Level 2 Slide Rush",
 }
+-- LEVEL2_PIPE_ENTITY_GROANS_20260909: one client-local voice changes source
+-- from actual distant map anchors to the new giant's moving RootPart at pump 2.
+local MONSTER_GROAN_SLOTS = {
+	"Level 2 Distant Monster-Like Pipe Groan 1",
+	"Level 2 Distant Monster-Like Pipe Groan 2",
+	"Level 2 Distant Monster-Like Pipe Groan 3",
+	"Level 2 Distant Monster-Like Pipe Groan 4",
+}
+local GROAN_DELAY_MIN, GROAN_DELAY_MAX = 24, 42
 local RANDOM_AMBIENCE_SLOTS = {
 	"Level 2 Water Drop",
 	"Level 2 Drain Gurgle",
@@ -60,6 +69,7 @@ local COMMON_AMBIENCE = {
 local PRELOAD_SLOTS = {}
 for _, slotName in ipairs(CUE_SLOTS) do table.insert(PRELOAD_SLOTS, slotName) end
 for _, slotName in ipairs(RANDOM_AMBIENCE_SLOTS) do table.insert(PRELOAD_SLOTS, slotName) end
+for _, slotName in ipairs(MONSTER_GROAN_SLOTS) do table.insert(PRELOAD_SLOTS, slotName) end
 -- SoundController's footstep walker owns this slot; warm it with the rest.
 table.insert(PRELOAD_SLOTS, "Level 2 Player Dry Tile Walking Sound")
 
@@ -159,6 +169,31 @@ local ambientAnchorSeen = {}
 local ambientConnections = {}
 local nextCommonAt = math.huge
 local lastCommonKey
+local groanWorld, groanGeneration, groanSource
+local groanRecord
+local groanSpawnSeen, groanBodySeen = false, false
+local groanFirstBodyPending = false
+local groanBag, groanFailedSlots = {}, {}
+local lastGroanSlot
+local nextGroanAt, groanBusyUntil = math.huge, 0
+local nextGroanPollAt = 0
+local GROAN_POLL_INTERVAL = .1
+
+local function clearGroanPlayback()
+	local record = groanRecord
+	groanRecord = nil
+	groanBusyUntil = 0
+	if record and record.Owner.Parent then record.Owner:Destroy() end
+end
+
+local function resetGroanSession()
+	clearGroanPlayback()
+	groanWorld, groanGeneration, groanSource = nil, nil, nil
+	groanSpawnSeen, groanBodySeen, groanFirstBodyPending = false, false, false
+	groanBag, groanFailedSlots = {}, {}
+	lastGroanSlot = nil
+	nextGroanAt, nextGroanPollAt = math.huge, 0
+end
 
 local function disconnectAmbientConnections()
 	for _, connection in ipairs(ambientConnections) do
@@ -179,6 +214,7 @@ local function clearSpatialCueEmitters()
 end
 
 local function stopRandomSession()
+	resetGroanSession()
 	disconnectAmbientConnections()
 	clearAmbientEmitters()
 	clearSpatialCueEmitters()
@@ -212,8 +248,8 @@ local function startRandomSession(world)
 	randomSessionActive = true
 	ambientWorld = world
 	nextCommonAt = os.clock() + rng:NextNumber(COMMON_FIRST_DELAY_MIN, COMMON_FIRST_DELAY_MAX)
-	-- The monster's first 10-18 second delay begins only when its actual
-	-- replicated body is available, not when an otherwise empty round starts.
+	-- Monster groans have their own source-aware scheduler below. Environmental
+	-- water drops, pump drains and ordinary building-pressure groans stay intact.
 	for _, instance in ipairs(world:GetDescendants()) do
 		classifyAmbientAnchor(instance)
 	end
@@ -400,8 +436,7 @@ local function weightedCommonProfile(excludeLast)
 	return nil
 end
 
--- The four monster recordings retain their distant tiled-hall sound and random
--- shuffle/cadence, but can only play on the actual spawned humanoid's body.
+-- Ordinary environmental ambience remains separate from the four monster voices.
 
 local function updateRandomAmbience()
 	if not syncRandomSession() then return end
@@ -409,7 +444,9 @@ local function updateRandomAmbience()
 
 	if now >= nextCommonAt
 		and now >= authoredBusyUntil
-		and now >= ambientBusyUntil then
+		and now >= ambientBusyUntil
+		and now >= groanBusyUntil
+		and not groanRecord then
 		local profile = weightedCommonProfile(true) or weightedCommonProfile(false)
 		if profile and playRandomSound(profile.Slot, profile) then
 			lastCommonKey = profile.Key
@@ -421,6 +458,218 @@ local function updateRandomAmbience()
 end
 
 RunService.Heartbeat:Connect(updateRandomAmbience)
+
+
+-- Exactly one monster-voice scheduler, shared by pre-spawn foreshadowing and
+-- actual-body audio. All instances are client-local; the sound never becomes
+-- a 2D SoundService bed or a fake emitter after the encounter has spawned.
+local function currentPumpCount()
+	-- ObjectiveController publishes the count of DISTINCT started levers here.
+	return math.max(0, math.floor(tonumber(workspace:GetAttribute("Level2Pumps")) or 0))
+end
+
+local function currentPoolSlideRoot()
+	local world = ambientWorld
+	local runtime = world and world:FindFirstChild("Level 2 Pool Slide Runtime")
+	local model = runtime and runtime:FindFirstChild("Level 2 Pool Slide")
+	if not (model and model:IsA("Model") and model:IsDescendantOf(world)) then return nil end
+	local generation = model:GetAttribute("Level2_Generation")
+	if generation ~= nil and generation ~= groanGeneration then return nil end
+	local root = model.PrimaryPart or model:FindFirstChild("RootPart")
+	if root and root:IsA("BasePart") and root:IsDescendantOf(model) then return root end
+	return nil
+end
+
+local function takeMonsterGroanSlot()
+	if #groanBag == 0 then
+		for _, slotName in ipairs(MONSTER_GROAN_SLOTS) do
+			if not groanFailedSlots[slotName] and resolveId(slotName) then
+				table.insert(groanBag, slotName)
+			end
+		end
+		for index = #groanBag, 2, -1 do
+			local other = rng:NextInteger(1, index)
+			groanBag[index], groanBag[other] = groanBag[other], groanBag[index]
+		end
+		if #groanBag > 1 and groanBag[#groanBag] == lastGroanSlot then
+			groanBag[1], groanBag[#groanBag] = groanBag[#groanBag], groanBag[1]
+		end
+	end
+	return table.remove(groanBag)
+end
+
+local function distantGroanPosition(listenerRoot)
+	-- No radial fallback: every point is a real, currently replicated piece of
+	-- this generation's room/corridor geometry. If streaming leaves no distant
+	-- anchor, retry later instead of placing a voice outside the authored map.
+	local anchor = chooseAnchor(ambientAnchors.Corridor, listenerRoot.Position, 55, 180)
+		or chooseAnchor(ambientAnchors.PumpPipe, listenerRoot.Position, 55, 180)
+		or chooseAnchor(ambientAnchors.WetHall, listenerRoot.Position, 55, 180)
+	if not anchor then return nil end
+	return anchor.Position
+end
+
+local function groanPlaybackStillValid(record)
+	if groanRecord ~= record or not record.Owner.Parent or not record.Sound.Parent
+		or not randomActive() or not rootPart() or player:GetAttribute("Escaped") == true
+		or workspace:GetAttribute("EntityPaused") == true
+		or ambientWorld ~= record.World
+		or record.World:GetAttribute("Level2_Generation") ~= record.Generation then
+		return false
+	end
+	if record.Source then
+		return record.Source == groanSource and currentPoolSlideRoot() == record.Source
+	end
+	return not groanSpawnSeen and currentPumpCount() < 2
+		and workspace:GetAttribute("Level2_PoolSlideActive") ~= true
+		and currentPoolSlideRoot() == nil
+end
+
+local function playMonsterGroan(slotName, listenerRoot, source)
+	local id = resolveId(slotName)
+	if not id then return false end
+	local owner, attachment
+	if source then
+		attachment = Instance.new("Attachment")
+		attachment.Name = "Level 2 Pool Slide Local Groan Emitter"
+		attachment:SetAttribute("Level2_ClientOnlyAudio", true)
+		attachment.Parent = source
+		owner = attachment
+	else
+		local position = distantGroanPosition(listenerRoot)
+		if not position then return false end
+		owner = Instance.new("Part")
+		owner.Name = "Level 2 Pre-Spawn Pipe Groan Emitter"
+		owner.Anchored, owner.CanCollide, owner.CanTouch, owner.CanQuery = true, false, false, false
+		owner.CastShadow, owner.Transparency = false, 1
+		owner.Size = Vector3.new(.2, .2, .2)
+		owner.Position = position
+		owner:SetAttribute("Level2_ClientOnlyAudio", true)
+		owner.Parent = ambientWorld
+		attachment = Instance.new("Attachment")
+		attachment.Name = "Level 2 Distant Pipe Groan Point"
+		attachment.Parent = owner
+	end
+	local sound = Instance.new("Sound")
+	sound.Name = (source and "Level 2 Pool Slide Groan - " or "Level 2 Distant Groan - ") .. slotName
+	sound.SoundId = id
+	sound.Looped, sound.PlayOnRemove = false, false
+	sound.Volume = .68
+	sound.PlaybackSpeed = rng:NextNumber(.97, 1.02)
+	sound.RollOffMode = Enum.RollOffMode.InverseTapered
+	-- Slightly wider plateau than the retired voice so medium-distance warning
+	-- remains audible; direction still comes from the actual point attachment.
+	sound.RollOffMinDistance = source and 32 or 40
+	sound.RollOffMaxDistance = source and 360 or 280
+	sound.Parent = attachment
+	local reverb = Instance.new("ReverbSoundEffect")
+	reverb.Name = "Level 2 Pipe Voice Poolroom Reverb"
+	reverb.DecayTime, reverb.Density, reverb.Diffusion = 5.2, .34, .30
+	reverb.DryLevel, reverb.WetLevel = -9, -2
+	reverb.Parent = sound
+
+	local record = {
+		Owner = owner, Sound = sound, Source = source,
+		World = ambientWorld, Generation = groanGeneration,
+		ExpiresAt = os.clock() + 20, Slot = slotName, Started = false,
+	}
+	groanRecord = record
+	-- Only this one pending voice is allowed. The timeout/cancellation guard
+	-- prevents a slow asset load from playing from a stale map or pre-spawn point.
+	task.spawn(function()
+		local loaded = pcall(function() ContentProvider:PreloadAsync({sound}) end)
+		if not groanPlaybackStillValid(record) then
+			if groanRecord == record then clearGroanPlayback() end
+			return
+		end
+		if not loaded or not sound.IsLoaded then
+			groanFailedSlots[slotName] = true
+			warn("[Level 2] Pipe groan asset failed to load: " .. slotName .. " (" .. id .. ")")
+			clearGroanPlayback()
+			nextGroanAt = os.clock() + 2
+			return
+		end
+		clearAmbientEmitters()
+		sound:Play()
+		record.Started = true
+		local duration = sound.TimeLength > 0 and sound.TimeLength / sound.PlaybackSpeed or 15
+		record.ExpiresAt = os.clock() + duration + 1
+		groanBusyUntil = record.ExpiresAt
+		lastGroanSlot = slotName
+		if source then groanFirstBodyPending = false end
+		nextGroanAt = os.clock() + math.max(duration + 1, rng:NextNumber(GROAN_DELAY_MIN, GROAN_DELAY_MAX))
+	end)
+	return true
+end
+
+local function updateMonsterGroans()
+	local now = os.clock()
+	if now < nextGroanPollAt then return end
+	nextGroanPollAt = now + GROAN_POLL_INTERVAL
+	if not syncRandomSession() then return end
+	local listenerRoot = rootPart()
+	if not listenerRoot or player:GetAttribute("Escaped") == true then
+		-- Do not reset phase/first-body latches during death or a character swap;
+		-- a late respawn must not turn the same spawn into a new intro sound.
+		clearGroanPlayback()
+		nextGroanAt = math.max(nextGroanAt, now + 2)
+		return
+	end
+	local generation = ambientWorld:GetAttribute("Level2_Generation")
+	if groanWorld ~= ambientWorld or groanGeneration ~= generation then
+		resetGroanSession()
+		groanWorld, groanGeneration = ambientWorld, generation
+		nextGroanAt = now + rng:NextNumber(10, 18)
+	end
+	local source = currentPoolSlideRoot()
+	local spawnNow = currentPumpCount() >= 2
+		or workspace:GetAttribute("Level2_PoolSlideActive") == true or source ~= nil
+	if spawnNow and not groanSpawnSeen then
+		groanSpawnSeen = true
+		clearGroanPlayback()
+		nextGroanAt = math.huge
+	end
+	if source ~= groanSource then
+		clearGroanPlayback()
+		groanSource = source
+		if source then
+			groanFirstBodyPending = not groanBodySeen
+			groanBodySeen = true
+			nextGroanAt = now + (groanFirstBodyPending and rng:NextNumber(1, 2)
+				or rng:NextNumber(GROAN_DELAY_MIN, GROAN_DELAY_MAX))
+		else
+			-- Streamed-out/despawned body = silence, NEVER a fake distant voice.
+			nextGroanAt = math.huge
+		end
+	end
+	if workspace:GetAttribute("EntityPaused") == true then
+		clearGroanPlayback()
+		nextGroanAt = math.max(nextGroanAt, now + 2)
+		return
+	end
+	if groanRecord then
+		if not groanPlaybackStillValid(groanRecord) then
+			clearGroanPlayback()
+		elseif now >= groanRecord.ExpiresAt then
+			if not groanRecord.Started then
+				groanFailedSlots[groanRecord.Slot] = true
+				warn("[Level 2] Pipe groan asset load timed out: " .. groanRecord.Slot)
+			end
+			clearGroanPlayback()
+		end
+	end
+	if groanRecord or now < nextGroanAt or (groanSpawnSeen and not source) then return end
+	-- The first real-body voice announces the spawn during the pump motor.
+	-- All later voices defer to authored pump/drain/pressure-door cues.
+	if not groanFirstBodyPending and (now < authoredBusyUntil or now < ambientBusyUntil) then return end
+	local slotName = takeMonsterGroanSlot()
+	if not slotName or not playMonsterGroan(slotName, listenerRoot, source) then
+		if slotName then table.insert(groanBag, slotName) end
+		nextGroanAt = now + 2
+	end
+end
+
+RunService.Heartbeat:Connect(updateMonsterGroans)
 
 -- Ambience loops (created lazily so empty slots cost nothing).
 local loops = {}

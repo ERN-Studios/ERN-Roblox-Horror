@@ -1,3 +1,44 @@
+# Owner workflow and Studio snapshot — 2026-09-09
+
+**Roblox Studio is the sole source of truth.** Before every game-development
+task, inspect repository status and current remote history, then read the relevant
+live Studio state. Never overwrite Studio from GitHub, Trello, an older place
+copy, or historical pending-push flags. Preserve other developers' work and use
+a fresh, identity-checked Source/editor baseline for any specifically requested
+Studio edit. Mirror the verified result from Studio to Git, inspect the staged
+diff, and commit all task changes. See [AGENTS.md](AGENTS.md) for the governing
+workflow and publication checks.
+
+The material below is retained **verbatim from origin/main commit `7f13f53`**
+to preserve the other developer's documentation. Its historical deployment
+examples, environment restrictions, tuning values, and “current” status claims
+do not override this banner or a newer live Studio inspection. In particular,
+repository-to-Studio bulk restores are not authorized, and the historical
+Windows-only MCP statement does not describe the working native macOS connection.
+
+## Observed Studio state, not a release claim
+
+The read-only export at **2026-09-09 18:07:13 UTC** captured place
+`131311258779917`, universe `10559217407`, Edit version `1793`.
+It contained **122 Lua source containers / 6,085,773 source bytes**; every
+captured Source matched its editor source. These are point-in-time source
+facts, not a full native-place backup, gameplay pass, or public release.
+
+The captured `Level 2 Pool Slide Configuration` is staged with
+`StudioValidationMode = true`, `WalkSpeed = 10`,
+`NormalRunSpeed = 20`, and `EnragedSpeed = 32`. It must not be
+published in validation mode. The captured `LobbyMusicController` retains
+asset `89997163439780`, base volume `0.12`, and loop start `35`
+seconds. Final spawn-distance, third-pump, and active-server performance
+verification must be recorded separately; these code values are not evidence
+that those checks passed.
+
+Pre-reconciliation local changes are recoverable in safety commit `e736b4e`.
+This documentation reconciliation changes the repository only; it neither
+modifies Studio nor publishes the game or its public description.
+
+---
+
 # BACKROOMS: STAY QUIET [CO-OP HORROR]
 
 A round-based **Backrooms-inspired multiplayer horror game** for Roblox, by

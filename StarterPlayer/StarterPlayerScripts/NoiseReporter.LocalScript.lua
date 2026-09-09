@@ -58,19 +58,30 @@ local function staminaMax()
 end
 local stamina, exhausted = staminaMax(), false
 
--- ADRENALINE: while the Entity is on YOU (chasing, or blindly tracking you for
--- the few seconds after it loses sight — the server marks you "BeingChased"),
--- your stamina lasts ADRENALINE_MUL times longer, lingering a moment after.
+-- ADRENALINE: existing entities publish BeingChased; Level 2's pipe giant has
+-- its own chase mark so Pool Foam cannot clear the giant's stamina boost.
+-- Read the combined state only; never write either server-owned chase mark.
 local ADRENALINE_MUL    = 3
-local ADRENALINE_LINGER = 4   -- seconds the boost outlives the chase itself
+local ADRENALINE_LINGER = 4   -- seconds the boost outlives the LAST active chase
 local adrenalineUntil = 0
-player:GetAttributeChangedSignal("BeingChased"):Connect(function()
-	if player:GetAttribute("BeingChased") ~= true then
-		adrenalineUntil = os.clock() + ADRENALINE_LINGER -- chase just ended → linger
+local function chaseActive()
+	return player:GetAttribute("BeingChased") == true
+		or (workspace:GetAttribute("SelectedLevel") == 2
+			and player:GetAttribute("Level2_PoolSlideChased") == true)
+end
+local wasChased = chaseActive()
+local function updateChaseAdrenaline()
+	local chased = chaseActive()
+	if wasChased and not chased then
+		adrenalineUntil = os.clock() + ADRENALINE_LINGER
 	end
-end)
+	wasChased = chased
+end
+player:GetAttributeChangedSignal("BeingChased"):Connect(updateChaseAdrenaline)
+player:GetAttributeChangedSignal("Level2_PoolSlideChased"):Connect(updateChaseAdrenaline)
+workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(updateChaseAdrenaline)
 local function adrenalized()
-	return player:GetAttribute("BeingChased") == true or os.clock() < adrenalineUntil
+	return chaseActive() or os.clock() < adrenalineUntil
 end
 
 -- dev cheat (DevCheats toggles the local DevUnlimited attribute): stamina never drains

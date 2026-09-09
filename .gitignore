@@ -37,3 +37,6 @@ graphify-out/
 
 # local secrets (Discord/Trello bot)
 .env
+
+# macOS Finder metadata, never game content
+.DS_Store

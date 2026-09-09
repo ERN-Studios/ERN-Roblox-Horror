@@ -340,16 +340,16 @@ local Configuration = {
 	},
 	-- LEVEL3_MANAGER_TABLE_CHECK_20260904
 	-- The Mall Manager kneels at an occupied hiding table during a hunt, warns
-	-- whoever is under it, then flushes them out. Hiding stays a real tactic:
-	-- the sweep bias is a chance rather than omniscience, checks are rate-limited
-	-- both globally and per table, and a flush is a head start, not a kill.
+	-- whoever is under it, then flushes them out. A targeted hidden player is
+	-- pursued directly; sweep bias and cooldowns apply only to patrol checks.
+	-- The warning and flush immunity give occupants time to leave and run.
 	TableCheck = {
 		-- Chance that a fresh sweep leg aims at an occupied table instead of a
-		-- random room. 1 would make the Manager omniscient.
+		-- random room. This does not gate pursuit of a selected hidden player.
 		SweepBiasChance = 0.5,
-		-- Floor between two table checks anywhere in the mall.
+		-- Floor between incidental patrol checks anywhere in the mall.
 		GlobalIntervalSeconds = 18,
-		-- Floor before the SAME table may be checked again.
+		-- Floor before the SAME table may be checked again on patrol.
 		AnchorCooldownSeconds = 25,
 		-- How close the Manager must get to the anchor before the check starts.
 		-- Measured to the anchor CENTRE, and the table's own navigation envelope

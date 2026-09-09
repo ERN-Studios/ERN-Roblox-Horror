@@ -345,8 +345,8 @@ function TestSuite.ValidateConfiguration(): {[string]: any}
 		and Configuration.Hiding.HideOccupantLateralOffset * 2 + 2
 			<= Configuration.Hiding.SightOccluderSize.X,
 		"Level 3 shared-table occupancy does not fit two players under one table")
-	-- The Mall Manager's table check must stay a tactic-preserving mechanic:
-	-- never certain, rate-limited, announced, and survivable.
+	-- Direct pursuit checks the selected hiding place deterministically. The
+	-- warning and flush immunity remain; random bias only belongs to patrol.
 	local tableCheck = Configuration.TableCheck
 	assert(tableCheck.SweepBiasChance > 0 and tableCheck.SweepBiasChance < 1
 		and tableCheck.GlobalIntervalSeconds > 0
@@ -357,7 +357,7 @@ function TestSuite.ValidateConfiguration(): {[string]: any}
 		and tableCheck.SoundRollOffMaxDistance > tableCheck.SoundRollOffMinDistance
 		and type(Configuration.Audio[tableCheck.SoundName]) == "string"
 		and Configuration.Audio[tableCheck.SoundName] ~= "",
-		"Level 3 table-check tuning is omniscient, unannounced, or names a missing cue")
+		"Level 3 table-check tuning has invalid patrol bias, warning, immunity, or cue")
 	assert(managerTemplate:FindFirstChildOfClass("AnimationController")
 		and managerTemplate:FindFirstChildOfClass("AnimationController"):FindFirstChildOfClass("Animator"),
 		"Mall Manager template is missing AnimationController.Animator")
@@ -3297,9 +3297,9 @@ end
 -- the real music sequence across the pre-blackout warning, the blackout, the
 -- scream edge, the Mall Manager hunt, the final lock and the recovery must
 -- leave every furniture part byte-identical in parent, transparency,
--- CanCollide, CanTouch and CanQuery, must leave a hidden player hidden, must
--- keep that hidden player off the Manager's target list, and must keep every
--- furniture group guarding navigation while the Manager still makes progress.
+-- CanCollide, CanTouch and CanQuery, must leave a hidden player hidden while
+-- checks are deliberately suspended, and must keep every furniture group
+-- guarding navigation while the Manager pursues the hidden player.
 --
 -- Seeking across the blackout edge fires one-way scream and chair events, so
 -- this probe is restricted to a disposable Play session. The required cleanup
@@ -3506,7 +3506,7 @@ function TestSuite.ProbeFurniturePermanence(context: {[string]: any}?): {[string
 				"Furniture group count changed at %s (%d -> %d)",
 				edge.Name, groupCount, #liveGroups))
 
-			-- 3. The hidden player stays hidden, and is not the Manager's target.
+			-- 3. Hiding remains intact while checks are disabled; targeting continues.
 			assert(player.Parent == Players, "Probe player left during the furniture probe")
 			assert(player:GetAttribute("Level3_Hiding") == true,
 				"Hidden player lost the Level3_Hiding attribute at " .. edge.Name)
@@ -3521,9 +3521,15 @@ function TestSuite.ProbeFurniturePermanence(context: {[string]: any}?): {[string
 
 			local managerSnapshot = Manager.GetSnapshot()
 			local targetUserId = managerSnapshot and managerSnapshot.TargetUserId or 0
-			assert(targetUserId ~= player.UserId, string.format(
-				"Mall Manager targeted a hidden player at %s (userId %d)",
-				edge.Name, targetUserId))
+			if managerSnapshot and managerSnapshot.Blackout and targetUserId > 0 then
+				local targetPlayer = Players:GetPlayerByUserId(targetUserId)
+				assert(targetPlayer and targetPlayer:GetAttribute("InRound") == true,
+					"Mall Manager retained an invalid target at " .. edge.Name)
+				if HidingController.IsHidden(targetPlayer, generation) then
+					assert(not managerSnapshot.Attacking,
+						"Mall Manager bypassed the suspended table check at " .. edge.Name)
+				end
+			end
 
 			local exclusionsActive = managerSnapshot and managerSnapshot.FurnitureNavExclusionsActive
 			local exclusionsTotal = managerSnapshot and managerSnapshot.FurnitureNavExclusionsTotal
@@ -3551,14 +3557,9 @@ function TestSuite.ProbeFurniturePermanence(context: {[string]: any}?): {[string
 			})
 		end
 
-		-- 4. Manager progress with EVERY player hidden.
-		--
-		-- This is the case that used to be excused rather than tested: with the
-		-- only player under a table, the Manager had nothing to chase, so the
-		-- movement assertion was dropped and the frozen-on-the-spot behaviour it
-		-- would have caught shipped. Having nothing to chase is not licence to
-		-- stop -- the hunt still sweeps the mall, it just never targets or
-		-- attacks anyone who is hidden. Both halves are asserted here.
+		-- 4. Every hidden player remains eligible for pursuit. With checks disabled
+		-- for this furniture audit, arriving at the safe table perimeter is valid;
+		-- the separate table-chase probe exercises the warning and flush.
 		MusicController.DebugSetElapsed(music.DurationSeconds + .1)
 		task.wait(.25)
 		assert(HidingController.IsHidden(player, generation),
@@ -3596,15 +3597,16 @@ function TestSuite.ProbeFurniturePermanence(context: {[string]: any}?): {[string
 				TargetUserId = snapshot.TargetUserId,
 				GenuineProgressSerial = snapshot.GenuineProgressSerial,
 			})
-			-- Exclusion has to hold for every single sample, not just at the
-			-- edges: a hidden player must never become a target or be attacked.
-			assert((snapshot.TargetUserId or 0) == 0,
-				"Mall Manager acquired a target during the all-hidden patrol")
-			assert(snapshot.TargetMode == "NO_EXPOSED_PLAYER", string.format(
-				"Mall Manager reported target mode %s during the all-hidden patrol",
-				tostring(snapshot.TargetMode)))
-			assert(snapshot.TargetDistance == -1 and snapshot.TargetPosition == nil,
-				"Mall Manager retained target distance/position while every player was hidden")
+			local targetPlayer = Players:GetPlayerByUserId(snapshot.TargetUserId or 0)
+			assert(targetPlayer and HidingController.IsHidden(targetPlayer, generation),
+				"Mall Manager lost its target while every living player was hidden")
+			assert(snapshot.TargetMode == "NEAREST_PLAYER" and snapshot.State == "CHASE",
+				"Mall Manager stopped pursuing the nearest hidden player")
+			assert(snapshot.TargetDistance >= 0 and typeof(snapshot.TargetPosition) == "Vector3"
+				and targetPlayer:GetAttribute("BeingChased") == true,
+				"Hidden-target chase telemetry was cleared")
+			assert(not snapshot.Attacking,
+				"Mall Manager bypassed the disabled table check to attack a hidden player")
 			assert(HidingController.IsHidden(player, generation),
 				"the hidden player was ejected during the all-hidden patrol")
 			assert(snapshot.FurnitureNavExclusionsActive == snapshot.FurnitureNavExclusionsTotal,
@@ -3612,19 +3614,23 @@ function TestSuite.ProbeFurniturePermanence(context: {[string]: any}?): {[string
 		end
 		assert(#hiddenMotion >= 5, string.format(
 			"All-hidden patrol probe collected only %d samples", #hiddenMotion))
-		assert(hiddenTravelled > 4, string.format(
+		local hiddenEnd = assert(Manager.GetSnapshot(),
+			"Mall Manager vanished during the hidden-player pursuit probe")
+		local resolvedGoal = hiddenEnd.ResolvedFinalGoal
+		local reachedTable = typeof(resolvedGoal) == "Vector3"
+			and Vector3.new(hiddenEnd.Position.X-resolvedGoal.X, 0,
+				hiddenEnd.Position.Z-resolvedGoal.Z).Magnitude <= Configuration.MallManager.GoalTolerance + 1
+		assert(reachedTable or hiddenTravelled > 4, string.format(
 			"Mall Manager stood still while every player was hidden (%.2f studs in %.1fs)",
 			hiddenTravelled, hiddenSeconds))
 		local hiddenNet = (hiddenLast - hiddenStart.Position).Magnitude
-		assert(hiddenNet > 2, string.format(
+		assert(reachedTable or hiddenNet > 2, string.format(
 			"Mall Manager oscillated without net progress while every player was hidden"
 			.. " (%.2f studs net of %.2f travelled)", hiddenNet, hiddenTravelled))
-		local hiddenEnd = assert(Manager.GetSnapshot(),
-			"Mall Manager vanished during the all-hidden patrol probe")
-		assert(hiddenEnd.GenuineProgressSerial > hiddenStart.GenuineProgressSerial,
+		assert(reachedTable or hiddenEnd.GenuineProgressSerial > hiddenStart.GenuineProgressSerial,
 			"Mall Manager moved without recording genuine patrol progress while all players were hidden")
 
-		-- 5. Manager progress with a legitimate target, for comparison.
+		-- 5. Manager progress with the player outside the table, for comparison.
 		pcall(HidingController.DebugExit, player)
 		task.wait(.4)
 		assert(not HidingController.IsHidden(player, generation),

@@ -1,6 +1,12 @@
 {
   "schemaVersion": 1,
-  "snapshotDate": "2026-08-26",
+  "snapshotDate": "2026-08-28",
+  "retiredSlidemouthRuntime": {
+    "date": "2026-08-31",
+    "archive": "ServerStorage.Level2RetiredSlidemouth_20260831",
+    "replacement": "Pool Slide humanoid on the second distinct pump",
+    "note": "Historical Slidemouth asset IDs and authoring packs below remain recovery references, not active runtime assets"
+  },
   "experience": {
     "name": "BACKROOMS: STAY QUIET [CO-OP HORROR]",
     "placeId": 131311258779917,
@@ -18,6 +24,22 @@
     "verifiedSourceFileCount": 51,
     "restoreCommand": "./tools/restore-live-assets.sh"
   },
+  "supplementalSourcePacks": [
+    {
+      "directory": "assets/source-packs/slidemouth-2026-08-28",
+      "format": "split tar.gz",
+      "partSizeBytes": 655360,
+      "partCount": 20,
+      "archiveBytes": 12774459,
+      "archiveSha256": "742d7324f0604e8bd6ea3500c3c2ba51f5774e2296dcdd88263b13f88a563f44",
+      "verifiedSourceFileCount": 2,
+      "contents": [
+        "models/level2/slidemouth-bind.fbx",
+        "models/level2/slidemouth-walk.fbx"
+      ],
+      "restoreCommand": "./tools/restore-slidemouth-assets.sh"
+    }
+  ],
   "directFiles": [
     {
       "path": "assets/sounds/level3/cd-collected.mp3",
@@ -46,7 +68,6 @@
     },
     "level2Audio": {
       "waterDrop": 116103446006735,
-      "distantSplash": 102625239366222,
       "drainGurgle": 105244893367809,
       "pipeGroan": 116707880665577,
       "pressureDoor": 113402173976510,
@@ -132,6 +153,7 @@
       "mallManagerColor": 139917107442839
     },
     "modelsAndAnimations": {
+      "slidemouthMesh": 99102503208838,
       "mallManagerMesh": 109940356128050,
       "mallManagerWalkAnimation": 123012476898232,
       "foldingTableMesh": 135921646304432,

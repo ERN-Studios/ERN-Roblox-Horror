@@ -1686,6 +1686,8 @@ function Navigator:_probeBlockedClearance()
 end
 
 function Navigator:_stableNeedsPath(goal, force)
+	-- Shared request scheduling, including Pool Foam's ordinary route policy:
+	-- elapsed time permits a replacement; it does not invalidate a good route.
 	local age = os.clock() - self.LastPathAt
 	if self.Computing and age >= self.Tuning.PathRequestTimeout then
 		-- A hung async calculation cannot own navigation forever. Late results
@@ -1859,7 +1861,7 @@ function Navigator:_requestPath(goal, graphOnly)
 					WaypointSpacing = self.Tuning.WaypointSpacing,
 					Costs = {Water = 1, Level2Roof = math.huge},
 				})
-				path:ComputeAsync(stable and requestStart or self.FootPosition, goal)
+				path:ComputeAsync(requestStart, goal)
 			end)
 		end
 		if self.Destroyed or requestId ~= self.RequestId then return end
@@ -1868,7 +1870,7 @@ function Navigator:_requestPath(goal, graphOnly)
 		local status = "PATH_FAILED"
 		if success and path and path.Status == Enum.PathStatus.Success then
 			for _, waypoint in ipairs(path:GetWaypoints()) do
-				if horizontalDistance(waypoint.Position, stable and requestStart or self.FootPosition) > self.Tuning.WaypointArrivalDistance then
+				if horizontalDistance(waypoint.Position, requestStart) > self.Tuning.WaypointArrivalDistance then
 					table.insert(points, waypoint.Position)
 				end
 			end
@@ -1876,11 +1878,11 @@ function Navigator:_requestPath(goal, graphOnly)
 			if self:_pathPointsAllowed(points) then
 				status = "PATH"
 			else
-				points, status = self:_fallbackWaypoints(goal, stable and requestStart or nil)
+				points, status = self:_fallbackWaypoints(goal, requestStart)
 				failure = "path left allowed halls"
 			end
 		else
-			points, status = self:_fallbackWaypoints(goal, stable and requestStart or nil)
+			points, status = self:_fallbackWaypoints(goal, requestStart)
 		end
 
 		if self.Destroyed or requestId ~= self.RequestId then return end
@@ -1902,7 +1904,7 @@ function Navigator:_requestPath(goal, graphOnly)
 				return self.Destroyed or requestId ~= self.RequestId
 					or (stable and os.clock() >= deadline)
 			end
-			local centred, centringStats = self:_centreRoute(points, shouldAbort, stable and requestStart or nil)
+			local centred, centringStats = self:_centreRoute(points, shouldAbort, requestStart)
 			if self.Destroyed or requestId ~= self.RequestId then return end
 			if stable and type(centringStats) ~= "table" then
 				self:_rejectStableRoute("route certification missing")
@@ -1937,9 +1939,9 @@ function Navigator:_requestPath(goal, graphOnly)
 				and status ~= "GRAPH" and not shouldAbort())
 				or (not stable and centringStats.Unwalkable and centringStats.Unwalkable > 0
 					and not centringStats.Aborted) then
-				local graphPoints, graphStatus = self:_fallbackWaypoints(goal, stable and requestStart or nil)
+				local graphPoints, graphStatus = self:_fallbackWaypoints(goal, requestStart)
 				if #graphPoints > 0 then
-					local graphCentred, graphStats = self:_centreRoute(graphPoints, shouldAbort, stable and requestStart or nil)
+					local graphCentred, graphStats = self:_centreRoute(graphPoints, shouldAbort, requestStart)
 					if self.Destroyed or requestId ~= self.RequestId then return end
 					if (stable and fullyCertified(graphStats))
 						or (not stable and not graphStats.Aborted
@@ -1978,7 +1980,6 @@ function Navigator:_requestPath(goal, graphOnly)
 			-- unaffected, and this can never let the rig stop early, because the
 			-- stand-in is by construction the closest standable point the pass
 			-- could find to the goal.
-			if not stable then self.GoalApproach = nil end
 			local goalStandable = self:_standableAt(goal)
 			if not goalStandable then
 				local approachIndex
@@ -1986,7 +1987,6 @@ function Navigator:_requestPath(goal, graphOnly)
 					local candidate = points[index]
 					if self:_standableAt(candidate) then
 						proposedApproach = candidate
-						if not stable then self.GoalApproach = candidate end
 						approachIndex = index
 						break
 					end
@@ -2057,6 +2057,25 @@ function Navigator:_requestPath(goal, graphOnly)
 				and os.clock() + CLEARANCE_RECHECK_INTERVAL or 0
 			self.RouteInstallCount += 1
 			self.RoutePrefixSkips += skipped
+		else
+			-- Pool Foam keeps walking its incumbent while planning yields too.
+			-- Join at its current position; resetting to a stale first waypoint
+			-- otherwise sends it backwards every time a replacement lands.
+			if horizontalDistance(requestStart, self.FootPosition) > .05 then
+				local joined, skipped = self:_joinStableRoute(points, requestStart)
+				if not joined then
+					self:_rejectStableRoute("new route cannot join current foot safely")
+					if previousBlockedPath and self.Waypoints[self.WaypointIndex] then
+						self:_bindBlocked(previousBlockedPath)
+					end
+					return
+				end
+				points = joined
+				self.RoutePrefixSkips += skipped
+			end
+			self.GoalApproach = proposedApproach
+			self.InstalledGoal = goal
+			self.RouteInstallCount += 1
 		end
 		self.Waypoints = points
 		self.WaypointIndex = 1
@@ -2077,37 +2096,25 @@ end
 function Navigator:SetGraphGoal(goal, force)
 	if self.Destroyed or not finiteVector3(goal) or not self:_positionAllowed(goal) then return false end
 	self.Goal = goal
-	if self.Tuning.StableRoutes and force ~= true then
+	if force ~= true then
 		if self:_stableNeedsPath(goal, false) then self:_requestPath(goal, true) end
 		return true
 	end
 	if force == true and self.Computing then
 		self.RequestId += 1
 		self.Computing = false
-		if not self.Tuning.StableRoutes then
-			self.Waypoints = {}
-			self.WaypointIndex = 1
-		end
 		self:_clearBlocked()
 	end
-	local now = os.clock()
-	local moved = not self.LastRequestedGoal
-		or horizontalDistance(goal, self.LastRequestedGoal) >= self.Tuning.RepathDistance
-	local stale = now - self.LastPathAt >= self.Tuning.RepathInterval
-	if not self.Computing and (force == true or moved or stale or #self.Waypoints == 0) then
-		-- The old recovery path installed raw room-centre waypoints synchronously,
-		-- bypassing the body-clearance centring and goal-approach contract used by
-		-- every normal route. Force the graph as the route SOURCE, but send it
-		-- through the same asynchronous, budgeted installer as PathfindingService.
-		self:_requestPath(goal, true)
-	end
+	-- Recovery changes the route source, while keeping the normal asynchronous
+	-- body-clearance installer and any incumbent the entity can still follow.
+	self:_requestPath(goal, true)
 	return true
 end
 
 function Navigator:SetGoal(goal, force)
 	if self.Destroyed or not finiteVector3(goal) or not self:_positionAllowed(goal) then return false end
 	self.Goal = goal
-	if self.Tuning.StableRoutes and force ~= true then
+	if force ~= true then
 		if self:_stableNeedsPath(goal, false) then self:_requestPath(goal) end
 		return true
 	end
@@ -2116,19 +2123,9 @@ function Navigator:SetGoal(goal, force)
 		-- not a no-op that advances the controller's recovery stage.
 		self.RequestId += 1
 		self.Computing = false
-		if not self.Tuning.StableRoutes then
-			self.Waypoints = {}
-			self.WaypointIndex = 1
-		end
 		self:_clearBlocked()
 	end
-	local now = os.clock()
-	local moved = not self.LastRequestedGoal
-		or horizontalDistance(goal, self.LastRequestedGoal) >= self.Tuning.RepathDistance
-	local stale = now - self.LastPathAt >= self.Tuning.RepathInterval
-	if not self.Computing and (force == true or moved or stale or #self.Waypoints == 0) then
-		self:_requestPath(goal)
-	end
+	self:_requestPath(goal)
 	return true
 end
 

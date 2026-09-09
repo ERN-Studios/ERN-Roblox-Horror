@@ -14,6 +14,8 @@ local WorldBuilder = require(script.Parent:WaitForChild("Level 2 World Builder")
 local ObjectiveController = require(script.Parent:WaitForChild("Level 2 Objective Controller"))
 local PoolFoamController = require(script.Parent:WaitForChild("Level 2 Pool Foam Controller"))
 local PoolFoamConfiguration = require(script.Parent:WaitForChild("Level 2 Pool Foam Configuration"))
+local PoolSlideConfiguration = require(script.Parent:WaitForChild("Level 2 Pool Slide Configuration"))
+local PoolSlideController = require(script.Parent:WaitForChild("Level 2 Pool Slide Controller"))
 local Master = require(ReplicatedStorage:WaitForChild("MasterConfiguration"))
 
 local Adapter = {}
@@ -250,6 +252,8 @@ function Adapter.Cleanup()
 		or ServerStorage:FindFirstChild("Level 2 Stored Level 1 Entity") ~= nil
 		or ServerStorage:FindFirstChild(STORED_LOBBY_NAME) ~= nil
 	)
+	-- Stop pending spawn work/tracks before either objectives or world are removed.
+	PoolSlideController.Stop()
 	PoolFoamController.Stop()
 	ObjectiveController.Stop()
 	-- Pool Foam pause is session-local; do not inherit a Studio debug pause.
@@ -297,6 +301,7 @@ function Adapter.Cleanup()
 	end
 	state:SetAttribute("Level2_HallCount", nil)
 	state:SetAttribute("Level2_Error", nil)
+	state:SetAttribute("Level2_PoolSlideEnabled", nil)
 end
 
 function Adapter.Build()
@@ -386,11 +391,8 @@ function Adapter.Build()
 		state:SetAttribute("Level2_HallCount", #layout.Halls)
 
 		ObjectiveController.Start(manifest, generation)
-		-- The Pool Slide encounter was removed on 2026-09-02. It never once
-		-- succeeded in spawning on a generated map -- every attempt failed the
-		-- body-route certification and retried forever, costing 78% of the frame
-		-- budget (13 FPS, measured). Pool Foam is Level 2's only hostile now.
-		-- The retired code is in ServerStorage.Archive.Level2RetiredPoolSlide_20260902.
+		-- Preserve the existing Pool Foam encounter. The new verified rig/controller
+		-- below is separate from the retired whole-route-certification giant.
 		local poolFoamSession, poolFoamError = PoolFoamController.Start(manifest, generation)
 		if not poolFoamSession then
 			local message = "[Level 2] Pool Foam encounter did not start: " .. tostring(poolFoamError)
@@ -398,6 +400,20 @@ function Adapter.Build()
 				error(message)
 			end
 			warn(message)
+		end
+
+		-- Disabled is an intentional rollout state, not an encounter error. When
+		-- enabled, fail the build usefully if the rig/controller cannot start;
+		-- the existing outer failure path stops both entities and cleans the world.
+		state:SetAttribute("Level2_PoolSlideEnabled", PoolSlideConfiguration.Enabled == true)
+		if PoolSlideConfiguration.Enabled == true then
+			local poolSlideSession, poolSlideError = PoolSlideController.Start(manifest, generation)
+			if not poolSlideSession then
+				error("[Level 2] Pool Slide encounter did not start: " .. tostring(poolSlideError))
+			end
+		else
+			state:SetAttribute("Level2_PoolSlideState", "DISABLED")
+			state:SetAttribute("Level2_PoolSlidePhase", "DISABLED")
 		end
 
 		workspace:SetAttribute("SelectedLevel", 2)

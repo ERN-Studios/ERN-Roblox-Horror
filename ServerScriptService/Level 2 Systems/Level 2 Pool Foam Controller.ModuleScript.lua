@@ -1214,6 +1214,16 @@ local function updateEntity(session, entity, deltaTime, now)
 			if netTravel >= .5 or goalProgress >= .35 then
 				entity.RepathAttempts = 0
 			else
+				local navigation = entity.Navigator:GetDebugSnapshot()
+				local requestAge = now - numberOr(navigation.RequestStartedAt, -math.huge)
+				local requestTimeout = numberOr(movement.PathRequestTimeout, 8, 2, 30)
+				if navigation.Computing and requestAge >= 0 and requestAge < requestTimeout
+					and entity.NoProgressFor < requestTimeout then
+					-- Certification may outlast the movement watchdog. Bound its
+					-- grace by total idle time too, so successive timed-out requests
+					-- cannot keep the creature waiting forever.
+					return
+				end
 				entity.RepathAttempts += 1
 				if entity.RepathAttempts == 1 then
 					entity.Navigator:SetGoal(currentGoal, true)

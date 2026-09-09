@@ -269,7 +269,7 @@ local function tryEnter(session: any, player: Player, anchor: BasePart): (boolea
 	humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
 	suppressCollision(collisionState)
 
-	player:SetAttribute("BeingChased", false)
+	-- Hiding does not end the Manager's chase; the AI owns BeingChased.
 	player:SetAttribute("Level3_HideGeneration", session.Generation)
 	player:SetAttribute("Level3_HideTableIndex",
 		tonumber(anchor:GetAttribute("Level3_HideTableIndex")) or 0)
@@ -329,6 +329,13 @@ function Controller.IsHidden(player: Player, generation: number?): boolean
 		and record.Anchor ~= nil
 		and record.Anchor.Parent ~= nil
 		and player:GetAttribute("Level3_Hiding") == true
+end
+
+-- The Manager routes to the authoritative table record, never a client-supplied
+-- index or an old character's hiding attributes.
+function Controller.GetAnchor(player: Player, generation: number?): BasePart?
+	if not Controller.IsHidden(player, generation) then return nil end
+	return activeSession.HiddenPlayers[player].Anchor
 end
 
 function Controller.SetFurnitureSuspended(active: boolean): boolean

@@ -1,0 +1,6 @@
+NOT a script — this file mirrors a RemoteEvent object in Roblox Studio.
+
+Studio path: ReplicatedStorage.Remotes.SetCrouching
+Used bidirectionally by NoiseReporter (client prediction/reconciliation) and
+Crouch State Server (validated replicated state and serialled acknowledgement).
+Name is case-sensitive and must be exactly "SetCrouching".

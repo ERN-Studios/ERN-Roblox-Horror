@@ -1,0 +1,305 @@
+{
+  "ProfileSha256": "2e42e93fec8ef80d25e856fceee887a04b1acc779c0e8ced3a95daa860e23db3",
+  "SchemaVersion": 2,
+  "Nodes": 442,
+  "Functions": 195,
+  "Source": "https://create.roblox.com/docs/studio/optimization/scriptprofiler",
+  "SessionStartUTC": "2026-09-09T18:32:53.497Z",
+  "SessionEndUTC": "2026-09-09T18:33:13.567Z",
+  "SessionElapsedSeconds": 20.07,
+  "TotalSampledScriptMicroseconds": 4767991,
+  "PoolSlideUniqueInclusiveMicroseconds": 1843447,
+  "PoolSlideDiagnosticCallerInclusiveMicroseconds": 5121,
+  "PoolSlideNonDiagnosticCallerInclusiveMicroseconds": 1838326,
+  "PoolSlideShareOfSampledScriptPercent": 38.66297146953507,
+  "PoolSlideSampledMillisecondsPerWallSecond": 91.85087194818136,
+  "RefreshObstacleFiltersInclusiveMicroseconds": 631674,
+  "RefreshShareOfPoolSlideInclusivePercent": 34.26591597154678,
+  "RefreshShareOfSampledScriptPercent": 13.248221315853995,
+  "FrameMedianMilliseconds": null,
+  "FrameP95Milliseconds": null,
+  "Limitations": "Aggregate sampled script CPU only, including native calls attributed to script stacks; not total hardware CPU, frame percentiles, physics/rendering cost, or memory/leak certification. Nested inclusive functions are not summed for entity attribution.",
+  "CategoryRoots": [
+    {
+      "Category": "delayedThreads",
+      "NodeId": 1,
+      "InclusiveMicroseconds": 2378143
+    },
+    {
+      "Category": "DescendantAdded",
+      "NodeId": 400,
+      "InclusiveMicroseconds": 1286
+    },
+    {
+      "Category": "Uncategorized",
+      "NodeId": 363,
+      "InclusiveMicroseconds": 9290
+    },
+    {
+      "Category": "OnServerEvent",
+      "NodeId": 214,
+      "InclusiveMicroseconds": 8418
+    },
+    {
+      "Category": "ValueChanged",
+      "NodeId": 192,
+      "InclusiveMicroseconds": 11249
+    },
+    {
+      "Category": "callAsyncCallback",
+      "NodeId": 345,
+      "InclusiveMicroseconds": 15720
+    },
+    {
+      "Category": "deferredThreads",
+      "NodeId": 92,
+      "InclusiveMicroseconds": 2681
+    },
+    {
+      "Category": "WaitingScripts",
+      "NodeId": 22,
+      "InclusiveMicroseconds": 177069
+    },
+    {
+      "Category": "Heartbeat",
+      "NodeId": 10,
+      "InclusiveMicroseconds": 2164135
+    }
+  ],
+  "PoolSlideFirstEntryNodes": [
+    {
+      "Category": "delayedThreads",
+      "NodeId": 3,
+      "FunctionId": 2,
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "<anonymous>",
+      "Line": 1959,
+      "InclusiveMicroseconds": 1739072,
+      "Ancestors": [
+        "GameManager"
+      ]
+    },
+    {
+      "Category": "delayedThreads",
+      "NodeId": 253,
+      "FunctionId": 114,
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Controller",
+      "Name": "GetDebugSnapshot",
+      "Line": 767,
+      "InclusiveMicroseconds": 5121,
+      "Ancestors": [
+        "TEMP_Pump3NativeServer",
+        "ServerScriptService.TEMP_Pump3NativeServer:86:<anonymous>",
+        "[C]:?:xpcall",
+        "ServerScriptService.TEMP_Pump3NativeServer:87:<anonymous>"
+      ]
+    },
+    {
+      "Category": "deferredThreads",
+      "NodeId": 94,
+      "FunctionId": 2,
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "<anonymous>",
+      "Line": 1959,
+      "InclusiveMicroseconds": 2681,
+      "Ancestors": [
+        "GameManager"
+      ]
+    },
+    {
+      "Category": "WaitingScripts",
+      "NodeId": 396,
+      "FunctionId": 2,
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "<anonymous>",
+      "Line": 1959,
+      "InclusiveMicroseconds": 1627,
+      "Ancestors": [
+        "GameManager"
+      ]
+    },
+    {
+      "Category": "Heartbeat",
+      "NodeId": 73,
+      "FunctionId": 42,
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Controller",
+      "Name": "<anonymous>",
+      "Line": 756,
+      "InclusiveMicroseconds": 94946,
+      "Ancestors": [
+        "GameManager"
+      ]
+    }
+  ],
+  "RefreshObstacleFilterCallgraphNodes": [
+    {
+      "Category": "delayedThreads",
+      "NodeId": 149,
+      "FunctionId": 41,
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "_refreshObstacleFilters",
+      "Line": 543,
+      "InclusiveMicroseconds": 48514,
+      "Ancestors": [
+        "GameManager",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1959:<anonymous>",
+        "[C]:?:xpcall",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1961:runRequest",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1311:_centreRoute",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:999:_centredWaypoint",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:987:_standableAt",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:627:_bodyBoxClear"
+      ]
+    },
+    {
+      "Category": "delayedThreads",
+      "NodeId": 71,
+      "FunctionId": 41,
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "_refreshObstacleFilters",
+      "Line": 543,
+      "InclusiveMicroseconds": 202849,
+      "Ancestors": [
+        "GameManager",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1959:<anonymous>",
+        "[C]:?:xpcall",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1961:runRequest",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1311:_centreRoute",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:698:_walkingEdgeClear",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:644:_bodySweepClear"
+      ]
+    },
+    {
+      "Category": "delayedThreads",
+      "NodeId": 154,
+      "FunctionId": 41,
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "_refreshObstacleFilters",
+      "Line": 543,
+      "InclusiveMicroseconds": 258852,
+      "Ancestors": [
+        "GameManager",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1959:<anonymous>",
+        "[C]:?:xpcall",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1961:runRequest",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1311:_centreRoute",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:698:_walkingEdgeClear",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:627:_bodyBoxClear"
+      ]
+    },
+    {
+      "Category": "delayedThreads",
+      "NodeId": 403,
+      "FunctionId": 41,
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "_refreshObstacleFilters",
+      "Line": 543,
+      "InclusiveMicroseconds": 3094,
+      "Ancestors": [
+        "GameManager",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1959:<anonymous>",
+        "[C]:?:xpcall",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1961:runRequest",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1311:_centreRoute",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:987:_standableAt",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:627:_bodyBoxClear"
+      ]
+    },
+    {
+      "Category": "delayedThreads",
+      "NodeId": 332,
+      "FunctionId": 41,
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "_refreshObstacleFilters",
+      "Line": 543,
+      "InclusiveMicroseconds": 3009,
+      "Ancestors": [
+        "GameManager",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1959:<anonymous>",
+        "[C]:?:xpcall",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1961:runRequest",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1311:_centreRoute",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1287:_clearanceDetour",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1095:_clearanceDetourAtStep",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:987:_standableAt",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:627:_bodyBoxClear"
+      ]
+    },
+    {
+      "Category": "delayedThreads",
+      "NodeId": 191,
+      "FunctionId": 41,
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "_refreshObstacleFilters",
+      "Line": 543,
+      "InclusiveMicroseconds": 37590,
+      "Ancestors": [
+        "GameManager",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1959:<anonymous>",
+        "[C]:?:xpcall",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1961:runRequest",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1311:_centreRoute",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1287:_clearanceDetour",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1095:_clearanceDetourAtStep",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:698:_walkingEdgeClear",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:644:_bodySweepClear"
+      ]
+    },
+    {
+      "Category": "delayedThreads",
+      "NodeId": 186,
+      "FunctionId": 41,
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "_refreshObstacleFilters",
+      "Line": 543,
+      "InclusiveMicroseconds": 63770,
+      "Ancestors": [
+        "GameManager",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1959:<anonymous>",
+        "[C]:?:xpcall",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1961:runRequest",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1311:_centreRoute",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1287:_clearanceDetour",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1095:_clearanceDetourAtStep",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:698:_walkingEdgeClear",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:627:_bodyBoxClear"
+      ]
+    },
+    {
+      "Category": "delayedThreads",
+      "NodeId": 274,
+      "FunctionId": 41,
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "_refreshObstacleFilters",
+      "Line": 543,
+      "InclusiveMicroseconds": 6428,
+      "Ancestors": [
+        "GameManager",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1959:<anonymous>",
+        "[C]:?:xpcall",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1961:runRequest",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1795:_smoothStableRoute",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:698:_walkingEdgeClear",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:644:_bodySweepClear"
+      ]
+    },
+    {
+      "Category": "delayedThreads",
+      "NodeId": 270,
+      "FunctionId": 41,
+      "Source": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "Name": "_refreshObstacleFilters",
+      "Line": 543,
+      "InclusiveMicroseconds": 7568,
+      "Ancestors": [
+        "GameManager",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1959:<anonymous>",
+        "[C]:?:xpcall",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1961:runRequest",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:1795:_smoothStableRoute",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:698:_walkingEdgeClear",
+        "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator:627:_bodyBoxClear"
+      ]
+    }
+  ]
+}

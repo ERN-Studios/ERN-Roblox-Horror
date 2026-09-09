@@ -1,0 +1,34 @@
+{
+  "ComparedAgainst": "studio-truth-export-before.json",
+  "Version": 1809,
+  "Count": 122,
+  "Diffs": [
+    {
+      "Path": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "before": {
+        "Hash": 209686369,
+        "Bytes": 126975
+      },
+      "after": {
+        "Bytes": 128589,
+        "Path": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+        "EditorMatches": true,
+        "Hash": 1836534037
+      }
+    },
+    {
+      "Path": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Controller",
+      "before": {
+        "Hash": 2429415967,
+        "Bytes": 35774
+      },
+      "after": {
+        "Bytes": 36230,
+        "Path": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Controller",
+        "EditorMatches": true,
+        "Hash": 1722930491
+      }
+    }
+  ],
+  "Removed": []
+}

@@ -1,0 +1,263 @@
+{
+  "schema": "poolslide-offline-review-evidence-v1",
+  "archivedDate": "2026-09-09",
+  "nonRuntime": true,
+  "sourceDirectory": "work/level2-entity-2026-09-09/current-review",
+  "sourceAuthority": "Fresh Studio1793 review; repository candidates do not authorize Studio writes",
+  "gameplayPassed": false,
+  "performancePassed": false,
+  "executedDuringArchive": false,
+  "files": [
+    {
+      "file": "analyze-script-profile.mjs",
+      "bytes": 4952,
+      "sha256": "fdd205741c85910bbc3a7a08462a4af8821d9839b0f2a4ce29120a5c8b67c9e8",
+      "status": "Read-only aggregate profiler analysis; no frame percentiles inferred"
+    },
+    {
+      "file": "baseline2-analysis.json",
+      "bytes": 12133,
+      "sha256": "24048e559443fae98f8f6564d409d67403cdc44789f4e108e62c5f627b25ec54",
+      "status": "Actual baseline2 evidence; movement/speed checks failed; not a release acceptance pass"
+    },
+    {
+      "file": "baseline2-gameplay.json",
+      "bytes": 45677,
+      "sha256": "982c2ce190b3e5e1d41eb3f6149e3aadfbcea26b09664cdbba808c122fa24561",
+      "status": "Actual baseline2 evidence; movement/speed checks failed; not a release acceptance pass"
+    },
+    {
+      "file": "baseline2-server-profile.json",
+      "bytes": 48746,
+      "sha256": "2e42e93fec8ef80d25e856fceee887a04b1acc779c0e8ced3a95daa860e23db3",
+      "status": "Actual baseline2 evidence; movement/speed checks failed; not a release acceptance pass"
+    },
+    {
+      "file": "baseline2-server-trace.json",
+      "bytes": 79613,
+      "sha256": "43bafd14e3aafabeb9d7b55b860bf464fecc94fc2f01b2f84b1c1aae5b5be16c",
+      "status": "Actual baseline2 evidence; movement/speed checks failed; not a release acceptance pass"
+    },
+    {
+      "file": "budget4-analysis.json",
+      "bytes": 5081,
+      "sha256": "67ca18fcb267fac7b78ec9f828a0875eee36a5c0b88f52e24d1bb8a4c98773bb",
+      "status": "Actual native scoped-change evidence; 9/9 diagnostic checks passed; not full release acceptance"
+    },
+    {
+      "file": "budget4-gameplay.json",
+      "bytes": 59907,
+      "sha256": "2cb145c4a354379bc3b6ddb10326cf4460ee7866386f28a4cca5e877a8c8aa05",
+      "status": "Actual native scoped-change evidence; 9/9 diagnostic checks passed; not full release acceptance"
+    },
+    {
+      "file": "budget4-memory.json",
+      "bytes": 4975,
+      "sha256": "a49f7cac5cb6f46533a2b3fb5a95ebe4b11e181d6f079dc6ce949610c112da2e",
+      "status": "Actual native scoped-change evidence; 9/9 diagnostic checks passed; not full release acceptance"
+    },
+    {
+      "file": "budget4-server-profile.json",
+      "bytes": 69041,
+      "sha256": "5377c56dae5e6b2ecac067ecc857e4cdfbb3521ab1af28e559af60d848993b36",
+      "status": "Actual native scoped-change evidence; 9/9 diagnostic checks passed; not full release acceptance"
+    },
+    {
+      "file": "budget4-server-trace.json",
+      "bytes": 86299,
+      "sha256": "e7be2301d5055f758c268dc0fd9683223a2c463a5fffccde56b1699dd852bf6e",
+      "status": "Actual native scoped-change evidence; 9/9 diagnostic checks passed; not full release acceptance"
+    },
+    {
+      "file": "budget5-analysis.json",
+      "bytes": 9268,
+      "sha256": "0436faf54779d8b05e80091b08d1b184ce38fe0d01118afc283a44811a03ac4b",
+      "status": "Actual native scoped-change evidence; 9/9 diagnostic checks passed; not full release acceptance"
+    },
+    {
+      "file": "budget5-gameplay.json",
+      "bytes": 53718,
+      "sha256": "fbb18642ea58a536097744a159f84f42f97a7b26ef2c98eb3f97933378436e99",
+      "status": "Actual native scoped-change evidence; 9/9 diagnostic checks passed; not full release acceptance"
+    },
+    {
+      "file": "budget5-server-profile.json",
+      "bytes": 70293,
+      "sha256": "c621f53bfaac6c3df4d244c7013fd70b3cfc32383c38b60acbcf1595aa9f9a68",
+      "status": "Actual native scoped-change evidence; 9/9 diagnostic checks passed; not full release acceptance"
+    },
+    {
+      "file": "budget5-server-trace.json",
+      "bytes": 80091,
+      "sha256": "4868ba6f14c15aada4b7eb4cca61066300158886f1c4b04b7c01731e166f29c4",
+      "status": "Actual native scoped-change evidence; 9/9 diagnostic checks passed; not full release acceptance"
+    },
+    {
+      "file": "cache3-analysis.json",
+      "bytes": 8168,
+      "sha256": "1d5aae4c87560a0b784acb5d7ac687ce1a260c5741affc07ee174e1767d47388",
+      "status": "Actual cache3 native evidence; movement/speed checks failed"
+    },
+    {
+      "file": "cache3-gameplay.json",
+      "bytes": 51325,
+      "sha256": "eff3661c58d12466f5d395abce16d1cec945459c0ec16cd805a134bb1723a94e",
+      "status": "Actual cache3 native evidence; movement/speed checks failed"
+    },
+    {
+      "file": "cache3-server-profile.json",
+      "bytes": 77753,
+      "sha256": "c8dfa27749c69cf50ba643e1d2a88e16f7213fec359cce583eb61c0005580fea",
+      "status": "Actual cache3 native evidence; movement/speed checks failed"
+    },
+    {
+      "file": "cache3-server-trace.json",
+      "bytes": 77654,
+      "sha256": "6b15b97df15fe17aed792f8506e7a1ab7d6be90847e52df3cde239b439df8f16",
+      "status": "Actual cache3 native evidence; movement/speed checks failed"
+    },
+    {
+      "file": "current-studio-source-comparison.json",
+      "bytes": 859,
+      "sha256": "8d0baa33a5252ee9cc01c38a19aa94f1ff2d221c64a48d72e8dd6d378e08aec5",
+      "status": "Final source/temporary-test cleanup evidence; no publication claim"
+    },
+    {
+      "file": "filter-cache-fixture-result.json",
+      "bytes": 2907,
+      "sha256": "9024b38ed8710b92fe04841338d570f9ecbc2ebc8344d97a3b4f9ac22fbb83dc",
+      "status": "38/38 native table-mock checks; not CPU or memory certification"
+    },
+    {
+      "file": "obstacle-filter-cache.fixture.luau",
+      "bytes": 4670,
+      "sha256": "ebd4c96f341de32c92ac7f2421b4ad324627bb08a01a49953aa5abff028dc1e9",
+      "status": "Archived source only; not a passed gameplay test or applied optimization"
+    },
+    {
+      "file": "pump3-active-server-profile.luau",
+      "bytes": 8360,
+      "sha256": "cf91fbb9407cf20046285d4b5b88a0c31571c4e6fe42fe57d6bec009b266104b",
+      "status": "Archived source only; not a passed gameplay test or applied optimization"
+    },
+    {
+      "file": "pump3-native-test.client.lua",
+      "bytes": 1568,
+      "sha256": "48efae8e4eb1ccc9094f623610fdcd1b367cabc605e0d53ced72cfc43e28f2de",
+      "status": "Archived source only; not a passed gameplay test or applied optimization"
+    },
+    {
+      "file": "pump3-native-test.server.lua",
+      "bytes": 16184,
+      "sha256": "6d235fa472d2c9098adbd29518e3a195a0c2f22f4e52f14d7e9faa2c1e61de51",
+      "status": "Archived source only; not a passed gameplay test or applied optimization"
+    },
+    {
+      "file": "README.md",
+      "bytes": 14466,
+      "sha256": "049e331b5af750e7105eab6cfae5900c78d8f7be39ee5cb4f8be2a2a1482fcda",
+      "status": "Archival documentation or analysis; no public deployment"
+    },
+    {
+      "file": "refresh-obstacle-filters.candidate.luau",
+      "bytes": 1464,
+      "sha256": "875730d269be6f6b88b51ba063eec489d27bc04c4ebf1bee1ed62dacf80c8fb3",
+      "status": "Archived source only; not a passed gameplay test or applied optimization"
+    },
+    {
+      "file": "route-install-budget-fixture-result.json",
+      "bytes": 2615,
+      "sha256": "7b66e18a6e358d5d5a5676f0d42fdb1ade52bc62ed0cb9f2387683c8342df3d3",
+      "status": "26/26 native mocked control-flow fixture checks; not geometry or gameplay certification"
+    },
+    {
+      "file": "route-install-budget.fixture.luau",
+      "bytes": 8819,
+      "sha256": "525233785c1f2fbbec65cbc5e04508d1f0bea871593220ec5e974f112430c728",
+      "status": "26/26 native mocked control-flow fixture checks; not geometry or gameplay certification"
+    },
+    {
+      "file": "test-script-cleanup.json",
+      "bytes": 475,
+      "sha256": "57e26c5f64aee262081682b89ab1ef5928ee8e05d15bfa9b739c2b9b6e0526f5",
+      "status": "Final source/temporary-test cleanup evidence; no publication claim"
+    }
+  ],
+  "baseline2": {
+    "NativeObservationCompleted": true,
+    "OverallGameplayAccepted": false,
+    "MovementPassed": false,
+    "EnragedSameInstancePassed": true,
+    "TestedMinimumSpawnDistance": 60,
+    "MeasuredSpawnHorizontalStuds": 89.99322509765625,
+    "ProfileCaptureCompleted": true,
+    "PerformanceBudgetAccepted": false,
+    "BeforeSubsequentSafetyAndCacheChanges": true
+  },
+  "cache3": {
+    "Seed": 1162830069,
+    "DiagnosticPassCount": 7,
+    "DiagnosticCheckCount": 9,
+    "MinimumSpawnDistance": 100,
+    "MeasuredSpawnHorizontalStuds": 142.20889282226562,
+    "Movement": {
+      "DirectionReversals": 0,
+      "Note": "Coarse direction changes may include legitimate corridor turns; not an oscillation classifier.",
+      "Elapsed": 20.102288291673176,
+      "MaximumPublishedSpeed": 0,
+      "Full20Seconds": true,
+      "HorizontalTravel": 0
+    },
+    "ExitPoweredDelay": 11.79646037495695,
+    "ProfileCaptureSeconds": 20.146,
+    "TotalSampledScriptMicroseconds": 6123890,
+    "PoolSlideUniqueInclusiveMicroseconds": 1533832,
+    "RefreshObstacleFiltersInclusiveMicroseconds": 21883
+  },
+  "budget4": {
+    "Seed": 1254293067,
+    "DiagnosticPassCount": 9,
+    "DiagnosticCheckCount": 9,
+    "MinimumSpawnDistance": 100,
+    "MeasuredSpawnHorizontalStuds": 146.16464233398438,
+    "Movement": {
+      "DirectionReversals": 0,
+      "Note": "Coarse direction changes may include legitimate corridor turns; not an oscillation classifier.",
+      "Elapsed": 20.160312458348926,
+      "MaximumPublishedSpeed": 32.00109354279775,
+      "Full20Seconds": true,
+      "HorizontalTravel": 513.306713104248
+    },
+    "ExitPoweredDelay": 11.65832175000105,
+    "ProfileCaptureSeconds": 20.445,
+    "TotalSampledScriptMicroseconds": 3280444,
+    "PoolSlideUniqueInclusiveMicroseconds": 698742,
+    "RefreshObstacleFiltersInclusiveMicroseconds": 7456
+  },
+  "budget5": {
+    "Seed": 1094051225,
+    "DiagnosticPassCount": 9,
+    "DiagnosticCheckCount": 9,
+    "MinimumSpawnDistance": 100,
+    "MeasuredSpawnHorizontalStuds": 153.28997802734375,
+    "Movement": {
+      "DirectionReversals": 0,
+      "Note": "Coarse direction changes may include legitimate corridor turns; not an oscillation classifier.",
+      "Elapsed": 20.26708004163811,
+      "MaximumPublishedSpeed": 32.00291838532521,
+      "Full20Seconds": true,
+      "HorizontalTravel": 383.0953262448311
+    },
+    "ExitPoweredDelay": 11.61811895831488,
+    "ProfileCaptureSeconds": 20.357,
+    "TotalSampledScriptMicroseconds": 4535372,
+    "PoolSlideUniqueInclusiveMicroseconds": 791810,
+    "RefreshObstacleFiltersInclusiveMicroseconds": 8897
+  },
+  "latestNativeDiagnosticChecksPassed": true,
+  "releaseVerificationComplete": false,
+  "ControlledSameSeedPerformanceComparison": false,
+  "EntityTotalRamBytes": null,
+  "FrameMedianMilliseconds": null,
+  "FrameP95Milliseconds": null
+}

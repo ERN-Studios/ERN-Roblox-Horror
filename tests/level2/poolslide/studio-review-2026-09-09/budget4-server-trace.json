@@ -1,0 +1,2451 @@
+{
+  "ActiveElapsedSeconds": 19.92928674997529,
+  "StopReason": "CAPTURE_WINDOW_COMPLETE",
+  "Errors": [],
+  "FinalState": {
+    "Players": [
+      {
+        "Health": 100,
+        "Position": [
+          509.9296569824219,
+          2.007843255996704,
+          -127.39257049560547
+        ],
+        "Chased": true,
+        "UserId": 9488575949,
+        "InRound": true
+      }
+    ],
+    "Paused": false,
+    "Model": {
+      "Active": true,
+      "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+      "Generation": 1,
+      "Position": [
+        183.7052459716797,
+        2.2800002098083496,
+        -213.81063842773438
+      ]
+    },
+    "Controller": {
+      "Level2_PoolSlideEnraged": true,
+      "Level2_PoolSlideSpawnRequested": true,
+      "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+      "Level2_PoolSlideSpawnProbeCount": 1,
+      "Level2_PoolSlideValidationOnly": true,
+      "Level2_PoolSlideEnabled": true,
+      "Level2_PoolSlideGeneration": 1,
+      "Level2_PoolSlideAnimationState": "Run",
+      "Level2_PoolSlideSpawnCount": 1,
+      "Level2_PoolSlideSpawnRouteQueries": 0,
+      "Level2_PoolSlidePathStatus": "MOVING",
+      "Level2_PoolSlideNavigationContextError": "",
+      "Level2_PoolSlideAttackSerial": 0,
+      "Level2_PoolSlideState": "ENRAGED",
+      "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+      "Level2_PoolSlideSpawnRoutePoints": 6,
+      "Level2_PoolSlideLastError": "",
+      "Level2_PoolSlideActive": true,
+      "Level2_PoolSlidePhase": "ENRAGED",
+      "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+      "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+      "Level2_PoolSlideTargetUserId": 9488575949,
+      "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+      "Level2_PoolSlideSpeed": 32.00020643109394,
+      "Level2_PoolSlideSpawnHidden": true,
+      "Level2_PoolSlideNavigationContextReady": true,
+      "Level2_PoolSlideMoving": true
+    },
+    "T": 56.92431312496774,
+    "Pumps": 3,
+    "RoundActive": true
+  },
+  "Samples": [
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.92962646484375,
+            1.8999998569488525,
+            -127.39303588867188
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          -209.6111602783203,
+          2.4800004959106445,
+          -315.3825988769531
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Idle",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979287.730714,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 0,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": false
+      },
+      "T": 36.29430695832707,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39620971679688
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          -209.6111602783203,
+          2.4800004959106445,
+          -315.3825988769531
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Idle",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979287.730714,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 0,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": false
+      },
+      "T": 36.938221708347555,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296875,
+            2.007843255996704,
+            -127.39457702636719
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          -209.6111602783203,
+          2.4800004959106445,
+          -315.3825988769531
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Idle",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "NO_PATH",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979287.730714,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 0,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": false
+      },
+      "T": 37.596140541660134,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          -209.6111602783203,
+          2.4800004959106445,
+          -315.3825988769531
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Idle",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "NO_PATH",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979287.730714,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 0,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": false
+      },
+      "T": 38.1046382500208,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          -209.6111602783203,
+          2.4800004959106445,
+          -315.3825988769531
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Idle",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "NO_PATH",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979287.730714,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 0,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": false
+      },
+      "T": 38.621343041653745,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          -209.6111602783203,
+          2.4800004959106445,
+          -315.3825988769531
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Idle",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "NO_PATH",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979287.730714,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 0,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": false
+      },
+      "T": 39.12372816668358,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          -201.10733032226562,
+          2.4800004959106445,
+          -315.8651428222656
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 31.99992915491013,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 39.62953383335844,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          -184.6147918701172,
+          2.4800004959106445,
+          -316.80096435546875
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 31.99982771916679,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 40.14011170831509,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          -168.07215881347656,
+          2.4800004959106445,
+          -317.7396545410156
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 31.999880172211597,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 40.74262591666775,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          -149.4525604248047,
+          2.4800004959106445,
+          -320.0772705078125
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 32.00028209862181,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 41.25451120833168,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          -136.0635223388672,
+          2.4800004959106445,
+          -329.0277099609375
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 32.000308820239425,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 41.75527312501799,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          -124.26627349853516,
+          2.4800004959106445,
+          -337.4709167480469
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 32.0000097311585,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 42.27153787499992,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          -110.81863403320312,
+          2.4800004959106445,
+          -347.11419677734375
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 31.999528339263264,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 42.787968458316755,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          -101.1438980102539,
+          2.4800004959106445,
+          -358.0859680175781
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 32.00017960720828,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 43.28840604168363,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          -84.6427993774414,
+          2.580000400543213,
+          -358.50164794921875
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 32.00008649368244,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 43.805036249978,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          -69.17223358154297,
+          2.580000400543213,
+          -358.50579833984375
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 32.00021898599448,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 44.30907112499699,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          -54.26961898803711,
+          2.580000400543213,
+          -358.505859375
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 31.999869354298106,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 44.82218424999155,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          -36.72557830810547,
+          2.580000400543213,
+          -358.505859375
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 31.999972205088998,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 45.34375483333133,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          -20.250707626342773,
+          2.580000400543213,
+          -358.505859375
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 31.99999288686718,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 45.85403129167389,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          -5.72687292098999,
+          2.080000400543213,
+          -355.2713317871094
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 32.00003055841245,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 46.373730666644406,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          12.34406852722168,
+          2.080000400543213,
+          -354.318603515625
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 32.000089702920235,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 46.88724012498278,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          28.319631576538086,
+          2.080000400543213,
+          -353.6081848144531
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 32.0000069444663,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 47.38806012499845,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          40.6944694519043,
+          2.080000400543213,
+          -345.18377685546875
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 32.000022768100365,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 47.8902379583451,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          51.64398956298828,
+          2.080000400543213,
+          -353.5003356933594
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 31.99922466380956,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 48.42767920834012,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          56.44501495361328,
+          2.080000400543213,
+          -361.3343505859375
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 22.299749851226807,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 48.94427720835665,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          73.06951141357422,
+          2.580000400543213,
+          -361.3343505859375
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 31.99990880006536,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 49.487459708354436,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          90.10655975341797,
+          2.580000400543213,
+          -361.3343505859375
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 32.00002587381594,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 49.9879350833362,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          106.65393829345703,
+          2.580000400543213,
+          -361.3343505859375
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 31.999837222956614,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 50.52121587499278,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          123.6926040649414,
+          2.580000400543213,
+          -361.3343505859375
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 31.999876484433784,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 51.0369401666685,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          138.77389526367188,
+          2.080000400543213,
+          -357.8528137207031
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 32.0005024679668,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 51.55603662499925,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          153.94581604003906,
+          2.080000400543213,
+          -350.0596618652344
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 31.99970130041,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 52.071460458333604,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          166.99917602539062,
+          2.080000400543213,
+          -343.38568115234375
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 31.999666028448576,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 52.634137541637756,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          175.43527221679688,
+          2.080000400543213,
+          -329.0060119628906
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 32.00019298247378,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 53.14061508333543,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          178.2733917236328,
+          2.080000400543213,
+          -312.8720703125
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 31.999921383941707,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 53.67654125002446,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          181.60328674316406,
+          2.580000400543213,
+          -296.4802551269531
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 31.99995536776439,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 54.18769070832059,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          181.61630249023438,
+          2.580000400543213,
+          -280.4551696777344
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 32.00032639261217,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 54.68807691667462,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          181.61692810058594,
+          2.580000400543213,
+          -263.9298095703125
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 31.99984116978454,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 55.20630408334546,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          181.61692810058594,
+          2.580000400543213,
+          -247.90777587890625
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 32.00026527063687,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 55.7079018750228,
+      "Pumps": 3,
+      "RoundActive": true
+    },
+    {
+      "Players": [
+        {
+          "Health": 100,
+          "Position": [
+            509.9296569824219,
+            2.007843255996704,
+            -127.39257049560547
+          ],
+          "Chased": true,
+          "UserId": 9488575949,
+          "InRound": true
+        }
+      ],
+      "Paused": false,
+      "Model": {
+        "Active": true,
+        "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+        "Generation": 1,
+        "Position": [
+          181.61692810058594,
+          2.580000400543213,
+          -231.41632080078125
+        ]
+      },
+      "Controller": {
+        "Level2_PoolSlideEnraged": true,
+        "Level2_PoolSlideSpawnRequested": true,
+        "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+        "Level2_PoolSlideSpawnProbeCount": 1,
+        "Level2_PoolSlideValidationOnly": true,
+        "Level2_PoolSlideEnabled": true,
+        "Level2_PoolSlideGeneration": 1,
+        "Level2_PoolSlideAnimationState": "Run",
+        "Level2_PoolSlideSpawnCount": 1,
+        "Level2_PoolSlideSpawnRouteQueries": 0,
+        "Level2_PoolSlidePathStatus": "MOVING",
+        "Level2_PoolSlideNavigationContextError": "",
+        "Level2_PoolSlideAttackSerial": 0,
+        "Level2_PoolSlideState": "ENRAGED",
+        "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+        "Level2_PoolSlideSpawnRoutePoints": 6,
+        "Level2_PoolSlideLastError": "",
+        "Level2_PoolSlideActive": true,
+        "Level2_PoolSlidePhase": "ENRAGED",
+        "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+        "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+        "Level2_PoolSlideTargetUserId": 9488575949,
+        "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+        "Level2_PoolSlideSpeed": 32.00018935643846,
+        "Level2_PoolSlideSpawnHidden": true,
+        "Level2_PoolSlideNavigationContextReady": true,
+        "Level2_PoolSlideMoving": true
+      },
+      "T": 56.222132833325304,
+      "Pumps": 3,
+      "RoundActive": true
+    }
+  ],
+  "CleanupFailure": false,
+  "CaptureElapsedSeconds": 20.444908583303913,
+  "CaptureFinalState": {
+    "Players": [
+      {
+        "Health": 100,
+        "Position": [
+          509.9296569824219,
+          2.007843255996704,
+          -127.39257049560547
+        ],
+        "Chased": true,
+        "UserId": 9488575949,
+        "InRound": true
+      }
+    ],
+    "Paused": false,
+    "Model": {
+      "Active": true,
+      "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+      "Generation": 1,
+      "Position": [
+        181.61692810058594,
+        2.2800002098083496,
+        -214.8829345703125
+      ]
+    },
+    "Controller": {
+      "Level2_PoolSlideEnraged": true,
+      "Level2_PoolSlideSpawnRequested": true,
+      "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+      "Level2_PoolSlideSpawnProbeCount": 1,
+      "Level2_PoolSlideValidationOnly": true,
+      "Level2_PoolSlideEnabled": true,
+      "Level2_PoolSlideGeneration": 1,
+      "Level2_PoolSlideAnimationState": "Run",
+      "Level2_PoolSlideSpawnCount": 1,
+      "Level2_PoolSlideSpawnRouteQueries": 0,
+      "Level2_PoolSlidePathStatus": "MOVING",
+      "Level2_PoolSlideNavigationContextError": "",
+      "Level2_PoolSlideAttackSerial": 0,
+      "Level2_PoolSlideState": "ENRAGED",
+      "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+      "Level2_PoolSlideSpawnRoutePoints": 6,
+      "Level2_PoolSlideLastError": "",
+      "Level2_PoolSlideActive": true,
+      "Level2_PoolSlidePhase": "ENRAGED",
+      "Level2_PoolSlideAnimationStartedAt": 1788979291.338475,
+      "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+      "Level2_PoolSlideTargetUserId": 9488575949,
+      "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+      "Level2_PoolSlideSpeed": 32.00020803578574,
+      "Level2_PoolSlideSpawnHidden": true,
+      "Level2_PoolSlideNavigationContextReady": true,
+      "Level2_PoolSlideMoving": true
+    },
+    "T": 56.736798500001896,
+    "Pumps": 3,
+    "RoundActive": true
+  },
+  "Partial": false,
+  "NoCheatEscape": "NOT_TESTED",
+  "Generation": 1,
+  "ElapsedSeconds": 56.92430445831269,
+  "CaptureWindowComplete": true,
+  "NoDataFailure": false,
+  "InitialState": {
+    "Players": [
+      {
+        "Health": 100,
+        "Position": [
+          509.92962646484375,
+          1.8999998569488525,
+          -127.39303588867188
+        ],
+        "Chased": true,
+        "UserId": 9488575949,
+        "InRound": true
+      }
+    ],
+    "Paused": false,
+    "Model": {
+      "Active": true,
+      "Path": "Workspace.Level 2 Generated World.Level 2 Pool Slide Runtime.Level 2 Pool Slide",
+      "Generation": 1,
+      "Position": [
+        -209.6111602783203,
+        2.4800004959106445,
+        -315.3825988769531
+      ]
+    },
+    "Controller": {
+      "Level2_PoolSlideEnraged": true,
+      "Level2_PoolSlideSpawnRequested": true,
+      "Level2_PoolSlideSpawnNavigatorBuilds": 1,
+      "Level2_PoolSlideSpawnProbeCount": 1,
+      "Level2_PoolSlideValidationOnly": true,
+      "Level2_PoolSlideEnabled": true,
+      "Level2_PoolSlideGeneration": 1,
+      "Level2_PoolSlideAnimationState": "Idle",
+      "Level2_PoolSlideSpawnCount": 1,
+      "Level2_PoolSlideSpawnRouteQueries": 0,
+      "Level2_PoolSlidePathStatus": "MOVING",
+      "Level2_PoolSlideNavigationContextError": "",
+      "Level2_PoolSlideAttackSerial": 0,
+      "Level2_PoolSlideState": "ENRAGED",
+      "Level2_PoolSlideNavigationContextMaxSlice": 0.04204616666538641,
+      "Level2_PoolSlideSpawnRoutePoints": 6,
+      "Level2_PoolSlideLastError": "",
+      "Level2_PoolSlideActive": true,
+      "Level2_PoolSlidePhase": "ENRAGED",
+      "Level2_PoolSlideAnimationStartedAt": 1788979287.730714,
+      "Level2_PoolSlideSpawnAnchor": "Level 2 Entity Patrol Node 3.3",
+      "Level2_PoolSlideTargetUserId": 9488575949,
+      "Level2_PoolSlideSpawnDistance": 146.16464233398438,
+      "Level2_PoolSlideSpeed": 0,
+      "Level2_PoolSlideSpawnHidden": true,
+      "Level2_PoolSlideNavigationContextReady": true,
+      "Level2_PoolSlideMoving": false
+    },
+    "T": 36.29324829165125,
+    "Pumps": 3,
+    "RoundActive": true
+  }
+}

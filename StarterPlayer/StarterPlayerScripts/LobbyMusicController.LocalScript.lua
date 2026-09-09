@@ -52,6 +52,7 @@ end
 
 local trackEpoch = 0
 local trackReady = false
+local currentTrackId = nil
 local lobbyIntent = false
 local activeDeckIndex = 1
 local musicStarted = false
@@ -134,6 +135,19 @@ local function beginMusicIfReady()
 	musicStarted = true
 end
 
+local function refreshTrackReadiness()
+	if trackReady or not currentTrackId then return end
+	-- PreloadAsync returning without an error does not prove either Sound loaded.
+	-- Keep observing both decks after the timeout so a slow download can recover.
+	trackReady = decks[1].SoundId == currentTrackId and decks[1].IsLoaded
+		and decks[2].SoundId == currentTrackId and decks[2].IsLoaded
+	if trackReady then beginMusicIfReady() end
+end
+
+for _, sound in ipairs(decks) do
+	sound.Loaded:Connect(refreshTrackReadiness)
+end
+
 local function configureTrack()
 	trackEpoch += 1
 	local epoch = trackEpoch
@@ -141,6 +155,7 @@ local function configureTrack()
 	stopDecks(true)
 
 	local trackId = configuredTrackId()
+	currentTrackId = trackId
 	if not trackId then
 		if not warnedMissingTrack then
 			warnedMissingTrack = true
@@ -154,23 +169,21 @@ local function configureTrack()
 
 	task.spawn(function()
 		local preloadFinished = false
-		local preloadSucceeded = false
 		task.spawn(function()
-			preloadSucceeded = pcall(function()
+			pcall(function()
 				ContentProvider:PreloadAsync(decks)
 			end)
 			preloadFinished = true
+			if epoch == trackEpoch then refreshTrackReadiness() end
 		end)
 
 		local deadline = os.clock() + PRELOAD_TIMEOUT_SECONDS
 		repeat task.wait(0.10) until preloadFinished or os.clock() >= deadline
 		if epoch ~= trackEpoch then return end
 
-		trackReady = preloadSucceeded
-			or decks[1].IsLoaded
-			or decks[1].TimeLength > 0
+		refreshTrackReadiness()
 		if not trackReady then
-			warn("[LobbyMusicController] Lobby track did not preload before the timeout")
+			warn("[LobbyMusicController] Lobby track is not loaded yet; waiting for audio readiness")
 			return
 		end
 		beginMusicIfReady()
@@ -214,6 +227,8 @@ lobbyIntent = hardLobbyEligible()
 configureTrack()
 
 RunService.Heartbeat:Connect(function(deltaTime)
+	-- Also recover if Loaded fired before a deck's metadata became observable.
+	if not trackReady then refreshTrackReadiness() end
 	local audible = shouldPlay()
 	-- Idle and fully faded: nothing below would change anything. masterVolume
 	-- must have reached exactly 0, or the next fade-in reads it as a duck.

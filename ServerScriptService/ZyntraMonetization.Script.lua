@@ -694,6 +694,76 @@ local function mutate(player, transform)
 	return false, message
 end
 
+-- Developer token gifts use the same serialized profile write as purchases.
+-- RemoteFunction supplies the caller; the UI only chooses a recipient and amount.
+do
+	local DevAccess = require(ReplicatedStorage:WaitForChild("DevAccess"))
+	local grantRemote = ensureRemote("RemoteFunction", "ZyntraGrantTokens")
+	local MAX_GRANT = 10000
+	local COOLDOWN = 3
+	local grantStates = setmetatable({}, { __mode = "k" })
+	local function result(success, message)
+		return { Success = success, Message = message }
+	end
+
+	grantRemote.OnServerInvoke = function(issuer, targetUserId, amount)
+		if not DevAccess.IsAllowed(issuer) or issuer.Parent ~= Players then
+			return result(false, "Developer access is required.")
+		end
+		if serverClosing then return result(false, "Server is closing. No tokens were given.") end
+		local state = grantStates[issuer]
+		if state and (state.busy or os.clock() - state.finishedAt < COOLDOWN) then
+			return result(false, "Please wait for the previous gift and 3 seconds before giving again.")
+		end
+		if type(targetUserId) ~= "number" or targetUserId ~= targetUserId
+			or targetUserId < 1 or targetUserId > 9007199254740991 or targetUserId % 1 ~= 0 then
+			return result(false, "Choose a player in this server.")
+		end
+		if type(amount) ~= "number" or amount ~= amount or amount < 1
+			or amount > MAX_GRANT or amount % 1 ~= 0 then
+			return result(false, "Enter a whole number from 1 to 10,000.")
+		end
+		local target = Players:GetPlayerByUserId(targetUserId)
+		if not target or target.Parent ~= Players then
+			return result(false, "That player has left this server. Choose another player.")
+		end
+		local session = sessions[target]
+		if not session or session.closing then
+			return result(false, "That player's profile is still loading or closing. Try again shortly.")
+		end
+		if not RunService:IsStudio() and not session.persistent then
+			return result(false, "That player's saved data is unavailable. No tokens were given.")
+		end
+		state = { busy = true, finishedAt = 0 }
+		grantStates[issuer] = state
+		local changed, reason = mutate(target, function(data)
+			-- Recheck after waiting for another profile mutation to finish.
+			if serverClosing or issuer.Parent ~= Players or target.Parent ~= Players then
+				return false, "Gift cancelled because a player or server is leaving.", "error"
+			end
+			if data.Tokens ~= data.Tokens or data.Tokens + amount > 9007199254740991 then
+				return false, "That player's token balance is too large for this gift.", "error"
+			end
+			data.Tokens += amount
+			return true, "+" .. amount .. " free Zyntra Research Tokens from a developer.", "success"
+		end)
+		state.busy = false
+		state.finishedAt = os.clock()
+		if changed then
+			local message = "Gave " .. amount .. " Research Tokens to @" .. target.Name .. "."
+			if RunService:IsStudio() then message ..= " Studio test only; not saved." end
+			print(string.format("[Zyntra] Token gift: issuer=%d target=%d amount=%d studio=%s",
+				issuer.UserId, target.UserId, amount, tostring(RunService:IsStudio())))
+			return result(true, message)
+		else
+			-- A failed UpdateAsync response may follow a committed write. Never
+			-- automatically replay a currency delta or promise it was not saved.
+			warn("[Zyntra] Token gift unconfirmed:", issuer.UserId, target.UserId, reason)
+			return result(false, "Gift was not confirmed. Have the recipient rejoin and check their balance before repeating.")
+		end
+	end
+end
+
 local supportNameCache = {}
 local supportRefreshRunning = false
 local pendingSupportSync = {}

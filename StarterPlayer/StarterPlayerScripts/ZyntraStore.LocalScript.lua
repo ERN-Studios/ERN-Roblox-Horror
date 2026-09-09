@@ -30,6 +30,7 @@ local currentTab = "Upgrades"
 local productButtons = {}
 local displayedProductPrices = {}
 local reentryDead = false
+local reentryDismissed = false
 
 local COLORS = {
 	bg = Color3.fromRGB(7, 11, 13),
@@ -487,6 +488,209 @@ if devAllowed and pages.Dev then
 		devScroll.Position = UDim2.fromOffset(0, height)
 		devScroll.Size = UDim2.new(1, 0, 1, -height)
 	end)
+
+	-- Token grants use their own server-authorized remote, independently of chat.
+	-- Keep this form scoped: the terminal is close to Luau's local-register limit.
+	do
+		local form = Instance.new("Frame")
+		form.Name = "GrantResearchTokens"
+		form.LayoutOrder = 0
+		form.Size = UDim2.new(1, 0, 0, 148)
+		form.BackgroundColor3 = COLORS.card
+		form.BorderSizePixel = 0
+		form.Visible = not UIDevice.IsTouch()
+		form.Parent = devScroll
+		corner(form, 8)
+		outline(form, COLORS.line, 0.4)
+		local heading = label(form, "GIVE RESEARCH TOKENS", UDim2.new(1, -28, 0, 22),
+			UDim2.fromOffset(14, 8), 14, COLORS.accent, Enum.Font.GothamBold)
+		heading.Name = "Heading"
+		local recipientLabel = label(form, "PLAYER ON THIS SERVER", UDim2.fromOffset(260, 16),
+			UDim2.fromOffset(14, 36), 11, COLORS.muted, Enum.Font.GothamMedium)
+		local recipient = button(form, "SELECT PLAYER", UDim2.fromOffset(300, 36), UDim2.fromOffset(14, 56))
+		recipient.Name = "SelectPlayer"
+		local amountLabel = label(form, "TOKENS", UDim2.fromOffset(100, 16),
+			UDim2.fromOffset(326, 36), 11, COLORS.muted, Enum.Font.GothamMedium)
+		local amountInput = Instance.new("TextBox")
+		amountInput.Name = "Amount"
+		amountInput.Size = UDim2.fromOffset(100, 36)
+		amountInput.Position = UDim2.fromOffset(326, 56)
+		amountInput.BackgroundColor3 = COLORS.bg
+		amountInput.BorderSizePixel = 0
+		amountInput.Font = Enum.Font.GothamMedium
+		amountInput.TextSize = 14
+		amountInput.TextColor3 = COLORS.text
+		amountInput.PlaceholderColor3 = COLORS.muted
+		amountInput.PlaceholderText = "1-10,000"
+		amountInput.Text = "20"
+		amountInput.ClearTextOnFocus = false
+		amountInput.Parent = form
+		corner(amountInput, 7)
+		local amountOutline = outline(amountInput, COLORS.line, 0.2)
+		amountInput.Focused:Connect(function() amountOutline.Color = COLORS.accent end)
+		amountInput.FocusLost:Connect(function() amountOutline.Color = COLORS.line end)
+		local give = button(form, "GIVE TOKENS", UDim2.fromOffset(140, 36), UDim2.fromOffset(438, 56))
+		give.Name = "GiveTokens"
+		local result = label(form, "Choose a player on this server and enter 1-10,000 tokens.",
+			UDim2.new(1, -28, 0, 32), UDim2.fromOffset(14, 102), 12, COLORS.muted)
+		result.Name = "Result"
+		result.TextWrapped = true
+		result.TextYAlignment = Enum.TextYAlignment.Top
+		local roster = Instance.new("ScrollingFrame")
+		roster.Name = "PlayerList"
+		roster.BackgroundTransparency = 1
+		roster.BorderSizePixel = 0
+		roster.ScrollBarThickness = 4
+		roster.ScrollBarImageColor3 = COLORS.accent
+		roster.AutomaticCanvasSize = Enum.AutomaticSize.Y
+		roster.CanvasSize = UDim2.new()
+		roster.ScrollingEnabled = true
+		roster.Visible = false
+		roster.Parent = form
+		local rosterLayout = Instance.new("UIListLayout")
+		rosterLayout.SortOrder = Enum.SortOrder.LayoutOrder
+		rosterLayout.Padding = UDim.new(0, 4)
+		rosterLayout.Parent = roster
+
+		local selectedPlayer, pending, cooldownUntil = nil, false, 0
+		local rosterButtons = {}
+		local function relayout()
+			if applyTerminalLayout then applyTerminalLayout() end
+		end
+		local function showResult(message, tone)
+			result.Text = message
+			result.TextColor3 = tone == "error" and COLORS.error
+				or tone == "success" and COLORS.accent or COLORS.muted
+			showStatus(message, tone)
+			relayout()
+		end
+		local function refreshState()
+			local desktop = not UIDevice.IsTouch()
+			local remaining = math.max(0, math.ceil(cooldownUntil - os.clock()))
+			local ready = desktop and not pending and remaining == 0
+			form:SetAttribute("Pending", pending)
+			form:SetAttribute("SelectedUserId", selectedPlayer and selectedPlayer.UserId or nil)
+			recipient.Text = selectedPlayer and ("@" .. selectedPlayer.Name
+				.. (selectedPlayer == player and " (you)" or "")) or "SELECT PLAYER"
+			UIDevice.SetEnabled(recipient, ready)
+			amountInput.TextEditable = ready
+			UIDevice.SetEnabled(give, ready and selectedPlayer ~= nil)
+			give.Text = pending and "GIVING..." or remaining > 0 and ("WAIT " .. remaining .. "s") or "GIVE TOKENS"
+			give.TextColor3 = give.Active and COLORS.accent or COLORS.muted
+			for _, choice in ipairs(rosterButtons) do UIDevice.SetEnabled(choice, ready) end
+		end
+		local function refreshRoster(departing)
+			for _, choice in ipairs(rosterButtons) do choice:Destroy() end
+			table.clear(rosterButtons)
+			if selectedPlayer and (selectedPlayer == departing or selectedPlayer.Parent ~= Players) then
+				selectedPlayer = nil
+				if not pending then showResult("Selected player left. Choose another player.", "error") end
+			end
+			local online = Players:GetPlayers()
+			table.sort(online, function(a, b) return a.Name:lower() < b.Name:lower() end)
+			for _, onlinePlayer in ipairs(online) do
+				if onlinePlayer ~= departing then
+					local choice = button(roster, "@" .. onlinePlayer.Name
+						.. (onlinePlayer == player and " (you)" or ""), UDim2.new(1, -8, 0, 32))
+					choice.Name = "Player_" .. tostring(onlinePlayer.UserId)
+					choice.LayoutOrder = #rosterButtons + 1
+					table.insert(rosterButtons, choice)
+					choice.Activated:Connect(function()
+						if pending or os.clock() < cooldownUntil or UIDevice.IsTouch() then return end
+						if onlinePlayer.Parent ~= Players then refreshRoster(onlinePlayer) return end
+						selectedPlayer = onlinePlayer
+						roster.Visible = false
+						refreshState()
+						showResult("Ready to give tokens to @" .. onlinePlayer.Name .. ".")
+					end)
+				end
+			end
+			refreshState()
+			relayout()
+		end
+		recipient.Activated:Connect(function()
+			if pending or os.clock() < cooldownUntil or UIDevice.IsTouch() then return end
+			roster.Visible = not roster.Visible
+			refreshRoster()
+		end)
+		Players.PlayerAdded:Connect(function() refreshRoster() end)
+		Players.PlayerRemoving:Connect(refreshRoster)
+
+		give.Activated:Connect(function()
+			if pending or os.clock() < cooldownUntil or UIDevice.IsTouch() then return end
+			if not selectedPlayer or selectedPlayer.Parent ~= Players then
+				refreshRoster()
+				showResult("Choose a player who is on this server.", "error")
+				return
+			end
+			local amount = tonumber(amountInput.Text)
+			if not amount or amount ~= amount or amount < 1 or amount > 10000 or amount % 1 ~= 0 then
+				showResult("Enter a whole number from 1 to 10,000.", "error")
+				return
+			end
+			local remote = remotes:FindFirstChild("ZyntraGrantTokens")
+			if not remote or not remote:IsA("RemoteFunction") then
+				showResult("Token grants are unavailable on this server. Rejoin an updated server.", "error")
+				return
+			end
+			local target = selectedPlayer
+			pending = true
+			roster.Visible = false
+			refreshState()
+			showResult(("Giving %d tokens to @%s..."):format(amount, target.Name))
+			local completed = false
+			task.delay(12, function()
+				if not completed then
+					showResult("Still waiting for the server. Keep this request open; do not send it again.")
+				end
+			end)
+			local ok, response = pcall(function() return remote:InvokeServer(target.UserId, amount) end)
+			completed = true
+			pending = false
+			cooldownUntil = os.clock() + 3
+			refreshState()
+			if ok and type(response) == "table" and type(response.Success) == "boolean"
+				and type(response.Message) == "string" and response.Message ~= "" then
+				showResult(response.Message, response.Success and "success" or "error")
+			else
+				showResult("Result unknown. Ask @" .. target.Name .. " to rejoin and check their balance before giving again.", "error")
+			end
+			task.spawn(function()
+				while os.clock() < cooldownUntil do
+					task.wait(math.min(1, cooldownUntil - os.clock()))
+					refreshState()
+				end
+			end)
+		end)
+
+		table.insert(layoutHooks, function(fit)
+			-- IsTouch is the phone/tablet form factor; touchscreen PCs keep this form.
+			form.Visible = not UIDevice.IsTouch()
+			if not form.Visible then roster.Visible = false end
+			local width = math.max(1, fit.ContentWidth - 8 - 28)
+			local stacked = width < 520
+			local playerWidth = stacked and width or width - 264
+			recipientLabel.Size = UDim2.fromOffset(playerWidth, 16)
+			recipient.Size = UDim2.fromOffset(playerWidth, 36)
+			local inputX = stacked and 14 or 14 + playerWidth + 12
+			local inputY = stacked and 118 or 56
+			amountLabel.Position = UDim2.fromOffset(inputX, inputY - 20)
+			amountInput.Position = UDim2.fromOffset(inputX, inputY)
+			give.Position = UDim2.fromOffset(inputX + 112, inputY)
+			give.Size = UDim2.fromOffset(stacked and math.max(1, width - 112) or 140, 36)
+			local bottom = inputY + 36 + 10
+			local rosterHeight = math.min(140, #rosterButtons * 36)
+			roster.Position = UDim2.fromOffset(14, bottom)
+			roster.Size = UDim2.fromOffset(width, rosterHeight)
+			if roster.Visible then bottom += rosterHeight + 8 end
+			local resultHeight = math.max(18, textHeightFor(result.Text, 12, result.Font, width) + TEXT_FIT_SLACK)
+			result.Position = UDim2.fromOffset(14, bottom)
+			result.Size = UDim2.fromOffset(width, resultHeight)
+			form.Size = UDim2.new(1, 0, 0, bottom + resultHeight + 12)
+			refreshState()
+		end)
+		refreshRoster()
+	end
 
 	local controls = {
 		{
@@ -1787,6 +1991,7 @@ reentryShade.BorderSizePixel = 0
 reentryShade.Text = ""
 reentryShade.AutoButtonColor = false
 reentryShade.Active = true
+reentryShade.Selectable = false
 reentryShade.Modal = true
 reentryShade.ZIndex = 1
 reentryShade.Parent = reentryGui
@@ -1795,21 +2000,21 @@ local reentry = Instance.new("Frame")
 reentry.Name = "EmergencyReentry"
 reentry.AnchorPoint = Vector2.new(0.5, 0.5)
 reentry.Position = UDim2.fromScale(0.5, 0.54)
-reentry.Size = UDim2.new(1, -32, 0, 164)
+reentry.Size = UDim2.new(1, -32, 0, 216)
 reentry.BackgroundColor3 = COLORS.bg
 reentry.BorderSizePixel = 0
 reentry.Visible = true
 reentry.ZIndex = 2
 reentry.Parent = reentryGui
 local reentryConstraint = Instance.new("UISizeConstraint")
-reentryConstraint.MinSize = Vector2.new(280, 164)
-reentryConstraint.MaxSize = Vector2.new(480, 164)
+reentryConstraint.MinSize = Vector2.new(280, 216)
+reentryConstraint.MaxSize = Vector2.new(480, 216)
 reentryConstraint.Parent = reentry
 corner(reentry, 10)
 outline(reentry, COLORS.error, 0.15, 1.5)
 local reentryTitle = label(reentry, "EMERGENCY RE-ENTRY", UDim2.new(1, -32, 0, 28), UDim2.fromOffset(16, 10), 19, COLORS.text, Enum.Font.GothamBold)
 reentryTitle.ZIndex = 3
-local reentryInfo = label(reentry, "The team has 15 seconds before the run is lost.", UDim2.new(1, -32, 0, 40), UDim2.fromOffset(16, 44), 13, COLORS.muted)
+local reentryInfo = label(reentry, "Use a credit to rejoin the run, or spectate your teammates.", UDim2.new(1, -32, 0, 40), UDim2.fromOffset(16, 44), 13, COLORS.muted)
 reentryInfo.TextWrapped = true
 reentryInfo.TextYAlignment = Enum.TextYAlignment.Top
 reentryInfo.ZIndex = 3
@@ -1838,7 +2043,8 @@ local function updateReentry()
 	local inRound = player:GetAttribute("InRound") == true
 	local roundActive = workspace:GetAttribute("RoundActive") == true
 	local used = player:GetAttribute("ZyntraReentryUsed") == true
-	local shouldShow = inRound and roundActive and reentryDead and not used
+	if not inRound or not roundActive then reentryDismissed = false end
+	local shouldShow = inRound and roundActive and reentryDead and not used and not reentryDismissed
 	-- C_PARTY_DOWN_ONE_PURCHASE_SURFACE_20260904: RoundUI's PARTY DOWN card
 	-- carries the same re-entry action for the 15-second wipe window. For that
 	-- whole WINDOW this panel stands down -- two purchase surfaces for one
@@ -1853,6 +2059,14 @@ local function updateReentry()
 	local windowOpen = player:GetAttribute("PartyDownWindowOpen") == true
 	local cardOpen = player:GetAttribute("PartyDownCardOpen") == true
 	reentryGui.Enabled = shouldShow and not windowOpen
+	-- Hidden modal selections still block SpectateController's input handlers.
+	if not reentryGui.Enabled then
+		local GuiService = game:GetService("GuiService")
+		local selected = GuiService.SelectedObject
+		if selected and selected:IsDescendantOf(reentryGui) then
+			GuiService.SelectedObject = nil
+		end
+	end
 	player:SetAttribute("ZyntraReentryOpen",
 		(reentryGui.Enabled or cardOpen) and true or nil)
 	local credits = profile and profile.ReentryCredits or 0
@@ -1874,8 +2088,22 @@ end
 player:GetAttributeChangedSignal("PartyDownCardOpen"):Connect(updateReentry)
 player:GetAttributeChangedSignal("PartyDownWindowOpen"):Connect(updateReentry)
 
+do
+	local reentryDecline = button(reentry, "SPECTATE", UDim2.new(1, -32, 0, 44), UDim2.fromOffset(16, 156))
+	reentryDecline.Name = "ReentryDecline"
+	reentryDecline.ZIndex = 3
+	reentryDecline.Activated:Connect(function()
+		if not reentryGui.Enabled then return end
+		-- Remember the choice for this death, including profile refreshes and
+		-- the PARTY DOWN window opening or clearing after a teammate re-enters.
+		reentryDismissed = true
+		updateReentry()
+	end)
+end
+
 local function bindCharacter(character)
 	reentryDead = false
+	reentryDismissed = false
 	updateReentry()
 	task.spawn(function()
 		local humanoid = character:WaitForChild("Humanoid", 10)
