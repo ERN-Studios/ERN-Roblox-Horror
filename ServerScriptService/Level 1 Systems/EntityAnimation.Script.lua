@@ -80,6 +80,7 @@ end
 
 local currentLocomotion = nil
 local currentAction = nil
+local actionSerial = 0
 
 local function stopLocomotion(fade)
 	for _, name in ipairs({ "Watch", "Walk", "Run" }) do
@@ -104,6 +105,8 @@ end
 
 local function playAction(track)
 	if not track then return end
+	actionSerial += 1
+	local thisSerial = actionSerial
 	if currentAction and currentAction ~= track and currentAction.IsPlaying then
 		currentAction:Stop(ACTION_FADE)
 	end
@@ -113,7 +116,7 @@ local function playAction(track)
 	local thisTrack = track
 	task.spawn(function()
 		thisTrack.Ended:Wait()
-		if currentAction == thisTrack then currentAction = nil end
+		if currentAction == thisTrack and actionSerial == thisSerial then currentAction = nil end
 	end)
 end
 
@@ -135,8 +138,21 @@ bindEvent("PlayYell", function()
 	playAction(tracks.YellFromRun or tracks.Howl)
 end)
 
-bindEvent("PlayKill", function()
+local killCaptureId = nil
+bindEvent("PlayKill", function(captureId)
+	if type(captureId) ~= "string" or workspace:GetAttribute("EntityKillActive") ~= true
+		or workspace:GetAttribute("EntityKillCaptureId") ~= captureId then return end
+	killCaptureId = captureId
 	playAction(tracks.Kill)
+end)
+
+bindEvent("CancelKill", function(captureId)
+	if killCaptureId ~= captureId then return end
+	killCaptureId = nil
+	if currentAction == tracks.Kill then
+		if currentAction and currentAction.IsPlaying then currentAction:Stop(ACTION_FADE) end
+		currentAction = nil
+	end
 end)
 
 workspace:GetAttributeChangedSignal("EntityLunge"):Connect(function()

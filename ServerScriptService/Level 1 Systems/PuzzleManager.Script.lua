@@ -412,6 +412,187 @@ local function updateCarriedFuse(player, count)
 	}):Play()
 end
 
+-- Death drops stay on the authored carpet/walkways, never the lethal pit floor.
+local function fuseDropPosition(position)
+	local maze = workspace:FindFirstChild("Maze")
+	if not maze then return nil end
+	local candidates = {}
+	for _, floor in ipairs(maze:GetDescendants()) do
+		-- MazeGenerator.floorTile is shared by normal tiles and pit gangways.
+		if floor:IsA("BasePart") and floor.Anchored and floor.CanCollide
+			and floor.Material == Enum.Material.Fabric and math.abs(floor.Size.Y - 1) < 0.01
+			and math.abs(floor.Position.Y + 0.5) < 0.01 and floor.CFrame.UpVector.Y > 0.999
+			and floor.Size.X >= 1.6 and floor.Size.Z >= 1.6 then
+			local localPoint = floor.CFrame:PointToObjectSpace(position)
+			local point = floor.CFrame:PointToWorldSpace(Vector3.new(
+				math.clamp(localPoint.X, -floor.Size.X * 0.5 + 0.8, floor.Size.X * 0.5 - 0.8),
+				floor.Size.Y * 0.5,
+				math.clamp(localPoint.Z, -floor.Size.Z * 0.5 + 0.8, floor.Size.Z * 0.5 - 0.8)))
+			candidates[#candidates + 1] = { Floor = floor, Position = point, Distance = (point - position).Magnitude }
+		end
+	end
+	table.sort(candidates, function(a, b) return a.Distance < b.Distance end)
+	local rays = RaycastParams.new()
+	rays.FilterType = Enum.RaycastFilterType.Include
+	local overlap = OverlapParams.new()
+	overlap.FilterType = Enum.RaycastFilterType.Include
+	local decor = workspace:FindFirstChild("Decor")
+	overlap.FilterDescendantsInstances = decor and { maze, decor } or { maze }
+	for _, candidate in ipairs(candidates) do
+		rays.FilterDescendantsInstances = { candidate.Floor }
+		local point = candidate.Position
+		local hit = workspace:Raycast(point + Vector3.new(0, 1, 0), Vector3.new(0, -2, 0), rays)
+		if hit and hit.Normal.Y > 0.99 then
+			local clear = true
+			for _, part in ipairs(workspace:GetPartBoundsInBox(CFrame.new(point + Vector3.new(0, 1.1, 0)), Vector3.new(1.4, 2, 1.4), overlap)) do
+				if part.CanCollide then clear = false break end
+			end
+			if clear then return hit.Position end
+		end
+	end
+	return nil
+end
+
+local function makeDroppedFuses(owningSession, count, position)
+	if session ~= owningSession or not owningSession.active or count <= 0 then return nil end
+	local floor = fuseDropPosition(position)
+	if not floor then return nil end
+	local model = Instance.new("Model")
+	model.Name = "DroppedFuses"
+	model:SetAttribute("FuseCount", count)
+	local core = Instance.new("Part")
+	core.Name = "Fuse"
+	core.Size = Vector3.new(0.65, 1.45, 0.65)
+	core.CFrame = CFrame.new(floor + Vector3.new(0, 0.9, 0))
+	core.Material = Enum.Material.Neon
+	core.Color = Color3.fromRGB(215, 178, 45)
+	core.Anchored = true
+	core.CanCollide = false
+	core.CanTouch = false
+	core.Parent = model
+	for _, offset in ipairs({ -0.78, 0.78 }) do
+		local cap = Instance.new("Part")
+		cap.Name = "Cap"
+		cap.Size = Vector3.new(0.78, 0.16, 0.78)
+		cap.CFrame = core.CFrame * CFrame.new(0, offset, 0)
+		cap.Material = Enum.Material.Metal
+		cap.Color = Color3.fromRGB(75, 72, 62)
+		cap.Anchored = true
+		cap.CanCollide = false
+		cap.CanTouch = false
+		cap.Parent = model
+	end
+	local glow = Instance.new("PointLight")
+	glow.Color = Color3.fromRGB(225, 185, 55)
+	glow.Brightness = 0.7
+	glow.Range = 12
+	glow.Parent = core
+	local marker = Instance.new("BillboardGui")
+	marker.Name = "FuseMarker"
+	marker.Size = UDim2.fromOffset(120, 28)
+	marker.StudsOffsetWorldSpace = Vector3.new(0, 1.7, 0)
+	marker.MaxDistance = 60
+	marker.AlwaysOnTop = false
+	marker.Parent = core
+	local label = Instance.new("TextLabel")
+	label.Size = UDim2.fromScale(1, 1)
+	label.BackgroundTransparency = 1
+	label.Font = Enum.Font.GothamBold
+	label.TextSize = 16
+	label.TextColor3 = Color3.fromRGB(255, 225, 120)
+	label.TextStrokeTransparency = 0.25
+	label.Text = count == 1 and "FUSE" or ("FUSES ×" .. count)
+	label.Parent = marker
+	local prompt = makePrompt(core, "Pick up", label.Text, 9)
+	prompt.HoldDuration = 0.25
+	model.Parent = owningSession.folder
+	local claimed = false
+	table.insert(owningSession.conns, prompt.Triggered:Connect(function(player)
+		if claimed or session ~= owningSession or not model.Parent then return end
+		if player:GetAttribute("InRound") ~= true or workspace:GetAttribute("RoundActive") ~= true then return end
+		if not canUsePrompt(player, prompt, model) then return end
+		local record = owningSession.fuseCharacters[player]
+		if not record or record.Character ~= player.Character or record.Humanoid ~= player.Character:FindFirstChildOfClass("Humanoid") then return end
+		-- No yield between validation, consuming this stack, and updating inventory.
+		claimed = true
+		prompt.Enabled = false
+		owningSession.carried[player] = (owningSession.carried[player] or 0) + count
+		model:Destroy()
+		updateCarriedFuse(player, owningSession.carried[player])
+		status:FireClient(player, "carry", owningSession.carried[player])
+		status:FireClient(player, "msg", count == 1 and "Fuse picked up" or (count .. " fuses picked up"))
+		if owningSession.updateEntityObjectiveTarget then owningSession.updateEntityObjectiveTarget() end
+	end))
+	table.insert(owningSession.fuses, core)
+	return model
+end
+
+local function dropCarriedFuses(owningSession, player, record)
+	if session ~= owningSession or not owningSession.active or owningSession.fuseCharacters[player] ~= record then return end
+	if not record.Humanoid or record.Humanoid.Health > 0 or not record.Root then return end
+	if owningSession.escaped[player] or player:GetAttribute("Escaped") == true then return end
+	record.DeathPosition = record.DeathPosition or record.Root.Position
+	local count = owningSession.carried[player] or 0
+	if count <= 0 or not makeDroppedFuses(owningSession, count, record.DeathPosition) then return end
+	owningSession.carried[player] = 0
+	local visual = record.Character:FindFirstChild("CarriedFuseVisual")
+	if visual then visual:Destroy() end
+	if player.Parent == Players then status:FireClient(player, "carry", 0) end
+	if owningSession.updateEntityObjectiveTarget then owningSession.updateEntityObjectiveTarget() end
+end
+
+local function bindFuseCharacter(owningSession, player, character)
+	if session ~= owningSession or not owningSession.active or player.Character ~= character then return end
+	local previous = owningSession.fuseCharacters[player]
+	if previous and previous.Character == character then return end
+	-- CharacterAdded can precede a deferred old Died callback. Settle its count first.
+	if previous then dropCarriedFuses(owningSession, player, previous) end
+	local record = { Character = character }
+	owningSession.fuseCharacters[player] = record
+	local childConnection
+	local function ready()
+		if session ~= owningSession or not owningSession.active or owningSession.fuseCharacters[player] ~= record
+			or player.Character ~= character or not character.Parent or record.Humanoid then return end
+		local humanoid = character:FindFirstChildOfClass("Humanoid")
+		local root = character:FindFirstChild("HumanoidRootPart")
+		if not humanoid or not root then return end
+		record.Humanoid, record.Root = humanoid, root
+		if childConnection then childConnection:Disconnect() end
+		table.insert(owningSession.conns, humanoid.Died:Connect(function()
+			dropCarriedFuses(owningSession, player, record)
+		end))
+		if humanoid.Health <= 0 then dropCarriedFuses(owningSession, player, record)
+		else updateCarriedFuse(player, owningSession.carried[player] or 0) end
+	end
+	childConnection = character.ChildAdded:Connect(ready)
+	table.insert(owningSession.conns, childConnection)
+	ready()
+end
+
+local function finishFuseExtraction(owningSession, player, record, position)
+	if session ~= owningSession or not owningSession.active then return false end
+	local character = record and record.Character
+	if record and owningSession.fuseCharacters[player] == record and player.Character == character
+		and character.Parent and record.Humanoid and record.Humanoid.Health > 0
+		and character:FindFirstChildOfClass("Humanoid") == record.Humanoid and character:FindFirstChild("HumanoidRootPart") == record.Root
+		and player.Parent == Players and player:GetAttribute("InRound") == true
+		and not owningSession.escaped[player] and player:GetAttribute("Escaped") ~= true then
+		owningSession.carried[player] = (owningSession.carried[player] or 0) + 1
+		updateCarriedFuse(player, owningSession.carried[player])
+		status:FireClient(player, "carry", owningSession.carried[player])
+		status:FireClient(player, "msg", "Fuse extracted")
+	else
+		-- The relay's .55 s release may finish after death/re-entry. It still owns
+		-- exactly one fuse, which belongs on the floor rather than on the new body.
+		local dropPosition = record and (record.DeathPosition
+			or (record.Humanoid and record.Humanoid.Health <= 0 and record.Root and record.Root.Position)) or position
+		if not makeDroppedFuses(owningSession, 1, dropPosition) then
+			if not makeDroppedFuses(owningSession, 1, position) then return false end
+		end
+	end
+	return true
+end
+
 -- One workspace sweep per puzzle build: every relay reuses the same
 -- SurfaceLight inventory instead of re-scanning every workspace descendant
 -- once per relay (up to 12 full scans over the finished 40x40 maze).
@@ -1018,20 +1199,20 @@ local function startPuzzle()
 		boxes = {}, levers = {}, circuits = {}, relays = {}, fuses = {}, carried = {}, exit = nil,
 		boxesDone = 0, boxCount = boxCount, latchMode = false,
 		escaped = {}, escapeAnnounced = false, -- who's out + first-escape latch
-		participants = roundPlayerSet,
+		participants = roundPlayerSet, fuseCharacters = {},
 	}
 
-	-- Emergency Re-entry respawns a participant mid-round: their carried count
-	-- survives in session.carried, but the hand visual lived on the old
-	-- character, so rebuild it on every fresh body.
+	-- A dead body's inventory becomes one visible stack, including re-entry deaths.
+	local fuseSession = session
 	for _, participant in ipairs(roundPlayers) do
-		table.insert(session.conns, participant.CharacterAdded:Connect(function()
-			task.defer(function()
-				if session and session.active and session.participants[participant] then
-					updateCarriedFuse(participant, session.carried[participant] or 0)
-				end
-			end)
+		table.insert(session.conns, participant.CharacterAdded:Connect(function(character)
+			bindFuseCharacter(fuseSession, participant, character)
 		end))
+		table.insert(session.conns, participant.CharacterRemoving:Connect(function(character)
+			local record = fuseSession.fuseCharacters[participant]
+			if record and record.Character == character then dropCarriedFuses(fuseSession, participant, record) end
+		end))
+		if participant.Character then bindFuseCharacter(fuseSession, participant, participant.Character) end
 	end
 
 	local function updateEntityObjectiveTarget()
@@ -1109,6 +1290,11 @@ local function startPuzzle()
 		table.insert(session.conns, relay.prompt.Triggered:Connect(function(player)
 			if session ~= owningSession or not session.active or relay.extracting or relay.extracted then return end
 			if not canUsePrompt(player, relay.prompt, relay.model) then return end
+			local extractionRecord = owningSession.fuseCharacters[player]
+			local extractionPosition = player.Character.HumanoidRootPart.Position
+			local extractionHandleCF = relay.handle.CFrame
+			local extractionFuseFrames = {}
+			for _, part in ipairs(relay.fuseParts) do extractionFuseFrames[part] = part.CFrame end
 			relay.extracting = true
 			relay.prompt.Enabled = false
 			relay.label.Text = "RELEASING  //  STAND BY"
@@ -1173,7 +1359,17 @@ local function startPuzzle()
 			end
 
 			task.delay(0.55, function()
-				if session ~= owningSession or not session.active or not relay.model.Parent then return end
+				if session ~= owningSession or not session.active or not relay.model.Parent or relay.extracted then return end
+				if not finishFuseExtraction(owningSession, player, extractionRecord, extractionPosition) then
+					-- No verified floor: keep this one fuse in its relay for another attempt.
+					for part, pose in pairs(extractionFuseFrames) do if part.Parent then part.CFrame = pose end end
+					relay.handle.CFrame = extractionHandleCF
+					relay.extracting = false
+					relay.prompt.Enabled = true
+					relay.label.Text = "FUSE READY  //  EXTRACT"
+					relay.hum:Play()
+					return
+				end
 				relay.extracted = true
 				relay.model:SetAttribute("ContainsFuse", false)
 				for _, fusePart in ipairs(relay.fuseParts) do
@@ -1186,10 +1382,6 @@ local function startPuzzle()
 				relay.label.Text = "EMPTY  //  POWER ISOLATED"
 				relay.label.TextColor3 = Color3.fromRGB(188, 89, 68)
 
-				session.carried[player] = (session.carried[player] or 0) + 1
-				updateCarriedFuse(player, session.carried[player])
-				status:FireClient(player, "carry", session.carried[player])
-				status:FireClient(player, "msg", "Fuse extracted")
 				updateEntityObjectiveTarget()
 			end)
 		end))

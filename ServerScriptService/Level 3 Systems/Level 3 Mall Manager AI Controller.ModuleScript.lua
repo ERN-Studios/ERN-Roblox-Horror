@@ -14,6 +14,7 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
+local PlayerProtection = require(game:GetService("ServerScriptService"):WaitForChild("PlayerProtection"))
 
 local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
 local HidingController = require(script.Parent:WaitForChild("Level 3 Hiding Controller"))
@@ -48,6 +49,7 @@ local stopChaseScream: (any) -> ()
 -- full-segment clearance contract, which is defined with the navigation
 -- filters below.
 local volumeClear: (any, Vector3, Vector3) -> boolean
+local volumeFits: (any, Vector3, OverlapParams?) -> boolean
 
 -- ServerStorage assets can be absent from a place file, and WaitForChild with
 -- no timeout yields instead of erroring. Every caller below is reached from
@@ -137,15 +139,15 @@ local function livingPlayer(player: Player, session: any): (Model?, Humanoid?, B
 	if not validRound(session)
 		or player.Parent ~= Players
 		or player:GetAttribute("InRound") ~= true
-		or player:GetAttribute("Escaped") == true
-		or HidingController.IsHidden(player, session.Generation) then
+		or player:GetAttribute("Escaped") == true then
 		return nil, nil, nil
 	end
 	local character = player.Character
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 	local root = character and character:FindFirstChild("HumanoidRootPart")
 	if not character or not character.Parent or not humanoid or humanoid.Health <= 0
-		or not root or not root:IsA("BasePart") then
+		or not root or not root:IsA("BasePart")
+		or PlayerProtection.IsActive(player, character) then
 		return nil, nil, nil
 	end
 	return character, humanoid, root
@@ -218,7 +220,6 @@ local function publishTargetTelemetry(session: any, mode: string, distance: numb
 end
 
 local function publishTarget(session: any, player: Player?)
-	if player and HidingController.IsHidden(player, session.Generation) then player = nil end
 	if session.Target == player then
 		-- Nil is also a telemetry state. Re-publish it even when the target field is
 		-- already nil so an old mode/position can never survive a dormant edge.
@@ -227,6 +228,7 @@ local function publishTarget(session: any, player: Player?)
 	end
 	local old = session.Target
 	session.Target = player
+	session.TargetTableAnchor = nil
 	if not player then stopChaseScream(session) end
 	if old and old.Parent == Players and old:GetAttribute("BeingChased") == true then
 		old:SetAttribute("BeingChased", false)
@@ -287,6 +289,7 @@ local function clearPath(session: any, status: string?)
 	session.PathToken += 1
 	session.Path = nil
 	session.PathObject = nil
+	session.PathIsRoomPerimeter = false
 	session.WaypointIndex = 1
 	session.PathGoal = nil
 	-- PathComputing/InFlightPathGoal are owned exclusively by the compute task
@@ -650,8 +653,20 @@ end
 -- segment. Keeping it in one helper prevents consumption, first-waypoint
 -- steering and the Studio regression probe from drifting apart.
 local function movementProjectedWaypoint(session: any, currentGround: Vector3,
-	originalPosition: Vector3): (Vector3, boolean, boolean)
+	originalPosition: Vector3): (Vector3?, boolean, boolean)
 	local original = flat(originalPosition, session.FloorY)
+	-- PFS uses a smaller agent than the physical sweep. Its raw point can be
+	-- inside a door jamb, so the usual raw-point -> centreline check cannot
+	-- repair it. Only a clear approach from the actual Manager position may
+	-- replace that invalid point; otherwise it is never a movement target.
+	if not volumeFits(session, original) then
+		local centered = centerCorridorWaypoint(session, original, session.FloorY, false)
+		local usedProjection = planarDistance(original, centered) > .05
+		if usedProjection and volumeClear(session, currentGround, centered) then
+			return centered, true, true
+		end
+		return nil, usedProjection, false
+	end
 	local projected = centerCorridorWaypoint(session, original, session.FloorY, true)
 	local usedProjection = planarDistance(original, projected) > .05
 	local approachClear = not usedProjection or volumeClear(session, currentGround, projected)
@@ -780,8 +795,14 @@ local function navigationOverlapParams(session: any): OverlapParams
 end
 
 local function clearanceBox(groundPosition: Vector3): (CFrame, Vector3)
-	local castHeight = math.max(2, Tuning.AgentHeight - .6)
-	local center = groundPosition + Vector3.new(0, castHeight * .5 + .2, 0)
+	-- Authored floor supports (including the half-stud ElevatorSpawn plate)
+	-- are walkable underfoot. Starting the body sweep only .2 studs above the
+	-- floor treated that plate as a wall and stranded chases outside attack
+	-- range. Allow .6 studs at the feet, keeping the previous upper boundary
+	-- and full horizontal body width so ceilings, walls and tables still block.
+	local floorClearance = .6
+	local castHeight = math.max(2, Tuning.AgentHeight - .4 - floorClearance)
+	local center = groundPosition + Vector3.new(0, castHeight * .5 + floorClearance, 0)
 	local size = Vector3.new(Tuning.SweepRadius * 2, castHeight, Tuning.SweepRadius * 2)
 	-- Keep the square aligned to the axis-aligned Level 3 corridors. Rotating a
 	-- square sweep at a corner would artificially widen it by sqrt(2).
@@ -935,7 +956,7 @@ local function navigationBlockersAt(session: any, groundPosition: Vector3,
 	return blockers
 end
 
-local function volumeFits(session: any, groundPosition: Vector3, params: OverlapParams?): boolean
+volumeFits = function(session: any, groundPosition: Vector3, params: OverlapParams?): boolean
 	return #navigationBlockersAt(session, groundPosition, params) == 0
 end
 
@@ -953,6 +974,128 @@ volumeClear = function(session: any, startGround: Vector3, endGround: Vector3): 
 	return physicalVolumeClear(session, startGround, endGround)
 end
 
+-- A bounded repair for coarse navmesh points that hug an authored room wall.
+-- Only this room's four perimeter edges and its next existing doorway are
+-- candidates. Every edge must pass the unchanged physical/furniture sweep.
+local function buildRoomPerimeterPath(session: any, destination: Vector3,
+	throughMiddle: boolean?): {any}?
+	if session.FinalHallChase then return nil end
+	local current = flat(session.Root.Position, session.FloorY)
+	local room = roomDefinition(nearestRoomId(current))
+	local goalRoom = roomDefinition(nearestRoomId(destination))
+	if not room or not goalRoom then return nil end
+	local inset = Configuration.WallThickness * .5 + Tuning.SweepRadius + .5
+	local hx, hz = room.W * .5 - inset, room.D * .5 - inset
+	if throughMiddle then
+		-- Corner columns can block the outer ring while an interior aisle is
+		-- clear. Try one narrower rectangle across the same adjacent doorway;
+		-- its candidates still require every unchanged full-volume sweep.
+		if room.Id == goalRoom.Id then return nil end
+		if math.abs(goalRoom.X - room.X) > math.abs(goalRoom.Z - room.Z) then
+			hz *= .5
+		else
+			hx *= .5
+		end
+	end
+	if hx <= 0 or hz <= 0 then return nil end
+	local center = roomCenter(room.Id, session.FloorY) :: Vector3
+	local function point(x: number, z: number): Vector3
+		return center + Vector3.new(x, 0, z)
+	end
+	local corners = {point(-hx, -hz), point(hx, -hz), point(hx, hz), point(-hx, hz)}
+	local function projections(position: Vector3): {Vector3}
+		local offset = position - center
+		local x, z = math.clamp(offset.X, -hx, hx), math.clamp(offset.Z, -hz, hz)
+		return {point(x, -hz), point(hx, z), point(x, hz), point(-hx, z)}
+	end
+	local entries = projections(current)
+	local exits = projections(destination)
+	local lastPoint = destination
+	local onlyExitSide: number? = nil
+	if goalRoom.Id ~= room.Id then
+		local linked = false
+		for _, link in ipairs(layoutLinks()) do
+			if link.Door ~= "HiddenExit" and ((link.A == room.Id and link.B == goalRoom.Id)
+				or (link.B == room.Id and link.A == goalRoom.Id)) then linked = true break end
+		end
+		if not linked then return nil end
+		local nextCenter = roomCenter(goalRoom.Id, session.FloorY) :: Vector3
+		local delta = nextCenter - center
+		if math.abs(delta.X) > math.abs(delta.Z) then
+			-- The existing authored corridor is cardinal. Do not invent a diagonal
+			-- doorway if a future layout introduces offset or curved connections.
+			if math.abs(delta.Z) > .05 or goalRoom.W * .5 <= inset then return nil end
+			local sign = if delta.X > 0 then 1 else -1
+			onlyExitSide = if sign > 0 then 2 else 4
+			exits[onlyExitSide] = point(sign * hx, 0)
+			lastPoint = nextCenter + Vector3.new(-sign * (goalRoom.W * .5 - inset), 0, 0)
+		else
+			if math.abs(delta.X) > .05 or goalRoom.D * .5 <= inset then return nil end
+			local sign = if delta.Z > 0 then 1 else -1
+			onlyExitSide = if sign > 0 then 3 else 1
+			exits[onlyExitSide] = point(0, sign * hz)
+			lastPoint = nextCenter + Vector3.new(0, 0, -sign * (goalRoom.D * .5 - inset))
+		end
+	end
+	local best: {any}? = nil
+	local bestLength = math.huge
+	for entrySide = 1, 4 do
+		for exitSide = 1, 4 do
+			if onlyExitSide and exitSide ~= onlyExitSide then continue end
+			for _, direction in ipairs({1, -1}) do
+				local points = {entries[entrySide]}
+				local side = entrySide
+				while side ~= exitSide do
+					local corner = if direction == 1 then side % 4 + 1 else side
+					table.insert(points, corners[corner])
+					side = (side - 1 + direction) % 4 + 1
+				end
+				table.insert(points, exits[exitSide])
+				table.insert(points, lastPoint)
+				local accepted, length, from = {}, 0, current
+				local clear = true
+				for _, to in ipairs(points) do
+					local distance = planarDistance(from, to)
+					if distance <= .05 then continue end
+					if not volumeClear(session, from, to) then clear = false break end
+					length += distance
+					table.insert(accepted, {Position=to})
+					from = to
+				end
+				if clear and #accepted > 0 and length < bestLength then
+					best, bestLength = accepted, length
+				end
+			end
+		end
+	end
+	return best
+end
+
+local function installRoomPerimeterPath(session: any, destination: Vector3): boolean
+	local waypoints = buildRoomPerimeterPath(session, destination)
+	if not waypoints then waypoints = buildRoomPerimeterPath(session, destination, true) end
+	if not waypoints then return false end
+	-- Reuse the ordinary follower/progress counters. Invalidate any old async
+	-- PFS result so it cannot overwrite this checked local repair with bad points.
+	clearPath(session)
+	session.Path = waypoints
+	session.PathIsRoomPerimeter = true
+	session.WaypointIndex = 1
+	session.PathGoal = destination
+	session.PathSwapSerial += 1
+	publishPathStatus(session, "ROOM_PERIMETER")
+	return true
+end
+
+local function pathSegmentsClear(session: any, current: Vector3, waypoints: {any},
+	firstIndex: number, destination: Vector3): boolean
+	for index = firstIndex, #waypoints do
+		local point = movementProjectedWaypoint(session, current, waypoints[index].Position)
+		if not point or not volumeClear(session, current, point) then return false end
+		current = point
+	end
+	return volumeClear(session, current, destination)
+end
 -- LEVEL3_MANAGER_SAFE_GOAL_20260821
 -- Room centers and sensed targets may land inside a banquet table's inflated
 -- navigation envelope. Resolve them to the nearest reachable point on the
@@ -1324,6 +1467,7 @@ requestPath = function(session: any, destination: Vector3, force: boolean?)
 			return
 		end
 		if not ok or path.Status ~= Enum.PathStatus.Success then
+			if not session.Path and installRoomPerimeterPath(session, destination) then return end
 			session.PathFailures += 1
 			-- A failed refresh is not permission to discard the route currently
 			-- carrying the Manager. Authored room-center steering remains available
@@ -1370,8 +1514,8 @@ requestPath = function(session: any, destination: Vector3, force: boolean?)
 			then Tuning.BlackoutPathLookaheadWaypoints else Tuning.PathLookaheadWaypoints
 		local finalProbe = math.min(#waypoints, nearestIndex + rebaseLookahead - 1)
 		for index = nearestIndex, finalProbe do
-			local candidate = centerCorridorWaypoint(session,
-				flat(waypoints[index].Position, session.FloorY), session.FloorY, true)
+			local candidate = movementProjectedWaypoint(session, currentGround, waypoints[index].Position)
+			if not candidate then continue end
 			local displacement = candidate - currentGround
 			local forward = displacement.Magnitude <= Tuning.WaypointReachDistance * 1.5
 				or session.CurrentMoveSpeed <= .5
@@ -1381,18 +1525,32 @@ requestPath = function(session: any, destination: Vector3, force: boolean?)
 				initialIndex = index
 			end
 		end
-		if not initialIndex and session.Path then
-			publishPathStatus(session, "ROUTE_RETAINED")
+		if not initialIndex then
+			if not session.Path and installRoomPerimeterPath(session, destination) then return end
+			-- A successful coarse route is not permission to install an unreachable
+			-- nearest point. Retain a live route or use the checked graph fallback.
+			session.PathFailures += 1
+			publishPathStatus(session, if session.Path then "ROUTE_RETAINED" else "GRAPH_FALLBACK")
+			abandonFailedPatrol(session)
 			dispatchPendingPath(session, destination)
 			return
 		end
-		initialIndex = initialIndex or nearestIndex
+		-- A useful checked local detour cannot be replaced by a coarse path
+		-- with only a valid first point and another blocked wall-hug later on.
+		if session.PathIsRoomPerimeter
+			and not pathSegmentsClear(session, currentGround, waypoints, initialIndex, destination) then
+			publishPathStatus(session, "ROOM_PERIMETER_RETAINED")
+			dispatchPendingPath(session, destination)
+			return
+		end
 		disconnect(session.PathBlockedConnection)
 		session.PathObject = path
+		session.PathIsRoomPerimeter = false
 		session.Path = waypoints
 		session.WaypointIndex = initialIndex
 		session.PathGoal = destination
-		session.PathFailures = 0
+		-- Installation alone is not progress. Keep the stuck-recovery count
+		-- until real movement/consumption credits it in noteNavigationProgress.
 		session.PathSwapSerial += 1
 		local resolvedGoal = session.ResolvedFinalGoal or session.FinalGoal
 		if not session.PathValidated and resolvedGoal
@@ -1402,18 +1560,7 @@ requestPath = function(session: any, destination: Vector3, force: boolean?)
 			-- route genuinely validated, replay every accepted segment through the
 			-- exact production sweep used by local steering, including the final
 			-- endpoint. This is performed only until validation succeeds.
-			local authoritativeRouteClear = true
-			local routePosition = currentGround
-			for index = initialIndex, #waypoints do
-				local routePoint = centerCorridorWaypoint(session,
-					flat(waypoints[index].Position, session.FloorY), session.FloorY, true)
-				if not volumeClear(session, routePosition, routePoint) then
-					authoritativeRouteClear = false
-					break
-				end
-				routePosition = routePoint
-			end
-			if authoritativeRouteClear and volumeClear(session, routePosition, destination) then
+			if pathSegmentsClear(session, currentGround, waypoints, initialIndex, destination) then
 				markPathValidated(session)
 			end
 		end
@@ -1635,7 +1782,7 @@ local function chooseTableCheckAnchor(session: any, now: number): BasePart?
 	if now < session.ActivatedAt then return nil end
 	if now < session.NextTableCheckAt then return nil end
 	local candidates = {}
-	for _, anchor in ipairs(HidingController.GetOccupiedAnchors(session.Generation)) do
+	for _, anchor in ipairs(HidingController.GetOccupiedAnchors(session.Generation, true)) do
 		if now >= (session.AnchorCheckCooldown[anchor] or 0) then
 			table.insert(candidates, anchor)
 		end
@@ -1712,7 +1859,7 @@ local function choosePatrolGoal(session: any, now: number)
 	publishState(session, "PATROL")
 end
 
-local function nearestExposedPlayer(session: any): (Player?, BasePart?)
+local function nearestLivingPlayer(session: any): (Player?, BasePart?)
 	local selected: Player? = nil
 	local selectedRoot: BasePart? = nil
 	local bestDistance = math.huge
@@ -1732,55 +1879,8 @@ local function nearestExposedPlayer(session: any): (Player?, BasePart?)
 	return selected, selectedRoot
 end
 
--- LEVEL3_MANAGER_TABLE_CHECK_20260904
--- The hunt is co-extensive with the blackout, and the blackout branch of the
--- brain returns before the whole patrol half, so choosePatrolGoal's sweep bias
--- only ever runs in a round where EVERY living player is hidden. One teammate
--- still out running would otherwise make hiding perfectly safe for everyone
--- else -- the feature would be inert in exactly the case it exists for. This is
--- the same leg, taken mid-hunt.
---
--- It is only ever taken toward a table that is CLOSER than the nearest exposed
--- player, so the Manager never turns away from a chase it is about to win, and
--- the detour is dropped the moment that stops being true. Note the coin flip in
--- chooseTableCheckAnchor only staggers the start here (a failed draw is retried
--- on the next think tick); the rate limits that make hiding a real tactic are
--- TableCheck.GlobalIntervalSeconds and the per-anchor cooldown.
-local function tableCheckDetour(session: any, now: number, exposedDistance: number): boolean
-	local anchor = session.TableCheckTargetAnchor
-	if anchor then
-		if anchor.Parent
-			and HidingController.OccupantCount(anchor) > 0
-			and (session.PatrolLegUntil == nil or now < session.PatrolLegUntil)
-			and planarDistance(session.Root.Position, anchor.Position) < exposedDistance then
-			-- Steering already owns the goal; only the state has to be held.
-			publishState(session, "PATROL")
-			return true
-		end
-		abandonTableCheckTarget(session, now)
-		session.PatrolGoal = nil
-		return false
-	end
-	if session.Attacking then return false end
-	anchor = chooseTableCheckAnchor(session, now)
-	if not anchor
-		or planarDistance(session.Root.Position, anchor.Position) >= exposedDistance then
-		return false
-	end
-	session.TableCheckTargetAnchor = anchor
-	session.PatrolGoal = flat(anchor.Position, session.FloorY)
-	session.PatrolWaitUntil = nil
-	session.PatrolLegUntil = now + blackoutSweepLegDuration(
-		planarDistance(session.Root.Position, session.PatrolGoal))
-	publishTarget(session, nil)
-	setGoal(session, session.PatrolGoal, true)
-	publishState(session, "PATROL")
-	publishTargetTelemetry(session, "TABLE_CHECK_DETOUR", exposedDistance, session.PatrolGoal)
-	return true
-end
-
 local function trackNearestBlackoutPlayer(session: any, now: number): boolean
-	local nearestPlayer, nearestRoot = nearestExposedPlayer(session)
+	local nearestPlayer, nearestRoot = nearestLivingPlayer(session)
 	if not nearestPlayer or not nearestRoot then
 		if session.Attacking then
 			session.AttackToken += 1
@@ -1789,17 +1889,12 @@ local function trackNearestBlackoutPlayer(session: any, now: number): boolean
 		end
 		publishTarget(session, nil)
 		session.LastKnownPosition = nil
+		session.LastKnownPlayer = nil
+		session.LastKnownCharacter = nil
 		session.LastSenseAt = -math.huge
 		session.SearchUntil = nil
-		-- LEVEL3_FURNITURE_PERMANENCE_20260828
-		-- Everyone is hidden. This used to clearGoal() and publish the STRING
-		-- "SEARCH" while holding no destination, so the Manager stood on the spot
-		-- with a walk animation playing until somebody came out -- and because the
-		-- blackout branch returns before the whole patrol/search half of the brain,
-		-- nothing downstream could ever give it one. It now sweeps the mall for
-		-- real: hidden players stay excluded from targeting and from attacks (that
-		-- is `nearestExposedPlayer` above and `attackLineClear` below, both
-		-- unchanged), but the hunt keeps moving over them.
+		-- Patrol only when no living round participant remains. Hiding players
+		-- remain chase targets and therefore never enter this fallback.
 		local sweepGoal = arrivalGoal(session)
 		if session.PatrolGoal and (not sweepGoal
 			or planarDistance(session.Root.Position, sweepGoal) <= Tuning.GoalTolerance + 1) then
@@ -1817,15 +1912,11 @@ local function trackNearestBlackoutPlayer(session: any, now: number): boolean
 		else
 			publishState(session, "PATROL")
 		end
-		publishTargetTelemetry(session, "NO_EXPOSED_PLAYER", -1, nil)
+		publishTargetTelemetry(session, "NO_LIVING_PLAYER", -1, nil)
 		return false
 	end
 
-	local exposedDistance = planarDistance(session.Root.Position, nearestRoot.Position)
-	-- Somebody is still out there, but a table with people under it is nearer:
-	-- take the check on the way. Re-evaluated every think tick, so the chase
-	-- reclaims the Manager as soon as the runner is the closer of the two.
-	if tableCheckDetour(session, now, exposedDistance) then return false end
+	local targetDistance = planarDistance(session.Root.Position, nearestRoot.Position)
 
 	local switchedTarget = session.Target ~= nearestPlayer
 	if switchedTarget and session.Attacking then
@@ -1836,6 +1927,11 @@ local function trackNearestBlackoutPlayer(session: any, now: number): boolean
 		session.AttackCooldownUntil = now
 	end
 	publishTarget(session, nearestPlayer)
+	local targetAnchor = HidingController.GetAnchor(nearestPlayer, session.Generation)
+	session.TargetTableAnchor = targetAnchor
+	-- The nearest player owns the chase. A prior random patrol-table leg cannot
+	-- divert it, whether that player is exposed or underneath a table.
+	session.TableCheckTargetAnchor = nil
 
 	local targetPosition = flat(nearestRoot.Position, session.FloorY)
 	local velocity = Vector3.new(nearestRoot.AssemblyLinearVelocity.X, 0,
@@ -1845,43 +1941,24 @@ local function trackNearestBlackoutPlayer(session: any, now: number): boolean
 		lead = lead.Unit * Tuning.BlackoutTargetLeadMaximumDistance
 	end
 	local predicted = targetPosition + lead
-	if volumeFits(session, predicted) then targetPosition = predicted end
+	if not targetAnchor and volumeFits(session, predicted) then targetPosition = predicted end
 
 	session.LastKnownPosition = targetPosition
+	session.LastKnownPlayer = nearestPlayer
+	session.LastKnownCharacter = nearestPlayer.Character
 	session.LastSenseAt = now
 	session.LastVisualAt = now
 	session.SearchUntil = nil
 	session.PatrolGoal = nil
 	session.AlertUntil = 0
-	setGoal(session, targetPosition, switchedTarget)
+	-- Aim at the table centre so safe-goal resolution selects its clear outer
+	-- perimeter, rather than trying to squeeze the rig into an occupant slot.
+	local navigationTarget = if targetAnchor then targetAnchor.Position else targetPosition
+	setGoal(session, navigationTarget, switchedTarget)
 
-	publishTargetTelemetry(session, "NEAREST_PLAYER", exposedDistance, targetPosition)
+	publishTargetTelemetry(session, "NEAREST_PLAYER", targetDistance, targetPosition)
 	if not session.Attacking then publishState(session, "CHASE") end
 	return true
-end
-
-local function redirectHiddenTarget(session: any, hiddenPlayer: Player, now: number)
-	session.Suspicion[hiddenPlayer] = nil
-	session.AttackToken += 1
-	session.Attacking = false
-	session.AttackCooldownUntil = now
-	publishTarget(session, nil)
-	session.LastKnownPosition = nil
-	session.LastSenseAt = -math.huge
-	session.LastVisualAt = -math.huge
-	session.SearchUntil = nil
-	session.PatrolGoal = nil
-	local replacement, replacementRoot = nearestExposedPlayer(session)
-	if replacement and replacementRoot then
-		publishTarget(session, replacement)
-		session.LastKnownPosition = flat(replacementRoot.Position, session.FloorY)
-		session.LastSenseAt = now
-		session.LastVisualAt = now
-		publishState(session, "CHASE")
-		setGoal(session, session.LastKnownPosition, true)
-	else
-		choosePatrolGoal(session, now)
-	end
 end
 
 local function beginSearch(session: any, now: number)
@@ -1895,6 +1972,8 @@ end
 local function dormant(session: any, stateName: string)
 	publishTarget(session, nil)
 	session.LastKnownPosition = nil
+	session.LastKnownPlayer = nil
+	session.LastKnownCharacter = nil
 	session.LastSenseAt = -math.huge
 	session.AlertUntil = 0
 	session.SearchUntil = nil
@@ -1930,7 +2009,7 @@ local function updateBrain(session: any, now: number, dt: number)
 		return
 	end
 	if session.Target and HidingController.IsHidden(session.Target, session.Generation) then
-		redirectHiddenTarget(session, session.Target, now)
+		trackNearestBlackoutPlayer(session, now)
 		return
 	end
 	if session.Attacking then return end
@@ -1952,6 +2031,8 @@ local function updateBrain(session: any, now: number, dt: number)
 			if volumeFits(session, predicted) then sensedPosition = predicted end
 		end
 		session.LastKnownPosition = sensedPosition
+		session.LastKnownPlayer = seenPlayer
+		session.LastKnownCharacter = seenPlayer.Character
 		session.LastSenseAt = now
 		session.LastVisualAt = now
 		session.SearchUntil = nil
@@ -1977,6 +2058,8 @@ local function updateBrain(session: any, now: number, dt: number)
 			and now - session.LastVisualAt <= Tuning.ChaseVisualLossGraceSeconds
 		publishTarget(session, heardPlayer)
 		session.LastKnownPosition = flat(heardRoot.Position, session.FloorY)
+		session.LastKnownPlayer = heardPlayer
+		session.LastKnownCharacter = heardPlayer.Character
 		session.LastSenseAt = now
 		session.SearchUntil = nil
 		session.PatrolGoal = nil
@@ -1999,6 +2082,8 @@ local function updateBrain(session: any, now: number, dt: number)
 	if worldNoise then
 		publishTarget(session, nil)
 		session.LastKnownPosition = flat(worldNoise, session.FloorY)
+		session.LastKnownPlayer = nil
+		session.LastKnownCharacter = nil
 		session.LastSenseAt = session.WorldNoise.Time
 		session.SearchUntil = nil
 		session.PatrolGoal = nil
@@ -2029,6 +2114,8 @@ local function updateBrain(session: any, now: number, dt: number)
 			return
 		end
 		session.LastKnownPosition = nil
+		session.LastKnownPlayer = nil
+		session.LastKnownCharacter = nil
 		session.SearchUntil = nil
 	end
 
@@ -2061,6 +2148,7 @@ end
 local function endTableCheck(session: any, flush: boolean)
 	local anchor = session.TableCheckAnchor
 	session.TableCheckAnchor = nil
+	session.TableCheckTargetPlayer = nil
 	session.TableCheckEndsAt = 0
 	if session.TableCheckSound then
 		session.TableCheckSound:Destroy()
@@ -2070,15 +2158,68 @@ local function endTableCheck(session: any, flush: boolean)
 	if not anchor then return end
 	session.AnchorCheckCooldown[anchor] = os.clock() + TableCheckTuning.AnchorCooldownSeconds
 	if flush and anchor.Parent then
-		-- Everyone still under the table comes out on the far side, with the
+		-- Unprotected occupants come out on the far side, with the
 		-- immunity the Hiding Controller grants them. Leaving during the window
 		-- was the safe option; this is the consequence of not taking it.
 		HidingController.FlushAnchor(anchor, session.Root.Position)
 	end
 end
 
+-- Cancel only this exact protected life; unrelated players and CD noise survive.
+local function forgetProtectedPlayer(session: any, player: Player?, character: Model?)
+	if not player or not character or not liveSession(session)
+		or player.Character ~= character or not PlayerProtection.IsActive(player, character) then return end
+	session.Suspicion[player] = nil
+	local ownsTarget = session.Target == player
+	-- Retired-avatar memory still belongs to this player and must not restart pursuit.
+	local ownsMemory = session.LastKnownPlayer == player
+	local ownsAttack = session.Attacking and session.AttackPlayer == player and session.AttackCharacter == character
+	local ownsCheck = session.TableCheckTargetPlayer == player
+	if ownsAttack then
+		session.AttackToken += 1
+		session.Attacking = false
+		session.AttackPlayer = nil
+		session.AttackCharacter = nil
+	end
+	if ownsCheck then endTableCheck(session, false) end
+	if ownsTarget then
+		publishTarget(session, nil)
+		session.LastVisualAt = -math.huge
+	end
+	if ownsMemory then
+		session.LastKnownPosition = nil
+		session.LastKnownPlayer = nil
+		session.LastKnownCharacter = nil
+		session.LastSenseAt = -math.huge
+	end
+	if (ownsTarget or ownsMemory or ownsAttack or ownsCheck) and not session.Target then
+		session.SearchUntil = nil
+		session.SearchNextAt = 0
+		session.AlertUntil = 0
+		session.PatrolGoal = nil
+		session.PatrolWaitUntil = nil
+		session.PatrolLegUntil = nil
+		session.TableCheckTargetAnchor = nil
+		clearGoal(session)
+		publishState(session, if validRound(session) then "PATROL_LISTEN" else "WAITING")
+		-- Let the next normal brain tick choose another eligible player.
+		session.ThinkAccumulator = math.max(session.ThinkAccumulator,
+			Tuning.ThinkIntervalSeconds, Tuning.BlackoutThinkIntervalSeconds)
+	end
+	local patrolAnchor = session.TableCheckTargetAnchor
+	if patrolAnchor and HidingController.OccupantCount(patrolAnchor, true) == 0 then
+		session.TableCheckTargetAnchor = nil
+		if session.State == "PATROL" or session.State == "PATROL_LISTEN" then
+			session.PatrolGoal = nil
+			session.PatrolLegUntil = nil
+			clearGoal(session)
+		end
+	end
+end
+
 local function beginTableCheck(session: any, anchor: BasePart, now: number)
 	session.TableCheckAnchor = anchor
+	session.TableCheckTargetPlayer = if session.TargetTableAnchor == anchor then session.Target else nil
 	-- The reaction window is the one clock a player is SHOWN -- the client counts
 	-- its banner down against this exact number -- and os.clock is CPU time in the
 	-- server datamodel, materially behind the wall clock. Measuring the window on
@@ -2112,35 +2253,68 @@ local function beginTableCheck(session: any, anchor: BasePart, now: number)
 	end
 end
 
+local function tableCheckApproachClear(session: any, anchor: BasePart): boolean
+	return planarDistance(session.Root.Position, anchor.Position) <= TableCheckTuning.StartRange
+		and navigationGoalLineClear(session, flat(session.Root.Position, session.FloorY),
+			flat(anchor.Position, session.FloorY))
+end
+
 -- Returns true while a check owns the Manager: the brain, the attack test and
 -- ordinary steering all stand down for the reaction window.
 local function updateTableCheck(session: any, now: number): boolean
 	if session.TableCheckAnchor then
-		if not validRound(session) or not session.TableCheckAnchor.Parent then
+		local anchor = session.TableCheckAnchor
+		if not validRound(session) or not anchor.Parent then
 			endTableCheck(session, false)
+			return false
+		end
+		if HidingController.OccupantCount(anchor, true) == 0 then
+			endTableCheck(session, false)
+			return false
+		end
+		local checkPlayer = session.TableCheckTargetPlayer
+		if checkPlayer and (nearestLivingPlayer(session) ~= checkPlayer
+			or HidingController.GetAnchor(checkPlayer, session.Generation) ~= anchor
+			or not tableCheckApproachClear(session, anchor)) then
+			-- Leaving, dying, changing tables or a nearer player interrupts this
+			-- check immediately. A newly closed wall also cancels the flush.
+			endTableCheck(session, false)
+			trackNearestBlackoutPlayer(session, now)
 			return false
 		end
 		-- Server time: TableCheckEndsAt is the value the occupants' banner counts
 		-- down against, so the flush lands when the warning says it will.
 		if workspace:GetServerTimeNow() < session.TableCheckEndsAt then return true end
 		endTableCheck(session, true)
+		trackNearestBlackoutPlayer(session, now)
 		return false
 	end
 	if debugTableChecksSuspended or not validRound(session) then return false end
 	if now < session.ActivatedAt then return false end
-	-- Only a sweep may turn into a check. A chase or an attack is never
-	-- interrupted by a table the Manager happens to walk past.
+	local targetAnchor = session.TargetTableAnchor
+	if session.State == "CHASE" and targetAnchor and session.Target then
+		if nearestLivingPlayer(session) ~= session.Target
+			or HidingController.GetAnchor(session.Target, session.Generation) ~= targetAnchor then
+			trackNearestBlackoutPlayer(session, now)
+			return false
+		end
+		-- The selected player remains the target under the table. Approach its
+		-- clear perimeter, announce the existing warning, then flush and resume
+		-- the chase. Random patrol bias and cooldowns do not grant hiding immunity.
+		if not tableCheckApproachClear(session, targetAnchor) then return false end
+		beginTableCheck(session, targetAnchor, now)
+		return true
+	end
+	-- An untargeted patrol check cannot interrupt a chase past another table.
 	if session.State ~= "PATROL" and session.State ~= "PATROL_LISTEN" then return false end
 	local anchor = session.TableCheckTargetAnchor
 	if not anchor or not anchor.Parent
-		or HidingController.OccupantCount(anchor) <= 0
+		or HidingController.OccupantCount(anchor, true) <= 0
 		or now < (session.AnchorCheckCooldown[anchor] or 0) then
 		session.TableCheckTargetAnchor = nil
 		return false
 	end
-	if planarDistance(session.Root.Position, anchor.Position) > TableCheckTuning.StartRange then
-		return false
-	end
+	if not tableCheckApproachClear(session, anchor) then return false end
 	beginTableCheck(session, anchor, now)
 	return true
 end
@@ -2173,8 +2347,11 @@ local function beginAttack(session: any, player: Player)
 		and planarDistance(session.FinalGoal, session.ResolvedFinalGoal) > 1 then
 		initiationRange = Tuning.AttackConfirmRange
 	end
-	local clear = attackLineClear(session, player, initiationRange)
-	if not clear then return end
+	local clear, attackHumanoid = attackLineClear(session, player, initiationRange)
+	local attackCharacter = player.Character
+	if not clear or not attackHumanoid or not attackCharacter then return end
+	session.AttackPlayer = player
+	session.AttackCharacter = attackCharacter
 	session.Attacking = true
 	session.AttackToken += 1
 	local attackToken = session.AttackToken
@@ -2185,6 +2362,8 @@ local function beginAttack(session: any, player: Player)
 	task.delay(windup, function()
 		if not liveSession(session) or session.AttackToken ~= attackToken then return end
 		local confirmed, humanoid = attackLineClear(session, player, Tuning.AttackConfirmRange)
+		confirmed = confirmed and player.Character == attackCharacter
+			and humanoid == attackHumanoid and not PlayerProtection.IsActive(player, attackCharacter)
 		if confirmed and humanoid and humanoid.Health > 0 then
 			session.AttackSerial += 1
 			session.StateFolder:SetAttribute("Level3_MallManagerAttackSerial", session.AttackSerial)
@@ -2195,10 +2374,14 @@ local function beginAttack(session: any, player: Player)
 			end
 			humanoid.Health = 0
 			session.LastKnownPosition = nil
+			session.LastKnownPlayer = nil
+			session.LastKnownCharacter = nil
 			session.LastSenseAt = -math.huge
 			publishTarget(session, nil)
 		end
 		session.Attacking = false
+		session.AttackPlayer = nil
+		session.AttackCharacter = nil
 		local recovery = if session.Blackout
 			then Tuning.BlackoutAttackRecoverySeconds else Tuning.AttackRecoverySeconds
 		session.AttackCooldownUntil = os.clock() + recovery
@@ -2212,7 +2395,8 @@ end
 
 local function movementWaypoint(session: any, destination: Vector3, speed: number, dt: number): Vector3?
 	local currentGround = flat(session.Root.Position, session.FloorY)
-	if not session.Path or not session.PathObject then
+	-- Checked authored repairs have waypoints but no Roblox Path object.
+	if not session.Path then
 		-- Strategic destinations are adjacent authored room centers. A full-volume
 		-- clear sweep is a real centerline fallback even when the segment is long.
 		if volumeClear(session, currentGround, destination) then
@@ -2222,6 +2406,9 @@ local function movementWaypoint(session: any, destination: Vector3, speed: numbe
 				markPathValidated(session)
 			end
 			return destination
+		end
+		if session.PathFailures > 0 and installRoomPerimeterPath(session, destination) then
+			return session.Path[1].Position
 		end
 		requestPath(session, destination)
 		-- Keep advancing only through a verified short clear segment while the
@@ -2240,16 +2427,19 @@ local function movementWaypoint(session: any, destination: Vector3, speed: numbe
 		speed * math.min(dt, Tuning.MaximumMovementDeltaSeconds) * 1.5)
 	while session.WaypointIndex <= #session.Path do
 		local waypoint = session.Path[session.WaypointIndex]
-		-- Consumption must revalidate too: an invalid centreline projection
-		-- falls back to the original PFS point, so a blocked projection can
-		-- never make a still-distant waypoint look reached.
+		-- Consumption uses the same physical repair/refusal as installation.
+		-- A rejected point is not reached; a valid raw point retains the usual
+		-- lateral-centering and actual-approach checks.
 		local originalPosition = flat(waypoint.Position, session.FloorY)
 		local position = movementProjectedWaypoint(session, currentGround, originalPosition)
 		-- A projected point may only make a PFS waypoint look reached when the
 		-- Manager's actual approach segment to that projection is clear as well.
 		-- Retained/original waypoints keep the normal PFS consumption behavior;
 		-- this extra check is specifically for the lateral centering preference.
-		if planarDistance(currentGround, position) <= dynamicReach then
+		local nextWaypoint = session.Path[session.WaypointIndex + 1]
+		local cornerClear = not session.PathIsRoomPerimeter or not nextWaypoint
+			or volumeClear(session, currentGround, flat(nextWaypoint.Position, session.FloorY))
+		if position and cornerClear and planarDistance(currentGround, position) <= dynamicReach then
 			session.WaypointIndex += 1
 		else
 			break
@@ -2260,7 +2450,7 @@ local function movementWaypoint(session: any, destination: Vector3, speed: numbe
 		-- furthest clearance-checked point in a short lookahead window instead.
 		-- Every candidate runs the one shared clearance contract (physical
 		-- sweep plus state-aware furniture envelopes) and keeps its original
-		-- PFS waypoint when the centreline projection is blocked.
+		-- valid PFS waypoint when the centreline projection is blocked.
 		local bestIndex = session.WaypointIndex
 		local originalBestPosition = flat(session.Path[bestIndex].Position, session.FloorY)
 		local bestPosition = movementProjectedWaypoint(
@@ -2270,14 +2460,22 @@ local function movementWaypoint(session: any, destination: Vector3, speed: numbe
 		local maximumIndex = math.min(#session.Path,
 			session.WaypointIndex + lookahead - 1)
 		for index = session.WaypointIndex + 1, maximumIndex do
-			local candidate = centerCorridorWaypoint(session,
-				flat(session.Path[index].Position, session.FloorY), session.FloorY, true)
+			local candidate = movementProjectedWaypoint(session, currentGround, session.Path[index].Position)
+			if not candidate then continue end
 			if volumeClear(session, currentGround, candidate) then
 				bestIndex = index
 				bestPosition = candidate
 			else
 				break
 			end
+		end
+		if session.PathIsRoomPerimeter and bestPosition
+			and not volumeClear(session, currentGround, bestPosition) then bestPosition = nil end
+		if not bestPosition then
+			clearPath(session, "PHYSICAL_WAYPOINT_REJECTED")
+			if installRoomPerimeterPath(session, destination) then return session.Path[1].Position end
+			requestPath(session, destination, true)
+			return nil
 		end
 		session.WaypointIndex = bestIndex
 		if session.Model and session.Model.Parent then
@@ -2298,6 +2496,7 @@ local function movementWaypoint(session: any, destination: Vector3, speed: numbe
 		return nil
 	end
 	clearPath(session, "FINAL_SEGMENT_BLOCKED")
+	if installRoomPerimeterPath(session, destination) then return session.Path[1].Position end
 	requestPath(session, destination, true)
 	return nil
 end
@@ -2549,8 +2748,14 @@ local function clearSteeringStep(session: any, currentGround: Vector3, desired: 
 		end
 	end
 	if bestDirection and bestDegrees ~= 0 then
-		session.AvoidanceSign = math.sign(bestDegrees)
-		session.AvoidanceUntil = now + Tuning.AvoidanceCommitSeconds
+		local nextSign = math.sign(bestDegrees)
+		-- Continuing on the same side must not renew its deadline every frame:
+		-- the commitment bonus otherwise keeps winning over a clear straight
+		-- step forever. A fresh attempt or a forced side change gets one window.
+		if not committed or nextSign ~= session.AvoidanceSign then
+			session.AvoidanceUntil = now + Tuning.AvoidanceCommitSeconds
+		end
+		session.AvoidanceSign = nextSign
 		setAvoidanceTelemetry(session, false)
 	elseif not committed then
 		session.AvoidanceSign = 0
@@ -2890,6 +3095,8 @@ function Controller.Stop()
 			session.TableCheckSound = nil
 		end
 		session.TableCheckAnchor = nil
+		session.TargetTableAnchor = nil
+		session.TableCheckTargetPlayer = nil
 		session.TableCheckTargetAnchor = nil
 		session.TableCheckEndsAt = 0
 		if session.AnchorCheckCooldown then table.clear(session.AnchorCheckCooldown) end
@@ -2936,7 +3143,8 @@ local function eligibleSpawnPlayers(): {any}
 			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 			local root = character and character:FindFirstChild("HumanoidRootPart")
 			if character and character.Parent and humanoid and humanoid.Health > 0
-				and root and root:IsA("BasePart") then
+				and root and root:IsA("BasePart")
+				and not PlayerProtection.IsActive(player, character) then
 				table.insert(records, {Player=player, Character=character, Root=root, Position=root.Position})
 			end
 		end
@@ -2982,10 +3190,8 @@ local function spawnOverlapParams(records: {any}): OverlapParams
 end
 
 local function spawnVolumeFits(position: Vector3, params: OverlapParams): boolean
-	local castHeight = math.max(2, Tuning.AgentHeight - .6)
-	local center = position + Vector3.new(0, castHeight * .5 + .2, 0)
-	local size = Vector3.new(Tuning.SweepRadius * 2, castHeight, Tuning.SweepRadius * 2)
-	return #workspace:GetPartBoundsInBox(CFrame.new(center), size, params) == 0
+	local boxCFrame, size = clearanceBox(position)
+	return #workspace:GetPartBoundsInBox(boxCFrame, size, params) == 0
 end
 
 local function spawnVisibilityCount(position: Vector3, records: {any}): number
@@ -3255,6 +3461,8 @@ function Controller.Start(manifest: any, generation: number)
 		Target = nil,
 		Suspicion = {},
 		LastKnownPosition = nil,
+		LastKnownPlayer = nil,
+		LastKnownCharacter = nil,
 		LastSenseAt = -math.huge,
 		LastVisualAt = -math.huge,
 		AlertUntil = 0,
@@ -3353,6 +3561,8 @@ function Controller.Start(manifest: any, generation: number)
 		ActivatedAt = math.huge,
 		Attacking = false,
 		AttackToken = 0,
+		AttackPlayer = nil,
+		AttackCharacter = nil,
 		AttackCooldownUntil = 0,
 		AttackSerial = 0,
 		-- Table check (LEVEL3_MANAGER_TABLE_CHECK_20260904). TargetAnchor is the
@@ -3360,6 +3570,8 @@ function Controller.Start(manifest: any, generation: number)
 		-- now. Both are cleared by Controller.Stop, along with the cue and the
 		-- replicated state, so nothing survives a round.
 		TableCheckAnchor = nil,
+		TargetTableAnchor = nil,
+		TableCheckTargetPlayer = nil,
 		TableCheckTargetAnchor = nil,
 		TableCheckEndsAt = 0,
 		TableCheckSound = nil,
@@ -3455,21 +3667,16 @@ function Controller.Start(manifest: any, generation: number)
 	table.insert(session.Connections, workspace:GetAttributeChangedSignal("Level3BlackoutActive"):Connect(refreshBlackoutProfile))
 	table.insert(session.Connections,
 		workspace:GetAttributeChangedSignal("Level3FinalHallChaseActive"):Connect(refreshBlackoutProfile))
-	local function bindHideTarget(player: Player)
-		table.insert(session.Connections, player:GetAttributeChangedSignal("Level3_Hiding"):Connect(function()
-			if liveSession(session) and player:GetAttribute("Level3_Hiding") == true
-				and session.Target == player then
-				redirectHiddenTarget(session, player, os.clock())
-			end
-		end))
-	end
-	for _, player in ipairs(Players:GetPlayers()) do bindHideTarget(player) end
-	table.insert(session.Connections, Players.PlayerAdded:Connect(bindHideTarget))
+	table.insert(session.Connections, PlayerProtection.Activated:Connect(function(player, character)
+		forgetProtectedPlayer(session, player, character)
+	end))
 	table.insert(session.Connections, Players.PlayerRemoving:Connect(function(player)
 		session.Suspicion[player] = nil
 		if session.Target == player then
 			publishTarget(session, nil)
 			session.LastKnownPosition = nil
+			session.LastKnownPlayer = nil
+			session.LastKnownCharacter = nil
 		end
 	end))
 	for _, module in ipairs(manifest.Modules) do
@@ -3490,6 +3697,10 @@ function Controller.Start(manifest: any, generation: number)
 		if not liveSession(session) then return end
 		local now = os.clock()
 		refreshNavigationFilters(session)
+		-- Also fence deferred activation delivery before the table-check early return.
+		forgetProtectedPlayer(session, session.Target, session.Target and session.Target.Character)
+		forgetProtectedPlayer(session, session.LastKnownPlayer, session.LastKnownPlayer and session.LastKnownPlayer.Character)
+		forgetProtectedPlayer(session, session.AttackPlayer, session.AttackCharacter)
 		if updateTableCheck(session, now) then
 			-- Kneeling at a table. Speed is 0 for TABLE_CHECK so updateMovement
 			-- holds position and parks the walk cycle; perception and attacks are
@@ -3522,13 +3733,17 @@ function Controller.Start(manifest: any, generation: number)
 	if session.Blackout and validRound(session) then
 		trackNearestBlackoutPlayer(session, os.clock())
 	else
-		local seedPlayer, seedRoot = nearestExposedPlayer(session)
+		local seedPlayer, seedRoot = nearestLivingPlayer(session)
 		if seedPlayer and seedRoot then
 			session.LastKnownPosition = flat(seedRoot.Position, floorY)
+			session.LastKnownPlayer = seedPlayer
+			session.LastKnownCharacter = seedPlayer.Character
 			session.LastSenseAt = os.clock()
 			setGoal(session, session.LastKnownPosition, true)
 		else
 			session.LastKnownPosition = nil
+			session.LastKnownPlayer = nil
+			session.LastKnownCharacter = nil
 			session.LastSenseAt = -math.huge
 		end
 	end
@@ -3574,6 +3789,9 @@ function Controller.GetSnapshot()
 		TableCheckActive = session.TableCheckAnchor ~= nil,
 		TableCheckIndex = if session.TableCheckAnchor
 			then (tonumber(session.TableCheckAnchor:GetAttribute("Level3_HideTableIndex")) or 0)
+			else 0,
+		TargetTableIndex = if session.TargetTableAnchor
+			then (tonumber(session.TargetTableAnchor:GetAttribute("Level3_HideTableIndex")) or 0)
 			else 0,
 		TableCheckTargetIndex = if session.TableCheckTargetAnchor
 			then (tonumber(session.TableCheckTargetAnchor:GetAttribute("Level3_HideTableIndex")) or 0)
@@ -3668,6 +3886,8 @@ function Controller.DebugForcePatrolRoom(roomId: string)
 	publishTarget(session, nil)
 	table.clear(session.Suspicion)
 	session.LastKnownPosition = nil
+	session.LastKnownPlayer = nil
+	session.LastKnownCharacter = nil
 	session.LastSenseAt = -math.huge
 	session.WorldNoise = nil
 	session.SearchUntil = nil
@@ -3711,6 +3931,8 @@ function Controller.DebugPrepareStraightPatrol(startPosition: Vector3, destinati
 	publishTarget(session, nil)
 	table.clear(session.Suspicion)
 	session.LastKnownPosition = nil
+	session.LastKnownPlayer = nil
+	session.LastKnownCharacter = nil
 	session.LastSenseAt = -math.huge
 	session.WorldNoise = nil
 	session.SearchUntil = nil
@@ -3833,8 +4055,10 @@ function Controller.DebugMovementProjection(currentPosition: Vector3, position: 
 		UsedProjection = usedProjection,
 		ApproachSegmentClear = approachClear,
 		CurrentEndpointFits = volumeFits(session, currentGround),
+		OriginalEndpointFits = volumeFits(session, original),
 		ProjectionEndpointFits = volumeFits(session, unchecked),
-		RetainedOriginal = planarDistance(accepted, original) <= .05,
+		AcceptedEndpointFits = accepted ~= nil and volumeFits(session, accepted),
+		RetainedOriginal = accepted ~= nil and planarDistance(accepted, original) <= .05,
 	}
 end
 

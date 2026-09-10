@@ -16,6 +16,7 @@ local CollectionService = game:GetService("CollectionService")
 
 local player = Players.LocalPlayer
 local Config = require(ReplicatedStorage:WaitForChild("ZyntraConfig"))
+local ProtectionClient = require(ReplicatedStorage:WaitForChild("ProtectionClient"))
 local PCT = ("+%d%%"):format(math.floor(Config.TokenPercentPerLevel * 100 + 0.5))
 local DevAccess = require(ReplicatedStorage:WaitForChild("DevAccess"))
 local devAllowed = DevAccess.IsAllowed(player)
@@ -30,6 +31,7 @@ local currentTab = "Upgrades"
 local productButtons = {}
 local displayedProductPrices = {}
 local reentryDead = false
+local reentryDismissed = false
 
 local COLORS = {
 	bg = Color3.fromRGB(7, 11, 13),
@@ -97,19 +99,116 @@ local function button(parent, text, size, position)
 	corner(object, 7)
 	outline(object, COLORS.line, 0.2, 1)
 	object.MouseEnter:Connect(function()
+		if object:GetAttribute("SquareSectionButton") then return end
 		if object.Active then object.BackgroundColor3 = Color3.fromRGB(32, 50, 53) end
 	end)
 	object.MouseLeave:Connect(function()
+		if object:GetAttribute("SquareSectionButton") then return end
 		object.BackgroundColor3 = COLORS.card2
 	end)
 	return object
 end
 
-local openButton = button(gui, "ZYNTRA // EQUIPMENT", UDim2.fromOffset(220, 42), UDim2.new(1, -238, 0, 20))
+-- Imagegen section art; approved asset IDs are filled at the upload checkpoint.
+local SECTION_IMAGES = {Upgrades = "rbxassetid://119432640057145", Shop = "rbxassetid://132462891522145"}
+local function sectionButtonContent(parent, kinds)
+	local content = Instance.new("Frame")
+	content.Name = "SectionButtonContent"
+	content.Size = UDim2.fromScale(1, 1)
+	content.BackgroundTransparency = 1
+	content.ClipsDescendants = true
+	content.Active = false
+	content.Parent = parent
+	local icon = Instance.new("ImageLabel")
+	icon.Name = kinds[1] .. "Icon"
+	icon.Image = SECTION_IMAGES[kinds[1]]
+	icon.BackgroundTransparency = 1
+	local scale = kinds[1] == "Upgrades" and 0.9 or 1
+	icon.Size = UDim2.fromScale(scale, scale)
+	icon.Position = UDim2.fromScale((1 - scale) / 2, 0.36 - scale / 2)
+	icon.ScaleType = Enum.ScaleType.Fit
+	icon.Active = false
+	icon.Parent = content
+	local caption = label(content, kinds[1] == "Shop" and "shops" or "upgrades",
+		UDim2.new(1, -8, 0, 18), UDim2.new(0, 4, 0.74, 0), 16, COLORS.accent, Enum.Font.GothamBold)
+	caption.Name = "SectionCaption"
+	caption.TextScaled = false
+	caption.TextWrapped = false
+	caption.TextXAlignment = Enum.TextXAlignment.Center
+	caption.Active = false
+	parent.TextTransparency = 1
+	return content
+end
+
+local function layoutSquareSections(layout, openButton, shopButton)
+	local safe, zones = layout.Safe, layout.Zones
+	local requested = not layout.IsTouch and 112 or (layout.Class == "tablet" and 104 or 84)
+	local gap, top = 8, safe.Top + 8
+	local rightLimit = math.min(safe.Right, zones.Controls and zones.Controls.Left or safe.Right)
+	local function clear(left, width, height)
+		local right, bottom = left + width, top + height
+		if left < safe.Left + 8 or right > safe.Right - 8 or bottom > safe.Bottom - 8 then return false end
+		for _, name in ipairs({"Controls", "Thumbstick", "Jump"}) do
+			local zone = zones[name]
+			if zone and left < zone.Right and right > zone.Left
+				and top < zone.Bottom and bottom > zone.Top then return false end
+		end
+		return true
+	end
+	for _, side in ipairs({requested, 84, 64}) do
+		if side <= requested then
+			for _, right in ipairs({rightLimit - 8, safe.Right - 8}) do
+				for _, across in ipairs({true, false}) do
+					local width, height = across and side * 2 + gap or side, across and side or side * 2 + gap
+					local left = math.floor(right - width)
+					if clear(left, width, height) then
+						openButton.Size = UDim2.fromOffset(side, side)
+						shopButton.Size = UDim2.fromOffset(side, side)
+						-- Native text can remain unscaled; reserve its actual line height.
+						for _, entry in ipairs({openButton, shopButton}) do
+							local caption = entry:FindFirstChild("SectionButtonContent"):FindFirstChild("SectionCaption")
+							caption.TextSize = side < 84 and 12 or 16
+							caption.Position = UDim2.fromOffset(4, math.min(math.floor(side * 0.74), side - 22))
+						end
+						openButton.Position = UIDevice.LocalPosition(gui, left, top)
+						shopButton.Position = UIDevice.LocalPosition(gui,
+							left + (across and side + gap or 0), top + (across and 0 or side + gap))
+						return true
+					end
+				end
+			end
+		end
+	end
+	-- An impossibly small safe area must not place input over movement controls.
+	return false
+end
+
+local openButton = button(gui, "upgrades", UDim2.fromOffset(112, 112), UDim2.new(1, -250, 0, 20))
 openButton.Name = "ZyntraOpenButton"
 openButton.BackgroundColor3 = COLORS.bg
 openButton.TextColor3 = COLORS.accent
+openButton.TextSize = 18
+openButton.TextWrapped = true
 local openButtonOutline = outline(openButton, COLORS.accent, 0.22, 1.5)
+local openButtonSections = sectionButtonContent(openButton, {"Upgrades"})
+
+local shopButton = button(gui, "shops", UDim2.fromOffset(112, 112), UDim2.new(1, -130, 0, 20))
+shopButton.Name = "ZyntraShopButton"
+shopButton.BackgroundColor3 = COLORS.bg
+shopButton.TextColor3 = COLORS.accent
+shopButton.TextSize = 18
+outline(shopButton, COLORS.accent, 0.22, 1.5)
+local shopButtonSections = sectionButtonContent(shopButton, {"Shop"})
+for _, entry in ipairs({openButton, shopButton}) do
+	entry:SetAttribute("SquareSectionButton", true)
+	local border = outline(entry, COLORS.accent, 0.22, 1.5)
+	border.Name = "SquareSectionBorder"
+	border.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+	entry.MouseEnter:Connect(function()
+		if entry.Active and entry:GetAttribute("SquareSectionButton") then border.Transparency = 0 end
+	end)
+	entry.MouseLeave:Connect(function() border.Transparency = 0.22 end)
+end
 
 -- C5_ZYNTRA_OPEN_BUTTON_20260829 -- WHAT SHIPPED BROKEN.
 -- This lobby entry point was 36px tall on a phone (30 for the whitelisted dev
@@ -488,6 +587,209 @@ if devAllowed and pages.Dev then
 		devScroll.Size = UDim2.new(1, 0, 1, -height)
 	end)
 
+	-- Token grants use their own server-authorized remote, independently of chat.
+	-- Keep this form scoped: the terminal is close to Luau's local-register limit.
+	do
+		local form = Instance.new("Frame")
+		form.Name = "GrantResearchTokens"
+		form.LayoutOrder = 0
+		form.Size = UDim2.new(1, 0, 0, 148)
+		form.BackgroundColor3 = COLORS.card
+		form.BorderSizePixel = 0
+		form.Visible = not UIDevice.IsTouch()
+		form.Parent = devScroll
+		corner(form, 8)
+		outline(form, COLORS.line, 0.4)
+		local heading = label(form, "GIVE RESEARCH TOKENS", UDim2.new(1, -28, 0, 22),
+			UDim2.fromOffset(14, 8), 14, COLORS.accent, Enum.Font.GothamBold)
+		heading.Name = "Heading"
+		local recipientLabel = label(form, "PLAYER ON THIS SERVER", UDim2.fromOffset(260, 16),
+			UDim2.fromOffset(14, 36), 11, COLORS.muted, Enum.Font.GothamMedium)
+		local recipient = button(form, "SELECT PLAYER", UDim2.fromOffset(300, 36), UDim2.fromOffset(14, 56))
+		recipient.Name = "SelectPlayer"
+		local amountLabel = label(form, "TOKENS", UDim2.fromOffset(100, 16),
+			UDim2.fromOffset(326, 36), 11, COLORS.muted, Enum.Font.GothamMedium)
+		local amountInput = Instance.new("TextBox")
+		amountInput.Name = "Amount"
+		amountInput.Size = UDim2.fromOffset(100, 36)
+		amountInput.Position = UDim2.fromOffset(326, 56)
+		amountInput.BackgroundColor3 = COLORS.bg
+		amountInput.BorderSizePixel = 0
+		amountInput.Font = Enum.Font.GothamMedium
+		amountInput.TextSize = 14
+		amountInput.TextColor3 = COLORS.text
+		amountInput.PlaceholderColor3 = COLORS.muted
+		amountInput.PlaceholderText = "1-10,000"
+		amountInput.Text = "20"
+		amountInput.ClearTextOnFocus = false
+		amountInput.Parent = form
+		corner(amountInput, 7)
+		local amountOutline = outline(amountInput, COLORS.line, 0.2)
+		amountInput.Focused:Connect(function() amountOutline.Color = COLORS.accent end)
+		amountInput.FocusLost:Connect(function() amountOutline.Color = COLORS.line end)
+		local give = button(form, "GIVE TOKENS", UDim2.fromOffset(140, 36), UDim2.fromOffset(438, 56))
+		give.Name = "GiveTokens"
+		local result = label(form, "Choose a player on this server and enter 1-10,000 tokens.",
+			UDim2.new(1, -28, 0, 32), UDim2.fromOffset(14, 102), 12, COLORS.muted)
+		result.Name = "Result"
+		result.TextWrapped = true
+		result.TextYAlignment = Enum.TextYAlignment.Top
+		local roster = Instance.new("ScrollingFrame")
+		roster.Name = "PlayerList"
+		roster.BackgroundTransparency = 1
+		roster.BorderSizePixel = 0
+		roster.ScrollBarThickness = 4
+		roster.ScrollBarImageColor3 = COLORS.accent
+		roster.AutomaticCanvasSize = Enum.AutomaticSize.Y
+		roster.CanvasSize = UDim2.new()
+		roster.ScrollingEnabled = true
+		roster.Visible = false
+		roster.Parent = form
+		local rosterLayout = Instance.new("UIListLayout")
+		rosterLayout.SortOrder = Enum.SortOrder.LayoutOrder
+		rosterLayout.Padding = UDim.new(0, 4)
+		rosterLayout.Parent = roster
+
+		local selectedPlayer, pending, cooldownUntil = nil, false, 0
+		local rosterButtons = {}
+		local function relayout()
+			if applyTerminalLayout then applyTerminalLayout() end
+		end
+		local function showResult(message, tone)
+			result.Text = message
+			result.TextColor3 = tone == "error" and COLORS.error
+				or tone == "success" and COLORS.accent or COLORS.muted
+			showStatus(message, tone)
+			relayout()
+		end
+		local function refreshState()
+			local desktop = not UIDevice.IsTouch()
+			local remaining = math.max(0, math.ceil(cooldownUntil - os.clock()))
+			local ready = desktop and not pending and remaining == 0
+			form:SetAttribute("Pending", pending)
+			form:SetAttribute("SelectedUserId", selectedPlayer and selectedPlayer.UserId or nil)
+			recipient.Text = selectedPlayer and ("@" .. selectedPlayer.Name
+				.. (selectedPlayer == player and " (you)" or "")) or "SELECT PLAYER"
+			UIDevice.SetEnabled(recipient, ready)
+			amountInput.TextEditable = ready
+			UIDevice.SetEnabled(give, ready and selectedPlayer ~= nil)
+			give.Text = pending and "GIVING..." or remaining > 0 and ("WAIT " .. remaining .. "s") or "GIVE TOKENS"
+			give.TextColor3 = give.Active and COLORS.accent or COLORS.muted
+			for _, choice in ipairs(rosterButtons) do UIDevice.SetEnabled(choice, ready) end
+		end
+		local function refreshRoster(departing)
+			for _, choice in ipairs(rosterButtons) do choice:Destroy() end
+			table.clear(rosterButtons)
+			if selectedPlayer and (selectedPlayer == departing or selectedPlayer.Parent ~= Players) then
+				selectedPlayer = nil
+				if not pending then showResult("Selected player left. Choose another player.", "error") end
+			end
+			local online = Players:GetPlayers()
+			table.sort(online, function(a, b) return a.Name:lower() < b.Name:lower() end)
+			for _, onlinePlayer in ipairs(online) do
+				if onlinePlayer ~= departing then
+					local choice = button(roster, "@" .. onlinePlayer.Name
+						.. (onlinePlayer == player and " (you)" or ""), UDim2.new(1, -8, 0, 32))
+					choice.Name = "Player_" .. tostring(onlinePlayer.UserId)
+					choice.LayoutOrder = #rosterButtons + 1
+					table.insert(rosterButtons, choice)
+					choice.Activated:Connect(function()
+						if pending or os.clock() < cooldownUntil or UIDevice.IsTouch() then return end
+						if onlinePlayer.Parent ~= Players then refreshRoster(onlinePlayer) return end
+						selectedPlayer = onlinePlayer
+						roster.Visible = false
+						refreshState()
+						showResult("Ready to give tokens to @" .. onlinePlayer.Name .. ".")
+					end)
+				end
+			end
+			refreshState()
+			relayout()
+		end
+		recipient.Activated:Connect(function()
+			if pending or os.clock() < cooldownUntil or UIDevice.IsTouch() then return end
+			roster.Visible = not roster.Visible
+			refreshRoster()
+		end)
+		Players.PlayerAdded:Connect(function() refreshRoster() end)
+		Players.PlayerRemoving:Connect(refreshRoster)
+
+		give.Activated:Connect(function()
+			if pending or os.clock() < cooldownUntil or UIDevice.IsTouch() then return end
+			if not selectedPlayer or selectedPlayer.Parent ~= Players then
+				refreshRoster()
+				showResult("Choose a player who is on this server.", "error")
+				return
+			end
+			local amount = tonumber(amountInput.Text)
+			if not amount or amount ~= amount or amount < 1 or amount > 10000 or amount % 1 ~= 0 then
+				showResult("Enter a whole number from 1 to 10,000.", "error")
+				return
+			end
+			local remote = remotes:FindFirstChild("ZyntraGrantTokens")
+			if not remote or not remote:IsA("RemoteFunction") then
+				showResult("Token grants are unavailable on this server. Rejoin an updated server.", "error")
+				return
+			end
+			local target = selectedPlayer
+			pending = true
+			roster.Visible = false
+			refreshState()
+			showResult(("Giving %d tokens to @%s..."):format(amount, target.Name))
+			local completed = false
+			task.delay(12, function()
+				if not completed then
+					showResult("Still waiting for the server. Keep this request open; do not send it again.")
+				end
+			end)
+			local ok, response = pcall(function() return remote:InvokeServer(target.UserId, amount) end)
+			completed = true
+			pending = false
+			cooldownUntil = os.clock() + 3
+			refreshState()
+			if ok and type(response) == "table" and type(response.Success) == "boolean"
+				and type(response.Message) == "string" and response.Message ~= "" then
+				showResult(response.Message, response.Success and "success" or "error")
+			else
+				showResult("Result unknown. Ask @" .. target.Name .. " to rejoin and check their balance before giving again.", "error")
+			end
+			task.spawn(function()
+				while os.clock() < cooldownUntil do
+					task.wait(math.min(1, cooldownUntil - os.clock()))
+					refreshState()
+				end
+			end)
+		end)
+
+		table.insert(layoutHooks, function(fit)
+			-- IsTouch is the phone/tablet form factor; touchscreen PCs keep this form.
+			form.Visible = not UIDevice.IsTouch()
+			if not form.Visible then roster.Visible = false end
+			local width = math.max(1, fit.ContentWidth - 8 - 28)
+			local stacked = width < 520
+			local playerWidth = stacked and width or width - 264
+			recipientLabel.Size = UDim2.fromOffset(playerWidth, 16)
+			recipient.Size = UDim2.fromOffset(playerWidth, 36)
+			local inputX = stacked and 14 or 14 + playerWidth + 12
+			local inputY = stacked and 118 or 56
+			amountLabel.Position = UDim2.fromOffset(inputX, inputY - 20)
+			amountInput.Position = UDim2.fromOffset(inputX, inputY)
+			give.Position = UDim2.fromOffset(inputX + 112, inputY)
+			give.Size = UDim2.fromOffset(stacked and math.max(1, width - 112) or 140, 36)
+			local bottom = inputY + 36 + 10
+			local rosterHeight = math.min(140, #rosterButtons * 36)
+			roster.Position = UDim2.fromOffset(14, bottom)
+			roster.Size = UDim2.fromOffset(width, rosterHeight)
+			if roster.Visible then bottom += rosterHeight + 8 end
+			local resultHeight = math.max(18, textHeightFor(result.Text, 12, result.Font, width) + TEXT_FIT_SLACK)
+			result.Position = UDim2.fromOffset(14, bottom)
+			result.Size = UDim2.fromOffset(width, resultHeight)
+			form.Size = UDim2.new(1, 0, 0, bottom + resultHeight + 12)
+			refreshState()
+		end)
+		refreshRoster()
+	end
+
 	local controls = {
 		{
 			Name = "ESP",
@@ -776,7 +1078,7 @@ end
 
 local upgradeIntro = label(
 	pages.Upgrades,
-	"Every Research Token permanently adds " .. PCT .. ". There is no maximum level.",
+	"Permanent upgrades have no cap. Entity Shield is a consumable.",
 	UDim2.new(1, 0, 0, 42),
 	UDim2.fromOffset(4, 0),
 	15,
@@ -847,13 +1149,13 @@ local staminaCard = makeUpgradeCard(
 	upgradeScroll,
 	1,
 	"STAMINA CAPACITY",
-	"Run for longer before exhaustion. Sprint speed and noise remain unchanged."
+	"Run for longer before exhaustion."
 )
 local batteryCard = makeUpgradeCard(
 	upgradeScroll,
 	2,
 	"BATTERY CAPACITY",
-	"Keep the flashlight active for longer. Recharge speed remains unchanged."
+	"Keep the flashlight active for longer."
 )
 
 table.insert(layoutHooks, function(fit)
@@ -1013,11 +1315,15 @@ local function makeProductCard(key, item, kind)
 
 	-- The pass tag sits above the name, so a pass starts its name 12px lower.
 	-- Both are authored starting points; the layout hook measures from here.
-	local headingY = kind == "Pass" and 28 or 16
+	local headingY = (kind == "Pass" or kind == "TokenItem") and 28 or 16
 	local tag
 	if kind == "Pass" then
 		tag = label(card, "PERMANENT PASS", UDim2.new(1, -118, 0, 18), UDim2.fromOffset(104, 10), 10, COLORS.accent, Enum.Font.Code)
 		tag.Name = "PassTag"
+	end
+	if kind == "TokenItem" then
+		tag = label(card, "OWNED  0", UDim2.new(1, -118, 0, 18), UDim2.fromOffset(104, 10), 10, COLORS.accent, Enum.Font.Code)
+		tag.Name = "ChargeCount"
 	end
 	local heading = label(card, item.Name, UDim2.new(1, -118, 0, 42), UDim2.fromOffset(104, headingY), 18, COLORS.text, Enum.Font.GothamBold)
 	-- Named for the same reason the DEV rows were: `label()` leaves the default
@@ -1029,7 +1335,7 @@ local function makeProductCard(key, item, kind)
 	desc.Name = "ProductDescription"
 	desc.TextWrapped = true
 	desc.TextYAlignment = Enum.TextYAlignment.Top
-	local buy = button(card, tostring(item.Price) .. " R$", UDim2.new(1, -28, 0, 38), UDim2.new(0, 14, 1, -50))
+	local buy = button(card, kind == "TokenItem" and (tostring(item.TokenCost) .. " TOKENS") or (tostring(item.Price) .. " R$"), UDim2.new(1, -28, 0, 38), UDim2.new(0, 14, 1, -50))
 	buy.Name = "Buy"
 	buy.TextColor3 = COLORS.accent2
 	contract.card("Shop", key, card, buy)
@@ -1042,7 +1348,7 @@ local function makeProductCard(key, item, kind)
 	})
 	productButtons[key] = buy
 	displayedProductPrices[key] = math.max(0, math.floor(tonumber(item.Price) or 0))
-	if tonumber(item.Id) and item.Id > 0 then
+	if kind ~= "TokenItem" and tonumber(item.Id) and item.Id > 0 then
 		task.spawn(function()
 			local infoType = kind == "Pass" and Enum.InfoType.GamePass or Enum.InfoType.Product
 			local ok, info = pcall(MarketplaceService.GetProductInfo, MarketplaceService, item.Id, infoType)
@@ -1056,6 +1362,14 @@ local function makeProductCard(key, item, kind)
 		end)
 	end
 	buy.Activated:Connect(function()
+		if kind == "TokenItem" then
+			if ProtectionClient.GetState().Pending then
+				ProtectionClient.Retry()
+			else
+				ProtectionClient.Request("BuyProtection")
+			end
+			return
+		end
 		if tonumber(item.Id) == nil or item.Id <= 0 then
 			showStatus(item.Name .. ": Product ID is not configured yet.", "error")
 			return
@@ -1076,9 +1390,42 @@ makeProductCard("Tokens20", Config.Products.Tokens20, "Product")
 makeProductCard("EmergencyReentry", Config.Products.EmergencyReentry, "Product")
 makeProductCard("CosmeticEquipment", Config.Passes.CosmeticEquipment, "Pass")
 
+do
+	local item = Config.ProtectionItem
+	local card = makeUpgradeCard(upgradeScroll, 3, item.Name, item.Description)
+	card.Current.Text = tostring(item.DurationSeconds) .. "s"
+	local buy = card.Spend
+	table.insert(layoutHooks, function(fit)
+		buy.Size = UDim2.new(1, -36, 0, math.max(fit.Tap, 48))
+	end)
+	buy.Activated:Connect(function()
+		if ProtectionClient.GetState().Pending then
+			ProtectionClient.Retry()
+		else
+			ProtectionClient.Request("BuyProtection")
+		end
+	end)
+	local function refreshProtectionCard()
+		local state = ProtectionClient.GetState()
+		card.Level.Text = "OWNED  " .. tostring(state.Charges)
+		if state.Pending then
+			buy.Text = state.CanRetry and "RETRY REQUEST" or "CONFIRMING..."
+			UIDevice.SetEnabled(buy, state.CanRetry)
+		elseif state.ServerPending then
+			buy.Text = "CONFIRMING..."
+			UIDevice.SetEnabled(buy, false)
+		else
+			buy.Text = state.Available and (tostring(item.TokenCost) .. " TOKENS") or "UNAVAILABLE"
+			UIDevice.SetEnabled(buy, state.Available and state.Tokens >= item.TokenCost)
+		end
+	end
+	ProtectionClient.Changed:Connect(refreshProtectionCard)
+	refreshProtectionCard()
+end
+
 local supportTotalLabel = label(
 	pages.Donate,
-	"YOUR RECORDED DONATIONS  0 R$",
+	"RECORDED SUPPORT  0 R$\nDonations 0 R$ / Products 0 R$\nPasses & earlier token/re-entry purchases excluded.",
 	UDim2.new(1, -8, 0, 24),
 	UDim2.fromOffset(4, 0),
 	13,
@@ -1087,6 +1434,8 @@ local supportTotalLabel = label(
 )
 supportTotalLabel.Name = "DonationTotal"
 supportTotalLabel.TextXAlignment = Enum.TextXAlignment.Left
+supportTotalLabel.TextYAlignment = Enum.TextYAlignment.Top
+supportTotalLabel.TextWrapped = true
 
 local supportScroll = Instance.new("ScrollingFrame")
 -- NAMED, for the same reason the shop's scroll is: the default
@@ -1161,6 +1510,11 @@ table.insert(layoutHooks, function(fit)
 		and UDim2.new(0.5, -8, 0, height)
 		or UDim2.new(1, -8, 0, height)
 	supportTotalLabel.TextSize = fit.Compact and 12 or 13
+	local totalHeight = math.max(24, textHeightFor(supportTotalLabel.Text,
+		supportTotalLabel.TextSize, supportTotalLabel.Font, math.max(48, fit.ContentWidth - 8)) + TEXT_FIT_SLACK)
+	supportTotalLabel.Size = UDim2.new(1, -8, 0, totalHeight)
+	supportScroll.Position = UDim2.fromOffset(0, totalHeight + 8)
+	supportScroll.Size = UDim2.new(1, 0, 1, -(totalHeight + 8))
 	for _, card in ipairs(supportScroll:GetChildren()) do
 		local buy = card:IsA("Frame") and card:FindFirstChild("Buy")
 		if buy then
@@ -1787,6 +2141,7 @@ reentryShade.BorderSizePixel = 0
 reentryShade.Text = ""
 reentryShade.AutoButtonColor = false
 reentryShade.Active = true
+reentryShade.Selectable = false
 reentryShade.Modal = true
 reentryShade.ZIndex = 1
 reentryShade.Parent = reentryGui
@@ -1795,21 +2150,21 @@ local reentry = Instance.new("Frame")
 reentry.Name = "EmergencyReentry"
 reentry.AnchorPoint = Vector2.new(0.5, 0.5)
 reentry.Position = UDim2.fromScale(0.5, 0.54)
-reentry.Size = UDim2.new(1, -32, 0, 164)
+reentry.Size = UDim2.new(1, -32, 0, 216)
 reentry.BackgroundColor3 = COLORS.bg
 reentry.BorderSizePixel = 0
 reentry.Visible = true
 reentry.ZIndex = 2
 reentry.Parent = reentryGui
 local reentryConstraint = Instance.new("UISizeConstraint")
-reentryConstraint.MinSize = Vector2.new(280, 164)
-reentryConstraint.MaxSize = Vector2.new(480, 164)
+reentryConstraint.MinSize = Vector2.new(280, 216)
+reentryConstraint.MaxSize = Vector2.new(480, 216)
 reentryConstraint.Parent = reentry
 corner(reentry, 10)
 outline(reentry, COLORS.error, 0.15, 1.5)
 local reentryTitle = label(reentry, "EMERGENCY RE-ENTRY", UDim2.new(1, -32, 0, 28), UDim2.fromOffset(16, 10), 19, COLORS.text, Enum.Font.GothamBold)
 reentryTitle.ZIndex = 3
-local reentryInfo = label(reentry, "The team has 15 seconds before the run is lost.", UDim2.new(1, -32, 0, 40), UDim2.fromOffset(16, 44), 13, COLORS.muted)
+local reentryInfo = label(reentry, "Use a credit to rejoin the run, or spectate your teammates.", UDim2.new(1, -32, 0, 40), UDim2.fromOffset(16, 44), 13, COLORS.muted)
 reentryInfo.TextWrapped = true
 reentryInfo.TextYAlignment = Enum.TextYAlignment.Top
 reentryInfo.ZIndex = 3
@@ -1838,7 +2193,8 @@ local function updateReentry()
 	local inRound = player:GetAttribute("InRound") == true
 	local roundActive = workspace:GetAttribute("RoundActive") == true
 	local used = player:GetAttribute("ZyntraReentryUsed") == true
-	local shouldShow = inRound and roundActive and reentryDead and not used
+	if not inRound or not roundActive then reentryDismissed = false end
+	local shouldShow = inRound and roundActive and reentryDead and not used and not reentryDismissed
 	-- C_PARTY_DOWN_ONE_PURCHASE_SURFACE_20260904: RoundUI's PARTY DOWN card
 	-- carries the same re-entry action for the 15-second wipe window. For that
 	-- whole WINDOW this panel stands down -- two purchase surfaces for one
@@ -1853,6 +2209,14 @@ local function updateReentry()
 	local windowOpen = player:GetAttribute("PartyDownWindowOpen") == true
 	local cardOpen = player:GetAttribute("PartyDownCardOpen") == true
 	reentryGui.Enabled = shouldShow and not windowOpen
+	-- Hidden modal selections still block SpectateController's input handlers.
+	if not reentryGui.Enabled then
+		local GuiService = game:GetService("GuiService")
+		local selected = GuiService.SelectedObject
+		if selected and selected:IsDescendantOf(reentryGui) then
+			GuiService.SelectedObject = nil
+		end
+	end
 	player:SetAttribute("ZyntraReentryOpen",
 		(reentryGui.Enabled or cardOpen) and true or nil)
 	local credits = profile and profile.ReentryCredits or 0
@@ -1874,8 +2238,22 @@ end
 player:GetAttributeChangedSignal("PartyDownCardOpen"):Connect(updateReentry)
 player:GetAttributeChangedSignal("PartyDownWindowOpen"):Connect(updateReentry)
 
+do
+	local reentryDecline = button(reentry, "SPECTATE", UDim2.new(1, -32, 0, 44), UDim2.fromOffset(16, 156))
+	reentryDecline.Name = "ReentryDecline"
+	reentryDecline.ZIndex = 3
+	reentryDecline.Activated:Connect(function()
+		if not reentryGui.Enabled then return end
+		-- Remember the choice for this death, including profile refreshes and
+		-- the PARTY DOWN window opening or clearing after a teammate re-enters.
+		reentryDismissed = true
+		updateReentry()
+	end)
+end
+
 local function bindCharacter(character)
 	reentryDead = false
+	reentryDismissed = false
 	updateReentry()
 	task.spawn(function()
 		local humanoid = character:WaitForChild("Humanoid", 10)
@@ -1897,7 +2275,11 @@ local function refreshUI()
 		return
 	end
 	tokenLabel.Text = "TOKENS  " .. tostring(profile.Tokens)
-	supportTotalLabel.Text = "YOUR RECORDED DONATIONS  " .. tostring(profile.DonationRobux or 0) .. " R$"
+	supportTotalLabel.Text = string.format(
+		"RECORDED SUPPORT  %d R$\nDonations %d R$ / Products %d R$\nPasses & earlier token/re-entry purchases excluded.",
+		profile.RecordedSupportRobux or profile.DonationRobux or 0,
+		profile.DonationRobux or 0, profile.UtilityRobux or 0)
+	if applyTerminalLayout then applyTerminalLayout() end
 	staminaCard.Current.Text = "+" .. tostring(profile.StaminaPercent) .. "%"
 	staminaCard.Level.Text = "LEVEL " .. tostring(profile.StaminaLevel)
 	batteryCard.Current.Text = "+" .. tostring(profile.BatteryPercent) .. "%"
@@ -2102,6 +2484,7 @@ function updateVisibility()
 			and not blockedByModal
 			-- ...and never behind the terminal it opens.
 			and not main.Visible)
+	UIDevice.SetInteractive(shopButton, not inRound and not blockedByModal and not main.Visible)
 	local layout = UIDevice.Layout()
 	if layout.IsTouch then
 		-- The right edge is owned by the game's RUN/JUMP/GLOW/FLASHLIGHT
@@ -2109,7 +2492,7 @@ function updateVisibility()
 		-- above it and end it just before the control column; this also leaves
 		-- the briefing card's safe content band unobstructed below.
 		local requestedWidth = touchDevInLevel and 136
-			or (layout.Class == "tablet" and 220 or 184)
+			or (layout.Class == "tablet" and 280 or 220)
 		-- A TAP TARGET OR NOTHING. `math.max(1, ...)` was the floor here, and a
 		-- one-pixel-wide button is not a smaller control -- it is an invisible
 		-- one, which is exactly what a stale control-zone measurement produced
@@ -2117,7 +2500,11 @@ function updateVisibility()
 		-- other touch control in this game is held to; if the strip beside the
 		-- cluster genuinely cannot hold that, the overlap becomes a visible
 		-- failure in the touch-target matrix rather than a button nobody can hit.
-		local availableWidth = math.max(1, layout.Zones.Controls.Left - layout.SafeLeft - 8)
+		-- With no controls drawn, their empty zone sits at Display.Right, which
+		-- extends past a phone's safe area. Keep both lobby buttons inside it.
+		local rightLimit = touchDevInLevel and layout.Zones.Controls.Left
+			or math.min(layout.Safe.Right, layout.Zones.Controls.Left)
+		local availableWidth = math.max(1, rightLimit - layout.SafeLeft - 8)
 		local buttonWidth = math.max(TOUCH_MIN_TAP_HEIGHT,
 			math.min(requestedWidth, availableWidth))
 		-- The authored 30/36/42 heights were ALL below the 44px tap target this
@@ -2127,7 +2514,7 @@ function updateVisibility()
 		-- y = 8 (= TopBand.Top once the 58px inset is added), so the button grows
 		-- DOWNWARD into the safe band and never up under the Roblox topbar.
 		local buttonHeight = math.max(TOUCH_MIN_TAP_HEIGHT, touchDevInLevel and 30
-			or (layout.Class == "tablet" and 42 or 36))
+			or (layout.Class == "tablet" and 64 or 56))
 		openButton.Size = UDim2.fromOffset(buttonWidth, buttonHeight)
 		if touchDevInLevel then
 			-- C_OBJECTIVES_UPPER_RIGHT_20260830. In a LEVEL the upper right now
@@ -2191,29 +2578,56 @@ function updateVisibility()
 			-- The LOBBY has no objective readout, so the corner is free and this
 			-- is the one place a player looks for the store.
 			openButton.Position = UIDevice.LocalPosition(gui,
-				math.max(layout.SafeLeft, layout.Zones.Controls.Left - buttonWidth - 8),
+				math.max(layout.SafeLeft, rightLimit - buttonWidth - 8),
 				layout.Safe.Top + 8)
 		end
 	else
-		openButton.Size = UDim2.fromOffset(220, 42)
-		openButton.Position = UDim2.new(1, -238, 0, 20)
+		openButton.Size = UDim2.fromOffset(280, 64)
+		openButton.Position = UDim2.new(1, -298, 0, 20)
+	end
+	shopButton.Size = UDim2.fromOffset(openButton.Size.X.Offset, 48)
+	shopButton.Position = openButton.Position + UDim2.fromOffset(0, openButton.Size.Y.Offset + 8)
+	if not inRound and not layoutSquareSections(layout, openButton, shopButton) then
+		UIDevice.SetInteractive(openButton, false)
+		UIDevice.SetInteractive(shopButton, false)
+	end
+	for _, entry in ipairs({openButton, shopButton}) do
+		entry:SetAttribute("SquareSectionButton", not touchDevInLevel)
+		entry:FindFirstChild("SquareSectionBorder").Enabled = not touchDevInLevel
+		if not touchDevInLevel then entry.BackgroundColor3 = COLORS.bg end
 	end
 	if touchDevInLevel then
 		-- Keep a discreet phone-only escape hatch for whitelisted developers.
 		-- Desktop developers use J in levels, so no clickable HUD control is shown.
 		openButton.Text = "ZYNTRA // DEV"
 		openButton.TextSize = 11
+		openButton.TextWrapped = false
 		openButton.BackgroundTransparency = 0.48
 		openButton.TextTransparency = 0.22
 		openButtonOutline.Transparency = 0.64
 		openButtonOutline.Thickness = 1
 	else
-		openButton.Text = "ZYNTRA // EQUIPMENT"
-		openButton.TextSize = layout.IsTouch and layout.Class ~= "tablet" and 12 or 14
+		openButton.Text = "upgrades"
+		openButton.TextSize = 18
+		openButton.TextWrapped = true
 		openButton.BackgroundTransparency = 0
 		openButton.TextTransparency = 0
 		openButtonOutline.Transparency = 0.22
 		openButtonOutline.Thickness = 1.5
+	end
+	-- Lobby squares keep their centered artwork and labels; the existing DEV chip stays text-only.
+	local sectionIconsVisible = not touchDevInLevel
+	openButtonSections.Visible = sectionIconsVisible
+	shopButtonSections.Visible = sectionIconsVisible
+	if sectionIconsVisible then openButton.TextTransparency = 1 end
+	shopButton.TextTransparency = sectionIconsVisible and 1 or 0
+	-- Contextual UIStrokes still paint the hidden original caption in Roblox.
+	for _, entry in ipairs({openButton, shopButton}) do
+		for _, child in ipairs(entry:GetChildren()) do
+			if child:IsA("UIStroke") and child.ApplyStrokeMode == Enum.ApplyStrokeMode.Contextual then
+				child.Enabled = not sectionIconsVisible
+			end
+		end
 	end
 	if inRound and not devAllowed then setMainVisible(false) end
 	updateReentry()
@@ -2341,6 +2755,7 @@ end
 openButton.Activated:Connect(function()
 	toggleMain()
 end)
+shopButton.Activated:Connect(openKioskShop)
 closeButton.Activated:Connect(function() setMainVisible(false) end)
 
 UserInputService.InputBegan:Connect(function(input, processed)

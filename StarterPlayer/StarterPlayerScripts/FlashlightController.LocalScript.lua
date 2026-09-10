@@ -542,13 +542,7 @@ end
 local BAT_FULL  = Color3.fromRGB(245, 245, 245)
 local BAT_EMPTY = Color3.fromRGB(235, 60, 50)
 
-local function flashlightsSuppressed()
- return workspace:GetAttribute("SelectedLevel") == 3
-  and workspace:GetAttribute("Level3FlashlightsSuppressed") == true
-end
-
 local function setLights(state)
- if state and flashlightsSuppressed() then state = false end
  on = state
 	if coreLight then coreLight.Enabled = state end
 	if spillLight then spillLight.Enabled = state end
@@ -556,10 +550,6 @@ local function setLights(state)
  for _, ray in ipairs(lightRays) do ray.Visible = state end
  remote:FireServer(state)
 end
-
-workspace:GetAttributeChangedSignal("Level3FlashlightsSuppressed"):Connect(function()
- if flashlightsSuppressed() and on then setLights(false) end
-end)
 
 -- a low-battery WARNING flicker: briefly drop the beam `times` times then
 -- restore it. Purely visual — doesn't change the real on/off state, so it
@@ -586,7 +576,6 @@ local function alive()
 end
 
 local function toggle()
-	if flashlightsSuppressed() then return end
 	if player:GetAttribute("InRound") ~= true then return end
 	if not alive() then return end -- dead / spectating: no flashlight of your own
 	if on then
@@ -609,7 +598,7 @@ end)
 UIS.InputBegan:Connect(function(input, processed)
 	if processed then return end
 	-- Same handler for both: ButtonR1 is the gamepad's F. `toggle` already
-	-- carries every guard (suppressed, out of round, dead, flat battery), so the
+	-- carries every guard (out of round, dead, flat battery), so the
 	-- controller cannot reach a state the keyboard cannot.
 	if input.KeyCode == Enum.KeyCode.F or input.KeyCode == Enum.KeyCode.ButtonR1 then
 		toggle()

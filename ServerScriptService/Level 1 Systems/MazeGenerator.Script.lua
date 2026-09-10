@@ -12,6 +12,8 @@
 local Lighting = game:GetService("Lighting")
 local Players = game:GetService("Players")
 local PhysicsService = game:GetService("PhysicsService")
+local RunService = game:GetService("RunService")
+local PlayerProtection = require(game:GetService("ServerScriptService"):WaitForChild("PlayerProtection"))
 
 -- The lobby owns server startup. Build the expensive world only when a queued
 -- party finishes the launch countdown.
@@ -628,21 +630,72 @@ local function ownerModel(hit)
 	return nil
 end
 
-local function onPitTouch(hit)
+local protectedPitOccupants = {}
+local pitEpoch = 0
+
+local function clearPitOccupants()
+	pitEpoch += 1
+	table.clear(protectedPitOccupants)
+end
+workspace:GetAttributeChangedSignal("RoundActive"):Connect(clearPitOccupants)
+workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(clearPitOccupants)
+Players.PlayerRemoving:Connect(function(player) protectedPitOccupants[player] = nil end)
+
+local function pitPlayerAlive(player, character, humanoid)
+	return player.Parent == Players and player.Character == character and character.Parent ~= nil
+		and humanoid.Parent == character and humanoid.Health > 0
+		and player:GetAttribute("InRound") == true and player:GetAttribute("Escaped") ~= true
+		and workspace:GetAttribute("RoundActive") == true and workspace:GetAttribute("SelectedLevel") == 1
+end
+
+local function onPitTouch(hit, bottom)
 	local model = ownerModel(hit)
 	if not model then return end
 	if model.Name == "Entity" then
-		-- the entity climbs back out instead of soft-locking the round
+		-- Preserve the entity's existing rescue path.
 		local bbox, size = model:GetBoundingBox()
 		local pivot = model:GetPivot()
 		model:PivotTo(CFrame.new(entityStartCF.X, 0.5 + (pivot.Y - (bbox.Y - size.Y / 2)), entityStartCF.Z))
 		return
 	end
+	local player = Players:GetPlayerFromCharacter(model)
 	local hum = model:FindFirstChildOfClass("Humanoid")
-	if Players:GetPlayerFromCharacter(model) and hum and hum.Health > 0 then
-		hum.Health = 0
+	if not (player and hum and pitPlayerAlive(player, model, hum)) then return end
+	if PlayerProtection.IsActive(player, model) then
+		protectedPitOccupants[player] = {Character = model, Humanoid = hum, Bottom = bottom, Epoch = pitEpoch}
+		return
+	end
+	hum.Health = 0
+end
+
+local function recheckProtectedPitOccupants()
+	for player, record in pairs(protectedPitOccupants) do
+		if record.Epoch ~= pitEpoch or not record.Bottom.Parent
+			or not pitPlayerAlive(player, record.Character, record.Humanoid) then
+			protectedPitOccupants[player] = nil
+		elseif not PlayerProtection.IsActive(player, record.Character) then
+			protectedPitOccupants[player] = nil
+			local params = OverlapParams.new()
+			params.FilterType = Enum.RaycastFilterType.Include
+			params.FilterDescendantsInstances = {record.Character}
+			params.MaxParts = 1
+			-- Include the contact tolerance at the top surface. Being anywhere in
+			-- the shaft is insufficient: an actual character part must still touch
+			-- this bottom's bounds when the private deadline expires.
+			local touching = workspace:GetPartBoundsInBox(record.Bottom.CFrame,
+				record.Bottom.Size + Vector3.new(0, 0.6, 0), params)
+			if #touching > 0 and pitPlayerAlive(player, record.Character, record.Humanoid)
+				and not PlayerProtection.IsActive(player, record.Character) then
+				record.Humanoid.Health = 0
+			end
+		end
 	end
 end
+
+-- Only recorded protected contacts are checked. The private server clock in
+-- IsActive decides expiry on the next Heartbeat; no client deadline or stale
+-- delayed callback can kill a new character/round or a player who left the pit.
+RunService.Heartbeat:Connect(recheckProtectedPitOccupants)
 
 -- ── floor (per-cell tiles; pit zones get their own hole grids) ──
 for x = 1, GRID do
@@ -784,7 +837,7 @@ for _, zn in ipairs(zones) do
 	-- bottom: lethal for players, a rescue teleport for the entity
 	local bottom = part(Vector3.new(span, 1, span),
 		CFrame.new(cx, -PIT_DEPTH, cz), PIT_COLOR, Enum.Material.Concrete)
-	bottom.Touched:Connect(onPitTouch)
+	bottom.Touched:Connect(function(hit) onPitTouch(hit, bottom) end)
 end
 
 -- ceiling — one slab, texture offset by half a tile so a tile sits centered
@@ -1191,9 +1244,12 @@ do
 		refreshCableGuidePoster()
 	end
 
+	local largestCabinDepth = 10
 	local function cabinDepth()
 		-- 1 player → 10 studs deep · +2 per extra player · caps at 18
-		return 8 + math.clamp(#Players:GetPlayers(), 1, 5) * 2
+		-- Do not shrink the occupied floor when someone disconnects during arrival.
+		largestCabinDepth = math.max(largestCabinDepth, 8 + math.clamp(#Players:GetPlayers(), 1, 5) * 2)
+		return largestCabinDepth
 	end
 	buildCabin(cabinDepth())
 	workspace:GetAttributeChangedSignal("Level1ActiveCircuitCount"):Connect(refreshCableGuidePoster)

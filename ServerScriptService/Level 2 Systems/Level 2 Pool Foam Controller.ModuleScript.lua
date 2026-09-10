@@ -11,6 +11,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local ServerScriptService = game:GetService("ServerScriptService")
 local ServerStorage = game:GetService("ServerStorage")
+local PlayerProtection = require(ServerScriptService:WaitForChild("PlayerProtection"))
 
 -- Hearing. NoiseRegistry lives in the ServerScriptService ROOT, not in this
 -- folder, so it is reached through the service (script.Parent is "Level 2
@@ -177,6 +178,7 @@ local function livingPlayer(session, player)
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 	local root = character and character:FindFirstChild("HumanoidRootPart")
 	if not (character and humanoid and humanoid.Health > 0 and root and root:IsA("BasePart")) then return nil end
+	if PlayerProtection.IsActive(player, character) then return nil end
 	return root, humanoid, character
 end
 
@@ -812,6 +814,8 @@ local function instantKill(session, entity, player, distance, now)
 	if freshDistance > killDistance then return false end
 	if not entityLineOfSight(session, entity, character, liveRoot.Position) then return false end
 
+	-- No fatal feedback or health mutation for a privately protected character.
+	if PlayerProtection.IsActive(player, character) then return false end
 	entity.ActionSerial += 1
 	local attackId = tostring(session.Generation) .. ":" .. entity.Id .. ":" .. tostring(entity.ActionSerial)
 	entity.Navigator:Stop()
@@ -864,6 +868,8 @@ local function observedChaseTarget(session, entity, players)
 end
 
 local function triggerChase(session, entity, players, now)
+	local target = observedChaseTarget(session, entity, players)
+	if not target then return end -- a cached report cannot latch a protected player
 	if entity.ChaseTriggered then
 		-- Preserve a living chase target. If it vanished between reports, a new
 		-- genuine observer can take ownership without clearing the hunt latch.
@@ -880,7 +886,7 @@ local function triggerChase(session, entity, players, now)
 		-- Re-plan immediately toward the player who actually caused the reveal.
 		entity.NextGoalAt = 0
 	end
-	setChaseTarget(entity, observedChaseTarget(session, entity, players))
+	setChaseTarget(entity, target)
 end
 
 -- SERVER BACKSTOP FOR THE CHASE LATCH (2026-09-05).
@@ -1040,6 +1046,7 @@ local function updateObservation(session, entity, now)
 end
 
 local function choosePatrolPosition(session, entity)
+	entity.PatrolNoisePlayer = nil
 	local current = entity.Navigator:GetPosition()
 	-- Investigate before wandering. A pump motor is a noise with nobody standing
 	-- at it, and every player can be an invalid target at once (all of them on
@@ -1061,7 +1068,10 @@ local function choosePatrolPosition(session, entity)
 			local distance = (node.Position - noise.pos).Magnitude
 			if distance < nearestDistance then nearest, nearestDistance = node.Position, distance end
 		end
-		if nearest and (nearest - current).Magnitude > 7 then return nearest end
+		if nearest and (nearest - current).Magnitude > 7 then
+			entity.PatrolNoisePlayer = noise.SourcePlayer
+			return nearest
+		end
 	end
 	local candidates = {}
 	local localCandidates = {}
@@ -1111,6 +1121,35 @@ local function resetProgressWindow(entity, position, goal, resetAttempts)
 	entity.ProgressGoal = goal
 	entity.ProgressGoalDistance = goal and (goal - position).Magnitude or math.huge
 	if resetAttempts ~= false then entity.RepathAttempts = 0 end
+end
+
+local function releaseProtectedPlayer(session, player, character)
+	if activeSession ~= session or not PlayerProtection.IsActive(player, character) then return end
+	if session.TargetedPlayer == player then setTargeted(session, nil) end
+	for _, entity in ipairs(session.Entities) do
+		local targeted = entity.ChaseTarget == player or entity.Target == player or entity.ProgressTarget == player
+		local noiseRoute = entity.PatrolNoisePlayer == player
+		if entity.ChaseTarget == player then setChaseTarget(entity, nil) end
+		if entity.Target == player then entity.Target = nil end
+		if entity.ProgressTarget == player then entity.ProgressTarget = nil end
+		if entity.ProximityDwellPlayer == player then
+			entity.ProximityDwellPlayer, entity.ProximityDwellSince = nil, 0
+		end
+		if entity.HeardNoise and entity.HeardNoise.SourcePlayer == player then entity.HeardNoise = nil end
+		if noiseRoute then entity.PatrolPosition, entity.PatrolNoisePlayer = nil, nil end
+		if targeted or (noiseRoute and not entity.Target) then
+			entity.Navigator:Stop()
+			entity.NextGoalAt, entity.WasMoving = 0, false
+			resetProgressWindow(entity, entity.Navigator:GetPosition(), nil, true)
+		end
+		-- Recompute the whole observer result so an eligible teammate keeps its
+		-- observation. A protected observer cannot retain the short release hold.
+		if table.find(entity.Observers, player.UserId) then
+			entity.LastSeenAt = nil
+			updateObservation(session, entity, os.clock())
+		end
+	end
+	session.ObservationAccumulator = 1
 end
 
 local function updateEntity(session, entity, deltaTime, now)
@@ -1214,6 +1253,16 @@ local function updateEntity(session, entity, deltaTime, now)
 			if netTravel >= .5 or goalProgress >= .35 then
 				entity.RepathAttempts = 0
 			else
+				local navigation = entity.Navigator:GetDebugSnapshot()
+				local requestAge = now - numberOr(navigation.RequestStartedAt, -math.huge)
+				local requestTimeout = numberOr(movement.PathRequestTimeout, 8, 2, 30)
+				if navigation.Computing and requestAge >= 0 and requestAge < requestTimeout
+					and entity.NoProgressFor < requestTimeout then
+					-- Certification may outlast the movement watchdog. Bound its
+					-- grace by total idle time too, so successive timed-out requests
+					-- cannot keep the creature waiting forever.
+					return
+				end
 				entity.RepathAttempts += 1
 				if entity.RepathAttempts == 1 then
 					entity.Navigator:SetGoal(currentGoal, true)
@@ -1390,7 +1439,7 @@ do
 				root.AssemblyLinearVelocity.Z).Magnitude
 			if speed < 2 then return end
 			if stateName == "sprint" and speed < 12 then return end
-			NoiseRegistry.Add(root.Position, stateName)
+			NoiseRegistry.Add(root.Position, stateName, player)
 		end)
 		Players.PlayerRemoving:Connect(function(player)
 			lastReport[player] = nil
@@ -1521,6 +1570,9 @@ function Controller.Start(manifest, generation)
 	setShared("Level2_PoolFoamActiveMover", session.ActiveMoverId)
 	table.insert(session.Connections, RunService.Heartbeat:Connect(function(deltaTime)
 		updateSession(session, deltaTime)
+	end))
+	table.insert(session.Connections, PlayerProtection.Activated:Connect(function(player, character)
+		releaseProtectedPlayer(session, player, character)
 	end))
 	table.insert(session.Connections, Players.PlayerRemoving:Connect(function(player)
 		if session.TargetedPlayer == player then session.TargetedPlayer = nil end

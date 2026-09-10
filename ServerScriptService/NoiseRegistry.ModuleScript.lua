@@ -1,6 +1,7 @@
 -- NoiseRegistry
 -- PASTE INTO: ServerScriptService → Insert Object → ModuleScript → rename to "NoiseRegistry"
 
+local PlayerProtection = require(game:GetService("ServerScriptService"):WaitForChild("PlayerProtection"))
 local NoiseRegistry = {}
 
 local LOUDNESS = {
@@ -18,7 +19,7 @@ local DECAY = 5
 
 local sounds = {}
 
-function NoiseRegistry.Add(position, stateName)
+function NoiseRegistry.Add(position, stateName, sourcePlayer)
 	local loud = LOUDNESS[stateName]
 	if not loud or loud <= 0 then return end
 
@@ -26,6 +27,7 @@ function NoiseRegistry.Add(position, stateName)
 		pos = position,
 		loudness = loud,
 		t = os.clock(),
+		SourcePlayer = sourcePlayer, -- nil for pump/relay and existing unowned world sounds
 	})
 end
 
@@ -49,6 +51,7 @@ end
 function NoiseRegistry.GetBest(fromPos, maxRange)
 	local best, bestScore = nil, 0
 	for _, s in ipairs(sounds) do
+		if s.SourcePlayer and PlayerProtection.IsActive(s.SourcePlayer) then continue end
 		local dist = (s.pos - fromPos).Magnitude
 		if dist < maxRange * s.loudness then
 			local score = s.loudness / math.max(dist, 1)

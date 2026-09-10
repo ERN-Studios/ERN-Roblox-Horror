@@ -411,6 +411,7 @@ local MOVEMENT_CONTROLS = {
 	TouchPOV = true,
 	TouchDropGlowstick = true,
 	FlashlightPower = true,
+	ProtectionUse = true,
 }
 
 local FULLSCREEN_OVERLAYS = {
@@ -1028,6 +1029,10 @@ local function resetScenario(inRound: boolean?)
 		task.wait()
 		openButton.Visible = not inRound
 	end
+	local shopButton = store and store:FindFirstChild("ZyntraShopButton")
+	if shopButton and shopButton:IsA("GuiObject") then
+		shopButton.Visible = not inRound
+	end
 end
 
 local function revealGui(name: string, filter: ((Instance) -> boolean)?)
@@ -1260,7 +1265,7 @@ function UIRegression.Scenarios(): {any}
 		{Name = "store-modal", Requires = {
 			"Terminal", "TerminalHeader", "TerminalTabs", "TerminalContent",
 			"TerminalStatus",
-		}, Forbids = {"ZyntraOpenButton"},
+		}, Forbids = {"ZyntraOpenButton", "ZyntraShopButton"},
 			TouchTargets = {"TerminalHeader.CloseTerminal"}, Setup = function()
 			resetScenario()
 			local store = findGui("ZyntraStore")
@@ -1449,24 +1454,27 @@ function Fit.bodyCompletionContract(): (string, number)
 	check(hintText():find("BEGINS IN", 1, true) ~= nil,
 		"win countdown promises the next level", hintText())
 
-	-- (2) Pressing CONTINUE takes the run onward and locks both actions.
+	-- (2) First choices are provisional until the original deadline.
 	press("ContinueRun")
 	continueRun, returnLobby = action("ContinueRun"), action("ReturnToLobby")
 	if continueRun and returnLobby then
-		check(continueRun.Text == "CONTINUING...", "continue press acknowledges",
-			continueRun.Text)
-		check(not continueRun.Active and not returnLobby.Active,
-			"continue press locks both actions")
+		check(continueRun.Text == "CONTINUE", "provisional continue keeps its label", continueRun.Text)
+		check(continueRun.Active and returnLobby.Active,
+			"continue leaves both choices available")
 	end
 
-	-- (3) Pressing BACK TO LOBBY takes the other route.
-	drive("win")
+	-- (3) Switch both ways in THIS window, without resetScenario/drive.
 	press("ReturnToLobby")
-	returnLobby = action("ReturnToLobby")
-	if returnLobby then
-		check(returnLobby.Text == "RETURNING...", "lobby press acknowledges",
-			returnLobby.Text)
+	continueRun, returnLobby = action("ContinueRun"), action("ReturnToLobby")
+	if continueRun and returnLobby then
+		check(returnLobby.Text == "BACK TO LOBBY", "provisional lobby keeps its label", returnLobby.Text)
+		check(continueRun.Active and returnLobby.Active,
+			"Continue to Lobby leaves the opposite choice available")
 	end
+	press("ContinueRun")
+	continueRun, returnLobby = action("ContinueRun"), action("ReturnToLobby")
+	check(continueRun ~= nil and returnLobby ~= nil and continueRun.Active and returnLobby.Active,
+		"Lobby to Continue remains editable in the same window")
 
 	-- (4) The last level: one action, and no route to a level 4.
 	drive("winfinal")
@@ -3481,6 +3489,7 @@ function Fit.bodyQueueModalMatrix(): (string, number)
 	local expectedControlKeys = {
 		TouchRunHold = true, TouchJump = true, TouchPOV = true,
 		TouchDropGlowstick = true, TouchSneakHold = true, FlashlightPower = true,
+		ProtectionUse = true,
 	}
 	local function registeredControlState(element: GuiObject): any
 		local ancestorsVisible = true

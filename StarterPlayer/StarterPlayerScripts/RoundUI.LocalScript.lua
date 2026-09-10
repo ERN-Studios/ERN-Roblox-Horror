@@ -1158,6 +1158,128 @@ completion.button:SetAttribute("CompletionAction", "returntolobby")
 completion.button:SetAttribute("CompletionPressedText", "RETURNING...")
 end
 
+-- Observational party choices above the original result composition.
+-- It never changes buttons, countdowns, cursor policy or transport decisions.
+do
+ local list = Instance.new("ScrollingFrame")
+ list.Name = "PartyChoices"
+ list.BackgroundTransparency = 1
+ list.BorderSizePixel = 0
+ list.ScrollBarThickness = 3
+ list.ScrollBarImageColor3 = Color3.fromRGB(112, 145, 120)
+ list.ScrollingDirection = Enum.ScrollingDirection.Y
+ list.CanvasSize = UDim2.fromOffset(0, 0)
+ list.Active = true
+ list.Visible = false
+ list.ZIndex = 123
+ list.Parent = endFrame
+ completion.choiceList = list
+ completion.choiceRows = {}
+end
+
+function completion.layoutChoices()
+ local list = completion.choiceList
+ local count = #(completion.choiceMembers or {})
+ list.Visible = count > 0 and completion.returnVisible and endFrame.Visible
+ if not list.Visible then list.Active = false; list.Selectable = false; return end
+ local layout = UIDevice.Layout()
+ local width = math.min(620, layout.Safe.Width - 24)
+ local columns = width >= 480 and 2 or 1
+ -- The full-frame parent uses this ScreenGui's inset area. UIDevice returns
+ -- the native rectangle (or the same fixture rectangle as LocalPosition).
+ -- Keep the original heading and the core-safe viewport distinct.
+ local frame = UIDevice.InsetArea(gui.ScreenInsets)
+ local top = math.max(layout.Safe.Top + 6, frame.Top + 6)
+ local titleTop = frame.Top + frame.Height * .34
+ local availableHeight = math.max(0, math.floor(titleTop - top - 2))
+ -- A native short window can leave only 27px above the unchanged title.
+ -- Keep each complete name/choice together in one line when two cannot fit.
+ local compact = availableHeight < 32
+ -- A full-width line keeps long names and their accepted choice together.
+ if compact then columns = 1 end
+ local rowHeight = math.min(32, availableHeight)
+ local totalHeight = math.ceil(count / columns) * rowHeight
+ local height = math.min(totalHeight, availableHeight)
+ list.Position = UIDevice.LocalPosition(gui, layout.Safe.Left + (layout.Safe.Width - width) / 2, top)
+ list.Size = UDim2.fromOffset(width, height)
+ list.CanvasSize = UDim2.fromOffset(0, totalHeight)
+ list.ScrollingEnabled = totalHeight > height
+ list.Active = list.ScrollingEnabled
+ list.Selectable = list.ScrollingEnabled
+ list.CanvasPosition = Vector2.new(0, math.min(list.CanvasPosition.Y, math.max(0, totalHeight - height)))
+ -- Every name remains available; compact screens scroll within the spare
+ -- top strip rather than shrinking/moving the old title or action controls.
+ for i, row in ipairs(completion.choiceRows) do
+  local member = completion.choiceMembers[i]
+  row.Visible = member ~= nil
+  if member then
+   row.Position = UDim2.new((i - 1) % columns / columns, 4, 0, math.floor((i - 1) / columns) * rowHeight)
+   row.Size = UDim2.new(1 / columns, -12, 0, rowHeight)
+   row.TextWrapped = not compact
+   row.Text = member.Name .. (compact and " — " or "\n")
+    .. (member.Choice == "continuing" and "CONTINUE" or "LOBBY")
+  end
+ end
+end
+
+function completion.clearChoices()
+ completion.lastChoiceRequestAt = nil
+ completion.choiceRevision = 0
+ completion.choiceMembers = {}
+ completion.choiceList.Visible = false
+ completion.choiceList.Active = false
+ completion.choiceList.Selectable = false
+ completion.choiceList.CanvasPosition = Vector2.new(0, 0)
+ for _, row in ipairs(completion.choiceRows) do row.Visible = false end
+end
+
+function completion.applyChoices(packet)
+ if type(packet) ~= "table" or packet.Serial ~= completion.serverSerial
+  or type(packet.Revision) ~= "number" or packet.Revision <= (completion.choiceRevision or 0)
+  or type(packet.Members) ~= "table" or not completion.returnVisible then return end
+ completion.choiceRevision = packet.Revision
+ -- A closed server snapshot is terminal for this window. Later open snapshots
+ -- cannot re-arm it; only a fresh completion.start/reset opens another window.
+ if packet.Closed == true then completion.pending = true end
+ local editable = not completion.pending and completion.deadline
+  and workspace:GetServerTimeNow() < completion.deadline
+ for _, button in ipairs(completion.buttons) do
+  button.Active = button.Visible and editable == true
+  button.Selectable = button.Active
+ end
+ local members = {}
+ for _, member in ipairs(packet.Members) do
+  if type(member) == "table" and type(member.Name) == "string"
+   and (member.Choice == "continuing" or member.Choice == "returning") then
+   members[#members + 1] = member
+  end
+ end
+ completion.choiceMembers = members
+ for i, member in ipairs(members) do
+  local row = completion.choiceRows[i]
+  if not row then
+   row = Instance.new("TextLabel")
+   row.Name = "PartyChoice" .. i
+   row.BackgroundTransparency = 1
+   row.Font = Enum.Font.Gotham
+   row.TextScaled = true
+   row.TextWrapped = true
+   row.TextXAlignment = Enum.TextXAlignment.Left
+   row.TextTruncate = Enum.TextTruncate.None
+   row.ZIndex = 123
+   row.Parent = completion.choiceList
+   local textSize = Instance.new("UITextSizeConstraint")
+   textSize.MinTextSize = 11
+   textSize.MaxTextSize = 14
+   textSize.Parent = row
+   completion.choiceRows[i] = row
+  end
+  local continued = member.Choice == "continuing"
+  row.TextColor3 = continued and Color3.fromRGB(130, 255, 184) or Color3.fromRGB(205, 235, 210)
+ end
+ completion.layoutChoices()
+end
+
 -- Which shape the result screen is wearing, and in what accent, so a viewport
 -- or orientation change can re-measure the card without waiting for the next
 -- result to arrive.
@@ -1260,6 +1382,14 @@ function completion.applyLayout(color)
  end
 end
 
+do
+ local originalLayout = completion.applyLayout
+ function completion.applyLayout(color)
+  originalLayout(color)
+  completion.layoutChoices()
+ end
+end
+
 -- The layout is viewport-dependent, so a resize or an orientation change
 -- re-measures it.
 UIDevice.Changed:Connect(function()
@@ -1293,6 +1423,7 @@ local function formatRoundTime(seconds)
 end
 
 function completion.reset()
+	completion.clearChoices()
 	completion.deadline = nil
 	completion.nextLevel = nil
 	completion.serverSerial = nil
@@ -1313,6 +1444,7 @@ end
 -- Continue action on screen. The last level reports no next level, so it shows
 -- Back to Lobby alone and cannot route anyone to a level that does not exist.
 function completion.start(deadline, nextLevel, serverSerial)
+	completion.clearChoices()
 	completion.deadline = tonumber(deadline) or (workspace:GetServerTimeNow() + 15)
 	completion.nextLevel = tonumber(nextLevel)
 	completion.serverSerial = tonumber(serverSerial)
@@ -1345,19 +1477,15 @@ function completion.activate(button)
 		return false
 	end
 	if not button.Visible or not button.Active then return false end
+	local now = workspace:GetServerTimeNow()
+	if not completion.deadline or now >= completion.deadline then return false end
 	local action = button:GetAttribute("CompletionAction")
-	if type(action) ~= "string" then return false end
-	-- Continue cannot route past the last level: the server sends no next level
-	-- there, and this is the second, client-side guard on the same rule.
+	if action ~= "continuenow" and action ~= "returntolobby" then return false end
 	if action == "continuenow" and completion.nextLevel == nil then return false end
-	completion.pending = true
-	for _, other in ipairs(completion.buttons) do
-		other.Active = false
-		other.Selectable = false
-	end
-	button.Text = button:GetAttribute("CompletionPressedText") or button.Text
-	-- The server advances as soon as every remaining player has chosen; the
-	-- countdown stays as the backstop for anyone who never presses anything.
+	if completion.lastChoiceRequestAt and now - completion.lastChoiceRequestAt < 0.15 then return false end
+	completion.lastChoiceRequestAt = now
+	-- Keep both choices available. The existing server roster is the only
+	-- displayed selection; a click never pretends travel has already begun.
 	remote:FireServer(action, completion.serverSerial)
 	return true
 end
@@ -1578,7 +1706,8 @@ end
 
 -- All levels share the server's party barrier. Only an explicit successful
 -- release can lift the cover; the sequence below is presentation, never proof.
-local entryState = {Active = false, Token = nil, Error = nil}
+local entryState = {Active = false, Token = nil, Error = nil,
+	ErrorArmed = true, ErrorSerial = 0, MessageSerial = 0}
 
 local function finishLoadingWhenReady()
 	if entryState.Active or not (loadingSequenceFinished and serverReadyForEntry) then return end
@@ -1629,6 +1758,7 @@ local DEFAULT_FONT = Enum.Font.GothamMedium
 local COMPACT_SIZE = UDim2.new(0, 620, 0, 48)
 
 local function setMsg(text, color)
+	entryState.MessageSerial += 1
 	label.TextSize = DEFAULT_SIZE
 	label.Font = DEFAULT_FONT
 	label.TextTransparency = 0
@@ -1638,6 +1768,49 @@ local function setMsg(text, color)
 	label.Text = text or ""
 	label.TextColor3 = color or DEFAULT_TEXT
 	label.Visible = text ~= nil and text ~= ""
+end
+
+-- A failure can arrive through both the remote and the join-time attribute,
+-- then be replayed after cleanup. Give one attempt one eight-second notice.
+-- Keep these helpers on entryState: this chunk has no spare top-level locals.
+function entryState.ClearError(armed)
+	entryState.ErrorSerial += 1
+	entryState.Error = nil
+	entryState.ErrorExpiresAt = nil
+	entryState.ErrorMessageSerial = nil
+	entryState.ErrorArmed = armed
+	if armed then entryState.ErrorReason = nil end
+	entryState.ErrorAttribute = player:GetAttribute("RoundLoadingError")
+end
+
+function entryState.RenderError()
+	if entryState.Error and os.clock() >= entryState.ErrorExpiresAt then
+		entryState.Error = nil
+	end
+	setMsg(entryState.Error or "", Color3.fromRGB(255, 100, 100))
+	entryState.ErrorMessageSerial = entryState.MessageSerial
+end
+
+function entryState.ShowError(reason)
+	if not entryState.ErrorArmed or entryState.ErrorReason then return false end
+	entryState.ErrorReason = (reason == "LOADING_TIMEOUT" or reason == "timeout") and "timeout" or "failed"
+	entryState.Error = entryState.ErrorReason == "timeout"
+		and "LOADING TIMED OUT AFTER 60 SECONDS — PLEASE TRY AGAIN"
+		or "ROUND LOADING FAILED — PLEASE TRY AGAIN"
+	entryState.ErrorSerial += 1
+	entryState.ErrorExpiresAt = os.clock() + 8
+	entryState.RenderError()
+	local serial, message = entryState.ErrorSerial, entryState.Error
+	task.delay(8, function()
+		if entryState.ErrorSerial ~= serial then return end
+		entryState.Error = nil
+		-- Expiry retires the incident, even if another status has replaced it.
+		-- The text check also protects the direct MISSION BRIEF label writer.
+		if entryState.ErrorMessageSerial == entryState.MessageSerial and label.Text == message then
+			setMsg("")
+		end
+	end)
+	return true
 end
 
 -- Level 1 command briefing. This replaces the old typed objective sequence and
@@ -3807,8 +3980,8 @@ player:GetAttributeChangedSignal("Level2_ExitTransition"):Connect(function()
 	end
 end)
 
--- Old, unstable elevator camera motion. It peaks after the one-second
--- startup delay, then decays smoothly for ten seconds without moving the player.
+-- Elevator cabin effects keep their existing timing and restore behavior.
+-- The player retains camera control throughout loading, the ride and its stop.
 local SHAKE_BIND = "UnstableElevatorCamera"
 local SHAKE_DURATION = 10
 local SETTLE_DURATION = 1
@@ -3872,31 +4045,10 @@ local function scheduleElevatorShake()
 				return
 			end
 
-			local camera = workspace.CurrentCamera
-			if not camera then return end
 			local settling = elapsed >= SHAKE_DURATION
 			local settleProgress = math.clamp(elapsed - SHAKE_DURATION, 0, SETTLE_DURATION) / SETTLE_DURATION
 			local fade = math.max(1 - elapsed / SHAKE_DURATION, 0) ^ 1.35
 			local t = os.clock()
-
-			-- Layered noise: low mechanical sway plus a restrained high-frequency rattle.
-			local side = (math.noise(t * 3.2, 0) * 0.055 + math.noise(t * 11.0, 5) * 0.018) * fade
-			local lift = (math.noise(0, t * 4.0) * 0.075 + math.noise(8, t * 13.0) * 0.022) * fade
-			local roll = math.rad(math.noise(t * 2.7, 14) * 0.22 * fade)
-			local pitch = math.rad(math.noise(21, t * 3.0) * 0.12 * fade)
-
-			if settling then
-				-- One firm but controlled downward stop, followed by a soft recovery.
-				local joltPhase = math.clamp(settleProgress / 0.62, 0, 1)
-				lift = -math.sin(joltPhase * math.pi) * 0.16
-				side = 0
-				roll = 0
-				pitch = math.rad(math.sin(joltPhase * math.pi) * 0.28)
-			end
-
-			camera.CFrame = camera.CFrame
-				* CFrame.new(side, lift, 0)
-				* CFrame.Angles(pitch, 0, roll)
 
 			-- Cabin lamp follows the machinery load, with two brief early brownouts.
 			local brownout = (elapsed > 1.15 and elapsed < 1.28)
@@ -3956,7 +4108,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		queueShade.Visible = false
 		queueStation = nil
 		queueSubmitting = false
-		setMsg(entryState.Error or "") -- retain a failed launch's explanation in the lobby
+		entryState.RenderError() -- redisplay without extending the original deadline
 
 	elseif ev == "lobbybriefing" then
 		lobbyBriefing.playOnce()
@@ -4033,7 +4185,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 	elseif ev == "loadinggame" then
 		entryState.Active = true
 		entryState.Token = nil
-		entryState.Error = nil
+		entryState.ClearError(true)
 		serverReadyForEntry = false
 		cancelAllCommandBriefings(true)
 		elevatorBriefingStarted = false
@@ -4088,17 +4240,13 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 		end
 
 	elseif ev == "loadfailed" then
+		if not entryState.ErrorArmed then return end
 		entryState.Active = false
 		entryState.Token = nil
-		entryState.Error = a == "LOADING_TIMEOUT"
-			and "LOADING TIMED OUT AFTER 60 SECONDS — PLEASE TRY AGAIN"
-			or "ROUND LOADING FAILED — PLEASE TRY AGAIN"
 		loadingRun += 1
 		cancelAllCommandBriefings(true)
 		loadingFrame.Visible = false
-		setMsg(a == "LOADING_TIMEOUT"
-			and "LOADING TIMED OUT (60s) — RETURNING YOUR PARTY TO LOBBY"
-			or "ROUND COULD NOT LOAD — RETURNING YOUR PARTY TO LOBBY", Color3.fromRGB(255, 100, 100))
+		entryState.ShowError(a)
 
 	elseif ev == "poolaccess" then
 		dead = false
@@ -4130,7 +4278,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 	elseif ev == "start" then
 		entryState.Active = false
 		entryState.Token = nil
-		entryState.Error = nil
+		entryState.ClearError(false)
 		loadingRun += 1
 		loadingSequenceFinished = true
 		hideRoundEnding(true)
@@ -4223,6 +4371,8 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 			completion.button.Text = "RETURNING..."
 		end
 
+	elseif ev == "postwinchoices" then
+		completion.applyChoices(a)
 	elseif ev == "continuefailed" then
 		if tonumber(a) == completion.serverSerial and completion.deadline
 			and workspace:GetServerTimeNow() < completion.deadline then
@@ -5369,13 +5519,13 @@ player:SetAttribute("RoundEntryUIReady", true)
 do
 	local function restoreLoadingError()
 		local reason = player:GetAttribute("RoundLoadingError")
+		if reason == entryState.ErrorAttribute then return end
+		entryState.ErrorAttribute = reason
 		if type(reason) ~= "string" or reason == "" or entryState.Active then return end
-		entryState.Error = (reason == "LOADING_TIMEOUT" or reason == "timeout")
-			and "LOADING TIMED OUT AFTER 60 SECONDS — PLEASE TRY AGAIN"
-			or "ROUND LOADING FAILED — PLEASE TRY AGAIN"
-		loadingRun += 1
-		loadingFrame.Visible = false
-		setMsg(entryState.Error, Color3.fromRGB(255, 100, 100))
+		if entryState.ShowError(reason) then
+			loadingRun += 1
+			loadingFrame.Visible = false
+		end
 	end
 	player:GetAttributeChangedSignal("RoundLoadingError"):Connect(restoreLoadingError)
 	restoreLoadingError()

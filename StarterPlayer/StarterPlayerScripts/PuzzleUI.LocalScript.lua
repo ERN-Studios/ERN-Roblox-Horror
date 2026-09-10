@@ -686,20 +686,45 @@ receiverReadout.TextColor3 = Color3.fromRGB(78, 178, 105)
 receiverReadout.Text = "[■□□□] WEAK SIGNAL\nMove around to improve reception"
 receiverReadout.Parent = receiver
 
-local compassArrow = Instance.new("TextLabel")
+local compassArrow = Instance.new("Frame")
 compassArrow.Name = "DetectorCompass"
-compassArrow.Position = UDim2.new(0, 12, 0, 36)
-compassArrow.Size = UDim2.new(0, 66, 0, 68)
+compassArrow.Position = UDim2.fromOffset(13, 38)
+compassArrow.Size = UDim2.fromOffset(64, 64)
 compassArrow.BackgroundTransparency = 1
-compassArrow.Font = Enum.Font.Code
-compassArrow.Text = "▲"
-compassArrow.TextSize = 54
-compassArrow.TextColor3 = Color3.fromRGB(75, 210, 110)
-compassArrow.TextTransparency = 0.12
+compassArrow.BorderSizePixel = 0
 compassArrow.Visible = false
 compassArrow.Parent = receiver
+do
+ local ringCorner = Instance.new("UICorner")
+ ringCorner.CornerRadius = UDim.new(1, 0)
+ ringCorner.Parent = compassArrow
+ local ring = Instance.new("UIStroke")
+ ring.Name = "CompassRing"
+ ring.Color = Color3.fromRGB(75, 210, 110)
+ ring.Thickness = 1.5
+ ring.Transparency = 0.4
+ ring.Parent = compassArrow
+
+ -- Draw a real arrow with a shaft and two wings; no font-dependent glyph.
+ local function segment(name, ax, ay, bx, by)
+  local line = Instance.new("Frame")
+  line.Name = name
+  line.AnchorPoint = Vector2.new(0.5, 0.5)
+  line.Position = UDim2.fromScale((ax + bx) / 2, (ay + by) / 2)
+  line.Size = UDim2.new(math.sqrt((bx - ax)^2 + (by - ay)^2), 0, 0, 2.5)
+  line.Rotation = math.deg(math.atan2(by - ay, bx - ax))
+  line.BackgroundColor3 = Color3.fromRGB(75, 210, 110)
+  line.BackgroundTransparency = 0.12
+  line.BorderSizePixel = 0
+  line.Parent = compassArrow
+ end
+ segment("ArrowShaft", 0.5, 0.26, 0.5, 0.75)
+ segment("ArrowHeadLeft", 0.3, 0.46, 0.5, 0.26)
+ segment("ArrowHeadRight", 0.5, 0.26, 0.7, 0.46)
+end
 
 local receiverActive = false
+local receiverPlacementAvailable = true
 local compassMode = false
 local receiverClock = 0
 local lastExitDistance = nil
@@ -721,7 +746,6 @@ local function receiverTier(compact)
   Gap = compact and 2 or 5,
   PadBottom = compact and 4 or 12,
   ArrowWidth = compact and 40 or 66,
-  ArrowFace = compact and 32 or 54,
   BodyFace = compact and 12 or 17,
  }
 end
@@ -802,9 +826,13 @@ local function layoutReceiver()
  -- compact tier reached 3px past a 15px header and into the readout.
  local bodyTop = tier.HeaderTop + math.max(headerHeight, tier.Badge) + tier.Gap
  local bodyHeight = math.max(12, receiverHeight - bodyTop - tier.PadBottom)
- compassArrow.Position = UDim2.new(0, tier.PadX + 2, 0, bodyTop)
- compassArrow.Size = UDim2.fromOffset(tier.ArrowWidth, bodyHeight)
- compassArrow.TextSize = tier.ArrowFace
+ -- Keep the circular face inside the existing arrow column at every tier.
+ -- The 1px inset also contains the centred ring stroke during rotation.
+ local diameter = math.max(10, math.min(tier.ArrowWidth, bodyHeight) - 2)
+ compassArrow.Position = UDim2.fromOffset(
+  tier.PadX + 2 + (tier.ArrowWidth - diameter) / 2,
+  bodyTop + (bodyHeight - diameter) / 2)
+ compassArrow.Size = UDim2.fromOffset(diameter, diameter)
 
  local bodyLeft = detectorBodyLeft(tier)
  receiverReadout.Position = UDim2.new(0, bodyLeft, 0, bodyTop)
@@ -830,7 +858,7 @@ end
 
 local function setReceiver(on)
  receiverActive = on
- receiver.Visible = on
+ receiver.Visible = on and receiverPlacementAvailable
  lastExitDistance = nil
  compassMode = false
  compassArrow.Visible = false
@@ -1139,6 +1167,46 @@ end)
 -- clear of that column -- the top band where the band can hold it, otherwise
 -- Layout().ModalArea. Neither of those two things is a fixed corner any more,
 -- so both are worked out below rather than stated here.
+-- Mission Brief belongs to another ScreenGui. Convert its measured local
+-- rectangle to UIDevice's shared space, including synthetic viewport origins.
+local function detectorObstacleRect(guiName, buttonName, requireVisible)
+    local guide = gui.Parent:FindFirstChild(guiName)
+    local button = guide and guide:FindFirstChild(buttonName)
+    if not button or not button:IsA("GuiObject") then return nil end
+    -- Keep the DEV chip reserved while its modal temporarily hides it.
+    -- A hidden ordinary lobby opener does not reserve gameplay space.
+    if requireVisible and not button.Visible and button.Text ~= "ZYNTRA // DEV" then return nil end
+    local x, y = UIDevice.LocalOffset(guide, 0, 0)
+    local position = button.AbsolutePosition - guide.AbsolutePosition
+    local size = button.AbsoluteSize
+    if size.X <= 0 or size.Y <= 0 then return nil end
+    return {Left = position.X - x, Top = position.Y - y,
+        Right = position.X - x + size.X, Bottom = position.Y - y + size.Y}
+end
+
+local function clearMissionBrief(candidates, brief)
+    if not brief then return candidates end
+    local result = {}
+    local left, right, top, bottom = brief.Left - 8, brief.Right + 8,
+        brief.Top - 8, brief.Bottom + 8
+    for _, rect in ipairs(candidates) do
+        if rect.Left < right and rect.Right > left and rect.Top < bottom and rect.Bottom > top then
+            -- First retain the full height beside Brief; never push blindly down.
+            table.insert(result, {Left = math.max(rect.Left, right), Right = rect.Right,
+                Top = rect.Top, Bottom = rect.Bottom})
+            table.insert(result, {Left = rect.Left, Right = rect.Right,
+                Top = math.max(rect.Top, bottom), Bottom = rect.Bottom})
+            table.insert(result, {Left = rect.Left, Right = math.min(rect.Right, left),
+                Top = rect.Top, Bottom = rect.Bottom})
+            table.insert(result, {Left = rect.Left, Right = rect.Right,
+                Top = rect.Top, Bottom = math.min(rect.Bottom, top)})
+        else
+            table.insert(result, rect)
+        end
+    end
+    return result
+end
+
 function applyPuzzleLayout()
 	local layout = UIDevice.Layout()
 	-- WHICH COMPOSITION, decided before the first measurement rather than after
@@ -1149,6 +1217,8 @@ function applyPuzzleLayout()
 	refreshToggleCaption()
 
 	if not layout.IsTouch then
+		receiverPlacementAvailable = true
+		receiver.Visible = receiverActive
 		local margin = LAYOUT.Margin
 		objectivePanelWidth = LAYOUT.ObjectivesWidth
 		local detectorLeft = LAYOUT.DetectorLeft
@@ -1405,6 +1475,9 @@ function applyPuzzleLayout()
 		end
 	end
 
+	local brief = detectorObstacleRect("LevelOneGuideGui", "ObjectivesButton", false)
+	local devChip = detectorObstacleRect("ZyntraStore", "ZyntraOpenButton", true)
+	candidates = clearMissionBrief(clearMissionBrief(candidates, brief), devChip)
 	local chosen
 	for _, rect in ipairs(candidates) do
 		local placed = {
@@ -1424,6 +1497,15 @@ function applyPuzzleLayout()
 			chosen = placed
 		end
 	end
+	-- No free pixel is preferable to reintroducing a covered navigation card.
+	-- Supported layouts retain a readable candidate; this guards degenerate areas.
+	if chosen == nil and (brief or devChip) then
+		receiverPlacementAvailable = false
+		receiver.Visible = false
+		return
+	end
+	receiverPlacementAvailable = true
+	receiver.Visible = receiverActive
 	if chosen == nil then
 		-- Every rectangle on this device was degenerate. The card still goes in
 		-- the band, at whatever the band has, rather than at a size the band
@@ -1462,3 +1544,30 @@ end
 
 applyPuzzleLayout()
 UIDevice.Changed:Connect(applyPuzzleLayout)
+
+-- RoundUI may lay out its button after this script, or create it later.
+-- Reserve the button even while its panel hides it, avoiding a layout jump.
+local obstacleConnections = {}
+local function watchDetectorObstacle(button)
+    local parent = button.Parent
+    local brief = parent == gui.Parent:FindFirstChild("LevelOneGuideGui") and button.Name == "ObjectivesButton"
+    local dev = parent == gui.Parent:FindFirstChild("ZyntraStore") and button.Name == "ZyntraOpenButton"
+    if not (brief or dev) or not button:IsA("GuiObject") then return end
+    local key = brief and "Brief" or "Dev"
+    for _, connection in ipairs(obstacleConnections[key] or {}) do connection:Disconnect() end
+    local connections = {}
+    obstacleConnections[key] = connections
+    local properties = dev and {"AbsolutePosition", "AbsoluteSize", "Visible", "Text"}
+        or {"AbsolutePosition", "AbsoluteSize"}
+    for _, property in ipairs(properties) do
+        table.insert(connections, button:GetPropertyChangedSignal(property):Connect(applyPuzzleLayout))
+    end
+    table.insert(connections, button.AncestryChanged:Connect(applyPuzzleLayout))
+    applyPuzzleLayout()
+end
+gui.Parent.DescendantAdded:Connect(watchDetectorObstacle)
+for _, names in ipairs({{"LevelOneGuideGui", "ObjectivesButton"}, {"ZyntraStore", "ZyntraOpenButton"}}) do
+    local parent = gui.Parent:FindFirstChild(names[1])
+    local button = parent and parent:FindFirstChild(names[2])
+    if button then watchDetectorObstacle(button) end
+end

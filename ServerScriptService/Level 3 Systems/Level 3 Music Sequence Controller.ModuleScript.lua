@@ -22,7 +22,6 @@ local session: {
 	RoundConnection: RBXScriptConnection?,
 	Cycle: number,
 	BlackoutScreamTriggered: boolean,
-	FlashlightsSuppressed: boolean,
 }? = nil
 
 local function stateFolder(): Folder
@@ -66,34 +65,9 @@ local function setRecoveryFlicker(active: boolean, startedAt: number, untilTime:
 	workspace:SetAttribute("Level3RecoveryFlickerActive", active)
 end
 
-local function setFlashlightsSuppressed(activeSession: any, active: boolean)
-	active = active == true
-	if activeSession.FlashlightsSuppressed == active then return end
-	activeSession.FlashlightsSuppressed = active
-	stateFolder():SetAttribute("Level3_FlashlightsSuppressed", active)
-	workspace:SetAttribute("Level3FlashlightsSuppressed", active)
-end
-
 -- LEVEL3_PERMANENT_FURNITURE_20260828
--- Furniture is permanent scene topology: tables, tablecloths, chairs, hide
--- anchors, sight occluders and the Manager's navigation exclusion envelopes
--- stay parented, visible, collidable and queryable for the whole round. The
--- former REMOVED -> VISIBLE_GHOST -> RESTORED machine that lived here is gone,
--- and with it the furniture suspension that ejected hidden players. This
--- function now owns exactly one edge: the two flashlight blackout locks.
-local function updateBlackoutEdges(activeSession: any, elapsed: number)
-	local songEnd = Configuration.MusicSequence.DurationSeconds
-	local screamStart = songEnd - Configuration.MusicSequence.BlackoutScreamLeadSeconds
-	local firstLockStart = screamStart
-		- Configuration.MusicSequence.PreScreamFlashlightLockSeconds
-	local huntEnd = Configuration.MusicSequence.CycleEndSeconds
-	local finalLockStart = huntEnd - Configuration.MusicSequence.HuntFinalFlashlightLockSeconds
-
-	local firstLock = elapsed >= firstLockStart and elapsed < screamStart
-	local finalLock = elapsed >= finalLockStart and elapsed < huntEnd
-	setFlashlightsSuppressed(activeSession, firstLock or finalLock)
-end
-
+-- Furniture stays in the world throughout the sequence; only the authored
+-- chairs shift once. Handheld lights remain under the player's control.
 local function shiftBlackoutChairs(activeSession: any)
 	if activeSession.ChairsShifted then return end
 	activeSession.ChairsShifted = true
@@ -188,7 +162,6 @@ local function setPhase(activeSession: any, phase: string)
 		setHunt(false)
 		setRecoveryFlicker(false, 0, 0)
 		setBlackout(false, 0)
-		setFlashlightsSuppressed(activeSession, false)
 	end
 end
 
@@ -248,7 +221,6 @@ local function update(activeSession: any)
 	local goal = tonumber(state:GetAttribute("Level3_ModuleGoal")) or Configuration.ModuleGoal
 	if progress >= goal then
 		setPhase(activeSession, "DONE")
-		setFlashlightsSuppressed(activeSession, false)
 		return
 	end
 	local elapsed = workspace:GetServerTimeNow() - activeSession.StartServerTime
@@ -278,7 +250,6 @@ local function update(activeSession: any)
 		activeSession.StartServerTime = nil
 		arm(activeSession)
 	end
-	updateBlackoutEdges(activeSession, elapsed)
 end
 
 function Controller.Stop()
@@ -286,10 +257,12 @@ function Controller.Stop()
 	if old then
 		if old.Connection then old.Connection:Disconnect() end
 		if old.RoundConnection then old.RoundConnection:Disconnect() end
-		setFlashlightsSuppressed(old, false)
 	end
 	session = nil
 	local state = stateFolder()
+	-- Clear saved flags from the retired forced-light windows, even on cold start.
+	state:SetAttribute("Level3_FlashlightsSuppressed", false)
+	workspace:SetAttribute("Level3FlashlightsSuppressed", false)
 	state:SetAttribute("Level3_RoomSongPhase", "STOPPED")
 	state:SetAttribute("Level3_ReversedRoomSongAssetId", Configuration.Audio.RoomListeningSongReversed)
 	state:SetAttribute("Level3_CompletionSongPitchOctave", Configuration.MusicSequence.CompletionSongPitchOctave)
@@ -342,7 +315,6 @@ function Controller.Start(manifest: any, generation: number)
 		RoundConnection = nil,
 		Cycle = 0,
 		BlackoutScreamTriggered = false,
-		FlashlightsSuppressed = false,
 	}
 	session = activeSession
 	local devSkip = ServerStorage:FindFirstChild("Level3DevSkipToPreBlackout")
@@ -409,7 +381,6 @@ function Controller.GetSnapshot()
 		BlackoutStart = Configuration.MusicSequence.BlackoutStartSeconds,
 		PreBlackoutDuration = Configuration.MusicSequence.PreBlackoutFlickerSeconds,
 		BlackoutScreamLead = Configuration.MusicSequence.BlackoutScreamLeadSeconds,
-		FlashlightsSuppressed = activeSession.FlashlightsSuppressed,
 		PreBlackoutActive = stateFolder():GetAttribute("Level3_PreBlackoutActive") == true,
 		BlackoutDuration = Configuration.MusicSequence.BlackoutSeconds,
 		HuntActive = stateFolder():GetAttribute("Level3_MallManagerHuntActive") == true,

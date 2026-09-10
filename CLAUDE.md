@@ -230,8 +230,10 @@ Afternoon batch (see `HANDOVER-2026-09-04.md` for the verification record):
   state `TABLE_CHECK`, `Level3_MallManagerTableCheckIndex/EndsAt` in the state
   folder (server time), 2 s reaction window, flush through
   `HidingController.FlushAnchor` to the far side with `FlushImmunitySeconds`
-  of attack immunity, per-anchor and global cooldowns, and a mid-hunt detour
-  only toward a table closer than the nearest exposed player.
+  of attack immunity. **Changed 2026-09-09:** the hunt targets the nearest living
+  player even while hidden, approaches their table and starts the check on
+  arrival. Targeted checks bypass random sweep bias and patrol cooldowns;
+  entering a table does not clear the AI-owned `BeingChased` flag.
 - **Gamepad:** L2 (hold) sprints, R1 toggles the flashlight; `sprintRequested()`
   in NoiseReporter is the one definition of "asking to sprint".
 - **RoundUI no longer writes the spectate camera**; SpectateController is the

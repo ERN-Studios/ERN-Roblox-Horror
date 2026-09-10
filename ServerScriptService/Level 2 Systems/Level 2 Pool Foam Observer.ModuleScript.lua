@@ -9,6 +9,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
+local PlayerProtection = require(game:GetService("ServerScriptService"):WaitForChild("PlayerProtection"))
 
 local Observer = {}
 Observer.__index = Observer
@@ -102,6 +103,7 @@ local function livingRoundCharacter(player)
 	if not (character and humanoid and humanoid.Health > 0 and root and root:IsA("BasePart")) then
 		return nil
 	end
+	if PlayerProtection.IsActive(player, character) then return nil end
 	if not (head and head:IsA("BasePart")) then head = root end
 	return character, humanoid, root, head
 end
@@ -229,6 +231,11 @@ function Observer.new(manifest, generation, tuning)
 			self:_consume(player, payload)
 		end))
 	end
+	table.insert(self.Connections, PlayerProtection.Activated:Connect(function(player, character)
+		if not self.Destroyed and PlayerProtection.IsActive(player, character) then
+			self.Reports[player] = nil
+		end
+	end))
 	table.insert(self.Connections, Players.PlayerRemoving:Connect(function(player)
 		self.Reports[player] = nil
 		self.Attempts[player] = nil

@@ -11,7 +11,15 @@ return {
 	SupportLeaderboardSize = 10,
 	SupportLeaderboardRefreshSeconds = 90,
 	TokenPercentPerLevel = TokenPercentPerLevel,
-	LevelCompletionTokens = 1,
+	LevelCompletionTokens = 2,
+
+	ProtectionItem = {
+		Key = "EntityProtection",
+		Name = "Entity Shield",
+		TokenCost = 5,
+		DurationSeconds = 5,
+		Description = "Buy a stored charge for 5 seconds of protection. Activate it during a run.",
+	},
 
 	Studio = {
 		GrantAllPasses = true,
@@ -24,7 +32,7 @@ return {
 			-- The previous asset was hazmat-themed and did not represent Supporter.
 			-- Keep it retired until an approved replacement exists; the client renders
 			-- this neutral Zyntra monogram instead of inventing or uploading artwork.
-			IconId = 0,
+			IconId = 89100714759013,
 			IconText = "Z//S",
 			Name = "Zyntra Supporter",
 			Price = 99,
@@ -33,14 +41,14 @@ return {
 		},
 		AdvancedEquipment = {
 			Id = 1945402536,
-			IconId = 82752249741977,
+			IconId = 105990911046404,
 			Name = "Advanced Equipment",
 			Price = 149,
 			Description = "Permanently unlock the hazmat color picker and receive one " .. PCT .. " upgrade to both Stamina Capacity and Battery Capacity.",
 		},
 		CosmeticEquipment = {
 			Id = 1946086261,
-			IconId = 96817218792472,
+			IconId = 120190657040752,
 			Name = "Glowstick Customizer",
 			Price = 99,
 			Description = "Permanently unlock the glowstick color picker for every glowstick you deploy. Cosmetic only.",
@@ -50,23 +58,23 @@ return {
 	Products = {
 		Tokens4 = {
 			Id = 3707755089,
-			IconId = 122080898819162,
+			IconId = 106212286945374,
 			Name = "4 Research Tokens",
 			Price = 49,
 			TokenGrant = 4,
-			Description = "Adds 4 Research Tokens to your account. Spend each token on a permanent " .. PCT .. " upgrade to either Stamina Capacity or Battery Capacity.",
+			Description = "Adds 4 Research Tokens to your account. Spend tokens on permanent " .. PCT .. " Stamina or Battery upgrades, or buy one Entity Shield charge for 5 tokens.",
 		},
 		Tokens20 = {
 			Id = 3707755233,
-			IconId = 85350713730800,
+			IconId = 136487758639981,
 			Name = "20 Research Tokens",
 			Price = 149,
 			TokenGrant = 20,
-			Description = "Adds 20 Research Tokens to your account. Spend each token on a permanent " .. PCT .. " upgrade to either Stamina Capacity or Battery Capacity.",
+			Description = "Adds 20 Research Tokens to your account. Spend tokens on permanent " .. PCT .. " Stamina or Battery upgrades, or buy one Entity Shield charge for 5 tokens.",
 		},
 		EmergencyReentry = {
 			Id = 3707755318,
-			IconId = 105488216694656,
+			IconId = 137929784189814,
 			Name = "Emergency Re-entry",
 			Price = 29,
 			ReentryGrant = 1,
@@ -74,9 +82,9 @@ return {
 		},
 	},
 
-	-- Optional, repeatable donations with no gameplay grant. Keep these separate
-	-- from utility Developer Products so only intentional donations reach the
-	-- global leaderboard. All six products belong to this experience; any future
+	-- Optional, repeatable donations with no gameplay grant. DonationRobux keeps
+	-- these separate from utility receipts; their recorded totals share the
+	-- support leaderboard. All six products belong to this experience; any future
 	-- entry with a zero ID remains visibly disabled in the client.
 	Donations = {
 		DonationSignal = {
@@ -144,10 +152,16 @@ return {
 	-- Client), ReduceFlashing (Level 2 Pool Foam Client, Level 3 Lighting
 	-- Controller) and the two caption names (Level 2 Pool Foam Client).
 	-- Default is what a profile that never touched the switch
-	-- publishes -- captions are ON unless a player turns them off, everything
-	-- else is off -- so a default must never be changed to the opposite of what
+	-- publishes -- lobby music and captions default ON; other switches are
+	-- off -- so a default must never be changed to the opposite of what
 	-- its readers already assume.
 	AccessibilitySettings = {
+		{
+			Key = "LobbyMusicEnabled",
+			Label = "Lobby music",
+			Description = "Turn background music in the lobby on or off. Level music and sound effects are unchanged.",
+			Default = true,
+		},
 		{
 			Key = "ReduceCameraShake",
 			Label = "Reduce camera shake",

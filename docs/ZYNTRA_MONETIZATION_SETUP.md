@@ -76,6 +76,50 @@ Filnavne, full-resolution masters og det anvendte prompt-set er dokumenteret i `
 - Studio giver automatisk alle passes og starter spilleren med 25 tokens; Studio kan derfor ikke bevise, at rigtige køb virker.
 - Zyntra-butikken viser tekstkort. Ikonerne bruges straks på Roblox' købssider, men kræver en senere `ImageLabel`-udvidelse for også at blive vist i spillets terminal.
 
+## Gratis tokens i DEV-menuen (desktop)
+
+1. Åbn udviklertelefonen med **J**, og vælg **DEV**.
+2. Find **GIVE RESEARCH TOKENS** øverst, og vælg en spiller fra listen.
+3. Skriv antallet, og tryk **GIVE TOKENS**. Kvitteringen vises i formularen.
+
+Formularen er kun til desktop og erstatter chatkommandoen. Listen viser
+Roblox-brugernavne og kun spillere på **samme server**, inklusive dig selv.
+Beløbet skal være et helt tal fra 1 til 10.000. Knappen er låst, mens gaven
+gemmes, og der er tre sekunders pause efter et afsluttet kald. Offline-spillere
+og spillere på andre servere kan ikke modtage gennem formularen.
+
+Adgang styres af `ReplicatedStorage.DevAccess`: kun `Mikkelczar` (40920547)
+og `LaverSneglen` (9488575949). Indsnævringen blev publiceret som **v1865**
+den 10/9 2026; Detective_Costeau har ikke længere adgang. Serveren kontrollerer
+selv afsenderen for hvert kald. Eksisterende ældre servere opdaterer ikke listen
+dynamisk.
+
+En godkendt gave lægges til modtagerens Research Tokens gennem den almindelige
+profilskrivning og opdaterer butikkens saldo. Gaver tæller ikke som donationer
+eller køb. Ved en ubekræftet
+DataStore-skrivning skal modtageren genindtræde i spillet og kontrollere saldoen,
+før gaven gentages: en skrivning kan være gemt, selv om Roblox ikke
+returnerede et svar, og saldoen i den nuværende session kan derfor være forældet.
+I Studio ændrer gaven kun testprofilen, og kvitteringen oplyser dette.
+
+Serveren modtager kun modtagerens UserId og antal gennem
+`Remotes.ZyntraGrantTokens`. Roblox leverer afsenderens identitet; serveren
+validerer adgang, spillerens tilstedeværelse og profilens tilstand, før den
+ændrer saldoen gennem den eksisterende `mutate`-funktion. Chat er ikke involveret.
+
+**Verificeret 2026-09-09:** scripts er synkroniseret og kompileret i Studio;
+242 offline-checks bestod. Desktop-spiltesten valgte modtager gennem listen
+og brugte GIVE TOKENS-knappen: kvittering og saldo blev opdateret, `-2` blev
+afvist uden saldoændring, og to hurtige klik med beløbet 3 gav kun 3 tokens
+(95 → 98). Formularens desktop-layout er visuelt gennemgået. Dette er den
+historiske kontrol fra 9/9; gavefunktionen er siden bevaret i den publicerede
+Monetization-kilde, herunder **v1840** den 10/9. Publicering er ikke bevis for
+rigtig DataStore-lagring: denne er fortsat ikke testet i en publiceret server
+som del af gavekontrollen.
+
+Kør de automatiske tests med `LUAU_BIN` sat til Luau-interpreteren:
+`python tools/tests/test_token_grants.py`.
+
 ## Release-vurdering
 
 ### Klar til opsætning

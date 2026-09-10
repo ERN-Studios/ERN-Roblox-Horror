@@ -6,6 +6,7 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
+local PlayerProtection = require(game:GetService("ServerScriptService"):WaitForChild("PlayerProtection"))
 
 local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
 local Tuning = Configuration.Hiding
@@ -269,7 +270,7 @@ local function tryEnter(session: any, player: Player, anchor: BasePart): (boolea
 	humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
 	suppressCollision(collisionState)
 
-	player:SetAttribute("BeingChased", false)
+	-- Hiding does not end the Manager's chase; the AI owns BeingChased.
 	player:SetAttribute("Level3_HideGeneration", session.Generation)
 	player:SetAttribute("Level3_HideTableIndex",
 		tonumber(anchor:GetAttribute("Level3_HideTableIndex")) or 0)
@@ -329,6 +330,13 @@ function Controller.IsHidden(player: Player, generation: number?): boolean
 		and record.Anchor ~= nil
 		and record.Anchor.Parent ~= nil
 		and player:GetAttribute("Level3_Hiding") == true
+end
+
+-- The Manager routes to the authoritative table record, never a client-supplied
+-- index or an old character's hiding attributes.
+function Controller.GetAnchor(player: Player, generation: number?): BasePart?
+	if not Controller.IsHidden(player, generation) then return nil end
+	return activeSession.HiddenPlayers[player].Anchor
 end
 
 function Controller.SetFurnitureSuspended(active: boolean): boolean
@@ -435,21 +443,34 @@ end
 
 -- How many players are under one anchor right now. 0 also covers "not a live
 -- anchor of the running session", which is what every caller wants.
-function Controller.OccupantCount(anchor: BasePart): number
+-- This opt-in AI view does not change occupancy, capacity or voluntary exit.
+local function aiOccupant(session: any, player: Player, anchor: BasePart): boolean
+	local record = session.HiddenPlayers[player]
+	return record ~= nil and record.Generation == session.Generation
+		and record.Anchor == anchor and record.Character == player.Character
+		and not PlayerProtection.IsActive(player, record.Character)
+end
+
+function Controller.OccupantCount(anchor: BasePart, excludeProtected: boolean?): number
 	local session = activeSession
 	if not session or not liveSession(session) then return 0 end
-	return #occupantsOf(session, anchor)
+	if not excludeProtected then return #occupantsOf(session, anchor) end
+	local count = 0
+	for _, player in ipairs(occupantsOf(session, anchor)) do
+		if aiOccupant(session, player, anchor) then count += 1 end
+	end
+	return count
 end
 
 -- Anchors holding at least one hidden player, in authored anchor order so the
 -- Mall Manager's candidate list is deterministic for a given seed.
-function Controller.GetOccupiedAnchors(generation: number?): {BasePart}
+function Controller.GetOccupiedAnchors(generation: number?, excludeProtected: boolean?): {BasePart}
 	local result = {}
 	local session = activeSession
 	if not session or not liveSession(session) then return result end
 	if generation ~= nil and session.Generation ~= generation then return result end
 	for _, anchor in ipairs(session.Anchors) do
-		if anchor.Parent and #occupantsOf(session, anchor) > 0 then
+		if anchor.Parent and Controller.OccupantCount(anchor, excludeProtected) > 0 then
 			table.insert(result, anchor)
 		end
 	end
@@ -475,7 +496,7 @@ function Controller.FlushAnchor(anchor: BasePart, awayFrom: Vector3?): {Player}
 	-- releasePlayer mutates the list, so iterate a copy.
 	for _, player in ipairs(table.clone(occupants)) do
 		local record = session.HiddenPlayers[player]
-		if record then
+		if record and aiOccupant(session, player, anchor) then
 			if awayFrom then
 				local localPosition = anchor.CFrame:PointToObjectSpace(awayFrom)
 				local exitSide = if localPosition.Z >= 0 then -1 else 1

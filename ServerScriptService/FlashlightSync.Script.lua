@@ -98,16 +98,12 @@ remote.OnServerEvent:Connect(function(player, value, payload)
 			return
 		end
 		lastToggle[player] = now
-		if value and workspace:GetAttribute("SelectedLevel") == 3
-			and workspace:GetAttribute("Level3FlashlightsSuppressed") == true then value = false end
 		if value and (not humanoid or humanoid.Health <= 0) then return end
 		if player:GetAttribute("InRound") ~= true then value = false end
 		ensureFlag(char).Value = value
 		local mount = value and ensureMount(player, char) or mounts[player]
 		if mount then setMountEnabled(mount, value) end
 	elseif value == "aim" and typeof(payload) == "CFrame" then
-		if workspace:GetAttribute("SelectedLevel") == 3
-			and workspace:GetAttribute("Level3FlashlightsSuppressed") == true then return end
 		if not humanoid or humanoid.Health <= 0 then return end
 		if now - (lastAim[player] or -math.huge) < 1 / 30 then return end
 		lastAim[player] = now
@@ -136,13 +132,6 @@ local function forceLightOff(p)
 	local mount = mounts[p]
 	if mount then setMountEnabled(mount, false) end
 end
-
-workspace:GetAttributeChangedSignal("Level3FlashlightsSuppressed"):Connect(function()
-	if workspace:GetAttribute("SelectedLevel") == 3
-		and workspace:GetAttribute("Level3FlashlightsSuppressed") == true then
-		for _, player in ipairs(Players:GetPlayers()) do forceLightOff(player) end
-	end
-end)
 
 local function hookPlayer(p)
 	p:GetAttributeChangedSignal("InRound"):Connect(function()

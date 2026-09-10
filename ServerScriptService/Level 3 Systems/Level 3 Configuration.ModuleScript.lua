@@ -27,7 +27,7 @@ local Configuration = {
 	-- bounded district plan is larger than the former authored graph while still
 	-- keeping each six-player reserved server within a predictable build budget.
 	Layout = {
-		GeneratorVersion = 1,
+		GeneratorVersion = 2,
 		DistrictCount = 3,
 		RoomsPerDistrict = 8,
 		GenerationAttempts = 32,
@@ -121,13 +121,6 @@ local Configuration = {
 		BlackoutStartSeconds = 150,
 		PreBlackoutFlickerSeconds = 5,
 		BlackoutScreamLeadSeconds = 3,
-		-- How long before the distant scream every handheld light cuts out. This
-		-- used to be named for a furniture removal that no longer happens —
-		-- furniture is permanent scene topology now (see the Music Sequence
-		-- Controller's LEVEL3_PERMANENT_FURNITURE_20260828 note). The blackout
-		-- timing itself is unchanged: one beat of darkness before the scream.
-		PreScreamFlashlightLockSeconds = 1,
-		HuntFinalFlashlightLockSeconds = 2,
 		PostSongBlackoutSeconds = 30,
 		BlackoutSeconds = 60.035917,
 		CycleEndSeconds = 210.035917,
@@ -340,16 +333,16 @@ local Configuration = {
 	},
 	-- LEVEL3_MANAGER_TABLE_CHECK_20260904
 	-- The Mall Manager kneels at an occupied hiding table during a hunt, warns
-	-- whoever is under it, then flushes them out. Hiding stays a real tactic:
-	-- the sweep bias is a chance rather than omniscience, checks are rate-limited
-	-- both globally and per table, and a flush is a head start, not a kill.
+	-- whoever is under it, then flushes them out. A targeted hidden player is
+	-- pursued directly; sweep bias and cooldowns apply only to patrol checks.
+	-- The warning and flush immunity give occupants time to leave and run.
 	TableCheck = {
 		-- Chance that a fresh sweep leg aims at an occupied table instead of a
-		-- random room. 1 would make the Manager omniscient.
+		-- random room. This does not gate pursuit of a selected hidden player.
 		SweepBiasChance = 0.5,
-		-- Floor between two table checks anywhere in the mall.
+		-- Floor between incidental patrol checks anywhere in the mall.
 		GlobalIntervalSeconds = 18,
-		-- Floor before the SAME table may be checked again.
+		-- Floor before the SAME table may be checked again on patrol.
 		AnchorCooldownSeconds = 25,
 		-- How close the Manager must get to the anchor before the check starts.
 		-- Measured to the anchor CENTRE, and the table's own navigation envelope

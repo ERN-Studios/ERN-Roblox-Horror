@@ -19,6 +19,15 @@ local RunService = game:GetService("RunService")
 -- WaitForChild with no timeout does not error, it yields, so the pcall never
 -- returned and "hearing disabled" could never actually happen.
 local ServerScriptService = game:GetService("ServerScriptService")
+local PlayerProtection = require(ServerScriptService:WaitForChild("PlayerProtection"))
+
+local function targetable(player, character)
+	if not (player and player.Parent == Players and character and player.Character == character and character.Parent) then return false end
+	local hum = character:FindFirstChildOfClass("Humanoid")
+	return workspace:GetAttribute("RoundActive") == true and workspace:GetAttribute("SelectedLevel") == 1
+		and player:GetAttribute("InRound") == true and player:GetAttribute("Escaped") ~= true
+		and hum ~= nil and hum.Health > 0 and not PlayerProtection.IsActive(player, character)
+end
 local NoiseRegistry
 do
 	local ok, mod = pcall(function()
@@ -42,6 +51,7 @@ end
 -- always drained even if the Entity is missing / not yet built. Otherwise the
 -- events pile up on the server → "invocation queue exhausted" warnings.
 local lastReport = {}
+local yellRecords = {}
 local lastYell = {}    -- per-player yell cooldown (declared early: used just below)
 local CLIENT_NOISE = {walk = true, sprint = true}
 RS:WaitForChild("Remotes"):WaitForChild("ReportNoise").OnServerEvent
@@ -54,16 +64,19 @@ RS:WaitForChild("Remotes"):WaitForChild("ReportNoise").OnServerEvent
 		local char = player.Character
 		local humanoid = char and char:FindFirstChildOfClass("Humanoid")
 		local hrp = char and char:FindFirstChild("HumanoidRootPart")
-		if not (humanoid and humanoid.Health > 0 and hrp) then return end
+		if not (humanoid and humanoid.Health > 0 and hrp) or not targetable(player, char) then return end
 		local horizontalSpeed = Vector3.new(
 			hrp.AssemblyLinearVelocity.X, 0, hrp.AssemblyLinearVelocity.Z
 		).Magnitude
 		if horizontalSpeed < 2 then return end
 		if stateName == "sprint" and horizontalSpeed < 12 then return end
-		NoiseRegistry.Add(hrp.Position, stateName)
+		NoiseRegistry.Add(hrp.Position, stateName, player)
 	end)
 Players.PlayerRemoving:Connect(function(p)
 	lastReport[p] = nil; lastYell[p] = nil
+	local record = yellRecords[p]
+	if record and record.Push then record.Push:Destroy() end
+	yellRecords[p] = nil
 end)
 
 local entity = workspace:WaitForChild("Entity")
@@ -424,6 +437,8 @@ local State = { LURK = "LURK", INVESTIGATE = "INVESTIGATE",
 
 local current = State.LURK
 local lastKnownPos = nil
+local lastKnownPlayer = nil
+local noisePlayer = nil
 local searchUntil = 0
 local chasePlayer = nil -- the player currently in sight (drives the lunge)
 local trackPlayer = nil -- after losing sight it still tracks THIS player's live
@@ -433,6 +448,7 @@ local spotUntil = 0
 local spotCooldownUntil = 0
 
 -- lunge state (driven in the chase Heartbeat)
+local lungePlayer, lungeCharacter = nil, nil
 local lungePhase = 0            -- 0 idle · 1 wind-up (frozen telegraph) · 2 dashing
 local lungeTarget = Vector3.zero
 local lungeWindupUntil = 0      -- end of the freeze/telegraph
@@ -600,13 +616,17 @@ end
 -- network-ownership juggling is needed.
 local function tryYell(char, hrp)
 	local p = Players:GetPlayerFromCharacter(char)
+	if not targetable(p, char) then return false end
 	local now = os.clock()
 	if p and lastYell[p] and now - lastYell[p] < YELL_COOLDOWN then return false end
 	if p then lastYell[p] = now end
 	-- mark the whole yell (lead + wind-up + push) so the chase sound goes quiet
 	yellActiveUntil = now + YELL_SOUND_LEAD + YELL_WINDUP + YELL_DURATION
+	local record = {Player = p, Character = char, EndsAt = yellActiveUntil}
+	yellRecords[p] = record
 
 	task.spawn(function()
+		if yellRecords[p] ~= record or not targetable(p, char) then return end
 		-- the roar SOUND has an inhale before the yell, so start it FIRST and
 		-- let the inhale play; then trigger the animation so the visual lands on
 		-- the actual yell (id lives in SoundController, keyed off this attribute)
@@ -617,9 +637,10 @@ local function tryYell(char, hrp)
 		-- wind up with the roar, THEN shove — so the push lands with the animation
 		task.wait(YELL_SOUND_LEAD + YELL_WINDUP)
 
+		if yellRecords[p] ~= record or not targetable(p, char) then return end
 		if p and p:GetAttribute("DevPushImmune") == true then return end
 
-		local char2 = p and p.Character or char
+		local char2 = char
 		local hrp2 = char2 and char2:FindFirstChild("HumanoidRootPart")
 		local hum2 = char2 and char2:FindFirstChildOfClass("Humanoid")
 		if not (hrp2 and hum2 and hum2.Health > 0) then return end
@@ -643,9 +664,11 @@ local function tryYell(char, hrp)
 		bv.MaxForce = Vector3.new(1, 0, 1) * YELL_FORCE
 		bv.P = 1250
 		bv.Velocity = pushDir * YELL_PUSH
+		record.Push = bv
 		bv.Parent = hrp2
 		task.delay(YELL_DURATION, function()
 			if bv and bv.Parent then bv:Destroy() end
+			if yellRecords[p] == record then yellRecords[p] = nil end
 		end)
 	end)
 	return true
@@ -729,6 +752,7 @@ local function clearLoS(char)
 end
 
 local function canSee(char, hrp)
+	if not targetable(Players:GetPlayerFromCharacter(char), char) then return false end
 	-- range + cone measured FLAT (XZ only), so the entity's vertical position
 	-- can't throw off detection
 	local dir = hrp.Position - root.Position
@@ -932,7 +956,9 @@ end)
 -- Movement is now the grid-walk in the main loop (which never clips a wall). The
 -- Heartbeat only runs the LUNGE — a committed pounce when it gets close and has a
 -- clear shot. Everything else, it does nothing and lets the grid-walk drive.
-local function launchBallisticLunge(targetPosition, now)
+local function launchBallisticLunge(targetPosition, now, player, character)
+	if not targetable(player, character) then return end
+	lungePlayer, lungeCharacter = player, character
 	lungePhase = 2
 	lungeTarget = targetPosition
 	local launch = Vector3.new(lungeTarget.X - root.Position.X, 0, lungeTarget.Z - root.Position.Z)
@@ -967,11 +993,22 @@ RunService.Heartbeat:Connect(function()
 		local testPlayer = Players:GetPlayers()[1]
 		local testCharacter = testPlayer and testPlayer.Character
 		local testRoot = testCharacter and testCharacter:FindFirstChild("HumanoidRootPart")
-		if testRoot then
+		if testRoot and targetable(testPlayer, testCharacter) then
 			current = State.CHASE
 			chasePlayer = testPlayer
-			launchBallisticLunge(testRoot.Position, now)
+			lungePlayer, lungeCharacter = testPlayer, testCharacter
+			launchBallisticLunge(testRoot.Position, now, testPlayer, testCharacter)
 		end
+	end
+
+	if lungePhase ~= 0 and not targetable(lungePlayer, lungeCharacter) then
+		lungePhase = 0
+		lungePlayer, lungeCharacter = nil, nil
+		workspace:SetAttribute("EntityIsLunging", false)
+		root.AssemblyLinearVelocity = Vector3.new(0, v.Y, 0)
+		humanoid:MoveTo(root.Position)
+		resetNav()
+		return
 	end
 
 	-- A launched pounce is committed to its captured position, even if the
@@ -1008,7 +1045,7 @@ RunService.Heartbeat:Connect(function()
 	end
 	local char = chasePlayer.Character
 	local hrp = char and char:FindFirstChild("HumanoidRootPart")
-	if not hrp then
+	if not hrp or not targetable(chasePlayer, char) then
 		lungePhase = 0
 		workspace:SetAttribute("EntityIsLunging", false)
 		return
@@ -1027,7 +1064,7 @@ RunService.Heartbeat:Connect(function()
 		humanoid:MoveTo(root.Position)
 		faceFlat(hrp.Position)
 		if now >= lungeWindupUntil then
-			launchBallisticLunge(hrp.Position, now)
+			launchBallisticLunge(hrp.Position, now, chasePlayer, char)
 		end
 		return
 	end
@@ -1050,6 +1087,7 @@ RunService.Heartbeat:Connect(function()
 		and not wallBetween(hrp.Position) then
 		lungeRollArmed = false
 		if math.random() <= LUNGE_CHANCE then
+			lungePlayer, lungeCharacter = chasePlayer, char
 			lungePhase = 1
 			lungeWindupUntil = now + LUNGE_WINDUP
 			lungeCooldownUntil = now + LUNGE_COOLDOWN
@@ -1119,6 +1157,45 @@ local function setChaseMarker(player)
 	lastChaseTarget = player
 end
 
+local function releaseProtectedPlayer(player, character)
+	if not PlayerProtection.IsActive(player, character) then return end
+	local owned = chasePlayer == player or trackPlayer == player or spottingPlayer == player
+		or lastKnownPlayer == player or noisePlayer == player
+	if chasePlayer == player then chasePlayer = nil end
+	if trackPlayer == player then trackPlayer, trackUntil = nil, 0 end
+	if spottingPlayer == player then spottingPlayer, spotUntil = nil, 0 end
+	if lastKnownPlayer == player then lastKnownPos, lastKnownPlayer, searchUntil = nil, nil, 0 end
+	if noisePlayer == player then noisePlayer = nil end
+	if lastChaseTarget == player then setChaseMarker(nil) end
+	if lungePlayer == player and lungeCharacter == character then
+		owned = true
+		lungePhase, lungePlayer, lungeCharacter = 0, nil, nil
+		workspace:SetAttribute("EntityIsLunging", false)
+		local velocity = root.AssemblyLinearVelocity
+		root.AssemblyLinearVelocity = Vector3.new(0, velocity.Y, 0)
+	end
+	local yell = yellRecords[player]
+	if yell and yell.Character == character then
+		if yell.Push then yell.Push:Destroy() end
+		yellRecords[player] = nil
+		yellActiveUntil = 0
+		for _, other in pairs(yellRecords) do yellActiveUntil = math.max(yellActiveUntil, other.EndsAt) end
+	end
+	-- Leave an eligible teammate's current pursuit intact. World noise and the
+	-- objective wander destination never belong to the protected player.
+	if owned and not chasePlayer and not trackPlayer and not spottingPlayer then
+		resetNav()
+		current = State.LURK
+		humanoid.WalkSpeed = 0
+		humanoid:MoveTo(root.Position)
+		local velocity = root.AssemblyLinearVelocity
+		root.AssemblyLinearVelocity = Vector3.new(0, velocity.Y, 0)
+		workspace:SetAttribute("EntityState", "LURK")
+	end
+end
+
+PlayerProtection.Activated:Connect(releaseProtectedPlayer)
+
 -- distant scream scheduler: at a random cadence, publish which of the four
 -- scream takes plays. Every client's SoundController reacts to the
 -- EntityScream counter and plays SCREAM_SOUNDS[EntityScreamIndex] positionally
@@ -1152,13 +1229,16 @@ task.spawn(function()
 		NoiseRegistry.Prune()
 
 		local now = os.clock()
+		for _, player in ipairs(Players:GetPlayers()) do
+			if PlayerProtection.IsActive(player, player.Character) then releaseProtectedPlayer(player, player.Character) end
+		end
 		local yelling = false
 		local char, hrp = findVisiblePlayer()
 		local visiblePlayer = char and Players:GetPlayerFromCharacter(char) or nil
 
 		-- A newly spotted player gets a complete, stationary howl before pursuit.
 		-- Rapid reacquisition inside SPOT_COOLDOWN resumes the chase immediately.
-		if current == State.ALERT and now < spotUntil then
+		if current == State.ALERT and now < spotUntil and targetable(spottingPlayer, spottingPlayer and spottingPlayer.Character) then
 			local sc = spottingPlayer and spottingPlayer.Character
 			local shrp = sc and sc:FindFirstChild("HumanoidRootPart")
 			humanoid.WalkSpeed = 0
@@ -1223,7 +1303,7 @@ task.spawn(function()
 			local tc = trackPlayer.Character
 			local th = tc and tc:FindFirstChild("HumanoidRootPart")
 			local thum = tc and tc:FindFirstChildOfClass("Humanoid")
-			if th and thum and thum.Health > 0 then
+			if th and thum and thum.Health > 0 and targetable(trackPlayer, tc) then
 				targetPlayer, targetHrp = trackPlayer, th
 			else
 				trackPlayer = nil
@@ -1235,7 +1315,8 @@ task.spawn(function()
 			if current ~= State.CHASE then current = State.CHASE; resetNav() end
 			local seen = char ~= nil
 			chasePlayer = seen and targetPlayer or nil
-			lastKnownPos = targetHrp.Position
+			lastKnownPos, lastKnownPlayer = targetHrp.Position, targetPlayer
+			noisePlayer = nil
 
 			if seen and inPitZone(targetHrp.Position) then
 				local edge = pitEdgeToward(targetHrp.Position, root.Position)
@@ -1278,6 +1359,7 @@ task.spawn(function()
 			setChaseMarker(nil)
 
 			local noise = NoiseRegistry.GetBest(root.Position, HEAR_RANGE)
+			noisePlayer = noise and noise.SourcePlayer or nil
 			if noise then
 				current = State.INVESTIGATE
 				stepToward(noise.pos, SPEED_INVESTIGATE * speedMul())

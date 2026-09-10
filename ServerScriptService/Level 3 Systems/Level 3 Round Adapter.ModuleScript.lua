@@ -367,9 +367,9 @@ local function validateManifest(manifest: any)
 		and type(manifest.DiscPlayer.Slots) == "table"
 		and #manifest.DiscPlayer.Slots == Configuration.ModuleGoal,
 		"Level 3 manifest is missing its five-slot Signal Hall disc player")
-	assert(manifest.EscapePrompt and manifest.EscapePrompt:IsA("ProximityPrompt")
-		and manifest.EscapePrompt:IsDescendantOf(manifest.World),
-		"Level 3 manifest is missing its escape prompt")
+	assert(manifest.EscapeTrigger and manifest.EscapeTrigger:IsA("BasePart")
+		and manifest.EscapeTrigger:IsDescendantOf(manifest.World),
+		"Level 3 manifest is missing its escape trigger")
 	assert(manifest.ExitSafeSpawn and manifest.ExitSafeSpawn:IsA("BasePart")
 		and manifest.ExitSafeSpawn:IsDescendantOf(manifest.World),
 		"Level 3 manifest is missing its exit safe spawn")
@@ -391,16 +391,19 @@ end
 
 local function movePlayersToArrival(manifest: any)
 	local spawnPart = manifest.ElevatorSpawn :: BasePart
+	local arrivals = Players:GetPlayers()
+	local columns = math.min(8, math.max(1, #arrivals))
+	local rows = math.ceil(#arrivals / columns)
 	local moved = 0
-	for _, player in ipairs(Players:GetPlayers()) do
+	for _, player in ipairs(arrivals) do
 		local character = player.Character
 		local root = character and character:FindFirstChild("HumanoidRootPart")
 		if character and root and root:IsA("BasePart") then
 			local index = moved
 			moved += 1
-			local column = index % 3
-			local row = math.floor(index / 3)
-			local target = spawnPart.CFrame * CFrame.new((column - 1) * 2.75, 4, row * 2.75)
+			local column = index % columns
+			local row = math.floor(index / columns)
+			local target = spawnPart.CFrame * CFrame.new((column - (columns - 1) / 2) * 4, 4, (row - (rows - 1) / 2) * 4)
 			character:PivotTo(target)
 			root.AssemblyLinearVelocity = Vector3.zero
 			root.AssemblyAngularVelocity = Vector3.zero

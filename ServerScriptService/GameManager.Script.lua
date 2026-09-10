@@ -590,6 +590,44 @@ local function awaitStreamAround(state, timeOut)
  return state.Done and state.Succeeded
 end
 
+-- Choose against actual characters immediately before PivotTo, without yielding.
+-- This also leaves a returning player a free space when a teammate camps spawn.
+local function arrivalPointFree(player, position)
+ for _, other in ipairs(Players:GetPlayers()) do
+  if other ~= player then
+   local character = other.Character
+   local otherRoot = character and character:FindFirstChild("HumanoidRootPart")
+   if otherRoot then
+    local offset = otherRoot.Position - position
+    if math.abs(offset.Y) < 6 and Vector2.new(offset.X, offset.Z).Magnitude < 3.9 then
+     return false
+    end
+   end
+  end
+ end
+ return true
+end
+
+local function freeElevatorFrame(player, pad)
+ local levelOne = pad:GetAttribute("Level2_CompatibilityMarker") ~= true
+  and pad:GetAttribute("Level3_CompatibilityMarker") ~= true
+ local forward = levelOne and Vector3.xAxis or pad.CFrame.LookVector
+ local side = levelOne and Vector3.zAxis or pad.CFrame.RightVector
+ local depth = pad.Size.X + 3 -- Level 1's emergency pad is 3 studs shorter than its floor.
+ local rows = levelOne and math.max(1, math.floor((depth - 6) / 4) + 1) or 7
+ for row = 0, rows - 1 do
+  for column = 0, (levelOne and 1 or 3) do
+   local across = (column % 2 == 0 and -1 or 1) * (2 + math.floor(column / 2) * 4)
+   local along = levelOne and (depth / 2 - 3 - row * 4) or row * 4
+   local position = pad.Position + side * across + forward * along + Vector3.new(0, 4, 0)
+   if arrivalPointFree(player, position) then
+    return CFrame.lookAt(position, position + forward)
+   end
+  end
+ end
+ return nil
+end
+
 local function placeSafelyInElevator(player, char)
  local entry = activeEntry
  local pad = workspace:FindFirstChild("ElevatorSpawn")
@@ -601,22 +639,13 @@ local function placeSafelyInElevator(player, char)
  -- The lobby and maze are far apart. Keep the character server-anchored while
  -- the client streams the elevator region so it cannot fall through an unloaded floor.
  pad.CanCollide = true -- invisible emergency floor inside the cabin
- local streamed = beginStreamAround(player, pad.Position, STREAM_AROUND_TIMEOUT)
+ local target = freeElevatorFrame(player, pad)
+ if not target then return false end
  root.Anchored = true
  root.AssemblyLinearVelocity = Vector3.zero
  root.AssemblyAngularVelocity = Vector3.zero
- local ox = (math.random() - 0.5) * math.max(pad.Size.X - 4, 1)
- local oz = (math.random() - 0.5) * math.max(pad.Size.Z - 3, 1)
- local isLevel2Pad = pad:GetAttribute("Level2_CompatibilityMarker") == true
- if isLevel2Pad then
-  local forward = Vector3.new(pad.CFrame.LookVector.X, 0, pad.CFrame.LookVector.Z).Unit
-  local side = Vector3.new(pad.CFrame.RightVector.X, 0, pad.CFrame.RightVector.Z).Unit
-  local position = pad.Position + side * ox + forward * oz + Vector3.new(0, 4, 0)
-  char:PivotTo(CFrame.lookAt(position, position + forward))
- else
-  local position = pad.Position + Vector3.new(ox, 4, oz)
-  char:PivotTo(CFrame.lookAt(position, position + Vector3.new(1, 0, 0)))
- end
+ char:PivotTo(target * root.CFrame:ToObjectSpace(char:GetPivot()))
+ local streamed = beginStreamAround(player, target.Position, STREAM_AROUND_TIMEOUT)
 
  local shield = Instance.new("ForceField")
  shield.Name = "LobbyTransferShield"
@@ -723,7 +752,7 @@ local function awaitVerifiedBoreStream(player, state)
  return state.Done and state.Ready
 end
 
-local function levelThreeSlideResume()
+local function levelThreeSlideResume(player)
  local world = workspace:FindFirstChild("Level 3 Generated World")
  if not world then return nil end
  for _, object in ipairs(world:GetDescendants()) do
@@ -733,7 +762,24 @@ local function levelThreeSlideResume()
    local velocity = object:GetAttribute("Level3_SlideResumeVelocity")
    if typeof(position) == "Vector3" and typeof(tangent) == "Vector3"
     and typeof(velocity) == "Vector3" and tangent.Magnitude > .1 then
-    return {Position = position, Tangent = tangent.Unit, Velocity = velocity}
+    local mouth = object:GetAttribute("Level3_SlideMouthPosition")
+    local length = object:GetAttribute("Level3_SlideLength")
+    local rise = object:GetAttribute("Level3_SlideRise")
+    if typeof(mouth) ~= "Vector3" or type(length) ~= "number" or length <= 0
+     or type(rise) ~= "number" then return nil end
+    local startAlpha = (mouth.X - position.X) / length
+    for slot = 0, MAX_PLAYERS_PER_STATION - 1 do
+     -- Keep each successive actual-root placement farther UP the same bore.
+     -- The rear reserve prevents any candidate from crossing its physical cap.
+     local alpha = startAlpha + slot * 12 / length
+     if alpha <= .025 or (1 - alpha) * length < 12 then break end
+     local point = Vector3.new(mouth.X - length * alpha, mouth.Y + rise * alpha * alpha, mouth.Z)
+     if arrivalPointFree(player, point) then
+      local direction = Vector3.new(length, -2 * rise * alpha, 0).Unit
+      return {Position = point, Tangent = direction, Velocity = direction * velocity.Magnitude}
+     end
+    end
+    return nil
    end
    return nil
   end
@@ -743,17 +789,19 @@ end
 
 local function placeAtLevelThreeSlideResume(player, char)
  local entry = activeEntry
- local resume = levelThreeSlideResume()
- if not resume then return false end
  local root = char and char:WaitForChild("HumanoidRootPart", 8)
  local hum = char and char:FindFirstChildOfClass("Humanoid")
  if player.Character ~= char or (entry and (activeEntry ~= entry or entry.State == "failed")) then return false end
  if not (root and hum and hum.Health > 0) then return false end
 
+ local resume = levelThreeSlideResume(player)
+ if not resume then return false end
+
  root.Anchored = true
  root.AssemblyLinearVelocity = Vector3.zero
  root.AssemblyAngularVelocity = Vector3.zero
- char:PivotTo(CFrame.lookAt(resume.Position, resume.Position + resume.Tangent))
+ local target = CFrame.lookAt(resume.Position, resume.Position + resume.Tangent)
+ char:PivotTo(target * root.CFrame:ToObjectSpace(char:GetPivot()))
  local shield = Instance.new("ForceField")
  shield.Name = "LobbyTransferShield"
  shield.Visible = false
@@ -791,7 +839,10 @@ local function placeAtLevelThreeSlideResume(player, char)
 			-- emergency cabin floor and bounded release are safer than handing an
 			-- unstreamed character to gravity.
 			if root.Parent and hum.Parent and hum.Health > 0 and inRound[player] then
-				placeSafelyInElevator(player, char)
+				if not placeSafelyInElevator(player, char) and player.Character == char then
+					root.Anchored = false
+					hum.Health = 0
+				end
 			end
 		elseif root.Parent and hum.Parent and hum.Health > 0 and inRound[player] then
 			root.Anchored = false
@@ -870,7 +921,10 @@ local function onCharacter(player, char)
    -- a placement is armed but its character is not known yet.
    local pending = pendingExplicitPlacement[player]
    if worldReady and pending ~= true and pending ~= char then
-    placeSafelyInElevator(player, char)
+    if not placeSafelyInElevator(player, char) and player.Character == char then
+     local humanoid = char:FindFirstChildOfClass("Humanoid")
+     if humanoid then humanoid.Health = 0 end
+    end
    end
   else
    scatterAt(char, lobbySpawn, false)
@@ -938,32 +992,53 @@ Players.PlayerRemoving:Connect(function(player)
  player:SetAttribute("DevPushImmune", nil)
 end)
 
-local function playerInsideZone(player, station)
- if inRound[player] or station.busy then return false end
+local function queueRadius(station)
+ local zone = station.zone
+ if zone:GetAttribute("QueueDetectorShape") == "Circle" then
+  local radius = tonumber(zone:GetAttribute("QueueRadius"))
+  if radius and radius > 0 and radius == radius then
+   return math.min(radius, zone.Size.X * .5, zone.Size.Z * .5)
+  end
+ end
+ return nil
+end
+
+local function playerInsideZone(player, station, includeBusy)
+ if inRound[player] or (station.busy and not includeBusy) then return false end
  local char = player.Character
  local hum = char and char:FindFirstChildOfClass("Humanoid")
  local root = char and char:FindFirstChild("HumanoidRootPart")
- if not (hum and hum.Health > 0 and root) then return false end
+ if player.Parent ~= Players or not (char and char.Parent and hum and hum.Health > 0
+  and root and root:IsA("BasePart")) then return false end
  local zone = station.zone
+ if not zone or not zone.Parent then return false end
  local p = zone.CFrame:PointToObjectSpace(root.Position)
- return math.abs(p.X) <= zone.Size.X / 2
-  and math.abs(p.Z) <= zone.Size.Z / 2
-  and p.Y > -6 and p.Y < 12
+ local radius = queueRadius(station)
+ local inside = if radius then p.X * p.X + p.Z * p.Z <= radius * radius
+  else math.abs(p.X) <= zone.Size.X * .5 and math.abs(p.Z) <= zone.Size.Z * .5
+ return inside and p.Y > -6 and p.Y < 12
 end
 
-local function rawQueuedPlayers(station)
+local function rawQueuedPlayers(station, includeBusy)
  local result = {}
  local insideNow = {}
  station.entrySeen = station.entrySeen or {}
+ station.entryCharacters = station.entryCharacters or {}
  for _, player in ipairs(Players:GetPlayers()) do
-  if playerInsideZone(player, station) then
+  if playerInsideZone(player, station, includeBusy) then
    insideNow[player] = true
-   if station.entrySeen[player] == nil then station.entrySeen[player] = os.clock() end
+   if station.entrySeen[player] == nil or station.entryCharacters[player] ~= player.Character then
+    station.entrySeen[player] = os.clock()
+    station.entryCharacters[player] = player.Character
+   end
    result[#result + 1] = player
   end
  end
  for player in pairs(station.entrySeen) do
-  if not insideNow[player] then station.entrySeen[player] = nil end
+  if not insideNow[player] then
+   station.entrySeen[player] = nil
+   station.entryCharacters[player] = nil
+  end
  end
  table.sort(result, function(a, b)
   local at = station.entrySeen[a] or 0
@@ -979,9 +1054,12 @@ local function stationAllowsPlayer(station, player)
  if station.privacy ~= "friends" or not (station.host and station.host.Parent) then return false end
  local cached = station.friendCache[player.UserId]
  if cached ~= nil then return cached end
+ local host, epoch, character = station.host, station.admissionEpoch, player.Character
  local ok, isFriend = pcall(function()
-  return player:IsFriendsWith(station.host.UserId)
+  return player:IsFriendsWith(host.UserId)
  end)
+ if station.host ~= host or station.admissionEpoch ~= epoch or station.privacy ~= "friends"
+  or station.cancelRequested or player.Parent ~= Players or player.Character ~= character then return false end
  local allowed = ok and isFriend == true
  -- Only a DEFINITIVE answer is worth caching. A throttled or failed web call
  -- returns ok == false, which is indistinguishable here from "not a friend",
@@ -992,24 +1070,54 @@ local function stationAllowsPlayer(station, player)
  return allowed
 end
 
-local function queuedPlayers(station)
- local raw = rawQueuedPlayers(station)
- local accepted, rejected = {}, {}
- if not station.configured or not station.host or not table.find(raw, station.host) then
+-- This pass never yields: physical enforcement must not wait for a friends API.
+-- Preserve current accepted characters before considering newly arrived users.
+local function selectQueuedPlayers(station, raw)
+ local accepted, rejected, nextMembers = {}, {}, {}
+ if not station.configured or station.cancelRequested or not station.host
+  or not table.find(raw, station.host) then
+  station.admittedCharacters = nextMembers
   return accepted, raw, rejected
  end
- accepted[1] = station.host
+ local function allowed(player)
+  return player == station.host or station.privacy == "public"
+   or (station.privacy == "friends" and station.friendCache[player.UserId] == true)
+ end
+ local function admit(player)
+  accepted[#accepted + 1] = player
+  nextMembers[player] = player.Character
+ end
+ admit(station.host)
+ local previous = station.admittedCharacters or {}
  for _, player in ipairs(raw) do
-  if player ~= station.host then
-   local allowed = stationAllowsPlayer(station, player)
-   if allowed and #accepted < station.maxPlayers then
-    accepted[#accepted + 1] = player
-   else
-    rejected[#rejected + 1] = {player = player, reason = allowed and "full" or "private"}
+  if player ~= station.host and previous[player] == player.Character
+   and allowed(player) and #accepted < station.maxPlayers then admit(player) end
+ end
+ for _, player in ipairs(raw) do
+  if not nextMembers[player] then
+   local permitted = allowed(player)
+   if permitted and #accepted < station.maxPlayers then admit(player)
+   else rejected[#rejected + 1] = {player=player, reason=permitted and "full" or "private"} end
+  end
+ end
+ station.admittedCharacters = nextMembers
+ return accepted, raw, rejected
+end
+
+local function queuedPlayers(station)
+ local raw = rawQueuedPlayers(station)
+ local host, epoch = station.host, station.admissionEpoch
+ if station.configured and host and table.find(raw, host) then
+  for _, player in ipairs(raw) do
+   if player ~= host then stationAllowsPlayer(station, player) end
+   if station.host ~= host or station.admissionEpoch ~= epoch or station.cancelRequested then
+    return {}, rawQueuedPlayers(station), {}
    end
   end
  end
- return accepted, raw, rejected
+ -- Friendship can yield. Never commit the old positions, character identities
+ -- or occupancy observed before that call.
+ return selectQueuedPlayers(station, rawQueuedPlayers(station))
 end
 
 local function fireGroup(group, ...)
@@ -1023,6 +1131,25 @@ end
 -- clients hold a loading cover instead and report here once the complex is
 -- actually around them. The lobby client also announces that its RoundStatus
 -- listener exists so its one-shot welcome cannot race the initial status fire.
+local function publishPostWinChoices(session)
+ if activePostWin ~= session or session.Aborted then return end
+ local members = {}
+ for _, member in ipairs(Routing.RosterMembers(session.Roster)) do
+  members[#members + 1] = {
+   UserId = member.UserId,
+   Name = member.Name,
+   Choice = Routing.DecisionOf(session.Roster, member),
+  }
+ end
+ session.ChoiceRevision = (session.ChoiceRevision or 0) + 1
+ fireGroup(Routing.RosterMembers(session.Roster), "postwinchoices", {
+  Serial = session.Serial,
+  Revision = session.ChoiceRevision,
+  Closed = session.Closed == true,
+  Members = members,
+ })
+end
+
 local lobbyBriefingReady = {}
 local handlePostWinReturnRequest
 local handlePostWinContinueRequest
@@ -1058,11 +1185,15 @@ Players.PlayerRemoving:Connect(function(player)
  -- second transfer attempt at a ghost.
  Routing.ResolveTransfer(pendingTeleports, player, Routing.Succeeded)
  if activePostWin then
-  -- Membership of a result window is FROZEN. Only the decision moves, and only
-  -- for somebody who had not already chosen: leaving is how a Continue or a
-  -- Back completes, and erasing them here is what made the settlement tell the
-  -- destination to expect one fewer player than was really coming.
+  -- Membership of a result window is FROZEN. A pre-commit disconnect is
+  -- gone; an accepted transfer remains part of its destination cohort.
+  -- Before commit, a disconnect is not an accepted transfer. Remove its
+  -- provisional choice so the final cohort never waits for a disconnected rider.
+  if not activePostWin.Closed and not Routing.ClaimOwns(pendingTeleports[player]) then
+   Routing.ClearDecision(activePostWin.Roster, player)
+  end
   Routing.NoteDeparture(activePostWin.Roster, player)
+  publishPostWinChoices(activePostWin)
  end
 end)
 
@@ -1080,6 +1211,7 @@ queueConfig.OnServerEvent:Connect(function(player, stationIndex, requestedMax, r
  if requestedPrivacy == "cancel" then
   -- The phone close button genuinely leaves the queue instead of only hiding UI.
   station.cancelRequested = true
+  station.admissionEpoch = (station.admissionEpoch or 0) + 1
   local character = player.Character
   local root = character and character:FindFirstChild("HumanoidRootPart")
   if character and root then
@@ -1094,6 +1226,7 @@ queueConfig.OnServerEvent:Connect(function(player, stationIndex, requestedMax, r
 
  if not playerInsideZone(player, station) then return end
 
+ station.admissionEpoch = (station.admissionEpoch or 0) + 1
  station.maxPlayers = math.clamp(math.floor(tonumber(requestedMax) or MAX_PLAYERS_PER_STATION), 1, MAX_PLAYERS_PER_STATION)
  station.privacy = requestedPrivacy == "friends" and "friends" or "public"
  station.friendCache = {}
@@ -1806,157 +1939,43 @@ game:BindToClose(function()
  end
 end)
 
+-- Choices stay editable until the original deadline. No transfer or yield is
+-- allowed here: settlement commits the final roster and owns all travel.
+local function recordPostWinSelection(player, requestSerial, choice)
+	local session = activePostWin
+	if not session or session.Closed or session.Aborted
+		or type(requestSerial) ~= "number" or requestSerial ~= session.Serial
+		or workspace:GetServerTimeNow() >= session.Deadline
+		or workspace:GetAttribute("RoundActive") == true
+		or activeLevel ~= session.Level
+		or not Routing.InRoster(session.Roster, player)
+		or Routing.HasDeparted(session.Roster, player)
+		or Routing.ClaimOwns(pendingTeleports[player])
+		or inRound[player] ~= true or player:GetAttribute("InRound") ~= true
+		or player.Parent ~= Players
+		or (choice == Routing.Continuing and session.NextLevel == nil) then return end
+	local current = Routing.DecisionOf(session.Roster, player)
+	if current == choice or current == Routing.Gone then return end
+	local now = workspace:GetServerTimeNow()
+	session.LastChoiceAt = session.LastChoiceAt or {}
+	local last = session.LastChoiceAt[player]
+	if last and now - last < 0.15 then return end
+	-- Reuse the routing module's membership/departure checks. These two writes
+	-- do not yield, so nobody observes the temporary deciding state.
+	if current ~= Routing.Deciding and not Routing.ClearDecision(session.Roster, player) then return end
+	if not Routing.RecordDecision(session.Roster, player, choice) then return end
+	session.LastChoiceAt[player] = now
+	publishPostWinChoices(session)
+end
+
 handlePostWinReturnRequest = function(player, requestSerial)
-	local session = activePostWin
-	if not session
-		or session.Closed
-		or type(requestSerial) ~= "number"
-		or requestSerial ~= session.Serial
-		or workspace:GetServerTimeNow() >= session.Deadline
-		or workspace:GetAttribute("RoundActive") == true
-		or activeLevel ~= session.Level
-		or not Routing.InRoster(session.Roster, player)
-		or Routing.DecisionOf(session.Roster, player) ~= Routing.Deciding
-		or inRound[player] ~= true
-		or player:GetAttribute("InRound") ~= true
-		or player.Parent ~= Players then
-		return
-	end
-
-	-- Latch before any yield/TeleportAsync call; clients cannot choose the
-	-- destination, deadline, level, or another party member. RecordDecision is
-	-- the only writer, and it refuses a second press by itself.
-	if not Routing.RecordDecision(session.Roster, player, Routing.Returning) then return end
-	status:FireClient(player, "returnpending", session.Serial)
-	if IS_RESERVED_ROUND_SERVER and not IS_STUDIO then
-		-- Keep the endless ride authoritative until Roblox accepts the transfer.
-		-- Clearing it before TeleportAsync made a transient failure irreversibly
-		-- delete the objective's transition record and strand the player.
-		task.spawn(function()
-			local ok, err = teleportPlayersToLobby({player})
-			if not ok and Routing.ClaimOwns(pendingTeleports[player]) then
-				-- Refused, and the runtime is retrying it. The decision stands
-				-- until that lineage ends; finishFailedTeleportLocally gives the
-				-- choice back if it ends badly while the window is still open.
-				warn("GameManager: early return-to-lobby was refused for " .. player.Name
-					.. "; the transfer runtime is retrying it (" .. tostring(err) .. ")")
-			elseif not ok and activePostWin == session and not session.Closed and player.Parent == Players then
-				if Routing.ClearDecision(session.Roster, player) then
-					status:FireClient(player, "returnfailed", session.Serial)
-				end
-				warn("GameManager: early return-to-lobby failed for " .. player.Name .. ": " .. tostring(err))
-			end
-		end)
-	else
-		-- Studio has no TeleportService destination. Park the opted-out rider in
-		-- Level 2's recovery chamber until the local fallback resolves at deadline.
-		player:SetAttribute("Level2_ExitTransition", nil)
-	end
+	recordPostWinSelection(player, requestSerial, Routing.Returning)
 end
 
--- The next-level server is reserved ONCE per post-win session, by whoever
--- continues first, and everyone after them joins the same reservation. Without
--- this, an immediate Continue and a timed-out Continue would each reserve their
--- own server and split the party across two of them.
-local function reserveNextLevelServer(session)
-	if session.NextServerCode then return session.NextServerCode end
-	if session.ReservingServer then
-		-- Another continuer got here first; wait for their reservation.
-		local deadline = os.clock() + 12
-		while session.ReservingServer and os.clock() < deadline do task.wait(0.1) end
-		return session.NextServerCode
-	end
-	session.ReservingServer = true
-	local ok, code = pcall(function()
-		return (TeleportService:ReserveServer(game.PlaceId))
-	end)
-	session.ReservingServer = false
-	if ok and type(code) == "string" and code ~= "" then
-		session.NextServerCode = code
-		return code
-	end
-	warn("GameManager: could not reserve the next-level server: " .. tostring(code))
-	return nil
-end
-
--- How many players this session should still deliver to the destination.
--- Counted from the FROZEN roster, so a player who pressed Continue, departed
--- and left this server is still counted -- they are on their way there.
-local function sessionExpectedContinuers(session)
-	return Routing.ExpectedContinuers(session.Roster, stillHere)
-end
-
--- Continue advances THIS player immediately. It never waits on the rest of the
--- party: the fifteen-second countdown is the auto-continue deadline for anyone
--- who has not chosen, not a barrier the early presser has to sit behind. What
--- it does NOT do any more is travel alone: the packet carries the session's
--- reservation, id, deadline and head count, so the destination stages this
--- player until the source's window has closed and then admits the whole cohort
--- into one round.
 handlePostWinContinueRequest = function(player, requestSerial)
-	local session = activePostWin
-	if not session
-		or session.Closed
-		or session.NextLevel == nil
-		or type(requestSerial) ~= "number"
-		or requestSerial ~= session.Serial
-		or workspace:GetServerTimeNow() >= session.Deadline
-		or workspace:GetAttribute("RoundActive") == true
-		or activeLevel ~= session.Level
-		or not Routing.InRoster(session.Roster, player)
-		or Routing.DecisionOf(session.Roster, player) ~= Routing.Deciding
-		or inRound[player] ~= true
-		or player:GetAttribute("InRound") ~= true
-		or player.Parent ~= Players then
-		return
-	end
-	-- Latch before any yield so a repeated press cannot start two transfers.
-	-- RecordDecision refuses the second press by itself, so this is also the
-	-- guard against a double-click racing its own spawned thread.
-	if not Routing.RecordDecision(session.Roster, player, Routing.Continuing) then return end
-	if IS_STUDIO then
-		-- Studio has no TeleportService destination; the local campaign route
-		-- runs once at settlement and carries this player with it.
-		return
-	end
-	task.spawn(function()
-		local code = reserveNextLevelServer(session)
-		if activePostWin ~= session or session.Aborted or player.Parent ~= Players then return end
-		if not code then
-			if Routing.ClearDecision(session.Roster, player) then
-				status:FireClient(player, "continuefailed", session.Serial)
-			end
-			return
-		end
-		local moved, moveError = teleportPlayersToNextLevel({player}, {
-			NextLevel = session.NextLevel,
-			EntryMode = session.EntryMode,
-			AccessCode = code,
-			SessionId = session.Id,
-			Deadline = session.Deadline,
-			Expected = sessionExpectedContinuers(session),
-			Final = false,
-		})
-		if moved then
-			-- Terminal. From here the settlement counts them as coming, whether or
-			-- not they are still connected to this server a moment from now.
-			Routing.MarkDeparted(session.Roster, player)
-		elseif Routing.ClaimOwns(pendingTeleports[player]) then
-			-- The dispatch was refused, and the runtime took the failure: a retry
-			-- (or a lobby fallback) already owns this player. Giving them their
-			-- choice back here would let a second press open a competing claim
-			-- while the first is still in flight.
-			warn("GameManager: immediate Continue was refused for " .. player.Name
-				.. "; the transfer runtime is retrying it (" .. tostring(moveError) .. ")")
-		else
-			if Routing.ClearDecision(session.Roster, player) and player.Parent == Players then
-				status:FireClient(player, "continuefailed", session.Serial)
-			end
-			warn("GameManager: immediate Continue failed for " .. player.Name
-				.. ": " .. tostring(moveError))
-		end
-	end)
+	recordPostWinSelection(player, requestSerial, Routing.Continuing)
 end
+
 
 -- The last resort, after the original transfer, its one retry and (for a
 -- next-level transfer) its lobby fallback were all rejected.
@@ -1996,6 +2015,7 @@ function finishFailedTeleportLocally(player, reason)
 		and livePostWin and not livePostWin.Closed
 		and workspace:GetServerTimeNow() < livePostWin.Deadline
 		and Routing.ClearDecision(livePostWin.Roster, player) then
+		publishPostWinChoices(livePostWin)
 		status:FireClient(player, "returnfailed", livePostWin.Serial)
 		warn("GameManager: Return Lobby failed twice; keeping " .. player.Name
 			.. " in the campaign (" .. tostring(reason) .. ")")
@@ -2085,19 +2105,31 @@ local function runPostWinIntermission(participants, elapsed, escapedCount, entry
 	}
 	activePostWin = session
 	fireGroup(participants, "win", elapsed, escapedCount, #participants, deadline, nextLevel, session.Serial)
+	publishPostWinChoices(session)
 
-	-- Settled = every member of the frozen roster has decided, or is no longer
-	-- here to decide. A disconnect settles the window instead of holding the rest
-	-- of the party at a screen nobody is going to answer.
-	local function settled()
-		return Routing.Settled(roster, stillHere)
+	-- First choices are provisional, including a solo player's. Keep the
+	-- original window open until its deadline, or until everybody disconnects.
+	local function someoneRemains()
+		for _, member in ipairs(Routing.RosterMembers(roster)) do
+			if stillHere(member) then return true end
+		end
+		return false
 	end
 	while activePostWin == session
 		and workspace:GetServerTimeNow() < session.Deadline
-		and not settled() do
+		and someoneRemains() do
 		task.wait(0.1)
 	end
+	-- PlayerRemoving may still be queued when the deadline coroutine resumes.
+	-- Reconcile actual presence before freezing the final destination cohort.
+	for _, member in ipairs(Routing.RosterMembers(roster)) do
+		if not stillHere(member) and not Routing.ClaimOwns(pendingTeleports[member]) then
+			Routing.ClearDecision(roster, member)
+			Routing.NoteDeparture(roster, member)
+		end
+	end
 	session.Closed = true
+	publishPostWinChoices(session)
 	if activePostWin == session then activePostWin = nil end
 	if session.Aborted then
 		return {Aborted = true, Session = session, Continuing = {}, Returning = {}}
@@ -2316,6 +2348,8 @@ playRound = function(participants)
   end
   local hum = char:FindFirstChildOfClass("Humanoid")
   if not hum or hum.Health <= 0 or not placeSafelyInElevator(player, char) then
+   -- A refused placement must not leave a living, uncounted character behind.
+   if player.Character == char and hum then hum.Health = 0 end
    abandonReentry(player)
    return false
   end
@@ -2644,6 +2678,9 @@ local function launchStation(station, participants)
 end
 
 local function resetStation(station, closeHost)
+ station.admissionEpoch = (station.admissionEpoch or 0) + 1
+ station.admittedCharacters = {}
+ station.entryCharacters = {}
  local oldHost = station.host
  if closeHost and oldHost and oldHost.Parent then
   status:FireClient(oldHost, "queueconfigclosed", station.index)
@@ -2707,6 +2744,106 @@ local function syncQueueFeedback(station, raw, accepted, rejected)
  end
  station.feedback = nextFeedback
 end
+
+local function queueOutsidePosition(player, station, localPosition)
+ local zone = station.zone
+ local room = zone.Parent
+ local floor = room and room:FindFirstChild("ChamberFloor")
+ local diameter = room and tonumber(room:GetAttribute("CircularBayDiameter"))
+ if not floor or not floor:IsA("BasePart") or not diameter or diameter <= 4 then return nil end
+ local radial = Vector3.new(localPosition.X, 0, localPosition.Z)
+ local direction = if radial.Magnitude > .01 then radial.Unit else Vector3.new(0, 0, -1)
+ if not station.outsideOverlap then
+  local params = OverlapParams.new()
+  params.FilterType = Enum.RaycastFilterType.Include
+  params.FilterDescendantsInstances = {room}
+  params.RespectCanCollide = true
+  station.outsideOverlap = params
+ end
+ local function free(target)
+  local fromCentre = target - floor.Position
+  if Vector2.new(fromCentre.X, fromCentre.Z).Magnitude > diameter * .5 - 2 then return false end
+  -- A neighbouring circle is not an exit destination, even when it is empty.
+  for _, other in pairs(lobbyStations) do
+   if other ~= station and other.zone and other.zone:IsDescendantOf(workspace) then
+    local p = other.zone.CFrame:PointToObjectSpace(target)
+    local r = queueRadius(other)
+    if (r and p.X*p.X + p.Z*p.Z <= (r + 1.5)^2)
+     or (not r and math.abs(p.X) <= other.zone.Size.X*.5 + 1.5
+      and math.abs(p.Z) <= other.zone.Size.Z*.5 + 1.5) then return false end
+   end
+  end
+  if not arrivalPointFree(player, target) then return false end
+  for _, part in ipairs(workspace:GetPartBoundsInBox(CFrame.new(target), Vector3.new(3.3, 5.5, 3.3), station.outsideOverlap)) do
+   if part.CanCollide then return false end
+  end
+  return true
+ end
+ for _, margin in ipairs({1.5, 4}) do
+  for _, angle in ipairs({0, math.pi/8, -math.pi/8, math.pi/4, -math.pi/4, math.pi/2, -math.pi/2, math.pi}) do
+   local c, s = math.cos(angle), math.sin(angle)
+   local outward = Vector3.new(direction.X*c - direction.Z*s, 0, direction.X*s + direction.Z*c)
+   local radius = queueRadius(station)
+   local edge = radius or math.min(
+    zone.Size.X * .5 / math.max(math.abs(outward.X), .0001),
+    zone.Size.Z * .5 / math.max(math.abs(outward.Z), .0001))
+   local position = outward * (edge + margin)
+   local target = zone.CFrame:PointToWorldSpace(Vector3.new(position.X, localPosition.Y, position.Z))
+   if free(target) then return target, zone.CFrame:VectorToWorldSpace(outward) end
+  end
+ end
+ return nil
+end
+
+local function enforceStationCapacity(station)
+ if IS_RESERVED_ROUND_SERVER or (IS_STUDIO and roundBusy) or station.cancelRequested
+  or not station.configured or not station.zone or not station.zone:IsDescendantOf(workspace) then return end
+ local raw = rawQueuedPlayers(station, true)
+ local accepted, rejected
+ if station.busy then
+  -- The launch cohort is frozen. Let its members walk/teleport out normally;
+  -- never admit someone to an in-flight launch or move that cohort.
+  accepted, rejected = {}, {}
+  for _, player in ipairs(raw) do
+   if (station.admittedCharacters or {})[player] == player.Character then
+    accepted[#accepted + 1] = player
+   else rejected[#rejected + 1] = {player=player, reason="full"} end
+  end
+ else
+  accepted, _, rejected = selectQueuedPlayers(station, raw)
+ end
+ if #accepted < station.maxPlayers then return end
+ for _, info in ipairs(rejected) do
+  local player = info.player
+  if playerInsideZone(player, station, true) then
+   local char = player.Character
+   local root = char and char:FindFirstChild("HumanoidRootPart")
+   if root and root:IsA("BasePart") and not root.Anchored then
+    local zone = station.zone
+    local localPosition = zone.CFrame:PointToObjectSpace(root.Position)
+    local target, normal = queueOutsidePosition(player, station, localPosition)
+    if not target then continue end -- Never force a character into occupied/blocked space.
+    local delta = target - root.Position
+    -- Translate the entire authored character by the HRP delta. This preserves
+    -- its PivotOffset, height, facing and ability to leave the circle.
+    char:PivotTo(CFrame.new(delta) * char:GetPivot())
+    local velocity = root.AssemblyLinearVelocity
+    local inward = velocity:Dot(normal)
+    if inward < 0 then root.AssemblyLinearVelocity = velocity - normal * inward end
+    if not station.busy and station.feedback[player] ~= "full" then
+     status:FireClient(player, "queuefull", station.index, station.maxPlayers)
+     station.feedback[player] = "full"
+    end
+   end
+  end
+ end
+end
+
+-- One non-yielding server pass per physics frame. No collision groups, walls,
+-- anchored members or per-character listeners are added.
+RunService.Heartbeat:Connect(function()
+ for _, station in pairs(lobbyStations) do enforceStationCapacity(station) end
+end)
 
 local function runStation(station)
  resetStation(station, false)

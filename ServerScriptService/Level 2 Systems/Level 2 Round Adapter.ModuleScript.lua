@@ -14,6 +14,8 @@ local WorldBuilder = require(script.Parent:WaitForChild("Level 2 World Builder")
 local ObjectiveController = require(script.Parent:WaitForChild("Level 2 Objective Controller"))
 local PoolFoamController = require(script.Parent:WaitForChild("Level 2 Pool Foam Controller"))
 local PoolFoamConfiguration = require(script.Parent:WaitForChild("Level 2 Pool Foam Configuration"))
+local PoolSlideConfiguration = require(script.Parent:WaitForChild("Level 2 Pool Slide Configuration"))
+local PoolSlideController = require(script.Parent:WaitForChild("Level 2 Pool Slide Controller"))
 local Master = require(ReplicatedStorage:WaitForChild("MasterConfiguration"))
 
 local Adapter = {}
@@ -250,6 +252,10 @@ function Adapter.Cleanup()
 		or ServerStorage:FindFirstChild("Level 2 Stored Level 1 Entity") ~= nil
 		or ServerStorage:FindFirstChild(STORED_LOBBY_NAME) ~= nil
 	)
+	-- Stop pending spawn work/tracks before either objectives or world are removed.
+	-- Finish restoring the lobby even if this optional encounter's teardown
+	-- throws. Report the failure after restoring the rest of the owned world.
+	local poolSlideStopped, poolSlideStopError = pcall(PoolSlideController.Stop)
 	PoolFoamController.Stop()
 	ObjectiveController.Stop()
 	-- Pool Foam pause is session-local; do not inherit a Studio debug pause.
@@ -297,6 +303,12 @@ function Adapter.Cleanup()
 	end
 	state:SetAttribute("Level2_HallCount", nil)
 	state:SetAttribute("Level2_Error", nil)
+	state:SetAttribute("Level2_PoolSlideEnabled", nil)
+	if not poolSlideStopped then
+		local message = "[Level 2] Pool Slide cleanup failed: " .. tostring(poolSlideStopError)
+		state:SetAttribute("Level2_PoolSlideLastError", message)
+		warn(message)
+	end
 end
 
 function Adapter.Build()
@@ -364,15 +376,17 @@ function Adapter.Build()
 		local arrivalLook = arrivalSpawn.CFrame.LookVector
 		local forward = Vector3.new(arrivalLook.X, 0, arrivalLook.Z).Unit
 		local side = Vector3.new(-forward.Z, 0, forward.X)
+		local arrivals = Players:GetPlayers()
+		local columns = math.min(8, math.max(1, #arrivals))
 		local moved = 0
-		for _, player in ipairs(Players:GetPlayers()) do
+		for _, player in ipairs(arrivals) do
 			local character = player.Character
 			local root = character and character:FindFirstChild("HumanoidRootPart")
 			if root then
 				moved += 1
 				local slot = moved - 1
-				local offset = side * (((slot % 3) - 1) * 2.5)
-					+ forward * (math.floor(slot / 3) * 2.5)
+				local offset = side * ((slot % columns - (columns - 1) / 2) * 4)
+					+ forward * (math.floor(slot / columns) * 4)
 					+ Vector3.new(0, 4, 0)
 				character:PivotTo(CFrame.lookAt(
 					arrivalPosition + offset, arrivalPosition + offset + forward))
@@ -386,11 +400,8 @@ function Adapter.Build()
 		state:SetAttribute("Level2_HallCount", #layout.Halls)
 
 		ObjectiveController.Start(manifest, generation)
-		-- The Pool Slide encounter was removed on 2026-09-02. It never once
-		-- succeeded in spawning on a generated map -- every attempt failed the
-		-- body-route certification and retried forever, costing 78% of the frame
-		-- budget (13 FPS, measured). Pool Foam is Level 2's only hostile now.
-		-- The retired code is in ServerStorage.Archive.Level2RetiredPoolSlide_20260902.
+		-- Preserve the existing Pool Foam encounter. The new verified rig/controller
+		-- below is separate from the retired whole-route-certification giant.
 		local poolFoamSession, poolFoamError = PoolFoamController.Start(manifest, generation)
 		if not poolFoamSession then
 			local message = "[Level 2] Pool Foam encounter did not start: " .. tostring(poolFoamError)
@@ -398,6 +409,31 @@ function Adapter.Build()
 				error(message)
 			end
 			warn(message)
+		end
+
+		-- An unavailable optional encounter must not strand the entire party at
+		-- the Level 2 entrance. Keep its failure visible and clean its partial
+		-- session before allowing the otherwise valid world to become ready.
+		state:SetAttribute("Level2_PoolSlideEnabled", PoolSlideConfiguration.Enabled == true)
+		state:SetAttribute("Level2_PoolSlideLastError", nil)
+		if PoolSlideConfiguration.Enabled == true then
+			local started, poolSlideSession, poolSlideError = pcall(PoolSlideController.Start, manifest, generation)
+			if not started or not poolSlideSession then
+				local message = "[Level 2] Pool Slide encounter unavailable: "
+					.. tostring(started and poolSlideError or poolSlideSession)
+				local stopped, stopError = pcall(PoolSlideController.Stop)
+				if not stopped then
+					error(message .. "; cleanup failed: " .. tostring(stopError))
+				end
+				state:SetAttribute("Level2_PoolSlideEnabled", false)
+				state:SetAttribute("Level2_PoolSlideState", "UNAVAILABLE")
+				state:SetAttribute("Level2_PoolSlidePhase", "UNAVAILABLE")
+				state:SetAttribute("Level2_PoolSlideLastError", message)
+				warn(message)
+			end
+		else
+			state:SetAttribute("Level2_PoolSlideState", "DISABLED")
+			state:SetAttribute("Level2_PoolSlidePhase", "DISABLED")
 		end
 
 		workspace:SetAttribute("SelectedLevel", 2)

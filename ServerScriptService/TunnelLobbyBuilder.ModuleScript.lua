@@ -263,7 +263,7 @@ end
 local function addComingSoonBoard(panel, face, level)
 	-- Level 4 is the active development target. Later future levels stay at
 	-- their initial planning stage until work on them begins.
-	local filledSegmentCount = level == 4 and 3 or 1
+	local progressPercent = ({[4] = 60, [5] = 10, [6] = 5})[level] or 0
 
 	local gui = Instance.new("SurfaceGui")
 	gui.Name = "ComingSoonDisplay"
@@ -273,9 +273,9 @@ local function addComingSoonBoard(panel, face, level)
 	gui.Brightness = 1.35
 	gui.AlwaysOnTop = false
 	gui.MaxDistance = 130
-	gui:SetAttribute("ComingSoonGateVersion", 2)
+	gui:SetAttribute("ComingSoonGateVersion", 3)
 	gui:SetAttribute("FutureLevel", level)
-	gui:SetAttribute("ProgressSegments", filledSegmentCount)
+	gui:SetAttribute("ProgressPercent", progressPercent)
 	gui.Parent = panel
 
 	local background = Instance.new("Frame")
@@ -322,32 +322,11 @@ local function addComingSoonBoard(panel, face, level)
 	kicker.TextXAlignment = Enum.TextXAlignment.Left
 	kicker.Parent = background
 
-	local statusPill = Instance.new("Frame")
-	statusPill.Name = "RouteStatus"
-	statusPill.Position = UDim2.fromScale(0.705, 0.045)
-	statusPill.Size = UDim2.fromScale(0.235, 0.09)
-	statusPill.BackgroundColor3 = COLORS.amber
-	statusPill.BackgroundTransparency = 0.05
-	statusPill.BorderSizePixel = 0
-	statusPill.Parent = background
-	local statusCorner = Instance.new("UICorner")
-	statusCorner.CornerRadius = UDim.new(1, 0)
-	statusCorner.Parent = statusPill
-	local statusText = Instance.new("TextLabel")
-	statusText.Name = "Status"
-	statusText.Size = UDim2.fromScale(1, 1)
-	statusText.BackgroundTransparency = 1
-	statusText.Font = Enum.Font.Code
-	statusText.Text = "ROUTE PENDING"
-	statusText.TextColor3 = Color3.fromRGB(29, 24, 13)
-	statusText.TextSize = 19
-	statusText.Parent = statusPill
-
 	local upperDivider = Instance.new("Frame")
 	upperDivider.Name = "UpperDivider"
 	upperDivider.Position = UDim2.fromScale(0.055, 0.175)
 	upperDivider.Size = UDim2.fromScale(0.89, 0.006)
-	upperDivider.BackgroundColor3 = COLORS.amber
+	upperDivider.BackgroundColor3 = COLORS.red
 	upperDivider.BackgroundTransparency = 0.18
 	upperDivider.BorderSizePixel = 0
 	upperDivider.Parent = background
@@ -360,26 +339,26 @@ local function addComingSoonBoard(panel, face, level)
 	title.Font = Enum.Font.GothamBlack
 	title.Text = "COMING SOON"
 	title.TextColor3 = COLORS.red
-	title.TextSize = 86
+	title.TextSize = 96
 	title.TextWrapped = false
 	title.Parent = background
 
 	local levelStatus = Instance.new("TextLabel")
 	levelStatus.Name = "LevelStatus"
 	levelStatus.Position = UDim2.fromScale(0.07, 0.47)
-	levelStatus.Size = UDim2.fromScale(0.86, 0.09)
+	levelStatus.Size = UDim2.fromScale(0.86, 0.12)
 	levelStatus.BackgroundTransparency = 1
 	levelStatus.Font = Enum.Font.Code
-	levelStatus.Text = string.format("LEVEL %d IS CURRENTLY IN DEVELOPMENT", level)
+	levelStatus.Text = "WORK IN PROGRESS"
 	levelStatus.TextColor3 = Color3.fromRGB(227, 218, 177)
-	levelStatus.TextSize = 28
+	levelStatus.TextSize = 56
 	levelStatus.TextWrapped = false
 	levelStatus.Parent = background
 
 	local progressTrack = Instance.new("Frame")
-	progressTrack.Name = "CalibrationTrack"
+	progressTrack.Name = "ProgressTrack"
 	progressTrack.Position = UDim2.fromScale(0.15, 0.625)
-	progressTrack.Size = UDim2.fromScale(0.7, 0.025)
+	progressTrack.Size = UDim2.fromScale(0.7, 0.04)
 	progressTrack.BackgroundColor3 = Color3.fromRGB(54, 62, 58)
 	progressTrack.BackgroundTransparency = 0.22
 	progressTrack.BorderSizePixel = 0
@@ -387,52 +366,27 @@ local function addComingSoonBoard(panel, face, level)
 	local trackCorner = Instance.new("UICorner")
 	trackCorner.CornerRadius = UDim.new(1, 0)
 	trackCorner.Parent = progressTrack
-	for index = 1, 5 do
-		local filled = index <= filledSegmentCount
-		local segment = Instance.new("Frame")
-		segment.Name = (filled and "FilledSegment" or "PendingSegment") .. index
-		segment.Position = UDim2.fromScale((index - 1) * 0.205, 0)
-		segment.Size = UDim2.fromScale(0.18, 1)
-		segment.BackgroundColor3 = filled and COLORS.red or Color3.fromRGB(84, 91, 87)
-		segment.BackgroundTransparency = filled and 0.05 or 0.68
-		segment.BorderSizePixel = 0
-		segment:SetAttribute("Filled", filled)
-		segment.Parent = progressTrack
-		local segmentCorner = Instance.new("UICorner")
-		segmentCorner.CornerRadius = UDim.new(1, 0)
-		segmentCorner.Parent = segment
-	end
+	local fill = Instance.new("Frame")
+	fill.Name = "ProgressFill"
+	fill.Size = UDim2.fromScale(progressPercent / 100, 1)
+	fill.BackgroundColor3 = COLORS.red
+	fill.BackgroundTransparency = 0.05
+	fill.BorderSizePixel = 0
+	fill.Parent = progressTrack
+	local fillCorner = Instance.new("UICorner")
+	fillCorner.CornerRadius = UDim.new(1, 0)
+	fillCorner.Parent = fill
 
 	local routeStatus = Instance.new("TextLabel")
-	routeStatus.Name = "RouteCalibration"
+	routeStatus.Name = "ProgressPercent"
 	routeStatus.Position = UDim2.fromScale(0.08, 0.69)
-	routeStatus.Size = UDim2.fromScale(0.84, 0.08)
+	routeStatus.Size = UDim2.fromScale(0.84, 0.12)
 	routeStatus.BackgroundTransparency = 1
 	routeStatus.Font = Enum.Font.Code
-	routeStatus.Text = "ROUTE CALIBRATION IN PROGRESS"
-	routeStatus.TextColor3 = Color3.fromRGB(174, 188, 180)
-	routeStatus.TextSize = 23
+	routeStatus.Text = string.format("%d%% COMPLETE", progressPercent)
+	routeStatus.TextColor3 = Color3.fromRGB(214, 222, 217)
+	routeStatus.TextSize = 56
 	routeStatus.Parent = background
-
-	local lowerDivider = Instance.new("Frame")
-	lowerDivider.Name = "LowerDivider"
-	lowerDivider.Position = UDim2.fromScale(0.055, 0.815)
-	lowerDivider.Size = UDim2.fromScale(0.89, 0.004)
-	lowerDivider.BackgroundColor3 = COLORS.zyntraCyan
-	lowerDivider.BackgroundTransparency = 0.68
-	lowerDivider.BorderSizePixel = 0
-	lowerDivider.Parent = background
-
-	local footer = Instance.new("TextLabel")
-	footer.Name = "Footer"
-	footer.Position = UDim2.fromScale(0.08, 0.845)
-	footer.Size = UDim2.fromScale(0.84, 0.07)
-	footer.BackgroundTransparency = 1
-	footer.Font = Enum.Font.Code
-	footer.Text = "MORE LEVELS ARE ON THE WAY"
-	footer.TextColor3 = Color3.fromRGB(142, 157, 150)
-	footer.TextSize = 21
-	footer.Parent = background
 
 	return gui
 end
@@ -441,7 +395,7 @@ local function addDonationLeaderboard(parent, center)
 	local model = Instance.new("Model")
 	model.Name = "ZyntraDonationLeaderboardBoard"
 	model:SetAttribute("LeaderboardVersion", 2)
-	model:SetAttribute("RankingScope", "Donation Developer Products recorded since August 2026")
+	model:SetAttribute("RankingScope", "Recorded donations plus utility Developer Products acknowledged by support-enabled servers; passes and earlier utilities excluded")
 	model.Parent = parent
 
 	local panel = makePart(
@@ -504,7 +458,7 @@ local function addDonationLeaderboard(parent, center)
 	title.Size = UDim2.new(1, -76, 0, 58)
 	title.BackgroundTransparency = 1
 	title.Font = Enum.Font.GothamBlack
-	title.Text = "TOP DONORS"
+	title.Text = "TOP SUPPORTERS"
 	title.TextColor3 = COLORS.green
 	title.TextSize = 43
 	title.TextXAlignment = Enum.TextXAlignment.Left
@@ -516,7 +470,7 @@ local function addDonationLeaderboard(parent, center)
 	status.Size = UDim2.new(1, -80, 0, 30)
 	status.BackgroundTransparency = 1
 	status.Font = Enum.Font.Code
-	status.Text = "CONNECTING TO DONATION RANKINGS"
+	status.Text = "CONNECTING TO SUPPORT RANKINGS"
 	status.TextColor3 = Color3.fromRGB(215, 205, 165)
 	status.TextSize = 19
 	status.TextXAlignment = Enum.TextXAlignment.Left
@@ -530,6 +484,18 @@ local function addDonationLeaderboard(parent, center)
 	divider.BorderSizePixel = 0
 	divider.Parent = background
 
+	local scope = Instance.new("TextLabel")
+	scope.Name = "RecordedSupportScope"
+	scope.Position = UDim2.fromOffset(40, 630)
+	scope.Size = UDim2.new(1, -80, 0, 22)
+	scope.BackgroundTransparency = 1
+	scope.Font = Enum.Font.Code
+	scope.Text = "PASSES & EARLIER TOKEN / RE-ENTRY PURCHASES NOT INCLUDED"
+	scope.TextColor3 = Color3.fromRGB(215, 205, 165)
+	scope.TextSize = 17
+	scope.TextXAlignment = Enum.TextXAlignment.Left
+	scope.Parent = background
+
 	local rowLabels = {}
 	for rank = 1, 10 do
 		local row = Instance.new("TextLabel")
@@ -540,7 +506,7 @@ local function addDonationLeaderboard(parent, center)
 		row.BackgroundTransparency = 0.12
 		row.BorderSizePixel = 0
 		row.Font = Enum.Font.Code
-		row.Text = rank == 1 and "NO DONATIONS RECORDED YET" or ""
+		row.Text = rank == 1 and "NO SUPPORT RECORDED YET" or ""
 		row.TextColor3 = rank <= 3 and Color3.fromRGB(236, 224, 165) or Color3.fromRGB(201, 225, 214)
 		row.TextSize = 24
 		row.TextXAlignment = Enum.TextXAlignment.Left
@@ -1956,8 +1922,8 @@ local function addDoorway(parent, center, level, side, zOffset, active)
 		tagSurface(makePart(
 			parent,
 			"Level" .. level .. "DoorPost",
-			CFrame.new(x, center.Y + 7.3, z + zSide * 9.8),
-			Vector3.new(3.1, 15, 1.55),
+			CFrame.new(x, center.Y + 6.875, z + zSide * 9.8),
+			Vector3.new(3.1, 14.15, 1.55),
 			COLORS.metal,
 			Enum.Material.Metal
 		), "Metal")
@@ -1988,7 +1954,7 @@ local function addDoorway(parent, center, level, side, zOffset, active)
 		face,
 		"LEVEL " .. level,
 		-- An open door carries no subtitle; the queue/capacity line was dropped.
-		not active and "COMING SOON  •  NEW LEVEL IN DEVELOPMENT" or nil,
+		not active and "COMING SOON  •  WORK IN PROGRESS" or nil,
 		accentColor
 	)
 
@@ -2004,7 +1970,7 @@ local function addDoorway(parent, center, level, side, zOffset, active)
 		tagSurface(blocker, "Metal")
 		blocker:SetAttribute("FutureLevelGate", true)
 		blocker:SetAttribute("FutureLevel", level)
-		blocker:SetAttribute("ComingSoonGateVersion", 2)
+		blocker:SetAttribute("ComingSoonGateVersion", 3)
 
 		local displayPanel = makePart(
 			parent,
@@ -2020,7 +1986,7 @@ local function addDoorway(parent, center, level, side, zOffset, active)
 		displayPanel.CastShadow = false
 		displayPanel:SetAttribute("FutureLevelGate", true)
 		displayPanel:SetAttribute("FutureLevel", level)
-		displayPanel:SetAttribute("ComingSoonGateVersion", 2)
+		displayPanel:SetAttribute("ComingSoonGateVersion", 3)
 		addComingSoonBoard(displayPanel, face, level)
 
 		local frontX = displayPanel.Position.X - side * (displayPanel.Size.X * 0.5 + 0.05)
@@ -3002,16 +2968,6 @@ function Builder.Build(center)
 		)
 		edgeLine.CanCollide = false
 		tagSurface(edgeLine, "RoadPaint")
-
-		local conduit = makePart(
-			detail,
-			"WallConduit",
-			CFrame.new(center + Vector3.new(side * 33.2, 10.5, 0)),
-			Vector3.new(0.65, 0.65, tunnelLength - 6),
-			COLORS.metal,
-			Enum.Material.Metal
-		)
-		conduit.CanCollide = false
 	end
 
 	for z = -halfLength + 10, halfLength - 10, 16 do
@@ -3034,6 +2990,24 @@ function Builder.Build(center)
 		{10, 70},
 		{90, halfLength},
 	}
+
+	-- The wall conduit follows the closed shell sections. A full-length bar
+	-- crossed the open span of every level entrance despite being non-collidable.
+	for _, side in ipairs({-1, 1}) do
+		for _, range in ipairs(wallRanges) do
+			local startZ = math.max(range[1], -halfLength + 3)
+			local endZ = math.min(range[2], halfLength - 3)
+			local conduit = makePart(
+				detail,
+				"WallConduit",
+				CFrame.new(center + Vector3.new(side * 33.2, 10.5, (startZ + endZ) * .5)),
+				Vector3.new(0.65, 0.65, endZ - startZ),
+				COLORS.metal,
+				Enum.Material.Metal
+			)
+			conduit.CanCollide = false
+		end
+	end
 
 	-- Curved concrete shell. The lowest 22.5-degree band on each side is
 	-- segmented around the level bays; full-length low panels would physically
@@ -3192,20 +3166,29 @@ function Builder.Build(center)
 		Enum.Material.Metal
 	)
 	welcome.CanCollide = false
-	addBoard(
-		welcome,
-		Enum.NormalId.Front,
-		"ZYNTRA\nTRANSIT GATES",
-		"LEVEL ACCESS IS THROUGH THE SIDE GATES",
-		COLORS.green
-	)
-	addBoard(
-		welcome,
-		Enum.NormalId.Back,
-		"ZYNTRA\nTRANSIT GATES",
-		"LEVEL ACCESS IS THROUGH THE SIDE GATES",
-		COLORS.green
-	)
+	-- Keep the studio introduction on the arrival sign, outside gameplay UI.
+	for _, face in ipairs({Enum.NormalId.Front, Enum.NormalId.Back}) do
+		local title, subtitle = addBoard(
+			welcome,
+			face,
+			"ZYNTRA TRANSIT GATES",
+			"LEVEL ACCESS IS THROUGH THE SIDE GATES",
+			COLORS.green
+		)
+		title.Size = UDim2.fromScale(0.93, 0.24)
+
+		local introduction = Instance.new("TextLabel")
+		introduction.Name = "StudioIntroduction"
+		introduction.Position = UDim2.fromScale(0.045, 0.33)
+		introduction.Size = UDim2.fromScale(0.91, 0.36)
+		introduction.BackgroundTransparency = 1
+		introduction.Font = Enum.Font.Gotham
+		introduction.Text = "We're a team of 2 developers.\nWe're fixing bugs and appreciate your feedback."
+		introduction.TextColor3 = subtitle.TextColor3
+		introduction.TextScaled = true
+		introduction.TextWrapped = true
+		introduction.Parent = title.Parent
+	end
 
 	local farWarning = makePart(
 		detail,

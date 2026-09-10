@@ -90,11 +90,13 @@ local Configuration = {
 	WallHeight = 34,
 	GrandSlideHallHeight = 96,
 	SlideHallHeight = 76,
-	KidsWallHeight = 21,
-	CorridorHeight = 26,
+	KidsWallHeight = 33,
+	CorridorHeight = 32,
+	-- Stretch only corridor vaults; room arches keep their authored proportions.
+	CorridorVaultVerticalScale = 1.9,
 	WallThickness = 3.5,
 	DoorWidth = 30,
-	DoorHeight = 19,
+	DoorHeight = 30,
 
 	-- Water covers the floor wall-to-wall in every pool hall, exactly like the
 	-- reference photos — no sunken basins. Raised decks standing IN the water

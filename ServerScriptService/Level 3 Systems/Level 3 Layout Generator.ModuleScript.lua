@@ -12,7 +12,7 @@ local Master = require(game:GetService("ReplicatedStorage"):WaitForChild("Master
 
 local LayoutGenerator = {}
 
-local VERSION = 1
+local VERSION = 2
 local DISTRICT_COUNT = 3
 local ROOMS_PER_DISTRICT = 8
 local GRID_ROWS = 2
@@ -225,6 +225,49 @@ local function planarDistance(a, b)
 	return math.sqrt(dx * dx + dz * dz)
 end
 
+local function measureBounds(rooms, excludeExit)
+	local minX, maxX, minZ, maxZ = math.huge, -math.huge, math.huge, -math.huge
+	for _, room in ipairs(rooms) do
+		if not excludeExit or room.Id ~= "Exit" then
+			minX = math.min(minX, room.X - room.W * .5)
+			maxX = math.max(maxX, room.X + room.W * .5)
+			minZ = math.min(minZ, room.Z - room.D * .5)
+			maxZ = math.max(maxZ, room.Z + room.D * .5)
+		end
+	end
+	local width, depth = maxX - minX, maxZ - minZ
+	return {MinX=minX, MaxX=maxX, MinZ=minZ, MaxZ=maxZ, Width=width, Depth=depth,
+		Aspect=math.max(width, depth) / math.min(width, depth)}
+end
+
+local function boundsMatch(actual, expected)
+	if type(actual) ~= "table" then return false end
+	for key, value in pairs(expected) do
+		if type(actual[key]) ~= "number" or actual[key] ~= actual[key]
+			or math.abs(actual[key]) == math.huge or math.abs(actual[key] - value) > .001 then return false end
+	end
+	return true
+end
+
+local function rectanglesOverlap(a, b)
+	return math.min(a.MaxX, b.MaxX) - math.max(a.MinX, b.MinX) > .001
+		and math.min(a.MaxZ, b.MaxZ) - math.max(a.MinZ, b.MinZ) > .001
+end
+
+-- Conservative footprint of the actual corridor kit: the 14-stud clear lane
+-- plus both side walls, and the .04 floor seal. Endpoint rooms own the joins.
+local function corridorBounds(a, b)
+	local halfWidth = Configuration.CorridorWidth * .5 + Configuration.WallThickness
+	if math.abs(a.Z - b.Z) < .001 then
+		local left, right = if a.X < b.X then a else b, if a.X < b.X then b else a
+		return {MinX=left.X + left.W * .5 - .02, MaxX=right.X - right.W * .5 + .02,
+			MinZ=a.Z - halfWidth, MaxZ=a.Z + halfWidth}
+	end
+	local north, south = if a.Z < b.Z then a else b, if a.Z < b.Z then b else a
+	return {MinX=a.X - halfWidth, MaxX=a.X + halfWidth,
+		MinZ=north.Z + north.D * .5 - .02, MaxZ=south.Z - south.D * .5 + .02}
+end
+
 local function makeHash(layout)
 	local pieces = {
 		tostring(VERSION),
@@ -233,7 +276,7 @@ local function makeHash(layout)
 	}
 	for _, room in ipairs(layout.Rooms) do
 		table.insert(pieces, string.format(
-			"R:%s:%d:%d:%d:%d:%d:%s:%s:%s:%d:%d:%d",
+			"R:%s:%.3f:%.3f:%d:%d:%d:%s:%s:%s:%d:%d:%d",
 			room.Id, room.X, room.Z, room.W, room.D, room.H,
 			room.Kind, room.Decor, room.ThemeId, room.SectionIndex,
 			if room.Module then 1 else 0, room.LocalSeed
@@ -258,8 +301,7 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 	local rng = Random.new(seed)
 	local rowZ = {-Tuning.RowHalfSpacing, Tuning.RowHalfSpacing}
 	local entryRow = rng:NextInteger(1, GRID_ROWS)
-	local firstGatewayRow = rng:NextInteger(1, GRID_ROWS)
-	local secondGatewayRow = rng:NextInteger(1, GRID_ROWS)
+	local gatewayColumns = {rng:NextInteger(1, GRID_COLUMNS), rng:NextInteger(1, GRID_COLUMNS)}
 	local exitRow = rng:NextInteger(1, GRID_ROWS)
 
 	local layout = {
@@ -314,6 +356,7 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 	local sectionLeft = arrival.X + arrival.W * 0.5
 		+ rng:NextInteger(Tuning.MinimumGatewayGap, Tuning.MaximumGatewayGap)
 	local slots = {}
+	local sharedWidths, sharedGaps, gatewayGaps = {}, {}, {}
 
 	for sectionIndex, definition in ipairs(DISTRICT_DEFINITIONS) do
 		local widths = {}
@@ -323,20 +366,14 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 		}
 		for column = 1, GRID_COLUMNS do
 			widths[column] = rng:NextInteger(Tuning.MinimumRoomWidth, Tuning.MaximumRoomWidth)
+			sharedWidths[column] = math.max(sharedWidths[column] or 0, widths[column])
 		end
 		local gaps = {}
 		for column = 1, GRID_COLUMNS - 1 do
 			gaps[column] = rng:NextInteger(Tuning.MinimumInternalGap, Tuning.MaximumInternalGap)
+			sharedGaps[column] = math.max(sharedGaps[column] or 0, gaps[column])
 		end
 		local decors = shuffled(rng, definition.DecorPool)
-		local columnCenters = {}
-		local cursor = sectionLeft
-		for column = 1, GRID_COLUMNS do
-			columnCenters[column] = cursor + widths[column] * 0.5
-			cursor += widths[column]
-			if column < GRID_COLUMNS then cursor += gaps[column] end
-		end
-		local sectionRight = cursor
 		local district = {
 			Index = sectionIndex,
 			Id = definition.Id,
@@ -347,12 +384,6 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 			Rooms = {},
 			IncomingGatewayLinkId = "",
 			OutgoingGatewayLinkId = "",
-			Bounds = {
-				MinX = sectionLeft,
-				MaxX = sectionRight,
-				MinZ = rowZ[1] - depths[1] * 0.5,
-				MaxZ = rowZ[2] + depths[2] * 0.5,
-			},
 		}
 		layout.Districts[sectionIndex] = district
 		layout.DistrictById[district.Id] = district
@@ -369,7 +400,7 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 					Id = id,
 					Name = if isSignal then "Signal Hall"
 						else string.format("%s %02d", definition.Name, slotNumber),
-					X = columnCenters[column],
+					X = 0, -- Assigned after all three district widths are known.
 					Z = rowZ[row],
 					W = widths[column],
 					D = depths[row],
@@ -395,9 +426,32 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 		end
 
 		if sectionIndex < DISTRICT_COUNT then
-			sectionLeft = sectionRight
-				+ rng:NextInteger(Tuning.MinimumGatewayGap, Tuning.MaximumGatewayGap)
+			gatewayGaps[sectionIndex] = rng:NextInteger(Tuning.MinimumGatewayGap, Tuning.MaximumGatewayGap)
 		end
+	end
+
+	-- Shared columns keep the bridges straight while each district retains its
+	-- own seeded room sizes. Stack districts along Z instead of extending X.
+	local columnCenters = {}
+	local cursor = sectionLeft
+	for column = 1, GRID_COLUMNS do
+		columnCenters[column] = cursor + sharedWidths[column] * .5
+		cursor += sharedWidths[column]
+		if column < GRID_COLUMNS then cursor += sharedGaps[column] end
+	end
+	local districtOffset = 0
+	for sectionIndex, district in ipairs(layout.Districts) do
+		if sectionIndex > 1 then
+			local previousSouth = slots[sectionIndex - 1][GRID_ROWS][1]
+			local currentNorth = slots[sectionIndex][1][1]
+			districtOffset = previousSouth.Z + previousSouth.D * .5
+				+ gatewayGaps[sectionIndex - 1] + currentNorth.D * .5 - rowZ[1]
+		end
+		for _, room in ipairs(district.Rooms) do
+			room.X = columnCenters[room.GridColumn]
+			room.Z = rowZ[room.GridRow] + districtOffset
+		end
+		district.Bounds = measureBounds(district.Rooms)
 	end
 
 	local signalHall = layout.RoomById.SignalHall
@@ -465,9 +519,9 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 	end
 
 	for sectionIndex, definition in ipairs(DISTRICT_DEFINITIONS) do
-		local startRow = if sectionIndex == 1 then entryRow
-			elseif sectionIndex == 2 then firstGatewayRow else secondGatewayRow
-		local start = slots[sectionIndex][startRow][1]
+		local startRow = if sectionIndex == 1 then entryRow else 1
+		local startColumn = if sectionIndex == 1 then 1 else gatewayColumns[sectionIndex - 1]
+		local start = slots[sectionIndex][startRow][startColumn]
 		local visited = {[start.Id] = true}
 		local stack = {start}
 		local visitedCount = 1
@@ -529,7 +583,6 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 		end
 	end
 
-	local gatewayRows = {entryRow, firstGatewayRow, secondGatewayRow, exitRow}
 	local gatewaySpecs = {
 		{
 			A = arrival,
@@ -541,8 +594,8 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 			ToThemeId = DISTRICT_DEFINITIONS[1].ThemeId,
 		},
 		{
-			A = slots[1][firstGatewayRow][GRID_COLUMNS],
-			B = slots[2][firstGatewayRow][1],
+			A = slots[1][GRID_ROWS][gatewayColumns[1]],
+			B = slots[2][1][gatewayColumns[1]],
 			Kind = "District",
 			FromSection = 1,
 			ToSection = 2,
@@ -550,8 +603,8 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 			ToThemeId = DISTRICT_DEFINITIONS[2].ThemeId,
 		},
 		{
-			A = slots[2][secondGatewayRow][GRID_COLUMNS],
-			B = slots[3][secondGatewayRow][1],
+			A = slots[2][GRID_ROWS][gatewayColumns[2]],
+			B = slots[3][1][gatewayColumns[2]],
 			Kind = "District",
 			FromSection = 2,
 			ToSection = 3,
@@ -611,9 +664,17 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 		local candidates = {}
 		for _, room in ipairs(layout.Districts[sectionIndex].Rooms) do
 			if room.Id ~= "SignalHall" and (room.GridColumn == 2 or room.GridColumn == 3) then
-				table.insert(candidates, room)
+				local separated = true
+				for _, existing in ipairs(chosenModules) do
+					if planarDistance(room, existing) < Tuning.MinimumModuleSeparation then
+						separated = false
+						break
+					end
+				end
+				if separated then table.insert(candidates, room) end
 			end
 		end
+		if #candidates == 0 then return nil, "district has no sufficiently separated module candidate" end
 		addModule(candidates[rng:NextInteger(1, #candidates)])
 	end
 
@@ -649,28 +710,15 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 
 	for _, neighbours in pairs(layout.Adjacency) do table.sort(neighbours) end
 
-	local minX, maxX, minZ, maxZ = math.huge, -math.huge, math.huge, -math.huge
-	for _, room in ipairs(layout.Rooms) do
-		minX = math.min(minX, room.X - room.W * 0.5)
-		maxX = math.max(maxX, room.X + room.W * 0.5)
-		minZ = math.min(minZ, room.Z - room.D * 0.5)
-		maxZ = math.max(maxZ, room.Z + room.D * 0.5)
-	end
-	layout.Bounds = {
-		MinX = minX,
-		MaxX = maxX,
-		MinZ = minZ,
-		MaxZ = maxZ,
-		Width = maxX - minX,
-		Depth = maxZ - minZ,
-	}
+	layout.Bounds = measureBounds(layout.Rooms)
+	layout.CoreBounds = measureBounds(layout.Rooms, true)
 	layout.RoomCount = #layout.Rooms
 	layout.LinkCount = #layout.Links
 	layout.DistrictCount = #layout.Districts
 	layout.ModuleCount = #layout.ModuleRooms
 	layout.HideSpotCount = DISTRICT_COUNT * ROOMS_PER_DISTRICT
 	layout.CyclomaticLoops = #layout.Links - #layout.Rooms + 1
-	layout.GatewayRows = gatewayRows
+	layout.GatewayColumns = gatewayColumns
 	layout.Roles = {
 		ArrivalRoomId = "Arrival",
 		ExitRoomId = "Exit",
@@ -699,6 +747,7 @@ end
 
 function LayoutGenerator.Validate(layout)
 	if type(layout) ~= "table" then return fail("layout is not a table") end
+	if layout.Version ~= VERSION then return fail("layout version is stale") end
 	if type(layout.Rooms) ~= "table" or #layout.Rooms ~= DISTRICT_COUNT * ROOMS_PER_DISTRICT + 2 then
 		return fail("layout must contain exactly 26 rooms")
 	end
@@ -711,7 +760,8 @@ function LayoutGenerator.Validate(layout)
 	if type(layout.Districts) ~= "table" or #layout.Districts ~= DISTRICT_COUNT then
 		return fail("layout must contain exactly three districts")
 	end
-	if type(layout.RoomById) ~= "table" or type(layout.Adjacency) ~= "table" then
+	if type(layout.RoomById) ~= "table" or type(layout.Adjacency) ~= "table"
+		or type(layout.GatewayLinks) ~= "table" then
 		return fail("layout lookup tables are missing")
 	end
 
@@ -790,6 +840,7 @@ function LayoutGenerator.Validate(layout)
 	local seenPairs = {}
 	local hiddenCount = 0
 	local gatewayCount = 0
+	local corridorFootprints = {}
 	local rebuiltAdjacency = {}
 	for roomId in pairs(seenRooms) do
 		ports[roomId] = {}
@@ -822,11 +873,31 @@ function LayoutGenerator.Validate(layout)
 		table.insert(rebuiltAdjacency[b.Id], a.Id)
 		if link.Door == "HiddenExit" then
 			hiddenCount += 1
-			if not (link.A == "SignalHall" and link.B == "Exit") then
+			if not (link.A == "SignalHall" and link.B == "Exit")
+				or math.abs(gap - Tuning.ExitCorridorLength) > .001 then
 				return fail("the only hidden link must be SignalHall to Exit")
 			end
 		end
-		if link.Gateway == true then gatewayCount += 1 end
+		if link.Gateway == true then
+			gatewayCount += 1
+			local kind = if a.SectionIndex == 0 then "Entry"
+				elseif b.Id == "Exit" then "Exit" else "District"
+			if link.FromSection ~= a.SectionIndex or link.ToSection ~= b.SectionIndex
+				or b.SectionIndex ~= a.SectionIndex + 1
+				or link.FromThemeId ~= a.ThemeId or link.ToThemeId ~= b.ThemeId
+				or link.GatewayKind ~= kind or layout.GatewayLinks[gatewayCount] ~= link then
+				return fail("gateway metadata is inconsistent: " .. key)
+			end
+			if kind == "District" then
+				if sideA ~= "South" or a.GridRow ~= GRID_ROWS or b.GridRow ~= 1
+					or a.GridColumn ~= b.GridColumn or type(layout.GatewayColumns) ~= "table"
+					or layout.GatewayColumns[a.SectionIndex] ~= a.GridColumn then
+					return fail("district gateway does not join the shared column: " .. key)
+				end
+			elseif sideA ~= "East" then
+				return fail("arrival and final exit must face east")
+			end
+		end
 		if a.SectionIndex == b.SectionIndex and a.SectionIndex >= 1
 			and a.SectionIndex <= DISTRICT_COUNT then
 			local definition = DISTRICT_DEFINITIONS[a.SectionIndex]
@@ -834,12 +905,38 @@ function LayoutGenerator.Validate(layout)
 				return fail("internal link theme does not match its district")
 			end
 		end
+		table.insert(corridorFootprints, {Link=link, Bounds=corridorBounds(a, b)})
 	end
 	if hiddenCount ~= 1 then return fail("layout must contain one hidden exit link") end
 	if gatewayCount ~= ENTRY_AND_GATEWAY_LINKS
 		or type(layout.GatewayLinks) ~= "table"
 		or #layout.GatewayLinks ~= ENTRY_AND_GATEWAY_LINKS then
 		return fail("layout must contain four explicit gateway links")
+	end
+	if type(layout.GatewayColumns) ~= "table" or #layout.GatewayColumns ~= 2 then
+		return fail("layout must identify two gateway columns")
+	end
+	for index, corridor in ipairs(corridorFootprints) do
+		for _, room in ipairs(layout.Rooms) do
+			if room.Id ~= corridor.Link.A and room.Id ~= corridor.Link.B then
+				local halfWall = Configuration.WallThickness * .5
+				local roomShell = {MinX=room.X-room.W*.5-halfWall, MaxX=room.X+room.W*.5+halfWall,
+					MinZ=room.Z-room.D*.5-halfWall, MaxZ=room.Z+room.D*.5+halfWall}
+				if rectanglesOverlap(corridor.Bounds, roomShell) then
+					return fail("corridor crosses unrelated room: " .. corridor.Link.Id .. " and " .. room.Id)
+				end
+			end
+		end
+		for otherIndex = index + 1, #corridorFootprints do
+			local other = corridorFootprints[otherIndex]
+			if rectanglesOverlap(corridor.Bounds, other.Bounds) then
+				return fail("corridor shells overlap: " .. corridor.Link.Id .. " and " .. other.Link.Id)
+			end
+		end
+	end
+	if not boundsMatch(layout.Bounds, measureBounds(layout.Rooms))
+		or not boundsMatch(layout.CoreBounds, measureBounds(layout.Rooms, true)) then
+		return fail("layout bounds are stale")
 	end
 
 	for roomId, expected in pairs(rebuiltAdjacency) do
@@ -874,7 +971,10 @@ function LayoutGenerator.Validate(layout)
 		local district = layout.Districts[sectionIndex]
 		if district.Index ~= sectionIndex or district.Id ~= DISTRICT_DEFINITIONS[sectionIndex].Id
 			or district.ThemeId ~= DISTRICT_DEFINITIONS[sectionIndex].ThemeId
-			or type(district.RoomIds) ~= "table" or #district.RoomIds ~= ROOMS_PER_DISTRICT then
+			or type(district.RoomIds) ~= "table" or #district.RoomIds ~= ROOMS_PER_DISTRICT
+			or district.IncomingGatewayLinkId ~= layout.GatewayLinks[sectionIndex].Id
+			or district.OutgoingGatewayLinkId ~= layout.GatewayLinks[sectionIndex + 1].Id
+			or not boundsMatch(district.Bounds, measureBounds(district.Rooms)) then
 			return fail("district metadata is inconsistent")
 		end
 		local startId = district.RoomIds[1]

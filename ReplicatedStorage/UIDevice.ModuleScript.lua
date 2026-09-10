@@ -549,7 +549,7 @@ local MINIMUM_TOUCH_TARGET = 44
 -- dodge the other.
 local CONTROL_KEYS_RIGHT_FIRST = {
 	"TouchJump", "TouchRunHold", "TouchSneakHold",
-	"TouchDropGlowstick", "TouchPOV", "FlashlightPower",
+	"TouchDropGlowstick", "TouchPOV", "FlashlightPower", "ProtectionUse",
 }
 
 local function columnControlPlan(tablet: boolean): any
@@ -583,6 +583,9 @@ local function columnControlPlan(tablet: boolean): any
 				Width = secondWidth, Height = tablet and 54 or 48, TextSize = 13},
 			FlashlightPower = {Right = second, Bottom = edge,
 				Width = secondWidth, Height = secondWidth},
+			ProtectionUse = {Right = second,
+				Bottom = edge + flashlightSlot + button + gap + (tablet and 72 or 58) + gap,
+				Width = secondWidth, Height = secondWidth, TextSize = 12},
 		},
 	}
 end
@@ -590,23 +593,27 @@ end
 -- The bottom-edge arrangement. `usableWidth` is the daylight from the safe right
 -- edge back to the thumbstick's activation edge: the row is SIZED to fit inside
 -- it rather than clamped into it afterwards, so no control can land in the
--- region a finger uses to walk. Six 44px targets and their gaps do not fit every
--- short screen, so a second attempt seats them three-abreast in two ranks;
+-- region a finger uses to walk. Seven 44px targets and their gaps do not fit every
+-- short screen, so a second attempt seats them four/three in two ranks;
 -- returns nil when even that will not fit, and the column stands.
-local function rowControlPlan(tablet: boolean, usableWidth: number): any?
+local function rowControlPlan(tablet: boolean, usableWidth: number, usableHeight: number): any?
 	local edge = tablet and 26 or 22
 	local gap = tablet and 12 or 8
 	local largest = tablet and 68 or 56
 	local count = #CONTROL_KEYS_RIGHT_FIRST
 	for _, perRank in ipairs({count, math.ceil(count / 2)}) do
 		local cell = math.floor((usableWidth - edge - gap * (perRank - 1)) / perRank)
-		cell = math.min(cell, largest)
+		local ranks = math.ceil(count / perRank)
+		-- The seventh action may need two ranks where six fitted in one. Size
+		-- against the readout's remaining HEIGHT too, before giving up on a row.
+		local heightCell = math.floor((usableHeight - edge - gap * (ranks - 1)) / ranks)
+		cell = math.min(cell, largest, heightCell)
 		if cell >= MINIMUM_TOUCH_TARGET then
 			local slots = {}
 			for index, key in ipairs(CONTROL_KEYS_RIGHT_FIRST) do
 				-- Index 1 is the rightmost slot of the bottom rank, so the primary
 				-- controls stay under the thumb and the second rank -- when there
-				-- is one -- carries GLOW, POV and the torch.
+				-- is one -- carries the remaining equipment actions.
 				local column = (index - 1) % perRank
 				local rank = math.floor((index - 1) / perRank)
 				slots[key] = {
@@ -1017,7 +1024,9 @@ local function computeLayout(): any
 		and objectiveHeadroom(controls) < MINIMUM_USABLE_HEIGHT then
 		local usable = safe.Right
 			- math.max(safe.Left, display.Left + width * .4 + THUMBSTICK_CLEARANCE)
-		local rowed = rowControlPlan(tabletControls, usable)
+		local usableHeight = safe.Bottom - safe.Top - OBJECTIVE_MARGIN
+			- OBJECTIVE_GUTTER - MINIMUM_USABLE_HEIGHT - CONTROL_CUSHION
+		local rowed = rowControlPlan(tabletControls, usable, usableHeight)
 		if rowed then
 			local rowZone = planZone(rowed)
 			-- Only if it actually buys the readout its height. A row that does not

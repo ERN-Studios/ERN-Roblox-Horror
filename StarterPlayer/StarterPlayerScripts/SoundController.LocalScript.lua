@@ -95,9 +95,9 @@ local SCREAM_VOLUME    = 0.95  -- distant entity screams (positional at the Enti
 local CHASE_FADE       = 0.6   -- seconds to fade the chase loop in / out
 local TRACK_FADE       = 5     -- seconds to SLOWLY fade the chase music once it loses
 -- sight and is only tracking blindly (match TRACK_TIME)
-local SPOT_VOLUME      = 1.20   -- clear at long sight range without becoming a non-spatial jumpscare
-local SPOT_MIN_DISTANCE = 60    -- full-volume radius; then a predictable linear falloff
-local SPOT_MAX_DISTANCE = 2200  -- covers Level 1's full 960x960-stud footprint and diagonal
+local SPOT_VOLUME      = 1.20   -- preserve the authored close-range warning level
+local SPOT_MIN_DISTANCE = 10    -- close-range warning, then directional distance falloff
+local SPOT_MAX_DISTANCE = 200   -- same audible range as the existing chase loop
 local LUNGE_VOLUME     = 1     -- the lunge telegraph (positional)
 local STEP_WALK_VOLUME = 1.014 -- entity walk impact (30% louder)
 local STEP_RUN_VOLUME  = 1.30  -- entity chase impact (30% louder)
@@ -416,16 +416,24 @@ if YELL_SOUND ~= "" then
 end
 
 -- the "spotted you!" scream: Level 1 can see 650 studs normally and 1100
--- studs when a flashlight exposes the player. The former 200-stud hard cutoff
--- made a valid long-range detection nearly silent (or completely silent).
+-- studs when a flashlight exposes a player. Audio is deliberately local now:
+-- spotting somebody far away must not alert the entire map at high volume.
 --
 -- EntityAI publishes the exact howl position before it bumps EntitySpotScream.
 -- We play from a tiny local world emitter at that position. This stays true 3D
 -- audio even if StreamingEnabled has streamed the distant Entity model out for
 -- this client; the entity is stationary for the whole first-sight howl.
+local function chaseActive()
+	return workspace:GetAttribute("SelectedLevel") == 1
+		and workspace:GetAttribute("RoundActive") == true
+		and player:GetAttribute("InRound") == true
+		and player:GetAttribute("Escaped") ~= true
+end
+
 local lastSpotScreamAt = -math.huge
 
 local function playEntitySpotScream(fallbackEmitter, fadeIn)
+	if not chaseActive() then return false end
 	if SPOT_SOUND == "" or (os.clock() - lastSpotScreamAt) < 4 then return false end
 
 	local emitter = fallbackEmitter
@@ -458,7 +466,7 @@ local function playEntitySpotScream(fallbackEmitter, fadeIn)
 	s.SoundId = SPOT_SOUND
 	s.Volume = fadeIn and 0 or SPOT_VOLUME
 	-- Linear rolloff preserves left/right world direction while keeping the
-	-- scream intelligible at both normal and flashlight-enhanced sight ranges.
+	-- warning local to nearby players instead of carrying it across the whole map.
 	s.RollOffMode = Enum.RollOffMode.Linear
 	s.RollOffMinDistance = SPOT_MIN_DISTANCE
 	s.RollOffMaxDistance = SPOT_MAX_DISTANCE
@@ -569,13 +577,6 @@ local chase
 local chaseFadeTween
 local chaseBindSerial = 0
 local chasePrevEngaged = false
-
-local function chaseActive()
-	return workspace:GetAttribute("SelectedLevel") == 1
-		and workspace:GetAttribute("RoundActive") == true
-		and player:GetAttribute("InRound") == true
-		and player:GetAttribute("Escaped") ~= true
-end
 
 local function fadeChase(target, duration)
 	if not chase or not chase.Parent then return end

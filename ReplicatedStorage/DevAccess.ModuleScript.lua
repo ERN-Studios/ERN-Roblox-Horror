@@ -5,7 +5,6 @@ local DevAccess = {}
 local ALLOWED_USER_IDS = {
 	[40920547] = true,   -- mikkelczar
 	[9488575949] = true, -- LaverSneglen
-	[833029598] = true,  -- Detective_Costeau
 }
 
 -- Timeline seeking is intentionally narrower than the shared developer tools.

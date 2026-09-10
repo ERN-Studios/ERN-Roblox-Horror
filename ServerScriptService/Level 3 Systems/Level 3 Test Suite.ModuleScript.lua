@@ -56,16 +56,18 @@ local function assertPart(record: {[string]: any}, key: string, root: Instance):
 	return object
 end
 
-function TestSuite.ValidateGeneratedLayouts(): {[string]: any}
+function TestSuite.ValidateGeneratedLayouts(seeds: {number}?, requireSquare: boolean?): {[string]: any}
 	assert(Configuration.Layout.DistrictCount == 3
 		and Configuration.Layout.RoomsPerDistrict >= 8
 		and Configuration.Layout.HideTableCount == Configuration.Layout.DistrictCount
 			* Configuration.Layout.RoomsPerDistrict,
 		"Level 3 procedural district sizing or hide-table contract is invalid")
 	local expectedRooms = Configuration.Layout.DistrictCount * Configuration.Layout.RoomsPerDistrict + 2
+	local testSeeds = seeds or GENERATOR_TEST_SEEDS
 	local layoutHashes = {}
 	local firstLayout = nil
-	for _, requestedSeed in ipairs(GENERATOR_TEST_SEEDS) do
+	local maxAspect, maxCoreAspect, maxAttempt, fallbackCount = 0, 0, 0, 0
+	for _, requestedSeed in ipairs(testSeeds) do
 		local layout = LayoutGenerator.Generate(requestedSeed)
 		local repeated = LayoutGenerator.Generate(requestedSeed)
 		local valid, validationError = LayoutGenerator.Validate(layout)
@@ -77,8 +79,20 @@ function TestSuite.ValidateGeneratedLayouts(): {[string]: any}
 			and layout.UsedFallbackSeed == repeated.UsedFallbackSeed,
 			"Level 3 generation must be deterministic for seed " .. requestedSeed)
 		assert(layout.RequestedSeed == requestedSeed
-			and layout.Version == LayoutGenerator.Version,
+			and layout.Version == LayoutGenerator.Version and layout.Version >= 2,
 			"Level 3 generator seed/version diagnostics are stale")
+		assert(type(layout.CoreBounds) == "table" and type(layout.GatewayColumns) == "table"
+			and #layout.GatewayColumns == 2, "Level 3 stacked layout diagnostics are missing")
+		maxAspect = math.max(maxAspect, layout.Bounds.Aspect)
+		maxCoreAspect = math.max(maxCoreAspect, layout.CoreBounds.Aspect)
+		maxAttempt = math.max(maxAttempt, layout.Attempt)
+		if layout.UsedFallbackSeed then fallbackCount += 1 end
+		-- Explicit acceptance for the standard layout. Master size overrides may
+		-- intentionally change these proportions without invalidating generation.
+		if requireSquare then
+			assert(layout.Bounds.Aspect <= 1.5 and layout.CoreBounds.Aspect <= 2.1,
+				"Level 3 standard layout is not square enough for seed " .. requestedSeed)
+		end
 		assert(#layout.Rooms == expectedRooms
 			and #layout.Districts == Configuration.Layout.DistrictCount
 			and #layout.ModuleRooms == Configuration.ModuleGoal
@@ -113,6 +127,13 @@ function TestSuite.ValidateGeneratedLayouts(): {[string]: any}
 			and layout.Roles.SignalRoomId == layout.Roles.MallManagerSpawnRoomId
 			and layout.Roles.MallManagerSpawnRoomId ~= layout.Roles.ExitRoomId,
 			"Level 3 generated role metadata is incomplete or unsafe")
+		local arrival, entry = layout.RoomById.Arrival, layout.RoomById[layout.Roles.EntryDistrictRoomId]
+		local signal, exit = layout.RoomById.SignalHall, layout.RoomById.Exit
+		assert(entry.X > arrival.X and approx(entry.Z, arrival.Z)
+			and exit.X > signal.X and approx(exit.Z, signal.Z)
+			and (not requireSquare or approx(exit.X - signal.X - (exit.W + signal.W) * .5,
+				Configuration.Layout.ExitCorridorLength)),
+			"Level 3 arrival or +X final hall contract changed")
 		layoutHashes[layout.LayoutHash] = true
 		if firstLayout == nil then firstLayout = layout end
 	end
@@ -120,7 +141,7 @@ function TestSuite.ValidateGeneratedLayouts(): {[string]: any}
 		"Level 3 deterministic seed suite did not produce enough layout diversity")
 	local summaryLayout = firstLayout :: any
 	return {
-		Seeds = #GENERATOR_TEST_SEEDS,
+		Seeds = #testSeeds,
 		UniqueLayouts = countMap(layoutHashes),
 		Rooms = #summaryLayout.Rooms,
 		Links = #summaryLayout.Links,
@@ -128,6 +149,10 @@ function TestSuite.ValidateGeneratedLayouts(): {[string]: any}
 		Loops = #summaryLayout.Links - #summaryLayout.Rooms + 1,
 		HiddenExitLinks = 1,
 		GeneratorVersion = LayoutGenerator.Version,
+		MaximumAspect = maxAspect,
+		MaximumCoreAspect = maxCoreAspect,
+		MaximumAttempt = maxAttempt,
+		FallbackCount = fallbackCount,
 	}
 end
 
@@ -345,8 +370,8 @@ function TestSuite.ValidateConfiguration(): {[string]: any}
 		and Configuration.Hiding.HideOccupantLateralOffset * 2 + 2
 			<= Configuration.Hiding.SightOccluderSize.X,
 		"Level 3 shared-table occupancy does not fit two players under one table")
-	-- The Mall Manager's table check must stay a tactic-preserving mechanic:
-	-- never certain, rate-limited, announced, and survivable.
+	-- Direct pursuit checks the selected hiding place deterministically. The
+	-- warning and flush immunity remain; random bias only belongs to patrol.
 	local tableCheck = Configuration.TableCheck
 	assert(tableCheck.SweepBiasChance > 0 and tableCheck.SweepBiasChance < 1
 		and tableCheck.GlobalIntervalSeconds > 0
@@ -357,7 +382,7 @@ function TestSuite.ValidateConfiguration(): {[string]: any}
 		and tableCheck.SoundRollOffMaxDistance > tableCheck.SoundRollOffMinDistance
 		and type(Configuration.Audio[tableCheck.SoundName]) == "string"
 		and Configuration.Audio[tableCheck.SoundName] ~= "",
-		"Level 3 table-check tuning is omniscient, unannounced, or names a missing cue")
+		"Level 3 table-check tuning has invalid patrol bias, warning, immunity, or cue")
 	assert(managerTemplate:FindFirstChildOfClass("AnimationController")
 		and managerTemplate:FindFirstChildOfClass("AnimationController"):FindFirstChildOfClass("Animator"),
 		"Mall Manager template is missing AnimationController.Animator")
@@ -525,8 +550,11 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 	end
 	assert(manifest.ExitGateway == nil, "Legacy ExitGateway must not survive the hidden-exit rebuild")
 	assert(type(manifest.ExitPortal) == "table", "Level 3 manifest is missing ExitPortal")
-	assert(manifest.EscapePrompt and manifest.EscapePrompt:IsA("ProximityPrompt")
-		and manifest.EscapePrompt:IsDescendantOf(world), "Level 3 escape prompt is incomplete")
+	assert(manifest.EscapeTrigger and manifest.EscapeTrigger:IsA("BasePart")
+		and manifest.EscapeTrigger:IsDescendantOf(world)
+		and not manifest.EscapeTrigger.CanCollide, "Level 3 escape trigger is incomplete")
+	assert(world:FindFirstChild("EscapePrompt", true) == nil,
+		"Level 3 exit must not require a button prompt")
 	assert(manifest.ExitSafeSpawn and manifest.ExitSafeSpawn:IsA("BasePart")
 		and manifest.ExitSafeSpawn:IsDescendantOf(world), "Level 3 exit safe spawn is incomplete")
 	assert(typeof(manifest.ExitPosition) == "Vector3", "Level 3 ExitPosition must be a Vector3")
@@ -572,6 +600,16 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 		and typeof(slideMouth) == "Vector3"
 		and ((slideMouth :: Vector3) - expectedMouth).Magnitude <= .02,
 		"Level 2 slide mouth must terminate directly at the Level 3 mall arrival wall")
+	local arrivalSign = slide:FindFirstChild("Arrival Only Sign")
+	local arrivalNotice = arrivalSign and arrivalSign:FindFirstChild("Arrival Only Notice")
+	local noExitText = arrivalNotice and arrivalNotice:FindFirstChild("NoExit")
+	local arrivalOnlyText = arrivalNotice and arrivalNotice:FindFirstChild("ArrivalOnly")
+	assert(arrivalSign and arrivalSign:IsA("BasePart")
+		and arrivalNotice and arrivalNotice:IsA("SurfaceGui")
+		and arrivalNotice.Face == Enum.NormalId.Front and not arrivalNotice.AlwaysOnTop
+		and noExitText and noExitText:IsA("TextLabel") and noExitText.Text == "NO EXIT"
+		and arrivalOnlyText and arrivalOnlyText:IsA("TextLabel") and arrivalOnlyText.Text == "ONE-WAY ARRIVAL",
+		"The authored one-way arrival sign is missing or changed")
 	local transitionSeals = 0
 	for _, object in ipairs(slide:GetDescendants()) do
 		if object:IsA("BasePart") and object:GetAttribute("Level3_TransitionWallSeal") == true then
@@ -758,12 +796,12 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 			local allowedCRT = instance.Name == "CRT Status Screen Surface"
 				and instance.Parent and instance.Parent:GetAttribute("Level3_CRTScreen") == true
 				and instance:IsDescendantOf(manifest.DiscPlayer.Model)
-			assert(allowedDrawing or allowedCD or allowedCRT,
+			assert(allowedDrawing or allowedCD or allowedCRT or instance == arrivalNotice,
 				"Generated Level 3 SurfaceGui/sign is forbidden: " .. instance:GetFullName())
 		end
 		local allowedDiscPlayerText = instance:IsA("TextLabel")
 			and instance:IsDescendantOf(manifest.DiscPlayer.Model)
-		assert(allowedDiscPlayerText
+		assert(allowedDiscPlayerText or instance == noExitText or instance == arrivalOnlyText
 			or (not instance:IsA("TextLabel") and not instance:IsA("TextBox") and not instance:IsA("TextButton")),
 			"Generated Level 3 text UI is forbidden: " .. instance:GetFullName())
 		assert(not instance:IsA("Humanoid"),
@@ -1256,9 +1294,9 @@ function TestSuite.ValidateRuntime(expectedProgress: number): {[string]: any}
 		and insertedVisuals == expectedProgress,
 		"Disc player lights or inserted-disc visuals do not match inserted progress")
 
-	local escapePrompt = world:FindFirstChild("EscapePrompt", true)
-	assert(escapePrompt and escapePrompt:IsA("ProximityPrompt") and escapePrompt.Enabled == unlocked,
-		"Final escape prompt enabled state does not match module progress")
+	local escapeTrigger = world:FindFirstChild("EscapeTrigger", true)
+	assert(escapeTrigger and escapeTrigger:IsA("BasePart") and escapeTrigger.CanTouch,
+		"Final escape trigger is not listening during the live objective session")
 
 	local collectedModules = 0
 	for _, model in ipairs(world:GetDescendants()) do
@@ -1451,10 +1489,11 @@ local function corridorEndpoints(a: {[string]: any}, b: {[string]: any}): (numbe
 	return a.X, a.Z + direction * a.D * .5, b.X, b.Z - direction * b.D * .5
 end
 
-function TestSuite.ValidateNavigationLayouts(): {[string]: any}
+function TestSuite.ValidateNavigationLayouts(seeds: {number}?): {[string]: any}
 	local requiredSeeds = {[101] = false, [7331] = false, [65537] = false, [1900813] = false}
-	assert(#NAVIGATION_TEST_SEEDS >= 20, "Navigation layout coverage requires at least 20 seeds")
-	for _, seed in ipairs(NAVIGATION_TEST_SEEDS) do
+	local testSeeds = seeds or NAVIGATION_TEST_SEEDS
+	assert(#testSeeds >= 20, "Navigation layout coverage requires at least 20 seeds")
+	for _, seed in ipairs(testSeeds) do
 		if requiredSeeds[seed] ~= nil then requiredSeeds[seed] = true end
 		local layout = LayoutGenerator.Generate(seed)
 		local valid, validationProblem = LayoutGenerator.Validate(layout)
@@ -1531,7 +1570,7 @@ function TestSuite.ValidateNavigationLayouts(): {[string]: any}
 	for seed, covered in pairs(requiredSeeds) do
 		assert(covered, string.format("Required navigation seed %d was not exercised", seed))
 	end
-	return {Seeds = #NAVIGATION_TEST_SEEDS}
+	return {Seeds = #testSeeds}
 end
 
 -- Asserts the live hunt telemetry contract on a Controller.GetSnapshot()
@@ -2883,6 +2922,28 @@ end
 -- time-series replacement for the old single-snapshot age assertion: a recovery
 -- timestamp alone cannot satisfy it, because position and route indices are
 -- sampled directly.
+-- Movement and an early progress event do not excuse a later circle around
+-- one waypoint. Include the trailing plateau; detours need not reduce direct
+-- target distance on every sample. This also validates saved native traces.
+function TestSuite.ValidateChaseProgressSeries(series: {any}, maximumPlateauSeconds: number): number
+	assert(#series >= 2, "Chase progress validation requires at least two samples")
+	local progressAt = series[1].T
+	local previousSerial = series[1].GenuineProgressSerial
+	local longestPlateau = 0
+	for index = 2, #series do
+		local sample = series[index]
+		longestPlateau = math.max(longestPlateau, sample.T - progressAt)
+		if sample.GenuineProgressSerial > previousSerial then
+			progressAt = sample.T
+		end
+		previousSerial = sample.GenuineProgressSerial
+	end
+	assert(longestPlateau <= maximumPlateauSeconds, string.format(
+		"Chasing Manager made no genuine progress for %.2fs (budget %.2fs)",
+		longestPlateau, maximumPlateauSeconds))
+	return longestPlateau
+end
+
 function TestSuite.ProbeChaseForwardProgress(Manager: {[string]: any}, player: Player,
 	seconds: number?): {[string]: any}
 	assertStudioProbe("ProbeChaseForwardProgress")
@@ -3012,6 +3073,8 @@ function TestSuite.ProbeChaseForwardProgress(Manager: {[string]: any}, player: P
 		assert(last.GenuineProgressSerial > first.GenuineProgressSerial, string.format(
 			"Chasing Manager never credited genuine progress (%d -> %d)",
 			first.GenuineProgressSerial, last.GenuineProgressSerial))
+		local longestProgressPlateau = TestSuite.ValidateChaseProgressSeries(
+			series, math.max(2, tuning.StuckSeconds * 2 + .25))
 		assert(maxPeak <= 1, "More than one path computation was in flight during the chase")
 		assert(maxPerSecond <= 5, string.format(
 			"Chase exceeded five path computations in one second (%d)", maxPerSecond))
@@ -3031,6 +3094,7 @@ function TestSuite.ProbeChaseForwardProgress(Manager: {[string]: any}, player: P
 			ChaseSamples = chaseSamples,
 			MovingChaseSamples = movingSamples,
 			LongestFrozenChaseSeconds = longestFreeze,
+			LongestProgressPlateauSeconds = longestProgressPlateau,
 			RouteAdvances = routeAdvances,
 			GenuineProgressEvents = last.GenuineProgressSerial - first.GenuineProgressSerial,
 			StuckRecoveries = last.StuckRecoveries - first.StuckRecoveries,
@@ -3297,9 +3361,9 @@ end
 -- the real music sequence across the pre-blackout warning, the blackout, the
 -- scream edge, the Mall Manager hunt, the final lock and the recovery must
 -- leave every furniture part byte-identical in parent, transparency,
--- CanCollide, CanTouch and CanQuery, must leave a hidden player hidden, must
--- keep that hidden player off the Manager's target list, and must keep every
--- furniture group guarding navigation while the Manager still makes progress.
+-- CanCollide, CanTouch and CanQuery, must leave a hidden player hidden while
+-- checks are deliberately suspended, and must keep every furniture group
+-- guarding navigation while the Manager pursues the hidden player.
 --
 -- Seeking across the blackout edge fires one-way scream and chair events, so
 -- this probe is restricted to a disposable Play session. The required cleanup
@@ -3441,22 +3505,22 @@ function TestSuite.ProbeFurniturePermanence(context: {[string]: any}?): {[string
 		-- Every timeline edge the old furniture machine used to mutate, plus the
 		-- edges either side of it, sampled in chronological order.
 		local screamStart = music.DurationSeconds - music.BlackoutScreamLeadSeconds
-		local firstLockStart = screamStart - music.PreScreamFlashlightLockSeconds
-		local finalLockStart = music.CycleEndSeconds - music.HuntFinalFlashlightLockSeconds
 		local edges = {
 			{Name = "PRE_BLACKOUT", Elapsed = math.max(0, music.BlackoutStartSeconds
 				- music.PreBlackoutFlickerSeconds + .1)},
 			{Name = "BLACKOUT_SONG", Elapsed = music.BlackoutStartSeconds + .1},
-			{Name = "PRE_SCREAM_FLASHLIGHT_LOCK", Elapsed = firstLockStart + .1},
+			{Name = "PRE_SCREAM", Elapsed = screamStart - .9},
 			{Name = "BLACKOUT_SCREAM", Elapsed = screamStart + .1},
 			{Name = "HUNT", Elapsed = music.DurationSeconds + .1},
-			{Name = "HUNT_FINAL_LOCK", Elapsed = finalLockStart + .1},
+			{Name = "HUNT_END", Elapsed = music.CycleEndSeconds - 1.9},
 			{Name = "RECOVERY", Elapsed = music.CycleEndSeconds + .1},
 		}
 
 		for _, edge in ipairs(edges) do
 			MusicController.DebugSetElapsed(edge.Elapsed)
 			task.wait(.2)
+			assert(workspace:GetAttribute("Level3FlashlightsSuppressed") ~= true,
+				"Flashlights were forced off at " .. edge.Name)
 
 			-- 1. Every furniture part is untouched, in place, and still queryable.
 			for _, record in ipairs(baseline.Records) do
@@ -3506,7 +3570,7 @@ function TestSuite.ProbeFurniturePermanence(context: {[string]: any}?): {[string
 				"Furniture group count changed at %s (%d -> %d)",
 				edge.Name, groupCount, #liveGroups))
 
-			-- 3. The hidden player stays hidden, and is not the Manager's target.
+			-- 3. Hiding remains intact while checks are disabled; targeting continues.
 			assert(player.Parent == Players, "Probe player left during the furniture probe")
 			assert(player:GetAttribute("Level3_Hiding") == true,
 				"Hidden player lost the Level3_Hiding attribute at " .. edge.Name)
@@ -3521,9 +3585,15 @@ function TestSuite.ProbeFurniturePermanence(context: {[string]: any}?): {[string
 
 			local managerSnapshot = Manager.GetSnapshot()
 			local targetUserId = managerSnapshot and managerSnapshot.TargetUserId or 0
-			assert(targetUserId ~= player.UserId, string.format(
-				"Mall Manager targeted a hidden player at %s (userId %d)",
-				edge.Name, targetUserId))
+			if managerSnapshot and managerSnapshot.Blackout and targetUserId > 0 then
+				local targetPlayer = Players:GetPlayerByUserId(targetUserId)
+				assert(targetPlayer and targetPlayer:GetAttribute("InRound") == true,
+					"Mall Manager retained an invalid target at " .. edge.Name)
+				if HidingController.IsHidden(targetPlayer, generation) then
+					assert(not managerSnapshot.Attacking,
+						"Mall Manager bypassed the suspended table check at " .. edge.Name)
+				end
+			end
 
 			local exclusionsActive = managerSnapshot and managerSnapshot.FurnitureNavExclusionsActive
 			local exclusionsTotal = managerSnapshot and managerSnapshot.FurnitureNavExclusionsTotal
@@ -3551,14 +3621,9 @@ function TestSuite.ProbeFurniturePermanence(context: {[string]: any}?): {[string
 			})
 		end
 
-		-- 4. Manager progress with EVERY player hidden.
-		--
-		-- This is the case that used to be excused rather than tested: with the
-		-- only player under a table, the Manager had nothing to chase, so the
-		-- movement assertion was dropped and the frozen-on-the-spot behaviour it
-		-- would have caught shipped. Having nothing to chase is not licence to
-		-- stop -- the hunt still sweeps the mall, it just never targets or
-		-- attacks anyone who is hidden. Both halves are asserted here.
+		-- 4. Every hidden player remains eligible for pursuit. With checks disabled
+		-- for this furniture audit, arriving at the safe table perimeter is valid;
+		-- the separate table-chase probe exercises the warning and flush.
 		MusicController.DebugSetElapsed(music.DurationSeconds + .1)
 		task.wait(.25)
 		assert(HidingController.IsHidden(player, generation),
@@ -3596,15 +3661,16 @@ function TestSuite.ProbeFurniturePermanence(context: {[string]: any}?): {[string
 				TargetUserId = snapshot.TargetUserId,
 				GenuineProgressSerial = snapshot.GenuineProgressSerial,
 			})
-			-- Exclusion has to hold for every single sample, not just at the
-			-- edges: a hidden player must never become a target or be attacked.
-			assert((snapshot.TargetUserId or 0) == 0,
-				"Mall Manager acquired a target during the all-hidden patrol")
-			assert(snapshot.TargetMode == "NO_EXPOSED_PLAYER", string.format(
-				"Mall Manager reported target mode %s during the all-hidden patrol",
-				tostring(snapshot.TargetMode)))
-			assert(snapshot.TargetDistance == -1 and snapshot.TargetPosition == nil,
-				"Mall Manager retained target distance/position while every player was hidden")
+			local targetPlayer = Players:GetPlayerByUserId(snapshot.TargetUserId or 0)
+			assert(targetPlayer and HidingController.IsHidden(targetPlayer, generation),
+				"Mall Manager lost its target while every living player was hidden")
+			assert(snapshot.TargetMode == "NEAREST_PLAYER" and snapshot.State == "CHASE",
+				"Mall Manager stopped pursuing the nearest hidden player")
+			assert(snapshot.TargetDistance >= 0 and typeof(snapshot.TargetPosition) == "Vector3"
+				and targetPlayer:GetAttribute("BeingChased") == true,
+				"Hidden-target chase telemetry was cleared")
+			assert(not snapshot.Attacking,
+				"Mall Manager bypassed the disabled table check to attack a hidden player")
 			assert(HidingController.IsHidden(player, generation),
 				"the hidden player was ejected during the all-hidden patrol")
 			assert(snapshot.FurnitureNavExclusionsActive == snapshot.FurnitureNavExclusionsTotal,
@@ -3612,19 +3678,23 @@ function TestSuite.ProbeFurniturePermanence(context: {[string]: any}?): {[string
 		end
 		assert(#hiddenMotion >= 5, string.format(
 			"All-hidden patrol probe collected only %d samples", #hiddenMotion))
-		assert(hiddenTravelled > 4, string.format(
+		local hiddenEnd = assert(Manager.GetSnapshot(),
+			"Mall Manager vanished during the hidden-player pursuit probe")
+		local resolvedGoal = hiddenEnd.ResolvedFinalGoal
+		local reachedTable = typeof(resolvedGoal) == "Vector3"
+			and Vector3.new(hiddenEnd.Position.X-resolvedGoal.X, 0,
+				hiddenEnd.Position.Z-resolvedGoal.Z).Magnitude <= Configuration.MallManager.GoalTolerance + 1
+		assert(reachedTable or hiddenTravelled > 4, string.format(
 			"Mall Manager stood still while every player was hidden (%.2f studs in %.1fs)",
 			hiddenTravelled, hiddenSeconds))
 		local hiddenNet = (hiddenLast - hiddenStart.Position).Magnitude
-		assert(hiddenNet > 2, string.format(
+		assert(reachedTable or hiddenNet > 2, string.format(
 			"Mall Manager oscillated without net progress while every player was hidden"
 			.. " (%.2f studs net of %.2f travelled)", hiddenNet, hiddenTravelled))
-		local hiddenEnd = assert(Manager.GetSnapshot(),
-			"Mall Manager vanished during the all-hidden patrol probe")
-		assert(hiddenEnd.GenuineProgressSerial > hiddenStart.GenuineProgressSerial,
+		assert(reachedTable or hiddenEnd.GenuineProgressSerial > hiddenStart.GenuineProgressSerial,
 			"Mall Manager moved without recording genuine patrol progress while all players were hidden")
 
-		-- 5. Manager progress with a legitimate target, for comparison.
+		-- 5. Manager progress with the player outside the table, for comparison.
 		pcall(HidingController.DebugExit, player)
 		task.wait(.4)
 		assert(not HidingController.IsHidden(player, generation),

@@ -406,12 +406,11 @@ out (`Level 3 Systems`):
   (`Hiding.HideOccupantCap`), on lanes either side of the anchor; a hidden player
   has `ProximityPromptService` switched off so `E` cannot re-fire the prompt they
   are already inside.
-- **The Mall Manager checks tables** (`Configuration.TableCheck`): it biases its
-  sweep toward occupied tables, enters a `TABLE_CHECK` state with a two-second
-  warning on the occupants' hide banner, then flushes them out to the far side
-  with a short window of attack immunity. Per-table and global cooldowns stop it
-  camping one table, and a mid-hunt detour is only allowed toward a table closer
-  than the nearest exposed player.
+- **The Mall Manager pursues hidden players too**: its hunt follows the nearest
+  living player even under a table. On reaching that player's table, it enters
+  `TABLE_CHECK` with a two-second warning on the hide banner, then flushes the
+  occupants to the far side with 1.5 seconds of attack immunity. Hiding does not
+  cancel the chase; targeted checks do not wait for a random sweep or cooldown.
 - **The objective**: collect CDs scattered through the mall and insert them into
   the **five-slot disc player** in the Signal Hall (`Configuration.ModuleGoal`
   is 5). The state folder tracks collected, inserted, carried and dropped counts

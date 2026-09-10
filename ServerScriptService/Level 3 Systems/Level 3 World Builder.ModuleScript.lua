@@ -173,7 +173,8 @@ local function makeWall(parent: Instance, room: {[string]: any}, side: string, h
 	-- old door-sized opening at each room boundary.
 	local poolArrivalOpening = room.Id == "Arrival" and side == "West"
 	local doorW = poolArrivalOpening and 16.0 or Configuration.CorridorWidth
-	local doorH = poolArrivalOpening and 16.0 or Configuration.CorridorHeight
+	-- The bore rises slightly through the wall thickness; clear its top vertex.
+	local doorH = poolArrivalOpening and 16.1 or Configuration.CorridorHeight
 	local color = wallColor(room)
 	local wallpaper = usesWallpaper(room)
 	local horizontal = side == "North" or side == "South"
@@ -315,6 +316,11 @@ local function cloneDecorMesh(templateName: string, parent: Instance, name: stri
 	return object
 end
 
+-- The complete table/chair ground footprint is shared by exclusion creation
+-- and compact room placement. Body padding is added exactly once.
+local TABLE_GROUP_FOOTPRINT = Vector2.new(11.2, 10.8)
+local TABLE_GROUP_VISUAL_FOOTPRINT = Vector2.new(11.45, 10.8)
+
 local function makeTable(parent: Instance, cframe: CFrame, party: boolean, chairs: number, styleIndex: number, allowHide: boolean)
 	local tableColor = TABLECLOTH_COLORS[(styleIndex - 1) % #TABLECLOTH_COLORS + 1]
 	local tableMesh = cloneDecorMesh("FoldingTableTemplate", parent, "Level 3 Vetted Folding Table",
@@ -340,9 +346,9 @@ local function makeTable(parent: Instance, cframe: CFrame, party: boolean, chair
 		+ Configuration.MallManager.FurniturePathPadding
 	local navExclusion = part(parent, "Level 3 Manager Furniture Nav Exclusion",
 		cframe * CFrame.new(0, Configuration.MallManager.AgentHeight * .5, 0),
-		Vector3.new(11.2 + furnitureClearance * 2,
+		Vector3.new(TABLE_GROUP_FOOTPRINT.X + furnitureClearance * 2,
 			Configuration.MallManager.AgentHeight,
-			10.8 + furnitureClearance * 2),
+			TABLE_GROUP_FOOTPRINT.Y + furnitureClearance * 2),
 		Color3.new(), Enum.Material.SmoothPlastic, 1)
 	decorative(navExclusion)
 	-- PathfindingModifier regions must remain queryable when Roblox bakes the nav
@@ -802,6 +808,56 @@ local function makeExitCorridorSpeaker(parent: Instance, centerPoint: Vector3,
 	equalizer.Parent = sound
 end
 
+-- Generated rooms are smaller than several original decor archetypes. Keep
+-- every table/chair group, size and rotation, while reserving a continuous
+-- perimeter for the Manager's centre around the FULL inflated exclusions.
+local function fitRoomTableLayouts(room: {[string]: any}, layouts: {{number}})
+	local manager = Configuration.MallManager
+	local physicalWallInset = Configuration.WallThickness * .5 + manager.SweepRadius
+	local centreLane = 1
+	local padding = manager.AgentRadius + manager.FurniturePathPadding
+	local navHalfX, navHalfZ = TABLE_GROUP_FOOTPRINT.X * .5 + padding,
+		TABLE_GROUP_FOOTPRINT.Y * .5 + padding
+	local placed = {}
+	for _, layout in ipairs(layouts) do
+		local c, s = math.abs(math.cos(layout[3])), math.abs(math.sin(layout[3]))
+		local maxX = room.W * .5 - physicalWallInset - centreLane - (c * navHalfX + s * navHalfZ)
+		local maxZ = room.D * .5 - physicalWallInset - centreLane - (s * navHalfX + c * navHalfZ)
+		assert(maxX >= 0 and maxZ >= 0,
+			"Party room is too small for its furniture and Manager perimeter")
+		table.insert(placed, {
+			Layout = layout, MaxX = maxX, MaxZ = maxZ,
+			X = math.clamp(layout[1] * room.W, -maxX, maxX),
+			Z = math.clamp(layout[2] * room.D, -maxZ, maxZ),
+			HalfX = (c * TABLE_GROUP_VISUAL_FOOTPRINT.X + s * TABLE_GROUP_VISUAL_FOOTPRINT.Y) * .5,
+			HalfZ = (s * TABLE_GROUP_VISUAL_FOOTPRINT.X + c * TABLE_GROUP_VISUAL_FOOTPRINT.Y) * .5,
+		})
+	end
+	local function groupsOverlap()
+		for index, a in ipairs(placed) do
+			for other = index + 1, #placed do
+				local b = placed[other]
+				if math.abs(a.X - b.X) < a.HalfX + b.HalfX + .2
+					and math.abs(a.Z - b.Z) < a.HalfZ + b.HalfZ + .2 then return true end
+			end
+		end
+		return false
+	end
+	-- Only when minimum clamping crowds physical furniture: use opposite
+	-- corners for a pair, or a triangle for three groups. Keep the authored yaw.
+	if groupsOverlap() then
+		for index, group in ipairs(placed) do
+			group.X = if #placed == 3 and index == 2 then 0
+				else (if index == 1 then -group.MaxX else group.MaxX)
+			group.Z = if index == 2 then group.MaxZ else -group.MaxZ
+		end
+	end
+	assert(not groupsOverlap(), "Party room cannot separate its table/chair groups")
+	for _, group in ipairs(placed) do
+		group.Layout[1], group.Layout[2] = group.X / room.W, group.Z / room.D
+	end
+end
+
 local function makeRoomProps(parent: Instance, room: {[string]: any}, index: number)
 	local p = worldPosition(room)
 	if room.Id == "Arrival" then
@@ -845,6 +901,7 @@ local function makeRoomProps(parent: Instance, room: {[string]: any}, index: num
 		layouts = {{-.25, .15, math.rad(90), 2}}
 	end
 
+	fitRoomTableLayouts(room, layouts)
 	local moduleSocketCreated = false
 	for tableIndex, layout in ipairs(layouts) do
 		local tableCF = CFrame.new(p + Vector3.new(layout[1] * room.W, 0, layout[2] * room.D))
@@ -901,6 +958,10 @@ local function makeRoomStructure(parent: Instance, room: {[string]: any})
 		and room.Decor ~= "WhiteAtrium") then return end
 	local p = worldPosition(room)
 	local h = roomHeight(room)
+	-- Keep the beam's ceiling attachment while allowing the full authored
+	-- Manager height beneath it. Only the lowest rooms need a thinner beam.
+	local beamHeight = math.min(1.5, h - Configuration.MallManager.AgentHeight - .1)
+	assert(beamHeight > 0, "Party room is too low for its ceiling beams and Manager")
 	local color = wallColor(room)
 	for _, x in ipairs({-room.W * .34, room.W * .34}) do
 		for _, z in ipairs({-room.D * .32, room.D * .32}) do
@@ -910,8 +971,8 @@ local function makeRoomStructure(parent: Instance, room: {[string]: any})
 		end
 	end
 	for _, z in ipairs({-room.D * .32, room.D * .32}) do
-		local beam = part(parent, "Level 3 Ceiling Beam", CFrame.new(p + Vector3.new(0, h - .75, z)),
-			Vector3.new(room.W * .68, 1.5, 1.1), color:Lerp(Color3.new(0, 0, 0), .08), Enum.Material.Plaster)
+		local beam = part(parent, "Level 3 Ceiling Beam", CFrame.new(p + Vector3.new(0, h - beamHeight * .5, z)),
+			Vector3.new(room.W * .68, beamHeight, 1.1), color:Lerp(Color3.new(0, 0, 0), .08), Enum.Material.Plaster)
 		beam.CanCollide = true
 	end
 end
@@ -1554,18 +1615,48 @@ local function makeArrivalElevator(parent: Instance, room: {[string]: any}): (Mo
 	-- one long ride, and enough rise that the resume point is genuinely downhill.
 	-- The bore still finishes level with the landing-room floor so the outlet is
 	-- a slide mouth rather than a drop.
-	local tubeLength, rise, radius = 230, 66, 8
-	-- This curve changes slope gradually; 32 longitudinal sections keep each
-	-- collision span under eight studs, while a 20-sided bore is already visually
-	-- round at this radius. The former 44x40 tessellation created 1,760 shell
-	-- colliders for this one prop and pushed the whole level past both its part
-	-- and collision budgets without improving the ride.
+	local tubeLength, rise, radius = 400, 115, 8
+	-- A longer run leaves room for six riders, spaced uphill before the rear cap.
+	-- The gentle curve still uses 32 sections (panels shorter than 14.6 studs) and the
+	-- same 20-sided bore, preserving the existing shell/collision part budget.
 	local pathSections, shellSegments = 32, 20
 	local wallX = p.X - room.W * .5
 	local mouthX = wallX + Configuration.WallThickness * .5 + .12
 	local centerY = p.Y + radius + .05
 	visual:SetAttribute("Level3_SlideMouthPosition", Vector3.new(mouthX, centerY, p.Z))
 	visual:SetAttribute("Level3_DirectMallArrival", true)
+	local signPosition = Vector3.new(mouthX + .16, centerY + radius + 2.3, p.Z)
+	local arrivalSign = part(visual, "Arrival Only Sign",
+		CFrame.lookAt(signPosition, signPosition + Vector3.xAxis),
+		Vector3.new(14, 3.6, .2), Color3.fromRGB(223, 197, 115), Enum.Material.SmoothPlastic)
+	decorative(arrivalSign)
+	local signGui = Instance.new("SurfaceGui")
+	signGui.Name = "Arrival Only Notice"
+	signGui.Face = Enum.NormalId.Front
+	signGui.SizingMode = Enum.SurfaceGuiSizingMode.FixedSize
+	signGui.CanvasSize = Vector2.new(840, 216)
+	signGui.LightInfluence = .15
+	signGui.AlwaysOnTop = false
+	signGui.Parent = arrivalSign
+	local signTitle = Instance.new("TextLabel")
+	signTitle.Name = "NoExit"
+	signTitle.BackgroundTransparency = 1
+	signTitle.Size = UDim2.new(1, 0, .62, 0)
+	signTitle.Font = Enum.Font.GothamBold
+	signTitle.TextSize = 78
+	signTitle.TextColor3 = Color3.fromRGB(37, 33, 23)
+	signTitle.Text = "NO EXIT"
+	signTitle.Parent = signGui
+	local signDetail = Instance.new("TextLabel")
+	signDetail.Name = "ArrivalOnly"
+	signDetail.BackgroundTransparency = 1
+	signDetail.Position = UDim2.new(0, 0, .62, 0)
+	signDetail.Size = UDim2.new(1, 0, .3, 0)
+	signDetail.Font = Enum.Font.GothamMedium
+	signDetail.TextSize = 36
+	signDetail.TextColor3 = signTitle.TextColor3
+	signDetail.Text = "ONE-WAY ARRIVAL"
+	signDetail.Parent = signGui
 	local shellColor = Color3.fromRGB(218, 226, 211)
 	local shellShadow = Color3.fromRGB(193, 207, 197)
 	local slipperyPhysics = PhysicalProperties.new(.7, .02, 0, 100, 1)
@@ -1632,11 +1723,11 @@ local function makeArrivalElevator(parent: Instance, room: {[string]: any}): (Mo
 	visual:SetAttribute("Level3_SlideLength", tubeLength)
 
 	-- The resume frame: where a continuing Level 2 rider re-enters the world.
-	-- It sits just inside the rear safety cap, on the bore axis, with the
-	-- tangent pointing down the slide toward the mall. GameManager places the
+	-- It leaves room uphill for the remaining five riders, all on the bore axis,
+	-- with tangents pointing down toward the mall. GameManager places the
 	-- character here and gives it this velocity, so the ride continues instead
 	-- of restarting as a stand-up spawn somewhere else.
-	local RESUME_ALPHA = .93
+	local RESUME_ALPHA = .80
 	local RESUME_SPEED = 62
 	local resumePosition = Vector3.new(
 		mouthX - tubeLength * RESUME_ALPHA,
@@ -1655,39 +1746,51 @@ local function makeArrivalElevator(parent: Instance, room: {[string]: any}): (Mo
 	local rearPoint = pathPoints[#pathPoints]
 	local rearAxis = (rearPoint - pathPoints[#pathPoints - 1]).Unit
 
-	-- Fill only the four square aperture corners with wall-aligned slices.
-	-- The ordinary orange plaster finish continues around the slide mouth; the
-	-- tube's leading shell edge hides the sub-stud stepped inner boundary.
-	local sealCenter = Vector3.new(wallX, centerY, p.Z)
-	local sealHalfOpening = radius + .12
-	local sealOuterRadius = radius + .15
-	-- The leading shell edge hides the stepped inner boundary. Twenty rows keep
-	-- every step below one stud without spending 192 decorative parts on a wall
-	-- aperture the player only sees while moving at slide speed.
-	local sealRows = 20
-	local sealRowHeight = sealHalfOpening * 2 / sealRows
-	local sealOuterZ = sealHalfOpening + .08
-	local sealDepth = Configuration.WallThickness - .02
-	for rowIndex = 0, sealRows - 1 do
-		local y0 = -sealHalfOpening + rowIndex * sealRowHeight
-		local y1 = y0 + sealRowHeight
-		local yOffset = (y0 + y1) * .5
-		local farY = math.max(math.abs(y0), math.abs(y1))
-		local circleHalfWidth = math.sqrt(math.max(0,
-			sealOuterRadius * sealOuterRadius - farY * farY))
-		local innerZ = math.max(0, circleHalfWidth - .01)
-		local stripWidth = sealOuterZ - innerZ
-		local zOffset = (innerZ + sealOuterZ) * .5
+	-- Match the twenty flat shell panels, not a stepped approximation of a circle.
+	-- Each band is a rectangle plus a wedge: a continuous plaster face with the
+	-- same forty-part budget. Its inner edge meets the middle of the fiberglass.
+	-- Project the first tube segment onto the wall so its slight rise cannot
+	-- expose a seam. Across the wall depth the edge stays within the .30 shell.
+	local sealSlope = (pathPoints[2].Y - pathPoints[1].Y)
+		/ (pathPoints[1].X - pathPoints[2].X)
+	local sealYScale = math.sqrt(1 + sealSlope * sealSlope)
+	local sealCenter = Vector3.new(wallX, centerY + (mouthX - wallX) * sealSlope, p.Z)
+	local sealVertexRadius = radius / math.cos(math.pi / shellSegments)
+	local sealOuterZ = radius + .30
+	local sealDepth = Configuration.WallThickness + .02
+	for bandIndex = 0, shellSegments / 2 - 1 do
+		local angle0 = -math.pi * .5 + bandIndex * math.pi * 2 / shellSegments
+		local angle1 = angle0 + math.pi * 2 / shellSegments
+		local y0 = math.sin(angle0) * sealVertexRadius * sealYScale
+		local y1 = math.sin(angle1) * sealVertexRadius * sealYScale
+		local z0 = math.cos(angle0) * sealVertexRadius
+		local z1 = math.cos(angle1) * sealVertexRadius
+		local outerEdge = math.max(z0, z1)
+		local wedgeUp = Vector3.yAxis * (if z1 > z0 then 1 else -1)
 		for _, side in ipairs({-1, 1}) do
 			local sideName = side < 0 and "Left" or "Right"
-			local seal = part(visual,
-				"Level 3 West Wall Circular Aperture Fill " .. sideName,
-				CFrame.new(sealCenter + Vector3.new(0, yOffset, side * zOffset)),
-				Vector3.new(sealDepth, sealRowHeight + .03, stripWidth),
-				wallColor(room), Enum.Material.Plaster)
-			decorative(seal)
-			seal.CastShadow = false
-			seal:SetAttribute("Level3_TransitionWallSeal", true)
+			local fill = Instance.new("Part")
+			fill.Name = "Level 3 West Wall Circular Aperture Fill " .. sideName
+			fill.CFrame = CFrame.new(sealCenter
+				+ Vector3.new(0, (y0 + y1) * .5, side * (outerEdge + sealOuterZ) * .5))
+			fill.Size = Vector3.new(sealDepth, y1 - y0, sealOuterZ - outerEdge)
+			local wedge = Instance.new("WedgePart")
+			wedge.Name = "Level 3 West Wall Circular Aperture Wedge " .. sideName
+			local wedgeBack = Vector3.zAxis * side
+			wedge.CFrame = CFrame.fromMatrix(sealCenter
+				+ Vector3.new(0, (y0 + y1) * .5, side * (z0 + z1) * .5),
+				wedgeUp:Cross(wedgeBack), wedgeUp, wedgeBack)
+			wedge.Size = Vector3.new(sealDepth, y1 - y0, math.abs(z1 - z0))
+			for _, seal in ipairs({fill, wedge}) do
+				seal.Anchored = true
+				seal.Color = wallColor(room)
+				seal.Material = Enum.Material.Plaster
+				seal.TopSurface = Enum.SurfaceType.Smooth
+				seal.BottomSurface = Enum.SurfaceType.Smooth
+				decorative(seal)
+				seal:SetAttribute("Level3_TransitionWallSeal", true)
+				seal.Parent = visual
+			end
 		end
 	end
 
@@ -1832,7 +1935,7 @@ local function makeArrivalElevator(parent: Instance, room: {[string]: any}): (Mo
 	return model, spawn, mazeStart
 end
 
-local function makeExitSet(parent: Instance, room: {[string]: any}): (ProximityPrompt, BasePart, Vector3, Model)
+local function makeExitSet(parent: Instance, room: {[string]: any}): (BasePart, BasePart, Vector3, Model)
 	local model = Instance.new("Model")
 	model.Name = "Level 3 Energon Freight Exit"
 	model:SetAttribute("Level3_FinalExit", true)
@@ -1916,15 +2019,17 @@ local function makeExitSet(parent: Instance, room: {[string]: any}): (ProximityP
 	powerLight.Enabled = false
 	powerLight.Parent = lockCore
 
-	local prompt = Instance.new("ProximityPrompt")
-	prompt.Name = "EscapePrompt"
-	prompt.ActionText = "LEAVE LEVEL 3"
-	prompt.ObjectText = "ENERGON-LOCKED FREIGHT ELEVATOR"
-	prompt.HoldDuration = 1.0
-	prompt.MaxActivationDistance = 10
-	prompt.RequiresLineOfSight = true
-	prompt.Enabled = false
-	prompt.Parent = lockCore
+	-- Reach the exit by running into the freight doorway. The detector stops
+	-- inside its jambs and begins just in front of the solid door face, so the
+	-- character's root can enter it without opening or removing authored parts.
+	local escapeTrigger = part(model, "EscapeTrigger",
+		CFrame.new(doorX - 2.4, p.Y + 5, p.Z), Vector3.new(3, 10, 9.5),
+		Color3.new(), Enum.Material.SmoothPlastic, 1)
+	escapeTrigger.CanCollide = false
+	escapeTrigger.CanTouch = false -- Objective Controller owns touch detection for the live session.
+	escapeTrigger.CanQuery = false
+	escapeTrigger.CastShadow = false
+	escapeTrigger:SetAttribute("Level3_ExitTrigger", true)
 
 	local safeRoom = folder(parent, "Escaped Player Waiting Room")
 	local safeCenter = p + Vector3.new(0, -36, 0)
@@ -1939,7 +2044,7 @@ local function makeExitSet(parent: Instance, room: {[string]: any}): (ProximityP
 	local safeSpawn = part(safeRoom, "ExitSafeSpawn", CFrame.new(safeCenter + Vector3.new(0, 3, 0)),
 		Vector3.new(8, .3, 8), Color3.new(0,0,0), Enum.Material.SmoothPlastic, 1)
 	safeSpawn.CanCollide = false
-	return prompt, safeSpawn, lockCore.Position, model
+	return escapeTrigger, safeSpawn, lockCore.Position, model
 end
 
 local function makeMallManagerSpawn(parent: Instance, spawnRoomId: string): BasePart
@@ -2063,7 +2168,7 @@ function Builder.Build(layout: {[string]: any}, generation: number): {[string]: 
 	local elevator, elevatorSpawn, mazeStart = makeArrivalElevator(world, arrivalRoom)
 	local spawnRoomId = roles.MallManagerSpawnRoomId or roles.SignalRoomId or Configuration.MallManager.SpawnRoomId
 	local mallManagerSpawn = makeMallManagerSpawn(world, spawnRoomId)
-	local escapePrompt, safeSpawn, exitPosition, finalExit = makeExitSet(world, roomById(roles.ExitRoomId or "Exit"))
+	local escapeTrigger, safeSpawn, exitPosition, finalExit = makeExitSet(world, roomById(roles.ExitRoomId or "Exit"))
 	-- Publish the complete hierarchy once, then start spatial ambience.  This
 	-- avoids a room-by-room replication burst during procedural construction.
 	world.Parent = workspace
@@ -2124,7 +2229,7 @@ function Builder.Build(layout: {[string]: any}, generation: number): {[string]: 
 		HideTables=hideTables,
 		ExitPortal=exitPortal,
 		DiscPlayer=exitPortal and exitPortal.DiscPlayer or nil,
-		EscapePrompt=escapePrompt,
+		EscapeTrigger=escapeTrigger,
 		ExitSafeSpawn=safeSpawn,
 		ExitPosition=exitPosition,
 		FinalExit=finalExit,

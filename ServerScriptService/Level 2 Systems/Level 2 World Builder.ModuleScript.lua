@@ -1536,11 +1536,18 @@ end
 -- ring points, so the orientation can never be wrong. Classic half arch whose
 -- feet run DOWN past the water surface into the floor slab, so it never
 -- floats. `acrossZ` = the ring spans across Z; you walk through along X.
+local function archOffset(acrossZ, radius, verticalScale, angle)
+	local across = math.cos(angle) * radius
+	local y = math.sin(angle) * radius * verticalScale
+	return acrossZ and Vector3.new(0, y, across) or Vector3.new(across, y, 0)
+end
+
 local function makeArchSpan(parent, center, acrossZ, index, radius, floorDepth, styleHall, options)
 	options = options or {}
+	local verticalScale = options.VerticalScale or 1
 	radius = math.max(6, radius)
 	floorDepth = floorDepth or 0
-	local dip = math.asin(math.clamp((floorDepth + 2.2) / radius, 0, .55))
+	local dip = math.asin(math.clamp((floorDepth + 2.2) / (radius * verticalScale), 0, .55))
 	local angleFrom, angleTo = -dip, math.pi + dip
 	local steps = math.max(options.MinimumSteps or 14,
 		math.ceil(radius * (options.Density or 1.9)))
@@ -1549,10 +1556,7 @@ local function makeArchSpan(parent, center, acrossZ, index, radius, floorDepth, 
 	local segmentOverlap = options.SegmentOverlap or .9
 	local arcCenter = center + Vector3.new(0, 1, 0)
 	local function pointAt(a)
-		if acrossZ then
-			return arcCenter + Vector3.new(0, math.sin(a) * radius, math.cos(a) * radius)
-		end
-		return arcCenter + Vector3.new(math.cos(a) * radius, math.sin(a) * radius, 0)
+		return arcCenter + archOffset(acrossZ, radius, verticalScale, a)
 	end
 	for step = 0, steps - 1 do
 		local a0 = angleFrom + (angleTo - angleFrom) * step / steps
@@ -1560,8 +1564,9 @@ local function makeArchSpan(parent, center, acrossZ, index, radius, floorDepth, 
 		local from = pointAt(a0)
 		local to = pointAt(a1)
 		local mid = (from + to) * .5
-		local radial = (mid - arcCenter)
-		local up = radial.Magnitude > .01 and radial.Unit or Vector3.yAxis
+		local offset = mid - arcCenter
+		local normal = Vector3.new(offset.X, offset.Y / (verticalScale * verticalScale), offset.Z)
+		local up = normal.Magnitude > .01 and normal.Unit or Vector3.yAxis
 		local rib
 		if styleHall then
 			rib = part(parent, "Level 2 Arch Rib " .. index,
@@ -1587,10 +1592,12 @@ end
 -- the passage's whole length, one per angular step, sitting just behind the
 -- ribs — together they form the half cylinder you walk through, its feet
 -- submerged like the ribs'.
-local function makeBarrelVault(parent, center, acrossZ, index, radius, length, floorDepth, styleHall)
+local function makeBarrelVault(parent, center, acrossZ, index, radius, length, floorDepth, styleHall, options)
+	options = options or {}
+	local verticalScale = options.VerticalScale or 1
 	radius = math.max(6, radius)
 	floorDepth = floorDepth or 0
-	local dip = math.asin(math.clamp((floorDepth + 2.2) / radius, 0, .55))
+	local dip = math.asin(math.clamp((floorDepth + 2.2) / (radius * verticalScale), 0, .55))
 	local angleFrom, angleTo = -dip, math.pi + dip
 	local steps = math.max(12, math.floor(radius * 1.5))
 	local arcCenter = center + Vector3.new(0, 1, 0)
@@ -1598,13 +1605,15 @@ local function makeBarrelVault(parent, center, acrossZ, index, radius, length, f
 	for step = 0, steps - 1 do
 		local a0 = angleFrom + (angleTo - angleFrom) * step / steps
 		local a1 = angleFrom + (angleTo - angleFrom) * (step + 1) / steps
-		local am = (a0 + a1) * .5
-		local offset = acrossZ
-			and Vector3.new(0, math.sin(am) * radius, math.cos(am) * radius)
-			or Vector3.new(math.cos(am) * radius, math.sin(am) * radius, 0)
+		local from = archOffset(acrossZ, radius, verticalScale, a0)
+		local to = archOffset(acrossZ, radius, verticalScale, a1)
+		local offset = (from + to) * .5
 		local mid = arcCenter + offset
-		local up = offset.Magnitude > .01 and offset.Unit or Vector3.yAxis
-		local chord = 2 * radius * math.sin((a1 - a0) * .5) + .9
+		-- The ellipse gradient is perpendicular to this chord. A radial normal
+		-- would twist the long strips away from their neighbours near the feet.
+		local normal = Vector3.new(offset.X, offset.Y / (verticalScale * verticalScale), offset.Z)
+		local up = normal.Magnitude > .01 and normal.Unit or Vector3.yAxis
+		local chord = (to - from).Magnitude + .9
 		local strip
 		if styleHall then
 			strip = part(parent, "Level 2 Vault Strip " .. index,
@@ -4392,6 +4401,7 @@ local function makeCorridor(parent, layout, corridor, doorFolder)
 
 	local width = corridor.Width
 	local height = Configuration.CorridorHeight
+	local vaultScale = Configuration.CorridorVaultVerticalScale or 1
 	local from, to = corridor.From, corridor.To
 	local gapLength = math.abs(to - from)
 	local length = gapLength + 4
@@ -4525,8 +4535,9 @@ local function makeCorridor(parent, layout, corridor, doorFolder)
 		-- Bottom face toward the player. Avoid replicating textures on the buried
 		-- outer face and the overlapping segment seams. Kids variants retain their
 		-- authored face treatment.
-		local ribOptions = kidsStyleHall and nil or {
-			Faces = {Enum.NormalId.Left, Enum.NormalId.Right, Enum.NormalId.Bottom},
+		local ribOptions = {
+			VerticalScale = vaultScale,
+			Faces = not kidsStyleHall and {Enum.NormalId.Left, Enum.NormalId.Right, Enum.NormalId.Bottom} or nil,
 		}
 		makeArchSpan(parent, center + oriented(from - mid + (to - from) * t, 0),
 			alongX, corridor.Index .. "." .. ring, archRadius, depth, kidsStyleHall, ribOptions)
@@ -4535,9 +4546,10 @@ local function makeCorridor(parent, layout, corridor, doorFolder)
 	local vaultRadius = math.min(archRadius + 1.4, Configuration.DoorWidth * .5 - .9)
 	local portalFaceDepth = .6
 	local vaultLength = gapLength + 2 * (wallHalf - portalFaceDepth + .25)
-	makeBarrelVault(parent, center, alongX, corridor.Index, vaultRadius, vaultLength, depth, kidsStyleHall)
+	makeBarrelVault(parent, center, alongX, corridor.Index, vaultRadius, vaultLength, depth, kidsStyleHall,
+		{VerticalScale = vaultScale})
 
-	-- Integrate each tunnel mouth into the hall's existing 30 x 19 doorway.
+	-- Integrate each tunnel mouth into the hall's configured doorway.
 	-- A single header keeps the tile field continuous above the crown; narrow
 	-- spandrel strips only fill the curved shoulders. The thin, high-resolution
 	-- face ring sits at the hall-facing wall surface and hides the final sub-stud
@@ -4548,18 +4560,19 @@ local function makeCorridor(parent, layout, corridor, doorFolder)
 	local faceRadialDepth = 1.4
 	local faceRadius = math.min(vaultRadius,
 		capHalfWidth - faceRadialDepth * .5 - .12)
+	-- Keep the cap curve inside the face ring's fixed normal thickness even
+	-- at the stretched crown, rather than scaling the thickness with the rise.
 	local capCurveRadius = math.min(capHalfWidth - .04,
-		faceRadius + faceRadialDepth * .5 - .12)
-	local capCrown = 1 + capCurveRadius
+		faceRadius - (faceRadialDepth * .5 - .22) / vaultScale)
+	local capCrown = 1 + capCurveRadius * vaultScale
 	local capBottom = -depth - 2.2
 	-- Keep the .15-stud sealing flange hidden behind the real hall wall. The
 	-- old cap was .02 proud on both faces, exposing a narrow independently tiled
 	-- strip whose grout phase visibly reset at every tunnel mouth.
 	local capDepth = Configuration.WallThickness - .12
-	-- Twenty-four narrow portal slats preserve the curved tiled shoulder at
-	-- normal viewing distance while removing thousands of tiny non-collidable
-	-- parts and texture instances from a typical generated level.
-	local slats = 24
+	-- Thirty-two slats keep the steeper curve inside the face ring's thickness.
+	-- Sampling the near edge keeps every rectangular step outside the mouth.
+	local slats = 32
 	local slatWidth = (capHalfWidth * 2) / slats
 	local capFaces = alongX
 		and {Enum.NormalId.Left, Enum.NormalId.Right}
@@ -4586,15 +4599,15 @@ local function makeCorridor(parent, layout, corridor, doorFolder)
 		for slat = 0, slats - 1 do
 			local xLocal = -capHalfWidth + (slat + .5) * slatWidth
 			local arcY
-			local outerEdgeX = math.min(capCurveRadius,
-				math.abs(xLocal) + (slatWidth + .07) * .5)
+			local innerEdgeX = math.max(0,
+				math.abs(xLocal) - (slatWidth + .07) * .5)
 			if math.abs(xLocal) >= capCurveRadius then
 				arcY = capBottom
-			elseif outerEdgeX < capCurveRadius then
-				-- Sample the farthest edge of each rectangular strip, not its centre.
-				-- The hidden .08 overlap follows the circular face ring and closes the
-				-- tiny triangular wedges that otherwise show between approximations.
-				arcY = 1 + math.sqrt(math.max(capCurveRadius ^ 2 - outerEdgeX ^ 2, 0)) - .08
+			elseif innerEdgeX < capCurveRadius then
+				-- Sample the nearest edge so no strip protrudes into the clear mouth.
+				-- The curve stays inside the face ring; its thickness hides the
+				-- small triangular steps between these rectangular approximations.
+				arcY = 1 + vaultScale * math.sqrt(math.max(capCurveRadius ^ 2 - innerEdgeX ^ 2, 0)) - .08
 			else
 				arcY = 1 - .08
 			end
@@ -4609,6 +4622,7 @@ local function makeCorridor(parent, layout, corridor, doorFolder)
 		local faceAlong = along + endSign * (wallHalf - portalFaceDepth * .5 + .04)
 		makeArchSpan(parent, center + oriented(faceAlong, 0),
 			alongX, corridor.Index .. ".face" .. endSign, faceRadius, depth, endStyleHall, {
+				VerticalScale = vaultScale,
 				AxialDepth = portalFaceDepth,
 				RadialDepth = faceRadialDepth,
 				Density = 2.1,
@@ -4624,7 +4638,7 @@ local function makeCorridor(parent, layout, corridor, doorFolder)
 	-- bar sat above the shell and glowed over the tunnel from outside.
 	for _, lightT in ipairs({-.25, .25}) do
 		local emitter = part(parent, "Level 2 Corridor Vault Light " .. corridor.Index,
-			CFrame.new(center + oriented(lightT * length, 0) + Vector3.new(0, vaultRadius - 2.2, 0)),
+			CFrame.new(center + oriented(lightT * length, 0) + Vector3.new(0, vaultRadius * vaultScale - 2.2, 0)),
 			Vector3.new(1.2, .4, 1.2), C.Light, Enum.Material.Neon, 1)
 		emitter.CanCollide = false
 		emitter.CanTouch = false
@@ -5761,7 +5775,8 @@ function WorldBuilder.Build(layout, generation)
 					local position = acrossZ
 						and Vector3.new(hall.MinX + along * t, 0, hall.Center.Z)
 						or Vector3.new(hall.Center.X, 0, hall.MinZ + along * t)
-					makeArchSpan(hallModel, position, acrossZ, hall.Index .. "." .. ring, radius, depth or 0)
+					makeArchSpan(hallModel, position, acrossZ, hall.Index .. "." .. ring, radius, depth or 0, nil,
+						{VerticalScale = Configuration.CorridorVaultVerticalScale or 1})
 				end
 			elseif archetype == "Pump Station" then
 				decoratePumpHall(hallModel, hall, hall.Index, doorsByHall[hall.Index])

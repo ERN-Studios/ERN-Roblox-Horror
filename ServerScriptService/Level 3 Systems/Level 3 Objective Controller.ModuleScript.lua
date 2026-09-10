@@ -596,6 +596,31 @@ local function makeDroppedPickup(session: AnyTable, record: AnyTable, position: 
 	model.PrimaryPart = disc
 	model.Parent = session.RuntimeFolder
 
+	local light = Instance.new("PointLight")
+	light.Name = "Dropped CD Recovery Light"
+	light.Color = Color3.fromRGB(130, 230, 255)
+	light.Brightness = .7
+	light.Range = 7
+	light.Shadows = false
+	light.Parent = disc
+	local marker = Instance.new("BillboardGui")
+	marker.Name = "Dropped CD Marker"
+	marker.Adornee = disc
+	marker.Size = UDim2.fromOffset(36, 22)
+	marker.StudsOffsetWorldSpace = Vector3.new(0, 1.2, 0)
+	marker.AlwaysOnTop = false
+	marker.MaxDistance = 65
+	marker.Parent = disc
+	local label = Instance.new("TextLabel")
+	label.Size = UDim2.fromScale(1, 1)
+	label.BackgroundTransparency = 1
+	label.Font = Enum.Font.GothamBold
+	label.TextSize = 16
+	label.TextColor3 = light.Color
+	label.TextStrokeTransparency = .25
+	label.Text = "CD"
+	label.Parent = marker
+
 	local prompt = Instance.new("ProximityPrompt")
 	prompt.Name = "CollectPrompt"
 	prompt.ActionText = "PICK UP DROPPED CD"
@@ -613,15 +638,65 @@ local function makeDroppedPickup(session: AnyTable, record: AnyTable, position: 
 	table.insert(session.Connections, connection)
 end
 
-local function groundedDropPosition(session: AnyTable, player: Player, rawPosition: Vector3): Vector3
-	local params = RaycastParams.new()
-	params.FilterType = Enum.RaycastFilterType.Exclude
-	local filters: {Instance} = {session.RuntimeFolder}
-	if player.Character then table.insert(filters, player.Character) end
-	params.FilterDescendantsInstances = filters
-	params.IgnoreWater = true
-	local result = workspace:Raycast(rawPosition + Vector3.new(0, 3, 0), Vector3.new(0, -24, 0), params)
-	return result and result.Position or rawPosition
+local function groundedDropPosition(session: AnyTable, _player: Player, rawPosition: Vector3): Vector3?
+	if not session.DropFloorParams then
+		-- Only the playable mall floors: decor, corpses and the escaped-player
+		-- waiting room below the map must never become recovery surfaces.
+		local floors: {Instance} = {}
+		for _, object in ipairs(session.Manifest.World:GetDescendants()) do
+			if object:IsA("BasePart") and (object.Name == "Level 3 Room Floor"
+				or object.Name == "Level 3 Corridor Floor") then
+				table.insert(floors, object)
+			end
+		end
+		local params = RaycastParams.new()
+		params.FilterType = Enum.RaycastFilterType.Include
+		params.FilterDescendantsInstances = floors
+		params.IgnoreWater = true
+		session.DropFloorParams = params
+		local overlap = OverlapParams.new()
+		overlap.FilterType = Enum.RaycastFilterType.Include
+		overlap.FilterDescendantsInstances = {session.Manifest.World}
+		session.DropOverlapParams = overlap
+	end
+	local result = workspace:Raycast(rawPosition + Vector3.new(0, 3, 0),
+		Vector3.new(0, -32, 0), session.DropFloorParams)
+	if not result or result.Normal.Y < .8 or not result.Instance.CanCollide then return nil end
+	local position = result.Position
+	-- The disc is flat and noncolliding, but should not be buried in a wall
+	-- or table leg. Other avatars are outside this world-only overlap query.
+	for _, object in ipairs(workspace:GetPartBoundsInBox(CFrame.new(position + Vector3.new(0, .3, 0)),
+		Vector3.new(2.3, .3, 2.3), session.DropOverlapParams)) do
+		if object.CanCollide then return nil end
+	end
+	return position
+end
+
+local function nearbyDropPosition(session: AnyTable, player: Player, rawPosition: Vector3): Vector3?
+	local position = groundedDropPosition(session, player, rawPosition)
+	if position then return position end
+	-- A body or the source CD can be beside a table leg or a wall. Check a
+	-- small fixed neighbourhood; every candidate still needs real ground.
+	for _, radius in ipairs({1.5, 3, 4.5}) do
+		for direction = 0, 7 do
+			local angle = direction * math.pi * .25
+			position = groundedDropPosition(session, player,
+				rawPosition + Vector3.new(math.cos(angle), 0, math.sin(angle)) * radius)
+			if position then return position end
+		end
+	end
+	return nil
+end
+
+local function rememberCarriedPositions(session: AnyTable)
+	for player in pairs(session.HeldByPlayer) do
+		local _, _, root = livingCharacter(player)
+		if root then
+			session.LastKnownPositions[player] = root.Position
+			local ground = groundedDropPosition(session, player, root.Position)
+			if ground then session.LastGroundPositions[player] = ground end
+		end
+	end
 end
 
 local function dropHeldCDs(session: AnyTable, player: Player, rawPosition: Vector3?)
@@ -631,8 +706,20 @@ local function dropHeldCDs(session: AnyTable, player: Player, rawPosition: Vecto
 		updatePlayerHeldAttributes(session, player)
 		return
 	end
-	local basePosition = groundedDropPosition(session, player,
+	local basePosition = nearbyDropPosition(session, player,
 		rawPosition or session.LastKnownPositions[player] or session.Manifest.ExitPosition)
+	if not basePosition and session.LastGroundPositions[player] then
+		basePosition = nearbyDropPosition(session, player, session.LastGroundPositions[player])
+	end
+	if not basePosition then
+		-- Only for a missing/unsupported death position: recover on the original
+		-- CD's actual mall floor, never an unconfirmed airborne coordinate.
+		local first = session.CDRecords[indices[1]]
+		if first and first.Module.Model.Parent then
+			basePosition = nearbyDropPosition(session, player, first.Module.Model:GetPivot().Position)
+		end
+	end
+	if not basePosition then return end
 	for ordinal, index in ipairs(indices) do
 		local record = session.CDRecords[index]
 		if record and record.State == "CARRIED" and record.Owner == player then
@@ -641,8 +728,10 @@ local function dropHeldCDs(session: AnyTable, player: Player, rawPosition: Vecto
 			session.DroppedCount += 1
 			setRecordState(record, "DROPPED", nil)
 			local angle = (ordinal - 1) * (math.pi * 2 / math.max(1, #indices))
-			local offset = Vector3.new(math.cos(angle), 0, math.sin(angle)) * math.min(1.5, .45 * (#indices - 1))
-			makeDroppedPickup(session, record, basePosition + offset)
+			local radius = if #indices == 1 then 0 else math.min(2.6, 1.4 + .4 * (#indices - 2))
+			local offset = Vector3.new(math.cos(angle), 0, math.sin(angle)) * radius
+			local position = groundedDropPosition(session, player, basePosition + offset) or basePosition
+			makeDroppedPickup(session, record, position)
 		end
 	end
 	session.HeldByPlayer[player] = nil
@@ -713,22 +802,44 @@ local function transferLeavingCDs(session: AnyTable, leavingPlayer: Player)
 end
 
 local function bindPlayerLifecycle(session: AnyTable, player: Player)
+	local watchedCharacter: Model? = nil
+	local watchedHumanoid: Humanoid? = nil
+	local function dropDeadCharacter(character: Model)
+		if not liveSession(session) or player.Parent ~= Players or watchedCharacter ~= character then return end
+		local humanoid = watchedHumanoid or character:FindFirstChildOfClass("Humanoid")
+		if not humanoid or humanoid.Health > 0 then return end
+		local root = character:FindFirstChild("HumanoidRootPart")
+		dropHeldCDs(session, player, if root and root:IsA("BasePart") then root.Position else nil)
+	end
 	local function bindCharacter(character: Model)
+		-- CharacterAdded can precede deferred death/removal callbacks. Settle
+		-- the previous death before a fresh character can inherit its inventory.
+		if watchedCharacter and watchedCharacter ~= character then dropDeadCharacter(watchedCharacter) end
+		watchedCharacter = character
+		watchedHumanoid = nil
 		task.defer(function()
-			if not liveSession(session) or player.Parent ~= Players or character ~= player.Character then return end
+			if not liveSession(session) or player.Parent ~= Players or watchedCharacter ~= character
+				or character ~= player.Character then return end
 			local humanoid = character:FindFirstChildOfClass("Humanoid")
 				or character:WaitForChild("Humanoid", 5)
-			if not humanoid or not humanoid:IsA("Humanoid") then return end
-			local diedConnection = humanoid.Died:Connect(function()
-				local root = character:FindFirstChild("HumanoidRootPart")
-				dropHeldCDs(session, player, if root and root:IsA("BasePart") then root.Position else nil)
-			end)
+			-- WaitForChild can resume after Stop or after a different character.
+			if not liveSession(session) or player.Parent ~= Players or watchedCharacter ~= character
+				or character ~= player.Character or not humanoid or not humanoid:IsA("Humanoid")
+				or humanoid.Parent ~= character then return end
+			watchedHumanoid = humanoid
+			local diedConnection = humanoid.Died:Connect(function() dropDeadCharacter(character) end)
 			table.insert(session.Connections, diedConnection)
+			dropDeadCharacter(character) -- A death before the deferred bind is still recoverable.
 			refreshPlayerCarryVisuals(session, player)
 		end)
 	end
-	local characterConnection = player.CharacterAdded:Connect(bindCharacter)
-	table.insert(session.Connections, characterConnection)
+	table.insert(session.Connections, player.CharacterAdded:Connect(bindCharacter))
+	table.insert(session.Connections, player.CharacterRemoving:Connect(function(character)
+		if watchedCharacter ~= character then return end
+		dropDeadCharacter(character)
+		watchedCharacter = nil
+		watchedHumanoid = nil
+	end))
 	if player.Character then bindCharacter(player.Character) end
 	updatePlayerHeldAttributes(session, player)
 end
@@ -979,11 +1090,6 @@ unlockExit = function(session: AnyTable, startRoomId: string)
 		end
 	end
 
-	local escapePrompt = session.Manifest.EscapePrompt
-	escapePrompt.ActionText = "ENTER FREIGHT ELEVATOR"
-	escapePrompt.ObjectText = "PARTY AUDIO OVERRIDE ACCEPTED"
-	escapePrompt.Enabled = true
-
 	firePayload(session, {
 		Type = "ExitUnlocked",
 		Progress = session.ModuleCount,
@@ -1001,11 +1107,18 @@ end
 
 local function escapePlayer(session: AnyTable, player: Player)
 	if not session.ExitUnlocked or session.Escaping[player] then return end
-	local prompt = session.Manifest.EscapePrompt
-	local owner = prompt.Parent
-	if not owner or not canUsePrompt(player, session, prompt, owner) then return end
+	if not validPlayer(player, session) then return end
+	local trigger = session.Manifest.EscapeTrigger
+	if not trigger or not trigger.Parent or not trigger.CanTouch
+		or not trigger:IsDescendantOf(session.Manifest.World) then return end
 	local character, _, root = livingCharacter(player)
 	if not character or not root then return end
+	-- A client-reported limb touch is only a wake-up. The server must see the
+	-- living character's root inside this doorway, not merely near the exit.
+	local offset = trigger.CFrame:PointToObjectSpace(root.Position)
+	local halfSize = trigger.Size * .5
+	if not (math.abs(offset.X) <= halfSize.X and math.abs(offset.Y) <= halfSize.Y
+		and math.abs(offset.Z) <= halfSize.Z) then return end
 
 	session.Escaping[player] = true
 	session.EscapeOrdinal = (session.EscapeOrdinal or 0) + 1
@@ -1110,9 +1223,10 @@ local function validateManifest(manifest: AnyTable, generation: number)
 			and not slot.Light.Enabled,
 			"Level 3 disc player indicator light must begin off")
 	end
-	assert(manifest.EscapePrompt and manifest.EscapePrompt:IsA("ProximityPrompt")
-		and manifest.EscapePrompt:IsDescendantOf(manifest.World),
-		"Level 3 final escape prompt is missing from the generated world")
+	assert(manifest.EscapeTrigger and manifest.EscapeTrigger:IsA("BasePart")
+		and manifest.EscapeTrigger:IsDescendantOf(manifest.World)
+		and not manifest.EscapeTrigger.CanCollide,
+		"Level 3 final escape trigger is missing from the generated world")
 	assert(manifest.ExitSafeSpawn and manifest.ExitSafeSpawn:IsA("BasePart")
 		and manifest.ExitSafeSpawn:IsDescendantOf(manifest.World),
 		"Level 3 exit safe spawn is missing from the generated world")
@@ -1181,6 +1295,7 @@ function ObjectiveController.Start(manifest: AnyTable, generation: number): AnyT
 		CDRecords = {},
 		HeldByPlayer = {},
 		LastKnownPositions = {},
+		LastGroundPositions = {},
 		RuntimeFolder = runtimeFolder,
 		Random = Random.new(math.floor(math.abs(generation)) % 2147483647),
 		CollectedCount = 0,
@@ -1236,13 +1351,22 @@ function ObjectiveController.Start(manifest: AnyTable, generation: number): AnyT
 	table.insert(session.Connections, Players.PlayerRemoving:Connect(function(player)
 		transferLeavingCDs(session, player)
 		session.FinalHallCrossed[player] = nil
+		session.LastKnownPositions[player] = nil
+		session.LastGroundPositions[player] = nil
 	end))
 	table.insert(session.Connections, RunService.Heartbeat:Connect(function(dt)
 		if not liveSession(session) then return end
 		session.FinalHallAccumulator += dt
 		if session.FinalHallAccumulator < .10 then return end
 		session.FinalHallAccumulator = 0
+		rememberCarriedPositions(session)
 		updateFinalHallChase(session)
+		-- Touch events can be missed during streaming or when unlock happens
+		-- while a player is already at the door. The solid door holds runners
+		-- inside this small detector until this same server check accepts them.
+		if session.ExitUnlocked then
+			for _, player in ipairs(Players:GetPlayers()) do escapePlayer(session, player) end
+		end
 	end))
 
 	session.State:SetAttribute("Level3_FinalHallEligibleCount", 0)
@@ -1277,17 +1401,14 @@ function ObjectiveController.Start(manifest: AnyTable, generation: number): AnyT
 			end
 		end
 	end
-	local escapePrompt = manifest.EscapePrompt
-	session.EscapePromptOriginal = {
-		Enabled = escapePrompt.Enabled,
-		ActionText = escapePrompt.ActionText,
-		ObjectText = escapePrompt.ObjectText,
-	}
-	escapePrompt.Enabled = false
-	escapePrompt.ActionText = "CD OVERRIDE REQUIRED"
-	escapePrompt.ObjectText = "PARTY AUDIO-LOCKED SERVICE EXIT"
-	local escapeConnection = escapePrompt.Triggered:Connect(function(player)
-		escapePlayer(session, player)
+	local escapeTrigger = manifest.EscapeTrigger
+	-- CanTouch must be true before connecting Touched. ExitUnlocked remains
+	-- the server-owned gate; changing CanTouch while locked would drop listeners.
+	escapeTrigger.CanTouch = true
+	local escapeConnection = escapeTrigger.Touched:Connect(function(hit)
+		local character = hit:FindFirstAncestorOfClass("Model")
+		local player = character and Players:GetPlayerFromCharacter(character)
+		if player then escapePlayer(session, player) end
 	end)
 	table.insert(session.Connections, escapeConnection)
 
@@ -1338,11 +1459,9 @@ function ObjectiveController.Stop()
 			end
 		end
 	end
-	local escapePrompt = session.Manifest.EscapePrompt
-	if escapePrompt and escapePrompt.Parent then
-		escapePrompt.Enabled = session.EscapePromptOriginal.Enabled
-		escapePrompt.ActionText = session.EscapePromptOriginal.ActionText
-		escapePrompt.ObjectText = session.EscapePromptOriginal.ObjectText
+	local escapeTrigger = session.Manifest.EscapeTrigger
+	if escapeTrigger and escapeTrigger.Parent then
+		escapeTrigger.CanTouch = false
 	end
 
 	local portal = session.Manifest.ExitPortal

@@ -11,7 +11,9 @@ local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
 local MessagingService = game:GetService("MessagingService")
 
+local PlayerProtection = require(script.Parent:WaitForChild("PlayerProtection"))
 local Config = require(ReplicatedStorage:WaitForChild("ZyntraConfig"))
+local DevAccess = require(ReplicatedStorage:WaitForChild("DevAccess"))
 local store = DataStoreService:GetDataStore(Config.DataStoreName)
 local supportStore = DataStoreService:GetOrderedDataStore(Config.SupportLeaderboardDataStoreName)
 local remotes = ReplicatedStorage:WaitForChild("Remotes")
@@ -47,7 +49,7 @@ if not supportStatus then
 	supportStatus.Name = "Status"
 	supportStatus.Parent = supportFolder
 end
-supportStatus.Value = "CONNECTING TO DONATION RANKINGS"
+supportStatus.Value = "CONNECTING TO SUPPORT RANKINGS"
 
 local supportRows = {}
 for rank = 1, SUPPORT_LEADERBOARD_SIZE do
@@ -59,7 +61,7 @@ for rank = 1, SUPPORT_LEADERBOARD_SIZE do
 		row.Name = name
 		row.Parent = supportFolder
 	end
-	row.Value = rank == 1 and "NO DONATIONS RECORDED YET" or ""
+	row.Value = rank == 1 and "NO SUPPORT RECORDED YET" or ""
 	supportRows[rank] = row
 end
 
@@ -86,6 +88,8 @@ if not levelCompletedEvent then
 end
 
 local sessions = {}
+local protectionAttempts = {}
+local protectionResponses = {}
 local mutationLocks = {}
 -- player -> { [action window key] = os.clock() of the last accepted call }.
 local actionTimes = {}
@@ -125,6 +129,74 @@ local function readColor(value, fallback)
 	)
 end
 
+local MAX_SAFE_SUPPORT = 9007199254740991
+local function isSafeSupportAmount(value)
+	return type(value) == "number" and value == value and value >= 0
+		and value <= MAX_SAFE_SUPPORT and value % 1 == 0
+end
+
+local function normalizedSupportAmount(value)
+	local amount = tonumber(value)
+	if not amount or amount ~= amount or amount < 0 or amount > MAX_SAFE_SUPPORT then return 0 end
+	return math.floor(amount)
+end
+
+local function recordedSupportRobux(data)
+	if not data then return 0 end
+	return math.min(MAX_SAFE_SUPPORT,
+		normalizedSupportAmount(data.DonationRobux) + normalizedSupportAmount(data.UtilityRobux))
+end
+
+-- One bounded operation per inventory, separate from Roblox receipt history.
+local function protectionState(data)
+	local value = data and data.Protection
+	if type(value) ~= "table" or not isSafeSupportAmount(value.Charges)
+		or not isSafeSupportAmount(value.Revision) then return nil end
+	local operation = value.LastOperation
+	if operation ~= nil then
+		if type(operation) ~= "table" or type(operation.SessionId) ~= "string"
+			or #operation.SessionId == 0 or #operation.SessionId > 128
+			or operation.Revision ~= value.Revision or operation.Revision < 1 then return nil end
+		if operation.Kind == "Buy" then
+			if operation.Status ~= "Bought" then return nil end
+		elseif operation.Kind == "Use" then
+			if operation.Status ~= "Reserved" and operation.Status ~= "Consumed"
+				and operation.Status ~= "Refunded" then return nil end
+		else
+			return nil
+		end
+	elseif value.Revision ~= 0 then
+		return nil
+	end
+	return value
+end
+
+local function protectionResult(value)
+	local state = protectionState({Protection = value})
+	local operation = state and state.LastOperation
+	if not operation or operation.Status == "Reserved" then return nil end
+	return {
+		Action = operation.Kind == "Buy" and "BuyProtection" or "UseProtection",
+		SessionNonce = operation.SessionId,
+		Revision = operation.Revision - 1,
+		Status = operation.Status,
+	}
+end
+
+local function recoverProtectionReservation(data, ownerId)
+	-- Called only in the existing atomic load/lease claim. An interrupted use
+	-- never resumes gameplay. A still-Reserved operation gets one refund even
+	-- if its old server applied an effect but lost the completion response.
+	if data.Settings.MuteDispatchSessionId ~= ownerId then return false end
+	local state = protectionState(data)
+	local operation = state and state.LastOperation
+	if not operation or operation.Status ~= "Reserved" or operation.SessionId == ownerId
+		or state.Charges >= MAX_SAFE_SUPPORT then return false end
+	state.Charges += 1
+	operation.Status = "Refunded"
+	return true
+end
+
 local function newProfile()
 	return {
 		Version = 4,
@@ -139,7 +211,9 @@ local function newProfile()
 		LevelsCleared = {},
 		AwardedBadges = {},
 		ReentryCredits = 0,
+		Protection = {Charges = 0, Revision = 0},
 		DonationRobux = 0,
+		UtilityRobux = 0,
 		Settings = {
 			MuteDispatch = false,
 			MuteDispatchInputEpoch = 0,
@@ -166,6 +240,9 @@ local function normalizeProfile(data)
 	local existingProfile = type(data) == "table"
 	if not existingProfile then data = newProfile() end
 	data.Version = 4
+	-- Additive inventory: preserve malformed saved state for repair instead of
+	-- inventing charges or discarding an unresolved reservation.
+	if data.Protection == nil then data.Protection = {Charges = 0, Revision = 0} end
 	data.Tokens = math.max(0, math.floor(tonumber(data.Tokens) or 0))
 	data.StaminaLevel = math.max(0, math.floor(tonumber(data.StaminaLevel) or 0))
 	data.BatteryLevel = math.max(0, math.floor(tonumber(data.BatteryLevel) or 0))
@@ -190,10 +267,10 @@ local function normalizeProfile(data)
 	end
 	data.AwardedBadges = awardedBadges
 	data.ReentryCredits = math.max(0, math.floor(tonumber(data.ReentryCredits) or 0))
-	-- Deliberately do not migrate the retired SupportRobux field: that value
-	-- included utility purchases. DonationRobux starts a clean, donation-only
-	-- accounting stream backed by the v2 OrderedDataStore.
-	data.DonationRobux = math.max(0, math.floor(tonumber(data.DonationRobux) or 0))
+	-- Keep the two recorded streams separate. Retired SupportRobux and old
+	-- utility ReceiptIds are not evidence of an additional, uncounted payment.
+	data.DonationRobux = normalizedSupportAmount(data.DonationRobux)
+	data.UtilityRobux = normalizedSupportAmount(data.UtilityRobux)
 	data.Settings = type(data.Settings) == "table" and data.Settings or {}
 	data.Settings.MuteDispatch = data.Settings.MuteDispatch == true
 	data.Settings.MuteDispatchInputEpoch = math.max(0,
@@ -377,7 +454,12 @@ local function publicProfile(data)
 		-- reading the DataStore; nothing in the UI consumes it yet.
 		LevelsCleared = data.LevelsCleared,
 		ReentryCredits = data.ReentryCredits,
+		ProtectionCharges = protectionState(data) and data.Protection.Charges or 0,
+		ProtectionRevision = protectionState(data) and data.Protection.Revision or 0,
+		ProtectionLastResult = protectionResult(data.Protection),
 		DonationRobux = data.DonationRobux,
+		UtilityRobux = data.UtilityRobux,
+		RecordedSupportRobux = recordedSupportRobux(data),
 		MuteDispatch = data.Settings.MuteDispatch,
 		LobbyBriefingPlayed = data.Settings.LobbyBriefingPlayed,
 		HazmatColor = readColor(data.Colors.Hazmat, Config.Colors.HazmatDefault),
@@ -392,20 +474,26 @@ local function publicProfile(data)
 	return result
 end
 
-local function addSupporterTag(player, character)
+local tagCharacters = {}
+
+local function clearPlayerTags(character)
 	local head = character and character:FindFirstChild("Head")
 	if not head then return end
-	local old = head:FindFirstChild("ZyntraSupporterTag")
-	if old then old:Destroy() end
-	if player:GetAttribute("ZyntraOwnsSupporter") ~= true then return end
-	-- A lobby badge only: inside a level it would mark its wearer to the whole
-	-- party. Ownership and benefits are untouched.
-	if player:GetAttribute("InRound") == true then return end
+	for _, child in ipairs(head:GetChildren()) do
+		if child.Name == "ZyntraSupporterTag" or child.Name == "ZyntraDeveloperTag" then
+			child:Destroy()
+		end
+	end
+end
 
+local function createPlayerTag(head, name, text, row)
 	local billboard = Instance.new("BillboardGui")
-	billboard.Name = "ZyntraSupporterTag"
+	billboard.Name = name
 	billboard.Size = UDim2.fromOffset(180, 28)
 	billboard.StudsOffset = Vector3.new(0, 2.7, 0)
+	-- Size-relative screen spacing keeps two fixed-pixel tags apart even at
+	-- their maximum viewing distance. The existing Supporter anchor stays put.
+	billboard.SizeOffset = Vector2.new(0, row * 1.1)
 	billboard.AlwaysOnTop = true
 	billboard.MaxDistance = 65
 	billboard.Parent = head
@@ -414,12 +502,31 @@ local function addSupporterTag(player, character)
 	label.Size = UDim2.fromScale(1, 1)
 	label.BackgroundTransparency = 1
 	label.Font = Enum.Font.GothamBold
-	label.Text = "ZYNTRA SUPPORTER"
+	label.Text = text
 	label.TextColor3 = Color3.fromRGB(90, 235, 215)
 	label.TextStrokeColor3 = Color3.fromRGB(5, 12, 14)
 	label.TextStrokeTransparency = 0.25
 	label.TextScaled = true
 	label.Parent = billboard
+end
+
+local function refreshPlayerTags(player, character)
+	-- Deferred pass refreshes and old CharacterAdded work must not decorate a
+	-- retired character, including after its replacement acquires a late Head.
+	if player.Parent ~= Players or not character or player.Character ~= character
+		or tagCharacters[player] ~= character then return end
+	local head = character:FindFirstChild("Head")
+	if not head or not head:IsA("BasePart") then return end
+	clearPlayerTags(character)
+	-- Both tags are lobby badges. Developer identity never grants paid benefits.
+	if player:GetAttribute("InRound") == true then return end
+	local supporter = player:GetAttribute("ZyntraOwnsSupporter") == true
+	if supporter then
+		createPlayerTag(head, "ZyntraSupporterTag", "ZYNTRA SUPPORTER", 0)
+	end
+	if DevAccess.IsAllowed(player) then
+		createPlayerTag(head, "ZyntraDeveloperTag", "Developer", if supporter then 1 else 0)
+	end
 end
 
 local function applyHazmatColor(player)
@@ -450,6 +557,8 @@ local function applyAttributes(player, data)
 	player:SetAttribute("ZyntraMuteDispatch", data.Settings.MuteDispatch)
 	player:SetAttribute("ZyntraLobbyBriefingPlayed", data.Settings.LobbyBriefingPlayed)
 	player:SetAttribute("ZyntraDonationRobux", data.DonationRobux)
+	player:SetAttribute("ZyntraUtilityRobux", data.UtilityRobux)
+	player:SetAttribute("ZyntraRecordedSupportRobux", recordedSupportRobux(data))
 	-- Accessibility switches are published under their own bare names because
 	-- that is what the client readers already ask for (ReduceCameraShake,
 	-- ReduceFlashing, CaptionsEnabled, DisableCaptions) -- do not prefix them.
@@ -466,6 +575,18 @@ local function enrichedPublicProfile(player)
 	local session = sessions[player]
 	local result = session and publicProfile(session.data) or nil
 	if result then
+		result.ProtectionSessionNonce = session.dispatchSessionId
+		result.ProtectionAvailable = not RunService:IsStudio() and session.persistent == true
+			and not session.closing and not serverClosing and session.dispatchLeaseActive == true
+			and protectionState(session.data) ~= nil
+			and session.data.Protection.Revision < MAX_SAFE_SUPPORT
+		local attempt = protectionAttempts[player]
+		local operation = protectionState(session.data) and session.data.Protection.LastOperation
+		if operation and operation.Status == "Reserved" and not attempt then
+			result.ProtectionAvailable = false
+		end
+		result.ProtectionPending = attempt and table.clone(attempt.Command) or nil
+		result.ProtectionLastResponse = protectionResponses[player]
 		result.OwnsSupporter = player:GetAttribute("ZyntraOwnsSupporter") == true
 		result.OwnsAdvancedEquipment = player:GetAttribute("ZyntraOwnsAdvancedEquipment") == true
 		result.OwnsCosmeticEquipment = player:GetAttribute("ZyntraOwnsCosmeticEquipment") == true
@@ -694,6 +815,76 @@ local function mutate(player, transform)
 	return false, message
 end
 
+-- Developer token gifts use the same serialized profile write as purchases.
+-- RemoteFunction supplies the caller; the UI only chooses a recipient and amount.
+do
+	local DevAccess = require(ReplicatedStorage:WaitForChild("DevAccess"))
+	local grantRemote = ensureRemote("RemoteFunction", "ZyntraGrantTokens")
+	local MAX_GRANT = 10000
+	local COOLDOWN = 3
+	local grantStates = setmetatable({}, { __mode = "k" })
+	local function result(success, message)
+		return { Success = success, Message = message }
+	end
+
+	grantRemote.OnServerInvoke = function(issuer, targetUserId, amount)
+		if not DevAccess.IsAllowed(issuer) or issuer.Parent ~= Players then
+			return result(false, "Developer access is required.")
+		end
+		if serverClosing then return result(false, "Server is closing. No tokens were given.") end
+		local state = grantStates[issuer]
+		if state and (state.busy or os.clock() - state.finishedAt < COOLDOWN) then
+			return result(false, "Please wait for the previous gift and 3 seconds before giving again.")
+		end
+		if type(targetUserId) ~= "number" or targetUserId ~= targetUserId
+			or targetUserId < 1 or targetUserId > 9007199254740991 or targetUserId % 1 ~= 0 then
+			return result(false, "Choose a player in this server.")
+		end
+		if type(amount) ~= "number" or amount ~= amount or amount < 1
+			or amount > MAX_GRANT or amount % 1 ~= 0 then
+			return result(false, "Enter a whole number from 1 to 10,000.")
+		end
+		local target = Players:GetPlayerByUserId(targetUserId)
+		if not target or target.Parent ~= Players then
+			return result(false, "That player has left this server. Choose another player.")
+		end
+		local session = sessions[target]
+		if not session or session.closing then
+			return result(false, "That player's profile is still loading or closing. Try again shortly.")
+		end
+		if not RunService:IsStudio() and not session.persistent then
+			return result(false, "That player's saved data is unavailable. No tokens were given.")
+		end
+		state = { busy = true, finishedAt = 0 }
+		grantStates[issuer] = state
+		local changed, reason = mutate(target, function(data)
+			-- Recheck after waiting for another profile mutation to finish.
+			if serverClosing or issuer.Parent ~= Players or target.Parent ~= Players then
+				return false, "Gift cancelled because a player or server is leaving.", "error"
+			end
+			if data.Tokens ~= data.Tokens or data.Tokens + amount > 9007199254740991 then
+				return false, "That player's token balance is too large for this gift.", "error"
+			end
+			data.Tokens += amount
+			return true, "+" .. amount .. " free Zyntra Research Tokens from a developer.", "success"
+		end)
+		state.busy = false
+		state.finishedAt = os.clock()
+		if changed then
+			local message = "Gave " .. amount .. " Research Tokens to @" .. target.Name .. "."
+			if RunService:IsStudio() then message ..= " Studio test only; not saved." end
+			print(string.format("[Zyntra] Token gift: issuer=%d target=%d amount=%d studio=%s",
+				issuer.UserId, target.UserId, amount, tostring(RunService:IsStudio())))
+			return result(true, message)
+		else
+			-- A failed UpdateAsync response may follow a committed write. Never
+			-- automatically replay a currency delta or promise it was not saved.
+			warn("[Zyntra] Token gift unconfirmed:", issuer.UserId, target.UserId, reason)
+			return result(false, "Gift was not confirmed. Have the recipient rejoin and check their balance before repeating.")
+		end
+	end
+end
+
 local supportNameCache = {}
 local supportRefreshRunning = false
 local pendingSupportSync = {}
@@ -725,18 +916,18 @@ local function publishSupportRows(entries)
 			local name = string.upper(supportPlayerName(entry.UserId))
 			supportRows[rank].Value = string.format("%02d   %s   •   %d R$", rank, name, entry.Value)
 		else
-			supportRows[rank].Value = rank == 1 and "NO DONATIONS RECORDED YET" or ""
+			supportRows[rank].Value = rank == 1 and "NO SUPPORT RECORDED YET" or ""
 		end
 	end
-	-- Historical Marketplace receipts cannot be replayed. This clean v2 board
-	-- begins with the dedicated donation products, never utility purchases.
-	supportStatus.Value = "DONATIONS SINCE AUG 2026  •  LIVE"
+	-- Keep the existing v2 cache so absent donors retain their rows. Only newly
+	-- acknowledged utility receipts extend its totals; history is not backfilled.
+	supportStatus.Value = "DONATIONS + RECORDED TOKEN / RE-ENTRY PURCHASES"
 end
 
 local function studioSupportEntries()
 	local entries = {}
 	for player, session in pairs(sessions) do
-		local value = session.data and math.max(0, math.floor(tonumber(session.data.DonationRobux) or 0)) or 0
+		local value = recordedSupportRobux(session.data)
 		if player.Parent and value > 0 then
 			entries[#entries + 1] = { UserId = player.UserId, Value = value }
 		end
@@ -763,7 +954,7 @@ local function refreshSupportLeaderboard()
 		if ok then
 			for _, record in ipairs(result) do
 				local userId = tonumber(tostring(record.key):match("^u_(%d+)$"))
-				local value = math.max(0, math.floor(tonumber(record.value) or 0))
+				local value = normalizedSupportAmount(record.value)
 				if userId and value > 0 then
 					entries[#entries + 1] = { UserId = userId, Value = value }
 				end
@@ -777,26 +968,26 @@ local function refreshSupportLeaderboard()
 		publishSupportRows(entries)
 	else
 		warn("[Zyntra] Support leaderboard refresh failed:", failure)
-		supportStatus.Value = "DONATION RANKINGS TEMPORARILY UNAVAILABLE"
+		supportStatus.Value = "SUPPORT RANKINGS TEMPORARILY UNAVAILABLE"
 	end
 	supportRefreshRunning = false
 end
 
 local function syncSupportTotal(userId, total)
-	total = math.max(0, math.floor(tonumber(total) or 0))
+	total = normalizedSupportAmount(total)
 	if RunService:IsStudio() or total <= 0 then return true end
 	local ok, err = pcall(function()
 		supportStore:UpdateAsync("u_" .. tostring(userId), function(current)
-			return math.max(math.floor(tonumber(current) or 0), total)
+			return math.max(normalizedSupportAmount(current), total)
 		end)
 	end)
 	if not ok then warn("[Zyntra] Support leaderboard sync failed for", userId, err) end
 	return ok
 end
 
--- Outer retries are safe only for target-state mutations. Currency, rewards
--- and credits deliberately stay on mutate(): an errored response can have an
--- unknown commit result, so replaying a delta could charge/grant twice.
+-- Outer retries are safe for target states or durable operation identities checked
+-- before its delta (the protection item below). Unkeyed currency/reward deltas
+-- stay on mutate(): an errored response may already have committed.
 local IDEMPOTENT_RETRY_DELAYS = {0, 0.35, 0.80}
 local function mutateIdempotent(player, transform, suppressPush)
 	local session = sessions[player]
@@ -874,6 +1065,205 @@ local function mutateIdempotent(player, transform, suppressPush)
 		pushProfile(player, "Could not save that change. Please try again.", "error")
 	end
 	return false, false, message
+end
+
+local function sameProtectionCommand(left, right)
+	return left and right and left.Action == right.Action
+		and left.SessionNonce == right.SessionNonce and left.Revision == right.Revision
+		and left.RequestNonce == right.RequestNonce
+end
+
+local function protectionOperationMatches(operation, command)
+	return operation and operation.SessionId == command.SessionNonce
+		and operation.Revision == command.Revision + 1
+		and operation.Kind == (command.Action == "BuyProtection" and "Buy" or "Use")
+end
+
+local function protectionResponse(player, command, status, reason)
+	local response = table.clone(command)
+	response.Status = status
+	response.Reason = reason
+	protectionResponses[player] = response
+	local refusals = {
+		NeedFiveTokens = "You need 5 Research Tokens.",
+		NoCharges = "Buy an Entity Shield charge in Upgrades first.",
+		AlreadyActive = "Entity Shield is already active.",
+		RetryLater = "Please wait a moment and try again.",
+		AnotherActionPending = "Finish your pending Entity Shield action first.",
+		StaleRevision = "Your inventory changed. Please try again.",
+	}
+	local messages = {
+		Bought = "Entity Shield purchased: one charge.",
+		Consumed = "Entity Shield charge used.",
+		Refunded = "Entity Shield could not start. Your charge was returned.",
+		Pending = "Confirming your Entity Shield action. Retry the same request.",
+		Rejected = refusals[reason] or "Entity Shield is unavailable right now. No charge was used.",
+	}
+	pushProfile(player, messages[status], status == "Rejected" and "error" or "info")
+end
+
+local function protectionOwnsLease(player, session, data)
+	return player.Parent == Players and sessions[player] == session and not session.closing
+		and not serverClosing and session.persistent == true and session.dispatchLeaseActive == true
+		and data.Settings.MuteDispatchSessionId == session.dispatchSessionId
+		and data.Settings.MuteDispatchSessionEpoch == session.dispatchSessionEpoch
+end
+
+local function handleProtectionAction(player, action, payload)
+	-- A malformed command cannot be correlated and never reaches persistence.
+	if type(payload) ~= "table" or type(payload.SessionNonce) ~= "string"
+		or #payload.SessionNonce == 0 or #payload.SessionNonce > 128
+		or not isSafeSupportAmount(payload.Revision) or payload.Revision >= MAX_SAFE_SUPPORT then return end
+	if payload.RequestNonce ~= nil and (type(payload.RequestNonce) ~= "string"
+		or #payload.RequestNonce == 0 or #payload.RequestNonce > 64) then return end
+	-- RequestNonce correlates UI intentions after a definitive refusal. It is
+	-- deliberately absent from the durable operation ID and cannot bypass dedupe.
+	local command = {
+		Action = action, SessionNonce = payload.SessionNonce, Revision = payload.Revision,
+		RequestNonce = payload.RequestNonce,
+	}
+	local session = sessions[player]
+	local attempt = protectionAttempts[player]
+	if attempt and not sameProtectionCommand(attempt.Command, command) then
+		protectionResponse(player, command, "Rejected", "AnotherActionPending")
+		return
+	end
+	if attempt and attempt.Running then
+		protectionResponse(player, command, "Pending", "Processing")
+		return
+	end
+	if not session or RunService:IsStudio() or not protectionOwnsLease(player, session, session.data)
+		or command.SessionNonce ~= session.dispatchSessionId then
+		protectionResponse(player, command, attempt and "Pending" or "Rejected", "ProfileUnavailable")
+		return
+	end
+	local state = protectionState(session.data)
+	if not state then
+		protectionResponse(player, command, attempt and "Pending" or "Rejected", "InventoryUnavailable")
+		return
+	end
+	local operation = state.LastOperation
+	if protectionOperationMatches(operation, command) and operation.Status ~= "Reserved" then
+		protectionAttempts[player] = nil
+		protectionResponse(player, command, operation.Status)
+		return
+	end
+	local times = actionTimes[player] or {}
+	actionTimes[player] = times
+	if os.clock() - (times.ProtectionItem or -math.huge) < 1 then
+		protectionResponse(player, command, attempt and "Pending" or "Rejected", "RetryLater")
+		return
+	end
+	times.ProtectionItem = os.clock()
+	if not attempt then
+		local reason
+		if command.Revision ~= state.Revision then reason = "StaleRevision"
+		elseif operation and operation.Status == "Reserved" then reason = "AnotherActionPending"
+		elseif action == "BuyProtection" then
+			if not isSafeSupportAmount(session.data.Tokens) or state.Charges >= MAX_SAFE_SUPPORT then
+				reason = "InventoryUnavailable"
+			elseif session.data.Tokens < Config.ProtectionItem.TokenCost then reason = "NeedFiveTokens" end
+		elseif state.Charges < 1 then reason = "NoCharges" end
+		local context
+		if not reason and action == "UseProtection" then
+			-- Capture once BEFORE any wait/lock/UpdateAsync. Retry never renews it.
+			context, reason = PlayerProtection.GetContext(player)
+		end
+		if reason then
+			protectionResponse(player, command, "Rejected", reason)
+			return
+		end
+		attempt = {Command = command, Session = session, Context = context}
+		protectionAttempts[player] = attempt
+	end
+	attempt.Running = true
+	protectionResponse(player, command, "Pending", "Processing")
+	local outcome
+	local definiteRejection = false
+	local success = mutateIdempotent(player, function(data)
+		-- Roblox can discard a callback result and retry on a newer profile.
+		outcome = nil
+		definiteRejection = false
+		local current = protectionState(data)
+		if not current then outcome = "InventoryUnavailable"; return false end
+		local last = current.LastOperation
+		if protectionOperationMatches(last, command) then
+			outcome = last.Status
+			return false
+		end
+		-- A successful read at the original revision proves this operation has
+		-- not committed, even if an earlier response was lost. A newer revision
+		-- with an overwritten operation cannot establish that fact.
+		definiteRejection = current.Revision == command.Revision
+		if not protectionOwnsLease(player, attempt.Session, data) then outcome = "ProfileUnavailable"; return false end
+		if current.Revision ~= command.Revision then outcome = "StaleRevision"; return false end
+		if last and last.Status == "Reserved" then outcome = "AnotherActionPending"; return false end
+		if action == "BuyProtection" then
+			if not isSafeSupportAmount(data.Tokens) or current.Charges >= MAX_SAFE_SUPPORT then
+				outcome = "InventoryUnavailable"; return false
+			end
+			if data.Tokens < Config.ProtectionItem.TokenCost then outcome = "NeedFiveTokens"; return false end
+		else
+			if current.Charges < 1 then outcome = "NoCharges"; return false end
+		end
+		definiteRejection = false
+		-- Validate everything before changing balance, inventory or operation ID.
+		if action == "BuyProtection" then
+			data.Tokens -= Config.ProtectionItem.TokenCost
+			current.Charges += 1
+			outcome = "Bought"
+		else
+			current.Charges -= 1
+			outcome = "Reserved"
+		end
+		current.Revision += 1
+		current.LastOperation = {
+			SessionId = command.SessionNonce, Revision = current.Revision,
+			Kind = action == "BuyProtection" and "Buy" or "Use", Status = outcome,
+		}
+		return true
+	end, true)
+	if success and outcome == "Reserved" then
+		if attempt.Applied == nil then
+			-- The service call does not yield: its private epoch/character check and
+			-- deadline commit happen together, after the durable reservation.
+			attempt.Applied = protectionOwnsLease(player, attempt.Session, attempt.Session.data)
+				and PlayerProtection.Activate(player, attempt.Context) == true
+		end
+		local wanted = attempt.Applied and "Consumed" or "Refunded"
+		success = mutateIdempotent(player, function(data)
+			outcome = nil
+			definiteRejection = false
+			local current = protectionState(data)
+			local last = current and current.LastOperation
+			if not protectionOperationMatches(last, command) then return false end
+			outcome = last.Status
+			if last.Status ~= "Reserved" then return false end
+			if not protectionOwnsLease(player, attempt.Session, data) then return false end
+			if wanted == "Refunded" then
+				if current.Charges >= MAX_SAFE_SUPPORT then return false end
+				current.Charges += 1
+			end
+			last.Status = wanted
+			outcome = wanted
+			return true
+		end, true)
+	end
+	attempt.Running = false
+	-- PlayerRemoving may complete while persistence yields. It owns cleanup;
+	-- do not resurrect a response/attempt for a departed or replacement session.
+	if sessions[player] ~= attempt.Session or protectionAttempts[player] ~= attempt then return end
+	if success and (outcome == "Bought" or outcome == "Consumed" or outcome == "Refunded") then
+		protectionAttempts[player] = nil
+		protectionResponse(player, command, outcome)
+	elseif success and outcome and definiteRejection then
+		protectionAttempts[player] = nil
+		protectionResponse(player, command, "Rejected", outcome)
+	else
+		-- No blind refund or fresh activation after an unknown completion. A retry
+		-- retains Context and Applied and resolves precisely this operation.
+		protectionResponse(player, command, "Pending", "SaveUnconfirmed")
+	end
 end
 
 local function recoverStaleDispatchPredecessor(player, expectedSession)
@@ -1025,7 +1415,7 @@ end
 local queueSupportTotalSync
 queueSupportTotalSync = function(userId, total)
 	userId = math.floor(tonumber(userId) or 0)
-	total = math.max(0, math.floor(tonumber(total) or 0))
+	total = normalizedSupportAmount(total)
 	if userId <= 0 or total <= 0 then return end
 	pendingSupportSync[userId] = math.max(pendingSupportSync[userId] or 0, total)
 	if supportSyncWorkers[userId] then return end
@@ -1144,6 +1534,7 @@ local function loadProfile(player, loadState)
 							table.remove(current.Settings.MuteDispatchSessionClaims, 1)
 						end
 					end
+					recoverProtectionReservation(current, dispatchSessionId)
 					return current
 				end)
 			end)
@@ -1259,7 +1650,7 @@ local function loadProfile(player, loadState)
 			end
 		end)
 	end
-	queueSupportTotalSync(player.UserId, sessions[player] and sessions[player].data.DonationRobux or 0)
+	queueSupportTotalSync(player.UserId, recordedSupportRobux(sessions[player] and sessions[player].data))
 end
 
 -- A throw and a "no" used to collapse into the same false, and that false
@@ -1342,7 +1733,7 @@ local function refreshPasses(player)
 		player:SetAttribute("GlowstickColor", player:GetAttribute("ZyntraGlowstickColor"))
 	end
 	if player.Character then
-		task.defer(addSupporterTag, player, player.Character)
+		task.defer(refreshPlayerTags, player, player.Character)
 		task.defer(applyHazmatColor, player)
 	end
 	-- A read that never answered leaves a paying player without their pass, and
@@ -1382,15 +1773,42 @@ local function setupPlayer(player)
 		end
 		if ok and not loadState.cancelled and sessions[player] then refreshPasses(player) end
 	end)
-	player.CharacterAdded:Connect(function(character)
-		task.defer(function()
-			local head = character:WaitForChild("Head", 10)
-			if head then addSupporterTag(player, character) end
+	local headAddedConnection
+	local function releaseCharacter()
+		if headAddedConnection then headAddedConnection:Disconnect(); headAddedConnection = nil end
+		local character = tagCharacters[player]
+		-- CharacterRemoving may precede the Player.Character property update.
+		-- Invalidate every queued Head/pass refresh before clearing its badges.
+		tagCharacters[player] = nil
+		if character then clearPlayerTags(character) end
+	end
+	local function characterReady(character)
+		if player.Parent ~= Players or player.Character ~= character then return end
+		releaseCharacter()
+		tagCharacters[player] = character
+		local function refreshCharacter()
+			if player.Parent ~= Players or player.Character ~= character
+				or tagCharacters[player] ~= character then return end
+			refreshPlayerTags(player, character)
 			applyHazmatColor(player)
+		end
+		-- No timeout: custom avatars may receive Head after profile loading or
+		-- well after CharacterAdded. Disconnect when this character is retired.
+		headAddedConnection = character.ChildAdded:Connect(function(child)
+			if child.Name == "Head" and child:IsA("BasePart") then task.defer(refreshCharacter) end
 		end)
+		task.defer(refreshCharacter)
+	end
+	player.CharacterAdded:Connect(characterReady)
+	player.CharacterRemoving:Connect(function(character)
+		if tagCharacters[player] == character then releaseCharacter() end
 	end)
+	player.AncestryChanged:Connect(function()
+		if player.Parent ~= Players then releaseCharacter() end
+	end)
+	if player.Character then characterReady(player.Character) end
 	player:GetAttributeChangedSignal("InRound"):Connect(function()
-		if player.Character then task.defer(addSupporterTag, player, player.Character) end
+		if player.Character then task.defer(refreshPlayerTags, player, player.Character) end
 		if player:GetAttribute("InRound") == true then
 			if player:GetAttribute("ZyntraOwnsCosmeticEquipment") == true then
 				player:SetAttribute("GlowstickColor", player:GetAttribute("ZyntraGlowstickColor"))
@@ -1955,6 +2373,10 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 	-- Dispatch preference is an idempotent target state with its own coalescing
 	-- queue. It must never be silently dropped because the player clicked any
 	-- unrelated store action during the shared 120 ms action window.
+	if action == "BuyProtection" or action == "UseProtection" then
+		handleProtectionAction(player, action, payload)
+		return
+	end
 	if action == "SetMuteDispatch" then
 		if type(payload) == "boolean" then queueMuteDispatch(player, payload) end
 		return
@@ -2073,7 +2495,7 @@ levelCompletedEvent.Event:Connect(function(player, level)
 		data.Tokens += Config.LevelCompletionTokens
 		data.CompletedLevels += 1
 		if tracked then data.LevelsCleared[tostring(cleared)] = true end
-		return true, "+1 Zyntra Research Token for completing the level.", "success"
+		return true, ("+%d Zyntra Research Tokens for completing the level."):format(Config.LevelCompletionTokens), "success"
 	end)
 	if not tracked then return end
 	-- Badges hang off the write above rather than replacing it: awardBadge is
@@ -2133,32 +2555,40 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 		return Enum.ProductPurchaseDecision.NotProcessedYet
 	end
 
-	local donationSpent = 0
-	if entry.Kind == "Donation" then
-		local rawSpent = tonumber(receiptInfo.CurrencySpent)
-		if RunService:IsStudio() and (not rawSpent or rawSpent <= 0) then
-			rawSpent = tonumber(entry.Product.Price)
-		end
-		if not rawSpent or rawSpent ~= rawSpent or rawSpent <= 0 or rawSpent == math.huge then
-			warn("[Zyntra] Donation receipt has no valid CurrencySpent:", purchaseId)
-			return Enum.ProductPurchaseDecision.NotProcessedYet
-		end
-		donationSpent = math.floor(rawSpent)
-	end
+	-- Studio purchases are free test grants, never evidence of paid support.
+	-- A live receipt's paid amount is authoritative; catalog prices are not.
+	local spent = RunService:IsStudio() and 0 or receiptInfo.CurrencySpent
 
 	local alreadyGranted = false
 	local changed = mutate(player, function(data)
+		alreadyGranted = false
 		for _, id in ipairs(data.ReceiptIds) do
 			if id == purchaseId then
 				alreadyGranted = true
 				return false
 			end
 		end
+		-- Validate before changing any field: a rejected transform adopts its
+		-- observed profile locally even though UpdateAsync cancels the write.
+		if not isSafeSupportAmount(spent) then
+			return false, "Receipt has no valid paid amount.", "error"
+		end
+		if data.DonationRobux > MAX_SAFE_SUPPORT - data.UtilityRobux
+			or spent > MAX_SAFE_SUPPORT - recordedSupportRobux(data) then
+			return false, "Recorded support total exceeds the safe limit.", "error"
+		end
+		local grant = entry.Product.TokenGrant or entry.Product.ReentryGrant
+		local balance = entry.Product.TokenGrant and data.Tokens or data.ReentryCredits
+		if grant and (not isSafeSupportAmount(grant) or not isSafeSupportAmount(balance)
+			or grant > MAX_SAFE_SUPPORT - balance) then
+			return false, "Purchase balance exceeds the safe limit.", "error"
+		end
 		table.insert(data.ReceiptIds, purchaseId)
 		if entry.Kind == "Donation" then
-			data.DonationRobux += donationSpent
-			return true, string.format("Thank you — %d R$ added to your donation total.", donationSpent), "success"
+			data.DonationRobux += spent
+			return true, string.format("Thank you — %d R$ added to your donation total.", spent), "success"
 		end
+		data.UtilityRobux += spent
 		if entry.Product.TokenGrant then
 			data.Tokens += entry.Product.TokenGrant
 			return true, "+" .. entry.Product.TokenGrant .. " Zyntra Research Tokens", "success"
@@ -2179,14 +2609,10 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 				if reentryEligible(player) then useReentry(player) end
 			end)
 		end
-		if entry.Kind == "Donation" then
-			local session = sessions[player]
-			local total = session and session.data.DonationRobux or 0
-			-- The profile mutation above is the authoritative receipt transaction.
-			-- OrderedDataStore is a derived display cache: never leave a paid receipt
-			-- retrying just because rankings are throttled or temporarily unavailable.
-			queueSupportTotalSync(player.UserId, total)
-		end
+		local session = sessions[player]
+		-- The profile mutation is authoritative. Ranking failure must not delay
+		-- acknowledgement, and replay also repairs a missing derived-cache write.
+		queueSupportTotalSync(player.UserId, recordedSupportRobux(session and session.data))
 		return Enum.ProductPurchaseDecision.PurchaseGranted
 	end
 	return Enum.ProductPurchaseDecision.NotProcessedYet
@@ -2251,7 +2677,7 @@ local function finalizePlayerSessionBody(player)
 			player.UserId, loadState.dispatchSessionId) and dispatchPersisted
 	end
 	if session and session.data then
-		queueSupportTotalSync(player.UserId, session.data.DonationRobux)
+		queueSupportTotalSync(player.UserId, recordedSupportRobux(session.data))
 	end
 	return dispatchPersisted
 end
@@ -2279,6 +2705,8 @@ local function finalizePlayerSession(player)
 	sessions[player] = nil
 	mutationLocks[player] = nil
 	actionTimes[player] = nil
+	protectionAttempts[player] = nil
+	protectionResponses[player] = nil
 	-- Dropping the token is what stops a refund landing for a reservation whose
 	-- player is gone: no session, no second credit.
 	reentryAttempts[player] = nil
