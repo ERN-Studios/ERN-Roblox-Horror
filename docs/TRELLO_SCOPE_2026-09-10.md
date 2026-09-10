@@ -1,6 +1,12 @@
 # Opdateret arbejdsomfang — 10. september 2026
 
-## Aktuel slutstatus — aftalte features publiceret gennem v1875
+## Seneste ejerfeedback — publiceret som v1876
+
+Screenshot-revisionen er publiceret10/9 kl.19:45:34 dansk tid med musen: mindre knapper helt til venstre, Shop øverst, Upgrades nedenunder, hel synlig kant og en kopi af dispatch-mute under Upgrades.64px desktop/56px faktisk iPhone13-simulator; begge tekster og ikoner kontrolleret, native klik og fælles mute/unmute virker. Telefontryk på kolonnen starter ikke joystickbevægelse; separat joystick-drag virker. Endelig uafhængig kritik9/10 samlet og10/10 for knapdesignet.126/126 Studio-kilder matcher. Se releaseoversigtens v1876-afsnit for afgrænsninger.
+
+Det tidligere samlede arbejde er committed/pushet som715e4d9. Ejeren har selv slettet den første Discord-announcement og bedt om en revideret tekst i chatten før genafsendelse. Ingen ny Discord-post er sendt. Denne revision tilføjer ingen DEV-cheats, pricing, tokenresearch eller arbejde på Testing-kort. Den tidligere v1875-slutstatus nedenfor er et historisk checkpoint.
+
+## Tidligere slutstatus — aftalte features publiceret gennem v1875
 
 Rootens seneste komplette snapshot af begge boards er **artifacts/trello-20260909/final-scope-prepared/trello-final-boards-before-square.json**, kl. **19:04:20.038 dansk tid**: **71 kort, 66 Development + 5 starterkort**, begge pageInfo.hasNextPage=false. Mod kl.18:18:34 er der **0 nye, 0 fjernede, ingen navneændringer og præcis tre forventede statusændringer**: kompas, kortere upgrade-copy og loftlys er Done/complete=true med v1871/v1872/v1873-journaler. Alle øvrige sammenlignede navne/statusser/beskrivelser/aktiviteter er uændrede. Delta: **final-scope-prepared/trello-final-delta-before-square.json**. Den tidligere fulde 71-kortsoversigt og historiske prioritetstabeller bevares som daterede checkpoints.
 

@@ -114,7 +114,8 @@ local SECTION_IMAGES = {Upgrades = "rbxassetid://119432640057145", Shop = "rbxas
 local function sectionButtonContent(parent, kinds)
 	local content = Instance.new("Frame")
 	content.Name = "SectionButtonContent"
-	content.Size = UDim2.fromScale(1, 1)
+	content.Size = UDim2.new(1, -6, 1, -6)
+	content.Position = UDim2.fromOffset(3, 3)
 	content.BackgroundTransparency = 1
 	content.ClipsDescendants = true
 	content.Active = false
@@ -123,14 +124,14 @@ local function sectionButtonContent(parent, kinds)
 	icon.Name = kinds[1] .. "Icon"
 	icon.Image = SECTION_IMAGES[kinds[1]]
 	icon.BackgroundTransparency = 1
-	local scale = kinds[1] == "Upgrades" and 0.9 or 1
-	icon.Size = UDim2.fromScale(scale, scale)
-	icon.Position = UDim2.fromScale((1 - scale) / 2, 0.36 - scale / 2)
+	-- The complete bitmap stays inside the inset frame, above its label.
+	icon.Size = UDim2.new(1, 0, 1, -16)
+	icon.Position = UDim2.fromOffset(0, 0)
 	icon.ScaleType = Enum.ScaleType.Fit
 	icon.Active = false
 	icon.Parent = content
 	local caption = label(content, kinds[1] == "Shop" and "shops" or "upgrades",
-		UDim2.new(1, -8, 0, 18), UDim2.new(0, 4, 0.74, 0), 16, COLORS.accent, Enum.Font.GothamBold)
+		UDim2.new(1, 0, 0, 16), UDim2.new(0, 0, 1, -16), 12, COLORS.accent, Enum.Font.GothamBold)
 	caption.Name = "SectionCaption"
 	caption.TextScaled = false
 	caption.TextWrapped = false
@@ -140,50 +141,94 @@ local function sectionButtonContent(parent, kinds)
 	return content
 end
 
+-- Transparent geometry contract for RoundUI's copy of MUTE DISPATCH.
+local sideMuteSlot = Instance.new("Frame")
+sideMuteSlot.Name = "ZyntraSideMuteSlot"
+sideMuteSlot.BackgroundTransparency = 1
+sideMuteSlot.BorderSizePixel = 0
+sideMuteSlot.Active = false
+sideMuteSlot.Visible = false
+sideMuteSlot.Size = UDim2.fromOffset(64, 44)
+sideMuteSlot.Parent = gui
+
 local function layoutSquareSections(layout, openButton, shopButton)
 	local safe, zones = layout.Safe, layout.Zones
-	local requested = not layout.IsTouch and 112 or (layout.Class == "tablet" and 104 or 84)
-	local gap, top = 8, safe.Top + 8
-	local rightLimit = math.min(safe.Right, zones.Controls and zones.Controls.Left or safe.Right)
-	local function clear(left, width, height)
+	local left, baseTop = math.ceil(safe.Left + 8), math.ceil(safe.Top + 8)
+	local gap = layout.IsTouch and 6 or 8
+	-- This deliberately narrow left rail uses active GUI buttons inside the
+	-- dynamic stick's broad invisible activation area. Keep its visible glyph
+	-- clear; native tap testing must verify that a rail tap is consumed by UI.
+	local stickRect
+	if layout.IsTouch then
+		local touchGui = gui.Parent:FindFirstChild("TouchGui")
+		local controls = touchGui and touchGui:FindFirstChild("TouchControlFrame")
+		local stick = controls and controls:FindFirstChild("DynamicThumbstickFrame")
+		local glyph = stick and stick:FindFirstChild("ThumbstickStart")
+		if glyph and glyph:IsA("GuiObject") and glyph.AbsoluteSize.Y > 0 then
+			local x, y = UIDevice.LocalOffset(touchGui, 0, 0)
+			local position = glyph.AbsolutePosition - touchGui.AbsolutePosition
+			stickRect = {Left = position.X - x, Top = position.Y - y,
+				Right = position.X - x + glyph.AbsoluteSize.X,
+				Bottom = position.Y - y + glyph.AbsoluteSize.Y}
+		else
+			-- Initial layout before TouchGui arrives keeps a lower-screen reserve.
+			stickRect = {Left = safe.Left, Right = safe.Left + 96,
+				Top = safe.Bottom - 96, Bottom = safe.Bottom}
+		end
+	end
+	local guide = gui.Parent:FindFirstChild("LevelOneGuideGui")
+	local briefing = guide and guide:FindFirstChild("CommandSubtitles")
+	local briefRect
+	if briefing and briefing:IsA("GuiObject") and briefing.Visible then
+		local x, y = UIDevice.LocalOffset(guide, 0, 0)
+		local position = briefing.AbsolutePosition - guide.AbsolutePosition
+		briefRect = {Left = position.X - x, Top = position.Y - y,
+			Right = position.X - x + briefing.AbsoluteSize.X,
+			Bottom = position.Y - y + briefing.AbsoluteSize.Y}
+	end
+	local function clear(top, width, height)
 		local right, bottom = left + width, top + height
-		if left < safe.Left + 8 or right > safe.Right - 8 or bottom > safe.Bottom - 8 then return false end
-		for _, name in ipairs({"Controls", "Thumbstick", "Jump"}) do
-			local zone = zones[name]
-			if zone and left < zone.Right and right > zone.Left
-				and top < zone.Bottom and bottom > zone.Top then return false end
+		if right > safe.Right - 8 or bottom > safe.Bottom - 8 then return false end
+		-- Desktop has no thumbstick even if a cached touch rectangle still exists.
+		if layout.IsTouch then
+			for _, name in ipairs({"Controls", "Jump"}) do
+				local zone = zones[name]
+				if zone and left < zone.Right and right > zone.Left
+					and top < zone.Bottom and bottom > zone.Top then return false end
+			end
+			if left < stickRect.Right and right > stickRect.Left
+				and top < stickRect.Bottom and bottom > stickRect.Top then return false end
 		end
 		return true
 	end
-	for _, side in ipairs({requested, 84, 64}) do
-		if side <= requested then
-			for _, right in ipairs({rightLimit - 8, safe.Right - 8}) do
-				for _, across in ipairs({true, false}) do
-					local width, height = across and side * 2 + gap or side, across and side or side * 2 + gap
-					local left = math.floor(right - width)
-					if clear(left, width, height) then
-						openButton.Size = UDim2.fromOffset(side, side)
-						shopButton.Size = UDim2.fromOffset(side, side)
-						-- Native text can remain unscaled; reserve its actual line height.
-						for _, entry in ipairs({openButton, shopButton}) do
-							local caption = entry:FindFirstChild("SectionButtonContent"):FindFirstChild("SectionCaption")
-							caption.TextSize = side < 84 and 12 or 16
-							caption.Position = UDim2.fromOffset(4, math.min(math.floor(side * 0.74), side - 22))
-						end
-						openButton.Position = UIDevice.LocalPosition(gui, left, top)
-						shopButton.Position = UIDevice.LocalPosition(gui,
-							left + (across and side + gap or 0), top + (across and 0 or side + gap))
-						return true
-					end
-				end
+	for _, side in ipairs(layout.IsTouch and {56, 52} or {64}) do
+		local top = baseTop
+		local muteTop = top + side * 2 + gap + 8
+		-- Openers are hidden during Dispatch. Keep their mute copy outside the
+		-- measured briefing, while retaining its place below the same column.
+		if briefRect and left < briefRect.Right and left + side > briefRect.Left
+			and muteTop < briefRect.Bottom and muteTop + 44 > briefRect.Top then
+			top += math.ceil(briefRect.Bottom + 8 - muteTop)
+			muteTop = top + side * 2 + gap + 8
+		end
+		if clear(top, side, side * 2 + gap + 8 + 44) then
+			for _, entry in ipairs({openButton, shopButton}) do
+				entry.Size = UDim2.fromOffset(side, side)
+				local content = entry:FindFirstChild("SectionButtonContent")
+				local caption = content:FindFirstChild("SectionCaption")
+				caption.TextSize = side >= 64 and 12 or (side >= 56 and 11 or 10)
 			end
+			shopButton.Position = UIDevice.LocalPosition(gui, left, top)
+			openButton.Position = UIDevice.LocalPosition(gui, left, top + side + gap)
+			sideMuteSlot.Size = UDim2.fromOffset(side, 44)
+			sideMuteSlot.Position = UIDevice.LocalPosition(gui, left, muteTop)
+			return true
 		end
 	end
-	-- An impossibly small safe area must not place input over movement controls.
+	-- No right-side jump or placement over the visible stick/other controls.
 	return false
 end
-
-local openButton = button(gui, "upgrades", UDim2.fromOffset(112, 112), UDim2.new(1, -250, 0, 20))
+local openButton = button(gui, "upgrades", UDim2.fromOffset(64, 64), UDim2.fromOffset(8, 80))
 openButton.Name = "ZyntraOpenButton"
 openButton.BackgroundColor3 = COLORS.bg
 openButton.TextColor3 = COLORS.accent
@@ -192,7 +237,7 @@ openButton.TextWrapped = true
 local openButtonOutline = outline(openButton, COLORS.accent, 0.22, 1.5)
 local openButtonSections = sectionButtonContent(openButton, {"Upgrades"})
 
-local shopButton = button(gui, "shops", UDim2.fromOffset(112, 112), UDim2.new(1, -130, 0, 20))
+local shopButton = button(gui, "shops", UDim2.fromOffset(64, 64), UDim2.fromOffset(8, 8))
 shopButton.Name = "ZyntraShopButton"
 shopButton.BackgroundColor3 = COLORS.bg
 shopButton.TextColor3 = COLORS.accent
@@ -2587,7 +2632,11 @@ function updateVisibility()
 	end
 	shopButton.Size = UDim2.fromOffset(openButton.Size.X.Offset, 48)
 	shopButton.Position = openButton.Position + UDim2.fromOffset(0, openButton.Size.Y.Offset + 8)
-	if not inRound and not layoutSquareSections(layout, openButton, shopButton) then
+	local sideLayoutAvailable = not inRound and layoutSquareSections(layout, openButton, shopButton)
+	-- The mute copy remains available during Dispatch, but yields to full modals.
+	sideMuteSlot.Visible = sideLayoutAvailable and not queueModalOpen()
+		and not main.Visible and not UIDevice.ScreenOwningModalOpen()
+	if not inRound and not sideLayoutAvailable then
 		UIDevice.SetInteractive(openButton, false)
 		UIDevice.SetInteractive(shopButton, false)
 	end
@@ -2633,6 +2682,27 @@ function updateVisibility()
 	updateReentry()
 	refreshingVisibility = false
 end
+local sideBriefConnections = {}
+local function watchSideBrief(node)
+	if node.Name == "ThumbstickStart" and node.Parent and node.Parent.Name == "DynamicThumbstickFrame" then
+		if not refreshingVisibility then updateVisibility() end
+		return
+	end
+	if node.Name ~= "CommandSubtitles" or not node:IsA("GuiObject")
+		or node.Parent ~= gui.Parent:FindFirstChild("LevelOneGuideGui") then return end
+	for _, connection in ipairs(sideBriefConnections) do connection:Disconnect() end
+	table.clear(sideBriefConnections)
+	for _, property in ipairs({"AbsolutePosition", "AbsoluteSize", "Visible"}) do
+		table.insert(sideBriefConnections, node:GetPropertyChangedSignal(property):Connect(function()
+			if not refreshingVisibility then updateVisibility() end
+		end))
+	end
+	if not refreshingVisibility then updateVisibility() end
+end
+gui.Parent.DescendantAdded:Connect(watchSideBrief)
+local sideGuide = gui.Parent:FindFirstChild("LevelOneGuideGui")
+local sideBrief = sideGuide and sideGuide:FindFirstChild("CommandSubtitles")
+if sideBrief then watchSideBrief(sideBrief) end
 player:GetAttributeChangedSignal("InRound"):Connect(function()
 	-- Do not carry an open shop across a character/world transition. Developers
 	-- can reopen directly on the DEV page with J once the round is ready.

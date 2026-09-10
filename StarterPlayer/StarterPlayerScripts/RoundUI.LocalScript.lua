@@ -189,15 +189,15 @@ function dispatchAudio.refresh()
 		-- panel itself, including where the queue modal has suppressed it.
 		dispatchAudio.controls.Visible = active and shown
 	end
+	local muteWord = dispatchAudio.preferenceUnavailable() and "DISPATCH OFFLINE"
+		or not loaded and "LOADING DISPATCH"
+		or dispatchAudio.pending and "SAVING"
+		or muted and "UNMUTE DISPATCH"
+		or "MUTE DISPATCH"
 	if dispatchAudio.button then
 		-- Full words, always. The "[M]" prefix is a keyboard binding and is
 		-- therefore supplied by UIDevice, which returns nothing at all on a phone
 		-- or tablet no matter what input was used most recently.
-		local muteWord = dispatchAudio.preferenceUnavailable() and "DISPATCH OFFLINE"
-			or not loaded and "LOADING DISPATCH"
-			or dispatchAudio.pending and "SAVING"
-			or muted and "UNMUTE DISPATCH"
-			or "MUTE DISPATCH"
 		local binding = UIDevice.Binding("[M]", "[LB]")
 		dispatchAudio.button.Text = binding ~= "" and (binding .. "  " .. muteWord) or muteWord
 		-- ONE colour, in every state. This is the COMMAND CENTER line's own
@@ -223,6 +223,21 @@ function dispatchAudio.refresh()
 		dispatchAudio.button.Visible = active and shown
 		dispatchAudio.button.TextTransparency = ready and 0 or .45
 		UIDevice.SetEnabled(dispatchAudio.button, ready)
+	end
+	if dispatchAudio.sideButton then
+		local container = dispatchAudio.sideSlot.Parent
+		local shown = container ~= nil and container:IsA("ScreenGui")
+			and dispatchAudio.sideSlot.Visible and container.Enabled
+			and player:GetAttribute("InRound") ~= true
+			and not UIDevice.ScreenOwningModalOpen()
+			and player:GetAttribute("PartyDownCardOpen") ~= true
+		dispatchAudio.sideButton.Text = string.lower(muteWord):gsub(" ", "\n", 1)
+		dispatchAudio.sideButton.TextColor3 = dispatchAudio.accent
+		dispatchAudio.sideButton.TextSize = dispatchAudio.sideSlot.AbsoluteSize.X < 56 and 10 or 11
+		dispatchAudio.sideButton.Visible = shown
+		local ready = shown and loaded and not dispatchAudio.pending
+		dispatchAudio.sideButton.TextTransparency = ready and 0 or .45
+		UIDevice.SetEnabled(dispatchAudio.sideButton, ready)
 	end
 	if dispatchAudio.stopButton then
 		local stopBinding = UIDevice.Binding("[N]", "[B]")
@@ -254,8 +269,8 @@ function dispatchAudio.awaitPreference()
 	end
 end
 
-function dispatchAudio.requestToggle()
-	if not dispatchAudio.hasActiveTransmission()
+function dispatchAudio.requestToggle(allowIdle)
+	if (allowIdle ~= true and not dispatchAudio.hasActiveTransmission())
 		or dispatchAudio.pending
 		or not dispatchAudio.preferenceLoaded() then
 		return false
@@ -1993,6 +2008,47 @@ ContextActionService:BindAction("ZyntraToggleDispatchMute", function(_, inputSta
 		and Enum.ContextActionResult.Sink
 		or Enum.ContextActionResult.Pass
 end, false, Enum.KeyCode.M, Enum.KeyCode.ButtonL1)
+
+-- A lobby copy shares this private preference, pending state and request path.
+-- Store owns the reserved slot below Upgrades, including briefing-safe geometry.
+do
+	task.spawn(function()
+		local store = player:WaitForChild("PlayerGui"):WaitForChild("ZyntraStore")
+		local slot = store:WaitForChild("ZyntraSideMuteSlot")
+		if not store:IsA("ScreenGui") or not slot:IsA("Frame") then return end
+		local copy = dispatchAudio.button:Clone()
+		copy.Name = "SideDispatchMuteButton"
+		copy.Size = UDim2.fromScale(1, 1)
+		copy.Position = UDim2.fromOffset(0, 0)
+		copy.AnchorPoint = Vector2.zero
+		copy.BackgroundColor3 = Color3.fromRGB(7, 11, 13)
+		copy.BackgroundTransparency = 0.15
+		copy.TextSize = 11
+		copy.TextScaled = false
+		copy.TextWrapped = false
+		copy.TextXAlignment = Enum.TextXAlignment.Center
+		copy.TextYAlignment = Enum.TextYAlignment.Center
+		copy.ZIndex = slot.ZIndex + 1
+		copy.Visible = false
+		UIDevice.SetEnabled(copy, false)
+		roundAndStroke(copy, 6, dispatchAudio.accent, 0.5, 1)
+		copy:FindFirstChildOfClass("UIStroke").ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+		copy.Parent = slot
+		dispatchAudio.sideSlot = slot
+		dispatchAudio.sideButton = copy
+		copy.Activated:Connect(function()
+			dispatchAudio.refresh()
+			if copy.Visible and copy.Active then dispatchAudio.requestToggle(true) end
+		end)
+		slot:GetPropertyChangedSignal("Visible"):Connect(dispatchAudio.refresh)
+		slot:GetPropertyChangedSignal("AbsoluteSize"):Connect(dispatchAudio.refresh)
+		store:GetPropertyChangedSignal("Enabled"):Connect(dispatchAudio.refresh)
+		player:GetAttributeChangedSignal("InRound"):Connect(dispatchAudio.refresh)
+		player:GetAttributeChangedSignal("PartyDownCardOpen"):Connect(dispatchAudio.refresh)
+		UIDevice.OnScreenOwningModalChanged(dispatchAudio.refresh)
+		dispatchAudio.refresh()
+	end)
+end
 
 dispatchAudio.stopButton = Instance.new("TextButton")
 dispatchAudio.stopButton.Name = "DispatchStopButton"
