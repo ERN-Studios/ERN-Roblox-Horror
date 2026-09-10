@@ -110,7 +110,7 @@ local function button(parent, text, size, position)
 end
 
 -- Imagegen section art; approved asset IDs are filled at the upload checkpoint.
-local SECTION_IMAGES = {Upgrades = "rbxassetid://119432640057145", Shop = "rbxassetid://132462891522145"}
+local SECTION_IMAGES = {Upgrades = "rbxassetid://119432640057145", Shop = "rbxassetid://132462891522145", Music = "rbxassetid://102262986416811"}
 local function sectionButtonContent(parent, kinds)
 	local content = Instance.new("Frame")
 	content.Name = "SectionButtonContent"
@@ -130,7 +130,7 @@ local function sectionButtonContent(parent, kinds)
 	icon.ScaleType = Enum.ScaleType.Fit
 	icon.Active = false
 	icon.Parent = content
-	local caption = label(content, kinds[1] == "Shop" and "shops" or "upgrades",
+	local caption = label(content, kinds[1] == "Shop" and "Shops" or (kinds[1] == "Music" and "Music" or "Upgrades"),
 		UDim2.new(1, 0, 0, 16), UDim2.new(0, 0, 1, -16), 12, COLORS.accent, Enum.Font.GothamBold)
 	caption.Name = "SectionCaption"
 	caption.TextScaled = false
@@ -141,24 +141,16 @@ local function sectionButtonContent(parent, kinds)
 	return content
 end
 
--- Transparent geometry contract for RoundUI's copy of MUTE DISPATCH.
-local sideMuteSlot = Instance.new("Frame")
-sideMuteSlot.Name = "ZyntraSideMuteSlot"
-sideMuteSlot.BackgroundTransparency = 1
-sideMuteSlot.BorderSizePixel = 0
-sideMuteSlot.Active = false
-sideMuteSlot.Visible = false
-sideMuteSlot.Size = UDim2.fromOffset(64, 44)
-sideMuteSlot.Parent = gui
-
-local function layoutSquareSections(layout, openButton, shopButton)
-	local safe, zones = layout.Safe, layout.Zones
-	local left, baseTop = math.ceil(safe.Left + 8), math.ceil(safe.Top + 8)
+local function layoutSquareSections(layout, openButton, shopButton, musicButton)
+	local safe = layout.Safe
+	local left = math.ceil(safe.Left + 8)
 	local gap = layout.IsTouch and 6 or 8
-	-- This deliberately narrow left rail uses active GUI buttons inside the
-	-- dynamic stick's broad invisible activation area. Keep its visible glyph
-	-- clear; native tap testing must verify that a rail tap is consumed by UI.
-	local stickRect
+	local side = layout.IsTouch and 56 or 64
+	if side * 3 + gap * 2 > safe.Bottom - safe.Top - 16 then side = 52 end
+	local height = side * 3 + gap * 2
+	local top = math.floor((safe.Top + safe.Bottom - height) / 2 + 0.5)
+	-- Keep the left rail centred. Only move it when the actual resting stick
+	-- glyph intersects; the broad invisible activation zone is not a glyph.
 	if layout.IsTouch then
 		local touchGui = gui.Parent:FindFirstChild("TouchGui")
 		local controls = touchGui and touchGui:FindFirstChild("TouchControlFrame")
@@ -167,68 +159,32 @@ local function layoutSquareSections(layout, openButton, shopButton)
 		if glyph and glyph:IsA("GuiObject") and glyph.AbsoluteSize.Y > 0 then
 			local x, y = UIDevice.LocalOffset(touchGui, 0, 0)
 			local position = glyph.AbsolutePosition - touchGui.AbsolutePosition
-			stickRect = {Left = position.X - x, Top = position.Y - y,
-				Right = position.X - x + glyph.AbsoluteSize.X,
-				Bottom = position.Y - y + glyph.AbsoluteSize.Y}
-		else
-			-- Initial layout before TouchGui arrives keeps a lower-screen reserve.
-			stickRect = {Left = safe.Left, Right = safe.Left + 96,
-				Top = safe.Bottom - 96, Bottom = safe.Bottom}
-		end
-	end
-	local guide = gui.Parent:FindFirstChild("LevelOneGuideGui")
-	local briefing = guide and guide:FindFirstChild("CommandSubtitles")
-	local briefRect
-	if briefing and briefing:IsA("GuiObject") and briefing.Visible then
-		local x, y = UIDevice.LocalOffset(guide, 0, 0)
-		local position = briefing.AbsolutePosition - guide.AbsolutePosition
-		briefRect = {Left = position.X - x, Top = position.Y - y,
-			Right = position.X - x + briefing.AbsoluteSize.X,
-			Bottom = position.Y - y + briefing.AbsoluteSize.Y}
-	end
-	local function clear(top, width, height)
-		local right, bottom = left + width, top + height
-		if right > safe.Right - 8 or bottom > safe.Bottom - 8 then return false end
-		-- Desktop has no thumbstick even if a cached touch rectangle still exists.
-		if layout.IsTouch then
-			for _, name in ipairs({"Controls", "Jump"}) do
-				local zone = zones[name]
-				if zone and left < zone.Right and right > zone.Left
-					and top < zone.Bottom and bottom > zone.Top then return false end
+			local gx, gy = position.X - x, position.Y - y
+			if left < gx + glyph.AbsoluteSize.X and left + side > gx
+				and top < gy + glyph.AbsoluteSize.Y + 8 and top + height > gy - 8 then
+				local above = math.floor(gy - 8 - height)
+				local below = math.ceil(gy + glyph.AbsoluteSize.Y + 8)
+				local aboveFits = above >= safe.Top + 8
+				local belowFits = below + height <= safe.Bottom - 8
+				if aboveFits and (not belowFits or math.abs(above - top) <= math.abs(below - top)) then
+					top = above
+				elseif belowFits then
+					top = below
+				end
+				-- If neither side fits, retain the visible centred rail. Do not
+				-- hide all three controls or silently relocate them to the right.
 			end
-			if left < stickRect.Right and right > stickRect.Left
-				and top < stickRect.Bottom and bottom > stickRect.Top then return false end
-		end
-		return true
-	end
-	for _, side in ipairs(layout.IsTouch and {56, 52} or {64}) do
-		local top = baseTop
-		local muteTop = top + side * 2 + gap + 8
-		-- Openers are hidden during Dispatch. Keep their mute copy outside the
-		-- measured briefing, while retaining its place below the same column.
-		if briefRect and left < briefRect.Right and left + side > briefRect.Left
-			and muteTop < briefRect.Bottom and muteTop + 44 > briefRect.Top then
-			top += math.ceil(briefRect.Bottom + 8 - muteTop)
-			muteTop = top + side * 2 + gap + 8
-		end
-		if clear(top, side, side * 2 + gap + 8 + 44) then
-			for _, entry in ipairs({openButton, shopButton}) do
-				entry.Size = UDim2.fromOffset(side, side)
-				local content = entry:FindFirstChild("SectionButtonContent")
-				local caption = content:FindFirstChild("SectionCaption")
-				caption.TextSize = side >= 64 and 12 or (side >= 56 and 11 or 10)
-			end
-			shopButton.Position = UIDevice.LocalPosition(gui, left, top)
-			openButton.Position = UIDevice.LocalPosition(gui, left, top + side + gap)
-			sideMuteSlot.Size = UDim2.fromOffset(side, 44)
-			sideMuteSlot.Position = UIDevice.LocalPosition(gui, left, muteTop)
-			return true
 		end
 	end
-	-- No right-side jump or placement over the visible stick/other controls.
-	return false
+	for index, entry in ipairs({shopButton, openButton, musicButton}) do
+		entry.Size = UDim2.fromOffset(side, side)
+		entry.Position = UIDevice.LocalPosition(gui, left, top + (index - 1) * (side + gap))
+		local caption = entry:FindFirstChild("SectionButtonContent"):FindFirstChild("SectionCaption")
+		caption.TextSize = side >= 64 and 12 or (side >= 56 and 11 or 10)
+	end
 end
-local openButton = button(gui, "upgrades", UDim2.fromOffset(64, 64), UDim2.fromOffset(8, 80))
+
+local openButton = button(gui, "Upgrades", UDim2.fromOffset(64, 64), UDim2.fromOffset(8, 80))
 openButton.Name = "ZyntraOpenButton"
 openButton.BackgroundColor3 = COLORS.bg
 openButton.TextColor3 = COLORS.accent
@@ -237,14 +193,21 @@ openButton.TextWrapped = true
 local openButtonOutline = outline(openButton, COLORS.accent, 0.22, 1.5)
 local openButtonSections = sectionButtonContent(openButton, {"Upgrades"})
 
-local shopButton = button(gui, "shops", UDim2.fromOffset(64, 64), UDim2.fromOffset(8, 8))
+local shopButton = button(gui, "Shops", UDim2.fromOffset(64, 64), UDim2.fromOffset(8, 8))
 shopButton.Name = "ZyntraShopButton"
 shopButton.BackgroundColor3 = COLORS.bg
 shopButton.TextColor3 = COLORS.accent
 shopButton.TextSize = 18
 outline(shopButton, COLORS.accent, 0.22, 1.5)
 local shopButtonSections = sectionButtonContent(shopButton, {"Shop"})
-for _, entry in ipairs({openButton, shopButton}) do
+
+local musicButton = button(gui, "Music", UDim2.fromOffset(64, 64), UDim2.fromOffset(8, 152))
+musicButton.Name = "ZyntraMusicButton"
+musicButton.BackgroundColor3 = COLORS.bg
+musicButton.TextColor3 = COLORS.accent
+musicButton.Active = false
+local musicButtonSections = sectionButtonContent(musicButton, {"Music"})
+for _, entry in ipairs({openButton, shopButton, musicButton}) do
 	entry:SetAttribute("SquareSectionButton", true)
 	local border = outline(entry, COLORS.accent, 0.22, 1.5)
 	border.Name = "SquareSectionBorder"
@@ -284,9 +247,9 @@ local QUEUE_MODAL_ATTRIBUTE = "QueueModalOpen"
 -- a visibly opaque briefing onto an invisible ZYNTRA // EQUIPMENT button.
 --
 -- Same remedy as the queue modal above, same shape: RoundUI publishes the
--- panel's OWN visibility as this attribute and the opener is not drawn while it
--- is true. A missing or non-true value means "no briefing", so this degrades to
--- the old behaviour if the attribute is never written.
+-- panel's OWN visibility as this attribute. The centred lobby rail now
+-- explicitly remains usable during Dispatch; the in-round DEV phone still
+-- honours this historical overlap guard.
 local BRIEFING_ATTRIBUTE = "DispatchBriefingOpen"
 
 local function queueModalOpen()
@@ -297,8 +260,10 @@ local function briefingOpen()
 	return player:GetAttribute(BRIEFING_ATTRIBUTE) == true
 end
 
+-- The centred lobby rail remains usable during Dispatch. Keep the prior
+-- briefing exclusion for the in-round DEV phone and always honour the queue.
 local function modalBlocksStore()
-	return queueModalOpen() or briefingOpen()
+	return queueModalOpen() or (player:GetAttribute("InRound") == true and briefingOpen())
 end
 
 -- C_TERMINAL_RESPONSIVE_20260830 -- WHAT SHIPPED BROKEN.
@@ -2074,8 +2039,20 @@ do
 			-- 44px floor applies to it in every state it has.
 			toggle.Text = enabled and "ON" or "OFF"
 			toggle.TextColor3 = enabled and COLORS.accent or COLORS.muted
+			if entry.Key == "LobbyMusicEnabled" then
+				local ready = type(player:GetAttribute(entry.Key)) == "boolean"
+				musicButton.Text = ready and (enabled and "Mute music" or "Unmute music") or "Loading music"
+				local caption = musicButton.SectionButtonContent.SectionCaption
+				caption.Text = ready and (enabled and "Mute" or "Unmute") or "Music"
+				caption.TextColor3 = ready and COLORS.accent or COLORS.muted
+				UIDevice.SetEnabled(toggle, ready)
+				UIDevice.SetEnabled(musicButton, musicButton.Visible and ready
+					and player:GetAttribute("InRound") ~= true
+					and not UIDevice.ScreenOwningModalOpen())
+			end
 		end
-		toggle.Activated:Connect(function()
+		local function requestToggle()
+			if entry.Key == "LobbyMusicEnabled" and type(player:GetAttribute(entry.Key)) ~= "boolean" then return end
 			local wanted = not currentValue()
 			entry.Pending = wanted
 			entry.Serial = (entry.Serial or 0) + 1
@@ -2101,7 +2078,18 @@ do
 					refresh()
 				end
 			end)
-		end)
+		end
+		toggle.Activated:Connect(requestToggle)
+		if entry.Key == "LobbyMusicEnabled" then
+			musicButton.Activated:Connect(function()
+				if musicButton.Visible and musicButton.Active
+					and player:GetAttribute("InRound") ~= true
+					and not UIDevice.ScreenOwningModalOpen() then
+					requestToggle()
+				end
+			end)
+			musicButton:GetPropertyChangedSignal("Visible"):Connect(refresh)
+		end
 		player:GetAttributeChangedSignal(entry.Key):Connect(function()
 			if entry.Pending == nil or player:GetAttribute(entry.Key) == entry.Pending then
 				entry.Pending = nil
@@ -2388,7 +2376,7 @@ local function setMainVisible(visible)
 	local wasVisible = main.Visible
 	local selectionBefore = terminalNavigation.selected()
 	-- Keep the invariant at the final write as well as at each input path. This
-	-- makes a future caller unable to bypass queue/briefing mutual exclusion.
+	-- makes a future caller unable to bypass the queue or in-round briefing guard.
 	main.Visible = visible == true and not modalBlocksStore()
 	-- RoundUI uses this modal flag to release the cursor only while the
 	-- whitelisted in-round phone is actually open.
@@ -2514,6 +2502,7 @@ function updateVisibility()
 	-- The full terminal is part of the same modal-exclusion contract as its
 	-- opener. If a queue or visible briefing is raised over an already-open
 	-- terminal, close it and clear both modal attributes before updating input.
+	-- Lobby Dispatch is allowed; opening the terminal hides its briefing via UIDevice.
 	if blockedByModal and main.Visible then
 		setMainVisible(false)
 	end
@@ -2530,6 +2519,12 @@ function updateVisibility()
 			-- ...and never behind the terminal it opens.
 			and not main.Visible)
 	UIDevice.SetInteractive(shopButton, not inRound and not blockedByModal and not main.Visible)
+	UIDevice.SetInteractive(musicButton, not inRound and not blockedByModal and not main.Visible
+		and not UIDevice.ScreenOwningModalOpen())
+	if type(player:GetAttribute("LobbyMusicEnabled")) ~= "boolean" then
+		musicButton.Active = false
+		musicButton.Selectable = false
+	end
 	local layout = UIDevice.Layout()
 	if layout.IsTouch then
 		-- The right edge is owned by the game's RUN/JUMP/GLOW/FLASHLIGHT
@@ -2632,15 +2627,8 @@ function updateVisibility()
 	end
 	shopButton.Size = UDim2.fromOffset(openButton.Size.X.Offset, 48)
 	shopButton.Position = openButton.Position + UDim2.fromOffset(0, openButton.Size.Y.Offset + 8)
-	local sideLayoutAvailable = not inRound and layoutSquareSections(layout, openButton, shopButton)
-	-- The mute copy remains available during Dispatch, but yields to full modals.
-	sideMuteSlot.Visible = sideLayoutAvailable and not queueModalOpen()
-		and not main.Visible and not UIDevice.ScreenOwningModalOpen()
-	if not inRound and not sideLayoutAvailable then
-		UIDevice.SetInteractive(openButton, false)
-		UIDevice.SetInteractive(shopButton, false)
-	end
-	for _, entry in ipairs({openButton, shopButton}) do
+	if not inRound then layoutSquareSections(layout, openButton, shopButton, musicButton) end
+	for _, entry in ipairs({openButton, shopButton, musicButton}) do
 		entry:SetAttribute("SquareSectionButton", not touchDevInLevel)
 		entry:FindFirstChild("SquareSectionBorder").Enabled = not touchDevInLevel
 		if not touchDevInLevel then entry.BackgroundColor3 = COLORS.bg end
@@ -2656,7 +2644,7 @@ function updateVisibility()
 		openButtonOutline.Transparency = 0.64
 		openButtonOutline.Thickness = 1
 	else
-		openButton.Text = "upgrades"
+		openButton.Text = "Upgrades"
 		openButton.TextSize = 18
 		openButton.TextWrapped = true
 		openButton.BackgroundTransparency = 0
@@ -2668,10 +2656,12 @@ function updateVisibility()
 	local sectionIconsVisible = not touchDevInLevel
 	openButtonSections.Visible = sectionIconsVisible
 	shopButtonSections.Visible = sectionIconsVisible
+	musicButtonSections.Visible = sectionIconsVisible
 	if sectionIconsVisible then openButton.TextTransparency = 1 end
 	shopButton.TextTransparency = sectionIconsVisible and 1 or 0
+	musicButton.TextTransparency = 1
 	-- Contextual UIStrokes still paint the hidden original caption in Roblox.
-	for _, entry in ipairs({openButton, shopButton}) do
+	for _, entry in ipairs({openButton, shopButton, musicButton}) do
 		for _, child in ipairs(entry:GetChildren()) do
 			if child:IsA("UIStroke") and child.ApplyStrokeMode == Enum.ApplyStrokeMode.Contextual then
 				child.Enabled = not sectionIconsVisible
@@ -2682,27 +2672,6 @@ function updateVisibility()
 	updateReentry()
 	refreshingVisibility = false
 end
-local sideBriefConnections = {}
-local function watchSideBrief(node)
-	if node.Name == "ThumbstickStart" and node.Parent and node.Parent.Name == "DynamicThumbstickFrame" then
-		if not refreshingVisibility then updateVisibility() end
-		return
-	end
-	if node.Name ~= "CommandSubtitles" or not node:IsA("GuiObject")
-		or node.Parent ~= gui.Parent:FindFirstChild("LevelOneGuideGui") then return end
-	for _, connection in ipairs(sideBriefConnections) do connection:Disconnect() end
-	table.clear(sideBriefConnections)
-	for _, property in ipairs({"AbsolutePosition", "AbsoluteSize", "Visible"}) do
-		table.insert(sideBriefConnections, node:GetPropertyChangedSignal(property):Connect(function()
-			if not refreshingVisibility then updateVisibility() end
-		end))
-	end
-	if not refreshingVisibility then updateVisibility() end
-end
-gui.Parent.DescendantAdded:Connect(watchSideBrief)
-local sideGuide = gui.Parent:FindFirstChild("LevelOneGuideGui")
-local sideBrief = sideGuide and sideGuide:FindFirstChild("CommandSubtitles")
-if sideBrief then watchSideBrief(sideBrief) end
 player:GetAttributeChangedSignal("InRound"):Connect(function()
 	-- Do not carry an open shop across a character/world transition. Developers
 	-- can reopen directly on the DEV page with J once the round is ready.

@@ -143,8 +143,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.RoundUI",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
-      "bytes": 236341,
-      "sha256": "59c29543b0e4d24eb733be2a096c36a684d8d6d285234984ed24ce9df44a519f",
+      "bytes": 233686,
+      "sha256": "a851f6315bad4806698ab40627a9092955b1455a88b6da4f62ad95b9e65eb7f3",
       "status": "synced"
     },
     {
@@ -199,8 +199,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
-      "bytes": 137868,
-      "sha256": "5638699125280c0980128946efb1c20018da219c3c263d9e9c21bc402843ee6b",
+      "bytes": 136640,
+      "sha256": "cb9396a4a796810a1725426c5f3732c808f96fe6e0c5c60740c601756ae290b0",
       "status": "synced"
     },
     {

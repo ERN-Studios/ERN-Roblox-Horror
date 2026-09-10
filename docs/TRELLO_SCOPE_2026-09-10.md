@@ -1,5 +1,13 @@
 # Opdateret arbejdsomfang — 10. september 2026
 
+## Seneste ejerrevision — publiceret som v1878
+
+Publiceret med musen10/9 kl.20:16:59 dansk tid. Tre lige store, symmetriske knapper står i en lodret kolonne midt til venstre: Shops, Upgrades og Mute/Unmute. Den sidste har et nyt musiklogo og deler Lobby Music-indstillingen. Alle tre kan bruges under Dispatch. Den oprindelige Dispatch-mute bevares; den tidligere sidekopi fjernes.
+
+64px desktop/56px iPhone13-simulator, ens afstande og hele kanter. Telefonkolonnen flyttes36px over idealmidten for8px joystickafstand. Faktiske klik, store begyndelsesbogstaver, billedindlæsning, Settings-synkronisering, stoppede/genstartede musikspor og separat joystickbevægelse er kontrolleret. Kritik9/10 samlet og10/10 design;126/126 Studio-kilder matcher. Den ene tidligere ukendte optimistic-only-observation er bevaret i testjournalen og ikke omskrevet til et pass. Se releaseoversigten for præcise kildehashes og afgrænsninger.
+
+Den reviderede announcement vises i chatten før genafsendelse; ingen ny Discord-post er sendt. Ingen yderligere Trello-features, DEV-cheats, pricing, tokenresearch eller Testing-arbejde er med. v1876 nedenfor er historik, committed/pushet somffcc92e.
+
 ## Seneste ejerfeedback — publiceret som v1876
 
 Screenshot-revisionen er publiceret10/9 kl.19:45:34 dansk tid med musen: mindre knapper helt til venstre, Shop øverst, Upgrades nedenunder, hel synlig kant og en kopi af dispatch-mute under Upgrades.64px desktop/56px faktisk iPhone13-simulator; begge tekster og ikoner kontrolleret, native klik og fælles mute/unmute virker. Telefontryk på kolonnen starter ikke joystickbevægelse; separat joystick-drag virker. Endelig uafhængig kritik9/10 samlet og10/10 for knapdesignet.126/126 Studio-kilder matcher. Se releaseoversigtens v1876-afsnit for afgrænsninger.
