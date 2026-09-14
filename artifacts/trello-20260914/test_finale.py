@@ -5,8 +5,9 @@ HERE=Path(__file__).resolve().parent
 SYSTEMS=Path('ServerScriptService/Level 3 Systems')
 def read(folder,name): return (HERE/folder/SYSTEMS/name).read_text(encoding='utf-8')
 def section(s,start,end): return s[s.index(start):s.index(end,s.index(start))]
-ai=read('finale-proposed','Level 3 Mall Manager AI Controller.ModuleScript.lua')
-obj=read('finale-proposed','Level 3 Objective Controller.ModuleScript.lua')
+ROOT=HERE.parents[1]
+ai=(ROOT/SYSTEMS/'Level 3 Mall Manager AI Controller.ModuleScript.lua').read_text(encoding='utf-8')
+obj=(ROOT/SYSTEMS/'Level 3 Objective Controller.ModuleScript.lua').read_text(encoding='utf-8')
 before=read('finale-before','Level 3 Mall Manager AI Controller.ModuleScript.lua')
 # Everything in normal spawn selection and gameplay remains byte-for-byte identical.
 assert ai[ai.index('local function chooseBlackoutSpawn'):]==before[before.index('local function chooseBlackoutSpawn'):]
@@ -55,6 +56,9 @@ local function planarDistance(a,b) return Vector3.new(a.X-b.X,0,a.Z-b.Z).Magnitu
 local function nearestRoomId(p) return if p.X<0 then 'Arrival' else 'SignalHall' end
 local function stateFolder() return attributes() end
 local Random={new=function() return {} end}
+local Tuning={FinaleApproachSpeed=360,PlayerRunSpeedReference=26,
+ Normal={ChaseSpeed=22,PatrolSpeed=4},Blackout={ChaseSpeed=31.2,PatrolSpeed=5.25}}
+local function profile(s) return s.Blackout and Tuning.Blackout or Tuning.Normal end
 '''
 TEST=r'''
 local session=makeSession()
@@ -101,9 +105,30 @@ check(chooseFinalHallSpawn(session.Manifest,12)==nil,'spawned without living pla
 check(not insideFinalHall(session,session.Manifest.MazeStart.Position),'entry treated as direct hall route')
 check(insideFinalHall(session,Vector3.new(150,0,0)),'hall position rejected')
 check(not insideFinalHall(session,Vector3.new(150,0,100)),'unrelated parallel room treated as hall')
+session.Manifest.EscapeTrigger={Position=Vector3.new(715,0,0)}
+check(insideFinalHall(session,Vector3.new(714,0,0)),'runner beyond authored hall end lost before escape sensor')
+check(not insideFinalHall(session,Vector3.new(750,0,0)),'lane extends indefinitely beyond exit')
+session.Root={Position=Vector3.new(-180,0,0)}
+session.State='CHASE';session.Blackout=true
+check(currentSpeed(session)==31.2,'ordinary blackout chase changed')
+session.Blackout=false
+check(currentSpeed(session)==22,'ordinary chase changed')
+session.FinalHallChase=true
+check(currentSpeed(session)==360,'finale approach did not accelerate')
+session.Root.Position=Vector3.new(102,0,0)
+for _,runnerX in ipairs({190,240,300}) do
+ session.FinaleHallSpeed=nil
+ local targetRoot={Position=Vector3.new(runnerX,0,0)}
+ session.Target={Character={FindFirstChild=function() return targetRoot end}}
+ local speed=currentSpeed(session)
+ local runnerTime=(715-runnerX)/26
+ check(math.abs((715-102)/speed-runnerTime-1)<.001,'layout changed sprint escape margin')
+ targetRoot.Position=Vector3.new(runnerX+50,0,0)
+ check(currentSpeed(session)==speed,'pursuit slowed down to let a hesitant runner escape')
+end
 print('PASS Level 3 finale: '..checks..' scenario assertions; normal spawn/gameplay source unchanged')
 '''
-code=PRELUDE+'\n'+section(obj,'local function updateFinalHallChase','local function promptWorldPosition')+'\n'+section(ai,'local function insideFinalHall','-- A bounded repair')+'\n'+section(ai,'local function chooseFinalHallSpawn','local function chooseBlackoutSpawn')+'\n'+TEST
+code=PRELUDE+'\n'+section(obj,'local function updateFinalHallChase','local function promptWorldPosition')+'\nlocal '+section(ai,'insideFinalHall = function','-- A bounded repair')+'\n'+section(ai,'local function currentSpeed','local function publishPathStatus')+'\n'+section(ai,'local function chooseFinalHallSpawn','local function chooseBlackoutSpawn')+'\n'+TEST
 host=HERE/'finale-runtime.luau'; host.write_text(code,encoding='utf-8')
 r=subprocess.run([r'C:\Users\mikke\AppData\Local\Temp\codex-luau-0.737\luau.exe',str(host)],text=True,capture_output=True)
 print(r.stdout,end=''); print(r.stderr,end=''); raise SystemExit(r.returncode)

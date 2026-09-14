@@ -1,0 +1,42 @@
+{
+  "id": "finale-prepare3",
+  "result": {
+    "hallStart": [
+      6654.5,
+      24,
+      657.5
+    ],
+    "managerExists": false,
+    "floor": 24,
+    "objective": {
+      "CarriedCount": 0,
+      "FinalHallEligibleCount": 1,
+      "CollectedProgress": 5,
+      "ModuleProgress": 5,
+      "FinalHallCrossedCount": 0,
+      "FinalHallChaseTriggered": false,
+      "Generation": 1,
+      "ExitUnlocked": true,
+      "InsertedProgress": 5,
+      "DroppedCount": 0,
+      "ModuleGoal": 5
+    },
+    "entry": [
+      6194,
+      24.25,
+      -90
+    ],
+    "forward": [
+      1,
+      0,
+      0
+    ],
+    "length": 560,
+    "hallEnd": [
+      7214.5,
+      24,
+      657.5
+    ]
+  },
+  "ok": true
+}

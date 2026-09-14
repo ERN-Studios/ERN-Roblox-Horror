@@ -53,7 +53,7 @@ local Enum={NormalId={Front="Front"},KeyCode={F="F",ButtonR1="ButtonR1",G="G"},
     UserInputType={Touch="Touch",MouseButton1="MouseButton1"}}
 
 local function fresh()
-    local ctx={Now=100,Sent={},Popups={}}
+    local ctx={Now=100,Sent={},Popups={},Vitals={}}
     local methods={};local Instance={};local nm={}
     nm.__index=function(self,k)
         if methods[k] then return methods[k] end
@@ -121,6 +121,12 @@ local function fresh()
         table.insert(ctx.Sent,{value,payload});serverRemote.OnServerEvent:Fire(player,value,payload)
     end}
     local RunService={Heartbeat=signal(),IsStudio=function() return true end}
+    local vitalRemote={FireServer=function(_,kind,payload)
+        table.insert(ctx.Vitals,{kind=kind,payload=payload})
+    end}
+    local lastVitalReport=-math.huge
+    local batBody,bindingCaption={},{}
+    local function applyFlashlightBinding() end
     local UIS={InputBegan=signal()}
     local touchFlashButton={InputBegan=signal()}
     local coreLight,spillLight={Enabled=false},{Enabled=false}

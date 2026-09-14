@@ -215,8 +215,8 @@
       "studioPath": "ServerScriptService.GameManager",
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 145027,
-      "sha256": "ab9eaefbd7674d8082b877de17ba7432bd68f714784e2660cbcf46e4b3f7329f",
+      "bytes": 146788,
+      "sha256": "42b4e6e61ccbe6e32816c90fe8c846bbc43806d4d9bce92e05a0578b1c6197fb",
       "status": "synced"
     },
     {
@@ -415,8 +415,8 @@
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Configuration.ModuleScript.lua",
-      "bytes": 18946,
-      "sha256": "1b3e1678993913b7013d4135bad5433c8fe0f17edbdedc002d40def54eecfe06",
+      "bytes": 18975,
+      "sha256": "6f02f90244b94b25bbfdad78e678dffee549f5cc7ac630f7a4b9b45d95d29d77",
       "status": "synced"
     },
     {
@@ -439,8 +439,8 @@
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Mall Manager AI Controller.ModuleScript.lua",
-      "bytes": 179913,
-      "sha256": "70de739bb78c9a75ad44cd254b50eed4d7d62af3ac5abb1d469f9923e6ba0cce",
+      "bytes": 181945,
+      "sha256": "4a5957d086658ee535d8e8b0c7c1e298a91b4f9e58421db177470afbfe39ea68",
       "status": "synced"
     },
     {
@@ -575,8 +575,8 @@
       "studioPath": "ServerScriptService.ZyntraMonetization",
       "className": "Script",
       "file": "ServerScriptService/ZyntraMonetization.Script.lua",
-      "bytes": 116667,
-      "sha256": "28c0b4d2a437850ee322255a4725aa1d8a2ac2e3e039586da685e54cadb70dce",
+      "bytes": 117953,
+      "sha256": "8fd2ad79db9aa106501892ca2e6bdb092923f8fca0747d2d9d5a884b072a28d8",
       "status": "synced"
     },
     {
@@ -935,16 +935,16 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.First Entry Guide",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/First Entry Guide.LocalScript.lua",
-      "bytes": 9147,
-      "sha256": "7b86c501703905b71060220e09db305ce7c7f08c21fc082b281a11336b5dd481",
+      "bytes": 9260,
+      "sha256": "a23d1f047ccefea3383298f9cc32fb46a861461232f700407fb2fe5fe6711afc",
       "status": "synced"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.FlashlightController",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/FlashlightController.LocalScript.lua",
-      "bytes": 29544,
-      "sha256": "b48894704e3348cb6716987f0182cf41924addbe9c16e6f1ff234816edab8d27",
+      "bytes": 30942,
+      "sha256": "61a20628a4db7d9e519aed97461e9f45395d53f657eb4f5f9b42c161f66272ad",
       "status": "synced"
     },
     {
@@ -1008,8 +1008,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Sound Controller.LocalScript.lua",
-      "bytes": 37926,
-      "sha256": "8766811f3b8b3730468e3dfcb35a821b965537413b62ea33ff87f34cffad6000",
+      "bytes": 39655,
+      "sha256": "20e97b4974f3a326eaaee4afa7f2a90d2ce7b966cd4f8be7d4f4e9dc9df565e3",
       "status": "synced"
     },
     {
@@ -1032,16 +1032,16 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 3 Reader Client.LocalScript.lua",
-      "bytes": 53364,
-      "sha256": "6a3ced93567a3b3180d3f827357b23b12c954c9afecd6e7d2a11d9134bee8b15",
+      "bytes": 54034,
+      "sha256": "21a65e1a8c723e8e2ca28b535780e51b20a8afe040fca832284ec9c9767254ab",
       "status": "synced"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Sound Controller",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 3 Sound Controller.LocalScript.lua",
-      "bytes": 45927,
-      "sha256": "8fdf40d531cd40e60a8a2423e43178c4c36809485f4fb968f19e063d00065f08",
+      "bytes": 46833,
+      "sha256": "8896ccdacbbd00116686a7f0547059b72e24776c99c119b4c8cd207d0eea3d3b",
       "status": "synced"
     },
     {
@@ -1096,16 +1096,16 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/NoiseReporter.LocalScript.lua",
-      "bytes": 39082,
-      "sha256": "b0f4f073731981c4d019c448cf5f1f09e0337ad530966ef3e37c0db1303bf4ea",
+      "bytes": 41114,
+      "sha256": "6c47beda1d43690ee53e3adc35cfec46b8d1627b18cca566058211be1fa16507",
       "status": "synced"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.ProtectionHUD",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/ProtectionHUD.LocalScript.lua",
-      "bytes": 9556,
-      "sha256": "20024d1b9de04276c8cef478167569d5c49a3038b5ad2829f238fd3c38ba790f",
+      "bytes": 12035,
+      "sha256": "1a809423555b55b21652c3e828213f90c3822f66038badd2f33c05a368f6b054",
       "status": "synced"
     },
     {
@@ -1144,8 +1144,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.SoundController",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
-      "bytes": 67067,
-      "sha256": "e0438f1ef6a462d9ef038f419e7d44f304a0fda8f8ce164e92c08cf58a4d63a0",
+      "bytes": 69416,
+      "sha256": "29b6e3be3f962a0cf6f55f4301908d00572069a4275c1b8edb8b962806017952",
       "status": "synced"
     },
     {

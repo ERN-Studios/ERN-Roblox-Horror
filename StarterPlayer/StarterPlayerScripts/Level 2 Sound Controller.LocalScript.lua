@@ -144,18 +144,53 @@ task.spawn(function()
 	end
 end)
 
-local function active()
-	return workspace:GetAttribute("SelectedLevel") == 2
-		and (workspace:GetAttribute("RoundActive") == true
-			or player:GetAttribute("Level2_ExitTransition") == true)
-		and workspace:GetAttribute("WorldGenerated") == true
-		and player:GetAttribute("InRound") == true
+-- SPECTATE_AUDIO_PARITY_20260914 -- the player we are WATCHING, or nil.
+--
+-- SpectateController publishes `Spectating` / `SpectateTargetUserId` on the
+-- LocalPlayer (client-local) and parks the camera -- the audio listener -- on
+-- the watched player's head. A subject only counts while they are a living,
+-- in-round, non-escaped participant, i.e. exactly the players
+-- SpectateController is willing to pick; anything else is "no subject" and the
+-- caller falls back to the local player's own state.
+local function spectateSubject()
+	if player:GetAttribute("Spectating") ~= true then return nil end
+	local userId = player:GetAttribute("SpectateTargetUserId")
+	local watched = type(userId) == "number" and Players:GetPlayerByUserId(userId) or nil
+	if not watched or watched:GetAttribute("InRound") ~= true
+		or watched:GetAttribute("Escaped") == true then return nil end
+	local character = watched.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if humanoid and humanoid.Health > 0 and character:FindFirstChild("HumanoidRootPart") then
+		return watched
+	end
+	return nil
+end
+
+-- Whether THIS client is entitled to the Level 2 mix at all. `InRound` is
+-- required of everybody -- a lobby player must never inherit the party's audio,
+-- and every spectator is still flagged InRound, because the server only clears
+-- it at teardown. Spectating excuses the ESCAPED clause and nothing else.
+--
+-- SPECTATE_AUDIO_PARITY_20260914: that clause is the bug. It tested only the
+-- LOCAL player's own attributes, so an escapee parked in the safe room lost the
+-- entire level mix while looking through a living teammate's eyes.
+local function participantActive()
+	return player:GetAttribute("InRound") == true
 		-- LEVEL2_EXIT_TRANSITION_20260828: an Escaped rider is still physically
 		-- sliding down the exit flume until the server clears the transition
 		-- flag. Cutting Level 2 out at the completion sensor left the whole
 		-- ride silent and daylight-graded halfway down the tube.
 		and (player:GetAttribute("Escaped") ~= true
+			or player:GetAttribute("Level2_ExitTransition") == true
+			or spectateSubject() ~= nil)
+end
+
+local function active()
+	return workspace:GetAttribute("SelectedLevel") == 2
+		and (workspace:GetAttribute("RoundActive") == true
 			or player:GetAttribute("Level2_ExitTransition") == true)
+		and workspace:GetAttribute("WorldGenerated") == true
+		and participantActive()
 end
 
 -- Contextual environmental one-shots. These are client-local and spatial so every
@@ -263,13 +298,7 @@ local function randomActive()
 	return workspace:GetAttribute("SelectedLevel") == 2
 		and workspace:GetAttribute("RoundActive") == true
 		and workspace:GetAttribute("WorldGenerated") == true
-		and player:GetAttribute("InRound") == true
-		-- LEVEL2_EXIT_TRANSITION_20260828: an Escaped rider is still physically
-		-- sliding down the exit flume until the server clears the transition
-		-- flag. Cutting Level 2 out at the completion sensor left the whole
-		-- ride silent and daylight-graded halfway down the tube.
-		and (player:GetAttribute("Escaped") ~= true
-			or player:GetAttribute("Level2_ExitTransition") == true)
+		and (participantActive() or spectateSubject() ~= nil)
 		and workspace:FindFirstChild("Level 2 Generated World") ~= nil
 end
 
@@ -294,15 +323,11 @@ end
 -- same proximity cues from the same place instead of silence. Still nil when
 -- there is no living subject, which every caller already reads as "stand down".
 local function rootPart()
-	local character, humanoid, root
-	if player:GetAttribute("Spectating") == true then
-		local userId = player:GetAttribute("SpectateTargetUserId")
-		local watched = type(userId) == "number" and Players:GetPlayerByUserId(userId) or nil
-		character = watched and watched.Character
-		humanoid = character and character:FindFirstChildOfClass("Humanoid")
-		root = character and character:FindFirstChild("HumanoidRootPart")
-		if humanoid and humanoid.Health > 0 and root then return root end
-	end
+	local watched = spectateSubject()
+	local character = watched and watched.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	if humanoid and humanoid.Health > 0 and root then return root end
 	character = player.Character
 	humanoid = character and character:FindFirstChildOfClass("Humanoid")
 	root = character and character:FindFirstChild("HumanoidRootPart")
@@ -530,7 +555,8 @@ end
 
 local function groanPlaybackStillValid(record)
 	if groanRecord ~= record or not record.Owner.Parent or not record.Sound.Parent
-		or not randomActive() or not rootPart() or player:GetAttribute("Escaped") == true
+		or not randomActive() or not rootPart()
+		or (player:GetAttribute("Escaped") == true and not spectateSubject())
 		or workspace:GetAttribute("EntityPaused") == true
 		or ambientWorld ~= record.World
 		or record.World:GetAttribute("Level2_Generation") ~= record.Generation then
@@ -627,7 +653,7 @@ local function updateMonsterGroans()
 	nextGroanPollAt = now + GROAN_POLL_INTERVAL
 	if not syncRandomSession() then return end
 	local listenerRoot = rootPart()
-	if not listenerRoot or player:GetAttribute("Escaped") == true then
+	if not listenerRoot or (player:GetAttribute("Escaped") == true and not spectateSubject()) then
 		-- Do not reset phase/first-body latches during death or a character swap;
 		-- a late respawn must not turn the same spawn into a new intro sound.
 		clearGroanPlayback()
@@ -1002,7 +1028,14 @@ end
 for _, attributeName in ipairs({"SelectedLevel", "RoundActive", "WorldGenerated"}) do
 	workspace:GetAttributeChangedSignal(attributeName):Connect(enforceLevel2AudioLifecycle)
 end
-for _, attributeName in ipairs({"InRound", "Escaped", "Level2_ExitTransition"}) do
+-- SPECTATE_AUDIO_PARITY_20260914: Spectating / SpectateTargetUserId are inputs
+-- to active() now, so losing or switching a target has to run the same stop that
+-- losing your own eligibility does. A target who dies is caught by the same
+-- signal: SpectateController re-picks within a second and rewrites the id (nil
+-- when nobody is left), and until then every Level 2 mix is Heartbeat-polled
+-- against active() and simply fades.
+for _, attributeName in ipairs({"InRound", "Escaped", "Level2_ExitTransition",
+	"Spectating", "SpectateTargetUserId"}) do
 	player:GetAttributeChangedSignal(attributeName):Connect(enforceLevel2AudioLifecycle)
 end
 

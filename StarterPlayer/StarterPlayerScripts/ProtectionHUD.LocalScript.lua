@@ -87,9 +87,31 @@ local function contextAvailable()
 		and not GuiService.MenuIsOpen and UIS:GetFocusedTextBox() == nil
 end
 
-local function secondsRemaining()
-	local expires = player:GetAttribute("PlayerProtectionExpiresAt")
-	if player:GetAttribute("PlayerProtectionActive") ~= true or type(expires) ~= "number"
+-- SPECTATE_UI_PARITY_20260914 -- the player we are WATCHING, or nil.
+-- SpectateController publishes `Spectating` / `SpectateTargetUserId` on the
+-- LocalPlayer. A subject only counts while they are a living, in-round,
+-- non-escaped participant, i.e. exactly the players SpectateController picks.
+local function spectateSubject()
+	if player:GetAttribute("Spectating") ~= true then return nil end
+	local userId = player:GetAttribute("SpectateTargetUserId")
+	local watched = type(userId) == "number" and Players:GetPlayerByUserId(userId) or nil
+	if not watched or watched:GetAttribute("InRound") ~= true
+		or watched:GetAttribute("Escaped") == true then return nil end
+	local character = watched.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if humanoid and humanoid.Health > 0 and character:FindFirstChild("HumanoidRootPart") then
+		return watched
+	end
+	return nil
+end
+
+-- PlayerProtectionActive / PlayerProtectionExpiresAt are SERVER-set on the
+-- Player (ServerScriptService/PlayerProtection.ModuleScript.lua), so they
+-- replicate and the watched player's shield can be read for anyone.
+local function secondsRemaining(subject)
+	subject = subject or player
+	local expires = subject:GetAttribute("PlayerProtectionExpiresAt")
+	if subject:GetAttribute("PlayerProtectionActive") ~= true or type(expires) ~= "number"
 		or expires ~= expires or expires == math.huge or expires == -math.huge then return 0 end
 	return math.clamp(expires - workspace:GetServerTimeNow(), 0, 5)
 end
@@ -103,8 +125,32 @@ local function canPress(state, remaining)
 	return remaining <= 0 and state.Available == true and not state.ServerPending and state.Charges > 0
 end
 
+-- SPECTATE_UI_PARITY_20260914: while spectating, this HUD stops being a control
+-- and becomes a READ-ONLY mirror of the watched player's shield -- timer only.
+-- No charge count (Charges is ProtectionClient's view of OUR OWN inventory, so
+-- printing it beside their timer would be a lie), no key binding, never
+-- pressable, and no touch control rect: `mirroring` is what tells applyLayout
+-- both of those. It stands down the moment the subject changes or goes invalid.
+local mirroring = false
+local applyLayout
+
 local function refresh()
 	if destroyed then return end
+	local subject = spectateSubject()
+	if (subject ~= nil) ~= mirroring then
+		mirroring = subject ~= nil
+		applyLayout() -- re-places the button and (un)registers the control rect
+		return        -- ...and tail-calls this function with the flip consumed
+	end
+	if subject then
+		local watchedRemaining = secondsRemaining(subject)
+		local showing = watchedRemaining > 0
+		gui.Enabled, button.Visible = showing, showing
+		button.Active, button.AutoButtonColor = false, false
+		button.Text = "SAFE\n" .. string.format("%.1fs", watchedRemaining)
+		button.TextTransparency = 0
+		return
+	end
 	local state = Client.GetState()
 	local remaining = secondsRemaining()
 	local visible = contextAvailable()
@@ -133,16 +179,19 @@ local function refresh()
 	button.TextTransparency = (button.Active or remaining > 0) and 0 or .3
 end
 
-local function applyLayout()
+function applyLayout()
 	if destroyed then return end
 	local layout = UIDevice.Layout()
 	touch = layout.IsTouch
-	if touch ~= registered then
-		registered = touch
+	-- The read-only mirror is a label, not a control, so it never takes a touch
+	-- control slot -- it uses the plain placement on every device.
+	local control = touch and not mirroring
+	if control ~= registered then
+		registered = control
 		if registered then UIDevice.RegisterControlRect("ProtectionUse", button)
 		else UIDevice.UnregisterControlRect(button) end
 	end
-	if touch then
+	if control then
 		local slot = layout.ControlPlan.Slots.ProtectionUse
 		assert(slot and slot.Width >= 44 and slot.Height >= 44, "ProtectionUse needs a 44px control slot")
 		button.AnchorPoint = Vector2.new(1, 1)
@@ -214,7 +263,8 @@ connect(GuiService:GetPropertyChangedSignal("MenuIsOpen"), refresh)
 connect(GuiService:GetPropertyChangedSignal("SelectedObject"), refresh)
 connect(UIS.TextBoxFocused, refresh)
 connect(UIS.TextBoxFocusReleased, refresh)
-for _, name in ipairs({"InRound", "Escaped", "Spectating", "Level2_ExitTransition", "RoundEntryControlsReady",
+for _, name in ipairs({"InRound", "Escaped", "Spectating", "SpectateTargetUserId",
+	"Level2_ExitTransition", "RoundEntryControlsReady",
 	"DispatchBriefingOpen", "ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen", "QueueModalOpen",
 	"PlayerProtectionActive", "PlayerProtectionExpiresAt"}) do
 	connect(player:GetAttributeChangedSignal(name), refresh)

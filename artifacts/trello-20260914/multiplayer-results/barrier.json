@@ -1,0 +1,14 @@
+{
+  "id": "barrier",
+  "result": {
+    "minimumOutsiderRadius": 9.048455238342285,
+    "reopenedRadius": 0.7979331612586975,
+    "restoredGroup": "Default",
+    "barrierRemoved": true,
+    "memberLeftRadius": 8.163471221923828,
+    "blockedRadius": 9.048876762390137,
+    "outsiderGroup": "Default",
+    "membersGroup": "QueueMember"
+  },
+  "ok": true
+}

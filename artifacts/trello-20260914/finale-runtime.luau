@@ -43,6 +43,9 @@ local function planarDistance(a,b) return Vector3.new(a.X-b.X,0,a.Z-b.Z).Magnitu
 local function nearestRoomId(p) return if p.X<0 then 'Arrival' else 'SignalHall' end
 local function stateFolder() return attributes() end
 local Random={new=function() return {} end}
+local Tuning={FinaleApproachSpeed=360,PlayerRunSpeedReference=26,
+ Normal={ChaseSpeed=22,PatrolSpeed=4},Blackout={ChaseSpeed=31.2,PatrolSpeed=5.25}}
+local function profile(s) return s.Blackout and Tuning.Blackout or Tuning.Normal end
 
 local function updateFinalHallChase(session: AnyTable)
 	if not session.ExitUnlocked or session.FinalHallChaseTriggered
@@ -103,7 +106,7 @@ local function updateFinalHallChase(session: AnyTable)
 end
 
 
-local function insideFinalHall(session: any, position: Vector3): boolean
+local insideFinalHall = function(session: any, position: Vector3): boolean
  local hall = session.Manifest.FinalHall
  if type(hall) ~= "table" then return false end
  local forward = Vector3.new(hall.Forward.X, 0, hall.Forward.Z)
@@ -111,9 +114,54 @@ local function insideFinalHall(session: any, position: Vector3): boolean
  forward = forward.Unit
  local offset = Vector3.new(position.X - hall.StartPoint.X, 0, position.Z - hall.StartPoint.Z)
  local along = offset:Dot(forward)
- return along >= -2 and along <= hall.Length + 2
+ -- The physical escape sensor is beyond the hall's authored EndPoint. Keep
+ -- following this same straight lane until the runner actually crosses it.
+ local escape = session.Manifest.EscapeTrigger
+ local laneLength = escape and math.max(hall.Length,
+  (escape.Position - hall.StartPoint):Dot(forward)) or hall.Length
+ return along >= -2 and along <= laneLength + 6
   and (offset - forward * along).Magnitude <= hall.Width * .5 + 2
   and math.abs(position.Y - hall.FloorY) <= hall.Height + 6
+end
+
+
+local function currentSpeed(session: any): number
+	local stateName = session.State
+	local activeProfile = profile(session)
+	if session.FinalHallChase and stateName == "CHASE" then
+		-- The entrance can be over a thousand studs away. The fast approach
+		-- still follows the maze and uses the normal collision sweep.
+		if not insideFinalHall(session, session.Root.Position) then
+			return Tuning.FinaleApproachSpeed
+		end
+		-- Lock the hall speed once, accounting for this layout's approach time.
+		-- An uninterrupted sprint reaches the sensor about one second ahead.
+		-- Do not keep adapting to the runner: stopping must still get them caught.
+		if not session.FinaleHallSpeed then
+			local targetRoot = session.Target and session.Target.Character
+				and session.Target.Character:FindFirstChild("HumanoidRootPart")
+			local exit = session.Manifest.EscapeTrigger
+			if targetRoot and exit and insideFinalHall(session, targetRoot.Position) then
+				local forward = session.Manifest.FinalHall.Forward
+				local runnerRemaining = math.max(0, (exit.Position - targetRoot.Position):Dot(forward))
+				local entityRemaining = math.max(0, (exit.Position - session.Root.Position):Dot(forward))
+				local timeToExit = runnerRemaining / Tuning.PlayerRunSpeedReference + 1
+				session.FinaleHallSpeed = math.clamp(entityRemaining / timeToExit,
+					Tuning.PlayerRunSpeedReference, Tuning.PlayerRunSpeedReference * 1.5)
+			end
+		end
+		return session.FinaleHallSpeed or activeProfile.ChaseSpeed
+	end
+	if stateName == "PATROL" or stateName == "PATROL_LISTEN" or stateName == "AWAKENING" then
+		return activeProfile.PatrolSpeed
+	end
+	if stateName == "INVESTIGATE" or stateName == "ALERT" or stateName == "RECOVER" then
+		return activeProfile.InvestigateSpeed
+	end
+	if stateName == "SEARCH" or stateName == "TRACKING" then return activeProfile.SearchSpeed end
+	if stateName == "CHASE" then return activeProfile.ChaseSpeed end
+	if stateName == "ATTACK_WINDUP" then return activeProfile.PatrolSpeed end
+	return 0
 end
 
 
@@ -217,4 +265,25 @@ check(chooseFinalHallSpawn(session.Manifest,12)==nil,'spawned without living pla
 check(not insideFinalHall(session,session.Manifest.MazeStart.Position),'entry treated as direct hall route')
 check(insideFinalHall(session,Vector3.new(150,0,0)),'hall position rejected')
 check(not insideFinalHall(session,Vector3.new(150,0,100)),'unrelated parallel room treated as hall')
+session.Manifest.EscapeTrigger={Position=Vector3.new(715,0,0)}
+check(insideFinalHall(session,Vector3.new(714,0,0)),'runner beyond authored hall end lost before escape sensor')
+check(not insideFinalHall(session,Vector3.new(750,0,0)),'lane extends indefinitely beyond exit')
+session.Root={Position=Vector3.new(-180,0,0)}
+session.State='CHASE';session.Blackout=true
+check(currentSpeed(session)==31.2,'ordinary blackout chase changed')
+session.Blackout=false
+check(currentSpeed(session)==22,'ordinary chase changed')
+session.FinalHallChase=true
+check(currentSpeed(session)==360,'finale approach did not accelerate')
+session.Root.Position=Vector3.new(102,0,0)
+for _,runnerX in ipairs({190,240,300}) do
+ session.FinaleHallSpeed=nil
+ local targetRoot={Position=Vector3.new(runnerX,0,0)}
+ session.Target={Character={FindFirstChild=function() return targetRoot end}}
+ local speed=currentSpeed(session)
+ local runnerTime=(715-runnerX)/26
+ check(math.abs((715-102)/speed-runnerTime-1)<.001,'layout changed sprint escape margin')
+ targetRoot.Position=Vector3.new(runnerX+50,0,0)
+ check(currentSpeed(session)==speed,'pursuit slowed down to let a hesitant runner escape')
+end
 print('PASS Level 3 finale: '..checks..' scenario assertions; normal spawn/gameplay source unchanged')

@@ -16,6 +16,8 @@ local RunService = game:GetService("RunService")
 
 local remote = RS:WaitForChild("Remotes"):WaitForChild("ToggleFlashlight")
 local player = Players.LocalPlayer
+local vitalRemote = RS:WaitForChild("Remotes"):WaitForChild("RoundStatus")
+local lastVitalReport = -math.huge
 
 -- how the torch is held, relative to the eye (horizontal offset + drop)
 local HAND_SIDE = 0.25  -- small hand offset: avoids putting the light inside walls
@@ -721,6 +723,11 @@ RunService.Heartbeat:Connect(function(dt)
 
 	-- re-arm and fire warnings by percentage, so upgrades preserve the same UX.
 	local batteryFraction = math.clamp(battery / batteryMax(), 0, 1)
+	if player:GetAttribute("InRound") == true and player:GetAttribute("Spectating") ~= true
+		and os.clock() - lastVitalReport >= .25 then
+		lastVitalReport = os.clock()
+		vitalRemote:FireServer("spectatevital", {Key = "Battery", Value = batteryFraction})
+	end
 	if batteryFraction > 0.55 then warned50 = false end
 	if batteryFraction > 0.30 then warned25 = false end
 	if on and batteryFraction <= 0.25 and not warned25 then
@@ -732,6 +739,29 @@ RunService.Heartbeat:Connect(function(dt)
 	end
 
 	-- battery bars: fill count + colour (white full → red near empty)
+	local spectating = player:GetAttribute("Spectating") == true
+	if spectating then
+		local id = player:GetAttribute("SpectateTargetUserId")
+		local watched = type(id) == "number" and Players:GetPlayerByUserId(id) or nil
+		local char = watched and watched.Character
+		local hum = char and char:FindFirstChildOfClass("Humanoid")
+		local value = watched and watched:GetAttribute("SpectateBattery")
+		local valid = watched and watched:GetAttribute("InRound") == true
+			and watched:GetAttribute("Escaped") ~= true and hum and hum.Health > 0
+			and type(value) == "number"
+		batBody.Visible = valid == true and not UIDevice.ScreenOwningModalOpen()
+		bindingCaption.Visible = false
+		if valid then
+			batteryFraction = math.clamp(value, 0, 1)
+			local flag = char:FindFirstChild("FlashlightOn")
+			local shining = flag and flag.Value == true
+			lens.BackgroundTransparency = shining and 0 or .72
+			for _, ray in ipairs(lightRays) do ray.Visible = shining == true end
+		end
+	else
+		batBody.Visible = true
+		applyFlashlightBinding()
+	end
 	local filled = math.clamp(math.ceil(batteryFraction * 5), 0, 5)
 	local col = BAT_FULL:Lerp(BAT_EMPTY, 1 - batteryFraction)
 	for i, bar in ipairs(batBars) do

@@ -122,16 +122,33 @@ local player = Players.LocalPlayer
 -- spectates too and is still alive, so "use my own body unless it is dead"
 -- would leave every escapee hearing their own parked body for the rest of the
 -- round. SpectateController only ever sets the flag while you are dead or out.
+-- spectateSubject() is the one definition of "there is a player to hear for":
+-- a living, in-round, non-escaped participant, i.e. exactly who
+-- SpectateController is willing to pick. Both audioSubject() (whose body drives
+-- the mix) and chaseActive() (whether this client is entitled to the Level 1
+-- entity mix at all) read it, so they can never disagree.
+local function spectateSubject()
+	if player:GetAttribute("Spectating") ~= true then return nil end
+	local id = player:GetAttribute("SpectateTargetUserId")
+	local watched = type(id) == "number" and Players:GetPlayerByUserId(id) or nil
+	if not watched or watched:GetAttribute("InRound") ~= true
+		or watched:GetAttribute("Escaped") == true then return nil end
+	local char = watched.Character
+	local hum = char and char:FindFirstChildOfClass("Humanoid")
+	if hum and hum.Health > 0 and char:FindFirstChild("HumanoidRootPart") then return watched end
+	return nil
+end
+
 local function audioSubject()
 	local char, hum, root
-	if player:GetAttribute("Spectating") == true then
-		local id = player:GetAttribute("SpectateTargetUserId")
-		local watched = type(id) == "number" and Players:GetPlayerByUserId(id) or nil
-		char = watched and watched.Character
+	local watched = spectateSubject()
+	if watched then
+		char = watched.Character
 		hum = char and char:FindFirstChildOfClass("Humanoid")
 		root = char and char:FindFirstChild("HumanoidRootPart")
 		if hum and root and hum.Health > 0 then return hum, root, char, true end
 	end
+	if player:GetAttribute("Spectating") == true then return nil end
 	char = player.Character
 	hum = char and char:FindFirstChildOfClass("Humanoid")
 	root = char and char:FindFirstChild("HumanoidRootPart")
@@ -451,11 +468,20 @@ end
 -- We play from a tiny local world emitter at that position. This stays true 3D
 -- audio even if StreamingEnabled has streamed the distant Entity model out for
 -- this client; the entity is stationary for the whole first-sight howl.
+-- Whether this client is entitled to the Level 1 entity mix: the "spotted you!"
+-- scream here and the positional chase loop below.
+--
+-- SPECTATE_AUDIO_PARITY_20260914: an ESCAPED spectator used to fail on their own
+-- `Escaped` and hear neither, while watching the very player being chased.
+-- Watching a valid subject is now its own way in; the world conditions (level,
+-- round) still apply. The cues stay positional at the Entity either way -- the
+-- camera, and therefore the listener, already sits on the watched player's head.
 local function chaseActive()
 	return workspace:GetAttribute("SelectedLevel") == 1
 		and workspace:GetAttribute("RoundActive") == true
-		and player:GetAttribute("InRound") == true
-		and player:GetAttribute("Escaped") ~= true
+		and ((player:GetAttribute("InRound") == true
+				and player:GetAttribute("Escaped") ~= true)
+			or spectateSubject() ~= nil)
 end
 
 local lastSpotScreamAt = -math.huge
@@ -704,6 +730,12 @@ workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(refreshChase)
 workspace:GetAttributeChangedSignal("RoundActive"):Connect(refreshChase)
 player:GetAttributeChangedSignal("InRound"):Connect(refreshChase)
 player:GetAttributeChangedSignal("Escaped"):Connect(refreshChase)
+-- SPECTATE_AUDIO_PARITY_20260914: chaseActive() reads these too, so gaining,
+-- switching or losing a target has to re-evaluate the loop. A target who DIES
+-- does not fire either signal, but SpectateController re-picks within a second
+-- and rewrites SpectateTargetUserId (nil when nobody is left), which does.
+player:GetAttributeChangedSignal("Spectating"):Connect(refreshChase)
+player:GetAttributeChangedSignal("SpectateTargetUserId"):Connect(refreshChase)
 workspace.ChildAdded:Connect(function(child)
 	if child.Name == "Entity" then bindChaseEntity(child) end
 end)
@@ -841,6 +873,12 @@ RunService.Heartbeat:Connect(function(dt)
 	-- WATCHING either: stamina is a client-local attribute of their own client
 	-- (NoiseReporter writes it on the LocalPlayer), so it does not replicate and
 	-- there is nothing here to read. Breathing stays own-only.
+	-- SPECTATE_AUDIO_PARITY_20260914: moot in this build anyway -- BREATHING_SOUND
+	-- is "" (line 21), so nothing is audible here at all. PostChaseBreath IS
+	-- server-set (EntityAI) and does replicate; the missing half is stamina. If
+	-- the clip is ever filled and the spectator should pant with the watched
+	-- player, the server has to publish a StaminaPublic attribute on the Player
+	-- and the `frac` read below becomes `subjectPlayer:GetAttribute("StaminaPublic")`.
 	local ownHum = not spectated and hum or nil
 	if BREATHING_SOUND ~= "" then
 		local targetI = 0

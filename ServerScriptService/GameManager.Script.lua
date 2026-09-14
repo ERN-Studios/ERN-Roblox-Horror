@@ -1216,9 +1216,24 @@ end
 -- attribute SpectatorCount on the watched Player. Only a dead or escaped
 -- participant may count, and only towards a living participant.
 local spectateTargets = {}
+local function validSpectatePair(player, target)
+ if target == player or player.Parent ~= Players or target.Parent ~= Players
+  or inRound[player] ~= true or inRound[target] ~= true
+  or target:GetAttribute("Escaped") == true then return false end
+ local ownHumanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+ local targetHumanoid = target.Character and target.Character:FindFirstChildOfClass("Humanoid")
+ return (player:GetAttribute("Escaped") == true or not ownHumanoid or ownHumanoid.Health <= 0)
+  and targetHumanoid ~= nil and targetHumanoid.Health > 0
+end
 local function republishSpectatorCounts()
  local counts = {}
- for _, target in pairs(spectateTargets) do counts[target] = (counts[target] or 0) + 1 end
+ for spectator, target in pairs(spectateTargets) do
+  if validSpectatePair(spectator, target) then
+   counts[target] = (counts[target] or 0) + 1
+  else
+   spectateTargets[spectator] = nil
+  end
+ end
  for _, subject in ipairs(Players:GetPlayers()) do
   if subject:GetAttribute("SpectatorCount") ~= counts[subject] then
    subject:SetAttribute("SpectatorCount", counts[subject])
@@ -1228,19 +1243,12 @@ end
 local function setSpectateTarget(player, targetUserId)
  local target = nil
  if type(targetUserId) == "number" and targetUserId == targetUserId
-  and targetUserId > 0 and targetUserId < 2^53 then
+  and math.abs(targetUserId) < 2^53 and targetUserId % 1 == 0 then
+  -- Studio's actual multiplayer clients have negative UserIds. Resolve the
+  -- current roster instead of assuming positive production account ids.
   target = Players:GetPlayerByUserId(targetUserId)
  end
- if target then
-  local ownHumanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
-  local targetHumanoid = target.Character and target.Character:FindFirstChildOfClass("Humanoid")
-  local senderOut = player:GetAttribute("Escaped") == true
-   or not ownHumanoid or ownHumanoid.Health <= 0
-  if target == player or inRound[player] ~= true or inRound[target] ~= true
-   or not senderOut or not targetHumanoid or targetHumanoid.Health <= 0 then
-   target = nil
-  end
- end
+ if target and not validSpectatePair(player, target) then target = nil end
  if spectateTargets[player] == target then return end
  spectateTargets[player] = target
  republishSpectatorCounts()
@@ -1250,8 +1258,33 @@ local function clearSpectatorCounts()
  table.clear(spectateTargets)
  republishSpectatorCounts()
 end
+-- Clear stale reports even when a client stops reporting after its target dies,
+-- leaves, escapes, or the spectator respawns. No names are replicated.
+task.spawn(function()
+ while task.wait(1) do
+  if next(spectateTargets) ~= nil then republishSpectatorCounts() end
+ end
+end)
 
 local lobbyBriefingReady = {}
+-- Presentation only: never read these values for movement, battery drain,
+-- protection, purchases or rewards. Each field accepts at most five reports/s.
+local spectatorVitalReports = setmetatable({}, {__mode = "k"})
+local function receiveSpectatorVital(player, payload)
+ if type(payload) ~= "table" or inRound[player] ~= true
+  or player:GetAttribute("Escaped") == true then return end
+ local key, value = payload.Key, payload.Value
+ if (key ~= "Stamina" and key ~= "Battery") or type(value) ~= "number"
+  or value ~= value or value < 0 or value > 1 then return end
+ local hum = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+ if not hum or hum.Health <= 0 then return end
+ local reports = spectatorVitalReports[player] or {}
+ local now = os.clock()
+ if reports[key] and now - reports[key] < .2 then return end
+ reports[key] = now
+ spectatorVitalReports[player] = reports
+ player:SetAttribute("Spectate" .. key, value)
+end
 local handlePostWinReturnRequest
 local handlePostWinContinueRequest
 local handleLeaveRoundRequest
@@ -1266,6 +1299,8 @@ status.OnServerEvent:Connect(function(player, message, requestSerial)
   handleLeaveRoundRequest(player)
  elseif message == "spectatetarget" then
   setSpectateTarget(player, requestSerial)
+ elseif message == "spectatevital" then
+  receiveSpectatorVital(player, requestSerial)
  elseif message == "lobbybriefingready"
   and not lobbyBriefingReady[player]
   and not IS_RESERVED_ROUND_SERVER

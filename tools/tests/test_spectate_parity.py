@@ -101,8 +101,12 @@ expect(select(4, audioSubject()), false, 'a living player is never the spectate 
 attributes.Spectating = true
 attributes.SpectateTargetUserId = 42
 local watched = makeCharacter(100, 26, 30)
-roster[42] = {Character = watched}
+local watchedAttributes = {InRound = true}
+roster[42] = {Character = watched, GetAttribute = function(_, key) return watchedAttributes[key] end}
 expect(select(4, audioSubject()), true, 'a live escapee still hears the watched player')
+watchedAttributes.Escaped = true
+expect(audioSubject(), nil, 'invalid watched player never falls back to the living parked escapee')
+watchedAttributes.Escaped = nil
 footstepTick(1)
 expect(steps.SoundId, FOOTSTEP_RUN, "the escapee hears the watched player's sprint")
 
@@ -153,7 +157,7 @@ def main():
         # the real audio-slot ids and volumes the block keys on
         section(SOUND, "local AMBIENCE_SOUND", "-- ── tuning"),
         section(SOUND, "local AMBIENCE_VOLUME", "local player = Players.LocalPlayer"),
-        section(SOUND, "local function audioSubject()", "local function makeLoop"),
+        section(SOUND, "local function spectateSubject()", "local function makeLoop"),
         FOOTSTEP_TICK_HEAD, footsteps, "end",
         section(SOUND, "local spectateFlashlightConn", 'player:GetAttributeChangedSignal("SpectateTargetUserId")'),
         TESTS,

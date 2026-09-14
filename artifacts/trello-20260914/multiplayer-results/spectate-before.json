@@ -1,0 +1,267 @@
+{
+  "id": "spectate-before",
+  "result": {
+    "observer": {
+      "sounds": [
+        {
+          "id": "rbxassetid://92576512092725",
+          "path": "Workspace.Maze.Part.FluorescentHum",
+          "volume": 0.16940157115459442,
+          "playing": true
+        },
+        {
+          "id": "rbxasset://sounds/action_footsteps_plastic.mp3",
+          "path": "Workspace.Player1.HumanoidRootPart.Running",
+          "volume": 0,
+          "playing": false
+        },
+        {
+          "id": "rbxasset://sounds/action_footsteps_plastic.mp3",
+          "path": "Workspace.Player2.HumanoidRootPart.Running",
+          "volume": 0,
+          "playing": false
+        },
+        {
+          "id": "rbxasset://sounds/electronicpingshort.wav",
+          "path": "Workspace.PuzzleItems.FuseRelay.RelayBody.RelayHum",
+          "volume": 0.054999999701976776,
+          "playing": true
+        },
+        {
+          "id": "rbxasset://sounds/electronicpingshort.wav",
+          "path": "Workspace.PuzzleItems.FuseRelay.RelayBody.RelayHum",
+          "volume": 0.054999999701976776,
+          "playing": true
+        },
+        {
+          "id": "rbxasset://sounds/electronicpingshort.wav",
+          "path": "Workspace.PuzzleItems.FuseRelay.RelayBody.RelayHum",
+          "volume": 0.054999999701976776,
+          "playing": true
+        },
+        {
+          "id": "rbxasset://sounds/electronicpingshort.wav",
+          "path": "Workspace.PuzzleItems.FuseRelay.RelayBody.RelayHum",
+          "volume": 0.054999999701976776,
+          "playing": true
+        },
+        {
+          "id": "rbxassetid://108141977175862",
+          "path": "SoundService.Sound",
+          "volume": 0,
+          "playing": true
+        }
+      ],
+      "guis": [
+        {
+          "visible": true,
+          "path": "Players.Player2.PlayerGui.SpectateGui.TextLabel",
+          "text": "POV: Player1  (Q / E to switch)",
+          "active": false
+        },
+        {
+          "visible": false,
+          "path": "Players.Player2.PlayerGui.SpectateGui.SpectatePrevious",
+          "text": "\u2039",
+          "active": false
+        },
+        {
+          "visible": false,
+          "path": "Players.Player2.PlayerGui.SpectateGui.SpectateNext",
+          "text": "\u203a",
+          "active": false
+        },
+        {
+          "visible": true,
+          "path": "Players.Player2.PlayerGui.SpectateGui.SpectateBackToLobby",
+          "text": "BACK TO LOBBY",
+          "active": true
+        },
+        {
+          "visible": false,
+          "path": "Players.Player2.PlayerGui.SpectateGui.SpectatorCounter",
+          "text": "",
+          "active": false
+        }
+      ],
+      "name": "Player2",
+      "position": [
+        -4.99877405166626,
+        1.118579387664795,
+        -9.899621963500977
+      ],
+      "userId": -2,
+      "attributes": {
+        "ZyntraFirstLogin": false,
+        "Crouching": false,
+        "ZyntraLobbyBriefingPlayed": true,
+        "LevelThreeBriefingActive": false,
+        "CaptionsEnabled": true,
+        "ZyntraReentryCredits": 0,
+        "ZyntraRecordedSupportRobux": 0,
+        "ZyntraDispatchClientActive": false,
+        "DisableCaptions": false,
+        "Escaped": true,
+        "ZyntraHazmatColor": null,
+        "ZyntraStaminaMultiplier": 1.05,
+        "ZyntraDonationRobux": 0,
+        "GlowstickSlot": 2,
+        "ReduceCameraShake": false,
+        "ZyntraReentryUsed": false,
+        "ReduceFlashing": false,
+        "ZyntraUtilityRobux": 0,
+        "ZyntraMuteDispatch": false,
+        "LevelOneBriefingActive": false,
+        "ZyntraDispatchPreferenceLoaded": true,
+        "GlowstickColor": null,
+        "RoundEntryUIReady": true,
+        "Spectating": true,
+        "ZyntraReentryPrice": 29,
+        "ZyntraGlowstickColor": null,
+        "ZyntraOwnsCosmeticEquipment": true,
+        "ZyntraOwnsAdvancedEquipment": true,
+        "LobbyBriefingActive": false,
+        "ZyntraReentryProductId": 3707755318,
+        "ZyntraOwnsSupporter": true,
+        "LobbyBriefingPlayed": true,
+        "ZyntraProfileLoaded": true,
+        "ZyntraBatteryMultiplier": 1.05,
+        "RoundEntryControlsReady": true,
+        "QueueModalOpen": false,
+        "LocalCrouching": false,
+        "LevelTwoBriefingActive": false,
+        "DevFastQueue": true,
+        "InRound": true,
+        "SpectateTargetUserId": -1,
+        "Stamina": 1,
+        "LobbyMusicEnabled": true,
+        "DispatchBriefingOpen": false,
+        "LobbyBriefingSkipped": false
+      }
+    },
+    "watched": {
+      "sounds": [
+        {
+          "id": "rbxassetid://92576512092725",
+          "path": "Workspace.Maze.Part.FluorescentHum",
+          "volume": 0.1693967580795288,
+          "playing": true
+        },
+        {
+          "id": "rbxasset://sounds/action_footsteps_plastic.mp3",
+          "path": "Workspace.Player1.HumanoidRootPart.Running",
+          "volume": 0,
+          "playing": false
+        },
+        {
+          "id": "rbxasset://sounds/action_footsteps_plastic.mp3",
+          "path": "Workspace.Player2.HumanoidRootPart.Running",
+          "volume": 0.6499999761581421,
+          "playing": false
+        },
+        {
+          "id": "rbxasset://sounds/electronicpingshort.wav",
+          "path": "Workspace.PuzzleItems.FuseRelay.RelayBody.RelayHum",
+          "volume": 0.054999999701976776,
+          "playing": true
+        },
+        {
+          "id": "rbxasset://sounds/electronicpingshort.wav",
+          "path": "Workspace.PuzzleItems.FuseRelay.RelayBody.RelayHum",
+          "volume": 0.054999999701976776,
+          "playing": true
+        },
+        {
+          "id": "rbxasset://sounds/electronicpingshort.wav",
+          "path": "Workspace.PuzzleItems.FuseRelay.RelayBody.RelayHum",
+          "volume": 0.054999999701976776,
+          "playing": true
+        },
+        {
+          "id": "rbxasset://sounds/electronicpingshort.wav",
+          "path": "Workspace.PuzzleItems.FuseRelay.RelayBody.RelayHum",
+          "volume": 0.054999999701976776,
+          "playing": true
+        },
+        {
+          "id": "rbxassetid://133468930879347",
+          "path": "Workspace.DistantWallKnock.Knock",
+          "volume": 0.5,
+          "playing": true
+        },
+        {
+          "id": "rbxassetid://108141977175862",
+          "path": "SoundService.Sound",
+          "volume": 0,
+          "playing": true
+        },
+        {
+          "id": "rbxassetid://110249611823719",
+          "path": "Players.Player1.PlayerGui.LevelOneGuideGui.LevelOneCommandBriefing",
+          "volume": 1,
+          "playing": true
+        }
+      ],
+      "guis": [
+        {
+          "visible": false,
+          "path": "Players.Player1.PlayerGui.SpectateGui.SpectatorCounter",
+          "text": "",
+          "active": false
+        }
+      ],
+      "name": "Player1",
+      "position": [
+        -4.994576454162598,
+        1.118579387664795,
+        -13.903521537780762
+      ],
+      "userId": -1,
+      "attributes": {
+        "ZyntraFirstLogin": false,
+        "Crouching": false,
+        "ZyntraLobbyBriefingPlayed": true,
+        "LevelThreeBriefingActive": false,
+        "CaptionsEnabled": true,
+        "ZyntraReentryCredits": 0,
+        "ZyntraRecordedSupportRobux": 0,
+        "ZyntraDispatchClientActive": true,
+        "DisableCaptions": false,
+        "ZyntraHazmatColor": null,
+        "ZyntraStaminaMultiplier": 1.05,
+        "ZyntraDonationRobux": 0,
+        "GlowstickSlot": 1,
+        "ReduceCameraShake": false,
+        "ZyntraReentryUsed": false,
+        "ReduceFlashing": false,
+        "ZyntraUtilityRobux": 0,
+        "ZyntraMuteDispatch": false,
+        "LevelOneBriefingActive": true,
+        "ZyntraDispatchPreferenceLoaded": true,
+        "GlowstickColor": null,
+        "RoundEntryUIReady": true,
+        "LobbyBriefingPlayed": true,
+        "ZyntraReentryPrice": 29,
+        "ZyntraGlowstickColor": null,
+        "ZyntraOwnsCosmeticEquipment": true,
+        "ZyntraOwnsAdvancedEquipment": true,
+        "LobbyBriefingActive": false,
+        "ZyntraReentryProductId": 3707755318,
+        "ZyntraOwnsSupporter": true,
+        "ZyntraProfileLoaded": true,
+        "RoundEntryControlsReady": true,
+        "ZyntraBatteryMultiplier": 1.05,
+        "InRound": true,
+        "LevelTwoBriefingActive": false,
+        "LocalCrouching": false,
+        "QueueModalOpen": false,
+        "DevFastQueue": true,
+        "Stamina": 1,
+        "LobbyMusicEnabled": true,
+        "DispatchBriefingOpen": true,
+        "LobbyBriefingSkipped": false
+      }
+    }
+  },
+  "ok": true
+}

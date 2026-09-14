@@ -1,0 +1,1061 @@
+{
+  "id": "finale-balanced",
+  "result": {
+    "round": {
+      "a": {
+        "ZyntraFirstLogin": false,
+        "Crouching": false,
+        "ZyntraLobbyBriefingPlayed": true,
+        "CaptionsEnabled": true,
+        "ZyntraRecordedSupportRobux": 0,
+        "DisableCaptions": false,
+        "SpectateBattery": 1,
+        "Level3_HeldCDMask": 0,
+        "ZyntraHazmatColor": null,
+        "ZyntraStaminaMultiplier": 1.05,
+        "ZyntraDonationRobux": 0,
+        "GlowstickSlot": 1,
+        "ReduceCameraShake": false,
+        "ZyntraReentryUsed": false,
+        "ReduceFlashing": false,
+        "ZyntraUtilityRobux": 0,
+        "ZyntraMuteDispatch": false,
+        "ZyntraDispatchPreferenceLoaded": true,
+        "GlowstickColor": null,
+        "Level3_Hiding": false,
+        "Level3_HeldCDCount": 0,
+        "Level3_HideGeneration": 0,
+        "ZyntraGlowstickColor": null,
+        "ZyntraOwnsCosmeticEquipment": true,
+        "ZyntraOwnsAdvancedEquipment": true,
+        "ZyntraBatteryMultiplier": 1.05,
+        "ZyntraOwnsSupporter": true,
+        "ZyntraProfileLoaded": true,
+        "SpectateStamina": 1,
+        "Level3_HideTableIndex": 0,
+        "LobbyMusicEnabled": true,
+        "InRound": true,
+        "DevFastQueue": true
+      },
+      "world": {
+        "Level2ExitPowered": false,
+        "Level3CDsCarried": 0,
+        "LoadStage": "READY",
+        "RoundLoadingDeadline": 1789409915.9250336,
+        "WorldGenerated": true,
+        "Level3HiddenPlayers": 0,
+        "GenerateWorld": false,
+        "Level2BuildGeneration": 20,
+        "Level3MallManagerState": "OFF",
+        "ValveColorWashUntil": 0,
+        "EntityPaused": false,
+        "Level3BlackoutActive": false,
+        "SelectedLevel": 3,
+        "Level2PumpGoal": 0,
+        "CodexProbePreviousLoadstring": false,
+        "Level3CompletionDimDuration": 5.5,
+        "Level2Valves": 0,
+        "Level3FinalHallChaseActive": false,
+        "CodexProbePreviousHttp": false,
+        "PuzzleWon": false,
+        "Level3FinalHallCrossedCount": 0,
+        "SkipElevatorSequence": false,
+        "Level3CDsCollected": 0,
+        "Level3PreBlackoutActive": false,
+        "Level3ModuleGoal": 5,
+        "Level3CDsDropped": 0,
+        "Level3FinalHallChaseTriggered": false,
+        "Level3RecoveryFlickerActive": false,
+        "RoundLoadingToken": ":entry:1",
+        "RoundLoadingState": "ready",
+        "ValveBlackoutActive": false,
+        "Level3Modules": 0,
+        "RoundActive": false,
+        "RoundCompletionRoutingVersion": "2026-09-06.1",
+        "Level3FinalHallEligibleCount": 0,
+        "RoundLoadingRuntimeVersion": "2026-09-05.2",
+        "ReservedRoundServer": false,
+        "Level3FlashlightsSuppressed": false,
+        "Level2ValveGoal": 3,
+        "Level2LightingOwnedByController": false,
+        "PostWinIntermissionActive": false,
+        "Level3MallManagerHuntActive": false,
+        "Level3ExitUnlocked": false,
+        "Level3MallManagerActive": false,
+        "Level3LightingOwnedByController": true,
+        "Level3MallManagerBlackoutBoosted": false,
+        "Level3ExitGuideActive": false,
+        "Level3CompletionDimStartedAtServerTime": 0
+      },
+      "b": {
+        "ZyntraFirstLogin": false,
+        "Crouching": false,
+        "ZyntraLobbyBriefingPlayed": true,
+        "CaptionsEnabled": true,
+        "ZyntraRecordedSupportRobux": 0,
+        "DisableCaptions": false,
+        "SpectateBattery": 1,
+        "Level3_HeldCDMask": 0,
+        "ZyntraHazmatColor": null,
+        "ZyntraStaminaMultiplier": 1.05,
+        "ZyntraDonationRobux": 0,
+        "GlowstickSlot": 2,
+        "ReduceCameraShake": false,
+        "ZyntraReentryUsed": false,
+        "ReduceFlashing": false,
+        "ZyntraUtilityRobux": 0,
+        "ZyntraMuteDispatch": false,
+        "ZyntraDispatchPreferenceLoaded": true,
+        "GlowstickColor": null,
+        "Level3_Hiding": false,
+        "Level3_HeldCDCount": 0,
+        "Level3_HideGeneration": 0,
+        "ZyntraGlowstickColor": null,
+        "ZyntraOwnsCosmeticEquipment": true,
+        "ZyntraOwnsAdvancedEquipment": true,
+        "ZyntraBatteryMultiplier": 1.05,
+        "ZyntraOwnsSupporter": true,
+        "ZyntraProfileLoaded": true,
+        "SpectateStamina": 1,
+        "Level3_HideTableIndex": 0,
+        "LobbyMusicEnabled": true,
+        "InRound": true,
+        "DevFastQueue": true
+      }
+    },
+    "run": {
+      "elapsed": 23.75012330000027,
+      "samples": [
+        {
+          "runner": [
+            6668.09716796875,
+            27.9560604095459,
+            662.9964599609375
+          ],
+          "time": 0.05009579999932612,
+          "escaped": false,
+          "health": 100
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 286.206908673048,
+          "state": "CHASE",
+          "runner": [
+            6678.572265625,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 0.551400599999397,
+          "entity": [
+            6223.34521484375,
+            28.10005760192871,
+            90
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 360
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 360,
+          "state": "CHASE",
+          "runner": [
+            6691.044921875,
+            27.60548210144043,
+            662.996337890625
+          ],
+          "time": 1.0516475000003993,
+          "entity": [
+            6402.625,
+            28.10005760192871,
+            91.7487564086914
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 360
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 360,
+          "state": "CHASE",
+          "runner": [
+            6705.19873046875,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 1.5682791999988694,
+          "entity": [
+            6451.9345703125,
+            28.10005760192871,
+            200
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 360
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 360,
+          "state": "CHASE",
+          "runner": [
+            6719.10595703125,
+            27.605480194091797,
+            662.9963989257812
+          ],
+          "time": 2.083828699998776,
+          "entity": [
+            6521,
+            28.10005760192871,
+            261.5619201660156
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 360
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 328.68522986769676,
+          "state": "CHASE",
+          "runner": [
+            6732.4287109375,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 2.6007432999995217,
+          "entity": [
+            6524.45849609375,
+            28.10005760192871,
+            378.9896240234375
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 360
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 360,
+          "state": "CHASE",
+          "runner": [
+            6745.63525390625,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 3.1338637999997445,
+          "entity": [
+            6622.52197265625,
+            28.10005760192871,
+            486.8065490722656
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 360
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 360,
+          "state": "CHASE",
+          "runner": [
+            6759.74560546875,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 3.6501503999988927,
+          "entity": [
+            6628.50341796875,
+            28.10005760192871,
+            637.1575317382812
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 360
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            6773.31103515625,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 4.167235400000209,
+          "entity": [
+            6683.0244140625,
+            28.10005760192871,
+            664.634033203125
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            6786.30859375,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 4.683365499999127,
+          "entity": [
+            6698.2646484375,
+            28.10005760192871,
+            664.4557495117188
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            6799.8017578125,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 5.201377199999115,
+          "entity": [
+            6713.55712890625,
+            28.10005760192871,
+            664.20458984375
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            6813.310546875,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 5.717261300000246,
+          "entity": [
+            6728.87060546875,
+            28.10005760192871,
+            663.9930419921875
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            6826.76708984375,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 6.250223099999857,
+          "entity": [
+            6744.6298828125,
+            28.10005760192871,
+            663.810302734375
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            6840.0029296875,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 6.752538299999287,
+          "entity": [
+            6759.41552734375,
+            28.10005760192871,
+            663.6689453125
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            6853.4052734375,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 7.266692499999408,
+          "entity": [
+            6774.7216796875,
+            28.10005760192871,
+            663.5442504882812
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            6866.78515625,
+            27.60548210144043,
+            662.9964599609375
+          ],
+          "time": 7.78339909999886,
+          "entity": [
+            6789.98681640625,
+            28.10005760192871,
+            663.44140625
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            6879.82373046875,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 8.284265799999048,
+          "entity": [
+            6804.78173828125,
+            28.10005760192871,
+            663.355224609375
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            6893.1513671875,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 8.801293099999384,
+          "entity": [
+            6819.99462890625,
+            28.10005760192871,
+            663.2845458984375
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            6906.83935546875,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 9.34938449999936,
+          "entity": [
+            6836.26513671875,
+            28.10005760192871,
+            663.2232666015625
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            6920.341796875,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 9.85109779999948,
+          "entity": [
+            6851.125,
+            28.10005760192871,
+            663.1786499023438
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            6933.34033203125,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 10.352237199998854,
+          "entity": [
+            6865.83837890625,
+            28.10005760192871,
+            663.1427612304688
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            6946.72412109375,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 10.866576200000054,
+          "entity": [
+            6881.16845703125,
+            28.10005760192871,
+            663.1123657226562
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            6959.85986328125,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 11.366930500000308,
+          "entity": [
+            6895.98681640625,
+            28.10005760192871,
+            663.08837890625
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            6972.92333984375,
+            27.60548210144043,
+            662.996337890625
+          ],
+          "time": 11.867592399999921,
+          "entity": [
+            6910.79052734375,
+            28.10005760192871,
+            663.0692138671875
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            6986.39990234375,
+            27.605484008789062,
+            662.9963989257812
+          ],
+          "time": 12.400505899999189,
+          "entity": [
+            6926.54345703125,
+            28.10005760192871,
+            663.053466796875
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            6999.91845703125,
+            27.605484008789062,
+            662.9963989257812
+          ],
+          "time": 12.90074420000019,
+          "entity": [
+            6941.3115234375,
+            28.10005760192871,
+            663.0415649414062
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            7013.26611328125,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 13.416353799999342,
+          "entity": [
+            6956.595703125,
+            28.10005760192871,
+            663.0311889648438
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            7026.70703125,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 13.933652800000345,
+          "entity": [
+            6971.88671875,
+            28.10005760192871,
+            663.023681640625
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            7040.28125,
+            27.605480194091797,
+            662.9963989257812
+          ],
+          "time": 14.450519799998801,
+          "entity": [
+            6987.1474609375,
+            28.10005760192871,
+            663.017822265625
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            7053.05810546875,
+            27.605484008789062,
+            662.9963989257812
+          ],
+          "time": 14.95077879999917,
+          "entity": [
+            7001.94384765625,
+            28.10005760192871,
+            663.0134887695312
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            7067.07958984375,
+            27.605484008789062,
+            662.9964599609375
+          ],
+          "time": 15.49982749999981,
+          "entity": [
+            7018.22509765625,
+            28.10005760192871,
+            663.009521484375
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            7080.50830078125,
+            27.605484008789062,
+            662.9964599609375
+          ],
+          "time": 15.999938999999358,
+          "entity": [
+            7032.97607421875,
+            28.10005760192871,
+            663.00732421875
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            7093.3720703125,
+            27.605484008789062,
+            662.9963989257812
+          ],
+          "time": 16.500446599999123,
+          "entity": [
+            7047.77880859375,
+            28.10005760192871,
+            663.0054931640625
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            7106.798828125,
+            27.605480194091797,
+            662.996337890625
+          ],
+          "time": 17.017017699999997,
+          "entity": [
+            7063.06494140625,
+            28.10005760192871,
+            663.0036010742188
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            7120.3134765625,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 17.533798799999204,
+          "entity": [
+            7078.328125,
+            28.10005760192871,
+            663.0023803710938
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            7133.78955078125,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 18.051629399999,
+          "entity": [
+            7093.623046875,
+            28.10005760192871,
+            663.002197265625
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            7148.1142578125,
+            27.605484008789062,
+            662.9964599609375
+          ],
+          "time": 18.61697269999968,
+          "entity": [
+            7110.4013671875,
+            28.10005760192871,
+            663.0020751953125
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            7161.82470703125,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 19.134156000000075,
+          "entity": [
+            7125.6552734375,
+            28.10005760192871,
+            663.001953125
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            7175.42578125,
+            27.605480194091797,
+            662.9963989257812
+          ],
+          "time": 19.650336499998957,
+          "entity": [
+            7140.953125,
+            28.10005760192871,
+            663.0018920898438
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            7188.79296875,
+            27.60548210144043,
+            662.996337890625
+          ],
+          "time": 20.16576729999906,
+          "entity": [
+            7156.271484375,
+            28.10005760192871,
+            663.0017700195312
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            7201.81787109375,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 20.66588359999878,
+          "entity": [
+            7171.07666015625,
+            28.10005760192871,
+            663.0015258789062
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            7214.7255859375,
+            27.60548210144043,
+            662.9963989257812
+          ],
+          "time": 21.166622499998994,
+          "entity": [
+            7185.880859375,
+            28.10005760192871,
+            663.0015258789062
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            7228.68115234375,
+            27.605484008789062,
+            662.9963989257812
+          ],
+          "time": 21.716046899999128,
+          "entity": [
+            7202.087890625,
+            28.10005760192871,
+            663.0014038085938
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            7242.0009765625,
+            27.75391960144043,
+            662.9963989257812
+          ],
+          "time": 22.216253999999026,
+          "entity": [
+            7216.8779296875,
+            28.10005760192871,
+            663.0009765625
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            7255.5048828125,
+            27.753917694091797,
+            662.9963989257812
+          ],
+          "time": 22.73368329999903,
+          "entity": [
+            7232.177734375,
+            28.10005760192871,
+            662.9988403320312
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            7268.94091796875,
+            27.75391960144043,
+            662.9963989257812
+          ],
+          "time": 23.248876599998766,
+          "entity": [
+            7247.43603515625,
+            28.10005760192871,
+            662.99755859375
+          ],
+          "escaped": false,
+          "health": 100,
+          "speed": 29.5809645411166
+        },
+        {
+          "finalHall": true,
+          "movementSpeed": 29.5809645411166,
+          "state": "CHASE",
+          "runner": [
+            7248.99462890625,
+            -2.513805627822876,
+            658.90380859375
+          ],
+          "time": 23.750117199999295,
+          "entity": [
+            7262.26025390625,
+            28.10005760192871,
+            662.9970092773438
+          ],
+          "escaped": true,
+          "health": 100,
+          "speed": 29.5809645411166
+        }
+      ],
+      "escaped": true,
+      "spawn": [
+        6223.34521484375,
+        28.10005760192871,
+        90
+      ]
+    },
+    "prepare": {
+      "hallStart": [
+        6666,
+        24,
+        663
+      ],
+      "managerExists": false,
+      "floor": 24,
+      "objective": {
+        "CarriedCount": 0,
+        "FinalHallEligibleCount": 1,
+        "CollectedProgress": 5,
+        "ModuleProgress": 5,
+        "FinalHallCrossedCount": 0,
+        "FinalHallChaseTriggered": false,
+        "Generation": 1,
+        "ExitUnlocked": true,
+        "InsertedProgress": 5,
+        "DroppedCount": 0,
+        "ModuleGoal": 5
+      },
+      "entry": [
+        6194,
+        24.25,
+        90
+      ],
+      "forward": [
+        1,
+        0,
+        0
+      ],
+      "length": 560,
+      "hallEnd": [
+        7226,
+        24,
+        663
+      ]
+    }
+  },
+  "ok": true
+}

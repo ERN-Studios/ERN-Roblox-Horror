@@ -4,42 +4,68 @@
 
 | File | Status |
 |---|---|
-| `StarterPlayer/StarterPlayerScripts/First Entry Guide.LocalScript.lua` | new, 291 lines, LF, UTF-8 |
-| `tools/tests/test_first_entry_guide.py` | new, offline Luau suite, 37 checks |
+| `StarterPlayer/StarterPlayerScripts/First Entry Guide.LocalScript.lua` | new, 293 lines, LF, UTF-8 |
+| `ServerScriptService/ZyntraMonetization.Script.lua` | edited: `loadProfile` only (+20 lines) |
+| `tools/tests/test_first_entry_guide.py` | offline Luau suite, 39 checks |
+| `tools/tests/test_first_login_flag.py` | new, offline Luau suite, 33 checks |
 
-Nothing else was touched: no server script, no manifest entry, no Studio write,
-no git. The lead creates the Studio instance (see *For Studio* below).
+Nothing else was touched: no other Monetization behaviour (`refreshPasses`, the
+feedback gift and `ProcessReceipt` are untouched), no manifest entry, no Studio
+write, no git. The lead creates the Studio instance (see *For Studio* below).
 
-## Eligibility — why this needs no new persistence
+## Eligibility — first login is decided at the commit, by the server
 
-The card's "only on their first login" is exactly the fact the profile already
-stores for the Command Center welcome, so the guide reads it instead of adding
-a field:
+The first draft read `ZyntraLobbyBriefingPlayed`. That flag is owned by another
+feature: the Command Center welcome claims it a few seconds **after** spawn, so
+a player who left before acknowledging the welcome was still "first login" on
+the next join and got the guide again. It is now decided where the question can
+actually be answered — the one place that sees the DataStore record before it is
+written back.
 
-- `ZyntraProfileLoaded` (player attribute, set false at load start and true
-  after `applyAttributes`, `ZyntraMonetization.Script.lua:1466` / `:1592`).
-- `ZyntraLobbyBriefingPlayed` (player attribute, published from
-  `data.Settings.LobbyBriefingPlayed`, `ZyntraMonetization.Script.lua:558`).
-  A legacy profile is migrated to **true** at `:325-330` — only a genuinely new
-  profile arrives false.
+**Server (`ZyntraMonetization.Script.lua`, `loadProfile`):**
 
-The latch:
+```lua
+return store:UpdateAsync("u_" .. player.UserId, function(current)
+    recordExisted = type(current) == "table"   -- before normalizeProfile invents one
+    current = normalizeProfile(current)
+    ...
+end)
+-- on ok, the callback's return value has committed, so the record exists now:
+firstLogin = not recordExisted
+```
+
+- `recordExisted` is **rewritten on every callback run**. Roblox re-runs the
+  UpdateAsync callback when a competing write conflicts, and only the last run's
+  return value commits — so the last run's observation is the committed one. A
+  conflicting run that sees the record the previous run wrote correctly yields
+  `firstLogin = false`.
+- **Failure path** (`lastError`, `newProfile()`, `persistent = false`):
+  `firstLogin` stays false. Nothing committed, so the next *successful* load is
+  the first one — a DataStore outage can never burn a player's first login.
+- **Studio** (`RunService:IsStudio()`, no DataStore): false, unless
+  `workspace:GetAttribute("DevSimulateFirstLogin") == true`. That is the dev
+  switch for previewing the guide.
+- Stored as `sessions[player].firstLogin` and published as the player attribute
+  **`ZyntraFirstLogin`** (boolean), written **immediately before**
+  `player:SetAttribute("ZyntraProfileLoaded", true)` — the ordering is what the
+  guide's latch depends on, and both tests assert it by index.
+- Existing players can never be misread as new: the record exists, so
+  `recordExisted` is true on every run.
+
+**Client (the guide's latch):**
 
 ```lua
 if player:GetAttribute("ZyntraProfileLoaded") ~= true then return end   -- wait
 latched = true                                                          -- once
-if player:GetAttribute("ZyntraLobbyBriefingPlayed") == true
+if player:GetAttribute("ZyntraFirstLogin") ~= true
     or workspace:GetAttribute("ReservedRoundServer") == true
     or player:GetAttribute("InRound") == true then return end
 ```
 
-Taken **once**, at load, and never re-read — the welcome flips the same flag
-true a few seconds into that first session (and persists it through the claim
-protocol), so a re-read would delete the guide from under a player mid-walk.
-`applyAttributes` writes the briefing flag *before* `ZyntraProfileLoaded` goes
-true, so the value is already correct at the moment the latch fires. If the
-profile never loads, nothing happens at all: one idle attribute connection,
-no instances, no warning.
+Taken **once**, at load, and never re-read. `ZyntraFirstLogin` stays true for the
+whole session — nothing flips it — so re-reading would say nothing new; the
+guide's own `finished` latch owns the end. If the profile never loads, nothing
+happens at all: one idle attribute connection, no instances, no warning.
 
 Two small deviations from the brief, both deliberate:
 
@@ -103,25 +129,49 @@ frame, so losing the root just hides the beams and marker, and the new root
 resumes them. `finished` is a one-way latch — after an end, a late path compute,
 a late profile-load signal and every remaining event are all no-ops.
 
-## Test
+## Tests
 
 ```
-LUAU_BIN="C:/Users/mikke/AppData/Local/Temp/codex-luau-0.737/luau.exe" \
-  python tools/tests/test_first_entry_guide.py
+export LUAU_BIN="C:/Users/mikke/AppData/Local/Temp/codex-luau-0.737/luau.exe"
+python tools/tests/test_first_login_flag.py
+python tools/tests/test_first_entry_guide.py
+python tools/tests/test_feedback_gift.py
+python tools/tests/test_token_grants.py
+python tools/tests/test_support_product_receipts.py
 ```
 
 ```
-First Entry Guide: 37 checks passed (entire actual script, offline Luau)
+first-login flag: 33 checks passed
+First Entry Guide: 39 checks passed (entire actual script, offline Luau)
+feedback gift: 26 checks passed (actual mutate + gift block; fake DataStore)
+token grants: 243 checks passed
+support product receipts: 236 checks passed
 ```
 
-`luau-compile --binary` on the LocalScript: clean.
+All five exit 0. `luau-compile --binary` on both changed Lua files: clean.
 
-The suite runs the **real source** under a fake DataModel (the
+`test_first_login_flag.py` (new) runs the **real `loadProfile`**, string-marker
+extracted, under a fake `store`; normalization, dispatch handoff and the
+attribute/push plumbing are stubbed. Six scenarios: no record (first login,
+record committed), record present (never a first login), three throws (false,
+`persistent = false`, one warn), a conflict that re-runs the callback twice
+(first run sees nil, second sees what it wrote → **false**, because the last run
+is the committed one), a load cancelled mid-`UpdateAsync` (no session, no
+attribute written at all, `ZyntraProfileLoaded` stays false), and the Studio
+branch both without and with `DevSimulateFirstLogin`. Every scenario asserts the
+attribute values, `sessions[player].firstLogin`, `persistent`, and — by index in
+a recorded write log — that `ZyntraFirstLogin` lands before `ZyntraProfileLoaded`.
+
+`test_first_entry_guide.py` keeps every earlier scenario, now driven by
+`ZyntraFirstLogin` (true / false / absent) instead of the briefing flag, plus one
+new case: flipping `ZyntraFirstLogin` true **after** the latch starts nothing.
+
+The guide suite runs the **real source** under a fake DataModel (the
 `test_round_entry_client.py` pattern): lobby → `LevelQueueRooms` →
 `Level1QueueRoom` with the real attributes and the four pads at
 `(-63,30,-840) + (±9, 0.18, ±13.2)` with `QueueRadius = 7.41`, plus a Level 2
 pad in its own bay as a decoy; a `PathfindingService` with a scripted waypoint
-list and a switchable status; `Players.LocalPlayer` with the profile
+list and a switchable status; `Players.LocalPlayer` with the two profile
 attributes and a character; a RoundStatus RemoteEvent; Heartbeat and a fake
 clock. It covers all eight required assertions plus: the deferred profile load
 still starts the guide, the agent parameters, the nearest pad being LaunchZone2
@@ -134,12 +184,15 @@ round status *not* ending it, and `script.Destroying`.
 1. Create `StarterPlayerScripts > First Entry Guide` as a **LocalScript** via
    `execute_luau` + `UpdateSourceAsync` (new scripts cannot be pushed by the
    tools), then add the manifest item with `sha256_of` / `canonical_bytes`.
-2. Run the compile probe.
-3. Simulate a fresh profile: in a play session set the local player's
-   `ZyntraLobbyBriefingPlayed` to `false` *before* the script latches — easiest
-   is a Studio session with no saved profile (`RunService:IsStudio()` already
-   makes `loadProfile` non-persistent), otherwise clear
-   `Settings.LobbyBriefingPlayed` in the session copy and rejoin.
+2. Push the `loadProfile` change into `ServerScriptService.ZyntraMonetization`
+   (audit first — another session has been editing this place), then run the
+   compile probe.
+3. **Preview the guide:** in **Edit**, set a boolean attribute
+   `DevSimulateFirstLogin = true` on `workspace`, then Play. The Studio branch of
+   `loadProfile` reads it and publishes `ZyntraFirstLogin = true`.
+4. **Then remove it** (or set it false) and Play again: the guide must **not**
+   appear for the owner. That is the regression the card is about — with no
+   DataStore in Studio, first login is false by default.
 
 What to look for:
 
@@ -150,10 +203,13 @@ What to look for:
 - The marker sits over the nearer of the two south pads and swaps to the other
   pad as you walk past the doorway.
 - The Command Center welcome finishes mid-walk — the guide must **not**
-  disappear when it does.
+  disappear when it does. (It no longer reads that flag at all, but the welcome
+  is still the thing that used to kill it.)
 - Stepping onto a pad removes trail and marker instantly; leaving the pad does
   not bring them back.
-- Rejoining as the same player shows nothing.
+- Rejoining as the same player shows nothing — in a live server this is now
+  decided by the record existing, so a player who leaves the very first session
+  early still gets nothing on their second join.
 - No `FirstEntryGuide` part is left in workspace after any end condition.
 
 Open, low-cost follow-up if the owner wants the "flowing arrow" look: put a

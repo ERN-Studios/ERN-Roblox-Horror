@@ -169,9 +169,34 @@ local function pathRequestInterval(session: any): number
 	return if session.Blackout then Tuning.BlackoutPathRecomputeSeconds else Tuning.PathRecomputeSeconds
 end
 
+local insideFinalHall
 local function currentSpeed(session: any): number
 	local stateName = session.State
 	local activeProfile = profile(session)
+	if session.FinalHallChase and stateName == "CHASE" then
+		-- The entrance can be over a thousand studs away. The fast approach
+		-- still follows the maze and uses the normal collision sweep.
+		if not insideFinalHall(session, session.Root.Position) then
+			return Tuning.FinaleApproachSpeed
+		end
+		-- Lock the hall speed once, accounting for this layout's approach time.
+		-- An uninterrupted sprint reaches the sensor about one second ahead.
+		-- Do not keep adapting to the runner: stopping must still get them caught.
+		if not session.FinaleHallSpeed then
+			local targetRoot = session.Target and session.Target.Character
+				and session.Target.Character:FindFirstChild("HumanoidRootPart")
+			local exit = session.Manifest.EscapeTrigger
+			if targetRoot and exit and insideFinalHall(session, targetRoot.Position) then
+				local forward = session.Manifest.FinalHall.Forward
+				local runnerRemaining = math.max(0, (exit.Position - targetRoot.Position):Dot(forward))
+				local entityRemaining = math.max(0, (exit.Position - session.Root.Position):Dot(forward))
+				local timeToExit = runnerRemaining / Tuning.PlayerRunSpeedReference + 1
+				session.FinaleHallSpeed = math.clamp(entityRemaining / timeToExit,
+					Tuning.PlayerRunSpeedReference, Tuning.PlayerRunSpeedReference * 1.5)
+			end
+		end
+		return session.FinaleHallSpeed or activeProfile.ChaseSpeed
+	end
 	if stateName == "PATROL" or stateName == "PATROL_LISTEN" or stateName == "AWAKENING" then
 		return activeProfile.PatrolSpeed
 	end
@@ -974,7 +999,7 @@ volumeClear = function(session: any, startGround: Vector3, endGround: Vector3): 
 	return physicalVolumeClear(session, startGround, endGround)
 end
 
-local function insideFinalHall(session: any, position: Vector3): boolean
+insideFinalHall = function(session: any, position: Vector3): boolean
  local hall = session.Manifest.FinalHall
  if type(hall) ~= "table" then return false end
  local forward = Vector3.new(hall.Forward.X, 0, hall.Forward.Z)
@@ -982,7 +1007,12 @@ local function insideFinalHall(session: any, position: Vector3): boolean
  forward = forward.Unit
  local offset = Vector3.new(position.X - hall.StartPoint.X, 0, position.Z - hall.StartPoint.Z)
  local along = offset:Dot(forward)
- return along >= -2 and along <= hall.Length + 2
+ -- The physical escape sensor is beyond the hall's authored EndPoint. Keep
+ -- following this same straight lane until the runner actually crosses it.
+ local escape = session.Manifest.EscapeTrigger
+ local laneLength = escape and math.max(hall.Length,
+  (escape.Position - hall.StartPoint):Dot(forward)) or hall.Length
+ return along >= -2 and along <= laneLength + 6
   and (offset - forward * along).Magnitude <= hall.Width * .5 + 2
   and math.abs(position.Y - hall.FloorY) <= hall.Height + 6
 end
@@ -2998,6 +3028,12 @@ local function updateMovement(session: any, dt: number, now: number)
 	local currentMoveSpeed = session.CurrentMoveSpeed
 	local acceleration = if session.Blackout then Tuning.BlackoutMovementAcceleration else Tuning.MovementAcceleration
 	local deceleration = if session.Blackout then Tuning.BlackoutMovementDeceleration else Tuning.MovementDeceleration
+	if session.FinalHallChase then
+		-- Finish the fast approach promptly, including braking at the hall mouth.
+		-- Every actual displacement still uses the unchanged physical sweep.
+		acceleration = math.max(acceleration, Tuning.FinaleApproachSpeed * 6)
+		deceleration = math.max(deceleration, Tuning.FinaleApproachSpeed * 12)
+	end
 	local rate = if desiredSpeed >= currentMoveSpeed then acceleration else deceleration
 	local maximumChange = rate * motionDt
 	currentMoveSpeed += math.clamp(desiredSpeed - currentMoveSpeed, -maximumChange, maximumChange)

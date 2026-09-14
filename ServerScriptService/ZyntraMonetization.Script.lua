@@ -1478,6 +1478,11 @@ local function loadProfile(player, loadState)
 	player:SetAttribute("ZyntraDispatchPreferenceLoaded", false)
 	local data
 	local persistent = not RunService:IsStudio()
+	-- "First login" for the first-entry guide. Only the UpdateAsync callback below
+	-- can tell: it is the one place that sees the record before it is written back.
+	-- A load that never commits leaves this false -- the next SUCCESSFUL load is
+	-- then the first one -- so a lost save can never burn a player's first login.
+	local firstLogin = false
 	local dispatchSessionId = game.JobId .. ":" .. tostring(player.UserId) .. ":"
 		.. HttpService:GenerateGUID(false)
 	loadState.dispatchSessionId = dispatchSessionId
@@ -1495,8 +1500,12 @@ local function loadProfile(player, loadState)
 			Closed = false,
 		}}
 		claimedSessionEpoch = 1
+		-- No DataStore in Studio, so there is no record to have existed. Set
+		-- workspace.DevSimulateFirstLogin in Edit before Play to preview the guide.
+		firstLogin = workspace:GetAttribute("DevSimulateFirstLogin") == true
 	else
 		local lastError
+		local recordExisted = false
 		for attempt = 1, 3 do
 			if loadState.cancelled then break end
 			-- Loading atomically claims this player's dispatch-setting lease and a
@@ -1506,6 +1515,10 @@ local function loadProfile(player, loadState)
 			loadState.claimAttempted = true
 			local ok, result = pcall(function()
 				return store:UpdateAsync("u_" .. player.UserId, function(current)
+					-- Read before normalizeProfile invents an empty profile out of nil.
+					-- Rewritten on every run on purpose: Roblox re-runs this callback on a
+					-- conflict, and only the LAST run's view is the one that commits.
+					recordExisted = type(current) == "table"
 					current = normalizeProfile(current)
 					-- PlayerRemoving/BindToClose can cancel while UpdateAsync is waiting.
 					-- Roblox may re-run this callback after a competing server claims the
@@ -1552,6 +1565,9 @@ local function loadProfile(player, loadState)
 			if ok then
 				data = result
 				lastError = nil
+				-- The callback's return value is what commits, so the record exists from
+				-- here on: this join was the first one exactly when it did not before.
+				firstLogin = not recordExisted
 				break
 			end
 			lastError = result
@@ -1589,6 +1605,7 @@ local function loadProfile(player, loadState)
 	sessions[player] = {
 		data = normalized,
 		persistent = persistent,
+		firstLogin = firstLogin,
 		dispatchSessionId = dispatchSessionId,
 		dispatchSessionEpoch = claimedSessionEpoch,
 		dispatchLeaseActive = normalized.Settings.MuteDispatchSessionId == dispatchSessionId
@@ -1600,6 +1617,9 @@ local function loadProfile(player, loadState)
 			normalized.Settings, predecessorSessionEpoch),
 	}
 	applyAttributes(player, sessions[player].data)
+	-- Strictly before ZyntraProfileLoaded: the first-entry guide latches on that
+	-- flag and reads this one in the same tick, once, and never again.
+	player:SetAttribute("ZyntraFirstLogin", firstLogin)
 	player:SetAttribute("ZyntraProfileLoaded", true)
 	local pendingSnapshot = pendingDispatchSnapshots[player.UserId]
 	if pendingSnapshot then

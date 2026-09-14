@@ -713,23 +713,35 @@ end
 -- server on the player (Level 3 Hiding Controller), so it replicates and can be
 -- read for anyone. Falls back to yourself whenever there is no living subject,
 -- which is exactly the pre-spectate behaviour.
-local function readerSubject(): Player
-	if player:GetAttribute("Spectating") ~= true then return player end
+-- A subject only counts while they are a living, in-round, non-escaped
+-- participant, i.e. exactly the players SpectateController is willing to pick.
+local function spectateSubject(): Player?
+	if player:GetAttribute("Spectating") ~= true then return nil end
 	local userId = player:GetAttribute("SpectateTargetUserId")
 	local watched = if type(userId) == "number" then Players:GetPlayerByUserId(userId) else nil
-	local character = watched and watched.Character
+	if not watched or watched:GetAttribute("InRound") ~= true
+		or watched:GetAttribute("Escaped") == true then return nil end
+	local character = watched.Character
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-	if watched and humanoid and humanoid.Health > 0
-		and character:FindFirstChild("HumanoidRootPart") then
+	if humanoid and humanoid.Health > 0 and character:FindFirstChild("HumanoidRootPart") then
 		return watched
 	end
-	return player
+	return nil
 end
 
+local function readerSubject(): Player
+	return spectateSubject() or player
+end
+
+-- SPECTATE_UI_PARITY_20260914: an ESCAPED spectator used to fail this gate on
+-- their own `Escaped` and lose the panel entirely while watching a living
+-- teammate whose panel is the whole point. Being a spectator with a valid
+-- subject is now its own way in; the world condition (level) still applies.
 local function isActive(): boolean
 	local levelActive = workspace:GetAttribute("SelectedLevel") == LEVEL
-		and player:GetAttribute("InRound") == true
-		and player:GetAttribute("Escaped") ~= true
+		and ((player:GetAttribute("InRound") == true
+				and player:GetAttribute("Escaped") ~= true)
+			or spectateSubject() ~= nil)
 	if RunService:IsStudio()
 		and player:GetAttribute("UIRegressionForceLevel3Reader") == true then
 		levelActive = true

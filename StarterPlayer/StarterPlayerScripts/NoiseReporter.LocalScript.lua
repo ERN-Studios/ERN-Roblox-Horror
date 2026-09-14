@@ -16,6 +16,8 @@ local DevAccess = require(RS:WaitForChild("DevAccess"))
 local UIDevice = require(RS:WaitForChild("UIDevice"))
 local devAllowed = DevAccess.IsAllowed(player)
 local function inRound() return player:GetAttribute("InRound") == true end
+local vitalRemote = remotes:WaitForChild("RoundStatus")
+local lastVitalReport = -math.huge
 
 local WALK_SPEED, SPRINT_SPEED, CROUCH_SPEED = 16, 26, 8
 
@@ -698,6 +700,38 @@ local lastFrac, lastExhausted = -1, nil -- last values written; -1/nil force the
 RunService.Heartbeat:Connect(function(dt)
 	-- InputEnded can be lost on disconnect/focus loss in any phase. Reconcile
 	-- physical holds without changing the independent touch RUN toggle.
+	if player:GetAttribute("Spectating") == true then
+		local id = player:GetAttribute("SpectateTargetUserId")
+		local watched = type(id) == "number" and Players:GetPlayerByUserId(id) or nil
+		local hum = watched and watched.Character and watched.Character:FindFirstChildOfClass("Humanoid")
+		local value = watched and watched:GetAttribute("SpectateStamina")
+		local valid = watched and watched:GetAttribute("InRound") == true
+			and watched:GetAttribute("Escaped") ~= true and hum and hum.Health > 0
+			and type(value) == "number"
+		staBg.Visible = valid == true and not UIDevice.ScreenOwningModalOpen()
+		if valid then
+			local frac = math.clamp(value, 0, 1)
+			local layout = UIDevice.Layout()
+			local corridor = layout.Corridor
+			local useCorridor = layout.IsTouch and corridor.Width >= 240
+			local centre = useCorridor and (corridor.Left + corridor.Right) * .5
+				or (layout.SafeLeft + layout.SafeRight) * .5
+			local bottom = layout.IsTouch and (useCorridor and layout.Display.Bottom - 18 or layout.SafeBottom)
+				or layout.Display.Bottom - 20
+			local width = useCorridor and corridor.Width or layout.SafeRight - layout.SafeLeft
+			staBg.Size = UDim2.fromOffset(math.min(BAR_W, width), BAR_H)
+			staBg.Position = UDim2.fromOffset(UIDevice.LocalOffset(gui, centre, bottom - 92))
+			staFill.Size = UDim2.new(frac, -4, 1, -4)
+			staFill.BackgroundColor3 = STA_FULL:Lerp(STA_EMPTY, math.clamp(1 - frac, 0, 1) * .85)
+			local want = frac < .999 and 1 or 0
+			barShown += (want - barShown) * math.clamp(dt * BAR_FADE, 0, 1)
+			staBg.BackgroundTransparency = 1 - barShown * (1 - BAR_BG_ALPHA)
+			staFill.BackgroundTransparency = 1 - barShown
+		end
+		-- Force the own-body display to refresh when spectating ends.
+		lastFrac = -1
+		return
+	end
 	local physicalShift = UIS:GetFocusedTextBox() == nil and keyboardSprintHeld()
 	local physicalTrigger = gamepadSprintDown()
 	if shiftSprintHeld ~= physicalShift or gamepadSprintHeld ~= physicalTrigger then
@@ -762,6 +796,10 @@ RunService.Heartbeat:Connect(function(dt)
 	end
 
 	local frac = stamina / staminaMax()
+	if os.clock() - lastVitalReport >= .25 then
+		lastVitalReport = os.clock()
+		vitalRemote:FireServer("spectatevital", {Key = "Stamina", Value = math.clamp(frac, 0, 1)})
+	end
 	if exhausted ~= lastExhausted or math.abs(frac - lastFrac) > 0.001 then
 		lastFrac, lastExhausted = frac, exhausted
 		-- publish stamina (0–1) so SoundController can drive the winded-breathing sound
@@ -806,6 +844,7 @@ end
 
 local wasRoundActive = inRound()
 local function updateRoundState()
+	applyStaminaLayout()
 	local active = inRound()
 	local usable = controlsAvailable()
 	if not movementAvailable() and (crouching or keyboardCrouchHeld

@@ -154,6 +154,7 @@ local Configuration = {
 		SpawnPreferredDistance = 125,
 		SpawnMaximumDistance = 180,
 		FinalHallSpawnProgress = .40,
+		FinaleApproachSpeed = 360,
 		SpawnGroupRadius = 75,
 		SpawnRoomMargin = 10,
 		-- Radius 5 matches the animated root-relative body sway. The slightly

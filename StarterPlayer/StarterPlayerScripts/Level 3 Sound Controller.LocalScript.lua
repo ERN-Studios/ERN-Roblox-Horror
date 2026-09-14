@@ -345,34 +345,50 @@ local function updateCDPitch(now: number)
 	script:SetAttribute("Level3_CDPitchPulseSerial", cdPitchPulseSerial)
 end
 
+-- SPECTATE_AUDIO_PARITY_20260914 -- the player we are WATCHING, or nil.
+--
+-- SpectateController publishes `Spectating` / `SpectateTargetUserId` on the
+-- LocalPlayer (client-local) and parks the camera -- the audio listener -- on
+-- the watched player's head. A subject only counts while they are a living,
+-- in-round, non-escaped participant, i.e. exactly the players
+-- SpectateController is willing to pick; anything else is "no subject".
+local function spectateSubject(): Player?
+	if player:GetAttribute("Spectating") ~= true then return nil end
+	local userId = player:GetAttribute("SpectateTargetUserId")
+	local watched = if type(userId) == "number" then Players:GetPlayerByUserId(userId) else nil
+	if not watched or watched:GetAttribute("InRound") ~= true
+		or watched:GetAttribute("Escaped") == true then return nil end
+	local character = watched.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if humanoid and humanoid.Health > 0 and character:FindFirstChild("HumanoidRootPart") then
+		return watched
+	end
+	return nil
+end
+
+-- SPECTATE_AUDIO_PARITY_20260914: an ESCAPED spectator used to fail this gate on
+-- their own `Escaped` and lose the whole Level 3 mix while watching a living
+-- teammate. Being a spectator with a valid subject is now its own way in; the
+-- world conditions (level, phase) still apply to everyone.
 local function isActive(): boolean
 	local state = stateFolder()
 	return workspace:GetAttribute("SelectedLevel") == LEVEL
-		and player:GetAttribute("InRound") == true
-		and player:GetAttribute("Escaped") ~= true
+		and ((player:GetAttribute("InRound") == true
+				and player:GetAttribute("Escaped") ~= true)
+			or spectateSubject() ~= nil)
 		and (not state or state:GetAttribute("Level3_Phase") ~= "STOPPED")
 end
 
--- SPECTATE_AUDIO_PARITY_20260914 -- the listener body every proximity mix in
--- this file measures from: the nearest PA speakers, the nearest fluorescent
--- fixtures, the blackout scream emitters and the reader beep.
---
--- While spectating, that is the player being WATCHED: SpectateController parks
--- the camera (the audio listener) on their head and publishes them on the
--- client-local `Spectating` / `SpectateTargetUserId` attributes, so a dead
--- player hears the room the living one is standing in. With no living target it
--- falls back to your own body exactly as before.
+-- The listener body every proximity mix in this file measures from: the nearest
+-- PA speakers, the nearest fluorescent fixtures, the blackout scream emitters
+-- and the reader beep. While spectating that is the watched player, so a dead
+-- player hears the room the living one is standing in; with no subject it falls
+-- back to your own body exactly as before.
 local function listenerRoot(): BasePart?
-	if player:GetAttribute("Spectating") == true then
-		local userId = player:GetAttribute("SpectateTargetUserId")
-		local watched = if type(userId) == "number" then Players:GetPlayerByUserId(userId) else nil
-		local character = watched and watched.Character
-		local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-		local root = character and character:FindFirstChild("HumanoidRootPart")
-		if humanoid and humanoid.Health > 0 and root and root:IsA("BasePart") then
-			return root :: BasePart
-		end
-	end
+	local watched = spectateSubject()
+	local root = watched and watched.Character
+		and watched.Character:FindFirstChild("HumanoidRootPart")
+	if root and root:IsA("BasePart") then return root :: BasePart end
 	local own = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 	return if own and own:IsA("BasePart") then own :: BasePart else nil
 end
@@ -905,8 +921,8 @@ local function handleClientEvent(payload: any)
 	-- replication frame behind during the transition.
 	if payload.Type == "Sound" and payload.Cue == "PowerDown" then
 		if workspace:GetAttribute("SelectedLevel") == LEVEL
-			and player:GetAttribute("InRound") == true
-			and player:GetAttribute("Escaped") ~= true then
+			and ((player:GetAttribute("InRound") == true
+				and player:GetAttribute("Escaped") ~= true) or spectateSubject() ~= nil) then
 			playPowerDown()
 		end
 		return

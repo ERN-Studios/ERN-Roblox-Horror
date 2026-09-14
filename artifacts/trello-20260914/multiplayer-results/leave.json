@@ -1,0 +1,10 @@
+{
+  "id": "leave",
+  "result": {
+    "roundActive": false,
+    "countCleared": true,
+    "aliveLeft": true,
+    "spectatorLeft": true
+  },
+  "ok": true
+}

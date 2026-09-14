@@ -130,8 +130,9 @@ local function context()
     otherPad:SetAttribute("QueueRadius",7.41)
 
     ctx.Player=node("Player","Player")
+    -- ZyntraMonetization publishes ZyntraFirstLogin strictly before ProfileLoaded.
+    ctx.Player:SetAttribute("ZyntraFirstLogin",true)
     ctx.Player:SetAttribute("ZyntraProfileLoaded",true)
-    ctx.Player:SetAttribute("ZyntraLobbyBriefingPlayed",false)
     function ctx:NewCharacter()
         local character=node("Model","Character",self.Workspace)
         local root=node("Part","HumanoidRootPart",character)
@@ -204,20 +205,33 @@ local function fresh(setup)
     return ctx
 end
 
-do  -- (1) returning player: the flag is already true when the profile lands
-    local ctx=fresh(function(c) c.Player:SetAttribute("ZyntraLobbyBriefingPlayed",true) end)
+do  -- (1) returning player: the server says this is not a first login
+    local ctx=fresh(function(c) c.Player:SetAttribute("ZyntraFirstLogin",false) end)
     ctx:Step(.1)
     check(ctx:Guide()==nil,"a returning player never gets the guide")
 end
-do  -- (2) first login, and the welcome flipping the flag must not kill it
+do  -- (1b) a load that failed to commit publishes nothing at all
+    local ctx=fresh(function(c) c.Player:SetAttribute("ZyntraFirstLogin",nil) end)
+    ctx:Step(.1)
+    check(ctx:Guide()==nil,"a missing first-login attribute shows nothing")
+end
+do  -- (2) first login, and a later attribute change must not kill it
     local ctx=fresh()
     ctx:Step(.1)
     check(ctx:Guide()~=nil,"a brand-new profile gets the guide")
     local beams=ctx:EnabledBeams()
-    ctx.Player:SetAttribute("ZyntraLobbyBriefingPlayed",true)
+    ctx.Player:SetAttribute("ZyntraFirstLogin",false)
     ctx:Step(.1)
     check(ctx:Guide()~=nil and ctx:EnabledBeams()==beams,
         "the latch is taken at load: a later flip does not tear the guide down")
+end
+do  -- (2b) the latch is one-shot the other way too
+    local ctx=fresh(function(c) c.Player:SetAttribute("ZyntraFirstLogin",false) end)
+    ctx:Step(.1)
+    ctx.Player:SetAttribute("ZyntraFirstLogin",true)
+    ctx.Player:SetAttribute("ZyntraProfileLoaded",true)
+    ctx:Step(.1)
+    check(ctx:Guide()==nil,"flipping first-login true after the latch starts nothing")
 end
 do  -- (3) no profile, no guide -- and the deferred load still starts it
     local ctx=fresh(function(c) c.Player:SetAttribute("ZyntraProfileLoaded",false) end)

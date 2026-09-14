@@ -5,9 +5,10 @@
 -- one-time cyan trail from the player to the nearest Level 1 launch pad, with
 -- a marker floating over that pad.
 --
--- Client-only and persistence-free. "First login" is read once from the
--- lifetime welcome flag the profile already carries, so this feature owns no
--- DataStore field and no server code.
+-- Client-only. "First login" is decided by the server: ZyntraMonetization's
+-- loadProfile publishes ZyntraFirstLogin from whether the DataStore record
+-- existed before the load committed it, so this runs on the first successful
+-- login and on no other.
 
 local PathfindingService = game:GetService("PathfindingService")
 local Players = game:GetService("Players")
@@ -268,10 +269,11 @@ local function considerProfile()
 	latched = true
 	profileConnection:Disconnect()
 	profileConnection = nil
-	-- Read exactly once, at load. The Command Center welcome flips this same
-	-- flag true a few seconds into this first session; re-reading it later
-	-- would tear the guide down mid-walk.
-	if player:GetAttribute("ZyntraLobbyBriefingPlayed") == true
+	-- Read exactly once, at load: ZyntraFirstLogin is published immediately
+	-- before ZyntraProfileLoaded and then stays true for the whole session, so
+	-- re-reading it would say nothing new. The guide's own `finished` latch owns
+	-- the end.
+	if player:GetAttribute("ZyntraFirstLogin") ~= true
 		or workspace:GetAttribute("ReservedRoundServer") == true
 		or player:GetAttribute("InRound") == true then
 		return
