@@ -12,6 +12,17 @@ local HttpService = game:GetService("HttpService")
 local MessagingService = game:GetService("MessagingService")
 
 local PlayerProtection = require(script.Parent:WaitForChild("PlayerProtection"))
+-- Best-effort developer purchase alerts. Optional by construction: a missing or
+-- broken module must never be able to affect a receipt, so the require is
+-- non-blocking and pcall'd, and so is every call.
+local PurchaseAlerts
+do
+	local alertModule = script.Parent:FindFirstChild("PurchaseAlerts")
+	if alertModule then
+		local ok, loaded = pcall(require, alertModule)
+		PurchaseAlerts = ok and type(loaded) == "table" and loaded or nil
+	end
+end
 local Config = require(ReplicatedStorage:WaitForChild("ZyntraConfig"))
 local DevAccess = require(ReplicatedStorage:WaitForChild("DevAccess"))
 local store = DataStoreService:GetDataStore(Config.DataStoreName)
@@ -1704,6 +1715,26 @@ end
 
 local function refreshPasses(player)
 	if not sessions[player] then return end
+	-- FEEDBACK_GIFT_20260914 (card 71). One persistent thank-you grant for the
+	-- player who gave feedback on Discord: the Advanced Equipment package's two
+	-- capacity upgrades plus ten Research Tokens. Official username lookup
+	-- 2026-09-14: Kecoalmutt / AdminNBCRxAria, UserId 10152463945. The grant
+	-- key is separate from Grants.AdvancedEquipment so a later real purchase of
+	-- that pass still awards its own benefits; ReceiptIds and pass ownership
+	-- are untouched. mutate is serialized and the marker makes it idempotent,
+	-- so a failed DataStore write simply retries on the next profile load or
+	-- pass recheck. normalizeProfile keeps unknown Grants keys, which is what
+	-- makes the marker survive every later load.
+	if player.UserId == 10152463945 then
+		mutate(player, function(data)
+			if data.Grants.FeedbackThanks20260914 == true then return false end
+			data.Grants.FeedbackThanks20260914 = true
+			data.StaminaLevel += 1
+			data.BatteryLevel += 1
+			data.Tokens += 10
+			return true, "Thanks for your feedback: +" .. PCT .. " stamina, +" .. PCT .. " battery and 10 Research Tokens", "success"
+		end)
+	end
 	passReadFailed[player] = nil
 	local supporter = passOwnership(player, "Supporter", Config.Passes.Supporter)
 	local advanced = passOwnership(player, "AdvancedEquipment", Config.Passes.AdvancedEquipment)
@@ -2608,6 +2639,22 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 			task.spawn(function()
 				if reentryEligible(player) then useReentry(player) end
 			end)
+		end
+		-- First-time grant only: a Roblox retry of an already-granted PurchaseId
+		-- must not alert twice. Notify never yields and never throws; the pcall
+		-- is the belt to that braces.
+		if changed and PurchaseAlerts then
+			pcall(PurchaseAlerts.Notify, {
+				PurchaseId = purchaseId,
+				ProductId = receiptInfo.ProductId,
+				ProductKey = entry.Key,
+				ProductName = entry.Product.Name,
+				Kind = entry.Kind,
+				RobuxSpent = spent,
+				PlayerName = player.Name,
+				UserId = player.UserId,
+				IsStudio = RunService:IsStudio(),
+			})
 		end
 		local session = sessions[player]
 		-- The profile mutation is authoritative. Ranking failure must not delay

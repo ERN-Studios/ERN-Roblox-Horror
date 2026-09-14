@@ -1,4 +1,4 @@
--- Occasional, local cyan sweeps across the lobby's two ceiling-light rows.
+-- Five occasional on/off patterns across the lobby's two ceiling-light rows.
 -- The server's Party button owns its effect; accessibility remains per player.
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -7,7 +7,6 @@ local random = Random.new()
 
 local TICK = 0.05
 local DURATION = 6
-local HIGHLIGHT = Color3.fromRGB(166, 255, 238)
 local lobby = nil
 local lighting = nil
 local allowed = false
@@ -20,11 +19,11 @@ local connections = {}
 
 local function restoreItem(item)
  -- Only undo values this controller still owns. A replicated Party colour
- -- arriving before its flag must not be overwritten by a saved cyan value.
+ -- arriving before its flag must not be overwritten by a saved baseline.
  pcall(function()
   if item.part.Color == item.lastPartColor then item.part.Color = item.partColor end
-  if item.light.Color == item.lastLightColor then item.light.Color = item.lightColor end
-  if item.light.Brightness == item.lastBrightness then item.light.Brightness = item.brightness end
+  if item.part.Material == item.lastMaterial then item.part.Material = item.material end
+  if item.light.Enabled == item.lastEnabled then item.light.Enabled = item.enabled end
  end)
 end
 
@@ -78,6 +77,7 @@ local function collectLights()
     table.insert(targets, {
      part = part, light = light, partColor = part.Color,
      lightColor = light.Color, brightness = light.Brightness,
+     material = part.Material, enabled = light.Enabled,
     })
     minZ, maxZ = math.min(minZ, part.Position.Z), math.max(maxZ, part.Position.Z)
     minX, maxX = math.min(minX, part.Position.X), math.max(maxX, part.Position.X)
@@ -99,11 +99,11 @@ local function patternCoordinate(pattern, item)
  return item.left and item.z or 1 - item.z                 -- opposing lanes
 end
 
-local function pulse(coordinate, progress)
- -- Start and end outside the fixtures, with a soft, zero-slope edge.
+local function lightIsOn(coordinate, progress)
+ -- One broad dark band travels across the fixtures. Each switches off once
+ -- for about 1.8 seconds, then on; the band starts and finishes outside them.
  local front = -0.24 + progress * 1.48
- local distance = math.abs(coordinate - front) / 0.22
- return distance < 1 and (1 + math.cos(math.pi * distance)) / 2 or 0
+ return math.abs(coordinate - front) >= 0.22
 end
 
 local function beginSweep(now)
@@ -128,8 +128,10 @@ local function update(now)
  for _, item in ipairs(active.targets) do
   if item.part:IsDescendantOf(lighting) and item.light.Parent == item.part
    and (item.part.Color ~= (item.lastPartColor or item.partColor)
-    or item.light.Color ~= (item.lastLightColor or item.lightColor)
-    or item.light.Brightness ~= (item.lastBrightness or item.brightness)) then
+    or item.part.Material ~= (item.lastMaterial or item.material)
+    or item.light.Color ~= item.lightColor
+    or item.light.Brightness ~= item.brightness
+    or item.light.Enabled ~= (if item.lastEnabled == nil then item.enabled else item.lastEnabled)) then
    restore()
    pauseUntilLater(now)
    return
@@ -143,15 +145,16 @@ local function update(now)
    restoreItem(item)
    table.remove(active.targets, index)
   else
-   local strength = pulse(patternCoordinate(active.pattern, item), progress)
-   -- Never darken the road or create a strobe: a broad highlight travels once.
-   item.part.Color = item.partColor:Lerp(HIGHLIGHT, strength * 0.65)
-   item.light.Color = item.lightColor:Lerp(HIGHLIGHT, strength * 0.65)
-   item.light.Brightness = item.brightness * (1 + strength * 0.45)
+   local on = lightIsOn(patternCoordinate(active.pattern, item), progress)
+   item.light.Enabled = on
+   -- Remove the fixture's neon emission as well as its real illumination.
+   item.part.Material = if on then item.material else Enum.Material.SmoothPlastic
+   -- Color3 has no arithmetic; Lerp towards black is the same 14% dim.
+   item.part.Color = if on then item.partColor else item.partColor:Lerp(Color3.new(), 0.86)
    -- Read back native property precision for reliable ownership on restoration.
    item.lastPartColor = item.part.Color
-   item.lastLightColor = item.light.Color
-   item.lastBrightness = item.light.Brightness
+   item.lastMaterial = item.part.Material
+   item.lastEnabled = item.light.Enabled
   end
  end
 end

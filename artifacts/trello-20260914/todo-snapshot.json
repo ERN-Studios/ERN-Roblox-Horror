@@ -1,0 +1,441 @@
+{
+  "cards": [
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6a9d9659d329a1e64f1fedb2",
+      "name": "Unlock younger audiences: fix publishing warning + reach 250 qualifying players",
+      "description": "## Goal\n\nQualify BACKROOMS: STAY QUIET for younger audiences through Roblox Kids/Select. Keep the horror questionnaire truthful.\n\n## Kontrolleret 9. september 2026\n\n- Manage kunne åbnes. Account status, ID, Age check og 2-step verification var opfyldt; handlingsknapperne viste Done. Kontoens status: **Publish to all ages**.\n- Oplevelsens Reach: **16+ and trusted friends**; group reach All ages. “Publishing tier at risk” var stadig vist. Advarslens præcise årsag er ikke fastslået.\n- Publishing fee: **Not submitted**. Ingen betaling eller kontoændring udført.\n- Kvalificerende spillere: **30/250**, senest opdateret **8/9**. Ikke CCU eller almindelige visits.\n- Indhold: **Mild — Fear (Repeated/Mild)**.\n\n[Audience Reach](https://create.roblox.com/dashboard/creations/experiences/10559217407/audience-reach)\n\n## Fortsat åbent\n\nOwner-only adgangsblokeringen er løst. Kontoens grønne krav er ikke bevis for, at spillets advarsel, evaluering eller yngre adgang er løst.\n\nAfklar advarslen og oplevelsens fee-/abonnementsstatus. Den normale vej kræver sikkerhedsevaluering og 250 unikke kvalificerende, højt engagerede alderskontrollerede spillere i 60-dagesvinduet. Brug Roblox' tæller; køb i vores spil kræves ikke.\n\nKvalificerende Plus/Premium i 2 sammenhængende måneder eller 1.000 Robux er alternative publiceringsveje; ingen betaling vælges automatisk. Ekspederet review til 100.000 er valgfrit. Verificér vilkår ved evt. senere betaling.\n\nDone først når evaluering og faktisk adgang til den ønskede yngre målgruppe er bekræftet, med gældende forældre-/regionsregler. Følg checklisterne. **Kortet forbliver åbent.**\n\nHistorik: 6/9 blev LaverSneglen afvist i Manage; 30/250 var dateret 4/9. Original bevaret i docs/TRELLO_SNAPSHOT_2026-09-09.json.\n\n[Eligibility](https://create.roblox.com/docs/production/publishing/kids-and-select)\n[Fees](https://create.roblox.com/docs/production/publishing/publish-games-and-places#optional-fees)\n[Maturity](https://create.roblox.com/docs/production/promotion/content-maturity)",
+      "url": "https://trello.com/c/iMTZhXMy/18-unlock-younger-audiences-fix-publishing-warning-reach-250-qualifying-players",
+      "shortUrl": "https://trello.com/c/iMTZhXMy",
+      "closed": false,
+      "complete": false,
+      "position": 140737488355328,
+      "lastActivityAt": "2026-09-09T20:59:54.290Z",
+      "startedAt": null,
+      "due": {
+        "date": null,
+        "complete": false
+      },
+      "listId": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+      "boardId": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+      "labels": [],
+      "labelsHasMore": false,
+      "checklists": [],
+      "checklistsHasMore": false,
+      "members": [],
+      "comments": [],
+      "commentsHasMore": false,
+      "list": {
+        "id": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+        "name": "To Do"
+      },
+      "board": {
+        "id": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+        "name": "BACKROOMS: STAY QUIET – Development"
+      }
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa25608ba83c505c95e8bd4",
+      "name": "Research more items players can buy with tokens",
+      "description": "Investigate additional items players could purchase with tokens and propose suitable options for the game.",
+      "url": "https://trello.com/c/O0h3ag8I/44-research-more-items-players-can-buy-with-tokens",
+      "shortUrl": "https://trello.com/c/O0h3ag8I",
+      "closed": false,
+      "complete": false,
+      "position": 140737488748544,
+      "lastActivityAt": "2026-09-10T07:02:32.360Z",
+      "startedAt": null,
+      "due": {
+        "date": null,
+        "complete": false
+      },
+      "listId": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+      "boardId": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+      "labels": [],
+      "labelsHasMore": false,
+      "checklists": [],
+      "checklistsHasMore": false,
+      "members": [],
+      "comments": [],
+      "commentsHasMore": false,
+      "list": {
+        "id": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+        "name": "To Do"
+      },
+      "board": {
+        "id": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+        "name": "BACKROOMS: STAY QUIET – Development"
+      }
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa2560a94de304f6e3b02e2",
+      "name": "Dev cheats: Add ESP for all players",
+      "description": "Add a player ESP option to the developer cheats so developers can see the locations of all players.",
+      "url": "https://trello.com/c/53c4MFE5/45-dev-cheats-add-esp-for-all-players",
+      "shortUrl": "https://trello.com/c/53c4MFE5",
+      "closed": false,
+      "complete": false,
+      "position": 140737488764928,
+      "lastActivityAt": "2026-09-10T07:02:34.943Z",
+      "startedAt": null,
+      "due": {
+        "date": null,
+        "complete": false
+      },
+      "listId": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+      "boardId": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+      "labels": [],
+      "labelsHasMore": false,
+      "checklists": [],
+      "checklistsHasMore": false,
+      "members": [],
+      "comments": [],
+      "commentsHasMore": false,
+      "list": {
+        "id": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+        "name": "To Do"
+      },
+      "board": {
+        "id": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+        "name": "BACKROOMS: STAY QUIET – Development"
+      }
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa28f74f28ee42411f88578",
+      "name": "Dev cheats: Add free respawn for developers",
+      "description": "Add a dev cheats option that lets developers respawn into the level for free after dying, without spending Robux, tokens, or re-entry credits. This option should be available to developers only.",
+      "url": "https://trello.com/c/bwyxIUz1/64-dev-cheats-add-free-respawn-for-developers",
+      "shortUrl": "https://trello.com/c/bwyxIUz1",
+      "closed": false,
+      "complete": false,
+      "position": 140737488990208,
+      "lastActivityAt": "2026-09-10T11:07:32.464Z",
+      "startedAt": null,
+      "due": {
+        "date": null,
+        "complete": false
+      },
+      "listId": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+      "boardId": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+      "labels": [],
+      "labelsHasMore": false,
+      "checklists": [],
+      "checklistsHasMore": false,
+      "members": [],
+      "comments": [],
+      "commentsHasMore": false,
+      "list": {
+        "id": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+        "name": "To Do"
+      },
+      "board": {
+        "id": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+        "name": "BACKROOMS: STAY QUIET – Development"
+      }
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa3948b39ce15a584bb1f45",
+      "name": "Correction to (Lobby: The ceiling lights should make like cool sweep patern at random. Make 5 different cool ones. ) The pattern should be turning the lights on and off in a pattern.",
+      "description": "",
+      "url": "https://trello.com/c/j2JrjfkG/67-correction-to-lobby-the-ceiling-lights-should-make-like-cool-sweep-patern-at-random-make-5-different-cool-ones-the-pattern-shoul",
+      "shortUrl": "https://trello.com/c/j2JrjfkG",
+      "closed": false,
+      "complete": false,
+      "position": 140737489006592,
+      "lastActivityAt": "2026-09-11T05:41:31.693Z",
+      "startedAt": null,
+      "due": {
+        "date": null,
+        "complete": false
+      },
+      "listId": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+      "boardId": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+      "labels": [],
+      "labelsHasMore": false,
+      "checklists": [],
+      "checklistsHasMore": false,
+      "members": [],
+      "comments": [],
+      "commentsHasMore": false,
+      "list": {
+        "id": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+        "name": "To Do"
+      },
+      "board": {
+        "id": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+        "name": "BACKROOMS: STAY QUIET – Development"
+      }
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa54161d8e3624b3beb802a",
+      "name": "Roblox Analytics for the last 28 days shows: - Phone: 47.7% — 1,874 player-days - PC/computer: 32.3% — 1,269 player-days - Tablet: 20.0% — 788 player-days - Console/VR: no recorded activity So 67.7% of the audience plays on touch devices. Phone is the largest platform, but PC is still a substantial third. Therefore a full and x optimization for mobile and tablet view is essential. For example the shop and upgrades tab are to big on the phone, the tabs can stay the same size, but the contents have to be shrunk. ",
+      "description": "",
+      "url": "https://trello.com/c/0xPyX762/68-roblox-analytics-for-the-last-28-days-shows-phone-477-1874-player-days-pc-computer-323-1269-player-days-tablet-200-788-player-da",
+      "shortUrl": "https://trello.com/c/0xPyX762",
+      "closed": false,
+      "complete": false,
+      "position": 140737489022976,
+      "lastActivityAt": "2026-09-14T15:22:56.208Z",
+      "startedAt": null,
+      "due": {
+        "date": null,
+        "complete": false
+      },
+      "listId": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+      "boardId": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+      "labels": [],
+      "labelsHasMore": false,
+      "checklists": [],
+      "checklistsHasMore": false,
+      "members": [],
+      "comments": [],
+      "commentsHasMore": false,
+      "list": {
+        "id": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+        "name": "To Do"
+      },
+      "board": {
+        "id": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+        "name": "BACKROOMS: STAY QUIET – Development"
+      }
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa5565746ee8953de105288",
+      "name": "Alert developers when an in-game purchase is completed",
+      "description": "## Goal\n\nSend a real-time Discord notification whenever a verified in-game purchase succeeds in **BACKROOMS: STAY QUIET**.\n\n## Destination\n\nUse a **private developer-only channel** in the game/community Discord server, suggested name: `#dev-purchase-alerts`. Regular players and community members must not be able to see the channel or notifications. Only approved developer/admin roles should have access.\n\n## Alert contents\n\n- Product name and ID\n- Actual Robux paid\n- Player username and user ID\n- Timestamp\n- Purchase ID for deduplication\n- Server/place ID when useful\n\nExample:\n\n> 💰 NEW PURCHASE\n> Product: Emergency Re-entry\n> Price: 25 Robux\n> Player: ExamplePlayer (123456)\n> Time: 14:32 UTC\n\n## Security and reliability\n\n- Trigger only from the server after Roblox verification through the existing `MarketplaceService.ProcessReceipt` flow.\n- Never use `PromptProductPurchaseFinished` as proof of payment.\n- Preserve existing receipt granting and permanent deduplication.\n- Never expose the Discord webhook URL to clients. Prefer a secure external relay/endpoint.\n- Notification delivery must be separate and best-effort: Discord failure must never delay or reject the player's grant.\n- Deduplicate notifications by `PurchaseId` when Roblox retries receipts.\n- Do not transmit unnecessary personal information.\n- Rate-limit requests and never log webhook secrets.\n\n## Done when\n\n- One successful test purchase creates exactly one private Discord alert.\n- The alert contains the correct product, amount, player and time.\n- Community members cannot access the channel.\n- Discord failure does not affect the purchase grant.\n- Receipt retry creates no duplicate alert.\n- Test evidence and implementation are documented before publishing.",
+      "url": "https://trello.com/c/XuxYAtTA/69-alert-developers-when-an-in-game-purchase-is-completed",
+      "shortUrl": "https://trello.com/c/XuxYAtTA",
+      "closed": false,
+      "complete": false,
+      "position": 140737489039360,
+      "lastActivityAt": "2026-09-12T13:40:39.091Z",
+      "startedAt": null,
+      "due": {
+        "date": null,
+        "complete": false
+      },
+      "listId": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+      "boardId": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+      "labels": [],
+      "labelsHasMore": false,
+      "checklists": [],
+      "checklistsHasMore": false,
+      "members": [],
+      "comments": [],
+      "commentsHasMore": false,
+      "list": {
+        "id": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+        "name": "To Do"
+      },
+      "board": {
+        "id": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+        "name": "BACKROOMS: STAY QUIET – Development"
+      }
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa5a3ddd3b98913804464f2",
+      "name": "When a player joins the game for the first time, there should be an arrow or a guiding line leading from the player to the entrance of Level 1, so they know exactly where to go to start the game. This guide should only appear on their first login and should not be shown again afterward.",
+      "description": "",
+      "url": "https://trello.com/c/69agyLbr/70-when-a-player-joins-the-game-for-the-first-time-there-should-be-an-arrow-or-a-guiding-line-leading-from-the-player-to-the-entran",
+      "shortUrl": "https://trello.com/c/69agyLbr",
+      "closed": false,
+      "complete": false,
+      "position": 140737489055744,
+      "lastActivityAt": "2026-09-12T19:11:25.773Z",
+      "startedAt": null,
+      "due": {
+        "date": null,
+        "complete": false
+      },
+      "listId": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+      "boardId": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+      "labels": [],
+      "labelsHasMore": false,
+      "checklists": [],
+      "checklistsHasMore": false,
+      "members": [],
+      "comments": [],
+      "commentsHasMore": false,
+      "list": {
+        "id": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+        "name": "To Do"
+      },
+      "board": {
+        "id": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+        "name": "BACKROOMS: STAY QUIET – Development"
+      }
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa6466de5d69a5e7a3b1467",
+      "name": "Remember to gift the player that gave us feedback in discord with the upgrades from advanced equipment package and 10 research tokens.",
+      "description": "",
+      "url": "https://trello.com/c/3FGClSDh/71-remember-to-gift-the-player-that-gave-us-feedback-in-discord-with-the-upgrades-from-advanced-equipment-package-and-10-research-t",
+      "shortUrl": "https://trello.com/c/3FGClSDh",
+      "closed": false,
+      "complete": false,
+      "position": 140737489072128,
+      "lastActivityAt": "2026-09-13T06:45:01.904Z",
+      "startedAt": null,
+      "due": {
+        "date": null,
+        "complete": false
+      },
+      "listId": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+      "boardId": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+      "labels": [],
+      "labelsHasMore": false,
+      "checklists": [],
+      "checklistsHasMore": false,
+      "members": [],
+      "comments": [],
+      "commentsHasMore": false,
+      "list": {
+        "id": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+        "name": "To Do"
+      },
+      "board": {
+        "id": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+        "name": "BACKROOMS: STAY QUIET – Development"
+      }
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa64aefe6db48d80373f4ce",
+      "name": "When spectating a player, the player being watched should see a small spectator counter showing how many people are currently spectating them. It should only show the number, not the spectators’ names.  Spectators should also hear the exact same sounds as the alive player they are watching. For example, the walking sound currently plays the default Roblox sound for spectators, while the alive player hears our custom walking sound. The spectator should hear the exact same custom sound.  This should apply to all relevant sounds, so the spectator’s audio matches what the player they are watching is hearing as closely as possible. Also the UIs, so when for example a exit arrow is showing or just any UI the specated player can see. But when spectating a DEV the specators should not be able to see ESP when toggled on ",
+      "description": "",
+      "url": "https://trello.com/c/J67RPeIy/73-when-spectating-a-player-the-player-being-watched-should-see-a-small-spectator-counter-showing-how-many-people-are-currently-spe",
+      "shortUrl": "https://trello.com/c/J67RPeIy",
+      "closed": false,
+      "complete": false,
+      "position": 140737489088512,
+      "lastActivityAt": "2026-09-14T14:40:54.769Z",
+      "startedAt": null,
+      "due": {
+        "date": null,
+        "complete": false
+      },
+      "listId": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+      "boardId": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+      "labels": [],
+      "labelsHasMore": false,
+      "checklists": [],
+      "checklistsHasMore": false,
+      "members": [],
+      "comments": [],
+      "commentsHasMore": false,
+      "list": {
+        "id": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+        "name": "To Do"
+      },
+      "board": {
+        "id": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+        "name": "BACKROOMS: STAY QUIET – Development"
+      }
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa80215a5f2cfc2c59bb6cd",
+      "name": "We need a \"Back to lobby\" option when in a level.",
+      "description": "",
+      "url": "https://trello.com/c/FON3SKNO/74-we-need-a-back-to-lobby-option-when-in-a-level",
+      "shortUrl": "https://trello.com/c/FON3SKNO",
+      "closed": false,
+      "complete": false,
+      "position": 140737489104896,
+      "lastActivityAt": "2026-09-14T14:17:57.372Z",
+      "startedAt": null,
+      "due": {
+        "date": null,
+        "complete": false
+      },
+      "listId": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+      "boardId": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+      "labels": [],
+      "labelsHasMore": false,
+      "checklists": [],
+      "checklistsHasMore": false,
+      "members": [],
+      "comments": [],
+      "commentsHasMore": false,
+      "list": {
+        "id": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+        "name": "To Do"
+      },
+      "board": {
+        "id": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+        "name": "BACKROOMS: STAY QUIET – Development"
+      }
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa8076d031e080ec6040660",
+      "name": "Level 3 entity spawns at the start of the level when you have completed the level and start running down the long hall, before the exit.",
+      "description": "",
+      "url": "https://trello.com/c/jhwiqOIL/75-level-3-entity-spawns-at-the-start-of-the-level-when-you-have-completed-the-level-and-start-running-down-the-long-hall-before-th",
+      "shortUrl": "https://trello.com/c/jhwiqOIL",
+      "closed": false,
+      "complete": false,
+      "position": 140737489121280,
+      "lastActivityAt": "2026-09-14T14:40:45.837Z",
+      "startedAt": null,
+      "due": {
+        "date": null,
+        "complete": false
+      },
+      "listId": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+      "boardId": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+      "labels": [],
+      "labelsHasMore": false,
+      "checklists": [],
+      "checklistsHasMore": false,
+      "members": [],
+      "comments": [],
+      "commentsHasMore": false,
+      "list": {
+        "id": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+        "name": "To Do"
+      },
+      "board": {
+        "id": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+        "name": "BACKROOMS: STAY QUIET – Development"
+      }
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa8170ca9d00704fc203fcd",
+      "name": "Show a physical barrier around the level-entry circle when the party is full",
+      "description": "When a party waiting to enter a level reaches its player capacity, a visible border/barrier should appear around the circle and physically prevent additional players from entering.\n\nFollow-up to the completed full-lobby entry fix: https://trello.com/c/u0rLQTOe",
+      "url": "https://trello.com/c/tqcZqFqk/76-show-a-physical-barrier-around-the-level-entry-circle-when-the-party-is-full",
+      "shortUrl": "https://trello.com/c/tqcZqFqk",
+      "closed": false,
+      "complete": false,
+      "position": 140737489137664,
+      "lastActivityAt": "2026-09-14T15:47:24.577Z",
+      "startedAt": null,
+      "due": {
+        "date": null,
+        "complete": false
+      },
+      "listId": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+      "boardId": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+      "labels": [],
+      "labelsHasMore": false,
+      "checklists": [],
+      "checklistsHasMore": false,
+      "members": [],
+      "comments": [],
+      "commentsHasMore": false,
+      "list": {
+        "id": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980822a4600c96defb1f7d",
+        "name": "To Do"
+      },
+      "board": {
+        "id": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+        "name": "BACKROOMS: STAY QUIET – Development"
+      }
+    }
+  ],
+  "pageInfo": {
+    "endCursor": "eyJwb3NpdGlvbiI6MTQwNzM3NDg5MTM3NjY0LCJvYmplY3RJZCI6IjZhYTgxNzBjYTlkMDA3MDRmYzIwM2ZjZCJ9",
+    "hasNextPage": false
+  },
+  "board": {
+    "id": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+    "name": "BACKROOMS: STAY QUIET – Development"
+  }
+}

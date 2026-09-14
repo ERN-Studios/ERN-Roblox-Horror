@@ -889,6 +889,26 @@ local function enterNavMode()
  applyPuzzleLayout()
 end
 
+-- SPECTATE_UI_PARITY_20260914 -- the detector reads from the body the camera is
+-- attached to. Spectating parks it on the WATCHED player's head
+-- (SpectateController publishes them on the client-local `Spectating` /
+-- `SpectateTargetUserId` attributes), so the compass arrow and the signal meter
+-- must measure from THEIR position: a spectator sees the readout the player they
+-- are watching sees, not a bearing from their own corpse. No living subject
+-- falls back to your own body, i.e. today's behaviour.
+local function detectorRoot()
+ if player:GetAttribute("Spectating") == true then
+  local userId = player:GetAttribute("SpectateTargetUserId")
+  local watched = type(userId) == "number" and Players:GetPlayerByUserId(userId) or nil
+  local watchedCharacter = watched and watched.Character
+  local humanoid = watchedCharacter and watchedCharacter:FindFirstChildOfClass("Humanoid")
+  local watchedRoot = watchedCharacter and watchedCharacter:FindFirstChild("HumanoidRootPart")
+  if humanoid and humanoid.Health > 0 and watchedRoot then return watchedRoot end
+ end
+ local character = player.Character
+ return character and character:FindFirstChild("HumanoidRootPart")
+end
+
 local function signalMeter(distance)
  local filled = math.clamp(9 - math.ceil(distance / 42), 1, 8)
  return "[" .. string.rep("■", filled) .. string.rep("□", 8 - filled) .. "]"
@@ -901,8 +921,7 @@ RunService.Heartbeat:Connect(function(dt)
  receiverClock = 0
 
  local exitPos = workspace:GetAttribute("ExitPos")
- local character = player.Character
- local root = character and character:FindFirstChild("HumanoidRootPart")
+ local root = detectorRoot()
  if typeof(exitPos) ~= "Vector3" or not root then
   setDetectorText(receiverReadout, "[□□□□□□□□] SEARCHING...\nMove around to find the signal")
   return

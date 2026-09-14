@@ -5000,7 +5000,13 @@ Fit.DonationTierKeys = {
 -- across the 11 rows of Fit.Devices: 11 x 2 = 22. The busy caption for the same
 -- row is "WAITING 5s", which is the same shape and the same silence, so it is
 -- named here too. Nothing in production changed; the harness was wrong.
-Fit.ZyntraDisabledCaptions = {"OWNED", "COMING SOON", "LEVEL %d+ ONLY", "WAITING"}
+-- 2026-09-14: three more stated reasons. FREE RESPAWN (Dev) stands down as
+-- "WHEN DEAD" while the developer is alive and "RESPAWNING..." while a request
+-- is in flight; the Entity Shield card (Upgrades) says "UNAVAILABLE" when the
+-- protection inventory cannot be bought and "CONFIRMING..." while a purchase
+-- settles. All four are the store telling the player why, not silence.
+Fit.ZyntraDisabledCaptions = {"OWNED", "COMING SOON", "LEVEL %d+ ONLY", "WAITING",
+	"WHEN DEAD", "RESPAWNING", "UNAVAILABLE", "CONFIRMING"}
 
 -- HOW MANY OF A PAGE'S CARD ACTIONS THE PLAYER CAN PRESS, where that number is
 -- a property of the build and not of the tester's save file.

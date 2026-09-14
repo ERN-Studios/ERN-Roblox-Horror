@@ -157,11 +157,31 @@ local POWERED_HINT = "TAKE TOP-DECK FLUME"
 -- server has published no position (older build, or a manifest with no mouth).
 local BEARINGS = {"AHEAD", "AHEAD-R", "RIGHT", "BEHIND-R", "BEHIND", "BEHIND-L", "LEFT", "AHEAD-L"}
 
+-- SPECTATE_UI_PARITY_20260914: the bearing is measured from the body the camera
+-- is attached to. While spectating that is the WATCHED player -- SpectateController
+-- parks the camera on their head and publishes them on the client-local
+-- `Spectating` / `SpectateTargetUserId` attributes -- so the spectator reads the
+-- same line the player they are watching reads, instead of a bearing from their
+-- own corpse. No living subject => nil, which is the existing "no root" path
+-- and falls back to POWERED_HINT.
+local function bearingRoot()
+	if player:GetAttribute("Spectating") == true then
+		local userId = player:GetAttribute("SpectateTargetUserId")
+		local watched = type(userId) == "number" and Players:GetPlayerByUserId(userId) or nil
+		local watchedCharacter = watched and watched.Character
+		local humanoid = watchedCharacter and watchedCharacter:FindFirstChildOfClass("Humanoid")
+		local root = watchedCharacter and watchedCharacter:FindFirstChild("HumanoidRootPart")
+		if humanoid and humanoid.Health > 0 and root then return root end
+		return nil
+	end
+	local character = player.Character
+	return character and character:FindFirstChild("HumanoidRootPart")
+end
+
 local function exitBearingText()
 	local exitPosition = workspace:GetAttribute("Level2_ExitPosition")
 	if typeof(exitPosition) ~= "Vector3" then return nil end
-	local character = player.Character
-	local root = character and character:FindFirstChild("HumanoidRootPart")
+	local root = bearingRoot()
 	local camera = workspace.CurrentCamera
 	if not root or not camera then return nil end
 	local delta = exitPosition - root.Position

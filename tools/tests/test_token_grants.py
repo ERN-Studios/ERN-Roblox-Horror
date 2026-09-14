@@ -152,10 +152,17 @@ do
         "donations, receipts, passes and settings preserved")
     equal(w:balance(w.other), 8, "unrelated player remains unchanged")
 end
-for _, who in ipairs({"issuer", "second", "third"}) do
+for _, who in ipairs({"issuer", "second"}) do
     local w = world()
     w:invoke(w[who].UserId, 1, w[who])
     equal(w:balance(w[who]), 9, "each allowlisted UserId can grant to self")
+end
+do
+    -- 2026-09-10 (card #66): DevAccess holds exactly two accounts. The retired
+    -- third entry must be refused like any ordinary player.
+    local w = world()
+    equal(w:invoke(w.third.UserId, 1, w.third).Success, false, "retired third UserId cannot grant")
+    equal(w:balance(w.third), 8, "retired third UserId balance unchanged")
 end
 do
     local w = world()

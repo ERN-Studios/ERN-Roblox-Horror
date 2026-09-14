@@ -13,6 +13,17 @@ local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
 local UIDevice = require(ReplicatedStorage:WaitForChild("UIDevice"))
 local Profiles = require(ReplicatedStorage:WaitForChild("FlashlightProfiles"))
+local remote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("RoundStatus")
+local playerScripts = player:WaitForChild("PlayerScripts")
+
+-- SPECTATOR_COUNT_20260914 (card 73): tell the server who we watch so the
+-- watched player can be shown a count. Sent only when the answer changes.
+local reportedTarget = false
+local function reportTarget(userId)
+	if reportedTarget == userId then return end
+	reportedTarget = userId
+	remote:FireServer("spectatetarget", userId)
+end
 
 local gui = Instance.new("ScreenGui")
 gui.Name = "SpectateGui"
@@ -64,6 +75,33 @@ end
 local applySpectateLayout
 local prevButton = makeCycleButton("SpectatePrevious", ARROW_LEFT)
 local nextButton = makeCycleButton("SpectateNext", ARROW_RIGHT)
+
+-- BACK_TO_LOBBY_20260914 (card 74): a dead or escaped player can leave the
+-- round from the spectate band. The button only asks; Round Exit Client owns
+-- the confirm card and the request, so the two entry points cannot drift.
+local exitButton = Instance.new("TextButton")
+exitButton.Name = "SpectateBackToLobby"
+exitButton.AnchorPoint = Vector2.new(0.5, 1)
+exitButton.BackgroundColor3 = Color3.fromRGB(12, 30, 28)
+exitButton.BackgroundTransparency = 0.25
+exitButton.BorderSizePixel = 0
+exitButton.AutoButtonColor = true
+exitButton.Font = Enum.Font.GothamBold
+exitButton.Text = "BACK TO LOBBY"
+exitButton.TextColor3 = Color3.fromRGB(73, 245, 204)
+exitButton.TextSize = 13
+exitButton.Visible = false
+exitButton.Active = false
+exitButton.Parent = gui
+do
+	local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 6); corner.Parent = exitButton
+	local stroke = Instance.new("UIStroke"); stroke.Color = exitButton.TextColor3
+	stroke.Transparency = 0.5; stroke.Thickness = 1.2; stroke.Parent = exitButton
+end
+exitButton.Activated:Connect(function()
+	local prompt = playerScripts:FindFirstChild("RoundExitPrompt")
+	if prompt and prompt:IsA("BindableEvent") then prompt:Fire() end
+end)
 
 local SMOOTH = 11     -- how fast the POV eases toward their head — high enough to
 -- follow, low enough to filter out the walk/idle head-bob jitter
@@ -135,6 +173,10 @@ local function watch(i)
 	targets = livingOthers()
 	if #targets == 0 then
 		spectated = nil
+		-- SPECTATE_TARGET_20260914: the one client-local fact every other local
+		-- script reads to mirror the watched player's audio and POV-relative UI.
+		player:SetAttribute("SpectateTargetUserId", nil)
+		reportTarget(nil)
 		unhide()
 		label.Text = player:GetAttribute("Escaped") == true
 			and "You escaped — waiting for the round to end"
@@ -144,6 +186,8 @@ local function watch(i)
 	idx = ((i - 1) % #targets) + 1
 	if spectated ~= targets[idx] then unhide(); snapCam = true end -- reveal prev body, snap to new POV
 	spectated = targets[idx]
+	player:SetAttribute("SpectateTargetUserId", spectated.UserId)
+	reportTarget(spectated.UserId)
 	-- The binding half of this caption comes from UIDevice, so a phone sees
 	-- only the name and uses the arrows beside it.
 	label.Text = UIDevice.Caption("POV: " .. spectated.Name, "(Q / E to switch)", "(D-pad ← / →)")
@@ -248,12 +292,51 @@ applySpectateLayout = function()
 	local showArrows = touch and cycleAvailable()
 	UIDevice.SetInteractive(prevButton, showArrows)
 	UIDevice.SetInteractive(nextButton, showArrows)
+	-- The exit action sits directly above the caption, in the same lane, and
+	-- stands down whenever the caption's own controls do.
+	exitButton.Size = UDim2.fromOffset(width, touch and 44 or 32)
+	exitButton.Position = centre and UDim2.fromOffset(centre, bottom - 30 - 8)
+		or UDim2.new(0.5, 0, 0, bottom - 30 - 8)
+	UIDevice.SetInteractive(exitButton, cycleAvailable()
+		and player:GetAttribute("RoundExitPromptOpen") ~= true)
 end
 
 prevButton.Activated:Connect(function() if cycleAvailable() then watch(idx - 1) end end)
 nextButton.Activated:Connect(function() if cycleAvailable() then watch(idx + 1) end end)
 UIDevice.OnScreenOwningModalChanged(function() applySpectateLayout() end)
 player:GetAttributeChangedSignal("PartyDownCardOpen"):Connect(function() applySpectateLayout() end)
+player:GetAttributeChangedSignal("RoundExitPromptOpen"):Connect(function() applySpectateLayout() end)
+
+-- SPECTATOR_COUNT_20260914 (card 73): the WATCHED player sees only a number.
+-- GameManager publishes SpectatorCount on the Player from what spectators
+-- report; nothing here names anyone.
+local counter = Instance.new("TextLabel")
+counter.Name = "SpectatorCounter"
+counter.AnchorPoint = Vector2.new(0.5, 0)
+counter.Position = UDim2.new(0.5, 0, 0, 0)
+counter.Size = UDim2.fromOffset(170, 22)
+counter.BackgroundColor3 = Color3.new(0, 0, 0)
+counter.BackgroundTransparency = 0.45
+counter.BorderSizePixel = 0
+counter.Font = Enum.Font.GothamBold
+counter.TextSize = 12
+counter.TextColor3 = Color3.fromRGB(190, 225, 255)
+counter.Text = ""
+counter.Visible = false
+counter.Parent = gui
+do local cc = Instance.new("UICorner"); cc.CornerRadius = UDim.new(0, 6); cc.Parent = counter end
+local function refreshSpectatorCounter()
+	local count = tonumber(player:GetAttribute("SpectatorCount")) or 0
+	local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+	local show = count > 0 and not spectating and player:GetAttribute("InRound") == true
+		and humanoid ~= nil and humanoid.Health > 0
+	counter.Visible = show
+	if show then
+		counter.Text = count == 1 and "1 SPECTATOR WATCHING" or (count .. " SPECTATORS WATCHING")
+	end
+end
+player:GetAttributeChangedSignal("SpectatorCount"):Connect(refreshSpectatorCounter)
+player:GetAttributeChangedSignal("InRound"):Connect(refreshSpectatorCounter)
 GuiService:GetPropertyChangedSignal("MenuIsOpen"):Connect(function() applySpectateLayout() end)
 UIDevice.Changed:Connect(function()
 	applySpectateLayout()
@@ -270,6 +353,7 @@ local function startSpectate()
 	-- written it, so both checks were dead.
 	player:SetAttribute("Spectating", true)
 	label.Visible = true
+	refreshSpectatorCounter()
 	applySpectateLayout()
 	watch(1)
 end
@@ -277,10 +361,14 @@ end
 local function stopSpectate()
 	spectating = false
 	player:SetAttribute("Spectating", nil)
+	player:SetAttribute("SpectateTargetUserId", nil)
+	reportTarget(nil)
 	spectated = nil
 	label.Visible = false
 	UIDevice.SetInteractive(prevButton, false)
 	UIDevice.SetInteractive(nextButton, false)
+	UIDevice.SetInteractive(exitButton, false)
+	refreshSpectatorCounter()
 	unhide()
 	core.Enabled = false; spill.Enabled = false
 	lastBeamProfile, lastOn = nil, nil -- force a fresh write next time spectate resumes
@@ -297,6 +385,7 @@ local function onChar(char)
 	stopSpectate() -- fresh body → back to your own view
 	local hum = char:WaitForChild("Humanoid")
 	hum.Died:Connect(startSpectate)
+	refreshSpectatorCounter()
 end
 
 -- C_ONE_SPECTATE_CAMERA_20260904: this file is now the ONLY writer of the

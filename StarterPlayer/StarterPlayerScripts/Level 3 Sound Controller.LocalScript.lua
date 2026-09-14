@@ -353,6 +353,30 @@ local function isActive(): boolean
 		and (not state or state:GetAttribute("Level3_Phase") ~= "STOPPED")
 end
 
+-- SPECTATE_AUDIO_PARITY_20260914 -- the listener body every proximity mix in
+-- this file measures from: the nearest PA speakers, the nearest fluorescent
+-- fixtures, the blackout scream emitters and the reader beep.
+--
+-- While spectating, that is the player being WATCHED: SpectateController parks
+-- the camera (the audio listener) on their head and publishes them on the
+-- client-local `Spectating` / `SpectateTargetUserId` attributes, so a dead
+-- player hears the room the living one is standing in. With no living target it
+-- falls back to your own body exactly as before.
+local function listenerRoot(): BasePart?
+	if player:GetAttribute("Spectating") == true then
+		local userId = player:GetAttribute("SpectateTargetUserId")
+		local watched = if type(userId) == "number" then Players:GetPlayerByUserId(userId) else nil
+		local character = watched and watched.Character
+		local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+		if humanoid and humanoid.Health > 0 and root and root:IsA("BasePart") then
+			return root :: BasePart
+		end
+	end
+	local own = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	return if own and own:IsA("BasePart") then own :: BasePart else nil
+end
+
 local roomSongPhase: () -> string
 
 local function currentWorld(): Model?
@@ -438,7 +462,7 @@ local function playBlackoutScream(serial: number, startedAt: number, duration: n
 	local replicated = normalizeId(stateAttribute("Level3_BlackoutScreamAssetId", nil))
 	if replicated and replicated ~= "rbxassetid://0" then id = replicated end
 	local world = currentWorld()
-	local characterRoot = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	local characterRoot = listenerRoot()
 	if not id or not world or not (characterRoot and characterRoot:IsA("BasePart")) then return false end
 	local elapsed = math.max(0, workspace:GetServerTimeNow() - startedAt)
 	if elapsed >= duration then return false end
@@ -698,7 +722,7 @@ local function updateRoomSong(dt: number)
 	roomSongLastStartServerTime = startValue
 	roomSongLastMode = mode
 	local syncNow = os.clock()
-	local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	local root = listenerRoot()
 	local ranked: {any} = {}
 	for index = #roomSongSpeakers, 1, -1 do
 		local voice = roomSongSpeakers[index]
@@ -1021,9 +1045,8 @@ end
 local function updateReaderCadence(now: number)
 	if not isActive() or now < nextReaderBeep then return end
 	local progress, goal, exit = currentReaderData()
-	local character = player.Character
-	local root = character and character:FindFirstChild("HumanoidRootPart")
-	if not (root and root:IsA("BasePart") and exit) then
+	local root = listenerRoot()
+	if not (root and exit) then
 		nextReaderBeep = now + 3
 		return
 	end
@@ -1117,7 +1140,7 @@ RunService.Heartbeat:Connect(function(dt)
 	updateBlackoutScream()
 	updateReaderCadence(now)
 
-	local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	local root = listenerRoot()
 	local nearestFixtureCount = 0
 	if root and root:IsA("BasePart") then
 		local nearestCap = #fluorescentVoices

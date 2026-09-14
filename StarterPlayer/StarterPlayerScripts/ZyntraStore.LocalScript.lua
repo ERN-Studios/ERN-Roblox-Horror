@@ -802,11 +802,31 @@ if devAllowed and pages.Dev then
 
 	local controls = {
 		{
+			-- DEV_FREE_RESPAWN_20260914: server-only re-entry in free mode. Never
+			-- touches Monetization, credits, tokens or Robux.
+			Name = "FREE RESPAWN",
+			Description = "Return after death in this level. No Robux, tokens or credits.",
+			Command = "freeRespawn",
+			Action = true,
+			DeadOnly = true,
+			ActionCaption = "RESPAWN",
+			BusyCaption = "RESPAWNING...",
+			DisabledCaption = "WHEN DEAD",
+			BusyAttribute = "DevRespawnBusy",
+		},
+		{
 			Name = "ESP",
 			Description = "Highlights objectives and hostile entities through walls.",
 			Key = "B",
 			Command = "esp",
 			Attribute = "DevCheatEsp",
+		},
+		{
+			-- DEV_PLAYER_ESP_20260914: keyless, defaults OFF, server-fed positions.
+			Name = "PLAYER ESP",
+			Description = "Shows every player through walls, including distant players.",
+			Command = "playerEsp",
+			Attribute = "DevCheatPlayerEsp",
 		},
 		{
 			Name = "3-SECOND QUEUE",
@@ -1003,7 +1023,23 @@ if devAllowed and pages.Dev then
 				row.Size = UDim2.new(1, 0, 0, height)
 			end
 		end)
+		-- A DeadOnly row (FREE RESPAWN) is available only while THIS character is
+		-- dead inside an active round. `retiringCharacter` fences the gap between
+		-- CharacterRemoving and the next CharacterAdded so a queued callback from
+		-- the old body cannot re-enable the row.
+		local retiringCharacter
 		local function actionAvailable()
+			if info.DeadOnly then
+				local char = player.Character
+				local hum = char and char:FindFirstChildOfClass("Humanoid")
+				return workspace:GetAttribute("RoundActive") == true
+					and player:GetAttribute("InRound") == true
+					and player:GetAttribute("Escaped") ~= true
+					and player:GetAttribute("Level2_ExitTransition") ~= true
+					and char ~= nil and char ~= retiringCharacter and char.Parent ~= nil
+					and hum ~= nil and hum.Health <= 0
+					and player:GetAttribute(info.BusyAttribute) ~= true
+			end
 			return workspace:GetAttribute("SelectedLevel") == (info.Level or 3)
 				and workspace:GetAttribute("RoundActive") == true
 				and player:GetAttribute("InRound") == true
@@ -1016,8 +1052,9 @@ if devAllowed and pages.Dev then
 				-- info.Key is a keyboard binding. On a phone or tablet it names a
 				-- key that does not exist, so UIDevice drops it entirely.
 				toggle.Text = UIDevice.Caption(
-					busy and "WAITING 5s" or (available and (info.ActionCaption or "SKIP")
-						or ("LEVEL " .. tostring(info.Level or 3) .. " ONLY")),
+					busy and (info.BusyCaption or "WAITING 5s")
+						or (available and (info.ActionCaption or "SKIP")
+						or (info.DisabledCaption or ("LEVEL " .. tostring(info.Level or 3) .. " ONLY"))),
 					info.Key and "//  " .. info.Key or "")
 				toggle.TextColor3 = available and COLORS.accent or COLORS.muted
 				-- LEVEL 3 ONLY is the message, so the row stays drawn and stays
@@ -1027,7 +1064,9 @@ if devAllowed and pages.Dev then
 				toggle.AutoButtonColor = available
 			else
 				local enabled = player:GetAttribute(info.Attribute) == true
-				toggle.Text = UIDevice.Caption(enabled and "ON" or "OFF", "//  " .. info.Key)
+				-- A keyless toggle (PLAYER ESP) carries no binding half at all.
+				toggle.Text = UIDevice.Caption(enabled and "ON" or "OFF",
+					info.Key and ("//  " .. info.Key) or nil)
 				toggle.TextColor3 = enabled and COLORS.accent or COLORS.muted
 			end
 		end
@@ -1041,12 +1080,55 @@ if devAllowed and pages.Dev then
 			if info.BusyAttribute then
 				player:GetAttributeChangedSignal(info.BusyAttribute):Connect(refresh)
 			end
+			if info.DeadOnly then
+				local watchedCharacter, healthConnection, childConnection
+				local function watch(character)
+					if healthConnection then healthConnection:Disconnect(); healthConnection = nil end
+					if childConnection then childConnection:Disconnect(); childConnection = nil end
+					watchedCharacter = character
+					if character then retiringCharacter = nil end
+					local function attach()
+						if watchedCharacter ~= character or player.Character ~= character then return end
+						local hum = character and character:FindFirstChildOfClass("Humanoid")
+						if hum and not healthConnection then
+							healthConnection = hum.HealthChanged:Connect(refresh)
+						end
+						refresh()
+					end
+					-- A late Humanoid (avatar still assembling) is observed on arrival.
+					if character then childConnection = character.ChildAdded:Connect(attach) end
+					attach()
+					refresh()
+				end
+				player.CharacterAdded:Connect(watch)
+				player.CharacterRemoving:Connect(function(character)
+					if watchedCharacter == character then retiringCharacter = character; watch(nil) end
+				end)
+				player:GetAttributeChangedSignal("Escaped"):Connect(refresh)
+				player:GetAttributeChangedSignal("Level2_ExitTransition"):Connect(refresh)
+				watch(player.Character)
+			end
 		else
 			player:GetAttributeChangedSignal(info.Attribute):Connect(refresh)
 		end
 		refresh()
 		table.insert(deviceCaptionRefreshers, refresh)
 	end
+
+	-- Readback of a FREE RESPAWN request. DevRespawnStatus is display state the
+	-- server publishes after the fact, never an authorization.
+	player:GetAttributeChangedSignal("DevRespawnSerial"):Connect(function()
+		local result = tostring(player:GetAttribute("DevRespawnStatus") or "")
+		local messages = {
+			RESPAWNED = "Developer respawn complete. No Robux, tokens or credits used.",
+			MUST_BE_DEAD = "Free respawn is available after death in an active level.",
+			BUSY = "A respawn is already in progress.",
+			PLACEMENT_FAILED = "No safe arrival space. Try again when space is free.",
+			DEVELOPER_ONLY = "Free respawn is for whitelisted developers only.",
+		}
+		showStatus(messages[result] or "Free respawn is unavailable for this round.",
+			result == "RESPAWNED" and "success" or "error")
+	end)
 
 	player:GetAttributeChangedSignal("DevLevel2PumpSerial"):Connect(function()
 		local status = tostring(player:GetAttribute("DevLevel2PumpStatus") or "")
@@ -1123,9 +1205,17 @@ upgradeGrid.CellPadding = UDim2.fromOffset(12, 12)
 upgradeGrid.SortOrder = Enum.SortOrder.LayoutOrder
 upgradeGrid.Parent = upgradeScroll
 
--- The card's authored internal stack, measured: 18 top pad + 34 title + 8 +
+-- The card's authored POINTER stack, measured: 18 top pad + 34 title + 8 +
 -- 72 description + 10 + 80 readout + 24 level + 18 gap + 48 button + 18 pad.
+-- It is the grid's starting cell and the pointer tier's floors below still add
+-- up to it exactly; the touch tiers re-measure the same stack at a smaller face.
 local UPGRADE_CARD_HEIGHT = 330
+
+-- Every upgrade card registers its measurable parts here, the way the product
+-- cards do. The grid carries ONE cell size for the whole page, so the height has
+-- to be the tallest card's measured stack -- and the Entity Shield card that
+-- reuses this builder is created two hundred lines below these two.
+local upgradeCards = {}
 
 local function makeUpgradeCard(parent, order, titleText, description)
 	local card = Instance.new("Frame")
@@ -1137,7 +1227,13 @@ local function makeUpgradeCard(parent, order, titleText, description)
 	corner(card, 10)
 	outline(card, COLORS.line, 0.35)
 
-	label(card, titleText, UDim2.new(1, -36, 0, 34), UDim2.fromOffset(18, 18), 22, COLORS.text, Enum.Font.GothamBold)
+	-- NAMED and WRAPPED, for the two reasons ProductName carries both: the card
+	-- holds several TextLabels, so a clipping report has to be able to say which
+	-- one overflowed -- and the layout hook MEASURES this string at a wrap width,
+	-- which is only the truth about what gets drawn if the label wraps.
+	local title = label(card, titleText, UDim2.new(1, -36, 0, 34), UDim2.fromOffset(18, 18), 22, COLORS.text, Enum.Font.GothamBold)
+	title.Name = "UpgradeTitle"
+	title.TextWrapped = true
 	local desc = label(card, description, UDim2.new(1, -36, 0, 72), UDim2.fromOffset(18, 60), 14, COLORS.muted)
 	desc.Name = "Description"
 	desc.TextWrapped = true
@@ -1152,7 +1248,10 @@ local function makeUpgradeCard(parent, order, titleText, description)
 	spend.TextWrapped = true
 	outline(spend, COLORS.accent, 0.2, 1.5)
 	contract.card("Upgrades", card.Name, card, spend)
-	return { Current = current, Level = level, Spend = spend }
+	local entry = { Title = title, Desc = desc, Current = current, Level = level,
+		Spend = spend }
+	table.insert(upgradeCards, entry)
+	return entry
 end
 
 local staminaCard = makeUpgradeCard(
@@ -1168,21 +1267,99 @@ local batteryCard = makeUpgradeCard(
 	"Keep the flashlight active for longer."
 )
 
+-- C_ZYNTRA_CONTENT_HAS_THREE_TIERS_20260914 -- WHAT SHIPPED TOO BIG.
+-- 28 days of analytics: 47.7% phone, 20.0% tablet, 32.3% PC. Two thirds of this
+-- audience reads these cards through a finger, and the card above is a DESKTOP
+-- card: 330px of it, on a 956x440 landscape phone whose whole Upgrades page is
+-- 201px tall. THE TAB BAR DOES NOT SHRINK -- it is the one row a thumb has to
+-- hit and it already stands at the tap floor. Only page CONTENT does, in three
+-- tiers taken from the fit values the terminal already publishes:
+--   1  phone    fit.Compact AND fit.Touch   a phone-sized touch panel
+--   2  tablet   fit.Touch, not compact      1024x768 and up
+--   3  pointer  neither                     THE AUTHORED CARD, to the pixel
+-- Every box in a row is a FLOOR the measured copy may grow past, never a ceiling
+-- it can be cut to -- which is what makes a smaller face safe. The pointer row's
+-- floors are the authored 18/34/8/72/10/80/24/18/48/18 stack, and they still sum
+-- to UPGRADE_CARD_HEIGHT exactly, so a mouse sees the terminal it has always seen.
 table.insert(layoutHooks, function(fit)
 	local introHeight = fit.Compact and 34 or 50
 	upgradeIntro.Size = UDim2.new(1, 0, 0, introHeight - 8)
 	upgradeIntro.TextSize = fit.Compact and 12 or 15
 	upgradeScroll.Position = UDim2.fromOffset(0, introHeight)
 	upgradeScroll.Size = UDim2.new(1, 0, 1, -introHeight)
-	-- Two columns only where a column is still wide enough to hold the copy;
-	-- one column, full width, below that. 240 is the width at which the 14px
-	-- description wraps to four lines inside its 72px box.
-	local twoUp = fit.ContentWidth >= 520
+
+	local face = ({
+		{Pad = 14, Title = 16, TitleBox = 22, GapTitle = 6, Desc = 12, DescBox = 32,
+			GapDesc = 8, Pct = 28, PctBox = 40, Level = 11, LevelBox = 18,
+			GapLevel = 12, Button = 40},
+		{Pad = 16, Title = 18, TitleBox = 26, GapTitle = 6, Desc = 13, DescBox = 44,
+			GapDesc = 8, Pct = 36, PctBox = 52, Level = 12, LevelBox = 20,
+			GapLevel = 14, Button = 44},
+		{Pad = 18, Title = 22, TitleBox = 34, GapTitle = 8, Desc = 14, DescBox = 72,
+			GapDesc = 10, Pct = 44, PctBox = 80, Level = 13, LevelBox = 24,
+			GapLevel = 18, Button = 48},
+	})[(fit.Compact and fit.Touch) and 1 or (fit.Touch and 2 or 3)]
+	-- fit.Tap is 44 on every touch device, so no tier can draw a target under it.
+	local buttonHeight = math.max(fit.Tap, face.Button)
+
+	-- TWO COLUMNS ONLY WHERE A COLUMN STILL HOLDS THE COPY, and MEASURED rather
+	-- than left at the authored 520 -- that number was taken against a 22px title
+	-- the touch tiers no longer draw, so it would keep a phone in one column at a
+	-- width its own 16px card fits two of. The widest string in this card is the
+	-- SPEND button's label, not the title, and it is the one that wraps first;
+	-- TEXT_FIT_SLACK for the same reason the header carries it.
+	local twoUpWidth = math.floor(fit.ContentWidth * 0.5) - 8
+	local twoUp = true
+	for _, entry in ipairs(upgradeCards) do
+		local widest = math.max(
+			textWidthFor(entry.Title.Text, face.Title, entry.Title.Font),
+			textWidthFor(entry.Spend.Text, entry.Spend.TextSize, entry.Spend.Font))
+		if widest + TEXT_FIT_SLACK > twoUpWidth - face.Pad * 2 then
+			twoUp = false
+			break
+		end
+	end
+	local cellWidth = twoUp and twoUpWidth or (fit.ContentWidth - 8)
+	local copyWidth = math.max(48, cellWidth - face.Pad * 2)
+
+	-- MEASURED ACROSS THE SET, not per card. The grid carries one cell size, so
+	-- the tallest title and the tallest description decide the stack -- and
+	-- positioning every card from the same two numbers is what keeps the percent
+	-- readouts on a row level with each other, the way the fixed boxes did.
+	local titleHeight, descHeight = face.TitleBox, face.DescBox
+	for _, entry in ipairs(upgradeCards) do
+		titleHeight = math.max(titleHeight,
+			textHeightFor(entry.Title.Text, face.Title, entry.Title.Font, copyWidth))
+		descHeight = math.max(descHeight,
+			textHeightFor(entry.Desc.Text, face.Desc, entry.Desc.Font, copyWidth))
+	end
+	local descTop = face.Pad + titleHeight + face.GapTitle
+	local pctTop = descTop + descHeight + face.GapDesc
+	local cellHeight = pctTop + face.PctBox + face.LevelBox + face.GapLevel
+		+ buttonHeight + face.Pad
+	for _, entry in ipairs(upgradeCards) do
+		-- MEASURED at copyWidth, but SIZED against the cell's own width, for the
+		-- reason the product cards are: the grid resolves 0.5 of the canvas itself
+		-- and may land a pixel either side of the width measured here.
+		local inset = -face.Pad * 2
+		entry.Title.TextSize = face.Title
+		entry.Title.Position = UDim2.fromOffset(face.Pad, face.Pad)
+		entry.Title.Size = UDim2.new(1, inset, 0, titleHeight)
+		entry.Desc.TextSize = face.Desc
+		entry.Desc.Position = UDim2.fromOffset(face.Pad, descTop)
+		entry.Desc.Size = UDim2.new(1, inset, 0, descHeight)
+		entry.Current.TextSize = face.Pct
+		entry.Current.Position = UDim2.fromOffset(face.Pad, pctTop)
+		entry.Current.Size = UDim2.new(1, inset, 0, face.PctBox)
+		entry.Level.TextSize = face.Level
+		entry.Level.Position = UDim2.fromOffset(face.Pad, pctTop + face.PctBox)
+		entry.Level.Size = UDim2.new(1, inset, 0, face.LevelBox)
+		entry.Spend.Size = UDim2.new(1, inset, 0, buttonHeight)
+		entry.Spend.Position = UDim2.new(0, face.Pad, 1, -(buttonHeight + face.Pad))
+	end
 	upgradeGrid.CellSize = twoUp
-		and UDim2.new(0.5, -8, 0, UPGRADE_CARD_HEIGHT)
-		or UDim2.new(1, -8, 0, UPGRADE_CARD_HEIGHT)
-	staminaCard.Spend.Size = UDim2.new(1, -36, 0, math.max(fit.Tap, 48))
-	batteryCard.Spend.Size = UDim2.new(1, -36, 0, math.max(fit.Tap, 48))
+		and UDim2.new(0.5, -8, 0, cellHeight)
+		or UDim2.new(1, -8, 0, cellHeight)
 end)
 staminaCard.Spend.Activated:Connect(function() actionRemote:FireServer("UpgradeStamina") end)
 batteryCard.Spend.Activated:Connect(function() actionRemote:FireServer("UpgradeBattery") end)
@@ -1235,15 +1412,26 @@ local productCards = {}
 --      product NAME on one line at its 18px face; below it the card is mostly
 --      icon, so the page takes one full-width column and scrolls instead.
 table.insert(layoutHooks, function(fit)
-	-- The copy column starts after the icon (14 pad + 76 icon + 14 gap) and ends
-	-- at the card's own 14px right pad. Stated once here, so the measurement and
-	-- the placement below cannot disagree about where the text goes.
-	local copyLeft, copyInset = 104, 118
+	-- THE SAME THREE TIERS the upgrade cards use (see the note above them), and
+	-- the icon is why this page needed them most: at the authored 76px it and its
+	-- paddings are 118 of the 188px a portrait phone's column has to spend, so the
+	-- copy got a third of the card and four wrapped lines of 12px type. Row 3 is
+	-- the authored card -- 14/76/18, copyLeft 104, copyInset 118 -- unchanged.
+	local face = ({
+		{Pad = 10, Icon = 52, IconTop = 12, Title = 14, Desc = 11, Lead = 10, Foot = 8},
+		{Pad = 14, Icon = 64, IconTop = 16, Title = 16, Desc = 12, Lead = 16, Foot = 12},
+		{Pad = 14, Icon = 76, IconTop = 18, Title = 18, Desc = 12, Lead = 16, Foot = 12},
+	})[(fit.Compact and fit.Touch) and 1 or (fit.Touch and 2 or 3)]
+	-- The copy column starts after the icon (pad + icon + pad) and ends at the
+	-- card's own right pad. Stated once here, so the measurement and the
+	-- placement below cannot disagree about where the text goes.
+	local copyLeft = face.Pad * 2 + face.Icon
+	local copyInset = copyLeft + face.Pad
 	local buyHeight = math.max(fit.Tap, 38)
 	local twoUpWidth = math.floor(fit.ContentWidth * 0.5) - 8
 	local twoUp = true
 	for _, entry in ipairs(productCards) do
-		if textWidthFor(entry.Heading.Text, entry.Heading.TextSize, entry.Heading.Font)
+		if textWidthFor(entry.Heading.Text, face.Title, entry.Heading.Font)
 			> twoUpWidth - copyInset then
 			twoUp = false
 			break
@@ -1251,16 +1439,24 @@ table.insert(layoutHooks, function(fit)
 	end
 	local cellWidth = twoUp and twoUpWidth or (fit.ContentWidth - 8)
 	local copyWidth = math.max(48, cellWidth - copyInset)
-	-- 94 is the icon's own bottom edge (18 top + 76 tall). A card is never
-	-- shorter than the icon standing beside its copy.
-	local bodyBottom = 94
+	-- The icon's own bottom edge. A card is never shorter than the icon standing
+	-- beside its copy.
+	local bodyBottom = face.IconTop + face.Icon
 	for _, entry in ipairs(productCards) do
+		-- The icon is SIZED here rather than at build, because its width is what
+		-- sets copyLeft. Its UICorner keeps the authored 38px radius: the engine
+		-- clamps CornerRadius to half the smaller side, so the same corner draws a
+		-- circle at 76, at 64 and at 52 and nothing here has to restate it.
+		entry.Icon.Size = UDim2.fromOffset(face.Icon, face.Icon)
+		entry.Icon.Position = UDim2.fromOffset(face.Pad, face.IconTop)
+		entry.Heading.TextSize = face.Title
+		entry.Desc.TextSize = face.Desc
 		-- Measured at the label's OWN face, not a repeated literal, so a face
 		-- change cannot leave the box sized for the other one.
 		local titleHeight = math.max(22, textHeightFor(entry.Heading.Text,
-			entry.Heading.TextSize, entry.Heading.Font, copyWidth))
+			face.Title, entry.Heading.Font, copyWidth))
 		local descHeight = math.max(14, textHeightFor(entry.Desc.Text,
-			entry.Desc.TextSize, entry.Desc.Font, copyWidth))
+			face.Desc, entry.Desc.Font, copyWidth))
 		-- MEASURED at copyWidth, but SIZED against the cell's own width, the way
 		-- the authored card was. The grid resolves 0.5 of the canvas itself and
 		-- may land a pixel either side of the width measured here; an offset
@@ -1273,11 +1469,11 @@ table.insert(layoutHooks, function(fit)
 		entry.Heading.Size = UDim2.new(1, -copyInset, 0, titleHeight)
 		entry.Desc.Position = UDim2.fromOffset(copyLeft, entry.Top + titleHeight + 6)
 		entry.Desc.Size = UDim2.new(1, -copyInset, 0, descHeight)
-		entry.Buy.Size = UDim2.new(1, -28, 0, buyHeight)
-		entry.Buy.Position = UDim2.new(0, 14, 1, -(buyHeight + 12))
+		entry.Buy.Size = UDim2.new(1, -face.Pad * 2, 0, buyHeight)
+		entry.Buy.Position = UDim2.new(0, face.Pad, 1, -(buyHeight + face.Foot))
 		bodyBottom = math.max(bodyBottom, entry.Top + titleHeight + 6 + descHeight)
 	end
-	local cellHeight = bodyBottom + 16 + buyHeight + 12
+	local cellHeight = bodyBottom + face.Lead + buyHeight + face.Foot
 	shopGrid.CellSize = twoUp
 		and UDim2.new(0.5, -8, 0, cellHeight)
 		or UDim2.new(1, -8, 0, cellHeight)
@@ -1354,6 +1550,7 @@ local function makeProductCard(key, item, kind)
 		Desc = desc,
 		Buy = buy,
 		Tag = tag,
+		Icon = icon,
 		Top = headingY,
 	})
 	productButtons[key] = buy
@@ -1405,9 +1602,10 @@ do
 	local card = makeUpgradeCard(upgradeScroll, 3, item.Name, item.Description)
 	card.Current.Text = tostring(item.DurationSeconds) .. "s"
 	local buy = card.Spend
-	table.insert(layoutHooks, function(fit)
-		buy.Size = UDim2.new(1, -36, 0, math.max(fit.Tap, 48))
-	end)
+	-- No layout hook of its own any more. makeUpgradeCard registered this card in
+	-- upgradeCards, so the Upgrades hook sizes all three from one measured stack
+	-- -- and a second hook restating -36 and 48 here would have overwritten the
+	-- tier the page had just chosen, because it runs after it.
 	buy.Activated:Connect(function()
 		if ProtectionClient.GetState().Pending then
 			ProtectionClient.Retry()

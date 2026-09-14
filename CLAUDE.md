@@ -296,6 +296,76 @@ Batch 2 of the deep audit (`docs/AUDIT-2026-09-04.md`); the record is
   what was still true. `docs/AUDIT-2026-09-04.md` lists what remains open
   (robustness, controller and Pool Foam audio are Trello cards).
 
+### Added 2026-09-14 (Trello To Do batch; record in `artifacts/trello-20260914/claude-handoff.md`)
+
+- **Three new scripts**, created in Studio first and then given manifest items:
+  `ServerScriptService.PurchaseAlerts` (ModuleScript), and the LocalScripts
+  `StarterPlayerScripts."First Entry Guide"` and `"Round Exit Client"`.
+- **Dev cheats (cards 45/64).** `DevControl` gained `playerEsp` (the server
+  answers ONLY the requesting developer with a position snapshot on the same
+  remote; markers live in that client's `PlayerGui.DevPlayerESP` and never
+  replicate) and `freeRespawn` (`ServerStorage.ZyntraReentry:Invoke(player,
+  true)`; readbacks `DevRespawnBusy/Status/Serial`). `ZyntraReentry.OnInvoke`
+  is now one body for both paths: paid reserves the credit in Monetization as
+  before, free needs DevAccess + a dead InRound body; one request in flight per
+  player. DEV rows FREE RESPAWN and PLAYER ESP sit in the terminal.
+- **Back to lobby (card 74).** Client `RoundStatus "leaveround"` → GameManager
+  `handleLeaveRoundRequest` (assigned inside playRound, nil outside a
+  lifecycle) removes only that player from `alive`, `participantSet` and the
+  `participants` roster, answers `leaveack`, then `teleportPlayersToLobby` on a
+  reserved server or `returnPlayersToLocalLobby` in Studio. Studio Level 2/3
+  park the lobby, so there it answers `leavefailed`. UI: `Round Exit Client`
+  (chip top-left of the safe area while alive; the spectate band's button fires
+  `PlayerScripts.RoundExitPrompt`); `RoundExitPromptOpen` while the card is up.
+- **Spectator parity (card 73).** SpectateController publishes the
+  client-local `SpectateTargetUserId` next to `Spectating` and reports
+  `RoundStatus "spectatetarget", userId`; the server publishes the replicated
+  `SpectatorCount` on the watched Player (only dead/escaped participants count,
+  only towards living participants; cleared when the lifecycle closes).
+  SoundController, both level sound controllers, Level 2 Objective UI, Level 3
+  Reader Client and PuzzleUI resolve their audio/UI subject from those two
+  attributes. Breathing stays own-only (stamina is client-local); ProtectionHUD
+  is untouched. Dev ESP is client-local by construction.
+- **Full-party barrier (card 76).** Collision groups `QueueBarrier` and
+  `QueueMember` (mutually non-collidable, both clear of `DevNoclip`).
+  `enforceStationCapacity` raises `Station<N>FullBarrier` (24 ForceField
+  segments, `CanQuery = false` so the push-out's overlap checks ignore it) when
+  a configured party is full and moves accepted members' parts to
+  `QueueMember`; it drops the wall and restores `Default` when capacity frees,
+  on cancel or on an unconfigured station. The Heartbeat push-out is still the
+  authority. `tools/tests/test_queue_barrier.py`.
+- **First entry guide (card 70).** Latches once at `ZyntraProfileLoaded` on
+  `ZyntraLobbyBriefingPlayed ~= true` (a brand-new profile), no new DataStore
+  field. Pathfinding beam chain to the nearest Level 1 `LaunchZone` plus a
+  "LEVEL 1 START HERE" billboard; ends on pad arrival, InRound or a queue
+  event. A `BeamTexture` string attribute on the script auditions a texture.
+- **Purchase alerts (card 69).** `PurchaseAlerts.Notify` runs from
+  ProcessReceipt only on a first-time grant (`changed`), pcall'd, never
+  yielding. Config is Roblox Secrets `ZYNTRA_PURCHASE_ALERT_URL` /
+  `ZYNTRA_PURCHASE_ALERT_TOKEN`, or `ServerStorage.PurchaseAlertConfig`
+  attributes `Endpoint`/`Token` for Studio. Roblox cannot post to discord.com,
+  so `tools/purchase_alert_relay/relay.py` forwards. NOT operational until the
+  owner completes the relay README's prerequisites (channel, webhook, host,
+  Secrets, HttpEnabled). `tools/tests/test_purchase_alerts.py`,
+  `test_purchase_alert_relay.py`.
+- **Shop/Upgrades tiers (card 68).** ZyntraStore content has phone
+  (`fit.Compact and fit.Touch`), tablet (`fit.Touch`) and pointer tiers; the
+  tab bar is unchanged and the pointer tier is the authored card to the pixel.
+  `tools/tests/test_zyntra_store_compact.py`.
+- **Feedback gift (card 71, Codex).** `refreshPasses` grants UserId
+  10152463945 once (`Grants.FeedbackThanks20260914`: +1 stamina, +1 battery,
+  +10 tokens); it lands on that player's next successful profile load on a
+  server running this build. `tools/tests/test_feedback_gift.py`.
+- **Codex's cards 67/75** landed from `artifacts/trello-20260914/
+  {ceiling,finale}-proposed` after canonical-hash verification: five on/off
+  ceiling patterns; the Level 3 finale spawns at the level entry (`MazeStart`
+  + 8/12/16/20 studs forward) once the first survivor is 4 studs into the open
+  exit hall. Physical chase pacing was not measured.
+- **Offline test hygiene.** `test_support_product_receipts.py` and
+  `test_token_grants.py` carried stale markers (fixed). `test_level3_run_in_exit`,
+  `test_level3_hidden_chase` and `test_level3_slide_aperture` already failed at
+  HEAD before this batch and were left alone.
+
 ### History — the 2026-08-19 audit (done, kept for context)
 
 Branch `claude/roblox-code-audit-di6qxi`, PR #1 (merged): a project-wide audit of ~45k

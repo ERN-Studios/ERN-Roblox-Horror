@@ -103,6 +103,131 @@ local function tag(instance, color)
 	highlight.Parent = instance
 end
 
+-- DEV_PLAYER_ESP_20260910: local presentation; positions are authorized by the server.
+local setPlayerEsp
+do
+	local enabled = false
+	local stopped = false
+	local records = {}
+	local connections = {}
+	local queryElapsed = 0
+	local latestSnapshot = -math.huge
+	local playerGui = player:WaitForChild("PlayerGui")
+	local gui = Instance.new("ScreenGui")
+	gui.Name = "DevPlayerESP"
+	gui.ResetOnSpawn = false
+	gui.IgnoreGuiInset = true
+	gui.DisplayOrder = 30
+	gui.Enabled = false
+	gui.Parent = playerGui
+	local remote = devControl or remotes:WaitForChild("DevControl")
+
+	local function clear()
+		for _, record in pairs(records) do record.Label:Destroy() end
+		table.clear(records)
+	end
+
+	local function finiteVector(value)
+		return typeof(value) == "Vector3"
+			and value.X == value.X and value.Y == value.Y and value.Z == value.Z
+			and math.abs(value.X) < 1e7 and math.abs(value.Y) < 1e7 and math.abs(value.Z) < 1e7
+	end
+
+	local function receive(command, snapshot)
+		if stopped or not enabled or command ~= "playerEsp" then return end
+		if type(snapshot) ~= "table" or type(snapshot.At) ~= "number"
+			or snapshot.At ~= snapshot.At or type(snapshot.Players) ~= "table" then return end
+		local age = workspace:GetServerTimeNow() - snapshot.At
+		if age < -.5 or age > 1.5 or snapshot.At < latestSnapshot then return end
+		latestSnapshot = snapshot.At
+		local seen = {}
+		for _, entry in ipairs(snapshot.Players) do
+			if type(entry) ~= "table" or type(entry.UserId) ~= "number"
+				or not finiteVector(entry.Position) then continue end
+			local subject = Players:GetPlayerByUserId(entry.UserId)
+			if not subject or seen[subject] then continue end
+			seen[subject] = true
+			local record = records[subject]
+			if not record then
+				local label = Instance.new("TextLabel")
+				label.Name = "Player_" .. tostring(subject.UserId)
+				label.AnchorPoint = Vector2.new(.5, 1)
+				label.Size = UDim2.fromOffset(210, 38)
+				label.BackgroundColor3 = Color3.fromRGB(5, 17, 20)
+				label.BackgroundTransparency = .25
+				label.BorderSizePixel = 0
+				label.Font = Enum.Font.GothamBold
+				label.TextSize = 13
+				label.TextWrapped = true
+				label.RichText = false
+				label.Visible = false
+				label.Parent = gui
+				record = {Label = label}
+				records[subject] = record
+			end
+			record.Position = entry.Position
+			record.Label.Text = "@" .. subject.Name
+				.. (entry.Alive == true and "" or "\nDEAD")
+			record.Label.TextColor3 = entry.Alive == true
+				and Color3.fromRGB(95, 255, 185) or Color3.fromRGB(185, 190, 195)
+		end
+		for subject, record in pairs(records) do
+			if not seen[subject] then record.Label:Destroy(); records[subject] = nil end
+		end
+	end
+
+	setPlayerEsp = function(requested)
+		if stopped then return end
+		enabled = requestedState(enabled, requested)
+		gui.Enabled = enabled
+		publishState("DevCheatPlayerEsp", enabled)
+		queryElapsed = 0
+		if enabled then fireDev("playerEsp", true) else clear() end
+	end
+	publishState("DevCheatPlayerEsp", false)
+	connections[#connections + 1] = remote.OnClientEvent:Connect(receive)
+	connections[#connections + 1] = RunService.Heartbeat:Connect(function(deltaTime)
+		if stopped or not enabled then return end
+		queryElapsed += deltaTime
+		if queryElapsed >= .5 then
+			queryElapsed = 0
+			fireDev("playerEsp", true)
+		end
+		-- Missing replies never leave an apparently current location on screen.
+		if workspace:GetServerTimeNow() - latestSnapshot > 1.5 then clear() end
+	end)
+	connections[#connections + 1] = RunService.RenderStepped:Connect(function()
+		if stopped or not enabled then return end
+		local camera = workspace.CurrentCamera
+		for subject, record in pairs(records) do
+			local label = record.Label
+			label.Visible = false
+			if camera and subject.Parent == Players then
+				local point, onScreen = camera:WorldToViewportPoint(record.Position + Vector3.new(0, 3, 0))
+				label.Visible = onScreen and point.Z > 0
+				if label.Visible then
+					local viewport = camera.ViewportSize
+					label.Position = UDim2.fromOffset(
+						math.clamp(point.X, math.min(105, viewport.X * .5), math.max(105, viewport.X - 105)),
+						math.clamp(point.Y, math.min(38, viewport.Y), math.max(38, viewport.Y)))
+				end
+			end
+		end
+	end)
+	connections[#connections + 1] = Players.PlayerRemoving:Connect(function(subject)
+		local record = records[subject]
+		if record then record.Label:Destroy(); records[subject] = nil end
+	end)
+	connections[#connections + 1] = script.Destroying:Connect(function()
+		stopped = true
+		for _, connection in ipairs(connections) do connection:Disconnect() end
+		clear()
+		gui:Destroy()
+		publishState("DevCheatPlayerEsp", false)
+	end)
+end
+-- END_DEV_PLAYER_ESP_20260910
+
 local function setEsp(requested)
 	local enabled = requestedState(espOn, requested)
 	espOn = enabled
@@ -436,6 +561,8 @@ end)
 local function dispatchCommand(command, requested)
 	if command == "esp" then
 		setEsp(requested)
+	elseif command == "playerEsp" then
+		setPlayerEsp(requested)
 	elseif command == "fastQueue" then
 		setFastQueue(requested)
 	elseif command == "noclip" then
@@ -448,6 +575,9 @@ local function dispatchCommand(command, requested)
 		setUnlimited(requested)
 	elseif command == "thirdPerson" then
 		setThirdPerson(requested)
+	elseif command == "freeRespawn" then
+		-- DEV_FREE_RESPAWN_20260914: server-validated; the DEV row gates availability.
+		fireDev("freeRespawn", true)
 	elseif command == "level2PumpPair" then
 		-- One server-owned sequence: first available lever now, second in 5s.
 		fireDev("level2PumpPair", true)

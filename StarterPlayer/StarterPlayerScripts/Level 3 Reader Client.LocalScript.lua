@@ -703,6 +703,29 @@ local function numberAttribute(name: string, workspaceMirror: string?, fallback:
 	return if type(value) == "number" then value else fallback
 end
 
+-- SPECTATE_UI_PARITY_20260914 -- whose reader this panel is drawing.
+--
+-- While spectating, the camera sits on the WATCHED player's head
+-- (SpectateController publishes them on the client-local `Spectating` /
+-- `SpectateTargetUserId` attributes), so the needle, the signal bars and the
+-- hiding blackout all have to come from THEIR body: a spectator must read the
+-- panel the player they are watching is reading. `Level3_Hiding` is set by the
+-- server on the player (Level 3 Hiding Controller), so it replicates and can be
+-- read for anyone. Falls back to yourself whenever there is no living subject,
+-- which is exactly the pre-spectate behaviour.
+local function readerSubject(): Player
+	if player:GetAttribute("Spectating") ~= true then return player end
+	local userId = player:GetAttribute("SpectateTargetUserId")
+	local watched = if type(userId) == "number" then Players:GetPlayerByUserId(userId) else nil
+	local character = watched and watched.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if watched and humanoid and humanoid.Health > 0
+		and character:FindFirstChild("HumanoidRootPart") then
+		return watched
+	end
+	return player
+end
+
 local function isActive(): boolean
 	local levelActive = workspace:GetAttribute("SelectedLevel") == LEVEL
 		and player:GetAttribute("InRound") == true
@@ -713,7 +736,7 @@ local function isActive(): boolean
 	end
 	return levelActive
 		and player:GetAttribute("ZyntraDispatchClientActive") ~= true
-		and player:GetAttribute("Level3_Hiding") ~= true
+		and readerSubject():GetAttribute("Level3_Hiding") ~= true
 		-- A screen-owning modal takes the reader with it. The panel is a
 		-- TextButton on touch, so leaving it up under an open terminal would put
 		-- a live control beneath a modal.
@@ -887,7 +910,7 @@ local function updateReader(dt: number)
 	for cell = 1, goal do cells[cell] = if cell <= progress then "■" else "□" end
 	progressLabel.Text = string.format("DISC RELAY [%s]  %d/%d", table.concat(cells), progress, goal)
 
-	local character = player.Character
+	local character = readerSubject().Character
 	local root = character and character:FindFirstChild("HumanoidRootPart")
 	local target = exitPosition()
 	if not (root and root:IsA("BasePart") and target) then
@@ -982,6 +1005,9 @@ end
 -- which is the only caller that holds a real elapsed time.
 local READER_STATE_ATTRIBUTES = {
 	"InRound", "Escaped", "ZyntraDispatchClientActive", "Level3_Hiding",
+	-- A spectate target change swaps whose reader this is, so it takes the panel
+	-- off the 0.10s tick and onto the same immediate path as the states above.
+	"Spectating", "SpectateTargetUserId",
 }
 -- Read by isActive() and updateReader only under RunService:IsStudio(), so they
 -- are only subscribed there. In a live game these attributes are never written

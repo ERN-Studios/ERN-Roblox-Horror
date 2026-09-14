@@ -261,7 +261,7 @@ def main():
     pieces=[COMMON,CONFIG,WORLD,
         section('local function colorData','local function isDispatchPredecessorClosed'),
         section('local function accessibilityValue','-- The switch a player'),
-        section('local function publicProfile','local function addSupporterTag'),
+        section('local function publicProfile','local function clearPlayerTags'),
         section('local function applyAttributes','local function enrichedPublicProfile'),PUSH,
         section('local function acquireMutation','-- Developer token gifts'),
         section('local supportNameCache','-- Outer retries are safe'),

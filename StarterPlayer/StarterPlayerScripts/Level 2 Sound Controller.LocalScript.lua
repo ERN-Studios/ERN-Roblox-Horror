@@ -283,12 +283,31 @@ local function syncRandomSession()
 	return true
 end
 
+-- The one listener position this file mixes against: every random ambience
+-- placement, the monster groan and the pressure-door cue are chosen by distance
+-- from it.
+--
+-- SPECTATE_AUDIO_PARITY_20260914: while you are dead and spectating, that is the
+-- player you are WATCHING -- SpectateController parks the camera (the audio
+-- listener) on their head and publishes the target on the client-local
+-- `Spectating` / `SpectateTargetUserId` attributes, so the spectator gets the
+-- same proximity cues from the same place instead of silence. Still nil when
+-- there is no living subject, which every caller already reads as "stand down".
 local function rootPart()
-	local character = player.Character
-	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-	local root = character and character:FindFirstChild("HumanoidRootPart")
-	if not (humanoid and humanoid.Health > 0 and root) then return nil end
-	return root
+	local character, humanoid, root
+	if player:GetAttribute("Spectating") == true then
+		local userId = player:GetAttribute("SpectateTargetUserId")
+		local watched = type(userId) == "number" and Players:GetPlayerByUserId(userId) or nil
+		character = watched and watched.Character
+		humanoid = character and character:FindFirstChildOfClass("Humanoid")
+		root = character and character:FindFirstChild("HumanoidRootPart")
+		if humanoid and humanoid.Health > 0 and root then return root end
+	end
+	character = player.Character
+	humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	root = character and character:FindFirstChild("HumanoidRootPart")
+	if humanoid and humanoid.Health > 0 and root then return root end
+	return nil
 end
 
 local function pumpPipeIsRunning(pipe)

@@ -149,6 +149,23 @@ for _, group in ipairs(PhysicsService:GetRegisteredCollisionGroups()) do
  end)
 end
 
+-- QUEUE_BARRIER_20260914 (card 76). A full party's circle grows a visible wall
+-- that non-members collide with. Accepted members' character parts move to
+-- QueueMember, which does not collide with QueueBarrier, so they can still
+-- leave and come back; the wall disappears the moment capacity frees. The
+-- Heartbeat push-out further down stays the authority; the wall is the cue.
+local QUEUE_BARRIER_GROUP = "QueueBarrier"
+local QUEUE_MEMBER_GROUP = "QueueMember"
+pcall(function() PhysicsService:RegisterCollisionGroup(QUEUE_BARRIER_GROUP) end)
+pcall(function() PhysicsService:RegisterCollisionGroup(QUEUE_MEMBER_GROUP) end)
+for _, pair in ipairs({
+ {QUEUE_BARRIER_GROUP, QUEUE_MEMBER_GROUP},
+ {QUEUE_BARRIER_GROUP, NOCLIP_GROUP},
+ {QUEUE_MEMBER_GROUP, NOCLIP_GROUP},
+}) do
+ pcall(function() PhysicsService:CollisionGroupSetCollidable(pair[1], pair[2], false) end)
+end
+
 local function setServerNoclip(player, enabled)
  local char = player.Character
  if not char then return end
@@ -180,6 +197,25 @@ local function setServerNoclip(player, enabled)
  end
 end
 
+-- DEV_FREE_RESPAWN_20260914 (card 64). One request at a time per developer;
+-- the shared server-only re-entry endpoint owns membership, death and
+-- placement. Free mode never enters Monetization or reserves a credit.
+local devRespawnRequests = {}
+local function requestDevRespawn(player)
+ if not DevAccess.IsAllowed(player) or player.Parent ~= Players or devRespawnRequests[player] then return end
+ local request = {}
+ devRespawnRequests[player] = request
+ player:SetAttribute("DevRespawnBusy", true)
+ local ok, accepted, reason = pcall(zyntraReentry.Invoke, zyntraReentry, player, true)
+ if devRespawnRequests[player] ~= request then return end
+ devRespawnRequests[player] = nil
+ if player.Parent ~= Players then return end
+ player:SetAttribute("DevRespawnBusy", nil)
+ player:SetAttribute("DevRespawnStatus",
+  ok and accepted == true and "RESPAWNED" or (ok and tostring(reason or "FAILED") or "UNAVAILABLE"))
+ player:SetAttribute("DevRespawnSerial", (tonumber(player:GetAttribute("DevRespawnSerial")) or 0) + 1)
+end
+
 devControl.OnServerEvent:Connect(function(player, command, enabled)
  if not DevAccess.IsAllowed(player) then return end
  if type(command) ~= "string" or type(enabled) ~= "boolean" then return end
@@ -197,6 +233,26 @@ devControl.OnServerEvent:Connect(function(player, command, enabled)
  elseif command == "noclip" then
   setServerNoclip(player, enabled == true)
   print("[GameManager] server noclip", enabled == true and "ON" or "OFF", "for", player.Name)
+ elseif command == "playerEsp" then
+  -- DEV_PLAYER_ESP_20260914 (card 45): on-demand readback for THIS developer
+  -- only. Server positions also cover characters outside the requesting
+  -- client's streaming region. Nothing is broadcast and nothing is stored.
+  if not enabled then return end
+  local snapshot = {At = workspace:GetServerTimeNow(), Players = {}}
+  for _, subject in ipairs(Players:GetPlayers()) do
+   local character = subject.Character
+   local root = character and character:FindFirstChild("HumanoidRootPart")
+   local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+   if root and root:IsA("BasePart") and character:IsDescendantOf(workspace) then
+    snapshot.Players[#snapshot.Players + 1] = {
+     UserId = subject.UserId, Position = root.Position,
+     Alive = humanoid ~= nil and humanoid.Health > 0,
+    }
+   end
+  end
+  devControl:FireClient(player, "playerEsp", snapshot)
+ elseif command == "freeRespawn" then
+  if enabled then requestDevRespawn(player) end
  elseif command == "level2PumpPair" then
   if not enabled then return end
   local systems = script.Parent:FindFirstChild("Level 2 Systems")
@@ -428,10 +484,14 @@ local function loadLobbyCharacter(player)
  return ok
 end
 
-local function loadGameplayCharacter(player, allowed)
+local function loadGameplayCharacter(player, allowed, loadRecord)
  local loadToken = beginCharacterLoad(allowed)
  if not loadToken then return false end
+ local previous = player.Character
  local ok, err = pcall(player.LoadCharacterAsync, player)
+ -- Record this load before releasing the gate, even if its body is incomplete.
+ -- A re-entry refusal may discard only this still-current owned Character.
+ if loadRecord and player.Character ~= previous then loadRecord.Character = player.Character end
  finishCharacterLoad(loadToken)
  if not ok then warn("[GameManager] Gameplay character load failed:", err) end
  return ok
@@ -449,7 +509,7 @@ end
 local CHARACTER_LOAD_ATTEMPTS = 4
 local CHARACTER_LOAD_TIMEOUT = 6
 
-local function spawnGameplayCharacter(player, attempt, lifecycleOpen)
+local function spawnGameplayCharacter(player, attempt, lifecycleOpen, loadRecord)
  local function allowed()
   return player.Parent == Players and (not attempt or attempt:IsOpen())
    and (not lifecycleOpen or lifecycleOpen())
@@ -457,7 +517,7 @@ local function spawnGameplayCharacter(player, attempt, lifecycleOpen)
  for attempt = 1, CHARACTER_LOAD_ATTEMPTS do
   if not allowed() then return nil end
   local previous = player.Character
-  local loaded = loadGameplayCharacter(player, allowed)
+  local loaded = loadGameplayCharacter(player, allowed, loadRecord)
   local waited = 0
   while allowed() and waited < CHARACTER_LOAD_TIMEOUT do
    local character = player.Character
@@ -989,6 +1049,7 @@ Players.PlayerRemoving:Connect(function(player)
  setServerNoclip(player, false)
  noclipState[player] = nil
  devControlRate[player] = nil
+ devRespawnRequests[player] = nil
  player:SetAttribute("DevPushImmune", nil)
 end)
 
@@ -1150,9 +1211,50 @@ local function publishPostWinChoices(session)
  })
 end
 
+-- SPECTATOR_COUNT_20260914 (card 73). Each spectator reports who it watches;
+-- the watched player is shown only the NUMBER, published as the replicated
+-- attribute SpectatorCount on the watched Player. Only a dead or escaped
+-- participant may count, and only towards a living participant.
+local spectateTargets = {}
+local function republishSpectatorCounts()
+ local counts = {}
+ for _, target in pairs(spectateTargets) do counts[target] = (counts[target] or 0) + 1 end
+ for _, subject in ipairs(Players:GetPlayers()) do
+  if subject:GetAttribute("SpectatorCount") ~= counts[subject] then
+   subject:SetAttribute("SpectatorCount", counts[subject])
+  end
+ end
+end
+local function setSpectateTarget(player, targetUserId)
+ local target = nil
+ if type(targetUserId) == "number" and targetUserId == targetUserId
+  and targetUserId > 0 and targetUserId < 2^53 then
+  target = Players:GetPlayerByUserId(targetUserId)
+ end
+ if target then
+  local ownHumanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+  local targetHumanoid = target.Character and target.Character:FindFirstChildOfClass("Humanoid")
+  local senderOut = player:GetAttribute("Escaped") == true
+   or not ownHumanoid or ownHumanoid.Health <= 0
+  if target == player or inRound[player] ~= true or inRound[target] ~= true
+   or not senderOut or not targetHumanoid or targetHumanoid.Health <= 0 then
+   target = nil
+  end
+ end
+ if spectateTargets[player] == target then return end
+ spectateTargets[player] = target
+ republishSpectatorCounts()
+end
+local function clearSpectatorCounts()
+ if next(spectateTargets) == nil then return end
+ table.clear(spectateTargets)
+ republishSpectatorCounts()
+end
+
 local lobbyBriefingReady = {}
 local handlePostWinReturnRequest
 local handlePostWinContinueRequest
+local handleLeaveRoundRequest
 status.OnServerEvent:Connect(function(player, message, requestSerial)
   if message == "entryready" and activeEntry then
    activeEntry:Acknowledge(player, requestSerial)
@@ -1160,6 +1262,10 @@ status.OnServerEvent:Connect(function(player, message, requestSerial)
   handlePostWinReturnRequest(player, requestSerial)
  elseif message == "continuenow" and handlePostWinContinueRequest then
   handlePostWinContinueRequest(player, requestSerial)
+ elseif message == "leaveround" and handleLeaveRoundRequest then
+  handleLeaveRoundRequest(player)
+ elseif message == "spectatetarget" then
+  setSpectateTarget(player, requestSerial)
  elseif message == "lobbybriefingready"
   and not lobbyBriefingReady[player]
   and not IS_RESERVED_ROUND_SERVER
@@ -1173,6 +1279,7 @@ status.OnServerEvent:Connect(function(player, message, requestSerial)
  end
 end)
 Players.PlayerRemoving:Connect(function(player)
+ if spectateTargets[player] then spectateTargets[player] = nil; republishSpectatorCounts() end
  pendingExplicitPlacement[player] = nil
  pendingSlideRelease[player] = nil
  pendingSlideStream[player] = nil
@@ -2192,6 +2299,8 @@ playRound = function(participants)
  local conns = {}
  local participantSet = {}
  local reentryUsed = {}
+ local reentryInFlight = {}
+ local leaving = {}
 	local transitionRespawnToken = {}
 	local roundLifecycleOpen = true
  -- LEVEL2_EXIT_TRANSITION_20260828
@@ -2218,6 +2327,8 @@ playRound = function(participants)
 	local function closeRoundLifecycle()
 		if not roundLifecycleOpen then return end
 		roundLifecycleOpen = false
+		handleLeaveRoundRequest = nil
+		clearSpectatorCounts()
 		clearPartyDown()
 		table.clear(transitionRespawnToken)
 		for _, connection in ipairs(conns) do connection:Disconnect() end
@@ -2323,45 +2434,101 @@ playRound = function(participants)
   reentryUsed[player] = nil
   player:SetAttribute("ZyntraReentryUsed", false)
  end
- zyntraReentry.OnInvoke = function(player)
-  if not participantSet[player] or not player.Parent or alive[player] then return false end
-  if workspace:GetAttribute("RoundActive") ~= true or player:GetAttribute("Escaped") == true then return false end
-  if reentryUsed[player] or player:GetAttribute("ZyntraReentryUsed") == true then return false end
-  reentryUsed[player] = true
-  player:SetAttribute("ZyntraReentryUsed", true)
+ -- One re-entry body for both the PAID path (ZyntraMonetization.useReentry,
+ -- which reserved a credit first) and the FREE developer path (card 64).
+ -- The round ending while the character loads is handled by `allowed`: the
+ -- lobby avatar is NOT loaded here, the teardown owns it (it clears inRound and
+ -- calls loadLobbyCharacter for every participant still in the server).
+ local function performRoundReentry(player, freeDeveloper, request)
+  if freeDeveloper and not DevAccess.IsAllowed(player) then return false, "DEVELOPER_ONLY" end
+  if not participantSet[player] or player.Parent ~= Players or alive[player] then return false, "UNAVAILABLE" end
+  if workspace:GetAttribute("RoundActive") ~= true or player:GetAttribute("Escaped") == true then return false, "UNAVAILABLE" end
+  if freeDeveloper then
+   local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+   if not humanoid or humanoid.Health > 0 then return false, "MUST_BE_DEAD" end
+   if inRound[player] ~= true or player:GetAttribute("InRound") ~= true
+    or player:GetAttribute("Level2_ExitTransition") == true then return false, "UNAVAILABLE" end
+  elseif reentryUsed[player] or player:GetAttribute("ZyntraReentryUsed") == true then return false, "ALREADY_USED" end
+  if not freeDeveloper then
+   request.PaidCommitted = true
+   reentryUsed[player] = true
+   player:SetAttribute("ZyntraReentryUsed", true)
+  end
   player:SetAttribute("Escaped", nil)
   player:SetAttribute("Level2_ExitTransition", nil)
-  local char = spawnGameplayCharacter(player, nil, function() return reentryRoundOpen(player) end)
-  if not char then
-   abandonReentry(player)
-   return false
+  local function allowed()
+   return reentryRoundOpen(player) and reentryInFlight[player] == request
+    and (not freeDeveloper or (DevAccess.IsAllowed(player) and inRound[player] == true
+     and player:GetAttribute("InRound") == true and player:GetAttribute("Escaped") ~= true
+     and player:GetAttribute("Level2_ExitTransition") ~= true))
   end
-  if not reentryRoundOpen(player) then
-   -- The round ended while the character was loading. Do not place anyone in a
-   -- world that is being torn down; just report the refusal so the credit is
-   -- refunded. The lobby avatar is NOT loaded here: the teardown owns it (it
-   -- clears inRound and calls loadLobbyCharacter for every participant still in
-   -- the server), and loadLobbyCharacter refuses while inRound is set anyway, so
-   -- a call here is either a no-op or a second character load racing that one.
-   abandonReentry(player)
-   return false
-  end
+  local char = spawnGameplayCharacter(player, nil, allowed, request)
+  request.Character = char or request.Character
+  if not char or not allowed() or player.Character ~= char then return false, "UNAVAILABLE" end
   local hum = char:FindFirstChildOfClass("Humanoid")
-  if not hum or hum.Health <= 0 or not placeSafelyInElevator(player, char) then
-   -- A refused placement must not leave a living, uncounted character behind.
-   if player.Character == char and hum then hum.Health = 0 end
-   abandonReentry(player)
-   return false
-  end
-  if not reentryRoundOpen(player) then
-   abandonReentry(player)
-   return false
-  end
+  if not hum or hum.Health <= 0 or not placeSafelyInElevator(player, char) then return false, "PLACEMENT_FAILED" end
+  if not allowed() or player.Character ~= char or hum.Parent ~= char or hum.Health <= 0 then return false, "UNAVAILABLE" end
   alive[player] = true
   aliveCount += 1
   hookLife(player, hum)
   fireGroup(participants, "reentry", player.Name)
   return true
+ end
+ zyntraReentry.OnInvoke = function(player, freeDeveloper)
+  if not player or reentryInFlight[player] then return false, "BUSY" end
+  if freeDeveloper ~= nil and freeDeveloper ~= true then return false, "UNAVAILABLE" end
+  local request = {}
+  reentryInFlight[player] = request -- shared by paid and free paths before any yield
+  local ok, accepted, reason = pcall(performRoundReentry, player, freeDeveloper == true, request)
+  if reentryInFlight[player] == request then reentryInFlight[player] = nil end
+  if not ok or accepted ~= true then
+   local char = request.Character
+   local hum = char and char:FindFirstChildOfClass("Humanoid")
+   -- Only this request's still-current body may be discarded on refusal: a
+   -- refused placement must not leave a living, uncounted character behind.
+   if char and player.Character == char and hum and hum.Health > 0 then hum.Health = 0 end
+   -- A failed engine load may return no Character after the paid flag was set.
+   if freeDeveloper ~= true and request.PaidCommitted then abandonReentry(player) end
+   if not ok then warn("[GameManager] re-entry failed:", accepted) end
+   return false, ok and reason or "FAILED"
+  end
+  return true
+ end
+
+ -- BACK_TO_LOBBY_20260914 (card 74). One player leaves a running round on
+ -- their own. For everybody else the round continues exactly as if that
+ -- player had disconnected: they stop counting as alive, they leave the party
+ -- roster, and they receive no further round events. Published servers send
+ -- them home through the ordinary lobby transfer (the transfer runtime owns
+ -- retries and surrender); the Studio/public fallback stands them up in the
+ -- local lobby the way a finished round does.
+ handleLeaveRoundRequest = function(player)
+  if not roundLifecycleOpen or not participantSet[player] or leaving[player]
+   or player.Parent ~= Players or inRound[player] ~= true then return end
+  local viaTeleport = IS_RESERVED_ROUND_SERVER and not IS_STUDIO
+  if not viaTeleport and not lobbySpawn:IsDescendantOf(workspace) then
+   -- Studio fallback only: Level 2 and 3 park the tunnel lobby in
+   -- ServerStorage for the round, so there is no floor to stand this player
+   -- up on. Published servers never take this branch; they teleport.
+   status:FireClient(player, "leavefailed")
+   return
+  end
+  leaving[player] = true
+  participantSet[player] = nil
+  transitionRespawnToken[player] = nil
+  if alive[player] then alive[player] = nil; aliveCount -= 1; lastDeathName = nil end
+  local index = table.find(participants, player)
+  if index then table.remove(participants, index) end
+  if spectateTargets[player] then spectateTargets[player] = nil; republishSpectatorCounts() end
+  status:FireClient(player, "leaveack")
+  print("[GameManager]", player.Name, "returned to the lobby mid-round")
+  task.spawn(function()
+   if IS_RESERVED_ROUND_SERVER and not IS_STUDIO then
+    teleportPlayersToLobby({player})
+   else
+    returnPlayersToLocalLobby({player})
+   end
+  end)
  end
 
  conns[#conns + 1] = Players.PlayerRemoving:Connect(function(player)
@@ -2453,6 +2620,9 @@ playRound = function(participants)
  local wipeDeadline
  while true do
   if workspace:GetAttribute("PuzzleWon") then result = "win" break end
+  -- Everybody chose Back to Lobby: nobody is left to re-enter, so the
+  -- fifteen-second window would only hold the Studio station hostage.
+  if #participants == 0 then result = "lose" break end
   if aliveCount <= 0 then
    if not wipeDeadline then
     wipeDeadline = os.clock() + 15
@@ -2795,9 +2965,85 @@ local function queueOutsidePosition(player, station, localPosition)
  return nil
 end
 
+local BARRIER_SEGMENTS = 24
+local BARRIER_HEIGHT = 5
+
+local function setQueueMemberCollision(character, member)
+ if not character then return end
+ for _, part in ipairs(character:GetDescendants()) do
+  if part:IsA("BasePart") then
+   if member then
+    -- Never touch a developer's noclip parts; setServerNoclip restores those.
+    if part.CollisionGroup == "Default" then part.CollisionGroup = QUEUE_MEMBER_GROUP end
+   elseif part.CollisionGroup == QUEUE_MEMBER_GROUP then
+    part.CollisionGroup = "Default"
+   end
+  end
+ end
+end
+
+local function buildStationBarrier(station)
+ local zone = station.zone
+ local radius = (queueRadius(station) or math.min(zone.Size.X, zone.Size.Z) * .5) + .7
+ local model = Instance.new("Model")
+ model.Name = "Station" .. station.index .. "FullBarrier"
+ local segmentLength = 2 * math.pi * radius / BARRIER_SEGMENTS + .3
+ for i = 0, BARRIER_SEGMENTS - 1 do
+  local angle = (i + .5) / BARRIER_SEGMENTS * 2 * math.pi
+  local segment = Instance.new("Part")
+  segment.Name = "BarrierSegment"
+  segment.Anchored = true
+  segment.CanCollide = true
+  -- Spatial queries skip it, so queueOutsidePosition's overlap check and the
+  -- arrival raycasts still see the same free space they did before the wall.
+  segment.CanQuery = false
+  segment.CanTouch = false
+  segment.CastShadow = false
+  segment.CollisionGroup = QUEUE_BARRIER_GROUP
+  segment.Material = Enum.Material.ForceField
+  segment.Color = station.color
+  segment.Transparency = .35
+  segment.Size = Vector3.new(segmentLength, BARRIER_HEIGHT, .4)
+  -- Bottom sits just under the pad slab so nobody slips beneath the wall.
+  local at = Vector3.new(math.cos(angle) * radius, BARRIER_HEIGHT * .5 - .45, math.sin(angle) * radius)
+  segment.CFrame = zone.CFrame * CFrame.lookAt(at, Vector3.new(0, at.Y, 0))
+  segment.Parent = model
+ end
+ return model
+end
+
+local function setStationBarrier(station, active, members)
+ if active then
+  if not station.barrier then station.barrier = buildStationBarrier(station) end
+  if station.barrier.Parent ~= station.zone.Parent then station.barrier.Parent = station.zone.Parent end
+ elseif station.barrier and station.barrier.Parent then
+  station.barrier.Parent = nil
+ end
+ local desired = {}
+ if active then
+  for _, player in ipairs(members) do desired[player] = player.Character end
+ end
+ station.barrierMembers = station.barrierMembers or {}
+ for player, character in pairs(station.barrierMembers) do
+  if desired[player] ~= character then
+   setQueueMemberCollision(character, false)
+   station.barrierMembers[player] = nil
+  end
+ end
+ for player, character in pairs(desired) do
+  if character and station.barrierMembers[player] ~= character then
+   setQueueMemberCollision(character, true)
+   station.barrierMembers[player] = character
+  end
+ end
+end
+
 local function enforceStationCapacity(station)
  if IS_RESERVED_ROUND_SERVER or (IS_STUDIO and roundBusy) or station.cancelRequested
-  or not station.configured or not station.zone or not station.zone:IsDescendantOf(workspace) then return end
+  or not station.configured or not station.zone or not station.zone:IsDescendantOf(workspace) then
+  setStationBarrier(station, false)
+  return
+ end
  local raw = rawQueuedPlayers(station, true)
  local accepted, rejected
  if station.busy then
@@ -2812,7 +3058,9 @@ local function enforceStationCapacity(station)
  else
   accepted, _, rejected = selectQueuedPlayers(station, raw)
  end
- if #accepted < station.maxPlayers then return end
+ local full = #accepted >= station.maxPlayers
+ setStationBarrier(station, full, accepted)
+ if not full then return end
  for _, info in ipairs(rejected) do
   local player = info.player
   if playerInsideZone(player, station, true) then

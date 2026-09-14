@@ -111,6 +111,33 @@ local STEP_PITCH_JITTER   = 0.015
 
 local player = Players.LocalPlayer
 
+-- SPECTATE_AUDIO_PARITY_20260914 -- whose ears this controller is mixing for.
+-- Alive: your own body. Dead or escaped and spectating: the player
+-- SpectateController is watching (it publishes the client-local attributes
+-- `Spectating` and `SpectateTargetUserId`, and parks the camera -- the audio
+-- listener -- on that player's head, so positional mixes line up by
+-- construction). Returns nil when there is nobody to hear for, which every
+-- caller already treats as silence.
+-- Spectating is checked FIRST, not as a dead-player fallback: an ESCAPED player
+-- spectates too and is still alive, so "use my own body unless it is dead"
+-- would leave every escapee hearing their own parked body for the rest of the
+-- round. SpectateController only ever sets the flag while you are dead or out.
+local function audioSubject()
+	local char, hum, root
+	if player:GetAttribute("Spectating") == true then
+		local id = player:GetAttribute("SpectateTargetUserId")
+		local watched = type(id) == "number" and Players:GetPlayerByUserId(id) or nil
+		char = watched and watched.Character
+		hum = char and char:FindFirstChildOfClass("Humanoid")
+		root = char and char:FindFirstChild("HumanoidRootPart")
+		if hum and root and hum.Health > 0 then return hum, root, char, true end
+	end
+	char = player.Character
+	hum = char and char:FindFirstChildOfClass("Humanoid")
+	root = char and char:FindFirstChild("HumanoidRootPart")
+	if hum and root and hum.Health > 0 then return hum, root, char, false end
+end
+
 local function makeLoop(id, vol)
 	local s = Instance.new("Sound")
 	s.Looped = true
@@ -316,8 +343,9 @@ roundStatus.OnClientEvent:Connect(function(ev, name, pos)
 	if name == player.Name then return end -- your own scare is on the Jumpscare remote
 
 	if DEATH_SOUND == "" or typeof(pos) ~= "Vector3" then return end
-	local hum = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
-	if not (hum and hum.Health > 0) then return end -- only the living hear the scream
+	-- Only the living hear the scream -- and a spectator hears whatever the
+	-- LIVING player they are watching hears, from that player's ears.
+	if not audioSubject() then return end
 	local holder = Instance.new("Part")
 	holder.Anchored = true
 	holder.CanCollide = false
@@ -794,14 +822,6 @@ if FOOTSTEP_WALK ~= "" then
 	steps:Play()
 end
 
-local function aliveParts()
-	local char = player.Character
-	if not char then return end
-	local hum = char:FindFirstChildOfClass("Humanoid")
-	local root = char:FindFirstChild("HumanoidRootPart")
-	if hum and root and hum.Health > 0 then return hum, root end
-end
-
 local breathingActive = false -- once winded, stays true until stamina is full again
 local breathI = 0     -- eased breathing intensity 0–1
 
@@ -813,15 +833,18 @@ player:GetAttributeChangedSignal("PostChaseBreath"):Connect(function()
 end)
 
 RunService.Heartbeat:Connect(function(dt)
-	local hum, root = aliveParts()
+	local hum, root, _, spectated = audioSubject()
 
 	-- YOUR winded breathing: a continuous loop whose VOLUME rises the more winded
 	-- (below BREATH_START stamina, lingering until full) or scared you are. Never
-	-- breathes while DEAD / spectating (hum is nil unless you're alive).
-	-- NoiseReporter publishes your stamina as the player attribute "Stamina" (0–1).
+	-- breathes while DEAD / spectating -- and never for the player you are
+	-- WATCHING either: stamina is a client-local attribute of their own client
+	-- (NoiseReporter writes it on the LocalPlayer), so it does not replicate and
+	-- there is nothing here to read. Breathing stays own-only.
+	local ownHum = not spectated and hum or nil
 	if BREATHING_SOUND ~= "" then
 		local targetI = 0
-		if hum then
+		if ownHum then
 			local frac = player:GetAttribute("Stamina")
 			if typeof(frac) ~= "number" then frac = 1 end
 			if frac <= BREATH_START then
@@ -837,7 +860,7 @@ RunService.Heartbeat:Connect(function(dt)
 			end
 			targetI = math.clamp(math.max(staminaI, scareI), 0, 1)
 		end
-		if not hum then
+		if not ownHum then
 			breathI = 0 -- dead: silence immediately, no fade tail
 		else
 			breathI = breathI + (targetI - breathI) * math.clamp(dt * BREATH_SMOOTH, 0, 1)
@@ -859,7 +882,11 @@ RunService.Heartbeat:Connect(function(dt)
 	end
 
 	-- footsteps: a looping track that only plays while you MOVE and fades out when
-	-- you stop (so a long loop never drones on while standing, and never hard-cuts)
+	-- you stop (so a long loop never drones on while standing, and never hard-cuts).
+	-- While spectating, the SUBJECT's velocity and WalkSpeed drive it, so the
+	-- spectator hears the watched player's custom steps instead of that player's
+	-- default Roblox loop (muted below). Losing the subject leaves footTarget at
+	-- 0, which fades out exactly like stopping.
 	local footTarget, footSpeed = 0, nil
 	local inRound = player:GetAttribute("InRound") == true
 	local lobbySteps = not inRound and LOBBY_FOOTSTEP_SOUND ~= ""
@@ -898,26 +925,88 @@ end)
 -- flashlight toggle click: reacts to the replicated FlashlightOn flag flipping.
 -- Kept here (the audio hub) so every sound id lives in one place; the tiny
 -- round-trip delay is inaudible for a click.
+local function playFlashlightClick(char)
+	local hum = char:FindFirstChildOfClass("Humanoid")
+	if not (hum and hum.Health > 0) then return end -- no click on the forced-off at death
+	local s = Instance.new("Sound")
+	s.SoundId = FLASHLIGHT_SOUND
+	s.Volume = FLASHLIGHT_VOLUME
+	s.Parent = SoundService -- 2D: only you hear it
+	s:Play()
+	s.Ended:Connect(function() s:Destroy() end)
+	task.delay(3, function() if s then s:Destroy() end end)
+end
+
 local function hookFlashlightClick(char)
 	if FLASHLIGHT_SOUND == "" then return end
 	task.spawn(function()
 		local flag = char:WaitForChild("FlashlightOn", 10)
 		if not flag then return end
-		flag.Changed:Connect(function()
-			local hum = char:FindFirstChildOfClass("Humanoid")
-			if not (hum and hum.Health > 0) then return end -- no click on the forced-off at death
-			local s = Instance.new("Sound")
-			s.SoundId = FLASHLIGHT_SOUND
-			s.Volume = FLASHLIGHT_VOLUME
-			s.Parent = SoundService -- 2D: only you hear it
-			s:Play()
-			s.Ended:Connect(function() s:Destroy() end)
-			task.delay(3, function() if s then s:Destroy() end end)
-		end)
+		flag.Changed:Connect(function() playFlashlightClick(char) end)
 	end)
 end
 if player.Character then hookFlashlightClick(player.Character) end
 player.CharacterAdded:Connect(hookFlashlightClick)
+
+-- SPECTATE_AUDIO_PARITY_20260914 -- what the WATCHED player's body owes the
+-- spectator's ears, rebound every time the spectate target changes:
+--   * their flashlight click (FlashlightOn is a replicated BoolValue, so the
+--     spectator clicks when they click), and
+--   * silence from their DEFAULT Roblox "Running" loop. That loop is what the
+--     card complains about: RbxCharacterSounds runs it locally for every
+--     character on this client, so while the camera sits on their head it is
+--     the only footstep audio a spectator gets. Same Volume = 0 idiom
+--     configureDefaultSteps uses for your own body; the custom loop above
+--     supplies the real steps.
+-- ponytail: the mute is a one-shot write, not configureDefaultSteps' re-assert
+-- watcher. If something starts writing that Volume back up mid-spectate, give
+-- this the same GetPropertyChangedSignal("Volume") guard.
+local spectateFlashlightConn = nil
+local spectateMuted = nil -- the watched character's Running Sound
+local spectateMutedVolume = nil
+
+local function bindSpectateTarget()
+	if spectateFlashlightConn then
+		spectateFlashlightConn:Disconnect()
+		spectateFlashlightConn = nil
+	end
+	if spectateMuted then
+		spectateMuted.Volume = spectateMutedVolume or 0
+		spectateMuted, spectateMutedVolume = nil, nil
+	end
+
+	local _, root, char, spectated = audioSubject()
+	if not spectated then return end
+
+	-- Recursive: configureDefaultSteps binds anything named Running ANYWHERE under
+	-- the root, so this has to look as deep as that does.
+	local running = root:FindFirstChild("Running", true)
+	if running and running:IsA("Sound") then
+		spectateMuted, spectateMutedVolume = running, running.Volume
+		running.Volume = 0
+	end
+
+	if FLASHLIGHT_SOUND == "" then return end
+	local flag = char:FindFirstChild("FlashlightOn")
+	if flag then
+		spectateFlashlightConn = flag.Changed:Connect(function() playFlashlightClick(char) end)
+	end
+end
+player:GetAttributeChangedSignal("SpectateTargetUserId"):Connect(bindSpectateTarget)
+player:GetAttributeChangedSignal("Spectating"):Connect(bindSpectateTarget)
+-- The watched character streams in piecemeal: HumanoidRootPart.Running and the
+-- FlashlightOn flag can both arrive after the target is published, so retry on
+-- the same 1 s beat SpectateController re-picks a target on.
+task.spawn(function()
+	while true do
+		task.wait(1)
+		if player:GetAttribute("Spectating") == true
+			and (spectateMuted == nil
+				or (FLASHLIGHT_SOUND ~= "" and spectateFlashlightConn == nil)) then
+			bindSpectateTarget()
+		end
+	end
+end)
 
 -- Roblox's own character footstep loop is muted EVERYWHERE, lobby included —
 -- the lobby uses the LOBBY_FOOTSTEP_SOUND slot above and rounds use this
@@ -1398,9 +1487,8 @@ end
 -- footing states in which NEITHER wet nor dry steps may play: slide rides have
 -- their own audio ("Level 2 Slide Rush"), and airborne/seated/dead make no
 -- footfalls of any kind
-local function level2FootingBlocked(humanoid)
-	if player.Character
-		and player.Character:GetAttribute("Level2_ForcedSliding") == true then
+local function level2FootingBlocked(humanoid, character)
+	if character and character:GetAttribute("Level2_ForcedSliding") == true then
 		return true
 	end
 	local state = humanoid:GetState()
@@ -1419,8 +1507,7 @@ local function level2WaterAt(position, rootY)
 	return rootAboveSurface >= 0.6 and rootAboveSurface <= 4.25
 end
 
-local function level2ShallowWater(root)
-	local character = player.Character
+local function level2ShallowWater(root, character)
 	level2WaterRay.FilterDescendantsInstances = { character }
 
 	-- Sample the actual feet first. A root-only ray misclassified the narrow dry
@@ -1440,8 +1527,10 @@ local function level2ShallowWater(root)
 	return level2WaterAt(root.Position, root.Position.Y)
 end
 
-local function level2WadeVolumeScale(humanoid)
-	local character = player.Character
+local function level2WadeVolumeScale(humanoid, character)
+	-- Level2_DesiredWalkSpeed is written by the OWNING client, so it is absent for
+	-- a spectate subject; the replicated Humanoid.WalkSpeed fallback below covers
+	-- that case and already picks crouch / walk / sprint correctly.
 	local intendedSpeed = character and character:GetAttribute("Level2_DesiredWalkSpeed")
 	if typeof(intendedSpeed) ~= "number" then intendedSpeed = humanoid.WalkSpeed end
 	if intendedSpeed <= 10.5 then return 0.68 end -- crouch
@@ -1457,7 +1546,10 @@ local function level2WadePlaybackSpeed(flatSpeed)
 end
 
 RunService.Heartbeat:Connect(function(dt)
-	local hum, root = aliveParts()
+	-- The wade audio follows the SUBJECT: your own body, or the player you are
+	-- spectating. A target change moves the reference position far enough to trip
+	-- the teleport guard below, which stops the bank and re-seats the cadence.
+	local hum, root, character = audioSubject()
 	if player:GetAttribute("InRound") ~= true
 		or workspace:GetAttribute("SelectedLevel") ~= 2 or not hum or not root then
 		level2PlayerLastPosition = root and root.Position or nil
@@ -1476,7 +1568,7 @@ RunService.Heartbeat:Connect(function(dt)
 	end
 	local displacement = Vector3.new(now.X - level2PlayerLastPosition.X, 0, now.Z - level2PlayerLastPosition.Z).Magnitude
 	level2PlayerLastPosition = now
-	local intendedSpeed = player.Character and player.Character:GetAttribute("Level2_DesiredWalkSpeed")
+	local intendedSpeed = character and character:GetAttribute("Level2_DesiredWalkSpeed")
 	if typeof(intendedSpeed) ~= "number" then intendedSpeed = 0 end
 	-- A fixed seven-stud threshold treated a normal low-FPS sprint frame as a
 	-- teleport. Scale the allowance with elapsed time so long render stalls
@@ -1495,7 +1587,7 @@ RunService.Heartbeat:Connect(function(dt)
 		return
 	end
 	local flatSpeed = dt > 0 and displacement / dt or 0
-	local footingBlocked = level2FootingBlocked(hum)
+	local footingBlocked = level2FootingBlocked(hum, character)
 	if flatSpeed < 1.35 or footingBlocked then
 		if footingBlocked then
 			level2PlayerStepClock = 0
@@ -1513,7 +1605,7 @@ RunService.Heartbeat:Connect(function(dt)
 		level2StopDrySteps()
 		return
 	end
-	local wet = level2ShallowWater(root)
+	local wet = level2ShallowWater(root, character)
 	if not wet and hum.FloorMaterial == Enum.Material.Air then
 		-- nothing underfoot at all (running off a deck edge): no steps
 		level2PlayerStepClock = math.min(level2PlayerStepClock, 0.12)
@@ -1542,7 +1634,7 @@ RunService.Heartbeat:Connect(function(dt)
 			-- never suppress the following audible footfall.
 			level2PlayerBank:play(
 				level2WadePlaybackSpeed(flatSpeed),
-				level2WadeVolumeScale(hum)
+				level2WadeVolumeScale(hum, character)
 			)
 		else
 			-- dry tile: same cadence clock, the dedicated dry-tile take
