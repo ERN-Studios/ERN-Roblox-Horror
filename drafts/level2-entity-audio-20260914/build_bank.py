@@ -5,6 +5,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent
 plan = json.loads((ROOT / 'upload-plan.json').read_text())
 assert len(plan) == 51
+plan = [r for r in plan if r.get('selected')]
+assert len(plan) == 32
 assert all(str(r.get('assetId') or '').isdigit() and int(r['assetId']) > 0 for r in plan), 'Uploads are incomplete; do not install this bank.'
 mix = {
     'Foam': {'Walk': (.25, 12, 110), 'Run': (.33, 14, 145), 'Idle': (.09, 8, 60),

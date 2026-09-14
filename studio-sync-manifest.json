@@ -7,9 +7,9 @@
     "id": "7ccaf8b2-9e54-4709-8caa-91e1bce8b5b0"
   },
   "counts": {
-    "scripts": 129,
+    "scripts": 131,
     "remoteEvents": 14,
-    "total": 143,
+    "total": 145,
     "studioTrailingNewline": 1
   },
   "extraMirroredFilesNotInStudio": [
@@ -33,6 +33,14 @@
       "file": "ReplicatedStorage/FlashlightProfiles.ModuleScript.lua",
       "bytes": 2253,
       "sha256": "298444abd5d52c551fe63b28c8254c6dfb79a05d81fbc9a2a63a0669a4c0d3de",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ReplicatedStorage.Level 2 Entity Audio Bank",
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/Level 2 Entity Audio Bank.ModuleScript.lua",
+      "bytes": 2841,
+      "sha256": "73ffd5eaa63499b8aa012d53adfa54be6eeb3927f5d582b00eb423662fe5ef2e",
       "status": "synced"
     },
     {
@@ -981,6 +989,14 @@
       "status": "synced"
     },
     {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Entity Audio",
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 2 Entity Audio.LocalScript.lua",
+      "bytes": 9971,
+      "sha256": "3aa673668072c9e98ac8eaa4389e9e900f8e21f1bd948455033105579456e5b1",
+      "status": "synced"
+    },
+    {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Pool Foam Client",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Pool Foam Client.LocalScript.lua",
@@ -1008,8 +1024,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Sound Controller.LocalScript.lua",
-      "bytes": 39655,
-      "sha256": "20e97b4974f3a326eaaee4afa7f2a90d2ce7b966cd4f8be7d4f4e9dc9df565e3",
+      "bytes": 39939,
+      "sha256": "2fcff3b13b8d55f6b355155e066951b82df67135c5ca5bab7b215b5462a636dc",
       "status": "synced"
     },
     {

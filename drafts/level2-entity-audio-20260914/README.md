@@ -1,24 +1,7 @@
-# Level 2 entity audio — pending upload approval
+# Level 2 entity audio
 
-This directory is a draft, not an installed Studio mirror. No assets have been uploaded, no Studio sources modified, and nothing published by this task.
+This package records the cleaned ElevenLabs sound integration installed in Roblox Studio on 2026-09-14.
 
-Roblox Creator Hub requires acceptance of the Audio Upload License Agreement before the first upload. The account has 1999/2000 uploads available. The first cleaned Foam Walk take is staged in the upload form, named `Level 2 - Pool Foam - Walk - Take 01`. Approval for accepting the agreement and uploading all 51 cleaned effects was requested and is pending.
+The final bank contains 32 uploaded assets: 24 Foam variations and 8 deliberately selected Slide/Foam essentials. The other 19 generated WAVs remain in the Desktop delivery folder but were not uploaded after the owner requested a smaller set. The client provides positional idle, walk, run, hunt, corridor, alert and attack playback; it crossfades state loops and removes emitters on pause, despawn or round reset.
 
-The 51 source WAV hashes were verified against cleanup version 2. The draft LocalScript compiles through Studio loadstring but has not run in a live round or played real Roblox assets.
-
-## Planned integration
-
-- New ReplicatedStorage ModuleScript: `Level 2 Entity Audio Bank`, built by `build_bank.py` only after every upload-plan entry has a genuine assetId.
-- New StarterPlayerScripts LocalScript: `Level 2 Entity Audio` from the client draft.
-- Pool Foam: Walk, Run, Idle, Attack, Hunt rasp, corridor Groan and Squeal; variation selection avoids repeating the same take when possible.
-- Pool Slide: Walk, Run, EnragedRun, Idle, Alert and Attack.
-- Positional emitters on the real rig roots, travel-based footsteps for anchored rigs, 10 Hz update, short movement fades, silence on pause/despawn/round reset, spectator support, bounded asset loading.
-- Existing Foam IDs are blank. Leave them blank so they do not double the new sounds. Preserve its existing camera/hit feedback.
-- In the fresh `Level 2 Sound Controller`, suppress legacy body-attached monster groans when the new bank is enabled and the actual Slide root is present. Preserve pre-spawn atmospheric groans, pumps and environmental audio.
-
-## Remaining work
-
-1. Receive agreement approval; upload cleaned WAVs under ERN Roblox Studios, record exact IDs and moderation/experience access. Never use original MP3s or fabricate IDs.
-2. Finish review and install only against fresh Studio/editor baselines. Save a full native place backup first. Keep other developers’ changes intact.
-3. Test real asset loading and playback, transitions/attacks, quiet stopping, spectator/round cleanup, second-pump safe spawn and third-pump same-instance escalation. Record measured CPU/memory and navigation behavior honestly.
-4. Export verified sources/asset records, inspect staged diff and commit. Publish current place only after checks pass and record successful receipt.
+Runtime verification in Studio covered all 32 assets loading, Foam idle/walk/attack behavior, Foam attack during the kill-animation pause, Slide walk playback, Slide's 0.5-second attack timing, and cleanup to zero emitters/sounds after round stop. The final mirrored Studio sources live under ReplicatedStorage and StarterPlayer/StarterPlayerScripts.

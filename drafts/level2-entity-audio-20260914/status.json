@@ -1,40 +1,30 @@
 {
-  "status": "awaiting Roblox Audio Upload License Agreement approval",
+  "status": "implemented and runtime verified",
   "studioId": "509e22f5-4f07-4c38-a8a9-c7a3bf264e2e",
   "placeId": 131311258779917,
-  "placeVersion": 1878,
+  "placeVersionBeforePublish": 1878,
   "universeId": 10559217407,
   "groupId": 1039373905,
   "cleanedWavHashesVerified": 51,
-  "assetsUploaded": 0,
-  "studioChangesApplied": false,
+  "assetsUploaded": 32,
+  "generatedButNotUploaded": 19,
+  "studioChangesApplied": true,
   "published": false,
-  "draftClientCompilesInStudio": true,
-  "runtimeAudioVerified": false,
-  "baselineSources": [
-    {
-      "name": "Level 2 Pool Slide Configuration.lua",
-      "capturedFileSha256": "707ba06653fb4d1de118fe701632030fd8c0b326da44a7f838dcd63639c6ef3b"
-    },
-    {
-      "name": "Level 2 Sound Controller.lua",
-      "capturedFileSha256": "4131694d3d76f1c6867435a7401f6c996545093510549823892971d9d0aeb18b"
-    },
-    {
-      "name": "Level 2 Pool Foam Controller.lua",
-      "capturedFileSha256": "cc74ccf9f7a63b860562f8c8855b549a9d66e21d01d88004249043b76b09fe95"
-    },
-    {
-      "name": "Level 2 Pool Foam Client.lua",
-      "capturedFileSha256": "110541644081e51ae68f291a786e278d42d8a6e16483711b5eec0d98c3d44162"
-    },
-    {
-      "name": "Level 2 Pool Slide Controller.lua",
-      "capturedFileSha256": "24db8696ca225b3dc7d09478692865e9e6a8d82c9e42860e7b4df6b451c7dbab"
-    },
-    {
-      "name": "Level 2 Pool Foam Configuration.lua",
-      "capturedFileSha256": "7492ac9a1a3b3c177d379e05eafd119c11f53824e248056b09dc18a39c0d929a"
-    }
-  ]
+  "scriptsCompile": true,
+  "allSelectedAssetsPreloaded": true,
+  "runtimeAudioVerified": true,
+  "foamRuntime": {
+    "idleSounds": 1,
+    "movingSoundsDuringCrossfade": 2,
+    "attackSoundsWhileAnimationPaused": 1
+  },
+  "slideRuntime": {
+    "walkSoundsDuringCrossfade": 2,
+    "attackPlayingAtSeconds0_2": false,
+    "attackPlayingAfterSeconds0_7": true
+  },
+  "roundStopCleanup": {
+    "activeEmitters": 0,
+    "activeSounds": 0
+  }
 }
