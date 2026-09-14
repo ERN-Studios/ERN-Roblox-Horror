@@ -11,4 +11,4 @@ Codex has completed the implementation and focused verification of the authorize
 - Both temporary test scripts REMOVED from Edit. HTTP restored to false. LoadStringEnabled visibly restored to false through Properties. Probe attributes removed; loopback process stopped and port 44559 is no longer listening.
 - Final Studio compile: 129/129, no failures or unstaged sources. Final audit: 129/129 matched, zero drift. Existing permitted trailing-newline contract retained for Level 2 Lighting Controller.
 - Local build exported to _local/trello-todo-final-20260914.rbxl.
-- Trello cards remain in To Do; production-only delivery is not marked done.
+- At the owner's request, Trello was reconciled after the code handoff: 9 cards moved to Done (#44, #45, #64, #67, #68, #70, #73, #75, #76); #71 gift and #74 Back to lobby moved to Testing for actual gift delivery and production Level 2/3 teleport verification. #18 audience and #69 deferred Discord remain To Do. Each of the 13 cards has a verified completion/status comment with evidence and next steps. No other cards were changed. See trello-comment-results.json and trello-list-readback.json.
