@@ -95,6 +95,27 @@ local COLORS = {
 	red = Color3.fromRGB(255, 76, 60),
 }
 
+-- One reversible lever over the whole authored lobby palette (Trello #90).
+-- Every literal above and below stays the source; this only raises how far each
+-- one sits from grey. 1.0 returns the original colours byte for byte.
+--
+-- Deliberate limits:
+--   * SURFACES only. Light Color and Brightness are untouched, so the lobby is
+--     lit exactly as before and nothing gameplay-relevant gets harder to see.
+--   * Value (HSV brightness) is preserved exactly, so nothing darkens.
+--   * Pure greys and blacks have no hue to raise and pass through unchanged;
+--     near-black tints move by at most a couple of 0-255 steps because the
+--     absolute change scales with V.
+--   * UI text, UI frames and sign faces do not go through here.
+local LOBBY_SATURATION = 1.35
+
+local function saturatedLobbyColor(color)
+	if LOBBY_SATURATION == 1 then return color end
+	local h, s, v = color:ToHSV()
+	if s <= 0 then return color end
+	return Color3.fromHSV(h, math.min(s * LOBBY_SATURATION, 1), v)
+end
+
 -- Roblox Texture instances are diffuse overlays and have no roughness channel.
 -- A lightly reflective SmoothPlastic backing gives the existing concrete image
 -- the requested sealed/glossy finish while preserving its texture and geometry.
@@ -106,7 +127,9 @@ local function makePart(parent, name, cf, size, color, material, transparency)
 	p.Anchored = true
 	p.Size = size
 	p.CFrame = typeof(cf) == "CFrame" and cf or CFrame.new(cf)
-	p.Color = color
+	-- Every lobby part is born here, so this is the one place the palette lever
+	-- has to be applied for world geometry.
+	p.Color = saturatedLobbyColor(color)
 	p.Material = material or Enum.Material.SmoothPlastic
 	p.Transparency = transparency or 0
 	p.TopSurface = Enum.SurfaceType.Smooth
@@ -394,8 +417,8 @@ end
 local function addDonationLeaderboard(parent, center)
 	local model = Instance.new("Model")
 	model.Name = "ZyntraDonationLeaderboardBoard"
-	model:SetAttribute("LeaderboardVersion", 2)
-	model:SetAttribute("RankingScope", "Recorded donations plus utility Developer Products acknowledged by support-enabled servers; passes and earlier utilities excluded")
+	model:SetAttribute("LeaderboardVersion", 3)
+	model:SetAttribute("RankingScope", "Recorded donations, utility Developer Products and storefront passes/private servers (live receipts since 2026-09-10 plus the 2026-09-15 sales import); purchases before 2026-09-02 are not recorded")
 	model.Parent = parent
 
 	local panel = makePart(
@@ -431,7 +454,14 @@ local function addDonationLeaderboard(parent, center)
 	local gui = Instance.new("SurfaceGui")
 	gui.Name = "DonationLeaderboardDisplay"
 	gui.Face = Enum.NormalId.Right
-	gui.CanvasSize = Vector2.new(900, 660)
+	-- Trello #78. Roblox never draws a label above 100 px, so the only way to
+	-- grow this board is to put fewer pixels on the same studs. The panel face
+	-- is 18 x 12.6 studs; 560 x 392 keeps that aspect exactly (the old 900 x 660
+	-- also stretched the canvas 4.8% sideways) and drops 50.0 px/stud to
+	-- 31.11 px/stud, so every size below is worth 1.61x its old physical height
+	-- before the larger TextSizes are counted. Stroke and corner pixels are
+	-- divided by the same 1.61 so the enclosure keeps its real-world weight.
+	gui.CanvasSize = Vector2.new(560, 392)
 	gui.LightInfluence = 0
 	gui.AlwaysOnTop = false
 	gui.Parent = panel
@@ -443,42 +473,44 @@ local function addDonationLeaderboard(parent, center)
 	background.BorderSizePixel = 0
 	background.Parent = gui
 	local backgroundCorner = Instance.new("UICorner")
-	backgroundCorner.CornerRadius = UDim.new(0, 26)
+	backgroundCorner.CornerRadius = UDim.new(0, 16)
 	backgroundCorner.Parent = background
 	local border = Instance.new("UIStroke")
 	border.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 	border.Color = COLORS.green
-	border.Thickness = 5
+	border.Thickness = 3
 	border.Transparency = 0.24
 	border.Parent = background
 
+	-- Everything below is full width and centre-aligned, so the column stays
+	-- centred on the face no matter what a row's text turns out to be.
 	local title = Instance.new("TextLabel")
 	title.Name = "Title"
-	title.Position = UDim2.fromOffset(38, 22)
-	title.Size = UDim2.new(1, -76, 0, 58)
+	title.Position = UDim2.fromOffset(0, 12)
+	title.Size = UDim2.new(1, 0, 0, 46)
 	title.BackgroundTransparency = 1
 	title.Font = Enum.Font.GothamBlack
 	title.Text = "TOP SUPPORTERS"
 	title.TextColor3 = COLORS.green
-	title.TextSize = 43
-	title.TextXAlignment = Enum.TextXAlignment.Left
+	title.TextSize = 44
+	title.TextXAlignment = Enum.TextXAlignment.Center
 	title.Parent = background
 
 	local status = Instance.new("TextLabel")
 	status.Name = "Status"
-	status.Position = UDim2.fromOffset(40, 78)
-	status.Size = UDim2.new(1, -80, 0, 30)
+	status.Position = UDim2.fromOffset(0, 60)
+	status.Size = UDim2.new(1, 0, 0, 22)
 	status.BackgroundTransparency = 1
 	status.Font = Enum.Font.Code
 	status.Text = "CONNECTING TO SUPPORT RANKINGS"
 	status.TextColor3 = Color3.fromRGB(215, 205, 165)
-	status.TextSize = 19
-	status.TextXAlignment = Enum.TextXAlignment.Left
+	status.TextSize = 17
+	status.TextXAlignment = Enum.TextXAlignment.Center
 	status.Parent = background
 
 	local divider = Instance.new("Frame")
-	divider.Position = UDim2.fromOffset(38, 116)
-	divider.Size = UDim2.new(1, -76, 0, 3)
+	divider.Position = UDim2.fromOffset(20, 90)
+	divider.Size = UDim2.new(1, -40, 0, 2)
 	divider.BackgroundColor3 = COLORS.green
 	divider.BackgroundTransparency = 0.25
 	divider.BorderSizePixel = 0
@@ -486,37 +518,43 @@ local function addDonationLeaderboard(parent, center)
 
 	local scope = Instance.new("TextLabel")
 	scope.Name = "RecordedSupportScope"
-	scope.Position = UDim2.fromOffset(40, 630)
-	scope.Size = UDim2.new(1, -80, 0, 22)
+	scope.Position = UDim2.fromOffset(20, 366)
+	scope.Size = UDim2.new(1, -40, 0, 18)
 	scope.BackgroundTransparency = 1
 	scope.Font = Enum.Font.Code
-	scope.Text = "PASSES & EARLIER TOKEN / RE-ENTRY PURCHASES NOT INCLUDED"
+	scope.Text = "INCLUDES VERIFIED HISTORICAL PURCHASES"
 	scope.TextColor3 = Color3.fromRGB(215, 205, 165)
-	scope.TextSize = 17
-	scope.TextXAlignment = Enum.TextXAlignment.Left
+	scope.TextSize = 15
+	scope.TextXAlignment = Enum.TextXAlignment.Center
 	scope.Parent = background
 
+	-- 10 rows between the divider (92) and the footer (366). Pitch 26 with a
+	-- 24 px plate leaves the last row ending at 356. The widest row
+	-- ZyntraMonetization can publish is a rank, a 20-character name, the two
+	-- separators and a six-digit amount: 41 monospace characters. At TextSize 20
+	-- that is 492 px inside the 496 px the plate leaves after its padding, so no
+	-- supporter's name is ever clipped.
 	local rowLabels = {}
 	for rank = 1, 10 do
 		local row = Instance.new("TextLabel")
 		row.Name = string.format("Rank%02d", rank)
-		row.Position = UDim2.fromOffset(38, 128 + (rank - 1) * 50)
-		row.Size = UDim2.new(1, -76, 0, 42)
+		row.Position = UDim2.fromOffset(20, 98 + (rank - 1) * 26)
+		row.Size = UDim2.new(1, -40, 0, 24)
 		row.BackgroundColor3 = rank % 2 == 1 and Color3.fromRGB(15, 25, 22) or Color3.fromRGB(10, 17, 15)
 		row.BackgroundTransparency = 0.12
 		row.BorderSizePixel = 0
 		row.Font = Enum.Font.Code
 		row.Text = rank == 1 and "NO SUPPORT RECORDED YET" or ""
 		row.TextColor3 = rank <= 3 and Color3.fromRGB(236, 224, 165) or Color3.fromRGB(201, 225, 214)
-		row.TextSize = 24
-		row.TextXAlignment = Enum.TextXAlignment.Left
+		row.TextSize = 20
+		row.TextXAlignment = Enum.TextXAlignment.Center
 		row.Parent = background
 		local padding = Instance.new("UIPadding")
-		padding.PaddingLeft = UDim.new(0, 16)
-		padding.PaddingRight = UDim.new(0, 16)
+		padding.PaddingLeft = UDim.new(0, 12)
+		padding.PaddingRight = UDim.new(0, 12)
 		padding.Parent = row
 		local corner = Instance.new("UICorner")
-		corner.CornerRadius = UDim.new(0, 8)
+		corner.CornerRadius = UDim.new(0, 6)
 		corner.Parent = row
 		rowLabels[rank] = row
 	end
@@ -1108,10 +1146,14 @@ local function addQueueStation(parent, roomCenter, index, offset, color, active,
 	padGui.AlwaysOnTop = false
 	padGui.Parent = padVisual
 
+	-- The pad parts are invisible; this ring IS the painted floor marking, so it
+	-- follows the surface palette rather than the UI palette.
+	local padColor = saturatedLobbyColor(color)
+
 	local circle = Instance.new("Frame")
 	circle.Name = "Circle"
 	circle.Size = UDim2.fromScale(1, 1)
-	circle.BackgroundColor3 = color
+	circle.BackgroundColor3 = padColor
 	circle.BackgroundTransparency = active and 0.78 or 0.91
 	circle.BorderSizePixel = 0
 	circle.Parent = padGui
@@ -1123,7 +1165,7 @@ local function addQueueStation(parent, roomCenter, index, offset, color, active,
 	local outline = Instance.new("UIStroke")
 	outline.Name = "CircularOutline"
 	outline.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-	outline.Color = color
+	outline.Color = padColor
 	outline.Thickness = active and 11 or 8
 	outline.Transparency = active and 0.08 or 0.58
 	outline.LineJoinMode = Enum.LineJoinMode.Round
@@ -1262,15 +1304,15 @@ local function styleLevelOneBay(roomModel, roomCenter, side, roomRadius, roomHei
 				local role, face = spec[1], spec[2]
 				object.Material = Enum.Material.SmoothPlastic
 				if role == "wall" then
-					object.Color = LEVEL_ONE_BAY_STYLE.wallColor
+					object.Color = saturatedLobbyColor(LEVEL_ONE_BAY_STYLE.wallColor)
 					object:SetAttribute("TunnelTextureRole", "Level1Wall")
 					addLevelOneTexture(object, LEVEL_ONE_BAY_STYLE.wallTexture, {face}, LEVEL_ONE_BAY_STYLE.tile)
 				elseif role == "floor" then
-					object.Color = LEVEL_ONE_BAY_STYLE.floorColor
+					object.Color = saturatedLobbyColor(LEVEL_ONE_BAY_STYLE.floorColor)
 					object:SetAttribute("TunnelTextureRole", "Level1Floor")
 					addLevelOneTexture(object, LEVEL_ONE_BAY_STYLE.floorTexture, {face}, LEVEL_ONE_BAY_STYLE.tile)
 				else
-					object.Color = LEVEL_ONE_BAY_STYLE.ceilingColor
+					object.Color = saturatedLobbyColor(LEVEL_ONE_BAY_STYLE.ceilingColor)
 					object:SetAttribute("TunnelTextureRole", "Level1Ceiling")
 					addLevelOneTexture(object, LEVEL_ONE_BAY_STYLE.ceilingTexture, {face}, 8)
 				end
@@ -1429,9 +1471,9 @@ local function styleLevelTwoBay(roomModel, roomCenter, side, roomRadius, roomHei
 			if spec then
 				local role, face = spec[1], spec[2]
 				object.Material = Enum.Material.SmoothPlastic
-				object.Color = role == "wall" and LEVEL_TWO_BAY_STYLE.wallColor
+				object.Color = saturatedLobbyColor(role == "wall" and LEVEL_TWO_BAY_STYLE.wallColor
 					or role == "floor" and LEVEL_TWO_BAY_STYLE.floorColor
-					or LEVEL_TWO_BAY_STYLE.ceilingColor
+					or LEVEL_TWO_BAY_STYLE.ceilingColor)
 				object:SetAttribute("TunnelTextureRole", "LobbyPoolrooms" .. role)
 				addLobbyThemeTexture(object, "LobbyLevel2TileTexture",
 					LEVEL_TWO_BAY_STYLE.tileTexture, {face}, LEVEL_TWO_BAY_STYLE.tile,
@@ -1567,7 +1609,7 @@ local function cloneLobbyLevelThreeFurniture(templateName, parent, name, cframe,
 	object.CanQuery = false
 	object.CFrame = cframe
 	object.Size = size
-	if color then object.Color = color end
+	if color then object.Color = saturatedLobbyColor(color) end
 	object:SetAttribute("LobbyBayDecorLevel", 3)
 	object.Parent = parent
 	return object
@@ -1593,20 +1635,20 @@ local function styleLevelThreeBay(roomModel, roomCenter, side, roomRadius, roomH
 				local role, face = spec[1], spec[2]
 				clearLobbyConcreteTextures(object)
 				if role == "floor" then
-					object.Color = LEVEL_THREE_BAY_STYLE.partyCarpetColor
+					object.Color = saturatedLobbyColor(LEVEL_THREE_BAY_STYLE.partyCarpetColor)
 					object.Material = Enum.Material.Carpet
 					object:SetAttribute("TunnelTextureRole", "LobbyMallPartyFloor")
 					addLobbyThemeTexture(object, "LobbyLevel3PartyCarpet",
 						LEVEL_THREE_BAY_STYLE.partyCarpetTexture, {face},
 						LEVEL_THREE_BAY_STYLE.carpetTile, LEVEL_THREE_BAY_STYLE.carpetTile)
 				elseif role == "ceiling" then
-					object.Color = LEVEL_THREE_BAY_STYLE.ceilingColor
+					object.Color = saturatedLobbyColor(LEVEL_THREE_BAY_STYLE.ceilingColor)
 					object.Material = Enum.Material.Plaster
 					object:SetAttribute("TunnelTextureRole", "LobbyMallDropCeiling")
 				else
 					-- Carry the entrance's existing red/orange plaster finish around
 					-- the entire chamber; the rear wall no longer swaps to wallpaper.
-					object.Color = LEVEL_THREE_BAY_STYLE.orangeWallColor
+					object.Color = saturatedLobbyColor(LEVEL_THREE_BAY_STYLE.orangeWallColor)
 					object.Material = Enum.Material.Plaster
 					object.Reflectance = 0
 					object:SetAttribute("TunnelTextureRole", "LobbyMallOrangeWall")
@@ -2786,8 +2828,12 @@ local function addLobbyConcourse(parent, center, lobbyModel)
 	prompt.RequiresLineOfSight = false
 	prompt.Parent = button
 
-	local baseSignalColor = Color3.fromRGB(39, 126, 121)
-	local pulseSignalColor = Color3.fromRGB(86, 255, 173)
+	-- makePart raises saturation on the way in, so the sweep's tweens and the
+	-- idle restore below have to aim at the values it actually wrote, not at
+	-- the raw literals. The node below is still built from the raw source.
+	local baseSignalSource = Color3.fromRGB(39, 126, 121)
+	local baseSignalColor = saturatedLobbyColor(baseSignalSource)
+	local pulseSignalColor = saturatedLobbyColor(Color3.fromRGB(86, 255, 173))
 	local signalGroups = {}
 	for z = -112, 112, 12 do
 		local group = {}
@@ -2797,7 +2843,7 @@ local function addLobbyConcourse(parent, center, lobbyModel)
 				"TransitSignalNode",
 				CFrame.new(center + Vector3.new(side * 14.75, 0.13, z)),
 				Vector3.new(0.42, 0.12, 2.25),
-				baseSignalColor,
+				baseSignalSource,
 				Enum.Material.Neon,
 				0.28
 			)
@@ -2859,7 +2905,7 @@ local function addLobbyConcourse(parent, center, lobbyModel)
 		end
 
 		task.delay(#signalGroups * 0.075 + 1.05, function()
-			if button.Parent then button.Color = Color3.fromRGB(45, 157, 112) end
+			if button.Parent then button.Color = saturatedLobbyColor(Color3.fromRGB(45, 157, 112)) end
 			if signalTitle.Parent then signalTitle.Text = "SIGNAL SWEEP" end
 			if signalSubtitle.Parent then signalSubtitle.Text = "PRESS TO PULSE THE TRANSIT LINE" end
 			if prompt.Parent then prompt.Enabled = true end
@@ -3206,6 +3252,11 @@ function Builder.Build(center)
 		"RETURN TO YOUR ASSIGNED ACCESS BAY",
 		COLORS.red
 	)
+
+	-- The SHOP frontage on the right ledge (card 88). Spawned, not called: a
+	-- fault in the shop must never cost the lobby, and a module that is not in
+	-- the place yet must never hold the build.
+	task.spawn(function() require(script.Parent:WaitForChild("LobbyShopDisplay")).Build(model, {Center = center}) end)
 
 	return model, spawn, stations
 end

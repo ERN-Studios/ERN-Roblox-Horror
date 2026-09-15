@@ -117,6 +117,21 @@ local function animatedTransform(jointName: string, hidden: boolean,
 	return transform
 end
 
+local function hideTrackReady(targetPlayer: Player, character: Model): boolean
+	local id = targetPlayer:GetAttribute("Level3_HideAnimationId")
+	if type(id) ~= "string" or id == "" then return false end
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	local animator = humanoid and humanoid:FindFirstChildOfClass("Animator")
+	if not animator then return false end
+	for _, track in animator:GetPlayingAnimationTracks() do
+		if track.Animation and track.Animation.AnimationId == id
+			and track.IsPlaying and track.Length > 0 and track.WeightCurrent > .99 then
+			return true
+		end
+	end
+	return false
+end
+
 -- Animator writes first; PreSimulation owns the final crouch for this frame.
 -- Weight and gait are eased, so entering/exiting never snaps and a stationary
 -- crouch settles back to the exact Level 3 hiding pose instead of skating.
@@ -127,6 +142,12 @@ RunService.PreSimulation:Connect(function(deltaTime)
 		if not character or not character.Parent then continue end
 		seen[character] = true
 		local active, hidden = poseAllowed(targetPlayer, character)
+		if active and hidden and hideTrackReady(targetPlayer, character) then
+			-- Animator has already written this frame. Do not overwrite it on the
+			-- owner OR other clients. Missing/denied content keeps the old fallback.
+			poseStates[character] = nil
+			continue
+		end
 		local poseState = poseStates[character]
 		if not poseState and not active then continue end
 		if not poseState then
@@ -259,8 +280,8 @@ message.Name = "HiddenStatus"
 message.AnchorPoint = Vector2.new(.5, 0)
 message.Position = UDim2.new(.5, 0, 0, 45)
 message.Size = UDim2.new(0, 360, 0, 42)
-message.BackgroundColor3 = Color3.fromRGB(8, 10, 11)
-message.BackgroundTransparency = .24
+message.BackgroundColor3 = Color3.fromRGB(4, 8, 6)
+message.BackgroundTransparency = .18
 message.BorderSizePixel = 0
 message.Font = Enum.Font.GothamBold
 message.Text = "HIDDEN UNDER TABLE"
@@ -271,9 +292,10 @@ local messageCorner = Instance.new("UICorner")
 messageCorner.CornerRadius = UDim.new(0, 8)
 messageCorner.Parent = message
 local messageStroke = Instance.new("UIStroke")
-messageStroke.Color = Color3.fromRGB(79, 183, 157)
-messageStroke.Transparency = .2
-messageStroke.Thickness = 1.5
+messageStroke.Color = Color3.fromRGB(75, 94, 83)
+messageStroke.Transparency = .28
+messageStroke.Thickness = 1
+messageStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 messageStroke.Parent = message
 
 local leave = Instance.new("TextButton")
@@ -281,24 +303,25 @@ leave.Name = "LeaveHiding"
 leave.AnchorPoint = Vector2.new(.5, 1)
 leave.Position = UDim2.new(.5, 0, 1, -54)
 leave.Size = UDim2.new(0, 330, 0, 58)
-leave.BackgroundColor3 = Color3.fromRGB(17, 22, 23)
-leave.BackgroundTransparency = .08
+leave.BackgroundColor3 = Color3.fromRGB(14, 20, 17)
+leave.BackgroundTransparency = .04
 leave.BorderSizePixel = 0
 leave.AutoButtonColor = true
 leave.Font = Enum.Font.GothamBold
-leave.TextColor3 = Color3.fromRGB(236, 248, 243)
+leave.TextColor3 = Color3.fromRGB(231, 238, 233)
 leave.TextScaled = true
 -- Captioned once at load in the old build, so a tablet that gained a keyboard
 -- kept reading "TAP" forever. It is now rebuilt on every UIDevice.Changed.
 leave.Text = "LEAVE HIDING"
 leave.Parent = gui
 local leaveCorner = Instance.new("UICorner")
-leaveCorner.CornerRadius = UDim.new(0, 10)
+leaveCorner.CornerRadius = UDim.new(0, 9)
 leaveCorner.Parent = leave
 local leaveStroke = Instance.new("UIStroke")
-leaveStroke.Color = Color3.fromRGB(101, 224, 187)
-leaveStroke.Transparency = .05
-leaveStroke.Thickness = 2
+leaveStroke.Color = Color3.fromRGB(75, 94, 83)
+leaveStroke.Transparency = .28
+leaveStroke.Thickness = 1
+leaveStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 leaveStroke.Parent = leave
 
 -- Both panels were fixed-size (360 and 330 wide). At 375x667 the leave button
@@ -327,10 +350,14 @@ local function applyHidingLayout()
 		local available = layout.SafeRight - layout.SafeLeft
 		message.AnchorPoint = Vector2.new(.5, 0)
 		message.Size = UDim2.new(0, math.min(360, available), 0, 42)
-		message.Position = UDim2.new(.5, 0, 0, 45)
+		message.Position = UIDevice.LocalPosition(gui,
+			(layout.Safe.Left + layout.Safe.Right) * .5, layout.Safe.Top + 8)
 		leave.AnchorPoint = Vector2.new(.5, 1)
 		leave.Size = UDim2.new(0, math.min(330, available), 0, 58)
-		leave.Position = UDim2.new(.5, 0, 1, -54)
+		-- Keep the exit with the hidden status, clear of bottom radio captions.
+		leave.AnchorPoint = Vector2.new(.5, 0)
+		leave.Position = UIDevice.LocalPosition(gui,
+			(layout.Safe.Left + layout.Safe.Right) * .5, layout.Safe.Top + 58)
 	end
 	leave.Text = UIDevice.Caption("LEAVE HIDING", "//  E", "//  B")
 end

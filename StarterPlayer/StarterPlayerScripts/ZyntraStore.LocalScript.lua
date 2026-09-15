@@ -29,6 +29,10 @@ local profileChangedRemote = remotes:WaitForChild("ZyntraProfileChanged")
 local profile
 local currentTab = "Upgrades"
 local productButtons = {}
+-- The same buy each product card's button runs, keyed so the lobby SHOP wall's
+-- detail card can ask for it by name (see the ZyntraShopBuy bridge at the end
+-- of this file). One purchase entry point per item, not two.
+local productPurchase = {}
 local displayedProductPrices = {}
 local reentryDead = false
 local reentryDismissed = false
@@ -38,8 +42,8 @@ local COLORS = {
 	panel = Color3.fromRGB(14, 21, 24),
 	card = Color3.fromRGB(20, 29, 33),
 	card2 = Color3.fromRGB(25, 36, 40),
-	line = Color3.fromRGB(65, 92, 98),
-	text = Color3.fromRGB(232, 240, 238),
+	line = Color3.fromRGB(75, 94, 83),
+	text = Color3.fromRGB(231, 238, 233),
 	muted = Color3.fromRGB(144, 164, 165),
 	accent = Color3.fromRGB(68, 221, 196),
 	accent2 = Color3.fromRGB(255, 203, 79),
@@ -56,7 +60,7 @@ gui.Parent = player:WaitForChild("PlayerGui")
 
 local function corner(parent, radius)
 	local object = Instance.new("UICorner")
-	object.CornerRadius = UDim.new(0, radius or 8)
+	object.CornerRadius = UDim.new(0, radius or 9)
 	object.Parent = parent
 	return object
 end
@@ -64,8 +68,9 @@ end
 local function outline(parent, color, transparency, thickness)
 	local object = Instance.new("UIStroke")
 	object.Color = color or COLORS.line
-	object.Transparency = transparency or 0
+	object.Transparency = transparency or 0.28
 	object.Thickness = thickness or 1
+	object.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 	object.Parent = parent
 	return object
 end
@@ -75,7 +80,7 @@ local function label(parent, text, size, position, textSize, color, font)
 	object.BackgroundTransparency = 1
 	object.Size = size
 	object.Position = position or UDim2.new()
-	object.Font = font or Enum.Font.Gotham
+	object.Font = font or Enum.Font.GothamMedium
 	object.Text = text or ""
 	object.TextColor3 = color or COLORS.text
 	object.TextSize = textSize or 16
@@ -198,7 +203,7 @@ shopButton.Name = "ZyntraShopButton"
 shopButton.BackgroundColor3 = COLORS.bg
 shopButton.TextColor3 = COLORS.accent
 shopButton.TextSize = 18
-outline(shopButton, COLORS.accent, 0.22, 1.5)
+local shopButtonRing = outline(shopButton, COLORS.accent, 0.22, 1.5)
 local shopButtonSections = sectionButtonContent(shopButton, {"Shop"})
 
 local musicButton = button(gui, "Music", UDim2.fromOffset(64, 64), UDim2.fromOffset(8, 152))
@@ -216,6 +221,45 @@ for _, entry in ipairs({openButton, shopButton, musicButton}) do
 		if entry.Active and entry:GetAttribute("SquareSectionButton") then border.Transparency = 0 end
 	end)
 	entry.MouseLeave:Connect(function() border.Transparency = 0.22 end)
+	if entry == shopButton then
+		-- SHOP_ICON_CIRCLE_20260915 (card 88). The shop is the one HUD control
+		-- the owner asked to be NOTICED, so it is the one that is round: the
+		-- button's own corner becomes a disc and its accent ring thickens.
+		--
+		-- The ring that breathes is shopButtonRing -- the button's own accent
+		-- stroke, which nothing else writes. The hover border above keeps
+		-- writing SquareSectionBorder, so the two never fight over one property.
+		-- The colour NEVER changes and the period is never under 2.4s: a
+		-- pulsing colour is a strobe with extra steps. Under ReduceFlashing the
+		-- same breath is slower (6s) and half as deep.
+		--
+		-- Nothing here changes the button's RECTANGLE. layoutSquareSections
+		-- still owns its size and position, so the fit matrix measures exactly
+		-- what it measured before.
+		local TweenService = game:GetService("TweenService")
+		local shopCorner = entry:FindFirstChildOfClass("UICorner")
+		if shopCorner then shopCorner.CornerRadius = UDim.new(1, 0) end
+		-- The icon and its caption move inside the disc the background now draws.
+		shopButtonSections.Size = UDim2.new(1, -16, 1, -16)
+		shopButtonSections.Position = UDim2.fromOffset(8, 8)
+
+		local breath
+		local function restartBreath()
+			if breath then breath:Cancel() end
+			local calm = player:GetAttribute("ReduceFlashing") == true
+			shopButtonRing.Thickness = calm and 2.6 or 2.4
+			shopButtonRing.Transparency = calm and 0.3 or 0.42
+			breath = TweenService:Create(
+				shopButtonRing,
+				TweenInfo.new(calm and 3 or 1.3, Enum.EasingStyle.Sine,
+					Enum.EasingDirection.InOut, -1, true),
+				{Transparency = calm and 0.2 or 0.06, Thickness = calm and 3 or 3.4}
+			)
+			breath:Play()
+		end
+		player:GetAttributeChangedSignal("ReduceFlashing"):Connect(restartBreath)
+		restartBreath()
+	end
 end
 
 -- C5_ZYNTRA_OPEN_BUTTON_20260829 -- WHAT SHIPPED BROKEN.
@@ -1568,7 +1612,9 @@ local function makeProductCard(key, item, kind)
 			end
 		end)
 	end
-	buy.Activated:Connect(function()
+	-- Named rather than anonymous so the lobby SHOP wall can run THIS, instead
+	-- of a second copy of the same three branches that could drift from it.
+	local function requestPurchase()
 		if kind == "TokenItem" then
 			if ProtectionClient.GetState().Pending then
 				ProtectionClient.Retry()
@@ -1586,7 +1632,9 @@ local function makeProductCard(key, item, kind)
 		else
 			MarketplaceService:PromptProductPurchase(player, item.Id)
 		end
-	end)
+	end
+	productPurchase[key] = requestPurchase
+	buy.Activated:Connect(requestPurchase)
 	return card
 end
 
@@ -1633,7 +1681,7 @@ end
 
 local supportTotalLabel = label(
 	pages.Donate,
-	"RECORDED SUPPORT  0 R$\nDonations 0 R$ / Products 0 R$\nPasses & earlier token/re-entry purchases excluded.",
+	"RECORDED SUPPORT  0 R$\nDonations 0 R$ / Products 0 R$ / Passes 0 R$\nPurchases made before 2 Sep 2026 are not recorded.",
 	UDim2.new(1, -8, 0, 24),
 	UDim2.fromOffset(4, 0),
 	13,
@@ -2470,7 +2518,38 @@ player:GetAttributeChangedSignal("PartyDownCardOpen"):Connect(updateReentry)
 player:GetAttributeChangedSignal("PartyDownWindowOpen"):Connect(updateReentry)
 
 do
-	local reentryDecline = button(reentry, "SPECTATE", UDim2.new(1, -32, 0, 44), UDim2.fromOffset(16, 156))
+	-- DEV_FREE_RESPAWN_OFFER_20260915 (card 81): whitelisted developers get the
+	-- free server-only respawn inside the same offer, between the paid action
+	-- and SPECTATE. `devAllowed` is cosmetic: GameManager re-checks DevAccess
+	-- and the dead InRound body, and the free path never reserves a credit,
+	-- spends tokens or prompts Robux. Same bridge as the terminal's DEV row.
+	if devAllowed then
+		reentry.Size = UDim2.new(1, -32, 0, 268)
+		reentryConstraint.MinSize = Vector2.new(280, 268)
+		reentryConstraint.MaxSize = Vector2.new(480, 268)
+		local reentryFree = button(reentry, "FREE RESPAWN  //  DEV", UDim2.new(1, -32, 0, 44), UDim2.fromOffset(16, 156))
+		reentryFree.Name = "ReentryFreeRespawn"
+		reentryFree.TextColor3 = COLORS.accent
+		reentryFree.ZIndex = 3
+		local function refreshFree()
+			local busy = player:GetAttribute("DevRespawnBusy") == true
+			reentryFree.Text = busy and "RESPAWNING..." or "FREE RESPAWN  //  DEV"
+			UIDevice.SetEnabled(reentryFree, not busy)
+		end
+		player:GetAttributeChangedSignal("DevRespawnBusy"):Connect(refreshFree)
+		refreshFree()
+		reentryFree.Activated:Connect(function()
+			if not reentryGui.Enabled or player:GetAttribute("DevRespawnBusy") == true then return end
+			local scripts = player:FindFirstChild("PlayerScripts")
+			local command = scripts and scripts:FindFirstChild("DevCheatCommand")
+			if command and command:IsA("BindableEvent") then
+				command:Fire("freeRespawn")
+			else
+				showStatus("Developer controls are still loading. Try again.", "error")
+			end
+		end)
+	end
+	local reentryDecline = button(reentry, "SPECTATE", UDim2.new(1, -32, 0, 44), UDim2.fromOffset(16, devAllowed and 208 or 156))
 	reentryDecline.Name = "ReentryDecline"
 	reentryDecline.ZIndex = 3
 	reentryDecline.Activated:Connect(function()
@@ -2507,9 +2586,9 @@ local function refreshUI()
 	end
 	tokenLabel.Text = "TOKENS  " .. tostring(profile.Tokens)
 	supportTotalLabel.Text = string.format(
-		"RECORDED SUPPORT  %d R$\nDonations %d R$ / Products %d R$\nPasses & earlier token/re-entry purchases excluded.",
+		"RECORDED SUPPORT  %d R$\nDonations %d R$ / Products %d R$ / Passes %d R$\nPurchases made before 2 Sep 2026 are not recorded.",
 		profile.RecordedSupportRobux or profile.DonationRobux or 0,
-		profile.DonationRobux or 0, profile.UtilityRobux or 0)
+		profile.DonationRobux or 0, profile.UtilityRobux or 0, profile.PassRobux or 0)
 	if applyTerminalLayout then applyTerminalLayout() end
 	staminaCard.Current.Text = "+" .. tostring(profile.StaminaPercent) .. "%"
 	staminaCard.Level.Text = "LEVEL " .. tostring(profile.StaminaLevel)
@@ -3225,3 +3304,19 @@ UIDevice.Changed:Connect(function()
 	end
 end)
 applyTerminalLayout()
+
+-- ── the lobby SHOP wall's buy bridge (card 88) ──────────────────────────────
+-- The pedestals out on the concourse sell the SAME catalogue. Their detail card
+-- (StarterPlayerScripts."Shop Display Client") has no purchase path of its own:
+-- it fires this with an item key and the terminal's own product-card buy runs,
+-- so there is exactly one place in the game that prompts Robux for an item.
+-- An unknown key is ignored rather than guessed at.
+do
+	local bridge = Instance.new("BindableEvent")
+	bridge.Name = "ZyntraShopBuy"
+	bridge.Parent = player:WaitForChild("PlayerScripts")
+	bridge.Event:Connect(function(key)
+		local request = productPurchase[tostring(key)]
+		if request then request() end
+	end)
+end

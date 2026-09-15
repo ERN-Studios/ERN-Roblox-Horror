@@ -977,6 +977,60 @@ local leverEndsAt = 0
 local leverLatchMode = false
 local leverLatchDone = false
 
+-- C_L1_NEXT_STEP_IS_A_ROW_20260915. The carry row is the one line that is on
+-- screen for the whole round, and "FUSES CARRIED   0" never said what to DO
+-- with that -- a player who had not read the cabin poster had no standing
+-- instruction anywhere on the HUD. It now carries the count AND the next
+-- concrete action, and takes over the row entirely once fuses stop mattering.
+--
+-- No new row: the objectives column's height is derived from its visible rows
+-- and every added row has to be placed against the toggle, the detector and the
+-- movement band on every device in the fit matrix. The longest string below is
+-- 37 characters, exactly the width the shipped lever row already proves fits
+-- ("SYNC LEVERS   0 / 3  •  NO TIME LIMIT"), so no column has to grow for it.
+local carriedFuses = 0
+local exitOpen = false
+local function refreshNextStep()
+	local text
+	if exitOpen then
+		text = "REACH THE LIT EXIT DOOR"
+	elseif leverPhase then
+		text = "FOLLOW THE CURRENT TO A LEVER"
+	elseif carriedFuses > 0 then
+		text = ("FUSES CARRIED   %d  •  FILL A FUSE BOX"):format(carriedFuses)
+	else
+		text = "FUSES CARRIED   0  •  FIND A FUSE"
+	end
+	setObjectiveText(carryLabel, text)
+end
+
+-- The team prompt. The server sends the actor and a short detail; the sentence
+-- is assembled HERE because this is the side that knows how much room it has.
+-- The desktop strip is one unwrapped 300px line at 15px Code -- about 33
+-- characters -- which is the budget every string the server sends is written
+-- to, and the name is cut to keep a long display name from spending it all.
+local TEAM_NAME_MAX = 12
+local TEAM_COLOURS = {
+	fuse = Color3.fromRGB(235, 220, 150),
+	box = Color3.fromRGB(127, 218, 166),
+	lever = Color3.fromRGB(170, 225, 255),
+}
+local teamBurstAt, teamBurstExtra = 0, 0
+local function teamPrompt(actorName, kind, detail)
+	local name = string.upper(tostring(actorName or "SOMEONE"))
+	if #name > TEAM_NAME_MAX then name = string.sub(name, 1, TEAM_NAME_MAX) end
+	local text = name .. " " .. string.upper(tostring(detail or ""))
+	-- A burst -- two teammates finishing boxes in the same breath -- coalesces
+	-- into the newest line plus a count, rather than each one flashing for a
+	-- fraction of the 1.8s the surface gives it.
+	local now = os.clock()
+	teamBurstExtra = (now - teamBurstAt < 0.7) and (teamBurstExtra + 1) or 0
+	teamBurstAt = now
+	if teamBurstExtra > 0 then text = text .. "  +" .. teamBurstExtra end
+	msgLabel.TextColor3 = TEAM_COLOURS[kind] or TEAM_COLOURS.fuse
+	showMessage(text)
+end
+
 -- The toggle's caption follows the rectangle it has to fit in, which is why it
 -- is decided here and not where the collapsed state changes. Inside the panel
 -- the control is a 44x44 square -- the tap-target floor and nothing more, so it
@@ -1086,17 +1140,26 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d)
 		-- and only then re-measures the stack. These three run before
 		-- showCounters(true), which is the pass that places the rows.
 		setObjectiveText(objectiveTitle, "POWER RESTORATION", Color3.fromRGB(231, 238, 233))
-		setObjectiveText(carryLabel, "FUSES CARRIED   0")
+		leverPhase = false
+		carriedFuses = 0
+		exitOpen = false
+		refreshNextStep()
 		setObjectiveText(boxesLabel, ("RESTORE FUSE BOXES   0 / %d"):format(b))
 		LAYOUT.SetProgress(0, b, Color3.fromRGB(83, 204, 145))
-		leverPhase = false
 		showCounters(true)
 
 	elseif ev == "carry" then
-		setObjectiveText(carryLabel, "FUSES CARRIED   " .. a)
+		carriedFuses = tonumber(a) or 0
+		refreshNextStep()
 
 	elseif ev == "msg" then
+		-- Private refusals only ("You have no fuses"). Restore the surface's own
+		-- colour: the last team prompt may have left it green or blue.
+		msgLabel.TextColor3 = TEAM_COLOURS.fuse
 		showMessage(a)
+
+	elseif ev == "team" then
+		teamPrompt(a, b, c)
 
 	elseif ev == "boxes" then
 		setObjectiveText(boxesLabel, ("RESTORE FUSE BOXES   %d / %d"):format(a, b))
@@ -1112,6 +1175,9 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d)
 		leverTotal = a or 0
 		leverEndsAt = 0
 		leverLatchMode = false
+		-- The standing instruction for the whole lever phase, and the words the
+		-- reversed cable current is now illustrating.
+		refreshNextStep()
 		LAYOUT.SetProgress(0, leverTotal, Color3.fromRGB(112, 190, 223))
 		refreshLever()
 
@@ -1135,14 +1201,13 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d)
 		LAYOUT.SetProgress(1, 1, Color3.fromRGB(98, 221, 148))
 		enterNavMode()
 		leverPhase = false
-		-- Copy first, then the row is shown, then the stack is placed. Written the
-		-- other way round the stack was measured against the timer string this
-		-- replaces, and "EXIT POWERED — FIND THE DOOR" is two lines wherever the
-		-- column is narrow.
-		local appearing = not leverLabel.Visible
-		setObjectiveText(leverLabel, "FOLLOW THE READER TO THE EXIT", Color3.fromRGB(120, 224, 161))
-		leverLabel.Visible = true
-		if appearing then applyPuzzleLayout() end
+		exitOpen = true
+		refreshNextStep()
+		-- Completed counts no longer compete with the exit instruction. On short
+		-- landscape phones this also leaves a readable lane for the compass.
+		boxesLabel.Visible = false
+		leverLabel.Visible = false
+		applyPuzzleLayout()
 	end
 end)
 
@@ -1152,6 +1217,8 @@ workspace:GetAttributeChangedSignal("RoundActive"):Connect(function()
 		leverActive = 0
 		leverTotal = 0
 		leverEndsAt = 0
+		carriedFuses = 0
+		exitOpen = false
 		setReceiver(false)
 		showCounters(false)
 	end
@@ -1228,6 +1295,14 @@ end
 
 function applyPuzzleLayout()
 	local layout = UIDevice.Layout()
+	-- A short landscape phone has room for one useful exit card. Once the
+	-- circuit is complete, give that space to the compass instead of shrinking
+	-- it beside the completed objective column until its text is unreadable.
+	local exitCompassOnly = receiverNav and layout.IsTouch and not layout.Portrait
+		and layout.ModalArea.Height < 180
+	objectivePanel.Visible = countersActive and not objectivesCollapsed and not exitCompassOnly
+	UIDevice.SetInteractive(objectivesToggle, countersActive and not exitCompassOnly)
+	if exitCompassOnly then msgLabel.Visible = false end
 	-- WHICH COMPOSITION, decided before the first measurement rather than after
 	-- it. The toggle's band and the message row are part of the measured stack on
 	-- touch and are not in it at all on desktop, so a stack measured before this
@@ -1478,7 +1553,7 @@ function applyPuzzleLayout()
 
 	local candidates = {}
 	for _, area in ipairs({band, layout.ModalArea}) do
-		if area.Left < columnRect.Right and area.Right > columnRect.Left
+		if not exitCompassOnly and area.Left < columnRect.Right and area.Right > columnRect.Left
 			and area.Top < columnRect.Bottom and area.Bottom > columnRect.Top then
 			-- Beside the column first, then below it, LAYOUT.ColumnGap clear on
 			-- whichever axis is used. That separation is the C1 rule, unchanged.

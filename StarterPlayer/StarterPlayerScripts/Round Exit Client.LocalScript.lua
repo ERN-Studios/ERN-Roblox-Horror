@@ -22,8 +22,12 @@ if not prompt then
 	prompt.Parent = playerScripts
 end
 
-local ACCENT = Color3.fromRGB(73, 245, 204)
-local MUTED = Color3.fromRGB(175, 190, 186)
+-- UI_STYLE_20260915 (Trello #98). Chrome and faces only -- the chip, the
+-- confirm card and the "leaveround" request behave exactly as card 74 froze
+-- them. The teal accent this file invented is gone; the card now wears the
+-- Mission Brief card's own surface, stroke and typography.
+local UIStyle = require(ReplicatedStorage:WaitForChild("UIStyle"))
+local MUTED = UIStyle.Color.Muted
 
 local gui = Instance.new("ScreenGui")
 gui.Name = "RoundExitGui"
@@ -31,31 +35,13 @@ gui.ResetOnSpawn = false
 gui.DisplayOrder = 70 -- above the HUD and spectate band, under PARTY DOWN (100)
 gui.Parent = player:WaitForChild("PlayerGui")
 
-local function corner(parent, radius)
-	local c = Instance.new("UICorner")
-	c.CornerRadius = UDim.new(0, radius)
-	c.Parent = parent
-end
-
 local function makeButton(parent, name, text)
 	local button = Instance.new("TextButton")
 	button.Name = name
-	button.BackgroundColor3 = Color3.fromRGB(12, 30, 28)
-	button.BackgroundTransparency = 0.15
-	button.BorderSizePixel = 0
 	button.AutoButtonColor = true
-	button.Font = Enum.Font.GothamBold
 	button.Text = text
-	button.TextColor3 = ACCENT
-	button.TextSize = 13
 	button.Parent = parent
-	corner(button, 6)
-	local stroke = Instance.new("UIStroke")
-	stroke.Color = ACCENT
-	stroke.Transparency = 0.45
-	stroke.Thickness = 1.2
-	stroke.Parent = button
-	return button
+	return UIStyle.button(button)
 end
 
 local chip = makeButton(gui, "LeaveChip", "BACK TO LOBBY")
@@ -79,28 +65,21 @@ card.Name = "RoundExitCard"
 card.AnchorPoint = Vector2.new(0.5, 0.5)
 card.Position = UDim2.fromScale(0.5, 0.5)
 card.Size = UDim2.fromOffset(340, 176)
-card.BackgroundColor3 = Color3.fromRGB(8, 16, 15)
-card.BackgroundTransparency = 0.05
-card.BorderSizePixel = 0
 card.Parent = shade
-corner(card, 10)
-do
-	local stroke = Instance.new("UIStroke")
-	stroke.Color = ACCENT
-	stroke.Transparency = 0.35
-	stroke.Thickness = 1.5
-	stroke.Parent = card
-end
+UIStyle.panel(card, {
+	Background = UIStyle.Color.Card,
+	Transparency = UIStyle.Transparency.Card,
+	Radius = UIStyle.Radius.Card,
+	StrokeTransparency = UIStyle.Stroke.CardTransparency,
+})
 
 local title = Instance.new("TextLabel")
 title.Name = "Title"
 title.Position = UDim2.fromOffset(16, 14)
 title.Size = UDim2.new(1, -32, 0, 24)
 title.BackgroundTransparency = 1
-title.Font = Enum.Font.GothamBold
+UIStyle.title(title, {TextSize = 17})
 title.Text = "RETURN TO THE LOBBY?"
-title.TextColor3 = ACCENT
-title.TextSize = 17
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.Parent = card
 
@@ -109,10 +88,8 @@ body.Name = "Body"
 body.Position = UDim2.fromOffset(16, 42)
 body.Size = UDim2.new(1, -32, 0, 40)
 body.BackgroundTransparency = 1
-body.Font = Enum.Font.Gotham
+UIStyle.body(body, {TextSize = 14})
 body.Text = "Your run ends here. The others keep playing."
-body.TextColor3 = Color3.fromRGB(230, 236, 232)
-body.TextSize = 14
 body.TextWrapped = true
 body.TextXAlignment = Enum.TextXAlignment.Left
 body.TextYAlignment = Enum.TextYAlignment.Top
@@ -123,16 +100,15 @@ notice.Name = "Notice"
 notice.Position = UDim2.fromOffset(16, 84)
 notice.Size = UDim2.new(1, -32, 0, 18)
 notice.BackgroundTransparency = 1
-notice.Font = Enum.Font.Code
+UIStyle.readout(notice, {TextColor = MUTED, TextSize = 12})
 notice.Text = ""
-notice.TextColor3 = MUTED
-notice.TextSize = 12
 notice.TextXAlignment = Enum.TextXAlignment.Left
 notice.Parent = card
 
 local confirm = makeButton(card, "Confirm", "BACK TO LOBBY")
 local stay = makeButton(card, "Stay", "STAY")
-stay.TextColor3 = Color3.fromRGB(230, 236, 232)
+-- One step quieter than the action it sits next to: same chrome, body face.
+stay.TextColor3 = UIStyle.Color.Body
 
 local requestPending = false
 

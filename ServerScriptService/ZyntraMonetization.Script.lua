@@ -155,7 +155,8 @@ end
 local function recordedSupportRobux(data)
 	if not data then return 0 end
 	return math.min(MAX_SAFE_SUPPORT,
-		normalizedSupportAmount(data.DonationRobux) + normalizedSupportAmount(data.UtilityRobux))
+		normalizedSupportAmount(data.DonationRobux) + normalizedSupportAmount(data.UtilityRobux)
+			+ normalizedSupportAmount(data.PassRobux))
 end
 
 -- One bounded operation per inventory, separate from Roblox receipt history.
@@ -225,6 +226,11 @@ local function newProfile()
 		Protection = {Charges = 0, Revision = 0},
 		DonationRobux = 0,
 		UtilityRobux = 0,
+		-- Game passes and private servers are bought on Roblox's own storefront
+		-- and never reach ProcessReceipt, so this third stream has no live writer
+		-- at all: only the historical sales import at the bottom of this script
+		-- fills it.
+		PassRobux = 0,
 		Settings = {
 			MuteDispatch = false,
 			MuteDispatchInputEpoch = 0,
@@ -282,6 +288,25 @@ local function normalizeProfile(data)
 	-- utility ReceiptIds are not evidence of an additional, uncounted payment.
 	data.DonationRobux = normalizedSupportAmount(data.DonationRobux)
 	data.UtilityRobux = normalizedSupportAmount(data.UtilityRobux)
+	data.PassRobux = normalizedSupportAmount(data.PassRobux)
+	-- Historical sales import bookkeeping: which export sources this profile has
+	-- seen, and which individual rows of them have been applied. Permanent for
+	-- the same reason ReceiptIds is -- dropping a row marker would let a re-run
+	-- of the same export pay a game pass into the total a second time. Both are
+	-- rebuilt from validated string keys so a hand-edited save cannot inject one.
+	local salesImport = type(data.SalesImport) == "table" and data.SalesImport or {}
+	local importSources, importRows = {}, {}
+	for key, value in pairs(type(salesImport.Sources) == "table" and salesImport.Sources or {}) do
+		if value == true and type(key) == "string" and #key > 0 and #key <= 64 then
+			importSources[key] = true
+		end
+	end
+	for key, value in pairs(type(salesImport.Rows) == "table" and salesImport.Rows or {}) do
+		if value == true and type(key) == "string" and #key > 0 and #key <= 64 then
+			importRows[key] = true
+		end
+	end
+	data.SalesImport = { Sources = importSources, Rows = importRows }
 	data.Settings = type(data.Settings) == "table" and data.Settings or {}
 	data.Settings.MuteDispatch = data.Settings.MuteDispatch == true
 	data.Settings.MuteDispatchInputEpoch = math.max(0,
@@ -470,6 +495,7 @@ local function publicProfile(data)
 		ProtectionLastResult = protectionResult(data.Protection),
 		DonationRobux = data.DonationRobux,
 		UtilityRobux = data.UtilityRobux,
+		PassRobux = data.PassRobux,
 		RecordedSupportRobux = recordedSupportRobux(data),
 		MuteDispatch = data.Settings.MuteDispatch,
 		LobbyBriefingPlayed = data.Settings.LobbyBriefingPlayed,
@@ -569,6 +595,7 @@ local function applyAttributes(player, data)
 	player:SetAttribute("ZyntraLobbyBriefingPlayed", data.Settings.LobbyBriefingPlayed)
 	player:SetAttribute("ZyntraDonationRobux", data.DonationRobux)
 	player:SetAttribute("ZyntraUtilityRobux", data.UtilityRobux)
+	player:SetAttribute("ZyntraPassRobux", data.PassRobux)
 	player:SetAttribute("ZyntraRecordedSupportRobux", recordedSupportRobux(data))
 	-- Accessibility switches are published under their own bare names because
 	-- that is what the client readers already ask for (ReduceCameraShake,
@@ -930,9 +957,9 @@ local function publishSupportRows(entries)
 			supportRows[rank].Value = rank == 1 and "NO SUPPORT RECORDED YET" or ""
 		end
 	end
-	-- Keep the existing v2 cache so absent donors retain their rows. Only newly
-	-- acknowledged utility receipts extend its totals; history is not backfilled.
-	supportStatus.Value = "DONATIONS + RECORDED TOKEN / RE-ENTRY PURCHASES"
+	-- The existing cache preserves absent donors; the audited import also adds
+	-- historical products, passes and private-server purchases exactly once.
+	supportStatus.Value = "RECORDED ROBUX: PRODUCTS, PASSES & DONATIONS"
 end
 
 local function studioSupportEntries()
@@ -2624,7 +2651,8 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 		if not isSafeSupportAmount(spent) then
 			return false, "Receipt has no valid paid amount.", "error"
 		end
-		if data.DonationRobux > MAX_SAFE_SUPPORT - data.UtilityRobux
+		if data.PassRobux > MAX_SAFE_SUPPORT - data.UtilityRobux
+			or data.DonationRobux > MAX_SAFE_SUPPORT - data.UtilityRobux - data.PassRobux
 			or spent > MAX_SAFE_SUPPORT - recordedSupportRobux(data) then
 			return false, "Recorded support total exceeds the safe limit.", "error"
 		end
@@ -2819,5 +2847,259 @@ game:BindToClose(function()
 	local deadline = os.clock() + 25
 	while (pendingStarts > 0 or activeSessionFinalizers > 0) and os.clock() < deadline do
 		task.wait(0.05)
+	end
+end)
+
+-- SALES_IMPORT_20260915
+-- Historical sales import (Trello #36). Roblox's sales export is the only record
+-- of what players spent before this build began recording paid amounts, and the
+-- only record at all of game pass and private server purchases, which never
+-- reach ProcessReceipt. The lead places the generated rows in Studio as
+-- ServerStorage.ZyntraSalesBackfill; with that module absent this whole block is
+-- a silent no-op, which is the normal state before it is placed and after it is
+-- taken away again.
+--
+-- Each export includes a separately audited per-buyer snapshot. The complete
+-- pre-cutoff receipt sets were checked in Creator Dashboard; CSV ids are NOT
+-- PurchaseIds. Add (CSV total - audited recorded total) once. Later receipts
+-- remain on top, unlike max(current, CSV), which loses old missing purchases
+-- whenever newer purchases overlap. Refuse drift below the baseline or missing
+-- audited receipts. Pass/private-server rows have their own permanent markers.
+local SALES_IMPORT_STREAM_FIELDS = {donation = "DonationRobux", utility = "UtilityRobux", pass = "PassRobux"}
+-- How long one server's claim on the import blocks the others. A crash mid-run
+-- leaves the claim behind; after this it expires and the next server redoes the
+-- whole thing, which is safe because every per-user write is idempotent.
+local SALES_IMPORT_CLAIM_SECONDS = 3600
+local SALES_IMPORT_BOOT_DELAY = 20
+local SALES_IMPORT_USER_DELAY = 0.2
+
+local function salesImportReadback(key, value)
+	ServerStorage:SetAttribute("ZyntraSalesImport" .. key, value)
+end
+
+local function runSalesImport()
+	-- Studio never writes live player data, and a Studio session must not be able
+	-- to claim the import away from the servers that can.
+	if RunService:IsStudio() then return salesImportReadback("Status", "skipped-studio") end
+	local module = ServerStorage:FindFirstChild("ZyntraSalesBackfill")
+	if not module or not module:IsA("ModuleScript") then
+		return salesImportReadback("Status", "no-module")
+	end
+	local ok, source = pcall(require, module)
+	if not ok or type(source) ~= "table" or type(source.Rows) ~= "table"
+		or type(source.Baselines) ~= "table"
+		or type(source.SourceKey) ~= "string" or #source.SourceKey == 0
+		or #source.SourceKey > 64 then
+		warn("[Zyntra] ZyntraSalesBackfill is unusable; no sales import ran:", ok and "bad shape" or source)
+		return salesImportReadback("Status", "bad-module")
+	end
+	local sourceKey = source.SourceKey
+	salesImportReadback("Source", sourceKey)
+	salesImportReadback("Sha256", tostring(source.Sha256))
+
+	-- Group by buyer first: one atomic write per profile, never one per row.
+	local byUser, invalidRows, userCount = {}, 0, 0
+	for _, row in ipairs(source.Rows) do
+		local userId = type(row) == "table" and math.floor(tonumber(row.UserId) or 0) or 0
+		local price = type(row) == "table" and math.floor(tonumber(row.Price) or -1) or -1
+		local field = type(row) == "table" and SALES_IMPORT_STREAM_FIELDS[row.Stream] or nil
+		local marker = type(row) == "table" and row.Marker or nil
+		if userId > 0 and price >= 0 and price <= MAX_SAFE_SUPPORT and field
+			and type(marker) == "string" and #marker > 0 and #marker <= 64 then
+			local bucket = byUser[userId]
+			if not bucket then
+				bucket = {}
+				byUser[userId] = bucket
+				userCount += 1
+			end
+			bucket[#bucket + 1] = {
+				Field = field,
+				Price = price,
+				Marker = marker,
+				CsvId = type(row.CsvId) == "string" and row.CsvId or nil,
+			}
+		else
+			invalidRows += 1
+		end
+	end
+	salesImportReadback("RowsTotal", #source.Rows)
+	salesImportReadback("RowsInvalid", invalidRows)
+	if invalidRows > 0 or userCount == 0 then return salesImportReadback("Status", "invalid-rows") end
+
+	-- One server does the work. The claim is only a budget guard: it is safe for
+	-- two servers to run this concurrently, because every write below is either a
+	-- guarded by a permanent source/row marker.
+	local claimKey = "salesimport_" .. sourceKey
+	local claimed = false
+	local okClaim, claimErr = pcall(function()
+		store:UpdateAsync(claimKey, function(current)
+			claimed = false
+			if type(current) == "table" and current.Done == true then return nil end
+			local heldFor = math.huge
+			if type(current) == "table" then heldFor = os.time() - (tonumber(current.At) or 0) end
+			if type(current) == "table" and current.JobId ~= game.JobId
+				and heldFor < SALES_IMPORT_CLAIM_SECONDS then return nil end
+			claimed = true
+			return { JobId = game.JobId, At = os.time(), Sha = source.Sha256, Done = false }
+		end)
+	end)
+	if not okClaim then
+		warn("[Zyntra] Sales import could not read its claim:", claimErr)
+		return salesImportReadback("Status", "claim-failed")
+	end
+	if not claimed then return salesImportReadback("Status", "claim-held") end
+	salesImportReadback("Status", "running")
+
+	local applied, alreadyCounted, written, failed, idMatches, ambiguous = 0, 0, 0, 0, 0, 0
+
+	-- Runs inside UpdateAsync, so it may be called more than once for one write:
+	-- it only ever ASSIGNS into `outcome`, never accumulates, and the caller folds
+	-- the outcome into the totals once, after the write has actually landed.
+	local function applyRows(data, rows, outcome, userId)
+		outcome.Pending, outcome.Applied, outcome.Skipped = false, 0, 0
+		outcome.Recorded = recordedSupportRobux(data)
+		outcome.Rejected, outcome.Ambiguous, outcome.IdMatches = false, false, 0
+		if data.SalesImport.Sources[sourceKey] then
+			outcome.Skipped = #rows
+			return false
+		end
+		local baseline = source.Baselines[tostring(userId)]
+		local totals, productRows, passAdd = {DonationRobux=0, UtilityRobux=0}, 0, 0
+		local markers = data.SalesImport.Rows
+		for _, row in ipairs(rows) do
+			if row.Field == "PassRobux" then
+				if not markers[row.Marker] then passAdd += row.Price end
+			else
+				productRows += 1
+				totals[row.Field] += row.Price
+				-- A different source already touched this product row. It needs a
+				-- newly audited baseline, never an automatic second correction.
+				if markers[row.Marker] then outcome.Rejected = true end
+			end
+		end
+		if type(baseline) ~= "table" or type(baseline.ReceiptIds) ~= "table"
+			or #baseline.ReceiptIds ~= productRows then outcome.Rejected = true end
+		local receipts, audited = {}, {}
+		for _, id in ipairs(data.ReceiptIds) do receipts[id] = true end
+		if not outcome.Rejected then
+			for _, id in ipairs(baseline.ReceiptIds) do
+				if type(id) ~= "string" or audited[id] or not receipts[id] then outcome.Rejected = true end
+				audited[id] = true
+			end
+		end
+		local additions, totalAdd = {}, passAdd
+		if not outcome.Rejected then
+			for field, total in pairs(totals) do
+				local before = baseline[field]
+				if not isSafeSupportAmount(before) or before > total or data[field] < before then
+					outcome.Rejected = true
+				else
+					additions[field] = total - before
+					totalAdd += total - before
+				end
+			end
+		end
+		if outcome.Rejected or totalAdd > MAX_SAFE_SUPPORT - outcome.Recorded then
+			outcome.Rejected = true
+			return false
+		end
+		-- All validation precedes the first mutation. UpdateAsync retries get a
+		-- fresh profile and either add this same delta or see the source marker.
+		for field, add in pairs(additions) do data[field] += add end
+		data.PassRobux += passAdd
+		for _, row in ipairs(rows) do markers[row.Marker] = true end
+		data.SalesImport.Sources[sourceKey] = true
+		outcome.Applied = #rows
+		outcome.Recorded = recordedSupportRobux(data)
+		outcome.Pending = true
+		return true
+	end
+	local processed = 0
+
+	for userId, rows in pairs(byUser) do
+		if serverClosing then break end
+		local outcome = {}
+		local player = Players:GetPlayerByUserId(userId)
+		local session = player and sessions[player] or nil
+		local okWrite
+		if player and player.Parent == Players and session and session.persistent and not session.closing then
+			-- Online buyer: go through the session's own retrying writer so the
+			-- session copy and the published attributes adopt the imported totals
+			-- rather than lagging behind the saved profile. Its own failure toast
+			-- is suppressed; a silent refresh follows a successful write.
+			okWrite = mutateIdempotent(player, function(data)
+				return applyRows(data, rows, outcome, userId)
+			end, true)
+			if okWrite and player.Parent then pushProfile(player) end
+		end
+		if not okWrite then
+			-- Offline, or a session that closed underneath the write above -- a
+			-- buyer leaving mid-import must not be what leaves the whole source
+			-- unfinished. Safe to follow a write that committed and lost its
+			-- response: the markers it left cancel this one.
+			okWrite = pcall(function()
+				store:UpdateAsync("u_" .. tostring(userId), function(current)
+					local data = normalizeProfile(current)
+					if not applyRows(data, rows, outcome, userId) then return nil end
+					return data
+				end)
+			end)
+		end
+		processed += 1
+		if okWrite and not outcome.Rejected then
+			-- Changed, not merely processed: a re-run reads every profile and
+			-- commits none of them, and the readback should say so.
+			if outcome.Pending then written += 1 end
+			applied += outcome.Applied or 0
+			alreadyCounted += outcome.Skipped or 0
+			idMatches += outcome.IdMatches or 0
+			if outcome.Ambiguous then ambiguous += 1 end
+			-- The ordered store is a max, so this is how an OFFLINE buyer reaches
+			-- the board without ever logging in -- and a replay repairs an entry
+			-- that was lost even when the profile write itself was a no-op.
+			local recorded = outcome.Recorded or 0
+			if recorded > 0 and not syncSupportTotal(userId, recorded) then failed += 1 end
+		else
+			failed += 1
+		end
+		task.wait(SALES_IMPORT_USER_DELAY)
+	end
+
+	failed += userCount - processed -- shutdown cannot mark unvisited buyers done
+	salesImportReadback("Buyers", userCount)
+	salesImportReadback("RowsApplied", applied)
+	salesImportReadback("RowsAlreadyCounted", alreadyCounted)
+	salesImportReadback("ProfilesChanged", written)
+	salesImportReadback("ProfilesFailed", failed)
+	salesImportReadback("IdMatches", idMatches)
+	salesImportReadback("Ambiguous", ambiguous)
+	salesImportReadback("Status", failed == 0 and "done" or "incomplete")
+	-- Done only when nothing failed. Otherwise the claim simply expires and the
+	-- next server retries; the buyers that already landed cost one cancelled read.
+	pcall(function()
+		store:UpdateAsync(claimKey, function(current)
+			local record = type(current) == "table" and current or {}
+			record.Done = failed == 0
+			record.At = os.time()
+			record.Sha = source.Sha256
+			record.Applied = applied
+			record.Failed = failed
+			return record
+		end)
+	end)
+	print(string.format(
+		"[Zyntra] Sales import %s: source %s, %d rows (%d invalid), %d buyers, %d applied, %d already counted, %d profiles changed, %d failed, %d export ids found in ReceiptIds, %d ambiguous profiles",
+		failed == 0 and "complete" or "incomplete", sourceKey, #source.Rows, invalidRows,
+		userCount, applied, alreadyCounted, written, failed, idMatches, ambiguous))
+	refreshSupportLeaderboard()
+end
+
+-- SALES_IMPORT_BOOT
+task.spawn(function()
+	task.wait(SALES_IMPORT_BOOT_DELAY)
+	local ok, err = pcall(runSalesImport)
+	if not ok then
+		warn("[Zyntra] Sales import failed:", err)
+		salesImportReadback("Status", "failed")
 	end
 end)

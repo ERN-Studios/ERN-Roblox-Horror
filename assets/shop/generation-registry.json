@@ -1,0 +1,62 @@
+[
+  {
+    "key": "shop-sign-face",
+    "source": "C:\\Users\\mikke\\.codex\\generated_images\\01a0a685-aadc-77f3-98a1-f2a21fdf61e5\\exec-f0884d37-a46c-4942-9346-fecf376743ba.png",
+    "prompt": "See texture-requests.md and imagegen calls in current task."
+  },
+  {
+    "key": "shop-plate-top",
+    "source": "C:\\Users\\mikke\\.codex\\generated_images\\01a0a685-aadc-77f3-98a1-f2a21fdf61e5\\exec-7e0aec44-fa42-44d4-b749-65e91f289849.png",
+    "prompt": "See texture-requests.md and imagegen calls in current task."
+  },
+  {
+    "key": "shop-pedestal-top",
+    "source": "C:\\Users\\mikke\\.codex\\generated_images\\01a0a685-aadc-77f3-98a1-f2a21fdf61e5\\exec-8a628bf9-c6a6-47fb-875a-9463f0042927.png",
+    "prompt": "See texture-requests.md and imagegen calls in current task."
+  },
+  {
+    "key": "box-supporter",
+    "source": "C:\\Users\\mikke\\.codex\\generated_images\\01a0a685-aadc-77f3-98a1-f2a21fdf61e5\\exec-b717f546-5ce8-4b66-93f2-9129c68f100b.png",
+    "prompt": "Create a square 1024x1024 production texture for ONE face of a fictional Zyntra supply crate in a Roblox industrial horror tunnel. The whole canvas is flat crate-face artwork, straight-on orthographic, no perspective, no complete 3D box, no scene. Opaque charcoal #141D21 worn sheet-metal shell, edge metal #3E423E corner brackets and horizontal band strap. Keep outer 8% quiet for the game's edge trim. A large central etched label depicts a SUPPORTER CREDENTIAL: strong teal #44DDC4 shield/chevron badge over precisely three small gold #FFCB4F square chips. Small '//S' etching within badge and tiny 'Z//' stencil bottom-left are the ONLY text. Badge must read as a physical engraved credential, not a person or glowing screen. Strong bold motif recognizable from across a road; subtle material wear, polished game art. No product names, price numbers, currency symbols, real logos, watermark, additional lettering. Square framing, crate shell edge-to-edge, not a circular icon or radial vignette."
+  },
+  {
+    "key": "box-advanced-equipment",
+    "source": "C:\\Users\\mikke\\.codex\\generated_images\\01a0a685-aadc-77f3-98a1-f2a21fdf61e5\\exec-8ca22091-d943-4e00-a73a-8c167f948e46.png",
+    "prompt": "Create the ADVANCED EQUIPMENT variant of this fictional Zyntra crate-face game texture. Keep this same square, straight-on opaque dark worn charcoal steel shell, four corner brackets, band straps, bottom-left Z// stencil and quiet outer edge framing. Replace the entire central supporter badge and //S with a large, highly recognizable etched hazmat respirator module in side profile, a restrained color-calibration arc, one teal #44DDC4 upward chevron for stamina and one gold #FFCB4F upward chevron for battery. Printed/engraved label appearance, not a glowing screen. Central motif should read clearly at quarter scale and harmonize with the existing shell. No other text or words, product name, numbers, price, currency symbols, watermark or real logos. Flat square image for one face of a physical Roblox crate, no perspective, no 3D scene, no circular framing. Output PNG."
+  },
+  {
+    "key": "box-cosmetic-equipment",
+    "source": "C:\\Users\\mikke\\.codex\\generated_images\\01a0a685-aadc-77f3-98a1-f2a21fdf61e5\\exec-6011e688-0b7e-4e16-aab9-4f5ffbdcc0d8.png",
+    "prompt": "Create the COSMETIC GLOWSTICKS variant of this fictional Zyntra crate-face game texture. Keep exactly the same square straight-on opaque charcoal steel shell, four corner brackets, two band straps, dark side slots, quiet outer edge and small Z// stencil bottom-left. Replace central badge and //S completely with THREE rugged glowsticks arranged as a clear triangular fan, one cyan #44DDC4, one magenta, one amber #FFCB4F, above a slender luminous color-selection ring. Etched/printed bold central supply label with controlled colored luminance; graphic immediately recognizable at small scale. No flashlight, helmet, respirator, person, supporter badge, prices, words or numbers. Only tiny Z// remains. Subtle worn physical crate texture, no perspective, no 3D box scene, no circular vignette. Output one square PNG image."
+  },
+  {
+    "key": "box-tokens-4",
+    "source": "C:\\Users\\mikke\\.codex\\generated_images\\01a0a685-aadc-77f3-98a1-f2a21fdf61e5\\exec-e17645fe-5286-470b-9fdf-e469df80985c.png",
+    "prompt": "Create the FOUR RESEARCH CHIPS variant of the referenced Zyntra supply crate-face game texture. Preserve exactly its square straight-on charcoal worn steel shell, four corner brackets, band straps, dark side slots, 8% quiet edges and tiny bottom-left Z// stencil. Replace the entire large central badge with precisely FOUR SEPARATE countable square gold #FFCB4F research microchips, each with one teal #49F5CC inset core. Arrange as diamond cluster: one top, one left, one right, one bottom. Keep chips clearly separated with visible dark gaps, no fifth object and no leftover badge. Each chip is a strong bold printed/etched supply-label motif; subtle dimensional engraving, not a glowing screen. No numbers or text other than Z//. No currency, price, product name, real logo, watermarks, coins, perspectives, scene, circular vignette. One flat square opaque PNG texture for a Roblox crate face."
+  },
+  {
+    "key": "box-tokens-20",
+    "source": "C:\\Users\\mikke\\.codex\\generated_images\\01a0a685-aadc-77f3-98a1-f2a21fdf61e5\\exec-7fa35ed4-9667-4fde-ad9d-180b8509e148.png",
+    "prompt": "Create the LARGE RESEARCH CHIP CACHE variant of this Zyntra crate-face texture. Preserve the square straight-on charcoal worn metal crate shell, corner brackets, straps, dark slots, quiet edge frame and tiny Z// stamp bottom-left exactly. Replace the four-chip cluster with a dense supply cache of the SAME square gold #FFCB4F research chips with teal #49F5CC inset cores, arranged in three orderly stacked layers, with a single slightly brighter master chip on top. About twenty chips in the cache; immediately and unmistakably more abundant than the four-pack. Etched/printed illustration on steel, disciplined composition, bold central silhouette, no glowing screen. No text except Z//, no number, price, currency, coin, real logos, watermark, perspective on crate face, surrounding scene or circular vignette. One opaque square PNG game texture."
+  },
+  {
+    "key": "box-emergency-reentry",
+    "source": "C:\\Users\\mikke\\.codex\\generated_images\\01a0a685-aadc-77f3-98a1-f2a21fdf61e5\\exec-df58c77c-a2e8-4b08-be8c-7fb143283517.png",
+    "prompt": "Create the EMERGENCY RE-ENTRY variant of the reference Zyntra supply crate-face game texture. Keep the exact same square straight-on dark worn charcoal steel shell, four corner brackets, horizontal bands, side slots, small Z// bottom-left, quiet outer edge. Completely replace central badge and //S with a bold sealed industrial airlock door and ONE thick red #F45F52 circular return arrow clearly turning back inward to the door. Two tiny teal #49F5CC status lights. Urgent rescue/return motif, no gore, readable at a small scale. Etched/printed supply label rather than screen. No additional text, no price, currency, numbers, people or real logos. Flat edge-to-edge crate surface, no perspective, no 3D scene or circular vignette. Output square PNG with FULLY OPAQUE background and surfaces, every pixel alpha 255. This is not a transparent cutout."
+  },
+  {
+    "key": "box-fallback",
+    "source": "C:\\Users\\mikke\\.codex\\generated_images\\01a0a685-aadc-77f3-98a1-f2a21fdf61e5\\exec-419e0e0c-105c-42c3-9a58-b2c2110fc122.png",
+    "prompt": "Create a GENERIC UNLABELED variant of the referenced fictional Zyntra supply crate-face texture. Preserve exactly the same square straight-on worn charcoal #141D21 steel shell, metal #3E423E corner brackets, bands, side slots, tiny Z// stamp bottom-left, quiet outer 8% frame. Remove the entire supporter shield, gold chips, //S and every central icon. In their place, one wide rectangular recessed EMPTY dark steel label panel, with a very faint teal edge shimmer and sparse engraved alignment marks, intentionally awaiting a label. Looks like a complete deliberate physical crate, not broken missing texture. No extra text, question mark, number, price, currency, real logo or watermark. Fully opaque edge-to-edge PNG, no alpha, no perspective or environment scene, no circular icon framing."
+  },
+  {
+    "key": "shop-sign-glow",
+    "source": "C:\\Users\\mikke\\.codex\\generated_images\\01a0a685-aadc-77f3-98a1-f2a21fdf61e5\\exec-4c5f0b0d-110b-4d28-acc9-1a7ac18543f2.png",
+    "prompt": "Derive a transparent LIGHT GLOW OVERLAY from this exact SHOP sign. Output ONE 8:3 landscape PNG with genuine alpha transparency. Retain ONLY a soft teal #49F5CC luminous halo corresponding to the four exact SHOP glyph shapes. Remove all opaque black housing, brushed metal, wear, amber trim lines, small ZYNTRA SUPPLY subtitle, and sharp white letter interiors. The glyphs themselves should be diffuse teal luminous clouds with no hard text edges; transparent elsewhere, including the holes in letters. Preserve the relative SHOP letter shapes and center. Reduce the SHOP halo overall to 89.3% of the reference letter size about the image center to compensate for an in-game overlay plane that is 12% larger than the sign. Entire non-glowing background alpha 0. No black rectangle, no checkerboard drawn into image, no new words or graphics. This is the additive-looking bloom only which overlays the physical sign; glow must be soft and restrained."
+  },
+  {
+    "key": "shop-backplate",
+    "source": "C:\\Users\\mikke\\.codex\\generated_images\\01a0a685-aadc-77f3-98a1-f2a21fdf61e5\\exec-a860b1b0-645f-423b-95a1-7aa78883e90a.png",
+    "prompt": "Create one 1024x1024 square SEAMLESS REPEATING videogame albedo texture for a fictional Zyntra industrial service alcove. Perfectly tileable horizontally and vertically, no border frame. Straight-on flat dark charcoal #141D21 sheet metal with subtly recessed square modular panels, low contrast #3E423E panel seams, occasional flush rivets, tiny streaks of grime pooling at joints. One VERY FAINT teal #49F5CC conduit line continuing uninterrupted horizontally across left and right edges at exactly the same height. Extremely restrained and low contrast, this goes behind vivid products and must not compete with them. Panel grid and texture features continue cleanly across all edges. Opaque PNG surface texture, uniform lighting, no directional shadows, perspective, text, logos, prices, labels, objects, big warning stripes, vignette or scene. Crisp believable brushed metal material."
+  }
+]

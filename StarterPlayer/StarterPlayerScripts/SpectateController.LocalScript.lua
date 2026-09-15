@@ -12,6 +12,10 @@ local GuiService = game:GetService("GuiService")
 local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
 local UIDevice = require(ReplicatedStorage:WaitForChild("UIDevice"))
+-- UI_STYLE_20260915 (Trello #98). The spectate band was the one HUD still
+-- drawing pure black at .4 with no border; it now wears the same card chrome as
+-- the Objectives panel. Placement, sizes and every behaviour are untouched.
+local UIStyle = require(ReplicatedStorage:WaitForChild("UIStyle"))
 local Profiles = require(ReplicatedStorage:WaitForChild("FlashlightProfiles"))
 local remote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("RoundStatus")
 local playerScripts = player:WaitForChild("PlayerScripts")
@@ -35,16 +39,18 @@ local label = Instance.new("TextLabel")
 label.AnchorPoint = Vector2.new(0.5, 1)
 label.Position = UDim2.new(0.5, 0, 1, -20)
 label.Size = UDim2.new(0, 420, 0, 30)
-label.BackgroundColor3 = Color3.new(0, 0, 0)
-label.BackgroundTransparency = 0.4
-label.BorderSizePixel = 0
-label.Font = Enum.Font.Gotham
 label.TextScaled = true
-label.TextColor3 = Color3.fromRGB(220, 220, 220)
 label.Visible = false
 label.Text = ""
 label.Parent = gui
-local lc = Instance.new("UICorner"); lc.CornerRadius = UDim.new(0, 6); lc.Parent = label
+-- The subtitle band's surface, the objectives panel's stroke: a caption sitting
+-- over the world, in the family the rest of the HUD now shares.
+UIStyle.panel(label, {
+	Background = UIStyle.Color.Caption,
+	Transparency = UIStyle.Transparency.Caption,
+	Radius = UIStyle.Radius.Chip,
+})
+UIStyle.body(label)
 
 -- Touch has no Q/E, and until now had no way to change who it was watching at
 -- all: the label simply named bindings that do not exist on a phone. Two arrows
@@ -56,20 +62,15 @@ local function makeCycleButton(name, glyph)
 	local button = Instance.new("TextButton")
 	button.Name = name
 	button.AnchorPoint = Vector2.new(0.5, 1)
-	button.BackgroundColor3 = Color3.new(0, 0, 0)
-	button.BackgroundTransparency = 0.4
-	button.BorderSizePixel = 0
 	button.AutoButtonColor = true
-	button.Font = Enum.Font.GothamBold
 	button.Text = glyph
-	button.TextColor3 = Color3.fromRGB(220, 220, 220)
-	button.TextSize = 22
 	button.Visible = false
 	button.Active = false
 	button.Parent = gui
-	local corner = Instance.new("UICorner")
-	corner.CornerRadius = UDim.new(0, 6)
-	corner.Parent = button
+	-- 22px keeps the chevron the size the touch layout was measured against.
+	-- These are the TOUCH affordance, so AutoButtonColor stays the press
+	-- feedback and no hover handler is added to fight it for the background.
+	UIStyle.button(button, {TextSize = 22})
 	return button
 end
 local applySpectateLayout
@@ -82,22 +83,14 @@ local nextButton = makeCycleButton("SpectateNext", ARROW_RIGHT)
 local exitButton = Instance.new("TextButton")
 exitButton.Name = "SpectateBackToLobby"
 exitButton.AnchorPoint = Vector2.new(0.5, 1)
-exitButton.BackgroundColor3 = Color3.fromRGB(12, 30, 28)
-exitButton.BackgroundTransparency = 0.25
-exitButton.BorderSizePixel = 0
 exitButton.AutoButtonColor = true
-exitButton.Font = Enum.Font.GothamBold
 exitButton.Text = "BACK TO LOBBY"
-exitButton.TextColor3 = Color3.fromRGB(73, 245, 204)
-exitButton.TextSize = 13
 exitButton.Visible = false
 exitButton.Active = false
 exitButton.Parent = gui
-do
-	local corner = Instance.new("UICorner"); corner.CornerRadius = UDim.new(0, 6); corner.Parent = exitButton
-	local stroke = Instance.new("UIStroke"); stroke.Color = exitButton.TextColor3
-	stroke.Transparency = 0.5; stroke.Thickness = 1.2; stroke.Parent = exitButton
-end
+-- Same face as the chip Round Exit Client draws for a LIVING player: one
+-- action, one look. (Card 74's behaviour is untouched -- this only asks.)
+UIStyle.button(exitButton)
 exitButton.Activated:Connect(function()
 	local prompt = playerScripts:FindFirstChild("RoundExitPrompt")
 	if prompt and prompt:IsA("BindableEvent") then prompt:Fire() end
@@ -315,16 +308,15 @@ counter.Name = "SpectatorCounter"
 counter.AnchorPoint = Vector2.new(0.5, 0)
 counter.Position = UDim2.new(0.5, 0, 0, 0)
 counter.Size = UDim2.fromOffset(170, 22)
-counter.BackgroundColor3 = Color3.new(0, 0, 0)
-counter.BackgroundTransparency = 0.45
-counter.BorderSizePixel = 0
-counter.Font = Enum.Font.GothamBold
-counter.TextSize = 12
-counter.TextColor3 = Color3.fromRGB(190, 225, 255)
 counter.Text = ""
 counter.Visible = false
 counter.Parent = gui
-do local cc = Instance.new("UICorner"); cc.CornerRadius = UDim.new(0, 6); cc.Parent = counter end
+UIStyle.panel(counter, {
+	Background = UIStyle.Color.Caption,
+	Transparency = UIStyle.Transparency.Caption,
+	Radius = UIStyle.Radius.Chip,
+})
+UIStyle.title(counter, {TextSize = 12, TextColor = UIStyle.Color.AccentText})
 local function refreshSpectatorCounter()
 	local count = tonumber(player:GetAttribute("SpectatorCount")) or 0
 	local humanoid = player.Character and player.Character:FindFirstChildOfClass("Humanoid")

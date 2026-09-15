@@ -7,6 +7,10 @@ local GuiService = game:GetService("GuiService")
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 local UIDevice = require(ReplicatedStorage:WaitForChild("UIDevice"))
+-- UI_STYLE_20260915 (Trello #98): chrome only. This control was already the
+-- closest thing in the game to the reference; it was missing the stroke's
+-- transparency, so its border read a full step harder than every panel's.
+local UIStyle = require(ReplicatedStorage:WaitForChild("UIStyle"))
 local Client = require(ReplicatedStorage:WaitForChild("ProtectionClient"))
 
 local gui = Instance.new("ScreenGui")
@@ -23,11 +27,6 @@ local button = Instance.new("TextButton")
 button.Name = "ProtectionUse"
 button.Size = UDim2.fromOffset(138, 52)
 button.AnchorPoint = Vector2.new(0, 1)
-button.BackgroundColor3 = Color3.fromRGB(20, 35, 31)
-button.BorderSizePixel = 0
-button.TextColor3 = Color3.fromRGB(158, 244, 195)
-button.Font = Enum.Font.GothamBold
-button.TextSize = 12
 button.TextWrapped = false
 button.AutoButtonColor = false
 button.Selectable = false
@@ -35,13 +34,16 @@ button.Modal = false
 button.Active = false
 button.Visible = false
 button.Parent = gui
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 8)
-corner.Parent = button
-local stroke = Instance.new("UIStroke")
-stroke.Color = Color3.fromRGB(70, 115, 91)
-stroke.Thickness = 1
-stroke.Parent = button
+-- Chip chrome, and the soft green the objectives toggle prints in. TextSize is
+-- rewritten per form factor further down (10 on the narrowest bands), so the
+-- helper's 12 is only the seed.
+UIStyle.button(button, {
+	Background = Color3.fromRGB(20, 35, 31),
+	Transparency = 0,
+	Radius = UIStyle.Radius.Chip,
+	TextColor = Color3.fromRGB(158, 244, 195),
+	TextSize = 12,
+})
 
 local connections, characterConnections = {}, {}
 local boundCharacter, boundHumanoid

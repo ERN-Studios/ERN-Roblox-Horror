@@ -1,0 +1,14 @@
+{
+  "status": "ok",
+  "result": {
+    "scene": "Zyntra_TableHide_20260915",
+    "action": "Zyntra_TableHide_Hold_4s_v1",
+    "frames": 121,
+    "duration": 4,
+    "roundtripMaxError": 2.5331974029541016e-07,
+    "blend": "G:\\Roblox\\MongoTV\\assets\\animations\\table-hiding\\zyntra-table-hide-v1.blend",
+    "keyframes": "G:\\Roblox\\MongoTV\\assets\\animations\\table-hiding\\hide-hold-keyframes.json",
+    "preview": "G:\\Roblox\\MongoTV\\assets\\animations\\table-hiding\\hide-hold-preview.png"
+  },
+  "stdout": "Info: Saved copy as \"zyntra-table-hide-v1.blend\"\n"
+}

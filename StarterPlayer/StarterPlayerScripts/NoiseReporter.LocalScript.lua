@@ -408,8 +408,8 @@ local function makeTouchButton(name, text)
 	local button = Instance.new("TextButton")
 	button.Name = name
 	button.AnchorPoint = Vector2.new(1, 1)
-	button.BackgroundColor3 = Color3.fromRGB(8, 10, 9)
-	button.BackgroundTransparency = 0.52
+	button.BackgroundColor3 = Color3.fromRGB(14, 20, 17)
+	button.BackgroundTransparency = 0.04
 	button.BorderSizePixel = 0
 	button.AutoButtonColor = false
 	button.Font = Enum.Font.GothamBold
@@ -425,9 +425,10 @@ local function makeTouchButton(name, text)
 	corner.CornerRadius = UDim.new(1, 0)
 	corner.Parent = button
 	local stroke = Instance.new("UIStroke")
-	stroke.Color = Color3.fromRGB(220, 228, 218)
-	stroke.Transparency = 0.48
-	stroke.Thickness = 1.5
+	stroke.Color = Color3.fromRGB(75, 94, 83)
+	stroke.Transparency = 0.28
+	stroke.Thickness = 1
+	stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 	stroke.Parent = button
 	return button, stroke
 end
@@ -676,11 +677,11 @@ local function applyStaminaLayout()
 	staBg.Position = UDim2.new(0, select(1, UIDevice.LocalOffset(gui, centre, 0)),
 		1, -UIDevice.BottomOffsetFor(gui, bottom))
 end
-staBg.BackgroundColor3 = Color3.new(0, 0, 0)
+staBg.BackgroundColor3 = Color3.fromRGB(4, 8, 6)
 staBg.BackgroundTransparency = 1 -- starts hidden (full stamina)
 staBg.BorderSizePixel = 0
 staBg.Parent = gui
-local bgc = Instance.new("UICorner"); bgc.CornerRadius = UDim.new(0, 5); bgc.Parent = staBg
+local bgc = Instance.new("UICorner"); bgc.CornerRadius = UDim.new(1, 0); bgc.Parent = staBg
 
 local staFill = Instance.new("Frame")
 staFill.AnchorPoint = Vector2.new(0, 0.5)
