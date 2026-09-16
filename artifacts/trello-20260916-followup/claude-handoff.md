@@ -82,3 +82,28 @@ agent table; `claude-contracts.md` = the interface every agent builds against.
 
 ## If this session dies
 Working copy is the truth (`git status`); nothing committed; Studio untouched until step 3.
+
+## 18:40 UTC — publish NOT done; owner action required (no more desktop control)
+
+State: all three cards are implemented, natively QA'd on desktop and on the real iPhone 13
+emulator (portrait + landscape), Studio == repo (pull --audit 143/143, parity PARITY OK), Play is
+stopped, the place is in Edit mode. Two real-device fixes from the emulator pass (rail two-column
+dodge of the thumbstick; wheel prize on the status line) are pushed and Studio-verified.
+
+The owner asked Claude to stop using computer control before the Publish click landed, so the
+remaining steps are manual (about two minutes in Studio):
+
+1. Roblox Studio (place is open, Edit mode): File > Publish to Roblox (Alt+P). Wait for the
+   "Publish complete" notification.
+2. Creator Dashboard > this experience > Places > BACKROOMS: STAY QUIET > Version History, tick
+   "Show published only" and read the newest version number (was 1920 before this batch).
+3. File > Save to File As... -> G:\Roblox\MongoTV\_local\trello-20260916-followup\
+   BACKROOMS-published-v<N>.rbxl (folder exists; _local/ is gitignored).
+4. Tell Claude the version number (and the file size if handy). Claude then writes the release
+   receipt, updates Trello #103/#104/#105 (To Do -> Done with the version), and makes the release
+   commit. Cards stay in To Do until that number is confirmed.
+
+Optional tidy-up: Test menu > Device Simulator is still ticked (iPhone 13). It does not affect the
+published content.
+
+Nothing else is pending. Uncommitted work at this stamp: none after commit (see git log).

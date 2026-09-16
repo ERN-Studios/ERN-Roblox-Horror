@@ -1034,10 +1034,23 @@ for _, case in ipairs({
         check(ctx.Skip.Size.OY >= 44, case.Name .. ': SKIP is a 44px tap target')
         check(ctx.Holder.Size.OX <= 260,
             case.Name .. ': the disc takes the width a hand can reach across')
+        -- The banner is the last thing on a canvas that scrolls (iPhone 13
+        -- landscape, 2026-09-16: canvas y 474 of a 134px body), so the prize
+        -- is also printed on the status line, which never scrolls.
+        check(ctx.Status.Text == 'YOU RECEIVED: 1 Research Token',
+            case.Name .. ': the prize is printed on the status line under the footer')
+        check(ctx.Status.TextColor3 == ctx.BannerText.TextColor3,
+            case.Name .. ': in the sector colour')
+        push(ctx, daily({}))
+        check(ctx.Status.Text == '',
+            case.Name .. ': and a day with no spin prints nothing there')
+        push(ctx, daily({Key = 'Token1', Serial = 1}))
     else
         check(ctx.Spin.Parent == ctx.Body,
             case.Name .. ': SPIN scrolls with the legend on a pointer tier')
         check(ctx.Skip.Parent == ctx.Body, case.Name .. ': and so does SKIP')
+        check(ctx.Status.Text == '',
+            case.Name .. ': a pointer tier keeps the status line for errors only')
         check(ctx.Holder.Size.OX >= 160,
             case.Name .. ': a pointer device gets a disc worth looking at')
     end

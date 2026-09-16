@@ -118,3 +118,36 @@ after this push follows. Native landscape re-measure follows in Play.
   holder (152) scroll inside the 104-px body -- the pointer and landing sector at the top stay
   on screen, the lower half scrolls. Accepted as the Galaxy A06 compromise; noted for the owner.
 - Console clean in every session. Studio is back in Edit.
+
+## Milestone 5 — 18:30 UTC (desktop grant received ~17:54 UTC; real-emulator QA done; pre-publish checkpoint)
+
+Clock note: stamps in this section are read from the Windows clock (20:3x local = 18:3x UTC).
+
+- Owner granted computer-use access to Roblox Studio (~17:54 UTC). Studio maximized; the Device
+  Simulator (iPhone 13) was driven natively with `user_mouse_input` (coordinate mapping: in
+  landscape the emulator maps moveTo (x, y) to gui (x - 47, y); explicit x/y only).
+- Real iPhone 13 emulator pass, landscape 749x368 and portrait 389x761, with the Studio touch
+  override `workspace:SetAttribute("ForceTouchUI", true)` (the emulator still reports a mouse and a
+  keyboard, so without it UIDevice lays everything out in the pointer tier):
+  - Wheel: opens from its rail button, FREE SPIN -> SPINNING... (SKIP strip) -> lands (pointer
+    265.4 deg inside Potion1 / 69.9 deg inside Token1 in the two sessions), SPUN TODAY, CLOSE.
+  - Daily Rewards: opens from its own rail button, X (44 px) closes, milestones scroll, exclusion
+    with the wheel holds.
+  - Hologram shop: card auto-opens on the Tokens4 plate (BUY 49 R$ 188x44, CLOSE 84x44), CLOSE
+    hides it and it does NOT reopen while standing still (3 s), switching to the Tokens20 plate
+    reopens with the right product, stepping off clears the focus.
+- Two real-device findings, both FIXED, pushed and covered by tests:
+  1. Landscape rail overlapped the resting thumbstick glyph (five 52px buttons = 284px, glyph at
+     y 217..291, neither side had room). `layoutSquareSections` now falls back to two columns
+     when the single column can dodge neither above nor below (rail measured at y 41..209, clear
+     of the glyph). test_zyntra_store_compact.py 520 -> 540 checks.
+  2. On the phone tier the "YOU RECEIVED" banner sat at canvas y 474 of a 134px body (never seen
+     without scrolling). `render()` now also prints the prize on the status line under the
+     footer (never scrolls) on touch tiers; status TextSize 11 -> 12. test_lucky_wheel_client.py
+     530 -> 544 checks.
+- Studio == repo after both pushes: `pull --audit` 143/143, parity probe PARITY OK (142 exact +
+  1 permitted), dump refreshed in this folder.
+- NEXT (in progress): publish (Alt+P / File > Publish to Roblox), verify the version through the
+  Creator Dashboard version history ("Show published only"), Save to File As
+  `_local/trello-20260916-followup/BACKROOMS-published-v<N>.rbxl`, update Trello #103/#104/#105,
+  commit. Cards stay in To Do until the publish is verified.

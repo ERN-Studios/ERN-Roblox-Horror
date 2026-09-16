@@ -199,19 +199,43 @@ local function layoutSquareSections(layout, shopButton, openButton, rewardsButto
 			local x, y = UIDevice.LocalOffset(touchGui, 0, 0)
 			local position = glyph.AbsolutePosition - touchGui.AbsolutePosition
 			local gx, gy = position.X - x, position.Y - y
-			if left < gx + glyph.AbsoluteSize.X and left + width > gx
-				and top < gy + glyph.AbsoluteSize.Y + 8 and top + height > gy - 8 then
-				local above = math.floor(gy - 8 - height)
-				local below = math.ceil(gy + glyph.AbsoluteSize.Y + 8)
+			local gw, gh = glyph.AbsoluteSize.X, glyph.AbsoluteSize.Y
+			-- The rail is re-solved against the glyph as a whole: first the stack
+			-- it already has, then -- if that stack can dodge neither above nor
+			-- below -- the two-column stack, which is half the height and does.
+			-- Measured on a real iPhone 13 in landscape (749x368, 2026-09-16): five
+			-- 52px buttons in one column are 297px tall, the resting glyph sits at
+			-- y 217..291, and neither side had room, so WHEEL and MUTE were drawn
+			-- under the thumbstick. Two columns (168px) clear it above.
+			local function intersects(railTop, railHeight, railWidth)
+				return left < gx + gw and left + railWidth > gx
+					and railTop < gy + gh + 8 and railTop + railHeight > gy - 8
+			end
+			local function dodge(railTop, railHeight)
+				local above = math.floor(gy - 8 - railHeight)
+				local below = math.ceil(gy + gh + 8)
 				local aboveFits = above >= safe.Top + 8
-				local belowFits = below + height <= safe.Bottom - 8
-				if aboveFits and (not belowFits or math.abs(above - top) <= math.abs(below - top)) then
-					top = above
+				local belowFits = below + railHeight <= safe.Bottom - 8
+				if aboveFits and (not belowFits or math.abs(above - railTop) <= math.abs(below - railTop)) then
+					return above
 				elseif belowFits then
-					top = below
+					return below
 				end
-				-- If neither side fits, retain the visible centred rail. Do not
-				-- hide all five controls or silently relocate them to the right.
+				return nil
+			end
+			if intersects(top, height, width) then
+				local moved = dodge(top, height)
+				if moved == nil and columns == 1 then
+					columns = 2
+					rows = math.ceil(#rail / columns)
+					height = stackHeight(rows, side)
+					width = side * columns + gap * (columns - 1)
+					top = math.floor((safe.Top + safe.Bottom - height) / 2 + 0.5)
+					if intersects(top, height, width) then moved = dodge(top, height) end
+				end
+				if moved ~= nil then top = moved end
+				-- If neither stack can dodge, retain the visible centred rail. Do
+				-- not hide all five controls or silently relocate them to the right.
 			end
 		end
 	end

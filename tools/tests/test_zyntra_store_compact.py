@@ -793,6 +793,29 @@ expect(trapped[1].Left, 8, 'on the same side of the screen')
 for _, slot in ipairs(trapped) do
 	expect(slot.Side, 52, 'and at the same size')
 end
+
+-- ---- iPhone 13 LANDSCAPE, measured 2026-09-16 in the Studio Device Simulator ------
+-- Viewport 749x368 with the 58px topbar already outside the safe gui space, so
+-- safe (0,0)-(749,310). One column of five 52px buttons is 284 tall (y 13..297)
+-- and the resting thumbstick glyph sits at (29,217) 74x74: neither above nor
+-- below has room for 284px, so the OLD code left WHEEL and MUTE under the stick.
+-- The rail has to fall back to two columns (168px), which DO fit above.
+local IPHONE_LANDSCAPE = {Left = 0, Top = 0, Right = 749, Bottom = 310}
+local landscapeGlyph = {Left = 29, Top = 217, Width = 74, Height = 74}
+local landscapeRect = {Left = 29, Top = 217, Right = 103, Bottom = 291}
+local single = run(IPHONE_LANDSCAPE, true, nil)
+expect(single[1].Left, 8, 'landscape: with no glyph the rail is one column')
+expect(single[5].Left, 8, 'landscape: all five in that column')
+expect(single[1].Top, 13, 'landscape: centred, y 13')
+local dodgedLandscape = run(IPHONE_LANDSCAPE, true, landscapeGlyph)
+expect(dodgedLandscape[4].Left, 66, 'landscape: the rail split into two columns to dodge the stick')
+expect(dodgedLandscape[1].Top, 41, 'landscape: and moved ABOVE the glyph by its 8px margin')
+for _, slot in ipairs(dodgedLandscape) do
+	ok(not overlaps(slot, landscapeRect), slot.Name .. ' (landscape) is clear of the thumbstick glyph')
+	ok(slot.Top >= IPHONE_LANDSCAPE.Top and slot.Bottom <= IPHONE_LANDSCAPE.Bottom,
+		slot.Name .. ' (landscape) stays inside the safe area')
+	expect(slot.Side, 52, slot.Name .. ' (landscape) keeps the 52px side')
+end
 print('layout|' .. checks)
 """
 

@@ -129,7 +129,7 @@ StarterPlayer.StarterPlayerScripts.Level2AlertClient	LocalScript	34389:a372010b:
 StarterPlayer.StarterPlayerScripts.LobbyCeilingSweeps	LocalScript	7021:fabc7554:0299b078
 StarterPlayer.StarterPlayerScripts.LobbyLevel3GateFlicker	LocalScript	5033:26843e7b:db426e59
 StarterPlayer.StarterPlayerScripts.LobbyMusicController	LocalScript	10098:36e5982a:e4bd67b8
-StarterPlayer.StarterPlayerScripts.Lucky Wheel Client	LocalScript	39531:ecc1bbaf:ddb41e63
+StarterPlayer.StarterPlayerScripts.Lucky Wheel Client	LocalScript	40133:e80adba6:454f3f62
 StarterPlayer.StarterPlayerScripts.MasterTuningClient	LocalScript	10614:36ac9d0c:8d6239ce
 StarterPlayer.StarterPlayerScripts.NoiseReporter	LocalScript	43475:03d2614f:ef340a33
 StarterPlayer.StarterPlayerScripts.ProtectionHUD	LocalScript	29091:dfa6a07a:631af60e
@@ -140,4 +140,4 @@ StarterPlayer.StarterPlayerScripts.RoundUI	LocalScript	237425:92d93b74:c8355e68
 StarterPlayer.StarterPlayerScripts.Shop Display Client	LocalScript	21811:c75657d1:44d2a0bd
 StarterPlayer.StarterPlayerScripts.SoundController	LocalScript	69416:c0079f4d:87de143b
 StarterPlayer.StarterPlayerScripts.SpectateController	LocalScript	19755:be3bc550:ab528e08
-StarterPlayer.StarterPlayerScripts.ZyntraStore	LocalScript	186007:51c79b78:b0328f3e
+StarterPlayer.StarterPlayerScripts.ZyntraStore	LocalScript	187153:0ec1cd16:8a77e9f0

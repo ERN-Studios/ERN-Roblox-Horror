@@ -245,7 +245,7 @@ closeButton.Parent = panel
 UIStyle.button(closeButton, {TextColor = UIStyle.Color.Body, TextSize = 12})
 
 local statusLine = newLabel(panel, "StatusLine", "")
-UIStyle.readout(statusLine, {TextColor = UIStyle.Color.Muted, TextSize = 11})
+UIStyle.readout(statusLine, {TextColor = UIStyle.Color.Muted, TextSize = 12})
 
 local body = Instance.new("ScrollingFrame")
 body.Name = "WheelBody"
@@ -816,6 +816,16 @@ function render()
 	-- The banner and SKIP both take room, so the geometry is re-resolved rather
 	-- than left describing the previous state.
 	applyLayout()
+	-- On touch tiers the body is a short scroller and the banner is the LAST
+	-- thing on its canvas: measured on an iPhone 13 in landscape (2026-09-16)
+	-- the prize sat at canvas y 474 of a 134px body, so a player saw SPUN TODAY
+	-- and never what they got. The status line under the footer never scrolls,
+	-- so there it carries the prize as well. Every path that clears the status
+	-- line calls render() straight after, which is what keeps this honest.
+	if banner.Visible and sector and spinButton.Parent == panel then
+		statusLine.Text = bannerText.Text
+		statusLine.TextColor3 = sector.Color
+	end
 end
 
 -- ── open and close ────────────────────────────────────────────────────────
