@@ -1,8 +1,14 @@
 -- LobbyShopDisplay
 -- The Zyntra SHOP frontage in the transit lobby: a recessed shop built into the
--- RIGHT service ledge between the Level 2 gate and the supply kiosk, with one
--- pedestal per catalogue item, a crate hovering over each, and a floor plate in
--- front of it that opens that item's detail card for the player standing there.
+-- RIGHT service ledge between the Level 2 gate and the supply kiosk. Every
+-- catalogue item is a HOLOGRAM -- a translucent product box floating in the
+-- beam of a projector disc on the deck -- with an INVISIBLE pressure plate on
+-- the floor in front of it that opens that item's detail card for whoever is
+-- standing there.
+--
+-- There is no pedestal to walk into and no prompt to press (Trello #105):
+-- walking up IS the interaction, the row is walk-through from the curb to the
+-- wall, and the only prompt left on the frontage is the DAILY REWARDS plaque's.
 --
 -- NOTHING HERE EVER TAKES MONEY. A plate sets ONE player attribute,
 -- ZyntraShopFocus; the client draws a card from it; the card's BUY routes back
@@ -28,11 +34,13 @@ local LobbyShopDisplay = {}
 -- interactive before a single texture exists. Bare numeric ids and full
 -- rbxassetid:// urls are both accepted; anything else is ignored rather than
 -- rendered as a broken surface.
+-- PedestalTop (101891958398163) and PlateTop (131434121223604) were retired
+-- with the pedestal cap and the visible floor plate; both surfaces are gone,
+-- so the ids are recorded in assets/shop/README.md rather than kept as config
+-- for parts that no longer exist.
 local SHOP_TEXTURES = {
 	SignFace = "rbxassetid://126032557889771",
 	SignGlow = "rbxassetid://92494312014031",
-	PedestalTop = "rbxassetid://101891958398163",
-	PlateTop = "rbxassetid://131434121223604",
 	Backdrop = "rbxassetid://124038960784765",
 	BoxFallback = "rbxassetid://90558430724311",
 	Box = {
@@ -114,22 +122,70 @@ local PALETTE = {
 -- same acceptance the 2026-09-15 build made. Both were 34.23 and 33.99 then,
 -- i.e. INSIDE the concrete shell; this build pulls them back out of it.
 --
--- The main display plates stop at x = 25.78. The adjacent supply kiosk's
--- token-item plates stop at x = 22.6, leaving 4.8 studs between their neon edge
--- and the curb face at x = 17.8. The road keeps its full 33-stud width
--- (x -16.5 .. +16.5). These two bays use the existing kiosk shelves.
+-- The main display plates stop at x = 26.08 and the kiosk's at x = 22.80, both
+-- east of the 25.78 / 22.6 limits the 2026-09-16 frontage left behind, so the
+-- walk lane and the curb face at x = 17.8 are untouched. The road keeps its
+-- full 33-stud width (x -16.5 .. +16.5).
+--
+-- THE HOLOGRAM'S CEILING IS A SIGHTLINE, NOT A COLLISION. The boxes stand at
+-- x 28.90 .. 31.90, which is BEHIND the canopy fascia (x 28.20 .. 28.64), so
+-- the thing they could actually hit is the soffit at y 8.90 -- 1.50 studs of
+-- headroom above where they are. What rules the row is what the fascia HIDES:
+-- from the far lane of the road, eye at about (x 16, y 4.5), the line that
+-- grazes the fascia's inner bottom corner (28.64, 7.60) has reached y 7.66 by
+-- the time it is over the front face of a box, and 8.40 by its rear face.
+-- Anything higher has its front corner cut off by the fascia for every player
+-- who has not walked up to it yet.
+--
+-- That is what rejects the obvious "one row low, one row high" pair at
+-- y 4.6 / 6.4: the high box would top out at 8.25 with its bob and lose its
+-- top half-stud behind the fascia from across the road. The pair that reads
+-- from everywhere is 4.40 / 5.55, and the arithmetic it is solved against,
+-- bottom up:
+--
+--   projector disc ... 0.80 .. 1.00   rests on the deck
+--   nameplate ....... 1.25 .. 2.35   0.25 over the disc, 1.10 tall not 1.43
+--   low box ......... 2.55 .. 6.25   at full bob either way (centre 4.40)
+--   high box ........ 3.70 .. 7.40   centre 5.55; 0.26 under the 7.66 sightline
+--                                    and 1.50 under the soffit it could hit
+--
+-- Corner radii, r(x, y) = sqrt(x^2 + (y - 1)^2), worst corner of each new part
+-- (the boxes reach x 31.90 at the rear and the rib limit is 33.05 because two
+-- slots cross the arch at z -52.36 .. -51.64):
+--   high box rear top (31.90, 7.40) r = 32.536  ->  0.514 clear of the ribs
+--   low  box rear top (31.90, 6.25) r = 32.329  ->  0.721
+--   projector disc    (31.70, 1.00) r = 31.700  ->  1.350
+--   nameplate         (29.20, 2.35) r = 29.223  ->  3.827
+-- and at the kiosk bays, which are at z -40.7 / -35.0 and so answer only to the
+-- shell's 33.70:
+--   bay box rear top  (31.30, 9.25) r = 32.372  ->  1.328 clear of the shell
 local AREA_Z = -57          -- centre of the frontage along the tunnel
 local AREA_HALF = 11.2      -- so the deck spans z -68.2 .. -45.8
 local FLOOR_Y = 0.65        -- top of the right service ledge
 local DECK_TOP = 0.80       -- top of the shop's own deck plate
 local BACK_X = 32.45        -- back panel centre, clear of the wall face at 32.9
-local PEDESTAL_X = 30.40    -- pedestal centres; the cap's rear reaches 31.80
-local PLATE_X = 27.38       -- the inspect plates, one pace in front of the row
+local HOLOGRAM_X = 30.40    -- projector and box centres; the box's rear reaches 31.90
+local PLATE_X = 27.78       -- the pressure plates, 0.40 further in than the 2026-09-16 row
 local ITEM_SPACING = 3.15   -- 7 slots (6 items + the rewards plaque) in 22.4
-local PLATE_HALF_X, PLATE_HALF_Z = 1.50, 1.43
+local PLATE_HALF_X, PLATE_HALF_Z = 1.70, 1.55
 local PLATE_HYSTERESIS = 0.6 -- the zone a player already inside has to leave
-local LATCH_RANGE = 14       -- how far a prompt's focus survives being walked away from
 local FOCUS_POLL = 0.2       -- seconds; also the debounce for a plate's edge
+
+-- The hologram kit. One set of numbers for the frontage row and one for the two
+-- kiosk bays, which have no canopy over them and can afford a bigger box.
+local BOX_SIZE = 3.00               -- was a 2.20 crate: 1.86x the face, 2.5x the volume
+local BOX_Y_LOW, BOX_Y_HIGH = 4.40, 5.55
+local BAY_BOX_SIZE = 3.20
+local BAY_BOX_X, BAY_BOX_Y = 29.70, 7.30 -- clear of the bay shelf, recess and info card
+local BAY_BASE_Y = 4.52             -- disc bottom, 0.06 over the bay shelf top at 4.46
+local BAY_PLATE_X = 24.50           -- road edge 22.80, clear of the counter's bottom glow
+local PROJECTOR_WIDE = 2.60
+local PROJECTOR_THICK = 0.20
+local BEAM_WIDE = 0.50
+local HOLOGRAM_TRANSPARENCY = 0.35
+local BEAM_TRANSPARENCY = 0.85
+local BOB_CLEARANCE = 0.35  -- Shop Display Client's BOB_HEIGHT, so the beam reaches the top of it
+local NAMEPLATE_Y = 1.80
 local FOCUS_ATTRIBUTE = "ZyntraShopFocus"
 local MODEL_NAME = "ZyntraShopDisplay"
 local REWARDS_PROMPT_NAME = "ZyntraShopPrompt"  -- the name ZyntraStore already binds
@@ -137,7 +193,7 @@ local REWARDS_PROMPT_FLAG = "ShopRewardsPrompt" -- how the client tells it apart
 
 -- The terminal's Shop tab order, so the wall reads left to right the way the
 -- card list reads top to bottom. Anything in the catalogue that is NOT named
--- here still gets a pedestal (see `catalogue`), with the fallback crate.
+-- here still gets a hologram (see `catalogue`), with the fallback art.
 local DISPLAY_ORDER = {
 	{Key = "Supporter", Kind = "Pass"},
 	{Key = "AdvancedEquipment", Kind = "Pass"},
@@ -212,6 +268,10 @@ local function addDecal(part, face, slot, id, color)
 	decal.Name = "ShopTexture"
 	decal.Face = face
 	decal.Texture = url
+	-- Stated rather than left to the default: a Decal inherits nothing from its
+	-- part, and the hologram boxes it goes on are 0.35 transparent on purpose.
+	-- The product art is the one thing on them that has to stay solid.
+	decal.Transparency = 0
 	if color then decal.Color3 = color end
 	decal.Parent = part
 	part:SetAttribute("ShopTextureSlot", slot)
@@ -291,14 +351,15 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 
 	local model = Instance.new("Model")
 	model.Name = MODEL_NAME
-	model:SetAttribute("ShopDisplayVersion", 2)
+	model:SetAttribute("ShopDisplayVersion", 3)
 	model:SetAttribute("Placement", "Right service ledge between the Level 2 gate and the supply kiosk")
 	model:SetAttribute("FocusAttribute", FOCUS_ATTRIBUTE)
 	-- The envelope this build was solved against, so a Studio probe can check the
 	-- geometry without reading the source.
 	model:SetAttribute("ShellInnerRadius", 33.9)
 	model:SetAttribute("RibInnerRadius", 33.25)
-	model:SetAttribute("FrontmostX", 24.2 - PLATE_HALF_X - 0.10)
+	model:SetAttribute("FrontmostX", BAY_PLATE_X - PLATE_HALF_X)
+	model:SetAttribute("CanopyClearanceY", 7.60)
 	model.Parent = lobbyModel
 
 	-- Every part faces the road: the part's Front (-Z) points at the tunnel's
@@ -307,6 +368,88 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 	local function faceCF(x, y, z)
 		local position = center + Vector3.new(x, y, AREA_Z + z)
 		return CFrame.lookAt(position, center + Vector3.new(0, y, AREA_Z + z))
+	end
+
+	-- ── one hologram fixture ──────────────────────────────────────────────────
+	-- A projector disc standing on `baseY`, the beam it throws, and the product
+	-- box floating in it. The frontage row and the two kiosk bays build the same
+	-- three parts at two sizes, so the shop reads as one kit and not as two.
+	--
+	-- The disc is a CylinderMesh on an ordinary Part rather than a Cylinder-
+	-- shaped part: a Cylinder part's axis is +X and would have to be rolled 90
+	-- degrees to lie flat, which puts a rotation into geometry whose every other
+	-- corner is checked against a radius. CylinderMesh's axis is already +Y.
+	local function addHologram(stand, key, accent, x, offset, baseY, boxY, boxSize, textureId, item)
+		local disc = makePart(stand, "ShopProjectorDisc",
+			faceCF(x, baseY + PROJECTOR_THICK * 0.5, offset),
+			Vector3.new(PROJECTOR_WIDE, PROJECTOR_THICK, PROJECTOR_WIDE),
+			accent, Enum.Material.Neon, 0.2)
+		disc:SetAttribute("ShopItemKey", key)
+		local mesh = Instance.new("CylinderMesh")
+		mesh.Name = "ShopProjectorDiscMesh"
+		mesh.Parent = disc
+
+		-- The beam is fixed and the box moves, so the beam reaches the box's
+		-- HIGHEST bob: an overlap inside a 0.35-transparent box is invisible,
+		-- a 0.35-stud gap at the top of a light beam reads as a fault.
+		local beamBottom = baseY + PROJECTOR_THICK
+		local beamTop = boxY - boxSize * 0.5 + BOB_CLEARANCE
+		local beam = makePart(stand, "ShopProjectorBeam",
+			faceCF(x, (beamBottom + beamTop) * 0.5, offset),
+			Vector3.new(BEAM_WIDE, beamTop - beamBottom, BEAM_WIDE),
+			accent, Enum.Material.Neon, BEAM_TRANSPARENCY)
+		beam.CanQuery = false
+		beam:SetAttribute("ShopItemKey", key)
+
+		local box = makePart(stand, "ShopHologramBox",
+			faceCF(x, boxY, offset), Vector3.new(boxSize, boxSize, boxSize),
+			accent, Enum.Material.ForceField, HOLOGRAM_TRANSPARENCY)
+		box:SetAttribute("ShopItemKey", key)
+		box:SetAttribute("ShopBobOrigin", box.CFrame)
+		box:SetAttribute("ShopTextureSlot", "Box:" .. key)
+		-- The product art goes on the ONE face that looks at the road and stays
+		-- fully opaque there: a Decal inherits nothing from its part's
+		-- transparency, so the item reads solid inside a box that does not. The
+		-- other five faces are the accent's own glass. Nothing turns the box --
+		-- see Shop Display Client -- because a turning box hides the art it
+		-- exists to show.
+		local hasArt = assetUrl(textureId) and addDecal(box, Enum.NormalId.Front, "Box:" .. key, textureId)
+		if not hasArt then
+			hasArt = addDecal(box, Enum.NormalId.Front, "BoxFallback", textures.BoxFallback)
+		end
+		if not hasArt then
+			hasArt = addDecal(box, Enum.NormalId.Front, "Box:" .. key, item and item.IconId)
+		end
+		if not hasArt then
+			-- Never a blank box: the item's own monogram until an id exists.
+			local gui = addFace(box, Enum.NormalId.Front, 256, 256)
+			addText(gui, "BoxMonogram", tostring((item and item.IconText) or "Z//"),
+				UDim2.fromScale(0.1, 0.28), UDim2.fromScale(0.8, 0.44), accent, Enum.Font.GothamBlack)
+		end
+
+		local edge = Instance.new("SelectionBox")
+		edge.Name = "ShopBoxEdge"
+		edge.Adornee = box
+		edge.Color3 = accent
+		edge.LineThickness = 0.05
+		edge.Transparency = 0.2
+		edge.Parent = box
+		addPointLight(box, "ShopBoxGlow", accent, 1.1, 11)
+		return box
+	end
+
+	-- ── one pressure plate ────────────────────────────────────────────────────
+	-- INVISIBLE by contract (#105): the player sees the hologram, not the floor
+	-- it is keyed to. Non-query and non-touch as well as non-collidable, so no
+	-- raycast, prompt or Touched handler anywhere in the game can see it either;
+	-- the focus pass below is the only thing that knows it is there.
+	local function addPlate(stand, key, x, offset, y)
+		local plate = makePart(stand, "ShopPressurePlate",
+			faceCF(x, y, offset), Vector3.new(PLATE_HALF_Z * 2, 0.12, PLATE_HALF_X * 2),
+			PALETTE.metalLight, Enum.Material.SmoothPlastic, 1)
+		plate.CanQuery = false
+		plate:SetAttribute("ShopItemKey", key)
+		return plate
 	end
 
 	-- ── shell: deck, back panel, two pilasters ────────────────────────────────
@@ -331,7 +474,7 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 	for _, side in ipairs({-1, 1}) do
 		-- Blades on the backdrop rather than the 2026-09-15 full-depth columns:
 		-- at 4.6 studs deep their rear corner measured r = 34.23, a third of a
-		-- stud inside the shell, and they clipped the outer pedestal caps.
+		-- stud inside the shell, and they clipped the outer slots.
 		makePart(model, "ShopPilaster",
 			faceCF(32.12, (1.05 + 9.34) * 0.5, side * (AREA_HALF - 0.45)), Vector3.new(0.90, 9.34 - 1.05, 0.44),
 			PALETTE.metal, Enum.Material.Metal)
@@ -341,8 +484,9 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 	end
 
 	-- ── canopy: a lit fascia the walk reads, and the soffit it hangs from ─────
-	-- The fascia's bottom edge is y 7.60 and the crates top out at 6.95 plus
-	-- 0.35 of bob, so there is 0.30 of air under it at the top of the bob.
+	-- The fascia's bottom edge is y 7.60. It is the CEILING the hologram row is
+	-- solved against: the high box tops out at 7.40 with its bob, so there is
+	-- 0.20 of air under the fascia at the top of the bob.
 	local fascia = makePart(model, "ShopCanopyFascia",
 		faceCF(28.42, 8.25, 0), Vector3.new(21.80, 1.30, 0.44),
 		PALETTE.metal, Enum.Material.Metal)
@@ -352,7 +496,7 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 	do
 		-- 21.80 x 1.30 studs of face at 436 x 26 canvas = 20.0 px/stud, so the
 		-- 22 px band of type is 1.10 studs tall in the world -- three times the
-		-- 2026-09-15 pedestal caption, and the widest single line the shop has.
+		-- 2026-09-15 slot caption, and the widest single line the shop has.
 		local gui = addFace(fascia, Enum.NormalId.Front, 436, 26)
 		addText(gui, "CanopyWord", "ZYNTRA  //  SUPPLY", UDim2.fromOffset(8, 2),
 			UDim2.fromOffset(420, 22), PALETTE.amber, Enum.Font.Code)
@@ -435,12 +579,12 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 	signLight.Shadows = false
 	signLight.Parent = sign
 
-	-- ── one pedestal, crate, nameplate and plate per catalogue item ───────────
+	-- ── one hologram, nameplate and pressure plate per catalogue item ─────────
 	-- Seven slots across the 22.4 studs: six items and the DAILY REWARDS plaque
-	-- at the kiosk end. At 3.15 studs the widest part of a slot (the plate's
-	-- neon edge, 3.06) leaves 0.09 between slots and 0.22 at each end of the
-	-- frontage. The 2026-09-15 row used 3.70 for six slots and had no room for a
-	-- seventh; nothing on the wall can be spaced wider and still fit the plaque.
+	-- at the kiosk end. At 3.15 studs the widest part of a slot is now the
+	-- pressure plate at 3.10 along the wall, which leaves 0.05 between zones --
+	-- a gap PLATE_HYSTERESIS covers, so a player walking the row never falls
+	-- between two cards. The 3.00 boxes leave 0.15 between them at any height.
 	local items = catalogue()
 	local count = #items
 	local slots = count + 1
@@ -448,7 +592,6 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 		return (index - (slots + 1) * 0.5) * ITEM_SPACING
 	end
 	local plates = {}
-	local prompts = {}
 	for index, entry in ipairs(items) do
 		local offset = slotOffset(index)
 		local accent = entry.Key == "EmergencyReentry" and PALETTE.red
@@ -460,124 +603,52 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 		stand:SetAttribute("ShopItemKind", entry.Kind)
 		stand.Parent = model
 
-		-- 3.20 tall instead of 2.60, and the row no longer bows toward the road:
-		-- the 2026-09-15 arc pushed the middle columns 0.85 studs forward, where
-		-- their front face cut 0.25 studs into their own inspect plate.
-		local column = makePart(stand, "ShopPedestal",
-			faceCF(PEDESTAL_X, (DECK_TOP + 4.00) * 0.5, offset), Vector3.new(2.70, 4.00 - DECK_TOP, 2.40),
-			PALETTE.metal, Enum.Material.Metal)
-		column.CanCollide = true
-		column:SetAttribute("ShopItemKey", entry.Key)
+		-- Alternating hover heights. Nothing turns, so 3.00 boxes at a 3.15
+		-- pitch clear each other by 0.15 at any height -- but a single-height
+		-- row occludes itself the moment the walk reads it from down the
+		-- tunnel rather than square on. 1.15 studs of stagger opens a sightline
+		-- to both rows from the same place.
+		local boxY = (index % 2 == 1) and BOX_Y_LOW or BOX_Y_HIGH
+		addHologram(stand, entry.Key, accent, HOLOGRAM_X, offset, DECK_TOP, boxY,
+			BOX_SIZE, textures.Box and textures.Box[entry.Key], entry.Item)
 
-		local cap = makePart(stand, "ShopPedestalCap",
-			faceCF(PEDESTAL_X, 4.16, offset), Vector3.new(2.86, 0.32, 2.80),
-			PALETTE.black, Enum.Material.Metal)
-		cap:SetAttribute("ShopItemKey", entry.Key)
-		if not addDecal(cap, Enum.NormalId.Top, "PedestalTop", textures.PedestalTop) then
-			cap:SetAttribute("ShopTextureSlot", "PedestalTop")
-			makePart(stand, "ShopPedestalRing",
-				faceCF(PEDESTAL_X, 4.35, offset), Vector3.new(2.10, 0.06, 2.10),
-				accent, Enum.Material.Neon, 0.1)
-		end
-
-		-- The nameplate is its own 2.86 x 1.43 plaque on the column's front, not
-		-- a caption on the 2.20-stud column face it used to share with the kind
-		-- line. Physical type size is set by the plaque's WIDTH divided by the
-		-- characters on a line, not by the canvas: 2.86 studs over ten characters
-		-- is 0.52 studs of glyph height against 0.39 before, and the canvas is
-		-- 144 x 72 = 50.35 px/stud on a 2:1 face so nothing is stretched.
+		-- The nameplate lost the column it was bolted to and now floats in the
+		-- beam under the box, in front of it rather than behind it, so nothing
+		-- translucent sits between the name and the road. 1.10 tall instead of
+		-- 1.43 is what puts its top at 2.35, a clear 0.20 under the low box's
+		-- deepest bob. Physical type size is the plaque's WIDTH over the
+		-- characters on a line, and 2.86 studs is unchanged, so the name reads
+		-- exactly as large as it did; the canvas is 143 x 55 = 50 px/stud on a
+		-- 2.6:1 face that matches the plaque, so nothing is stretched.
 		local plaque = makePart(stand, "ShopNamePlate",
-			faceCF(PEDESTAL_X - 1.26, 3.20, offset), Vector3.new(2.86, 1.43, 0.12),
+			faceCF(HOLOGRAM_X - 1.26, NAMEPLATE_Y, offset), Vector3.new(2.86, 1.10, 0.12),
 			PALETTE.panel, Enum.Material.Metal)
 		plaque:SetAttribute("ShopItemKey", entry.Key)
 		if not addDecal(plaque, Enum.NormalId.Front, "NamePlate", textures.NamePlate) then
 			plaque:SetAttribute("ShopTextureSlot", "NamePlate")
 		end
-		local plaqueGui = addFace(plaque, Enum.NormalId.Front, 144, 72)
+		local plaqueGui = addFace(plaque, Enum.NormalId.Front, 143, 55)
 		-- Price-free by contract: the eyebrow says what KIND of thing this is and
 		-- the card says what it costs, because the price is live and this is not.
 		addText(plaqueGui, "ItemKind", entry.Kind == "Pass" and "PASS" or "PRODUCT",
-			UDim2.fromOffset(8, 4), UDim2.fromOffset(128, 16), accent, Enum.Font.Code)
+			UDim2.fromOffset(4, 3), UDim2.fromOffset(135, 13), accent, Enum.Font.Code)
 		addText(plaqueGui, "ItemName", tostring(entry.Item.Name or entry.Key),
-			UDim2.fromOffset(6, 22), UDim2.fromOffset(132, 44), PALETTE.text)
+			UDim2.fromOffset(4, 18), UDim2.fromOffset(135, 34), PALETTE.text)
 
-		-- The hovering representation. The client bobs and turns it from this
-		-- pose; the server never moves it, so nothing here replicates per frame.
-		local box = makePart(stand, "ShopItemBox",
-			faceCF(PEDESTAL_X, 5.85, offset), Vector3.new(2.20, 2.20, 2.20),
-			PALETTE.panel, Enum.Material.Metal)
-		box:SetAttribute("ShopItemKey", entry.Key)
-		box:SetAttribute("ShopBobOrigin", box.CFrame)
-		box.Reflectance = 0.08
-		local boxTexture = textures.Box and textures.Box[entry.Key]
-		local faces = {Enum.NormalId.Front, Enum.NormalId.Back, Enum.NormalId.Left, Enum.NormalId.Right}
-		if assetUrl(boxTexture) or assetUrl(textures.BoxFallback) then
-			local slot = assetUrl(boxTexture) and ("Box:" .. entry.Key) or "BoxFallback"
-			local id = assetUrl(boxTexture) and boxTexture or textures.BoxFallback
-			for _, face in ipairs(faces) do addDecal(box, face, slot, id) end
-		else
-			-- Until the crate art lands, the crate wears the item's own live
-			-- monetization icon on the face that looks at the road, and its
-			-- accent colour everywhere else. Never a blank box.
-			box:SetAttribute("ShopTextureSlot", "Box:" .. entry.Key)
-			if not addDecal(box, Enum.NormalId.Front, "Box:" .. entry.Key, entry.Item.IconId) then
-				local gui = addFace(box, Enum.NormalId.Front, 256, 256)
-				addText(gui, "BoxMonogram", tostring(entry.Item.IconText or "Z//"),
-					UDim2.fromScale(0.1, 0.28), UDim2.fromScale(0.8, 0.44), accent, Enum.Font.GothamBlack)
-			end
-			-- One adornment draws the whole neon silhouette, which is what the
-			-- crate art will carry as printed edge trim.
-			local edge = Instance.new("SelectionBox")
-			edge.Name = "ShopBoxEdge"
-			edge.Adornee = box
-			edge.Color3 = accent
-			edge.LineThickness = 0.04
-			edge.Transparency = 0.25
-			edge.Parent = box
-		end
-
-		addPointLight(box, "ShopBoxGlow", accent, 0.9, 9)
-
-		-- The deliberate alternative to standing on the plate: one prompt, on
-		-- the pedestal, that opens the same card. E on a keyboard, X on a pad,
-		-- and a tap on touch -- which is why the plate is not the only way in.
-		local prompt = Instance.new("ProximityPrompt")
-		prompt.Name = "ShopInspectPrompt"
-		prompt.ActionText = "INSPECT"
-		prompt.ObjectText = tostring(entry.Item.Name or entry.Key)
-		prompt.KeyboardKeyCode = Enum.KeyCode.E
-		prompt.GamepadKeyCode = Enum.KeyCode.ButtonX
-		prompt.HoldDuration = 0
-		prompt.MaxActivationDistance = 9
-		prompt.RequiresLineOfSight = false
-		prompt.Parent = column
-		prompts[entry.Key] = prompt
-
-		local plate = makePart(stand, "ShopInspectPlate",
-			faceCF(PLATE_X, DECK_TOP + 0.06, offset), Vector3.new(PLATE_HALF_Z * 2, 0.12, PLATE_HALF_X * 2),
-			PALETTE.metalLight, Enum.Material.DiamondPlate)
-		plate:SetAttribute("ShopItemKey", entry.Key)
-		if not addDecal(plate, Enum.NormalId.Top, "PlateTop", textures.PlateTop) then
-			plate:SetAttribute("ShopTextureSlot", "PlateTop")
-			local gui = addFace(plate, Enum.NormalId.Top, 286, 300)
-			local hint = addText(gui, "PlateHint", "STEP TO\nINSPECT",
-				UDim2.fromOffset(24, 90), UDim2.fromOffset(238, 120), PALETTE.neon, Enum.Font.Code)
-			hint.TextTransparency = 0.15
-		end
-		makePart(stand, "ShopInspectPlateEdge",
-			faceCF(PLATE_X, DECK_TOP + 0.01, offset), Vector3.new(PLATE_HALF_Z * 2 + 0.20, 0.06, PLATE_HALF_X * 2 + 0.20),
-			PALETTE.neon, Enum.Material.Neon, 0.35)
-
-		table.insert(plates, {
-			Key = entry.Key,
-			Plate = plate.Position,
-			Pedestal = column.Position,
-		})
+		local plate = addPlate(stand, entry.Key, PLATE_X, offset, DECK_TOP + 0.06)
+		table.insert(plates, {Key = entry.Key, Plate = plate.Position})
 	end
 
 	-- Token supplies occupy the existing kiosk's first two merchandise bays.
-	-- The counter stays solid; inspect plates sit in front of it. This keeps
-	-- the larger frontage readable without squeezing nine stands into one row.
+	-- The counter stays solid and the pressure plates sit in front of it, so the
+	-- larger frontage stays readable without squeezing nine slots into one row.
+	--
+	-- The bay hologram is 3.20 rather than 3.00 because nothing hangs over it,
+	-- and it sits at (29.70, 7.30) rather than the crate's old (30.75, 6.00):
+	-- a 3.20 box at the old pose would have cut the bay shelf at y 4.46 on the
+	-- down-bob and the bay's info card at y 7.56 on the up-bob. Its projector
+	-- disc floats 0.06 over the shelf lip instead of resting on it -- a disc on
+	-- the deck below would be hidden by the counter top at y 4.22.
 	for _, bay in ipairs({{Key = "SpeedPotion", Offset = 16.3}, {Key = "RouteMarker", Offset = 22}}) do
 		local item = Config.Items and Config.Items[bay.Key]
 		if item then
@@ -587,44 +658,23 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 			stand:SetAttribute("ShopItemKind", "Item")
 			stand:SetAttribute("ShopSupplyBay", true)
 			stand.Parent = model
-			local box = makePart(stand, "ShopItemBox", faceCF(30.75, 6.0, bay.Offset),
-				Vector3.new(2.2, 2.2, 2.2), PALETTE.panel, Enum.Material.Metal)
-			box:SetAttribute("ShopItemKey", bay.Key)
-			box:SetAttribute("ShopBobOrigin", box.CFrame)
-			for _, face in ipairs({Enum.NormalId.Front, Enum.NormalId.Back, Enum.NormalId.Left, Enum.NormalId.Right}) do
-				addDecal(box, face, "Box:" .. bay.Key, textures.Box and textures.Box[bay.Key] or item.IconId)
-			end
-			addPointLight(box, "ShopBoxGlow", PALETTE.gold, 0.6, 7)
-			local prompt = Instance.new("ProximityPrompt")
-			prompt.Name = "ShopInspectPrompt"
-			prompt.ActionText = "INSPECT"
-			prompt.ObjectText = item.Name
-			prompt.KeyboardKeyCode = Enum.KeyCode.E
-			prompt.GamepadKeyCode = Enum.KeyCode.ButtonX
-			prompt.HoldDuration = 0
-			prompt.MaxActivationDistance = 10
-			prompt.RequiresLineOfSight = false
-			prompt.Parent = box
-			prompts[bay.Key] = prompt
-			local plate = makePart(stand, "ShopInspectPlate", faceCF(24.2, FLOOR_Y + 0.06, bay.Offset),
-				Vector3.new(PLATE_HALF_Z * 2, 0.12, PLATE_HALF_X * 2), PALETTE.metalLight, Enum.Material.DiamondPlate)
-			plate:SetAttribute("ShopItemKey", bay.Key)
-			addDecal(plate, Enum.NormalId.Top, "PlateTop", textures.PlateTop)
-			makePart(stand, "ShopInspectPlateEdge", faceCF(24.2, FLOOR_Y + 0.01, bay.Offset),
-				Vector3.new(PLATE_HALF_Z * 2 + 0.2, 0.06, PLATE_HALF_X * 2 + 0.2), PALETTE.gold, Enum.Material.Neon, 0.35)
-			table.insert(plates, {Key = bay.Key, Plate = plate.Position, Pedestal = box.Position})
+			addHologram(stand, bay.Key, PALETTE.gold, BAY_BOX_X, bay.Offset, BAY_BASE_Y,
+				BAY_BOX_Y, BAY_BOX_SIZE, textures.Box and textures.Box[bay.Key], item)
+			local plate = addPlate(stand, bay.Key, BAY_PLATE_X, bay.Offset, FLOOR_Y + 0.06)
+			table.insert(plates, {Key = bay.Key, Plate = plate.Position})
 			count += 1
 		end
 	end
 	model:SetAttribute("ShopItemCount", count)
 
 	-- ── the seventh slot: DAILY REWARDS ──────────────────────────────────────
-	-- A reach-in, not a shop item: it has no inspect plate, it never publishes
-	-- ZyntraShopFocus, and it grants NOTHING. Its prompt opens the Zyntra
-	-- terminal. The prompt keeps the name ZyntraStore has always bound
-	-- (ZyntraShopPrompt), so if the Rewards tab is not in this build the
-	-- terminal still opens on Shop; Shop Display Client recognises it by the
-	-- ShopRewardsPrompt attribute and asks for the Rewards tab on top of that.
+	-- A reach-in, not a shop item: it has no pressure plate, it never publishes
+	-- ZyntraShopFocus, and it grants NOTHING. It is also the ONLY prompt left on
+	-- the frontage. It keeps the name ZyntraStore has always bound
+	-- (ZyntraShopPrompt) and the ShopRewardsPrompt attribute that tells it apart
+	-- from the kiosk's own terminal prompt, so whatever the client binds that
+	-- attribute to -- the terminal's Rewards tab before this batch, the
+	-- standalone Daily Rewards modal after it -- keeps working unchanged.
 	do
 		local offset = slotOffset(slots)
 		local stand = Instance.new("Model")
@@ -633,7 +683,7 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 		stand.Parent = model
 
 		local plinth = makePart(stand, "ShopRewardsPlinth",
-			faceCF(PEDESTAL_X, (DECK_TOP + 2.60) * 0.5, offset), Vector3.new(2.70, 2.60 - DECK_TOP, 2.40),
+			faceCF(HOLOGRAM_X, (DECK_TOP + 2.60) * 0.5, offset), Vector3.new(2.70, 2.60 - DECK_TOP, 2.40),
 			PALETTE.metal, Enum.Material.Metal)
 		plinth.CanCollide = true
 
@@ -656,16 +706,16 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 			UDim2.fromOffset(100, 28), PALETTE.gold, Enum.Font.GothamBlack)
 		addText(gui, "RewardsTitle2", "REWARDS", UDim2.fromOffset(6, 46),
 			UDim2.fromOffset(100, 28), PALETTE.gold, Enum.Font.GothamBlack)
-		addText(gui, "RewardsLine", "FREE DAILY SPIN", UDim2.fromOffset(6, 80),
+		addText(gui, "RewardsLine", "PLAY TO EARN", UDim2.fromOffset(6, 80),
 			UDim2.fromOffset(100, 14), PALETTE.text, Enum.Font.Code)
-		addText(gui, "RewardsFoot", "ZYNTRA TERMINAL", UDim2.fromOffset(6, 106),
+		addText(gui, "RewardsFoot", "PRESS E TO OPEN", UDim2.fromOffset(6, 106),
 			UDim2.fromOffset(100, 16), PALETTE.muted, Enum.Font.Code)
 		addPointLight(plaque, "ShopRewardsGlow", PALETTE.gold, 0.9, 10)
 
 		local prompt = Instance.new("ProximityPrompt")
 		prompt.Name = REWARDS_PROMPT_NAME
 		prompt.ActionText = "DAILY REWARDS"
-		prompt.ObjectText = "Zyntra Terminal"
+		prompt.ObjectText = "Daily Rewards"
 		prompt.KeyboardKeyCode = Enum.KeyCode.E
 		prompt.GamepadKeyCode = Enum.KeyCode.ButtonX
 		prompt.HoldDuration = 0
@@ -676,32 +726,40 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 	end
 
 	-- ── focus ────────────────────────────────────────────────────────────────
-	-- One server pass decides, for every player, which item they are looking at:
-	-- the plate they are standing on, or the pedestal they last pressed INSPECT
-	-- at while they stay near it. Derived every pass rather than latched on a
-	-- Touched/TouchEnded pair, so a player who dies, teleports or is moved by
-	-- anything else cannot leave a card stuck open behind them. FOCUS_POLL is
-	-- the debounce; PLATE_HYSTERESIS keeps a player standing on an edge from
-	-- flickering the card.
-	-- Keyed by UserId, not by the Player: this loop outlives the players who
-	-- leave during it and must not hold a departed one alive.
-	local latched = {}
-
+	-- One server pass decides, for every player, which item they are standing in
+	-- front of. Derived from the player's position every pass rather than
+	-- latched on a Touched/TouchEnded pair, so a player who dies, teleports or
+	-- is moved by anything else cannot leave a card stuck open behind them, and
+	-- so there is no state to get out of step with where they actually are.
+	--
+	-- The three behaviours #105 asks for all fall out of this one pass:
+	--   DEBOUNCE ....... FOCUS_POLL. A zone edge can only change the answer five
+	--                    times a second, and the attribute is written only when
+	--                    the answer CHANGES, so standing still writes nothing.
+	--   SWITCHING ...... stepping into the next zone returns the next key.
+	--   LEAVING ........ no zone means nil, which closes the card. There is no
+	--                    timer and nothing to expire, so there is no state in
+	--                    which walking away can reopen anything.
 	local function plateUnder(position, current)
+		-- The zone the player already holds is tested FIRST, so its hysteresis
+		-- always beats a neighbour's raw zone: at a 3.15 pitch the zones are
+		-- 0.05 apart and the slack reaches into the next one, and without this
+		-- the answer at a boundary would depend on the order the row was built.
 		for _, record in ipairs(plates) do
-			local slack = record.Key == current and PLATE_HYSTERESIS or 0
-			local delta = position - record.Plate
-			if math.abs(delta.X) <= PLATE_HALF_X + slack
-				and math.abs(delta.Z) <= PLATE_HALF_Z + slack then
-				return record.Key
+			if record.Key == current then
+				local delta = position - record.Plate
+				if math.abs(delta.X) <= PLATE_HALF_X + PLATE_HYSTERESIS
+					and math.abs(delta.Z) <= PLATE_HALF_Z + PLATE_HYSTERESIS then
+					return current
+				end
+				break
 			end
 		end
-		return nil
-	end
-
-	local function pedestalPosition(key)
 		for _, record in ipairs(plates) do
-			if record.Key == key then return record.Pedestal end
+			local delta = position - record.Plate
+			if math.abs(delta.X) <= PLATE_HALF_X and math.abs(delta.Z) <= PLATE_HALF_Z then
+				return record.Key
+			end
 		end
 		return nil
 	end
@@ -711,27 +769,7 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 		local character = player.Character
 		local root = character and character:FindFirstChild("HumanoidRootPart")
 		if not root then return nil end
-		local current = player:GetAttribute(FOCUS_ATTRIBUTE)
-		local onPlate = plateUnder(root.Position, current)
-		if onPlate then
-			latched[player.UserId] = nil
-			return onPlate
-		end
-		local key = latched[player.UserId]
-		local pedestal = key and pedestalPosition(key)
-		if pedestal and (root.Position - pedestal).Magnitude <= LATCH_RANGE then
-			return key
-		end
-		latched[player.UserId] = nil
-		return nil
-	end
-
-	for key, prompt in pairs(prompts) do
-		prompt.Triggered:Connect(function(player)
-			-- A second press on the same pedestal closes it again.
-			latched[player.UserId] = latched[player.UserId] ~= key and key or nil
-			player:SetAttribute(FOCUS_ATTRIBUTE, latched[player.UserId])
-		end)
+		return plateUnder(root.Position, player:GetAttribute(FOCUS_ATTRIBUTE))
 	end
 
 	task.spawn(function()

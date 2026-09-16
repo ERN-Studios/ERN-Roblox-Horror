@@ -1,13 +1,16 @@
-"""The Zyntra terminal: content tiers, the shop's list+detail split, FIELD
-SUPPLIES, the mounted-page tab rule, and the square HUD button.
+"""The Zyntra terminal and its lobby rail: content tiers, the shop's list+detail
+split, FIELD SUPPLIES, the mounted-page tab rule, and the five square HUD
+buttons.
 
 Trello #68 gave this terminal three content tiers (phone / tablet / pointer)
 because 67.7% of this game's audience plays on touch. Trello #102 made the
 pointer composition bigger and turned the Shop tab into a list + detail browser,
 #85 put two token consumables on the Upgrades tab, and the owner's 2026-09-16
-correction took the circular treatment back off the HUD shop button.
+correction took the circular treatment back off the HUD shop button. Cards #103
+and #104 then took Daily Rewards OUT of the terminal and gave it and the new
+Lucky Wheel a rail button each, so the rail went from three buttons to five.
 
-Four things have to stay true and none of them is visible from a screenshot:
+Seven things have to stay true and none of them is visible from a screenshot:
 
   * the POINTER tier is still the authored card, to the pixel (330px upgrade
     card, 76px product icon, copyLeft 104 / copyInset 118),
@@ -15,7 +18,15 @@ Four things have to stay true and none of them is visible from a screenshot:
     NEVER GETS THE SECOND PANE,
   * a FIELD SUPPLIES button spends tokens through ZyntraAction "BuyItem" with the
     contract's payload, and says SAVING... exactly while it cannot be pressed,
-  * REWARDS and NOTES exist as tabs only where their page module does.
+  * NOTES exists as a tab only where its page module does, and REWARDS does NOT
+    exist as a tab even though its page module is still in ReplicatedStorage,
+  * the rail is five buttons in one drawn order, built by one loop over one list,
+  * layoutSquareSections fits them at 64 / 56 / 52px and then in two columns
+    rather than clipping one off the bottom, and dodges the thumbstick glyph
+    against the rail's WHOLE footprint,
+  * REWARDS and WHEEL fire PlayerScripts.OpenDailyRewards / OpenLuckyWheel and
+    refuse in a round, under a queue and under any screen-owning modal -- and
+    every "Rewards" caller reaches the modal rather than falling back to Shop.
 
 The tier tables and the height expressions are EXTRACTED from
 ZyntraStore.LocalScript.lua so the arithmetic mirror cannot drift. Everything
@@ -39,6 +50,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 SRC_PATH = ROOT / "StarterPlayer" / "StarterPlayerScripts" / "ZyntraStore.LocalScript.lua"
 SRC = SRC_PATH.read_text(encoding="utf-8")
+UIDEVICE = (ROOT / "ReplicatedStorage" / "UIDevice.ModuleScript.lua").read_text(encoding="utf-8")
 
 PHONE, TABLET, POINTER = 0, 1, 2
 TOUCH_TAP, POINTER_TAP = 44, 32
@@ -174,8 +186,31 @@ check("SHOP_ICON_CIRCLE" not in SRC, "the circular shop-button block is gone")
 check("UDim.new(1, 0)" not in SRC, "no disc corner radius survives anywhere in the store")
 check("TweenService" not in SRC, "the breathing ring's tween is gone with it")
 check("shopButtonSections.Size" not in SRC, "the 8px disc inset is gone")
-rail = section("for _, entry in ipairs({openButton, shopButton, musicButton}) do",
+rail = section("for _, entry in ipairs(railButtons) do",
                "-- C5_ZYNTRA_OPEN_BUTTON_20260829")
+
+# ── 5a. THE RAIL IS ENUMERATED ONCE (cards #103/#104) ──────────────────────
+# Seven places used to each name three buttons. Two more buttons arrived on
+# 2026-09-16, and a place that kept its literal would have silently left them
+# out of that one rule -- the exact shape of the Level 1 FindFirstChild bug this
+# project already paid for. The list is built once and every loop reads it.
+check(re.search(r"^local railButtons = \{shopButton, openButton, rewardsButton,"
+                r" wheelButton, musicButton\}$", SRC, re.M) is not None,
+      "the rail is one named list, in drawn order, built once")
+check(SRC.count("ipairs({openButton, shopButton, musicButton})") == 0,
+      "no three-button literal survives anywhere in the store")
+check(SRC.count("ipairs(railButtons)") == 3,
+      f"all three rail loops read that list, found {SRC.count('ipairs(railButtons)')}")
+for name in ("ZyntraShopButton", "ZyntraOpenButton", "ZyntraRewardsButton",
+             "ZyntraWheelButton", "ZyntraMusicButton"):
+    check(SRC.count(f'.Name = "{name}"') == 1, f"{name} is named exactly once")
+# Order in the SOURCE is the order on the SCREEN: layoutSquareSections takes its
+# five arguments in drawn order, so there is no second literal to disagree with.
+check("local function layoutSquareSections(layout, shopButton, openButton,"
+      " rewardsButton, wheelButton, musicButton)" in SRC,
+      "layoutSquareSections takes the rail in drawn order")
+check("layoutSquareSections(layout, shopButton, openButton, rewardsButton,"
+      " wheelButton, musicButton)" in SRC, "and is called with it in that order")
 
 # ── 5b. THE CONTRACT KEYS the two supplies cards will report ───────────────
 # makeUpgradeCard names its frame `titleText:match("^%a+")`, and the terminal's
@@ -194,7 +229,24 @@ for key, expected in (("SpeedPotion", "SPEED"), ("RouteMarker", "ROUTE")):
     check(re.match(r"[A-Za-z]+", names[key].upper()).group(0) == expected,
           f"{key} reports contract card key {expected}")
 check("if entry == shopButton" not in rail, "nothing in the rail singles out one button")
-check(rail.count("SquareSectionBorder") == 1, "one hover border, built once for all three")
+check(rail.count("SquareSectionBorder") == 1, "one hover border, built once for all five")
+
+# ── 5c. THE TWO NEW ICONS, and the caption table that replaced the ternary ──
+# The captions used to be `Shop and "Shops" or (Music and "Music" or "Upgrades")`,
+# whose final `or` is a DEFAULT: the first kind that was neither would have
+# captioned itself "Upgrades". Adding a fourth and a fifth kind is precisely the
+# case that breaks, so the expression is a table now.
+check('Rewards = "rbxassetid://85423575361057"' in SRC, "the Daily Rewards icon is the handed-over asset")
+check('Wheel = "rbxassetid://111918608092047"' in SRC, "and so is the Lucky Wheel icon")
+captions = re.search(r"local SECTION_CAPTIONS = \{(.*?)\}", SRC, re.S)
+check(captions is not None, "the captions are a table rather than a nested ternary")
+CAPTIONS = dict(re.findall(r'(\w+) = "([^"]+)"', captions.group(1)))
+check(CAPTIONS == {"Upgrades": "Upgrades", "Shop": "Shops", "Music": "Music",
+                   "Rewards": "Rewards", "Wheel": "Wheel"}, CAPTIONS)
+check('kinds[1] == "Shop" and "Shops"' not in SRC, "the defaulting ternary is gone")
+images = re.search(r"local SECTION_IMAGES = \{(.*?)\}", SRC, re.S)
+IMAGES = dict(re.findall(r'(\w+) = "([^"]+)"', images.group(1)))
+check(set(IMAGES) == set(CAPTIONS), f"every section kind has both an icon and a caption: {IMAGES}")
 
 
 # ── 6..9 RUN THE PRODUCTION LUA ────────────────────────────────────────────
@@ -287,28 +339,34 @@ local function fakeStorage(present)
 		return nil
 	end}
 end
+-- REWARDS IS GONE FROM THE TERMINAL (card #104). The page module is still in
+-- ReplicatedStorage -- the standalone Daily Rewards modal mounts it -- so the
+-- interesting case is precisely "the module is present and the terminal still
+-- does not build a tab for it". A second mount here would mean two profile
+-- subscriptions and two claim buttons for one server-side claim.
 local both = buildTabs(fakeStorage({ZyntraDailyRewardsPage = true, ZyntraFieldNotesPage = true}), false)
-expect(table.concat(both, ','), 'Upgrades,Shop,Rewards,Notes,Donate,Colors,Settings',
-	'both page modules present')
+expect(table.concat(both, ','), 'Upgrades,Shop,Notes,Donate,Colors,Settings',
+	'the rewards page module present does NOT bring back a Rewards tab')
+expect(table.find(both, 'Rewards'), nil, 'there is no Rewards tab at all')
 local neither = buildTabs(fakeStorage({}), false)
 expect(table.concat(neither, ','), 'Upgrades,Shop,Donate,Colors,Settings',
-	'neither module present -- the terminal is exactly what it was')
+	'no module present -- the terminal is the five authored tabs')
 local rewardsOnly = buildTabs(fakeStorage({ZyntraDailyRewardsPage = true}), false)
-expect(table.concat(rewardsOnly, ','), 'Upgrades,Shop,Rewards,Donate,Colors,Settings',
-	'one module present builds one tab')
+expect(table.concat(rewardsOnly, ','), 'Upgrades,Shop,Donate,Colors,Settings',
+	'the rewards module alone changes nothing about the tab bar')
 local notesOnly = buildTabs(fakeStorage({ZyntraFieldNotesPage = true}), false)
 expect(table.concat(notesOnly, ','), 'Upgrades,Shop,Notes,Donate,Colors,Settings',
-	'and the other builds the other')
+	'NOTES is still the one module-conditional tab')
 local dev = buildTabs(fakeStorage({ZyntraDailyRewardsPage = true, ZyntraFieldNotesPage = true}), true)
-expect(table.concat(dev, ','), 'Upgrades,Shop,Rewards,Notes,Donate,Colors,Settings,Dev',
-	'DEV is still last, after the mounted pages')
+expect(table.concat(dev, ','), 'Upgrades,Shop,Notes,Donate,Colors,Settings,Dev',
+	'DEV is still last, after the mounted page')
 expect(buildTabs(fakeStorage({}), true)[6], 'Dev', 'DEV is still last when no page mounts')
 -- The order is AUTHORED, not alphabetical: the tab bar breaks LayoutOrder ties
 -- by name and this list is the only thing that states the intent.
 expect(both[1], 'Upgrades', 'Upgrades first')
-expect(both[7], 'Settings', 'Settings last before DEV')
-ok(table.find(both, 'Rewards') < table.find(both, 'Donate'),
-	'Rewards sits with the equipment pages, ahead of Donate')
+expect(both[6], 'Settings', 'Settings last before DEV')
+ok(table.find(both, 'Notes') < table.find(both, 'Donate'),
+	'Notes sits with the equipment pages, ahead of Donate')
 print('tabs|' .. checks)
 """
 
@@ -461,8 +519,53 @@ print('shop|' .. checks)
 """
 
 RAIL_TESTS = r"""
+-- ---- THE RAIL IS FIVE BUTTONS, in the drawn order ------------------------
+expect(#railButtons, 5, 'the rail is five buttons')
+local NAMES = {'ZyntraShopButton', 'ZyntraOpenButton', 'ZyntraRewardsButton',
+	'ZyntraWheelButton', 'ZyntraMusicButton'}
+for index, entry in ipairs(railButtons) do
+	expect(entry.Name, NAMES[index], 'rail slot ' .. index .. ' is ' .. NAMES[index])
+end
+expect(rewardsButton.Name, 'ZyntraRewardsButton', 'the rewards button carries the contract name')
+expect(wheelButton.Name, 'ZyntraWheelButton', 'and so does the wheel button')
+
+-- ---- the two new buttons are built EXACTLY like the other three ----------
+local CAPTIONS = {ZyntraShopButton = 'Shops', ZyntraOpenButton = 'Upgrades',
+	ZyntraRewardsButton = 'Rewards', ZyntraWheelButton = 'Wheel',
+	ZyntraMusicButton = 'Music'}
+local ICONS = {ZyntraShopButton = 'rbxassetid://132462891522145',
+	ZyntraOpenButton = 'rbxassetid://119432640057145',
+	ZyntraRewardsButton = 'rbxassetid://85423575361057',
+	ZyntraWheelButton = 'rbxassetid://111918608092047',
+	ZyntraMusicButton = 'rbxassetid://102262986416811'}
+for _, entry in ipairs(railButtons) do
+	expect(entry.BackgroundColor3, COLORS.bg, entry.Name .. ' wears the rail background')
+	expect(entry.TextColor3, COLORS.accent, entry.Name .. ' wears the accent')
+	expect(entry.Size.OX, 64, entry.Name .. ' is authored 64 wide')
+	expect(entry.Size.OY, 64, entry.Name .. ' is authored 64 tall -- SQUARE')
+	local content = entry:FindFirstChild('SectionButtonContent')
+	ok(content ~= nil, entry.Name .. ' has its inset content frame')
+	local caption, icon
+	for _, child in ipairs(content.Children) do
+		if child.Name == 'SectionCaption' then caption = child end
+		if child.ClassName == 'ImageLabel' then icon = child end
+	end
+	expect(caption.Text, CAPTIONS[entry.Name], entry.Name .. ' says what it opens')
+	expect(icon.Image, ICONS[entry.Name], entry.Name .. ' carries its own art')
+	expect(icon.ScaleType, 'Fit', entry.Name .. ' keeps the aspect ratio of a 1254^2 PNG')
+	expect(icon.Size.OY, -16, entry.Name .. ' leaves its caption row uncovered')
+	expect(entry.TextTransparency, 1, entry.Name .. " hides button()'s own text under the icon")
+end
+-- The rail's ACTIVE state is authored, not incidental: MUSIC ships out of the
+-- input stack (it is a readout until the profile lands) and the other four ship
+-- in it. Getting this backwards for the two new buttons would mean a rail button
+-- that never responds, which no screenshot shows.
+expect(musicButton.Active, false, 'MUSIC ships inactive, as it always has')
+expect(rewardsButton.Active, true, 'REWARDS ships pressable')
+expect(wheelButton.Active, true, 'WHEEL ships pressable')
+
 local corners = {}
-for _, entry in ipairs({openButton, shopButton, musicButton}) do
+for _, entry in ipairs(railButtons) do
 	local radius, content, caption
 	for _, child in ipairs(entry.Children) do
 		if child.ClassName == 'UICorner' then radius = child.CornerRadius end
@@ -475,20 +578,21 @@ for _, entry in ipairs({openButton, shopButton, musicButton}) do
 	expect(content.Position.OY, 3, 'the content inset is 3px on y')
 	expect(content.Size.OX, -6, 'and the frame gives back both insets on x')
 	expect(content.Size.OY, -6, 'and on y')
-	expect(entry:GetAttribute('SquareSectionButton'), true, 'all three are square-section buttons')
+	expect(entry:GetAttribute('SquareSectionButton'), true, 'all five are square-section buttons')
 	for _, child in ipairs(entry.Children) do
 		if child.ClassName == 'UIStroke' and child.Name == 'SquareSectionBorder' then
 			caption = child
 			expect(child.Transparency, 0.22, 'the hover border rests at the same transparency')
 		end
 	end
-	ok(caption ~= nil, 'and all three carry the same named hover border')
+	ok(caption ~= nil, 'and all five carry the same named hover border')
 end
-expect(corners[1], corners[2], 'the shop button has its neighbours corner')
-expect(corners[2], corners[3], 'and so does the music button')
+for index = 2, #corners do
+	expect(corners[index], corners[1], 'rail slot ' .. index .. ' has its neighbours corner')
+end
 expect(corners[1], '0:7', 'which is the square 7px corner button() draws')
 -- The hover is the only thing that writes the border, and it behaves the same
--- on all three: the card-88 ring wrote the shop button's stroke from a tween
+-- on all five: the card-88 ring wrote the shop button's stroke from a tween
 -- as well, so "one writer per property" is the thing worth proving.
 local function borderOf(entry)
 	for _, child in ipairs(entry.Children) do
@@ -496,11 +600,11 @@ local function borderOf(entry)
 	end
 	return nil
 end
-for _, entry in ipairs({openButton, shopButton, musicButton}) do
+for _, entry in ipairs(railButtons) do
 	local border = borderOf(entry)
 	-- MUSIC ships Active = false (it is a readout, not a control), so it is
-	-- lifted here: the point is that the HOVER RULE is one rule for all three,
-	-- not that all three are pressable.
+	-- lifted here: the point is that the HOVER RULE is one rule for all five,
+	-- not that all five are pressable.
 	local was = entry.Active
 	entry.Active = true
 	entry.MouseEnter:Fire()
@@ -517,6 +621,322 @@ expect(music.Transparency, 0.22, 'an inactive rail button does not respond to ho
 print('rail|' .. checks)
 """
 
+# ── 10. THE FIT LADDER, running the real layoutSquareSections ───────────────
+# 5 x 64 + 4 x 8 is 352px of rail. A landscape phone's safe area is nowhere near
+# that, so the function grew a ladder -- full side, the 52px floor, then TWO
+# COLUMNS -- and a ladder is arithmetic that a screenshot cannot check.
+LAYOUT_TESTS = r"""
+local function run(safe, isTouch, glyph)
+	setGlyph(glyph)
+	layoutSquareSections({Safe = safe, IsTouch = isTouch},
+		shopButton, openButton, rewardsButton, wheelButton, musicButton)
+	local placed = {}
+	for index, entry in ipairs(railButtons) do
+		placed[index] = {Name = entry.Name,
+			Left = entry.Position.OX, Top = entry.Position.OY,
+			Right = entry.Position.OX + entry.Size.OX,
+			Bottom = entry.Position.OY + entry.Size.OY,
+			Side = entry.Size.OX,
+			Caption = entry:FindFirstChild('SectionButtonContent')
+				:FindFirstChild('SectionCaption').TextSize}
+	end
+	return placed
+end
+local function rectOf(placed)
+	local left, top, right, bottom = math.huge, math.huge, -math.huge, -math.huge
+	for _, slot in ipairs(placed) do
+		left = math.min(left, slot.Left)
+		top = math.min(top, slot.Top)
+		right = math.max(right, slot.Right)
+		bottom = math.max(bottom, slot.Bottom)
+	end
+	return {Left = left, Top = top, Right = right, Bottom = bottom}
+end
+local function overlaps(a, b)
+	return a.Left < b.Right and a.Right > b.Left and a.Top < b.Bottom and a.Bottom > b.Top
+end
+
+-- ---- DESKTOP: the authored rail, one column of five 64px squares ---------
+local desk = run({Left = 0, Top = 0, Right = 1920, Bottom = 1080}, false)
+expect(#desk, 5, 'five buttons are placed')
+for index, slot in ipairs(desk) do
+	expect(slot.Side, 64, slot.Name .. ' keeps the authored 64px side on a desktop')
+	expect(slot.Left, 8, slot.Name .. ' sits in one column at the safe left + 8')
+	expect(slot.Caption, 12, slot.Name .. ' captions at 12px while the square is 64')
+	if index > 1 then
+		expect(slot.Top, desk[index - 1].Bottom + 8, slot.Name .. ' follows the one above it')
+	end
+end
+expect(desk[1].Top, 364, 'the column is centred in the safe area: (1080 - 352) / 2')
+expect(desk[5].Bottom, 716, 'and ends 364px above the bottom, symmetrically')
+expect(desk[1].Name, 'ZyntraShopButton', 'SHOPS is the top of the rail')
+expect(desk[5].Name, 'ZyntraMusicButton', 'MUSIC is the bottom of it')
+
+-- ---- TABLET: 56px squares, still one column ------------------------------
+local tab = run({Left = 0, Top = 0, Right = 1024, Bottom = 768}, true)
+for _, slot in ipairs(tab) do
+	expect(slot.Side, 56, 'a tablet gets the 56px touch square')
+	expect(slot.Caption, 11, 'and an 11px caption')
+end
+expect(tab[1].Top, 232, 'centred: (768 - 304) / 2')
+expect(tab[2].Top, tab[1].Bottom + 6, 'with the 6px touch gap')
+
+-- ---- RUNG 2: the 52px floor, one column ---------------------------------
+-- 284px of safe height is exactly 5 x 52 + 4 x 6, so this is the last row that
+-- does NOT split. One pixel less and the next assertion would be two columns.
+local floorRow = run({Left = 0, Top = 0, Right = 800, Bottom = 300}, true)
+for _, slot in ipairs(floorRow) do
+	expect(slot.Side, 52, 'the floor square is 52px')
+	expect(slot.Left, 8, 'and the rail is still one column at the floor')
+	expect(slot.Caption, 10, 'with the 10px caption')
+end
+expect(floorRow[1].Top, 8, 'the column fills the safe area exactly')
+expect(floorRow[5].Bottom, 292, 'down to its last pixel')
+
+-- ---- RUNG 3: TWO COLUMNS, 3 + 2 -----------------------------------------
+-- The brief's short screen: 260px of safe height. 5 x 52 + 4 x 8 = 292 does not
+-- fit 244, so the rail splits rather than running off the bottom.
+local split = run({Left = 0, Top = 0, Right = 900, Bottom = 260}, false)
+for _, slot in ipairs(split) do
+	expect(slot.Side, 52, 'the split rail is drawn at the 52px floor')
+end
+expect(split[1].Left, 8, 'SHOPS heads the first column')
+expect(split[2].Left, 8, 'UPGRADES under it')
+expect(split[3].Left, 8, 'REWARDS under that -- three in the first column')
+expect(split[4].Left, 68, 'WHEEL starts the second column, one side + one gap over')
+expect(split[5].Left, 68, 'MUSIC under it -- two in the second')
+expect(split[1].Top, split[4].Top, 'both columns start at the same top')
+expect(split[1].Top, 44, 'which is the centred top of a 3-row stack: (260 - 172) / 2')
+expect(split[3].Bottom, 216, 'and the taller column still ends inside the safe area')
+ok(split[3].Bottom <= 260, 'nothing is clipped off the bottom')
+
+-- ---- NO TWO BUTTONS EVER OVERLAP, at any safe height --------------------
+-- 184px is the arithmetic floor of the ladder (3 x 52 + 2 x 6 = 168, plus the
+-- 16px margin). Below it the rail overflows rather than vanishing, which no
+-- shipping device reaches -- the shortest in the matrix is 338px tall.
+-- One row per safe height, and one CHECK per invariant over the whole sweep:
+-- 300 passing assertions of the same rule say nothing 1 does not, and they bury
+-- the lanes that do.
+local sides, columns = {}, {}
+local short, uneven, notSquare, tiny, collide, spill = 0, 0, 0, 0, 0, 0
+local rows = 0
+for height = 184, 1200, 4 do
+	for _, touch in ipairs({true, false}) do
+		rows += 1
+		local placed = run({Left = 0, Top = 0, Right = 900, Bottom = height}, touch)
+		if #placed ~= 5 then short += 1 end
+		sides[placed[1].Side] = true
+		local wide = false
+		for _, slot in ipairs(placed) do
+			if slot.Side < 44 then tiny += 1 end
+			if slot.Side ~= placed[1].Side then uneven += 1 end
+			if slot.Right - slot.Left ~= slot.Bottom - slot.Top then notSquare += 1 end
+			if slot.Left > 8 then wide = true end
+		end
+		columns[wide and 2 or 1] = true
+		for a = 1, 5 do
+			for b = a + 1, 5 do
+				if overlaps(placed[a], placed[b]) then collide += 1 end
+			end
+		end
+		local rect = rectOf(placed)
+		-- 184px is the arithmetic floor: 3 x 52 + 2 x 6 + the 16px margin. No
+		-- shipping device is anywhere near it; the shortest in the matrix is 338.
+		if rect.Bottom - rect.Top > height - 16 and height >= 200 then spill += 1 end
+	end
+end
+ok(rows > 400, 'the sweep covered ' .. rows .. ' safe heights on both form factors')
+expect(short, 0, 'every one of them placed all five buttons')
+expect(tiny, 0, 'and never drew a square under the 44px tap floor')
+expect(uneven, 0, 'and never mixed two sizes in one rail')
+expect(notSquare, 0, 'and never drew a rail button that was not square')
+expect(collide, 0, 'and never overlapped two rail buttons')
+expect(spill, 0, 'and never ran the rail past the safe height it was given')
+ok(sides[64] and sides[56] and sides[52], 'the sweep exercised all three side rungs')
+ok(columns[1] and columns[2], 'and both the one- and two-column layouts')
+
+-- ---- THE THUMBSTICK GLYPH, on the 705x338 reference phone ---------------
+-- Galaxy A06, inset 0,58 -> safe (0,58)-(705,338). 264px of room, so the rail is
+-- two 52px columns: x 8..118. THE GLYPH IS TESTED AGAINST THAT FULL WIDTH.
+-- A glyph at x = 114 sits outside a single 64px column and inside the real
+-- two-column rail, which is the case the old `left + side` test could not see.
+local PHONE = {Left = 0, Top = 58, Right = 705, Bottom = 338}
+local resting = run(PHONE, true, nil)
+expect(resting[1].Left, 8, 'with no glyph drawn the rail keeps its column')
+expect(resting[4].Left, 66, 'and its second column, one 52px side + the 6px touch gap over')
+expect(resting[1].Top, 114, 'centred in the safe area: 58 + (280 - 168) / 2')
+local glyph = {Left = 114, Top = 286, Width = 40, Height = 40}
+local dodged = run(PHONE, true, glyph)
+local glyphRect = {Left = glyph.Left, Top = glyph.Top,
+	Right = glyph.Left + glyph.Width, Bottom = glyph.Top + glyph.Height}
+expect(dodged[1].Top, 110, 'the rail moves ABOVE the glyph, by its own 8px margin')
+for _, slot in ipairs(dodged) do
+	ok(not overlaps(slot, glyphRect),
+		slot.Name .. ' is clear of the resting thumbstick glyph')
+	ok(slot.Top >= PHONE.Top and slot.Bottom <= PHONE.Bottom,
+		slot.Name .. ' is still inside the safe area after the dodge')
+end
+-- A glyph that only a ONE-column rail would miss still has to move the rail:
+-- this is the whole reason the test measures the combined width.
+ok(glyph.Left >= 8 + 52, 'the glyph starts outside a single 52px column')
+ok(glyph.Left < 8 + 52 * 2 + 6, 'and inside the two-column rail')
+ok(dodged[1].Top ~= resting[1].Top, 'so the rail did move for it')
+
+-- ---- neither side fits: the DOCUMENTED fallback, not a hidden rail ------
+-- A glyph in the middle of a short screen leaves no room above or below. The
+-- rail stays centred and complete; it is never hidden, shrunk further, or
+-- silently moved to the other side of the screen.
+local trapped = run(PHONE, true, {Left = 20, Top = 200, Width = 90, Height = 90})
+expect(#trapped, 5, 'all five buttons are still placed')
+expect(trapped[1].Top, resting[1].Top, 'the rail keeps the centred position')
+expect(trapped[1].Left, 8, 'on the same side of the screen')
+for _, slot in ipairs(trapped) do
+	expect(slot.Side, 52, 'and at the same size')
+end
+print('layout|' .. checks)
+"""
+
+# ── 11. THE RAIL'S TWO NEW DESTINATIONS, running the real routing ──────────
+# The rail button, the terminal opener and the kiosk plaque all have to reach the
+# same place, and REWARDS no longer has a tab to fall back on: an unrouted
+# "Rewards" would silently open the SHOP tab, which is a defect with no symptom.
+ROUTING_TESTS = r"""
+local playerScripts = player:WaitForChild('PlayerScripts')
+local rewardsEvent = playerScripts:FindFirstChild('OpenDailyRewards')
+local wheelEvent = playerScripts:FindFirstChild('OpenLuckyWheel')
+local terminalEvent = playerScripts:FindFirstChild('ZyntraOpenTerminal')
+ok(rewardsEvent ~= nil, 'PlayerScripts.OpenDailyRewards exists')
+ok(wheelEvent ~= nil, 'PlayerScripts.OpenLuckyWheel exists')
+expect(rewardsEvent.ClassName, 'BindableEvent', 'and it is a BindableEvent')
+expect(wheelEvent.ClassName, 'BindableEvent', 'and so is the wheel opener')
+expect(wheelEvent.Adopted, true, 'the pre-existing OpenLuckyWheel was ADOPTED, not replaced')
+expect(wheelEvent, adopted, 'it is the same instance the other client already created')
+local count = 0
+for _, child in ipairs(playerScripts.Children) do
+	if child.Name == 'OpenLuckyWheel' then count += 1 end
+end
+expect(count, 1, 'create-if-absent never leaves two openers with one name')
+
+local fired = {Rewards = 0, Wheel = 0}
+rewardsEvent.Event:Connect(function() fired.Rewards += 1 end)
+wheelEvent.Event:Connect(function() fired.Wheel += 1 end)
+local function reset()
+	fired.Rewards, fired.Wheel = 0, 0
+	opened = {}
+	inRound, queueBlocked, modalOpen = false, false, false
+end
+
+-- ---- the two rail buttons ------------------------------------------------
+reset()
+rewardsButton.Activated:Fire({UserInputType = 'MouseButton1'})
+expect(fired.Rewards, 1, 'REWARDS fires PlayerScripts.OpenDailyRewards')
+expect(fired.Wheel, 0, 'and nothing else')
+expect(#opened, 0, 'and never opens the terminal')
+reset()
+wheelButton.Activated:Fire({UserInputType = 'MouseButton1'})
+expect(fired.Wheel, 1, 'WHEEL fires PlayerScripts.OpenLuckyWheel')
+expect(fired.Rewards, 0, 'and nothing else')
+expect(#opened, 0, 'and never opens the terminal')
+reset()
+shopButton.Activated:Fire({UserInputType = 'MouseButton1'})
+expect(#opened, 1, 'SHOPS still opens the terminal')
+expect(opened[1], 'Shop', 'on its own tab')
+expect(fired.Rewards + fired.Wheel, 0, 'and raises no lobby modal')
+
+-- ---- the three refusals, on BOTH buttons and on the plaque --------------
+for _, case in ipairs({'inRound', 'queue', 'modal'}) do
+	reset()
+	if case == 'inRound' then inRound = true
+	elseif case == 'queue' then queueBlocked = true
+	else modalOpen = true end
+	rewardsButton.Activated:Fire()
+	wheelButton.Activated:Fire()
+	terminalEvent:Fire('Rewards')
+	rewardsPrompt.Triggered:Fire(player)
+	expect(fired.Rewards, 0, 'no rewards modal is raised while ' .. case)
+	expect(fired.Wheel, 0, 'and no wheel modal while ' .. case)
+end
+
+-- ---- REWARDS IS NOT A TAB ANY MORE --------------------------------------
+reset()
+terminalEvent:Fire('Rewards')
+expect(fired.Rewards, 1, 'ZyntraOpenTerminal "Rewards" reaches the standalone modal')
+expect(#opened, 0, 'and does NOT fall through to the Shop tab')
+reset()
+terminalEvent:Fire('Notes')
+expect(#opened, 1, 'a tab that still exists still opens the terminal')
+expect(opened[1], 'Notes', 'on the tab that was asked for')
+reset()
+terminalEvent:Fire()
+expect(opened[1], 'Shop', 'no tab means Shop, as before')
+reset()
+terminalEvent:Fire('Rewords')
+expect(opened[1], 'Shop', 'and an unknown name still falls back to Shop')
+expect(fired.Rewards, 0, 'a near-miss spelling does not reach the modal either')
+
+-- ---- the kiosk plaque prompt --------------------------------------------
+reset()
+rewardsPrompt.Triggered:Fire(player)
+expect(fired.Rewards, 1, 'the ShopRewardsPrompt plaque opens Daily Rewards')
+expect(#opened, 0, 'and not the terminal')
+reset()
+shopPrompt.Triggered:Fire(player)
+expect(#opened, 1, 'an ordinary ZyntraShopPrompt still opens the terminal')
+expect(opened[1], 'Shop', 'on the Shop tab')
+expect(fired.Rewards, 0, 'without raising the rewards modal')
+reset()
+rewardsPrompt.Triggered:Fire(otherPlayer)
+expect(fired.Rewards, 0, "another player's trigger reaches nobody's screen")
+expect(#opened, 0, 'and opens nothing here')
+
+-- ---- a BindableEvent that is not one -------------------------------------
+-- A place where something else already owns the name must WARN and stand down,
+-- not throw on the first press and take the whole rail down with it.
+local impostorOpener = lobbyModalOpener('OpenImpostor')
+expect(#warnings, 1, 'a wrongly-typed opener is reported once')
+ok(string.find(warnings[1], 'OpenImpostor') ~= nil, 'and named in the warning')
+impostorOpener()
+expect(#warnings, 1, 'pressing it is a no-op rather than an error')
+print('routing|' .. checks)
+"""
+
+# ── 12. THE MODAL SET, running UIDevice's own list and predicate ────────────
+# ZyntraStore's rail, and both new clients, gate on
+# UIDevice.ScreenOwningModalOpen(). The two new modals are only in that answer if
+# they are in the list, and a name that is merely SPELLED in the file proves
+# nothing -- so the list and the predicate are run together.
+MODALS_TESTS = r"""
+expect(UIDevice.ScreenOwningModalOpen(), false, 'an idle lobby owns no modal')
+for _, attribute in ipairs({'ZyntraStoreOpen', 'DevPhoneOpen', 'ZyntraReentryOpen',
+	'QueueModalOpen', 'LuckyWheelOpen', 'DailyRewardsOpen'}) do
+	attributes[attribute] = true
+	expect(UIDevice.ScreenOwningModalOpen(), true, attribute .. ' owns the screen')
+	attributes[attribute] = nil
+	expect(UIDevice.ScreenOwningModalOpen(), false, attribute .. ' releases it again')
+end
+expect(#SCREEN_OWNING_MODALS, 6, 'the set is exactly those six')
+-- Not `== true` is the whole point of the predicate: a client that writes the
+-- attribute as a string, or clears it to false, must not read as "modal up".
+attributes.LuckyWheelOpen = false
+expect(UIDevice.ScreenOwningModalOpen(), false, 'false is not open')
+attributes.LuckyWheelOpen = 'yes'
+expect(UIDevice.ScreenOwningModalOpen(), false, 'and neither is a truthy non-boolean')
+attributes.LuckyWheelOpen = nil
+-- OnScreenOwningModalChanged has to watch the SAME list -- ZyntraStore now
+-- re-runs updateVisibility from it, and a rail that never hears about the wheel
+-- stays Active underneath it.
+local fired = 0
+UIDevice.OnScreenOwningModalChanged(function() fired += 1 end)
+expect(#watched, 6, 'the change hook subscribes to all six')
+for _, attribute in ipairs({'LuckyWheelOpen', 'DailyRewardsOpen'}) do
+	ok(table.find(watched, attribute) ~= nil, attribute .. ' is watched, not just listed')
+end
+print('modals|' .. checks)
+"""
+
+
+LANES: dict[str, int] = {}
+
 
 def lua(binary: str, name: str, body: str) -> int:
     with tempfile.TemporaryDirectory(prefix="zyntra-store-") as directory:
@@ -530,6 +950,10 @@ def lua(binary: str, name: str, body: str) -> int:
     line = result.stdout.strip().splitlines()[-1]
     label, _, count = line.partition("|")
     assert label == name, f"{name}: unexpected output {result.stdout!r}"
+    # A lane that runs nothing still exits 0 and still prints its label, so the
+    # count is reported rather than only summed.
+    assert int(count) > 0, f"{name}: the fixture asserted nothing"
+    LANES[name] = int(count)
     return int(count)
 
 
@@ -672,6 +1096,11 @@ local function object2(class)
 		end
 		return nil
 	end
+	function obj:IsA(className) return self.ClassName == className end
+	if class == 'BindableEvent' then
+		obj.Event = signal()
+		function obj:Fire(...) self.Event:Fire(...) end
+	end
 	obj.MouseEnter, obj.MouseLeave = signal(), signal()
 	obj.__newindex = nil
 	return obj
@@ -692,11 +1121,138 @@ local gui = Instance.new('ScreenGui')
         FAKES, rail_fakes, helpers, rail_block, RAIL_TESTS,
     ]))
 
+    # ── 10. the fit ladder, from the production layoutSquareSections ───────
+    layout_block = section("local function layoutSquareSections(layout,",
+                           "\nlocal openButton = button(gui,")
+    layout_fakes = r"""
+-- The thumbstick GLYPH, not its activation region: the production code walks
+-- PlayerGui.TouchGui.TouchControlFrame.DynamicThumbstickFrame.ThumbstickStart
+-- and reads AbsolutePosition/AbsoluteSize off it, so the fixture stands up that
+-- exact chain. An AbsoluteSize.Y of 0 is how "no glyph is drawn" looks.
+local vector2
+vector2 = function(x, y)
+	return setmetatable({X = x, Y = y},
+		{__sub = function(a, b) return vector2(a.X - b.X, a.Y - b.Y) end})
+end
+local function node(name, children)
+	local entry = {Name = name, Children = children or {},
+		AbsolutePosition = vector2(0, 0), AbsoluteSize = vector2(0, 0)}
+	function entry:FindFirstChild(childName)
+		for _, child in ipairs(self.Children) do
+			if child.Name == childName then return child end
+		end
+		return nil
+	end
+	function entry:IsA(className) return className == 'GuiObject' end
+	return entry
+end
+local glyphNode = node('ThumbstickStart')
+local playerGui = node('PlayerGui', {node('TouchGui',
+	{node('TouchControlFrame', {node('DynamicThumbstickFrame', {glyphNode})})})})
+gui.Parent = playerGui
+local function setGlyph(glyph)
+	if glyph then
+		glyphNode.AbsolutePosition = vector2(glyph.Left, glyph.Top)
+		glyphNode.AbsoluteSize = vector2(glyph.Width, glyph.Height)
+	else
+		glyphNode.AbsoluteSize = vector2(0, 0)
+	end
+end
+function UIDevice.LocalPosition(_gui, x, y) return UDim2.fromOffset(x, y) end
+function UIDevice.LocalOffset(_gui, x, y) return x, y end
+"""
+    CHECKS += lua(binary, "layout", "\n".join([
+        FAKES, rail_fakes, layout_fakes, helpers, layout_block, rail_block,
+        LAYOUT_TESTS,
+    ]))
+
+    # ── 11. the routing, from the production blocks ────────────────────────
+    opener_block = section("-- The two lobby modals that are NOT this terminal",
+                           "\n-- Lobby supply kiosks use")
+    kiosk_block = section("local boundShopPrompts = setmetatable(",
+                          "\n-- Studio-only input seam")
+    prompt_block = section("local function bindShopPrompt(instance)",
+                           "\nlocal devPhoneCommand")
+    activated_block = section("openButton.Activated:Connect(function()",
+                              "\nUserInputService.InputBegan")
+    routing_fakes = r"""
+local warnings = {}
+local function warn(message) table.insert(warnings, message) end
+local inRound, queueBlocked, modalOpen = false, false, false
+local opened = {}
+local currentTab = 'Upgrades'
+-- The tab set the terminal builds TODAY. Rewards is deliberately not in it.
+local pages = {Upgrades = {}, Shop = {}, Notes = {}, Donate = {}, Colors = {},
+	Settings = {}}
+local playerScripts = Instance.new('Folder')
+playerScripts.Name = 'PlayerScripts'
+-- Another client got to the wheel opener first. The create-if-absent pattern has
+-- to ADOPT it -- both sides create it and whichever loads first wins -- so this
+-- fixture starts with one already parented.
+local adopted = Instance.new('BindableEvent')
+adopted.Name = 'OpenLuckyWheel'
+adopted.Adopted = true
+adopted.Parent = playerScripts
+-- And something that is NOT a BindableEvent, for the refusal path.
+local impostor = Instance.new('Folder')
+impostor.Name = 'OpenImpostor'
+impostor.Parent = playerScripts
+local player = {}
+function player:GetAttribute(key)
+	if key == 'InRound' then return inRound or nil end
+	return nil
+end
+function player:WaitForChild() return playerScripts end
+local otherPlayer = {}
+local function modalBlocksStore() return queueBlocked end
+function UIDevice.ScreenOwningModalOpen() return modalOpen end
+local function selectTab(name) currentTab = name end
+local function setMainVisible(visible)
+	if visible then table.insert(opened, currentTab) end
+end
+local function showStatus() end
+local function toggleMain() table.insert(opened, 'toggle') end
+local closeButton = Instance.new('TextButton')
+local function prompt(rewards)
+	local instance = Instance.new('ProximityPrompt')
+	instance.Name = 'ZyntraShopPrompt'
+	instance.Triggered = signal()
+	if rewards then instance:SetAttribute('ShopRewardsPrompt', true) end
+	return instance
+end
+local rewardsPrompt, shopPrompt = prompt(true), prompt(false)
+local workspace = {DescendantAdded = signal()}
+function workspace:GetDescendants() return {rewardsPrompt, shopPrompt} end
+"""
+    CHECKS += lua(binary, "routing", "\n".join([
+        FAKES, rail_fakes, helpers, rail_block, routing_fakes,
+        opener_block, kiosk_block, prompt_block, activated_block, ROUTING_TESTS,
+    ]))
+
+    # ── 12. the modal set, from the REAL UIDevice module ───────────────────
+    begin = UIDEVICE.index("local SCREEN_OWNING_MODALS = {")
+    modal_block = UIDEVICE[begin:UIDEVICE.index("\n-- ------", begin)]
+    modal_fakes = r"""
+local attributes = {}
+local watched = {}
+local fakePlayer = {}
+function fakePlayer:GetAttribute(key) return attributes[key] end
+function fakePlayer:GetAttributeChangedSignal(key)
+	table.insert(watched, key)
+	return {Connect = function() end}
+end
+local Players = {LocalPlayer = fakePlayer}
+"""
+    CHECKS += lua(binary, "modals", "\n".join([
+        FAKES, modal_fakes, modal_block, MODALS_TESTS,
+    ]))
+
     print(f"ok  {CHECKS} checks: terminal {DESIGN_W}x{DESIGN_H},"
           f" upgrade card {phone['Height']}/{tablet['Height']}/{pc['Height']}px"
           f" (phone/tablet/pointer), shop icon"
           f" {SHOP[PHONE]['Icon']}/{SHOP[TABLET]['Icon']}/{SHOP[POINTER]['Icon']}px,"
-          f" list+detail at >=760 pointer only")
+          f" list+detail at >=760 pointer only, 5-button rail"
+          f" ({', '.join(f'{k} {v}' for k, v in LANES.items())})")
     sys.exit(0)
 
 

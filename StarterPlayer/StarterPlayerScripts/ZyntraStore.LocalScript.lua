@@ -115,7 +115,18 @@ local function button(parent, text, size, position)
 end
 
 -- Imagegen section art; approved asset IDs are filled at the upload checkpoint.
-local SECTION_IMAGES = {Upgrades = "rbxassetid://119432640057145", Shop = "rbxassetid://132462891522145", Music = "rbxassetid://102262986416811"}
+-- Rewards and Wheel are the 2026-09-16 pair (cards #104 / #103), 1254² RGBA with
+-- real alpha -- see artifacts/trello-20260916-followup/assets-handoff.md. The
+-- wheel art is a BUTTON ICON with its pointer baked in, so nothing may rotate it;
+-- Lucky Wheel Client builds the spinning disc and its stationary pointer itself.
+local SECTION_IMAGES = {Upgrades = "rbxassetid://119432640057145", Shop = "rbxassetid://132462891522145", Music = "rbxassetid://102262986416811",
+	Rewards = "rbxassetid://85423575361057", Wheel = "rbxassetid://111918608092047"}
+-- One caption per section kind, as a TABLE. It used to be a nested conditional
+-- over the kind name whose final `or` was "Upgrades", so the first kind that was
+-- neither Shop nor Music captioned itself "Upgrades" -- which is exactly what the
+-- two new buttons would have done.
+local SECTION_CAPTIONS = {Upgrades = "Upgrades", Shop = "Shops", Music = "Music",
+	Rewards = "Rewards", Wheel = "Wheel"}
 local function sectionButtonContent(parent, kinds)
 	local content = Instance.new("Frame")
 	content.Name = "SectionButtonContent"
@@ -135,7 +146,7 @@ local function sectionButtonContent(parent, kinds)
 	icon.ScaleType = Enum.ScaleType.Fit
 	icon.Active = false
 	icon.Parent = content
-	local caption = label(content, kinds[1] == "Shop" and "Shops" or (kinds[1] == "Music" and "Music" or "Upgrades"),
+	local caption = label(content, SECTION_CAPTIONS[kinds[1]],
 		UDim2.new(1, 0, 0, 16), UDim2.new(0, 0, 1, -16), 12, COLORS.accent, Enum.Font.GothamBold)
 	caption.Name = "SectionCaption"
 	caption.TextScaled = false
@@ -146,13 +157,36 @@ local function sectionButtonContent(parent, kinds)
 	return content
 end
 
-local function layoutSquareSections(layout, openButton, shopButton, musicButton)
+-- The rail, top to bottom: SHOPS, UPGRADES, REWARDS, WHEEL, MUSIC. Arguments are
+-- in that same order so the drawn order and the argument order cannot disagree;
+-- this used to take three buttons in one order and re-order them in a literal
+-- inside the loop, which is a second place to get the rail wrong.
+--
+-- Cards #103/#104 took Daily Rewards out of the terminal and gave it and the
+-- Lucky Wheel a button each, so this column went from 3 to 5 -- and 5 x 64 + 4 x 8
+-- is 352px, which does not fit the safe height of a landscape phone. The fit
+-- ladder is therefore: full side, then the 52px floor, then TWO COLUMNS. It never
+-- ends in a clipped button, because a control that has run off the bottom of the
+-- screen is not a smaller control -- it is one the player cannot reach at all.
+local function layoutSquareSections(layout, shopButton, openButton, rewardsButton, wheelButton, musicButton)
+	local rail = {shopButton, openButton, rewardsButton, wheelButton, musicButton}
 	local safe = layout.Safe
 	local left = math.ceil(safe.Left + 8)
 	local gap = layout.IsTouch and 6 or 8
 	local side = layout.IsTouch and 56 or 64
-	if side * 3 + gap * 2 > safe.Bottom - safe.Top - 16 then side = 52 end
-	local height = side * 3 + gap * 2
+	local available = safe.Bottom - safe.Top - 16
+	local function stackHeight(rowCount, edge) return edge * rowCount + gap * (rowCount - 1) end
+	local rows, columns = #rail, 1
+	if stackHeight(rows, side) > available then side = 52 end
+	if stackHeight(rows, side) > available then
+		columns = 2
+		rows = math.ceil(#rail / columns)
+	end
+	local height = stackHeight(rows, side)
+	-- The rail's whole footprint, which is what the thumbstick has to be dodged
+	-- against. Measuring one button's width there was already only correct while
+	-- the rail was a single column.
+	local width = side * columns + gap * (columns - 1)
 	local top = math.floor((safe.Top + safe.Bottom - height) / 2 + 0.5)
 	-- Keep the left rail centred. Only move it when the actual resting stick
 	-- glyph intersects; the broad invisible activation zone is not a glyph.
@@ -165,7 +199,7 @@ local function layoutSquareSections(layout, openButton, shopButton, musicButton)
 			local x, y = UIDevice.LocalOffset(touchGui, 0, 0)
 			local position = glyph.AbsolutePosition - touchGui.AbsolutePosition
 			local gx, gy = position.X - x, position.Y - y
-			if left < gx + glyph.AbsoluteSize.X and left + side > gx
+			if left < gx + glyph.AbsoluteSize.X and left + width > gx
 				and top < gy + glyph.AbsoluteSize.Y + 8 and top + height > gy - 8 then
 				local above = math.floor(gy - 8 - height)
 				local below = math.ceil(gy + glyph.AbsoluteSize.Y + 8)
@@ -177,13 +211,18 @@ local function layoutSquareSections(layout, openButton, shopButton, musicButton)
 					top = below
 				end
 				-- If neither side fits, retain the visible centred rail. Do not
-				-- hide all three controls or silently relocate them to the right.
+				-- hide all five controls or silently relocate them to the right.
 			end
 		end
 	end
-	for index, entry in ipairs({shopButton, openButton, musicButton}) do
+	for index, entry in ipairs(rail) do
+		-- Column-major: a 3-button column at `left` and a 2-button column beside
+		-- it, both starting at the same `top`, so the order still reads downward.
+		local column = math.floor((index - 1) / rows)
+		local row = (index - 1) % rows
 		entry.Size = UDim2.fromOffset(side, side)
-		entry.Position = UIDevice.LocalPosition(gui, left, top + (index - 1) * (side + gap))
+		entry.Position = UIDevice.LocalPosition(gui,
+			left + column * (side + gap), top + row * (side + gap))
 		local caption = entry:FindFirstChild("SectionButtonContent"):FindFirstChild("SectionCaption")
 		caption.TextSize = side >= 64 and 12 or (side >= 56 and 11 or 10)
 	end
@@ -206,13 +245,30 @@ shopButton.TextSize = 18
 local shopButtonRing = outline(shopButton, COLORS.accent, 0.22, 1.5)
 local shopButtonSections = sectionButtonContent(shopButton, {"Shop"})
 
-local musicButton = button(gui, "Music", UDim2.fromOffset(64, 64), UDim2.fromOffset(8, 152))
+local rewardsButton = button(gui, "Rewards", UDim2.fromOffset(64, 64), UDim2.fromOffset(8, 152))
+rewardsButton.Name = "ZyntraRewardsButton"
+rewardsButton.BackgroundColor3 = COLORS.bg
+rewardsButton.TextColor3 = COLORS.accent
+local rewardsButtonSections = sectionButtonContent(rewardsButton, {"Rewards"})
+
+local wheelButton = button(gui, "Wheel", UDim2.fromOffset(64, 64), UDim2.fromOffset(8, 224))
+wheelButton.Name = "ZyntraWheelButton"
+wheelButton.BackgroundColor3 = COLORS.bg
+wheelButton.TextColor3 = COLORS.accent
+local wheelButtonSections = sectionButtonContent(wheelButton, {"Wheel"})
+
+local musicButton = button(gui, "Music", UDim2.fromOffset(64, 64), UDim2.fromOffset(8, 296))
 musicButton.Name = "ZyntraMusicButton"
 musicButton.BackgroundColor3 = COLORS.bg
 musicButton.TextColor3 = COLORS.accent
 musicButton.Active = false
 local musicButtonSections = sectionButtonContent(musicButton, {"Music"})
-for _, entry in ipairs({openButton, shopButton, musicButton}) do
+-- The whole rail, once, in the drawn order. Every loop over it below uses this
+-- list rather than restating the members, because the members changed on
+-- 2026-09-16 and the seven places that each named three buttons are exactly how
+-- two of them would have been left out of one rule.
+local railButtons = {shopButton, openButton, rewardsButton, wheelButton, musicButton}
+for _, entry in ipairs(railButtons) do
 	entry:SetAttribute("SquareSectionButton", true)
 	local border = outline(entry, COLORS.accent, 0.22, 1.5)
 	border.Name = "SquareSectionBorder"
@@ -493,19 +549,26 @@ end
 -- way for a player to reach either. Kept last before DEV so the equipment pages
 -- stay in their authored order.
 --
--- REWARDS and NOTES are mounted page MODULES (ZyntraDailyRewardsPage and
--- ZyntraFieldNotesPage, see claude-contracts.md). A tab is built only when its
--- module is actually in ReplicatedStorage, so this LocalScript keeps working in
--- a place where those scripts do not exist yet -- and UIRegression's
--- expectedTabs mirrors the same rule rather than hard-coding seven names.
--- FindFirstChild, never WaitForChild: this runs at build time and a yield here
--- would hold the whole terminal for a page that may never arrive.
+-- NOTES is a mounted page MODULE (ZyntraFieldNotesPage, see
+-- claude-contracts.md). A tab is built only when its module is actually in
+-- ReplicatedStorage, so this LocalScript keeps working in a place where that
+-- script does not exist yet -- and UIRegression's expectedTabs mirrors the same
+-- rule rather than hard-coding the names. FindFirstChild, never WaitForChild:
+-- this runs at build time and a yield here would hold the whole terminal for a
+-- page that may never arrive.
+--
+-- REWARDS IS NO LONGER A TAB. Card #104 gave Daily Rewards its own standalone
+-- modal and its own rail button, so the terminal would otherwise have carried a
+-- SECOND live copy of the same page -- two mounts, two profile subscriptions and
+-- two claim buttons for one server-side claim. The page module itself is
+-- unchanged and is now mounted by StarterPlayerScripts."Daily Rewards Client";
+-- everything that used to ask for the Rewards tab (the kiosk plaque prompt and
+-- PlayerScripts.ZyntraOpenTerminal "Rewards") fires PlayerScripts.OpenDailyRewards.
 local TERMINAL_PAGE_MODULES = {
-	Rewards = "ZyntraDailyRewardsPage",
 	Notes = "ZyntraFieldNotesPage",
 }
 local tabNames = {}
-for _, name in ipairs({"Upgrades", "Shop", "Rewards", "Notes", "Donate", "Colors", "Settings"}) do
+for _, name in ipairs({"Upgrades", "Shop", "Notes", "Donate", "Colors", "Settings"}) do
 	local moduleName = TERMINAL_PAGE_MODULES[name]
 	if moduleName == nil or ReplicatedStorage:FindFirstChild(moduleName) ~= nil then
 		table.insert(tabNames, name)
@@ -3353,14 +3416,31 @@ function updateVisibility()
 	-- Two independent suppressors, both of which own this same strip of screen:
 	-- the queue host modal, and the dispatch briefing panel. Either one being up
 	-- takes the opener off the screen AND out of the input stack.
+	-- ANOTHER screen-owning modal -- the Lucky Wheel, Daily Rewards, re-entry --
+	-- takes the two terminal openers off the screen and out of the input stack
+	-- as well (lead fix, 2026-09-16): measured in Studio, SHOPS stayed Visible and
+	-- Active beside the open Daily Rewards modal, one tap from a second modal.
+	-- `not main.Visible` already covers the terminal's own flag, so this term is
+	-- everybody else's modal only.
+	local otherModal = UIDevice.ScreenOwningModalOpen() and not main.Visible
 	UIDevice.SetInteractive(openButton,
 		(not inRound or touchDevInLevel)
 			and not blockedByModal
+			and not otherModal
 			-- ...and never behind the terminal it opens.
 			and not main.Visible)
-	UIDevice.SetInteractive(shopButton, not inRound and not blockedByModal and not main.Visible)
-	UIDevice.SetInteractive(musicButton, not inRound and not blockedByModal and not main.Visible
-		and not UIDevice.ScreenOwningModalOpen())
+	UIDevice.SetInteractive(shopButton, not inRound and not blockedByModal
+		and not otherModal and not main.Visible)
+	-- REWARDS, WHEEL and MUSIC share one predicate. The first two open modals of
+	-- their own (LuckyWheelGui 118, DailyRewardsGui 117) that draw OVER this rail,
+	-- so leaving them Active underneath is the same defect the opener had: a
+	-- TextButton takes taps through a transparent background wherever the modal
+	-- above it does not paint.
+	local railAvailable = not inRound and not blockedByModal and not main.Visible
+		and not UIDevice.ScreenOwningModalOpen()
+	UIDevice.SetInteractive(rewardsButton, railAvailable)
+	UIDevice.SetInteractive(wheelButton, railAvailable)
+	UIDevice.SetInteractive(musicButton, railAvailable)
 	if type(player:GetAttribute("LobbyMusicEnabled")) ~= "boolean" then
 		musicButton.Active = false
 		musicButton.Selectable = false
@@ -3467,8 +3547,10 @@ function updateVisibility()
 	end
 	shopButton.Size = UDim2.fromOffset(openButton.Size.X.Offset, 48)
 	shopButton.Position = openButton.Position + UDim2.fromOffset(0, openButton.Size.Y.Offset + 8)
-	if not inRound then layoutSquareSections(layout, openButton, shopButton, musicButton) end
-	for _, entry in ipairs({openButton, shopButton, musicButton}) do
+	if not inRound then
+		layoutSquareSections(layout, shopButton, openButton, rewardsButton, wheelButton, musicButton)
+	end
+	for _, entry in ipairs(railButtons) do
 		entry:SetAttribute("SquareSectionButton", not touchDevInLevel)
 		entry:FindFirstChild("SquareSectionBorder").Enabled = not touchDevInLevel
 		if not touchDevInLevel then entry.BackgroundColor3 = COLORS.bg end
@@ -3496,12 +3578,19 @@ function updateVisibility()
 	local sectionIconsVisible = not touchDevInLevel
 	openButtonSections.Visible = sectionIconsVisible
 	shopButtonSections.Visible = sectionIconsVisible
+	rewardsButtonSections.Visible = sectionIconsVisible
+	wheelButtonSections.Visible = sectionIconsVisible
 	musicButtonSections.Visible = sectionIconsVisible
 	if sectionIconsVisible then openButton.TextTransparency = 1 end
 	shopButton.TextTransparency = sectionIconsVisible and 1 or 0
+	-- The three icon-only buttons never show their fallback caption: the icon and
+	-- its SectionCaption are the label, and the TextButton text underneath is only
+	-- there so a place without the art still has a reachable, named control.
+	rewardsButton.TextTransparency = 1
+	wheelButton.TextTransparency = 1
 	musicButton.TextTransparency = 1
 	-- Contextual UIStrokes still paint the hidden original caption in Roblox.
-	for _, entry in ipairs({openButton, shopButton, musicButton}) do
+	for _, entry in ipairs(railButtons) do
 		for _, child in ipairs(entry:GetChildren()) do
 			if child:IsA("UIStroke") and child.ApplyStrokeMode == Enum.ApplyStrokeMode.Contextual then
 				child.Enabled = not sectionIconsVisible
@@ -3520,6 +3609,13 @@ player:GetAttributeChangedSignal("InRound"):Connect(function()
 end)
 player:GetAttributeChangedSignal(QUEUE_MODAL_ATTRIBUTE):Connect(updateVisibility)
 player:GetAttributeChangedSignal(BRIEFING_ATTRIBUTE):Connect(updateVisibility)
+-- The rail's predicate reads UIDevice.ScreenOwningModalOpen(), and until this
+-- line nothing re-evaluated it: only QueueModalOpen and the briefing re-ran
+-- updateVisibility, so MUSIC was already being left drawn and Active underneath a
+-- re-entry modal, and REWARDS and WHEEL would have joined it. Re-entrant by
+-- construction -- setMainVisible's own write to ZyntraStoreOpen lands back here,
+-- finds the terminal already closed, and stops.
+UIDevice.OnScreenOwningModalChanged(updateVisibility)
 player:GetAttributeChangedSignal("ZyntraReentryUsed"):Connect(updateReentry)
 workspace:GetAttributeChangedSignal("RoundActive"):Connect(updateReentry)
 setMainVisible(false)
@@ -3533,10 +3629,44 @@ local function toggleMain(requested)
 		setMainVisible(false)
 		return
 	end
+	-- Never OPEN over another screen-owning modal (wheel, rewards, re-entry);
+	-- closing is always allowed, which is why the terminal's own flag is excluded.
+	if visible and not main.Visible and UIDevice.ScreenOwningModalOpen() then return end
 	if visible and inRound and devAllowed then selectTab("Dev") end
 	setMainVisible(visible)
 	if main.Visible then showStatus("") end
 end
+
+-- The two lobby modals that are NOT this terminal (cards #103 / #104). This
+-- LocalScript owns the rail BUTTON for each and nothing else about them: it
+-- fires a BindableEvent in PlayerScripts and the owning client decides the rest.
+-- Create-if-absent on both sides -- the PlayerScripts.RoundExitPrompt pattern --
+-- so neither script has to have loaded before the other.
+local function lobbyModalOpener(name)
+	local playerScripts = player:WaitForChild("PlayerScripts")
+	local event = playerScripts:FindFirstChild(name)
+	if not event then
+		event = Instance.new("BindableEvent")
+		event.Name = name
+		event.Parent = playerScripts
+	elseif not event:IsA("BindableEvent") then
+		warn("[ZyntraStore] PlayerScripts." .. name .. " must be a BindableEvent")
+		return function() end
+	end
+	return function()
+		-- The kiosk's two guards, plus the modal set. Two screen-owning modals may
+		-- never be up at once and this rail is the only thing that could raise a
+		-- second one; the receiving client refuses as well, but refusing HERE is
+		-- what keeps the refusal true for the plaque prompt too.
+		if player:GetAttribute("InRound") == true or modalBlocksStore()
+			or UIDevice.ScreenOwningModalOpen() then
+			return
+		end
+		event:Fire()
+	end
+end
+local openDailyRewards = lobbyModalOpener("OpenDailyRewards")
+local openLuckyWheel = lobbyModalOpener("OpenLuckyWheel")
 
 -- Lobby supply kiosks use the same Equipment dashboard instead of creating a
 -- second store interface. Prompts are bound dynamically because the server
@@ -3548,7 +3678,17 @@ local boundShopPrompts = setmetatable({}, { __mode = "k" })
 -- Shop, and BOTH callers keep the kiosk's guards: never in a round, never while
 -- a modal owns the screen.
 local function openKioskShop(tab)
-	if player:GetAttribute("InRound") == true or modalBlocksStore() then return end
+	-- REWARDS LEFT THE TERMINAL (card #104), and both of this function's callers
+	-- still ask for it by that name: PlayerScripts.ZyntraOpenTerminal "Rewards"
+	-- and the plaque prompt's ShopRewardsPrompt attribute. Answered HERE, once, so
+	-- there is a single answer to "Rewards" -- routing it at each caller is how one
+	-- of them ends up opening the Shop tab instead, silently.
+	if tab == "Rewards" then
+		openDailyRewards()
+		return
+	end
+	if player:GetAttribute("InRound") == true or modalBlocksStore()
+		or (UIDevice.ScreenOwningModalOpen() and not main.Visible) then return end
 	selectTab(type(tab) == "string" and pages[tab] ~= nil and tab or "Shop")
 	setMainVisible(true)
 	showStatus("")
@@ -3648,6 +3788,9 @@ end)
 -- Wrapped: Activated passes an InputObject, which openKioskShop would
 -- otherwise be handed as a tab name.
 shopButton.Activated:Connect(function() openKioskShop() end)
+-- Wrapped for the same reason, and both guard inside lobbyModalOpener.
+rewardsButton.Activated:Connect(function() openDailyRewards() end)
+wheelButton.Activated:Connect(function() openLuckyWheel() end)
 closeButton.Activated:Connect(function() setMainVisible(false) end)
 
 UserInputService.InputBegan:Connect(function(input, processed)

@@ -1,0 +1,143 @@
+ReplicatedStorage.DevAccess	ModuleScript	990:a1e3038c:e6512e00
+ReplicatedStorage.FlashlightProfiles	ModuleScript	2253:1deec184:aac2dd28
+ReplicatedStorage.Level 2 Entity Audio Bank	ModuleScript	2841:7f11979e:918a8aa6
+ReplicatedStorage.MasterConfiguration	ModuleScript	21208:287c4387:128bad19
+ReplicatedStorage.ProtectionClient	ModuleScript	6906:0a4f0345:d06e7359
+ReplicatedStorage.UIDevice	ModuleScript	99714:2b51e24a:f712e236
+ReplicatedStorage.UIRegression	ModuleScript	443665:55f0aaa3:22224cdd
+ReplicatedStorage.UIStyle	ModuleScript	10555:6ae0dd7a:9ff6ec28
+ReplicatedStorage.ZyntraConfig	ModuleScript	10469:c0287679:a96871c1
+ReplicatedStorage.ZyntraDailyRewardsPage	ModuleScript	26121:ae294d29:ec4855c5
+ReplicatedStorage.ZyntraFieldNotes	ModuleScript	7373:b17e7e99:97fcccb3
+ReplicatedStorage.ZyntraFieldNotesPage	ModuleScript	16492:4516b33d:df67e7c5
+ServerScriptService.AvatarNormalize	Script	2567:f52d403d:911671d3
+ServerScriptService.Crouch State Server	Script	6714:6c424c5a:8ece4e32
+ServerScriptService.FieldNotesService	Script	21612:2edae64f:d9569939
+ServerScriptService.FlashlightSync	Script	5382:ae88b32d:b83997bf
+ServerScriptService.GameManager	Script	146788:9a12e364:9549f88a
+ServerScriptService.Level 1 Systems.EntityAI	Script	59207:e342a23b:04b3a04b
+ServerScriptService.Level 1 Systems.EntityAnimation	Script	6301:6cfa41c6:cd228a10
+ServerScriptService.Level 1 Systems.EntityKill	Script	11471:c90742b7:d99621bf
+ServerScriptService.Level 1 Systems.MazeGenerator	Script	84041:2524b00d:b056b3cf
+ServerScriptService.Level 1 Systems.PuzzleManager	Script	100716:b5028718:1407dd94
+ServerScriptService.Level 2 Systems.Level 2 Configuration	ModuleScript	9970:bdd221f9:d8830845
+ServerScriptService.Level 2 Systems.Level 2 Exit Transition Test Suite	ModuleScript	47083:94d0c0d1:205934d1
+ServerScriptService.Level 2 Systems.Level 2 Layout Generator	ModuleScript	37520:daf7be42:934d494a
+ServerScriptService.Level 2 Systems.Level 2 Objective Controller	ModuleScript	50748:f3d29752:47740550
+ServerScriptService.Level 2 Systems.Level 2 Pool Foam Animation Adapter	ModuleScript	16481:3488289e:c08edfe6
+ServerScriptService.Level 2 Systems.Level 2 Pool Foam Configuration	ModuleScript	10652:e85874ff:7d285afb
+ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller	ModuleScript	69432:86e5ee65:62b8b8d9
+ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator	ModuleScript	118667:7d1ebe89:9f51758f
+ServerScriptService.Level 2 Systems.Level 2 Pool Foam Observer	ModuleScript	16597:64d188c0:d6c8e42a
+ServerScriptService.Level 2 Systems.Level 2 Pool Foam Proxy Factory	ModuleScript	11278:4858470f:68b6711f
+ServerScriptService.Level 2 Systems.Level 2 Pool Slide Configuration	ModuleScript	691:1bf46563:beaed8fb
+ServerScriptService.Level 2 Systems.Level 2 Pool Slide Controller	ModuleScript	38772:0adcd791:cc2e9865
+ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator	ModuleScript	131658:23784253:093ef79d
+ServerScriptService.Level 2 Systems.Level 2 Pool Slide Rig Adapter	ModuleScript	7363:71e7fa44:ecdeca3c
+ServerScriptService.Level 2 Systems.Level 2 Round Adapter	ModuleScript	19458:3b840482:90d78344
+ServerScriptService.Level 2 Systems.Level 2 Slide Ragdoll Service	Script	21604:3f43be1d:d2808c6d
+ServerScriptService.Level 2 Systems.Level 2 World Builder	ModuleScript	265160:67ebc0cf:cf9516b7
+ServerScriptService.Level 2 Systems.README - LEVEL 2 POOL FOAM	ModuleScript	7451:bcc0d339:5367f227
+ServerScriptService.Level 2 Systems.README - LEVEL 2 TWEAKS	ModuleScript	5828:59f7879a:8b94222c
+ServerScriptService.Level 3 Systems.Level 3 Configuration	ModuleScript	19070:8ff06fc4:0c06f280
+ServerScriptService.Level 3 Systems.Level 3 Hiding Controller	ModuleScript	24793:477ef5f1:ae3795a7
+ServerScriptService.Level 3 Systems.Level 3 Layout Generator	ModuleScript	38107:73547797:379eef91
+ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller	ModuleScript	181945:1afa1381:6326eb0f
+ServerScriptService.Level 3 Systems.Level 3 Music Sequence Controller	ModuleScript	20901:13f36c55:6a2aad5f
+ServerScriptService.Level 3 Systems.Level 3 Objective Controller	ModuleScript	65815:935b3fe4:1096018c
+ServerScriptService.Level 3 Systems.Level 3 Round Adapter	ModuleScript	30972:e7b70b64:c016ce8a
+ServerScriptService.Level 3 Systems.Level 3 Test Suite	ModuleScript	197871:eb72f97d:a66b8dd1
+ServerScriptService.Level 3 Systems.Level 3 World Builder	ModuleScript	104627:b8c3f8d2:2b6c443c
+ServerScriptService.Level2Generator	ModuleScript	427:7a84c8aa:109bfe28
+ServerScriptService.Level3Generator	ModuleScript	437:bcbbc796:d010dcf2
+ServerScriptService.LobbyPartyModeController	Script	7124:0dd45af4:cd85200a
+ServerScriptService.LobbyShopDisplay	ModuleScript	38351:228e860d:7b0bf9f9
+ServerScriptService.NoiseRegistry	ModuleScript	1991:2872ca37:61c095a7
+ServerScriptService.PlayerProtection	ModuleScript	6314:bf5dfd7d:0e0d0069
+ServerScriptService.PurchaseAlerts	ModuleScript	6278:0e879a6f:e461e245
+ServerScriptService.Round Completion Routing	ModuleScript	74983:cd3d4709:061f1a07
+ServerScriptService.Round Completion Test Suite	ModuleScript	135364:3f478e32:46bedae4
+ServerScriptService.Round Loading Runtime	ModuleScript	8128:82057947:3d1e8291
+ServerScriptService.Round Loading Test Suite	ModuleScript	15550:5fd1ee3a:6405424c
+ServerScriptService.RouteMarkerService	Script	12066:337bfe90:d225378a
+ServerScriptService.TunnelLobbyBuilder	ModuleScript	117530:09f3ecff:4e1c244f
+ServerScriptService.ZyntraMonetization	Script	166884:71a61b00:d2d9a418
+ServerStorage.Archive.Level 2 Kids Skylight Backup 20260806.Level 2 World Builder Before Kids Skylights	ModuleScript	84738:d0e58a20:fcb3d20e
+ServerStorage.Archive.Level 2 Kids Texture Backup 20260806.Level 2 World Builder Before Kids Textures	ModuleScript	69618:b93dbc6a:396804d8
+ServerStorage.Archive.Level 2 Kids V1 Backup 20260811.Level 2 Configuration	ModuleScript	5803:e95429f3:2e36e56f
+ServerStorage.Archive.Level 2 Kids V1 Backup 20260811.Level 2 World Builder	ModuleScript	97093:d2394336:66a0f422
+ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 Configuration	ModuleScript	5926:6e228725:3939252b
+ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 Objective Controller	ModuleScript	7391:fe6c1e52:1e0f6050
+ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 World Builder	ModuleScript	58002:882d4e6f:f3cfde63
+ServerStorage.Archive.Level 2 Pump Scale Backup 20260806.Level 2 World Builder Before 40 Percent Reduction	ModuleScript	68535:d0131ea0:8c47aff8
+ServerStorage.Archive.Level2AudioBackup_20260831_NoDistantSplash.Level 2 Configuration	ModuleScript	9801:a6d644ae:1927918e
+ServerStorage.Archive.Level2AudioBackup_20260831_NoDistantSplash.Level 2 Sound Controller	LocalScript	26598:a5b5d34c:569d133a
+ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Client	LocalScript	9372:72d2ec45:c5f72639
+ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Controller	ModuleScript	167166:078dfaf1:1f54b27d
+ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Test Suite	ModuleScript	295599:fc3ff3bd:efa90c65
+ServerStorage.Archive.RetiredLobbyAssets.Miso.MisoPatrol	Script	2250:bc1ca951:17714fbf
+ServerStorage.CodexBackup_20260902_ComingSoonGates.TunnelLobbyBuilder_PreComingSoon	ModuleScript	96252:735a39c9:a495ca07
+ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__FlashlightSync	Script	6740:327d4d4c:181016a0
+ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 2 Systems__Level 2 Pool Foam Configuration	ModuleScript	5736:9dbc3e94:9499553e
+ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 2 Systems__Level 2 Pool Foam Controller	ModuleScript	42420:6752a58e:8dbaaa38
+ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 3 Systems__Level 3 Hiding Controller	ModuleScript	16436:aee4c4fc:c2b62d60
+ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__TunnelLobbyBuilder	ModuleScript	95466:a3f7ae7b:92f25c1b
+ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__EntityShakeController	LocalScript	8095:10744df9:56a9ce87
+ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__FlashlightController	LocalScript	28932:acccfeba:3793f234
+ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client	LocalScript	6350:9603d5a8:c9225db8
+ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__NoiseReporter	LocalScript	27514:dfc69f56:296762ea
+ServerStorage.PoolSlideContextDiagnosticBackup_0710.Level 2 Pool Slide Controller	ModuleScript	35774:d66b1ca1:90cdf21f
+ServerStorage.PoolSlideContextDiagnosticBackup_0710.Level 2 Pool Slide Navigator	ModuleScript	126820:a83bd632:a0bf195a
+ServerStorage.PoolSlideContextDiagnosticBackup_MP6_1609Z.Controller	ModuleScript	35774:d66b1ca1:90cdf21f
+ServerStorage.PoolSlideContextDiagnosticBackup_MP6_1609Z.Navigator	ModuleScript	126820:a83bd632:a0bf195a
+ServerStorage.PoolSlideContextDiagnosticBackup_MP7_1624Z.Controller	ModuleScript	35774:d66b1ca1:90cdf21f
+ServerStorage.PoolSlideContextDiagnosticBackup_MP7_1624Z.Navigator	ModuleScript	126820:a83bd632:a0bf195a
+ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.Controller	ModuleScript	35774:d66b1ca1:90cdf21f
+ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.Navigator	ModuleScript	126975:446c866b:0c7f8f61
+ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.NavigatorBeforeBudgetFix	ModuleScript	126820:a83bd632:a0bf195a
+ServerStorage.PoolSlideContextDiagnosticBackup_MP9_1640Z.Controller	ModuleScript	35774:d66b1ca1:90cdf21f
+ServerStorage.PoolSlideContextDiagnosticBackup_MP9_1640Z.Navigator	ModuleScript	126975:446c866b:0c7f8f61
+ServerStorage.Project Mirror.IMPORTANT	LocalScript	167:6e517ee8:198a69f6
+ServerStorage.Project Mirror.Script	Script	235:2896b56f:462cfe95
+ServerStorage.TEMP_PipeEntityAnimations_20260909.PreviewControls	ModuleScript	4670:08e5f851:784da127
+StarterPlayer.StarterCharacter.Animate	LocalScript	28802:0fbfcdb6:e15688ee
+StarterPlayer.StarterCharacterScripts.DanceEmote	LocalScript	1539:4dd6244a:6bbc16ee
+StarterPlayer.StarterCharacterScripts.DisableDefaultWalkingSound	LocalScript	300:ff8e0d50:cd030562
+StarterPlayer.StarterCharacterScripts.SetRunAnimation	LocalScript	654:49082967:63c69723
+StarterPlayer.StarterPlayerScripts.Daily Rewards Client	LocalScript	24186:d49d22b9:570752ab
+StarterPlayer.StarterPlayerScripts.DevCheats	LocalScript	22809:3689206f:52872f43
+StarterPlayer.StarterPlayerScripts.EntityShakeController	LocalScript	10390:9181f8b7:fb819829
+StarterPlayer.StarterPlayerScripts.Field Notes Client	LocalScript	9288:6ef9bae5:25d4d829
+StarterPlayer.StarterPlayerScripts.First Entry Guide	LocalScript	9947:1880a433:5f31dc19
+StarterPlayer.StarterPlayerScripts.FlashlightController	LocalScript	30942:e60818e6:5f6817d8
+StarterPlayer.StarterPlayerScripts.JumpscareUI	LocalScript	7476:099984d5:b14656b5
+StarterPlayer.StarterPlayerScripts.Level 1 Cable Current	LocalScript	10507:dfb359e3:382473c3
+StarterPlayer.StarterPlayerScripts.Level 1 Sound Controller	LocalScript	3462:0350dfdb:e9d1b5c7
+StarterPlayer.StarterPlayerScripts.Level 2 Entity Audio	LocalScript	9971:9bd107c1:65054ef1
+StarterPlayer.StarterPlayerScripts.Level 2 Lighting Controller	LocalScript	5592:c39d822e:2695d118
+StarterPlayer.StarterPlayerScripts.Level 2 Objective UI	LocalScript	13516:9d95723f:4f6cba81
+StarterPlayer.StarterPlayerScripts.Level 2 Pool Foam Client	LocalScript	18788:1435bf26:e33a59bc
+StarterPlayer.StarterPlayerScripts.Level 2 Pool Slide Dev ESP	LocalScript	9656:a317c4e3:a4d23c79
+StarterPlayer.StarterPlayerScripts.Level 2 Slide Controller	LocalScript	30379:d9ab4624:281f5b52
+StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller	LocalScript	39939:ce191685:be3ee859
+StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller	LocalScript	39946:5b25926b:eaf2d90d
+StarterPlayer.StarterPlayerScripts.Level 3 Mall Manager Visual Smoother	LocalScript	6548:600e0d90:2efa3f7a
+StarterPlayer.StarterPlayerScripts.Level 3 Reader Client	LocalScript	54201:cfc14745:00e1d7d7
+StarterPlayer.StarterPlayerScripts.Level 3 Sound Controller	LocalScript	46833:cce73687:e2743b67
+StarterPlayer.StarterPlayerScripts.Level 3 Table Hiding Client	LocalScript	21675:88f479bd:c369b541
+StarterPlayer.StarterPlayerScripts.Level2AlertClient	LocalScript	34389:a372010b:acb3c0a9
+StarterPlayer.StarterPlayerScripts.LobbyCeilingSweeps	LocalScript	7021:fabc7554:0299b078
+StarterPlayer.StarterPlayerScripts.LobbyLevel3GateFlicker	LocalScript	5033:26843e7b:db426e59
+StarterPlayer.StarterPlayerScripts.LobbyMusicController	LocalScript	10098:36e5982a:e4bd67b8
+StarterPlayer.StarterPlayerScripts.Lucky Wheel Client	LocalScript	39531:ecc1bbaf:ddb41e63
+StarterPlayer.StarterPlayerScripts.MasterTuningClient	LocalScript	10614:36ac9d0c:8d6239ce
+StarterPlayer.StarterPlayerScripts.NoiseReporter	LocalScript	43475:03d2614f:ef340a33
+StarterPlayer.StarterPlayerScripts.ProtectionHUD	LocalScript	29091:dfa6a07a:631af60e
+StarterPlayer.StarterPlayerScripts.PuzzleUI	LocalScript	78232:f7463a14:edd36122
+StarterPlayer.StarterPlayerScripts.Round Entry Client	LocalScript	5914:4b430826:4e4229a6
+StarterPlayer.StarterPlayerScripts.Round Exit Client	LocalScript	20545:259ebd58:4d631f7c
+StarterPlayer.StarterPlayerScripts.RoundUI	LocalScript	237425:92d93b74:c8355e68
+StarterPlayer.StarterPlayerScripts.Shop Display Client	LocalScript	21811:c75657d1:44d2a0bd
+StarterPlayer.StarterPlayerScripts.SoundController	LocalScript	69416:c0079f4d:87de143b
+StarterPlayer.StarterPlayerScripts.SpectateController	LocalScript	19755:be3bc550:ab528e08
+StarterPlayer.StarterPlayerScripts.ZyntraStore	LocalScript	186007:51c79b78:b0328f3e

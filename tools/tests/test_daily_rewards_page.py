@@ -1,27 +1,33 @@
 """Run the real ZyntraDailyRewardsPage under offline Luau with an honest fake Roblox.
 
-DAILY_REWARDS_PAGE_20260916 (Trello #83/#84/#89). The module under test is the
-whole shipped file -- not a retyped copy -- mounted through the terminal page
-contract in `artifacts/trello-20260916/claude-contracts.md`, with:
+DAILY_REWARDS_PAGE_20260916 (Trello #83/#84/#89, wheel removed by #104). The
+module under test is the whole shipped file -- not a retyped copy -- mounted
+through the page contract in `artifacts/trello-20260916/claude-contracts.md`,
+with:
 
   * the REAL ReplicatedStorage/UIStyle module, loaded and run;
   * the REAL ZyntraStore COLORS table and its corner/outline/label/button
     helpers, extracted from the LocalScript by string marker;
   * the REAL ReplicatedStorage/ZyntraConfig, so once A-SERVER lands
     `DailyRewards` this file becomes a CONTRACT test between the two sides: the
-    milestones, the wheel prizes and the weights are asserted against the
-    numbers the owner approved (5/15/35 and 45/20/20/5/10) whichever source
-    supplies them. Until that lands, the contract's own table stands in and the
-    run says so.
+    milestones are asserted against the numbers the owner approved
+    (5/15/35) whichever source supplies them. Until that lands, the
+    contract's own table stands in and the run says so.
 
-What it proves, by running the code rather than matching strings: the claim and
-spin states drawn for a given saved profile, the UTC day-roll guard, the local
+WHAT #104 CHANGED. The supply wheel moved out of this page into its own modal
+(`Lucky Wheel Client`, Trello #103), so every assertion about spinning, replaying
+a recorded prize, the odds rows and the SKIP control went with it -- those are
+the wheel client's tests now. What is left is asserted harder: this file also
+proves the wheel is GONE, because a page that still built a hidden SpinButton
+would put a second `SpinDailyWheel` path back into the game.
+
+What it proves, by running the code rather than matching strings: the claim
+states drawn for a given saved profile, the UTC day-roll guard, the local
 countdown after real elapsed time, that one press fires exactly one action and
 then locks, that a request nobody answers recovers by RE-READING instead of
-granting, that a committed prize replays once and a resumed session never
-replays it at all, that ReduceFlashing removes the stepping pass entirely, and
-that every rectangle at four viewport tiers lands inside the terminal's own
-content box at or above the 44px touch floor.
+granting, that nothing the page builds can send `SpinDailyWheel`, and that every
+rectangle at four viewport tiers lands inside the host's own content box at or
+above the 44px touch floor.
 
 What it CANNOT see: real font metrics and TextBounds, the engine's UICorner /
 UIStroke rendering, UIDevice's real form-factor detection, and anything about
@@ -438,17 +444,19 @@ local function buttonFor(host, key)
 	return nil, nil
 end
 
--- Which wheel row is lit right now, by the ONE property the animation moves.
-local function litSegment(host)
-	local index = 0
-	for order = 1, 5 do
-		local row = findByName(host.Page, "Segment" .. tostring(order))
-		if row then
-			local highlight = row:FindFirstChild("Highlight")
-			if highlight and highlight.BackgroundTransparency < 1 then index = order end
+-- The wheel is not this page's any more, and "not drawn" is not the same fact
+-- as "not built": a hidden SpinButton would still be wired to the action. This
+-- walks the WHOLE tree the page built, so nothing survives by being invisible.
+local function wheelRemnant(host)
+	for _, node in ipairs(descendants(host.Page)) do
+		local name = tostring(node.Name)
+		if name == "SpinButton" or name == "SkipButton" or name == "WheelSection"
+			or name == "ResultBanner" or name == "NextSpinNote" or name == "OddsNote"
+			or string.match(name, "^Segment%d+$") then
+			return name
 		end
 	end
-	return index
+	return nil
 end
 '''
 
@@ -460,18 +468,22 @@ do
 	local handle = mount(host)
 	expect(#host.Scrolls, 1, "the page registers exactly one scroll")
 	expect(host.Scrolls[1], "Rewards|DailyRewards", "the scroll is registered by page and name")
-	expect(#host.Cards, 4, "three milestones and the wheel are registered as cards")
+	expect(#host.Cards, 3, "the three milestones are registered as cards")
 	local keys = {}
 	for _, entry in ipairs(host.Cards) do
 		keys[entry.Key] = true
 		expect(entry.Page, "Rewards", entry.Key .. " is registered under the Rewards page")
 	end
-	for _, key in ipairs({"Playtime5", "Playtime15", "Playtime35", "Wheel"}) do
+	for _, key in ipairs({"Playtime5", "Playtime15", "Playtime35"}) do
 		check(keys[key], key .. " is a registered card")
 	end
+	check(not keys.Wheel, "and the Wheel is NOT one of them any more")
 
-	expect(host:find("Eyebrow").Text, "ZYNTRA // DAILY SUPPLY", "the header eyebrow")
-	expect(host:find("Title").Text, "DAILY REWARDS", "the header title")
+	-- The MODAL owns its own name: the Daily Rewards Client prints the eyebrow
+	-- and the title in its title bar, and the terminal prints its own. A page
+	-- title here would be the same two words twice, 40px apart.
+	expect(findByName(host.Page, "Title"), nil, "the page draws no title of its own")
+	expect(findByName(host.Page, "Eyebrow"), nil, "and no eyebrow of its own")
 	expect(host:find("ResetNote").Text, "Resets 00:00 UTC", "the UTC boundary is stated")
 	expect(host:find("ResetCountdown").Text, "RESETS IN 05:12:33",
 		"the countdown is drawn from SecondsToReset")
@@ -499,45 +511,36 @@ do
 		expect(action.Active, false, case[1] .. " cannot be pressed while locked")
 	end
 
-	local spin = buttonFor(host, "Wheel")
-	expect(spin.Text, "FREE SPIN", "an unspun day offers the free spin")
-	expect(spin.Active, true, "the free spin is reachable")
-	expect(host:find("ResultBanner").Visible, false, "no result banner before a spin")
-	expect(host:find("NextSpinNote").Visible, false, "no next-spin note before a spin")
-	expect(host:find("SkipButton").Visible, false, "SKIP only exists during a replay")
+	expect(wheelRemnant(host), nil, "the page builds no wheel instance at all")
+	expect(host:find("WheelNote").Text,
+		"Spin the Lucky Wheel from its own button on the left rail.",
+		"and says where the wheel went instead")
 	expect(#host.Actions, 0, "drawing the page sends nothing to the server")
 	expect(tweensCreated, 0, "the page creates no tweens at rest")
 	handle.destroy()
 end
 
--- ══ 2. the five prizes, their labels and their REAL odds ══════════════════
+-- ══ 1b. the wheel cannot be reached from here by any path ═════════════════
 do
+	-- A page that still HELD the wheel, merely hidden, would still be able to
+	-- fire SpinDailyWheel from a stale connection -- and a second spin path is
+	-- exactly what the split was meant to remove. Fired at every button the page
+	-- built, with a profile that has an unspent spin on it.
 	local host = newHost()
 	local handle = mount(host)
-	local total = 0
-	for _, entry in ipairs(Config.DailyRewards.Wheel) do total += entry.Weight end
-	expect(total, 100, "the shipped weights sum to 100")
-	expect(#Config.DailyRewards.Wheel, 5, "five distinct prizes, as the owner asked")
-	local wanted = {45, 20, 20, 5, 10}
-	local labels = {"1 Research Token", "3 Research Tokens", "1 Speed Potion",
-		"2 Speed Potions", "1 Entity Shield"}
-	for order, entry in ipairs(Config.DailyRewards.Wheel) do
-		local row = host:find("Segment" .. tostring(order))
-		expect(entry.Weight, wanted[order], "prize " .. order .. " carries the approved weight")
-		expect(row:FindFirstChild("SegmentLabel").Text, labels[order],
-			"prize " .. order .. " is named as the owner approved")
-		expect(row:FindFirstChild("SegmentOdds").Text,
-			tostring(math.floor(entry.Weight / total * 100 + 0.5)) .. "%",
-			"prize " .. order .. " prints its real weight as a percentage")
-		check(row:FindFirstChild("OddsBar").Size.OX >= 2,
-			"prize " .. order .. " draws an odds bar")
+	host:push({WheelDay = nil, WheelLast = nil})
+	for _, node in ipairs(descendants(host.Page)) do
+		if node.ClassName == "TextButton" then node.Activated:Fire() end
 	end
-	-- The bar is proportional, so the 45% prize's bar is wider than the 5% one.
-	check(host:find("Segment1"):FindFirstChild("OddsBar").Size.OX
-		> host:find("Segment4"):FindFirstChild("OddsBar").Size.OX,
-		"a likelier prize draws a longer odds bar")
-	expect(host:find("OddsNote").Text, "One free spin a day. These are the real odds.",
-		"the page states that the odds shown are the real ones")
+	for _, entry in ipairs(host.Actions) do
+		check(entry.Name ~= "SpinDailyWheel",
+			"no control on this page sends SpinDailyWheel (sent " .. entry.Name .. ")")
+	end
+	-- A recorded prize on the profile must not resurrect a banner or a replay.
+	host:push({WheelDay = TODAY, WheelLast = {Day = TODAY, Key = "Token3", Serial = 3}})
+	expect(wheelRemnant(host), nil, "a recorded prize draws nothing here")
+	advance(4)
+	expect(wheelRemnant(host), nil, "and nothing appears on a later frame either")
 	handle.destroy()
 end
 
@@ -602,10 +605,7 @@ do
 	expect(host:find("PlaytimeReadout").Text, "ACTIVE PLAY TODAY  0:00",
 		"yesterday's seconds are not today's")
 	expect(buttonFor(host, "Playtime5").Text, "5:00 TO GO", "yesterday's claim does not carry over")
-	expect(buttonFor(host, "Wheel").Text, "FREE SPIN", "yesterday's spin does not spend today's")
-	expect(buttonFor(host, "Wheel").Active, true, "and today's spin is reachable")
-	expect(host:find("ResultBanner").Visible, false, "yesterday's prize is not today's result")
-	expect(litSegment(host), 0, "and nothing is left lit from yesterday")
+	expect(wheelRemnant(host), nil, "and yesterday's recorded prize draws nothing")
 	handle.destroy()
 end
 
@@ -694,164 +694,6 @@ do
 	handle.destroy()
 end
 
--- ══ 8. the wheel: one spin, a replay of a committed prize ═════════════════
-do
-	local host = newHost()
-	local handle = mount(host)
-	local spin = buttonFor(host, "Wheel")
-	spin.Activated:Fire()
-	expect(#host.Actions, 1, "one press sends one spin")
-	expect(host.Actions[1].Name, "SpinDailyWheel", "the contract's action name")
-	expect(host.Actions[1].Payload, nil, "with no payload")
-	expect(spin.Text, "SPINNING...", "the button says what it is waiting for")
-	expect(spin.Active, false, "and is locked")
-	spin.Activated:Fire()
-	expect(#host.Actions, 1, "a second press while in flight sends nothing")
-
-	-- The server has already picked AND written the prize; this push is the
-	-- record, so everything after it is presentation.
-	host:push({WheelDay = TODAY, WheelLast = {Day = TODAY, Key = "Token3", Serial = 3}})
-	check(host:find("SkipButton").Visible, "a replay offers a skip")
-	expect(spin.Text, "SPINNING...", "the spin button stays locked while it replays")
-
-	local seen, order, at = {}, {}, {}
-	local elapsed = 0
-	advance(3, 1 / 60, function()
-		elapsed += 1 / 60
-		local lit = litSegment(host)
-		if order[#order] ~= lit then
-			table.insert(order, lit)
-			table.insert(at, elapsed)
-		end
-		seen[lit] = true
-	end)
-	check(#order > 3, "the highlight genuinely steps through segments (" .. #order .. " moves)")
-	local distinct = 0
-	for index in pairs(seen) do if index > 0 then distinct += 1 end end
-	check(distinct >= 3, "more than one segment is visited on the way")
-	expect(litSegment(host), 2, "and it lands on the recorded prize, Token3")
-	check(at[#at] <= 2.5, "the whole replay is inside the 2.5 s ceiling ("
-		.. string.format("%.2f", at[#at]) .. "s)")
-	-- Decelerating: the last gap is longer than the first.
-	check(#at >= 3 and (at[#at] - at[#at - 1]) > (at[2] - at[1]),
-		"the highlight decelerates onto the prize")
-	expect(tweensCreated, 0, "the replay runs on the page's own ticker, not a tween")
-
-	expect(host:find("ResultBanner").Visible, true, "the result is announced")
-	expect(host:find("ResultText").Text, "YOU RECEIVED: 3 Research Tokens",
-		"naming the prize the server recorded")
-	expect(spin.Text, "SPUN TODAY", "the day's free spin is spent")
-	expect(spin.Active, false, "and cannot be spun again")
-	expect(host:find("SkipButton").Visible, false, "SKIP goes away with the replay")
-	expect(host:find("NextSpinNote").Visible, true, "and the next spin is dated")
-	-- The same clock as the header's, to the second: three seconds of real time
-	-- passed while the replay was sampled, and both readouts moved with it.
-	expect(host:find("NextSpinNote").Text,
-		"Next spin in " .. string.sub(host:find("ResetCountdown").Text, 11),
-		"the next spin is dated by the same countdown")
-
-	-- A REPLAY push -- same Serial -- grants nothing and animates nothing.
-	local before = litSegment(host)
-	host:push({WheelDay = TODAY, WheelLast = {Day = TODAY, Key = "Token3", Serial = 3}})
-	expect(host:find("SkipButton").Visible, false, "an unchanged Serial does not replay")
-	expect(litSegment(host), before, "the recorded prize is simply shown again")
-	expect(host:find("ResultText").Text, "YOU RECEIVED: 3 Research Tokens", "with the same text")
-	expect(#host.Actions, 1, "and nothing is sent")
-	handle.destroy()
-end
-
--- ══ 9. a resumed session shows the prize, it does not replay it ═══════════
-do
-	local host = newHost()
-	host.Profile = profileOf({PlaytimeSeconds = 640, Claimed = {["5"] = true},
-		WheelDay = TODAY, WheelLast = {Day = TODAY, Key = "Potion2", Serial = 11}})
-	local handle = mount(host)
-	expect(host:find("SkipButton").Visible, false, "rejoining does not replay this morning's spin")
-	expect(host:find("ResultBanner").Visible, true, "but the prize is still shown")
-	expect(host:find("ResultText").Text, "YOU RECEIVED: 2 Speed Potions", "and named")
-	expect(buttonFor(host, "Wheel").Text, "SPUN TODAY", "with the spin spent")
-	expect(buttonFor(host, "Playtime5").Text, "CLAIMED", "and the morning's claim intact")
-	local lit = litSegment(host)
-	advance(3)
-	expect(litSegment(host), lit, "and nothing animates afterwards")
-	handle.destroy()
-end
-
--- ══ 10. ReduceFlashing removes the stepping pass entirely ═════════════════
-do
-	local host = newHost()
-	host.Player:SetAttribute("ReduceFlashing", true)
-	local handle = mount(host)
-	buttonFor(host, "Wheel").Activated:Fire()
-	host:push({WheelDay = TODAY, WheelLast = {Day = TODAY, Key = "Shield1", Serial = 2}})
-
-	local visited, moves, transparencies = {}, 0, {}
-	local previous = -1
-	advance(2, 1 / 60, function()
-		local lit = litSegment(host)
-		if lit ~= previous then
-			moves += 1
-			previous = lit
-		end
-		if lit > 0 then
-			visited[lit] = true
-			-- Sampled only WHILE the replay runs: once it ends the winning row
-			-- keeps a dim resting marker under the banner, which is a state,
-			-- not a frame of the fade.
-			if host:find("SkipButton").Visible then
-				local row = findByName(host.Page, "Segment" .. tostring(lit))
-				table.insert(transparencies,
-					row:FindFirstChild("Highlight").BackgroundTransparency)
-			end
-		end
-	end)
-	local distinct = 0
-	for _ in pairs(visited) do distinct += 1 end
-	expect(distinct, 1, "only the winning segment is ever lit -- no stepping")
-	check(moves <= 2, "and the lit segment changes at most twice over two seconds")
-	expect(litSegment(host), 5, "it settles on the recorded prize, Shield1")
-	check(#transparencies > 10, "the fade is sampled over many frames")
-	local monotonic = true
-	for index = 2, #transparencies do
-		if transparencies[index] > transparencies[index - 1] + 1e-6 then monotonic = false end
-	end
-	check(monotonic, "and it only ever fades IN, never flickers back out")
-	check(transparencies[1] > 0.9, "the fade starts from invisible")
-	check(transparencies[#transparencies] < 0.1, "and finishes fully lit")
-	expect(tweensCreated, 0, "the reduced path creates no tween either")
-	expect(host:find("ResultText").Text, "YOU RECEIVED: 1 Entity Shield", "the prize is named")
-	handle.destroy()
-end
-
--- ══ 11. a replay nobody is watching is simply over ════════════════════════
-do
-	local host = newHost()
-	local handle = mount(host)
-	buttonFor(host, "Wheel").Activated:Fire()
-	host.Visible = false
-	host:push({WheelDay = TODAY, WheelLast = {Day = TODAY, Key = "Potion1", Serial = 4}})
-	expect(host:find("SkipButton").Visible, false, "a closed terminal does not replay")
-	expect(host:find("ResultBanner").Visible, true, "the prize is recorded straight away")
-	expect(host:find("ResultText").Text, "YOU RECEIVED: 1 Speed Potion", "and named")
-	handle.destroy()
-end
-
--- ══ 12. SKIP ends the replay immediately, on the recorded prize ═══════════
-do
-	local host = newHost()
-	local handle = mount(host)
-	buttonFor(host, "Wheel").Activated:Fire()
-	host:push({WheelDay = TODAY, WheelLast = {Day = TODAY, Key = "Token1", Serial = 9}})
-	advance(0.3)
-	check(host:find("SkipButton").Visible, "the skip is up while it replays")
-	host:find("SkipButton").Activated:Fire()
-	expect(litSegment(host), 1, "skipping lands on the recorded prize, not wherever it was")
-	expect(host:find("ResultText").Text, "YOU RECEIVED: 1 Research Token", "and announces it")
-	expect(host:find("SkipButton").Visible, false, "and the skip goes away")
-	expect(buttonFor(host, "Wheel").Text, "SPUN TODAY", "with the spin spent")
-	handle.destroy()
-end
-
 -- ══ 13. refresh() and destroy() ═══════════════════════════════════════════
 do
 	local host = newHost()
@@ -881,46 +723,37 @@ do
 end
 
 -- ══ 14. fit: four viewports, measured ═════════════════════════════════════
+-- ONE COLUMN AT EVERY TIER since #104: the wheel was the second column, and a
+-- half-width card beside an empty half is not a composition.
 local FITS = {
-	{Name = "phone portrait 390x844", Fit = PHONE_PORTRAIT, Columns = 1},
-	{Name = "phone landscape 844x390", Fit = PHONE_LANDSCAPE, Columns = 1},
-	{Name = "tablet 1024x768", Fit = TABLET, Columns = 2},
-	{Name = "pointer 1280x720", Fit = POINTER, Columns = 2},
+	{Name = "phone portrait 390x844", Fit = PHONE_PORTRAIT},
+	{Name = "phone landscape 844x390", Fit = PHONE_LANDSCAPE},
+	{Name = "tablet 1024x768", Fit = TABLET},
+	{Name = "pointer 1280x720", Fit = POINTER},
 }
 for _, entry in ipairs(FITS) do
 	local fit, name = entry.Fit, entry.Name
 	local host = newHost()
 	local handle = mount(host, fit)
-	host:push({PlaytimeSeconds = 900, WheelDay = TODAY,
-		WheelLast = {Day = TODAY, Key = "Token1", Serial = 1}})
+	host:push({PlaytimeSeconds = 900})
 	host:layout(fit)
 
 	local scroll = host.Page.Children[1]
 	local playtime = host:find("PlaytimeSection")
-	local wheel = host:find("WheelSection")
 	local header = host:find("RewardsHeader")
 
-	for _, part in ipairs({header, playtime, wheel}) do
+	for _, part in ipairs({header, playtime}) do
 		check(part.Position.OX + part.Size.OX <= fit.ContentWidth,
 			name .. ": " .. part.Name .. " ends inside the content box")
 		check(part.Position.OX >= 0, name .. ": " .. part.Name .. " starts inside it")
 		check(part.Size.OX > 0 and part.Size.OY > 0,
 			name .. ": " .. part.Name .. " has a real rectangle")
 	end
-	if entry.Columns == 2 then
-		check(wheel.Position.OX >= playtime.Position.OX + playtime.Size.OX,
-			name .. ": the two columns do not overlap")
-		expect(wheel.Position.OY, playtime.Position.OY,
-			name .. ": the two columns share a top edge")
-	else
-		expect(wheel.Position.OX, playtime.Position.OX, name .. ": one column, one left edge")
-		check(wheel.Position.OY >= playtime.Position.OY + playtime.Size.OY,
-			name .. ": the wheel sits below the playtime card")
-		expect(playtime.Size.OX, fit.ContentWidth - 8,
-			name .. ": a single column is the full content width")
-	end
-	local bottom = math.max(playtime.Position.OY + playtime.Size.OY,
-		wheel.Position.OY + wheel.Size.OY)
+	expect(playtime.Position.OX, 0, name .. ": one column, flush with the left edge")
+	expect(playtime.Size.OX, fit.ContentWidth - 8,
+		name .. ": and it takes the full content width less the scrollbar")
+	expect(wheelRemnant(host), nil, name .. ": nothing of the wheel is drawn at this tier")
+	local bottom = playtime.Position.OY + playtime.Size.OY
 	check(scroll.CanvasSize.OY >= bottom,
 		name .. ": the canvas reaches the last row (" .. tostring(scroll.CanvasSize.OY)
 		.. " >= " .. tostring(bottom) .. ")")
@@ -949,16 +782,6 @@ for _, entry in ipairs(FITS) do
 		end
 	end
 
-	-- SKIP is not a contract card, but it is a touch target while it exists.
-	local skip = host:find("SkipButton")
-	if fit.Touch then
-		check(skip.Size.OY >= 44, name .. ": SKIP holds the tap floor")
-		check(skip.Size.OX >= 44, name .. ": SKIP is wide enough to hit")
-	end
-	local skipLeft = offsetWithin(skip, scroll)
-	check(skipLeft + skip.Size.OX <= fit.ContentWidth,
-		name .. ": SKIP ends inside the content box")
-
 	-- Nothing prints below 11px, anywhere on the page, at any tier.
 	local smallest = 999
 	local counted = 0
@@ -969,28 +792,28 @@ for _, entry in ipairs(FITS) do
 			counted += 1
 		end
 	end
-	check(counted >= 20, name .. ": the page draws its full set of copy (" .. counted .. ")")
+	check(counted >= 12, name .. ": the page draws its full set of copy (" .. counted .. ")")
 	check(smallest >= 11, name .. ": the smallest face is " .. tostring(smallest) .. "px")
 
-	-- Segment rows stay inside their own column.
-	for order = 1, 5 do
-		local row = host:find("Segment" .. tostring(order))
-		check(offsetWithin(row, scroll) + row.Size.OX <= fit.ContentWidth,
-			name .. ": wheel row " .. order .. " ends inside the content box")
-		local odds = row:FindFirstChild("SegmentOdds")
-		check(odds.Position.OX + odds.Size.OX <= row.Size.OX,
-			name .. ": wheel row " .. order .. "'s odds readout stays in its row")
-		local segmentLabel = row:FindFirstChild("SegmentLabel")
-		check(segmentLabel.Position.OX + segmentLabel.Size.OX <= odds.Position.OX,
-			name .. ": wheel row " .. order .. "'s label does not run into the odds")
+	-- Every label in the section stays inside the section it belongs to. The
+	-- one-column collapse widened `inner`, so this is the arithmetic that would
+	-- catch a rectangle still sized against the old half-width column.
+	for _, node in ipairs(descendants(playtime)) do
+		if node.ClassName == "TextLabel" or node.ClassName == "TextButton" then
+			local left = offsetWithin(node, playtime)
+			check(left >= 0 and left + node.Size.OX <= playtime.Size.OX,
+				name .. ": " .. node.Name .. " spans " .. tostring(left) .. ".."
+				.. tostring(left + node.Size.OX) .. " inside " .. tostring(playtime.Size.OX))
+		end
 	end
 	handle.destroy()
 end
 
 -- ══ 15. the page survives a host that is missing pieces ═══════════════════
 do
-	-- Not a hypothetical: ZyntraStore skips a tab whose module is absent, and a
-	-- module that errored on mount would take the terminal's layout pass with it.
+	-- Not a hypothetical: the Daily Rewards Client draws "DAILY REWARDS
+	-- UNAVAILABLE" when the module is absent, and a module that errored on mount
+	-- would take its host's whole layout pass with it.
 	local host = newHost()
 	host.ctx.contract = nil
 	host.ctx.showStatus = nil
@@ -1011,8 +834,9 @@ do
 	expect(#host.Cards, 0, "no config, no card actions")
 	check(findByName(host.Page, "RewardsOffline") ~= nil, "the page states that it is offline")
 	expect(host:find("PlaytimeSection").Visible, false, "and draws no playtime controls")
-	expect(host:find("WheelSection").Visible, false, "and no wheel")
-	expect(host:find("Title").Text, "DAILY REWARDS", "the header still reads correctly")
+	expect(wheelRemnant(host), nil, "and there was no wheel to hide in the first place")
+	expect(host:find("ResetNote").Text, "Resets 00:00 UTC",
+		"the countdown strip still reads correctly")
 	handle.destroy()
 end
 

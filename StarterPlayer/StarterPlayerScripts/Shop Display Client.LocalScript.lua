@@ -10,10 +10,13 @@
 --      PlayerScripts.ZyntraShopBuy, which ZyntraStore answers by running the
 --      SAME product-card purchase path its own terminal button runs. One
 --      purchase entry point in the game, not two.
---   2. THE MOTION. The crates bob and turn and the sign breathes, locally, so
+--   2. THE MOTION. The hologram boxes bob and the sign breathes, locally, so
 --      no CFrame or colour of this replicates. It all stops the moment a round
 --      starts, and under ReduceFlashing the sign's pulse becomes a slow cosine
 --      swell instead (period 6s, a third of the amplitude). Nothing strobes.
+--      The boxes do NOT turn any more (Trello #105): the product art lives on
+--      the one face that looks at the road, and a box that turns spends half
+--      of its cycle hiding the thing the shop exists to show.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -143,6 +146,12 @@ local title = makeLabel("ItemName", Enum.Font.GothamBold, COLORS.text)
 local kindTag = makeLabel("ItemKind", Enum.Font.Code, COLORS.accent)
 local description = makeLabel("ItemDescription", Enum.Font.GothamMedium, COLORS.muted)
 local state = makeLabel("ItemState", Enum.Font.Code, COLORS.accent2)
+-- How to get rid of the card, on the kind row's right so it costs no height.
+-- The plate is invisible now, so this line is the only place that says the
+-- floor is what opened this; proportional Gotham rather than the kind tag's
+-- monospace, because 27 characters of Code does not fit 168px on a phone.
+local hintTag = makeLabel("CloseHint", Enum.Font.GothamMedium, COLORS.muted, Enum.TextXAlignment.Right)
+hintTag.TextTruncate = Enum.TextTruncate.AtEnd
 
 local function makeButton(name, text, color)
 	local object = Instance.new("TextButton")
@@ -164,12 +173,16 @@ local closeButton = makeButton("Close", "CLOSE", COLORS.muted)
 
 -- ── layout ──────────────────────────────────────────────────────────────────
 -- THE SAME THREE TIERS the terminal's Shop cards use -- phone / tablet /
--- pointer -- and the same icon sizes (52 / 64 / 76), so a crate's card and its
--- card in the terminal are recognisably the same object. `compact` is read from
--- the VIEWPORT rather than from this card's own width: the terminal's compact
--- means "the 840x610 panel had to shrink", and a 420px card would otherwise
--- report itself compact on every screen there is.
-local CARD_DESIGN_WIDTH = 420
+-- pointer -- and the same two touch icon sizes (52 / 64), so a hologram's card
+-- and its card in the terminal are recognisably the same object. `compact` is
+-- read from the VIEWPORT rather than from this card's own width: the terminal's
+-- compact means "the 840x610 panel had to shrink", and a 560px card would
+-- otherwise report itself compact on every screen there is.
+--
+-- The POINTER tier grew with the shop (#105): 560 wide and a 112px icon, which
+-- is the product art at a size worth looking at on a desktop screen that has
+-- the room. The two touch tiers are unchanged -- a phone does not.
+local CARD_DESIGN_WIDTH = 560
 
 local function cardFace()
 	local layout = UIDevice.Layout()
@@ -179,14 +192,14 @@ local function cardFace()
 	local face = ({
 		{Pad = 10, Icon = 52, Title = 14, Kind = 11, Desc = 11, State = 11, Button = 38, Width = 300},
 		{Pad = 14, Icon = 64, Title = 16, Kind = 12, Desc = 12, State = 12, Button = 38, Width = 380},
-		{Pad = 14, Icon = 76, Title = 18, Kind = 12, Desc = 12, State = 13, Button = 38, Width = 420},
+		{Pad = 16, Icon = 112, Title = 20, Kind = 12, Desc = 13, State = 13, Button = 40, Width = 560},
 	})[(compact and touch) and 1 or (touch and 2 or 3)]
-	return face, (touch and TOUCH_TAP or 32)
+	return face, (touch and TOUCH_TAP or 32), touch
 end
 
 -- WHERE THE CARD SITS: bottom centre of the true safe area, not a HUD corner.
 -- The top right is the player list's on desktop, the left rail is the store's
--- three section buttons, and the card is about the crate the player is standing
+-- rail buttons, and the card is about the hologram the player is standing
 -- in front of, so it belongs near the bottom of the screen they are looking
 -- through. On touch it is lifted above the movement cluster -- walking off the
 -- plate is how the card is meant to close, and a card over the thumbstick would
@@ -228,7 +241,7 @@ local MIN_BODY_HEIGHT = 28
 
 local function applyLayout()
 	if not gui.Enabled then return end
-	local face, tap = cardFace()
+	local face, tap, touch = cardFace()
 	local buttonHeight = math.max(tap, face.Button)
 	local titleHeight = face.Title + 12
 	local kindHeight = face.Kind + 6
@@ -260,9 +273,19 @@ local function applyLayout()
 	title.Position = UDim2.fromOffset(face.Pad, face.Pad)
 	title.Size = UDim2.fromOffset(inner, titleHeight)
 	title.TextSize = face.Title
+	-- Kind on the left, how-to-close on the right, one row. 38% is what fits
+	-- "PERMANENT PASS" in monospace at the phone tier's 11px and still leaves
+	-- the hint its 27 characters.
+	local kindWidth = math.floor(inner * 0.38)
 	kindTag.Position = UDim2.fromOffset(face.Pad, face.Pad + titleHeight)
-	kindTag.Size = UDim2.fromOffset(inner, kindHeight)
+	kindTag.Size = UDim2.fromOffset(kindWidth, kindHeight)
 	kindTag.TextSize = face.Kind
+	hintTag.Position = UDim2.fromOffset(face.Pad + kindWidth + 6, face.Pad + titleHeight)
+	hintTag.Size = UDim2.fromOffset(math.max(40, inner - kindWidth - 6), kindHeight)
+	hintTag.TextSize = face.Kind
+	-- CLOSE is a pointer affordance; on touch the honest instruction is to walk.
+	hintTag.Text = touch and "Step off the plate to close"
+		or "Step off the plate or press CLOSE"
 
 	icon.Position = UDim2.fromOffset(face.Pad, bodyTop)
 	icon.Size = UDim2.fromOffset(bodyHeight, bodyHeight)
@@ -352,7 +375,7 @@ local function setShown(key)
 	shownKey = key
 	gui.Enabled = key ~= nil
 	-- Yield the dispatch caption without suppressing movement: stepping off the
-	-- inspect plate remains a way to close this nonmodal card.
+	-- pressure plate remains a way to close this nonmodal card.
 	player:SetAttribute("ZyntraShopDetailOpen", key ~= nil)
 	if key then
 		refresh()
@@ -360,6 +383,12 @@ local function setShown(key)
 	end
 end
 
+-- WHY THIS CANNOT LOOP. evaluate runs on an attribute CHANGE, never on a
+-- timer, so after CLOSE a player who stands perfectly still gets no further
+-- call and the card stays down. dismissedKey survives exactly as long as the
+-- focus does not move: any other key, or nil, clears it on the line below,
+-- which is what lets stepping off and back on -- or on to the next hologram --
+-- open the card again. There is no second path that can raise it.
 local function evaluate()
 	local key = player:GetAttribute(FOCUS_ATTRIBUTE)
 	if type(key) ~= "string" or key == "" or not lookup(key) then key = nil end
@@ -376,7 +405,7 @@ end
 
 closeButton.Activated:Connect(function()
 	-- CLOSE dismisses THIS focus. Stepping off the plate and back on, or
-	-- walking to another pedestal, brings the card back.
+	-- walking to the next hologram, brings the card back.
 	dismissedKey = shownKey
 	setShown(nil)
 end)
@@ -414,7 +443,6 @@ gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(applyLayout)
 -- this client. Stops dead outside the lobby, and restores every pose it moved.
 local BOB_HEIGHT = 0.35
 local BOB_PERIOD = 4.2
-local SPIN_RATE = 0.42
 local PULSE = {Base = 0.58, Swing = 0.13, Period = 3.2}
 local REDUCED = {Base = 0.60, Swing = 0.05, Period = 6.0}
 
@@ -473,11 +501,13 @@ RunService.Heartbeat:Connect(function(delta)
 		return
 	end
 	animating = true
+	-- Bob only, never yaw: the box's road-facing decal IS the product, and the
+	-- server's beam is sized to BOB_HEIGHT on the assumption that this is the
+	-- whole of the motion. The per-box phase offset keeps the row from pumping
+	-- in unison.
 	for index, record in ipairs(boxes) do
 		local phase = elapsed * (math.pi * 2 / BOB_PERIOD) + index * 0.7
-		record.Part.CFrame = record.Origin
-			* CFrame.new(0, math.sin(phase) * BOB_HEIGHT, 0)
-			* CFrame.Angles(0, elapsed * SPIN_RATE, 0)
+		record.Part.CFrame = record.Origin * CFrame.new(0, math.sin(phase) * BOB_HEIGHT, 0)
 	end
 	-- One cosine either way. ReduceFlashing does not switch the sign off; it
 	-- makes the same breath slower and shallower, which is what the level

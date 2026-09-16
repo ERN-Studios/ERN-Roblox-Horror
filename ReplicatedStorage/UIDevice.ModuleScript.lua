@@ -1632,8 +1632,15 @@ end
 -- terminal and, being Active, took the taps meant for it. Raising the
 -- terminal's DisplayOrder would have fixed the painting and not the input; the
 -- HUD standing down fixes both, and is what the briefing already did.
+--
+-- LuckyWheelOpen and DailyRewardsOpen joined the list on 2026-09-16 (cards
+-- #103 / #104). Both are lobby modals that own the screen exactly the way the
+-- terminal does -- full ModalViewport panel, movement suppressed, the rail
+-- underneath them -- so they belong to the same set rather than each inventing
+-- a private flag that the HUDs, and each other, would have to learn.
 local SCREEN_OWNING_MODALS = {
 	"ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen", "QueueModalOpen",
+	"LuckyWheelOpen", "DailyRewardsOpen",
 }
 
 function UIDevice.ScreenOwningModalOpen(): boolean

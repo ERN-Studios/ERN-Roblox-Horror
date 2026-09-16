@@ -1025,6 +1025,10 @@ local function resetScenario(inRound: boolean?)
 	elseif terminal and terminal:IsA("GuiObject") then
 		terminal.Visible = false
 	end
+	-- THE WHOLE RAIL, not the two buttons it happened to hold when this was
+	-- written. It grew to five on 2026-09-16 (cards #103 / #104), and a reset that
+	-- puts three of them back leaves the other two drawn into the next scenario --
+	-- a state leak that then reads as a real overlap finding.
 	local openButton = store and store:FindFirstChild("ZyntraOpenButton")
 	if openButton and openButton:IsA("GuiObject") then
 		-- LAST, and after a yield. Clearing InRound above makes ZyntraStore's own
@@ -1035,9 +1039,12 @@ local function resetScenario(inRound: boolean?)
 		task.wait()
 		openButton.Visible = not inRound
 	end
-	local shopButton = store and store:FindFirstChild("ZyntraShopButton")
-	if shopButton and shopButton:IsA("GuiObject") then
-		shopButton.Visible = not inRound
+	for _, name in ipairs({"ZyntraShopButton", "ZyntraRewardsButton",
+		"ZyntraWheelButton", "ZyntraMusicButton"}) do
+		local railButton = store and store:FindFirstChild(name)
+		if railButton and railButton:IsA("GuiObject") then
+			railButton.Visible = not inRound
+		end
 	end
 end
 
@@ -1271,7 +1278,11 @@ function UIRegression.Scenarios(): {any}
 		{Name = "store-modal", Requires = {
 			"Terminal", "TerminalHeader", "TerminalTabs", "TerminalContent",
 			"TerminalStatus",
-		}, Forbids = {"ZyntraOpenButton", "ZyntraShopButton"},
+		-- All FIVE rail buttons, not the two this row was written against: REWARDS
+		-- and WHEEL open modals of their own, so one left drawn under the terminal
+		-- is a second screen-owning modal one tap away.
+		}, Forbids = {"ZyntraOpenButton", "ZyntraShopButton", "ZyntraRewardsButton",
+			"ZyntraWheelButton", "ZyntraMusicButton"},
 			TouchTargets = {"TerminalHeader.CloseTerminal"}, Setup = function()
 			resetScenario()
 			local store = findGui("ZyntraStore")
@@ -5193,6 +5204,16 @@ function Fit.bodyZyntraTerminalFitMatrix(): (string, number)
 	local terminal = store and store:FindFirstChild("Terminal")
 	local probe = store and store:FindFirstChild("UIRegressionZyntraStoreProbe")
 	local opener = store and store:FindFirstChild("ZyntraOpenButton")
+	-- The rest of the rail, so the stand-down assertion below covers all five
+	-- buttons rather than the one this matrix was written around. Collected by
+	-- name and skipped when absent: this module has to keep running in a place
+	-- that predates cards #103 / #104.
+	local railButtons = {}
+	for _, name in ipairs({"ZyntraShopButton", "ZyntraRewardsButton",
+		"ZyntraWheelButton", "ZyntraMusicButton"}) do
+		local node = store and store:FindFirstChild(name)
+		if node then table.insert(railButtons, node) end
+	end
 	if not (terminal and probe and probe:IsA("BindableFunction") and opener) then
 		record(false, "the Zyntra terminal exists to be measured",
 			string.format("terminal=%s probe=%s opener=%s",
@@ -5257,15 +5278,21 @@ function Fit.bodyZyntraTerminalFitMatrix(): (string, number)
 		-- SETTINGS is the accessibility page. It is in the authored set for every
 		-- account, developer or not, so it is named here rather than left to the
 		-- whitelist branch below.
-		-- REWARDS and NOTES are mounted page modules, and the store builds a tab
-		-- for one only when its ModuleScript is actually in ReplicatedStorage.
-		-- This mirrors that rule from the OTHER side -- by looking for the module,
-		-- not by asking the store what it built -- so a place where the module is
-		-- missing passes, a place where it exists but the store silently skipped
-		-- it fails, and neither case needs this literal editing.
+		-- NOTES is a mounted page module, and the store builds its tab only when
+		-- the ModuleScript is actually in ReplicatedStorage. This mirrors that rule
+		-- from the OTHER side -- by looking for the module, not by asking the store
+		-- what it built -- so a place where the module is missing passes, a place
+		-- where it exists but the store silently skipped it fails, and neither case
+		-- needs this literal editing.
+		--
+		-- REWARDS IS DELIBERATELY ABSENT. Card #104 moved Daily Rewards out of the
+		-- terminal into its own modal behind ZyntraRewardsButton, so a REWARDS tab
+		-- here would now mean the page is mounted TWICE -- two profile
+		-- subscriptions and two claim buttons for one server-side claim. The page
+		-- module still exists in ReplicatedStorage, which is exactly why this list
+		-- must not derive the tab from its presence any more.
 		local expectedTabs = {"Upgrades", "Shop"}
-		for _, entry in ipairs({{"Rewards", "ZyntraDailyRewardsPage"},
-			{"Notes", "ZyntraFieldNotesPage"}}) do
+		for _, entry in ipairs({{"Notes", "ZyntraFieldNotesPage"}}) do
 			if ReplicatedStorage:FindFirstChild(entry[2]) then
 				table.insert(expectedTabs, entry[1])
 			end
@@ -5510,6 +5537,17 @@ function Fit.bodyZyntraTerminalFitMatrix(): (string, number)
 				.. " in the input stack behind its own modal",
 				string.format("visible=%s active=%s",
 					tostring((opener :: any).Visible), tostring((opener :: any).Active)))
+			-- And neither is any other rail button. `not main.Visible` is a term in
+			-- all five predicates, so a button still drawn here is a real defect and
+			-- not a rule this row forgot to state.
+			for _, railButton in ipairs(railButtons) do
+				local node = railButton :: any
+				record(node.Visible == false and node.Active == false,
+					device.Name .. ": " .. railButton.Name .. " leaves the screen and the"
+					.. " input stack behind the terminal too",
+					string.format("visible=%s active=%s",
+						tostring(node.Visible), tostring(node.Active)))
+			end
 			if device.Touch then
 				record(UIDevice.TouchMovementSuppressed() == true,
 					device.Name .. ": the engine's own thumbstick stands down under the modal",

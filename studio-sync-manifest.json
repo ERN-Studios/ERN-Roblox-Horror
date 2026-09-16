@@ -7,9 +7,9 @@
     "name": "BACKROOMS: STAY QUIET [CO-OP HORROR] (placeId: 131311258779917)"
   },
   "counts": {
-    "scripts": 141,
+    "scripts": 143,
     "remoteEvents": 14,
-    "total": 155,
+    "total": 157,
     "studioTrailingNewline": 1
   },
   "extraMirroredFilesNotInStudio": [
@@ -167,16 +167,16 @@
       "studioPath": "ReplicatedStorage.UIDevice",
       "className": "ModuleScript",
       "file": "ReplicatedStorage/UIDevice.ModuleScript.lua",
-      "bytes": 99291,
-      "sha256": "7db0b84eae93746fb7e48b863cc4af900ceba8c0e7192091c29decdc8d6a259a",
+      "bytes": 99714,
+      "sha256": "89b0a5a0f46f7f72e15d08b1741dd00970606548e0ee646a1c09aaf33aa841c2",
       "status": "synced"
     },
     {
       "studioPath": "ReplicatedStorage.UIRegression",
       "className": "ModuleScript",
       "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
-      "bytes": 441526,
-      "sha256": "0c818ae134b6f1fadfeeee4bcfe4bc57b9cec4eddd9544603a36d7437d5350a7",
+      "bytes": 443665,
+      "sha256": "bd504c1fc26f808e096ae13a484294048979d1c9f464c8dbb44c37590fa3978d",
       "status": "synced"
     },
     {
@@ -1160,8 +1160,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
-      "bytes": 177974,
-      "sha256": "952f1eb5bceb418424a101e51e387cd643bd5aba615961159a087c717c7071b1",
+      "bytes": 186007,
+      "sha256": "6721bdf1d9af5cf26fcc7a3a693c228c68793b41dd2bc786600a6eaa46fe7712",
       "status": "synced"
     },
     {
@@ -1192,16 +1192,16 @@
       "studioPath": "ServerScriptService.LobbyShopDisplay",
       "className": "ModuleScript",
       "file": "ServerScriptService/LobbyShopDisplay.ModuleScript.lua",
-      "bytes": 34787,
-      "sha256": "89345a04c0fd1361710973e9383b8c439c6cde8f3885d18383f3f2df4f4b9168",
+      "bytes": 38351,
+      "sha256": "52d003b3b1ea21fbed8b5a265cc3dad10c5c99c3db0b8638a49c856822f73335",
       "status": "synced"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Shop Display Client",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Shop Display Client.LocalScript.lua",
-      "bytes": 19656,
-      "sha256": "177b13d14a1325a73584805d26b1c58fe1e6e9c55740844dcba188ad22d5ed7f",
+      "bytes": 21811,
+      "sha256": "51f54a99ca8f181e85d70f828f838792af953f4d3154deeaddfccb8f9cea84f9",
       "status": "synced"
     },
     {
@@ -1216,8 +1216,8 @@
       "studioPath": "ReplicatedStorage.ZyntraDailyRewardsPage",
       "className": "ModuleScript",
       "file": "ReplicatedStorage/ZyntraDailyRewardsPage.ModuleScript.lua",
-      "bytes": 39164,
-      "sha256": "9e8370b8c472df7d94f339d7d9eae835f34252c4bbc85067485bdd3a4d907329",
+      "bytes": 26121,
+      "sha256": "23a2a89a72ef7a62967c5f88bd72775f56a781c27d9308eeeec1c01c26cd7a2b",
       "status": "synced"
     },
     {
@@ -1258,6 +1258,22 @@
       "file": "StarterPlayer/StarterPlayerScripts/Field Notes Client.LocalScript.lua",
       "bytes": 9288,
       "sha256": "75162f7219bc5966ff5ee367360338a5d56356f085529e4188fc41f51f239c72",
+      "status": "synced"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Daily Rewards Client",
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Daily Rewards Client.LocalScript.lua",
+      "bytes": 24186,
+      "sha256": "b976036b6a14e87c5bca3e9f9fc1298445f70e3ecbf5144ce14f165fc2e9ecee",
+      "status": "synced"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Lucky Wheel Client",
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Lucky Wheel Client.LocalScript.lua",
+      "bytes": 39531,
+      "sha256": "2a3a34377763afabbb7c7f74d5e8c0f2952cf1c39541708f9cd2b481e4468053",
       "status": "synced"
     }
   ]
