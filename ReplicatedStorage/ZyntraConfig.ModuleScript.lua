@@ -13,6 +13,13 @@ return {
 	TokenPercentPerLevel = TokenPercentPerLevel,
 	LevelCompletionTokens = 2,
 
+	-- FRIEND_BOOST_20260916. Additive, uncapped: +10% completion tokens per
+	-- unique verified Roblox friend who was in the SAME round on the SAME server
+	-- (ServerScriptService.FriendBoost states the interpretation in full). The
+	-- fraction never rounds away -- ZyntraMonetization carries it on the profile
+	-- as FriendBoostTenths and pays whole tokens as they are earned.
+	FriendBoost = {PercentPerFriend = 10},
+
 	ProtectionItem = {
 		Key = "EntityProtection",
 		Name = "Entity Shield",

@@ -1,33 +1,42 @@
-"""The lobby SHOP wall (Trello #88, rebuilt as holograms for #105): the real
+"""The lobby SHOP wall (Trello #88 -> #105 -> the 2026-09-16 refresh): the real
 server module and the real client LocalScript, executed against a fake DataModel.
 
 Both scripts are RUN, not pattern-matched -- LobbyShopDisplay.Build against a
 fake lobby and the real ZyntraConfig catalogue, and Shop Display Client against
 a fake PlayerGui/UIDevice -- so this fails on a typo as well as on a contract.
 
-What it holds after #105:
+v4 is a deletion. The shopfront (deck, backdrop, pilasters, canopy, the overhead
+SHOP sign, nameplates, projector discs, beams, the DAILY REWARDS plaque and its
+prompt) and TunnelLobbyBuilder's whole ZyntraSupplyKiosk are gone; what is left
+is eight product boxes strung along the wall between the Level 2 and Level 4
+gates. What this holds:
 
-  * one stand per catalogue item, and each stand is a projector disc, a beam, a
-    floating hologram box and an INVISIBLE pressure plate -- no pedestal, no
-    cap, no plate edge, no plate stencil and no INSPECT prompt anywhere;
-  * the box wears the product art on the face that looks at the road, at
-    Transparency 0 on a part that is 0.35 transparent, and keeps its neon edge,
-    its PointLight and the ShopBobOrigin the client animates;
-  * the pressure plates are transparent, non-query, non-touch and
-    non-collidable, and they are the ONLY trigger: stepping on publishes
-    ZyntraShopFocus, stepping across switches it, stepping off clears it, and
-    standing still writes nothing;
+  * EIGHT stands, one per catalogue item, evenly spaced at z = -66 + 52/7 * i,
+    and each stand is exactly one hologram box and one INVISIBLE pressure plate;
+  * the box is a 3.40 cube at (30.20, 7.00) wearing the product art on ALL SIX
+    faces at Transparency 0 on a part that is 0.35 transparent, with its neon
+    edge, its PointLight, its ShopBobOrigin and a distinct ShopBobPhase;
+  * every box centre stays >= 3.4 studs clear of both gate post edges
+    (rel z -69.45 and -10.55) so the gate openings stay walkable, and two plate
+    zones are >= 4.0 studs apart so walking the row cannot switch product by
+    accident;
   * EVERY corner of EVERY part is inside the tunnel's envelope -- r <= 33.70
-    against the shell, r <= 33.05 for the two slots that cross the rib arch at
-    z -52.36..-51.64 -- and nothing reaches into the walk lane;
-  * the DAILY REWARDS plaque is the one remaining prompt, and it says what it
-    does now that the terminal's Rewards tab is gone;
-  * NOTHING on the server touches MarketplaceService -- focus cannot cost money;
-  * the card opens on the attribute, states OWNED for an owned pass, routes BUY
-    to PlayerScripts.ZyntraShopBuy exactly once, and CLOSE dismisses the current
-    focus WITHOUT reopening while the player stands still;
-  * ReduceFlashing shrinks the sign's swell instead of strobing it, the boxes
-    bob but never turn, and all motion stops in a round;
+    against the shell, r <= 33.05 for the slot that crosses the rib arch at
+    z -52.36..-51.64 -- at rest AND at the top of the client's bob;
+  * NOTHING is named Deck/Backdrop/Sign/NamePlate/Projector/Plinth/Plaque/
+    Prompt, there is no ProximityPrompt and no drawn text ANYWHERE in the model,
+    so no "SUPPLY" and no "ZYNTRA //" can survive on the wall;
+  * the plates are the ONLY trigger: stepping on publishes ZyntraShopFocus,
+    stepping across switches it, stepping off clears it, standing still writes
+    nothing, and NOTHING on the server touches MarketplaceService;
+  * the card carries the eyebrow "SHOP" -- the one place the word is written --
+    and the kind tags PERMANENT PASS / TOKEN ITEM / ROBUX PRODUCT, states OWNED
+    for an owned pass, routes BUY to PlayerScripts.ZyntraShopBuy exactly once,
+    and CLOSE dismisses the current focus WITHOUT reopening while the player
+    stands still;
+  * the bob is y = origin + 0.35 * sin(t * 2pi / 3.4 + ShopBobPhase), checked
+    against the server's own phase per box, never turns, and stands down in a
+    round and under ReduceFlashing / ReduceCameraShake, restoring every pose;
   * the card draws three tiers (52/64/112px icon, 300/380/560 wide) and keeps a
     44px tap target on touch.
 
@@ -49,6 +58,7 @@ LUAU = Path(os.environ.get("LUAU_BIN") or (Path(__file__).resolve().parent / "lu
 CONFIG = (ROOT / "ReplicatedStorage/ZyntraConfig.ModuleScript.lua").read_text(encoding="utf-8")
 SERVER = (ROOT / "ServerScriptService/LobbyShopDisplay.ModuleScript.lua").read_text(encoding="utf-8")
 CLIENT = (ROOT / "StarterPlayer/StarterPlayerScripts/Shop Display Client.LocalScript.lua").read_text(encoding="utf-8")
+BUILDER = (ROOT / "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua").read_text(encoding="utf-8")
 
 # ── source contracts that the run cannot see ────────────────────────────────
 # A purchase prompt anywhere in the server module would mean walking onto a
@@ -59,18 +69,55 @@ for forbidden in ("PromptProductPurchase", "PromptGamePassPurchase", 'GetService
 # The card's BUY is a request to ZyntraStore, never its own prompt.
 for forbidden in ("PromptProductPurchase", "PromptGamePassPurchase"):
     assert forbidden not in CLIENT, f"client must not call {forbidden} itself"
-# #105 removed the Inspect interaction outright. Not "renamed the prompt" --
-# the whole idea is gone, including the part names and the plate stencil that
-# used to advertise it, so the word must not survive anywhere in either file.
+# #105 removed the Inspect interaction outright, and v4 removed the last prompt
+# of any kind from the wall: the whole idea is gone, not renamed.
 for name, source in (("server", SERVER), ("client", CLIENT)):
     assert "inspect" not in source.lower(), f"{name} still mentions the removed Inspect interaction"
-# Nothing turns the boxes any more: the product decal has to keep facing the road.
+assert "ProximityPrompt" not in SERVER, "the shop wall must not build a prompt of any kind"
+# Nothing turns the boxes: the product art has to stay square to whoever reads it.
 assert "CFrame.Angles" not in CLIENT, "the client must not rotate the hologram boxes"
 # The same tier expression the terminal's Shop and Upgrades pages use, so the
 # three tiers cannot drift apart silently.
 assert "})[(compact and touch) and 1 or (touch and 2 or 3)]" in CLIENT
 STORE = (ROOT / "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua").read_text(encoding="utf-8")
 assert "})[(fit.Compact and fit.Touch) and 1 or (fit.Touch and 2 or 3)]" in STORE
+
+# ── the second shop is gone from TunnelLobbyBuilder ─────────────────────────
+# ZyntraSupplyKiosk stood 12 studs from the frontage with its own SHOP masthead,
+# "ZYNTRA // SUPPLY" fascia, counter, canisters, telemetry, shopkeeper and the
+# ShopAccessTerminal that carried ZyntraShopPrompt. The builder must no longer
+# define it, call it, or build the shopkeeper it parented.
+for forbidden in (
+    "addSupplyKiosk(concourse",
+    "local function addSupplyKiosk",
+    "local function addGameplayShopkeeper",
+    'kiosk.Name = "ZyntraSupplyKiosk"',
+    '"ZyntraShopkeeper"',
+    '"ShopAccessTerminal"',
+    '"ShopkeeperPlatform"',
+    'prompt.Name = "ZyntraShopPrompt"',
+    "ZYNTRA  //  SUPPLY",
+):
+    assert forbidden not in BUILDER, f"TunnelLobbyBuilder still carries {forbidden!r}"
+# The concourse the kiosk stood in keeps everything else it had.
+for kept in (
+    "addConcourseBench(concourse",
+    "addDonationLeaderboard(concourse",
+    "addPartyButton(concourse",
+    "ArrivalGantryPost",
+    "ConcourseCrossingStripe",
+    "ZyntraSignalConsole",
+):
+    assert kept in BUILDER, f"TunnelLobbyBuilder lost {kept!r} along with the kiosk"
+# And the shop is still started from there, untouched.
+assert 'require(script.Parent:WaitForChild("LobbyShopDisplay")).Build(model, {Center = center})' in BUILDER
+
+# Every product keeps its OWN art: eight distinct ids, none shared.
+BOX_TEXTURES = re.search(r"\tBox = \{\n(.*?)\n\t\},", SERVER, re.S)
+assert BOX_TEXTURES, "SHOP_TEXTURES.Box not found"
+BOX_IDS = dict(re.findall(r"(\w+) = \"(rbxassetid://\d+)\"", BOX_TEXTURES.group(1)))
+assert len(BOX_IDS) == 8, f"expected 8 product textures, found {len(BOX_IDS)}"
+assert len(set(BOX_IDS.values())) == 8, "two products share one texture id"
 
 PRELUDE = r"""
 local checks = 0
@@ -181,6 +228,8 @@ local function signal()
 end
 
 setAttributeCalls = 0
+warnings = {}
+function warn(...) table.insert(warnings, table.concat({...}, " ")) end
 Instance = {}
 
 function Instance.new(className)
@@ -385,6 +434,9 @@ ASSERTIONS = r"""
 -- helper would have to be revisited rather than quietly mis-measuring it.
 local SHELL_LIMIT, RIB_LIMIT = 33.70, 33.05
 local RIB_NEAR, RIB_FAR = -52.36, -51.64
+local BOB = 0.35                 -- the client's amplitude; the envelope owns it
+local GATE_L2, GATE_L4 = -69.45, -10.55   -- post edges facing the shop wall
+local GATE_CLEARANCE = 3.4
 
 local function extents(part)
 	local size, cf = part.Size, part.CFrame
@@ -396,17 +448,16 @@ local function extents(part)
 end
 
 -- All EIGHT corners, not the centre and not the bounding sphere: the corner is
--- the thing that pokes through a curved concrete shell.
-local function worstRadius(part)
+-- the thing that pokes through a curved concrete shell. `lift` is how far the
+-- client may raise the part, so a bobbing box is measured at the top of its bob.
+local function worstRadius(part, lift)
 	local pos, hx, hy = extents(part)
 	local worst = 0
 	for _, sx in ipairs({-1, 1}) do
 		for _, sy in ipairs({-1, 1}) do
-			for _ = 1, 2 do
-				local x, y = pos.X + sx * hx, pos.Y + sy * hy
-				local r = math.sqrt(x * x + (y - 1) * (y - 1))
-				if r > worst then worst = r end
-			end
+			local x, y = pos.X + sx * hx, pos.Y + sy * hy + (sy > 0 and (lift or 0) or 0)
+			local r = math.sqrt(x * x + (y - 1) * (y - 1))
+			if r > worst then worst = r end
 		end
 	end
 	return worst
@@ -416,14 +467,6 @@ local function crossesRib(part)
 	local pos, _, _, hz = extents(part)
 	return (pos.Z - hz) <= RIB_FAR and (pos.Z + hz) >= RIB_NEAR
 end
-
--- The backdrop and the pilasters are flat wall DRESSING that sits behind the
--- rib line: the arch crosses in front of them at z = -52 and reads as
--- structure. That is the acceptance the 2026-09-15 build made and the module's
--- own header records, and it is the only one -- anything that stands proud of
--- the wall answers to 33.05. The x guard below keeps the exemption from
--- quietly covering a part that is not dressing.
-local RIB_DRESSING = {ShopAlcoveBackdrop = true, ShopPilaster = true}
 
 -- ── 1. the build ────────────────────────────────────────────────────────────
 local lobby = Instance.new("Model")
@@ -435,10 +478,15 @@ local model = Shop.Build(lobby, {Center = center})
 check(model ~= nil, "Build returned nothing")
 check(model.Name == "ZyntraShopDisplay", "wrong model name: " .. tostring(model.Name))
 check(model.Parent == lobby, "the shop is not parented to the lobby")
-check(model:GetAttribute("ShopDisplayVersion") == 3, "the hologram build must bump the version")
-check(near(model:GetAttribute("FrontmostX"), 22.80, 0.0001),
-	"FrontmostX disagrees with the kiosk plates: " .. tostring(model:GetAttribute("FrontmostX")))
-check(near(model:GetAttribute("CanopyClearanceY"), 7.60, 0.0001), "the canopy ceiling is not published")
+check(model:GetAttribute("ShopDisplayVersion") == 4, "the wall build must bump the version to 4")
+check(model:GetAttribute("Placement") == "Right wall between the Level 2 and Level 4 gates",
+	"placement: " .. tostring(model:GetAttribute("Placement")))
+check(model:GetAttribute("FocusAttribute") == "ZyntraShopFocus", "the focus contract moved")
+check(near(model:GetAttribute("FrontmostX"), 27.78 - 1.60, 0.0001),
+	"FrontmostX disagrees with the plates: " .. tostring(model:GetAttribute("FrontmostX")))
+-- The kiosk bays are gone, so nothing publishes a canopy ceiling any more.
+check(model:GetAttribute("CanopyClearanceY") == nil, "the canopy attribute outlived the canopy")
+check(#warnings == 0, "the build warned: " .. table.concat(warnings, " | "))
 
 local catalogueKeys = {}
 for _, source in ipairs({moduleResults.ZyntraConfig.Passes, moduleResults.ZyntraConfig.Products, moduleResults.ZyntraConfig.Items}) do
@@ -447,98 +495,74 @@ end
 check(#catalogueKeys == 8, "expected 8 catalogue items, found " .. #catalogueKeys)
 
 local stands = {}
+local standCount = 0
 for _, child in ipairs(model:GetChildren()) do
-	if child.ClassName == "Model" and not child:GetAttribute("ShopRewardsStand") then
-		local key = child:GetAttribute("ShopItemKey")
-		check(key ~= nil, "a stand with no item key")
-		check(stands[key] == nil, "two stands for " .. tostring(key))
-		stands[key] = child
-	end
+	check(child.ClassName == "Model", "the shop grew a loose " .. child.ClassName .. " named " .. child.Name)
+	local key = child:GetAttribute("ShopItemKey")
+	check(key ~= nil, "a stand with no item key")
+	check(stands[key] == nil, "two stands for " .. tostring(key))
+	stands[key] = child
+	standCount += 1
 end
+check(standCount == 8, "the wall has " .. standCount .. " stands, expected 8")
 for _, key in ipairs(catalogueKeys) do
 	check(stands[key] ~= nil, "no hologram for catalogue item " .. key)
 end
-check(model:GetAttribute("ShopItemCount") == #catalogueKeys, "item count attribute disagrees")
+check(model:GetAttribute("ShopItemCount") == 8, "item count attribute disagrees")
 
--- ── 2. every stand is a hologram, and the old furniture is gone ─────────────
-local RETIRED = {"ShopPedestal", "ShopPedestalCap", "ShopPedestalRing", "ShopItemBox",
-	"ShopInspectPlate", "ShopInspectPlateEdge", "ShopInspectPrompt"}
-local built = {}
-for _, node in ipairs(model:GetDescendants()) do
-	built[node.Name] = (built[node.Name] or 0) + 1
-end
-for _, name in ipairs(RETIRED) do
-	check(built[name] == nil, "the retired " .. name .. " is still being built: " .. tostring(built[name]))
-end
-
-local boxCount, plateCount, discCount, beamCount = 0, 0, 0, 0
-local boxByKey, plateByKey = {}, {}
+-- ── 2. a stand is ONE box and ONE plate, and nothing else ───────────────────
+local FACES = {"Front", "Back", "Left", "Right", "Top", "Bottom"}
+local boxByKey, plateByKey, artByKey, phaseByKey = {}, {}, {}, {}
 for key, stand in pairs(stands) do
 	local seen, parts = {}, {}
 	for _, node in ipairs(stand:GetDescendants()) do
-		seen[node.Name] = (seen[node.Name] or 0) + 1
+		seen[node.ClassName] = (seen[node.ClassName] or 0) + 1
 		if node.ClassName == "Part" then parts[node.Name] = node end
 	end
-	check(seen.ShopHologramBox == 1, key .. ": hologram box count " .. tostring(seen.ShopHologramBox))
-	check(seen.ShopProjectorDisc == 1, key .. ": projector disc count " .. tostring(seen.ShopProjectorDisc))
-	check(seen.ShopProjectorBeam == 1, key .. ": beam count " .. tostring(seen.ShopProjectorBeam))
-	check(seen.ShopPressurePlate == 1, key .. ": plate count " .. tostring(seen.ShopPressurePlate))
-	boxCount += 1; plateCount += 1; discCount += 1; beamCount += 1
-
-	local bay = stand:GetAttribute("ShopSupplyBay") == true
-	local box, disc, beam, plate =
-		parts.ShopHologramBox, parts.ShopProjectorDisc, parts.ShopProjectorBeam, parts.ShopPressurePlate
+	check(seen.Part == 2, key .. ": a stand is one box and one plate, found " .. tostring(seen.Part) .. " parts")
+	local box, plate = parts.ShopHologramBox, parts.ShopPressurePlate
+	check(box ~= nil and plate ~= nil, key .. ": the stand lost its box or its plate")
 	boxByKey[key], plateByKey[key] = box, plate
 
-	-- THE BOX. Translucent, the accent's own colour, the product art on the one
-	-- face that looks at the road and nothing on the other five.
+	-- THE BOX. A 3.40 cube of translucent light, invisible to every query.
 	check(box.Material == Enum.Material.ForceField, key .. ": the box is not a hologram material")
 	check(near(box.Transparency, 0.35), key .. ": box transparency " .. tostring(box.Transparency))
-	local edge = bay and 3.20 or 3.00
-	check(near(box.Size.X, edge) and near(box.Size.Y, edge) and near(box.Size.Z, edge),
-		key .. ": box is not a " .. edge .. " cube")
+	check(near(box.Size.X, 3.40) and near(box.Size.Y, 3.40) and near(box.Size.Z, 3.40),
+		key .. ": box is not a 3.40 cube")
+	check(near(box.Position.X, 30.20), key .. ": box x " .. box.Position.X)
+	check(near(box.Position.Y, 7.00), key .. ": box y " .. box.Position.Y)
+	check(box.Anchored == true, key .. ": the box is not anchored")
+	check(box.CanCollide == false and box.CanQuery == false and box.CanTouch == false,
+		key .. ": the box is in the way of something")
 	check(box:GetAttribute("ShopItemKey") == key, key .. ": the box lost its key")
 	check(typeof(box:GetAttribute("ShopBobOrigin")) == "CFrame", key .. ": no ShopBobOrigin for the client")
-	check(tostring(box:GetAttribute("ShopTextureSlot")):sub(1, 3) == "Box", key .. ": no texture slot")
-	local decals, guis = 0, 0
+	check(tostring(box:GetAttribute("ShopTextureSlot")) == "Box:" .. key, key .. ": no texture slot")
+	local phase = box:GetAttribute("ShopBobPhase")
+	check(type(phase) == "number" and phase >= 0 and phase < math.pi * 2,
+		key .. ": bob phase " .. tostring(phase))
+	phaseByKey[key] = phase
+
+	-- PRODUCT ART ON ALL SIX FACES, one Decal each, the same id, and opaque on a
+	-- part that is not: a Decal inherits nothing from its part's transparency.
+	local decals, byFace = 0, {}
 	for _, node in ipairs(box:GetChildren()) do
 		if node.ClassName == "Decal" then
 			decals += 1
-			check(node.Face == Enum.NormalId.Front, key .. ": art on a face that does not see the road")
 			check(node.Transparency == 0, key .. ": the product art inherited the box's transparency")
 			check(tostring(node.Texture):match("^rbxassetid://%d+$") ~= nil, key .. ": bad texture url")
-		elseif node.ClassName == "SurfaceGui" then
-			guis += 1
+			check(byFace[node.Face.Name] == nil, key .. ": two decals on " .. node.Face.Name)
+			byFace[node.Face.Name] = node.Texture
 		end
 	end
-	-- Every one of the eight keys has uploaded art, so the monogram fallback
-	-- must not be what shipped.
-	check(decals == 1, key .. ": expected exactly one road-facing decal, got " .. decals)
-	check(guis == 0, key .. ": the box fell back to the monogram")
+	check(decals == 6, key .. ": expected six decals, one per face, got " .. decals)
+	for _, face in ipairs(FACES) do
+		check(byFace[face] ~= nil, key .. ": no product art on the " .. face .. " face")
+		check(byFace[face] == byFace.Front, key .. ": the " .. face .. " face shows another product")
+	end
+	artByKey[key] = byFace.Front
+	check(seen.SurfaceGui == nil, key .. ": the box fell back to a drawn monogram")
 	check(box:FindFirstChildOfClass("SelectionBox") ~= nil, key .. ": the neon edge is gone")
 	check(box:FindFirstChildOfClass("PointLight") ~= nil, key .. ": the box light is gone")
-
-	-- THE PROJECTOR. A flat disc under the box, drawn by a CylinderMesh so the
-	-- geometry never needs a roll to be measured.
-	check(disc.Material == Enum.Material.Neon, key .. ": the disc is not lit")
-	check(disc:FindFirstChildOfClass("CylinderMesh") ~= nil, key .. ": the disc is a box")
-	check(near(disc.Size.X, 2.60) and near(disc.Size.Z, 2.60), key .. ": disc is not 2.60 across")
-	check(near(disc.Size.Y, 0.20), key .. ": disc thickness " .. tostring(disc.Size.Y))
-	check(near(disc.Position.X, box.Position.X), key .. ": the disc is not under the box")
-
-	-- THE BEAM. Faint, invisible to every query, and long enough that the box's
-	-- highest bob still lands in it.
-	check(beam.Material == Enum.Material.Neon, key .. ": the beam is not lit")
-	check(near(beam.Transparency, 0.85), key .. ": beam transparency " .. tostring(beam.Transparency))
-	check(beam.CanCollide == false and beam.CanTouch == false and beam.CanQuery == false,
-		key .. ": the beam is in the way of something")
-	check(near(beam.Size.X, 0.50) and near(beam.Size.Z, 0.50), key .. ": beam is not 0.50 square")
-	local discTop = disc.Position.Y + 0.10
-	local beamBottom = beam.Position.Y - beam.Size.Y * 0.5
-	local beamTop = beam.Position.Y + beam.Size.Y * 0.5
-	check(near(beamBottom, discTop), key .. ": the beam does not start at the disc")
-	check(near(beamTop, box.Position.Y - box.Size.Y * 0.5 + 0.35),
-		key .. ": the beam stops short of the box's top bob")
 
 	-- THE PLATE. Invisible by contract, and invisible to everything else too.
 	check(near(plate.Transparency, 1), key .. ": the plate is still drawn")
@@ -547,45 +571,65 @@ for key, stand in pairs(stands) do
 	check(plate.CanTouch == false, key .. ": the plate still fires Touched")
 	check(plate:GetAttribute("ShopItemKey") == key, key .. ": the plate lost its key")
 	check(#plate:GetChildren() == 0, key .. ": the plate still carries a stencil or a hint")
-	check(near(plate.Size.X, 3.10) and near(plate.Size.Z, 3.40),
+	check(near(plate.Size.X, 3.40) and near(plate.Size.Z, 3.20),
 		key .. ": plate zone is " .. plate.Size.X .. " x " .. plate.Size.Z)
-	local platePos, plateHalfX = extents(plate)
-	local limit = platePos.Z > -44.75 and 22.60 or 25.78
-	check(platePos.X - plateHalfX >= limit - 0.0001,
-		key .. ": the plate reaches into the walk lane at x " .. (platePos.X - plateHalfX))
-
-	-- The box hangs over its own plate, so walking to the hologram crosses it.
-	local boxPos, boxHalfX = extents(box)
-	check(boxPos.X + boxHalfX > platePos.X, key .. ": the box is not behind its plate")
-	if not bay then
-		check(near(plate.Position.X, 27.78), key .. ": frontage plate moved off 27.78")
-	else
-		check(near(plate.Position.X, 24.50), key .. ": bay plate moved off 24.50")
-	end
+	check(near(plate.Position.X, 27.78), key .. ": plate x " .. plate.Position.X)
+	check(near(plate.Position.Y, 0.71), key .. ": plate y " .. plate.Position.Y)
+	check(near(plate.Position.Z, boxByKey[key].Position.Z),
+		key .. ": the plate is not under its own box")
 end
-check(boxCount == 8 and plateCount == 8 and discCount == 8 and beamCount == 8,
-	"one box, disc, beam and plate per item")
 
--- ── 3. alternating hover heights on the frontage row ────────────────────────
+-- Each of the eight boxes shows its OWN product, never a neighbour's.
+local artSeen = {}
+for key, url in pairs(artByKey) do
+	check(artSeen[url] == nil, key .. " and " .. tostring(artSeen[url]) .. " show the same art")
+	artSeen[url] = key
+end
+
+-- The bob phases are spread over one cycle, so the row never pumps in unison.
+local phases = {}
+for _, phase in pairs(phaseByKey) do table.insert(phases, phase) end
+table.sort(phases)
+check(#phases == 8, "phase count")
+for index = 2, #phases do
+	check(phases[index] - phases[index - 1] > 0.5,
+		"two boxes bob in step: " .. phases[index - 1] .. " and " .. phases[index])
+end
+
+-- ── 3. the row: evenly along the wall, clear of both gates ──────────────────
 local row = {}
 for key, box in pairs(boxByKey) do
-	if stands[key]:GetAttribute("ShopSupplyBay") ~= true then
-		table.insert(row, {Z = box.Position.Z, Y = box.Position.Y, Key = key})
-	end
+	table.insert(row, {Z = box.Position.Z, Key = key})
 end
 table.sort(row, function(a, b) return a.Z < b.Z end)
-check(#row == 6, "the frontage row is not six holograms: " .. #row)
+check(#row == 8, "the row is not eight holograms: " .. #row)
 for index, slot in ipairs(row) do
-	local wanted = (index % 2 == 1) and 4.40 or 5.55
-	check(near(slot.Y, wanted), slot.Key .. " hovers at " .. slot.Y .. ", expected " .. wanted)
+	local wanted = -66 + 52 / 7 * (index - 1)
+	check(near(slot.Z, wanted, 1e-6),
+		slot.Key .. " sits at z " .. slot.Z .. ", expected " .. wanted)
+	-- Walkable gates: the brief's whole point is that the wall is now open from
+	-- one doorway to the other.
+	check(math.abs(slot.Z - GATE_L2) >= GATE_CLEARANCE - 1e-6,
+		slot.Key .. " crowds the Level 2 gate post at z " .. slot.Z)
+	check(math.abs(slot.Z - GATE_L4) >= GATE_CLEARANCE - 1e-6,
+		slot.Key .. " crowds the Level 4 gate post at z " .. slot.Z)
 	if index > 1 then
-		check(near(slot.Z - row[index - 1].Z, 3.15, 0.0001), "the row pitch drifted at slot " .. index)
-		check(math.abs(slot.Y - row[index - 1].Y) > 1.0, "two neighbours hover at the same height")
+		local pitch = slot.Z - row[index - 1].Z
+		check(near(pitch, 52 / 7, 1e-6), "the row pitch drifted at slot " .. index .. ": " .. pitch)
+		-- 3.40 boxes at a 7.43 pitch leave about 4.03 studs of air; v3's had 0.15.
+		check(pitch - 3.40 >= 3.9, "the boxes lost their air: " .. (pitch - 3.40))
 	end
 end
--- 3.00 boxes at a 3.15 pitch clear each other by 0.15 whatever the stagger --
--- which is only true because nothing turns them.
-check(near(3.15 - 3.00, 0.15, 0.0001), "the pitch no longer clears a 3.00 box")
+
+-- Two plate zones must stay far enough apart that walking the row cannot switch
+-- product by accident, even with PLATE_HYSTERESIS reaching out of the held one.
+local plateZ = {}
+for _, slot in ipairs(row) do table.insert(plateZ, plateByKey[slot.Key].Position.Z) end
+for index = 2, #plateZ do
+	local gap = (plateZ[index] - plateZ[index - 1]) - 3.40
+	check(gap >= 4.0 - 1e-6, "plate zones are only " .. gap .. " studs apart")
+	check(gap > 0.6 + 0.6, "hysteresis on both sides can bridge the gap")
+end
 
 -- ── 4. every corner of every part, against the tunnel ───────────────────────
 local partCount, worstShell, worstRib, ribParts = 0, 0, 0, 0
@@ -593,71 +637,54 @@ for _, node in ipairs(model:GetDescendants()) do
 	if node.ClassName == "Part" then
 		partCount += 1
 		local pos, halfX, halfY = extents(node)
-		local r = worstRadius(node)
+		-- A box is measured at the top of the client's bob, because that is where
+		-- it actually gets to on a live server.
+		local lift = node.Name == "ShopHologramBox" and BOB or 0
+		local r = worstRadius(node, lift)
 		if r > worstShell then worstShell = r end
 		check(r <= SHELL_LIMIT, node.Name .. " corner r = " .. r .. " is inside the concrete shell")
 		if crossesRib(node) then
-			if RIB_DRESSING[node.Name] then
-				check(pos.X - halfX >= 32.0,
-					node.Name .. " claims the wall-dressing exemption at x " .. (pos.X - halfX))
-			else
-				ribParts += 1
-				if r > worstRib then worstRib = r end
-				check(r <= RIB_LIMIT, node.Name .. " crosses the rib arch at r = " .. r)
-			end
+			ribParts += 1
+			if r > worstRib then worstRib = r end
+			check(r <= RIB_LIMIT, node.Name .. " crosses the rib arch at r = " .. r)
 		end
-		-- The walk lane, measured at the road-side face rather than the centre.
-		local lane = pos.Z > -44.75 and 22.60 or 25.78
-		check(pos.X - halfX >= lane - 0.0001,
-			node.Name .. " reaches to x " .. (pos.X - halfX) .. ", past the " .. lane .. " lane limit")
+		-- The walkway, measured at the road-side face rather than the centre. The
+		-- ledge's road edge is x 22.8 and nothing may reach past it.
+		check(pos.X - halfX >= 22.80 - 0.0001,
+			node.Name .. " reaches to x " .. (pos.X - halfX) .. ", past the road edge")
 		check(pos.Y - halfY >= 0.55, node.Name .. " is under the ledge at y " .. (pos.Y - halfY))
-		check(pos.Y + halfY <= 16, node.Name .. " is over the tunnel at y " .. (pos.Y + halfY))
-		-- Only the rewards plinth is solid: the shop is walk-through so nothing
-		-- on it can block the lobby's own traffic.
-		check(node.CanCollide == (node.Name == "ShopRewardsPlinth"),
-			node.Name .. " has the wrong collision")
+		check(pos.Y + halfY + lift <= 16, node.Name .. " is over the tunnel at y " .. (pos.Y + halfY))
+		-- NOTHING in the shop is solid: the boxes hang over the walkway and the
+		-- plates are floor. A player must be able to walk the whole wall.
+		check(node.CanCollide == false, node.Name .. " is solid and blocks the walkway")
 	end
 end
-check(partCount >= 50, "the shop got suspiciously small: " .. partCount .. " parts")
-check(ribParts >= 6, "nothing measured against the rib arch, which cannot be right")
+check(partCount == 16, "expected 16 parts (8 boxes + 8 plates), got " .. partCount)
+check(ribParts >= 2, "nothing measured against the rib arch, which cannot be right")
 check(worstShell <= SHELL_LIMIT and worstRib <= RIB_LIMIT, "envelope summary disagrees with itself")
-
--- The frontage boxes stay under the canopy's own line at the top of a bob. The
--- fascia is only 0.44 deep and the boxes stand behind it, so this is a
--- SIGHTLINE and not a collision: a box top over 7.66 has its front corner cut
--- off by the fascia for a player still on the far lane of the road. 8.90 is
--- where it would actually hit something, and the row keeps 1.50 studs of that.
+-- The boxes hang high enough to walk under: bottom 5.30 is 4.65 over the ledge.
 for _, slot in ipairs(row) do
-	check(slot.Y + 1.50 + 0.35 <= 7.60, slot.Key .. " tops out over the canopy line")
-	check(slot.Y + 1.50 + 0.35 <= 8.90 - 1.0, slot.Key .. " lost its headroom under the soffit")
+	check(boxByKey[slot.Key].Position.Y - 1.70 - 0.35 >= 0.65 + 4.0,
+		slot.Key .. " hangs too low to walk under")
 end
 
--- ── 5. the one prompt that is left ──────────────────────────────────────────
-local prompts = {}
+-- ── 5. the shopfront is GONE ────────────────────────────────────────────────
+-- Not renamed, not hidden: no part of the old presentation is built at all, and
+-- there is no drawn text and no prompt anywhere on the wall.
+local RETIRED = {"deck", "backdrop", "sign", "nameplate", "projector", "beam", "plinth",
+	"plaque", "prompt", "canopy", "fascia", "pilaster", "pedestal", "kiosk", "monogram",
+	"trim", "flood", "soffit"}
+local RETIRED_CLASSES = {ProximityPrompt = true, SurfaceGui = true, TextLabel = true,
+	Texture = true, SurfaceLight = true, SpotLight = true, CylinderMesh = true}
 for _, node in ipairs(model:GetDescendants()) do
-	if node.ClassName == "ProximityPrompt" then table.insert(prompts, node) end
-end
-check(#prompts == 1, "the frontage has " .. #prompts .. " prompts, expected only DAILY REWARDS")
-local rewards = prompts[1]
-check(rewards.Name == "ZyntraShopPrompt", "the rewards prompt lost the name ZyntraStore binds")
-check(rewards:GetAttribute("ShopRewardsPrompt") == true, "the rewards prompt lost its flag")
-check(rewards.ActionText == "DAILY REWARDS", "rewards action text: " .. tostring(rewards.ActionText))
-check(rewards.ObjectText == "Daily Rewards", "rewards object text: " .. tostring(rewards.ObjectText))
-check(rewards.KeyboardKeyCode ~= nil and rewards.GamepadKeyCode ~= nil, "rewards prompt binding")
-
--- The plaque no longer sends anyone to a terminal tab that is being removed.
-local plaqueWords = {}
-for _, node in ipairs(model:GetDescendants()) do
-	if node.ClassName == "TextLabel" then
-		plaqueWords[node.Name] = node.Text
-		check(node.Text ~= "ZYNTRA TERMINAL", "the plaque still points at the terminal")
-		check(node.Text:upper():find("INSPECT") == nil, "world text still says INSPECT")
+	local lower = node.Name:lower()
+	for _, word in ipairs(RETIRED) do
+		check(lower:find(word, 1, true) == nil,
+			"the retired " .. word .. " is still being built as " .. node.Name)
 	end
+	check(RETIRED_CLASSES[node.ClassName] == nil,
+		"the wall still builds a " .. node.ClassName .. " (" .. node.Name .. ")")
 end
-check(plaqueWords.RewardsTitle == "DAILY" and plaqueWords.RewardsTitle2 == "REWARDS",
-	"the plaque title changed")
-check(plaqueWords.RewardsLine == "PLAY TO EARN", "plaque line: " .. tostring(plaqueWords.RewardsLine))
-check(plaqueWords.RewardsFoot == "PRESS E TO OPEN", "plaque foot: " .. tostring(plaqueWords.RewardsFoot))
 
 -- ── 6. a rebuild replaces the shop instead of stacking one on top of it ─────
 local rebuilt = Shop.Build(lobby, {Center = center})
@@ -701,15 +728,15 @@ step(10)
 check(setAttributeCalls == before, "focus rewrote the attribute while standing still")
 
 -- Walking up to the hologram from the road crosses the zone and stays in it.
-standAt(samplePlate.X - 1.60, samplePlate.Z)
+standAt(samplePlate.X - 1.55, samplePlate.Z)
 step()
 check(player:GetAttribute("ZyntraShopFocus") == sample, "the road-side edge of the zone is dead")
-standAt(samplePlate.X + 1.60, samplePlate.Z)
+standAt(samplePlate.X + 1.55, samplePlate.Z)
 step()
 check(player:GetAttribute("ZyntraShopFocus") == sample, "the wall-side edge of the zone is dead")
 
 -- Hysteresis: past the plate's edge still counts while already inside.
-standAt(samplePlate.X, samplePlate.Z + 2.0)
+standAt(samplePlate.X, samplePlate.Z + 2.2)
 step()
 check(player:GetAttribute("ZyntraShopFocus") == sample, "hysteresis dropped focus at the edge")
 
@@ -717,7 +744,7 @@ check(player:GetAttribute("ZyntraShopFocus") == sample, "hysteresis dropped focu
 -- the held zone's hysteresis does not out-vote it once the player has left.
 local neighbour, neighbourPlate = nil, nil
 for key, position in pairs(plates) do
-	if key ~= sample and math.abs(position.Z - samplePlate.Z) < 3.2
+	if key ~= sample and math.abs(position.Z - samplePlate.Z) < 7.5
 		and math.abs(position.X - samplePlate.X) < 0.1 then
 		neighbour, neighbourPlate = key, position
 	end
@@ -727,6 +754,12 @@ standAt(neighbourPlate.X, neighbourPlate.Z)
 step()
 check(player:GetAttribute("ZyntraShopFocus") == neighbour,
 	"stepping to the next hologram did not switch: " .. tostring(player:GetAttribute("ZyntraShopFocus")))
+-- And the walk BETWEEN them is a clean nil, not a flicker from one to the other:
+-- 4.03 studs of dead air is exactly what stops an accidental product switch.
+standAt(neighbourPlate.X, (neighbourPlate.Z + samplePlate.Z) * 0.5)
+step()
+check(player:GetAttribute("ZyntraShopFocus") == nil,
+	"the gap between two boxes still holds a card open")
 standAt(samplePlate.X, samplePlate.Z)
 step()
 check(player:GetAttribute("ZyntraShopFocus") == sample, "switching back did not work")
@@ -753,12 +786,19 @@ CLIENT_ASSERTIONS = r"""
 local gui = playerGui:FindFirstChild("ZyntraShopDisplayCard")
 check(gui ~= nil, "the client never built its ScreenGui")
 local card = gui:FindFirstChild("ShopDetailCard")
+local shopTitle = card:FindFirstChild("ShopTitle")
 local buy = card:FindFirstChild("Buy")
 local closeButton = card:FindFirstChild("Close")
 local title = card:FindFirstChild("ItemName")
+local kindTag = card:FindFirstChild("ItemKind")
 local state = card:FindFirstChild("ItemState")
 local hint = card:FindFirstChild("CloseHint")
-check(buy and closeButton and title and state and hint, "the card is missing its parts")
+check(shopTitle and buy and closeButton and title and kindTag and state and hint,
+	"the card is missing its parts")
+-- The ONE place the word SHOP is written now that the sign and the kiosk
+-- masthead are both deleted.
+check(shopTitle.Text == "SHOP", "the card eyebrow says " .. tostring(shopTitle.Text))
+check(shopTitle.Font == Enum.Font.GothamBlack, "the eyebrow is not GothamBlack")
 
 player:SetAttribute("ZyntraShopFocus", nil)
 check(gui.Enabled == false, "the card is open with no focus")
@@ -769,6 +809,32 @@ check(title.Text == moduleResults.ZyntraConfig.Products.Tokens4.Name, "wrong nam
 check(buy.Text == "49 R$", "the card did not state the configured price: " .. tostring(buy.Text))
 step()  -- the live price fetch answers
 check(buy.Text == "77 R$", "the card ignored the live price: " .. tostring(buy.Text))
+
+-- ── 8b. the kind tags say what you are paying WITH ──────────────────────────
+-- No "SUPPLY DROP", no "FIELD SUPPLIES", no "ZYNTRA //" anywhere the player can
+-- read it. The product NAME and DESCRIPTION are catalogue content and are left
+-- alone; these three labels are the shop's own voice.
+local KIND_TAGS = {
+	Tokens4 = "ROBUX PRODUCT",
+	EmergencyReentry = "ROBUX PRODUCT",
+	Supporter = "PERMANENT PASS",
+	AdvancedEquipment = "PERMANENT PASS",
+	SpeedPotion = "TOKEN ITEM",
+	RouteMarker = "TOKEN ITEM",
+}
+for key, wanted in pairs(KIND_TAGS) do
+	player:SetAttribute("ZyntraShopFocus", nil)
+	player:SetAttribute("ZyntraShopFocus", key)
+	check(kindTag.Text == wanted, key .. " is tagged " .. tostring(kindTag.Text) .. ", expected " .. wanted)
+end
+for _, label in ipairs({shopTitle, kindTag, hint, buy, closeButton}) do
+	local text = tostring(label.Text):upper()
+	check(text:find("SUPPLY", 1, true) == nil, label.Name .. " still says SUPPLY: " .. text)
+	check(text:find("ZYNTRA", 1, true) == nil, label.Name .. " still says ZYNTRA: " .. text)
+end
+
+player:SetAttribute("ZyntraShopFocus", nil)
+player:SetAttribute("ZyntraShopFocus", "Tokens4")
 
 -- BUY is a request to ZyntraStore, and exactly one. Opening the card was not.
 local bridge = Instance.new("BindableEvent")
@@ -839,7 +905,9 @@ local function measure(touch, width, height)
 		Buy = buy.Size.Y.Offset,
 		Close = closeButton.Size.Y.Offset,
 		Desc = card:FindFirstChild("ItemDescription").TextSize,
-		Kind = card:FindFirstChild("ItemKind").TextSize,
+		Kind = kindTag.TextSize,
+		Eyebrow = shopTitle.Visible,
+		EyebrowSize = shopTitle.TextSize,
 		Hint = hint.Text,
 		HintSize = hint.TextSize,
 		HintWidth = hint.Size.X.Offset,
@@ -858,36 +926,42 @@ check(phone.Icon == 52 and tablet.Icon == 64 and pointer.Icon == 112,
 	"tier icons: " .. phone.Icon .. "/" .. tablet.Icon .. "/" .. pointer.Icon)
 check(phone.Width == 300 and tablet.Width == 380 and pointer.Width == 560,
 	"tier widths: " .. phone.Width .. "/" .. tablet.Width .. "/" .. pointer.Width)
-check(phone.Height == 200, "the phone card is no longer 300x200: " .. phone.Height)
+check(phone.Height == 217, "the phone card is no longer 300x217: " .. phone.Height)
 check(phone.Buy >= 44 and tablet.Buy >= 44, "a touch tier drew a tap target under 44")
 check(phone.Close >= 44 and tablet.Close >= 44, "a touch tier drew CLOSE under 44")
 check(pointer.Buy >= 32, "the pointer tier drew a tap target under 32")
 check(phone.Desc >= 11 and tablet.Desc >= 11 and pointer.Desc >= 11, "type under 11px")
 check(phone.Kind >= 11 and phone.HintSize >= 11, "the hint row is under 11px")
+-- Every tier that has the room shows the SHOP eyebrow, at readable type.
+for _, tier in ipairs({phone, tablet, pointer}) do
+	check(tier.Eyebrow, "a full-size tier hid the SHOP eyebrow")
+	check(tier.EyebrowSize >= 11, "the eyebrow is under 11px: " .. tier.EyebrowSize)
+end
 -- Every tier fits the screen it was measured on, and clears the touch cluster.
 check(phone.Width <= 956 and phone.Top + phone.Height <= 382 - 140,
 	"the phone card overlaps the movement cluster")
 check(pointer.Height <= 684 and pointer.Width <= 1280, "the pointer card does not fit")
 
 -- The copy line says how to get rid of the card, and says the true thing for
--- the input the player has. No tier mentions an interaction that was removed.
+-- the input the player has.
 check(phone.Hint == "Step off the plate to close", "phone hint: " .. phone.Hint)
 check(tablet.Hint == "Step off the plate to close", "tablet hint: " .. tablet.Hint)
 check(pointer.Hint == "Step off the plate or press CLOSE", "pointer hint: " .. pointer.Hint)
 for _, tier in ipairs({phone, tablet, pointer}) do
-	check(tier.Hint:upper():find("INSPECT") == nil, "the card still says INSPECT")
 	check(tier.HintWidth >= 120, "the hint lane collapsed to " .. tier.HintWidth)
 end
 
 -- A SHORT screen gives way in the authored order: the icon/description row
--- shrinks, the state line goes, and the tap target and the type never move.
--- 568x262 is the smallest landscape handheld UIDevice documents.
+-- shrinks, the state line goes, the eyebrow goes last, and the tap target and
+-- the type never move. 568x262 is the smallest landscape handheld UIDevice
+-- documents.
 local short = measure(true, 568, 262)
 check(short.Top >= 0 and short.Top + short.Height <= 262,
 	"the 568x262 card left the screen: top " .. short.Top .. " h " .. short.Height)
 check(short.Buy >= 44, "the short screen shrank the tap target to " .. short.Buy)
 check(short.Desc >= 11, "the short screen shrank the type to " .. short.Desc)
 check(short.Icon >= 28 and short.Icon <= 52, "the icon gave way past its floor: " .. short.Icon)
+check(short.Eyebrow == false, "the eyebrow survived a band too short for BUY")
 -- The BUY row is inside the card it is drawn in, which is the thing a clipped
 -- card actually costs the player.
 local buyBottom = buy.Position.Y.Offset + buy.Size.Y.Offset
@@ -902,64 +976,99 @@ check(card.Position.X.Offset + card.Size.X.Offset <= 555, "shop card leaves the 
 check(lane.Top >= 8 and lane.Top + lane.Height <= 164, "shop card covers the bottom controls")
 check(lane.Buy >= 44, "free-lane composition shrank BUY")
 uiState.ModalArea = nil
+measure(false, 1280, 684)
 
 -- ── 11. motion ──────────────────────────────────────────────────────────────
-local boxes, glow = {}, nil
+-- The exact formula the contract states: y = origin + 0.35 * sin(t*2pi/3.4 +
+-- ShopBobPhase), per box, with the SERVER's phase. Nothing else moves, and the
+-- server does no per-frame work at all -- this is the whole animation.
+local BOB_HEIGHT, BOB_PERIOD = 0.35, 3.4
+local clock = 0
+local function beat(delta)
+	clock += delta
+	heartbeat:Fire(delta)
+end
+
+local boxes = {}
 for _, node in ipairs(model:GetDescendants()) do
 	if node.Name == "ShopHologramBox" then table.insert(boxes, node) end
-	if node.Name == "ShopSignGlowPanel" then glow = node end
 end
-check(#boxes == 8 and glow ~= nil, "the client has nothing to animate")
-local restingY = boxes[1].Position.Y
-local restingGlow = glow.Transparency
+check(#boxes == 8, "the client has nothing to animate: " .. #boxes)
+local resting, origins, phasesById = {}, {}, {}
+for index, box in ipairs(boxes) do
+	resting[index] = box.Position.Y
+	origins[index] = box:GetAttribute("ShopBobOrigin").Position.Y
+	phasesById[index] = box:GetAttribute("ShopBobPhase")
+	check(near(resting[index], origins[index]), "a box did not start at its own origin")
+end
 local restingYaw = boxes[1].CFrame.Yaw
 
-local function sampleMotion(seconds)
-	local lowest, highest = math.huge, -math.huge
-	local movedY, turned, highestY = false, false, -math.huge
-	for _ = 1, seconds * 30 do
-		heartbeat:Fire(1 / 30)
-		lowest = math.min(lowest, glow.Transparency)
-		highest = math.max(highest, glow.Transparency)
-		local offset = boxes[1].Position.Y - restingY
-		if math.abs(offset) > 0.05 then movedY = true end
-		highestY = math.max(highestY, math.abs(offset))
-		if not near(boxes[1].CFrame.Yaw, restingYaw, 1e-9) then turned = true end
+local function checkFormula(why)
+	for index, box in ipairs(boxes) do
+		local wanted = origins[index]
+			+ BOB_HEIGHT * math.sin(clock * (math.pi * 2 / BOB_PERIOD) + phasesById[index])
+		check(near(box.Position.Y, wanted, 1e-9),
+			why .. ": box " .. index .. " at " .. box.Position.Y .. ", formula says " .. wanted)
+		check(near(box.CFrame.Yaw, restingYaw, 1e-9), why .. ": a box turned away")
 	end
-	return highest - lowest, movedY, turned, highestY
 end
 
-local swing, bobbed, turned, reach = sampleMotion(7)
-check(bobbed, "the holograms never bobbed")
-check(swing > 0.15, "the sign never breathed: " .. swing)
--- The server sized every beam to a 0.35 bob and every corner to a 0.35 bob.
+-- Seven seconds is two full 3.4 s periods and a bit, sampled against the
+-- formula three times a second -- enough to catch a phase, amplitude or period
+-- that drifts, without 1700 identical assertions.
+local moved, reach = false, 0
+for frame = 1, 7 * 30 do
+	beat(1 / 30)
+	if frame % 10 == 0 then checkFormula("bob") end
+	for index, box in ipairs(boxes) do
+		local offset = math.abs(box.Position.Y - resting[index])
+		if offset > 0.05 then moved = true end
+		if offset > reach then reach = offset end
+	end
+end
+check(moved, "the holograms never bobbed")
+-- The server sized the envelope to a 0.35 bob at the top of the box.
 check(reach <= 0.3501, "the bob went past the 0.35 the geometry was solved for: " .. reach)
--- And nothing turns: the product decal faces the road at every frame.
-check(not turned, "a hologram box turned away from the road")
+check(reach > 0.34, "the bob never reached its own amplitude: " .. reach)
 
-player:SetAttribute("ReduceFlashing", true)
-local reducedSwing, stillBobbed = sampleMotion(7)
-check(stillBobbed, "ReduceFlashing stopped the holograms as well")
-check(reducedSwing < swing * 0.6, "ReduceFlashing did not calm the sign: "
-	.. reducedSwing .. " vs " .. swing)
-check(reducedSwing <= 0.11, "ReduceFlashing left a visible pulse: " .. reducedSwing)
-player:SetAttribute("ReduceFlashing", nil)
+-- Accessibility: a player who asked for less motion gets none, and every pose
+-- goes back. The boxes are readable standing still -- the art is on all six
+-- faces -- so this costs the shop nothing.
+for _, flag in ipairs({"ReduceFlashing", "ReduceCameraShake"}) do
+	player:SetAttribute(flag, true)
+	beat(1 / 30)
+	for index, box in ipairs(boxes) do
+		check(near(box.Position.Y, origins[index], 1e-9), flag .. " left a box bobbing")
+	end
+	beat(1 / 30)
+	for index, box in ipairs(boxes) do
+		check(near(box.Position.Y, origins[index], 1e-9), flag .. " let a box drift")
+	end
+	player:SetAttribute(flag, nil)
+	beat(1 / 30)
+	checkFormula("after " .. flag)
+end
 
 -- A round stops everything and puts every pose back.
 workspace:SetAttribute("RoundActive", true)
-heartbeat:Fire(1 / 30)
-check(near(boxes[1].Position.Y, restingY, 0.0001), "a hologram was left bobbing in a round")
-check(near(glow.Transparency, restingGlow, 0.0001), "the sign was left mid-pulse in a round")
-local frozen = boxes[1].Position.Y
-heartbeat:Fire(1 / 30)
-check(near(boxes[1].Position.Y, frozen, 0.0001), "the holograms kept moving in a round")
+beat(1 / 30)
+for index, box in ipairs(boxes) do
+	check(near(box.Position.Y, origins[index], 1e-9), "a hologram was left bobbing in a round")
+end
+beat(1 / 30)
+for index, box in ipairs(boxes) do
+	check(near(box.Position.Y, origins[index], 1e-9), "the holograms kept moving in a round")
+end
 workspace:SetAttribute("RoundActive", nil)
+beat(1 / 30)
+checkFormula("after the round")
 
 -- Token items reuse the same bridge and never ask Roblox for a Robux price.
 local beforeTokenPriceCalls = marketplaceCalls
 for _, key in ipairs({"SpeedPotion", "RouteMarker"}) do
+	player:SetAttribute("ZyntraShopFocus", nil)
 	player:SetAttribute("ZyntraShopFocus", key)
-	check(gui.Enabled, key .. " physical card did not open")
+	check(gui.Enabled, key .. " card did not open")
 	check(buy.Text == tostring(moduleResults.ZyntraConfig.Items[key].TokenCost) .. " TOKENS  //  BUY", key .. " wrong currency")
 	local beforeBuy = #fired
 	buy.Activated:Fire()
@@ -968,6 +1077,35 @@ end
 check(marketplaceCalls == beforeTokenPriceCalls, "token supplies called MarketplaceService")
 player:SetAttribute("ZyntraRouteMarkers", 6)
 check(state.Text == "6 STORED", "physical stock did not refresh")
+
+-- ── 11b. the boxes replicate AFTER the model ─────────────────────────────────
+-- Measured in Studio Play (2026-09-16): a client saw ZyntraShopDisplay with
+-- none of its boxes on the frame it appeared, collected nothing, and never
+-- looked again. The server stamps ShopItemCount when the row is complete, so a
+-- client that holds fewer boxes than that keeps collecting until it has them.
+do
+	local lobbyModel = model.Parent
+	local stands = {}
+	for _, child in ipairs(model:GetChildren()) do
+		if child.Name:sub(1, 10) == "ShopStand_" then table.insert(stands, child) end
+	end
+	check(#stands == 8, "expected eight stands to detach: " .. #stands)
+	for _, stand in ipairs(stands) do stand.Parent = nil end
+	-- A fresh model arrival: the client must drop the old one and pick this up.
+	model.Parent = nil
+	beat(1 / 30)
+	model.Parent = lobbyModel
+	beat(1 / 30)
+	for _, stand in ipairs(stands) do stand.Parent = model end
+	beat(1 / 30)
+	beat(1 / 30)
+	local late = false
+	for index, box in ipairs(boxes) do
+		if math.abs(box.Position.Y - origins[index]) > 0.05 then late = true end
+	end
+	check(late, "boxes that replicated after their model never bobbed")
+	checkFormula("late-replicated boxes")
+end
 
 -- ── 12. the shop going away takes the focus with it ─────────────────────────
 standAt(samplePlate.X, samplePlate.Z)
@@ -978,8 +1116,8 @@ step(2)
 check(player:GetAttribute("ZyntraShopFocus") == nil, "a destroyed shop left a card open")
 
 print(string.format(
-	"ok  %d checks: 8 holograms on %d parts, worst corner r %.3f (shell) / %.3f (rib), tiers %d/%d/%d px",
-	checks, partCount, worstShell, worstRib, phone.Width, tablet.Width, pointer.Width))
+	"ok  %d checks: 8 boxes on %d parts, z %.2f..%.2f, worst corner r %.3f (shell) / %.3f (rib), tiers %d/%d/%d px",
+	checks, partCount, row[1].Z, row[#row].Z, worstShell, worstRib, phone.Width, tablet.Width, pointer.Width))
 """
 
 

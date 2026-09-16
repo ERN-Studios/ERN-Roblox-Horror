@@ -8,11 +8,21 @@ ZyntraProfileChanged remote, pressing a CLAIM button -- and then reading what
 the script did to its own instances, to the LocalPlayer's attributes and to the
 ZyntraAction remote.
 
+WHAT THE 2026-09-16 REBUILD CHANGED. The shell's header: an orange UIGradient
+bar carrying Codex's gift art, "DAILY REWARDS" and a 48px red X, in place of the
+old accent bar, the "ZYNTRA // DAILY SUPPLY" eyebrow and the 36px chrome close
+chip. Everything this file asserted about the MODAL RULES -- one mount, the five
+refusals, every close path, the suppression derived from the whole modal set,
+the Studio probe -- is asserted unchanged, because none of it moved.
+
 REAL, not faked: ReplicatedStorage/UIStyle, ReplicatedStorage/ZyntraConfig and
 ReplicatedStorage/ZyntraDailyRewardsPage. The page module is what the modal
 exists to host, so mounting the real one is the only way the mount contract
 (one mount, a fit table the page can read, a profile subscription, a working
-CLAIM) is actually proved rather than assumed. The page is re-executed per
+CLAIM) is actually proved rather than assumed. It is also why the card
+assertions below -- the art ids, the claimed tick, the 44px CLAIM -- are made
+against the real page through the real fit this shell publishes, rather than
+against numbers a page test made up for itself. The page is re-executed per
 fixture so two tests cannot share its state, which is what `require`'s cache
 gives it in the engine.
 
@@ -160,6 +170,14 @@ local function newInstance(class)
 		Modal = false, Enabled = true, ScrollingEnabled = false,
 		Active = class == "TextButton" or class == "ImageButton",
 	}
+	-- An ImageLabel that does not carry these is a fake that would pass a shell
+	-- which never set Image or left ScaleType at Stretch.
+	if class == "ImageLabel" or class == "ImageButton" then
+		fields.Image = ""
+		fields.ScaleType = Enum.ScaleType.Stretch
+		fields.ImageColor3 = Color3.new(1, 1, 1)
+		fields.IsLoaded = false
+	end
 	local proxy
 	fields.FindFirstChildOfClass = function(_, want)
 		for _, child in ipairs(fields.Children) do
@@ -561,8 +579,9 @@ local function start(options)
 	if ctx.Gui then
 		ctx.Shade = findByName(ctx.Gui, "DailyRewardsShade")
 		ctx.Panel = findByName(ctx.Gui, "DailyRewardsPanel")
-		ctx.Title = findByName(ctx.Panel, "Title")
-		ctx.Eyebrow = findByName(ctx.Panel, "Eyebrow")
+		ctx.Header = findByName(ctx.Panel, "RewardsHeader")
+		ctx.Gift = findByName(ctx.Panel, "HeaderGift")
+		ctx.Title = findByName(ctx.Panel, "HeaderTitle")
 		ctx.Close = findByName(ctx.Panel, "CloseButton")
 		ctx.Content = findByName(ctx.Panel, "PageContent")
 		ctx.Status = findByName(ctx.Panel, "StatusLine")
@@ -570,6 +589,19 @@ local function start(options)
 	end
 	ctx.OpenerEvent = findByName(ctx.PlayerScripts, "OpenDailyRewards")
 	return ctx
+end
+-- The retired supply fiction, hunted over the WHOLE modal -- shell and page
+-- alike -- because the eyebrow that carried it used to be a label like any
+-- other and a stray one would read as a second brand on a warm header.
+local function forbiddenCopy(ctx)
+	for _, node in ipairs(descendants(ctx.Gui)) do
+		local text = tostring(node.Text or "")
+		if string.find(text, "SUPPLY", 1, true) or string.find(text, "Supply", 1, true)
+			or string.find(text, "ZYNTRA //", 1, true) then
+			return node.Name .. ": " .. text
+		end
+	end
+	return nil
 end
 local function openIt(ctx) ctx.OpenerEvent:Fire() end
 local function push(ctx, overrides)
@@ -585,10 +617,11 @@ local function buttonB(ctx)
 	assert(bound, "ButtonB is not bound while the modal is open")
 	return bound.Handler("DailyRewardsClose", Enum.UserInputState.Begin, {})
 end
-local function claimButton(ctx, minutes)
+local function cardPart(ctx, minutes, name)
 	local card = findByName(ctx.Content, "Milestone" .. tostring(minutes))
-	return card and card:FindFirstChild("ClaimButton") or nil
+	return card and card:FindFirstChild(name) or nil
 end
+local function claimButton(ctx, minutes) return cardPart(ctx, minutes, "ClaimButton") end
 local function actionsNamed(ctx, name)
 	local count = 0
 	for _, entry in ipairs(ctx.Sent) do
@@ -626,9 +659,35 @@ do
 
 	check(ctx.Panel ~= nil, "the panel is built")
 	expect(ctx.Panel.Parent, ctx.Shade, "inside the shade")
-	expect(ctx.Title.Text, "DAILY REWARDS", "the title bar names the modal")
-	expect(ctx.Eyebrow.Text, "ZYNTRA // DAILY SUPPLY", "with the Zyntra eyebrow above it")
+
+	-- The warm header: the one surface in this game that is not the dark teal
+	-- chrome, because it is the one screen that gives something away.
+	check(ctx.Header ~= nil, "the header bar is built")
+	expect(ctx.Header.Parent, ctx.Panel, "inside the panel")
+	local ramp = ctx.Header:FindFirstChildOfClass("UIGradient")
+	check(ramp ~= nil, "and carries a gradient")
+	expect(ramp.Color.Value[1].C, Color3.fromRGB(255, 170, 60), "from the contracted orange")
+	expect(ramp.Color.Value[2].C, Color3.fromRGB(255, 120, 40), "to the contracted deeper orange")
+	-- A UIGradient MULTIPLIES BackgroundColor3; over the old dark panel colour
+	-- the warm ramp would render as a slightly-less-dark bar.
+	expect(ctx.Header.BackgroundColor3, Color3.fromRGB(255, 255, 255),
+		"over a white bar, so the ramp reads as authored")
+
+	check(ctx.Gift ~= nil and ctx.Gift.ClassName == "ImageLabel", "the gift is an ImageLabel")
+	expect(ctx.Gift.Image, "rbxassetid://117126194981100", "wearing Codex's uploaded art")
+	expect(ctx.Gift.ScaleType, Enum.ScaleType.Fit, "Fit, so it is never stretched")
+	expect(ctx.Gift.BackgroundTransparency, 1, "over the ramp, not on a plate of its own")
+	expect(ctx.Gift.Parent, ctx.Header, "and it belongs to the header")
+
+	expect(ctx.Title.Text, "DAILY REWARDS", "the header names the modal")
+	expect(ctx.Title.Parent, ctx.Header, "inside the header bar")
+	expect(findByName(ctx.Panel, "Eyebrow"), nil, "the supply eyebrow is gone")
+	expect(forbiddenCopy(ctx), nil, "and nothing left in the modal names it")
+
 	check(ctx.Close ~= nil and ctx.Close.ClassName == "TextButton", "CLOSE is a button")
+	expect(ctx.Close.Text, "X", "drawn as an X")
+	expect(ctx.Close.Parent, ctx.Header, "at the top right of the header")
+	expect(ctx.Close.BackgroundColor3, Color3.fromRGB(190, 60, 50), "in the contracted red")
 	check(ctx.Content ~= nil, "there is a content frame for the page")
 	expect(ctx.Status.Text, "", "the status line starts empty")
 
@@ -839,17 +898,38 @@ do
 	push(ctx, {PlaytimeSeconds = 300})
 	expect(claimButton(ctx, 5).Text, "CLAIM", "five minutes unlocks it")
 	expect(claimButton(ctx, 5).Active, true, "and it is reachable")
+	expect(claimButton(ctx, 5).BackgroundColor3, Color3.fromRGB(70, 200, 90),
+		"a ready CLAIM is the bright green one")
 	expect(claimButton(ctx, 15).Text, "10:00 TO GO", "the fifteen is still locked")
 	expect(claimButton(ctx, 35).Text, "30:00 TO GO", "and so is the thirty-five")
 
+	-- The card the owner asked for: the reward's own art, not a row of text.
+	expect(cardPart(ctx, 5, "Threshold").Text, "5 MIN", "the threshold is stated in minutes")
+	expect(cardPart(ctx, 5, "RewardIcon").Image, "rbxassetid://93116899475472",
+		"the 5 minute card wears the token art")
+	expect(cardPart(ctx, 15, "RewardIcon").Image, "rbxassetid://120211340805188",
+		"the 15 minute card wears the speed potion art")
+	expect(cardPart(ctx, 35, "RewardIcon").Image, "rbxassetid://126728249949579",
+		"the 35 minute card wears the entity shield art")
+	for _, minutes in ipairs({5, 15, 35}) do
+		expect(cardPart(ctx, minutes, "RewardIcon").ScaleType, Enum.ScaleType.Fit,
+			minutes .. ": Fit, so the motif is never stretched")
+	end
+
 	push(ctx, {PlaytimeSeconds = 300, Claimed = {["5"] = true}})
-	expect(claimButton(ctx, 5).Text, "CLAIMED", "a claimed milestone says so")
+	expect(cardPart(ctx, 5, "ClaimedCheck").Visible, true, "a claimed milestone shows the tick")
+	expect(cardPart(ctx, 5, "ClaimedLabel").Visible, true, "and says CLAIMED")
+	expect(claimButton(ctx, 5).Visible, false, "with the button hidden, not relabelled")
 	expect(claimButton(ctx, 5).Active, false, "and cannot be claimed twice")
+	expect(cardPart(ctx, 15, "ClaimedCheck").Visible, false, "the other cards are untouched")
 
 	push(ctx, {Day = YESTERDAY, PlaytimeSeconds = 3000,
 		Claimed = {["5"] = true, ["15"] = true, ["35"] = true}})
 	expect(claimButton(ctx, 5).Text, "5:00 TO GO",
 		"yesterday's counters are not today's")
+	expect(claimButton(ctx, 5).Visible, true, "and the button comes back with the new day")
+	expect(claimButton(ctx, 5).Active, false, "locked, not pressable")
+	expect(cardPart(ctx, 5, "ClaimedCheck").Visible, false, "with yesterday's tick taken down")
 
 	-- A push while the modal is CLOSED is still accepted: the page has to be
 	-- correct the moment it is drawn, not one frame later.
@@ -877,7 +957,8 @@ do
 	expect(#ctx.Sent, 1, "a second and third press send nothing")
 
 	push(ctx, {PlaytimeSeconds = 400, Claimed = {["5"] = true}})
-	expect(claim.Text, "CLAIMED", "the push is the answer")
+	expect(cardPart(ctx, 5, "ClaimedCheck").Visible, true, "the push is the answer")
+	expect(claim.Visible, false, "and the button gives way to the tick")
 	ctx:Advance(8)
 	expect(ctx.Status.Text, "", "and the timeout never fires for a request that was answered")
 	expect(#ctx.Sent, 1, "nothing else was sent")
@@ -1018,12 +1099,21 @@ for _, layout in ipairs(VIEWPORTS) do
 	check(ctx.Content.Position.OY + ctx.Content.Size.OY <= ctx.Status.Position.OY,
 		name .. ": the content stops short of the status line")
 
-	if layout.IsTouch then
-		check(ctx.Close.Size.OY >= 44,
-			name .. ": CLOSE is " .. tostring(ctx.Close.Size.OY) .. "px tall, the floor is 44")
-		check(ctx.Close.Size.OX >= 44,
-			name .. ": CLOSE is " .. tostring(ctx.Close.Size.OX) .. "px wide, the floor is 44")
-	end
+	-- 48, at EVERY tier: the X is the one control on a screen-owning modal a
+	-- player must be able to hit, and a pointer is not an excuse to shrink it.
+	check(ctx.Close.Size.OY >= 48,
+		name .. ": CLOSE is " .. tostring(ctx.Close.Size.OY) .. "px tall, the floor is 48")
+	check(ctx.Close.Size.OX >= 48,
+		name .. ": CLOSE is " .. tostring(ctx.Close.Size.OX) .. "px wide, the floor is 48")
+	check(ctx.Gift.Size.OX > 0 and ctx.Gift.Size.OX == ctx.Gift.Size.OY,
+		name .. ": the gift is a real square")
+	local gx, gy = offsetWithin(ctx.Gift, ctx.Header)
+	check(gx >= 0 and gx + ctx.Gift.Size.OX <= ctx.Header.Size.OX,
+		name .. ": the gift fits the header horizontally")
+	check(gy >= 0 and gy + ctx.Gift.Size.OY <= ctx.Header.Size.OY,
+		name .. ": and vertically")
+	check(ctx.Title.Position.OX >= gx + ctx.Gift.Size.OX,
+		name .. ": the title starts clear of the gift")
 
 	-- The page laid itself out against the fit this shell published.
 	local fit = nil
@@ -1086,7 +1176,7 @@ do
 	check(panel.Size.OY <= tiny.ModalViewport.Height,
 		"the panel never grows past the modal viewport")
 	check(ctx.Content.Size.OY >= 1, "the content box is still a rectangle")
-	check(ctx.Close.Size.OY >= 44, "and CLOSE still holds the 44px tap floor")
+	check(ctx.Close.Size.OY >= 48, "and CLOSE still holds its 48px floor")
 	local cx, cy = offsetWithin(ctx.Close, panel)
 	check(cx >= 0 and cx + ctx.Close.Size.OX <= panel.Size.OX,
 		"with CLOSE inside the panel horizontally")

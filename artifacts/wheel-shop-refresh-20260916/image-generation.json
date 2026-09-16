@@ -1,0 +1,25 @@
+{
+  "method": "built-in image_gen",
+  "prompt": "Use case: stylized-concept. Asset type: production-ready rotatable Roblox prize wheel texture, square PNG with genuine transparent alpha outside the circle. Create a large perfectly circular front-facing flat 2D illustrated reward wheel, polished inviting Roblox game UI art, bold near-black outlines, luminous golden outer rim with evenly spaced small bulbs, clean colorful fills. Exactly FIVE equal 72-degree pie sectors, no additional sectors. The first wedge is centered at twelve o'clock, then clockwise: 1) warm yellow sector with a single large shiny gold hexagonal token icon; 2) orange sector with a neat stack of THREE gold hexagonal tokens; 3) cyan-blue sector with ONE bright blue speed potion bottle featuring a lightning-bolt symbol; 4) violet sector with TWO bright blue speed potion bottles each with lightning-bolt symbol; 5) emerald green sector with ONE glowing protective shield icon. Each icon must sit wholly within its own wedge, centered at about 62 percent of the wheel radius, large and immediately readable. Five straight dark radial dividers from a small plain circular gold center hub to the rim. Center hub is blank and small (about 15 percent wheel diameter), leaving room to overlay an interactive SPIN button. Symmetric orthographic view with the disc exactly centered at canvas center, circular silhouette filling 92 percent of canvas width and height. Bright celebratory toy-like game art with crisp thick outlines and slight bevel highlights, no grunge and no environment. Keep ALL outside pixels truly transparent, NOT checkerboard. The wheel must be usable as a rotating disc, so absolutely NO pointer, arrow, stand, button protrusions, close icon, title, text, letters, numeric labels, UI panel, background, or watermark. Nothing outside the circular rim. Quantity labels will be added as live UI by the game.",
+  "source": "C:/Users/mikke/.codex/generated_images/01a0a685-aadc-77f3-98a1-f2a21fdf61e5/exec-76c7ab42-ed79-47f3-878e-b23616ddb16a.png",
+  "workspaceFile": "assets/shop/lucky-wheel-disc-v2.png",
+  "assetId": "86770264881525",
+  "robloxImage": "rbxassetid://86770264881525",
+  "width": 1254,
+  "height": 1254,
+  "mode": "RGBA",
+  "alphaRange": [
+    0,
+    255
+  ],
+  "visualInspection": "Five sectors, correct clockwise reward icon order; no baked pointer; transparent outside circular wheel. Slight illustrated irregularity at outer rim. Runtime integration and loaded-asset QA belong to Claude.",
+  "uploadReceipt": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"http://127.0.0.1:50720/lucky-wheel-disc-v2.png\":\"rbxassetid://86770264881525\"}"
+      }
+    ],
+    "isError": false
+  }
+}

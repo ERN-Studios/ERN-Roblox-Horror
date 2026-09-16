@@ -10,13 +10,16 @@
 --      PlayerScripts.ZyntraShopBuy, which ZyntraStore answers by running the
 --      SAME product-card purchase path its own terminal button runs. One
 --      purchase entry point in the game, not two.
---   2. THE MOTION. The hologram boxes bob and the sign breathes, locally, so
---      no CFrame or colour of this replicates. It all stops the moment a round
---      starts, and under ReduceFlashing the sign's pulse becomes a slow cosine
---      swell instead (period 6s, a third of the amplitude). Nothing strobes.
---      The boxes do NOT turn any more (Trello #105): the product art lives on
---      the one face that looks at the road, and a box that turns spends half
---      of its cycle hiding the thing the shop exists to show.
+--   2. THE MOTION. The hologram boxes bob, locally, so no CFrame of this
+--      replicates and the server does no per-frame work at all. One calm
+--      continuous sine per box, phase-offset by the server's ShopBobPhase so
+--      the row never pumps in unison. It stops the moment a round starts and
+--      under ReduceFlashing / ReduceCameraShake, and every pose it moved is put
+--      back. The boxes do NOT turn (Trello #105) -- the product art is on all
+--      six faces now, but a turning box still reads as a spinning pickup rather
+--      than as merchandise, and the shop's whole point is that it is legible
+--      from the road. The overhead sign it used to breathe with was deleted
+--      with the rest of the shopfront in v4.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -142,6 +145,11 @@ local function makeLabel(name, font, color, xAlign)
 	return object
 end
 
+-- The ONE place the word SHOP is written anywhere in the game world or on this
+-- card: v4 deleted the overhead sign and the kiosk fascia, so the eyebrow on
+-- the card a hologram opens is what tells the player what they have walked into.
+local shopTitle = makeLabel("ShopTitle", Enum.Font.GothamBlack, COLORS.accent)
+shopTitle.Text = "SHOP"
 local title = makeLabel("ItemName", Enum.Font.GothamBold, COLORS.text)
 local kindTag = makeLabel("ItemKind", Enum.Font.Code, COLORS.accent)
 local description = makeLabel("ItemDescription", Enum.Font.GothamMedium, COLORS.muted)
@@ -233,31 +241,37 @@ local function cardArea(width, height)
 end
 
 -- The icon and description stand side by side in ONE row, and that row is the
--- only thing that gives way on a short screen -- never the type size, never the
--- tap target. 28px is the floor below which the row is not a row any more, and
--- at that point the state line goes instead. The same ordered give-way the
--- terminal's own panel uses, with two rungs instead of four.
+-- first thing that gives way on a short screen -- never the type size, never the
+-- tap target. 28px is the floor below which the row is not a row any more; at
+-- that point the state line goes, and below that the SHOP eyebrow goes too. The
+-- same ordered give-way the terminal's own panel uses, with three rungs instead
+-- of four. The eyebrow is last because a card with no room for it still has the
+-- product name, the price and BUY, which is the whole transaction.
 local MIN_BODY_HEIGHT = 28
 
 local function applyLayout()
 	if not gui.Enabled then return end
 	local face, tap, touch = cardFace()
 	local buttonHeight = math.max(tap, face.Button)
+	local eyebrowHeight = face.Kind + 6
 	local titleHeight = face.Title + 12
 	local kindHeight = face.Kind + 6
 	local stateHeight = face.State + 8
-	local function fixedHeight(withState)
-		return face.Pad + titleHeight + kindHeight + 4 + 8
+	local function fixedHeight(withState, withEyebrow)
+		return face.Pad + (withEyebrow and eyebrowHeight or 0) + titleHeight + kindHeight + 4 + 8
 			+ (withState and (stateHeight + 10) or 0)
 			+ buttonHeight + face.Pad
 	end
 
-	local wanted = fixedHeight(true) + face.Icon
+	local wanted = fixedHeight(true, true) + face.Icon
 	local column = cardArea(math.min(face.Width, CARD_DESIGN_WIDTH), wanted)
-	local withState = column.Height >= fixedHeight(true) + MIN_BODY_HEIGHT
-	local bodyHeight = math.clamp(column.Height - fixedHeight(withState), MIN_BODY_HEIGHT, face.Icon)
-	local height = fixedHeight(withState) + bodyHeight
-	local bodyTop = face.Pad + titleHeight + kindHeight + 4
+	local withState = column.Height >= fixedHeight(true, true) + MIN_BODY_HEIGHT
+	local withEyebrow = column.Height >= fixedHeight(withState, true) + MIN_BODY_HEIGHT
+	local fixed = fixedHeight(withState, withEyebrow)
+	local bodyHeight = math.clamp(column.Height - fixed, MIN_BODY_HEIGHT, face.Icon)
+	local height = fixed + bodyHeight
+	local titleTop = face.Pad + (withEyebrow and eyebrowHeight or 0)
+	local bodyTop = titleTop + titleHeight + kindHeight + 4
 	local stateTop = bodyTop + bodyHeight + 8
 	local buttonTop = withState and (stateTop + stateHeight + 10) or stateTop
 
@@ -270,17 +284,21 @@ local function applyLayout()
 		math.max(column.Top, column.Top + column.Height - height))
 
 	local inner = column.Width - face.Pad * 2
-	title.Position = UDim2.fromOffset(face.Pad, face.Pad)
+	shopTitle.Visible = withEyebrow
+	shopTitle.Position = UDim2.fromOffset(face.Pad, face.Pad)
+	shopTitle.Size = UDim2.fromOffset(inner, eyebrowHeight)
+	shopTitle.TextSize = face.Kind
+	title.Position = UDim2.fromOffset(face.Pad, titleTop)
 	title.Size = UDim2.fromOffset(inner, titleHeight)
 	title.TextSize = face.Title
 	-- Kind on the left, how-to-close on the right, one row. 38% is what fits
 	-- "PERMANENT PASS" in monospace at the phone tier's 11px and still leaves
 	-- the hint its 27 characters.
 	local kindWidth = math.floor(inner * 0.38)
-	kindTag.Position = UDim2.fromOffset(face.Pad, face.Pad + titleHeight)
+	kindTag.Position = UDim2.fromOffset(face.Pad, titleTop + titleHeight)
 	kindTag.Size = UDim2.fromOffset(kindWidth, kindHeight)
 	kindTag.TextSize = face.Kind
-	hintTag.Position = UDim2.fromOffset(face.Pad + kindWidth + 6, face.Pad + titleHeight)
+	hintTag.Position = UDim2.fromOffset(face.Pad + kindWidth + 6, titleTop + titleHeight)
 	hintTag.Size = UDim2.fromOffset(math.max(40, inner - kindWidth - 6), kindHeight)
 	hintTag.TextSize = face.Kind
 	-- CLOSE is a pointer affordance; on touch the honest instruction is to walk.
@@ -341,7 +359,9 @@ local function refresh()
 	local item, kind = lookup(key)
 	if not item then return end
 	title.Text = tostring(item.Name or key)
-	kindTag.Text = kind == "Pass" and "PERMANENT PASS" or (kind == "Item" and "FIELD SUPPLIES" or "SUPPLY DROP")
+	-- What you are actually buying with, in three words: a pass you keep, a thing
+	-- bought with research tokens, a thing bought with Robux.
+	kindTag.Text = kind == "Pass" and "PERMANENT PASS" or (kind == "Item" and "TOKEN ITEM" or "ROBUX PRODUCT")
 	description.Text = tostring(item.Description or "")
 
 	local iconId = tonumber(item.IconId) or 0
@@ -418,7 +438,7 @@ buyButton.Activated:Connect(function()
 		-- ZyntraStore owns the purchase. This is a request to run its button.
 		event:Fire(shownKey)
 	else
-		state.Text = "SHOP IS STILL LOADING -- TRY AGAIN"
+		state.Text = "STILL LOADING -- TRY AGAIN"
 	end
 end)
 
@@ -440,37 +460,38 @@ gui:GetPropertyChangedSignal("AbsoluteSize"):Connect(applyLayout)
 
 -- ── the wall's own motion ───────────────────────────────────────────────────
 -- Local only: these are anchored server parts and nothing written here leaves
--- this client. Stops dead outside the lobby, and restores every pose it moved.
+-- this client, so the server does no per-frame work for the shop at all. Stops
+-- dead outside the lobby, and restores every pose it moved.
+--
+-- The amplitude is the number the SERVER's envelope was solved against: a box
+-- top at 8.70 resting and 9.05 at the peak, which is 0.15 inside the rib arch.
+-- Changing BOB_HEIGHT here moves geometry that LobbyShopDisplay measured.
 local BOB_HEIGHT = 0.35
-local BOB_PERIOD = 4.2
-local PULSE = {Base = 0.58, Swing = 0.13, Period = 3.2}
-local REDUCED = {Base = 0.60, Swing = 0.05, Period = 6.0}
+local BOB_PERIOD = 3.4
 
 local shopModel = nil
 local boxes = {}
-local glows = {}
 local animating = false
 
 local function restoreMotion()
 	for _, record in ipairs(boxes) do
 		if record.Part.Parent then record.Part.CFrame = record.Origin end
 	end
-	for _, record in ipairs(glows) do
-		if record.Part.Parent then record.Part.Transparency = record.Transparency end
-	end
 	animating = false
 end
 
 local function collect(model)
-	boxes, glows = {}, {}
+	boxes = {}
 	if not model then return end
 	for _, node in ipairs(model:GetDescendants()) do
 		if node:IsA("BasePart") then
 			local origin = node:GetAttribute("ShopBobOrigin")
 			if typeof(origin) == "CFrame" then
-				table.insert(boxes, {Part = node, Origin = origin})
-			elseif node:GetAttribute("ShopSignGlow") == true then
-				table.insert(glows, {Part = node, Transparency = node.Transparency})
+				table.insert(boxes, {
+					Part = node,
+					Origin = origin,
+					Phase = tonumber(node:GetAttribute("ShopBobPhase")) or 0,
+				})
 			end
 		end
 	end
@@ -481,10 +502,16 @@ local function lobbyShop()
 	return lobby and lobby:FindFirstChild("ZyntraShopDisplay") or nil
 end
 
+-- Rounds stop it because nothing in the lobby should run while the player is
+-- somewhere else; the two accessibility flags stop it because a player who has
+-- asked for less motion has asked for less motion, and the boxes are readable
+-- standing still -- the art is on all six faces.
 local function motionAllowed()
 	return shopModel ~= nil
 		and player:GetAttribute("InRound") ~= true
 		and workspace:GetAttribute("RoundActive") ~= true
+		and player:GetAttribute("ReduceFlashing") ~= true
+		and player:GetAttribute("ReduceCameraShake") ~= true
 end
 
 local elapsed = 0
@@ -496,26 +523,25 @@ RunService.Heartbeat:Connect(function(delta)
 		shopModel = current
 		collect(shopModel)
 	end
+	-- Replication hands a client the model BEFORE its boxes: measured in Studio
+	-- Play on 2026-09-16, the first collect found the model and none of the
+	-- eight boxes, and the row then stood still for the whole session. The
+	-- server stamps ShopItemCount on the model once every box is built, so
+	-- until this client holds that many it keeps collecting.
+	if shopModel and #boxes < (tonumber(shopModel:GetAttribute("ShopItemCount")) or 0) then
+		collect(shopModel)
+	end
 	if not motionAllowed() then
 		if animating then restoreMotion() end
 		return
 	end
 	animating = true
-	-- Bob only, never yaw: the box's road-facing decal IS the product, and the
-	-- server's beam is sized to BOB_HEIGHT on the assumption that this is the
-	-- whole of the motion. The per-box phase offset keeps the row from pumping
-	-- in unison.
-	for index, record in ipairs(boxes) do
-		local phase = elapsed * (math.pi * 2 / BOB_PERIOD) + index * 0.7
+	-- Bob only, never yaw: a turning box reads as a spinning pickup, and the
+	-- server's envelope is solved for a box that only ever moves up and down.
+	-- The phase comes from the server so every client sees the same row.
+	for _, record in ipairs(boxes) do
+		local phase = elapsed * (math.pi * 2 / BOB_PERIOD) + record.Phase
 		record.Part.CFrame = record.Origin * CFrame.new(0, math.sin(phase) * BOB_HEIGHT, 0)
-	end
-	-- One cosine either way. ReduceFlashing does not switch the sign off; it
-	-- makes the same breath slower and shallower, which is what the level
-	-- controllers do with their own strobes.
-	local shape = player:GetAttribute("ReduceFlashing") == true and REDUCED or PULSE
-	local swell = shape.Base + math.cos(elapsed * (math.pi * 2 / shape.Period)) * shape.Swing
-	for _, record in ipairs(glows) do
-		record.Part.Transparency = swell
 	end
 end)
 

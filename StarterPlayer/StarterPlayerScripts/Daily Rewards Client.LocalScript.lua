@@ -1,13 +1,20 @@
 -- Daily Rewards Client -- the standalone DAILY REWARDS modal. (Trello #104)
 --
--- WHAT THIS FILE IS: a shell. It draws a shade, a panel, a title bar, a CLOSE
--- button and a status line, and then hands the content frame to
--- ReplicatedStorage.ZyntraDailyRewardsPage -- the SAME module the Zyntra
--- terminal used to mount as its REWARDS tab, with the same `mount(page, ctx)`
--- contract. Nothing about daily rewards is decided here. The playtime counters,
--- the milestone claims and every number on them come out of the public profile
--- the server already committed; this file only owns when the modal is up and
--- what `ctx` the page is handed.
+-- WHAT THIS FILE IS: a shell. It draws a shade, a panel, the warm header bar
+-- (the gift, "DAILY REWARDS" and the big red X), a status line, and then hands
+-- the content frame to ReplicatedStorage.ZyntraDailyRewardsPage -- the SAME
+-- module the Zyntra terminal used to mount as its REWARDS tab, with the same
+-- `mount(page, ctx)` contract. Nothing about daily rewards is decided here. The
+-- playtime counters, the milestone claims and every number on them come out of
+-- the public profile the server already committed; this file only owns when the
+-- modal is up and what `ctx` the page is handed.
+--
+-- WHY THE HEADER IS WARM AND THE REST IS NOT (2026-09-16). Every other surface
+-- in this game is the dark teal Zyntra chrome, because every other surface is
+-- either a warning or a shop. This one gives something away, so the owner asked
+-- for a header that says so: an orange ramp, the gift, and an X nobody has to
+-- hunt for. The old eyebrow "ZYNTRA // DAILY SUPPLY" is gone with it -- the
+-- fiction was naming a supply depot on the screen that hands out free rewards.
 --
 -- WHY A MODAL OF ITS OWN (card #104). Daily Rewards was a tab inside the shop
 -- terminal, which meant reaching it was: open the terminal, find the tab, and
@@ -187,26 +194,70 @@ UIStyle.panel(panel, {
 	StrokeTransparency = UIStyle.Stroke.CardTransparency,
 })
 
-local headerAccent = Instance.new("Frame")
-headerAccent.Name = "HeaderAccent"
-headerAccent.BackgroundColor3 = COLORS.accent
-headerAccent.BackgroundTransparency = 0.14
-headerAccent.BorderSizePixel = 0
-headerAccent.Parent = panel
-corner(headerAccent, 2)
+-- ── the warm header ─────────────────────────────────────────────────────────
+-- The one piece of this modal that is not the game's dark teal chrome, and
+-- deliberately so: this is the screen a player opens to be GIVEN something.
+-- The bar is WHITE underneath because a UIGradient multiplies BackgroundColor3
+-- rather than replacing it -- over the old dark panel colour the warm ramp
+-- would render as a slightly-less-dark bar.
+local headerBar = Instance.new("Frame")
+headerBar.Name = "RewardsHeader"
+headerBar.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+headerBar.BackgroundTransparency = 0
+headerBar.BorderSizePixel = 0
+headerBar.Parent = panel
+corner(headerBar, 10)
 
-local eyebrow = label(panel, "ZYNTRA // DAILY SUPPLY", UDim2.new(), UDim2.new(),
-	11, UIStyle.Color.AccentText, UIStyle.Font.Readout)
-eyebrow.Name = "Eyebrow"
+local headerGradient = Instance.new("UIGradient")
+headerGradient.Name = "HeaderGradient"
+headerGradient.Color = ColorSequence.new({
+	ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 170, 60)),
+	ColorSequenceKeypoint.new(1, Color3.fromRGB(255, 120, 40)),
+})
+headerGradient.Rotation = 90
+headerGradient.Parent = headerBar
 
-local title = label(panel, "DAILY REWARDS", UDim2.new(), UDim2.new(),
-	24, COLORS.text, UIStyle.Font.Title)
-title.Name = "Title"
+-- Codex's uploaded art. Fit, never stretched: the PNG carries its own air.
+local headerGift = Instance.new("ImageLabel")
+headerGift.Name = "HeaderGift"
+headerGift.Image = "rbxassetid://117126194981100"
+headerGift.ScaleType = Enum.ScaleType.Fit
+headerGift.BackgroundTransparency = 1
+headerGift.BorderSizePixel = 0
+headerGift.Parent = headerBar
 
-local closeButton = button(panel, "X", UDim2.fromOffset(36, 36))
+local title = label(headerBar, "DAILY REWARDS", UDim2.new(), UDim2.new(),
+	26, Color3.fromRGB(255, 255, 255), Enum.Font.GothamBlack)
+title.Name = "HeaderTitle"
+do
+	-- Contextual (the default) outlines the TEXT, which is what white copy over
+	-- an orange ramp needs. UIStyle's helpers force Border, so this is its own
+	-- four lines rather than a call.
+	local titleShadow = Instance.new("UIStroke")
+	titleShadow.Color = Color3.fromRGB(120, 55, 10)
+	titleShadow.Thickness = 2
+	titleShadow.Transparency = 0.15
+	titleShadow.Parent = title
+end
+
+-- Built by hand rather than through button(): that helper paints the dark
+-- terminal chrome and wires a MouseLeave that would put it back over the red.
+local closeButton = Instance.new("TextButton")
 closeButton.Name = "CloseButton"
-closeButton.TextSize = 22
+closeButton.AutoButtonColor = false
+closeButton.BackgroundColor3 = Color3.fromRGB(190, 60, 50)
+closeButton.BorderSizePixel = 0
+closeButton.Font = Enum.Font.GothamBlack
+closeButton.Text = "X"
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeButton.TextSize = 24
 closeButton.TextXAlignment = Enum.TextXAlignment.Center
+closeButton.Parent = headerBar
+corner(closeButton, 9)
+outline(closeButton, Color3.fromRGB(255, 220, 200), 0.45, 2)
+-- The shared hover, so a hand-built control still answers a pointer the way
+-- every other button in the game does.
+UIStyle.hover(closeButton, Color3.fromRGB(190, 60, 50), Color3.fromRGB(222, 82, 68))
 
 local content = Instance.new("Frame")
 content.Name = "PageContent"
@@ -284,21 +335,23 @@ local function applyLayout()
 	local pad = compact and 12 or 20
 	local gap = compact and 8 or 12
 	local statusHeight = compact and 22 or 30
-	local closeSize = math.max(tap, 36)
-	local titleFace = compact and 19 or 24
-	-- Eyebrow + title stacked. The eyebrow is the one row that gives way first
-	-- on a screen too short for the composition -- it names the fiction, and the
-	-- title names the page.
-	local eyebrowHeight = 16
-	local showEyebrow = true
-	local headerHeight = pad + eyebrowHeight + 2 + titleFace + 10 + math.floor(pad / 2)
+	-- The X NEVER gives way. It is the one control on a screen-owning modal a
+	-- player must be able to hit, so 48 is a floor on a pointer as much as under
+	-- a thumb, and the header bar is measured around it rather than the reverse.
+	local closeSize = math.max(48, tap)
+	local headerMargin = 8
+	local titleFace = compact and 22 or 26
+	local barHeight = math.max(closeSize + 8, compact and 56 or 64)
+	local headerHeight = barHeight + headerMargin
 
 	local function contentHeight()
 		return height - headerHeight - gap - statusHeight - gap
 	end
+	-- The give-way ladder, cheapest rung first: the header's spare air, then the
+	-- status line, then the panel's own margins.
 	if contentHeight() < MIN_CONTENT_HEIGHT then
-		showEyebrow = false
-		headerHeight = math.max(closeSize + 8, pad + titleFace + 10)
+		barHeight = closeSize + 8
+		headerHeight = barHeight + headerMargin
 	end
 	if contentHeight() < MIN_CONTENT_HEIGHT then statusHeight = 18 end
 	if contentHeight() < MIN_CONTENT_HEIGHT then
@@ -315,26 +368,26 @@ local function applyLayout()
 		math.floor(area.Left + (area.Width - width) / 2),
 		math.floor(area.Top + (area.Height - height) / 2))
 
-	headerAccent.Position = UDim2.fromOffset(pad, math.floor(pad / 2))
-	headerAccent.Size = UDim2.fromOffset(3, math.max(8, headerHeight - pad))
+	-- The bar, then RIGHT TO LEFT inside it: gift, close, and whatever is left
+	-- for the title. The title can never run under the one control that
+	-- dismisses the modal, and the gift can never push it there.
+	local barWidth = math.max(120, width - headerMargin * 2)
+	headerBar.Position = UDim2.fromOffset(headerMargin, headerMargin)
+	headerBar.Size = UDim2.fromOffset(barWidth, barHeight)
 
-	-- RIGHT TO LEFT: close first, then whatever is left for the copy. The title
-	-- can never run under the one control that dismisses the modal.
-	local closeLeft = width - closeSize - 10
-	local copyLeft = pad + 11
-	local copyWidth = math.max(60, closeLeft - 10 - copyLeft)
+	local giftSize = math.max(32, barHeight - 10)
+	headerGift.Position = UDim2.fromOffset(6, math.floor((barHeight - giftSize) / 2))
+	headerGift.Size = UDim2.fromOffset(giftSize, giftSize)
+
+	local closeLeft = barWidth - closeSize - 6
 	closeButton.Size = UDim2.fromOffset(closeSize, closeSize)
 	closeButton.Position = UDim2.fromOffset(closeLeft,
-		math.clamp(math.floor((headerHeight - closeSize) / 2), 4,
-			math.max(4, headerHeight - closeSize)))
-	closeButton.TextSize = compact and 19 or 22
+		math.max(0, math.floor((barHeight - closeSize) / 2)))
+	closeButton.TextSize = compact and 22 or 24
 
-	eyebrow.Visible = showEyebrow
-	eyebrow.Position = UDim2.fromOffset(copyLeft, math.floor(pad / 2))
-	eyebrow.Size = UDim2.fromOffset(copyWidth, eyebrowHeight)
-	title.Position = UDim2.fromOffset(copyLeft,
-		showEyebrow and (math.floor(pad / 2) + eyebrowHeight + 2) or math.floor(pad / 2))
-	title.Size = UDim2.fromOffset(copyWidth, titleFace + 10)
+	local titleLeft = 6 + giftSize + 8
+	title.Position = UDim2.fromOffset(titleLeft, 0)
+	title.Size = UDim2.fromOffset(math.max(60, closeLeft - 8 - titleLeft), barHeight)
 	title.TextSize = titleFace
 
 	local contentWidth = width - pad * 2

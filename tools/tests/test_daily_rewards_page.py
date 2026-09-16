@@ -21,13 +21,23 @@ the wheel client's tests now. What is left is asserted harder: this file also
 proves the wheel is GONE, because a page that still built a hidden SpinButton
 would put a second `SpinDailyWheel` path back into the game.
 
+WHAT THE 2026-09-16 REBUILD CHANGED. Only the drawing, and this file is the
+proof of exactly that: the three milestones, the request shape, the one-in-
+flight guard, the 6 s re-read and the UTC day guard are asserted here unchanged,
+while the CARD is asserted against the new contract -- Codex's uploaded art per
+reward, a gradient per card, a 45%-of-the-card icon, a CLAIM at 44px, and a
+claimed state that HIDES the button behind a tick. The header (gift, title, X)
+is the host's and is asserted in test_daily_rewards_client.py; this file proves
+the page draws none of it, because two copies would lay out separately.
+
 What it proves, by running the code rather than matching strings: the claim
 states drawn for a given saved profile, the UTC day-roll guard, the local
 countdown after real elapsed time, that one press fires exactly one action and
 then locks, that a request nobody answers recovers by RE-READING instead of
-granting, that nothing the page builds can send `SpinDailyWheel`, and that every
-rectangle at four viewport tiers lands inside the host's own content box at or
-above the 44px touch floor.
+granting, that nothing the page builds can send `SpinDailyWheel`, that no copy
+still names the retired supply fiction, and that every rectangle at four
+viewport tiers lands inside the host's own content box at or above the 44px
+touch floor -- as one row of three cards everywhere except a phone held upright.
 
 What it CANNOT see: real font metrics and TextBounds, the engine's UICorner /
 UIStroke rendering, UIDevice's real form-factor detection, and anything about
@@ -154,6 +164,14 @@ local function newInstance(class)
 		Visible = true, Text = "", TextScaled = false, Destroyed = false,
 		Active = class == "TextButton" or class == "ImageButton",
 	}
+	-- An ImageLabel that does not carry these is a fake that would pass a page
+	-- which never set Image or left ScaleType at Stretch.
+	if class == "ImageLabel" or class == "ImageButton" then
+		fields.Image = ""
+		fields.ScaleType = Enum.ScaleType.Stretch
+		fields.ImageColor3 = Color3.new(1, 1, 1)
+		fields.IsLoaded = false
+	end
 	local proxy
 	fields.MouseEnter, fields.MouseLeave, fields.Activated = signal(), signal(), signal()
 	fields.FindFirstChildOfClass = function(_, want)
@@ -412,24 +430,35 @@ local function newHost()
 	return host
 end
 
--- The fit table applyTerminalLayout publishes, rebuilt from the same figures
--- (840x610 design, 260 floor, compact under 640x430, 12/20 padding, 44 tap).
--- ContentHeight is not used by this page, so it is only approximated.
+-- The fit table the Daily Rewards Client publishes, rebuilt from the SAME
+-- figures its applyLayout uses (720x640 design, 260 floor, compact under
+-- 640x430, 12/20 padding, 44 tap, a 56/64 header bar plus its 8px margin, and
+-- a 22/30 status line). ContentHeight matters now: the card's icon is sized
+-- against the height the host actually handed the page.
+--
+-- The arguments are MODAL VIEWPORT sizes, not display sizes -- that is what the
+-- client clamps against, and the difference is the safe-area inset.
 local function fitFor(viewportWidth, viewportHeight, touch)
-	local width = math.floor(math.clamp(math.min(840, viewportWidth), 260, 840))
-	local height = math.floor(math.min(610, viewportHeight))
+	local width = math.floor(math.clamp(math.min(720, viewportWidth), 260, 720))
+	local height = math.floor(math.min(640, viewportHeight))
 	local compact = width < 640 or height < 430
 	local tap = touch and 44 or 32
 	local pad = compact and 12 or 20
+	local gap = compact and 8 or 12
+	local statusHeight = compact and 22 or 30
+	local headerHeight = math.max(math.max(48, tap) + 8, compact and 56 or 64) + 8
 	return {Width = width, Height = height, ContentWidth = width - pad * 2,
-		ContentHeight = math.max(96, height - 200), Compact = compact, Touch = touch,
+		ContentHeight = height - headerHeight - gap - statusHeight - gap,
+		Compact = compact, Touch = touch,
 		Tap = tap, TabHeight = math.max(tap, compact and 40 or 42),
 		TabMinWidth = compact and 88 or 110}
 end
-local PHONE_PORTRAIT = fitFor(390, 844, true)
-local PHONE_LANDSCAPE = fitFor(844, 390, true)
-local TABLET = fitFor(1024, 768, true)
-local POINTER = fitFor(1280, 720, false)
+-- 390x844 phone, 844x390 phone, 1024x768 tablet and 1280x720 desktop, each
+-- already reduced to the modal viewport UIDevice would hand the shell.
+local PHONE_PORTRAIT = fitFor(358, 774, true)
+local PHONE_LANDSCAPE = fitFor(812, 338, true)
+local TABLET = fitFor(992, 716, true)
+local POINTER = fitFor(1248, 668, false)
 
 local function mount(host, fit)
 	local handle = Page.mount(host.Page, host.ctx)
@@ -458,11 +487,54 @@ local function wheelRemnant(host)
 	end
 	return nil
 end
+
+-- The two glyphs the page draws that are not ASCII, written as escapes on both
+-- sides so the comparison cannot turn into a test of this file's encoding.
+local RESET_TAIL = "  \u{00B7}  00:00 UTC"
+local CHECK_MARK = "\u{2713}"
+
+-- Codex's uploaded art, by milestone. Asserted here rather than read out of the
+-- module: a test that took the id from the code under test would pass whatever
+-- the code happened to hold.
+local ICON_ID = {
+	[5] = "rbxassetid://93116899475472",
+	[15] = "rbxassetid://120211340805188",
+	[35] = "rbxassetid://126728249949579",
+}
+local CARD_TOP_COLOR = {
+	[5] = Color3.fromRGB(255, 205, 60),
+	[15] = Color3.fromRGB(80, 220, 255),
+	[35] = Color3.fromRGB(150, 90, 230),
+}
+local CARD_BOTTOM_COLOR = {
+	[5] = Color3.fromRGB(255, 150, 30),
+	[15] = Color3.fromRGB(40, 120, 220),
+	[35] = Color3.fromRGB(60, 200, 140),
+}
+local CLAIM_READY = Color3.fromRGB(70, 200, 90)
+
+local function cardOf(host, minutes) return host:find("Milestone" .. tostring(minutes)) end
+local function partOf(host, minutes, name)
+	return cardOf(host, minutes):FindFirstChild(name)
+end
+
+-- Nothing on this page may still name the retired supply fiction. Walks the
+-- whole tree, because the eyebrow used to be a label like any other.
+local function forbiddenCopy(host)
+	for _, node in ipairs(descendants(host.Page)) do
+		local text = tostring(node.Text or "")
+		if string.find(text, "SUPPLY", 1, true) or string.find(text, "Supply", 1, true)
+			or string.find(text, "ZYNTRA", 1, true) then
+			return node.Name .. ": " .. text
+		end
+	end
+	return nil
+end
 '''
 
 
 TESTS = r'''
--- ══ 1. a fresh day ════════════════════════════════════════════════════════
+-- ══ 1. a fresh day, and the card the owner asked for ══════════════════════
 do
 	local host = newHost()
 	local handle = mount(host)
@@ -479,14 +551,16 @@ do
 	end
 	check(not keys.Wheel, "and the Wheel is NOT one of them any more")
 
-	-- The MODAL owns its own name: the Daily Rewards Client prints the eyebrow
-	-- and the title in its title bar, and the terminal prints its own. A page
-	-- title here would be the same two words twice, 40px apart.
-	expect(findByName(host.Page, "Title"), nil, "the page draws no title of its own")
-	expect(findByName(host.Page, "Eyebrow"), nil, "and no eyebrow of its own")
-	expect(host:find("ResetNote").Text, "Resets 00:00 UTC", "the UTC boundary is stated")
-	expect(host:find("ResetCountdown").Text, "RESETS IN 05:12:33",
-		"the countdown is drawn from SecondsToReset")
+	-- THE HOST OWNS THE MODAL'S IDENTITY. The gift, the title and the X are the
+	-- Daily Rewards Client's header bar; a second copy of any of them here would
+	-- be the same thing twice, 40px apart, in two files that lay out separately.
+	for _, name in ipairs({"Title", "HeaderTitle", "Eyebrow", "RewardsHeader",
+		"HeaderGift", "CloseButton"}) do
+		expect(findByName(host.Page, name), nil, "the page draws no " .. name .. " of its own")
+	end
+
+	expect(host:find("ResetCountdown").Text, "RESETS IN 05:12:33" .. RESET_TAIL,
+		"one strip carries the countdown and the UTC boundary it counts to")
 	expect(host:find("PlaytimeReadout").Text, "ACTIVE PLAY TODAY  0:00",
 		"a fresh day has no active play")
 	expect(host:find("ProgressCaption").Text, "5:00 to the 5 minute reward",
@@ -494,27 +568,49 @@ do
 	expect(host:find("ProgressTrack"):FindFirstChild("Fill").Size.SX, 0,
 		"the progress fill is empty at zero seconds")
 
-	expect(host:find("Milestone5"):FindFirstChild("CardTitle").Text, "5 MINUTES", "5 minute card")
-	expect(host:find("Milestone15"):FindFirstChild("CardTitle").Text, "15 MINUTES", "15 minute card")
-	expect(host:find("Milestone35"):FindFirstChild("CardTitle").Text, "35 MINUTES", "35 minute card")
-	expect(host:find("Milestone5"):FindFirstChild("CardReward").Text, "1 Research Token",
-		"5 minutes pays a token")
-	expect(host:find("Milestone15"):FindFirstChild("CardReward").Text, "1 Speed Potion",
-		"15 minutes pays a potion")
-	expect(host:find("Milestone35"):FindFirstChild("CardReward").Text, "1 Entity Shield",
-		"35 minutes pays a shield charge")
+	-- The card: threshold, the product's own art, the reward, the state.
+	for _, minutes in ipairs({5, 15, 35}) do
+		expect(partOf(host, minutes, "Threshold").Text, tostring(minutes) .. " MIN",
+			minutes .. ": the threshold is stated in minutes")
+		local icon = partOf(host, minutes, "RewardIcon")
+		check(icon ~= nil and icon.ClassName == "ImageLabel",
+			minutes .. ": the reward art is an ImageLabel")
+		expect(icon.Image, ICON_ID[minutes], minutes .. ": wearing Codex's uploaded art")
+		expect(icon.ScaleType, Enum.ScaleType.Fit,
+			minutes .. ": Fit, so the motif is never stretched or cropped")
+		expect(icon.BackgroundTransparency, 1, minutes .. ": over the card, not on a plate")
+		local ramp = cardOf(host, minutes):FindFirstChildOfClass("UIGradient")
+		check(ramp ~= nil, minutes .. ": the card carries a gradient")
+		expect(ramp.Color.Value[1].C, CARD_TOP_COLOR[minutes], minutes .. ": from its own colour")
+		expect(ramp.Color.Value[2].C, CARD_BOTTOM_COLOR[minutes], minutes .. ": to its own colour")
+		-- A UIGradient MULTIPLIES BackgroundColor3. A card left dark underneath
+		-- would render the warm ramp as a slightly-less-dark card.
+		expect(cardOf(host, minutes).BackgroundColor3, Color3.fromRGB(255, 255, 255),
+			minutes .. ": and is white underneath so the ramp reads as authored")
+		expect(partOf(host, minutes, "ClaimedCheck").Visible, false,
+			minutes .. ": nothing is claimed on a fresh day")
+		expect(partOf(host, minutes, "ClaimedLabel").Visible, false,
+			minutes .. ": and the word CLAIMED is not drawn either")
+	end
+	expect(partOf(host, 5, "RewardName").Text, "1 Research Token", "5 minutes pays a token")
+	expect(partOf(host, 15, "RewardName").Text, "1 Speed Potion", "15 minutes pays a potion")
+	expect(partOf(host, 35, "RewardName").Text, "1 Entity Shield", "35 minutes pays a shield charge")
+	expect(partOf(host, 5, "ClaimedCheck"):FindFirstChild("CheckMark").Text, CHECK_MARK,
+		"the claimed badge is a tick")
 
 	for _, case in ipairs({{"Playtime5", "5:00 TO GO"}, {"Playtime15", "15:00 TO GO"},
 		{"Playtime35", "35:00 TO GO"}}) do
 		local action = buttonFor(host, case[1])
 		expect(action.Text, case[2], case[1] .. " is locked with its remaining time")
 		expect(action.Active, false, case[1] .. " cannot be pressed while locked")
+		expect(action.Visible, true, case[1] .. " is still drawn, so the wait is legible")
 	end
 
 	expect(wheelRemnant(host), nil, "the page builds no wheel instance at all")
 	expect(host:find("WheelNote").Text,
 		"Spin the Lucky Wheel from its own button on the left rail.",
 		"and says where the wheel went instead")
+	expect(forbiddenCopy(host), nil, "nothing on the page still names the supply fiction")
 	expect(#host.Actions, 0, "drawing the page sends nothing to the server")
 	expect(tweensCreated, 0, "the page creates no tweens at rest")
 	handle.destroy()
@@ -556,29 +652,46 @@ do
 	expect(host:find("PlaytimeReadout").Text, "ACTIVE PLAY TODAY  4:59", "4:59 played")
 
 	host:push({PlaytimeSeconds = 300})
-	expect(buttonFor(host, "Playtime5").Text, "CLAIM", "five minutes unlocks the claim")
-	expect(buttonFor(host, "Playtime5").Active, true, "and it is reachable")
+	local ready = buttonFor(host, "Playtime5")
+	expect(ready.Text, "CLAIM", "five minutes unlocks the claim")
+	expect(ready.Active, true, "and it is reachable")
+	expect(ready.BackgroundColor3, CLAIM_READY, "a ready CLAIM is the bright green one")
 	expect(buttonFor(host, "Playtime15").Text, "10:00 TO GO", "the next one is still locked")
+	check(buttonFor(host, "Playtime15").BackgroundColor3 ~= CLAIM_READY,
+		"and a locked one is not")
 	expect(host:find("ProgressCaption").Text, "10:00 to the 15 minute reward",
 		"the caption moves to the next milestone")
 
 	host:push({PlaytimeSeconds = 300, Claimed = {["5"] = true}})
-	expect(buttonFor(host, "Playtime5").Text, "CLAIMED", "a claimed milestone says so")
-	expect(buttonFor(host, "Playtime5").Active, false, "and cannot be claimed twice")
+	expect(partOf(host, 5, "ClaimedCheck").Visible, true, "a claimed card shows the tick")
+	expect(partOf(host, 5, "ClaimedLabel").Visible, true, "and says CLAIMED in words")
+	expect(partOf(host, 5, "ClaimedLabel").Text, "CLAIMED", "in those words")
+	expect(buttonFor(host, "Playtime5").Visible, false, "and the button is hidden, not relabelled")
+	expect(buttonFor(host, "Playtime5").Active, false, "so it cannot be claimed twice")
+	expect(partOf(host, 15, "ClaimedCheck").Visible, false, "the other cards are untouched")
 
 	host:push({PlaytimeSeconds = 2100})
-	expect(buttonFor(host, "Playtime5").Text, "CLAIM", "35 minutes clears the five")
-	expect(buttonFor(host, "Playtime15").Text, "CLAIM", "35 minutes clears the fifteen")
-	expect(buttonFor(host, "Playtime35").Text, "CLAIM", "35 minutes clears the thirty-five")
+	for _, minutes in ipairs({5, 15, 35}) do
+		expect(buttonFor(host, "Playtime" .. minutes).Text, "CLAIM",
+			"35 minutes clears the " .. minutes)
+		expect(buttonFor(host, "Playtime" .. minutes).Visible, true,
+			"and the " .. minutes .. " button is back from the claimed state")
+		expect(partOf(host, minutes, "ClaimedCheck").Visible, false,
+			"with the " .. minutes .. " tick taken down again")
+	end
 	expect(host:find("ProgressTrack"):FindFirstChild("Fill").Size.SX, 1,
 		"the progress bar is full at the last milestone")
 	expect(host:find("ProgressCaption").Text, "Every milestone reached today.",
 		"with nothing left, the caption says so")
 
 	host:push({PlaytimeSeconds = 4000, Claimed = {["5"] = true, ["15"] = true, ["35"] = true}})
-	for _, key in ipairs({"Playtime5", "Playtime15", "Playtime35"}) do
-		expect(buttonFor(host, key).Text, "CLAIMED", key .. " is claimed for the day")
-		expect(buttonFor(host, key).Active, false, key .. " is out of the input stack")
+	for _, minutes in ipairs({5, 15, 35}) do
+		expect(partOf(host, minutes, "ClaimedCheck").Visible, true,
+			minutes .. " is claimed for the day")
+		expect(buttonFor(host, "Playtime" .. minutes).Visible, false,
+			minutes .. " has no button left to press")
+		expect(buttonFor(host, "Playtime" .. minutes).Active, false,
+			minutes .. " is out of the input stack")
 	end
 	expect(host:find("PlaytimeReadout").Text, "ACTIVE PLAY TODAY  1:06:40",
 		"past an hour the readout grows an hours field")
@@ -605,6 +718,8 @@ do
 	expect(host:find("PlaytimeReadout").Text, "ACTIVE PLAY TODAY  0:00",
 		"yesterday's seconds are not today's")
 	expect(buttonFor(host, "Playtime5").Text, "5:00 TO GO", "yesterday's claim does not carry over")
+	expect(buttonFor(host, "Playtime5").Active, false, "and the fresh card is locked, not pressable")
+	expect(partOf(host, 5, "ClaimedCheck").Visible, false, "and yesterday's tick comes down")
 	expect(wheelRemnant(host), nil, "and yesterday's recorded prize draws nothing")
 	handle.destroy()
 end
@@ -613,26 +728,28 @@ end
 do
 	local host = newHost()
 	local handle = mount(host)
-	expect(host:find("ResetCountdown").Text, "RESETS IN 05:12:33", "the anchored countdown")
+	expect(host:find("ResetCountdown").Text, "RESETS IN 05:12:33" .. RESET_TAIL,
+		"the anchored countdown")
 	advance(61)
-	expect(host:find("ResetCountdown").Text, "RESETS IN 05:11:32",
+	expect(host:find("ResetCountdown").Text, "RESETS IN 05:11:32" .. RESET_TAIL,
 		"61 seconds of real time takes 61 seconds off the countdown")
 	-- Hidden: the ticker stops redrawing. The clock underneath is server time,
 	-- so the countdown is correct again the moment the page comes back.
 	host.Visible = false
 	advance(120)
-	expect(host:find("ResetCountdown").Text, "RESETS IN 05:11:32",
+	expect(host:find("ResetCountdown").Text, "RESETS IN 05:11:32" .. RESET_TAIL,
 		"a page nobody is looking at does not redraw")
 	host.Visible = true
 	advance(1)
-	expect(host:find("ResetCountdown").Text, "RESETS IN 05:09:31",
+	expect(host:find("ResetCountdown").Text, "RESETS IN 05:09:31" .. RESET_TAIL,
 		"and it catches up from the clock, not from what it drew last")
 	-- A push re-anchors it, which is what keeps it from drifting.
 	host:push({SecondsToReset = 65})
-	expect(host:find("ResetCountdown").Text, "RESETS IN 00:01:05", "a push re-anchors the countdown")
+	expect(host:find("ResetCountdown").Text, "RESETS IN 00:01:05" .. RESET_TAIL,
+		"a push re-anchors the countdown")
 	local before = host.Refreshes
 	advance(66)
-	expect(host:find("ResetCountdown").Text, "RESETS IN 00:00:00", "it floors at zero")
+	expect(host:find("ResetCountdown").Text, "RESETS IN 00:00:00" .. RESET_TAIL, "it floors at zero")
 	expect(host.Refreshes, before + 1, "reaching the reset RE-READS the profile once")
 	advance(10)
 	expect(host.Refreshes, before + 1, "and asks exactly once, not once a second")
@@ -652,6 +769,7 @@ do
 	expect(host.Actions[1].Payload.Minutes, 5, "carrying the milestone it belongs to")
 	expect(claim.Text, "CLAIMING...", "the button says what it is waiting for")
 	expect(claim.Active, false, "and is out of the input stack until it is answered")
+	expect(claim.Visible, true, "still drawn, because the wait is the message")
 	claim.Activated:Fire()
 	claim.Activated:Fire()
 	expect(#host.Actions, 1, "a second and third press send nothing")
@@ -661,8 +779,8 @@ do
 	expect(other.Text, "8:20 TO GO", "the fifteen is still locked at 6:40")
 
 	host:push({PlaytimeSeconds = 400, Claimed = {["5"] = true}})
-	expect(claim.Text, "CLAIMED", "the push is the answer")
-	expect(claim.Active, false, "and a claimed milestone stays out of the stack")
+	expect(partOf(host, 5, "ClaimedCheck").Visible, true, "the push is the answer")
+	expect(claim.Visible, false, "and the button gives way to the tick")
 	advance(8)
 	expect(#host.Status, 0, "the timeout does not fire for a request that was answered")
 	expect(host.Refreshes, 0, "and nothing is re-read needlessly")
@@ -688,6 +806,7 @@ do
 	expect(host.Refreshes, 1, "and the page RE-READS rather than guessing")
 	expect(claim.Text, "CLAIM", "the control comes back")
 	expect(claim.Active, true, "reachable, so the player can retry")
+	expect(claim.BackgroundColor3, CLAIM_READY, "and green again")
 	expect(#host.Actions, 1, "the recovery itself sends nothing")
 	claim.Activated:Fire()
 	expect(#host.Actions, 2, "and a retry is a genuine second request")
@@ -705,11 +824,12 @@ do
 	expect(buttonFor(host, "Playtime15").Text, "15:00 TO GO", "not yet re-read")
 	handle.refresh()
 	expect(buttonFor(host, "Playtime15").Text, "CLAIM", "refresh() re-renders from the profile")
-	expect(host:find("ResetCountdown").Text, "RESETS IN 01:01:01",
+	expect(host:find("ResetCountdown").Text, "RESETS IN 01:01:01" .. RESET_TAIL,
 		"and re-anchors the countdown too")
 
 	local scroll = host.Page.Children[1]
 	expect(scroll.Name, "DailyRewards", "the page drew one root inside the frame it was given")
+	expect(#host.Page.Children, 1, "and exactly one, so the host's frame stays its own")
 	handle.destroy()
 	expect(heartbeat:Count(), listeners - 1, "destroy() disconnects the ticker")
 	expect(host.Disconnects, 1, "and the profile subscription")
@@ -723,13 +843,14 @@ do
 end
 
 -- ══ 14. fit: four viewports, measured ═════════════════════════════════════
--- ONE COLUMN AT EVERY TIER since #104: the wheel was the second column, and a
--- half-width card beside an empty half is not a composition.
+-- ONE ROW OF THREE everywhere except a phone held upright, where three cards
+-- across 330px of content box would be 100px each -- narrower than the art they
+-- exist to show. That tier gets one horizontal card per row instead.
 local FITS = {
-	{Name = "phone portrait 390x844", Fit = PHONE_PORTRAIT},
-	{Name = "phone landscape 844x390", Fit = PHONE_LANDSCAPE},
-	{Name = "tablet 1024x768", Fit = TABLET},
-	{Name = "pointer 1280x720", Fit = POINTER},
+	{Name = "phone portrait 390x844", Fit = PHONE_PORTRAIT, Column = true},
+	{Name = "phone landscape 844x390", Fit = PHONE_LANDSCAPE, Column = false},
+	{Name = "tablet 1024x768", Fit = TABLET, Column = false},
+	{Name = "pointer 1280x720", Fit = POINTER, Column = false},
 }
 for _, entry in ipairs(FITS) do
 	local fit, name = entry.Fit, entry.Name
@@ -739,31 +860,78 @@ for _, entry in ipairs(FITS) do
 	host:layout(fit)
 
 	local scroll = host.Page.Children[1]
-	local playtime = host:find("PlaytimeSection")
-	local header = host:find("RewardsHeader")
+	local body = host:find("PlaytimeSection")
+	local strip = host:find("CountdownStrip")
 
-	for _, part in ipairs({header, playtime}) do
-		check(part.Position.OX + part.Size.OX <= fit.ContentWidth,
-			name .. ": " .. part.Name .. " ends inside the content box")
-		check(part.Position.OX >= 0, name .. ": " .. part.Name .. " starts inside it")
+	for _, part in ipairs({strip, body, host:find("PlayStrip")}) do
+		local left = offsetWithin(part, scroll)
+		check(left >= 0 and left + part.Size.OX <= fit.ContentWidth,
+			name .. ": " .. part.Name .. " spans " .. tostring(left) .. ".."
+			.. tostring(left + part.Size.OX) .. " inside " .. tostring(fit.ContentWidth))
 		check(part.Size.OX > 0 and part.Size.OY > 0,
 			name .. ": " .. part.Name .. " has a real rectangle")
 	end
-	expect(playtime.Position.OX, 0, name .. ": one column, flush with the left edge")
-	expect(playtime.Size.OX, fit.ContentWidth - 8,
-		name .. ": and it takes the full content width less the scrollbar")
+	expect(body.Position.OX, 0, name .. ": the body is flush with the left edge")
+	expect(body.Size.OX, fit.ContentWidth - 8,
+		name .. ": and takes the full content width less the scrollbar")
 	expect(wheelRemnant(host), nil, name .. ": nothing of the wheel is drawn at this tier")
-	local bottom = playtime.Position.OY + playtime.Size.OY
+	expect(forbiddenCopy(host), nil, name .. ": and nothing names the supply fiction")
+	local bottom = body.Position.OY + body.Size.OY
 	check(scroll.CanvasSize.OY >= bottom,
 		name .. ": the canvas reaches the last row (" .. tostring(scroll.CanvasSize.OY)
 		.. " >= " .. tostring(bottom) .. ")")
 
+	-- The three cards, in the arrangement this tier calls for.
+	local previous = nil
+	for _, minutes in ipairs({5, 15, 35}) do
+		local card = cardOf(host, minutes)
+		local left, top = offsetWithin(card, scroll)
+		check(left >= 0 and left + card.Size.OX <= fit.ContentWidth,
+			name .. ": card " .. minutes .. " spans " .. tostring(left) .. ".."
+			.. tostring(left + card.Size.OX) .. " inside " .. tostring(fit.ContentWidth))
+		check(top >= 0 and top + card.Size.OY <= scroll.CanvasSize.OY,
+			name .. ": card " .. minutes .. " is inside the scrollable canvas")
+		if previous then
+			if entry.Column then
+				expect(card.Position.OX, previous.Position.OX,
+					name .. ": a column keeps every card on the same left edge")
+				check(card.Position.OY >= previous.Position.OY + previous.Size.OY,
+					name .. ": and stacks card " .. minutes .. " under the one before it")
+			else
+				expect(card.Position.OY, previous.Position.OY,
+					name .. ": a row keeps every card on the same top edge")
+				check(card.Position.OX >= previous.Position.OX + previous.Size.OX,
+					name .. ": and sets card " .. minutes .. " beside the one before it")
+			end
+		end
+		previous = card
+
+		local icon = partOf(host, minutes, "RewardIcon")
+		expect(icon.Size.OX, icon.Size.OY, name .. ": card " .. minutes .. "'s icon is square")
+		check(icon.Size.OX >= 56, name .. ": card " .. minutes .. "'s icon is "
+			.. tostring(icon.Size.OX) .. "px, the floor is 56")
+		-- The icon is the dominant element -- 45% of the card -- unless the host
+		-- handed the page so little height that it has been squeezed to the floor,
+		-- in which case the body scrolls instead of shrinking the art further.
+		check(icon.Size.OY * 100 >= card.Size.OY * 45 or icon.Size.OY == 56,
+			name .. ": card " .. minutes .. "'s icon is " .. tostring(icon.Size.OY)
+			.. " of " .. tostring(card.Size.OY))
+		local ix, iy = offsetWithin(icon, card)
+		check(ix >= 0 and ix + icon.Size.OX <= card.Size.OX,
+			name .. ": card " .. minutes .. "'s icon fits horizontally")
+		check(iy >= 0 and iy + icon.Size.OY <= card.Size.OY,
+			name .. ": card " .. minutes .. "'s icon fits vertically")
+
+		local badge = partOf(host, minutes, "ClaimedCheck")
+		local bx, by = offsetWithin(badge, card)
+		check(bx >= 0 and bx + badge.Size.OX <= card.Size.OX,
+			name .. ": card " .. minutes .. "'s tick cannot hang off the card")
+		check(by >= 0 and by + badge.Size.OY <= card.Size.OY,
+			name .. ": card " .. minutes .. "'s tick stays on it vertically")
+	end
+
 	-- Every card action: drawn, inside the box, and at the tap floor on touch.
 	for _, card in ipairs(host.Cards) do
-		local left = offsetWithin(card.Card, scroll)
-		check(left >= 0 and left + card.Card.Size.OX <= fit.ContentWidth,
-			name .. ": card " .. card.Key .. " spans " .. tostring(left) .. ".."
-			.. tostring(left + card.Card.Size.OX) .. " inside " .. tostring(fit.ContentWidth))
 		local action = card.Action
 		local actionLeft, actionTop = offsetWithin(action, scroll)
 		check(action.Size.OX > 0 and action.Size.OY > 0,
@@ -772,10 +940,10 @@ for _, entry in ipairs(FITS) do
 			name .. ": " .. card.Key .. "'s action ends inside the content box")
 		check(actionTop >= 0 and actionTop + action.Size.OY <= scroll.CanvasSize.OY,
 			name .. ": " .. card.Key .. "'s action is inside the scrollable canvas")
+		check(action.Size.OY >= 44,
+			name .. ": " .. card.Key .. "'s CLAIM is " .. tostring(action.Size.OY)
+			.. "px tall, the floor is 44 at every tier")
 		if fit.Touch then
-			check(action.Size.OY >= 44,
-				name .. ": " .. card.Key .. "'s action is " .. tostring(action.Size.OY)
-				.. "px tall, the floor is 44")
 			check(action.Size.OX >= 44,
 				name .. ": " .. card.Key .. "'s action is " .. tostring(action.Size.OX)
 				.. "px wide, the floor is 44")
@@ -795,15 +963,15 @@ for _, entry in ipairs(FITS) do
 	check(counted >= 12, name .. ": the page draws its full set of copy (" .. counted .. ")")
 	check(smallest >= 11, name .. ": the smallest face is " .. tostring(smallest) .. "px")
 
-	-- Every label in the section stays inside the section it belongs to. The
-	-- one-column collapse widened `inner`, so this is the arithmetic that would
-	-- catch a rectangle still sized against the old half-width column.
-	for _, node in ipairs(descendants(playtime)) do
+	-- Every label stays inside the card or strip it belongs to. This is the
+	-- arithmetic that catches a rectangle still sized against the previous tier.
+	for _, node in ipairs(descendants(body)) do
 		if node.ClassName == "TextLabel" or node.ClassName == "TextButton" then
-			local left = offsetWithin(node, playtime)
-			check(left >= 0 and left + node.Size.OX <= playtime.Size.OX,
+			local left = offsetWithin(node, node.Parent)
+			check(left >= 0 and left + node.Size.OX <= node.Parent.Size.OX,
 				name .. ": " .. node.Name .. " spans " .. tostring(left) .. ".."
-				.. tostring(left + node.Size.OX) .. " inside " .. tostring(playtime.Size.OX))
+				.. tostring(left + node.Size.OX) .. " inside its parent "
+				.. tostring(node.Parent.Size.OX))
 		end
 	end
 	handle.destroy()
@@ -824,6 +992,18 @@ do
 end
 
 do
+	-- A host with no SetInteractive at all still hides the claimed button: the
+	-- page falls back to Visible/Active rather than leaving a dead control up.
+	local host = newHost()
+	host.ctx.UIDevice = {SetEnabled = function(element, enabled) element.Active = enabled end}
+	local handle = mount(host)
+	host:push({PlaytimeSeconds = 400, Claimed = {["5"] = true}})
+	expect(buttonFor(host, "Playtime5").Visible, false, "the claimed button is hidden anyway")
+	expect(buttonFor(host, "Playtime5").Active, false, "and cannot be pressed")
+	handle.destroy()
+end
+
+do
 	-- A server without the config cannot honour a claim, so the page says so
 	-- rather than offering a control that does nothing.
 	local host = newHost()
@@ -835,8 +1015,9 @@ do
 	check(findByName(host.Page, "RewardsOffline") ~= nil, "the page states that it is offline")
 	expect(host:find("PlaytimeSection").Visible, false, "and draws no playtime controls")
 	expect(wheelRemnant(host), nil, "and there was no wheel to hide in the first place")
-	expect(host:find("ResetNote").Text, "Resets 00:00 UTC",
+	expect(host:find("ResetCountdown").Text, "RESETS IN 05:12:33" .. RESET_TAIL,
 		"the countdown strip still reads correctly")
+	expect(forbiddenCopy(host), nil, "and the offline page names no supply fiction either")
 	handle.destroy()
 end
 

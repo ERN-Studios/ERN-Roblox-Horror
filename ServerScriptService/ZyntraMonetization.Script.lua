@@ -416,6 +416,11 @@ local function newProfile()
 		StaminaLevel = 0,
 		BatteryLevel = 0,
 		CompletedLevels = 0,
+		-- FRIEND_BOOST_20260916. The part of a Friend Boost that has been earned
+		-- but not yet paid, in TENTHS of a token (0..9). +10% of a 2-token clear
+		-- is 0.2 of a token, so without this a one-friend boost would round to
+		-- nothing every single time; with it, the fifth clear pays the whole token.
+		FriendBoostTenths = 0,
 		-- Which levels have been cleared at least once (string keys so the
 		-- DataStore never turns this into a sparse array), and which badges have
 		-- already been handed out. The badge set is what makes an award
@@ -470,6 +475,13 @@ local function normalizeProfile(data)
 	data.StaminaLevel = math.max(0, math.floor(tonumber(data.StaminaLevel) or 0))
 	data.BatteryLevel = math.max(0, math.floor(tonumber(data.BatteryLevel) or 0))
 	data.CompletedLevels = math.max(0, math.floor(tonumber(data.CompletedLevels) or 0))
+	-- FRIEND_BOOST_20260916. The unpaid fraction of a Friend Boost, in tenths of
+	-- a token. Range-tested rather than clamped: a NaN and a hand-edited 999 both
+	-- fail the test and reset to 0, where math.clamp would have propagated the NaN
+	-- straight into the token balance.
+	local friendBoostTenths = math.floor(tonumber(data.FriendBoostTenths) or 0)
+	data.FriendBoostTenths = (friendBoostTenths >= 0 and friendBoostTenths <= 9)
+		and friendBoostTenths or 0
 	-- Both sets are rebuilt from a KNOWN key set, so a corrupt or hand-edited
 	-- save can neither grow the profile without bound nor claim a badge that
 	-- this build does not know about. Numeric level keys from an older write are
@@ -709,6 +721,9 @@ local function publicProfile(data, player)
 		StaminaPercent = data.StaminaLevel * PERCENT_PER_LEVEL,
 		BatteryPercent = data.BatteryLevel * PERCENT_PER_LEVEL,
 		CompletedLevels = data.CompletedLevels,
+		-- The unpaid tenth-of-a-token remainder, carried so the client can see it
+		-- exists. It is NOT a balance and no UI spends it.
+		FriendBoostTenths = data.FriendBoostTenths,
 		-- Carried so campaign progress is observable from a client without
 		-- reading the DataStore; nothing in the UI consumes it yet.
 		LevelsCleared = data.LevelsCleared,
@@ -3373,16 +3388,40 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 	end
 end)
 
-levelCompletedEvent.Event:Connect(function(player, level)
+levelCompletedEvent.Event:Connect(function(player, level, friendCount)
 	if not player or not player:IsA("Player") or not sessions[player] then return end
-	-- GameManager fires this once per escapee with the level they just cleared.
+	-- GameManager fires this once per escapee with the level they just cleared and
+	-- how many of that round's OTHER participants are verified friends of theirs
+	-- (ServerScriptService.FriendBoost counts them; it is never a client's claim).
 	local cleared = math.floor(tonumber(level) or 0)
 	local tracked = cleared >= 1 and cleared <= 3
+	local base = Config.LevelCompletionTokens
+	-- The count is a bounded loop result from FriendBoost, so anything outside a
+	-- sane range -- NaN, infinity, a negative -- is a caller bug, and it pays no
+	-- boost rather than poisoning a token balance with a non-finite number. The
+	-- range test is a sanity bound, NOT a cap on the bonus: the owner asked for
+	-- none, and a real party cannot approach it.
+	local counted = math.floor(tonumber(friendCount) or 0)
+	local friends = (counted >= 0 and counted < 1e6) and counted or 0
+	local boostPercent = friends * Config.FriendBoost.PercentPerFriend
 	mutate(player, function(data)
-		data.Tokens += Config.LevelCompletionTokens
+		-- FRIEND_BOOST_20260916. The boost is counted in TENTHS of a token and the
+		-- remainder rides on the profile, so +10% of a 2-token clear (0.2) builds
+		-- up instead of rounding away: one friend pays a whole extra token on the
+		-- fifth clear, five friends pay one every clear. This is the ONLY
+		-- multiplier on completion tokens -- nothing else touches them.
+		local tenths = data.FriendBoostTenths + base * boostPercent / 10
+		local bonus = math.floor(tenths / 10)
+		data.FriendBoostTenths = tenths % 10
+		data.Tokens += base + bonus
 		data.CompletedLevels += 1
 		if tracked then data.LevelsCleared[tostring(cleared)] = true end
-		return true, ("+%d Zyntra Research Tokens for completing the level."):format(Config.LevelCompletionTokens), "success"
+		local message = ("+%d Zyntra Research Tokens for completing the level."):format(base + bonus)
+		if friends > 0 then
+			message = ("+%d Zyntra Research Tokens for completing the level (Friend Boost +%d%%).")
+				:format(base + bonus, boostPercent)
+		end
+		return true, message, "success"
 	end)
 	if not tracked then return end
 	-- Badges hang off the write above rather than replacing it: awardBadge is
