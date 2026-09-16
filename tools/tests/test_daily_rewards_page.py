@@ -454,9 +454,12 @@ local function fitFor(viewportWidth, viewportHeight, touch)
 		TabMinWidth = compact and 88 or 110}
 end
 -- 390x844 phone, 844x390 phone, 1024x768 tablet and 1280x720 desktop, each
--- already reduced to the modal viewport UIDevice would hand the shell.
+-- already reduced to the modal viewport UIDevice would hand the shell. The
+-- landscape row is the one that was MEASURED rather than derived: Studio at
+-- 844x390 with the UIDevice overrides gives a 720x316 panel and a 696x214
+-- content box, which is 22px tighter than this file first assumed.
 local PHONE_PORTRAIT = fitFor(358, 774, true)
-local PHONE_LANDSCAPE = fitFor(812, 338, true)
+local PHONE_LANDSCAPE = fitFor(812, 316, true)
 local TABLET = fitFor(992, 716, true)
 local POINTER = fitFor(1248, 668, false)
 
@@ -846,11 +849,19 @@ end
 -- ONE ROW OF THREE everywhere except a phone held upright, where three cards
 -- across 330px of content box would be 100px each -- narrower than the art they
 -- exist to show. That tier gets one horizontal card per row instead.
+-- `Tight` is the phone held sideways: one merged strip, no progress caption and
+-- the shorter card. `AboveFold` is the promise that CLAIM can be pressed without
+-- scrolling -- true everywhere except the portrait column, which is a list by
+-- design and scrolls like one.
 local FITS = {
-	{Name = "phone portrait 390x844", Fit = PHONE_PORTRAIT, Column = true},
-	{Name = "phone landscape 844x390", Fit = PHONE_LANDSCAPE, Column = false},
-	{Name = "tablet 1024x768", Fit = TABLET, Column = false},
-	{Name = "pointer 1280x720", Fit = POINTER, Column = false},
+	{Name = "phone portrait 390x844", Fit = PHONE_PORTRAIT, Column = true,
+		Tight = false, AboveFold = false},
+	{Name = "phone landscape 844x390", Fit = PHONE_LANDSCAPE, Column = false,
+		Tight = true, AboveFold = true},
+	{Name = "tablet 1024x768", Fit = TABLET, Column = false,
+		Tight = false, AboveFold = true},
+	{Name = "pointer 1280x720", Fit = POINTER, Column = false,
+		Tight = false, AboveFold = true},
 }
 for _, entry in ipairs(FITS) do
 	local fit, name = entry.Fit, entry.Name
@@ -863,13 +874,38 @@ for _, entry in ipairs(FITS) do
 	local body = host:find("PlaytimeSection")
 	local strip = host:find("CountdownStrip")
 
-	for _, part in ipairs({strip, body, host:find("PlayStrip")}) do
+	local play = host:find("PlayStrip")
+	local parts = entry.Tight and {body, play} or {strip, body, play}
+	for _, part in ipairs(parts) do
 		local left = offsetWithin(part, scroll)
 		check(left >= 0 and left + part.Size.OX <= fit.ContentWidth,
 			name .. ": " .. part.Name .. " spans " .. tostring(left) .. ".."
 			.. tostring(left + part.Size.OX) .. " inside " .. tostring(fit.ContentWidth))
 		check(part.Size.OX > 0 and part.Size.OY > 0,
 			name .. ": " .. part.Name .. " has a real rectangle")
+	end
+
+	-- The strips: two rows on every tier but the phone held sideways, where the
+	-- countdown moves into the play strip and shares its one row.
+	local clock = host:find("ResetCountdown")
+	expect(strip.Visible, not entry.Tight, name .. ": the countdown strip's own row")
+	expect(host:find("ProgressCaption").Visible, not entry.Tight,
+		name .. ": the progress caption")
+	if entry.Tight then
+		expect(clock.Parent, play, name .. ": the countdown shares the play strip's row")
+		expect(clock.TextXAlignment, Enum.TextXAlignment.Right,
+			name .. ": pushed to the right of it, with the played time on the left")
+		expect(clock.Text, "RESETS IN 05:12:33",
+			name .. ": and shortened, because it no longer has a row to itself")
+		check(play.Size.OY <= 44, name .. ": the merged strip is "
+			.. tostring(play.Size.OY) .. "px, the ceiling is 44")
+		expect(offsetWithin(body, scroll), 0, name .. ": and it starts at the top of the scroll")
+		local _, playTop = offsetWithin(play, scroll)
+		expect(playTop, 0, name .. ": with nothing above it")
+	else
+		expect(clock.Parent, strip, name .. ": the countdown keeps its own strip")
+		expect(clock.Text, "RESETS IN 05:12:33" .. RESET_TAIL,
+			name .. ": with room for the UTC boundary it counts to")
 	end
 	expect(body.Position.OX, 0, name .. ": the body is flush with the left edge")
 	expect(body.Size.OX, fit.ContentWidth - 8,
@@ -943,6 +979,16 @@ for _, entry in ipairs(FITS) do
 		check(action.Size.OY >= 44,
 			name .. ": " .. card.Key .. "'s CLAIM is " .. tostring(action.Size.OY)
 			.. "px tall, the floor is 44 at every tier")
+		-- REACHABLE WITHOUT SCROLLING. The portrait column is a list and scrolls
+		-- like one; every other tier has to land the whole state row inside the
+		-- box the host handed the page, or the one control the card exists for
+		-- is a flick away on the tier where a thumb covers half the screen.
+		if entry.AboveFold then
+			check(actionTop + action.Size.OY <= fit.ContentHeight,
+				name .. ": " .. card.Key .. "'s CLAIM ends at "
+				.. tostring(actionTop + action.Size.OY) .. ", the fold is "
+				.. tostring(fit.ContentHeight))
+		end
 		if fit.Touch then
 			check(action.Size.OX >= 44,
 				name .. ": " .. card.Key .. "'s action is " .. tostring(action.Size.OX)

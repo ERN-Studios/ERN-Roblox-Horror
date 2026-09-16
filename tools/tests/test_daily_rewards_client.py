@@ -328,8 +328,18 @@ local function viewport(name, left, top, right, bottom, touch)
 end
 local POINTER = viewport("pointer 1280x720", 16, 44, 1264, 712, false)
 local PHONE_PORTRAIT = viewport("phone portrait 390x844", 16, 52, 374, 826, true)
-local PHONE_LANDSCAPE = viewport("phone landscape 844x390", 16, 44, 828, 382, true)
+-- MEASURED, not derived: Studio at 844x390 with the UIDevice overrides gives a
+-- 720x316 panel and a 696x214 content box, 22px tighter than this file first
+-- assumed. It is the tier where CLAIM was one flick below the fold.
+local PHONE_LANDSCAPE = viewport("phone landscape 844x390", 16, 44, 828, 360, true)
 local TABLET = viewport("tablet 1024x768", 16, 44, 1008, 760, true)
+-- Whether CLAIM must be pressable without scrolling. The portrait phone is a
+-- list of three full-width cards and scrolls like one; everything else has to
+-- fit the state row inside the content box.
+POINTER.ClaimAboveFold = true
+PHONE_PORTRAIT.ClaimAboveFold = false
+PHONE_LANDSCAPE.ClaimAboveFold = true
+TABLET.ClaimAboveFold = true
 local VIEWPORTS = {POINTER, PHONE_PORTRAIT, PHONE_LANDSCAPE, TABLET}
 
 local TODAY, YESTERDAY = "2026-09-16", "2026-09-15"
@@ -1135,12 +1145,33 @@ for _, layout in ipairs(VIEWPORTS) do
 	local sx = offsetWithin(section, ctx.Content)
 	check(sx >= 0 and sx + section.Size.OX <= ctx.Content.Size.OX,
 		name .. ": and it fits the content frame the shell gave it")
+	-- The phone held sideways gets ONE strip: the countdown moves in beside the
+	-- play readout so the three cards start 52px down instead of 126px down.
+	local clock = findByName(ctx.Content, "ResetCountdown")
+	local play = findByName(ctx.Content, "PlayStrip")
+	local merged = layout == PHONE_LANDSCAPE
+	expect(clock.Parent == play, merged,
+		name .. ": the countdown shares the play strip's row only when it has to")
+	if merged then
+		check(play.Size.OY <= 44, name .. ": the merged strip is "
+			.. tostring(play.Size.OY) .. "px, the ceiling is 44")
+		expect(findByName(ctx.Content, "CountdownStrip").Visible, false,
+			name .. ": with no row of its own left")
+	end
+
 	for _, minutes in ipairs({5, 15, 35}) do
 		local action = claimButton(ctx, minutes)
 		check(action ~= nil, name .. ": the " .. minutes .. " minute card has a CLAIM")
-		local ax = offsetWithin(action, ctx.Content)
+		local ax, ay = offsetWithin(action, ctx.Content)
 		check(ax >= 0 and ax + action.Size.OX <= ctx.Content.Size.OX,
 			name .. ": " .. minutes .. "'s CLAIM ends inside the content frame")
+		if layout.ClaimAboveFold then
+			check(ay + action.Size.OY <= ctx.Content.Size.OY,
+				name .. ": " .. minutes .. "'s CLAIM ends at "
+				.. tostring(ay + action.Size.OY) .. ", the fold is "
+				.. tostring(ctx.Content.Size.OY) .. " -- it must be pressable"
+				.. " without scrolling")
+		end
 		if layout.IsTouch then
 			check(action.Size.OY >= 44,
 				name .. ": " .. minutes .. "'s CLAIM is " .. tostring(action.Size.OY)

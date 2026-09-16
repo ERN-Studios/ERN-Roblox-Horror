@@ -444,3 +444,29 @@ Also landed 2026-08-19 (Studio first, then mirrored, manifest updated):
   (credits Dragonfire1710, boatbomber), not project code and not a backup.
 - Testing vs production values are documented in README.md; every one of them is
   currently at its production setting.
+
+### Added 2026-09-16 (evening; record in `artifacts/wheel-shop-refresh-20260916/`)
+
+- **Lucky Wheel is a full-screen takeover** (`Lucky Wheel Client`): while `LuckyWheelOpen` is
+  true every OTHER ScreenGui in PlayerGui is disabled, kept disabled if it re-enables itself
+  (NoiseReporter's StaminaGui does, on every layout pass) and restored on close/respawn. The disc
+  is the texture `rbxassetid://86770264881525` with five EQUAL 72-degree fields, config order
+  Token1 (12 o'clock), Token3, Potion1, Potion2, Shield1; the server weights are only the odds
+  text. SPIN is the hub button; a tap while spinning skips.
+- **Shop v4** (`LobbyShopDisplay`): eight 3.4-stud six-face hologram boxes at relative z
+  -66 + 52/7·i along the right wall between the Level 2 and Level 4 gates (post edges rel z
+  -69.45 / -10.55), centre x 30.2, y 7.0 (4.65 studs of headroom), invisible plates at x 27.78.
+  The `ZyntraSupplyKiosk`, shopkeeper, access terminal, `ZyntraShopPrompt`, deck, sign, nameplates,
+  projectors and the Daily Rewards plaque are GONE; the ZyntraStore terminal opens only from the
+  left rail. The client keeps re-collecting boxes until it holds `ShopItemCount` of them (the model
+  replicates before its children). Bob stands still under ReduceFlashing/ReduceCameraShake.
+- **Friend Boost** (`ServerScriptService.FriendBoost`, `Friend Boost Client`): +10% completion
+  tokens per verified Roblox friend (`IsFriendsWith`, pair cache, only definitive answers cached)
+  who was a participant of the SAME round; `zyntraLevelCompleted:Fire(player, level, friendCount)`;
+  ZyntraMonetization keeps the unpaid fraction as profile `FriendBoostTenths` (0..9). GameManager
+  `WaitForChild`s the module: install it before pushing GameManager to a place that lacks it.
+  Replicated Player attributes `FriendBoostFriends` / `FriendBoostPercent` drive the lobby chip.
+- **Daily Rewards** page/client redesigned around Codex's four images (gift 117126194981100,
+  token 93116899475472, potion 120211340805188, shield 126728249949579); milestones and claims
+  unchanged. Studio's Device Simulator still reports a mouse and keyboard, so touch tiers only
+  show there with `workspace:SetAttribute("ForceTouchUI", true)`.

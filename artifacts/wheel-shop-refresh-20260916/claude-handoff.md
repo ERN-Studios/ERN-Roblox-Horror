@@ -1,13 +1,13 @@
 # Wheel / Shop / Rewards / Friend Boost refresh — handoff (Claude, manager)
 
-Clock: Windows clock, local = UTC + 2. State at 23:05 UTC, 16 September 2026.
+Clock: Windows clock, local = UTC + 2. State at 23:25 UTC, 16 September 2026.
 
 ## What is in Studio right now (== repo working copy, audit 145/145)
 
 | Area | Files (repo mirror) | Offline checks |
 |---|---|---|
 | Lucky Wheel takeover | `StarterPlayer/StarterPlayerScripts/Lucky Wheel Client.LocalScript.lua` | test_lucky_wheel_client 524 |
-| Daily Rewards | `ReplicatedStorage/ZyntraDailyRewardsPage.ModuleScript.lua`, `StarterPlayer/StarterPlayerScripts/Daily Rewards Client.LocalScript.lua` | test_daily_rewards_page 480, test_daily_rewards_client 488 (follow-up for landscape phones pending, see below) |
+| Daily Rewards | `ReplicatedStorage/ZyntraDailyRewardsPage.ModuleScript.lua`, `StarterPlayer/StarterPlayerScripts/Daily Rewards Client.LocalScript.lua` | test_daily_rewards_page 508, test_daily_rewards_client 503 |
 | Shop wall | `ServerScriptService/LobbyShopDisplay.ModuleScript.lua` (v4), `StarterPlayer/StarterPlayerScripts/Shop Display Client.LocalScript.lua`, `ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua` (kiosk removed) | test_lobby_shop_display 2896, test_lobby_palette 828 |
 | Friend Boost | NEW `ServerScriptService/FriendBoost.ModuleScript.lua`, NEW `StarterPlayer/StarterPlayerScripts/Friend Boost Client.LocalScript.lua`, `ServerScriptService/GameManager.Script.lua` (4 call sites), `ServerScriptService/ZyntraMonetization.Script.lua` (profile field + payout), `ReplicatedStorage/ZyntraConfig.ModuleScript.lua` (`FriendBoost = {PercentPerFriend = 10}`) | test_friend_boost 318, test_token_grants 243 |
 
@@ -45,8 +45,8 @@ Agent reports: `agent-wheel-report.md`, `agent-daily-report.md`, `agent-shop-rep
   CLAIM; touch takeover hides StaminaGui/RUN and restores it.
 
 ## Open / pending
-- A-DAILY follow-up (landscape phones: CLAIM visible without scrolling) — being applied, will be
-  pushed and re-measured before handing over.
+- (done 23:20 UTC) Landscape phones: the countdown folds into the play strip and the cards shrink
+  to 162 so CLAIM sits inside the 214-px content box (measured 286 <= 294 at 844x390).
 - Real-device pass (iPhone emulator / phone), the two-account Friend Boost test and the final
   approval are the OWNER's (see `owner-test-checklist.md`). Note: Studio's Device Simulator still
   reports a mouse and keyboard, so set `workspace:SetAttribute("ForceTouchUI", true)` in the

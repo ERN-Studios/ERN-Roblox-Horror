@@ -708,7 +708,8 @@ function Page.mount(page, ctx)
 		else
 			cardWidth = math.floor((usable - gap * 2) / 3)
 			-- Everything on the card that is NOT the icon.
-			local chrome = pad + thresholdHeight + 4 + 4 + nameHeight + 6 + buttonHeight + pad
+			local chrome = cardPad + thresholdHeight + 4 + 4 + nameHeight + nameGap
+				+ buttonHeight + cardPad
 			-- icon / (chrome + icon) = ICON_SHARE, solved for icon, then capped by
 			-- whatever height the host actually handed us. Under the cap the body
 			-- scrolls rather than shrinking the one thing the card exists to show.
@@ -738,13 +739,13 @@ function Page.mount(page, ctx)
 			else
 				card.Position = UDim2.fromOffset((index - 1) * (cardWidth + gap), y)
 				iconX = math.floor((cardWidth - iconSize) / 2)
-				iconY = pad + thresholdHeight + 4
-				textLeft = pad
-				textWidth = math.max(44, cardWidth - pad * 2)
+				iconY = cardPad + thresholdHeight + 4
+				textLeft = cardPad
+				textWidth = math.max(44, cardWidth - cardPad * 2)
 				milestone.Threshold.TextXAlignment = Enum.TextXAlignment.Center
 				milestone.Name.TextXAlignment = Enum.TextXAlignment.Center
-				milestone.Threshold.Position = UDim2.fromOffset(pad, pad)
-				milestone.Name.Position = UDim2.fromOffset(pad, iconY + iconSize + 4)
+				milestone.Threshold.Position = UDim2.fromOffset(cardPad, cardPad)
+				milestone.Name.Position = UDim2.fromOffset(cardPad, iconY + iconSize + 4)
 			end
 			card.Size = UDim2.fromOffset(cardWidth, cardHeight)
 			milestone.Threshold.Size = UDim2.fromOffset(textWidth, thresholdHeight)
@@ -761,7 +762,7 @@ function Page.mount(page, ctx)
 			milestone.Check.Size = UDim2.fromOffset(checkSize, checkSize)
 			milestone.CheckMark.TextSize = math.max(14, math.floor(checkSize * 0.6))
 
-			local stateTop = cardHeight - pad - buttonHeight
+			local stateTop = cardHeight - cardPad - buttonHeight
 			milestone.Button.Position = UDim2.fromOffset(textLeft, stateTop)
 			milestone.Button.Size = UDim2.fromOffset(textWidth, buttonHeight)
 			milestone.Button.TextSize = face.Name + 3

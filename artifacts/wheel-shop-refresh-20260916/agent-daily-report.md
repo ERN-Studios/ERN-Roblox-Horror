@@ -135,3 +135,62 @@ close paths and the `UIRegressionDailyRewardsProbe` (its `cards` string is byte-
 3. **`ProgressCaption` and the two footer notes were kept.** The contract does not mention
    them; they are the only place the page states that lobby time and spectating do not
    count, and where the wheel went. Easy to delete if the owner wants the page barer.
+
+---
+
+## Follow-up (coordinator's 844x390 Studio measurement)
+
+The landscape finding was correct, and the root cause was in my fixture as well as
+in the layout: both suites modelled the landscape modal viewport as **338 px** tall
+where Studio gives **316**. Both fixtures now carry the measured number, so the offline
+run reproduces the Studio panel exactly — `panel 720x316, header bar 56, content 696x214`.
+
+**Tier 1 landscape only** (`fit.Compact and fit.Touch and Width > Height`, and not the
+offline branch). Everything else — portrait, tablet, pointer — is byte-identical to the
+first pass; the desktop composition the coordinator approved is untouched.
+
+| | before | after |
+|---|---|---|
+| countdown strip | own 28 px row + 10 gap | folded into the play strip, `Visible = false`, 0 tall |
+| play strip | 75 (readout + track + caption) | **42**: readout left, `RESETS IN HH:MM:SS` right-aligned, 4 px track under both |
+| progress caption | drawn | `Visible = false` (each card's `Threshold` already prints 5/15/35 MIN) |
+| cards start at | y 126 | **y 52** |
+| card | 222x178 | **222x162** (pad 8, threshold 18, icon 56, name 16, 4, CLAIM 44) |
+| CLAIM bottom edge | 262 of a 214 box | **206 of a 214 box** |
+| footer notes | — | unchanged, scroll below (canvas 293) |
+
+Implementation notes: there is still exactly **one** `ResetCountdown` label — `layout()`
+moves it between `CountdownStrip` and `PlayStrip` rather than drawing a second one, so
+there is one place that keeps the clock honest. Its text drops the `· 00:00 UTC` tail on
+that tier (`compactClock`), re-rendered the instant the tier changes rather than at the
+next 1 Hz tick, guarded on the flag actually changing so a rotation cannot re-enter
+`render()`. The tight tier shrinks only the AIR (`cardPad`, `thresholdHeight`,
+`nameHeight`, `nameGap`) — every text FACE is unchanged, so nothing drops under 11 px.
+
+**Tests.** Page 480 -> **508**, client 488 -> **503**. New: the merged strip on the
+844x390 tier (countdown reparented to `PlayStrip`, right-aligned, no UTC tail, strip
+<= 44 tall, body starting at scroll y 0, countdown strip hidden), the two-strip form
+still asserted on every other tier, and — the contract the coordinator asked for — every
+`ClaimButton`'s bottom edge `<= fit.ContentHeight` on landscape, tablet and pointer
+(`AboveFold` / `ClaimAboveFold`), in BOTH suites. The portrait column is explicitly
+exempt: it is a list of three full-width cards and scrolls like one.
+
+```
+python tools/tests/test_daily_rewards_page.py     -> 508 checks passed
+python tools/tests/test_daily_rewards_client.py   -> 503 checks passed
+luau-compile.exe --binary <both .lua files>       -> OK
+python tools/tests/test_zyntra_store_compact.py   -> 540 checks (unchanged)
+```
+
+Measured after the change, through the real shell:
+
+| viewport | panel | content | card | icon | CLAIM bottom | canvas |
+|---|---|---|---|---|---|---|
+| phone portrait 390x844 | 358x640 | 334x538 | 326x150 | 126 | 584 (list, scrolls) | 675 |
+| phone landscape 844x390 | 720x316 | 696x214 | 222x162 | 56 | **206** | 293 |
+| tablet 1024x768 | 720x640 | 680x514 | 216x239 | 108 | 365 | 465 |
+| pointer 1280x720 | 720x640 | 680x514 | 214x251 | 113 | 386 | 495 |
+
+Open question 1 in the section above is now closed. Open questions 2 (the 56 px icon
+floor in landscape, now 35% of a 162 card) and 3 (the kept notes and caption) stand,
+and the caption is now dropped on the landscape tier only.
