@@ -516,63 +516,136 @@ local function addDonationLeaderboard(parent, center)
 	divider.BorderSizePixel = 0
 	divider.Parent = background
 
-	local scope = Instance.new("TextLabel")
-	scope.Name = "RecordedSupportScope"
-	scope.Position = UDim2.fromOffset(20, 366)
-	scope.Size = UDim2.new(1, -40, 0, 18)
-	scope.BackgroundTransparency = 1
-	scope.Font = Enum.Font.Code
-	scope.Text = "INCLUDES VERIFIED HISTORICAL PURCHASES"
-	scope.TextColor3 = Color3.fromRGB(215, 205, 165)
-	scope.TextSize = 15
-	scope.TextXAlignment = Enum.TextXAlignment.Center
-	scope.Parent = background
+	-- Trello #100 deleted the "INCLUDES VERIFIED HISTORICAL PURCHASES" footer.
+	-- What it described still exists as the RankingScope attribute on the model
+	-- above, which is where the audit reads it from; the 26 px it occupied pays
+	-- for the taller row plates below.
 
-	-- 10 rows between the divider (92) and the footer (366). Pitch 26 with a
-	-- 24 px plate leaves the last row ending at 356. The widest row
-	-- ZyntraMonetization can publish is a rank, a 20-character name, the two
-	-- separators and a six-digit amount: 41 monospace characters. At TextSize 20
-	-- that is 492 px inside the 496 px the plate leaves after its padding, so no
-	-- supporter's name is ever clipped.
-	local rowLabels = {}
+	-- 10 rows between the divider (92) and the bottom margin. Pitch 27 with a
+	-- 25 px plate puts the last plate's foot at 366, leaving 26 px clear of the
+	-- 392 canvas so no row reaches the background's 16 px corner radius.
+	--
+	-- Each row is a frame of three fixed-offset columns instead of one centred
+	-- string (Trello #100): a long name can no longer shove the rank or the
+	-- amount sideways, so all ten ranks and all ten amounts line up down the
+	-- board. Columns leave a 16 px gap after the rank and 12 px before the
+	-- amount, and the outer 12 px match the canvas margin on both sides.
+	-- Code is monospace at ~0.6 em, so at TextSize 20 the 324 px name column
+	-- holds 27 characters -- more than Roblox allows in a name, and more than
+	-- the 23 of "NO SUPPORT RECORDED YET". The 140 px amount column holds
+	-- "999,999 R$" outright; a seven-digit total is 4 px wider, and because the
+	-- column is right aligned that overhang lands in the 12 px gap and still
+	-- stops 8 px short of the name column.
+	local rows = {}
 	for rank = 1, 10 do
-		local row = Instance.new("TextLabel")
+		local row = Instance.new("Frame")
 		row.Name = string.format("Rank%02d", rank)
-		row.Position = UDim2.fromOffset(20, 98 + (rank - 1) * 26)
-		row.Size = UDim2.new(1, -40, 0, 24)
+		row.Position = UDim2.fromOffset(0, 98 + (rank - 1) * 27)
+		row.Size = UDim2.new(1, 0, 0, 25)
 		row.BackgroundColor3 = rank % 2 == 1 and Color3.fromRGB(15, 25, 22) or Color3.fromRGB(10, 17, 15)
 		row.BackgroundTransparency = 0.12
 		row.BorderSizePixel = 0
-		row.Font = Enum.Font.Code
-		row.Text = rank == 1 and "NO SUPPORT RECORDED YET" or ""
-		row.TextColor3 = rank <= 3 and Color3.fromRGB(236, 224, 165) or Color3.fromRGB(201, 225, 214)
-		row.TextSize = 20
-		row.TextXAlignment = Enum.TextXAlignment.Center
 		row.Parent = background
-		local padding = Instance.new("UIPadding")
-		padding.PaddingLeft = UDim.new(0, 12)
-		padding.PaddingRight = UDim.new(0, 12)
-		padding.Parent = row
 		local corner = Instance.new("UICorner")
 		corner.CornerRadius = UDim.new(0, 6)
 		corner.Parent = row
-		rowLabels[rank] = row
+
+		local tint = rank <= 3 and Color3.fromRGB(236, 224, 165) or Color3.fromRGB(201, 225, 214)
+		local function column(name, offsetX, width, alignment)
+			local label = Instance.new("TextLabel")
+			label.Name = name
+			label.Position = UDim2.fromOffset(offsetX, 0)
+			label.Size = UDim2.new(0, width, 1, 0)
+			label.BackgroundTransparency = 1
+			label.BorderSizePixel = 0
+			label.Font = Enum.Font.Code
+			label.Text = ""
+			label.TextColor3 = tint
+			label.TextSize = 20
+			label.TextXAlignment = alignment
+			label.TextYAlignment = Enum.TextYAlignment.Center
+			label.Parent = row
+			return label
+		end
+
+		local entry = {
+			Rank = column("Rank", 12, 44, Enum.TextXAlignment.Right),
+			Name = column("Name", 72, 324, Enum.TextXAlignment.Left),
+			Robux = column("Robux", 408, 140, Enum.TextXAlignment.Right),
+		}
+		-- A name longer than the column is cut with an ellipsis rather than
+		-- allowed to run under the amount; the clip is the belt to that brace.
+		entry.Name.TextTruncate = Enum.TextTruncate.AtEnd
+		entry.Name.ClipsDescendants = true
+		-- Pre-bind state is the old board's: a message, no rank, no amount.
+		entry.Name.Text = rank == 1 and "NO SUPPORT RECORDED YET" or ""
+		rows[rank] = entry
 	end
+
+	-- Thousands separator without a locale, and the one place a hostile number
+	-- (a NaN, an infinity, a float) could otherwise throw inside a changed
+	-- handler and leave a row frozen on stale text.
+	local function robuxText(amount)
+		if type(amount) ~= "number" or amount ~= amount or math.abs(amount) >= 1e15 then return "" end
+		local digits = string.format("%d", math.floor(amount))
+		local replaced
+		repeat
+			digits, replaced = string.gsub(digits, "^(-?%d+)(%d%d%d)", "%1,%2")
+		until replaced == 0
+		return digits .. " R$"
+	end
+
+	-- One renderer, three sources. Preferred: the Rank/Name/Robux attributes
+	-- ZyntraMonetization publishes beside the string. Fallback: the legacy
+	-- single string "01   NAME   •   1234 R$" it published before them, so the
+	-- board still reads correctly against a server that has not been updated
+	-- (the bullet is three UTF-8 bytes, none of them pattern magic). Anything
+	-- else -- "", "NO SUPPORT RECORDED YET" -- is a message, not a ranking, and
+	-- goes in the name column alone so nothing implies a rank or an amount that
+	-- was never published.
+	local function renderRow(entry, value, text)
+		local rank = value:GetAttribute("Rank")
+		local name = value:GetAttribute("Name")
+		local robux = value:GetAttribute("Robux")
+		if type(rank) ~= "number" then
+			local legacyRank, legacyName, legacyRobux = string.match(text, "^(%d+)%s+(.-)%s+•%s+(%d+) R%$$")
+			rank, name, robux = tonumber(legacyRank), legacyName, tonumber(legacyRobux)
+		end
+		if type(rank) == "number" and rank == rank and rank >= 1 and rank <= 99 then
+			entry.Rank.Text = string.format("%02d", math.floor(rank))
+			entry.Name.Text = type(name) == "string" and name or ""
+			entry.Robux.Text = robuxText(robux)
+		else
+			entry.Rank.Text = ""
+			entry.Name.Text = text
+			entry.Robux.Text = ""
+		end
+	end
+
+	-- The contract with ZyntraMonetization: these three attributes on Row01..10.
+	local ROW_ATTRIBUTES = {"Rank", "Name", "Robux"}
 
 	task.spawn(function()
 		local values = ReplicatedStorage:WaitForChild("ZyntraDonationLeaderboard", 15)
 		if not values or not model.Parent then return end
 		local connections = {}
-		local function bind(value, render)
+		-- Attribute writes do not fire Changed on the value, so a row also has
+		-- to listen to the three attributes it renders from.
+		local function bind(value, render, attributes)
 			if not value or not value:IsA("StringValue") then return end
 			render(value.Value)
-			connections[#connections + 1] = value:GetPropertyChangedSignal("Value"):Connect(function()
+			local function update()
 				if model.Parent then render(value.Value) end
-			end)
+			end
+			connections[#connections + 1] = value:GetPropertyChangedSignal("Value"):Connect(update)
+			for _, attribute in ipairs(attributes or {}) do
+				connections[#connections + 1] = value:GetAttributeChangedSignal(attribute):Connect(update)
+			end
 		end
 		bind(values:FindFirstChild("Status"), function(value) status.Text = value end)
-		for rank, label in ipairs(rowLabels) do
-			bind(values:FindFirstChild(string.format("Row%02d", rank)), function(value) label.Text = value end)
+		for rank, entry in ipairs(rows) do
+			local value = values:FindFirstChild(string.format("Row%02d", rank))
+			bind(value, function(text) renderRow(entry, value, text) end, ROW_ATTRIBUTES)
 		end
 		connections[#connections + 1] = model.AncestryChanged:Connect(function(_, newParent)
 			if newParent then return end
@@ -2305,12 +2378,11 @@ local function addSupplyKiosk(parent, center)
 		)
 	end
 
-	-- Recessed merchandise bays use recognizable field gear instead of colored
-	-- blocks. The displays are deliberately non-interactive; the real purchase
-	-- entry point remains the single audited terminal below.
+	-- Recessed supply bays share the existing audited purchase paths.
+	-- LobbyShopDisplay adds interactive Speed Potion and Route Marker crates.
 	local productBays = {
-		{ z = -5.7, title = "LUMEN KIT", subtitle = "FIELD LIGHT // MK II", accent = cyan },
-		{ z = 0, title = "SIGNAL KIT", subtitle = "TEAM COMMS // SYNC", accent = amber },
+		{ z = -5.7, title = "SPEED POTION", subtitle = "FIELD SUPPLY // TOKENS", accent = cyan },
+		{ z = 0, title = "ROUTE MARKERS", subtitle = "TEAM DIRECTIONS // TOKENS", accent = amber },
 		{ z = 5.7, title = "RECOVERY", subtitle = "EMERGENCY // RE-ENTRY", accent = red },
 	}
 	for index, bay in ipairs(productBays) do
@@ -2364,44 +2436,8 @@ local function addSupplyKiosk(parent, center)
 		addBoard(card, Enum.NormalId.Left, bay.title, bay.subtitle, bay.accent)
 	end
 
-	-- Physical product silhouettes.
-	local flashlightBody = shopPart(
-		"DisplayLumenFlashlight",
-		offsetCF(30.75, 5.35, -5.7),
-		Vector3.new(1.75, 0.62, 0.62),
-		metalLight,
-		Enum.Material.Metal,
-		0,
-		true
-	)
-	flashlightBody.Shape = Enum.PartType.Cylinder
-	local flashlightLens = shopPart(
-		"DisplayLumenLens",
-		offsetCF(29.84, 5.35, -5.7),
-		Vector3.new(0.16, 0.72, 0.72),
-		cyan,
-		Enum.Material.Neon,
-		0.04,
-		true
-	)
-	flashlightLens.Shape = Enum.PartType.Cylinder
-	shopPart("DisplayLumenGrip", offsetCF(30.92, 4.92, -5.7, 0, 0, -18), Vector3.new(0.45, 0.92, 0.48), metal, Enum.Material.Metal, 0, true)
-
-	local radio = shopPart(
-		"DisplaySignalRadio",
-		offsetCF(30.72, 5.4, 0),
-		Vector3.new(1.25, 1.65, 1.75),
-		metalLight,
-		Enum.Material.Metal,
-		0,
-		true
-	)
-	shopPart("DisplaySignalScreen", offsetCF(30.06, 5.56, 0), Vector3.new(0.08, 0.62, 1.14), cyan, Enum.Material.Neon, 0.12, true)
-	shopPart("DisplaySignalAntenna", offsetCF(30.72, 6.72, -0.58, 0, 0, 8), Vector3.new(0.14, 1.25, 0.14), metalLight, Enum.Material.Metal, 0, true)
-	for zDot = -1, 1 do
-		shopPart("DisplaySignalDial", offsetCF(30.02, 4.95, zDot * 0.45), Vector3.new(0.12, 0.24, 0.24), amber, Enum.Material.Neon, 0, true).Shape = Enum.PartType.Cylinder
-	end
-
+	-- The first two bays receive the real token-product crates and inspect
+	-- interactions from LobbyShopDisplay. Recovery keeps its existing silhouette.
 	local recoveryCase = shopPart(
 		"DisplayRecoveryCase",
 		offsetCF(30.74, 5.35, 5.7),

@@ -209,6 +209,206 @@ local function recoverProtectionReservation(data, ownerId)
 	return true
 end
 
+-- ---------------------------------------------------------------------------
+-- Stored items, daily counters and field notes
+-- ---------------------------------------------------------------------------
+-- The two stored consumables. One spelling serves as the profile field, the
+-- Config.Items key, the BuyItem payload and the ZyntraInventory key; do not
+-- introduce a second. EntityShield is deliberately NOT one of them: its charges
+-- live in Protection.Charges and only applyReward may add one there.
+local ITEM_KEYS = {"SpeedPotion", "RouteMarker"}
+local ITEM_CONFIG = Config.Items or {}
+local DAILY_REWARDS = Config.DailyRewards or {}
+
+-- The clock every day comparison goes through, in one place so a test can pin
+-- "today" and "now". Nothing else in this file reads the date.
+local dailyClock = {
+	day = function() return os.date("!%Y-%m-%d") end,
+	now = os.time,
+}
+local function utcDay() return dailyClock.day() end
+local function secondsToReset()
+	local now = math.max(0, math.floor(tonumber(dailyClock.now()) or 0))
+	return 86400 - now % 86400
+end
+
+-- A whole count a player can actually spend, or zero. Same rule the support
+-- amounts use, so a hand-edited save cannot put a fraction, a NaN or a string
+-- into an inventory.
+local function wholeCount(value)
+	return isSafeSupportAmount(value) and value or 0
+end
+
+-- Rebuilt from the KNOWN key set on every load, exactly like LevelsCleared and
+-- AwardedBadges: a corrupt save can neither grow the inventory without bound nor
+-- introduce an item this build has no way to spend.
+local function normalizeItems(value)
+	local saved = type(value) == "table" and value or {}
+	local items = {}
+	for _, key in ipairs(ITEM_KEYS) do items[key] = wholeCount(saved[key]) end
+	return items
+end
+
+-- Today's counters. Day is the UTC day they belong to; when it no longer
+-- matches, rollDaily below resets them inside whatever transaction reads them
+-- next, so the roll can never be lost between a read and its write. WheelDay is
+-- NOT part of that reset: it records the day of the last spin and is compared to
+-- today directly. FlushId is the identity of the last playtime flush that landed
+-- and is what makes a re-sent flush add nothing a second time.
+local function normalizeDaily(value)
+	local saved = type(value) == "table" and value or {}
+	local function savedDay(field)
+		local day = saved[field]
+		return type(day) == "string" and #day == 10 and day or nil
+	end
+	local claimed = {}
+	local savedClaimed = type(saved.Claimed) == "table" and saved.Claimed or {}
+	for _, milestone in ipairs(DAILY_REWARDS.Milestones or {}) do
+		local key = tostring(milestone.Minutes)
+		if savedClaimed[key] == true then claimed[key] = true end
+	end
+	local wheelDay = savedDay("WheelDay")
+	local wheelLast
+	local savedLast = type(saved.WheelLast) == "table" and saved.WheelLast or nil
+	if savedLast and type(savedLast.Key) == "string"
+		and #savedLast.Key > 0 and #savedLast.Key <= 64 then
+		local lastDay = savedLast.Day
+		wheelLast = {
+			Day = type(lastDay) == "string" and #lastDay == 10 and lastDay or wheelDay,
+			Key = savedLast.Key,
+			Serial = wholeCount(savedLast.Serial),
+		}
+	end
+	local flushId = saved.FlushId
+	return {
+		-- Deliberately left nil when a save has none: "these counters belong to no
+		-- day yet" is exactly right for a profile written before daily rewards
+		-- existed, and the first daily transaction rolls it onto today. Reading the
+		-- clock here instead would make normalization depend on it.
+		Day = savedDay("Day"),
+		PlaytimeSeconds = wholeCount(saved.PlaytimeSeconds),
+		Claimed = claimed,
+		WheelDay = wheelDay,
+		WheelLast = wheelLast,
+		FlushId = type(flushId) == "string" and #flushId > 0 and #flushId <= 128 and flushId or nil,
+	}
+end
+
+-- Discovered note ids, as string keys of a bounded length. Serial only grows, so
+-- a UI can tell one discovery from the next without diffing the whole set.
+local function normalizeFieldNotes(value)
+	local saved = type(value) == "table" and value or {}
+	local discovered = {}
+	local savedDiscovered = type(saved.Discovered) == "table" and saved.Discovered or {}
+	for key, flag in pairs(savedDiscovered) do
+		if flag == true and type(key) == "string" and #key > 0 and #key <= 32 then
+			discovered[key] = true
+		end
+	end
+	return {Discovered = discovered, Serial = wholeCount(saved.Serial)}
+end
+
+-- Resets the counters that belong to a day that has already passed. Returns
+-- whether it changed anything, because a caller that goes on to refuse must know
+-- whether this transform has already touched the profile.
+local function rollDaily(data, today)
+	local daily = data.Daily
+	if daily.Day == today then return false end
+	daily.Day = today
+	daily.PlaytimeSeconds = 0
+	daily.Claimed = {}
+	return true
+end
+
+-- The one place a reward turns into profile state, shared by the playtime
+-- milestones and the wheel so a prize cannot mean two different things in two
+-- places. Returns a short human label, or nil when this build cannot pay the
+-- reward -- a caller must read nil as "granted nothing" and refuse.
+local function applyReward(data, reward)
+	if type(reward) ~= "table" then return nil end
+	local amount = wholeCount(reward.Amount)
+	if amount < 1 then return nil end
+	if reward.Kind == "Tokens" then
+		if not isSafeSupportAmount(data.Tokens)
+			or amount > MAX_SAFE_SUPPORT - data.Tokens then return nil end
+		data.Tokens += amount
+		return amount .. (amount == 1 and " Research Token" or " Research Tokens")
+	end
+	if reward.Kind ~= "Item" then return nil end
+	if reward.Key == "EntityShield" then
+		-- A reward is not an inventory OPERATION. It adds a charge and leaves
+		-- Revision and LastOperation exactly as they were, so a buy or use that is
+		-- still in flight keeps its identity and cannot be resolved by this write.
+		-- A Protection table that does not validate is left alone for repair
+		-- rather than being replaced with invented charges.
+		local state = protectionState(data)
+		if not state or amount > MAX_SAFE_SUPPORT - state.Charges then return nil end
+		state.Charges += amount
+		return amount == 1 and "1 Entity Shield charge" or amount .. " Entity Shield charges"
+	end
+	local item = ITEM_CONFIG[reward.Key]
+	local owned = item and data.Items[reward.Key]
+	if not owned or amount > MAX_SAFE_SUPPORT - owned then return nil end
+	data.Items[reward.Key] = owned + amount
+	return amount .. " " .. item.Name .. (amount == 1 and "" or "s")
+end
+
+-- Live playtime accrual, per loaded player: where they were, when they last
+-- moved, and the seconds earned since the last flush landed. Weak keys because
+-- this is session state; finalizePlayerSession clears it explicitly as well.
+local playtimeSessions = setmetatable({}, { __mode = "k" })
+local playtimeSessionSequence = 0
+
+-- Field note content is data, not schema: ZyntraFieldNotes carries the notes and
+-- a place without it simply has no collection. Looked up on each read instead of
+-- captured, so a module added to a running server is picked up, and never with
+-- WaitForChild -- a missing module must not be able to stall a profile push. The
+-- service itself is tested because the offline test harnesses run these blocks
+-- without a DataModel behind them.
+local function fieldNoteEntries()
+	local module = ReplicatedStorage and ReplicatedStorage:FindFirstChild("ZyntraFieldNotes")
+	if not module or not module:IsA("ModuleScript") then return nil end
+	local ok, loaded = pcall(require, module)
+	if not ok or type(loaded) ~= "table" or type(loaded.Notes) ~= "table" then return nil end
+	return loaded.Notes
+end
+
+local function fieldNoteProgress(data)
+	local notes = fieldNoteEntries()
+	local count = 0
+	for _ in pairs(data.FieldNotes.Discovered) do count += 1 end
+	return count, notes and #notes or 0
+end
+
+-- The daily block as the client sees it. PlaytimeSeconds INCLUDES the seconds
+-- this session has earned but not yet flushed, so the page never counts
+-- backwards over a flush, and the counters are presented through the pending day
+-- roll -- yesterday's playtime and claims are already spent, and publishing them
+-- would show a claim button that the transform is guaranteed to refuse.
+local function dailyPublic(data, player)
+	local today = utcDay()
+	local daily = data.Daily
+	local sameDay = daily.Day == today
+	local pending = playtimeSessions[player]
+	local pendingSeconds = pending and pending.day == today and wholeCount(pending.unflushedSeconds) or 0
+	-- mutate publishes before its caller returns. Once this flush is present in
+	-- the saved profile, its seconds are no longer pending in that payload.
+	if sameDay and pending and pending.activeFlushId == daily.FlushId then
+		pendingSeconds = math.max(0, pendingSeconds - wholeCount(pending.activeFlushSeconds))
+	end
+	return {
+		Day = today,
+		Today = today,
+		PlaytimeSeconds = (sameDay and daily.PlaytimeSeconds or 0)
+			+ pendingSeconds,
+		Claimed = sameDay and daily.Claimed or {},
+		WheelDay = daily.WheelDay,
+		WheelLast = daily.WheelLast,
+		SecondsToReset = secondsToReset(),
+		Accruing = pending ~= nil and pending.accruing == true,
+	}
+end
+
 local function newProfile()
 	return {
 		Version = 4,
@@ -224,6 +424,12 @@ local function newProfile()
 		AwardedBadges = {},
 		ReentryCredits = 0,
 		Protection = {Charges = 0, Revision = 0},
+		-- Stored consumables, today's daily counters and the note collection.
+		-- Additive: every one of them normalizes from nil, so schema 4 saves
+		-- written before they existed load without a version bump.
+		Items = {SpeedPotion = 0, RouteMarker = 0},
+		Daily = {PlaytimeSeconds = 0, Claimed = {}},
+		FieldNotes = {Discovered = {}, Serial = 0},
 		DonationRobux = 0,
 		UtilityRobux = 0,
 		-- Game passes and private servers are bought on Roblox's own storefront
@@ -284,6 +490,9 @@ local function normalizeProfile(data)
 	end
 	data.AwardedBadges = awardedBadges
 	data.ReentryCredits = math.max(0, math.floor(tonumber(data.ReentryCredits) or 0))
+	data.Items = normalizeItems(data.Items)
+	data.Daily = normalizeDaily(data.Daily)
+	data.FieldNotes = normalizeFieldNotes(data.FieldNotes)
 	-- Keep the two recorded streams separate. Retired SupportRobux and old
 	-- utility ReceiptIds are not evidence of an additional, uncounted payment.
 	data.DonationRobux = normalizedSupportAmount(data.DonationRobux)
@@ -477,10 +686,24 @@ local function reassertPendingAccessibility(player, data)
 	end
 end
 
-local function publicProfile(data)
+-- `player` is optional and carries only SESSION facts the saved profile cannot
+-- know: the playtime seconds that have not been flushed yet, whether they are
+-- accruing right now, and the speed boost that is running. Called without one
+-- (a profile that is not a live session) those simply read as "none".
+local function publicProfile(data, player)
 	if not data then return nil end
+	local noteCount, noteTotal = fieldNoteProgress(data)
 	local result = {
 		Tokens = data.Tokens,
+		Items = data.Items,
+		Daily = dailyPublic(data, player),
+		FieldNotes = {
+			Discovered = data.FieldNotes.Discovered,
+			Count = noteCount,
+			Total = noteTotal,
+			TitleUnlocked = noteTotal > 0 and noteCount >= noteTotal,
+		},
+		SpeedBoostUntil = player and player:GetAttribute("ZyntraSpeedBoostUntil") or 0,
 		StaminaLevel = data.StaminaLevel,
 		BatteryLevel = data.BatteryLevel,
 		StaminaPercent = data.StaminaLevel * PERCENT_PER_LEVEL,
@@ -517,7 +740,8 @@ local function clearPlayerTags(character)
 	local head = character and character:FindFirstChild("Head")
 	if not head then return end
 	for _, child in ipairs(head:GetChildren()) do
-		if child.Name == "ZyntraSupporterTag" or child.Name == "ZyntraDeveloperTag" then
+		if child.Name == "ZyntraSupporterTag" or child.Name == "ZyntraDeveloperTag"
+			or child.Name == "ZyntraTitleTag" then
 			child:Destroy()
 		end
 	end
@@ -558,11 +782,20 @@ local function refreshPlayerTags(player, character)
 	-- Both tags are lobby badges. Developer identity never grants paid benefits.
 	if player:GetAttribute("InRound") == true then return end
 	local supporter = player:GetAttribute("ZyntraOwnsSupporter") == true
+	local row = 0
 	if supporter then
-		createPlayerTag(head, "ZyntraSupporterTag", "ZYNTRA SUPPORTER", 0)
+		createPlayerTag(head, "ZyntraSupporterTag", "ZYNTRA SUPPORTER", row)
+		row += 1
 	end
 	if DevAccess.IsAllowed(player) then
-		createPlayerTag(head, "ZyntraDeveloperTag", "Developer", if supporter then 1 else 0)
+		createPlayerTag(head, "ZyntraDeveloperTag", "Developer", row)
+		row += 1
+	end
+	-- The field-note completion title. Earned, not bought, and it stacks under
+	-- whatever the player already has rather than replacing it.
+	local title = player:GetAttribute("ZyntraFieldNotesTitle")
+	if type(title) == "string" and #title > 0 then
+		createPlayerTag(head, "ZyntraTitleTag", title, row)
 	end
 end
 
@@ -597,6 +830,16 @@ local function applyAttributes(player, data)
 	player:SetAttribute("ZyntraUtilityRobux", data.UtilityRobux)
 	player:SetAttribute("ZyntraPassRobux", data.PassRobux)
 	player:SetAttribute("ZyntraRecordedSupportRobux", recordedSupportRobux(data))
+	-- Stored consumables are attributes because the HUD reads them every frame it
+	-- draws a slot; the profile packet carries the same numbers for the terminal.
+	player:SetAttribute("ZyntraSpeedPotions", data.Items.SpeedPotion)
+	player:SetAttribute("ZyntraRouteMarkers", data.Items.RouteMarker)
+	-- The completion title is a name-tag row, so it is published as the text to
+	-- draw rather than as a boolean: empty string means "no title".
+	local noteCount, noteTotal = fieldNoteProgress(data)
+	player:SetAttribute("ZyntraFieldNotesTitle",
+		(noteTotal > 0 and noteCount >= noteTotal)
+			and tostring((Config.FieldNotes or {}).CompletionTitle or "") or "")
 	-- Accessibility switches are published under their own bare names because
 	-- that is what the client readers already ask for (ReduceCameraShake,
 	-- ReduceFlashing, CaptionsEnabled, DisableCaptions) -- do not prefix them.
@@ -611,7 +854,7 @@ end
 
 local function enrichedPublicProfile(player)
 	local session = sessions[player]
-	local result = session and publicProfile(session.data) or nil
+	local result = session and publicProfile(session.data, player) or nil
 	if result then
 		result.ProtectionSessionNonce = session.dispatchSessionId
 		result.ProtectionAvailable = not RunService:IsStudio() and session.persistent == true
@@ -947,14 +1190,29 @@ local function supportPlayerName(userId)
 	return "USER " .. tostring(userId)
 end
 
+-- The same row, split into its three columns. The board aligns rank, name and
+-- amount in separate columns and cannot do that by parsing the sentence back
+-- apart; an empty row clears all three. The string above is unchanged, so any
+-- reader that still wants one line keeps working.
+-- The guard is for the offline harnesses in tools/tests, which run this function
+-- against plain-table rows rather than real StringValues.
+local function publishRowColumns(row, rank, name, robux)
+	if typeof(row) ~= "Instance" then return end
+	row:SetAttribute("Rank", rank)
+	row:SetAttribute("Name", name)
+	row:SetAttribute("Robux", robux)
+end
+
 local function publishSupportRows(entries)
 	for rank = 1, SUPPORT_LEADERBOARD_SIZE do
 		local entry = entries[rank]
 		if entry then
 			local name = string.upper(supportPlayerName(entry.UserId))
 			supportRows[rank].Value = string.format("%02d   %s   •   %d R$", rank, name, entry.Value)
+			publishRowColumns(supportRows[rank], rank, name, entry.Value)
 		else
 			supportRows[rank].Value = rank == 1 and "NO SUPPORT RECORDED YET" or ""
+			publishRowColumns(supportRows[rank], nil, nil, nil)
 		end
 	end
 	-- The existing cache preserves absent donors; the audited import also adds
@@ -1789,6 +2047,11 @@ local function refreshPasses(player)
 	player:SetAttribute("ZyntraOwnsSupporter", supporter)
 	player:SetAttribute("ZyntraOwnsAdvancedEquipment", advanced)
 	player:SetAttribute("ZyntraOwnsCosmeticEquipment", cosmetic)
+	for key, pass in pairs(Config.Donations or {}) do
+		if pass.Kind == "GamePass" then
+			player:SetAttribute("ZyntraOwns" .. key, passOwnership(player, key, pass))
+		end
+	end
 
 	if supporter then
 		mutate(player, function(data)
@@ -2427,6 +2690,529 @@ local function queueAccessibilityWrite(player, key, value)
 	end)
 end
 
+-- ---------------------------------------------------------------------------
+-- Daily rewards, stored items and the inventory service
+-- ---------------------------------------------------------------------------
+local DAILY_AFK_GRACE = math.max(1, tonumber(DAILY_REWARDS.AfkGraceSeconds) or 90)
+local DAILY_ACTIVITY_STUDS = math.max(0, tonumber(DAILY_REWARDS.ActivityMinimumStuds) or 1)
+local DAILY_FLUSH_INTERVAL = math.max(5, tonumber(DAILY_REWARDS.FlushIntervalSeconds) or 60)
+
+local function playtimeState(player)
+	local state = playtimeSessions[player]
+	local today = utcDay()
+	if state then
+		if state.day ~= today then
+			state.day = today
+			state.unflushedSeconds = 0
+			state.activeFlushId, state.activeFlushSeconds = nil, nil
+		end
+		return state
+	end
+	playtimeSessionSequence += 1
+	state = {
+		day = today,
+		sessionSequence = playtimeSessionSequence,
+		lastPosition = nil,
+		lastMovedAt = 0,
+		lastFlushAt = 0,
+		unflushedSeconds = 0,
+		flushCount = 0,
+		-- nil, not false: the first tick then always differs and publishes, so a
+		-- player who never earns a second still has the attribute to read.
+		accruing = nil,
+	}
+	playtimeSessions[player] = state
+	return state
+end
+
+-- The identity of ONE flush. It changes only when the seconds it covers are
+-- known to be in the profile, so every retry of the same flush carries the same
+-- id -- which is how a write that committed and lost its response is recognised
+-- instead of being added a second time.
+local function flushIdFor(player, state)
+	return string.format("%s:%d:%d:%d", tostring(game.JobId), player.UserId, state.sessionSequence, state.flushCount)
+end
+
+-- One transaction for everything that touches today's counters. It rolls the
+-- day, folds in the seconds this session has earned since its last flush, and
+-- then runs the caller's own change -- so a claim at exactly five minutes can
+-- never lose the seconds that took it there.
+--
+-- `body(data, today)` returns the same triple a mutate transform does and must
+-- only mutate `data` when it accepts. Returns the BODY's answer, which is not
+-- mutate's: a write that carried nothing but banked playtime is a successful
+-- write and still a refused action.
+local function dailyMutate(player, body)
+	local state = playtimeState(player)
+	local delta, flushId, deltaDay
+	local accepted, banked, proven = false, false, false
+	local committed, message = mutate(player, function(data)
+		-- Snapshot only after mutate owns the existing profile lock. Retain that
+		-- snapshot across UpdateAsync retries, including a lost-response retry.
+		if delta == nil then
+			state = playtimeState(player)
+			delta = state.activeFlushId and state.activeFlushSeconds or wholeCount(state.unflushedSeconds)
+			flushId = state.activeFlushId or flushIdFor(player, state)
+			deltaDay = state.day
+			state.activeFlushId, state.activeFlushSeconds = flushId, delta
+		end
+		accepted, banked, proven = false, false, false
+		local today = utcDay()
+		local rolled = rollDaily(data, today)
+		local already = deltaDay == today and delta > 0 and data.Daily.FlushId == flushId
+		local adding = deltaDay == today and delta > 0 and not already
+			and delta <= MAX_SAFE_SUPPORT - data.Daily.PlaytimeSeconds
+		if adding then
+			data.Daily.PlaytimeSeconds += delta
+			data.Daily.FlushId = flushId
+		end
+		local granted, bodyMessage, tone = body(data, today)
+		accepted = granted == true
+		proven = already
+		banked = already or adding
+		-- A refusal costs a read and not a write -- unless this transform has
+		-- already changed the profile, because cancelling then would adopt a copy
+		-- the store never received. A day roll and banked playtime are both real
+		-- changes and worth the write on their own.
+		if not accepted and not rolled and not adding then
+			return false, bodyMessage, tone
+		end
+		return true, bodyMessage, tone
+	end)
+	-- `committed` is mutate's "the transform reported a change", and the transform
+	-- above reports one whenever it added seconds, so it doubles as proof the
+	-- write landed. `proven` covers the other direction: the profile already held
+	-- this exact flush, which only a previous commit can explain.
+	if delta ~= nil and state.day == deltaDay and ((committed and banked) or proven) then
+		-- Subtract, never zero: seconds that arrived while the write yielded belong
+		-- to the next flush.
+		state.unflushedSeconds = math.max(0, wholeCount(state.unflushedSeconds) - delta)
+		state.flushCount += 1
+		if state.activeFlushId == flushId then
+			state.activeFlushId, state.activeFlushSeconds = nil, nil
+		end
+	elseif delta == 0 and state.activeFlushId == flushId then
+		state.activeFlushId, state.activeFlushSeconds = nil, nil
+	end
+	return committed and accepted, message
+end
+
+local function flushPlaytime(player)
+	local state = playtimeSessions[player]
+	if not state or wholeCount(state.unflushedSeconds) <= 0 then return false end
+	dailyMutate(player, function() return false end)
+	return true
+end
+
+-- Does this second count? Every condition is the contract's. A dead body is not
+-- a living humanoid, which is what keeps spectators and the lobby out without a
+-- separate check for either.
+local function playtimeCounts(player, state, now)
+	if player:GetAttribute("InRound") ~= true then return false end
+	if workspace:GetAttribute("RoundActive") ~= true then return false end
+	if workspace:GetAttribute("RoundLoadingState") ~= "ready" then return false end
+	if player:GetAttribute("Escaped") == true then return false end
+	if player:GetAttribute("Level2_ExitTransition") == true then return false end
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	if not humanoid or not root or humanoid.Health <= 0 then return false end
+	local position = root.Position
+	local last = state.lastPosition
+	if not last or (position - last).Magnitude >= DAILY_ACTIVITY_STUDS then
+		state.lastPosition = position
+		state.lastMovedAt = now
+	end
+	-- Hiding under a table is the one legitimate way to be perfectly still, and
+	-- it is exactly when a player most needs the time to count.
+	if player:GetAttribute("Level3_Hiding") == true then return true end
+	return now - state.lastMovedAt <= DAILY_AFK_GRACE
+end
+
+task.spawn(function()
+	while true do
+		task.wait(1)
+		local now = workspace:GetServerTimeNow()
+		for player, session in pairs(sessions) do
+			if player.Parent and not session.closing then
+				local state = playtimeState(player)
+				local counting = playtimeCounts(player, state, now)
+				-- Only ever add. A second that was earned stays earned: nothing in
+				-- this file subtracts from PlaytimeSeconds except the day roll.
+				if counting then state.unflushedSeconds += 1 end
+				if state.accruing ~= counting then
+					state.accruing = counting
+					player:SetAttribute("ZyntraDailyAccruing", counting)
+				end
+				if counting and state.unflushedSeconds > 0
+					and now - state.lastFlushAt >= DAILY_FLUSH_INTERVAL then
+					state.lastFlushAt = now
+					task.spawn(flushPlaytime, player)
+				end
+			end
+		end
+	end
+end)
+
+-- The speed potion's one-per-round rule needs a round identity, and the same
+-- pair of attribute changes PlayerProtection already treats as a round boundary
+-- is the right one: RoundActive flips between consecutive rounds even when the
+-- level does not, and a direct level change is its own boundary.
+local roundEpoch = 0
+local potionRoundUsed = setmetatable({}, { __mode = "k" })
+local speedBoostTokens = setmetatable({}, { __mode = "k" })
+
+-- The client owns movement speed; this only publishes how much and until when.
+-- Nothing here writes Humanoid.WalkSpeed -- a server that did would fight the
+-- sprint, crouch and stun controllers and would restore a stale value on death.
+local function clearSpeedBoost(player)
+	speedBoostTokens[player] = nil
+	player:SetAttribute("ZyntraSpeedBoostUntil", 0)
+	player:SetAttribute("ZyntraSpeedBoostMultiplier", 1)
+end
+
+local function roundChanged()
+	roundEpoch += 1
+	table.clear(potionRoundUsed)
+	local ended = workspace:GetAttribute("RoundActive") ~= true
+	for player in pairs(sessions) do
+		player:SetAttribute("ZyntraSpeedPotionUsedThisRound", false)
+		clearSpeedBoost(player)
+		-- Bank the round's playtime at the boundary rather than waiting out the
+		-- flush interval; a player who leaves straight from the results screen
+		-- would otherwise lose up to a minute of what they just played.
+		if ended then task.spawn(flushPlaytime, player) end
+	end
+end
+workspace:GetAttributeChangedSignal("RoundActive"):Connect(roundChanged)
+workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(roundChanged)
+
+local function watchSpeedBoost(player)
+	local function characterBoost(character)
+		clearSpeedBoost(player)
+		local humanoid = character:FindFirstChildOfClass("Humanoid")
+			or character:WaitForChild("Humanoid", 10)
+		if humanoid and humanoid:IsA("Humanoid") then
+			humanoid.Died:Connect(function() clearSpeedBoost(player) end)
+		end
+	end
+	player.CharacterAdded:Connect(characterBoost)
+	player.CharacterRemoving:Connect(function() clearSpeedBoost(player) end)
+	player:GetAttributeChangedSignal("InRound"):Connect(function()
+		if player:GetAttribute("InRound") ~= true then clearSpeedBoost(player) end
+	end)
+	clearSpeedBoost(player)
+	player:SetAttribute("ZyntraSpeedPotionUsedThisRound", false)
+	if player.Character then task.spawn(characterBoost, player.Character) end
+end
+Players.PlayerAdded:Connect(watchSpeedBoost)
+for _, player in ipairs(Players:GetPlayers()) do watchSpeedBoost(player) end
+
+-- Exactly PlayerProtection's eligibility, plus the two the contract adds: the
+-- loading cover must be gone, and a player folded under a table cannot drink.
+local function speedPotionRefusal(player)
+	if workspace:GetAttribute("RoundActive") ~= true
+		or player:GetAttribute("InRound") ~= true
+		or workspace:GetAttribute("RoundLoadingState") ~= "ready"
+		or player:GetAttribute("Escaped") == true
+		or player:GetAttribute("Level2_ExitTransition") == true then return "Not in a round" end
+	if player:GetAttribute("Level3_Hiding") == true then return "Not while hiding" end
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if not character or not character:IsDescendantOf(workspace)
+		or not humanoid or humanoid.Health <= 0 then return "Not in a round" end
+	if potionRoundUsed[player] == roundEpoch then return "Already used this round" end
+	return nil
+end
+
+local function useSpeedPotion(player)
+	local item = ITEM_CONFIG.SpeedPotion
+	local session = sessions[player]
+	if not item or not session or session.closing then return end
+	-- Refuse in memory FIRST, like the upgrade path: a player with no potion or
+	-- no round must not be able to spend a DataStore write per press.
+	local refusal = speedPotionRefusal(player)
+	if not refusal and session.data.Items.SpeedPotion < 1 then refusal = "No Speed Potion stored" end
+	if refusal then
+		pushProfile(player, refusal .. ".", "error")
+		return
+	end
+
+	local epoch = roundEpoch
+	local duration = math.max(0, tonumber(item.DurationSeconds) or 0)
+	local multiplier = math.max(1, tonumber(item.SpeedMultiplier) or 1)
+	local consumed = dailyMutate(player, function(data)
+		-- Rechecked after waiting for the mutation lock and the store.
+		if data.Items.SpeedPotion < 1 then return false, "No Speed Potion stored.", "error" end
+		if epoch ~= roundEpoch or potionRoundUsed[player] == epoch then
+			return false, "Already used this round.", "error"
+		end
+		local late = speedPotionRefusal(player)
+		if late then return false, late .. ".", "error" end
+		data.Items.SpeedPotion -= 1
+		return true, string.format("Speed Potion: +%d%% speed for %d seconds.",
+			math.floor((multiplier - 1) * 100 + 0.5), duration), "success"
+	end)
+	if not consumed then return end
+	-- The potion is spent. If the round ended while the write yielded, the boost
+	-- is simply not applied: roundChanged has already cleared the attributes and
+	-- resurrecting them here would hand a lobby player a speed boost.
+	if epoch ~= roundEpoch then return end
+	potionRoundUsed[player] = epoch
+	local token = {}
+	speedBoostTokens[player] = token
+	player:SetAttribute("ZyntraSpeedBoostUntil", workspace:GetServerTimeNow() + duration)
+	player:SetAttribute("ZyntraSpeedBoostMultiplier", multiplier)
+	player:SetAttribute("ZyntraSpeedPotionUsedThisRound", true)
+	task.delay(duration, function()
+		if speedBoostTokens[player] == token then clearSpeedBoost(player) end
+	end)
+end
+
+local function milestoneFor(minutes)
+	for _, milestone in ipairs(DAILY_REWARDS.Milestones or {}) do
+		if milestone.Minutes == minutes then return milestone end
+	end
+	return nil
+end
+
+-- The playtime this player can claim against right now: what is saved for today
+-- plus what this session has earned since the last flush landed.
+local function claimablePlaytime(player, data)
+	local state = playtimeSessions[player]
+	local daily = data.Daily
+	return (daily.Day == utcDay() and daily.PlaytimeSeconds or 0)
+		+ (state and state.day == utcDay() and wholeCount(state.unflushedSeconds) or 0)
+end
+
+local function claimPlaytimeReward(player, payload)
+	local minutes = type(payload) == "table" and payload.Minutes or nil
+	local milestone = type(minutes) == "number" and milestoneFor(minutes) or nil
+	local session = sessions[player]
+	if not milestone or not session or session.closing then return end
+	local key = tostring(milestone.Minutes)
+	local required = milestone.Minutes * 60
+	local claimedMessage = string.format("You already claimed the %d minute reward today.", milestone.Minutes)
+	if session.data.Daily.Day == utcDay() and session.data.Daily.Claimed[key] == true then
+		pushProfile(player, claimedMessage, "error")
+		return
+	end
+	local have = claimablePlaytime(player, session.data)
+	if have < required then
+		pushProfile(player, string.format(
+			"Play %d minutes of a round today to claim this. You are at %d minutes.",
+			milestone.Minutes, math.floor(have / 60)), "error")
+		return
+	end
+	dailyMutate(player, function(data)
+		if data.Daily.Claimed[key] == true then return false, claimedMessage, "error" end
+		if data.Daily.PlaytimeSeconds < required then
+			return false, string.format(
+				"Play %d minutes of a round today to claim this.", milestone.Minutes), "error"
+		end
+		local label = applyReward(data, milestone.Reward)
+		if not label then return false, "That reward is unavailable right now.", "error" end
+		data.Daily.Claimed[key] = true
+		return true, string.format("+%s for %d minutes of play today.", label, milestone.Minutes), "success"
+	end)
+end
+
+-- The wheel's own generator, so a test can pin the sequence without touching
+-- anything else that needs randomness.
+local wheelRandom = Random.new()
+
+local function wheelPrizeByKey(key)
+	for _, prize in ipairs(DAILY_REWARDS.Wheel or {}) do
+		if prize.Key == key then return prize end
+	end
+	return nil
+end
+
+local function pickWheelPrize()
+	local wheel = DAILY_REWARDS.Wheel or {}
+	local total = 0
+	for _, prize in ipairs(wheel) do total += math.max(0, tonumber(prize.Weight) or 0) end
+	if total <= 0 then return nil end
+	local roll = wheelRandom:NextNumber() * total
+	local seen = 0
+	for _, prize in ipairs(wheel) do
+		seen += math.max(0, tonumber(prize.Weight) or 0)
+		if roll < seen then return prize end
+	end
+	return wheel[#wheel]
+end
+
+local function spentSpinMessage(daily)
+	local last = daily.WheelLast
+	local prize = last and wheelPrizeByKey(last.Key)
+	return string.format("Today's spin is done: %s. Next spin at 00:00 UTC.",
+		prize and prize.Label or "already claimed")
+end
+
+local function spinDailyWheel(player)
+	local session = sessions[player]
+	if not session or session.closing then return end
+	local today = utcDay()
+	-- Already spun: re-report the RECORDED prize and write nothing. That one rule
+	-- is what makes a lost reply, a rejoin, a retry and a double click all safe --
+	-- the outcome the UI animates to is durable before any of them can happen.
+	if session.data.Daily.WheelDay == today then
+		pushProfile(player, spentSpinMessage(session.data.Daily), "info")
+		return
+	end
+	dailyMutate(player, function(data)
+		if data.Daily.WheelDay == today then
+			return false, spentSpinMessage(data.Daily), "info"
+		end
+		local prize = pickWheelPrize()
+		local label = prize and applyReward(data, prize.Reward)
+		if not label then return false, "The supply wheel is offline right now.", "error" end
+		data.Daily.WheelDay = today
+		data.Daily.WheelLast = {
+			Day = today,
+			Key = prize.Key,
+			Serial = wholeCount(data.Daily.WheelLast and data.Daily.WheelLast.Serial) + 1,
+		}
+		return true, "Supply Wheel: " .. prize.Label, "success"
+	end)
+end
+
+local function buyItem(player, payload)
+	local key = type(payload) == "table" and payload.Key or nil
+	local item = type(key) == "string" and ITEM_CONFIG[key] or nil
+	local session = sessions[player]
+	if not item or not session or session.closing or session.data.Items[key] == nil then return end
+	local cost = math.max(0, math.floor(tonumber(item.TokenCost) or 0))
+	local amount = math.max(1, math.floor(tonumber(item.PackSize) or 1))
+	local needMessage = string.format("You need %d Research Tokens.", cost)
+	if session.data.Tokens < cost then
+		pushProfile(player, needMessage, "error")
+		return
+	end
+	dailyMutate(player, function(data)
+		if data.Tokens < cost then return false, needMessage, "error" end
+		local label = applyReward(data, {Kind = "Item", Key = key, Amount = amount})
+		if not label then return false, "That item is unavailable right now.", "error" end
+		data.Tokens -= cost
+		return true, string.format("%s stored (%d owned).", item.Name, data.Items[key]), "success"
+	end)
+end
+
+-- ServerStorage.ZyntraInventory: the only way another server script may read or
+-- spend a stored item, or hand out a field note. Every op validates its caller;
+-- Consume is a durable transaction and a caller must not apply its effect when
+-- it answers false.
+local inventoryFunction = ServerStorage:FindFirstChild("ZyntraInventory")
+if inventoryFunction and not inventoryFunction:IsA("BindableFunction") then
+	inventoryFunction:Destroy()
+	inventoryFunction = nil
+end
+if not inventoryFunction then
+	inventoryFunction = Instance.new("BindableFunction")
+	inventoryFunction.Name = "ZyntraInventory"
+	inventoryFunction.Parent = ServerStorage
+end
+
+local function inventorySession(player)
+	if typeof(player) ~= "Instance" or not player:IsA("Player")
+		or player.Parent ~= Players then return nil end
+	local session = sessions[player]
+	if not session or session.closing then return nil end
+	return session
+end
+
+local function inventoryItemKey(session, key)
+	if type(key) ~= "string" or session.data.Items[key] == nil then return nil end
+	return key
+end
+
+-- The first note of `level` this player has not found yet. Sorted by Id so the
+-- order a collection fills in is the order it is authored in, not hash order.
+local function nextFieldNote(data, level)
+	local notes = fieldNoteEntries()
+	if not notes then return nil, 0, 0 end
+	local candidates = {}
+	local total = 0
+	for _, note in ipairs(notes) do
+		if type(note) == "table" and type(note.Id) == "string" and #note.Id > 0 then
+			total += 1
+			if note.Level == level and data.FieldNotes.Discovered[note.Id] ~= true then
+				candidates[#candidates + 1] = note
+			end
+		end
+	end
+	table.sort(candidates, function(a, b) return a.Id < b.Id end)
+	return candidates[1], total, #candidates
+end
+
+inventoryFunction.OnInvoke = function(operation, player, key, amount)
+	if operation == "Count" then
+		local session = inventorySession(player)
+		local itemKey = session and inventoryItemKey(session, key)
+		return itemKey and session.data.Items[itemKey] or 0
+	end
+
+	if operation == "Consume" then
+		local session = inventorySession(player)
+		if not session then return false, "Your profile is not loaded" end
+		local itemKey = inventoryItemKey(session, key)
+		if not itemKey then return false, "Unknown item" end
+		if not isSafeSupportAmount(amount) or amount < 1 then return false, "Invalid amount" end
+		if session.data.Items[itemKey] < amount then return false, "You do not have that item" end
+		local spent = dailyMutate(player, function(data)
+			if data.Items[itemKey] < amount then return false, nil, nil end
+			data.Items[itemKey] -= amount
+			return true
+		end)
+		if not spent then return false, "That could not be saved. Try again." end
+		return true, ""
+	end
+
+	if operation == "DiscoverNote" then
+		local session = inventorySession(player)
+		if not session then return false, nil, "Your profile is not loaded" end
+		if type(key) ~= "number" or key ~= key or key % 1 ~= 0 then
+			return false, nil, "Field notes unavailable"
+		end
+		local level = key
+		local candidate, total = nextFieldNote(session.data, level)
+		if total == 0 then return false, nil, "Field notes unavailable" end
+		if not candidate then
+			return false, nil, "Every note on this level is already in your collection", "complete"
+		end
+		local noteId
+		local granted, message = dailyMutate(player, function(data)
+			-- Re-picked inside the transform: another server may have logged a note
+			-- for this player while we waited, and the profile we are writing is the
+			-- only one that can say which note is next.
+			local note, noteTotal = nextFieldNote(data, level)
+			if noteTotal == 0 or not note then return false, nil, nil end
+			noteId = note.Id
+			data.FieldNotes.Discovered[note.Id] = true
+			data.FieldNotes.Serial += 1
+			local count = 0
+			for _ in pairs(data.FieldNotes.Discovered) do count += 1 end
+			if count >= noteTotal then
+				-- The completion title is awarded in the SAME transaction as the last
+				-- note: a save that fails leaves neither, and the tag below is drawn
+				-- from the attribute applyAttributes publishes off this profile.
+				return true, string.format("Field note logged: %s. Collection complete.",
+					note.Title or note.Id), "success"
+			end
+			return true, string.format("Field note logged: %s (%d of %d).",
+				note.Title or note.Id, count, noteTotal), "success"
+		end)
+		if not granted then
+			return false, nil, "That could not be saved. Try again."
+		end
+		-- The title tag hangs off the attribute, which the write above republished.
+		if player.Character then task.defer(refreshPlayerTags, player, player.Character) end
+		return true, noteId, message
+	end
+
+	return false, "Unknown inventory operation"
+end
+
 -- Actions that open a DataStore write get a window a human click fits in;
 -- everything else keeps the responsive one. UseReentry is deliberately NOT in
 -- here: it is a single press inside the fifteen-second wipe window, it refuses
@@ -2442,6 +3228,12 @@ local WRITE_BEARING_ACTIONS = {
 	SetHazmatColor = true,
 	SetGlowstickColor = true,
 	SetAccessibility = true,
+	-- All four open a profile transaction. UseSpeedPotion is one press inside a
+	-- round, but that press spends a stored consumable, so it belongs here.
+	ClaimPlaytimeReward = true,
+	SpinDailyWheel = true,
+	BuyItem = true,
+	UseSpeedPotion = true,
 }
 local ACTION_WINDOW = 0.12
 local WRITE_ACTION_WINDOW = 1
@@ -2471,6 +3263,15 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 	if action == "SetAccessibility" and type(payload) == "table"
 		and ACCESSIBILITY_BY_KEY[payload.Key] then
 		windowKey = "SetAccessibility:" .. payload.Key
+	elseif action == "ClaimPlaytimeReward" and type(payload) == "table"
+		and milestoneFor(payload.Minutes) then
+		-- The rewards page is a column of claim buttons, like the settings page is
+		-- a column of switches: two legitimate consecutive clicks on DIFFERENT
+		-- milestones must not collapse into one. Both key sets are fixed by config,
+		-- so a spammer cannot grow this table.
+		windowKey = "ClaimPlaytimeReward:" .. tostring(payload.Minutes)
+	elseif action == "BuyItem" and type(payload) == "table" and ITEM_CONFIG[payload.Key] then
+		windowKey = "BuyItem:" .. payload.Key
 	end
 	local times = actionTimes[player]
 	if not times then
@@ -2561,6 +3362,14 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 		pushProfile(player, setting.Label .. (payload.Enabled and ": on" or ": off"), "success")
 	elseif action == "UseReentry" then
 		useReentry(player)
+	elseif action == "ClaimPlaytimeReward" then
+		claimPlaytimeReward(player, payload)
+	elseif action == "SpinDailyWheel" then
+		spinDailyWheel(player)
+	elseif action == "BuyItem" then
+		buyItem(player, payload)
+	elseif action == "UseSpeedPotion" then
+		useSpeedPotion(player)
 	end
 end)
 
@@ -2589,7 +3398,12 @@ end)
 
 MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(player, passId, purchased)
 	if not purchased then return end
-	for key, pass in pairs(Config.Passes) do
+	-- Donation passes share the ownership latch, but grant no gameplay benefits.
+	local passes = table.clone(Config.Passes)
+	for key, pass in pairs(Config.Donations or {}) do
+		if pass.Kind == "GamePass" then passes[key] = pass end
+	end
+	for key, pass in pairs(passes) do
 		if pass.Id > 0 and pass.Id == passId then
 			-- Latch the purchase BEFORE refreshing: Roblox has just told us this
 			-- player paid, and its own ownership cache may still say otherwise for
@@ -2611,7 +3425,7 @@ local productById = {}
 local function registerProductCatalog(catalog, kind)
 	for key, product in pairs(catalog or {}) do
 		local productId = math.floor(tonumber(product.Id) or 0)
-		if productId > 0 then
+		if productId > 0 and product.Kind ~= "GamePass" then
 			assert(not productById[productId],
 				string.format("Duplicate Zyntra Developer Product ID %d (%s)", productId, key))
 			productById[productId] = { Key = key, Kind = kind, Product = product }
@@ -2737,6 +3551,11 @@ local function finalizePlayerSessionBody(player)
 		accessibility.dirty = false
 		writeAccessibilityTargets(player, accessibility.desired)
 	end
+	-- Playtime accrues in memory between flushes, for the same reason and with the
+	-- same consequence: bank it HERE, while the session is still open, or the last
+	-- minute of every round is lost to whoever leaves from the results screen.
+	-- BindToClose reaches this through finalizePlayerSession as well.
+	if session and not session.closing then flushPlaytime(player) end
 	local dispatchPersisted = true
 	if muteQueue then
 		-- Stop a sleeping worker before it can begin an obsolete write. The last
@@ -2805,6 +3624,9 @@ local function finalizePlayerSession(player)
 	-- Dropping the token is what stops a refund landing for a reservation whose
 	-- player is gone: no session, no second credit.
 	reentryAttempts[player] = nil
+	playtimeSessions[player] = nil
+	potionRoundUsed[player] = nil
+	speedBoostTokens[player] = nil
 	dispatchMuteQueues[player] = nil
 	briefingClaims[player] = nil
 	pendingDispatchSnapshots[player.UserId] = nil

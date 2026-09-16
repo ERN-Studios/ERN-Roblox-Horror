@@ -16,9 +16,9 @@ local requestRemote: RemoteEvent? = nil
 
 local hiding = false
 
--- This is the game's canonical runtime-authored R15 crouch animation. Its base
--- pose is the exact under-table silhouette; ordinary crouching layers a small,
--- low gait over that same pose while moving. Every client evaluates it for
+-- Ordinary crouching retains its low gait. Level 3 table hiding uses the
+-- separately authored hold below and its uploaded animation. Clients evaluate
+-- the procedural fallback for
 -- every replicated crouching/hidden player because AnimationConstraint.Transform
 -- itself does not replicate. There is deliberately only one pose writer.
 local RAD = math.rad
@@ -37,6 +37,25 @@ local CROUCH_POSE = {
 	LeftElbow = CFrame.Angles(RAD(-64), 0, RAD(-5)),
 	RightElbow = CFrame.Angles(RAD(-64), 0, RAD(5)),
 }
+-- Frame 0 of the Blender hold, fitted to the actual hazmat meshes. Kept as a
+-- local fallback while the group-owned asset loads or if it is unavailable.
+local HIDE_POSE = {
+	Root = CFrame.new(0, -0.327591755, 0.471597579, 1, 0, 0, 0, 0.980363428, -0.197199264, 0, 0.197199264, 0.980363428),
+	Waist = CFrame.new(0, 0, 0, 1, 0, 0, 0, -0.230934263, 0.972969355, 0, -0.972969355, -0.230934263),
+	Neck = CFrame.new(0, 0, 0, 1, 0, 0, 0, 0.342020143, -0.939692621, 0, 0.939692621, 0.342020143),
+	LeftHip = CFrame.new(0, 0, 0, 0.992546152, 0, 0.121869343, 0.075395165, -0.785662216, -0.61404434, 0.095748138, 0.618655706, -0.779806009),
+	LeftKnee = CFrame.new(0, 0, 0, 1, 0, 0, 0, -0.925527725, 0.378679852, 0, -0.378679852, -0.925527725),
+	LeftAnkle = CFrame.new(0, 0, 0, 1, 0, 0, 0, 0.99394982, -0.109835129, 0, 0.109835129, 0.99394982),
+	LeftShoulder = CFrame.new(0, 0, 0, 0.286578739, 0.320678384, 0.90279455, -0.671238927, -0.605165734, 0.428033571, 0.68360144, -0.728656166, 0.041824181),
+	LeftElbow = CFrame.new(0, 0, 0, 0.498097349, 0.043577871, 0.866025404, -0.602258954, -0.701149179, 0.381672611, 0.62384548, -0.711681669, -0.322995384),
+	LeftWrist = CFrame.new(0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1),
+	RightHip = CFrame.new(0, 0, 0, 0.992546152, 0, -0.121869343, -0.075395165, -0.785662216, -0.61404434, -0.095748138, 0.618655706, -0.779806009),
+	RightKnee = CFrame.new(0, 0, 0, 1, 0, 0, 0, -0.925527725, 0.378679852, 0, -0.378679852, -0.925527725),
+	RightAnkle = CFrame.new(0, 0, 0, 1, 0, 0, 0, 0.99394982, -0.109835129, 0, 0.109835129, 0.99394982),
+	RightShoulder = CFrame.new(0, 0, 0, 0.286578739, -0.320678384, -0.90279455, 0.671238927, -0.605165734, 0.428033571, -0.68360144, -0.728656166, 0.041824181),
+	RightElbow = CFrame.new(0, 0, 0, 0.498097349, -0.043577871, -0.866025404, 0.602258954, -0.701149179, 0.381672611, -0.62384548, -0.711681669, -0.322995384),
+	RightWrist = CFrame.new(0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1),
+}
 local jointCache = setmetatable({}, {__mode = "k"})
 local poseStates = setmetatable({}, {__mode = "k"})
 
@@ -46,7 +65,7 @@ local function jointsFor(character: Model): {Instance}
 	local joints = {}
 	for _, object in ipairs(character:GetDescendants()) do
 		if (object:IsA("AnimationConstraint") or object:IsA("Motor6D"))
-			and CROUCH_POSE[object.Name] ~= nil then
+			and (CROUCH_POSE[object.Name] ~= nil or HIDE_POSE[object.Name] ~= nil) then
 			table.insert(joints, object)
 		end
 	end
@@ -89,7 +108,17 @@ end
 
 local function animatedTransform(jointName: string, hidden: boolean,
 	phase: number, gaitWeight: number): CFrame
-	local transform = CROUCH_POSE[jointName]
+	if hidden then
+		local transform = HIDE_POSE[jointName] or CFrame.identity
+		local breath = math.sin(os.clock() * math.pi / 2)
+		if jointName == "Waist" then
+			transform *= CFrame.Angles(RAD(breath * .20), 0, 0)
+		elseif jointName == "Neck" then
+			transform *= CFrame.Angles(RAD(-breath * .15), 0, 0)
+		end
+		return transform
+	end
+	local transform = CROUCH_POSE[jointName] or CFrame.identity
 	local stride = if hidden then 0 else math.sin(phase) * gaitWeight
 	local counterStride = if hidden then 0 else math.sin(phase + math.pi) * gaitWeight
 	if jointName == "Root" then
@@ -133,8 +162,8 @@ local function hideTrackReady(targetPlayer: Player, character: Model): boolean
 end
 
 -- Animator writes first; PreSimulation owns the final crouch for this frame.
--- Weight and gait are eased, so entering/exiting never snaps and a stationary
--- crouch settles back to the exact Level 3 hiding pose instead of skating.
+-- Weight and gait are eased for ordinary crouching. Hidden players use the
+-- fitted hold immediately because their server root is already under the table.
 RunService.PreSimulation:Connect(function(deltaTime)
 	local seen = {}
 	for _, targetPlayer in ipairs(Players:GetPlayers()) do

@@ -2894,7 +2894,15 @@ local function updateLevelOneGuideLayout()
 	end
 	if touch then
 		objectivesButton.AnchorPoint = Vector2.new(0, 0)
-		objectivesButton.Position = UDim2.fromOffset(12, 12)
+		local left, top = layout.SafeLeft + 12, layout.SafeTop + 12
+		local puzzle = player.PlayerGui:FindFirstChild("PuzzleGui")
+		local counter = puzzle and puzzle:FindFirstChild("Level1Objectives")
+		-- Portrait phones cannot fit the brief beside the objective card.
+		-- Follow its measured bottom, including changing objective messages.
+		if counter and counter.Visible and left + 168 > counter.AbsolutePosition.X - 8 then
+			top = math.max(top, counter.AbsolutePosition.Y + counter.AbsoluteSize.Y + 8)
+		end
+		objectivesButton.Position = UIDevice.LocalPosition(guideGui, left, top)
 	else
 		-- PuzzleUI owns the final 36px at the bottom-right. This guide completes
 		-- the footer row immediately to its left.
@@ -3542,6 +3550,14 @@ end
 
 UIDevice.Changed:Connect(updateLevelOneGuideLayout)
 player:GetAttributeChangedSignal("Level3_Hiding"):Connect(updateLevelOneGuideLayout)
+task.spawn(function()
+	local puzzle = player.PlayerGui:WaitForChild("PuzzleGui")
+	local counter = puzzle:WaitForChild("Level1Objectives")
+	for _, property in ipairs({"Visible", "AbsolutePosition", "AbsoluteSize"}) do
+		counter:GetPropertyChangedSignal(property):Connect(updateLevelOneGuideLayout)
+	end
+	updateLevelOneGuideLayout()
+end)
 
 local viewportConnection = nil
 local function connectGuideViewport()

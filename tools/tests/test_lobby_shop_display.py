@@ -372,14 +372,14 @@ check(model.Name == "ZyntraShopDisplay", "wrong model name: " .. tostring(model.
 check(model.Parent == lobby, "the shop is not parented to the lobby")
 
 local catalogueKeys = {}
-for _, source in ipairs({moduleResults.ZyntraConfig.Passes, moduleResults.ZyntraConfig.Products}) do
+for _, source in ipairs({moduleResults.ZyntraConfig.Passes, moduleResults.ZyntraConfig.Products, moduleResults.ZyntraConfig.Items}) do
 	for key in pairs(source) do table.insert(catalogueKeys, key) end
 end
-check(#catalogueKeys == 6, "expected 6 catalogue items, found " .. #catalogueKeys)
+check(#catalogueKeys == 8, "expected 8 catalogue items, found " .. #catalogueKeys)
 
 local stands = {}
 for _, child in ipairs(model:GetChildren()) do
-	if child.ClassName == "Model" then
+	if child.ClassName == "Model" and not child:GetAttribute("ShopRewardsStand") then
 		local key = child:GetAttribute("ShopItemKey")
 		check(key ~= nil, "a stand with no item key")
 		check(stands[key] == nil, "two stands for " .. tostring(key))
@@ -410,8 +410,10 @@ for key, stand in pairs(stands) do
 			check(node.KeyboardKeyCode ~= nil and node.GamepadKeyCode ~= nil, key .. ": prompt binding")
 		end
 	end
-	check(seen.ShopPedestal == 1, key .. ": pedestal count " .. tostring(seen.ShopPedestal))
-	check(seen.ShopPedestalCap == 1, key .. ": cap count")
+	if not stand:GetAttribute("ShopSupplyBay") then
+		check(seen.ShopPedestal == 1, key .. ": pedestal count " .. tostring(seen.ShopPedestal))
+		check(seen.ShopPedestalCap == 1, key .. ": cap count")
+	end
 	check(seen.ShopItemBox == 1, key .. ": crate count")
 	check(seen.ShopInspectPlate == 1, key .. ": plate count")
 	plateCount += seen.ShopInspectPlate
@@ -424,9 +426,10 @@ check(plateCount == #catalogueKeys and promptCount == #catalogueKeys and boxCoun
 for _, node in ipairs(model:GetDescendants()) do
 	if node.ClassName == "Part" then
 		local p = node.Position
-		check(p.Z <= -45 and p.Z >= -70, node.Name .. " is outside z -70..-45: " .. p.Z)
-		check(p.X >= 25 and p.X <= 32.9, node.Name .. " is outside the ledge: " .. p.X)
-		check(p.Y >= 0.6 and p.Y <= 11, node.Name .. " is outside y 0.6..11: " .. p.Y)
+		local bay = node.Parent and node.Parent:GetAttribute("ShopSupplyBay")
+		check(p.Z <= (bay and -34 or -45) and p.Z >= -70, node.Name .. " leaves shop/kiosk frontage: " .. p.Z)
+		check(p.X >= (bay and 24.2 or 25) and p.X <= 32.9, node.Name .. " is outside the ledge: " .. p.X)
+		check(p.Y >= 0.6 and p.Y <= 16, node.Name .. " is outside y 0.6..16: " .. p.Y)
 	end
 end
 
@@ -445,7 +448,7 @@ local plates = {}
 for key, stand in pairs(stands) do plates[key] = nil end
 stands = {}
 for _, child in ipairs(model:GetChildren()) do
-	if child.ClassName == "Model" then stands[child:GetAttribute("ShopItemKey")] = child end
+	if child.ClassName == "Model" and child:GetAttribute("ShopItemKey") then stands[child:GetAttribute("ShopItemKey")] = child end
 end
 for key, stand in pairs(stands) do
 	for _, node in ipairs(stand:GetDescendants()) do
@@ -633,7 +636,7 @@ for _, node in ipairs(model:GetDescendants()) do
 	if node.Name == "ShopItemBox" then table.insert(boxes, node) end
 	if node.Name == "ShopSignGlowPanel" then glow = node end
 end
-check(#boxes == 6 and glow ~= nil, "the client has nothing to animate")
+check(#boxes == 8 and glow ~= nil, "the client has nothing to animate")
 local restingY = boxes[1].Position.Y
 local restingGlow = glow.Transparency
 
@@ -671,6 +674,20 @@ heartbeat:Fire(1 / 30)
 check(near(boxes[1].Position.Y, frozen, 0.0001), "the crates kept moving in a round")
 workspace:SetAttribute("RoundActive", nil)
 
+-- Token items reuse the same bridge and never ask Roblox for a Robux price.
+local beforeTokenPriceCalls = marketplaceCalls
+for _, key in ipairs({"SpeedPotion", "RouteMarker"}) do
+	player:SetAttribute("ZyntraShopFocus", key)
+	check(gui.Enabled, key .. " physical card did not open")
+	check(buy.Text == tostring(moduleResults.ZyntraConfig.Items[key].TokenCost) .. " TOKENS  //  BUY", key .. " wrong currency")
+	local beforeBuy = #fired
+	buy.Activated:Fire()
+	check(#fired == beforeBuy + 1 and fired[#fired] == key, key .. " bridge did not route")
+end
+check(marketplaceCalls == beforeTokenPriceCalls, "token supplies called MarketplaceService")
+player:SetAttribute("ZyntraRouteMarkers", 6)
+check(state.Text == "6 STORED", "physical stock did not refresh")
+
 -- ── 9. the shop going away takes the focus with it ──────────────────────────
 standAt(samplePlate.X, samplePlate.Z)
 step()
@@ -679,7 +696,7 @@ model:Destroy()
 step(2)
 check(player:GetAttribute("ZyntraShopFocus") == nil, "a destroyed shop left a card open")
 
-print(string.format("ok  %d checks: 6 stands, %d plates, three tiers %d/%d/%d px",
+print(string.format("ok  %d checks: 8 products, %d plates, three tiers %d/%d/%d px",
 	checks, plateCount, phone.Width, tablet.Width, pointer.Width))
 """
 

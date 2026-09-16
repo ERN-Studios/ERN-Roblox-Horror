@@ -317,7 +317,7 @@ local Configuration = {
 		},
 	},
 	Hiding = {
-		HoldAnimationId = "rbxassetid://113160394754713", -- Blender-authored, group 1039373905
+		HoldAnimationId = "rbxassetid://119040885264927", -- Actual hazmat hold v2; group 1039373905
 		PromptHoldDuration = 0,
 		PromptMaxDistance = 8,
 		ServerDistanceSlack = 3,

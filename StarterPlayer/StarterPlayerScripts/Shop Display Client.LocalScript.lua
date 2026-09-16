@@ -44,6 +44,8 @@ local function lookup(key)
 	if pass then return pass, "Pass" end
 	local product = Config.Products and Config.Products[key]
 	if product then return product, "Product" end
+	local item = Config.Items and Config.Items[key]
+	if item then return item, "Item" end
 	return nil, nil
 end
 
@@ -292,6 +294,10 @@ local shownKey = nil
 local dismissedKey = nil
 
 local function ownedState(key, kind, item)
+	if kind == "Item" then
+		local attribute = key == "SpeedPotion" and "ZyntraSpeedPotions" or "ZyntraRouteMarkers"
+		return ("%d STORED"):format(tonumber(player:GetAttribute(attribute)) or 0), true
+	end
 	if kind == "Pass" then
 		if player:GetAttribute("ZyntraOwns" .. key) == true then return "OWNED", false end
 		return "PERMANENT -- BOUGHT ONCE", true
@@ -312,7 +318,7 @@ local function refresh()
 	local item, kind = lookup(key)
 	if not item then return end
 	title.Text = tostring(item.Name or key)
-	kindTag.Text = kind == "Pass" and "PERMANENT PASS" or "SUPPLY DROP"
+	kindTag.Text = kind == "Pass" and "PERMANENT PASS" or (kind == "Item" and "FIELD SUPPLIES" or "SUPPLY DROP")
 	description.Text = tostring(item.Description or "")
 
 	local iconId = tonumber(item.IconId) or 0
@@ -327,6 +333,9 @@ local function refresh()
 		-- Fit.ZyntraDisabledCaptions already recognises it.
 		buyButton.Text = "OWNED"
 		UIDevice.SetEnabled(buyButton, false)
+	elseif kind == "Item" then
+		buyButton.Text = tostring(item.TokenCost) .. " TOKENS  //  BUY"
+		UIDevice.SetEnabled(buyButton, true)
 	elseif not tonumber(item.Id) or item.Id <= 0 then
 		buyButton.Text = "UNAVAILABLE"
 		UIDevice.SetEnabled(buyButton, false)
@@ -387,6 +396,8 @@ end)
 player:GetAttributeChangedSignal(FOCUS_ATTRIBUTE):Connect(evaluate)
 player:GetAttributeChangedSignal("InRound"):Connect(evaluate)
 player:GetAttributeChangedSignal("ZyntraReentryCredits"):Connect(refresh)
+player:GetAttributeChangedSignal("ZyntraSpeedPotions"):Connect(refresh)
+player:GetAttributeChangedSignal("ZyntraRouteMarkers"):Connect(refresh)
 for _, key in ipairs({"Supporter", "AdvancedEquipment", "CosmeticEquipment"}) do
 	player:GetAttributeChangedSignal("ZyntraOwns" .. key):Connect(refresh)
 end

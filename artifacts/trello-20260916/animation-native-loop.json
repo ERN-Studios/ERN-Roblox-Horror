@@ -1,0 +1,15 @@
+{
+  "seconds": 4.211221800003841,
+  "floorClearance": 0.04127354621887225,
+  "meshParts": 18,
+  "samples": 253,
+  "asset": 119040885264927,
+  "hidden": true,
+  "trackLength": 4,
+  "trackWeight": 1,
+  "rootDrift": 0,
+  "maxDepth": 2.0298874378204346,
+  "priority": "Enum.AnimationPriority.Action",
+  "tableClearance": 0.05386405944824224,
+  "maxLaneX": 1.4907078742980957
+}

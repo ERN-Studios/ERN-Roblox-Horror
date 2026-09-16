@@ -221,45 +221,11 @@ for _, entry in ipairs({openButton, shopButton, musicButton}) do
 		if entry.Active and entry:GetAttribute("SquareSectionButton") then border.Transparency = 0 end
 	end)
 	entry.MouseLeave:Connect(function() border.Transparency = 0.22 end)
-	if entry == shopButton then
-		-- SHOP_ICON_CIRCLE_20260915 (card 88). The shop is the one HUD control
-		-- the owner asked to be NOTICED, so it is the one that is round: the
-		-- button's own corner becomes a disc and its accent ring thickens.
-		--
-		-- The ring that breathes is shopButtonRing -- the button's own accent
-		-- stroke, which nothing else writes. The hover border above keeps
-		-- writing SquareSectionBorder, so the two never fight over one property.
-		-- The colour NEVER changes and the period is never under 2.4s: a
-		-- pulsing colour is a strobe with extra steps. Under ReduceFlashing the
-		-- same breath is slower (6s) and half as deep.
-		--
-		-- Nothing here changes the button's RECTANGLE. layoutSquareSections
-		-- still owns its size and position, so the fit matrix measures exactly
-		-- what it measured before.
-		local TweenService = game:GetService("TweenService")
-		local shopCorner = entry:FindFirstChildOfClass("UICorner")
-		if shopCorner then shopCorner.CornerRadius = UDim.new(1, 0) end
-		-- The icon and its caption move inside the disc the background now draws.
-		shopButtonSections.Size = UDim2.new(1, -16, 1, -16)
-		shopButtonSections.Position = UDim2.fromOffset(8, 8)
-
-		local breath
-		local function restartBreath()
-			if breath then breath:Cancel() end
-			local calm = player:GetAttribute("ReduceFlashing") == true
-			shopButtonRing.Thickness = calm and 2.6 or 2.4
-			shopButtonRing.Transparency = calm and 0.3 or 0.42
-			breath = TweenService:Create(
-				shopButtonRing,
-				TweenInfo.new(calm and 3 or 1.3, Enum.EasingStyle.Sine,
-					Enum.EasingDirection.InOut, -1, true),
-				{Transparency = calm and 0.2 or 0.06, Thickness = calm and 3 or 3.4}
-			)
-			breath:Play()
-		end
-		player:GetAttributeChangedSignal("ReduceFlashing"):Connect(restartBreath)
-		restartBreath()
-	end
+	-- SQUARE, like its two neighbours. Card 88 singled this one control out on
+	-- 2026-09-15 -- a disc corner radius, an 8px content inset and a breathing
+	-- accent ring, on ZyntraShopButton only. The owner's 2026-09-16 correction
+	-- puts it back in the rail: all three buttons are built by exactly this loop
+	-- now, and nothing in here may distinguish one of them again.
 end
 
 -- C5_ZYNTRA_OPEN_BUTTON_20260829 -- WHAT SHIPPED BROKEN.
@@ -342,7 +308,7 @@ local main = Instance.new("Frame")
 main.Name = "Terminal"
 main.AnchorPoint = Vector2.new(0, 0)
 main.Position = UDim2.fromOffset(0, 0)
-main.Size = UDim2.fromOffset(840, 610)
+main.Size = UDim2.fromOffset(1180, 760)
 main.BackgroundColor3 = COLORS.bg
 main.BorderSizePixel = 0
 main.Visible = false
@@ -357,6 +323,13 @@ mainScale.Parent = main
 -- and would otherwise need a forward local for every card, row and page it
 -- touches, and this LocalScript is already close to Luau's 200-local ceiling.
 local layoutHooks = {}
+
+-- The mounted terminal PAGES (card 102) and everything that wants telling when
+-- a profile arrives. One table rather than four locals, for the reason
+-- layoutHooks is one: this LocalScript is close to Luau's 200-local ceiling.
+--   Handles     -- {pageName -> {refresh, destroy}} from a mounted page module
+--   Subscribers -- fn(profile, message, tone), fired on every push
+local pageMounts = {Handles = {}, Subscribers = {}}
 
 -- C_TERMINAL_CONTRACT_20260831 -- WHAT SHIPPED BROKEN.
 -- The terminal knew everything about its own composition and published none of
@@ -519,7 +492,25 @@ end
 -- client has honoured ReduceCameraShake and ReduceFlashing for months with no
 -- way for a player to reach either. Kept last before DEV so the equipment pages
 -- stay in their authored order.
-local tabNames = { "Upgrades", "Shop", "Donate", "Colors", "Settings" }
+--
+-- REWARDS and NOTES are mounted page MODULES (ZyntraDailyRewardsPage and
+-- ZyntraFieldNotesPage, see claude-contracts.md). A tab is built only when its
+-- module is actually in ReplicatedStorage, so this LocalScript keeps working in
+-- a place where those scripts do not exist yet -- and UIRegression's
+-- expectedTabs mirrors the same rule rather than hard-coding seven names.
+-- FindFirstChild, never WaitForChild: this runs at build time and a yield here
+-- would hold the whole terminal for a page that may never arrive.
+local TERMINAL_PAGE_MODULES = {
+	Rewards = "ZyntraDailyRewardsPage",
+	Notes = "ZyntraFieldNotesPage",
+}
+local tabNames = {}
+for _, name in ipairs({"Upgrades", "Shop", "Rewards", "Notes", "Donate", "Colors", "Settings"}) do
+	local moduleName = TERMINAL_PAGE_MODULES[name]
+	if moduleName == nil or ReplicatedStorage:FindFirstChild(moduleName) ~= nil then
+		table.insert(tabNames, name)
+	end
+end
 if devAllowed then table.insert(tabNames, "Dev") end
 for order, name in ipairs(tabNames) do
 	local tab = button(tabBar, string.upper(name), UDim2.fromOffset(150, 40))
@@ -1243,11 +1234,36 @@ upgradeScroll.CanvasSize = UDim2.new()
 upgradeScroll.Parent = pages.Upgrades
 contract.scroll("Upgrades", upgradeScroll)
 
+-- TWO GROUPS on this page now -- the permanent upgrades, and the token
+-- consumables FIELD SUPPLIES adds below (#85). A UIGridLayout gives every child
+-- of its parent the SAME cell, so a full-width group heading cannot live in one
+-- without becoming a half-width cell beside a card. The scroll therefore stacks
+-- its rows with a list, and each group owns a grid inside a section frame that
+-- auto-sizes to it. Both grids are handed the same cell by the layout hook, so
+-- a card in one group still lines up with a card in the other.
+do
+	local list = Instance.new("UIListLayout")
+	list.Padding = UDim.new(0, 14)
+	list.SortOrder = Enum.SortOrder.LayoutOrder
+	list.Parent = upgradeScroll
+end
+
+local upgradeSection = Instance.new("Frame")
+upgradeSection.Name = "PermanentUpgrades"
+upgradeSection.LayoutOrder = 1
+-- FULL WIDTH, not (1, -8): the grid's own cell already carries the -8 that
+-- keeps a two-up row clear of the scrollbar, and insetting the section as well
+-- would narrow every cell by 8px against the width the hook measured.
+upgradeSection.Size = UDim2.new(1, 0, 0, 0)
+upgradeSection.AutomaticSize = Enum.AutomaticSize.Y
+upgradeSection.BackgroundTransparency = 1
+upgradeSection.Parent = upgradeScroll
+
 local upgradeGrid = Instance.new("UIGridLayout")
 upgradeGrid.CellSize = UDim2.new(0.5, -8, 0, 330)
 upgradeGrid.CellPadding = UDim2.fromOffset(12, 12)
 upgradeGrid.SortOrder = Enum.SortOrder.LayoutOrder
-upgradeGrid.Parent = upgradeScroll
+upgradeGrid.Parent = upgradeSection
 
 -- The card's authored POINTER stack, measured: 18 top pad + 34 title + 8 +
 -- 72 description + 10 + 80 readout + 24 level + 18 gap + 48 button + 18 pad.
@@ -1293,19 +1309,19 @@ local function makeUpgradeCard(parent, order, titleText, description)
 	outline(spend, COLORS.accent, 0.2, 1.5)
 	contract.card("Upgrades", card.Name, card, spend)
 	local entry = { Title = title, Desc = desc, Current = current, Level = level,
-		Spend = spend }
+		Spend = spend, Frame = card }
 	table.insert(upgradeCards, entry)
 	return entry
 end
 
 local staminaCard = makeUpgradeCard(
-	upgradeScroll,
+	upgradeSection,
 	1,
 	"STAMINA CAPACITY",
 	"Run for longer before exhaustion."
 )
 local batteryCard = makeUpgradeCard(
-	upgradeScroll,
+	upgradeSection,
 	2,
 	"BATTERY CAPACITY",
 	"Keep the flashlight active for longer."
@@ -1433,6 +1449,15 @@ shopGrid.Parent = shopScroll
 -- measured stack, and that cannot be worked out from a card in isolation.
 local productCards = {}
 
+-- The Shop tab's DETAIL pane (card 102). A TABLE and not a set of locals for
+-- two reasons: this LocalScript is close to Luau's 200-local ceiling, and
+-- makeProductCard -- which is defined above the pane and has to be able to
+-- select into it -- would otherwise need a forward local per field.
+--   Order/Items -- the catalogue in build order, and by key
+--   select(key) -- show that item in the pane (nil until the pane is built)
+--   apply(...)  -- the layout hook hands the pane its geometry
+local shopDetail = {Order = {}, Items = {}}
+
 -- C_SHOP_CARD_MEASURED_20260830 -- WHAT SHIPPED BROKEN.
 -- The card was a composition of constants: a 42px title box, a 68px description
 -- box pinned at y = 72, and a 220px cell that only ever grew by the difference
@@ -1472,7 +1497,36 @@ table.insert(layoutHooks, function(fit)
 	local copyLeft = face.Pad * 2 + face.Icon
 	local copyInset = copyLeft + face.Pad
 	local buyHeight = math.max(fit.Tap, 38)
-	local twoUpWidth = math.floor(fit.ContentWidth * 0.5) - 8
+
+	-- LIST + DETAIL at the pointer tier (shop-research.md findings 2, 5 and 7).
+	-- A shop has to let a player compare items before spending, and six cards
+	-- carrying four wrapped lines of 12px copy each is a grid, not a browser. So
+	-- at a pointer device with room for it the page splits: the cards become a
+	-- LIST on the left and the selected item gets a pane of its own on the right,
+	-- with the big icon, the live price and the description broken into lines.
+	--
+	-- TOUCH KEEPS THE CARD LIST EXACTLY AS IT IS. Two panes on a handheld is two
+	-- unreadable columns, and the engine owns the bottom corners a detail pane
+	-- would sit in. 760 is the measured floor for the split: 46% of it still
+	-- gives the list a 343px column, which is wider than the one-column card a
+	-- 375px phone already reads.
+	local twoPane = not fit.Touch and fit.ContentWidth >= 760
+	local listWidth = twoPane and math.floor((fit.ContentWidth - 14) * 0.46)
+		or fit.ContentWidth
+	shopScroll.Size = twoPane
+		and UDim2.fromOffset(listWidth, fit.ContentHeight)
+		or UDim2.fromScale(1, 1)
+	if shopDetail.apply then
+		shopDetail.apply(fit, twoPane, listWidth + 14, fit.ContentWidth - listWidth - 14)
+	end
+	for _, entry in ipairs(productCards) do
+		-- The row is only a pick target where there is a pane for it to fill.
+		-- SetEnabled takes Selectable and Modal down with Active, so a gamepad
+		-- cannot land on an overlay that does nothing.
+		UIDevice.SetEnabled(entry.Pick, twoPane)
+	end
+
+	local twoUpWidth = math.floor(listWidth * 0.5) - 8
 	local twoUp = true
 	for _, entry in ipairs(productCards) do
 		if textWidthFor(entry.Heading.Text, face.Title, entry.Heading.Font)
@@ -1481,7 +1535,7 @@ table.insert(layoutHooks, function(fit)
 			break
 		end
 	end
-	local cellWidth = twoUp and twoUpWidth or (fit.ContentWidth - 8)
+	local cellWidth = twoUp and twoUpWidth or (listWidth - 8)
 	local copyWidth = math.max(48, cellWidth - copyInset)
 	-- The icon's own bottom edge. A card is never shorter than the icon standing
 	-- beside its copy.
@@ -1530,7 +1584,7 @@ local function makeProductCard(key, item, kind)
 	card.BorderSizePixel = 0
 	card.Parent = shopScroll
 	corner(card, 9)
-	outline(card, COLORS.line, 0.4)
+	local cardStroke = outline(card, COLORS.line, 0.4)
 
 	local icon = Instance.new("ImageLabel")
 	icon.Name = "ProductIcon"
@@ -1589,6 +1643,29 @@ local function makeProductCard(key, item, kind)
 	buy.Name = "Buy"
 	buy.TextColor3 = COLORS.accent2
 	contract.card("Shop", key, card, buy)
+
+	-- THE ROW IS THE PICK TARGET where the detail pane exists. A bare TextButton
+	-- under the card's own children rather than making the card itself a button:
+	-- the card frame carries the contract's ZyntraCardKey and the fit matrix
+	-- looks up card -> action through it, so its class is not free to change.
+	-- ZIndex 0 puts it UNDER the labels (which are not Active and pass input
+	-- through) and under Buy, so pressing BUY still buys and pressing anywhere
+	-- else selects. It is NOT tagged: the tagged action of this card is Buy, and
+	-- a second tagged control would fail the terminal's own card contract.
+	local pick = Instance.new("TextButton")
+	pick.Name = "Select"
+	pick.Text = ""
+	pick.AutoButtonColor = false
+	pick.BackgroundTransparency = 1
+	pick.BorderSizePixel = 0
+	pick.ZIndex = 0
+	pick.Size = UDim2.fromScale(1, 1)
+	pick.Parent = card
+	UIDevice.SetEnabled(pick, false)
+	pick.Activated:Connect(function()
+		if shopDetail.select then shopDetail.select(key) end
+	end)
+
 	table.insert(productCards, {
 		Heading = heading,
 		Desc = desc,
@@ -1596,7 +1673,13 @@ local function makeProductCard(key, item, kind)
 		Tag = tag,
 		Icon = icon,
 		Top = headingY,
+		Card = card,
+		Stroke = cardStroke,
+		Pick = pick,
+		Key = key,
 	})
+	shopDetail.Items[key] = {Item = item, Kind = kind}
+	table.insert(shopDetail.Order, key)
 	productButtons[key] = buy
 	displayedProductPrices[key] = math.max(0, math.floor(tonumber(item.Price) or 0))
 	if kind ~= "TokenItem" and tonumber(item.Id) and item.Id > 0 then
@@ -1609,6 +1692,9 @@ local function makeProductCard(key, item, kind)
 			if price and price >= 0 and buy.Parent and buy.Active then
 				displayedProductPrices[key] = math.floor(price)
 				buy.Text = tostring(math.floor(price)) .. " R$"
+				-- The detail pane shows the same number; it is built after this
+				-- task is spawned, so the hook is checked rather than assumed.
+				if shopDetail.priceChanged then shopDetail.priceChanged(key) end
 			end
 		end)
 	end
@@ -1645,9 +1731,244 @@ makeProductCard("Tokens20", Config.Products.Tokens20, "Product")
 makeProductCard("EmergencyReentry", Config.Products.EmergencyReentry, "Product")
 makeProductCard("CosmeticEquipment", Config.Passes.CosmeticEquipment, "Pass")
 
+-- ── THE SHOP DETAIL PANE (card 102) ─────────────────────────────────────────
+-- Roblox's monetization guidance asks for a shop a player can "linger and
+-- browse" and that gives enough context to judge an item's value; NN/g's
+-- product-page findings name the four things that context is made of -- a
+-- descriptive name, a recognisable ENLARGED image, the price, and a concise
+-- description written to be skimmed. The card list could carry none of them at
+-- size: its icon is 76px because the copy has to share the row with it.
+--
+-- So on a pointer device the cards become the LIST and this is the detail.
+-- Three rules hold it honest:
+--   * IT NEVER PROMPTS ANYTHING ITSELF. BUY runs productPurchase[key] -- the
+--     same named function the row's own BUY runs, and the same one the lobby
+--     shop wall's bridge runs. One place in this game prompts Robux for an item.
+--   * THE PRICE IS THE LIVE ONE. displayedProductPrices is filled by the per-card
+--     GetProductInfo the row already does; no second request is made, and the
+--     pane says where the number came from rather than implying it is fixed.
+--   * OWNED IS MIRRORED, not recomputed. It reads the row button's own state, so
+--     the pane cannot disagree with the card beside it about what this account
+--     already has.
+-- WHAT YOU GET is the authored Description split on sentence boundaries. No new
+-- marketing copy was written for it: the same words, in lines a reader can skim.
+do
+	local frame = Instance.new("Frame")
+	frame.Name = "ShopDetail"
+	frame.BackgroundColor3 = COLORS.card
+	frame.BorderSizePixel = 0
+	frame.ClipsDescendants = true
+	frame.Visible = false
+	frame.Size = UDim2.fromOffset(0, 0)
+	frame.Parent = pages.Shop
+	corner(frame, 10)
+	outline(frame, COLORS.accent, 0.5)
+
+	local icon = Instance.new("ImageLabel")
+	icon.Name = "DetailIcon"
+	icon.BackgroundColor3 = COLORS.bg
+	icon.BorderSizePixel = 0
+	icon.ScaleType = Enum.ScaleType.Crop
+	icon.Size = UDim2.fromOffset(128, 128)
+	icon.Parent = frame
+	corner(icon, 64)
+	outline(icon, COLORS.accent, 0.35, 1.5)
+	local monogram = label(icon, "Z//", UDim2.fromScale(1, 1), UDim2.new(), 24,
+		COLORS.accent, Enum.Font.GothamBlack)
+	monogram.Name = "DetailMonogram"
+	monogram.TextXAlignment = Enum.TextXAlignment.Center
+
+	local kind = label(frame, "", UDim2.fromOffset(120, 16), UDim2.new(), 11,
+		COLORS.accent, Enum.Font.Code)
+	kind.Name = "DetailKind"
+	local name = label(frame, "", UDim2.fromOffset(120, 34), UDim2.new(), 28,
+		COLORS.text, Enum.Font.GothamBold)
+	name.Name = "DetailName"
+	name.TextWrapped = true
+	local price = label(frame, "", UDim2.fromOffset(120, 26), UDim2.new(), 20,
+		COLORS.accent2, Enum.Font.GothamBold)
+	price.Name = "DetailPrice"
+	local getTitle = label(frame, "WHAT YOU GET", UDim2.fromOffset(120, 16), UDim2.new(),
+		11, COLORS.muted, Enum.Font.Code)
+	getTitle.Name = "DetailBenefitsTitle"
+	local bullets = Instance.new("Frame")
+	bullets.Name = "DetailBenefits"
+	bullets.BackgroundTransparency = 1
+	bullets.ClipsDescendants = true
+	bullets.Size = UDim2.fromOffset(120, 0)
+	bullets.Parent = frame
+	local bulletLayout = Instance.new("UIListLayout")
+	bulletLayout.Padding = UDim.new(0, 6)
+	bulletLayout.SortOrder = Enum.SortOrder.LayoutOrder
+	bulletLayout.Parent = bullets
+	local note = label(frame, "Prices are read live from Roblox.",
+		UDim2.fromOffset(120, 18), UDim2.new(), 11, COLORS.muted)
+	note.Name = "DetailNote"
+	local buy = button(frame, "", UDim2.fromOffset(120, 44), UDim2.new())
+	buy.Name = "DetailBuy"
+	buy.TextColor3 = COLORS.accent2
+	buy.BackgroundColor3 = Color3.fromRGB(21, 55, 53)
+	outline(buy, COLORS.accent, 0.2, 1.5)
+
+	local geom = {Visible = false, Left = 0, Width = 0, Height = 0, Tap = 32}
+	local selected = nil
+	local PAD = 24
+
+	local function setContentVisible(on)
+		for _, node in ipairs(frame:GetDescendants()) do
+			if node:IsA("GuiObject") then node.Visible = on end
+		end
+		-- The monogram is the no-artwork fallback, never drawn over an image.
+		if on then monogram.Visible = icon.Image == "" end
+	end
+
+	local function layoutDetail()
+		-- Hidden means MEASURABLY hidden: the regression sweep reads every text
+		-- node's own Visible flag, not its ancestors', and a descendant of an
+		-- invisible frame still resolves an AbsoluteSize. A pane that only turned
+		-- its own Visible off would leave eight labels claiming boxes that are not
+		-- on screen.
+		if not geom.Visible or geom.Width < 240 or geom.Height < 170 then
+			frame.Visible = false
+			frame.Size = UDim2.fromOffset(0, 0)
+			setContentVisible(false)
+			return
+		end
+		frame.Visible = true
+		setContentVisible(true)
+		frame.Position = UDim2.fromOffset(geom.Left, 0)
+		frame.Size = UDim2.fromOffset(geom.Width, geom.Height)
+
+		-- The enlarged image, but never so large it takes the pane's own height.
+		local iconSize = math.clamp(math.floor(geom.Height * 0.22), 72, 128)
+		icon.Size = UDim2.fromOffset(iconSize, iconSize)
+		icon.Position = UDim2.fromOffset(PAD, PAD)
+		monogram.TextSize = math.max(16, math.floor(iconSize * 0.28))
+		local copyLeft = PAD + iconSize + 18
+		local copyWidth = math.max(60, geom.Width - copyLeft - PAD)
+
+		kind.Position = UDim2.fromOffset(copyLeft, PAD + 2)
+		kind.Size = UDim2.fromOffset(copyWidth, 16)
+		local nameFace = geom.Width >= 440 and 28 or 22
+		name.TextSize = nameFace
+		-- TEXT_FIT_SLACK for the reason the header carries it: this box is chosen
+		-- with GetTextSize and re-measured by the regression with
+		-- GetTextBoundsAsync, and the two do not agree to the pixel.
+		local nameHeight = math.max(nameFace + 8,
+			textHeightFor(name.Text, nameFace, name.Font, copyWidth) + TEXT_FIT_SLACK)
+		name.Position = UDim2.fromOffset(copyLeft, PAD + 22)
+		name.Size = UDim2.fromOffset(copyWidth, nameHeight)
+		price.Position = UDim2.fromOffset(copyLeft, PAD + 26 + nameHeight)
+		price.Size = UDim2.fromOffset(copyWidth, 26)
+
+		local buyHeight = math.max(geom.Tap, 44)
+		buy.Size = UDim2.fromOffset(geom.Width - PAD * 2, buyHeight)
+		buy.Position = UDim2.fromOffset(PAD, geom.Height - PAD - buyHeight)
+		note.Size = UDim2.fromOffset(geom.Width - PAD * 2, 18)
+		note.Position = UDim2.fromOffset(PAD, geom.Height - PAD - buyHeight - 24)
+
+		local listTop = math.max(PAD + iconSize + 20, PAD + 26 + nameHeight + 32)
+		getTitle.Position = UDim2.fromOffset(PAD, listTop)
+		getTitle.Size = UDim2.fromOffset(geom.Width - PAD * 2, 16)
+		local bulletWidth = geom.Width - PAD * 2
+		local used = 0
+		for _, row in ipairs(bullets:GetChildren()) do
+			if row:IsA("TextLabel") then
+				local rowHeight = math.max(16,
+					textHeightFor(row.Text, row.TextSize, row.Font, bulletWidth) + TEXT_FIT_SLACK)
+				row.Size = UDim2.fromOffset(bulletWidth, rowHeight)
+				used += rowHeight + 6
+			end
+		end
+		local room = geom.Height - PAD - buyHeight - 30 - (listTop + 22)
+		bullets.Position = UDim2.fromOffset(PAD, listTop + 22)
+		bullets.Size = UDim2.fromOffset(bulletWidth,
+			math.max(0, math.min(math.max(0, used - 6), room)))
+	end
+
+	-- ". " and nothing cleverer. A full stop with no space after it is a decimal
+	-- or an abbreviation, and splitting on it would cut "1.5" in half.
+	local function splitBenefits(text)
+		local out, rest = {}, tostring(text or "")
+		while #out < 5 do
+			local head, tail = rest:match("^(.-%.)%s+(.*)$")
+			if not head then break end
+			table.insert(out, head)
+			rest = tail
+		end
+		rest = rest:match("^%s*(.-)%s*$")
+		if rest ~= "" and #out < 5 then table.insert(out, rest) end
+		return out
+	end
+
+	local function render()
+		local entry = selected and shopDetail.Items[selected] or nil
+		for _, card in ipairs(productCards) do
+			local chosen = card.Key == selected
+			card.Stroke.Color = chosen and COLORS.accent or COLORS.line
+			card.Stroke.Transparency = chosen and 0.1 or 0.4
+		end
+		if not entry then
+			geom.Visible = false
+			layoutDetail()
+			return
+		end
+		local item = entry.Item
+		local iconId = math.floor(tonumber(item.IconId) or 0)
+		icon.Image = iconId > 0 and ("rbxassetid://" .. tostring(iconId)) or ""
+		monogram.Text = type(item.IconText) == "string" and item.IconText or "Z//"
+		kind.Text = entry.Kind == "Pass" and "PERMANENT PASS" or "DEVELOPER PRODUCT"
+		name.Text = tostring(item.Name or selected)
+		local row = productButtons[selected]
+		local owned = row ~= nil and row.Active ~= true and tostring(row.Text) == "OWNED"
+		local robux = math.max(0, math.floor(tonumber(displayedProductPrices[selected]) or 0))
+		price.Text = owned and "IN YOUR ACCOUNT" or (tostring(robux) .. " R$")
+		buy.Text = owned and "OWNED" or ("BUY  //  " .. tostring(robux) .. " R$")
+		buy.TextColor3 = owned and COLORS.accent or COLORS.accent2
+		UIDevice.SetEnabled(buy, not owned)
+		for _, old in ipairs(bullets:GetChildren()) do
+			if old:IsA("TextLabel") then old:Destroy() end
+		end
+		for index, line in ipairs(splitBenefits(item.Description)) do
+			local bullet = label(bullets, "\u{2022}  " .. line, UDim2.fromOffset(120, 16),
+				UDim2.new(), 13, COLORS.muted)
+			bullet.Name = "Benefit" .. tostring(index)
+			bullet.LayoutOrder = index
+			bullet.TextWrapped = true
+			bullet.TextYAlignment = Enum.TextYAlignment.Top
+		end
+		layoutDetail()
+	end
+
+	buy.Activated:Connect(function()
+		local request = selected and productPurchase[selected] or nil
+		if request then request() end
+	end)
+
+	shopDetail.select = function(key)
+		if not shopDetail.Items[key] then return end
+		selected = key
+		render()
+	end
+	shopDetail.priceChanged = function(key)
+		if selected == key then render() end
+	end
+	shopDetail.apply = function(fit, twoPane, left, width)
+		geom.Visible = twoPane
+		geom.Left, geom.Width, geom.Height = left, width, fit.ContentHeight
+		geom.Tap = fit.Tap
+		layoutDetail()
+	end
+	-- OWNED and the live prices arrive after the cards are built, so the pane
+	-- redraws on every profile push rather than only on a click.
+	table.insert(pageMounts.Subscribers, render)
+	-- The pane is never blank: it opens on the first catalogue item.
+	shopDetail.select(shopDetail.Order[1])
+end
+
 do
 	local item = Config.ProtectionItem
-	local card = makeUpgradeCard(upgradeScroll, 3, item.Name, item.Description)
+	local card = makeUpgradeCard(upgradeSection, 3, item.Name, item.Description)
 	card.Current.Text = tostring(item.DurationSeconds) .. "s"
 	local buy = card.Spend
 	-- No layout hook of its own any more. makeUpgradeCard registered this card in
@@ -1677,6 +1998,137 @@ do
 	end
 	ProtectionClient.Changed:Connect(refreshProtectionCard)
 	refreshProtectionCard()
+end
+
+-- FIELD SUPPLIES -- the token consumables (#85, card 102's Upgrades half).
+-- CONFIG-DRIVEN AND SKIPPED ENTIRELY when ZyntraConfig carries no Items table:
+-- this client can ship ahead of the server that defines them, and a card for an
+-- item the server has never heard of is a button whose only outcome is a
+-- refusal. Nothing else on the page changes when the group is absent.
+--
+-- The cards are made by makeUpgradeCard, which is why they are the same object
+-- as the three above them -- same three tiers, same measured stack, same
+-- contract.card registration -- rather than a second card shape that could
+-- drift from it. That also means they register in `upgradeCards`, so the
+-- Upgrades layout hook measures ALL FIVE and hands both grids one cell.
+if type(Config.Items) == "table" then
+	local heading = label(upgradeScroll, "FIELD SUPPLIES", UDim2.new(1, -8, 0, 26),
+		UDim2.new(), 14, COLORS.accent2, Enum.Font.GothamBold)
+	heading.Name = "FieldSuppliesHeading"
+	heading.LayoutOrder = 2
+
+	local section = Instance.new("Frame")
+	section.Name = "FieldSupplies"
+	section.LayoutOrder = 3
+	section.Size = UDim2.new(1, 0, 0, 0)
+	section.AutomaticSize = Enum.AutomaticSize.Y
+	section.BackgroundTransparency = 1
+	section.Parent = upgradeScroll
+	local grid = Instance.new("UIGridLayout")
+	grid.CellSize = upgradeGrid.CellSize
+	grid.CellPadding = UDim2.fromOffset(12, 12)
+	grid.SortOrder = Enum.SortOrder.LayoutOrder
+	grid.Parent = section
+
+	local rows = {}
+	local function addItem(key, order, word, headline)
+		local item = Config.Items[key]
+		if type(item) ~= "table" then return end
+		local cost = math.floor(tonumber(item.TokenCost) or 0)
+		local idle = tostring(cost) .. " TOKENS  //  BUY"
+		local card = makeUpgradeCard(section, order,
+			string.upper(tostring(item.Name or key)), tostring(item.Description or ""))
+		card.Current.Text = headline(item)
+		card.Level.Text = "0 " .. word
+		card.Spend.Text = idle
+		-- A purchase is a DataStore transaction, and the only honest thing to draw
+		-- while one is in flight is that it is being written. SAVING... is in
+		-- UIRegression's Fit.ZyntraDisabledCaptions, so an action wearing it is
+		-- allowed to be out of the input stack -- and required to be.
+		local pending, serial = false, 0
+		local function setPending(active)
+			pending = active
+			card.Spend.Text = active and "SAVING..." or idle
+			UIDevice.SetEnabled(card.Spend, not active)
+		end
+		local function requestItemPurchase()
+			if pending then return end
+			serial += 1
+			local mine = serial
+			setPending(true)
+			actionRemote:FireServer("BuyItem", {Key = key})
+			-- The next profile push clears this. The timer is the floor under that:
+			-- a write that never answers must not leave a dead button on the page.
+			task.delay(6, function()
+				if pending and serial == mine then setPending(false) end
+			end)
+		end
+		productPurchase[key] = requestItemPurchase
+		card.Spend.Activated:Connect(requestItemPurchase)
+		-- OPTIONAL crate art (Codex's uploads). Drawn only for a positive IconId,
+		-- because a card with an empty ImageLabel is worse than a text card --
+		-- and this client can run against a config that has no art yet.
+		local art = nil
+		local iconId = math.floor(tonumber(item.IconId) or 0)
+		if iconId > 0 then
+			art = Instance.new("ImageLabel")
+			art.Name = "SupplyIcon"
+			art.BackgroundColor3 = COLORS.bg
+			art.BorderSizePixel = 0
+			art.Image = "rbxassetid://" .. tostring(iconId)
+			art.ScaleType = Enum.ScaleType.Fit
+			art.Size = UDim2.fromOffset(44, 44)
+			art.Parent = card.Frame
+			corner(art, 8)
+			outline(art, COLORS.accent2, 0.4, 1)
+		end
+		table.insert(rows, {Key = key, Word = word, Card = card, Art = art,
+			Clear = function()
+				if pending then setPending(false) end
+			end})
+	end
+
+	addItem("SpeedPotion", 1, "STORED", function(item)
+		return ("+%d%%"):format(math.floor(((tonumber(item.SpeedMultiplier) or 1) - 1) * 100 + 0.5))
+	end)
+	addItem("RouteMarker", 2, "MARKERS", function(item)
+		return "x" .. tostring(math.floor(tonumber(item.PackSize) or 0))
+	end)
+
+	table.insert(pageMounts.Subscribers, function()
+		local items = type(profile) == "table" and profile.Items or nil
+		for _, row in ipairs(rows) do
+			local count = 0
+			if type(items) == "table" then count = math.floor(tonumber(items[row.Key]) or 0) end
+			row.Card.Level.Text = tostring(count) .. " " .. row.Word
+			row.Clear()
+		end
+	end)
+
+	-- Registered AFTER the Upgrades hook, which is the whole point: it reads the
+	-- cell that hook has just written, so the two groups cannot disagree about
+	-- how tall a card is.
+	table.insert(layoutHooks, function(fit)
+		grid.CellSize = upgradeGrid.CellSize
+		heading.TextSize = fit.Compact and 12 or 14
+		heading.Size = UDim2.new(1, -8, 0, fit.Compact and 22 or 26)
+		for _, row in ipairs(rows) do
+			if row.Art then
+				-- The pad and the title box are whatever the Upgrades hook just
+				-- wrote for this tier; they are READ rather than restated, so the
+				-- art cannot end up sized for a face the card is not drawing.
+				local title = row.Card.Title
+				local pad = title.Position.X.Offset
+				local side = fit.Compact and 34 or 44
+				row.Art.Size = UDim2.fromOffset(side, side)
+				row.Art.Position = UDim2.new(1, -(side + pad), 0, pad)
+				-- The title gives the art its column instead of running under it.
+				title.Size = UDim2.new(title.Size.X.Scale,
+					title.Size.X.Offset - side - 10,
+					title.Size.Y.Scale, title.Size.Y.Offset)
+			end
+		end
+	end)
 end
 
 local supportTotalLabel = label(
@@ -1805,7 +2257,9 @@ local function makeDonationCard(key, item)
 	heading.Name = "TierName"
 	heading.TextWrapped = true
 	local productId = math.floor(tonumber(item.Id) or 0)
-	local buy = button(card, tostring(item.Price) .. " R$  //  DONATE", UDim2.new(1, -24, 0, 36), UDim2.new(0, 12, 1, -44))
+	local isPass = item.Kind == "GamePass"
+	local actionCaption = isPass and " R$  //  ONE-TIME" or " R$  //  DONATE"
+	local buy = button(card, tostring(item.Price) .. actionCaption, UDim2.new(1, -24, 0, 36), UDim2.new(0, 12, 1, -44))
 	buy.Name = "Buy"
 	buy.TextWrapped = true
 	buy.TextColor3 = COLORS.accent2
@@ -1816,6 +2270,7 @@ local function makeDonationCard(key, item)
 	-- string that a copy change is free to rewrite.
 	card:SetAttribute("DonationTierKey", key)
 	card:SetAttribute("DonationProductId", productId)
+	card:SetAttribute("DonationPurchaseKind", isPass and "GamePass" or "Product")
 	contract.card("Donate", key, card, buy)
 	if productId <= 0 then
 		buy.Text = "COMING SOON"
@@ -1828,16 +2283,33 @@ local function makeDonationCard(key, item)
 		-- gamepad cannot land on a product that cannot be bought.
 		UIDevice.SetEnabled(buy, false)
 	else
+		local function refreshDonationOwnership()
+			if not buy.Parent then return end
+			local owned = isPass and player:GetAttribute("ZyntraOwns" .. key) == true
+			UIDevice.SetEnabled(buy, not owned)
+			buy.Text = owned and "OWNED" or tostring(displayedProductPrices[key]) .. actionCaption
+			buy.TextColor3 = owned and COLORS.muted or COLORS.accent2
+		end
+		if isPass then
+			player:GetAttributeChangedSignal("ZyntraOwns" .. key):Connect(refreshDonationOwnership)
+		end
+		refreshDonationOwnership()
 		task.spawn(function()
-			local ok, info = pcall(MarketplaceService.GetProductInfo, MarketplaceService, productId, Enum.InfoType.Product)
+			local infoType = isPass and Enum.InfoType.GamePass or Enum.InfoType.Product
+			local ok, info = pcall(MarketplaceService.GetProductInfo, MarketplaceService, productId, infoType)
 			local price = ok and type(info) == "table" and tonumber(info.PriceInRobux) or nil
-			if price and price >= 0 and buy.Parent and buy.Active then
+			if price and price >= 0 and buy.Parent then
 				displayedProductPrices[key] = math.floor(price)
-				buy.Text = tostring(math.floor(price)) .. " R$  //  DONATE"
+				refreshDonationOwnership()
 			end
 		end)
 		buy.Activated:Connect(function()
-			MarketplaceService:PromptProductPurchase(player, productId)
+			if isPass then
+				if player:GetAttribute("ZyntraOwns" .. key) == true then return end
+				MarketplaceService:PromptGamePassPurchase(player, productId)
+			else
+				MarketplaceService:PromptProductPurchase(player, productId)
+			end
 		end)
 	end
 	return card
@@ -2620,11 +3092,101 @@ local function refreshUI()
 	hazmatPicker.SetColor(profile.HazmatColor)
 	glowstickPicker.SetColor(profile.GlowstickColor)
 	updateReentry()
+	-- The mounted pages redraw from the same profile, and a page that throws in
+	-- its own refresh must not take the terminal's controls down with it.
+	for pageName, handle in pairs(pageMounts.Handles) do
+		if type(handle.refresh) == "function" then
+			local ok, err = pcall(handle.refresh)
+			if not ok then warn("[ZyntraStore] " .. pageName .. " refresh failed: " .. tostring(err)) end
+		end
+	end
+end
+
+-- Everything that asked to hear about a profile push hears about it HERE, once,
+-- after refreshUI has redrawn the terminal's own controls -- the FIELD SUPPLIES
+-- readouts, the shop detail pane, and every page module's onProfile. pcall'ed
+-- per subscriber so one failure cannot stop the next.
+local function publishProfile(message, tone)
+	for _, subscriber in ipairs(pageMounts.Subscribers) do
+		local ok, err = pcall(subscriber, profile, message, tone)
+		if not ok then warn("[ZyntraStore] profile subscriber failed: " .. tostring(err)) end
+	end
+end
+
+-- ── the mounted terminal pages (card 102) ──────────────────────────────────
+-- REWARDS and NOTES are owned by their own ModuleScripts. ZyntraStore supplies
+-- the page frame and exactly the context claude-contracts.md names, and nothing
+-- else: the page never requires this script back, never touches another page,
+-- and draws only inside the frame it is handed.
+--
+-- A MOUNT THAT THROWS IS A WARNING AND A MISSING PAGE, never a dead terminal.
+-- This LocalScript also draws the lobby rail, the re-entry modal, the colour
+-- pickers and the whole Shop, and none of those may be lost to a page module it
+-- does not own. Mounted here rather than beside the tab loop because the context
+-- hands out refreshProfile, which needs refreshUI -- a local declared above this
+-- line. Referencing it any earlier would capture a nil global instead.
+do
+	local styleModule = ReplicatedStorage:FindFirstChild("UIStyle")
+	local okStyle, UIStyle = pcall(require, styleModule)
+	if not okStyle then UIStyle = nil end
+	for pageName, moduleName in pairs(TERMINAL_PAGE_MODULES) do
+		local page = pages[pageName]
+		local moduleScript = page and ReplicatedStorage:FindFirstChild(moduleName)
+		if moduleScript then
+			local ok, result = pcall(function()
+				return require(moduleScript).mount(page, {
+					player = player,
+					Config = Config,
+					UIStyle = UIStyle,
+					UIDevice = UIDevice,
+					COLORS = COLORS,
+					label = label,
+					button = button,
+					corner = corner,
+					outline = outline,
+					action = function(name, payload) actionRemote:FireServer(name, payload) end,
+					profile = function() return profile end,
+					onProfile = function(fn)
+						table.insert(pageMounts.Subscribers, fn)
+						return function()
+							for index, entry in ipairs(pageMounts.Subscribers) do
+								if entry == fn then
+									table.remove(pageMounts.Subscribers, index)
+									break
+								end
+							end
+						end
+					end,
+					refreshProfile = function()
+						task.spawn(function()
+							local gotIt, answer = pcall(getProfileRemote.InvokeServer, getProfileRemote)
+							if gotIt and answer then
+								profile = answer
+								refreshUI()
+								publishProfile(nil, nil)
+							end
+						end)
+					end,
+					showStatus = showStatus,
+					registerLayoutHook = function(fn) table.insert(layoutHooks, fn) end,
+					isVisible = function() return main.Visible and page.Visible end,
+					contract = contract,
+					pageName = pageName,
+				})
+			end)
+			if ok and type(result) == "table" then
+				pageMounts.Handles[pageName] = result
+			else
+				warn("[ZyntraStore] " .. moduleName .. " failed to mount: " .. tostring(result))
+			end
+		end
+	end
 end
 
 profileChangedRemote.OnClientEvent:Connect(function(newProfile, message, tone)
 	if newProfile then profile = newProfile end
 	refreshUI()
+	publishProfile(message, tone)
 	if message and message ~= "" then showStatus(message, tone) end
 end)
 
@@ -2633,6 +3195,7 @@ task.spawn(function()
 	if ok then
 		profile = result
 		refreshUI()
+		publishProfile(nil, nil)
 	else
 		showStatus("Could not load the Zyntra profile.", "error")
 	end
@@ -2980,11 +3543,22 @@ end
 -- builder can replace the concourse after this LocalScript starts.
 local boundShopPrompts = setmetatable({}, { __mode = "k" })
 
-local function openKioskShop()
+-- The optional tab is what the lobby shop wall asks for through
+-- PlayerScripts.ZyntraOpenTerminal. An unknown or absent name falls back to
+-- Shop, and BOTH callers keep the kiosk's guards: never in a round, never while
+-- a modal owns the screen.
+local function openKioskShop(tab)
 	if player:GetAttribute("InRound") == true or modalBlocksStore() then return end
-	selectTab("Shop")
+	selectTab(type(tab) == "string" and pages[tab] ~= nil and tab or "Shop")
 	setMainVisible(true)
 	showStatus("")
+end
+
+do
+	local opener = Instance.new("BindableEvent")
+	opener.Name = "ZyntraOpenTerminal"
+	opener.Parent = player:WaitForChild("PlayerScripts")
+	opener.Event:Connect(function(tab) openKioskShop(tab) end)
 end
 
 -- Studio-only input seam for UIRegression. It exercises the exact production
@@ -3042,7 +3616,7 @@ local function bindShopPrompt(instance)
 	boundShopPrompts[instance] = true
 	instance.Triggered:Connect(function(triggeringPlayer)
 		if triggeringPlayer and triggeringPlayer ~= player then return end
-		openKioskShop()
+		openKioskShop(instance:GetAttribute("ShopRewardsPrompt") == true and "Rewards" or nil)
 	end)
 end
 
@@ -3071,7 +3645,9 @@ end
 openButton.Activated:Connect(function()
 	toggleMain()
 end)
-shopButton.Activated:Connect(openKioskShop)
+-- Wrapped: Activated passes an InputObject, which openKioskShop would
+-- otherwise be handed as a tab name.
+shopButton.Activated:Connect(function() openKioskShop() end)
 closeButton.Activated:Connect(function() setMainVisible(false) end)
 
 UserInputService.InputBegan:Connect(function(input, processed)
@@ -3115,7 +3691,20 @@ end)
 -- Every rectangle below is an OFFSET, and the panel's own origin is computed
 -- rather than expressed as a 0.5 scale, so the geometry a regression measures
 -- at a simulated viewport is the geometry a player gets at the real one.
-local STORE_DESIGN_WIDTH, STORE_DESIGN_HEIGHT = 840, 610
+-- C_TERMINAL_IS_A_DESTINATION_20260916 (card 102). 840x610 was a dialog:
+-- on a 1920x1080 screen it used 22% of the area and the Shop tab showed six
+-- cards with a 12px description each. Roblox's own monetization guidance asks
+-- for a shop a player can "linger and browse" and that carries enough context
+-- to compare items (see artifacts/trello-20260916/shop-research.md, findings 1
+-- and 2), so the POINTER design is 1180x760 and the Shop tab uses the width for
+-- a list + detail browser rather than wider cards.
+--
+-- Nothing else about the ladder changes. The panel is still clamped to
+-- UIDevice's ModalViewport with the same margins, so a 1366x768 laptop gets a
+-- proportionally smaller panel with the SAME composition, and the phone and
+-- tablet tiers keep the arithmetic they had -- `compact` is still width < 640
+-- or height < 430, which no handheld crosses because the clamp keeps it below.
+local STORE_DESIGN_WIDTH, STORE_DESIGN_HEIGHT = 1180, 760
 -- Nothing may resolve to zero or negative. These are the smallest rectangles
 -- the composition is still a composition at; below them the panel takes the
 -- whole modal viewport and the pages scroll.

@@ -1,0 +1,12 @@
+{
+  "StarterPlayer/StarterPlayerScripts/Level 3 Table Hiding Client.LocalScript.lua": {
+    "sha256": "e406296d0b1aa64f72cb9051caa36bc1d555a1c680c13cffebb8f79893ed6d98",
+    "synced": true,
+    "studioExtraNewline": false
+  },
+  "ServerScriptService/Level 3 Systems/Level 3 Configuration.ModuleScript.lua": {
+    "sha256": "4c7ee39a3f60f32dab269394a0ced2a5813f4a909ae347fefffbf26092a22b88",
+    "synced": true,
+    "studioExtraNewline": false
+  }
+}

@@ -50,3 +50,14 @@ The native sign review found that the glow panel obscured the lettering. Its
 depth now sits behind the sign face (X=31.78), preserving readable SHOP text.
 Product plates only open a detail card; the explicit BUY action uses the existing
 store purchase flow. No prices or discounts were changed.
+
+## September 16 additions
+
+Speed Potion: `box-speed-potion.png`, `Box.SpeedPotion`, asset 73457681182843.
+Route Marker Pack: `box-route-marker-pack.png`, `Box.RouteMarkerPack`, asset 100856675462356.
+Integrated in published v1920; both supply images rendered and reported IsLoaded=true in native Studio QA.
+Receipt: `published-products-20260916.json`.
+
+## Additional shop surfaces, 16 September 2026
+
+Canopy fascia: 104212668736693; nameplate: 87848253712756; rewards plaque: 79807587818348. See published-surfaces-20260916.json for dimensions and alpha checks. All five images uploaded on this date are user-owned by mikkelczar (40920547), as verified through MarketplaceService. All five returned ContentProvider AssetFetchStatus.Success in native QA and are integrated in published v1920.

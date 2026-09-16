@@ -1,0 +1,707 @@
+[
+  {
+    "file": "ReplicatedStorage/DevAccess.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ReplicatedStorage/FlashlightProfiles.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ReplicatedStorage/MasterConfiguration.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ReplicatedStorage/ProtectionClient.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ReplicatedStorage/UIDevice.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ReplicatedStorage/ZyntraConfig.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/AvatarNormalize.Script.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Crouch State Server.Script.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/FlashlightSync.Script.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/GameManager.Script.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 1 Systems/EntityAI.Script.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 1 Systems/EntityAnimation.Script.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 1 Systems/EntityKill.Script.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 1 Systems/MazeGenerator.Script.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 2 Systems/Level 2 Configuration.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 2 Systems/Level 2 Exit Transition Test Suite.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 2 Systems/Level 2 Layout Generator.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 2 Systems/Level 2 Objective Controller.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Animation Adapter.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Configuration.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Controller.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Navigator.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Observer.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Proxy Factory.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Slide Configuration.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Slide Controller.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Slide Navigator.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Slide Rig Adapter.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 2 Systems/Level 2 Slide Ragdoll Service.Script.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 2 Systems/README - LEVEL 2 POOL FOAM.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 2 Systems/README - LEVEL 2 TWEAKS.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 3 Systems/Level 3 Configuration.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 3 Systems/Level 3 Hiding Controller.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 3 Systems/Level 3 Layout Generator.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 3 Systems/Level 3 Mall Manager AI Controller.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 3 Systems/Level 3 Music Sequence Controller.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 3 Systems/Level 3 Objective Controller.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 3 Systems/Level 3 Round Adapter.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 3 Systems/Level 3 Test Suite.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level 3 Systems/Level 3 World Builder.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level2Generator.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Level3Generator.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/LobbyPartyModeController.Script.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/NoiseRegistry.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/PlayerProtection.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/PurchaseAlerts.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Round Completion Routing.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Round Completion Test Suite.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Round Loading Runtime.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/Round Loading Test Suite.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/ZyntraMonetization.Script.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/Archive/Level 2 Kids Skylight Backup 20260806/Level 2 World Builder Before Kids Skylights.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/Archive/Level 2 Kids Texture Backup 20260806/Level 2 World Builder Before Kids Textures.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/Archive/Level 2 Kids V1 Backup 20260811/Level 2 Configuration.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/Archive/Level 2 Kids V1 Backup 20260811/Level 2 World Builder.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/Archive/Level 2 Lever Redesign Backup 20260806/Level 2 Configuration.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/Archive/Level 2 Lever Redesign Backup 20260806/Level 2 Objective Controller.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/Archive/Level 2 Lever Redesign Backup 20260806/Level 2 World Builder.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/Archive/Level 2 Pump Scale Backup 20260806/Level 2 World Builder Before 40 Percent Reduction.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/Archive/Level2AudioBackup_20260831_NoDistantSplash/Level 2 Configuration.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/Archive/Level2AudioBackup_20260831_NoDistantSplash/Level 2 Sound Controller.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/Archive/Level2RetiredSlidemouth_20260831/Level 2 Slidemouth Client.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/Archive/Level2RetiredSlidemouth_20260831/Level 2 Slidemouth Controller.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/Archive/Level2RetiredSlidemouth_20260831/Level 2 Slidemouth Test Suite.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/Archive/RetiredLobbyAssets/Miso/MisoPatrol.Script.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/CodexBackup_20260902_ComingSoonGates/TunnelLobbyBuilder_PreComingSoon.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__FlashlightSync.Script.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__Level 2 Systems__Level 2 Pool Foam Configuration.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__Level 2 Systems__Level 2 Pool Foam Controller.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__Level 3 Systems__Level 3 Hiding Controller.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__TunnelLobbyBuilder.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__EntityShakeController.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__FlashlightController.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__NoiseReporter.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/PoolSlideContextDiagnosticBackup_0710/Level 2 Pool Slide Controller.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/PoolSlideContextDiagnosticBackup_0710/Level 2 Pool Slide Navigator.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP6_1609Z/Controller.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP6_1609Z/Navigator.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP7_1624Z/Controller.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP7_1624Z/Navigator.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP8_1633Z/Controller.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP8_1633Z/Navigator.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP8_1633Z/NavigatorBeforeBudgetFix.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP9_1640Z/Controller.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP9_1640Z/Navigator.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/Project Mirror/IMPORTANT.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/Project Mirror/Script.Script.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerStorage/TEMP_PipeEntityAnimations_20260909/PreviewControls.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterCharacter/Animate.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterCharacterScripts/DisableDefaultWalkingSound.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterCharacterScripts/SetRunAnimation.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/DevCheats.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/EntityShakeController.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/First Entry Guide.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/FlashlightController.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/JumpscareUI.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level 1 Sound Controller.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level 2 Lighting Controller.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level 2 Pool Foam Client.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level 2 Pool Slide Dev ESP.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level 2 Slide Controller.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level 2 Sound Controller.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level 3 Lighting Controller.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level 3 Mall Manager Visual Smoother.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level 3 Reader Client.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level 3 Sound Controller.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level 3 Table Hiding Client.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level2AlertClient.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/LobbyCeilingSweeps.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/LobbyLevel3GateFlicker.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/LobbyMusicController.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/MasterTuningClient.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/NoiseReporter.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/ProtectionHUD.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/PuzzleUI.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Round Entry Client.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Round Exit Client.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/SpectateController.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level 2 Entity Audio.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ReplicatedStorage/Level 2 Entity Audio Bank.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ReplicatedStorage/UIStyle.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/LobbyShopDisplay.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Shop Display Client.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level 1 Cable Current.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ReplicatedStorage/ZyntraDailyRewardsPage.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/RouteMarkerService.Script.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ReplicatedStorage/ZyntraFieldNotes.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ReplicatedStorage/ZyntraFieldNotesPage.ModuleScript.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "ServerScriptService/FieldNotesService.Script.lua",
+    "exit": 0,
+    "error": ""
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Field Notes Client.LocalScript.lua",
+    "exit": 0,
+    "error": ""
+  }
+]

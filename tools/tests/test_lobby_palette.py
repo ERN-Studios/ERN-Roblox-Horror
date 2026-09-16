@@ -135,6 +135,12 @@ function ReplicatedStorage:WaitForChild(name)
         function v:GetPropertyChangedSignal()
             return {Connect = function() bound[vname] = true; return {Disconnect = function() end} end}
         end
+        -- Trello #100: rows also bind the Rank/Name/Robux attributes. This fake
+        -- publishes none, so the board takes its string fallback path.
+        function v:GetAttribute() return nil end
+        function v:GetAttributeChangedSignal()
+            return {Connect = function() return {Disconnect = function() end} end}
+        end
         v.Parent = folder
     end
     value("Status", "DONATIONS + RECORDED TOKEN / RE-ENTRY PURCHASES")
@@ -237,9 +243,14 @@ local status = childNamed("Status")
 check(status.TextXAlignment == Enum.TextXAlignment.Center, "the status line is centred")
 check(status.TextSize / pxV > 19 / (660 / faceH), "the status line is physically larger than before")
 
-local scope = childNamed("RecordedSupportScope")
-check(scope.TextXAlignment == Enum.TextXAlignment.Center, "the footer is centred")
-check(scope.TextSize / pxV > 17 / (660 / faceH), "the footer is physically larger than before")
+-- Trello #100: the footer is gone; its wording lives on as the RankingScope
+-- attribute only. The per-column layout itself is proved by
+-- test_donation_board_columns.py; this suite keeps the palette-era physical
+-- size claims and the bindings.
+check(childNamed("RecordedSupportScope") == nil, "the historical-purchases footer is no longer drawn")
+for _, c in ipairs(background.Children) do
+    check(c.Text ~= "INCLUDES VERIFIED HISTORICAL PURCHASES", "no child carries the retired footer text")
+end
 
 local rows = {}
 for rank = 1, 10 do
@@ -254,33 +265,46 @@ for _, c in ipairs(background.Children) do
 end
 check(#drawn == 10, "exactly ten rank plates are drawn -- an extra one would not fit the budget")
 
+local function column(row, name)
+    for _, c in ipairs(row.Children) do if c.Name == name then return c end end
+    return nil
+end
 local rowH = rows[1].Size.Y.Offset
 local pitch = rows[2].Position.Y.Offset - rows[1].Position.Y.Offset
+local first = {Rank = column(rows[1], "Rank"), Name = column(rows[1], "Name"), Robux = column(rows[1], "Robux")}
 for rank, row in ipairs(rows) do
-    check(row.TextXAlignment == Enum.TextXAlignment.Center, "rank row " .. rank .. " is centred")
-    check(row.Size.Y.Offset == rowH and row.TextSize == rows[1].TextSize, "every rank row is the same height and size")
+    check(row.Size.Y.Offset == rowH, "every rank row is the same height")
     check(row.Position.X.Offset == rows[1].Position.X.Offset, "every rank row shares one left margin")
     if rank > 1 then
         check(row.Position.Y.Offset - rows[rank - 1].Position.Y.Offset == pitch, "rank rows are evenly pitched")
     end
     check(row.Position.Y.Offset >= 92, "rank row " .. rank .. " starts below the divider")
-    check(row.Position.Y.Offset + rowH <= scope.Position.Y.Offset, "rank row " .. rank .. " ends above the footer")
+    check(row.Position.Y.Offset + rowH <= gui.CanvasSize.Y - 16, "rank row " .. rank .. " ends clear of the canvas corner")
+    for _, name in ipairs({"Rank", "Name", "Robux"}) do
+        local col = column(row, name)
+        check(col ~= nil, "rank row " .. rank .. " has a " .. name .. " column")
+        check(col.Position.X.Offset == first[name].Position.X.Offset and col.Size.X.Offset == first[name].Size.X.Offset,
+            "the " .. name .. " column sits at one x on every row")
+        check(col.TextSize == first[name].TextSize, "every " .. name .. " column shares one text size")
+    end
+    check(column(row, "Rank").TextXAlignment == Enum.TextXAlignment.Right, "ranks are right-aligned in their column")
+    check(column(row, "Name").TextXAlignment == Enum.TextXAlignment.Left, "names are left-aligned in their column")
+    check(column(row, "Robux").TextXAlignment == Enum.TextXAlignment.Right, "amounts are right-aligned in their column")
 end
 check(pitch >= rowH, "rank plates do not overlap")
-check(scope.Position.Y.Offset + scope.Size.Y.Offset <= gui.CanvasSize.Y, "the footer fits inside the canvas")
-check(rows[1].TextSize / pxV > 24 / (660 / faceH), "rank text is physically larger than before")
-
--- The widest row ZyntraMonetization can publish is "00" + a 20-character name
--- + the separators + a six-digit amount: 41 monospace characters.
-local pad = rows[1].Children[1]
-check(pad.ClassName == "UIPadding", "rank rows still carry their padding")
-local inner = gui.CanvasSize.X + rows[1].Size.X.Offset - pad.PaddingLeft.Offset - pad.PaddingRight.Offset
-check(41 * 0.6 * rows[1].TextSize <= inner, "the longest publishable row still fits without clipping a name")
+check(first.Name.TextSize / pxV > 24 / (660 / faceH), "rank text is physically larger than before")
+check(first.Rank.Position.X.Offset + first.Rank.Size.X.Offset < first.Name.Position.X.Offset,
+    "the rank column ends before the name column starts")
+check(first.Name.Position.X.Offset + first.Name.Size.X.Offset < first.Robux.Position.X.Offset,
+    "the name column ends before the amount column starts")
+check(first.Robux.Position.X.Offset + first.Robux.Size.X.Offset <= gui.CanvasSize.X,
+    "the amount column ends inside the canvas")
+check(first.Name.TextTruncate == Enum.TextTruncate.AtEnd, "a long name is truncated rather than run under the amount")
 
 check(bound.Status == true, "the status value is still bound")
 for rank = 1, 10 do
     check(bound[string.format("Row%02d", rank)] == true, "row " .. rank .. " is still bound to its value")
-    check(rows[rank].Text:find("SUPPORTER") ~= nil, "row " .. rank .. " renders what the server published")
+    check(column(rows[rank], "Name").Text:find("SUPPORTER") ~= nil, "row " .. rank .. " renders what the server published")
 end
 
 print(string.format(

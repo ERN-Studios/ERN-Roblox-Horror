@@ -1,28 +1,25 @@
-# Zyntra table-hiding hold — Blender MCP authoring
+# Level 3 table-hiding hold
 
-Trello #99, coordinated with A80's #80 placement fix. **Authoring complete; native Roblox validation and asset publication pending.**
+## Current asset — 16 September 2026
 
-- `zyntra-table-hide-v1.blend`: separate authoring project, preserving the original Blender scene. New scene `Zyntra_TableHide_20260915`, action `Zyntra_TableHide_Hold_4s_v1`.
-- `hide-hold-keyframes.json`: 121 evaluated frames at30fps, four-second seamless Action-priority loop. Pose hierarchy uses R15 part names, with corresponding joint names in metadata.
-- `authored-pose.json`: parameterized tucked pose fitted against actual measured Attachment0/1 transforms and MeshPart bounding sizes.
-- `bake-validation.json`: full-loop geometry/round-trip measurements.
-- `hide-hold-preview.png`: **bounding-box proxies only**, a cutaway authoring view; not proof of final mesh appearance.
-- `blender-build-result.json`: actual successful MCP result.
+Roblox animation **119040885264927**, owned by **ERN Roblox Studios**, group **1039373905**. Publication succeeded and MarketplaceService confirmed asset type 24 and the group creator. `published-animation-v2.json` records the receipt.
 
-## Method and constraints
+- `zyntra-table-hide-v2.blend`: actual StarterCharacter meshes, measured AnimationConstraint rig and actual Level 3 folding table; textures packed, existing scenes preserved.
+- `hide-hold-v2-keyframes.json`: 121 evaluated frames at 30 fps, four-second Action hold with subtle breathing. No entry/exit sequence or root drift.
+- `authored-actual-pose.json`: fitted transforms using actual mesh convex hulls, including three seam liners.
+- `actual-bake-validation.json`: every mesh vertex checked throughout the loop. Floor clearance 0.0415 stud, collider clearance 0.0538, maximum lane |X| 1.4908 and depth |Z| 2.0298. Physical table and sight occluder contain this depth. Roundtrip error 5.07e-7.
+- `actual-character-table-final.png`: actual mesh/table authoring preview. Final gameplay evidence goes in `artifacts/trello-20260916/animation-native-qa.md`.
 
-Read-only capture of the live game's real R15 AnimationConstraints, scale1 and HipHeight2.60477 is in `artifacts/trello-20260915/codex-hiding-rig.json`. Reconstructed attachment rest hierarchy, created a matching Blender armature and rigid weighted geometry proxies, authored the crouched hold with subtle breathing, and baked evaluated Blender pose matrices back into Roblox joint-local space. Scripts: `tools/prepare_table_hide_pose.py` and `tools/build_table_hide_blender.py`.
+Native exports: `_local/trello-20260916/character-export`. All 18 meshes match measured positions and dimensions within 0.00004 stud. Studio OBJ export omits SurfaceAppearance tint; the Blender preview restores measured colors. These are existing game textures.
 
-Across121frames: body bounding boxes stay at root-space Y −2.17990…+0.47179. With root at floor+2.20, minimum floor clearance0.0201 and minimum table-collider clearance0.0882stud. X −1.45187…+1.50052 fits the two lanes with ample separation. Z −2.05313…+1.92713 exceeds the logical3stud hide-volume depth but remains within the physical table±2.30 and sight occluder±2.15. Final native visual checking must confirm concealment. Decorative seam liners are excluded from the proxy analysis and must also be visually checked.
+## Authoring and runtime
 
-Loop endpoints are identical. Maximum Blender/Roblox transform round-trip error2.53e-7. Root has no animation drift. The player is teleported into the lane by the server before this hold; no walking/crawling entry clip is included. Exit must stop the track immediately.
+Use `tools/build_actual_table_hide.py`, `fit_actual_hide_pose.py`, `preview_actual_hide_pose.py` and `bake_actual_hide_pose.py` through the active Blender MCP bridge. The fitter uses task-local SciPy under `_local/trello-20260916/python-deps`.
 
-## Integration requirements for A80/Fable
+Publish with `tools/publish_table_hide_animation.py --coordinated-edit-window --version v2`. The uploader refuses repeat publication when a receipt exists and checks the experience owner.
 
-1. Publish the KeyframeSequence as an Animation under creator group1039373905, matching the experience owner. Record the actual id and ownership response. Do not invent an id.
-2. Add a replicated configuration seam for the local client; a client cannot directly require ServerScriptService's Configuration. Server can publish a validated animation id attribute or shared config value.
-3. Use the player's server-created Animator and Action priority, Looped=true. Ensure the procedural writer **does not overwrite the playing hide track on observing clients**. The existing all-client hidden pose writer would otherwise defeat replication. Ordinary crouch must keep working. Failed/missing track uses the procedural pose fallback, with observable readiness rather than assuming LoadAnimation success means content ready.
-4. Clean track/instance/state on exit, death, character replacement, level transitions and failed load. Do not alter camera, prompt/exit interaction, occupancy, lanes or server hiding security.
-5. Verify actual avatar mesh under both table orientations/lanes and through a full loop. Test exit, re-entry, death/flush and fallback. Verify animation permission/content load and actual track weight. Cross-client visual evidence remains required if feasible; do not claim one local client proved replication.
+The server places the root at floor +2.20 and starts the Action track. Clients defer to the loaded, fully weighted track; the procedural fallback now copies v2's fitted pose. Ordinary crouch retains its previous gait. Existing controller cleanup owns exit, death and character replacement.
 
-Roblox's [AnimationConstraint reference](https://create.roblox.com/docs/reference/engine/classes/AnimationConstraint) documents the joint transform/Animator relationship.
+## History
+
+v1 files and animation **113160394754713** remain as history. That preview used bounding-box proxies. v2 uses actual geometry, a forward gaze and arms drawn forward. v1 is no longer the configured hold.

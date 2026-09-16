@@ -144,6 +144,12 @@ local function publishCrouch(active)
 	crouchRemote:FireServer(active, crouchRequestSerial)
 end
 
+-- Speed Potion (ZYNTRA_SPEED_POTION_20260916). Forward-declared like currentChar
+-- above so applySpeed can use it while the body stays below, beside the speeds
+-- it scales -- which is also what keeps it inside the block the offline
+-- controller test lifts out of this file (applySpeed down to refreshCrouch).
+local speedBoost
+
 local function applySpeed()
 	local character, hum = currentChar()
 	if not hum then return end
@@ -168,6 +174,12 @@ local function applySpeed()
 		state = "walk"
 		desiredSpeed = WALK_SPEED
 	end
+	-- ONE multiplier, applied after the movement state has chosen its speed, so
+	-- crouch/walk/sprint all scale (8/16/26 -> 8.8/17.6/28.6) from the single
+	-- existing writer instead of a competing WalkSpeed loop. `state` and the
+	-- stamina drain keyed off it are deliberately untouched: the potion is speed,
+	-- not stamina, and the noise a player makes must not change with it.
+	desiredSpeed *= speedBoost()
 	-- Publish the intended speed separately from WalkSpeed. Deferred property
 	-- signals can observe the slide controller's re-zero instead of this write;
 	-- the attribute gives every movement lock an unambiguous restore target.
@@ -181,6 +193,23 @@ local function applySpeed()
 		return
 	end
 	hum.WalkSpeed = desiredSpeed
+end
+
+-- The SERVER owns the boost: ZyntraMonetization consumes the potion and then
+-- writes ZyntraSpeedBoostUntil (a workspace server clock) and
+-- ZyntraSpeedBoostMultiplier on the Player. This only reads them, and refuses
+-- anything outside [1, 1.5] so a stray write can never become a speed hack.
+-- Order matters: everything cheap and local is checked before the clock, so a
+-- player with no boost -- the normal case, every frame -- costs two lookups.
+function speedBoost()
+	if not inRound() then return 1 end
+	local expires = player:GetAttribute("ZyntraSpeedBoostUntil")
+	-- NaN fails every comparison, so `expires > 0` rejects it along with 0/nil.
+	if type(expires) ~= "number" or not (expires > 0) then return 1 end
+	if expires <= workspace:GetServerTimeNow() then return 1 end
+	local multiplier = player:GetAttribute("ZyntraSpeedBoostMultiplier")
+	if type(multiplier) ~= "number" or not (multiplier >= 1 and multiplier <= 1.5) then return 1 end
+	return multiplier
 end
 
 local function refreshCrouch()
@@ -698,6 +727,17 @@ UIDevice.Changed:Connect(applyStaminaLayout)
 local barShown = 0 -- eased 0–1 visibility
 local lastFrac, lastExhausted = -1, nil -- last values written; -1/nil force the first frame to write
 
+-- The boost STARTS as an attribute change, but it ENDS when a server timestamp
+-- passes and nothing fires at all. The in-round loop below watches this edge
+-- rather than adding a second WalkSpeed loop just to count six seconds down.
+local boostActive = false
+local function refreshSpeedBoost()
+	boostActive = speedBoost() > 1
+	applySpeed()
+end
+player:GetAttributeChangedSignal("ZyntraSpeedBoostUntil"):Connect(refreshSpeedBoost)
+player:GetAttributeChangedSignal("ZyntraSpeedBoostMultiplier"):Connect(refreshSpeedBoost)
+
 RunService.Heartbeat:Connect(function(dt)
 	-- InputEnded can be lost on disconnect/focus loss in any phase. Reconcile
 	-- physical holds without changing the independent touch RUN toggle.
@@ -775,6 +815,7 @@ RunService.Heartbeat:Connect(function(dt)
 	local root = char and char:FindFirstChild("HumanoidRootPart")
 	local moving = root
 		and Vector3.new(root.AssemblyLinearVelocity.X, 0, root.AssemblyLinearVelocity.Z).Magnitude > 2
+	if (speedBoost() > 1) ~= boostActive then refreshSpeedBoost() end
 
 	if devUnlimited() then
 		stamina = staminaMax() -- dev cheat: never drains
