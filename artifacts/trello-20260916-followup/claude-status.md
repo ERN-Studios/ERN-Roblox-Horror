@@ -1,5 +1,9 @@
 # Claude status — follow-up #103/#104/#105 (living document, lead = Fable 5.1)
 
+> Clock note: the section times below after "11:10 UTC" were written from memory and run ahead of
+> the wall clock (the desktop-grant retry, the commit and this note happened at 12:06 UTC by
+> `date -u`). The ORDER of events is exact; treat the later stamps as approximate.
+
 Baseline: git `2c60cf3` (= published v1920), Studio == HEAD (141 scripts, 0 drift), Edit mode.
 Claude only: code, integration, QA, publish. Codex: images (delivered, see assets-handoff.md).
 

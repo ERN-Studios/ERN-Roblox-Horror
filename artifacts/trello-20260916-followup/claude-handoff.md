@@ -1,5 +1,9 @@
 # Claude handoff — follow-up #103/#104/#105 (living document)
 
+> Clock note: the section times below after "11:10 UTC" were written from memory and run ahead of
+> the wall clock (the desktop-grant retry, the commit and this note happened at 12:06 UTC by
+> `date -u`). The ORDER of events is exact; treat the later stamps as approximate.
+
 Resume point for a new Claude session (Codex does not implement). `claude-status.md` = live
 agent table; `claude-contracts.md` = the interface every agent builds against.
 
@@ -40,6 +44,23 @@ agent table; `claude-contracts.md` = the interface every agent builds against.
 - Desktop control (device emulator, File -> Publish, Save As) needs the owner's approval of
   the computer-use grant; Codex has asked the owner. Claude does not bypass it and keeps the
   native QA/publish itself.
+
+## Milestone 4 (12:06 UTC by the wall clock) — code complete, Studio == repo, committed; BLOCKED on the desktop grant
+- Fix 2 accepted (530 checks) and pushed; landscape re-measured; parity OK (142 exact + 1
+  permitted); audit 143/143; console clean in every Play session.
+- Focused local commit made on main (see `git log -1`); NOT pushed to origin; nothing published.
+- What is left and why it is blocked: the Studio Device Emulator pass (real iPhone rendering of
+  the two modals, the rail and the shop card), File -> Publish to Roblox, the published-version
+  verification and the .rbxl backup all need the Studio window, i.e. the computer-use grant
+  for "Roblox Studio". `request_access` was denied twice (12:52 and 13:32 UTC). The owner has
+  been asked (via Codex) to approve it in Claude; Claude waits and does not bypass it.
+- When the grant arrives, in this order: (1) Studio Test tab -> Device -> iPhone (portrait +
+  landscape): Play, open Wheel/Rewards from the rail, walk onto a hologram plate, screenshot;
+  (2) stop Play, File -> Publish to Roblox (same experience), read the new version from the
+  Output/Creator Dashboard; (3) File -> Save to File As -> _local/trello-20260916-followup/
+  BACKROOMS-published-v<N>.rbxl; (4) update Trello #103/#104/#105 with the verified version
+  (trelloWriteCard, ARIs in trello-scope.json); (5) a second small commit with the release
+  receipt; (6) leave the PC on.
 
 ## Exact next steps
 1. As agents land: read report, `git diff` their files, run their tests + the suites that load
