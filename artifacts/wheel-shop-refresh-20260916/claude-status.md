@@ -99,3 +99,14 @@ Owner's three notes after looking at the build:
    (gates updated + a 120 s spectating run).
 Pushed: LobbyShopDisplay, ZyntraDailyRewardsPage, ZyntraMonetization. Audit 145/145, manifest
 synced. Studio in Edit, Play stopped. Still NOT published.
+
+## 2026-09-17 01:05 UTC — owner feedback round 2: Friend Boost chip lobby-only by construction
+- Owner: the chip must never show inside a game. Reproduced the round flow natively (Level 1 via
+  CREATE PARTY + DevFastQueue, instant win, auto-continue into Level 2): the chip stayed hidden
+  throughout, so the old rule (InRound) held in that path — but "lobby" is now read off the
+  world as well: visible only while the player's root is inside the ServerLobby model's bounding
+  box (re-measured when the lobby is parked/moved) AND InRound/RoundActive are not true AND no
+  round is loading; polled twice a second. A level server (no ServerLobby) can never show it.
+- Verified in Play: visible on the lobby road, hidden within a poll after teleporting outside the
+  lobby box with InRound still false, visible again back on the road. test_friend_boost 329.
+- Pushed; audit 145/145. Still NOT published.

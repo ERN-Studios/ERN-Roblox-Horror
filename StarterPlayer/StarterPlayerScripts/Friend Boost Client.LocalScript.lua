@@ -10,12 +10,19 @@
 -- completion from verified friendships (see ServerScriptService.FriendBoost).
 -- A client that rewrites these attributes lies only to its own screen.
 --
--- WHERE IT IS: the top-right panel, lobby only. It stands down the moment the
--- player is in a round or any screen-owning modal is up, which is also what
+-- WHERE IT IS: the top-right panel, LOBBY ONLY (owner, 2026-09-17: never inside a
+-- game). "Lobby" is read off the world, not off one flag: the chip shows only
+-- while the player's root is inside the ServerLobby model's bounding box AND no
+-- round flag is up (InRound, RoundActive, a round loading). A level server has
+-- no ServerLobby at all; in Studio the lobby is parked away while a Level 2/3
+-- round runs and a Level 1 maze is built far outside it (measured 2026-09-17:
+-- the box is 186 x 59 x 287 studs about (0.7, 58.4, -760.3), the maze at z -15,
+-- Level 2 at z -349). Any screen-owning modal also stands it down, which is what
 -- keeps it off the Lucky Wheel's takeover screen.
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
 local SocialService = game:GetService("SocialService")
 local player = Players.LocalPlayer
 local UIDevice = require(ReplicatedStorage:WaitForChild("UIDevice"))
@@ -115,9 +122,47 @@ local function paint()
 	end
 end
 
+-- The lobby's box, re-measured only when the model or its pivot changes: the
+-- Studio lobby is PARKED (moved) for a Level 2/3 round, and a box measured
+-- before the move would still say "lobby" about a spot that is now a level.
+local LOBBY_MARGIN = 6
+local lobbyBox = nil
+local function lobbyBounds()
+	local lobby = workspace:FindFirstChild("ServerLobby")
+	if not lobby or not lobby:IsA("Model") then
+		lobbyBox = nil
+		return nil
+	end
+	local pivot = lobby:GetPivot().Position
+	if lobbyBox and lobbyBox.Model == lobby and lobbyBox.PX == pivot.X
+		and lobbyBox.PY == pivot.Y and lobbyBox.PZ == pivot.Z then
+		return lobbyBox
+	end
+	local cf, size = lobby:GetBoundingBox()
+	lobbyBox = {
+		Model = lobby, PX = pivot.X, PY = pivot.Y, PZ = pivot.Z,
+		X = cf.Position.X, Y = cf.Position.Y, Z = cf.Position.Z,
+		HX = size.X / 2 + LOBBY_MARGIN, HY = size.Y / 2 + LOBBY_MARGIN, HZ = size.Z / 2 + LOBBY_MARGIN,
+	}
+	return lobbyBox
+end
+
+local function inLobby(): boolean
+	if player:GetAttribute("InRound") == true then return false end
+	if workspace:GetAttribute("RoundActive") == true then return false end
+	if workspace:GetAttribute("RoundLoadingState") == "loading" then return false end
+	local box = lobbyBounds()
+	local character = player.Character
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	if not box or not root then return false end
+	local position = root.Position
+	return math.abs(position.X - box.X) <= box.HX
+		and math.abs(position.Y - box.Y) <= box.HY
+		and math.abs(position.Z - box.Z) <= box.HZ
+end
+
 local function refresh()
-	chip.Visible = player:GetAttribute("InRound") ~= true
-		and not UIDevice.ScreenOwningModalOpen()
+	chip.Visible = inLobby() and not UIDevice.ScreenOwningModalOpen()
 	invite.Visible = inviteAllowed
 end
 
@@ -150,7 +195,18 @@ for _, attribute in ipairs({"FriendBoostFriends", "FriendBoostPercent"}) do
 	player:GetAttributeChangedSignal(attribute):Connect(paint)
 end
 player:GetAttributeChangedSignal("InRound"):Connect(refresh)
+workspace:GetAttributeChangedSignal("RoundActive"):Connect(refresh)
+workspace:GetAttributeChangedSignal("RoundLoadingState"):Connect(refresh)
 UIDevice.OnScreenOwningModalChanged(refresh)
+-- The position half of "in the lobby" has no signal of its own; twice a second
+-- is fast enough for a chip and costs one box compare.
+local pollAccum = 0
+RunService.Heartbeat:Connect(function(delta)
+	pollAccum += delta
+	if pollAccum < 0.5 then return end
+	pollAccum = 0
+	refresh()
+end)
 UIDevice.Changed:Connect(function()
 	applyLayout()
 	refresh()

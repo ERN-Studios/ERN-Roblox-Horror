@@ -1288,8 +1288,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Friend Boost Client",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Friend Boost Client.LocalScript.lua",
-      "bytes": 5912,
-      "sha256": "ae9d76f5a6017c406d35fe0c85e780f4d514906f32a59347b38e1640666fd623",
+      "bytes": 8386,
+      "sha256": "8828ec76ae08c949f1bf8da80e108f1de73f6f8132d466b329752f17c238e8f3",
       "status": "synced"
     }
   ]

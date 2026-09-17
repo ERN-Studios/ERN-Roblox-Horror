@@ -43,6 +43,7 @@ command bar'en (emulatoren melder stadig mus + tastatur); sæt den før du teste
 - [ ] I lobbyen: kompakt "FRIEND BOOST +X%"-chip med antal venner på serveren og en INVITE
       FRIENDS-knap, der åbner Roblox' invitationsflow. 0 venner = +0%.
 - [ ] Med en ven på serveren (test med to konti, der er Roblox-venner): +10%; når vennen
-      forlader serveren: tilbage til +0%. Chippen er skjult, når hjulet er åbent og i runder.
+      forlader serveren: tilbage til +0%. Chippen er skjult, når hjulet er åbent, under load, i runder
+      og i resultatskærmen; den vises kun, mens man fysisk står i lobbyen.
 - [ ] Gennemfør et level sammen med vennen: beskeden viser "+N ... (Friend Boost +10%)" og
       brøkrest gemmes (1 ven: hel bonus-token ved 5. gennemførsel). Uden ven: +2 som før.

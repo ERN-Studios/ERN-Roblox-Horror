@@ -18,7 +18,8 @@ Agent reports: `agent-wheel-report.md`, `agent-daily-report.md`, `agent-shop-rep
 - **Friend Boost interpretation** (the project has no invite tracking): a friend counts when
   `Player:IsFriendsWith` says so server-side AND they were a participant of the same round on the
   same server. Being friends elsewhere, or on the server but not in the round, pays nothing. The
-  lobby chip shows verified friends currently on the server (updates on join/leave).
+  lobby chip shows verified friends currently on the server (updates on join/leave) and is drawn
+  ONLY while the player stands inside the ServerLobby model with no round flag up (owner, 17/9).
 - **Friend Boost arithmetic**: 2 tokens × friends × 10% counted in tenths; the remainder is saved on
   the profile (`FriendBoostTenths`, 0..9) and whole tokens are paid as they are earned. One friend
   pays a whole extra token on the fifth clear; five friends pay +1 every clear. Only completion

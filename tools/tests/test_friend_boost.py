@@ -120,7 +120,17 @@ local function newInstance(class, name)
             return methods[key]
         end,
         __newindex = function(_, key, value)
-            if key == 'Parent' and value ~= nil then table.insert(value.Children, proxy) end
+            if key == 'Parent' then
+                -- Reparenting REMOVES from the old parent, the way the engine
+                -- does, so FindFirstChild on the old parent stops finding it.
+                local old = fields.Parent
+                if old then
+                    for index, child in ipairs(old.Children) do
+                        if child == proxy then table.remove(old.Children, index) break end
+                    end
+                end
+                if value ~= nil then table.insert(value.Children, proxy) end
+            end
             fields[key] = value
         end,
     })
@@ -500,8 +510,25 @@ local function clientContext(layout, invite)
         check(who == ctx.Player, 'the invite prompt is for the local player')
         ctx.Invites += 1
     end
+    -- The world the chip reads "lobby" off: a ServerLobby model with the box
+    -- measured in Play on 2026-09-17, a character standing on the lobby road,
+    -- and a Heartbeat the chip polls the position on.
+    ctx.Workspace = newInstance('Workspace', 'Workspace')
+    ctx.Lobby = newInstance('Model', 'ServerLobby')
+    ctx.Lobby.Parent = ctx.Workspace
+    ctx.LobbyPivot = {X = 0.7, Y = 58.4, Z = -760.3}
+    ctx.Lobby.GetPivot = function() return {Position = ctx.LobbyPivot} end
+    ctx.Lobby.GetBoundingBox = function()
+        return {Position = ctx.LobbyPivot}, {X = 186.3, Y = 59.1, Z = 286.8}
+    end
+    ctx.Character = newInstance('Model', 'Character')
+    ctx.Root = newInstance('Part', 'HumanoidRootPart')
+    ctx.Root.Position = {X = 1.6, Y = 33.6, Z = -861.3}
+    ctx.Root.Parent = ctx.Character
+    ctx.Player.Character = ctx.Character
+    ctx.Heartbeat = signal()
     local services = {Players = {LocalPlayer = ctx.Player}, ReplicatedStorage = storage,
-        SocialService = ctx.Social}
+        SocialService = ctx.Social, RunService = {Heartbeat = ctx.Heartbeat}}
     ctx.Game = {GetService = function(_, name) return assert(services[name], name) end}
     ctx.Task = {spawn = function(fn, ...) fn(...) end,
         wait = function() ctx.Waits += 1 end}
@@ -509,7 +536,7 @@ local function clientContext(layout, invite)
 end
 
 local function boot(ctx)
-    local game, task = ctx.Game, ctx.Task
+    local game, task, workspace = ctx.Game, ctx.Task, ctx.Workspace
     local UIStyleModule = (function()
 '''
 
@@ -624,6 +651,40 @@ do -- lobby only, and out of the way of anything that owns the screen
     equal(ctx.Chip.Visible, false, 'and stands down in a round')
     ctx.Player:SetAttribute('InRound', false)
     equal(ctx.Chip.Visible, true, 'and comes back in the lobby')
+    -- LOBBY ONLY is read off the world too (owner, 2026-09-17: never inside a
+    -- game). A round flag, a round loading, a body outside the lobby's box, or
+    -- no lobby at all each hide it on their own.
+    ctx.Workspace:SetAttribute('RoundActive', true)
+    equal(ctx.Chip.Visible, false, 'RoundActive hides it even with InRound false')
+    ctx.Workspace:SetAttribute('RoundActive', false)
+    equal(ctx.Chip.Visible, true, 'and it returns when the round ends')
+    ctx.Workspace:SetAttribute('RoundLoadingState', 'loading')
+    equal(ctx.Chip.Visible, false, 'a round loading hides it')
+    ctx.Workspace:SetAttribute('RoundLoadingState', 'ready')
+    equal(ctx.Chip.Visible, true, 'a finished load with no round is the lobby again')
+    ctx.Root.Position = {X = -5, Y = 4.6, Z = -14}   -- the Level 1 maze
+    ctx.Heartbeat:Fire(0.6)
+    equal(ctx.Chip.Visible, false, 'a body outside the lobby box hides it within a poll')
+    ctx.Root.Position = {X = 1.6, Y = 33.6, Z = -861.3}
+    ctx.Heartbeat:Fire(0.6)
+    equal(ctx.Chip.Visible, true, 'and back on the lobby road it returns')
+    ctx.Root.Position = {X = 62, Y = 41, Z = -840}     -- inside the Level 2 queue room
+    ctx.Heartbeat:Fire(0.6)
+    equal(ctx.Chip.Visible, true, 'the queue rooms are still the lobby')
+    ctx.Root.Position = {X = 1.6, Y = 33.6, Z = -861.3}
+    ctx.Heartbeat:Fire(0.3)
+    ctx.Heartbeat:Fire(0.3)
+    equal(ctx.Chip.Visible, true, 'two short beats add up to one poll')
+    ctx.Lobby.Parent = nil
+    ctx.Heartbeat:Fire(0.6)
+    equal(ctx.Chip.Visible, false, 'no ServerLobby (a level server) hides it')
+    ctx.Lobby.Parent = ctx.Workspace
+    ctx.LobbyPivot = {X = 0.7, Y = 58.4, Z = 2000}     -- the lobby parked away for a level
+    ctx.Heartbeat:Fire(0.6)
+    equal(ctx.Chip.Visible, false, 'a parked lobby is re-measured, and the body is not in it')
+    ctx.LobbyPivot = {X = 0.7, Y = 58.4, Z = -760.3}
+    ctx.Heartbeat:Fire(0.6)
+    equal(ctx.Chip.Visible, true, 'and the lobby put back is the lobby')
     for _, modal in ipairs({'LuckyWheelOpen', 'DailyRewardsOpen', 'ZyntraStoreOpen',
         'QueueModalOpen', 'DevPhoneOpen', 'ZyntraReentryOpen'}) do
         ctx.Player:SetAttribute(modal, true)
