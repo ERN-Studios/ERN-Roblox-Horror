@@ -118,3 +118,5 @@ synced. Studio in Edit, Play stopped. Still NOT published.
 - Trello #103, #104, #105 moved to Done and marked complete with the v1933 note. #106/#107/#69/#87
   untouched. release-receipt.json written.
 - Backup .rbxl: pending the one Save-As (owner, or a single desktop action by Claude).
+
+- Backup saved: _local/wheel-shop-refresh-20260916/BACKROOMS-published-v1933.rbxl (9326595 bytes) via File > Download a Copy (the one desktop action of the round).

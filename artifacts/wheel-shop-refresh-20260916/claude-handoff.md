@@ -55,6 +55,6 @@ Agent reports: `agent-wheel-report.md`, `agent-daily-report.md`, `agent-shop-rep
   approval are the OWNER's (see `owner-test-checklist.md`). Note: Studio's Device Simulator still
   reports a mouse and keyboard, so set `workspace:SetAttribute("ForceTouchUI", true)` in the
   command bar to see the touch tiers there.
-- Publish only after the owner's approval; then verify the version in the Creator Dashboard, save
-  the .rbxl backup to `_local/wheel-shop-refresh-20260916/`, update Trello #103/#104/#105 (the only
-  cards this work delivers; #106/#107 are untouched), commit.
+- PUBLISHED by the owner as v1933 (17 Sep 2026 08:25 local), verified in the Creator Dashboard version
+  history; backup BACKROOMS-published-v1933.rbxl (9326595 bytes) in _local/wheel-shop-refresh-20260916/; Trello #103/#104/#105
+  Done; #106/#107 untouched. See release-receipt.json.
