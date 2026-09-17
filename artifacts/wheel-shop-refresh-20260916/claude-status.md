@@ -110,3 +110,11 @@ synced. Studio in Edit, Play stopped. Still NOT published.
 - Verified in Play: visible on the lobby road, hidden within a poll after teleporting outside the
   lobby box with InRound still false, visible again back on the road. test_friend_boost 329.
 - Pushed; audit 145/145. Still NOT published.
+
+## 2026-09-17 06:40 UTC — PUBLISHED as v1933 (by the owner), verified
+- Owner approved and published from Studio at 08:25 local (06:25:46 UTC). Verified by Claude in the
+  Creator Dashboard version history (owner's Chrome, read-only): the "Published Version" tick is on
+  1933 only; 1921-1932 are cloud saves. The public games API "updated" stamp matches.
+- Trello #103, #104, #105 moved to Done and marked complete with the v1933 note. #106/#107/#69/#87
+  untouched. release-receipt.json written.
+- Backup .rbxl: pending the one Save-As (owner, or a single desktop action by Claude).
