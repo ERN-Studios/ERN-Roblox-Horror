@@ -610,9 +610,13 @@ do
 	end
 
 	expect(wheelRemnant(host), nil, "the page builds no wheel instance at all")
-	expect(host:find("WheelNote").Text,
-		"Spin the Lucky Wheel from its own button on the left rail.",
-		"and says where the wheel went instead")
+	local wheelNoteLeft = nil
+	for _, node in ipairs(descendants(host.Page)) do
+		if tostring(node.Name) == "WheelNote" then wheelNoteLeft = node end
+	end
+	expect(wheelNoteLeft, nil, "the wheel pointer note is gone (owner, 2026-09-17)")
+	expect(host:find("PlaytimeNote").Text, "Only time in an active round counts.",
+		"the playtime note is one line and no longer excludes spectating")
 	expect(forbiddenCopy(host), nil, "nothing on the page still names the supply fiction")
 	expect(#host.Actions, 0, "drawing the page sends nothing to the server")
 	expect(tweensCreated, 0, "the page creates no tweens at rest")

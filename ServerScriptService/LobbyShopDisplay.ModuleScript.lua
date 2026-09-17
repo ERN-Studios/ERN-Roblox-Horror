@@ -293,6 +293,38 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 			warn("[LobbyShopDisplay] no product art for " .. tostring(key))
 		end
 
+		-- Owner, 2026-09-17: a very short caption OVER each box saying what it is
+		-- -- the product's own name and nothing more. A BillboardGui sized in
+		-- studs, so it reads the same from anywhere on the road, rides the bob
+		-- with the box it is adorned to, and draws in the box's accent so it
+		-- reads as part of the hologram rather than a sign hung over it.
+		local caption = Instance.new("BillboardGui")
+		caption.Name = "ShopHologramCaption"
+		caption.Adornee = box
+		caption.Size = UDim2.fromScale(7, 0.9)
+		caption.StudsOffset = Vector3.new(0, BOX_SIZE * 0.5 + 0.75, 0)
+		caption.MaxDistance = 90
+		caption.AlwaysOnTop = false
+		caption.LightInfluence = 0
+		caption.ResetOnSpawn = false
+		caption.Parent = box
+		local captionText = Instance.new("TextLabel")
+		captionText.Name = "ShopHologramName"
+		captionText.BackgroundTransparency = 1
+		captionText.BorderSizePixel = 0
+		captionText.Size = UDim2.fromScale(1, 1)
+		captionText.Font = Enum.Font.GothamBlack
+		captionText.TextScaled = true
+		captionText.TextColor3 = accent
+		captionText.TextTransparency = 0.05
+		captionText.Text = string.upper(tostring((item and item.Name) or key))
+		captionText.Parent = caption
+		local captionStroke = Instance.new("UIStroke")
+		captionStroke.Color = Color3.fromRGB(8, 14, 12)
+		captionStroke.Thickness = 1.5
+		captionStroke.Transparency = 0.3
+		captionStroke.Parent = captionText
+
 		local edge = Instance.new("SelectionBox")
 		edge.Name = "ShopBoxEdge"
 		edge.Adornee = box

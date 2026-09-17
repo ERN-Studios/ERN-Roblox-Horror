@@ -676,14 +676,52 @@ local RETIRED = {"deck", "backdrop", "sign", "nameplate", "projector", "beam", "
 	"trim", "flood", "soffit"}
 local RETIRED_CLASSES = {ProximityPrompt = true, SurfaceGui = true, TextLabel = true,
 	Texture = true, SurfaceLight = true, SpotLight = true, CylinderMesh = true}
+-- The ONE piece of text the wall may carry (owner, 2026-09-17): a product-name
+-- caption in a BillboardGui over each box. Nothing else may draw text.
+local function insideCaption(node)
+	local up = node.Parent
+	while up do
+		if up.ClassName == "BillboardGui" and up.Name == "ShopHologramCaption" then return true end
+		up = up.Parent
+	end
+	return false
+end
 for _, node in ipairs(model:GetDescendants()) do
 	local lower = node.Name:lower()
 	for _, word in ipairs(RETIRED) do
 		check(lower:find(word, 1, true) == nil,
 			"the retired " .. word .. " is still being built as " .. node.Name)
 	end
-	check(RETIRED_CLASSES[node.ClassName] == nil,
+	check(RETIRED_CLASSES[node.ClassName] == nil or insideCaption(node),
 		"the wall still builds a " .. node.ClassName .. " (" .. node.Name .. ")")
+end
+
+-- ── 5b. every box carries its name, and only its name ─────────────────────
+for _, stand in ipairs(model:GetChildren()) do
+	if stand.Name:sub(1, 10) == "ShopStand_" then
+		local key = stand.Name:sub(11)
+		local box = stand:FindFirstChild("ShopHologramBox")
+		local captions = {}
+		for _, child in ipairs(box:GetChildren()) do
+			if child.ClassName == "BillboardGui" then table.insert(captions, child) end
+		end
+		check(#captions == 1, key .. ": expected one caption, found " .. #captions)
+		local caption = captions[1]
+		check(caption.Name == "ShopHologramCaption", key .. ": caption named " .. caption.Name)
+		check(caption.Adornee == box, key .. ": the caption is not adorned to its box")
+		check(caption.StudsOffset.Y >= 3.4 / 2 + 0.5, key .. ": the caption is not above the box")
+		check(caption.Size.X.Scale >= 5 and caption.Size.Y.Scale <= 1.2,
+			key .. ": the caption is not a short wide strip in studs")
+		local label = caption:FindFirstChild("ShopHologramName")
+		check(label ~= nil and label.ClassName == "TextLabel", key .. ": no name label in the caption")
+		local item = moduleResults.ZyntraConfig.Passes[key] or moduleResults.ZyntraConfig.Products[key]
+			or moduleResults.ZyntraConfig.Items[key]
+		check(label.Text == string.upper(item.Name), key .. ": caption says " .. tostring(label.Text))
+		check(#label.Text <= 24, key .. ": caption too long to be a name: " .. label.Text)
+		check(label.TextScaled == true, key .. ": caption text must scale to its strip")
+		check(label.Text:find("SUPPLY", 1, true) == nil and label.Text:find("//", 1, true) == nil,
+			key .. ": caption carries the old fiction: " .. label.Text)
+	end
 end
 
 -- ── 6. a rebuild replaces the shop instead of stacking one on top of it ─────

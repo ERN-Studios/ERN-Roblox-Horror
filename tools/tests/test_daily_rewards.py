@@ -315,16 +315,23 @@ do
             w:enter(); w.workspace:SetAttribute("RoundActive", false) end, want = 0},
         {name = "loading cover up", setup = function(w)
             w:enter(); w.workspace:SetAttribute("RoundLoadingState", "loading") end, want = 0},
-        {name = "escaped", setup = function(w)
-            w:enter(); w.player:SetAttribute("Escaped", true) end, want = 0},
+        -- SPECTATING COUNTS (owner, 2026-09-17): a participant of an active round
+        -- with no living body -- escaped and waiting, dead, or between bodies --
+        -- is watching the round, and that time is play time. No AFK gate applies
+        -- to them; the round's own end (RoundActive) is what bounds it.
+        {name = "escaped (spectating)", setup = function(w)
+            w:enter(); w.player:SetAttribute("Escaped", true) end, want = 5},
         {name = "level 2 exit transition", setup = function(w)
             w:enter(); w.player:SetAttribute("Level2_ExitTransition", true) end, want = 0},
         {name = "dead body (spectating)", setup = function(w)
-            local c = w.character(0); c.Humanoid.Health = 0; w:enter(c) end, want = 0},
-        {name = "no character", setup = function(w)
-            w:enter(); w.player.Character = nil end, want = 0},
-        {name = "no root part", setup = function(w)
-            local c = w.character(0); c.HumanoidRootPart = nil; w:enter(c) end, want = 0},
+            local c = w.character(0); c.Humanoid.Health = 0; w:enter(c) end, want = 5},
+        {name = "no character (between bodies)", setup = function(w)
+            w:enter(); w.player.Character = nil end, want = 5},
+        {name = "no root part (between bodies)", setup = function(w)
+            local c = w.character(0); c.HumanoidRootPart = nil; w:enter(c) end, want = 5},
+        {name = "dead but the round is over", setup = function(w)
+            local c = w.character(0); c.Humanoid.Health = 0; w:enter(c)
+            w.workspace:SetAttribute("RoundActive", false) end, want = 0},
     }
     for _, gate in ipairs(gates) do
         local w = fresh()
@@ -335,6 +342,17 @@ do
         eq(w.player:GetAttribute("ZyntraDailyAccruing"), gate.want > 0,
             gate.name .. " publishes ZyntraDailyAccruing")
     end
+end
+
+-- Spectating has no AFK gate: a dead participant cannot move, so the grace
+-- window that pauses a living idler must not pause them. 120 s is past the
+-- 90 s grace and past one 60 s flush.
+do
+    local w = fresh()
+    local c = w.character(0); c.Humanoid.Health = 0; w:enter(c)
+    w:tick(120)
+    check(w:total() >= 118, "a dead participant stopped counting past the AFK grace: " .. tostring(w:total()))
+    eq(w.player:GetAttribute("ZyntraDailyAccruing"), true, "spectating publishes the accruing hint")
 end
 
 -- AFK: standing still pauses after the grace window and movement resumes it.

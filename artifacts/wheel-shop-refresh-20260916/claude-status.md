@@ -83,3 +83,19 @@ Clock: stamps are the Windows clock; local = UTC + 2.
 - Owner does the real desktop + iPhone-emulator/phone test and the two-account Friend Boost test
   (owner-test-checklist.md). Publish, Creator Dashboard verification, .rbxl backup, Trello
   #103/#104/#105 and the release commit follow the owner's approval.
+
+## 2026-09-17 00:15 UTC — owner feedback round 1 applied and pushed
+Owner's three notes after looking at the build:
+1. A short caption over each hologram box → `ShopHologramCaption` BillboardGui (7 x 0.9 studs,
+   2.45 studs above the box centre, rides the bob) with the product's own name in upper case in
+   the box's accent colour + dark stroke. Verified in Play: eight captions, texts = upper(Name).
+   test_lobby_shop_display 3432 (the "no drawn text" rule now exempts the caption).
+2. Daily Rewards footer: the wheel pointer note removed; the playtime note is now only "Only time
+   in an active round counts." (the "lobby and spectating do not ..." sentence is gone).
+   test_daily_rewards_page 505, client 503.
+3. Spectating counts toward daily playtime: ZyntraMonetization.playtimeCounts now counts a
+   participant of an active round with no living body (dead, escaped-and-waiting, between bodies)
+   — no AFK gate for them; RoundActive/loading flags still bound it. test_daily_rewards 337
+   (gates updated + a 120 s spectating run).
+Pushed: LobbyShopDisplay, ZyntraDailyRewardsPage, ZyntraMonetization. Audit 145/145, manifest
+synced. Studio in Edit, Play stopped. Still NOT published.

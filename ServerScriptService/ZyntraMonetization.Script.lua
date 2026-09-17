@@ -2819,19 +2819,26 @@ local function flushPlaytime(player)
 	return true
 end
 
--- Does this second count? Every condition is the contract's. A dead body is not
--- a living humanoid, which is what keeps spectators and the lobby out without a
--- separate check for either.
+-- Does this second count? Every condition is the contract's. The lobby is out
+-- because InRound is false there; a round that is loading, over or in its
+-- Level 2 exit transition is out by the workspace flags.
+--
+-- SPECTATING COUNTS (owner, 2026-09-17). A participant of an active round who
+-- has no living humanoid -- dead, escaped and waiting, or between bodies -- is
+-- watching that round, and that time is play time. There is nothing for them
+-- to move, so the AFK gate below cannot apply to them; the round's own end is
+-- what bounds it (the flags above go false the moment it ends).
 local function playtimeCounts(player, state, now)
 	if player:GetAttribute("InRound") ~= true then return false end
 	if workspace:GetAttribute("RoundActive") ~= true then return false end
 	if workspace:GetAttribute("RoundLoadingState") ~= "ready" then return false end
-	if player:GetAttribute("Escaped") == true then return false end
 	if player:GetAttribute("Level2_ExitTransition") == true then return false end
 	local character = player.Character
 	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 	local root = character and character:FindFirstChild("HumanoidRootPart")
-	if not humanoid or not root or humanoid.Health <= 0 then return false end
+	if player:GetAttribute("Escaped") == true or not humanoid or not root or humanoid.Health <= 0 then
+		return true
+	end
 	local position = root.Position
 	local last = state.lastPosition
 	if not last or (position - last).Magnitude >= DAILY_ACTIVITY_STUDS then

@@ -33,6 +33,9 @@ Agent reports: `agent-wheel-report.md`, `agent-daily-report.md`, `agent-shop-rep
   itself) and restored on close/respawn.
 - **Daily Rewards**: header gift + three card icons are Codex's uploads; no streaks, no new rewards.
 - Accessibility: with ReduceFlashing or ReduceCameraShake on, the shop boxes stand still.
+- **Owner feedback 2026-09-17**: product-name captions float over the boxes (BillboardGui, accent
+  colour); the Daily Rewards footer keeps one line; SPECTATING NOW COUNTS toward daily playtime
+  (dead / escaped / between bodies participants of an active round accrue without an AFK gate).
 
 ## Verified natively by Claude (Studio MCP only, no desktop control)
 - Desktop 899x677: wheel open/spin/land (field matches the hub prize)/close with exact HUD restore;

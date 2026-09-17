@@ -427,21 +427,15 @@ function Page.mount(page, ctx)
 	end
 	table.sort(milestones, function(a, b) return a.Minutes < b.Minutes end)
 
-	local playtimeNote = ctx.label(body,
-		"Only time in an active round counts. The lobby and spectating do not,"
-		.. " and a short break never takes back time already earned.",
+	-- Owner, 2026-09-17: one short line. The old second sentence ("the lobby and
+	-- spectating do not ...") is gone because spectating now COUNTS (ZyntraMonetization
+	-- playtimeCounts), and the note that pointed at the wheel's rail button went
+	-- with it -- the rail button is where every player already finds the wheel.
+	local playtimeNote = ctx.label(body, "Only time in an active round counts.",
 		UDim2.new(), UDim2.new(), 11, muted, UIStyle.Font.Body)
 	playtimeNote.Name = "PlaytimeNote"
 	playtimeNote.TextWrapped = true
 	playtimeNote.TextYAlignment = Enum.TextYAlignment.Top
-
-	-- The wheel used to be the section under this one. A player who remembers it
-	-- being here has to be told where it went, once, in the place they last saw
-	-- it -- otherwise the page simply looks like it lost a feature.
-	local wheelNote = ctx.label(body,
-		"Spin the Lucky Wheel from its own button on the left rail.",
-		UDim2.new(), UDim2.new(), 11, muted, UIStyle.Font.Body)
-	wheelNote.Name = "WheelNote"
 
 	local offline
 	if not rewards then
@@ -684,8 +678,8 @@ function Page.mount(page, ctx)
 		-- Two wrapped lines of the note, measured as boxes rather than with
 		-- TextService: nothing here chooses a branch on the measurement, so a
 		-- generous box is cheaper than a synchronous text query per layout pass.
-		local noteHeight = face.Body * 2 + 14
-		local notesHeight = noteHeight + 4 + captionHeight
+		local noteHeight = face.Body + 8
+		local notesHeight = noteHeight
 
 		-- the cards. On the tight tier every vertical number shrinks -- the text
 		-- FACES do not, so nothing drops under 11px; only the air around them
@@ -775,11 +769,7 @@ function Page.mount(page, ctx)
 		playtimeNote.Position = UDim2.fromOffset(0, y)
 		playtimeNote.Size = UDim2.fromOffset(usable, noteHeight)
 		playtimeNote.TextSize = face.Body
-		y += noteHeight + 4
-		wheelNote.Position = UDim2.fromOffset(0, y)
-		wheelNote.Size = UDim2.fromOffset(usable, captionHeight)
-		wheelNote.TextSize = face.Body
-		local bodyHeight = y + captionHeight
+		local bodyHeight = y + noteHeight
 
 		body.Position = UDim2.fromOffset(0, top)
 		body.Size = UDim2.fromOffset(usable, bodyHeight)

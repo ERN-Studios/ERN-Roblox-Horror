@@ -23,12 +23,15 @@ command bar'en (emulatoren melder stadig mus + tastatur); sæt den før du teste
 - [ ] Tre store farvede kort (5 / 15 / 35 min) med store ikoner (token, potion, shield), tydelig
       status/nedtælling, CLAIM når klar, grønt check når modtaget.
 - [ ] Claim virker og bliver husket efter genstart af Play (persistence).
+- [ ] Under kortene står kun "Only time in an active round counts." (ingen wheel-note).
+- [ ] Spectating tæller: dø i en runde og se på, ACTIVE PLAY TODAY stiger stadig.
 - [ ] Ingen Rewards-plakat, tekst eller prompt i den fysiske shop.
 - [ ] Shop, Wheel og Rewards kan ikke være åbne samtidig.
 
 ## Shop langs væggen
 - [ ] Gammel shopbod/terminal, SHOP-skilt, fascia, sokler, navneplader og Daily Rewards-plakat er
       væk. Ingen "Zyntra Supply"/"ZYNTRA // SUPPLY" nogen steder i shoppen.
+- [ ] Hver boks har en kort tekst (produktets navn) svævende over sig i boksens farve.
 - [ ] Otte svævende hologram-bokse jævnt fordelt fra Level 2-gaten til Level 4-gaten, med
       tydeligt mere luft imellem; produktgrafik på alle seks sider; rolig op/ned-bevægelse med
       forskudt fase; gateåbninger og gangareal frie.
