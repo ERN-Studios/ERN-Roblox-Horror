@@ -1,16 +1,26 @@
 {
-  "formatVersion": 1,
-  "source": "Roblox Studio built-in MCP: .rbxmx payload -> game:GetObjects -> side-effect-free compile probe -> ScriptEditorService:UpdateSourceAsync -> .Source re-read and verified byte for byte; reconciled against tools/verify_studio_parity.py",
-  "finalNewlineContract": "Entries flagged studioTrailingNewline hold exactly the canonical repo file plus one extra trailing newline in Studio. Exact landings remove the flag. Current flagged entry count: 1. Manifest hashes always describe the canonical repo file, never Studio's transport bytes.",
+  "formatVersion": 2,
+  "source": "Read-only Studio MCP export. Exact UTF-8 script bytes; Source/editor equality checked. Repository never deployed to Studio.",
+  "finalNewlineContract": "Exact Studio source bytes including final newline; no newline exceptions.",
   "studio": {
     "name": "BACKROOMS: STAY QUIET [CO-OP HORROR]",
-    "id": "7ccaf8b2-9e54-4709-8caa-91e1bce8b5b0"
+    "id": "13492bce-27a0-4835-890f-c74652a9a4de",
+    "placeId": 131311258779917,
+    "universeId": 10559217407,
+    "observedPlaceVersion": 1933,
+    "capturedUTC": "2026-09-20T12:46:17Z"
   },
   "counts": {
-    "scripts": 129,
-    "remoteEvents": 14,
-    "total": 143,
-    "studioTrailingNewline": 1
+    "scripts": 145,
+    "remoteEvents": 15,
+    "total": 160,
+    "studioTrailingNewline": 145
+  },
+  "nativePlaceBackup": {
+    "file": "artifacts/studio-audit-20260920/place-v1933.rbxl",
+    "bytes": 9326597,
+    "sha256": "2c32b4c63495afcec75f1333e25cd9c6d28b81490e499ef0879c81fd2ec5200f",
+    "purpose": "Full native geometry, properties and assets; source mirror alone is not the complete place."
   },
   "extraMirroredFilesNotInStudio": [
     "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_AutomaticAssetCaptureSender_LocalizationService.RemoteEvent.txt",
@@ -21,19 +31,45 @@
   "items": [
     {
       "studioPath": "ReplicatedStorage.DevAccess",
+      "segments": [
+        "ReplicatedStorage",
+        "DevAccess"
+      ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/DevAccess.ModuleScript.lua",
       "bytes": 990,
       "sha256": "4c51e000ecf702c0cfb6544d3c2bf46eb9959b3f7941b6b30eec29284e185514",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ReplicatedStorage.FlashlightProfiles",
+      "segments": [
+        "ReplicatedStorage",
+        "FlashlightProfiles"
+      ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/FlashlightProfiles.ModuleScript.lua",
       "bytes": 2253,
       "sha256": "298444abd5d52c551fe63b28c8254c6dfb79a05d81fbc9a2a63a0669a4c0d3de",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "studioPath": "ReplicatedStorage.Level 2 Entity Audio Bank",
+      "segments": [
+        "ReplicatedStorage",
+        "Level 2 Entity Audio Bank"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/Level 2 Entity Audio Bank.ModuleScript.lua",
+      "bytes": 2841,
+      "sha256": "73ffd5eaa63499b8aa012d53adfa54be6eeb3927f5d582b00eb423662fe5ef2e",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks"
     },
     {
       "studioPath": "ReplicatedStorage.Level 2 Pool Foam Remotes.ClientEvent",
@@ -85,19 +121,31 @@
     },
     {
       "studioPath": "ReplicatedStorage.MasterConfiguration",
+      "segments": [
+        "ReplicatedStorage",
+        "MasterConfiguration"
+      ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/MasterConfiguration.ModuleScript.lua",
       "bytes": 21208,
       "sha256": "d2b426761029e4f757a8633ee53f65123f9726364a5f11da2ba176ee392908d6",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ReplicatedStorage.ProtectionClient",
+      "segments": [
+        "ReplicatedStorage",
+        "ProtectionClient"
+      ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/ProtectionClient.ModuleScript.lua",
       "bytes": 6906,
       "sha256": "7465190a4b065cc0398923bfeb5938914e2cdfd7e06db574df25109a5c1d9649",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ReplicatedStorage.Remotes.DevControl",
@@ -156,6 +204,19 @@
       "status": "synced"
     },
     {
+      "studioPath": "ReplicatedStorage.Remotes.SetCrouching",
+      "segments": [
+        "ReplicatedStorage",
+        "Remotes",
+        "SetCrouching"
+      ],
+      "className": "RemoteEvent",
+      "file": "ReplicatedStorage/Remotes/SetCrouching.RemoteEvent.txt",
+      "bytes": 151,
+      "sha256": "2422f7966311e4bc878e551342a570271b4eb60799c829bbc7c647c28d22ba54",
+      "status": "synced"
+    },
+    {
       "studioPath": "ReplicatedStorage.Remotes.ToggleFlashlight",
       "className": "RemoteEvent",
       "file": "ReplicatedStorage/Remotes/ToggleFlashlight.RemoteEvent.txt",
@@ -165,1004 +226,2223 @@
     },
     {
       "studioPath": "ReplicatedStorage.UIDevice",
+      "segments": [
+        "ReplicatedStorage",
+        "UIDevice"
+      ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/UIDevice.ModuleScript.lua",
-      "bytes": 97496,
-      "sha256": "ed4d8457ca5aaf873e9481e0de93338b3cdb557b722c4cf4e5ff9bbf56d80fb5",
-      "status": "synced"
+      "bytes": 99714,
+      "sha256": "89b0a5a0f46f7f72e15d08b1741dd00970606548e0ee646a1c09aaf33aa841c2",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks"
     },
     {
       "studioPath": "ReplicatedStorage.UIRegression",
+      "segments": [
+        "ReplicatedStorage",
+        "UIRegression"
+      ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
-      "bytes": 438773,
-      "sha256": "0c392804954615dd2c7c30707d82d79e6555d1dd746764ca6a641b5f10187d64",
-      "status": "synced"
+      "bytes": 443665,
+      "sha256": "bd504c1fc26f808e096ae13a484294048979d1c9f464c8dbb44c37590fa3978d",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "studioPath": "ReplicatedStorage.UIStyle",
+      "segments": [
+        "ReplicatedStorage",
+        "UIStyle"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/UIStyle.ModuleScript.lua",
+      "bytes": 10555,
+      "sha256": "0b165e8a3819b6f14bc7c785b1f8af2ba4d5bd3a433bba48c0d952ed65ecf08a",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks"
     },
     {
       "studioPath": "ReplicatedStorage.ZyntraConfig",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraConfig"
+      ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/ZyntraConfig.ModuleScript.lua",
-      "bytes": 7166,
-      "sha256": "d5f8ce54d4fbbf008a8d48bd958478b704c6d9cc1e26883c73439b0a88398f98",
-      "status": "synced"
+      "bytes": 10886,
+      "sha256": "667efa1a225c9dbfd2e7c826eb9474e76bafb40d75e52de72a1bcc3184115d42",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraDailyRewardsPage",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraDailyRewardsPage"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/ZyntraDailyRewardsPage.ModuleScript.lua",
+      "bytes": 36624,
+      "sha256": "00a94f9c972cba15fbd6f2f9ec0ff04c077a08cc4e6a7a008b38722e4da2a219",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraFieldNotes",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraFieldNotes"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/ZyntraFieldNotes.ModuleScript.lua",
+      "bytes": 7373,
+      "sha256": "7734ab1c871eee83d85bf7712f413bc72ea728ff9b4eccfad2349a1647409f18",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraFieldNotesPage",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraFieldNotesPage"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/ZyntraFieldNotesPage.ModuleScript.lua",
+      "bytes": 16492,
+      "sha256": "71457d7ecb83dff9e7999cc8cf75203c4ec14bb78a4e1a3f6ea08fb9794af7f0",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks"
     },
     {
       "studioPath": "ServerScriptService.AvatarNormalize",
+      "segments": [
+        "ServerScriptService",
+        "AvatarNormalize"
+      ],
       "className": "Script",
       "file": "ServerScriptService/AvatarNormalize.Script.lua",
       "bytes": 2567,
       "sha256": "19c6dab6bc7c09d5affd25180a54f14f03cfa954bb52bf90313de570564ac8de",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerScriptService.Crouch State Server",
+      "segments": [
+        "ServerScriptService",
+        "Crouch State Server"
+      ],
       "className": "Script",
       "file": "ServerScriptService/Crouch State Server.Script.lua",
       "bytes": 6714,
       "sha256": "2a474a0d3a18e5e97d53e2e0dced5fbe502663220684357d50f697f73300dffc",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
+    },
+    {
+      "studioPath": "ServerScriptService.FieldNotesService",
+      "segments": [
+        "ServerScriptService",
+        "FieldNotesService"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/FieldNotesService.Script.lua",
+      "bytes": 21612,
+      "sha256": "a0aed81a20ee24e8a1f1413a09e75fd001281ae639ea4cb8e9cb9f55b69b0bcd",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerScriptService.FlashlightSync",
+      "segments": [
+        "ServerScriptService",
+        "FlashlightSync"
+      ],
       "className": "Script",
       "file": "ServerScriptService/FlashlightSync.Script.lua",
       "bytes": 5382,
       "sha256": "3ef8ccffdbd3961848c888be6b115b70dda6d6a0010fb1aa32877039883501ff",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
+    },
+    {
+      "studioPath": "ServerScriptService.FriendBoost",
+      "segments": [
+        "ServerScriptService",
+        "FriendBoost"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/FriendBoost.ModuleScript.lua",
+      "bytes": 5413,
+      "sha256": "2db3a7a08c3ddfe68ec05d0eb10d607544ca027a0d837082ea30b4285e19027d",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks"
     },
     {
       "studioPath": "ServerScriptService.GameManager",
+      "segments": [
+        "ServerScriptService",
+        "GameManager"
+      ],
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 146788,
-      "sha256": "42b4e6e61ccbe6e32816c90fe8c846bbc43806d4d9bce92e05a0578b1c6197fb",
-      "status": "synced"
+      "bytes": 147542,
+      "sha256": "971042284f57550d896f6fe7bba8199e4785b85de9672717ed1664007177ad64",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerScriptService.Level 1 Systems.EntityAI",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "EntityAI"
+      ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/EntityAI.Script.lua",
       "bytes": 59207,
       "sha256": "06e4f4a163cb511bcf4a0485e9e2d1eaf8ef70472f0fe1212883a375a768767e",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerScriptService.Level 1 Systems.EntityAnimation",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "EntityAnimation"
+      ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/EntityAnimation.Script.lua",
       "bytes": 6301,
       "sha256": "1416b0cc577a4ae2379c0a6c6fc6ffb68ddadf0afc1c43e3833444e7019d17f5",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerScriptService.Level 1 Systems.EntityKill",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "EntityKill"
+      ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/EntityKill.Script.lua",
       "bytes": 11471,
       "sha256": "0a071593bd126541b52cfa00f406c63aa09764f2356956ba873cc112b648b6d4",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerScriptService.Level 1 Systems.MazeGenerator",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "MazeGenerator"
+      ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/MazeGenerator.Script.lua",
       "bytes": 84041,
       "sha256": "5e0521e5b053deff36410ff6eb9de2e64fb26cad6d1c661e4c83513bec661df7",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerScriptService.Level 1 Systems.PuzzleManager",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "PuzzleManager"
+      ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
-      "bytes": 96642,
-      "sha256": "204f3edd93c7970882a2379a12c141b55acc3c941f137ee48e5955fc3e2e090c",
-      "status": "synced"
+      "bytes": 100716,
+      "sha256": "a549f5d4c5052eaf81e7d4e8042048f01b682daafbc9e79ca5eda295d4734c9f",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Configuration",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Configuration"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Configuration.ModuleScript.lua",
       "bytes": 9970,
       "sha256": "707d0831964731ce1c7f0337b98839bb45a4bcbb3a7644beaa28b68536764c68",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Exit Transition Test Suite",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Exit Transition Test Suite"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Exit Transition Test Suite.ModuleScript.lua",
       "bytes": 47083,
       "sha256": "8f62fc39e7993c2cda2e51921ad257b1ee94e3aef898fe827293ee25bc08e871",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Layout Generator",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Layout Generator"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Layout Generator.ModuleScript.lua",
       "bytes": 37520,
       "sha256": "97633275065e517c8e9b86ee33a7e81eac7eae28f6c1131757e8062982923788",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Objective Controller"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Objective Controller.ModuleScript.lua",
       "bytes": 50748,
       "sha256": "47fbecd2627e40770d3440975ffb17df180ef415dd09e6b9f98e18c5b96175ca",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Animation Adapter",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Animation Adapter"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Animation Adapter.ModuleScript.lua",
       "bytes": 16481,
       "sha256": "84c3edb8eff60ab023f5c7d9d5f608b324f92fb634dacfe2afc84b02d8d1f596",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Configuration",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Configuration"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Configuration.ModuleScript.lua",
       "bytes": 10652,
       "sha256": "0cd3387ef8cee75e869fab70a9d2d62ded7cca34b7f4766b8a789baa8ce4bf42",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Controller"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Controller.ModuleScript.lua",
       "bytes": 69432,
       "sha256": "3680c3ca111dc040aa8d0fa121676fae4e967c3774e9e711c8fb90c2b7e785c4",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Navigator"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Navigator.ModuleScript.lua",
       "bytes": 118667,
       "sha256": "27fa1dabd6c9c81eef7b305744777a7dec382c3668db83067b26f0eba8ec4747",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Observer",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Observer"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Observer.ModuleScript.lua",
       "bytes": 16597,
       "sha256": "e64860d25a94c8cbcd35306b3228ec251a3cdee944a22c26f0104a6ecdd7b76d",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Proxy Factory",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Proxy Factory"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Proxy Factory.ModuleScript.lua",
       "bytes": 11278,
       "sha256": "759d388240f4079f06d06282923f76da8bbf0023af6d79415be48eb5d6a62a9a",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Configuration",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Configuration"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Slide Configuration.ModuleScript.lua",
       "bytes": 691,
       "sha256": "600ff29d74a931b358d4817506f5aaee2e046a26f25aecf5367a312d8f267703",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Controller",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Controller"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Slide Controller.ModuleScript.lua",
-      "bytes": 37880,
-      "sha256": "a9c53bf7c95e7d81b08998c0fcfdfe41c9722801712ca30d5c92ea47c91debd0",
-      "status": "synced"
+      "bytes": 38772,
+      "sha256": "c46b1717f6090e45c932c99bbad0bf02fb61ba2a59daf6c7c3057f72e0e7f377",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Navigator"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Slide Navigator.ModuleScript.lua",
-      "bytes": 129070,
-      "sha256": "24507756188f5bd0bf80a94570222b3b77542d1ed44831223d4a88c819e26bd8",
-      "status": "synced"
+      "bytes": 131658,
+      "sha256": "edc7e3f3784572e5e0f2dda2acc0f83e2d9fb275a126545e12442a337a149f81",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Rig Adapter",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Rig Adapter"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Slide Rig Adapter.ModuleScript.lua",
       "bytes": 7363,
       "sha256": "ce7daab2e8f93fc333152c7e241c79c2e6e577ff0a9a5801311adc01c2839db1",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Round Adapter",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Round Adapter"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua",
       "bytes": 19458,
       "sha256": "f3fb88fa4a931a19c15e752e42b96fcfedfbbda3d5bfeccc98cf0c3e71eb7853",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 Slide Ragdoll Service",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Slide Ragdoll Service"
+      ],
       "className": "Script",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Slide Ragdoll Service.Script.lua",
       "bytes": 21604,
       "sha256": "2468092ab1171b80c14525e7b0e2c5ebbb790186a475551479bebb7cc833152a",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.Level 2 World Builder",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 World Builder"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua",
       "bytes": 265160,
       "sha256": "78634c03df3e8365109d776f8a298f3f148be60dadd813c05d6596181d1c17e9",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.README - LEVEL 2 POOL FOAM",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "README - LEVEL 2 POOL FOAM"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/README - LEVEL 2 POOL FOAM.ModuleScript.lua",
       "bytes": 7451,
       "sha256": "fab8f5c8f2e910ab5955c6c909b7d1ea9ebda25a32927f48b90781a936554e24",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level 2 Systems.README - LEVEL 2 TWEAKS",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "README - LEVEL 2 TWEAKS"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/README - LEVEL 2 TWEAKS.ModuleScript.lua",
       "bytes": 5828,
       "sha256": "6992c8687051748f053a7a1c0312a5a8c2700c75905f58dc278eaf51cbbd7c98",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Configuration"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Configuration.ModuleScript.lua",
-      "bytes": 18975,
-      "sha256": "6f02f90244b94b25bbfdad78e678dffee549f5cc7ac630f7a4b9b45d95d29d77",
-      "status": "synced"
+      "bytes": 19070,
+      "sha256": "4c7ee39a3f60f32dab269394a0ced2a5813f4a909ae347fefffbf26092a22b88",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Hiding Controller",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Hiding Controller"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Hiding Controller.ModuleScript.lua",
-      "bytes": 22901,
-      "sha256": "5eae5ad31bbfd20570fb3908e1fc04f9727a73a1cd78c177244168ba13e8d232",
-      "status": "synced"
+      "bytes": 24793,
+      "sha256": "2ce6b52d642a6e81af90237f39fecd5e83cd83152723de5a285a417eaf18589d",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Layout Generator",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Layout Generator"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Layout Generator.ModuleScript.lua",
       "bytes": 38107,
       "sha256": "822d944f3b93684ecbe9e97f18791e0e3619a85925284ab6043336d73f36fe14",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Mall Manager AI Controller"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Mall Manager AI Controller.ModuleScript.lua",
       "bytes": 181945,
       "sha256": "4a5957d086658ee535d8e8b0c7c1e298a91b4f9e58421db177470afbfe39ea68",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Music Sequence Controller",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Music Sequence Controller"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Music Sequence Controller.ModuleScript.lua",
       "bytes": 20901,
       "sha256": "803c62833b63d7b2a4f45216c782087ee7b526140399a3bf27cdb31585e1f5a1",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Objective Controller"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Objective Controller.ModuleScript.lua",
       "bytes": 65815,
       "sha256": "9d9052269592df2b3fb1779f60c612a1c17d5c1ae78a3c17bc6d618e7c8a76be",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Round Adapter"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Round Adapter.ModuleScript.lua",
       "bytes": 30972,
       "sha256": "3651c06324f71b635ce979343bb5209a53ad93ba9e3d595bf781f2824c4cdfa4",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 Test Suite",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Test Suite"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Test Suite.ModuleScript.lua",
       "bytes": 197871,
       "sha256": "f9406dbc7b436cb75b385b74736f01ca90199f48cd65841a377766bd2ea95bf3",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 World Builder"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 World Builder.ModuleScript.lua",
       "bytes": 104627,
       "sha256": "a3a41d76f6dc6d13d782cb5dab5595757a5cd9b1d1b440f6605f310c56bf983d",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level2Generator",
+      "segments": [
+        "ServerScriptService",
+        "Level2Generator"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level2Generator.ModuleScript.lua",
       "bytes": 427,
       "sha256": "b5edbf084450ddc309845668e1dc9f8df79af9e5edd94b827dbf6c1cd4040b76",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Level3Generator",
+      "segments": [
+        "ServerScriptService",
+        "Level3Generator"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level3Generator.ModuleScript.lua",
       "bytes": 437,
       "sha256": "3395a2c38e9de3e6b99568545fd1b5d719d8aa5d4e4cb5c2da3f0a6ada0da07d",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.LobbyPartyModeController",
+      "segments": [
+        "ServerScriptService",
+        "LobbyPartyModeController"
+      ],
       "className": "Script",
       "file": "ServerScriptService/LobbyPartyModeController.Script.lua",
       "bytes": 7124,
       "sha256": "790fad57bf00234e1ae66656227b8949b1917be257b3d4c3647b4e519d41c92c",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
+    },
+    {
+      "studioPath": "ServerScriptService.LobbyShopDisplay",
+      "segments": [
+        "ServerScriptService",
+        "LobbyShopDisplay"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/LobbyShopDisplay.ModuleScript.lua",
+      "bytes": 20669,
+      "sha256": "b618327415c753198662bf251eaec76d61f7fc40ac8c6e1c3692f19bb53be423",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks"
     },
     {
       "studioPath": "ServerScriptService.NoiseRegistry",
+      "segments": [
+        "ServerScriptService",
+        "NoiseRegistry"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/NoiseRegistry.ModuleScript.lua",
       "bytes": 1991,
       "sha256": "736bca202ea8f008f7c0c0338ccac55b1a09cc4edb6f27ce255d664b645250a9",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.PlayerProtection",
+      "segments": [
+        "ServerScriptService",
+        "PlayerProtection"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/PlayerProtection.ModuleScript.lua",
       "bytes": 6314,
       "sha256": "da2e5ac8a2cc2a5ac3eec5e07179446035ac99a285f6af63c44c376269f9a522",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.PurchaseAlerts",
+      "segments": [
+        "ServerScriptService",
+        "PurchaseAlerts"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/PurchaseAlerts.ModuleScript.lua",
       "bytes": 6278,
       "sha256": "f9de2995a607bd6101738acd4b955b8ba4d407c85c91a8111dd44dab032c9fd2",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Round Completion Routing",
+      "segments": [
+        "ServerScriptService",
+        "Round Completion Routing"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Round Completion Routing.ModuleScript.lua",
       "bytes": 74983,
       "sha256": "8d2a66dc670c1400513edaa5b6416191b73a3bfd9a189244cc55effde2c8d914",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Round Completion Test Suite",
+      "segments": [
+        "ServerScriptService",
+        "Round Completion Test Suite"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Round Completion Test Suite.ModuleScript.lua",
       "bytes": 135364,
       "sha256": "47e85422ad334aecde58eddbdc034ff02badaaf65e8d632fbf6f58efb30cc5ab",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Round Loading Runtime",
+      "segments": [
+        "ServerScriptService",
+        "Round Loading Runtime"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Round Loading Runtime.ModuleScript.lua",
       "bytes": 8128,
       "sha256": "80a2eccf323f5701e0d910ab9decdafa1cdcb14cc3bf5f3765f81735fa2c06ce",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerScriptService.Round Loading Test Suite",
+      "segments": [
+        "ServerScriptService",
+        "Round Loading Test Suite"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Round Loading Test Suite.ModuleScript.lua",
       "bytes": 15550,
       "sha256": "d82beaefcced451556031a8dcd0c5d9a47ef47057918c728a283ace762f70c5b",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "studioPath": "ServerScriptService.RouteMarkerService",
+      "segments": [
+        "ServerScriptService",
+        "RouteMarkerService"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/RouteMarkerService.Script.lua",
+      "bytes": 12066,
+      "sha256": "1f37b265e7cbb8fe9de76231e7f4ccf9eded7ec4cd3981d08694c196a8ddccb7",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerScriptService.TunnelLobbyBuilder",
+      "segments": [
+        "ServerScriptService",
+        "TunnelLobbyBuilder"
+      ],
       "className": "ModuleScript",
       "file": "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
-      "bytes": 111868,
-      "sha256": "4184fb6a958c625d44cc2dc533c8a3536d5bd429ad87dcf2382f6d5cfdb0c3bf",
-      "status": "synced"
+      "bytes": 103329,
+      "sha256": "ab17d5e8d0c0a994aae35580020890e392ad303b89d420e8edc2beee3244473c",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks"
     },
     {
       "studioPath": "ServerScriptService.ZyntraMonetization",
+      "segments": [
+        "ServerScriptService",
+        "ZyntraMonetization"
+      ],
       "className": "Script",
       "file": "ServerScriptService/ZyntraMonetization.Script.lua",
-      "bytes": 117953,
-      "sha256": "8fd2ad79db9aa106501892ca2e6bdb092923f8fca0747d2d9d5a884b072a28d8",
-      "status": "synced"
+      "bytes": 169673,
+      "sha256": "9dcae05fccdee454d7eb278f2aa1d6d2a77b4079cbb915e23d98ee9fd756676c",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerStorage.Archive.Level 2 Kids Skylight Backup 20260806.Level 2 World Builder Before Kids Skylights",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids Skylight Backup 20260806",
+        "Level 2 World Builder Before Kids Skylights"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/Archive/Level 2 Kids Skylight Backup 20260806/Level 2 World Builder Before Kids Skylights.ModuleScript.lua",
       "bytes": 84738,
       "sha256": "380beb91a4623994c5e86b2c956eb9c68033d4df9fa0e9b4844ff451da9047b0",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.Archive.Level 2 Kids Texture Backup 20260806.Level 2 World Builder Before Kids Textures",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids Texture Backup 20260806",
+        "Level 2 World Builder Before Kids Textures"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/Archive/Level 2 Kids Texture Backup 20260806/Level 2 World Builder Before Kids Textures.ModuleScript.lua",
       "bytes": 69618,
       "sha256": "8971886166a1fa4a79671c35f533589b13ba5a36449f1134ad73018b0db61328",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.Archive.Level 2 Kids V1 Backup 20260811.Level 2 Configuration",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids V1 Backup 20260811",
+        "Level 2 Configuration"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/Archive/Level 2 Kids V1 Backup 20260811/Level 2 Configuration.ModuleScript.lua",
       "bytes": 5803,
       "sha256": "d24bd2185aead26ced59abb64f639f61494457642b6323943ce32d67f4bf2c6f",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.Archive.Level 2 Kids V1 Backup 20260811.Level 2 World Builder",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids V1 Backup 20260811",
+        "Level 2 World Builder"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/Archive/Level 2 Kids V1 Backup 20260811/Level 2 World Builder.ModuleScript.lua",
       "bytes": 97093,
       "sha256": "fdc69a799166da1f1b6324a8e09766d67fec298985d3408eb1d80685bba340d1",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 Configuration",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Lever Redesign Backup 20260806",
+        "Level 2 Configuration"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/Archive/Level 2 Lever Redesign Backup 20260806/Level 2 Configuration.ModuleScript.lua",
       "bytes": 5926,
       "sha256": "24cec1cebf1816fd727c70992588c96d89c92432f2aa53b777a920d2002b529c",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 Objective Controller",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Lever Redesign Backup 20260806",
+        "Level 2 Objective Controller"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/Archive/Level 2 Lever Redesign Backup 20260806/Level 2 Objective Controller.ModuleScript.lua",
       "bytes": 7391,
       "sha256": "c9a9847ad63b338abba95480a1cbe09d8e8f9f4651282551c85f1cfe870a520d",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 World Builder",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Lever Redesign Backup 20260806",
+        "Level 2 World Builder"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/Archive/Level 2 Lever Redesign Backup 20260806/Level 2 World Builder.ModuleScript.lua",
       "bytes": 58002,
       "sha256": "4fca985383c272391f20ec44524c257f6e539a698b6480ddb5d4ec591e6aa046",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.Archive.Level 2 Pump Scale Backup 20260806.Level 2 World Builder Before 40 Percent Reduction",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Pump Scale Backup 20260806",
+        "Level 2 World Builder Before 40 Percent Reduction"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/Archive/Level 2 Pump Scale Backup 20260806/Level 2 World Builder Before 40 Percent Reduction.ModuleScript.lua",
       "bytes": 68535,
       "sha256": "343bcc9bf8bffcd225f1692ac722971c3e1d2e9551ba059614a8f3fd7387417b",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.Archive.Level2AudioBackup_20260831_NoDistantSplash.Level 2 Configuration",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2AudioBackup_20260831_NoDistantSplash",
+        "Level 2 Configuration"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/Archive/Level2AudioBackup_20260831_NoDistantSplash/Level 2 Configuration.ModuleScript.lua",
       "bytes": 9801,
       "sha256": "8befab8a370d8e8c325243136e4ef624c548ffd54e4d54b07b5c169633e4d90a",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.Archive.Level2AudioBackup_20260831_NoDistantSplash.Level 2 Sound Controller",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2AudioBackup_20260831_NoDistantSplash",
+        "Level 2 Sound Controller"
+      ],
       "className": "LocalScript",
       "file": "ServerStorage/Archive/Level2AudioBackup_20260831_NoDistantSplash/Level 2 Sound Controller.LocalScript.lua",
       "bytes": 26598,
       "sha256": "2b8c34b1b886f3ec85f303b8666ac6e69bfd8ebf9110ac61ae31804e7d67e0cd",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Client",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2RetiredSlidemouth_20260831",
+        "Level 2 Slidemouth Client"
+      ],
       "className": "LocalScript",
       "file": "ServerStorage/Archive/Level2RetiredSlidemouth_20260831/Level 2 Slidemouth Client.LocalScript.lua",
       "bytes": 9372,
       "sha256": "1f6f81df549b4cecfaaf83490c7f61dc0a2182f6cf1208ac2af4010e745f762d",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": true,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Controller",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2RetiredSlidemouth_20260831",
+        "Level 2 Slidemouth Controller"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/Archive/Level2RetiredSlidemouth_20260831/Level 2 Slidemouth Controller.ModuleScript.lua",
       "bytes": 167166,
       "sha256": "a2f0d1ed7e8b28de5803dccef88d517fbf61b9c255ec331c3c0db42b60652118",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Test Suite",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2RetiredSlidemouth_20260831",
+        "Level 2 Slidemouth Test Suite"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/Archive/Level2RetiredSlidemouth_20260831/Level 2 Slidemouth Test Suite.ModuleScript.lua",
       "bytes": 295599,
       "sha256": "c3f183e46ae15fbbd6eb1b20d91291b0f1038a08cec43f89a4f19c7cd09f41bf",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.Archive.RetiredLobbyAssets.Miso.MisoPatrol",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "RetiredLobbyAssets",
+        "Miso",
+        "MisoPatrol"
+      ],
       "className": "Script",
       "file": "ServerStorage/Archive/RetiredLobbyAssets/Miso/MisoPatrol.Script.lua",
       "bytes": 2250,
       "sha256": "19d0da27795704865d9b179ea3818ad56425607937a97b4259af336f4e4f2b4b",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerStorage.CodexBackup_20260902_ComingSoonGates.TunnelLobbyBuilder_PreComingSoon",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_ComingSoonGates",
+        "TunnelLobbyBuilder_PreComingSoon"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/CodexBackup_20260902_ComingSoonGates/TunnelLobbyBuilder_PreComingSoon.ModuleScript.lua",
       "bytes": 96252,
       "sha256": "80ed54db4d80a88ffe7c9dfb2f1c0413b14f6204eeb3c132f34ca21590940512",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__FlashlightSync",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__FlashlightSync"
+      ],
       "className": "Script",
       "file": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__FlashlightSync.Script.lua",
       "bytes": 6740,
       "sha256": "5ac6372a017e79d3522ef624fa57a1e7f7784a5303d86428fb0881b1ff8dede2",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 2 Systems__Level 2 Pool Foam Configuration",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__Level 2 Systems__Level 2 Pool Foam Configuration"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__Level 2 Systems__Level 2 Pool Foam Configuration.ModuleScript.lua",
       "bytes": 5736,
       "sha256": "2b6936befb4a52c0cac4e5f62e13cd66275a40f8e26dd79b32d798bfd65cedd0",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 2 Systems__Level 2 Pool Foam Controller",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__Level 2 Systems__Level 2 Pool Foam Controller"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__Level 2 Systems__Level 2 Pool Foam Controller.ModuleScript.lua",
       "bytes": 42420,
       "sha256": "3cb41a90df987ec3a9f83fc894cf094f844c95753400f22041d1e47d5e86dc5b",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 3 Systems__Level 3 Hiding Controller",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__Level 3 Systems__Level 3 Hiding Controller"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__Level 3 Systems__Level 3 Hiding Controller.ModuleScript.lua",
       "bytes": 16436,
       "sha256": "7a5a44653b630fba1dbf7afbc7e12f4b1d763a96be0623a225d29317aa75e5d4",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__TunnelLobbyBuilder",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__TunnelLobbyBuilder"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__TunnelLobbyBuilder.ModuleScript.lua",
       "bytes": 95466,
       "sha256": "ce964f8a684c2719cd2939255046866acbb05091c1f1c0ae1f10c9285b645d3c",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__EntityShakeController",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__EntityShakeController"
+      ],
       "className": "LocalScript",
       "file": "ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__EntityShakeController.LocalScript.lua",
       "bytes": 8095,
       "sha256": "c856717e898f4bc80f734963306e51d55fa1862b4ef45fec8b7a33031bab78da",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__FlashlightController",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__FlashlightController"
+      ],
       "className": "LocalScript",
       "file": "ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__FlashlightController.LocalScript.lua",
       "bytes": 28932,
       "sha256": "84138b423271a4204568fe3df9a5c233df9c2692d1dd1b303f3f7dbdae09bddd",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client"
+      ],
       "className": "LocalScript",
       "file": "ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client.LocalScript.lua",
       "bytes": 6350,
       "sha256": "2fc549d2d8b5838ea3db33d2c30d76aba60ff8be63b23bcf63af678c36af1e17",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__NoiseReporter",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__NoiseReporter"
+      ],
       "className": "LocalScript",
       "file": "ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__NoiseReporter.LocalScript.lua",
       "bytes": 27514,
       "sha256": "3905d456cc0eaa446b563ca55ef538018da9a22b860cd52d3df49b67e4920ccd",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerStorage.PoolSlideContextDiagnosticBackup_0710.Level 2 Pool Slide Controller",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_0710",
+        "Level 2 Pool Slide Controller"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/PoolSlideContextDiagnosticBackup_0710/Level 2 Pool Slide Controller.ModuleScript.lua",
       "bytes": 35774,
       "sha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.PoolSlideContextDiagnosticBackup_0710.Level 2 Pool Slide Navigator",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_0710",
+        "Level 2 Pool Slide Navigator"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/PoolSlideContextDiagnosticBackup_0710/Level 2 Pool Slide Navigator.ModuleScript.lua",
       "bytes": 126820,
       "sha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.PoolSlideContextDiagnosticBackup_MP6_1609Z.Controller",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP6_1609Z",
+        "Controller"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP6_1609Z/Controller.ModuleScript.lua",
       "bytes": 35774,
       "sha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.PoolSlideContextDiagnosticBackup_MP6_1609Z.Navigator",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP6_1609Z",
+        "Navigator"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP6_1609Z/Navigator.ModuleScript.lua",
       "bytes": 126820,
       "sha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.PoolSlideContextDiagnosticBackup_MP7_1624Z.Controller",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP7_1624Z",
+        "Controller"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP7_1624Z/Controller.ModuleScript.lua",
       "bytes": 35774,
       "sha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.PoolSlideContextDiagnosticBackup_MP7_1624Z.Navigator",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP7_1624Z",
+        "Navigator"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP7_1624Z/Navigator.ModuleScript.lua",
       "bytes": 126820,
       "sha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.Controller",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP8_1633Z",
+        "Controller"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP8_1633Z/Controller.ModuleScript.lua",
       "bytes": 35774,
       "sha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.Navigator",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP8_1633Z",
+        "Navigator"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP8_1633Z/Navigator.ModuleScript.lua",
       "bytes": 126975,
       "sha256": "c4e8a1f3606c14830772a7f6d7fe9b82aabdc3b06772fa22e599e6b562251093",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.NavigatorBeforeBudgetFix",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP8_1633Z",
+        "NavigatorBeforeBudgetFix"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP8_1633Z/NavigatorBeforeBudgetFix.ModuleScript.lua",
       "bytes": 126820,
       "sha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.PoolSlideContextDiagnosticBackup_MP9_1640Z.Controller",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP9_1640Z",
+        "Controller"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP9_1640Z/Controller.ModuleScript.lua",
       "bytes": 35774,
       "sha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.PoolSlideContextDiagnosticBackup_MP9_1640Z.Navigator",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP9_1640Z",
+        "Navigator"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/PoolSlideContextDiagnosticBackup_MP9_1640Z/Navigator.ModuleScript.lua",
       "bytes": 126975,
       "sha256": "c4e8a1f3606c14830772a7f6d7fe9b82aabdc3b06772fa22e599e6b562251093",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "ServerStorage.Project Mirror.IMPORTANT",
+      "segments": [
+        "ServerStorage",
+        "Project Mirror",
+        "IMPORTANT"
+      ],
       "className": "LocalScript",
       "file": "ServerStorage/Project Mirror/IMPORTANT.LocalScript.lua",
       "bytes": 167,
       "sha256": "4095140216ad0d9515e60d4697c207f537da5a11847fda2421995c4fe03194da",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": true,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerStorage.Project Mirror.Script",
+      "segments": [
+        "ServerStorage",
+        "Project Mirror",
+        "Script"
+      ],
       "className": "Script",
       "file": "ServerStorage/Project Mirror/Script.Script.lua",
       "bytes": 235,
       "sha256": "e583992400de7c9bafd421907b8b33f1a6aaa859526e64282702fd70f4a08acf",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerStorage.TEMP_PipeEntityAnimations_20260909.PreviewControls",
+      "segments": [
+        "ServerStorage",
+        "TEMP_PipeEntityAnimations_20260909",
+        "PreviewControls"
+      ],
       "className": "ModuleScript",
       "file": "ServerStorage/TEMP_PipeEntityAnimations_20260909/PreviewControls.ModuleScript.lua",
       "bytes": 4670,
       "sha256": "ab09c80f1ecb24dabc1561a5c9901af5e5767c8251e78359a85c1b1b2569e53e",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
     },
     {
       "studioPath": "StarterPlayer.StarterCharacter.Animate",
+      "segments": [
+        "StarterPlayer",
+        "StarterCharacter",
+        "Animate"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterCharacter/Animate.LocalScript.lua",
       "bytes": 28802,
       "sha256": "49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterCharacterScripts.DanceEmote",
+      "segments": [
+        "StarterPlayer",
+        "StarterCharacterScripts",
+        "DanceEmote"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua",
       "bytes": 1539,
       "sha256": "1adfdded75ae74aba87cb74c69590e55219b2ac9e7f5adc1a7f535cceb39fa8b",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterCharacterScripts.DisableDefaultWalkingSound",
+      "segments": [
+        "StarterPlayer",
+        "StarterCharacterScripts",
+        "DisableDefaultWalkingSound"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterCharacterScripts/DisableDefaultWalkingSound.LocalScript.lua",
       "bytes": 300,
       "sha256": "b5309d09c60b9fb5ea319c24d34cbdc3b861fdb1726727a608944e528462e66f",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterCharacterScripts.SetRunAnimation",
+      "segments": [
+        "StarterPlayer",
+        "StarterCharacterScripts",
+        "SetRunAnimation"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterCharacterScripts/SetRunAnimation.LocalScript.lua",
       "bytes": 654,
       "sha256": "3f84b7c495f091703b0636958f6691c0c2f23c9c7f487e1a3637b3b0e7c37f07",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": true,
+      "runContext": "Enum.RunContext.Legacy"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Daily Rewards Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Daily Rewards Client"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Daily Rewards Client.LocalScript.lua",
+      "bytes": 27008,
+      "sha256": "fed9df9c724827deba63a18f0189a65b3dd47186796862f6bbc175efe97d4885",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.DevCheats",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "DevCheats"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/DevCheats.LocalScript.lua",
       "bytes": 22809,
       "sha256": "cefdd63c547b5c3076455a1ed9b820bbcb8b9e121f290763fccef87b2c947e6b",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.EntityShakeController",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "EntityShakeController"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/EntityShakeController.LocalScript.lua",
       "bytes": 10390,
       "sha256": "f120ff0660785fe03a31ab3cf57705aeaa39bbc5fbe89d7592584812ebf16ac1",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Field Notes Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Field Notes Client"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Field Notes Client.LocalScript.lua",
+      "bytes": 9288,
+      "sha256": "75162f7219bc5966ff5ee367360338a5d56356f085529e4188fc41f51f239c72",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.First Entry Guide",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "First Entry Guide"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/First Entry Guide.LocalScript.lua",
-      "bytes": 9260,
-      "sha256": "a23d1f047ccefea3383298f9cc32fb46a861461232f700407fb2fe5fe6711afc",
-      "status": "synced"
+      "bytes": 9947,
+      "sha256": "675c45e03f0b50ee2122c40da1c2b68d0bf1e55a5a2a74e0e89493b3eb9df2be",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.FlashlightController",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "FlashlightController"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/FlashlightController.LocalScript.lua",
       "bytes": 30942,
       "sha256": "61a20628a4db7d9e519aed97461e9f45395d53f657eb4f5f9b42c161f66272ad",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Friend Boost Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Friend Boost Client"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Friend Boost Client.LocalScript.lua",
+      "bytes": 8386,
+      "sha256": "8828ec76ae08c949f1bf8da80e108f1de73f6f8132d466b329752f17c238e8f3",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.JumpscareUI",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "JumpscareUI"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/JumpscareUI.LocalScript.lua",
       "bytes": 7476,
       "sha256": "faacdbb53c48b844bc122a629cbd0f68c7af0a6057953cb2b5d957e443343f8e",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 1 Cable Current",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 1 Cable Current"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 1 Cable Current.LocalScript.lua",
+      "bytes": 10507,
+      "sha256": "ecb3adeab5a09695574dccc27bedfa514d74fdc601807e4e996e24ae382f1133",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 1 Sound Controller",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 1 Sound Controller"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 1 Sound Controller.LocalScript.lua",
       "bytes": 3462,
       "sha256": "1cf0c64a0a95fb3dc82ac94c39191542f92461fdaf05f41164e40c6d29544fa5",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Entity Audio",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Entity Audio"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 2 Entity Audio.LocalScript.lua",
+      "bytes": 9971,
+      "sha256": "3aa673668072c9e98ac8eaa4389e9e900f8e21f1bd948455033105579456e5b1",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Lighting Controller",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Lighting Controller"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Lighting Controller.LocalScript.lua",
-      "bytes": 5591,
-      "sha256": "3526af9143f0ce1c5d80aad30dcecba8bd7f0156f542aa5381a8a7adc72d1657",
+      "bytes": 5592,
+      "sha256": "d33a1d6290dd5b1bd829aeab3c61edeb7199896568a719c8d0a656a7a31bfecc",
       "status": "synced",
-      "studioTrailingNewline": true
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Objective UI",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Objective UI"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua",
-      "bytes": 13014,
-      "sha256": "2e9cb6f026ab0e00f972d96d388106c651e290997ce07ab2c6958b7dc8a398dc",
-      "status": "synced"
+      "bytes": 13516,
+      "sha256": "5b6397736dbf40f15f07d88bd57422be317ad387c2535e474de5c736e39feed2",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Pool Foam Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Pool Foam Client"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Pool Foam Client.LocalScript.lua",
-      "bytes": 18692,
-      "sha256": "7e2b605e37b816b0d216c15383683cf7bde13a9481c1836c44cb597e0df7472e",
-      "status": "synced"
+      "bytes": 18788,
+      "sha256": "7e178ddfc4917766dd353e861388df756fe977a653816ecaf24d52f6fae26ec1",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Pool Slide Dev ESP",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Pool Slide Dev ESP"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Pool Slide Dev ESP.LocalScript.lua",
       "bytes": 9656,
       "sha256": "a5b3cbb5f7a41c650207e9585d3b3c51fbf884b7a5859ac40d5e155114b064de",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Slide Controller",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Slide Controller"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Slide Controller.LocalScript.lua",
       "bytes": 30379,
       "sha256": "4e612759f17761f31e3f2a473fe0ae28c0772e51fc3eea594b56d0355d6c92b3",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Sound Controller"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Sound Controller.LocalScript.lua",
-      "bytes": 39655,
-      "sha256": "20e97b4974f3a326eaaee4afa7f2a90d2ce7b966cd4f8be7d4f4e9dc9df565e3",
-      "status": "synced"
+      "bytes": 39939,
+      "sha256": "2fcff3b13b8d55f6b355155e066951b82df67135c5ca5bab7b215b5462a636dc",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Lighting Controller"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 3 Lighting Controller.LocalScript.lua",
       "bytes": 39946,
       "sha256": "af55a6cba5254e627d6b1c7479a124b586280b024052616b93f0cca2d088c325",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Mall Manager Visual Smoother",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Mall Manager Visual Smoother"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 3 Mall Manager Visual Smoother.LocalScript.lua",
       "bytes": 6548,
       "sha256": "81309944181cf982fd2eda88291244bde8cdcaf5c2ecbd4c8c0f05f9f733cf37",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Reader Client"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 3 Reader Client.LocalScript.lua",
-      "bytes": 54034,
-      "sha256": "21a65e1a8c723e8e2ca28b535780e51b20a8afe040fca832284ec9c9767254ab",
-      "status": "synced"
+      "bytes": 54201,
+      "sha256": "ed7bfa3f565957e1e4b47134827318fb9346188f416ef0a4052c3b5e18cc94b0",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Sound Controller",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Sound Controller"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 3 Sound Controller.LocalScript.lua",
       "bytes": 46833,
       "sha256": "8896ccdacbbd00116686a7f0547059b72e24776c99c119b4c8cd207d0eea3d3b",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 3 Table Hiding Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Table Hiding Client"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 3 Table Hiding Client.LocalScript.lua",
-      "bytes": 18144,
-      "sha256": "a4346a5a361ae4b900c4e2d441cb3703dde7deee07bf8247b12d9d30ab8ba9a7",
-      "status": "synced"
+      "bytes": 21675,
+      "sha256": "e406296d0b1aa64f72cb9051caa36bc1d555a1c680c13cffebb8f79893ed6d98",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level2AlertClient",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level2AlertClient"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level2AlertClient.LocalScript.lua",
-      "bytes": 33798,
-      "sha256": "ab5459947e91a52ac22e211a2de36f002649f16ebfcd87d421bb6ffde20aba5a",
-      "status": "synced"
+      "bytes": 34389,
+      "sha256": "4350501fbaef5707c67bd2ebbc42ac429a7793653f61a330549feaf9aa2c6a32",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.LobbyCeilingSweeps",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyCeilingSweeps"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/LobbyCeilingSweeps.LocalScript.lua",
       "bytes": 7021,
       "sha256": "fda84a982df70caf1044eee533161d2fe2bd94ed5808701ad1b82acb087fdc4a",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.LobbyLevel3GateFlicker",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyLevel3GateFlicker"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/LobbyLevel3GateFlicker.LocalScript.lua",
       "bytes": 5033,
       "sha256": "187b2f54577f23dfd40ffcd23624acd1d01fe9e8b37dba58e30cdbc3ddccd80b",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.LobbyMusicController",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyMusicController"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/LobbyMusicController.LocalScript.lua",
       "bytes": 10098,
       "sha256": "7f9ecdeda7b62256ccd3f25484e7116fd31e0437dd1e692074b53f07bb966c38",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Lucky Wheel Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Lucky Wheel Client"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Lucky Wheel Client.LocalScript.lua",
+      "bytes": 33299,
+      "sha256": "ea9c1e57aafe3de6fb6437daaedbcda35e0ab457255a7ee9cb6ab06d1ff75ffd",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.MasterTuningClient",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "MasterTuningClient"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/MasterTuningClient.LocalScript.lua",
       "bytes": 10614,
       "sha256": "4094dc40c82aa71fba3c30d7d2296b11ec217db02bf12c60c721d1f8735ab7d4",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "NoiseReporter"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/NoiseReporter.LocalScript.lua",
-      "bytes": 41114,
-      "sha256": "6c47beda1d43690ee53e3adc35cfec46b8d1627b18cca566058211be1fa16507",
-      "status": "synced"
+      "bytes": 43475,
+      "sha256": "aaf0ef925f94210d35baf9a6e169f37af7d6fc5efe931773b32726629b0d1f6e",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.ProtectionHUD",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "ProtectionHUD"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/ProtectionHUD.LocalScript.lua",
-      "bytes": 12035,
-      "sha256": "1a809423555b55b21652c3e828213f90c3822f66038badd2f33c05a368f6b054",
-      "status": "synced"
+      "bytes": 29091,
+      "sha256": "ae1e444760097c35fde09516fb88c8fe8df3ce3176a15a8e5a13c0c67f31d811",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.PuzzleUI",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "PuzzleUI"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/PuzzleUI.LocalScript.lua",
-      "bytes": 74893,
-      "sha256": "95c26a55b073a12ce2a2e32a822416cce6d2f88749e491537ef0aa5eff785639",
-      "status": "synced"
+      "bytes": 78232,
+      "sha256": "eb9b8723b507e465ca6cd5ee6784121b90117830563634120c7f3d30b2af86d2",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Round Entry Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Round Entry Client"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Round Entry Client.LocalScript.lua",
       "bytes": 5914,
       "sha256": "1a265d23442134298ec99144d5728c3dbcb7f1dbb1bd942b8e3de93010cc4850",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Round Exit Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Round Exit Client"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Round Exit Client.LocalScript.lua",
-      "bytes": 9270,
-      "sha256": "378378563282afb3fc57076af13ed9b6dfbe0442c9acaa9b9965f5fed1dad48a",
-      "status": "synced"
+      "bytes": 20545,
+      "sha256": "c96f56c9cd9325efcee8096183f5c356fa02985212d326d55c99ae8245b08af0",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.RoundUI",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "RoundUI"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
-      "bytes": 233686,
-      "sha256": "a851f6315bad4806698ab40627a9092955b1455a88b6da4f62ad95b9e65eb7f3",
-      "status": "synced"
+      "bytes": 237425,
+      "sha256": "6ea126334b86f7b8791add4b73e220ea68b8a979c40c8ddfd00b3db0eaf1ce16",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Shop Display Client",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Shop Display Client"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Shop Display Client.LocalScript.lua",
+      "bytes": 23505,
+      "sha256": "8471c35ed617b1383b57748cde1e5bf8d1399e11874e0036c145e7b957a46667",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.SoundController",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "SoundController"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
       "bytes": 69416,
       "sha256": "29b6e3be3f962a0cf6f55f4301908d00572069a4275c1b8edb8b962806017952",
-      "status": "synced"
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.SpectateController",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "SpectateController"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/SpectateController.LocalScript.lua",
-      "bytes": 19927,
-      "sha256": "8a1099c4155c81c5181915fc98a8449cec6908f71ecf5b21ff632fb312527eeb",
-      "status": "synced"
+      "bytes": 19755,
+      "sha256": "787c9dacbff58525cd0a63d949b1f663e3305aa31ae302b8b30104b8639b2a4a",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "ZyntraStore"
+      ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
-      "bytes": 147108,
-      "sha256": "2cd30a474d6b1e21818fefff7dd5d6ca7d3870f7d24766fc020f7aa9bfcae733",
-      "status": "synced"
+      "bytes": 187153,
+      "sha256": "b2e288a19af5747aa913d2ae7d5b2ef32ba4939ae09b98a7fea50a53ca9141fe",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "fresh Studio Source chunks",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     }
   ]
 }

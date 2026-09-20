@@ -26,11 +26,16 @@ local MAXIMUM_RANGE = 650
 local ACCURACY_DEGREES = {155, 105, 64, 36, 18, 5}
 local DISTANCE_NOISE = {0.60, 0.42, 0.27, 0.15, 0.07, 0.0}
 
+-- UI_STYLE_20260915 (Trello #98). The panel surface, the body/muted/caution
+-- faces and the chrome now come from the shared tokens taken off Level 1's
+-- Objectives panel and the Mission Brief card. ENERGON stays local: it is the
+-- reader's own instrument colour and it carries signal strength.
+local UIStyle = require(ReplicatedStorage:WaitForChild("UIStyle"))
 local ENERGON = Color3.fromRGB(66, 244, 218)
-local PANEL = Color3.fromRGB(6, 13, 15)
-local TEXT = Color3.fromRGB(218, 237, 223)
-local MUTED = Color3.fromRGB(153, 174, 166)
-local AMBER = Color3.fromRGB(231, 218, 145)
+local PANEL = UIStyle.Color.Panel
+local TEXT = UIStyle.Color.Body
+local MUTED = UIStyle.Color.Muted
+local AMBER = UIStyle.Color.Warning
 
 local gui = Instance.new("ScreenGui")
 gui.Name = "Level3ReaderGui"
@@ -54,31 +59,24 @@ panel.AutoButtonColor = false
 panel.Text = ""
 panel.Active = false
 panel.Selectable = false
-panel.BackgroundColor3 = PANEL
-panel.BackgroundTransparency = 0.12
-panel.BorderSizePixel = 0
 panel.Visible = false
 panel.Parent = gui
 
-local panelCorner = Instance.new("UICorner")
-panelCorner.CornerRadius = UDim.new(0, 6)
-panelCorner.Parent = panel
-
-local panelStroke = Instance.new("UIStroke")
+-- Reference chrome. The stroke COLOUR is still the instrument's own -- it is
+-- the calibration gauge, written every tick by updateReader -- but the panel's
+-- surface, radius and stroke weight are the shared ones, so the reader reads as
+-- the same family of card as the objectives panel instead of a 2px teal box.
+UIStyle.panel(panel)
+local panelStroke = panel:FindFirstChildOfClass("UIStroke") :: UIStroke
 panelStroke.Color = ENERGON
-panelStroke.Thickness = 2
-panelStroke.Transparency = 0.25
-panelStroke.Parent = panel
 
 local title = Instance.new("TextLabel")
 title.Name = "Title"
 title.BackgroundTransparency = 1
 title.Position = UDim2.fromOffset(10, 5)
 title.Size = UDim2.new(1, -20, 0, 18)
-title.Font = Enum.Font.Code
+UIStyle.readout(title, {TextColor = ENERGON, TextSize = 16})
 title.Text = "> EXIT DOOR READER"
-title.TextColor3 = ENERGON
-title.TextSize = 16
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.Parent = panel
 
@@ -87,10 +85,8 @@ progressLabel.Name = "Calibration"
 progressLabel.BackgroundTransparency = 1
 progressLabel.Position = UDim2.fromOffset(10, 26)
 progressLabel.Size = UDim2.new(1, -20, 0, 18)
-progressLabel.Font = Enum.Font.Code
+UIStyle.readout(progressLabel, {TextColor = TEXT, TextSize = 15})
 progressLabel.Text = "[□□□□□]  0/5"
-progressLabel.TextColor3 = TEXT
-progressLabel.TextSize = 15
 progressLabel.TextXAlignment = Enum.TextXAlignment.Left
 progressLabel.Parent = panel
 
@@ -104,7 +100,8 @@ track.BorderSizePixel = 0
 track.Parent = panel
 
 local trackCorner = Instance.new("UICorner")
-trackCorner.CornerRadius = UDim.new(0, 4)
+-- Pill, like the reference panel's ProgressTrack and its Fill.
+trackCorner.CornerRadius = UDim.new(1, 0)
 trackCorner.Parent = track
 
 local centerLine = Instance.new("Frame")
@@ -134,10 +131,8 @@ signalLabel.Name = "Signal"
 signalLabel.BackgroundTransparency = 1
 signalLabel.Position = UDim2.fromOffset(10, 75)
 signalLabel.Size = UDim2.new(1, -20, 0, 19)
-signalLabel.Font = Enum.Font.Code
+UIStyle.readout(signalLabel, {TextColor = AMBER})
 signalLabel.Text = "SIGNAL // NO TRACE"
-signalLabel.TextColor3 = AMBER
-signalLabel.TextSize = 13
 signalLabel.TextTruncate = Enum.TextTruncate.AtEnd
 signalLabel.TextXAlignment = Enum.TextXAlignment.Left
 signalLabel.Parent = panel
@@ -189,30 +184,22 @@ restoreChip.Name = "Chip"
 restoreChip.AnchorPoint = Vector2.new(0.5, 0.5)
 restoreChip.Position = UDim2.fromScale(0.5, 0.5)
 restoreChip.Size = UDim2.fromOffset(RESTORE_CHIP, RESTORE_CHIP)
-restoreChip.BackgroundColor3 = PANEL
-restoreChip.BackgroundTransparency = 0.10
-restoreChip.BorderSizePixel = 0
 restoreChip.Parent = restoreButton
-local restoreCorner = Instance.new("UICorner")
-restoreCorner.CornerRadius = UDim.new(0, 7)
-restoreCorner.Parent = restoreChip
-local restoreStroke = Instance.new("UIStroke")
-restoreStroke.Color = ENERGON
-restoreStroke.Thickness = 1.5
-restoreStroke.Transparency = 0.34
-restoreStroke.Parent = restoreChip
+UIStyle.panel(restoreChip, {
+	Background = UIStyle.Color.Control,
+	Transparency = UIStyle.Transparency.Control,
+	Radius = UIStyle.Radius.Control,
+})
 
 local restoreGlyph = Instance.new("TextLabel")
 restoreGlyph.Name = "Glyph"
 restoreGlyph.BackgroundTransparency = 1
 restoreGlyph.Size = UDim2.fromScale(1, 1)
-restoreGlyph.Font = Enum.Font.Code
 -- U+25BE. A geometric-shapes glyph from the same block as the progress boxes
 -- this file already draws, so it is known to render here, and it is the
 -- conventional "expand this" mark rather than a key name.
+UIStyle.readout(restoreGlyph, {TextColor = ENERGON, TextSize = 15})
 restoreGlyph.Text = "\u{25BE}"
-restoreGlyph.TextColor3 = ENERGON
-restoreGlyph.TextSize = 15
 restoreGlyph.Parent = restoreChip
 
 local readerHidden = false
@@ -220,30 +207,21 @@ local readerHidden = false
 local toast = Instance.new("Frame")
 toast.Name = "AlertToast"
 toast.AnchorPoint = Vector2.new(0.5, 0)
-toast.BackgroundColor3 = PANEL
-toast.BackgroundTransparency = 0.08
-toast.BorderSizePixel = 0
 toast.Visible = false
 toast.ZIndex = 20
 toast.Parent = gui
 
-local toastCorner = Instance.new("UICorner")
-toastCorner.CornerRadius = UDim.new(0, 7)
-toastCorner.Parent = toast
-
-local toastStroke = Instance.new("UIStroke")
-toastStroke.Color = ENERGON
-toastStroke.Thickness = 2
-toastStroke.Transparency = 0.18
-toastStroke.Parent = toast
+-- Stated ONCE: showToast fades the toast out and has to put these back, and two
+-- copies of the same numbers is how a restyle leaves a stale value behind.
+local TOAST_STYLE = {Stroke = ENERGON, Transparency = UIStyle.Transparency.Panel}
+UIStyle.panel(toast, TOAST_STYLE)
+local toastStroke = toast:FindFirstChildOfClass("UIStroke") :: UIStroke
 
 local toastTitle = Instance.new("TextLabel")
 toastTitle.BackgroundTransparency = 1
 toastTitle.Position = UDim2.fromOffset(12, 6)
 toastTitle.Size = UDim2.new(1, -24, 0, 20)
-toastTitle.Font = Enum.Font.Code
-toastTitle.TextColor3 = ENERGON
-toastTitle.TextSize = 17
+UIStyle.title(toastTitle, {TextColor = ENERGON, TextSize = 17})
 toastTitle.TextXAlignment = Enum.TextXAlignment.Left
 toastTitle.TextTruncate = Enum.TextTruncate.AtEnd
 toastTitle.ZIndex = 21
@@ -253,9 +231,10 @@ local toastBody = Instance.new("TextLabel")
 toastBody.BackgroundTransparency = 1
 toastBody.Position = UDim2.fromOffset(12, 28)
 toastBody.Size = UDim2.new(1, -24, 1, -34)
-toastBody.Font = Enum.Font.Code
-toastBody.TextColor3 = TEXT
-toastBody.TextSize = 13
+-- The toast is prose, not a readout: GothamMedium, the reference body face.
+-- It is also NARROWER than the Code it replaces, so the wrapped-copy bound
+-- Fit.childProblems measures only gets slack.
+UIStyle.body(toastBody, {TextColor = TEXT})
 toastBody.TextWrapped = true
 toastBody.TextXAlignment = Enum.TextXAlignment.Left
 toastBody.TextYAlignment = Enum.TextYAlignment.Top
@@ -789,10 +768,9 @@ local function showToast(titleText: any, subtitle: any, instruction: any, durati
 	local first = cleanText(subtitle, "", 110)
 	local second = cleanText(instruction, "", 110)
 	toastBody.Text = if first ~= "" and second ~= "" then first .. "\n" .. second else first .. second
-	toast.BackgroundTransparency = 0.08
+	UIStyle.panel(toast, TOAST_STYLE)
 	toastTitle.TextTransparency = 0
 	toastBody.TextTransparency = 0
-	toastStroke.Transparency = 0.18
 	toast.Visible = true
 	-- The alert owns the same safe top band for its brief lifetime. Do not draw
 	-- the reader underneath it; updateReader restores both controls afterwards.

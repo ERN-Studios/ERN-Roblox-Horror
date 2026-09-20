@@ -550,6 +550,23 @@ local MINIMUM_TOUCH_TARGET = 44
 local CONTROL_KEYS_RIGHT_FIRST = {
 	"TouchJump", "TouchRunHold", "TouchSneakHold",
 	"TouchDropGlowstick", "TouchPOV", "FlashlightPower", "ProtectionUse",
+	-- EQUIPMENT_SLOTS_20260916 (Trello #101). The two stored consumables are
+	-- seated by THIS list, with the same arithmetic as the other seven, rather
+	-- than pinned above ProtectionUse in a table of their own. That is what
+	-- keeps them honest: planZone reserves the union of every key listed here,
+	-- rowControlPlan shrinks the cell until ALL of them clear
+	-- MINIMUM_TOUCH_TARGET, and the objective readout's headroom is measured
+	-- against the result -- so nine controls cannot quietly eat the top band.
+	-- Two slots bolted on above ProtectionUse do exactly that: measured, a
+	-- 568x320 phone put the second of them at y 50 inside a top band running to
+	-- y 97, and on a 812x375 phone the column needs 432px of a 375px screen.
+	-- Last in the list means furthest from the thumb, so JUMP / RUN / SNEAK keep
+	-- their place in the rank.
+	--
+	-- They are DRAWN only when the player owns the item (ProtectionHUD hides the
+	-- button), and an undrawn control is excluded from the measured union, so on
+	-- a real device Zones.Controls still describes what is actually on screen.
+	"SpeedPotionUse", "RouteMarkerPlace",
 }
 
 local function columnControlPlan(tablet: boolean): any
@@ -562,6 +579,10 @@ local function columnControlPlan(tablet: boolean): any
 	local secondWidth = tablet and 72 or 58
 	local flashlightSlot = 58
 	local run = edge + button + gap
+	-- The second column's equipment stack, DERIVED from the shield's own bottom
+	-- rather than restated, so the three inventory slots cannot drift apart.
+	local protection = edge + flashlightSlot + button + gap + (tablet and 72 or 58) + gap
+	local equipmentStep = secondWidth + gap
 	return {
 		Mode = "column",
 		Edge = edge,
@@ -583,8 +604,11 @@ local function columnControlPlan(tablet: boolean): any
 				Width = secondWidth, Height = tablet and 54 or 48, TextSize = 13},
 			FlashlightPower = {Right = second, Bottom = edge,
 				Width = secondWidth, Height = secondWidth},
-			ProtectionUse = {Right = second,
-				Bottom = edge + flashlightSlot + button + gap + (tablet and 72 or 58) + gap,
+			ProtectionUse = {Right = second, Bottom = protection,
+				Width = secondWidth, Height = secondWidth, TextSize = 12},
+			SpeedPotionUse = {Right = second, Bottom = protection + equipmentStep,
+				Width = secondWidth, Height = secondWidth, TextSize = 12},
+			RouteMarkerPlace = {Right = second, Bottom = protection + equipmentStep * 2,
 				Width = secondWidth, Height = secondWidth, TextSize = 12},
 		},
 	}
@@ -593,9 +617,11 @@ end
 -- The bottom-edge arrangement. `usableWidth` is the daylight from the safe right
 -- edge back to the thumbstick's activation edge: the row is SIZED to fit inside
 -- it rather than clamped into it afterwards, so no control can land in the
--- region a finger uses to walk. Seven 44px targets and their gaps do not fit every
--- short screen, so a second attempt seats them four/three in two ranks;
--- returns nil when even that will not fit, and the column stands.
+-- region a finger uses to walk. One 44px target per control plus the gaps does
+-- not fit every short screen, so a second attempt seats them in two ranks of
+-- ceil(n/2); returns nil when even that will not fit, and the column stands.
+-- `n` is however many keys CONTROL_KEYS_RIGHT_FIRST holds -- nine since the
+-- equipment slots joined it -- and nothing here is written for a fixed count.
 local function rowControlPlan(tablet: boolean, usableWidth: number, usableHeight: number): any?
 	local edge = tablet and 26 or 22
 	local gap = tablet and 12 or 8
@@ -1606,8 +1632,15 @@ end
 -- terminal and, being Active, took the taps meant for it. Raising the
 -- terminal's DisplayOrder would have fixed the painting and not the input; the
 -- HUD standing down fixes both, and is what the briefing already did.
+--
+-- LuckyWheelOpen and DailyRewardsOpen joined the list on 2026-09-16 (cards
+-- #103 / #104). Both are lobby modals that own the screen exactly the way the
+-- terminal does -- full ModalViewport panel, movement suppressed, the rail
+-- underneath them -- so they belong to the same set rather than each inventing
+-- a private flag that the HUDs, and each other, would have to learn.
 local SCREEN_OWNING_MODALS = {
 	"ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen", "QueueModalOpen",
+	"LuckyWheelOpen", "DailyRewardsOpen",
 }
 
 function UIDevice.ScreenOwningModalOpen(): boolean

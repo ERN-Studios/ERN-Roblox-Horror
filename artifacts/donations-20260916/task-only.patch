@@ -1,0 +1,145 @@
+--- before/ServerScriptService/ZyntraMonetization.Script.lua
++++ after/ServerScriptService/ZyntraMonetization.Script.lua
+@@ -2047,6 +2047,11 @@
+ 	player:SetAttribute("ZyntraOwnsSupporter", supporter)
+ 	player:SetAttribute("ZyntraOwnsAdvancedEquipment", advanced)
+ 	player:SetAttribute("ZyntraOwnsCosmeticEquipment", cosmetic)
++	for key, pass in pairs(Config.Donations or {}) do
++		if pass.Kind == "GamePass" then
++			player:SetAttribute("ZyntraOwns" .. key, passOwnership(player, key, pass))
++		end
++	end
+ 
+ 	if supporter then
+ 		mutate(player, function(data)
+@@ -3393,7 +3398,12 @@
+ 
+ MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(player, passId, purchased)
+ 	if not purchased then return end
+-	for key, pass in pairs(Config.Passes) do
++	-- Donation passes share the ownership latch, but grant no gameplay benefits.
++	local passes = table.clone(Config.Passes)
++	for key, pass in pairs(Config.Donations or {}) do
++		if pass.Kind == "GamePass" then passes[key] = pass end
++	end
++	for key, pass in pairs(passes) do
+ 		if pass.Id > 0 and pass.Id == passId then
+ 			-- Latch the purchase BEFORE refreshing: Roblox has just told us this
+ 			-- player paid, and its own ownership cache may still say otherwise for
+@@ -3415,7 +3425,7 @@
+ local function registerProductCatalog(catalog, kind)
+ 	for key, product in pairs(catalog or {}) do
+ 		local productId = math.floor(tonumber(product.Id) or 0)
+-		if productId > 0 then
++		if productId > 0 and product.Kind ~= "GamePass" then
+ 			assert(not productById[productId],
+ 				string.format("Duplicate Zyntra Developer Product ID %d (%s)", productId, key))
+ 			productById[productId] = { Key = key, Kind = kind, Product = product }
+--- before/ReplicatedStorage/UIRegression.ModuleScript.lua
++++ after/ReplicatedStorage/UIRegression.ModuleScript.lua
+@@ -4986,13 +4986,14 @@
+ -- the number the actions were actually sized against on the pass that just ran.
+ Fit.ZyntraFloorFallback = 44
+ 
+--- The six donation tiers, NAMED here so the assertion has an oracle the store
++-- The nine donation tiers, NAMED here so the assertion has an oracle the store
+ -- and the config cannot both drift away from at once. Reading the config and
+ -- comparing it to the store proves the two agree; it does not prove either is
+ -- what was authored. Both are held to this list.
+ Fit.DonationTierKeys = {
+ 	"DonationSignal", "DonationSupply", "DonationField",
+ 	"DonationResearch", "DonationCommand", "DonationDirector",
++	"Donation5000", "Donation10000", "Donation20K",
+ }
+ 
+ -- The captions the store is AUTHORED to take an action out of the input stack
+--- before/ReplicatedStorage/ZyntraConfig.ModuleScript.lua
++++ after/ReplicatedStorage/ZyntraConfig.ModuleScript.lua
+@@ -184,6 +184,28 @@
+ 			Price = 1000,
+ 			Description = "Donate to the continued development of BACKROOMS: STAY QUIET [CO-OP HORROR].",
+ 		},
++		Donation5000 = {
++			Id = 3713115025,
++			Order = 7,
++			Name = "ZYNTRA Donate — 5,000",
++			Price = 5000,
++			Description = "Optional, repeatable support for continued development. No gameplay advantages.",
++		},
++		Donation10000 = {
++			Id = 3713115125,
++			Order = 8,
++			Name = "ZYNTRA Donate — 10,000",
++			Price = 10000,
++			Description = "Optional, repeatable support for continued development. No gameplay advantages.",
++		},
++		Donation20K = {
++			Id = 1978617781,
++			Kind = "GamePass",
++			Order = 9,
++			Name = "ZYNTRA Support — 20K",
++			Price = 20000,
++			Description = "One-time support through the existing 20K gamepass. No gameplay advantages.",
++		},
+ 	},
+ 
+ 	-- Roblox badges, created on the Creator Dashboard under this same experience.
+--- before/StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua
++++ after/StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua
+@@ -2257,7 +2257,9 @@
+ 	heading.Name = "TierName"
+ 	heading.TextWrapped = true
+ 	local productId = math.floor(tonumber(item.Id) or 0)
+-	local buy = button(card, tostring(item.Price) .. " R$  //  DONATE", UDim2.new(1, -24, 0, 36), UDim2.new(0, 12, 1, -44))
++	local isPass = item.Kind == "GamePass"
++	local actionCaption = isPass and " R$  //  ONE-TIME" or " R$  //  DONATE"
++	local buy = button(card, tostring(item.Price) .. actionCaption, UDim2.new(1, -24, 0, 36), UDim2.new(0, 12, 1, -44))
+ 	buy.Name = "Buy"
+ 	buy.TextWrapped = true
+ 	buy.TextColor3 = COLORS.accent2
+@@ -2268,6 +2270,7 @@
+ 	-- string that a copy change is free to rewrite.
+ 	card:SetAttribute("DonationTierKey", key)
+ 	card:SetAttribute("DonationProductId", productId)
++	card:SetAttribute("DonationPurchaseKind", isPass and "GamePass" or "Product")
+ 	contract.card("Donate", key, card, buy)
+ 	if productId <= 0 then
+ 		buy.Text = "COMING SOON"
+@@ -2280,16 +2283,33 @@
+ 		-- gamepad cannot land on a product that cannot be bought.
+ 		UIDevice.SetEnabled(buy, false)
+ 	else
++		local function refreshDonationOwnership()
++			if not buy.Parent then return end
++			local owned = isPass and player:GetAttribute("ZyntraOwns" .. key) == true
++			UIDevice.SetEnabled(buy, not owned)
++			buy.Text = owned and "OWNED" or tostring(displayedProductPrices[key]) .. actionCaption
++			buy.TextColor3 = owned and COLORS.muted or COLORS.accent2
++		end
++		if isPass then
++			player:GetAttributeChangedSignal("ZyntraOwns" .. key):Connect(refreshDonationOwnership)
++		end
++		refreshDonationOwnership()
+ 		task.spawn(function()
+-			local ok, info = pcall(MarketplaceService.GetProductInfo, MarketplaceService, productId, Enum.InfoType.Product)
++			local infoType = isPass and Enum.InfoType.GamePass or Enum.InfoType.Product
++			local ok, info = pcall(MarketplaceService.GetProductInfo, MarketplaceService, productId, infoType)
+ 			local price = ok and type(info) == "table" and tonumber(info.PriceInRobux) or nil
+-			if price and price >= 0 and buy.Parent and buy.Active then
++			if price and price >= 0 and buy.Parent then
+ 				displayedProductPrices[key] = math.floor(price)
+-				buy.Text = tostring(math.floor(price)) .. " R$  //  DONATE"
++				refreshDonationOwnership()
+ 			end
+ 		end)
+ 		buy.Activated:Connect(function()
+-			MarketplaceService:PromptProductPurchase(player, productId)
++			if isPass then
++				if player:GetAttribute("ZyntraOwns" .. key) == true then return end
++				MarketplaceService:PromptGamePassPurchase(player, productId)
++			else
++				MarketplaceService:PromptProductPurchase(player, productId)
++			end
+ 		end)
+ 	end
+ 	return card

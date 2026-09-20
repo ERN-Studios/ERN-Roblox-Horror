@@ -13,6 +13,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local SoundService = game:GetService("SoundService")
 
+local UIStyle = require(ReplicatedStorage:WaitForChild("UIStyle"))
+
 local player = Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 
@@ -81,21 +83,17 @@ caption.Name = "Caption"
 caption.AnchorPoint = Vector2.new(0.5, 1)
 caption.Position = UDim2.fromScale(0.5, 0.91)
 caption.Size = UDim2.new(0.72, 0, 0, 50)
-caption.BackgroundColor3 = Color3.fromRGB(5, 13, 16)
-caption.BackgroundTransparency = 0.3
-caption.BorderSizePixel = 0
-caption.Font = Enum.Font.GothamMedium
-caption.TextColor3 = Color3.fromRGB(232, 246, 240)
 caption.TextStrokeColor3 = Color3.new(0, 0, 0)
 caption.TextStrokeTransparency = 0.55
-caption.TextSize = 19
 caption.TextWrapped = true
 caption.Visible = false
 caption.Parent = gui
 
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 7)
-corner.Parent = caption
+-- UI_STYLE_20260915 (Trello #98): the Mission Brief's own subtitle band, with
+-- the neutral line rather than its live-transmission green -- this is a hostile
+-- cue, not Command talking. Copy, timing and placement unchanged.
+UIStyle.caption(caption, {Stroke = UIStyle.Color.Line})
+UIStyle.body(caption, {TextColor = UIStyle.Color.Caption3, TextSize = 19})
 
 local padding = Instance.new("UIPadding")
 padding.PaddingLeft = UDim.new(0, 12)

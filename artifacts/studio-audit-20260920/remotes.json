@@ -1,0 +1,131 @@
+[
+  {
+    "segments": [
+      "StarterPlayer",
+      "StarterCharacter",
+      "Animate",
+      "PlayEmote"
+    ],
+    "className": "BindableFunction"
+  },
+  {
+    "segments": [
+      "ReplicatedStorage",
+      "Remotes",
+      "ReportNoise"
+    ],
+    "className": "RemoteEvent"
+  },
+  {
+    "segments": [
+      "ReplicatedStorage",
+      "Remotes",
+      "ToggleFlashlight"
+    ],
+    "className": "RemoteEvent"
+  },
+  {
+    "segments": [
+      "ReplicatedStorage",
+      "Remotes",
+      "Jumpscare"
+    ],
+    "className": "RemoteEvent"
+  },
+  {
+    "segments": [
+      "ReplicatedStorage",
+      "Remotes",
+      "RoundStatus"
+    ],
+    "className": "RemoteEvent"
+  },
+  {
+    "segments": [
+      "ReplicatedStorage",
+      "Remotes",
+      "PuzzleStatus"
+    ],
+    "className": "RemoteEvent"
+  },
+  {
+    "segments": [
+      "ReplicatedStorage",
+      "Remotes",
+      "DevControl"
+    ],
+    "className": "RemoteEvent"
+  },
+  {
+    "segments": [
+      "ReplicatedStorage",
+      "Remotes",
+      "DropGlowstick"
+    ],
+    "className": "RemoteEvent"
+  },
+  {
+    "segments": [
+      "ReplicatedStorage",
+      "Remotes",
+      "DevTuning"
+    ],
+    "className": "RemoteEvent"
+  },
+  {
+    "segments": [
+      "ReplicatedStorage",
+      "Remotes",
+      "SetCrouching"
+    ],
+    "className": "RemoteEvent"
+  },
+  {
+    "segments": [
+      "ReplicatedStorage",
+      "Level 2 Remotes",
+      "Level 2 Alert Event"
+    ],
+    "className": "RemoteEvent"
+  },
+  {
+    "segments": [
+      "ReplicatedStorage",
+      "Level 2 Remotes",
+      "Level 2 Sound Event"
+    ],
+    "className": "RemoteEvent"
+  },
+  {
+    "segments": [
+      "ReplicatedStorage",
+      "Level 2 Pool Foam Remotes",
+      "ClientReport"
+    ],
+    "className": "RemoteEvent"
+  },
+  {
+    "segments": [
+      "ReplicatedStorage",
+      "Level 2 Pool Foam Remotes",
+      "ClientEvent"
+    ],
+    "className": "RemoteEvent"
+  },
+  {
+    "segments": [
+      "ReplicatedStorage",
+      "Level 3 Remotes",
+      "ClientEvent"
+    ],
+    "className": "RemoteEvent"
+  },
+  {
+    "segments": [
+      "ReplicatedStorage",
+      "Level 3 Remotes",
+      "Level3HideRequest"
+    ],
+    "className": "RemoteEvent"
+  }
+]

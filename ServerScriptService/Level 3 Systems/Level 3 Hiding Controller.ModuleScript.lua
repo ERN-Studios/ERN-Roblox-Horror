@@ -61,6 +61,15 @@ local function characterState(player: Player): (Model?, Humanoid?, BasePart?)
 	return character, humanoid, root
 end
 
+-- Model:PivotTo moves the model's WorldPivot, and the gameplay rig is authored
+-- with its pivot on the floor, 3.49 studs under the HumanoidRootPart. A raw
+-- PivotTo(anchor) therefore parked the whole body ON the tabletop while the hide
+-- camera sat under it. Place the ROOT on the target, which is what
+-- HiddenRootHeight and ExitVerticalOffset are both measured against.
+local function pivotRootTo(character: Model, root: BasePart, target: CFrame)
+	character:PivotTo(target * root.CFrame:ToObjectSpace(character:GetPivot()))
+end
+
 local function eligible(player: Player, session: any): (Model?, Humanoid?, BasePart?)
 	if not roundAllowsHiding(session)
 		or player.Parent ~= Players
@@ -155,10 +164,17 @@ local function releasePlayer(session: any, player: Player, moveOutside: boolean)
 	end
 
 	local character = record.Character
+	if record.HideTrack then
+		record.HideTrack:Stop(0)
+		record.HideTrack:Destroy()
+		record.HideTrack = nil
+	end
+	if record.HideAnimation then record.HideAnimation:Destroy() end
+	player:SetAttribute("Level3_HideAnimationId", nil)
 	local humanoid = record.Humanoid
 	local root = record.Root
 	if moveOutside and character and character.Parent and root and root.Parent then
-		character:PivotTo(record.ExitCFrame)
+		pivotRootTo(character, root, record.ExitCFrame)
 		root.AssemblyLinearVelocity = Vector3.zero
 		root.AssemblyAngularVelocity = Vector3.zero
 	end
@@ -259,7 +275,7 @@ local function tryEnter(session: any, player: Player, anchor: BasePart): (boolea
 	table.insert(occupants, player)
 	refreshPrompt(session, anchor)
 
-	character:PivotTo(hiddenCFrame)
+	pivotRootTo(character, root, hiddenCFrame)
 	root.AssemblyLinearVelocity = Vector3.zero
 	root.AssemblyAngularVelocity = Vector3.zero
 	root.Anchored = true
@@ -279,6 +295,30 @@ local function tryEnter(session: any, player: Player, anchor: BasePart): (boolea
 	player:SetAttribute("Level3_HideCameraPosition", cameraPosition)
 	player:SetAttribute("Level3_Hiding", true)
 	updateHiddenCount(session)
+	-- The server has already teleported/reserved the player. The server-created
+	-- Animator replicates this hold to every observer; clients retain a pose
+	-- fallback until this particular track has loaded and gained full weight.
+	task.spawn(function()
+		local animator = humanoid:FindFirstChildOfClass("Animator")
+		local id = Tuning.HoldAnimationId
+		if not animator or type(id) ~= "string" or not id:match("^rbxassetid://%d+$") then return end
+		local animation = Instance.new("Animation")
+		animation.Name = "TableHideBlenderHold"
+		animation.AnimationId = id
+		local ok, track = pcall(function() return animator:LoadAnimation(animation) end)
+		if not ok or session.HiddenPlayers[player] ~= record or humanoid.Health <= 0 then
+			if ok then track:Destroy() end
+			animation:Destroy()
+			if not ok then warn("[TableHide] Hold load failed; using crouch fallback", track) end
+			return
+		end
+		record.HideAnimation = animation
+		record.HideTrack = track
+		track.Looped = true
+		track.Priority = Enum.AnimationPriority.Action
+		player:SetAttribute("Level3_HideAnimationId", id)
+		track:Play(0, 1, 1)
+	end)
 	return true, "HIDDEN"
 end
 

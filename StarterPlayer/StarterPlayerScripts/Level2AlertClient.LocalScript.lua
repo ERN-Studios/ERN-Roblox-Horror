@@ -4,6 +4,10 @@
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local UIDevice = require(ReplicatedStorage:WaitForChild("UIDevice"))
+-- UI_STYLE_20260915 (Trello #98). This toast was the only panel in the game
+-- with SQUARE corners and a 3px border. Chrome and faces only: the measured
+-- placement in applySafePanelLayout, the copy and the timings are untouched.
+local UIStyle = require(ReplicatedStorage:WaitForChild("UIStyle"))
 local TweenService = game:GetService("TweenService")
 local RunService = game:GetService("RunService")
 
@@ -40,10 +44,11 @@ local panel = Instance.new("Frame")
 -- touch the placement is not authored at all: it is whichever rectangle
 -- UIDevice reports as clear of the movement controls and big enough for the
 -- measured copy. See applySafePanelLayout.
-panel.BackgroundColor3 = Color3.fromRGB(5, 13, 16)
-panel.BackgroundTransparency = .12
-panel.BorderSizePixel = 0
 panel.Parent = shade
+-- Stated ONCE: presentAlert re-applies it after every fade-out, and the
+-- regression harness restores it after borrowing the panel.
+local ALERT_PANEL = {Transparency = UIStyle.Transparency.Panel}
+UIStyle.panel(panel, ALERT_PANEL)
 local panelSize = Instance.new("UISizeConstraint")
 -- SEEDED, not authored: every layout pass rewrites both terms from the
 -- rectangle the panel was actually given. A MinSize is applied AFTER Size, so
@@ -348,18 +353,16 @@ workspace:GetPropertyChangedSignal("CurrentCamera"):Connect(bindCurrentCamera)
 UIDevice.Changed:Connect(applySafePanelLayout)
 bindCurrentCamera()
 
-local stroke = Instance.new("UIStroke")
-stroke.Color = Color3.fromRGB(54, 210, 221)
-stroke.Thickness = 3
-stroke.Parent = panel
+local stroke = panel:FindFirstChildOfClass("UIStroke")
 
 first = Instance.new("TextLabel")
 first.BackgroundTransparency = 1
 first.Position = UDim2.fromScale(.04, .07)
 first.Size = UDim2.fromScale(.92, .24)
-first.Font = Enum.Font.Code
 first.Name = "AlertLine1"
-first.TextColor3 = Color3.fromRGB(126, 224, 235)
+-- Cyan is Level 2's identity and stays; the FACE is the reference's Code
+-- readout role. TextSize is owned by the fit pass below, so it is not seeded.
+UIStyle.readout(first, {TextColor = Color3.fromRGB(126, 224, 235)})
 first.TextWrapped = true
 first.TextYAlignment = Enum.TextYAlignment.Top
 first.Parent = panel
@@ -374,7 +377,7 @@ if inheritedSecondSize then inheritedSecondSize:Destroy() end
 second.Name = "AlertLine2"
 second.Position = UDim2.fromScale(.04, .36)
 second.Size = UDim2.fromScale(.92, .22)
-second.TextColor3 = Color3.fromRGB(231, 218, 145)
+second.TextColor3 = UIStyle.Color.Warning
 second.Parent = panel
 local secondSize = Instance.new("UITextSizeConstraint")
 secondSize.MinTextSize = 12
@@ -386,8 +389,7 @@ run.Name = "AlertRunLine"
 run.Position = UDim2.fromScale(.04, .65)
 run.Size = UDim2.fromScale(.92, .24)
 run.BackgroundTransparency = 1
-run.Font = Enum.Font.Code
-run.TextColor3 = Color3.fromRGB(231, 218, 145)
+UIStyle.readout(run, {TextColor = UIStyle.Color.Warning})
 run.TextStrokeColor3 = Color3.fromRGB(35, 28, 12)
 run.TextStrokeTransparency = .72
 run.TextWrapped = true
@@ -561,8 +563,9 @@ local function presentAlert(line1, line2, finalLine, holdSeconds)
 	second.TextTransparency = 0
 	run.TextTransparency = 0
 	run.TextStrokeTransparency = .72
-	panel.BackgroundTransparency = .12
-	stroke.Transparency = .15
+	-- The fade-out tweened both to 1; put the authored chrome back from the
+	-- same table the panel was built with rather than a second set of numbers.
+	UIStyle.panel(panel, ALERT_PANEL)
 	panel.Visible = true
 	shade.Visible = true
 	-- Status messages must never black out the play space or mobile controls.

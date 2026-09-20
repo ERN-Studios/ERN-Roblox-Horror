@@ -14,6 +14,10 @@ local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local UIDevice = require(game:GetService("ReplicatedStorage"):WaitForChild("UIDevice"))
+-- UI_STYLE_20260915 (Trello #98): panel chrome, faces and the state palette now
+-- come from the shared tokens read off Level 1's Objectives panel and the
+-- Mission Brief card. Placement, copy and the meter glyphs are untouched.
+local UIStyle = require(game:GetService("ReplicatedStorage"):WaitForChild("UIStyle"))
 
 local player = Players.LocalPlayer
 
@@ -36,9 +40,6 @@ syncDispatchSuppression()
 local panel = Instance.new("Frame")
 panel.Name = "Level2ObjectivePanel"
 panel.Size = UDim2.new(0, 236, 0, 78)
-panel.BackgroundColor3 = Color3.fromRGB(6, 13, 15)
-panel.BackgroundTransparency = .16
-panel.BorderSizePixel = 0
 panel.Visible = false
 panel.Parent = gui
 
@@ -87,25 +88,24 @@ end
 updatePanelPlacement()
 UIDevice.Changed:Connect(updatePanelPlacement)
 
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 6)
-corner.Parent = panel
-
-local stroke = Instance.new("UIStroke")
-stroke.Color = Color3.fromRGB(54, 210, 221)
-stroke.Thickness = 2
-stroke.Transparency = .35
-stroke.Parent = panel
+-- Neutral chrome, coloured content: the reference panel's stroke is the same
+-- grey-green whatever it is saying, and the STATE is carried by the copy and
+-- the accent. refresh() still swaps this stroke for the powered/lethal states,
+-- it just starts from the shared line colour instead of a cyan of its own.
+UIStyle.panel(panel)
+local stroke = panel:FindFirstChildOfClass("UIStroke")
 
 local title = Instance.new("TextLabel")
 title.BackgroundTransparency = 1
 title.Position = UDim2.new(0, 10, 0, 4)
 title.Size = UDim2.new(1, -20, 0, 20)
-title.Font = Enum.Font.Code
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.TextScaled = true
 title.TextWrapped = true
-title.TextColor3 = Color3.fromRGB(126, 224, 235)
+-- The "> ..." status line is the reference's Code role (its Eyebrow and
+-- "> COMMAND CENTER  //  LIVE" speaker). Cyan is Level 2's own identity and
+-- stays; the face and the scale contract do not change.
+UIStyle.readout(title, {TextColor = Color3.fromRGB(126, 224, 235)})
 title.Text = "> PUMP NETWORK"
 title.Parent = panel
 local titleSize = Instance.new("UITextSizeConstraint")
@@ -117,11 +117,11 @@ local meter = Instance.new("TextLabel")
 meter.BackgroundTransparency = 1
 meter.Position = UDim2.new(0, 10, 0, 27)
 meter.Size = UDim2.new(1, -20, 0, 20)
-meter.Font = Enum.Font.Code
 meter.TextXAlignment = Enum.TextXAlignment.Left
 meter.TextScaled = true
 meter.TextWrapped = true
-meter.TextColor3 = Color3.fromRGB(218, 237, 223)
+-- Code, because the □/■ cells have to line up; the colour is the shared body.
+UIStyle.readout(meter, {TextColor = UIStyle.Color.Body})
 meter.Text = "[□□□]  0/3"
 meter.Parent = panel
 local meterSize = Instance.new("UITextSizeConstraint")
@@ -133,11 +133,10 @@ local hint = Instance.new("TextLabel")
 hint.BackgroundTransparency = 1
 hint.Position = UDim2.new(0, 10, 0, 51)
 hint.Size = UDim2.new(1, -20, 0, 18)
-hint.Font = Enum.Font.Code
 hint.TextXAlignment = Enum.TextXAlignment.Left
 hint.TextScaled = true
 hint.TextWrapped = true
-hint.TextColor3 = Color3.fromRGB(231, 218, 145)
+UIStyle.readout(hint, {TextColor = UIStyle.Color.Warning})
 hint.Text = "ACTIVATE 3 STATIONS"
 hint.Parent = panel
 local hintSize = Instance.new("UITextSizeConstraint")
@@ -233,12 +232,12 @@ local function refresh()
 
 	if powered then
 		title.Text = "> EXIT ROUTE"
-		title.TextColor3 = Color3.fromRGB(140, 255, 180)
+		title.TextColor3 = UIStyle.Color.Positive
 		meter.Text = "PRESSURE RELEASED"
-		meter.TextColor3 = Color3.fromRGB(140, 255, 180)
+		meter.TextColor3 = UIStyle.Color.Positive
 		hint.Text = exitBearingText() or POWERED_HINT
-		hint.TextColor3 = Color3.fromRGB(140, 255, 180)
-		stroke.Color = Color3.fromRGB(120, 255, 170)
+		hint.TextColor3 = UIStyle.Color.Positive
+		stroke.Color = UIStyle.Color.Accent
 	elseif workspace:GetAttribute("Level2FoamLethal") == true then
 		-- LEVEL2_LETHAL_PUMP_20260905. The pump that unlocks Pool Foam's attacks
 		-- used to read exactly like the one before it. The panel now carries the
@@ -246,14 +245,14 @@ local function refresh()
 		-- stations are left, so no objective information is lost.
 		title.Text = "> PUMP NETWORK"
 		title.TextColor3 = Color3.fromRGB(126, 224, 235)
-		meter.TextColor3 = Color3.fromRGB(218, 237, 223)
+		meter.TextColor3 = UIStyle.Color.Body
 		hint.Text = "WATER NO LONGER SAFE"
-		hint.TextColor3 = Color3.fromRGB(255, 138, 120)
-		stroke.Color = Color3.fromRGB(255, 116, 96)
+		hint.TextColor3 = UIStyle.Color.DangerText
+		stroke.Color = UIStyle.Color.Danger
 	else
 		title.Text = "> PUMP NETWORK"
 		title.TextColor3 = Color3.fromRGB(126, 224, 235)
-		meter.TextColor3 = Color3.fromRGB(218, 237, 223)
+		meter.TextColor3 = UIStyle.Color.Body
 		local remaining = goal - pumps
 		if pumps == 0 then
 			hint.Text = string.format("ACTIVATE %d STATIONS", goal)
@@ -262,8 +261,8 @@ local function refresh()
 		else
 			hint.Text = string.format("%d STATIONS REMAIN", remaining)
 		end
-		hint.TextColor3 = Color3.fromRGB(231, 218, 145)
-		stroke.Color = Color3.fromRGB(54, 210, 221)
+		hint.TextColor3 = UIStyle.Color.Warning
+		stroke.Color = UIStyle.Color.Line
 	end
 end
 

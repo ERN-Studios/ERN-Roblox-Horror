@@ -72,6 +72,10 @@ local MAX_ROUTE_RETREATS = 5
 -- Recheck a proved obstruction cheaply; never rebuild the whole blocked route
 -- just because time passed. Doors can open while the player stands still.
 local CLEARANCE_RECHECK_INTERVAL = 3
+-- How many of those rechecks may fail before the wait is abandoned and the goal
+-- goes back to ordinary planning. Static geometry never clears, and waiting on
+-- it forever is the one stall no other recovery in this module can reach.
+local MAX_CLEARANCE_PROBES = 3
 -- Validated positions kept for the retreat recovery, and the furthest it may
 -- ever walk back along them.
 local TRAIL_LIMIT = 48
@@ -318,16 +322,24 @@ end
 -- Prepare once per immutable generated world; enumerate hierarchy cooperatively,
 -- retaining only authored walkable ground and intentionally soft prop exclusions.
 local planningThreads = setmetatable({}, {__mode = "k"})
+-- Bound planning with the local monotonic deadline and a server-time guard.
+-- Roblox os.clock advances across task.wait (verified in native Studio); it is
+-- not a CPU-only clock. The second clock is defensive, not a distinct stall
+-- root cause. The actual clearance-latch recovery lives in _probeBlockedClearance.
+local function planningExpired(context)
+ return os.clock() >= context.Deadline
+  or workspace:GetServerTimeNow() >= context.WallDeadline
+end
 local function planningCheckpoint()
  local context = planningThreads[coroutine.running()]
  if not context or context.Atomic then return true end
  if context.Navigator.Destroyed or context.Navigator.RequestId ~= context.RequestId
-  or os.clock() >= context.Deadline then return false end
+  or planningExpired(context) then return false end
  if os.clock() - context.SliceAt >= .002 then
   task.wait()
   context.SliceAt = os.clock()
   return not context.Navigator.Destroyed and context.Navigator.RequestId == context.RequestId
-   and os.clock() < context.Deadline
+   and not planningExpired(context)
  end
  return true
 end
@@ -459,6 +471,8 @@ function Navigator.new(model, manifest, tuning, options)
 			-- large diff through tuned navigation for no runtime gain.
 			StableRoutes = tuning.StableRoutes == true,
 			PathRequestTimeout = readNumber(tuning, "PathRequestTimeout", 8, 2, 30),
+			-- Independent server-time limit on the same planning request.
+			PlanningWallTimeout = readNumber(tuning, "PlanningWallTimeout", 8, 1, 30),
 			FootClearance = readNumber(tuning, "FootClearance", DEFAULTS.FootClearance, 0, 3),
 			FloorProbeAbove = readNumber(tuning, "FloorProbeAbove", DEFAULTS.FloorProbeAbove, 3, 60),
 			FloorProbeDepth = readNumber(tuning, "FloorProbeDepth", DEFAULTS.FloorProbeDepth, 20, 300),
@@ -496,6 +510,7 @@ function Navigator.new(model, manifest, tuning, options)
 		BlockedProbeFrom = nil,
 		BlockedProbeTarget = nil,
 		NextClearanceProbeAt = 0,
+		ClearanceProbes = 0,
 		BlockedConnection = nil,
 		-- The Path the connection above belongs to. Recorded because a pause has
 		-- to be able to REBUILD the binding, and a connection alone cannot be
@@ -1740,21 +1755,52 @@ function Navigator:_waitingForClearance()
 		and horizontalDistance(self.FootPosition,self.BlockedGoalApproach) <= self.Tuning.WaypointArrivalDistance
 end
 
+function Navigator:_releaseBlockedApproach()
+	self.BlockedGoalApproach = nil
+	self.BlockedProbeFrom = nil
+	self.BlockedProbeTarget = nil
+	self.NextClearanceProbeAt = 0
+	self.ClearanceProbes = 0
+	self.LastPathAt = -math.huge
+end
+
 function Navigator:_probeBlockedClearance()
 	if not self:_waitingForClearance() or self.Computing
 		or os.clock() < self.NextClearanceProbeAt then return false end
 	self.NextClearanceProbeAt = os.clock() + CLEARANCE_RECHECK_INTERVAL
 	local from, target = self.BlockedProbeFrom, self.BlockedProbeTarget
-	if not finiteVector3(from) or not finiteVector3(target)
-		or horizontalDistance(from,target) > 256 then return false end
 	-- These are the actual last-safe foot and obstructed endpoint recorded by
 	-- the prefix walk. Probe the same floor/step/body contract without moving.
-	if not self:_walkingEdgeClear(from,target) then return false end
-	self.BlockedGoalApproach = nil
-	self.BlockedProbeFrom = nil
-	self.BlockedProbeTarget = nil
-	self.NextClearanceProbeAt = 0
-	self.LastPathAt = -math.huge
+	if finiteVector3(from) and finiteVector3(target)
+		and horizontalDistance(from,target) <= 256
+		and self:_walkingEdgeClear(from,target)
+	then
+		self:_releaseBlockedApproach()
+		return true
+	end
+
+	-- WHAT SHIPPED BROKEN: THE WAIT HAD NO END. The latch was cleared only by a
+	-- probe that SUCCEEDED, and the probe is a static geometry test -- against
+	-- an authored vault rib or column it can never start passing. Meanwhile
+	-- _waitingForClearance makes Step return before its repath branch,
+	-- _stableNeedsPath refuses to repath, and the controller watchdog
+	-- explicitly exempts WaitingForClearance from its recovery. The only escape
+	-- was the target moving RepathDistance (6 studs, 4 enraged) away -- so a
+	-- player doing exactly what this game asks of them, standing still and
+	-- staying quiet, left the giant standing at the opening indefinitely. The
+	-- invalid-endpoint early-out above was worse still: it never even counted a
+	-- probe, so a latch with no recorded endpoints waited forever having never
+	-- tested anything.
+	--
+	-- A bounded number of rechecks keeps the original intent -- a genuinely
+	-- transient obstruction still clears on its own -- and then hands the goal
+	-- back to ordinary planning, which may route around it, and to the
+	-- watchdog's forced graph route, which until now could never fire here.
+	-- Nothing is moved and no geometry is bypassed: releasing the latch only
+	-- re-opens planning.
+	self.ClearanceProbes += 1
+	if self.ClearanceProbes < MAX_CLEARANCE_PROBES then return false end
+	self:_releaseBlockedApproach()
 	return true
 end
 
@@ -1943,13 +1989,13 @@ function Navigator:_joinStableRoute(points, requestStart)
  local from=self.FootPosition
  local context=planningThreads[coroutine.running()]
  if self.Destroyed or (context and
-  (self.RequestId~=context.RequestId or os.clock()>=context.Deadline)) then return nil,0 end
+  (self.RequestId~=context.RequestId or planningExpired(context))) then return nil,0 end
  -- No splice is needed when certification started at this exact XYZ foot.
  -- Step still sweeps every live stride; moving incumbents use the join below.
  if from==requestStart then return points,0 end
  local joined,skipped=self:_certifiedJoin(points,requestStart)
  if not joined or self.Destroyed or (context and
-  (self.RequestId~=context.RequestId or os.clock()>=context.Deadline)) then return nil,0 end
+  (self.RequestId~=context.RequestId or planningExpired(context))) then return nil,0 end
  if horizontalDistance(from,self.FootPosition)<=.001 then return joined,skipped end
  if context then context.Atomic=true end
  local fresh,extra=self:_shortAtomicJoin(joined,from)
@@ -1960,7 +2006,7 @@ end
 function Navigator:_rejectStableRoute(reason)
  local context=planningThreads[coroutine.running()]
  if context and (self.Destroyed or self.RequestId~=context.RequestId) then return end
- if context and os.clock()>=context.Deadline then
+ if context and planningExpired(context) then
   self.RouteRejectedCount+=1;self.LastFailure=reason;self.Computing=false
   return -- preserve certified incumbent; Step validates every stride
  end
@@ -1974,7 +2020,7 @@ function Navigator:_rejectStableRoute(reason)
 	-- The private predicate can yield. A newer request may have installed a
 	-- different route while it ran; never clear that newer route on return.
 	if context and (self.Destroyed or self.RequestId ~= context.RequestId) then return end
-	if context and os.clock() >= context.Deadline then return end
+	if context and planningExpired(context) then return end
 	if keepIncumbent or self:_reachedGoal() then return end
 	self.Waypoints = {}
 	self.WaypointIndex = 1
@@ -1993,12 +2039,14 @@ function Navigator:_requestPath(goal, graphOnly)
 	self.LastPathAt = os.clock()
 	self.LastRequestedGoal = goal
 	local deadline = self.LastPathAt + self.Tuning.PathRequestTimeout
+	local wallDeadline = workspace:GetServerTimeNow() + self.Tuning.PlanningWallTimeout
 
 	task.defer(function()
 		local planningThread=coroutine.running()
 		local function runRequest()
 		if self.Destroyed or requestId ~= self.RequestId then return end
-		planningThreads[coroutine.running()]={Navigator=self,RequestId=requestId,Deadline=deadline,SliceAt=os.clock()}
+		planningThreads[coroutine.running()]={Navigator=self,RequestId=requestId,Deadline=deadline,
+			WallDeadline=wallDeadline,SliceAt=os.clock()}
 		local path
 		local success = false
 		local failure
@@ -2055,7 +2103,8 @@ function Navigator:_requestPath(goal, graphOnly)
 		if #points > 0 then
 			local shouldAbort = function()
 				return self.Destroyed or requestId ~= self.RequestId
-					or (stable and os.clock() >= deadline)
+					or (stable and (os.clock() >= deadline
+						or workspace:GetServerTimeNow() >= wallDeadline))
 			end
 			local centred, centringStats = self:_centreRoute(points, shouldAbort, stable and requestStart or nil)
 			if self.Destroyed or requestId ~= self.RequestId then return end
@@ -2230,6 +2279,7 @@ function Navigator:_requestPath(goal, graphOnly)
 			self.BlockedProbeTarget = blockedProbeTarget
 			self.NextClearanceProbeAt = blockedApproach
 				and os.clock() + CLEARANCE_RECHECK_INTERVAL or 0
+			self.ClearanceProbes = 0
 			self.RouteInstallCount += 1
 			self.RoutePrefixSkips += skipped
 		end
@@ -2335,6 +2385,7 @@ function Navigator:Stop()
 	self.BlockedProbeFrom = nil
 	self.BlockedProbeTarget = nil
 	self.NextClearanceProbeAt = 0
+	self.ClearanceProbes = 0
 end
 
 -- Where to sidestep when the straight stride and the progress-guarded steer
@@ -2962,6 +3013,7 @@ function Navigator:GetDebugSnapshot()
 		RequestId = self.RequestId,
 		Reached = self:_reachedGoal(),
 		WaitingForClearance = self:_waitingForClearance(),
+		ClearanceProbes = self.ClearanceProbes,
 		RouteInstalls = self.RouteInstallCount,
 		RejectedRoutes = self.RouteRejectedCount,
 		PrefixSkips = self.RoutePrefixSkips,

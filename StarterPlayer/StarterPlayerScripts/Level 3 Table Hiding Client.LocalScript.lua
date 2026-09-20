@@ -16,9 +16,9 @@ local requestRemote: RemoteEvent? = nil
 
 local hiding = false
 
--- This is the game's canonical runtime-authored R15 crouch animation. Its base
--- pose is the exact under-table silhouette; ordinary crouching layers a small,
--- low gait over that same pose while moving. Every client evaluates it for
+-- Ordinary crouching retains its low gait. Level 3 table hiding uses the
+-- separately authored hold below and its uploaded animation. Clients evaluate
+-- the procedural fallback for
 -- every replicated crouching/hidden player because AnimationConstraint.Transform
 -- itself does not replicate. There is deliberately only one pose writer.
 local RAD = math.rad
@@ -37,6 +37,25 @@ local CROUCH_POSE = {
 	LeftElbow = CFrame.Angles(RAD(-64), 0, RAD(-5)),
 	RightElbow = CFrame.Angles(RAD(-64), 0, RAD(5)),
 }
+-- Frame 0 of the Blender hold, fitted to the actual hazmat meshes. Kept as a
+-- local fallback while the group-owned asset loads or if it is unavailable.
+local HIDE_POSE = {
+	Root = CFrame.new(0, -0.327591755, 0.471597579, 1, 0, 0, 0, 0.980363428, -0.197199264, 0, 0.197199264, 0.980363428),
+	Waist = CFrame.new(0, 0, 0, 1, 0, 0, 0, -0.230934263, 0.972969355, 0, -0.972969355, -0.230934263),
+	Neck = CFrame.new(0, 0, 0, 1, 0, 0, 0, 0.342020143, -0.939692621, 0, 0.939692621, 0.342020143),
+	LeftHip = CFrame.new(0, 0, 0, 0.992546152, 0, 0.121869343, 0.075395165, -0.785662216, -0.61404434, 0.095748138, 0.618655706, -0.779806009),
+	LeftKnee = CFrame.new(0, 0, 0, 1, 0, 0, 0, -0.925527725, 0.378679852, 0, -0.378679852, -0.925527725),
+	LeftAnkle = CFrame.new(0, 0, 0, 1, 0, 0, 0, 0.99394982, -0.109835129, 0, 0.109835129, 0.99394982),
+	LeftShoulder = CFrame.new(0, 0, 0, 0.286578739, 0.320678384, 0.90279455, -0.671238927, -0.605165734, 0.428033571, 0.68360144, -0.728656166, 0.041824181),
+	LeftElbow = CFrame.new(0, 0, 0, 0.498097349, 0.043577871, 0.866025404, -0.602258954, -0.701149179, 0.381672611, 0.62384548, -0.711681669, -0.322995384),
+	LeftWrist = CFrame.new(0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1),
+	RightHip = CFrame.new(0, 0, 0, 0.992546152, 0, -0.121869343, -0.075395165, -0.785662216, -0.61404434, -0.095748138, 0.618655706, -0.779806009),
+	RightKnee = CFrame.new(0, 0, 0, 1, 0, 0, 0, -0.925527725, 0.378679852, 0, -0.378679852, -0.925527725),
+	RightAnkle = CFrame.new(0, 0, 0, 1, 0, 0, 0, 0.99394982, -0.109835129, 0, 0.109835129, 0.99394982),
+	RightShoulder = CFrame.new(0, 0, 0, 0.286578739, -0.320678384, -0.90279455, 0.671238927, -0.605165734, 0.428033571, -0.68360144, -0.728656166, 0.041824181),
+	RightElbow = CFrame.new(0, 0, 0, 0.498097349, -0.043577871, -0.866025404, 0.602258954, -0.701149179, 0.381672611, -0.62384548, -0.711681669, -0.322995384),
+	RightWrist = CFrame.new(0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1),
+}
 local jointCache = setmetatable({}, {__mode = "k"})
 local poseStates = setmetatable({}, {__mode = "k"})
 
@@ -46,7 +65,7 @@ local function jointsFor(character: Model): {Instance}
 	local joints = {}
 	for _, object in ipairs(character:GetDescendants()) do
 		if (object:IsA("AnimationConstraint") or object:IsA("Motor6D"))
-			and CROUCH_POSE[object.Name] ~= nil then
+			and (CROUCH_POSE[object.Name] ~= nil or HIDE_POSE[object.Name] ~= nil) then
 			table.insert(joints, object)
 		end
 	end
@@ -89,7 +108,17 @@ end
 
 local function animatedTransform(jointName: string, hidden: boolean,
 	phase: number, gaitWeight: number): CFrame
-	local transform = CROUCH_POSE[jointName]
+	if hidden then
+		local transform = HIDE_POSE[jointName] or CFrame.identity
+		local breath = math.sin(os.clock() * math.pi / 2)
+		if jointName == "Waist" then
+			transform *= CFrame.Angles(RAD(breath * .20), 0, 0)
+		elseif jointName == "Neck" then
+			transform *= CFrame.Angles(RAD(-breath * .15), 0, 0)
+		end
+		return transform
+	end
+	local transform = CROUCH_POSE[jointName] or CFrame.identity
 	local stride = if hidden then 0 else math.sin(phase) * gaitWeight
 	local counterStride = if hidden then 0 else math.sin(phase + math.pi) * gaitWeight
 	if jointName == "Root" then
@@ -117,9 +146,24 @@ local function animatedTransform(jointName: string, hidden: boolean,
 	return transform
 end
 
+local function hideTrackReady(targetPlayer: Player, character: Model): boolean
+	local id = targetPlayer:GetAttribute("Level3_HideAnimationId")
+	if type(id) ~= "string" or id == "" then return false end
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	local animator = humanoid and humanoid:FindFirstChildOfClass("Animator")
+	if not animator then return false end
+	for _, track in animator:GetPlayingAnimationTracks() do
+		if track.Animation and track.Animation.AnimationId == id
+			and track.IsPlaying and track.Length > 0 and track.WeightCurrent > .99 then
+			return true
+		end
+	end
+	return false
+end
+
 -- Animator writes first; PreSimulation owns the final crouch for this frame.
--- Weight and gait are eased, so entering/exiting never snaps and a stationary
--- crouch settles back to the exact Level 3 hiding pose instead of skating.
+-- Weight and gait are eased for ordinary crouching. Hidden players use the
+-- fitted hold immediately because their server root is already under the table.
 RunService.PreSimulation:Connect(function(deltaTime)
 	local seen = {}
 	for _, targetPlayer in ipairs(Players:GetPlayers()) do
@@ -127,6 +171,12 @@ RunService.PreSimulation:Connect(function(deltaTime)
 		if not character or not character.Parent then continue end
 		seen[character] = true
 		local active, hidden = poseAllowed(targetPlayer, character)
+		if active and hidden and hideTrackReady(targetPlayer, character) then
+			-- Animator has already written this frame. Do not overwrite it on the
+			-- owner OR other clients. Missing/denied content keeps the old fallback.
+			poseStates[character] = nil
+			continue
+		end
 		local poseState = poseStates[character]
 		if not poseState and not active then continue end
 		if not poseState then
@@ -259,8 +309,8 @@ message.Name = "HiddenStatus"
 message.AnchorPoint = Vector2.new(.5, 0)
 message.Position = UDim2.new(.5, 0, 0, 45)
 message.Size = UDim2.new(0, 360, 0, 42)
-message.BackgroundColor3 = Color3.fromRGB(8, 10, 11)
-message.BackgroundTransparency = .24
+message.BackgroundColor3 = Color3.fromRGB(4, 8, 6)
+message.BackgroundTransparency = .18
 message.BorderSizePixel = 0
 message.Font = Enum.Font.GothamBold
 message.Text = "HIDDEN UNDER TABLE"
@@ -271,9 +321,10 @@ local messageCorner = Instance.new("UICorner")
 messageCorner.CornerRadius = UDim.new(0, 8)
 messageCorner.Parent = message
 local messageStroke = Instance.new("UIStroke")
-messageStroke.Color = Color3.fromRGB(79, 183, 157)
-messageStroke.Transparency = .2
-messageStroke.Thickness = 1.5
+messageStroke.Color = Color3.fromRGB(75, 94, 83)
+messageStroke.Transparency = .28
+messageStroke.Thickness = 1
+messageStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 messageStroke.Parent = message
 
 local leave = Instance.new("TextButton")
@@ -281,24 +332,25 @@ leave.Name = "LeaveHiding"
 leave.AnchorPoint = Vector2.new(.5, 1)
 leave.Position = UDim2.new(.5, 0, 1, -54)
 leave.Size = UDim2.new(0, 330, 0, 58)
-leave.BackgroundColor3 = Color3.fromRGB(17, 22, 23)
-leave.BackgroundTransparency = .08
+leave.BackgroundColor3 = Color3.fromRGB(14, 20, 17)
+leave.BackgroundTransparency = .04
 leave.BorderSizePixel = 0
 leave.AutoButtonColor = true
 leave.Font = Enum.Font.GothamBold
-leave.TextColor3 = Color3.fromRGB(236, 248, 243)
+leave.TextColor3 = Color3.fromRGB(231, 238, 233)
 leave.TextScaled = true
 -- Captioned once at load in the old build, so a tablet that gained a keyboard
 -- kept reading "TAP" forever. It is now rebuilt on every UIDevice.Changed.
 leave.Text = "LEAVE HIDING"
 leave.Parent = gui
 local leaveCorner = Instance.new("UICorner")
-leaveCorner.CornerRadius = UDim.new(0, 10)
+leaveCorner.CornerRadius = UDim.new(0, 9)
 leaveCorner.Parent = leave
 local leaveStroke = Instance.new("UIStroke")
-leaveStroke.Color = Color3.fromRGB(101, 224, 187)
-leaveStroke.Transparency = .05
-leaveStroke.Thickness = 2
+leaveStroke.Color = Color3.fromRGB(75, 94, 83)
+leaveStroke.Transparency = .28
+leaveStroke.Thickness = 1
+leaveStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 leaveStroke.Parent = leave
 
 -- Both panels were fixed-size (360 and 330 wide). At 375x667 the leave button
@@ -327,10 +379,14 @@ local function applyHidingLayout()
 		local available = layout.SafeRight - layout.SafeLeft
 		message.AnchorPoint = Vector2.new(.5, 0)
 		message.Size = UDim2.new(0, math.min(360, available), 0, 42)
-		message.Position = UDim2.new(.5, 0, 0, 45)
+		message.Position = UIDevice.LocalPosition(gui,
+			(layout.Safe.Left + layout.Safe.Right) * .5, layout.Safe.Top + 8)
 		leave.AnchorPoint = Vector2.new(.5, 1)
 		leave.Size = UDim2.new(0, math.min(330, available), 0, 58)
-		leave.Position = UDim2.new(.5, 0, 1, -54)
+		-- Keep the exit with the hidden status, clear of bottom radio captions.
+		leave.AnchorPoint = Vector2.new(.5, 0)
+		leave.Position = UIDevice.LocalPosition(gui,
+			(layout.Safe.Left + layout.Safe.Right) * .5, layout.Safe.Top + 58)
 	end
 	leave.Text = UIDevice.Caption("LEAVE HIDING", "//  E", "//  B")
 end

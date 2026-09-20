@@ -47,6 +47,24 @@ local function fireEscapeStatus(player)
 	end
 end
 
+-- The team-wide objective prompt, on this level's own PuzzleStatus remote.
+-- Fired ONCE per validated action, from the same code path that already
+-- mutated the state, so it can never describe a refused prompt. Only players
+-- inside this round are told -- a dead or escaped participant keeps InRound
+-- until GameManager closes the lifecycle, so a spectator sees exactly what the
+-- party it is watching sees, and a lobby player sees nothing at all.
+--
+-- The CLIENT owns the sentence. It is the side that knows how wide the
+-- objectives column is on the device in front of it, so this carries the actor,
+-- a kind and a short detail -- never a finished line of copy.
+local function announceTeam(actorName, kind, detail)
+	for _, recipient in ipairs(Players:GetPlayers()) do
+		if recipient:GetAttribute("InRound") == true then
+			status:FireClient(recipient, "team", actorName, kind, detail)
+		end
+	end
+end
+
 -- ── tuning ────────────────────────────────────────────────
 local Master = require(game:GetService("ReplicatedStorage"):WaitForChild("MasterConfiguration"))
 local FUSES_PER_BOX = 1      -- fuses each box needs
@@ -520,7 +538,10 @@ local function makeDroppedFuses(owningSession, count, position)
 		model:Destroy()
 		updateCarriedFuse(player, owningSession.carried[player])
 		status:FireClient(player, "carry", owningSession.carried[player])
-		status:FireClient(player, "msg", count == 1 and "Fuse picked up" or (count .. " fuses picked up"))
+		-- Replaces the private "Fuse picked up": the party learns who has it, and
+		-- the picker still sees the count on their own carry row.
+		announceTeam(player.Name, "fuse",
+			count == 1 and "TOOK A FUSE" or ("TOOK " .. count .. " FUSES"))
 		if owningSession.updateEntityObjectiveTarget then owningSession.updateEntityObjectiveTarget() end
 	end))
 	table.insert(owningSession.fuses, core)
@@ -580,7 +601,7 @@ local function finishFuseExtraction(owningSession, player, record, position)
 		owningSession.carried[player] = (owningSession.carried[player] or 0) + 1
 		updateCarriedFuse(player, owningSession.carried[player])
 		status:FireClient(player, "carry", owningSession.carried[player])
-		status:FireClient(player, "msg", "Fuse extracted")
+		announceTeam(player.Name, "fuse", "TOOK A FUSE")
 	else
 		-- The relay's .55 s release may finish after death/re-entry. It still owns
 		-- exactly one fuse, which belongs on the floor rather than on the new body.
@@ -1461,9 +1482,21 @@ local function startPuzzle()
 				box.statusLabel.TextColor3 = Color3.fromRGB(90, 255, 115)
 				session.boxesDone += 1
 				status:FireAllClients("boxes", session.boxesDone, session.boxCount)
+				-- This pair's cable now carries power OUT of the box: the client
+				-- current reverses toward the lever off this one attribute, so the
+				-- visual can never disagree with the authoritative box state.
+				local circuit = session.circuits[boxIndex]
+				if circuit then circuit:SetAttribute("Powered", true) end
+				announceTeam(player.Name, "box",
+					("POWERED A BOX %d/%d"):format(session.boxesDone, session.boxCount))
 				if session.boxesDone >= session.boxCount then
 					session.onAllBoxes()
 				end
+			else
+				-- Unreachable while FUSES_PER_BOX is 1, and the one line that keeps
+				-- a partial deposit from being the only silent action in the level.
+				announceTeam(player.Name, "box",
+					("FED A BOX %d/%d"):format(box.count, FUSES_PER_BOX))
 			end
 		end))
 	end
@@ -1504,6 +1537,11 @@ local function startPuzzle()
 			-- launched party may drive the exit circuit.
 			if not canUsePrompt(player, lever.prompt, lever.model) then return end
 			if lever.latched then return end
+			-- Re-triggering a lever that is still inside its own window is a legal
+			-- prompt that changes nothing the party needs telling about. Announce
+			-- the OFF -> ON transition only, so holding E on one lever cannot
+			-- become a stream of identical prompts for everyone else.
+			local wasOn = os.clock() < (lever.activeUntil or 0)
 
 			if lever.pullSound then lever.pullSound:Play() end
 
@@ -1517,6 +1555,15 @@ local function startPuzzle()
 			updateEntityObjectiveTarget()
 			if session.updateLeverLights then session.updateLeverLights() end
 			if session.broadcastLeverStatus then session.broadcastLeverStatus() end
+
+			if not wasOn then
+				local on = 0
+				for _, lv in ipairs(session.levers) do
+					if lv.latched or os.clock() < (lv.activeUntil or 0) then on += 1 end
+				end
+				announceTeam(player.Name, "lever",
+					("PULLED LEVER %d/%d"):format(on, #session.levers))
+			end
 
 			-- a lever counts as ON if it's latched OR still inside its window
 			local all = true
@@ -1658,6 +1705,14 @@ local function startPuzzle()
 	local currentCircuitName = ""
 	local currentCircuitParent = folder
 	local currentCircuitEdgeKeys = {}
+	-- Every cable Part gets a SegmentIndex counting up along the route, so a
+	-- client can walk a circuit end to end without guessing the geometry. Both
+	-- halves of a circuit share the counter and the elevator witness point is
+	-- index 1 of each; CircuitCable_NN carries BoxBranchEnd, the last index that
+	-- belongs to the box half. The pieces below are therefore EMITTED in route
+	-- order -- that is what the source-connector and bevel-joiner ordering in
+	-- layWire / layWireDirect / layPiece is for, and the only reason it matters.
+	local currentSegmentIndex = 0
 
 	local GRIDn = attr("GRID", 40)
 	local CELLn = attr("CELL", 24)
@@ -1812,6 +1867,8 @@ local function startPuzzle()
 		seg.CFrame = CFrame.lookAt((a + b) / 2, b)
 		seg:SetAttribute("CircuitIndex", currentCircuitIndex)
 		seg:SetAttribute("CircuitId", currentCircuitName)
+		currentSegmentIndex += 1
+		seg:SetAttribute("SegmentIndex", currentSegmentIndex)
 		seg.Parent = currentCircuitParent or folder
 		registerRun(a, b)
 	end
@@ -1843,8 +1900,10 @@ local function startPuzzle()
 			local bevel = math.min(0.3, flat.Magnitude * 0.2)
 			local mainA = finalA + unit * bevel
 			local mainB = finalB - unit * bevel
-			makeRawPiece(mainA, mainB, color)
+			-- Emitted in the order the detour is travelled, not main-piece-first:
+			-- SegmentIndex is the route order and a joiner is not a branch.
 			makeRawPiece(a, mainA, color)
+			makeRawPiece(mainA, mainB, color)
 			makeRawPiece(mainB, b, color)
 		else
 			makeRawPiece(finalA, finalB, color)
@@ -1907,6 +1966,12 @@ local function startPuzzle()
 		seg.CFrame = CFrame.new(x, (y0 + y1) / 2, z)
 		seg:SetAttribute("CircuitIndex", currentCircuitIndex)
 		seg:SetAttribute("CircuitId", currentCircuitName)
+		currentSegmentIndex += 1
+		seg:SetAttribute("SegmentIndex", currentSegmentIndex)
+		-- A riser runs along its own Y, every other piece along its Z. Stated
+		-- rather than inferred from Size: the shortest bevel joiners and the
+		-- shortest risers are close enough in size to be told apart wrongly.
+		seg:SetAttribute("Vertical", true)
 		seg.Parent = currentCircuitParent or folder
 	end
 
@@ -1968,10 +2033,8 @@ local function startPuzzle()
 		local q1 = Vector3.new(p1.X, y, p1.Z + side * lane)
 		local corner = Vector3.new(p2.X + side * lane, y, q1.Z)
 		local q2 = Vector3.new(p2.X + side * lane, y, p2.Z)
-		laySeg(p1, q1, color)
-		laySeg(q1, corner, color)
-		laySeg(corner, q2, color)
-		laySeg(q2, p2, color)
+		-- Source first: the route is emitted from its start so SegmentIndex reads
+		-- as the order a current travels it. Geometry is unchanged either way.
 		if connectStart ~= false then
 			connectEnd(p1, fromCF, color)
 		else
@@ -1991,6 +2054,10 @@ local function startPuzzle()
 				or sourceOnRun(q2, p2)
 			if not alreadyConnected then laySeg(source, p1, color) end
 		end
+		laySeg(p1, q1, color)
+		laySeg(q1, corner, color)
+		laySeg(corner, q2, color)
+		laySeg(q2, p2, color)
 		connectEnd(p2, toCF, color, terminalPosition)
 	end
 
@@ -2046,18 +2113,10 @@ local function startPuzzle()
 		verts[#verts + 1] = (axis[L] == "X") and Vector3.new(W[#W].X, 0, konst[L])
 			or Vector3.new(konst[L], 0, W[#W].Z)
 
-		for i = 1, #verts - 1 do
-			if segCrossesPit(verts[i], verts[i + 1]) then
-				layOverhead(verts[i], verts[i + 1], color) -- up wall, over ceiling, down
-			else
-				local a = Vector3.new(verts[i].X, (floorY(verts[i].X, verts[i].Z) or 0) + 0.06, verts[i].Z)
-				local b = Vector3.new(verts[i + 1].X, (floorY(verts[i + 1].X, verts[i + 1].Z) or 0) + 0.06, verts[i + 1].Z)
-				laySeg(a, b, color)
-			end
-		end
-
-		-- connect the route to its source. Elevator cable starts stay entirely on
-		-- the floor; wall-mounted endpoints still receive a vertical riser.
+		-- Connect the route to its source FIRST. Elevator cable starts stay
+		-- entirely on the floor; wall-mounted endpoints still receive a vertical
+		-- riser. Emitting it ahead of the routed runs is what makes SegmentIndex
+		-- the order the route is travelled; no geometry moves.
 		if connectStart ~= false then
 			connectEnd(verts[1], fromCF, color)
 		else
@@ -2085,6 +2144,16 @@ local function startPuzzle()
 				local corner = Vector3.new(first.X, source.Y, source.Z)
 				laySeg(source, corner, color)
 				laySeg(corner, first, color)
+			end
+		end
+
+		for i = 1, #verts - 1 do
+			if segCrossesPit(verts[i], verts[i + 1]) then
+				layOverhead(verts[i], verts[i + 1], color) -- up wall, over ceiling, down
+			else
+				local a = Vector3.new(verts[i].X, (floorY(verts[i].X, verts[i].Z) or 0) + 0.06, verts[i].Z)
+				local b = Vector3.new(verts[i + 1].X, (floorY(verts[i + 1].X, verts[i + 1].Z) or 0) + 0.06, verts[i + 1].Z)
+				laySeg(a, b, color)
 			end
 		end
 		connectEnd(verts[#verts], toCF, color, terminalPosition)
@@ -2169,6 +2238,7 @@ local function startPuzzle()
 		currentCircuitName = circuitId
 		currentCircuitParent = circuit
 		currentCircuitEdgeKeys = {}
+		currentSegmentIndex = 0
 		addCircuitJack(box, color, pairIndex)
 		addCircuitJack(lever, color, pairIndex)
 
@@ -2201,12 +2271,17 @@ local function startPuzzle()
 		-- model. Same-circuit overlaps remain coincident, so a route that doubles
 		-- back through a corridor still reads as one cable—not parallel duplicates.
 		layWire(witnessCF, box.cf, color, false, pairIndex, box.cableTerminal)
+		-- The split between the two halves, so a client can run a current up the
+		-- box half and, once the box is powered, back down it and out to the lever.
+		circuit:SetAttribute("BoxBranchEnd", currentSegmentIndex)
 		layWire(witnessCF, lever.cf, color, false, pairIndex, lever.cableTerminal)
+		circuit:SetAttribute("SegmentCount", currentSegmentIndex)
 	end
 	currentCircuitIndex = 0
 	currentCircuitName = ""
 	currentCircuitParent = folder
 	currentCircuitEdgeKeys = {}
+	currentSegmentIndex = 0
 
 	-- exit: a doorway in the OUTER BORDER wall (you're actually leaving), dim
 	-- and closed until the levers are pulled

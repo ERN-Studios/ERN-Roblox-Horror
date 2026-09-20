@@ -21,6 +21,12 @@ local DevAccess = require(RS:WaitForChild("DevAccess"))
 -- while production ran another.
 local Routing = require(script.Parent:WaitForChild("Round Completion Routing"))
 local Loading = require(script.Parent:WaitForChild("Round Loading Runtime"))
+-- FRIEND_BOOST_20260916. The module owns the friendship cache and the two lobby
+-- attributes; GameManager only tells it when a party launches and hands it the
+-- round roster at completion. Start() connects PlayerAdded/PlayerRemoving and
+-- runs its first pass in the background, so it never delays boot.
+local FriendBoost = require(script.Parent:WaitForChild("FriendBoost"))
+FriendBoost.Start()
 local activeEntry, loadingRuntime, recoverFailedEntry, cleanupActiveWorld
 local failedReservedEntry = false
 local characterLoadOwner = {}
@@ -2329,6 +2335,9 @@ end
 
 playRound = function(participants)
 	if LEVEL_GENERATORS[activeLevel] then Players.CharacterAutoLoads = false end
+ -- Warm the Friend Boost pair cache for this party now (it resolves in the
+ -- background); the count at completion reads the cache and cannot yield there.
+ FriendBoost.PrimeRoster(participants)
  local alive = {}
  local aliveCount = 0
  local conns = {}
@@ -2507,6 +2516,7 @@ playRound = function(participants)
   aliveCount += 1
   hookLife(player, hum)
   fireGroup(participants, "reentry", player.Name)
+  FriendBoost.PrimeRoster(participants) -- retries any pair whose lookup failed at launch
   return true
  end
  zyntraReentry.OnInvoke = function(player, freeDeveloper)
@@ -2708,7 +2718,10 @@ playRound = function(participants)
  for _, participant in ipairs(participants) do
   if participant.Parent and participant:GetAttribute("Escaped") == true then
    escapedCount += 1
-   if result == "win" then zyntraLevelCompleted:Fire(participant, activeLevel) end
+   if result == "win" then
+    zyntraLevelCompleted:Fire(participant, activeLevel,
+     FriendBoost.CountRoundFriends(participant, participants))
+   end
   end
  end
  if result == "win" then

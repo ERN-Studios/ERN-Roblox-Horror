@@ -1,0 +1,2008 @@
+{
+  "universeId": 10559217407,
+  "version": 1933,
+  "placeId": 131311258779917,
+  "capturedAt": "2026-09-20T12:46:17Z",
+  "scripts": [
+    {
+      "bytes": 43475,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "NoiseReporter"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 4013165107,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 30942,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "FlashlightController"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 1600657368,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 7476,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "JumpscareUI"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 2974176949,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 237425,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "RoundUI"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 3358940776,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 69416,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "SoundController"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 2279478331,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 78232,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "PuzzleUI"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 3990053154,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 22809,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "DevCheats"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 1384591171,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 19755,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "SpectateController"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 2874314248,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 10390,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "EntityShakeController"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 4219574313,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 34389,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level2AlertClient"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 2897461417,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 187153,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "ZyntraStore"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 2323114480,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 3462,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 1 Sound Controller"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 3922834887,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 5592,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Lighting Controller"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 647352600,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 39939,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Sound Controller"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 3191793753,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 13516,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Objective UI"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 1332525697,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 18788,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Pool Foam Client"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 3812252092,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 54201,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Reader Client"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 14800855,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 39946,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Lighting Controller"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 3941783821,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 46833,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Sound Controller"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 3799268199,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 6548,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Mall Manager Visual Smoother"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 788152186,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 21675,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Table Hiding Client"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 3278484801,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 30379,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Slide Controller"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 673143634,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 10614,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "MasterTuningClient"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 2372024782,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 10098,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyMusicController"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 3837618104,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 5914,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Round Entry Client"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 1312958886,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 5033,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyLevel3GateFlicker"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 3678563929,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 9656,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Pool Slide Dev ESP"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 2765241465,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 29091,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "ProtectionHUD"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 1662711310,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 7021,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyCeilingSweeps"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 43626616,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 9947,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "First Entry Guide"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 1597103129,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 20545,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Round Exit Client"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 1298341756,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 9971,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Entity Audio"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 1694846705,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 23505,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Shop Display Client"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 2756028096,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 10507,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 1 Cable Current"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 941913027,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 9288,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Field Notes Client"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 634705961,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 27008,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Daily Rewards Client"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 2292762524,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 33299,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Lucky Wheel Client"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 3247656667,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 8386,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Friend Boost Client"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 3184439710,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 300,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterCharacterScripts",
+        "DisableDefaultWalkingSound"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 3439527266,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 654,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterCharacterScripts",
+        "SetRunAnimation"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": true,
+      "editorReadable": true,
+      "hash": 1673959203,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 1539,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterCharacterScripts",
+        "DanceEmote"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 1807488750,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 28802,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "StarterPlayer",
+        "StarterCharacter",
+        "Animate"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 3780544750,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 990,
+      "segments": [
+        "ReplicatedStorage",
+        "DevAccess"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 3864079872,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 10886,
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraConfig"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 333433936,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 2253,
+      "segments": [
+        "ReplicatedStorage",
+        "FlashlightProfiles"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2864897320,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 99714,
+      "segments": [
+        "ReplicatedStorage",
+        "UIDevice"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 4145209910,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 443665,
+      "segments": [
+        "ReplicatedStorage",
+        "UIRegression"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 572673245,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 21208,
+      "segments": [
+        "ReplicatedStorage",
+        "MasterConfiguration"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 311143705,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 6906,
+      "segments": [
+        "ReplicatedStorage",
+        "ProtectionClient"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 3496899417,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 2841,
+      "segments": [
+        "ReplicatedStorage",
+        "Level 2 Entity Audio Bank"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2441775782,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 10555,
+      "segments": [
+        "ReplicatedStorage",
+        "UIStyle"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2683759656,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 36624,
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraDailyRewardsPage"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 182426712,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 7373,
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraFieldNotes"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2549927091,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 16492,
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraFieldNotesPage"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 3748128709,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 1991,
+      "segments": [
+        "ServerScriptService",
+        "NoiseRegistry"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 1640011175,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 5382,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerScriptService",
+        "FlashlightSync"
+      ],
+      "className": "Script",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 3090782143,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 147542,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerScriptService",
+        "GameManager"
+      ],
+      "className": "Script",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 1467061242,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 2567,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerScriptService",
+        "AvatarNormalize"
+      ],
+      "className": "Script",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 2434167251,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 103329,
+      "segments": [
+        "ServerScriptService",
+        "TunnelLobbyBuilder"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2300846163,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 169673,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerScriptService",
+        "ZyntraMonetization"
+      ],
+      "className": "Script",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 1120311358,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 427,
+      "segments": [
+        "ServerScriptService",
+        "Level2Generator"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 278658600,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 437,
+      "segments": [
+        "ServerScriptService",
+        "Level3Generator"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 3490766066,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 7124,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerScriptService",
+        "LobbyPartyModeController"
+      ],
+      "className": "Script",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 3448053770,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 74983,
+      "segments": [
+        "ServerScriptService",
+        "Round Completion Routing"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 102701575,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 135364,
+      "segments": [
+        "ServerScriptService",
+        "Round Completion Test Suite"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 1186912996,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 6714,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerScriptService",
+        "Crouch State Server"
+      ],
+      "className": "Script",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 2395885106,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 8128,
+      "segments": [
+        "ServerScriptService",
+        "Round Loading Runtime"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 1025409681,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 15550,
+      "segments": [
+        "ServerScriptService",
+        "Round Loading Test Suite"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 1678066252,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 6314,
+      "segments": [
+        "ServerScriptService",
+        "PlayerProtection"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 235733097,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 6278,
+      "segments": [
+        "ServerScriptService",
+        "PurchaseAlerts"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 3831620165,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 20669,
+      "segments": [
+        "ServerScriptService",
+        "LobbyShopDisplay"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 1797746515,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 12066,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerScriptService",
+        "RouteMarkerService"
+      ],
+      "className": "Script",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 3525654410,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 21612,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerScriptService",
+        "FieldNotesService"
+      ],
+      "className": "Script",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 3646331193,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 5413,
+      "segments": [
+        "ServerScriptService",
+        "FriendBoost"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 4078293387,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 9970,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Configuration"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 3632465989,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 37520,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Layout Generator"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2471315786,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 265160,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 World Builder"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 3482654391,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 50748,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Objective Controller"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 1198785872,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 19458,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Round Adapter"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2430042948,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 5828,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "README - LEVEL 2 TWEAKS"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2341741100,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 10652,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Configuration"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2099796731,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 11278,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Proxy Factory"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 1756786975,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 16481,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Animation Adapter"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 3230588902,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 118667,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Navigator"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2672915855,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 16597,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Observer"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 3603489834,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 7451,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "README - LEVEL 2 POOL FOAM"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 1399321127,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 69432,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Controller"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 1656273113,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 21604,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Slide Ragdoll Service"
+      ],
+      "className": "Script",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 3531639917,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 47083,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Exit Transition Test Suite"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 542717137,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 691,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Configuration"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 3199129851,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 131658,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Navigator"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 155121565,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 7363,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Rig Adapter"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 3974023740,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 38772,
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Controller"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 3425605733,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 19070,
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Configuration"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 201781888,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 104627,
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 World Builder"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 728515644,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 65815,
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Objective Controller"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 278266252,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 30972,
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Round Adapter"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 3222720138,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 197871,
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Test Suite"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2792066513,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 20901,
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Music Sequence Controller"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 1781181791,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 181945,
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Mall Manager AI Controller"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 1663494927,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 24793,
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Hiding Controller"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2922878375,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 38107,
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Layout Generator"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 933162897,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 84041,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "MazeGenerator"
+      ],
+      "className": "Script",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 2958472143,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 100716,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "PuzzleManager"
+      ],
+      "className": "Script",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 336059796,
+      "captureMethod": "fresh Studio Source chunks"
+    },
+    {
+      "bytes": 59207,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "EntityAI"
+      ],
+      "className": "Script",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 78880843,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 6301,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "EntityAnimation"
+      ],
+      "className": "Script",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 3441592848,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 11471,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "EntityKill"
+      ],
+      "className": "Script",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 3650494911,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 2250,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "RetiredLobbyAssets",
+        "Miso",
+        "MisoPatrol"
+      ],
+      "className": "Script",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 393301951,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 58002,
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Lever Redesign Backup 20260806",
+        "Level 2 World Builder"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 4090486371,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 7391,
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Lever Redesign Backup 20260806",
+        "Level 2 Objective Controller"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 504324176,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 5926,
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Lever Redesign Backup 20260806",
+        "Level 2 Configuration"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 960046379,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 68535,
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Pump Scale Backup 20260806",
+        "Level 2 World Builder Before 40 Percent Reduction"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2353508344,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 69618,
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids Texture Backup 20260806",
+        "Level 2 World Builder Before Kids Textures"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 963118296,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 84738,
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids Skylight Backup 20260806",
+        "Level 2 World Builder Before Kids Skylights"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 4239643150,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 5803,
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids V1 Backup 20260811",
+        "Level 2 Configuration"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 775349615,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 97093,
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids V1 Backup 20260811",
+        "Level 2 World Builder"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 1721824290,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 26598,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2AudioBackup_20260831_NoDistantSplash",
+        "Level 2 Sound Controller"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 1453134650,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 9801,
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2AudioBackup_20260831_NoDistantSplash",
+        "Level 2 Configuration"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 422023566,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 167166,
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2RetiredSlidemouth_20260831",
+        "Level 2 Slidemouth Controller"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 525644413,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 295599,
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2RetiredSlidemouth_20260831",
+        "Level 2 Slidemouth Test Suite"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 4020833381,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 9372,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2RetiredSlidemouth_20260831",
+        "Level 2 Slidemouth Client"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": true,
+      "editorReadable": true,
+      "hash": 3321308729,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 167,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerStorage",
+        "Project Mirror",
+        "IMPORTANT"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": true,
+      "editorReadable": true,
+      "hash": 428501494,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 235,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerStorage",
+        "Project Mirror",
+        "Script"
+      ],
+      "className": "Script",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 1177353877,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 95466,
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__TunnelLobbyBuilder"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2465356827,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 27514,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__NoiseReporter"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 694641386,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 5736,
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__Level 2 Systems__Level 2 Pool Foam Configuration"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2493076798,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 42420,
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__Level 2 Systems__Level 2 Pool Foam Controller"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2377820728,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 16436,
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__Level 3 Systems__Level 3 Hiding Controller"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 3266719072,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 6350,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 3374472632,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 28932,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__FlashlightController"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 932442676,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 6740,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__FlashlightSync"
+      ],
+      "className": "Script",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 403707552,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 8095,
+      "runContext": "Enum.RunContext.Legacy",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__EntityShakeController"
+      ],
+      "className": "LocalScript",
+      "editorMatches": true,
+      "disabled": false,
+      "editorReadable": true,
+      "hash": 1453969031,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 96252,
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_ComingSoonGates",
+        "TunnelLobbyBuilder_PreComingSoon"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2761280007,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 4670,
+      "segments": [
+        "ServerStorage",
+        "TEMP_PipeEntityAnimations_20260909",
+        "PreviewControls"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2018353447,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 35774,
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_0710",
+        "Level 2 Pool Slide Controller"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2429415967,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 126820,
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_0710",
+        "Level 2 Pool Slide Navigator"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2696878426,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 35774,
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP6_1609Z",
+        "Controller"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2429415967,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 126820,
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP6_1609Z",
+        "Navigator"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2696878426,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 35774,
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP7_1624Z",
+        "Controller"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2429415967,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 126820,
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP7_1624Z",
+        "Navigator"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2696878426,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 35774,
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP8_1633Z",
+        "Controller"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2429415967,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 126975,
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP8_1633Z",
+        "Navigator"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 209686369,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 126820,
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP8_1633Z",
+        "NavigatorBeforeBudgetFix"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2696878426,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 35774,
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP9_1640Z",
+        "Controller"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 2429415967,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "bytes": 126975,
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP9_1640Z",
+        "Navigator"
+      ],
+      "className": "ModuleScript",
+      "editorMatches": true,
+      "editorReadable": true,
+      "hash": 209686369,
+      "captureMethod": "local bytes verified against fresh Studio length and djb2"
+    }
+  ]
+}

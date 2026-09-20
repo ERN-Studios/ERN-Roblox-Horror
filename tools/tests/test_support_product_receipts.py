@@ -248,6 +248,21 @@ do
         eq(w.total(w.normalize({DonationRobux=v,UtilityRobux=v})),0,"invalid saved amounts cannot poison ranking")
     end
 end
+for _,n in ipairs({"Donation5000","Donation10000"})do
+    local w=world();local price=w.product(n).Price
+    eq(w:receipt(n,price,"large-1"),"Granted",n.." granted")
+    eq(w:data().DonationRobux,75+price,"large donation recorded")
+    eq(w:data().Tokens,2,"donation grants no tokens")
+    eq(w:receipt(n,price,"large-1"),"Granted","large duplicate acknowledged")
+    eq(w:data().DonationRobux,75+price,"large duplicate not counted twice")
+    eq(w:receipt(n,price,"large-2"),"Granted","large donation repeatable")
+    eq(w:data().DonationRobux,75+price*2,"second purchase recorded")
+end
+do
+    local w=world()
+    eq(w:receipt("Donation20K",20000),"Retry","gamepass excluded from developer receipts")
+    eq(w.calls,0,"gamepass ID never writes developer receipt")
+end
 print(string.format("support product receipts: %d checks passed",checks))
 '''
 
