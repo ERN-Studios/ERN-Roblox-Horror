@@ -19,6 +19,7 @@ local ContentProvider = game:GetService("ContentProvider")
 local SoundService = game:GetService("SoundService")
 local ServerScriptService = game:GetService("ServerScriptService")
 local Terrain = workspace.Terrain
+local TeamObjectives = require(ServerScriptService:WaitForChild("TeamObjectives"))
 local DevAccess = require(ReplicatedStorage:WaitForChild("DevAccess"))
 
 -- A running pump motor is the loudest thing in Level 2, and Pool Foam listens to
@@ -566,6 +567,8 @@ function ObjectiveController.Start(manifest, generation)
 				tween:Play()
 			end
 			pump.Model:SetAttribute("Level2_PumpRunning", true)
+			TeamObjectives.Announce(player.Name,
+				string.format("STARTED PUMP %02d  //  %d/%d", pump.Index, session.StartedCount, goal), 2)
 
 			workspace:SetAttribute("Level2Pumps", session.StartedCount)
 			local level2State = state()

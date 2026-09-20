@@ -885,7 +885,7 @@ local function enterNavMode()
  compassArrow.Visible = true
  receiverNav = true
  setDetectorText(receiverHeader, "> EXIT ENERGY DETECTOR // NAV")
- setDetectorText(receiverReadout, "EXIT VECTOR LOCKED\nFOLLOW DIRECTION")
+ setDetectorText(receiverReadout, UIDevice.IsTouch() and "FOLLOW\nARROW" or "EXIT VECTOR LOCKED\nFOLLOW DIRECTION")
  applyPuzzleLayout()
 end
 
@@ -941,7 +941,7 @@ RunService.Heartbeat:Connect(function(dt)
     compassArrow.Rotation = math.deg(math.atan2(cross, dot))
    end
   end
-  setDetectorText(receiverReadout, "EXIT VECTOR LOCKED\nFOLLOW DIRECTION")
+  setDetectorText(receiverReadout, UIDevice.IsTouch() and "FOLLOW\nARROW" or "EXIT VECTOR LOCKED\nFOLLOW DIRECTION")
   return
  end
 
@@ -1293,13 +1293,50 @@ local function clearMissionBrief(candidates, brief)
     return result
 end
 
+local function placeExitReceiver()
+	if not receiverNav then return end
+	local layout = UIDevice.Layout()
+	local touch = layout.IsTouch
+	local tablet = layout.Class == "tablet"
+	local desiredWidth = touch and (tablet and 220 or 190) or LAYOUT.DetectorWidth
+	local desiredHeight = touch and (tablet and 80 or 72) or LAYOUT.DetectorHeight
+	setDetectorText(receiverHeader, touch and "> EXIT" or "> EXIT ENERGY DETECTOR // NAV")
+	setDetectorText(receiverReadout, touch and "FOLLOW\nARROW" or "EXIT VECTOR LOCKED\nFOLLOW DIRECTION")
+	local area = UIDevice.TopRightPanel(desiredWidth, desiredHeight)
+	local candidates = {area}
+	for _, obstacle in ipairs({
+		detectorObstacleRect("LevelOneGuideGui", "ObjectivesButton", false) or false,
+		detectorObstacleRect("ZyntraStore", "ZyntraOpenButton", true) or false,
+	}) do
+		if obstacle then candidates = clearMissionBrief(candidates, obstacle) end
+	end
+	-- Keep the safe right edge; a header sharing this corner pushes us below it.
+	table.sort(candidates, function(a, b)
+		if a.Right ~= b.Right then return a.Right > b.Right end
+		return a.Top < b.Top
+	end)
+	for _, rect in ipairs(candidates) do
+		local width = math.min(desiredWidth, rect.Right - rect.Left)
+		local height = math.min(desiredHeight, rect.Bottom - rect.Top)
+		if width >= LAYOUT.DetectorTouchMinWidth and height >= detectorMinimumHeight(width) then
+			receiverWidth, receiverHeight = width, height
+			receiver.AnchorPoint = Vector2.zero
+			receiver.Size = UDim2.fromOffset(width, height)
+			receiver.Position = UIDevice.LocalPosition(gui, rect.Right - width, rect.Top)
+			receiverPlacementAvailable = true
+			receiver.Visible = receiverActive
+			layoutReceiver()
+			return
+		end
+	end
+end
+
 function applyPuzzleLayout()
 	local layout = UIDevice.Layout()
 	-- A short landscape phone has room for one useful exit card. Once the
 	-- circuit is complete, give that space to the compass instead of shrinking
 	-- it beside the completed objective column until its text is unreadable.
-	local exitCompassOnly = receiverNav and layout.IsTouch and not layout.Portrait
-		and layout.ModalArea.Height < 180
+	local exitCompassOnly = receiverNav and layout.IsTouch
 	objectivePanel.Visible = countersActive and not objectivesCollapsed and not exitCompassOnly
 	UIDevice.SetInteractive(objectivesToggle, countersActive and not exitCompassOnly)
 	if exitCompassOnly then msgLabel.Visible = false end
@@ -1375,6 +1412,7 @@ function applyPuzzleLayout()
 		receiver.Size = UDim2.fromOffset(detectorWidth, receiverHeight)
 		receiver.Position = UDim2.new(0, detectorLeft, 1, -detectorBottom)
 		layoutReceiver()
+		placeExitReceiver()
 		return
 	end
 
@@ -1634,6 +1672,7 @@ function applyPuzzleLayout()
 	receiver.Size = UDim2.fromOffset(receiverWidth, receiverHeight)
 	receiver.Position = UIDevice.LocalPosition(gui, chosen.Left, chosen.Top)
 	layoutReceiver()
+	placeExitReceiver()
 end
 
 applyPuzzleLayout()

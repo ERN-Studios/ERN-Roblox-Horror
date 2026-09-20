@@ -140,6 +140,7 @@ local DISPLAY_ORDER = {
 	{Key = "Tokens4", Kind = "Product"},
 	{Key = "Tokens20", Kind = "Product"},
 	{Key = "EmergencyReentry", Kind = "Product"},
+	{Key = "ExpeditionPack", Kind = "Product"},
 	{Key = "CosmeticEquipment", Kind = "Pass"},
 	{Key = "SpeedPotion", Kind = "Item"},
 	{Key = "RouteMarker", Kind = "Item"},
@@ -243,7 +244,7 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 
 	local model = Instance.new("Model")
 	model.Name = MODEL_NAME
-	model:SetAttribute("ShopDisplayVersion", 4)
+	model:SetAttribute("ShopDisplayVersion", 5)
 	model:SetAttribute("Placement", "Right wall between the Level 2 and Level 4 gates")
 	model:SetAttribute("FocusAttribute", FOCUS_ATTRIBUTE)
 	-- The envelope this build was solved against, so a Studio probe can check the
@@ -260,6 +261,34 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 	local function faceCF(x, y, z)
 		local position = center + Vector3.new(x, y, z)
 		return CFrame.lookAt(position, center + Vector3.new(0, y, z))
+	end
+
+
+	-- Owner-requested sign above the merchandise. Its rear/top corner remains
+	-- inside the tunnel rib radius; all surfaces are non-collidable.
+	local sign = makePart(model, "SuppliesAndUpgradesSign", faceCF(28, 12.3, -40),
+		Vector3.new(45, 2.8, .18), Color3.fromRGB(10, 24, 24), Enum.Material.SmoothPlastic, 0)
+	local face = Instance.new("SurfaceGui")
+	face.Name = "SuppliesAndUpgradesFace"
+	face.Face = Enum.NormalId.Front
+	face.CanvasSize = Vector2.new(1800, 112)
+	face.LightInfluence = 0
+	face.Parent = sign
+	local caption = Instance.new("TextLabel")
+	caption.Name = "Title"
+	caption.BackgroundTransparency = 1
+	caption.Size = UDim2.fromScale(1, 1)
+	caption.Font = Enum.Font.GothamBlack
+	caption.Text = "SUPPLIES  &  UPGRADES"
+	caption.TextSize = 76
+	caption.TextColor3 = PALETTE.neon
+	caption.Parent = face
+	local gradient = Instance.new("UIGradient")
+	gradient.Color = ColorSequence.new(PALETTE.neon, PALETTE.gold)
+	gradient.Parent = caption
+	for _, y in ipairs({10.7, 13.9}) do
+		makePart(model, "SupplySignNeon", faceCF(27.85, y, -40),
+			Vector3.new(45, .09, .12), y > 12 and PALETTE.neon or PALETTE.gold, Enum.Material.Neon, 0)
 	end
 
 	-- ── one hologram box ──────────────────────────────────────────────────────

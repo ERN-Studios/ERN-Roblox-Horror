@@ -29,6 +29,7 @@ local MarketplaceService = game:GetService("MarketplaceService")
 local player = Players.LocalPlayer
 local UIDevice = require(ReplicatedStorage:WaitForChild("UIDevice"))
 local Config = require(ReplicatedStorage:WaitForChild("ZyntraConfig"))
+local Profiles = require(ReplicatedStorage:WaitForChild("FlashlightProfiles"))
 
 local FOCUS_ATTRIBUTE = "ZyntraShopFocus"
 local BUY_EVENT_NAME = "ZyntraShopBuy"
@@ -302,8 +303,7 @@ local function applyLayout()
 	hintTag.Size = UDim2.fromOffset(math.max(40, inner - kindWidth - 6), kindHeight)
 	hintTag.TextSize = face.Kind
 	-- CLOSE is a pointer affordance; on touch the honest instruction is to walk.
-	hintTag.Text = touch and "Step off the plate to close"
-		or "Step off the plate or press CLOSE"
+	hintTag.Text = "Step off the plate to close"
 
 	icon.Position = UDim2.fromOffset(face.Pad, bodyTop)
 	icon.Size = UDim2.fromOffset(bodyHeight, bodyHeight)
@@ -359,6 +359,7 @@ local function refresh()
 	local item, kind = lookup(key)
 	if not item then return end
 	title.Text = tostring(item.Name or key)
+	closeButton.Text = key == "AdvancedEquipment" and "6s DEMO" or "CLOSE"
 	-- What you are actually buying with, in three words: a pass you keep, a thing
 	-- bought with research tokens, a thing bought with Robux.
 	kindTag.Text = kind == "Pass" and "PERMANENT PASS" or (kind == "Item" and "TOKEN ITEM" or "ROBUX PRODUCT")
@@ -390,8 +391,53 @@ local function refresh()
 	end
 end
 
+local demoMount, demoConnection
+local function stopDemo()
+	if demoConnection then demoConnection:Disconnect(); demoConnection = nil end
+	if demoMount then demoMount:Destroy(); demoMount = nil end
+	if shownKey then refresh() end
+end
+local function startFocusDemo()
+	stopDemo()
+	if shownKey ~= "AdvancedEquipment" or player:GetAttribute("InRound") == true then return end
+	-- Local-only six-second comparison on the world in front of the camera.
+	-- It changes no equipment, battery, ownership, inventory or purchase state.
+	local part = Instance.new("Part")
+	part.Name = "ZyntraLocalFlashlightDemo"
+	part.Size = Vector3.new(.1, .1, .1)
+	part.Transparency = 1
+	part.Anchored = true
+	part.CanCollide, part.CanTouch, part.CanQuery = false, false, false
+	local core = Instance.new("SpotLight")
+	core.Face = Enum.NormalId.Front
+	core.Shadows = true
+	core.Color = Color3.fromRGB(255, 244, 214)
+	core.Parent = part
+	local spill = core:Clone()
+	spill.Shadows = false
+	spill.Parent = part
+	part.Parent = workspace
+	demoMount = part
+	local began, previous = os.clock(), nil
+	demoConnection = RunService.RenderStepped:Connect(function()
+		local elapsed = os.clock() - began
+		if elapsed >= 6 or not gui.Enabled or player:GetAttribute("InRound") == true then stopDemo(); return end
+		local camera = workspace.CurrentCamera
+		if not camera then return end
+		part.CFrame = camera.CFrame * CFrame.new(.25, -.25, -.3)
+		local focused = elapsed >= 3
+		if previous ~= focused then
+			Profiles.Apply(Profiles.Own, "BASE", core, spill, focused)
+			previous = focused
+			state.Text = focused and "DEMO: FOCUSED — +45% RANGE, SAME DRAIN" or "DEMO: NORMAL WIDE BEAM"
+			closeButton.Text = focused and "FOCUSED" or "WIDE"
+		end
+	end)
+end
+
 local function setShown(key)
 	if shownKey == key then return end
+	stopDemo()
 	shownKey = key
 	gui.Enabled = key ~= nil
 	-- Yield the dispatch caption without suppressing movement: stepping off the
@@ -424,6 +470,7 @@ local function evaluate()
 end
 
 closeButton.Activated:Connect(function()
+	if shownKey == "AdvancedEquipment" then startFocusDemo(); return end
 	-- CLOSE dismisses THIS focus. Stepping off the plate and back on, or
 	-- walking to the next hologram, brings the card back.
 	dismissedKey = shownKey

@@ -1,0 +1,170 @@
+[
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aaaa88dabc3a66ebe65e0d5",
+    "name": "Speed potion needs to give 30% speed boost.",
+    "desc": "",
+    "webUrl": "https://trello.com/c/a85w9YZj/106-speed-potion-needs-to-give-30-speed-boost",
+    "url": "https://trello.com/c/a85w9YZj/106-speed-potion-needs-to-give-30-speed-boost",
+    "list": {
+      "id": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980823a4e791f503ad922d",
+      "name": "In Progress"
+    },
+    "board": {
+      "id": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+      "name": "BACKROOMS: STAY QUIET – Development"
+    },
+    "labels": [],
+    "labelsHasMore": false,
+    "due": null,
+    "dueComplete": false,
+    "lastActivityAt": "2026-09-20T13:04:09.878Z",
+    "startedAt": null,
+    "closed": false,
+    "complete": false,
+    "members": [],
+    "comments": [],
+    "commentsHasMore": false,
+    "checklists": [],
+    "checklistsHasMore": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aad4aead71a4efcd5f7f005",
+    "name": "Make a nice sign with saturated colors, but still fits the Zyntra neon colors that says supplies and upgrades over the purchasable items in the lobby.",
+    "desc": "",
+    "webUrl": "https://trello.com/c/LswEFLHq/108-make-a-nice-sign-with-saturated-colors-but-still-fits-the-zyntra-neon-colors-that-says-supplies-and-upgrades-over-the-purchasabl",
+    "url": "https://trello.com/c/LswEFLHq/108-make-a-nice-sign-with-saturated-colors-but-still-fits-the-zyntra-neon-colors-that-says-supplies-and-upgrades-over-the-purchasabl",
+    "list": {
+      "id": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980823a4e791f503ad922d",
+      "name": "In Progress"
+    },
+    "board": {
+      "id": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+      "name": "BACKROOMS: STAY QUIET – Development"
+    },
+    "labels": [],
+    "labelsHasMore": false,
+    "due": null,
+    "dueComplete": false,
+    "lastActivityAt": "2026-09-20T13:04:11.505Z",
+    "startedAt": null,
+    "closed": false,
+    "complete": false,
+    "members": [],
+    "comments": [],
+    "commentsHasMore": false,
+    "checklists": [],
+    "checklistsHasMore": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aaed2a0b29ef7925f827e43",
+    "name": "The exit door indicator for level 1 should be placed in the top right cornor.",
+    "desc": "",
+    "webUrl": "https://trello.com/c/w07K0m5E/111-the-exit-door-indicator-for-level-1-should-be-placed-in-the-top-right-cornor",
+    "url": "https://trello.com/c/w07K0m5E/111-the-exit-door-indicator-for-level-1-should-be-placed-in-the-top-right-cornor",
+    "list": {
+      "id": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980823a4e791f503ad922d",
+      "name": "In Progress"
+    },
+    "board": {
+      "id": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+      "name": "BACKROOMS: STAY QUIET – Development"
+    },
+    "labels": [],
+    "labelsHasMore": false,
+    "due": null,
+    "dueComplete": false,
+    "lastActivityAt": "2026-09-20T13:04:13.440Z",
+    "startedAt": null,
+    "closed": false,
+    "complete": false,
+    "members": [],
+    "comments": [],
+    "commentsHasMore": false,
+    "checklists": [],
+    "checklistsHasMore": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aaed2f270f2b906446c1fa0",
+    "name": "When a player in every levels completes a step, like in level 1, finding a fuse, powering fuse box, pulls lever. This should be stated as message on screen for everybody which should be visible and with the username for the person who did that certain thing. This is for all levels.",
+    "desc": "",
+    "webUrl": "https://trello.com/c/FAgRQho1/112-when-a-player-in-every-levels-completes-a-step-like-in-level-1-finding-a-fuse-powering-fuse-box-pulls-lever-this-should-be-state",
+    "url": "https://trello.com/c/FAgRQho1/112-when-a-player-in-every-levels-completes-a-step-like-in-level-1-finding-a-fuse-powering-fuse-box-pulls-lever-this-should-be-state",
+    "list": {
+      "id": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980823a4e791f503ad922d",
+      "name": "In Progress"
+    },
+    "board": {
+      "id": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+      "name": "BACKROOMS: STAY QUIET – Development"
+    },
+    "labels": [],
+    "labelsHasMore": false,
+    "due": null,
+    "dueComplete": false,
+    "lastActivityAt": "2026-09-20T13:04:15.315Z",
+    "startedAt": null,
+    "closed": false,
+    "complete": false,
+    "members": [],
+    "comments": [],
+    "commentsHasMore": false,
+    "checklists": [],
+    "checklistsHasMore": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aafbe52ebd509db8d8fbd33",
+    "name": "P1 · Advanced Equipment: tilføj fokuseret lygte og tydelig produktværdi",
+    "desc": "Tilføjet fra konkurrentanalysen 20/9/2026. Planlagt arbejde; ikke implementeret. Prisangivelser for vores produkter er foreløbige designforslag.\n\nUdvid det eksisterende Advanced Equipment-pass med en synlig lygtefunktion, eksempelvis en fokuseret lyskegle med længere rækkevidde. Behold foreløbig prisen 149 Robux.\n\n- Alle eksisterende ejere får funktionen; kræv ikke genkøb.\n- Bevar de allerede solgte fordele: hazmat-farvevalg og eksisterende stamina-/batterigrants. Genuddel ikke engangsgrants ved migrering.\n- Spilleren skifter selv lysfunktion. Bevar manuel lygtekontrol, også under hiding; tidligere rettelser må ikke rulles tilbage.\n- Normal lygte skal fortsat kunne løse alle obligatoriske opgaver.\n- Vis forskellen i shopdemo og forklar permanent adgang, funktion og eventuelt batteriforbrug klart.\n- Genbrug den nuværende hologramshop frem for at bygge den om.\n\nFærdig når: gammel/ny ejer og ikke-ejer virker korrekt, mørke levels er spilbare med gratis lys, lysfunktion og batteri virker på PC/mobil.\n\nInspiration: https://www.rolimons.com/gamepass/62882797\nEksisterende lygtekontrol: https://trello.com/c/nS5vj1RM\nEksisterende shop: https://trello.com/c/IA6VOViX",
+    "webUrl": "https://trello.com/c/n1yx5OdQ/115-p1-advanced-equipment-tilf%C3%B8j-fokuseret-lygte-og-tydelig-produktv%C3%A6rdi",
+    "url": "https://trello.com/c/n1yx5OdQ/115-p1-advanced-equipment-tilf%C3%B8j-fokuseret-lygte-og-tydelig-produktv%C3%A6rdi",
+    "list": {
+      "id": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980823a4e791f503ad922d",
+      "name": "In Progress"
+    },
+    "board": {
+      "id": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+      "name": "BACKROOMS: STAY QUIET – Development"
+    },
+    "labels": [],
+    "labelsHasMore": false,
+    "due": null,
+    "dueComplete": false,
+    "lastActivityAt": "2026-09-20T13:04:17.073Z",
+    "startedAt": null,
+    "closed": false,
+    "complete": false,
+    "members": [],
+    "comments": [],
+    "commentsHasMore": false,
+    "checklists": [],
+    "checklistsHasMore": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aafbe576313ae1dcf281eb2",
+    "name": "P2 · Expedition Pack: re-entry, Entity Shield og Route Markers",
+    "desc": "Tilføjet fra konkurrentanalysen 20/9/2026. Planlagt arbejde; ikke implementeret. Prisangivelser for vores produkter er foreløbige designforslag.\n\nTilføj én overskuelig forbrugspakke til shoppen. Foreslået første pris: 69 Robux.\n\nIndhold pr. køb:\n- 1 stored Emergency Re-entry.\n- 1 Entity Shield charge.\n- 1 Route Marker Pack = 3 markører.\n\nGenbrug inventory og anvendelsesregler. Beskriv pakken som forbrugsvarer, ikke et permanent pass. Produktkortet skal vise hvert antal, samlet pris og hvor tingene aktiveres. Ét normalt produktdisplay; ingen ekstra popup-kæde.\n\nFærdig når: hele pakken tildeles ved et gennemført køb, gentagen kvittering giver ikke dobbelt belønning, afbrudt køb giver intet, og saldoer holder ved genjoin. Alle tre varer kan anvendes via eksisterende HUD.\n\nKoordinér med det allerede åbne re-entry-kort; dette kort ændrer ikke selv spawn-/grace-regler: https://trello.com/c/Ejo5OPkG\nDenne pakkekombination er vores eget forslag, ikke et verificeret konkurrentprodukt.",
+    "webUrl": "https://trello.com/c/eigEDZAH/119-p2-expedition-pack-re-entry-entity-shield-og-route-markers",
+    "url": "https://trello.com/c/eigEDZAH/119-p2-expedition-pack-re-entry-entity-shield-og-route-markers",
+    "list": {
+      "id": "ari:cloud:trello::list/workspace/6a9807517a71aa833c5dedb8/6a980823a4e791f503ad922d",
+      "name": "In Progress"
+    },
+    "board": {
+      "id": "ari:cloud:trello::board/workspace/6a9807517a71aa833c5dedb8/6a9808124df96806af3f205d",
+      "name": "BACKROOMS: STAY QUIET – Development"
+    },
+    "labels": [],
+    "labelsHasMore": false,
+    "due": null,
+    "dueComplete": false,
+    "lastActivityAt": "2026-09-20T13:04:18.787Z",
+    "startedAt": null,
+    "closed": false,
+    "complete": false,
+    "members": [],
+    "comments": [],
+    "commentsHasMore": false,
+    "checklists": [],
+    "checklistsHasMore": false
+  }
+]

@@ -46,13 +46,23 @@ function Profiles.Current()
 end
 
 -- Write one profile of a set onto a core and a spill SpotLight (either may be nil).
-function Profiles.Apply(set, name, core, spill)
+function Profiles.Apply(set, name, core, spill, focused)
 	local profile = set[name]
 	if core then
 		core.Brightness, core.Range, core.Angle = profile.Core.Brightness, profile.Core.Range, profile.Core.Angle
 	end
 	if spill then
 		spill.Brightness, spill.Range, spill.Angle = profile.Spill.Brightness, profile.Spill.Range, profile.Spill.Angle
+	end
+	if focused == true then
+		if core then
+			core.Range = profile.Core.Range * 1.45
+			core.Angle = profile.Core.Angle * .60
+		end
+		if spill then
+			spill.Range = profile.Spill.Range * 1.45
+			spill.Angle = profile.Spill.Angle * .65
+		end
 	end
 end
 

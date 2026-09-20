@@ -3522,12 +3522,37 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 			or grant > MAX_SAFE_SUPPORT - balance) then
 			return false, "Purchase balance exceeds the safe limit.", "error"
 		end
+		-- Validate EVERY bundle balance before touching any profile field. The
+		-- reward and receipt marker commit in the same UpdateAsync transaction.
+		local bundle = entry.Product.BundleGrant
+		local shield
+		if bundle then
+			shield = protectionState(data)
+			local markers = data.Items and data.Items.RouteMarker
+			if type(bundle) ~= "table" or not shield
+				or not isSafeSupportAmount(bundle.Reentry) or bundle.Reentry < 1
+				or not isSafeSupportAmount(bundle.Shield) or bundle.Shield < 1
+				or not isSafeSupportAmount(bundle.RouteMarkers) or bundle.RouteMarkers < 1
+				or not isSafeSupportAmount(data.ReentryCredits)
+				or not isSafeSupportAmount(markers)
+				or bundle.Reentry > MAX_SAFE_SUPPORT - data.ReentryCredits
+				or bundle.Shield > MAX_SAFE_SUPPORT - shield.Charges
+				or bundle.RouteMarkers > MAX_SAFE_SUPPORT - markers then
+				return false, "Expedition Pack inventory cannot be updated yet.", "error"
+			end
+		end
 		table.insert(data.ReceiptIds, purchaseId)
 		if entry.Kind == "Donation" then
 			data.DonationRobux += spent
 			return true, string.format("Thank you — %d R$ added to your donation total.", spent), "success"
 		end
 		data.UtilityRobux += spent
+		if bundle then
+			data.ReentryCredits += bundle.Reentry
+			shield.Charges += bundle.Shield
+			data.Items.RouteMarker += bundle.RouteMarkers
+			return true, "Expedition Pack stored: 1 re-entry, 1 shield, 3 markers.", "success"
+		end
 		if entry.Product.TokenGrant then
 			data.Tokens += entry.Product.TokenGrant
 			return true, "+" .. entry.Product.TokenGrant .. " Zyntra Research Tokens", "success"

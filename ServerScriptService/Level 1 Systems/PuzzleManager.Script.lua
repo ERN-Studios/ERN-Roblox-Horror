@@ -57,12 +57,9 @@ end
 -- The CLIENT owns the sentence. It is the side that knows how wide the
 -- objectives column is on the device in front of it, so this carries the actor,
 -- a kind and a short detail -- never a finished line of copy.
+local TeamObjectives = require(game:GetService("ServerScriptService"):WaitForChild("TeamObjectives"))
 local function announceTeam(actorName, kind, detail)
-	for _, recipient in ipairs(Players:GetPlayers()) do
-		if recipient:GetAttribute("InRound") == true then
-			status:FireClient(recipient, "team", actorName, kind, detail)
-		end
-	end
+	TeamObjectives.Announce(actorName, detail, 1)
 end
 
 -- ── tuning ────────────────────────────────────────────────
