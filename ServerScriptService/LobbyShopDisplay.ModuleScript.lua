@@ -51,6 +51,7 @@ local SHOP_TEXTURES = {
 		Tokens20 = "rbxassetid://114348157561307",
 		EmergencyReentry = "rbxassetid://93091494402773",
 		ExpeditionPack = "rbxassetid://132485864297801",
+		EntityDetector = "rbxassetid://134413710349950",
 		SpeedPotion = "rbxassetid://73457681182843",
 		RouteMarker = "rbxassetid://100856675462356",
 	},
@@ -308,12 +309,12 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 		box:SetAttribute("ShopBobPhase", phase)
 
 		-- ONE id for all six faces, resolved once: the product's own art, then
-		-- the shared fallback texture, then the catalogue icon the terminal
-		-- already draws. Every shipped key has art at the first rung; the other
+		-- the catalogue icon the terminal already draws, then the shared
+		-- fallback texture. Every shipped key has art at the first rung; the other
 		-- two exist so a product added to ZyntraConfig without a SHOP_TEXTURES
 		-- entry is never a blank box.
-		local url = assetUrl(textureId) or assetUrl(textures.BoxFallback)
-			or assetUrl(item and item.IconId)
+		local url = assetUrl(textureId) or assetUrl(item and item.IconId)
+			or assetUrl(textures.BoxFallback)
 		if url then
 			box:SetAttribute("ShopTextureSlot", "Box:" .. key)
 			for _, face in ipairs(BOX_FACES) do
