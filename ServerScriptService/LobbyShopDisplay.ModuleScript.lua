@@ -50,6 +50,7 @@ local SHOP_TEXTURES = {
 		Tokens4 = "rbxassetid://127956354478910",
 		Tokens20 = "rbxassetid://114348157561307",
 		EmergencyReentry = "rbxassetid://93091494402773",
+		ExpeditionPack = "rbxassetid://132485864297801",
 		SpeedPotion = "rbxassetid://73457681182843",
 		RouteMarker = "rbxassetid://100856675462356",
 	},

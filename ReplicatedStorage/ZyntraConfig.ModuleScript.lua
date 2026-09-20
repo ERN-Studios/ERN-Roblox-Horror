@@ -120,6 +120,7 @@ return {
 	Products = {
 		ExpeditionPack = {
 			Id = 3713829859,
+			IconId = 132485864297801,
 			Name = "Expedition Pack",
 			IconText = "PACK",
 			Price = 69,

@@ -1,6 +1,6 @@
 {
   "formatVersion": 2,
-  "source": "Studio-authoritative snapshot after scoped, compare-and-swap updates for six improvements. Exact Source/editor equality verified; no bulk repository deployment.",
+  "source": "Studio-authoritative snapshot after scoped compare-and-swap Expedition Pack artwork updates. All 147 scripts match fresh Studio source/editor hashes; no bulk deployment.",
   "finalNewlineContract": "Exact Studio source bytes including final newline; no newline exceptions.",
   "studio": {
     "name": "BACKROOMS: STAY QUIET [CO-OP HORROR]",
@@ -8,10 +8,11 @@
     "placeId": 131311258779917,
     "universeId": 10559217407,
     "observedPlaceVersion": 1933,
-    "capturedUTC": "2026-09-20T13:28:00Z",
+    "capturedUTC": "2026-09-20T13:47:10Z",
     "publishedPlaceVersion": 1937,
     "publicationVerifiedUTC": "2026-09-20T13:29:52Z",
-    "publicationEvidence": "artifacts/six-improvements-20260920/publish-log.txt"
+    "publicationEvidence": "artifacts/six-improvements-20260920/publish-log.txt",
+    "pendingPublication": "Expedition Pack texture asset 132485864297801 is saved and visually verified; native UI connection timed out before live publication. Last verified live publish remains v1937."
   },
   "counts": {
     "scripts": 147,
@@ -20,10 +21,10 @@
     "studioTrailingNewline": 147
   },
   "nativePlaceBackup": {
-    "file": "artifacts/six-improvements-20260920/six-improvements.rbxl",
-    "bytes": 9330280,
-    "sha256": "a7ac314fd2526b9d82b50951b0cd98b3d9fd46737d7533993d8acf6a665aa7f8",
-    "purpose": "Complete native copy of the final verified Edit model immediately before publication as v1937."
+    "file": "artifacts/expedition-texture-20260920/expedition-texture.rbxl",
+    "bytes": 9330297,
+    "sha256": "0e76137df105e0381b91d2434e6b5eff5085128eebdab997a40fbda39e088b76",
+    "purpose": "Complete native copy of the final verified Edit model with Expedition Pack artwork. Saved before live publication."
   },
   "extraMirroredFilesNotInStudio": [
     "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_AutomaticAssetCaptureSender_LocalizationService.RemoteEvent.txt",
@@ -277,8 +278,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/ZyntraConfig.ModuleScript.lua",
-      "bytes": 11424,
-      "sha256": "9b633d3e3a98cbc1f338a45b8afd7dabacc1aa55d4d299ecd70ec3de2549008b",
+      "bytes": 11453,
+      "sha256": "0623e890dcb55a3a39c5f2eb7931e9ef6107ba21f8d27961a862ee330e97b19a",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -978,8 +979,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/LobbyShopDisplay.ModuleScript.lua",
-      "bytes": 21859,
-      "sha256": "3a065c79fd2068282950b0c736e92cb12d25d7c30d15e3b5185546873d5583ff",
+      "bytes": 21910,
+      "sha256": "080ddbdf642c660b5374ca2d68c61612e0df71e2d36eded5f84149a4adedc777",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
