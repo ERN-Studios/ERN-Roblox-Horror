@@ -51,7 +51,7 @@ local SHOP_TEXTURES = {
 		Tokens20 = "rbxassetid://114348157561307",
 		EmergencyReentry = "rbxassetid://93091494402773",
 		ExpeditionPack = "rbxassetid://132485864297801",
-		EntityDetector = "rbxassetid://134413710349950",
+		EntityDetector = "rbxassetid://90757067349588",
 		SpeedPotion = "rbxassetid://73457681182843",
 		RouteMarker = "rbxassetid://100856675462356",
 	},
@@ -332,7 +332,7 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 		local caption = Instance.new("BillboardGui")
 		caption.Name = "ShopHologramCaption"
 		caption.Adornee = box
-		caption.Size = UDim2.fromScale(7, 0.9)
+		caption.Size = UDim2.fromScale(4.4, 1.1)
 		caption.StudsOffset = Vector3.new(0, BOX_SIZE * 0.5 + 0.75, 0)
 		caption.MaxDistance = 90
 		caption.AlwaysOnTop = false
@@ -346,9 +346,11 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 		captionText.Size = UDim2.fromScale(1, 1)
 		captionText.Font = Enum.Font.GothamBlack
 		captionText.TextScaled = true
+		captionText.TextWrapped = true
 		captionText.TextColor3 = accent
 		captionText.TextTransparency = 0.05
-		captionText.Text = string.upper(tostring((item and item.Name) or key))
+		captionText.Text = key == "EntityDetector" and "ENTITY\nDETECTOR"
+			or string.upper(tostring((item and item.Name) or key))
 		captionText.Parent = caption
 		local captionStroke = Instance.new("UIStroke")
 		captionStroke.Color = Color3.fromRGB(8, 14, 12)

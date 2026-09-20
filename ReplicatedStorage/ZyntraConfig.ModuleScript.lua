@@ -93,7 +93,7 @@ return {
 	Detector = {Range=120, HighRange=50, Cooldown=20, ReadingSeconds=4},
 	Passes = {
   EntityDetector = {
-   Id=1982715834, IconId=134413710349950, Name="Zyntra Entity Detector", Price=149,
+   Id=1982715834, IconId=90757067349588, Name="Zyntra Entity Detector", Price=149,
    Description="Permanent detector. Press Z / D-pad left or tap SCAN during a run for a 4-second LOW/MEDIUM/HIGH reading within 120 studs (HIGH within 50). 20-second cooldown. No exact locations and no guaranteed safety. Free simulated demo in the lobby shop.",
    PreviewDescription="PERMANENT · 120-stud snapshot for 4s. HIGH within 50. LOW / MEDIUM / HIGH. 20s cooldown. No exact locations or guaranteed safety.",
   },
