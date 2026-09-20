@@ -119,6 +119,15 @@ caption.Parent = gui
 UIStyle.caption(caption)
 UIStyle.body(caption, {TextSize = 12, TextColor = UIStyle.Color.Caption3})
 
+local reentryNotice = Instance.new("TextLabel")
+reentryNotice.Name = "ReentryGrace"
+reentryNotice.AnchorPoint = Vector2.new(.5, 1)
+reentryNotice.Visible = false
+reentryNotice.Parent = gui
+UIStyle.caption(reentryNotice)
+UIStyle.body(reentryNotice, {TextSize = 16, TextColor = UIStyle.Color.Live})
+reentryNotice.TextWrapped = true
+
 local connections, characterConnections = {}, {}
 local boundCharacter, boundHumanoid
 local healthConnection
@@ -299,7 +308,8 @@ local function secondsRemaining(subject)
 	local expires = subject:GetAttribute("PlayerProtectionExpiresAt")
 	if subject:GetAttribute("PlayerProtectionActive") ~= true or type(expires) ~= "number"
 		or expires ~= expires or expires == math.huge or expires == -math.huge then return 0 end
-	return math.clamp(expires - workspace:GetServerTimeNow(), 0, 5)
+	local duration = subject:GetAttribute("PlayerProtectionSource") == "Reentry" and 10 or 5
+	return math.clamp(expires - workspace:GetServerTimeNow(), 0, duration)
 end
 
 local function canPress(state, remaining)
@@ -451,6 +461,7 @@ end
 
 local function refresh()
 	if destroyed then return end
+	reentryNotice.Visible = false
 	local subject = spectateSubject()
 	if (subject ~= nil) ~= mirroring then
 		mirroring = subject ~= nil
@@ -504,6 +515,14 @@ local function refresh()
 	end
 	if touch then panel.Visible = false else placePointer(states) end
 	caption.Visible = states.Available and captionUntil > os.clock()
+	local remaining = secondsRemaining()
+	if states.Available and remaining > 0 and player:GetAttribute("PlayerProtectionSource") == "Reentry" then
+		local area = UIDevice.Layout().ModalArea
+		reentryNotice.Size = UDim2.fromOffset(math.max(120, math.min(360, area.Width - 16)), 50)
+		reentryNotice.Position = UIDevice.LocalPosition(gui, (area.Left + area.Right) * .5, area.Bottom - 32)
+		reentryNotice.Text = string.format("You are invisible to monsters\n%d seconds", math.ceil(remaining))
+		reentryNotice.Visible = true
+	end
 end
 
 function applyLayout()
@@ -647,7 +666,7 @@ end)
 for _, name in ipairs({"InRound", "Escaped", "Spectating", "SpectateTargetUserId",
 	"Level2_ExitTransition", "RoundEntryControlsReady",
 	"DispatchBriefingOpen", "ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen", "QueueModalOpen",
-	"PlayerProtectionActive", "PlayerProtectionExpiresAt",
+	"PlayerProtectionActive", "PlayerProtectionExpiresAt", "PlayerProtectionSource",
 	"ZyntraSpeedPotions", "ZyntraRouteMarkers", "RouteMarkersActive",
 	"ZyntraSpeedBoostUntil", "ZyntraSpeedPotionUsedThisRound"}) do
 	connect(player:GetAttributeChangedSignal(name), refresh)

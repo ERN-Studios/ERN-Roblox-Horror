@@ -12,6 +12,8 @@ local PhysicsService = game:GetService("PhysicsService")
 local Lighting = game:GetService("Lighting")
 local MemoryStoreService = game:GetService("MemoryStoreService")
 local DevAccess = require(RS:WaitForChild("DevAccess"))
+local PlayerProtection = require(script.Parent:WaitForChild("PlayerProtection"))
+local ReentryPlacement = require(script.Parent:WaitForChild("ReentryPlacement"))
 
 -- Every rule about what a finished level leads to, who the destination is still
 -- waiting for and who owns an unfinished transfer lives in ONE module. The
@@ -773,6 +775,7 @@ local roundEntryMode = nil
 -- resume and drag the rider off the bore onto the spawn pad, silently undoing
 -- the whole continuous transition.
 local pendingExplicitPlacement = {}
+local pendingReentryPlacement = {}
 
 -- A rider placed in Level 3's bore stays anchored until the mall around them is
 -- actually live. Holding the release here rather than on a fixed timer is the
@@ -985,6 +988,7 @@ local function onCharacter(player, char)
 	end
    -- Round entry places this character explicitly; do not race it. `true` means
    -- a placement is armed but its character is not known yet.
+   if pendingReentryPlacement[player] then return end
    local pending = pendingExplicitPlacement[player]
    if worldReady and pending ~= true and pending ~= char then
     if not placeSafelyInElevator(player, char) and player.Character == char then
@@ -2344,6 +2348,7 @@ playRound = function(participants)
  local participantSet = {}
  local reentryUsed = {}
  local reentryInFlight = {}
+ local deathFrames, safeFrames = {}, {}
  local leaving = {}
 	local transitionRespawnToken = {}
 	local roundLifecycleOpen = true
@@ -2375,17 +2380,21 @@ playRound = function(participants)
 		clearSpectatorCounts()
 		clearPartyDown()
 		table.clear(transitionRespawnToken)
+		table.clear(deathFrames)
+		table.clear(safeFrames)
 		for _, connection in ipairs(conns) do connection:Disconnect() end
 		table.clear(conns)
 	end
 
 	local scheduleTransitionRespawn
 	local function hookLife(player, hum)
+  local life = hum.Parent
   conns[#conns + 1] = hum.Died:Connect(function()
-   if alive[player] then
+   if alive[player] and player.Character == life then
     alive[player] = nil
     aliveCount -= 1
     local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+    if root then deathFrames[player] = root.CFrame end
     lastDeathName = player.Name -- whoever fell last names the PARTY DOWN card
     fireGroup(participants, "death", player.Name, root and root.Position or nil)
 		if scheduleTransitionRespawn then scheduleTransitionRespawn(player) end
@@ -2453,6 +2462,26 @@ playRound = function(participants)
   end
  end
 
+ -- One bounded sample per half second, disconnected at round teardown. This
+ -- keeps pit deaths from returning a player to the bottom of the same pit.
+ local safeSampleElapsed = 0
+ conns[#conns + 1] = RunService.Heartbeat:Connect(function(dt)
+  safeSampleElapsed += dt
+  if safeSampleElapsed < .5 then return end
+  safeSampleElapsed = 0
+  if not roundLifecycleOpen or workspace:GetAttribute("RoundActive") ~= true then return end
+  for player in pairs(alive) do
+   local char = player.Character
+   local hum = char and char:FindFirstChildOfClass("Humanoid")
+   local root = char and char:FindFirstChild("HumanoidRootPart")
+   if root and hum and hum.Health > 0 and not root.Anchored
+    and hum.FloorMaterial ~= Enum.Material.Air and math.abs(root.AssemblyLinearVelocity.Y) < 2 then
+    local frame = ReentryPlacement.At(root, hum, root.CFrame)
+    if frame then safeFrames[player] = frame end
+   end
+  end
+ end)
+
  if entity and entity.PrimaryPart and entityStart then
   local bbox, size = entity:GetBoundingBox()
   local pivot = entity:GetPivot()
@@ -2506,11 +2535,40 @@ playRound = function(participants)
      and player:GetAttribute("InRound") == true and player:GetAttribute("Escaped") ~= true
      and player:GetAttribute("Level2_ExitTransition") ~= true))
   end
+  pendingReentryPlacement[player] = request
   local char = spawnGameplayCharacter(player, nil, allowed, request)
   request.Character = char or request.Character
   if not char or not allowed() or player.Character ~= char then return false, "UNAVAILABLE" end
   local hum = char:FindFirstChildOfClass("Humanoid")
-  if not hum or hum.Health <= 0 or not placeSafelyInElevator(player, char) then return false, "PLACEMENT_FAILED" end
+  local root = char:FindFirstChild("HumanoidRootPart")
+  if not root or not hum or hum.Health <= 0 then return false, "PLACEMENT_FAILED" end
+  local function chooseFrame()
+   local frame = ReentryPlacement.Resolve(root, hum, deathFrames[player], safeFrames[player], function(position)
+    return arrivalPointFree(player, position)
+   end)
+   if frame then return frame end
+   -- A destroyed floor or missing death record must not strand a paid player.
+   local pad = workspace:FindFirstChild("ElevatorSpawn")
+   return pad and freeElevatorFrame(player, pad) or nil
+  end
+  local frame = chooseFrame()
+  if not frame then return false, "PLACEMENT_FAILED" end
+  local context = PlayerProtection.GetContext(player)
+  if not context or not PlayerProtection.ActivateReentry(player, context) then return false, "PROTECTION_FAILED" end
+  root.Anchored = true
+  root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
+  char:PivotTo(frame * root.CFrame:ToObjectSpace(char:GetPivot()))
+  local streamed = awaitStreamAround(beginStreamAround(player, frame.Position, STREAM_AROUND_TIMEOUT), STREAM_AROUND_TIMEOUT)
+  if not allowed() or player.Character ~= char or hum.Health <= 0 then return false, "UNAVAILABLE" end
+  if not streamed then return false, "STREAMING_FAILED" end
+  -- Check occupancy again after streaming; another survivor may have moved.
+  local streamedPosition = frame.Position
+  frame = chooseFrame()
+  if not frame or (frame.Position - streamedPosition).Magnitude > 20 then return false, "PLACEMENT_FAILED" end
+  char:PivotTo(frame * root.CFrame:ToObjectSpace(char:GetPivot()))
+  if not PlayerProtection.ActivateReentry(player, context) then return false, "PROTECTION_FAILED" end
+  root.AssemblyLinearVelocity, root.AssemblyAngularVelocity = Vector3.zero, Vector3.zero
+  root.Anchored = false
   if not allowed() or player.Character ~= char or hum.Parent ~= char or hum.Health <= 0 then return false, "UNAVAILABLE" end
   alive[player] = true
   aliveCount += 1
@@ -2526,12 +2584,18 @@ playRound = function(participants)
   reentryInFlight[player] = request -- shared by paid and free paths before any yield
   local ok, accepted, reason = pcall(performRoundReentry, player, freeDeveloper == true, request)
   if reentryInFlight[player] == request then reentryInFlight[player] = nil end
+  if pendingReentryPlacement[player] == request then pendingReentryPlacement[player] = nil end
   if not ok or accepted ~= true then
    local char = request.Character
    local hum = char and char:FindFirstChildOfClass("Humanoid")
    -- Only this request's still-current body may be discarded on refusal: a
    -- refused placement must not leave a living, uncounted character behind.
-   if char and player.Character == char and hum and hum.Health > 0 then hum.Health = 0 end
+   if char and player.Character == char and hum and hum.Health > 0 then
+    PlayerProtection.Clear(player)
+    local root = char:FindFirstChild("HumanoidRootPart")
+    if root then root.Anchored = false end
+    hum.Health = 0
+   end
    -- A failed engine load may return no Character after the paid flag was set.
    if freeDeveloper ~= true and request.PaidCommitted then abandonReentry(player) end
    if not ok then warn("[GameManager] re-entry failed:", accepted) end

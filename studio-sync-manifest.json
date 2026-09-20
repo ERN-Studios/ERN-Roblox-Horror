@@ -1,6 +1,6 @@
 {
   "formatVersion": 2,
-  "source": "Studio-authoritative snapshot after scoped owner-requested stamina, Level 1 puzzle/audio and team-feed updates. Fresh full source/editor parity verified; no bulk repository deployment.",
+  "source": "Studio-authoritative snapshot after death-location re-entry with ten-second grace. Exact source/editor parity verified; publication pending native UI recovery.",
   "finalNewlineContract": "Exact Studio source bytes including final newline; no newline exceptions.",
   "studio": {
     "name": "BACKROOMS: STAY QUIET [CO-OP HORROR]",
@@ -8,22 +8,23 @@
     "placeId": 131311258779917,
     "universeId": 10559217407,
     "observedPlaceVersion": 1933,
-    "capturedUTC": "2026-09-20T14:35:32Z",
+    "capturedUTC": "2026-09-20T15:50:14Z",
     "publishedPlaceVersion": 1939,
     "publicationVerifiedUTC": "2026-09-20T14:37:24Z",
-    "publicationEvidence": "artifacts/balance-20260920/publish-log.txt"
+    "publicationEvidence": "artifacts/balance-20260920/publish-log.txt",
+    "pendingPublication": "Re-entry task saved in Studio; native publish menu automation times out. Last verified published version remains v1939."
   },
   "counts": {
-    "scripts": 147,
+    "scripts": 148,
     "remoteEvents": 15,
-    "total": 162,
-    "studioTrailingNewline": 147
+    "total": 163,
+    "studioTrailingNewline": 148
   },
   "nativePlaceBackup": {
-    "file": "artifacts/balance-20260920/balance-20260920.rbxl",
-    "bytes": 9328938,
-    "sha256": "3edbc150d100a1ac3fcefb12dc01c77f8ed3a1ac24b64dda565a8a73863a66c0",
-    "purpose": "Full native final Edit copy immediately before publication as v1939."
+    "file": "artifacts/reentry-20260920/reentry-20260920.rbxl",
+    "bytes": 9331219,
+    "sha256": "3f80cb70c8bbf3164b59fbe934f0b344af3d1e3869129f8d7bba0c806aef66e1",
+    "purpose": "Full native Edit copy before final one-line stale CharacterAdded guard. Final source mirrored separately; publication pending."
   },
   "extraMirroredFilesNotInStudio": [
     "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_AutomaticAssetCaptureSender_LocalizationService.RemoteEvent.txt",
@@ -277,8 +278,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/ZyntraConfig.ModuleScript.lua",
-      "bytes": 11587,
-      "sha256": "279a268a5d8661ee09177ebc17d86e3e7c41e1d1e8cef5ece4647af13ac52fd1",
+      "bytes": 11645,
+      "sha256": "434ca9ba86954e46d6be6c8f254efa0f46b21947ca96b078e3ad59250317d716",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -411,8 +412,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 147542,
-      "sha256": "971042284f57550d896f6fe7bba8199e4785b85de9672717ed1664007177ad64",
+      "bytes": 150909,
+      "sha256": "220e0e260ea5aca336ae375528f9a5ad2e03ee3ebe7aef184b0b9b4619bd3910",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -1006,8 +1007,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/PlayerProtection.ModuleScript.lua",
-      "bytes": 6314,
-      "sha256": "da2e5ac8a2cc2a5ac3eec5e07179446035ac99a285f6af63c44c376269f9a522",
+      "bytes": 7408,
+      "sha256": "0447ca2a84e9d7f9e4c997c1eafdf450bd0c262ee69d4b0db24f3f8c26a80b2b",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -2317,8 +2318,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/ProtectionHUD.LocalScript.lua",
-      "bytes": 29091,
-      "sha256": "ae1e444760097c35fde09516fb88c8fe8df3ce3176a15a8e5a13c0c67f31d811",
+      "bytes": 30098,
+      "sha256": "4d5558cf75f36a8a403b020815ce437052f3e73f272563f31d2bdf6fa9db5470",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2477,6 +2478,20 @@
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
       "disabled": false,
       "runContext": "Enum.RunContext.Legacy"
+    },
+    {
+      "studioPath": "ServerScriptService.ReentryPlacement",
+      "segments": [
+        "ServerScriptService",
+        "ReentryPlacement"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/ReentryPlacement.ModuleScript.lua",
+      "bytes": 4473,
+      "sha256": "df169b0af66304a6216d5448464254987f2a59cd0cc44bb6bbe9d218443eef9c",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
     }
   ]
 }

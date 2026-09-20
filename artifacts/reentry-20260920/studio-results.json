@@ -1,0 +1,30 @@
+{
+  "geometry": {
+    "content": [
+      {
+        "type": "text",
+        "text": "9 Studio geometry checks passed"
+      }
+    ],
+    "isError": false
+  },
+  "deathLocation": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"protection\":false,\"source\":\"Reentry\",\"distance\":0.12250351905822754,\"accepted\":true,\"arrival\":\"-120.00138092041016, 3.724773645401001, -47.99833679199219\",\"death\":\"-120.00139617919922, 3.6022701263427734, -47.99834442138672\",\"used\":false,\"remaining\":9.991159915924073,\"anchored\":false}"
+      }
+    ],
+    "isError": false
+  },
+  "runtimeAndPaid": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"runtime\":\"{\\\"remaining\\\":9.970805168151856,\\\"source\\\":\\\"Reentry\\\",\\\"active\\\":true,\\\"anchored\\\":false,\\\"accepted\\\":true}\",\"paidPath\":\"{\\\"remaining\\\":9.98387098312378,\\\"duplicate\\\":false,\\\"active\\\":true,\\\"used\\\":true,\\\"duplicateReason\\\":\\\"ALREADY_USED\\\",\\\"accepted\\\":true}\",\"expired\":true}"
+      }
+    ],
+    "isError": false
+  },
+  "note": "MCP module requires have separate runtime state. Authoritative protection assertions use a temporary server Script in Play, recorded in runtimeAndPaid. All Play fixtures removed by Stop."
+}

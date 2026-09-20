@@ -1,3 +1,40 @@
+local checks = 0
+local function check(value, message) assert(value, message); checks += 1 end
+local function signal()
+ local s={listeners={}}
+ function s:Connect(fn) local c={Connected=true}; function c:Disconnect() self.Connected=false end; table.insert(self.listeners,{fn,c}); return c end
+ function s:Fire(...) for _,r in ipairs(self.listeners) do if r[2].Connected then r[1](...) end end end
+ return s
+end
+local function attrs(obj)
+ obj.attributes={};obj.signals={}
+ function obj:GetAttribute(k)return self.attributes[k]end
+ function obj:GetAttributeChangedSignal(k) self.signals[k]=self.signals[k]or signal();return self.signals[k]end
+ function obj:SetAttribute(k,v) local old=self.attributes[k];self.attributes[k]=v;if old~=v then self:GetAttributeChangedSignal(k):Fire()end end
+ return obj
+end
+local now=100
+local Workspace=attrs({});function Workspace:GetServerTimeNow()return now end
+local Players={PlayerRemoving=signal()}
+local RunService={IsServer=function()return true end}
+local game={GetService=function(_,name)return ({Players=Players,Workspace=Workspace,RunService=RunService})[name]end}
+local Instance={new=function() local s=signal();return{Event=s,Fire=function(_,...)s:Fire(...)end}end}
+local typeof=function(v)return type(v)=="table" and v.IsA and "Instance" or type(v)end
+local tasks={};local task={delay=function(delay,fn)table.insert(tasks,{at=now+delay,fn=fn})end}
+local function advance(seconds)
+ now+=seconds
+ local due=tasks;tasks={}
+ for _,t in ipairs(due)do if t.at<=now then t.fn()else table.insert(tasks,t)end end
+end
+local p=attrs({Parent=Players,CharacterAdded=signal(),CharacterRemoving=signal()})
+function p:IsA(name)return name=="Player"end
+local function life()
+ local hum={Health=100,Died=signal()}
+ local char={hum=hum,FindFirstChildOfClass=function(self)return self.hum end,IsDescendantOf=function()return true end}
+ return char
+end
+Workspace:SetAttribute("RoundActive",true);p:SetAttribute("InRound",true);p.Character=life()
+local Protection=(function()
 --!strict
 -- Shared server authority for Entity Shield and Emergency Re-entry grace.
 -- Capture GetContext BEFORE a yielding inventory reservation, then Activate
@@ -177,3 +214,35 @@ Players.PlayerRemoving:Connect(function(player)
 end)
 
 return table.freeze(Protection)
+
+end)()
+local ctx=Protection.GetContext(p)
+local ok,expires=Protection.Activate(p,ctx)
+check(ok and expires==105,"Shield stays five seconds")
+check(not Protection.ActivateReentry(p,ctx),"Cannot renew a paid shield as reentry")
+advance(5);check(not Protection.IsActive(p),"Shield expires")
+ctx=Protection.GetContext(p);ok,expires=Protection.ActivateReentry(p,ctx)
+check(ok and expires==115 and p:GetAttribute("PlayerProtectionSource")=="Reentry","Ten-second grace")
+check(Protection.GetContext(p)==nil,"Cannot reserve a shield during grace")
+check(not Protection.Activate(p,ctx),"Cannot stack shield during grace")
+advance(3);ok,expires=Protection.ActivateReentry(p,ctx)
+check(ok and expires==118,"Full ten seconds after streaming")
+advance(7);check(Protection.IsActive(p),"Old expiry cannot clear renewal")
+advance(3);check(not Protection.IsActive(p),"Renewed effect expires")
+local old=p.Character;p.Character=life();ctx=Protection.GetContext(p)
+check(Protection.ActivateReentry(p,ctx),"New life activates")
+p.CharacterRemoving:Fire(old);p.CharacterAdded:Fire(old);p.CharacterAdded:Fire(p.Character)
+check(Protection.IsActive(p),"Delayed old-character events preserve new grace")
+check(not Protection.IsActive(p,old),"Old character cannot borrow immunity")
+p.Character.hum.Health=0;p.Character.hum.Died:Fire()
+check(not Protection.IsActive(p),"Death clears grace")
+p.Character=life();ctx=Protection.GetContext(p);check(Protection.ActivateReentry(p,ctx),"Next life activates")
+p:SetAttribute("Escaped",true);check(not Protection.IsActive(p),"Escape clears grace")
+p:SetAttribute("Escaped",nil);ctx=Protection.GetContext(p)
+Workspace:SetAttribute("RoundActive",false);Workspace:SetAttribute("RoundActive",true)
+check(not Protection.ActivateReentry(p,ctx),"Stale round cannot activate")
+ctx=Protection.GetContext(p);Protection.ActivateReentry(p,ctx)
+Workspace:SetAttribute("SelectedLevel",2);check(not Protection.IsActive(p),"Level change clears grace")
+ctx=Protection.GetContext(p);Protection.ActivateReentry(p,ctx);Players.PlayerRemoving:Fire(p)
+check(p:GetAttribute("PlayerProtectionSource")==nil and not Protection.IsActive(p),"Disconnect clears state")
+print(tostring(checks).." production-module protection checks passed")

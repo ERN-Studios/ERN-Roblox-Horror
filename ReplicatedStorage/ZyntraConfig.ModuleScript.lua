@@ -150,7 +150,7 @@ return {
 			Name = "Emergency Re-entry",
 			Price = 29,
 			ReentryGrant = 1,
-			Description = "Adds 1 stored Emergency Re-entry credit. After dying during an active run, use it to rejoin once that round.",
+			Description = "Adds 1 stored Emergency Re-entry credit. Return to your death location with 10 seconds invisible to monsters. Unsafe locations use nearby safe ground. Once per round.",
 		},
 	},
 
