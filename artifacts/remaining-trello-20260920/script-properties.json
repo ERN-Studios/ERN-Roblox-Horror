@@ -1,0 +1,278 @@
+{
+  "StarterPlayer.StarterPlayerScripts.Field Notes Client": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.LobbyCeilingSweeps": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerScriptService.ZyntraMonetization": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.Level 2 Pool Foam Client": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.LobbyLevel3GateFlicker": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerScriptService.Crouch State Server": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__FlashlightController": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerStorage.Archive.RetiredLobbyAssets.Miso.MisoPatrol": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerScriptService.Level 1 Systems.PuzzleManager": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Client": {
+    "disabled": true,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.Level 2 Slide Controller": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterCharacterScripts.DanceEmote": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.ProtectionHUD": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.ZyntraStore": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.LobbyMusicController": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.Level 1 Sound Controller": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.PuzzleUI": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerScriptService.Level 1 Systems.MazeGenerator": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerScriptService.Level 2 Systems.Level 2 Slide Ragdoll Service": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.Level 3 Mall Manager Visual Smoother": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.Team Objective Feed": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerScriptService.LobbyPartyModeController": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.Level 2 Pool Slide Dev ESP": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.Friend Boost Client": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.Level 2 Objective UI": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterCharacterScripts.SetRunAnimation": {
+    "disabled": true,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerScriptService.FieldNotesService": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerStorage.Project Mirror.Script": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.Level2AlertClient": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.Level 1 Cable Current": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.JumpscareUI": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterCharacter.Animate": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.FlashlightController": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.SpectateController": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.EntityShakeController": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.DevCheats": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.ZyntraDetectorClient": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterCharacterScripts.DisableDefaultWalkingSound": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.Daily Rewards Client": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.Shop Display Client": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.Round Exit Client": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.RoundUI": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.Round Entry Client": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.Level 2 Lighting Controller": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerScriptService.Level 1 Systems.EntityKill": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.Lucky Wheel Client": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerScriptService.RouteMarkerService": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.NoiseReporter": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerStorage.Archive.Level2AudioBackup_20260831_NoDistantSplash.Level 2 Sound Controller": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__EntityShakeController": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.First Entry Guide": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.SoundController": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__FlashlightSync": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerScriptService.Level 1 Systems.EntityAnimation": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerScriptService.FlashlightSync": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.Level 3 Sound Controller": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerStorage.Project Mirror.IMPORTANT": {
+    "disabled": true,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.Level 3 Table Hiding Client": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.Level 2 Entity Audio": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.MasterTuningClient": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerScriptService.ZyntraDetectorService": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__NoiseReporter": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerScriptService.Level 1 Systems.EntityAI": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerScriptService.GameManager": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  },
+  "ServerScriptService.AvatarNormalize": {
+    "disabled": false,
+    "runContext": "Enum.RunContext.Legacy"
+  }
+}

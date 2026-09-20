@@ -8,6 +8,7 @@ local ServerStorage = game:GetService("ServerStorage")
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 
+local SlideSafety = require(ReplicatedStorage:WaitForChild("SlideContinuationSafety"))
 local Builder = {}
 local C = Configuration.Colors
 
@@ -1603,6 +1604,7 @@ local function makeArrivalElevator(parent: Instance, room: {[string]: any}): (Mo
 	local p = worldPosition(room)
 	local visual = Instance.new("Model")
 	visual.Name = "Level 2 Exit Slide Continuation"
+	visual.ModelStreamingMode = Enum.ModelStreamingMode.Atomic
 	visual:SetAttribute("Level3_Level2ExitTube", true)
 	visual:SetAttribute("Level3_ProgressionLandmark", true)
 	visual.Parent = parent
@@ -1616,6 +1618,10 @@ local function makeArrivalElevator(parent: Instance, room: {[string]: any}): (Mo
 	-- The bore still finishes level with the landing-room floor so the outlet is
 	-- a slide mouth rather than a drop.
 	local tubeLength, rise, radius = 400, 115, 8
+	local shellThickness, runoutThickness = .30 * 1.5, .60 * 1.5
+	local shellRadius = radius + (shellThickness - .30) * .5
+	visual:SetAttribute("Level3_SlideBoreRadius", radius)
+	visual:SetAttribute("Level3_SlideWallThickness", shellThickness)
 	-- A longer run leaves room for six riders, spaced uphill before the rear cap.
 	-- The gentle curve still uses 32 sections (panels shorter than 14.6 studs) and the
 	-- same 20-sided bore, preserving the existing shell/collision part budget.
@@ -1681,9 +1687,9 @@ local function makeArrivalElevator(parent: Instance, room: {[string]: any}): (Mo
 				:VectorToWorldSpace(radialZero).Unit
 			local tangent = segmentAxis:Cross(radial).Unit
 			local panel = part(visual, "Level 2 Exit Slide Fiberglass Shell",
-				CFrame.fromMatrix(segmentCenter + radial * radius, segmentAxis, radial, tangent),
-				Vector3.new(segmentLength + .14, .30,
-					2 * radius * math.tan(math.pi / shellSegments) + .06),
+				CFrame.fromMatrix(segmentCenter + radial * shellRadius, segmentAxis, radial, tangent),
+				Vector3.new(segmentLength + 1, shellThickness,
+					2 * shellRadius * math.tan(math.pi / shellSegments) + .06),
 				shellColor, Enum.Material.SmoothPlastic)
 			panel.CanCollide = true
 			panel.CanTouch = false
@@ -1697,9 +1703,9 @@ local function makeArrivalElevator(parent: Instance, room: {[string]: any}): (Mo
 		local radialDown = (downSeed - segmentAxis * downSeed:Dot(segmentAxis)).Unit
 		local floorTangent = segmentAxis:Cross(radialDown).Unit
 		local runout = part(visual, "Level 2 Exit Slide Runout",
-			CFrame.fromMatrix(segmentCenter + radialDown * (radius + .30),
+			CFrame.fromMatrix(segmentCenter + radialDown * (radius + runoutThickness * .5),
 				segmentAxis, radialDown, floorTangent),
-			Vector3.new(segmentLength + .16, .60, 11.8),
+			Vector3.new(segmentLength + 1, runoutThickness, 11.8),
 			shellShadow, Enum.Material.SmoothPlastic)
 		runout.CanCollide = true
 		runout.CastShadow = false
@@ -1718,6 +1724,7 @@ local function makeArrivalElevator(parent: Instance, room: {[string]: any}): (Mo
 			end
 		end
 	end
+	visual:SetAttribute("Level3_SlideCollisionPartCount", pathSections * (shellSegments + 1))
 	visual:SetAttribute("Level3_SlideRise", rise)
 	visual:SetAttribute("Level3_SlideSlipback", true)
 	visual:SetAttribute("Level3_SlideLength", tubeLength)
@@ -1835,6 +1842,7 @@ local function makeArrivalElevator(parent: Instance, room: {[string]: any}): (Mo
 	-- Fast enough to read as the tail of a long slide; slow enough that the
 	-- arrival into the mall is survivable and controllable.
 	local SLIDE_MINIMUM_SPEED = 48
+	local riders = setmetatable({}, {__mode = "k"})
 	local slipAccumulator = 0
 	local slipConnection: RBXScriptConnection?
 	slipConnection = RunService.Heartbeat:Connect(function(deltaTime)
@@ -1861,6 +1869,9 @@ local function makeArrivalElevator(parent: Instance, room: {[string]: any}): (Mo
 			local humanoid = character and character:FindFirstChildOfClass("Humanoid")
 			local root = character and character:FindFirstChild("HumanoidRootPart")
 			if humanoid and humanoid.Health > 0 and root and root:IsA("BasePart") then
+				if player:GetAttribute("InRound") == true and workspace:GetAttribute("SelectedLevel") == 3 then
+					riders[character] = SlideSafety.Apply(visual, character, riders[character], true) or nil
+				end
 				local alpha = (mouthX - root.Position.X) / tubeLength
 				local pathY = centerY + rise * alpha * alpha
 				local insideBore = alpha > .025 and alpha < .99

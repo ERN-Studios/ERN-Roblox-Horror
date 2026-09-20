@@ -42,10 +42,13 @@ raycastParams.RespectCanCollide = true
 
 local activeSlide
 local pendingRestore
+local SlideSafety = require(ReplicatedStorage:WaitForChild("SlideContinuationSafety"))
+local continuationCharacter, continuationTube
+local continuationEngaged = false
 
 -- GameManager keeps a Level 2 continuer anchored and covered until this client
 -- can see real Level 3 bore collision. RequestStreamAroundAsync completion by
--- itself is not treated as readiness; a nearby tagged BasePart must exist too.
+-- itself is not readiness; the complete collision shell and floor must exist.
 if level3SlideStream and level3SlideStream:IsA("RemoteEvent") then
 	level3SlideStream.OnClientEvent:Connect(function(action, token, position, timeout)
 		if action ~= "request" or type(token) ~= "string"
@@ -59,14 +62,7 @@ if level3SlideStream and level3SlideStream:IsA("RemoteEvent") then
 				local world = Workspace:FindFirstChild("Level 3 Generated World")
 				local tube = world and world:FindFirstChild("Level 2 Exit Slide Continuation", true)
 				if tube and tube:GetAttribute("Level3_Level2ExitTube") == true then
-					for _, object in ipairs(tube:GetDescendants()) do
-						if object:IsA("BasePart") and object.CanCollide
-							and object:GetAttribute("Level3_ProgressionSlide") == true
-							and (object.Position - position).Magnitude <= 28 then
-							ready = true
-							break
-						end
-					end
+					ready = SlideSafety.Ready(tube, position)
 				end
 				if not ready then task.wait(.05) end
 			until ready or os.clock() >= deadline
@@ -625,6 +621,19 @@ RunService.PreSimulation:Connect(function(deltaTime)
 		or humanoid.Health <= 0 then
 		finishSliding(humanoid ~= nil and humanoid.Health > 0, false)
 		return
+	end
+	if Workspace:GetAttribute("SelectedLevel") == 3 then
+		if continuationCharacter ~= character then
+			continuationCharacter, continuationTube, continuationEngaged = character, nil, false
+		end
+		if not continuationTube or not continuationTube.Parent then
+			local world = Workspace:FindFirstChild("Level 3 Generated World")
+			continuationTube = world and world:FindFirstChild("Level 2 Exit Slide Continuation", true)
+		end
+		continuationEngaged = SlideSafety.Apply(continuationTube, character, continuationEngaged)
+		if activeSlide and continuationEngaged then activeSlide.LastPosition = root.Position end
+	else
+		continuationCharacter, continuationTube, continuationEngaged = nil, nil, false
 	end
 	if root.Anchored then
 		if activeSlide and exitTransitionOwnsSlide(activeSlide) then

@@ -2208,12 +2208,9 @@ local function endTableCheck(session: any, flush: boolean)
 	publishTableCheck(session, nil, 0)
 	if not anchor then return end
 	session.AnchorCheckCooldown[anchor] = os.clock() + TableCheckTuning.AnchorCooldownSeconds
-	if flush and anchor.Parent then
-		-- Unprotected occupants come out on the far side, with the
-		-- immunity the Hiding Controller grants them. Leaving during the window
-		-- was the safe option; this is the consequence of not taking it.
-		HidingController.FlushAnchor(anchor, session.Root.Position)
-	end
+	-- A completed inspection is a scare, not an involuntary exit. The hiding
+	-- controller keeps the player anchored and non-colliding until they leave.
+
 end
 
 -- Cancel only this exact protected life; unrelated players and CD noise survive.
@@ -2334,7 +2331,7 @@ local function updateTableCheck(session: any, now: number): boolean
 			return false
 		end
 		-- Server time: TableCheckEndsAt is the value the occupants' banner counts
-		-- down against, so the flush lands when the warning says it will.
+		-- down against, so the inspection ends when the warning says it will.
 		if workspace:GetServerTimeNow() < session.TableCheckEndsAt then return true end
 		endTableCheck(session, true)
 		trackNearestBlackoutPlayer(session, now)
@@ -2350,8 +2347,9 @@ local function updateTableCheck(session: any, now: number): boolean
 			return false
 		end
 		-- The selected player remains the target under the table. Approach its
-		-- clear perimeter, announce the existing warning, then flush and resume
-		-- the chase. Random patrol bias and cooldowns do not grant hiding immunity.
+		-- clear perimeter, announce the existing warning, then resume
+		-- its search without moving the occupants. Respect the inspection cooldown.
+		if now < (session.AnchorCheckCooldown[targetAnchor] or 0) then return false end
 		if not tableCheckApproachClear(session, targetAnchor) then return false end
 		beginTableCheck(session, targetAnchor, now)
 		return true

@@ -35,6 +35,7 @@ return {
 	Items = {
 		SpeedPotion = {
 			Name = "Speed Potion",
+			PreviewDescription = "CONSUMABLE · 1 stored potion. +30% movement speed for 6s. One use per round. No stamina change.",
 			TokenCost = 3,
 			DurationSeconds = 6,
 			SpeedMultiplier = 1.30,
@@ -46,6 +47,7 @@ return {
 		},
 		RouteMarker = {
 			Name = "Route Marker Pack",
+			PreviewDescription = "CONSUMABLE · 3 stored markers. Your team sees them; at most 3 of yours remain placed. Placed markers disappear when the round ends.",
 			TokenCost = 2,
 			PackSize = 3,
 			MaxActive = 3,
@@ -88,7 +90,13 @@ return {
 		StartingTokens = 25,
 	},
 
+	Detector = {Range=60, HighRange=22, Cooldown=20, ReadingSeconds=4},
 	Passes = {
+  EntityDetector = {
+   Id=1982715834, IconId=134413710349950, Name="Zyntra Entity Detector", Price=149,
+   Description="Permanent detector. Press Z / D-pad left or tap SCAN during a run for a 4-second LOW/MEDIUM/HIGH reading within 60 studs. 20-second cooldown. No exact locations and no guaranteed safety. Free simulated demo in the lobby shop.",
+   PreviewDescription="PERMANENT · 60-stud snapshot for 4s. LOW / MEDIUM / HIGH. 20s cooldown. No exact locations or guaranteed safety.",
+  },
 		Supporter = {
 			Id = 1941938256,
 			-- The previous asset was hazmat-themed and did not represent Supporter.
@@ -105,6 +113,7 @@ return {
 			Id = 1945402536,
 			IconId = 105990911046404,
 			Name = "Advanced Equipment",
+			PreviewDescription = "PERMANENT · Focused torch (+45% range, same drain), +50% base stamina, hazmat colors and one +5% stamina/battery upgrade. Demo includes colors.",
 			StaminaBonus = 0.50, -- additive capacity bonus; existing upgrades remain
 			Price = 149,
 			Description = "Permanent focused flashlight: a narrower beam with 45% more range and the same battery drain. Press Y / R3 or hold the torch on touch to switch. Includes permanent +50% base stamina on top of existing upgrades, hazmat colors and one " .. PCT .. " Stamina/Battery upgrade. Existing owners get focus automatically.",
@@ -113,6 +122,7 @@ return {
 			Id = 1946086261,
 			IconId = 120190657040752,
 			Name = "Glowstick Customizer",
+			PreviewDescription = "PERMANENT · Choose the color of every glowstick you deploy. Cosmetic only; preview colors on your avatar without buying.",
 			Price = 99,
 			Description = "Permanently unlock the glowstick color picker for every glowstick you deploy. Cosmetic only.",
 		},
@@ -123,6 +133,7 @@ return {
 			Id = 3713829859,
 			IconId = 132485864297801,
 			Name = "Expedition Pack",
+			PreviewDescription = "CONSUMABLE · 1 re-entry after death (10s protection), 1 shield charge (5s), 3 route markers. Stored until used. Repeatable purchase.",
 			IconText = "PACK",
 			Price = 69,
 			BundleGrant = {Reentry = 1, Shield = 1, RouteMarkers = 3},

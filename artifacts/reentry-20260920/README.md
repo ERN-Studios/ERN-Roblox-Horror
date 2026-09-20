@@ -25,4 +25,4 @@ The existing once-per-round, request ownership, round teardown, credit reservati
 
 Sources were changed using complete fresh Source/editor comparisons, then exact readbacks. Temporary test fixtures lived only in Play and were removed by Stop. reentry-20260920.rbxl is a complete native Edit backup taken before the final one-line stale CharacterAdded guard; the exact final PlayerProtection source is mirrored separately. source-inventory.json records source paths/classes and fresh hashes.
 
-Publication is pending: native UI automation repeatedly returned timeoutReached after the successful Download a Copy. Studio MCP remains connected; code is installed in the open Studio editor. Last verified live version is v1939, before this task. Trello remains open until publication is verified.
+The owner manually published the completed re-entry change as v1942 at 15:59:51 UTC (17:59:51 Copenhagen), verified from PublishSuccessful, Place published and the v1942 log link. Trello card 109 is marked complete and moved to Done. The earlier native UI timeout is resolved by that manual publication.

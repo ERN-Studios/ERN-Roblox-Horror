@@ -1,6 +1,6 @@
 {
   "formatVersion": 2,
-  "source": "Studio-authoritative snapshot after death-location re-entry with ten-second grace. Exact source/editor parity verified; publication pending native UI recovery.",
+  "source": "Studio-authoritative final snapshot: safer slides and hiding, product previews, daily research and Entity Detector; published v1947.",
   "finalNewlineContract": "Exact Studio source bytes including final newline; no newline exceptions.",
   "studio": {
     "name": "BACKROOMS: STAY QUIET [CO-OP HORROR]",
@@ -8,23 +8,22 @@
     "placeId": 131311258779917,
     "universeId": 10559217407,
     "observedPlaceVersion": 1933,
-    "capturedUTC": "2026-09-20T15:50:14Z",
-    "publishedPlaceVersion": 1939,
-    "publicationVerifiedUTC": "2026-09-20T14:37:24Z",
-    "publicationEvidence": "artifacts/balance-20260920/publish-log.txt",
-    "pendingPublication": "Re-entry task saved in Studio; native publish menu automation times out. Last verified published version remains v1939."
+    "capturedUTC": "2026-09-20T17:19:26Z",
+    "publishedPlaceVersion": 1947,
+    "publicationVerifiedUTC": "2026-09-20T17:07:56Z",
+    "publicationEvidence": "artifacts/remaining-trello-20260920/publish-log.txt"
   },
   "counts": {
-    "scripts": 148,
+    "scripts": 154,
     "remoteEvents": 15,
-    "total": 163,
-    "studioTrailingNewline": 148
+    "total": 169,
+    "studioTrailingNewline": 154
   },
   "nativePlaceBackup": {
-    "file": "artifacts/reentry-20260920/reentry-20260920.rbxl",
-    "bytes": 9331219,
-    "sha256": "3f80cb70c8bbf3164b59fbe934f0b344af3d1e3869129f8d7bba0c806aef66e1",
-    "purpose": "Full native Edit copy before final one-line stale CharacterAdded guard. Final source mirrored separately; publication pending."
+    "file": "artifacts/remaining-trello-20260920/remaining-trello-20260920.rbxl",
+    "bytes": 9337807,
+    "sha256": "d2dbfed1b1d6c2c00b6b04caffe53ccada2bc02a65a14acf9c6e72fb6b370f1b",
+    "purpose": "Full native Edit backup of final v1947 source and non-script state before publication."
   },
   "extraMirroredFilesNotInStudio": [
     "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_AutomaticAssetCaptureSender_LocalizationService.RemoteEvent.txt",
@@ -229,6 +228,20 @@
       "status": "synced"
     },
     {
+      "studioPath": "ReplicatedStorage.SlideContinuationSafety",
+      "segments": [
+        "ReplicatedStorage",
+        "SlideContinuationSafety"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/SlideContinuationSafety.ModuleScript.lua",
+      "bytes": 3693,
+      "sha256": "a40927b8d10c18776a1ba9e1c3241940a68766c1e76ee17504c3db2d698e1d6c",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
+    },
+    {
       "studioPath": "ReplicatedStorage.UIDevice",
       "segments": [
         "ReplicatedStorage",
@@ -236,8 +249,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/UIDevice.ModuleScript.lua",
-      "bytes": 99714,
-      "sha256": "89b0a5a0f46f7f72e15d08b1741dd00970606548e0ee646a1c09aaf33aa841c2",
+      "bytes": 99881,
+      "sha256": "c64ba7abc2f7efb80e9dbae241bc3bb831f19ea8902fde30b159af33bf323f2f",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -278,8 +291,22 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/ZyntraConfig.ModuleScript.lua",
-      "bytes": 11645,
-      "sha256": "434ca9ba86954e46d6be6c8f254efa0f46b21947ca96b078e3ad59250317d716",
+      "bytes": 12973,
+      "sha256": "4363c2e6cc51ef5f0bcf39adfb945562942f9172b1a9aa825eb1257d05e82924",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraDailyResearch",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraDailyResearch"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/ZyntraDailyResearch.ModuleScript.lua",
+      "bytes": 1496,
+      "sha256": "c52745e7c9ab71d055d66512c8522f6629b1bafe39dc0079dc05a6da4e348515",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -292,8 +319,22 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/ZyntraDailyRewardsPage.ModuleScript.lua",
-      "bytes": 36624,
-      "sha256": "00a94f9c972cba15fbd6f2f9ec0ff04c077a08cc4e6a7a008b38722e4da2a219",
+      "bytes": 38146,
+      "sha256": "38e78dae01d1d96980660c75ac7c6c71f2cee32343ec6b1a95db8c82799747c9",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraDetectorVisual",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraDetectorVisual"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/ZyntraDetectorVisual.ModuleScript.lua",
+      "bytes": 1407,
+      "sha256": "66e485e176031b84941b13774b80df5a1b77f2031b31cd07d81c74ca51169d33",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -497,8 +538,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
-      "bytes": 96825,
-      "sha256": "56e84f2983233d31a0840640c440845fb6a18131a7f662f283e4e35338d18607",
+      "bytes": 97116,
+      "sha256": "aad1f84e087ecda4b443b0fcb74c33433cfd89cbe8bbee61c2b8c0db345d67c9",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -756,8 +797,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua",
-      "bytes": 265160,
-      "sha256": "78634c03df3e8365109d776f8a298f3f148be60dadd813c05d6596181d1c17e9",
+      "bytes": 265471,
+      "sha256": "9995fc66f739468715976bd16f004ee6de28dbbd69bf1e9ac10d2a4fd515a9a1",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -816,8 +857,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Hiding Controller.ModuleScript.lua",
-      "bytes": 24793,
-      "sha256": "2ce6b52d642a6e81af90237f39fecd5e83cd83152723de5a285a417eaf18589d",
+      "bytes": 23157,
+      "sha256": "0fdb59a28918e95c151a6508a4241274529fe75f05522cdf98cbf4baf98c2b0e",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -846,8 +887,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Mall Manager AI Controller.ModuleScript.lua",
-      "bytes": 181945,
-      "sha256": "4a5957d086658ee535d8e8b0c7c1e298a91b4f9e58421db177470afbfe39ea68",
+      "bytes": 181869,
+      "sha256": "fa1771e588461ede4d6fc0b16dc23b60005694240a72b48fc46141f48040edb4",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -906,8 +947,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Test Suite.ModuleScript.lua",
-      "bytes": 197871,
-      "sha256": "f9406dbc7b436cb75b385b74736f01ca90199f48cd65841a377766bd2ea95bf3",
+      "bytes": 196197,
+      "sha256": "2f33a1b6a4accd0d491837ebb078824680cb3591c1cbf09c820e30bf05fa66fe",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -921,8 +962,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 World Builder.ModuleScript.lua",
-      "bytes": 104627,
-      "sha256": "a3a41d76f6dc6d13d782cb5dab5595757a5cd9b1d1b440f6605f310c56bf983d",
+      "bytes": 105403,
+      "sha256": "1ab3707df9f7dec093fe610478ad67bc563243bff72c52c300b7a3cd2378a652",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -1028,6 +1069,20 @@
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
     },
     {
+      "studioPath": "ServerScriptService.ReentryPlacement",
+      "segments": [
+        "ServerScriptService",
+        "ReentryPlacement"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/ReentryPlacement.ModuleScript.lua",
+      "bytes": 4473,
+      "sha256": "df169b0af66304a6216d5448464254987f2a59cd0cc44bb6bbe9d218443eef9c",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
+    },
+    {
       "studioPath": "ServerScriptService.Round Completion Routing",
       "segments": [
         "ServerScriptService",
@@ -1128,6 +1183,36 @@
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
     },
     {
+      "studioPath": "ServerScriptService.ZyntraDetectorSensing",
+      "segments": [
+        "ServerScriptService",
+        "ZyntraDetectorSensing"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/ZyntraDetectorSensing.ModuleScript.lua",
+      "bytes": 1819,
+      "sha256": "aed8a9a492ea2ce58ad112e3806873a6730d7b3d8906470888350b47772f05ab",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "studioPath": "ServerScriptService.ZyntraDetectorService",
+      "segments": [
+        "ServerScriptService",
+        "ZyntraDetectorService"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/ZyntraDetectorService.Script.lua",
+      "bytes": 2229,
+      "sha256": "9068f1e5729eda73de1b1c88141bc57a8656692fbbe9b3131c0f5d6349dae317",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
+    },
+    {
       "studioPath": "ServerScriptService.ZyntraMonetization",
       "segments": [
         "ServerScriptService",
@@ -1135,8 +1220,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/ZyntraMonetization.Script.lua",
-      "bytes": 171539,
-      "sha256": "17ebf3241e50a3d3390e5c3887c381ee2373aa4b1fe4d42af780679c43a66a08",
+      "bytes": 173312,
+      "sha256": "52b35b60f9274710c64e7378d4bdeb1906bec02ee25aeb8b32367838c6fe026e",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2080,8 +2165,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 2 Slide Controller.LocalScript.lua",
-      "bytes": 30379,
-      "sha256": "4e612759f17761f31e3f2a473fe0ae28c0772e51fc3eea594b56d0355d6c92b3",
+      "bytes": 31003,
+      "sha256": "5794562f45419c43f20fd7f8351ec16e05fd708309c71101c30dfd47a0055b93",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2318,8 +2403,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/ProtectionHUD.LocalScript.lua",
-      "bytes": 30098,
-      "sha256": "4d5558cf75f36a8a403b020815ce437052f3e73f272563f31d2bdf6fa9db5470",
+      "bytes": 31343,
+      "sha256": "9cbf7fde3feed6da2b10bc68db95e67b99dfd4e34f3d1fa776e14a7e5aa1df1b",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2403,8 +2488,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Shop Display Client.LocalScript.lua",
-      "bytes": 25403,
-      "sha256": "cab43e2abfa90f79a6eabf3e55f1c7ff422d4f0a584c9443a9ea86521bf60676",
+      "bytes": 31051,
+      "sha256": "5a38c339a7f01dda5d291cf3ba60631cc7b0adde2592ecadb5438cef064523f1",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2463,6 +2548,23 @@
       "runContext": "Enum.RunContext.Legacy"
     },
     {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.ZyntraDetectorClient",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "ZyntraDetectorClient"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/ZyntraDetectorClient.LocalScript.lua",
+      "bytes": 1674,
+      "sha256": "7f62e5bc82e5b642bc641add78420fed9fcd068951bb7f9832d05f3e47db2cb9",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
+    },
+    {
       "studioPath": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
       "segments": [
         "StarterPlayer",
@@ -2471,27 +2573,13 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
-      "bytes": 187230,
-      "sha256": "610e31592d55508b0dafa80f2de96df7d0af5d7ea66b9a41c0efeecac2d4ecdc",
+      "bytes": 187349,
+      "sha256": "702d3001f2f30db1a7a4c95d09e900ddc8d5d0eebb64c40d6f5e3d4da898488a",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
       "disabled": false,
       "runContext": "Enum.RunContext.Legacy"
-    },
-    {
-      "studioPath": "ServerScriptService.ReentryPlacement",
-      "segments": [
-        "ServerScriptService",
-        "ReentryPlacement"
-      ],
-      "className": "ModuleScript",
-      "file": "ServerScriptService/ReentryPlacement.ModuleScript.lua",
-      "bytes": 4473,
-      "sha256": "df169b0af66304a6216d5448464254987f2a59cd0cc44bb6bbe9d218443eef9c",
-      "status": "synced",
-      "sourceEqualsEditor": true,
-      "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
     }
   ]
 }

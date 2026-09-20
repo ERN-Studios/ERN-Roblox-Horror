@@ -1430,6 +1430,8 @@ local function startPuzzle()
 			updateCarriedFuse(player, session.carried[player])
 			status:FireClient(player, "carry", session.carried[player])
 			box.count += 1
+			local research=game:GetService("ServerStorage"):FindFirstChild("ZyntraResearchProgress")
+			if research then research:Fire(player,"Fuse") end
 			updateEntityObjectiveTarget()
 			showFuseInBox(box, box.count)
 			box.ind.Color = Color3.fromRGB(235, 165, 45)
@@ -1526,6 +1528,8 @@ local function startPuzzle()
 			if lever.latched then return end
 			if lever.pullSound then lever.pullSound:Play() end
 			lever.latched = true
+			local research=game:GetService("ServerStorage"):FindFirstChild("ZyntraResearchProgress")
+			if research then research:Fire(player,"Lever") end
 			lever.prompt.Enabled = false
 			setLeverHandle(lever, true)
 			updateEntityObjectiveTarget()

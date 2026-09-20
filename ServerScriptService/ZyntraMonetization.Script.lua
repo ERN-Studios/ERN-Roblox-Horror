@@ -219,6 +219,7 @@ end
 local ITEM_KEYS = {"SpeedPotion", "RouteMarker"}
 local ITEM_CONFIG = Config.Items or {}
 local DAILY_REWARDS = Config.DailyRewards or {}
+local DailyResearch = require(ReplicatedStorage:WaitForChild("ZyntraDailyResearch"))
 
 -- The clock every day comparison goes through, in one place so a test can pin
 -- "today" and "now". Nothing else in this file reads the date.
@@ -286,6 +287,7 @@ local function normalizeDaily(value)
 		-- existed, and the first daily transaction rolls it onto today. Reading the
 		-- clock here instead would make normalization depend on it.
 		Day = savedDay("Day"),
+		Research = DailyResearch.Normalize(saved.Research),
 		PlaytimeSeconds = wholeCount(saved.PlaytimeSeconds),
 		Claimed = claimed,
 		WheelDay = wheelDay,
@@ -317,6 +319,7 @@ local function rollDaily(data, today)
 	daily.Day = today
 	daily.PlaytimeSeconds = 0
 	daily.Claimed = {}
+	daily.Research = DailyResearch.Normalize(nil)
 	return true
 end
 
@@ -402,6 +405,7 @@ local function dailyPublic(data, player)
 		PlaytimeSeconds = (sameDay and daily.PlaytimeSeconds or 0)
 			+ pendingSeconds,
 		Claimed = sameDay and daily.Claimed or {},
+		Research = DailyResearch.Public(daily.Research, sameDay),
 		WheelDay = daily.WheelDay,
 		WheelLast = daily.WheelLast,
 		SecondsToReset = secondsToReset(),
@@ -433,7 +437,7 @@ local function newProfile()
 		-- Additive: every one of them normalizes from nil, so schema 4 saves
 		-- written before they existed load without a version bump.
 		Items = {SpeedPotion = 0, RouteMarker = 0},
-		Daily = {PlaytimeSeconds = 0, Claimed = {}},
+		Daily = {PlaytimeSeconds = 0, Claimed = {}, Research = DailyResearch.Normalize(nil)},
 		FieldNotes = {Discovered = {}, Serial = 0},
 		DonationRobux = 0,
 		UtilityRobux = 0,
@@ -747,6 +751,7 @@ local function publicProfile(data, player)
 		OwnsSupporter = false,
 		OwnsAdvancedEquipment = false,
 		OwnsCosmeticEquipment = false,
+		OwnsEntityDetector = false,
 	}
 	for _, setting in ipairs(ACCESSIBILITY_SETTINGS) do
 		result[setting.Key] = accessibilityValue(data, setting)
@@ -891,6 +896,7 @@ local function enrichedPublicProfile(player)
 		result.OwnsSupporter = player:GetAttribute("ZyntraOwnsSupporter") == true
 		result.OwnsAdvancedEquipment = player:GetAttribute("ZyntraOwnsAdvancedEquipment") == true
 		result.OwnsCosmeticEquipment = player:GetAttribute("ZyntraOwnsCosmeticEquipment") == true
+		result.OwnsEntityDetector = player:GetAttribute("ZyntraOwnsEntityDetector") == true
 	end
 	return result
 end
@@ -2069,6 +2075,7 @@ local function refreshPasses(player)
 	player:SetAttribute("ZyntraOwnsSupporter", supporter)
 	player:SetAttribute("ZyntraOwnsAdvancedEquipment", advanced)
 	player:SetAttribute("ZyntraOwnsCosmeticEquipment", cosmetic)
+	player:SetAttribute("ZyntraOwnsEntityDetector", passOwnership(player,"EntityDetector",Config.Passes.EntityDetector))
 	for key, pass in pairs(Config.Donations or {}) do
 		if pass.Kind == "GamePass" then
 			player:SetAttribute("ZyntraOwns" .. key, passOwnership(player, key, pass))
@@ -2823,6 +2830,32 @@ local function dailyMutate(player, body)
 	return committed and accepted, message
 end
 
+-- Only validated server gameplay emits this event; clients cannot submit progress.
+local researchProgress = ServerStorage:FindFirstChild("ZyntraResearchProgress")
+if not researchProgress then
+ researchProgress = Instance.new("BindableEvent")
+ researchProgress.Name="ZyntraResearchProgress"
+ researchProgress.Parent=ServerStorage
+end
+researchProgress.Event:Connect(function(player, key)
+ if typeof(player)~="Instance" or not player:IsA("Player") or player.Parent~=Players
+  or (key~="Fuse" and key~="Lever") or not sessions[player] then return end
+ local earnedDay=utcDay()
+ for attempt=1,3 do
+  if utcDay()~=earnedDay or player.Parent~=Players then return end
+  local session=sessions[player]
+  if not session or session.closing then return end
+  if session.data.Daily.Day==earnedDay and session.data.Daily.Research[key] then return end
+  local done=dailyMutate(player,function(data,today)
+   if today~=earnedDay then return false end
+   local changed,amount=DailyResearch.Complete(data,key)
+   return changed, changed and ("Daily research complete: +"..amount.." Research Token") or nil,"success"
+  end)
+  if done then return end
+  task.wait(attempt)
+ end
+end)
+
 local function flushPlaytime(player)
 	local state = playtimeSessions[player]
 	if not state or wholeCount(state.unflushedSeconds) <= 0 then return false end
@@ -3433,6 +3466,8 @@ levelCompletedEvent.Event:Connect(function(player, level, friendCount)
 		data.FriendBoostTenths = tenths % 10
 		data.Tokens += base + bonus
 		data.CompletedLevels += 1
+		rollDaily(data, utcDay())
+		if tracked then DailyResearch.Complete(data, "Clear") end
 		if tracked then data.LevelsCleared[tostring(cleared)] = true end
 		local message = ("+%d Zyntra Research Tokens for completing the level."):format(base + bonus)
 		if friends > 0 then
