@@ -702,6 +702,11 @@ end
 -- know: the playtime seconds that have not been flushed yet, whether they are
 -- accruing right now, and the speed boost that is running. Called without one
 -- (a profile that is not a live session) those simply read as "none".
+local function advancedStaminaBonus(player)
+	return player and player:GetAttribute("ZyntraOwnsAdvancedEquipment") == true
+		and Config.Passes.AdvancedEquipment.StaminaBonus or 0
+end
+
 local function publicProfile(data, player)
 	if not data then return nil end
 	local noteCount, noteTotal = fieldNoteProgress(data)
@@ -718,7 +723,7 @@ local function publicProfile(data, player)
 		SpeedBoostUntil = player and player:GetAttribute("ZyntraSpeedBoostUntil") or 0,
 		StaminaLevel = data.StaminaLevel,
 		BatteryLevel = data.BatteryLevel,
-		StaminaPercent = data.StaminaLevel * PERCENT_PER_LEVEL,
+		StaminaPercent = data.StaminaLevel * PERCENT_PER_LEVEL + advancedStaminaBonus(player) * 100,
 		BatteryPercent = data.BatteryLevel * PERCENT_PER_LEVEL,
 		CompletedLevels = data.CompletedLevels,
 		-- The unpaid tenth-of-a-token remainder, carried so the client can see it
@@ -835,7 +840,7 @@ local function applyAttributes(player, data)
 	-- Raw profile numbers (tokens, levels, credits) travel only in the
 	-- ZyntraProfileChanged/ZyntraGetProfile payloads; gameplay consumes the two
 	-- derived multipliers plus the cosmetic colors below.
-	player:SetAttribute("ZyntraStaminaMultiplier", 1 + data.StaminaLevel * step)
+	player:SetAttribute("ZyntraStaminaMultiplier", 1 + data.StaminaLevel * step + advancedStaminaBonus(player))
 	player:SetAttribute("ZyntraBatteryMultiplier", 1 + data.BatteryLevel * step)
 	player:SetAttribute("ZyntraHazmatColor", readColor(data.Colors.Hazmat, Config.Colors.HazmatDefault))
 	player:SetAttribute("ZyntraGlowstickColor", readColor(data.Colors.Glowstick, Config.Colors.GlowstickDefault))
@@ -2021,6 +2026,8 @@ local PASS_RECHECK_DELAY = 20
 local PASS_RECHECK_LIMIT = 3
 
 local function passOwnership(player, key, pass)
+	-- Owner-authorized permanent in-experience entitlement. Does not grant other passes.
+	if key == "AdvancedEquipment" and player.UserId == 9488575949 then return true end -- LaverSneglen
 	local purchases = passPurchases[player]
 	if purchases and purchases[key] then return true end
 	local answer = ownsPass(player, pass)
@@ -2106,6 +2113,10 @@ local function refreshPasses(player)
 			if sessions[player] and passReadFailed[player] then refreshPasses(player) end
 		end)
 	end
+	-- Existing owners may have already received their one-time grant, so refresh
+	-- derived capacity even when mutate made no profile change. Never award levels twice.
+	if not sessions[player] then return end
+	applyAttributes(player, sessions[player].data)
 	pushProfile(player)
 end
 

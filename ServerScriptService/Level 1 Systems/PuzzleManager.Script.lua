@@ -66,7 +66,6 @@ end
 local Master = require(game:GetService("ReplicatedStorage"):WaitForChild("MasterConfiguration"))
 local FUSES_PER_BOX = 1      -- fuses each box needs
 local SPAWN_MULT    = Master.Effective("L1_FuseSpawnMultiplier", 2)  -- fuses spawned = needed x this
-local LEVER_WINDOW  = Master.Effective("L1_LeverWindowSeconds", 10)  -- seconds all levers must be on together
 local FLICK_PER_FUSE = 0.6   -- FlickerBoost added per fuse inserted
 local SPEED_PER_FUSE = Master.Effective("L1_SpeedPerFuse", 0.06)  -- EntitySpeedMul added per fuse
 local END_SPEED_MUL  = 1.3   -- entity speed once the exit opens (finale boost)
@@ -1028,7 +1027,7 @@ local function makeLever(cf, folder)
 	model.Parent = folder
 	return { model = model, cf = cf, plate = plate, handle = handle, knob = knob,
 		prompt = pp, statusLight = statusLight, statusLabel = statusLabel,
-		pullSound = pullSound, activeUntil = 0 }
+		pullSound = pullSound, latched = false }
 end
 
 local function setLeverHandle(lever, pulled)
@@ -1198,15 +1197,15 @@ local function startPuzzle()
 			roundPlayerSet[player] = true
 		end
 	end
-	local n = math.clamp(#roundPlayers, 1, 6) -- one box, lever, and paired cable per player
-	local boxCount = n
+	local n = math.clamp(#roundPlayers, 1, 6)
+	local boxCount = math.ceil(n / 2) -- 1–2 players: 1 pair; 3–4: 2; 5–6: 3
 	-- Replicate the generated circuit count for the in-elevator guide. This is
 	-- deliberately tied to the frozen puzzle session, not total server players,
 	-- so spectators and players who join later cannot advertise nonexistent cables.
 	workspace:SetAttribute("Level1ActiveCircuitCount", boxCount)
 	local fusesNeeded = boxCount * FUSES_PER_BOX
 	local fuseCount = fusesNeeded * SPAWN_MULT
-	local leverCount = n
+	local leverCount = boxCount
 
 	local folder = Instance.new("Folder")
 	folder.Name = "PuzzleItems"
@@ -1215,7 +1214,7 @@ local function startPuzzle()
 	session = {
 		active = true, stage = "fuses", conns = {}, folder = folder,
 		boxes = {}, levers = {}, circuits = {}, relays = {}, fuses = {}, carried = {}, exit = nil,
-		boxesDone = 0, boxCount = boxCount, latchMode = false,
+		boxesDone = 0, boxCount = boxCount, latchMode = true,
 		escaped = {}, escapeAnnounced = false, -- who's out + first-escape latch
 		participants = roundPlayerSet, fuseCharacters = {},
 	}
@@ -1251,9 +1250,8 @@ local function startPuzzle()
 				end
 			end
 		elseif session.stage == "levers" then
-			local now = os.clock()
 			for _, lever in ipairs(session.levers) do
-				if not lever.latched and now >= (lever.activeUntil or 0)
+				if not lever.latched
 					and lever.plate and lever.plate.Parent then
 					target = lever.plate.Position
 					break
@@ -1267,22 +1265,14 @@ local function startPuzzle()
 	end
 	session.updateEntityObjectiveTarget = updateEntityObjectiveTarget
 
-	-- Send an authoritative lever snapshot whenever the lever state changes.
-	-- The countdown follows the earliest temporary lever that will expire.
+	-- Pulled levers stay on for the whole round. There is no synchronization timer.
 	local function broadcastLeverStatus()
 		if not session or not session.active then return end
-		local now = os.clock()
-		local active, earliest = 0, nil
+		local active = 0
 		for _, lv in ipairs(session.levers) do
-			if lv.latched then
-				active += 1
-			elseif now < (lv.activeUntil or 0) then
-				active += 1
-				local remaining = lv.activeUntil - now
-				if not earliest or remaining < earliest then earliest = remaining end
-			end
+			if lv.latched then active += 1 end
 		end
-		status:FireAllClients("lever", active, #session.levers, earliest or 0, session.latchMode)
+		status:FireAllClients("lever", active, #session.levers, 0, true)
 	end
 	session.broadcastLeverStatus = broadcastLeverStatus
 
@@ -1534,96 +1524,26 @@ local function startPuzzle()
 			-- launched party may drive the exit circuit.
 			if not canUsePrompt(player, lever.prompt, lever.model) then return end
 			if lever.latched then return end
-			-- Re-triggering a lever that is still inside its own window is a legal
-			-- prompt that changes nothing the party needs telling about. Announce
-			-- the OFF -> ON transition only, so holding E on one lever cannot
-			-- become a stream of identical prompts for everyone else.
-			local wasOn = os.clock() < (lever.activeUntil or 0)
-
 			if lever.pullSound then lever.pullSound:Play() end
-
-			if session.latchMode then
-				lever.latched = true          -- clutch: flip-and-stays, no timer
-				lever.prompt.Enabled = false
-			else
-				lever.activeUntil = os.clock() + LEVER_WINDOW
-			end
+			lever.latched = true
+			lever.prompt.Enabled = false
 			setLeverHandle(lever, true)
 			updateEntityObjectiveTarget()
 			if session.updateLeverLights then session.updateLeverLights() end
 			if session.broadcastLeverStatus then session.broadcastLeverStatus() end
 
-			if not wasOn then
-				local on = 0
-				for _, lv in ipairs(session.levers) do
-					if lv.latched or os.clock() < (lv.activeUntil or 0) then on += 1 end
-				end
-				announceTeam(player.Name, "lever",
-					("PULLED LEVER %d/%d"):format(on, #session.levers))
-			end
-
-			-- a lever counts as ON if it's latched OR still inside its window
-			local all = true
+			local on = 0
 			for _, lv in ipairs(session.levers) do
-				if not (lv.latched or os.clock() < lv.activeUntil) then all = false break end
+				if lv.latched then on += 1 end
 			end
-			if all then session.onLevers(lever.cf.Position) end
-
-			-- temporary (non-latched) levers reset when their window lapses
-			if not lever.latched then
-				task.delay(LEVER_WINDOW + 0.1, function()
-					if session and session.active and session.stage == "levers"
-						and not lever.latched and os.clock() >= lever.activeUntil then
-						setLeverHandle(lever, false)
-						if session.updateLeverLights then session.updateLeverLights() end
-						if session.broadcastLeverStatus then session.broadcastLeverStatus() end
-						if session.updateEntityObjectiveTarget then session.updateEntityObjectiveTarget() end
-					end
-				end)
-			end
+			announceTeam(player.Name, "lever",
+				("PULLED LEVER %d/%d"):format(on, #session.levers))
+			if on == #session.levers then session.onLevers(lever.cf.Position) end
 		end))
 	end
 	assert(#session.levers == session.boxCount, "Every fuse box must have exactly one paired lever")
 
-	-- CLUTCH: when a teammate dies or leaves, their lever latches ON for good and
-	-- the levers stop needing the 10s simultaneity — survivors just flip the rest
-	-- at their own pace (coordination gets unfair as the party shrinks)
-	local function onParticipantDown(reason)
-		if not session or not session.active then return end
-		if session.latchMode then return end -- already clutched; don't re-log
-		-- a death only DROPS the 10s simultaneity requirement — levers now
-		-- flip-and-STAY. It does NOT turn any lever on: survivors still have to
-		-- find and pull every lever themselves, just without the timing pressure.
-		-- (If levers "stay on with nobody dead", this print will name the cause —
-		-- usually a teammate you didn't see die, since there's no alive count.)
-		print("[Puzzle] Clutch engaged (" .. tostring(reason) ..
-			"): levers are now flip-and-stay, 10s sync dropped")
-		session.latchMode = true
-		-- lock in any lever currently being held so it can't time out on them
-		for _, lv in ipairs(session.levers) do
-			if not lv.latched and os.clock() < lv.activeUntil then
-				lv.latched = true
-				lv.prompt.Enabled = false
-			end
-		end
-		if session.updateLeverLights then session.updateLeverLights() end
-		if session.broadcastLeverStatus then session.broadcastLeverStatus() end
-	end
-
-	for _, p in ipairs(roundPlayers) do
-		local char = p.Character
-		local hum = char and char:FindFirstChildOfClass("Humanoid")
-		if hum and hum.Health > 0 then
-			table.insert(session.conns, hum.Died:Connect(function()
-				onParticipantDown("death: " .. p.Name)
-			end))
-		end
-	end
-	table.insert(session.conns, Players.PlayerRemoving:Connect(function(lp)
-		if session and session.participants[lp] then
-			onParticipantDown("left: " .. lp.Name)
-		end
-	end))
+	-- Levers are always persistent; deaths and departures never reset progress.
 
 	-- ── lever status lights: each lever wears a row showing EVERY lever's state
 	do
@@ -1648,14 +1568,14 @@ local function startPuzzle()
 	function session.updateLeverLights()
 		if not session then return end
 		for _, lv in ipairs(session.levers) do
-			local selfOn = lv.latched or os.clock() < lv.activeUntil
+			local selfOn = lv.latched
 			if lv.statusLabel then
 				if session.stage ~= "levers" then
 					lv.statusLabel.Text = "LOCKED"
 					lv.statusLabel.TextColor3 = Color3.fromRGB(230, 70, 65)
 					lv.statusLight.Color = Color3.fromRGB(125, 22, 22)
 				elseif selfOn then
-					lv.statusLabel.Text = lv.latched and "LATCHED" or "ACTIVE"
+					lv.statusLabel.Text = "LATCHED"
 					lv.statusLabel.TextColor3 = Color3.fromRGB(100, 255, 125)
 					lv.statusLight.Color = Color3.fromRGB(55, 235, 80)
 				else
@@ -1667,7 +1587,7 @@ local function startPuzzle()
 			if lv.statusLights then
 				for j, sl in ipairs(lv.statusLights) do
 					local other = session.levers[j]
-					local on = other and (other.latched or os.clock() < other.activeUntil)
+					local on = other and other.latched
 					sl.Color = on and Color3.fromRGB(50, 220, 60) or Color3.fromRGB(120, 20, 20)
 				end
 			end
@@ -1675,7 +1595,7 @@ local function startPuzzle()
 	end
 	session.updateLeverLights()
 
-	-- ── one fuse box ↔ one lever circuit per player ─────────────────
+	-- ── one fuse box ↔ one lever per scaled circuit ─────────────────
 	-- Every circuit passes the elevator threshold, so its unique colour is visible
 	-- the instant the doors open. Neon is intentionally restrained: readable in
 	-- darkness without turning hundreds of cable segments into actual light sources.
@@ -2355,17 +2275,10 @@ local function startPuzzle()
 			lv.prompt.Enabled = true
 			lv.prompt.ObjectText = "Power Exit Door"
 		end
-		status:FireAllClients("levers", #session.levers, LEVER_WINDOW)
+		status:FireAllClients("levers", #session.levers, 0)
 		if session.broadcastLeverStatus then session.broadcastLeverStatus() end
 		if session.updateLeverLights then session.updateLeverLights() end
 
-		-- keep the status rows accurate as temporary levers' windows lapse
-		task.spawn(function()
-			while session and session.active and session.stage == "levers" do
-				if session.updateLeverLights then session.updateLeverLights() end
-				task.wait(0.5)
-			end
-		end)
 	end
 	function session.onLevers(shutdownOrigin)
 		if session.stage ~= "levers" then return end

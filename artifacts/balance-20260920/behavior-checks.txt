@@ -1,0 +1,1 @@
+PASS	53	behavior checks: entitlement, additive stamina without repeated grants, 1–6 player scaling, persistent/idempotent lever pulls, targeted warning eligibility

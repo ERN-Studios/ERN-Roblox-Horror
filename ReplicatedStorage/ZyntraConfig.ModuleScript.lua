@@ -105,8 +105,9 @@ return {
 			Id = 1945402536,
 			IconId = 105990911046404,
 			Name = "Advanced Equipment",
+			StaminaBonus = 0.50, -- additive capacity bonus; existing upgrades remain
 			Price = 149,
-			Description = "Permanent focused flashlight: a narrower beam with 45% more range and the same battery drain. Press Y / R3 or hold the torch on touch to switch. Includes hazmat colors and one " .. PCT .. " Stamina/Battery upgrade. Existing owners get focus automatically.",
+			Description = "Permanent focused flashlight: a narrower beam with 45% more range and the same battery drain. Press Y / R3 or hold the torch on touch to switch. Includes permanent +50% base stamina on top of existing upgrades, hazmat colors and one " .. PCT .. " Stamina/Battery upgrade. Existing owners get focus automatically.",
 		},
 		CosmeticEquipment = {
 			Id = 1946086261,

@@ -16,4 +16,4 @@ Native Studio Play inspection confirmed the artwork visibly renders on the crate
 
 ## Publication
 
-Saved to Roblox and backed up locally. Live publication is pending: the native UI connection began timing out after the successful native download. The owner has been asked to use File → Publish to Roblox. Last verified live version is v1937, which predates this artwork. Do not treat the Download a Copy save as live publication.
+The owner manually published this artwork as **v1938** on 2026-09-20 at 14:15:44 UTC. Studio logs confirm PublishSuccessful, Place published and the v1938 publish-note link; see `manual-publish-log.txt`. The later balance release v1939 retains this artwork.

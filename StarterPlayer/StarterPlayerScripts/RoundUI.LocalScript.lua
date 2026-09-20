@@ -2218,7 +2218,7 @@ objectivesLayout.Parent = objectivesBody
 local objectiveCopy = {
 	{badge = "01", copy = "<b>Locate the fuse relays</b>\nSearch beneath unusually bright ceiling lights and extract each fuse."},
 	{badge = "02", copy = "<b>Restore the circuits</b>\nFollow the colored cables and insert one fuse into every fuse box."},
-	{badge = "03", copy = "<b>Synchronize the levers</b>\nOnce every box is powered, activate all levers within 10 seconds."},
+	{badge = "03", copy = "<b>Pull the levers</b>\nOnce every box is powered, activate each lever. They stay on — no time limit."},
 	{badge = "04", copy = "<b>Find the powered exit</b>\nFollow the energy reader to the exit door."},
 	{badge = "!", warning = true, copy = "<b>Threat protocol</b>\nKeep your distance from the entity. Do not engage."},
 }
@@ -2375,7 +2375,7 @@ local briefingCues = {
 	{10.50, 12.93, "A fuse relay should be nearby."},
 	{12.93, 15.83, "Extract the fuses, then locate the colored cables."},
 	{15.83, 20.78, "Each cable connects a fuse box to a lever... but we cannot determine which end is which."},
-	{20.78, 25.86, "Power every fuse box first. Then, activate all levers within ten seconds."},
+	{20.78, 25.86, "Power every fuse box first. Then activate each lever. They stay on; there is no time limit."},
 	{25.86, 31.19, "Be advised... we are detecting movement inside the space that does not match your team."},
 	{31.19, 33.88, "We know nothing about the entity responsible."},
 	{33.88, 36.91, "If you see or hear anything unusual, stay alert."},
@@ -3626,6 +3626,7 @@ local function playLevelOneBriefing()
 
 		levelOneBriefingSound:Stop()
 		levelOneBriefingSound.TimePosition = 0
+		levelOneBriefingSound.Volume = 1
 		player:SetAttribute("LevelOneBriefingActive", true)
 		local played = pcall(function() levelOneBriefingSound:Play() end)
 		if not played then
@@ -3643,6 +3644,9 @@ local function playLevelOneBriefing()
 		local deadline = os.clock() + 52
 		while run == briefingRun and isLevelOneParticipant() and os.clock() < deadline do
 			local position = levelOneBriefingSound.TimePosition
+			-- Retire the old timed-lever sentence without replaying outdated rules.
+			-- Keep its corrected caption visible; the remaining recording is unchanged.
+			levelOneBriefingSound.Volume = (position >= 20.78 and position < 25.86) and 0 or 1
 			local cueText = nil
 			for _, cue in ipairs(briefingCues) do
 				if position >= cue[1] and position < cue[2] then

@@ -1,4 +1,4 @@
--- PuzzleUI (v3 — counters plus lever synchronization timer)
+-- PuzzleUI: counters and persistent lever progress (no time limit).
 
 local Players = game:GetService("Players")
 local RS = game:GetService("ReplicatedStorage")
@@ -1086,21 +1086,8 @@ local function refreshLever()
 	-- row visible and called applyPuzzleLayout() here, then wrote the text
 	-- below, so the stack was measured against the string being replaced --
 	-- against the label's "Label" default on the frame the row first appears.
-	local text, colour
-	if leverLatchMode then
-		text = ("SYNC LEVERS   %d / %d  •  NO TIME LIMIT"):format(leverActive, leverTotal)
-		colour = Color3.fromRGB(170, 225, 255)
-	elseif leverActive > 0 and leverEndsAt > 0 then
-		local remaining = math.max(leverEndsAt - os.clock(), 0)
-		text = ("SYNC LEVERS   %d / %d  •  %.1fs"):format(leverActive, leverTotal, remaining)
-		colour = remaining <= 3
-			and Color3.fromRGB(255, 105, 105)
-			or Color3.fromRGB(255, 220, 130)
-	else
-		text = ("SYNC LEVERS   %d / %d"):format(leverActive, leverTotal)
-		colour = Color3.fromRGB(245, 245, 245)
-	end
-
+	local text = ("PULL LEVERS   %d / %d  •  NO TIME LIMIT"):format(leverActive, leverTotal)
+	local colour = Color3.fromRGB(170, 225, 255)
 	-- This runs every RenderStepped. setObjectiveText re-enters the row layout
 	-- only when the new copy MEASURES differently, so a ticking second costs one
 	-- text measurement and no relayout, while the latch arming -- which is what

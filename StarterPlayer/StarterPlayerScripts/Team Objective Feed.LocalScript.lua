@@ -30,12 +30,12 @@ label.Name = "Messages"
 label.BackgroundTransparency = 1
 label.Position = UDim2.fromOffset(10, 6)
 label.Size = UDim2.new(1, -20, 1, -12)
-label.Font = Enum.Font.GothamMedium
-label.TextSize = 13
+label.Font = Enum.Font.GothamBold
+label.TextSize = 20
 label.TextColor3 = Color3.fromRGB(231, 238, 233)
 label.TextWrapped = true
 label.RichText = false
-label.TextXAlignment = Enum.TextXAlignment.Left
+label.TextXAlignment = Enum.TextXAlignment.Center
 label.Parent = panel
 local entries, lastSerial = {}, 0
 local function draw()
@@ -45,20 +45,18 @@ local function draw()
 	if not panel.Visible then return end
 	local layout = UIDevice.Layout()
 	local safe = layout.Safe
-	local width = math.min(380, safe.Right - safe.Left - 24)
-	-- Lower centre on desktop; touch stays inside the movement-free modal lane.
-	local area = layout.IsTouch and layout.ModalArea or safe
-	width = math.min(width, area.Right - area.Left - 16)
+	local width = math.max(120, math.min(620, safe.Right - safe.Left - 32))
+	label.TextSize = layout.IsTouch and 17 or 20
 	-- A touch screen shows the latest action so bursts cannot cover the compass.
 	local lines = {}
 	for index = (layout.IsTouch and #entries or 1), #entries do
 		lines[#lines + 1] = entries[index].Text
 	end
 	label.Text = table.concat(lines, "\n")
-	local height = TextService:GetTextSize(label.Text, label.TextSize, label.Font, Vector2.new(math.max(100, width - 20), 1000)).Y + 16
+	local height = TextService:GetTextSize(label.Text, label.TextSize, label.Font, Vector2.new(math.max(100, width - 20), 1000)).Y + 24
 	panel.Size = UDim2.fromOffset(math.max(120, width), height)
-	panel.Position = UIDevice.LocalPosition(gui, (area.Left + area.Right - width) / 2,
-		math.max(area.Top + 8, area.Bottom - height - 18))
+	panel.Position = UIDevice.LocalPosition(gui, (safe.Left + safe.Right - width) / 2,
+		safe.Top + 12)
 end
 RS:WaitForChild("Remotes"):WaitForChild("RoundStatus").OnClientEvent:Connect(function(kind, payload)
 	if kind ~= "objective" or type(payload) ~= "table" then return end
