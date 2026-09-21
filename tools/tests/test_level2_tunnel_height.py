@@ -40,6 +40,10 @@ local function isKids(hall)return hall.Kids==true end
 local function kidsPalette(hall)return {Color={}}end
 local function addTexture(...)end
 local function addKidsTileTexture(...)end
+-- Face culling is a texture decision; this harness stubs textures out entirely,
+-- so pass the requested list straight through. test_level2_tile_face_culling.py
+-- is where the face lists themselves are checked.
+local function visibleFaces(faces)return faces end
 local function hallFloorY(hall)return 0 end
 local function makeStairFlight(...)error("unexpected deep staircase in configured depth cases")end
 local function addWater(center,size,name)return part({},"Water "..name,CFrame.new(center),size)end

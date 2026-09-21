@@ -74,6 +74,20 @@ local function addTexture(object, faces, studs)
 	return object
 end
 
+-- Texture instances, not parts, dominate this world: a measured seed built
+-- 44,923 of them for ~27,500 parts, because a nil face list means all six.
+-- Call sites that can PROVE which faces a player may see pass that list through
+-- here. With Configuration.Performance.CullHiddenTileFaces off this returns nil,
+-- which is exactly the six-face default those sites had before — so the switch
+-- is a real A/B, not an approximation of one.
+local function visibleFaces(faces)
+	local performance = Configuration.Performance
+	if performance and performance.CullHiddenTileFaces then
+		return faces
+	end
+	return nil
+end
+
 local function tiledPart(parent, name, cframe, size, color, faces, studs)
 	local object = part(parent, name, cframe, size, color or C.Tile)
 	addTexture(object, faces or Enum.NormalId:GetEnumItems(), studs)
@@ -246,6 +260,34 @@ local function makeWallWithGaps(parent, hall, name, axis, cross, low, high, gaps
 		return Vector3.new(thickness, tall, length)
 	end
 
+	-- Which faces of a wall slab can ever be seen. The room side always. A cut
+	-- END only where an opening leaves it standing as a door jamb — the ends
+	-- that run out to geometryLow/geometryHigh are past the perpendicular wall,
+	-- facing the void outside the level. The outward side is that same void; the
+	-- top is buried .15 inside the two-stud ceiling slab (and under the three-
+	-- stud exterior light seal above it), with the nearest skylight opening
+	-- clamped 2 studs inboard of a 1.75-stud wall half-thickness; the bottom
+	-- sits four studs below the hall floor and points down, away from every eye.
+	local roomFace, lowEndFace, highEndFace
+	if axis == "X" then
+		roomFace = cross < hall.Center.Z and Enum.NormalId.Back or Enum.NormalId.Front
+		lowEndFace, highEndFace = Enum.NormalId.Left, Enum.NormalId.Right
+	else
+		roomFace = cross < hall.Center.X and Enum.NormalId.Right or Enum.NormalId.Left
+		lowEndFace, highEndFace = Enum.NormalId.Front, Enum.NormalId.Back
+	end
+	local function slabFaces(jambLow, jambHigh)
+		-- Kids rooms already narrow themselves to two faces from the slab's own
+		-- proportions (kidsTextureFaces), and their tiles are a different asset
+		-- that the measurement never counted. Leave that rule alone rather than
+		-- hand a kids doorway a jamb face it has never had.
+		if isKids(hall) then return nil end
+		local faces = {roomFace}
+		if jambLow then table.insert(faces, lowEndFace) end
+		if jambHigh then table.insert(faces, highEndFace) end
+		return visibleFaces(faces)
+	end
+
 	-- Carry both wall ends beyond the nominal room bounds. Perpendicular walls
 	-- now overlap on the OUTSIDE of the room instead of relying on a perfectly
 	-- flush corner, which is vulnerable to sunlight/shadow bias. Door and flume
@@ -258,7 +300,8 @@ local function makeWallWithGaps(parent, hall, name, axis, cross, low, high, gaps
 		local gapHigh = math.clamp(opening.center + opening.width * .5, low, high)
 		if gapLow - cursor > .1 then
 			surfaceFor(hall, parent, name, CFrame.new(positionFor((cursor + gapLow) * .5, centerY)),
-				sizeFor(gapLow - cursor, fullHeight), wallColor, nil, 7)
+				sizeFor(gapLow - cursor, fullHeight), wallColor,
+				slabFaces(cursor > geometryLow, true), 7)
 		end
 		local span = gapHigh - gapLow
 		if span > .1 then
@@ -293,7 +336,8 @@ local function makeWallWithGaps(parent, hall, name, axis, cross, low, high, gaps
 	end
 	if geometryHigh - cursor > .1 then
 		surfaceFor(hall, parent, name, CFrame.new(positionFor((cursor + geometryHigh) * .5, centerY)),
-			sizeFor(geometryHigh - cursor, fullHeight), wallColor, nil, 7)
+			sizeFor(geometryHigh - cursor, fullHeight), wallColor,
+			slabFaces(cursor > geometryLow, false), 7)
 	end
 end
 
@@ -1319,10 +1363,22 @@ local function makeColumn(parent, position, height, radius, essential, seamYaw)
 	local shaftBottom = 0
 	local shaftTop = height - ceilingInset
 	local shaftHeight = shaftTop - shaftBottom
+	-- On a cylinder Top/Bottom/Front/Back are the four quarters of the barrel
+	-- and Left/Right are the flat end caps; the Z rotation stands the axis up,
+	-- so those two caps are the column's floor and ceiling ends. Every
+	-- non-essential column runs floor to ceiling: its base is coplanar with the
+	-- floor slab it stands on and its capital stops .08 under the ceiling, and a
+	-- face pointing at a slab .08 away has no eye position that can see it. The
+	-- one `essential` caller is the spiral newel, which ends ~5 studs above its
+	-- top tread in open air, so it keeps both caps.
+	local shaftFaces = not essential and visibleFaces({
+		Enum.NormalId.Top, Enum.NormalId.Bottom,
+		Enum.NormalId.Front, Enum.NormalId.Back,
+	}) or nil
 	local column = tiledPart(parent, "Level 2 Tiled Column",
 		CFrame.new(position + Vector3.new(0, (shaftBottom + shaftTop) * .5, 0))
 			* CFrame.Angles(0, 0, math.pi * .5),
-		Vector3.new(shaftHeight, radius, radius), C.TileWarm, nil, 9)
+		Vector3.new(shaftHeight, radius, radius), C.TileWarm, shaftFaces, 9)
 	column.Shape = Enum.PartType.Cylinder
 	column.CanCollide = true
 	table.insert(entry.Parts, column)
@@ -4518,9 +4574,19 @@ local function makeCorridor(parent, layout, corridor, doorFolder)
 	local wallHalf = Configuration.WallThickness * .5
 	local shellLength = gapLength + 2 * (wallHalf - .12)
 	for _, side in ipairs({-1, 1}) do
+		-- Only the tunnel-facing side is ever seen. The shell's two ends stop
+		-- .12 INSIDE the hall's own wall (and the 34-wide shell sits outside
+		-- the 30-wide doorway, so they butt into solid wall, never a reveal);
+		-- its top is coplanar with the ceiling slab's own untextured top face;
+		-- its bottom is three studs under the corridor floor slab, pointing
+		-- down; and its outward side faces the void between the halls.
+		local insideFace = alongX
+			and (side < 0 and Enum.NormalId.Back or Enum.NormalId.Front)
+			or (side < 0 and Enum.NormalId.Right or Enum.NormalId.Left)
 		local wall = corridorSkin("Level 2 Corridor Wall",
 			CFrame.new(center + oriented(0, side * width * .5) + Vector3.new(0, (wallTop + wallBottom) * .5, 0)),
-			orientedSize(shellLength, wallTop - wallBottom, Configuration.WallThickness), C.TileCool, nil, 7)
+			orientedSize(shellLength, wallTop - wallBottom, Configuration.WallThickness), C.TileCool,
+			visibleFaces({insideFace}), 7)
 		wall.CanCollide = true
 	end
 	local ceiling = corridorSkin("Level 2 Corridor Ceiling",
@@ -5779,8 +5845,18 @@ function WorldBuilder.Build(layout, generation)
 					local position = acrossZ
 						and Vector3.new(hall.MinX + along * t, 0, hall.Center.Z)
 						or Vector3.new(hall.Center.X, 0, hall.MinZ + along * t)
-					makeArchSpan(hallModel, position, acrossZ, hall.Index .. "." .. ring, radius, depth or 0, nil,
-						{VerticalScale = Configuration.CorridorVaultVerticalScale or 1})
+					-- A free-standing ring standing in a room, not a rib buried in
+					-- a tunnel vault: both axial faces and BOTH radial sides
+					-- (soffit and extrados) are on show. Only the two segment
+					-- ends are hidden, .45 inside the neighbouring rib by
+					-- makeArchSpan's SegmentOverlap.
+					makeArchSpan(hallModel, position, acrossZ, hall.Index .. "." .. ring, radius, depth or 0, nil, {
+						VerticalScale = Configuration.CorridorVaultVerticalScale or 1,
+						Faces = visibleFaces({
+							Enum.NormalId.Left, Enum.NormalId.Right,
+							Enum.NormalId.Top, Enum.NormalId.Bottom,
+						}),
+					})
 				end
 			elseif archetype == "Pump Station" then
 				decoratePumpHall(hallModel, hall, hall.Index, doorsByHall[hall.Index])
