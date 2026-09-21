@@ -35,7 +35,10 @@ function Safety.Apply(model, character, engaged, serverFallback)
 	local corrected, tangent, riding = Safety.Resolve(model, root.Position, engaged)
 	-- The owner corrects its own simulation. Server corrections against a stale
 	-- replicated pose otherwise drag a moving client back to the same segment.
-	if serverFallback and root:GetNetworkOwner() ~= nil then return riding end
+	-- GetNetworkOwner THROWS on an anchored root (arrival cover, table hiding),
+	-- and that error aborted the caller's whole per-player pass 12 times a
+	-- second. An anchored body is not falling out of anything.
+	if serverFallback and (root.Anchored or root:IsGrounded() or root:GetNetworkOwner() ~= nil) then return riding end
 	if corrected and not root.Anchored then
 		character:PivotTo(character:GetPivot() + corrected - root.Position)
 		root.AssemblyLinearVelocity = tangent * math.clamp(root.AssemblyLinearVelocity:Dot(tangent), 48, 90)

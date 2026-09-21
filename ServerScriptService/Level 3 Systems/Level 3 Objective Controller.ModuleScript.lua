@@ -321,9 +321,12 @@ local function roomIdAt(session: AnyTable, position: Vector3): string
 	-- once per player per 0.1s tick. A spatial index only pays off in hundreds.
 	-- Planar on purpose: the only thing under a room is the escaped-player
 	-- waiting room, and escaped players are excluded before this is called.
+	-- Layout rectangles are plan coordinates; the World Builder stands the plan
+	-- at Configuration.WorldOrigin (roomCentre), and positions here are world.
+	local origin = Configuration.WorldOrigin
+	local x, z = position.X - origin.X, position.Z - origin.Z
 	for _, room in ipairs(rooms) do
-		if math.abs(position.X - room.X) <= room.W * .5
-			and math.abs(position.Z - room.Z) <= room.D * .5 then
+		if math.abs(x - room.X) <= room.W * .5 and math.abs(z - room.Z) <= room.D * .5 then
 			return room.Id
 		end
 	end

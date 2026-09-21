@@ -7008,17 +7008,10 @@ function Fit.bodyObjectiveCornerMatrix(): (string, number)
 			task.wait(0.3)
 			local reader, readerError = resolved("Level3ReaderGui", "ReaderPanel")
 			state.note("      ReaderPanel " .. Fit.text(reader))
-			if not layout.IsTouch then
-				-- DESKTOP IS LOWER-RIGHT, matching Level 1 and Level 2. It used to be
-				-- hardcoded top-right, which was the one desktop composition in the
-				-- game that disagreed with the other two.
-				record(reader ~= nil
-					and reader.Bottom > (layout.Safe.Top + layout.Safe.Bottom) * .5
-					and reader.Right > (layout.Safe.Left + layout.Safe.Right) * .5,
-					device.Name .. " / L3 desktop: keeps the authored LOWER-RIGHT reader",
-					Fit.text(reader) or readerError)
-			end
-			if layout.IsTouch then
+			-- The CD reader takes the upper-right safe corner on EVERY form factor
+			-- (Trello 6BVH4WmN, 2026-09-21): anchorProblems already branches its
+			-- margin on IsTouch and applies the control-cluster rule only on touch.
+			do
 				local problems = Fit.anchorProblems(reader, layout, "ReaderPanel")
 				record(#problems == 0,
 					device.Name .. " / L3 open: the reader is in the upper-right safe corner",
