@@ -131,8 +131,9 @@ local UDim2 = {new = function(...) return {...} end,
 local UDim = {new = function(...) return {...} end}
 local Vector2 = {new = function(...) return {...} end}
 local Color3 = {fromRGB = function(...) return {...} end}
-local Enum = {Font = {GothamBlack = 'GothamBlack', Code = 'Code', GothamBold = 'GothamBold'},
-    TextXAlignment = {Left = 'Left'}, TextTruncate = {AtEnd = 'AtEnd'}}
+local Enum = {Font = {GothamBlack = 'GothamBlack', Code = 'Code', GothamBold = 'GothamBold', GothamMedium = 'GothamMedium'},
+    TextXAlignment = {Left = 'Left'}, TextYAlignment = {Top = 'Top'}, TextTruncate = {AtEnd = 'AtEnd'},
+    EasingStyle = {Quad = 'Quad'}}  -- the death-cause card now shares the extracted range
 local GuiService = {}
 local purchases = {}
 local MarketplaceService = {PromptProductPurchase = function(_, _, id) table.insert(purchases, id) end}
@@ -255,7 +256,7 @@ def main():
     modal_extra = MODAL_EXTRA.replace("local UIDevice", "COLORS.accent = 'accent'\nlocal UIDevice")
     roundui = ROUNDUI.read_text(encoding='utf-8')
     card = section(roundui, 'do\n\tlocal GuiService = game:GetService("GuiService")',
-                   '-- Announce readiness only after')
+                   '-- ── DEATH CARD')  # PARTY DOWN only; the death-cause card (2026-09-21) follows it
     with tempfile.TemporaryDirectory(prefix='free-respawn-offer-') as directory:
         for dev in ('true', 'false'):
             run(binary, directory, f'modal_{dev}.luau',
