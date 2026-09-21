@@ -287,6 +287,45 @@ function Routing.ClampLevel(level: any): number
 	return math.clamp(math.floor(requested), 1, Routing.MaxLevel)
 end
 
+-- LEVEL4_DEV_GATE_20260921 -------------------------------------------------
+-- Level 4 exists but is not part of the campaign: the lobby gate still says
+-- coming soon, Routing.MaxLevel is still 3, and everything above is unchanged.
+-- These three functions are the ONLY way to reach level 4, and they are pure
+-- in the same way the rest of this module is: the caller supplies the two
+-- facts, because this module must stay assertable without a Workspace or a
+-- DevAccess whitelist.
+--
+--   enabled     workspace:GetAttribute(Routing.Level4DevAttribute) == true
+--   isDeveloper DevAccess.IsAllowed(...) for EVERY participant, not just the
+--               host -- GameManager's devCeiling() is what applies that.
+Routing.DevLevel = 4
+Routing.Level4DevAttribute = "Level4DevEnabled"
+
+function Routing.DevCeiling(enabled: any, isDeveloper: any): number
+	if enabled == true and isDeveloper == true then return Routing.DevLevel end
+	return Routing.MaxLevel
+end
+
+function Routing.ClampLevelTo(level: any, ceiling: any): number
+	local requested = tonumber(level)
+	if not requested then return 1 end
+	local limit = tonumber(ceiling)
+	if not limit or limit ~= limit then limit = Routing.MaxLevel end
+	limit = math.clamp(math.floor(limit), 1, Routing.DevLevel)
+	return math.clamp(math.floor(requested), 1, limit)
+end
+
+function Routing.NextLevelTo(level: number?, ceiling: any): number?
+	local current = tonumber(level)
+	if not current then return nil end
+	local limit = tonumber(ceiling)
+	if not limit or limit ~= limit then limit = Routing.MaxLevel end
+	limit = math.clamp(math.floor(limit), 1, Routing.DevLevel)
+	if current < 1 or current >= limit then return nil end
+	return current + 1
+end
+-- END LEVEL4_DEV_GATE_20260921 ---------------------------------------------
+
 -- ---------------------------------------------------------------------------
 -- The session roster
 -- ---------------------------------------------------------------------------
