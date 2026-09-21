@@ -7,9 +7,9 @@
     "name": "BACKROOMS: STAY QUIET [CO-OP HORROR] (placeId: 131311258779917)"
   },
   "counts": {
-    "scripts": 155,
+    "scripts": 156,
     "remoteEvents": 15,
-    "total": 170,
+    "total": 171,
     "studioTrailingNewline": 0
   },
   "nativePlaceBackup": {
@@ -446,8 +446,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 153684,
-      "sha256": "bee65f183974e5117c14c8d2f77dcec229f04fa05a36b05e1b43437e1b804e50",
+      "bytes": 154509,
+      "sha256": "27148a14ed29c2ecc678917c5aabf065b5bb1805de9d99ad91211557b4601174",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -1155,8 +1155,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/TeamObjectives.ModuleScript.lua",
-      "bytes": 789,
-      "sha256": "9a8cd1a17fd7f844ceaf9d23236cd4d736a8117663a53519b90fedb0daa86148",
+      "bytes": 1228,
+      "sha256": "30382e78f30a64cd753a2eb650f6bb2357e47f1941a586cd1eaaea70a52521d3",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -1197,8 +1197,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/ZyntraDetectorService.Script.lua",
-      "bytes": 2229,
-      "sha256": "9068f1e5729eda73de1b1c88141bc57a8656692fbbe9b3131c0f5d6349dae317",
+      "bytes": 2450,
+      "sha256": "ca0c857c66091268b97c538d102d685b990d9cce917ddbefd3526cd255ae1fbf",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -1213,8 +1213,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/ZyntraMonetization.Script.lua",
-      "bytes": 173587,
-      "sha256": "970565069cd74c2994f1611107da71fab0912e5490db58fb263999a73e480913",
+      "bytes": 175884,
+      "sha256": "28efb1e8130eb4bdf2be6bb08cff8592cb6512b280e6735b2004e0086c47a4d1",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2464,8 +2464,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
-      "bytes": 244252,
-      "sha256": "9e5f2c3e7503f531f7253a8ed6cbe3d0fa3aa5a0f2e2e9344b1eb677fbdb7fde",
+      "bytes": 246130,
+      "sha256": "0cae509bec39bda7fc3ed0fd30c0fd4c0e2d4bf0a52cdd8bbda6008e414d0874",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2481,8 +2481,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Shop Display Client.LocalScript.lua",
-      "bytes": 31110,
-      "sha256": "9c23936fe056286a205aca495aa8cdf08e97ff8e7fa04ac534c7858d644abbde",
+      "bytes": 32760,
+      "sha256": "80001c40f3f61269d555aa972ca69b558339928b0c5e4f5cdc465617a4bf960f",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2580,6 +2580,14 @@
       "file": "ReplicatedStorage/DeathAdvice.ModuleScript.lua",
       "bytes": 6953,
       "sha256": "0868a419029002994d059eb268fa0f76ca213417f3218ecab4e61b8238237d0d",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ServerScriptService.ZyntraAnalytics",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/ZyntraAnalytics.ModuleScript.lua",
+      "bytes": 18350,
+      "sha256": "fc35f145451524780c0f03680235018a7006a6531d206b9491960848f79e09b5",
       "status": "synced"
     }
   ]

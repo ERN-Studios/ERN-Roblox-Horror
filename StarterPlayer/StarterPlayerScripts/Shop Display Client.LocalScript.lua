@@ -47,6 +47,27 @@ local function reportShop(key, demo)
 	end
 end
 
+-- ANALYTICS_20260921. The PC / phone / tablet split the ads decision needs is a
+-- client fact. It is reported once, as one of three fixed words; the server
+-- keeps it only as an analytics segment, so a client that lies mislabels
+-- nothing but its own row. ponytail: no console class -- UIDevice has none;
+-- add it there first if console ever matters.
+task.delay(4, function()
+	-- The server drops every ZyntraAction until the profile has loaded.
+	local localPlayer = game:GetService("Players").LocalPlayer
+	for _ = 1, 60 do
+		if localPlayer:GetAttribute("ZyntraProfileLoaded") == true then break end
+		task.wait(1)
+	end
+	local remotes = ReplicatedStorage:FindFirstChild("Remotes")
+	local action = remotes and remotes:FindFirstChild("ZyntraAction")
+	local ok, class = pcall(function() return UIDevice.Layout().Class end)
+	local names = {desktop = "PC", phone = "Phone", tablet = "Tablet"}
+	if action and action:IsA("RemoteEvent") and ok and names[class] then
+		action:FireServer("DeviceClass", {Class = names[class]})
+	end
+end)
+
 local COLORS = {
 	panel = Color3.fromRGB(14, 21, 24),
 	card = Color3.fromRGB(20, 29, 33),

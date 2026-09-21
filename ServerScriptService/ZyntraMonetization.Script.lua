@@ -3379,6 +3379,14 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 		if Analytics and type(payload) == "table" and player:GetAttribute("InRound") ~= true then
 			Analytics.ShopView(player, payload.Key, payload.Demo == true)
 		end
+	elseif action == "DeviceClass" then
+		-- ANALYTICS_20260921, segmentation only: first answer per session wins,
+		-- from a fixed enum, and nothing in gameplay or the store reads it.
+		local class = type(payload) == "table" and payload.Class
+		if player:GetAttribute("ZyntraDeviceClass") == nil
+			and (class == "PC" or class == "Phone" or class == "Tablet") then
+			player:SetAttribute("ZyntraDeviceClass", class)
+		end
 	elseif action == "UpgradeStamina" or action == "UpgradeBattery" then
 		-- Refuse in memory FIRST. The in-transform check below stays as the
 		-- cross-server race guard, but reaching it costs a DataStore write, and a

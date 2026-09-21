@@ -2448,7 +2448,7 @@ playRound = function(participants)
     lastDeathCause = DeathAdvice.Take(player)
     fireGroup(participants, "death", player.Name, root and root.Position or nil, lastDeathCause)
 		if scheduleTransitionRespawn then scheduleTransitionRespawn(player) end
-    Analytics.Death(player, activeLevel)
+    Analytics.Death(player, activeLevel, lastDeathCause)
    end
   end)
  end

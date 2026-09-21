@@ -270,14 +270,16 @@ end
 
 -- A death is its own branch, never a step of the linear funnel: it can happen
 -- before any objective, and a clear can happen without any death.
-function impl.Death(player, level)
+-- `causeKey` is what GameManager just took from DeathAdvice; Take CONSUMES the
+-- player attribute, so reading it here afterwards would always say unknown.
+function impl.Death(player, level, causeKey)
 	local state = session(player)
 	if not state then return end
 	state.Deaths += 1
 	if state.Deaths > 1 then return end
 	custom(player, state, "zq_first_death",
 		math.max(0, now() - (state.RoundAt or now())),
-		levelTag(level), cause(player:GetAttribute("LastDeathCause")), state.Origin)
+		levelTag(level), cause(causeKey or player:GetAttribute("LastDeathCause")), state.Origin)
 end
 
 -- escaped / died / left / disconnected, once per player per round. A nil
