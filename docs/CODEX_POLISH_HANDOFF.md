@@ -85,7 +85,8 @@ Alle målinger: ejerens PC, Roblox Studio play-session (server + én klient), ud
 
 Ejerskab: `Level 2 Sound Controller` ejer fjerne pipe-groans; `Level 2 Entity Audio` ejer alt der kommer fra en krop. Eneste håndtryk er serverflaget `Level2_PoolSlideActive` (på `workspace` og i `Level 2 State`), som ikke streames ud — et lokalt stream-out kan derfor ikke forveksles med despawn.
 Observeret i Studio-runde (klient-probe, attributter/instanser — ikke lyttetest): fjern groan 10 s inde i runden før nogen pumpe (én emitter, ~8 s, fjernet); ved spawn præcis én `Level 2 Slide Alert` fra mund-emitteren, fjerne emittere = 0 mens aktiv; emitteren sidder ~11 studs over sålerne og vipper med gangen (følger `Head`-bonens `TransformedWorldCFrame`); ved listener-død fader kanaler ud på 70 ms; ved rundeslut 0 emittere, 0 lyde, 0 efterladte instanser.
-Ikke verificeret: faktisk despawn → genoptaget ambience, stream ud/ind, andet spawn, chase-frekvens for øret, spectator-mix. Lyttetjekliste: se agentens rapport gengivet i §5 (lydkontrakt).
+Anden Studio-runde: spawn-groan (`Level 2 Slide Alert`) 2 s efter spawn, første periodiske `Level 2 Slide Mouth` 11 s senere under chase (interval 7–14 s), og efter et **reelt despawn** (modellen fjernet på serveren → `Active=false`, state `REMOVED`) kom den fjerne pipe-groan tilbage 36 s senere (pause 24–42 s) og spillede ~8 s.
+Ikke verificeret: stream ud/ind, andet spawn i samme runde (controlleren spawner kun én gang pr. runde), lydniveauer/retning for øret, spectator-mix. Lyttetjekliste: se agentens rapport gengivet i §5 (lydkontrakt).
 
 ### 3.3 PoolFoam (A3)
 
