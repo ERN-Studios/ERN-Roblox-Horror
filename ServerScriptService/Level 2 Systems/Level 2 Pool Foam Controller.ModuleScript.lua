@@ -482,6 +482,8 @@ local function createEntity(session, id, slotId, spawnPosition, hallIndex, spawn
 		SeparationContactDistance = math.huge,
 		SeparationAhead = nil,
 		SeparationAheadDistance = math.huge,
+		SeparationObstructing = false,
+		SeparationClearance = 0,
 		SeparationLane = 0,
 		SeparationLaneFor = nil,
 		SeparationLaneTried = false,
@@ -1473,12 +1475,18 @@ end
 --   * Two entities in actual contact are BOTH held, so neither can advance
 --     through the other while the yielder is eased out; so is an entity whose
 --     yielder is PINNED in front of it, which is the only way to stop a body
---     walking into one that has nowhere to go. A held yielder that cannot move
---     at all runs a bounded wait; when it expires it backs out along its own
---     trail (Navigator:Retreat, validated placement by placement) and re-plans.
---     That is what resolves a head-on meeting in a corridor too narrow for
---     either of them to step aside: the one with right of way keeps walking
---     through the ground the yielder gives up.
+--     walking into one that has nowhere to go.
+--   * A yielder that is OBSTRUCTING somebody -- an entity with right of way
+--     that has a goal, a speed and this yielder standing in the cone it is
+--     walking into -- runs a bounded wait; when it expires it backs out along
+--     its own trail (Navigator:Retreat, validated placement by placement, and
+--     never onto a position another body occupies) and re-plans. That is what
+--     resolves a head-on meeting in a corridor too narrow for either of them to
+--     step aside: the one with right of way keeps walking through the ground
+--     the yielder gives up. Being crowded is NOT obstructing: a ring of arrived
+--     hunters round one player wants nothing and runs no clock, which is what
+--     makes a converged ring a stable end state rather than a permanent churn
+--     of back-outs.
 local function separationDirection(from, to, fallbackFacing)
 	local offset = Vector3.new(to.X - from.X, 0, to.Z - from.Z)
 	if offset.Magnitude > 0.01 then return offset.Unit end
@@ -1489,6 +1497,48 @@ local function separationDirection(from, to, fallbackFacing)
 	local side = Vector3.new(-facing.Z, 0, facing.X)
 	if side.Magnitude < 0.01 then return Vector3.new(1, 0, 0) end
 	return side.Unit
+end
+
+-- Is this entity actually trying to get somewhere? updateEntity PARKS a hunter
+-- that has arrived -- Navigator:Stop() (which drops the goal) and desired speed
+-- zero -- so a ring of foam converged on one player is made of entities that
+-- want nothing, and one standing behind them is not obstructed, it has arrived
+-- too. Deliberately NOT tested here: whether the entity is itself under a
+-- separation hold. The pinned rule holds the entity with right of way exactly
+-- when its yielder cannot step aside, which is the corridor stand-off the
+-- bounded wait exists for; testing the hold would freeze that case forever.
+local function separationPressing(session, entity, contact)
+	local goal = entity.Navigator:GetGoal()
+	if goal == nil or numberOr(entity.LastDesiredSpeed, 0, 0, 40) <= 0 then return false end
+	-- ...and it still has somewhere to WALK. Testing the goal alone is not
+	-- enough: in a converged ring only the first entity gets inside
+	-- TargetStopDistance and parks, while the ones held a body further out keep
+	-- both a goal and a speed and would read as pressing forever. A hunter whose
+	-- goal is already within one body's reach of where it would park has
+	-- arrived, crowd or no crowd -- and in the ring measured in Studio that is
+	-- 6.7 studs against a 4.5 + 5.17 = 9.7 reach, so none of the five arms
+	-- anything, while a corridor stand-off with a player tens of studs away
+	-- still does.
+	local at = entity.Navigator:GetPosition()
+	local stop = numberOr((session.Configuration.Movement or {}).TargetStopDistance, 4.5, 1, 20)
+	local deltaX, deltaZ = goal.X - at.X, goal.Z - at.Z
+	local reach = stop + contact
+	return deltaX * deltaX + deltaZ * deltaZ > reach * reach
+end
+
+-- Is `position` outside every OTHER entity's body? The navigator's own floor
+-- and body checks cannot answer this: the runtime folder is excluded from its
+-- queries, so one foam is invisible to another's geometry tests.
+local function separationFree(session, entity, position)
+	for _, other in ipairs(session.Entities) do
+		if other ~= entity then
+			local at = other.Navigator:GetPosition()
+			local deltaX, deltaZ = position.X - at.X, position.Z - at.Z
+			local reach = entity.BodyRadius + other.BodyRadius
+			if deltaX * deltaX + deltaZ * deltaZ < reach * reach then return false end
+		end
+	end
+	return true
 end
 
 local function separationSidestep(entity, limit, ahead)
@@ -1542,6 +1592,7 @@ local function updateSeparation(session, now, deltaTime)
 		entity.SeparationPushX, entity.SeparationPushZ = 0, 0
 		entity.SeparationContact, entity.SeparationContactDistance = nil, math.huge
 		entity.SeparationAhead, entity.SeparationAheadDistance = nil, math.huge
+		entity.SeparationObstructing, entity.SeparationClearance = false, 0
 		entity.SeparationActive = entityIsActive(session, entity)
 	end
 
@@ -1604,6 +1655,33 @@ local function updateSeparation(session, now, deltaTime)
 						yielder.SeparationPushX += away.X * intrusion
 						yielder.SeparationPushZ += away.Z * intrusion
 					end
+					-- THE BOUNDED WAIT IS FOR A STAND-OFF, NOT FOR A CROWD.
+					--
+					-- Measured in Studio on 2026-09-21, seed 1182081016: five
+					-- entities converged on one stationary player and stood in a
+					-- ring at padded contact, which is the correct end state -- but
+					-- in that ring every entity has a neighbour inside its own cone,
+					-- so arming the wait on obstruction alone armed it on all five,
+					-- forever. Each expiry then called Retreat on an ARRIVED entity,
+					-- whose Navigator:Stop() had already emptied its trail, so the
+					-- back-out moved nothing, the release ceiling fired instead, and
+					-- for two seconds the pair was free to walk into each other:
+					-- Level2_PoolFoamYieldCount +2-3/s without end and
+					-- MinSeparation down to 3.2 against a 5.17 contact circle.
+					--
+					-- The wait now needs the entity with right of way to be GENUINELY
+					-- BLOCKED BY THIS ONE: it has somewhere to go, and this yielder
+					-- is standing inside the cone it is walking into. A ring of
+					-- arrived hunters runs no clock at all and is a stable end state.
+					local holderFacing = holder.Navigator:GetFacing()
+					if separationPressing(session, holder, contact)
+						and away.X * holderFacing.X + away.Z * holderFacing.Z > aheadCosine
+					then
+						yielder.SeparationObstructing = true
+						yielder.SeparationClearance =
+							math.max(yielder.SeparationClearance, contact + padding)
+					end
+
 					-- The contact circle is DEFENDED, not merely detected. This pass
 					-- corrects after the step, so a pair that is already touching
 					-- when it first looks has already interpenetrated by whatever it
@@ -1648,31 +1726,41 @@ local function updateSeparation(session, now, deltaTime)
 				blocker.SeparationHoldUntil = leaseUntil
 			end
 		end
-		-- The wait is measured on being OBSTRUCTED, never on standing still. A
-		-- yielder easing sideways along a wall is moving and getting nowhere, and
-		-- crediting that as progress is what let two entities stand nose to nose
-		-- for a whole round; the moment it gets past -- the obstruction leaves its
-		-- cone and it is no longer touching anything -- the clock is dropped.
-		if not (ahead or touching) then
+		-- The wait is measured on OBSTRUCTING somebody who is trying to get past,
+		-- never on standing still and never on merely being crowded. A yielder
+		-- easing sideways along a wall is moving and getting nowhere, so crediting
+		-- that as progress would let two entities stand nose to nose for a whole
+		-- round; a yielder that nobody is waiting for has nothing to prove.
+		if not entity.SeparationObstructing then
 			entity.SeparationYieldSince = nil
 		else
 			entity.SeparationYieldSince = entity.SeparationYieldSince or now
 			if now - entity.SeparationYieldSince >= yieldSeconds then
 				entity.SeparationYieldSince = nil
 				session.SeparationYields += 1
-				local backed = entity.Navigator:Retreat(numberOr(tuning.RetreatStuds, 8, 0, 48))
+				-- Back out far enough to clear the body that is waiting and no
+				-- further, and never THROUGH a third one: Retreat asks about every
+				-- position before it steps there and stops at the first refusal.
+				local reach = math.min(numberOr(tuning.RetreatStuds, 8, 0, 48),
+					math.max(entity.SeparationClearance, 1))
+				local backed = entity.Navigator:Retreat(reach, function(position)
+					return separationFree(session, entity, position)
+				end)
 				entity.PatrolPosition = nil
 				entity.NextGoalAt = 0
 				entity.SeparationHoldUntil = 0
 				if blocker then blocker.SeparationHoldUntil = 0 end
-				if backed <= 0 then
-					-- ponytail: nowhere to back out to -- no trail yet, or the way
-					-- back is blocked as well. The pair is RELEASED rather than held
-					-- again, so the ceiling of this rule is a moment of visible
-					-- overlap instead of two creatures frozen against each other for
-					-- the rest of the round. Upgrade path if that moment ever shows:
-					-- reciprocal velocity obstacles, or reserving the corridor
-					-- segment between them instead of resolving after the fact.
+				if backed <= 0 and separationFree(session, entity, entity.Navigator:GetPosition()) then
+					-- ponytail: nowhere to back out to and nobody within a body's
+					-- reach, so what is blocking the back-out is the WORLD -- a wall
+					-- behind, or a trail emptied by a Stop. Only then is the pair
+					-- released to pass, because releasing with a neighbour that close
+					-- is precisely how five converged entities walked through each
+					-- other in the 2026-09-21 Studio round. With one that close the
+					-- pair simply stays held: a hold is recoverable the moment either
+					-- of them can move, an overlap the owner can see is not. Upgrade
+					-- path if a lasting freeze is ever observed: reciprocal velocity
+					-- obstacles, or reserving the corridor segment between them.
 					entity.SeparationReleaseUntil = now
 						+ numberOr(tuning.ReleaseSeconds, 2, 0, 30)
 				end

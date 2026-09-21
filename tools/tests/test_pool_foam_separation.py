@@ -4,8 +4,16 @@ No Studio and no geometry: the navigator is replaced by a stub whose Sidestep
 honours the SAME contract as the real one (clamped offset, validated placement,
 a refused placement moves nothing), so a wall is expressed as a walkability
 predicate. Everything under test -- separationRadius, separationDirection,
-separationSidestep, updateSeparation, the spawn chooser and the hold branch
-inside updateEntity -- is extracted from the shipped controller source.
+separationPressing, separationFree, separationSidestep, updateSeparation, the
+spawn chooser and the hold branch inside updateEntity -- is extracted from the
+shipped controller source.
+
+Scenario 3 is the 2026-09-21 Studio round rebuilt offline, with the final art's
+measured radius: five entities converging on one stationary player. Live that
+state made the bounded wait fire forever and the release ceiling walk bodies
+through each other, so it asserts on the same three numbers the state folder
+publishes. `build_source` takes the controller source so a mutation run can
+prove these assertions still bite.
 
 What this cannot show: real floors, real body sweeps and real frame times. Those
 need a Studio playtest with the Level2_PoolFoam* readbacks.
@@ -65,17 +73,30 @@ HARNESS = r'''
 local MAX_TRAVEL_STEP = .9
 local RADIUS = 3.75
 local CONTACT = RADIUS*2
+-- The live final art, measured in Studio on 2026-09-21: bounding box
+-- 5.17 x 11.05 x 4.0, so the pass measures 2.585 and a pair touches at 5.17.
+local ART_RADIUS = 2.585
+local ART_CONTACT = ART_RADIUS*2
+-- TargetStopDistance: where updateEntity parks a hunter that has arrived.
+local STOP_DISTANCE = 4.5
 -- TRAIL_LIMIT * TRAIL_SPACING in the navigator: 48 breadcrumbs, .6 apart.
 local TRAIL_CAP = 28.8
 local SPEED = 10
 local everywhere = function() return true end
 local placements = 0
 
-local function makeEntity(id,ordinal,x,z,facing,walkable)
+local function makeEntity(id,ordinal,x,z,facing,walkable,radius)
     local nav = {
         Position=Vector3.new(x,0,z), Facing=facing or Vector3.new(0,0,-1),
-        Walkable=walkable or everywhere, TrailStuds=0, Retreats=0,
+        Walkable=walkable or everywhere, TrailStuds=0, Retreats=0, Goal=nil,
     }
+    function nav:GetGoal() return self.Goal end
+    function nav:Stop()
+        -- Navigator:Stop() drops the goal AND EMPTIES THE TRAIL. That second
+        -- half is what made an arrived entity's back-out move nothing in the
+        -- 2026-09-21 Studio round, which is what reached the release ceiling.
+        self.Goal, self.TrailStuds = nil, 0
+    end
     function nav:GetPosition() return self.Position end
     function nav:GetFacing() return self.Facing end
     function nav:Sidestep(offset,limit)
@@ -93,26 +114,30 @@ local function makeEntity(id,ordinal,x,z,facing,walkable)
         self.TrailStuds = math.min(TRAIL_CAP,self.TrailStuds+travel)
         return true
     end
-    function nav:Retreat(distance)
-        -- The real Retreat walks BACK along validated positions and stops the
-        -- instant a placement fails; it returns the studs it actually covered.
+    function nav:Retreat(distance,isClear)
+        -- The real Retreat walks BACK along validated positions, asks isClear
+        -- about each one before stepping there, and stops the instant a
+        -- placement or that question fails; it returns the studs it covered.
         local travel = math.min(distance,self.TrailStuds)
         local target = self.Position - self.Facing*travel
         if travel <= 0 or not self.Walkable(target) then return 0 end
+        if isClear and not isClear(target) then return 0 end
         self.Position = target
         self.TrailStuds -= travel
         self.Retreats += 1
         return travel
     end
-    return {Id=id,SpawnOrdinal=ordinal,Navigator=nav,BodyRadius=RADIUS,
+    return {Id=id,SpawnOrdinal=ordinal,Navigator=nav,BodyRadius=radius or RADIUS,
         SeparationPushX=0,SeparationPushZ=0,SeparationContactDistance=math.huge,
         SeparationAheadDistance=math.huge,SeparationHoldUntil=0,
+        SeparationObstructing=false,SeparationClearance=0,
         SeparationReleaseUntil=0,SeparationActive=true,Goal=nil,
         LastDesiredSpeed=SPEED,Deltas={},Reversals=0,LongestReversalRun=0}
 end
 
 local function makeSession(entities)
-    return {Configuration={Separation={}},Entities=entities,
+    return {Configuration={Separation={},Movement={TargetStopDistance=STOP_DISTANCE}},
+        Entities=entities,
         SeparationMinimum=math.huge,SeparationOverlapFrames=0,
         SeparationYields=0,SeparationCostMs=0,NextSeparationPublishAt=0}
 end
@@ -121,19 +146,30 @@ end
 -- route step, and the SEPARATION HOLD that updateEntity applies before it (the
 -- wiring of that hold is asserted separately against the real updateEntity).
 local function routeStep(entity,deltaTime,now)
-    if entity.Goal and now >= (entity.SeparationHoldUntil or 0) then
-        local nav = entity.Navigator
-        local offset = Vector3.new(entity.Goal.X-nav.Position.X,0,entity.Goal.Z-nav.Position.Z)
-        local distance = offset.Magnitude
-        if distance > .5 then
-            local direction = offset/distance
-            nav.Facing = direction
-            local step = math.min(distance,SPEED*deltaTime)
-            local target = nav.Position + direction*step
-            if nav.Walkable(target) then
-                nav.Position = target
-                nav.TrailStuds = math.min(TRAIL_CAP,nav.TrailStuds+step)
-            end
+    local nav = entity.Navigator
+    if not entity.Goal then return end
+    local offset = Vector3.new(entity.Goal.X-nav.Position.X,0,entity.Goal.Z-nav.Position.Z)
+    local distance = offset.Magnitude
+    if distance <= STOP_DISTANCE then
+        -- updateEntity parks an arrived hunter BEFORE the separation hold is
+        -- consulted, and Navigator:Stop() takes the trail with it.
+        nav:Stop()
+        entity.LastDesiredSpeed = 0
+        return
+    end
+    -- The goal is (re)set every tick whether or not the entity is held; only
+    -- the STEP is withheld, and the desired speed keeps its last value.
+    nav.Goal = entity.Goal
+    if now < (entity.SeparationHoldUntil or 0) then return end
+    if distance > .5 then
+        local direction = offset/distance
+        nav.Facing = direction
+        local step = math.min(distance,SPEED*deltaTime)
+        local target = nav.Position + direction*step
+        if nav.Walkable(target) then
+            nav.Position = target
+            nav.TrailStuds = math.min(TRAIL_CAP,nav.TrailStuds+step)
+            entity.LastDesiredSpeed = SPEED
         end
     end
 end
@@ -232,7 +268,47 @@ do
     check(shared.Level2_PoolFoamSeparationMs~=nil,"the cost average is published")
 end
 
--- 3. Head-on in a corridor the bodies cannot pass in: no overlap, no deadlock,
+-- 3. The 2026-09-21 Studio round, offline. Five entities carrying the FINAL
+--    ART's radius converge on one stationary player and then stand there for a
+--    minute. A converged ring is an END STATE: it must not overlap, and the
+--    bounded wait must not keep firing -- live, every expiry called Retreat on
+--    an arrived entity whose Stop() had emptied its trail, reached the release
+--    ceiling instead, and let the ring walk through itself (MinSeparation 3.2
+--    against a 5.17 contact circle, YieldCount climbing 2-3 per second).
+do
+    local entities = {}
+    for ordinal=1,5 do
+        local angle = (ordinal-1)*(2*math.pi/5)
+        local entity = makeEntity(("Primary_%02d"):format(ordinal),ordinal,
+            math.cos(angle)*26,math.sin(angle)*26,nil,nil,ART_RADIUS)
+        entity.Goal = Vector3.zero
+        table.insert(entities,entity)
+    end
+    local session = makeSession(entities)
+    local converging = run(session,1800,1/60)   -- 30 s: close in and settle
+    local settledYields = session.SeparationYields
+    local standing = run(session,1800,1/60)     -- 30 s: just stand there
+    check(session.SeparationOverlapFrames==0,
+        ("a converged ring never overlapped (%d overlap steps)"):format(
+            session.SeparationOverlapFrames))
+    check(math.min(converging,standing) >= ART_CONTACT,
+        ("and never closed inside %.2f studs (closest %.2f)"):format(
+            ART_CONTACT,math.min(converging,standing)))
+    check(session.SeparationYields==settledYields,
+        ("the bounded wait plateaus once converged (%d -> %d)"):format(
+            settledYields,session.SeparationYields))
+    -- Stronger than the plateau, and the one the live readback shows: a ring of
+    -- hunters that have nowhere further to walk never needs a back-out at all.
+    check(session.SeparationYields==0,
+        ("a converged ring never backs out (%d back-outs)"):format(session.SeparationYields))
+    local held = 0
+    for _,entity in entities do
+        if entity.SeparationReleaseUntil>clock then held += 1 end
+    end
+    check(held==0,"and no entity was ever released to pass through a neighbour")
+end
+
+-- 4. Head-on in a corridor the bodies cannot pass in: no overlap, no deadlock,
 --    and the entity with right of way keeps the ground the yielder gives up.
 do
     local corridor = function(position) return math.abs(position.X) <= .4 end
@@ -257,7 +333,7 @@ do
     check(second.LongestReversalRun<=2,"the held yielder did not shiver against its route")
 end
 
--- 4. A yielder with a wall on the side it was sent to takes the other lane once,
+-- 5. A yielder with a wall on the side it was sent to takes the other lane once,
 --    and one with a wall on BOTH sides is held rather than pushed backwards.
 do
     local oneLane = function(position) return position.X >= -.1 end
@@ -283,22 +359,86 @@ do
         "and so is the entity that would otherwise walk through it")
 end
 
--- 5. A yielder that cannot back out either is RELEASED, never frozen for good.
+-- 6. A yielder with nowhere to go and a body INSIDE contact is never released:
+--    releasing there is what walked the Studio ring through itself.
 do
-    local pen = function(position) return math.abs(position.X)<=.01 and position.Z>=0 end
-    local ahead = makeEntity("Primary_01",1,0,8,Vector3.new(0,0,-1))
+    local pen = function(position) return math.abs(position.X)<=.01 and position.Z>=-.01 end
+    local pressing = makeEntity("Primary_01",1,0,20,Vector3.new(0,0,-1))
+    pressing.Goal = Vector3.new(0,0,-40)
     local trapped = makeEntity("Primary_02",2,0,0,Vector3.new(0,0,1),pen)
-    local session = makeSession({ahead,trapped})
+    trapped.Goal = Vector3.new(0,0,60) -- walled in sideways, and behind as well
+    local session = makeSession({pressing,trapped})
+    local closest = run(session,600,1/60)
+    check(session.SeparationYields>0,
+        "an entity obstructing somebody with somewhere to go still arms the wait")
+    check(trapped.SeparationReleaseUntil<=clock,
+        "a trapped yielder inside contact distance is never released")
+    check(trapped.SeparationHoldUntil>clock,"it stays held instead")
+    check(session.SeparationOverlapFrames==0 and closest>=CONTACT,
+        ("and nothing overlaps (closest %.2f)"):format(closest))
+end
+
+-- 7. The release is REFUSED while a body is inside contact distance, which is
+--    the state the Studio ring was in every time it reached the ceiling.
+do
+    local walled = function() return false end
+    local pressing = makeEntity("Primary_01",1,0,4,Vector3.new(0,0,-1))
+    pressing.Navigator.Goal = Vector3.new(0,0,-40) -- 44 studs left to walk
+    local stuck = makeEntity("Primary_02",2,0,0,Vector3.new(0,0,1),walled)
+    local session = makeSession({pressing,stuck})
+    local before = (pressing.Navigator.Position-stuck.Navigator.Position).Magnitude
+    for _=1,90 do
+        clock += 1/60
+        updateSeparation(session,clock,1/60)
+    end
+    check(session.SeparationYields>0,"the wait ran out with nowhere to go")
+    check(stuck.SeparationReleaseUntil<=clock,
+        "and the release was refused with a body inside contact distance")
+    check(stuck.SeparationHoldUntil>clock and pressing.SeparationHoldUntil>clock,
+        "both stay held instead")
+    check((pressing.Navigator.Position-stuck.Navigator.Position).Magnitude>=before,
+        "and the pair never got closer than it started")
+end
+
+-- 8. The back-out itself never lands on another body: the trail leads straight
+--    back into a third entity, so the retreat must stop rather than jump in.
+do
+    local corridor = function(position) return math.abs(position.X)<=.01 end
+    local pressing = makeEntity("Primary_01",1,0,8,Vector3.new(0,0,-1))
+    pressing.Navigator.Goal = Vector3.new(0,0,-40)
+    local middle = makeEntity("Primary_02",2,0,0,Vector3.new(0,0,1),corridor)
+    middle.Navigator.TrailStuds = 24 -- it walked here, so a back-out is possible
+    local behind = makeEntity("Primary_03",3,0,-12,Vector3.new(0,0,1))
+    local session = makeSession({pressing,middle,behind})
     for _=1,200 do
         clock += 1/60
         updateSeparation(session,clock,1/60)
     end
-    check(session.SeparationYields>0,"the trapped yielder reached its back-out")
-    check(trapped.SeparationReleaseUntil>clock,"and was released instead of held again")
-    check(trapped.SeparationHoldUntil<=clock,"the hold is gone while the release stands")
+    check(session.SeparationYields>0,"the middle entity ran its wait out")
+    local gap = (middle.Navigator.Position-behind.Navigator.Position).Magnitude
+    check(gap>=CONTACT,("it never backed onto the body behind it (%.2f)"):format(gap))
+    check(session.SeparationOverlapFrames==0,"and no step reported an overlap")
 end
 
--- 6. The pass is off by configuration, and one entity is never a pair.
+-- 9. The ceiling is still reachable when the WORLD, not a neighbour, is what
+--    blocks the back-out -- otherwise a rig walled into a dead end freezes.
+do
+    local walled = function() return false end
+    local pressing = makeEntity("Primary_01",1,0,8.2,Vector3.new(0,0,-1))
+    pressing.Navigator.Goal = Vector3.new(0,0,-40)
+    local stuck = makeEntity("Primary_02",2,0,0,Vector3.new(0,0,1),walled)
+    local session = makeSession({pressing,stuck})
+    for _=1,120 do
+        clock += 1/60
+        updateSeparation(session,clock,1/60)
+    end
+    check(session.SeparationYields>0,"the wait ran out with nowhere to back out to")
+    check(stuck.SeparationReleaseUntil>clock,
+        "and the pair was released, because no body is within contact of it")
+    check(session.SeparationOverlapFrames==0,"nothing overlapped getting there")
+end
+
+-- 10. The pass is off by configuration, and one entity is never a pair.
 do
     local a = makeEntity("Primary_01",1,0,0)
     local b = makeEntity("Primary_02",2,0,1)
@@ -391,11 +531,11 @@ print("Pool Foam separation: "..checks.." checks passed, "..placements
 '''
 
 
-def main():
-    binary = os.environ.get("LUAU_BIN") or shutil.which("luau")
-    if not binary:
-        raise SystemExit("Set LUAU_BIN or install luau; no tests were executed.")
-    source = "\n".join([
+def build_source(controller=None):
+    """Assemble the fixture. Takes the controller source so a mutation run can
+    hand in a deliberately broken copy and prove these assertions still bite."""
+    CONTROLLER = controller if controller is not None else globals()["CONTROLLER"]
+    return "\n".join([
         PRELUDE,
         section(CONTROLLER, "local function finiteNumber", "local function loadSibling"),
         section(CONTROLLER, "-- SEPARATION TUNING BEGIN", "-- SEPARATION TUNING END"),
@@ -407,10 +547,20 @@ def main():
         CONTROLLER[CONTROLLER.index("local function resetProgressWindow"):CONTROLLER.index("local function refreshTemplate")],
         HOLD_TESTS,
     ])
+
+
+def run_source(binary, source, check=True):
     with tempfile.TemporaryDirectory(prefix="pool-foam-separation-") as directory:
         fixture = Path(directory) / "separation_test.luau"
         fixture.write_text(source, encoding="utf-8")
-        subprocess.run([binary, str(fixture)], check=True, timeout=60)
+        return subprocess.run([binary, str(fixture)], check=check, timeout=120)
+
+
+def main():
+    binary = os.environ.get("LUAU_BIN") or shutil.which("luau")
+    if not binary:
+        raise SystemExit("Set LUAU_BIN or install luau; no tests were executed.")
+    run_source(binary, build_source())
 
 
 if __name__ == "__main__":

@@ -2540,7 +2540,13 @@ end
 -- floor and body checks as forward motion, so it cannot cross a wall, gain
 -- height it did not climb, or jump a gap. It is a walk, not a teleport: the
 -- distance is capped and the rig stops the instant a step fails.
-function Navigator:Retreat(maxDistance)
+-- `isClear`, when given, is asked about every position this would step to
+-- BEFORE it steps there, and the walk stops at the first refusal. The floor and
+-- body checks below only know about the world: they cannot see another
+-- anchored, non-colliding creature standing in the way, and a rig that backs
+-- out through one of those has done exactly the damage the retreat exists to
+-- avoid. Callers with nothing to add leave it out and nothing changes.
+function Navigator:Retreat(maxDistance, isClear)
 	if self.Destroyed or not (self.Model and self.Model.Parent) then return 0 end
 	maxDistance = finiteNumber(maxDistance) and math.clamp(maxDistance, 0, 48) or 0
 	if maxDistance <= 0 or #self.Trail == 0 then return 0 end
@@ -2551,6 +2557,7 @@ function Navigator:Retreat(maxDistance)
 		local step = horizontalDistance(self.FootPosition, target)
 		if step > .05 then
 			if travelled + step > maxDistance then break end
+			if isClear and not isClear(target) then break end
 			local direction = Vector3.new(
 				target.X - self.FootPosition.X, 0, target.Z - self.FootPosition.Z)
 			if not self:_placeFoot(target, direction) then break end
