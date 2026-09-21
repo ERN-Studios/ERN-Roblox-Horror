@@ -7,6 +7,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
 local RunService = game:GetService("RunService")
 local CollectionService = game:GetService("CollectionService")
+local HttpService = game:GetService("HttpService")
 local PlayerProtection = require(game:GetService("ServerScriptService"):WaitForChild("PlayerProtection"))
 
 local Navigator = require(script.Parent:WaitForChild("Level 2 Pool Slide Navigator"))
@@ -27,6 +28,8 @@ local SPAWN_MAX_PROBES_PER_PASS = 24
 local SPAWN_PROBE_INTERVAL = .05
 local PATH_REQUEST_TIMEOUT = 3
 local PLANNING_WALL_TIMEOUT = 4
+local PLAN_HORIZON = 96
+local PLAN_HORIZON_EXTEND = 48
 local TARGET_REFRESH_SECONDS = .25
 local GOAL_REFRESH_SECONDS = .15
 local WATCHDOG_SECONDS = 3
@@ -76,7 +79,7 @@ local function resetPublished()
 		PathStatus = "IDLE", LastError = "", Phase = "DORMANT",
 		Computing = false, Waypoints = 0, ClearanceProbes = 0, PathFailure = "",
 		Enraged = false, AttackSerial = 0, SpawnProbeCount = 0, ValidationOnly = false,
-		SpawnNavigatorBuilds = 0,
+		SpawnNavigatorBuilds = 0, TargetDistance = 0, GoalError = -1, GoalAge = -1, Trace = "",
 		NavigationContextReady = false, NavigationContextError = "", NavigationContextMaxSlice = 0,
 	}) do publish(nil, suffix, value) end
 end
@@ -118,6 +121,25 @@ local function livingRecords(session)
 		if record then table.insert(records, record) end
 	end
 	return records
+end
+
+-- Diagnostics only. Vector3 cannot be JSON-encoded, and whole studs are enough.
+local function traceJson(records)
+	local rows = {}
+	for _, record in ipairs(records) do
+		local row = {}
+		for key, value in pairs(record) do
+			if typeof(value) == "Vector3" then
+				row[key] = {math.round(value.X), math.round(value.Y), math.round(value.Z)}
+			elseif type(value) == "number" then
+				row[key] = math.round(value * 10) / 10
+			else
+				row[key] = value
+			end
+		end
+		table.insert(rows, row)
+	end
+	return HttpService:JSONEncode(rows)
 end
 
 local function setTarget(session, player)
@@ -288,6 +310,10 @@ local function navigationTuning(model)
 		-- Walk to the certified final approach; a 1.4-stud early stop can miss melee reach.
 		GoalArrivalDistance = .2,
 		RepathInterval = .75, StableRoutes = true, PathRequestTimeout = PATH_REQUEST_TIMEOUT,
+		-- Certify 96 studs of route per request and extend with 48 left: at the
+		-- enraged 32 studs/s that is 1.5 s of road, one repath interval plus one
+		-- measured short plan (0.3-0.8 s). Whole-route plans expired at range.
+		PlanHorizon = PLAN_HORIZON, PlanHorizonExtend = PLAN_HORIZON_EXTEND,
 		-- Defensive server-time limit; os.clock's primary deadline also advances
 		-- while the planning coroutine yields on a Roblox server.
 		PlanningWallTimeout = PLANNING_WALL_TIMEOUT,
@@ -623,6 +649,13 @@ end
 
 local function updateModel(session, deltaTime)
 	local now, navigator = os.clock(), session.Navigator
+	local diagnostics = workspace:GetAttribute("Level2_PoolSlideDiagnostics") == true
+	navigator.TraceEnabled = diagnostics -- before SetGoal, so the first request is traced too
+	if diagnostics then
+		-- A/B lever for the same round: 0 is the old whole-route certification.
+		local horizon = workspace:GetAttribute("Level2_PoolSlidePlanHorizon")
+		navigator.Tuning.PlanHorizon = type(horizon) == "number" and math.clamp(horizon, 0, 512) or PLAN_HORIZON
+	end
 	if updateAttack(session, now) then return end
 	if now >= session.NextTargetRefresh then
 		chooseTarget(session)
@@ -660,11 +693,23 @@ local function updateModel(session, deltaTime)
 	-- not readable from outside otherwise: GetDebugSnapshot needs the live
 	-- module, and a probe run through execute_luau gets its own instance. Off
 	-- unless a probe asks, and publish() writes only on change.
-	if workspace:GetAttribute("Level2_PoolSlideDiagnostics") == true then
+	if diagnostics then
 		publish(session, "Computing", nav.Computing == true)
 		publish(session, "Waypoints", nav.WaypointCount)
 		publish(session, "ClearanceProbes", nav.ClearanceProbes or 0)
 		publish(session, "PathFailure", tostring(nav.LastFailure or ""))
+		-- How old is the position this route was planned for, and how far has the
+		-- target moved off it? These two are the reported "chases an old position".
+		local targetPosition = record.Root.Position
+		publish(session, "TargetDistance", math.round(distance(navigator:GetPosition(), targetPosition)))
+		publish(session, "GoalError", nav.InstalledGoal
+			and math.round(distance(nav.InstalledGoal, targetPosition)) or -1)
+		publish(session, "GoalAge", nav.InstalledGoalRequestedAt
+			and math.round((workspace:GetServerTimeNow() - nav.InstalledGoalRequestedAt) * 10) / 10 or -1)
+		if session.TraceSerial ~= navigator.TraceSerial then
+			session.TraceSerial = navigator.TraceSerial
+			publish(session, "Trace", traceJson(navigator.Trace))
+		end
 	end
 	if beginAttack(session, record, now) then return end
 	if now - session.ProgressAt >= WATCHDOG_SECONDS then

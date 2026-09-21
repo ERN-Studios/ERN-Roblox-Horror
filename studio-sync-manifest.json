@@ -1,7 +1,7 @@
 {
   "formatVersion": 2,
   "source": "Studio-authoritative square detector artwork and compact shop captions, published v1949.",
-  "finalNewlineContract": "Exact Studio source bytes including final newline; no newline exceptions.",
+  "finalNewlineContract": "Entries flagged studioTrailingNewline hold exactly the canonical repo file plus one extra trailing newline in Studio. Exact landings remove the flag. Current flagged entry count: 0. Manifest hashes always describe the canonical repo file, never Studio's transport bytes.",
   "studio": {
     "name": "BACKROOMS: STAY QUIET [CO-OP HORROR]",
     "id": "13492bce-27a0-4835-890f-c74652a9a4de",
@@ -17,7 +17,7 @@
     "scripts": 154,
     "remoteEvents": 15,
     "total": 169,
-    "studioTrailingNewline": 154
+    "studioTrailingNewline": 0
   },
   "nativePlaceBackup": {
     "file": "artifacts/remaining-trello-20260920/remaining-trello-20260920.rbxl",
@@ -720,8 +720,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Slide Controller.ModuleScript.lua",
-      "bytes": 38772,
-      "sha256": "c46b1717f6090e45c932c99bbad0bf02fb61ba2a59daf6c7c3057f72e0e7f377",
+      "bytes": 40922,
+      "sha256": "0c0368645ca2a7a43b96420c0b3efcaee3a0a6371c1b0e39630b55d8a7284924",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -735,8 +735,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Slide Navigator.ModuleScript.lua",
-      "bytes": 131658,
-      "sha256": "edc7e3f3784572e5e0f2dda2acc0f83e2d9fb275a126545e12442a337a149f81",
+      "bytes": 137281,
+      "sha256": "8cc8483cd8661e07af8dd5d2d89d10e73e0004ea04d69ceb05940738b47223ed",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
