@@ -35,8 +35,8 @@ Intet i dette dokument er publiceret endnu, medmindre der står det.
 | Kort | Status |
 |---|---|
 | B1 Shoptekster ([xQWVkwhw](https://trello.com/c/xQWVkwhw), [UNRk7Qy8](https://trello.com/c/UNRk7Qy8)) | tekst **kodefærdig og i Studio**; event-måling under B2 |
-| B2 Analytics ([bIFdNWUf](https://trello.com/c/bIFdNWUf)) | under arbejde |
-| B3 Dødsårsag, råd og retry ([PR0ersiy](https://trello.com/c/PR0ersiy), [us5TWr9O](https://trello.com/c/us5TWr9O)) | under arbejde |
+| B2 Analytics ([bIFdNWUf](https://trello.com/c/bIFdNWUf)) | **kodefærdig, verificeret i Studio** på ring-niveau (Studio sender bevidst intet). Dashboard-modtagelse: **afventer publiceret release**; data/kohorter: **afventer data**. Schema: `docs/ANALYTICS_SCHEMA_2026-09-21.md` |
+| B3 Dødsårsag, råd og retry ([PR0ersiy](https://trello.com/c/PR0ersiy), [us5TWr9O](https://trello.com/c/us5TWr9O)) | **verificeret i Studio** (solo, PC): rigtig død → korrekt årsag + råd, retry-guide til det spillede level. Øvrige årsager kun via dev-seam/offline; nyspiller-forståelse: **afventer personer**. Queue-/briefing-/loadtid og "tilgivende første møde" pr. entity er **ikke lavet** (se §6) |
 | B4 QA/marketing | **afventer personer/hardware**; se §6 |
 
 ### Fase C/D
@@ -54,6 +54,8 @@ Level 4 blokmodel + prototype er under arbejde (dev-only adgang; live-gates uæn
 | `a1248c8` | L3 rumopslag i plan-koordinater; SlideContinuationSafety kaster ikke længere på forankret rod; UIRegression-række | `…Level 3 Objective Controller`, `ReplicatedStorage.SlideContinuationSafety`, `ReplicatedStorage.UIRegression` |
 | `0a83253`, `afa3fb1` | Load-tids-readbacks (pcall'et) + måleartefakter | `…Level 2 Round Adapter`, `…Level 3 Round Adapter` |
 | `60a8d4b` | Skjulte tile-flader cullet | `…Level 2 World Builder`, `…Level 2 Configuration` (`Performance.CullHiddenTileFaces`); test `test_level2_tile_face_culling.py` |
+| `1c9ff51`, `e3891a4`, `a6aea0a` | Dødsårsag + råd på dødskortet, retry-guide i lobbyen | NY `ReplicatedStorage.DeathAdvice`; `ServerScriptService.GameManager`; ét `Mark`-kald før drabet i `Level 1 Systems.EntityKill`, `…MazeGenerator`, `Level 2 Pool Foam Controller`, `Level 2 Pool Slide Controller`, `Level 3 Mall Manager AI Controller`; `StarterPlayerScripts.RoundUI`, `…First Entry Guide`; tests `test_death_advice.py`, `test_retry_guide.py` |
+| `5e775e6`, `72caec6` | Analytics (funnels + custom events) | NY `ServerScriptService.ZyntraAnalytics`; hooks i `GameManager`, `TeamObjectives`, `ZyntraMonetization`, `ZyntraDetectorService`, `StarterPlayerScripts.Shop Display Client`; test `test_zyntra_analytics.py`; `docs/ANALYTICS_SCHEMA_2026-09-21.md` |
 | `8e97018` | Shoptekster | `ReplicatedStorage.ZyntraConfig`, `StarterPlayerScripts.Shop Display Client`, `ServerScriptService.ZyntraMonetization` |
 
 Branchen er pushet til GitHub (`origin/claude/trello-20260921`, almindeligt push, ingen force); ingen PR oprettet endnu. Ikke publiceret til Roblox (se §9).
@@ -105,9 +107,20 @@ Observation til polish: alle fem CD'er ligger på rummets **skjulebord**, og bå
 Touch/tablet: `UIRegression.Compact("ObjectiveCornerMatrix")` i play-session — 399 checks, alle Level 3-rækker (readeren i øverste højre safe-hjørne + readout passer i panelet) består på samtlige simulerede telefoner, tablets og desktops. De 14 fejl i kørslen er alle **Level 1**-rækker (`Level1Objectives is not visible …`, detector-readout på 568×320 og 667×375) i filer denne opgave ikke har rørt (PuzzleUI uændret siden baseline) — forældede rækker efter objective-feed-ændringen 20/9, bør ryddes op særskilt.
 Ikke verificeret: to spilleres pickups, fem afleveringer + exit, fysisk enhed, spectator-visning.
 
+### 3.6 Dødsårsag og retry (B3)
+
+Serveren markerer spilleren på linjen før det autoritative drab (`DeathAdvice.Mark(player, key)`), GameManagers `hum.Died` tager mærket (≤ 3 s gammelt, ellers `Unknown`) og tilføjer nøglen **bagest** i de eksisterende payloads: `"death", name, position, causeKey` og `"partydown", 15, lastDeathName, causeKey`. Nøgler: `L1Entity`, `L1Pit`, `L2Foam`, `L2Slide`, `L3Manager`, `Unknown` (ingen opdigtet forklaring, intet råd). Al tekst ligger i `ReplicatedStorage.DeathAdvice` med kodehenvisning pr. regel.
+Studio, Level 2, rigtig død til PoolSlide: payload `death(mikkelczar, (-570.6,3.8,-408.8), L2Slide)` + `partydown(15, mikkelczar, L2Slide)`; kortet viste `THE SLIDE STRUCK` / `The pool slide landed its swing.` / `NEXT TIME` / `Step behind it during the windup; its swing is locked forward.` Fundet og rettet i Studio: (1) et solo-dødsfald er også PARTY DOWN, hvis modal + skygge dækkede/dæmpede kortet i hele dets levetid — kortet løfter sig nu over skyggen, dokker øverst som titel + råd på lave viewports (< 620 px) og lever til modalen lukker; (2) retry-guiden pegede på Level 1 efter et Level 2-tab, fordi `cleanupActiveWorld` nulstiller `activeLevel` før hjemturen — den læser nu `lastRoundLevel` (verificeret: `RetryGuideLevel = 2`, billboard `TRY AGAIN · LEVEL 2` over Level 2-pladen med beam-kæde).
+Ikke verificeret: de fire andre årsager ved rigtig død (kun dev-seam `player:SetAttribute("DevDeathCause", key)` i Studio + offline-test), teleport-stien (`RetryLevel` i ReturnToLobby-pakken) på publiceret server, telefon-layoutet af det dokkede kort på fysisk enhed.
+
+### 3.7 Analytics (B2)
+
+Studio-runde (ringen i `ServerStorage.ZyntraAnalyticsDebug`, `Mode = studio`, `Faults 0`, `Dropped 0`): `onboard 2 ProfileLoaded` → `onboard 3 RoundLoaded L2` → `onboard 4 RoundStarted L2` → `zq_round_start L2|returning|PC` → `onboard 5 FirstObjective L2` → `zq_objective_first` → `zq_first_death 23 L2|l2slide|returning` → `zq_round_outcome 39 L2|died|returning` → `retry 1 BackInLobby`. Enhedsklassen (`PC`/`Phone`/`Tablet`) meldes én gang af klienten som fast enum og bruges kun som segment. I Studio lander `Joined` efter `ProfileLoaded` (GameManager initialiserer langsommere end profilen loader), så trin 1 ses ikke i ringen dér; på en rigtig server kommer join før DataStore-svaret, og Roblox bagudfylder under alle omstændigheder tidligere trin.
+Ikke verificeret: modtagelse i Creator Dashboard (kræver publiceret release), shop view/demo-events i en rigtig lobby-gennemgang, købsevents (ingen rigtig transaktion kørt).
+
 ## 4. Screenshots
 
-Native Studio-captures ligger uden for git i session-scratchpad (`shots-before/shot01–12.png`, fast kameratur i Level 2). Level 3-readeren (desktop, `IN THIS ROOM`) er set og beskrevet ovenfor; gemte HUD-screenshots til Codex følger når touch-tiers er kørt.
+`artifacts/claude-20260921/screens/` (native Studio-vindue, desktop 1540×820): `death-card-with-partydown-desktop.jpg` (rigtig død, dødskort + PARTY DOWN), `death-card-L2Slide-desktop.jpg` (dev-seam i lobbyen), `death-real-L2Slide-partydown-desktop.jpg` (før docking-rettelsen: kortet væk under modalen), `retry-guide-lobby.jpg`. Level 2-kameraturen (12 vinkler × 3 kørsler) ligger i session-scratchpad uden for git. Level 3-readeren (`IN THIS ROOM`) er beskrevet i §3.5; touch-tiers er kun kørt i UIRegression, ikke fotograferet.
 
 ## 5. Assetliste til Codex
 
