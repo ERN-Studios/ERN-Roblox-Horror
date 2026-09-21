@@ -370,7 +370,9 @@ function Adapter.Build()
 		local manifest = WorldBuilder.Build(layout, generation)
 		activeManifest = manifest
 		state:SetAttribute("Level2_BuildSeconds", math.round((os.clock() - buildBegan) * 100) / 100)
-		state:SetAttribute("Level2_WorldDescendants", #manifest.World:GetDescendants())
+		-- A readback must never be able to fail a build.
+		local counted, descendants = pcall(function() return #manifest.World:GetDescendants() end)
+		state:SetAttribute("Level2_WorldDescendants", counted and descendants or nil)
 
 		-- Move everyone out of the lobby BEFORE parking it, or the floor
 		-- vanishes from under them and they fall into the void. The arrival

@@ -555,8 +555,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Configuration.ModuleScript.lua",
-      "bytes": 9970,
-      "sha256": "707d0831964731ce1c7f0337b98839bb45a4bcbb3a7644beaa28b68536764c68",
+      "bytes": 10997,
+      "sha256": "34190865818ba9d31ca5ce84ae6e1838ffef07e7eef8bd2a518de558ed16e720",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -765,8 +765,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua",
-      "bytes": 19880,
-      "sha256": "db203a37e07ffc4640bf9fea85bece2dce74637420c8ea9d816e55d228e0c3d5",
+      "bytes": 20023,
+      "sha256": "31a1da544c6588538591302e805dc8377a718808f080665d02aa7631a759f6e4",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -797,8 +797,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua",
-      "bytes": 265471,
-      "sha256": "9995fc66f739468715976bd16f004ee6de28dbbd69bf1e9ac10d2a4fd515a9a1",
+      "bytes": 269479,
+      "sha256": "1f961ef268145e1dfe3f529965624316089f78d396b004113370664041361190",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -932,8 +932,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Round Adapter.ModuleScript.lua",
-      "bytes": 31395,
-      "sha256": "b6e35d97c18a844ad5cb5463c63308ae4d496a10c8ec194c77889f94d1fba508",
+      "bytes": 31538,
+      "sha256": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"

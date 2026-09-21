@@ -640,7 +640,9 @@ function Adapter.Build()
 		validateManifest(manifest)
 		activeManifest = manifest
 		levelState:SetAttribute("Level3_BuildSeconds", math.round((os.clock() - buildBegan) * 100) / 100)
-		levelState:SetAttribute("Level3_WorldDescendants", #manifest.World:GetDescendants())
+		-- A readback must never be able to fail a build.
+		local counted, descendants = pcall(function() return #manifest.World:GetDescendants() end)
+		levelState:SetAttribute("Level3_WorldDescendants", counted and descendants or nil)
 
 		-- Move characters onto solid Level 3 ground before the lobby is parked.
 		-- GameManager will place the round party again when entry begins.

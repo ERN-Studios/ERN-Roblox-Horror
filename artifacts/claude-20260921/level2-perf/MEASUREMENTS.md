@@ -55,3 +55,34 @@ a throttling artefact, not a gameplay frame rate.
   owner/art decision with the number attached.
 - New load-time readbacks: `Level2_LayoutSeconds`, `Level2_BuildSeconds`,
   `Level2_WorldDescendants` (and the same three for Level 3) on the level state folders.
+
+## After hidden tile-face culling (`Performance.CullHiddenTileFaces = true`, commit 60a8d4b)
+
+Same seed, same round state: world descendants 74,086 → **71,214**, `Texture` 44,923 → **42,051**
+(−2,872, −6.4 %); build 2.27–2.36 s → 2.83 s (one sample each; not a regression signal by itself).
+Fixed-camera tour (12 shots, `shots-client.luau`), pixel diff of the 3D viewport, threshold 24/255:
+
+| Pair | stable shots 02,03,05,06,08–12 | shots 01, 04, 07 |
+|---|---|---|
+| unchanged run A vs unchanged run B (noise floor) | 0.00–0.17 % pixels differ | 77 % / 89 % / 3.4 % — capture timing and stream-in order, present without any change |
+| unchanged vs culled | 0.00–0.13 % | 81 % / 5.7 % / 0.00 % — same artefacts (shot 01 caught the camera still at the pump; shot 04 differs by which distant arch had streamed in) |
+
+No visible change from the culling in any stable viewpoint.
+
+## Where the instances really are (after culling, same seed)
+
+| Family | Textures | Parts | Faces/part |
+|---|---:|---:|---:|
+| `Level 2 Arch Rib n` | 16,352 | 5,518 | 3.0 |
+| `Level 2 Corridor Arch Spandrel n` | 8,192 | 4,096 | 2.0 |
+| `Level 2 Arch Rib n face-n` / `face n` | 7,680 | 3,840 | 2.0 |
+| `Level 2 Vault Strip n` | 1,533 | 1,344 | 1.1 |
+| everything else (props, treads, columns, ledges, lintels, walls, ceilings…) | ≈ 8,300 | — | — |
+
+**The corridor vault arches are 32,224 of 42,051 textures (77 %) and 13,454 parts — about half
+of every part in the level.** Each arch is built from many short box segments so it reads as a
+curve, and each segment carries two or three tile textures. Face culling cannot touch that (all
+three faces of a rib are visible). The lever is the arch itself: one skinned/CSG or imported
+MeshPart per rib (or per corridor vault) with the tile as a SurfaceAppearance/MaterialVariant
+would take the world from ~71k to roughly 26k descendants. That changes how the arches are
+made, so it is an art + owner decision with a builder change to follow — see the handoff.
