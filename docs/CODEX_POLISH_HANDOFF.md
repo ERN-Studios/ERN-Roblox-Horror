@@ -26,7 +26,7 @@ Intet i dette dokument er publiceret endnu, medmindre der står det.
 |---|---|---|
 | A1 PoolSlide chase-lag ([rXhi1SZ8](https://trello.com/c/rXhi1SZ8)) | kode: **verificeret i Studio** (solo). Animationer/større model: **mangler art** | Årsag fundet og målt; planlægning med 96-studs horisont. Se §3.1 |
 | A2 PoolSlide-lyd ([LigItMHi](https://trello.com/c/LigItMHi)) | **kodefærdig**, tilstandsmaskine **verificeret i Studio** på attributniveau. Lyttetest: **afventer** (jeg kan ikke høre) | Én ejer pr. lydforløb; mund-emitter følger det animerede `Head`-bone. §3.2 |
-| A3 PoolFoam overlap ([jecT8s86](https://trello.com/c/jecT8s86)) | **delvist**: steady state holder afstand i Studio; korte overlap under "back-out" i en klynge er fundet og er ved at blive rettet | §3.3 |
+| A3 PoolFoam overlap ([jecT8s86](https://trello.com/c/jecT8s86)) | **verificeret i Studio** for klynge om fælles mål og spawn-afstand (solo). Korridor-møde og flere spillere: kun offline-test | §3.3 |
 | A4 Lag/render ([Zpj0Gkbb](https://trello.com/c/Zpj0Gkbb)) | målt på PC; mobil **afventer hardware**. Texture-instans-reduktion under arbejde | §3.4 |
 | A5 Level 3 første CD + CD-reader ([6BVH4WmN](https://trello.com/c/6BVH4WmN)) | **verificeret i Studio** (solo, PC). To spillere, fem afleveringer og touch-layout: ikke kørt | §3.5 |
 
@@ -50,7 +50,7 @@ Level 4 blokmodel + prototype er under arbejde (dev-only adgang; live-gates uæn
 | `7509fb9` | PoolSlide horisont-planlægning + request-tracing | `ServerScriptService.Level 2 Systems.Level 2 Pool Slide Controller`, `…Navigator` |
 | `e4bc4a7` | L3 første CD i entry-rummet + CD-reader | `…Level 3 Systems.Level 3 Layout Generator`, `…Objective Controller`, `StarterPlayerScripts.Level 3 Reader Client`; test `tools/tests/test_level3_first_cd.py` |
 | `390f5aa`, `f58e493` | PoolSlide-lyd: ejerskab + mund følger animeret bone | `ReplicatedStorage.Level 2 Entity Audio Bank`, `StarterPlayerScripts.Level 2 Entity Audio`, `…Level 2 Sound Controller`; tests `test_pool_slide_audio_states.py`, `test_spectate_audio_gates.py` |
-| `0790135` | PoolFoam separation | `…Level 2 Pool Foam Controller`, `…Navigator` (ny `Sidestep`), `…Configuration` (blok `Separation`); test `test_pool_foam_separation.py` |
+| `0790135`, `521d80f` | PoolFoam separation + klynge-rettelse | `…Level 2 Pool Foam Controller`, `…Navigator` (ny `Sidestep`), `…Configuration` (blok `Separation`); test `test_pool_foam_separation.py` |
 | `a1248c8` | L3 rumopslag i plan-koordinater; SlideContinuationSafety kaster ikke længere på forankret rod; UIRegression-række | `…Level 3 Objective Controller`, `ReplicatedStorage.SlideContinuationSafety`, `ReplicatedStorage.UIRegression` |
 | `0a83253` | Load-tids-readbacks + måleartefakter | `…Level 2 Round Adapter`, `…Level 3 Round Adapter` |
 | `8e97018` | Shoptekster | `ReplicatedStorage.ZyntraConfig`, `StarterPlayerScripts.Shop Display Client`, `ServerScriptService.ZyntraMonetization` |
@@ -88,7 +88,7 @@ Ikke verificeret: faktisk despawn → genoptaget ambience, stream ud/ind, andet 
 
 ### 3.3 PoolFoam (A3)
 
-Studio, seed `1182081016`, én pumpe (fase Foreshadow: fem aktive, ingen angreb), stillestående spiller: alle fem konvergerede på spilleren inden for et minut. Live-modellen er final art, bbox 5,17 × 11,05 × 4,0 → målt radius 2,59, kontakt 5,17, med padding 6,67. Uafhængig sampling (0,5 Hz): par-afstande 6,48–6,7 = præcis den polstrede kontaktafstand. Men controllerens egne readbacks viste korte reelle overlap: `MinSeparation` 3,2, `OverlapFrames` +1/s, `YieldCount` +2–3/s uden loft — "back-out"-reglen (til korridor-møder) fyrer kontinuerligt i en stillestående klynge og bakker gennem naboer. Rettelse bestilt: en ring om et fælles mål er en stabil sluttilstand; aldrig retreat/release ind i en anden krop. Passets pris: 0,006–0,2 ms.
+Studio, seed `1182081016`, én pumpe (fase Foreshadow: fem aktive, ingen angreb), stillestående spiller: alle fem konvergerede på spilleren inden for et minut. Live-modellen er final art, bbox 5,17 × 11,05 × 4,0 → målt radius 2,59, kontakt 5,17, med padding 6,67. Uafhængig sampling (0,5 Hz): par-afstande 6,48–6,7 = præcis den polstrede kontaktafstand. Men controllerens egne readbacks viste korte reelle overlap: `MinSeparation` 3,2, `OverlapFrames` +1/s, `YieldCount` +2–3/s uden loft — "back-out"-reglen (til korridor-møder) fyrer kontinuerligt i en stillestående klynge og bakker gennem naboer. Rettelse (`521d80f`): ventetiden til back-out armeres kun når den med forkørselsret reelt er blokeret og vil forbi; hverken back-out eller release må krydse en anden krop (`Navigator:Retreat(maxDistance, isClear)`). Samme runde efter rettelsen: alle fem i ring om spilleren i 97 s → `OverlapFrames` 0, `YieldCount` 0, `MinSeparation` 6,41 (kontakt 5,17), uafhængig 10 Hz-sampling: 0 samples under kontakt, løbende min 6,62; passets pris 0,012–0,017 ms. Spawn: mindste parafstand mellem de fem 115,4 studs på denne seed. Naturlig runde med to pumper (120 s): min 8,99, 0 overlap. Ikke reproduceret i Studio: head-on i smal korridor (dækket af offline-test: 0 overlap, 10 begrænsede back-outs, forkørselsretten kommer igennem) og klynge der jager et bevægende mål (foams slipper et mål der går fra dem).
 Før-tilstand: ingen separation overhovedet (alle dele forankrede, `CanCollide = false`, navigatoren ekskluderer hele runtime-mappen).
 
 ### 3.4 Lag (A4) — `artifacts/claude-20260921/level2-perf/MEASUREMENTS.md`
@@ -100,7 +100,8 @@ PC, Studio i forgrunden: klient 16,7 ms p50 / 18,4 p95 / 22,1 max (60 Hz-loft, 0
 Seed `1154781618` (pinned), solo: `Level3_EntryRoomId == Level3_FirstCDRoomId == L3_S1_R05`; præcis fem CD'er i fem forskellige rum; CD 1 ligger på bordet i første rum efter ankomstkorridoren. `Level3_Room` på spilleren: `Arrival` → `""` i korridoren (21 studs fra CD'en, én væg imellem → ingen tekst) → `L3_S1_R05` inde i rummet → readeren viser præcis `IN THIS ROOM` i `UIStyle.Color.Danger`, pulserende 0–0,40 transparens (stabil med `ReduceFlashing`). Pickup → `CARRIED`, position nil, readeren skifter straks til næste CD (`CD // ▮□□□□ 61m`). Død med CD i hånden → `DROPPED` på sidste sikre gulvposition med rum-id. Reader-panel: øverst til højre, 248 × 101 px ved 1539 × 809.
 Fundet og rettet undervejs: rumopslaget sammenlignede verdenskoordinater med planens lokale rektangler (`WorldOrigin` 6200,24,0) — ingen spiller var nogensinde "i et rum". Offline-testen kunne ikke se det; første Studio-kørsel gjorde.
 Observation til polish: alle fem CD'er ligger på rummets **skjulebord**, og både `COLLECT CD` og `HIDE UNDER TABLE` bruger E. Roblox viser den prompt man sigter på (verificeret: sigt på CD'en → COLLECT, sigt under bordet → HIDE). Det er eksisterende adfærd for alle CD'er, men for den garanterede første CD kan en ny spiller komme til at gemme sig i stedet for at samle op. Forslag: slå bordets hide-prompt fra mens dets CD er `WORLD` (kræver ændring i Hiding Controller; ikke lavet).
-Ikke verificeret: to spilleres pickups, fem afleveringer + exit, touch/tablet-layout, spectator-visning.
+Touch/tablet: `UIRegression.Compact("ObjectiveCornerMatrix")` i play-session — 399 checks, alle Level 3-rækker (readeren i øverste højre safe-hjørne + readout passer i panelet) består på samtlige simulerede telefoner, tablets og desktops. De 14 fejl i kørslen er alle **Level 1**-rækker (`Level1Objectives is not visible …`, detector-readout på 568×320 og 667×375) i filer denne opgave ikke har rørt (PuzzleUI uændret siden baseline) — forældede rækker efter objective-feed-ændringen 20/9, bør ryddes op særskilt.
+Ikke verificeret: to spilleres pickups, fem afleveringer + exit, fysisk enhed, spectator-visning.
 
 ## 4. Screenshots
 
@@ -146,4 +147,4 @@ Lav polish, art og asset-feedback ud fra kontrakterne ovenfor. Har du brug for e
 
 ## 9. Release
 
-Ikke publiceret. Publicering følger repoets præference (AGENTS.md) når en milepæl er færdig **og** verificeret uden materiel blocker. Aktuelle blockere for en samlet publicering: A3-rettelsen (overlap i klynge) er ikke landet/verificeret; B2/B3 er ikke integreret; Level 4 er en dev-only prototype og må ikke erstatte live-gates.
+Ikke publiceret. Publicering følger repoets præference (AGENTS.md) når en milepæl er færdig **og** verificeret uden materiel blocker. Aktuelle blockere for en samlet publicering: B2/B3 er ikke integreret og verificeret; Level 4 er en dev-only prototype og må ikke erstatte live-gates.
