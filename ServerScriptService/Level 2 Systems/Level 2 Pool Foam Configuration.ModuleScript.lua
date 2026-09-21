@@ -189,6 +189,85 @@ local Configuration = {
 		},
 	},
 
+	-- NO TWO FOAM MODELS MAY OCCUPY THE SAME SPACE (2026-09-21).
+	--
+	-- Level 2 runs one clone per generated Kids Area, five on a full map. Every
+	-- part of every clone is anchored with CanCollide false, and the Navigator
+	-- EXCLUDES the whole runtime folder from its own body queries, so neither the
+	-- engine nor the route checks keep two of them apart: they walk through each
+	-- other at spawn, on crossing routes and whenever several chase one player.
+	-- The controller's separation pass is the only thing that keeps them apart.
+	--
+	-- Every distance below is DERIVED, not chosen, and the live radius is not in
+	-- this table at all: it is measured per model from its bounding box at spawn
+	-- and again when a final template replaces a proxy, so nothing here has to be
+	-- retuned when the art lands.
+	Separation = {
+		Enabled = true,
+		-- Used only when a model's bounding box cannot be read. Half the larger
+		-- horizontal extent of the shipped Bloom proxy root, 7.5 x 4.8 x 6.5
+		-- (Proxy Factory, createRoot) -> 7.5 / 2.
+		FallbackRadius = 3.75,
+		-- Sanity clamp on the measured radius. The floor is half the narrowest
+		-- authored proxy (the Spire root is 4.8 wide -> 2.4, rounded down); the
+		-- ceiling is far past any authored template and exists so one mis-scaled
+		-- import cannot park the whole group.
+		MinimumRadius = 1.0,
+		MaximumRadius = 8.0,
+		-- Studs of clear air kept on top of rA + rB. Two entities can close at
+		-- 2 x Movement.SpeedRamp.MaximumSpeed = 44 studs/s, which is 0.73 studs
+		-- per 60 Hz frame, so 1.5 gives the pass two frames of warning before the
+		-- models actually touch.
+		Padding = 1.5,
+		-- Longest correction per pass. Equals the Navigator's MaxTravelStep, the
+		-- longest horizontal distance it validates in a single placement. It is
+		-- a ceiling, not the usual size: a correction is also limited to what the
+		-- creature could have WALKED in that frame.
+		MaximumOffset = 0.9,
+		-- Floor for that per-frame walking limit, so an entity that is parked
+		-- (desired speed 0) can still be eased apart. Movement.Speeds.Stalk, the
+		-- slowest pace this encounter ever moves at.
+		MinimumCorrectionSpeed = 7.5,
+		-- How far off its own heading a neighbour still counts as being IN THE
+		-- WAY: cos 60 degrees. Inside that cone the correction is lateral (go
+		-- round) and a blocked yielder is held, because pushing an entity
+		-- backwards along the line its route is pulling it forward on is exactly
+		-- the cancellation that makes a separation rule shiver. Outside it the
+		-- push is radial, which is roughly perpendicular to the route and cannot
+		-- fight it. 1.0 would only treat a dead-on collision as blocking; 0
+		-- would treat a neighbour directly behind as blocking too.
+		AheadCosine = 0.5,
+		-- A stand-off -- nothing fits on any side, a corridor as wide as the body
+		-- -- holds BOTH entities under a lease this long, refreshed every pass
+		-- while it lasts. It only has to outlive the gap between two passes; the
+		-- worst frame ever measured in this place was 13 FPS (0.077 s), so this
+		-- covers two of those and expires within a few frames of the cause going.
+		HoldSeconds = 0.15,
+		-- How long the yielder waits before backing out. Longer than one
+		-- Movement.RepathInterval (0.55) so ordinary re-routing gets first
+		-- refusal, short enough that a corridor meeting is never a standstill.
+		YieldSeconds = 1.2,
+		-- How far it then backs out along its own trail: one contact diameter
+		-- (2 x 3.75 = 7.5) rounded up, so one retreat clears the other's disc.
+		RetreatStuds = 8,
+		-- A yielder with nowhere to back out to stops being held for this long,
+		-- so a pair that cannot resolve overlaps for a moment instead of standing
+		-- frozen against each other for the rest of the round.
+		ReleaseSeconds = 2.0,
+		-- Minimum distance between two spawn positions: one contact diameter plus
+		-- the padding (7.5 + 1.5). The spawn chooser only ever picks between REAL
+		-- entity nodes; it never invents a position, because an unvalidated spawn
+		-- fails the navigator's floor check and kills the whole encounter.
+		SpawnGap = 9.0,
+		-- How often the debug readbacks are written to ReplicatedStorage."Level 2
+		-- State". They are diagnostics; the pass itself runs every Heartbeat.
+		--   Level2_PoolFoamMinSeparation  smallest centre distance seen this round
+		--   Level2_PoolFoamOverlapFrames  steps with a pair inside rA + rB
+		--   Level2_PoolFoamYieldCount     bounded waits that ended in a back-out
+		--   Level2_PoolFoamSeparationMs   moving average cost of the pass
+		PublishInterval = 0.5,
+	},
+
 	PhaseOrder = { "Dormant", "Foreshadow", "Pressure", "Finale" },
 	Phases = {
 		Dormant = {

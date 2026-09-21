@@ -152,6 +152,12 @@ local function publishStopped(reason)
 	setShared("Level2_PoolFoamPhase", reason or "Stopped")
 	setShared("Level2_PoolFoamGeneration", 0)
 	setShared("Level2_PoolFoamActiveMover", "")
+	-- Separation diagnostics are per round; a stopped encounter must not leave
+	-- the previous round's numbers on the state folder for the next one to read.
+	setShared("Level2_PoolFoamMinSeparation", 0)
+	setShared("Level2_PoolFoamOverlapFrames", 0)
+	setShared("Level2_PoolFoamYieldCount", 0)
+	setShared("Level2_PoolFoamSeparationMs", 0)
 end
 
 local function sessionAlive(session)
@@ -246,7 +252,30 @@ local function collectNodes(manifest, hallIds, allowed)
 	return nodes
 end
 
-local function positionForHall(session, hall)
+-- SEPARATION TUNING BEGIN: the two readers every separation caller shares.
+local function separationTuning(configuration)
+	local tuning = configuration and configuration.Separation
+	return typeof(tuning) == "table" and tuning or {}
+end
+
+-- The no-overlap radius of ONE model, measured from the model itself: half the
+-- larger horizontal extent of its bounding box. The shipped Bloom proxy answers
+-- 3.75 (its root is 7.5 x 4.8 x 6.5); a final template answers its own size, so
+-- no radius is ever invented here.
+local function separationRadius(configuration, model)
+	local tuning = separationTuning(configuration)
+	local minimum = numberOr(tuning.MinimumRadius, 1, 0.25, 16)
+	local maximum = numberOr(tuning.MaximumRadius, 8, minimum, 32)
+	local fallback = math.clamp(numberOr(tuning.FallbackRadius, 3.75, 0.25, 32), minimum, maximum)
+	local ok, size = pcall(function() return select(2, model:GetBoundingBox()) end)
+	if not ok or typeof(size) ~= "Vector3" then return fallback end
+	local radius = math.max(size.X, size.Z) * 0.5
+	if not finiteNumber(radius) or radius <= 0 then return fallback end
+	return math.clamp(radius, minimum, maximum)
+end
+-- SEPARATION TUNING END
+
+local function positionForHall(session, hall, used)
 	local index = tonumber(hall and hall.Index)
 	local choices = {}
 	local dedicated = {}
@@ -257,7 +286,27 @@ local function positionForHall(session, hall)
 		end
 	end
 	local candidates = #dedicated > 0 and dedicated or choices
-	if #candidates > 0 then return candidates[1].Position end
+	-- SPAWN SPACING. Five clones that start inside each other are already
+	-- overlapping before the first Heartbeat, and two Kids Areas can offer
+	-- neighbouring nodes. The candidate list is already sorted by node name, so
+	-- taking the FIRST entry that clears every spawn placed so far keeps the old
+	-- deterministic choice whenever it is legal, and only moves when it is not.
+	-- Nothing is invented: if no candidate clears the gap the roomiest real node
+	-- wins, because an unvalidated position fails the navigator's floor check and
+	-- takes the whole encounter down with it.
+	local gap = numberOr(separationTuning(session.Configuration).SpawnGap, 9, 0, 120)
+	local roomiest, roomiestClearance
+	for _, node in ipairs(candidates) do
+		local clearance = math.huge
+		for _, taken in ipairs(used or {}) do
+			clearance = math.min(clearance, (node.Position - taken).Magnitude)
+		end
+		if clearance >= gap then return node.Position end
+		if roomiestClearance == nil or clearance > roomiestClearance then
+			roomiest, roomiestClearance = node.Position, clearance
+		end
+	end
+	if roomiest then return roomiest end
 	return hallCenter(hall) + Vector3.new(0, 2, 0)
 end
 
@@ -421,6 +470,24 @@ local function createEntity(session, id, slotId, spawnPosition, hallIndex, spawn
 		HallIndex = hallIndex,
 		SpawnOrdinal = spawnOrdinal,
 		Model = model,
+		-- Measured from this model, never assumed; re-measured in refreshTemplate
+		-- when the final art replaces the proxy.
+		BodyRadius = separationRadius(session.Configuration, model),
+		-- Mutual separation state (see updateSeparation). Every numeric field
+		-- starts real so the per-frame pass compares instead of allocating.
+		SeparationActive = false,
+		SeparationPushX = 0,
+		SeparationPushZ = 0,
+		SeparationContact = nil,
+		SeparationContactDistance = math.huge,
+		SeparationAhead = nil,
+		SeparationAheadDistance = math.huge,
+		SeparationLane = 0,
+		SeparationLaneFor = nil,
+		SeparationLaneTried = false,
+		SeparationHoldUntil = 0,
+		SeparationYieldSince = nil,
+		SeparationReleaseUntil = 0,
 		Animation = nil,
 		AnimationPaused = false,
 		Navigator = nil,
@@ -1212,6 +1279,22 @@ local function updateEntity(session, entity, deltaTime, now)
 		end
 	end
 
+	-- SEPARATION HOLD. Another entity is inside this one's no-overlap disc (see
+	-- updateSeparation). Withhold LOCOMOTION only -- the target choice, the kill
+	-- check and the goal above have all already run, and the separation pass
+	-- still moves this entity through Navigator:Sidestep -- so the pair cannot
+	-- walk through each other while the yielder is eased out or backs off. The
+	-- lease is short and refreshed by the pass, so nothing here can strand a
+	-- creature; the progress watchdog below is skipped on purpose, because a hold
+	-- is not the creature failing to make progress.
+	if now < (entity.SeparationHoldUntil or 0) then
+		entity.WasMoving = false
+		entity.StationaryFor += deltaTime
+		setEntityAnimation(entity, "Idle")
+		setEntityAnimationPaused(entity, false)
+		return
+	end
+
 	local before = entity.Navigator:GetPosition()
 	entity.Reached = entity.Navigator:Step(deltaTime,
 		movementSpeed(session, entity, hunting, pursuing and deltaTime or 0))
@@ -1330,6 +1413,9 @@ local function refreshTemplate(session, entity)
 
 	destroyEntityAudio(entity)
 	entity.Model = replacement
+	-- The final art is a different size from the proxy it replaces, so the
+	-- no-overlap radius is re-measured rather than carried over.
+	entity.BodyRadius = separationRadius(session.Configuration, replacement)
 	entity.Navigator = replacementNavigator
 	entity.Animation = replacementAnimation
 	entity.AnimationPaused = false
@@ -1349,6 +1435,268 @@ local function refreshTemplate(session, entity)
 		Caption = false,
 	})
 end
+
+-- SEPARATION BEGIN: the only thing that keeps two Pool Foam models apart.
+--
+-- Nothing else can. Every part of every clone is anchored with CanCollide
+-- false, and the Navigator excludes the entire runtime folder from its own body
+-- queries, so one foam has never read as an obstacle to another: they overlap at
+-- spawn, cross each other's routes and stack on a shared chase target.
+--
+-- The rule, run once per Heartbeat after every entity has committed its step:
+--
+--   * Each model's no-overlap radius is MEASURED from the model (separationRadius
+--     above), so the contact distance of a pair is rA + rB -- 7.5 studs for two
+--     shipped proxies -- and the pass starts correcting a padding earlier.
+--   * Only ONE of a pair ever moves: the YIELDER, deterministically the higher
+--     spawn ordinal, except that an entity the phase has not activated cannot
+--     move at all and so is never chosen. A symmetric push is how two steering
+--     agents end up shoving each other back and forth.
+--   * A neighbour AHEAD of the yielder (inside the AheadCosine cone of its own
+--     heading) is never answered by pushing it backwards. That is the one
+--     geometry where the correction is exactly opposite the route step, so the
+--     two cancel and the model shivers at 60 Hz; it is also the geometry where
+--     backing up achieves nothing. Instead the yielder is HELD -- updateEntity
+--     withholds its locomotion -- and eased LATERALLY around the obstruction,
+--     either lane. Holding is the half that matters: a lateral slide alone only
+--     redirects the approach, it does not stop it, and five entities steering
+--     round one target while still walking into it spiral inward until they are
+--     all standing in the same place. Neighbours beside or behind get the
+--     ordinary radial push, which is roughly perpendicular to the route and so
+--     cannot fight it, and they never hold anything.
+--   * Every correction is a single accumulated Navigator:Sidestep: ONE validated
+--     placement, clamped to MaximumOffset AND to the distance the creature could
+--     have walked in this frame, so separation never moves a body faster than it
+--     moves itself. A placement that would leave the walkable space fails and
+--     the offset is simply dropped -- the route is never edited and no entity is
+--     ever teleported.
+--   * Two entities in actual contact are BOTH held, so neither can advance
+--     through the other while the yielder is eased out; so is an entity whose
+--     yielder is PINNED in front of it, which is the only way to stop a body
+--     walking into one that has nowhere to go. A held yielder that cannot move
+--     at all runs a bounded wait; when it expires it backs out along its own
+--     trail (Navigator:Retreat, validated placement by placement) and re-plans.
+--     That is what resolves a head-on meeting in a corridor too narrow for
+--     either of them to step aside: the one with right of way keeps walking
+--     through the ground the yielder gives up.
+local function separationDirection(from, to, fallbackFacing)
+	local offset = Vector3.new(to.X - from.X, 0, to.Z - from.Z)
+	if offset.Magnitude > 0.01 then return offset.Unit end
+	-- Two bodies at the same point have no "away". Step sideways from the
+	-- yielder's own facing instead: deterministic, and never straight backwards
+	-- down the route it just walked.
+	local facing = typeof(fallbackFacing) == "Vector3" and fallbackFacing or Vector3.new(0, 0, -1)
+	local side = Vector3.new(-facing.Z, 0, facing.X)
+	if side.Magnitude < 0.01 then return Vector3.new(1, 0, 0) end
+	return side.Unit
+end
+
+local function separationSidestep(entity, limit, ahead)
+	local push = Vector3.new(entity.SeparationPushX, 0, entity.SeparationPushZ)
+	local magnitude = push.Magnitude
+	if magnitude < 0.01 then return false end
+	local direction = push / magnitude
+	local travel = math.min(magnitude, limit)
+	local navigator = entity.Navigator
+	if ahead then
+		-- The lane is already baked into the push by the pair pass, where it is
+		-- committed for as long as the obstruction lasts; nothing re-decides it
+		-- here. Re-deciding it every frame is what made a rig slide to one wall
+		-- of a corridor, find that lane blocked, take the other, slide back and
+		-- repeat forever -- and because it was technically moving it never sat
+		-- still long enough for the bounded wait to resolve it either.
+		if navigator:Sidestep(direction * travel, travel) then return true end
+		-- The committed lane is walled. Swapping to the other one is allowed
+		-- ONCE per obstruction, and backing up is never allowed at all, so a
+		-- yielder with both lanes shut is held rather than shuffled.
+		if entity.SeparationLaneTried then return false end
+		entity.SeparationLaneTried = true
+		entity.SeparationLane = -entity.SeparationLane
+		return navigator:Sidestep(direction * -travel, travel)
+	end
+	if navigator:Sidestep(direction * travel, travel) then return true end
+	-- Nothing is in front, so the push is not fighting the route. Either
+	-- perpendicular is a fair escape when straight away is against a wall.
+	local side = Vector3.new(-direction.Z, 0, direction.X)
+	return navigator:Sidestep(side * travel, travel)
+		or navigator:Sidestep(side * -travel, travel)
+end
+
+local function updateSeparation(session, now, deltaTime)
+	local tuning = separationTuning(session.Configuration)
+	if tuning.Enabled == false then return end
+	local entities = session.Entities
+	if #entities < 2 then return end
+	local startedAt = os.clock()
+	local padding = numberOr(tuning.Padding, 1.5, 0, 12)
+	local maximumOffset = numberOr(tuning.MaximumOffset, 0.9, 0.05, 4)
+	local aheadCosine = numberOr(tuning.AheadCosine, 0.5, 0, 1)
+	-- A correction may never be faster than the creature itself. Without this a
+	-- 0.9-stud offset every Heartbeat is 54 studs/s of strafing, which is shoving
+	-- with extra steps. A parked entity still has to be movable, so the floor is
+	-- the slowest pace the encounter ever walks (Movement.Speeds.Stalk).
+	local correctionFloor = numberOr(tuning.MinimumCorrectionSpeed, 7.5, 0.5, 40)
+	local frame = numberOr(deltaTime, 1 / 60, 1 / 240, 0.1)
+
+	for _, entity in ipairs(entities) do
+		entity.SeparationPushX, entity.SeparationPushZ = 0, 0
+		entity.SeparationContact, entity.SeparationContactDistance = nil, math.huge
+		entity.SeparationAhead, entity.SeparationAheadDistance = nil, math.huge
+		entity.SeparationActive = entityIsActive(session, entity)
+	end
+
+	-- O(n^2) over five entities is ten distance comparisons; the expensive part
+	-- is the placement below, and that only runs for an entity actually crowded.
+	local minimum = math.huge
+	local overlapping = false
+	for index = 1, #entities - 1 do
+		local a = entities[index]
+		local aPosition = a.Navigator:GetPosition()
+		for other = index + 1, #entities do
+			local b = entities[other]
+			local bPosition = b.Navigator:GetPosition()
+			local deltaX, deltaZ = bPosition.X - aPosition.X, bPosition.Z - aPosition.Z
+			local distance = math.sqrt(deltaX * deltaX + deltaZ * deltaZ)
+			local contact = a.BodyRadius + b.BodyRadius
+			if distance < minimum then minimum = distance end
+			if distance < contact then overlapping = true end
+			if distance < contact + padding then
+				local yielder, holder
+				if a.SeparationActive and (not b.SeparationActive or a.SpawnOrdinal > b.SpawnOrdinal) then
+					yielder, holder = a, b
+				elseif b.SeparationActive then
+					yielder, holder = b, a
+				end
+				if yielder then
+					local facing = yielder.Navigator:GetFacing()
+					local away = separationDirection(holder.Navigator:GetPosition(),
+						yielder.Navigator:GetPosition(), facing)
+					local intrusion = contact + padding - distance
+					if away.X * facing.X + away.Z * facing.Z < -aheadCosine then
+						-- Directly in the way: go round it. THE LANE IS COMMITTED on
+						-- the first frame of an obstruction and never recomputed
+						-- while it lasts. Recomputing it is not stable: the lean it
+						-- is derived from passes through zero in a true head-on, so
+						-- the preferred side flips with the last bit of the mantissa
+						-- and the model shivers between two lanes instead of taking
+						-- one. Ordinal parity settles that tie -- stable for the
+						-- whole round, and it gives neighbours opposite lanes.
+						local side = Vector3.new(-facing.Z, 0, facing.X)
+						local lane = yielder.SeparationLane
+						if lane == 0 or yielder.SeparationLaneFor ~= holder then
+							local lean = side.X * away.X + side.Z * away.Z
+							if lean > 0.001 then
+								lane = 1
+							elseif lean < -0.001 then
+								lane = -1
+							else
+								lane = (yielder.SpawnOrdinal % 2 == 0) and 1 or -1
+							end
+							yielder.SeparationLane, yielder.SeparationLaneFor = lane, holder
+							yielder.SeparationLaneTried = false
+						end
+						yielder.SeparationPushX += side.X * lane * intrusion
+						yielder.SeparationPushZ += side.Z * lane * intrusion
+						if distance < yielder.SeparationAheadDistance then
+							yielder.SeparationAhead, yielder.SeparationAheadDistance = holder, distance
+						end
+					else
+						yielder.SeparationPushX += away.X * intrusion
+						yielder.SeparationPushZ += away.Z * intrusion
+					end
+					-- The contact circle is DEFENDED, not merely detected. This pass
+					-- corrects after the step, so a pair that is already touching
+					-- when it first looks has already interpenetrated by whatever it
+					-- closed in that frame; the brake therefore engages one frame of
+					-- closing early. The floor keeps two parked bodies apart when
+					-- neither has a speed to derive it from.
+					local brake = math.max(0.25,
+						(numberOr(a.LastDesiredSpeed, 0, 0, 40)
+							+ numberOr(b.LastDesiredSpeed, 0, 0, 40)) * frame)
+					if distance < contact + brake and distance < yielder.SeparationContactDistance then
+						yielder.SeparationContact, yielder.SeparationContactDistance = holder, distance
+					end
+				end
+			end
+		end
+	end
+
+	local holdSeconds = numberOr(tuning.HoldSeconds, 0.15, 0.05, 2)
+	local yieldSeconds = numberOr(tuning.YieldSeconds, 1.2, 0.1, 10)
+	for _, entity in ipairs(entities) do
+		local ahead = entity.SeparationAhead
+		local touching = entity.SeparationContact
+		local limit = math.min(maximumOffset,
+			math.max(correctionFloor, numberOr(entity.LastDesiredSpeed, 0, 0, 40)) * frame)
+		if ahead == nil and entity.SeparationLaneFor ~= nil then
+			-- Nothing in the way any more: the next obstruction chooses afresh.
+			entity.SeparationLane, entity.SeparationLaneFor = 0, nil
+			entity.SeparationLaneTried = false
+		end
+		local moved = separationSidestep(entity, limit, ahead ~= nil)
+		-- The yielder is held whenever something is in its way, moved or not:
+		-- sliding around an obstruction does not stop a route that points through
+		-- it. The OTHER entity is held only when it is touching this one or has
+		-- it pinned -- an entity with right of way is never stopped by something
+		-- merely behind it, which is what keeps a corridor from becoming a queue.
+		local blocker = touching
+		if not blocker and ahead ~= nil and not moved then blocker = ahead end
+		if (ahead ~= nil or touching ~= nil) and now >= entity.SeparationReleaseUntil then
+			local leaseUntil = now + holdSeconds
+			if leaseUntil > entity.SeparationHoldUntil then entity.SeparationHoldUntil = leaseUntil end
+			if blocker and leaseUntil > blocker.SeparationHoldUntil then
+				blocker.SeparationHoldUntil = leaseUntil
+			end
+		end
+		-- The wait is measured on being OBSTRUCTED, never on standing still. A
+		-- yielder easing sideways along a wall is moving and getting nowhere, and
+		-- crediting that as progress is what let two entities stand nose to nose
+		-- for a whole round; the moment it gets past -- the obstruction leaves its
+		-- cone and it is no longer touching anything -- the clock is dropped.
+		if not (ahead or touching) then
+			entity.SeparationYieldSince = nil
+		else
+			entity.SeparationYieldSince = entity.SeparationYieldSince or now
+			if now - entity.SeparationYieldSince >= yieldSeconds then
+				entity.SeparationYieldSince = nil
+				session.SeparationYields += 1
+				local backed = entity.Navigator:Retreat(numberOr(tuning.RetreatStuds, 8, 0, 48))
+				entity.PatrolPosition = nil
+				entity.NextGoalAt = 0
+				entity.SeparationHoldUntil = 0
+				if blocker then blocker.SeparationHoldUntil = 0 end
+				if backed <= 0 then
+					-- ponytail: nowhere to back out to -- no trail yet, or the way
+					-- back is blocked as well. The pair is RELEASED rather than held
+					-- again, so the ceiling of this rule is a moment of visible
+					-- overlap instead of two creatures frozen against each other for
+					-- the rest of the round. Upgrade path if that moment ever shows:
+					-- reciprocal velocity obstacles, or reserving the corridor
+					-- segment between them instead of resolving after the fact.
+					entity.SeparationReleaseUntil = now
+						+ numberOr(tuning.ReleaseSeconds, 2, 0, 30)
+				end
+			end
+		end
+	end
+
+	if minimum < session.SeparationMinimum then session.SeparationMinimum = minimum end
+	if overlapping then session.SeparationOverlapFrames += 1 end
+	local elapsedMs = (os.clock() - startedAt) * 1000
+	session.SeparationCostMs += (elapsedMs - session.SeparationCostMs) * 0.1
+	if now >= session.NextSeparationPublishAt then
+		session.NextSeparationPublishAt = now + numberOr(tuning.PublishInterval, 0.5, 0.1, 10)
+		if session.SeparationMinimum < math.huge then
+			setShared("Level2_PoolFoamMinSeparation",
+				math.floor(session.SeparationMinimum * 100 + 0.5) / 100)
+		end
+		setShared("Level2_PoolFoamOverlapFrames", session.SeparationOverlapFrames)
+		setShared("Level2_PoolFoamYieldCount", session.SeparationYields)
+		setShared("Level2_PoolFoamSeparationMs",
+			math.floor(session.SeparationCostMs * 1000 + 0.5) / 1000)
+	end
+end
+-- SEPARATION END
 
 local function updateSession(session, deltaTime)
 	if not sessionAlive(session) then Controller.Stop() return end
@@ -1394,6 +1742,10 @@ local function updateSession(session, deltaTime)
 		end
 	end
 	for _, entity in ipairs(session.Entities) do updateEntity(session, entity, math.min(deltaTime, 0.1), now) end
+	-- After every entity has committed its position, never between two of them:
+	-- a pass that ran mid-loop would measure half the group where it was last
+	-- frame. It is also the reason the corrections can be one-sided.
+	updateSeparation(session, now, math.min(deltaTime, 0.1))
 
 	if now >= session.NextTemplateRefreshAt then
 		session.NextTemplateRefreshAt = now + 3
@@ -1544,14 +1896,22 @@ function Controller.Start(manifest, generation)
 		TargetedPlayer = nil,
 		-- player -> how many entities are currently hunting them (see markChased)
 		ChaseMarks = {},
+		-- Separation diagnostics for the round, published by updateSeparation.
+		SeparationMinimum = math.huge,
+		SeparationOverlapFrames = 0,
+		SeparationYields = 0,
+		SeparationCostMs = 0,
+		NextSeparationPublishAt = 0,
 	}
 	activeSession = session
 
 	-- Every generated Kids Area owns one distinct runtime identity, while every
 	-- clone resolves art and animation through the single Primary asset slot.
+	local takenSpawns = {}
 	for ordinal, hall in ipairs(kidsHalls) do
 		local entityId = string.format("Primary_%02d", ordinal)
-		local spawnPosition = positionForHall(session, hall)
+		local spawnPosition = positionForHall(session, hall, takenSpawns)
+		table.insert(takenSpawns, spawnPosition)
 		local entity, createError = createEntity(session, entityId, "Primary",
 			spawnPosition, tonumber(hall.Index), ordinal)
 		if not entity then
@@ -1664,6 +2024,9 @@ function Controller.GetDebugSnapshot()
 			SpeedRampBonus = entity.SpeedRampBonus,
 			SpeedRampFrozen = entity.SpeedRampFrozen,
 			DesiredSpeed = entity.LastDesiredSpeed,
+			BodyRadius = entity.BodyRadius,
+			SeparationHeld = os.clock() < (entity.SeparationHoldUntil or 0),
+			SeparationYielding = entity.SeparationYieldSince ~= nil,
 			Navigator = navigator,
 			TemporaryProxy = session.ProxyFactory.IsTemporaryProxy(entity.Model),
 		})
@@ -1677,6 +2040,10 @@ function Controller.GetDebugSnapshot()
 		Elapsed = session.RoundStartedAt and os.clock() - session.RoundStartedAt or 0,
 		Paused = workspace:GetAttribute("EntityPaused") == true,
 		ActiveMoverId = session.ActiveMoverId,
+		MinSeparation = session.SeparationMinimum < math.huge and session.SeparationMinimum or 0,
+		OverlapFrames = session.SeparationOverlapFrames,
+		YieldCount = session.SeparationYields,
+		SeparationMs = session.SeparationCostMs,
 		Entities = entities,
 		Observer = session.Observer:GetDebugSnapshot(),
 	}
