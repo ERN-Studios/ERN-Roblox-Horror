@@ -333,6 +333,10 @@ local inRound = {}
 local roundBusy = false
 local worldReady = false
 local activeLevel = 1
+-- The level of the most recent round. cleanupActiveWorld puts activeLevel back
+-- to 1 BEFORE players are walked home, so the retry guide reads this instead
+-- (found in Studio 2026-09-22: a Level 2 loss pointed the guide at Level 1).
+local lastRoundLevel = 1
 local postWinSerial = 0
 local activePostWin = nil
 local pendingTeleports = {}
@@ -1437,6 +1441,7 @@ local function ensureWorld(group, requestedLevel, attempt)
  local level = Routing.ClampLevel(requestedLevel)
  if worldReady and activeLevel == level then return true end
  activeLevel = level
+ lastRoundLevel = level
  workspace:SetAttribute("SelectedLevel", level)
  workspace:SetAttribute("WorldGenerated", false)
  local generatorName = LEVEL_GENERATORS[level]
@@ -1567,7 +1572,7 @@ local function returnPlayersToLocalLobby(group)
 		-- and never for a bystander this recovery path swept up. It is a hint, not
 		-- a revive: nothing about the queue, the price or the round changes.
 		if inRound[player] and player:GetAttribute("Escaped") ~= true then
-			player:SetAttribute("RetryGuideLevel", activeLevel)
+			player:SetAttribute("RetryGuideLevel", lastRoundLevel)
 		end
 		inRound[player] = nil
 		player:SetAttribute("InRound", false)
@@ -1750,7 +1755,7 @@ local function teleportPlayersToLobby(group)
 	-- NOBODY in it escaped: a win sends escapers and non-escapers home together,
 	-- and telling somebody to try again at the level they just cleared is worse
 	-- than telling them nothing.
-	local retryLevel = activeLevel
+	local retryLevel = lastRoundLevel
 	for _, player in ipairs(live) do
 		if not inRound[player] or player:GetAttribute("Escaped") == true then
 			retryLevel = nil

@@ -237,6 +237,8 @@ local function runHookLife(ctx)
     local lastDeathName = nil
     local lastDeathCause = DeathAdvice.Unknown
     local scheduleTransitionRespawn = nil
+    -- The same block also reports to ZyntraAnalytics (added by the analytics work).
+    local Analytics = setmetatable({}, {__index = function() return function() end end})
     local function fireGroup(_group, ...) table.insert(ctx.Fired, {...}) end
 --[[HOOKLIFE_SOURCE]]
     hookLife(ctx.Player, ctx.Humanoid)
@@ -280,6 +282,7 @@ end
 do
     local dispatched = nil
     local activeLevel = 2
+    local lastRoundLevel = activeLevel -- the retry guide reads the last round's level
     local inRound = {}
     local loadingFailures = {}
     local IS_RESERVED_ROUND_SERVER, IS_STUDIO = true, false
@@ -317,6 +320,7 @@ end
 
 do
     local activeLevel = 3
+    local lastRoundLevel = activeLevel
     local inRound = {}
     local loadingFailures = {}
     local lobbySpawn = node("Part", "LobbySpawn")
