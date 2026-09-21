@@ -267,7 +267,10 @@ for _,studio in {true,false} do
 end
 for _,invalid in {
     {Deadline=99},{Deadline=0/0},{Deadline=math.huge},{Token=""},{Token=string.rep("x",129)},
-    {Level=1.5},{Level=0/0},{Level=4},{Position=Vector3.new(0/0,5,0)},{Position=Vector3.new(math.huge,5,0)},
+    -- LEVEL4_DEV_GATE_20260921: the bound moved 3 -> 4 when Level 4 was added,
+    -- so 5 is now the first out-of-range level. The rule under test is
+    -- unchanged: a level outside the range spawns no work and never acks.
+    {Level=1.5},{Level=0/0},{Level=5},{Position=Vector3.new(0/0,5,0)},{Position=Vector3.new(math.huge,5,0)},
 } do
     local ctx=fresh(); ctx:Prepare(invalid); ctx:Advance(.3)
     check(ctx.StreamCalls==0 and ctx.PreloadCalls==0 and #ctx.Acks==0,"invalid request rejected before spawning work")
