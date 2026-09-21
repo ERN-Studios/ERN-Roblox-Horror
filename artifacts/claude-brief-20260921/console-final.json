@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "[EntityAnimations] Transition controller active\n[TunnelLobbyBuilder] bays open: 1, 2, 3  |  launch stations: 12\n[EntityAI] eye markers: Workspace.Entity.EyeL · Workspace.Entity.EyeR\n[EntityAI] glowing eyes active: 2/2\n[EntityAnimations] Transition controller active\n[EntityKill] Cinematic ground-pin knockout sequence active\nMazeGenerator: plaza at (33,19) · 2 pit zone(s) at (30,30) (8,13) · elevator at (20,20)\n[EntityAI] learned the maze layout (40x40)"
+    }
+  ],
+  "isError": false
+}
