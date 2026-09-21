@@ -1,0 +1,223 @@
+=== 899x675  class=desktop  portrait=false  touch=false ===
+objectives-panel             FAIL  rects=3 texts=17
+     Overlaps: LevelOneGuideGui.ObjectivesButton overlaps LevelOneGuideGui.ObjectivesPanel
+touch-movement-cluster       skip  (touch-only; covered by TouchTargetMatrix)
+level3-reader-hidden         skip  (touch-only; covered by TouchTargetMatrix)
+=== safe area: ONE measured device, then eleven ADVERSARIAL FIXTURES ===
+  note the fixture rows below are shapes the layout must survive, NOT measurements of hardware -- the only measured case is Fit.MeasuredCase, and it is the only row checked against the live engine
+--- real device: camera 899x675 ---
+      None   (0,-58)..(899,617)
+      Core   (0,0)..(899,617)
+      Device (0,-58)..(899,617)
+      UIDevice Display (0,-58)..(899,617)  Safe (0,0)..(899,617)
+      this host is NOT the measured device -- the recorded rectangles are not asserted here; the relationships above are
+      adversarial 956x440 landscape, housing on the right  Display 956x440  Safe (0,0)..(897,361)  insets L0 T58 R59 B21
+      adversarial 440x956 portrait, status bar and indicator Display 440x956  Safe (0,0)..(440,840)  insets L0 T82 R0 B34
+      adversarial 705x338 landscape, no housing            Display 705x338  Safe (0,0)..(705,302)  insets L0 T36 R0 B0
+      adversarial 568x320 landscape, no housing            Display 568x320  Safe (0,0)..(568,284)  insets L0 T36 R0 B0
+      adversarial 667x375 landscape, symmetric housing     Display 667x375  Safe (0,0)..(579,318)  insets L44 T36 R44 B21
+      adversarial 375x667 portrait, no housing             Display 375x667  Safe (0,0)..(375,631)  insets L0 T36 R0 B0
+      adversarial 338x705 portrait, no housing             Display 338x705  Safe (0,0)..(338,669)  insets L0 T36 R0 B0
+      adversarial 1180x820 tablet landscape                Display 1180x820  Safe (0,0)..(1180,784)  insets L0 T36 R0 B0
+      adversarial 820x1180 tablet portrait                 Display 820x1180  Safe (0,0)..(820,1144)  insets L0 T36 R0 B0
+      adversarial 1920x1080 desktop                        Display 1920x1080  Safe (0,0)..(1920,1044)  insets L0 T36 R0 B0
+      adversarial 1366x768 desktop                         Display 1366x768  Safe (0,0)..(1366,732)  insets L0 T36 R0 B0
+      the measured iPhone 16 Pro Max, rebuilt as a fixture Display 955x439  Safe (0,0)..(831,360)  insets L62 T58 R62 B21
+TOTAL: 126 checks, 0 failed
+=== completion contract ===
+COMPLETION: 0 failed
+=== completion fit matrix ===
+  ok   levels 1-2 / desktop 1920x1080         row, 301x54 each
+  ok   levels 1-2 / desktop 1280x720          row, 302x54 each
+  ok   levels 1-2 / tablet landscape 1024x768 row, 302x54 each
+  ok   levels 1-2 / tablet portrait 768x1024  row, 301x54 each
+  ok   levels 1-2 / phone landscape 812x375   row, 305x44 each
+  ok   levels 1-2 / phone landscape 667x375   row, 281x44 each
+  ok   levels 1-2 / phone portrait 390x844    stack, 335x54 each
+  ok   levels 1-2 / phone portrait 375x667    stack, 322x50 each
+  ok   levels 1-2 / phone landscape 705x338   row, 298x44 each
+  ok   final level / desktop 1920x1080        single, 340x54 each
+  ok   final level / desktop 1280x720         single, 340x54 each
+  ok   final level / tablet landscape 1024x768 single, 340x54 each
+  ok   final level / tablet portrait 768x1024 single, 340x54 each
+  ok   final level / phone landscape 812x375  single, 340x44 each
+  ok   final level / phone landscape 667x375  single, 315x44 each
+  ok   final level / phone portrait 390x844   single, 184x54 each
+  ok   final level / phone portrait 375x667   single, 180x50 each
+  ok   final level / phone landscape 705x338  single, 333x44 each
+FIT: 0 failed
+=== queue modal geometry, resolved per device ===
+queue modal matrix: 719 checks, 0 failed
+=== briefing text fit, resolved per device ===
+TOTAL: 243 checks, 0 failed
+=== briefing / queue modal / full Zyntra terminal exclusion ===
+  FAIL phone-landscape / briefing only: the store opener is gone from the screen AND from the input stack whenever anything is over it  (Visible=true Active=true, want false)
+  FAIL phone-landscape / modal closed, briefing still running: the store opener is gone from the screen AND from the input stack whenever anything is over it  (Visible=true Active=true, want false)
+  FAIL desktop / briefing only: the store opener is gone from the screen AND from the input stack whenever anything is over it  (Visible=true Active=true, want false)
+  FAIL desktop / modal closed, briefing still running: the store opener is gone from the screen AND from the input stack whenever anything is over it  (Visible=true Active=true, want false)
+  FAIL briefing already open: both toggle and kiosk paths refuse the terminal  (toggle=true kiosk=true Visible=true)
+  FAIL a briefing modal attribute closes a terminal that was already open  (Visible=true attribute=true)
+  FAIL briefing-only exclusion closes Zyntra without leaving movement suppressed  (true)
+TOTAL: 102 checks, 7 failed
+=== objective readouts, upper right, every level and device ===
+--- adversarial 956x440 landscape, housing on the right (class=phone touch=true) safe (0,0)-(897,361) ---
+      Level1Objectives (589,8)-(889,88) 300x80
+      Level2ObjectivePanel (653,8)-(889,86) 236x78
+      Level2Alert (12,8)-(643,76) 631x68 gate=false
+      ReaderPanel (641,8)-(889,109) 248x101
+      ReaderRestore (845,8)-(889,52) 44x44
+--- adversarial 440x956 portrait, status bar and indicator (class=phone touch=true) safe (0,0)-(440,840) ---
+      Level1Objectives (132,8)-(432,163) 300x155
+      Level2ObjectivePanel (196,8)-(432,86) 236x78
+      Level2Alert (12,8)-(428,76) 416x68 gate=false
+      ReaderPanel (186,8)-(432,109) 246x101
+      ReaderRestore (388,8)-(432,52) 44x44
+--- adversarial 705x338 landscape, no housing (class=phone touch=true) safe (0,0)-(705,302) ---
+      Level1Objectives (397,8)-(697,163) 300x155
+      Level2ObjectivePanel (461,8)-(697,86) 236x78
+      Level2Alert (290,8)-(693,76) 403x68 gate=false
+      ReaderPanel (486,8)-(697,109) 211x101
+      ReaderRestore (653,8)-(697,52) 44x44
+--- adversarial 568x320 landscape, no housing (class=phone touch=true) safe (0,0)-(568,284) ---
+      Level1Objectives (260,8)-(560,130) 300x122
+  FAIL adversarial 568x320 landscape, no housing / L1: and the detector's own readout fits it  (ExitEnergyDetector.DetectorHeader at (196,-11)-(210,43) 14x54 escapes (188,-14)-(244,38) 56x52; ExitEnergyDetector.DetectorReadout at (197,45)-(237,57) 40x12 escapes (188,-14)-(244,38) 56x52)
+      Level2ObjectivePanel (324,8)-(560,86) 236x78
+      Level2Alert (235,8)-(555,76) 320x68 gate=false
+      ReaderPanel (312,8)-(560,109) 248x101
+      ReaderRestore (516,8)-(560,52) 44x44
+--- adversarial 667x375 landscape, symmetric housing (class=phone touch=true) safe (0,0)-(579,318) ---
+      Level1Objectives (271,8)-(571,130) 300x122
+      Level2ObjectivePanel (335,8)-(571,86) 236x78
+      Level2Alert (12,8)-(325,76) 313x68 gate=false
+      ReaderPanel (371,8)-(571,109) 200x101
+      ReaderRestore (527,8)-(571,52) 44x44
+--- adversarial 375x667 portrait, no housing (class=phone touch=true) safe (0,0)-(375,631) ---
+      Level1Objectives (67,8)-(367,163) 300x155
+      Level2ObjectivePanel (131,8)-(367,86) 236x78
+      Level2Alert (12,8)-(363,76) 351x68 gate=false
+      ReaderPanel (157,8)-(367,109) 210x101
+      ReaderRestore (323,8)-(367,52) 44x44
+--- adversarial 338x705 portrait, no housing (class=phone touch=true) safe (0,0)-(338,669) ---
+      Level1Objectives (30,8)-(330,163) 300x155
+      Level2ObjectivePanel (94,8)-(330,86) 236x78
+      Level2Alert (12,8)-(326,76) 314x68 gate=false
+      ReaderPanel (141,8)-(330,109) 189x101
+      ReaderRestore (286,8)-(330,52) 44x44
+--- adversarial 1180x820 tablet landscape (class=tablet touch=true) safe (0,0)-(1180,784) ---
+      Level1Objectives (872,8)-(1172,163) 300x155
+      Level2ObjectivePanel (936,8)-(1172,86) 236x78
+      Level2Alert (12,8)-(926,76) 914x68 gate=false
+      ReaderPanel (924,8)-(1172,109) 248x101
+      ReaderRestore (1128,8)-(1172,52) 44x44
+--- adversarial 820x1180 tablet portrait (class=tablet touch=true) safe (0,0)-(820,1144) ---
+      Level1Objectives (512,8)-(812,163) 300x155
+      Level2ObjectivePanel (576,8)-(812,86) 236x78
+      Level2Alert (12,8)-(566,76) 554x68 gate=false
+      ReaderPanel (566,8)-(812,109) 246x101
+      ReaderRestore (768,8)-(812,52) 44x44
+--- adversarial 1920x1080 desktop (class=desktop touch=false) safe (0,0)-(1920,1044) ---
+      Level1Objectives (1602,852)-(1902,982) 300x130
+      Level2ObjectivePanel (1666,948)-(1902,1026) 236x78
+      Level2Alert (135,114)-(638,182) 503x68 gate=false
+      ReaderPanel (1654,925)-(1902,1026) 248x101
+      ReaderRestore (768,8)-(812,52) 44x44
+--- adversarial 1366x768 desktop (class=desktop touch=false) safe (0,0)-(1366,732) ---
+      Level1Objectives (1048,540)-(1348,670) 300x130
+      Level2ObjectivePanel (1112,636)-(1348,714) 236x78
+      Level2Alert (135,114)-(638,182) 503x68 gate=false
+      ReaderPanel (1100,613)-(1348,714) 248x101
+      ReaderRestore (768,8)-(812,52) 44x44
+TOTAL: 397 checks, 1 failed
+=== dispatch briefing, compact footprint, every device ===
+--- adversarial 956x440 landscape, housing on the right --- panel (390,8)-(884,91) 494x83
+--- adversarial 440x956 portrait, status bar and indicator --- panel (12,8)-(342,97) 330x89
+--- adversarial 705x338 landscape, no housing --- panel (290,8)-(693,80) 403x72
+      adversarial 705x338 landscape, no housing: the compact target cannot hold this device's copy (needs 78 in 77), so the proportional bounds do not apply and the necessity bound above is the whole rule
+--- adversarial 568x320 landscape, no housing --- panel (235,8)-(555,83) 320x75
+      adversarial 568x320 landscape, no housing: the compact target cannot hold this device's copy (needs 86 in 73), so the proportional bounds do not apply and the necessity bound above is the whole rule
+--- adversarial 667x375 landscape, symmetric housing --- panel (230,8)-(566,94) 336x86
+      adversarial 667x375 landscape, symmetric housing: the compact target cannot hold this device's copy (needs 92 in 86), so the proportional bounds do not apply and the necessity bound above is the whole rule
+--- adversarial 375x667 portrait, no housing --- panel (12,8)-(342,97) 330x89
+--- adversarial 338x705 portrait, no housing --- panel (12,8)-(326,94) 314x86
+--- adversarial 1180x820 tablet landscape --- panel (12,8)-(572,98) 560x90
+--- adversarial 820x1180 tablet portrait --- panel (12,8)-(495,91) 483x83
+--- adversarial 1920x1080 desktop --- panel (530,884)-(1390,980) 860x96
+--- adversarial 1366x768 desktop --- panel (253,572)-(1113,668) 860x96
+TOTAL: 214 checks, 0 failed
+=== zyntra terminal fit, every tab, every device ===
+--- adversarial 956x440 landscape, housing on the right (reported 956x440 class=phone touch=true) ---
+      Terminal (28,8)-(868,353) 840x345  modal viewport (12,8)-(885,353)
+      TerminalHeader   (28,8)-(868,62) 840x54
+      TerminalTabs     (40,70)-(856,114) 816x44
+      TerminalContent  (40,122)-(856,323) 816x201
+      TerminalStatus   (40,327)-(856,349) 816x22
+--- adversarial 440x956 portrait, status bar and indicator (reported 440x956 class=phone touch=true) ---
+      Terminal (12,115)-(428,725) 416x610  modal viewport (12,8)-(428,832)
+      TerminalHeader   (12,115)-(428,169) 416x54
+      TerminalTabs     (24,177)-(416,221) 392x44
+      TerminalContent  (24,229)-(416,695) 392x466
+      TerminalStatus   (24,699)-(416,721) 392x22
+--- adversarial 705x338 landscape, no housing (reported 705x338 class=phone touch=true) ---
+      Terminal (12,8)-(693,294) 681x286  modal viewport (12,8)-(693,294)
+      TerminalHeader   (12,8)-(693,62) 681x54
+      TerminalTabs     (24,70)-(681,114) 657x44
+      TerminalContent  (24,122)-(681,264) 657x142
+      TerminalStatus   (24,268)-(681,290) 657x22
+--- adversarial 568x320 landscape, no housing (reported 568x320 class=phone touch=true) ---
+      Terminal (12,8)-(556,276) 544x268  modal viewport (12,8)-(556,276)
+      TerminalHeader   (12,8)-(556,62) 544x54
+      TerminalTabs     (24,70)-(544,114) 520x44
+      TerminalContent  (24,122)-(544,246) 520x124
+      TerminalStatus   (24,250)-(544,272) 520x22
+--- adversarial 667x375 landscape, symmetric housing (reported 667x375 class=phone touch=true) ---
+      Terminal (12,8)-(567,310) 555x302  modal viewport (12,8)-(567,310)
+      TerminalHeader   (12,8)-(567,62) 555x54
+      TerminalTabs     (24,70)-(555,114) 531x44
+      TerminalContent  (24,122)-(555,280) 531x158
+      TerminalStatus   (24,284)-(555,306) 531x22
+--- adversarial 375x667 portrait, no housing (reported 375x667 class=phone touch=true) ---
+      Terminal (12,10)-(363,620) 351x610  modal viewport (12,8)-(363,623)
+      TerminalHeader   (12,10)-(363,68) 351x58
+      TerminalTabs     (24,76)-(351,120) 327x44
+      TerminalContent  (24,128)-(351,590) 327x462
+      TerminalStatus   (24,594)-(351,616) 327x22
+--- adversarial 338x705 portrait, no housing (reported 338x705 class=phone touch=true) ---
+      Terminal (12,29)-(326,639) 314x610  modal viewport (12,8)-(326,661)
+      TerminalHeader   (12,29)-(326,87) 314x58
+      TerminalTabs     (24,95)-(314,139) 290x44
+      TerminalContent  (24,147)-(314,609) 290x462
+      TerminalStatus   (24,613)-(314,635) 290x22
+--- adversarial 1180x820 tablet landscape (reported 1180x820 class=tablet touch=true) ---
+      Terminal (170,87)-(1010,697) 840x610  modal viewport (12,8)-(1168,776)
+      TerminalHeader   (170,87)-(1010,157) 840x70
+      TerminalTabs     (190,169)-(990,213) 800x44
+      TerminalContent  (190,225)-(990,655) 800x430
+      TerminalStatus   (190,661)-(990,691) 800x30
+--- adversarial 820x1180 tablet portrait (reported 820x1180 class=tablet touch=true) ---
+      Terminal (12,267)-(808,877) 796x610  modal viewport (12,8)-(808,1136)
+      TerminalHeader   (12,267)-(808,337) 796x70
+      TerminalTabs     (32,349)-(788,393) 756x44
+      TerminalContent  (32,405)-(788,835) 756x430
+      TerminalStatus   (32,841)-(788,871) 756x30
+--- adversarial 1920x1080 desktop (reported 1920x1080 class=desktop touch=false) ---
+      Terminal (540,217)-(1380,827) 840x610  modal viewport (12,8)-(1908,1036)
+      TerminalHeader   (540,217)-(1380,287) 840x70
+      TerminalTabs     (560,299)-(1360,341) 800x42
+      TerminalContent  (560,353)-(1360,785) 800x432
+      TerminalStatus   (560,791)-(1360,821) 800x30
+--- adversarial 1366x768 desktop (reported 1366x768 class=desktop touch=false) ---
+      Terminal (263,61)-(1103,671) 840x610  modal viewport (12,8)-(1354,724)
+      TerminalHeader   (263,61)-(1103,131) 840x70
+      TerminalTabs     (283,143)-(1083,185) 800x42
+      TerminalContent  (283,197)-(1083,629) 800x432
+      TerminalStatus   (283,635)-(1083,665) 800x30
+TOTAL: 1405 checks, 0 failed
+=== control zone: the LIVE registered cluster, not the proxy ===
+  FAIL hiding a registered control invalidates the zone rather than leaving a cached rectangle behind  (0 fire(s) while FlashlightPower was hidden)
+TOTAL: 22 checks, 1 failed
+=== same-frame exclusion, and the dispatch guard ===
+TOTAL: 24 checks, 0 failed
+=== harness lock: contention, identity, abandonment ===
+TOTAL: 16 checks, 0 failed
+  ok   the whole run restored the state it borrowed before the scenario sweep
+TOTAL: 22 scenarios, 10 failed

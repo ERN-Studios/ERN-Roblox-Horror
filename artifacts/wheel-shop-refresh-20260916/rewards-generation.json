@@ -1,0 +1,38 @@
+{
+  "method": "built-in image_gen",
+  "specs": [
+    {
+      "key": "token",
+      "subject": "ONE large shiny golden hexagonal token, front face with an inset smaller hexagon, slightly tilted to show chunky beveled thickness, two tiny sparkle accents. No stack.",
+      "prompt": "Use case: stylized-concept. Asset type: individual Roblox Daily Rewards UI icon, square PNG, genuine transparent alpha background. Subject: ONE large shiny golden hexagonal token, front face with an inset smaller hexagon, slightly tilted to show chunky beveled thickness, two tiny sparkle accents. No stack. Style: polished inviting colorful Roblox game reward art, rich saturated color, thick clean near-black outline, glossy toy-like golden bevel highlights, crisp flat illustrative shading, matching a colorful golden-rim prize wheel. Composition: a single isolated icon, centered, filling about 78 percent of square canvas, at least 8 percent fully transparent padding all around, readable at 96 pixels. This is an actual UI asset, not a screenshot or mockup. No panel, card frame, background, drop-shadow floor, text, numbers, lettering, button, watermark, checkerboard or extra items. Preserve the genuine transparency outside the object. Full icon completely inside image."
+    },
+    {
+      "key": "speed-potion",
+      "subject": "ONE squat rounded transparent glass bottle full of vivid cyan-blue liquid, warm orange cork stopper, a large golden lightning bolt on its front, tiny sparkles. Strong immediately readable speed potion silhouette.",
+      "prompt": "Use case: stylized-concept. Asset type: individual Roblox Daily Rewards UI icon, square PNG, genuine transparent alpha background. Subject: ONE squat rounded transparent glass bottle full of vivid cyan-blue liquid, warm orange cork stopper, a large golden lightning bolt on its front, tiny sparkles. Strong immediately readable speed potion silhouette. Style: polished inviting colorful Roblox game reward art, rich saturated color, thick clean near-black outline, glossy toy-like golden bevel highlights, crisp flat illustrative shading, matching a colorful golden-rim prize wheel. Composition: a single isolated icon, centered, filling about 78 percent of square canvas, at least 8 percent fully transparent padding all around, readable at 96 pixels. This is an actual UI asset, not a screenshot or mockup. No panel, card frame, background, drop-shadow floor, text, numbers, lettering, button, watermark, checkerboard or extra items. Preserve the genuine transparency outside the object. Full icon completely inside image."
+    },
+    {
+      "key": "entity-shield",
+      "subject": "ONE broad protective heraldic shield, gleaming gold beveled rim, vivid cyan-blue inner face with ONE crisp white four-point starburst in its center, subtle cyan glow contained close to silhouette. No weapon or character.",
+      "prompt": "Use case: stylized-concept. Asset type: individual Roblox Daily Rewards UI icon, square PNG, genuine transparent alpha background. Subject: ONE broad protective heraldic shield, gleaming gold beveled rim, vivid cyan-blue inner face with ONE crisp white four-point starburst in its center, subtle cyan glow contained close to silhouette. No weapon or character. Style: polished inviting colorful Roblox game reward art, rich saturated color, thick clean near-black outline, glossy toy-like golden bevel highlights, crisp flat illustrative shading, matching a colorful golden-rim prize wheel. Composition: a single isolated icon, centered, filling about 78 percent of square canvas, at least 8 percent fully transparent padding all around, readable at 96 pixels. This is an actual UI asset, not a screenshot or mockup. No panel, card frame, background, drop-shadow floor, text, numbers, lettering, button, watermark, checkerboard or extra items. Preserve the genuine transparency outside the object. Full icon completely inside image."
+    },
+    {
+      "key": "gift",
+      "subject": "ONE inviting red-orange gift box with chunky golden ribbon and bow, lively slightly tilted three-quarter angle, two tiny golden sparkle accents. Clean classic gift silhouette.",
+      "prompt": "Use case: stylized-concept. Asset type: individual Roblox Daily Rewards UI icon, square PNG, genuine transparent alpha background. Subject: ONE inviting red-orange gift box with chunky golden ribbon and bow, lively slightly tilted three-quarter angle, two tiny golden sparkle accents. Clean classic gift silhouette. Style: polished inviting colorful Roblox game reward art, rich saturated color, thick clean near-black outline, glossy toy-like golden bevel highlights, crisp flat illustrative shading, matching a colorful golden-rim prize wheel. Composition: a single isolated icon, centered, filling about 78 percent of square canvas, at least 8 percent fully transparent padding all around, readable at 96 pixels. This is an actual UI asset, not a screenshot or mockup. No panel, card frame, background, drop-shadow floor, text, numbers, lettering, button, watermark, checkerboard or extra items. Preserve the genuine transparency outside the object. Full icon completely inside image."
+    }
+  ],
+  "upload": {
+    "http://127.0.0.1:58977/rewards-entity-shield-v1.png": "rbxassetid://126728249949579",
+    "http://127.0.0.1:58977/rewards-token-v1.png": "rbxassetid://93116899475472",
+    "http://127.0.0.1:58977/rewards-speed-potion-v1.png": "rbxassetid://120211340805188",
+    "http://127.0.0.1:58977/rewards-gift-v1.png": "rbxassetid://117126194981100"
+  },
+  "size": [
+    1254,
+    1254
+  ],
+  "mode": "RGBA",
+  "alpha": "Genuine transparency on all four. Shield range 0..254; others 0..255.",
+  "integration": "Pending Claude ImageLabel runtime QA"
+}

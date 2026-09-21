@@ -1,0 +1,112 @@
+[
+  {
+    "test": "tools/tests\\test_field_notes.py",
+    "exit": 0,
+    "output": "Field Notes content: 140 checks passed\nField Notes service: 103 checks passed\nField Notes client: 43 checks passed\nField Notes page: 314 checks passed\nField Notes: 600 checks passed (real Lua sources, offline Luau)"
+  },
+  {
+    "test": "tools/tests\\test_lobby_shop_display.py",
+    "exit": 0,
+    "output": "ok  404 checks: 8 products, 8 plates, three tiers 300/380/420 px"
+  },
+  {
+    "test": "tools/tests\\test_zyntra_store_compact.py",
+    "exit": 0,
+    "output": "ok  259 checks: terminal 1180x760, upgrade card 210/246/330px (phone/tablet/pointer), shop icon 52/64/76px, list+detail at >=760 pointer only"
+  },
+  {
+    "test": "tools/tests\\test_feedback_gift.py",
+    "exit": 0,
+    "output": "feedback gift: 26 checks passed (actual mutate + gift block; fake DataStore)\nnormalizeProfile keeps unknown Grants keys (3 Grants lines inspected)"
+  },
+  {
+    "test": "tools/tests\\test_ui_style.py",
+    "exit": 0,
+    "output": "UI style: 83 checks passed (offline Luau; font metrics, rendering and look not exercised)"
+  },
+  {
+    "test": "tools/tests\\test_route_markers.py",
+    "exit": 0,
+    "output": "Route markers: 189 checks passed (whole actual Script, offline Luau; rendering and replication not exercised)"
+  },
+  {
+    "test": "tools/tests\\test_equipment_hud.py",
+    "exit": 0,
+    "output": "Equipment HUD: 303 checks passed (real ProtectionHUD + real UIDevice plan, offline Luau)"
+  },
+  {
+    "test": "tools/tests\\test_speed_potion.py",
+    "exit": 0,
+    "output": "Speed potion: 498 checks passed (real NoiseReporter movement blocks, offline Luau)"
+  },
+  {
+    "test": "tools/tests\\test_purchase_alerts.py",
+    "exit": 0,
+    "output": "purchase alerts: 97 checks passed"
+  },
+  {
+    "test": "tools/tests\\test_token_grants.py",
+    "exit": 0,
+    "output": "token grants: 243 checks passed"
+  },
+  {
+    "test": "tools/tests\\test_donation_board_columns.py",
+    "exit": 0,
+    "output": "TunnelLobbyBuilder.ModuleScript.lua compiles (98883 bytes of bytecode)\nsupporter board columns: 826 checks passed (10 rows, columns 12/72/408 on a 560x392 canvas, last plate foot 366)"
+  },
+  {
+    "test": "tools/tests\\test_support_product_receipts.py",
+    "exit": 0,
+    "output": "support product receipts: 236 checks passed"
+  },
+  {
+    "test": "tools/tests\\test_dev_free_respawn_offer.py",
+    "exit": 0,
+    "output": "Free respawn offer (modal, dev=true): 17 checks passed\nFree respawn offer (card, dev=true): 24 checks passed\nFree respawn offer (modal, dev=false): 3 checks passed\nFree respawn offer (card, dev=false): 8 checks passed"
+  },
+  {
+    "test": "tools/tests\\test_leaderboard_backfill.py",
+    "exit": 0,
+    "output": "leaderboard backfill: 100 checks passed (actual import block + normalizeProfile + mutateIdempotent + ProcessReceipt; fake DataStore)\ngenerator: 4 rows classified, 5 refused, unmapped asset ids abort"
+  },
+  {
+    "test": "tools/tests\\test_daily_rewards_page.py",
+    "exit": 0,
+    "output": "Daily rewards page: 403 checks passed (offline Luau, config source: ZyntraConfig; font metrics, TextBounds, real UIDevice and rendering not exercised)"
+  },
+  {
+    "test": "tools/tests\\test_lobby_palette.py",
+    "exit": 0,
+    "output": "lobby palette + supporter board: 888 checks passed (LOBBY_SATURATION=1.35, canvas 560x392 = 31.11 px/stud)"
+  },
+  {
+    "test": "tools/tests\\test_daily_rewards.py",
+    "exit": 0,
+    "output": "daily rewards: 333 checks passed"
+  },
+  {
+    "test": "tools/tests\\test_first_entry_guide.py",
+    "exit": 0,
+    "output": "First Entry Guide: 39 checks passed (entire actual script, offline Luau)"
+  },
+  {
+    "test": "tools/tests\\test_item_inventory.py",
+    "exit": 0,
+    "output": "item inventory: 146 checks passed"
+  },
+  {
+    "test": "tools/tests\\test_first_login_flag.py",
+    "exit": 0,
+    "output": "first-login flag: 33 checks passed"
+  },
+  {
+    "test": "tools/tests\\test_reentry_dismissal.py",
+    "exit": 0,
+    "output": "Re-entry dismissal: 37 checks passed (offline Luau; engine hit testing not exercised)"
+  },
+  {
+    "test": "tools/tests\\test_round_exit_hold.py",
+    "exit": 0,
+    "output": "Round Exit hold: 299 checks passed (entire actual LocalScript, offline Luau; real cursor lock, real touch and font metrics not exercised)"
+  }
+]

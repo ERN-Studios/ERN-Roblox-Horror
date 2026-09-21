@@ -1,0 +1,38 @@
+true
+checks=2799 failures=21 scenarios=22 scenarios, 21 failed
+safe area: ONE measured device, then eleven ADVERSAR  126 checks   0 failed
+completion contract                                           0 failed
+completion fit matrix                                         0 failed
+briefing text fit, resolved per device                243 checks   0 failed
+briefing / queue modal / full Zyntra terminal exclus  102 checks   7 failed
+objective readouts, upper right, every level and dev  397 checks  12 failed
+dispatch briefing, compact footprint, every device    212 checks   0 failed
+zyntra terminal fit, every tab, every device         1657 checks   0 failed
+control zone: the LIVE registered cluster, not the p   22 checks   1 failed
+same-frame exclusion, and the dispatch guard           24 checks   0 failed
+harness lock: contention, identity, abandonment        16 checks   0 failed
+  note the fixture rows below are shapes the layout must survive, NOT measurements of hardware -- the only measured case is Fit.MeasuredCase, and it is the only row checked against the live engine
+objectives-panel             FAIL  rects=3 texts=17
+touch-movement-cluster       skip  (touch-only; covered by TouchTargetMatrix)
+level3-reader-hidden         skip  (touch-only; covered by TouchTargetMatrix)
+  FAIL phone-landscape / briefing only: the store opener is gone from the screen AND from the input stack whenever anything is over it  (Visible=true Active=true, want false)
+  FAIL phone-landscape / modal closed, briefing still running: the store opener is gone from the screen AND from the input stack whenever anything is over it  (Visible=true Active=true, want false)
+  FAIL desktop / briefing only: the store opener is gone from the screen AND from the input stack whenever anything is over it  (Visible=true Active=true, want false)
+  FAIL desktop / modal closed, briefing still running: the store opener is gone from the screen AND from the input stack whenever anything is over it  (Visible=true Active=true, want false)
+  FAIL briefing already open: both toggle and kiosk paths refuse the terminal  (toggle=true kiosk=true Visible=true)
+  FAIL a briefing modal attribute closes a terminal that was already open  (Visible=true attribute=true)
+  FAIL briefing-only exclusion closes Zyntra without leaving movement suppressed  (true)
+  FAIL adversarial 956x440 landscape, housing on the right / L1: the toggle, the title, all three objective rows and the message each own a separate rectangle, and the panel holds the ones this form factor draws inside it  (Level1Objectives is not visible, so nothing about it was measured; Level1ObjectivesToggle is not visible, so nothing about it was measured)
+  FAIL adversarial 440x956 portrait, status bar and indicator / L1: the toggle, the title, all three objective rows and the message each own a separate rectangle, and the panel holds the ones this form factor draws inside it  (Level1Objectives is not visible, so nothing about it was measured; Level1ObjectivesToggle is not visible, so nothing about it was measured)
+  FAIL adversarial 705x338 landscape, no housing / L1: the toggle, the title, all three objective rows and the message each own a separate rectangle, and the panel holds the ones this form factor draws inside it  (Level1Objectives is not visible, so nothing about it was measured; Level1ObjectivesToggle is not visible, so nothing about it was measured)
+  FAIL adversarial 568x320 landscape, no housing / L1: and the detector's own readout fits it  (ExitEnergyDetector.DetectorHeader at (196,-11)-(210,43) 14x54 escapes (188,-14)-(244,38) 56x52; ExitEnergyDetector.DetectorReadout at (197,45)-(237,57) 40x12 escapes (188,-14)-(244,38) 56x52)
+  FAIL adversarial 568x320 landscape, no housing / L1: the toggle, the title, all three objective rows and the message each own a separate rectangle, and the panel holds the ones this form factor draws inside it  (Level1Objectives is not visible, so nothing about it was measured; Level1ObjectivesToggle is not visible, so nothing about it was measured)
+  FAIL adversarial 667x375 landscape, symmetric housing / L1: the toggle, the title, all three objective rows and the message each own a separate rectangle, and the panel holds the ones this form factor draws inside it  (Level1Objectives is not visible, so nothing about it was measured; Level1ObjectivesToggle is not visible, so nothing about it was measured)
+  FAIL adversarial 375x667 portrait, no housing / L1: the toggle, the title, all three objective rows and the message each own a separate rectangle, and the panel holds the ones this form factor draws inside it  (Level1Objectives is not visible, so nothing about it was measured; Level1ObjectivesToggle is not visible, so nothing about it was measured)
+  FAIL adversarial 338x705 portrait, no housing / L1: the toggle, the title, all three objective rows and the message each own a separate rectangle, and the panel holds the ones this form factor draws inside it  (Level1Objectives is not visible, so nothing about it was measured; Level1ObjectivesToggle is not visible, so nothing about it was measured)
+  FAIL adversarial 1180x820 tablet landscape / L1: the toggle, the title, all three objective rows and the message each own a separate rectangle, and the panel holds the ones this form factor draws inside it  (Level1Objectives is not visible, so nothing about it was measured; Level1ObjectivesToggle is not visible, so nothing about it was measured)
+  FAIL adversarial 820x1180 tablet portrait / L1: the toggle, the title, all three objective rows and the message each own a separate rectangle, and the panel holds the ones this form factor draws inside it  (Level1Objectives is not visible, so nothing about it was measured; Level1ObjectivesToggle is not visible, so nothing about it was measured)
+  FAIL adversarial 1920x1080 desktop / L1: the toggle, the title, all three objective rows and the message each own a separate rectangle, and the panel holds the ones this form factor draws inside it  (Level1Objectives is not visible, so nothing about it was measured; Level1ObjectivesToggle is not visible, so nothing about it was measured)
+  FAIL adversarial 1366x768 desktop / L1: the toggle, the title, all three objective rows and the message each own a separate rectangle, and the panel holds the ones this form factor draws inside it  (Level1Objectives is not visible, so nothing about it was measured; Level1ObjectivesToggle is not visible, so nothing about it was measured)
+  FAIL hiding a registered control invalidates the zone rather than leaving a cached rectangle behind  (0 fire(s) while FlashlightPower was hidden)
+lock: clear

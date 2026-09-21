@@ -1,0 +1,26 @@
+[
+  {
+    "file": "assets\\shop\\hud-lucky-wheel-v1.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "alphaRange": [
+      0,
+      255
+    ]
+  },
+  {
+    "file": "assets\\shop\\hud-daily-rewards-v1.png",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA",
+    "alphaRange": [
+      0,
+      255
+    ]
+  }
+]

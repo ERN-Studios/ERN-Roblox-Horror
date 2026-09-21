@@ -1,0 +1,21 @@
+{
+  "method": "built-in image_gen",
+  "createdAt": "2026-09-16",
+  "items": [
+    {
+      "key": "LuckyWheelHUD",
+      "file": "assets/shop/hud-lucky-wheel-v1.png",
+      "source": "C:/Users/mikke/.codex/generated_images/01a0a685-aadc-77f3-98a1-f2a21fdf61e5/exec-2e12b4e6-9027-4b93-a2f2-ffac73b3a4b4.png",
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent PNG game HUD icon for the dedicated Lucky Wheel button in the fictional Zyntra Roblox backrooms horror game. Create one bold readable front-facing five-segment prize wheel symbol, machined charcoal #141D21 outer rim, alternating teal #49F5CC and muted amber #FFCB4F faces, small dark central hub, a single clearly visible downward pointer at twelve o'clock. Subtle premium industrial material, restrained neon rim light, chunky silhouette and broad simple shapes recognizable at 48 pixels. Orthographic straight-on circular wheel with no stand, occupies 78% of a square canvas, all edges and glow fully inside generous transparent margins. GENUINELY TRANSPARENT alpha background outside the wheel, no painted checkerboard or black rectangle. This is only the SYMBOL to place inside a square UI button; do not draw a button container. No text, numerals, odds, coins, prizes, currency signs, extra objects, confetti, watermark, background scene, perspective, human, casino imagery or excessive glow. Exactly one icon, not a sprite sheet, polished crisp high contrast production PNG.",
+      "revisionPrompt": "Edit this Lucky Wheel HUD icon. Keep its exact charcoal machined rim, teal/amber industrial materials, central hub, twelve-o'clock pointer, transparent background and square framing. Correct ONLY the inner disc segmentation: it currently has SIX colored sectors and must have EXACTLY FIVE equal 72-degree sectors, separated by EXACTLY FIVE radial spokes from hub to rim. Five sectors, no sixth. The five sector centre directions clockwise from top are 12 o'clock, about 2:24, 4:48, 7:12, and 9:36. In that clockwise order color them TEAL, AMBER, TEAL, AMBER, TEAL. The last and first teal sectors therefore touch at their shared dark spoke; this intentional adjacent-teal pair is necessary for five sectors. Remove the existing six-sector layout entirely before drawing five. No labels, text, numerals, prize glyphs or new objects. Preserve genuinely transparent alpha outside the icon and maintain generous transparent margin. Output one production PNG.",
+      "purpose": "Side button icon only, not the rotating prize disc"
+    },
+    {
+      "key": "DailyRewardsHUD",
+      "file": "assets/shop/hud-daily-rewards-v1.png",
+      "source": "C:/Users/mikke/.codex/generated_images/01a0a685-aadc-77f3-98a1-f2a21fdf61e5/exec-19c0be6f-f91d-485e-a560-48fb4c10409b.png",
+      "prompt": "Use case: stylized-concept. Asset type: a single transparent PNG game HUD icon for a dedicated Daily Rewards button in the fictional Zyntra Roblox backrooms horror game. Create one bold front-facing industrial reward supply parcel, a compact machined charcoal #141D21 square gift-like crate with chunky restrained teal #49F5CC ribbon/straps and a warm amber #FFCB4F lid tab. A small amber clock badge sits over the lower-right corner, with a plain circular face and exactly two dark clock hands, no numbers. Clear gift-plus-time meaning, crisp simple silhouette recognizable at 48 pixels, subtle premium industrial materials and controlled neon edge light matching a teal/amber metal wheel icon. Orthographic straight-on, no dramatic perspective. Main icon occupies 78% of a square canvas, generous fully transparent margin containing every edge and glow. GENUINELY TRANSPARENT alpha background, no painted checkerboard, no black rectangle. This is only the SYMBOL to place inside a square UI button; do not draw a button container. No text, letters, numerals, currency, reward counts, extra boxes, confetti, environment, humans, watermark or excessive glow. Exactly one standalone icon, not a sprite sheet, production transparent PNG.",
+      "purpose": "Standalone Daily Rewards side-button icon"
+    }
+  ]
+}
