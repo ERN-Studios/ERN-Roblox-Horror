@@ -4967,6 +4967,36 @@ do
 	dc.tip = row("DeathCauseTip", 96, 34, Enum.Font.GothamMedium, 13,
 		Color3.fromRGB(201, 213, 205))
 
+	-- A SOLO death is also a PARTY DOWN, and that modal is a centred 268-316px
+	-- card over a full-screen shade: on a phone it covers the whole authored
+	-- position, and everywhere it dims it. While it is up the card therefore
+	-- rises above the shade, and where there is no room under the modal (short
+	-- viewports) it docks at the top as title + tip only -- the tip is the part a
+	-- first-time solo player must not miss, and nothing is laid over the buttons.
+	function dc.layout()
+		local docked = player:GetAttribute("PartyDownCardOpen") == true
+		local camera = workspace.CurrentCamera
+		local compact = docked and camera ~= nil and camera.ViewportSize.Y < 620
+		local z = docked and 118 or 96
+		dc.card.ZIndex = z
+		for _, text in ipairs({dc.title, dc.cause, dc.eyebrow, dc.tip}) do text.ZIndex = z + 1 end
+		if compact then
+			dc.card.AnchorPoint = Vector2.new(0.5, 0)
+			dc.card.Position = UDim2.new(0.5, 0, 0, 6)
+			dc.card.Size = UDim2.new(1, -32, 0, dc.hasTip and 64 or 34)
+			dc.title.Position, dc.title.TextSize = UDim2.fromOffset(16, 8), 14
+			dc.cause.Visible, dc.eyebrow.Visible = false, false
+			dc.tip.Position, dc.tip.TextSize = UDim2.fromOffset(16, 28), 12
+		else
+			dc.card.AnchorPoint = Vector2.new(0.5, 1)
+			dc.card.Position = UDim2.new(0.5, 0, 1, -116)
+			dc.card.Size = UDim2.new(1, -32, 0, dc.hasTip and dc.heightWithTip or dc.heightPlain)
+			dc.title.Position, dc.title.TextSize = UDim2.fromOffset(16, 14), 17
+			dc.cause.Visible, dc.eyebrow.Visible = true, dc.hasTip == true
+			dc.tip.Position, dc.tip.TextSize = UDim2.fromOffset(16, 96), 13
+		end
+	end
+
 	function dc.hide()
 		dc.serial += 1
 		dc.card.Visible = false
@@ -4979,10 +5009,10 @@ do
 		-- No tip, no promise of one: the eyebrow goes with it and the card
 		-- shrinks, so an unexplained death never looks like a withheld hint.
 		local hasTip = type(advice.Tip) == "string" and advice.Tip ~= ""
+		dc.hasTip = hasTip
 		dc.tip.Text = hasTip and advice.Tip or ""
 		dc.tip.Visible = hasTip
-		dc.eyebrow.Visible = hasTip
-		dc.card.Size = UDim2.new(1, -32, 0, hasTip and dc.heightWithTip or dc.heightPlain)
+		dc.layout()
 		dc.serial += 1
 		local token = dc.serial
 		dc.card.Visible = true
@@ -4996,9 +5026,17 @@ do
 				{BackgroundTransparency = 0.035}):Play()
 		end
 		task.delay(dc.dwell, function()
+			-- PARTY DOWN runs 15 s and the card must outlast the modal that was
+			-- covering it; "lose"/"lobby" still take it down with the round.
+			while dc.serial == token and player:GetAttribute("PartyDownCardOpen") == true do
+				task.wait(0.5)
+			end
 			if dc.serial == token then dc.hide() end
 		end)
 	end
+	player:GetAttributeChangedSignal("PartyDownCardOpen"):Connect(function()
+		if dc.card.Visible then dc.layout() end
+	end)
 
 	remote.OnClientEvent:Connect(function(ev, a, _b, c)
 		if ev == "death" then

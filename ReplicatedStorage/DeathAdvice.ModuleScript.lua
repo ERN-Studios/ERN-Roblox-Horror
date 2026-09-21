@@ -25,9 +25,9 @@
 -- Unknown, and Unknown shows a truthful "signal lost" line with NO tip. A
 -- made-up tip is worse than no tip.
 --
--- os.clock is process CPU time in the server datamodel (see CLAUDE.md), which
--- runs materially behind the wall clock, so the window is measured on
--- workspace:GetServerTimeNow() like every other player-visible clock here.
+-- The window is measured on workspace:GetServerTimeNow(), the same clock every
+-- other player-visible timer here uses, so the mark and its reader agree even
+-- if they ever run in different scripts' os.clock domains.
 
 local DeathAdvice = {}
 
