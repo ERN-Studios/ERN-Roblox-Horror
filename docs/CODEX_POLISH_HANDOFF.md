@@ -27,8 +27,8 @@ Intet i dette dokument er publiceret endnu, medmindre der står det.
 | A1 PoolSlide chase-lag ([rXhi1SZ8](https://trello.com/c/rXhi1SZ8)) | kode: **verificeret i Studio** (solo). Animationer/større model: **mangler art** | Årsag fundet og målt; planlægning med 96-studs horisont. Se §3.1 |
 | A2 PoolSlide-lyd ([LigItMHi](https://trello.com/c/LigItMHi)) | **kodefærdig**, tilstandsmaskine **verificeret i Studio** på attributniveau. Lyttetest: **afventer** (jeg kan ikke høre) | Én ejer pr. lydforløb; mund-emitter følger det animerede `Head`-bone. §3.2 |
 | A3 PoolFoam overlap ([jecT8s86](https://trello.com/c/jecT8s86)) | **verificeret i Studio** for klynge om fælles mål og spawn-afstand (solo). Korridor-møde og flere spillere: kun offline-test | §3.3 |
-| A4 Lag/render ([Zpj0Gkbb](https://trello.com/c/Zpj0Gkbb)) | målt på PC; mobil **afventer hardware**. Texture-instans-reduktion under arbejde | §3.4 |
-| A5 Level 3 første CD + CD-reader ([6BVH4WmN](https://trello.com/c/6BVH4WmN)) | **verificeret i Studio** (solo, PC). To spillere, fem afleveringer og touch-layout: ikke kørt | §3.5 |
+| A4 Lag/render ([Zpj0Gkbb](https://trello.com/c/Zpj0Gkbb)) | målt på PC, skjulte tile-flader cullet (**verificeret i Studio**, ingen synlig ændring); den store gevinst kræver art-beslutning om hvælvingsbuerne; mobil **afventer hardware** | §3.4 |
+| A5 Level 3 første CD + CD-reader ([6BVH4WmN](https://trello.com/c/6BVH4WmN)) | **verificeret i Studio** (solo, PC + alle simulerede touch-enheder i UIRegression). To spillere og fem afleveringer: ikke kørt | §3.5 |
 
 ### Fase B
 
@@ -52,10 +52,11 @@ Level 4 blokmodel + prototype er under arbejde (dev-only adgang; live-gates uæn
 | `390f5aa`, `f58e493` | PoolSlide-lyd: ejerskab + mund følger animeret bone | `ReplicatedStorage.Level 2 Entity Audio Bank`, `StarterPlayerScripts.Level 2 Entity Audio`, `…Level 2 Sound Controller`; tests `test_pool_slide_audio_states.py`, `test_spectate_audio_gates.py` |
 | `0790135`, `521d80f` | PoolFoam separation + klynge-rettelse | `…Level 2 Pool Foam Controller`, `…Navigator` (ny `Sidestep`), `…Configuration` (blok `Separation`); test `test_pool_foam_separation.py` |
 | `a1248c8` | L3 rumopslag i plan-koordinater; SlideContinuationSafety kaster ikke længere på forankret rod; UIRegression-række | `…Level 3 Objective Controller`, `ReplicatedStorage.SlideContinuationSafety`, `ReplicatedStorage.UIRegression` |
-| `0a83253` | Load-tids-readbacks + måleartefakter | `…Level 2 Round Adapter`, `…Level 3 Round Adapter` |
+| `0a83253`, `afa3fb1` | Load-tids-readbacks (pcall'et) + måleartefakter | `…Level 2 Round Adapter`, `…Level 3 Round Adapter` |
+| `60a8d4b` | Skjulte tile-flader cullet | `…Level 2 World Builder`, `…Level 2 Configuration` (`Performance.CullHiddenTileFaces`); test `test_level2_tile_face_culling.py` |
 | `8e97018` | Shoptekster | `ReplicatedStorage.ZyntraConfig`, `StarterPlayerScripts.Shop Display Client`, `ServerScriptService.ZyntraMonetization` |
 
-Ikke pushet til GitHub endnu, ikke publiceret til Roblox endnu (se §9).
+Branchen er pushet til GitHub (`origin/claude/trello-20260921`, almindeligt push, ingen force); ingen PR oprettet endnu. Ikke publiceret til Roblox (se §9).
 
 ## 3. Før/efter, seeds og målinger
 
@@ -93,7 +94,7 @@ Før-tilstand: ingen separation overhovedet (alle dele forankrede, `CanCollide =
 
 ### 3.4 Lag (A4) — `artifacts/claude-20260921/level2-perf/MEASUREMENTS.md`
 
-PC, Studio i forgrunden: klient 16,7 ms p50 / 18,4 p95 / 22,1 max (60 Hz-loft, 0 frames > 33 ms); server Heartbeat 0,98 ms i ro. Auditens "ca. 15 FPS" var baggrunds-throttling. Strukturel afviger: **44.923 af 74.654 verdens-descendants er `Texture`-instanser** (én pr. flade, seks som standard); 138–154 lys, alle med skygger; 21.261 dele med CastShadow. Streaming-radius/-mode kan ikke læses fra MCP-tråden (capability). Nye readbacks: `Level2_/Level3_LayoutSeconds`, `BuildSeconds`, `WorldDescendants`. Under arbejde: fjern Texture på beviseligt skjulte flader (kontakt `Performance.CullHiddenTileFaces`), verificeres med fast kameratur + billed-diff (`level2-perf/shots-client.luau`).
+PC, Studio i forgrunden: klient 16,7 ms p50 / 18,4 p95 / 22,1 max (60 Hz-loft, 0 frames > 33 ms); server Heartbeat 0,98 ms i ro. Auditens "ca. 15 FPS" var baggrunds-throttling. Strukturel afviger: **44.923 af 74.654 verdens-descendants er `Texture`-instanser** (én pr. flade, seks som standard); 138–154 lys, alle med skygger; 21.261 dele med CastShadow. Streaming-radius/-mode kan ikke læses fra MCP-tråden (capability). Nye readbacks: `Level2_/Level3_LayoutSeconds`, `BuildSeconds`, `WorldDescendants`. Lavet (`60a8d4b`): Texture kun på flader en spiller kan se for hallvægge, korridorvægge, søjler og ring-buer (kontakt `Level 2 Configuration.Performance.CullHiddenTileFaces`; slået fra giver den gamle adfærd præcist). Målt: 44.923 → 42.051 Textures, 74.086 → 71.214 descendants. Fast kameratur (12 vinkler) + pixel-diff: 0,00–0,13 % forskel i de 9 stabile vinkler = samme støjgulv som to uændrede kørsler; ingen synlig ændring. **Hovedfundet**: korridorernes hvælvingsbuer (`Arch Rib`, `Arch Rib face`, `Corridor Arch Spandrel`) er 32.224 af 42.051 Textures (77 %) og 13.454 dele — cirka halvdelen af alle dele i Level 2. Hver bue er bygget af mange korte kassesegmenter med 2–3 tile-Textures hver; alle deres flader er synlige, så culling kan ikke røre dem. Det er her mobil-gevinsten ligger (se assetlisten).
 
 ### 3.5 Level 3 (A5)
 
@@ -121,6 +122,10 @@ Native Studio-captures ligger uden for git i session-scratchpad (`shots-before/s
 ### PoolSlide-lyd (kalibrering for øret)
 
 `ReplicatedStorage."Level 2 Entity Audio Bank"`: `Slide.MouthBoneOffset = Vector3.new(0, -0.3, -0.8)` (bone-space fra `Head`-leddet mod mundåbningen, skaleres med modelhøjde / `MouthReferenceHeight = 12`); `Mix.Slide.Mouth = {Volume 0.42, Min 24, Max 240}`; mund-interval idle 16–28 s, chase 7–14 s; spawn-groan = eksisterende `Slide.Alert`; periodiske groans = de fire `Level 2 Distant Monster-Like Pipe Groan 1..4`-slots i `Level 2 Sound Library`. Valgfrit for art: en Attachment `Level2_PoolSlideMouth` på kæben i templaten vinder over alt andet. Bemærk: også walk/run-loopet spiller fra mund-emitteren (12 studs høj krop; ikke hørbart forkert på afstand, men en fod-emitter er en mulig polish).
+
+### Level 2 hvælvingsbuer som mesh (forslag; kræver ejer-/art-beslutning)
+
+Mål: erstat de ~13.450 kassesegmenter + ~32.000 Textures med én MeshPart pr. bue (eller pr. korridorhvælving). Geometri i dag (`makeArchSpan` i `Level 2 World Builder`): elliptisk bue, `VerticalScale` 1,9 (`CorridorVaultVerticalScale`), ribbe-tværsnit `AxialDepth` 3,2 × `RadialDepth` 2,2 studs, segmentoverlap 0,9; tile-billedet er `TILE_TEXTURE` med 7 studs pr. flise og tint `TILE_TINT`, farve `TileWarm` (236,227,196). Leverance: én bue-mesh (UV med 7-studs fliser langs buen, separat materiale-ID ikke nødvendig), collision ikke nødvendig (ribberne er dekorative hvor `CanCollide=false`; hvælvingens collision ligger i `Vault Strip`). Når meshen findes, skifter jeg builderen (bag en kontakt) og måler igen med samme seed/kameratur. Forventet: ~71k → ~26k descendants.
 
 ### Level 3 CD-reader
 
