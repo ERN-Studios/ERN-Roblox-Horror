@@ -1,5 +1,11 @@
 -- Cleaned ElevenLabs recordings; provenance and WAV hashes are in the audio asset manifest.
-local Bank = {Enabled = true, Version = 1, Mix = {
+--
+-- LEVEL2_GROAN_OWNERSHIP_20260921: `Enabled` is also the handshake that hands the
+-- Pool Slide's voice to `Level 2 Entity Audio`. While it is true AND the server
+-- publishes Level2_PoolSlideActive, `Level 2 Sound Controller` holds its distant
+-- pipe-groan scheduler. Set it false and the distant groans simply keep running
+-- as map ambience, so the kill switch never leaves the level silent.
+local Bank = {Enabled = true, Version = 2, Mix = {
 	Foam = {
 		Walk = {Volume = 0.25, Min = 12, Max = 110},
 		Run = {Volume = 0.33, Min = 14, Max = 145},
@@ -16,6 +22,10 @@ local Bank = {Enabled = true, Version = 1, Mix = {
 		Idle = {Volume = 0.14, Min = 12, Max = 100},
 		Alert = {Volume = 0.45, Min = 24, Max = 240},
 		Attack = {Volume = 0.52, Min = 20, Max = 170},
+		-- The periodic mouth groan sits just under Alert so the one spawn
+		-- announcement stays the loudest thing the giant ever says. Same
+		-- plateau/reach as Alert: direction and distance come from the rolloff.
+		Mouth = {Volume = 0.42, Min = 24, Max = 240},
 	},
 },
 Foam = {
@@ -34,6 +44,22 @@ Slide = {
 	Idle = {{Id = "rbxassetid://91311095755288", Seconds = 6.0}},
 	Alert = {{Id = "rbxassetid://123428540737909", Seconds = 7.0}},
 	Attack = {{Id = "rbxassetid://138559499183993", Seconds = 3.0}},
+	-- The periodic mouth voice reuses the four authored pipe-groan clips: they
+	-- are StringValue slots in ReplicatedStorage["Level 2 Sound Library"], not
+	-- ids, so they are named here and resolved on the client. The reveal is that
+	-- the groans the party heard from the pipes were always this thing.
+	MouthSlots = {
+		"Level 2 Distant Monster-Like Pipe Groan 1",
+		"Level 2 Distant Monster-Like Pipe Groan 2",
+		"Level 2 Distant Monster-Like Pipe Groan 3",
+		"Level 2 Distant Monster-Like Pipe Groan 4",
+	},
+	MouthClipSeconds = 8.0,
+	-- Calibration knob for the LAST resort in the mouth lookup (see the client):
+	-- a point derived from the model's own bounding box, as a fraction of it, so
+	-- it scales with the rig. Only used when the template carries no mouth
+	-- Attachment, no mouth/jaw/head Bone and no head/jaw MeshPart.
+	MouthOffset = {Height = 0.42, Forward = 0.30},
 },
 }
 local function freeze(value)

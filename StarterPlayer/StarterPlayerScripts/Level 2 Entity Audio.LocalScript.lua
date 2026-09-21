@@ -1,4 +1,15 @@
 -- Level 2 entity sound design. Presentation only; server attributes own gameplay.
+--
+-- LEVEL2_GROAN_OWNERSHIP_20260921 -- which script owns which Level 2 voice.
+--   THIS script owns every sound that comes out of a BODY: all Pool Foam voices,
+--   and the Pool Slide's one spawn groan plus its periodic mouth groans.
+--   `Level 2 Sound Controller` owns the DISTANT pipe-groan ambience around the
+--   map and stands its scheduler down for exactly as long as the server
+--   publishes Level2_PoolSlideActive = true.
+--   Neither script reads the other's runtime state; that server flag is the only
+--   handshake. It lives on `workspace` and in ReplicatedStorage["Level 2 State"],
+--   so a client-side STREAM-OUT of the model never looks like a despawn and can
+--   never resume the distant scheduler behind this script's back.
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local CollectionService = game:GetService("CollectionService")
@@ -6,7 +17,7 @@ local RunService = game:GetService("RunService")
 local Bank = require(ReplicatedStorage:WaitForChild("Level 2 Entity Audio Bank"))
 local player = Players.LocalPlayer
 local rng = Random.new()
-local records, failedAssets, connections = {}, {}, {}
+local records, failedAssets, connections, dying = {}, {}, {}, {}
 local world, generation
 local pollClock, scanClock, voiceCooldown = 0, 0, 0
 
@@ -24,26 +35,150 @@ local function listenerActive()
 	return player:GetAttribute("Escaped") ~= true or player:GetAttribute("Level2_ExitTransition") == true
 end
 
-local function destroyRecord(record)
-	for _, channel in pairs(record.Channels) do channel.Sound:Destroy() end
-	record.Emitter:Destroy()
+-- SLIDE SPAWN LATCH BEGIN -- exercised offline by tools/tests/test_pool_slide_audio_states.py
+local SPAWN_GROAN_GRACE = 5
+local MOUTH_IDLE_MIN, MOUTH_IDLE_MAX = 16, 28
+local MOUTH_CHASE_MIN, MOUTH_CHASE_MAX = 7, 14
+local slideState
+local slideSpawnKey, slideSpawnPending, slideSpawnDeadline = nil, false, 0
+
+local function slideStateFolder()
+	if slideState and slideState.Parent then return slideState end
+	slideState = ReplicatedStorage:FindFirstChild("Level 2 State")
+	return slideState
 end
 
-local function clear()
-	for model, record in pairs(records) do destroyRecord(record) records[model] = nil end
+-- The server's own answer to "is there a body". `workspace` attributes are never
+-- streamed out, so this stays true across a local stream-out and goes false only
+-- on a real despawn or round teardown (Controller.Stop -> resetPublished).
+local function slideActive()
+	return workspace:GetAttribute("Level2_PoolSlideActive") == true
+end
+
+-- Monotonic per successful spawn. Read from the State folder in ReplicatedStorage
+-- rather than the model, because the model is exactly what a stream-out removes.
+local function slideSpawnCount()
+	local folder = slideStateFolder()
+	local value = folder and folder:GetAttribute("Level2_PoolSlideSpawnCount")
+	return type(value) == "number" and value or 0
+end
+
+-- One groan per BODY, not per stream-in. The key moves only when the server
+-- publishes another spawn (or another generation), so a model that streams out
+-- and back re-attaches its emitter silently. The grace window exists because the
+-- rig spawns at least 100 studs away and may not have replicated yet; after it
+-- expires the announcement is dropped rather than faked from somewhere else.
+local function updateSlideSpawnLatch(now, currentGeneration)
+	local key = slideActive()
+		and (tostring(currentGeneration) .. "/" .. tostring(slideSpawnCount())) or nil
+	if key ~= slideSpawnKey then
+		slideSpawnKey = key
+		slideSpawnPending = key ~= nil
+		slideSpawnDeadline = now + SPAWN_GROAN_GRACE
+	elseif slideSpawnPending and now >= slideSpawnDeadline then
+		slideSpawnPending = false
+	end
+	return slideSpawnPending
+end
+
+local function mouthVoiceDelay(chasing)
+	if chasing then return rng:NextNumber(MOUTH_CHASE_MIN, MOUTH_CHASE_MAX) end
+	return rng:NextNumber(MOUTH_IDLE_MIN, MOUTH_IDLE_MAX)
+end
+-- SLIDE SPAWN LATCH END
+
+local function destroyRecord(record)
+	for _, channel in pairs(record.Channels) do channel.Sound:Destroy() end
+	-- An AUTHORED mouth Attachment belongs to the rig; only emitters this script
+	-- created are ours to remove.
+	if record.EmitterOwned and record.Emitter.Parent then record.Emitter:Destroy() end
+end
+
+local function clear(fade)
+	for model, record in pairs(records) do
+		records[model] = nil
+		if fade and next(record.Channels) then
+			-- Round end with the body still present: ride the existing 70 ms
+			-- release instead of destroying a playing Sound, which clicks.
+			for _, channel in pairs(record.Channels) do
+				channel.Releasing, channel.Target = true, 0
+			end
+			table.insert(dying, record)
+		else
+			destroyRecord(record)
+		end
+	end
+	if not fade then
+		for index = #dying, 1, -1 do
+			destroyRecord(dying[index])
+			dying[index] = nil
+		end
+	end
 	script:SetAttribute("ActiveEmitters", 0)
 	script:SetAttribute("ActiveSounds", 0)
+end
+
+-- The imported Meshy rig carries no documented mouth marker, so look for one in
+-- descending order of how much the RIG tells us and fall back to a point derived
+-- from the model's own bounding box -- which scales with the rig -- rather than
+-- leaving the voice on RootPart at floor level. A Bone is an Attachment, so a
+-- named jaw/head bone is used directly and no Attachment is parented under it.
+-- ponytail: whether the engine mixes a Sound on a Bone from the ANIMATED or the
+-- bind-pose transform is not verified here; either way it is at head height and
+-- travels with the rig. Authoring a `Level2_PoolSlideMouth` Attachment on the jaw
+-- of the template removes the question and takes precedence over everything else.
+local MOUTH_NAMES = {"Level2_PoolSlideMouth", "MouthAttachment", "Mouth", "Jaw", "Head", "head"}
+local MOUTH_BONE_HINTS = {"mouth", "jaw", "head"}
+
+local function mouthEmitter(model)
+	for _, name in ipairs(MOUTH_NAMES) do
+		local found = model:FindFirstChild(name, true)
+		-- A Bone IS an Attachment, so an exactly named bone lands here too.
+		if found and found:IsA("Attachment") then return found, false end
+		if found and found:IsA("BasePart") then
+			local attachment = Instance.new("Attachment")
+			attachment.Name = "Level 2 Slide Clean Audio Emitter"
+			attachment.Position = Vector3.new(0, found.Size.Y * .2, -found.Size.Z * .35)
+			attachment.Parent = found
+			return attachment, true
+		end
+	end
+	-- Imported skeletons prefix their bones (`mixamorig:Head`), so try a
+	-- case-insensitive substring, most specific hint first. One pass per spawn.
+	local descendants = model:GetDescendants()
+	for _, hint in ipairs(MOUTH_BONE_HINTS) do
+		for _, object in ipairs(descendants) do
+			if object:IsA("Bone") and object.Name:lower():find(hint, 1, true) then
+				return object, false
+			end
+		end
+	end
+	local root = model.PrimaryPart
+	local box, size = model:GetBoundingBox()
+	local offset = Bank.Slide.MouthOffset
+	local attachment = Instance.new("Attachment")
+	attachment.Name = "Level 2 Slide Clean Audio Emitter"
+	attachment.Position = root.CFrame:ToObjectSpace(box).Position
+		+ Vector3.new(0, size.Y * offset.Height, -size.Z * offset.Forward)
+	attachment.Parent = root
+	return attachment, true
 end
 
 local function add(model, kind)
 	if records[model] or not model:IsA("Model") or not model.PrimaryPart
 		or not world or not model:IsDescendantOf(world)
 		or model:GetAttribute("Level2_Generation") ~= generation then return end
-	local emitter = Instance.new("Attachment")
-	emitter.Name = "Level 2 " .. kind .. " Clean Audio Emitter"
-	emitter:SetAttribute("Level2_ClientOnlyAudio", true)
-	emitter.Parent = model.PrimaryPart
+	local emitter, owned
+	if kind == "Slide" then
+		emitter, owned = mouthEmitter(model)
+	else
+		emitter, owned = Instance.new("Attachment"), true
+		emitter.Name = "Level 2 " .. kind .. " Clean Audio Emitter"
+		emitter.Parent = model.PrimaryPart
+	end
+	if owned then emitter:SetAttribute("Level2_ClientOnlyAudio", true) end
 	records[model] = {Model = model, Kind = kind, Emitter = emitter, Channels = {}, Last = {},
+		EmitterOwned = owned, Host = emitter.Parent,
 		Position = model.PrimaryPart.Position, MovingUntil = 0,
 		Serial = model:GetAttribute(kind == "Foam" and "ActionSerial" or "Level2_PoolSlideAttackSerial") or 0,
 		NextVoice = os.clock() + rng:NextNumber(3, 10)}
@@ -56,8 +191,30 @@ local function scan()
 	if model then add(model, "Slide") end
 end
 
+-- The mouth groans are authored as StringValue slots in the shared Level 2 Sound
+-- Library, not as ids in the Bank. Resolve once, and only once the library has
+-- replicated -- a miss is not cached, or an early run would leave them silent.
+local mouthClips
+local function mouthClipList()
+	if mouthClips then return mouthClips end
+	local library = ReplicatedStorage:FindFirstChild("Level 2 Sound Library")
+	if not library then return nil end
+	local clips = {}
+	for _, slotName in ipairs(Bank.Slide.MouthSlots) do
+		local slot = library:FindFirstChild(slotName)
+		local raw = slot and slot:IsA("StringValue") and tostring(slot.Value):gsub("%s", "") or ""
+		if raw ~= "" then
+			table.insert(clips, {Id = raw:match("^%d+$") and ("rbxassetid://" .. raw) or raw,
+				Seconds = Bank.Slide.MouthClipSeconds})
+		end
+	end
+	if #clips == 0 then return nil end
+	mouthClips = clips
+	return mouthClips
+end
+
 local function choose(record, key)
-	local list = Bank[record.Kind][key]
+	local list = key == "Mouth" and mouthClipList() or Bank[record.Kind][key]
 	if not list then return nil end
 	local candidates = {}
 	for _, clip in ipairs(list) do
@@ -82,6 +239,9 @@ local function start(record, channelName, key, looped, now)
 	sound.Name = "Level 2 " .. record.Kind .. " " .. key
 	sound.SoundId = clip.Id
 	sound.Volume = 0
+	-- Pitch variation on the one-shot voices only; a detuned movement LOOP would
+	-- beat against the next one when setLoop crossfades them.
+	if not looped then sound.PlaybackSpeed = rng:NextNumber(.97, 1.03) end
 	sound.Looped = looped
 	sound.PlayOnRemove = false
 	sound.RollOffMode = Enum.RollOffMode.InverseTapered
@@ -91,7 +251,7 @@ local function start(record, channelName, key, looped, now)
 	-- Echo is already authored into the corridor files. Extra long reverb would
 	-- re-amplify their noise floor and smear the pauses between sounds.
 	local channel = {Sound = sound, Key = key, Target = tuning.Volume, Started = false,
-		LoadDeadline = now + 8, Duration = clip.Seconds, Looped = looped}
+		LoadDeadline = now + 8, Duration = clip.Seconds / sound.PlaybackSpeed, Looped = looped}
 	record.Channels[channelName] = channel
 	return channel
 end
@@ -156,7 +316,7 @@ local function updateRecord(record, dt, now, cameraPosition)
 	-- travel and hold briefly across network updates, without steps while blocked.
 	if speed > .6 and speed < 100 then record.MovingUntil = now + .18 end
 	local paused = workspace:GetAttribute("EntityPaused") == true
-	local active, moving, hunting, key
+	local active, moving, hunting, chasing, key
 	if kind == "Foam" then
 		active = model:GetAttribute("Level2_PoolFoamActiveMover") == true
 		paused = paused or model:GetAttribute("PoolFoamAnimationPaused") == true
@@ -167,6 +327,10 @@ local function updateRecord(record, dt, now, cameraPosition)
 		active = model:GetAttribute("Level2_PoolSlideActive") == true
 		hunting = model:GetAttribute("Level2_PoolSlideEnraged") == true
 		moving = now < record.MovingUntil and model:GetAttribute("Level2_PoolSlideMoving") == true
+		-- "Chase" is the controller's own state, not the pump-3 enrage: the mouth
+		-- speeds up whenever it is actually coming for somebody.
+		local pursuit = model:GetAttribute("Level2_PoolSlideState")
+		chasing = pursuit == "CHASE" or pursuit == "ENRAGED" or pursuit == "ATTACK"
 		local animation = model:GetAttribute("Level2_PoolSlideAnimationState")
 		key = moving and (hunting and "EnragedRun" or animation == "Run" and "Run" or "Walk") or "Idle"
 		if animation == "Attack" then key = nil end
@@ -183,13 +347,22 @@ local function updateRecord(record, dt, now, cameraPosition)
 		local voice = record.Channels.Voice
 		if voice and (not voice.IsAttack or not inRange) then voice.Releasing, voice.Target = true, 0 end
 		record.NextVoice = math.max(record.NextVoice, now + 2)
+	elseif kind == "Slide" and slideSpawnPending then
+		-- The one spawn announcement outranks the shared voice stagger; it must not
+		-- be swallowed because a Pool Foam entity happened to speak a second ago.
+		if oneShot(record, "Alert", now, false) then
+			slideSpawnPending = false
+			voiceCooldown = now + 4
+			record.NextVoice = now + mouthVoiceDelay(chasing)
+		end
 	elseif now >= record.NextVoice and now >= voiceCooldown then
 		local cue
-		if kind == "Slide" then cue = "Alert"
+		if kind == "Slide" then cue = "Mouth"
 		elseif moving then cue = hunting and "Hunt" or (rng:NextNumber() < .65 and "Groan" or "Squeal") end
 		if cue and oneShot(record, cue, now, false) then
 			voiceCooldown = now + 4 -- Stagger five Foam entities; avoid a wall of voices.
-			record.NextVoice = now + rng:NextNumber(16, 28)
+			record.NextVoice = now + (kind == "Slide" and mouthVoiceDelay(chasing)
+				or rng:NextNumber(16, 28))
 		else record.NextVoice = now + 2 end
 	end
 end
@@ -197,6 +370,16 @@ end
 table.insert(connections, RunService.Heartbeat:Connect(function(dt)
 	local frameNow = os.clock()
 	for _, record in pairs(records) do updateChannels(record, dt, frameNow) end
+	-- Records released by clear(true) keep fading on this same pass and are torn
+	-- down the moment their last channel has gone; nothing survives a round.
+	for index = #dying, 1, -1 do
+		local record = dying[index]
+		updateChannels(record, dt, frameNow)
+		if next(record.Channels) == nil then
+			destroyRecord(record)
+			table.remove(dying, index)
+		end
+	end
 	pollClock += dt
 	if pollClock < .1 then return end
 	local elapsed = pollClock
@@ -208,14 +391,19 @@ table.insert(connections, RunService.Heartbeat:Connect(function(dt)
 		world, generation = nextWorld, nextGeneration
 		scanClock, voiceCooldown = 1, 0
 	end
+	-- Tracked even while this client is not listening (dead, or between spectate
+	-- targets), so coming back does not fire an announcement for an old body.
+	updateSlideSpawnLatch(frameNow, generation)
 	local camera = workspace.CurrentCamera
-	if not world or not camera or not listenerActive() then clear() return end
+	if not world or not camera or not listenerActive() then clear(true) return end
 	scanClock += elapsed
 	if scanClock >= 1 then scanClock = 0 scan() end
 	local now, emitterCount, soundCount = os.clock(), 0, 0
 	for model, record in pairs(records) do
+		-- Host, not PrimaryPart: the Slide's emitter lives on its mouth bone/part.
 		if not model:IsDescendantOf(world) or not model.PrimaryPart
-			or record.Emitter.Parent ~= model.PrimaryPart then
+			or record.Emitter.Parent ~= record.Host
+			or not record.Host:IsDescendantOf(model) then
 			destroyRecord(record)
 			records[model] = nil
 		else

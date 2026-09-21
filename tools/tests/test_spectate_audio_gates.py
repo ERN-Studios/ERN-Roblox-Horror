@@ -34,10 +34,11 @@ local target = {}
 local function spectateSubject() return target end
 local function rootPart() return {} end
 local ambientWorld = {GetAttribute=function() return 1 end}
-local groanSource = {}
 local groanRecord = {Owner={Parent=true}, Sound={Parent=true}, World=ambientWorld,
- Generation=1, Source=groanSource}
-local function currentPoolSlideRoot() return groanSource end
+ Generation=1}
+-- LEVEL2_GROAN_OWNERSHIP_20260921: the distant groan no longer has a body form;
+-- it stands down wholesale when the entity audio client owns the voice.
+local function entityAudioOwnsBody() return false end
 local function stateFolder() return nil end
 local LEVEL=3
 local played=0
