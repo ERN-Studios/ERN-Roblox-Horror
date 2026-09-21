@@ -9,6 +9,19 @@
 -- loadProfile publishes ZyntraFirstLogin from whether the DataStore record
 -- existed before the load committed it, so this runs on the first successful
 -- login and on no other.
+--
+-- RETRY_GUIDE_20260921 (Trello: "nemt nyt forsoeg"). The same beams and the same
+-- billboard, pointed at a different bay: after a round the player did NOT escape
+-- -- a death, a party wipe, or Back to Lobby -- GameManager publishes
+-- RetryGuideLevel and this walks them to that level's nearest free pad instead.
+--
+-- Three things it deliberately is not. It is not a revive and it touches no
+-- queue: the ordinary pad, the ordinary party, the ordinary price. It never runs
+-- over the first-entry guide (a brand-new profile has no round to retry, and the
+-- `holder` guard is belt and braces). And it gives up after RETRY_SECONDS, so a
+-- player who walked off to the shop is not followed around the lobby by a beam.
+-- It ends on everything the first-entry guide ends on as well: pad arrival, a
+-- queue or load event, and entering a round.
 
 local PathfindingService = game:GetService("PathfindingService")
 local Players = game:GetService("Players")
@@ -25,6 +38,9 @@ local roundStatus = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Roun
 local ZYNTRA_CYAN = Color3.fromRGB(73, 245, 204)
 local RECOMPUTE_INTERVAL = 0.75
 local RECOMPUTE_MOVE = 3
+-- Wall-clock seconds, accumulated from the Heartbeat delta rather than read off
+-- os.clock -- the same reason Round Exit Client gives for its hold.
+local RETRY_SECONDS = 45
 local HOVER = Vector3.new(0, 0.35, 0)
 -- TunnelLobbyBuilder's built value, used only if a pad lost its attribute.
 local DEFAULT_QUEUE_RADIUS = 7.4
@@ -40,24 +56,31 @@ local holder, billboard, arrow, path
 local attachments, beams = {}, {}
 local connections = {}
 local chainCount, visible = 0, false
-local finished, latched, computing = false, false, false
+-- `finished` ends THIS run; `torndown` ends the script for good. They used to be
+-- one flag, which is fine while the guide only ever runs once -- a retry has to
+-- be able to open a second time.
+local finished, torndown = false, false
+local latched, computing = false, false
 local lastComputeAt, lastOrigin, lastFailed = -math.huge, nil, true
 local bobClock = 0
+-- The bay this run is walking to, and the run's own budget. A nil deadline never
+-- expires; that is the first-entry guide, which ends only on arrival or a round.
+local guideLevel, guideDeadline, runClock = 1, nil, 0
 local finish
 
-local function level1Room()
+local function guideRoom()
 	local lobby = workspace:FindFirstChild("ServerLobby")
 	local rooms = lobby and lobby:FindFirstChild("LevelQueueRooms")
-	local room = rooms and rooms:FindFirstChild("Level1QueueRoom")
+	local room = rooms and rooms:FindFirstChild("Level" .. tostring(guideLevel) .. "QueueRoom")
 	if not room or room:GetAttribute("LevelEnabled") ~= true then return nil end
 	return room
 end
 
--- Nearest Level 1 pad by horizontal distance, and whether the player already
--- stands on one of them (the "arrived" end condition). Scoped to the Level 1
--- bay: the other bays name their own pads LaunchZone5..LaunchZone24.
+-- Nearest pad in THIS run's bay by horizontal distance, and whether the player
+-- already stands on one of them (the "arrived" end condition). Scoped to the one
+-- room: the other bays name their own pads LaunchZone5..LaunchZone24.
 local function scanPads(position)
-	local room = level1Room()
+	local room = guideRoom()
 	if not room then return nil, false end
 	local best, bestDistance
 	for _, child in ipairs(room:GetChildren()) do
@@ -163,6 +186,15 @@ end
 
 local function update(deltaTime)
 	if finished then return end
+	-- The retry budget runs on real time, including the frames with no character
+	-- under it: a player who dies in the lobby is not owed a fresh 45 seconds.
+	if guideDeadline then
+		runClock += deltaTime
+		if runClock >= guideDeadline then
+			finish()
+			return
+		end
+	end
 	local character = player.Character
 	local root = character and character:FindFirstChild("HumanoidRootPart")
 	if not root then
@@ -207,10 +239,18 @@ function finish()
 		holder = nil
 	end
 	billboard, arrow, path = nil, nil, nil
+	chainCount, visible = 0, false
 end
 
-local function start()
-	if finished then return end
+-- `level` picks the bay, `titleText` is what the billboard says, and `deadline`
+-- is this run's budget in seconds (nil = no budget). Refuses to open a second
+-- guide over a live one, which is the whole of the "never both at once" rule.
+local function start(level, titleText, deadline)
+	if torndown or holder then return end
+	guideLevel, guideDeadline, runClock = level, deadline, 0
+	finished = false
+	lastComputeAt, lastOrigin, lastFailed = -math.huge, nil, true
+	bobClock = 0
 	holder = Instance.new("Part")
 	holder.Name = "FirstEntryGuide"
 	holder.Anchored = true
@@ -235,7 +275,7 @@ local function start()
 	local title = Instance.new("TextLabel")
 	title.Name = "Title"
 	title.Size = UDim2.fromScale(1, 0.5)
-	title.Text = "LEVEL 1 START HERE"
+	title.Text = titleText
 	title.TextScaled = true
 	title.TextStrokeTransparency = 0.5
 	title.Parent = billboard
@@ -274,9 +314,27 @@ local function start()
 	end))
 end
 
+-- RETRY_GUIDE_20260921. The server owns the fact (a non-escaped return publishes
+-- RetryGuideLevel; entering a round clears it), so this only has to decide that
+-- the lobby is the right place to draw in. Same three refusals the first-entry
+-- guide makes: a reserved round server has no lobby, a player already in a round
+-- is not in it, and a live guide is never replaced.
+local function considerRetry()
+	if torndown or holder then return end
+	-- A number, not tonumber: the server writes a number attribute, and a "2"
+	-- that coerced would mean something upstream is guessing about this contract.
+	local level = player:GetAttribute("RetryGuideLevel")
+	if type(level) ~= "number" or level < 1 or level % 1 ~= 0 then return end
+	if workspace:GetAttribute("ReservedRoundServer") == true
+		or player:GetAttribute("InRound") == true then
+		return
+	end
+	start(level, "TRY AGAIN · LEVEL " .. tostring(level), RETRY_SECONDS)
+end
+
 local profileConnection
 local function considerProfile()
-	if latched or finished then return end
+	if latched then return end
 	if player:GetAttribute("ZyntraProfileLoaded") ~= true then return end
 	latched = true
 	profileConnection:Disconnect()
@@ -290,16 +348,26 @@ local function considerProfile()
 		or player:GetAttribute("InRound") == true then
 		return
 	end
-	start()
+	start(1, "LEVEL 1 START HERE", nil)
 end
 
 -- No profile, no guide: a load that never completes simply leaves this idle.
 profileConnection = player:GetAttributeChangedSignal("ZyntraProfileLoaded"):Connect(considerProfile)
+-- Outside `connections`, which finish() clears: this watcher has to survive one
+-- run to open the next.
+local retryConnection = player:GetAttributeChangedSignal("RetryGuideLevel"):Connect(considerRetry)
 script.Destroying:Connect(function()
+	torndown = true
 	if profileConnection then
 		profileConnection:Disconnect()
 		profileConnection = nil
 	end
+	if retryConnection then
+		retryConnection:Disconnect()
+		retryConnection = nil
+	end
 	finish()
 end)
 considerProfile()
+-- The attribute can be set by setupPlayer before this script's first line runs.
+considerRetry()

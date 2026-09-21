@@ -14,6 +14,7 @@ local Players = game:GetService("Players")
 local PhysicsService = game:GetService("PhysicsService")
 local RunService = game:GetService("RunService")
 local PlayerProtection = require(game:GetService("ServerScriptService"):WaitForChild("PlayerProtection"))
+local DeathAdvice = require(game:GetService("ReplicatedStorage"):WaitForChild("DeathAdvice"))
 
 -- The lobby owns server startup. Build the expensive world only when a queued
 -- party finishes the launch countdown.
@@ -665,6 +666,7 @@ local function onPitTouch(hit, bottom)
 		protectedPitOccupants[player] = {Character = model, Humanoid = hum, Bottom = bottom, Epoch = pitEpoch}
 		return
 	end
+	DeathAdvice.Mark(player, "L1Pit")
 	hum.Health = 0
 end
 
@@ -686,6 +688,7 @@ local function recheckProtectedPitOccupants()
 				record.Bottom.Size + Vector3.new(0, 0.6, 0), params)
 			if #touching > 0 and pitPlayerAlive(player, record.Character, record.Humanoid)
 				and not PlayerProtection.IsActive(player, record.Character) then
+				DeathAdvice.Mark(player, "L1Pit")
 				record.Humanoid.Health = 0
 			end
 		end

@@ -9,6 +9,7 @@ local RunService = game:GetService("RunService")
 local CollectionService = game:GetService("CollectionService")
 local HttpService = game:GetService("HttpService")
 local PlayerProtection = require(game:GetService("ServerScriptService"):WaitForChild("PlayerProtection"))
+local DeathAdvice = require(ReplicatedStorage:WaitForChild("DeathAdvice"))
 
 local Navigator = require(script.Parent:WaitForChild("Level 2 Pool Slide Navigator"))
 local Configuration = require(script.Parent:WaitForChild("Level 2 Pool Slide Configuration"))
@@ -636,6 +637,7 @@ local function updateAttack(session, now)
 		-- One server evaluation after visible windup. No delayed task survives reset.
 		if attackReach(session, attack.Record)
 			and not PlayerProtection.IsActive(attack.Record.Player, attack.Record.Character) then
+			DeathAdvice.Mark(attack.Record.Player, "L2Slide")
 			attack.Record.Humanoid:TakeDamage(Configuration.AttackDamage)
 		end
 	end

@@ -12,6 +12,11 @@ local PhysicsService = game:GetService("PhysicsService")
 local Lighting = game:GetService("Lighting")
 local MemoryStoreService = game:GetService("MemoryStoreService")
 local DevAccess = require(RS:WaitForChild("DevAccess"))
+-- DEATH_CAUSE_20260921. The kill sites mark the player; this file reads the mark
+-- in hum.Died and appends the key to the "death"/"partydown" payloads the
+-- clients already receive. Never invents a cause: an unmarked or stale death is
+-- DeathAdvice.Unknown and the card says so.
+local DeathAdvice = require(RS:WaitForChild("DeathAdvice"))
 local PlayerProtection = require(script.Parent:WaitForChild("PlayerProtection"))
 local ReentryPlacement = require(script.Parent:WaitForChild("ReentryPlacement"))
 
@@ -1034,6 +1039,12 @@ local function setupPlayer(player)
   and type(packet.LoadingError) == "string" then
   player:SetAttribute("RoundLoadingError", packet.LoadingError == "LOADING_TIMEOUT" and "timeout" or "failed")
  end
+ -- RETRY_GUIDE_20260921. Only in the public lobby, and only from the packet:
+ -- GetJoinData is server-trusted, a client attribute would not be.
+ if not IS_RESERVED_ROUND_SERVER and type(packet) == "table"
+  and packet.ReturnToLobby == true and type(packet.RetryLevel) == "number" then
+  player:SetAttribute("RetryGuideLevel", packet.RetryLevel)
+ end
  player.CharacterAdded:Connect(function(char) onCharacter(player, char) end)
  task.defer(function()
   if not player.Parent then return end
@@ -1544,6 +1555,13 @@ end
 
 local function returnPlayersToLocalLobby(group)
 	for _, player in ipairs(livePlayers(group)) do
+		-- RETRY_GUIDE_20260921. A participant who did NOT escape is shown the way
+		-- back to the same level's pads; read before InRound/Escaped are cleared,
+		-- and never for a bystander this recovery path swept up. It is a hint, not
+		-- a revive: nothing about the queue, the price or the round changes.
+		if inRound[player] and player:GetAttribute("Escaped") ~= true then
+			player:SetAttribute("RetryGuideLevel", activeLevel)
+		end
 		inRound[player] = nil
 		player:SetAttribute("InRound", false)
 		player:SetAttribute("Escaped", nil)
@@ -1719,9 +1737,22 @@ local function teleportPlayersToLobby(group)
 		releaseUndispatchedClaims(live)
 		return false, "LOCAL_FALLBACK", live
 	end
+	-- RETRY_GUIDE_20260921. A player attribute cannot cross a teleport, so the
+	-- level to offer a retry for rides in the packet the lobby already reads.
+	-- ONE descriptor covers the whole dispatch, so this only claims a retry when
+	-- NOBODY in it escaped: a win sends escapers and non-escapers home together,
+	-- and telling somebody to try again at the level they just cleared is worse
+	-- than telling them nothing.
+	local retryLevel = activeLevel
+	for _, player in ipairs(live) do
+		if not inRound[player] or player:GetAttribute("Escaped") == true then
+			retryLevel = nil
+			break
+		end
+	end
 	local ok, err, attemptId = dispatchTransfer(live, {
 		Kind = "lobby",
-		Data = {ReturnToLobby = true, LoadingError = loadingFailures[live[1]]},
+		Data = {ReturnToLobby = true, LoadingError = loadingFailures[live[1]], RetryLevel = retryLevel},
 	})
 	if not ok then reportDispatchFailure(live, attemptId, err) end
 	return ok, err, live
@@ -1991,6 +2022,7 @@ local function prepareGroupLoading(attempt, group, level, useSlideResume)
    inRound[player] = true
    player:SetAttribute("InRound", true)
    player:SetAttribute("Escaped", nil)
+   player:SetAttribute("RetryGuideLevel", nil) -- RETRY_GUIDE_20260921: they took it
    player:SetAttribute("Level2_ExitTransition", nil)
   end
  end
@@ -2366,6 +2398,10 @@ playRound = function(participants)
  -- window opens and cleared the moment anyone is alive again -- or the round is
  -- torn down under it, so no client is left holding a card for a dead round.
  local lastDeathName = nil
+ -- DEATH_CAUSE_20260921: whoever fell last also names the CAUSE on that card.
+ -- Cleared with the name, for the same reason -- a party emptied by a leave must
+ -- not inherit the explanation of a death minutes old.
+ local lastDeathCause = DeathAdvice.Unknown
  local partyDownOpen = false
  local function clearPartyDown()
   if not partyDownOpen then return end
@@ -2379,6 +2415,10 @@ playRound = function(participants)
 		handleLeaveRoundRequest = nil
 		clearSpectatorCounts()
 		clearPartyDown()
+		-- A mark the round never consumed dies with the round. Otherwise a kill
+		-- site that fired without a Died (a refused health write, a protected
+		-- character) would still be sitting on the player next round.
+		for _, member in ipairs(participants) do DeathAdvice.Clear(member) end
 		table.clear(transitionRespawnToken)
 		table.clear(deathFrames)
 		table.clear(safeFrames)
@@ -2396,7 +2436,10 @@ playRound = function(participants)
     local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
     if root then deathFrames[player] = root.CFrame end
     lastDeathName = player.Name -- whoever fell last names the PARTY DOWN card
-    fireGroup(participants, "death", player.Name, root and root.Position or nil)
+    -- Read and consume the kill site's mark. APPENDED to the payload, never
+    -- reordered: every older client still reads name and position where it did.
+    lastDeathCause = DeathAdvice.Take(player)
+    fireGroup(participants, "death", player.Name, root and root.Position or nil, lastDeathCause)
 		if scheduleTransitionRespawn then scheduleTransitionRespawn(player) end
    end
   end)
@@ -2572,6 +2615,7 @@ playRound = function(participants)
   if not allowed() or player.Character ~= char or hum.Parent ~= char or hum.Health <= 0 then return false, "UNAVAILABLE" end
   alive[player] = true
   aliveCount += 1
+  DeathAdvice.Clear(player) -- a revived player carries no explanation forward
   hookLife(player, hum)
   fireGroup(participants, "reentry", player.Name)
   FriendBoost.PrimeRoster(participants) -- retries any pair whose lookup failed at launch
@@ -2625,7 +2669,7 @@ playRound = function(participants)
   leaving[player] = true
   participantSet[player] = nil
   transitionRespawnToken[player] = nil
-  if alive[player] then alive[player] = nil; aliveCount -= 1; lastDeathName = nil end
+  if alive[player] then alive[player] = nil; aliveCount -= 1; lastDeathName = nil; lastDeathCause = DeathAdvice.Unknown end
   local index = table.find(participants, player)
   if index then table.remove(participants, index) end
   if spectateTargets[player] then spectateTargets[player] = nil; republishSpectatorCounts() end
@@ -2647,7 +2691,7 @@ playRound = function(participants)
   -- the remembered name would be stale -- the PARTY DOWN card would name someone
   -- who fell minutes earlier and has been spectating since. Clearing it makes
   -- the client fall back to its nameless, party-wide caption.
-  if alive[player] then alive[player] = nil; aliveCount -= 1; lastDeathName = nil end
+  if alive[player] then alive[player] = nil; aliveCount -= 1; lastDeathName = nil; lastDeathCause = DeathAdvice.Unknown end
  end)
 
  -- The party was wiped before the round proper began. This is the Loss endpoint
@@ -2736,7 +2780,7 @@ playRound = function(participants)
    if not wipeDeadline then
     wipeDeadline = os.clock() + 15
     partyDownOpen = true
-    fireGroup(participants, "partydown", 15, lastDeathName)
+    fireGroup(participants, "partydown", 15, lastDeathName, lastDeathCause)
    end
    if os.clock() >= wipeDeadline then
     -- The client treats "lose" as its own clear, so the card needs no

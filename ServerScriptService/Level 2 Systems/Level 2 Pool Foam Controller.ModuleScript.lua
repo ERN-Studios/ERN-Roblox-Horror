@@ -12,6 +12,7 @@ local RunService = game:GetService("RunService")
 local ServerScriptService = game:GetService("ServerScriptService")
 local ServerStorage = game:GetService("ServerStorage")
 local PlayerProtection = require(ServerScriptService:WaitForChild("PlayerProtection"))
+local DeathAdvice = require(ReplicatedStorage:WaitForChild("DeathAdvice"))
 
 -- Hearing. NoiseRegistry lives in the ServerScriptService ROOT, not in this
 -- folder, so it is reached through the service (script.Parent is "Level 2
@@ -912,6 +913,7 @@ local function instantKill(session, entity, player, distance, now)
 
 	-- Direct health assignment is intentional: contact is lethal even through a
 	-- spawn ForceField, and setting zero immediately prevents duplicate targeting.
+	DeathAdvice.Mark(player, "L2Foam")
 	humanoid.Health = 0
 	setTargeted(session, nil)
 	return true
