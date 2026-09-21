@@ -982,9 +982,9 @@ check(pointer.Height <= 684 and pointer.Width <= 1280, "the pointer card does no
 
 -- The copy line says how to get rid of the card, and says the true thing for
 -- the input the player has.
-check(phone.Hint == "Step off the plate to close", "phone hint: " .. phone.Hint)
-check(tablet.Hint == "Step off the plate to close", "tablet hint: " .. tablet.Hint)
-check(pointer.Hint == "Step off the plate or press CLOSE", "pointer hint: " .. pointer.Hint)
+check(phone.Hint == "Walk away to close", "phone hint: " .. phone.Hint)
+check(tablet.Hint == "Walk away to close", "tablet hint: " .. tablet.Hint)
+check(pointer.Hint == "Walk away to close", "pointer hint: " .. pointer.Hint)
 for _, tier in ipairs({phone, tablet, pointer}) do
 	check(tier.HintWidth >= 120, "the hint lane collapsed to " .. tier.HintWidth)
 end

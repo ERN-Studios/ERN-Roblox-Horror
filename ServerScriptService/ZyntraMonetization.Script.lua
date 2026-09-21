@@ -2096,7 +2096,11 @@ local function refreshPasses(player)
 			data.Grants.AdvancedEquipment = true
 			data.StaminaLevel += 1
 			data.BatteryLevel += 1
-			return true, "Advanced Equipment: +" .. PCT .. " stamina and +" .. PCT .. " battery", "success"
+			-- Names what the pass is (focus beam, +50% base stamina, colours) and
+			-- then the one-time bonus this branch actually grants; the grant and
+			-- its once-only flag above are unchanged.
+			return true, "Advanced Equipment unlocked: focused torch, +50% base stamina and hazmat colors. One-time bonus: +"
+				.. PCT .. " stamina and +" .. PCT .. " battery.", "success"
 		end)
 	end
 	if cosmetic and player:GetAttribute("InRound") == true then

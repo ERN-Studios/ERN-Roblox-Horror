@@ -321,8 +321,9 @@ local function applyLayout()
 	hintTag.Position = UDim2.fromOffset(face.Pad + kindWidth + 6, titleTop + titleHeight)
 	hintTag.Size = UDim2.fromOffset(math.max(40, inner - kindWidth - 6), kindHeight)
 	hintTag.TextSize = face.Kind
-	-- CLOSE is a pointer affordance; on touch the honest instruction is to walk.
-	hintTag.Text = "Step off the plate to close"
+	-- The trigger is invisible, so "the plate" names nothing a player can see;
+	-- the card closes on distance, and walking is true on every device.
+	hintTag.Text = "Walk away to close"
 
 	icon.Position = UDim2.fromOffset(face.Pad, bodyTop)
 	icon.Size = UDim2.fromOffset(bodyHeight, bodyHeight)
