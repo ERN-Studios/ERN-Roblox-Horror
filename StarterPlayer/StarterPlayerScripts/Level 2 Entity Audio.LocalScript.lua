@@ -118,22 +118,41 @@ local function clear(fade)
 	script:SetAttribute("ActiveSounds", 0)
 end
 
--- The imported Meshy rig carries no documented mouth marker, so look for one in
--- descending order of how much the RIG tells us and fall back to a point derived
--- from the model's own bounding box -- which scales with the rig -- rather than
--- leaving the voice on RootPart at floor level. A Bone is an Attachment, so a
--- named jaw/head bone is used directly and no Attachment is parented under it.
--- ponytail: whether the engine mixes a Sound on a Bone from the ANIMATED or the
--- bind-pose transform is not verified here; either way it is at head height and
--- travels with the rig. Authoring a `Level2_PoolSlideMouth` Attachment on the jaw
--- of the template removes the question and takes precedence over everything else.
+-- MOUTH EMITTER BEGIN -- exercised offline by tools/tests/test_pool_slide_audio_states.py
+-- The live template's rig is 20 plainly named bones (Root, Hips, .. Neck, Head)
+-- under the skinned MeshPart, with no authored mouth marker, so this lands on
+-- the `Head` bone.
+--
+-- A Sound parented to a Bone is mixed from that bone's BIND-POSE WorldCFrame,
+-- not its animated one, so it would not move with the animation. A bone host
+-- therefore gets an OWNED Attachment on the bone's nearest BasePart ancestor
+-- (an Attachment cannot be parented to a Bone, and a bone's own parent is
+-- usually the next bone up), and the Heartbeat pass writes the bone's ANIMATED
+-- pose -- TransformedWorldCFrame -- into it once a frame.
+--
+-- The other rungs stay as fallbacks: an authored `Level2_PoolSlideMouth`
+-- Attachment wins outright, then a named head/jaw MeshPart, then a point derived
+-- from the model's own bounding box. Anything rather than RootPart at floor level.
 local MOUTH_NAMES = {"Level2_PoolSlideMouth", "MouthAttachment", "Mouth", "Jaw", "Head", "head"}
 local MOUTH_BONE_HINTS = {"mouth", "jaw", "head"}
 
+local function boneEmitter(model, bone, scale)
+	local host = bone:FindFirstAncestorWhichIsA("BasePart") or model.PrimaryPart
+	local attachment = Instance.new("Attachment")
+	attachment.Name = "Level 2 Slide Clean Audio Emitter"
+	attachment.Parent = host
+	-- Resolved once per spawn, so the per-frame cost is one multiply and one write.
+	return attachment, true, bone, CFrame.new(Bank.Slide.MouthBoneOffset * scale)
+end
+
 local function mouthEmitter(model)
+	local box, size = model:GetBoundingBox()
+	-- The bone nudge is authored against a 12-stud rig; carry it to this one.
+	local scale = size.Y / Bank.Slide.MouthReferenceHeight
 	for _, name in ipairs(MOUTH_NAMES) do
 		local found = model:FindFirstChild(name, true)
-		-- A Bone IS an Attachment, so an exactly named bone lands here too.
+		-- Bone first: a Bone IS an Attachment, but it needs the follow treatment.
+		if found and found:IsA("Bone") then return boneEmitter(model, found, scale) end
 		if found and found:IsA("Attachment") then return found, false end
 		if found and found:IsA("BasePart") then
 			local attachment = Instance.new("Attachment")
@@ -149,12 +168,11 @@ local function mouthEmitter(model)
 	for _, hint in ipairs(MOUTH_BONE_HINTS) do
 		for _, object in ipairs(descendants) do
 			if object:IsA("Bone") and object.Name:lower():find(hint, 1, true) then
-				return object, false
+				return boneEmitter(model, object, scale)
 			end
 		end
 	end
 	local root = model.PrimaryPart
-	local box, size = model:GetBoundingBox()
 	local offset = Bank.Slide.MouthOffset
 	local attachment = Instance.new("Attachment")
 	attachment.Name = "Level 2 Slide Clean Audio Emitter"
@@ -164,24 +182,38 @@ local function mouthEmitter(model)
 	return attachment, true
 end
 
+-- The entire per-frame cost of the mouth: one CFrame write, for the one record
+-- that has a bone. Every other record returns on the first line. No extra
+-- connection, no thread, nothing allocated.
+local function followMouthBone(record)
+	local bone = record.MouthBone
+	if bone and bone.Parent then
+		record.Emitter.WorldCFrame = bone.TransformedWorldCFrame * record.MouthOffset
+	end
+end
+-- MOUTH EMITTER END
+
 local function add(model, kind)
 	if records[model] or not model:IsA("Model") or not model.PrimaryPart
 		or not world or not model:IsDescendantOf(world)
 		or model:GetAttribute("Level2_Generation") ~= generation then return end
-	local emitter, owned
+	local emitter, owned, bone, boneOffset
 	if kind == "Slide" then
-		emitter, owned = mouthEmitter(model)
+		emitter, owned, bone, boneOffset = mouthEmitter(model)
 	else
 		emitter, owned = Instance.new("Attachment"), true
 		emitter.Name = "Level 2 " .. kind .. " Clean Audio Emitter"
 		emitter.Parent = model.PrimaryPart
 	end
 	if owned then emitter:SetAttribute("Level2_ClientOnlyAudio", true) end
-	records[model] = {Model = model, Kind = kind, Emitter = emitter, Channels = {}, Last = {},
+	local record = {Model = model, Kind = kind, Emitter = emitter, Channels = {}, Last = {},
 		EmitterOwned = owned, Host = emitter.Parent,
+		MouthBone = bone, MouthOffset = boneOffset,
 		Position = model.PrimaryPart.Position, MovingUntil = 0,
 		Serial = model:GetAttribute(kind == "Foam" and "ActionSerial" or "Level2_PoolSlideAttackSerial") or 0,
 		NextVoice = os.clock() + rng:NextNumber(3, 10)}
+	records[model] = record
+	followMouthBone(record) -- place it before the first frame, not at the bind pose
 end
 
 local function scan()
@@ -369,7 +401,10 @@ end
 
 table.insert(connections, RunService.Heartbeat:Connect(function(dt)
 	local frameNow = os.clock()
-	for _, record in pairs(records) do updateChannels(record, dt, frameNow) end
+	for _, record in pairs(records) do
+		followMouthBone(record)
+		updateChannels(record, dt, frameNow)
+	end
 	-- Records released by clear(true) keep fading on this same pass and are torn
 	-- down the moment their last channel has gone; nothing survives a round.
 	for index = #dying, 1, -1 do
@@ -400,10 +435,13 @@ table.insert(connections, RunService.Heartbeat:Connect(function(dt)
 	if scanClock >= 1 then scanClock = 0 scan() end
 	local now, emitterCount, soundCount = os.clock(), 0, 0
 	for model, record in pairs(records) do
-		-- Host, not PrimaryPart: the Slide's emitter lives on its mouth bone/part.
+		-- Host, not PrimaryPart: the Slide's emitter lives on the part its mouth
+		-- bone hangs off. A bone that has gone away rebuilds the record too, so
+		-- the emitter cannot quietly freeze at the last pose it was written.
 		if not model:IsDescendantOf(world) or not model.PrimaryPart
 			or record.Emitter.Parent ~= record.Host
-			or not record.Host:IsDescendantOf(model) then
+			or not record.Host:IsDescendantOf(model)
+			or (record.MouthBone and not record.MouthBone:IsDescendantOf(model)) then
 			destroyRecord(record)
 			records[model] = nil
 		else

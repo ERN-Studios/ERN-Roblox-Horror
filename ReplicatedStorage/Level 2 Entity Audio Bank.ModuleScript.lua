@@ -55,10 +55,20 @@ Slide = {
 		"Level 2 Distant Monster-Like Pipe Groan 4",
 	},
 	MouthClipSeconds = 8.0,
+	-- THE calibration knob, and the one to turn by ear. The live template's rig
+	-- has 20 plainly named bones and no mouth marker, so the voice hangs off the
+	-- `Head` bone -- which sits at the skull base, not at the mouth. This is the
+	-- nudge from that joint to the opening, in BONE space, measured against a rig
+	-- 12.00 studs tall (MouthReferenceHeight); the client scales it by the
+	-- model's actual height so it follows a resized rig. Forward is -Z and down
+	-- is -Y in Roblox, but an imported skeleton's bone axes are whatever the DCC
+	-- exported, so listen before trusting the sign of any component.
+	MouthBoneOffset = Vector3.new(0, -0.3, -0.8),
+	MouthReferenceHeight = 12.0,
 	-- Calibration knob for the LAST resort in the mouth lookup (see the client):
 	-- a point derived from the model's own bounding box, as a fraction of it, so
 	-- it scales with the rig. Only used when the template carries no mouth
-	-- Attachment, no mouth/jaw/head Bone and no head/jaw MeshPart.
+	-- Attachment, no bone at all and no head/jaw MeshPart.
 	MouthOffset = {Height = 0.42, Forward = 0.30},
 },
 }

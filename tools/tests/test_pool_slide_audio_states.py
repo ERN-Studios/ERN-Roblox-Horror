@@ -10,6 +10,11 @@ shipped clients by string markers and driven against stubs:
     despawn.
   * `Level 2 Entity Audio`'s spawn latch -- one mouth groan per BODY, keyed on
     the replicated spawn count, plus the chase-shortened voice interval.
+  * `Level 2 Entity Audio`'s mouth emitter and bone follow, against a fake rig
+    shaped like the live template: 20 plain bones under a skinned MeshPart, no
+    authored mouth marker. A Sound under a Bone would sit at the bind pose, so
+    the emitter must land on the MeshPart and be driven from the bone's
+    TransformedWorldCFrame every frame.
 
 Set LUAU_BIN to an official luau executable, or put luau on PATH.
 """
@@ -237,6 +242,154 @@ check(mouthVoiceDelay(true) == MOUTH_CHASE_MIN and mouthVoiceDelay(false) == MOU
     "the mouth interval has a chase form and an idle form")
 check(MOUTH_CHASE_MAX < MOUTH_IDLE_MIN,
     "every chase interval is shorter than every idle interval")
+'''
+
+MOUTH_PRELUDE = r'''
+-- Vector3/CFrame stubs are TRANSLATION ONLY. That is exact for what the mouth
+-- emitter composes (a pure-translation bone offset onto a pose) and keeps the
+-- fixture honest about what it does not model: rotation, and the engine's mix.
+local vectorMeta = {}
+local Vector3 = {}
+function Vector3.new(x, y, z) return setmetatable({X=x or 0, Y=y or 0, Z=z or 0}, vectorMeta) end
+vectorMeta.__index = vectorMeta
+vectorMeta.__mul = function(a, b) return Vector3.new(a.X*b, a.Y*b, a.Z*b) end
+vectorMeta.__add = function(a, b) return Vector3.new(a.X+b.X, a.Y+b.Y, a.Z+b.Z) end
+vectorMeta.__eq = function(a, b) return a.X==b.X and a.Y==b.Y and a.Z==b.Z end
+
+local cframeMeta = {}
+local CFrame = {}
+function CFrame.new(position) return setmetatable({Position=position}, cframeMeta) end
+cframeMeta.__index = cframeMeta
+cframeMeta.__mul = function(a, b) return CFrame.new(a.Position + b.Position) end
+function cframeMeta:ToObjectSpace(other)
+    return CFrame.new(other.Position + self.Position * -1)
+end
+
+-- Bank stub: relationships are asserted, not these numbers, so tuning the real
+-- knob in the bank does not rot this test.
+local Bank = {Slide = {MouthBoneOffset = Vector3.new(0, -0.3, -0.8),
+    MouthReferenceHeight = 12, MouthOffset = {Height = 0.42, Forward = 0.30}}}
+
+local SUPERCLASS = {Bone="Attachment", MeshPart="BasePart", Part="BasePart"}
+local rigApi = {}
+function rigApi:IsA(class)
+    local current = self.ClassName
+    while current do
+        if current == class then return true end
+        current = SUPERCLASS[current]
+    end
+    return false
+end
+function rigApi:FindFirstChild(name)
+    for _, child in self.Kids do
+        if child.Name == name then return child end
+        local found = child:FindFirstChild(name)
+        if found then return found end
+    end
+    return nil
+end
+function rigApi:GetDescendants(into)
+    into = into or {}
+    for _, child in self.Kids do table.insert(into, child); child:GetDescendants(into) end
+    return into
+end
+function rigApi:FindFirstAncestorWhichIsA(class)
+    local current = self.Parent
+    while type(current) == "table" and current.ClassName do
+        if current:IsA(class) then return current end
+        current = current.Parent
+    end
+    return nil
+end
+function rigApi:IsDescendantOf(other)
+    local current = self.Parent
+    while current do
+        if current == other then return true end
+        current = type(current) == "table" and current.Parent or nil
+    end
+    return false
+end
+function rigApi:GetBoundingBox() return self.Box, self.Size end
+function rigApi:SetAttribute(key, value) self.Attributes[key] = value end
+function rigApi:GetAttribute(key) return self.Attributes[key] end
+local function rig(class, name, parent)
+    local node = setmetatable({ClassName=class, Name=name, Attributes={}, Kids={},
+        Parent=parent}, {__index=rigApi})
+    if parent then table.insert(parent.Kids, node) end
+    return node
+end
+
+local Instance = {}
+function Instance.new(class)
+    return {ClassName=class, Attributes={},
+        SetAttribute=function(self, key, value) self.Attributes[key]=value end}
+end
+
+-- Shaped like the live template: 20 plain bones under the skinned MeshPart, a
+-- second MeshPart, a 0.6-cube RootPart primary, and NO authored mouth marker.
+local function buildRig(height)
+    local model = rig("Model", "Level 2 Pool Slide")
+    model.Size = Vector3.new(11.53, height, 3.96)
+    model.Box = CFrame.new(Vector3.new(0, 2, 0))
+    model.PrimaryPart = rig("Part", "RootPart", model)
+    model.PrimaryPart.CFrame = CFrame.new(Vector3.new(0, 0, 0))
+    local mesh = rig("MeshPart", "Mesh_0", model)
+    rig("MeshPart", "Mesh_02", model)
+    local chain = mesh
+    for _, boneName in {"Root", "Hips", "Spine", "Chest", "Neck", "Head"} do
+        chain = rig("Bone", boneName, chain)
+    end
+    chain.TransformedWorldCFrame = CFrame.new(Vector3.new(0, 10, 0))
+    return model, mesh, chain
+end
+'''
+
+MOUTH_TESTS = r'''
+local model, mesh, head = buildRig(12)
+local emitter, owned, bone, offset = mouthEmitter(model)
+check(bone == head, "the lookup lands on the rig's Head bone")
+check(emitter.Parent == mesh,
+    "the emitter hangs off the skinned MeshPart, never off the Bone itself")
+check(owned, "a bone-hosted emitter is ours to create and destroy")
+check(offset.Position == Bank.Slide.MouthBoneOffset,
+    "at the authored 12-stud height the bone offset is applied unscaled")
+
+local record = {Emitter = emitter, MouthBone = bone, MouthOffset = offset}
+followMouthBone(record)
+check(emitter.WorldCFrame.Position == Vector3.new(0, 9.7, -0.8),
+    "the emitter is written to the bone pose plus the mouth offset")
+
+-- The point of the whole exercise: it tracks the ANIMATED pose, which is what a
+-- Sound parented to the Bone would NOT have done.
+head.TransformedWorldCFrame = CFrame.new(Vector3.new(4, 11, -2))
+followMouthBone(record)
+check(emitter.WorldCFrame.Position == Vector3.new(4, 10.7, -2.8),
+    "a later animation frame moves the emitter with the bone")
+
+local frozen = emitter.WorldCFrame
+head.Parent = nil
+head.TransformedWorldCFrame = CFrame.new(Vector3.new(99, 99, 99))
+followMouthBone(record)
+check(emitter.WorldCFrame == frozen, "a detached bone is never read")
+
+-- Scaling: a rig twice as tall carries the nudge twice as far.
+local tall, tallMesh, tallHead = buildRig(24)
+local tallEmitter, _, tallBone, tallOffset = mouthEmitter(tall)
+check(tallBone == tallHead and tallEmitter.Parent == tallMesh, "a resized rig resolves the same way")
+check(tallOffset.Position == Bank.Slide.MouthBoneOffset * 2,
+    "the bone offset scales with the model's height")
+
+-- An authored Attachment still wins outright and needs no follow.
+local authored, authoredMesh = buildRig(12)
+local marker = rig("Attachment", "Level2_PoolSlideMouth", authoredMesh)
+local chosen, chosenOwned, chosenBone = mouthEmitter(authored)
+check(chosen == marker and not chosenOwned and chosenBone == nil,
+    "an authored Level2_PoolSlideMouth Attachment wins and is not ours to destroy")
+
+-- Pool Foam records carry no bone at all; the follow is a no-op for them.
+local foam = {Emitter = Instance.new("Attachment")}
+followMouthBone(foam)
+check(foam.Emitter.WorldCFrame == nil, "records without a mouth bone are untouched")
 
 print("Pool Slide audio states: " .. tostring(checks)
     .. " checks passed (offline Luau; engine mix, rolloff and asset loading not exercised)")
@@ -259,6 +412,9 @@ def main():
         ENTITY_PRELUDE,
         section(ENTITY, "-- SLIDE SPAWN LATCH BEGIN", "-- SLIDE SPAWN LATCH END"),
         ENTITY_TESTS,
+        MOUTH_PRELUDE,
+        section(ENTITY, "-- MOUTH EMITTER BEGIN", "-- MOUTH EMITTER END"),
+        MOUTH_TESTS,
     ])
     with tempfile.TemporaryDirectory(prefix="pool-slide-audio-") as directory:
         fixture = Path(directory) / "slide_audio_test.luau"
