@@ -34,6 +34,11 @@ local Loading = require(script.Parent:WaitForChild("Round Loading Runtime"))
 -- runs its first pass in the background, so it never delays boot.
 local FriendBoost = require(script.Parent:WaitForChild("FriendBoost"))
 FriendBoost.Start()
+-- ANALYTICS_20260921. Measurement only: every entry point is a pcall boundary
+-- inside the module and none of them yield, so no call here can affect a round.
+-- Install ZyntraAnalytics in Studio before pushing GameManager to a place
+-- that lacks it -- this WaitForChild has no timeout, exactly like FriendBoost's.
+local Analytics = require(script.Parent:WaitForChild("ZyntraAnalytics"))
 local activeEntry, loadingRuntime, recoverFailedEntry, cleanupActiveWorld
 local failedReservedEntry = false
 local characterLoadOwner = {}
@@ -1021,6 +1026,7 @@ local function onCharacter(player, char)
 end
 
 local function setupPlayer(player)
+ Analytics.Join(player)
  inRound[player] = nil
  player:SetAttribute("InRound", false)
  player:SetAttribute("Escaped", nil)
@@ -1311,7 +1317,7 @@ local handlePostWinContinueRequest
 local handleLeaveRoundRequest
 status.OnServerEvent:Connect(function(player, message, requestSerial)
   if message == "entryready" and activeEntry then
-   activeEntry:Acknowledge(player, requestSerial)
+   if activeEntry:Acknowledge(player, requestSerial) then Analytics.Ready(player, activeLevel) end
  elseif message == "returntolobby" and handlePostWinReturnRequest then
   handlePostWinReturnRequest(player, requestSerial)
  elseif message == "continuenow" and handlePostWinContinueRequest then
@@ -1335,6 +1341,7 @@ status.OnServerEvent:Connect(function(player, message, requestSerial)
  end
 end)
 Players.PlayerRemoving:Connect(function(player)
+ Analytics.Leave(player)
  if spectateTargets[player] then spectateTargets[player] = nil; republishSpectatorCounts() end
  pendingExplicitPlacement[player] = nil
  pendingSlideRelease[player] = nil
@@ -2441,6 +2448,7 @@ playRound = function(participants)
     lastDeathCause = DeathAdvice.Take(player)
     fireGroup(participants, "death", player.Name, root and root.Position or nil, lastDeathCause)
 		if scheduleTransitionRespawn then scheduleTransitionRespawn(player) end
+    Analytics.Death(player, activeLevel)
    end
   end)
  end
@@ -2674,6 +2682,7 @@ playRound = function(participants)
   if index then table.remove(participants, index) end
   if spectateTargets[player] then spectateTargets[player] = nil; republishSpectatorCounts() end
   status:FireClient(player, "leaveack")
+  Analytics.Outcome(player, activeLevel, "left")
   print("[GameManager]", player.Name, "returned to the lobby mid-round")
   task.spawn(function()
    if IS_RESERVED_ROUND_SERVER and not IS_STUDIO then
@@ -2767,6 +2776,7 @@ playRound = function(participants)
   workspace:SetAttribute("PostWinIntermissionActive", false)
   workspace:SetAttribute("RoundActive", true)
  local roundStartedAt = os.clock()
+ for _, member in ipairs(participants) do Analytics.RoundStart(member, activeLevel) end
  fireGroup(participants, "start")
 
  local result
@@ -2824,6 +2834,7 @@ playRound = function(participants)
  local elapsed = math.max(0, os.clock() - roundStartedAt)
  local escapedCount = 0
  for _, participant in ipairs(participants) do
+  Analytics.Outcome(participant, activeLevel, nil)
   if participant.Parent and participant:GetAttribute("Escaped") == true then
    escapedCount += 1
    if result == "win" then
@@ -2998,6 +3009,7 @@ local function launchStation(station, participants)
   fireGroup(participants, "lobbycancel")
   task.wait(2.5)
  else
+  for _, member in ipairs(participants) do Analytics.Launch(member, station.level or 1) end
   task.wait(7)
  end
  station.busy = false

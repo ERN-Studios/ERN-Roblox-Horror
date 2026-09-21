@@ -23,6 +23,19 @@ do
 		PurchaseAlerts = ok and type(loaded) == "table" and loaded or nil
 	end
 end
+-- ANALYTICS_20260921. Measurement only; ServerScriptService.ZyntraAnalytics
+-- states the contract. No call below can yield, throw or touch a DataStore.
+-- Optional by construction, like the alert module above: a place without the
+-- module still loads, and the offline suites that run slices of this file in
+-- isolation still run them. Every call site is guarded for that reason.
+local Analytics
+do
+	local module = script.Parent:FindFirstChild("ZyntraAnalytics")
+	if module then
+		local ok, loaded = pcall(require, module)
+		Analytics = ok and type(loaded) == "table" and loaded or nil
+	end
+end
 local Config = require(ReplicatedStorage:WaitForChild("ZyntraConfig"))
 local DevAccess = require(ReplicatedStorage:WaitForChild("DevAccess"))
 local store = DataStoreService:GetDataStore(Config.DataStoreName)
@@ -1577,6 +1590,7 @@ local function handleProtectionAction(player, action, payload)
 	if sessions[player] ~= attempt.Session or protectionAttempts[player] ~= attempt then return end
 	if success and (outcome == "Bought" or outcome == "Consumed" or outcome == "Refunded") then
 		protectionAttempts[player] = nil
+		if outcome == "Consumed" and Analytics then Analytics.ItemUse(player, "EntityShield") end
 		protectionResponse(player, command, outcome)
 	elseif success and outcome and definiteRejection then
 		protectionAttempts[player] = nil
@@ -1932,6 +1946,7 @@ local function loadProfile(player, loadState)
 	-- flag and reads this one in the same tick, once, and never again.
 	player:SetAttribute("ZyntraFirstLogin", firstLogin)
 	player:SetAttribute("ZyntraProfileLoaded", true)
+	if Analytics then Analytics.ProfileLoaded(player, firstLogin) end
 	local pendingSnapshot = pendingDispatchSnapshots[player.UserId]
 	if pendingSnapshot then
 		pendingDispatchSnapshots[player.UserId] = nil
@@ -2601,6 +2616,7 @@ local function useReentry(player)
 	if reentryAttempts[player] ~= token then return ok and accepted == true end
 	reentryAttempts[player] = nil
 	if ok and accepted == true then
+		if Analytics then Analytics.ItemUse(player, "Reentry") end
 		pushProfile(player, "Emergency Re-entry activated.", "success")
 		return true
 	end
@@ -3029,6 +3045,7 @@ local function useSpeedPotion(player)
 	-- resurrecting them here would hand a lobby player a speed boost.
 	if epoch ~= roundEpoch then return end
 	potionRoundUsed[player] = epoch
+	if Analytics then Analytics.ItemUse(player, "SpeedPotion") end
 	local token = {}
 	speedBoostTokens[player] = token
 	player:SetAttribute("ZyntraSpeedBoostUntil", workspace:GetServerTimeNow() + duration)
@@ -3235,6 +3252,7 @@ inventoryFunction.OnInvoke = function(operation, player, key, amount)
 			return true
 		end)
 		if not spent then return false, "That could not be saved. Try again." end
+		if Analytics then Analytics.ItemUse(player, itemKey) end
 		return true, ""
 	end
 
@@ -3352,7 +3370,16 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 	if now - (times[windowKey] or 0) < window then return end
 	times[windowKey] = now
 
-	if action == "UpgradeStamina" or action == "UpgradeBattery" then
+	if action == "ShopView" then
+		-- ANALYTICS_20260921, measurement only. A card opening and a demo starting
+		-- are the only two shop facts the server cannot observe for itself. This
+		-- branch grants nothing, answers nothing and prompts nothing; the module
+		-- drops any key that is not in the catalogue. Lobby only, like the shop,
+		-- and already behind the shared per-action window above.
+		if Analytics and type(payload) == "table" and player:GetAttribute("InRound") ~= true then
+			Analytics.ShopView(player, payload.Key, payload.Demo == true)
+		end
+	elseif action == "UpgradeStamina" or action == "UpgradeBattery" then
 		-- Refuse in memory FIRST. The in-transform check below stays as the
 		-- cross-server race guard, but reaching it costs a DataStore write, and a
 		-- player with zero tokens could once drive one of those per click.
@@ -3511,6 +3538,8 @@ MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(player, passI
 				passPurchases[player] = purchases
 			end
 			purchases[key] = true
+			-- Roblox has confirmed this player paid; a pass cannot be bought twice.
+			if Analytics then Analytics.Purchase(player, key, "Pass", pass.Price) end
 			task.spawn(refreshPasses, player)
 			break
 		end
@@ -3623,6 +3652,9 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 				if reentryEligible(player) then useReentry(player) end
 			end)
 		end
+		-- The grant is committed and this is its FIRST time: the only moment a
+		-- purchase is real. Never when the prompt opens.
+		if changed and Analytics then Analytics.Purchase(player, entry.Key, entry.Kind, spent) end
 		-- First-time grant only: a Roblox retry of an already-granted PurchaseId
 		-- must not alert twice. Notify never yields and never throws; the pcall
 		-- is the belt to that braces.

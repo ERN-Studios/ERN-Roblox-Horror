@@ -35,6 +35,18 @@ local FOCUS_ATTRIBUTE = "ZyntraShopFocus"
 local BUY_EVENT_NAME = "ZyntraShopBuy"
 local TOUCH_TAP = 44
 
+-- ANALYTICS_20260921. The server cannot see a card open or a demo start, so
+-- the client reports those two facts and nothing else, fire-and-forget, on
+-- the existing ZyntraAction remote. The server validates the key against the
+-- catalogue and ignores everything else; a missing remote is simply silence.
+local function reportShop(key, demo)
+	local remotes = ReplicatedStorage:FindFirstChild("Remotes")
+	local action = remotes and remotes:FindFirstChild("ZyntraAction")
+	if action and action:IsA("RemoteEvent") then
+		action:FireServer("ShopView", {Key = key, Demo = demo})
+	end
+end
+
 local COLORS = {
 	panel = Color3.fromRGB(14, 21, 24),
 	card = Color3.fromRGB(20, 29, 33),
@@ -549,6 +561,7 @@ local function setShown(key)
 	if key then
 		refresh()
 		applyLayout()
+		reportShop(key, false)
 	end
 end
 
@@ -573,10 +586,13 @@ local function evaluate()
 end
 
 local function startShownDemo()
- if shownKey=="AdvancedEquipment" then startFocusDemo() return true end
- if shownKey=="CosmeticEquipment" then startCosmeticDemo(shownKey) return true end
- if shownKey=="EntityDetector" then startDetectorDemo() return true end
- return false
+ local key=shownKey
+ if key=="AdvancedEquipment" then startFocusDemo()
+ elseif key=="CosmeticEquipment" then startCosmeticDemo(key)
+ elseif key=="EntityDetector" then startDetectorDemo()
+ else return false end
+ reportShop(key,true)
+ return true
 end
 -- Studio-only probe invokes the same entry point as the visible demo button.
 if RunService:IsStudio() then
