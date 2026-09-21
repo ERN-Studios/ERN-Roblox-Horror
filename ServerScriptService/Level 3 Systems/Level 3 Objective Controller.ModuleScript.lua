@@ -303,6 +303,72 @@ local function fireEscapeStatus(player: Player)
 	end
 end
 
+-- L3_CD_BEACONS_20260921.
+--
+-- The reader has to point at a CD the client may not hold: the source model
+-- streams out at range and a disc dropped on a death across the mall may never
+-- have replicated to that client at all. So the server publishes what it
+-- already knows -- state, room, position -- onto the replicated Level 3 State
+-- folder, on the objective events that change it rather than on a tick or a
+-- per-frame remote. Only a disc that can actually be picked up carries a
+-- position; CARRIED and INSERTED clear it, and that is the client's whole
+-- filter. The client never decides progression from this; it only draws.
+local function roomIdAt(session: AnyTable, position: Vector3): string
+	local layout = session.Manifest.Layout
+	local rooms = if type(layout) == "table" then layout.Rooms else nil
+	if type(rooms) ~= "table" then return "" end
+	-- ponytail: linear scan of the 26 authored rectangles, run on CD events and
+	-- once per player per 0.1s tick. A spatial index only pays off in hundreds.
+	-- Planar on purpose: the only thing under a room is the escaped-player
+	-- waiting room, and escaped players are excluded before this is called.
+	for _, room in ipairs(rooms) do
+		if math.abs(position.X - room.X) <= room.W * .5
+			and math.abs(position.Z - room.Z) <= room.D * .5 then
+			return room.Id
+		end
+	end
+	return ""
+end
+
+local function publishCDBeacons(session: AnyTable)
+	for index, record in pairs(session.CDRecords) do
+		local state = tostring(record.State)
+		local position: Vector3? = nil
+		local roomId = ""
+		if state == "DROPPED" then
+			position = record.DropPosition
+			roomId = if position then roomIdAt(session, position) else ""
+		elseif state == "WORLD" then
+			local core = record.Module.Core
+			if core and core.Parent then
+				position = core.Position
+				roomId = record.Module.RoomId
+			end
+		end
+		session.State:SetAttribute(string.format("Level3_CD%dState", index), state)
+		session.State:SetAttribute(string.format("Level3_CD%dRoom", index), roomId)
+		session.State:SetAttribute(string.format("Level3_CD%dPosition", index), position)
+	end
+end
+
+-- The room a player is standing in, published on the player so it replicates to
+-- everyone -- a spectator reads their subject's, exactly like Level3_Hiding.
+-- Room membership is real geometry, never a distance: a CD one wall away is in
+-- the next room and must not light the indicator.
+local function updatePlayerRooms(session: AnyTable)
+	for _, player in ipairs(Players:GetPlayers()) do
+		local roomId = ""
+		if validPlayer(player, session) then
+			local _, _, root = livingCharacter(player)
+			if root then roomId = roomIdAt(session, root.Position) end
+		end
+		local current = player:GetAttribute("Level3_Room")
+		if current ~= roomId and (roomId ~= "" or current ~= nil) then
+			player:SetAttribute("Level3_Room", roomId)
+		end
+	end
+end
+
 local function updateSharedState(session: AnyTable)
 	if not liveSession(session) then return end
 	local exitPosition = session.Manifest.ExitPosition
@@ -324,6 +390,12 @@ local function updateSharedState(session: AnyTable)
 	session.State:SetAttribute("Level3_CompletionDimDuration", Configuration.MusicSequence.CompletionDimSeconds)
 	session.State:SetAttribute("Level3_ExitPosition", exitPosition)
 	session.State:SetAttribute("Level3_Phase", session.ExitUnlocked and "EXIT_UNLOCKED" or "SEARCH")
+	local roles = session.Manifest.Layout and session.Manifest.Layout.Roles
+	session.State:SetAttribute("Level3_EntryRoomId",
+		if type(roles) == "table" then tostring(roles.EntryDistrictRoomId) else "")
+	session.State:SetAttribute("Level3_FirstCDRoomId",
+		if type(roles) == "table" then tostring(roles.FirstCDRoomId) else "")
+	publishCDBeacons(session)
 	workspace:SetAttribute("Level3Modules", insertedCount)
 	workspace:SetAttribute("Level3ModuleGoal", session.ModuleGoal)
 	workspace:SetAttribute("Level3CDsCollected", collectedCount)
@@ -541,6 +613,7 @@ local function collectRecord(session: AnyTable, record: AnyTable, player: Player
 		local droppedModel = record.DropModel
 		record.DropModel = nil
 		record.DropPrompt = nil
+		record.DropPosition = nil
 		if droppedModel and droppedModel.Parent then droppedModel:Destroy() end
 	end
 
@@ -637,6 +710,7 @@ local function makeDroppedPickup(session: AnyTable, record: AnyTable, position: 
 	prompt.Parent = disc
 	record.DropModel = model
 	record.DropPrompt = prompt
+	record.DropPosition = position
 	local connection = prompt.Triggered:Connect(function(player)
 		collectRecord(session, record, player, prompt, model)
 	end)
@@ -1337,6 +1411,7 @@ function ObjectiveController.Start(manifest: AnyTable, generation: number): AnyT
 			CarryVisual = nil,
 			DropModel = nil,
 			DropPrompt = nil,
+			DropPosition = nil,
 		}
 		local connection = module.Prompt.Triggered:Connect(function(player)
 			collectModule(session, module, player)
@@ -1367,6 +1442,7 @@ function ObjectiveController.Start(manifest: AnyTable, generation: number): AnyT
 		if session.FinalHallAccumulator < .10 then return end
 		session.FinalHallAccumulator = 0
 		rememberCarriedPositions(session)
+		updatePlayerRooms(session)
 		updateFinalHallChase(session)
 		-- Touch events can be missed during streaming or when unlock happens
 		-- while a player is already at the door. The solid door holds runners
@@ -1442,6 +1518,7 @@ function ObjectiveController.Stop()
 	for _, player in ipairs(Players:GetPlayers()) do
 		player:SetAttribute("Level3_HeldCDCount", 0)
 		player:SetAttribute("Level3_HeldCDMask", 0)
+		if player:GetAttribute("Level3_Room") ~= nil then player:SetAttribute("Level3_Room", "") end
 	end
 	session.InsertedCount = 0
 	session.ModuleCount = 0
@@ -1516,6 +1593,15 @@ function ObjectiveController.Stop()
 		session.State:SetAttribute("Level3_ExitGuideLampCount", 0)
 		session.State:SetAttribute("Level3_ExitPosition", nil)
 		session.State:SetAttribute("Level3_Phase", "STOPPED")
+		session.State:SetAttribute("Level3_EntryRoomId", "")
+		session.State:SetAttribute("Level3_FirstCDRoomId", "")
+		-- L3_CD_BEACONS_20260921: a stale position outlives the round otherwise,
+		-- and the reader would keep a needle on a disc that no longer exists.
+		for index in pairs(session.CDRecords or {}) do
+			session.State:SetAttribute(string.format("Level3_CD%dState", index), "")
+			session.State:SetAttribute(string.format("Level3_CD%dRoom", index), "")
+			session.State:SetAttribute(string.format("Level3_CD%dPosition", index), nil)
+		end
 	end
 	workspace:SetAttribute("Level3Modules", 0)
 	workspace:SetAttribute("Level3ModuleGoal", 0)

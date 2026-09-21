@@ -660,6 +660,17 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 		table.insert(chosenModules, room)
 	end
 
+	-- L3_FIRST_CD_IN_THE_ENTRY_ROOM_20260921.
+	-- gatewaySpecs[1].B is the far side of the Entry gateway -- the room the
+	-- player physically walks into from the arrival elevator, and Arrival's only
+	-- link -- so seeding it here puts one visible CD on its first table instead
+	-- of leaving the opening minutes to a blind search. It is seeded BEFORE the
+	-- district pass, so the other four are chosen by the unchanged seeded rule
+	-- and are separated from this one by the same MinimumModuleSeparation: no
+	-- two CDs can share a room or crowd each other. Nothing later re-rolls it.
+	local firstCDRoom = gatewaySpecs[1].B
+	addModule(firstCDRoom)
+
 	for sectionIndex = 1, DISTRICT_COUNT do
 		local candidates = {}
 		for _, room in ipairs(layout.Districts[sectionIndex].Rooms) do
@@ -725,6 +736,7 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 		SignalRoomId = "SignalHall",
 		MallManagerSpawnRoomId = "SignalHall",
 		EntryDistrictRoomId = gatewaySpecs[1].B.Id,
+		FirstCDRoomId = firstCDRoom.Id,
 		ModuleRoomIds = (function()
 			local ids = {}
 			for _, room in ipairs(chosenModules) do table.insert(ids, room.Id) end
@@ -1013,6 +1025,14 @@ function LayoutGenerator.Validate(layout)
 		or layout.Roles.SignalRoomId ~= "SignalHall"
 		or layout.Roles.MallManagerSpawnRoomId ~= "SignalHall" then
 		return fail("role metadata is incomplete")
+	end
+	-- L3_FIRST_CD_IN_THE_ENTRY_ROOM_20260921: the guarantee, restated where a
+	-- mutated or hand-built plan is rejected rather than only where it is made.
+	local firstCDRoom = layout.RoomById[tostring(layout.Roles.FirstCDRoomId)]
+	if layout.Roles.FirstCDRoomId ~= layout.Roles.EntryDistrictRoomId
+		or firstCDRoom == nil or firstCDRoom.Module ~= true
+		or firstCDRoom.HideSpotCount ~= 1 then
+		return fail("the first CD must occupy the entry district room")
 	end
 	if layout.LayoutHash ~= makeHash(layout) then return fail("layout hash is inconsistent") end
 	return true, "OK"
