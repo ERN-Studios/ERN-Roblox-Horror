@@ -618,7 +618,10 @@ function Adapter.Build()
 	-- GameManager treats a raised error as a failed generation. Every failure
 	-- path therefore restores the lobby and Level 1 runtime before re-raising.
 	local success, result = xpcall(function()
+		local layoutBegan = os.clock()
 		local layout = LayoutGenerator.Generate(requestedSeed)
+		-- Load-time readbacks (Trello Zpj0Gkbb), same names as Level 2's.
+		levelState:SetAttribute("Level3_LayoutSeconds", math.round((os.clock() - layoutBegan) * 100) / 100)
 		local layoutValid, layoutProblem = LayoutGenerator.Validate(layout)
 		assert(layoutValid, "Level 3 layout validation failed: " .. tostring(layoutProblem))
 		levelState:SetAttribute("Level3_ResolvedSeed", layout.ResolvedSeed)
@@ -632,9 +635,12 @@ function Adapter.Build()
 
 		levelState:SetAttribute("Level3_Phase", "BUILDING_WORLD")
 		workspace:SetAttribute("LoadStage", "LEVEL_3_BUILDING_WORLD")
+		local buildBegan = os.clock()
 		local manifest = WorldBuilder.Build(layout, generation)
 		validateManifest(manifest)
 		activeManifest = manifest
+		levelState:SetAttribute("Level3_BuildSeconds", math.round((os.clock() - buildBegan) * 100) / 100)
+		levelState:SetAttribute("Level3_WorldDescendants", #manifest.World:GetDescendants())
 
 		-- Move characters onto solid Level 3 ground before the lobby is parked.
 		-- GameManager will place the round party again when entry begins.
