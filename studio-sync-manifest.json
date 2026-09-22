@@ -504,8 +504,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Configuration.ModuleScript.lua",
-      "bytes": 10997,
-      "sha256": "34190865818ba9d31ca5ce84ae6e1838ffef07e7eef8bd2a518de558ed16e720",
+      "bytes": 11670,
+      "sha256": "84335091be6e5bcaa771bab8e1c4b3cdc0a142acc6ffa74b9cf010c37881d4ec",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -746,8 +746,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua",
-      "bytes": 269479,
-      "sha256": "1f961ef268145e1dfe3f529965624316089f78d396b004113370664041361190",
+      "bytes": 282897,
+      "sha256": "0d208c53cfc55bc3476e4f3c11d26820eac2af205c31b020e8971e8c1dd15d3c",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"

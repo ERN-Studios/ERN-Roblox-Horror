@@ -162,6 +162,16 @@ local Configuration = {
 	-- behaviour exactly, for an A/B in Studio.
 	Performance = {
 		CullHiddenTileFaces = true,
+		-- ARCH_MESH_PILOT_20260922. The standard corridor rib (3.2 x 2.2 band,
+		-- VerticalScale 1.9) as one MeshPart instead of 14-28 textured Parts.
+		-- OFF by default: the mesh comes from an uploaded asset (ArchMeshRibAssets,
+		-- key -> "rbxassetid://..."), a ServerStorage template, or -- only where
+		-- the experience allows the Mesh & Image APIs -- an EditableMesh built at
+		-- runtime. Without any of those the ribs stay Parts and the world records
+		-- the wanted keys (World Builder: ArchRibMeshMissingKeys). A Studio session
+		-- can A/B without a push through workspace:SetAttribute("Level2ArchMeshRibs", true).
+		ArchMeshRibs = false,
+		ArchMeshRibAssets = {},
 	},
 }
 

@@ -47,6 +47,13 @@ local function visibleFaces(faces)return faces end
 local function hallFloorY(hall)return 0 end
 local function makeStairFlight(...)error("unexpected deep staircase in configured depth cases")end
 local function addWater(center,size,name)return part({},"Water "..name,CFrame.new(center),size)end
+-- ARCH_MESH_PILOT_20260922: the arch code reads these engine globals; the pilot
+-- switch is off here, so the Part path (what this harness measures) runs.
+local workspace={GetAttribute=function()return nil end}
+local AssetService={}
+local ServerStorage={FindFirstChild=function()return nil end}
+local Content={}
+local TILE_TINT,TILE_TEXTURE={},""
 __ARCHES__
 __CORRIDOR__
 local function vec(v)return string.format("%.17g,%.17g,%.17g",v.X,v.Y,v.Z)end
