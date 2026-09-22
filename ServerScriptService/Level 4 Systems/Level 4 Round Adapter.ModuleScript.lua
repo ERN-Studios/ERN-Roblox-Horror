@@ -350,6 +350,7 @@ function Adapter.Cleanup()
 	restoreLevelOneRuntime(recoveringPersistedState)
 
 	workspace:SetAttribute("WorldGenerated", false)
+	workspace:SetAttribute("Level4LightingOwnedByController", false)
 	workspace:SetAttribute("Level4SignalProgress", 0)
 	workspace:SetAttribute("Level4SignalGoal", 0)
 	workspace:SetAttribute("Level4BeaconUnlocked", false)
@@ -434,6 +435,10 @@ function Adapter.Build()
 		ObjectiveController.Start(manifest, generation)
 		NeighbourController.Start(manifest, generation)
 
+		-- RoundUI applies Level 1's night to every round it does not know is
+		-- owned; this is the same handshake Level 2 and Level 3 use, set before
+		-- any participant is marked InRound.
+		workspace:SetAttribute("Level4LightingOwnedByController", true)
 		workspace:SetAttribute("LoadStage", "READY")
 		workspace:SetAttribute("WorldGenerated", true)
 		return manifest.World

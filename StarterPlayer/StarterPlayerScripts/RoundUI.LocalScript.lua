@@ -337,6 +337,14 @@ local function applyPlayerLighting()
   if mazeGrade then mazeGrade.Enabled = false end
   return
  end
+ -- LEVEL4_DEV_GATE_20260921: the suburb is a bright afternoon owned by its own
+ -- controller; found in the first Studio round drowned in Level 1's night.
+ if workspace:FindFirstChild("Level 4 Generated World") ~= nil and (selectedLevel == 4 or inMaze)
+  and workspace:GetAttribute("Level4LightingOwnedByController") == true then
+  lobbyGrade.Enabled = false
+  if mazeGrade then mazeGrade.Enabled = false end
+  return
+ end
 
  if isLevelTwo and workspace:GetAttribute("Level2LightingOwnedByController") == true then
   lobbyGrade.Enabled = false

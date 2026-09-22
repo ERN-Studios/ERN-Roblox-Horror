@@ -2464,8 +2464,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
-      "bytes": 246130,
-      "sha256": "0cae509bec39bda7fc3ed0fd30c0fd4c0e2d4bf0a52cdd8bbda6008e414d0874",
+      "bytes": 246554,
+      "sha256": "2c0f71c294d5bb15521694ffbe8b84d6ae6f41e111021ae961fd079986d7d07e",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2642,8 +2642,8 @@
       "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Round Adapter",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 4 Systems/Level 4 Round Adapter.ModuleScript.lua",
-      "bytes": 19620,
-      "sha256": "568a9e42b4656dc81af0b1a33ab13c1edd917dc1bc0493585f4dfbf615e4fdb5",
+      "bytes": 19939,
+      "sha256": "49bb57155095e88c4ae346bc9d23fc846d220e20eb3ce1a51abfc6a7e4a35add",
       "status": "synced"
     },
     {
@@ -2666,8 +2666,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 4 Lighting Controller.LocalScript.lua",
-      "bytes": 6510,
-      "sha256": "ad2932d33b3b345e98eb47fc8cb12c608460e823ade4b915651cde7845b1724c",
+      "bytes": 6711,
+      "sha256": "11f4ade3ff7d43e96c3d2e34db907cb25c52584a2256e5b06bd2925c0813917a",
       "status": "synced"
     },
     {

@@ -161,7 +161,10 @@ local function leave()
 end
 
 local function sync()
-	if workspace:GetAttribute("SelectedLevel") ~= LEVEL then
+	-- Wait for the server's ownership flag: entering before it captures a
+	-- snapshot of whatever grade RoundUI was still writing.
+	if workspace:GetAttribute("SelectedLevel") ~= LEVEL
+		or workspace:GetAttribute("Level4LightingOwnedByController") ~= true then
 		leave()
 		return
 	end
