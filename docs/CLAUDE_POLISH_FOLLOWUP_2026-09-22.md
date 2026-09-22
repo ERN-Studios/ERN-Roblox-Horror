@@ -4,6 +4,28 @@ Du skal lave **al kode og teknisk implementering**: Luau, integration, tests og 
 
 Projekt: `G:/Roblox/MongoTV`. Spillertekst på engelsk. Handoff på dansk.
 
+## 0. Ny ejerinstruktion — fjern Field Notes og lobbyens Try again
+
+Tilføjet 22/9/2026 efter det oprindelige prompt. Denne instruktion har forrang over ældre ønsker om Field Notes/notes-arkiv og retry-guide, inklusive A4 nedenfor. Fortsæt igangværende arbejde og bevar samtidige ændringer; start ikke de allerede færdige faser forfra.
+
+**Fjern Field Notes som aktiv funktion i spillet:**
+
+- Fjern Notes/Field Notes-fanen og alle indgange til den, læsevinduet, note-pickups og interaktionsprompts i levels, discovery-notifikationer, samlingsprogression og den tilhørende `FIELD ARCHIVIST`-titel.
+- Afvikl de aktive spawn-/discovery-/UI-kald og de remotes, listeners, konfigurationsfelter og moduler, der kun bruges af funktionen. Fjern referencesammenhænge ordentligt, så der ikke opstår manglende requires, WaitForChild-timeouts, tomme navigationselementer eller efterladte pickups. Lad ikke blot UI'et være skjult, mens systemet fortsætter i baggrunden.
+- Gamle FieldNotes-felter i spillerprofiler må gerne bevares som inert legacy-data for bagudkompatibilitet. Ingen destruktiv DataStore-oprydning, profilreset eller tab af tokens, udstyr og andre rewards. Gamle profiler skal stadig indlæses normalt; Field Notes-titlen skal ikke længere vises eller optjenes.
+- Gennemgå især `ServerScriptService/FieldNotesService.Script.lua`, `StarterPlayer/StarterPlayerScripts/Field Notes Client.LocalScript.lua`, `ReplicatedStorage/ZyntraFieldNotes.ModuleScript.lua`, `ZyntraFieldNotesPage.ModuleScript.lua`, samt referencer i ZyntraStore, ZyntraConfig og ZyntraMonetization. Disse stier er navigationshjælp; læs den friske Studio-kilde før ændringer. ZyntraMonetization er samtidig berørt af reward-arbejdet og må ikke overskrives med en ældre fil.
+
+**Fjern den automatiske Try again-guide efter død og retur til lobby:**
+
+- Ingen `TRY AGAIN · LEVEL …`-tekst, lyssti, pil eller billboard mod en level-kø efter død, party wipe eller anden ikke-escaped retur. En gammel `RetryLevel` i en teleportpakke eller `RetryGuideLevel`-attribut må heller ikke genaktivere den.
+- Fjern retry-delen i `First Entry Guide.LocalScript.lua` og de GameManager-/teleport-kald, som kun understøtter den. Bevar førstegangs-guiden `LEVEL 1 START HERE`, almindelige køer, dødskort, respawn/revive og completion/Continue/Return-flowet.
+- Fjern også den automatiske Level 4-dev-erstatning `LEVEL 4 DEV ROUND ENDED ... TO RUN AGAIN` og den tilhørende banner/listener-logik. Den skal ikke være et nyt lobbyhint i stedet for den fjernede guide. Selve udvikleradgangen til Level 4 bevares.
+- Afgræns efter funktion, ikke global tekstsøg/erstat: almindelige fejlbeskeder om at prøve igen ved netværks-/indlæsningsfejl er ikke denne lobbyguide.
+
+Verificér, at en gammel profil med opdagede notes stadig kan indlæses, at ingen Field Notes-UI/titel/pickups eller aktive spawns er tilbage, og at Rewards/Wheel/shop virker efter oprydningen. Kør en faktisk lokal død → lobby og kontrollér fraværet af retry-tekst og guideobjekter. Kontrollér også, at en gammel returpakke ikke genskaber guiden, og at førstegangsintroduktion og manuel køstart stadig virker. Opdatér relevante regressionstests til den eksplicit ændrede produktadfærd; dokumentér uverificerede produktions-/multiplayer-scenarier ærligt.
+
+Al implementeringskode udføres fortsat af Claude. Opdatér handoffet med fjernelser, scoped ændringer, checks og eventuel publiceringskvittering efter projektets eksisterende workflow.
+
 ## 1. Start fra den rigtige aktuelle version
 
 Læs først:
@@ -66,7 +88,7 @@ Codex reproducerede seed 101/CLOSE med 0/3 signaler, Neighbour PATROL og ét usi
 ### A4. Luk de små, kendte prototypehuller
 
 - Exit-position/readeren skal pege på en faktisk anvendelig indgang til EscapeTrigger, ikke stoppe 3,5 studs foran den uden at kunne fuldføre.
-- Level4-retry i dev skal have et meningsfuldt flow; vis ikke en guide mod en ikke-eksisterende lobby-bay. Bevar den normale dev-gate; løs ikke dette ved at gøre levellet offentligt.
+- Den tidligere opgave om et Level 4-retry-hint er erstattet af ejerinstruktionen i §0: fjern automatisk lobby-retry-guide og dev-erstatningsbanner. Bevar selve udvikleradgangen og almindelig manuel rundestart.
 - Gem et billede af det faktiske Neighbour-dødsårsagskort efter et reelt kill. Det gamle `level4-death-neighbour-desktop.jpg` viser kun den generiske endskærm.
 - Opdatér kontraktdokumentets status/installationsanvisninger, så næste udvikler ikke genopretter eksisterende scripts.
 
