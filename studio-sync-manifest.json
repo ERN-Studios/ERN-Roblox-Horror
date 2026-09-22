@@ -1,10 +1,17 @@
 {
   "formatVersion": 2,
-  "source": "Studio-authoritative square detector artwork and compact shop captions, published v1949.",
-  "finalNewlineContract": "Entries flagged studioTrailingNewline hold exactly the canonical repo file plus one extra trailing newline in Studio. Exact landings remove the flag. Current flagged entry count: 0. Manifest hashes always describe the canonical repo file, never Studio's transport bytes.",
+  "source": "Studio-authoritative detector model, generated face texture, responsive readout and interactive demo; published v1976.",
+  "finalNewlineContract": "Exact Studio source bytes including final newline; no newline exceptions.",
   "studio": {
-    "id": "a476e358-db0c-4276-b888-c8e741cac447",
-    "name": "BACKROOMS: STAY QUIET [CO-OP HORROR] (placeId: 131311258779917)"
+    "id": "14060480-ae82-4da3-85f6-249c6bd3857c",
+    "name": "BACKROOMS: STAY QUIET [CO-OP HORROR] (placeId: 131311258779917)",
+    "placeId": 131311258779917,
+    "universeId": 10559217407,
+    "observedPlaceVersion": 1958,
+    "publishedPlaceVersion": 1976,
+    "capturedUTC": "2026-09-22T07:53:02.663006+00:00",
+    "publicationVerifiedUTC": "2026-09-22T07:51:26Z",
+    "publicationEvidence": "artifacts/detector-polish-20260922/publish-log.txt"
   },
   "counts": {
     "scripts": 156,
@@ -13,10 +20,10 @@
     "studioTrailingNewline": 0
   },
   "nativePlaceBackup": {
-    "file": "artifacts/remaining-trello-20260920/remaining-trello-20260920.rbxl",
-    "bytes": 9337807,
-    "sha256": "d2dbfed1b1d6c2c00b6b04caffe53ccada2bc02a65a14acf9c6e72fb6b370f1b",
-    "purpose": "Full v1947 native backup retains unchanged non-script Edit content. Final detector follow-up script sources mirrored separately."
+    "file": "artifacts/detector-polish-20260922/detector-polish-final-20260922.rbxl",
+    "bytes": 9375496,
+    "sha256": "bcb6e651430e1b09e591e125cc0cf624c374c6eb40f5306d7167286b48aafcb9",
+    "purpose": "Full native Edit backup taken immediately before publishing detector polish. Contains current geometry and all 156 scripts."
   },
   "extraMirroredFilesNotInStudio": [
     "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_AutomaticAssetCaptureSender_LocalizationService.RemoteEvent.txt",
@@ -326,11 +333,11 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/ZyntraDetectorVisual.ModuleScript.lua",
-      "bytes": 1407,
-      "sha256": "66e485e176031b84941b13774b80df5a1b77f2031b31cd07d81c74ca51169d33",
+      "bytes": 13427,
+      "sha256": "fa2fa10afd325f33a7e0eaf72fc233926a1ec20443602bb512778a0f74429cce",
       "status": "synced",
       "sourceEqualsEditor": true,
-      "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
+      "captureMethod": "Exact UTF-8 source verified with fresh Studio length and djb2"
     },
     {
       "studioPath": "ReplicatedStorage.ZyntraFieldNotes",
@@ -2481,11 +2488,11 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Shop Display Client.LocalScript.lua",
-      "bytes": 32760,
-      "sha256": "80001c40f3f61269d555aa972ca69b558339928b0c5e4f5cdc465617a4bf960f",
+      "bytes": 32565,
+      "sha256": "45c4c84fcc78dbfce4d36d89116f5f1fb8e0fc9b015d15722fba89919e9187a9",
       "status": "synced",
       "sourceEqualsEditor": true,
-      "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
+      "captureMethod": "Exact UTF-8 source verified with fresh Studio length and djb2",
       "disabled": false,
       "runContext": "Enum.RunContext.Legacy"
     },
@@ -2549,11 +2556,11 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/ZyntraDetectorClient.LocalScript.lua",
-      "bytes": 1674,
-      "sha256": "7f62e5bc82e5b642bc641add78420fed9fcd068951bb7f9832d05f3e47db2cb9",
+      "bytes": 3216,
+      "sha256": "8583b02a68fc91466c52cfadb7f7818c07c67bcf14f78c9cb76f3bd4eeb2a232",
       "status": "synced",
       "sourceEqualsEditor": true,
-      "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
+      "captureMethod": "Exact UTF-8 source verified with fresh Studio length and djb2",
       "disabled": false,
       "runContext": "Enum.RunContext.Legacy"
     },
