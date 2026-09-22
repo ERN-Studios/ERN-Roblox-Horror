@@ -147,9 +147,15 @@ local LEVEL_GENERATORS = {
 }
 
 -- LEVEL4_DEV_GATE_20260921
--- Level 4 is a development build with no lobby bay. A party may only route to
+-- Level 4 is a development build with developer-only lobby stations. A party may only route to
 -- it when the place carries the flag AND EVERY member is on the DevAccess
 -- whitelist, so a normal player cannot be carried into it by a developer.
+-- Level 4 lobby access is enabled for the shared developer whitelist.
+-- An explicit false remains an emergency off switch.
+if workspace:GetAttribute(Routing.Level4DevAttribute) == nil then
+ workspace:SetAttribute(Routing.Level4DevAttribute, true)
+end
+
 local function devCeiling(group)
  if workspace:GetAttribute(Routing.Level4DevAttribute) ~= true then return Routing.MaxLevel end
  if type(group) ~= "table" or #group == 0 then return Routing.MaxLevel end
@@ -1124,6 +1130,8 @@ local function queueRadius(station)
 end
 
 local function playerInsideZone(player, station, includeBusy)
+ if station.level == 4 and (not DevAccess.IsAllowed(player)
+  or workspace:GetAttribute(Routing.Level4DevAttribute) ~= true) then return false end
  if inRound[player] or (station.busy and not includeBusy) then return false end
  local char = player.Character
  local hum = char and char:FindFirstChildOfClass("Humanoid")
@@ -1914,6 +1922,7 @@ local function teleportPlayersToNextLevel(group, plan)
 		AccessCode = plan.AccessCode,
 		ReserveServer = not (type(plan.AccessCode) == "string" and plan.AccessCode ~= ""),
 		Data = Routing.ArrivalPacket({
+			Ceiling = devCeiling(live),
 			Level = plan.NextLevel,
 			-- LEVEL2_EXIT_TRANSITION_20260828: the whole continuing party left
 			-- Level 2 down the exit flume (the win condition requires every
@@ -3000,9 +3009,9 @@ playRound = function(participants)
 end
 
 -- LEVEL4_DEV_GATE_20260921 --------------------------------------------------
--- Level 4 has no lobby bay -- its gate still says "coming soon" -- so there is
--- no station a developer can walk into. This is the documented way to start a
--- Level 4 round from a Studio play session, and it is shaped like the existing
+-- Level 4 now has developer-only lobby stations behind its sealed gate.
+-- This server-only hook is retained for direct Studio playtests,
+-- and it is shaped like the existing
 -- playtest hooks (ServerStorage.ZyntraReentry,
 -- ServerStorage.Level3DevSkipToPreBlackout): a server-side BindableFunction
 -- with no remote in front of it, so no client can reach it at all.
@@ -3045,6 +3054,7 @@ end
 -- reserved server. Studio cannot test TeleportService, so it runs the same party
 -- locally as a practical editor-only fallback.
 local function launchStation(station, participants)
+ if station.level == 4 and devCeiling(participants) ~= 4 then return end
  station.busy = true
  setStationDisplay(station, "STARTING PRIVATE WORLD", #participants .. "/" .. (station.maxPlayers or MAX_PLAYERS_PER_STATION) .. " PLAYERS", station.color)
  fireGroup(participants, "loadinggame", station.level or 1)
@@ -3085,6 +3095,7 @@ local function launchStation(station, participants)
  local launchToken = game.JobId .. ":station" .. station.index
   .. ":" .. math.floor(os.clock() * 1000)
  local packet = Routing.ArrivalPacket({
+  Ceiling = devCeiling(participants),
   Level = station.level or 1,
   SessionId = launchToken,
   Expected = #participants,

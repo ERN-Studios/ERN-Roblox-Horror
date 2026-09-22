@@ -489,7 +489,8 @@ function Routing.ArrivalPacket(state)
 	local deadline = tonumber(state.Deadline)
 	return {
 		BackroomsRound = true,
-		Level = Routing.ClampLevel(state.Level),
+		-- Preserve an explicitly authorized dev launch; receiver validates its roster.
+		Level = Routing.ClampLevelTo(state.Level, state.Ceiling),
 		EntryMode = state.EntryMode,
 		RoundSessionId = tostring(state.SessionId),
 		ExpectedContinuers = math.max(0, math.floor(tonumber(state.Expected) or 0)),
@@ -533,7 +534,9 @@ function Routing.SelectArrivalSession(entries)
 				group = {
 					SessionId = id,
 					Members = {},
-					Level = Routing.ClampLevel(data.Level),
+					-- Transport parsing preserves level 4, but grants no access.
+					-- GameManager checks every arriving player before world generation.
+					Level = Routing.ClampLevelTo(data.Level, Routing.DevLevel),
 					EntryMode = data.EntryMode,
 					Expected = nil,
 					Deadline = nil,
