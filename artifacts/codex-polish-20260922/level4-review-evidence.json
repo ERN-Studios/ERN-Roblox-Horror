@@ -1,0 +1,510 @@
+{
+  "reviewDate": "2026-09-22",
+  "sourceCommit": "7e45852bdfa83cabc590de586d29365d082e627b",
+  "mode": "local Studio Play, dev-only seed 101, no source/property asset edits",
+  "level4": {
+    "Level4_NeighbourReason": "patrolling",
+    "Level4_DynamicLightCount": 10,
+    "Level4_NeighbourSpeed": 7,
+    "Level4_PlanHash": "4f3eec7f",
+    "Level4_BeaconUnlocked": false,
+    "Level4_NeighbourNoiseX": 0,
+    "Level4_NeighbourAnimation": "Walk",
+    "Level4_NeighbourAttackSerial": 0,
+    "Level4_Phase": "INVESTIGATE",
+    "Level4_CabinetGoal": 3,
+    "Level4_ExitPosition": null,
+    "Level4_NeighbourNoiseZ": 0,
+    "Level4_SeedPinned": true,
+    "Level4_CabinetProgress": 0,
+    "Level4_Signal1": "OPEN",
+    "Level4_ResolvedSeed": 101,
+    "Level4_RequestedSeed": 101,
+    "Level4_BuildSeconds": 0.06,
+    "Level4_ExitWarningEndsAt": 0,
+    "Level4_VariantName": "CLOSE",
+    "Level4_Signal3": "OPEN",
+    "Level4_NeighbourGoalZ": -35.400001525878906,
+    "Level4_NeighbourGoalX": 12500.580078125,
+    "Level4_Briefing": "Investigate three residential signals. Restore the extraction beacon. Stay quiet.",
+    "Level4_SignalGoal": 3,
+    "Level4_NeighbourTargetUserId": 0,
+    "Level4_ExitOpen": false,
+    "Level4_PlanSeconds": 0,
+    "Level4_Variant": 3,
+    "Level4_WorldDescendants": 535,
+    "Level4_Signal2": "OPEN",
+    "Level4_Generation": 1,
+    "Level4_NeighbourState": "PATROL",
+    "Level4_SignalProgress": 0,
+    "Level4_NeighbourPathStatus": "OK",
+    "Level4_GeneratorVersion": 1,
+    "Level4_UnsafeHouses": 1
+  },
+  "workspace": {
+    "SelectedLevel": 4,
+    "RoundActive": true,
+    "Level4DevEnabled": true,
+    "Level4LightingOwnedByController": true,
+    "EntityPaused": false
+  },
+  "client": {
+    "fogStart": 70,
+    "fogEnd": 380,
+    "clock": 17.600000381469727,
+    "brightness": 1.899999976158142,
+    "camera": "12346.0166, 30.1841793, -2, 0, 0.258819073, -0.965925932, 0, 0.965925932, 0.258819073, 1, 0, 0",
+    "gui": [
+      {
+        "text": "[■□□□] WEAK SIGNAL\nMove around to improve reception",
+        "path": "Players.mikkelczar.PlayerGui.PuzzleGui.ExitEnergyDetector.DetectorReadout"
+      },
+      {
+        "text": "SIGNALS 0/3  [ ][ ][ ]",
+        "path": "Players.mikkelczar.PlayerGui.Level4ObjectiveGui.Level4ObjectivePanel.Signals"
+      },
+      {
+        "text": "HOUSE C1 IS GOING DARK -- LEAVE WITHIN 12s",
+        "path": "Players.mikkelczar.PlayerGui.Level4ObjectiveGui.Level4Banner"
+      },
+      {
+        "text": "SIGNAL // NO TRACE",
+        "path": "Players.mikkelczar.PlayerGui.Level3ReaderGui.ReaderPanel.Signal"
+      },
+      {
+        "text": "@ZYNTRA  —  HOUSE C1 UNSTABLE  //  LEAVE WITHIN 12s",
+        "path": "Players.mikkelczar.PlayerGui.TeamObjectiveFeed.TeamProgress.Messages"
+      }
+    ]
+  },
+  "geometry": [
+    {
+      "roofSamples": [
+        {
+          "zOffset": -14,
+          "heightAboveFloor": 18.36470603942871
+        },
+        {
+          "zOffset": -0.1,
+          "heightAboveFloor": 12.641176223754883
+        },
+        {
+          "zOffset": 0.1,
+          "heightAboveFloor": 12.641176223754883
+        },
+        {
+          "zOffset": 14,
+          "heightAboveFloor": 18.36470603942871
+        }
+      ],
+      "windows": [
+        {
+          "right": [
+            -4.371138828673793e-8,
+            0,
+            -1
+          ],
+          "size": [
+            0.4000000059604645,
+            4.199999809265137,
+            5
+          ],
+          "position": [
+            12431.75,
+            31.540000915527344,
+            36.599998474121094
+          ]
+        },
+        {
+          "right": [
+            -4.371138828673793e-8,
+            0,
+            -1
+          ],
+          "size": [
+            0.4000000059604645,
+            4.199999809265137,
+            5
+          ],
+          "position": [
+            12426.4697265625,
+            31.540000915527344,
+            36.599998474121094
+          ]
+        },
+        {
+          "right": [
+            -4.371138828673793e-8,
+            0,
+            -1
+          ],
+          "size": [
+            0.4000000059604645,
+            4.199999809265137,
+            5
+          ],
+          "position": [
+            12444.4697265625,
+            31.540000915527344,
+            36.599998474121094
+          ]
+        },
+        {
+          "right": [
+            -4.371138828673793e-8,
+            0,
+            -1
+          ],
+          "size": [
+            0.4000000059604645,
+            4.199999809265137,
+            5
+          ],
+          "position": [
+            12449.75,
+            31.540000915527344,
+            36.599998474121094
+          ]
+        }
+      ],
+      "name": "House_Intro",
+      "walls": [
+        {
+          "size": [
+            12,
+            13,
+            1
+          ],
+          "position": [
+            12429.1103515625,
+            30.5,
+            36.5
+          ]
+        },
+        {
+          "size": [
+            12,
+            13,
+            1
+          ],
+          "position": [
+            12447.1103515625,
+            30.5,
+            36.5
+          ]
+        }
+      ]
+    },
+    {
+      "roofSamples": [
+        {
+          "zOffset": -14,
+          "heightAboveFloor": 18.36470603942871
+        },
+        {
+          "zOffset": -0.1,
+          "heightAboveFloor": 12.641176223754883
+        },
+        {
+          "zOffset": 0.1,
+          "heightAboveFloor": 12.641176223754883
+        },
+        {
+          "zOffset": 14,
+          "heightAboveFloor": 18.36470603942871
+        }
+      ],
+      "windows": [
+        {
+          "right": [
+            -4.371138828673793e-8,
+            0,
+            -1
+          ],
+          "size": [
+            0.4000000059604645,
+            4.199999809265137,
+            5
+          ],
+          "position": [
+            12519.650390625,
+            31.540000915527344,
+            36.599998474121094
+          ]
+        },
+        {
+          "right": [
+            -4.371138828673793e-8,
+            0,
+            -1
+          ],
+          "size": [
+            0.4000000059604645,
+            4.199999809265137,
+            5
+          ],
+          "position": [
+            12514.3701171875,
+            31.540000915527344,
+            36.599998474121094
+          ]
+        },
+        {
+          "right": [
+            -4.371138828673793e-8,
+            0,
+            -1
+          ],
+          "size": [
+            0.4000000059604645,
+            4.199999809265137,
+            5
+          ],
+          "position": [
+            12532.3701171875,
+            31.540000915527344,
+            36.599998474121094
+          ]
+        },
+        {
+          "right": [
+            -4.371138828673793e-8,
+            0,
+            -1
+          ],
+          "size": [
+            0.4000000059604645,
+            4.199999809265137,
+            5
+          ],
+          "position": [
+            12537.650390625,
+            31.540000915527344,
+            36.599998474121094
+          ]
+        }
+      ],
+      "name": "House_A1",
+      "walls": [
+        {
+          "size": [
+            12,
+            13,
+            1
+          ],
+          "position": [
+            12517.009765625,
+            30.5,
+            36.5
+          ]
+        },
+        {
+          "size": [
+            12,
+            13,
+            1
+          ],
+          "position": [
+            12535.009765625,
+            30.5,
+            36.5
+          ]
+        }
+      ]
+    }
+  ],
+  "locations": {
+    "signals": [
+      {
+        "kind": "Sample",
+        "name": "Workspace.Level 4 Generated World.House_A1.SignalFixture",
+        "position": [
+          12517.009765625,
+          27.600000381469727,
+          29
+        ]
+      },
+      {
+        "kind": "FacadeCompare",
+        "name": "Workspace.Level 4 Generated World.House_B2.SignalFixture",
+        "position": [
+          12663.0595703125,
+          29.200000762939453,
+          -34.599998474121094
+        ]
+      },
+      {
+        "kind": "Broadcast",
+        "name": "Workspace.Level 4 Generated World.House_C2.SignalFixture",
+        "position": [
+          12745.41015625,
+          27.399999618530273,
+          -46.20000076293945
+        ]
+      }
+    ],
+    "landmarks": [
+      {
+        "name": "Workspace.Level 4 Generated World.ExtractionBeacon.CabinetStatus",
+        "position": [
+          12834.2998046875,
+          31.399999618530273,
+          -66.19999694824219
+        ]
+      },
+      {
+        "name": "Workspace.Level 4 Generated World.ExtractionBeacon.EscapeTrigger",
+        "position": [
+          12849.5,
+          29.25,
+          -88.19999694824219
+        ]
+      }
+    ],
+    "houses": [
+      {
+        "door": [
+          12438.1103515625,
+          29.25,
+          36.5
+        ],
+        "name": "House_Intro",
+        "position": [
+          12438.1103515625,
+          24.399999618530273,
+          53
+        ]
+      },
+      {
+        "door": [
+          12526.009765625,
+          29.25,
+          36.5
+        ],
+        "name": "House_A1",
+        "position": [
+          12526.009765625,
+          24.399999618530273,
+          53
+        ]
+      },
+      {
+        "door": [
+          12495.580078125,
+          29.25,
+          -36.5
+        ],
+        "name": "House_A2",
+        "position": [
+          12495.580078125,
+          24.399999618530273,
+          -53
+        ]
+      },
+      {
+        "door": [
+          12648.9296875,
+          29.25,
+          36.5
+        ],
+        "name": "House_B1",
+        "position": [
+          12648.9296875,
+          24.399999618530273,
+          53
+        ]
+      },
+      {
+        "door": [
+          12669.4599609375,
+          29.25,
+          -36.5
+        ],
+        "name": "House_B2",
+        "position": [
+          12669.4599609375,
+          24.399999618530273,
+          -53
+        ]
+      },
+      {
+        "door": [
+          12768.0595703125,
+          29.25,
+          36.5
+        ],
+        "name": "House_C1",
+        "position": [
+          12768.0595703125,
+          24.399999618530273,
+          53
+        ]
+      },
+      {
+        "door": [
+          12739.41015625,
+          29.25,
+          -36.5
+        ],
+        "name": "House_C2",
+        "position": [
+          12739.41015625,
+          24.399999618530273,
+          -53
+        ]
+      },
+      {
+        "door": [
+          12507.76953125,
+          29.25,
+          -256.5
+        ],
+        "name": "House_D1",
+        "position": [
+          12507.76953125,
+          24.399999618530273,
+          -273
+        ]
+      },
+      {
+        "door": [
+          12671.099609375,
+          29.25,
+          -256.5
+        ],
+        "name": "House_D2",
+        "position": [
+          12671.099609375,
+          24.399999618530273,
+          -273
+        ]
+      },
+      {
+        "door": [
+          12756.3203125,
+          29.25,
+          -256.5
+        ],
+        "name": "House_D3",
+        "position": [
+          12756.3203125,
+          24.399999618530273,
+          -273
+        ]
+      },
+      {
+        "door": [
+          12553.4404296875,
+          29.25,
+          -183.5
+        ],
+        "name": "House_D4",
+        "position": [
+          12553.4404296875,
+          24.399999618530273,
+          -167
+        ]
+      }
+    ]
+  }
+}

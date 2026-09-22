@@ -1,0 +1,115 @@
+[
+  {
+    "card": "https://trello.com/c/Y2xXThBN",
+    "status": "fulfilled",
+    "data": {
+      "checklists": [
+        {
+          "id": "ari:cloud:trello::checklist/workspace/6a9807517a71aa833c5dedb8/6aafbeeefa70e188fddc4224",
+          "name": "Level 4 — detaljeret design og byggeplan",
+          "position": 140737488355328,
+          "checkItems": [
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6aafbef6d2895ecaae562533",
+              "name": "**1. Oplevelsen og den visuelle retning**\n\nSpillerne forlader level 3 og kommer ud i et alt for perfekt parcelhuskvarter. Sol, klar blå himmel, ens huse og velplejet græs giver et kort øjeblik følelsen af at være sluppet ud. Stilheden, gentagelserne og forkerte detaljer afslører gradvist, at kvarteret er en Zyntra-testzone.\n\nStilen skal være liminal og troværdig med let kunstige proportioner: enkle pudsede/træbeklædte facader i falmet creme, støvet gul og blågrå; mørke tage; præcise hække; postkasser og lave hegn. Græsset må gerne være unaturligt ensartet grønt. Få diskrete Zyntra-neonmarkeringer på testudstyr — ikke neon på hele kvarteret. Silhuetten af et vand-/signaltårn fungerer som landmærke.\n\nBrug næsten identiske huse med små men aflæselige afvigelser: et ekstra vindue, forkert husnummer, en postkasse vendt mod huset, gardiner som er trukket for på én side. Interiører har almindelige møbler, som gentages lidt for præcist, tomme billedrammer, et CRT-TV og ingen beboere. Undgå tilfældig rod, som skjuler gameplay-spor.\n\nLyset begynder som varm, stille eftermiddag. Under fareperioder bliver himlen koldere, disen tættere og enkelte verandaer slukker i en tydelig sekvens. Bevar læsbarhed på mobil; spændingen må ikke kræve næsten sort skærm. Intet påkrævet gore; design til spillets eksisterende milde frygtprofil uden at love en bestemt platformsvurdering.",
+              "state": "INCOMPLETE",
+              "position": 140737488355328
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6aafbef77b19d3f7859571e5",
+              "name": "**2. Kortets opbygning**\n\nFørste version: 8–12 synlige huse, ca. 8–12 minutters målspilletid og én entity. Byg en sammenhængende rundstrækning med en tværgående genvej, så en forfølgelse kan brydes uden blindgyder.\n\n- Indgang: en kort servicepassage fra level 3 åbner mod kvarterets centrale gade. Spillere spawner adskilt på stabilt underlag.\n- Første hus: et trygt introduktionsområde med Zyntra-briefing, et synligt eksempel på en anomali og den første enkle succes.\n- Tre undersøgelsesområder: hver har flere mulige opgavehuse, tydelige landmærker og mindst to forbindelser tilbage til hovedruten.\n- Midte: et lille grønt område med bænk, slukket legeplads eller telefonboks; landmærke og sigtelinje til tårnet.\n- Finale: et Zyntra-signalskab ved et busstoppested nær tårnet. Det kan ses tidligere, men aktiveres først efter tre undersøgelser.\n- Udkant: gentagne facader og bakker skaber illusionen af et enormt kvarter. Dekorationshuse behøver ikke interiør; gameplaygrænsen skal fremstå naturlig.\n\nBrug 2–3 interiørmoduler til de tilgængelige huse. Placér døre, trapper og passagebredder efter vores faktiske karakter og entity-rig. De første spilbare huse skal have tydelige ind-/udgange og nok plads til at passere en holdkammerat. Undgå fysisk labyrint af mange ens rum.",
+              "state": "INCOMPLETE",
+              "position": 140737488371712
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6aafbef8a614b3a50738f9b0",
+              "name": "**3. Rundens forløb**\n\n1. Ankomst: kort, roligt blik ud over kvarteret. Spilleren får selv kontrollen og ser, hvor de kan gå hen.\n2. Briefing: “Investigate three residential signals. Restore the extraction beacon. Stay quiet.” Vis 0/3 fælles mål i eksisterende Objectives-stil.\n3. Første undersøgelse: en tilgivende opgave viser, hvordan man genkender et ændret hus og aflæser et signal. Første entity-cue kan observeres fra sikker afstand.\n4. Fri undersøgelse: holdet vælger rækkefølge mellem de tre zoner. Eksempler på opgavetyper: sammenlign facade med et referencefoto, find den forkerte udsendelse på et TV, og registrér en prøve ved et unormalt målepunkt. Giv også visuelle spor, så ingen opgave kræver hørelse eller mikrofon.\n5. Fare og rutevalg: The Neighbour undersøger støj. Holdet vælger stille omveje, bruger et aflæseligt sikkert hus eller lokker entityen væk fra en holdkammerat.\n6. Finale: de tre undersøgelser låser signalskabet op. Holdet aktiverer tre korte kontroller omkring busstoppestedet. Én spiller skal kunne udføre dem efter hinanden; flere kan samarbejde.\n7. Udgang: et kort, tydeligt varsel efterfølges af transport/udgang i levelgrænsen. Genbrug completion-, reward- og Continue/Return-flow. Ingen automatisk succes for spillere, der aldrig nåede ud.\n\nFørste prototype kan bruge almindelig interact til dokumentation. Når research-kameraet er klar, integreres det gratis basiskamera. Betalt kamera eller detector må ikke blive en adgangsbillet til completion.",
+              "state": "INCOMPLETE",
+              "position": 140737488388096
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6aafbef9e38e45f4714363ed",
+              "name": "**4. The Neighbour — entityens udseende og regler**\n\nBevar retningen fra den eksisterende note om en høj, Slender-lignende skabning, men lav en selvstændig Zyntra-entity. Arbejdsnavn: The Neighbour.\n\nUdseende: meget høj og smal, for lange underarme, stift arbejdstøj og et ansigt skjult af mat glas/maske. En unaturlig hældning i hovedet og langsomme, målrettede skridt gør den genkendelig på afstand. Lav egen silhuet, rig og animationer.\n\nAdfærd:\n- Patrol: bevæger sig mellem gader, postkasser og verandaer.\n- Investigate: reagerer på løb, hårdt smækkede døre og relevante opgavelyde. Undersøger lydens position frem for at kende spillerens placering uden spor.\n- Search: stopper ved huse, lytter og kontrollerer indgange. Spilleren kan aflæse søgningen gennem skridt, silhouette og vindues-/verandasignaler.\n- Chase: udløses ved faktisk afsløring tæt på/med fri sigtelinje. Der skal være varsling og mulighed for at bryde kontakten.\n- Return: når sporene mistes, søger den kort og vender tilbage til patrulje.\n\nStille gang og et afbrudt synsfelt skal have værdi. Døre må forsinke entityen kort, men kan ikke holde den fast for evigt. Ingen teleport direkte oven på spilleren, skade gennem vægge eller hits på en korrekt skjult spiller. Brug gameplay-støj; voice chat kan være en ekstra oplevelse, men er aldrig nødvendig.",
+              "state": "INCOMPLETE",
+              "position": 140737488404480
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6aafbefbc7e9c9a8d97146b3",
+              "name": "**5. Sikre huse, varsler og variation**\n\nHuse kan have en af tre tydelige tilstande: sikkert, varslet og farligt. Et stabilt verandasignal samt fravær af en bestemt facadeanomali viser et brugbart skjul. Før status skifter, vis et tydeligt forvarsel med lys og en lav tone; spilleren får tid til at forlade huset.\n\nSørg for mindst ét nåeligt sikkert alternativ i den aktive zone. En spiller må ikke låses inde eller dræbes øjeblikkeligt af et skjult tilstandsskift. Faren er en beslutning om rute og observation; den skal ikke gentage level 3's musikstop-og-gem-dig-under-bordet.\n\nLav 2–3 kontrollerede kombinationer af opgaveplaceringer og facadeanomalier. Alle spillere ser samme runde. Entity-reglerne og betydningen af varsler skifter ikke vilkårligt.",
+              "state": "INCOMPLETE",
+              "position": 140737488420864
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6aafbefe8596d415302195bc",
+              "name": "**6. Lyd og stemning**\n\nUdendørs: svag vind, fjern elektrisk summen og unaturligt få naturlyde. Indendørs: dæmpet køleskab/TV, træknirk og entity-skridt udenfor. The Neighbour får tydeligt forskellige patrol-, search-, chase- og attack-signaler med afstand og retning.\n\nUndgå konstant musik, så stilheden kan bære spændingen. Lydhaler fades rent til nul; ingen hørbar statisk støj i stille passager. Brug naturlig udendørs dæmpning og korte husrefleksioner frem for pool-/korridor-ekko overalt. Kritiske varsler har også en visuel komponent.",
+              "state": "INCOMPLETE",
+              "position": 140737488437248
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6aafbeff0110b2427facccec",
+              "name": "**7. Assets og byggefaser**\n\n- Blokmodel: gader, 8–12 husvolumener, tre zoner, genvej, spawn og exit. Gennemfør først hele ruten med simple interaktioner.\n- Spilbar prototype: ét færdigt hus, første research-opgave, entity med patrol/investigate/search/chase og ét sæt læsbare faresignaler.\n- Udvidelse: tre objektivtyper, 2–3 placeringsvarianter, sikre huse, finale, solo-/holdskalering og reset.\n- Art pass: modulære facader, 2–3 interiører, postkasser/hegn/lygter, signalskab, busstoppested, baggrundsbakker, sky/lys, entitymodel og animationer.\n- Audio/UI: rumlyd, entity-SFX, Mission Brief, fælles opgavebeskeder, completion og arkivindgange.\n- Færdiggørelse: mobilperformance, pathfinding, collision, respawn, progression og publiceret level-overgang. Bevis gennemført arbejde før kortet flyttes til Done.\n\nStream/genbrug husmoduler, hold baggrundsdekoration enkel og undgå hundredvis af unødvendige dynamiske lyskilder. Serveren afgør opgaver, skade, spawns og rewards; klienten viser effekter/UI. Entity-navigation skal fungere ved åbne/lukkede døre, traps og skiftende spillerantal. Fjern rundeobjekter og lyd ved unload.",
+              "state": "INCOMPLETE",
+              "position": 140737488453632
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6aafbf016d35af67f162fd68",
+              "name": "**8. Kriterier for færdig level**\n\n- Hele runden kan gennemføres solo og med spillets understøttede holdstørrelse uden betalt udstyr.\n- PC og touch kan aflæse varsler, undersøge, gemme sig, bruge udstyr og afslutte.\n- Alle opgavekombinationer er løselige; ingen nødvendige spor forsvinder permanent ved død/disconnect.\n- Spawn, level 3→4, re-entry, død, spectate og lobbyretur fungerer uden clipping eller dobbelte belønninger.\n- Nye spillere forstår den vigtigste entity-regel efter første møde.\n- Mål: start→første undersøgelse, completion pr. zone, dødssteder, exit undervejs, genforsøg og antal spillere der overhovedet når level 4.\n- Registrér observeret spilletid og performance på relevante mobilenheder; 8–12 minutter er et designmål, ikke et fast krav.",
+              "state": "INCOMPLETE",
+              "position": 140737488470016
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6aafbf029d5c0ac064758c05",
+              "name": "**9. Sammenhæng med de øvrige nye opgaver**\n\nResearch-opgaver: https://trello.com/c/wEFTmguQ\nEntity-arkiv: https://trello.com/c/nWCCdowB\nEntity Detector: https://trello.com/c/Zyrtgu79\nResearch Camera: https://trello.com/c/cqvNQIIc\nLevel-variation: https://trello.com/c/OBjSW30k\nFælles objective-beskeder: https://trello.com/c/FAgRQho1",
+              "state": "INCOMPLETE",
+              "position": 140737488486400
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6aafbf0369af58362d956eab",
+              "name": "**10. Inspiration og afgrænsning**\n\nMotion/Level 94 er tematisk reference til falsk tryghed og et forvrænget boligkvarter. Byg egne rum, opgaver, assets, historie og entity. Konkurrenternes besøg/badges dokumenterer eksponering, ikke at netop dette level har bedst retention eller salg. Run for Your Life kan overvejes som senere kort ekstrasekvens; Funrooms fravælges som level 4-retning, fordi level 3 allerede har party/mall-tema.\n\nhttps://www.rolimons.com/game/9534337535\nhttps://escapethebackrooms.fandom.com/wiki/Level_94_Guide",
+              "state": "INCOMPLETE",
+              "position": 140737488502784
+            }
+          ]
+        }
+      ],
+      "nextCursor": "eyJvYmplY3RJZCI6IjZhYWZiZWVlZmE3MGUxODhmZGRjNDIyNCJ9",
+      "hasMore": false
+    }
+  },
+  {
+    "card": "https://trello.com/c/MsEn2mya",
+    "status": "fulfilled",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    }
+  },
+  {
+    "card": "https://trello.com/c/25GLltY6",
+    "status": "fulfilled",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    }
+  },
+  {
+    "card": "https://trello.com/c/JYiwjBxw",
+    "status": "fulfilled",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    }
+  },
+  {
+    "card": "https://trello.com/c/bn2zeKKO",
+    "status": "fulfilled",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    }
+  }
+]
