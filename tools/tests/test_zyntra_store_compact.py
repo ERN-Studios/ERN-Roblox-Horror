@@ -289,6 +289,8 @@ local function udim2(sx, ox, sy, oy)
 	return {SX = sx, OX = ox, SY = sy, OY = oy,
 		X = {Scale = sx, Offset = ox}, Y = {Scale = sy, Offset = oy}}
 end
+-- RAIL_DOTS_20260922: the notification dots anchor with Vector2.
+local Vector2 = {new = function(x, y) return {X = x, Y = y} end}
 local UDim2 = {
 	new = udim2,
 	fromOffset = function(x, y) return udim2(0, x, 0, y) end,
