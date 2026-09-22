@@ -5,9 +5,29 @@ create these scripts in Studio and run them for the first time.
 
 **Status: milestones 1 and 2 only** — a walkable blockout plus one end-to-end
 prototype of house / task / entity. This is not a finished level and it must not
-be described as one. Nothing here has been run in Roblox; everything below is
-either asserted by an offline test, asserted by the in-Studio suite, or listed
-as unverified.
+be described as one.
+
+**Update 2026-09-22 — installed and run.** All twelve scripts exist in Studio
+(section 1 is history now: the sync tools push them like any other script) and
+the level has been played solo in Studio on seeds 101 (CLOSE) and 202 (TERRACE):
+three signals → three cabinet controls in order → the transit door → `Escaped`,
+and one real Neighbour kill with the `THE NEIGHBOUR GOT YOU` card. The in-Studio
+suite reports plan 163 / brain 18 / world 66 checks, 0 failures. Facade fixes of
+the same day (marked `FACADE_POLISH_20260922`, `CALM_ARRIVAL_20260922`,
+`EXIT_POINTER_20260922`, `LEVEL4_DEV_RETRY_20260922`): the roof wedge now peaks at
+the ridge (19.5 studs over the slab at z ±0.1, 14.2 at the eaves), the window
+units stand 0.4 studs PROUD of the outer wall (they were 0.2–0.6 studs inside
+it), the house scheduler waits `HouseStates.CalmLeadSeconds` (24 s, measured
+25.4 s) after `RoundActive` before the first house leaves SAFE, the client's
+danger grade only follows a threat to THIS player (Neighbour ALERT/CHASE on them,
+or the house they stand in), `Level4_ExitPosition` is the trigger's own centre
+and the server sweeps living roots inside the open trigger, and a dev round that
+ends without escape raises `Level4DevRoundEnded` on the player instead of a
+`RetryGuideLevel` beam to a bay that does not exist. Evidence and images:
+`docs/CODEX_POLISH_HANDOFF.md`, `artifacts/claude-20260922/screens/`.
+
+Everything below this line is the 2026-09-21 text; where it says "unverified",
+read the 2026-09-22 handoff for what has since been run.
 
 **Level 4 is dev-only.** The lobby gate stays "coming soon". A round can only
 start when `workspace.Level4DevEnabled == true` **and** every player present

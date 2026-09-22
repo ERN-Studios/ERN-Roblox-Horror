@@ -127,12 +127,52 @@ local function grade(danger: boolean, instant: boolean)
 	applyGoal(goal, instant and 0 or (c.TransitionSeconds * (reduce and 1.6 or 1)))
 end
 
+-- The house the subject is standing in, by the same InteriorVolume box the
+-- server's IsSheltered uses. Nil in the street.
+local function houseAround(root: BasePart): Model?
+	local world = workspace:FindFirstChild("Level 4 Generated World")
+	if not world then return nil end
+	for _, child in ipairs(world:GetChildren()) do
+		if child:IsA("Model") and child:GetAttribute("Level4_HouseState") ~= nil then
+			local volume = child:FindFirstChild("InteriorVolume")
+			if volume and volume:IsA("BasePart") then
+				local offset = volume.CFrame:PointToObjectSpace(root.Position)
+				local half = volume.Size * 0.5
+				if math.abs(offset.X) <= half.X and math.abs(offset.Y) <= half.Y and math.abs(offset.Z) <= half.Z then
+					return child
+				end
+			end
+		end
+	end
+	return nil
+end
+
+-- CALM_ARRIVAL_20260922. Danger is what threatens THIS player: the Neighbour
+-- alerted on or chasing them, or the house they are standing in going bad. A
+-- warned house three streets away used to hold the whole sky cold for the rest
+-- of the round; it no longer counts, and the grade returns to calm when the
+-- threat ends.
 local function dangerNow(): boolean
 	local folder = stateFolder()
 	if not folder then return false end
+	local subject = player
+	local spectating = player:GetAttribute("SpectateTargetUserId")
+	if player:GetAttribute("Spectating") == true and type(spectating) == "number" then
+		subject = game:GetService("Players"):GetPlayerByUserId(spectating) or player
+	end
 	local neighbour = folder:GetAttribute("Level4_NeighbourState")
-	if neighbour == "ALERT" or neighbour == "CHASE" then return true end
-	return (tonumber(folder:GetAttribute("Level4_UnsafeHouses")) or 0) > 0
+	if (neighbour == "ALERT" or neighbour == "CHASE")
+		and folder:GetAttribute("Level4_NeighbourTargetUserId") == subject.UserId then
+		return true
+	end
+	local character = subject.Character
+	local root = character and character:FindFirstChild("HumanoidRootPart")
+	if root and root:IsA("BasePart") then
+		local house = houseAround(root)
+		local state = house and house:GetAttribute("Level4_HouseState")
+		if state == "WARNED" or state == "DANGEROUS" then return true end
+	end
+	return false
 end
 
 local function enter()

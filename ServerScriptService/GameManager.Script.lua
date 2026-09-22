@@ -1604,7 +1604,14 @@ local function returnPlayersToLocalLobby(group)
 		-- and never for a bystander this recovery path swept up. It is a hint, not
 		-- a revive: nothing about the queue, the price or the round changes.
 		if inRound[player] and player:GetAttribute("Escaped") ~= true then
-			player:SetAttribute("RetryGuideLevel", lastRoundLevel)
+			-- LEVEL4_DEV_RETRY_20260922: a dev level has no lobby bay, so the
+			-- pad guide would point at nothing. The dev client shows a restart
+			-- hint from this attribute instead (cleared when a round starts).
+			if lastRoundLevel > Routing.MaxLevel then
+				player:SetAttribute("Level4DevRoundEnded", true)
+			else
+				player:SetAttribute("RetryGuideLevel", lastRoundLevel)
+			end
 		end
 		inRound[player] = nil
 		player:SetAttribute("InRound", false)
@@ -1787,7 +1794,7 @@ local function teleportPlayersToLobby(group)
 	-- NOBODY in it escaped: a win sends escapers and non-escapers home together,
 	-- and telling somebody to try again at the level they just cleared is worse
 	-- than telling them nothing.
-	local retryLevel = lastRoundLevel
+	local retryLevel = lastRoundLevel <= Routing.MaxLevel and lastRoundLevel or nil
 	for _, player in ipairs(live) do
 		if not inRound[player] or player:GetAttribute("Escaped") == true then
 			retryLevel = nil
@@ -2067,6 +2074,7 @@ local function prepareGroupLoading(attempt, group, level, useSlideResume)
    player:SetAttribute("InRound", true)
    player:SetAttribute("Escaped", nil)
    player:SetAttribute("RetryGuideLevel", nil) -- RETRY_GUIDE_20260921: they took it
+   player:SetAttribute("Level4DevRoundEnded", nil)
    player:SetAttribute("Level2_ExitTransition", nil)
   end
  end

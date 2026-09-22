@@ -287,11 +287,37 @@ local STATE_COLORS = {
 	DANGEROUS = COLORS.SignalDangerous,
 }
 
+-- Who is standing inside this house right now. The InteriorVolume is the
+-- contract box the AI's IsSheltered reads too, so "in the house" means the same
+-- thing to the warning as it does to the Neighbour.
+local function occupantsOf(record: any): {Player}
+	local volume = record.InteriorVolume
+	local occupants = {}
+	if not (volume and volume.Parent) then return occupants end
+	local half = volume.Size * 0.5
+	for _, player in ipairs(Players:GetPlayers()) do
+		local _, _, root = livingCharacter(player)
+		if root then
+			local offset = volume.CFrame:PointToObjectSpace(root.Position)
+			if math.abs(offset.X) <= half.X and math.abs(offset.Y) <= half.Y and math.abs(offset.Z) <= half.Z then
+				table.insert(occupants, player)
+			end
+		end
+	end
+	return occupants
+end
+
 local function setHouseState(session: any, record: any, stateName: string)
 	if record.HouseState == stateName then return end
 	record.HouseState = stateName
 	record.HouseStateSince = os.clock()
 	record.Model:SetAttribute("Level4_HouseState", stateName)
+	-- Server time the state ends, so a client can count down without a
+	-- remote: WARNED runs WarnSeconds, DANGEROUS runs DangerousSeconds.
+	local runs = stateName == "WARNED" and HOUSE.WarnSeconds
+		or stateName == "DANGEROUS" and HOUSE.DangerousSeconds or 0
+	record.Model:SetAttribute("Level4_HouseStateEndsAt",
+		runs > 0 and workspace:GetServerTimeNow() + runs or 0)
 	record.PorchSignal.Color = STATE_COLORS[stateName] or COLORS.SignalSafe
 	if record.PorchLight then
 		record.PorchLight.Color = STATE_COLORS[stateName] or COLORS.SignalSafe
@@ -306,14 +332,20 @@ local function setHouseState(session: any, record: any, stateName: string)
 	end
 	publish(session, "Level4_UnsafeHouses", unsafe)
 
-	if stateName == "WARNED" then
-		fire(session, {Type = "House", LotId = record.Lot.Id, Zone = record.Lot.Zone,
-			State = stateName, Cue = HOUSE.WarnCueName, Seconds = HOUSE.WarnSeconds})
-		TeamObjectives.Announce("ZYNTRA",
-			("HOUSE %s UNSTABLE  //  LEAVE WITHIN %ds"):format(record.Lot.Id, HOUSE.WarnSeconds), 4)
-	elseif stateName == "DANGEROUS" then
-		fire(session, {Type = "House", LotId = record.Lot.Id, Zone = record.Lot.Zone,
-			State = stateName, Cue = HOUSE.DangerCueName})
+	-- CALM_ARRIVAL_20260922. The order to LEAVE goes to the people inside that
+	-- house; everyone else gets the same payload marked Occupant = false, which
+	-- the client renders as a short local note at most. The team feed no longer
+	-- carries house warnings: a whole neighbourhood told to leave a house it is
+	-- not in was the complaint.
+	if stateName == "WARNED" or stateName == "DANGEROUS" then
+		local inside = {}
+		for _, player in ipairs(occupantsOf(record)) do inside[player] = true end
+		for _, player in ipairs(Players:GetPlayers()) do
+			fire(session, {Type = "House", LotId = record.Lot.Id, Zone = record.Lot.Zone,
+				State = stateName, Cue = stateName == "WARNED" and HOUSE.WarnCueName or HOUSE.DangerCueName,
+				Seconds = stateName == "WARNED" and HOUSE.WarnSeconds or nil,
+				Occupant = inside[player] == true}, player)
+		end
 	end
 end
 
@@ -333,6 +365,13 @@ end
 
 local function evaluateHouses(session: any)
 	local now = os.clock()
+	-- CALM_ARRIVAL_20260922: nothing is scheduled until the round is live, and
+	-- the first pick waits out the calm lead measured from THAT moment.
+	if not session.RoundStartedAt then
+		if workspace:GetAttribute("RoundActive") ~= true then return end
+		session.RoundStartedAt = now
+		session.NextHouseEvaluateAt = now + HOUSE.CalmLeadSeconds
+	end
 	local unsafe = 0
 	for _, record in ipairs(session.Houses) do
 		if record.HouseState == "WARNED" and now - record.HouseStateSince >= HOUSE.WarnSeconds then
@@ -428,7 +467,9 @@ function ObjectiveController.Start(manifest: any, generation: number): any
 		ControlProgress = 0,
 		BeaconUnlocked = false,
 		ExitOpen = false,
-		NextHouseEvaluateAt = os.clock() + Configuration.HouseStates.EvaluateIntervalSeconds,
+		-- Set when the round goes live (see evaluateHouses), not at build time.
+		RoundStartedAt = nil,
+		NextHouseEvaluateAt = math.huge,
 		Random = Random.new(manifest.Plan.ResolvedSeed),
 		Running = true,
 	}
@@ -470,6 +511,20 @@ function ObjectiveController.Start(manifest: any, generation: number): any
 		local player = character and Players:GetPlayerFromCharacter(character)
 		if player then escapePlayer(session, player) end
 	end))
+	-- EXIT_POINTER_20260922: Touched is only a wake-up (escapePlayer does its
+	-- own containment test), so a touch that never replicates from a
+	-- client-owned character must not strand a player standing in the doorway.
+	-- Once the exit is open the living roots are swept as well.
+	task.spawn(function()
+		while session.Running and liveSession(session) do
+			if session.ExitOpen then
+				for _, player in ipairs(Players:GetPlayers()) do
+					if player:GetAttribute("InRound") == true then escapePlayer(session, player) end
+				end
+			end
+			task.wait(0.25)
+		end
+	end)
 
 	publish(session, "Level4_SignalGoal", OBJECTIVES.SignalGoal)
 	publish(session, "Level4_Briefing", OBJECTIVES.BriefingLine)

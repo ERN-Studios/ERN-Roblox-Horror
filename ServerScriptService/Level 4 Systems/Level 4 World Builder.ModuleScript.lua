@@ -273,14 +273,53 @@ end
 -- Houses
 -- ---------------------------------------------------------------------------
 
--- A facade window. Four of these is the normal house; the ExtraWindow anomaly
--- adds a fifth, and DrawnCurtains fills one of them on one side only.
-local function buildWindow(parent: Instance, name: string, cframe: CFrame): BasePart
-	local object = decorative(part(parent, name, cframe, Vector3.new(0.4, 4.2, 5),
-		Color3.fromRGB(96, 116, 126), Enum.Material.Glass))
-	object.Transparency = 0.35
-	object.Reflectance = 0.08
-	return object
+-- FACADE_POLISH_20260922. A facade window UNIT: an off-white frame standing a
+-- little proud of the outer wall face, a frosted pane in front of it and a sill
+-- under it. Every house faces along z, so the unit is sized in world axes and
+-- never rotated -- the old 0.4-wide part turned by ninety degrees sat 0.1 studs
+-- INSIDE the wall, and Codex measured all four panes buried in the render.
+-- `outward` is the lot's FacingZ; `centre` is the point ON the outer wall face.
+-- Returns the pane (the socket the anomalies key on) and the frame.
+local function buildWindow(parent: Instance, name: string, centre: Vector3, outward: number,
+	width: number?, height: number?): (BasePart, BasePart)
+	local w = width or LOTS.WindowWidth
+	local h = height or LOTS.WindowHeight
+	local lip = LOTS.WindowFrame
+	local proud = LOTS.WindowProud
+	local frame = decorative(part(parent, name .. "Frame",
+		CFrame.new(centre + Vector3.new(0, 0, outward * proud / 2)),
+		Vector3.new(w + lip * 2, h + lip * 2, proud), COLORS.Trim, Enum.Material.SmoothPlastic))
+	local pane = decorative(part(parent, name,
+		CFrame.new(centre + Vector3.new(0, 0, outward * (proud + 0.1))),
+		Vector3.new(w, h, 0.2), COLORS.Pane, Enum.Material.Glass))
+	pane.Transparency = 0.25
+	pane.Reflectance = 0.12
+	decorative(part(parent, name .. "Sill",
+		CFrame.new(centre + Vector3.new(0, -(h / 2 + lip + 0.15), outward * (proud / 2 + 0.25))),
+		Vector3.new(w + lip * 2 + 0.6, 0.3, proud + 0.5), COLORS.Trim, Enum.Material.SmoothPlastic))
+	return pane, frame
+end
+
+-- FACADE_POLISH_20260922. Where the four normal windows sit on a facade, as
+-- points on the OUTER wall face; buildAnomaly reuses slot 1 for the curtain.
+local function facadeWindowCentres(session: any, lot: any): {Vector3}
+	local width, depth, height = LOTS.HouseWidth, LOTS.HouseDepth, LOTS.StoreyHeight
+	local frontZ = lot.Z + lot.FacingZ * depth / 2
+	local sidePanel = (width - DERIVED.DoorWidth) / 2
+	local centres = {}
+	for index = 1, 4 do
+		local column = index <= 2 and -1 or 1
+		local inset = (index % 2 == 1) and 0.3 or 0.7
+		centres[index] = worldPoint(session,
+			lot.X + column * (DERIVED.DoorWidth / 2 + sidePanel * inset), height * 0.58, frontZ)
+	end
+	return centres
+end
+
+-- The bare wall between the door edge and the first window unit.
+local function facadeBandWidth(): number
+	local sidePanel = (LOTS.HouseWidth - DERIVED.DoorWidth) / 2
+	return sidePanel * 0.3 - LOTS.WindowWidth / 2
 end
 
 local function buildHouseShell(session: any, parent: Instance, lot: any): (Model, BasePart)
@@ -335,27 +374,65 @@ local function buildHouseShell(session: any, parent: Instance, lot: any): (Model
 	doorFrame:SetAttribute("Level4_DoorWidth", doorWidth)
 	doorFrame:SetAttribute("Level4_DoorHeight", doorHeight)
 
-	-- Dark roof: two wedges meeting at a ridge that runs along x, over the
-	-- middle of the house. A WedgePart is full height at its own -z face and
-	-- zero at +z, so the half that sits on -z is turned 180 degrees to put its
-	-- tall edge on the ridge rather than on the eaves.
+	-- Dark gable roof: two wedges meeting at a ridge that runs along x over the
+	-- MIDDLE of the house. A WedgePart is full height at its own +z (Back) face
+	-- and zero at -z (Front), so the half on the +z side is the one turned 180
+	-- degrees, putting both tall edges on the ridge. (The first build had this
+	-- backwards -- a valley down the middle -- and Codex measured it: the roof
+	-- was 12.6 studs over the floor at the centre and 18.4 near the eaves.)
+	-- Each half also overhangs its eave a little; the footprint itself is
+	-- unchanged. FACADE_POLISH_20260922.
 	local roofHeight = LOTS.RoofHeight
+	local overhang = LOTS.EavesOverhang
 	for _, side in ipairs({-1, 1}) do
-		local turn = side < 0 and CFrame.Angles(0, math.pi, 0) or CFrame.identity
+		local turn = side > 0 and CFrame.Angles(0, math.pi, 0) or CFrame.identity
+		local halfDepth = depth / 2 + overhang
 		wedge(model, "HouseRoof",
-			at(session, lot.X, height + roofHeight / 2, lot.Z + side * depth / 4) * turn,
-			Vector3.new(width + 2, roofHeight, depth / 2), COLORS.DarkRoof, Enum.Material.Slate)
+			at(session, lot.X, height + roofHeight / 2, lot.Z + side * halfDepth / 2) * turn,
+			Vector3.new(width + overhang * 2, roofHeight, halfDepth), COLORS.DarkRoof, Enum.Material.Slate)
+		-- Fascia board along the eave, under the roof edge.
+		decorative(part(model, "HouseFascia",
+			at(session, lot.X, height - LOTS.FasciaDepth / 2 + 0.05, lot.Z + side * (depth / 2 + overhang - 0.15)),
+			Vector3.new(width + overhang * 2, LOTS.FasciaDepth, 0.3), COLORS.Fascia, Enum.Material.SmoothPlastic))
+	end
+	-- Gable-end boards, so the roof edge reads as a built edge from the side.
+	for _, side in ipairs({-1, 1}) do
+		decorative(part(model, "HouseFascia",
+			at(session, lot.X + side * (width / 2 + overhang - 0.15), height - LOTS.FasciaDepth / 2 + 0.05, lot.Z),
+			Vector3.new(0.3, LOTS.FasciaDepth, depth + overhang * 2), COLORS.Fascia, Enum.Material.SmoothPlastic))
 	end
 
-	-- Four windows on the facade, two each side of the door.
-	local windowZ = frontZ - lot.FacingZ * (wall / 2 + 0.1)
-	for index = 1, 4 do
-		local column = index <= 2 and -1 or 1
-		local inset = (index % 2 == 1) and 0.28 or 0.72
-		buildWindow(model, "HouseWindow",
-			at(session, lot.X + column * (doorWidth / 2 + sidePanel * inset), height * 0.58, windowZ)
-				* CFrame.Angles(0, math.pi / 2, 0))
+	-- Four window units on the facade, two each side of the door, standing on
+	-- the OUTER face of the front wall.
+	for _, centre in ipairs(facadeWindowCentres(session, lot)) do
+		buildWindow(model, "HouseWindow", centre, lot.FacingZ)
 	end
+
+	-- Door trim: a frame around the opening, proud of the wall like the windows,
+	-- so the entrance reads as a doorway and not a hole. It stands OUTSIDE the
+	-- opening on every side and never narrows the 6 x 10.5 contract.
+	local trimLip = LOTS.WindowFrame
+	local outerFront = frontZ + lot.FacingZ * (LOTS.WindowProud / 2)
+	for _, side in ipairs({-1, 1}) do
+		decorative(part(model, "DoorTrim",
+			CFrame.new(worldPoint(session, lot.X + side * (doorWidth / 2 + trimLip / 2), doorHeight / 2, outerFront)),
+			Vector3.new(trimLip, doorHeight, LOTS.WindowProud), COLORS.Trim, Enum.Material.SmoothPlastic))
+	end
+	decorative(part(model, "DoorTrim",
+		CFrame.new(worldPoint(session, lot.X, doorHeight + trimLip / 2, outerFront)),
+		Vector3.new(doorWidth + trimLip * 2, trimLip, LOTS.WindowProud), COLORS.Trim, Enum.Material.SmoothPlastic))
+
+	-- House identification in the bare wall band on the street-viewer's RIGHT
+	-- of the door (the porch signal takes the left band): the lot id, on the
+	-- outward face. The WrongNumber anomaly REPLACES this text (see
+	-- buildAnomaly); the lot id stays the technical identity either way.
+	local bandX = doorWidth / 2 + (facadeBandWidth() / 2)
+	local plate = decorative(part(model, "HouseNumber",
+		CFrame.new(worldPoint(session, lot.X + lot.FacingZ * bandX, LOTS.FittingHeight, frontZ + lot.FacingZ * 0.25)),
+		Vector3.new(1.6, 1.6, 0.5), COLORS.Graphite, Enum.Material.Metal))
+	plate:SetAttribute("Level4_HouseNumber", true)
+	face(plate, string.upper(lot.Id), lot.FacingZ < 0 and Enum.NormalId.Front or Enum.NormalId.Back,
+		COLORS.Trim, 40)
 
 	return model, doorFrame
 end
@@ -444,27 +521,54 @@ local function buildYard(session: any, model: Instance, lot: any): (BasePart, Ba
 		local panel = (width + 4 - gate) / 2
 		solid(part(model, "Fence",
 			at(session, lot.X + side * (gate / 2 + panel / 2), LOTS.FenceHeight / 2, frontZ),
-			Vector3.new(panel, LOTS.FenceHeight, 0.5), COLORS.Concrete, Enum.Material.WoodPlanks))
+			Vector3.new(panel, LOTS.FenceHeight, 0.5), COLORS.Trim, Enum.Material.WoodPlanks))
 	end
 	-- Path from the gate to the door.
 	decorative(part(model, "Path",
 		at(session, lot.X, 0.15, lot.Z + lot.FacingZ * (depth / 2 + LOTS.FrontYardDepth / 2)),
 		Vector3.new(DERIVED.DoorWidth, 0.3, LOTS.FrontYardDepth), COLORS.Concrete, Enum.Material.Concrete))
 
-	local mailbox = part(model, "Mailbox",
-		at(session, lot.X + width * 0.34, LOTS.MailboxHeight / 2, frontZ - lot.FacingZ * 1.6),
-		Vector3.new(1.6, LOTS.MailboxHeight, 1.6), COLORS.Timber, Enum.Material.Wood)
+	-- FACADE_POLISH_20260922. A recognisable mailbox: timber post, galvanised
+	-- box, a darker door plate on the STREET end and a red flag on one side, so
+	-- the ReversedMailbox anomaly (the whole assembly turned 180 degrees to face
+	-- the house) reads from the pavement. The `Mailbox` part is still the
+	-- contract object; post, door and flag hang off it in a Model.
+	local mailboxModel = Instance.new("Model")
+	mailboxModel.Name = "MailboxAssembly"
+	mailboxModel.Parent = model
+	placeholder(mailboxModel)
+	local boxCentre = worldPoint(session, lot.X + width * 0.34, LOTS.MailboxHeight - 0.7, frontZ - lot.FacingZ * 1.6)
+	local mailbox = part(mailboxModel, "Mailbox", CFrame.new(boxCentre),
+		Vector3.new(1.4, 1.3, 2.2), COLORS.MailboxMetal, Enum.Material.Metal)
 	decorative(mailbox)
+	mailboxModel.PrimaryPart = mailbox
+	decorative(part(mailboxModel, "MailboxPost",
+		CFrame.new(boxCentre + Vector3.new(0, -(LOTS.MailboxHeight - 0.7) / 2 - 0.65, 0)),
+		Vector3.new(0.5, LOTS.MailboxHeight - 1.3, 0.5), COLORS.Timber, Enum.Material.Wood))
+	-- The door: on the street-facing end, i.e. towards +FacingZ.
+	decorative(part(mailboxModel, "MailboxDoor",
+		CFrame.new(boxCentre + Vector3.new(0, -0.05, lot.FacingZ * 1.15)),
+		Vector3.new(1.2, 1.1, 0.12), COLORS.Graphite, Enum.Material.Metal))
+	decorative(part(mailboxModel, "MailboxFlag",
+		CFrame.new(boxCentre + Vector3.new(0.78, 0.55, lot.FacingZ * 0.5)),
+		Vector3.new(0.12, 0.7, 0.9), COLORS.MailboxFlag, Enum.Material.SmoothPlastic))
 	mailbox:SetAttribute("Level4_Mailbox", true)
 	-- Mailboxes normally face the street.
 	mailbox:SetAttribute("Level4_MailboxFacesStreet", true)
 
-	-- The porch signal: the readable house-state light. One part, one counted
-	-- light, and the colour is the whole language.
+	-- The porch signal: the readable house-state light. A graphite housing with a
+	-- small lit aperture, beside the door at head height. The aperture colour is
+	-- the language (SAFE green / WARNED amber / DANGEROUS red-then-dark); the
+	-- housing keeps it from lighting the whole lawn. One part carries the state
+	-- and the one counted light (FACADE_POLISH_20260922).
+	local bandX = DERIVED.DoorWidth / 2 + facadeBandWidth() / 2
+	local porchCentre = worldPoint(session, lot.X - lot.FacingZ * bandX, LOTS.FittingHeight,
+		lot.Z + lot.FacingZ * (depth / 2 + 0.45))
+	decorative(part(model, "PorchSignalHousing", CFrame.new(porchCentre),
+		Vector3.new(1.4, 1.4, 0.9), COLORS.Graphite, Enum.Material.Metal))
 	local porch = part(model, "PorchSignal",
-		at(session, lot.X + DERIVED.DoorWidth / 2 + 2, DERIVED.DoorHeight - 1.5,
-			lot.Z + lot.FacingZ * (depth / 2 + 0.6)),
-		Vector3.new(1.4, 1.4, 1.4), COLORS.SignalSafe, Enum.Material.Neon)
+		CFrame.new(porchCentre + Vector3.new(0, 0, lot.FacingZ * 0.4)),
+		Vector3.new(0.8, 0.8, 0.25), COLORS.SignalSafe, Enum.Material.Neon)
 	decorative(porch)
 	porch:SetAttribute("Level4_PorchSignal", true)
 	return mailbox, porch
@@ -476,30 +580,51 @@ local function buildAnomaly(session: any, model: Model, lot: any, mailbox: BaseP
 	local frontZ = lot.Z + lot.FacingZ * (depth / 2 + 0.6)
 	local socket: BasePart
 
+	-- FACADE_POLISH_20260922: every anomaly is built in the same world axes as
+	-- the normal facade fittings, so it is comparable with them from the
+	-- pavement instead of being a 0.3-stud sliver seen edge-on.
+	local wallFace = lot.Z + lot.FacingZ * depth / 2
 	if lot.Anomaly == "ExtraWindow" then
+		-- A fifth, shorter window over the door, under the eaves: no other house
+		-- has one there, and it is compared against the four normal units.
 		socket = buildWindow(model, "AnomalyExtraWindow",
-			at(session, lot.X + width * 0.36, height * 0.82, frontZ) * CFrame.Angles(0, math.pi / 2, 0))
+			worldPoint(session, lot.X, DERIVED.DoorHeight + (height - DERIVED.DoorHeight) / 2 + 0.15, wallFace),
+			lot.FacingZ, LOTS.WindowWidth, 1.6)
 	elseif lot.Anomaly == "WrongNumber" then
-		socket = decorative(part(model, "AnomalyHouseNumber",
-			at(session, lot.X - DERIVED.DoorWidth / 2 - 2, DERIVED.DoorHeight - 2, frontZ),
-			Vector3.new(0.3, 2.2, 3.4), COLORS.Concrete, Enum.Material.Metal))
-		-- A number that does not belong to this street's run.
-		face(socket, "13B", lot.FacingZ < 0 and Enum.NormalId.Front or Enum.NormalId.Back,
-			Color3.fromRGB(40, 40, 44), 30)
+		-- The house's OWN plate shows a number that cannot belong to this
+		-- street: the zone letter with 0, which no lot ever has.
+		local plate = model:FindFirstChild("HouseNumber")
+		if plate then
+			local gui = plate:FindFirstChildOfClass("SurfaceGui")
+			local label = gui and gui:FindFirstChildOfClass("TextLabel")
+			if label then label.Text = string.upper(string.sub(lot.Id, 1, 1)) .. "0" end
+			plate:SetAttribute("Level4_WrongNumber", true)
+		end
+		socket = plate or mailbox
 	elseif lot.Anomaly == "ReversedMailbox" then
-		-- The mailbox is turned to face the house instead of the street.
-		mailbox.CFrame = mailbox.CFrame * CFrame.Angles(0, math.pi, 0)
+		-- The whole mailbox assembly is turned to face the house: door and flag
+		-- now point at the front wall instead of the street.
+		local assembly = mailbox.Parent
+		if assembly and assembly:IsA("Model") then
+			assembly:PivotTo(mailbox.CFrame * CFrame.Angles(0, math.pi, 0))
+		else
+			mailbox.CFrame = mailbox.CFrame * CFrame.Angles(0, math.pi, 0)
+		end
 		mailbox:SetAttribute("Level4_MailboxFacesStreet", false)
 		socket = mailbox
 	else -- DrawnCurtains
+		-- One of the four normal windows is drawn on one side: a curtain panel
+		-- immediately in front of the pane of window slot 1, covering ONE half.
+		local centre = facadeWindowCentres(session, lot)[1]
+		local w, h = LOTS.WindowWidth, LOTS.WindowHeight
 		socket = decorative(part(model, "AnomalyDrawnCurtains",
-			at(session, lot.X - width * 0.3, height * 0.58, frontZ),
-			Vector3.new(0.3, 4.6, 5.4), Color3.fromRGB(184, 168, 150), Enum.Material.Fabric))
+			CFrame.new(centre + Vector3.new(-w / 4, 0, lot.FacingZ * (LOTS.WindowProud + 0.32))),
+			Vector3.new(w / 2 - 0.2, h - 0.3, 0.14), COLORS.Curtain, Enum.Material.Fabric))
 	end
 
 	-- The reversed-mailbox anomaly IS the mailbox, and the mailbox's own name is
 	-- part of the art contract, so only a purpose-built socket gets renamed.
-	if socket ~= mailbox then socket.Name = "AnomalySocket" end
+	if socket ~= mailbox and socket.Name ~= "HouseNumber" then socket.Name = "AnomalySocket" end
 	socket:SetAttribute("Level4_AnomalySocket", true)
 	socket:SetAttribute("Level4_Anomaly", lot.Anomaly)
 	socket:SetAttribute("Level4_LotId", lot.Id)
@@ -694,9 +819,13 @@ local function buildFinale(session: any, parent: Instance): any
 		Vector3.new(1.2, DERIVED.DoorHeight, DERIVED.DoorWidth + 2),
 		COLORS.ZyntraCabinet, Enum.Material.DiamondPlate)
 	gate:SetAttribute("Level4_ExitGate", true)
+	-- EXIT_POINTER_20260922: the trigger volume starts at the gate's inner face
+	-- and runs 6 studs past it, and ExitPosition (what the reader/pointer aims
+	-- at) is the volume's own centre -- a point that completes the escape when
+	-- reached, not a spot 3.5 studs short of it.
 	local trigger = part(model, "EscapeTrigger",
-		at(session, exit.X + 3.5, DERIVED.DoorHeight / 2, exit.Z),
-		Vector3.new(5, DERIVED.DoorHeight, DERIVED.DoorWidth + 2), COLORS.Zyntra, Enum.Material.Neon)
+		at(session, exit.X + 0.6 + 3, DERIVED.DoorHeight / 2, exit.Z),
+		Vector3.new(6, DERIVED.DoorHeight, DERIVED.DoorWidth + 2), COLORS.Zyntra, Enum.Material.Neon)
 	trigger.CanCollide = false
 	trigger.CanQuery = false
 	trigger.Transparency = 1
@@ -713,7 +842,7 @@ local function buildFinale(session: any, parent: Instance): any
 	return {
 		Model = model, Cabinet = cabinet, Status = status, Controls = controls,
 		Gate = gate, Trigger = trigger, SafeSpawn = safeSpawn,
-		ExitPosition = worldPoint(session, exit.X, 3, exit.Z),
+		ExitPosition = trigger.Position,
 	}
 end
 
@@ -748,9 +877,26 @@ local function buildBoundary(session: any, parent: Instance)
 		end
 	end
 
-	for _, hill in ipairs(boundary.Hills) do
-		decorative(part(model, "BoundaryHill", at(session, hill.X, hill.H / 2 - 12, hill.Z),
-			Vector3.new(hill.W, hill.H, hill.D), COLORS.Hill, Enum.Material.Grass))
+	-- FACADE_POLISH_20260922: rolling ridges, not a flat green wall. Each
+	-- boundary hill is three overlapping cylinders lying along the row, sunk
+	-- into the ground, so the skyline is rounded and uneven from the street.
+	-- Decorative: the blockers below are what hold the player.
+	for hillIndex, hill in ipairs(boundary.Hills) do
+		local alongX = hill.W >= hill.D
+		local length = alongX and hill.W or hill.D
+		local lumps = {{0, 1.0}, {-0.34, 0.72}, {0.36, 0.84}}
+		for lumpIndex, lump in ipairs(lumps) do
+			local diameter = hill.H * 2 * lump[2]
+			local shift = lump[1] * length * 0.6
+			local centre = alongX and Vector3.new(hill.X + shift, 0, hill.Z + (lumpIndex - 2) * 22)
+				or Vector3.new(hill.X + (lumpIndex - 2) * 22, 0, hill.Z + shift)
+			local ridge = decorative(part(model, "BoundaryHill",
+				at(session, centre.X, -diameter * 0.32, centre.Z)
+					* (alongX and CFrame.identity or CFrame.Angles(0, math.pi / 2, 0)),
+				Vector3.new(length * (0.55 + 0.15 * lumpIndex), diameter, diameter), COLORS.Hill, Enum.Material.Grass))
+			ridge.Shape = Enum.PartType.Cylinder
+			ridge:SetAttribute("Level4_HillIndex", hillIndex)
+		end
 	end
 
 	-- Invisible blockers on the play bounds. They are what makes the boundary a

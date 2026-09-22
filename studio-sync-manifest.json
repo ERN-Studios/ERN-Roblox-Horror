@@ -446,8 +446,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 159233,
-      "sha256": "8278caef452e744f2408da1782d3709f871e28a75ef09836ce5ea1324c2e8708",
+      "bytes": 159655,
+      "sha256": "ee3016242f2389c5d8c11a83fd83e4e78a3cc885e90bf9d0aa07dab8e2906612",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2594,8 +2594,8 @@
       "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Configuration",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 4 Systems/Level 4 Configuration.ModuleScript.lua",
-      "bytes": 15156,
-      "sha256": "5952307c3788d7db34f6442381de3995e23a53ed78cc0fd10ac34d12b6fdcd1c",
+      "bytes": 16760,
+      "sha256": "44f875f37e1cb7cd54c8d50ae148c64ca29b71d844573d02e09c1bc06bbc9ef6",
       "status": "synced"
     },
     {
@@ -2618,16 +2618,16 @@
       "studioPath": "ServerScriptService.Level 4 Systems.Level 4 World Builder",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 4 Systems/Level 4 World Builder.ModuleScript.lua",
-      "bytes": 39471,
-      "sha256": "f7c850689c984f1f2158ef22aedf9ea996ed178ee75682fd25f555667d926bc6",
+      "bytes": 47997,
+      "sha256": "47e37c8309bee4ebc0c3232e90d467865e21ab036bbfeccabbd07857392e8927",
       "status": "synced"
     },
     {
       "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Objective Controller",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 4 Systems/Level 4 Objective Controller.ModuleScript.lua",
-      "bytes": 22992,
-      "sha256": "ad5e7617f239ebf77c4e2052e7e9d3d966b91e0accc7a56b84767afe5562b655",
+      "bytes": 25455,
+      "sha256": "ad456d0c6eda6bb7e5a3cfb6d4a760fb5d2296b040fd42c32b75d83e0a7e2614",
       "status": "synced"
     },
     {
@@ -2666,16 +2666,16 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 4 Lighting Controller.LocalScript.lua",
-      "bytes": 6711,
-      "sha256": "11f4ade3ff7d43e96c3d2e34db907cb25c52584a2256e5b06bd2925c0813917a",
+      "bytes": 8418,
+      "sha256": "a2a65c7609099e0b9c99010f8625235a1097a0a1bf65c58faff2b021fb42a592",
       "status": "synced"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 4 Objective UI",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 4 Objective UI.LocalScript.lua",
-      "bytes": 11532,
-      "sha256": "e7d9877b48182747ae91619eef2dda7b6d370e3a92d92a088fd4c885e1441f00",
+      "bytes": 14886,
+      "sha256": "22d42d3208897830555939a957b3195a227c658ed3106c698d43711449365304",
       "status": "synced"
     }
   ]

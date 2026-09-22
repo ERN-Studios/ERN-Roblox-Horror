@@ -163,6 +163,26 @@ local HOUSE_COLOR = {
 	DANGEROUS = UIStyle.Color.DangerText,
 }
 
+-- The house the subject is standing IN, by its InteriorVolume -- the same box
+-- the server's IsSheltered and the warning both use.
+local function houseAround(root: BasePart): Model?
+	local world = workspace:FindFirstChild("Level 4 Generated World")
+	if not world then return nil end
+	for _, child in ipairs(world:GetChildren()) do
+		if child:IsA("Model") and child:GetAttribute("Level4_HouseState") ~= nil then
+			local volume = child:FindFirstChild("InteriorVolume")
+			if volume and volume:IsA("BasePart") then
+				local offset = volume.CFrame:PointToObjectSpace(root.Position)
+				local half = volume.Size * 0.5
+				if math.abs(offset.X) <= half.X and math.abs(offset.Y) <= half.Y and math.abs(offset.Z) <= half.Z then
+					return child
+				end
+			end
+		end
+	end
+	return nil
+end
+
 -- The nearest house model to the subject, within a lot's own reach. The house
 -- state is replicated on the Model, so this needs no remote at all.
 local function nearestHouseState(root: BasePart): (string?, number)
@@ -230,13 +250,32 @@ local function refresh()
 
 	local root = subjectRoot()
 	if root then
-		local houseState, distance = nearestHouseState(root)
-		if houseState and distance <= 34 then
-			houseLine.Text = HOUSE_TEXT[houseState] or ("SHELTER: " .. tostring(houseState))
-			houseLine.TextColor3 = HOUSE_COLOR[houseState] or UIStyle.Color.Muted
+		-- CALM_ARRIVAL_20260922: inside a house the line names THAT house and,
+		-- while it is warned, counts down the time left to leave -- text, not
+		-- only a colour. Outside, the nearest shelter as before.
+		local inside = houseAround(root)
+		local insideState = inside and inside:GetAttribute("Level4_HouseState")
+		if inside and insideState then
+			local lotId = tostring(inside:GetAttribute("Level4_LotId") or "?")
+			if insideState == "WARNED" then
+				local endsAt = tonumber(inside:GetAttribute("Level4_HouseStateEndsAt")) or 0
+				local left = math.max(0, math.ceil(endsAt - workspace:GetServerTimeNow()))
+				houseLine.Text = ("LEAVE HOUSE %s -- %ds LEFT"):format(lotId, left)
+			elseif insideState == "DANGEROUS" then
+				houseLine.Text = ("HOUSE %s DARK -- NOT SAFE HERE"):format(lotId)
+			else
+				houseLine.Text = ("HOUSE %s -- SHELTER STABLE"):format(lotId)
+			end
+			houseLine.TextColor3 = HOUSE_COLOR[insideState] or UIStyle.Color.Muted
 		else
-			houseLine.Text = "SHELTER: NONE NEARBY"
-			houseLine.TextColor3 = UIStyle.Color.Muted
+			local houseState, distance = nearestHouseState(root)
+			if houseState and distance <= 34 then
+				houseLine.Text = HOUSE_TEXT[houseState] or ("SHELTER: " .. tostring(houseState))
+				houseLine.TextColor3 = HOUSE_COLOR[houseState] or UIStyle.Color.Muted
+			else
+				houseLine.Text = "SHELTER: NONE NEARBY"
+				houseLine.TextColor3 = UIStyle.Color.Muted
+			end
 		end
 	else
 		houseLine.Text = ""
@@ -271,9 +310,24 @@ task.spawn(function()
 			showBanner(tostring(payload.Detail or payload.Title or ""),
 				tostring(payload.Tone or "info"), tonumber(payload.Duration) or 5)
 		elseif payload.Type == "House" and payload.State == "WARNED" then
-			showBanner(("HOUSE %s IS GOING DARK -- LEAVE WITHIN %ds")
-				:format(tostring(payload.LotId), math.max(1, tonumber(payload.Seconds) or 10)),
-				"warn", math.max(4, tonumber(payload.Seconds) or 10))
+			-- CALM_ARRIVAL_20260922. The order to leave is for the people INSIDE
+			-- (the server marks them); outside, a short note only when the house
+			-- is near enough to matter, and nothing at all across the map.
+			local seconds = math.max(1, tonumber(payload.Seconds) or 10)
+			if payload.Occupant == true then
+				showBanner(("HOUSE %s IS GOING DARK -- LEAVE WITHIN %ds")
+					:format(tostring(payload.LotId), seconds), "warn", math.max(4, seconds))
+			else
+				local root = subjectRoot()
+				local world = workspace:FindFirstChild("Level 4 Generated World")
+				local house = world and world:FindFirstChild("House_" .. tostring(payload.LotId))
+				local primary = house and house:IsA("Model") and house.PrimaryPart
+				if root and primary and (primary.Position - root.Position).Magnitude <= 70 then
+					showBanner(("HOUSE %s UNSTABLE -- STAY OUT"):format(tostring(payload.LotId)), "info", 3)
+				end
+			end
+		elseif payload.Type == "House" and payload.State == "DANGEROUS" and payload.Occupant == true then
+			showBanner(("HOUSE %s IS DARK -- GET OUT"):format(tostring(payload.LotId)), "warn", 4)
 		elseif payload.Type == "Signal" then
 			showBanner(("SIGNAL %02d LOGGED  //  %d/%d"):format(
 				tonumber(payload.Index) or 0, tonumber(payload.Progress) or 0,
@@ -282,6 +336,22 @@ task.spawn(function()
 		refresh()
 	end)
 end)
+
+-- DEV_RETRY_20260922. A dev-only Level 4 round has no lobby bay to retry from,
+-- so GameManager raises this instead of RetryGuideLevel; say how to go again.
+local DEV_HINT = "LEVEL 4 DEV ROUND ENDED -- ServerStorage.Level4DevStart:Invoke() TO RUN AGAIN"
+local function syncDevHint()
+	if player:GetAttribute("Level4DevRoundEnded") == true then
+		bannerSerial += 1 -- no timer hides it; it stands until the next dev round clears the attribute
+		banner.Text = DEV_HINT
+		banner.TextColor3 = UIStyle.Color.Body
+		banner.Visible = true
+	elseif banner.Text == DEV_HINT then
+		banner.Visible = false
+	end
+end
+player:GetAttributeChangedSignal("Level4DevRoundEnded"):Connect(syncDevHint)
+syncDevHint()
 
 -- Five times a second, not every frame. The only moving number on the panel is
 -- a countdown shown in whole seconds, and the house read walks the world's

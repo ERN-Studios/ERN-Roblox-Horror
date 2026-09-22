@@ -85,6 +85,22 @@ local Configuration = {
 		HedgeThickness = 1.6,
 		FenceHeight = 2.4,
 		MailboxHeight = 4.2,
+		-- FACADE_POLISH_20260922 (Codex' facade reference). Eaves overhang past
+		-- the wall, fascia board depth, and the window unit: pane plus a
+		-- surrounding frame and a sill, all standing PROUD of the outer wall face
+		-- so they read from the pavement. Contract sizes (footprint, wall, roof,
+		-- door) are unchanged; these only dress the shell.
+		EavesOverhang = 1.4,
+		FasciaDepth = 0.5,
+		-- Two units per side of the door, centred at 0.3 and 0.7 of the 12-stud
+		-- side panel: 2.1 studs of bare wall at the door and at the corner, 1.8
+		-- between the units. The door-side bands carry the porch signal (left,
+		-- seen from the street) and the house number (right).
+		WindowWidth = 3.0,
+		WindowHeight = 4.4,
+		WindowFrame = 0.35,
+		WindowProud = 0.3,
+		FittingHeight = 8.6,
 		-- Seeded jitter applied to each lot's along-street position. Small: the
 		-- neighbourhood has to read as machine-laid, not organic.
 		PositionJitter = 6,
@@ -97,6 +113,15 @@ local Configuration = {
 		DustyYellow = Color3.fromRGB(214, 194, 132),
 		BlueGrey = Color3.fromRGB(163, 176, 184),
 		DarkRoof = Color3.fromRGB(56, 56, 62),
+		-- FACADE_POLISH_20260922: shared trim palette. Off-white window frames
+		-- and fascia, frosted panes, graphite fittings, galvanised mailbox.
+		Trim = Color3.fromRGB(232, 228, 214),
+		Fascia = Color3.fromRGB(204, 198, 182),
+		Pane = Color3.fromRGB(176, 190, 196),
+		Graphite = Color3.fromRGB(58, 62, 66),
+		MailboxMetal = Color3.fromRGB(168, 172, 176),
+		MailboxFlag = Color3.fromRGB(196, 62, 54),
+		Curtain = Color3.fromRGB(190, 176, 158),
 		Hedge = Color3.fromRGB(78, 112, 68),
 		-- Unnaturally uniform: every lawn is this exact green.
 		Lawn = Color3.fromRGB(104, 156, 88),
@@ -152,6 +177,12 @@ local Configuration = {
 	-- safe house in the active zone (Objective Controller enforces it).
 	-- ---------------------------------------------------------------------
 	HouseStates = {
+		-- CALM_ARRIVAL_20260922. The scheduler's clock starts when the round is
+		-- actually live (RoundActive after the arrival), never at build time,
+		-- and the first house may not be warned before this many seconds of
+		-- quiet street. Codex reproduced the old behaviour: danger lighting and
+		-- an unstable house before the party had taken a step.
+		CalmLeadSeconds = 24,
 		-- How often the scheduler considers promoting one house.
 		EvaluateIntervalSeconds = 9,
 		-- Forewarning: the porch light turns amber and the HUD says so this
