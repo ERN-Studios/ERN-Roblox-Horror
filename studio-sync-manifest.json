@@ -7,9 +7,9 @@
     "name": "BACKROOMS: STAY QUIET [CO-OP HORROR] (placeId: 131311258779917)"
   },
   "counts": {
-    "scripts": 156,
+    "scripts": 167,
     "remoteEvents": 15,
-    "total": 171,
+    "total": 182,
     "studioTrailingNewline": 0
   },
   "nativePlaceBackup": {
@@ -446,8 +446,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 154800,
-      "sha256": "5561788cfaf734c0ef0e61eac5a5cfc3fa74f5c79f411577700924e17cd7e3b4",
+      "bytes": 159233,
+      "sha256": "8278caef452e744f2408da1782d3709f871e28a75ef09836ce5ea1324c2e8708",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -1083,8 +1083,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Round Completion Routing.ModuleScript.lua",
-      "bytes": 74983,
-      "sha256": "8d2a66dc670c1400513edaa5b6416191b73a3bfd9a189244cc55effde2c8d914",
+      "bytes": 76753,
+      "sha256": "425a6f8af52ebe443ee156e05a7b8852f850a9c3278de11ce9f405d4e84773d8",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -2430,8 +2430,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Round Entry Client.LocalScript.lua",
-      "bytes": 5914,
-      "sha256": "1a265d23442134298ec99144d5728c3dbcb7f1dbb1bd942b8e3de93010cc4850",
+      "bytes": 6319,
+      "sha256": "3ce933734958789ab7b813128cc0ff06a40ddabf4b6d9a25605b8adc08d5b91a",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2578,8 +2578,8 @@
       "studioPath": "ReplicatedStorage.DeathAdvice",
       "className": "ModuleScript",
       "file": "ReplicatedStorage/DeathAdvice.ModuleScript.lua",
-      "bytes": 6953,
-      "sha256": "0868a419029002994d059eb268fa0f76ca213417f3218ecab4e61b8238237d0d",
+      "bytes": 7503,
+      "sha256": "0c9be57d8ed81236c71a30461a4383fb7c2d3c0dc799ca7b9a025b451bd9b3c5",
       "status": "synced"
     },
     {
@@ -2587,7 +2587,95 @@
       "className": "ModuleScript",
       "file": "ServerScriptService/ZyntraAnalytics.ModuleScript.lua",
       "bytes": 18350,
-      "sha256": "fc35f145451524780c0f03680235018a7006a6531d206b9491960848f79e09b5",
+      "sha256": "62e218d93650d0156b7f989b2ad3ae284d0180200931f896767437602a30c81b",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Configuration",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 4 Systems/Level 4 Configuration.ModuleScript.lua",
+      "bytes": 15156,
+      "sha256": "5952307c3788d7db34f6442381de3995e23a53ed78cc0fd10ac34d12b6fdcd1c",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Plan Generator",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 4 Systems/Level 4 Plan Generator.ModuleScript.lua",
+      "bytes": 21815,
+      "sha256": "dedbb64cc87096ff3617ad9a13553e756da5686717dc778f57d3c4dffc47a6aa",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Neighbour Brain",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 4 Systems/Level 4 Neighbour Brain.ModuleScript.lua",
+      "bytes": 7859,
+      "sha256": "ea99f2d98970fcc69c00f64c7367688cae4ce6a2d205e36b5c17a8fb3abac4b9",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 World Builder",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 4 Systems/Level 4 World Builder.ModuleScript.lua",
+      "bytes": 39471,
+      "sha256": "f7c850689c984f1f2158ef22aedf9ea996ed178ee75682fd25f555667d926bc6",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Objective Controller",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 4 Systems/Level 4 Objective Controller.ModuleScript.lua",
+      "bytes": 22992,
+      "sha256": "ad5e7617f239ebf77c4e2052e7e9d3d966b91e0accc7a56b84767afe5562b655",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Neighbour Controller",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 4 Systems/Level 4 Neighbour Controller.ModuleScript.lua",
+      "bytes": 28604,
+      "sha256": "a846c735b13afae8a204208ec646ec9159c2a7a757dc09c11273428f1a528a5c",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Round Adapter",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 4 Systems/Level 4 Round Adapter.ModuleScript.lua",
+      "bytes": 19620,
+      "sha256": "568a9e42b4656dc81af0b1a33ab13c1edd917dc1bc0493585f4dfbf615e4fdb5",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Test Suite",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 4 Systems/Level 4 Test Suite.ModuleScript.lua",
+      "bytes": 17631,
+      "sha256": "b4a0eaa12366a163e57f7ae119ae1b699aa24dd437b3227e33845cc1c98e0ffe",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ServerScriptService.Level4Generator",
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level4Generator.ModuleScript.lua",
+      "bytes": 622,
+      "sha256": "a6a72b56b35834197415f83805614b46328c2342801fa183b111abb789160a9a",
+      "status": "synced"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller",
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 4 Lighting Controller.LocalScript.lua",
+      "bytes": 6510,
+      "sha256": "ad2932d33b3b345e98eb47fc8cb12c608460e823ade4b915651cde7845b1724c",
+      "status": "synced"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 4 Objective UI",
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 4 Objective UI.LocalScript.lua",
+      "bytes": 11532,
+      "sha256": "e7d9877b48182747ae91619eef2dda7b6d370e3a92d92a088fd4c885e1441f00",
       "status": "synced"
     }
   ]

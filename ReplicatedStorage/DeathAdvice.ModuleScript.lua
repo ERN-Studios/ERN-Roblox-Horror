@@ -93,6 +93,16 @@ DeathAdvice.Causes = {
 		Cause = "The Mall Manager reached you.",
 		Tip = "Hide under a table, and leave it the moment it kneels to look.",
 	},
+	-- Level 4 Neighbour Controller.ModuleScript.lua, tryAttack.
+	-- WHY THIS TIP: the brain only chases on a real sighting (clear line inside
+	-- its cone, after a telegraphed ALERT), loses a player whose line it cannot
+	-- hold, and ObjectiveController.IsSheltered makes a player inside a SAFE
+	-- house (steady porch light) invisible and unattackable.
+	L4Neighbour = {
+		Title = "THE NEIGHBOUR GOT YOU",
+		Cause = "It saw you in the open and closed the distance.",
+		Tip = "Break its line of sight; a house with a steady porch light hides you.",
+	},
 	-- Everything nothing marked: a void fall, a failed arrival placement
 	-- (GameManager.Script.lua:913), or a kill site added without a mark. It says
 	-- so and offers NOTHING, because there is nothing true to offer.

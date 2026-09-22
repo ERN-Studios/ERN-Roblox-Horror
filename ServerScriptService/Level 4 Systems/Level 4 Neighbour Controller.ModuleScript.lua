@@ -34,6 +34,14 @@ local Brain = require(script.Parent:WaitForChild("Level 4 Neighbour Brain"))
 local ObjectiveController = require(script.Parent:WaitForChild("Level 4 Objective Controller"))
 local NoiseRegistry = require(ServerScriptService:WaitForChild("NoiseRegistry"))
 local PlayerProtection = require(ServerScriptService:WaitForChild("PlayerProtection"))
+local DeathAdvice = require(ReplicatedStorage:WaitForChild("DeathAdvice"))
+
+-- workspace.EntityPaused is the shared developer pause every hostile honours
+-- (Pool Foam, Pool Slide): motion, thinking and damage stop, existence does
+-- not. Found missing in the first Studio round, 2026-09-22.
+local function paused()
+	return workspace:GetAttribute("EntityPaused") == true
+end
 
 local Controller = {}
 
@@ -373,7 +381,7 @@ end
 -- ---------------------------------------------------------------------------
 
 local function tryAttack(session: any, now: number)
-	if session.State ~= Brain.CHASE then return end
+	if paused() or session.State ~= Brain.CHASE then return end
 	if now < session.AttackReadyAt then return end
 	local player = session.SeenPlayer
 	local root = player and livingRoot(player)
@@ -399,8 +407,12 @@ local function tryAttack(session: any, now: number)
 		if PlayerProtection.IsActive(player) then return end
 		if (nowRoot.Position - session.Root.Position).Magnitude > CONFIG.AttackRange + 1.5 then return end
 		if sightBlocked(session, eye, nowRoot.Position + Vector3.new(0, 1, 0), nowRoot.Parent) then return end
+		if paused() then return end
 		local humanoid = nowRoot.Parent and nowRoot.Parent:FindFirstChildOfClass("Humanoid")
-		if humanoid then humanoid.Health = 0 end
+		if humanoid then
+			DeathAdvice.Mark(player, "L4Neighbour")
+			humanoid.Health = 0
+		end
 	end)
 end
 
@@ -617,15 +629,17 @@ function Controller.Start(manifest: any, generation: number): any
 	task.spawn(function()
 		while session.Running and alive(session) do
 			if roundReady(session) then
-				local ok, problem = pcall(think, session)
-				if not ok then warn("[Level 4] Neighbour think failed: " .. tostring(problem)) end
+				if not paused() then
+					local ok, problem = pcall(think, session)
+					if not ok then warn("[Level 4] Neighbour think failed: " .. tostring(problem)) end
+				end
 			end
 			task.wait(CONFIG.ThinkIntervalSeconds)
 		end
 	end)
 
 	table.insert(session.Connections, RunService.Heartbeat:Connect(function(deltaTime)
-		if not roundReady(session) then return end
+		if not roundReady(session) or paused() then return end
 		local ok, problem = pcall(move, session, deltaTime)
 		if not ok then warn("[Level 4] Neighbour move failed: " .. tostring(problem)) end
 	end))

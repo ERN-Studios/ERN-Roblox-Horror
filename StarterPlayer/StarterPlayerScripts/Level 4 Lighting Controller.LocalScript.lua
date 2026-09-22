@@ -49,7 +49,7 @@ local Configuration = {
 type Snapshot = {
 	Brightness: number, ClockTime: number, Ambient: Color3, OutdoorAmbient: Color3,
 	FogColor: Color3, FogStart: number, FogEnd: number,
-	ColorShiftTop: Color3, EnvironmentDiffuseScale: number, GlobalShadows: boolean,
+	ColorShift_Top: Color3, EnvironmentDiffuseScale: number, GlobalShadows: boolean,
 	ExposureCompensation: number,
 }
 
@@ -79,7 +79,7 @@ local function capture(): Snapshot
 		FogColor = Lighting.FogColor,
 		FogStart = Lighting.FogStart,
 		FogEnd = Lighting.FogEnd,
-		ColorShiftTop = Lighting.ColorShiftTop,
+		ColorShift_Top = Lighting.ColorShift_Top,
 		EnvironmentDiffuseScale = Lighting.EnvironmentDiffuseScale,
 		GlobalShadows = Lighting.GlobalShadows,
 		ExposureCompensation = Lighting.ExposureCompensation,

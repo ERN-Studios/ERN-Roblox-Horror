@@ -132,7 +132,7 @@ end
 
 local function levelTag(level)
 	local n = math.floor(tonumber(level) or 0)
-	return (n >= 1 and n <= 3) and ("L" .. n) or "L0"
+	return (n >= 1 and n <= 4) and ("L" .. n) or "L0"
 end
 
 local function cause(raw)
