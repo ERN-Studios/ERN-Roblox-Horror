@@ -446,10 +446,12 @@ local function refresh()
 	end
 end
 
-local demoMount, demoConnection
+local demoMount, demoConnection, detectorDemo
 local startCosmeticDemo
 local DetectorVisual=require(ReplicatedStorage:WaitForChild("ZyntraDetectorVisual"))
 local function stopDemo()
+	if detectorDemo then detectorDemo:Destroy(); detectorDemo=nil end
+	card.Visible=true
 	if demoConnection then demoConnection:Disconnect(); demoConnection = nil end
 	if demoMount then demoMount:Destroy(); demoMount = nil end
 	icon.Visible=true
@@ -555,18 +557,14 @@ end
 local function startDetectorDemo()
  stopDemo()
  if shownKey~="EntityDetector" or player:GetAttribute("InRound")==true then return end
- local text
- demoMount,text=DetectorVisual.Build(workspace.CurrentCamera)
- local began=os.clock()
- demoConnection=RunService.RenderStepped:Connect(function()
-  local elapsed=os.clock()-began
-  if elapsed>=6 or not gui.Enabled or player:GetAttribute("InRound")==true then stopDemo() return end
-  local band=({"LOW","MEDIUM","HIGH"})[math.min(3,math.floor(elapsed/2)+1)]
-  text.Text="DEMO\n"..band text.TextColor3=DetectorVisual.Colors[band]
-  state.Text="SIMULATED DEMO: "..band.." · NOT A LIVE SCAN"
-  closeButton.Text="DEMO"
-  local camera=workspace.CurrentCamera
-  if camera then demoMount:PivotTo(camera.CFrame*CFrame.new(.8,-.4,-2.4)*CFrame.Angles(0,math.pi,0)) end
+ card.Visible=false
+ local demoCharacter=player.Character
+ detectorDemo=DetectorVisual.Demo(player:WaitForChild("PlayerGui"),function()
+  detectorDemo=nil
+  stopDemo()
+ end)
+ demoConnection=RunService.Heartbeat:Connect(function()
+  if not gui.Enabled or shownKey~="EntityDetector" or player:GetAttribute("InRound")==true or player.Character~=demoCharacter then stopDemo() end
  end)
 end
 
