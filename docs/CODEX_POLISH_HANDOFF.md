@@ -2,7 +2,7 @@
 
 Skrevet løbende af Claude (al kode). Opgavegrundlag: `docs/CLAUDE_PROMPT_2026-09-21.md`.
 Status-ord: **kodefærdig** · **verificeret i Studio** · **verificeret publiceret** · **mangler art** · **afventer data/hardware**.
-Intet i dette dokument er publiceret endnu, medmindre der står det.
+**Publiceret: v1973** (2026-09-21 22:47 UTC, Studio-log `artifacts/claude-20260921/publish-log.txt`: `Place published … Add publish notes to v1973`). Alt i fase A og B nedenfor ligger i v1973. **Level 4 er kommet i Studio efter v1973 og er IKKE publiceret**; det er dev-gated og må ikke publiceres som et level.
 
 ## 0. Baseline og versionsstyring
 
@@ -41,7 +41,7 @@ Intet i dette dokument er publiceret endnu, medmindre der står det.
 
 ### Fase C/D
 
-Level 4 blokmodel + prototype er under arbejde (dev-only adgang; live-gates uændrede). Øvrige: se §7.
+Level 4 blokmodel + én fungerende prototype (`C4`, [Y2xXThBN](https://trello.com/c/Y2xXThBN)): **kodefærdig og verificeret i Studio solo** som dev-only runde (flag + DevAccess for alle deltagere; lobby-gaten siger stadig "coming soon"). §3.8 og `docs/LEVEL4_CONTRACTS_2026-09-21.md`. C1–C3 og D1–D3: **ikke påbegyndt** (§7).
 
 ## 2. Ændrede Studio-paths og commits (lokale commits på `claude/trello-20260921`)
 
@@ -56,9 +56,11 @@ Level 4 blokmodel + prototype er under arbejde (dev-only adgang; live-gates uæn
 | `60a8d4b` | Skjulte tile-flader cullet | `…Level 2 World Builder`, `…Level 2 Configuration` (`Performance.CullHiddenTileFaces`); test `test_level2_tile_face_culling.py` |
 | `1c9ff51`, `e3891a4`, `a6aea0a` | Dødsårsag + råd på dødskortet, retry-guide i lobbyen | NY `ReplicatedStorage.DeathAdvice`; `ServerScriptService.GameManager`; ét `Mark`-kald før drabet i `Level 1 Systems.EntityKill`, `…MazeGenerator`, `Level 2 Pool Foam Controller`, `Level 2 Pool Slide Controller`, `Level 3 Mall Manager AI Controller`; `StarterPlayerScripts.RoundUI`, `…First Entry Guide`; tests `test_death_advice.py`, `test_retry_guide.py` |
 | `5e775e6`, `72caec6` | Analytics (funnels + custom events) | NY `ServerScriptService.ZyntraAnalytics`; hooks i `GameManager`, `TeamObjectives`, `ZyntraMonetization`, `ZyntraDetectorService`, `StarterPlayerScripts.Shop Display Client`; test `test_zyntra_analytics.py`; `docs/ANALYTICS_SCHEMA_2026-09-21.md` |
+| `86caa46`, `bcb32ce`, `29df626`, `7aba59a` | Level 4 The Quiet Suburbs, dev-only | NYE: `ServerScriptService.Level4Generator`, mappe `ServerScriptService.Level 4 Systems` med `Level 4 Configuration / Plan Generator / Neighbour Brain / World Builder / Objective Controller / Neighbour Controller / Round Adapter / Test Suite`, `StarterPlayerScripts.Level 4 Lighting Controller`, `…Level 4 Objective UI`. Ændrede: `GameManager` (`LEVEL4_DEV_GATE_20260921`-hunks, `ServerStorage.Level4DevStart`), `Round Completion Routing` (`DevCeiling/ClampLevelTo/NextLevelTo`), `Round Entry Client` (grænse 3→4), `RoundUI` (lys-ejerskab), `DeathAdvice` (`L4Neighbour`), `ZyntraAnalytics` (L4-tag); tests `test_level4_plan.py`, `test_level4_neighbour_brain.py` |
+| `d8edb14` | Mirror af en ANDEN sessions Studio-ændringer (detector-visual/readout, shop-demo) | `ReplicatedStorage.ZyntraDetectorVisual`, `StarterPlayerScripts.ZyntraDetectorClient`, `…Shop Display Client` — ikke lavet her |
 | `8e97018` | Shoptekster | `ReplicatedStorage.ZyntraConfig`, `StarterPlayerScripts.Shop Display Client`, `ServerScriptService.ZyntraMonetization` |
 
-Branchen er pushet til GitHub (`origin/claude/trello-20260921`, almindeligt push, ingen force); ingen PR oprettet endnu. Ikke publiceret til Roblox (se §9).
+Branchen er pushet til GitHub (`origin/claude/trello-20260921`); draft-PR [#4](https://github.com/ERN-Studios/ERN-Roblox-Horror/pull/4) stacket på PR #3 (intet merget). Publicering: se §9.
 
 ## 3. Før/efter, seeds og målinger
 
@@ -118,9 +120,15 @@ Ikke verificeret: de fire andre årsager ved rigtig død (kun dev-seam `player:S
 Studio-runde (ringen i `ServerStorage.ZyntraAnalyticsDebug`, `Mode = studio`, `Faults 0`, `Dropped 0`): `onboard 2 ProfileLoaded` → `onboard 3 RoundLoaded L2` → `onboard 4 RoundStarted L2` → `zq_round_start L2|returning|PC` → `onboard 5 FirstObjective L2` → `zq_objective_first` → `zq_first_death 23 L2|l2slide|returning` → `zq_round_outcome 39 L2|died|returning` → `retry 1 BackInLobby`. Enhedsklassen (`PC`/`Phone`/`Tablet`) meldes én gang af klienten som fast enum og bruges kun som segment. I Studio lander `Joined` efter `ProfileLoaded` (GameManager initialiserer langsommere end profilen loader), så trin 1 ses ikke i ringen dér; på en rigtig server kommer join før DataStore-svaret, og Roblox bagudfylder under alle omstændigheder tidligere trin.
 Ikke verificeret: modtagelse i Creator Dashboard (kræver publiceret release), shop view/demo-events i en rigtig lobby-gennemgang, købsevents (ingen rigtig transaktion kørt).
 
+### 3.8 Level 4 — The Quiet Suburbs (C4), dev-only
+
+Start i Studio: `workspace:SetAttribute("Level4DevEnabled", true)`, evt. `Level4Seed`, `ServerStorage.Level4DevStart:Invoke()` (afviser `DISABLED`/`NOT_DEVELOPER`/`BUSY`/`RESERVED_SERVER`). Verificeret solo, seed 101 (variant 3 "CLOSE") og 202 (variant 1 "TERRACE"): plan 0,00 s, build 0,05–0,06 s, 535–548 descendants, 11 huse, 10 dynamiske lys (0 med skygge), 530 placeholder-dele; in-Studio-suite 66 checks / 0 fejl; tre signaler (1: 16 studs, ingen hold; 2–3: 10 studs, 1,2 s hold) → `BEACON`; tre kabinetkontroller **i rækkefølge 1→2→3** (2 før 1 afvises) → `EXIT_WARNING` (≈4 s) → `EXIT`; trigger-volumen ved busstoppestedet gav `Escaped=true`, `zq_round_outcome … escaped`, `onboard 6 FirstEscape L4`, completion-flow og lobbyretur uden efterladte instanser. Neighbour: `PATROL → INVESTIGATE` (støj ved signal 2) → `ALERT` (0,2 s efter sigtelinje på 12,7 studs) → `CHASE` (1,5 s) → drab 2,4 s; dødskort `THE NEIGHBOUR GOT YOU` med råd.
+Fundet og rettet i Studio: Neighbour ignorerede `EntityPaused` (gik 200 studs og dræbte under pause); dets drab bar ingen dødsårsag; lys-klienten kastede ved hver sync (`ColorShiftTop` → `ColorShift_Top`); RoundUI lagde Level 1-nat over kvarteret (nu `Level4LightingOwnedByController`-håndtryk som Level 2/3); analytics-taggede Level 4 som `L0`.
+Åbne observationer til polish/design: (1) `Level4_ExitPosition` ligger 3,5 studs foran trigger-volumen (spilleren skal gå ind i stoppestedet — fint i spil, men reader/pejling bør pege på volumen); (2) `Level4_UnsafeHouses ≥ 1` fra start gør lys-graden "danger" hele runden i variant 3 — den varme eftermiddag ses reelt kun når ingen huse er farlige; (3) `RetryGuideLevel = 4` efter et Level 4-tab peger på en bay der ikke findes (guiden tegner intet); (4) L3→L4 Continue virker kun i Studio, ikke over en rigtig teleport (`Routing.ArrivalPacket` clamper til `MaxLevel` — fejler sikkert). Ikke målt: 8–12 min spilletid, mobil, flere spillere, om Neighbour kan løbes fra, navmesh med `AgentRadius 2.7`. Ingen art/animation/lyd (slot-liste i kontrakterne).
+
 ## 4. Screenshots
 
-`artifacts/claude-20260921/screens/` (native Studio-vindue, desktop 1540×820): `death-card-with-partydown-desktop.jpg` (rigtig død, dødskort + PARTY DOWN), `death-card-L2Slide-desktop.jpg` (dev-seam i lobbyen), `death-real-L2Slide-partydown-desktop.jpg` (før docking-rettelsen: kortet væk under modalen), `retry-guide-lobby.jpg`. Level 2-kameraturen (12 vinkler × 3 kørsler) ligger i session-scratchpad uden for git. Level 3-readeren (`IN THIS ROOM`) er beskrevet i §3.5; touch-tiers er kun kørt i UIRegression, ikke fotograferet.
+`artifacts/claude-20260921/screens/` (native Studio-vindue, desktop 1540×820): `death-card-with-partydown-desktop.jpg` (rigtig død, dødskort + PARTY DOWN), `death-card-L2Slide-desktop.jpg` (dev-seam i lobbyen), `death-real-L2Slide-partydown-desktop.jpg` (før docking-rettelsen: kortet væk under modalen), `retry-guide-lobby.jpg`, `level4-death-neighbour-desktop.jpg`, `level4-blockout-main-street.jpg` (blokmodel fra servicepassagen). Level 2-kameraturen (12 vinkler × 3 kørsler) ligger i session-scratchpad uden for git. Level 3-readeren (`IN THIS ROOM`) er beskrevet i §3.5; touch-tiers er kun kørt i UIRegression, ikke fotograferet.
 
 ## 5. Assetliste til Codex
 
@@ -158,6 +166,8 @@ Ingen nye assets. Tekster: `> CD READER`, `CD // ▮▮▮□□ 30m`, `IN THIS 
 1. **Token Earner 2x/3x/5x (D3)**: priser, stacking, hvilke tokenkilder der ganges, upgrade-semantik. Forslag: højeste ejede tier gælder (ingen multiplikation af tiers), upgrade koster differencen, multiplikatoren gælder kun *optjente* tokens (ikke købte/gave), og engangseffekten ved køb er `floor(balance × (tier − forrige tier))` bogført i en grant-ledger. Konsekvens: ingen selvforstærkende grants ved login, og 2→3→5 giver samme slutresultat som 5 direkte.
 2. **Hazmat-skins (C2)** og **Advanced Camera (D1)**: priser/produkt-ID'er findes ikke; kode kan laves testbar uden aktivt salg.
 3. **Alle 138–154 Level 2-lys kaster skygger**: art/ejer-valg om fjerne dekorationslys må miste `Shadows` på svage enheder.
+5. **Level 2 hvælvingsbuer som mesh** (§5): 77 % af alle tile-Textures og ~halvdelen af alle dele. Ejer/art-beslutning; builder-ændring følger.
+6. **UI-regression** (`RunAllSummary`, 2717 checks): 78 fejl i tre baner — 14 Level 1-rækker (`Level1Objectives is not visible …`, detector-readout på 568×320/667×375), 11 `Donate: exactly 9 of its card actions are reachable (8 reachable of 9 tagged, 1 stood down with a reason)`, 7 `BriefingExclusionMatrix` om store-opener under briefing. Ingen af dem rører filer denne opgave har ændret (PuzzleUI/ZyntraStore-opener/Donate er urørte), så de vurderes forældede efter 20/9-ændringerne — men det er ikke bevist mod baseline i Studio. Bør ryddes som egen opgave.
 4. **PoolSlide-størrelse**: hvor meget større (tal), før korridor-fit genverificeres.
 
 ## 8. Instruktion til Codex
@@ -166,4 +176,8 @@ Lav polish, art og asset-feedback ud fra kontrakterne ovenfor. Har du brug for e
 
 ## 9. Release
 
-Ikke publiceret. Publicering følger repoets præference (AGENTS.md) når en milepæl er færdig **og** verificeret uden materiel blocker. Aktuelle blockere for en samlet publicering: B2/B3 er ikke integreret og verificeret; Level 4 er en dev-only prototype og må ikke erstatte live-gates.
+**v1973 publiceret 2026-09-21 22:47 UTC** fra Studio (File → Publish, bekræftet `PublishSuccessful` + `Place published` i Studio-loggen; ingen servere genstartet). Indhold: fase A (A1–A5), B1, B2 (analytics), B3 (dødsårsag/retry). Før publicering: 156/156 scripts synkrone, editor==Source, ingen efterladte probe-instanser, `EntityPaused=false`, offline-suite 45/60 grønne hvor alle 15 røde også var røde på baseline (`06a0642`) på nær én, som var min egen og blev rettet inden publicering.
+
+Efter v1973 er Level 4 (dev-only) landet i Studio (167 scripts). Det må gerne publiceres — en normal spiller kan ikke nå det (flag + DevAccess for alle deltagere; gate siger "coming soon") — men det er **ikke** gjort, og skal ikke annonceres som indhold. Anbefaling: publicér efter Codex' første polish-runde, samlet med eventuelle kode-tilbageløb.
+
+Dashboard-verifikation af analytics kan først ske mod v1973-trafik (`docs/ANALYTICS_SCHEMA_2026-09-21.md` §8).
