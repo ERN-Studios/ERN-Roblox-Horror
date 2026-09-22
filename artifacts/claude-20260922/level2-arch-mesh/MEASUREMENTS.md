@@ -20,14 +20,15 @@ rebuilding those four segments per side as invisible, untextured Parts (`Level 2
 Foot n`). The Vault Strip shell behind the ribs, the slender `.face` portal arches, the
 spandrels, the kids-hall ribs and the Ring Corridor rings are untouched.
 
-Where the mesh comes from, in order: (1) a `MeshPart` template already in ServerStorage
-(`Level 2 Arch Rib Mesh <key>`), (2) an uploaded asset id in
-`Performance.ArchMeshRibAssets[key]`, (3) an `EditableMesh` built by the World Builder from
-the same math. (3) needs the experience's **"Allow Mesh & Image APIs"** security setting at
-runtime (it failed in the play session with exactly that message; Edit-mode plugin context
-has it, which is how `WorldBuilder.EnsureArchRibMeshTemplates` built the two templates from
-the command bar). Without any source the ribs stay Parts and the world records the wanted
-keys in `Level2_ArchRibMeshMissingKeys`.
+Where the mesh comes from, in order: (1) a `MeshPart` template in ServerStorage
+(`Level 2 Arch Rib Mesh <key>`) with a real `MeshId`, (2) an uploaded asset id in
+`Performance.ArchMeshRibAssets[key]`. The World Builder can also build the identical
+geometry as an `EditableMesh` (`WorldBuilder.EnsureArchRibMeshTemplates`, Edit-mode command
+bar), but that is a **Studio-only measurement tool** behind
+`workspace.Level2ArchMeshRibsAllowEditable`: at runtime the API is refused unless the
+experience allows Mesh & Image APIs, and even where it runs the object-backed mesh renders
+on clients as its bounding box (see Visual). Without an asset the ribs stay Parts and the
+world records the wanted keys in `Level2_ArchRibMeshMissingKeys`.
 
 Two family keys exist on this layout (corridor width 34, DoorWidth 30 → radius 13.2; channel
 depths 1.5 and 1.8): `r13.20_vs1.90_fd1.50_a3.20_d2.20_s26`, `r13.20_vs1.90_fd1.80_a3.20_d2.20_s26`.
@@ -72,24 +73,34 @@ that held 77 % of all textures. The remaining rib textures are the slender porta
   went CHASE with `PathStatus MOVING`, moved, reached ATTACK and killed the solo player
   (recorder log in the handoff). Same on B′ (three feet per side). No console errors.
 
-## Visual
+## Visual — the runtime EditableMesh route does NOT render on clients
 
-`screens/level2-corridor-A-part-ribs.jpg` and `level2-corridor-B-mesh-ribs.jpg` are the
-previous session's tour shot 6 (a hall, portal in the distance) for A and B.
-`screens/level2-rib-closeup-B-mesh.jpg` is rib 1.1 from 16 studs down its corridor at FOV
-100 (mesh); `level2-rib-closeup-A-parts.jpg` is the same camera on the Part ribs. The mesh
-rib reads as one continuous tiled band; the Part rib is the same silhouette in 26 segments
-with visible seams. Codex owns any further art judgement (tile alignment on the soffit, a
-bevel, a dedicated rib texture) — the OBJ is the editable source for that.
+`screens/level2-rib-closeup-A-parts.jpg` (Part ribs) and `level2-rib-closeup-B-mesh.jpg`
+(mesh ribs) are the SAME camera: rib 1.1's arc centre, 16 studs down corridor 1, FOV 100.
+A shows the vaulted tunnel with its arch bands. B shows a 28 × 30 × 3 slab across the
+tunnel: `level2-rib-B-mesh-magenta-probe.jpg` (rib 1.1 recoloured on the client) proves
+the client draws the object-backed MeshPart as its BOUNDING BOX while its collision and
+query geometry ARE the true arch (client raycasts: through the opening miss, crown hit at
+13.82, foot hit at 11.99). Mesh content built with `Content.fromObject` does not reach the
+client in this experience; only an asset-backed mesh (`Content.fromUri` / a real `MeshId`)
+will. The runtime loader therefore adopts asset-backed templates only; the EditableMesh
+builder is a Studio-only measurement tool behind
+`workspace.Level2ArchMeshRibsAllowEditable` (counts, collision, navigation — never looks).
+
+So the visual A/B is **blocked on an upload**: the two OBJ files beside this note are the
+editable source; once uploaded and keyed in `Performance.ArchMeshRibAssets`, repeat the
+B camera and judge tile alignment, seams and shading. `level2-corridor-A-part-ribs.jpg` /
+`level2-corridor-B-mesh-ribs.jpg` are the previous session's tour shot 6 (a hall) for A/B.
 
 ## Not measured / open
 
 - A phone or tablet (two thirds of the players); stream-in time; memory. Not measurable here.
-- Production runtime needs an owner step: either upload the two OBJs and set
-  `ArchMeshRibAssets`, or enable the Mesh & Image APIs in Game Settings → Security so the
-  server may build the EditableMesh itself. Until one of those, the switch ON in a live
-  server falls back to Parts (recorded in `Level2_ArchRibMeshMissingKeys`), which is the
-  reason the config default stays **false**.
-- Object-backed templates are not saved in the place file; `EnsureArchRibMeshTemplates`
-  rebuilds them from the Edit command bar in a Studio session (this session's two templates
-  are in ServerStorage now).
+- Production needs an owner step: upload the two OBJs (Creator Hub or Studio Import 3D)
+  and set `Performance.ArchMeshRibAssets[key] = "rbxassetid://..."`. Enabling the Mesh &
+  Image APIs alone is NOT enough: even in Studio, where that API is available, the object-
+  backed mesh rendered as a box on the client. Until the upload, the switch ON falls back
+  to Parts (recorded in `Level2_ArchRibMeshMissingKeys`), which is why the default stays
+  **false** and why this is a pilot, not a shipped change.
+- Object-backed templates are not saved in the place file and were removed from
+  ServerStorage after the measurements; `EnsureArchRibMeshTemplates` rebuilds them from the
+  Edit command bar when the counts need reproducing.

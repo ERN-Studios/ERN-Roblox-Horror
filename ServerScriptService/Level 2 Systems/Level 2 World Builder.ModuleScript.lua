@@ -16,6 +16,7 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
+local RunService = game:GetService("RunService")
 local AssetService = game:GetService("AssetService")
 local Terrain = workspace.Terrain
 
@@ -1723,18 +1724,25 @@ local function archRibMeshTemplate(radius, verticalScale, floorDepth, axialDepth
 	local cached = archRibMeshTemplates[key]
 	if cached and cached.Parent then return cached end
 	if archRibMeshFailed[key] then return nil end
-	-- 1. a template already standing in ServerStorage (Edit-mode built, or left
-	--    by an earlier session), adopted by name and key.
+	-- Only an ASSET-BACKED mesh renders on clients. Measured 2026-09-22: a
+	-- MeshPart built from an EditableMesh (Content.fromObject) replicates its
+	-- collision and query geometry to the client but renders there as its
+	-- bounding BOX -- a 28 x 30 x 3 slab across the tunnel. So at runtime the
+	-- loader takes (1) a ServerStorage template with a real MeshId, then (2) an
+	-- uploaded asset id from Configuration; the EditableMesh route (3) is a
+	-- Studio-only measurement tool behind workspace.Level2ArchMeshRibsAllowEditable
+	-- (counts, collision, navigation -- never how it looks).
+	local allowEditable = RunService:IsStudio() and workspace:GetAttribute("Level2ArchMeshRibsAllowEditable") == true
 	local existing = ServerStorage:FindFirstChild("Level 2 Arch Rib Mesh " .. key)
 	if existing and existing:IsA("MeshPart") and existing:GetAttribute("Level2_ArchRibMeshKey") == key
-		and existing.Size.Magnitude > 1 then
+		and existing.Size.Magnitude > 1
+		and (existing.MeshId ~= "" or (allowEditable and existing:GetAttribute("Level2_ArchRibMeshEditorOnly") == true)) then
 		archRibMeshTemplates[key] = existing
 		return existing
 	end
 	local performance = Configuration.Performance or {}
 	local assets = performance.ArchMeshRibAssets or {}
 	local ok, result = pcall(function()
-		-- 2. an uploaded asset for this family.
 		local meshId = assets[key]
 		if type(meshId) == "string" and meshId ~= "" then
 			return AssetService:CreateMeshPartAsync(Content.fromUri(meshId), {
@@ -1742,12 +1750,16 @@ local function archRibMeshTemplate(radius, verticalScale, floorDepth, axialDepth
 				RenderFidelity = Enum.RenderFidelity.Precise,
 			})
 		end
-		-- 3. built here. Needs the Mesh & Image APIs security setting at runtime.
-		return AssetService:CreateMeshPartAsync(
+		if not allowEditable then
+			error("no uploaded asset for this family (Performance.ArchMeshRibAssets)")
+		end
+		local built = AssetService:CreateMeshPartAsync(
 			Content.fromObject(buildArchRibMesh(radius, verticalScale, floorDepth, axialDepth, radialDepth, steps)), {
 			CollisionFidelity = Enum.CollisionFidelity.PreciseConvexDecomposition,
 			RenderFidelity = Enum.RenderFidelity.Precise,
 		})
+		built:SetAttribute("Level2_ArchRibMeshEditorOnly", true)
+		return built
 	end)
 	if not ok or not result then
 		archRibMeshFailed[key] = true
@@ -6358,6 +6370,8 @@ end
 -- into the next play session and are adopted there (step 1 of the loader).
 function WorldBuilder.EnsureArchRibMeshTemplates(keys)
 	keys = keys or WorldBuilder.ArchRibMeshMissingKeys()
+	-- Editor-only templates: the command bar asks for them on purpose.
+	workspace:SetAttribute("Level2ArchMeshRibsAllowEditable", true)
 	local built = {}
 	for _, key in ipairs(keys) do
 		local radius, verticalScale, floorDepth, axialDepth, radialDepth, steps = string.match(key,
