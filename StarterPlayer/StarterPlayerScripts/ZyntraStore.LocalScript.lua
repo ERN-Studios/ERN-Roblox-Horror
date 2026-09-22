@@ -573,13 +573,12 @@ end
 -- way for a player to reach either. Kept last before DEV so the equipment pages
 -- stay in their authored order.
 --
--- NOTES is a mounted page MODULE (ZyntraFieldNotesPage, see
--- claude-contracts.md). A tab is built only when its module is actually in
--- ReplicatedStorage, so this LocalScript keeps working in a place where that
--- script does not exist yet -- and UIRegression's expectedTabs mirrors the same
--- rule rather than hard-coding the names. FindFirstChild, never WaitForChild:
--- this runs at build time and a yield here would hold the whole terminal for a
--- page that may never arrive.
+-- MOUNTED PAGE MODULES: a tab named here is built only when its module is
+-- actually in ReplicatedStorage (FindFirstChild, never WaitForChild -- this runs
+-- at build time). The table is EMPTY since FIELD_NOTES_REMOVED_20260922: the
+-- NOTES tab and its ZyntraFieldNotesPage module are gone with the Field Notes
+-- feature (owner instruction), and UIRegression's expectedTabs no longer
+-- expects it. The mechanism stays for the next page that earns a tab.
 --
 -- REWARDS IS NO LONGER A TAB. Card #104 gave Daily Rewards its own standalone
 -- modal and its own rail button, so the terminal would otherwise have carried a
@@ -588,11 +587,9 @@ end
 -- unchanged and is now mounted by StarterPlayerScripts."Daily Rewards Client";
 -- everything that used to ask for the Rewards tab (the kiosk plaque prompt and
 -- PlayerScripts.ZyntraOpenTerminal "Rewards") fires PlayerScripts.OpenDailyRewards.
-local TERMINAL_PAGE_MODULES = {
-	Notes = "ZyntraFieldNotesPage",
-}
+local TERMINAL_PAGE_MODULES = {}
 local tabNames = {}
-for _, name in ipairs({"Upgrades", "Shop", "Notes", "Donate", "Colors", "Settings"}) do
+for _, name in ipairs({"Upgrades", "Shop", "Donate", "Colors", "Settings"}) do
 	local moduleName = TERMINAL_PAGE_MODULES[name]
 	if moduleName == nil or ReplicatedStorage:FindFirstChild(moduleName) ~= nil then
 		table.insert(tabNames, name)
@@ -3204,7 +3201,8 @@ local function publishProfile(message, tone)
 end
 
 -- ── the mounted terminal pages (card 102) ──────────────────────────────────
--- REWARDS and NOTES are owned by their own ModuleScripts. ZyntraStore supplies
+-- A mounted page is owned by its own ModuleScript (none today; Daily Rewards
+-- moved to its own modal and the NOTES page left with Field Notes). ZyntraStore supplies
 -- the page frame and exactly the context claude-contracts.md names, and nothing
 -- else: the page never requires this script back, never touches another page,
 -- and draws only inside the frame it is handed.

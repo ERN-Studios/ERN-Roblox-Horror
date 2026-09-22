@@ -79,12 +79,6 @@ return {
 		},
 	},
 
-	-- Field notes are optional discoveries placed in the levels. Completing the
-	-- collection awards a name-tag title and nothing else: no stat, no currency.
-	FieldNotes = {
-		CompletionTitle = "FIELD ARCHIVIST",
-	},
-
 	Studio = {
 		GrantAllPasses = true,
 		StartingTokens = 25,

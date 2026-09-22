@@ -470,8 +470,11 @@ local function daily(options)
         Claimed = {}, SecondsToReset = options.Reset or 3600, Accruing = false,
     }
     if options.Key then
-        block.WheelDay = TODAY
-        block.WheelLast = {Day = TODAY, Key = options.Key, Serial = options.Serial or 1}
+        block.WheelDay = options.Day or TODAY
+        block.WheelLast = {Day = options.Day or TODAY, Key = options.Key, Serial = options.Serial or 1,
+            -- WHEEL_COLLECT_20260922: a spin records, the claim pays. Omitted =
+            -- an old, already-paid result (the server normalizes it to true).
+            Claimed = options.Claimed}
     end
     return {Daily = block, Tokens = 0}
 end
@@ -1019,6 +1022,101 @@ do
     check(#ctx.Tweens == 1, 'and reopening does not replay it')
     check(fieldOf(pointerAngle(ctx.Disc.Rotation)).Key == 'Token1',
         'the disc is still parked on the prize')
+end
+
+-- ── COLLECT PRIZE: the server records, the claim pays, the hub confirms ──
+do
+    local ctx = start(POINTER)
+    open(ctx)
+    push(ctx, daily({}))
+    ctx.Hub.Activated:Fire()
+    check(ctx.Sent[1].Action == 'SpinDailyWheel', 'the spin is asked for')
+    push(ctx, daily({Key = 'Token1', Serial = 1, Claimed = false}))
+    check(#ctx.Tweens == 1, 'the recorded result lands')
+    ctx.Hub.Activated:Fire() -- skip
+    check(ctx.Hub.Text == 'COLLECT\nPRIZE', 'an owed prize makes the hub COLLECT PRIZE straight after landing')
+    check(ctx.Hub.Active == true, 'and it takes input')
+    check(fieldOf(pointerAngle(ctx.Disc.Rotation)).Key == 'Token1', 'with the pointer on the prize')
+    ctx.Hub.Activated:Fire()
+    check(#ctx.Sent == 2 and ctx.Sent[2].Action == 'ClaimWheelPrize', 'COLLECT asks the server for ClaimWheelPrize')
+    check(ctx.Sent[2].Payload == nil, 'with no payload for the server to trust')
+    check(ctx.Hub.Text == 'COLLECTING' and ctx.Hub.Active == false, 'and waits, taking no input')
+    ctx.Hub.Activated:Fire()
+    ctx.Hub.Activated:Fire()
+    check(#ctx.Sent == 2, 'a double press cannot become a second claim')
+    -- The server's word: Claimed == true for the serial that was asked for.
+    push(ctx, daily({Key = 'Token1', Serial = 1, Claimed = true}))
+    check(ctx.Hub.Text == '1 TOKEN\nCOLLECTED', 'the confirmation appears only once the pushed profile says Claimed')
+    check(ctx.Hub.Active == false, 'and is not a button')
+    ctx:Advance(3.6)
+    check(ctx.Hub.Text:sub(1, 4) == 'SPUN', 'then the hub becomes the countdown for the spent day')
+    ctx.Hub.Activated:Fire()
+    check(#ctx.Sent == 2, 'nothing more is asked for')
+end
+do
+    -- A push that does NOT confirm (write failed, Claimed still false) is not
+    -- success: the hub goes back to COLLECT PRIZE and no confirmation is shown.
+    local ctx = start(POINTER)
+    open(ctx)
+    push(ctx, daily({Key = 'Potion2', Serial = 4, Claimed = false}))
+    check(#ctx.Tweens == 0, 'the first profile is a seed: parked, not replayed')
+    check(ctx.Hub.Text == 'COLLECT\nPRIZE', 'owed')
+    ctx.Hub.Activated:Fire()
+    check(ctx.Sent[1].Action == 'ClaimWheelPrize', 'asked')
+    push(ctx, daily({Key = 'Potion2', Serial = 4, Claimed = false}))
+    check(ctx.Hub.Text == 'COLLECT\nPRIZE', 'a refused or failed claim leaves the prize owed and the button back')
+    check(ctx.Hub.Active == true, 'ready to try again')
+    ctx.Hub.Activated:Fire()
+    check(#ctx.Sent == 2, 'the retry asks again')
+    push(ctx, daily({Key = 'Potion2', Serial = 4, Claimed = true}))
+    check(ctx.Hub.Text == '2 POTIONS\nCOLLECTED', 'and the confirmation names the real item and count')
+end
+do
+    -- Silence for 6 s: RETRY, a RE-READ, and RETRY re-asks for the CLAIM (the
+    -- prize is still owed), never for a spin.
+    local ctx = start(POINTER)
+    open(ctx)
+    push(ctx, daily({Key = 'Shield1', Serial = 2, Claimed = false}))
+    check(ctx.Hub.Text == 'COLLECT\nPRIZE', 'owed on arrival')
+    local invokes = ctx.Invokes
+    ctx.Hub.Activated:Fire() -- collect
+    ctx:Advance(5.5)
+    check(ctx.Hub.Text == 'COLLECTING', 'five and a half seconds is not yet a failure')
+    ctx:Advance(1)
+    check(ctx.Hub.Text == 'COLLECT\nPRIZE' and ctx.Hub.Active == true,
+        'six seconds of silence hands the button back (the prize is still owed, so it says COLLECT, not RETRY)')
+    check(ctx.Invokes == invokes + 1, 'the recovery is a RE-READ of the profile')
+    ctx.Hub.Activated:Fire()
+    check(#ctx.Sent == 2 and ctx.Sent[2].Action == 'ClaimWheelPrize', 'and pressing it re-asks for the claim, not a spin')
+end
+do
+    -- A REJOIN with an uncollected prize from YESTERDAY: parked, not replayed,
+    -- and the hub is COLLECT PRIZE -- the day change did not lose it, and the
+    -- free spin waits behind it (the server refuses a spin until it is in).
+    local ctx = start(POINTER)
+    open(ctx)
+    push(ctx, daily({Key = 'Token3', Serial = 7, Claimed = false, Day = '2026-09-15'}))
+    check(#ctx.Tweens == 0, 'the first profile of the session is a seed, never a replay')
+    check(fieldOf(pointerAngle(ctx.Disc.Rotation)).Key == 'Token3', 'the disc is parked on the owed prize')
+    check(ctx.Hub.Text == 'COLLECT\nPRIZE' and ctx.Hub.Active == true, 'and the hub offers to collect it')
+    ctx.Hub.Activated:Fire()
+    check(ctx.Sent[1].Action == 'ClaimWheelPrize', 'collecting, not spinning')
+    push(ctx, daily({Key = 'Token3', Serial = 7, Claimed = true, Day = '2026-09-15'}))
+    check(ctx.Hub.Text == '3 TOKENS\nCOLLECTED', 'confirmed')
+    ctx:Advance(3.6)
+    check(ctx.Hub.Text == 'SPIN' and ctx.Hub.Active == true, "yesterday's result collected, today's free spin is offered")
+end
+do
+    -- A historical result (no Claimed field) is an already-paid one: the hub
+    -- shows the prize and the countdown exactly as before, never COLLECT.
+    local ctx = start(POINTER)
+    open(ctx)
+    push(ctx, daily({}))
+    push(ctx, daily({Key = 'Token1', Serial = 1}))
+    ctx.Hub.Activated:Fire()
+    check(ctx.Hub.Text == '1\nTOKEN', 'an old result shows the prize')
+    ctx:Advance(3.6)
+    check(ctx.Hub.Text:sub(1, 4) == 'SPUN', 'and then the countdown, with nothing to collect')
 end
 
 -- ── a replay is not a spin ───────────────────────────────────────────────

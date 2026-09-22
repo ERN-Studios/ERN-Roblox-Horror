@@ -56,6 +56,7 @@ PAGE = (ROOT / "ReplicatedStorage/ZyntraDailyRewardsPage.ModuleScript.lua"
         ).read_text(encoding="utf-8")
 UISTYLE = (ROOT / "ReplicatedStorage/UIStyle.ModuleScript.lua").read_text(encoding="utf-8")
 CONFIG = (ROOT / "ReplicatedStorage/ZyntraConfig.ModuleScript.lua").read_text(encoding="utf-8")
+RESEARCH = (ROOT / "ReplicatedStorage/ZyntraDailyResearch.ModuleScript.lua").read_text(encoding="utf-8")
 STORE = (ROOT / "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua"
          ).read_text(encoding="utf-8")
 
@@ -289,6 +290,13 @@ local services = {
 local game = {GetService = function(_, name)
 	return assert(services[name], "unfaked service " .. name)
 end}
+-- The page requires the REAL daily research ledger off ReplicatedStorage.
+game.ReplicatedStorage = {WaitForChild = function(_, name) return name end}
+local Research -- assigned once the real module source below has run
+local function require(name)
+	if name == "ZyntraDailyResearch" then return Research end
+	error("unfaked module " .. tostring(name))
+end
 
 -- Advance real time in small steps, running due task.delay callbacks and
 -- firing Heartbeat exactly as the engine would.
@@ -1091,6 +1099,7 @@ def main():
         section(STORE, "local COLORS = {", 'local gui = Instance.new("ScreenGui")'),
         section(STORE, "local function corner(parent, radius)", "-- Imagegen section art"),
         # the module under test, run as a module
+        "Research = (function()", RESEARCH, "end)()",
         "local Page = (function()", PAGE, "end)()",
         HARNESS,
         TESTS,

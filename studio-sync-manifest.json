@@ -7,9 +7,9 @@
     "name": "BACKROOMS: STAY QUIET [CO-OP HORROR] (placeId: 131311258779917)"
   },
   "counts": {
-    "scripts": 167,
+    "scripts": 168,
     "remoteEvents": 15,
-    "total": 182,
+    "total": 183,
     "studioTrailingNewline": 0
   },
   "nativePlaceBackup": {
@@ -256,8 +256,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
-      "bytes": 443360,
-      "sha256": "7625238a2fb991368066c37c018545a735db6722c406bd9b1bed3b270904355d",
+      "bytes": 443282,
+      "sha256": "b2d1b0e486608c0424f10caf1dea217a47908b8870f9b89b84d331fca5165fa8",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -284,8 +284,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/ZyntraConfig.ModuleScript.lua",
-      "bytes": 13047,
-      "sha256": "bfbc22d2cbeb832eb8f46537f29408e8411f53df11ec35031f86a2ac039b5cc3",
+      "bytes": 12830,
+      "sha256": "7641dab672506acc2827a64c5be33bcf63df0aa9367cd8e0885783dca2e6f430",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -333,34 +333,6 @@
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
     },
     {
-      "studioPath": "ReplicatedStorage.ZyntraFieldNotes",
-      "segments": [
-        "ReplicatedStorage",
-        "ZyntraFieldNotes"
-      ],
-      "className": "ModuleScript",
-      "file": "ReplicatedStorage/ZyntraFieldNotes.ModuleScript.lua",
-      "bytes": 7373,
-      "sha256": "7734ab1c871eee83d85bf7712f413bc72ea728ff9b4eccfad2349a1647409f18",
-      "status": "synced",
-      "sourceEqualsEditor": true,
-      "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
-    },
-    {
-      "studioPath": "ReplicatedStorage.ZyntraFieldNotesPage",
-      "segments": [
-        "ReplicatedStorage",
-        "ZyntraFieldNotesPage"
-      ],
-      "className": "ModuleScript",
-      "file": "ReplicatedStorage/ZyntraFieldNotesPage.ModuleScript.lua",
-      "bytes": 16492,
-      "sha256": "71457d7ecb83dff9e7999cc8cf75203c4ec14bb78a4e1a3f6ea08fb9794af7f0",
-      "status": "synced",
-      "sourceEqualsEditor": true,
-      "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
-    },
-    {
       "studioPath": "ServerScriptService.AvatarNormalize",
       "segments": [
         "ServerScriptService",
@@ -386,22 +358,6 @@
       "file": "ServerScriptService/Crouch State Server.Script.lua",
       "bytes": 6714,
       "sha256": "2a474a0d3a18e5e97d53e2e0dced5fbe502663220684357d50f697f73300dffc",
-      "status": "synced",
-      "sourceEqualsEditor": true,
-      "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
-      "disabled": false,
-      "runContext": "Enum.RunContext.Legacy"
-    },
-    {
-      "studioPath": "ServerScriptService.FieldNotesService",
-      "segments": [
-        "ServerScriptService",
-        "FieldNotesService"
-      ],
-      "className": "Script",
-      "file": "ServerScriptService/FieldNotesService.Script.lua",
-      "bytes": 21612,
-      "sha256": "a0aed81a20ee24e8a1f1413a09e75fd001281ae639ea4cb8e9cb9f55b69b0bcd",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -446,8 +402,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 159655,
-      "sha256": "ee3016242f2389c5d8c11a83fd83e4e78a3cc885e90bf9d0aa07dab8e2906612",
+      "bytes": 158164,
+      "sha256": "1a36c9fbe46edf8e0fa6fed66d5ce48d026fe75e119e12cd1d432c001d65e4bd",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -531,8 +487,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
-      "bytes": 97116,
-      "sha256": "aad1f84e087ecda4b443b0fcb74c33433cfd89cbe8bbee61c2b8c0db345d67c9",
+      "bytes": 97783,
+      "sha256": "65ede1b20fa3418b8bb872953deff3c5a7f3ed957b3293eafb19d7442a171804",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -850,8 +806,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Hiding Controller.ModuleScript.lua",
-      "bytes": 23157,
-      "sha256": "0fdb59a28918e95c151a6508a4241274529fe75f05522cdf98cbf4baf98c2b0e",
+      "bytes": 25250,
+      "sha256": "6d6f6c7d1b17d43b0759208b69a38892b3c124526b105b15a1790b088452d3c0",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -940,8 +896,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Test Suite.ModuleScript.lua",
-      "bytes": 196197,
-      "sha256": "2f33a1b6a4accd0d491837ebb078824680cb3591c1cbf09c820e30bf05fa66fe",
+      "bytes": 196808,
+      "sha256": "45a467521f4c2d1502771903e7f233cfc1e986520559cf303e982ed959f7b9d2",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -1083,8 +1039,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Round Completion Routing.ModuleScript.lua",
-      "bytes": 76753,
-      "sha256": "425a6f8af52ebe443ee156e05a7b8852f850a9c3278de11ce9f405d4e84773d8",
+      "bytes": 77013,
+      "sha256": "db1cffcde94a4ac139b223ecedcbddc4c67b3227590c1980a1b0d4c99872db07",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -1169,8 +1125,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
-      "bytes": 103329,
-      "sha256": "ab17d5e8d0c0a994aae35580020890e392ad303b89d420e8edc2beee3244473c",
+      "bytes": 103347,
+      "sha256": "98a7d70dbaba096d2411711e36088b5bcc17452cbd047c18364bf0bdc4269e09",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -1213,8 +1169,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/ZyntraMonetization.Script.lua",
-      "bytes": 175884,
-      "sha256": "28efb1e8130eb4bdf2be6bb08cff8592cb6512b280e6735b2004e0086c47a4d1",
+      "bytes": 174941,
+      "sha256": "830dfda1e1b1ccfaed8379b2538f6ee612a63e212592df0f064b786b6042a35f",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -1946,23 +1902,6 @@
       "runContext": "Enum.RunContext.Legacy"
     },
     {
-      "studioPath": "StarterPlayer.StarterPlayerScripts.Field Notes Client",
-      "segments": [
-        "StarterPlayer",
-        "StarterPlayerScripts",
-        "Field Notes Client"
-      ],
-      "className": "LocalScript",
-      "file": "StarterPlayer/StarterPlayerScripts/Field Notes Client.LocalScript.lua",
-      "bytes": 9288,
-      "sha256": "75162f7219bc5966ff5ee367360338a5d56356f085529e4188fc41f51f239c72",
-      "status": "synced",
-      "sourceEqualsEditor": true,
-      "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
-      "disabled": false,
-      "runContext": "Enum.RunContext.Legacy"
-    },
-    {
       "studioPath": "StarterPlayer.StarterPlayerScripts.First Entry Guide",
       "segments": [
         "StarterPlayer",
@@ -1971,8 +1910,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/First Entry Guide.LocalScript.lua",
-      "bytes": 13515,
-      "sha256": "ca7d11ad6d3def5e7de24e761d39e9ec1f55cb7f11843ebd0c088f38e457bb52",
+      "bytes": 11425,
+      "sha256": "cfd1b6f34a9e0339d7f7bcc1bbc450e3835a545b2b50c08578dc158d3ca8af31",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2345,8 +2284,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Lucky Wheel Client.LocalScript.lua",
-      "bytes": 33299,
-      "sha256": "ea9c1e57aafe3de6fb6437daaedbcda35e0ab457255a7ee9cb6ab06d1ff75ffd",
+      "bytes": 36189,
+      "sha256": "429a4f525af930c7e33bb7de94703415973ff6df467c3f1f9256aeb51a86b4ce",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2566,8 +2505,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
-      "bytes": 187349,
-      "sha256": "702d3001f2f30db1a7a4c95d09e900ddc8d5d0eebb64c40d6f5e3d4da898488a",
+      "bytes": 187367,
+      "sha256": "466c8356cf5526a6f7dea9942f7cc5ee38edd2ad3708715a023375dc087c9558",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2674,9 +2613,87 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 4 Objective UI",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 4 Objective UI.LocalScript.lua",
-      "bytes": 14886,
-      "sha256": "22d42d3208897830555939a957b3195a227c658ed3106c698d43711449365304",
+      "bytes": 14190,
+      "sha256": "262ed3b4e1ef053f981965216b58cd9a7d095300c6b67aab60508c4f3e3b6944",
       "status": "synced"
+    },
+    {
+      "studioPath": "ServerStorage.Archive.FieldNotesRetired_20260922.FieldNotesService",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "FieldNotesRetired_20260922",
+        "FieldNotesService"
+      ],
+      "className": "Script",
+      "file": "ServerStorage/Archive/FieldNotesRetired_20260922/FieldNotesService.Script.lua",
+      "bytes": 21612,
+      "sha256": "a0aed81a20ee24e8a1f1413a09e75fd001281ae639ea4cb8e9cb9f55b69b0bcd",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "studioPath": "ServerStorage.Archive.FieldNotesRetired_20260922.Field Notes Client",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "FieldNotesRetired_20260922",
+        "Field Notes Client"
+      ],
+      "className": "LocalScript",
+      "file": "ServerStorage/Archive/FieldNotesRetired_20260922/Field Notes Client.LocalScript.lua",
+      "bytes": 9288,
+      "sha256": "75162f7219bc5966ff5ee367360338a5d56356f085529e4188fc41f51f239c72",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "studioPath": "ServerStorage.Archive.FieldNotesRetired_20260922.ZyntraFieldNotes",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "FieldNotesRetired_20260922",
+        "ZyntraFieldNotes"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/Archive/FieldNotesRetired_20260922/ZyntraFieldNotes.ModuleScript.lua",
+      "bytes": 7373,
+      "sha256": "7734ab1c871eee83d85bf7712f413bc72ea728ff9b4eccfad2349a1647409f18",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "studioPath": "ServerStorage.Archive.FieldNotesRetired_20260922.ZyntraFieldNotesPage",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "FieldNotesRetired_20260922",
+        "ZyntraFieldNotesPage"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerStorage/Archive/FieldNotesRetired_20260922/ZyntraFieldNotesPage.ModuleScript.lua",
+      "bytes": 16492,
+      "sha256": "71457d7ecb83dff9e7999cc8cf75203c4ec14bb78a4e1a3f6ea08fb9794af7f0",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "studioPath": "ServerScriptService.Level4GateAccess",
+      "segments": [
+        "ServerScriptService",
+        "Level4GateAccess"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/Level4GateAccess.Script.lua",
+      "bytes": 2857,
+      "sha256": "7363338a0422d1d4a2b0b0d3a0f123878a22370ace464fd45d47a3b945aefb61",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
     }
   ]
 }

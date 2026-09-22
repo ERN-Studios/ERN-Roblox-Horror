@@ -18,7 +18,7 @@ Seven things have to stay true and none of them is visible from a screenshot:
     NEVER GETS THE SECOND PANE,
   * a FIELD SUPPLIES button spends tokens through ZyntraAction "BuyItem" with the
     contract's payload, and says SAVING... exactly while it cannot be pressed,
-  * NOTES exists as a tab only where its page module does, and REWARDS does NOT
+  * no page module adds a tab today (NOTES left with Field Notes), and REWARDS does NOT
     exist as a tab even though its page module is still in ReplicatedStorage,
   * the rail is five buttons in one drawn order, built by one loop over one list,
   * layoutSquareSections fits them at 64 / 56 / 52px and then in two columns
@@ -345,28 +345,21 @@ end
 -- does not build a tab for it". A second mount here would mean two profile
 -- subscriptions and two claim buttons for one server-side claim.
 local both = buildTabs(fakeStorage({ZyntraDailyRewardsPage = true, ZyntraFieldNotesPage = true}), false)
-expect(table.concat(both, ','), 'Upgrades,Shop,Notes,Donate,Colors,Settings',
-	'the rewards page module present does NOT bring back a Rewards tab')
+expect(table.concat(both, ','), 'Upgrades,Shop,Donate,Colors,Settings',
+	'neither page module present brings a tab: Rewards has its own modal, NOTES left with Field Notes (FIELD_NOTES_REMOVED_20260922)')
 expect(table.find(both, 'Rewards'), nil, 'there is no Rewards tab at all')
+expect(table.find(both, 'Notes'), nil, 'and no Notes tab, even with a stale page module in the place')
 local neither = buildTabs(fakeStorage({}), false)
 expect(table.concat(neither, ','), 'Upgrades,Shop,Donate,Colors,Settings',
 	'no module present -- the terminal is the five authored tabs')
-local rewardsOnly = buildTabs(fakeStorage({ZyntraDailyRewardsPage = true}), false)
-expect(table.concat(rewardsOnly, ','), 'Upgrades,Shop,Donate,Colors,Settings',
-	'the rewards module alone changes nothing about the tab bar')
-local notesOnly = buildTabs(fakeStorage({ZyntraFieldNotesPage = true}), false)
-expect(table.concat(notesOnly, ','), 'Upgrades,Shop,Notes,Donate,Colors,Settings',
-	'NOTES is still the one module-conditional tab')
 local dev = buildTabs(fakeStorage({ZyntraDailyRewardsPage = true, ZyntraFieldNotesPage = true}), true)
-expect(table.concat(dev, ','), 'Upgrades,Shop,Notes,Donate,Colors,Settings,Dev',
-	'DEV is still last, after the mounted page')
+expect(table.concat(dev, ','), 'Upgrades,Shop,Donate,Colors,Settings,Dev',
+	'DEV is still last')
 expect(buildTabs(fakeStorage({}), true)[6], 'Dev', 'DEV is still last when no page mounts')
 -- The order is AUTHORED, not alphabetical: the tab bar breaks LayoutOrder ties
 -- by name and this list is the only thing that states the intent.
 expect(both[1], 'Upgrades', 'Upgrades first')
-expect(both[6], 'Settings', 'Settings last before DEV')
-ok(table.find(both, 'Notes') < table.find(both, 'Donate'),
-	'Notes sits with the equipment pages, ahead of Donate')
+expect(both[5], 'Settings', 'Settings last before DEV')
 print('tabs|' .. checks)
 """
 

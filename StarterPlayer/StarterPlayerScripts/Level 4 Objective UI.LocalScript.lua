@@ -337,22 +337,6 @@ task.spawn(function()
 	end)
 end)
 
--- DEV_RETRY_20260922. A dev-only Level 4 round has no lobby bay to retry from,
--- so GameManager raises this instead of RetryGuideLevel; say how to go again.
-local DEV_HINT = "LEVEL 4 DEV ROUND ENDED -- ServerStorage.Level4DevStart:Invoke() TO RUN AGAIN"
-local function syncDevHint()
-	if player:GetAttribute("Level4DevRoundEnded") == true then
-		bannerSerial += 1 -- no timer hides it; it stands until the next dev round clears the attribute
-		banner.Text = DEV_HINT
-		banner.TextColor3 = UIStyle.Color.Body
-		banner.Visible = true
-	elseif banner.Text == DEV_HINT then
-		banner.Visible = false
-	end
-end
-player:GetAttributeChangedSignal("Level4DevRoundEnded"):Connect(syncDevHint)
-syncDevHint()
-
 -- Five times a second, not every frame. The only moving number on the panel is
 -- a countdown shown in whole seconds, and the house read walks the world's
 -- top-level children -- neither belongs in a Heartbeat.

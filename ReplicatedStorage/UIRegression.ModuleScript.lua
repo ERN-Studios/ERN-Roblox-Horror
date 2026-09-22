@@ -5036,14 +5036,14 @@ Fit.DonationTierKeys = {
 --   %d+:%d+ TO GO   a milestone that has not been played to yet ("2:20 TO GO")
 --   SPUN TODAY      the free daily wheel is used for this UTC day
 --   SPINNING        the wheel is resolving
---   NOT YET FOUND   a field note that has not been discovered
 -- NO ENTRY MAY CARRY A LITERAL "...". These are Lua patterns fed to string.find,
 -- where "." matches any character, so "SAVING..." as an entry would also match
 -- "SAVINGXYZ" -- and the store draws "SAVING..." anyway, which "SAVING" finds.
 Fit.ZyntraDisabledCaptions = {"OWNED", "COMING SOON", "LEVEL %d+ ONLY", "WAITING",
 	"WHEN DEAD", "RESPAWNING", "UNAVAILABLE", "CONFIRMING", "SAVING",
 	"CLAIMED", "CLAIMING", "%d+:%d+ TO GO", "SPUN TODAY", "SPINNING",
-	"NOT YET FOUND"}
+	-- WHEEL_COLLECT_20260922: the hub while a claim is in flight / confirmed.
+	"COLLECTING", "COLLECTED"}
 
 -- HOW MANY OF A PAGE'S CARD ACTIONS THE PLAYER CAN PRESS, where that number is
 -- a property of the build and not of the tester's save file.
@@ -5291,15 +5291,9 @@ function Fit.bodyZyntraTerminalFitMatrix(): (string, number)
 		-- subscriptions and two claim buttons for one server-side claim. The page
 		-- module still exists in ReplicatedStorage, which is exactly why this list
 		-- must not derive the tab from its presence any more.
-		local expectedTabs = {"Upgrades", "Shop"}
-		for _, entry in ipairs({{"Notes", "ZyntraFieldNotesPage"}}) do
-			if ReplicatedStorage:FindFirstChild(entry[2]) then
-				table.insert(expectedTabs, entry[1])
-			end
-		end
-		for _, name in ipairs({"Donate", "Colors", "Settings"}) do
-			table.insert(expectedTabs, name)
-		end
+		-- FIELD_NOTES_REMOVED_20260922: the NOTES tab left with the Field Notes
+		-- feature, so the terminal is the five authored tabs (plus DEV).
+		local expectedTabs = {"Upgrades", "Shop", "Donate", "Colors", "Settings"}
 		local devExpected = DevAccess.IsAllowed(player)
 		if devExpected then table.insert(expectedTabs, "Dev") end
 		local tabList = {}

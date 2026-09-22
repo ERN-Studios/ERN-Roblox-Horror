@@ -21,9 +21,9 @@ it), the house scheduler waits `HouseStates.CalmLeadSeconds` (24 s, measured
 25.4 s) after `RoundActive` before the first house leaves SAFE, the client's
 danger grade only follows a threat to THIS player (Neighbour ALERT/CHASE on them,
 or the house they stand in), `Level4_ExitPosition` is the trigger's own centre
-and the server sweeps living roots inside the open trigger, and a dev round that
-ends without escape raises `Level4DevRoundEnded` on the player instead of a
-`RetryGuideLevel` beam to a bay that does not exist. Evidence and images:
+and the server sweeps living roots inside the open trigger. (A dev round that
+ends without escape draws nothing afterwards: the owner removed every lobby
+retry guide on 2026-09-22, the `Level4DevRoundEnded` banner with it.) Evidence and images:
 `docs/CODEX_POLISH_HANDOFF.md`, `artifacts/claude-20260922/screens/`.
 
 Everything below this line is the 2026-09-21 text; where it says "unverified",

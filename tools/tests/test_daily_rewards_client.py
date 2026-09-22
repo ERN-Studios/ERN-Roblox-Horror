@@ -51,6 +51,7 @@ CLIENT = ROOT / "StarterPlayer/StarterPlayerScripts/Daily Rewards Client.LocalSc
 PAGE = ROOT / "ReplicatedStorage/ZyntraDailyRewardsPage.ModuleScript.lua"
 UISTYLE = ROOT / "ReplicatedStorage/UIStyle.ModuleScript.lua"
 CONFIG = ROOT / "ReplicatedStorage/ZyntraConfig.ModuleScript.lua"
+RESEARCH = ROOT / "ReplicatedStorage/ZyntraDailyResearch.ModuleScript.lua"
 UIDEVICE = ROOT / "ReplicatedStorage/UIDevice.ModuleScript.lua"
 
 
@@ -388,7 +389,7 @@ local function context(options)
 	local storage = newInstance("ReplicatedStorage")
 	storage.Name = "ReplicatedStorage"
 	ctx.Storage = storage
-	for _, name in ipairs({"UIDevice", "UIStyle", "ZyntraConfig"}) do
+	for _, name in ipairs({"UIDevice", "UIStyle", "ZyntraConfig", "ZyntraDailyResearch"}) do
 		local module = newInstance("ModuleScript")
 		module.Name = name
 		module.Parent = storage
@@ -547,10 +548,18 @@ end
 
 BOOT_HEAD = r'''
 local function boot(ctx)
+	-- The page reaches the research ledger as game.ReplicatedStorage, a property.
+	ctx.Game.ReplicatedStorage = ctx.Storage
 	local game, workspace, task = ctx.Game, ctx.Workspace, ctx.Task
 	-- The page module is re-executed per fixture, which is what require's cache
 	-- gives it in the engine: one instance per place, not one shared between
 	-- two unrelated tests in the same process.
+	-- The page chunk below requires the research ledger by instance; answer it
+	-- with the REAL module (the client's own require is declared after the page).
+	local function require(module)
+		if module.Name == "ZyntraDailyResearch" then return RealResearch end
+		error("unexpected page require: " .. tostring(module.Name))
+	end
 	local PageModule = (function()
 '''
 
@@ -570,6 +579,7 @@ BOOT_BRIDGE = r'''
 		if module.Name == "UIDevice" then return ctx.UIDevice end
 		if module.Name == "UIStyle" then return UIStyle end
 		if module.Name == "ZyntraConfig" then return RealConfig end
+		if module.Name == "ZyntraDailyResearch" then return RealResearch end
 		if module.Name == "ZyntraDailyRewardsPage" then return WrappedPage end
 		error("unexpected require: " .. tostring(module.Name))
 	end
@@ -1239,6 +1249,7 @@ def main():
         # the real shared style module and the real shipped config
         "local UIStyle = (function()", UISTYLE.read_text(encoding="utf-8"), "end)()",
         "local RealConfig = (function()", CONFIG.read_text(encoding="utf-8"), "end)()",
+        "local RealResearch = (function()", RESEARCH.read_text(encoding="utf-8"), "end)()",
         FIXTURE,
         BOOT_HEAD,
         PAGE.read_text(encoding="utf-8"),

@@ -223,7 +223,7 @@ local function recoverProtectionReservation(data, ownerId)
 end
 
 -- ---------------------------------------------------------------------------
--- Stored items, daily counters and field notes
+-- Stored items, daily counters and the inert legacy field-note record
 -- ---------------------------------------------------------------------------
 -- The two stored consumables. One spelling serves as the profile field, the
 -- Config.Items key, the BuyItem payload and the ZyntraInventory key; do not
@@ -291,6 +291,11 @@ local function normalizeDaily(value)
 			Day = type(lastDay) == "string" and #lastDay == 10 and lastDay or wheelDay,
 			Key = savedLast.Key,
 			Serial = wholeCount(savedLast.Serial),
+			-- WHEEL_COLLECT_20260922 (Trello 25GLltY6): a spin now records the
+			-- prize and the CLAIM pays it. Only an explicit false is still owed;
+			-- every result saved before this field existed was paid at spin time
+			-- and must never be paid again.
+			Claimed = savedLast.Claimed ~= false,
 		}
 	end
 	local flushId = saved.FlushId
@@ -375,26 +380,11 @@ end
 local playtimeSessions = setmetatable({}, { __mode = "k" })
 local playtimeSessionSequence = 0
 
--- Field note content is data, not schema: ZyntraFieldNotes carries the notes and
--- a place without it simply has no collection. Looked up on each read instead of
--- captured, so a module added to a running server is picked up, and never with
--- WaitForChild -- a missing module must not be able to stall a profile push. The
--- service itself is tested because the offline test harnesses run these blocks
--- without a DataModel behind them.
-local function fieldNoteEntries()
-	local module = ReplicatedStorage and ReplicatedStorage:FindFirstChild("ZyntraFieldNotes")
-	if not module or not module:IsA("ModuleScript") then return nil end
-	local ok, loaded = pcall(require, module)
-	if not ok or type(loaded) ~= "table" or type(loaded.Notes) ~= "table" then return nil end
-	return loaded.Notes
-end
-
-local function fieldNoteProgress(data)
-	local notes = fieldNoteEntries()
-	local count = 0
-	for _ in pairs(data.FieldNotes.Discovered) do count += 1 end
-	return count, notes and #notes or 0
-end
+-- FIELD_NOTES_REMOVED_20260922 (owner instruction). The Field Notes feature --
+-- placed notes, the reading card, the NOTES tab, the discovery progress and the
+-- FIELD ARCHIVIST title -- is gone. A profile's FieldNotes table is kept as
+-- INERT legacy data by normalizeFieldNotes so an old save still loads exactly
+-- as it was; nothing reads it, grants from it, or publishes a title off it.
 
 -- The daily block as the client sees it. PlaytimeSeconds INCLUDES the seconds
 -- this session has earned but not yet flushed, so the page never counts
@@ -468,6 +458,9 @@ local function newProfile()
 			MuteDispatchSessionId = nil,
 			MuteDispatchSessionClaims = {},
 			LobbyBriefingPlayed = false,
+			-- REWARDS_INTRO_20260922 (Trello MsEn2mya): the one-time Rewards/Wheel
+			-- note shown after the first real level completion.
+			RewardsIntroSeen = false,
 		},
 		Colors = {
 			Hazmat = colorData(Config.Colors.HazmatDefault),
@@ -606,6 +599,7 @@ local function normalizeProfile(data)
 	local claimId = data.Settings.LobbyBriefingClaimId
 	data.Settings.LobbyBriefingClaimId = data.Settings.LobbyBriefingPlayed == true
 		and type(claimId) == "string" and #claimId <= 128 and claimId or nil
+	data.Settings.RewardsIntroSeen = data.Settings.RewardsIntroSeen == true
 	-- Accessibility switches are a fixed, config-driven key set: a hand-edited
 	-- save can neither add keys nor push a non-boolean into a player attribute,
 	-- and an untouched switch lands on its documented default.
@@ -726,17 +720,10 @@ end
 
 local function publicProfile(data, player)
 	if not data then return nil end
-	local noteCount, noteTotal = fieldNoteProgress(data)
 	local result = {
 		Tokens = data.Tokens,
 		Items = data.Items,
 		Daily = dailyPublic(data, player),
-		FieldNotes = {
-			Discovered = data.FieldNotes.Discovered,
-			Count = noteCount,
-			Total = noteTotal,
-			TitleUnlocked = noteTotal > 0 and noteCount >= noteTotal,
-		},
 		SpeedBoostUntil = player and player:GetAttribute("ZyntraSpeedBoostUntil") or 0,
 		StaminaLevel = data.StaminaLevel,
 		BatteryLevel = data.BatteryLevel,
@@ -759,6 +746,7 @@ local function publicProfile(data, player)
 		RecordedSupportRobux = recordedSupportRobux(data),
 		MuteDispatch = data.Settings.MuteDispatch,
 		LobbyBriefingPlayed = data.Settings.LobbyBriefingPlayed,
+		RewardsIntroSeen = data.Settings.RewardsIntroSeen,
 		HazmatColor = readColor(data.Colors.Hazmat, Config.Colors.HazmatDefault),
 		GlowstickColor = readColor(data.Colors.Glowstick, Config.Colors.GlowstickDefault),
 		OwnsSupporter = false,
@@ -829,12 +817,6 @@ local function refreshPlayerTags(player, character)
 		createPlayerTag(head, "ZyntraDeveloperTag", "Developer", row)
 		row += 1
 	end
-	-- The field-note completion title. Earned, not bought, and it stacks under
-	-- whatever the player already has rather than replacing it.
-	local title = player:GetAttribute("ZyntraFieldNotesTitle")
-	if type(title) == "string" and #title > 0 then
-		createPlayerTag(head, "ZyntraTitleTag", title, row)
-	end
 end
 
 local function applyHazmatColor(player)
@@ -872,12 +854,6 @@ local function applyAttributes(player, data)
 	-- draws a slot; the profile packet carries the same numbers for the terminal.
 	player:SetAttribute("ZyntraSpeedPotions", data.Items.SpeedPotion)
 	player:SetAttribute("ZyntraRouteMarkers", data.Items.RouteMarker)
-	-- The completion title is a name-tag row, so it is published as the text to
-	-- draw rather than as a boolean: empty string means "no title".
-	local noteCount, noteTotal = fieldNoteProgress(data)
-	player:SetAttribute("ZyntraFieldNotesTitle",
-		(noteTotal > 0 and noteCount >= noteTotal)
-			and tostring((Config.FieldNotes or {}).CompletionTitle or "") or "")
 	-- Accessibility switches are published under their own bare names because
 	-- that is what the client readers already ask for (ReduceCameraShake,
 	-- ReduceFlashing, CaptionsEnabled, DisableCaptions) -- do not prefix them.
@@ -3100,7 +3076,7 @@ local function claimPlaytimeReward(player, payload)
 		local label = applyReward(data, milestone.Reward)
 		if not label then return false, "That reward is unavailable right now.", "error" end
 		data.Daily.Claimed[key] = true
-		return true, string.format("+%s for %d minutes of play today.", label, milestone.Minutes), "success"
+		return true, string.format("%s collected -- %d minutes of play today.", label, milestone.Minutes), "success"
 	end)
 end
 
@@ -3136,10 +3112,32 @@ local function spentSpinMessage(daily)
 		prize and prize.Label or "already claimed")
 end
 
+-- WHEEL_COLLECT_20260922 (Trello 25GLltY6). A spin RECORDS the prize
+-- (WheelLast.Claimed = false) and the claim PAYS it, so the player sees what
+-- they won, presses COLLECT PRIZE, and the confirmation is the server's word.
+-- Exactly one payout: applyReward and Claimed = true sit in the same UpdateAsync
+-- transform, a second claim finds Claimed == true and writes nothing, and a
+-- spin is refused while a prize is still owed -- so a day change cannot
+-- overwrite an uncollected prize with a new result (the free spin waits).
+local function pendingWheelPrize(daily)
+	local last = daily.WheelLast
+	return last and last.Claimed == false and last or nil
+end
+
+local function collectFirstMessage(daily)
+	local last = pendingWheelPrize(daily)
+	local prize = last and wheelPrizeByKey(last.Key)
+	return string.format("Collect your prize first: %s.", prize and prize.Label or "the last spin")
+end
+
 local function spinDailyWheel(player)
 	local session = sessions[player]
 	if not session or session.closing then return end
 	local today = utcDay()
+	if pendingWheelPrize(session.data.Daily) then
+		pushProfile(player, collectFirstMessage(session.data.Daily), "info")
+		return
+	end
 	-- Already spun: re-report the RECORDED prize and write nothing. That one rule
 	-- is what makes a lost reply, a rejoin, a retry and a double click all safe --
 	-- the outcome the UI animates to is durable before any of them can happen.
@@ -3148,19 +3146,53 @@ local function spinDailyWheel(player)
 		return
 	end
 	dailyMutate(player, function(data)
+		if pendingWheelPrize(data.Daily) then return false, collectFirstMessage(data.Daily), "info" end
 		if data.Daily.WheelDay == today then
 			return false, spentSpinMessage(data.Daily), "info"
 		end
 		local prize = pickWheelPrize()
-		local label = prize and applyReward(data, prize.Reward)
-		if not label then return false, "The supply wheel is offline right now.", "error" end
+		if not prize or type(prize.Reward) ~= "table" then
+			return false, "The supply wheel is offline right now.", "error"
+		end
 		data.Daily.WheelDay = today
 		data.Daily.WheelLast = {
 			Day = today,
 			Key = prize.Key,
 			Serial = wholeCount(data.Daily.WheelLast and data.Daily.WheelLast.Serial) + 1,
+			Claimed = false,
 		}
-		return true, "Supply Wheel: " .. prize.Label, "success"
+		return true, "Supply Wheel: " .. prize.Label .. " -- collect your prize.", "success"
+	end)
+end
+
+-- REWARDS_INTRO_20260922. Target-state write: "seen" is true afterwards no
+-- matter how many times the client says so, and a lost reply costs nothing.
+local function markRewardsIntroSeen(player)
+	local session = sessions[player]
+	if not session or session.closing then return end
+	if session.data.Settings.RewardsIntroSeen == true then return end
+	mutateIdempotent(player, function(data)
+		if data.Settings.RewardsIntroSeen == true then return false end
+		data.Settings.RewardsIntroSeen = true
+		return true
+	end)
+end
+
+local function claimWheelPrize(player)
+	local session = sessions[player]
+	if not session or session.closing then return end
+	if not pendingWheelPrize(session.data.Daily) then
+		pushProfile(player, "Nothing to collect.", "info")
+		return
+	end
+	dailyMutate(player, function(data)
+		local last = pendingWheelPrize(data.Daily)
+		if not last then return false, "Nothing to collect.", "info" end
+		local prize = wheelPrizeByKey(last.Key)
+		local label = prize and applyReward(data, prize.Reward)
+		if not label then return false, "That prize is unavailable right now.", "error" end
+		last.Claimed = true
+		return true, label .. " collected.", "success"
 	end)
 end
 
@@ -3213,25 +3245,6 @@ local function inventoryItemKey(session, key)
 	return key
 end
 
--- The first note of `level` this player has not found yet. Sorted by Id so the
--- order a collection fills in is the order it is authored in, not hash order.
-local function nextFieldNote(data, level)
-	local notes = fieldNoteEntries()
-	if not notes then return nil, 0, 0 end
-	local candidates = {}
-	local total = 0
-	for _, note in ipairs(notes) do
-		if type(note) == "table" and type(note.Id) == "string" and #note.Id > 0 then
-			total += 1
-			if note.Level == level and data.FieldNotes.Discovered[note.Id] ~= true then
-				candidates[#candidates + 1] = note
-			end
-		end
-	end
-	table.sort(candidates, function(a, b) return a.Id < b.Id end)
-	return candidates[1], total, #candidates
-end
-
 inventoryFunction.OnInvoke = function(operation, player, key, amount)
 	if operation == "Count" then
 		local session = inventorySession(player)
@@ -3256,48 +3269,6 @@ inventoryFunction.OnInvoke = function(operation, player, key, amount)
 		return true, ""
 	end
 
-	if operation == "DiscoverNote" then
-		local session = inventorySession(player)
-		if not session then return false, nil, "Your profile is not loaded" end
-		if type(key) ~= "number" or key ~= key or key % 1 ~= 0 then
-			return false, nil, "Field notes unavailable"
-		end
-		local level = key
-		local candidate, total = nextFieldNote(session.data, level)
-		if total == 0 then return false, nil, "Field notes unavailable" end
-		if not candidate then
-			return false, nil, "Every note on this level is already in your collection", "complete"
-		end
-		local noteId
-		local granted, message = dailyMutate(player, function(data)
-			-- Re-picked inside the transform: another server may have logged a note
-			-- for this player while we waited, and the profile we are writing is the
-			-- only one that can say which note is next.
-			local note, noteTotal = nextFieldNote(data, level)
-			if noteTotal == 0 or not note then return false, nil, nil end
-			noteId = note.Id
-			data.FieldNotes.Discovered[note.Id] = true
-			data.FieldNotes.Serial += 1
-			local count = 0
-			for _ in pairs(data.FieldNotes.Discovered) do count += 1 end
-			if count >= noteTotal then
-				-- The completion title is awarded in the SAME transaction as the last
-				-- note: a save that fails leaves neither, and the tag below is drawn
-				-- from the attribute applyAttributes publishes off this profile.
-				return true, string.format("Field note logged: %s. Collection complete.",
-					note.Title or note.Id), "success"
-			end
-			return true, string.format("Field note logged: %s (%d of %d).",
-				note.Title or note.Id, count, noteTotal), "success"
-		end)
-		if not granted then
-			return false, nil, "That could not be saved. Try again."
-		end
-		-- The title tag hangs off the attribute, which the write above republished.
-		if player.Character then task.defer(refreshPlayerTags, player, player.Character) end
-		return true, noteId, message
-	end
-
 	return false, "Unknown inventory operation"
 end
 
@@ -3320,6 +3291,8 @@ local WRITE_BEARING_ACTIONS = {
 	-- round, but that press spends a stored consumable, so it belongs here.
 	ClaimPlaytimeReward = true,
 	SpinDailyWheel = true,
+	ClaimWheelPrize = true,
+	MarkRewardsIntroSeen = true,
 	BuyItem = true,
 	UseSpeedPotion = true,
 }
@@ -3471,6 +3444,10 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 		claimPlaytimeReward(player, payload)
 	elseif action == "SpinDailyWheel" then
 		spinDailyWheel(player)
+	elseif action == "ClaimWheelPrize" then
+		claimWheelPrize(player)
+	elseif action == "MarkRewardsIntroSeen" then
+		markRewardsIntroSeen(player)
 	elseif action == "BuyItem" then
 		buyItem(player, payload)
 	elseif action == "UseSpeedPotion" then

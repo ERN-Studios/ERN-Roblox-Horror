@@ -9,7 +9,7 @@ test_round_loading_host.py uses) and executed against fakes:
                           carry the key, and does an unmarked death fall back to
                           DeathAdvice.Unknown without reordering name/position?
   * teleportPlayersToLobby / returnPlayersToLocalLobby / the setupPlayer packet
-                          read -- is RetryGuideLevel published ONLY for a
+                          read -- RETRY_GUIDE_REMOVED_20260922: is NO retry level published for a
                           participant who did not escape?
   * RoundUI's death-card do-block -- does it draw its own death only, and does
                           an Unknown cause draw no tip?
@@ -278,11 +278,13 @@ do  -- a mark left over from a round that ended minutes ago
     expect(ctx.Fired[1][4], DeathAdvice.Unknown, "a stale mark cannot explain a later death")
 end
 
-------------------------------------------------------- 4. RetryGuideLevel, server side
+------------------------------------------------------- 4. No retry guide, server side
+-- RETRY_GUIDE_REMOVED_20260922 (owner instruction): a non-escaped return draws
+-- nothing. The packet carries no RetryLevel, the local fallback publishes no
+-- RetryGuideLevel, and an OLD packet that still carries RetryLevel is ignored.
 do
     local dispatched = nil
     local activeLevel = 2
-    local lastRoundLevel = activeLevel -- the retry guide reads the last round's level
     local inRound = {}
     local loadingFailures = {}
     local IS_RESERVED_ROUND_SERVER, IS_STUDIO = true, false
@@ -302,25 +304,15 @@ do
     escaped:SetAttribute("Escaped", true)
 
     send({died})
-    expect(dispatched.Data.RetryLevel, 2, "a participant who fell is offered the same level")
+    expect(dispatched.Data.RetryLevel, nil, "a participant who fell is NOT offered a retry level")
     expect(dispatched.Data.ReturnToLobby, true, "the existing packet field is untouched")
-
-    send({escaped})
-    expect(dispatched.Data.RetryLevel, nil, "an escapee is never told to try again")
-
     send({died, escaped})
-    expect(dispatched.Data.RetryLevel, nil,
-        "a mixed group shares one packet, so nobody is told to retry a level they cleared")
-
-    local bystander = newPlayer("Bystander")
-    send({bystander})
-    expect(dispatched.Data.RetryLevel, nil, "somebody who never entered gets no retry")
+    expect(dispatched.Data.RetryLevel, nil, "nor is a mixed group")
     check(claimed ~= nil, "the real claim path still ran")
 end
 
 do
     local activeLevel = 3
-    local lastRoundLevel = activeLevel
     local inRound = {}
     local loadingFailures = {}
     local lobbySpawn = node("Part", "LobbySpawn")
@@ -334,13 +326,14 @@ do
     inRound[died], inRound[escaped] = true, true
     escaped:SetAttribute("Escaped", true)
     returnPlayersToLocalLobby({died, escaped, bystander})
-    expect(died:GetAttribute("RetryGuideLevel"), 3, "the local fallback offers the same level")
-    expect(escaped:GetAttribute("RetryGuideLevel"), nil, "and refuses an escapee")
-    expect(bystander:GetAttribute("RetryGuideLevel"), nil, "and a swept-up bystander")
+    expect(died:GetAttribute("RetryGuideLevel"), nil, "the local fallback publishes no retry level")
+    expect(died:GetAttribute("Level4DevRoundEnded"), nil, "and no Level 4 dev banner flag")
+    expect(escaped:GetAttribute("RetryGuideLevel"), nil, "not for an escapee")
+    expect(bystander:GetAttribute("RetryGuideLevel"), nil, "not for a swept-up bystander")
     expect(died:GetAttribute("InRound"), false, "the existing lobby reset still runs")
 end
 
-do  -- the lobby side: only from the server-trusted packet, and never in a round server
+do  -- the lobby side: an OLD packet that still names a RetryLevel is ignored
     local function arrive(packet, reserved)
         local player = newPlayer()
         local IS_RESERVED_ROUND_SERVER = reserved
@@ -350,14 +343,10 @@ do  -- the lobby side: only from the server-trusted packet, and never in a round
         run()
         return player:GetAttribute("RetryGuideLevel")
     end
-    expect(arrive({ReturnToLobby = true, RetryLevel = 2}, false), 2, "the packet is read")
-    expect(arrive({ReturnToLobby = true, RetryLevel = 2}, true), nil,
-        "a reserved round server has no lobby to guide anyone through")
+    expect(arrive({ReturnToLobby = true, RetryLevel = 2}, false), nil, "an old packet's RetryLevel is read by nobody")
+    expect(arrive({ReturnToLobby = true, RetryLevel = 2}, true), nil, "in a reserved round server too")
     expect(arrive({ReturnToLobby = true}, false), nil, "a packet without a level offers nothing")
-    expect(arrive({RetryLevel = 2}, false), nil, "a packet that is not a lobby return is ignored")
     expect(arrive(nil, false), nil, "no packet at all is fine")
-    expect(arrive({ReturnToLobby = true, RetryLevel = "2"}, false), nil,
-        "a non-number level is refused")
 end
 
 --------------------------------------------------------- 5. RoundUI's death card
@@ -453,7 +442,7 @@ def main():
             "\n-- One authoritative transfer per player"))
         .replace("--[[SETUPPLAYER_SOURCE]]", section(
             MANAGER,
-            " -- RETRY_GUIDE_20260921. Only in the public lobby",
+            " -- RETRY_GUIDE_REMOVED_20260922",
             " player.CharacterAdded:Connect("))
         .replace("--[[DEATHCARD_SOURCE]]", section(
             ROUNDUI,

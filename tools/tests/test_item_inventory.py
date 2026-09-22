@@ -1,4 +1,4 @@
-"""ServerStorage.ZyntraInventory, BuyItem, field notes and the leaderboard columns.
+"""ServerStorage.ZyntraInventory, BuyItem, the inert legacy FieldNotes record and the leaderboard columns.
 
 Runs the REAL blocks out of ZyntraMonetization.Script.lua -- the profile helpers,
 publicProfile, applyAttributes, refreshPlayerTags, mutate, the daily-rewards
@@ -17,6 +17,7 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[2]
 SERVER = (ROOT / "ServerScriptService/ZyntraMonetization.Script.lua").read_text(encoding="utf-8")
 CONFIG = (ROOT / "ReplicatedStorage/ZyntraConfig.ModuleScript.lua").read_text(encoding="utf-8")
+RESEARCH = (ROOT / "ReplicatedStorage/ZyntraDailyResearch.ModuleScript.lua").read_text(encoding="utf-8")
 
 
 def section(start, stop):
@@ -68,15 +69,11 @@ local Config = (function()
 
 WORLD = r'''
 end)()
-
-local NOTES = {
-    Notes = {
-        {Id = "L1-02", Level = 1, Title = "Wet Return Duct", Body = "b", Stamp = "s"},
-        {Id = "L1-01", Level = 1, Title = "Intake Log", Body = "b", Stamp = "s"},
-        {Id = "L2-01", Level = 2, Title = "Pump Room Slate", Body = "b", Stamp = "s"},
-        {Id = "L3-01", Level = 3, Title = "Mall Manifest", Body = "b", Stamp = "s"},
-    },
-}
+-- The REAL daily research ledger (ZyntraMonetization requires it since the
+-- research goals landed); served through the ReplicatedStorage stub below.
+local ZyntraDailyResearchModule = (function()
+RESEARCH_SOURCE
+end)()
 
 local function world(opts)
     opts = opts or {}
@@ -163,6 +160,8 @@ local function world(opts)
         local object = {ClassName = class, Name = name or "", Parent = nil,
             attributes = {}, children = {}, Value = ""}
         object.ChildAdded = signal()
+        -- The research-progress BindableEvent the pasted block wires up.
+        object.Event = signal()
         function object:IsA(other) return other == class end
         function object:SetAttribute(key, value) self.attributes[key] = value end
         function object:GetAttribute(key) return self.attributes[key] end
@@ -202,12 +201,12 @@ local function world(opts)
     local Instance = {new = function(class) return instance(class) end}
 
     local ReplicatedStorage = instance("Folder", "ReplicatedStorage")
-    if w.notes ~= false then
-        local module = instance("ModuleScript", "ZyntraFieldNotes")
-        module.content = w.notes or NOTES
-        table.insert(ReplicatedStorage.children, module)
-    end
+    local researchModule = instance("ModuleScript", "ZyntraDailyResearch")
+    researchModule.content = ZyntraDailyResearchModule
+    researchModule.Parent = ReplicatedStorage
+    function ReplicatedStorage:WaitForChild(name) return self:FindFirstChild(name) end
     local function require(module) return module.content end
+    local function advancedStaminaBonus() return 0 end
 
     local ServerStorage = instance("Folder", "ServerStorage")
 
@@ -449,138 +448,24 @@ eq(select(1, (function()
     return w.inventory.OnInvoke("Nonsense", w.player)
 end)()), false, "an unknown operation answers false")
 
--- ---------------------------------------------------------------------------
--- ZyntraInventory: DiscoverNote.
--- ---------------------------------------------------------------------------
-do
-    local w = fresh()
-    local changed, noteId, message = w.inventory.OnInvoke("DiscoverNote", w.player, 1)
-    eq(changed, true, "the first level 1 note is granted")
-    eq(noteId, "L1-01", "sorted by Id, not by table order")
-    eq(message, "Field note logged: Intake Log (1 of 4).",
-        "and the human message comes back for the client")
-    eq(w:saved().FieldNotes.Discovered["L1-01"], true, "durably recorded")
-    eq(w:saved().FieldNotes.Serial, 1, "with a serial")
-    eq(w:lastPush().message, "Field note logged: Intake Log (1 of 4).",
-        "the push reports the progress")
-    local second, secondId = w.inventory.OnInvoke("DiscoverNote", w.player, 1)
-    eq(second, true, "the next call grants the next note")
-    eq(secondId, "L1-02", "in Id order")
-    eq(w:saved().FieldNotes.Serial, 2, "the serial advances")
-    local writes = w.writes
-    local none, noneId, noneMessage = w.inventory.OnInvoke("DiscoverNote", w.player, 1)
-    eq(none, false, "a level whose notes are all owned grants nothing")
-    eq(noneId, nil, "and names no note")
-    eq(noneMessage, "Every note on this level is already in your collection",
-        "with the contract's message")
-    eq(w.writes, writes, "and writes nothing")
-end
-
-do
-    local w = fresh()
-    for _, level in ipairs({0, 4, -1, 1.5, "1", {}}) do
-        local changed, noteId, message = w.inventory.OnInvoke("DiscoverNote", w.player, level)
-        eq(changed, false, "level " .. tostring(level) .. " grants nothing")
-        eq(noteId, nil, "and names no note")
-        check(message == "Field notes unavailable"
-            or message == "Every note on this level is already in your collection",
-            "with a refusal message")
-    end
-    eq(w:saved().FieldNotes.Serial, 0, "no note was recorded")
-    eq(select(1, w.inventory.OnInvoke("DiscoverNote", w.stranger, 1)), false,
-        "a non-Player discovers nothing")
-    eq(select(3, w.inventory.OnInvoke("DiscoverNote", w.stranger, 1)),
-        "Your profile is not loaded", "with a loading reason")
-end
-
--- No module in the place: the collection is simply unavailable.
-do
-    local w = fresh({notes = false})
-    local changed, noteId, message = w.inventory.OnInvoke("DiscoverNote", w.player, 1)
-    eq(changed, false, "with no module nothing is granted")
-    eq(noteId, nil, "and no id")
-    eq(message, "Field notes unavailable", "with the contract's message")
-    local public = w.publicProfile(w:live(), w.player)
-    eq(public.FieldNotes.Total, 0, "the payload reports zero notes")
-    eq(public.FieldNotes.TitleUnlocked, false, "and no completed collection")
-    eq(w.player:GetAttribute("ZyntraFieldNotesTitle"), "", "and awards no title")
-end
-
--- Completion: the title lands with the last note, in the same transaction.
-do
-    local w = fresh()
-    eq(w.publicProfile(w:live(), w.player).FieldNotes.Total, 4, "four notes in the module")
-    w.inventory.OnInvoke("DiscoverNote", w.player, 1)
-    w.inventory.OnInvoke("DiscoverNote", w.player, 1)
-    w.inventory.OnInvoke("DiscoverNote", w.player, 2)
-    eq(w.player:GetAttribute("ZyntraFieldNotesTitle"), "",
-        "three of four is not a completed collection")
-    eq(w.publicProfile(w:live(), w.player).FieldNotes.Count, 3, "and the payload agrees")
-    eq(w.publicProfile(w:live(), w.player).FieldNotes.TitleUnlocked, false, "no title yet")
-    local changed, noteId, note4 = w.inventory.OnInvoke("DiscoverNote", w.player, 3)
-    eq(changed, true, "the last note is granted")
-    eq(noteId, "L3-01", "and named")
-    eq(note4, "Field note logged: Mall Manifest. Collection complete.",
-        "with the completion message")
-    eq(w.player:GetAttribute("ZyntraFieldNotesTitle"), Config.FieldNotes.CompletionTitle,
-        "completion publishes the title attribute")
-    eq(w.publicProfile(w:live(), w.player).FieldNotes.TitleUnlocked, true,
-        "and the payload reports it unlocked")
-    eq(w.publicProfile(w:live(), w.player).FieldNotes.Count, 4, "with every note counted")
-    eq(w:lastPush().message, "Field note logged: Mall Manifest. Collection complete.",
-        "and the push says the collection is complete")
-    w:run()
-    w:refreshTags()
-    local rows = w.tags()
-    local titles = 0
-    for _, tag in ipairs(rows) do
-        if tag.Name == "ZyntraTitleTag" then titles += 1 end
-    end
-    eq(titles, 1, "a single title tag row is drawn")
-    eq(#rows, 1, "and nothing else, for a player with no pass and no dev access")
-end
-
--- The title row stacks under the Supporter tag rather than replacing it.
-do
-    local w = fresh()
-    w.player:SetAttribute("ZyntraOwnsSupporter", true)
-    for _, level in ipairs({1, 1, 2, 3}) do
-        w.inventory.OnInvoke("DiscoverNote", w.player, level)
-    end
-    w:refreshTags()
-    local names = {}
-    for _, tag in ipairs(w.tags()) do names[tag.Name] = true end
-    check(names.ZyntraSupporterTag, "the Supporter tag is still drawn")
-    check(names.ZyntraTitleTag, "and the title tag as well")
-    w.player:SetAttribute("InRound", true)
-    w:refreshTags()
-    eq(#w.tags(), 0, "both are lobby badges and are cleared in a round")
-end
-
--- A discovery whose write fails records nothing and keeps the note available.
-do
-    local w = fresh()
-    w.failBefore = true
-    local changed, noteId, message = w.inventory.OnInvoke("DiscoverNote", w.player, 1)
-    w.failBefore = false
-    eq(changed, false, "a failed discovery answers false")
-    eq(noteId, nil, "with no id")
-    eq(message, "That could not be saved. Try again.", "and a retry reason")
-    eq(w:saved().FieldNotes.Serial, 0, "nothing recorded")
-    eq(select(2, w.inventory.OnInvoke("DiscoverNote", w.player, 1)), "L1-01",
-        "the same note is still the next one")
-end
-
--- A save that already holds a note is not granted it again.
+-- FIELD_NOTES_REMOVED_20260922: DiscoverNote, the completion title and the
+-- NOTES progress left with the Field Notes feature. An old save's FieldNotes
+-- table is inert legacy data (see test_daily_rewards.py's normalization checks).
 do
     local w = fresh()
     w:seed({Tokens = 0, FieldNotes = {Discovered = {["L1-01"] = true}, Serial = 1}})
-    eq(select(2, w.inventory.OnInvoke("DiscoverNote", w.player, 1)), "L1-02",
-        "an already-owned note is skipped")
-    eq(w:saved().FieldNotes.Serial, 2, "and the serial continues from the save")
+    local changed, second = w.inventory.OnInvoke("DiscoverNote", w.player, 1)
+    eq(changed, false, "DiscoverNote is no longer an inventory operation")
+    eq(second, "Unknown inventory operation", "and is refused like any unknown one")
+    eq(w:saved().FieldNotes.Discovered["L1-01"], true, "an old save keeps its discovered notes as inert data")
+    eq(w:saved().FieldNotes.Serial, 1, "and its serial")
     local public = w.publicProfile(w:live(), w.player)
-    eq(public.FieldNotes.Count, 2, "the payload counts both")
-    eq(public.FieldNotes.Discovered["L1-01"], true, "and carries the set")
+    eq(public.FieldNotes, nil, "the payload no longer carries a collection")
+    eq(w.player:GetAttribute("ZyntraFieldNotesTitle"), nil, "and no title attribute is published")
+    w:refreshTags()
+    for _, tag in ipairs(w.tags()) do
+        check(tag.Name ~= "ZyntraTitleTag", "no FIELD ARCHIVIST title row is drawn")
+    end
 end
 
 -- ---------------------------------------------------------------------------
@@ -617,7 +502,7 @@ def main():
     pieces = [
         PRELUDE,
         CONFIG,
-        WORLD,
+        WORLD.replace("RESEARCH_SOURCE", RESEARCH),
         section("local function colorData", "local function isDispatchPredecessorClosed"),
         section("local function accessibilityValue", "-- The switch a player"),
         section("local function publicProfile", "local function applyHazmatColor"),

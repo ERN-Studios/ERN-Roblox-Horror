@@ -17,6 +17,7 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[2]
 SERVER = (ROOT / "ServerScriptService/ZyntraMonetization.Script.lua").read_text(encoding="utf-8")
 CONFIG = (ROOT / "ReplicatedStorage/ZyntraConfig.ModuleScript.lua").read_text(encoding="utf-8")
+RESEARCH = (ROOT / "ReplicatedStorage/ZyntraDailyResearch.ModuleScript.lua").read_text(encoding="utf-8")
 
 
 def section(start, stop):
@@ -63,6 +64,11 @@ local Config = (function()
 '''
 
 WORLD = r'''
+end)()
+-- The REAL daily research ledger (ZyntraMonetization requires it since the
+-- research goals landed); served through the ReplicatedStorage stub below.
+local ZyntraDailyResearchModule = (function()
+RESEARCH_SOURCE
 end)()
 
 -- Every world gets its own upvalues, so the real blocks below are pasted inside
@@ -223,15 +229,24 @@ local function world(opts)
     local ACCESSIBILITY_SETTINGS = Config.AccessibilitySettings
     local PERCENT_PER_LEVEL = math.floor(Config.TokenPercentPerLevel * 100 + 0.5)
     local function applyHazmatColor() end
+    local function advancedStaminaBonus() return 0 end
     local function reassertPendingAccessibility() end
     local function refreshPlayerTags() w.tagRefreshes += 1 end
-    local ReplicatedStorage = nil
+    local ReplicatedStorage = {}
+    function ReplicatedStorage:WaitForChild(name) return name end
+    function ReplicatedStorage:FindFirstChild(_name) return nil end
+    local function require(name)
+        if name == "ZyntraDailyResearch" then return ZyntraDailyResearchModule end
+        error("harness has no module " .. tostring(name))
+    end
     local ServerStorage = {children = {}}
     function ServerStorage:FindFirstChild(name) return self.children[name] end
     local Instance = {}
     function Instance.new(class)
         local object = {ClassName = class, Name = "", Parent = nil}
         function object:IsA(other) return other == class end
+        -- The research-progress BindableEvent the pasted block wires up.
+        object.Event = {Connect = function() return {Disconnect = function() end} end}
         return object
     end
     -- xorshift32: good enough that a 20000-sample distribution is a real test of
@@ -264,6 +279,7 @@ TAIL = r'''
     w.publicProfile, w.normalize, w.applyReward = publicProfile, normalizeProfile, applyReward
     w.playtime, w.flush, w.pick = playtimeSessions, flushPlaytime, pickWheelPrize
     w.claim, w.spin, w.buy, w.potion = claimPlaytimeReward, spinDailyWheel, buyItem, useSpeedPotion
+    w.collect = claimWheelPrize
     w.inventory = inventoryFunction
     function w:seed(profile)
         local key = "u_" .. player.UserId
@@ -558,7 +574,7 @@ do
     w.claim(w.player, {Minutes = 5})
     eq(w:saved().Tokens, 11, "the 5 minute milestone grants one token")
     eq(w:saved().Daily.Claimed["5"], true, "and records the claim")
-    eq(w:lastPush().message, "+1 Research Token for 5 minutes of play today.",
+    eq(w:lastPush().message, "1 Research Token collected -- 5 minutes of play today.",
         "the claim message names the reward and the milestone")
     eq(w:lastPush().tone, "success", "a granted claim is a success")
     local writes, calls = w.writes, w.calls
@@ -704,44 +720,84 @@ do
 end
 
 do
+    -- WHEEL_COLLECT_20260922: a spin RECORDS, the claim PAYS, exactly once.
     local w = fresh()
     w.random = function() return 0.0 end
     w:enter()
     w.spin(w.player)
-    eq(w:saved().Tokens, 11, "the first spin pays out")
+    eq(w:saved().Tokens, 10, "a spin records the prize and pays nothing yet")
     eq(w:saved().Daily.WheelDay, "2026-09-16", "and records the day")
     eq(w:saved().Daily.WheelLast.Key, "Token1", "and the prize")
     eq(w:saved().Daily.WheelLast.Serial, 1, "and a serial")
-    eq(w:lastPush().message, "Supply Wheel: 1 Research Token", "the reply names the prize")
+    eq(w:saved().Daily.WheelLast.Claimed, false, "and that it is still owed")
+    eq(w:lastPush().message, "Supply Wheel: 1 Research Token -- collect your prize.", "the reply names the prize")
+    eq(w:lastPush().data.Daily.WheelLast.Claimed, false, "the published profile carries the pending flag")
     local writes, calls = w.writes, w.calls
+    -- Spinning again while a prize is owed is refused without a write, today or
+    -- tomorrow, so a day change can never overwrite an uncollected prize.
     w.random = function() return 0.99 end
     w.spin(w.player)
-    eq(w:saved().Tokens, 11, "a second spin the same day grants nothing")
+    eq(w:saved().Daily.WheelLast.Key, "Token1", "a second spin cannot replace a pending prize")
     eq(w.writes, writes, "and writes nothing")
     eq(w.calls, calls, "and opens no transaction")
-    eq(w:saved().Daily.WheelLast.Key, "Token1", "the recorded prize is unchanged")
-    eq(w:lastPush().message,
-        "Today's spin is done: 1 Research Token. Next spin at 00:00 UTC.",
-        "the replay re-reports the recorded prize")
-    -- A rejoin sees the same recorded outcome, so an animation can replay it.
-    w:seed(w:saved())
-    w.spin(w.player)
-    eq(w:saved().Tokens, 11, "a rejoin cannot spin again")
-    eq(w:lastPush().message,
-        "Today's spin is done: 1 Research Token. Next spin at 00:00 UTC.",
-        "a rejoin gets the same recorded prize")
-    -- Tomorrow.
+    eq(w:lastPush().message, "Collect your prize first: 1 Research Token.", "the reply says why")
     w.day = "2026-09-17"
+    w.spin(w.player)
+    eq(w:saved().Daily.WheelLast.Key, "Token1", "the free spin waits behind the uncollected prize")
+    eq(w:saved().Daily.WheelDay, "2026-09-16", "the spin day is untouched")
+    eq(w.writes, writes, "still no write")
+    -- Collect: one atomic payout.
+    w.collect(w.player)
+    eq(w:saved().Tokens, 11, "the claim pays the recorded prize")
+    eq(w:saved().Daily.WheelLast.Claimed, true, "and marks it collected in the same write")
+    eq(w:saved().Daily.WheelLast.Serial, 1, "the serial is the receipt and does not change")
+    eq(w:lastPush().message, "1 Research Token collected.", "the confirmation is the server's word")
+    writes, calls = w.writes, w.calls
+    w.collect(w.player)
+    eq(w:saved().Tokens, 11, "a double click pays nothing more")
+    eq(w.writes, writes, "and writes nothing")
+    eq(w.calls, calls, "and opens no transaction")
+    eq(w:lastPush().message, "Nothing to collect.", "the second claim is told there is nothing owed")
+    -- A rejoin sees the same recorded, collected outcome.
+    w:seed(w:saved())
+    w.collect(w.player)
+    eq(w:saved().Tokens, 11, "a rejoin cannot collect again")
+    -- The day-2 free spin was not lost: it is available now that the prize is in.
     w.random = function() return 0.99 end
     w.spin(w.player)
-    eq(w:saved().Daily.WheelDay, "2026-09-17", "tomorrow's spin is allowed")
-    eq(w:saved().Daily.WheelLast.Key, "Shield1", "and pays the rolled prize")
+    eq(w:saved().Daily.WheelDay, "2026-09-17", "the next day's spin is allowed after collection")
+    eq(w:saved().Daily.WheelLast.Key, "Shield1", "and records the rolled prize")
     eq(w:saved().Daily.WheelLast.Serial, 2, "the serial advances")
-    eq(w:saved().Protection.Charges, 1, "an Entity Shield prize is a stored charge")
+    eq(w:saved().Daily.WheelLast.Claimed, false, "and it is owed")
+    eq(w:saved().Protection.Charges, 0, "not paid before the claim")
+    w.spin(w.player)
+    eq(w:lastPush().message, "Collect your prize first: 1 Entity Shield.", "spent-spin replay while owed")
+    w.collect(w.player)
+    eq(w:saved().Protection.Charges, 1, "an Entity Shield prize is a stored charge, paid on claim")
+    w.spin(w.player)
+    eq(w:lastPush().message,
+        "Today's spin is done: 1 Entity Shield. Next spin at 00:00 UTC.",
+        "after collection the same-day replay re-reports the recorded prize")
+end
+
+-- Every result saved before the Claimed field existed was paid at spin time:
+-- it normalizes to collected and a claim pays nothing.
+do
+    local w = fresh()
+    w:seed({Tokens = 10, Daily = {Day = w.day, PlaytimeSeconds = 0, Claimed = {},
+        WheelDay = w.day, WheelLast = {Day = w.day, Key = "Token3", Serial = 4}}})
+    eq(w:saved().Daily.WheelLast.Claimed, true, "a historical result normalizes to claimed")
+    local writes = w.writes
+    w.collect(w.player)
+    eq(w:saved().Tokens, 10, "and is never paid again")
+    eq(w.writes, writes, "and the claim writes nothing")
+    eq(w:lastPush().message, "Nothing to collect.", "the reply says so")
+    eq(w:saved().Daily.WheelLast.Serial, 4, "the serial is kept")
 end
 
 -- The outcome is durable before the reply: a spin whose write never lands
--- records nothing and can be spun again.
+-- records nothing and can be spun again; a claim whose write never lands
+-- leaves the prize owed and pays once on the retry.
 do
     local w = fresh()
     w.random = function() return 0.0 end
@@ -753,10 +809,27 @@ do
     eq(w:saved().Tokens, 10, "and pays nothing")
     w.spin(w.player)
     eq(w:saved().Daily.WheelDay, "2026-09-16", "the retry spins for real")
-    eq(w:saved().Tokens, 11, "and pays once")
+    eq(w:saved().Daily.WheelLast.Claimed, false, "and the prize is owed")
+    w.failBefore = true
+    w.collect(w.player)
+    w.failBefore = false
+    eq(w:saved().Tokens, 10, "a failed claim pays nothing")
+    eq(w:saved().Daily.WheelLast.Claimed, false, "and the prize is still owed")
+    eq(w:lastPush().message, "Could not save that change. Please try again.", "the client is told to retry")
+    w.collect(w.player)
+    eq(w:saved().Tokens, 11, "the retry pays once")
+    eq(w:saved().Daily.WheelLast.Claimed, true, "and closes the prize")
+    -- Committed but the response was lost: the retry finds it collected.
+    w.day = "2026-09-17"
+    w.spin(w.player)
+    w.failAfter = true
+    w.collect(w.player)
+    eq(w:saved().Tokens, 12, "the lost-response claim was committed")
+    w.collect(w.player)
+    eq(w:saved().Tokens, 12, "and the retry pays nothing more")
 end
 
--- Every wheel prize pays the reward its config declares.
+-- Every wheel prize pays the reward its config declares -- on the claim.
 do
     local payouts = {
         Token1 = function(d) return d.Tokens - 10 == 1 end,
@@ -765,6 +838,7 @@ do
         Potion2 = function(d) return d.Items.SpeedPotion == 2 end,
         Shield1 = function(d) return d.Protection.Charges == 1 end,
     }
+    local untouched = function(d) return d.Tokens == 10 and d.Items.SpeedPotion == 0 and d.Protection.Charges == 0 end
     local edge = 0
     for index, prize in ipairs(Config.DailyRewards.Wheel) do
         local w = fresh()
@@ -775,8 +849,10 @@ do
         w:enter()
         w.spin(w.player)
         eq(w:saved().Daily.WheelLast.Key, prize.Key, "slice " .. index .. " selects " .. prize.Key)
-        check(payouts[prize.Key](w:saved()), prize.Key .. " pays what its config declares")
-        eq(w:lastPush().message, "Supply Wheel: " .. prize.Label, prize.Key .. " reply")
+        check(untouched(w:saved()), prize.Key .. " pays nothing at spin")
+        eq(w:lastPush().message, "Supply Wheel: " .. prize.Label .. " -- collect your prize.", prize.Key .. " reply")
+        w.collect(w.player)
+        check(payouts[prize.Key](w:saved()), prize.Key .. " pays what its config declares on claim")
     end
 end
 
@@ -863,10 +939,11 @@ do
     w.potion(w.player)
     eq(w:saved().Items.SpeedPotion, 1, "one potion is consumed")
     eq(w.player:GetAttribute("ZyntraSpeedBoostUntil"), w.now + 6, "the boost ends six seconds out")
-    eq(w.player:GetAttribute("ZyntraSpeedBoostMultiplier"), 1.1, "at +10%")
+    eq(w.player:GetAttribute("ZyntraSpeedBoostMultiplier"), Config.Items.SpeedPotion.SpeedMultiplier,
+        "at the configured boost (1.30 since the +30% potion; the old literal 1.1 was stale)")
     eq(w.player:GetAttribute("ZyntraSpeedPotionUsedThisRound"), true, "and the round is marked")
     eq(w.player:GetAttribute("ZyntraSpeedPotions"), 1, "the stored count is republished")
-    eq(w:lastPush().message, "Speed Potion: +10% speed for 6 seconds.", "the reply states the effect")
+    eq(w:lastPush().message, "Speed Potion: +30% speed for 6 seconds.", "the reply states the effect")
     eq(w.publicProfile(w:live(), w.player).SpeedBoostUntil, w.now + 6,
         "the payload carries the boost deadline")
     -- Second use inside the same round.
@@ -888,7 +965,7 @@ do
     w:enter()
     w.potion(w.player)
     eq(w:saved().Items.SpeedPotion, 0, "and allows one more potion")
-    eq(w.player:GetAttribute("ZyntraSpeedBoostMultiplier"), 1.1, "with the boost applied again")
+    eq(w.player:GetAttribute("ZyntraSpeedBoostMultiplier"), Config.Items.SpeedPotion.SpeedMultiplier, "with the boost applied again")
 end
 
 -- Death, leaving the round and the round ending all clear the boost.
@@ -907,7 +984,7 @@ do
             Daily = {Day = w.day, PlaytimeSeconds = 0, Claimed = {}}})
         w:enter()
         w.potion(w.player)
-        eq(w.player:GetAttribute("ZyntraSpeedBoostMultiplier"), 1.1, case.name .. ": boost is on")
+        eq(w.player:GetAttribute("ZyntraSpeedBoostMultiplier"), Config.Items.SpeedPotion.SpeedMultiplier, case.name .. ": boost is on")
         case.act(w)
         eq(w.player:GetAttribute("ZyntraSpeedBoostUntil"), 0, case.name .. " clears the deadline")
         eq(w.player:GetAttribute("ZyntraSpeedBoostMultiplier"), 1, case.name .. " clears the multiplier")
@@ -994,12 +1071,11 @@ do
     w.buy(w.player, {Key = "RouteMarker"})
     eq(w.player:GetAttribute("ZyntraRouteMarkers"), 3, "markers are published as an attribute")
     eq(w.player:GetAttribute("ZyntraSpeedPotions"), 0, "so are potions")
-    eq(w.player:GetAttribute("ZyntraFieldNotesTitle"), "",
-        "with no note module there is no completion title")
+    eq(w.player:GetAttribute("ZyntraFieldNotesTitle"), nil,
+        "FIELD_NOTES_REMOVED_20260922: no completion title is published any more")
     local public = w.publicProfile(w:live(), w.player)
     eq(public.Items.RouteMarker, 3, "the payload carries the inventory")
-    eq(public.FieldNotes.Total, 0, "and reports an empty collection honestly")
-    eq(public.FieldNotes.TitleUnlocked, false, "which is not a completed one")
+    eq(public.FieldNotes, nil, "and no field-note collection")
     eq(public.SpeedBoostUntil, 0, "and no boost")
 end
 
@@ -1015,15 +1091,18 @@ do
     eq(w:live().Tokens, 11, "Studio grants the milestone")
     w.random = function() return 0.0 end
     w.spin(w.player)
-    eq(w:live().Tokens, 12, "Studio spins the wheel")
+    eq(w:live().Tokens, 11, "Studio spins the wheel and records the prize")
     eq(w:live().Daily.WheelDay, "2026-09-16", "and records it in memory")
+    eq(w:live().Daily.WheelLast.Claimed, false, "owed until collected")
+    w.collect(w.player)
+    eq(w:live().Tokens, 12, "Studio pays the prize on the claim")
     w.spin(w.player)
     eq(w:live().Tokens, 12, "and refuses the second spin the same way")
     w.buy(w.player, {Key = "SpeedPotion"})
     eq(w:live().Items.SpeedPotion, 1, "Studio buys the potion")
     w.potion(w.player)
     eq(w:live().Items.SpeedPotion, 0, "and uses it")
-    eq(w.player:GetAttribute("ZyntraSpeedBoostMultiplier"), 1.1, "with the boost applied")
+    eq(w.player:GetAttribute("ZyntraSpeedBoostMultiplier"), Config.Items.SpeedPotion.SpeedMultiplier, "with the boost applied")
     eq(w.calls, 0, "still no DataStore access anywhere")
 end
 
@@ -1097,7 +1176,7 @@ def main():
     pieces = [
         PRELUDE,
         CONFIG,
-        WORLD,
+        WORLD.replace("RESEARCH_SOURCE", RESEARCH),
         section("local function colorData", "local function isDispatchPredecessorClosed"),
         section("local function accessibilityValue", "-- The switch a player"),
         section("local function publicProfile", "local tagCharacters"),

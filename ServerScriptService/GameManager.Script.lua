@@ -358,10 +358,6 @@ local inRound = {}
 local roundBusy = false
 local worldReady = false
 local activeLevel = 1
--- The level of the most recent round. cleanupActiveWorld puts activeLevel back
--- to 1 BEFORE players are walked home, so the retry guide reads this instead
--- (found in Studio 2026-09-22: a Level 2 loss pointed the guide at Level 1).
-local lastRoundLevel = 1
 local postWinSerial = 0
 local activePostWin = nil
 local pendingTeleports = {}
@@ -1083,12 +1079,9 @@ local function setupPlayer(player)
   and type(packet.LoadingError) == "string" then
   player:SetAttribute("RoundLoadingError", packet.LoadingError == "LOADING_TIMEOUT" and "timeout" or "failed")
  end
- -- RETRY_GUIDE_20260921. Only in the public lobby, and only from the packet:
- -- GetJoinData is server-trusted, a client attribute would not be.
- if not IS_RESERVED_ROUND_SERVER and type(packet) == "table"
-  and packet.ReturnToLobby == true and type(packet.RetryLevel) == "number" then
-  player:SetAttribute("RetryGuideLevel", packet.RetryLevel)
- end
+ -- RETRY_GUIDE_REMOVED_20260922 (owner instruction): a non-escaped return no
+ -- longer draws a TRY AGAIN guide, so a RetryLevel in an old lobby packet is
+ -- read by nobody -- neither here nor as a player attribute.
  player.CharacterAdded:Connect(function(char) onCharacter(player, char) end)
  task.defer(function()
   if not player.Parent then return end
@@ -1480,7 +1473,6 @@ local function ensureWorld(group, requestedLevel, attempt)
  local level = Routing.ClampLevelTo(requestedLevel, devCeiling(group))
  if worldReady and activeLevel == level then return true end
  activeLevel = level
- lastRoundLevel = level
  workspace:SetAttribute("SelectedLevel", level)
  workspace:SetAttribute("WorldGenerated", false)
  local generatorName = LEVEL_GENERATORS[level]
@@ -1607,20 +1599,6 @@ end
 
 local function returnPlayersToLocalLobby(group)
 	for _, player in ipairs(livePlayers(group)) do
-		-- RETRY_GUIDE_20260921. A participant who did NOT escape is shown the way
-		-- back to the same level's pads; read before InRound/Escaped are cleared,
-		-- and never for a bystander this recovery path swept up. It is a hint, not
-		-- a revive: nothing about the queue, the price or the round changes.
-		if inRound[player] and player:GetAttribute("Escaped") ~= true then
-			-- LEVEL4_DEV_RETRY_20260922: a dev level has no lobby bay, so the
-			-- pad guide would point at nothing. The dev client shows a restart
-			-- hint from this attribute instead (cleared when a round starts).
-			if lastRoundLevel > Routing.MaxLevel then
-				player:SetAttribute("Level4DevRoundEnded", true)
-			else
-				player:SetAttribute("RetryGuideLevel", lastRoundLevel)
-			end
-		end
 		inRound[player] = nil
 		player:SetAttribute("InRound", false)
 		player:SetAttribute("Escaped", nil)
@@ -1796,22 +1774,9 @@ local function teleportPlayersToLobby(group)
 		releaseUndispatchedClaims(live)
 		return false, "LOCAL_FALLBACK", live
 	end
-	-- RETRY_GUIDE_20260921. A player attribute cannot cross a teleport, so the
-	-- level to offer a retry for rides in the packet the lobby already reads.
-	-- ONE descriptor covers the whole dispatch, so this only claims a retry when
-	-- NOBODY in it escaped: a win sends escapers and non-escapers home together,
-	-- and telling somebody to try again at the level they just cleared is worse
-	-- than telling them nothing.
-	local retryLevel = lastRoundLevel <= Routing.MaxLevel and lastRoundLevel or nil
-	for _, player in ipairs(live) do
-		if not inRound[player] or player:GetAttribute("Escaped") == true then
-			retryLevel = nil
-			break
-		end
-	end
 	local ok, err, attemptId = dispatchTransfer(live, {
 		Kind = "lobby",
-		Data = {ReturnToLobby = true, LoadingError = loadingFailures[live[1]], RetryLevel = retryLevel},
+		Data = {ReturnToLobby = true, LoadingError = loadingFailures[live[1]]},
 	})
 	if not ok then reportDispatchFailure(live, attemptId, err) end
 	return ok, err, live
@@ -2082,8 +2047,6 @@ local function prepareGroupLoading(attempt, group, level, useSlideResume)
    inRound[player] = true
    player:SetAttribute("InRound", true)
    player:SetAttribute("Escaped", nil)
-   player:SetAttribute("RetryGuideLevel", nil) -- RETRY_GUIDE_20260921: they took it
-   player:SetAttribute("Level4DevRoundEnded", nil)
    player:SetAttribute("Level2_ExitTransition", nil)
   end
  end
