@@ -211,6 +211,10 @@ end
 -- finish and the dashboard would read 100% drop-off.
 local function openRetryLoop(state, player)
 	if RESERVED then return end
+	-- ONBOARD_ORDER_20260922: idempotent. A second Join for the same player
+	-- (GameManager re-running its arrival hook) must not open a second funnel
+	-- session while the first is still waiting for a launch.
+	if state.LobbyAt and (state.RoundAt == nil or state.RoundAt < state.LobbyAt) then return end
 	state.Loops += 1
 	state.LobbyAt = now()
 	send(string.format("retry 1 BackInLobby user=%d", player.UserId),
@@ -233,6 +237,12 @@ function impl.ProfileLoaded(player, isNew)
 	if not state then return end
 	state.Origin = isNew == true and "new" or (isNew == false and "returning" or "unknown")
 	if debugFolder then debugFolder:SetAttribute("Mode", live and "live" or "studio") end
+	-- ONBOARD_ORDER_20260922: the funnel contract is 1 Joined, then 2
+	-- ProfileLoaded, in that order. Whether GameManager's arrival hook or the
+	-- DataStore answers first is a race (in Studio the profile wins), so step 1
+	-- is logged here if it has not been yet; the later Join then finds its step
+	-- taken and only does its own work (the retry loop).
+	onboard(state, player, 1, 0)
 	onboard(state, player, 2, 0)
 end
 

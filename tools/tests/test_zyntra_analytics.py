@@ -191,6 +191,49 @@ end
 '''
 
 TESTS = r'''
+
+-- ONBOARD_ORDER_20260922. The funnel contract is 1 Joined then 2 ProfileLoaded,
+-- whichever of GameManager's arrival hook and the DataStore answers first.
+do
+    -- Join -> ProfileLoaded: the ordinary order, one event per step.
+    local h = host()
+    local player = newPlayer()
+    Analytics.Join(player)
+    Analytics.ProfileLoaded(player, false)
+    equal(kinds(h.Service), "onboard:1:Joined onboard:2:ProfileLoaded", "Join then ProfileLoaded logs 1 then 2")
+end
+do
+    -- ProfileLoaded -> Join (what Studio does): step 1 is still logged, first,
+    -- and the late Join adds nothing to the onboarding funnel.
+    local h = host()
+    local player = newPlayer()
+    Analytics.ProfileLoaded(player, false)
+    equal(kinds(h.Service), "onboard:1:Joined onboard:2:ProfileLoaded", "a profile that answers first still logs Joined before ProfileLoaded")
+    Analytics.Join(player)
+    equal(kinds(h.Service), "onboard:1:Joined onboard:2:ProfileLoaded", "the late Join logs no second step 1")
+    equal(countCalls(h.Service, "onboard"), 2, "two onboarding events, not three")
+end
+do
+    -- Double Join: one step 1, and for a player walking back from a round one
+    -- retry loop, not two.
+    local h = host()
+    local player = newPlayer({join = {SourcePlaceId = 7001}})
+    Analytics.Join(player)
+    Analytics.Join(player)
+    Analytics.ProfileLoaded(player, false)
+    equal(countCalls(h.Service, "onboard"), 2, "a double Join still logs exactly 1 and 2")
+    equal(countCalls(h.Service, "funnel"), 1, "and opens the retry loop once")
+end
+do
+    -- Reserved round server arrival: steps may be logged (Roblox keeps the
+    -- first per user), but no retry loop is ever opened there.
+    local h = host({reserved = true, jobId = "job-round"})
+    local player = newPlayer()
+    Analytics.ProfileLoaded(player, false)
+    Analytics.Join(player)
+    equal(kinds(h.Service), "onboard:1:Joined onboard:2:ProfileLoaded", "a reserved arrival logs 1 then 2 in order")
+    equal(countCalls(h.Service, "funnel"), 0, "and opens no retry loop it could never close")
+end
 -- 1. The onboarding funnel only ever moves forward, and only once per step.
 do
     local h = host()
