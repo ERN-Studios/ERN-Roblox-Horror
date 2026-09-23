@@ -23,6 +23,10 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[2]
 SERVER = (ROOT / "ServerScriptService/ZyntraMonetization.Script.lua").read_text(encoding="utf-8")
 CONFIG = (ROOT / "ReplicatedStorage/ZyntraConfig.ModuleScript.lua").read_text(encoding="utf-8")
+# The two pure ledgers ZyntraMonetization requires at the top of the sliced
+# profile section (daily research since 21/9, challenges since 23/9).
+RESEARCH = (ROOT / "ReplicatedStorage/ZyntraDailyResearch.ModuleScript.lua").read_text(encoding="utf-8")
+CHALLENGES = (ROOT / "ReplicatedStorage/ZyntraChallenges.ModuleScript.lua").read_text(encoding="utf-8")
 
 
 def section(start, stop):
@@ -43,6 +47,12 @@ local Config = (function()
 '''
 
 WORLD = r'''
+end)()
+local ZyntraDailyResearchModule = (function()
+RESEARCH_SOURCE
+end)()
+local ZyntraChallengesModule = (function()
+CHALLENGES_SOURCE
 end)()
 -- Synthetic buyers. 101 has one counted and one uncounted product row, 102's
 -- single row is already in both the recorded total AND ReceiptIds, 103 never
@@ -111,7 +121,15 @@ local function world(opts)
     end
     -- The import requires a ModuleScript instance; standalone Luau has no such
     -- require, so it reads the table the fake instance carries.
-    local function require(module) return module.Source end
+    local function require(module)
+        if module == "ZyntraDailyResearch" then return ZyntraDailyResearchModule end
+        if module == "ZyntraChallenges" then return ZyntraChallengesModule end
+        return module.Source
+    end
+    -- Defined between two of the sliced sections; no pass is owned here.
+    local function advancedStaminaBonus() return 0 end
+    local ReplicatedStorage = {}
+    function ReplicatedStorage:WaitForChild(name) return name end
     local store = {}
     function store:UpdateAsync(key, transform)
         w.calls += 1
@@ -468,7 +486,7 @@ def main():
         (
             COMMON,
             CONFIG,
-            WORLD,
+            WORLD.replace("RESEARCH_SOURCE", RESEARCH).replace("CHALLENGES_SOURCE", CHALLENGES),
             section("local function colorData", "local function isDispatchPredecessorClosed"),
             section("local function accessibilityValue", "-- The switch a player"),
             section("local function publicProfile", "local tagCharacters"),
