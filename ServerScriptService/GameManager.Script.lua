@@ -3413,7 +3413,12 @@ local function runStation(station)
     break
    end
   end
-  for t = countdownTime, 1, -1 do
+  -- QUEUE_FULL_FASTSTART_20260923: once a party is full nobody else can join,
+  -- so the rest of the countdown is only waiting (measured: a solo 1/1 party
+  -- sat through all 10 s). A full party counts down the last FAST_QUEUE_TIME
+  -- seconds instead, which it keeps as its window to step off and cancel.
+  local t = countdownTime
+  while t >= 1 do
    if not (station.host and playerInsideZone(station.host, station) and station.configured) then
     cancelled = true
     break
@@ -3423,6 +3428,7 @@ local function runStation(station)
    lastReady = ready
    syncQueueFeedback(station, allInside, ready, rejected)
    local full = #ready >= station.maxPlayers
+   if full then t = math.min(t, FAST_QUEUE_TIME) end
    setStationDisplay(station,
     "GAME BEGINS IN " .. t,
     #ready .. "/" .. station.maxPlayers .. " READY  •  " .. privacyLabel(station)
@@ -3430,6 +3436,7 @@ local function runStation(station)
     station.color)
    fireGroup(ready, "lobbycountdown", t, #ready, station.index, station.maxPlayers, station.privacy)
    task.wait(1)
+   t -= 1
   end
 
   if cancelled then
