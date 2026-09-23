@@ -1,8 +1,8 @@
-# Prompt til Claude — alle aktive Trello-kort, 23. september 2026
+# Prompt til Claude — Trello-prioritet 1–5, 23. september 2026
 
-Du er ansvarlig for **al spilkode** i BACKROOMS: STAY QUIET. Jeg (Codex) laver animationer, billeder, modeller/teksturer og visuel/lydmæssig polish samt uafhængig QA. Arbejd videre til de aktive Trello-kort er gennemført eller har en præcis ekstern blokering. Stop ikke efter planlægning eller første fase.
+Du er ansvarlig for **al spilkode** i BACKROOMS: STAY QUIET. Jeg (Codex) laver animationer, billeder, modeller/teksturer og visuel/lydmæssig polish samt uafhængig QA. Arbejd videre til kortene i prioritet 1–5 nedenfor er gennemført eller har en præcis ekstern blokering. Stop ikke efter planlægning eller første fase.
 
-Board: https://trello.com/b/6FHYrsMR/backrooms-stay-quiet-development. Ved denne status er der **14 To Do, 2 Testing og 7 Before big adsspend**. Læs altid de aktuelle kort og deres acceptkriterier igen; kort kan ændre sig under arbejdet. De 99 Done-kort skal kun regressionskontrolleres, ikke bygges igen. Shoptekst-kortet `xQWVkwhw` og Rewards/Wheel-prikker + intro-kortet `MsEn2mya` blev flyttet til Done 23/9 på verificeret v1973/v2005-grundlag. Field Notes-arkivkortet `nWCCdowB` blev arkiveret som bortfaldet efter ejerens beslutning om at **fjerne Field Notes**. Genindfør ikke Field Notes eller en TRY AGAIN-guide i lobbyen. Genåbn ikke historisk arkiverede kort uden en ny ejerbeslutning.
+Board: https://trello.com/b/6FHYrsMR/backrooms-stay-quiet-development. Ved denne status er der **14 To Do, 2 Testing og 7 Before big adsspend**; **20 af disse 23 aktive kort er i scope**. Læs de aktuelle kort i prioritet 1–5 og deres acceptkriterier igen; kort kan ændre sig under arbejdet. De 99 Done-kort skal kun regressionskontrolleres, ikke bygges igen. Shoptekst-kortet `xQWVkwhw` og Rewards/Wheel-prikker + intro-kortet `MsEn2mya` blev flyttet til Done 23/9 på verificeret v1973/v2005-grundlag. Field Notes-arkivkortet `nWCCdowB` blev arkiveret som bortfaldet efter ejerens beslutning om at **fjerne Field Notes**. Genindfør ikke Field Notes eller en TRY AGAIN-guide i lobbyen. Genåbn ikke historisk arkiverede kort uden en ny ejerbeslutning.
 
 ## Arbejdsregler
 
@@ -47,11 +47,8 @@ Board: https://trello.com/b/6FHYrsMR/backrooms-stay-quiet-development. Ved denne
 - **Købsnotifikation til udviklere:** https://trello.com/c/XuxYAtTA. Tidligere udskudt. Receipt-/dedupe-koden findes; verificér aktuel status. Forbered en privat, sikker alert efter verificeret grant, med retry/rate limit og uden at blokere køb. Kræver ejerens kanal/webhook/secrets og ét faktisk testkøb for fuld accept. Opret ikke en offentlig kanal eller send beskeder uden den konkrete opsætning.
 - **Controller:** https://trello.com/c/uI8hg2At. Står i Testing og var udskudt, fordi konsol ikke er udgivet. Reproducer de tre HUD-handlinger, sprint-lås og terminal-luk i tilgængelig test; fysisk controller/console-bevis kræves før Done, hvis det stadig er kortets accept.
 
-## Prioritet 6 — sidst: skins og Token Earner
+## Uden for denne opgave
 
-- **Hazmat-/udstyrsskins:** https://trello.com/c/VSCGGIA9. Jeg leverer visuelt forskellige gruppeejede skins/3D-assets. Du laver preview på rigtig avatar/udstyr, ejerskab/equip/persistens/replikation og mobilflow uden gameplayfordel. Opret ikke Robux-produkter med opdigtede priser/ID'er; de 79–149 Robux i kortet er kun forslag. Bed om ejerens pris-/produktbeslutning, når det øvrige er klart.
-- **Token Earner 2x/3x/5x:** https://trello.com/c/EtdsUM4e. Lav sikker design-/formelgennemgang og isolerede tests, men aktiver ikke salg eller balancegrants før pris, stacking, hvilke tokenkilder der påvirkes og engangseffekt på nuværende saldo er besluttet. Handoff §7.1 forklarer faldgruben med en selvforstærkende grant. Højeste ejede tier, ikke produkt af tiers, er et forslag — ikke vedtaget.
-
-**Datoafhængigt kort:** https://trello.com/c/GxhsmCC5 siger udtrykkeligt “Disregard this until 20. October”. Respektér det: ingen 50 % rabat, planlagt start eller ændrede priser før 20. oktober 2026 og en konkret ejerbeslutning. Hold kortet åbent med datoen synlig. Det forhindrer ikke arbejdet på resten.
+Ejeren har valgt at springe den tidligere prioritet 6 over. Implementér, design, test eller planlæg derfor **ikke** nye hazmat-/udstyrsskins (`VSCGGIA9`), Token Earner 2x/3x/5x (`EtdsUM4e`) eller 50 %-udsalget (`GxhsmCC5`). De tre kort bliver åbne i Trello og må ikke markeres Done. Udsalgskortets egen dato, 20. oktober 2026, ændres ikke.
 
 Rapportér efter hver publicerbar fase: kort flyttet til Done med bevis, kort stadig åbne med konkret rest, Studio/repo-paritet, testresultater, commit/push/PR, Roblox-publishkvittering samt næste assetbestilling til mig. Fortsæt derefter til næste uafhængige fase uden at vente på et generelt “go”.
