@@ -1,0 +1,12 @@
+Verified target: place 131311258779917, universe 10559217407
+Published version: v2015
+Action: native Studio File > Publish to Roblox (computer-use click, access granted by the owner for this action)
+Source log: 0.740.0.7400927_20260923T092827Z_Studio_B9061_last.log
+Code at publish: claude/trello-20260921 a443bed (Studio == repo 168/168, compile probe 168/168, no test attributes or probes left in Edit)
+
+2026-09-23T18:32:52.517Z,32664.517578,a3f8,6,Debug [FLog::PublishSessionStateController] Go to PublishPreAssetsPublishing
+2026-09-23T18:32:52.521Z,32664.521484,a3f8,6,Debug [FLog::PublishSessionStateController] Go to PublishInProgress
+2026-09-23T18:32:57.349Z,32669.349609,a25c,6,Debug [FLog::PublishSessionStateController] Go to PublishSuccessful
+2026-09-23T18:32:57.357Z,32669.357422,a0a8,6,Info [FLog::CreatorOutput] Place published. Eligible players can now play this place in Roblox.
+2026-09-23T18:32:57.357Z,32669.357422,a0a8,6,Info [FLog::CreatorOutput] → Add publish notes to v2015
+2026-09-23T18:32:57.384Z,32669.384766,a0a8,6,Info [FLog::CreatorOutput] Published new changes in "BACKROOMS: STAY QUIET [CO-OP HORROR]" to Roblox.
