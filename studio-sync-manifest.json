@@ -3177,9 +3177,11 @@
     }
   ],
   "currentSyncPublication": {
-    "status": "pending",
+    "status": "blocked_pending_owner_ui",
     "scope": "Level 5 eight-district expansion",
     "priorPublicationVersion": 2026,
-    "priorReceiptDoesNotCoverCurrentExpansion": true
+    "priorReceiptDoesNotCoverCurrentExpansion": true,
+    "reason": "Download a Copy dialog became unresponsive to automation; owner asked to save/cancel and publish",
+    "newNativeAfterBackupVerified": false
   }
 }

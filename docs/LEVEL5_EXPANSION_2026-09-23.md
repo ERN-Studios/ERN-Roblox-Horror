@@ -1,6 +1,6 @@
 # Level 5 — Indoor Suburbs expansion
 
-Delivery record in progress, 2026-09-23. The expanded map has passed Studio visual review, character traversal through all eight districts, representative side routes, lobby return/cleanup and the final fresh-Play check of its cutaway entrances. The final 176-script export has zero source/editor conflicts and matches the repository after the three-module sync. Publication and GitHub delivery remain pending. The earlier map's v2026 publication does **not** establish publication of this expansion.
+Verified map delivery, 2026-09-23. The expanded map has passed Studio visual review, character traversal through all eight districts, representative side routes, lobby return/cleanup and the final fresh-Play check of its cutaway entrances. The final 176-script export has zero source/editor conflicts and matches the repository after the three-module sync. Map implementation commit `ec5787672527df614672a49fa19f08d6e6804603` is pushed to `codex/level5-indoor-suburbs`, with PR #7 updated. Four of five expansion checklist items are checked in Trello. A new native after-backup and verified publication remain blocked by Studio’s unresponsive Download a Copy dialog; the owner has been asked to save/cancel and publish. The earlier map's v2026 publication does **not** establish publication of this expansion.
 
 ## What changed
 
@@ -37,11 +37,11 @@ The tall canyon has gentle lighting beneath balconies and bridges so its ground 
 
 Visual review found that two intermediate ceiling rafts cut through the tilted houses, and both were removed. A later source review found that the open cutaway rooms still had a continuous low façade apron. The apron is now split to provide a seven-stud walk-in opening only for open cutaway rooms. The final rebuilt map measured **11,638 BaseParts, 12,179 descendants, 60 lights and 356 windows**, with zero window-standard violations. The root's count attributes matched those measured values.
 
-Screenshots in `output/level5-expansion/screenshots/` include seven earlier Edit views (`low-eaves.jpg`, `pastel-village.jpg`, `floral-terraces.jpg`, `domestic-rooms.jpg`, `window-canyon.jpg`, `tilted-quarter.jpg`, `last-house.jpg`) and three later Play views with HUD: `final-canyon.jpg`, `tilted-quarter-final.jpg` and `pastel-village-final.jpg`. The integration developer reported the landmark visual review passed after the raft correction. Screenshots establish visible appearance at those viewpoints; movement results below establish the tested routes separately.
+Screenshots in `assets/level5/expansion20260923/screenshots/` include seven earlier Edit views (`low-eaves.jpg`, `pastel-village.jpg`, `floral-terraces.jpg`, `domestic-rooms.jpg`, `window-canyon.jpg`, `tilted-quarter.jpg`, `last-house.jpg`) and three later Play views with HUD: `final-canyon.jpg`, `tilted-quarter-final.jpg` and `pastel-village-final.jpg`. The integration developer reported the landmark visual review passed after the raft correction. Screenshots establish visible appearance at those viewpoints; movement results below establish the tested routes separately.
 
 ## Actual Studio traversal
 
-The integration developer walked the main route through **A → B → C → D → E → F → G → H and the chute**, using actual character navigation rather than teleporting between districts. The main routes passed. The raw navigation calls are recorded in `navigation-tool-results.json`.
+The integration developer walked the main route through **A → B → C → D → E → F → G → H and the chute**, using actual character navigation rather than teleporting between districts. The main routes passed. The raw navigation calls are recorded in `artifacts/level5-expansion-20260923/navigation-tool-results.json`.
 
 - The chute was traversed with `Humanoid:MoveTo`: observed positions included `(17000.01, 16.81, 1286.44)` and the dark landing at `(17000.01, −1.40, 1313.36)`, with health 100. The character then walked back uphill to F.
 - F's west stair circuit, upper bridge and east upper route passed. The navigation tool could not find a direct route from the east upper landing to the lower landing. Moving the actual Humanoid through intermediate Z962/948/930 points descended successfully with health 100; subsequent navigation to `(17065, 27, 970)` succeeded. This is a documented pathfinding-tool limitation, not an unqualified automated-route pass.
@@ -69,6 +69,10 @@ The final chute now starts at local `(0, 0, 1255)`, bends through `(0, −11, 12
 
 This remains a **map-only developer preview**. No entity, functional puzzle, controllable slide, victory trigger, reward flow or public Level 5 access was added. The final house's three lamps are set dressing for later puzzle work.
 
-Pending delivery records at this report's update: successful publication of this expansion, GitHub commit/push and Trello completion. Human multiplayer and physical mobile/tablet performance have not been measured.
+Pending at this report’s update: native after-backup and successful publication of this expansion. The delivery checklist item remains unchecked until both are verified. Human multiplayer and physical mobile/tablet performance have not been measured.
 
 `QA-EVIDENCE.json` records the final measured Play results. Publication receipts must refer to this expansion rather than the earlier Level 5 delivery.
+
+## Concurrent developer changes preserved
+
+Remote branch `claude/trello-20260921` advanced to `ebb3b7c` during delivery. The full-party 3-second countdown and death-card layout fix were already identical in the verified Studio export. Merge `2d96bf9` retains the developer’s new Level 4 entity/hazmat concepts and historical brief updates; only stale manifest hash conflicts needed resolution. All 176 runtime mirrors still match the export after this merge. These are preserved upstream changes, not new Level 4 implementation by this task.

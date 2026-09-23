@@ -1,7 +1,7 @@
 {
   "report": "Level 5 expansion partial QA",
   "date": "2026-09-23",
-  "status": "visual and traversal QA plus final source/editor/repository parity passed; publication and GitHub/Trello delivery pending",
+  "status": "Map visual/traversal and source parity passed; code pushed and four Trello items complete; native after-backup and expansion publication blocked by unresponsive Studio dialog",
   "scope": "map geometry only; no new entities or gameplay",
   "evidenceAttribution": "Studio build measurements and visual-review results reported by the root integration developer; local source hashes and file inventory read by this documentation agent.",
   "footprint": {
@@ -213,21 +213,26 @@
     "sha256": "37629bcccb5af38c150e2c7015f318942f0d1d1b0f761cff125309b6b7e221ab"
   },
   "pending": [
-    "expansion publication receipt",
-    "GitHub commit/push",
-    "Trello delivery update"
+    "native after-backup",
+    "verified expansion publication receipt"
   ],
   "notMeasured": [
     "human multiplayer",
     "physical mobile/tablet performance"
   ],
   "publication": {
-    "status": "pending for this expansion",
-    "earlierVersion2026DoesNotProveExpansionPublication": true
+    "currentExpansionVerified": false,
+    "priorVersion": 2026,
+    "blocker": "Download a Copy dialog became unresponsive to automation, including Cancel; owner asked to save/cancel and publish"
   },
   "github": {
-    "commit": null,
-    "pushVerified": false
+    "implementationCommit": "ec5787672527df614672a49fa19f08d6e6804603",
+    "branch": "codex/level5-indoor-suburbs",
+    "pushVerified": true,
+    "pullRequest": "https://github.com/ERN-Studios/ERN-Roblox-Horror/pull/7",
+    "upstreamIntegrated": "ebb3b7c",
+    "integrationCommit": "2d96bf9",
+    "integrationRuntimeParity": 176
   },
   "lastMeasuredStudioBuild": {
     "phase": "final fresh Play after open-cutaway apron correction",
@@ -350,5 +355,12 @@
     "level4NamedPathsUnchanged": 10,
     "additionalLevel4GeneratorAndGateUnchanged": 2,
     "level4TotalUnchanged": 12
+  },
+  "trello": {
+    "card": "https://trello.com/c/Y2xXThBN",
+    "completedExpansionItems": 4,
+    "totalExpansionItems": 5,
+    "deliveryItemPending": "native after-backup and publication",
+    "readbackVerified": true
   }
 }
