@@ -1,6 +1,6 @@
 {
   "formatVersion": 2,
-  "source": "Studio-authoritative Level 5 eight-district expansion; exact 176-script export verified. Only the architecture module changed and two district modules were added; 173 unrelated scripts preserved. Expansion publication pending; prior v2026 receipt retained below.",
+  "source": "Studio-authoritative Level 5 sparse furnishing and transparent tall wall drawings, house-light removal, Level 1 briefing correction; concurrent Records UI preserved from origin/claude/trello-20260921 at 2e5cfd8. Exact 178-script export verified; publication receipt recorded separately.",
   "finalNewlineContract": "Entries flagged studioTrailingNewline hold exactly the canonical repo file plus one extra trailing newline in Studio. Exact landings remove the flag. Current flagged entry count: 0. Manifest hashes always describe the canonical repo file, never Studio's transport bytes.",
   "studio": {
     "id": "b7dc57b1-886e-46fc-812f-6a1dd3106871",
@@ -10,18 +10,19 @@
     "publishedVersion": 2026
   },
   "counts": {
-    "scripts": 176,
+    "scripts": 178,
     "remoteEvents": 15,
-    "total": 191,
+    "total": 193,
     "studioTrailingNewline": 0
   },
   "nativePlaceBackup": {
-    "localPath": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-build/Backrooms-Level5-v2026.rbxl",
-    "bytes": 9462909,
-    "sha256": "37629bcccb5af38c150e2c7015f318942f0d1d1b0f761cff125309b6b7e221ab",
+    "localPath": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-furnishing/Backrooms-Level5-furnished-2026-09-24.rbxl",
+    "bytes": 16715956,
+    "sha256": "4c849ff7e68576fd0092408c93779c988708db7d0b3f3be10357c06fe01d3a4a",
     "robloxBinaryHeaderVerified": true,
-    "metadataFile": "artifacts/level5-20260923/native-backups.json",
-    "purpose": "Post-change native place backup after verified v2026 publication; full non-script place state. Binary retained locally; repository stores verified metadata."
+    "robloxEndChunkVerified": true,
+    "metadataFile": "artifacts/level5-furnishing-20260924/native-backup.json",
+    "purpose": "Full post-furnishing native place checkpoint including current scripts and non-script state, saved via Studio Download a Copy. Binary retained locally."
   },
   "extraMirroredFilesNotInStudio": [
     "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_AutomaticAssetCaptureSender_LocalizationService.RemoteEvent.txt",
@@ -268,8 +269,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
-      "bytes": 452305,
-      "sha256": "e907e975c0d55ecc1405401c64645285dd5c07222919763cac4273643948f34a",
+      "bytes": 453003,
+      "sha256": "4e975f803b3bf369729f436168fd95a13a067dab027c58ecec0d63e2cebb325f",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "fresh Studio source/editor export; exact UTF-8 bytes and SHA-256 verified against repository",
@@ -424,8 +425,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 164130,
-      "sha256": "203dedf6e29602ec65ea11de60a00002477f23a6263f88a9b33a2753a6ccd5b3",
+      "bytes": 164145,
+      "sha256": "e80f0c03bacd1843665c834a48738d348a86b4fbb281b45acb8ab6033d72c724",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "fresh Studio source/editor export; exact UTF-8 bytes and SHA-256 verified against repository",
@@ -2680,8 +2681,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
-      "bytes": 194720,
-      "sha256": "270605ad872f0e610a71a7007d9a4c1dc702f748bba31eb0bec08ace3e57d0e9",
+      "bytes": 194768,
+      "sha256": "198e780c2acc40f1154685603fa21945f4f622e63ffdf363f60e3aae69654f5b",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "fresh Studio source/editor export; exact UTF-8 bytes and SHA-256 verified against repository",
@@ -2876,7 +2877,9 @@
       ],
       "sourceEqualsEditor": true,
       "attributes": [],
-      "captureMethod": "fresh Studio source/editor export; exact UTF-8 bytes and SHA-256 verified against repository"
+      "captureMethod": "fresh Studio source/editor export; exact UTF-8 bytes and SHA-256 verified against repository",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 4 Objective UI",
@@ -2892,7 +2895,9 @@
       ],
       "sourceEqualsEditor": true,
       "attributes": [],
-      "captureMethod": "fresh Studio source/editor export; exact UTF-8 bytes and SHA-256 verified against repository"
+      "captureMethod": "fresh Studio source/editor export; exact UTF-8 bytes and SHA-256 verified against repository",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerStorage.Archive.FieldNotesRetired_20260922.FieldNotesService",
@@ -2909,7 +2914,9 @@
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "fresh Studio source/editor export; exact UTF-8 bytes and SHA-256 verified against repository",
-      "attributes": []
+      "attributes": [],
+      "disabled": true,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerStorage.Archive.FieldNotesRetired_20260922.Field Notes Client",
@@ -2926,7 +2933,9 @@
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "fresh Studio source/editor export; exact UTF-8 bytes and SHA-256 verified against repository",
-      "attributes": []
+      "attributes": [],
+      "disabled": true,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerStorage.Archive.FieldNotesRetired_20260922.ZyntraFieldNotes",
@@ -2975,7 +2984,9 @@
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "fresh Studio source/editor export; exact UTF-8 bytes and SHA-256 verified against repository",
-      "attributes": []
+      "attributes": [],
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ReplicatedStorage.ZyntraChallenges",
@@ -3001,8 +3012,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 5 Systems/Level 5 Architecture.ModuleScript.lua",
-      "bytes": 21074,
-      "sha256": "f7b282f821d7b4937257d6c95bc46b54be847a2c2ec9b698ca8c51bb0183c65e",
+      "bytes": 23573,
+      "sha256": "2125b3bb99fb28f88f61063fa875bc9a1e25684c236fa3c23c9c78211e91cdc7",
       "status": "synced",
       "sourceEqualsEditor": true,
       "attributes": [],
@@ -3017,8 +3028,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 5 Systems/Level 5 Landmark Districts.ModuleScript.lua",
-      "bytes": 16935,
-      "sha256": "deeeb2972ce038bec3f3be9bc36b13d0a20bdf88a45c5913c928382656b855b0",
+      "bytes": 16337,
+      "sha256": "8559e86f110388cfa827d3e86d133b08fb8f37d8775ddb0e8133eadd204c9f62",
       "status": "synced",
       "sourceEqualsEditor": true,
       "attributes": [],
@@ -3073,7 +3084,9 @@
       "status": "synced",
       "sourceEqualsEditor": true,
       "attributes": [],
-      "captureMethod": "fresh Studio source/editor export; exact UTF-8 bytes and SHA-256 verified against repository"
+      "captureMethod": "fresh Studio source/editor export; exact UTF-8 bytes and SHA-256 verified against repository",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerScriptService.Level5Generator",
@@ -3104,16 +3117,49 @@
       "status": "synced",
       "sourceEqualsEditor": true,
       "attributes": [],
+      "captureMethod": "fresh Studio source/editor export; exact UTF-8 bytes and SHA-256 verified against repository",
+      "disabled": false,
+      "runContext": "Enum.RunContext.Legacy"
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraRecordsPage",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraRecordsPage"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/ZyntraRecordsPage.ModuleScript.lua",
+      "bytes": 15974,
+      "sha256": "2b026764c5d0ffbdf45f084832cd3bb1f60ccccc7390417aaf8a39a4b73c35a2",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "attributes": [],
+      "captureMethod": "fresh Studio source/editor export; exact UTF-8 bytes and SHA-256 verified against repository"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 5 Systems.Level 5 Furniture",
+      "segments": [
+        "ServerScriptService",
+        "Level 5 Systems",
+        "Level 5 Furniture"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 5 Systems/Level 5 Furniture.ModuleScript.lua",
+      "bytes": 13685,
+      "sha256": "eda52827e7be51b42f6354674141c146dd64c1421e559f571f802501225e957b",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "attributes": [],
       "captureMethod": "fresh Studio source/editor export; exact UTF-8 bytes and SHA-256 verified against repository"
     }
   ],
   "scriptVerification": {
-    "scriptCount": 176,
-    "sourceEqualsEditorCount": 176,
-    "exactRepositoryByteMatches": 176,
+    "scriptCount": 178,
+    "sourceEqualsEditorCount": 178,
+    "exactRepositoryByteMatches": 178,
     "editorConflicts": [],
     "capturedPlaceVersion": 1999,
-    "sourceAudit": "artifacts/level5-expansion-20260923/studio-source-verification.json",
+    "sourceAudit": "artifacts/level5-furnishing-20260924/studio-source-verification.json",
     "level4ScriptCount": 12,
     "level4UnchangedVsBaselineAndRepository": true,
     "repositoryOnlyServiceMirrors": 0
@@ -3149,6 +3195,14 @@
       "robloxBinaryHeaderVerified": true,
       "metadataFile": "artifacts/level5-20260923/native-backups.json",
       "purpose": "Pre-Level5 native place backup; original local filename retained."
+    },
+    {
+      "localPath": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-build/Backrooms-Level5-v2026.rbxl",
+      "bytes": 9462909,
+      "sha256": "37629bcccb5af38c150e2c7015f318942f0d1d1b0f761cff125309b6b7e221ab",
+      "robloxBinaryHeaderVerified": true,
+      "metadataFile": "artifacts/level5-20260923/native-backups.json",
+      "purpose": "Post-change native place backup after verified v2026 publication; full non-script place state. Binary retained locally; repository stores verified metadata."
     }
   ],
   "previousSyncHistory": [
@@ -3174,14 +3228,24 @@
       "nativePlaceBackupSha256": "37629bcccb5af38c150e2c7015f318942f0d1d1b0f761cff125309b6b7e221ab",
       "publishedVersion": 2026,
       "scope": "Historical pre-expansion Level 5 map delivery; preserved while only three architecture entries refresh."
+    },
+    {
+      "source": "Studio-authoritative Level 5 eight-district expansion; exact 176-script export verified. Only the architecture module changed and two district modules were added; 173 unrelated scripts preserved. Expansion publication pending; prior v2026 receipt retained below.",
+      "counts": {
+        "scripts": 178,
+        "remoteEvents": 15,
+        "total": 193,
+        "studioTrailingNewline": 0
+      },
+      "scope": "Historical pre-furnishing expansion record; final current export includes the other developer Records page."
     }
   ],
   "currentSyncPublication": {
-    "status": "blocked_pending_owner_ui",
-    "scope": "Level 5 eight-district expansion",
+    "status": "saved_and_backed_up_publication_pending",
+    "scope": "Level 5 expansion and furnishing, Level 1 briefing fix, preserved Records UI",
+    "savedAtUtc": "2026-09-23T22:31:25Z",
     "priorPublicationVersion": 2026,
-    "priorReceiptDoesNotCoverCurrentExpansion": true,
-    "reason": "Download a Copy dialog became unresponsive to automation; owner asked to save/cancel and publish",
-    "newNativeAfterBackupVerified": false
+    "newNativeAfterBackupVerified": true,
+    "reason": "Save to Roblox and local full native copy verified; UI publish confirmation pending."
   }
 }

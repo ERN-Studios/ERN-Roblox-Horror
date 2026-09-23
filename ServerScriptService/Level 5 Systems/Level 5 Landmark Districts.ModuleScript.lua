@@ -127,7 +127,7 @@ function Districts.Build(K)
 	-- Recessed cutaway lounge is discoverable off the main ground-level route.
 	local recess=house(F,"CutawayReadingRoom",CF(-127,0,899)*yaw(-90),25,19,14,C.pale,nil,{open=true,cutaway=true,lit=false})
 	floor(F,"ReadingRoomSideAccess",-109,0,900,42,13,C.carpet)
-	part(recess,"LowEmptySofa",V(5,2.4,10),CF(-136,1.2,899),C.rose,Enum.Material.Fabric)
+
 	thinPicture(recess,CF(-144.1,7,899)*yaw(-90),6,5)
 	-- Small fragments of domestic vocabulary break the street's large repeated rhythm.
 	for _,z in ipairs({859,906,953}) do
@@ -180,7 +180,7 @@ function Districts.Build(K)
 	local secret=house(west,"SecretThroughHouse",CF(-65,8,1104),28,30,14.7,C.lavender,C.blue,{open=true,backOpening=true,lit=false})
 	secret:SetAttribute("ExplorationLoop",true)
 	thinPicture(secret,CF(-75,15,1133.5),4.5,3.8)
-	part(secret,"EmptyRoomBench",V(2.5,2,9),CF(-75,9,1119),C.cream,Enum.Material.Wood)
+
 	local h5=house(east,"HighTerraceCreamHouse",CF(113,16,1086)*yaw(90),30,27,14.7,C.pale,C.blue,{open=true,lit=false})
 	local h6=house(east,"HighTerracePinkHouse",CF(113,16,1130)*yaw(90),30,27,14.7,C.pink,C.lavender,{open=true,lit=false})
 	local h7=house(east,"ReversedSmallBlueHouse",CF(78,16,1120)*yaw(180),24,25,14.7,C.blue,C.pink,{open=true,lit=false})
@@ -201,10 +201,7 @@ function Districts.Build(K)
 		part(G,"CarpetCoveredPlanter",V(5,2,7),CF(v[1],v[2]+1,v[3]),C.green,Enum.Material.Fabric)
 		part(G,"PlanterWhiteFoot",V(5.3,.35,7.3),CF(v[1],v[2]+.18,v[3]),C.white)
 	end
-	fixture(G,-58,23,1082); fixture(G,74,31,1110)
-	for _,p in ipairs({{-58,23,1082},{74,31,1110}}) do
-		for _,s in ipairs({-1,1}) do part(G,"PendantSuspension",V(.055,65.8-p[2],.055),CF(p[1]+s*2,(65.8+p[2])/2,p[3]),C.grid,Enum.Material.Metal,false) end
-	end
+	-- House courts rely on the shared ceiling; no low exterior pendants.
 	camera("TiltedSubdivisionArrival",V(3,8,1022),V(-89,20,1090))
 	camera("TiltedSubdivisionTerraces",V(-38,16,1145),V(113,32,1111))
 	camera("TiltedSubdivisionFusedHomes",V(43,7,1176),V(122,39,1132))
@@ -233,11 +230,7 @@ function Districts.Build(K)
 		skirting(finalHouse,CF(s*12,0,1230)*yaw(90),10)
 	end
 	part(finalHouse,"PuzzleReadySideboard",V(12,3,2),CF(0,1.5,1242),Color3.fromRGB(135,111,82),Enum.Material.Wood)
-	for _,x in ipairs({-4,0,4}) do
-		part(finalHouse,"UnwiredLampBase",V(.9,.2,.9),CF(x,3.1,1242),C.white,Enum.Material.Metal)
-		part(finalHouse,"UnwiredLampStem",V(.15,1.2,.15),CF(x,3.75,1242),C.white,Enum.Material.Metal)
-		part(finalHouse,"UnwiredLampShade",V(1.4,.8,1.4),CF(x,4.7,1242),C.pale,Enum.Material.Fabric)
-	end
+	-- The later puzzle gets its own design; no lamps in the house art pass.
 	for _,s in ipairs({-1,1}) do
 		local art=part(finalHouse,"ExitArrowArtSurface",V(4.7,4.7,.04),CF(s*7.5,6,1254.58),C.pale,Enum.Material.SmoothPlastic,false)
 		if config.ArrowTexture and config.ArrowTexture~="" then

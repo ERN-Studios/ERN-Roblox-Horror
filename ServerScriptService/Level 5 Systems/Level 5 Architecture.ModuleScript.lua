@@ -3,11 +3,24 @@
 local Architecture = {}
 
 function Architecture.Build(parent, origin, config)
-	config = config or {}
+	config = table.clone(config or {})
+	config.FurnitureUpholsteryTexture = config.FurnitureUpholsteryTexture or "rbxassetid://132119936960491"
+	config.FurnitureTVTexture = config.FurnitureTVTexture or "rbxassetid://129933596500815"
+	local Furniture = require(script.Parent:WaitForChild("Level 5 Furniture"))
+	local furnitureKit
+	local furnishedHomes={
+		LowEavesResidence_1_1=1,DetachedWaitingRoom_1=4,
+		CourtCottage_01=1,CourtCottage_02=2,CourtCottage_03=3,
+		CourtCottage_05=4,CourtCottage_07=5,CourtCottage_11=1,
+		["TerraceHouse_-1_2"]=3,TerraceHouse_1_3=2,
+		CutawayReadingRoom=5,
+		GroundBlueStarterHouse=1,RosePorchHouse=3,
+		SecretThroughHouse=4,HighTerraceCreamHouse=2,HighTerracePinkHouse=5,
+	}
 	origin = origin or Vector3.zero
 	local root = Instance.new("Model")
 	root.Name = "Level5_IndoorSuburbs"
-	root:SetAttribute("ArchitectureVersion", "2026-09-23.3")
+	root:SetAttribute("ArchitectureVersion", "2026-09-24.1")
 	root:SetAttribute("GeometryOnly", true)
 	root.Parent = parent
 	local offset = CFrame.new(origin)
@@ -116,9 +129,9 @@ function Architecture.Build(parent, origin, config)
 			for _,sign in ipairs({-1,1}) do part(into,"SplitSkirting",V(sw,.35,.8),frame*CF(sign*(dw/2+sw/2),.18,.08),C.white) end
 		end
 	end
-	local function wallLamp(into,frame)
-		part(into,"WallSconceBack",V(.6,1.4,.25),frame,C.white,Enum.Material.Metal)
-		part(into,"WallSconceGlow",V(.65,.7,.45),frame*CF(0,0,-.25),Color3.fromRGB(255,236,189),Enum.Material.Neon,false)
+	local function wallLamp(_into,_frame)
+		-- Individual homes have no exterior/interior lamps or luminous fixtures.
+		-- Shared room ceilings provide the architectural light.
 	end
 	local function house(into,name,frame,w,d,h,color,roofColor,options)
 		options=options or {}; local m=model(name,into)
@@ -151,7 +164,7 @@ function Architecture.Build(parent, origin, config)
 			doorframe(m,frame*CF(0,0,d),7,10)
 		else part(m,"BackWall",V(w,h,.65),frame*CF(0,h/2,d),color) end
 		part(m,"InteriorCeiling",V(w,.45,d),frame*CF(0,h,d/2),C.ceiling)
-		part(m,"InteriorLight",V(w*.35,.1,2.7),frame*CF(0,h-.3,d/2),Color3.fromRGB(241,240,214),Enum.Material.Neon,false)
+		m:SetAttribute("HouseLighting","None")
 		part(m,"CrownMoulding",V(w+.6,.5,.85),frame*CF(0,h-.15,-.08),C.white)
 		for _,s in ipairs({-1,1}) do wallLamp(m,frame*CF(s*(w/2-1.2),10.8,-.55)) end
 		if roofColor then
@@ -167,6 +180,13 @@ function Architecture.Build(parent, origin, config)
 				part(m,"ClosedGableTriangle",V(.6,gableRise,w/2),frame*CF(s*w/4,h+gableBase+gableRise/2,-.03)*CFrame.Angles(0,-s*math.pi/2,0),color,Enum.Material.SmoothPlastic,true,"WedgePart")
 			end
 			part(m,"RoofRidge",V(.35,.35,d+2.4),frame*CF(0,h+half*math.tan(pitch)+.5,d/2),roofColor)
+		end
+		local variant=furnishedHomes[name]
+		if name=="CanyonDwelling_0" and (into.Name=="WestHouseStack2" or into.Name=="EastHouseStack3") then variant=into.Name=="WestHouseStack2" and 1 or 4 end
+		if furnitureKit and variant and options.open~=false then
+			Furniture.FurnishHome(furnitureKit,m,frame,w,d,h,{variant=variant,open=true,backOpening=options.backOpening,glitchedTable=name=="CourtCottage_03"})
+			m:SetAttribute("FurnitureRoomFrame",offset*frame)
+			m:SetAttribute("FurnitureRoomSize",V(w,h,d))
 		end
 		return m
 	end
@@ -212,6 +232,10 @@ function Architecture.Build(parent, origin, config)
 		part(into,"BayCornice",V(w+.8,.55,4.9),frame*CF(0,h+2.95,-1.8),C.white)
 	end
 
+	local K={root=root,config=config,C=C,V=V,CF=CF,model=model,part=part,floor=floor,
+		beam=beam,rail=rail,stairs=stairs,window=window,doorframe=doorframe,facade=facade,
+		house=house,texture=texture,wallLamp=wallLamp,bay=bay,ceiling=ceiling}
+	furnitureKit=K
 	-- A: the first reveal is a multi-level residential atrium under a low office ceiling.
 	local A=model("A_BalconyAtrium")
 	floor(A,"AtriumCarpet",0,0,36,220,80)
@@ -265,8 +289,8 @@ function Architecture.Build(parent, origin, config)
 				part(m,"WoodShutter",V(1.1,7.4,.28),f*CF(sign*10.65,6.5,-.45),Color3.fromRGB(115,125,100),Enum.Material.Wood)
 			end
 			floor(m,"DeepCarpetPorch",0,.05,-3,28,6,C.carpet,f)
-			part(m,"EmptyDomesticBench",V(7,1.2,2.2),f*CF(-7,1.2,15),Color3.fromRGB(122,108,82),Enum.Material.Wood)
-			part(m,"InteriorShortPartition",V(.6,9,9),f*CF(6,4.5,13),C.pale)
+
+
 		end
 	end
 	-- Two detached low room islands can be explored on either side and through.
@@ -284,13 +308,18 @@ function Architecture.Build(parent, origin, config)
 		part(B,"DroppedLongSoffit",V(5,2.8,120),CF(x,16.6,136),C.cream)
 	end
 	for _,z in ipairs({83,137,188}) do floor(B,"LoopCrossing",0,.045,z,158,7,C.carpet) end
-	local K={root=root,config=config,C=C,V=V,CF=CF,model=model,part=part,floor=floor,
-		beam=beam,rail=rail,stairs=stairs,window=window,doorframe=doorframe,facade=facade,
-		house=house,texture=texture,wallLamp=wallLamp,bay=bay,ceiling=ceiling}
+
 	local neighbourhood=require(script.Parent:WaitForChild("Level 5 Neighbourhood Districts"))
 	local landmarks=require(script.Parent:WaitForChild("Level 5 Landmark Districts"))
 	local N=neighbourhood.Build(K)
 	local L=landmarks.Build(K)
+	local domestic=root:FindFirstChild("E_DomesticLabyrinth")
+	for _,room in ipairs({{name="WestLoungeFurniture",x=-35,z=696,w=26,d=24,v=2},{name="EastReadingFurniture",x=65,z=696,w=32,d=22,v=4}}) do
+		local m=model(room.name,domestic)
+		local f=CF(room.x,0,room.z)
+		Furniture.FurnishHome(K,m,f,room.w,room.d,14.8,{variant=room.v,open=true,backOpening=true})
+		m:SetAttribute("FurnitureRoomFrame",offset*f);m:SetAttribute("FurnitureRoomSize",V(room.w,14.8,room.d))
+	end
 
 	-- Separate room envelopes, each with its own ceiling and deliberately narrow
 	-- threshold. No sightline can mistake this for one giant shared warehouse.
@@ -340,6 +369,20 @@ function Architecture.Build(parent, origin, config)
 
 		totalFootprint+=z.width*(z.z1-z.z0)
 	end
+	local wallArt=model("TallWallDrawings")
+	local function mural(name,position,look,width,height,asset)
+		local surface=part(wallArt,name,V(width,height,.015),CFrame.lookAt(position,look),C.pale,Enum.Material.SmoothPlastic,false)
+		surface.Transparency=1;surface.CastShadow=false;surface.CanQuery=false;surface.CanTouch=false
+		surface:SetAttribute("Level5WallDrawing",true);surface:SetAttribute("AlphaBackground",true)
+		local decal=Instance.new("Decal");decal.Name="CharcoalOnPlaster";decal.Texture=asset;decal.Face=Enum.NormalId.Front
+		decal.Color3=Color3.fromRGB(112,103,86);decal.Transparency=.08;decal.Parent=surface
+	end
+	-- Four landmark sightings, not a repeated pattern in every room.
+	mural("VillageHouseDrawing",V(-179.32,26,319),V(0,26,319),14,42,"rbxassetid://114474831346440")
+	mural("CanyonStairDrawing",V(34,56,1015.31),V(34,56,900),29,87,"rbxassetid://108980796139348")
+	mural("CanyonHouseDrawing",V(-149.32,58,902),V(0,58,902),29,87,"rbxassetid://114474831346440")
+	mural("SubdivisionStairDrawing",V(159.32,36,1092),V(0,36,1092),18,54,"rbxassetid://108980796139348")
+	root:SetAttribute("TallWallDrawingCount",4)
 	local cameras={
 		{name="Atrium",position=V(-34,12,7),lookAt=V(52,18,49)},
 		{name="LowEaves",position=V(9,6,80),lookAt=V(-44,8,132)},

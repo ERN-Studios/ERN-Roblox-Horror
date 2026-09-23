@@ -1,0 +1,85 @@
+=== Studio rename selection stays exact and place-id safe ===
+  ok   the legacy selector accepts the exact renamed Studio title
+  ok   the renamed selector accepts the exact legacy Studio title during migration
+  ok   the title alias never bypasses the expected Roblox place id
+  ok   a malformed advertised place id also fails closed
+=== reconcile_source: what the mirror should hold ===
+  ok   an exact match keeps the mirrored file untouched
+  ok   a FLAGGED entry keeps the repo file when Studio has the permitted newline
+  ok   and specifically does NOT absorb the transport newline into the mirror
+  ok   the same difference on an UNFLAGGED entry is real drift and is pulled
+  ok   two extra newlines are drift even on a flagged entry
+  ok   a genuinely changed line is always pulled
+  ok   a script with no mirrored file yet is created
+  ok   a CRLF working copy is not mistaken for drift
+=== flags survive a full rebuild ===
+  ok   trailing_newline_flags reads every flag, keyed by Studio path
+  ok   and copes with a manifest that has no items at all
+=== END TO END: the real sync() against a fake Studio ===
+[01/07] ServerScriptService.Drifted -> ServerScriptService/Drifted.ModuleScript.lua
+[02/07] ServerScriptService.FlaggedCrlf -> ServerScriptService/FlaggedCrlf.ModuleScript.lua
+        keeping the mirrored file: Studio holds the one permitted trailing newline
+[03/07] ServerScriptService.NewScript -> ServerScriptService/NewScript.ModuleScript.lua
+[04/07] ServerScriptService.PlainCrlf -> ServerScriptService/PlainCrlf.ModuleScript.lua
+[05/07] ServerScriptService.PlainLf -> ServerScriptService/PlainLf.ModuleScript.lua
+[06/07] ServerScriptService.StaleExact -> ServerScriptService/StaleExact.ModuleScript.lua
+[07/07] ReplicatedStorage.RoundStatus -> ReplicatedStorage/RoundStatus.RemoteEvent.txt
+
+1 mirrored file(s) kept under the permitted trailing-newline contract:
+  +1 LF in Studio  ServerScriptService/FlaggedCrlf.ModuleScript.lua
+  ok   sync() runs to completion over a CRLF-checked-out mirror
+  ok   sync() initialised and closed its client
+  ok   sync() read every script out of Studio
+  ok   a 'keep' left FlaggedCrlf.ModuleScript.lua byte-for-byte untouched on disk
+  ok   a 'keep' left StaleExact.ModuleScript.lua byte-for-byte untouched on disk
+  ok   a 'keep' left PlainCrlf.ModuleScript.lua byte-for-byte untouched on disk
+  ok   a 'keep' left PlainLf.ModuleScript.lua byte-for-byte untouched on disk
+  ok   a 'keep' left RoundStatus.RemoteEvent.txt byte-for-byte untouched on disk
+  ok   and those files are genuinely still CRLF, i.e. the case really was exercised
+  ok   the flagged mirror did NOT absorb Studio's permitted extra newline
+  ok   real drift was pulled from Studio and written LF
+  ok   a script with no mirror yet was created
+  ok   the flagged CRLF entry is reported unchanged
+  ok   the unflagged CRLF entry is reported unchanged
+  ok   the drifted entry is reported updated
+  ok   the new entry is reported created
+  ok   manifest bytes are canonical, not the CRLF checkout's raw length
+  ok   the rebuilt hash is the REPO file's, not Studio's copy
+  ok   a CRLF checkout and an LF checkout of the same script describe identically
+  ok   the rebuilt item still carries the flag
+  ok   an exact landing removes a stale flag during the full rebuild
+  ok   and an unflagged item did not acquire one
+  ok   finalNewlineContract publishes the reconciled flag count
+  ok   counts describe what Studio actually held
+  ok   counts includes the exact number of permitted +LF landings
+  ok   post-sync, a push recognises Studio's permitted copy as the same source
+  ok   and does NOT bless the same newline on an unflagged entry
+[01/07] ServerScriptService.Drifted -> ServerScriptService/Drifted.ModuleScript.lua
+[02/07] ServerScriptService.FlaggedCrlf -> ServerScriptService/FlaggedCrlf.ModuleScript.lua
+        keeping the mirrored file: Studio holds the one permitted trailing newline
+[03/07] ServerScriptService.NewScript -> ServerScriptService/NewScript.ModuleScript.lua
+[04/07] ServerScriptService.PlainCrlf -> ServerScriptService/PlainCrlf.ModuleScript.lua
+[05/07] ServerScriptService.PlainLf -> ServerScriptService/PlainLf.ModuleScript.lua
+[06/07] ServerScriptService.StaleExact -> ServerScriptService/StaleExact.ModuleScript.lua
+[07/07] ReplicatedStorage.RoundStatus -> ReplicatedStorage/RoundStatus.RemoteEvent.txt
+
+1 mirrored file(s) kept under the permitted trailing-newline contract:
+  +1 LF in Studio  ServerScriptService/FlaggedCrlf.ModuleScript.lua
+  ok   a second sync over a settled mirror changes nothing
+  ok   and still leaves the CRLF working files untouched
+  ok   the flag survived a second full rebuild too
+=== the PRODUCTION checkout reconciles, read-only ===
+  FAIL the production checkout really does hold the CRLF files this guards  (0 CRLF of 191)
+  ok   every mirrored file in the real checkout reconciles and verifies
+  ok   and the live manifest already describes canonical content for all of them
+=== the live manifest keeps its contract ===
+  ok   finalNewlineContract is present
+  ok   the published trailing-newline count is the number of entries that carry the flag
+  ok   and the contract prose names that same number rather than a stale one
+  ok   counts still reconcile
+  ok   every .lua in the mirrored services is listed in the manifest
+
+FAILED: 1 of the checks above
+  - the production checkout really does hold the CRLF files this guards
+
+STDERR:

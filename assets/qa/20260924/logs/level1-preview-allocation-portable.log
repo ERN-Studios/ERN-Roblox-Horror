@@ -1,0 +1,10 @@
+party=1 preview=1 actual=1
+party=2 preview=1 actual=1
+party=3 preview=2 actual=2
+party=4 preview=2 actual=2
+party=5 preview=3 actual=3
+party=6 preview=3 actual=3
+Historical baseline reproduced five incorrect party briefings
+Level 1 preview allocation: 19 checks passed (actual GameManager/PuzzleManager source)
+
+STDERR:

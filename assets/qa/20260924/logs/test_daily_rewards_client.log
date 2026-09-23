@@ -1,0 +1,3 @@
+Daily Rewards modal: 503 checks passed (entire actual LocalScript plus the real page module, UIStyle and ZyntraConfig, offline Luau; real touch, thumbstick suppression, font metrics and rendering not exercised)
+
+STDERR:

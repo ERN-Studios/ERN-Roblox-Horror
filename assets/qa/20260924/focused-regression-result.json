@@ -1,0 +1,19 @@
+{
+  "command": [
+    "python3",
+    "<workspace>/output/game-qa-20260924/delivery/tools/tests/test_level1_preview_allocation.py",
+    "--sources",
+    "<workspace>/output/level5-furnishing/baseline",
+    "--manager",
+    "<workspace>/output/game-qa-20260924/proposed/ServerScriptService/GameManager.Script.lua",
+    "--baseline-manager",
+    "<workspace>/output/level5-furnishing/baseline/ServerScriptService/GameManager.Script.lua",
+    "--luau",
+    "<workspace>/output/level5-build/tools/luau/luau"
+  ],
+  "returnCode": 0,
+  "checks": 19,
+  "sourceExtraction": true,
+  "historicalMismatchCount": 5,
+  "sourceChangedByTest": false
+}

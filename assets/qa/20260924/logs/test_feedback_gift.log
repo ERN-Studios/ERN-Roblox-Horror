@@ -1,0 +1,4 @@
+feedback gift: 26 checks passed (actual mutate + gift block; fake DataStore)
+normalizeProfile keeps unknown Grants keys (3 Grants lines inspected)
+
+STDERR:

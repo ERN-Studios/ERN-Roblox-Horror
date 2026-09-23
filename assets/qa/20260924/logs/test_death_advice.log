@@ -1,0 +1,18 @@
+
+STDERR:
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/death-advice-8ngb2vr5/death_advice_test.luau:365: attempt to index nil with table
+stacktrace:
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/death-advice-8ngb2vr5/death_advice_test.luau:365
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/death-advice-8ngb2vr5/death_advice_test.luau:25 function Fire
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/death-advice-8ngb2vr5/death_advice_test.luau:384
+Traceback (most recent call last):
+  File "<workspace>/output/level5-audit/repository/tools/tests/test_death_advice.py", line 472, in <module>
+    main()
+    ~~~~^^
+  File "<workspace>/output/level5-audit/repository/tools/tests/test_death_advice.py", line 456, in main
+    subprocess.run([binary, str(path)], check=True, timeout=30)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['<workspace>/output/level5-build/tools/luau/luau', '/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/death-advice-8ngb2vr5/death_advice_test.luau']' returned non-zero exit status 1.

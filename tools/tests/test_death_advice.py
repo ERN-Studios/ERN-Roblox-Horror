@@ -236,6 +236,9 @@ local function runHookLife(ctx)
     local participants = ctx.Participants
     local lastDeathName = nil
     local lastDeathCause = DeathAdvice.Unknown
+    -- CHALLENGES_20260923: the real hookLife counts each death into the run.
+    local runFacts = {[ctx.Player] = {Deaths = 0}}
+    ctx.RunFacts = runFacts
     local scheduleTransitionRespawn = nil
     -- The same block also reports to ZyntraAnalytics (added by the analytics work).
     local Analytics = setmetatable({}, {__index = function() return function() end end})
@@ -260,6 +263,8 @@ do
     expect(cause, "L3Manager", "the PARTY DOWN cause is remembered")
     expect(ctx.Player:GetAttribute(DeathAdvice.CauseAttribute), nil,
         "the mark is consumed by the death that used it")
+    expect(ctx.RunFacts[ctx.Player].Deaths, 1,
+        "the death is counted into the run (CHALLENGES_20260923)")
 end
 
 do  -- an unmarked death: a void fall, a placement failure, a new kill site

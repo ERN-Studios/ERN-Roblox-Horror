@@ -2865,7 +2865,7 @@ playRound = function(participants)
   -- it NOW so the cabin's maintenance poster lists every cable (count + colour)
   -- while the crew rides the elevator, instead of only after the doors open.
   -- PuzzleManager re-asserts the same value when the puzzle actually starts.
-  workspace:SetAttribute("Level1ActiveCircuitCount", math.clamp(#participants, 1, 6))
+  workspace:SetAttribute("Level1ActiveCircuitCount", math.clamp(math.ceil(#participants / 2), 1, 3))
   for t = ELEVATOR_TIME, 1, -1 do
    if aliveCount <= 0 then sendWipedPartyHome(); return end
    fireGroup(participants, "elevator", t)

@@ -18,6 +18,8 @@ ROOT = Path(__file__).resolve().parents[2]
 SERVER = (ROOT / "ServerScriptService/ZyntraMonetization.Script.lua").read_text(encoding="utf-8")
 CONFIG = (ROOT / "ReplicatedStorage/ZyntraConfig.ModuleScript.lua").read_text(encoding="utf-8")
 RESEARCH = (ROOT / "ReplicatedStorage/ZyntraDailyResearch.ModuleScript.lua").read_text(encoding="utf-8")
+# ZyntraMonetization requires the challenge ledger since CHALLENGES_20260923.
+CHALLENGES = (ROOT / "ReplicatedStorage/ZyntraChallenges.ModuleScript.lua").read_text(encoding="utf-8")
 
 
 def section(start, stop):
@@ -69,6 +71,9 @@ end)()
 -- research goals landed); served through the ReplicatedStorage stub below.
 local ZyntraDailyResearchModule = (function()
 RESEARCH_SOURCE
+end)()
+local ZyntraChallengesModule = (function()
+CHALLENGES_SOURCE
 end)()
 
 -- Every world gets its own upvalues, so the real blocks below are pasted inside
@@ -237,6 +242,7 @@ local function world(opts)
     function ReplicatedStorage:FindFirstChild(_name) return nil end
     local function require(name)
         if name == "ZyntraDailyResearch" then return ZyntraDailyResearchModule end
+        if name == "ZyntraChallenges" then return ZyntraChallengesModule end
         error("harness has no module " .. tostring(name))
     end
     local ServerStorage = {children = {}}
@@ -1176,7 +1182,7 @@ def main():
     pieces = [
         PRELUDE,
         CONFIG,
-        WORLD.replace("RESEARCH_SOURCE", RESEARCH),
+        WORLD.replace("RESEARCH_SOURCE", RESEARCH).replace("CHALLENGES_SOURCE", CHALLENGES),
         section("local function colorData", "local function isDispatchPredecessorClosed"),
         section("local function accessibilityValue", "-- The switch a player"),
         section("local function publicProfile", "local tagCharacters"),
