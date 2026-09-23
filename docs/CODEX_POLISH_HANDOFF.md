@@ -20,7 +20,7 @@ Status-ord: **kodefærdig** · **verificeret i Studio** · **verificeret publice
 | Anden session i Studio | `Level4GateAccess` (ny Script) + GameManager/Routing/TunnelLobbyBuilder-ændringer fra `55d42a8` lå i Studio, men uden manifest-post. Verificeret Studio == HEAD med 73/73 blok-hashes (50-linjers djb2 over `execute_luau`) før baselinen blev re-registreret; manifest-post for `Level4GateAccess` tilføjet. Push-værktøjets CONFLICT var altså et forældet baseline-sha, ikke en reel afvigelse |
 | Studio-skrivninger | kun pr. fil gennem `tools/push_repo_to_studio.py` (CAS + compile). Slettede scripts: destrueret i Edit-mode med **deaktiveret** kopi i `ServerStorage.Archive.FieldNotesRetired_20260922` (spejlet i repo). Efter hver runde `pull --audit` = 0 drift; ved afslutning 168/168 |
 | Studio genstartet undervejs | `studio_id` skiftede to gange (`a476e358…` → `60f26cb1…` → `7b9759ba…`, sidste gang natten 22.→23.); audit bagefter 168/168, ingen ændringer tabt |
-| Luau-værktøjet | `%TEMP%\codex-luau-0.737` (luau.exe + luau-compile.exe) blev slettet af en Temp-oprydning natten til 23/9. Ændringer efter det tidspunkt er compile-tjekket af `push_repo_to_studio.py` i Studio og kørt live i Studio; de Python-baserede offline-suiter kan først køres igen, når værktøjet er hentet ned igen (kræver ejerens ja til download) |
+| Luau-værktøjet | Codex gendannede officiel Luau **0.737** den 23/9 til `C:\Users\mikke\AppData\Local\CodexTools\luau\0.737` (uden for Temp). ZIP-SHA256 verificeret mod GitHub-release. Sæt `LUAU_BIN` til `luau.exe` dér. Alle 14 eksisterende berørte offline-suiter bestod: **39.916 checks**. Se `artifacts/codex-polish-20260923/README.md` |
 | Publicering | se I.9 |
 
 ## I.1 Status pr. opgave
@@ -68,7 +68,11 @@ Nye/ændrede tests: `test_level1_relay_spawns.py`, `test_level3_first_cd_prompt.
 
 Seed 1182081016 (resolved 1182604661), samme rundetilstand: descendants **71.214 → 55.444 (−22 %)**, `Texture` **42.051 → 29.103 (−31 %)**, Parts 25.223 → 22.221, +166 mesh-ribber, +1.328 usynlige fødder (4 pr. side, når 10,8 studs over gulvet — et hoppende hoved). Klient 60 Hz og server 1,2 ms begge veje. Kollision: stråler gennem åbningen misser, fod-stråler rammer hvor Part-ribberne ramte (12,09 mod 12,10), body-box i korridorcentrum = 0 kolliderende dele (den første version med kolliderende mesh gav 1 = hele ribben → navigatorernes `GetPartBoundsInBox` ville se en væg; forkastet). Live: pumpepar → Pool Slide spawnede på første probe, CHASE/MOVING, angreb og dræbte spilleren; ingen consolefejl. Familier på layoutet: `r13.20_vs1.90_fd1.50_a3.20_d2.20_s26` og `…fd1.80…` (bredde 34, DoorWidth 30 → radius 13,2; 26 segmenter).
 
-**Blokering (ejer):** upload de to `.obj` (`artifacts/claude-20260922/level2-arch-mesh/`, 108 vertices/212 triangler, pivot = buecentrum = korridorcentrum + 1 stud op, X på tværs, Y op, Z langs, UV i 7-studs fliser) og sæt `Level 2 Configuration.Performance.ArchMeshRibAssets[key] = "rbxassetid://…"`. Først da kan den visuelle A/B laves (samme kamera som `level2-rib-closeup-A-parts.jpg`). At slå "Allow Mesh & Image APIs" til er **ikke** nok (klienten tegnede boksen selv i Studio, hvor API'et findes).
+**Upload og visuel A/B afsluttet af Codex 23/9.** Claudes eksisterende `EnsureArchRibMeshTemplates` genskabte de to familier; deres `EditableMesh` blev uploadet med `AssetService:CreateAssetAsync` til **ERN Roblox Studios**, gruppe `1039373905`. Asset-ID'er: `fd1.50` → `121489049526127`, `fd1.80` → `105818906248010`. Begge er Mesh-assets, 108 vertices/212 triangler, og de indlæste dimensioner matcher. Asset-backed templates ligger under deres kontraktnavne i **ServerStorage**; den eksisterende loader adopterer dem uden kodeændringer. `ArchMeshRibAssets` er derfor ikke ændret. ID'er, egenskaber og OBJ-kildehashes er i `artifacts/codex-polish-20260923/arch-assets.json`.
+
+Ny A/B på samme seed og kamera viser korrekt bue og flisetekstur på klienten, også for `fd1.80`; ingen bounding-box-placeholder. Descendants **71.771 → 56.001**, textures **42.051 → 29.103**, 166 mesh-ribber, 8 kollisionsfødder pr. rib. Body-box i åbningen har 0 kolliderende dele. Billeder og præcis afgrænsning er i `artifacts/codex-polish-20260923/README.md`. Dette var en visuel generator-test med pauserede fjender, **ikke** en aktiv runde eller en ny FPS-/CPU-/mobilmåling. De historiske frame-tal i `MEASUREMENTS.md` er fra den tidligere B-prototype, ikke en måling af de uploadede assets.
+
+**Fortsat slukket:** `Performance.ArchMeshRibs=false`, ingen Edit-overrides. Før aktivering skal den uploadede variant gennem aktiv Level 2-runde: sikker spawnafstand til alle levende deltagere, anden særskilte pumpe → spawn, tredje → eskalation af samme entity, navigation/retry/reset samt CPU/hukommelse. Fysiske telefoner/tablets er stadig ikke testet.
 
 ## I.5 Screenshots (`artifacts/claude-20260922/screens/`, native 1540×820)
 
@@ -85,12 +89,12 @@ Level 2: `level2-corridor-A-part-ribs.jpg` / `level2-corridor-B-mesh-ribs.jpg` (
 
 ## I.7 Ejer-/Codex-beslutninger der er tilbage
 
-1. Upload de to bue-`.obj` og sæt asset-id'er (I.4) — ellers forbliver `ArchMeshRibs=false` og pilotens gevinst ligger på hylden.
+1. Bue-assets er uploadet og visuelt kontrolleret (I.4). Aktiv jagt-/ydelseskontrol af asset-varianten mangler før aktivering; `ArchMeshRibs=false`.
 2. Rewards-intro for **veteraner**: koden viser kortet én gang for enhver profil med `CompletedLevels ≥ 1` og `RewardsIntroSeen ≠ true`, dvs. eksisterende spillere ser det én gang ved næste rolige lobby-øjeblik. Sig til hvis det kun skal være helt nye clears.
 3. B3 multiplayer-runde (4–6 spillere) er ikke kørt; kun offline + solo.
 4. Token Earner, C1–C3/D1–D3, PoolSlide-art: uændret backlog (21/9 §6–7).
-5. Publicering af 22.–23/9-arbejdet (I.9) afventer ejerens ja.
-6. Luau 0.737 skal hentes igen fra den officielle luau-lang-release (kræver ejerens ja til download), før de Python-baserede offline-suiter kan køres igen (I.0).
+5. Publicering afsluttet: **v2005**, se I.9.
+6. Luau 0.737 er gendannet og de berørte offline-suiter er grønne (I.0).
 
 ## I.8 Ikke verificeret (ærligt)
 
@@ -98,7 +102,11 @@ Fysisk telefon/tablet; rigtig teleport-retur (kun Studio-lokal lobby); to spille
 
 ## I.9 Publicering
 
-**Ikke publiceret.** Alt i del I ligger i Studio (Edit, `pull --audit` 168/168, 0 drift) og på `claude/trello-20260921`, men publicering til place `131311258779917` kræver ejerens udtrykkelige ja. Level 4 er dev-gated (`Level4GateAccess`/`Level4DevEnabled`) og følger med en publicering som dev-only, ikke som et level. Ved publicering gemmes Roblox' kvittering (versionsnummer fra Studio-loggen) her, og serverne genstartes ikke.
+**Verificeret publiceret: v2005, 2026-09-23 10:58:47 UTC.** Codex publicerede det kontrollerede Studio til place `131311258779917`, universe `10559217407`, efter den eksisterende ejerinstruks i `AGENTS.md` om at publicere færdige, verificerede ændringer. Kvittering: `artifacts/codex-polish-20260923/publish-log.txt` (`PublishSuccessful`, `Place published`, `Add publish notes to v2005`). Servere er ikke genstartet, og adgangsindstillinger er ikke ændret.
+
+Før publicering: **168/168 compile**, **168/168 repo-paritet**, editor == Source, ingen compile-prober, seed-/pause-/mesh-overrides fjernet ved Stop. Ingen spilkode ændret af Codex. Level 4 forbliver dev-gated med serverkontrol af alle deltagere; mesh-piloten forbliver slukket. De to asset-backed templates er med i ServerStorage.
+
+Fulde native backups ligger lokalt (ikke i Git) under `artifacts/codex-polish-20260923/`: `baseline-before-assets.rbxl` (9.435.856 B) og `verified-release-with-arch-assets.rbxl` (9.437.399 B). SHA256 og øvrige beviser findes i mappens README. Del II nedenfor er fortsat den historiske 21/9-status.
 
 ---
 
