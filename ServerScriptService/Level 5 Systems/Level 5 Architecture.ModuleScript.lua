@@ -20,7 +20,7 @@ function Architecture.Build(parent, origin, config)
 	origin = origin or Vector3.zero
 	local root = Instance.new("Model")
 	root.Name = "Level5_IndoorSuburbs"
-	root:SetAttribute("ArchitectureVersion", "2026-09-24.1")
+	root:SetAttribute("ArchitectureVersion", "2026-09-24.2")
 	root:SetAttribute("GeometryOnly", true)
 	root.Parent = parent
 	local offset = CFrame.new(origin)
@@ -369,20 +369,34 @@ function Architecture.Build(parent, origin, config)
 
 		totalFootprint+=z.width*(z.z1-z.z0)
 	end
-	local wallArt=model("TallWallDrawings")
-	local function mural(name,position,look,width,height,asset)
-		local surface=part(wallArt,name,V(width,height,.015),CFrame.lookAt(position,look),C.pale,Enum.Material.SmoothPlastic,false)
+	-- Dark fungal colonies grow from different damp seams; no pictorial wall art.
+	local growth=model("MyceliumWallGrowth")
+	local moldAssets={
+		rising="rbxassetid://111130507669211",
+		corner="rbxassetid://84997095468417",
+		seam="rbxassetid://119550867817499",
+	}
+	local function wallMold(name,position,look,width,height,variant,growthOrigin)
+		local surface=part(growth,name,V(width,height,.015),CFrame.lookAt(position,look),C.pale,Enum.Material.SmoothPlastic,false)
 		surface.Transparency=1;surface.CastShadow=false;surface.CanQuery=false;surface.CanTouch=false
-		surface:SetAttribute("Level5WallDrawing",true);surface:SetAttribute("AlphaBackground",true)
-		local decal=Instance.new("Decal");decal.Name="CharcoalOnPlaster";decal.Texture=asset;decal.Face=Enum.NormalId.Front
-		decal.Color3=Color3.fromRGB(112,103,86);decal.Transparency=.08;decal.Parent=surface
+		surface:SetAttribute("Level5WallMold",true);surface:SetAttribute("AlphaBackground",true)
+		surface:SetAttribute("MoldVariant",variant);surface:SetAttribute("GrowthOrigin",growthOrigin)
+		local decal=Instance.new("Decal");decal.Name="DarkMyceliumOnPlaster";decal.Texture=moldAssets[variant];decal.Face=Enum.NormalId.Front
+		decal.Color3=Color3.fromRGB(168,164,150);decal.Transparency=.04;decal.Parent=surface
 	end
-	-- Four landmark sightings, not a repeated pattern in every room.
-	mural("VillageHouseDrawing",V(-179.32,26,319),V(0,26,319),14,42,"rbxassetid://114474831346440")
-	mural("CanyonStairDrawing",V(34,56,1015.31),V(34,56,900),29,87,"rbxassetid://108980796139348")
-	mural("CanyonHouseDrawing",V(-149.32,58,902),V(0,58,902),29,87,"rbxassetid://114474831346440")
-	mural("SubdivisionStairDrawing",V(159.32,36,1092),V(0,36,1092),18,54,"rbxassetid://108980796139348")
-	root:SetAttribute("TallWallDrawingCount",4)
+	-- Bottom edges meet the floor or the raised terrace. Upper colonies originate
+	-- at wall joints; none of the carriers crosses the central threshold opening.
+	wallMold("VillageFloorSpread",V(-179.32,22.05,319),V(0,22.05,319),58.67,44,"corner","Floor corner")
+	wallMold("CanyonRearRising",V(55,48.05,1015.31),V(55,48.05,900),72,96,"rising","Floor seam")
+	wallMold("CanyonWestRising",V(-149.32,45.05,902),V(0,45.05,902),67.5,90,"rising","Floor seam")
+	wallMold("SubdivisionTerraceSpread",V(159.32,39.05,1092),V(0,39.05,1092),61.33,46,"corner","Raised terrace floor")
+	wallMold("CanyonUpperSeam",V(149.32,75,866),V(0,75,866),52,52,"seam","Upper wall seam")
+	wallMold("SubdivisionUpperSeam",V(-159.32,46,1148),V(0,46,1148),36,36,"seam","Upper wall seam")
+	wallMold("ArcadeDampCorner",V(-65,8.05,195.31),V(-65,8.05,150),21.33,16,"corner","Low wall corner")
+	wallMold("DomesticCeilingSeam",V(-63,7.25,795.31),V(-63,7.25,740),13.5,13.5,"seam","Ceiling seam")
+	root:SetAttribute("TallWallDrawingCount",0)
+	root:SetAttribute("WallMoldCount",8)
+	root:SetAttribute("WallMoldVariantCount",3)
 	local cameras={
 		{name="Atrium",position=V(-34,12,7),lookAt=V(52,18,49)},
 		{name="LowEaves",position=V(9,6,80),lookAt=V(-44,8,132)},

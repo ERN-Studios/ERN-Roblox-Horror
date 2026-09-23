@@ -1,0 +1,154 @@
+{
+  "schemaVersion": 1,
+  "createdAtLocalDate": "2026-09-24",
+  "generationMode": "built-in imagegen",
+  "status": "Verified in actual Studio Play: all three assets loaded; eight colonies and 72 backing rays passed with zero failures. Published natively as Roblox v2036.",
+  "plannedPlacementCount": 8,
+  "supersedes": {
+    "description": "All four tall house/stair drawing placements are replaced. Original files remain historical provenance; runtime QA verified zero old drawing asset references and zero old drawing attributes.",
+    "previousAssetIds": [
+      "114474831346440",
+      "108980796139348"
+    ],
+    "previousPlacementCount": 4,
+    "runtimeRemovalVerified": true
+  },
+  "assets": [
+    {
+      "key": "rising",
+      "file": "level5-mold-rising-alpha.png",
+      "robloxAssetId": "111130507669211",
+      "contentId": "rbxassetid://111130507669211",
+      "width": 1086,
+      "height": 1448,
+      "mode": "RGBA",
+      "bytes": 2014380,
+      "sha256": "84252a72299d89a350fca25e72ae4c88291d25eb7ea188b9f8e2765dbd29ce74",
+      "usage": "Dense bottom-origin patch growing upward/outward; portrait 3:4.",
+      "sourcePath": "/Users/zeanjuul4/.codex/generated_images/01a0cfe1-440b-79e2-acb9-8e509ddf6a64/exec-18d8eeea-2ca2-46a2-8ad8-9f8bd8887b1a.png",
+      "promptRecord": "level5-mold-rising-alpha.prompt.md",
+      "promptFidelity": "exact",
+      "alpha": {
+        "min": 0,
+        "max": 255,
+        "fullyTransparentPercent": 48.511,
+        "semiTransparentPercent": 51.4889,
+        "fullyOpaquePercent": 0.0001,
+        "nonzeroBounds": [
+          0,
+          21,
+          1085,
+          1448
+        ],
+        "method": "Read-only Pillow inspection; no pixel edits or alpha conversion."
+      },
+      "qa": {
+        "generatedImageInspected": true,
+        "byteIdenticalToGeneratedOriginal": true,
+        "contentProviderStatus": "Success",
+        "actualWallVisualQAPending": false,
+        "actualWallVisualQAPassed": true,
+        "statusSource": "Actual Studio Play visual and ContentProvider confirmation on 24 September 2026; runtime report confirms structural/placement checks."
+      }
+    },
+    {
+      "key": "corner",
+      "file": "level5-mold-corner-alpha.png",
+      "robloxAssetId": "84997095468417",
+      "contentId": "rbxassetid://84997095468417",
+      "width": 1448,
+      "height": 1086,
+      "mode": "RGBA",
+      "bytes": 1983447,
+      "sha256": "8164b7957723725bbf67bc9bb281c06c0d64415268c8b098611e91becebee8f8",
+      "usage": "Lower-left corner origin with broad diagonal growth toward upper-right; landscape 4:3.",
+      "sourcePath": "/Users/zeanjuul4/.codex/generated_images/01a0cfe4-74ed-7262-a527-95459bf25d57/exec-3a274ab7-bd88-4f68-8e74-cd5f30c6a801.png",
+      "promptRecord": "level5-mold-corner-generation.md",
+      "promptFidelity": "exact",
+      "alpha": {
+        "min": 0,
+        "max": 255,
+        "fullyTransparentPercent": 48.2631,
+        "semiTransparentPercent": 51.7365,
+        "fullyOpaquePercent": 0.0004,
+        "nonzeroBounds": [
+          0,
+          0,
+          1436,
+          1086
+        ],
+        "method": "Read-only Pillow inspection; no pixel edits or alpha conversion."
+      },
+      "qa": {
+        "generatedImageInspected": true,
+        "byteIdenticalToGeneratedOriginal": true,
+        "contentProviderStatus": "Success",
+        "actualWallVisualQAPending": false,
+        "actualWallVisualQAPassed": true,
+        "statusSource": "Actual Studio Play visual and ContentProvider confirmation on 24 September 2026; runtime report confirms structural/placement checks."
+      }
+    },
+    {
+      "key": "seam",
+      "file": "level5-mold-seam-alpha.png",
+      "robloxAssetId": "119550867817499",
+      "contentId": "rbxassetid://119550867817499",
+      "width": 1254,
+      "height": 1254,
+      "mode": "RGBA",
+      "bytes": 2392833,
+      "sha256": "9d70f001b130ca4c3c897c056e66ad706e0ecb6c92c21c5b37469bd54e3ddb64",
+      "usage": "High upper-right seam origin spreading left/down; square.",
+      "sourcePath": "/Users/zeanjuul4/.codex/generated_images/01a0cfe1-051b-7073-9dd4-8d21f8ddfda3/exec-f04b2036-47d0-4ead-875f-8b5e11063e21.png",
+      "promptRecord": "level5-mold-seam-alpha.prompt.txt",
+      "promptFidelity": "exact",
+      "alpha": {
+        "min": 0,
+        "max": 255,
+        "fullyTransparentPercent": 42.9178,
+        "semiTransparentPercent": 57.0818,
+        "fullyOpaquePercent": 0.0004,
+        "nonzeroBounds": [
+          0,
+          0,
+          1254,
+          1254
+        ],
+        "method": "Read-only Pillow inspection; no pixel edits or alpha conversion."
+      },
+      "qa": {
+        "generatedImageInspected": true,
+        "byteIdenticalToGeneratedOriginal": true,
+        "contentProviderStatus": "Success",
+        "actualWallVisualQAPending": false,
+        "actualWallVisualQAPassed": true,
+        "statusSource": "Actual Studio Play visual and ContentProvider confirmation on 24 September 2026; runtime report confirms structural/placement checks."
+      }
+    }
+  ],
+  "verifiedPlacementCount": 8,
+  "runtimeVerification": {
+    "qaName": "Level5MoldRuntime",
+    "version": "2026-09-24.mold.1",
+    "pass": true,
+    "failureCount": 0,
+    "assetLoadsPassed": 3,
+    "placementsPassed": 8,
+    "backingRaysPassed": 72,
+    "backingRaysTotal": 72,
+    "oldDrawingAssetReferences": 0,
+    "oldDrawingAttributes": 0,
+    "maximumWallGapStuds": 0.1,
+    "evidencePath": "output/level5-mold/verification/runtime-qa.json",
+    "evidenceRelativeToAssets": "../../../artifacts/level5-mold-20260924/runtime-qa.json",
+    "publicationVerified": true,
+    "deliveryStatus": "Published v2036; Git delivery is tracked by branch history and Trello.",
+    "publication": {
+      "version": 2036,
+      "timeUTC": "2026-09-23T23:05:12Z",
+      "method": "Native File > Publish to Roblox",
+      "receipt": "Studio log contains PublishSuccessful, Published new changes, Place published and Add publish notes to v2036.",
+      "scope": "Expansion, furnishings and mold."
+    }
+  }
+}

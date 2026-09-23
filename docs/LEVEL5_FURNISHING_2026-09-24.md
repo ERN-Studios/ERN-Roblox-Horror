@@ -1,5 +1,7 @@
 # Level 5 — domestic furniture, unlit houses and tall wall drawings
 
+**Superseded wall art:** The four drawings described below were replaced by eight dark mold colonies later on 24 September. See [current mold appearance and verified v2036 publication](LEVEL5_MOLD_2026-09-24.md). Furnishing and house-light checks below remain applicable.
+
 The Indoor Suburbs now has 20 sparsely furnished rooms, four tall transparent wall drawings, and no small house lights or glowing house fixtures. The eight-district layout, developer access and tinted windows are preserved. This remains a map preview: no entity, puzzle, slide controller or completion rewards were added.
 
 ## Appearance
@@ -47,6 +49,6 @@ The remote Records UI and repaired test harnesses were merged from `claude/trell
 
 ## Delivery status
 
-Save to Roblox succeeded at `2026-09-23T22:31:25Z`. A full local native post-change copy was verified (16,715,956 bytes, SHA-256 `4c849ff7e68576fd0092408c93779c988708db7d0b3f3be10357c06fe01d3a4a`), despite a delayed UI response. Existing v2026 backup is also preserved. Publication confirmation remains pending. Do not treat the earlier v2026 publish receipt as publication of this update. The final publication receipt, when available, belongs in `artifacts/level5-furnishing-20260924/` and `studio-sync-manifest.json`.
+Save to Roblox succeeded at `2026-09-23T22:31:25Z`. A full local native post-furnishing copy was verified (16,715,956 bytes, SHA-256 `4c849ff7e68576fd0092408c93779c988708db7d0b3f3be10357c06fe01d3a4a`). Existing v2026 backup is also preserved. The expansion, furnishings and subsequent mold replacement were **published successfully as v2036 at 2026-09-23T23:05:12Z**. See [publication receipt](../artifacts/level5-mold-20260924/publication-v2036.json).
 
-The [Level 5 Trello card](https://trello.com/c/Y2xXThBN) remains In Progress for its future gameplay work. Completed furnishing/visual/traversal items can be checked independently; delivery remains unchecked until verified.
+The [Level 5 Trello card](https://trello.com/c/Y2xXThBN) remains In Progress for future gameplay; completed visual work is tracked separately.

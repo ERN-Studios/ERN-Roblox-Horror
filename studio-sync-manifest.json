@@ -1,13 +1,13 @@
 {
   "formatVersion": 2,
-  "source": "Studio-authoritative Level 5 sparse furnishing and transparent tall wall drawings, house-light removal, Level 1 briefing correction; concurrent Records UI preserved from origin/claude/trello-20260921 at 2e5cfd8. Exact 178-script export verified; publication receipt recorded separately.",
+  "source": "Studio-authoritative Level 5 mold replacement: 8 transparent dark mycelium colonies using 3 image assets replace all 4 drawings. Fresh 178-script source/editor export; only Architecture changed this task, other 177 including all 12 Level 4 sources preserved. Concurrent hazmat asset/docs commits merged through 655ef9e.",
   "finalNewlineContract": "Entries flagged studioTrailingNewline hold exactly the canonical repo file plus one extra trailing newline in Studio. Exact landings remove the flag. Current flagged entry count: 0. Manifest hashes always describe the canonical repo file, never Studio's transport bytes.",
   "studio": {
     "id": "b7dc57b1-886e-46fc-812f-6a1dd3106871",
     "name": "BACKROOMS: STAY QUIET [CO-OP HORROR] (placeId: 131311258779917)",
     "placeId": 131311258779917,
     "universeId": 10559217407,
-    "publishedVersion": 2026
+    "publishedVersion": 2036
   },
   "counts": {
     "scripts": 178,
@@ -3012,8 +3012,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 5 Systems/Level 5 Architecture.ModuleScript.lua",
-      "bytes": 23573,
-      "sha256": "2125b3bb99fb28f88f61063fa875bc9a1e25684c236fa3c23c9c78211e91cdc7",
+      "bytes": 24505,
+      "sha256": "0a7a99fe8e38a971604f420f40f8f08b7768ccf04ec417f3f6cd6a918b067e55",
       "status": "synced",
       "sourceEqualsEditor": true,
       "attributes": [],
@@ -3159,7 +3159,7 @@
     "exactRepositoryByteMatches": 178,
     "editorConflicts": [],
     "capturedPlaceVersion": 1999,
-    "sourceAudit": "artifacts/level5-furnishing-20260924/studio-source-verification.json",
+    "sourceAudit": "artifacts/level5-mold-20260924/studio-source-verification.json",
     "level4ScriptCount": 12,
     "level4UnchangedVsBaselineAndRepository": true,
     "repositoryOnlyServiceMirrors": 0
@@ -3167,14 +3167,14 @@
   "publication": {
     "placeId": 131311258779917,
     "universeId": 10559217407,
-    "publishedVersion": 2026,
-    "publishedAtUtc": "2026-09-23T21:05:06Z",
+    "publishedVersion": 2036,
+    "publishedAtUtc": "2026-09-23T23:05:12Z",
     "success": true,
     "sourceLog": "0.740.0.7400927_20260923T201259Z_Studio_b65c7_last.log",
-    "evidenceFile": "artifacts/level5-20260923/publish-log-v2026.txt",
-    "evidenceSha256": "14e6628ac64871849f928167b48bbc3c8a8ad5ae00fbf0a21a2c3d16ba39c92f",
-    "scope": "Successful publication of existing experience; no active-server restart claimed.",
-    "metadataFile": "artifacts/level5-20260923/publication-v2026.json"
+    "evidenceFile": "artifacts/level5-mold-20260924/publish-log-v2036.txt",
+    "evidenceSha256": "85acfcf882e14203d9f5dece1328255b8a8b3b05df8045c5b67848447e08cf51",
+    "scope": "Level 5 expansion, furnishing and current mold replacement, plus preserved authoritative Studio state. No active-server restart claimed.",
+    "metadataFile": "artifacts/level5-mold-20260924/publication-v2036.json"
   },
   "remoteVerification": {
     "verifiedDuringLevel5Task": false,
@@ -3238,14 +3238,49 @@
         "studioTrailingNewline": 0
       },
       "scope": "Historical pre-furnishing expansion record; final current export includes the other developer Records page."
+    },
+    {
+      "source": "Studio-authoritative Level 5 sparse furnishing and transparent tall wall drawings, house-light removal, Level 1 briefing correction; concurrent Records UI preserved from origin/claude/trello-20260921 at 2e5cfd8. Exact 178-script export verified; publication receipt recorded separately.",
+      "scriptVerification": {
+        "scriptCount": 178,
+        "sourceEqualsEditorCount": 178,
+        "exactRepositoryByteMatches": 178,
+        "editorConflicts": [],
+        "capturedPlaceVersion": 1999,
+        "sourceAudit": "artifacts/level5-furnishing-20260924/studio-source-verification.json",
+        "level4ScriptCount": 12,
+        "level4UnchangedVsBaselineAndRepository": true,
+        "repositoryOnlyServiceMirrors": 0
+      },
+      "publication": {
+        "placeId": 131311258779917,
+        "universeId": 10559217407,
+        "publishedVersion": 2026,
+        "publishedAtUtc": "2026-09-23T21:05:06Z",
+        "success": true,
+        "sourceLog": "0.740.0.7400927_20260923T201259Z_Studio_b65c7_last.log",
+        "evidenceFile": "artifacts/level5-20260923/publish-log-v2026.txt",
+        "evidenceSha256": "14e6628ac64871849f928167b48bbc3c8a8ad5ae00fbf0a21a2c3d16ba39c92f",
+        "scope": "Successful publication of existing experience; no active-server restart claimed.",
+        "metadataFile": "artifacts/level5-20260923/publication-v2026.json"
+      },
+      "currentSyncPublication": {
+        "status": "saved_and_backed_up_publication_pending",
+        "scope": "Level 5 expansion and furnishing, Level 1 briefing fix, preserved Records UI",
+        "savedAtUtc": "2026-09-23T22:31:25Z",
+        "priorPublicationVersion": 2026,
+        "newNativeAfterBackupVerified": true,
+        "reason": "Save to Roblox and local full native copy verified; UI publish confirmation pending."
+      }
     }
   ],
   "currentSyncPublication": {
-    "status": "saved_and_backed_up_publication_pending",
-    "scope": "Level 5 expansion and furnishing, Level 1 briefing fix, preserved Records UI",
-    "savedAtUtc": "2026-09-23T22:31:25Z",
-    "priorPublicationVersion": 2026,
-    "newNativeAfterBackupVerified": true,
-    "reason": "Save to Roblox and local full native copy verified; UI publish confirmation pending."
+    "status": "published",
+    "scope": "Level 5 expansion, furnishing and current mold replacement, plus preserved authoritative Studio state. No active-server restart claimed.",
+    "publishedVersion": 2036,
+    "publishedAtUtc": "2026-09-23T23:05:12Z",
+    "success": true,
+    "evidenceFile": "artifacts/level5-mold-20260924/publish-log-v2036.txt",
+    "nativePlaceBackupNote": "Full native pre-mold checkpoint retained with identical non-script state. This task changed one ModuleScript, backed up before and after. Current Download a Copy Save control disabled; no newer full native copy claimed."
   }
 }

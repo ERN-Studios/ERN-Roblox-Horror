@@ -2,7 +2,7 @@
 -- No services are mutated, no modules are required, and no yields are performed.
 local HttpService = game:GetService("HttpService")
 local report = {
-	qa="Level5FurnitureRuntime",version="2026-09-24.2",pass=false,
+	qa="Level5MoldRuntime",version="2026-09-24.mold.1",pass=false,
 	failureCount=0,failures={},counts={},rooms={},
 }
 local MAX_DESCENDANTS, MAX_FAILURES, EPS = 60000, 50, .015
@@ -37,7 +37,9 @@ if #architectureRoots~=1 then finish();return end
 local root=architectureRoots[1]
 local objects=root:GetDescendants()
 report.counts.architectureDescendants=#objects
-local homes,houseSet,groups,windows,murals={},{},{},{},{}
+local homes,houseSet,groups,windows,murals,molds={},{},{},{},{},{}
+local oldAssetReferences=0
+local oldDrawingAssets={"114474831346440","108980796139348"}
 local parts,lights,neon,houseCount=0,0,0,0
 local variantNames={"SofaTVLounge","ReadingCorner","DiningRoom","JoinedChairs","SparseSittingRoom"}
 for _,object in ipairs(objects) do
@@ -60,7 +62,16 @@ for _,object in ipairs(objects) do
 	if object.Name=="WindowGlass" then
 		check(object:GetAttribute("Level5TintedWindow")==true,"UNTAGGED_WINDOW",object)
 	end
-	if object:GetAttribute("Level5WallDrawing")==true then table.insert(murals,object) end
+	if object:GetAttribute("Level5WallDrawing")~=nil then table.insert(murals,object) end
+	if object:GetAttribute("Level5WallMold")==true then table.insert(molds,object) end
+	if object:IsA("Decal") or object:IsA("Texture") then
+		for _,asset in ipairs(oldDrawingAssets) do
+			if string.find(object.Texture,asset,1,true) then
+				oldAssetReferences+=1
+				check(false,"OLD_DRAWING_ASSET_REMAINS",object,asset)
+			end
+		end
+	end
 end
 report.counts.architectureParts=parts
 report.counts.architectureLights=lights
@@ -183,30 +194,119 @@ for _,window in ipairs(windows) do
 	end
 end
 
-local muralAssets={
-	VillageHouseDrawing="rbxassetid://114474831346440",CanyonHouseDrawing="rbxassetid://114474831346440",
-	CanyonStairDrawing="rbxassetid://108980796139348",SubdivisionStairDrawing="rbxassetid://108980796139348",
+local moldAssets={
+	rising="rbxassetid://111130507669211",
+	corner="rbxassetid://84997095468417",
+	seam="rbxassetid://119550867817499",
 }
-local muralNames,muralDecals={},0
-report.counts.murals=#murals
-check(#murals==4 and root:GetAttribute("TallWallDrawingCount")==4,"MURAL_COUNT",root,tostring(#murals))
-for _,mural in ipairs(murals) do
-	check(not muralNames[mural.Name],"DUPLICATE_MURAL_NAME",mural);muralNames[mural.Name]=true
-	check(muralAssets[mural.Name]~=nil,"UNEXPECTED_MURAL_NAME",mural)
-	check(mural:IsA("BasePart"),"MURAL_CARRIER_CLASS",mural)
-	if mural:IsA("BasePart") then
-		check(mural.Transparency==1 and not mural.CanCollide and not mural.CanQuery and not mural.CanTouch and not mural.CastShadow,"MURAL_CARRIER_FLAGS",mural)
-		check(mural:GetAttribute("AlphaBackground")==true,"MURAL_ALPHA_ATTRIBUTE",mural)
-		local decals={}
-		for _,child in ipairs(mural:GetChildren()) do if child:IsA("Decal") then table.insert(decals,child) end end
-		check(#decals==1,"MURAL_DECAL_COUNT",mural,tostring(#decals))
-		for _,decal in ipairs(decals) do
-			muralDecals+=1
-			check(decal.Name=="CharcoalOnPlaster" and decal.Texture==muralAssets[mural.Name],"MURAL_DECAL_ASSET",decal)
-			check(decal.Face==Enum.NormalId.Front and math.abs(decal.Transparency-.08)<.00001,"MURAL_DECAL_DISPLAY",decal)
-		end
+local expectedMolds={
+	VillageFloorSpread={variant="corner",origin="Floor corner",wall="DistrictSideWall"},
+	CanyonRearRising={variant="rising",origin="Floor seam",wall="ThresholdSideWall"},
+	CanyonWestRising={variant="rising",origin="Floor seam",wall="DistrictSideWall"},
+	SubdivisionTerraceSpread={variant="corner",origin="Raised terrace floor",wall="DistrictSideWall"},
+	CanyonUpperSeam={variant="seam",origin="Upper wall seam",wall="DistrictSideWall"},
+	SubdivisionUpperSeam={variant="seam",origin="Upper wall seam",wall="DistrictSideWall"},
+	ArcadeDampCorner={variant="corner",origin="Low wall corner",wall="ThresholdSideWall"},
+	DomesticCeilingSeam={variant="seam",origin="Ceiling seam",wall="ThresholdSideWall"},
+}
+report.counts.oldDrawingAttributes=#murals
+report.counts.oldDrawingAssetReferences=oldAssetReferences
+check(#murals==0,"OLD_DRAWING_ATTRIBUTES_REMAIN",root,tostring(#murals))
+check(root:GetAttribute("TallWallDrawingCount")==0,"OLD_DRAWING_COUNT_ATTRIBUTE",root)
+check(#molds==8 and root:GetAttribute("WallMoldCount")==8,"MOLD_COUNT",root,tostring(#molds))
+check(root:GetAttribute("WallMoldVariantCount")==3,"MOLD_VARIANT_COUNT_ATTRIBUTE",root)
+local rayParams=RaycastParams.new()
+rayParams.FilterType=Enum.RaycastFilterType.Include
+rayParams.FilterDescendantsInstances={root}
+rayParams.IgnoreWater=true
+-- Baseboards and decals are noncollidable decoration. Inspect solid wall backing.
+rayParams.RespectCanCollide=true
+local moldNames,usedVariants,usedAssets={},{},{}
+local moldDecals,backedCarriers,backingRays=0,0,0
+report.molds={}
+table.sort(molds,function(a,b)return a.Name<b.Name end)
+for _,mold in ipairs(molds) do
+	local before=report.failureCount
+	local expected=expectedMolds[mold.Name]
+	local variant=mold:GetAttribute("MoldVariant")
+	local row={name=mold.Name,variant=variant,backingRays=0,pass=false}
+	check(not moldNames[mold.Name],"DUPLICATE_MOLD_NAME",mold);moldNames[mold.Name]=true
+	check(expected~=nil,"UNEXPECTED_MOLD_NAME",mold)
+	check(mold:IsA("BasePart"),"MOLD_CARRIER_CLASS",mold)
+	if expected then
+		check(variant==expected.variant,"MOLD_VARIANT",mold,tostring(variant))
+		check(mold:GetAttribute("GrowthOrigin")==expected.origin,"MOLD_GROWTH_ORIGIN",mold)
 	end
+	if type(variant)=="string" then usedVariants[variant]=true end
+	if mold:IsA("BasePart") then
+		check(mold.Anchored and mold.Transparency==1 and not mold.CanCollide and not mold.CanQuery and not mold.CanTouch and not mold.CastShadow,"MOLD_CARRIER_FLAGS",mold)
+		check(mold:GetAttribute("AlphaBackground")==true,"MOLD_ALPHA_ATTRIBUTE",mold)
+		check(mold.Size.X>0 and mold.Size.Y>0 and mold.Size.Z>0 and mold.Size.Z<=.02,"MOLD_FLAT_CARRIER_SIZE",mold)
+		check(mold.Parent and mold.Parent.Name=="MyceliumWallGrowth","MOLD_CONTAINER",mold)
+		check(mold.Material~=Enum.Material.Neon,"MOLD_EMISSION",mold)
+		local decals={}
+		for _,child in ipairs(mold:GetChildren()) do
+			if child:IsA("Decal") then table.insert(decals,child) end
+			check(not child:IsA("Light"),"MOLD_LIGHT",child)
+		end
+		check(#decals==1,"MOLD_DECAL_COUNT",mold,tostring(#decals))
+		for _,decal in ipairs(decals) do
+			moldDecals+=1;usedAssets[decal.Texture]=true
+			check(decal.Name=="DarkMyceliumOnPlaster" and decal.Texture==moldAssets[variant],"MOLD_DECAL_ASSET",decal)
+			local tint=Color3.fromRGB(168,164,150)
+			check(decal.Face==Enum.NormalId.Front and math.abs(decal.Transparency-.04)<.00001,"MOLD_DECAL_DISPLAY",decal)
+			check(math.abs(decal.Color3.R-tint.R)<.00001 and math.abs(decal.Color3.G-tint.G)<.00001 and math.abs(decal.Color3.B-tint.B)<.00001,"MOLD_DECAL_TINT",decal)
+		end
+		-- Nine short rays cover the center, four near-corners and edge midpoints.
+		-- Their direction is opposite the decal's Front normal. A room-facing,
+		-- nearly flush carrier must hit an inward-facing solid named wall, never
+		-- a door, window, floor, external face, or a distant object across a gap.
+		local normal=mold.CFrame.LookVector
+		local rayPass=true
+		local backing=nil
+		local maxGap=0
+		local offsets={-1,0,1}
+		for _,sx in ipairs(offsets) do for _,sy in ipairs(offsets) do
+			local p=mold.CFrame:PointToWorldSpace(Vector3.new(sx*math.max(0,mold.Size.X/2-.03),sy*math.max(0,mold.Size.Y/2-.03),0))
+			local hit=workspace:Raycast(p+normal*.2,-normal*.6,rayParams)
+			backingRays+=1;row.backingRays+=1
+			local valid=hit~=nil
+			check(valid,"MOLD_BACKING_MISSING",mold,tostring(sx)..","..tostring(sy))
+			if hit then
+				local wall=hit.Instance
+				local gap=hit.Distance-.2
+				maxGap=math.max(maxGap,gap)
+				local named=expected~=nil and wall.Name==expected.wall and wall.Parent and wall.Parent.Name=="Enclosure"
+				local solid=wall:IsA("BasePart") and wall.Anchored and wall.CanCollide and wall.Transparency<1
+				local inward=hit.Normal:Dot(normal)>.995
+				local flush=gap>=-.015 and gap<=.18
+				check(named,"MOLD_WRONG_BACKING_WALL",mold,wall:GetFullName())
+				check(solid,"MOLD_NONSOLID_BACKING",mold,wall:GetFullName())
+				check(inward,"MOLD_OUTSIDE_OR_ANGLED",mold,tostring(hit.Normal:Dot(normal)))
+				check(flush,"MOLD_NOT_FLUSH",mold,tostring(gap))
+				if backing then check(backing==wall,"MOLD_STRADDLES_WALL_OR_OPENING",mold,wall:GetFullName()) else backing=wall end
+				valid=named and solid and inward and flush and wall==backing
+			end
+			rayPass=rayPass and valid
+		end end
+		if rayPass then backedCarriers+=1 end
+		row.backing=backing and backing:GetFullName() or ""
+		row.maxWallGap=math.floor(maxGap*10000+.5)/10000
+	end
+	row.pass=report.failureCount==before
+	table.insert(report.molds,row)
 end
-report.counts.muralDecals=muralDecals
-report.muralAlphaCheck="Carrier flags, alpha attribute and exact uploaded asset references; image pixels require visual inspection."
+local variantCount,assetCount=0,0
+for _ in pairs(usedVariants) do variantCount+=1 end
+for _ in pairs(usedAssets) do assetCount+=1 end
+check(variantCount==3 and assetCount==3,"MOLD_DISTINCT_VARIANTS_ASSETS",root,tostring(variantCount).."/"..tostring(assetCount))
+check(moldDecals==8 and backedCarriers==8 and backingRays==72,"MOLD_BACKING_TOTAL",root,tostring(moldDecals).."/"..tostring(backedCarriers).."/"..tostring(backingRays))
+for name in pairs(expectedMolds) do check(moldNames[name]==true,"EXPECTED_MOLD_MISSING",root,name) end
+report.counts.molds=#molds
+report.counts.moldDecals=moldDecals
+report.counts.moldVariants=variantCount
+report.counts.moldAssets=assetCount
+report.counts.moldBackedCarriers=backedCarriers
+report.counts.moldBackingRays=backingRays
+report.moldAlphaCheck="Transparent carrier flags, alpha attribute and exact uploaded asset references; image alpha is verified separately."
 finish()
