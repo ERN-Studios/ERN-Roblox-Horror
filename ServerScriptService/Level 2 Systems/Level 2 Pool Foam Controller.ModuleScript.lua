@@ -870,9 +870,10 @@ local function instantKill(session, entity, player, distance, now)
 	-- chase in Foreshadow, but contact only becomes lethal once attacks unlock.
 	if phaseRecord(session, session.Phase).AllowAttacks == false then return false end
 	if distance > killDistance then return false end
-	-- The legacy statue mode keeps looking as a defense. The Pool Noodle's current
-	-- mode does the opposite: a validated look starts the chase, with only a short
-	-- one-shot grace window so the transition is readable rather than an instant hit.
+	-- A validated look starts the chase, with a short one-shot grace window so
+	-- the transition is readable rather than an instant hit. With
+	-- FreezeWhileObserved (the shipped rule since 2026-09-23) looking is also the
+	-- defense: a watched foam never reaches this line (updateEntity returns first).
 	if now < entity.ChaseGraceUntil then return false end
 	if observationFreezes(session) and (entity.Observed or now < entity.RevealUntil) then return false end
 
@@ -1082,6 +1083,14 @@ local function updateObservation(session, entity, now)
 	setModelAttribute(entity.Model, "Level2_PoolFoamObserved", entity.Observed)
 	if entity.Observed then
 		entity.ObservedSince = entity.ObservedSince or now
+		if observationFreezes(session) then
+			-- Card wdz28z81: a watched foam stands still AND gives back the speed
+			-- it earned; looking away restarts the chase from its floor. Only the
+			-- bonus is reset: LastDesiredSpeed is also separation's "still wants
+			-- to go somewhere", and zeroing it left a released statue that was
+			-- held before its first step unable ever to arm the bounded wait.
+			entity.SpeedRampBonus = 0
+		end
 		if observation.TriggerChaseOnObserve ~= false
 			and rawObserved
 			and session.Phase ~= PHASES.Dormant
@@ -1114,6 +1123,10 @@ local function updateObservation(session, entity, now)
 		entity.ObservedSince = nil
 		entity.RevealUntil = 0
 	end
+	-- Readback for playtests, at the think rate: the speed the last step asked
+	-- for, and 0 while a look holds it still.
+	setModelAttribute(entity.Model, "Level2_PoolFoamSpeed", (entity.Observed and observationFreezes(session)) and 0
+		or math.floor(entity.LastDesiredSpeed * 10 + 0.5) / 10)
 end
 
 local function choosePatrolPosition(session, entity)
@@ -1177,11 +1190,14 @@ local function movementSpeed(session, entity, hunting, rampDeltaTime)
 		entity.SpeedRampBonus = math.min(maximumBonus,
 			entity.SpeedRampBonus + acceleration * rampDeltaTime)
 	end
-	local speed = base * multiplier + entity.SpeedRampBonus
+	local speed = base * multiplier
 	if entity.ChaseTriggered then
+		-- The chase floor is where every chase (re)starts, and the bonus rides
+		-- on top of it, so acceleration shows from the first second of a chase
+		-- and a look (which zeroes the bonus) drops it back to exactly this.
 		speed = math.max(speed, numberOr(ramp.ChaseMinimumSpeed, 13, 0, 40))
 	end
-	speed = math.min(speed, numberOr(ramp.MaximumSpeed, 22, 1, 40))
+	speed = math.min(speed + entity.SpeedRampBonus, numberOr(ramp.MaximumSpeed, 22, 1, 40))
 	entity.LastDesiredSpeed = speed
 	return speed
 end
@@ -1543,13 +1559,31 @@ local function separationFree(session, entity, position)
 	return true
 end
 
-local function separationSidestep(entity, limit, ahead)
+-- A correction must never carry a body INTO a third one. The pushes are summed
+-- pair by pair, and in a cluster of three that sum walked two bodies into each
+-- other (offline replay of the 2026-09-23 Studio cluster). Moving AWAY from a
+-- body it already overlaps is always allowed, so this can never pin an overlap.
+local function separationTrySidestep(session, entity, offset, travel)
+	local at = entity.Navigator:GetPosition()
+	for _, other in ipairs(session.Entities) do
+		if other ~= entity then
+			local position = other.Navigator:GetPosition()
+			local reach = entity.BodyRadius + other.BodyRadius
+			local beforeX, beforeZ = at.X - position.X, at.Z - position.Z
+			local afterX, afterZ = beforeX + offset.X, beforeZ + offset.Z
+			local after = afterX * afterX + afterZ * afterZ
+			if after < reach * reach and after < beforeX * beforeX + beforeZ * beforeZ then return false end
+		end
+	end
+	return entity.Navigator:Sidestep(offset, travel)
+end
+
+local function separationSidestep(session, entity, limit, ahead)
 	local push = Vector3.new(entity.SeparationPushX, 0, entity.SeparationPushZ)
 	local magnitude = push.Magnitude
 	if magnitude < 0.01 then return false end
 	local direction = push / magnitude
 	local travel = math.min(magnitude, limit)
-	local navigator = entity.Navigator
 	if ahead then
 		-- The lane is already baked into the push by the pair pass, where it is
 		-- committed for as long as the obstruction lasts; nothing re-decides it
@@ -1557,21 +1591,21 @@ local function separationSidestep(entity, limit, ahead)
 		-- of a corridor, find that lane blocked, take the other, slide back and
 		-- repeat forever -- and because it was technically moving it never sat
 		-- still long enough for the bounded wait to resolve it either.
-		if navigator:Sidestep(direction * travel, travel) then return true end
+		if separationTrySidestep(session, entity, direction * travel, travel) then return true end
 		-- The committed lane is walled. Swapping to the other one is allowed
 		-- ONCE per obstruction, and backing up is never allowed at all, so a
 		-- yielder with both lanes shut is held rather than shuffled.
 		if entity.SeparationLaneTried then return false end
 		entity.SeparationLaneTried = true
 		entity.SeparationLane = -entity.SeparationLane
-		return navigator:Sidestep(direction * -travel, travel)
+		return separationTrySidestep(session, entity, direction * -travel, travel)
 	end
-	if navigator:Sidestep(direction * travel, travel) then return true end
+	if separationTrySidestep(session, entity, direction * travel, travel) then return true end
 	-- Nothing is in front, so the push is not fighting the route. Either
 	-- perpendicular is a fair escape when straight away is against a wall.
 	local side = Vector3.new(-direction.Z, 0, direction.X)
-	return navigator:Sidestep(side * travel, travel)
-		or navigator:Sidestep(side * -travel, travel)
+	return separationTrySidestep(session, entity, side * travel, travel)
+		or separationTrySidestep(session, entity, side * -travel, travel)
 end
 
 local function updateSeparation(session, now, deltaTime)
@@ -1595,7 +1629,10 @@ local function updateSeparation(session, now, deltaTime)
 		entity.SeparationContact, entity.SeparationContactDistance = nil, math.huge
 		entity.SeparationAhead, entity.SeparationAheadDistance = nil, math.huge
 		entity.SeparationObstructing, entity.SeparationClearance = false, 0
+		-- A watched foam is a statue: nothing, separation included, moves it.
+		-- Its moving neighbour yields instead, exactly as for an inactive one.
 		entity.SeparationActive = entityIsActive(session, entity)
+			and not (entity.Observed and observationFreezes(session))
 	end
 
 	-- O(n^2) over five entities is ten distance comparisons; the expensive part
@@ -1713,14 +1750,42 @@ local function updateSeparation(session, now, deltaTime)
 			entity.SeparationLane, entity.SeparationLaneFor = 0, nil
 			entity.SeparationLaneTried = false
 		end
-		local moved = separationSidestep(entity, limit, ahead ~= nil)
+		local moved = separationSidestep(session, entity, limit, ahead ~= nil)
 		-- The yielder is held whenever something is in its way, moved or not:
 		-- sliding around an obstruction does not stop a route that points through
 		-- it. The OTHER entity is held only when it is touching this one or has
 		-- it pinned -- an entity with right of way is never stopped by something
 		-- merely behind it, which is what keeps a corridor from becoming a queue.
 		local blocker = touching
-		if not blocker and ahead ~= nil and not moved then blocker = ahead end
+		-- A touching blocker is stopped by ANY step toward this yielder: at
+		-- contact even a sideways one closes the gap (Studio 2026-09-23, two foams
+		-- stepping past a held third at 60-80 degrees reached 0.6 studs of
+		-- overlap). A pinned one only by a step into the cone it is facing.
+		local threshold = 0
+		if not blocker and ahead ~= nil and not moved then blocker, threshold = ahead, aheadCosine end
+		-- EVERY HOLD MUST BE ONE THE BOUNDED WAIT CAN END (Studio 2026-09-23,
+		-- seed 1182081016). Five foams settled round a player at contact+padding,
+		-- where each correction sits under separationSidestep's 0.01 floor, so
+		-- every yielder read as pinned and held the body ahead of it -- including
+		-- bodies facing away from it, which the wait above never counts as
+		-- obstructed. A held body never steps, so its facing never updated: when
+		-- the player walked off, all five stood still for good (YieldCount 0).
+		-- So a blocker is held only while it is stepping toward this yielder,
+		-- and a held blocker that still wants to go somewhere arms this
+		-- yielder's wait, so every such hold is one the wait can end.
+		if blocker then
+			local from, to = blocker.Navigator:GetPosition(), entity.Navigator:GetPosition()
+			local deltaX, deltaZ = to.X - from.X, to.Z - from.Z
+			local length = math.sqrt(deltaX * deltaX + deltaZ * deltaZ)
+			local facing = blocker.Navigator:GetFacing()
+			local reach = entity.BodyRadius + blocker.BodyRadius
+			if length > 0.01 and (deltaX * facing.X + deltaZ * facing.Z) / length <= threshold then
+				blocker = nil
+			elseif separationPressing(session, blocker, reach) then
+				entity.SeparationObstructing = true
+				entity.SeparationClearance = math.max(entity.SeparationClearance, reach + padding)
+			end
+		end
 		if (ahead ~= nil or touching ~= nil) and now >= entity.SeparationReleaseUntil then
 			local leaseUntil = now + holdSeconds
 			if leaseUntil > entity.SeparationHoldUntil then entity.SeparationHoldUntil = leaseUntil end

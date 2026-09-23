@@ -579,8 +579,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Configuration.ModuleScript.lua",
-      "bytes": 15248,
-      "sha256": "f61c54131f2960512a1674b7a78afe9cf6be172d0c07ade0f996ebfe03eb7055",
+      "bytes": 15925,
+      "sha256": "0d34c363ddd9c523ee7bda5506fefab5f7e5e2ac467b5357c5052fd6e47b1fa0",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -594,8 +594,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Controller.ModuleScript.lua",
-      "bytes": 93561,
-      "sha256": "31387942e124311a350d4b1cea2fd31f7c800070316f491153646f5c191a9c71",
+      "bytes": 97504,
+      "sha256": "550892ca8353d732efe0c424f8ad7412a663cdf41d14ce755a736a3be7bdb174",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -624,8 +624,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Observer.ModuleScript.lua",
-      "bytes": 16597,
-      "sha256": "e64860d25a94c8cbcd35306b3228ec251a3cdee944a22c26f0104a6ecdd7b76d",
+      "bytes": 17971,
+      "sha256": "3f50361755427bf9438f5f2d43961348d646eda41ac060ae0754595ad2c6c4dc",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -761,8 +761,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/README - LEVEL 2 POOL FOAM.ModuleScript.lua",
-      "bytes": 7451,
-      "sha256": "fab8f5c8f2e910ab5955c6c909b7d1ea9ebda25a32927f48b90781a936554e24",
+      "bytes": 8054,
+      "sha256": "bbf8d3b22ab76891958b1180ac41ab8a01faaaf2a261f9e7e3b09a5c97929941",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"

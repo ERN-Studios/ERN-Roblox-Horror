@@ -23,6 +23,7 @@ local DEFAULTS = table.freeze({
 	MinReportInterval = 0.045,
 	ReportMaxAge = 0.45,
 	MaxCameraDistance = 18,
+	MaxCameraYawError = 60,
 	MinimumFieldOfView = 35,
 	MaximumFieldOfView = 100,
 	MaximumObserveDistance = 185,
@@ -144,6 +145,25 @@ local function inFrustum(cameraCFrame, verticalFov, viewport, point, maximumDist
 		and math.abs(localPoint.Y) <= depth * verticalTangent
 end
 
+-- A LOOK THE BODY CAN BE MAKING (card wdz28z81, 2026-09-23). A validated look
+-- now FREEZES a foam, so the camera direction in a report is worth a stun, and
+-- the server cannot see the player's screen. Every round runs LockFirstPerson,
+-- where the character turns with the camera, so the server-known root yaw
+-- bounds where an honest camera can point. A report aimed further off the body
+-- than maxYawError is not trusted and the server's own head view stands in for
+-- it; without this a client could freeze every foam in its line of sight,
+-- behind it included. A near-vertical look has no yaw to compare, and the
+-- default camera never pitches past ~80 degrees, so that is refused too.
+local function facesBody(cameraCFrame, root, maxYawError)
+	local look = cameraCFrame.LookVector
+	local facing = root.CFrame.LookVector
+	local lookFlat = math.sqrt(look.X * look.X + look.Z * look.Z)
+	local facingFlat = math.sqrt(facing.X * facing.X + facing.Z * facing.Z)
+	if lookFlat < 0.1 or facingFlat < 0.1 then return false end
+	local cosine = (look.X * facing.X + look.Z * facing.Z) / (lookFlat * facingFlat)
+	return cosine >= math.cos(math.rad(maxYawError))
+end
+
 -- The params and the filter table are owned by the observer and reused. This
 -- used to allocate a RaycastParams AND a fresh filter table per SAMPLE — up to
 -- five per target per player per entity per tick — for a value whose only
@@ -195,6 +215,7 @@ function Observer.new(manifest, generation, tuning)
 				readNumber(tuning, "ReportTimeout", DEFAULTS.ReportMaxAge), 0.1, 3),
 			MaxCameraDistance = readNumber(tuning, "MaxCameraDistance",
 				readNumber(tuning, "MaximumCameraOriginError", DEFAULTS.MaxCameraDistance), 3, 60),
+			MaxCameraYawError = readNumber(tuning, "MaximumCameraYawError", DEFAULTS.MaxCameraYawError, 15, 180),
 			MinimumFieldOfView = readNumber(tuning, "MinimumFieldOfView", DEFAULTS.MinimumFieldOfView, 15, 80),
 			MaximumFieldOfView = readNumber(tuning, "MaximumFieldOfView",
 				readNumber(tuning, "BroadPhaseFovDegrees", DEFAULTS.MaximumFieldOfView), 60, 120),
@@ -335,12 +356,13 @@ function Observer:_viewSees(character, cameraCFrame, fieldOfView, viewport, samp
 end
 
 function Observer:_playerSees(player, samples, targetModel, now)
-	local character, _, _, head = livingRoundCharacter(player)
+	local character, _, root, head = livingRoundCharacter(player)
 	if not character then return false end
 	self:_prepareRay(character)
 	local report = self.Reports[player]
 	if report and now - report.ReceivedAt <= self.Tuning.ReportMaxAge
 		and (report.CameraCFrame.Position - head.Position).Magnitude <= self.Tuning.MaxCameraDistance
+		and facesBody(report.CameraCFrame, root, self.Tuning.MaxCameraYawError)
 	then
 		-- A fresh, validated report represents the actual player camera. The
 		-- server/head view is only a stale-report fallback; OR-ing the two would

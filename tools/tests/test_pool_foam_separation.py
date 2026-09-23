@@ -65,6 +65,8 @@ end
 local shared = {}
 local function setShared(name,value) shared[name]=value end
 local function entityIsActive(_,entity) return entity.SpawnAwake~=false end
+local freezeWatched = false
+local function observationFreezes() return freezeWatched end
 '''
 
 # The stub navigator. MaxTravelStep mirrors the navigator's own authored .9, and
@@ -436,6 +438,58 @@ do
     check(stuck.SeparationReleaseUntil>clock,
         "and the pair was released, because no body is within contact of it")
     check(session.SeparationOverlapFrames==0,"nothing overlapped getting there")
+end
+
+-- 11. A WATCHED foam is a statue (Trello wdz28z81): separation never moves it,
+--     even though its ordinal would normally make it the yielder; the moving
+--     neighbour yields round it instead and never overlaps it.
+do
+    freezeWatched = true
+    local walker = makeEntity("Primary_01",1,-20,0,Vector3.new(1,0,0))
+    local statue = makeEntity("Primary_02",2,0,.5,Vector3.new(-1,0,0))
+    statue.Observed = true
+    walker.Goal = Vector3.new(20,0,0)
+    local session = makeSession({walker,statue})
+    local start = statue.Navigator.Position
+    local closest = run(session,600,1/60)
+    check((statue.Navigator.Position-start).Magnitude<1e-9,"a watched foam is never moved by separation")
+    check(closest>=CONTACT,("the walker never entered the statue (closest %.2f)"):format(closest))
+    statue.Observed = false
+    freezeWatched = false
+end
+
+-- 12. A settled cluster whose target LEAVES must disperse. Studio 2026-09-23,
+--     seed 1182081016: five foams stood round a player at contact+padding,
+--     where every correction is under the 0.01 sidestep floor, so each yielder
+--     counted as pinned and held the entity ahead of it too -- even ones
+--     facing away from it. When the player moved off nothing ever stepped
+--     again (YieldCount 0, all five Idle). Positions and facings below are the
+--     live readback of that standstill.
+do
+    local live = {
+        {-82.93,391.81,.66,-.75}, {-81.96,398.40,.06,-1}, {-76.60,393.89,-.79,-.61},
+        {-84.89,404.39,.17,-.99}, {-74.95,400.35,-.54,-.84},
+    }
+    local entities = {}
+    for ordinal,row in live do
+        local facing = Vector3.new(row[3],0,row[4])
+        local entity = makeEntity(("Primary_%02d"):format(ordinal),ordinal,row[1],row[2],
+            facing/facing.Magnitude,nil,ART_RADIUS)
+        entity.Goal = Vector3.new(-145,0,738) -- where the player went
+        entity.SeparationHoldUntil = clock + .15 -- live, every one was under a hold lease
+        table.insert(entities,entity)
+    end
+    local session = makeSession(entities)
+    local before = {}
+    for index,entity in entities do before[index] = entity.Navigator.Position end
+    local closest = run(session,600,1/60) -- 10 s
+    local moved = 0
+    for index,entity in entities do
+        if (entity.Navigator.Position-before[index]).Magnitude > 20 then moved += 1 end
+    end
+    check(moved==5,("every member of the cluster left after its target (%d of 5 moved 20+ studs)"):format(moved))
+    check(closest>=ART_CONTACT and session.SeparationOverlapFrames==0,
+        ("without overlapping on the way out (closest %.2f)"):format(closest))
 end
 
 -- 10. The pass is off by configuration, and one entity is never a pair.
