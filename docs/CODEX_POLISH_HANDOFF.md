@@ -1,5 +1,109 @@
 # Codex polish-handoff — BACKROOMS: STAY QUIET
 
+Skrevet af Claude (al kode). Opgavegrundlag: `docs/CLAUDE_PROMPT_2026-09-21.md` (21/9) og
+`docs/CLAUDE_POLISH_FOLLOWUP_2026-09-22.md` inkl. ejerinstruktionen i §0 (22/9). Del I nedenfor
+er 22.–23/9-arbejdet; del II er 21/9-handoffet uændret, som reference.
+
+Status-ord: **kodefærdig** · **verificeret i Studio** · **verificeret publiceret** · **mangler art** · **afventer data/hardware/ejer**.
+
+---
+
+# Del I — 22.–23. september 2026
+
+## I.0 Baseline, versionsstyring og samtidige sessioner
+
+| Punkt | Værdi |
+|---|---|
+| Studio ved start | place `131311258779917`, Edit, 167 scripts, `pull_source_from_studio.py --audit` 167/167, 0 drift, editor == Source |
+| Native backup før ændringer | `artifacts/claude-20260922/baseline-before-polish.rbxl` (File → Download a Copy), 9.420.617 B, sha256 `66903fbba4487187240271e715041928b110babb3b326c5b394f4d03a0ebc3a0`. Kun lokalt (untracked) |
+| Arbejdsbranch | `claude/trello-20260921` (lokal `2596df8` fra Codex ved start; Codex committede `55d42a8`, `bc1a1db`, `437d10f` undervejs — bevaret, ikke rørt) |
+| Anden session i Studio | `Level4GateAccess` (ny Script) + GameManager/Routing/TunnelLobbyBuilder-ændringer fra `55d42a8` lå i Studio, men uden manifest-post. Verificeret Studio == HEAD med 73/73 blok-hashes (50-linjers djb2 over `execute_luau`) før baselinen blev re-registreret; manifest-post for `Level4GateAccess` tilføjet. Push-værktøjets CONFLICT var altså et forældet baseline-sha, ikke en reel afvigelse |
+| Studio-skrivninger | kun pr. fil gennem `tools/push_repo_to_studio.py` (CAS + compile). Slettede scripts: destrueret i Edit-mode med **deaktiveret** kopi i `ServerStorage.Archive.FieldNotesRetired_20260922` (spejlet i repo). Efter hver runde `pull --audit` = 0 drift; ved afslutning 168/168 |
+| Studio genstartet undervejs | `studio_id` skiftede to gange (`a476e358…` → `60f26cb1…` → `7b9759ba…`, sidste gang natten 22.→23.); audit bagefter 168/168, ingen ændringer tabt |
+| Luau-værktøjet | `%TEMP%\codex-luau-0.737` (luau.exe + luau-compile.exe) blev slettet af en Temp-oprydning natten til 23/9. Ændringer efter det tidspunkt er compile-tjekket af `push_repo_to_studio.py` i Studio og kørt live i Studio; de Python-baserede offline-suiter kan først køres igen, når værktøjet er hentet ned igen (kræver ejerens ja til download) |
+| Publicering | se I.9 |
+
+## I.1 Status pr. opgave
+
+| Opgave | Status | Commit |
+|---|---|---|
+| §0 Field Notes fjernet | **verificeret i Studio**: ingen NOTES-fane, ingen remotes/folders/pickups, ingen `ZyntraFieldNotesTitle`/tag-række, gammel profil loader (in-memory `FieldNotes` bevares inert), Rewards/Wheel/shop virker | `080a946` |
+| §0 Try again-guide fjernet | **verificeret i Studio**: Level 1-død → lobby uden `TRY AGAIN`-tekst, beam, billboard eller `RetryGuideLevel`; gammel pakke med `RetryLevel` læses af ingen (offline `test_death_advice` §4); Level 4-dev-banner fjernet; førstegangsguiden `LEVEL 1 START HERE` **verificeret i Studio** 23/9 (en frisk kopi af det rigtige script med `ZyntraFirstLogin=true` — serverens eget input for en ny profil — tegnede billboard + 16 beams ind i Level 1-bayen; billede `lobby-first-entry-guide-still-works.jpg`) | `080a946` |
+| A1 Level 4 tage/vinduer/facade | **verificeret i Studio** seed 101 (CLOSE) + 202 (TERRACE), begge husretninger: kip 19,5 over pladen ved z ±0,1, 14,2 ved udhæng (før: omvendt 12,6/18,4); ruder 0,4 studs **foran** ydermuren (før: 0,2–0,6 inde i den). Facade efter Codex' reference: udhæng + fascia, 3,0×4,4-vinduer m. ramme/sålbænk i bånd, dørkarm, porchsignal (venstre bånd) + husnummer (højre bånd), postkasse m. stolpe/låge/flag, trim-hegn, cylinderbakker; anomalier i samme akser (ekstra vindue over døren, forkert nummer `D0`, vendt postkasse, halvt gardin) — alle synlige fra fortovet (billeder I.5) | `ed5a3d8` |
+| A3 Level 4 rolig start / fare | **verificeret i Studio**: `CalmLeadSeconds 24` → første usikre hus 25,4 s efter `RoundActive`; klientens lys følger kun trusler mod DENNE spiller (Neighbour ALERT/CHASE på én, eller huset man står i) og vender tilbage til ro; `ReduceFlashing` forlænger rampen (5,25 s mod 3,32 s målt); nedtælling `LEAVE HOUSE A2 -- 12s LEFT` inde i huset, ellers 3 s note inden for 70 studs | `ed5a3d8` |
+| A4 Level 4 exit/retry | **verificeret i Studio**: `Level4_ExitPosition` = triggerens centrum; server fejer levende rødder i den åbne trigger (0,25 s); solo 3 signaler → 3 kontroller i rækkefølge (forkert rækkefølge afvist) → transitdør → `Escaped` på seed 101 og 202. Dev-retry-hintet blev bygget og derefter **fjernet igen** efter §0 | `ed5a3d8`, `080a946` |
+| Level 4 Neighbour-kill | **verificeret i Studio** seed 202: PATROL → ALERT (0,1 s) → CHASE (1,4 s) → drab 2,7 s; kort `THE NEIGHBOUR GOT YOU` / `It saw you in the open and closed the distance.` / `NEXT TIME Break its line of sight; a house with a steady porch light hides you.` (billede) | — |
+| B1 Rewards/Wheel-prikker + intro ([MsEn2mya](https://trello.com/c/MsEn2mya)) | **verificeret i Studio**: prik på WHEEL ved ubrugt gratis spin, væk efter collect; ingen prik på REWARDS ved 0 min spilletid; intro-kort efter første rigtige completion (Level 1-win → lobby), GOT IT → `RewardsIntroSeen` true, vises ikke igen. Prikker genberegnes ved hvert profil-push + én forsinket genlæsning ved UTC-reset (ingen ticker) | `9e4e6f8` |
+| B2 COLLECT PRIZE ([25GLltY6](https://trello.com/c/25GLltY6)) | **verificeret i Studio** (in-memory profil): spin → `COLLECT PRIZE` → dobbeltklik → **én** udbetaling (Tokens 35→36, `WheelLast.Claimed=false→true`, Serial 1); Daily-claims bekræfter `<reward> collected -- N minutes of play today.`. Offline 370+557 checks: pending overlever dagskifte (spin afvises `Collect your prize first: …` og det gratis spin venter), tabt reply/retry, to claims, gemmefejl før/efter commit, gammel profil (historisk `WheelLast` normaliseres til claimed, betales aldrig igen) | `080a946` |
+| B3 +50 % relays ([JYiwjBxw](https://trello.com/c/JYiwjBxw)) | **verificeret i Studio**: to solo-layouts placerede 3/3 relæer (mål 3, `Level1RelaySpawnTarget`/`Level1RelaysPlaced`), min. parvis afstand 226/369 studs; mål 1–6 spillere = 3,3,6,4,6,6 (`SPAWN_MULT` effektivt 2 i MasterConfiguration). Multiplayer-runde: **ikke kørt** (kun solo + offline 43 checks) | `080a946` |
+| B4 Første CD-prompt | **verificeret i Studio** seed 1154781618 (`L3_S1_R05`): kun `COLLECT CD` vises ved introbordet på desktop og simuleret touch (`ForceTouchUI`); HIDE-prompten er slået fra mens CD'en er WORLD (23/24 borde åbne, kun introbordet), server afviser `CD_ON_TABLE`; efter pickup vender HIDE tilbage øjeblikkeligt og man kan gemme sig under samme bord (`Level3_Hiding=true`, bord 3). Kun første-CD-rummets bord; øvrige borde/cap/regler uændrede | `080a946` |
+| C Level 2 bue-mesh-pilot | **kodefærdig, målt i Studio, kontakt OFF som standard.** Tal I.4. Visuel A/B **blokeret**: mesh bygget som EditableMesh renderer på klienten som sin bounding box (bevist med magenta-probe); kun et **uploadet** mesh-asset renderer. Levering: to `.obj` + integration bag kontakt + loader der kun tager asset-baserede meshes ved runtime | `3e533e7`, `2d24ac8` |
+| §5 Analytics-rækkefølge | **verificeret i Studio + offline** (111 checks): `ProfileLoaded` før `Join` logger nu 1 så 2; dobbelt `Join` åbner én retry-loop; reserved arrival åbner ingen. Studio-ringen viser nu `onboard 1 Joined` → `onboard 2 ProfileLoaded` (21/9 manglede trin 1 i Studio, fordi profilen vandt kapløbet). Dashboard: **afventer publiceret trafik** | `c6cbad3` |
+| §5 UIRegression 78 fejl | **verificeret i Studio 23/9: 78 → 0.** Fuld `RunAllCompact` (203 s): sikkert område 126, kø-modal 719, briefing-tekst 243, eksklusion 107, objektiv-hjørner 450, dispatch 210, terminal 1449, kontrolzone 22, same-frame 24, harness-lås 16, completion + fit 0 fejl, 22/22 scenarier, alt lånt state genoprettet. Grupperet og reproduceret i Studio 23/9 (samme 78 som 21/9; kørsel 188 s):<br>(1) **Kø-modal-banen, 44** — 11 var en reel kontraktfejl: Friend Boost-chippen skjulte sig med `Visible` alene og efterlod `InviteButton` Active under kø-skyggen → rettet i produktkoden (`UIDevice.SetInteractive` sammen med chippen). 33 var testens autoriserede nøgleliste, som var ældre end to autoriserede registreringer: `EntityDetectorScan` (ProtectionHUD-rækken, `bd72376` 20/9, samme `makeRow` som listens `SpeedPotionUse`/`RouteMarkerPlace`) og `FriendBoost` (chippen, 16/9) → listen opdateret med henvisning. Banen: 0 fejl.<br>(2) **Briefing-eksklusion, 7** — ejerens egen `d0ff99e` (10/9) ændrede `modalBlocksStore` fra `queueModal or briefing` til `queueModal or (InRound and briefing)`: lobby-railen er brugbar under Dispatch. Matrixen hævdede den gamle regel → rækkerne genformuleret til den nye regel + et NYT værn for reglens forudsætning (en nåbar opener deler ingen pixel med briefing-panelet — C4A-fejlen). In-round-halvdelen (DEV-telefonen) kan lobby-banen ikke nå; **verificeret manuelt i en Level 1-runde**: med briefing-panelet oppe afviser både toggle og kiosk telefonen; en allerede åben telefon får briefingen til at vige (samme vige-regel som i lobbyen). 107 checks, 0 fejl.<br>(3) **Terminal-fit, 11** — `Donation20K` er en engangs-GamePass; en konto der ejer den ser `OWNED` pr. design (`ZyntraStore.refreshDonationOwnership`). Forventet antal fratrækker nu ejede pass-tiers med butikkens egen test. 1449 checks, 0 fejl.<br>(4) **Level 1-objektivhjørnet, 14** — ingen produktfejl: siden `f3b8923` (20/9) gen-afleder PuzzleUI panel+toggle fra rundens tællere ved hvert layout-pass (by design, kommentar PuzzleUI:1046), så testens `Visible = true`-skrivninger i lobbyen blev overskrevet (11× "not visible"); detektor-rækkerne målte et kort der kun vises i NAV-mode, klemt af rækker lækket fra forrige enhed; 375×667 målte 5 lækkede rækker (titel + 3 rækker + besked), som serveren ikke længere kan producere. Bevis: den samme bane kørt INDE i en rigtig Level 1-runde gav 14 → 3, og de 3 var netop lækage-rækkerne. Rettet: ny Studio-only `UIRegressionPuzzleProbe` i PuzzleUI driver den RIGTIGE status-handler (serverens egne events og tekst), banen stager de to stakke en runde faktisk tegner (fuse-fase + afvisningsbesked `You have no fuses`; lever-fase med 3 rækker), nulstiller med den rigtige runde-slut-reset, og måler detektoren i NAV-mode efter `escape`.<br>(5) **To basisscenarier** — `objectives-panel`: scenariet viste footer-knappen OG det fulde brief, som RoundUI siden `9812b87` (2/9) aldrig viser samtidig på nogen formfaktor → scenariet viser nu kun panelet. `level3-reader-open`: lobby-only Friend Boost-chippen deler nu `TopRightPanel` med readeren (min egen `e4bc4a7`, 21/9); i spillet kan de aldrig ses samtidig → `resetScenario` slår lobby-only flader fra i in-round-rækker (chip via `Enabled`, rewards-introkort), ligesom railen.<br>(6) **Kontrolzonen, fundet under slutverifikationen** — rækken "hiding a registered control invalidates the zone" skjulte `drawn[1]`, altså den kontrol `GetTagged` tilfældigvis nævnte først. Var det `FlashlightPower`, tegner FlashlightController den igen hvert frame før den udskudte refresh, og zonen flytter sig med rette ikke (målt: `TouchRunHold`/`TouchPOV` 2 fires, `FlashlightPower` 0). Produktet er korrekt; rækken bruger nu harnessens egen registrerede probe, som banens header i forvejen foreskriver.<br>Plus: `Level4ObjectiveGui` i harnessens optional-liste. | `69ab222`, `2430e54` |
+| §5 Token Earner | **ikke implementeret** (ejerinstruktion; formlen er fejlbehæftet — se 21/9 §7.1) | — |
+
+## I.2 Ændrede Studio-paths
+
+| Commit | Studio-paths |
+|---|---|
+| `ed5a3d8` | `ServerScriptService.Level 4 Systems.Level 4 Configuration / World Builder / Objective Controller`, `StarterPlayerScripts.Level 4 Lighting Controller / Level 4 Objective UI`, `GameManager` |
+| `080a946` | SLETTET: `ServerScriptService.FieldNotesService`, `StarterPlayerScripts.Field Notes Client`, `ReplicatedStorage.ZyntraFieldNotes`, `ReplicatedStorage.ZyntraFieldNotesPage` (arkiv: `ServerStorage.Archive.FieldNotesRetired_20260922`). Ændret: `ZyntraMonetization` (Field Notes ud, `WheelLast.Claimed`, `ClaimWheelPrize`, `MarkRewardsIntroSeen`, `RewardsIntroSeen`), `ZyntraConfig`, `UIRegression`, `ZyntraStore` (NOTES-fane ud), `GameManager` (retry ud), `First Entry Guide` (retry ud), `Level 4 Objective UI` (dev-banner ud), `Lucky Wheel Client` (COLLECT), `Level 1 Systems.PuzzleManager`, `Level 3 Systems.Level 3 Hiding Controller`, `Level 3 Test Suite` |
+| `9e4e6f8` | `ZyntraStore` (prikker + intro) |
+| `3e533e7`, `2d24ac8` | `Level 2 Systems.Level 2 World Builder`, `Level 2 Configuration` (`Performance.ArchMeshRibs`, `ArchMeshRibAssets`) |
+| `c6cbad3` | `ServerScriptService.ZyntraAnalytics` |
+| `69ab222` | `StarterPlayerScripts.Friend Boost Client` (Invite står ned sammen med chippen), `UIRegression` |
+| `2430e54` | `StarterPlayerScripts.PuzzleUI` (navngivet status-handler + Studio-only `UIRegressionPuzzleProbe`; ingen adfærdsændring live), `UIRegression` |
+
+Nye/ændrede tests: `test_level1_relay_spawns.py`, `test_level3_first_cd_prompt.py`, `test_rail_dots_intro.py`, `test_daily_rewards.py` (wheel-flow + harness), `test_lucky_wheel_client.py`, `test_item_inventory.py`, `test_zyntra_store_compact.py`, `test_death_advice.py`, `test_daily_rewards_client.py`, `test_daily_rewards_page.py`, `test_level2_tunnel_height.py`, `test_zyntra_analytics.py`; slettet `test_field_notes.py`, `test_retry_guide.py`. Fem harnesses var forældede mod den levende kode (manglende `ZyntraDailyResearch`, `BindableEvent.Event`, `advancedStaminaBonus`, +30 %-potion, `Vector2`) og blev repareret — assertions kun ændret for bevidst ændret produktadfærd.
+
+## I.3 Level 4 — målinger
+
+- Seed 101 CLOSE / 202 TERRACE: 11 huse, 808 descendants, 10 lys (0 skygger), plan/brain/world-suite 163/18/66 checks, 0 fejl; offline plan 3172 (68 seeds), brain 38.
+- Server Heartbeat 0,79 ms, physics 0,04 ms; klient p50 16,9 ms i forgrunden (66 ms-frames i samples er fokus-throttling ved vinduets kanter).
+- Rolig start: `RoundActive` → første usikre hus 25,4 s (`CalmLeadSeconds 24` + 1 s evaluering). Lys ved indtræden i mørkt hus: CT 16,4→17,6, B 2,6→1,9, fog 180–900 → 70–380; tilbage til ro på gaden. Ramper 3,32 s / 5,25 s (ReduceFlashing).
+- Exit: klient-drevet gang ind i triggeren → `Escaped` på 0,9 s; én tidlig miss (karakter droppet fra 2 studs højde) er grunden til server-sweepen.
+- Kontrakt-doc `docs/LEVEL4_CONTRACTS_2026-09-21.md` har status-afsnit 22/9 (scripts findes; §1 er historie).
+
+## I.4 Level 2 bue-mesh-pilot — tal (`artifacts/claude-20260922/level2-arch-mesh/MEASUREMENTS.md`)
+
+Seed 1182081016 (resolved 1182604661), samme rundetilstand: descendants **71.214 → 55.444 (−22 %)**, `Texture` **42.051 → 29.103 (−31 %)**, Parts 25.223 → 22.221, +166 mesh-ribber, +1.328 usynlige fødder (4 pr. side, når 10,8 studs over gulvet — et hoppende hoved). Klient 60 Hz og server 1,2 ms begge veje. Kollision: stråler gennem åbningen misser, fod-stråler rammer hvor Part-ribberne ramte (12,09 mod 12,10), body-box i korridorcentrum = 0 kolliderende dele (den første version med kolliderende mesh gav 1 = hele ribben → navigatorernes `GetPartBoundsInBox` ville se en væg; forkastet). Live: pumpepar → Pool Slide spawnede på første probe, CHASE/MOVING, angreb og dræbte spilleren; ingen consolefejl. Familier på layoutet: `r13.20_vs1.90_fd1.50_a3.20_d2.20_s26` og `…fd1.80…` (bredde 34, DoorWidth 30 → radius 13,2; 26 segmenter).
+
+**Blokering (ejer):** upload de to `.obj` (`artifacts/claude-20260922/level2-arch-mesh/`, 108 vertices/212 triangler, pivot = buecentrum = korridorcentrum + 1 stud op, X på tværs, Y op, Z langs, UV i 7-studs fliser) og sæt `Level 2 Configuration.Performance.ArchMeshRibAssets[key] = "rbxassetid://…"`. Først da kan den visuelle A/B laves (samme kamera som `level2-rib-closeup-A-parts.jpg`). At slå "Allow Mesh & Image APIs" til er **ikke** nok (klienten tegnede boksen selv i Studio, hvor API'et findes).
+
+## I.5 Screenshots (`artifacts/claude-20260922/screens/`, native 1540×820)
+
+Level 4: `level4-facade-after-seed101-intro.jpg` (samme kamera som Codex' `level4-facade-before.jpg`), `level4-anomaly-seed101-A1-drawncurtains.jpg`, `…B2-extrawindow.jpg` (+Z-facing), `…C2-reversedmailbox.jpg` (occupant-advarsel synlig), `…D1-wrongnumber.jpg`, `level4-neighbour-kill-card-seed202.jpg`.
+Lobby/UI: `lobby-rail-wheel-dot-desktop.jpg`, `lobby-rewards-intro-card-desktop.jpg`, `wheel-collect-prize-desktop.jpg` (COLLECT PRIZE-hubben), `wheel-collected-desktop.jpg` (`1 POTION COLLECTED`, fanget i en burst 23/9; hub-loggen viser `COLLECTING` 18,60 s → `1 POTION/COLLECTED` 18,67 s → nedtælling 22,18 s, dvs. først efter serverens `Claimed=true`), `level1-death-card-after-retry-removal.jpg`, `lobby-after-death-no-retry-guide.jpg`, `lobby-first-entry-guide-still-works.jpg`.
+Level 3: `level3-first-cd-prompt-desktop.jpg`, `level3-first-cd-prompt-touch.jpg`.
+Level 2: `level2-corridor-A-part-ribs.jpg` / `level2-corridor-B-mesh-ribs.jpg` (tour shot 6), `level2-rib-closeup-A-parts.jpg` / `level2-rib-closeup-B-mesh.jpg` (samme kamera; B viser bounding-box-renderingen), `level2-rib-B-mesh-magenta-probe.jpg` (beviset), `level2-arch-mesh-probe-quad.jpg`.
+
+## I.6 Asset-/rig-kontrakter til Codex
+
+- **Level 4 facade** er stadig Parts/WedgeParts med `Level4_Placeholder`; alle navne fra kontrakt-doc §5 bevaret (`HouseNumber` m. `Level4_HouseNumber`, `PorchSignal`, `Mailbox` i `MailboxAssembly`, `AnomalySocket` + `Level4_Anomaly`). Nye konfigurationsknapper i `Level 4 Configuration.Lots`: `EavesOverhang 1.4`, `FasciaDepth 0.5`, `WindowWidth 3.0`, `WindowHeight 4.4`, `WindowFrame 0.35`, `WindowProud 0.3`, `FittingHeight 8.6`; farver `Trim/Fascia/Pane/Graphite/MailboxMetal/MailboxFlag/Curtain`. Dine at dreje; sig til, så de spejles.
+- **Level 2 bue-mesh**: `.obj`-kilderne ovenfor er redigerbare (Blender ikke installeret her; genereret af `tools/level2_arch_rib_obj.py`, samme matematik som builderen). Kunstnerisk dom (flisejustering på soffitten, fase, bevel) er din efter upload.
+- **PoolSlide-rig**: uændret; original kilde mangler fortsat (21/9 §5).
+
+## I.7 Ejer-/Codex-beslutninger der er tilbage
+
+1. Upload de to bue-`.obj` og sæt asset-id'er (I.4) — ellers forbliver `ArchMeshRibs=false` og pilotens gevinst ligger på hylden.
+2. Rewards-intro for **veteraner**: koden viser kortet én gang for enhver profil med `CompletedLevels ≥ 1` og `RewardsIntroSeen ≠ true`, dvs. eksisterende spillere ser det én gang ved næste rolige lobby-øjeblik. Sig til hvis det kun skal være helt nye clears.
+3. B3 multiplayer-runde (4–6 spillere) er ikke kørt; kun offline + solo.
+4. Token Earner, C1–C3/D1–D3, PoolSlide-art: uændret backlog (21/9 §6–7).
+5. Publicering af 22.–23/9-arbejdet (I.9) afventer ejerens ja.
+6. Luau 0.737 skal hentes igen fra den officielle luau-lang-release (kræver ejerens ja til download), før de Python-baserede offline-suiter kan køres igen (I.0).
+
+## I.8 Ikke verificeret (ærligt)
+
+Fysisk telefon/tablet; rigtig teleport-retur (kun Studio-lokal lobby); to spillere ved første CD-bord (kun offline `HideOccupantCap`-logik uændret); dashboard-ingestion; DataStore-wheel-flow mod rigtig DataStore (Studio-profil er in-memory; UpdateAsync-disciplinen er kun offline-harness); UIRegression-udfald se I.1.
+
+## I.9 Publicering
+
+**Ikke publiceret.** Alt i del I ligger i Studio (Edit, `pull --audit` 168/168, 0 drift) og på `claude/trello-20260921`, men publicering til place `131311258779917` kræver ejerens udtrykkelige ja. Level 4 er dev-gated (`Level4GateAccess`/`Level4DevEnabled`) og følger med en publicering som dev-only, ikke som et level. Ved publicering gemmes Roblox' kvittering (versionsnummer fra Studio-loggen) her, og serverne genstartes ikke.
+
+---
+
+# Del II — 21. september 2026 (reference, uændret)
+
 Skrevet løbende af Claude (al kode). Opgavegrundlag: `docs/CLAUDE_PROMPT_2026-09-21.md`.
 Status-ord: **kodefærdig** · **verificeret i Studio** · **verificeret publiceret** · **mangler art** · **afventer data/hardware**.
 **Publiceret: v1973** (2026-09-21 22:47 UTC, Studio-log `artifacts/claude-20260921/publish-log.txt`: `Place published … Add publish notes to v1973`). Alt i fase A og B nedenfor ligger i v1973. **Level 4 er kommet i Studio efter v1973 og er IKKE publiceret**; det er dev-gated og må ikke publiceres som et level.

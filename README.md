@@ -11,7 +11,7 @@ escape together, or watch your friends try.
 
 **Current repository snapshot: Studio place version 1933, captured 20 September 2026.**
 The source mirror now contains all 145 Studio scripts, including the hologram
-shop, Daily Rewards, Lucky Wheel, Field Notes, Friend Boost, Level 2 entity
+shop, Daily Rewards, Lucky Wheel, Friend Boost, Level 2 entity
 audio, and 5K/10K/20K donation options. A complete native place backup accompanies
 the source inventory. This audit did not publish the experience or change Studio.
 
