@@ -162,8 +162,13 @@ local function inLobby(): boolean
 end
 
 local function refresh()
-	chip.Visible = inLobby() and not UIDevice.ScreenOwningModalOpen()
-	invite.Visible = inviteAllowed
+	local shown = inLobby() and not UIDevice.ScreenOwningModalOpen()
+	chip.Visible = shown
+	-- UI_REGRESSION_20260923: the button stands down WITH the chip -- Visible,
+	-- Active and Selectable together, UIDevice's contract for every registered
+	-- control -- instead of staying Active inside a hidden chip under the queue
+	-- modal (UIRegression queue-modal lane: "1 active objects: InviteButton").
+	UIDevice.SetInteractive(invite, inviteAllowed and shown)
 end
 
 invite.Activated:Connect(function()

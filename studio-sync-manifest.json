@@ -256,8 +256,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
-      "bytes": 443282,
-      "sha256": "b2d1b0e486608c0424f10caf1dea217a47908b8870f9b89b84d331fca5165fa8",
+      "bytes": 447236,
+      "sha256": "b4c18fd9315fbf569e774446e5eec19ff2f5d0567dd0e2aaad651e25961660fc",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -1944,8 +1944,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Friend Boost Client.LocalScript.lua",
-      "bytes": 8386,
-      "sha256": "8828ec76ae08c949f1bf8da80e108f1de73f6f8132d466b329752f17c238e8f3",
+      "bytes": 8742,
+      "sha256": "f23f18b67d9858ee72263f622098a7e5e8bb65b0b64942306f591c775ef02262",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2525,8 +2525,8 @@
       "studioPath": "ServerScriptService.ZyntraAnalytics",
       "className": "ModuleScript",
       "file": "ServerScriptService/ZyntraAnalytics.ModuleScript.lua",
-      "bytes": 18350,
-      "sha256": "62e218d93650d0156b7f989b2ad3ae284d0180200931f896767437602a30c81b",
+      "bytes": 19038,
+      "sha256": "2a53285b3d7852cdd6bb1488e60edc3b15aca8c92c8624855ba391bbcd20eee9",
       "status": "synced"
     },
     {

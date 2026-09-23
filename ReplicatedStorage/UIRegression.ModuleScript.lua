@@ -3512,6 +3512,13 @@ function Fit.bodyQueueModalMatrix(): (string, number)
 		-- the item -- registration follows the form factor, visibility follows
 		-- the inventory -- so these two are as expected here as the shield is.
 		SpeedPotionUse = true, RouteMarkerPlace = true,
+		-- UI_REGRESSION_20260923. Two authored registrations newer than this list:
+		-- EntityDetectorScan is ProtectionHUD's fourth equipment row (bd72376,
+		-- 2026-09-20; the same makeRow as the two above, and UIDevice's equipment
+		-- key list names it), and FriendBoost is the lobby chip's rectangle
+		-- (Friend Boost Client, FRIEND_BOOST_20260916), registered so layouts
+		-- avoid it. Both stand down under the shade like everything else here.
+		EntityDetectorScan = true, FriendBoost = true,
 	}
 	local function registeredControlState(element: GuiObject): any
 		local ancestorsVisible = true
@@ -3660,7 +3667,7 @@ function Fit.bodyQueueModalMatrix(): (string, number)
 				registeredBefore = captureRegisteredCluster()
 				local authoredProblems = expectedClusterProblems(registeredBefore)
 				record(#authoredProblems == 0,
-					device.Name .. ": exactly the six authored registered-control keys are present",
+					device.Name .. ": exactly the authored registered-control keys are present",
 					table.concat(authoredProblems, "; "))
 				local activeBefore = 0
 				for object, state in pairs(registeredBefore.States) do
@@ -4560,15 +4567,26 @@ function Fit.bodyBriefingExclusionMatrix(): (string, number)
 	-- The order is the point: rows 2-3 raise the modal over a running briefing
 	-- and take it away again, rows 5-6 raise a briefing under a modal that is
 	-- already up. A one-directional flag passes one half and fails the other.
+	--
+	-- UI_REGRESSION_20260923: Opener follows the OWNER'S rule of 2026-09-10
+	-- (d0ff99e, "Center lobby controls and share music toggle during dispatch"):
+	-- ZyntraStore's modalBlocksStore went from `queueModal or briefing` to
+	-- `queueModal or (InRound and briefing)`. This lane runs in the LOBBY, so a
+	-- briefing alone no longer takes the opener -- the queue modal still does.
+	-- The in-round DEV phone keeps the old exclusion; this lane cannot put the
+	-- local player in a round without faking a server attribute, so that half is
+	-- NOT exercised here (noted in the report). What made the rule safe is that
+	-- the rail and the briefing panel no longer share a rectangle, and that is
+	-- asserted below for every row that draws both.
 	local STATES = {
 		{Label = "idle", Force = false, Shade = false,
 			Brief = false, Subs = false, Opener = true, Transmission = false},
 		{Label = "briefing only", Force = true, Shade = false,
-			Brief = true, Subs = true, Opener = false, Transmission = true},
+			Brief = true, Subs = true, Opener = true, Transmission = true},
 		{Label = "modal opened over a live briefing", Force = true, Shade = true,
 			Brief = false, Subs = false, Opener = false, Transmission = true},
 		{Label = "modal closed, briefing still running", Force = true, Shade = false,
-			Brief = true, Subs = true, Opener = false, Transmission = true},
+			Brief = true, Subs = true, Opener = true, Transmission = true},
 		{Label = "briefing cleared", Force = false, Shade = false,
 			Brief = false, Subs = false, Opener = true, Transmission = false},
 		{Label = "modal only", Force = false, Shade = true,
@@ -4647,11 +4665,37 @@ function Fit.bodyBriefingExclusionMatrix(): (string, number)
 				-- opener leaves the input stack rather than merely going invisible
 				-- underneath an opaque panel -- which is what shipped.
 				record(opener.Visible == state.Opener and opener.Active == state.Opener,
-					label .. ": the store opener is gone from the screen AND from the"
-					.. " input stack whenever anything is over it",
+					label .. ": the store opener leaves the screen AND the input stack"
+					.. " exactly when the queue modal is up (a lobby briefing keeps it, d0ff99e)",
 					string.format("Visible=%s Active=%s, want %s",
 						tostring(opener.Visible), tostring(opener.Active),
 						tostring(state.Opener)))
+				-- The precondition of that rule: a reachable opener must never sit
+				-- inside the briefing panel's rectangle (the C4A defect: taps that
+				-- missed MUTE/STOP fell through onto an invisible opener).
+				if state.Opener and state.Subs then
+					local openerOverlap, openerPair = 0, ""
+					for _, a in ipairs(subtitles:GetDescendants()) do
+						if a:IsA("GuiObject") and visibleChain(a) then
+							local overlapX = math.min(
+								a.AbsolutePosition.X + a.AbsoluteSize.X,
+								opener.AbsolutePosition.X + opener.AbsoluteSize.X)
+								- math.max(a.AbsolutePosition.X, opener.AbsolutePosition.X)
+							local overlapY = math.min(
+								a.AbsolutePosition.Y + a.AbsoluteSize.Y,
+								opener.AbsolutePosition.Y + opener.AbsoluteSize.Y)
+								- math.max(a.AbsolutePosition.Y, opener.AbsolutePosition.Y)
+							local area = math.max(0, overlapX) * math.max(0, overlapY)
+							if area > openerOverlap then
+								openerOverlap = area
+								openerPair = a.Name .. " x " .. opener.Name
+							end
+						end
+					end
+					record(openerOverlap == 0,
+						label .. ": the reachable store opener shares no pixel with the briefing panel",
+						string.format("%.0f px^2 at %s", openerOverlap, openerPair))
+				end
 
 				record(
 					(player:GetAttribute("ZyntraDispatchClientActive") == true)
@@ -4751,14 +4795,28 @@ function Fit.bodyBriefingExclusionMatrix(): (string, number)
 			"closing the terminal releases movement when no movement-owning modal remains",
 			tostring(UIDevice.TouchMovementSuppressed()))
 
+		-- UI_REGRESSION_20260923 (d0ff99e): in the LOBBY a running briefing no
+		-- longer refuses the terminal. Both production paths open it, RoundUI
+		-- yields its panel to it, and the transmission itself keeps running.
 		local toggleDuringBrief = storeProbe:Invoke("open")
 		local kioskDuringBrief = storeProbe:Invoke("kiosk")
-		task.wait(.2)
-		record(toggleDuringBrief == false and kioskDuringBrief == false
-			and terminal.Visible == false and player:GetAttribute("ZyntraStoreOpen") ~= true,
-			"briefing already open: both toggle and kiosk paths refuse the terminal",
-			string.format("toggle=%s kiosk=%s Visible=%s", tostring(toggleDuringBrief),
-				tostring(kioskDuringBrief), tostring(terminal.Visible)))
+		task.wait(.3)
+		record(toggleDuringBrief == true and kioskDuringBrief == true
+			and terminal.Visible == true and player:GetAttribute("ZyntraStoreOpen") == true
+			and subtitles.Visible == false
+			and player:GetAttribute("ZyntraDispatchClientActive") == true,
+			"lobby briefing already open: both toggle and kiosk open the terminal, the panel"
+			.. " yields and the transmission keeps running (d0ff99e)",
+			string.format("toggle=%s kiosk=%s Visible=%s subtitles=%s active=%s",
+				tostring(toggleDuringBrief), tostring(kioskDuringBrief),
+				tostring(terminal.Visible), tostring(subtitles.Visible),
+				tostring(player:GetAttribute("ZyntraDispatchClientActive"))))
+		storeProbe:Invoke("close")
+		task.wait(.3)
+		record(terminal.Visible == false and subtitles.Visible == true,
+			"closing that terminal hands the screen back to the still-running briefing",
+			string.format("Visible=%s subtitles=%s", tostring(terminal.Visible),
+				tostring(subtitles.Visible)))
 
 		player:SetAttribute("UIRegressionForceDispatchActive", nil)
 		task.wait(.3)
@@ -4800,13 +4858,16 @@ function Fit.bodyBriefingExclusionMatrix(): (string, number)
 			tostring(UIDevice.TouchMovementSuppressed()))
 		player:SetAttribute("DispatchBriefingOpen", true)
 		task.wait(.2)
-		record(terminal.Visible == false and player:GetAttribute("ZyntraStoreOpen") ~= true,
-			"a briefing modal attribute closes a terminal that was already open",
+		-- UI_REGRESSION_20260923 (d0ff99e): in the lobby the briefing flag no
+		-- longer closes an open terminal, and movement stays with the terminal.
+		record(terminal.Visible == true and player:GetAttribute("ZyntraStoreOpen") == true,
+			"in the lobby a briefing flag raised over an open terminal leaves it open (d0ff99e)",
 			string.format("Visible=%s attribute=%s", tostring(terminal.Visible),
 				tostring(player:GetAttribute("ZyntraStoreOpen"))))
-		record(UIDevice.TouchMovementSuppressed() == false,
-			"briefing-only exclusion closes Zyntra without leaving movement suppressed",
+		record(UIDevice.TouchMovementSuppressed() == true,
+			"and movement stays suppressed by the terminal that still owns the screen",
 			tostring(UIDevice.TouchMovementSuppressed()))
+		storeProbe:Invoke("close")
 		player:SetAttribute("DispatchBriefingOpen", nil)
 		task.wait(.2)
 
@@ -5988,7 +6049,13 @@ function Fit.bodyZyntraTerminalFitMatrix(): (string, number)
 					expectedActive = 0
 					for _, key in ipairs(Fit.DonationTierKeys) do
 						local tier = (ZyntraConfig.Donations or {})[key]
-						if tier and (tonumber((tier :: any).Id) or 0) > 0 then
+						-- UI_REGRESSION_20260923: a one-time GamePass tier this account
+						-- already OWNS is stood down as OWNED by the store (the same
+						-- Kind/ZyntraOwns<key> test ZyntraStore's refreshDonationOwnership
+						-- applies), so it is not a reachable action for THIS account.
+						local ownedPass = tier ~= nil and (tier :: any).Kind == "GamePass"
+							and game:GetService("Players").LocalPlayer:GetAttribute("ZyntraOwns" .. key) == true
+						if tier and (tonumber((tier :: any).Id) or 0) > 0 and not ownedPass then
 							expectedActive += 1
 						end
 					end
