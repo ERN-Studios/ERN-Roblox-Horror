@@ -1,0 +1,33 @@
+{
+  "publishedVersion": 1933,
+  "publishedAtLocal": "2026-09-17 08:25",
+  "publishedAtUtc": "2026-09-17T06:25:46Z",
+  "publishedBy": "owner (Studio, File > Publish to Roblox)",
+  "verifiedBy": "Claude: Creator Dashboard > Places > Version History, 'Published Version' tick on 1933 only; public games API 'updated' 2026-09-17T06:25:46.574537Z",
+  "previousPublished": 1920,
+  "savedVersionsBetween": "1921-1932 are cloud saves (Save to Roblox), not publishes",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "commits": [
+    "98e03b2",
+    "feb0c48",
+    "86c675d",
+    "a655130",
+    "677a18d",
+    "8bbf85f",
+    "666064b"
+  ],
+  "studioParity": "pull --audit 145/145 at 2026-09-17 01:0x UTC before the publish; manifest 159 items synced",
+  "trello": {
+    "103": "Done",
+    "104": "Done",
+    "105": "Done",
+    "untouched": [
+      "106",
+      "107",
+      "69",
+      "87"
+    ]
+  },
+  "backup": "_local/wheel-shop-refresh-20260916/BACKROOMS-published-v1933.rbxl (9326595 bytes, saved via File > Download a Copy right after the v1933 publish; Studio == repo at that point)"
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aaa60eec3b7c104491930d6",
+    "name": "Rework Lucky Wheel into an actual wheel with a dedicated side button",
+    "description": "Rework the Lucky Wheel so it is presented as an actual wheel.\n\nAdd a dedicated button at the side of the screen to open it. Generate an image for this button.\n\nKeep the existing daily spin and rewards functionality.\n\nFollow-up to: https://trello.com/c/4DOb30AO",
+    "url": "https://trello.com/c/rZC8cJHy/103-rework-lucky-wheel-into-an-actual-wheel-with-a-dedicated-side-button",
+    "list": "To Do"
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aaa60f76add78f348c18d4d",
+    "name": "Give Daily Rewards a standalone UI and its own side button",
+    "description": "Move Daily Rewards into its own standalone UI.\n\nAdd a dedicated button at the side of the screen to open it, separate from the Lucky Wheel button.\n\nKeep the existing reward progression and claiming functionality.\n\nFollow-up to: https://trello.com/c/NP80aPPC",
+    "url": "https://trello.com/c/EnbSc9ak/104-give-daily-rewards-a-standalone-ui-and-its-own-side-button",
+    "list": "To Do"
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aaa6103271f9311a6d2fdf5",
+    "name": "Replace the old shop with a much larger floating hologram shop and automatic interaction",
+    "description": "Remove the old shop and make the new shop much larger.\n\nPresent the products in floating hologram boxes that players can walk up to and buy from.\n\nRemove the \"Inspect\" interaction. Walking up to a display should automatically open its purchase UI. Keep the pressure plate as the trigger, but make it invisible. Opening the UI should let the player choose to buy the item.\n\nFollow-up to: https://trello.com/c/32xgCdtM",
+    "url": "https://trello.com/c/IA6VOViX/105-replace-the-old-shop-with-a-much-larger-floating-hologram-shop-and-automatic-interaction",
+    "list": "To Do"
+  }
+]

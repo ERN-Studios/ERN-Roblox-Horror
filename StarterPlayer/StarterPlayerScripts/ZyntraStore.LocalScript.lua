@@ -281,6 +281,69 @@ wheelButton.BackgroundColor3 = COLORS.bg
 wheelButton.TextColor3 = COLORS.accent
 local wheelButtonSections = sectionButtonContent(wheelButton, {"Wheel"})
 
+-- RAIL_DOTS_20260922 (Trello MsEn2mya). A small red dot on REWARDS and WHEEL,
+-- drawn ONLY while the published profile says something is actually there to
+-- take: a playtime milestone reached and unclaimed, a free spin still unused
+-- for this UTC day, or a spun prize not yet collected. It is recomputed from
+-- every profile push (a claim, a spin, a collect, a playtime flush all push)
+-- and once more at the UTC reset -- one delayed re-read, re-armed per push,
+-- not a ticker.
+local function notificationDot(parent)
+	local dot = Instance.new("Frame")
+	dot.Name = "NotificationDot"
+	dot.AnchorPoint = Vector2.new(1, 0)
+	dot.Position = UDim2.new(1, -4, 0, 4)
+	dot.Size = UDim2.fromOffset(10, 10)
+	dot.BackgroundColor3 = COLORS.error
+	dot.BorderSizePixel = 0
+	dot.Visible = false
+	dot.ZIndex = 5
+	dot.Active = false
+	dot.Parent = parent
+	corner(dot, 5)
+	local ring = outline(dot, COLORS.bg, 0, 1.5)
+	ring.Name = "DotRing"
+	return dot
+end
+local rewardsDot = notificationDot(rewardsButton)
+local wheelDot = notificationDot(wheelButton)
+
+-- RAIL_DOTS_20260922 BEGIN -- pure reads of the profile ZyntraMonetization
+-- publishes (dailyPublic: Today, PlaytimeSeconds, Claimed, WheelDay, WheelLast).
+local function rewardsClaimable(data): boolean
+	local daily = type(data) == "table" and type(data.Daily) == "table" and data.Daily or nil
+	if not daily then return false end
+	local played = tonumber(daily.PlaytimeSeconds) or 0
+	local claimed = type(daily.Claimed) == "table" and daily.Claimed or {}
+	for _, milestone in ipairs((Config.DailyRewards or {}).Milestones or {}) do
+		local minutes = tonumber(milestone.Minutes)
+		if minutes and played >= minutes * 60 and claimed[tostring(minutes)] ~= true then
+			return true
+		end
+	end
+	return false
+end
+
+local function wheelClaimable(data): boolean
+	local daily = type(data) == "table" and type(data.Daily) == "table" and data.Daily or nil
+	if not daily then return false end
+	local last = type(daily.WheelLast) == "table" and daily.WheelLast or nil
+	-- A spun prize still owed (WHEEL_COLLECT_20260922) is something to take,
+	-- whatever day it was spun on.
+	if last and last.Claimed == false then return true end
+	local today = tostring(daily.Today or "")
+	return today ~= "" and tostring(daily.WheelDay or "") ~= today
+end
+-- RAIL_DOTS_20260922 END
+
+-- REWARDS_INTRO_20260922 BEGIN -- the one-time note after the first real
+-- level completion (the server counts CompletedLevels only on an escape).
+local function introWanted(data): boolean
+	return type(data) == "table" and (tonumber(data.CompletedLevels) or 0) >= 1
+		and data.RewardsIntroSeen ~= true
+end
+-- REWARDS_INTRO_20260922 END
+
 local musicButton = button(gui, "Music", UDim2.fromOffset(64, 64), UDim2.fromOffset(8, 296))
 musicButton.Name = "ZyntraMusicButton"
 musicButton.BackgroundColor3 = COLORS.bg
@@ -573,13 +636,12 @@ end
 -- way for a player to reach either. Kept last before DEV so the equipment pages
 -- stay in their authored order.
 --
--- NOTES is a mounted page MODULE (ZyntraFieldNotesPage, see
--- claude-contracts.md). A tab is built only when its module is actually in
--- ReplicatedStorage, so this LocalScript keeps working in a place where that
--- script does not exist yet -- and UIRegression's expectedTabs mirrors the same
--- rule rather than hard-coding the names. FindFirstChild, never WaitForChild:
--- this runs at build time and a yield here would hold the whole terminal for a
--- page that may never arrive.
+-- MOUNTED PAGE MODULES: a tab named here is built only when its module is
+-- actually in ReplicatedStorage (FindFirstChild, never WaitForChild -- this runs
+-- at build time). The table is EMPTY since FIELD_NOTES_REMOVED_20260922: the
+-- NOTES tab and its ZyntraFieldNotesPage module are gone with the Field Notes
+-- feature (owner instruction), and UIRegression's expectedTabs no longer
+-- expects it. The mechanism stays for the next page that earns a tab.
 --
 -- REWARDS IS NO LONGER A TAB. Card #104 gave Daily Rewards its own standalone
 -- modal and its own rail button, so the terminal would otherwise have carried a
@@ -588,11 +650,9 @@ end
 -- unchanged and is now mounted by StarterPlayerScripts."Daily Rewards Client";
 -- everything that used to ask for the Rewards tab (the kiosk plaque prompt and
 -- PlayerScripts.ZyntraOpenTerminal "Rewards") fires PlayerScripts.OpenDailyRewards.
-local TERMINAL_PAGE_MODULES = {
-	Notes = "ZyntraFieldNotesPage",
-}
+local TERMINAL_PAGE_MODULES = {}
 local tabNames = {}
-for _, name in ipairs({"Upgrades", "Shop", "Notes", "Donate", "Colors", "Settings"}) do
+for _, name in ipairs({"Upgrades", "Shop", "Donate", "Colors", "Settings"}) do
 	local moduleName = TERMINAL_PAGE_MODULES[name]
 	if moduleName == nil or ReplicatedStorage:FindFirstChild(moduleName) ~= nil then
 		table.insert(tabNames, name)
@@ -3203,8 +3263,118 @@ local function publishProfile(message, tone)
 	end
 end
 
+-- RAIL_DOTS_20260922: recomputed on every push; one delayed re-read at the
+-- UTC reset so a dot that depends on "today" flips without a ticker.
+local dotResetSerial = 0
+local function refreshRailDots()
+	rewardsDot.Visible = rewardsClaimable(profile)
+	wheelDot.Visible = wheelClaimable(profile)
+	local daily = type(profile) == "table" and type(profile.Daily) == "table" and profile.Daily or nil
+	local seconds = daily and tonumber(daily.SecondsToReset) or nil
+	if not seconds then return end
+	dotResetSerial += 1
+	local serial = dotResetSerial
+	task.delay(math.max(1, seconds + 1), function()
+		if serial ~= dotResetSerial then return end
+		task.spawn(function()
+			local gotIt, answer = pcall(getProfileRemote.InvokeServer, getProfileRemote)
+			if gotIt and answer then
+				profile = answer
+				refreshUI()
+				refreshRailDots()
+				publishProfile(nil, nil)
+			end
+		end)
+	end)
+end
+
+-- REWARDS_INTRO_20260922 (Trello MsEn2mya). A short, dismissable note beside
+-- the rail after the player's FIRST real level completion: what REWARDS and
+-- WHEEL give and what the red dot means. Shown only at a quiet lobby moment --
+-- not in a round, not over the briefing, the queue modal, the terminal or any
+-- screen-owning modal -- and only after those conditions have held for
+-- INTRO_QUIET_SECONDS, which is what keeps it clear of the win / Continue /
+-- Return flow the player has just come out of. GOT IT persists RewardsIntroSeen
+-- through MarkRewardsIntroSeen (idempotent on the server); a save that fails
+-- shows it again on a later join, never twice in one session.
+local INTRO_QUIET_SECONDS = 4
+local introDismissed = false
+local introArmSerial = 0
+local introCard = Instance.new("Frame")
+introCard.Name = "RewardsIntroCard"
+introCard.Size = UDim2.fromOffset(300, 150)
+introCard.BackgroundColor3 = COLORS.panel
+introCard.BorderSizePixel = 0
+introCard.Visible = false
+introCard.ZIndex = 6
+introCard.Parent = gui
+corner(introCard, 10)
+outline(introCard, COLORS.accent, 0.35, 1.5)
+local introEyebrow = label(introCard, "ZYNTRA // FIRST CLEAR LOGGED", UDim2.new(1, -24, 0, 14),
+	UDim2.fromOffset(12, 10), 11, COLORS.muted, Enum.Font.Code)
+introEyebrow.TextXAlignment = Enum.TextXAlignment.Left
+local introTitle = label(introCard, "REWARDS AND THE WHEEL", UDim2.new(1, -24, 0, 20),
+	UDim2.fromOffset(12, 26), 15, COLORS.accent, Enum.Font.GothamBlack)
+introTitle.TextXAlignment = Enum.TextXAlignment.Left
+local introBody = label(introCard,
+	"REWARDS pays tokens and gear for minutes played today. WHEEL gives one free spin a day -- collect what it lands on. A red dot on either button means something is waiting.",
+	UDim2.new(1, -24, 0, 58), UDim2.fromOffset(12, 48), 12, COLORS.text, Enum.Font.Gotham)
+introBody.TextXAlignment = Enum.TextXAlignment.Left
+introBody.TextYAlignment = Enum.TextYAlignment.Top
+introBody.TextWrapped = true
+local introGotIt = button(introCard, "GOT IT", UDim2.new(1, -24, 0, 30), UDim2.new(0, 12, 1, -40))
+introGotIt.Name = "GotIt"
+introGotIt.TextSize = 13
+
+local function placeIntro()
+	-- Beside the rail, level with REWARDS, inside this gui's own offsets.
+	local x = rewardsButton.AbsolutePosition.X - gui.AbsolutePosition.X + rewardsButton.AbsoluteSize.X + 12
+	local y = rewardsButton.AbsolutePosition.Y - gui.AbsolutePosition.Y
+	local layout = UIDevice.Layout()
+	local width = math.min(300, math.max(220, layout.Safe.Right - (rewardsButton.AbsolutePosition.X + rewardsButton.AbsoluteSize.X) - 24))
+	introCard.Size = UDim2.fromOffset(width, 150)
+	introCard.Position = UDim2.fromOffset(x, math.max(0, math.min(y, layout.Safe.Bottom - gui.AbsolutePosition.Y - 160)))
+end
+
+local function introConditions(): boolean
+	return not introDismissed and introWanted(profile)
+		and player:GetAttribute("InRound") ~= true
+		and player:GetAttribute(BRIEFING_ATTRIBUTE) ~= true
+		and not modalBlocksStore() and not main.Visible
+		and not UIDevice.ScreenOwningModalOpen()
+end
+
+local function syncRewardsIntro()
+	if introConditions() then
+		if introCard.Visible then return end
+		introArmSerial += 1
+		local serial = introArmSerial
+		task.delay(INTRO_QUIET_SECONDS, function()
+			if serial ~= introArmSerial or introCard.Visible then return end
+			if introConditions() then
+				placeIntro()
+				introCard.Visible = true
+			end
+		end)
+	else
+		introArmSerial += 1
+		introCard.Visible = false
+	end
+end
+
+introGotIt.Activated:Connect(function()
+	introDismissed = true
+	introArmSerial += 1
+	introCard.Visible = false
+	actionRemote:FireServer("MarkRewardsIntroSeen")
+end)
+for _, attribute in ipairs({"InRound", BRIEFING_ATTRIBUTE}) do
+	player:GetAttributeChangedSignal(attribute):Connect(syncRewardsIntro)
+end
+
 -- ── the mounted terminal pages (card 102) ──────────────────────────────────
--- REWARDS and NOTES are owned by their own ModuleScripts. ZyntraStore supplies
+-- A mounted page is owned by its own ModuleScript (none today; Daily Rewards
+-- moved to its own modal and the NOTES page left with Field Notes). ZyntraStore supplies
 -- the page frame and exactly the context claude-contracts.md names, and nothing
 -- else: the page never requires this script back, never touches another page,
 -- and draws only inside the frame it is handed.
@@ -3276,6 +3446,8 @@ end
 profileChangedRemote.OnClientEvent:Connect(function(newProfile, message, tone)
 	if newProfile then profile = newProfile end
 	refreshUI()
+	refreshRailDots()
+	syncRewardsIntro()
 	publishProfile(message, tone)
 	if message and message ~= "" then showStatus(message, tone) end
 end)
@@ -3285,6 +3457,8 @@ task.spawn(function()
 	if ok then
 		profile = result
 		refreshUI()
+		refreshRailDots()
+		syncRewardsIntro()
 		publishProfile(nil, nil)
 	else
 		showStatus("Could not load the Zyntra profile.", "error")
@@ -3468,6 +3642,7 @@ function updateVisibility()
 	UIDevice.SetInteractive(rewardsButton, railAvailable)
 	UIDevice.SetInteractive(wheelButton, railAvailable)
 	UIDevice.SetInteractive(musicButton, railAvailable)
+	syncRewardsIntro()
 	if type(player:GetAttribute("LobbyMusicEnabled")) ~= "boolean" then
 		musicButton.Active = false
 		musicButton.Selectable = false

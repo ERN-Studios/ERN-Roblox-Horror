@@ -359,6 +359,16 @@ local pendingSerial = 0
 local retryOffered = false  -- six seconds of silence: the hub says RETRY
 local showPrize = false     -- the hub carries the prize for PRIZE_SECONDS
 local prizeSerial = 0
+-- WHEEL_COLLECT_20260922 (Trello 25GLltY6). The server records a spin and pays
+-- on COLLECT PRIZE; the hub is that button while a prize is owed. Success is
+-- shown only once the pushed profile says Claimed == true for the serial that
+-- was asked for -- a toast or an animation alone is not a claim.
+local pendingClaim = false
+local claimSerial = 0
+local awaitingClaim = nil   -- WheelLast.Serial the in-flight claim is for
+local showCollected = false -- the hub carries "<prize> COLLECTED" for PRIZE_SECONDS
+local collectedKey = nil
+local collectedSerial = 0
 local resetAt = nil
 local rollAsked = false
 local clockAccum = 0
@@ -395,6 +405,16 @@ local function recordedToday()
 	return nil
 end
 
+-- The prize the server still owes: WheelLast with Claimed == false, from ANY
+-- day. A result that was never collected is collectable after a day change and
+-- after a rejoin; the server refuses a new spin until it is.
+local function pendingPrize()
+	local daily = dailyOf()
+	local record = daily and type(daily.WheelLast) == "table" and daily.WheelLast or nil
+	if record and record.Claimed == false then return record end
+	return nil
+end
+
 local function remainingSeconds(): number?
 	if not resetAt then return nil end
 	return math.max(0, resetAt - workspace:GetServerTimeNow())
@@ -408,6 +428,23 @@ local function acceptProfile(data)
 	pendingSpin = false
 	retryOffered = false
 	rollAsked = false
+	if pendingClaim then
+		pendingClaim = false
+		local daily = dailyOf()
+		local record = daily and type(daily.WheelLast) == "table" and daily.WheelLast or nil
+		if record and tonumber(record.Serial) == awaitingClaim and record.Claimed == true then
+			showCollected = true
+			collectedKey = tostring(record.Key or "")
+			collectedSerial += 1
+			local serial = collectedSerial
+			task.delay(PRIZE_SECONDS, function()
+				if collectedSerial ~= serial then return end
+				showCollected = false
+				render()
+			end)
+		end
+		awaitingClaim = nil
+	end
 	local daily = dailyOf()
 	local seconds = daily and tonumber(daily.SecondsToReset) or nil
 	-- Re-anchored on EVERY push, which is what keeps the local countdown honest
@@ -562,7 +599,7 @@ end
 
 -- ── what the hub says ─────────────────────────────────────────────────────
 function render()
-	local recorded = recordedToday()
+	local recorded = recordedToday() or pendingPrize()
 	if recorded then
 		local serial = tonumber(recorded.Serial) or 0
 		local order = sectorByKey(tostring(recorded.Key or ""))
@@ -581,6 +618,9 @@ function render()
 
 	local _, sector = nil, nil
 	if recorded then _, sector = sectorByKey(tostring(recorded.Key or "")) end
+	local _, collectedSector = nil, nil
+	if collectedKey then _, collectedSector = sectorByKey(collectedKey) end
+	local owed = pendingPrize() ~= nil
 
 	if #sectors == 0 then
 		-- The config and the server that honours it land together. With no wheel
@@ -588,6 +628,16 @@ function render()
 		hubText, hubEnabled, hubBig = "SPIN", false, true
 	elseif spinning or pendingSpin then
 		hubText, hubEnabled, hubBig = "SPINNING", false, false
+	elseif pendingClaim then
+		hubText, hubEnabled, hubBig = "COLLECTING", false, false
+	elseif showCollected and collectedSector then
+		-- The server's confirmation: "1 TOKEN" -> "1 TOKEN\nCOLLECTED".
+		hubText = collectedSector.Short .. "\nCOLLECTED"
+		hubEnabled, hubBig = false, false
+	elseif owed and sector then
+		-- The disc under the pointer already names the prize; the hub is the one
+		-- primary action left, on touch and pad as much as with a mouse.
+		hubText, hubEnabled, hubBig = "COLLECT\nPRIZE", true, false
 	elseif showPrize and sector then
 		-- Two lines, because a circle is not a row: "2 POTIONS" -> "2\nPOTIONS".
 		hubText = (sector.Short:gsub(" ", "\n"))
@@ -743,7 +793,30 @@ hub.Activated:Connect(function()
 	-- A tap while the disc is turning SKIPS. This is the whole reason the hub
 	-- stays Active during a spin.
 	if spinning then finishSpin() return end
-	if pendingSpin or not hub.Active or #sectors == 0 or spunToday() then return end
+	if pendingSpin or pendingClaim or not hub.Active or #sectors == 0 then return end
+	local owed = pendingPrize()
+	if owed then
+		-- COLLECT PRIZE. One request in flight; a second tap re-asks nothing. The
+		-- recovery from silence is a RE-READ (RETRY re-enters here), never a
+		-- local grant.
+		pendingClaim = true
+		retryOffered = false
+		awaitingClaim = tonumber(owed.Serial)
+		claimSerial += 1
+		local serial = claimSerial
+		actionRemote:FireServer("ClaimWheelPrize")
+		render()
+		task.delay(ACTION_TIMEOUT, function()
+			if not pendingClaim or claimSerial ~= serial then return end
+			pendingClaim = false
+			awaitingClaim = nil
+			retryOffered = true
+			refreshProfile()
+			render()
+		end)
+		return
+	end
+	if spunToday() then return end
 	pendingSpin = true
 	retryOffered = false
 	pendingSerial += 1

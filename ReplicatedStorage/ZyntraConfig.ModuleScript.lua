@@ -79,12 +79,6 @@ return {
 		},
 	},
 
-	-- Field notes are optional discoveries placed in the levels. Completing the
-	-- collection awards a name-tag title and nothing else: no stat, no currency.
-	FieldNotes = {
-		CompletionTitle = "FIELD ARCHIVIST",
-	},
-
 	Studio = {
 		GrantAllPasses = true,
 		StartingTokens = 25,
@@ -94,8 +88,8 @@ return {
 	Passes = {
   EntityDetector = {
    Id=1982715834, IconId=90757067349588, Name="Zyntra Entity Detector", Price=149,
-   Description="Permanent detector. Press Z / D-pad left or tap SCAN during a run for a 4-second LOW/MEDIUM/HIGH reading within 120 studs (HIGH within 50). 20-second cooldown. No exact locations and no guaranteed safety. Free simulated demo in the lobby shop.",
-   PreviewDescription="PERMANENT · 120-stud snapshot for 4s. HIGH within 50. LOW / MEDIUM / HIGH. 20s cooldown. No exact locations or guaranteed safety.",
+   Description="Permanent detector. Press Z / D-pad left or tap SCAN during a run to scan for nearby threats. It reads LOW / MEDIUM / HIGH for 4 seconds and is ready again after 20 seconds. It never shows exact positions and cannot guarantee safety. Free simulated demo in the lobby shop.",
+   PreviewDescription="PERMANENT · Scan nearby threats: LOW / MEDIUM / HIGH for 4 seconds. Ready again after 20 seconds. No exact positions, no guaranteed safety.",
   },
 		Supporter = {
 			Id = 1941938256,

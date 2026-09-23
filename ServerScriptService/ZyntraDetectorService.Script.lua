@@ -4,6 +4,8 @@ local RS=game:GetService("ReplicatedStorage")
 local CS=game:GetService("CollectionService")
 local Config=require(RS:WaitForChild("ZyntraConfig")).Detector
 local Sensing=require(script.Parent:WaitForChild("ZyntraDetectorSensing"))
+-- ANALYTICS_20260921. Measurement only, after the scan is granted.
+local Analytics=require(script.Parent:WaitForChild("ZyntraAnalytics"))
 local remote=Instance.new("RemoteEvent")
 remote.Name="ZyntraDetector"
 remote.Parent=RS:WaitForChild("Remotes")
@@ -30,6 +32,7 @@ remote.OnServerEvent:Connect(function(player,action)
  player:SetAttribute("ZyntraDetectorReadyAt",now+Config.Cooldown)
  player:SetAttribute("ZyntraDetectorReading",reading)
  player:SetAttribute("ZyntraDetectorReadingUntil",now+Config.ReadingSeconds)
+ Analytics.ItemUse(player,"DetectorScan",workspace:GetAttribute("SelectedLevel"))
  remote:FireClient(player,"reading",reading,now+Config.ReadingSeconds)
 end)
 local function watch(player)

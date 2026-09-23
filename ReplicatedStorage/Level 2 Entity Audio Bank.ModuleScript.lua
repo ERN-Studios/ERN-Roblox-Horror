@@ -1,5 +1,11 @@
 -- Cleaned ElevenLabs recordings; provenance and WAV hashes are in the audio asset manifest.
-local Bank = {Enabled = true, Version = 1, Mix = {
+--
+-- LEVEL2_GROAN_OWNERSHIP_20260921: `Enabled` is also the handshake that hands the
+-- Pool Slide's voice to `Level 2 Entity Audio`. While it is true AND the server
+-- publishes Level2_PoolSlideActive, `Level 2 Sound Controller` holds its distant
+-- pipe-groan scheduler. Set it false and the distant groans simply keep running
+-- as map ambience, so the kill switch never leaves the level silent.
+local Bank = {Enabled = true, Version = 2, Mix = {
 	Foam = {
 		Walk = {Volume = 0.25, Min = 12, Max = 110},
 		Run = {Volume = 0.33, Min = 14, Max = 145},
@@ -16,6 +22,10 @@ local Bank = {Enabled = true, Version = 1, Mix = {
 		Idle = {Volume = 0.14, Min = 12, Max = 100},
 		Alert = {Volume = 0.45, Min = 24, Max = 240},
 		Attack = {Volume = 0.52, Min = 20, Max = 170},
+		-- The periodic mouth groan sits just under Alert so the one spawn
+		-- announcement stays the loudest thing the giant ever says. Same
+		-- plateau/reach as Alert: direction and distance come from the rolloff.
+		Mouth = {Volume = 0.42, Min = 24, Max = 240},
 	},
 },
 Foam = {
@@ -34,6 +44,32 @@ Slide = {
 	Idle = {{Id = "rbxassetid://91311095755288", Seconds = 6.0}},
 	Alert = {{Id = "rbxassetid://123428540737909", Seconds = 7.0}},
 	Attack = {{Id = "rbxassetid://138559499183993", Seconds = 3.0}},
+	-- The periodic mouth voice reuses the four authored pipe-groan clips: they
+	-- are StringValue slots in ReplicatedStorage["Level 2 Sound Library"], not
+	-- ids, so they are named here and resolved on the client. The reveal is that
+	-- the groans the party heard from the pipes were always this thing.
+	MouthSlots = {
+		"Level 2 Distant Monster-Like Pipe Groan 1",
+		"Level 2 Distant Monster-Like Pipe Groan 2",
+		"Level 2 Distant Monster-Like Pipe Groan 3",
+		"Level 2 Distant Monster-Like Pipe Groan 4",
+	},
+	MouthClipSeconds = 8.0,
+	-- THE calibration knob, and the one to turn by ear. The live template's rig
+	-- has 20 plainly named bones and no mouth marker, so the voice hangs off the
+	-- `Head` bone -- which sits at the skull base, not at the mouth. This is the
+	-- nudge from that joint to the opening, in BONE space, measured against a rig
+	-- 12.00 studs tall (MouthReferenceHeight); the client scales it by the
+	-- model's actual height so it follows a resized rig. Forward is -Z and down
+	-- is -Y in Roblox, but an imported skeleton's bone axes are whatever the DCC
+	-- exported, so listen before trusting the sign of any component.
+	MouthBoneOffset = Vector3.new(0, -0.3, -0.8),
+	MouthReferenceHeight = 12.0,
+	-- Calibration knob for the LAST resort in the mouth lookup (see the client):
+	-- a point derived from the model's own bounding box, as a fraction of it, so
+	-- it scales with the rig. Only used when the template carries no mouth
+	-- Attachment, no bone at all and no head/jaw MeshPart.
+	MouthOffset = {Height = 0.42, Forward = 0.30},
 },
 }
 local function freeze(value)

@@ -15,6 +15,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local ServerStorage = game:GetService("ServerStorage")
 local PlayerProtection = require(game:GetService("ServerScriptService"):WaitForChild("PlayerProtection"))
+local DeathAdvice = require(ReplicatedStorage:WaitForChild("DeathAdvice"))
 
 local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
 local HidingController = require(script.Parent:WaitForChild("Level 3 Hiding Controller"))
@@ -2421,6 +2422,7 @@ local function beginAttack(session: any, player: Player)
 				session.Model:SetAttribute("Level3_MallManagerAttackSerial", session.AttackSerial)
 				session.Model:SetAttribute("Level3_MallManagerLastCaptureUserId", player.UserId)
 			end
+			DeathAdvice.Mark(player, "L3Manager")
 			humanoid.Health = 0
 			session.LastKnownPosition = nil
 			session.LastKnownPlayer = nil

@@ -1,0 +1,1535 @@
+{
+  "placeVersion": 1958,
+  "streaming": {
+    "StreamingIntegrityMode": "unavailable",
+    "StreamingTargetRadius": "unavailable",
+    "StreamingMinRadius": "unavailable",
+    "ModelStreamingBehavior": "unavailable",
+    "StreamingEnabled": "true"
+  },
+  "lobbySpawn": [
+    0,
+    30.399999618530273,
+    -860
+  ],
+  "gameId": 10559217407,
+  "placeId": 131311258779917,
+  "scripts": [
+    {
+      "bytes": 43475,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "NoiseReporter"
+      ],
+      "hash": 4013165107
+    },
+    {
+      "bytes": 33275,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "FlashlightController"
+      ],
+      "hash": 3553547400
+    },
+    {
+      "bytes": 7476,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "JumpscareUI"
+      ],
+      "hash": 2974176949
+    },
+    {
+      "bytes": 237727,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "RoundUI"
+      ],
+      "hash": 648595596
+    },
+    {
+      "bytes": 67153,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "SoundController"
+      ],
+      "hash": 2022468377
+    },
+    {
+      "bytes": 79548,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "PuzzleUI"
+      ],
+      "hash": 627256119
+    },
+    {
+      "bytes": 22809,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "DevCheats"
+      ],
+      "hash": 1384591171
+    },
+    {
+      "bytes": 19883,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "SpectateController"
+      ],
+      "hash": 3072305203
+    },
+    {
+      "bytes": 10390,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "EntityShakeController"
+      ],
+      "hash": 4219574313
+    },
+    {
+      "bytes": 34389,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level2AlertClient"
+      ],
+      "hash": 2897461417
+    },
+    {
+      "bytes": 187349,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "ZyntraStore"
+      ],
+      "hash": 2459639310
+    },
+    {
+      "bytes": 3462,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 1 Sound Controller"
+      ],
+      "hash": 3922834887
+    },
+    {
+      "bytes": 5592,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Lighting Controller"
+      ],
+      "hash": 647352600
+    },
+    {
+      "bytes": 39939,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Sound Controller"
+      ],
+      "hash": 3191793753
+    },
+    {
+      "bytes": 13516,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Objective UI"
+      ],
+      "hash": 1332525697
+    },
+    {
+      "bytes": 18788,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Pool Foam Client"
+      ],
+      "hash": 3812252092
+    },
+    {
+      "bytes": 54201,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Reader Client"
+      ],
+      "hash": 14800855
+    },
+    {
+      "bytes": 39946,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Lighting Controller"
+      ],
+      "hash": 3941783821
+    },
+    {
+      "bytes": 46833,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Sound Controller"
+      ],
+      "hash": 3799268199
+    },
+    {
+      "bytes": 6548,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Mall Manager Visual Smoother"
+      ],
+      "hash": 788152186
+    },
+    {
+      "bytes": 21675,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Table Hiding Client"
+      ],
+      "hash": 3278484801
+    },
+    {
+      "bytes": 31003,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Slide Controller"
+      ],
+      "hash": 1277968138
+    },
+    {
+      "bytes": 10614,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "MasterTuningClient"
+      ],
+      "hash": 2372024782
+    },
+    {
+      "bytes": 10098,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyMusicController"
+      ],
+      "hash": 3837618104
+    },
+    {
+      "bytes": 5914,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Round Entry Client"
+      ],
+      "hash": 1312958886
+    },
+    {
+      "bytes": 5033,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyLevel3GateFlicker"
+      ],
+      "hash": 3678563929
+    },
+    {
+      "bytes": 9656,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Pool Slide Dev ESP"
+      ],
+      "hash": 2765241465
+    },
+    {
+      "bytes": 31343,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "ProtectionHUD"
+      ],
+      "hash": 2436149620
+    },
+    {
+      "bytes": 7021,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyCeilingSweeps"
+      ],
+      "hash": 43626616
+    },
+    {
+      "bytes": 9947,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "First Entry Guide"
+      ],
+      "hash": 1597103129
+    },
+    {
+      "bytes": 20545,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Round Exit Client"
+      ],
+      "hash": 1298341756
+    },
+    {
+      "bytes": 9971,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Entity Audio"
+      ],
+      "hash": 1694846705
+    },
+    {
+      "bytes": 31051,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Shop Display Client"
+      ],
+      "hash": 1003998426
+    },
+    {
+      "bytes": 10507,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 1 Cable Current"
+      ],
+      "hash": 941913027
+    },
+    {
+      "bytes": 9288,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Field Notes Client"
+      ],
+      "hash": 634705961
+    },
+    {
+      "bytes": 27008,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Daily Rewards Client"
+      ],
+      "hash": 2292762524
+    },
+    {
+      "bytes": 33299,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Lucky Wheel Client"
+      ],
+      "hash": 3247656667
+    },
+    {
+      "bytes": 8386,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Friend Boost Client"
+      ],
+      "hash": 3184439710
+    },
+    {
+      "bytes": 3388,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Team Objective Feed"
+      ],
+      "hash": 3177459099
+    },
+    {
+      "bytes": 1674,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "ZyntraDetectorClient"
+      ],
+      "hash": 4216643759
+    },
+    {
+      "bytes": 300,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterCharacterScripts",
+        "DisableDefaultWalkingSound"
+      ],
+      "hash": 3439527266
+    },
+    {
+      "bytes": 654,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterCharacterScripts",
+        "SetRunAnimation"
+      ],
+      "hash": 1673959203
+    },
+    {
+      "bytes": 1539,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterCharacterScripts",
+        "DanceEmote"
+      ],
+      "hash": 1807488750
+    },
+    {
+      "bytes": 28802,
+      "class": "LocalScript",
+      "segments": [
+        "StarterPlayer",
+        "StarterCharacter",
+        "Animate"
+      ],
+      "hash": 3780544750
+    },
+    {
+      "bytes": 990,
+      "class": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "DevAccess"
+      ],
+      "hash": 3864079872
+    },
+    {
+      "bytes": 13008,
+      "class": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraConfig"
+      ],
+      "hash": 814147391
+    },
+    {
+      "bytes": 2505,
+      "class": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "FlashlightProfiles"
+      ],
+      "hash": 2035285055
+    },
+    {
+      "bytes": 99881,
+      "class": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "UIDevice"
+      ],
+      "hash": 2594197881
+    },
+    {
+      "bytes": 443665,
+      "class": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "UIRegression"
+      ],
+      "hash": 572673245
+    },
+    {
+      "bytes": 21208,
+      "class": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "MasterConfiguration"
+      ],
+      "hash": 311143705
+    },
+    {
+      "bytes": 6906,
+      "class": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "ProtectionClient"
+      ],
+      "hash": 3496899417
+    },
+    {
+      "bytes": 2841,
+      "class": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "Level 2 Entity Audio Bank"
+      ],
+      "hash": 2441775782
+    },
+    {
+      "bytes": 10555,
+      "class": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "UIStyle"
+      ],
+      "hash": 2683759656
+    },
+    {
+      "bytes": 38146,
+      "class": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraDailyRewardsPage"
+      ],
+      "hash": 1678333741
+    },
+    {
+      "bytes": 7373,
+      "class": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraFieldNotes"
+      ],
+      "hash": 2549927091
+    },
+    {
+      "bytes": 16492,
+      "class": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraFieldNotesPage"
+      ],
+      "hash": 3748128709
+    },
+    {
+      "bytes": 3693,
+      "class": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "SlideContinuationSafety"
+      ],
+      "hash": 2109951696
+    },
+    {
+      "bytes": 1496,
+      "class": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraDailyResearch"
+      ],
+      "hash": 2390954477
+    },
+    {
+      "bytes": 1407,
+      "class": "ModuleScript",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraDetectorVisual"
+      ],
+      "hash": 2051817315
+    },
+    {
+      "bytes": 1991,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "NoiseRegistry"
+      ],
+      "hash": 1640011175
+    },
+    {
+      "bytes": 6163,
+      "class": "Script",
+      "segments": [
+        "ServerScriptService",
+        "FlashlightSync"
+      ],
+      "hash": 1478505597
+    },
+    {
+      "bytes": 150909,
+      "class": "Script",
+      "segments": [
+        "ServerScriptService",
+        "GameManager"
+      ],
+      "hash": 343225650
+    },
+    {
+      "bytes": 2567,
+      "class": "Script",
+      "segments": [
+        "ServerScriptService",
+        "AvatarNormalize"
+      ],
+      "hash": 2434167251
+    },
+    {
+      "bytes": 103329,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "TunnelLobbyBuilder"
+      ],
+      "hash": 2300846163
+    },
+    {
+      "bytes": 173312,
+      "class": "Script",
+      "segments": [
+        "ServerScriptService",
+        "ZyntraMonetization"
+      ],
+      "hash": 1289805623
+    },
+    {
+      "bytes": 427,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level2Generator"
+      ],
+      "hash": 278658600
+    },
+    {
+      "bytes": 437,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level3Generator"
+      ],
+      "hash": 3490766066
+    },
+    {
+      "bytes": 7124,
+      "class": "Script",
+      "segments": [
+        "ServerScriptService",
+        "LobbyPartyModeController"
+      ],
+      "hash": 3448053770
+    },
+    {
+      "bytes": 74983,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Round Completion Routing"
+      ],
+      "hash": 102701575
+    },
+    {
+      "bytes": 135364,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Round Completion Test Suite"
+      ],
+      "hash": 1186912996
+    },
+    {
+      "bytes": 6714,
+      "class": "Script",
+      "segments": [
+        "ServerScriptService",
+        "Crouch State Server"
+      ],
+      "hash": 2395885106
+    },
+    {
+      "bytes": 8128,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Round Loading Runtime"
+      ],
+      "hash": 1025409681
+    },
+    {
+      "bytes": 15550,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Round Loading Test Suite"
+      ],
+      "hash": 1678066252
+    },
+    {
+      "bytes": 7408,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "PlayerProtection"
+      ],
+      "hash": 326713719
+    },
+    {
+      "bytes": 6278,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "PurchaseAlerts"
+      ],
+      "hash": 3831620165
+    },
+    {
+      "bytes": 22048,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "LobbyShopDisplay"
+      ],
+      "hash": 3508484151
+    },
+    {
+      "bytes": 12066,
+      "class": "Script",
+      "segments": [
+        "ServerScriptService",
+        "RouteMarkerService"
+      ],
+      "hash": 3525654410
+    },
+    {
+      "bytes": 21612,
+      "class": "Script",
+      "segments": [
+        "ServerScriptService",
+        "FieldNotesService"
+      ],
+      "hash": 3646331193
+    },
+    {
+      "bytes": 5413,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "FriendBoost"
+      ],
+      "hash": 4078293387
+    },
+    {
+      "bytes": 789,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "TeamObjectives"
+      ],
+      "hash": 3153777581
+    },
+    {
+      "bytes": 4473,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "ReentryPlacement"
+      ],
+      "hash": 114897137
+    },
+    {
+      "bytes": 1819,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "ZyntraDetectorSensing"
+      ],
+      "hash": 4196723567
+    },
+    {
+      "bytes": 2229,
+      "class": "Script",
+      "segments": [
+        "ServerScriptService",
+        "ZyntraDetectorService"
+      ],
+      "hash": 3698449566
+    },
+    {
+      "bytes": 9970,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Configuration"
+      ],
+      "hash": 3632465989
+    },
+    {
+      "bytes": 37520,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Layout Generator"
+      ],
+      "hash": 2471315786
+    },
+    {
+      "bytes": 265471,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 World Builder"
+      ],
+      "hash": 1187504075
+    },
+    {
+      "bytes": 50965,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Objective Controller"
+      ],
+      "hash": 929057489
+    },
+    {
+      "bytes": 19458,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Round Adapter"
+      ],
+      "hash": 2430042948
+    },
+    {
+      "bytes": 5828,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "README - LEVEL 2 TWEAKS"
+      ],
+      "hash": 2341741100
+    },
+    {
+      "bytes": 10652,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Configuration"
+      ],
+      "hash": 2099796731
+    },
+    {
+      "bytes": 11278,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Proxy Factory"
+      ],
+      "hash": 1756786975
+    },
+    {
+      "bytes": 16481,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Animation Adapter"
+      ],
+      "hash": 3230588902
+    },
+    {
+      "bytes": 118667,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Navigator"
+      ],
+      "hash": 2672915855
+    },
+    {
+      "bytes": 16597,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Observer"
+      ],
+      "hash": 3603489834
+    },
+    {
+      "bytes": 7451,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "README - LEVEL 2 POOL FOAM"
+      ],
+      "hash": 1399321127
+    },
+    {
+      "bytes": 69432,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Controller"
+      ],
+      "hash": 1656273113
+    },
+    {
+      "bytes": 21604,
+      "class": "Script",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Slide Ragdoll Service"
+      ],
+      "hash": 3531639917
+    },
+    {
+      "bytes": 47083,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Exit Transition Test Suite"
+      ],
+      "hash": 542717137
+    },
+    {
+      "bytes": 691,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Configuration"
+      ],
+      "hash": 3199129851
+    },
+    {
+      "bytes": 131658,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Navigator"
+      ],
+      "hash": 155121565
+    },
+    {
+      "bytes": 7363,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Rig Adapter"
+      ],
+      "hash": 3974023740
+    },
+    {
+      "bytes": 38772,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Controller"
+      ],
+      "hash": 3425605733
+    },
+    {
+      "bytes": 19070,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Configuration"
+      ],
+      "hash": 201781888
+    },
+    {
+      "bytes": 105403,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 World Builder"
+      ],
+      "hash": 793173584
+    },
+    {
+      "bytes": 66237,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Objective Controller"
+      ],
+      "hash": 2413410489
+    },
+    {
+      "bytes": 30972,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Round Adapter"
+      ],
+      "hash": 3222720138
+    },
+    {
+      "bytes": 196197,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Test Suite"
+      ],
+      "hash": 1993594995
+    },
+    {
+      "bytes": 20901,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Music Sequence Controller"
+      ],
+      "hash": 1781181791
+    },
+    {
+      "bytes": 181869,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Mall Manager AI Controller"
+      ],
+      "hash": 2171784412
+    },
+    {
+      "bytes": 23157,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Hiding Controller"
+      ],
+      "hash": 147807900
+    },
+    {
+      "bytes": 38107,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Layout Generator"
+      ],
+      "hash": 933162897
+    },
+    {
+      "bytes": 84041,
+      "class": "Script",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "MazeGenerator"
+      ],
+      "hash": 2958472143
+    },
+    {
+      "bytes": 97116,
+      "class": "Script",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "PuzzleManager"
+      ],
+      "hash": 3855234543
+    },
+    {
+      "bytes": 58731,
+      "class": "Script",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "EntityAI"
+      ],
+      "hash": 2980162132
+    },
+    {
+      "bytes": 6301,
+      "class": "Script",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "EntityAnimation"
+      ],
+      "hash": 3441592848
+    },
+    {
+      "bytes": 11471,
+      "class": "Script",
+      "segments": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "EntityKill"
+      ],
+      "hash": 3650494911
+    },
+    {
+      "bytes": 2250,
+      "class": "Script",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "RetiredLobbyAssets",
+        "Miso",
+        "MisoPatrol"
+      ],
+      "hash": 393301951
+    },
+    {
+      "bytes": 58002,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Lever Redesign Backup 20260806",
+        "Level 2 World Builder"
+      ],
+      "hash": 4090486371
+    },
+    {
+      "bytes": 7391,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Lever Redesign Backup 20260806",
+        "Level 2 Objective Controller"
+      ],
+      "hash": 504324176
+    },
+    {
+      "bytes": 5926,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Lever Redesign Backup 20260806",
+        "Level 2 Configuration"
+      ],
+      "hash": 960046379
+    },
+    {
+      "bytes": 68535,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Pump Scale Backup 20260806",
+        "Level 2 World Builder Before 40 Percent Reduction"
+      ],
+      "hash": 2353508344
+    },
+    {
+      "bytes": 69618,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids Texture Backup 20260806",
+        "Level 2 World Builder Before Kids Textures"
+      ],
+      "hash": 963118296
+    },
+    {
+      "bytes": 84738,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids Skylight Backup 20260806",
+        "Level 2 World Builder Before Kids Skylights"
+      ],
+      "hash": 4239643150
+    },
+    {
+      "bytes": 5803,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids V1 Backup 20260811",
+        "Level 2 Configuration"
+      ],
+      "hash": 775349615
+    },
+    {
+      "bytes": 97093,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids V1 Backup 20260811",
+        "Level 2 World Builder"
+      ],
+      "hash": 1721824290
+    },
+    {
+      "bytes": 26598,
+      "class": "LocalScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2AudioBackup_20260831_NoDistantSplash",
+        "Level 2 Sound Controller"
+      ],
+      "hash": 1453134650
+    },
+    {
+      "bytes": 9801,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2AudioBackup_20260831_NoDistantSplash",
+        "Level 2 Configuration"
+      ],
+      "hash": 422023566
+    },
+    {
+      "bytes": 167166,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2RetiredSlidemouth_20260831",
+        "Level 2 Slidemouth Controller"
+      ],
+      "hash": 525644413
+    },
+    {
+      "bytes": 295599,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2RetiredSlidemouth_20260831",
+        "Level 2 Slidemouth Test Suite"
+      ],
+      "hash": 4020833381
+    },
+    {
+      "bytes": 9372,
+      "class": "LocalScript",
+      "segments": [
+        "ServerStorage",
+        "Archive",
+        "Level2RetiredSlidemouth_20260831",
+        "Level 2 Slidemouth Client"
+      ],
+      "hash": 3321308729
+    },
+    {
+      "bytes": 167,
+      "class": "LocalScript",
+      "segments": [
+        "ServerStorage",
+        "Project Mirror",
+        "IMPORTANT"
+      ],
+      "hash": 428501494
+    },
+    {
+      "bytes": 235,
+      "class": "Script",
+      "segments": [
+        "ServerStorage",
+        "Project Mirror",
+        "Script"
+      ],
+      "hash": 1177353877
+    },
+    {
+      "bytes": 95466,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__TunnelLobbyBuilder"
+      ],
+      "hash": 2465356827
+    },
+    {
+      "bytes": 27514,
+      "class": "LocalScript",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__NoiseReporter"
+      ],
+      "hash": 694641386
+    },
+    {
+      "bytes": 5736,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__Level 2 Systems__Level 2 Pool Foam Configuration"
+      ],
+      "hash": 2493076798
+    },
+    {
+      "bytes": 42420,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__Level 2 Systems__Level 2 Pool Foam Controller"
+      ],
+      "hash": 2377820728
+    },
+    {
+      "bytes": 16436,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__Level 3 Systems__Level 3 Hiding Controller"
+      ],
+      "hash": 3266719072
+    },
+    {
+      "bytes": 6350,
+      "class": "LocalScript",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client"
+      ],
+      "hash": 3374472632
+    },
+    {
+      "bytes": 28932,
+      "class": "LocalScript",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__FlashlightController"
+      ],
+      "hash": 932442676
+    },
+    {
+      "bytes": 6740,
+      "class": "Script",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__FlashlightSync"
+      ],
+      "hash": 403707552
+    },
+    {
+      "bytes": 8095,
+      "class": "LocalScript",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__EntityShakeController"
+      ],
+      "hash": 1453969031
+    },
+    {
+      "bytes": 96252,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "CodexBackup_20260902_ComingSoonGates",
+        "TunnelLobbyBuilder_PreComingSoon"
+      ],
+      "hash": 2761280007
+    },
+    {
+      "bytes": 4670,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "TEMP_PipeEntityAnimations_20260909",
+        "PreviewControls"
+      ],
+      "hash": 2018353447
+    },
+    {
+      "bytes": 35774,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_0710",
+        "Level 2 Pool Slide Controller"
+      ],
+      "hash": 2429415967
+    },
+    {
+      "bytes": 126820,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_0710",
+        "Level 2 Pool Slide Navigator"
+      ],
+      "hash": 2696878426
+    },
+    {
+      "bytes": 35774,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP6_1609Z",
+        "Controller"
+      ],
+      "hash": 2429415967
+    },
+    {
+      "bytes": 126820,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP6_1609Z",
+        "Navigator"
+      ],
+      "hash": 2696878426
+    },
+    {
+      "bytes": 35774,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP7_1624Z",
+        "Controller"
+      ],
+      "hash": 2429415967
+    },
+    {
+      "bytes": 126820,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP7_1624Z",
+        "Navigator"
+      ],
+      "hash": 2696878426
+    },
+    {
+      "bytes": 35774,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP8_1633Z",
+        "Controller"
+      ],
+      "hash": 2429415967
+    },
+    {
+      "bytes": 126975,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP8_1633Z",
+        "Navigator"
+      ],
+      "hash": 209686369
+    },
+    {
+      "bytes": 126820,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP8_1633Z",
+        "NavigatorBeforeBudgetFix"
+      ],
+      "hash": 2696878426
+    },
+    {
+      "bytes": 35774,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP9_1640Z",
+        "Controller"
+      ],
+      "hash": 2429415967
+    },
+    {
+      "bytes": 126975,
+      "class": "ModuleScript",
+      "segments": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP9_1640Z",
+        "Navigator"
+      ],
+      "hash": 209686369
+    }
+  ]
+}

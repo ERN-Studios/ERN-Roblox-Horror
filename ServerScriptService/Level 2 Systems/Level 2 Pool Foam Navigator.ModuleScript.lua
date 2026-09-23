@@ -745,6 +745,38 @@ function Navigator:WarpTo(position, facing, allowLargeStep)
 	return self:_placeFoot(position, facing, allowLargeStep == true)
 end
 
+-- One validated lateral placement that leaves the ROUTE alone.
+--
+-- Why it exists: the controller's separation pass has to move a model a few
+-- tenths of a stud out of another model without the route churn every other
+-- mover carries -- WarpTo Stops (dropping Goal, Waypoints and the trail) and
+-- Retreat rewinds the plan on purpose. This runs the same _placeFoot every
+-- walking piece runs, so an offset that would land in a wall, off the authored
+-- Level 2 floor, up a step it may not climb or inside the body volume simply
+-- FAILS and the caller keeps its position. The certified waypoints are
+-- untouched and the next Step continues from the new foot toward the same
+-- waypoint -- exactly what the steer ladder and the clearance seek inside Step
+-- already do when they bend the approach around a prop.
+--
+-- The offset is clamped to MaxTravelStep, the longest horizontal distance this
+-- module validates in one placement, and the facing is preserved: a sidestep is
+-- not a turn, and rotating the rig toward its neighbour would spin it every
+-- time the pass fires.
+function Navigator:Sidestep(offset, maximumDistance)
+	if self.Destroyed or not self.HasGrounded then return false end
+	if not (self.Model and self.Model.Parent) or not finiteVector3(offset) then return false end
+	local flat = Vector3.new(offset.X, 0, offset.Z)
+	local requested = flat.Magnitude
+	if requested < .01 then return false end
+	local limit = self.Tuning.MaxTravelStep
+	if finiteNumber(maximumDistance) then limit = math.min(limit, math.max(0, maximumDistance)) end
+	local travel = math.min(requested, limit)
+	if travel < .01 then return false end
+	local target = self.FootPosition + flat.Unit * travel
+	if not self:_positionAllowed(target) then return false end
+	return self:_placeFoot(target, self.Facing)
+end
+
 function Navigator:_clearDirectLine(fromPosition, toPosition)
 	self:_refreshObstacleFilters()
 	local height = math.clamp(self.PivotAboveFoot * 0.5, 1.5, 5)
@@ -2508,7 +2540,13 @@ end
 -- floor and body checks as forward motion, so it cannot cross a wall, gain
 -- height it did not climb, or jump a gap. It is a walk, not a teleport: the
 -- distance is capped and the rig stops the instant a step fails.
-function Navigator:Retreat(maxDistance)
+-- `isClear`, when given, is asked about every position this would step to
+-- BEFORE it steps there, and the walk stops at the first refusal. The floor and
+-- body checks below only know about the world: they cannot see another
+-- anchored, non-colliding creature standing in the way, and a rig that backs
+-- out through one of those has done exactly the damage the retreat exists to
+-- avoid. Callers with nothing to add leave it out and nothing changes.
+function Navigator:Retreat(maxDistance, isClear)
 	if self.Destroyed or not (self.Model and self.Model.Parent) then return 0 end
 	maxDistance = finiteNumber(maxDistance) and math.clamp(maxDistance, 0, 48) or 0
 	if maxDistance <= 0 or #self.Trail == 0 then return 0 end
@@ -2519,6 +2557,7 @@ function Navigator:Retreat(maxDistance)
 		local step = horizontalDistance(self.FootPosition, target)
 		if step > .05 then
 			if travelled + step > maxDistance then break end
+			if isClear and not isClear(target) then break end
 			local direction = Vector3.new(
 				target.X - self.FootPosition.X, 0, target.Z - self.FootPosition.Z)
 			if not self:_placeFoot(target, direction) then break end

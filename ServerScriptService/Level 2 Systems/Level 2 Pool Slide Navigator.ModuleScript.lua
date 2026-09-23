@@ -473,6 +473,11 @@ function Navigator.new(model, manifest, tuning, options)
 			PathRequestTimeout = readNumber(tuning, "PathRequestTimeout", 8, 2, 30),
 			-- Independent server-time limit on the same planning request.
 			PlanningWallTimeout = readNumber(tuning, "PlanningWallTimeout", 8, 1, 30),
+			-- Stable routes only. Certify this many studs of route, not the whole of
+			-- it, and extend before the walked remainder drops under PlanHorizonExtend.
+			-- 0 keeps the old whole-route behaviour. See horizonPrefix.
+			PlanHorizon = readNumber(tuning, "PlanHorizon", 0, 0, 512),
+			PlanHorizonExtend = readNumber(tuning, "PlanHorizonExtend", 0, 0, 256),
 			FootClearance = readNumber(tuning, "FootClearance", DEFAULTS.FootClearance, 0, 3),
 			FloorProbeAbove = readNumber(tuning, "FloorProbeAbove", DEFAULTS.FloorProbeAbove, 3, 60),
 			FloorProbeDepth = readNumber(tuning, "FloorProbeDepth", DEFAULTS.FloorProbeDepth, 20, 300),
@@ -540,6 +545,13 @@ function Navigator.new(model, manifest, tuning, options)
 		-- borrow, and putting a field the pause contract does not restore into
 		-- the snapshot the pause-drift assertion compares would invent drift.
 		TravelClamped = false,
+		-- Request tracing for latency measurement. Off unless the controller's
+		-- diagnostics flag turns it on; a disabled trace allocates nothing.
+		RouteTruncated = false,
+		TraceEnabled = false,
+		Trace = {},
+		TraceSerial = 0,
+		InstalledGoalRequestedAt = nil,
 	}, Navigator)
 	-- Final arrival can be tighter without changing intermediate corner consumption.
 	self.Tuning.GoalArrivalDistance = readNumber(tuning, "GoalArrivalDistance",
@@ -1741,6 +1753,32 @@ function Navigator:_reachedGoal()
 		and math.abs(self.FootPosition.Y-target.Y) <= 7
 end
 
+-- RECEDING HORIZON. Certifying a whole 200-stud chase route costs 1-3 s at the
+-- planner's 2 ms/frame slice, and one obstacle cluster anywhere along it can
+-- run the 3 s request deadline out. Measured 2026-09-21 (seed 1182081016, a
+-- target walking 16 studs/s, 110-220 studs away): three and four requests in a
+-- row expired, the incumbent route was never replaced, and the creature walked
+-- to where the player had been 10-15 s earlier (goal error up to 177 studs).
+-- The far end of such a route is replaced long before it is walked, so only
+-- the part that can be walked before the next plan lands is worth proving.
+-- Nothing about the proof changes: the kept prefix goes through the same
+-- centring, detour, smoothing and join as a whole route, and Step still
+-- validates every stride.
+local function horizonPrefix(points, origin, horizon)
+	if horizon <= 0 or #points < 2 then return points, false end
+	local travelled, from = 0, origin
+	for index, point in ipairs(points) do
+		travelled += horizontalDistance(from, point)
+		from = point
+		if travelled >= horizon and index < #points then
+			local prefix = table.create(index)
+			table.move(points, 1, index, 1, prefix)
+			return prefix, true
+		end
+	end
+	return points, false
+end
+
 local function fullyCertified(stats)
 	return type(stats) == "table" and stats.Aborted == false
 		and stats.Unwalkable == 0 and stats.Unresolved == 0
@@ -1804,6 +1842,17 @@ function Navigator:_probeBlockedClearance()
 	return true
 end
 
+-- Studs of installed route still ahead of the foot, counted only up to `cap`.
+function Navigator:_remainingRoute(cap)
+	local total, from = 0, self.FootPosition
+	for index = self.WaypointIndex, #self.Waypoints do
+		total += horizontalDistance(from, self.Waypoints[index])
+		if total >= cap then break end
+		from = self.Waypoints[index]
+	end
+	return total
+end
+
 function Navigator:_stableNeedsPath(goal, force)
 	local age = os.clock() - self.LastPathAt
 	if self.Computing and age >= self.Tuning.PathRequestTimeout then
@@ -1816,6 +1865,14 @@ function Navigator:_stableNeedsPath(goal, force)
 	if force == true then return true end
 	if self:_probeBlockedClearance() then return true end
 	if age < self.Tuning.RepathInterval then return false end
+	-- A horizon route stops short of the goal on purpose. Ask for the next piece
+	-- while there is still road left, so a distant standing target is walked to
+	-- without a pause at the end of every piece.
+	-- With no road left the ordinary rule below decides (arrived/waiting).
+	if self.RouteTruncated and self.Waypoints[self.WaypointIndex]
+		and self:_remainingRoute(self.Tuning.PlanHorizonExtend) < self.Tuning.PlanHorizonExtend then
+		return true
+	end
 	local moved = not self.LastRequestedGoal
 		or horizontalDistance(goal, self.LastRequestedGoal) >= self.Tuning.RepathDistance
 		or math.abs(goal.Y - self.LastRequestedGoal.Y) >= self.Tuning.MaxStepHeight
@@ -2039,12 +2096,18 @@ function Navigator:_requestPath(goal, graphOnly)
 	self.LastPathAt = os.clock()
 	self.LastRequestedGoal = goal
 	local deadline = self.LastPathAt + self.Tuning.PathRequestTimeout
-	local wallDeadline = workspace:GetServerTimeNow() + self.Tuning.PlanningWallTimeout
+	local requestedAt = workspace:GetServerTimeNow()
+	local wallDeadline = requestedAt + self.Tuning.PlanningWallTimeout
+	-- One record follows this request from SetGoal to install/reject/expiry.
+	local trace = self.TraceEnabled and {Id = requestId, Kind = graphOnly and "GRAPH" or "PATH",
+		RequestedAt = requestedAt, Goal = goal, Start = requestStart,
+		Installs = self.RouteInstallCount, Rejects = self.RouteRejectedCount} or nil
 
 	task.defer(function()
 		local planningThread=coroutine.running()
 		local function runRequest()
 		if self.Destroyed or requestId ~= self.RequestId then return end
+		if trace then trace.QueueMs = (workspace:GetServerTimeNow() - requestedAt) * 1000 end
 		planningThreads[coroutine.running()]={Navigator=self,RequestId=requestId,Deadline=deadline,
 			WallDeadline=wallDeadline,SliceAt=os.clock()}
 		local path
@@ -2053,6 +2116,7 @@ function Navigator:_requestPath(goal, graphOnly)
 		if graphOnly then
 			failure = "forced generated-hall graph route"
 		else
+			local computeBegan = os.clock()
 			success, failure = pcall(function()
 				path = PathfindingService:CreatePath({
 					AgentRadius = self.Tuning.PathAgentRadius,
@@ -2064,6 +2128,10 @@ function Navigator:_requestPath(goal, graphOnly)
 				})
 				path:ComputeAsync(stable and requestStart or self.FootPosition, goal)
 			end)
+			if trace then
+				trace.ComputeMs = (os.clock() - computeBegan) * 1000
+				trace.PathStatus = success and path and path.Status.Name or "ERROR"
+			end
 		end
 		if self.Destroyed or requestId ~= self.RequestId then return end
 
@@ -2100,13 +2168,25 @@ function Navigator:_requestPath(goal, graphOnly)
 		local proposedApproach
 		local blockedApproach
 		local blockedProbeFrom, blockedProbeTarget
+		local truncated = false
+		if stable then
+			points, truncated = horizonPrefix(points, requestStart, self.Tuning.PlanHorizon)
+			if trace then trace.Truncated = truncated end
+		end
 		if #points > 0 then
 			local shouldAbort = function()
 				return self.Destroyed or requestId ~= self.RequestId
 					or (stable and (os.clock() >= deadline
 						or workspace:GetServerTimeNow() >= wallDeadline))
 			end
+			local centreBegan = os.clock()
+			if trace then trace.RawPoints = #points end
 			local centred, centringStats = self:_centreRoute(points, shouldAbort, stable and requestStart or nil)
+			if trace and type(centringStats) == "table" then
+				trace.CentreMs = (os.clock() - centreBegan) * 1000
+				trace.Queries, trace.Unwalkable = centringStats.Queries, centringStats.Unwalkable
+				trace.Aborted, trace.Detours = centringStats.Aborted, centringStats.DetourAttempts
+			end
 			if self.Destroyed or requestId ~= self.RequestId then return end
 			if stable and type(centringStats) ~= "table" then
 				self:_rejectStableRoute("route certification missing")
@@ -2143,7 +2223,12 @@ function Navigator:_requestPath(goal, graphOnly)
 					and not centringStats.Aborted) then
 				local graphPoints, graphStatus = self:_fallbackWaypoints(goal, stable and requestStart or nil)
 				if #graphPoints > 0 then
+					local graphBegan = os.clock()
 					local graphCentred, graphStats = self:_centreRoute(graphPoints, shouldAbort, stable and requestStart or nil)
+					if trace then
+						trace.GraphCentreMs = (os.clock() - graphBegan) * 1000
+						trace.GraphQueries = type(graphStats) == "table" and graphStats.Queries or nil
+					end
 					if self.Destroyed or requestId ~= self.RequestId then return end
 					if (stable and fullyCertified(graphStats))
 						or (not stable and not graphStats.Aborted
@@ -2183,13 +2268,16 @@ function Navigator:_requestPath(goal, graphOnly)
 			-- stand-in is by construction the closest standable point the pass
 			-- could find to the goal.
 			if not stable then self.GoalApproach = nil end
-			local goalStandable = self:_standableAt(goal)
+			-- A horizon route ends at a way-station, not at the goal: the same
+			-- trim applies to an unoccupiable last point, but it must never become
+			-- the arrival stand-in, or the walk would "arrive" 100 studs short.
+			local goalStandable = self:_standableAt(truncated and points[#points] or goal)
 			if not goalStandable then
 				local approachIndex
 				for index = #points - 1, 1, -1 do
 					local candidate = points[index]
 					if self:_standableAt(candidate) then
-						proposedApproach = candidate
+						if not truncated then proposedApproach = candidate end
 						if not stable then self.GoalApproach = candidate end
 						approachIndex = index
 						break
@@ -2244,10 +2332,12 @@ function Navigator:_requestPath(goal, graphOnly)
 			end
 			local joined, skipped
 			if valid then
+				local joinBegan = os.clock()
 				if not blockedApproach then points = self:_smoothStableRoute(points,requestStart,deadline) end
 				if self.Destroyed or requestId~=self.RequestId then return end
 				if os.clock()>=deadline then self.Computing=false;return end
 				joined, skipped = self:_joinStableRoute(points, requestStart)
+				if trace then trace.JoinMs = (os.clock() - joinBegan) * 1000 end
 				if self.Destroyed or requestId~=self.RequestId then return end
 				if os.clock()>=deadline then self.Computing=false;return end
 				-- Goal direction can change during the newly yielding join too.
@@ -2274,6 +2364,8 @@ function Navigator:_requestPath(goal, graphOnly)
 			points = joined
 			self.GoalApproach = proposedApproach
 			self.InstalledGoal = goal
+			self.InstalledGoalRequestedAt = requestedAt
+			self.RouteTruncated = truncated
 			self.BlockedGoalApproach = blockedApproach
 			self.BlockedProbeFrom = blockedProbeFrom
 			self.BlockedProbeTarget = blockedProbeTarget
@@ -2299,6 +2391,24 @@ function Navigator:_requestPath(goal, graphOnly)
 		end
 		local ok, failure=xpcall(runRequest,debug.traceback)
 		planningThreads[planningThread]=nil -- also on cancellation, timeout or error
+		if trace and not self.Destroyed then
+			-- Counters, not return sites, name the outcome: runRequest has a dozen exits.
+			local finishedAt = workspace:GetServerTimeNow()
+			trace.TotalMs = (finishedAt - requestedAt) * 1000
+			trace.Outcome = not ok and "ERROR"
+				or self.RouteInstallCount > trace.Installs and "INSTALLED"
+				or self.RouteRejectedCount > trace.Rejects and "REJECTED"
+				or requestId ~= self.RequestId and "SUPERSEDED"
+				or (os.clock() >= deadline or finishedAt >= wallDeadline) and "EXPIRED" or "DONE"
+			trace.Failure = trace.Outcome ~= "INSTALLED" and self.LastFailure or nil
+			trace.Points = trace.Outcome == "INSTALLED" and #self.Waypoints or 0
+			trace.GoalDrift = self.Goal and horizontalDistance(goal, self.Goal) or 0
+			trace.Span = horizontalDistance(requestStart, goal)
+			trace.Installs, trace.Rejects = nil, nil
+			table.insert(self.Trace, trace)
+			if #self.Trace > 48 then table.remove(self.Trace, 1) end
+			self.TraceSerial += 1
+		end
 		if not ok and not self.Destroyed and requestId==self.RequestId then
 			self.Computing=false
 			self.LastFailure="planning failed: "..tostring(failure)
@@ -2367,6 +2477,7 @@ end
 
 function Navigator:Stop()
 	self.Goal = nil
+	self.RouteTruncated = false
 	self.Waypoints = {}
 	self.WaypointIndex = 1
 	self.Trail = {}
@@ -3021,6 +3132,8 @@ function Navigator:GetDebugSnapshot()
 		WaypointIndex = self.WaypointIndex,
 		WaypointCount = #self.Waypoints,
 		Goal = self.Goal,
+		InstalledGoal = self.InstalledGoal,
+		InstalledGoalRequestedAt = self.InstalledGoalRequestedAt,
 		Position = self.FootPosition,
 		LastFailure = self.LastFailure,
 		LastBlockedBy = self.LastBlockedBy,

@@ -1,0 +1,28 @@
+[
+  {
+    "file": "box-speed-potion.png",
+    "sha256": "06ec6e5f9610cda9aeed4b3d1733e585065e9bf3cb1a6cbe760250d7b49b71e7",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "alpha": [
+      255,
+      255
+    ]
+  },
+  {
+    "file": "box-route-marker-pack.png",
+    "sha256": "0837ab87aebc6d0ef695da05a0c82946bd30023b9b1cc17fdc0480de58915c7c",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGB",
+    "alpha": [
+      255,
+      255
+    ]
+  }
+]

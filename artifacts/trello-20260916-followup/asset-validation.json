@@ -1,0 +1,40 @@
+{
+  "checkedAtUtc": "2026-09-16T10:35:00Z",
+  "mode": "Roblox Studio Edit, unparented ImageLabel dependency preload",
+  "uploadSucceeded": true,
+  "metadataVerified": true,
+  "assetTypeId": 1,
+  "creatorType": "User",
+  "creatorId": 40920547,
+  "items": [
+    {
+      "assetId": 111918608092047,
+      "status": "Enum.AssetFetchStatus.Success",
+      "unparentedImageIsLoaded": false
+    },
+    {
+      "assetId": 85423575361057,
+      "status": "Enum.AssetFetchStatus.Success",
+      "unparentedImageIsLoaded": false
+    }
+  ],
+  "control": {
+    "assetId": 73457681182843,
+    "status": "Enum.AssetFetchStatus.Success"
+  },
+  "conclusion": "Both official thumbnails are Completed. ContentProvider PreloadAsync with each unparented ImageLabel dependency returned Success. No game source or scene was modified; probe objects were destroyed. The earlier raw string preload returned Failure, so the successful instance-dependency result is distinguished explicitly. Unparented IsLoaded stayed false; actual visible button rendering remains Claude UI QA.",
+  "nextAssetCheckAtUtc": null,
+  "instructions": "Asset preparation is complete. No further polling required. Claude must integrate these IDs and verify rendered buttons during its normal native QA. Do not poll Claude before11:01UTC auto-resume and do not take over any code.",
+  "thumbnailApi": [
+    {
+      "url": "https://thumbnails.roblox.com/v1/assets?assetIds=111918608092047&returnPolicy=PlaceHolder&size=150x150&format=Png",
+      "state": "Completed",
+      "assetId": 111918608092047
+    },
+    {
+      "url": "https://thumbnails.roblox.com/v1/assets?assetIds=85423575361057&returnPolicy=PlaceHolder&size=150x150&format=Png",
+      "state": "Completed",
+      "assetId": 85423575361057
+    }
+  ]
+}

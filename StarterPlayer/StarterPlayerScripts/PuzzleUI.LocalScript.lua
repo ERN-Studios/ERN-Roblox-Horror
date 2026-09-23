@@ -1112,15 +1112,10 @@ local function progressMeter(current, total)
 		.. string.rep("-", math.max(total - current, 0)) .. "]"
 end
 
-remote.OnClientEvent:Connect(function(ev, a, b, c, d)
-	-- PuzzleManager broadcasts shared world changes, but lobby spectators must
-	-- never inherit the active party's maze HUD.
-	if player:GetAttribute("InRound") ~= true then
-		setReceiver(false)
-		showCounters(false)
-		return
-	end
-
+-- The server's status events, applied. Split out of the remote handler on
+-- 2026-09-23 so the Studio-only UIRegression probe at the bottom of this file
+-- drives the SAME code a round does (UI_REGRESSION_20260923).
+local function applyPuzzleStatus(ev, a, b, c, d)
 	if ev == "begin" then
 		setReceiver(false)
 		-- Every copy change goes through setObjectiveText, which writes the text
@@ -1196,19 +1191,32 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d)
 		leverLabel.Visible = false
 		applyPuzzleLayout()
 	end
-end)
+end
 
-workspace:GetAttributeChangedSignal("RoundActive"):Connect(function()
-	if not workspace:GetAttribute("RoundActive") then
-		leverPhase = false
-		leverActive = 0
-		leverTotal = 0
-		leverEndsAt = 0
-		carriedFuses = 0
-		exitOpen = false
+remote.OnClientEvent:Connect(function(ev, a, b, c, d)
+	-- PuzzleManager broadcasts shared world changes, but lobby spectators must
+	-- never inherit the active party's maze HUD.
+	if player:GetAttribute("InRound") ~= true then
 		setReceiver(false)
 		showCounters(false)
+		return
 	end
+	applyPuzzleStatus(ev, a, b, c, d)
+end)
+
+local function resetRoundHud()
+	leverPhase = false
+	leverActive = 0
+	leverTotal = 0
+	leverEndsAt = 0
+	carriedFuses = 0
+	exitOpen = false
+	setReceiver(false)
+	showCounters(false)
+end
+
+workspace:GetAttributeChangedSignal("RoundActive"):Connect(function()
+	if not workspace:GetAttribute("RoundActive") then resetRoundHud() end
 end)
 
 -- LEVEL2_EXIT_TRANSITION_20260828 / C1_OBJECTIVES_LOWER_RIGHT_20260829.
@@ -1690,4 +1698,29 @@ for _, names in ipairs({{"LevelOneGuideGui", "ObjectivesButton"}, {"ZyntraStore"
     local parent = gui.Parent:FindFirstChild(names[1])
     local button = parent and parent:FindFirstChild(names[2])
     if button then watchDetectorObstacle(button) end
+end
+
+-- UI_REGRESSION_20260923. Studio-only seam for UIRegression, the same shape as
+-- UIRegressionLevel2AlertProbe and UIRegressionReaderProbe. Since f3b8923 every
+-- layout pass re-derives the panel and toggle from countersActive, so a harness
+-- that wrote Visible = true on them in the lobby was undone by the next pass and
+-- measured nothing ("Level1Objectives is not visible"). This drives the REAL
+-- status handler with the server's own events and payloads ("begin", fuses,
+-- boxes / "carry", n / "msg", text / "boxes", done, total / "levers", n /
+-- "escape"), past the lobby-spectator gate only, and "reset" is the real
+-- round-end reset. Never present in a live server.
+if RunService:IsStudio() then
+	local probe = Instance.new("BindableFunction")
+	probe.Name = "UIRegressionPuzzleProbe"
+	probe.OnInvoke = function(action, a, b, c, d)
+		if action == "reset" then
+			resetRoundHud()
+		else
+			applyPuzzleStatus(action, a, b, c, d)
+		end
+		return string.format("counters=%s collapsed=%s receiver=%s panel=%s",
+			tostring(countersActive), tostring(objectivesCollapsed),
+			tostring(receiverActive), tostring(objectivePanel.Visible))
+	end
+	probe.Parent = gui
 end

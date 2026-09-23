@@ -16,6 +16,7 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerStorage = game:GetService("ServerStorage")
+local RunService = game:GetService("RunService")
 local AssetService = game:GetService("AssetService")
 local Terrain = workspace.Terrain
 
@@ -72,6 +73,20 @@ local function addTexture(object, faces, studs)
 		texture.Parent = object
 	end
 	return object
+end
+
+-- Texture instances, not parts, dominate this world: a measured seed built
+-- 44,923 of them for ~27,500 parts, because a nil face list means all six.
+-- Call sites that can PROVE which faces a player may see pass that list through
+-- here. With Configuration.Performance.CullHiddenTileFaces off this returns nil,
+-- which is exactly the six-face default those sites had before — so the switch
+-- is a real A/B, not an approximation of one.
+local function visibleFaces(faces)
+	local performance = Configuration.Performance
+	if performance and performance.CullHiddenTileFaces then
+		return faces
+	end
+	return nil
 end
 
 local function tiledPart(parent, name, cframe, size, color, faces, studs)
@@ -246,6 +261,34 @@ local function makeWallWithGaps(parent, hall, name, axis, cross, low, high, gaps
 		return Vector3.new(thickness, tall, length)
 	end
 
+	-- Which faces of a wall slab can ever be seen. The room side always. A cut
+	-- END only where an opening leaves it standing as a door jamb — the ends
+	-- that run out to geometryLow/geometryHigh are past the perpendicular wall,
+	-- facing the void outside the level. The outward side is that same void; the
+	-- top is buried .15 inside the two-stud ceiling slab (and under the three-
+	-- stud exterior light seal above it), with the nearest skylight opening
+	-- clamped 2 studs inboard of a 1.75-stud wall half-thickness; the bottom
+	-- sits four studs below the hall floor and points down, away from every eye.
+	local roomFace, lowEndFace, highEndFace
+	if axis == "X" then
+		roomFace = cross < hall.Center.Z and Enum.NormalId.Back or Enum.NormalId.Front
+		lowEndFace, highEndFace = Enum.NormalId.Left, Enum.NormalId.Right
+	else
+		roomFace = cross < hall.Center.X and Enum.NormalId.Right or Enum.NormalId.Left
+		lowEndFace, highEndFace = Enum.NormalId.Front, Enum.NormalId.Back
+	end
+	local function slabFaces(jambLow, jambHigh)
+		-- Kids rooms already narrow themselves to two faces from the slab's own
+		-- proportions (kidsTextureFaces), and their tiles are a different asset
+		-- that the measurement never counted. Leave that rule alone rather than
+		-- hand a kids doorway a jamb face it has never had.
+		if isKids(hall) then return nil end
+		local faces = {roomFace}
+		if jambLow then table.insert(faces, lowEndFace) end
+		if jambHigh then table.insert(faces, highEndFace) end
+		return visibleFaces(faces)
+	end
+
 	-- Carry both wall ends beyond the nominal room bounds. Perpendicular walls
 	-- now overlap on the OUTSIDE of the room instead of relying on a perfectly
 	-- flush corner, which is vulnerable to sunlight/shadow bias. Door and flume
@@ -258,7 +301,8 @@ local function makeWallWithGaps(parent, hall, name, axis, cross, low, high, gaps
 		local gapHigh = math.clamp(opening.center + opening.width * .5, low, high)
 		if gapLow - cursor > .1 then
 			surfaceFor(hall, parent, name, CFrame.new(positionFor((cursor + gapLow) * .5, centerY)),
-				sizeFor(gapLow - cursor, fullHeight), wallColor, nil, 7)
+				sizeFor(gapLow - cursor, fullHeight), wallColor,
+				slabFaces(cursor > geometryLow, true), 7)
 		end
 		local span = gapHigh - gapLow
 		if span > .1 then
@@ -293,7 +337,8 @@ local function makeWallWithGaps(parent, hall, name, axis, cross, low, high, gaps
 	end
 	if geometryHigh - cursor > .1 then
 		surfaceFor(hall, parent, name, CFrame.new(positionFor((cursor + geometryHigh) * .5, centerY)),
-			sizeFor(geometryHigh - cursor, fullHeight), wallColor, nil, 7)
+			sizeFor(geometryHigh - cursor, fullHeight), wallColor,
+			slabFaces(cursor > geometryLow, false), 7)
 	end
 end
 
@@ -1319,10 +1364,22 @@ local function makeColumn(parent, position, height, radius, essential, seamYaw)
 	local shaftBottom = 0
 	local shaftTop = height - ceilingInset
 	local shaftHeight = shaftTop - shaftBottom
+	-- On a cylinder Top/Bottom/Front/Back are the four quarters of the barrel
+	-- and Left/Right are the flat end caps; the Z rotation stands the axis up,
+	-- so those two caps are the column's floor and ceiling ends. Every
+	-- non-essential column runs floor to ceiling: its base is coplanar with the
+	-- floor slab it stands on and its capital stops .08 under the ceiling, and a
+	-- face pointing at a slab .08 away has no eye position that can see it. The
+	-- one `essential` caller is the spiral newel, which ends ~5 studs above its
+	-- top tread in open air, so it keeps both caps.
+	local shaftFaces = not essential and visibleFaces({
+		Enum.NormalId.Top, Enum.NormalId.Bottom,
+		Enum.NormalId.Front, Enum.NormalId.Back,
+	}) or nil
 	local column = tiledPart(parent, "Level 2 Tiled Column",
 		CFrame.new(position + Vector3.new(0, (shaftBottom + shaftTop) * .5, 0))
 			* CFrame.Angles(0, 0, math.pi * .5),
-		Vector3.new(shaftHeight, radius, radius), C.TileWarm, nil, 9)
+		Vector3.new(shaftHeight, radius, radius), C.TileWarm, shaftFaces, 9)
 	column.Shape = Enum.PartType.Cylinder
 	column.CanCollide = true
 	table.insert(entry.Parts, column)
@@ -1542,6 +1599,182 @@ local function archOffset(acrossZ, radius, verticalScale, angle)
 	return acrossZ and Vector3.new(0, y, across) or Vector3.new(across, y, 0)
 end
 
+-- ARCH_MESH_PILOT_20260922 (Trello: Level 2 arch-mesh pilot). The standard
+-- corridor rib -- the 3.2 x 2.2 band swept round the elliptical arc -- as ONE
+-- MeshPart instead of `steps` textured Parts. Same ring points, same dip under
+-- the floor, same step count, so the Part path and the mesh path can be A/B'd
+-- on one seed. Reversible: Configuration.Performance.ArchMeshRibs, overridable
+-- for a session with the workspace attribute Level2ArchMeshRibs; off, the old
+-- code path runs untouched. Only the standard corridor family opts in
+-- (MeshRib = true at its call site); kids halls, the slender portal faces and
+-- the Ring Corridor rings keep their Parts.
+--
+-- WHERE THE MESH COMES FROM, in order:
+--   1. a MeshPart template already in ServerStorage under the family's name
+--      ("Level 2 Arch Rib Mesh <key>"), adopted like the slide templates;
+--   2. an uploaded asset id for the key in Configuration.Performance.
+--      ArchMeshRibAssets, through AssetService:CreateMeshPartAsync;
+--   3. an EditableMesh built here from the same math -- which needs the
+--      experience's "Allow Mesh & Image APIs" security setting at runtime
+--      (Edit-mode plugin context always has it: WorldBuilder.EnsureArchRibMesh
+--      Templates builds the ServerStorage templates from the command bar).
+-- With none of the three the rib falls back to Parts and records the key it
+-- wanted on the world (Level2_ArchRibMeshMissingKeys), so the operator can
+-- see exactly which templates or assets to provide.
+local archRibMeshTemplates = {}
+local archRibMeshFailed = {}
+local archRibMeshMissing = {}
+
+local function archMeshEnabled()
+	local override = workspace:GetAttribute("Level2ArchMeshRibs")
+	if type(override) == "boolean" then return override end
+	local performance = Configuration.Performance
+	return performance ~= nil and performance.ArchMeshRibs == true
+end
+
+local function archRibMeshKey(radius, verticalScale, floorDepth, axialDepth, radialDepth, steps)
+	return string.format("r%.2f_vs%.2f_fd%.2f_a%.2f_d%.2f_s%d",
+		radius, verticalScale, floorDepth, axialDepth, radialDepth, steps)
+end
+
+-- The band's geometry, in the rib's own space: X across the opening, Y up, Z
+-- along the passage, origin at the arc centre (the Part path's arcCenter).
+-- One quad strip per face (soffit, extrados, two axial faces) and two end
+-- caps; UVs in studs / ARCH_MESH_TILE_STUDS so the tile reads at the same
+-- size as the Texture instances it replaces.
+local ARCH_MESH_TILE_STUDS = 7
+-- Invisible colliding segments kept at each foot of a mesh rib: four per side
+-- covers the arc from the floor to about eleven studs up (measured: three reach
+-- 7.6), which is a jumping player's head; the Vault Strip shell stands behind
+-- the rest of the rib and is unchanged.
+local ARCH_MESH_FOOT_SEGMENTS = 4
+local function buildArchRibMesh(radius, verticalScale, floorDepth, axialDepth, radialDepth, steps)
+	local em = AssetService:CreateEditableMesh()
+	local dip = math.asin(math.clamp((floorDepth + 2.2) / (radius * verticalScale), 0, .55))
+	local angleFrom, angleTo = -dip, math.pi + dip
+	local half = radialDepth * .5
+	local zNear, zFar = -axialDepth * .5, axialDepth * .5
+	local rings = {}
+	local along, previous = 0, nil
+	for i = 0, steps do
+		local a = angleFrom + (angleTo - angleFrom) * i / steps
+		local point = Vector3.new(math.cos(a) * radius, math.sin(a) * radius * verticalScale, 0)
+		local normal = Vector3.new(point.X, point.Y / (verticalScale * verticalScale), 0)
+		normal = normal.Magnitude > .01 and normal.Unit or Vector3.yAxis
+		if previous then along += (point - previous).Magnitude end
+		previous = point
+		local inner, outer = point - normal * half, point + normal * half
+		rings[i] = {
+			InnerNear = em:AddVertex(inner + Vector3.new(0, 0, zNear)),
+			InnerFar = em:AddVertex(inner + Vector3.new(0, 0, zFar)),
+			OuterNear = em:AddVertex(outer + Vector3.new(0, 0, zNear)),
+			OuterFar = em:AddVertex(outer + Vector3.new(0, 0, zFar)),
+			Along = along, Normal = normal, Point = point,
+		}
+	end
+	local function uv(u, v) return em:AddUV(Vector2.new(u / ARCH_MESH_TILE_STUDS, v / ARCH_MESH_TILE_STUDS)) end
+	local function quad(a, b, c, d, normal, uvA, uvB, uvC, uvD)
+		local n = em:AddNormal(normal)
+		local f1 = em:AddTriangle(a, b, c)
+		local f2 = em:AddTriangle(a, c, d)
+		em:SetFaceNormals(f1, {n, n, n})
+		em:SetFaceNormals(f2, {n, n, n})
+		em:SetFaceUVs(f1, {uvA, uvB, uvC})
+		em:SetFaceUVs(f2, {uvA, uvC, uvD})
+	end
+	for i = 0, steps - 1 do
+		local r0, r1 = rings[i], rings[i + 1]
+		local u0, u1 = r0.Along, r1.Along
+		local inward = -(r0.Normal + r1.Normal).Unit
+		-- soffit (faces the arc centre), extrados (faces away), then the two axial ends
+		quad(r0.InnerNear, r0.InnerFar, r1.InnerFar, r1.InnerNear, inward,
+			uv(u0, 0), uv(u0, axialDepth), uv(u1, axialDepth), uv(u1, 0))
+		quad(r0.OuterFar, r0.OuterNear, r1.OuterNear, r1.OuterFar, -inward,
+			uv(u0, axialDepth), uv(u0, 0), uv(u1, 0), uv(u1, axialDepth))
+		quad(r0.InnerNear, r1.InnerNear, r1.OuterNear, r0.OuterNear, Vector3.new(0, 0, -1),
+			uv(u0, 0), uv(u1, 0), uv(u1, radialDepth), uv(u0, radialDepth))
+		quad(r0.InnerFar, r0.OuterFar, r1.OuterFar, r1.InnerFar, Vector3.new(0, 0, 1),
+			uv(u0, 0), uv(u0, radialDepth), uv(u1, radialDepth), uv(u1, 0))
+	end
+	local first, last = rings[0], rings[steps]
+	local tangentFirst = (rings[1].Point - first.Point).Unit
+	local tangentLast = (last.Point - rings[steps - 1].Point).Unit
+	quad(first.InnerNear, first.OuterNear, first.OuterFar, first.InnerFar, -tangentFirst,
+		uv(0, 0), uv(radialDepth, 0), uv(radialDepth, axialDepth), uv(0, axialDepth))
+	quad(last.InnerNear, last.InnerFar, last.OuterFar, last.OuterNear, tangentLast,
+		uv(0, 0), uv(0, axialDepth), uv(radialDepth, axialDepth), uv(radialDepth, 0))
+	return em
+end
+
+local function dressArchRibTemplate(template, key)
+	template.Name = "Level 2 Arch Rib Mesh " .. key
+	template.Anchored = true
+	template.DoubleSided = true
+	template.Material = Enum.Material.SmoothPlastic
+	template.Color = TILE_TINT
+	template.TextureID = TILE_TEXTURE
+	template.TopSurface = Enum.SurfaceType.Smooth
+	template.BottomSurface = Enum.SurfaceType.Smooth
+	template:SetAttribute("Level2_ArchRibMeshKey", key)
+	return template
+end
+
+local function archRibMeshTemplate(radius, verticalScale, floorDepth, axialDepth, radialDepth, steps)
+	local key = archRibMeshKey(radius, verticalScale, floorDepth, axialDepth, radialDepth, steps)
+	local cached = archRibMeshTemplates[key]
+	if cached and cached.Parent then return cached end
+	if archRibMeshFailed[key] then return nil end
+	-- Only an ASSET-BACKED mesh renders on clients. Measured 2026-09-22: a
+	-- MeshPart built from an EditableMesh (Content.fromObject) replicates its
+	-- collision and query geometry to the client but renders there as its
+	-- bounding BOX -- a 28 x 30 x 3 slab across the tunnel. So at runtime the
+	-- loader takes (1) a ServerStorage template with a real MeshId, then (2) an
+	-- uploaded asset id from Configuration; the EditableMesh route (3) is a
+	-- Studio-only measurement tool behind workspace.Level2ArchMeshRibsAllowEditable
+	-- (counts, collision, navigation -- never how it looks).
+	local allowEditable = RunService:IsStudio() and workspace:GetAttribute("Level2ArchMeshRibsAllowEditable") == true
+	local existing = ServerStorage:FindFirstChild("Level 2 Arch Rib Mesh " .. key)
+	if existing and existing:IsA("MeshPart") and existing:GetAttribute("Level2_ArchRibMeshKey") == key
+		and existing.Size.Magnitude > 1
+		and (existing.MeshId ~= "" or (allowEditable and existing:GetAttribute("Level2_ArchRibMeshEditorOnly") == true)) then
+		archRibMeshTemplates[key] = existing
+		return existing
+	end
+	local performance = Configuration.Performance or {}
+	local assets = performance.ArchMeshRibAssets or {}
+	local ok, result = pcall(function()
+		local meshId = assets[key]
+		if type(meshId) == "string" and meshId ~= "" then
+			return AssetService:CreateMeshPartAsync(Content.fromUri(meshId), {
+				CollisionFidelity = Enum.CollisionFidelity.PreciseConvexDecomposition,
+				RenderFidelity = Enum.RenderFidelity.Precise,
+			})
+		end
+		if not allowEditable then
+			error("no uploaded asset for this family (Performance.ArchMeshRibAssets)")
+		end
+		local built = AssetService:CreateMeshPartAsync(
+			Content.fromObject(buildArchRibMesh(radius, verticalScale, floorDepth, axialDepth, radialDepth, steps)), {
+			CollisionFidelity = Enum.CollisionFidelity.PreciseConvexDecomposition,
+			RenderFidelity = Enum.RenderFidelity.Precise,
+		})
+		built:SetAttribute("Level2_ArchRibMeshEditorOnly", true)
+		return built
+	end)
+	if not ok or not result then
+		archRibMeshFailed[key] = true
+		if not archRibMeshMissing[key] then
+			archRibMeshMissing[key] = true
+			warn(string.format("[Level 2] arch rib mesh %s unavailable (%s); those ribs stay Parts", key, tostring(result)))
+		end
+		return nil
+	end
+	dressArchRibTemplate(result, key)
+	result.Parent = ServerStorage
+	archRibMeshTemplates[key] = result
+	return result
+end
+
 local function makeArchSpan(parent, center, acrossZ, index, radius, floorDepth, styleHall, options)
 	options = options or {}
 	local verticalScale = options.VerticalScale or 1
@@ -1555,6 +1788,51 @@ local function makeArchSpan(parent, center, acrossZ, index, radius, floorDepth, 
 	local radialDepth = options.RadialDepth or 2.2
 	local segmentOverlap = options.SegmentOverlap or .9
 	local arcCenter = center + Vector3.new(0, 1, 0)
+	-- ARCH_MESH_PILOT_20260922: one MeshPart for the whole rib where the family
+	-- opted in, the switch is on and a template exists. Colliding, like the
+	-- Parts it replaces (PreciseConvexDecomposition on a thin band).
+	if options.MeshRib == true and not styleHall and options.CanCollide ~= false and archMeshEnabled() then
+		local template = archRibMeshTemplate(radius, verticalScale, floorDepth, axialDepth, radialDepth, steps)
+		if template then
+			local rib = template:Clone()
+			rib.Name = "Level 2 Arch Rib " .. index
+			-- Mesh X is "across": identity when the ring spans X; a quarter turn
+			-- about Y when it spans Z (the arch is symmetric, so the sign is free).
+			rib.CFrame = acrossZ and CFrame.new(arcCenter) * CFrame.Angles(0, math.pi / 2, 0) or CFrame.new(arcCenter)
+			-- The MESH is the look, not the collision. Its bounding box spans the
+			-- whole opening, and the Pool Foam / Pool Slide navigators clear a
+			-- body volume with GetPartBoundsInBox (RespectCanCollide), so a
+			-- colliding mesh would read as a wall across every corridor ring --
+			-- the failing-spawn class of bug this project already paid for. The
+			-- collision the Part ribs gave where anything can reach it -- the
+			-- feet, floor to head height -- is kept EXACTLY by rebuilding those
+			-- segments invisible and untextured below; the crown 20 studs up had
+			-- only the Vault Strip shell behind it, which is unchanged.
+			rib.CanCollide = false
+			rib.CanTouch = false
+			rib:SetAttribute("Level2_ArchRibMesh", true)
+			rib.Parent = parent
+			local footSegments = math.min(ARCH_MESH_FOOT_SEGMENTS, math.floor(steps / 2))
+			for step = 0, steps - 1 do
+				if step < footSegments or step >= steps - footSegments then
+					local a0 = angleFrom + (angleTo - angleFrom) * step / steps
+					local a1 = angleFrom + (angleTo - angleFrom) * (step + 1) / steps
+					local from = arcCenter + archOffset(acrossZ, radius, verticalScale, a0)
+					local to = arcCenter + archOffset(acrossZ, radius, verticalScale, a1)
+					local mid = (from + to) * .5
+					local offset = mid - arcCenter
+					local normal = Vector3.new(offset.X, offset.Y / (verticalScale * verticalScale), offset.Z)
+					local up = normal.Magnitude > .01 and normal.Unit or Vector3.yAxis
+					local foot = part(parent, "Level 2 Arch Rib Foot " .. index, CFrame.lookAt(mid, to, up),
+						Vector3.new(axialDepth, radialDepth, (to - from).Magnitude + segmentOverlap), C.TileWarm,
+						Enum.Material.SmoothPlastic, 1)
+					foot.CastShadow = false
+					foot:SetAttribute("Level2_ArchRibFoot", true)
+				end
+			end
+			return
+		end
+	end
 	local function pointAt(a)
 		return arcCenter + archOffset(acrossZ, radius, verticalScale, a)
 	end
@@ -4518,9 +4796,19 @@ local function makeCorridor(parent, layout, corridor, doorFolder)
 	local wallHalf = Configuration.WallThickness * .5
 	local shellLength = gapLength + 2 * (wallHalf - .12)
 	for _, side in ipairs({-1, 1}) do
+		-- Only the tunnel-facing side is ever seen. The shell's two ends stop
+		-- .12 INSIDE the hall's own wall (and the 34-wide shell sits outside
+		-- the 30-wide doorway, so they butt into solid wall, never a reveal);
+		-- its top is coplanar with the ceiling slab's own untextured top face;
+		-- its bottom is three studs under the corridor floor slab, pointing
+		-- down; and its outward side faces the void between the halls.
+		local insideFace = alongX
+			and (side < 0 and Enum.NormalId.Back or Enum.NormalId.Front)
+			or (side < 0 and Enum.NormalId.Right or Enum.NormalId.Left)
 		local wall = corridorSkin("Level 2 Corridor Wall",
 			CFrame.new(center + oriented(0, side * width * .5) + Vector3.new(0, (wallTop + wallBottom) * .5, 0)),
-			orientedSize(shellLength, wallTop - wallBottom, Configuration.WallThickness), C.TileCool, nil, 7)
+			orientedSize(shellLength, wallTop - wallBottom, Configuration.WallThickness), C.TileCool,
+			visibleFaces({insideFace}), 7)
 		wall.CanCollide = true
 	end
 	local ceiling = corridorSkin("Level 2 Corridor Ceiling",
@@ -4542,6 +4830,7 @@ local function makeCorridor(parent, layout, corridor, doorFolder)
 		local ribOptions = {
 			VerticalScale = vaultScale,
 			Faces = not kidsStyleHall and {Enum.NormalId.Left, Enum.NormalId.Right, Enum.NormalId.Bottom} or nil,
+			MeshRib = true, -- ARCH_MESH_PILOT_20260922: the one family in the pilot
 		}
 		makeArchSpan(parent, center + oriented(from - mid + (to - from) * t, 0),
 			alongX, corridor.Index .. "." .. ring, archRadius, depth, kidsStyleHall, ribOptions)
@@ -5779,8 +6068,18 @@ function WorldBuilder.Build(layout, generation)
 					local position = acrossZ
 						and Vector3.new(hall.MinX + along * t, 0, hall.Center.Z)
 						or Vector3.new(hall.Center.X, 0, hall.MinZ + along * t)
-					makeArchSpan(hallModel, position, acrossZ, hall.Index .. "." .. ring, radius, depth or 0, nil,
-						{VerticalScale = Configuration.CorridorVaultVerticalScale or 1})
+					-- A free-standing ring standing in a room, not a rib buried in
+					-- a tunnel vault: both axial faces and BOTH radial sides
+					-- (soffit and extrados) are on show. Only the two segment
+					-- ends are hidden, .45 inside the neighbouring rib by
+					-- makeArchSpan's SegmentOverlap.
+					makeArchSpan(hallModel, position, acrossZ, hall.Index .. "." .. ring, radius, depth or 0, nil, {
+						VerticalScale = Configuration.CorridorVaultVerticalScale or 1,
+						Faces = visibleFaces({
+							Enum.NormalId.Left, Enum.NormalId.Right,
+							Enum.NormalId.Top, Enum.NormalId.Bottom,
+						}),
+					})
 				end
 			elseif archetype == "Pump Station" then
 				decoratePumpHall(hallModel, hall, hall.Index, doorsByHall[hall.Index])
@@ -5931,6 +6230,21 @@ function WorldBuilder.Build(layout, generation)
 		end
 		if corridorBuildIndex % 2 == 0 then task.wait() end
 	end
+	-- ARCH_MESH_PILOT_20260922 readbacks: whether the switch was on for this
+	-- build, how many ribs came out as MeshParts, and which family keys wanted a
+	-- mesh and fell back to Parts (comma-separated; empty when none did).
+	do
+		local keys = {}
+		for key in pairs(archRibMeshMissing) do table.insert(keys, key) end
+		table.sort(keys)
+		local meshRibs = 0
+		for _, descendant in ipairs(corridorsFolder:GetDescendants()) do
+			if descendant:GetAttribute("Level2_ArchRibMesh") == true then meshRibs += 1 end
+		end
+		world:SetAttribute("Level2_ArchRibMeshEnabled", archMeshEnabled())
+		world:SetAttribute("Level2_ArchRibMeshRibs", meshRibs)
+		world:SetAttribute("Level2_ArchRibMeshMissingKeys", table.concat(keys, ","))
+	end
 	task.wait()
 
 	local pumps = {}
@@ -6039,6 +6353,48 @@ function WorldBuilder.Build(layout, generation)
 		TerrainSize = terrainSize,
 		Generation = generation,
 	}
+end
+
+-- ARCH_MESH_PILOT_20260922 -- operator surface.
+-- Which rib families a build wanted a mesh for and did not get (Parts were used).
+function WorldBuilder.ArchRibMeshMissingKeys()
+	local keys = {}
+	for key in pairs(archRibMeshMissing) do table.insert(keys, key) end
+	table.sort(keys)
+	return keys
+end
+
+-- Build (or adopt) the ServerStorage templates for a list of family keys, or
+-- for every key a previous build reported missing. Meant for the Edit-mode
+-- command bar, where EditableMesh is always available; the templates carry
+-- into the next play session and are adopted there (step 1 of the loader).
+function WorldBuilder.EnsureArchRibMeshTemplates(keys)
+	keys = keys or WorldBuilder.ArchRibMeshMissingKeys()
+	-- Editor-only templates: the command bar asks for them on purpose.
+	workspace:SetAttribute("Level2ArchMeshRibsAllowEditable", true)
+	local built = {}
+	for _, key in ipairs(keys) do
+		local radius, verticalScale, floorDepth, axialDepth, radialDepth, steps = string.match(key,
+			"^r([%d%.]+)_vs([%d%.]+)_fd([%d%.]+)_a([%d%.]+)_d([%d%.]+)_s(%d+)$")
+		if radius then
+			archRibMeshFailed[key] = nil
+			local template = archRibMeshTemplate(tonumber(radius), tonumber(verticalScale), tonumber(floorDepth),
+				tonumber(axialDepth), tonumber(radialDepth), tonumber(steps))
+			built[key] = template ~= nil
+			if template then archRibMeshMissing[key] = nil end
+		end
+	end
+	return built
+end
+
+-- The family key the standard corridor rib of a given corridor width and
+-- channel depth resolves to, so an operator can build templates ahead of a
+-- round (the same arithmetic as makeCorridor and makeArchSpan).
+function WorldBuilder.ArchRibMeshKeyFor(corridorWidth, floorDepth)
+	local radius = math.max(6, math.min(corridorWidth * .5 - 3, Configuration.DoorWidth * .5 - 1.8))
+	local verticalScale = Configuration.CorridorVaultVerticalScale or 1
+	local steps = math.max(14, math.ceil(radius * 1.9))
+	return archRibMeshKey(radius, verticalScale, floorDepth or 0, 3.2, 2.2, steps)
 end
 
 return WorldBuilder

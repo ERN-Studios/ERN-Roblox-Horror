@@ -1,0 +1,226 @@
+{
+  "date": "2026-09-23",
+  "place_id": "131311258779917",
+  "universe_id": "10559217407",
+  "published_version": 2005,
+  "runtime_enabled": false,
+  "code_changed": false,
+  "upload_method": "AssetService:CreateAssetAsync(EditableMesh, Enum.AssetType.Mesh, group metadata)",
+  "geometry_source": "Existing Claude WorldBuilder.EnsureArchRibMeshTemplates; 108 vertices and 212 triangles per family",
+  "upload_results": [
+    {
+      "asset_id": "121489049526127",
+      "result": "Enum.CreateAssetResult.Success"
+    },
+    {
+      "asset_id": "105818906248010",
+      "result": "Enum.CreateAssetResult.Success"
+    }
+  ],
+  "owner_readback": [
+    {
+      "id": 121489049526127,
+      "creator": {
+        "Name": "ERN Roblox Studios",
+        "CreatorTargetId": 1039373905,
+        "Id": 11390480795,
+        "HasVerifiedBadge": false,
+        "CreatorType": "Group"
+      },
+      "name": "Level 2 Arch Rib fd1.50",
+      "assetTypeId": 4
+    },
+    {
+      "id": 105818906248010,
+      "creator": {
+        "Name": "ERN Roblox Studios",
+        "CreatorTargetId": 1039373905,
+        "Id": 11390480795,
+        "HasVerifiedBadge": false,
+        "CreatorType": "Group"
+      },
+      "name": "Level 2 Arch Rib fd1.80",
+      "assetTypeId": 4
+    }
+  ],
+  "templates": [
+    {
+      "path": "ServerStorage.Level 2 Arch Rib Mesh r13.20_vs1.90_fd1.50_a3.20_d2.20_s26",
+      "canQuery": true,
+      "color": [
+        0.9725490212440491,
+        0.9490196108818054,
+        0.8549019694328308
+      ],
+      "class": "MeshPart",
+      "key": "r13.20_vs1.90_fd1.50_a3.20_d2.20_s26",
+      "meshSize": [
+        28.596607208251953,
+        29.96609115600586,
+        3.200000047683716
+      ],
+      "cframe": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "size": [
+        28.596607208251953,
+        29.96609115600586,
+        3.200000047683716
+      ],
+      "canCollide": false,
+      "meshId": "rbxassetid://121489049526127",
+      "canTouch": false,
+      "textureId": "rbxassetid://113211706146395",
+      "attributes": {
+        "CodexUploadedAssetId": "121489049526127",
+        "Level2_ArchRibMeshKey": "r13.20_vs1.90_fd1.50_a3.20_d2.20_s26"
+      },
+      "renderFidelity": "Precise",
+      "doubleSided": true,
+      "collisionFidelity": "PreciseConvexDecomposition",
+      "anchored": true,
+      "material": "SmoothPlastic"
+    },
+    {
+      "path": "ServerStorage.Level 2 Arch Rib Mesh r13.20_vs1.90_fd1.80_a3.20_d2.20_s26",
+      "canQuery": true,
+      "color": [
+        0.9725490212440491,
+        0.9490196108818054,
+        0.8549019694328308
+      ],
+      "class": "MeshPart",
+      "key": "r13.20_vs1.90_fd1.80_a3.20_d2.20_s26",
+      "meshSize": [
+        28.590139389038086,
+        30.273197174072266,
+        3.200000047683716
+      ],
+      "cframe": [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "size": [
+        28.590139389038086,
+        30.273197174072266,
+        3.200000047683716
+      ],
+      "canCollide": false,
+      "meshId": "rbxassetid://105818906248010",
+      "canTouch": false,
+      "textureId": "rbxassetid://113211706146395",
+      "attributes": {
+        "CodexUploadedAssetId": "105818906248010",
+        "Level2_ArchRibMeshKey": "r13.20_vs1.90_fd1.80_a3.20_d2.20_s26"
+      },
+      "renderFidelity": "Precise",
+      "doubleSided": true,
+      "collisionFidelity": "PreciseConvexDecomposition",
+      "anchored": true,
+      "material": "SmoothPlastic"
+    }
+  ],
+  "source_objs": [
+    {
+      "path": "artifacts/claude-20260922/level2-arch-mesh/arch_rib_r13.20_vs1.90_fd1.50_a3.20_d2.20_s26.obj",
+      "sha256": "b675ed2077da77fda9ee879389d5437059cd1a9616ed47cc415526765627d37b"
+    },
+    {
+      "path": "artifacts/claude-20260922/level2-arch-mesh/arch_rib_r13.20_vs1.90_fd1.80_a3.20_d2.20_s26.obj",
+      "sha256": "e7e52479fa2b6aa9c607f0f5c1a17b7ea48666dac7c69a0de369084e5d19d71c"
+    }
+  ],
+  "comparison": {
+    "requested_seed": 1182081016,
+    "resolved_seed": 1182604661,
+    "round_state": "generator only, enemies paused, not an active GameManager round",
+    "camera_position": [
+      -570.55023,
+      6,
+      -289.50378
+    ],
+    "camera_look_at": [
+      -570.55023,
+      12,
+      -305.50378
+    ],
+    "field_of_view": 100,
+    "parts": {
+      "descendants": 71771,
+      "textures": 42051,
+      "parts": 25164,
+      "mesh_parts": 2355
+    },
+    "assets": {
+      "descendants": 56001,
+      "textures": 29103,
+      "parts": 22176,
+      "mesh_parts": 2521
+    },
+    "asset_collision_probe": {
+      "rays": [
+        {
+          "y": 0,
+          "distance": 12.08746337890625,
+          "name": "Level 2 Arch Rib Foot 1.1"
+        },
+        {
+          "y": 6,
+          "distance": 11.70562744140625,
+          "name": "Level 2 Arch Rib Foot 1.1"
+        },
+        {
+          "y": 9,
+          "distance": 11.1934814453125,
+          "name": "Level 2 Arch Rib Foot 1.1"
+        },
+        {
+          "y": 11,
+          "distance": 11.98260498046875,
+          "name": "Level 2 Vault Strip 1"
+        },
+        {
+          "y": 14,
+          "distance": 11.13275146484375,
+          "name": "Level 2 Vault Strip 1"
+        }
+      ],
+      "descendants": 56001,
+      "bodyBoxCollisions": 0,
+      "families": {
+        "rbxassetid://105818906248010": 9,
+        "rbxassetid://121489049526127": 157
+      },
+      "feetPerRib": 8
+    },
+    "unverified": [
+      "active hunt and all-living-player safe spawn distance",
+      "distinct second-pump spawn and third-pump same-entity escalation",
+      "navigation/retry/reset during active round",
+      "CPU and memory under active round",
+      "multiplayer",
+      "physical mobile hardware"
+    ]
+  }
+}

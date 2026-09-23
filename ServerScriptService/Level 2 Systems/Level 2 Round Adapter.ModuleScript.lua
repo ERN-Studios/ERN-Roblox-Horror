@@ -352,9 +352,12 @@ function Adapter.Build()
 	local success, result = xpcall(function()
 		-- Only an unpinned round may fall back to another random stride; a pinned
 		-- seed keeps its deterministic recovery so a failure stays reproducible.
+		local layoutBegan = os.clock()
 		local layout = LayoutGenerator.Generate(requestedSeed, {
 			AllowRandomRecovery = pinnedSeed == nil,
 		})
+		-- Load-time readbacks (Trello Zpj0Gkbb): which half of "generating" costs what.
+		state:SetAttribute("Level2_LayoutSeconds", math.round((os.clock() - layoutBegan) * 100) / 100)
 		state:SetAttribute("Level2_RandomRecoverySeed", layout.RandomRecoverySeed)
 		state:SetAttribute("Level2_ResolvedSeed", layout.Seed)
 		state:SetAttribute("Level2_GenerationAttempt", layout.Attempt)
@@ -363,8 +366,13 @@ function Adapter.Build()
 
 		state:SetAttribute("Level2_Phase", "BUILDING_WORLD")
 		workspace:SetAttribute("LoadStage", "LEVEL_2_BUILDING_WORLD")
+		local buildBegan = os.clock()
 		local manifest = WorldBuilder.Build(layout, generation)
 		activeManifest = manifest
+		state:SetAttribute("Level2_BuildSeconds", math.round((os.clock() - buildBegan) * 100) / 100)
+		-- A readback must never be able to fail a build.
+		local counted, descendants = pcall(function() return #manifest.World:GetDescendants() end)
+		state:SetAttribute("Level2_WorldDescendants", counted and descendants or nil)
 
 		-- Move everyone out of the lobby BEFORE parking it, or the floor
 		-- vanishes from under them and they fall into the void. The arrival

@@ -12,6 +12,11 @@ local PhysicsService = game:GetService("PhysicsService")
 local Lighting = game:GetService("Lighting")
 local MemoryStoreService = game:GetService("MemoryStoreService")
 local DevAccess = require(RS:WaitForChild("DevAccess"))
+-- DEATH_CAUSE_20260921. The kill sites mark the player; this file reads the mark
+-- in hum.Died and appends the key to the "death"/"partydown" payloads the
+-- clients already receive. Never invents a cause: an unmarked or stale death is
+-- DeathAdvice.Unknown and the card says so.
+local DeathAdvice = require(RS:WaitForChild("DeathAdvice"))
 local PlayerProtection = require(script.Parent:WaitForChild("PlayerProtection"))
 local ReentryPlacement = require(script.Parent:WaitForChild("ReentryPlacement"))
 
@@ -29,6 +34,11 @@ local Loading = require(script.Parent:WaitForChild("Round Loading Runtime"))
 -- runs its first pass in the background, so it never delays boot.
 local FriendBoost = require(script.Parent:WaitForChild("FriendBoost"))
 FriendBoost.Start()
+-- ANALYTICS_20260921. Measurement only: every entry point is a pcall boundary
+-- inside the module and none of them yield, so no call here can affect a round.
+-- Install ZyntraAnalytics in Studio before pushing GameManager to a place
+-- that lacks it -- this WaitForChild has no timeout, exactly like FriendBoost's.
+local Analytics = require(script.Parent:WaitForChild("ZyntraAnalytics"))
 local activeEntry, loadingRuntime, recoverFailedEntry, cleanupActiveWorld
 local failedReservedEntry = false
 local characterLoadOwner = {}
@@ -128,7 +138,32 @@ end
 local LEVEL_GENERATORS = {
  [2] = "Level2Generator",
  [3] = "Level3Generator",
+ -- LEVEL4_DEV_GATE_20260921: listed so Cleanup and the persisted-state
+ -- recovery can reach it. It is still unreachable for a normal player --
+ -- devCeiling() below is the only thing that lets a level above
+ -- Routing.MaxLevel through, and the adapter refuses to build without the
+ -- workspace flag as well.
+ [4] = "Level4Generator",
 }
+
+-- LEVEL4_DEV_GATE_20260921
+-- Level 4 is a development build with developer-only lobby stations. A party may only route to
+-- it when the place carries the flag AND EVERY member is on the DevAccess
+-- whitelist, so a normal player cannot be carried into it by a developer.
+-- Level 4 lobby access is enabled for the shared developer whitelist.
+-- An explicit false remains an emergency off switch.
+if workspace:GetAttribute(Routing.Level4DevAttribute) == nil then
+ workspace:SetAttribute(Routing.Level4DevAttribute, true)
+end
+
+local function devCeiling(group)
+ if workspace:GetAttribute(Routing.Level4DevAttribute) ~= true then return Routing.MaxLevel end
+ if type(group) ~= "table" or #group == 0 then return Routing.MaxLevel end
+ for _, player in ipairs(group) do
+  if not DevAccess.IsAllowed(player) then return Routing.MaxLevel end
+ end
+ return Routing.DevCeiling(true, true)
+end
 
 -- Always-on server authority for every developer command. Unlike the Level 1
 -- entity script, GameManager remains active in both levels.
@@ -565,6 +600,15 @@ local function sanitizePersistedLevelState()
   or ServerStorage:FindFirstChild("Level 3 Stored Level 1 Entity") ~= nil
   or selected == 3 then
   stale[#stale + 1] = 3
+ end
+ -- LEVEL4_DEV_GATE_20260921: a dev round saved into the place from Edit mode
+ -- has to be recoverable the same way, or the next boot builds the lobby on
+ -- top of a suburb with the Level 1 entity still parked in ServerStorage.
+ if workspace:FindFirstChild("Level 4 Generated World") ~= nil
+  or ServerStorage:FindFirstChild("Level 4 Stored Server Lobby") ~= nil
+  or ServerStorage:FindFirstChild("Level 4 Stored Level 1 Entity") ~= nil
+  or selected == 4 then
+  stale[#stale + 1] = 4
  end
  if #stale == 0 then return end
 
@@ -1016,6 +1060,7 @@ local function onCharacter(player, char)
 end
 
 local function setupPlayer(player)
+ Analytics.Join(player)
  inRound[player] = nil
  player:SetAttribute("InRound", false)
  player:SetAttribute("Escaped", nil)
@@ -1034,6 +1079,9 @@ local function setupPlayer(player)
   and type(packet.LoadingError) == "string" then
   player:SetAttribute("RoundLoadingError", packet.LoadingError == "LOADING_TIMEOUT" and "timeout" or "failed")
  end
+ -- RETRY_GUIDE_REMOVED_20260922 (owner instruction): a non-escaped return no
+ -- longer draws a TRY AGAIN guide, so a RetryLevel in an old lobby packet is
+ -- read by nobody -- neither here nor as a player attribute.
  player.CharacterAdded:Connect(function(char) onCharacter(player, char) end)
  task.defer(function()
   if not player.Parent then return end
@@ -1075,6 +1123,8 @@ local function queueRadius(station)
 end
 
 local function playerInsideZone(player, station, includeBusy)
+ if station.level == 4 and (not DevAccess.IsAllowed(player)
+  or workspace:GetAttribute(Routing.Level4DevAttribute) ~= true) then return false end
  if inRound[player] or (station.busy and not includeBusy) then return false end
  local char = player.Character
  local hum = char and char:FindFirstChildOfClass("Humanoid")
@@ -1300,7 +1350,7 @@ local handlePostWinContinueRequest
 local handleLeaveRoundRequest
 status.OnServerEvent:Connect(function(player, message, requestSerial)
   if message == "entryready" and activeEntry then
-   activeEntry:Acknowledge(player, requestSerial)
+   if activeEntry:Acknowledge(player, requestSerial) then Analytics.Ready(player, activeLevel) end
  elseif message == "returntolobby" and handlePostWinReturnRequest then
   handlePostWinReturnRequest(player, requestSerial)
  elseif message == "continuenow" and handlePostWinContinueRequest then
@@ -1324,6 +1374,7 @@ status.OnServerEvent:Connect(function(player, message, requestSerial)
  end
 end)
 Players.PlayerRemoving:Connect(function(player)
+ Analytics.Leave(player)
  if spectateTargets[player] then spectateTargets[player] = nil; republishSpectatorCounts() end
  pendingExplicitPlacement[player] = nil
  pendingSlideRelease[player] = nil
@@ -1416,7 +1467,10 @@ end
 
 local function ensureWorld(group, requestedLevel, attempt)
  if attempt and not attempt:IsOpen() then return false end
- local level = Routing.ClampLevel(requestedLevel)
+ -- LEVEL4_DEV_GATE_20260921: ClampLevelTo with the dev ceiling. For every
+ -- normal party devCeiling() returns Routing.MaxLevel, so this is exactly the
+ -- old Routing.ClampLevel(requestedLevel).
+ local level = Routing.ClampLevelTo(requestedLevel, devCeiling(group))
  if worldReady and activeLevel == level then return true end
  activeLevel = level
  workspace:SetAttribute("SelectedLevel", level)
@@ -1426,6 +1480,7 @@ local function ensureWorld(group, requestedLevel, attempt)
   local levelStages = {
    [2] = "ENTERING_DRY_POOLROOMS",
    [3] = "ENTERING_FORGOTTEN_MALL",
+   [4] = "ENTERING_QUIET_SUBURBS",
   }
   workspace:SetAttribute("LoadStage", levelStages[level] or "GENERATING_WORLD")
   local ok, err = pcall(function()
@@ -1832,6 +1887,7 @@ local function teleportPlayersToNextLevel(group, plan)
 		AccessCode = plan.AccessCode,
 		ReserveServer = not (type(plan.AccessCode) == "string" and plan.AccessCode ~= ""),
 		Data = Routing.ArrivalPacket({
+			Ceiling = devCeiling(live),
 			Level = plan.NextLevel,
 			-- LEVEL2_EXIT_TRANSITION_20260828: the whole continuing party left
 			-- Level 2 down the exit flume (the win condition requires every
@@ -2226,7 +2282,11 @@ end)
 
 local function runPostWinIntermission(participants, elapsed, escapedCount, entryMode)
 	postWinSerial += 1
-	local nextLevel = Routing.NextLevel(activeLevel)
+	-- LEVEL4_DEV_GATE_20260921: for a normal party devCeiling() returns
+	-- Routing.MaxLevel and this is exactly Routing.NextLevel(activeLevel), so
+	-- Level 3 still offers no Continue. A dev party carrying the flag is
+	-- offered Level 3 -> Level 4.
+	local nextLevel = Routing.NextLevelTo(activeLevel, devCeiling(participants))
 	local deadline = workspace:GetServerTimeNow() + Routing.PostWinSeconds
 	local roster = Routing.NewRoster((function()
 		local members = {}
@@ -2366,6 +2426,10 @@ playRound = function(participants)
  -- window opens and cleared the moment anyone is alive again -- or the round is
  -- torn down under it, so no client is left holding a card for a dead round.
  local lastDeathName = nil
+ -- DEATH_CAUSE_20260921: whoever fell last also names the CAUSE on that card.
+ -- Cleared with the name, for the same reason -- a party emptied by a leave must
+ -- not inherit the explanation of a death minutes old.
+ local lastDeathCause = DeathAdvice.Unknown
  local partyDownOpen = false
  local function clearPartyDown()
   if not partyDownOpen then return end
@@ -2379,6 +2443,10 @@ playRound = function(participants)
 		handleLeaveRoundRequest = nil
 		clearSpectatorCounts()
 		clearPartyDown()
+		-- A mark the round never consumed dies with the round. Otherwise a kill
+		-- site that fired without a Died (a refused health write, a protected
+		-- character) would still be sitting on the player next round.
+		for _, member in ipairs(participants) do DeathAdvice.Clear(member) end
 		table.clear(transitionRespawnToken)
 		table.clear(deathFrames)
 		table.clear(safeFrames)
@@ -2396,8 +2464,12 @@ playRound = function(participants)
     local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
     if root then deathFrames[player] = root.CFrame end
     lastDeathName = player.Name -- whoever fell last names the PARTY DOWN card
-    fireGroup(participants, "death", player.Name, root and root.Position or nil)
+    -- Read and consume the kill site's mark. APPENDED to the payload, never
+    -- reordered: every older client still reads name and position where it did.
+    lastDeathCause = DeathAdvice.Take(player)
+    fireGroup(participants, "death", player.Name, root and root.Position or nil, lastDeathCause)
 		if scheduleTransitionRespawn then scheduleTransitionRespawn(player) end
+    Analytics.Death(player, activeLevel, lastDeathCause)
    end
   end)
  end
@@ -2572,6 +2644,7 @@ playRound = function(participants)
   if not allowed() or player.Character ~= char or hum.Parent ~= char or hum.Health <= 0 then return false, "UNAVAILABLE" end
   alive[player] = true
   aliveCount += 1
+  DeathAdvice.Clear(player) -- a revived player carries no explanation forward
   hookLife(player, hum)
   fireGroup(participants, "reentry", player.Name)
   FriendBoost.PrimeRoster(participants) -- retries any pair whose lookup failed at launch
@@ -2625,11 +2698,12 @@ playRound = function(participants)
   leaving[player] = true
   participantSet[player] = nil
   transitionRespawnToken[player] = nil
-  if alive[player] then alive[player] = nil; aliveCount -= 1; lastDeathName = nil end
+  if alive[player] then alive[player] = nil; aliveCount -= 1; lastDeathName = nil; lastDeathCause = DeathAdvice.Unknown end
   local index = table.find(participants, player)
   if index then table.remove(participants, index) end
   if spectateTargets[player] then spectateTargets[player] = nil; republishSpectatorCounts() end
   status:FireClient(player, "leaveack")
+  Analytics.Outcome(player, activeLevel, "left")
   print("[GameManager]", player.Name, "returned to the lobby mid-round")
   task.spawn(function()
    if IS_RESERVED_ROUND_SERVER and not IS_STUDIO then
@@ -2647,7 +2721,7 @@ playRound = function(participants)
   -- the remembered name would be stale -- the PARTY DOWN card would name someone
   -- who fell minutes earlier and has been spectating since. Clearing it makes
   -- the client fall back to its nameless, party-wide caption.
-  if alive[player] then alive[player] = nil; aliveCount -= 1; lastDeathName = nil end
+  if alive[player] then alive[player] = nil; aliveCount -= 1; lastDeathName = nil; lastDeathCause = DeathAdvice.Unknown end
  end)
 
  -- The party was wiped before the round proper began. This is the Loss endpoint
@@ -2696,16 +2770,19 @@ playRound = function(participants)
 		RunService.Heartbeat:Wait()
 		releaseSlideResume(participants)
 		fireGroup(participants, "level3access")
- elseif activeLevel == 3 then
-  -- A short service-elevator descent establishes the mall without replaying
-  -- Level 1's fuse briefing. Level 3 owns its own objective presentation.
+ elseif activeLevel == 3 or activeLevel == 4 then
+  -- A short service descent establishes the level without replaying Level 1's
+  -- fuse briefing. Level 3 owns its own objective presentation; LEVEL4_DEV_GATE
+  -- _20260921 reuses the same descent through Level 4's service passage.
   for t = 7, 1, -1 do
    if aliveCount <= 0 then sendWipedPartyHome(); return end
    fireGroup(participants, "elevator", t)
    task.wait(1)
   end
   elevatorApi.open()
-  fireGroup(participants, "level3access")
+  -- level3access is Level 3's own cue and must not be sent for another level.
+  -- The "elevator" ticks above already released the client's loading cover.
+  if activeLevel == 3 then fireGroup(participants, "level3access") end
  else
   -- The party roster is frozen, so the circuit count is already known. Publish
   -- it NOW so the cabin's maintenance poster lists every cable (count + colour)
@@ -2723,6 +2800,7 @@ playRound = function(participants)
   workspace:SetAttribute("PostWinIntermissionActive", false)
   workspace:SetAttribute("RoundActive", true)
  local roundStartedAt = os.clock()
+ for _, member in ipairs(participants) do Analytics.RoundStart(member, activeLevel) end
  fireGroup(participants, "start")
 
  local result
@@ -2736,7 +2814,7 @@ playRound = function(participants)
    if not wipeDeadline then
     wipeDeadline = os.clock() + 15
     partyDownOpen = true
-    fireGroup(participants, "partydown", 15, lastDeathName)
+    fireGroup(participants, "partydown", 15, lastDeathName, lastDeathCause)
    end
    if os.clock() >= wipeDeadline then
     -- The client treats "lose" as its own clear, so the card needs no
@@ -2780,6 +2858,7 @@ playRound = function(participants)
  local elapsed = math.max(0, os.clock() - roundStartedAt)
  local escapedCount = 0
  for _, participant in ipairs(participants) do
+  Analytics.Outcome(participant, activeLevel, nil)
   if participant.Parent and participant:GetAttribute("Escaped") == true then
    escapedCount += 1
    if result == "win" then
@@ -2892,10 +2971,53 @@ playRound = function(participants)
  task.wait(1.6)
 end
 
+-- LEVEL4_DEV_GATE_20260921 --------------------------------------------------
+-- Level 4 now has developer-only lobby stations behind its sealed gate.
+-- This server-only hook is retained for direct Studio playtests,
+-- and it is shaped like the existing
+-- playtest hooks (ServerStorage.ZyntraReentry,
+-- ServerStorage.Level3DevSkipToPreBlackout): a server-side BindableFunction
+-- with no remote in front of it, so no client can reach it at all.
+--
+--   workspace:SetAttribute("Level4DevEnabled", true)
+--   game:GetService("ServerStorage").Level4DevStart:Invoke()
+--
+-- It refuses unless EVERY player present passes DevAccess, so a normal player
+-- in the same Studio session cannot be carried into an unfinished level.
+local level4DevStart = ServerStorage:FindFirstChild("Level4DevStart")
+if not level4DevStart then
+ level4DevStart = Instance.new("BindableFunction")
+ level4DevStart.Name = "Level4DevStart"
+ level4DevStart.Parent = ServerStorage
+end
+level4DevStart.OnInvoke = function()
+ if IS_RESERVED_ROUND_SERVER then return false, "RESERVED_SERVER" end
+ if workspace:GetAttribute(Routing.Level4DevAttribute) ~= true then return false, "DISABLED" end
+ if roundBusy then return false, "BUSY" end
+ local group = {}
+ for _, player in ipairs(Players:GetPlayers()) do
+  if not DevAccess.IsAllowed(player) then return false, "NOT_DEVELOPER" end
+  group[#group + 1] = player
+ end
+ if #group == 0 then return false, "NO_PLAYERS" end
+ roundBusy = true
+ task.spawn(function()
+  local attempt = beginGroupLoading(group)
+  clearGlowsticks()
+  assignGlowstickSlots(group)
+  roundEntryMode = nil
+  if prepareGroupLoading(attempt, group, 4, false) then playRound(group) end
+  if not activeEntry or activeEntry.State ~= "failed" then roundBusy = false end
+ end)
+ return true
+end
+-- END LEVEL4_DEV_GATE_20260921 -----------------------------------------------
+
 -- Launch one station. Published servers teleport the selected group into a fresh
 -- reserved server. Studio cannot test TeleportService, so it runs the same party
 -- locally as a practical editor-only fallback.
 local function launchStation(station, participants)
+ if station.level == 4 and devCeiling(participants) ~= 4 then return end
  station.busy = true
  setStationDisplay(station, "STARTING PRIVATE WORLD", #participants .. "/" .. (station.maxPlayers or MAX_PLAYERS_PER_STATION) .. " PLAYERS", station.color)
  fireGroup(participants, "loadinggame", station.level or 1)
@@ -2936,6 +3058,7 @@ local function launchStation(station, participants)
  local launchToken = game.JobId .. ":station" .. station.index
   .. ":" .. math.floor(os.clock() * 1000)
  local packet = Routing.ArrivalPacket({
+  Ceiling = devCeiling(participants),
   Level = station.level or 1,
   SessionId = launchToken,
   Expected = #participants,
@@ -2954,6 +3077,7 @@ local function launchStation(station, participants)
   fireGroup(participants, "lobbycancel")
   task.wait(2.5)
  else
+  for _, member in ipairs(participants) do Analytics.Launch(member, station.level or 1) end
   task.wait(7)
  end
  station.busy = false
@@ -3425,7 +3549,6 @@ if IS_RESERVED_ROUND_SERVER then
   local decision, group = stageArrivingParty(attempt)
   if decision ~= "admit" or not group then attempt:Fail("ARRIVAL_LOAD_FAILED"); return end
 
-  local selectedLevel = Routing.ClampLevel(group.Level)
   local participants = {}
   for _, player in ipairs(group.Members) do
    if player.Parent == Players then participants[#participants + 1] = player end
@@ -3433,6 +3556,10 @@ if IS_RESERVED_ROUND_SERVER then
   table.sort(participants, function(a, b) return a.UserId < b.UserId end)
   while #participants > MAX_PLAYERS_PER_STATION do table.remove(participants) end
   if #participants == 0 then attempt:Fail("PARTY_LEFT"); return end
+  -- LEVEL4_DEV_GATE_20260921: clamped AFTER the roster is known, because the
+  -- dev ceiling requires every arriving member to pass DevAccess. For a normal
+  -- party this is exactly the old Routing.ClampLevel(group.Level).
+  local selectedLevel = Routing.ClampLevelTo(group.Level, devCeiling(participants))
 
   local glowstickSlots = nil
   for _, entry in ipairs(arrivalEntries()) do

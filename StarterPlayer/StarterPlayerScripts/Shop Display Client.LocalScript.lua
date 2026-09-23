@@ -35,6 +35,39 @@ local FOCUS_ATTRIBUTE = "ZyntraShopFocus"
 local BUY_EVENT_NAME = "ZyntraShopBuy"
 local TOUCH_TAP = 44
 
+-- ANALYTICS_20260921. The server cannot see a card open or a demo start, so
+-- the client reports those two facts and nothing else, fire-and-forget, on
+-- the existing ZyntraAction remote. The server validates the key against the
+-- catalogue and ignores everything else; a missing remote is simply silence.
+local function reportShop(key, demo)
+	local remotes = ReplicatedStorage:FindFirstChild("Remotes")
+	local action = remotes and remotes:FindFirstChild("ZyntraAction")
+	if action and action:IsA("RemoteEvent") then
+		action:FireServer("ShopView", {Key = key, Demo = demo})
+	end
+end
+
+-- ANALYTICS_20260921. The PC / phone / tablet split the ads decision needs is a
+-- client fact. It is reported once, as one of three fixed words; the server
+-- keeps it only as an analytics segment, so a client that lies mislabels
+-- nothing but its own row. ponytail: no console class -- UIDevice has none;
+-- add it there first if console ever matters.
+task.delay(4, function()
+	-- The server drops every ZyntraAction until the profile has loaded.
+	local localPlayer = game:GetService("Players").LocalPlayer
+	for _ = 1, 60 do
+		if localPlayer:GetAttribute("ZyntraProfileLoaded") == true then break end
+		task.wait(1)
+	end
+	local remotes = ReplicatedStorage:FindFirstChild("Remotes")
+	local action = remotes and remotes:FindFirstChild("ZyntraAction")
+	local ok, class = pcall(function() return UIDevice.Layout().Class end)
+	local names = {desktop = "PC", phone = "Phone", tablet = "Tablet"}
+	if action and action:IsA("RemoteEvent") and ok and names[class] then
+		action:FireServer("DeviceClass", {Class = names[class]})
+	end
+end)
+
 local COLORS = {
 	panel = Color3.fromRGB(14, 21, 24),
 	card = Color3.fromRGB(20, 29, 33),
@@ -321,8 +354,9 @@ local function applyLayout()
 	hintTag.Position = UDim2.fromOffset(face.Pad + kindWidth + 6, titleTop + titleHeight)
 	hintTag.Size = UDim2.fromOffset(math.max(40, inner - kindWidth - 6), kindHeight)
 	hintTag.TextSize = face.Kind
-	-- CLOSE is a pointer affordance; on touch the honest instruction is to walk.
-	hintTag.Text = "Step off the plate to close"
+	-- The trigger is invisible, so "the plate" names nothing a player can see;
+	-- the card closes on distance, and walking is true on every device.
+	hintTag.Text = "Walk away to close"
 
 	icon.Position = UDim2.fromOffset(face.Pad, bodyTop)
 	icon.Size = UDim2.fromOffset(bodyHeight, bodyHeight)
@@ -412,10 +446,12 @@ local function refresh()
 	end
 end
 
-local demoMount, demoConnection
+local demoMount, demoConnection, detectorDemo
 local startCosmeticDemo
 local DetectorVisual=require(ReplicatedStorage:WaitForChild("ZyntraDetectorVisual"))
 local function stopDemo()
+	if detectorDemo then detectorDemo:Destroy(); detectorDemo=nil end
+	card.Visible=true
 	if demoConnection then demoConnection:Disconnect(); demoConnection = nil end
 	if demoMount then demoMount:Destroy(); demoMount = nil end
 	icon.Visible=true
@@ -521,18 +557,14 @@ end
 local function startDetectorDemo()
  stopDemo()
  if shownKey~="EntityDetector" or player:GetAttribute("InRound")==true then return end
- local text
- demoMount,text=DetectorVisual.Build(workspace.CurrentCamera)
- local began=os.clock()
- demoConnection=RunService.RenderStepped:Connect(function()
-  local elapsed=os.clock()-began
-  if elapsed>=6 or not gui.Enabled or player:GetAttribute("InRound")==true then stopDemo() return end
-  local band=({"LOW","MEDIUM","HIGH"})[math.min(3,math.floor(elapsed/2)+1)]
-  text.Text="DEMO\n"..band text.TextColor3=DetectorVisual.Colors[band]
-  state.Text="SIMULATED DEMO: "..band.." · NOT A LIVE SCAN"
-  closeButton.Text="DEMO"
-  local camera=workspace.CurrentCamera
-  if camera then demoMount:PivotTo(camera.CFrame*CFrame.new(.8,-.4,-2.4)*CFrame.Angles(0,math.pi,0)) end
+ card.Visible=false
+ local demoCharacter=player.Character
+ detectorDemo=DetectorVisual.Demo(player:WaitForChild("PlayerGui"),function()
+  detectorDemo=nil
+  stopDemo()
+ end)
+ demoConnection=RunService.Heartbeat:Connect(function()
+  if not gui.Enabled or shownKey~="EntityDetector" or player:GetAttribute("InRound")==true or player.Character~=demoCharacter then stopDemo() end
  end)
 end
 
@@ -548,6 +580,7 @@ local function setShown(key)
 	if key then
 		refresh()
 		applyLayout()
+		reportShop(key, false)
 	end
 end
 
@@ -572,10 +605,13 @@ local function evaluate()
 end
 
 local function startShownDemo()
- if shownKey=="AdvancedEquipment" then startFocusDemo() return true end
- if shownKey=="CosmeticEquipment" then startCosmeticDemo(shownKey) return true end
- if shownKey=="EntityDetector" then startDetectorDemo() return true end
- return false
+ local key=shownKey
+ if key=="AdvancedEquipment" then startFocusDemo()
+ elseif key=="CosmeticEquipment" then startCosmeticDemo(key)
+ elseif key=="EntityDetector" then startDetectorDemo()
+ else return false end
+ reportShop(key,true)
+ return true
 end
 -- Studio-only probe invokes the same entry point as the visible demo button.
 if RunService:IsStudio() then

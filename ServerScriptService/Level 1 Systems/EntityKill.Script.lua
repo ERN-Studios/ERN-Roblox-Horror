@@ -4,6 +4,7 @@ local RS = game:GetService("ReplicatedStorage")
 local TweenService = game:GetService("TweenService")
 local HttpService = game:GetService("HttpService")
 local PlayerProtection = require(game:GetService("ServerScriptService"):WaitForChild("PlayerProtection"))
+local DeathAdvice = require(RS:WaitForChild("DeathAdvice"))
 
 local remote = RS:WaitForChild("Remotes"):WaitForChild("Jumpscare")
 local entity = workspace:WaitForChild("Entity")
@@ -190,6 +191,7 @@ local function runKill(record)
 	if PlayerProtection.IsActive(player, char) then finishCapture(record, true); return end
 	record.Fatal = true
 	remote:FireClient(player, "death", nil, nil, nil, record.Id, char)
+	DeathAdvice.Mark(player, "L1Entity")
 	hum.Health = 0
 	task.wait(math.max(0, KILL_DURATION - DEATH_AT))
 	finishCapture(record, false)

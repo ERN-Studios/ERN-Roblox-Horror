@@ -97,6 +97,17 @@ local function occupantsOf(session: any, anchor: BasePart): {Player}
 	return session.Occupants[anchor] or {}
 end
 
+-- FIRST_CD_PROMPT_20260922. A CD still lying on this table (state WORLD, the
+-- Objective Controller publishes it on the module model) owns the E prompt:
+-- HIDE stands down so TAKE is the one thing the table offers, and it comes
+-- back the moment the CD is CARRIED / DROPPED / INSERTED. The anchor carries
+-- no new attribute (it is Level3_PermanentFurniture; the audit would read
+-- one as tampering), so the link is kept in the session.
+local function cdOnTable(session: any, anchor: BasePart): boolean
+	local model = session.CDOnAnchor and session.CDOnAnchor[anchor]
+	return model ~= nil and model.Parent ~= nil and model:GetAttribute("Level3_CDState") == "WORLD"
+end
+
 local function refreshPrompt(session: any, anchor: BasePart)
 	local prompt = promptFor(anchor)
 	if not prompt then return end
@@ -104,6 +115,7 @@ local function refreshPrompt(session: any, anchor: BasePart)
 	anchor:SetAttribute("Level3_HideOccupiedUserId",
 		if #occupants > 0 then (occupants[1] :: Player).UserId else 0)
 	prompt.Enabled = roundAllowsHiding(session) and #occupants < Tuning.HideOccupantCap
+		and not cdOnTable(session, anchor)
 end
 
 local function refreshPrompts(session: any)
@@ -225,6 +237,8 @@ local function tryEnter(session: any, player: Player, anchor: BasePart): (boolea
 	local occupants = session.Occupants[anchor]
 	if not occupants then return false, "INVALID_TABLE" end
 	if #occupants >= Tuning.HideOccupantCap then return false, "OCCUPIED" end
+	-- The server refuses too; a client can fire a prompt it cannot see.
+	if cdOnTable(session, anchor) then return false, "CD_ON_TABLE" end
 	local now = os.clock()
 	if now - (session.LastAction[player] or -math.huge) < Tuning.ActionCooldownSeconds then
 		return false, "COOLDOWN"
@@ -452,6 +466,32 @@ function Controller.Start(manifest: any, generation: number)
 		table.insert(session.Connections, (prompt :: ProximityPrompt).Triggered:Connect(function(player)
 			tryEnter(session, player, anchor)
 		end))
+	end
+
+	-- FIRST_CD_PROMPT_20260922: the FIRST CD's table. The builder puts a room's
+	-- CD socket on its first table and the hide anchor on that same table (the
+	-- first-CD room has exactly one), so the two share a footprint; 3 studs in
+	-- the floor plane is far inside one table and far outside the next. Only
+	-- the introduction table is affected -- every other hide table, CD room or
+	-- not, keeps its normal rules. State changes on the module re-evaluate.
+	session.CDOnAnchor = {}
+	local roles = manifest.Layout and manifest.Layout.Roles
+	local firstCDRoomId = roles and roles.FirstCDRoomId
+	for _, module in ipairs(if type(manifest.Modules) == "table" then manifest.Modules else {}) do
+		local model = module.Model
+		if module.RoomId == firstCDRoomId and model and model:IsA("Model") and model.Parent then
+			local at = model:GetPivot().Position
+			for _, anchor in ipairs(session.Anchors) do
+				local d = anchor.Position - at
+				if Vector3.new(d.X, 0, d.Z).Magnitude <= 3 then
+					session.CDOnAnchor[anchor] = model
+					table.insert(session.Connections, model:GetAttributeChangedSignal("Level3_CDState"):Connect(function()
+						if anchor.Parent then refreshPrompt(session, anchor) end
+					end))
+					break
+				end
+			end
+		end
 	end
 
 	table.insert(session.Connections, (request :: RemoteEvent).OnServerEvent:Connect(function(player, command)

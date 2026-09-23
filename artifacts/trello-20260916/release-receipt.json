@@ -1,0 +1,184 @@
+{
+  "placeId": 131311258779917,
+  "publishedVersion": 1920,
+  "localPublishedAt": "2026-09-16 10:04 Europe/Copenhagen",
+  "verifiedIn": "Roblox Creator Dashboard, Show published only",
+  "title": "Daily rewards, expanded shop and Level 3 hiding",
+  "cards": [
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa80215a5f2cfc2c59bb6cd",
+      "name": "We need a \"Back to lobby\" option when in a level.",
+      "url": "https://trello.com/c/FON3SKNO/74-we-need-a-back-to-lobby-option-when-in-a-level",
+      "list": "Done",
+      "complete": true,
+      "description": "PUBLICERET v1920 — 16/9/2026 kl. 10:04 dansk tid.\n\nHold L i 1,5 sek. på PC eller hold mobilknappen; slip annullerer. Desktop og rigtig Touch-input i Studio-emulator verificeret: kort hold annullerer, fuldt hold returnerer til lobby. Mobilknappen og Mission Brief ligger nu under Objectives uden overlap. 299 offlinechecks. Live cross-server-teleport/2–6 spillere er ikke gentestet, jf. ejerens fravalg af #16.\n\nSamlet QA: 22 relevante offline-testsuiter bestået, 141/141 Studio-scripts kompilerer, 0 kodedrift.\n\nTidligere status:\nGODKENDT af ejeren 16/9/2026. Hold-tast på PC og hold-knap på mobil implementeres med synlig fremgang, slip-for-at-annullere og tydelig konsekvenstekst. Claude har reviewet koden og synkroniseret klienten til Studio; native QA og release afventer den samlede integration."
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa8450962ba402b2f293640",
+      "name": "Add progressive playtime rewards, starting after 5 minutes",
+      "url": "https://trello.com/c/NP80aPPC/83-add-progressive-playtime-rewards-starting-after-5-minutes",
+      "list": "Done",
+      "complete": true,
+      "description": "PUBLICERET v1920 — 16/9/2026 kl. 10:04 dansk tid.\n\nDaglig aktiv spilletid: 5 min. → 1 token; 15 min. → 1 Speed Potion; 35 min. → 1 Entity Shield. Serverstyret fremgang/claims; rettet dobbeltoptælling, UTC-dagskifte og retry efter tabt savesvar. 333 offlinechecks; aktiv optælling og Rewards-UI verificeret i Studio.\n\nSamlet QA: 22 relevante offline-testsuiter bestået, 141/141 Studio-scripts kompilerer, 0 kodedrift.\n\nTidligere status:\nGODKENDT af ejeren 16/9/2026. Daglig aktiv spilletid: 5 min. giver 1 token; 15 min. giver 1 Speed Potion; 35 min. giver 1 Entity Shield. Claude/Opus implementerer serverstyret, gemt fremgang og beskyttelse mod gentagne claims. Integration/QA/publish afventer."
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa8450ac58a23c5f45e9dec",
+      "name": "Add a daily lucky wheel for tokens and other rewards",
+      "url": "https://trello.com/c/4DOb30AO/84-add-a-daily-lucky-wheel-for-tokens-and-other-rewards",
+      "list": "Done",
+      "complete": true,
+      "description": "PUBLICERET v1920 — 16/9/2026 kl. 10:04 dansk tid.\n\nÉt gratis spin pr. UTC-dag. Fem præmier: 1 token, 3 tokens, 1 Speed Potion, 2 Speed Potions, 1 Entity Shield; odds 45/20/20/5/10 % vises. Desktop- og mobilspin gav præmie og låste SPUN TODAY. Ingen betalte spins. Casings/Results Frame udgår.\n\nSamlet QA: 22 relevante offline-testsuiter bestået, 141/141 Studio-scripts kompilerer, 0 kodedrift.\n\nTidligere status:\nGODKENDT af ejeren 16/9/2026. Ét gratis dagligt spin med fem præmier: 1 token, 3 tokens, 1 Speed Potion, 2 Speed Potions, 1 Entity Shield. Foreløbige balanceodds 45/20/20/5/10 %, synlige i UI. Ingen betalte spins/rerolls. Casings og Results Frame udgår. Claude/Opus implementerer; QA/publish afventer."
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa8450b6f2d4e1a969d90a9",
+      "name": "Explore more token-purchasable items, including a Speed Boost Potion",
+      "url": "https://trello.com/c/cmsPkLhK/85-explore-more-token-purchasable-items-including-a-speed-boost-potion",
+      "list": "Done",
+      "complete": true,
+      "description": "PUBLICERET v1920 — 16/9/2026 kl. 10:04 dansk tid.\n\nRoute Marker Pack: 2 tokens → 3 markører. Speed Potion: 3 tokens, +10 % fart i 6 sek., højst én/runde. Field Notes-samling inkluderet. Faktiske tokenkøb, inventory, potion 16→17,6→16, anden aktivering afvist, markørplacering og indsamling af note verificeret i Studio. Nye teksturer indlæses.\n\nSamlet QA: 22 relevante offline-testsuiter bestået, 141/141 Studio-scripts kompilerer, 0 kodedrift.\n\nTidligere status:\nGODKENDT af ejeren 16/9/2026: Route Marker Pack (2 tokens/3 markører), Speed Potion (3 tokens, +10 % fart i 6 sek., maks. én/runde), samt Field Notes-samling. Flashlight Casings og Results Frame er afvist. Claude/Opus implementerer fungerende køb, inventory og anvendelse. To nye produktteksturer er genereret og uploadet. Integration/QA/publish afventer."
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa97dae0053689b45e56545",
+      "name": "Create more purchasable, high-quality items for the shop, and make sure every item actually works correctly after purchase.  Rethink the entire shop experience. Instead of a basic shop, create an actual **SHOP area built into the wall**, with a large **SHOP** sign using Zyntra’s neon colors. It should feel extremely inviting and immediately make players curious enough to walk over and explore it.  For the physical shop, experiment with something like **pressure-plate purchase displays**. Each purchasable item could have its own display or pedestal, with a box or representation of the item hovering above it. Make the products visually exciting and obvious to interact with. Use image generation to create custom textures/assets for the purchasable items so they feel native to Zyntra rather than like generic placeholders.  Also redesign the **SHOP UI icon** to increase visibility and clicks. Give it a strong circular border treatment, potentially with a subtle animated/glowing/pulsing effect around the edge using Zyntra’s visual identity. It should attract attention without becoming annoying.  Overall, treat the shop as a major part of the game rather than just another UI menu. The goal is to make players **notice it → become curious → interact with the products → understand what they are buying → actually want to purchase them**.",
+      "url": "https://trello.com/c/Tv8xvUGO/88-create-more-purchasable-high-quality-items-for-the-shop-and-make-sure-every-item-actually-works-correctly-after-purchase-rethink",
+      "list": "Done",
+      "complete": true,
+      "description": "PUBLICERET v1920 — 16/9/2026 kl. 10:04 dansk tid.\n\nUdvidet fysisk shop med 8 produkter, større afstand, supply-kiosk, produktplader, canopy, navn og Rewards-skilt. Fem nye custom textures uploadet og preload-verificeret. Fysisk Speed Potion-plade åbner korrekt vare og gennemfører tokenkøb. SHOP HUD er firkantet efter ejerens seneste instruktion.\n\nSamlet QA: 22 relevante offline-testsuiter bestået, 141/141 Studio-scripts kompilerer, 0 kodedrift.\n\nTidligere status:\nFORTSÆTTELSE GODKENDT 16/9/2026. V1907 indeholder det første fysiske shopområde og 12 custom textures. Nye godkendte produkter implementeres nu sammen med det større shopdesign i #102. SHOP HUD-ikonet gøres FIRKANTET efter ejerens seneste besked; dette erstatter korttitlens tidligere cirkelønske. Speed Potion/Route Marker Pack får egne uploadede crate-teksturer. Ingen 50 % rabat. QA/publish afventer."
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa97f315a64d0af25750eae",
+      "name": "Add Daily Rewards as a tab, just like Shop and Upgrades, but make it bouge.",
+      "url": "https://trello.com/c/c2YZJk60/89-add-daily-rewards-as-a-tab-just-like-shop-and-upgrades-but-make-it-bouge",
+      "list": "Done",
+      "complete": true,
+      "description": "PUBLICERET v1920 — 16/9/2026 kl. 10:04 dansk tid.\n\nDAILY REWARDS-fane med tre spilletidsmilepæle og gratis fem-præmiehjul. Desktop, iPhone-landscape og portrait afprøvet: scrolling, præmier, spinresultat og disabled-state. 403 offlinechecks for Rewards-siden.\n\nSamlet QA: 22 relevante offline-testsuiter bestået, 141/141 Studio-scripts kompilerer, 0 kodedrift.\n\nTidligere status:\nGODKENDT af ejeren 16/9/2026. En samlet DAILY REWARDS-fane med daglig aktiv spilletid, tre belønningstrin og gratis fem-præmiehjul. Siden er implementeret og lead-reviewet; serverintegration og native mobil/desktop QA afventer."
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aaa2d98a9306ba20cd545f9",
+      "name": "Donation leaderboard: Remove historical-purchase footer and align columns",
+      "url": "https://trello.com/c/ypGhJj76/100-donation-leaderboard-remove-historical-purchase-footer-and-align-columns",
+      "list": "Done",
+      "complete": true,
+      "description": "PUBLICERET v1920 — 16/9/2026 kl. 10:04 dansk tid.\n\nTOP SUPPORTERS har faste, separate rank/navn/Robux-kolonner; historik-footeren er fjernet. Native 10-rækkers geometri og 826 offlinechecks inkl. lange navne/store beløb verificeret. Historiske køb blev allerede importeret v1906; importen er ikke gentaget.\n\nSamlet QA: 22 relevante offline-testsuiter bestået, 141/141 Studio-scripts kompilerer, 0 kodedrift.\n\nTidligere status:\nI GANG 16/9/2026 med Claude Fable 5.1 som manager og Opus 5-kodeagenter. Codex udfører assets og uafhængig kontrol. Samlet native QA/publish afventer.\n\nUpdate the TOP SUPPORTERS donation leaderboard:\n\n- Remove the footer text \"INCLUDES VERIFIED HISTORICAL PURCHASES\".\n- Give rank, player name, and Robux spent their own clearly spaced columns.\n- Align each column consistently down the board so ranks and amounts do not shift with the length of the player's name.\n- Keep enough space between the columns so the rank and Robux amount are not crowded against the name."
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aaa2dc5ab730b7c66242fec",
+      "name": "Rework Entity Shield Charges UI to match the Objective UI",
+      "url": "https://trello.com/c/W61O37go/101-rework-entity-shield-charges-ui-to-match-the-objective-ui",
+      "list": "Done",
+      "complete": true,
+      "description": "PUBLICERET v1920 — 16/9/2026 kl. 10:04 dansk tid.\n\nEntity Shield/udstyrs-HUD bruger Objective-stil med klar titel, antal og aktiveringsknap. Potion- og markørkontroller integreret. Desktop/mobil-layout verificeret, 303 offlinechecks. Mobilens Objectives/Mission Brief/Leave har nu 8 px mellemrum.\n\nSamlet QA: 22 relevante offline-testsuiter bestået, 141/141 Studio-scripts kompilerer, 0 kodedrift.\n\nTidligere status:\nI GANG 16/9/2026 med Claude Fable 5.1 som manager og Opus 5-kodeagenter. Codex udfører assets og uafhængig kontrol. Samlet native QA/publish afventer.\n\nRework the Entity Shield Charges UI so it looks cleaner and matches the existing Objective UI. Use the Objective UI as the reference for typography, spacing, colors, and panel styling, with a clear layout for the item name, remaining charges, and activation key."
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa9a15a271f9311a6818b67",
+      "name": "Codex: Create a table-hiding animation in Blender via MCP",
+      "url": "https://trello.com/c/FXH0ddhN/99-codex-create-a-table-hiding-animation-in-blender-via-mcp",
+      "list": "Done",
+      "complete": true,
+      "description": "PUBLICERET v1920 — 16/9/2026 kl. 10:04 dansk tid.\n\nAnimation v2 til spillets faktiske hazmat-character og Level 3-bord. Gruppeejet asset 119040885264927 erstatter v1. Blender-source og 121 keyframes/30 fps/4 sek. gemt. 253 native samples: gulvafstand ≥0,04127 studs, bordafstand ≥0,05386 studs, nul rootdrift. Begge indgange, exit/død og unload-fallback kontrolleret. Flerklient-replikation ikke separat afprøvet.\n\nSamlet QA: 22 relevante offline-testsuiter bestået, 141/141 Studio-scripts kompilerer, 0 kodedrift.\n\nTidligere status:\nUdført og publiceret v1907. Blenderfil, 121 keyframes/30fps/4s, preview og bake-validering gemt i assets/animations/table-hiding. Gruppeejet Roblox-animation113160394754713 integreret server-side. Native drift/clearance, anden bordrotation, begge indgange, leave, død og fallback kontrolleret. To samtidige rigtige klienters animationsreplication er ikke separat afprøvet.\n\n---\nTidligere korttekst:\nCodex should open Blender and use the MCP connection to create an animation for hiding under a table.\n\nKeep the entry simple: teleport (\"TP\") the player into position, then visibly show the character hiding under the table."
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aaa30453e456d6b2a5f5510",
+      "name": "Research and redesign the shop to be much larger",
+      "url": "https://trello.com/c/32xgCdtM/102-research-and-redesign-the-shop-to-be-much-larger",
+      "list": "Done",
+      "complete": true,
+      "description": "PUBLICERET v1920 — 16/9/2026 kl. 10:04 dansk tid.\n\nResearch omsat til markant større fysisk shop og rummelig liste/detail-UI på desktop; mobil har kompakt layout og scrolling. 8 produkter med fungerende køb, fem nye uploadede textures og større produktspacing. Desktop samt iPhone portrait/landscape verificeret; 404 display- og 259 storechecks.\n\nSamlet QA: 22 relevante offline-testsuiter bestået, 141/141 Studio-scripts kompilerer, 0 kodedrift.\n\nTidligere status:\nI GANG 16/9/2026 med Claude Fable 5.1 som manager og Opus 5-kodeagenter. Codex udfører assets og uafhængig kontrol. Samlet native QA/publish afventer.\n\nMake the current in-game shop significantly larger and improve its overall quality.\n\nResearch good shop designs and layouts first, then use the findings to redesign and implement a polished, easy-to-use shop."
+    }
+  ],
+  "deferred": [
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa5565746ee8953de105288",
+      "name": "Alert developers when an in-game purchase is completed",
+      "url": "https://trello.com/c/XuxYAtTA/69-alert-developers-when-an-in-game-purchase-is-completed",
+      "list": "To Do",
+      "description": "UDSKUDT af ejeren 15/9/2026: Discord og køb-notifikationer venter. Ingen kanal/webhook/besked oprettet. Oprindelige krav bevaret i artifacts/trello-20260915/trello-before-final.json."
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa841af8c2bae8bf5c753e9",
+      "name": "Add entity sounds for level 2: Wait for sound IDs",
+      "url": "https://trello.com/c/oHGyjAm4/79-add-entity-sounds-for-level-2-wait-for-sound-ids",
+      "list": "To Do",
+      "description": "SPRINGES OVER efter ejerens besked 15/9/2026: ingen ElevenLabs og ingen nye Level2-lyde. Tre forudeksisterende audiofiler er bevaret; ingen ny lydproduktion eller nye lyd-ID'er på dette kort."
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa97cff59feedbeb07c0f10",
+      "name": "Make a temporay 14 days sales on every purchase, make it 50% on everything.",
+      "url": "https://trello.com/c/GxhsmCC5/87-make-a-temporay-14-days-sales-on-every-purchase-make-it-50-on-everything",
+      "list": "To Do",
+      "description": "UDSKUDT af ejeren 15/9/2026. 50% udsalg er hverken startet eller planlagt; priserne er uændrede."
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6a9b445042ccd577d4f074f2",
+      "name": "Controller: tre HUD-handlinger uden gamepad-sti, sprint-lås og terminal-luk",
+      "url": "https://trello.com/c/uI8hg2At/17-controller-tre-hud-handlinger-uden-gamepad-sti-sprint-l%C3%A5s-og-terminal-luk",
+      "list": "Testing",
+      "description": "Ejerbeslutning 15/9/2026: console/controller/keybind-QA udskydes, da spillet ikke er udgivet til konsol. Eksisterende kode bevares. Ikke erklæret hardwaretestet. Tidligere implementering publiceret v1764; den oprindelige detaljerede QA-status er bevaret i artifacts/trello-20260915/trello-before-final.json."
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6a9b44422d527accace490f8",
+      "name": "Robusthed: spillere kan strande bag loading-dækket (to tilfælde)",
+      "url": "https://trello.com/c/DIktjy8U/16-robusthed-spillere-kan-strande-bag-loading-d%C3%A6kket-to-tilf%C3%A6lde",
+      "list": "Testing",
+      "description": "SKIPPED efter ejerens direkte besked 16/9/2026: »Kort #16, skipper du bare.« Kortet er udeladt fra denne release og blokerer ikke afslutning/slukning. Det er ikke erklæret fuldt live-testet.\n\nRettelsen er publiceret i v1907. Lokal Studio-start L1 samt L1→L2→L3 continuation er afprøvet; loading-cover frigives. Tidligere kontroller omfatter 73 loading/398 completionchecks, 60s timeout, retry, karakter/tokenkontrol og malformed cohort-metadata.\n\nResterende acceptance-test med publiceret teleport/MemoryStore og 2–6 samtidige spillere er ikke udført. Lokal QA beviser ikke cross-server-adfærden. Ingen ny observeret fejl.\n\nOriginal korttekst: artifacts/trello-20260915/trello-before-final.json. Tidligere beviser: work/trello-finish-2026-09-06/loading/. Nattens status: artifacts/trello-20260915/codex-state.md."
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa288c6f9cfb6b3f705051e",
+      "name": "Level 4",
+      "url": "https://trello.com/c/Y2xXThBN/61-level-4",
+      "list": "Ideas",
+      "description": "https://discord.com/channels/1545382354594562068/1547557005898809374\n- krillemand\n\nSlender man creature"
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa98561cccdebb0bc9ffa2a",
+      "name": "P1 · Før større ads: mål frafald fra join til første genstart",
+      "url": "https://trello.com/c/bIFdNWUf/91-p1-f%C3%B8r-st%C3%B8rre-ads-m%C3%A5l-frafald-fra-join-til-f%C3%B8rste-genstart",
+      "list": "Ideas",
+      "description": "Punkt 1 — find den faktiske flaskehals før ændringer.\n\nMål join → loading færdig → rundestart → første objective → første død → nyt forsøg. Registrér tid og frafald ved hvert trin, inkl. exits under 60 sek. og 1–3 min. Opdel mobil/PC, nye/returnerende og Sponsored/Home/andre kilder, hvor Roblox understøtter attribution; brug Unknown frem for gættede kilder. Kontrollér dubletter og events ved teleport/rejoin.\n\nLever en funnel med antal, konvertering og tid mellem trin samt de tre største tab. Baseline fra ejerens screenshot 15/9: spilletid 7,6 min., D1 3,76 %, D7 0,02 %. Det er historiske gennemsnit, ikke bevis for en bestemt fejl.\n\nFælles beslutning før større ads: mindst en uges sammenlignelige data, færdige D1/D7-kohorter, CPP og kildefordeling. Arbejdsmål 10–12 min. og D1 6–8 % er foreløbige interne mål, ikke Roblox-krav. Ingen automatisk budgetforhøjelse."
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa985638631014f69727a5f",
+      "name": "P1 · Før større ads: kortere og tydeligere vej fra lobby til gameplay",
+      "url": "https://trello.com/c/EYIT99eM/92-p1-f%C3%B8r-st%C3%B8rre-ads-kortere-og-tydeligere-vej-fra-lobby-til-gameplay",
+      "list": "Before big adsspend",
+      "description": "Punkt 2 — mål og reducér unødvendig ventetid i kø, briefing og loading. Ny spiller skal straks finde startstedet, forstå køen og kunne starte alene. Test både første besøg og rejoin med nye spillere på mobil og PC.\n\nEksisterende førstegangs-guide er Done: [https://trello.com/c/69agyLbr](https://trello.com/c/69agyLbr \"smartCard-inline\")\nGenbrug og verificér den; byg ikke en ekstra guide. Loading-robusthed er i Testing: [https://trello.com/c/DIktjy8U](https://trello.com/c/DIktjy8U \"smartCard-inline\")\nBrug det kort til fejlene, dette til tid og forståelighed.\n\nAccept: dokumentér join→første styrbare gameplay og frafald før/efter. Ret de observerede største stop. Loading-cover må ikke fjernes, før spilleren kan spille sikkert. Onboarding er ikke bevist defekt alene ud fra analytics."
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa98564d7f072fae4a145c7",
+      "name": "P1 · Før større ads: stærk første oplevelse og tidlig succes",
+      "url": "https://trello.com/c/2fiHi4q4/93-p1-f%C3%B8r-st%C3%B8rre-ads-st%C3%A6rk-f%C3%B8rste-oplevelse-og-tidlig-succes",
+      "list": "Before big adsspend",
+      "description": "Punkt 4 — gennemgå de første minutter fra en helt ny spillers perspektiv. Spilleren skal få en forståelig lille succes og møde en tydelig uhyggelig hændelse/trussel, der skaber lyst til at fortsætte. Et jumpscare er ikke et krav. Bevar spillets tone og eksisterende indholdsvurdering.\n\nKoordinér første objective med [https://trello.com/c/IgTt0K3h](https://trello.com/c/IgTt0K3h \"smartCard-inline\")\nObserver nye spillere uden mundtlig hjælp, og registrér tidspunkt for første succes, spændingsmoment, forvirring og exit.\n\nAccept: dokumenteret før/efter-test af den tidlige oplevelse på mobil og PC; vis om frafald falder og flere når første objective. Implementér ud fra observerede problemer."
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa985646a0f7785ca1ae1e8",
+      "name": "P1 · Før større ads: forståelig første død og nemt nyt forsøg",
+      "url": "https://trello.com/c/PR0ersiy/94-p1-f%C3%B8r-st%C3%B8rre-ads-forst%C3%A5elig-f%C3%B8rste-d%C3%B8d-og-nemt-nyt-fors%C3%B8g",
+      "list": "Before big adsspend",
+      "description": "Punkt 5 — undersøg første dødsårsag, ventetid som tilskuer og hele vejen til næste forsøg. Spilleren skal forstå, hvad der dræbte dem, og hvad de kan gøre anderledes. Et nyt almindeligt forsøg skal være let at finde; dette kræver ikke gratis genoplivning midt i en runde.\n\n[Back to lobby](https://trello.com/c/FON3SKNO) er allerede i Testing. Genbrug det flow. Bevar fungerende [Continue/Return-valg](https://trello.com/c/rLDqjpE4).\n\nAccept: test solo, tidlig død i gruppe, party wipe og retur til lobby. Ingen fastlåsning, forkert kø eller uendelig tilskuerventetid uden synlig udvej. Mål death→nyt forsøg og andelen, der prøver igen."
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa9856568752c820a835ed9",
+      "name": "P1 · Før større ads: verificér mobil og tablet i rigtige runder",
+      "url": "https://trello.com/c/lUKD3R8G/95-p1-f%C3%B8r-st%C3%B8rre-ads-verific%C3%A9r-mobil-og-tablet-i-rigtige-runder",
+      "list": "Before big adsspend",
+      "description": "Punkt 6 — opfølgende runtime-test af den publicerede oplevelse; [mobil-UI-kortet](https://trello.com/c/0xPyX762) er allerede Done. Byg ikke samme UI-tilpasning igen.\n\nTest små telefoner, tablet og en svagere enhed i lobby og alle levels: knapper, objectives, shop, læsbarhed i mørke, touch-interaktioner, loading, død og genstart. Mål FPS/frame spikes, hukommelse og fejl under rigtige runder. Oversigtens 53 FPS er ikke bevis for stabilitet på svage telefoner.\n\nAccept: enhedsliste, reproduktion og før/efter-evidens for observerede problemer. Ingen blokerede primære handlinger, væsentlig tekstafskæring eller uløste kritiske mobilproblemer før større ads."
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa985660fb7afabb6a0fe30",
+      "name": "P2 · Før større ads: match annonce og thumbnail med første gameplay",
+      "url": "https://trello.com/c/kydyBl7u/97-p2-f%C3%B8r-st%C3%B8rre-ads-match-annonce-og-thumbnail-med-f%C3%B8rste-gameplay",
+      "list": "Before big adsspend",
+      "description": "Punkt 9 — gennemgå eksisterende annonce, titel og thumbnails mod de første minutter af den faktiske oplevelse. Lov kun det spillet leverer; undgå klik, der ender i hurtige exits. Screenshot 15/9 viser play-through rate 0,66 %, men dokumentér præcis kilde/definition før sammenligning med annonce-CTR.\n\nUdarbejd tydelige kreative varianter og en kontrolleret test med samme målretning, periode og aftalt budget. Mål spend, annonce-plays, CPP og efterfølgende spilletid/D1; følg Home Recommendations separat.\n\nAccept: vælg variant ud fra både anskaffelse og spillerkvalitet, ikke klik alene. Dette kort planlægger testen og godkender ikke en ny eller større annonceudgift."
+    },
+    {
+      "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa98566c1a8ba4791988d2f",
+      "name": "P1 · Før større ads: test hele solooplevelsen og spil igen med venner",
+      "url": "https://trello.com/c/V7m3zDSa/96-p1-f%C3%B8r-st%C3%B8rre-ads-test-hele-solooplevelsen-og-spil-igen-med-venner",
+      "list": "Before big adsspend",
+      "description": "Punkt 7 — annoncespillere kan ankomme uden venner. Test publiceret spil som ny solo-spiller: find/start kø, forstå første objective, sværhedsgrad, død, nyt forsøg og level-overgange. Kontrollér at gruppekrav ikke utilsigtet blokerer solo.\n\nTest også at to venner kan finde hinanden, starte sammen og spille endnu en runde. Skeln mellem nødvendige fixes og nye sociale features. Genbrug eksisterende lobby/party-system og [førstegangs-guide](https://trello.com/c/69agyLbr).\n\nAccept: dokumenteret solo- og to-spiller-test med konkrete fund. Sammenlign start-, objective- og retry-konvertering for solo og grupper, hvor data findes; ret observerede blokeringer."
+    }
+  ],
+  "boardHasNextPage": false,
+  "pcMustRemainOn": true
+}

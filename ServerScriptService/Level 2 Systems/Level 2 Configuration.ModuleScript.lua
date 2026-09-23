@@ -147,6 +147,32 @@ local Configuration = {
 	-- flumes cannot open seams, and open slides keep a tall invisible guard lip.
 	SlideCollisionOverlap = 1.5,
 	SlideOpenSafetyWallHeight = 14,
+
+	-- ── performance ─────────────────────────────────────────────────────────
+	-- Measured in Studio on seed 1182081016 (2026-09-21): the generated world
+	-- held 74,654 descendants and 44,923 of them -- 60%, about 1.8 per part --
+	-- were "Level 2 Tile Texture" instances (Part 25,175, MeshPart 2,355,
+	-- PointLight 138). Two thirds of this game's players are on phones and
+	-- tablets, where that count is memory, replication and stream-in time.
+	-- The biggest owners were Corridor Wall 696, Tiled Column 630, the four
+	-- Hall walls 416-424 each and every Arch Rib 228, and most of those faces
+	-- are buried in another slab or pointed at the void outside the level.
+	-- True textures only the faces a player can ever see, decided per call
+	-- site in the World Builder; false restores the old all-six-faces
+	-- behaviour exactly, for an A/B in Studio.
+	Performance = {
+		CullHiddenTileFaces = true,
+		-- ARCH_MESH_PILOT_20260922. The standard corridor rib (3.2 x 2.2 band,
+		-- VerticalScale 1.9) as one MeshPart instead of 14-28 textured Parts.
+		-- OFF by default: the mesh comes from an uploaded asset (ArchMeshRibAssets,
+		-- key -> "rbxassetid://..."), a ServerStorage template, or -- only where
+		-- the experience allows the Mesh & Image APIs -- an EditableMesh built at
+		-- runtime. Without any of those the ribs stay Parts and the world records
+		-- the wanted keys (World Builder: ArchRibMeshMissingKeys). A Studio session
+		-- can A/B without a push through workspace:SetAttribute("Level2ArchMeshRibs", true).
+		ArchMeshRibs = false,
+		ArchMeshRibAssets = {},
+	},
 }
 
 Configuration.Colors = {

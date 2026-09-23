@@ -1,0 +1,1868 @@
+[
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa5565746ee8953de105288",
+    "name": "Alert developers when an in-game purchase is completed",
+    "list": "To Do",
+    "url": "https://trello.com/c/XuxYAtTA",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa83e9056b4dacd569de1b9",
+    "name": "New entity idea for level 3: Mutated clown.",
+    "list": "To Do",
+    "url": "https://trello.com/c/6JjIbpg6",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6a9aa93401d30fbf347c3f12",
+    "name": "test",
+    "list": "To Do",
+    "url": "https://trello.com/c/Xwe1aiYI",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aaac828857f95506b2f3cf4",
+    "name": "New store upgrade: Token Earner Multiplier: 2x, 3x, and 5x. Each different pricepoints of course.   When purchased, the multiplier also applies instantly to the player's current token balance which is also informed.",
+    "list": "To Do",
+    "url": "https://trello.com/c/EtdsUM4e",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa64acdb0b14bb738af9d62",
+    "name": "When spectating a player, the player being watched should see a small spectator counter showing how many people are currently spectating them. It should only show the number, not the spectators’ names.  Spectators should also hear the exact same sounds as the alive player they are watching. For example, the walking sound currently plays the default Roblox sound for spectators, while the alive player hears our custom walking sound. The spectator should hear the exact same custom sound.  This should apply to all relevant sounds, so the spectator’s audio matches what the player they are watching is hearing as closely as possible.",
+    "list": "To Do",
+    "url": "https://trello.com/c/UDf4pzNZ",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aafbe559363d2e3fe72c1d1",
+    "name": "P1 · Shop: prøv udstyr og forstå hvert køb før betaling",
+    "list": "To Do",
+    "url": "https://trello.com/c/UNRk7Qy8",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6a9826e2494abae244fca17f",
+    "name": "Remove \"Access ready 4 queues max 6 each from the level screens in the lobby\"",
+    "list": "To Do",
+    "url": "https://trello.com/c/a2jXXL76",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6a9aab1301bf1c2c55c3973e",
+    "name": "test",
+    "list": "To Do",
+    "url": "https://trello.com/c/NSX2YrHm",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aafbe59a6873a855fd4e7d9",
+    "name": "P2 · Nye hazmat- og udstyrsskins med 3D-preview",
+    "list": "To Do",
+    "url": "https://trello.com/c/VSCGGIA9",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa841af8c2bae8bf5c753e9",
+    "name": "Add entity sounds for level 2: Wait for sound IDs",
+    "list": "To Do",
+    "url": "https://trello.com/c/oHGyjAm4",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aafbe5b6eac46779a9020c5",
+    "name": "P2 · Level-variation: skift spor og opgaver mellem gennemspilninger",
+    "list": "To Do",
+    "url": "https://trello.com/c/OBjSW30k",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aafbe56521ae38f7418b347",
+    "name": "P1 · Entity-regler: lær spilleren at overleve før første straf",
+    "list": "To Do",
+    "url": "https://trello.com/c/us5TWr9O",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa97cff59feedbeb07c0f10",
+    "name": "Make a temporay 14 days sales on every purchase, make it 50% on everything. Disregard this until 20. October.",
+    "list": "To Do",
+    "url": "https://trello.com/c/GxhsmCC5",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aafbe5d9920300f63fe130a",
+    "name": "P3 · Research Camera: gratis foto-opgaver og Advanced Camera",
+    "list": "To Do",
+    "url": "https://trello.com/c/cqvNQIIc",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aafbe5a9b618e6c50447543",
+    "name": "P2 · Entity-arkiv: udbyg Field Notes med progression og belønninger",
+    "list": "To Do",
+    "url": "https://trello.com/c/nWCCdowB",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6ab0d22e8bc647348b81207d",
+    "name": "Level 3 · Fast første CD og synlig CD-reader med rumindikator",
+    "list": "To Do",
+    "url": "https://trello.com/c/6BVH4WmN",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa288c6f9cfb6b3f705051e",
+    "name": "Level 4",
+    "list": "To Do",
+    "url": "https://trello.com/c/Y2xXThBN",
+    "data": {
+      "checklists": [
+        {
+          "id": "ari:cloud:trello::checklist/workspace/6a9807517a71aa833c5dedb8/6aafbeeefa70e188fddc4224",
+          "name": "Level 4 — detaljeret design og byggeplan",
+          "position": 140737488355328,
+          "checkItems": [
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6aafbef6d2895ecaae562533",
+              "name": "**1. Oplevelsen og den visuelle retning**\n\nSpillerne forlader level 3 og kommer ud i et alt for perfekt parcelhuskvarter. Sol, klar blå himmel, ens huse og velplejet græs giver et kort øjeblik følelsen af at være sluppet ud. Stilheden, gentagelserne og forkerte detaljer afslører gradvist, at kvarteret er en Zyntra-testzone.\n\nStilen skal være liminal og troværdig med let kunstige proportioner: enkle pudsede/træbeklædte facader i falmet creme, støvet gul og blågrå; mørke tage; præcise hække; postkasser og lave hegn. Græsset må gerne være unaturligt ensartet grønt. Få diskrete Zyntra-neonmarkeringer på testudstyr — ikke neon på hele kvarteret. Silhuetten af et vand-/signaltårn fungerer som landmærke.\n\nBrug næsten identiske huse med små men aflæselige afvigelser: et ekstra vindue, forkert husnummer, en postkasse vendt mod huset, gardiner som er trukket for på én side. Interiører har almindelige møbler, som gentages lidt for præcist, tomme billedrammer, et CRT-TV og ingen beboere. Undgå tilfældig rod, som skjuler gameplay-spor.\n\nLyset begynder som varm, stille eftermiddag. Under fareperioder bliver himlen koldere, disen tættere og enkelte verandaer slukker i en tydelig sekvens. Bevar læsbarhed på mobil; spændingen må ikke kræve næsten sort skærm. Intet påkrævet gore; design til spillets eksisterende milde frygtprofil uden at love en bestemt platformsvurdering.",
+              "state": "INCOMPLETE",
+              "position": 140737488355328
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6aafbef77b19d3f7859571e5",
+              "name": "**2. Kortets opbygning**\n\nFørste version: 8–12 synlige huse, ca. 8–12 minutters målspilletid og én entity. Byg en sammenhængende rundstrækning med en tværgående genvej, så en forfølgelse kan brydes uden blindgyder.\n\n- Indgang: en kort servicepassage fra level 3 åbner mod kvarterets centrale gade. Spillere spawner adskilt på stabilt underlag.\n- Første hus: et trygt introduktionsområde med Zyntra-briefing, et synligt eksempel på en anomali og den første enkle succes.\n- Tre undersøgelsesområder: hver har flere mulige opgavehuse, tydelige landmærker og mindst to forbindelser tilbage til hovedruten.\n- Midte: et lille grønt område med bænk, slukket legeplads eller telefonboks; landmærke og sigtelinje til tårnet.\n- Finale: et Zyntra-signalskab ved et busstoppested nær tårnet. Det kan ses tidligere, men aktiveres først efter tre undersøgelser.\n- Udkant: gentagne facader og bakker skaber illusionen af et enormt kvarter. Dekorationshuse behøver ikke interiør; gameplaygrænsen skal fremstå naturlig.\n\nBrug 2–3 interiørmoduler til de tilgængelige huse. Placér døre, trapper og passagebredder efter vores faktiske karakter og entity-rig. De første spilbare huse skal have tydelige ind-/udgange og nok plads til at passere en holdkammerat. Undgå fysisk labyrint af mange ens rum.",
+              "state": "INCOMPLETE",
+              "position": 140737488371712
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6aafbef8a614b3a50738f9b0",
+              "name": "**3. Rundens forløb**\n\n1. Ankomst: kort, roligt blik ud over kvarteret. Spilleren får selv kontrollen og ser, hvor de kan gå hen.\n2. Briefing: “Investigate three residential signals. Restore the extraction beacon. Stay quiet.” Vis 0/3 fælles mål i eksisterende Objectives-stil.\n3. Første undersøgelse: en tilgivende opgave viser, hvordan man genkender et ændret hus og aflæser et signal. Første entity-cue kan observeres fra sikker afstand.\n4. Fri undersøgelse: holdet vælger rækkefølge mellem de tre zoner. Eksempler på opgavetyper: sammenlign facade med et referencefoto, find den forkerte udsendelse på et TV, og registrér en prøve ved et unormalt målepunkt. Giv også visuelle spor, så ingen opgave kræver hørelse eller mikrofon.\n5. Fare og rutevalg: The Neighbour undersøger støj. Holdet vælger stille omveje, bruger et aflæseligt sikkert hus eller lokker entityen væk fra en holdkammerat.\n6. Finale: de tre undersøgelser låser signalskabet op. Holdet aktiverer tre korte kontroller omkring busstoppestedet. Én spiller skal kunne udføre dem efter hinanden; flere kan samarbejde.\n7. Udgang: et kort, tydeligt varsel efterfølges af transport/udgang i levelgrænsen. Genbrug completion-, reward- og Continue/Return-flow. Ingen automatisk succes for spillere, der aldrig nåede ud.\n\nFørste prototype kan bruge almindelig interact til dokumentation. Når research-kameraet er klar, integreres det gratis basiskamera. Betalt kamera eller detector må ikke blive en adgangsbillet til completion.",
+              "state": "INCOMPLETE",
+              "position": 140737488388096
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6aafbef9e38e45f4714363ed",
+              "name": "**4. The Neighbour — entityens udseende og regler**\n\nBevar retningen fra den eksisterende note om en høj, Slender-lignende skabning, men lav en selvstændig Zyntra-entity. Arbejdsnavn: The Neighbour.\n\nUdseende: meget høj og smal, for lange underarme, stift arbejdstøj og et ansigt skjult af mat glas/maske. En unaturlig hældning i hovedet og langsomme, målrettede skridt gør den genkendelig på afstand. Lav egen silhuet, rig og animationer.\n\nAdfærd:\n- Patrol: bevæger sig mellem gader, postkasser og verandaer.\n- Investigate: reagerer på løb, hårdt smækkede døre og relevante opgavelyde. Undersøger lydens position frem for at kende spillerens placering uden spor.\n- Search: stopper ved huse, lytter og kontrollerer indgange. Spilleren kan aflæse søgningen gennem skridt, silhouette og vindues-/verandasignaler.\n- Chase: udløses ved faktisk afsløring tæt på/med fri sigtelinje. Der skal være varsling og mulighed for at bryde kontakten.\n- Return: når sporene mistes, søger den kort og vender tilbage til patrulje.\n\nStille gang og et afbrudt synsfelt skal have værdi. Døre må forsinke entityen kort, men kan ikke holde den fast for evigt. Ingen teleport direkte oven på spilleren, skade gennem vægge eller hits på en korrekt skjult spiller. Brug gameplay-støj; voice chat kan være en ekstra oplevelse, men er aldrig nødvendig.",
+              "state": "INCOMPLETE",
+              "position": 140737488404480
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6aafbefbc7e9c9a8d97146b3",
+              "name": "**5. Sikre huse, varsler og variation**\n\nHuse kan have en af tre tydelige tilstande: sikkert, varslet og farligt. Et stabilt verandasignal samt fravær af en bestemt facadeanomali viser et brugbart skjul. Før status skifter, vis et tydeligt forvarsel med lys og en lav tone; spilleren får tid til at forlade huset.\n\nSørg for mindst ét nåeligt sikkert alternativ i den aktive zone. En spiller må ikke låses inde eller dræbes øjeblikkeligt af et skjult tilstandsskift. Faren er en beslutning om rute og observation; den skal ikke gentage level 3's musikstop-og-gem-dig-under-bordet.\n\nLav 2–3 kontrollerede kombinationer af opgaveplaceringer og facadeanomalier. Alle spillere ser samme runde. Entity-reglerne og betydningen af varsler skifter ikke vilkårligt.",
+              "state": "INCOMPLETE",
+              "position": 140737488420864
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6aafbefe8596d415302195bc",
+              "name": "**6. Lyd og stemning**\n\nUdendørs: svag vind, fjern elektrisk summen og unaturligt få naturlyde. Indendørs: dæmpet køleskab/TV, træknirk og entity-skridt udenfor. The Neighbour får tydeligt forskellige patrol-, search-, chase- og attack-signaler med afstand og retning.\n\nUndgå konstant musik, så stilheden kan bære spændingen. Lydhaler fades rent til nul; ingen hørbar statisk støj i stille passager. Brug naturlig udendørs dæmpning og korte husrefleksioner frem for pool-/korridor-ekko overalt. Kritiske varsler har også en visuel komponent.",
+              "state": "INCOMPLETE",
+              "position": 140737488437248
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6aafbeff0110b2427facccec",
+              "name": "**7. Assets og byggefaser**\n\n- Blokmodel: gader, 8–12 husvolumener, tre zoner, genvej, spawn og exit. Gennemfør først hele ruten med simple interaktioner.\n- Spilbar prototype: ét færdigt hus, første research-opgave, entity med patrol/investigate/search/chase og ét sæt læsbare faresignaler.\n- Udvidelse: tre objektivtyper, 2–3 placeringsvarianter, sikre huse, finale, solo-/holdskalering og reset.\n- Art pass: modulære facader, 2–3 interiører, postkasser/hegn/lygter, signalskab, busstoppested, baggrundsbakker, sky/lys, entitymodel og animationer.\n- Audio/UI: rumlyd, entity-SFX, Mission Brief, fælles opgavebeskeder, completion og arkivindgange.\n- Færdiggørelse: mobilperformance, pathfinding, collision, respawn, progression og publiceret level-overgang. Bevis gennemført arbejde før kortet flyttes til Done.\n\nStream/genbrug husmoduler, hold baggrundsdekoration enkel og undgå hundredvis af unødvendige dynamiske lyskilder. Serveren afgør opgaver, skade, spawns og rewards; klienten viser effekter/UI. Entity-navigation skal fungere ved åbne/lukkede døre, traps og skiftende spillerantal. Fjern rundeobjekter og lyd ved unload.",
+              "state": "INCOMPLETE",
+              "position": 140737488453632
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6aafbf016d35af67f162fd68",
+              "name": "**8. Kriterier for færdig level**\n\n- Hele runden kan gennemføres solo og med spillets understøttede holdstørrelse uden betalt udstyr.\n- PC og touch kan aflæse varsler, undersøge, gemme sig, bruge udstyr og afslutte.\n- Alle opgavekombinationer er løselige; ingen nødvendige spor forsvinder permanent ved død/disconnect.\n- Spawn, level 3→4, re-entry, død, spectate og lobbyretur fungerer uden clipping eller dobbelte belønninger.\n- Nye spillere forstår den vigtigste entity-regel efter første møde.\n- Mål: start→første undersøgelse, completion pr. zone, dødssteder, exit undervejs, genforsøg og antal spillere der overhovedet når level 4.\n- Registrér observeret spilletid og performance på relevante mobilenheder; 8–12 minutter er et designmål, ikke et fast krav.",
+              "state": "INCOMPLETE",
+              "position": 140737488470016
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6aafbf029d5c0ac064758c05",
+              "name": "**9. Sammenhæng med de øvrige nye opgaver**\n\nResearch-opgaver: https://trello.com/c/wEFTmguQ\nEntity-arkiv: https://trello.com/c/nWCCdowB\nEntity Detector: https://trello.com/c/Zyrtgu79\nResearch Camera: https://trello.com/c/cqvNQIIc\nLevel-variation: https://trello.com/c/OBjSW30k\nFælles objective-beskeder: https://trello.com/c/FAgRQho1",
+              "state": "INCOMPLETE",
+              "position": 140737488486400
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6aafbf0369af58362d956eab",
+              "name": "**10. Inspiration og afgrænsning**\n\nMotion/Level 94 er tematisk reference til falsk tryghed og et forvrænget boligkvarter. Byg egne rum, opgaver, assets, historie og entity. Konkurrenternes besøg/badges dokumenterer eksponering, ikke at netop dette level har bedst retention eller salg. Run for Your Life kan overvejes som senere kort ekstrasekvens; Funrooms fravælges som level 4-retning, fordi level 3 allerede har party/mall-tema.\n\nhttps://www.rolimons.com/game/9534337535\nhttps://escapethebackrooms.fandom.com/wiki/Level_94_Guide",
+              "state": "INCOMPLETE",
+              "position": 140737488502784
+            }
+          ]
+        }
+      ],
+      "nextCursor": "eyJvYmplY3RJZCI6IjZhYWZiZWVlZmE3MGUxODhmZGRjNDIyNCJ9",
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6ab05509da326f8f365a02fe",
+    "name": "Level 2 · Pool Foam: undgå overlap og hold afstand mellem entities",
+    "list": "To Do",
+    "url": "https://trello.com/c/jecT8s86",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aafbe5f12253934dc94267e",
+    "name": "P3 · Frivillige udfordringer efter gennemførsel",
+    "list": "To Do",
+    "url": "https://trello.com/c/FnF49TWk",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6ab0375c62ef97ff0a69cd92",
+    "name": "Level 2 · Pool Slide: ret chase-lag, nye Blender-animationer og større model",
+    "list": "To Do",
+    "url": "https://trello.com/c/rXhi1SZ8",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6ab0375ed15de4e0ce47181c",
+    "name": "Investigate render distance and nearby loading to reduce lag",
+    "list": "To Do",
+    "url": "https://trello.com/c/Zpj0Gkbb",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6ab0442d74ae658b95b476b6",
+    "name": "Level 2 · Pool Slide: fjerne groans før spawn og mundlyde under chase",
+    "list": "To Do",
+    "url": "https://trello.com/c/LigItMHi",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aaa60f76add78f348c18d4d",
+    "name": "Give Daily Rewards a standalone UI and its own side button",
+    "list": "Done",
+    "url": "https://trello.com/c/EnbSc9ak",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6a9b44422d527accace490f8",
+    "name": "Robusthed: spillere kan strande bag loading-dækket (to tilfælde)",
+    "list": "Testing",
+    "url": "https://trello.com/c/DIktjy8U",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6ab0375a3146b80d5d9b4f73",
+    "name": "Clarify shop range wording and fix misleading pressure plate instructions",
+    "list": "To Do",
+    "url": "https://trello.com/c/xQWVkwhw",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aaa60eec3b7c104491930d6",
+    "name": "Rework Lucky Wheel into an actual wheel with a dedicated side button",
+    "list": "Done",
+    "url": "https://trello.com/c/rZC8cJHy",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa2a720836f3f09face9180",
+    "name": "Restrict Developer tag and dev cheats to LaverSneglen and Mikkelczar",
+    "list": "Done",
+    "url": "https://trello.com/c/036tYqti",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6a9b445042ccd577d4f074f2",
+    "name": "Controller: tre HUD-handlinger uden gamepad-sti, sprint-lås og terminal-luk",
+    "list": "Testing",
+    "url": "https://trello.com/c/uI8hg2At",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aaa6103271f9311a6d2fdf5",
+    "name": "Replace the old shop with a much larger floating hologram shop and automatic interaction",
+    "list": "Done",
+    "url": "https://trello.com/c/IA6VOViX",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa28f628e0dc8bd5aa382b9",
+    "name": "Redesign Shop and Upgrades as square buttons with two-color imagegen icons",
+    "list": "Done",
+    "url": "https://trello.com/c/Nn65pxPk",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa283cc681d23bf5bb35ee7",
+    "name": "Prevent players from entering the circle when a lobby is full",
+    "list": "Done",
+    "url": "https://trello.com/c/u0rLQTOe",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa288e5364a5cc2fe2baecc",
+    "name": "Level 2: Pool Slide monster appears unable to kill players",
+    "list": "Done",
+    "url": "https://trello.com/c/UmtTK3MA",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa262aa6f6227170987731a",
+    "name": "Rework Upgrades and Shop logos — require 10/10 critic review before release",
+    "list": "Done",
+    "url": "https://trello.com/c/PkEUQQ74",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa2739450de4686d160acfe",
+    "name": "Fix forced upward camera movement after loading in",
+    "list": "Done",
+    "url": "https://trello.com/c/pzVtej6w",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa297de202ad6bead8fcaf9",
+    "name": "Allow switching between Continue and Return to Lobby",
+    "list": "Done",
+    "url": "https://trello.com/c/rLDqjpE4",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa27c1c2a2039431f67399a",
+    "name": "Drop carried fuses and CDs on death for easy pickup",
+    "list": "Done",
+    "url": "https://trello.com/c/IpCKlAsz",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa283900ffe41b731edee4f",
+    "name": "Level 3: Lengthen the slide and stagger spawns higher up",
+    "list": "Done",
+    "url": "https://trello.com/c/iuP2GkZL",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa27d952e5861676163bd55",
+    "name": "Simplify Stamina Capacity upgrade text",
+    "list": "Done",
+    "url": "https://trello.com/c/pCSeWVcQ",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa25e6f2234d6cc8a1215bd",
+    "name": "Lobby: The ceiling lights should make like cool sweep patern at random. Make 5 different cool ones.",
+    "list": "Done",
+    "url": "https://trello.com/c/lXtjnc8N",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa25e467820343245fc5673",
+    "name": "Level 1: Exit door reader/pointer should be an arrow instead of a triangle. Give it a circle, so its like a compass.",
+    "list": "Done",
+    "url": "https://trello.com/c/tnnPzDyn",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa2560e7914a58293dd3330",
+    "name": "Award 2 tokens for completing a level",
+    "list": "Done",
+    "url": "https://trello.com/c/ne5X0bYj",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa25c5e0f674df85dec7e33",
+    "name": "Level 1: Make chase audio directional and fade with distance",
+    "list": "Done",
+    "url": "https://trello.com/c/2GlQSXUc",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa25b25598bb19ebc9c1f95",
+    "name": "Rename Protect charges and move them under Upgrades",
+    "list": "Done",
+    "url": "https://trello.com/c/qFCuCf3w",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa225cb43b67521fea2f661",
+    "name": "Give players a short introduction to the studio. That we are only 2 DEVS and we are working on any bugs, and appreciate any feedback.",
+    "list": "Done",
+    "url": "https://trello.com/c/kQ4GNLUU",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa25606849486491e799ab9",
+    "name": "Create icons for Upgrades, Gear, and Shop",
+    "list": "Done",
+    "url": "https://trello.com/c/WJLErpHx",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa25e2c19a905828dbeddf7",
+    "name": "Lobby: Move the floating intro back on top of the gate",
+    "list": "Done",
+    "url": "https://trello.com/c/hhRhOMX5",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa25610e88099d83e0f0a01",
+    "name": "Lobby: Add a music toggle button",
+    "list": "Done",
+    "url": "https://trello.com/c/DEmpCU8O",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa1b2ba9db47e2257a0b5d9",
+    "name": "Level 2: Increase tunnel height to allow a larger pool slide entity",
+    "list": "Done",
+    "url": "https://trello.com/c/KcUdv690",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa1dd350992e86948e406f7",
+    "name": "Redo the logos for the developer items and passes.",
+    "list": "Done",
+    "url": "https://trello.com/c/RynrscFW",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa25669348aec324fe24ee5",
+    "name": "Fix players spawning on top of each other in levels",
+    "list": "Done",
+    "url": "https://trello.com/c/bwMzNaSs",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa25def2391640e3e593fe6",
+    "name": "Restore the old end-of-level UI with auto-continue and visible player choices",
+    "list": "Done",
+    "url": "https://trello.com/c/zlI8Rmto",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa1b544c3c45b8a9709dc33",
+    "name": "Add a Developer name tag for devs",
+    "list": "Done",
+    "url": "https://trello.com/c/ZAlinXFV",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa1b25624af8efea225eef6",
+    "name": "Automatically dismiss the Round Loading Failed message",
+    "list": "Done",
+    "url": "https://trello.com/c/ON6ZsrFJ",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa1b1d36d37a51358a1e60d",
+    "name": "Lobby: Fix overlapping textures on the level selector doorframe",
+    "list": "Done",
+    "url": "https://trello.com/c/xDmiuTCx",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa1b1ce2273597d78b6f571",
+    "name": "Explore percentage discounts for shop items and a possible ad campaign",
+    "list": "Done",
+    "url": "https://trello.com/c/3wDozWJa",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa1b1cb1ba10383ff7d17ae",
+    "name": "Brainstorm additional shop items",
+    "list": "Done",
+    "url": "https://trello.com/c/n7uSFoMX",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa1b1d1a89fd824f8e84024",
+    "name": "Review shop prices against the market",
+    "list": "Done",
+    "url": "https://trello.com/c/KBDJouxI",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa1b59584bef5e472378a89",
+    "name": "Add a token-purchasable item with 5 seconds of invisibility and death protection",
+    "list": "Done",
+    "url": "https://trello.com/c/ak8Mgaeq",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa1b1c9e5b971c7c6d9cd57",
+    "name": "Unfinished levels: Show Coming soon, work in progress, and a percentage bar",
+    "list": "Done",
+    "url": "https://trello.com/c/AzpxrZMR",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa19b883b7f6f02d1f91629",
+    "name": "weird bar at the entry of levels",
+    "list": "Done",
+    "url": "https://trello.com/c/mirOf8aF",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa1b1d60c7feb55055cbcb4",
+    "name": "Level 2: Fix spawning into the level from the lobby",
+    "list": "Done",
+    "url": "https://trello.com/c/DOIafNTw",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa1b1c7c39053b45fb6c922",
+    "name": "Lobby: Add a direct shop button below the Equipment button",
+    "list": "Done",
+    "url": "https://trello.com/c/7FXZy8ae",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa197dcd825c7257c220949",
+    "name": "Level 3: Fix the slide entry",
+    "list": "Done",
+    "url": "https://trello.com/c/psRtwdjR",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa1b1c675b4a16e0f0bd8bd",
+    "name": "Lobby: Make the Zyntra Equipment button much bigger and rename it",
+    "list": "Done",
+    "url": "https://trello.com/c/IS3zOeKP",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa197bbdc9b280cfb77289f",
+    "name": "Remove the forced flashlight",
+    "list": "Done",
+    "url": "https://trello.com/c/nS5vj1RM",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa197d9c8bf89945089e437",
+    "name": "Level 3: Make the map more square",
+    "list": "Done",
+    "url": "https://trello.com/c/k6e4BnS1",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa197bad02f9065bd5b44b2",
+    "name": "Level 3: Make it clear that spawn is not the exit",
+    "list": "Done",
+    "url": "https://trello.com/c/el9lI94F",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa6466de5d69a5e7a3b1467",
+    "name": "Remember to gift the player that gave us feedback in discord with the upgrades from advanced equipment package and 10 research tokens.",
+    "list": "Done",
+    "url": "https://trello.com/c/3FGClSDh",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6a9b0fa577ce6b268cd3e960",
+    "name": "Emergency Re-entry: sæt produktet on-sale og beslut vinduets længde",
+    "list": "Done",
+    "url": "https://trello.com/c/R5tjB30m",
+    "data": {
+      "checklists": [
+        {
+          "id": "ari:cloud:trello::checklist/workspace/6a9807517a71aa833c5dedb8/6a9b0fabe820b82336c6af9c",
+          "name": "Før on-sale",
+          "position": 140737488355328,
+          "checkItems": [
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9b0fb33c4699214e6688d9",
+              "name": "Beslut vinduets længde: behold 15 s eller gå til 45-60 s (én konstant i GameManager: wipeDeadline = os.clock() + 15, og RoundUI læser sekunderne fra partydown-eventet, så kortet følger med)",
+              "state": "INCOMPLETE",
+              "position": 1
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9b0fb559e589cd952d321d",
+              "name": "Studio-test: dø i en runde, køb credit i vinduet (Studio simulerer købet) → respawn uden andet tryk, credit-tæller 0",
+              "state": "INCOMPLETE",
+              "position": 2
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9b0fb727b5aca510142f09",
+              "name": "Studio-test: køb credit i lobbyen (i live) → intet sker, tæller 1; brug UseReentry mens i live → afvisning, tæller stadig 1 efter rejoin",
+              "state": "INCOMPLETE",
+              "position": 3
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9b0fba3050c3cc400ac1f2",
+              "name": "Studio-test: NO THANKS lukker kortet med det samme, nedtællingen fortsætter i statuslinjen, butikkens eget re-entry-panel dukker ikke op i stedet",
+              "state": "INCOMPLETE",
+              "position": 4
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9b0fbcf48232568c02dbcb",
+              "name": "Creator Dashboard → Monetization → Developer Products → \"Emergency Re-entry\" (id 3707755318) → sæt on-sale",
+              "state": "INCOMPLETE",
+              "position": 5
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9b0fbe0c7e53196cd637d0",
+              "name": "Efter on-sale: ét rigtigt køb i live-spillet med en testkonto, og tjek Output for \"[Zyntra] Re-entry refund FAILED\" (må ikke forekomme)",
+              "state": "INCOMPLETE",
+              "position": 6
+            }
+          ]
+        }
+      ],
+      "nextCursor": "eyJvYmplY3RJZCI6IjZhOWIwZmFiZTgyMGI4MjMzNmM2YWY5YyJ9",
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa197d834a60846a99d1ca2",
+    "name": "Level 3: Escaping does not require a button press",
+    "list": "Done",
+    "url": "https://trello.com/c/8hIQpNOw",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6a9d9659d329a1e64f1fedb2",
+    "name": "Unlock younger audiences: fix publishing warning + reach 250 qualifying players",
+    "list": "Done",
+    "url": "https://trello.com/c/iMTZhXMy",
+    "data": {
+      "checklists": [
+        {
+          "id": "ari:cloud:trello::checklist/workspace/6a9807517a71aa833c5dedb8/6a9d967410fe8f39fa83ecdd",
+          "name": "1. Group owner — resolve publishing warning",
+          "position": 1000,
+          "checkItems": [
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9d968d4172b89815ade3a2",
+              "name": "ERN group owner: open Audience Reach > Manage and record the exact unmet requirements; LaverSneglen cannot view them.",
+              "state": "INCOMPLETE",
+              "position": 1000
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9d969055503e98ef339b82",
+              "name": "Owner: resolve required good-standing, age/ID verification and 2FA checks. Do not assume which check caused the warning.",
+              "state": "INCOMPLETE",
+              "position": 2000
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9d968e8e9c560f7e11a850",
+              "name": "Owner: confirm qualifying 2-month Plus/Premium OR approve the 1,000 Robux alternative after reading terms; confirm the warning clears.",
+              "state": "INCOMPLETE",
+              "position": 3000
+            }
+          ]
+        },
+        {
+          "id": "ari:cloud:trello::checklist/workspace/6a9807517a71aa833c5dedb8/6a9d96702f11b53fe129e24e",
+          "name": "2. Grow and track 250 qualifying players",
+          "position": 2000,
+          "checkItems": [
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9d9691fe69747547e13c99",
+              "name": "Record a fresh Audience Reach count/date. Baseline: 30/250, updated 4 Sep 2026; displayed gap 220 within a rolling 60-day window.",
+              "state": "INCOMPLETE",
+              "position": 1000
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9d9693dd85eca5a4b9ee1a",
+              "name": "Prepare genuine 16+ co-op playtests, relevant creator invitations and gameplay clips; obtain approval before outreach or ad spending.",
+              "state": "INCOMPLETE",
+              "position": 2000
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9d9695439e4cf937b4e8a7",
+              "name": "Review first-session drop-offs and playtest feedback; prioritize fixes that help genuine players enjoy and return to the game.",
+              "state": "INCOMPLETE",
+              "position": 3000
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9d9692851658248401e4b6",
+              "name": "Manually track qualifying-player milestones: 50, 100, 150, 200, 250. Count only Roblox's updated metric; no bots, alt farming or forced purchases.",
+              "state": "INCOMPLETE",
+              "position": 4000
+            }
+          ]
+        },
+        {
+          "id": "ari:cloud:trello::checklist/workspace/6a9807517a71aa833c5dedb8/6a9d9672cca435505e7241ab",
+          "name": "3. Verify younger-audience access",
+          "position": 3000,
+          "checkItems": [
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9d9696b5c1ccaa51a015ea",
+              "name": "Keep the questionnaire accurate; current Mild/repeated mild fear is not itself a 16+ rating. Review any future maturity-affecting content.",
+              "state": "INCOMPLETE",
+              "position": 1000
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9d9699e21a29efac033ce8",
+              "name": "Confirm Roblox shows the qualifying-player/safety evaluation passed and Kids/Select eligible; address any actual moderation feedback.",
+              "state": "INCOMPLETE",
+              "position": 2000
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9d9697178d8cf77e8f4ecb",
+              "name": "Verify the group warning is resolved and dashboard/public audience access updates; record dated evidence before moving this card to Done.",
+              "state": "INCOMPLETE",
+              "position": 3000
+            }
+          ]
+        }
+      ],
+      "nextCursor": "eyJvYmplY3RJZCI6IjZhOWQ5NjcyY2NhNDM1NTA1ZTcyNDFhYiJ9",
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6a9ad699b97db6084f437b4b",
+    "name": "Opret 4 Roblox-badges (ikoner + id'er) til Backrooms",
+    "list": "Done",
+    "url": "https://trello.com/c/sHKVULaS",
+    "data": {
+      "checklists": [
+        {
+          "id": "ari:cloud:trello::checklist/workspace/6a9807517a71aa833c5dedb8/6a9ad6a2e24e9f6af5c202d2",
+          "name": "Badges",
+          "position": 140737488355328,
+          "checkItems": [
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9ad901ca7ccb26352d09a9",
+              "name": "Ikon + badge \"Level 1 Cleared\" (Escaped Level 1 of the Backrooms.) → id ind i ZyntraConfig.Badges.FirstClearLevel1",
+              "state": "INCOMPLETE",
+              "position": 1
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9ad90427fd51958a9a56a5",
+              "name": "Ikon + badge \"Level 2 Cleared\" (Survived the Sunken Leisure Complex and found the exit.) → ZyntraConfig.Badges.FirstClearLevel2",
+              "state": "INCOMPLETE",
+              "position": 2
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9ad9058caf7d6e520f7456",
+              "name": "Ikon + badge \"Level 3 Cleared\" (Got out of the mall before the Mall Manager found you.) → ZyntraConfig.Badges.FirstClearLevel3",
+              "state": "INCOMPLETE",
+              "position": 3
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9ad907d05f9241e5086f45",
+              "name": "Ikon + badge \"Stay Quiet\" (Cleared every level of the campaign.) → ZyntraConfig.Badges.CampaignComplete",
+              "state": "INCOMPLETE",
+              "position": 4
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9ad90a4d12b6015e7b164f",
+              "name": "Ikon-spec: 512x512 PNG, motiv inden for cirkel, mørkt backrooms-look med Zyntra-grøn accent (samme stil på alle 4)",
+              "state": "INCOMPLETE",
+              "position": 5
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9ad90e9fc4a84964fcbbab",
+              "name": "Efter id'er er indsat i Studio: klar ét level i en playtest og tjek at badget dukker op på profilen (kun første gang; anden gang uddeles intet)",
+              "state": "INCOMPLETE",
+              "position": 6
+            }
+          ]
+        }
+      ],
+      "nextCursor": "eyJvYmplY3RJZCI6IjZhOWFkNmEyZTI0ZTlmNmFmNWMyMDJkMiJ9",
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa197f0572d8f7b681cf400",
+    "name": "Add in-game voice chat (VC)",
+    "list": "Done",
+    "url": "https://trello.com/c/echzcDhm",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6a9aab20dfa9e1db73bdf58b",
+    "name": "test1",
+    "list": "Done",
+    "url": "https://trello.com/c/D77iBxrZ",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa80215a5f2cfc2c59bb6cd",
+    "name": "We need a \"Back to lobby\" option when in a level.",
+    "list": "Done",
+    "url": "https://trello.com/c/FON3SKNO",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6a9826c8bfd1bd52a62d85b8",
+    "name": "Remove \"Access ready 4 queues max 6 each from the level screens in the lobby\"",
+    "list": "Done",
+    "url": "https://trello.com/c/3zK75F0g",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6a983392e0573d698d355ff9",
+    "name": "Level 3 maze generator needs to be fixed, not one big rectangle",
+    "list": "Done",
+    "url": "https://trello.com/c/XwFEH1Tp",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6a980874149ec3f7179aab86",
+    "name": "Make the Level 2 pool noodle entity accelerate and chase",
+    "list": "Done",
+    "url": "https://trello.com/c/5VpRo6A8",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6a993af1d3ee2cf65d2a04e5",
+    "name": "Line needs to be removed, and made level text bigger",
+    "list": "Done",
+    "url": "https://trello.com/c/2GPXBNC4",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa19e8cd292830b22d7fa29",
+    "name": "A CAT IN THE LOBBY PLEASE",
+    "list": "Done",
+    "url": "https://trello.com/c/fdl6NB0b",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6a98086fa3c066831a82216d",
+    "name": "Allow the flashlight while hiding under a table",
+    "list": "Done",
+    "url": "https://trello.com/c/rrZu4S20",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6a9808720cc380284faa40e9",
+    "name": "Fix running turning itself off in the lobby",
+    "list": "Done",
+    "url": "https://trello.com/c/WC1ZQRyH",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6a98094b2997c1299ddd0769",
+    "name": "Level 1 entity scripts run in the lobby, level 1 entity is also loaded in the lobby",
+    "list": "Done",
+    "url": "https://trello.com/c/Ku6YeWJz",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa225652dac04cac74cd9d4",
+    "name": "Level 2 - Entity not spawning",
+    "list": "Done",
+    "url": "https://trello.com/c/GdkBpbkc",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa25608ba83c505c95e8bd4",
+    "name": "Research more items players can buy with tokens",
+    "list": "Done",
+    "url": "https://trello.com/c/O0h3ag8I",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa2560a94de304f6e3b02e2",
+    "name": "Dev cheats: Add ESP for all players",
+    "list": "Done",
+    "url": "https://trello.com/c/53c4MFE5",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6a98086e084b0392d1b9ec05",
+    "name": "Remove Zyntra Supporter from levels",
+    "list": "Done",
+    "url": "https://trello.com/c/0XurRnWf",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa54161d8e3624b3beb802a",
+    "name": "Roblox Analytics for the last 28 days shows: - Phone: 47.7% — 1,874 player-days - PC/computer: 32.3% — 1,269 player-days - Tablet: 20.0% — 788 player-days - Console/VR: no recorded activity So 67.7% of the audience plays on touch devices. Phone is the largest platform, but PC is still a substantial third. Therefore a full and x optimization for mobile and tablet view is essential. For example the shop and upgrades tab are to big on the phone, the tabs can stay the same size, but the contents have to be shrunk. ",
+    "list": "Done",
+    "url": "https://trello.com/c/0xPyX762",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa3948b39ce15a584bb1f45",
+    "name": "Correction to (Lobby: The ceiling lights should make like cool sweep patern at random. Make 5 different cool ones. ) The pattern should be turning the lights on and off in a pattern.",
+    "list": "Done",
+    "url": "https://trello.com/c/j2JrjfkG",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa8076d031e080ec6040660",
+    "name": "Level 3 entity spawns at the start of the level when you have completed the level and start running down the long hall, before the exit.",
+    "list": "Done",
+    "url": "https://trello.com/c/jhwiqOIL",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa1b286e729987da3a37513",
+    "name": "Donation leaderboard: Include all in-game purchases",
+    "list": "Done",
+    "url": "https://trello.com/c/gTgtoztS",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa64aefe6db48d80373f4ce",
+    "name": "When spectating a player, the player being watched should see a small spectator counter showing how many people are currently spectating them. It should only show the number, not the spectators’ names.  Spectators should also hear the exact same sounds as the alive player they are watching. For example, the walking sound currently plays the default Roblox sound for spectators, while the alive player hears our custom walking sound. The spectator should hear the exact same custom sound.  This should apply to all relevant sounds, so the spectator’s audio matches what the player they are watching is hearing as closely as possible. Also the UIs, so when for example a exit arrow is showing or just any UI the specated player can see. But when spectating a DEV the specators should not be able to see ESP when toggled on ",
+    "list": "Done",
+    "url": "https://trello.com/c/J67RPeIy",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa28f74f28ee42411f88578",
+    "name": "Dev cheats: Add free respawn for developers",
+    "list": "Done",
+    "url": "https://trello.com/c/bwyxIUz1",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6a9b4434c9262ba67f632b2e",
+    "name": "Pool Foam er lydløs: lav lyde og monter en looping emitter på hver entity",
+    "list": "Done",
+    "url": "https://trello.com/c/24sCzSO6",
+    "data": {
+      "checklists": [
+        {
+          "id": "ari:cloud:trello::checklist/workspace/6a9807517a71aa833c5dedb8/6a9c3de4b2bb806c244917d5",
+          "name": "Til lydproducenten — 3 Pool Foam-lyde",
+          "position": 140737488355328,
+          "checkItems": [
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9c3e16bc7bb1ed584d318a",
+              "name": "START HER: Brug ElevenLabs Sound Effects. Vi skal bruge Walk, Hunt og Attack til samme våde skum/gummi-monster i Roblox-spillet BACKROOMS: STAY QUIET. Lav gerne 2–3 forslag per lyd. Kun disse tre lyde i første omgang. Brug en konto/generation med kommerciel brugsret; bekræft dette før produktion. Ingen tale eller musik.",
+              "state": "INCOMPLETE",
+              "position": 140737488355328
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9c3e170cface8e2b98053c",
+              "name": "WALK — 6–8 sekunder, Looping ON. Diskret advarsel om noget tungt og vådt, der nærmer sig; uroligt, ikke komisk. Kopiér denne prompt:\n\nClose dry Foley of a heavy porous foam creature dragging and flexing across damp swimming-pool tiles. Soft rubber friction, small wet suction releases, irregular low creaks. Restrained and unsettling. Seamless loop. No voice, music, cartoon squeaks, human footsteps or baked-in room reverb.",
+              "state": "INCOMPLETE",
+              "position": 140737488371712
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9c3e187d671a4fc1a4915d",
+              "name": "HUNT — 6–8 sekunder, Looping ON. Samme materiale som Walk, hurtigere og mere truende. Forskellen skal kunne høres på både headset og telefon, ikke kun som højere lydstyrke. Kopiér denne prompt:\n\nThe same heavy porous foam creature moving urgently across wet pool tiles. Faster rubber tension releases, heavier wet drag and compact throbbing creaks. More threatening than the walking take, with clear midrange detail. Seamless loop. No voice, music, shrill whistle, cinematic boom or baked-in room reverb.",
+              "state": "INCOMPLETE",
+              "position": 140737488388096
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9c3e1a50dd157cf1c0c3ec",
+              "name": "ATTACK — cirka 0,5–1 sekund, Looping OFF. Ét kontant slag, uden lang optakt eller flere angreb. Kopiér denne prompt:\n\nOne abrupt close strike from a heavy wet foam creature: compact rubber snap, suction slap and a short low pressure burst. Immediate attack, short natural decay. Dry isolated Foley. No voice, scream, music, cinematic boom or long reverb.",
+              "state": "INCOMPLETE",
+              "position": 140737488404480
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9c3e1bb74d9dff21b39f8f",
+              "name": "KVALITETSTJEK: Hør Walk og Hunt mindst fem gange i træk. Ingen klik, pauser eller tydelig fade ved samlingen. Ingen clipping. Hold variationernes lydstyrke nogenlunde ens til sammenligning. Undgå indbygget stor poolhal-rumklang; spillet håndterer afstand, 3D-placering og endeligt mix.",
+              "state": "INCOMPLETE",
+              "position": 140737488420864
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9c3e1c87ba39912e68ec58",
+              "name": "AFLEVERING: WAV 48 kHz, gerne mono. Behold originaleksporten; MP3 44,1 kHz kan også bruges. Navne: pool-foam-walk-v1.wav, pool-foam-hunt-v1.wav og pool-foam-attack-v1.wav (v2/v3 for alternativer). Vedhæft filerne på dette kort eller læg et downloadlink her. Skriv anvendt model, dato og hvilken produktionskonto/plan der blev brugt — ingen loginoplysninger.",
+              "state": "INCOMPLETE",
+              "position": 140737488437248
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9c3e1d37e6fe0042027387",
+              "name": "NÆSTE TRIN: Ejeren og Codex vælger ved aflytning. Derefter håndteres gruppeupload, moderation, experience-adgang, lyd-ID'er og test/mix i Roblox. Din første levering er lydprøverne; du behøver ikke uploade dem til Roblox.",
+              "state": "INCOMPLETE",
+              "position": 140737488453632
+            },
+            {
+              "id": "ari:cloud:trello::check-item/workspace/6a9807517a71aa833c5dedb8/6a9c3e1fee88b8ff89de4579",
+              "name": "KILDER/HJÆLP: ElevenLabs SFX-guide: https://elevenlabs.io/docs/eleven-creative/playground/sound-effects — Brugsret: https://help.elevenlabs.io/hc/en-us/articles/13313564601361-Can-I-publish-the-content-I-generate-on-the-platform",
+              "state": "INCOMPLETE",
+              "position": 140737488470016
+            }
+          ]
+        }
+      ],
+      "nextCursor": "eyJvYmplY3RJZCI6IjZhOWMzZGU0YjJiYjgwNmMyNDQ5MTdkNSJ9",
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa8170ca9d00704fc203fcd",
+    "name": "Show a physical barrier around the level-entry circle when the party is full",
+    "list": "Done",
+    "url": "https://trello.com/c/tqcZqFqk",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa841e5e098f94fd432b79b",
+    "name": "Fix the hide under the table avatar animation in level 3.",
+    "list": "Done",
+    "url": "https://trello.com/c/fLcenSjE",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa83eb8a148c75cac9f1b45",
+    "name": "Rehink the \"Top Supporter\" sign. Center and enlarge the text.",
+    "list": "Done",
+    "url": "https://trello.com/c/ErO9MCnP",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa5a3ddd3b98913804464f2",
+    "name": "When a player joins the game for the first time, there should be an arrow or a guiding line leading from the player to the entrance of Level 1, so they know exactly where to go to start the game. This guide should only appear on their first login and should not be shown again afterward.",
+    "list": "Done",
+    "url": "https://trello.com/c/69agyLbr",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa97dae0053689b45e56545",
+    "name": "Create more purchasable, high-quality items for the shop, and make sure every item actually works correctly after purchase.  Rethink the entire shop experience. Instead of a basic shop, create an actual **SHOP area built into the wall**, with a large **SHOP** sign using Zyntra’s neon colors. It should feel extremely inviting and immediately make players curious enough to walk over and explore it.  For the physical shop, experiment with something like **pressure-plate purchase displays**. Each purchasable item could have its own display or pedestal, with a box or representation of the item hovering above it. Make the products visually exciting and obvious to interact with. Use image generation to create custom textures/assets for the purchasable items so they feel native to Zyntra rather than like generic placeholders.  Also redesign the **SHOP UI icon** to increase visibility and clicks. Give it a strong circular border treatment, potentially with a subtle animated/glowing/pulsing effect around the edge using Zyntra’s visual identity. It should attract attention without becoming annoying.  Overall, treat the shop as a major part of the game rather than just another UI menu. The goal is to make players **notice it → become curious → interact with the products → understand what they are buying → actually want to purchase them**.",
+    "list": "Done",
+    "url": "https://trello.com/c/Tv8xvUGO",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa8450962ba402b2f293640",
+    "name": "Add progressive playtime rewards, starting after 5 minutes",
+    "list": "Done",
+    "url": "https://trello.com/c/NP80aPPC",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa97f315a64d0af25750eae",
+    "name": "Add Daily Rewards as a tab, just like Shop and Upgrades, but make it bouge.",
+    "list": "Done",
+    "url": "https://trello.com/c/c2YZJk60",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa97f45294b0e7179160bce",
+    "name": "Make all lobby colors more saturated.",
+    "list": "Done",
+    "url": "https://trello.com/c/oB8Lqsln",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa841eca71239d7d25b37db",
+    "name": "Show a dev-only free respawn option in the respawn purchase prompt",
+    "list": "Done",
+    "url": "https://trello.com/c/VCIk4Sli",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa84253bf40882b9bd434a2",
+    "name": "Level 1: Make the instructions much clearer and more accessible. Display a text prompt to the entire team whenever a player picks up a fuse, powers a fuse box, or pulls a lever. Each prompt should clearly state who performed the action, what they did, and what the team needs to do next, while matching the game’s existing UI design.\n\nFor example, if more fuse boxes still need to be powered, clearly tell the team how many remain. This should apply throughout the entire level so players always understand their current objective and next step.\n\nAlso, make the cables show a subtle but clearly visible electrical current flowing toward the fuse box. Once the fuse box is powered, the current should reverse direction and flow toward the lever, visually guiding players to where they need to go next. At the same time, display a prompt instructing the team to follow the current and pull the lever.",
+    "list": "Done",
+    "url": "https://trello.com/c/IgTt0K3h",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa9a15a271f9311a6818b67",
+    "name": "Codex: Create a table-hiding animation in Blender via MCP",
+    "list": "Done",
+    "url": "https://trello.com/c/FXH0ddhN",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aaa2d98a9306ba20cd545f9",
+    "name": "Donation leaderboard: Remove historical-purchase footer and align columns",
+    "list": "Done",
+    "url": "https://trello.com/c/ypGhJj76",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa8450ac58a23c5f45e9dec",
+    "name": "Add a daily lucky wheel for tokens and other rewards",
+    "list": "Done",
+    "url": "https://trello.com/c/4DOb30AO",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa9a0cfa899e7a47767d695",
+    "name": "Unify in-game UI using Objectives and Mission Brief as the style reference",
+    "list": "Done",
+    "url": "https://trello.com/c/UwFJOWZH",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aaed1dda388999db043fc0a",
+    "name": "When players either use or buys a re-entry they should spawn the exact same place where they died, but they have a 10 seconds grace period which stated as \"you are invisible to monsters (10 seconds timer)",
+    "list": "Done",
+    "url": "https://trello.com/c/Ejo5OPkG",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa97b90faa636c869671471",
+    "name": "Fix pathfinding for the pool mouth entity in level 2, its stops up.",
+    "list": "Done",
+    "url": "https://trello.com/c/Mlicft6v",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa8450b6f2d4e1a969d90a9",
+    "name": "Explore more token-purchasable items, including a Speed Boost Potion",
+    "list": "Done",
+    "url": "https://trello.com/c/cmsPkLhK",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aad4aead71a4efcd5f7f005",
+    "name": "Make a nice sign with saturated colors, but still fits the Zyntra neon colors that says supplies and upgrades over the purchasable items in the lobby.",
+    "list": "Done",
+    "url": "https://trello.com/c/LswEFLHq",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aaa30453e456d6b2a5f5510",
+    "name": "Research and redesign the shop to be much larger",
+    "list": "Done",
+    "url": "https://trello.com/c/32xgCdtM",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aaaa88dabc3a66ebe65e0d5",
+    "name": "Speed potion needs to give 30% speed boost.",
+    "list": "Done",
+    "url": "https://trello.com/c/a85w9YZj",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aaa2dc5ab730b7c66242fec",
+    "name": "Rework Entity Shield Charges UI to match the Objective UI",
+    "list": "Done",
+    "url": "https://trello.com/c/W61O37go",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aaed285ef27bb6d353dc8e3",
+    "name": "Level 3 · Mall Manager må ikke skubbe skjulte spillere ud",
+    "list": "Done",
+    "url": "https://trello.com/c/DYnBEZHk",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aafbe51d978f95405288dcb",
+    "name": "P1 · Zyntra Entity Detector: kort fare-scanning",
+    "list": "Done",
+    "url": "https://trello.com/c/Zyrtgu79",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aafbe52ebd509db8d8fbd33",
+    "name": "P1 · Advanced Equipment: tilføj fokuseret lygte og tydelig produktværdi",
+    "list": "Done",
+    "url": "https://trello.com/c/n1yx5OdQ",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aaed2f270f2b906446c1fa0",
+    "name": "When a player in every levels completes a step, like in level 1, finding a fuse, powering fuse box, pulls lever. This should be stated as message on screen for everybody which should be visible and with the username for the person who did that certain thing. This is for all levels.",
+    "list": "Done",
+    "url": "https://trello.com/c/FAgRQho1",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aaed2a0b29ef7925f827e43",
+    "name": "The exit door indicator for level 1 should be placed in the top right cornor.",
+    "list": "Done",
+    "url": "https://trello.com/c/w07K0m5E",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aafefcd7aadf7ccfc3445e5",
+    "name": "Level 1: halve objectives, permanent lever pulls og lokalt spotting-skrig",
+    "list": "Done",
+    "url": "https://trello.com/c/DR1Isx73",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa98561cccdebb0bc9ffa2a",
+    "name": "P1 · Før større ads: mål frafald fra join til første genstart",
+    "list": "Before big adsspend",
+    "url": "https://trello.com/c/bIFdNWUf",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aafbe53ccd8401996d1329e",
+    "name": "P1 · Research-opgaver: daglige mål og frivillige fund i levels",
+    "list": "Done",
+    "url": "https://trello.com/c/wEFTmguQ",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa9856568752c820a835ed9",
+    "name": "P1 · Før større ads: verificér mobil og tablet i rigtige runder",
+    "list": "Before big adsspend",
+    "url": "https://trello.com/c/lUKD3R8G",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aaed4e9b96e24248128a65b",
+    "name": "When a player completes Level 2 and clicks “Continue” to load into Level 3, they can sometimes clip through the slide, fall out of the map, and die from fall damage.  Please fix this so players cannot clip or fall out of the slide during the transition into Level 3.  Also, increase the thickness of the tube’s outer walls by 50% to make sure players cannot fall or clip through them.",
+    "list": "Done",
+    "url": "https://trello.com/c/xIjizflN",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa985660fb7afabb6a0fe30",
+    "name": "P2 · Før større ads: match annonce og thumbnail med første gameplay",
+    "list": "Before big adsspend",
+    "url": "https://trello.com/c/kydyBl7u",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa985638631014f69727a5f",
+    "name": "P1 · Før større ads: kortere og tydeligere vej fra lobby til gameplay",
+    "list": "Before big adsspend",
+    "url": "https://trello.com/c/EYIT99eM",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa98564d7f072fae4a145c7",
+    "name": "P1 · Før større ads: stærk første oplevelse og tidlig succes",
+    "list": "Before big adsspend",
+    "url": "https://trello.com/c/2fiHi4q4",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aafbe576313ae1dcf281eb2",
+    "name": "P2 · Expedition Pack: re-entry, Entity Shield og Route Markers",
+    "list": "Done",
+    "url": "https://trello.com/c/eigEDZAH",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa985646a0f7785ca1ae1e8",
+    "name": "P1 · Før større ads: forståelig første død og nemt nyt forsøg",
+    "list": "Before big adsspend",
+    "url": "https://trello.com/c/PR0ersiy",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  },
+  {
+    "id": "ari:cloud:trello::card/workspace/6a9807517a71aa833c5dedb8/6aa98566c1a8ba4791988d2f",
+    "name": "P1 · Før større ads: test hele solooplevelsen og spil igen med venner",
+    "list": "Before big adsspend",
+    "url": "https://trello.com/c/V7m3zDSa",
+    "data": {
+      "checklists": [],
+      "nextCursor": null,
+      "hasMore": false
+    },
+    "error": false
+  }
+]

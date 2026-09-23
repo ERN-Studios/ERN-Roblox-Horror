@@ -3154,16 +3154,29 @@ function TestSuite.ProbeSharedTableHiding(context: {[string]: any}?): {[string]:
 		.. " the next one; start the Studio play session with %d players (found %d)",
 		cap + 1, cap + 1, #participants))
 
+	-- FIRST_CD_PROMPT_20260922: a table with a CD still lying on it keeps its
+	-- hide prompt off on purpose (TAKE owns the table), so it cannot serve as the
+	-- probe's free table.
+	local cdTables = {}
+	for _, object in ipairs(world:GetDescendants()) do
+		if object:IsA("Model") and object:GetAttribute("Level3_CDState") == "WORLD" then
+			table.insert(cdTables, object:GetPivot().Position)
+		end
+	end
 	local anchor: BasePart? = nil
 	for _, object in ipairs(world:GetDescendants()) do
 		if object:IsA("BasePart")
 			and object:GetAttribute("Level3_HideTableAnchor") == true
 			and object:GetAttribute("Level3_HideOccupiedUserId") == 0 then
-			anchor = object
-			break
+			local clear = true
+			for _, at in ipairs(cdTables) do
+				local d = object.Position - at
+				if Vector3.new(d.X, 0, d.Z).Magnitude <= 3 then clear = false break end
+			end
+			if clear then anchor = object break end
 		end
 	end
-	assert(anchor, "Level 3 world has no free hide table anchor")
+	assert(anchor, "Level 3 world has no free hide table anchor without a CD on it")
 	local hideAnchor = anchor :: BasePart
 	local promptObject = hideAnchor:FindFirstChild("HideUnderTablePrompt")
 	assert(promptObject and promptObject:IsA("ProximityPrompt"),

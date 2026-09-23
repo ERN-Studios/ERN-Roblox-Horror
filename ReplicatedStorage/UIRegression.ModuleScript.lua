@@ -938,6 +938,10 @@ end
 local OPTIONAL_GUIS = {
 	"PuzzleGui", "Level2ObjectiveGui", "Level2AlertGui", "Level3ReaderGui",
 	"Level3TableHideUI", "SpectateGui", "LevelOneGuideGui",
+	-- UI_REGRESSION_20260923: Level 4's objective HUD (dev-only level, 2026-09-21)
+	-- sits in the desktop corner the Level 1 brief uses; put away like the rest so
+	-- a run during a Level 4 session cannot report an overlap from a stale round.
+	"Level4ObjectiveGui",
 }
 
 local function findGui(name: string): Instance?
@@ -1046,6 +1050,18 @@ local function resetScenario(inRound: boolean?)
 			railButton.Visible = not inRound
 		end
 	end
+	-- UI_REGRESSION_20260923. The OTHER lobby-only surfaces, for the same reason
+	-- as the rail: an in-round row must not measure UI the game only draws in the
+	-- lobby. The Friend Boost chip (lobby only by owner decision 2026-09-17) and
+	-- the Level 3 reader now share UIDevice.TopRightPanel on desktop (e4bc4a7),
+	-- so level3-reader-open reported an overlap no player can see. Enabled, not
+	-- chip.Visible: the chip's own 0.5 s poll rewrites Visible inside the settle,
+	-- and nothing in that script writes Enabled; the closing reset (inRound nil)
+	-- turns it back on. The rewards intro card is lobby-only in the same way.
+	local boost = findGui("FriendBoostGui")
+	if boost and boost:IsA("ScreenGui") then boost.Enabled = not inRound end
+	local intro = store and store:FindFirstChild("RewardsIntroCard")
+	if inRound and intro and intro:IsA("GuiObject") then intro.Visible = false end
 end
 
 local function revealGui(name: string, filter: ((Instance) -> boolean)?)
@@ -1153,15 +1169,16 @@ function UIRegression.Scenarios(): {any}
 			-- not in the original matrix, which is exactly why its touch case
 			-- went unnoticed.
 			resetScenario(true)
-			-- On touch the panel owns the whole safe band and is Active, so RoundUI
-			-- stands the button down while it is open -- they are alternatives, not
-			-- companions. The matrix models that rather than forcing both visible
-			-- and reporting a collision between two things a player cannot see at
-			-- once; the button's own placement is covered by the row above.
-			local touch = UIDevice.IsTouch()
+			-- RoundUI stands the MISSION BRIEF footer down while the full brief is
+			-- open, on EVERY form factor since 9812b87 (2026-09-02: "leaving the
+			-- footer below it is the duplicate slab"; `objectivesButton.Visible =
+			-- not panelOpen`). They are alternatives, not companions, so the row
+			-- reveals the panel alone rather than reporting a collision between two
+			-- things a player cannot see at once (UI_REGRESSION_20260923; it had
+			-- failed on exactly that pair since 2026-09-02). The button's own
+			-- placement is covered by the row above.
 			revealGui("LevelOneGuideGui", function(child)
-				if child.Name == "ObjectivesPanel" then return true end
-				return child.Name == "ObjectivesButton" and not touch
+				return child.Name == "ObjectivesPanel"
 			end)
 		end, TouchTargets = {"ObjectivesPanel.Close"}},
 		-- The lobby queue panel: five interactive controls, all of which a
@@ -3512,6 +3529,13 @@ function Fit.bodyQueueModalMatrix(): (string, number)
 		-- the item -- registration follows the form factor, visibility follows
 		-- the inventory -- so these two are as expected here as the shield is.
 		SpeedPotionUse = true, RouteMarkerPlace = true,
+		-- UI_REGRESSION_20260923. Two authored registrations newer than this list:
+		-- EntityDetectorScan is ProtectionHUD's fourth equipment row (bd72376,
+		-- 2026-09-20; the same makeRow as the two above, and UIDevice's equipment
+		-- key list names it), and FriendBoost is the lobby chip's rectangle
+		-- (Friend Boost Client, FRIEND_BOOST_20260916), registered so layouts
+		-- avoid it. Both stand down under the shade like everything else here.
+		EntityDetectorScan = true, FriendBoost = true,
 	}
 	local function registeredControlState(element: GuiObject): any
 		local ancestorsVisible = true
@@ -3660,7 +3684,7 @@ function Fit.bodyQueueModalMatrix(): (string, number)
 				registeredBefore = captureRegisteredCluster()
 				local authoredProblems = expectedClusterProblems(registeredBefore)
 				record(#authoredProblems == 0,
-					device.Name .. ": exactly the six authored registered-control keys are present",
+					device.Name .. ": exactly the authored registered-control keys are present",
 					table.concat(authoredProblems, "; "))
 				local activeBefore = 0
 				for object, state in pairs(registeredBefore.States) do
@@ -4560,15 +4584,26 @@ function Fit.bodyBriefingExclusionMatrix(): (string, number)
 	-- The order is the point: rows 2-3 raise the modal over a running briefing
 	-- and take it away again, rows 5-6 raise a briefing under a modal that is
 	-- already up. A one-directional flag passes one half and fails the other.
+	--
+	-- UI_REGRESSION_20260923: Opener follows the OWNER'S rule of 2026-09-10
+	-- (d0ff99e, "Center lobby controls and share music toggle during dispatch"):
+	-- ZyntraStore's modalBlocksStore went from `queueModal or briefing` to
+	-- `queueModal or (InRound and briefing)`. This lane runs in the LOBBY, so a
+	-- briefing alone no longer takes the opener -- the queue modal still does.
+	-- The in-round DEV phone keeps the old exclusion; this lane cannot put the
+	-- local player in a round without faking a server attribute, so that half is
+	-- NOT exercised here (noted in the report). What made the rule safe is that
+	-- the rail and the briefing panel no longer share a rectangle, and that is
+	-- asserted below for every row that draws both.
 	local STATES = {
 		{Label = "idle", Force = false, Shade = false,
 			Brief = false, Subs = false, Opener = true, Transmission = false},
 		{Label = "briefing only", Force = true, Shade = false,
-			Brief = true, Subs = true, Opener = false, Transmission = true},
+			Brief = true, Subs = true, Opener = true, Transmission = true},
 		{Label = "modal opened over a live briefing", Force = true, Shade = true,
 			Brief = false, Subs = false, Opener = false, Transmission = true},
 		{Label = "modal closed, briefing still running", Force = true, Shade = false,
-			Brief = true, Subs = true, Opener = false, Transmission = true},
+			Brief = true, Subs = true, Opener = true, Transmission = true},
 		{Label = "briefing cleared", Force = false, Shade = false,
 			Brief = false, Subs = false, Opener = true, Transmission = false},
 		{Label = "modal only", Force = false, Shade = true,
@@ -4647,11 +4682,37 @@ function Fit.bodyBriefingExclusionMatrix(): (string, number)
 				-- opener leaves the input stack rather than merely going invisible
 				-- underneath an opaque panel -- which is what shipped.
 				record(opener.Visible == state.Opener and opener.Active == state.Opener,
-					label .. ": the store opener is gone from the screen AND from the"
-					.. " input stack whenever anything is over it",
+					label .. ": the store opener leaves the screen AND the input stack"
+					.. " exactly when the queue modal is up (a lobby briefing keeps it, d0ff99e)",
 					string.format("Visible=%s Active=%s, want %s",
 						tostring(opener.Visible), tostring(opener.Active),
 						tostring(state.Opener)))
+				-- The precondition of that rule: a reachable opener must never sit
+				-- inside the briefing panel's rectangle (the C4A defect: taps that
+				-- missed MUTE/STOP fell through onto an invisible opener).
+				if state.Opener and state.Subs then
+					local openerOverlap, openerPair = 0, ""
+					for _, a in ipairs(subtitles:GetDescendants()) do
+						if a:IsA("GuiObject") and visibleChain(a) then
+							local overlapX = math.min(
+								a.AbsolutePosition.X + a.AbsoluteSize.X,
+								opener.AbsolutePosition.X + opener.AbsoluteSize.X)
+								- math.max(a.AbsolutePosition.X, opener.AbsolutePosition.X)
+							local overlapY = math.min(
+								a.AbsolutePosition.Y + a.AbsoluteSize.Y,
+								opener.AbsolutePosition.Y + opener.AbsoluteSize.Y)
+								- math.max(a.AbsolutePosition.Y, opener.AbsolutePosition.Y)
+							local area = math.max(0, overlapX) * math.max(0, overlapY)
+							if area > openerOverlap then
+								openerOverlap = area
+								openerPair = a.Name .. " x " .. opener.Name
+							end
+						end
+					end
+					record(openerOverlap == 0,
+						label .. ": the reachable store opener shares no pixel with the briefing panel",
+						string.format("%.0f px^2 at %s", openerOverlap, openerPair))
+				end
 
 				record(
 					(player:GetAttribute("ZyntraDispatchClientActive") == true)
@@ -4751,14 +4812,28 @@ function Fit.bodyBriefingExclusionMatrix(): (string, number)
 			"closing the terminal releases movement when no movement-owning modal remains",
 			tostring(UIDevice.TouchMovementSuppressed()))
 
+		-- UI_REGRESSION_20260923 (d0ff99e): in the LOBBY a running briefing no
+		-- longer refuses the terminal. Both production paths open it, RoundUI
+		-- yields its panel to it, and the transmission itself keeps running.
 		local toggleDuringBrief = storeProbe:Invoke("open")
 		local kioskDuringBrief = storeProbe:Invoke("kiosk")
-		task.wait(.2)
-		record(toggleDuringBrief == false and kioskDuringBrief == false
-			and terminal.Visible == false and player:GetAttribute("ZyntraStoreOpen") ~= true,
-			"briefing already open: both toggle and kiosk paths refuse the terminal",
-			string.format("toggle=%s kiosk=%s Visible=%s", tostring(toggleDuringBrief),
-				tostring(kioskDuringBrief), tostring(terminal.Visible)))
+		task.wait(.3)
+		record(toggleDuringBrief == true and kioskDuringBrief == true
+			and terminal.Visible == true and player:GetAttribute("ZyntraStoreOpen") == true
+			and subtitles.Visible == false
+			and player:GetAttribute("ZyntraDispatchClientActive") == true,
+			"lobby briefing already open: both toggle and kiosk open the terminal, the panel"
+			.. " yields and the transmission keeps running (d0ff99e)",
+			string.format("toggle=%s kiosk=%s Visible=%s subtitles=%s active=%s",
+				tostring(toggleDuringBrief), tostring(kioskDuringBrief),
+				tostring(terminal.Visible), tostring(subtitles.Visible),
+				tostring(player:GetAttribute("ZyntraDispatchClientActive"))))
+		storeProbe:Invoke("close")
+		task.wait(.3)
+		record(terminal.Visible == false and subtitles.Visible == true,
+			"closing that terminal hands the screen back to the still-running briefing",
+			string.format("Visible=%s subtitles=%s", tostring(terminal.Visible),
+				tostring(subtitles.Visible)))
 
 		player:SetAttribute("UIRegressionForceDispatchActive", nil)
 		task.wait(.3)
@@ -4800,13 +4875,16 @@ function Fit.bodyBriefingExclusionMatrix(): (string, number)
 			tostring(UIDevice.TouchMovementSuppressed()))
 		player:SetAttribute("DispatchBriefingOpen", true)
 		task.wait(.2)
-		record(terminal.Visible == false and player:GetAttribute("ZyntraStoreOpen") ~= true,
-			"a briefing modal attribute closes a terminal that was already open",
+		-- UI_REGRESSION_20260923 (d0ff99e): in the lobby the briefing flag no
+		-- longer closes an open terminal, and movement stays with the terminal.
+		record(terminal.Visible == true and player:GetAttribute("ZyntraStoreOpen") == true,
+			"in the lobby a briefing flag raised over an open terminal leaves it open (d0ff99e)",
 			string.format("Visible=%s attribute=%s", tostring(terminal.Visible),
 				tostring(player:GetAttribute("ZyntraStoreOpen"))))
-		record(UIDevice.TouchMovementSuppressed() == false,
-			"briefing-only exclusion closes Zyntra without leaving movement suppressed",
+		record(UIDevice.TouchMovementSuppressed() == true,
+			"and movement stays suppressed by the terminal that still owns the screen",
 			tostring(UIDevice.TouchMovementSuppressed()))
+		storeProbe:Invoke("close")
 		player:SetAttribute("DispatchBriefingOpen", nil)
 		task.wait(.2)
 
@@ -5036,14 +5114,14 @@ Fit.DonationTierKeys = {
 --   %d+:%d+ TO GO   a milestone that has not been played to yet ("2:20 TO GO")
 --   SPUN TODAY      the free daily wheel is used for this UTC day
 --   SPINNING        the wheel is resolving
---   NOT YET FOUND   a field note that has not been discovered
 -- NO ENTRY MAY CARRY A LITERAL "...". These are Lua patterns fed to string.find,
 -- where "." matches any character, so "SAVING..." as an entry would also match
 -- "SAVINGXYZ" -- and the store draws "SAVING..." anyway, which "SAVING" finds.
 Fit.ZyntraDisabledCaptions = {"OWNED", "COMING SOON", "LEVEL %d+ ONLY", "WAITING",
 	"WHEN DEAD", "RESPAWNING", "UNAVAILABLE", "CONFIRMING", "SAVING",
 	"CLAIMED", "CLAIMING", "%d+:%d+ TO GO", "SPUN TODAY", "SPINNING",
-	"NOT YET FOUND"}
+	-- WHEEL_COLLECT_20260922: the hub while a claim is in flight / confirmed.
+	"COLLECTING", "COLLECTED"}
 
 -- HOW MANY OF A PAGE'S CARD ACTIONS THE PLAYER CAN PRESS, where that number is
 -- a property of the build and not of the tester's save file.
@@ -5291,15 +5369,9 @@ function Fit.bodyZyntraTerminalFitMatrix(): (string, number)
 		-- subscriptions and two claim buttons for one server-side claim. The page
 		-- module still exists in ReplicatedStorage, which is exactly why this list
 		-- must not derive the tab from its presence any more.
-		local expectedTabs = {"Upgrades", "Shop"}
-		for _, entry in ipairs({{"Notes", "ZyntraFieldNotesPage"}}) do
-			if ReplicatedStorage:FindFirstChild(entry[2]) then
-				table.insert(expectedTabs, entry[1])
-			end
-		end
-		for _, name in ipairs({"Donate", "Colors", "Settings"}) do
-			table.insert(expectedTabs, name)
-		end
+		-- FIELD_NOTES_REMOVED_20260922: the NOTES tab left with the Field Notes
+		-- feature, so the terminal is the five authored tabs (plus DEV).
+		local expectedTabs = {"Upgrades", "Shop", "Donate", "Colors", "Settings"}
 		local devExpected = DevAccess.IsAllowed(player)
 		if devExpected then table.insert(expectedTabs, "Dev") end
 		local tabList = {}
@@ -5994,7 +6066,13 @@ function Fit.bodyZyntraTerminalFitMatrix(): (string, number)
 					expectedActive = 0
 					for _, key in ipairs(Fit.DonationTierKeys) do
 						local tier = (ZyntraConfig.Donations or {})[key]
-						if tier and (tonumber((tier :: any).Id) or 0) > 0 then
+						-- UI_REGRESSION_20260923: a one-time GamePass tier this account
+						-- already OWNS is stood down as OWNED by the store (the same
+						-- Kind/ZyntraOwns<key> test ZyntraStore's refreshDonationOwnership
+						-- applies), so it is not a reachable action for THIS account.
+						local ownedPass = tier ~= nil and (tier :: any).Kind == "GamePass"
+							and game:GetService("Players").LocalPlayer:GetAttribute("ZyntraOwns" .. key) == true
+						if tier and (tonumber((tier :: any).Id) or 0) > 0 and not ownedPass then
 							expectedActive += 1
 						end
 					end
@@ -6376,9 +6454,22 @@ end
 -- applyPuzzleLayout, and UIDevice.Changed is the one signal it relayouts on.
 Fit.Level1Rows = {"FuseBoxStatus", "FuseCarryStatus", "LeverStatus"}
 
--- Long enough to wrap in the ~156px column the smallest landscape fixture gives,
--- because a one-line message is the case that cannot fail.
-Fit.Level1Message = "FUSE EXTRACTED -- CARRY IT TO THE NEXT BOX"
+-- UI_REGRESSION_20260923. The two stacks a round can actually draw, staged
+-- through PuzzleUI's own status handler (UIRegressionPuzzleProbe) with the
+-- server's own events and copy. The old staging wrote Visible on all three rows
+-- AND a message at once -- five rows no round can produce: the only message left
+-- is PuzzleManager's private refusal "You have no fuses", sent for an unfilled
+-- box, and every box is filled before the lever row exists (team prompts moved to
+-- the objective feed in 41fc4de). Since f3b8923 PuzzleUI's layout pass also
+-- re-derives the panel and toggle from the round's counters, which undid those
+-- writes in the lobby: 11 devices reported "Level1Objectives is not visible", and
+-- 375x667 measured the leaked five-row stack past the control cluster.
+Fit.Level1Phases = {
+	{Name = "fuse phase, refusal message", Rows = {"FuseBoxStatus", "FuseCarryStatus"},
+		Events = {{"begin", 3, 3}, {"carry", 0}}, Message = "You have no fuses"},
+	{Name = "lever phase", Rows = {"FuseBoxStatus", "FuseCarryStatus", "LeverStatus"},
+		Events = {{"begin", 3, 3}, {"boxes", 3, 3}, {"levers", 3}}},
+}
 
 -- The two authored padding tiers, natural then compact. The toggle's inset from
 -- the panel's top-right corner is padX/padTop of whichever tier the stack walk
@@ -6394,35 +6485,37 @@ Fit.Level1TogglePads = {{PadX = 13, PadTop = 6}, {PadX = 10, PadTop = 4}}
 -- from the one it published -- so re-stating the size a fixture already has is
 -- silent, and the rows would keep the geometry they had while they were hidden.
 -- Two real passes at two real sizes, the second at the fixture's own.
-function Fit.stageLevel1(device): (any, string?)
+function Fit.stageLevel1(device, phase): (any, string?)
 	Fit.beat()
 	local screen = findGui("PuzzleGui")
 	if not screen then return nil, "PuzzleGui missing" end
+	local probe = screen:FindFirstChild("UIRegressionPuzzleProbe")
+	if not (probe and probe:IsA("BindableFunction")) then
+		return nil, "PuzzleUI's UIRegressionPuzzleProbe is missing"
+	end
+	phase = phase or Fit.Level1Phases[#Fit.Level1Phases]
 	local panel = screen:FindFirstChild("Level1Objectives")
 	local pieces = {
 		Screen = screen,
+		Probe = probe,
+		Phase = phase,
 		Panel = panel,
 		Toggle = screen:FindFirstChild("Level1ObjectivesToggle"),
 		Title = panel and panel:FindFirstChild("ObjectiveTitle", true) or nil,
-		Message = screen:FindFirstChild("PuzzleMessage", true),
+		Message = phase.Message and screen:FindFirstChild("PuzzleMessage", true) or nil,
 		Rows = {},
-		MessageText = nil,
 	}
-	if panel then
-		for _, name in ipairs(Fit.Level1Rows) do
-			local row = panel:FindFirstChild(name, true)
-			if row then
-				table.insert(pieces.Rows, {Name = name, Object = row})
-				;(row :: any).Visible = true
-			end
-		end
-		;(panel :: any).Visible = true
+	-- The real handler, the server's events: the rows, the toggle and the panel
+	-- come up because the round's counters did, as they do in a round.
+	;(probe :: any):Invoke("reset")
+	for _, event in ipairs(phase.Events) do
+		(probe :: any):Invoke(table.unpack(event))
 	end
-	if pieces.Toggle then (pieces.Toggle :: any).Visible = true end
-	if pieces.Message then
-		pieces.MessageText = (pieces.Message :: any).Text
-		;(pieces.Message :: any).Text = Fit.Level1Message
-		;(pieces.Message :: any).Visible = true
+	if panel then
+		for _, name in ipairs(phase.Rows) do
+			local row = panel:FindFirstChild(name, true)
+			if row then table.insert(pieces.Rows, {Name = name, Object = row}) end
+		end
 	end
 
 	workspace:SetAttribute("UIRegressionViewport", device.Size + Vector2.new(0, 1))
@@ -6443,15 +6536,20 @@ function Fit.stageLevel1(device): (any, string?)
 	if not settled then
 		return pieces, "the relayout nudge never settled back on the fixture size"
 	end
+	-- LAST, because the real message lives 1.8 s and re-lays the stack itself on
+	-- both edges: sent after the nudge it is measured inside its own lifetime.
+	if phase.Message then
+		(probe :: any):Invoke("msg", phase.Message)
+		task.wait(0.15)
+	end
 	return pieces, nil
 end
 
--- The message's copy is the one thing Fit.borrow does not snapshot (it records
--- Visible, Active and CanvasPosition, never Text), so the staging puts it back
--- itself rather than leaving a test string in the player's HUD.
+-- The real round-end reset, so no staged row, counter or message can leak into
+-- the next device (the leak the 375x667 row measured).
 function Fit.unstageLevel1(pieces)
-	if pieces and pieces.Message and pieces.MessageText ~= nil then
-		(pieces.Message :: any).Text = pieces.MessageText
+	if pieces and pieces.Probe then
+		pcall(function() (pieces.Probe :: any):Invoke("reset") end)
 	end
 end
 
@@ -6487,7 +6585,8 @@ function Fit.level1CompositionProblems(pieces, resolve, touch): {string}
 	local panel = take(pieces.Panel, "Level1Objectives")
 	local toggle = take(pieces.Toggle, "Level1ObjectivesToggle")
 	local title = take(pieces.Title, "ObjectiveTitle")
-	local message = take(pieces.Message, "PuzzleMessage")
+	local phase = pieces.Phase or {Rows = Fit.Level1Rows}
+	local message = phase.Message and take(pieces.Message, "PuzzleMessage") or nil
 	local rows = {}
 	for _, entry in ipairs(pieces.Rows) do
 		local rect = take(entry.Object, entry.Name)
@@ -6495,10 +6594,10 @@ function Fit.level1CompositionProblems(pieces, resolve, touch): {string}
 	end
 	-- An empty row set is the vacuum this whole helper exists to close, so a row
 	-- that could not be staged is a FAILURE here rather than one fewer comparison.
-	if #rows < #Fit.Level1Rows then
+	if #rows < #phase.Rows then
 		table.insert(problems, string.format(
-			"only %d of the %d objective rows could be staged and measured",
-			#rows, #Fit.Level1Rows))
+			"only %d of the %d objective rows this phase draws could be staged and measured",
+			#rows, #phase.Rows))
 	end
 
 	local function disjoint(a, aLabel, b, bLabel)
@@ -6779,34 +6878,12 @@ function Fit.bodyObjectiveCornerMatrix(): (string, number)
 					device.Name .. " / L1 desktop: keeps its authored LOWER-RIGHT column",
 					Fit.text(level1) or level1Error)
 			else
-				local problems = Fit.anchorProblems(level1, layout, "Level1Objectives")
-				record(#problems == 0,
-					device.Name .. " / L1: the objectives column is in the upper-right safe corner",
-					table.concat(problems, "; ") .. (level1Error and (" " .. level1Error) or ""))
-				-- ...and its CONTENTS fit it. At 568x320 every one of the four
-				-- Level 1 lines needed two lines in a 156px column while the panel
-				-- gave each a 23px row, so all four rendered outside the panel that
-				-- was, itself, perfectly placed.
-				local puzzleScreen = findGui("PuzzleGui")
-				local livePanel = puzzleScreen and puzzleScreen:FindFirstChild("Level1Objectives")
-				local childProblems = Fit.childProblems(livePanel, "Level1Objectives")
-				record(#childProblems == 0,
-					device.Name .. " / L1: and every row fits inside it",
-					table.concat(childProblems, "; "))
-				local detectorObject = puzzleScreen
-					and puzzleScreen:FindFirstChild("ExitEnergyDetector")
-				local detectorProblems = Fit.childProblems(detectorObject, "ExitEnergyDetector")
-				record(#detectorProblems == 0,
-					device.Name .. " / L1: and the detector's own readout fits it",
-					table.concat(detectorProblems, "; "))
-				local toggle = resolved("PuzzleGui", "Level1ObjectivesToggle")
-				record(toggle ~= nil and toggle.Height >= 44,
-					device.Name .. " / L1: its toggle keeps a 44px target",
-					Fit.text(toggle))
-				local detector = resolved("PuzzleGui", "ExitEnergyDetector")
-				record(detector == nil or level1 == nil or not Fit.overlaps(detector, level1),
-					device.Name .. " / L1: and the exit detector does not overlap it",
-					Fit.text(detector))
+				-- UI_REGRESSION_20260923: the column's corner, its fit, the toggle
+				-- target and the detector are measured below on the STAGED stacks
+				-- a round draws. Measured here, on the lobby's unstaged panel, they
+				-- read rows leaked from the previous device and a detector card
+				-- that is only ever shown in NAV mode.
+				state.note("      (touch: Level 1 column measured on the staged phases below)")
 			end
 
 			-- ---- LEVEL 1, THE WHOLE COMPOSITION --------------------------
@@ -6816,39 +6893,90 @@ function Fit.bodyObjectiveCornerMatrix(): (string, number)
 			-- the three objective rows and the message real -- with copy -- and lets
 			-- the production layout pass place them, so what is compared below is a
 			-- stack PuzzleUI laid out and not one the harness wrote.
-			local pieces, stageWhy = Fit.stageLevel1(device)
-			record(pieces ~= nil and stageWhy == nil,
-				device.Name .. " / L1: the whole composition could be staged and relaid out",
-				stageWhy or "staged")
-			-- Resolved space, the same ResolveRect every other matrix measures with.
-			-- AbsolutePosition would be the HOST's answer for these elements, and a
-			-- fixture's rectangles are not the host's.
-			local function resolveObject(object, label)
-				local rect = UIRegression.ResolveRect(object, viewport, insetY)
-				if not rect or rect.Unresolvable then
-					return nil, label .. ": " .. tostring(rect and rect.Unresolvable or "nil")
+			for _, phase in ipairs(Fit.Level1Phases) do
+				local phaseLabel = device.Name .. " / L1 (" .. phase.Name .. ")"
+				local pieces, stageWhy = Fit.stageLevel1(device, phase)
+				record(pieces ~= nil and stageWhy == nil,
+					phaseLabel .. ": the whole composition could be staged and relaid out",
+					stageWhy or "staged")
+				-- Resolved space, the same ResolveRect every other matrix measures with.
+				-- AbsolutePosition would be the HOST's answer for these elements, and a
+				-- fixture's rectangles are not the host's.
+				local function resolveObject(object, label)
+					local rect = UIRegression.ResolveRect(object, viewport, insetY)
+					if not rect or rect.Unresolvable then
+						return nil, label .. ": " .. tostring(rect and rect.Unresolvable or "nil")
+					end
+					return rect, nil
 				end
-				return rect, nil
+				local composition = Fit.level1CompositionProblems(pieces, resolveObject,
+					layout.IsTouch)
+				record(#composition == 0,
+					phaseLabel .. ": the toggle, the title, every row this phase draws and"
+					.. " its message each own a separate rectangle, and the panel holds the"
+					.. " ones this form factor draws inside it",
+					table.concat(composition, "; "))
+				if layout.IsTouch then
+					-- The column's corner, measured on the stack a round draws.
+					local staged = pieces and pieces.Panel and resolveObject(pieces.Panel, "Level1Objectives")
+					local anchor = Fit.anchorProblems(staged, layout, "Level1Objectives")
+					record(#anchor == 0,
+						phaseLabel .. ": the objectives column is in the upper-right safe corner",
+						table.concat(anchor, "; "))
+					local stagedToggle = pieces and pieces.Toggle
+						and resolveObject(pieces.Toggle, "Level1ObjectivesToggle")
+					record(stagedToggle ~= nil and stagedToggle.Height >= 44,
+						phaseLabel .. ": its toggle keeps a 44px target",
+						Fit.text(stagedToggle))
+				end
+				-- ...and the child sweep AGAIN, now that there is something in the panel
+				-- for it to walk. The identical call above this block runs against a round
+				-- that never made the counters live, so its row set is empty and its copy
+				-- proof is a pass over nothing. This one measures four rows of real copy at
+				-- the width the fixture gives them, which is where 568x320 broke.
+				local stagedChildren = Fit.childProblems(pieces and pieces.Panel,
+					"Level1Objectives")
+				record(#stagedChildren == 0,
+					phaseLabel .. ": and with every row carrying real copy, each one's"
+					.. " string still fits the box the stack gave it",
+					table.concat(stagedChildren, "; "))
+				Fit.unstageLevel1(pieces)
 			end
-			local composition = Fit.level1CompositionProblems(pieces, resolveObject,
-				layout.IsTouch)
-			record(#composition == 0,
-				device.Name .. " / L1: the toggle, the title, all three objective rows and"
-				.. " the message each own a separate rectangle, and the panel holds the"
-				.. " ones this form factor draws inside it",
-				table.concat(composition, "; "))
-			-- ...and the child sweep AGAIN, now that there is something in the panel
-			-- for it to walk. The identical call above this block runs against a round
-			-- that never made the counters live, so its row set is empty and its copy
-			-- proof is a pass over nothing. This one measures four rows of real copy at
-			-- the width the fixture gives them, which is where 568x320 broke.
-			local stagedChildren = Fit.childProblems(pieces and pieces.Panel,
-				"Level1Objectives")
-			record(#stagedChildren == 0,
-				device.Name .. " / L1: and with every row carrying real copy, each one's"
-				.. " string still fits the box the stack gave it",
-				table.concat(stagedChildren, "; "))
-			Fit.unstageLevel1(pieces)
+
+			-- The exit detector, in the only mode that shows it: NAV, after the
+			-- real "escape" event (PuzzleUI.enterNavMode -> placeExitReceiver).
+			if layout.IsTouch then
+				local puzzleScreen = findGui("PuzzleGui")
+				local probe = puzzleScreen and puzzleScreen:FindFirstChild("UIRegressionPuzzleProbe")
+				local detectorObject = puzzleScreen and puzzleScreen:FindFirstChild("ExitEnergyDetector")
+				if probe and detectorObject then
+					(probe :: any):Invoke("reset")
+					;(probe :: any):Invoke("begin", 3, 3)
+					;(probe :: any):Invoke("escape")
+					workspace:SetAttribute("UIRegressionViewport", device.Size + Vector2.new(0, 1))
+					task.wait(0.12)
+					workspace:SetAttribute("UIRegressionViewport", device.Size)
+					task.wait(0.3)
+					record((detectorObject :: any).Visible == true,
+						device.Name .. " / L1 NAV: the exit detector is on screen after the escape event",
+						tostring((detectorObject :: any).Visible))
+					local detectorProblems = Fit.childProblems(detectorObject, "ExitEnergyDetector")
+					record(#detectorProblems == 0,
+						device.Name .. " / L1 NAV: and the detector's own readout fits it",
+						table.concat(detectorProblems, "; "))
+					local detector = resolved("PuzzleGui", "ExitEnergyDetector")
+					local navPanel = puzzleScreen:FindFirstChild("Level1Objectives")
+					local panelRect = navPanel and (navPanel :: any).Visible
+						and resolved("PuzzleGui", "Level1Objectives") or nil
+					record(detector ~= nil and (panelRect == nil or not Fit.overlaps(detector, panelRect)),
+						device.Name .. " / L1 NAV: and the exit detector does not overlap the column",
+						Fit.text(detector))
+					;(probe :: any):Invoke("reset")
+				else
+					record(false, device.Name .. " / L1 NAV: the detector and its probe exist",
+						string.format("probe=%s detector=%s", tostring(probe ~= nil), tostring(detectorObject ~= nil)))
+				end
+			end
 
 			-- ---- LEVEL 2, alone and with the completion alert -------------
 			resetScenario(true)
@@ -7008,17 +7136,10 @@ function Fit.bodyObjectiveCornerMatrix(): (string, number)
 			task.wait(0.3)
 			local reader, readerError = resolved("Level3ReaderGui", "ReaderPanel")
 			state.note("      ReaderPanel " .. Fit.text(reader))
-			if not layout.IsTouch then
-				-- DESKTOP IS LOWER-RIGHT, matching Level 1 and Level 2. It used to be
-				-- hardcoded top-right, which was the one desktop composition in the
-				-- game that disagreed with the other two.
-				record(reader ~= nil
-					and reader.Bottom > (layout.Safe.Top + layout.Safe.Bottom) * .5
-					and reader.Right > (layout.Safe.Left + layout.Safe.Right) * .5,
-					device.Name .. " / L3 desktop: keeps the authored LOWER-RIGHT reader",
-					Fit.text(reader) or readerError)
-			end
-			if layout.IsTouch then
+			-- The CD reader takes the upper-right safe corner on EVERY form factor
+			-- (Trello 6BVH4WmN, 2026-09-21): anchorProblems already branches its
+			-- margin on IsTouch and applies the control-cluster rule only on touch.
+			do
 				local problems = Fit.anchorProblems(reader, layout, "ReaderPanel")
 				record(#problems == 0,
 					device.Name .. " / L3 open: the reader is in the upper-right safe corner",
@@ -8210,25 +8331,45 @@ function Fit.bodyControlZoneMatrix(): (string, number)
 
 		-- HIDING is the other way a control leaves the union, and it is the one
 		-- production itself uses (SetInteractive out of round, a disabled gui).
-		-- The COUNT is what this row can claim: the cluster relayouts on the same
-		-- Changed, so what the union settles at afterwards is production's answer,
-		-- not the hide's.
+		-- Measured on a control the HARNESS owns, for the reason in the header.
+		-- This row used to hide drawn[1], whichever control GetTagged listed first,
+		-- and when that was FlashlightPower it failed: FlashlightController writes
+		-- the torch's Visible every frame, so it was drawn again before the
+		-- deferred refresh ran and the zone rightly never moved. Measured
+		-- 2026-09-23: hiding TouchRunHold or TouchPOV fired twice, FlashlightPower
+		-- 0 times (UI_REGRESSION_20260923).
+		probeControl = Instance.new("Frame")
+		local hider = probeControl
+		hider.Name = "UIRegressionControlProbe"
+		hider.AnchorPoint = Vector2.new(1, 1)
+		hider.BackgroundTransparency = 1
+		hider.Size = UDim2.fromOffset(64, 64)
+		hider.Position = UDim2.new(1, -22, 1, -(before.Bottom - before.Top) - 120)
+		hider.Parent = drawn[1].Parent
+		UIDevice.RegisterControlRect("UIRegressionControlProbe", hider)
+		task.wait(0.45)
+		local withHider = zone()
 		baseline = fires
-		local victim = drawn[1]
-		local wasVisible = victim.Visible
-		victim.Visible = false
+		hider.Visible = false
 		task.wait(0.45)
 		local hiddenFires = fires - baseline
-		victim.Visible = wasVisible
+		local hiddenZone = zone()
+		hider.Visible = true
 		task.wait(0.45)
-		record(hiddenFires >= 1,
+		local reshown = zone()
+		record(hiddenFires >= 1 and hiddenZone.Count == (withHider.Count or 0) - 1,
 			"hiding a registered control invalidates the zone rather than leaving a"
 			.. " cached rectangle behind",
-			string.format("%d fire(s) while %s was hidden", hiddenFires, victim.Name))
-		record(math.abs(zone().Top - before.Top) < 0.5 and zone().Count == before.Count,
+			string.format("%d fire(s) while the probe was hidden, count %s -> %s",
+				hiddenFires, tostring(withHider.Count), tostring(hiddenZone.Count)))
+		record(math.abs(reshown.Top - withHider.Top) < 0.5 and reshown.Count == withHider.Count,
 			"...and showing it again settles back on the same rectangle",
 			string.format("top %.0f (was %.0f), count %s (was %s)",
-				zone().Top, before.Top, tostring(zone().Count), tostring(before.Count)))
+				reshown.Top, withHider.Top, tostring(reshown.Count), tostring(withHider.Count)))
+		UIDevice.UnregisterControlRect(hider)
+		hider:Destroy()
+		probeControl = nil
+		task.wait(0.3)
 
 		connection:Disconnect()
 	end)

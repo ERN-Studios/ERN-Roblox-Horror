@@ -15,6 +15,7 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE = ROOT / "StarterPlayer/StarterPlayerScripts/First Entry Guide.LocalScript.lua"
+UISTYLE = ROOT / "ReplicatedStorage/UIStyle.ModuleScript.lua"
 
 HARNESS = r'''
 local checks=0
@@ -59,6 +60,11 @@ function nodeMethods:FindFirstChild(name)
         if candidate.Parent==self and candidate.Name==name then return candidate end
     end
 end
+function nodeMethods:FindFirstChildOfClass(class)
+    for _,candidate in ALL do
+        if candidate.Parent==self and candidate.ClassName==class then return candidate end
+    end
+end
 function nodeMethods:WaitForChild(name) return assert(self:FindFirstChild(name),name) end
 function nodeMethods:IsA(class)
     return class==self.ClassName or (class=="BasePart" and self.ClassName=="Part")
@@ -93,8 +99,18 @@ local UDim2={
     fromOffset=function(x,y) return {Kind="UDim2",SX=0,OX=x,SY=0,OY=y} end,
     fromScale=function(x,y) return {Kind="UDim2",SX=x,OX=0,SY=y,OY=0} end,
 }
-local Enum={Font={GothamBold="GothamBold"},PathStatus={Success="Success",NoPath="NoPath"}}
+local UDim={new=function(scale,offset) return {Kind="UDim",S=scale,O=offset} end}
+local Enum={Font={GothamBold="GothamBold",GothamMedium="GothamMedium",Code="Code"},
+    ApplyStrokeMode={Border="Border",Contextual="Contextual"},
+    PathStatus={Success="Success",NoPath="NoPath"}}
 local Instance={new=function(class) return node(class,class,nil) end}
+
+-- UI_STYLE_20260915: the guide's marker now wears the shared card chrome, so
+-- the REAL module is loaded here rather than stubbed -- a token that stops
+-- existing has to fail this suite, not silently draw nothing.
+local UIStyle=(function()
+--[[UISTYLE_SOURCE]]
+end)()
 
 local PAD_OFFSETS={Vector3.new(-9,.18,-13.2),Vector3.new(9,.18,-13.2),
     Vector3.new(-9,.18,13.2),Vector3.new(9,.18,13.2)}
@@ -143,6 +159,7 @@ local function context()
     ctx:NewCharacter()
 
     local storage=node("ReplicatedStorage","ReplicatedStorage")
+    node("ModuleScript","UIStyle",storage)
     local remotes=node("Folder","Remotes",storage)
     ctx.Remote=node("RemoteEvent","RoundStatus",remotes)
     ctx.Remote.OnClientEvent=signal()
@@ -194,6 +211,7 @@ local function boot(ctx)
     local game,workspace,script=ctx.Game,ctx.Workspace,ctx.Script
     local task={spawn=function(fn,...) fn(...) end}
     local os={clock=function() return ctx.Now end}
+    local require=function(module) return assert(module.Name=="UIStyle" and UIStyle,module.Name) end
 '''
 
 TESTS = r'''
@@ -353,7 +371,9 @@ def main():
         raise SystemExit("Set LUAU_BIN; no tests executed.")
     with tempfile.TemporaryDirectory(prefix="first-entry-guide-") as directory:
         path = Path(directory) / "guide_test.luau"
-        path.write_text(HARNESS + SOURCE.read_text(encoding="utf-8") + TESTS, encoding="utf-8")
+        harness = HARNESS.replace("--[[UISTYLE_SOURCE]]",
+                                  UISTYLE.read_text(encoding="utf-8"))
+        path.write_text(harness + SOURCE.read_text(encoding="utf-8") + TESTS, encoding="utf-8")
         subprocess.run([binary, str(path)], check=True, timeout=20)
 
 

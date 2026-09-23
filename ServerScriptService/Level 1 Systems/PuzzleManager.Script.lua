@@ -1205,6 +1205,12 @@ local function startPuzzle()
 	workspace:SetAttribute("Level1ActiveCircuitCount", boxCount)
 	local fusesNeeded = boxCount * FUSES_PER_BOX
 	local fuseCount = fusesNeeded * SPAWN_MULT
+	-- SMALL_PARTY_RELAYS_20260922 (Trello JYiwjBxw): a party of 1-3 gets half
+	-- again as many relays to find (rounded up), so a solo run is not two relays
+	-- in a 40x40 maze. Frozen party size, so a spectator or a late joiner cannot
+	-- change it; what completion needs (fusesNeeded, boxes, levers) is untouched.
+	if n <= 3 then fuseCount = math.ceil(fuseCount * 1.5) end
+	workspace:SetAttribute("Level1RelaySpawnTarget", fuseCount)
 	local leverCount = boxCount
 
 	local folder = Instance.new("Folder")
@@ -1285,11 +1291,15 @@ local function startPuzzle()
 	-- Wall relays share the station avoidance list with fuse boxes, levers, and
 	-- the exit, so props and puzzle machinery cannot conceal or overlap them.
 	local relayFrames = pickWallSpots(fuseCount, 2.2 * CELLv, false, stations)
-	if #relayFrames < fusesNeeded then
-		for _, fallbackCF in ipairs(pickWallSpots(fusesNeeded - #relayFrames, 1.1 * CELLv, false, stations)) do
+	if #relayFrames < fuseCount then
+		-- Top up to the SPAWN target with tighter spacing, not merely to what
+		-- completion needs: a raised target that placement quietly drops back
+		-- down is no change at all.
+		for _, fallbackCF in ipairs(pickWallSpots(fuseCount - #relayFrames, 1.1 * CELLv, false, stations)) do
 			table.insert(relayFrames, fallbackCF)
 		end
 	end
+	workspace:SetAttribute("Level1RelaysPlaced", #relayFrames)
 	for _, cf in ipairs(relayFrames) do
 		local relay = makeFuseRelay(cf, folder)
 		table.insert(session.relays, relay)

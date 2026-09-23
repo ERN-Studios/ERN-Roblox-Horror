@@ -25,6 +25,12 @@ local UPDATE_INTERVAL = 0.10
 local MAXIMUM_RANGE = 650
 local ACCURACY_DEGREES = {155, 105, 64, 36, 18, 5}
 local DISTANCE_NOISE = {0.60, 0.42, 0.27, 0.15, 0.07, 0.0}
+-- Full bars inside a room, one bar at roughly the far side of a district: the
+-- CD bar is plain proximity, not the exit's fogged signal.
+local CD_SIGNAL_RANGE = 260
+-- radians/second on a sine, so ~0.8Hz -- a text pulse, never a scene flash, and
+-- it never exceeds .40 transparency so the row stays legible at its dimmest.
+local ROOM_BLINK_RATE = 5.0
 
 -- UI_STYLE_20260915 (Trello #98). The panel surface, the body/muted/caution
 -- faces and the chrome now come from the shared tokens taken off Level 1's
@@ -36,6 +42,9 @@ local PANEL = UIStyle.Color.Panel
 local TEXT = UIStyle.Color.Body
 local MUTED = UIStyle.Color.Muted
 local AMBER = UIStyle.Color.Warning
+-- The room indicator's red is the shared danger token, not a fourth level
+-- inventing its own (UI_STYLE_20260915).
+local DANGER = UIStyle.Color.Danger
 
 local gui = Instance.new("ScreenGui")
 gui.Name = "Level3ReaderGui"
@@ -283,44 +292,43 @@ local function applyLayout()
 	local panelHeight = READER_PANEL_HEIGHT
 	local compactLandscape = false
 
-	if mobileControls then
-		local column = UIDevice.TopRightPanel(width, READER_PANEL_HEIGHT)
-		width = math.max(READER_MIN_WIDTH, math.floor(column.Width))
-		-- Floored: the safe-area edges UIDevice derives are fractional (they come
-		-- from thirds and fifths of a viewport) and a HUD a regression asserts to
-		-- the pixel must not inherit that.
-		panelHeight = math.floor(column.Height)
-		if panelHeight < READER_PANEL_HEIGHT then
-			-- The anchor could not give the authored height. Take what there is,
-			-- never less than the readable minimum, and switch the internals to
-			-- the compact arrangement so nothing renders outside the box.
-			compactLandscape = true
-			panelHeight = math.max(READER_PANEL_MIN_HEIGHT, panelHeight)
-		end
-		panel.AnchorPoint = Vector2.new(1, 0)
-		-- Anchored (1,0): the X handed over is the panel's RIGHT edge, and it is
-		-- converted like every other absolute coordinate.
-		panel.Position = UIDevice.LocalPosition(gui,
-			math.floor(column.Right), math.floor(column.Top))
-		-- The restore chip lands on the panel's own top-right corner, so the
-		-- control the player taps to bring the reader back is exactly where the
-		-- reader was. Same anchor, both states.
-		restoreButton.AnchorPoint = Vector2.new(1, 0)
-		restoreButton.Position = UIDevice.LocalPosition(gui,
-			math.floor(column.Right), math.floor(column.Top))
-	else
-		-- Anchored (1,1) at the safe rect's lower-right corner, the same 18px
-		-- margin Level 1 and Level 2 use. Measured against layoutInfo.Safe rather
-		-- than written as a bare `UDim2.new(1, -18, 1, -18)`: the gui's own
-		-- rectangle is GetInsetArea(CoreUISafeInsets) and Safe is that intersected
-		-- with the DEVICE inset, so the two separate the moment a client reports
-		-- one. RightOffsetFor/BottomOffsetFor is that conversion for a
-		-- (1,1)-anchored child, and it collapses to -18/-18 where they agree.
-		local margin = 18
-		panel.AnchorPoint = Vector2.new(1, 1)
-		panel.Position = UDim2.new(
-			1, -UIDevice.RightOffsetFor(gui, layoutInfo.Safe.Right - margin),
-			1, -UIDevice.BottomOffsetFor(gui, layoutInfo.Safe.Bottom - margin))
+	-- C_L3_READER_UPPER_RIGHT_EVERYWHERE_20260921.
+	-- The panel is now a CD reader and it is the first thing a player looks for,
+	-- so it takes ONE anchor on every form factor: UIDevice.TopRightPanel, the
+	-- same helper Level 1's objective column and Level 2's panel use on touch,
+	-- which answers for a mouse device too (top right of the TRUE safe rect, one
+	-- 18px margin in). The desktop branch that lived here pinned it to the LOWER
+	-- right instead -- a second answer to the same question, and the corner a
+	-- player is least likely to be watching while looking for a disc. Nothing
+	-- else draws in this corner in a Level 3 round: the Round Exit chip is top
+	-- LEFT, stamina is bottom centre, the flashlight cell bottom left, and the
+	-- alert toast owns the top CENTRE and already takes the panel down while it
+	-- is up (updateReader gates both controls on toast.Visible).
+	local column = UIDevice.TopRightPanel(width, READER_PANEL_HEIGHT)
+	width = math.max(READER_MIN_WIDTH, math.floor(column.Width))
+	-- Floored: the safe-area edges UIDevice derives are fractional (they come
+	-- from thirds and fifths of a viewport) and a HUD a regression asserts to
+	-- the pixel must not inherit that.
+	panelHeight = math.floor(column.Height)
+	if panelHeight < READER_PANEL_HEIGHT then
+		-- The anchor could not give the authored height. Take what there is,
+		-- never less than the readable minimum, and switch the internals to
+		-- the compact arrangement so nothing renders outside the box.
+		compactLandscape = true
+		panelHeight = math.max(READER_PANEL_MIN_HEIGHT, panelHeight)
+	end
+	panel.AnchorPoint = Vector2.new(1, 0)
+	-- Anchored (1,0): the X handed over is the panel's RIGHT edge, and it is
+	-- converted like every other absolute coordinate.
+	panel.Position = UIDevice.LocalPosition(gui,
+		math.floor(column.Right), math.floor(column.Top))
+	-- The restore chip lands on the panel's own top-right corner, so the
+	-- control the player taps to bring the reader back is exactly where the
+	-- reader was. Same anchor, both states.
+	restoreButton.AnchorPoint = Vector2.new(1, 0)
+	restoreButton.Position = UIDevice.LocalPosition(gui,
+		math.floor(column.Right), math.floor(column.Top))
+	if not mobileControls then
 		-- No restore chip and no open button, ever, on a mouse device: R is the
 		-- entire interface and the hidden state is genuinely empty
 		-- (C_READER_DESKTOP_CHIP_20260830). Put away HERE and not only in
@@ -855,6 +863,55 @@ local smoothedNeedle = 0
 local smoothedSignal = 0
 local accumulated = 0
 
+-- L3_CD_READER_TARGET_20260921.
+--
+-- The reader points at the nearest disc a player can still PICK UP and says
+-- whether one of them shares the room. Both answers come from server state
+-- (Level3_CD<n>State/Room/Position on the Level 3 State folder, and
+-- Level3_Room on the subject Player), never from the workspace: the CD model
+-- streams out at range and a disc dropped across the mall may never have
+-- replicated here at all. A CARRIED or INSERTED disc publishes no position, so
+-- it cannot be pointed at.
+--
+-- The selection itself is this pure function over plain numbers -- no
+-- instances, no Vector3 -- so tools/tests/test_level3_first_cd.py runs the very
+-- code the client runs. Same-room is decided by ROOM ID, so a disc one wall
+-- away in the adjacent room never lights the indicator however close it is.
+local function chooseCDTarget(beacons: {any}, fromX: number, fromZ: number,
+	subjectRoom: string): (any, number, boolean)
+	local nearest, nearestDistance = nil, math.huge
+	local sameRoom = false
+	for _, beacon in ipairs(beacons) do
+		local dx, dz = beacon.X - fromX, beacon.Z - fromZ
+		local distance = math.sqrt(dx * dx + dz * dz)
+		if distance < nearestDistance then
+			nearest = beacon
+			nearestDistance = distance
+		end
+		if subjectRoom ~= "" and beacon.Room == subjectRoom then sameRoom = true end
+	end
+	return nearest, nearestDistance, sameRoom
+end
+
+local function pickableCDs(goal: number): {any}
+	local beacons = {}
+	for index = 1, goal do
+		local state = stateAttribute(string.format("Level3_CD%dState", index), nil)
+		local position = stateAttribute(string.format("Level3_CD%dPosition", index), nil)
+		if (state == "WORLD" or state == "DROPPED") and typeof(position) == "Vector3" then
+			local room = stateAttribute(string.format("Level3_CD%dRoom", index), nil)
+			table.insert(beacons, {
+				Index = index,
+				X = position.X,
+				Z = position.Z,
+				Room = if type(room) == "string" then room else "",
+			})
+		end
+	end
+	return beacons
+end
+-- L3_CD_READER_TARGET_END_20260921
+
 local function signedPlanarAngle(forward: Vector3, target: Vector3): number
 	local a = Vector3.new(forward.X, 0, forward.Z)
 	local b = Vector3.new(target.X, 0, target.Z)
@@ -902,28 +959,57 @@ local function updateReader(dt: number)
 
 	local character = readerSubject().Character
 	local root = character and character:FindFirstChild("HumanoidRootPart")
-	local target = exitPosition()
-	if not (root and root:IsA("BasePart") and target) then
+	if not (root and root:IsA("BasePart")) then
 		signalLabel.Text = "SIGNAL // NO TRACE"
 		signalLabel.TextColor3 = MUTED
+		signalLabel.TextTransparency = 0
 		return
 	end
 
-	local offset = target - root.Position
-	local distance = Vector3.new(offset.X, 0, offset.Z).Magnitude
+	-- A remaining disc outranks the exit. Once every CD has been collected the
+	-- panel hands the needle straight back to the exit bearing it always had,
+	-- and the DISC RELAY row above keeps saying how many still owe the VCR.
+	local beacons = pickableCDs(goal)
+	local subjectRoom = readerSubject():GetAttribute("Level3_Room")
+	local cd, cdDistance, sameRoom = chooseCDTarget(beacons, root.Position.X, root.Position.Z,
+		if type(subjectRoom) == "string" then subjectRoom else "")
+	local exit = exitPosition()
+	if not cd and not exit then
+		title.Text = "> EXIT DOOR READER"
+		signalLabel.Text = "SIGNAL // NO TRACE"
+		signalLabel.TextColor3 = MUTED
+		signalLabel.TextTransparency = 0
+		return
+	end
+	title.Text = if cd then "> CD READER" else "> EXIT DOOR READER"
+
+	local targetX = if cd then cd.X else (exit :: Vector3).X
+	local targetZ = if cd then cd.Z else (exit :: Vector3).Z
+	local offset = Vector3.new(targetX - root.Position.X, 0, targetZ - root.Position.Z)
+	local distance = if cd then cdDistance else offset.Magnitude
 	local camera = workspace.CurrentCamera
 	local forward = camera and camera.CFrame.LookVector or root.CFrame.LookVector
 	local trueAngle = signedPlanarAngle(forward, offset)
 	local time = os.clock()
-	local angularNoise = math.noise(time * 0.43, progress * 2.71) * math.rad(ACCURACY_DEGREES[index])
-	local noisyAngle = trueAngle + angularNoise
-	local needleTarget = math.clamp(noisyAngle / math.rad(90), -1, 1)
-
-	local facing = math.clamp((math.cos(noisyAngle) + 1) * 0.5, 0, 1)
-	local rangeSignal = 1 - math.clamp(distance / MAXIMUM_RANGE, 0, 1)
-	local distanceJitter = math.noise(time * 0.61, 19 + progress) * DISTANCE_NOISE[index]
-	local signalTarget = math.clamp(facing * 0.72 + rangeSignal * 0.28 + distanceJitter, 0, 1)
-	local response = 1.3 + progress * 0.72
+	local needleTarget, signalTarget
+	if cd then
+		-- No fog on a CD bearing. The exit needle below lies by design -- up to
+		-- ACCURACY_DEGREES[1] = 155 degrees while nothing is inserted -- and that
+		-- is the whole reason the opening minutes were a blind search. A disc is
+		-- a findable object, so this needle is the true bearing and the bar is
+		-- plain proximity.
+		needleTarget = math.clamp(trueAngle / math.rad(90), -1, 1)
+		signalTarget = 1 - math.clamp(distance / CD_SIGNAL_RANGE, 0, 1)
+	else
+		local angularNoise = math.noise(time * 0.43, progress * 2.71) * math.rad(ACCURACY_DEGREES[index])
+		local noisyAngle = trueAngle + angularNoise
+		needleTarget = math.clamp(noisyAngle / math.rad(90), -1, 1)
+		local facing = math.clamp((math.cos(noisyAngle) + 1) * 0.5, 0, 1)
+		local rangeSignal = 1 - math.clamp(distance / MAXIMUM_RANGE, 0, 1)
+		local distanceJitter = math.noise(time * 0.61, 19 + progress) * DISTANCE_NOISE[index]
+		signalTarget = math.clamp(facing * 0.72 + rangeSignal * 0.28 + distanceJitter, 0, 1)
+	end
+	local response = if cd then 6 else 1.3 + progress * 0.72
 	local alpha = 1 - math.exp(-dt * response)
 	smoothedNeedle += (needleTarget - smoothedNeedle) * alpha
 	smoothedSignal += (signalTarget - smoothedSignal) * alpha
@@ -932,6 +1018,28 @@ local function updateReader(dt: number)
 	local signalBars = math.clamp(math.floor(smoothedSignal * 5 + 0.5), 0, 5)
 	local bars = string.rep("▮", signalBars) .. string.rep("□", 5 - signalBars)
 	local unlocked = stateAttribute("Level3_ExitUnlocked", "Level3ExitUnlocked") == true
+	signalLabel.TextTransparency = 0
+	if cd then
+		if sameRoom then
+			-- EXACTLY this string, and nothing else in the row: it is the one
+			-- signal that says "stop walking and look up". ReduceFlashing takes
+			-- the pulse away and leaves the red at full strength instead of
+			-- dimming it (C_L3_ROOM_BLINK_20260921).
+			signalLabel.Text = "IN THIS ROOM"
+			signalLabel.TextColor3 = DANGER
+			if player:GetAttribute("ReduceFlashing") ~= true then
+				signalLabel.TextTransparency = (math.sin(time * ROOM_BLINK_RATE) + 1) * .5 * .40
+			end
+			panelStroke.Color = DANGER
+		else
+			signalLabel.Text = string.format("CD // %s  %dm", bars, math.floor(distance / 3.571 + 0.5))
+			signalLabel.TextColor3 = ENERGON
+			panelStroke.Color = ENERGON
+		end
+		needle.BackgroundColor3 = if sameRoom then DANGER else ENERGON
+		return
+	end
+	needle.BackgroundColor3 = if unlocked then Color3.fromRGB(128, 255, 222) else ENERGON
 	if unlocked then
 		signalLabel.Text = string.format("SIGNAL // %s  %dm", bars, math.floor(distance / 3.571 + 0.5))
 		signalLabel.TextColor3 = ENERGON
@@ -949,7 +1057,6 @@ local function updateReader(dt: number)
 		signalLabel.TextColor3 = TEXT
 		panelStroke.Color = ENERGON
 	end
-	needle.BackgroundColor3 = if unlocked then Color3.fromRGB(128, 255, 222) else ENERGON
 end
 
 -- C_READER_IMMEDIATE_EXCLUSION_20260831 -- WHAT SHIPPED BROKEN.

@@ -1,0 +1,100 @@
+{
+  "status": "ok",
+  "result": {
+    "scene": "Zyntra_TableHide_Actual_20260916",
+    "mapped": [
+      {
+        "part": "LeftLowerArm",
+        "vertices": 919,
+        "mappingError": 1.4723625483300382e-05
+      },
+      {
+        "part": "UpperTorso",
+        "vertices": 6544,
+        "mappingError": 2.4065134324373308e-05
+      },
+      {
+        "part": "RightFoot",
+        "vertices": 752,
+        "mappingError": 3.2448528811391884e-05
+      },
+      {
+        "part": "LeftUpperArm",
+        "vertices": 1026,
+        "mappingError": 2.1873056363115647e-05
+      },
+      {
+        "part": "LowerTorso",
+        "vertices": 1244,
+        "mappingError": 2.5421931529683962e-05
+      },
+      {
+        "part": "RightLowerArm",
+        "vertices": 877,
+        "mappingError": 7.131084202119335e-06
+      },
+      {
+        "part": "LeftUpperLeg",
+        "vertices": 568,
+        "mappingError": 1.0258058695173478e-06
+      },
+      {
+        "part": "RightUpperLeg",
+        "vertices": 372,
+        "mappingError": 3.930898877179535e-06
+      },
+      {
+        "part": "RightHand",
+        "vertices": 469,
+        "mappingError": 8.251223190939234e-06
+      },
+      {
+        "part": "LeftLowerLeg",
+        "vertices": 765,
+        "mappingError": 2.5538154751170135e-05
+      },
+      {
+        "part": "Head",
+        "vertices": 3613,
+        "mappingError": 3.500840131725636e-05
+      },
+      {
+        "part": "LeftFoot",
+        "vertices": 786,
+        "mappingError": 2.633202999858888e-05
+      },
+      {
+        "part": "RightLowerLeg",
+        "vertices": 827,
+        "mappingError": 3.794108546752197e-05
+      },
+      {
+        "part": "RightUpperArm",
+        "vertices": 804,
+        "mappingError": 1.6306686048818235e-06
+      },
+      {
+        "part": "LeftHand",
+        "vertices": 483,
+        "mappingError": 1.7343548948061947e-05
+      },
+      {
+        "part": "LeftShoulderSeamLiner",
+        "vertices": 294,
+        "mappingError": 5.8875176299281874e-06
+      },
+      {
+        "part": "NeckSeamLiner",
+        "vertices": 294,
+        "mappingError": 5.768333465568742e-06
+      },
+      {
+        "part": "RightShoulderSeamLiner",
+        "vertices": 294,
+        "mappingError": 5.963391634527507e-06
+      }
+    ],
+    "preview": "G:\\Roblox\\MongoTV\\assets\\animations\\table-hiding\\actual-character-hide-preview.png"
+  },
+  "stdout": "Info: Saved copy as \"zyntra-table-hide-v2.blend\"\n"
+}

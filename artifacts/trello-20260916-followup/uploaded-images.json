@@ -1,0 +1,10 @@
+{
+  "method": "Roblox Studio MCP upload_image",
+  "studioId": "5d01a8db-7930-419a-aa93-ddfdeee7b21d",
+  "placeId": 131311258779917,
+  "items": [
+    {"file": "assets/shop/hud-lucky-wheel-v1.png", "assetId": "rbxassetid://111918608092047"},
+    {"file": "assets/shop/hud-daily-rewards-v1.png", "assetId": "rbxassetid://85423575361057"}
+  ],
+  "gameSourceChangedByCodex": false
+}
