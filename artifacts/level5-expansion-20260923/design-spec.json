@@ -1,0 +1,80 @@
+{
+  "previousGroundEnvelopeArea": 65396,
+  "newGroundEnvelopeArea": 331600,
+  "factor": 5.070646522723102,
+  "measurement": "Sum of authored non-overlapping enclosed district footprints in studs squared; excludes chute and extra upper floors. Not uniform scale, not a claimed navmesh area.",
+  "zones": [
+    {
+      "id": "A",
+      "name": "Balcony Atrium",
+      "width": 220,
+      "zMin": -4,
+      "zMax": 76,
+      "ceilingY": 44,
+      "groundEnvelopeArea": 17600
+    },
+    {
+      "id": "B",
+      "name": "Low Eaves Arcade",
+      "width": 220,
+      "zMin": 76,
+      "zMax": 196,
+      "ceilingY": 18,
+      "groundEnvelopeArea": 26400
+    },
+    {
+      "id": "C",
+      "name": "Pastel Village",
+      "width": 360,
+      "zMin": 196,
+      "zMax": 436,
+      "ceilingY": 48,
+      "groundEnvelopeArea": 86400
+    },
+    {
+      "id": "D",
+      "name": "Floral Terraces",
+      "width": 180,
+      "zMin": 436,
+      "zMax": 636,
+      "ceilingY": 32,
+      "groundEnvelopeArea": 36000
+    },
+    {
+      "id": "E",
+      "name": "Domestic Labyrinth",
+      "width": 200,
+      "zMin": 636,
+      "zMax": 796,
+      "ceilingY": 15,
+      "groundEnvelopeArea": 32000
+    },
+    {
+      "id": "F",
+      "name": "Bay Window Canyon",
+      "width": 300,
+      "zMin": 796,
+      "zMax": 1016,
+      "ceilingY": 108,
+      "groundEnvelopeArea": 66000
+    },
+    {
+      "id": "G",
+      "name": "Tilted Subdivision",
+      "width": 320,
+      "zMin": 1016,
+      "zMax": 1196,
+      "ceilingY": 66,
+      "groundEnvelopeArea": 57600
+    },
+    {
+      "id": "H",
+      "name": "Last House",
+      "width": 120,
+      "zMin": 1196,
+      "zMax": 1276,
+      "ceilingY": 26,
+      "groundEnvelopeArea": 9600
+    }
+  ]
+}

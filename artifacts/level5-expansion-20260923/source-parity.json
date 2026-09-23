@@ -1,0 +1,14 @@
+{
+  "scripts": 176,
+  "changed": [
+    "ServerScriptService/Level 5 Systems/Level 5 Architecture.ModuleScript.lua"
+  ],
+  "new": [
+    "ServerScriptService/Level 5 Systems/Level 5 Landmark Districts.ModuleScript.lua",
+    "ServerScriptService/Level 5 Systems/Level 5 Neighbourhood Districts.ModuleScript.lua"
+  ],
+  "removed": [],
+  "allEditorsMatch": true,
+  "unrelatedSourcesUnchanged": 173,
+  "level4ScriptsUnchanged": 10
+}

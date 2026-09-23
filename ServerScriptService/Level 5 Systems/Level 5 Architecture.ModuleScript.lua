@@ -7,7 +7,7 @@ function Architecture.Build(parent, origin, config)
 	origin = origin or Vector3.zero
 	local root = Instance.new("Model")
 	root.Name = "Level5_IndoorSuburbs"
-	root:SetAttribute("ArchitectureVersion", "2026-09-23.2")
+	root:SetAttribute("ArchitectureVersion", "2026-09-23.3")
 	root:SetAttribute("GeometryOnly", true)
 	root.Parent = parent
 	local offset = CFrame.new(origin)
@@ -28,6 +28,7 @@ function Architecture.Build(parent, origin, config)
 		p.Name=name; p.Size=size; p.CFrame=offset*cf; p.Anchored=true
 		p.Color=color or C.cream; p.Material=material or Enum.Material.SmoothPlastic
 		p.CanCollide=collide~=false; p.CanTouch=false; p.TopSurface=Enum.SurfaceType.Smooth; p.BottomSurface=Enum.SurfaceType.Smooth
+		p.CastShadow=collide~=false and math.min(size.X,size.Y,size.Z)>.4
 		p.Parent=into; partCount+=1; return p
 	end
 	local function texture(p, asset, face, tile)
@@ -76,8 +77,10 @@ function Architecture.Build(parent, origin, config)
 		return m
 	end
 	local function window(into,frame,w,h,lit)
-		local glass=part(into,"WindowGlass",V(w,h,.14),frame,lit and Color3.fromRGB(222,218,189) or C.glass,lit and Enum.Material.Neon or Enum.Material.Glass)
-		glass.Transparency=lit and .14 or .2
+		local glass=part(into,"WindowGlass",V(w,h,.14),frame,C.glass,Enum.Material.Glass)
+		glass.Transparency=.2
+		glass.Reflectance=0
+		glass:SetAttribute("Level5TintedWindow",true)
 		for _,s in ipairs({-1,1}) do
 			part(into,"WindowJamb",V(.25,h+.45,.34),frame*CF(s*(w/2+.08),0,-.08),C.white)
 			part(into,"WindowSill",V(w+.65,.25,.4),frame*CF(0,s*(h/2+.08),-.12),C.white)
@@ -123,7 +126,13 @@ function Architecture.Build(parent, origin, config)
 		if options.cutaway then
 			-- A few upper rooms have exposed wall sections, as in the reference.
 			-- These are fixed architectural cuts rather than destructible objects.
-			part(m,"CutawayWallApron",V(w,2.4,.7),frame*CF(0,1.2,0),color,Enum.Material.Plaster)
+			if options.open then
+				-- Walkable cutaway rooms retain broken wall edges around a clear entrance.
+				local wing=(w-7)/2
+				for _,sign in ipairs({-1,1}) do part(m,"CutawayWallApron",V(wing,2.4,.7),frame*CF(sign*(3.5+wing/2),1.2,0),color,Enum.Material.Plaster) end
+			else
+				part(m,"CutawayWallApron",V(w,2.4,.7),frame*CF(0,1.2,0),color,Enum.Material.Plaster)
+			end
 			part(m,"CutawayHeader",V(w,1,.7),frame*CF(0,h-.5,0),color,Enum.Material.Plaster)
 			part(m,"CutawayTallPier",V(1.3,h,.9),frame*CF(-w/2+.65,h/2,0),color,Enum.Material.Plaster)
 			part(m,"CutawayShortPier",V(1.3,5.3,.9),frame*CF(w/2-.65,2.65,0),color,Enum.Material.Plaster)
@@ -163,24 +172,33 @@ function Architecture.Build(parent, origin, config)
 	end
 	local function ceiling(into,name,x,z,w,d,y,style)
 		local m=model(name,into)
-		part(m,"CeilingPlane",V(w,.5,d),CF(x,y,z),C.ceiling)
-		local tile=style=="warehouse" and 20 or 12
-		for xx=-w/2,w/2,tile do part(m,"CeilingGrid",V(.09,.1,d),CF(x+xx,y-.29,z),C.grid) end
-		for zz=-d/2,d/2,tile do part(m,"CeilingGrid",V(w,.1,.09),CF(x,y-.29,z+zz),C.grid) end
+		local tint=style=="domestic" and C.pale or (style=="low" and Color3.fromRGB(177,172,145) or C.ceiling)
+		part(m,"CeilingPlane",V(w,.6,d),CF(x,y,z),tint)
+		local tile=style=="warehouse" and 24 or style=="domestic" and 9 or 15
+		for xx=-w/2,w/2,tile do part(m,"CeilingGrid",V(.08,.08,d),CF(x+xx,y-.34,z),C.grid,nil,false) end
+		for zz=-d/2,d/2,tile do part(m,"CeilingGrid",V(w,.08,.08),CF(x,y-.34,z+zz),C.grid,nil,false) end
+		local sx,sz=style=="domestic" and 36 or 40,style=="domestic" and 32 or 40
 		local ix=0
-		for xx=-w/2+14,w/2-8,28 do
-			for zz=-d/2+11,d/2-7,24 do
-				ix+=1
-				local p=part(m,"FluorescentPanel",V(8,.13,3.5),CF(x+xx,y-.36,z+zz),Color3.fromRGB(234,240,220),Enum.Material.Neon,false)
-				part(m,"LightPanelFrame",V(8.4,.1,3.9),CF(x+xx,y-.27,z+zz),C.white)
-				if ix%3==1 then
-					local light=Instance.new("SurfaceLight"); light.Face=Enum.NormalId.Bottom; light.Color=Color3.fromRGB(249,240,207)
-					light.Brightness=1.25; light.Range=60; light.Angle=150; light.Shadows=false; light.Parent=p; lightCount+=1
+		for xx=-w/2+sx/2,w/2-8,sx do for zz=-d/2+sz/2,d/2-7,sz do
+			ix+=1
+			local fixtureColor=style=="low" and Color3.fromRGB(207,201,170) or Color3.fromRGB(215,226,209)
+			local p=part(m,"FluorescentPanel",V(style=="domestic" and 4 or 8,.13,2.6),CF(x+xx,y-.46,z+zz),fixtureColor,Enum.Material.Neon,false)
+			part(m,"LightPanelFrame",V(p.Size.X+.4,.12,3),CF(x+xx,y-.34,z+zz),C.white,nil,false)
+			if ix%4==1 then
+				local light=Instance.new("SurfaceLight");light.Face=Enum.NormalId.Bottom;light.Color=style=="low" and Color3.fromRGB(250,220,177) or Color3.fromRGB(237,236,211)
+				light.Brightness=.85;light.Range=math.min(y+8,60);light.Angle=160;light.Shadows=false;light.Parent=p;lightCount+=1
+			end
+		end end
+		if style=="warehouse" then
+			for zz=-d/2+10,d/2,36 do
+				part(m,"ExposedCeilingBeam",V(w,.8,.6),CF(x,y-1.3,z+zz),C.white,nil,false)
+				for xx=-w/2+25,w/2-5,50 do
+					beam(m,"WarehouseTrussDiagonal",V(x+xx-18,y-1.6,z+zz),V(x+xx+18,y-5.7,z+zz),.22,C.pale)
 				end
 			end
 		end
-		if style=="warehouse" then for zz=-d/2+10,d/2,25 do part(m,"ExposedCeilingBeam",V(w,1,.5),CF(x,y-1.3,z+zz),C.white) end end
 	end
+
 	local function boundary(into,x,z,w,d,height)
 		for _,s in ipairs({-1,1}) do part(into,"EnclosureWall",V(1.2,height,d),CF(x+s*w/2,height/2,z),C.cream) end
 	end
@@ -197,8 +215,6 @@ function Architecture.Build(parent, origin, config)
 	-- A: the first reveal is a multi-level residential atrium under a low office ceiling.
 	local A=model("A_BalconyAtrium")
 	floor(A,"AtriumCarpet",0,0,36,220,80)
-	boundary(A,0,36,220,80,44)
-	part(A,"EntranceBackWall",V(220,44,1),CF(0,22,-4),C.cream)
 	for _,s in ipairs({-1,1}) do
 		for i,z in ipairs({13,38,63}) do
 			local yaw=s==1 and math.rad(90) or math.rad(-90)
@@ -233,223 +249,127 @@ function Architecture.Build(parent, origin, config)
 	floor(A,"ReturnStairLanding",51.5,14,44,23,5)
 	stairs(A,"UpperBalconyStair",CF(-69,14,40),10,14,27,28,C.carpet,true)
 	floor(A,"UpperLanding",-69,28,69,22,7)
-	ceiling(A,"OfficeCeiling",0,36,220,80,44)
 
-	-- B: a compact pastel suburb. The apparent lawns are fibrous indoor green carpet.
-	local B=model("B_PastelCarpetCourt")
-	floor(B,"GreenCarpetCourt",0,0,111,220,72,C.green)
-	boundary(B,0,111,220,72,44)
-	for _,s in ipairs({-1,1}) do part(B,"CourtToStreetWingWall",V(58.5,44,1),CF(s*80.75,22,147),C.cream) end
-	part(B,"CourtToStreetCeilingStepCap",V(103,7,1.2),CF(0,40.5,147),C.cream)
-	for _,s in ipairs({-1,1}) do
-		for i,z in ipairs({94,128}) do
-			local hue=({C.rose,C.blue,C.lavender,C.yellow})[(s==1 and 2 or 0)+i]
-			house(B,"PastelHouse_"..s.."_"..i,CF(s*68,0,z)*CFrame.Angles(0,s*math.rad(90),0),27,21,13.5,hue,i==1 and C.lavender or C.blue,{open=true})
-			floor(B,"Doorstep",s*60,0,z,10,9,C.carpet)
+	-- B: compress the player into a low, long residential arcade before the
+	-- larger village reveal. Deep corners and offset islands break the sightline.
+	local B=model("B_LowEavesArcade")
+	floor(B,"WornOchreCarpet",0,0,136,220,120,Color3.fromRGB(148,137,99))
+	floor(B,"ArcadeRunner",0,.025,136,15,118,Color3.fromRGB(102,94,72))
+	for _,side in ipairs({-1,1}) do
+		for i,z in ipairs({94,128,167}) do
+			local f=CF(side*(i==2 and 72 or 82),0,z)*CFrame.Angles(0,side*math.pi/2,0)
+			local m=house(B,"LowEavesResidence_"..side.."_"..i,f,24,19,12.3,i==2 and C.cream or C.yellow,nil,{open=true})
+			part(m,"BroadFlatPorchCanopy",V(28,.7,7),f*CF(0,12.7,-3),C.pale)
+			for _,sign in ipairs({-1,1}) do
+				part(m,"PorchPost",V(.7,12.4,.7),f*CF(sign*12,6.2,-5.7),C.white)
+				part(m,"WoodShutter",V(1.1,7.4,.28),f*CF(sign*10.65,6.5,-.45),Color3.fromRGB(115,125,100),Enum.Material.Wood)
+			end
+			floor(m,"DeepCarpetPorch",0,.05,-3,28,6,C.carpet,f)
+			part(m,"EmptyDomesticBench",V(7,1.2,2.2),f*CF(-7,1.2,15),Color3.fromRGB(122,108,82),Enum.Material.Wood)
+			part(m,"InteriorShortPartition",V(.6,9,9),f*CF(6,4.5,13),C.pale)
 		end
 	end
-	for _,s in ipairs({-1,1}) do house(B,"DistantGabledHouse_"..s,CF(s*33,0,135),23,12,12.5,s==1 and C.pale or C.rose,C.blue,{open=false,lit=true}) end
-	-- Carpet inset paths lead naturally between the open house interiors.
-	floor(B,"CourtWalkway",0,.035,110,15,68,C.carpet)
-	floor(B,"CrossCourtWalkway",0,.045,106,131,8,C.carpet)
-	for _,s in ipairs({-1,1}) do
-		part(B,"LongCourtSkirting",V(.7,1.2,70),CF(s*99,.6,111),C.pale)
-		for _,z in ipairs({88,119}) do
-			part(B,"CarpetPlanterRim",V(8,.45,3),CF(s*48,.23,z),C.white)
-			for k=1,3 do local p=part(B,"ArtificialShrub",V(1.8,2.2,1.7),CF(s*48-3+k*1.5,1.35,z),Color3.fromRGB(64,90,58),Enum.Material.Grass,false); p.Shape=Enum.PartType.Ball end
+	-- Two detached low room islands can be explored on either side and through.
+	for i,item in ipairs({{x=-28,z=107,c=C.pale},{x=29,z=160,c=C.cream}}) do
+		local f=CF(item.x,0,item.z)*CFrame.Angles(0,i==1 and math.rad(-8) or math.rad(7),0)
+		local m=house(B,"DetachedWaitingRoom_"..i,f,28,22,11.8,item.c,nil,{open=true,backOpening=true})
+		part(m,"LowCofferedRoof",V(31,.6,26),f*CF(0,12.35,11),C.cream)
+		part(m,"SilentTelephoneShelf",V(5,.3,1.5),f*CF(-9,3,15),Color3.fromRGB(116,97,71),Enum.Material.Wood)
+		for _,s in ipairs({-1,1}) do wallLamp(m,f*CF(s*12,8,-.6)) end
+	end
+	for _,x in ipairs({-51,51}) do
+		for _,z in ipairs({82,116,151,189}) do
+			part(B,"LowArcadeSquareColumn",V(1.4,18,1.4),CF(x,9,z),C.pale)
 		end
+		part(B,"DroppedLongSoffit",V(5,2.8,120),CF(x,16.6,136),C.cream)
 	end
-	ceiling(B,"PastelCourtCeiling",0,111,220,72,44)
+	for _,z in ipairs({83,137,188}) do floor(B,"LoopCrossing",0,.045,z,158,7,C.carpet) end
+	local K={root=root,config=config,C=C,V=V,CF=CF,model=model,part=part,floor=floor,
+		beam=beam,rail=rail,stairs=stairs,window=window,doorframe=doorframe,facade=facade,
+		house=house,texture=texture,wallLamp=wallLamp,bay=bay,ceiling=ceiling}
+	local neighbourhood=require(script.Parent:WaitForChild("Level 5 Neighbourhood Districts"))
+	local landmarks=require(script.Parent:WaitForChild("Level 5 Landmark Districts"))
+	local N=neighbourhood.Build(K)
+	local L=landmarks.Build(K)
 
-	-- C: pink carpet stairs descend through a yellow miniature-house street.
-	local S=model("C_SunkenPorchStreet")
-	floor(S,"LowerGreenCarpet",0,-12,184,102,78,C.green)
-	boundary(S,0,184,110,78,37)
-	-- The generic enclosure begins at y=0. These retaining walls contain the
-	-- deliberately sunken floor, including underneath the raised side porches.
-	for _,s in ipairs({-1,1}) do
-		part(S,"SunkenStreetRetainingSide",V(1.2,13,78),CF(s*51,-6.5,184),C.yellow)
-		part(S,"SunkenStreetRetainingEnd",V(102,13,1.2),CF(0,-6.5,184+s*39),C.yellow)
-	end
-	for _,s in ipairs({-1,1}) do
-		floor(S,"RaisedPorchWalk",s*36,0,183,25,76,C.yellow)
-		for i,z in ipairs({158,181,205}) do
-			local f=CF(s*42,0,z)*CFrame.Angles(0,s*math.rad(90),0)
-			house(S,"PorchHouse_"..s.."_"..i,f,19,11,11.8,i%2==0 and C.yellow or C.rose,i%2==0 and C.blue or C.lavender,{open=i~=2})
-			-- Broad domestic wallpaper panels are explicit replaceable texture surfaces.
-			local wp=part(S,"FloralWallpaperPanel",V(.16,12,15),CF(s*54,17,z),Color3.fromRGB(210,196,146),Enum.Material.SmoothPlastic,false)
-			texture(wp,config.FloralTexture,s==1 and Enum.NormalId.Left or Enum.NormalId.Right,12)
-			if not config.FloralTexture then
-				for row=0,2 do for col=0,2 do
-					local xf=s*53.88; local yy=12.5+row*3.6; local zz=z-5+col*4.7
-					local petal=part(S,"WallpaperRose",V(.055,.7,.85),CF(xf,yy,zz)*CFrame.Angles(math.rad(45),0,0),C.rose,Enum.Material.SmoothPlastic,false)
-					part(S,"WallpaperLeaf",V(.055,.35,1.05),CF(xf-s*.01,yy-.65,zz+.35)*CFrame.Angles(math.rad(-28),0,0),Color3.fromRGB(102,128,84),Enum.Material.SmoothPlastic,false)
-				end end
+	-- Separate room envelopes, each with its own ceiling and deliberately narrow
+	-- threshold. No sightline can mistake this for one giant shared warehouse.
+	local zones={
+		{id="A",name="Balcony Atrium",model="A_BalconyAtrium",width=220,z0=-4,z1=76,height=44,style="office",wall=C.cream},
+		{id="B",name="Low Eaves Arcade",model="B_LowEavesArcade",width=220,z0=76,z1=196,height=18,style="low",wall=C.yellow},
+		{id="C",name="Pastel Village",model="C_PastelVillage",width=360,z0=196,z1=436,height=48,style="office",wall=C.pale},
+		{id="D",name="Floral Terraces",model="D_FloralTerraces",width=180,z0=436,z1=636,height=32,minY=-14,style="low",wall=C.yellow},
+		{id="E",name="Domestic Labyrinth",model="E_DomesticLabyrinth",width=200,z0=636,z1=796,height=15,style="domestic",wall=C.pale},
+		{id="F",name="Bay Window Canyon",model="F_BayWindowCanyon",width=300,z0=796,z1=1016,height=108,style="warehouse",wall=C.cream},
+		{id="G",name="Tilted Subdivision",model="G_TiltedSubdivision",width=320,z0=1016,z1=1196,height=66,style="warehouse",wall=C.pale},
+		{id="H",name="Last House",model="H_LastHouse",width=120,z0=1196,z1=1276,height=26,style="domestic",wall=C.cream},
+	}
+	local totalFootprint=0
+	for index,z in ipairs(zones) do
+		local m=root:FindFirstChild(z.model) or model(z.model)
+		m:SetAttribute("BiomeName",z.name);m:SetAttribute("CeilingY",z.height)
+		m:SetAttribute("GroundEnvelopeArea",z.width*(z.z1-z.z0))
+		local enclosure=model("Enclosure",m)
+		local bottom=z.minY or 0
+		for _,s in ipairs({-1,1}) do
+			part(enclosure,"DistrictSideWall",V(1.2,z.height-bottom,z.z1-z.z0),CF(s*z.width/2,(z.height+bottom)/2,(z.z0+z.z1)/2),z.wall)
+			part(enclosure,"ContinuousBaseboard",V(.45,.8,z.z1-z.z0),CF(s*(z.width/2-.65),.4,(z.z0+z.z1)/2),C.white,nil,false)
+		end
+		for _,isBack in ipairs({false,true}) do
+			local edge=isBack and (z.z1-.04) or (z.z0+.04)
+			local isEntrance=index==1 and not isBack
+			local isChute=index==#zones and isBack
+			local opening=isChute and 9.3 or 22
+			local openingHeight=isChute and 11 or 14
+			local wallBottom=isChute and -35 or bottom
+			if isEntrance then
+				part(enclosure,"ArrivalBackWall",V(z.width,z.height,1.3),CF(0,z.height/2,edge),z.wall)
+			else
+				local wing=(z.width-opening)/2
+				for _,s in ipairs({-1,1}) do
+					part(enclosure,"ThresholdSideWall",V(wing,z.height-wallBottom,1.1),CF(s*(opening/2+wing/2),(z.height+wallBottom)/2,edge),z.wall)
+				end
+				part(enclosure,"ThresholdHighClosure",V(opening,z.height-openingHeight,1.1),CF(0,(z.height+openingHeight)/2,edge),z.wall)
+				if not isChute then
+					for _,s in ipairs({-1,1}) do part(enclosure,"WideThresholdJamb",V(.55,14,.9),CF(s*11,7,edge-.7),C.white) end
+					part(enclosure,"WideThresholdTrim",V(22.5,.5,.9),CF(0,14.15,edge-.7),C.white)
+				end
 			end
 		end
-		rail(S,CF(s*23.5,0,157)*CFrame.Angles(0,math.rad(90),0),22)
-		rail(S,CF(s*23.5,0,207)*CFrame.Angles(0,math.rad(90),0),27)
-	end
-	stairs(S,"LongPinkDescent",CF(0,0,148),14,-12,28,28,C.pink,true)
-	floor(S,"SunkenStreetLanding",0,-12,184,14,22,C.pink)
-	stairs(S,"PinkStreetAscent",CF(0,-12,194),14,12,28,28,C.pink,true)
-	stairs(S,"RightPorchSteps",CF(12,-12,184)*CFrame.Angles(0,math.rad(90),0),8,12,22,24,C.pink,true)
-	stairs(S,"LeftPorchSteps",CF(-12,-12,184)*CFrame.Angles(0,math.rad(-90),0),8,12,22,24,C.pink,true)
-	-- Large level landings connect the elevated optional route at both ends.
-	floor(S,"StreetEntryLanding",0,0,147,103,2,C.carpet)
-	floor(S,"StreetExitLanding",0,0,222,103,5,C.carpet)
-	ceiling(S,"WallpaperStreetCeiling",0,184,110,78,37)
+		ceiling(enclosure,z.name.."Ceiling",0,(z.z0+z.z1)/2,z.width,z.z1-z.z0,z.height,z.style)
 
-	-- D: the large reveal is a bounded courtyard, with six scenic storeys and three playable ones.
-	local D=model("D_ImpossibleHouseStacks")
-	floor(D,"StackCourtCarpet",0,0,262,220,82,C.green)
-	boundary(D,0,262,220,82,89)
-	for _,s in ipairs({-1,1}) do
-		part(D,"StreetToCourtWingWall",V(55,39,1),CF(s*82.5,19.5,221.5),C.cream)
-		part(D,"CourtToFinalWingWall",V(52,44,1),CF(s*84,22,302.5),C.cream)
+		totalFootprint+=z.width*(z.z1-z.z0)
 	end
-	-- Stepped ceiling heights must be physically enclosed above the openings.
-	-- The previous full-height view through these risers exposed the skybox.
-	part(D,"StreetToHighCourtCeilingStepCap",V(220,52,1.2),CF(0,63,221.5),C.cream)
-	part(D,"HighCourtToFinalCeilingStepCap",V(220,55,1.2),CF(0,61.5,302.5),C.cream)
-	for _,s in ipairs({-1,1}) do
-		local tower=model("BayWindowTower_"..s,D)
-		for level=0,5 do
-			local h=level*13.5
-			local f=CF(s*70,h,262)*CFrame.Angles(0,s*math.rad(90),0)
-			house(tower,"StackedResidence_"..level,f,32,25,13.3,level%2==0 and C.pale or C.cream,nil,{open=level<3,lit=level%3==1,cutaway=level==4 and s==-1})
-			for _,q in ipairs({-1,1}) do bay(tower,f*CF(q*10,0,-.5),8,7.2,(level+q)%3==0) end
-			floor(tower,"StackBalcony",0,0,-6,36,10,C.carpet,f)
-			rail(tower,f*CF(-11,0,-11),12)
-			rail(tower,f*CF(11,0,-11),12)
-			for _,q in ipairs({-1,1}) do rail(tower,f*CF(q*17.5,0,-6)*CFrame.Angles(0,math.rad(90),0),10) end
-			part(tower,"LayerCornice",V(33,.4,26),f*CF(0,13.2,12.5),C.white)
-		end
-		-- Real stairs connect lower landings; upper repetitions remain visual architecture.
-		stairs(D,"StackLowerStair_"..s,CF(s*48,0,227),10,13.5,27,27,C.carpet,true)
-		floor(D,"StackFirstLanding",s*48,13.5,256,14,7)
-		floor(D,"StackFirstConnector",s*54,13.5,260,20,8)
-		stairs(D,"StackUpperStair_"..s,CF(s*47,13.5,260),10,13.5,27,27,C.carpet,true)
-		floor(D,"StackSecondLanding",s*54,27,291,25,8)
-		floor(D,"StackUpperConnection",s*60,27,275,12,28)
+	local cameras={
+		{name="Atrium",position=V(-34,12,7),lookAt=V(52,18,49)},
+		{name="LowEaves",position=V(9,6,80),lookAt=V(-44,8,132)},
+		{name="LowEavesLoop",position=V(-49,5,146),lookAt=V(26,7,174)},
+	}
+	local waypoints={V(0,3,5),V(0,3,68),V(0,3,83),V(0,3,137),V(0,3,190)}
+	local function append(t,src) for _,v in ipairs(src or {}) do t[#t+1]=v end end
+	append(cameras,N.PreviewCameras);append(cameras,L.PreviewCameras)
+	append(waypoints,N.Waypoints);append(waypoints,L.Waypoints)
+	for _,camera in ipairs(cameras) do camera.position+=origin;camera.lookAt+=origin end
+	for i,p in ipairs(waypoints) do waypoints[i]=origin+p end
+	local actualParts,actualLights,windowCount=0,0,0
+	for _,object in ipairs(root:GetDescendants()) do
+		if object:IsA("BasePart") then actualParts+=1 end
+		if object:IsA("Light") then actualLights+=1 end
+		if object:GetAttribute("Level5TintedWindow")==true then windowCount+=1 end
 	end
-	floor(D,"SkyBridge",0,13.5,259,121,8)
-	rail(D,CF(0,13.5,255),85); rail(D,CF(0,13.5,263),83)
-	for _,s in ipairs({-1,1}) do
-		rail(D,CF(s*57.25,13.5,255),6.5)
-		rail(D,CF(s*56.5,13.5,263),8)
-	end
-	floor(D,"UpperSkyBridge",0,27,291,121,8)
-	rail(D,CF(0,27,287),83); rail(D,CF(0,27,295),121)
-	for _,s in ipairs({-1,1}) do rail(D,CF(s*56.5,27,287),8) end
-	for _,x in ipairs({-36,-12,12,36}) do
-		local p=part(D,"BridgeUndersideFluorescent",V(5,.14,2),CF(x,12.17,259),Color3.fromRGB(244,239,209),Enum.Material.Neon,false)
-		local l=Instance.new("SurfaceLight"); l.Face=Enum.NormalId.Bottom; l.Color=Color3.fromRGB(249,241,216)
-		l.Range=55; l.Brightness=1.4; l.Angle=160; l.Shadows=false; l.Parent=p; lightCount+=1
-	end
-	local tilted=house(D,"ImpossibleTiltedHouse",CF(0,42,270)*CFrame.Angles(0,0,math.rad(-24)),31,22,14,C.rose,C.blue,{open=false,lit=true})
-	tilted:SetAttribute("ScenicOnly",true)
-	-- Its slab meets the house floor, and offset cutaway volumes embed it into
-	-- the towers. The silhouette reads as fused domestic architecture, not a
-	-- lone hovering asset. All added masses remain above playable headroom.
-	floor(D,"TiltedCarpetSlab",0,0,11,39,28,C.green,CF(0,42,270)*CFrame.Angles(0,0,math.rad(-24)))
-	local function embeddedRoom(name,frame)
-		local m=model(name,D); m:SetAttribute("ScenicOnly",true)
-		floor(m,"EmbeddedRoomFloor",0,0,9,54,18,C.carpet,frame)
-		part(m,"EmbeddedRoomCeiling",V(54,.65,18),frame*CF(0,12,9),C.pale)
-		part(m,"EmbeddedRoomBackWall",V(54,12,.65),frame*CF(0,6,18),C.cream)
-		part(m,"ExposedRoomApron",V(54,2.4,.65),frame*CF(0,1.2,0),C.pale)
-		part(m,"ExposedRoomLintel",V(54,1,.65),frame*CF(0,11.5,0),C.pale)
-		for _,s in ipairs({-1,1}) do
-			part(m,"EmbeddedRoomSideWall",V(.65,12,18),frame*CF(s*27,6,9),C.cream)
-			part(m,"ExposedWhiteWallEdge",V(.35,12,.85),frame*CF(s*26.6,6,-.12),C.white)
-		end
-		part(m,"ExposedFloorMoulding",V(54,.35,.95),frame*CF(0,.15,-.15),C.white)
-		part(m,"ExposedCeilingMoulding",V(54,.45,.95),frame*CF(0,11.85,-.15),C.white)
-	end
-	embeddedRoom("LeftEmbeddedHouseVolume",CF(-39,52,272)*CFrame.Angles(0,0,math.rad(-18)))
-	embeddedRoom("RightEmbeddedHouseVolume",CF(39,39,273)*CFrame.Angles(0,0,math.rad(7)))
-	for _,s in ipairs({-1,1}) do
-		part(D,"CourtyardColumn",V(2.2,84,2.2),CF(s*104,42,250),C.pale)
-		floor(D,"CourtEdgePath",s*25,.04,260,10,72,C.carpet)
-	end
-	floor(D,"FinalApproach",0,.05,294,61,10,C.carpet)
-	ceiling(D,"HighIndoorRoof",0,262,220,82,89,"warehouse")
-
-	-- E: a real final house interior. Its rear passage is accessible for this map-only preview.
-	local E=model("E_FinalPuzzleHouseAndChute")
-	floor(E,"FinalHouseCourt",0,0,318,116,35,C.carpet)
-	boundary(E,0,324,116,46,34)
-	for _,s in ipairs({-1,1}) do
-		floor(E,"FinalSideCourt",s*39.5,0,341.5,37,13,C.carpet)
-		part(E,"FinalEnclosureBackWall",V(54,34,1),CF(s*31,17,347),C.cream)
-	end
-	part(E,"FinalEnclosureBackHeader",V(8,24,1),CF(0,22,347),C.cream)
-	local finalHouse=house(E,"FinalHouse",CF(0,0,317),42,27,14,C.pale,C.blue,{open=true,backOpening=true})
-	finalHouse:SetAttribute("PuzzleReady",true)
-	finalHouse:SetAttribute("FutureDoorPlaneZ",344)
-	for _,s in ipairs({-1,1}) do
-		part(finalHouse,"InteriorRoomDivider",V(.55,14,8),CF(s*12,7,322),C.cream)
-		part(finalHouse,"EmptyPictureFrame",V(4.5,3.7,.24),CF(s*13,7,343.5),C.white,Enum.Material.Wood)
-		part(finalHouse,"EmptyPictureInset",V(3.8,3,.25),CF(s*13,7,343.32),C.cream)
-	end
-	part(finalHouse,"PuzzleReadySideboard",V(12,3,2),CF(0,1.5,331),Color3.fromRGB(135,111,82),Enum.Material.Wood)
-	for _,x in ipairs({-4,0,4}) do
-		part(finalHouse,"UnwiredLampBase",V(.9,.2,.9),CF(x,3.1,331),C.white,Enum.Material.Metal)
-		part(finalHouse,"UnwiredLampStem",V(.15,1.2,.15),CF(x,3.75,331),C.white,Enum.Material.Metal)
-		part(finalHouse,"UnwiredLampShade",V(1.4,.8,1.4),CF(x,4.7,331),C.pale,Enum.Material.Fabric)
-	end
-	for _,s in ipairs({-1,1}) do
-		local arrow=part(finalHouse,"ExitArrowArtSurface",V(4.7,4.7,.04),CF(s*7.5,6,343.58),C.pale,Enum.Material.SmoothPlastic,false)
-		if config.ArrowTexture then local decal=Instance.new("Decal"); decal.Name="PaintedExitArrow"; decal.Texture=tostring(config.ArrowTexture); decal.Face=Enum.NormalId.Front; decal.Parent=arrow
-		else
-			part(finalHouse,"PaintedArrowShaft",V(3,.18,.05),CF(s*7.5,6,343.53),C.red,Enum.Material.SmoothPlastic,false)
-			for _,v in ipairs({-1,1}) do part(finalHouse,"PaintedArrowHead",V(1.4,.18,.055),CF(s*6.5,6+v*.43,343.51)*CFrame.Angles(0,0,s*v*math.rad(40)),C.red,Enum.Material.SmoothPlastic,false) end
-		end
-	end
-	ceiling(E,"FinalHouseEnclosureCeiling",0,324,116,46,34)
-	local chute=model("NarrowDescent",E)
-	local chuteStart=V(0,0,344)
-	local bend=V(0,-11,371)
-	local chuteEnd=V(0,-28,386)
-	local function chuteSegment(a,b,dark)
-		local length=(b-a).Magnitude
-		local f=CFrame.lookAt((a+b)/2,b)
-		part(chute,"SmoothSlopingFloor",V(7.2,.85,length+.6),f*CF(0,-.43,0),dark and C.dark or C.carpet,Enum.Material.SmoothPlastic)
-		for _,s in ipairs({-1,1}) do part(chute,"CloseChuteWall",V(.7,8.7,length+.6),f*CF(s*3.95,4.3,0),dark and Color3.fromRGB(5,6,6) or C.cream) end
-		part(chute,"LowChuteCeiling",V(8.6,.65,length+.6),f*CF(0,8.7,0),dark and Color3.fromRGB(5,6,6) or C.ceiling)
-		if not dark then
-			part(chute,"LastFluorescent",V(3,.12,1.7),f*CF(0,8.3,length*.25),Color3.fromRGB(185,191,154),Enum.Material.Neon,false)
-		end
-	end
-	chuteSegment(chuteStart,bend,false)
-	chuteSegment(bend,chuteEnd,true)
-	-- A contained black landing avoids dropping preview visitors into the void.
-	floor(chute,"DarkArrivalFloor",0,-28,390,8,9,Color3.fromRGB(3,4,4))
-	part(chute,"DarkArrivalCeiling",V(8,.7,9),CF(0,-19.3,390),Color3.fromRGB(3,4,4))
-	for _,s in ipairs({-1,1}) do part(chute,"DarkArrivalSide",V(.7,9,9),CF(s*4,-23.5,390),Color3.fromRGB(3,4,4)) end
-	part(chute,"DarkArrivalEnd",V(8,9,.7),CF(0,-23.5,394.5),Color3.fromRGB(3,4,4))
-	chute:SetAttribute("GeometryOnly_NoSlideOrCompletion",true)
-	chute:SetAttribute("SuggestedSlideStartFraction",.7)
-	root:SetAttribute("PartCount",partCount); root:SetAttribute("LightCount",lightCount)
-	root:SetAttribute("Design", "Unknown-origin Backrooms; visitors are researchers. No organisation created this place.")
-	local function world(v) return origin+v end
+	root:SetAttribute("PartCount",actualParts);root:SetAttribute("LightCount",actualLights)
+	root:SetAttribute("TintedWindowCount",windowCount)
+	root:SetAttribute("BiomeCount",#zones);root:SetAttribute("GroundEnvelopeArea",totalFootprint)
+	root:SetAttribute("PreviousGroundEnvelopeArea",65396)
+	root:SetAttribute("GroundEnvelopeExpansionFactor",totalFootprint/65396)
+	root:SetAttribute("WindowStandard","Glass RGB(87,102,102), transparency 0.2; no luminous panes")
+	root:SetAttribute("Design","Unknown-origin Backrooms; visitors are researchers. No organisation created this place.")
 	return {
-		Model=root,
-		SpawnCFrame=CFrame.lookAt(world(V(0,3,5)),world(V(0,3,38))),
-		PreviewCameras={
-			{name="Atrium",position=world(V(-34,12,7)),lookAt=world(V(52,18,49))},
-			{name="PastelCourt",position=world(V(-21,7,80)),lookAt=world(V(45,9,127))},
-			{name="PorchStreet",position=world(V(0,8,146)),lookAt=world(V(8,-2,199))},
-			{name="HouseStacks",position=world(V(-22,9,224)),lookAt=world(V(18,42,271))},
-			{name="FinalHouse",position=world(V(-11,7,306)),lookAt=world(V(0,7,334))},
-			{name="Chute",position=world(V(0,5,342)),lookAt=world(V(0,-12,375))},
-		},
-		Waypoints={world(V(0,3,5)),world(V(0,3,68)),world(V(0,3,110)),world(V(0,3,145)),world(V(0,-9,180)),world(V(0,3,224)),world(V(0,3,282)),world(V(0,3,315)),world(V(0,3,339))},
-		FinalHouse=finalHouse,
-		ChuteStart=CFrame.new(world(chuteStart)),
-		ChuteEnd=CFrame.new(world(chuteEnd)),
-		Bounds={Min=world(V(-111,-30,-5)),Max=world(V(111,90,395))},
+		Model=root,SpawnCFrame=CFrame.lookAt(origin+V(0,3,5),origin+V(0,3,38)),
+		PreviewCameras=cameras,Waypoints=waypoints,Zones=zones,
+		FinalHouse=L.FinalHouse,ChuteStart=CFrame.new(origin+L.ChuteStart),ChuteEnd=CFrame.new(origin+L.ChuteEnd),
+		Bounds={Min=origin+V(-181,-36,-5),Max=origin+V(181,110,1324)},
+		GroundEnvelopeArea=totalFootprint,PreviousGroundEnvelopeArea=65396,
 	}
 end
 
