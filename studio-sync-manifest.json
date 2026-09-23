@@ -3,13 +3,13 @@
   "source": "Studio-authoritative square detector artwork and compact shop captions, published v1949.",
   "finalNewlineContract": "Entries flagged studioTrailingNewline hold exactly the canonical repo file plus one extra trailing newline in Studio. Exact landings remove the flag. Current flagged entry count: 0. Manifest hashes always describe the canonical repo file, never Studio's transport bytes.",
   "studio": {
-    "id": "a476e358-db0c-4276-b888-c8e741cac447",
+    "id": "7b9759ba-1a0c-4f59-9eb8-21098b64c70b",
     "name": "BACKROOMS: STAY QUIET [CO-OP HORROR] (placeId: 131311258779917)"
   },
   "counts": {
-    "scripts": 168,
+    "scripts": 169,
     "remoteEvents": 15,
-    "total": 183,
+    "total": 184,
     "studioTrailingNewline": 0
   },
   "nativePlaceBackup": {
@@ -284,8 +284,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/ZyntraConfig.ModuleScript.lua",
-      "bytes": 12830,
-      "sha256": "7641dab672506acc2827a64c5be33bcf63df0aa9367cd8e0885783dca2e6f430",
+      "bytes": 13768,
+      "sha256": "7d35c401d3938d2fe49ff852830255d2767e40029a8af0e06f75f19908ea19c6",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -402,8 +402,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 158632,
-      "sha256": "8253bba32110972a883a678cabea9605695e801d9a1ddcb16fde44675853f7d7",
+      "bytes": 161143,
+      "sha256": "b898991761b83c71ccf2199ed1b0be1ea9530f7ac3899acf2c0f7e3ea0010e66",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -1153,8 +1153,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/ZyntraDetectorService.Script.lua",
-      "bytes": 2450,
-      "sha256": "ca0c857c66091268b97c538d102d685b990d9cce917ddbefd3526cd255ae1fbf",
+      "bytes": 2562,
+      "sha256": "cece441a57016a61e0ea6db41fcccba8257b27024ef25a6dd8043453de929f47",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -1169,8 +1169,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/ZyntraMonetization.Script.lua",
-      "bytes": 174941,
-      "sha256": "830dfda1e1b1ccfaed8379b2538f6ee612a63e212592df0f064b786b6042a35f",
+      "bytes": 176477,
+      "sha256": "f53742b22b74ec942c1cc40c5b0b7d7fddae2703db1b52134272c5592d94d5e4",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2694,6 +2694,14 @@
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraChallenges",
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/ZyntraChallenges.ModuleScript.lua",
+      "bytes": 6018,
+      "sha256": "c5aaa9b16a974cc13fa24a89a6d4dae3f26637f49ec53fccd1803dd562b9ab5b",
+      "status": "synced"
     }
   ]
 }
