@@ -1,6 +1,8 @@
 # The Neighbour — four-view T-pose reference
 
-Five full-resolution PNG references for the friend building the Level 4 entity:
+> **Superseded 23 September 2026:** the owner cancelled this model request. Do not build or import The Neighbour from these references. The new Level 4 entity is being selected from `assets/concepts/level4-entity-options-20260923/`.
+
+Five historical full-resolution PNG references for the cancelled Level 4 entity:
 
 | View | File | Roblox group image ID (reference only) |
 |---|---|---|

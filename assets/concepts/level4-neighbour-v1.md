@@ -1,5 +1,7 @@
 # The Neighbour — visual concept v1
 
+> **Superseded 23 September 2026:** the owner cancelled The Neighbour. This image remains for historical reference only; the new Level 4 entity will be selected from `assets/concepts/level4-entity-options-20260923/`.
+
 ![The Neighbour concept](level4-neighbour-v1.png)
 
 Original full-body character reference generated with Codex's built-in imagegen tool on 23 September 2026. This is a **concept image, not a mesh, rig or Roblox asset**. It gives a silhouette/material direction for the Level 4 entity: approximately 9.5-stud-tall, narrow shoulders, unnaturally long forearms, slightly tilted head, faded blue-grey maintenance clothing and a featureless matte smoked-glass faceplate. It avoids a formal suit/tie, glowing eyes, gore and weapons so the character remains a distinct Zyntra entity.

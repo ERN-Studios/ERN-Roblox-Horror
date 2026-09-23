@@ -1,6 +1,8 @@
 # The Neighbour — model delivery brief
 
-Use the five PNGs in this directory as visual references for the original Level 4 entity. The four orthographic T-pose images show front, back, left and right. The three-quarter concept shows the intended mood and silhouette. The game contract in `docs/LEVEL4_CONTRACTS_2026-09-21.md` §6 takes precedence over any AI-image inconsistency: particularly the forearms, which must be **1.5× the upper-arm length**. Keep the faceplate blank matte smoked glass, the utility coat faded blue-grey, and the trousers/boots dark. No eyes, weapon, tie, gore or borrowed horror-character likeness.
+> **Superseded 23 September 2026:** the owner cancelled The Neighbour. This brief is retained only as history; do not start model or animation work from it. See `assets/concepts/level4-entity-options-20260923/` for the current selection trials.
+
+The five PNGs in this directory were references for the cancelled Level 4 entity. The four orthographic T-pose images show front, back, left and right. The three-quarter concept shows its intended mood and silhouette. The historical game contract in `docs/LEVEL4_CONTRACTS_2026-09-21.md` §6 specified forearms **1.5× the upper-arm length**. Those details do not define the replacement entity.
 
 ## Scale and orientation
 
