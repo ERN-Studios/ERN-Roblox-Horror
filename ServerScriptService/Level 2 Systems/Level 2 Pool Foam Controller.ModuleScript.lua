@@ -1085,10 +1085,9 @@ local function updateObservation(session, entity, now)
 		entity.ObservedSince = entity.ObservedSince or now
 		if observationFreezes(session) then
 			-- Card wdz28z81: a watched foam stands still AND gives back the speed
-			-- it earned; looking away restarts the chase from its floor. Only the
-			-- bonus is reset: LastDesiredSpeed is also separation's "still wants
-			-- to go somewhere", and zeroing it left a released statue that was
-			-- held before its first step unable ever to arm the bounded wait.
+			-- it earned; looking away restarts the chase from its floor. The
+			-- stop itself is updateEntity's freeze branch, so only the bonus is
+			-- touched here.
 			entity.SpeedRampBonus = 0
 		end
 		if observation.TriggerChaseOnObserve ~= false
@@ -1239,6 +1238,32 @@ local function releaseProtectedPlayer(session, player, character)
 	session.ObservationAccumulator = 1
 end
 
+-- NEVER STEP INTO ANOTHER BODY (2026-09-23). updateSeparation corrects AFTER
+-- the step with one frame of lookahead, and Studio chase frames run 40+ ms, so
+-- a 14-22 stud/s hunter still crossed that lookahead into a held body (head-on
+-- in a corridor, 0.1-0.2 studs; 1.3 studs once). This is how far the entity can
+-- travel along its heading before its disc touches another's -- a ray against
+-- each contact circle ahead of it -- whatever the frame time.
+local function separationStepRoom(session, entity)
+	local heading = entity.Navigator:GetHeading()
+	if not heading then return math.huge end
+	local at = entity.Navigator:GetPosition()
+	local room = math.huge
+	for _, other in ipairs(session.Entities) do
+		if other ~= entity then
+			local position = other.Navigator:GetPosition()
+			local deltaX, deltaZ = position.X - at.X, position.Z - at.Z
+			local along = deltaX * heading.X + deltaZ * heading.Z
+			local reach = entity.BodyRadius + other.BodyRadius
+			local lateral2 = deltaX * deltaX + deltaZ * deltaZ - along * along
+			if along > 0 and lateral2 < reach * reach then
+				room = math.min(room, math.max(0, along - math.sqrt(reach * reach - lateral2)))
+			end
+		end
+	end
+	return room
+end
+
 local function updateEntity(session, entity, deltaTime, now)
 	local active = entityIsActive(session, entity)
 	setModelAttribute(entity.Model, "Level2_PoolFoamActiveMover", active)
@@ -1307,7 +1332,9 @@ local function updateEntity(session, entity, deltaTime, now)
 	-- lease is short and refreshed by the pass, so nothing here can strand a
 	-- creature; the progress watchdog below is skipped on purpose, because a hold
 	-- is not the creature failing to make progress.
-	if now < (entity.SeparationHoldUntil or 0) then
+	-- A heading with no room left before another body is the same wait.
+	local room = separationStepRoom(session, entity)
+	if now < (entity.SeparationHoldUntil or 0) or room < 0.01 then
 		entity.WasMoving = false
 		entity.StationaryFor += deltaTime
 		setEntityAnimation(entity, "Idle")
@@ -1316,8 +1343,8 @@ local function updateEntity(session, entity, deltaTime, now)
 	end
 
 	local before = entity.Navigator:GetPosition()
-	entity.Reached = entity.Navigator:Step(deltaTime,
-		movementSpeed(session, entity, hunting, pursuing and deltaTime or 0))
+	entity.Reached = entity.Navigator:Step(deltaTime, math.min(
+		movementSpeed(session, entity, hunting, pursuing and deltaTime or 0), room / math.max(deltaTime, 1e-3)))
 	local after = entity.Navigator:GetPosition()
 	entity.WasMoving = (after - before).Magnitude > 0.002
 	if entity.WasMoving then
@@ -1526,8 +1553,13 @@ end
 -- when its yielder cannot step aside, which is the corridor stand-off the
 -- bounded wait exists for; testing the hold would freeze that case forever.
 local function separationPressing(session, entity, contact)
+	-- The GOAL is the signal, not the last desired speed: Stop() already drops
+	-- the goal of a parked hunter, while a speed of 0 is also what a parked
+	-- hunter still carries after its target left and it was given a new goal but
+	-- held before its first step -- which read as "wants nothing" and left its
+	-- yielder's wait unarmed for good (Studio 2026-09-23, 0 of 5 moved).
 	local goal = entity.Navigator:GetGoal()
-	if goal == nil or numberOr(entity.LastDesiredSpeed, 0, 0, 40) <= 0 then return false end
+	if goal == nil then return false end
 	-- ...and it still has somewhere to WALK. Testing the goal alone is not
 	-- enough: in a converged ring only the first entity gets inside
 	-- TargetStopDistance and parks, while the ones held a body further out keep

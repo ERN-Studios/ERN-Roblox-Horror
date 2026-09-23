@@ -176,6 +176,11 @@ local Configuration = {
 		MaxStepHeight = 3.5,
 		StuckRepathSeconds = 1.1,
 		UnreachableTargetCooldown = 3.0,
+		-- Certify only the first 96 studs of a route and fetch the next piece
+		-- with 48 left (the Pool Slide's measured values, 2026-09-21). 0 = the
+		-- old whole-route certification. See the Navigator's PLAN HORIZON note.
+		PlanHorizon = 96,
+		PlanHorizonExtend = 48,
 		-- An unseen, pursuing Pool Noodle speeds up continuously: stalking from
 		-- its phase pace, chasing from ChaseMinimumSpeed, both capped at
 		-- MaximumSpeed. Every validated look resets the bonus to zero (card

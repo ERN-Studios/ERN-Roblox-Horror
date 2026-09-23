@@ -152,6 +152,39 @@ do
     drain()
     check(nav.Goal==nil and #nav.Waypoints==0 and not nav.Computing,"Stop prevents late route resurrection")
 end
+do
+    -- PLAN HORIZON (2026-09-23): a 200-stud route is certified only for its
+    -- first 96 studs, and the next piece is asked for while 48 of it are left,
+    -- never after the walk has already run out.
+    local nav=makeNavigator()
+    nav.Tuning.PlanHorizon=96
+    nav.Tuning.PlanHorizonExtend=48
+    local far=Vector3.new(200,0,0)
+    local route={}
+    for x=10,200,10 do table.insert(route,Vector3.new(x,0,0)) end
+    local certified
+    nav._fallbackWaypoints=function() return route,"GRAPH" end
+    nav._centreRoute=function(_,given)
+        certified=#given
+        task.wait()
+        return given,{Unwalkable=0,Unresolved=0,Queries=1,Aborted=false}
+    end
+    nav.Goal=far
+    nav:_requestPath(far,true)
+    drain()
+    check(certified==10,"only the first 96+ studs are certified (10 of 20 points): "..tostring(certified))
+    check(nav.RouteTruncated==true and #nav.Waypoints==10,"the installed piece knows it stops short")
+    local requests=0
+    nav._requestPath=function(self) requests+=1 self.LastPathAt=clock end
+    clock+=1
+    nav.FootPosition=Vector3.new(20,0,0); nav.WaypointIndex=2
+    nav:SetGoal(far)
+    check(requests==0,"plenty of road left: no new piece yet")
+    clock+=1
+    nav.FootPosition=Vector3.new(60,0,0); nav.WaypointIndex=6
+    nav:SetGoal(far)
+    check(requests==1,"under PlanHorizonExtend left: the next piece is asked for before the walk runs out")
+end
 '''
 
 CONTROLLER_PRELUDE = r'''
@@ -187,12 +220,13 @@ do
         Step=function() return false end,
         Stop=function(self) self.Stopped=true end,
         GetDebugSnapshot=function(self) return {Computing=self.Computing,RequestStartedAt=self.RequestStartedAt} end,
-        SetGoal=function(self) requests+=1; self.Computing=false end}
+        SetGoal=function(self) requests+=1; self.Computing=false end,
+        GetHeading=function() return nil end}
     local entity={Navigator=nav,ProgressTarget=player,ProgressGoal=goal,
         ProgressAnchor=Vector3.zero,ProgressGoalDistance=100,RepathAttempts=0,
         NoProgressFor=0,NextGoalAt=math.huge,NextTrailAt=math.huge,
         StationaryFor=0,ChaseTriggered=true,ChaseTarget=player,UnreachableUntil={}}
-    local session={Phase="Pressure",Configuration={Movement={StuckRepathSeconds=1.1,PathRequestTimeout=8}}}
+    local session={Phase="Pressure",Configuration={Movement={StuckRepathSeconds=1.1,PathRequestTimeout=8}},Entities={}}
     for _=1,15 do clock+=.1; updateEntity(session,entity,.1,clock) end
     check(requests==0 and entity.RepathAttempts==0,"watchdog lets a pending route finish beyond 1.1 seconds")
     check(entity.UnreachableUntil[player]==nil,"pending calculation does not make the pursued player unreachable")

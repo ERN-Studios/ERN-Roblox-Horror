@@ -492,6 +492,39 @@ do
         ("without overlapping on the way out (closest %.2f)"):format(closest))
 end
 
+-- 13. The same standstill with a PARKED holder. Studio 2026-09-23, second
+--     round: 01 had parked on the player (desired speed 0, as updateEntity
+--     parks), the player left, 01 got its new goal but was held before its
+--     first step -- and a holder whose last desired speed is 0 never counted as
+--     "wanting to go", so its yielder's wait never armed. 0 of 5 moved in 16 s.
+do
+    local live = {
+        {-571.805,-325.753,-0.0226,0.9997,0}, {-566.818,-321.332,-0.8241,-0.5664,13},
+        {-574.146,-319.506,0.8889,-0.4581,13}, {-569.278,-315.607,-0.3500,-0.9367,13},
+        {-574.769,-313.738,0.3924,-0.9198,13},
+    }
+    local entities = {}
+    for ordinal,row in live do
+        local entity = makeEntity(("Primary_%02d"):format(ordinal),ordinal,row[1],row[2],
+            Vector3.new(row[3],0,row[4]),nil,ART_RADIUS)
+        entity.Goal = Vector3.new(-356,0,-133) -- where the player went
+        entity.LastDesiredSpeed = row[5]
+        entity.SeparationHoldUntil = clock + .15
+        table.insert(entities,entity)
+    end
+    local session = makeSession(entities)
+    local before = {}
+    for index,entity in entities do before[index] = entity.Navigator.Position end
+    local closest = run(session,600,1/60)
+    local moved = 0
+    for index,entity in entities do
+        if (entity.Navigator.Position-before[index]).Magnitude > 20 then moved += 1 end
+    end
+    check(moved==5,("a cluster with a parked holder leaves too (%d of 5 moved 20+ studs)"):format(moved))
+    check(closest>=ART_CONTACT-0.02 and session.SeparationOverlapFrames<=3,
+        ("without a real overlap on the way out (closest %.2f, %d frames)"):format(closest,session.SeparationOverlapFrames))
+end
+
 -- 10. The pass is off by configuration, and one entity is never a pair.
 do
     local a = makeEntity("Primary_01",1,0,0)
@@ -558,12 +591,13 @@ do
         Step=function() steps += 1; return false end,
         Stop=function() end,
         SetGoal=function() end,
+        GetHeading=function() return Vector3.new(0,0,1) end,
         GetDebugSnapshot=function() return {Computing=false,RequestStartedAt=clock} end}
     local entity = {Navigator=nav,UnreachableUntil={},NoProgressFor=0,RepathAttempts=0,
         StationaryFor=0,NextGoalAt=math.huge,NextTrailAt=math.huge,ProgressAnchor=Vector3.zero,
         ProgressGoal=holdGoal,ProgressGoalDistance=100,ProgressTarget=player,
         ChaseTriggered=true,ChaseTarget=player,SeparationHoldUntil=0}
-    local session = {Phase="Pressure",Configuration={Movement={}}}
+    local session = {Phase="Pressure",Configuration={Movement={}},Entities={entity}}
     updateEntity(session,entity,1/60,clock)
     check(steps==1,"an unheld entity walks its route")
     entity.SeparationHoldUntil = clock + .15
@@ -576,6 +610,24 @@ do
     entity.SeparationHoldUntil = nil
     updateEntity(session,entity,1/60,clock)
     check(steps==3,"an entity created before the field existed is never held")
+end
+
+do
+    -- The step cap (2026-09-23): how far a hunter may travel along its heading
+    -- before its disc touches another's, whatever the frame time.
+    local function body(x,z,heading)
+        return {BodyRadius=ART_RADIUS,Navigator={GetPosition=function() return Vector3.new(x,0,z) end,
+            GetHeading=function() return heading end}}
+    end
+    local north = Vector3.new(0,0,1)
+    local mover = body(0,0,north)
+    local room = separationStepRoom({Entities={mover,body(0,7)}},mover)
+    check(math.abs(room-(7-ART_CONTACT))<1e-6,("straight ahead: room is the gap to contact (%.3f)"):format(room))
+    room = separationStepRoom({Entities={mover,body(3,7)}},mover)
+    check(math.abs(room-(7-math.sqrt(ART_CONTACT^2-9)))<1e-6,("off to one side: the ray meets the disc later (%.3f)"):format(room))
+    check(separationStepRoom({Entities={mover,body(0,-7)}},mover)==math.huge,"a body behind never limits the step")
+    check(separationStepRoom({Entities={mover,body(6,7)}},mover)==math.huge,"nor one the heading passes clear of")
+    check(separationStepRoom({Entities={mover,body(0,4)}},mover)==0,"already touching ahead: no step at all")
 end
 
 for _,message in failures do print("FAIL: "..message) end

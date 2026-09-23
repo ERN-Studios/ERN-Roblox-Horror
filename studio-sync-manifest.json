@@ -579,8 +579,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Configuration.ModuleScript.lua",
-      "bytes": 15925,
-      "sha256": "0d34c363ddd9c523ee7bda5506fefab5f7e5e2ac467b5357c5052fd6e47b1fa0",
+      "bytes": 16193,
+      "sha256": "17a5cd900d64960f6f2895b5a5add6569e9e47c8339662371385b0b12654b1f6",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -594,8 +594,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Controller.ModuleScript.lua",
-      "bytes": 97504,
-      "sha256": "550892ca8353d732efe0c424f8ad7412a663cdf41d14ce755a736a3be7bdb174",
+      "bytes": 99086,
+      "sha256": "25141362d024adc588e9f7ed07d882b446059f42d931db26983b07d2ccb5d472",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -609,8 +609,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Navigator.ModuleScript.lua",
-      "bytes": 120989,
-      "sha256": "7c486788ee8f11667790a2c6a6c89fa6f065980dc41424d7b68c8e3b3d8c4ff9",
+      "bytes": 123871,
+      "sha256": "37570a1fa44ba5841f63515837618662738fe34464c578f6143ecc00e2dc3b70",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
