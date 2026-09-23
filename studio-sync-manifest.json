@@ -2533,8 +2533,8 @@
       "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Configuration",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 4 Systems/Level 4 Configuration.ModuleScript.lua",
-      "bytes": 16760,
-      "sha256": "44f875f37e1cb7cd54c8d50ae148c64ca29b71d844573d02e09c1bc06bbc9ef6",
+      "bytes": 20124,
+      "sha256": "2b9f753b1f4ceae912f882dfcd96330833dee2fb6709bb59bda065345c84a986",
       "status": "synced"
     },
     {
@@ -2557,8 +2557,8 @@
       "studioPath": "ServerScriptService.Level 4 Systems.Level 4 World Builder",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 4 Systems/Level 4 World Builder.ModuleScript.lua",
-      "bytes": 47997,
-      "sha256": "47e37c8309bee4ebc0c3232e90d467865e21ab036bbfeccabbd07857392e8927",
+      "bytes": 60098,
+      "sha256": "d778f0eaa47c233495a1ecfd436c42d0bea0d51c96c403140ffc513cc6c9d19d",
       "status": "synced"
     },
     {
@@ -2605,8 +2605,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 4 Lighting Controller.LocalScript.lua",
-      "bytes": 8418,
-      "sha256": "a2a65c7609099e0b9c99010f8625235a1097a0a1bf65c58faff2b021fb42a592",
+      "bytes": 10346,
+      "sha256": "770febda91de2412356f23d9111d4948466c03d22592c9ced1d3a7899a88ec91",
       "status": "synced"
     },
     {

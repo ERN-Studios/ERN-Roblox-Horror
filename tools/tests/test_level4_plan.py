@@ -239,6 +239,49 @@ rejects(function(plan)
 end, "dead end", false)
 rejects(function(plan) plan.Variant = 99 end, "variant out of range", false)
 
+-- 6. ARRIVAL_SLICE_20260923: no megastructure block stands on anything the
+--    round uses. The cores are solid, so a block over a street, a lot with its
+--    yards, a landmark or the arrival would be a wall across gameplay.
+local function blockHit(minX, maxX, minZ, maxZ)
+    for _, group in ipairs(Configuration.Megastructure.Groups) do
+        for _, block in ipairs(group.Blocks) do
+            if minX < block.MaxX and maxX > block.MinX and minZ < block.MaxZ and maxZ > block.MinZ then
+                return block.Name
+            end
+        end
+    end
+    return nil
+end
+local streetsCfg, lotsCfg = Configuration.Streets, Configuration.Lots
+for _, seed in ipairs(seeds) do
+    local plan = PlanGenerator.Generate(seed)
+    for _, edge in ipairs(plan.Streets) do
+        local a, b = plan.JunctionById[edge.A], plan.JunctionById[edge.B]
+        local half = (edge.Kind == "Service" and streetsCfg.ServicePassageHalfWidth or streetsCfg.HalfWidth)
+            + streetsCfg.SidewalkWidth
+        local padX = a.X == b.X and half or 0
+        local padZ = a.Z == b.Z and half or 0
+        local hit = blockHit(math.min(a.X, b.X) - padX, math.max(a.X, b.X) + padX,
+            math.min(a.Z, b.Z) - padZ, math.max(a.Z, b.Z) + padZ)
+        check(hit == nil, ("seed %d: block %s stands on street %s"):format(seed, tostring(hit), edge.Id))
+    end
+    for _, lot in ipairs(plan.Lots) do
+        -- The house, its front yard to the pavement, and a back garden as deep.
+        local halfW = lotsCfg.HouseWidth / 2 + 4
+        local halfD = lotsCfg.HouseDepth / 2 + lotsCfg.FrontYardDepth
+        local hit = blockHit(lot.X - halfW, lot.X + halfW, lot.Z - halfD, lot.Z + halfD)
+        check(hit == nil, ("seed %d: block %s stands on lot %s"):format(seed, tostring(hit), lot.Id))
+    end
+    for _, key in ipairs({"Green", "Tower", "BusStop", "Cabinet", "Exit", "ArrivalSpawn"}) do
+        local mark = plan[key]
+        local halfX, halfZ = (mark.W or 24) / 2, (mark.D or 24) / 2
+        local hit = blockHit(mark.X - halfX, mark.X + halfX, mark.Z - halfZ, mark.Z + halfZ)
+        check(hit == nil, ("seed %d: block %s stands on %s"):format(seed, tostring(hit), key))
+    end
+end
+local mega = Configuration.Megastructure
+check(mega.Bridge.Storey * lotsCfg.StoreyHeight + 10 < mega.CeilingHeight, "the bridge must sit under the ceiling")
+
 for _, message in ipairs(failures) do print("FAIL: " .. message) end
 assert(#failures == 0, tostring(#failures) .. " of " .. checks .. " Level 4 plan checks failed")
 print(("Level 4 plan: %d checks passed over %d seeds, %d distinct plans, %d variants "
