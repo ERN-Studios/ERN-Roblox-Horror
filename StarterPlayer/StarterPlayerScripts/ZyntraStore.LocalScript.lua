@@ -1813,9 +1813,11 @@ end
 
 makeProductCard("Supporter", Config.Passes.Supporter, "Pass")
 makeProductCard("AdvancedEquipment", Config.Passes.AdvancedEquipment, "Pass")
+makeProductCard("EntityDetector", Config.Passes.EntityDetector, "Pass")
 makeProductCard("Tokens4", Config.Products.Tokens4, "Product")
 makeProductCard("Tokens20", Config.Products.Tokens20, "Product")
 makeProductCard("EmergencyReentry", Config.Products.EmergencyReentry, "Product")
+makeProductCard("ExpeditionPack", Config.Products.ExpeditionPack, "Product")
 makeProductCard("CosmeticEquipment", Config.Passes.CosmeticEquipment, "Pass")
 
 -- ── THE SHOP DETAIL PANE (card 102) ─────────────────────────────────────────
@@ -3158,6 +3160,7 @@ local function refreshUI()
 		Supporter = profile.OwnsSupporter,
 		AdvancedEquipment = profile.OwnsAdvancedEquipment,
 		CosmeticEquipment = profile.OwnsCosmeticEquipment,
+		EntityDetector = profile.OwnsEntityDetector,
 	}
 	for key, isOwned in pairs(owned) do
 		local itemButton = productButtons[key]

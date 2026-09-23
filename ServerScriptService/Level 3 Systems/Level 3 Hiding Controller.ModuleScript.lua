@@ -517,40 +517,10 @@ function Controller.GetOccupiedAnchors(generation: number?, excludeProtected: bo
 	return result
 end
 
--- The end of the Mall Manager's table check. Reuses releasePlayer's exact
--- restore path with moveOutside; the only differences are the exit lane, forced
--- to the side of the table AWAY from `awayFrom`, and the short immunity every
--- flushed player carries out with them. Returns who was actually ejected.
-function Controller.FlushAnchor(anchor: BasePart, awayFrom: Vector3?): {Player}
-	local flushed = {}
-	local session = activeSession
-	if not session or not liveSession(session) then return flushed end
-	local occupants = session.Occupants[anchor]
-	if not occupants or #occupants == 0 or not anchor.Parent then return flushed end
-	-- Server time, not os.clock: os.clock is CPU time in the server datamodel and
-	-- runs materially behind the wall clock, so a 1.5 "second" head start measured
-	-- on it is not 1.5 seconds of running. The Manager's reaction window is on the
-	-- same clock, so the promise the player is shown is the promise enforced.
-	-- LastAction and the anchor cooldowns stay on os.clock: nobody is shown those.
-	local now = workspace:GetServerTimeNow()
-	-- releasePlayer mutates the list, so iterate a copy.
-	for _, player in ipairs(table.clone(occupants)) do
-		local record = session.HiddenPlayers[player]
-		if record and aiOccupant(session, player, anchor) then
-			if awayFrom then
-				local localPosition = anchor.CFrame:PointToObjectSpace(awayFrom)
-				local exitSide = if localPosition.Z >= 0 then -1 else 1
-				local sideRotation = CFrame.Angles(0, if exitSide > 0 then math.pi else 0, 0)
-				record.ExitCFrame = anchor.CFrame
-					* CFrame.new(slotLateral(record.Slot or 1), Tuning.ExitVerticalOffset,
-						exitSide * Tuning.ExitOffsetZ)
-					* sideRotation
-			end
-			session.FlushImmuneUntil[player] = now + TableCheckTuning.FlushImmunitySeconds
-			if releasePlayer(session, player, true) then table.insert(flushed, player) end
-		end
-	end
-	return flushed
+-- Compatibility for older callers: a Manager inspection never moves hidden
+-- players. Only their EXIT request, death/leave, or world teardown releases them.
+function Controller.FlushAnchor(_anchor: BasePart, _awayFrom: Vector3?): {Player}
+	return {}
 end
 
 function Controller.IsFlushImmune(player: Player): boolean

@@ -50,6 +50,8 @@ local SHOP_TEXTURES = {
 		Tokens4 = "rbxassetid://127956354478910",
 		Tokens20 = "rbxassetid://114348157561307",
 		EmergencyReentry = "rbxassetid://93091494402773",
+		ExpeditionPack = "rbxassetid://132485864297801",
+		EntityDetector = "rbxassetid://90757067349588",
 		SpeedPotion = "rbxassetid://73457681182843",
 		RouteMarker = "rbxassetid://100856675462356",
 	},
@@ -140,6 +142,7 @@ local DISPLAY_ORDER = {
 	{Key = "Tokens4", Kind = "Product"},
 	{Key = "Tokens20", Kind = "Product"},
 	{Key = "EmergencyReentry", Kind = "Product"},
+	{Key = "ExpeditionPack", Kind = "Product"},
 	{Key = "CosmeticEquipment", Kind = "Pass"},
 	{Key = "SpeedPotion", Kind = "Item"},
 	{Key = "RouteMarker", Kind = "Item"},
@@ -243,7 +246,7 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 
 	local model = Instance.new("Model")
 	model.Name = MODEL_NAME
-	model:SetAttribute("ShopDisplayVersion", 4)
+	model:SetAttribute("ShopDisplayVersion", 5)
 	model:SetAttribute("Placement", "Right wall between the Level 2 and Level 4 gates")
 	model:SetAttribute("FocusAttribute", FOCUS_ATTRIBUTE)
 	-- The envelope this build was solved against, so a Studio probe can check the
@@ -262,6 +265,34 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 		return CFrame.lookAt(position, center + Vector3.new(0, y, z))
 	end
 
+
+	-- Owner-requested sign above the merchandise. Its rear/top corner remains
+	-- inside the tunnel rib radius; all surfaces are non-collidable.
+	local sign = makePart(model, "SuppliesAndUpgradesSign", faceCF(28, 12.3, -40),
+		Vector3.new(45, 2.8, .18), Color3.fromRGB(10, 24, 24), Enum.Material.SmoothPlastic, 0)
+	local face = Instance.new("SurfaceGui")
+	face.Name = "SuppliesAndUpgradesFace"
+	face.Face = Enum.NormalId.Front
+	face.CanvasSize = Vector2.new(1800, 112)
+	face.LightInfluence = 0
+	face.Parent = sign
+	local caption = Instance.new("TextLabel")
+	caption.Name = "Title"
+	caption.BackgroundTransparency = 1
+	caption.Size = UDim2.fromScale(1, 1)
+	caption.Font = Enum.Font.GothamBlack
+	caption.Text = "SUPPLIES  &  UPGRADES"
+	caption.TextSize = 76
+	caption.TextColor3 = PALETTE.neon
+	caption.Parent = face
+	local gradient = Instance.new("UIGradient")
+	gradient.Color = ColorSequence.new(PALETTE.neon, PALETTE.gold)
+	gradient.Parent = caption
+	for _, y in ipairs({10.7, 13.9}) do
+		makePart(model, "SupplySignNeon", faceCF(27.85, y, -40),
+			Vector3.new(45, .09, .12), y > 12 and PALETTE.neon or PALETTE.gold, Enum.Material.Neon, 0)
+	end
+
 	-- ── one hologram box ──────────────────────────────────────────────────────
 	-- Translucent, lit at the edge, and wearing the product art on ALL SIX faces
 	-- so it reads as that product from anywhere on the road rather than only from
@@ -278,12 +309,12 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 		box:SetAttribute("ShopBobPhase", phase)
 
 		-- ONE id for all six faces, resolved once: the product's own art, then
-		-- the shared fallback texture, then the catalogue icon the terminal
-		-- already draws. Every shipped key has art at the first rung; the other
+		-- the catalogue icon the terminal already draws, then the shared
+		-- fallback texture. Every shipped key has art at the first rung; the other
 		-- two exist so a product added to ZyntraConfig without a SHOP_TEXTURES
 		-- entry is never a blank box.
-		local url = assetUrl(textureId) or assetUrl(textures.BoxFallback)
-			or assetUrl(item and item.IconId)
+		local url = assetUrl(textureId) or assetUrl(item and item.IconId)
+			or assetUrl(textures.BoxFallback)
 		if url then
 			box:SetAttribute("ShopTextureSlot", "Box:" .. key)
 			for _, face in ipairs(BOX_FACES) do
@@ -301,7 +332,7 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 		local caption = Instance.new("BillboardGui")
 		caption.Name = "ShopHologramCaption"
 		caption.Adornee = box
-		caption.Size = UDim2.fromScale(7, 0.9)
+		caption.Size = UDim2.fromScale(4.4, 1.1)
 		caption.StudsOffset = Vector3.new(0, BOX_SIZE * 0.5 + 0.75, 0)
 		caption.MaxDistance = 90
 		caption.AlwaysOnTop = false
@@ -315,9 +346,11 @@ function LobbyShopDisplay.Build(lobbyModel, config)
 		captionText.Size = UDim2.fromScale(1, 1)
 		captionText.Font = Enum.Font.GothamBlack
 		captionText.TextScaled = true
+		captionText.TextWrapped = true
 		captionText.TextColor3 = accent
 		captionText.TextTransparency = 0.05
-		captionText.Text = string.upper(tostring((item and item.Name) or key))
+		captionText.Text = key == "EntityDetector" and "ENTITY\nDETECTOR"
+			or string.upper(tostring((item and item.Name) or key))
 		captionText.Parent = caption
 		local captionStroke = Instance.new("UIStroke")
 		captionStroke.Color = Color3.fromRGB(8, 14, 12)

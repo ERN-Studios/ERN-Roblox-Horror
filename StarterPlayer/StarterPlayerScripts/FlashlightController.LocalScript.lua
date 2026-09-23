@@ -69,11 +69,18 @@ local function buildMount()
 	mount.Parent = workspace
 end
 
+local function isFocused()
+	local char = player.Character
+	return player:GetAttribute("ZyntraOwnsAdvancedEquipment") == true
+		and char ~= nil and char:GetAttribute("FlashlightFocused") == true
+end
 local function applyBeamProfile()
 	local profile = Profiles.Current()
-	if profile == lastBeamProfile then return end
-	lastBeamProfile = profile
-	Profiles.Apply(Profiles.Own, profile, coreLight, spillLight)
+	local focused = isFocused()
+	local key = profile .. tostring(focused)
+	if key == lastBeamProfile then return end
+	lastBeamProfile = key
+	Profiles.Apply(Profiles.Own, profile, coreLight, spillLight, focused)
 end
 
 buildMount()
@@ -108,6 +115,7 @@ local replicatedSelf, replicatedLights = nil, {}
 -- Level3UnderTableCamera finalizes a hidden player's camera at Camera + 1.
 -- Aim one priority later so the torch always originates from that real POV.
 RunService:BindToRenderStep("MongoFlashlight", Enum.RenderPriority.Camera.Value + 2, function(dt)
+	applyBeamProfile()
 	local camera = workspace.CurrentCamera
 	if not camera then return end
 	if not (mount and mount.Parent == workspace) then
@@ -587,21 +595,62 @@ local function toggle()
 	end
 end
 
-local lastTouchToggle = 0
+local function toggleFocus()
+	if player:GetAttribute("InRound") ~= true or not alive() then return end
+	if player:GetAttribute("ZyntraOwnsAdvancedEquipment") ~= true then return end
+	remote:FireServer("focus", not isFocused())
+end
+local focusCaption = Instance.new("TextLabel")
+focusCaption.Name = "FocusModeHint"
+focusCaption.BackgroundColor3 = Color3.fromRGB(10, 18, 17)
+focusCaption.BackgroundTransparency = .2
+focusCaption.BorderSizePixel = 0
+focusCaption.ZIndex = 21
+focusCaption.Size = UDim2.new(1, 0, 0, 22)
+focusCaption.Position = UDim2.new(0, 0, 1, -22)
+focusCaption.TextWrapped = true
+focusCaption.Font = Enum.Font.GothamBold
+focusCaption.TextSize = 10
+focusCaption.TextColor3 = Color3.fromRGB(73, 245, 204)
+focusCaption.TextStrokeTransparency = .3
+focusCaption.Parent = batBody
+local function refreshFocusCaption()
+	focusCaption.Visible = player:GetAttribute("ZyntraOwnsAdvancedEquipment") == true and alive()
+	focusCaption.Text = (UIDevice.IsTouch() and "HOLD\n" or (UIDevice.Binding("Y", "R3") .. ": ")) .. (isFocused() and "FOCUSED" or "WIDE")
+end
+player:GetAttributeChangedSignal("ZyntraOwnsAdvancedEquipment"):Connect(refreshFocusCaption)
+UIDevice.Changed:Connect(refreshFocusCaption)
+local press, lastTouchToggle = nil, 0
 touchFlashButton.InputBegan:Connect(function(input)
- local touch = input.UserInputType == Enum.UserInputType.Touch
- local studioMouse = RunService:IsStudio() and workspace:GetAttribute("ForceTouchUI") == true
-  and input.UserInputType == Enum.UserInputType.MouseButton1
- if not (touch or studioMouse) or os.clock() - lastTouchToggle < 0.2 then return end
- lastTouchToggle = os.clock()
- toggle()
+	local touch = input.UserInputType == Enum.UserInputType.Touch
+	local studioMouse = RunService:IsStudio() and workspace:GetAttribute("ForceTouchUI") == true
+		and input.UserInputType == Enum.UserInputType.MouseButton1
+	if not (touch or studioMouse) or os.clock() - lastTouchToggle < .2 then return end
+	lastTouchToggle = os.clock()
+	local current = {Input = input, Held = false}
+	press = current
+	task.delay(.45, function()
+		if press == current and player:GetAttribute("ZyntraOwnsAdvancedEquipment") == true then
+			current.Held = true
+			toggleFocus()
+		end
+	end)
 end)
+UIS.InputEnded:Connect(function(input)
+	if press and press.Input == input then
+		local current = press
+		press = nil
+		if not current.Held then toggle() end
+	end
+end)
+refreshFocusCaption()
 
 UIS.InputBegan:Connect(function(input, processed)
 	if processed then return end
 	-- Same handler for both: ButtonR1 is the gamepad's F. `toggle` already
 	-- carries every guard (out of round, dead, flat battery), so the
 	-- controller cannot reach a state the keyboard cannot.
+	if input.KeyCode == Enum.KeyCode.Y or input.KeyCode == Enum.KeyCode.ButtonR3 then toggleFocus() end
 	if input.KeyCode == Enum.KeyCode.F or input.KeyCode == Enum.KeyCode.ButtonR1 then
 		toggle()
 	end
@@ -613,10 +662,12 @@ local boundCharacter
 local function bindCharacter(char)
 	if boundCharacter == char then return end
 	boundCharacter = char
+	char:GetAttributeChangedSignal("FlashlightFocused"):Connect(refreshFocusCaption)
+	refreshFocusCaption()
 	setLights(false)
 	battery = batteryMax()
 	local hum = char:WaitForChild("Humanoid")
-	hum.Died:Connect(function() setLights(false) end)
+	hum.Died:Connect(function() setLights(false); refreshFocusCaption() end)
 end
 player.CharacterAdded:Connect(bindCharacter)
 if player.Character then task.spawn(bindCharacter, player.Character) end
@@ -693,7 +744,11 @@ RunService.Heartbeat:Connect(function()
 		local hum = char:FindFirstChildOfClass("Humanoid")
 		local shine = flag ~= nil and flag.Value == true
 			and hum ~= nil and hum.Health > 0
-		if profileChanged then Profiles.Apply(Profiles.Mate, profile, beams.core, beams.spill) end
+		local focused = char:GetAttribute("FlashlightFocused") == true
+		if profileChanged or beams.Focused ~= focused then
+			Profiles.Apply(Profiles.Mate, profile, beams.core, beams.spill, focused)
+			beams.Focused = focused
+		end
 		beams.core.Enabled = shine
 		beams.spill.Enabled = shine
 	end
@@ -751,6 +806,7 @@ RunService.Heartbeat:Connect(function(dt)
 			and type(value) == "number"
 		batBody.Visible = valid == true and not UIDevice.ScreenOwningModalOpen()
 		bindingCaption.Visible = false
+		focusCaption.Visible = false
 		if valid then
 			batteryFraction = math.clamp(value, 0, 1)
 			local flag = char:FindFirstChild("FlashlightOn")
@@ -761,6 +817,7 @@ RunService.Heartbeat:Connect(function(dt)
 	else
 		batBody.Visible = true
 		applyFlashlightBinding()
+		refreshFocusCaption()
 	end
 	local filled = math.clamp(math.ceil(batteryFraction * 5), 0, 5)
 	local col = BAT_FULL:Lerp(BAT_EMPTY, 1 - batteryFraction)

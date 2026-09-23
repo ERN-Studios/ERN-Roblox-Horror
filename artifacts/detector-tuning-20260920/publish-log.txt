@@ -1,0 +1,4 @@
+2026-09-20T17:40:03.023Z,18006.023438,f0fa20c0,6,Info [FLog::StudioKeyEvents] publish request routing through state machine (publishType=1)
+2026-09-20T17:40:08.949Z,18011.949219,6e453000,6,Debug [FLog::PublishSessionStateController] Go to PublishSuccessful
+2026-09-20T17:40:08.974Z,18011.974609,f0fa20c0,6,Info [FLog::CreatorOutput] Place published. Eligible players can now play this place in Roblox.
+2026-09-20T17:40:08.974Z,18011.974609,f0fa20c0,6,Info [FLog::CreatorOutput] → Add publish notes to v1948

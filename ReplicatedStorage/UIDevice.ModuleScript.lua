@@ -566,7 +566,7 @@ local CONTROL_KEYS_RIGHT_FIRST = {
 	-- They are DRAWN only when the player owns the item (ProtectionHUD hides the
 	-- button), and an undrawn control is excluded from the measured union, so on
 	-- a real device Zones.Controls still describes what is actually on screen.
-	"SpeedPotionUse", "RouteMarkerPlace",
+	"SpeedPotionUse", "RouteMarkerPlace", "EntityDetectorScan",
 }
 
 local function columnControlPlan(tablet: boolean): any
@@ -609,6 +609,8 @@ local function columnControlPlan(tablet: boolean): any
 			SpeedPotionUse = {Right = second, Bottom = protection + equipmentStep,
 				Width = secondWidth, Height = secondWidth, TextSize = 12},
 			RouteMarkerPlace = {Right = second, Bottom = protection + equipmentStep * 2,
+				Width = secondWidth, Height = secondWidth, TextSize = 12},
+			EntityDetectorScan = {Right = second, Bottom = protection + equipmentStep * 3,
 				Width = secondWidth, Height = secondWidth, TextSize = 12},
 		},
 	}

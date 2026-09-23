@@ -11,6 +11,7 @@ local Profiles = require(RS:WaitForChild("FlashlightProfiles"))
 local mounts = {}
 local lastAim = {}
 local lastToggle = {}
+local lastFocus = {}
 
 local function finiteVector(vector)
 	return vector.X == vector.X and vector.Y == vector.Y and vector.Z == vector.Z
@@ -70,7 +71,10 @@ local function ensureMount(player, char)
 end
 
 local function applyMountProfile(mount)
-	Profiles.Apply(Profiles.Mount, Profiles.Current(), mount:FindFirstChild("Core"), mount:FindFirstChild("Spill"))
+	local owner = Players:GetPlayerByUserId(tonumber(mount.Name:match("_(%d+)$")) or 0)
+	local char = owner and owner.Character
+	Profiles.Apply(Profiles.Mount, Profiles.Current(), mount:FindFirstChild("Core"), mount:FindFirstChild("Spill"),
+		char and char:GetAttribute("FlashlightFocused") == true)
 end
 
 local function setMountEnabled(mount, enabled)
@@ -85,6 +89,15 @@ remote.OnServerEvent:Connect(function(player, value, payload)
 	if not char then return end
 	local humanoid = char:FindFirstChildOfClass("Humanoid")
 	local now = os.clock()
+	if value == "focus" then
+		if type(payload) ~= "boolean" or now - (lastFocus[player] or -math.huge) < .15 then return end
+		lastFocus[player] = now
+		if not humanoid or humanoid.Health <= 0 or player:GetAttribute("InRound") ~= true then return end
+		if player:GetAttribute("ZyntraOwnsAdvancedEquipment") ~= true then return end
+		char:SetAttribute("FlashlightFocused", payload)
+		if mounts[player] then applyMountProfile(mounts[player]) end
+		return
+	end
 	if type(value) == "boolean" then
 		if now - (lastToggle[player] or -math.huge) < 0.08 then
 			-- An off signal is always safe and must win even if death followed an
@@ -128,7 +141,7 @@ end)
 -- InRound watcher and kept a lit mount after their round ended).
 local function forceLightOff(p)
 	local char = p.Character
-	if char then ensureFlag(char).Value = false end
+	if char then ensureFlag(char).Value = false; char:SetAttribute("FlashlightFocused", false) end
 	local mount = mounts[p]
 	if mount then setMountEnabled(mount, false) end
 end
@@ -140,6 +153,7 @@ local function hookPlayer(p)
 	p.CharacterAdded:Connect(function(char)
 		removeMount(p)
 		ensureFlag(char)
+		char:SetAttribute("FlashlightFocused", false)
 	end)
 	if p.Character then ensureFlag(p.Character) end
 end
@@ -153,5 +167,6 @@ end
 Players.PlayerRemoving:Connect(function(player)
 	lastAim[player] = nil
 	lastToggle[player] = nil
+	lastFocus[player] = nil
 	removeMount(player)
 end)

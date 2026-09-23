@@ -1,0 +1,40 @@
+{
+  "readings": {
+    "0": "HIGH",
+    "49": "HIGH",
+    "50": "HIGH",
+    "51": "MEDIUM",
+    "80": "MEDIUM",
+    "120": "MEDIUM",
+    "121": "LOW"
+  },
+  "range": 120,
+  "high": 50,
+  "faces": [
+    {
+      "texture": "rbxassetid://134413710349950",
+      "face": "Enum.NormalId.Front"
+    },
+    {
+      "texture": "rbxassetid://134413710349950",
+      "face": "Enum.NormalId.Back"
+    },
+    {
+      "texture": "rbxassetid://134413710349950",
+      "face": "Enum.NormalId.Left"
+    },
+    {
+      "texture": "rbxassetid://134413710349950",
+      "face": "Enum.NormalId.Right"
+    },
+    {
+      "texture": "rbxassetid://134413710349950",
+      "face": "Enum.NormalId.Top"
+    },
+    {
+      "texture": "rbxassetid://134413710349950",
+      "face": "Enum.NormalId.Bottom"
+    }
+  ],
+  "box": "Workspace.ServerLobby.ZyntraShopDisplay.ShopStand_EntityDetector.ShopHologramBox"
+}

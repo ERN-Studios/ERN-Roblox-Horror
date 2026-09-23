@@ -3117,7 +3117,7 @@ function TestSuite.ProbeChaseForwardProgress(Manager: {[string]: any}, player: P
 end
 
 -- PROBE — one table, two occupants, a third refused, and the Mall Manager's
--- flush. This needs THREE live in-round players (Studio: Test > Clients and
+-- inspection. This needs THREE live in-round players (Studio: Test > Clients and
 -- Servers > Players = 3): "a third is refused" cannot be asserted without a
 -- third body. The third does not have to be near the table -- tryEnter reaches
 -- its cap test before any eligibility or distance test -- but it does have to
@@ -3278,59 +3278,29 @@ function TestSuite.ProbeSharedTableHiding(context: {[string]: any}?): {[string]:
 		assert(rejoined and HidingController.OccupantCount(hideAnchor) == cap,
 			"the freed lane was not reusable: " .. tostring(rejoinReason))
 
-		-- 5. The flush. Everyone still under the table leaves on the side AWAY
-		--    from the Manager and carries the head-start immunity out with them.
-		local managerSide = hideAnchor.CFrame:PointToWorldSpace(Vector3.new(0, 0, 12))
-		local flushed = HidingController.FlushAnchor(hideAnchor, managerSide)
-		assert(#flushed == cap, string.format(
-			"FlushAnchor ejected %d of %d occupants", #flushed, cap))
-		for slotIndex = 1, cap do
-			local record = participants[slotIndex]
-			assert(not HidingController.IsHidden(record.Player, generation)
-				and record.Player:GetAttribute("Level3_Hiding") ~= true
-				and (record.Player:GetAttribute("Level3_HideTableIndex") or 0) == 0,
-				"a flushed player was left in the hiding state")
-			assert(HidingController.IsFlushImmune(record.Player),
-				"a flushed player did not receive the head-start immunity")
-			local exitLocal = hideAnchor.CFrame:PointToObjectSpace(
-				record.Character:GetPivot().Position)
-			assert(exitLocal.Z <= -1, string.format(
-				"a flushed player was pushed toward the Manager (local Z %.2f)", exitLocal.Z))
+		-- 5. Finishing an inspection never ejects either occupant.
+		local before = {}
+		for i = 1, cap do before[i] = participants[i].Character.HumanoidRootPart.CFrame end
+		local flushed = HidingController.FlushAnchor(hideAnchor, hideAnchor.Position + Vector3.new(0, 0, 12))
+		assert(#flushed == 0, "Manager inspection ejected a hidden player")
+		for i = 1, cap do
+			local record = participants[i]
+			local root = record.Character.HumanoidRootPart
+			assert(HidingController.IsHidden(record.Player, generation) and root.Anchored
+				and (root.Position - before[i].Position).Magnitude < .01, "Inspection moved an occupant")
 		end
-		assert(HidingController.OccupantCount(hideAnchor) == 0
-			and hideAnchor:GetAttribute("Level3_HideOccupiedUserId") == 0
-			and prompt.Enabled == true,
-			"the flushed table did not release its occupancy")
-
-		-- 6. Immunity means the attack itself is refused, not merely recorded.
+		assert(HidingController.OccupantCount(hideAnchor) == cap, "Inspection changed occupancy")
 		local attackProbe = nil
 		if type(Manager) == "table" and Manager.GetSnapshot and Manager.DebugAttackProbe
 			and Manager.GetSnapshot() ~= nil then
 			attackProbe = Manager.DebugAttackProbe(first)
-			assert(attackProbe.LineClearAtConfirmRange == false
-				and attackProbe.WouldInitiate == false,
-				"the Mall Manager would still attack a player it flushed one frame ago")
+			assert(not attackProbe.LineClearAtConfirmRange and not attackProbe.WouldInitiate,
+				"Manager can attack an occupant who stayed hidden")
 		end
-
-		-- 7. And it is a head start, not permanent safety. os.clock is CPU time
-		--    on the Studio server, so poll it rather than sleeping a wall-clock
-		--    duration that may not have advanced it far enough.
-		local immunityStart = workspace:GetServerTimeNow()
-		local immunityDeadline = os.clock() + Configuration.TableCheck.FlushImmunitySeconds + 2
-		while HidingController.IsFlushImmune(first) and os.clock() < immunityDeadline do
-			task.wait(.1)
-		end
-		assert(not HidingController.IsFlushImmune(first),
-			"flush immunity never expired")
-		-- ...and it lasts the advertised number of SECONDS, not the same number of
-		-- CPU seconds. Measured against server time, the clock the reaction window
-		-- and the client banner both use; a regression to os.clock stretches a 1.5 s
-		-- head start into several seconds of real running and fails here.
-		local immunityWall = workspace:GetServerTimeNow() - immunityStart
-		assert(immunityWall <= Configuration.TableCheck.FlushImmunitySeconds + 1.5,
-			string.format("flush immunity ran %.2f wall seconds for a %.2f second head"
-				.. " start; it is being measured on a clock the player never experiences",
-				immunityWall, Configuration.TableCheck.FlushImmunitySeconds))
+		-- 6. Voluntary exit still restores controls and frees the player's slot.
+		assert(HidingController.DebugExit(first), "Voluntary exit failed")
+		assert(not HidingController.IsHidden(first, generation)
+			and HidingController.OccupantCount(hideAnchor) == cap - 1, "Exit did not free the slot")
 
 		return {
 			Anchor = hideAnchor:GetFullName(),
@@ -3338,9 +3308,8 @@ function TestSuite.ProbeSharedTableHiding(context: {[string]: any}?): {[string]:
 			OccupantCap = cap,
 			Participants = #participants,
 			Flushed = #flushed,
-			FlushImmunitySeconds = Configuration.TableCheck.FlushImmunitySeconds,
-			ImmunityWallSeconds = immunityWall,
-			AttackRefusedWhileImmune = attackProbe ~= nil,
+			InspectionPreservedOccupants = true,
+			AttackRefusedWhileHidden = attackProbe ~= nil,
 		}
 	end)
 

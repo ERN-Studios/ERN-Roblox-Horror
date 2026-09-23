@@ -232,11 +232,13 @@ RunService.RenderStepped:Connect(function(dt)
 	local fo = char:FindFirstChild("FlashlightOn")
 	local on = fo ~= nil and fo.Value
 	local profile = Profiles.Current()
-	if profile ~= lastBeamProfile or on ~= lastOn then
-		Profiles.Apply(Profiles.Spectate, profile, core, spill)
+	local focused = char:GetAttribute("FlashlightFocused") == true
+	local profileKey = profile .. tostring(focused)
+	if profileKey ~= lastBeamProfile or on ~= lastOn then
+		Profiles.Apply(Profiles.Spectate, profile, core, spill, focused)
 		core.Enabled = on
 		spill.Enabled = on
-		lastBeamProfile, lastOn = profile, on
+		lastBeamProfile, lastOn = profileKey, on
 	end
 end)
 

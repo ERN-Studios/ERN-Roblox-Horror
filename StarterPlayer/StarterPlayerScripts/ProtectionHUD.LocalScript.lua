@@ -46,6 +46,7 @@ local profileChanged = remotes:WaitForChild("ZyntraProfileChanged")
 -- a marker. Resolved off the main thread so a build without it costs this HUD
 -- nothing: the marker row simply never appears.
 local markerRemote = nil
+local detectorRemote = nil
 
 -- The item numbers belong to ZyntraConfig (the owner tunes them there); these
 -- reads only exist so the readout cannot print a cap the server does not use.
@@ -118,6 +119,15 @@ caption.Visible = false
 caption.Parent = gui
 UIStyle.caption(caption)
 UIStyle.body(caption, {TextSize = 12, TextColor = UIStyle.Color.Caption3})
+
+local reentryNotice = Instance.new("TextLabel")
+reentryNotice.Name = "ReentryGrace"
+reentryNotice.AnchorPoint = Vector2.new(.5, 1)
+reentryNotice.Visible = false
+reentryNotice.Parent = gui
+UIStyle.caption(reentryNotice)
+UIStyle.body(reentryNotice, {TextSize = 16, TextColor = UIStyle.Color.Live})
+reentryNotice.TextWrapped = true
 
 local connections, characterConnections = {}, {}
 local boundCharacter, boundHumanoid
@@ -223,6 +233,7 @@ do
 		makeRow("ProtectionUse", "Entity Shield", "SHIELD", "Q", "D-PAD DOWN"),
 		makeRow("SpeedPotionUse", "Speed Potion", "POTION", "T", nil),
 		makeRow("RouteMarkerPlace", "Route Markers", "MARKER", "X", nil),
+		makeRow("EntityDetectorScan", "Detector", "SCAN", "Z", "D-PAD LEFT"),
 	}
 end
 
@@ -230,6 +241,7 @@ local KEY_ROWS = {
 	[Enum.KeyCode.Q] = 1, [Enum.KeyCode.DPadDown] = 1,
 	[Enum.KeyCode.T] = 2,
 	[Enum.KeyCode.X] = 3,
+	[Enum.KeyCode.Z] = 4, [Enum.KeyCode.DPadLeft] = 4,
 }
 
 -- RouteMarkerService's whole vocabulary, kept short enough for one line.
@@ -299,7 +311,8 @@ local function secondsRemaining(subject)
 	local expires = subject:GetAttribute("PlayerProtectionExpiresAt")
 	if subject:GetAttribute("PlayerProtectionActive") ~= true or type(expires) ~= "number"
 		or expires ~= expires or expires == math.huge or expires == -math.huge then return 0 end
-	return math.clamp(expires - workspace:GetServerTimeNow(), 0, 5)
+	local duration = subject:GetAttribute("PlayerProtectionSource") == "Reentry" and 10 or 5
+	return math.clamp(expires - workspace:GetServerTimeNow(), 0, duration)
 end
 
 local function canPress(state, remaining)
@@ -395,6 +408,17 @@ local function computeStates()
 			Detail = stored .. " STORED · " .. placed .. "/" .. MAX_MARKERS .. " PLACED",
 			ShortDetail = placed .. "/" .. MAX_MARKERS}
 	end
+ do -- Server-published snapshot; the client never determines danger.
+  local now=workspace:GetServerTimeNow()
+  local remaining=math.max(0,(player:GetAttribute("ZyntraDetectorReadyAt") or 0)-now)
+  local live=(player:GetAttribute("ZyntraDetectorReadingUntil") or 0)>now
+  local reading=live and player:GetAttribute("ZyntraDetectorReading") or nil
+  local owned=player:GetAttribute("ZyntraOwnsEntityDetector")==true
+  local detail=reading or (remaining>0 and (math.ceil(remaining).."s") or "READY")
+  states[4]={Visible=available and owned and detectorRemote~=nil,
+   Enabled=available and owned and remaining<=0, Lit=live or remaining<=0,Live=live,
+   Title="Detector",Short="SCAN",Detail=detail,ShortDetail=detail}
+ end
 	return states
 end
 
@@ -451,6 +475,7 @@ end
 
 local function refresh()
 	if destroyed then return end
+	reentryNotice.Visible = false
 	local subject = spectateSubject()
 	if (subject ~= nil) ~= mirroring then
 		mirroring = subject ~= nil
@@ -504,6 +529,14 @@ local function refresh()
 	end
 	if touch then panel.Visible = false else placePointer(states) end
 	caption.Visible = states.Available and captionUntil > os.clock()
+	local remaining = secondsRemaining()
+	if states.Available and remaining > 0 and player:GetAttribute("PlayerProtectionSource") == "Reentry" then
+		local area = UIDevice.Layout().ModalArea
+		reentryNotice.Size = UDim2.fromOffset(math.max(120, math.min(360, area.Width - 16)), 50)
+		reentryNotice.Position = UIDevice.LocalPosition(gui, (area.Left + area.Right) * .5, area.Bottom - 32)
+		reentryNotice.Text = string.format("You are invisible to monsters\n%d seconds", math.ceil(remaining))
+		reentryNotice.Visible = true
+	end
 end
 
 function applyLayout()
@@ -566,7 +599,7 @@ end
 -- One request in flight per action. The windows are deliberately longer than a
 -- double-tap and shorter than a player waiting: they exist so a held finger or
 -- a stuck key cannot spray the remote, not as a gameplay cooldown.
-local RATE_WINDOW = {[2] = 1.2, [3] = 1.5}
+local RATE_WINDOW = {[2] = 1.2, [3] = 1.5, [4] = 1}
 
 local function press(index)
 	if destroyed then return end
@@ -584,7 +617,9 @@ local function press(index)
 		lastFired[index] = now
 		if index == 2 then
 			actionRemote:FireServer("UseSpeedPotion")
-		elseif markerRemote then
+		elseif index == 4 and detectorRemote then
+			detectorRemote:FireServer("scan")
+		elseif index == 3 and markerRemote then
 			markerRemote:FireServer("place")
 		end
 	end
@@ -647,7 +682,7 @@ end)
 for _, name in ipairs({"InRound", "Escaped", "Spectating", "SpectateTargetUserId",
 	"Level2_ExitTransition", "RoundEntryControlsReady",
 	"DispatchBriefingOpen", "ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen", "QueueModalOpen",
-	"PlayerProtectionActive", "PlayerProtectionExpiresAt",
+	"PlayerProtectionActive", "PlayerProtectionExpiresAt", "PlayerProtectionSource",
 	"ZyntraSpeedPotions", "ZyntraRouteMarkers", "RouteMarkersActive",
 	"ZyntraSpeedBoostUntil", "ZyntraSpeedPotionUsedThisRound"}) do
 	connect(player:GetAttributeChangedSignal(name), refresh)
@@ -678,6 +713,15 @@ task.spawn(function()
 			and string.upper(string.sub(detail, 1, 28))) or "NOT NOW")
 	end)
 	refresh()
+end)
+task.spawn(function()
+ local found=remotes:WaitForChild("ZyntraDetector",15)
+ if not found or destroyed then return end
+ detectorRemote=found
+ connect(found.OnClientEvent,function(event,detail)
+  if event=="refused" then showCaption(detail) end
+ end)
+ refresh()
 end)
 if player.Character then bindCharacter(player.Character) end
 applyLayout()

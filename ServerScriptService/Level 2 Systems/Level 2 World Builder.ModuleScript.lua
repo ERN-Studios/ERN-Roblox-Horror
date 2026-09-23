@@ -1906,7 +1906,9 @@ end
 local function makeLegacyTubeFromPoints(parent, points, radius, color, name, openTop,
 	forceOneWay)
 	local sides = Configuration.SlideTubeSides
-	local arcWidth = 2 * radius * math.sin(math.pi / sides) * 1.18
+	local panelThickness = .72 * (forceOneWay and 1.5 or 1)
+	local panelRadius = radius + (panelThickness - .72) * .5
+	local arcWidth = 2 * panelRadius * math.sin(math.pi / sides) * 1.18
 	for index = 1, #points - 1 do
 		local a, b = points[index], points[index + 1]
 		local length = (b - a).Magnitude
@@ -1916,10 +1918,10 @@ local function makeLegacyTubeFromPoints(parent, points, radius, color, name, ope
 				local angle = sideIndex * math.pi * 2 / sides
 				local overhead = math.sin(angle) > .70
 				if not (openTop and overhead) then
-					local offset = Vector3.new(math.cos(angle) * radius, math.sin(angle) * radius, 0)
+					local offset = Vector3.new(math.cos(angle) * panelRadius, math.sin(angle) * panelRadius, 0)
 					local panel = part(parent, name .. " Legacy Panel",
 						base * CFrame.new(offset) * CFrame.Angles(0, 0, angle - math.pi * .5),
-						Vector3.new(arcWidth, .72, length + 2), color, Enum.Material.SmoothPlastic)
+						Vector3.new(arcWidth, panelThickness, length + 2), color, Enum.Material.SmoothPlastic)
 					panel.CustomPhysicalProperties = slideCollisionPhysicalProperties()
 					panel.CanCollide = true
 					if math.sin(angle) < -.70 then
@@ -2224,7 +2226,9 @@ local function makeTubeFromPoints(parent, points, radius, color, name, openTop,
 
 	local visuals = folder(tubeModel, name .. " Visuals")
 	local collisions = folder(tubeModel, name .. " Collision")
-	local thickness = Configuration.SlideCollisionThickness or .6
+	-- Grow the exit sleeve outward; its usable bore stays the same size.
+	local thickness = (Configuration.SlideCollisionThickness or .6) * (forceOneWay and 1.5 or 1)
+	tubeModel:SetAttribute("Level2_CollisionWallThickness", thickness)
 	local collisionOverlap = Configuration.SlideCollisionOverlap or 1.5
 	local visualStarts, visualEnds = {}, {}
 

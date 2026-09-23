@@ -436,6 +436,21 @@ function Page.mount(page, ctx)
 	playtimeNote.Name = "PlaytimeNote"
 	playtimeNote.TextWrapped = true
 	playtimeNote.TextYAlignment = Enum.TextYAlignment.Top
+ local researchTitle=ctx.label(body,"DAILY RESEARCH  //  SOLO · NO PURCHASES",UDim2.new(),UDim2.new(),14,accent,UIStyle.Font.Readout)
+ researchTitle.Name="ResearchHeading"
+ researchTitle.TextWrapped=true
+ local researchRows={}
+ for index,goal in ipairs(require(game.ReplicatedStorage:WaitForChild("ZyntraDailyResearch")).Goals) do
+  local card=Instance.new("Frame")
+  card.Name="Research"..goal.Key
+  card.Parent=body
+  UIStyle.panel(card,{Background=UIStyle.Color.Card,Radius=UIStyle.Radius.Card})
+  local text=ctx.label(card,"",UDim2.new(1,-24,1,-16),UDim2.fromOffset(12,8),13,UIStyle.Color.Body,UIStyle.Font.Body)
+  text.TextWrapped=true
+  text.TextYAlignment=Enum.TextYAlignment.Center
+  researchRows[index]={Card=card,Text=text,Goal=goal}
+ end
+
 
 	local offline
 	if not rewards then
@@ -518,6 +533,14 @@ function Page.mount(page, ctx)
 		local played = sameDay and math.max(0, math.floor(tonumber(daily.PlaytimeSeconds) or 0)) or 0
 		local claimed = (sameDay and type(daily.Claimed) == "table") and daily.Claimed or {}
 		local accruing = daily ~= nil and daily.Accruing == true
+  for index,row in ipairs(researchRows) do
+   local entry=daily and daily.Research and daily.Research[index]
+   local done=sameDay and entry and entry.Complete==true
+   row.Text.Text=(done and "COMPLETE  ·  " or "0/1  ·  ")..row.Goal.Title.."\n"..row.Goal.Detail
+    .."\n"..(done and "RECEIVED +" or "REWARD +")..row.Goal.Reward.." RESEARCH TOKENS"
+   row.Text.TextColor3=done and CLAIM_READY or UIStyle.Color.Body
+  end
+
 
 		playtimeReadout.Text = "ACTIVE PLAY TODAY  " .. formatSpan(played)
 			.. (accruing and "  //  COUNTING" or "")
@@ -769,7 +792,18 @@ function Page.mount(page, ctx)
 		playtimeNote.Position = UDim2.fromOffset(0, y)
 		playtimeNote.Size = UDim2.fromOffset(usable, noteHeight)
 		playtimeNote.TextSize = face.Body
-		local bodyHeight = y + noteHeight
+  y += noteHeight + gap
+  researchTitle.Position=UDim2.fromOffset(0,y)
+  researchTitle.Size=UDim2.fromOffset(usable,42)
+  researchTitle.TextSize=face.Body+2
+  y += 46
+  for _,row in ipairs(researchRows) do
+   row.Card.Position=UDim2.fromOffset(0,y)
+   row.Card.Size=UDim2.fromOffset(usable,92)
+   row.Text.TextSize=math.max(12,face.Body+1)
+   y += 92+gap
+  end
+  local bodyHeight=y
 
 		body.Position = UDim2.fromOffset(0, top)
 		body.Size = UDim2.fromOffset(usable, bodyHeight)

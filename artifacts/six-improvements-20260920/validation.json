@@ -1,0 +1,19 @@
+{
+  "receiptChecksPassed": 299,
+  "flashlightChecksPassed": 249,
+  "repositoryLuaFilesCompiled": 149,
+  "studioScriptsVerified": 147,
+  "sourceEditorAndMirrorMatch": true,
+  "product": {
+    "id": 3713829859,
+    "price": 69,
+    "isForSale": true
+  },
+  "publishVersion": 1937,
+  "nativeBackup": {
+    "file": "artifacts/six-improvements-20260920/six-improvements.rbxl",
+    "bytes": 9330280,
+    "sha256": "a7ac314fd2526b9d82b50951b0cd98b3d9fd46737d7533993d8acf6a665aa7f8",
+    "purpose": "Complete native copy of the final verified Edit model immediately before publication as v1937."
+  }
+}

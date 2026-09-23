@@ -90,12 +90,12 @@ local YELL_VOLUME      = 1     -- the Entity's roar (positional)
 local IDLE_VOLUME      = 0.7   -- the Entity's idle vocalisations (positional)
 local IDLE_MIN_GAP     = 6     -- min seconds between idle vocalisations
 local IDLE_MAX_GAP     = 14    -- max seconds between them
-local CHASE_VOLUME     = 0.85  -- the Entity's chase sound (positional, looping)
+local CHASE_VOLUME     = 1.105  -- the Entity's chase sound (positional, looping)
 local SCREAM_VOLUME    = 0.95  -- distant entity screams (positional at the Entity, map-wide)
 local CHASE_FADE       = 0.6   -- seconds to fade the chase loop in / out
 local TRACK_FADE       = 5     -- seconds to SLOWLY fade the chase music once it loses
 -- sight and is only tracking blindly (match TRACK_TIME)
-local SPOT_VOLUME      = 1.20   -- preserve the authored close-range warning level
+local SPOT_VOLUME      = 0.96   -- 20% softer; direct local warning for the spotted player
 local SPOT_MIN_DISTANCE = 10    -- close-range warning, then directional distance falloff
 local SPOT_MAX_DISTANCE = 200   -- same audible range as the existing chase loop
 local LUNGE_VOLUME     = 1     -- the lunge telegraph (positional)
@@ -460,22 +460,8 @@ if YELL_SOUND ~= "" then
 	end)
 end
 
--- the "spotted you!" scream: Level 1 can see 650 studs normally and 1100
--- studs when a flashlight exposes a player. Audio is deliberately local now:
--- spotting somebody far away must not alert the entire map at high volume.
---
--- EntityAI publishes the exact howl position before it bumps EntitySpotScream.
--- We play from a tiny local world emitter at that position. This stays true 3D
--- audio even if StreamingEnabled has streamed the distant Entity model out for
--- this client; the entity is stationary for the whole first-sight howl.
--- Whether this client is entitled to the Level 1 entity mix: the "spotted you!"
--- scream here and the positional chase loop below.
---
--- SPECTATE_AUDIO_PARITY_20260914: an ESCAPED spectator used to fail on their own
--- `Escaped` and hear neither, while watching the very player being chased.
--- Watching a valid subject is now its own way in; the world conditions (level,
--- round) still apply. The cues stay positional at the Entity either way -- the
--- camera, and therefore the listener, already sits on the watched player's head.
+-- Chase ambience remains positional. The spotted warning below is private
+-- to the actual target and does not depend on distance or streamed entity parts.
 local function chaseActive()
 	return workspace:GetAttribute("SelectedLevel") == 1
 		and workspace:GetAttribute("RoundActive") == true
@@ -486,62 +472,22 @@ end
 
 local lastSpotScreamAt = -math.huge
 
-local function playEntitySpotScream(fallbackEmitter, fadeIn)
-	if not chaseActive() then return false end
+local function playEntitySpotScream()
+	if not chaseActive() or player:GetAttribute("InRound") ~= true
+		or player:GetAttribute("Escaped") == true then return false end
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	if not humanoid or humanoid.Health <= 0 then return false end
 	if SPOT_SOUND == "" or (os.clock() - lastSpotScreamAt) < 4 then return false end
-
-	local emitter = fallbackEmitter
-	local holder = nil
-	if not (emitter and emitter:IsA("BasePart") and emitter.Parent) then
-		local spotPosition = workspace:GetAttribute("EntitySpotPosition")
-		if typeof(spotPosition) ~= "Vector3" then
-			local entity = workspace:FindFirstChild("Entity")
-			emitter = entity and entity:FindFirstChild("HumanoidRootPart")
-		else
-			holder = Instance.new("Part")
-			holder.Name = "Level1SpotScreamEmitter"
-			holder.Size = Vector3.new(0.2, 0.2, 0.2)
-			holder.CFrame = CFrame.new(spotPosition)
-			holder.Transparency = 1
-			holder.Anchored = true
-			holder.CanCollide = false
-			holder.CanTouch = false
-			holder.CanQuery = false
-			holder.CastShadow = false
-			holder.Parent = workspace
-			emitter = holder
-		end
-	end
-	if not emitter then return false end
-
 	lastSpotScreamAt = os.clock()
-	local s = Instance.new("Sound")
-	s.Name = "SpotScream"
-	s.SoundId = SPOT_SOUND
-	s.Volume = fadeIn and 0 or SPOT_VOLUME
-	-- Linear rolloff preserves left/right world direction while keeping the
-	-- warning local to nearby players instead of carrying it across the whole map.
-	s.RollOffMode = Enum.RollOffMode.Linear
-	s.RollOffMinDistance = SPOT_MIN_DISTANCE
-	s.RollOffMaxDistance = SPOT_MAX_DISTANCE
-	s.Parent = emitter
-	s:Play()
-	if fadeIn then
-		TweenService:Create(s, TweenInfo.new(0.25), {Volume = SPOT_VOLUME}):Play()
-	end
-
-	local cleaned = false
-	local function cleanup()
-		if cleaned then return end
-		cleaned = true
-		if holder and holder.Parent then
-			holder:Destroy()
-		elseif s.Parent then
-			s:Destroy()
-		end
-	end
-	s.Ended:Connect(cleanup)
-	task.delay(12, cleanup)
+	local sound = Instance.new("Sound")
+	sound.Name = "SpotScream"
+	sound.SoundId = SPOT_SOUND
+	sound.Volume = SPOT_VOLUME
+	sound.Parent = SoundService
+	sound:Play()
+	sound.Ended:Connect(function() sound:Destroy() end)
+	task.delay(12, function() sound:Destroy() end)
 	return true
 end
 
@@ -558,8 +504,8 @@ if SPOT_SOUND ~= "" then
 		warm:Destroy()
 	end)
 
-	workspace:GetAttributeChangedSignal("EntitySpotScream"):Connect(function()
-		playEntitySpotScream(nil, false)
+	player:GetAttributeChangedSignal("Level1EntityAlertSerial"):Connect(function()
+		playEntitySpotScream()
 	end)
 end
 
@@ -623,7 +569,7 @@ workspace:GetAttributeChangedSignal("EntityScream"):Connect(function()
 end)
 
 -- the chase audio: when the Entity SPOTS someone (EntityState → CHASE) it
--- first plays a "spotted you!" sting, then the positional chase loop fades in.
+-- fades in the positional chase loop. Target warnings use their own private signal.
 -- Level 1 can begin after a long lobby wait and can rebuild its Entity between
 -- rounds, so this binding follows every replacement instead of timing out once.
 local chaseEntity
@@ -652,13 +598,7 @@ local function refreshChase()
 	local tracking = eligible and st == "TRACK"
 
 	if chasing then
-		-- Freshly spotted (wasn't already engaged) → the positional sting.
-		local er = chase and chase.Parent
-		if not chasePrevEngaged and er and er:IsA("BasePart") then
-			-- Fallback for a direct CHASE transition. The shared helper keeps this
-			-- path's spatial mix identical and de-duplicates it from the ALERT howl.
-			playEntitySpotScream(er, true)
-		end
+		-- Warning playback comes only from this player's server-issued alert serial.
 		fadeChase(CHASE_VOLUME, CHASE_FADE)
 	elseif tracking then
 		-- Lost sight but still tracking → slowly withdraw the chase loop.

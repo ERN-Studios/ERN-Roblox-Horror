@@ -1,0 +1,127 @@
+{
+  "slideGeometryResult": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"runoutThickness\":0.8999999761581421,\"partialRejected\":true,\"rescued\":true,\"expectedParts\":672,\"atomic\":\"Enum.ModelStreamingMode.Atomic\",\"shellThickness\":0.44999998807907107,\"worldParts\":3652,\"mouthReleased\":true,\"ready\":true}"
+      }
+    ],
+    "isError": false
+  },
+  "slideRideResult": {
+    "alive": true,
+    "health": 100,
+    "exited": true,
+    "position": [
+      6230.2333984375,
+      27.15626335144043,
+      -91.32035827636719
+    ],
+    "platformStand": false,
+    "scope": "Native Studio continuation ride from alpha .8; not full multi-client Level2 transition"
+  },
+  "slideL2ThicknessResult": {
+    "content": [
+      {
+        "type": "text",
+        "text": "[{\"name\":\"Level 2 Slide Kit Chute 15.1\",\"thickness\":0.6},{\"name\":\"Level 2 Slide Kit Chute 15.2\",\"thickness\":0.6},{\"name\":\"Level 2 Slide Kit Chute 16.1\",\"thickness\":0.6},{\"name\":\"Level 2 Slide Kit Chute 19.1\",\"thickness\":0.6},{\"name\":\"Level 2 Slide Kit Chute 19.2\",\"thickness\":0.6},{\"name\":\"Level 2 Slide Kit Chute 22.1\",\"thickness\":0.6},{\"name\":\"Level 2 Slide Kit Chute 27.1\",\"thickness\":0.6},{\"name\":\"Level 2 Slide Kit Chute 30.1\",\"thickness\":0.6},{\"name\":\"Level 2 Slide Kit Chute 32.1\",\"thickness\":0.6},{\"name\":\"Level 2 Slide Kit Chute 32.2\",\"thickness\":0.6},{\"name\":\"Level 2 Slide Kit Chute 33.1\",\"thickness\":0.6},{\"name\":\"Level 2 Slide Kit Chute 37.1\",\"thickness\":0.6},{\"name\":\"Level 2 Slide Kit Chute 39.1\",\"thickness\":0.6},{\"name\":\"Level 2 Kids Slide 3\",\"thickness\":0.6},{\"name\":\"Level 2 Slide Hall 2 Flume 1\",\"thickness\":0.6},{\"name\":\"Level 2 Slide Hall 2 Flume 2\",\"thickness\":0.6},{\"name\":\"Level 2 Slide Hall 2 Flume 3\",\"thickness\":0.6},{\"name\":\"Level 2 Slide Hall 2 Helix\",\"thickness\":0.6},{\"name\":\"Level 2 Slide Hall 3 Flume 1\",\"thickness\":0.6},{\"name\":\"Level 2 Slide Hall 3 Flume 2\",\"thickness\":0.6},{\"name\":\"Level 2 Slide Hall 3 Flume 3\",\"thickness\":0.6},{\"name\":\"Level 2 Slide Hall 1 Flume 1\",\"thickness\":0.6},{\"name\":\"Level 2 Slide Hall 1 Flume 2\",\"thickness\":0.6},{\"name\":\"Level 2 Slide Hall 1 Flume 3\",\"thickness\":0.6},{\"name\":\"Level 2 Slide Hall 1 Helix\",\"thickness\":0.6},{\"name\":\"Level 2 Exit Flume\",\"thickness\":0.8999999999999999}]"
+      }
+    ],
+    "isError": false
+  },
+  "hidingBeforeResult": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"remainsHidden\":false,\"entered\":true,\"ejected\":1,\"distance\":5.885563373565674,\"initiallyAnchored\":true}"
+      }
+    ],
+    "isError": false
+  },
+  "hidingAfterResult": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"remainsHidden\":true,\"entered\":true,\"ejected\":0,\"distance\":0,\"exitRestored\":true,\"initiallyAnchored\":true}"
+      }
+    ],
+    "isError": false
+  },
+  "detectorSensingResult": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"deadIgnored\":true,\"despawnedIgnored\":true,\"bands\":[\"HIGH\",\"MEDIUM\",\"LOW\"],\"futureEntityTag\":true}"
+      }
+    ],
+    "isError": false
+  },
+  "detectorRuntimeValidation": {
+    "keyboard": "Z triggered HIGH",
+    "mobileButton": "iPhone17Pro landscape 56x56 visible",
+    "cooldownRejected": true,
+    "remainingAfterSecondRequest": 18.59796905517578,
+    "unownedRefused": true
+  },
+  "detectorDemoResult": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"cleanup\":true,\"tokensUnchanged\":true,\"states\":[\"SIMULATED DEMO: LOW · NOT A LIVE SCAN\",\"SIMULATED DEMO: MEDIUM · NOT A LIVE SCAN\",\"SIMULATED DEMO: HIGH · NOT A LIVE SCAN\"]}"
+      }
+    ],
+    "isError": false
+  },
+  "cosmeticDemoResult": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"cleanup\":true,\"avatarParts\":18,\"liveAvatarUnchanged\":true}"
+      }
+    ],
+    "isError": false
+  },
+  "advancedDemoResult": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"avatarPreview\":true,\"cosmetic\":\"DEMO: YOUR AVATAR · HAZMAT COLORS\",\"wide\":\"DEMO: NORMAL WIDE BEAM\",\"focused\":\"DEMO: FOCUSED — +45% RANGE, SAME DRAIN\"}"
+      }
+    ],
+    "isError": false
+  },
+  "previewPortraitFinalResult": {
+    "viewport": [
+      401,
+      776
+    ],
+    "card": [
+      300,
+      217
+    ],
+    "button": [
+      84,
+      44
+    ],
+    "nativeClickActivated": true,
+    "recordedState": "SIMULATED DEMO: LOW · NOT A LIVE SCAN"
+  },
+  "researchProfileBefore": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"CompletedLevels\":0,\"UtilityRobux\":0,\"DonationRobux\":0,\"ProtectionSessionNonce\":\":9488575949:278a4936-dd8e-4fda-82fd-7224a01426f8\",\"CaptionsEnabled\":true,\"MuteDispatch\":false,\"ProtectionCharges\":0,\"Daily\":{\"SecondsToReset\":25706,\"Claimed\":[],\"Day\":\"2026-09-20\",\"Today\":\"2026-09-20\",\"Research\":[{\"Key\":\"Fuse\",\"Detail\":\"Personally insert a fuse in Level 1.\",\"Reward\":1,\"Title\":\"Restore power\",\"Complete\":false},{\"Key\":\"Lever\",\"Detail\":\"Personally activate a powered lever in Level 1.\",\"Reward\":1,\"Title\":\"Open the route\",\"Complete\":false},{\"Key\":\"Clear\",\"Detail\":\"Escape any level alive.\",\"Reward\":2,\"Title\":\"Return with research\",\"Complete\":false}],\"Accruing\":false,\"PlaytimeSeconds\":0},\"ProtectionAvailable\":false,\"StaminaLevel\":1,\"BatteryLevel\":1,\"StaminaPercent\":55,\"OwnsCosmeticEquipment\":true,\"ProtectionRevision\":0,\"FieldNotes\":{\"Discovered\":[],\"Total\":12,\"Count\":0,\"TitleUnlocked\":false},\"ReduceCameraShake\":false,\"PassRobux\":0,\"ReduceFlashing\":false,\"HazmatColor\":null,\"OwnsSupporter\":true,\"GlowstickColor\":null,\"RecordedSupportRobux\":0,\"LevelsCleared\":[],\"Tokens\":35,\"SpeedBoostUntil\":0,\"LobbyMusicEnabled\":true,\"Items\":{\"SpeedPotion\":0,\"RouteMarker\":0},\"ReentryCredits\":0,\"OwnsAdvancedEquipment\":true,\"DisableCaptions\":false,\"LobbyBriefingPlayed\":true,\"BatteryPercent\":5,\"OwnsEntityDetector\":true,\"FriendBoostTenths\":0}"
+      }
+    ],
+    "isError": false
+  },
+  "researchProfileAfter": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"research\":[{\"Key\":\"Fuse\",\"Detail\":\"Personally insert a fuse in Level 1.\",\"Reward\":1,\"Title\":\"Restore power\",\"Complete\":true},{\"Key\":\"Lever\",\"Detail\":\"Personally activate a powered lever in Level 1.\",\"Reward\":1,\"Title\":\"Open the route\",\"Complete\":true},{\"Key\":\"Clear\",\"Detail\":\"Escape any level alive.\",\"Reward\":2,\"Title\":\"Return with research\",\"Complete\":true}],\"tokens\":41,\"scrolled\":[\"Players.LaverSneglen.PlayerGui.DailyRewardsGui.DailyRewardsShade.DailyRewardsPanel.PageContent.DailyRewards\"]}"
+      }
+    ],
+    "isError": false
+  }
+}

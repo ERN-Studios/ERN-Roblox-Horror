@@ -29,6 +29,7 @@ local MarketplaceService = game:GetService("MarketplaceService")
 local player = Players.LocalPlayer
 local UIDevice = require(ReplicatedStorage:WaitForChild("UIDevice"))
 local Config = require(ReplicatedStorage:WaitForChild("ZyntraConfig"))
+local Profiles = require(ReplicatedStorage:WaitForChild("FlashlightProfiles"))
 
 local FOCUS_ATTRIBUTE = "ZyntraShopFocus"
 local BUY_EVENT_NAME = "ZyntraShopBuy"
@@ -79,7 +80,7 @@ end
 local gui = Instance.new("ScreenGui")
 gui.Name = "ZyntraShopDisplayCard"
 gui.ResetOnSpawn = false
-gui.DisplayOrder = 54
+gui.DisplayOrder = 65 -- product detail stays above the lobby rail and friend chip
 gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 gui.Enabled = false
 gui.Parent = player:WaitForChild("PlayerGui")
@@ -153,6 +154,17 @@ shopTitle.Text = "SHOP"
 local title = makeLabel("ItemName", Enum.Font.GothamBold, COLORS.text)
 local kindTag = makeLabel("ItemKind", Enum.Font.Code, COLORS.accent)
 local description = makeLabel("ItemDescription", Enum.Font.GothamMedium, COLORS.muted)
+local descriptionScroll=Instance.new("ScrollingFrame")
+descriptionScroll.Name="ProductContents"
+descriptionScroll.BackgroundTransparency=1
+descriptionScroll.BorderSizePixel=0
+descriptionScroll.ScrollBarThickness=3
+descriptionScroll.AutomaticCanvasSize=Enum.AutomaticSize.Y
+descriptionScroll.CanvasSize=UDim2.new()
+descriptionScroll.ScrollingDirection=Enum.ScrollingDirection.Y
+descriptionScroll.Parent=card
+description.Parent=descriptionScroll
+description.AutomaticSize=Enum.AutomaticSize.Y
 local state = makeLabel("ItemState", Enum.Font.Code, COLORS.accent2)
 -- How to get rid of the card, on the kind row's right so it costs no height.
 -- The plate is invisible now, so this line is the only place that says the
@@ -215,6 +227,14 @@ end
 local function cardArea(width, height)
 	local layout = UIDevice.Layout()
 	local safe = layout.Safe
+ if layout.IsTouch and safe.Height>safe.Width then
+  -- Portrait needs a readable card across the centre; the side lane can be
+  -- narrower than its two 44px actions. Leave the bottom movement band free.
+  width=math.min(width,safe.Width-24)
+  height=math.min(height,math.max(180,safe.Height-220))
+  return {Left=math.floor((safe.Left+safe.Right-width)/2),
+   Top=math.max(safe.Top+12,safe.Bottom-200-height),Width=width,Height=height}
+ end
 	if layout.IsTouch and layout.ModalArea then
 		-- The free lane excludes BOTH the thumbstick and the right-hand controls.
 		-- Centring over the whole screen covered the stick on short landscape phones.
@@ -302,17 +322,18 @@ local function applyLayout()
 	hintTag.Size = UDim2.fromOffset(math.max(40, inner - kindWidth - 6), kindHeight)
 	hintTag.TextSize = face.Kind
 	-- CLOSE is a pointer affordance; on touch the honest instruction is to walk.
-	hintTag.Text = touch and "Step off the plate to close"
-		or "Step off the plate or press CLOSE"
+	hintTag.Text = "Step off the plate to close"
 
 	icon.Position = UDim2.fromOffset(face.Pad, bodyTop)
 	icon.Size = UDim2.fromOffset(bodyHeight, bodyHeight)
 
 	local copyLeft = face.Pad * 2 + bodyHeight
-	description.Position = UDim2.fromOffset(copyLeft, bodyTop)
-	description.Size = UDim2.fromOffset(math.max(40, column.Width - copyLeft - face.Pad), bodyHeight)
+	descriptionScroll.Position = UDim2.fromOffset(copyLeft, bodyTop)
+	description.Position = UDim2.new()
+	descriptionScroll.Size = UDim2.fromOffset(math.max(40, column.Width - copyLeft - face.Pad), bodyHeight)
+	description.Size = UDim2.new(1,-5,0,0)
 	description.TextSize = face.Desc
-	description.TextTruncate = Enum.TextTruncate.AtEnd
+	description.TextTruncate = Enum.TextTruncate.None
 
 	state.Visible = withState
 	state.Position = UDim2.fromOffset(face.Pad, stateTop)
@@ -359,10 +380,11 @@ local function refresh()
 	local item, kind = lookup(key)
 	if not item then return end
 	title.Text = tostring(item.Name or key)
+	closeButton.Text = (key == "AdvancedEquipment" or key == "CosmeticEquipment" or key == "EntityDetector") and "TRY DEMO" or "CLOSE"
 	-- What you are actually buying with, in three words: a pass you keep, a thing
 	-- bought with research tokens, a thing bought with Robux.
 	kindTag.Text = kind == "Pass" and "PERMANENT PASS" or (kind == "Item" and "TOKEN ITEM" or "ROBUX PRODUCT")
-	description.Text = tostring(item.Description or "")
+	description.Text = tostring(item.PreviewDescription or item.Description or "")
 
 	local iconId = tonumber(item.IconId) or 0
 	icon.Image = iconId > 0 and ("rbxassetid://" .. tostring(iconId)) or ""
@@ -390,9 +412,135 @@ local function refresh()
 	end
 end
 
+local demoMount, demoConnection
+local startCosmeticDemo
+local DetectorVisual=require(ReplicatedStorage:WaitForChild("ZyntraDetectorVisual"))
+local function stopDemo()
+	if demoConnection then demoConnection:Disconnect(); demoConnection = nil end
+	if demoMount then demoMount:Destroy(); demoMount = nil end
+	icon.Visible=true
+	if shownKey then refresh() end
+end
+local function startFocusDemo()
+	stopDemo()
+	if shownKey ~= "AdvancedEquipment" or player:GetAttribute("InRound") == true then return end
+	-- Local-only six-second comparison on the world in front of the camera.
+	-- It changes no equipment, battery, ownership, inventory or purchase state.
+	local part = Instance.new("Part")
+	part.Name = "ZyntraLocalFlashlightDemo"
+	part.Size = Vector3.new(.1, .1, .1)
+	part.Transparency = 1
+	part.Anchored = true
+	part.CanCollide, part.CanTouch, part.CanQuery = false, false, false
+	local core = Instance.new("SpotLight")
+	core.Face = Enum.NormalId.Front
+	core.Shadows = true
+	core.Color = Color3.fromRGB(255, 244, 214)
+	core.Parent = part
+	local spill = core:Clone()
+	spill.Shadows = false
+	spill.Parent = part
+	part.Parent = workspace
+	demoMount = part
+	local began, previous = os.clock(), nil
+	demoConnection = RunService.RenderStepped:Connect(function()
+		local elapsed = os.clock() - began
+		if not gui.Enabled or player:GetAttribute("InRound") == true then stopDemo(); return end
+  if elapsed >= 6 then stopDemo(); startCosmeticDemo("AdvancedEquipment"); return end
+		local camera = workspace.CurrentCamera
+		if not camera then return end
+		part.CFrame = camera.CFrame * CFrame.new(.25, -.25, -.3)
+		local focused = elapsed >= 3
+		if previous ~= focused then
+			Profiles.Apply(Profiles.Own, "BASE", core, spill, focused)
+			previous = focused
+			state.Text = focused and "DEMO: FOCUSED — +45% RANGE, SAME DRAIN" or "DEMO: NORMAL WIDE BEAM"
+			closeButton.Text = focused and "FOCUSED" or "WIDE"
+		end
+	end)
+end
+
+
+-- Preview a disposable clone; never recolor the live character or save settings.
+startCosmeticDemo=function(key)
+ stopDemo()
+ if shownKey~=key or player:GetAttribute("InRound")==true then return end
+ local character=player.Character
+ if not character then return end
+ local previous=character.Archivable
+ character.Archivable=true
+ local ok,clone=pcall(function() return character:Clone() end)
+ character.Archivable=previous
+ if not ok or not clone then state.Text="AVATAR PREVIEW UNAVAILABLE" return end
+ local viewport=Instance.new("ViewportFrame")
+ viewport.Name="CosmeticPreview"
+ viewport.BackgroundColor3=Color3.fromRGB(12,25,23)
+ viewport.Size=icon.Size viewport.Position=icon.Position viewport.Parent=card
+ viewport.Ambient=Color3.fromRGB(200,200,200)
+ viewport.LightColor=Color3.new(1,1,1)
+ viewport.LightDirection=Vector3.new(-1,-1,-2)
+ demoMount=viewport icon.Visible=false
+ local world=Instance.new("WorldModel") world.Parent=viewport
+ for _,object in ipairs(clone:GetDescendants()) do
+  if object:IsA("LuaSourceContainer") then object:Destroy()
+  elseif object:IsA("BasePart") then object.Anchored=true object.CanCollide=false end
+ end
+ clone.Parent=world clone:PivotTo(CFrame.new())
+ local cf,size=clone:GetBoundingBox()
+ local camera=Instance.new("Camera") camera.FieldOfView=35 camera.Parent=viewport
+ camera.CFrame=CFrame.lookAt(cf.Position+Vector3.new(0,.25,-math.max(size.Y,size.X)*1.9),cf.Position)
+ viewport.CurrentCamera=camera
+ local glow
+ if key=="CosmeticEquipment" then
+  local hand=clone:FindFirstChild("RightHand") or clone:FindFirstChild("Right Arm")
+  glow=Instance.new("Part") glow.Name="PreviewGlowstick" glow.Size=Vector3.new(.22,1.5,.22)
+  glow.Anchored=true glow.CanCollide=false glow.Material=Enum.Material.Neon
+  glow.CFrame=(hand and hand.CFrame or cf)*CFrame.new(0,-.3,-.2) glow.Parent=world
+ end
+ local palette={Color3.fromRGB(73,245,204),Color3.fromRGB(245,151,61),Color3.fromRGB(165,115,255)}
+ local began,last=os.clock(),0
+ demoConnection=RunService.RenderStepped:Connect(function()
+  local elapsed=os.clock()-began
+  if elapsed>=6 or not gui.Enabled or player:GetAttribute("InRound")==true then stopDemo() return end
+  viewport.Position=icon.Position viewport.Size=icon.Size
+  local step=math.min(3,math.floor(elapsed/2)+1)
+  if step~=last then
+   last=step local color=palette[step]
+   if glow then glow.Color=color else
+    for _,object in ipairs(clone:GetDescendants()) do
+     if object:IsA("SurfaceAppearance") then object.Color=color
+     elseif object:IsA("BasePart") and object.Name~="HumanoidRootPart" then object.Color=color end
+    end
+   end
+   state.Text=glow and "DEMO: YOUR AVATAR · GLOWSTICK COLORS" or "DEMO: YOUR AVATAR · HAZMAT COLORS"
+   closeButton.Text="PREVIEW"
+  end
+ end)
+end
+
+local function startDetectorDemo()
+ stopDemo()
+ if shownKey~="EntityDetector" or player:GetAttribute("InRound")==true then return end
+ local text
+ demoMount,text=DetectorVisual.Build(workspace.CurrentCamera)
+ local began=os.clock()
+ demoConnection=RunService.RenderStepped:Connect(function()
+  local elapsed=os.clock()-began
+  if elapsed>=6 or not gui.Enabled or player:GetAttribute("InRound")==true then stopDemo() return end
+  local band=({"LOW","MEDIUM","HIGH"})[math.min(3,math.floor(elapsed/2)+1)]
+  text.Text="DEMO\n"..band text.TextColor3=DetectorVisual.Colors[band]
+  state.Text="SIMULATED DEMO: "..band.." · NOT A LIVE SCAN"
+  closeButton.Text="DEMO"
+  local camera=workspace.CurrentCamera
+  if camera then demoMount:PivotTo(camera.CFrame*CFrame.new(.8,-.4,-2.4)*CFrame.Angles(0,math.pi,0)) end
+ end)
+end
+
 local function setShown(key)
 	if shownKey == key then return end
+	stopDemo()
 	shownKey = key
+	descriptionScroll.CanvasPosition=Vector2.zero
 	gui.Enabled = key ~= nil
 	-- Yield the dispatch caption without suppressing movement: stepping off the
 	-- pressure plate remains a way to close this nonmodal card.
@@ -423,7 +571,25 @@ local function evaluate()
 	setShown(key)
 end
 
+local function startShownDemo()
+ if shownKey=="AdvancedEquipment" then startFocusDemo() return true end
+ if shownKey=="CosmeticEquipment" then startCosmeticDemo(shownKey) return true end
+ if shownKey=="EntityDetector" then startDetectorDemo() return true end
+ return false
+end
+-- Studio-only probe invokes the same entry point as the visible demo button.
+if RunService:IsStudio() then
+ local probe=Instance.new("BindableFunction")
+ probe.Name="UIRegressionShopDemoProbe"
+ probe.OnInvoke=function(action)
+  if action=="start" then return startShownDemo() end
+  if action=="stop" then stopDemo() return true end
+  return shownKey
+ end
+ probe.Parent=gui
+end
 closeButton.Activated:Connect(function()
+ if startShownDemo() then return end
 	-- CLOSE dismisses THIS focus. Stepping off the plate and back on, or
 	-- walking to the next hologram, brings the card back.
 	dismissedKey = shownKey
@@ -447,7 +613,7 @@ player:GetAttributeChangedSignal("InRound"):Connect(evaluate)
 player:GetAttributeChangedSignal("ZyntraReentryCredits"):Connect(refresh)
 player:GetAttributeChangedSignal("ZyntraSpeedPotions"):Connect(refresh)
 player:GetAttributeChangedSignal("ZyntraRouteMarkers"):Connect(refresh)
-for _, key in ipairs({"Supporter", "AdvancedEquipment", "CosmeticEquipment"}) do
+for _, key in ipairs({"Supporter", "AdvancedEquipment", "CosmeticEquipment", "EntityDetector"}) do
 	player:GetAttributeChangedSignal("ZyntraOwns" .. key):Connect(refresh)
 end
 UIDevice.OnScreenOwningModalChanged(evaluate)
@@ -545,5 +711,5 @@ RunService.Heartbeat:Connect(function(delta)
 	end
 end)
 
-script.Destroying:Connect(restoreMotion)
+script.Destroying:Connect(function() stopDemo(); restoreMotion() end)
 evaluate()

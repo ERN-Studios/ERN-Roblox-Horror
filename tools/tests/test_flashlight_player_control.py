@@ -49,7 +49,7 @@ function CFrame.lookAt(p,target) return {Kind="CFrame",Position=p,LookVector=(ta
 function CFrame.new(x,y,z) return CFrame.lookAt(Vector3.new(x,y,z),Vector3.new(x,y,z-1)) end
 local function typeof(v) return type(v)=="table" and v.Kind or type(v) end
 local Color3={fromRGB=function(r,g,b) return {R=r,G=g,B=b,Lerp=function(self) return self end} end}
-local Enum={NormalId={Front="Front"},KeyCode={F="F",ButtonR1="ButtonR1",G="G"},
+local Enum={NormalId={Front="Front"},Font={GothamBold="GothamBold"},KeyCode={F="F",ButtonR1="ButtonR1",G="G",Y="Y",ButtonR3="ButtonR3"},
     UserInputType={Touch="Touch",MouseButton1="MouseButton1"}}
 
 local function fresh()
@@ -100,6 +100,7 @@ local function fresh()
     local players=node("Players","Players");players.PlayerAdded=signal();players.PlayerRemoving=signal()
     local player=node("Player","Tester",players);player.UserId=123;player:SetAttribute("InRound",true)
     function players:GetPlayers() return {player} end
+    function players:GetPlayerByUserId(id) return id==player.UserId and player or nil end
     local function character()
         local char=node("Model","Character",workspace)
         local head=node("Part","Head",char);head.CFrame=CFrame.new(10,5,10)
@@ -115,7 +116,8 @@ local function fresh()
     local game={GetService=function(_,name) return name=="Players" and players or rs end}
     local require=function() return Profiles end
     local os={clock=function() return ctx.Now end}
-    local task={spawn=function(fn,...) fn(...) end,wait=function() end}
+    local delayed={}
+    local task={spawn=function(fn,...) fn(...) end,wait=function() end,delay=function(t,fn) table.insert(delayed,{At=ctx.Now+t,Fn=fn}) end}
     do __SERVER__ end
     local remote={FireServer=function(_,value,payload)
         table.insert(ctx.Sent,{value,payload});serverRemote.OnServerEvent:Fire(player,value,payload)
@@ -125,9 +127,12 @@ local function fresh()
         table.insert(ctx.Vitals,{kind=kind,payload=payload})
     end}
     local lastVitalReport=-math.huge
-    local batBody,bindingCaption={},{}
+    local batBody,bindingCaption={Children={}},{}
+    local UDim2={new=function(...) return {...} end}
+    local UIDevice={IsTouch=function() return false end,Changed=signal(),Binding=function(k) return k end}
+    local function isFocused() return player:GetAttribute("ZyntraOwnsAdvancedEquipment")==true and player.Character:GetAttribute("FlashlightFocused")==true end
     local function applyFlashlightBinding() end
-    local UIS={InputBegan=signal()}
+    local UIS={InputBegan=signal(),InputEnded=signal()}
     local touchFlashButton={InputBegan=signal()}
     local coreLight,spillLight={Enabled=false},{Enabled=false}
     local lens,lightRays={},{{},{},{}}
@@ -143,10 +148,10 @@ local function fresh()
     __MATE_HEARTBEAT__
     __BATTERY_HEARTBEAT__
     ctx.Player=player;ctx.Workspace=workspace;ctx.Observer=observer
-    function ctx:Advance(seconds) self.Now+=seconds end
+    function ctx:Advance(seconds) self.Now+=seconds;for i=#delayed,1,-1 do if delayed[i].At<=self.Now then local f=table.remove(delayed,i);f.Fn() end end end
     function ctx:Tick(dt) self.Now+=dt;RunService.Heartbeat:Fire(dt) end
     function ctx:Key(key,processed) UIS.InputBegan:Fire({KeyCode=key},processed==true) end
-    function ctx:Touch() touchFlashButton.InputBegan:Fire({UserInputType=Enum.UserInputType.Touch}) end
+    function ctx:Touch(duration) local i={UserInputType=Enum.UserInputType.Touch};touchFlashButton.InputBegan:Fire(i);if duration then self:Advance(duration) end;UIS.InputEnded:Fire(i) end
     function ctx:Send(value,payload) serverRemote.OnServerEvent:Fire(player,value,payload) end
     function ctx:SetBattery(value) battery=value end
     function ctx:Battery() return battery end
@@ -228,6 +233,20 @@ do
     equal(ctx:Mount().CFrame,old,"nonfinite aim remains rejected")
     ctx:Advance(.1);ctx:Key("F");ctx:Advance(.1);ctx:Send("aim",target)
     equal(ctx:Mount().CFrame,old,"off flashlight ignores aim packets")
+end
+do
+    local ctx=fresh();ctx:Key("Y");equal(ctx.Player.Character:GetAttribute("FlashlightFocused")==true,false,"nonowner local focus refused")
+    ctx:Send("focus",true);equal(ctx.Player.Character:GetAttribute("FlashlightFocused")==true,false,"nonowner server focus refused")
+    ctx.Player:SetAttribute("ZyntraOwnsAdvancedEquipment",true);ctx:Advance(.2);ctx:Key("Y")
+    equal(ctx.Player.Character:GetAttribute("FlashlightFocused"),true,"owner keyboard focus accepted")
+    ctx:Key("F");ctx:Lights(true,"focus does not prevent ordinary toggle")
+    ctx:Advance(.2);ctx:Key("ButtonR3");equal(ctx.Player.Character:GetAttribute("FlashlightFocused"),false,"gamepad returns wide")
+    ctx:Advance(.3);ctx:Touch(.5);equal(ctx.Player.Character:GetAttribute("FlashlightFocused"),true,"touch hold focuses")
+    ctx:Lights(true,"hold leaves on-off choice unchanged")
+    ctx:Advance(.3);ctx:Touch(.1);ctx:Lights(false,"short tap still toggles")
+    ctx:Advance(.3);ctx:Send("focus","true");equal(ctx.Player.Character:GetAttribute("FlashlightFocused"),true,"malformed focus rejected")
+    ctx.Player:SetAttribute("InRound",false);equal(ctx.Player.Character:GetAttribute("FlashlightFocused"),false,"round end clears focus")
+    ctx:Advance(.3);ctx:Send("focus",true);equal(ctx.Player.Character:GetAttribute("FlashlightFocused"),false,"lobby focus refused")
 end
 print(string.format("Flashlight player control: %d checks passed (actual inputs, battery, lifecycle, server replication, teammate display)",checks))
 '''

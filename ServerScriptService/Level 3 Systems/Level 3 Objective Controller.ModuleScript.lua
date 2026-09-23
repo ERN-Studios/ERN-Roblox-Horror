@@ -17,6 +17,7 @@ local Debris = game:GetService("Debris")
 local RunService = game:GetService("RunService")
 
 local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
+local TeamObjectives = require(game:GetService("ServerScriptService"):WaitForChild("TeamObjectives"))
 
 type AnyTable = {[any]: any}
 
@@ -575,6 +576,8 @@ local function collectRecord(session: AnyTable, record: AnyTable, player: Player
 		Goal = session.ModuleGoal,
 		RecoveredDrop = previousState == "DROPPED",
 	})
+	TeamObjectives.Announce(player.Name, string.format("%s CD %02d",
+		previousState == "DROPPED" and "RECOVERED" or "FOUND", record.Index), 3)
 	playCDCollectedSound(session, pickupPosition)
 end
 
@@ -921,6 +924,8 @@ local function insertHeldCDs(session: AnyTable, player: Player)
 		CollectedProgress = session.CollectedCount,
 		Goal = session.ModuleGoal,
 	})
+	TeamObjectives.Announce(player.Name, string.format("INSERTED %d CD%s  //  %d/%d",
+		#insertedNow, #insertedNow == 1 and "" or "S", session.InsertedCount, session.ModuleGoal), 3)
 	playCDCollectedSound(session, discPlayer.Position)
 	if session.InsertedCount >= session.ModuleGoal then
 		unlockExit(session, discPlayer.RoomId or "SignalHall")

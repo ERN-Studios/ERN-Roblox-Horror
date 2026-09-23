@@ -263,6 +263,58 @@ do
     eq(w:receipt("Donation20K",20000),"Retry","gamepass excluded from developer receipts")
     eq(w.calls,0,"gamepass ID never writes developer receipt")
 end
+-- Actual production bundle receipt branch: all-or-nothing, retry, rejoin,
+-- repeated purchases, no auto-consumption and bounded inventory.
+do
+    local w=world(); w.eligible=true
+    eq(w:receipt("ExpeditionPack",69,"pack-1"),"Granted","bundle granted")
+    eq(w:data().ReentryCredits,2,"one stored reentry")
+    eq(w:data().Protection.Charges,1,"one shield")
+    eq(w:data().Items.RouteMarker,3,"three individual markers")
+    eq(w:data().UtilityRobux,69,"paid amount recorded")
+    eq(w:data().Tokens,2,"bundle creates no tokens")
+    w:run();eq(w.reentries,0,"bundle remains stored even if buyer is dead")
+    w:load()
+    eq(w:receipt("ExpeditionPack",69,"pack-1"),"Granted","duplicate after rejoin acknowledged")
+    eq(w:data().ReentryCredits,2,"duplicate no reentry")
+    eq(w:data().Protection.Charges,1,"duplicate no shield")
+    eq(w:data().Items.RouteMarker,3,"duplicate no markers")
+    eq(w:receipt("ExpeditionPack",69,"pack-2"),"Granted","repeat purchase")
+    eq(w:data().ReentryCredits,3,"repeat reentry")
+    eq(w:data().Protection.Charges,2,"repeat shield")
+    eq(w:data().Items.RouteMarker,6,"repeat markers")
+end
+for _,kind in ipairs({"credits","shield","markers"}) do
+    local w=world();local d=w:data()
+    if kind=="credits"then d.ReentryCredits=9007199254740991
+    elseif kind=="shield"then d.Protection.Charges=9007199254740991
+    else d.Items.RouteMarker=9007199254740990 end
+    local before=clone(d)
+    eq(w:receipt("ExpeditionPack",69,"overflow"),"Retry",kind.." overflow refuses whole pack")
+    eq(w.writes,0,"no partial transaction")
+    eq(w:data().ReentryCredits,before.ReentryCredits,"no partial reentry")
+    eq(w:data().Protection.Charges,before.Protection.Charges,"no partial shield")
+    eq(w:data().Items.RouteMarker,before.Items.RouteMarker,"no partial markers")
+    eq(#w:data().ReceiptIds,1,"failed pack not acknowledged")
+end
+for _,failure in ipairs({"failBefore","failAfter"})do
+    local w=world();w[failure]=true
+    w:receipt("ExpeditionPack",69,"uncertain-pack")
+    w[failure]=false
+    eq(w:receipt("ExpeditionPack",69,"uncertain-pack"),"Granted","bundle retry succeeds")
+    eq(w:data().ReentryCredits,2,"retry exactly one reentry")
+    eq(w:data().Protection.Charges,1,"retry exactly one shield")
+    eq(w:data().Items.RouteMarker,3,"retry exactly three markers")
+    eq(w:data().UtilityRobux,69,"retry exactly one paid amount")
+end
+do
+    local w=world()
+    w.conflict=function()w.db.u_123.Items.RouteMarker=5 end
+    eq(w:receipt("ExpeditionPack",69,"concurrent-pack"),"Granted","bundle survives concurrent inventory write")
+    eq(w:data().Items.RouteMarker,8,"concurrent marker balance preserved")
+    eq(w:data().Protection.Charges,1,"callback retry one shield")
+    eq(w:data().ReentryCredits,2,"callback retry one reentry")
+end
 print(string.format("support product receipts: %d checks passed",checks))
 '''
 

@@ -1,5 +1,5 @@
 --!strict
--- Prepared server-only module; not installed in the running game.
+-- Shared server authority for Entity Shield and Emergency Re-entry grace.
 -- Capture GetContext BEFORE a yielding inventory reservation, then Activate
 -- with that exact context afterward. This module never charges or refunds.
 local Players = game:GetService("Players")
@@ -9,6 +9,7 @@ assert(RunService:IsServer(), "PlayerProtection must run on the server")
 
 local Protection = {}
 local DURATION = 5
+local REENTRY_DURATION = 10
 local states: {[Player]: any} = {}
 local roundEpoch = 0
 local activated = Instance.new("BindableEvent")
@@ -29,6 +30,7 @@ function Protection.Clear(player: Player)
 	state.Epoch = newEpoch()
 	player:SetAttribute("PlayerProtectionActive", false)
 	player:SetAttribute("PlayerProtectionExpiresAt", 0)
+	player:SetAttribute("PlayerProtectionSource", nil)
 end
 
 local function stateFor(player: Player)
@@ -42,8 +44,14 @@ local function stateFor(player: Player)
 	for _, name in ipairs({"InRound", "Escaped", "Level2_ExitTransition"}) do
 		table.insert(state.Connections, player:GetAttributeChangedSignal(name):Connect(invalidate))
 	end
-	table.insert(state.Connections, player.CharacterAdded:Connect(invalidate))
-	table.insert(state.Connections, player.CharacterRemoving:Connect(invalidate))
+	-- Character events may be delivered after LoadCharacterAsync returns. A
+	-- delayed event for the previous body must never clear the new life's grace.
+	table.insert(state.Connections, player.CharacterAdded:Connect(function(character)
+		if player.Character == character and state.Character ~= character then invalidate() end
+	end))
+	table.insert(state.Connections, player.CharacterRemoving:Connect(function(character)
+		if state.Character == character then invalidate() end
+	end))
 	Protection.Clear(player)
 	return state
 end
@@ -104,22 +112,26 @@ function Protection.GetContext(player: Player): (any?, string?)
 	return table.freeze({Character=character, Epoch=state.Epoch, RoundEpoch=roundEpoch}), nil
 end
 
-function Protection.Activate(player: Player, context: any): (boolean, any)
+local function activate(player: Player, context: any, duration: number, source: string): (boolean, any)
 	if not validPlayer(player) then return false, "InvalidPlayer" end
 	local state = states[player]
 	if not state or type(context) ~= "table" then return false, "InvalidContext" end
 	local character, humanoid = currentLife(player, state)
 	-- Expiry cleanup can replace the epoch; do it before comparing the context.
-	if Protection.IsActive(player, character) then return false, "AlreadyActive" end
+	if Protection.IsActive(player, character)
+		and not (source == "Reentry" and state.Active.Source == "Reentry") then
+		return false, "AlreadyActive"
+	end
 	if context.Character ~= character or context.Epoch ~= state.Epoch
 		or context.RoundEpoch ~= roundEpoch then return false, "StaleContext" end
 	local problem = eligibility(player, character, humanoid)
 	if problem then return false, problem end
 	local active = {
 		Character=character, Epoch=state.Epoch, RoundEpoch=roundEpoch,
-		ExpiresAt=Workspace:GetServerTimeNow() + DURATION,
+		ExpiresAt=Workspace:GetServerTimeNow() + duration, Source=source,
 	}
 	state.Active = active
+	player:SetAttribute("PlayerProtectionSource", source)
 	player:SetAttribute("PlayerProtectionActive", true)
 	player:SetAttribute("PlayerProtectionExpiresAt", active.ExpiresAt)
 	local function expire()
@@ -131,9 +143,20 @@ function Protection.Activate(player: Player, context: any): (boolean, any)
 			Protection.Clear(player)
 		end
 	end
-	task.delay(DURATION, expire)
+	task.delay(duration, expire)
 	activated:Fire(player, character, active.ExpiresAt)
 	return true, active.ExpiresAt
+end
+
+function Protection.Activate(player: Player, context: any): (boolean, any)
+	return activate(player, context, DURATION, "Shield")
+end
+
+-- Server-only; the same life token can renew re-entry once placement finishes.
+-- Old expiry callbacks cannot clear the replacement effect. Paid shields cannot
+-- stack with grace and never inherit its ten-second duration.
+function Protection.ActivateReentry(player: Player, context: any): (boolean, any)
+	return activate(player, context, REENTRY_DURATION, "Reentry")
 end
 
 local function roundChanged()

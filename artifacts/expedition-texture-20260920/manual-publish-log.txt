@@ -1,0 +1,4 @@
+2026-09-20T14:15:44.593Z,5747.593262,6e453000,6,Debug [FLog::PublishSessionStateController] Go to PublishSuccessful
+2026-09-20T14:15:44.656Z,5747.656250,f0fa20c0,6,Info [FLog::CreatorOutput] Published new changes in "BACKROOMS: STAY QUIET [CO-OP HORROR]" to Roblox.
+2026-09-20T14:15:44.763Z,5747.763184,f0fa20c0,6,Info [FLog::CreatorOutput] Place published. Eligible players can now play this place in Roblox.
+2026-09-20T14:15:44.767Z,5747.767578,f0fa20c0,6,Info [FLog::CreatorOutput] → Add publish notes to v1938

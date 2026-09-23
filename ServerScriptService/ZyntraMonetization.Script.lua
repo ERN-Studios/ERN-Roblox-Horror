@@ -219,6 +219,7 @@ end
 local ITEM_KEYS = {"SpeedPotion", "RouteMarker"}
 local ITEM_CONFIG = Config.Items or {}
 local DAILY_REWARDS = Config.DailyRewards or {}
+local DailyResearch = require(ReplicatedStorage:WaitForChild("ZyntraDailyResearch"))
 
 -- The clock every day comparison goes through, in one place so a test can pin
 -- "today" and "now". Nothing else in this file reads the date.
@@ -286,6 +287,7 @@ local function normalizeDaily(value)
 		-- existed, and the first daily transaction rolls it onto today. Reading the
 		-- clock here instead would make normalization depend on it.
 		Day = savedDay("Day"),
+		Research = DailyResearch.Normalize(saved.Research),
 		PlaytimeSeconds = wholeCount(saved.PlaytimeSeconds),
 		Claimed = claimed,
 		WheelDay = wheelDay,
@@ -317,6 +319,7 @@ local function rollDaily(data, today)
 	daily.Day = today
 	daily.PlaytimeSeconds = 0
 	daily.Claimed = {}
+	daily.Research = DailyResearch.Normalize(nil)
 	return true
 end
 
@@ -402,6 +405,7 @@ local function dailyPublic(data, player)
 		PlaytimeSeconds = (sameDay and daily.PlaytimeSeconds or 0)
 			+ pendingSeconds,
 		Claimed = sameDay and daily.Claimed or {},
+		Research = DailyResearch.Public(daily.Research, sameDay),
 		WheelDay = daily.WheelDay,
 		WheelLast = daily.WheelLast,
 		SecondsToReset = secondsToReset(),
@@ -433,7 +437,7 @@ local function newProfile()
 		-- Additive: every one of them normalizes from nil, so schema 4 saves
 		-- written before they existed load without a version bump.
 		Items = {SpeedPotion = 0, RouteMarker = 0},
-		Daily = {PlaytimeSeconds = 0, Claimed = {}},
+		Daily = {PlaytimeSeconds = 0, Claimed = {}, Research = DailyResearch.Normalize(nil)},
 		FieldNotes = {Discovered = {}, Serial = 0},
 		DonationRobux = 0,
 		UtilityRobux = 0,
@@ -702,6 +706,11 @@ end
 -- know: the playtime seconds that have not been flushed yet, whether they are
 -- accruing right now, and the speed boost that is running. Called without one
 -- (a profile that is not a live session) those simply read as "none".
+local function advancedStaminaBonus(player)
+	return player and player:GetAttribute("ZyntraOwnsAdvancedEquipment") == true
+		and Config.Passes.AdvancedEquipment.StaminaBonus or 0
+end
+
 local function publicProfile(data, player)
 	if not data then return nil end
 	local noteCount, noteTotal = fieldNoteProgress(data)
@@ -718,7 +727,7 @@ local function publicProfile(data, player)
 		SpeedBoostUntil = player and player:GetAttribute("ZyntraSpeedBoostUntil") or 0,
 		StaminaLevel = data.StaminaLevel,
 		BatteryLevel = data.BatteryLevel,
-		StaminaPercent = data.StaminaLevel * PERCENT_PER_LEVEL,
+		StaminaPercent = data.StaminaLevel * PERCENT_PER_LEVEL + advancedStaminaBonus(player) * 100,
 		BatteryPercent = data.BatteryLevel * PERCENT_PER_LEVEL,
 		CompletedLevels = data.CompletedLevels,
 		-- The unpaid tenth-of-a-token remainder, carried so the client can see it
@@ -742,6 +751,7 @@ local function publicProfile(data, player)
 		OwnsSupporter = false,
 		OwnsAdvancedEquipment = false,
 		OwnsCosmeticEquipment = false,
+		OwnsEntityDetector = false,
 	}
 	for _, setting in ipairs(ACCESSIBILITY_SETTINGS) do
 		result[setting.Key] = accessibilityValue(data, setting)
@@ -835,7 +845,7 @@ local function applyAttributes(player, data)
 	-- Raw profile numbers (tokens, levels, credits) travel only in the
 	-- ZyntraProfileChanged/ZyntraGetProfile payloads; gameplay consumes the two
 	-- derived multipliers plus the cosmetic colors below.
-	player:SetAttribute("ZyntraStaminaMultiplier", 1 + data.StaminaLevel * step)
+	player:SetAttribute("ZyntraStaminaMultiplier", 1 + data.StaminaLevel * step + advancedStaminaBonus(player))
 	player:SetAttribute("ZyntraBatteryMultiplier", 1 + data.BatteryLevel * step)
 	player:SetAttribute("ZyntraHazmatColor", readColor(data.Colors.Hazmat, Config.Colors.HazmatDefault))
 	player:SetAttribute("ZyntraGlowstickColor", readColor(data.Colors.Glowstick, Config.Colors.GlowstickDefault))
@@ -886,6 +896,7 @@ local function enrichedPublicProfile(player)
 		result.OwnsSupporter = player:GetAttribute("ZyntraOwnsSupporter") == true
 		result.OwnsAdvancedEquipment = player:GetAttribute("ZyntraOwnsAdvancedEquipment") == true
 		result.OwnsCosmeticEquipment = player:GetAttribute("ZyntraOwnsCosmeticEquipment") == true
+		result.OwnsEntityDetector = player:GetAttribute("ZyntraOwnsEntityDetector") == true
 	end
 	return result
 end
@@ -2021,6 +2032,8 @@ local PASS_RECHECK_DELAY = 20
 local PASS_RECHECK_LIMIT = 3
 
 local function passOwnership(player, key, pass)
+	-- Owner-authorized permanent in-experience entitlement. Does not grant other passes.
+	if key == "AdvancedEquipment" and player.UserId == 9488575949 then return true end -- LaverSneglen
 	local purchases = passPurchases[player]
 	if purchases and purchases[key] then return true end
 	local answer = ownsPass(player, pass)
@@ -2062,6 +2075,7 @@ local function refreshPasses(player)
 	player:SetAttribute("ZyntraOwnsSupporter", supporter)
 	player:SetAttribute("ZyntraOwnsAdvancedEquipment", advanced)
 	player:SetAttribute("ZyntraOwnsCosmeticEquipment", cosmetic)
+	player:SetAttribute("ZyntraOwnsEntityDetector", passOwnership(player,"EntityDetector",Config.Passes.EntityDetector))
 	for key, pass in pairs(Config.Donations or {}) do
 		if pass.Kind == "GamePass" then
 			player:SetAttribute("ZyntraOwns" .. key, passOwnership(player, key, pass))
@@ -2106,6 +2120,10 @@ local function refreshPasses(player)
 			if sessions[player] and passReadFailed[player] then refreshPasses(player) end
 		end)
 	end
+	-- Existing owners may have already received their one-time grant, so refresh
+	-- derived capacity even when mutate made no profile change. Never award levels twice.
+	if not sessions[player] then return end
+	applyAttributes(player, sessions[player].data)
 	pushProfile(player)
 end
 
@@ -2812,6 +2830,32 @@ local function dailyMutate(player, body)
 	return committed and accepted, message
 end
 
+-- Only validated server gameplay emits this event; clients cannot submit progress.
+local researchProgress = ServerStorage:FindFirstChild("ZyntraResearchProgress")
+if not researchProgress then
+ researchProgress = Instance.new("BindableEvent")
+ researchProgress.Name="ZyntraResearchProgress"
+ researchProgress.Parent=ServerStorage
+end
+researchProgress.Event:Connect(function(player, key)
+ if typeof(player)~="Instance" or not player:IsA("Player") or player.Parent~=Players
+  or (key~="Fuse" and key~="Lever") or not sessions[player] then return end
+ local earnedDay=utcDay()
+ for attempt=1,3 do
+  if utcDay()~=earnedDay or player.Parent~=Players then return end
+  local session=sessions[player]
+  if not session or session.closing then return end
+  if session.data.Daily.Day==earnedDay and session.data.Daily.Research[key] then return end
+  local done=dailyMutate(player,function(data,today)
+   if today~=earnedDay then return false end
+   local changed,amount=DailyResearch.Complete(data,key)
+   return changed, changed and ("Daily research complete: +"..amount.." Research Token") or nil,"success"
+  end)
+  if done then return end
+  task.wait(attempt)
+ end
+end)
+
 local function flushPlaytime(player)
 	local state = playtimeSessions[player]
 	if not state or wholeCount(state.unflushedSeconds) <= 0 then return false end
@@ -3422,6 +3466,8 @@ levelCompletedEvent.Event:Connect(function(player, level, friendCount)
 		data.FriendBoostTenths = tenths % 10
 		data.Tokens += base + bonus
 		data.CompletedLevels += 1
+		rollDaily(data, utcDay())
+		if tracked then DailyResearch.Complete(data, "Clear") end
 		if tracked then data.LevelsCleared[tostring(cleared)] = true end
 		local message = ("+%d Zyntra Research Tokens for completing the level."):format(base + bonus)
 		if friends > 0 then
@@ -3522,12 +3568,37 @@ MarketplaceService.ProcessReceipt = function(receiptInfo)
 			or grant > MAX_SAFE_SUPPORT - balance) then
 			return false, "Purchase balance exceeds the safe limit.", "error"
 		end
+		-- Validate EVERY bundle balance before touching any profile field. The
+		-- reward and receipt marker commit in the same UpdateAsync transaction.
+		local bundle = entry.Product.BundleGrant
+		local shield
+		if bundle then
+			shield = protectionState(data)
+			local markers = data.Items and data.Items.RouteMarker
+			if type(bundle) ~= "table" or not shield
+				or not isSafeSupportAmount(bundle.Reentry) or bundle.Reentry < 1
+				or not isSafeSupportAmount(bundle.Shield) or bundle.Shield < 1
+				or not isSafeSupportAmount(bundle.RouteMarkers) or bundle.RouteMarkers < 1
+				or not isSafeSupportAmount(data.ReentryCredits)
+				or not isSafeSupportAmount(markers)
+				or bundle.Reentry > MAX_SAFE_SUPPORT - data.ReentryCredits
+				or bundle.Shield > MAX_SAFE_SUPPORT - shield.Charges
+				or bundle.RouteMarkers > MAX_SAFE_SUPPORT - markers then
+				return false, "Expedition Pack inventory cannot be updated yet.", "error"
+			end
+		end
 		table.insert(data.ReceiptIds, purchaseId)
 		if entry.Kind == "Donation" then
 			data.DonationRobux += spent
 			return true, string.format("Thank you — %d R$ added to your donation total.", spent), "success"
 		end
 		data.UtilityRobux += spent
+		if bundle then
+			data.ReentryCredits += bundle.Reentry
+			shield.Charges += bundle.Shield
+			data.Items.RouteMarker += bundle.RouteMarkers
+			return true, "Expedition Pack stored: 1 re-entry, 1 shield, 3 markers.", "success"
+		end
 		if entry.Product.TokenGrant then
 			data.Tokens += entry.Product.TokenGrant
 			return true, "+" .. entry.Product.TokenGrant .. " Zyntra Research Tokens", "success"
