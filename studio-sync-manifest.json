@@ -504,8 +504,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Configuration.ModuleScript.lua",
-      "bytes": 11670,
-      "sha256": "84335091be6e5bcaa771bab8e1c4b3cdc0a142acc6ffa74b9cf010c37881d4ec",
+      "bytes": 12107,
+      "sha256": "0d420b4371f37deaa21d4830743d9fa5b5d3c6169288ceb0acad719f37d73c87",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"

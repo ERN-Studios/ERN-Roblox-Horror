@@ -170,7 +170,13 @@ local Configuration = {
 		-- runtime. Without any of those the ribs stay Parts and the world records
 		-- the wanted keys (World Builder: ArchRibMeshMissingKeys). A Studio session
 		-- can A/B without a push through workspace:SetAttribute("Level2ArchMeshRibs", true).
-		ArchMeshRibs = false,
+		-- ON since 2026-09-23 (Trello Zpj0Gkbb): the two group-owned assets
+		-- (121489049526127, 105818906248010) sit in ServerStorage as templates;
+		-- an active round on seed 1182081016 measured 56,001 vs 71,771
+		-- descendants and 29,103 vs 42,051 Textures, the same Pool Slide spawn
+		-- distance (194.75), second-pump spawn, third-pump ENRAGED on the same
+		-- model, chase/attack and a clean teardown, and no server cost of its own.
+		ArchMeshRibs = true,
 		ArchMeshRibAssets = {},
 	},
 }
