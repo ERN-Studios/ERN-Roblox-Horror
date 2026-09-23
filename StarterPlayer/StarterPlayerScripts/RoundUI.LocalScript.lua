@@ -163,6 +163,7 @@ function dispatchAudio.refresh()
 	local shown = (active or hasSubtitle)
 		and dispatchAudio.queueModalOpen ~= true
 		and player:GetAttribute("ZyntraStoreOpen") ~= true
+		and player:GetAttribute("ZyntraShopDetailOpen") ~= true
 	if dispatchAudio.panel then
 		dispatchAudio.panel.Visible = shown
 	end
@@ -302,6 +303,7 @@ end)
 -- Without this the labels keep whatever they were built with.
 UIDevice.Changed:Connect(function() dispatchAudio.refresh() end)
 player:GetAttributeChangedSignal("ZyntraStoreOpen"):Connect(dispatchAudio.refresh)
+player:GetAttributeChangedSignal("ZyntraShopDetailOpen"):Connect(dispatchAudio.refresh)
 if RunService:IsStudio() then
 	player:GetAttributeChangedSignal("UIRegressionForceDispatchActive"):Connect(dispatchAudio.refresh)
 	player:GetAttributeChangedSignal("UIRegressionSuppressDispatch"):Connect(dispatchAudio.refresh)
@@ -508,7 +510,7 @@ queueClose.Modal = true
 queueClose.ZIndex = 54
 queueClose.TextSize = 24
 queueClose.BackgroundColor3 = Color3.fromRGB(76, 38, 38)
-queueCloseStroke.Color = Color3.fromRGB(255, 125, 125)
+queueCloseStroke.Color = Color3.fromRGB(255, 138, 120)
 queueCloseStroke.Transparency = 0.35
 local queueHint = queueText("CancelHint", "STEP OUT OF THE SQUARE TO CANCEL", UDim2.new(0.08, 0, 1, -23), UDim2.new(0.84, 0, 0, 16), 14, Color3.fromRGB(125, 137, 126))
 queueHint.TextXAlignment = Enum.TextXAlignment.Center
@@ -849,7 +851,7 @@ refreshQueuePanel()
 -- result screen and live here rather than as file locals: this script sits on
 -- Luau's 200-local limit for a chunk's main body.
 local completion = {returnVisible = false,
-	color = Color3.fromRGB(115, 255, 170)}
+	color = Color3.fromRGB(127, 218, 166)}
 local function shouldShowCursor()
  return player:GetAttribute("InRound") ~= true
   or queueShade.Visible
@@ -1033,7 +1035,7 @@ endFrame.Parent = gui
 local endFlash = Instance.new("Frame")
 endFlash.Name = "SignalFlash"
 endFlash.Size = UDim2.fromScale(1, 1)
-endFlash.BackgroundColor3 = Color3.fromRGB(105, 255, 165)
+endFlash.BackgroundColor3 = Color3.fromRGB(83, 204, 145)
 endFlash.BackgroundTransparency = 1
 endFlash.BorderSizePixel = 0
 endFlash.ZIndex = 121
@@ -1044,7 +1046,7 @@ endLine.Name = "SignalLine"
 endLine.AnchorPoint = Vector2.new(0.5, 0.5)
 endLine.Position = UDim2.fromScale(0.5, 0.56)
 endLine.Size = UDim2.new(0, 0, 0, 2)
-endLine.BackgroundColor3 = Color3.fromRGB(105, 255, 165)
+endLine.BackgroundColor3 = Color3.fromRGB(83, 204, 145)
 endLine.BorderSizePixel = 0
 endLine.ZIndex = 122
 endLine.Parent = endFrame
@@ -1057,7 +1059,7 @@ endTitle.Size = UDim2.new(0.88, 0, 0.18, 0)
 endTitle.BackgroundTransparency = 1
 endTitle.Font = Enum.Font.GothamBlack
 endTitle.Text = ("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED")
-endTitle.TextColor3 = Color3.fromRGB(115, 255, 170)
+endTitle.TextColor3 = Color3.fromRGB(127, 218, 166)
 endTitle.TextScaled = true
 endTitle.TextStrokeColor3 = Color3.new(0, 0, 0)
 endTitle.TextStrokeTransparency = 0.35
@@ -1132,7 +1134,7 @@ local function makeCompletionButton(name, text)
 	corner.CornerRadius = UDim.new(0, 8)
 	corner.Parent = button
 	local stroke = Instance.new("UIStroke")
-	stroke.Color = Color3.fromRGB(105, 255, 165)
+	stroke.Color = Color3.fromRGB(83, 204, 145)
 	stroke.Transparency = 0.28
 	stroke.Thickness = 1.5
 	stroke.Parent = button
@@ -1590,7 +1592,7 @@ local function showRoundEnding(title, stats, hint, color, temporary)
  completion.reset()
  endingSerial += 1
  local token = endingSerial
- color = color or Color3.fromRGB(115, 255, 170)
+ color = color or Color3.fromRGB(127, 218, 166)
  completion.applyLayout(color)
  loadingFrame.Visible = false
  queueShade.Visible = false
@@ -1658,21 +1660,21 @@ if RunService:IsStudio() then
  player:GetAttributeChangedSignal("DevRoundEnding"):Connect(function()
   local mode = tostring(player:GetAttribute("DevRoundEnding") or ""):lower()
   if mode:find("escape", 1, true) then
-   showRoundEnding(("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"), "SIGNAL LOST", "WAITING FOR THE OTHERS", Color3.fromRGB(115, 255, 170), true)
+   showRoundEnding(("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"), "SIGNAL LOST", "WAITING FOR THE OTHERS", Color3.fromRGB(127, 218, 166), true)
 	-- "winfinal" is tested BEFORE "win": find() is a substring match and the
 	-- final-level mode would otherwise be swallowed by the ordinary one.
 	elseif mode:find("winfinal", 1, true) then
 		-- The last level: no next level exists, so no Continue action does either.
-		showRoundEnding(("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 3) .. " CLEARED"), "TIME 05:08  •  SURVIVORS 2/3", "RETURNING TO BASE", Color3.fromRGB(115, 255, 170), false)
+		showRoundEnding(("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 3) .. " CLEARED"), "TIME 05:08  •  SURVIVORS 2/3", "RETURNING TO BASE", Color3.fromRGB(127, 218, 166), false)
 		completion.start(workspace:GetServerTimeNow() + 15, nil, -1)
 	elseif mode:find("win", 1, true) then
-		showRoundEnding(("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"), "TIME 03:42  •  SURVIVORS 2/3", "RETURNING TO BASE", Color3.fromRGB(115, 255, 170), false)
+		showRoundEnding(("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"), "TIME 03:42  •  SURVIVORS 2/3", "RETURNING TO BASE", Color3.fromRGB(127, 218, 166), false)
 		-- Exercise the complete production win state in UIRegression: the overlay
 		-- is not valid unless its countdown and BOTH actions are present too. A
 		-- negative serial is intentionally Studio-only.
 		completion.start(workspace:GetServerTimeNow() + 15, 2, -1)
   elseif mode:find("lose", 1, true) then
-   showRoundEnding("NO ONE FOUND A WAY OUT", "TIME 04:17  •  SURVIVORS 0/3", "RETURNING TO BASE", Color3.fromRGB(255, 82, 72), false)
+   showRoundEnding("NO ONE FOUND A WAY OUT", "TIME 04:17  •  SURVIVORS 0/3", "RETURNING TO BASE", Color3.fromRGB(255, 116, 96), false)
   elseif mode:find("hide", 1, true) then
    hideRoundEnding(true)
   end
@@ -1883,6 +1885,7 @@ local function roundAndStroke(parent, radius, color, transparency, thickness)
 	stroke.Color = color
 	stroke.Transparency = transparency
 	stroke.Thickness = thickness
+	stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 	stroke.Parent = parent
 end
 
@@ -2891,7 +2894,15 @@ local function updateLevelOneGuideLayout()
 	end
 	if touch then
 		objectivesButton.AnchorPoint = Vector2.new(0, 0)
-		objectivesButton.Position = UDim2.fromOffset(12, 12)
+		local left, top = layout.SafeLeft + 12, layout.SafeTop + 12
+		local puzzle = player.PlayerGui:FindFirstChild("PuzzleGui")
+		local counter = puzzle and puzzle:FindFirstChild("Level1Objectives")
+		-- Portrait phones cannot fit the brief beside the objective card.
+		-- Follow its measured bottom, including changing objective messages.
+		if counter and counter.Visible and left + 168 > counter.AbsolutePosition.X - 8 then
+			top = math.max(top, counter.AbsolutePosition.Y + counter.AbsoluteSize.Y + 8)
+		end
+		objectivesButton.Position = UIDevice.LocalPosition(guideGui, left, top)
 	else
 		-- PuzzleUI owns the final 36px at the bottom-right. This guide completes
 		-- the footer row immediately to its left.
@@ -3439,6 +3450,12 @@ local function updateLevelOneGuideLayout()
 	if touch then
 		subtitleFrame.AnchorPoint = Vector2.new(0, 0)
 		subtitleFrame.Position = UIDevice.LocalPosition(guideGui, band.Left, band.Top)
+		if player:GetAttribute("Level3_Hiding") == true then
+			-- Hiding owns the top strip. The character is anchored, so captions
+			-- can use the bottom safe area while the warning and exit stay clear.
+			subtitleFrame.Position = UIDevice.LocalPosition(guideGui, band.Left,
+				math.max(band.Top, layout.Safe.Bottom - 42 - panelHeight))
+		end
 	else
 		subtitleFrame.AnchorPoint = Vector2.new(0.5, 1)
 		subtitleFrame.Position = UDim2.new(0.5, 0, 1, narrow and -96 or -64)
@@ -3532,6 +3549,15 @@ if RunService:IsStudio() then
 end
 
 UIDevice.Changed:Connect(updateLevelOneGuideLayout)
+player:GetAttributeChangedSignal("Level3_Hiding"):Connect(updateLevelOneGuideLayout)
+task.spawn(function()
+	local puzzle = player.PlayerGui:WaitForChild("PuzzleGui")
+	local counter = puzzle:WaitForChild("Level1Objectives")
+	for _, property in ipairs({"Visible", "AbsolutePosition", "AbsoluteSize"}) do
+		counter:GetPropertyChangedSignal(property):Connect(updateLevelOneGuideLayout)
+	end
+	updateLevelOneGuideLayout()
+end)
 
 local viewportConnection = nil
 local function connectGuideViewport()
@@ -4316,7 +4342,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 				("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"),
 				"SIGNAL LOST",
 				"WAITING FOR THE OTHERS",
-				Color3.fromRGB(115, 255, 170),
+				Color3.fromRGB(127, 218, 166),
 				true
 			)
 		elseif player:GetAttribute("InRound") == true
@@ -4345,7 +4371,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 			"NO ONE FOUND A WAY OUT",
 			"TIME " .. formatRoundTime(a) .. "  •  SURVIVORS 0/" .. totalPlayers,
 			"RETURNING TO BASE",
-			Color3.fromRGB(255, 82, 72),
+			Color3.fromRGB(255, 116, 96),
 			false
 		)
 
@@ -4358,7 +4384,7 @@ remote.OnClientEvent:Connect(function(ev, a, b, c, d, e, f)
 			dead and "THE OTHERS FOUND A WAY OUT" or ("LEVEL " .. tostring(workspace:GetAttribute("SelectedLevel") or 1) .. " CLEARED"),
 			"TIME " .. formatRoundTime(a) .. "  •  SURVIVORS " .. survivors .. "/" .. totalPlayers,
 			"RETURNING TO BASE",
-			Color3.fromRGB(115, 255, 170),
+			Color3.fromRGB(127, 218, 166),
 			false
 		)
 		completion.start(d, e, f)
@@ -4454,7 +4480,17 @@ do
 		declined = false,
 		lastSeconds = nil,
 		statusText = nil,
+		-- DEV_FREE_RESPAWN_OFFER_20260915 (card 81): whitelisted developers get a
+		-- third button, the free server-only respawn. The gate here is cosmetic:
+		-- GameManager re-checks DevAccess and the dead InRound body, and the free
+		-- path never reserves a credit. FindFirstChild + pcall, never a
+		-- WaitForChild, for the reason given above.
+		dev = (function()
+			local ok, access = pcall(require, RS:FindFirstChild("DevAccess"))
+			return ok and type(access) == "table" and access.IsAllowed(player) == true
+		end)(),
 	}
+	pd.height = pd.dev and 316 or 268
 
 	pd.frame = Instance.new("Frame")
 	pd.frame.Name = "PartyDownOverlay"
@@ -4474,7 +4510,7 @@ do
 	pd.card.Name = "PartyDownCard"
 	pd.card.AnchorPoint = Vector2.new(0.5, 0.5)
 	pd.card.Position = UDim2.fromScale(0.5, 0.5)
-	pd.card.Size = UDim2.new(1, -32, 0, 268)
+	pd.card.Size = UDim2.new(1, -32, 0, pd.height)
 	pd.card.BackgroundColor3 = Color3.fromRGB(9, 5, 6)
 	pd.card.BackgroundTransparency = 0.06
 	pd.card.BorderSizePixel = 0
@@ -4482,13 +4518,13 @@ do
 	pd.card.Parent = pd.frame
 	corner(pd.card, 10)
 	pd.cardSize = Instance.new("UISizeConstraint")
-	pd.cardSize.MinSize = Vector2.new(280, 268)
-	pd.cardSize.MaxSize = Vector2.new(460, 268)
+	pd.cardSize.MinSize = Vector2.new(280, pd.height)
+	pd.cardSize.MaxSize = Vector2.new(460, pd.height)
 	pd.cardSize.Parent = pd.card
 	pd.cardStroke = Instance.new("UIStroke")
-	pd.cardStroke.Color = Color3.fromRGB(255, 82, 72)
+	pd.cardStroke.Color = Color3.fromRGB(255, 116, 96)
 	pd.cardStroke.Transparency = 0.2
-	pd.cardStroke.Thickness = 1.5
+	pd.cardStroke.Thickness = 1
 	pd.cardStroke.Parent = pd.card
 	-- A 268px card does not fit a 320-tall landscape phone. One UIScale, driven
 	-- from the viewport, keeps the whole card on screen instead of cropping the
@@ -4503,7 +4539,7 @@ do
 	pd.title.BackgroundTransparency = 1
 	pd.title.Font = Enum.Font.GothamBlack
 	pd.title.Text = "PARTY DOWN"
-	pd.title.TextColor3 = Color3.fromRGB(255, 82, 72)
+	pd.title.TextColor3 = Color3.fromRGB(255, 116, 96)
 	pd.title.TextScaled = true
 	pd.title.TextXAlignment = Enum.TextXAlignment.Left
 	pd.title.ZIndex = 114
@@ -4540,7 +4576,7 @@ do
 	pd.fill = Instance.new("Frame")
 	pd.fill.Name = "PartyDownFill"
 	pd.fill.Size = UDim2.fromScale(1, 1)
-	pd.fill.BackgroundColor3 = Color3.fromRGB(255, 82, 72)
+	pd.fill.BackgroundColor3 = Color3.fromRGB(255, 116, 96)
 	pd.fill.BorderSizePixel = 0
 	pd.fill.ZIndex = 115
 	pd.fill.Parent = pd.track
@@ -4601,12 +4637,16 @@ do
 
 	pd.reentry = makeButton("PartyDownReentry", 146, 48, "USE RE-ENTRY",
 		Color3.fromRGB(255, 120, 110))
-	pd.decline = makeButton("PartyDownDecline", 206, 44, "NO THANKS",
+	if pd.dev then
+		pd.free = makeButton("PartyDownFreeRespawn", 200, 44, "FREE RESPAWN  //  DEV",
+			dispatchAudio.accent)
+	end
+	pd.decline = makeButton("PartyDownDecline", pd.dev and 254 or 206, 44, "NO THANKS",
 		Color3.fromRGB(186, 196, 190))
 
 	function pd.applyLayout()
 		local deviceLayout = UIDevice.Layout()
-		pd.cardScale.Scale = math.clamp((deviceLayout.Height - 24) / 268, 0.6, 1)
+		pd.cardScale.Scale = math.clamp((deviceLayout.Height - 24) / pd.height, 0.6, 1)
 	end
 	pd.applyLayout()
 	UIDevice.Changed:Connect(function()
@@ -4634,6 +4674,17 @@ do
 				.. " R$  //  BUY CREDIT")
 		pd.decline.Active = pd.armed
 		pd.decline.Selectable = pd.armed
+		if pd.free then
+			-- The free path ignores ZyntraReentryUsed (the server does too); it
+			-- only needs a live round this player is still part of, and no
+			-- request already in flight.
+			local busy = player:GetAttribute("DevRespawnBusy") == true
+			pd.free.Text = busy and "RESPAWNING..." or "FREE RESPAWN  //  DEV"
+			pd.free.Active = pd.armed and not busy
+				and player:GetAttribute("InRound") == true
+				and workspace:GetAttribute("RoundActive") == true
+			pd.free.Selectable = pd.free.Active
+		end
 	end
 
 	-- The CARD comes and goes; the WINDOW is what `pd.deadline` says. Declining
@@ -4655,7 +4706,8 @@ do
 			pd.applyLayout()
 			pd.refresh()
 		elseif GuiService.SelectedObject == pd.decline
-			or GuiService.SelectedObject == pd.reentry then
+			or GuiService.SelectedObject == pd.reentry
+			or (pd.free and GuiService.SelectedObject == pd.free) then
 			GuiService.SelectedObject = nil
 		end
 	end
@@ -4711,6 +4763,29 @@ do
 		pd.lastSeconds = nil -- force the status line to be written this frame
 		pd.setCardVisible(false)
 	end)
+
+	if pd.free then
+		pd.free.Activated:Connect(function()
+			if not pd.free.Active then return end
+			-- The terminal's DEV row bridge: DevCheats owns the DevControl dispatch
+			-- and GameManager answers through DevRespawnStatus/Serial. A success
+			-- arrives as our own "reentry" event, which hides the card above.
+			local command = script.Parent:FindFirstChild("DevCheatCommand")
+			if command and command:IsA("BindableEvent") then
+				command:Fire("freeRespawn")
+			else
+				setMsg("Developer controls are still loading. Try again.",
+					Color3.fromRGB(255, 120, 110))
+			end
+		end)
+		player:GetAttributeChangedSignal("DevRespawnBusy"):Connect(pd.refresh)
+		player:GetAttributeChangedSignal("DevRespawnSerial"):Connect(function()
+			local status = tostring(player:GetAttribute("DevRespawnStatus") or "")
+			if status ~= "RESPAWNED" and pd.frame.Visible then
+				setMsg("FREE RESPAWN  //  " .. status, Color3.fromRGB(255, 120, 110))
+			end
+		end)
+	end
 
 	RunService.RenderStepped:Connect(function()
 		if not pd.deadline then return end

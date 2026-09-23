@@ -1,0 +1,29 @@
+{
+  "date": "2026-09-14",
+  "placeId": 131311258779917,
+  "placeVersionBeforePublish": 1878,
+  "studioId": "509e22f5-4f07-4c38-a8a9-c7a3bf264e2e",
+  "selectedAssets": 32,
+  "assetPreload": {
+    "attempted": 32,
+    "loaded": 32,
+    "failed": 0
+  },
+  "scriptVerification": {
+    "compiled": true,
+    "sourceEqualsEditorSource": true,
+    "repoEqualsStudio": true
+  },
+  "foamSimulation": {
+    "idle": {"activeEmitters": 1, "activeSounds": 1},
+    "movingCrossfade": {"activeEmitters": 1, "activeSounds": 2},
+    "attackWhileAnimationPaused": {"activeEmitters": 1, "activeSounds": 1}
+  },
+  "slideSimulation": {
+    "walkChannelsDuringCrossfade": ["Level 2 Slide Walk", "Level 2 Slide Idle"],
+    "attackPlayingAtSeconds0_2": false,
+    "attackPlayingAfterSeconds0_7": true
+  },
+  "roundStopCleanup": {"activeEmitters": 0, "activeSounds": 0},
+  "limits": "Single-client Studio simulations validated audio behavior. They do not constitute a multiplayer or full Level 2 progression test."
+}

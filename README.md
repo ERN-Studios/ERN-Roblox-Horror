@@ -9,31 +9,19 @@ somebody spends a Zyntra **Emergency Re-entry**, which puts you back on your
 feet in the SAME round. Solve the level's objective while something hunts you —
 escape together, or watch your friends try.
 
-**Last published build: place version v1641 (2026-08-30)**, live on Roblox under
-the exact title `BACKROOMS: STAY QUIET [CO-OP HORROR]` with the approved
-spoiler-free description, and mirrored on GitHub. The place has moved a long way
-since — Level 2's hostile roster, Level 1's script layout, the Zyntra store and
-Level 3's hiding mechanics all changed after it — so read v1641 as *the last
-thing published*, not as a description of what is in Studio today. Every dated
-result in this file is accurate for the date it names and has not been re-run
-since.
+**Current repository snapshot: Studio place version 1933, captured 20 September 2026.**
+The source mirror now contains all 145 Studio scripts, including the hologram
+shop, Daily Rewards, Lucky Wheel, Field Notes, Friend Boost, Level 2 entity
+audio, and 5K/10K/20K donation options. A complete native place backup accompanies
+the source inventory. This audit did not publish the experience or change Studio.
 
-**Level 2 has exactly one hostile: Pool Foam.** Two others came and went. The
-Slidemouth was retired on 2026-08-31; the Pool Slide that replaced it was
-measured on 2026-09-02 never once to spawn successfully on a generated map — its
-failing spawn retried forever and cost 78% of the server's frame budget (13 FPS,
-59 with it paused) — and was deleted, backups included. The Slidemouth's code
-and its 391-check suite are preserved in
-`ServerStorage.Archive.Level2RetiredSlidemouth_20260831`. **Pool Foam has no
-suite of its own**, which is the largest open test gap in the project: the Pool
-Slide was built without one and failed in every round for days before a
-frame-time measurement found it.
-
-Level 3 — the **Mall Backrooms Party** — has its core systems in place (layout
-generator, Mall Manager AI, under-table hiding, music/blackout cycle, CD
-collection into a five-slot Signal Hall disc player, districts, and a final-hall
-chase) and is still being built out. It is the campaign endpoint: there is no
-Level 4.
+Read [the current audit and Trello implementation ranking](docs/STUDIO-AUDIT-2026-09-20.md)
+for scope, validation, feature-branch history and remaining checks. Studio remains
+authoritative. The detailed sections below are historical documentation: their
+dated observations and old verification results are not a current gameplay guarantee.
+In particular, older descriptions of Pool Slide being removed are superseded by
+the current Pool Slide controller/navigation and audio scripts. Level 4 remains
+planned work; the current campaign ends at Level 3.
 
 ### Finishing a level
 

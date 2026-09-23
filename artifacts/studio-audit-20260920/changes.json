@@ -1,0 +1,254 @@
+[
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/NoiseReporter.LocalScript.lua",
+    "kind": "modified",
+    "beforeBytes": 41114,
+    "afterBytes": 43475
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
+    "kind": "modified",
+    "beforeBytes": 233686,
+    "afterBytes": 237425
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/PuzzleUI.LocalScript.lua",
+    "kind": "modified",
+    "beforeBytes": 74893,
+    "afterBytes": 78232
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/SpectateController.LocalScript.lua",
+    "kind": "modified",
+    "beforeBytes": 19927,
+    "afterBytes": 19755
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level2AlertClient.LocalScript.lua",
+    "kind": "modified",
+    "beforeBytes": 33798,
+    "afterBytes": 34389
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
+    "kind": "modified",
+    "beforeBytes": 147108,
+    "afterBytes": 187153
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level 2 Lighting Controller.LocalScript.lua",
+    "kind": "modified",
+    "beforeBytes": 5591,
+    "afterBytes": 5592
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level 2 Sound Controller.LocalScript.lua",
+    "kind": "modified",
+    "beforeBytes": 39655,
+    "afterBytes": 39939
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua",
+    "kind": "modified",
+    "beforeBytes": 13014,
+    "afterBytes": 13516
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level 2 Pool Foam Client.LocalScript.lua",
+    "kind": "modified",
+    "beforeBytes": 18692,
+    "afterBytes": 18788
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level 3 Reader Client.LocalScript.lua",
+    "kind": "modified",
+    "beforeBytes": 54034,
+    "afterBytes": 54201
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level 3 Table Hiding Client.LocalScript.lua",
+    "kind": "modified",
+    "beforeBytes": 18144,
+    "afterBytes": 21675
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/ProtectionHUD.LocalScript.lua",
+    "kind": "modified",
+    "beforeBytes": 12035,
+    "afterBytes": 29091
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/First Entry Guide.LocalScript.lua",
+    "kind": "modified",
+    "beforeBytes": 9260,
+    "afterBytes": 9947
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Round Exit Client.LocalScript.lua",
+    "kind": "modified",
+    "beforeBytes": 9270,
+    "afterBytes": 20545
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level 2 Entity Audio.LocalScript.lua",
+    "kind": "new",
+    "beforeBytes": null,
+    "afterBytes": 9971
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Shop Display Client.LocalScript.lua",
+    "kind": "new",
+    "beforeBytes": null,
+    "afterBytes": 23505
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Level 1 Cable Current.LocalScript.lua",
+    "kind": "new",
+    "beforeBytes": null,
+    "afterBytes": 10507
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Field Notes Client.LocalScript.lua",
+    "kind": "new",
+    "beforeBytes": null,
+    "afterBytes": 9288
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Daily Rewards Client.LocalScript.lua",
+    "kind": "new",
+    "beforeBytes": null,
+    "afterBytes": 27008
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Lucky Wheel Client.LocalScript.lua",
+    "kind": "new",
+    "beforeBytes": null,
+    "afterBytes": 33299
+  },
+  {
+    "file": "StarterPlayer/StarterPlayerScripts/Friend Boost Client.LocalScript.lua",
+    "kind": "new",
+    "beforeBytes": null,
+    "afterBytes": 8386
+  },
+  {
+    "file": "ReplicatedStorage/ZyntraConfig.ModuleScript.lua",
+    "kind": "modified",
+    "beforeBytes": 7166,
+    "afterBytes": 10886
+  },
+  {
+    "file": "ReplicatedStorage/UIDevice.ModuleScript.lua",
+    "kind": "modified",
+    "beforeBytes": 97496,
+    "afterBytes": 99714
+  },
+  {
+    "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
+    "kind": "modified",
+    "beforeBytes": 438773,
+    "afterBytes": 443665
+  },
+  {
+    "file": "ReplicatedStorage/Level 2 Entity Audio Bank.ModuleScript.lua",
+    "kind": "new",
+    "beforeBytes": null,
+    "afterBytes": 2841
+  },
+  {
+    "file": "ReplicatedStorage/UIStyle.ModuleScript.lua",
+    "kind": "new",
+    "beforeBytes": null,
+    "afterBytes": 10555
+  },
+  {
+    "file": "ReplicatedStorage/ZyntraDailyRewardsPage.ModuleScript.lua",
+    "kind": "new",
+    "beforeBytes": null,
+    "afterBytes": 36624
+  },
+  {
+    "file": "ReplicatedStorage/ZyntraFieldNotes.ModuleScript.lua",
+    "kind": "new",
+    "beforeBytes": null,
+    "afterBytes": 7373
+  },
+  {
+    "file": "ReplicatedStorage/ZyntraFieldNotesPage.ModuleScript.lua",
+    "kind": "new",
+    "beforeBytes": null,
+    "afterBytes": 16492
+  },
+  {
+    "file": "ServerScriptService/GameManager.Script.lua",
+    "kind": "modified",
+    "beforeBytes": 146788,
+    "afterBytes": 147542
+  },
+  {
+    "file": "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
+    "kind": "modified",
+    "beforeBytes": 111868,
+    "afterBytes": 103329
+  },
+  {
+    "file": "ServerScriptService/ZyntraMonetization.Script.lua",
+    "kind": "modified",
+    "beforeBytes": 117953,
+    "afterBytes": 169673
+  },
+  {
+    "file": "ServerScriptService/LobbyShopDisplay.ModuleScript.lua",
+    "kind": "new",
+    "beforeBytes": null,
+    "afterBytes": 20669
+  },
+  {
+    "file": "ServerScriptService/RouteMarkerService.Script.lua",
+    "kind": "new",
+    "beforeBytes": null,
+    "afterBytes": 12066
+  },
+  {
+    "file": "ServerScriptService/FieldNotesService.Script.lua",
+    "kind": "new",
+    "beforeBytes": null,
+    "afterBytes": 21612
+  },
+  {
+    "file": "ServerScriptService/FriendBoost.ModuleScript.lua",
+    "kind": "new",
+    "beforeBytes": null,
+    "afterBytes": 5413
+  },
+  {
+    "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Slide Navigator.ModuleScript.lua",
+    "kind": "modified",
+    "beforeBytes": 129070,
+    "afterBytes": 131658
+  },
+  {
+    "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Slide Controller.ModuleScript.lua",
+    "kind": "modified",
+    "beforeBytes": 37880,
+    "afterBytes": 38772
+  },
+  {
+    "file": "ServerScriptService/Level 3 Systems/Level 3 Configuration.ModuleScript.lua",
+    "kind": "modified",
+    "beforeBytes": 18975,
+    "afterBytes": 19070
+  },
+  {
+    "file": "ServerScriptService/Level 3 Systems/Level 3 Hiding Controller.ModuleScript.lua",
+    "kind": "modified",
+    "beforeBytes": 22901,
+    "afterBytes": 24793
+  },
+  {
+    "file": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
+    "kind": "modified",
+    "beforeBytes": 96642,
+    "afterBytes": 100716
+  }
+]

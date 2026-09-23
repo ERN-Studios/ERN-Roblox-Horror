@@ -26,6 +26,7 @@ local SPAWN_RETRY_SECONDS = 5
 local SPAWN_MAX_PROBES_PER_PASS = 24
 local SPAWN_PROBE_INTERVAL = .05
 local PATH_REQUEST_TIMEOUT = 3
+local PLANNING_WALL_TIMEOUT = 4
 local TARGET_REFRESH_SECONDS = .25
 local GOAL_REFRESH_SECONDS = .15
 local WATCHDOG_SECONDS = 3
@@ -73,6 +74,7 @@ local function resetPublished()
 		SpawnDistance = 0, SpawnAnchor = "", SpawnHidden = false,
 		SpawnRouteQueries = 0, SpawnRoutePoints = 0,
 		PathStatus = "IDLE", LastError = "", Phase = "DORMANT",
+		Computing = false, Waypoints = 0, ClearanceProbes = 0, PathFailure = "",
 		Enraged = false, AttackSerial = 0, SpawnProbeCount = 0, ValidationOnly = false,
 		SpawnNavigatorBuilds = 0,
 		NavigationContextReady = false, NavigationContextError = "", NavigationContextMaxSlice = 0,
@@ -286,6 +288,9 @@ local function navigationTuning(model)
 		-- Walk to the certified final approach; a 1.4-stud early stop can miss melee reach.
 		GoalArrivalDistance = .2,
 		RepathInterval = .75, StableRoutes = true, PathRequestTimeout = PATH_REQUEST_TIMEOUT,
+		-- Defensive server-time limit; os.clock's primary deadline also advances
+		-- while the planning coroutine yields on a Roblox server.
+		PlanningWallTimeout = PLANNING_WALL_TIMEOUT,
 		FootClearance = .08, FloorProbeAbove = 18,
 		FloorProbeDepth = 80, MaxStepHeight = 3.5, MaxTravelStep = .6,
 		SteerAngles = {20, 35, 50}}
@@ -651,6 +656,16 @@ local function updateModel(session, deltaTime)
 	motion(session, nav.WaitingForClearance and "WAITING" or (enraged and "ENRAGED" or "CHASE"),
 		moved > .01, dt > 0 and moved / dt or 0, moved > .01 and (running and "Run" or "Walk") or "Idle")
 	publish(session, "PathStatus", navigator:GetStatus())
+	-- Which of the several ways this encounter can stand still is happening is
+	-- not readable from outside otherwise: GetDebugSnapshot needs the live
+	-- module, and a probe run through execute_luau gets its own instance. Off
+	-- unless a probe asks, and publish() writes only on change.
+	if workspace:GetAttribute("Level2_PoolSlideDiagnostics") == true then
+		publish(session, "Computing", nav.Computing == true)
+		publish(session, "Waypoints", nav.WaypointCount)
+		publish(session, "ClearanceProbes", nav.ClearanceProbes or 0)
+		publish(session, "PathFailure", tostring(nav.LastFailure or ""))
+	end
 	if beginAttack(session, record, now) then return end
 	if now - session.ProgressAt >= WATCHDOG_SECONDS then
 		local planning = nav.Computing and now - nav.RequestStartedAt < PATH_REQUEST_TIMEOUT

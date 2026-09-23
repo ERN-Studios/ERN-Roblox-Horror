@@ -15,9 +15,13 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 
+local UIStyle = require(ReplicatedStorage:WaitForChild("UIStyle"))
+
 local player = Players.LocalPlayer
 local roundStatus = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("RoundStatus")
 
+-- The lobby's Zyntra accent, and the colour of the beam this marker labels.
+-- Deliberately NOT the in-level green: the marker belongs to the lobby.
 local ZYNTRA_CYAN = Color3.fromRGB(73, 245, 204)
 local RECOMPUTE_INTERVAL = 0.75
 local RECOMPUTE_MOVE = 3
@@ -230,14 +234,22 @@ local function start()
 
 	local title = Instance.new("TextLabel")
 	title.Name = "Title"
-	title.BackgroundTransparency = 1
 	title.Size = UDim2.fromScale(1, 0.5)
-	title.Font = Enum.Font.GothamBold
 	title.Text = "LEVEL 1 START HERE"
-	title.TextColor3 = ZYNTRA_CYAN
 	title.TextScaled = true
 	title.TextStrokeTransparency = 0.5
 	title.Parent = billboard
+	-- UI_STYLE_20260915 (Trello #98). It was floating text over the lobby; it is
+	-- now the same dark card the rest of the game prints on. The pathfinding
+	-- beam, the placement and every ending condition are untouched.
+	UIStyle.panel(title, {Stroke = ZYNTRA_CYAN, StrokeTransparency = 0.4})
+	UIStyle.title(title, {TextColor = ZYNTRA_CYAN})
+	local titlePad = Instance.new("UIPadding")
+	titlePad.PaddingLeft = UDim.new(0, 10)
+	titlePad.PaddingRight = UDim.new(0, 10)
+	titlePad.PaddingTop = UDim.new(0, 5)
+	titlePad.PaddingBottom = UDim.new(0, 5)
+	titlePad.Parent = title
 
 	arrow = Instance.new("TextLabel")
 	arrow.Name = "Arrow"

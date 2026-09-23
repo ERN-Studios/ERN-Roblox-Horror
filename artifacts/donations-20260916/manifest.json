@@ -1,0 +1,46 @@
+{
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "publishedVersion": 1919,
+  "publishedUtc": "2026-09-16T07:53:03Z",
+  "nativeBackup": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/github/studio-backups/Backrooms-before-donations-20260916.rbxl",
+  "backupSha256": "942bd27c88a5d9ce6e78e5c2a78d825964c74f289641b53600162e85ff456798",
+  "scripts": [
+    {
+      "path": "ServerScriptService/ZyntraMonetization.Script.lua",
+      "studioPath": "ServerScriptService.ZyntraMonetization",
+      "class": "Script",
+      "beforeSha256": "c33450cc9683b8a6e526589c074dbb1d89410425d65f57a31b82173e4cecbef1",
+      "afterSha256": "9ebf3d9802807b79382a56bb147ac4511b27c19aa3fc87338a9b01efa3ae8542",
+      "afterBytes": 166884,
+      "sourceEqualsEditor": true
+    },
+    {
+      "path": "ReplicatedStorage/UIRegression.ModuleScript.lua",
+      "studioPath": "ReplicatedStorage.UIRegression",
+      "class": "ModuleScript",
+      "beforeSha256": "865e871dc745bf867929084ae26a6d57ec0cf02b04dd2c677119be39a25d350f",
+      "afterSha256": "0c818ae134b6f1fadfeeee4bcfe4bc57b9cec4eddd9544603a36d7437d5350a7",
+      "afterBytes": 441526,
+      "sourceEqualsEditor": true
+    },
+    {
+      "path": "ReplicatedStorage/ZyntraConfig.ModuleScript.lua",
+      "studioPath": "ReplicatedStorage.ZyntraConfig",
+      "class": "ModuleScript",
+      "beforeSha256": "b0979e1d5c2d9d148b8fb2ded9471120c07ae8ca1fba9c4e3cda7d101ec881d9",
+      "afterSha256": "77bc110753436470c189425da4cda90e8edbbc332fb12426a7b26cf26456b8d3",
+      "afterBytes": 10469,
+      "sourceEqualsEditor": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
+      "studioPath": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "class": "LocalScript",
+      "beforeSha256": "0bea6a7f5b54167497d676d9fe7e881dd5df3007f114a31aedf3ccccd669a562",
+      "afterSha256": "952f1eb5bceb418424a101e51e387cd643bd5aba615961159a087c717c7071b1",
+      "afterBytes": 177974,
+      "sourceEqualsEditor": true
+    }
+  ]
+}

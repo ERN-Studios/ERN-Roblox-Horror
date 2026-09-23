@@ -95,6 +95,27 @@ local COLORS = {
 	red = Color3.fromRGB(255, 76, 60),
 }
 
+-- One reversible lever over the whole authored lobby palette (Trello #90).
+-- Every literal above and below stays the source; this only raises how far each
+-- one sits from grey. 1.0 returns the original colours byte for byte.
+--
+-- Deliberate limits:
+--   * SURFACES only. Light Color and Brightness are untouched, so the lobby is
+--     lit exactly as before and nothing gameplay-relevant gets harder to see.
+--   * Value (HSV brightness) is preserved exactly, so nothing darkens.
+--   * Pure greys and blacks have no hue to raise and pass through unchanged;
+--     near-black tints move by at most a couple of 0-255 steps because the
+--     absolute change scales with V.
+--   * UI text, UI frames and sign faces do not go through here.
+local LOBBY_SATURATION = 1.35
+
+local function saturatedLobbyColor(color)
+	if LOBBY_SATURATION == 1 then return color end
+	local h, s, v = color:ToHSV()
+	if s <= 0 then return color end
+	return Color3.fromHSV(h, math.min(s * LOBBY_SATURATION, 1), v)
+end
+
 -- Roblox Texture instances are diffuse overlays and have no roughness channel.
 -- A lightly reflective SmoothPlastic backing gives the existing concrete image
 -- the requested sealed/glossy finish while preserving its texture and geometry.
@@ -106,7 +127,9 @@ local function makePart(parent, name, cf, size, color, material, transparency)
 	p.Anchored = true
 	p.Size = size
 	p.CFrame = typeof(cf) == "CFrame" and cf or CFrame.new(cf)
-	p.Color = color
+	-- Every lobby part is born here, so this is the one place the palette lever
+	-- has to be applied for world geometry.
+	p.Color = saturatedLobbyColor(color)
 	p.Material = material or Enum.Material.SmoothPlastic
 	p.Transparency = transparency or 0
 	p.TopSurface = Enum.SurfaceType.Smooth
@@ -394,8 +417,8 @@ end
 local function addDonationLeaderboard(parent, center)
 	local model = Instance.new("Model")
 	model.Name = "ZyntraDonationLeaderboardBoard"
-	model:SetAttribute("LeaderboardVersion", 2)
-	model:SetAttribute("RankingScope", "Recorded donations plus utility Developer Products acknowledged by support-enabled servers; passes and earlier utilities excluded")
+	model:SetAttribute("LeaderboardVersion", 3)
+	model:SetAttribute("RankingScope", "Recorded donations, utility Developer Products and storefront passes/private servers (live receipts since 2026-09-10 plus the 2026-09-15 sales import); purchases before 2026-09-02 are not recorded")
 	model.Parent = parent
 
 	local panel = makePart(
@@ -431,7 +454,14 @@ local function addDonationLeaderboard(parent, center)
 	local gui = Instance.new("SurfaceGui")
 	gui.Name = "DonationLeaderboardDisplay"
 	gui.Face = Enum.NormalId.Right
-	gui.CanvasSize = Vector2.new(900, 660)
+	-- Trello #78. Roblox never draws a label above 100 px, so the only way to
+	-- grow this board is to put fewer pixels on the same studs. The panel face
+	-- is 18 x 12.6 studs; 560 x 392 keeps that aspect exactly (the old 900 x 660
+	-- also stretched the canvas 4.8% sideways) and drops 50.0 px/stud to
+	-- 31.11 px/stud, so every size below is worth 1.61x its old physical height
+	-- before the larger TextSizes are counted. Stroke and corner pixels are
+	-- divided by the same 1.61 so the enclosure keeps its real-world weight.
+	gui.CanvasSize = Vector2.new(560, 392)
 	gui.LightInfluence = 0
 	gui.AlwaysOnTop = false
 	gui.Parent = panel
@@ -443,98 +473,179 @@ local function addDonationLeaderboard(parent, center)
 	background.BorderSizePixel = 0
 	background.Parent = gui
 	local backgroundCorner = Instance.new("UICorner")
-	backgroundCorner.CornerRadius = UDim.new(0, 26)
+	backgroundCorner.CornerRadius = UDim.new(0, 16)
 	backgroundCorner.Parent = background
 	local border = Instance.new("UIStroke")
 	border.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
 	border.Color = COLORS.green
-	border.Thickness = 5
+	border.Thickness = 3
 	border.Transparency = 0.24
 	border.Parent = background
 
+	-- Everything below is full width and centre-aligned, so the column stays
+	-- centred on the face no matter what a row's text turns out to be.
 	local title = Instance.new("TextLabel")
 	title.Name = "Title"
-	title.Position = UDim2.fromOffset(38, 22)
-	title.Size = UDim2.new(1, -76, 0, 58)
+	title.Position = UDim2.fromOffset(0, 12)
+	title.Size = UDim2.new(1, 0, 0, 46)
 	title.BackgroundTransparency = 1
 	title.Font = Enum.Font.GothamBlack
 	title.Text = "TOP SUPPORTERS"
 	title.TextColor3 = COLORS.green
-	title.TextSize = 43
-	title.TextXAlignment = Enum.TextXAlignment.Left
+	title.TextSize = 44
+	title.TextXAlignment = Enum.TextXAlignment.Center
 	title.Parent = background
 
 	local status = Instance.new("TextLabel")
 	status.Name = "Status"
-	status.Position = UDim2.fromOffset(40, 78)
-	status.Size = UDim2.new(1, -80, 0, 30)
+	status.Position = UDim2.fromOffset(0, 60)
+	status.Size = UDim2.new(1, 0, 0, 22)
 	status.BackgroundTransparency = 1
 	status.Font = Enum.Font.Code
 	status.Text = "CONNECTING TO SUPPORT RANKINGS"
 	status.TextColor3 = Color3.fromRGB(215, 205, 165)
-	status.TextSize = 19
-	status.TextXAlignment = Enum.TextXAlignment.Left
+	status.TextSize = 17
+	status.TextXAlignment = Enum.TextXAlignment.Center
 	status.Parent = background
 
 	local divider = Instance.new("Frame")
-	divider.Position = UDim2.fromOffset(38, 116)
-	divider.Size = UDim2.new(1, -76, 0, 3)
+	divider.Position = UDim2.fromOffset(20, 90)
+	divider.Size = UDim2.new(1, -40, 0, 2)
 	divider.BackgroundColor3 = COLORS.green
 	divider.BackgroundTransparency = 0.25
 	divider.BorderSizePixel = 0
 	divider.Parent = background
 
-	local scope = Instance.new("TextLabel")
-	scope.Name = "RecordedSupportScope"
-	scope.Position = UDim2.fromOffset(40, 630)
-	scope.Size = UDim2.new(1, -80, 0, 22)
-	scope.BackgroundTransparency = 1
-	scope.Font = Enum.Font.Code
-	scope.Text = "PASSES & EARLIER TOKEN / RE-ENTRY PURCHASES NOT INCLUDED"
-	scope.TextColor3 = Color3.fromRGB(215, 205, 165)
-	scope.TextSize = 17
-	scope.TextXAlignment = Enum.TextXAlignment.Left
-	scope.Parent = background
+	-- Trello #100 deleted the "INCLUDES VERIFIED HISTORICAL PURCHASES" footer.
+	-- What it described still exists as the RankingScope attribute on the model
+	-- above, which is where the audit reads it from; the 26 px it occupied pays
+	-- for the taller row plates below.
 
-	local rowLabels = {}
+	-- 10 rows between the divider (92) and the bottom margin. Pitch 27 with a
+	-- 25 px plate puts the last plate's foot at 366, leaving 26 px clear of the
+	-- 392 canvas so no row reaches the background's 16 px corner radius.
+	--
+	-- Each row is a frame of three fixed-offset columns instead of one centred
+	-- string (Trello #100): a long name can no longer shove the rank or the
+	-- amount sideways, so all ten ranks and all ten amounts line up down the
+	-- board. Columns leave a 16 px gap after the rank and 12 px before the
+	-- amount, and the outer 12 px match the canvas margin on both sides.
+	-- Code is monospace at ~0.6 em, so at TextSize 20 the 324 px name column
+	-- holds 27 characters -- more than Roblox allows in a name, and more than
+	-- the 23 of "NO SUPPORT RECORDED YET". The 140 px amount column holds
+	-- "999,999 R$" outright; a seven-digit total is 4 px wider, and because the
+	-- column is right aligned that overhang lands in the 12 px gap and still
+	-- stops 8 px short of the name column.
+	local rows = {}
 	for rank = 1, 10 do
-		local row = Instance.new("TextLabel")
+		local row = Instance.new("Frame")
 		row.Name = string.format("Rank%02d", rank)
-		row.Position = UDim2.fromOffset(38, 128 + (rank - 1) * 50)
-		row.Size = UDim2.new(1, -76, 0, 42)
+		row.Position = UDim2.fromOffset(0, 98 + (rank - 1) * 27)
+		row.Size = UDim2.new(1, 0, 0, 25)
 		row.BackgroundColor3 = rank % 2 == 1 and Color3.fromRGB(15, 25, 22) or Color3.fromRGB(10, 17, 15)
 		row.BackgroundTransparency = 0.12
 		row.BorderSizePixel = 0
-		row.Font = Enum.Font.Code
-		row.Text = rank == 1 and "NO SUPPORT RECORDED YET" or ""
-		row.TextColor3 = rank <= 3 and Color3.fromRGB(236, 224, 165) or Color3.fromRGB(201, 225, 214)
-		row.TextSize = 24
-		row.TextXAlignment = Enum.TextXAlignment.Left
 		row.Parent = background
-		local padding = Instance.new("UIPadding")
-		padding.PaddingLeft = UDim.new(0, 16)
-		padding.PaddingRight = UDim.new(0, 16)
-		padding.Parent = row
 		local corner = Instance.new("UICorner")
-		corner.CornerRadius = UDim.new(0, 8)
+		corner.CornerRadius = UDim.new(0, 6)
 		corner.Parent = row
-		rowLabels[rank] = row
+
+		local tint = rank <= 3 and Color3.fromRGB(236, 224, 165) or Color3.fromRGB(201, 225, 214)
+		local function column(name, offsetX, width, alignment)
+			local label = Instance.new("TextLabel")
+			label.Name = name
+			label.Position = UDim2.fromOffset(offsetX, 0)
+			label.Size = UDim2.new(0, width, 1, 0)
+			label.BackgroundTransparency = 1
+			label.BorderSizePixel = 0
+			label.Font = Enum.Font.Code
+			label.Text = ""
+			label.TextColor3 = tint
+			label.TextSize = 20
+			label.TextXAlignment = alignment
+			label.TextYAlignment = Enum.TextYAlignment.Center
+			label.Parent = row
+			return label
+		end
+
+		local entry = {
+			Rank = column("Rank", 12, 44, Enum.TextXAlignment.Right),
+			Name = column("Name", 72, 324, Enum.TextXAlignment.Left),
+			Robux = column("Robux", 408, 140, Enum.TextXAlignment.Right),
+		}
+		-- A name longer than the column is cut with an ellipsis rather than
+		-- allowed to run under the amount; the clip is the belt to that brace.
+		entry.Name.TextTruncate = Enum.TextTruncate.AtEnd
+		entry.Name.ClipsDescendants = true
+		-- Pre-bind state is the old board's: a message, no rank, no amount.
+		entry.Name.Text = rank == 1 and "NO SUPPORT RECORDED YET" or ""
+		rows[rank] = entry
 	end
+
+	-- Thousands separator without a locale, and the one place a hostile number
+	-- (a NaN, an infinity, a float) could otherwise throw inside a changed
+	-- handler and leave a row frozen on stale text.
+	local function robuxText(amount)
+		if type(amount) ~= "number" or amount ~= amount or math.abs(amount) >= 1e15 then return "" end
+		local digits = string.format("%d", math.floor(amount))
+		local replaced
+		repeat
+			digits, replaced = string.gsub(digits, "^(-?%d+)(%d%d%d)", "%1,%2")
+		until replaced == 0
+		return digits .. " R$"
+	end
+
+	-- One renderer, three sources. Preferred: the Rank/Name/Robux attributes
+	-- ZyntraMonetization publishes beside the string. Fallback: the legacy
+	-- single string "01   NAME   •   1234 R$" it published before them, so the
+	-- board still reads correctly against a server that has not been updated
+	-- (the bullet is three UTF-8 bytes, none of them pattern magic). Anything
+	-- else -- "", "NO SUPPORT RECORDED YET" -- is a message, not a ranking, and
+	-- goes in the name column alone so nothing implies a rank or an amount that
+	-- was never published.
+	local function renderRow(entry, value, text)
+		local rank = value:GetAttribute("Rank")
+		local name = value:GetAttribute("Name")
+		local robux = value:GetAttribute("Robux")
+		if type(rank) ~= "number" then
+			local legacyRank, legacyName, legacyRobux = string.match(text, "^(%d+)%s+(.-)%s+•%s+(%d+) R%$$")
+			rank, name, robux = tonumber(legacyRank), legacyName, tonumber(legacyRobux)
+		end
+		if type(rank) == "number" and rank == rank and rank >= 1 and rank <= 99 then
+			entry.Rank.Text = string.format("%02d", math.floor(rank))
+			entry.Name.Text = type(name) == "string" and name or ""
+			entry.Robux.Text = robuxText(robux)
+		else
+			entry.Rank.Text = ""
+			entry.Name.Text = text
+			entry.Robux.Text = ""
+		end
+	end
+
+	-- The contract with ZyntraMonetization: these three attributes on Row01..10.
+	local ROW_ATTRIBUTES = {"Rank", "Name", "Robux"}
 
 	task.spawn(function()
 		local values = ReplicatedStorage:WaitForChild("ZyntraDonationLeaderboard", 15)
 		if not values or not model.Parent then return end
 		local connections = {}
-		local function bind(value, render)
+		-- Attribute writes do not fire Changed on the value, so a row also has
+		-- to listen to the three attributes it renders from.
+		local function bind(value, render, attributes)
 			if not value or not value:IsA("StringValue") then return end
 			render(value.Value)
-			connections[#connections + 1] = value:GetPropertyChangedSignal("Value"):Connect(function()
+			local function update()
 				if model.Parent then render(value.Value) end
-			end)
+			end
+			connections[#connections + 1] = value:GetPropertyChangedSignal("Value"):Connect(update)
+			for _, attribute in ipairs(attributes or {}) do
+				connections[#connections + 1] = value:GetAttributeChangedSignal(attribute):Connect(update)
+			end
 		end
 		bind(values:FindFirstChild("Status"), function(value) status.Text = value end)
-		for rank, label in ipairs(rowLabels) do
-			bind(values:FindFirstChild(string.format("Row%02d", rank)), function(value) label.Text = value end)
+		for rank, entry in ipairs(rows) do
+			local value = values:FindFirstChild(string.format("Row%02d", rank))
+			bind(value, function(text) renderRow(entry, value, text) end, ROW_ATTRIBUTES)
 		end
 		connections[#connections + 1] = model.AncestryChanged:Connect(function(_, newParent)
 			if newParent then return end
@@ -1108,10 +1219,14 @@ local function addQueueStation(parent, roomCenter, index, offset, color, active,
 	padGui.AlwaysOnTop = false
 	padGui.Parent = padVisual
 
+	-- The pad parts are invisible; this ring IS the painted floor marking, so it
+	-- follows the surface palette rather than the UI palette.
+	local padColor = saturatedLobbyColor(color)
+
 	local circle = Instance.new("Frame")
 	circle.Name = "Circle"
 	circle.Size = UDim2.fromScale(1, 1)
-	circle.BackgroundColor3 = color
+	circle.BackgroundColor3 = padColor
 	circle.BackgroundTransparency = active and 0.78 or 0.91
 	circle.BorderSizePixel = 0
 	circle.Parent = padGui
@@ -1123,7 +1238,7 @@ local function addQueueStation(parent, roomCenter, index, offset, color, active,
 	local outline = Instance.new("UIStroke")
 	outline.Name = "CircularOutline"
 	outline.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-	outline.Color = color
+	outline.Color = padColor
 	outline.Thickness = active and 11 or 8
 	outline.Transparency = active and 0.08 or 0.58
 	outline.LineJoinMode = Enum.LineJoinMode.Round
@@ -1262,15 +1377,15 @@ local function styleLevelOneBay(roomModel, roomCenter, side, roomRadius, roomHei
 				local role, face = spec[1], spec[2]
 				object.Material = Enum.Material.SmoothPlastic
 				if role == "wall" then
-					object.Color = LEVEL_ONE_BAY_STYLE.wallColor
+					object.Color = saturatedLobbyColor(LEVEL_ONE_BAY_STYLE.wallColor)
 					object:SetAttribute("TunnelTextureRole", "Level1Wall")
 					addLevelOneTexture(object, LEVEL_ONE_BAY_STYLE.wallTexture, {face}, LEVEL_ONE_BAY_STYLE.tile)
 				elseif role == "floor" then
-					object.Color = LEVEL_ONE_BAY_STYLE.floorColor
+					object.Color = saturatedLobbyColor(LEVEL_ONE_BAY_STYLE.floorColor)
 					object:SetAttribute("TunnelTextureRole", "Level1Floor")
 					addLevelOneTexture(object, LEVEL_ONE_BAY_STYLE.floorTexture, {face}, LEVEL_ONE_BAY_STYLE.tile)
 				else
-					object.Color = LEVEL_ONE_BAY_STYLE.ceilingColor
+					object.Color = saturatedLobbyColor(LEVEL_ONE_BAY_STYLE.ceilingColor)
 					object:SetAttribute("TunnelTextureRole", "Level1Ceiling")
 					addLevelOneTexture(object, LEVEL_ONE_BAY_STYLE.ceilingTexture, {face}, 8)
 				end
@@ -1429,9 +1544,9 @@ local function styleLevelTwoBay(roomModel, roomCenter, side, roomRadius, roomHei
 			if spec then
 				local role, face = spec[1], spec[2]
 				object.Material = Enum.Material.SmoothPlastic
-				object.Color = role == "wall" and LEVEL_TWO_BAY_STYLE.wallColor
+				object.Color = saturatedLobbyColor(role == "wall" and LEVEL_TWO_BAY_STYLE.wallColor
 					or role == "floor" and LEVEL_TWO_BAY_STYLE.floorColor
-					or LEVEL_TWO_BAY_STYLE.ceilingColor
+					or LEVEL_TWO_BAY_STYLE.ceilingColor)
 				object:SetAttribute("TunnelTextureRole", "LobbyPoolrooms" .. role)
 				addLobbyThemeTexture(object, "LobbyLevel2TileTexture",
 					LEVEL_TWO_BAY_STYLE.tileTexture, {face}, LEVEL_TWO_BAY_STYLE.tile,
@@ -1567,7 +1682,7 @@ local function cloneLobbyLevelThreeFurniture(templateName, parent, name, cframe,
 	object.CanQuery = false
 	object.CFrame = cframe
 	object.Size = size
-	if color then object.Color = color end
+	if color then object.Color = saturatedLobbyColor(color) end
 	object:SetAttribute("LobbyBayDecorLevel", 3)
 	object.Parent = parent
 	return object
@@ -1593,20 +1708,20 @@ local function styleLevelThreeBay(roomModel, roomCenter, side, roomRadius, roomH
 				local role, face = spec[1], spec[2]
 				clearLobbyConcreteTextures(object)
 				if role == "floor" then
-					object.Color = LEVEL_THREE_BAY_STYLE.partyCarpetColor
+					object.Color = saturatedLobbyColor(LEVEL_THREE_BAY_STYLE.partyCarpetColor)
 					object.Material = Enum.Material.Carpet
 					object:SetAttribute("TunnelTextureRole", "LobbyMallPartyFloor")
 					addLobbyThemeTexture(object, "LobbyLevel3PartyCarpet",
 						LEVEL_THREE_BAY_STYLE.partyCarpetTexture, {face},
 						LEVEL_THREE_BAY_STYLE.carpetTile, LEVEL_THREE_BAY_STYLE.carpetTile)
 				elseif role == "ceiling" then
-					object.Color = LEVEL_THREE_BAY_STYLE.ceilingColor
+					object.Color = saturatedLobbyColor(LEVEL_THREE_BAY_STYLE.ceilingColor)
 					object.Material = Enum.Material.Plaster
 					object:SetAttribute("TunnelTextureRole", "LobbyMallDropCeiling")
 				else
 					-- Carry the entrance's existing red/orange plaster finish around
 					-- the entire chamber; the rear wall no longer swaps to wallpaper.
-					object.Color = LEVEL_THREE_BAY_STYLE.orangeWallColor
+					object.Color = saturatedLobbyColor(LEVEL_THREE_BAY_STYLE.orangeWallColor)
 					object.Material = Enum.Material.Plaster
 					object.Reflectance = 0
 					object:SetAttribute("TunnelTextureRole", "LobbyMallOrangeWall")
@@ -2041,570 +2156,15 @@ local function addConcourseBench(parent, center, side, zOffset)
 end
 
 
-local function addGameplayShopkeeper(parent, center, zOffset)
-	-- The same authored yellow hazmat rig players use in every level. It is
-	-- cloned as a deliberately inert display character so no gameplay scripts,
-	-- collisions, prompts, or movement controllers leak into the lobby.
-	local source = game:GetService("StarterPlayer"):FindFirstChild("StarterCharacter")
-		or game:GetService("ServerStorage"):FindFirstChild("StarterCharacter")
-	if not source or not source:IsA("Model") then
-		warn("[TunnelLobbyBuilder] Shared gameplay StarterCharacter was unavailable for the shopkeeper")
-		return nil
-	end
-
-	local character = source:Clone()
-	character.Name = "ZyntraShopkeeper"
-	character:SetAttribute("GameplayRigClone", true)
-	character:SetAttribute("StandardYellowAppearance", true)
-	character:SetAttribute("VisualOnly", true)
-
-	for _, descendant in ipairs(character:GetDescendants()) do
-		if descendant:IsA("BaseScript") or descendant:IsA("ModuleScript") or descendant:IsA("Tool") or descendant:IsA("ProximityPrompt") then
-			descendant:Destroy()
-		elseif descendant:IsA("BasePart") then
-			descendant.Anchored = true
-			descendant.CanCollide = false
-			descendant.CanTouch = false
-			descendant.CanQuery = false
-			descendant.Massless = true
-			descendant.CastShadow = true
-		end
-	end
-
-	local humanoid = character:FindFirstChildOfClass("Humanoid")
-	if humanoid then
-		humanoid.DisplayDistanceType = Enum.HumanoidDisplayDistanceType.None
-		humanoid.BreakJointsOnDeath = false
-		humanoid.AutoRotate = false
-	end
-
-	character.Parent = parent
-	-- A low staff platform and forward placement keep the authentic rig visible
-	-- above the counter without scaling or recoloring it.
-	local feetY = center.Y + 1.16
-	character:PivotTo(CFrame.lookAt(
-		Vector3.new(center.X + 29.15, feetY, center.Z + zOffset),
-		Vector3.new(center.X, feetY, center.Z + zOffset)
-	))
-	return character
-end
-
-local function addSupplyKiosk(parent, center)
-	local kiosk = Instance.new("Model")
-	kiosk.Name = "ZyntraSupplyKiosk"
-	kiosk:SetAttribute("VisualOnly", false)
-	kiosk:SetAttribute("ShopFunctional", true)
-	kiosk:SetAttribute("SupplyKioskVersion", 6)
-	kiosk:SetAttribute("Placement", "Right service ledge between Level 2 and Level 4")
-	kiosk:SetAttribute("ArtDirection", "Zyntra premium survival shop")
-	kiosk.Parent = parent
-
-	local zOffset = -35
-	local metal = Color3.fromRGB(20, 27, 29)
-	local metalMid = Color3.fromRGB(37, 48, 49)
-	local metalLight = Color3.fromRGB(67, 78, 76)
-	local blackGlass = Color3.fromRGB(5, 12, 14)
-	local cyan = COLORS.zyntraCyan
-	local amber = COLORS.amber
-	local warm = Color3.fromRGB(255, 224, 166)
-	local red = Color3.fromRGB(255, 88, 68)
-
-	local function offsetCF(x, y, z, rx, ry, rz)
-		return CFrame.new(center + Vector3.new(x, y, zOffset + z))
-			* CFrame.Angles(math.rad(rx or 0), math.rad(ry or 0), math.rad(rz or 0))
-	end
-
-	local function shopPart(name, cf, size, color, material, transparency, visualOnly)
-		local part = makePart(kiosk, name, cf, size, color, material, transparency)
-		part:SetAttribute("ShopDecor", true)
-		if visualOnly == true then
-			part.CanCollide = false
-			part.CanTouch = false
-			part.CanQuery = false
-		end
-		return part
-	end
-
-	local function neonStrip(name, cf, size, color, brightness, range, face)
-		local strip = shopPart(name, cf, size, color, Enum.Material.Neon, 0.03, true)
-		if brightness and brightness > 0 then
-			local light = Instance.new("SurfaceLight")
-			light.Name = name .. "Light"
-			light.Face = face or Enum.NormalId.Left
-			light.Color = color
-			light.Brightness = brightness
-			light.Range = range or 8
-			light.Angle = 105
-			light.Shadows = false
-			light.Parent = strip
-		end
-		return strip
-	end
-
-	-- Architectural shell: a recessed equipment booth with a strong silhouette
-	-- that is readable from the road and still leaves the service path open.
-	local floorPad = shopPart(
-		"ShopFloorPad",
-		offsetCF(29.55, 0.69, 0),
-		Vector3.new(7.7, 0.18, 19.5),
-		Color3.fromRGB(38, 46, 45),
-		Enum.Material.DiamondPlate
-	)
-	floorPad:SetAttribute("PremiumShopFloor", true)
-
-	local backWall = shopPart(
-		"ShopBackWall",
-		offsetCF(32.78, 6.2, 0),
-		Vector3.new(0.65, 11.3, 19.5),
-		metal,
-		Enum.Material.Metal
-	)
-	backWall:SetAttribute("PremiumShopShell", true)
-
-	local innerBack = shopPart(
-		"ShopRecessBackdrop",
-		offsetCF(32.42, 6.35, 0),
-		Vector3.new(0.12, 9.9, 17.8),
-		blackGlass,
-		Enum.Material.SmoothPlastic,
-		0,
-		true
-	)
-	innerBack.Reflectance = 0.18
-
-	for _, zSide in ipairs({ -1, 1 }) do
-		shopPart(
-			"ShopSideWing",
-			offsetCF(29.65, 6.2, zSide * 9.55),
-			Vector3.new(7.4, 11.3, 0.72),
-			metalMid,
-			Enum.Material.Metal
-		)
-		shopPart(
-			"ShopFaceColumn",
-			offsetCF(26.02, 6.1, zSide * 9.5),
-			Vector3.new(0.62, 11.5, 0.62),
-			metalLight,
-			Enum.Material.Metal
-		)
-		neonStrip(
-			"ShopPortalVerticalGlow",
-			offsetCF(25.68, 6.15, zSide * 9.5),
-			Vector3.new(0.13, 10.8, 0.18),
-			cyan,
-			0.34,
-			8,
-			Enum.NormalId.Left
-		)
-		shopPart(
-			"ShopHazardCap",
-			offsetCF(25.78, 1.05, zSide * 9.5),
-			Vector3.new(0.38, 1.05, 1.05),
-			amber,
-			Enum.Material.Metal
-		)
-	end
-
-	local canopy = shopPart(
-		"ShopCanopy",
-		offsetCF(29.5, 11.8, 0, 0, 0, -3),
-		Vector3.new(8.1, 0.8, 19.6),
-		metal,
-		Enum.Material.Metal
-	)
-	canopy:SetAttribute("PremiumShopShell", true)
-	shopPart(
-		"ShopCanopyFascia",
-		offsetCF(25.95, 11.45, 0),
-		Vector3.new(0.72, 1.22, 19.5),
-		metalMid,
-		Enum.Material.Metal
-	)
-	neonStrip(
-		"ShopPortalTopGlow",
-		offsetCF(25.56, 11.05, 0),
-		Vector3.new(0.14, 0.16, 18.5),
-		cyan,
-		0.28,
-		10,
-		Enum.NormalId.Left
-	)
-
-	-- Layered masthead: clear at a glance, but grounded in the same ZYNTRA
-	-- transit language as the doors and objective terminals.
-	local sign = shopPart(
-		"ShopOverheadSign",
-		offsetCF(25.56, 9.45, 0),
-		Vector3.new(0.3, 2.7, 14.8),
-		metal,
-		Enum.Material.Metal,
-		0,
-		true
-	)
-	local signTitle, signSubtitle = addBoard(
-		sign,
-		Enum.NormalId.Left,
-		"SHOP",
-		"EQUIPMENT  •  UPGRADES  •  RECOVERY",
-		cyan
-	)
-	signTitle:SetAttribute("ShopMasthead", true)
-	signSubtitle:SetAttribute("ShopMasthead", true)
-	neonStrip("ShopSignTopTrim", offsetCF(25.38, 10.92, 0), Vector3.new(0.12, 0.13, 15.2), amber, nil, nil)
-	neonStrip("ShopSignBottomTrim", offsetCF(25.38, 7.98, 0), Vector3.new(0.12, 0.13, 15.2), cyan, nil, nil)
-	for marker = -3, 3 do
-		neonStrip(
-			"ShopHeaderMarker",
-			offsetCF(25.34, 11.25, marker * 2.2),
-			Vector3.new(0.12, 0.22, 0.72),
-			marker == 0 and amber or cyan,
-			nil,
-			nil
-		)
-	end
-
-	-- Recessed merchandise bays use recognizable field gear instead of colored
-	-- blocks. The displays are deliberately non-interactive; the real purchase
-	-- entry point remains the single audited terminal below.
-	local productBays = {
-		{ z = -5.7, title = "LUMEN KIT", subtitle = "FIELD LIGHT // MK II", accent = cyan },
-		{ z = 0, title = "SIGNAL KIT", subtitle = "TEAM COMMS // SYNC", accent = amber },
-		{ z = 5.7, title = "RECOVERY", subtitle = "EMERGENCY // RE-ENTRY", accent = red },
-	}
-	for index, bay in ipairs(productBays) do
-		local recess = shopPart(
-			"ProductBay" .. index .. "Recess",
-			offsetCF(32.22, 6.1, bay.z),
-			Vector3.new(0.26, 4.9, 4.55),
-			Color3.fromRGB(10, 18, 19),
-			Enum.Material.SmoothPlastic,
-			0,
-			true
-		)
-		recess.Reflectance = 0.12
-		shopPart(
-			"ProductBay" .. index .. "Shelf",
-			offsetCF(31.15, 4.35, bay.z),
-			Vector3.new(2.25, 0.22, 4.35),
-			metalLight,
-			Enum.Material.Metal,
-			0,
-			true
-		)
-		neonStrip(
-			"ProductBay" .. index .. "ShelfGlow",
-			offsetCF(30.0, 4.23, bay.z),
-			Vector3.new(0.11, 0.12, 4),
-			bay.accent,
-			0.12,
-			4,
-			Enum.NormalId.Left
-		)
-		for _, zEdge in ipairs({ -1, 1 }) do
-			neonStrip(
-				"ProductBay" .. index .. "Edge",
-				offsetCF(32.04, 6.1, bay.z + zEdge * 2.17),
-				Vector3.new(0.12, 4.55, 0.1),
-				bay.accent,
-				nil,
-				nil
-			)
-		end
-		local card = shopPart(
-			"ProductBay" .. index .. "Info",
-			offsetCF(31.96, 8.08, bay.z),
-			Vector3.new(0.16, 1.05, 3.95),
-			metal,
-			Enum.Material.Metal,
-			0,
-			true
-		)
-		addBoard(card, Enum.NormalId.Left, bay.title, bay.subtitle, bay.accent)
-	end
-
-	-- Physical product silhouettes.
-	local flashlightBody = shopPart(
-		"DisplayLumenFlashlight",
-		offsetCF(30.75, 5.35, -5.7),
-		Vector3.new(1.75, 0.62, 0.62),
-		metalLight,
-		Enum.Material.Metal,
-		0,
-		true
-	)
-	flashlightBody.Shape = Enum.PartType.Cylinder
-	local flashlightLens = shopPart(
-		"DisplayLumenLens",
-		offsetCF(29.84, 5.35, -5.7),
-		Vector3.new(0.16, 0.72, 0.72),
-		cyan,
-		Enum.Material.Neon,
-		0.04,
-		true
-	)
-	flashlightLens.Shape = Enum.PartType.Cylinder
-	shopPart("DisplayLumenGrip", offsetCF(30.92, 4.92, -5.7, 0, 0, -18), Vector3.new(0.45, 0.92, 0.48), metal, Enum.Material.Metal, 0, true)
-
-	local radio = shopPart(
-		"DisplaySignalRadio",
-		offsetCF(30.72, 5.4, 0),
-		Vector3.new(1.25, 1.65, 1.75),
-		metalLight,
-		Enum.Material.Metal,
-		0,
-		true
-	)
-	shopPart("DisplaySignalScreen", offsetCF(30.06, 5.56, 0), Vector3.new(0.08, 0.62, 1.14), cyan, Enum.Material.Neon, 0.12, true)
-	shopPart("DisplaySignalAntenna", offsetCF(30.72, 6.72, -0.58, 0, 0, 8), Vector3.new(0.14, 1.25, 0.14), metalLight, Enum.Material.Metal, 0, true)
-	for zDot = -1, 1 do
-		shopPart("DisplaySignalDial", offsetCF(30.02, 4.95, zDot * 0.45), Vector3.new(0.12, 0.24, 0.24), amber, Enum.Material.Neon, 0, true).Shape = Enum.PartType.Cylinder
-	end
-
-	local recoveryCase = shopPart(
-		"DisplayRecoveryCase",
-		offsetCF(30.74, 5.35, 5.7),
-		Vector3.new(1.28, 1.55, 2.2),
-		Color3.fromRGB(111, 54, 45),
-		Enum.Material.Metal,
-		0,
-		true
-	)
-	recoveryCase:SetAttribute("DisplayProduct", "EmergencyReentry")
-	shopPart("RecoveryCrossVertical", offsetCF(30.08, 5.35, 5.7), Vector3.new(0.1, 0.92, 0.27), red, Enum.Material.Neon, 0, true)
-	shopPart("RecoveryCrossHorizontal", offsetCF(30.08, 5.35, 5.7), Vector3.new(0.1, 0.28, 0.86), red, Enum.Material.Neon, 0, true)
-	shopPart("RecoveryCaseHandle", offsetCF(30.72, 6.28, 5.7), Vector3.new(0.3, 0.34, 1.15), metalLight, Enum.Material.Metal, 0, true)
-
-	-- Storage canisters and industrial utility details give the booth a used,
-	-- believable service-station density without dirtying the clean sci-fi read.
-	for index, z in ipairs({ -8.1, 8.1 }) do
-		shopPart(
-			"ShopUtilityShelf" .. index,
-			offsetCF(31.25, 3.05, z),
-			Vector3.new(2.2, 0.22, 2.15),
-			metalLight,
-			Enum.Material.Metal,
-			0,
-			true
-		)
-		for canister = -1, 1 do
-			local can = shopPart(
-				"ShopSupplyCanister",
-				offsetCF(31.05, 3.72, z + canister * 0.62),
-				Vector3.new(0.92, 0.68, 0.68),
-				canister == -1 and metalLight or Color3.fromRGB(95, 88, 58),
-				Enum.Material.Metal,
-				0,
-				true
-			)
-			can.Shape = Enum.PartType.Cylinder
-			neonStrip(
-				"ShopCanisterBand",
-				offsetCF(30.57, 3.72, z + canister * 0.62),
-				Vector3.new(0.06, 0.74, 0.74),
-				index == 1 and cyan or amber,
-				nil,
-				nil
-			).Shape = Enum.PartType.Cylinder
-		end
-	end
-
-	-- Counter with a lit telemetry window, product scanner and protected terminal.
-	local counterFront = shopPart(
-		"ShopCounterFront",
-		offsetCF(27.0, 2.2, 0),
-		Vector3.new(1.25, 3.35, 15.7),
-		metal,
-		Enum.Material.Metal
-	)
-	counterFront:SetAttribute("PremiumShopCounter", true)
-	shopPart(
-		"ShopCounterTop",
-		offsetCF(27.62, 4.02, 0),
-		Vector3.new(2.65, 0.4, 16.35),
-		metalLight,
-		Enum.Material.Metal
-	)
-	neonStrip("ShopCounterTopGlow", offsetCF(26.25, 3.82, 0), Vector3.new(0.12, 0.16, 15.55), cyan, 0.18, 7, Enum.NormalId.Left)
-	neonStrip("ShopCounterBottomGlow", offsetCF(26.33, 0.62, 0), Vector3.new(0.1, 0.12, 14.8), amber, nil, nil)
-
-	local telemetryGlass = shopPart(
-		"ShopCounterTelemetryGlass",
-		offsetCF(26.34, 2.1, -2.2),
-		Vector3.new(0.09, 1.9, 8.5),
-		Color3.fromRGB(17, 53, 52),
-		Enum.Material.Glass,
-		0.32,
-		true
-	)
-	telemetryGlass.Reflectance = 0.18
-	for index = 1, 7 do
-		local height = 0.35 + ((index * 3) % 5) * 0.22
-		neonStrip(
-			"TelemetryBar" .. index,
-			offsetCF(26.27, 1.48 + height * 0.5, -5.35 + index * 0.78),
-			Vector3.new(0.06, height, 0.32),
-			index == 7 and amber or cyan,
-			nil,
-			nil
-		)
-	end
-
-	for index = 1, 3 do
-		local cabinet = shopPart(
-			"ShopCounterCabinet" .. index,
-			offsetCF(26.32, 2.08, 4.15 + index * 1.45),
-			Vector3.new(0.09, 1.75, 1.22),
-			metalMid,
-			Enum.Material.Metal,
-			0,
-			true
-		)
-		shopPart(
-			"ShopCounterCabinetHandle" .. index,
-			cabinet.CFrame * CFrame.new(-0.08, 0.48, 0),
-			Vector3.new(0.08, 0.08, 0.62),
-			index == 3 and amber or cyan,
-			Enum.Material.Neon,
-			0,
-			true
-		)
-	end
-
-	local scannerPad = shopPart(
-		"ShopProductScanner",
-		offsetCF(26.78, 4.24, 0.5),
-		Vector3.new(1.15, 0.08, 2.45),
-		blackGlass,
-		Enum.Material.Glass,
-		0.18,
-		true
-	)
-	scannerPad.Reflectance = 0.28
-	neonStrip("ShopScannerLine", offsetCF(26.72, 4.31, 0.5), Vector3.new(0.75, 0.05, 0.1), amber, nil, nil)
-
-	local accessTerminal = shopPart(
-		"ShopAccessTerminal",
-		offsetCF(25.93, 5.05, 6.05, 0, 0, 0),
-		Vector3.new(0.34, 2.25, 3.65),
-		metal,
-		Enum.Material.Metal,
-		0,
-		true
-	)
-	accessTerminal:SetAttribute("ShopInteraction", true)
-	accessTerminal:SetAttribute("InteractionRole", "OpenZyntraStore")
-	addBoard(accessTerminal, Enum.NormalId.Left, "OPEN SHOP", "PRESS  E  //  EQUIPMENT", cyan)
-	for _, ySide in ipairs({ -1, 1 }) do
-		neonStrip(
-			"ShopTerminalRail",
-			offsetCF(25.73, 5.05 + ySide * 1.2, 6.05),
-			Vector3.new(0.12, 0.1, 3.9),
-			ySide == 1 and amber or cyan,
-			nil,
-			nil
-		)
-	end
-
-	local prompt = Instance.new("ProximityPrompt")
-	prompt.Name = "ZyntraShopPrompt"
-	prompt.ActionText = "OPEN SHOP"
-	prompt.ObjectText = "SHOP"
-	prompt.KeyboardKeyCode = Enum.KeyCode.E
-	prompt.GamepadKeyCode = Enum.KeyCode.ButtonX
-	prompt.HoldDuration = 0
-	prompt.MaxActivationDistance = 10
-	prompt.RequiresLineOfSight = false
-	prompt.Style = Enum.ProximityPromptStyle.Default
-	prompt.Parent = accessTerminal
-
-	-- A small floor approach zone makes the store legible even when the tunnel
-	-- is crowded, without adding queue rails that could obstruct players.
-	local approach = shopPart(
-		"ShopApproachInlay",
-		offsetCF(22.65, 0.08, 4.2),
-		Vector3.new(5.2, 0.06, 7.4),
-		Color3.fromRGB(19, 32, 32),
-		Enum.Material.SmoothPlastic,
-		0.12,
-		true
-	)
-	addBoard(approach, Enum.NormalId.Top, "SHOP ACCESS", "APPROACH TERMINAL", cyan)
-	for _, xSide in ipairs({ -1, 1 }) do
-		neonStrip(
-			"ShopApproachEdge",
-			offsetCF(22.65 + xSide * 2.55, 0.12, 4.2),
-			Vector3.new(0.1, 0.05, 7.5),
-			cyan,
-			nil,
-			nil
-		)
-	end
-
-	local staffPlatform = shopPart(
-		"ShopkeeperPlatform",
-		offsetCF(29.35, 0.94, -3.25),
-		Vector3.new(3.6, 0.52, 4.2),
-		metalLight,
-		Enum.Material.DiamondPlate,
-		0,
-		true
-	)
-	staffPlatform:SetAttribute("ShopkeeperDisplay", true)
-	for _, zSide in ipairs({ -1, 1 }) do
-		neonStrip(
-			"ShopkeeperPlatformGlow",
-			offsetCF(27.52, 1.02, -3.25 + zSide * 2.0),
-			Vector3.new(0.12, 0.14, 0.85),
-			amber,
-			nil,
-			nil
-		)
-	end
-
-	-- Warm keys preserve the human focal point while cyan display lights make
-	-- the gear bays feel premium. Brightness stays below the lobby fixtures.
-	for index, z in ipairs({ -5.7, 0, 5.7 }) do
-		local downlight = neonStrip(
-			"ShopDisplayDownlight" .. index,
-			offsetCF(29.85, 10.72, z),
-			Vector3.new(2.7, 0.12, 3.6),
-			index == 2 and warm or cyan,
-			nil,
-			nil
-		)
-		local light = Instance.new("SurfaceLight")
-		light.Name = "ShopDisplayLight" .. index
-		light.Face = Enum.NormalId.Bottom
-		light.Color = index == 2 and warm or cyan
-		light.Brightness = index == 2 and 0.65 or 0.42
-		light.Range = 10
-		light.Angle = 92
-		light.Shadows = index == 2
-		light.Parent = downlight
-	end
-
-	local keyLightMount = shopPart(
-		"ShopkeeperKeyLightMount",
-		offsetCF(27.0, 6.5, -3.25),
-		Vector3.new(0.1, 0.1, 0.1),
-		warm,
-		Enum.Material.SmoothPlastic,
-		1,
-		true
-	)
-	local keyLight = Instance.new("SpotLight")
-	keyLight.Name = "ShopkeeperKeyLight"
-	keyLight.Face = Enum.NormalId.Right
-	keyLight.Color = warm
-	keyLight.Brightness = 1.9
-	keyLight.Range = 9
-	keyLight.Angle = 76
-	keyLight.Shadows = false
-	keyLight.Parent = keyLightMount
-
-	addGameplayShopkeeper(kiosk, center, zOffset - 3.25)
-	return kiosk
-end
+-- addSupplyKiosk and addGameplayShopkeeper were deleted on 2026-09-16. They
+-- built ZyntraSupplyKiosk at (27, 36, -795): a booth with its own SHOP
+-- masthead, "ZYNTRA // SUPPLY" fascia, counter, telemetry, canisters, an
+-- ShopAccessTerminal carrying the ZyntraShopPrompt, and a cloned shopkeeper
+-- character on a lit platform. It sat 12 studs from LobbyShopDisplay's own
+-- frontage, so the lobby had two shops both saying SHOP. The owner asked for
+-- one, so the booth went and LobbyShopDisplay v4 now runs the whole wall
+-- between the Level 2 and Level 4 gates. ZyntraStore still binds any prompt
+-- named ZyntraShopPrompt; there is simply no longer one to find.
 
 local function addPartyButton(parent, center)
 	local model = Instance.new("Model")
@@ -2732,7 +2292,6 @@ local function addLobbyConcourse(parent, center, lobbyModel)
 	end
 	addConcourseBench(concourse, center, -1, 54)
 	addConcourseBench(concourse, center, 1, 54)
-	addSupplyKiosk(concourse, center)
 	addDonationLeaderboard(concourse, center)
 	addPartyButton(concourse, center)
 
@@ -2786,8 +2345,12 @@ local function addLobbyConcourse(parent, center, lobbyModel)
 	prompt.RequiresLineOfSight = false
 	prompt.Parent = button
 
-	local baseSignalColor = Color3.fromRGB(39, 126, 121)
-	local pulseSignalColor = Color3.fromRGB(86, 255, 173)
+	-- makePart raises saturation on the way in, so the sweep's tweens and the
+	-- idle restore below have to aim at the values it actually wrote, not at
+	-- the raw literals. The node below is still built from the raw source.
+	local baseSignalSource = Color3.fromRGB(39, 126, 121)
+	local baseSignalColor = saturatedLobbyColor(baseSignalSource)
+	local pulseSignalColor = saturatedLobbyColor(Color3.fromRGB(86, 255, 173))
 	local signalGroups = {}
 	for z = -112, 112, 12 do
 		local group = {}
@@ -2797,7 +2360,7 @@ local function addLobbyConcourse(parent, center, lobbyModel)
 				"TransitSignalNode",
 				CFrame.new(center + Vector3.new(side * 14.75, 0.13, z)),
 				Vector3.new(0.42, 0.12, 2.25),
-				baseSignalColor,
+				baseSignalSource,
 				Enum.Material.Neon,
 				0.28
 			)
@@ -2859,7 +2422,7 @@ local function addLobbyConcourse(parent, center, lobbyModel)
 		end
 
 		task.delay(#signalGroups * 0.075 + 1.05, function()
-			if button.Parent then button.Color = Color3.fromRGB(45, 157, 112) end
+			if button.Parent then button.Color = saturatedLobbyColor(Color3.fromRGB(45, 157, 112)) end
 			if signalTitle.Parent then signalTitle.Text = "SIGNAL SWEEP" end
 			if signalSubtitle.Parent then signalSubtitle.Text = "PRESS TO PULSE THE TRANSIT LINE" end
 			if prompt.Parent then prompt.Enabled = true end
@@ -3206,6 +2769,11 @@ function Builder.Build(center)
 		"RETURN TO YOUR ASSIGNED ACCESS BAY",
 		COLORS.red
 	)
+
+	-- The SHOP frontage on the right ledge (card 88). Spawned, not called: a
+	-- fault in the shop must never cost the lobby, and a module that is not in
+	-- the place yet must never hold the build.
+	task.spawn(function() require(script.Parent:WaitForChild("LobbyShopDisplay")).Build(model, {Center = center}) end)
 
 	return model, spawn, stations
 end

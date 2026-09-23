@@ -412,6 +412,12 @@ local MOVEMENT_CONTROLS = {
 	TouchDropGlowstick = true,
 	FlashlightPower = true,
 	ProtectionUse = true,
+	-- EQUIPMENT_SLOTS_20260916 (Trello #101). The two stored consumables sit in
+	-- the same reserved cluster as the shield -- same list in UIDevice, same
+	-- arithmetic -- so like it they are exempt from the movement-zone test and
+	-- still have to stay onscreen, stay >= 44 and overlap nothing.
+	SpeedPotionUse = true,
+	RouteMarkerPlace = true,
 }
 
 local FULLSCREEN_OVERLAYS = {
@@ -1019,6 +1025,10 @@ local function resetScenario(inRound: boolean?)
 	elseif terminal and terminal:IsA("GuiObject") then
 		terminal.Visible = false
 	end
+	-- THE WHOLE RAIL, not the two buttons it happened to hold when this was
+	-- written. It grew to five on 2026-09-16 (cards #103 / #104), and a reset that
+	-- puts three of them back leaves the other two drawn into the next scenario --
+	-- a state leak that then reads as a real overlap finding.
 	local openButton = store and store:FindFirstChild("ZyntraOpenButton")
 	if openButton and openButton:IsA("GuiObject") then
 		-- LAST, and after a yield. Clearing InRound above makes ZyntraStore's own
@@ -1029,9 +1039,12 @@ local function resetScenario(inRound: boolean?)
 		task.wait()
 		openButton.Visible = not inRound
 	end
-	local shopButton = store and store:FindFirstChild("ZyntraShopButton")
-	if shopButton and shopButton:IsA("GuiObject") then
-		shopButton.Visible = not inRound
+	for _, name in ipairs({"ZyntraShopButton", "ZyntraRewardsButton",
+		"ZyntraWheelButton", "ZyntraMusicButton"}) do
+		local railButton = store and store:FindFirstChild(name)
+		if railButton and railButton:IsA("GuiObject") then
+			railButton.Visible = not inRound
+		end
 	end
 end
 
@@ -1265,7 +1278,11 @@ function UIRegression.Scenarios(): {any}
 		{Name = "store-modal", Requires = {
 			"Terminal", "TerminalHeader", "TerminalTabs", "TerminalContent",
 			"TerminalStatus",
-		}, Forbids = {"ZyntraOpenButton", "ZyntraShopButton"},
+		-- All FIVE rail buttons, not the two this row was written against: REWARDS
+		-- and WHEEL open modals of their own, so one left drawn under the terminal
+		-- is a second screen-owning modal one tap away.
+		}, Forbids = {"ZyntraOpenButton", "ZyntraShopButton", "ZyntraRewardsButton",
+			"ZyntraWheelButton", "ZyntraMusicButton"},
 			TouchTargets = {"TerminalHeader.CloseTerminal"}, Setup = function()
 			resetScenario()
 			local store = findGui("ZyntraStore")
@@ -3490,6 +3507,11 @@ function Fit.bodyQueueModalMatrix(): (string, number)
 		TouchRunHold = true, TouchJump = true, TouchPOV = true,
 		TouchDropGlowstick = true, TouchSneakHold = true, FlashlightPower = true,
 		ProtectionUse = true,
+		-- EQUIPMENT_SLOTS_20260916 (Trello #101). ProtectionHUD REGISTERS all
+		-- three of its rows on any touch device, whether or not the player owns
+		-- the item -- registration follows the form factor, visibility follows
+		-- the inventory -- so these two are as expected here as the shield is.
+		SpeedPotionUse = true, RouteMarkerPlace = true,
 	}
 	local function registeredControlState(element: GuiObject): any
 		local ancestorsVisible = true
@@ -4975,13 +4997,14 @@ end
 -- the number the actions were actually sized against on the pass that just ran.
 Fit.ZyntraFloorFallback = 44
 
--- The six donation tiers, NAMED here so the assertion has an oracle the store
+-- The nine donation tiers, NAMED here so the assertion has an oracle the store
 -- and the config cannot both drift away from at once. Reading the config and
 -- comparing it to the store proves the two agree; it does not prove either is
 -- what was authored. Both are held to this list.
 Fit.DonationTierKeys = {
 	"DonationSignal", "DonationSupply", "DonationField",
 	"DonationResearch", "DonationCommand", "DonationDirector",
+	"Donation5000", "Donation10000", "Donation20K",
 }
 
 -- The captions the store is AUTHORED to take an action out of the input stack
@@ -5005,8 +5028,22 @@ Fit.DonationTierKeys = {
 -- is in flight; the Entity Shield card (Upgrades) says "UNAVAILABLE" when the
 -- protection inventory cannot be bought and "CONFIRMING..." while a purchase
 -- settles. All four are the store telling the player why, not silence.
+-- 2026-09-16, cards 102 / 83 / 84 / 89 / 85. Seven more stated reasons, from the
+-- FIELD SUPPLIES cards on Upgrades and from the two mounted pages:
+--   SAVING          a token purchase is in the profile transaction
+--   CLAIMED         a playtime milestone already taken today
+--   CLAIMING        that claim is in flight
+--   %d+:%d+ TO GO   a milestone that has not been played to yet ("2:20 TO GO")
+--   SPUN TODAY      the free daily wheel is used for this UTC day
+--   SPINNING        the wheel is resolving
+--   NOT YET FOUND   a field note that has not been discovered
+-- NO ENTRY MAY CARRY A LITERAL "...". These are Lua patterns fed to string.find,
+-- where "." matches any character, so "SAVING..." as an entry would also match
+-- "SAVINGXYZ" -- and the store draws "SAVING..." anyway, which "SAVING" finds.
 Fit.ZyntraDisabledCaptions = {"OWNED", "COMING SOON", "LEVEL %d+ ONLY", "WAITING",
-	"WHEN DEAD", "RESPAWNING", "UNAVAILABLE", "CONFIRMING"}
+	"WHEN DEAD", "RESPAWNING", "UNAVAILABLE", "CONFIRMING", "SAVING",
+	"CLAIMED", "CLAIMING", "%d+:%d+ TO GO", "SPUN TODAY", "SPINNING",
+	"NOT YET FOUND"}
 
 -- HOW MANY OF A PAGE'S CARD ACTIONS THE PLAYER CAN PRESS, where that number is
 -- a property of the build and not of the tester's save file.
@@ -5022,9 +5059,14 @@ Fit.ZyntraDisabledCaptions = {"OWNED", "COMING SOON", "LEVEL %d+ ONLY", "WAITING
 -- accessibility toggle is reachable in both of its positions, so the accounting
 -- there reduces to "every authored switch can be pressed".
 Fit.ZyntraExpectedActive = {
-	-- The two upgrade cards. Neither is ever taken out of the input stack: a
-	-- player short of tokens still presses SPEND and is told so.
-	Upgrades = 2,
+	-- The two upgrade cards and the two FIELD SUPPLIES cards. None of the four is
+	-- ever taken out of the input stack: a player short of tokens still presses
+	-- the button and is told so by the server. (The Entity Shield card on the same
+	-- page IS account-dependent -- UNAVAILABLE / CONFIRMING -- which is why this
+	-- number is four and not five.) Rewards and Notes are deliberately absent:
+	-- they are account-state pages and belong to the complete-accounting rule
+	-- below, the way Shop and Dev do.
+	Upgrades = 4,
 	-- The two colour pickers. SetLocked draws a lock OVERLAY over a card; it does
 	-- not touch the Save button's Active, so both stay reachable at every
 	-- ownership state.
@@ -5162,6 +5204,16 @@ function Fit.bodyZyntraTerminalFitMatrix(): (string, number)
 	local terminal = store and store:FindFirstChild("Terminal")
 	local probe = store and store:FindFirstChild("UIRegressionZyntraStoreProbe")
 	local opener = store and store:FindFirstChild("ZyntraOpenButton")
+	-- The rest of the rail, so the stand-down assertion below covers all five
+	-- buttons rather than the one this matrix was written around. Collected by
+	-- name and skipped when absent: this module has to keep running in a place
+	-- that predates cards #103 / #104.
+	local railButtons = {}
+	for _, name in ipairs({"ZyntraShopButton", "ZyntraRewardsButton",
+		"ZyntraWheelButton", "ZyntraMusicButton"}) do
+		local node = store and store:FindFirstChild(name)
+		if node then table.insert(railButtons, node) end
+	end
 	if not (terminal and probe and probe:IsA("BindableFunction") and opener) then
 		record(false, "the Zyntra terminal exists to be measured",
 			string.format("terminal=%s probe=%s opener=%s",
@@ -5226,7 +5278,28 @@ function Fit.bodyZyntraTerminalFitMatrix(): (string, number)
 		-- SETTINGS is the accessibility page. It is in the authored set for every
 		-- account, developer or not, so it is named here rather than left to the
 		-- whitelist branch below.
-		local expectedTabs = {"Upgrades", "Shop", "Donate", "Colors", "Settings"}
+		-- NOTES is a mounted page module, and the store builds its tab only when
+		-- the ModuleScript is actually in ReplicatedStorage. This mirrors that rule
+		-- from the OTHER side -- by looking for the module, not by asking the store
+		-- what it built -- so a place where the module is missing passes, a place
+		-- where it exists but the store silently skipped it fails, and neither case
+		-- needs this literal editing.
+		--
+		-- REWARDS IS DELIBERATELY ABSENT. Card #104 moved Daily Rewards out of the
+		-- terminal into its own modal behind ZyntraRewardsButton, so a REWARDS tab
+		-- here would now mean the page is mounted TWICE -- two profile
+		-- subscriptions and two claim buttons for one server-side claim. The page
+		-- module still exists in ReplicatedStorage, which is exactly why this list
+		-- must not derive the tab from its presence any more.
+		local expectedTabs = {"Upgrades", "Shop"}
+		for _, entry in ipairs({{"Notes", "ZyntraFieldNotesPage"}}) do
+			if ReplicatedStorage:FindFirstChild(entry[2]) then
+				table.insert(expectedTabs, entry[1])
+			end
+		end
+		for _, name in ipairs({"Donate", "Colors", "Settings"}) do
+			table.insert(expectedTabs, name)
+		end
 		local devExpected = DevAccess.IsAllowed(player)
 		if devExpected then table.insert(expectedTabs, "Dev") end
 		local tabList = {}
@@ -5464,6 +5537,17 @@ function Fit.bodyZyntraTerminalFitMatrix(): (string, number)
 				.. " in the input stack behind its own modal",
 				string.format("visible=%s active=%s",
 					tostring((opener :: any).Visible), tostring((opener :: any).Active)))
+			-- And neither is any other rail button. `not main.Visible` is a term in
+			-- all five predicates, so a button still drawn here is a real defect and
+			-- not a rule this row forgot to state.
+			for _, railButton in ipairs(railButtons) do
+				local node = railButton :: any
+				record(node.Visible == false and node.Active == false,
+					device.Name .. ": " .. railButton.Name .. " leaves the screen and the"
+					.. " input stack behind the terminal too",
+					string.format("visible=%s active=%s",
+						tostring(node.Visible), tostring(node.Active)))
+			end
 			if device.Touch then
 				record(UIDevice.TouchMovementSuppressed() == true,
 					device.Name .. ": the engine's own thumbstick stands down under the modal",

@@ -1,0 +1,11 @@
+{
+  "initialCapturedUTC": "2026-09-20T12:46:17Z",
+  "finalCapturedUTC": "2026-09-20T12:53:28Z",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "version": 1933,
+  "scriptsCompared": 145,
+  "sourceOrPropertyDrift": [],
+  "sourceEditorConflicts": 0,
+  "method": "Fresh Studio byte-length/djb2 read plus exact comparison of reconstructed snapshots; disabled/runContext compared. Source/editor equality checked in Studio."
+}

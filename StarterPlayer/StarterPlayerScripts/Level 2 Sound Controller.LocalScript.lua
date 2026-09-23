@@ -667,6 +667,15 @@ local function updateMonsterGroans()
 		nextGroanAt = now + rng:NextNumber(10, 18)
 	end
 	local source = currentPoolSlideRoot()
+	local entityAudioBank = ReplicatedStorage:FindFirstChild("Level 2 Entity Audio Bank")
+	if source and entityAudioBank then
+		local ok, bank = pcall(require, entityAudioBank)
+		if ok and bank.Enabled == true then
+			clearGroanPlayback()
+			nextGroanAt = math.huge
+			return
+		end
+	end
 	local spawnNow = currentPumpCount() >= 2
 		or workspace:GetAttribute("Level2_PoolSlideActive") == true or source ~= nil
 	if spawnNow and not groanSpawnSeen then
