@@ -144,6 +144,7 @@ local LEVEL_GENERATORS = {
  -- Routing.MaxLevel through, and the adapter refuses to build without the
  -- workspace flag as well.
  [4] = "Level4Generator",
+ [5] = "Level5Generator",
 }
 
 -- LEVEL4_DEV_GATE_20260921
@@ -156,13 +157,32 @@ if workspace:GetAttribute(Routing.Level4DevAttribute) == nil then
  workspace:SetAttribute(Routing.Level4DevAttribute, true)
 end
 
+-- LEVEL5_MAP_PREVIEW_20260923. A ceiling is only a transport bound. Access
+-- is checked against the REQUESTED level too, so enabling 5 cannot enable 4.
+if workspace:GetAttribute(Routing.Level5DevAttribute) == nil then
+ workspace:SetAttribute(Routing.Level5DevAttribute, true)
+end
 local function devCeiling(group)
- if workspace:GetAttribute(Routing.Level4DevAttribute) ~= true then return Routing.MaxLevel end
  if type(group) ~= "table" or #group == 0 then return Routing.MaxLevel end
  for _, player in ipairs(group) do
   if not DevAccess.IsAllowed(player) then return Routing.MaxLevel end
  end
- return Routing.DevCeiling(true, true)
+ if workspace:GetAttribute(Routing.Level5DevAttribute) == true then return 5 end
+ return Routing.DevCeiling(workspace:GetAttribute(Routing.Level4DevAttribute), true)
+end
+
+local function canAccessLevel(requestedLevel, group)
+ local level = tonumber(requestedLevel)
+ if not level or level ~= level then return false end
+ if level <= Routing.MaxLevel then return true end
+ local flag = level == 4 and Routing.Level4DevAttribute
+  or level == 5 and Routing.Level5DevAttribute or nil
+ if not flag or workspace:GetAttribute(flag) ~= true then return false end
+ if type(group) ~= "table" or #group == 0 then return false end
+ for _, player in ipairs(group) do
+  if not DevAccess.IsAllowed(player) then return false end
+ end
+ return true
 end
 
 -- Always-on server authority for every developer command. Unlike the Level 1
@@ -259,10 +279,17 @@ local function requestDevRespawn(player)
  player:SetAttribute("DevRespawnSerial", (tonumber(player:GetAttribute("DevRespawnSerial")) or 0) + 1)
 end
 
+-- CHALLENGES_20260923 (Trello FnF49TWk): set by any developer command that
+-- changes a round, so a run it touched is never a record or a challenge.
+-- playRound clears it when a round opens and folds in whatever developer
+-- state is already standing then (paused entities, noclip, tuning overrides).
+local runDevTouched = false
+
 devControl.OnServerEvent:Connect(function(player, command, enabled)
  if not DevAccess.IsAllowed(player) then return end
  if type(command) ~= "string" or type(enabled) ~= "boolean" then return end
  if not allowDevControl(player) then return end
+ if command ~= "fastQueue" and command ~= "playerEsp" then runDevTouched = true end
  if command == "fastQueue" then
   if IS_RESERVED_ROUND_SERVER then return end
   player:SetAttribute("DevFastQueue", enabled == true and true or nil)
@@ -349,6 +376,7 @@ devTuning.OnServerEvent:Connect(function(player, key, value)
  player:SetAttribute("DevTuningSerial",
   (tonumber(player:GetAttribute("DevTuningSerial")) or 0) + 1)
  if applied then
+  runDevTouched = true
   print(string.format("[GameManager] tuning %s = %s by %s",
    key, tostring(value), player.Name))
  end
@@ -610,6 +638,13 @@ local function sanitizePersistedLevelState()
   or selected == 4 then
   stale[#stale + 1] = 4
  end
+ if workspace:FindFirstChild("Level 5 Generated World") ~= nil
+  or ServerStorage:FindFirstChild("Level 5 Stored Server Lobby") ~= nil
+  or ServerStorage:FindFirstChild("Level 5 Stored Level 1 Entity") ~= nil
+  or ServerStorage:FindFirstChild("Level 5 Runtime Backup") ~= nil
+  or selected == 5 then
+  stale[#stale + 1] = 5
+ end
  if #stale == 0 then return end
 
  for _, level in ipairs(stale) do
@@ -723,6 +758,7 @@ end
 local function freeElevatorFrame(player, pad)
  local levelOne = pad:GetAttribute("Level2_CompatibilityMarker") ~= true
   and pad:GetAttribute("Level3_CompatibilityMarker") ~= true
+  and pad:GetAttribute("Level5_CompatibilityMarker") ~= true
  local forward = levelOne and Vector3.xAxis or pad.CFrame.LookVector
  local side = levelOne and Vector3.zAxis or pad.CFrame.RightVector
  local depth = pad.Size.X + 3 -- Level 1's emergency pad is 3 studs shorter than its floor.
@@ -1123,8 +1159,7 @@ local function queueRadius(station)
 end
 
 local function playerInsideZone(player, station, includeBusy)
- if station.level == 4 and (not DevAccess.IsAllowed(player)
-  or workspace:GetAttribute(Routing.Level4DevAttribute) ~= true) then return false end
+ if station.level > Routing.MaxLevel and not canAccessLevel(station.level, {player}) then return false end
  if inRound[player] or (station.busy and not includeBusy) then return false end
  local char = player.Character
  local hum = char and char:FindFirstChildOfClass("Humanoid")
@@ -1467,6 +1502,7 @@ end
 
 local function ensureWorld(group, requestedLevel, attempt)
  if attempt and not attempt:IsOpen() then return false end
+ if not canAccessLevel(requestedLevel, group) then return false end
  -- LEVEL4_DEV_GATE_20260921: ClampLevelTo with the dev ceiling. For every
  -- normal party devCeiling() returns Routing.MaxLevel, so this is exactly the
  -- old Routing.ClampLevel(requestedLevel).
@@ -1481,6 +1517,7 @@ local function ensureWorld(group, requestedLevel, attempt)
    [2] = "ENTERING_DRY_POOLROOMS",
    [3] = "ENTERING_FORGOTTEN_MALL",
    [4] = "ENTERING_QUIET_SUBURBS",
+   [5] = "ENTERING_INDOOR_SUBURBS",
   }
   workspace:SetAttribute("LoadStage", levelStages[level] or "GENERATING_WORLD")
   local ok, err = pcall(function()
@@ -2042,6 +2079,7 @@ end
 local function prepareGroupLoading(attempt, group, level, useSlideResume)
  if not attempt:IsOpen() then return false end
  attempt:SetMembers(group)
+ if not canAccessLevel(level, group) then attempt:Fail("LEVEL_ACCESS_DENIED"); return false end
  for _, player in ipairs(group) do
   if player.Parent == Players then
    inRound[player] = true
@@ -2399,6 +2437,10 @@ local function continueStudioCampaign(participants, continuing, returning, nextL
 end
 
 playRound = function(participants)
+ if not canAccessLevel(activeLevel, participants) then
+  returnGroupToLobby(participants)
+  return
+ end
 	if LEVEL_GENERATORS[activeLevel] then Players.CharacterAutoLoads = false end
  -- Warm the Friend Boost pair cache for this party now (it resolves in the
  -- background); the count at completion reads the cache and cannot yield there.
@@ -2409,6 +2451,12 @@ playRound = function(participants)
  local participantSet = {}
  local reentryUsed = {}
  local reentryInFlight = {}
+ -- CHALLENGES_20260923: each participant's run -- deaths, revive, own escape
+ -- moment, paid upgrades -- for records and voluntary challenges, handed to
+ -- ZyntraMonetization with the completion event. Wall clock, never os.clock.
+ local runFacts = {}
+ local runStartWall = nil
+ local runPartySize = #participants
  local deathFrames, safeFrames = {}, {}
  local leaving = {}
 	local transitionRespawnToken = {}
@@ -2469,6 +2517,11 @@ playRound = function(participants)
     -- reordered: every older client still reads name and position where it did.
     lastDeathCause = DeathAdvice.Take(player)
     fireGroup(participants, "death", player.Name, root and root.Position or nil, lastDeathCause)
+    -- A death in Level 2's exit flume is the transition, not the run.
+    local facts = runFacts[player]
+    if facts and not facts.EscapedAt and player:GetAttribute("Level2_ExitTransition") ~= true then
+     facts.Deaths += 1
+    end
 		if scheduleTransitionRespawn then scheduleTransitionRespawn(player) end
     Analytics.Death(player, activeLevel, lastDeathCause)
    end
@@ -2516,9 +2569,31 @@ playRound = function(participants)
 		end)
 	end
 
+ runDevTouched = workspace:GetAttribute("EntityPaused") == true
+ do
+  local overrides = Master.Overrides()
+  if overrides and next(overrides:GetAttributes()) ~= nil then runDevTouched = true end
+ end
  for _, player in ipairs(participants) do
   participantSet[player] = true
   player:SetAttribute("ZyntraReentryUsed", false)
+  player:SetAttribute("ZyntraRunAided", false)
+  if noclipState[player] or player:GetAttribute("DevPushImmune") == true then runDevTouched = true end
+  runFacts[player] = {
+   Deaths = 0,
+   Revived = false,
+   EscapedAt = nil,
+   Equipped = player:GetAttribute("ZyntraOwnsAdvancedEquipment") == true
+    or player:GetAttribute("ZyntraOwnsEntityDetector") == true
+    or (tonumber(player:GetAttribute("ZyntraStaminaMultiplier")) or 1) > 1
+    or (tonumber(player:GetAttribute("ZyntraBatteryMultiplier")) or 1) > 1,
+  }
+  conns[#conns + 1] = player:GetAttributeChangedSignal("Escaped"):Connect(function()
+   local facts = runFacts[player]
+   if facts and not facts.EscapedAt and player:GetAttribute("Escaped") == true then
+    facts.EscapedAt = workspace:GetServerTimeNow()
+   end
+  end)
   if activeLevel == 2 then
    if player:GetAttribute("Level2_ExitTransition") == true then exitTubeRoute = true end
    conns[#conns + 1] = player:GetAttributeChangedSignal("Level2_ExitTransition"):Connect(function()
@@ -2645,6 +2720,7 @@ playRound = function(participants)
   if not allowed() or player.Character ~= char or hum.Parent ~= char or hum.Health <= 0 then return false, "UNAVAILABLE" end
   alive[player] = true
   aliveCount += 1
+  if runFacts[player] then runFacts[player].Revived = true end
   DeathAdvice.Clear(player) -- a revived player carries no explanation forward
   hookLife(player, hum)
   fireGroup(participants, "reentry", player.Name)
@@ -2771,7 +2847,7 @@ playRound = function(participants)
 		RunService.Heartbeat:Wait()
 		releaseSlideResume(participants)
 		fireGroup(participants, "level3access")
- elseif activeLevel == 3 or activeLevel == 4 then
+ elseif activeLevel == 3 or activeLevel == 4 or activeLevel == 5 then
   -- A short service descent establishes the level without replaying Level 1's
   -- fuse briefing. Level 3 owns its own objective presentation; LEVEL4_DEV_GATE
   -- _20260921 reuses the same descent through Level 4's service passage.
@@ -2801,6 +2877,7 @@ playRound = function(participants)
   workspace:SetAttribute("PostWinIntermissionActive", false)
   workspace:SetAttribute("RoundActive", true)
  local roundStartedAt = os.clock()
+ runStartWall = workspace:GetServerTimeNow()
  for _, member in ipairs(participants) do Analytics.RoundStart(member, activeLevel) end
  fireGroup(participants, "start")
 
@@ -2863,8 +2940,18 @@ playRound = function(participants)
   if participant.Parent and participant:GetAttribute("Escaped") == true then
    escapedCount += 1
    if result == "win" then
+    local facts = runFacts[participant]
+    local run = facts and facts.EscapedAt and runStartWall and {
+     Seconds = facts.EscapedAt - runStartWall,
+     Deaths = facts.Deaths,
+     Revived = facts.Revived or reentryUsed[participant] == true,
+     Aided = participant:GetAttribute("ZyntraRunAided") == true,
+     Equipped = facts.Equipped,
+     Solo = runPartySize == 1,
+     DevTouched = runDevTouched,
+    } or nil
     zyntraLevelCompleted:Fire(participant, activeLevel,
-     FriendBoost.CountRoundFriends(participant, participants))
+     FriendBoost.CountRoundFriends(participant, participants), run)
    end
   end
  end
@@ -3014,11 +3101,43 @@ level4DevStart.OnInvoke = function()
 end
 -- END LEVEL4_DEV_GATE_20260921 -----------------------------------------------
 
+-- LEVEL5_MAP_PREVIEW_20260923: server-only test entry. Independent of Level 4,
+-- with the same shared allowlist, no client remote and no privilege expansion.
+do
+ local hook = ServerStorage:FindFirstChild("Level5DevStart")
+ if not hook then
+  hook = Instance.new("BindableFunction")
+  hook.Name, hook.Parent = "Level5DevStart", ServerStorage
+ end
+ assert(hook:IsA("BindableFunction"), "Level5DevStart must be a BindableFunction")
+ hook.OnInvoke = function()
+  if IS_RESERVED_ROUND_SERVER then return false, "RESERVED_SERVER" end
+  if workspace:GetAttribute(Routing.Level5DevAttribute) ~= true then return false, "DISABLED" end
+  if roundBusy then return false, "BUSY" end
+  local group = {}
+  for _, player in ipairs(Players:GetPlayers()) do
+   if not DevAccess.IsAllowed(player) then return false, "NOT_DEVELOPER" end
+   group[#group + 1] = player
+  end
+  if #group == 0 then return false, "NO_PLAYERS" end
+  roundBusy = true
+  task.spawn(function()
+   local attempt = beginGroupLoading(group)
+   clearGlowsticks()
+   assignGlowstickSlots(group)
+   roundEntryMode = nil
+   if prepareGroupLoading(attempt, group, 5, false) then playRound(group) end
+   if not activeEntry or activeEntry.State ~= "failed" then roundBusy = false end
+  end)
+  return true
+ end
+end
+
 -- Launch one station. Published servers teleport the selected group into a fresh
 -- reserved server. Studio cannot test TeleportService, so it runs the same party
 -- locally as a practical editor-only fallback.
 local function launchStation(station, participants)
- if station.level == 4 and devCeiling(participants) ~= 4 then return end
+ if not canAccessLevel(station.level or 1, participants) then return end
  station.busy = true
  setStationDisplay(station, "STARTING PRIVATE WORLD", #participants .. "/" .. (station.maxPlayers or MAX_PLAYERS_PER_STATION) .. " PLAYERS", station.color)
  fireGroup(participants, "loadinggame", station.level or 1)
@@ -3413,7 +3532,12 @@ local function runStation(station)
     break
    end
   end
-  for t = countdownTime, 1, -1 do
+  -- QUEUE_FULL_FASTSTART_20260923: once a party is full nobody else can join,
+  -- so the rest of the countdown is only waiting (measured: a solo 1/1 party
+  -- sat through all 10 s). A full party counts down the last FAST_QUEUE_TIME
+  -- seconds instead, which it keeps as its window to step off and cancel.
+  local t = countdownTime
+  while t >= 1 do
    if not (station.host and playerInsideZone(station.host, station) and station.configured) then
     cancelled = true
     break
@@ -3423,6 +3547,7 @@ local function runStation(station)
    lastReady = ready
    syncQueueFeedback(station, allInside, ready, rejected)
    local full = #ready >= station.maxPlayers
+   if full then t = math.min(t, FAST_QUEUE_TIME) end
    setStationDisplay(station,
     "GAME BEGINS IN " .. t,
     #ready .. "/" .. station.maxPlayers .. " READY  •  " .. privacyLabel(station)
@@ -3430,6 +3555,7 @@ local function runStation(station)
     station.color)
    fireGroup(ready, "lobbycountdown", t, #ready, station.index, station.maxPlayers, station.privacy)
    task.wait(1)
+   t -= 1
   end
 
   if cancelled then
@@ -3560,6 +3686,11 @@ if IS_RESERVED_ROUND_SERVER then
   -- LEVEL4_DEV_GATE_20260921: clamped AFTER the roster is known, because the
   -- dev ceiling requires every arriving member to pass DevAccess. For a normal
   -- party this is exactly the old Routing.ClampLevel(group.Level).
+  if not canAccessLevel(group.Level, participants) then
+   attempt:SetMembers(participants)
+   attempt:Fail("LEVEL_ACCESS_DENIED")
+   return
+  end
   local selectedLevel = Routing.ClampLevelTo(group.Level, devCeiling(participants))
 
   local glowstickSlots = nil

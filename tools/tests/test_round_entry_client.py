@@ -171,8 +171,8 @@ do
     ctx:Advance(1)
     for i=2,#ctx.Acks do check(ctx.Acks[i].Time-ctx.Acks[i-1].Time>=.5,"readiness heartbeat bounded to 2Hz") end
 end
-for _,level in {1,3} do
-    local ctx=fresh(); ctx.World.Name=level==1 and "Maze" or "Level 3 Generated World"
+for _,level in {1,3,4,5} do
+    local ctx=fresh(); ctx.World.Name=level==1 and "Maze" or ("Level "..level.." Generated World")
     ctx.Workspace:SetAttribute("SelectedLevel",level); ctx:Prepare({Level=level}); ctx:Advance(.3)
     check(#ctx.Acks==1,"correct level "..level.." entry ground is allowed")
 end
@@ -267,10 +267,10 @@ for _,studio in {true,false} do
 end
 for _,invalid in {
     {Deadline=99},{Deadline=0/0},{Deadline=math.huge},{Token=""},{Token=string.rep("x",129)},
-    -- LEVEL4_DEV_GATE_20260921: the bound moved 3 -> 4 when Level 4 was added,
-    -- so 5 is now the first out-of-range level. The rule under test is
+    -- LEVEL5_MAP_PREVIEW_20260923: the bound moved to 5 for the dev-only preview,
+    -- so 6 is now the first out-of-range level. The rule under test is
     -- unchanged: a level outside the range spawns no work and never acks.
-    {Level=1.5},{Level=0/0},{Level=5},{Position=Vector3.new(0/0,5,0)},{Position=Vector3.new(math.huge,5,0)},
+    {Level=1.5},{Level=0/0},{Level=6},{Position=Vector3.new(0/0,5,0)},{Position=Vector3.new(math.huge,5,0)},
 } do
     local ctx=fresh(); ctx:Prepare(invalid); ctx:Advance(.3)
     check(ctx.StreamCalls==0 and ctx.PreloadCalls==0 and #ctx.Acks==0,"invalid request rejected before spawning work")

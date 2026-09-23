@@ -346,6 +346,15 @@ local function applyPlayerLighting()
   return
  end
 
+ -- LEVEL5_MAP_PREVIEW_20260923: its own client controller owns/restores the
+ -- fluorescent indoor grade. No Level 1 night or lobby tint over this map.
+ if workspace:FindFirstChild("Level 5 Generated World") ~= nil and selectedLevel == 5 and inMaze
+  and workspace:GetAttribute("Level5LightingOwnedByController") == true then
+  lobbyGrade.Enabled = false
+  if mazeGrade then mazeGrade.Enabled = false end
+  return
+ end
+
  if isLevelTwo and workspace:GetAttribute("Level2LightingOwnedByController") == true then
   lobbyGrade.Enabled = false
   if mazeGrade then mazeGrade.Enabled = false end
@@ -4981,10 +4990,23 @@ do
 	-- rises above the shade, and where there is no room under the modal (short
 	-- viewports) it docks at the top as title + tip only -- the tip is the part a
 	-- first-time solo player must not miss, and nothing is laid over the buttons.
+	-- The authored spot is 116 px up, clear of the spectate band, but at laptop
+	-- heights (about 620-830 px) the centred PARTY DOWN card reaches below its
+	-- top: 13 px of overlap measured at 1539x809. So the modal is measured as
+	-- drawn, and an overlap docks the card at the top like a short viewport.
+	function dc.overlapsModal()
+		local overlay = gui:FindFirstChild("PartyDownOverlay")
+		local modal = overlay and overlay:FindFirstChild("PartyDownCard")
+		if not (modal and modal:IsA("GuiObject") and modal.AbsoluteSize.Y > 0) then return false end
+		local cardTop = gui.AbsolutePosition.Y + gui.AbsoluteSize.Y - 116
+			- (dc.hasTip and dc.heightWithTip or dc.heightPlain)
+		return cardTop < modal.AbsolutePosition.Y + modal.AbsoluteSize.Y + 8
+	end
+
 	function dc.layout()
 		local docked = player:GetAttribute("PartyDownCardOpen") == true
 		local camera = workspace.CurrentCamera
-		local compact = docked and camera ~= nil and camera.ViewportSize.Y < 620
+		local compact = docked and camera ~= nil and (camera.ViewportSize.Y < 620 or dc.overlapsModal())
 		local z = docked and 118 or 96
 		dc.card.ZIndex = z
 		for _, text in ipairs({dc.title, dc.cause, dc.eyebrow, dc.tip}) do text.ZIndex = z + 1 end
@@ -5044,6 +5066,8 @@ do
 	end
 	player:GetAttributeChangedSignal("PartyDownCardOpen"):Connect(function()
 		if dc.card.Visible then dc.layout() end
+		-- Again next frame: the modal may not have been measured yet.
+		task.defer(function() if dc.card.Visible then dc.layout() end end)
 	end)
 
 	remote.OnClientEvent:Connect(function(ev, a, _b, c)
