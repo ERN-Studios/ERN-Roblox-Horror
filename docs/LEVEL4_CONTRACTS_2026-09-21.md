@@ -85,7 +85,11 @@ Three independent locks, all of which must be open:
 3. `ServerStorage.Level4DevStart:Invoke()` — the only entry point. It is a
    BindableFunction with no remote in front of it, so no client can reach it.
 
-Level 3 → Level 4 Continue uses the same ceiling: `Routing.NextLevelTo`.
+**There is no Level 3 → Level 4 Continue** (owner's rule, 2026-09-23,
+`NO_LEVEL3_CONTINUE_20260923`): GameManager's post-win window asks
+`Routing.NextLevel`, which ends at 3 for every party, developers included, and
+`Routing.NextLevelTo` is gone. `tools/tests/test_no_level3_continue.py` guards it.
+Level 4 is entered only through the dev-gated lobby stations or `Level4DevStart`.
 
 ---
 
@@ -600,15 +604,10 @@ Other honest gaps:
 - **`Round Entry Client` had to change.** Its payload guard rejected any level
   above 3, which would have hung the entry barrier for 60 s and failed every
   Level 4 round. The change is one bound, `> 3` → `> 4`, marked in place.
-- **Level 3 → Level 4 Continue works in Studio, not across a real teleport.**
-  `continueStudioCampaign` hands `nextLevel = 4` straight to
-  `prepareGroupLoading`, so the Studio path is live. The reserved-server path
-  goes through `Routing.ArrivalPacket` and the arrival decode, both of which
-  still call `Routing.ClampLevel` (ceiling 3), so a packet saying "level 4"
-  arrives as level 3. Left deliberately: those two lines are the live transfer
-  protocol, the failure is fail-safe (the party lands in Level 3, nothing
-  leaks), and Level 4 must not be publishable anyway. When Level 4 becomes a
-  real campaign level, raise `Routing.MaxLevel` and this disappears.
+- **Level 3 → Level 4 Continue was removed on 2026-09-23.** It used to work in
+  Studio for an all-developer party. Finishing Level 3 now returns to the lobby
+  for everyone; see §2. When Level 4 becomes a campaign level, raise
+  `Routing.MaxLevel` and the chain continues on its own.
 - **The loading cover is green, not a Level 4 palette.** `RoundUI.LOADING_PALETTES`
   has no entry for 4 and falls back to Level 1's. Cosmetic; left alone rather
   than editing RoundUI, which sits at the Luau 200-register limit.

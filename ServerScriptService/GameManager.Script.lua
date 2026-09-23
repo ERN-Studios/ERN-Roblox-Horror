@@ -2282,11 +2282,12 @@ end)
 
 local function runPostWinIntermission(participants, elapsed, escapedCount, entryMode)
 	postWinSerial += 1
-	-- LEVEL4_DEV_GATE_20260921: for a normal party devCeiling() returns
-	-- Routing.MaxLevel and this is exactly Routing.NextLevel(activeLevel), so
-	-- Level 3 still offers no Continue. A dev party carrying the flag is
-	-- offered Level 3 -> Level 4.
-	local nextLevel = Routing.NextLevelTo(activeLevel, devCeiling(participants))
+	-- NO_LEVEL3_CONTINUE_20260923: the campaign chain, for EVERY party. Level 3
+	-- offers no Continue, developers included; Level 4 is reached only from
+	-- its dev-gated lobby stations or ServerStorage.Level4DevStart. The dev
+	-- ceiling used to be applied here, which let an all-developer party walk
+	-- straight from a Level 3 win into the unfinished Level 4.
+	local nextLevel = Routing.NextLevel(activeLevel)
 	local deadline = workspace:GetServerTimeNow() + Routing.PostWinSeconds
 	local roster = Routing.NewRoster((function()
 		local members = {}
