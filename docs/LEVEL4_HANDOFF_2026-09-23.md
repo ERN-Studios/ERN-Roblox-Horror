@@ -1,24 +1,66 @@
-# Level 4 "The Quiet Suburbs" — handoff
+# Level 4 "The Indoor Suburbs" — handoff
 
 **Til:** den udvikler, der overtager Level 4.
 **Fra:** Claude, for ejeren (mikkelczar), 23. september 2026.
-**Trello:** [Y2xXThBN — Level 4](https://trello.com/c/Y2xXThBN).
+**Trello:** [Y2xXThBN — Level 4 — The Indoor Suburbs](https://trello.com/c/Y2xXThBN). **Kortet er den gældende brief.**
 
 Level 4 er en spilbar, **dev-only prototype**. Et helt forløb virker fra start til slut, men alt visuelt er pladsholdere, og der er
 ingen lyd eller animationer. Du overtager hele Level 4: kode, kort, The Neighbour og art-integration. Resten af spillet
 (Level 1–3, lobby, butik) bliver ved med at blive vedligeholdt af ejeren, Claude og Codex. Derfor skal du holde dig til
 Level 4-filerne og koordinere med ejeren, hvis du skal ind i fælles scripts.
 
+## Vigtigst først: retningen skiftede 23/9
+
+Prototypen blev bygget som et **udendørs** forstadskvarter ("The Quiet Suburbs": himmel, græs, gader, vandtårn og
+busstoppested). Trello-kortet blev opdateret 23/9 kl. 21:32 dansk tid med en ny brief, der **erstatter** den retning:
+
+- **Lyse huse INDE i et tæppebelagt kompleks.** Beige tæppe mellem husene, på repos og trapper. Fælles kontorloft med
+  rektangulære lysstofpaneler. Vinduer ser ind mod andre facader, ikke ud på himmel.
+- **Tre kompakte zoner omkring små atrier.** 6–8 modulære husfronter, tre opgaveinteriører og et sikkert introrum.
+  **2–3 spilbare højdeniveauer** (nedre gang, mellemrepos og øvre altanrute), forbundet af brede trapper og korte broer.
+  Ét loop og en genvej, ingen påkrævede hop, og rækværk ved åbne kanter.
+- **Finalen flyttes** til et eksisterende teknikrum ved udgangen. Der er intet busstoppested eller vandtårn.
+- **Historien.** Området er Backrooms med ukendt oprindelse. Spillerne er Zyntra-forskere, men Zyntra har ikke bygget eller
+  ejer området. Fjern Zyntra-branding fra arkitekturen og teksterne: HUD-titlen "ZYNTRA RESIDENTIAL TEST SITE",
+  referencetavlerne "ZYNTRA REFERENCE" og Configurationens "Zyntra Residential Test Site". Briefingen bliver
+  *"Investigate three residential signals. Activate your extraction beacon. Stay quiet."* Zyntra-rød hører kun til
+  forskernes udstyr og UI.
+- **Ikke med i første release:** himmel, græs, hække, udendørs gader, kæmpehaller, tårnskove og hundredvis af etager.
+- **Byggefaser** (kortets punkt 7):
+  1. Blokmodel: gå hele ruten med spiller og entity, før der kommer art på.
+  2. Vertical slice: ét færdigt boligmodul, det første signal og en fair jagt.
+  3. Moduler: facader, hjørner, karnap, trapper, bro, loftspanel og teknikrum.
+  4. Art.
+  5. Integration: signaler, entity, skjul, finale, re-entry, rewards, lyd og UI.
+  6. Mobiloptimering.
+
+**Hvad du kan genbruge fra prototypen:**
+- Opgaveløkken: tre signaler i fri rækkefølge, derefter beacon-kontroller og exit.
+- Husstaterne og ly-logikken.
+- The Neighbours rene tilstandsmaskine (Brain) og det meste af controlleren.
+- Round Adapterens livscyklus med dev-gate, seed og budgetter.
+- Testene, lyscontrolleren, det talte `light()` og `Level4_Placeholder`-mærkningen.
+
+**Hvad skal bygges om:**
+- Plan Generatorens flade gadeløkke skal blive til indendørs zoner i flere højder.
+- World Builderens udendørs geometri: gader, græs, hække, tårn, busstop, grænsebakker og ankomstslicen fra 23/9 (§5).
+- The Neighbours bevægelse holder i dag en fast højde (§7). Den skal kunne følge trapper mellem niveauerne.
+- Finalen skal flyttes fra busstoppets skab til teknikrummet.
+
+Kortets tjekliste med ti punkter har alle detaljerne, fra videoanalysen over layout, entity og skjul til materialer, lys, lyd,
+byggefaser og færdigkriterier. Læs den før koden.
+
 Dette dokument er indgangen. Detaljerne står i:
 
 | Dokument | Hvad det er |
 |---|---|
-| [LEVEL4_CONTRACTS_2026-09-21.md](LEVEL4_CONTRACTS_2026-09-21.md) | **Kontrakten.** Instansnavne, attributter, mål, rig, animations- og lydslots, smoke test og kendte huller (§13) |
-| [LEVEL4_VIDEO_DIRECTION_2026-09-22.md](LEVEL4_VIDEO_DIRECTION_2026-09-22.md) | Den visuelle retning: en lille forstad under enorme indendørs boligfacader, broer og et kunstigt loft |
-| [../assets/concepts/level4-indoor-suburbs-v1.png](../assets/concepts/level4-indoor-suburbs-v1.png) | Konceptbillede (kun reference, ikke et asset) |
-| [../assets/level4/neighbour/MODEL_HANDOFF.md](../assets/level4/neighbour/MODEL_HANDOFF.md) | Brief til modellen af The Neighbour, med T-pose-referencer i samme mappe |
+| [Trello-kortet Y2xXThBN](https://trello.com/c/Y2xXThBN) | **Den gældende brief** (opdateret 23/9) med tjeklisten "Level 4 — indendørs boligkompleks · videobrief 23/9/2026" |
+| [LEVEL4_CONTRACTS_2026-09-21.md](LEVEL4_CONTRACTS_2026-09-21.md) | **Prototypens kontrakt.** Instansnavne, attributter, mål, rig, animations- og lydslots, smoke test og kendte huller (§13). Gælder koden, som den er. Revidér den, når du flytter kortet indendørs |
+| [LEVEL4_VIDEO_DIRECTION_2026-09-22.md](LEVEL4_VIDEO_DIRECTION_2026-09-22.md) | *Ældre retning (erstattet af kortet):* en lille forstad under enorme boligfacader. Kun baggrund |
+| [../assets/concepts/level4-indoor-suburbs-v1.png](../assets/concepts/level4-indoor-suburbs-v1.png) | *Ældre konceptbillede* (græs og tårnhøje facader). Passer ikke til den nye brief |
+| [../assets/level4/neighbour/MODEL_HANDOFF.md](../assets/level4/neighbour/MODEL_HANDOFF.md) | Brief til modellen af The Neighbour, med T-pose-referencer i samme mappe. Entity-idéen er uændret |
 | [../assets/level4/materials/README.md](../assets/level4/materials/README.md) | Fem teksturer (siding og loftpaneler) med gruppeejede image-id'er, endnu ikke brugt i spillet |
-| [CODEX_ASSET_ORDER_2026-09-23.md](CODEX_ASSET_ORDER_2026-09-23.md) §3 | Hvad der er bestilt hos Codex til Level 4 (model, animationer, facademoduler, lyd) |
+| [CODEX_ASSET_ORDER_2026-09-23.md](CODEX_ASSET_ORDER_2026-09-23.md) §3 | Bestillingen hos Codex: model, animationer, facademoduler og lyd. Facade-, bro- og loftmodulerne (§3.2) blev bestilt til den ældre retning, så aftal med ejeren, hvad der stadig skal laves |
 
 ---
 
@@ -46,7 +88,7 @@ Dette dokument er indgangen. Detaljerne står i:
 2. **Level 4 forbliver dev-only**, indtil hele kortets accept er opfyldt (§6). Ejerens regler:
    - `Routing.MaxLevel` forbliver 3 i
      [`Round Completion Routing`](../ServerScriptService/Round%20Completion%20Routing.ModuleScript.lua).
-   - **Level 3 fortsætter aldrig ind i Level 4.** Det gælder også for udviklere (ejerens beslutning 23/9, markør
+   - **Level 3 fortsætter ikke ind i Level 4**, indtil ejeren beslutter andet. Det gælder også for udviklere (ejerens beslutning 23/9, markør
      `NO_LEVEL3_CONTINUE_20260923` i `GameManager`). Testen `tools/tests/test_no_level3_continue.py` fejler, hvis det kommer tilbage.
    - Lobbyen viser "coming soon" ved Level 4-porten for alle, også udviklere. Kun udviklere kan gå gennem den forseglede dør
      og bruge Level 4-stationerne. Level 4 må hverken annonceres eller slås til offentligt.
@@ -150,7 +192,9 @@ Tilstand til klienten: `ReplicatedStorage."Level 4 State"` (attributter) og `Rep
 hedder `Workspace."Level 4 Generated World"`, bygges ved `WorldOrigin (12400, 24, 0)` og rives helt ned mellem runder. Du
 kan derfor ikke placere ting i den med hånden: alt skal bygges af World Builder.
 
-## 4. Sådan spilles en runde i dag
+## 4. Sådan spilles prototypen i dag (udendørs, før den nye brief)
+
+Løkken herunder er den, der skal flyttes indendørs. Reglerne holder; stederne skifter.
 
 1. **Ankomst.** Partyet placeres på `ElevatorSpawn` i servicepassagen med front mod øst og ryggen til en rulleport 24 studs
    mod vest. Loading-coveret løftes ved første tick af en nedtælling på 7 s. Derefter glider portens `DoorL`/`DoorR` til side
@@ -175,7 +219,13 @@ kan derfor ikke placere ting i den med hånden: alt skal bygges af World Builder
    Taber den kontakten i 3,5 s (1,19 s hvis spilleren smyger sig), søger den og vender så hjem. Et slag dræber
    (0,5 s windup), og nyligt genoplivede spillere har 1,5 s grace.
 
-## 5. Nyt 23/9: ankomstslicen (første udgave af den nye retning)
+## 5. Ankomstslicen fra 23/9 (bygget efter den ÆLDRE retning)
+
+Slicen blev bygget samme dag, få timer før kortet fik den nye brief. Den følger den ældre retning med tårnhøje facader
+over græs, så betragt den som et eksperiment, der kan rives ned. Nogle dele kan genbruges: facademodulets kode,
+loftet med Neon-paneler, `Atmosphere`-graderingen i lyscontrolleren og afstandstesten i `test_level4_plan.py`.
+Den ligger i den publicerede place (v2018), men kun bag dev-gaten.
+
 
 Commit `5fe0503`. Den er bygget omkring ankomsten og langs vestkanten, så skala og stemning kan vurderes, før den bredes
 ud. `SouthTerrace` står bag husene på sydsiden fra x = -24 til 340 (Main Street går til 420), `NorthCanyon` dækker hele
@@ -198,31 +248,34 @@ West Avenue, og loftet og lysgraderingen gælder hele kvarteret. Østkanten og n
 
 ## 6. Hvad mangler før Level 4 kan åbnes
 
-Fra Trello-kortets punkt 8 og kontraktens §13. Alle 10 punkter på kortets tjekliste er åbne.
+Kortets punkt 8 er færdigkriterierne. Alle ti punkter på tjeklisten er åbne, og kortet bliver i To Do, indtil level'et er
+bygget og verificeret. Kort fortalt:
 
-**Gameplay og tests**
-- [ ] En hel runde solo og i fuldt hold, uden betalt udstyr, på alle tre varianter.
-- [ ] På PC og touch skal man kunne læse advarsler, undersøge, gemme sig, bruge udstyr og nå i mål.
-- [ ] Død, genoplivning (Emergency Re-entry), spectate, exit til lobbyen og belønninger i Level 4 specifikt, uden dobbelte
-  belønninger. Belønningssystemet tæller i dag kun Level 1–3 som "cleared", så Level 4 giver tokens, men ingen badge
-  og ingen `LevelsCleared`.
+**Kortets færdigkriterier (ny retning)**
+- [ ] Første hovedudsigt aflæses som lyse husfacader INDE i et fælles kompleks, med tæppe mellem husene, synligt loft og
+  flere højder.
+- [ ] 2–3 niveauer er forbundet fysisk med trapper og broer, uden nødvendige præcisionshop, usynlige barrierer eller fald
+  gennem gulvet.
+- [ ] Solo og understøttede holdstørrelser kan løse alle mål uden køb eller mikrofon.
+- [ ] Entityen navigerer mellem niveauer og gennem døre, og angriber aldrig gennem etagedæk, vægge eller sikre skjul.
+- [ ] På PC og touch kan man se opgaveindikatorer og sikre ruter. HUD'en må ikke skjule trappenedgange.
+- [ ] Spawn, re-entry, død, spectate, korrekt exit og lobbyretur fungerer, uden dobbelte rewards og uden forsvundne spor.
+  **Level 3 → 4** er slået fra efter ejerens beslutning, indtil Level 4 er færdigt; aftal med ejeren, hvordan det åbnes.
+- [ ] Mål første signal, completion, dødssteder, tidligt exit og genforsøg, samt spilletid og mobilperformance. 8–12 minutter
+  er et designmål, ikke et krav.
+
+**Huller i prototypens kode, som stadig gælder**
+- [ ] Belønninger tæller i dag kun Level 1–3 som "cleared". Level 4 giver tokens, men ingen badge og ingen `LevelsCleared`.
 - [ ] Navmesh med `AgentRadius 2.7` er ikke verificeret. Står `Level4_NeighbourPathStatus` på `FAILED`, så sænk radius
-  **kun til pathfinding** og behold kropsmålene.
-- [ ] Spilletid (målet er 8–12 min, ikke et krav), jagttempo, funnel-målinger og performance på mobil.
-- [ ] Beslut sammen med ejeren, hvordan Level 4 skal nås, når det åbner. Level 3 fortsætter ikke dertil i dag.
-
-**Art og lyd**
+  **kun til pathfinding** og behold kropsmålene. Med trapper og flere etager bliver det vigtigere.
 - [ ] **The Neighbour:** model, rig og fem animationer (Idle/ALERT, Walk, Search, Chase og Attack med markøren `Contact`),
   se kontrakten §6 og [MODEL_HANDOFF.md](../assets/level4/neighbour/MODEL_HANDOFF.md). Riggen i dag er Parts, der poseres
-  med CFrame. Et skinned mesh kan ikke bare sættes ind: controllerens posering skal tilpasses den leverede hierarki.
+  med CFrame. Et skinned mesh kan ikke bare sættes ind: controllerens posering skal tilpasses det leverede hierarki.
   `Level4_NeighbourAnimation` og `AttackSerial` publiceres allerede, men intet læser dem.
-- [ ] **Facade-, bro- og loftmoduler:** `Level4FacadeBalcony`, `Level4FacadeBay`, `Level4FacadeFlat`, `Level4BridgeSpan` og
-  `Level4CeilingPanel`, se [asset-bestillingen](CODEX_ASSET_ORDER_2026-09-23.md) §3.2. Udvid facaderne ud over ankomsten,
-  når slicen er godkendt, og giv husene mere dybde (gavle, verandaer, karnapper).
-- [ ] **Teksturer:** de fem id'er i [materials/README.md](../assets/level4/materials/README.md) er klar, men ikke i brug.
-  A/B-test dem i spillerhøjde og på lav grafik.
 - [ ] **Lyd:** alle slots i kontrakten §8 er tomme. Koden sender kun cue-navne, som `HouseWarned` og `HouseDangerous`.
-  Alle kritiske advarsler skal også have en visuel side.
+  Kortets punkt 6 har lydforslag til den indendørs version. Kritiske advarsler skal også have en visuel side.
+- [ ] **Teksturer:** de fem id'er i [materials/README.md](../assets/level4/materials/README.md) er klar, men ikke i brug.
+  Loftpanelerne passer til den nye brief; sidingen skal vurderes mod "creme/offwhite puds eller malede vægge".
 - [ ] Loading-coveret bruger Level 1's grønne palet, fordi `RoundUI.LOADING_PALETTES` mangler en `[4]`-post. Tilføj den i
   den eksisterende tabel (det er ingen ny top-level local), og kør kompileringstjekket bagefter.
 
@@ -255,10 +308,12 @@ Aftal med ejeren, om Codex stadig leverer model, animationer, moduler og lyd fra
 
 ## 8. Hvor du kan starte
 
-1. Få adgang (§0). Start en runde på seed 101 og 202 og kør `RunAll()`, så du ser udgangspunktet med egne øjne.
-2. Gå ankomstslicen igennem i spillerhøjde, og aftal med ejeren, om retningen holder, før den bredes ud over kvarteret.
-3. Ret de gameplay-fejl i §7, der ændrer, hvordan level'et spilles (fodtrin, WARNED-ly, væg-gang), før art lægges på.
-4. Integrér The Neighbour-modellen og animationerne, når de findes, og derefter moduler, teksturer og lyd.
-5. Gennemgå §6's accept, og flyt først kortet til Done, når alt er opfyldt.
+1. Få adgang (§0). Start en runde på seed 101 og 202 og kør `RunAll()`, så du ser, hvordan løkken spiller i dag.
+2. Læs kortets tjekliste og aftal med ejeren, hvad der skal genbruges, og hvad der bygges nyt.
+3. **Blokmodel først** (kortets fase 1): tre zoner i 2–3 højder med trapper, loop, genvej, spawn og indendørs exit. Gå hele
+   ruten med en spiller og med The Neighbour, før der kommer art på. Ret samtidig de fejl i §7, der ændrer, hvordan
+   level'et spilles: fodtrin, ly i WARNED huse, gang gennem vægge og fast højde.
+4. Vertical slice: ét færdigt boligmodul, det første signal og en fair jagt. Vis det til ejeren.
+5. Moduler, art, lyd og integration. Derefter mobil, og til sidst §6's kriterier. Flyt først kortet til Done, når alt er opfyldt.
 
 Skriv resultater, mål og beslutninger på [Trello-kortet](https://trello.com/c/Y2xXThBN), så ejeren og de andre kan følge med.
