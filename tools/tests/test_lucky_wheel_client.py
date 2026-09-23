@@ -527,7 +527,8 @@ do
         'it lives in the terminal\'s inset space')
     check(ctx.Shade ~= nil and ctx.Shade.Active == true,
         'the shade is Active, so a tap past the disc reaches nothing behind it')
-    check(ctx.Shade.BackgroundTransparency == 0.35, 'the dimming is discreet, not opaque')
+    check(ctx.Shade.BackgroundTransparency == 1,
+        'no dark overlay over the rest of the screen (owner, Trello 25GLltY6)')
     check(ctx.Shade.Size.SX == 1 and ctx.Shade.Size.SY == 1, 'and it covers the screen')
     check(ctx.Shade.Visible == false, 'nothing is drawn until the rail asks for it')
 
@@ -737,9 +738,17 @@ for _, case in ipairs({
     check(left >= layout.Safe.Left and top >= layout.Safe.Top
         and left + ctx.Close.Size.OX <= layout.Safe.Right
         and top + ctx.Close.Size.OY <= layout.Safe.Bottom,
-        case.Name .. ': and it is inside the safe area, top-right')
-    check(layout.Safe.Right - (left + ctx.Close.Size.OX) == 8,
-        case.Name .. ': with the stated 8px margin')
+        case.Name .. ': and it is inside the safe area')
+    -- Beside the disc (owner, Trello 25GLltY6: the X closer to the wheel):
+    -- just off the top-right rim, never over a field.
+    local closeX = left + ctx.Close.Size.OX / 2 - centreX
+    local closeY = top + ctx.Close.Size.OY / 2 - centreY
+    local fromCentre = math.sqrt(closeX * closeX + closeY * closeY)
+    check(closeX > 0 and closeY < 0, case.Name .. ': the X sits off the top-right of the disc')
+    check(fromCentre - ctx.Close.Size.OX / math.sqrt(2) >= side / 2,
+        case.Name .. ': without covering the disc')
+    check(fromCentre <= side / 2 + ctx.Close.Size.OX,
+        case.Name .. ': and within one button of its rim')
     check(ctx.Pointer.Size.OX >= 18 and ctx.Pointer.Size.OY == ctx.Pointer.Size.OX,
         case.Name .. ': the pointer is at least 18px')
     check(ctx.Pointer.Position.SX == 0.5 and ctx.Pointer.Position.SY == 0,

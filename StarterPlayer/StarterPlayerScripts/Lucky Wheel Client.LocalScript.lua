@@ -1,8 +1,8 @@
 -- Lucky Wheel Client  (LUCKY_WHEEL_TAKEOVER_20260916, wheel/shop refresh)
 --
 -- The daily wheel as a FULL-SCREEN TAKEOVER. There is no panel, no legend, no
--- banner and no footer: a dimmed screen, the textured disc, a fixed pointer at
--- 12 o'clock, SPIN living inside the hub, and one X. While it is open every
+-- banner and no footer: the undimmed world, the textured disc, a fixed pointer
+-- at 12 o'clock, SPIN living inside the hub, and one X beside the disc. While it is open every
 -- OTHER ScreenGui in PlayerGui is disabled and restored on close -- see "the
 -- takeover" below, which is the only part of this file that touches anything
 -- it does not own.
@@ -178,13 +178,14 @@ gui.DisplayOrder = 118
 gui.ScreenInsets = Enum.ScreenInsets.CoreUISafeInsets
 gui.Parent = playerGui
 
--- Discreet dimming, and Active so a tap aimed past the disc reaches nothing
+-- No dimming (owner, Trello 25GLltY6: no dark overlay over the rest of the
+-- screen), but still Active so a tap aimed past the disc reaches nothing
 -- behind it. Everything else is its child.
 local shade = Instance.new("Frame")
 shade.Name = "WheelShade"
 shade.Size = UDim2.fromScale(1, 1)
 shade.BackgroundColor3 = Color3.new(0, 0, 0)
-shade.BackgroundTransparency = 0.35
+shade.BackgroundTransparency = 1
 shade.BorderSizePixel = 0
 shade.Active = true
 shade.Visible = false
@@ -588,11 +589,17 @@ local function applyLayout()
 			0.5 - 0.36 * 0.5 * math.cos(a))
 	end
 
-	-- Top-right of the SAFE area, not of the display: the topbar and any housing
-	-- cutout own the rest.
+	-- Just off the disc's top-right rim (owner, Trello 25GLltY6: the X closer
+	-- to the wheel), clamped into the SAFE area so the topbar or a housing cutout
+	-- never sits on the only way out. At 45 degrees the button's nearest corner
+	-- is 0.8 * CLOSE_SIZE - CLOSE_SIZE / sqrt 2 (~4.5 px) outside the rim.
+	local reach = (side / 2 + CLOSE_SIZE * 0.8) * math.sqrt(0.5)
 	closeButton.Size = UDim2.fromOffset(CLOSE_SIZE, CLOSE_SIZE)
 	closeButton.Position = UIDevice.LocalPosition(gui,
-		safe.Right - CLOSE_MARGIN - CLOSE_SIZE, safe.Top + CLOSE_MARGIN)
+		math.clamp((safe.Left + safe.Right) / 2 + reach - CLOSE_SIZE / 2,
+			safe.Left + CLOSE_MARGIN, safe.Right - CLOSE_MARGIN - CLOSE_SIZE),
+		math.clamp((safe.Top + safe.Bottom) / 2 - reach - CLOSE_SIZE / 2,
+			safe.Top + CLOSE_MARGIN, safe.Bottom - CLOSE_MARGIN - CLOSE_SIZE))
 
 	paintHub(diameter)
 end
