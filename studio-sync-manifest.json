@@ -7,9 +7,9 @@
     "name": "BACKROOMS: STAY QUIET [CO-OP HORROR] (placeId: 131311258779917)"
   },
   "counts": {
-    "scripts": 169,
+    "scripts": 170,
     "remoteEvents": 15,
-    "total": 184,
+    "total": 185,
     "studioTrailingNewline": 0
   },
   "nativePlaceBackup": {
@@ -256,8 +256,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
-      "bytes": 452305,
-      "sha256": "e907e975c0d55ecc1405401c64645285dd5c07222919763cac4273643948f34a",
+      "bytes": 453003,
+      "sha256": "4e975f803b3bf369729f436168fd95a13a067dab027c58ecec0d63e2cebb325f",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -2505,8 +2505,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
-      "bytes": 194720,
-      "sha256": "270605ad872f0e610a71a7007d9a4c1dc702f748bba31eb0bec08ace3e57d0e9",
+      "bytes": 194768,
+      "sha256": "198e780c2acc40f1154685603fa21945f4f622e63ffdf363f60e3aae69654f5b",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2701,6 +2701,14 @@
       "file": "ReplicatedStorage/ZyntraChallenges.ModuleScript.lua",
       "bytes": 6018,
       "sha256": "c5aaa9b16a974cc13fa24a89a6d4dae3f26637f49ec53fccd1803dd562b9ab5b",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraRecordsPage",
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/ZyntraRecordsPage.ModuleScript.lua",
+      "bytes": 15974,
+      "sha256": "2b026764c5d0ffbdf45f084832cd3bb1f60ccccc7390417aaf8a39a4b73c35a2",
       "status": "synced"
     }
   ]
