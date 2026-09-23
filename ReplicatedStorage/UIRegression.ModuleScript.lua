@@ -1752,6 +1752,11 @@ local PAGE_CONTENT = {
 	-- store's emergency two-key fallback draws, so it only stands when the config
 	-- carries no list at all. A Settings page that built nothing fails here.
 	Settings = {Rows = 2, Actions = 2},
+	-- RECORDS (CHALLENGES_20260923): the header card that carries the one
+	-- SHOW ASSISTED / SHOW CLEAN toggle, plus one card per level in
+	-- ZyntraConfig.Challenges.Levels (three). The level cards carry no action:
+	-- the page is read-only.
+	Records = {Rows = 4, Actions = 1},
 	Dev = {Rows = 7, Actions = 7},
 }
 
@@ -5149,6 +5154,9 @@ Fit.ZyntraExpectedActive = {
 	-- not touch the Save button's Active, so both stay reachable at every
 	-- ownership state.
 	Colors = 2,
+	-- The RECORDS view toggle. It only chooses which half of the ledger is drawn,
+	-- so it is never stood down and has no entry in ZyntraDisabledCaptions.
+	Records = 1,
 	-- Donate is computed from ZyntraConfig at the point of use: one per tier with
 	-- a configured product id, which is the store's own COMING SOON condition and
 	-- the only thing that legitimately lowers it.
@@ -5371,7 +5379,12 @@ function Fit.bodyZyntraTerminalFitMatrix(): (string, number)
 		-- must not derive the tab from its presence any more.
 		-- FIELD_NOTES_REMOVED_20260922: the NOTES tab left with the Field Notes
 		-- feature, so the terminal is the five authored tabs (plus DEV).
+		-- RECORDS (CHALLENGES_20260923) is the one mounted page now, derived from
+		-- its module the way NOTES was, and sits before SETTINGS.
 		local expectedTabs = {"Upgrades", "Shop", "Donate", "Colors", "Settings"}
+		if ReplicatedStorage:FindFirstChild("ZyntraRecordsPage") then
+			table.insert(expectedTabs, 5, "Records")
+		end
 		local devExpected = DevAccess.IsAllowed(player)
 		if devExpected then table.insert(expectedTabs, "Dev") end
 		local tabList = {}
