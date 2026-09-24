@@ -1,0 +1,22 @@
+# Remaining real-device and published-server acceptance
+
+This is a compact execution sheet for the open non-Level-4/5 Trello cards, not a substitute for test evidence. Use the latest **published** place version and record its Roblox publish receipt before starting. Use tester accounts, not a Studio-only simulation. Link screenshots/video, the place version, UTC time, device model/OS and observed result in each card.
+
+## One phone + one tablet session
+
+1. On both physical devices, open the lobby, shop, hazmat page, wheel, Daily Rewards and settings. Check tap targets, the standing 3D suit preview, six-sector wheel, prize dialog, close/X and collect confirmation. Equip a Token skin, leave and rejoin, and check the same suit appears on the player and in the shop. This covers [hazmat skins](https://trello.com/c/VSCGGIA9), [standing preview](https://trello.com/c/x4kKwPZx) and [wheel/Daily clarity](https://trello.com/c/25GLltY6).
+2. Enter a real Level 2 round with the arch meshes active. Record device FPS and memory before entering, at the second pump/Pool Slide spawn, during the third-pump chase, and after the round ends. Check Pool Slide reach, animation/foot sliding, Pool Foam freeze when observed, and whether the two sparse wall decals hide enemies or look like required puzzle markers. This covers [render distance/arches](https://trello.com/c/Zpj0Gkbb), [Pool Slide](https://trello.com/c/rXhi1SZ8) and [wall depth](https://trello.com/c/DDqjXkyU). The arch card's server CPU and active chase already have evidence on the live card; do not repeat them merely to claim this mobile measurement.
+3. If the False Sun skin is available on a tester account, show it to another client, equip/unequip it, die and rejoin. Verify its particles remain cosmetic, visible but sparse, and disappear when the visual is removed. Note FPS/memory before/after. This covers [skin VFX](https://trello.com/c/IRLeRBcN).
+
+## Controller session
+
+With a physical controller, test kiosk → Settings → B, mission and mute buttons, multi-target spectate, controller disconnect/reconnect in Level 2, keyboard/controller switching and comparison with touch targets. Record every input/result, not just the final screenshot. This closes the device gate on [controller](https://trello.com/c/uI8hg2At).
+
+## Published multiplayer and persistence session
+
+1. Use 2–6 distinct tester accounts in a published server. Queue Level 2→3, include one late arrival and one rejoin, then die/retry. Record whether every client gets a loading cover and reaches the correct round; capture server/MemoryStore errors. This covers [loading/teleport](https://trello.com/c/DIktjy8U) and the multiplayer side of [Pool Slide](https://trello.com/c/rXhi1SZ8).
+2. Complete a level, leave and rejoin on a new server. Confirm the clear, record, earned Tokens and badge are each granted **once**, including after a simulated uncertain DataStore write only in a safe test environment. This covers [completion-save](https://trello.com/c/EYpXKa9S) and [challenges/records](https://trello.com/c/FnF49TWk).
+3. Use separate test accounts for each Token Earner direct tier and upgrade path. Buy only after the passes are enabled and the published server code checks prerequisites. Compare earned gameplay, Daily and wheel grants to the unboosted base; verify existing balance, purchased Token packs, admin grants and refunds are unchanged; leave/rejoin and repeat. This covers [Token Earner](https://trello.com/c/EtdsUM4e). Real Robux spending should use the smallest necessary tester matrix and retain transaction IDs.
+4. Around a real UTC daily rollover, attempt a wheel/Daily claim before and after, plus a rejoin and a duplicate tap. Record exactly one payout per eligibility window and the displayed reward. This covers [wheel/Daily clarity](https://trello.com/c/25GLltY6). Do not time-warp production DataStores or infer rollover from one saved snapshot.
+
+The [challenge/record card](https://trello.com/c/FnF49TWk) also awaits real player time data no earlier than **29 September 2026** for final time-goal tuning. Leave it open until those numbers and the owner's research-evidence definition are recorded. A simulator, source review or unpublished Studio round cannot replace any physical or published-server acceptance above.
