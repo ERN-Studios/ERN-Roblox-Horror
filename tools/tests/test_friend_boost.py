@@ -32,6 +32,7 @@ UISTYLE = (ROOT / "ReplicatedStorage/UIStyle.ModuleScript.lua").read_text(encodi
 MODULE = (ROOT / "ServerScriptService/FriendBoost.ModuleScript.lua").read_text(encoding="utf-8")
 CLIENT = (ROOT / "StarterPlayer/StarterPlayerScripts/Friend Boost Client.LocalScript.lua").read_text(encoding="utf-8")
 MONETIZATION = (ROOT / "ServerScriptService/ZyntraMonetization.Script.lua").read_text(encoding="utf-8")
+CHALLENGES = (ROOT / "ReplicatedStorage/ZyntraChallenges.ModuleScript.lua").read_text(encoding="utf-8")
 
 
 def section(source, start, stop):
@@ -570,6 +571,14 @@ UISTYLE_TAIL = r'''
         end
         return false
     end
+    -- UIDevice.SetInteractive, as the real module applies it since the 23/9
+    -- queue-modal fix: Visible, and for a button Active and Selectable with it.
+    function UIDeviceFake.SetInteractive(element, visible)
+        element.Visible = visible
+        if not (element:IsA("TextButton") or element:IsA("ImageButton")) then return end
+        element.Active = visible
+        element.Selectable = visible
+    end
     function UIDeviceFake.OnScreenOwningModalChanged(callback)
         for _, attribute in ipairs(MODALS) do
             ctx.Player:GetAttributeChangedSignal(attribute):Connect(callback)
@@ -773,7 +782,7 @@ def main():
     if not binary:
         raise SystemExit("Set LUAU_BIN or install luau; no tests were executed.")
 
-    handler = section(MONETIZATION, "levelCompletedEvent.Event:Connect(function(player, level, friendCount)",
+    handler = section(MONETIZATION, "levelCompletedEvent.Event:Connect(function(player, level, friendCount",
                       "MarketplaceService.PromptGamePassPurchaseFinished")
     tenths = section(MONETIZATION, "\t-- FRIEND_BOOST_20260916. The unpaid fraction",
                      "\t-- Both sets are rebuilt")
@@ -791,6 +800,8 @@ def main():
         "local NEW_PROFILE = " + literal(new_profile),
         "local SNAPSHOT = " + literal(snapshot),
         "local WIN_LOOP = " + literal(win_loop),
+        # The real challenge ledger: the handler applies the run in the same write.
+        "local CHALLENGES_MODULE = (function()", CHALLENGES, "end)()",
         "local CLIENT_SOURCE = " + literal(CLIENT),
         "local function normalizeTenths(data)",
         tenths,
@@ -812,6 +823,13 @@ def main():
         "        table.insert(messages, message)",
         "    end",
         "    local function awardBadge(_, badge) table.insert(w.badges, badge) end",
+        # The daily ledger and the challenge ledger the handler also touches.
+        # Daily research is a no-op here: this suite measures the boost alone,
+        # and test_daily_rewards.py runs the real ledger against the same write.
+        "    local function utcDay() return 20000 end",
+        "    local function rollDaily() end",
+        "    local DailyResearch = {Complete = function() return false, 0 end}",
+        "    local Challenges = CHALLENGES_MODULE",
         handler,
         "    function w.fire(level, friends) levelCompletedEvent.Event:Fire(player, level, friends) end",
         "    function w.fireRaw(...) levelCompletedEvent.Event:Fire(...) end",

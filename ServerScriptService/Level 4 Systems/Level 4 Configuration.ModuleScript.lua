@@ -300,26 +300,100 @@ local Configuration = {
 	},
 
 	-- ---------------------------------------------------------------------
-	-- Client lighting. Warm still afternoon, shifting colder and hazier under
-	-- danger, and NEVER near-black: the minimum brightness below is what keeps
-	-- the level readable on a phone in daylight.
+	-- ARRIVAL_SLICE_20260923 (docs/LEVEL4_VIDEO_DIRECTION_2026-09-22.md): the
+	-- first measured section of the indoor-suburb direction. Two tall facade
+	-- groups turn the service passage into a canyon, one bridge crosses it,
+	-- and an artificial ceiling closes the whole neighbourhood. Plan
+	-- coordinates. Each block's core is solid; everything on its faces is
+	-- dressing that no ray stops on. No gameplay object moves for any of it.
+	-- ---------------------------------------------------------------------
+	Megastructure = {
+		CeilingHeight = 300,
+		CeilingThickness = 4,
+		-- Light panels are emissive faces, not lights: none of them counts
+		-- against MaximumDynamicLights.
+		PanelSize = Vector3.new(20, 1, 36),
+		PanelRowsZ = {110, 0, -110, -220, -330},
+		PanelFromX = -140,
+		PanelToX = 700,
+		PanelPitchX = 64,
+		CeilingColor = Color3.fromRGB(168, 164, 134),
+		-- Four walls on the slab's edges, so the horizon is haze, not sky.
+		FarWallColor = Color3.fromRGB(196, 190, 146),
+		-- One residential module per 24 studs of face and 13 of storey. Near
+		-- storeys keep full depth, mid storeys keep the silhouette with fewer
+		-- parts, and everything above is one window band per module.
+		ModuleWidth = 24,
+		NearStoreys = 3,
+		MidStoreys = 10,
+		-- Every Nth module column is a stacked bay with a small gable; the rest
+		-- are balconies. One window in LitEvery is lit.
+		BayEvery = 3,
+		LitEvery = 7,
+		-- Faces are named by their outward normal. From/To trim a face along
+		-- its length; SkipStoreys leaves the bottom storeys bare (the arrival
+		-- door stands in front of that wall).
+		Groups = {
+			{
+				Name = "South",
+				Blocks = {
+					{Name = "SouthCanyon", MinX = -160, MaxX = -24, MinZ = 24, MaxZ = 170,
+						ColorKey = "DustyYellow", Faces = {{Outward = "-Z"}, {Outward = "+X", To = 128}}},
+					{Name = "SouthTerrace", MinX = -24, MaxX = 340, MinZ = 128, MaxZ = 170,
+						ColorKey = "FadedCream", Faces = {{Outward = "-Z"}}},
+				},
+			},
+			{
+				Name = "North",
+				Blocks = {
+					{Name = "NorthCanyon", MinX = -160, MaxX = -24, MinZ = -360, MaxZ = -24,
+						ColorKey = "FadedCream", Faces = {{Outward = "+Z"}, {Outward = "+X"}}},
+					{Name = "ArrivalWall", MinX = -100, MaxX = -84, MinZ = -24, MaxZ = 24,
+						ColorKey = "DustyYellow", Faces = {{Outward = "+X", SkipStoreys = 1}}},
+				},
+			},
+		},
+		-- The one bridge: across the canyon near its mouth, deck on this storey.
+		Bridge = {X = -34, Width = 16, Storey = 3, MinZ = -24, MaxZ = 24},
+	},
+
+	-- ---------------------------------------------------------------------
+	-- Client lighting. ARRIVAL_SLICE_20260923: one enormous indoor room -- a
+	-- high, even light and a long yellow-green haze, so the facades read all
+	-- the way up to the ceiling. Colder and hazier under danger, and NEVER
+	-- near-black: the minimum brightness below is what keeps the level
+	-- readable on a phone in daylight.
 	-- ---------------------------------------------------------------------
 	Lighting = {
-		CalmClockTime = 16.4,
-		CalmBrightness = 2.6,
-		CalmAmbient = Color3.fromRGB(122, 116, 104),
-		CalmOutdoorAmbient = Color3.fromRGB(150, 146, 134),
-		CalmFogColor = Color3.fromRGB(206, 206, 198),
-		CalmFogStart = 180,
-		CalmFogEnd = 900,
+		CalmClockTime = 13.2,
+		CalmBrightness = 2.2,
+		CalmAmbient = Color3.fromRGB(132, 128, 100),
+		CalmOutdoorAmbient = Color3.fromRGB(160, 158, 122),
+		CalmFogColor = Color3.fromRGB(198, 196, 158),
+		CalmFogStart = 160,
+		CalmFogEnd = 1100,
+		-- ARRIVAL_SLICE_20260923. While Lighting holds an Atmosphere the Fog
+		-- values above do nothing, and the stock atmosphere hazes the ceiling
+		-- into the sky. The controller grades the Atmosphere too.
+		CalmAtmosphereDensity = 0.27,
+		CalmAtmosphereHaze = 2.6,
+		CalmAtmosphereColor = Color3.fromRGB(204, 198, 140),
+		CalmAtmosphereDecay = Color3.fromRGB(186, 176, 112),
 
-		DangerClockTime = 17.6,
-		DangerBrightness = 1.9,
-		DangerAmbient = Color3.fromRGB(96, 102, 114),
-		DangerOutdoorAmbient = Color3.fromRGB(112, 122, 136),
-		DangerFogColor = Color3.fromRGB(150, 158, 168),
-		DangerFogStart = 70,
-		DangerFogEnd = 380,
+		DangerClockTime = 14.2,
+		DangerBrightness = 1.8,
+		DangerAmbient = Color3.fromRGB(100, 108, 104),
+		DangerOutdoorAmbient = Color3.fromRGB(118, 128, 120),
+		DangerFogColor = Color3.fromRGB(150, 160, 146),
+		DangerFogStart = 60,
+		DangerFogEnd = 420,
+		DangerAtmosphereDensity = 0.31,
+		DangerAtmosphereHaze = 2.2,
+		DangerAtmosphereColor = Color3.fromRGB(162, 172, 158),
+		DangerAtmosphereDecay = Color3.fromRGB(118, 130, 122),
+		-- Offset 0 keeps the haze off the ceiling when looking straight up.
+		AtmosphereOffset = 0,
+		AtmosphereGlare = 0,
 
 		-- Readability floor. Nothing in Level 4 may drive Lighting.Brightness
 		-- below this, on any device, in any state.

@@ -32,6 +32,8 @@ remote.OnServerEvent:Connect(function(player,action)
  player:SetAttribute("ZyntraDetectorReadyAt",now+Config.Cooldown)
  player:SetAttribute("ZyntraDetectorReading",reading)
  player:SetAttribute("ZyntraDetectorReadingUntil",now+Config.ReadingSeconds)
+ -- CHALLENGES_20260923: a scan is an aid, so this run is assisted.
+ player:SetAttribute("ZyntraRunAided",true)
  Analytics.ItemUse(player,"DetectorScan",workspace:GetAttribute("SelectedLevel"))
  remote:FireClient(player,"reading",reading,now+Config.ReadingSeconds)
 end)

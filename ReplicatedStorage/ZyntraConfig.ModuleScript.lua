@@ -244,6 +244,23 @@ return {
 		CampaignComplete = 2318404539475574,
 	},
 
+	-- CHALLENGES_20260923 (Trello FnF49TWk): voluntary goals for a level you
+	-- can already clear, and personal records. Nothing here gates the normal
+	-- playthrough. The server times each escapee from RoundActive to their own
+	-- escape; a run a developer tool changed is not recorded at all.
+	--   Clean    = no Emergency Re-entry and no consumable aid used in the run.
+	--   Equipped = the run had a paid permanent upgrade; shown next to the time,
+	--              so a record never hides what it was set with.
+	Challenges = {
+		Levels = {1, 2, 3},
+		-- PROVISIONAL goals in seconds. Tune them from the escaped times in
+		-- zq_round_outcome once a week of data exists (first read 29/9).
+		TimeGoalSeconds = {["1"] = 480, ["2"] = 600, ["3"] = 600},
+		-- One-time tokens per level, paid in the same write that records the
+		-- clear, so a challenge can be rewarded once and only once.
+		RewardTokens = {NoDeath = 3, TimeGoal = 3},
+	},
+
 	-- Accessibility switches, in the order a settings surface should list them.
 	-- Key is BOTH the player attribute the client reads and the profile.Settings
 	-- field it is saved under, so these strings must keep matching their readers

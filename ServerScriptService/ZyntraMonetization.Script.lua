@@ -233,6 +233,15 @@ local ITEM_KEYS = {"SpeedPotion", "RouteMarker"}
 local ITEM_CONFIG = Config.Items or {}
 local DAILY_REWARDS = Config.DailyRewards or {}
 local DailyResearch = require(ReplicatedStorage:WaitForChild("ZyntraDailyResearch"))
+-- CHALLENGES_20260923 (Trello FnF49TWk): the pure record/challenge ledger.
+local Challenges = require(ReplicatedStorage:WaitForChild("ZyntraChallenges"))
+-- A consumable spent during a round makes that run assisted. Latched at the
+-- moment of use: the round-end resets wipe the per-round attributes before the
+-- completion event arrives. GameManager clears it when a round opens and reads
+-- it for each escapee.
+local function markRunAided(player)
+	if player:GetAttribute("InRound") == true then player:SetAttribute("ZyntraRunAided", true) end
+end
 
 -- The clock every day comparison goes through, in one place so a test can pin
 -- "today" and "now". Nothing else in this file reads the date.
@@ -434,6 +443,10 @@ local function newProfile()
 		-- idempotent without asking Roblox on every clear.
 		LevelsCleared = {},
 		AwardedBadges = {},
+		-- CHALLENGES_20260923: personal records per level x solo/party x
+		-- clean/assisted, and which one-time challenges are already paid.
+		Records = {},
+		Challenges = {NoDeath = {}, TimeGoal = {}},
 		ReentryCredits = 0,
 		Protection = {Charges = 0, Revision = 0},
 		-- Stored consumables, today's daily counters and the note collection.
@@ -511,6 +524,8 @@ local function normalizeProfile(data)
 		if savedBadges[badgeKey] == true then awardedBadges[badgeKey] = true end
 	end
 	data.AwardedBadges = awardedBadges
+	data.Records = Challenges.NormalizeRecords(data.Records, Config.Challenges)
+	data.Challenges = Challenges.NormalizeDone(data.Challenges, Config.Challenges)
 	data.ReentryCredits = math.max(0, math.floor(tonumber(data.ReentryCredits) or 0))
 	data.Items = normalizeItems(data.Items)
 	data.Daily = normalizeDaily(data.Daily)
@@ -736,6 +751,9 @@ local function publicProfile(data, player)
 		-- Carried so campaign progress is observable from a client without
 		-- reading the DataStore; nothing in the UI consumes it yet.
 		LevelsCleared = data.LevelsCleared,
+		-- Read by the terminal's RECORDS page (CHALLENGES_20260923).
+		Records = data.Records,
+		Challenges = data.Challenges,
 		ReentryCredits = data.ReentryCredits,
 		ProtectionCharges = protectionState(data) and data.Protection.Charges or 0,
 		ProtectionRevision = protectionState(data) and data.Protection.Revision or 0,
@@ -1566,6 +1584,7 @@ local function handleProtectionAction(player, action, payload)
 	if sessions[player] ~= attempt.Session or protectionAttempts[player] ~= attempt then return end
 	if success and (outcome == "Bought" or outcome == "Consumed" or outcome == "Refunded") then
 		protectionAttempts[player] = nil
+		if outcome == "Consumed" then markRunAided(player) end
 		if outcome == "Consumed" and Analytics then Analytics.ItemUse(player, "EntityShield") end
 		protectionResponse(player, command, outcome)
 	elseif success and outcome and definiteRejection then
@@ -2592,6 +2611,7 @@ local function useReentry(player)
 	if reentryAttempts[player] ~= token then return ok and accepted == true end
 	reentryAttempts[player] = nil
 	if ok and accepted == true then
+		markRunAided(player)
 		if Analytics then Analytics.ItemUse(player, "Reentry") end
 		pushProfile(player, "Emergency Re-entry activated.", "success")
 		return true
@@ -3021,6 +3041,7 @@ local function useSpeedPotion(player)
 	-- resurrecting them here would hand a lobby player a speed boost.
 	if epoch ~= roundEpoch then return end
 	potionRoundUsed[player] = epoch
+	markRunAided(player)
 	if Analytics then Analytics.ItemUse(player, "SpeedPotion") end
 	local token = {}
 	speedBoostTokens[player] = token
@@ -3265,6 +3286,7 @@ inventoryFunction.OnInvoke = function(operation, player, key, amount)
 			return true
 		end)
 		if not spent then return false, "That could not be saved. Try again." end
+		markRunAided(player)
 		if Analytics then Analytics.ItemUse(player, itemKey) end
 		return true, ""
 	end
@@ -3455,7 +3477,7 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 	end
 end)
 
-levelCompletedEvent.Event:Connect(function(player, level, friendCount)
+levelCompletedEvent.Event:Connect(function(player, level, friendCount, run)
 	if not player or not player:IsA("Player") or not sessions[player] then return end
 	-- GameManager fires this once per escapee with the level they just cleared and
 	-- how many of that round's OTHER participants are verified friends of theirs
@@ -3489,6 +3511,14 @@ levelCompletedEvent.Event:Connect(function(player, level, friendCount)
 		if friends > 0 then
 			message = ("+%d Zyntra Research Tokens for completing the level (Friend Boost +%d%%).")
 				:format(base + bonus, boostPercent)
+		end
+		-- CHALLENGES_20260923. The run GameManager measured for THIS escapee, in
+		-- this same write: a record, a challenge flag and its tokens land
+		-- together or not at all, and a second clear finds the flag already set.
+		if tracked then
+			for _, note in ipairs(Challenges.Apply(data, cleared, run, Config.Challenges, os.time())) do
+				message ..= " " .. note
+			end
 		end
 		return true, message, "success"
 	end)

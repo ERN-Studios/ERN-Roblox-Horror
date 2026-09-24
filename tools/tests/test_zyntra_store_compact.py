@@ -18,8 +18,10 @@ Seven things have to stay true and none of them is visible from a screenshot:
     NEVER GETS THE SECOND PANE,
   * a FIELD SUPPLIES button spends tokens through ZyntraAction "BuyItem" with the
     contract's payload, and says SAVING... exactly while it cannot be pressed,
-  * no page module adds a tab today (NOTES left with Field Notes), and REWARDS does NOT
-    exist as a tab even though its page module is still in ReplicatedStorage,
+  * RECORDS is the one mounted page tab, built only when ZyntraRecordsPage is in
+    ReplicatedStorage and always just before SETTINGS; NOTES left with Field
+    Notes, and REWARDS does NOT exist as a tab even though its page module is
+    still in ReplicatedStorage,
   * the rail is five buttons in one drawn order, built by one loop over one list,
   * layoutSquareSections fits them at 64 / 56 / 52px and then in two columns
     rather than clipping one off the bottom, and dodges the thumbstick glyph
@@ -354,14 +356,24 @@ expect(table.find(both, 'Notes'), nil, 'and no Notes tab, even with a stale page
 local neither = buildTabs(fakeStorage({}), false)
 expect(table.concat(neither, ','), 'Upgrades,Shop,Donate,Colors,Settings',
 	'no module present -- the terminal is the five authored tabs')
-local dev = buildTabs(fakeStorage({ZyntraDailyRewardsPage = true, ZyntraFieldNotesPage = true}), true)
-expect(table.concat(dev, ','), 'Upgrades,Shop,Donate,Colors,Settings,Dev',
+expect(table.find(neither, 'Records'), nil, 'and no Records tab without its page module')
+-- RECORDS (CHALLENGES_20260923) mounts from ZyntraRecordsPage, and only when
+-- that module is actually in the place.
+local records = buildTabs(fakeStorage({ZyntraRecordsPage = true, ZyntraDailyRewardsPage = true}), false)
+expect(table.concat(records, ','), 'Upgrades,Shop,Donate,Colors,Records,Settings',
+	'the Records page module brings its tab, just before Settings')
+local dev = buildTabs(fakeStorage({ZyntraRecordsPage = true, ZyntraDailyRewardsPage = true, ZyntraFieldNotesPage = true}), true)
+expect(table.concat(dev, ','), 'Upgrades,Shop,Donate,Colors,Records,Settings,Dev',
 	'DEV is still last')
+expect(dev[6], 'Settings', 'Settings moves to sixth with Records in')
+expect(dev[7], 'Dev', 'and DEV to seventh')
 expect(buildTabs(fakeStorage({}), true)[6], 'Dev', 'DEV is still last when no page mounts')
 -- The order is AUTHORED, not alphabetical: the tab bar breaks LayoutOrder ties
 -- by name and this list is the only thing that states the intent.
 expect(both[1], 'Upgrades', 'Upgrades first')
 expect(both[5], 'Settings', 'Settings last before DEV')
+expect(records[5], 'Records', 'Records fifth')
+expect(records[6], 'Settings', 'and Settings still last before DEV')
 print('tabs|' .. checks)
 """
 

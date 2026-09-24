@@ -9,16 +9,19 @@ This is documentation only. It has no runtime side effects.
 
 The encounter creates one server-owned Primary clone in every generated Kids
 Area room (five with the current layout configuration). Each clone has a unique
-runtime ID but shares the final Primary art and animation slot. An unseen clone
-walks slowly toward the nearest eligible player. When any player sees it while
-it is moving, it continues for 0.50 seconds, then pauses the active AnimationTrack
-at its exact TimePosition and freezes in that pose. Looking away resumes the same
-track without restarting it. If an active clone reaches an unobstructed valid
-target within Movement.KillDistance (currently 5.5 studs), the server immediately
-sets that player's Humanoid health to zero; there is no damage wind-up. Base
-Stalk and Hunt movement are both 4.5 studs/second (50% above the previous 3.0),
-before phase multipliers. The server owns movement, observation, lethal contact,
-targeting, and cleanup.
+runtime ID but shares the final Primary art and animation slot. An unseen active
+clone walks toward the nearest eligible player and speeds up while it does
+(Movement.SpeedRamp). The first validated look latches its chase. While ANY
+living player holds a validated look on it, it stands completely still (2026-09-23,
+Trello wdz28z81): no overrun step, the active AnimationTrack paused at its exact
+TimePosition, no kill, and the speed it earned reset to zero. Looking away
+resumes the same track, and the chase restarts from ChaseMinimumSpeed (13) and
+accelerates 0.65 studs/s per second up to MaximumSpeed (22). If an active,
+latched clone reaches an unobstructed valid target within Movement.KillDistance
+(5.5 studs) while nobody is watching it, the server immediately sets that
+player's Humanoid health to zero; there is no damage wind-up. Stalk and Hunt
+paces are Movement.Speeds (7.5) times the phase multiplier. The server owns
+movement, observation, lethal contact, targeting, and cleanup.
 
 Put the client LocalScript at:
   StarterPlayer.StarterPlayerScripts.Level 2 Pool Foam Client
@@ -49,8 +52,11 @@ world content changes. Each runtime model carries `PoolFoamSlot=Primary` plus a
 unique `PoolFoamEntityId` such as Primary_01. The client does not claim an entity
 is hidden. Server observation must still
 validate protocol, generation, sequence, report rate, camera/head distance,
-field of view, viewport, frustum, and solid-world line of sight. Missing or bad
-reports must make movement more conservative, never safer.
+field of view, viewport, frustum, and solid-world line of sight. A report is
+only trusted while its camera sits within MaximumCameraOriginError (8) of the
+head and points within MaximumCameraYawError (60 degrees) of the server-known
+root facing -- a look is worth a freeze, so it must be one the body can make.
+Otherwise, and when reports are missing, the server's own head view stands in.
 
 3. CLIENT PRESENTATION EVENTS
 -----------------------------
@@ -140,13 +146,15 @@ Suggested state mapping for final animation names:
    collisions according to the contract.
 3. Verify the supplied Walk ID loads before adding any optional state animation.
 4. Verify all five Kids rooms receive a unique Primary_01..Primary_05 clone.
-5. Confirm watched movement lasts 0.50 seconds, then pose/time remain fixed.
-6. Confirm looking away resumes the held track rather than restarting at zero.
-7. Confirm watched close contact stays safe, including throughout the 0.50-second
-   reveal overrun; turning away inside 5.5 studs then kills immediately, including
-   through a ForceField.
-8. Manually verify every behaviour above before removing any remaining
-   proxy assets -- Pool Foam has no automated test suite yet (CLAUDE.md).
+5. Confirm a watched foam stops on the first validated look and pose/time
+   remain fixed (Level2_PoolFoamObserved true, Level2_PoolFoamSpeed 0).
+6. Confirm looking away resumes the held track rather than restarting at zero,
+   and the chase restarts from ChaseMinimumSpeed.
+7. Confirm watched close contact stays safe; turning away inside 5.5 studs then
+   kills immediately, including through a ForceField.
+8. Offline: tools/tests/test_pool_foam_sight_rule.py and
+   test_pool_foam_separation.py. Verify every behaviour above in a Studio round
+   before removing any remaining proxy assets.
 
 The temporary proxies are intentionally replaceable art, not a second gameplay
 implementation. Do not edit controller code merely to swap the final rig.

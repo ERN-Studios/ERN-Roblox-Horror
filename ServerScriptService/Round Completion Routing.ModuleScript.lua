@@ -290,7 +290,7 @@ end
 -- LEVEL4_DEV_GATE_20260921 -------------------------------------------------
 -- Level 4 exists but is not part of the campaign: the lobby gate still says
 -- coming soon, Routing.MaxLevel is still 3, and everything above is unchanged.
--- These three functions are the ONLY way to reach level 4, and they are pure
+-- These two functions are the ONLY way to reach level 4, and they are pure
 -- in the same way the rest of this module is: the caller supplies the two
 -- facts, because this module must stay assertable without a Workspace or a
 -- DevAccess whitelist.
@@ -315,15 +315,8 @@ function Routing.ClampLevelTo(level: any, ceiling: any): number
 	return math.clamp(math.floor(requested), 1, limit)
 end
 
-function Routing.NextLevelTo(level: number?, ceiling: any): number?
-	local current = tonumber(level)
-	if not current then return nil end
-	local limit = tonumber(ceiling)
-	if not limit or limit ~= limit then limit = Routing.MaxLevel end
-	limit = math.clamp(math.floor(limit), 1, Routing.DevLevel)
-	if current < 1 or current >= limit then return nil end
-	return current + 1
-end
+-- There is deliberately no dev-ceiling version of NextLevel: finishing Level 3
+-- never continues into Level 4, for anyone (NO_LEVEL3_CONTINUE_20260923).
 -- END LEVEL4_DEV_GATE_20260921 ---------------------------------------------
 
 -- ---------------------------------------------------------------------------

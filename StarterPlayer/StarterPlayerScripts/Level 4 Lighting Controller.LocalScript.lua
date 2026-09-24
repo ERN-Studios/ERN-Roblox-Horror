@@ -1,7 +1,8 @@
 --!strict
 -- Level 4 Lighting Controller
 --
--- The Quiet Suburbs open on a warm, still afternoon and get colder and hazier
+-- The Quiet Suburbs open in a high, even yellow-green haze -- one enormous
+-- indoor room under an artificial ceiling -- and get colder and hazier
 -- while the neighbourhood is dangerous. Two graded states, tweened between --
 -- there is no flicker and no strobe anywhere in Level 4, which is deliberate:
 -- Level 3 already owns the blackout, and this level's tension is supposed to
@@ -28,20 +29,30 @@ local Configuration = {
 	-- Mirrors ServerScriptService."Level 4 Systems"."Level 4 Configuration".Lighting.
 	-- A LocalScript cannot require a ServerScriptService module, so the numbers
 	-- are restated here and the Level 4 Test Suite asserts the two agree.
-	CalmClockTime = 16.4,
-	CalmBrightness = 2.6,
-	CalmAmbient = Color3.fromRGB(122, 116, 104),
-	CalmOutdoorAmbient = Color3.fromRGB(150, 146, 134),
-	CalmFogColor = Color3.fromRGB(206, 206, 198),
-	CalmFogStart = 180,
-	CalmFogEnd = 900,
-	DangerClockTime = 17.6,
-	DangerBrightness = 1.9,
-	DangerAmbient = Color3.fromRGB(96, 102, 114),
-	DangerOutdoorAmbient = Color3.fromRGB(112, 122, 136),
-	DangerFogColor = Color3.fromRGB(150, 158, 168),
-	DangerFogStart = 70,
-	DangerFogEnd = 380,
+	CalmClockTime = 13.2,
+	CalmBrightness = 2.2,
+	CalmAmbient = Color3.fromRGB(132, 128, 100),
+	CalmOutdoorAmbient = Color3.fromRGB(160, 158, 122),
+	CalmFogColor = Color3.fromRGB(198, 196, 158),
+	CalmFogStart = 160,
+	CalmFogEnd = 1100,
+	CalmAtmosphereDensity = 0.27,
+	CalmAtmosphereHaze = 2.6,
+	CalmAtmosphereColor = Color3.fromRGB(204, 198, 140),
+	CalmAtmosphereDecay = Color3.fromRGB(186, 176, 112),
+	DangerClockTime = 14.2,
+	DangerBrightness = 1.8,
+	DangerAmbient = Color3.fromRGB(100, 108, 104),
+	DangerOutdoorAmbient = Color3.fromRGB(118, 128, 120),
+	DangerFogColor = Color3.fromRGB(150, 160, 146),
+	DangerFogStart = 60,
+	DangerFogEnd = 420,
+	DangerAtmosphereDensity = 0.31,
+	DangerAtmosphereHaze = 2.2,
+	DangerAtmosphereColor = Color3.fromRGB(162, 172, 158),
+	DangerAtmosphereDecay = Color3.fromRGB(118, 130, 122),
+	AtmosphereOffset = 0,
+	AtmosphereGlare = 0,
 	MinimumBrightness = 1.6,
 	TransitionSeconds = 3.5,
 }
@@ -54,6 +65,13 @@ type Snapshot = {
 }
 
 local snapshot: Snapshot? = nil
+-- ARRIVAL_SLICE_20260923. The place's Atmosphere, when it has one, overrides
+-- every Fog value above and hazes the artificial ceiling into the sky. It is
+-- graded with the rest and restored on exit, captured separately because it
+-- is an instance, not a Lighting property.
+local ATMOSPHERE_KEYS = {"Density", "Offset", "Color", "Decay", "Glare", "Haze"}
+local atmosphere: Atmosphere? = nil
+local atmosphereSnapshot: {[string]: any}? = nil
 local active = false
 local tweens: {Tween} = {}
 local lastDanger: boolean? = nil
@@ -86,19 +104,24 @@ local function capture(): Snapshot
 	}
 end
 
-local function applyGoal(goal: {[string]: any}, seconds: number)
+local function tweenTo(target: Instance, goal: {[string]: any}, seconds: number)
+	if seconds <= 0 then
+		for key, value in pairs(goal) do (target :: any)[key] = value end
+		return
+	end
+	local tween = TweenService:Create(target,
+		TweenInfo.new(seconds, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), goal)
+	table.insert(tweens, tween)
+	tween:Play()
+end
+
+local function applyGoal(goal: {[string]: any}, air: {[string]: any}, seconds: number)
 	cancelTweens()
 	-- The floor, applied where it cannot be forgotten: whatever the goal says,
 	-- the brightness that actually reaches Lighting is never under the minimum.
 	goal.Brightness = math.max(goal.Brightness, Configuration.MinimumBrightness)
-	if seconds <= 0 then
-		for key, value in pairs(goal) do (Lighting :: any)[key] = value end
-		return
-	end
-	local tween = TweenService:Create(Lighting,
-		TweenInfo.new(seconds, Enum.EasingStyle.Quad, Enum.EasingDirection.InOut), goal)
-	table.insert(tweens, tween)
-	tween:Play()
+	tweenTo(Lighting, goal, seconds)
+	if atmosphere and atmosphere.Parent == Lighting then tweenTo(atmosphere, air, seconds) end
 end
 
 local function grade(danger: boolean, instant: boolean)
@@ -120,11 +143,19 @@ local function grade(danger: boolean, instant: boolean)
 		FogStart = c.CalmFogStart,
 		FogEnd = c.CalmFogEnd,
 	}
+	local air = {
+		Density = danger and c.DangerAtmosphereDensity or c.CalmAtmosphereDensity,
+		Haze = danger and c.DangerAtmosphereHaze or c.CalmAtmosphereHaze,
+		Color = danger and c.DangerAtmosphereColor or c.CalmAtmosphereColor,
+		Decay = danger and c.DangerAtmosphereDecay or c.CalmAtmosphereDecay,
+		Offset = c.AtmosphereOffset,
+		Glare = c.AtmosphereGlare,
+	}
 	-- ReduceFlashing lengthens the transition rather than shortening it: the
 	-- shift is already slow, and the accessibility request is "no sudden
 	-- change", not "no change".
 	local reduce = player:GetAttribute("ReduceFlashing") == true
-	applyGoal(goal, instant and 0 or (c.TransitionSeconds * (reduce and 1.6 or 1)))
+	applyGoal(goal, air, instant and 0 or (c.TransitionSeconds * (reduce and 1.6 or 1)))
 end
 
 -- The house the subject is standing in, by the same InteriorVolume box the
@@ -179,6 +210,12 @@ local function enter()
 	if active then return end
 	active = true
 	snapshot = capture()
+	atmosphere = Lighting:FindFirstChildOfClass("Atmosphere")
+	if atmosphere then
+		local saved = {}
+		for _, key in ipairs(ATMOSPHERE_KEYS) do saved[key] = (atmosphere :: any)[key] end
+		atmosphereSnapshot = saved
+	end
 	lastDanger = nil
 	-- One flat, artificial sky. GlobalShadows stays ON: the level is a bright
 	-- outdoor space and the house shadows are most of what makes the blockout
@@ -196,6 +233,11 @@ local function leave()
 	local saved = snapshot
 	snapshot = nil
 	lastDanger = nil
+	local air, airSaved = atmosphere, atmosphereSnapshot
+	atmosphere, atmosphereSnapshot = nil, nil
+	if air and airSaved and air.Parent then
+		for key, value in pairs(airSaved) do (air :: any)[key] = value end
+	end
 	if not saved then return end
 	for key, value in pairs(saved) do (Lighting :: any)[key] = value end
 end

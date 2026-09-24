@@ -5,6 +5,10 @@ import os, shutil, subprocess, tempfile
 ROOT = Path(__file__).resolve().parents[2]
 SERVER = (ROOT / 'ServerScriptService/ZyntraMonetization.Script.lua').read_text(encoding='utf-8')
 CONFIG = (ROOT / 'ReplicatedStorage/ZyntraConfig.ModuleScript.lua').read_text(encoding='utf-8')
+# The two pure ledgers ZyntraMonetization requires at the top of the sliced
+# profile section (daily research since 21/9, challenges since 23/9).
+RESEARCH = (ROOT / 'ReplicatedStorage/ZyntraDailyResearch.ModuleScript.lua').read_text(encoding='utf-8')
+CHALLENGES = (ROOT / 'ReplicatedStorage/ZyntraChallenges.ModuleScript.lua').read_text(encoding='utf-8')
 def section(start, stop):
     begin = SERVER.index(start)
     return SERVER[begin:SERVER.index(stop, begin)]
@@ -22,8 +26,23 @@ local Config=(function()
 '''
 WORLD = r'''
 end)()
+local ZyntraDailyResearchModule = (function()
+RESEARCH_SOURCE
+end)()
+local ZyntraChallengesModule = (function()
+CHALLENGES_SOURCE
+end)()
 local function world(opts)
     opts=opts or {}
+    -- Defined between two of the sliced sections; no pass is owned here.
+    local function advancedStaminaBonus() return 0 end
+    local ReplicatedStorage={}
+    function ReplicatedStorage:WaitForChild(name) return name end
+    local function require(name)
+        if name=="ZyntraDailyResearch" then return ZyntraDailyResearchModule end
+        if name=="ZyntraChallenges" then return ZyntraChallengesModule end
+        error("harness has no module "..tostring(name))
+    end
     local w={db=opts.db or {},ranks=opts.ranks or {u_999=900},now=0,calls=0,callbacks=0,writes=0,
         cacheCalls=0,reads=0,tasks={},waiting={},pushes={},reentries=0,studio=opts.studio==true}
     local function warn(...) end
@@ -325,7 +344,7 @@ def main():
     leave=next(l.strip() for l in SERVER.splitlines() if 'queueSupportTotalSync(player.UserId, recordedSupportRobux(session.data))' in l)
     dirty=section('\t\tfor userId, total in pairs(pendingSupportSync)','\n\t\trefreshSupportLeaderboard()')
     tail=TAIL.replace('LOAD_REPAIR',load).replace('DIRTY_RETRY',dirty).replace('LEAVE_REPAIR',leave)
-    pieces=[COMMON,CONFIG,WORLD,
+    pieces=[COMMON,CONFIG,WORLD.replace('RESEARCH_SOURCE',RESEARCH).replace('CHALLENGES_SOURCE',CHALLENGES),
         section('local function colorData','local function isDispatchPredecessorClosed'),
         section('local function accessibilityValue','-- The switch a player'),
         section('local function publicProfile','local function clearPlayerTags'),

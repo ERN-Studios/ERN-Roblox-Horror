@@ -3,13 +3,13 @@
   "source": "Studio-authoritative square detector artwork and compact shop captions, published v1949.",
   "finalNewlineContract": "Entries flagged studioTrailingNewline hold exactly the canonical repo file plus one extra trailing newline in Studio. Exact landings remove the flag. Current flagged entry count: 0. Manifest hashes always describe the canonical repo file, never Studio's transport bytes.",
   "studio": {
-    "id": "a476e358-db0c-4276-b888-c8e741cac447",
+    "id": "7b9759ba-1a0c-4f59-9eb8-21098b64c70b",
     "name": "BACKROOMS: STAY QUIET [CO-OP HORROR] (placeId: 131311258779917)"
   },
   "counts": {
-    "scripts": 168,
+    "scripts": 170,
     "remoteEvents": 15,
-    "total": 183,
+    "total": 185,
     "studioTrailingNewline": 0
   },
   "nativePlaceBackup": {
@@ -256,8 +256,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
-      "bytes": 452305,
-      "sha256": "e907e975c0d55ecc1405401c64645285dd5c07222919763cac4273643948f34a",
+      "bytes": 453003,
+      "sha256": "4e975f803b3bf369729f436168fd95a13a067dab027c58ecec0d63e2cebb325f",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -284,8 +284,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/ZyntraConfig.ModuleScript.lua",
-      "bytes": 12830,
-      "sha256": "7641dab672506acc2827a64c5be33bcf63df0aa9367cd8e0885783dca2e6f430",
+      "bytes": 13768,
+      "sha256": "7d35c401d3938d2fe49ff852830255d2767e40029a8af0e06f75f19908ea19c6",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -402,8 +402,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 158164,
-      "sha256": "1a36c9fbe46edf8e0fa6fed66d5ce48d026fe75e119e12cd1d432c001d65e4bd",
+      "bytes": 161143,
+      "sha256": "b898991761b83c71ccf2199ed1b0be1ea9530f7ac3899acf2c0f7e3ea0010e66",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -504,8 +504,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Configuration.ModuleScript.lua",
-      "bytes": 11670,
-      "sha256": "84335091be6e5bcaa771bab8e1c4b3cdc0a142acc6ffa74b9cf010c37881d4ec",
+      "bytes": 12107,
+      "sha256": "0d420b4371f37deaa21d4830743d9fa5b5d3c6169288ceb0acad719f37d73c87",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -579,8 +579,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Configuration.ModuleScript.lua",
-      "bytes": 15248,
-      "sha256": "f61c54131f2960512a1674b7a78afe9cf6be172d0c07ade0f996ebfe03eb7055",
+      "bytes": 16193,
+      "sha256": "17a5cd900d64960f6f2895b5a5add6569e9e47c8339662371385b0b12654b1f6",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -594,8 +594,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Controller.ModuleScript.lua",
-      "bytes": 93561,
-      "sha256": "31387942e124311a350d4b1cea2fd31f7c800070316f491153646f5c191a9c71",
+      "bytes": 99086,
+      "sha256": "25141362d024adc588e9f7ed07d882b446059f42d931db26983b07d2ccb5d472",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -609,8 +609,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Navigator.ModuleScript.lua",
-      "bytes": 120989,
-      "sha256": "7c486788ee8f11667790a2c6a6c89fa6f065980dc41424d7b68c8e3b3d8c4ff9",
+      "bytes": 123871,
+      "sha256": "37570a1fa44ba5841f63515837618662738fe34464c578f6143ecc00e2dc3b70",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -624,8 +624,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Observer.ModuleScript.lua",
-      "bytes": 16597,
-      "sha256": "e64860d25a94c8cbcd35306b3228ec251a3cdee944a22c26f0104a6ecdd7b76d",
+      "bytes": 17971,
+      "sha256": "3f50361755427bf9438f5f2d43961348d646eda41ac060ae0754595ad2c6c4dc",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -761,8 +761,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/README - LEVEL 2 POOL FOAM.ModuleScript.lua",
-      "bytes": 7451,
-      "sha256": "fab8f5c8f2e910ab5955c6c909b7d1ea9ebda25a32927f48b90781a936554e24",
+      "bytes": 8054,
+      "sha256": "bbf8d3b22ab76891958b1180ac41ab8a01faaaf2a261f9e7e3b09a5c97929941",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -1039,8 +1039,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Round Completion Routing.ModuleScript.lua",
-      "bytes": 77013,
-      "sha256": "db1cffcde94a4ac139b223ecedcbddc4c67b3227590c1980a1b0d4c99872db07",
+      "bytes": 76790,
+      "sha256": "a55762b480f9ca1c98ea0b32265a4ec2f4e7a9bdd4a5e38c09b8283b917bafec",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -1153,8 +1153,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/ZyntraDetectorService.Script.lua",
-      "bytes": 2450,
-      "sha256": "ca0c857c66091268b97c538d102d685b990d9cce917ddbefd3526cd255ae1fbf",
+      "bytes": 2562,
+      "sha256": "cece441a57016a61e0ea6db41fcccba8257b27024ef25a6dd8043453de929f47",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -1169,8 +1169,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/ZyntraMonetization.Script.lua",
-      "bytes": 174941,
-      "sha256": "830dfda1e1b1ccfaed8379b2538f6ee612a63e212592df0f064b786b6042a35f",
+      "bytes": 176477,
+      "sha256": "f53742b22b74ec942c1cc40c5b0b7d7fddae2703db1b52134272c5592d94d5e4",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2284,8 +2284,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Lucky Wheel Client.LocalScript.lua",
-      "bytes": 36189,
-      "sha256": "429a4f525af930c7e33bb7de94703415973ff6df467c3f1f9256aeb51a86b4ce",
+      "bytes": 36752,
+      "sha256": "d7a28ab40d2c1068c6cf08d899e6bd4166e6d8d4d5947166ba35d3679bafa954",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2403,8 +2403,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
-      "bytes": 246554,
-      "sha256": "2c0f71c294d5bb15521694ffbe8b84d6ae6f41e111021ae961fd079986d7d07e",
+      "bytes": 247468,
+      "sha256": "1c42d832d5342418f6396b27b9a6a20d35bf1ef8a2509f8ca69909ea5e125674",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2505,8 +2505,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
-      "bytes": 194720,
-      "sha256": "270605ad872f0e610a71a7007d9a4c1dc702f748bba31eb0bec08ace3e57d0e9",
+      "bytes": 194768,
+      "sha256": "198e780c2acc40f1154685603fa21945f4f622e63ffdf363f60e3aae69654f5b",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2533,8 +2533,8 @@
       "studioPath": "ServerScriptService.Level 4 Systems.Level 4 Configuration",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 4 Systems/Level 4 Configuration.ModuleScript.lua",
-      "bytes": 16760,
-      "sha256": "44f875f37e1cb7cd54c8d50ae148c64ca29b71d844573d02e09c1bc06bbc9ef6",
+      "bytes": 20124,
+      "sha256": "2b9f753b1f4ceae912f882dfcd96330833dee2fb6709bb59bda065345c84a986",
       "status": "synced"
     },
     {
@@ -2557,8 +2557,8 @@
       "studioPath": "ServerScriptService.Level 4 Systems.Level 4 World Builder",
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 4 Systems/Level 4 World Builder.ModuleScript.lua",
-      "bytes": 47997,
-      "sha256": "47e37c8309bee4ebc0c3232e90d467865e21ab036bbfeccabbd07857392e8927",
+      "bytes": 60098,
+      "sha256": "d778f0eaa47c233495a1ecfd436c42d0bea0d51c96c403140ffc513cc6c9d19d",
       "status": "synced"
     },
     {
@@ -2605,8 +2605,8 @@
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller",
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 4 Lighting Controller.LocalScript.lua",
-      "bytes": 8418,
-      "sha256": "a2a65c7609099e0b9c99010f8625235a1097a0a1bf65c58faff2b021fb42a592",
+      "bytes": 10346,
+      "sha256": "770febda91de2412356f23d9111d4948466c03d22592c9ced1d3a7899a88ec91",
       "status": "synced"
     },
     {
@@ -2694,6 +2694,22 @@
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraChallenges",
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/ZyntraChallenges.ModuleScript.lua",
+      "bytes": 6018,
+      "sha256": "c5aaa9b16a974cc13fa24a89a6d4dae3f26637f49ec53fccd1803dd562b9ab5b",
+      "status": "synced"
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraRecordsPage",
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/ZyntraRecordsPage.ModuleScript.lua",
+      "bytes": 15974,
+      "sha256": "2b026764c5d0ffbdf45f084832cd3bb1f60ccccc7390417aaf8a39a4b73c35a2",
+      "status": "synced"
     }
   ]
 }

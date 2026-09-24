@@ -846,6 +846,259 @@ local function buildFinale(session: any, parent: Instance): any
 	}
 end
 
+-- ---------------------------------------------------------------------------
+-- Megastructure: the arrival slice of the indoor-suburb direction
+-- (ARRIVAL_SLICE_20260923). Two tall facade groups, one bridge and the
+-- artificial ceiling, all from Configuration.Megastructure. A block's core is
+-- one solid part -- it collides and it blocks rays, like any wall -- and
+-- everything on its faces is decorative, so no sightline or Neighbour sweep
+-- ever stops on a balcony rail.
+-- ---------------------------------------------------------------------------
+
+local MEGA = Configuration.Megastructure
+
+local OUTWARD = {
+	["+X"] = Vector3.xAxis, ["-X"] = -Vector3.xAxis,
+	["+Z"] = Vector3.zAxis, ["-Z"] = -Vector3.zAxis,
+}
+
+local WINDOW_DARK = Color3.fromRGB(64, 70, 72)
+local WINDOW_LIT = Color3.fromRGB(255, 214, 142)
+local PANEL_LIT = Color3.fromRGB(255, 246, 218)
+
+-- True when a plan-space rectangle overlaps any megastructure block. The
+-- boundary uses it to leave out the low facades a tall block now stands in.
+local function insideMegastructure(minX: number, maxX: number, minZ: number, maxZ: number): boolean
+	for _, group in ipairs(MEGA.Groups) do
+		for _, block in ipairs(group.Blocks) do
+			if minX < block.MaxX and maxX > block.MinX and minZ < block.MaxZ and maxZ > block.MinZ then
+				return true
+			end
+		end
+	end
+	return false
+end
+
+local function overlapsAny(boxes: {any}, low: Vector3, high: Vector3): boolean
+	for _, box in ipairs(boxes) do
+		if low.X < box.Max.X and high.X > box.Min.X and low.Y < box.Max.Y and high.Y > box.Min.Y
+			and low.Z < box.Max.Z and high.Z > box.Min.Z then
+			return true
+		end
+	end
+	return false
+end
+
+-- One face of a block, dressed with the residential module repeated along it
+-- and up it. Near storeys keep depth (balcony slab, rail, door and windows; a
+-- bay with a gable), mid storeys keep the silhouette with fewer parts, and
+-- every storey above is one window band per module. Street level is flush
+-- openings only, so nothing stands out for a player to walk into. `clear`
+-- lists plan-space boxes (the bridge) that no module may grow into.
+local function buildFacadeFace(session: any, parent: Instance, block: any, spec: any,
+	body: Color3, clear: {any})
+	local outward = OUTWARD[spec.Outward]
+	assert(outward, "Level 4 megastructure face has no valid Outward: " .. tostring(spec.Outward))
+	local along = outward:Cross(Vector3.yAxis)
+	local alongX = along.X ~= 0
+	local from = spec.From or (alongX and block.MinX or block.MinZ)
+	local to = spec.To or (alongX and block.MaxX or block.MaxZ)
+	local mid = (from + to) / 2
+	local centre = Vector3.new(
+		outward.X > 0 and block.MaxX or outward.X < 0 and block.MinX or mid, 0,
+		outward.Z > 0 and block.MaxZ or outward.Z < 0 and block.MinZ or mid)
+	local faceWidth = to - from
+	local moduleWidth = MEGA.ModuleWidth
+	local storey = LOTS.StoreyHeight
+	local storeys = math.floor(MEGA.CeilingHeight / storey)
+	local count = math.floor(faceWidth / moduleWidth)
+	local first = -faceWidth / 2 + (faceWidth - count * moduleWidth) / 2
+	local frame = CFrame.fromMatrix(Vector3.zero, along, Vector3.yAxis)
+	local skip = spec.SkipStoreys or 0
+
+	-- A box `u` along the face, centred `y` up, standing `proud` off it.
+	local function box(name: string, u: number, y: number, w: number, h: number, d: number,
+		proud: number, color: Color3, material: Enum.Material?): BasePart
+		local position = session.Origin + centre + along * u + outward * (proud + d / 2) + Vector3.new(0, y, 0)
+		return decorative(part(parent, name, frame + position, Vector3.new(w, h, d), color, material))
+	end
+	-- Half a gable: tall edge at `u`, slope falling away in `dir`. A WedgePart
+	-- is tall at its own +Z; with its X on the outward normal that +Z runs
+	-- along the face, so the far half is turned to face inward instead.
+	local function gableHalf(u: number, y: number, halfWidth: number, h: number, d: number, dir: number)
+		local position = session.Origin + centre + along * (u + dir * halfWidth / 2)
+			+ outward * (d / 2) + Vector3.new(0, y, 0)
+		decorative(wedge(parent, "Level4FacadeGable",
+			CFrame.fromMatrix(position, dir > 0 and -outward or outward, Vector3.yAxis),
+			Vector3.new(d, h, halfWidth), COLORS.Trim, Enum.Material.SmoothPlastic))
+	end
+	local function window(u: number, y: number, w: number, h: number, proud: number, seed: number)
+		local lit = seed % MEGA.LitEvery == 0
+		box(lit and "Level4FacadeWindowLit" or "Level4FacadeWindow", u, y, w, h, 0.3, proud,
+			lit and WINDOW_LIT or WINDOW_DARK, lit and Enum.Material.Neon or Enum.Material.SmoothPlastic)
+	end
+
+	for column = 0, count - 1 do
+		local u = first + (column + 0.5) * moduleWidth
+		local bay = column % MEGA.BayEvery == 1
+		for level = skip, storeys - 1 do
+			local y0 = level * storey
+			local a = centre + along * (u - moduleWidth / 2) + Vector3.new(0, y0, 0)
+			local b = centre + along * (u + moduleWidth / 2) + outward * 5 + Vector3.new(0, y0 + storey, 0)
+			local n = column * 5 + level * 3
+			if overlapsAny(clear, a:Min(b), a:Max(b)) then
+				continue
+			elseif level == 0 then
+				box("Level4FacadeDoor", u - 6, 4.4, 3.8, 8, 0.4, 0, WINDOW_DARK)
+				window(u + 1, 6, 3.6, 4.4, 0, n)
+				window(u + 7, 6, 3.6, 4.4, 0, n + 1)
+			elseif level >= MEGA.MidStoreys then
+				window(u, y0 + 6.5, 18, 5, 0, n)
+			elseif bay then
+				box("Level4FacadeBay", u, y0 + 5.5, 10, 9, 3, 0, body)
+				window(u, y0 + 6, 7, 4.4, 3, n)
+				gableHalf(u, y0 + 11.75, 5.5, 3.5, 3.4, -1)
+				gableHalf(u, y0 + 11.75, 5.5, 3.5, 3.4, 1)
+				if level < MEGA.NearStoreys then
+					window(u - 8.5, y0 + 6, 3.2, 4.4, 0, n + 1)
+					window(u + 8.5, y0 + 6, 3.2, 4.4, 0, n + 2)
+				end
+			else
+				box("Level4FacadeBalcony", u, y0 + 0.4, moduleWidth - 2, 0.8, 4, 0, COLORS.Trim)
+				box("Level4FacadeRail", u, y0 + 2.3, moduleWidth - 2, 3, 0.3, 3.7, COLORS.Trim).Transparency = 0.3
+				if level < MEGA.NearStoreys then
+					box("Level4FacadeDoor", u - 6, y0 + 4.8, 3.6, 8, 0.4, 0, WINDOW_DARK)
+					window(u + 1, y0 + 6, 3.6, 4.4, 0, n)
+					window(u + 7, y0 + 6, 3.6, 4.4, 0, n + 1)
+				else
+					window(u + 1.5, y0 + 6, 14, 4.4, 0, n)
+				end
+			end
+		end
+	end
+	-- The grid: one floor line per storey and a pilaster every bay column,
+	-- one part each, from the first storey up.
+	for level = math.max(skip, 1), storeys - 1 do
+		box("Level4FacadeFloorLine", 0, level * storey, faceWidth, 0.8, 0.8, 0, COLORS.Trim)
+	end
+	local base = math.max(skip, 1) * storey
+	for column = 0, count, MEGA.BayEvery do
+		box("Level4FacadePilaster", first + column * moduleWidth, (base + MEGA.CeilingHeight) / 2,
+			1.6, MEGA.CeilingHeight - base, 1.2, 0, COLORS.Trim)
+	end
+end
+
+-- The bridge's own space, which no facade module may grow into.
+local function bridgeClearance(): any
+	local bridge = MEGA.Bridge
+	local deckY = bridge.Storey * LOTS.StoreyHeight
+	return {
+		Min = Vector3.new(bridge.X - bridge.Width / 2 - 2, deckY - 20, bridge.MinZ - 6),
+		Max = Vector3.new(bridge.X + bridge.Width / 2 + 2, deckY + 12, bridge.MaxZ + 6),
+	}
+end
+
+local function buildMegastructure(session: any, parent: Instance)
+	local clear = {bridgeClearance()}
+	for _, group in ipairs(MEGA.Groups) do
+		local model = Instance.new("Model")
+		model.Name = "Level4FacadeGroup_" .. group.Name
+		model:SetAttribute("Level4_FacadeGroup", group.Name)
+		model.Parent = parent
+		placeholder(model)
+		for _, block in ipairs(group.Blocks) do
+			local body = COLORS[block.ColorKey] or COLORS.FadedCream
+			local core = solid(part(model, "Level4FacadeCore_" .. block.Name,
+				at(session, (block.MinX + block.MaxX) / 2, MEGA.CeilingHeight / 2, (block.MinZ + block.MaxZ) / 2),
+				Vector3.new(block.MaxX - block.MinX, MEGA.CeilingHeight, block.MaxZ - block.MinZ),
+				body, Enum.Material.SmoothPlastic))
+			core:SetAttribute("Level4_Megastructure", block.Name)
+			for _, spec in ipairs(block.Faces) do
+				buildFacadeFace(session, model, block, spec, body, clear)
+				RunService.Heartbeat:Wait()
+			end
+		end
+	end
+end
+
+-- The one bridge: a covered walkway across the canyon, braced back to both
+-- walls, with a dark doorway where it enters each block. Out of reach and
+-- decorative throughout.
+local function buildBridge(session: any, parent: Instance)
+	local bridge = MEGA.Bridge
+	local model = Instance.new("Model")
+	model.Name = "Level4Bridge"
+	model.Parent = parent
+	placeholder(model)
+
+	local deckY = bridge.Storey * LOTS.StoreyHeight
+	local length = bridge.MaxZ - bridge.MinZ
+	local midZ = (bridge.MinZ + bridge.MaxZ) / 2
+	local halfWidth = bridge.Width / 2
+	local function piece(name: string, x: number, y: number, z: number, size: Vector3,
+		color: Color3, material: Enum.Material?): BasePart
+		return decorative(part(model, name, at(session, x, y, z), size, color, material))
+	end
+
+	piece("BridgeDeck", bridge.X, deckY - 0.6, midZ, Vector3.new(bridge.Width, 1.2, length), COLORS.Trim)
+	piece("BridgeGirder", bridge.X, deckY - 2.7, midZ, Vector3.new(bridge.Width - 6, 3, length), COLORS.Fascia)
+	piece("BridgeRoof", bridge.X, deckY + 9, midZ, Vector3.new(bridge.Width + 1, 0.8, length), COLORS.Trim)
+	for _, side in ipairs({-1, 1}) do
+		local x = bridge.X + side * (halfWidth - 0.2)
+		piece("BridgeRail", x, deckY + 1.5, midZ, Vector3.new(0.3, 3, length), COLORS.Trim).Transparency = 0.3
+		for _, offset in ipairs({-length / 4, 0, length / 4}) do
+			piece("BridgePost", x, deckY + 4.5, midZ + offset, Vector3.new(0.6, 9, 0.6), COLORS.Trim)
+		end
+		-- The arch, as two struts from each wall up under the deck.
+		for _, endZ in ipairs({bridge.MinZ, bridge.MaxZ}) do
+			local braceX = bridge.X + side * (halfWidth - 3)
+			local foot = worldPoint(session, braceX, deckY - 16, endZ)
+			local head = worldPoint(session, braceX, deckY - 2, endZ + (endZ < midZ and 14 or -14))
+			decorative(part(model, "BridgeBrace", CFrame.lookAt((foot + head) / 2, head),
+				Vector3.new(1.4, 1.4, (head - foot).Magnitude), COLORS.Fascia, Enum.Material.SmoothPlastic))
+		end
+	end
+	for _, offset in ipairs({-length / 4, length / 4}) do
+		piece("BridgeLamp", bridge.X, deckY + 8.4, midZ + offset, Vector3.new(1.6, 0.4, 1.6),
+			WINDOW_LIT, Enum.Material.Neon)
+	end
+	for _, endZ in ipairs({bridge.MinZ, bridge.MaxZ}) do
+		piece("BridgeDoorway", bridge.X, deckY + 4.4, endZ + (endZ < midZ and 0.2 or -0.2),
+			Vector3.new(8, 8.8, 0.4), WINDOW_DARK)
+	end
+end
+
+-- The artificial ceiling: one slab as large as a part may be, over the whole
+-- neighbourhood, rows of emissive panels under it, and a wall down each of the
+-- slab's edges so the horizon is haze instead of sky. The panels are Neon
+-- faces, not lights, so none of them spends the dynamic-light budget.
+local function buildCeiling(session: any, parent: Instance)
+	local model = Instance.new("Model")
+	model.Name = "Level4Ceiling"
+	model.Parent = parent
+	placeholder(model)
+
+	local bounds = session.Plan.Boundary.Bounds
+	local top = MEGA.CeilingHeight
+	local span = 2048
+	local centreX, centreZ = (bounds.MinX + bounds.MaxX) / 2, (bounds.MinZ + bounds.MaxZ) / 2
+	decorative(part(model, "CeilingSlab", at(session, centreX, top + MEGA.CeilingThickness / 2, centreZ),
+		Vector3.new(span, MEGA.CeilingThickness, span), MEGA.CeilingColor, Enum.Material.SmoothPlastic))
+	local height = top + 40
+	for _, edge in ipairs({{span / 2, 0}, {-span / 2, 0}, {0, span / 2}, {0, -span / 2}}) do
+		decorative(part(model, "CeilingFarWall", at(session, centreX + edge[1], top - height / 2, centreZ + edge[2]),
+			Vector3.new(edge[1] ~= 0 and 4 or span, height, edge[2] ~= 0 and 4 or span),
+			MEGA.FarWallColor, Enum.Material.SmoothPlastic))
+	end
+	local size = MEGA.PanelSize
+	for _, z in ipairs(MEGA.PanelRowsZ) do
+		for x = MEGA.PanelFromX, MEGA.PanelToX, MEGA.PanelPitchX do
+			decorative(part(model, "CeilingPanel", at(session, x, top - size.Y / 2, z), size,
+				PANEL_LIT, Enum.Material.Neon))
+		end
+	end
+end
+
 -- Repeated facade rows and hills. This is the whole boundary treatment: the
 -- edge has to look like more neighbourhood, and the invisible blockers are what
 -- actually hold the player in.
@@ -863,6 +1116,10 @@ local function buildBoundary(session: any, parent: Instance)
 			local offset = (index - count / 2) * (LOTS.HouseWidth + 12)
 			local x = alongZ and row.X or row.X + offset
 			local z = alongZ and row.Z + offset or row.Z
+			local sizeX = alongZ and LOTS.HouseDepth or LOTS.HouseWidth
+			local sizeZ = alongZ and LOTS.HouseWidth or LOTS.HouseDepth
+			-- A tall megastructure block already stands here.
+			if insideMegastructure(x - sizeX / 2, x + sizeX / 2, z - sizeZ / 2, z + sizeZ / 2) then continue end
 			local body = ({COLORS.FadedCream, COLORS.DustyYellow, COLORS.BlueGrey})[(index % 3) + 1]
 			decorative(part(model, "BoundaryFacade",
 				at(session, x, LOTS.StoreyHeight / 2, z),
@@ -1012,6 +1269,9 @@ function WorldBuilder.Build(plan: any, generation: number): any
 	local tower = buildTower(session, world)
 	local finale = buildFinale(session, world)
 	buildBoundary(session, world)
+	buildMegastructure(session, world)
+	buildBridge(session, world)
+	buildCeiling(session, world)
 	local patrolNodes = buildPatrolNodes(session, world, lotRecords)
 
 	-- The Neighbour's runtime lives in its own folder so the controller can

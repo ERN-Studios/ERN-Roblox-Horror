@@ -259,10 +259,17 @@ local function requestDevRespawn(player)
  player:SetAttribute("DevRespawnSerial", (tonumber(player:GetAttribute("DevRespawnSerial")) or 0) + 1)
 end
 
+-- CHALLENGES_20260923 (Trello FnF49TWk): set by any developer command that
+-- changes a round, so a run it touched is never a record or a challenge.
+-- playRound clears it when a round opens and folds in whatever developer
+-- state is already standing then (paused entities, noclip, tuning overrides).
+local runDevTouched = false
+
 devControl.OnServerEvent:Connect(function(player, command, enabled)
  if not DevAccess.IsAllowed(player) then return end
  if type(command) ~= "string" or type(enabled) ~= "boolean" then return end
  if not allowDevControl(player) then return end
+ if command ~= "fastQueue" and command ~= "playerEsp" then runDevTouched = true end
  if command == "fastQueue" then
   if IS_RESERVED_ROUND_SERVER then return end
   player:SetAttribute("DevFastQueue", enabled == true and true or nil)
@@ -349,6 +356,7 @@ devTuning.OnServerEvent:Connect(function(player, key, value)
  player:SetAttribute("DevTuningSerial",
   (tonumber(player:GetAttribute("DevTuningSerial")) or 0) + 1)
  if applied then
+  runDevTouched = true
   print(string.format("[GameManager] tuning %s = %s by %s",
    key, tostring(value), player.Name))
  end
@@ -2282,11 +2290,12 @@ end)
 
 local function runPostWinIntermission(participants, elapsed, escapedCount, entryMode)
 	postWinSerial += 1
-	-- LEVEL4_DEV_GATE_20260921: for a normal party devCeiling() returns
-	-- Routing.MaxLevel and this is exactly Routing.NextLevel(activeLevel), so
-	-- Level 3 still offers no Continue. A dev party carrying the flag is
-	-- offered Level 3 -> Level 4.
-	local nextLevel = Routing.NextLevelTo(activeLevel, devCeiling(participants))
+	-- NO_LEVEL3_CONTINUE_20260923: the campaign chain, for EVERY party. Level 3
+	-- offers no Continue, developers included; Level 4 is reached only from
+	-- its dev-gated lobby stations or ServerStorage.Level4DevStart. The dev
+	-- ceiling used to be applied here, which let an all-developer party walk
+	-- straight from a Level 3 win into the unfinished Level 4.
+	local nextLevel = Routing.NextLevel(activeLevel)
 	local deadline = workspace:GetServerTimeNow() + Routing.PostWinSeconds
 	local roster = Routing.NewRoster((function()
 		local members = {}
@@ -2408,6 +2417,12 @@ playRound = function(participants)
  local participantSet = {}
  local reentryUsed = {}
  local reentryInFlight = {}
+ -- CHALLENGES_20260923: each participant's run -- deaths, revive, own escape
+ -- moment, paid upgrades -- for records and voluntary challenges, handed to
+ -- ZyntraMonetization with the completion event. Wall clock, never os.clock.
+ local runFacts = {}
+ local runStartWall = nil
+ local runPartySize = #participants
  local deathFrames, safeFrames = {}, {}
  local leaving = {}
 	local transitionRespawnToken = {}
@@ -2468,6 +2483,11 @@ playRound = function(participants)
     -- reordered: every older client still reads name and position where it did.
     lastDeathCause = DeathAdvice.Take(player)
     fireGroup(participants, "death", player.Name, root and root.Position or nil, lastDeathCause)
+    -- A death in Level 2's exit flume is the transition, not the run.
+    local facts = runFacts[player]
+    if facts and not facts.EscapedAt and player:GetAttribute("Level2_ExitTransition") ~= true then
+     facts.Deaths += 1
+    end
 		if scheduleTransitionRespawn then scheduleTransitionRespawn(player) end
     Analytics.Death(player, activeLevel, lastDeathCause)
    end
@@ -2515,9 +2535,31 @@ playRound = function(participants)
 		end)
 	end
 
+ runDevTouched = workspace:GetAttribute("EntityPaused") == true
+ do
+  local overrides = Master.Overrides()
+  if overrides and next(overrides:GetAttributes()) ~= nil then runDevTouched = true end
+ end
  for _, player in ipairs(participants) do
   participantSet[player] = true
   player:SetAttribute("ZyntraReentryUsed", false)
+  player:SetAttribute("ZyntraRunAided", false)
+  if noclipState[player] or player:GetAttribute("DevPushImmune") == true then runDevTouched = true end
+  runFacts[player] = {
+   Deaths = 0,
+   Revived = false,
+   EscapedAt = nil,
+   Equipped = player:GetAttribute("ZyntraOwnsAdvancedEquipment") == true
+    or player:GetAttribute("ZyntraOwnsEntityDetector") == true
+    or (tonumber(player:GetAttribute("ZyntraStaminaMultiplier")) or 1) > 1
+    or (tonumber(player:GetAttribute("ZyntraBatteryMultiplier")) or 1) > 1,
+  }
+  conns[#conns + 1] = player:GetAttributeChangedSignal("Escaped"):Connect(function()
+   local facts = runFacts[player]
+   if facts and not facts.EscapedAt and player:GetAttribute("Escaped") == true then
+    facts.EscapedAt = workspace:GetServerTimeNow()
+   end
+  end)
   if activeLevel == 2 then
    if player:GetAttribute("Level2_ExitTransition") == true then exitTubeRoute = true end
    conns[#conns + 1] = player:GetAttributeChangedSignal("Level2_ExitTransition"):Connect(function()
@@ -2644,6 +2686,7 @@ playRound = function(participants)
   if not allowed() or player.Character ~= char or hum.Parent ~= char or hum.Health <= 0 then return false, "UNAVAILABLE" end
   alive[player] = true
   aliveCount += 1
+  if runFacts[player] then runFacts[player].Revived = true end
   DeathAdvice.Clear(player) -- a revived player carries no explanation forward
   hookLife(player, hum)
   fireGroup(participants, "reentry", player.Name)
@@ -2800,6 +2843,7 @@ playRound = function(participants)
   workspace:SetAttribute("PostWinIntermissionActive", false)
   workspace:SetAttribute("RoundActive", true)
  local roundStartedAt = os.clock()
+ runStartWall = workspace:GetServerTimeNow()
  for _, member in ipairs(participants) do Analytics.RoundStart(member, activeLevel) end
  fireGroup(participants, "start")
 
@@ -2862,8 +2906,18 @@ playRound = function(participants)
   if participant.Parent and participant:GetAttribute("Escaped") == true then
    escapedCount += 1
    if result == "win" then
+    local facts = runFacts[participant]
+    local run = facts and facts.EscapedAt and runStartWall and {
+     Seconds = facts.EscapedAt - runStartWall,
+     Deaths = facts.Deaths,
+     Revived = facts.Revived or reentryUsed[participant] == true,
+     Aided = participant:GetAttribute("ZyntraRunAided") == true,
+     Equipped = facts.Equipped,
+     Solo = runPartySize == 1,
+     DevTouched = runDevTouched,
+    } or nil
     zyntraLevelCompleted:Fire(participant, activeLevel,
-     FriendBoost.CountRoundFriends(participant, participants))
+     FriendBoost.CountRoundFriends(participant, participants), run)
    end
   end
  end
@@ -3412,7 +3466,12 @@ local function runStation(station)
     break
    end
   end
-  for t = countdownTime, 1, -1 do
+  -- QUEUE_FULL_FASTSTART_20260923: once a party is full nobody else can join,
+  -- so the rest of the countdown is only waiting (measured: a solo 1/1 party
+  -- sat through all 10 s). A full party counts down the last FAST_QUEUE_TIME
+  -- seconds instead, which it keeps as its window to step off and cancel.
+  local t = countdownTime
+  while t >= 1 do
    if not (station.host and playerInsideZone(station.host, station) and station.configured) then
     cancelled = true
     break
@@ -3422,6 +3481,7 @@ local function runStation(station)
    lastReady = ready
    syncQueueFeedback(station, allInside, ready, rejected)
    local full = #ready >= station.maxPlayers
+   if full then t = math.min(t, FAST_QUEUE_TIME) end
    setStationDisplay(station,
     "GAME BEGINS IN " .. t,
     #ready .. "/" .. station.maxPlayers .. " READY  •  " .. privacyLabel(station)
@@ -3429,6 +3489,7 @@ local function runStation(station)
     station.color)
    fireGroup(ready, "lobbycountdown", t, #ready, station.index, station.maxPlayers, station.privacy)
    task.wait(1)
+   t -= 1
   end
 
   if cancelled then

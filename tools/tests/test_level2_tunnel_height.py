@@ -28,6 +28,10 @@ function Enum.NormalId:GetEnumItems()return {"Right","Left","Back","Front","Top"
 local Configuration=(function()
 __CONFIG__
 end)()
+-- Production ships the mesh ribs on (a443bed). This harness measures the Part
+-- path, which is still the runtime fallback, so force the pilot switch off.
+-- The 2026-09-09 baseline predates the Performance table.
+if Configuration.Performance then Configuration.Performance.ArchMeshRibs=false end
 local C=Configuration.Colors
 local WALKWAY_TOP=__WALKWAY__
 local function part(parent,name,cf,size,color,material,transparency)

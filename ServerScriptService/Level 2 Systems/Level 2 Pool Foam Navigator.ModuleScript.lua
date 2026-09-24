@@ -413,6 +413,14 @@ function Navigator.new(model, manifest, tuning, options)
 			-- behaviour. Left in place deliberately: removing the branches is a
 			-- large diff through tuned navigation for no runtime gain.
 			StableRoutes = tuning.StableRoutes == true,
+			-- PLAN HORIZON (2026-09-23; the fix the Pool Slide got on 2026-09-21).
+			-- A new route is certified -- centred, swept, body-checked -- only for
+			-- its first PlanHorizon studs, and the next piece is asked for while
+			-- PlanHorizonExtend of it is still left. Five foams chasing one player
+			-- re-certified whole cross-map routes every repath, and the server ran
+			-- at ~40 Hz with 127 ms frames. 0 keeps the whole-route behaviour.
+			PlanHorizon = readNumber(tuning, "PlanHorizon", 0, 0, 512),
+			PlanHorizonExtend = readNumber(tuning, "PlanHorizonExtend", 0, 0, 256),
 			PathRequestTimeout = readNumber(tuning, "PathRequestTimeout", 8, 2, 30),
 			FootClearance = readNumber(tuning, "FootClearance", DEFAULTS.FootClearance, 0, 3),
 			FloorProbeAbove = readNumber(tuning, "FloorProbeAbove", DEFAULTS.FloorProbeAbove, 3, 60),
@@ -1717,6 +1725,34 @@ function Navigator:_probeBlockedClearance()
 	return true
 end
 
+-- The first `horizon` studs of `points` measured from `origin`, and whether
+-- anything was cut. horizon 0 (or none) returns the route unchanged.
+local function horizonPrefix(points, origin, horizon)
+	if not horizon or horizon <= 0 or #points < 2 then return points, false end
+	local travelled, from = 0, origin
+	for index, point in ipairs(points) do
+		travelled += horizontalDistance(from, point)
+		from = point
+		if travelled >= horizon and index < #points then
+			local prefix = table.create(index)
+			table.move(points, 1, index, 1, prefix)
+			return prefix, true
+		end
+	end
+	return points, false
+end
+
+-- Road left on the installed route, counted up to `cap`.
+function Navigator:_remainingRoute(cap)
+	local total, from = 0, self.FootPosition
+	for index = self.WaypointIndex, #self.Waypoints do
+		total += horizontalDistance(from, self.Waypoints[index])
+		if total >= cap then break end
+		from = self.Waypoints[index]
+	end
+	return total
+end
+
 function Navigator:_stableNeedsPath(goal, force)
 	-- Shared request scheduling, including Pool Foam's ordinary route policy:
 	-- elapsed time permits a replacement; it does not invalidate a good route.
@@ -1731,6 +1767,12 @@ function Navigator:_stableNeedsPath(goal, force)
 	if force == true then return true end
 	if self:_probeBlockedClearance() then return true end
 	if age < self.Tuning.RepathInterval then return false end
+	-- A horizon route stops short of the goal on purpose: ask for the next piece
+	-- while there is still road left, so the walk never pauses at a piece's end.
+	if self.RouteTruncated and self.Waypoints[self.WaypointIndex]
+		and self:_remainingRoute(self.Tuning.PlanHorizonExtend) < self.Tuning.PlanHorizonExtend then
+		return true
+	end
 	local moved = not self.LastRequestedGoal
 		or horizontalDistance(goal, self.LastRequestedGoal) >= self.Tuning.RepathDistance
 		or math.abs(goal.Y - self.LastRequestedGoal.Y) >= self.Tuning.MaxStepHeight
@@ -1931,6 +1973,8 @@ function Navigator:_requestPath(goal, graphOnly)
 		local proposedApproach
 		local blockedApproach
 		local blockedProbeFrom, blockedProbeTarget
+		local truncated
+		points, truncated = horizonPrefix(points, requestStart, self.Tuning.PlanHorizon)
 		if #points > 0 then
 			local shouldAbort = function()
 				return self.Destroyed or requestId ~= self.RequestId
@@ -1972,6 +2016,8 @@ function Navigator:_requestPath(goal, graphOnly)
 				or (not stable and centringStats.Unwalkable and centringStats.Unwalkable > 0
 					and not centringStats.Aborted) then
 				local graphPoints, graphStatus = self:_fallbackWaypoints(goal, requestStart)
+				local graphTruncated
+				graphPoints, graphTruncated = horizonPrefix(graphPoints, requestStart, self.Tuning.PlanHorizon)
 				if #graphPoints > 0 then
 					local graphCentred, graphStats = self:_centreRoute(graphPoints, shouldAbort, requestStart)
 					if self.Destroyed or requestId ~= self.RequestId then return end
@@ -1980,6 +2026,7 @@ function Navigator:_requestPath(goal, graphOnly)
 							and graphStats.Unwalkable < centringStats.Unwalkable) then
 						points = graphCentred
 						status = graphStatus
+						truncated = graphTruncated
 						self.LastCentring = graphStats
 						path = nil
 					end
@@ -2012,7 +2059,9 @@ function Navigator:_requestPath(goal, graphOnly)
 			-- unaffected, and this can never let the rig stop early, because the
 			-- stand-in is by construction the closest standable point the pass
 			-- could find to the goal.
-			local goalStandable = self:_standableAt(goal)
+			-- A piece of a horizon route does not end at the goal, so it has no
+			-- approach to certify; the last piece does.
+			local goalStandable = truncated or self:_standableAt(goal)
 			if not goalStandable then
 				local approachIndex
 				for index = #points - 1, 1, -1 do
@@ -2111,6 +2160,7 @@ function Navigator:_requestPath(goal, graphOnly)
 		end
 		self.Waypoints = points
 		self.WaypointIndex = 1
+		self.RouteTruncated = truncated
 		-- A fresh route gets fresh allowances. Carrying a spent skip budget into
 		-- a new plan would make the second route give up sooner than the first.
 		self.ClearanceSeeks = 0
@@ -2580,6 +2630,21 @@ end
 
 function Navigator:GetPosition()
 	return self.FootPosition
+end
+
+-- The flat unit direction the next Step heads in -- toward the first waypoint
+-- it has not yet reached, exactly as Step picks it -- or nil with none left.
+function Navigator:GetHeading(): Vector3?
+	local foot = self.FootPosition
+	for index = self.WaypointIndex, #self.Waypoints do
+		local point = self.Waypoints[index]
+		local deltaX, deltaZ = point.X - foot.X, point.Z - foot.Z
+		local distance = math.sqrt(deltaX * deltaX + deltaZ * deltaZ)
+		if distance > self.Tuning.WaypointArrivalDistance then
+			return Vector3.new(deltaX / distance, 0, deltaZ / distance)
+		end
+	end
+	return nil
 end
 
 function Navigator:GetFacing()

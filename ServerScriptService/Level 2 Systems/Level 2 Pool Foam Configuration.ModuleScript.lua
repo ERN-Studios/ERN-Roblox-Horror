@@ -59,7 +59,13 @@ local Configuration = {
 		MinReportInterval = 0.10,
 		ReportTimeout = 0.85,
 		MaximumReportDistance = 180,
-		MaximumCameraOriginError = 22,
+		-- A look now freezes a foam (FreezeWhileObserved below), so a report has to
+		-- be a camera this body can hold. Rounds run LockFirstPerson (zoom 0.5):
+		-- 8 studs covers the head offset plus report/replication lag at slide
+		-- speed. The yaw bound is checked against the server-known root facing.
+		-- A report outside either falls back to the server head view.
+		MaximumCameraOriginError = 8,
+		MaximumCameraYawError = 60,
 		BroadPhaseFovDegrees = 100,
 		ObservedFovDegrees = 72,
 		AcquireSeconds = 0.10,
@@ -107,13 +113,16 @@ local Configuration = {
 		ProximityLatchRadius = 8,
 		-- Flat (XZ) stud/s. Roblox walk speed is 16, so this is "standing".
 		ProximityLatchMaximumSpeed = 3,
-		-- Legacy statue reveal tuning remains available if FreezeWhileObserved is
-		-- enabled again. The Pool Noodle's current mechanic chases while visible.
-		RevealOverrunSeconds = 0.50,
+		-- LOOKING STOPS IT (owner, card wdz28z81, 2026-09-23): while any living
+		-- player holds a validated look on a foam it stands completely still --
+		-- no overrun step, no kill -- and the speed it earned chasing is reset.
+		-- Looking away resumes the chase from Movement.SpeedRamp.ChaseMinimumSpeed.
+		-- The first look still latches the chase (TriggerChaseOnObserve above).
+		RevealOverrunSeconds = 0,
 		RevealOverrunCooldown = 0.0,
 		RequireServerLineOfSight = true,
 		ServerLineOfSightInterval = 0.12,
-		FreezeWhileObserved = false,
+		FreezeWhileObserved = true,
 	},
 
 	-- Pool Foam listens to the shared ServerScriptService.NoiseRegistry — the
@@ -167,16 +176,22 @@ local Configuration = {
 		MaxStepHeight = 3.5,
 		StuckRepathSeconds = 1.1,
 		UnreachableTargetCooldown = 3.0,
-		-- While an active Pool Noodle has not yet been looked at, its stalking
-		-- speed rises continuously. The first validated look freezes the earned
-		-- bonus and changes to Hunt pace; it never toggles with camera-edge noise.
+		-- Certify only the first 96 studs of a route and fetch the next piece
+		-- with 48 left (the Pool Slide's measured values, 2026-09-21). 0 = the
+		-- old whole-route certification. See the Navigator's PLAN HORIZON note.
+		PlanHorizon = 96,
+		PlanHorizonExtend = 48,
+		-- An unseen, pursuing Pool Noodle speeds up continuously: stalking from
+		-- its phase pace, chasing from ChaseMinimumSpeed, both capped at
+		-- MaximumSpeed. Every validated look resets the bonus to zero (card
+		-- wdz28z81), so a chase that is watched never keeps what it earned.
 		SpeedRamp = {
 			Enabled = true,
 			AccelerationPerSecond = 0.65,
 			MaximumBonus = 12.0,
 			MaximumSpeed = 22.0,
 			ChaseMinimumSpeed = 13.0,
-			FreezeOnChase = true,
+			FreezeOnChase = false,
 		},
 		Speeds = {
 			Dormant = 0,
