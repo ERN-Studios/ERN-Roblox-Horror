@@ -37,6 +37,9 @@
   },
   "animations": {
     "Walk": {
+      "roblox_asset_id": "103719823156557",
+      "roblox_keyframe_sequence": "animations/pool_slide_walk_1p20_v1.rbxmx",
+      "roblox_upload_receipt": "animations/pool_slide_walk_1p20_v1_upload_receipt.json",
       "duration_seconds": 1.0333333,
       "loop_first_last_identical": true,
       "changed": "stronger hip/leg/arm motion, heel-toe articulation, slightly deeper weight shift",
@@ -45,6 +48,9 @@
       "reference_speed_status": "estimate from 1.372x average ankle-travel ratio vs old clip; tune in an active Level 2 round"
     },
     "Run": {
+      "roblox_asset_id": "128800704640816",
+      "roblox_keyframe_sequence": "animations/pool_slide_run_1p20_v1.rbxmx",
+      "roblox_upload_receipt": "animations/pool_slide_run_1p20_v1_upload_receipt.json",
       "duration_seconds": 0.6333333,
       "loop_first_last_identical": true,
       "changed": "more forceful chase stride and arm swing, heel-toe articulation, deeper body bounce",
@@ -59,6 +65,10 @@
     "blender_version": "5.2.2 LTS",
     "headless_blender_import": "pass: 20 named joints, two weighted meshes, four named actions",
     "gltf_validator": "pass: zero errors, zero warnings; two informational unused UV notices",
+    "animation_xml": "pass: 20 unique named Pose descendants per keyframe, orthonormal CFrames, exact first/last poses, in-place Root, reconstruction error under 1e-5 stud",
+    "roblox_animation_upload": "pass: Walk and Run group-owned, Approved, Active, revision 1; expectedPrice=0",
+    "roblox_animation_delivery": "pass: AssetDelivery returned both version-1 KeyframeSequences byte-for-byte identical to uploads; see animations/delivery_verification.json",
+    "roblox_animator_playback": "not yet tested in Studio",
     "roblox_studio_import": "not yet done",
     "level_2_corridor_fit_and_foot_slip": "not yet tested"
   }

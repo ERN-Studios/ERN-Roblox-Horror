@@ -1,0 +1,35 @@
+{
+  "checked_utc_date": "2026-09-24",
+  "method": "Roblox AssetDelivery API, private assetId/version/1 request with group Open Cloud key, then signed CDN download; credentials and signed URLs omitted",
+  "checks": [
+    {
+      "clip": "Walk",
+      "assetId": "103719823156557",
+      "http_status": 200,
+      "uploaded_file": "pool_slide_walk_1p20_v1.rbxmx",
+      "uploaded_bytes": 1300356,
+      "delivered_bytes": 1300356,
+      "uploaded_sha256": "f194aba2174a2ab74c085c41884d8141e79c4151b4696bb71b936726a01d5aff",
+      "delivered_sha256": "f194aba2174a2ab74c085c41884d8141e79c4151b4696bb71b936726a01d5aff",
+      "byte_equal": true,
+      "root_class": "KeyframeSequence",
+      "keyframes": 64,
+      "poses_per_keyframe": 20
+    },
+    {
+      "clip": "Run",
+      "assetId": "128800704640816",
+      "http_status": 200,
+      "uploaded_file": "pool_slide_run_1p20_v1.rbxmx",
+      "uploaded_bytes": 791964,
+      "delivered_bytes": 791964,
+      "uploaded_sha256": "3700e93c91d8baf988d436c3c3181291a796d39ced5180dadc19ad60d5613896",
+      "delivered_sha256": "3700e93c91d8baf988d436c3c3181291a796d39ced5180dadc19ad60d5613896",
+      "byte_equal": true,
+      "root_class": "KeyframeSequence",
+      "keyframes": 39,
+      "poses_per_keyframe": 20
+    }
+  ],
+  "limit": "Asset storage and structure are verified; Animator playback and Level 2 gameplay fit require Studio and an active round."
+}
