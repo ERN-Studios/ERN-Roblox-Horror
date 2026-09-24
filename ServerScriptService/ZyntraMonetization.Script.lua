@@ -318,6 +318,10 @@ local function normalizeDaily(value)
 				wheelLast.FallbackTokens = 3
 			end
 		end
+		-- TOKEN_EARNER_20260924: the tokens a claim actually paid, so the wheel's
+		-- COLLECTED face names the multiplied amount. Absent on older records.
+		local paidTokens = wholeCount(savedLast.PaidTokens)
+		if paidTokens > 0 then wheelLast.PaidTokens = paidTokens end
 	end
 	local flushId = saved.FlushId
 	return {
@@ -366,11 +370,14 @@ end
 -- milestones and the wheel so a prize cannot mean two different things in two
 -- places. Returns a short human label, or nil when this build cannot pay the
 -- reward -- a caller must read nil as "granted nothing" and refuse.
-local function applyReward(data, reward)
+-- `tier` (TOKEN_EARNER_20260924) multiplies a Tokens reward only: callers pass
+-- tokenEarner.tier(player), read once before their write.
+local function applyReward(data, reward, tier)
 	if type(reward) ~= "table" then return nil end
 	local amount = wholeCount(reward.Amount)
 	if amount < 1 then return nil end
 	if reward.Kind == "Tokens" then
+		amount *= (tier == 2 or tier == 3 or tier == 5) and tier or 1
 		if not isSafeSupportAmount(data.Tokens)
 			or amount > MAX_SAFE_SUPPORT - data.Tokens then return nil end
 		data.Tokens += amount
@@ -393,6 +400,23 @@ local function applyReward(data, reward)
 	if not owned or amount > MAX_SAFE_SUPPORT - owned then return nil end
 	data.Items[reward.Key] = owned + amount
 	return amount .. " " .. item.Name .. (amount == 1 and "" or "s")
+end
+
+-- TOKEN_EARNER_20260924 (Trello EtdsUM4e). The tier is session state that
+-- refreshPasses resolves from Roblox pass ownership. A caller reads it ONCE,
+-- before its write, so every retry of that write pays the same; `bonus` tops up
+-- tokens a transform has just EARNED. Balances, bought packs, refunds and grants
+-- never pass through here.
+local tokenEarner = {}
+function tokenEarner.tier(player)
+	local tier = player:GetAttribute("ZyntraTokenEarnerMultiplier")
+	return (tier == 2 or tier == 3 or tier == 5) and tier or 1
+end
+function tokenEarner.bonus(data, earned, tier)
+	local extra = math.max(0, math.floor(earned)) * (tier - 1)
+	if extra < 1 or extra > MAX_SAFE_SUPPORT - data.Tokens then return 0 end
+	data.Tokens += extra
+	return extra
 end
 
 -- Live playtime accrual, per loaded player: where they were, when they last
@@ -1590,6 +1614,10 @@ local function handleProtectionAction(player, action, payload)
 			-- deadline commit happen together, after the durable reservation.
 			attempt.Applied = protectionOwnsLease(player, attempt.Session, attempt.Session.data)
 				and PlayerProtection.Activate(player, attempt.Context) == true
+			-- AUDIT_FIX_20260924: the run is aided the moment the shield is live, not
+			-- after the finalize write -- which can fail, or land after the round read
+			-- ZyntraRunAided and filed a shielded escape as a clean record.
+			if attempt.Applied then markRunAided(player) end
 		end
 		local wanted = attempt.Applied and "Consumed" or "Refunded"
 		success = mutateIdempotent(player, function(data)
@@ -1616,7 +1644,6 @@ local function handleProtectionAction(player, action, payload)
 	if sessions[player] ~= attempt.Session or protectionAttempts[player] ~= attempt then return end
 	if success and (outcome == "Bought" or outcome == "Consumed" or outcome == "Refunded") then
 		protectionAttempts[player] = nil
-		if outcome == "Consumed" then markRunAided(player) end
 		if outcome == "Consumed" and Analytics then Analytics.ItemUse(player, "EntityShield") end
 		protectionResponse(player, command, outcome)
 	elseif success and outcome and definiteRejection then
@@ -2144,6 +2171,15 @@ local function refreshPasses(player)
 			end
 		end
 	end
+
+	-- TOKEN_EARNER_20260924: six passes, one tier. Each ownership is published
+	-- like any other pass; earning code reads only the resolved tier.
+	local earnerOwns = {}
+	for key, pass in pairs(Config.TokenEarner.Passes) do
+		earnerOwns[key] = passOwnership(player, key, pass)
+		player:SetAttribute("ZyntraOwns" .. key, earnerOwns[key])
+	end
+	player:SetAttribute("ZyntraTokenEarnerMultiplier", Config.TokenEarner.Tier(earnerOwns))
 
 	if supporter then
 		mutate(player, function(data)
@@ -2910,6 +2946,7 @@ researchProgress.Event:Connect(function(player, key)
  if typeof(player)~="Instance" or not player:IsA("Player") or player.Parent~=Players
   or (key~="Fuse" and key~="Lever") or not sessions[player] then return end
  local earnedDay=utcDay()
+ local earnerTier=tokenEarner.tier(player)
  for attempt=1,3 do
   if utcDay()~=earnedDay or player.Parent~=Players then return end
   local session=sessions[player]
@@ -2918,7 +2955,8 @@ researchProgress.Event:Connect(function(player, key)
   local done=dailyMutate(player,function(data,today)
    if today~=earnedDay then return false end
    local changed,amount=DailyResearch.Complete(data,key)
-   return changed, changed and ("Daily research complete: +"..amount.." Research Token") or nil,"success"
+   if changed then amount+=tokenEarner.bonus(data,amount,earnerTier) end
+   return changed, changed and ("Daily research complete: +"..amount.." Research Token"..(amount==1 and "" or "s")) or nil,"success"
   end)
   if done then return end
   task.wait(attempt)
@@ -3141,13 +3179,14 @@ local function claimPlaytimeReward(player, payload)
 			milestone.Minutes, math.floor(have / 60)), "error")
 		return
 	end
+	local earnerTier = tokenEarner.tier(player)
 	dailyMutate(player, function(data)
 		if data.Daily.Claimed[key] == true then return false, claimedMessage, "error" end
 		if data.Daily.PlaytimeSeconds < required then
 			return false, string.format(
 				"Play %d minutes of a round today to claim this.", milestone.Minutes), "error"
 		end
-		local label = applyReward(data, milestone.Reward)
+		local label = applyReward(data, milestone.Reward, earnerTier)
 		if not label then return false, "That reward is unavailable right now.", "error" end
 		data.Daily.Claimed[key] = true
 		return true, string.format("%s collected -- %d minutes of play today.", label, milestone.Minutes), "success"
@@ -3287,16 +3326,18 @@ local function claimWheelPrize(player)
 		pushProfile(player, "Nothing to collect.", "info")
 		return
 	end
+	local earnerTier = tokenEarner.tier(player)
 	dailyMutate(player, function(data)
 		local last = pendingWheelPrize(data.Daily)
 		if not last then return false, "Nothing to collect.", "info" end
 		local prize = wheelPrizeByKey(last.Key)
 		local label
+		local tokensBefore = data.Tokens
 		if prize and prize.Key == "Skin5" then
 			if last.FallbackTokens == 3 or Skins.IsOwned(data.Skins, last.SkinId) then
 				-- A player can buy the selected suit after spinning but before
 				-- collecting. Keep the exact SkinId receipt and pay the same fallback.
-				label = applyReward(data, {Kind = "Tokens", Amount = 3})
+				label = applyReward(data, {Kind = "Tokens", Amount = 3}, earnerTier)
 				if label then last.FallbackTokens = 3 end
 			else
 				local skin = Skins.Get(last.SkinId)
@@ -3305,9 +3346,10 @@ local function claimWheelPrize(player)
 				end
 			end
 		else
-			label = prize and applyReward(data, prize.Reward)
+			label = prize and applyReward(data, prize.Reward, earnerTier)
 		end
 		if not label then return false, "That prize is unavailable right now.", "error" end
+		if data.Tokens > tokensBefore then last.PaidTokens = data.Tokens - tokensBefore end
 		last.Claimed = true
 		return true, label .. " collected.", "success"
 	end)
@@ -3698,10 +3740,12 @@ levelCompletedEvent.Event:Connect(function(player, level, friendCount, run, roun
 	-- gets a stable id for its own retries.
 	local completionId = (type(roundId) == "string" and #roundId > 0 and #roundId <= 80)
 		and roundId .. ":" .. cleared or HttpService:GenerateGUID(false)
+	local earnerTier = tokenEarner.tier(player)
 	completionSaves.settle(player, completionId, function(data)
 		if table.find(data.CompletionIds, completionId) then
 			return false, "Level clear saved.", "success"
 		end
+		local tokensBefore = data.Tokens
 		-- FRIEND_BOOST_20260916. The boost is counted in TENTHS of a token and the
 		-- remainder rides on the profile, so +10% of a 2-token clear (0.2) builds
 		-- up instead of rounding away: one friend pays a whole extra token on the
@@ -3727,6 +3771,12 @@ levelCompletedEvent.Event:Connect(function(player, level, friendCount, run, roun
 			for _, note in ipairs(Challenges.Apply(data, cleared, run, Config.Challenges, os.time())) do
 				message ..= " " .. note
 			end
+		end
+		-- TOKEN_EARNER_20260924: everything this clear paid -- tokens, daily Clear,
+		-- challenges -- is earned, and is multiplied once, here.
+		local extra = tokenEarner.bonus(data, data.Tokens - tokensBefore, earnerTier)
+		if extra > 0 then
+			message ..= (" Token Earner %dx: +%d more."):format(earnerTier, extra)
 		end
 		table.insert(data.CompletionIds, completionId)
 		while #data.CompletionIds > 20 do table.remove(data.CompletionIds, 1) end
@@ -3758,6 +3808,7 @@ MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(player, passI
 			passes[skinId] = {Id = skin.PassId, Name = skin.Name, Price = skin.RobuxPrice}
 		end
 	end
+	for key, pass in pairs(Config.TokenEarner.Passes) do passes[key] = pass end
 	for key, pass in pairs(passes) do
 		if pass.Id > 0 and pass.Id == passId then
 			-- Latch the purchase BEFORE refreshing: Roblox has just told us this

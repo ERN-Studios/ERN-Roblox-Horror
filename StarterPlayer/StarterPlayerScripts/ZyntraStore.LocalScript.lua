@@ -1879,6 +1879,19 @@ makeProductCard("Tokens20", Config.Products.Tokens20, "Product")
 makeProductCard("EmergencyReentry", Config.Products.EmergencyReentry, "Product")
 makeProductCard("ExpeditionPack", Config.Products.ExpeditionPack, "Product")
 makeProductCard("CosmeticEquipment", Config.Passes.CosmeticEquipment, "Pass")
+-- TOKEN_EARNER_20260924 (Trello EtdsUM4e). One card per tier. refreshUI points
+-- each card at the pass the resolved tier makes eligible -- the direct pass, or
+-- the upgrade from the tier already held -- and marks reached tiers OWNED. Id
+-- stays 0 until the first profile, so no stale price fetch can land on a card.
+shopDetail.TokenEarner = {}
+for _, tier in ipairs({2, 3, 5}) do
+	local direct = Config.TokenEarner.Passes["TokenEarner" .. tier .. "x"]
+	local item = {Id = 0, Price = direct.Price, IconId = direct.IconId,
+		Name = ("TOKEN EARNER %dx"):format(tier),
+		Description = ("Permanently earn %dx Research Tokens from clears, daily rewards and the wheel. Upgrading costs less."):format(tier)}
+	makeProductCard("TokenEarner" .. tier .. "x", item, "Pass")
+	shopDetail.TokenEarner[tier] = item
+end
 
 -- ── THE SHOP DETAIL PANE (card 102) ─────────────────────────────────────────
 -- Roblox's monetization guidance asks for a shop a player can "linger and
@@ -3241,6 +3254,23 @@ local function refreshUI()
 			-- that cannot be bought.
 			UIDevice.SetEnabled(itemButton, false)
 		end
+	end
+
+	-- TOKEN_EARNER_20260924: ownership is the server's, published per pass.
+	local earner = Config.TokenEarner
+	local earnerOwns = {}
+	for key in pairs(earner.Passes) do earnerOwns[key] = player:GetAttribute("ZyntraOwns" .. key) == true end
+	for tier, item in pairs(shopDetail.TokenEarner) do
+		local key = "TokenEarner" .. tier .. "x"
+		local itemButton = productButtons[key]
+		local offer = earner.Offer(earner.Passes, earner.Tier, earnerOwns, tier)
+		local pass = offer and Config.TokenEarner.Passes[offer]
+		item.Id = pass and pass.Id or 0
+		if pass then item.Price = pass.Price; displayedProductPrices[key] = pass.Price end
+		itemButton.Text = pass and (tostring(pass.Price) .. " R$") or "OWNED"
+		itemButton.TextColor3 = pass and COLORS.accent2 or COLORS.accent
+		UIDevice.SetEnabled(itemButton, pass ~= nil)
+		if shopDetail.priceChanged then shopDetail.priceChanged(key) end
 	end
 
 	hazmatPicker.SetLocked(not profile.OwnsAdvancedEquipment, "ADVANCED EQUIPMENT REQUIRED")

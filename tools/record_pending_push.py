@@ -75,11 +75,15 @@ def find_unknown(known: set[str]) -> list[str]:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--dry-run", action="store_true", help="report only")
+    parser.add_argument("--file", action="append", default=[],
+                        help="record only this mirrored file (repeatable); others stay as they are")
     args = parser.parse_args()
 
     manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
     changed = 0
     for item in manifest.get("items", []):
+        if args.file and item["file"] not in args.file:
+            continue
         path = PROJECT_ROOT / item["file"]
         if not path.exists():
             print(f"  MISSING FILE {item['file']}")

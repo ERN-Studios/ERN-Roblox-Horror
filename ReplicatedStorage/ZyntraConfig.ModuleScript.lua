@@ -132,6 +132,48 @@ return {
 		},
 	},
 
+	-- TOKEN_EARNER_20260924 (Trello EtdsUM4e). Six permanent Game Passes (IDs:
+	-- assets/monetization/booster-passes/game-pass-receipt.json), off sale until
+	-- QA. The tier multiplies only Tokens EARNED from then on -- level clears,
+	-- daily research and rewards, the wheel -- never the balance, bought packs,
+	-- refunds or grants. The highest VALID tier wins and tiers never stack; an
+	-- upgrade counts only on top of its prerequisite, wherever it was bought.
+	-- Kept out of Passes so the lobby wall does not list six more boxes.
+	TokenEarner = {
+		Passes = {
+			TokenEarner2x = {Id = 1995218405, Price = 149, IconId = 110042354901224, Name = "Token Earner 2x"},
+			TokenEarner3x = {Id = 1995716395, Price = 299, IconId = 90602955172781, Name = "Token Earner 3x"},
+			TokenEarner5x = {Id = 1994654411, Price = 399, IconId = 123482394566073, Name = "Token Earner 5x"},
+			TokenEarnerUp2to3 = {Id = 1994282418, Price = 150, IconId = 127143625556663, Name = "Token Earner Upgrade 2x to 3x"},
+			TokenEarnerUp3to5 = {Id = 1995812369, Price = 100, IconId = 99847748150208, Name = "Token Earner Upgrade 3x to 5x"},
+			TokenEarnerUp2to5 = {Id = 1994252411, Price = 250, IconId = 138859474490319, Name = "Token Earner Upgrade 2x to 5x"},
+		},
+		-- `owns` maps pass key -> true. Returns 1, 2, 3 or 5.
+		Tier = function(owns)
+			local three = owns.TokenEarner3x or (owns.TokenEarner2x and owns.TokenEarnerUp2to3)
+			if owns.TokenEarner5x or (owns.TokenEarner2x and owns.TokenEarnerUp2to5)
+				or (three and owns.TokenEarnerUp3to5) then return 5 end
+			if three then return 3 end
+			return owns.TokenEarner2x and 2 or 1
+		end,
+		-- The cheapest single pass that lifts `owns` to at least `target` (2, 3
+		-- or 5), or nil once that tier is reached. Never a pass already owned,
+		-- and an upgrade bought early (still pending) makes its prerequisite the
+		-- cheaper offer. `tier` is this table's Tier, passed in by the caller.
+		Offer = function(passes, tier, owns, target)
+			if tier(owns) >= target then return nil end
+			local best
+			for key, pass in pairs(passes) do
+				if not owns[key] then
+					local trial = table.clone(owns)
+					trial[key] = true
+					if tier(trial) >= target and (not best or pass.Price < passes[best].Price) then best = key end
+				end
+			end
+			return best
+		end,
+	},
+
 	Products = {
 		ExpeditionPack = {
 			Id = 3713829859,

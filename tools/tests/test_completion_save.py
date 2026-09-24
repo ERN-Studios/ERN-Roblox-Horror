@@ -84,8 +84,11 @@ local function warn(...)
 end
 local RunService = {IsStudio = function() return false end}
 local Players = {}
-local player = {UserId = 7, Name = "Escapee", Parent = Players}
+local player = {UserId = 7, Name = "Escapee", Parent = Players, attrs = {}}
 function player:IsA(className) return className == "Player" end
+function player:GetAttribute(name) return self.attrs[name] end
+local MAX_SAFE_SUPPORT = 9007199254740991
+__TOKEN_EARNER__
 
 -- fake DataStore: a per-call script of outcomes
 local stored, commits, plan = {}, 0, {}
@@ -148,6 +151,7 @@ local function reset(profile)
     completionSaves.pending[player] = nil
     commits, plan, warnings, pushes, badges = 0, {}, {}, {}, {}
     player.Parent = Players
+    player.attrs = {}
     now, sleepers = 0, {}
 end
 local function saved() return stored.u_7 end
@@ -310,6 +314,27 @@ fire(player, 1, 0, nil, "bulk-21")
 run()
 equal(#saved().CompletionIds, 20, "the write keeps the list bounded")
 
+-- 13. Token Earner (TOKEN_EARNER_20260924): the tier multiplies what the clear
+-- earned, is read once before the write, and a lost response still pays once.
+reset()
+player.attrs.ZyntraTokenEarnerMultiplier = 5
+plan = {"fail_after"}
+fire(player, 1, 0, nil, "earner-A")
+player.attrs.ZyntraTokenEarnerMultiplier = 2 -- a mid-save change must not reprice the retry
+run()
+equal(saved().Tokens, 10, "5x tier: 2 earned tokens pay 10")
+equal(commits, 1, "lost response at 5x still pays once")
+reset()
+player.attrs.ZyntraTokenEarnerMultiplier = 4
+fire(player, 1, 0, nil, "earner-B")
+run()
+equal(saved().Tokens, 2, "an invalid tier value pays 1x")
+reset({Tokens = 50, CompletedLevels = 0, FriendBoostTenths = 0, LevelsCleared = {}, Daily = {Clears = 0}, CompletionIds = {}})
+player.attrs.ZyntraTokenEarnerMultiplier = 3
+fire(player, 1, 0, nil, "earner-C")
+run()
+equal(saved().Tokens, 56, "3x multiplies only the 2 earned, never the 50 already held")
+
 print(("completion save: %d checks passed (real mutateIdempotent + completionSaves + handler, fake DataStore)"):format(checks))
 '''
 
@@ -336,8 +361,9 @@ def main():
     assert "completionRoundId = game:GetService(\"HttpService\"):GenerateGUID(false)" in MANAGER
     assert "run, completionRoundId)" in MANAGER, "GameManager passes the round id"
 
+    earner = section(SERVER, "-- TOKEN_EARNER_20260924 (Trello EtdsUM4e). The tier", "-- Live playtime accrual")
     source = "".join([
-        HARNESS.replace("__NORMALIZE_IDS__", normalize_ids),
+        HARNESS.replace("__NORMALIZE_IDS__", normalize_ids).replace("__TOKEN_EARNER__", earner),
         locks, "\n", idempotent, "\n", completion, "\n", TESTS,
     ])
     with tempfile.TemporaryDirectory(prefix="completion-save-") as directory:

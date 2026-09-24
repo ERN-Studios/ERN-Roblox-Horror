@@ -820,6 +820,8 @@ def main():
         # DataStore. Here the write always lands once, as the old mutate did.
         "    local guids = 0",
         "    local HttpService = {GenerateGUID = function() guids += 1 return 'guid-' .. guids end}",
+        # No Token Earner tier here: test_completion_save.py runs the real one.
+        "    local tokenEarner = {tier = function() return 1 end, bonus = function() return 0 end}",
         "    local completionSaves = {settle = function(who, _, transform, onSaved)",
         "        local profile = sessions[who].data",
         "        normalizeTenths(profile)",
