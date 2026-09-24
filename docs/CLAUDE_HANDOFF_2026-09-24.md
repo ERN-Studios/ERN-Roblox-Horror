@@ -12,7 +12,7 @@ Final parity (end of session): 182/182 scripts match Studio `.Source`, 182/182 e
 | `ServerStorage.Level2Assets."Level 2 Pool Slide Template (pre-1p10 backup 20260924)"` | The previous live template, renamed only (scale 6, untouched) | recoverable from v2061 |
 | `ServerStorage.HazmatSkin_SignalArchitect_20260924` | Clone of Baseline Yellow template, `Scene.char1.SurfaceAppearance.ColorMap = rbxassetid://137400739559825` | `artifacts/claude-20260924/HazmatSkin_SignalArchitect_20260924.rbxm` |
 
-A full place `.rbxl` backup was not taken this session (the desktop "Download a Copy" route was declined); the two `.rbxm` exports plus v2061 cover every non-script object changed.
+Claude did not take a full `.rbxl` backup during that session (the desktop "Download a Copy" route was declined). Codex later saved the native place as `artifacts/poolslide-20260924/saved-place-v2074.rbxl` before changing the Pool Slide animation IDs. The two `.rbxm` exports and published v2061 remain separate recovery points.
 
 ## Cards
 
@@ -42,6 +42,12 @@ A read-only audit of six areas found 16 candidate defects; 13 survived three ind
 ## Tooling
 
 `tools/record_pending_push.py --file <path>` (repeatable) records only the named mirrored scripts, so one session can push its own files while another session's edits in the same checkout are mid-flight.
+
+## Codex independent Level 2 QA
+
+- [Pool Slide A/B](POOL_SLIDE_AB_2026-09-24.md): approved, scale-neutral Walk `100254982019982` and Run `80850407466977` had no all-bone rest flashes in the cloned-rig comparison. Codex changed only the live Edit template's two AnimationIds and RigNote; the old sibling template remains. In a generated solo Level 2 round, the entity spawned 141.98 studs away, used Run in chase and Walk at 10 studs/s. A Play-only counter probe selected Run at 32 studs/s. This does not prove the real third pump, sole contact or physical mobile FPS. The native `v2074` backup above predates the AnimationId change.
+- [Pool Slide sound](../artifacts/poolslide-audio-20260924/README.md): three disposable rounds showed distant groan before spawn, alert/chase sound from the Head follow emitter, periodic Mouth audio and cleanup after reset. The sound files previously measured as Pool Slide were actually Pool Foam; the report corrects this. Direct listening, true despawn/exit and published play are still needed.
+- [Level 2 wall art](../artifacts/level2-wall-20260924/README.md): three decals appeared in a generated Level 2 round, all non-colliding/non-querying and no Pool Slide sight-line ray hit a decal. Owner visual judgment and physical mobile measurement remain.
 
 ## Residual fixes, 24 September evening (Studio compiled; unpublished)
 
