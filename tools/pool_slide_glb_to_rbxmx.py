@@ -42,7 +42,7 @@ def prop(parent: ET.Element, tag: str, name: str, value: str) -> None:
     ET.SubElement(parent, tag, {"name": name}).text = value
 
 
-def sequence_xml(gltf: dict, blob: bytearray, action_name: str) -> tuple[ET.ElementTree, dict]:
+def sequence_xml(gltf: dict, blob: bytearray, action_name: str, label: str = "v1") -> tuple[ET.ElementTree, dict]:
     anim = next(a for a in gltf["animations"] if a["name"] == action_name)
     nodes = gltf["nodes"]
     joints = gltf["skins"][0]["joints"]
@@ -81,7 +81,7 @@ def sequence_xml(gltf: dict, blob: bytearray, action_name: str) -> tuple[ET.Elem
         return result
     seq = item(root, "KeyframeSequence")
     props = ET.SubElement(seq, "Properties")
-    prop(props, "string", "Name", f"Pool Slide {action_name} 1.20x v1")
+    prop(props, "string", "Name", f"Pool Slide {action_name} 1.20x {label}")
     prop(props, "bool", "Loop", "true")
     prop(props, "token", "Priority", "1")  # Enum.AnimationPriority.Movement
     max_t_error = 0.0
@@ -164,13 +164,15 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("glb", type=Path)
     parser.add_argument("out_dir", type=Path)
+    parser.add_argument("--label", default="v1", help="Version suffix for generated offline candidate assets")
     args = parser.parse_args()
+    assert args.label and all(c.isalnum() or c in "-_" for c in args.label)
     gltf, blob = parse_glb(args.glb)
     args.out_dir.mkdir(parents=True, exist_ok=True)
     reports = []
     for name in ("Walk", "Run"):
-        tree, report = sequence_xml(gltf, blob, name)
-        path = args.out_dir / f"pool_slide_{name.lower()}_1p20_v1.rbxmx"
+        tree, report = sequence_xml(gltf, blob, name, args.label)
+        path = args.out_dir / f"pool_slide_{name.lower()}_1p20_{args.label}.rbxmx"
         ET.indent(tree, space="  ")
         tree.write(path, encoding="utf-8", xml_declaration=False)
         with path.open("ab") as file:
