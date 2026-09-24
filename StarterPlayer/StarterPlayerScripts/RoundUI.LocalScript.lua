@@ -2596,8 +2596,15 @@ local function setObjectivesAvailable(available)
 end
 
 local function setSubtitle(text)
-	dispatchAudio.subtitleCopy = text or ""
+	local nextCopy = text or ""
+	local changed = dispatchAudio.subtitleCopy ~= nextCopy
+	dispatchAudio.subtitleCopy = nextCopy
 	dispatchAudio.refresh()
+	-- A device or reader change can fit the panel to a short current cue.
+	-- Refit when the next line arrives so a longer line cannot overflow it.
+	if changed and dispatchAudio.relayoutForCaption then
+		dispatchAudio.relayoutForCaption()
+	end
 end
 
 function lobbyBriefing.isEligible()
@@ -3740,6 +3747,8 @@ local function updateLevelOneGuideLayout()
 	-- refresh() never calls back into the layout, so there is no cycle here.
 	dispatchAudio.refresh()
 end
+
+dispatchAudio.relayoutForCaption = updateLevelOneGuideLayout
 
 -- Studio-only relayout seam. The regression harness sets a stress cue by
 -- writing the subtitle label directly, and the panel is SIZED FOR THE COPY --
