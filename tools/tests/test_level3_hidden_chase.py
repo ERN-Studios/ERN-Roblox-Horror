@@ -1,9 +1,9 @@
 """Run production hidden-target/table-check helpers with offline Luau fixtures.
 
-The real target selection, table lifecycle, wall-ray gate, hiding records and
-immunity clock run. Engine geometry, presentation, and character release are
-stubbed; generated-world movement remains a Studio check.
---baseline-ref HEAD runs only eligibility against the old source to prove fail.
+The real target selection, table inspection, wall-ray gate and hiding records
+run. Engine geometry, presentation, and character release are stubbed;
+generated-world movement remains a Studio check. --baseline-ref runs only
+eligibility checks against the selected revision.
 """
 
 import argparse
@@ -27,6 +27,7 @@ PRELUDE = r'''
 local serverNow,cpuNow=100,10
 local os=table.clone(os)
 os.clock=function() return cpuNow end
+local task={spawn=function() end} -- Animation presentation is outside this fixture.
 local Vector3={}
 local vm={}
 local mt={
@@ -65,6 +66,8 @@ local Instance={new=object}
 local Enum={RollOffMode={InverseTapered="InverseTapered"},HumanoidDisplayDistanceType={None="None"}}
 local roster={}
 local Players={GetPlayers=function() return roster end}
+local protectedLife={}
+local PlayerProtection={IsActive=function(p,character) return protectedLife[p]==character end}
 local workspace={Wall=false,RayCount=0,GetServerTimeNow=function() return serverNow end,
     Raycast=function(self) self.RayCount+=1; return self.Wall and {} or nil end}
 local hiddenSession={Active=true,Generation=7,HiddenPlayers={},Occupants={},FlushImmuneUntil={},AnchorSet={},LastAction={},World={}}
@@ -121,6 +124,7 @@ local function occupantsOf(s,a) return s.Occupants[a] or {} end
 local function slotLateral() return 0 end
 local function roundAllowsHiding(s) return liveSession(s) end
 local function eligible(p) return p.Character,p.Character.Human,p.Character.Root end
+local function pivotRootTo(character,root,target) character:PivotTo(target) end
 local function captureCollisionState() return {} end
 local function suppressCollision() end
 local function refreshPrompt() end
@@ -156,6 +160,10 @@ do
     local s=session()
     local p=player(1,10); hide(p,anchor(12))
     check(select(3,livingPlayer(p,s))==p.Character.Root,"hidden living participant remains an eligible chase target")
+    protectedLife[p]=p.Character
+    check(livingPlayer(p,s)==nil,"protected current life is excluded from chase")
+    protectedLife[p]=nil
+    check(select(3,livingPlayer(p,s))==p.Character.Root,"expired protection restores chase eligibility")
     p.Character.Human.Health=0
     check(livingPlayer(p,s)==nil,"dead participant excluded")
     p.Character.Human.Health=100; p:SetAttribute("Escaped",true)
@@ -180,6 +188,15 @@ do
     check(entered and p:GetAttribute("Level3_Hiding")==true,"real hiding entry succeeds for eligible participant")
     check(p:GetAttribute("BeingChased")==true,"entering a table preserves existing BeingChased")
     check(HidingController.GetAnchor(p,7)==a,"real hiding entry publishes authoritative chase anchor")
+end
+do
+    local s=session(); local p=player(66,10); local a=anchor(12)
+    hide(p,a); roster={p}; protectedLife[p]=p.Character
+    check(nearestLivingPlayer(s)==nil,"protected hidden life is excluded from chase selection")
+    check(HidingController.OccupantCount(a,true)==0,"protected hidden life is excluded from table checks")
+    protectedLife[p]=nil
+    check(nearestLivingPlayer(s)==p and HidingController.OccupantCount(a,true)==1,
+        "hidden life becomes eligible after protection ends")
 end
 do
     local s=session()
@@ -219,12 +236,12 @@ local function tableFixture()
     workspace.Wall=false; serverNow=100; cpuNow=10
     local s=session(); local p=player(10,10); local a=anchor(12)
     hide(p,a); roster={p}; trackNearestBlackoutPlayer(s,cpuNow)
-    s.NextTableCheckAt=999; s.AnchorCheckCooldown[a]=999
+    s.NextTableCheckAt=999; s.AnchorCheckCooldown[a]=0
     return s,p,a
 end
 do
     local s,p,a=tableFixture()
-    check(updateTableCheck(s,cpuNow)==true,"targeted chase starts table check despite random-patrol cooldown")
+    check(updateTableCheck(s,cpuNow)==true,"targeted chase starts table check despite global patrol interval")
     check(s.State=="TABLE_CHECK" and s.TableCheckAnchor==a,"table check owns movement and the target anchor")
     check(s.TableCheckEndsAt==102 and s.PublishedEndsAt==102,"warning gives exactly two server-time seconds")
     check(not attackLineClear(s,p,100),"hiding remains protected from a direct attack")
@@ -232,12 +249,27 @@ do
     serverNow=101.99; cpuNow=1000
     check(updateTableCheck(s,cpuNow)==true and #released==before,"CPU-clock advance cannot shorten visible reaction window")
     serverNow=102
-    check(updateTableCheck(s,cpuNow)==false and released[#released]==p,"occupant flushes when warning reaches zero")
-    check(HidingController.IsFlushImmune(p) and not attackLineClear(s,p,100),"flush grants protected head start")
+    check(updateTableCheck(s,cpuNow)==false and s.TableCheckAnchor==nil,
+        "inspection ends when the warning reaches zero")
+    check(#released==before and HidingController.IsHidden(p,7),
+        "completed inspection leaves the occupant hidden")
+    check(not attackLineClear(s,p,100),"hidden occupant remains protected after inspection")
+    check(s.AnchorCheckCooldown[a]==cpuNow+Configuration.TableCheck.AnchorCooldownSeconds,
+        "completed inspection applies the per-table cooldown")
     serverNow=103.49
-    check(HidingController.IsFlushImmune(p),"flush immunity lasts almost 1.5 server seconds")
+    check(#released==before and HidingController.IsHidden(p,7),
+        "inspection does not eject the occupant later")
     serverNow=103.5
-    check(not HidingController.IsFlushImmune(p) and attackLineClear(s,p,100),"attack resumes after exact 1.5-second immunity")
+    check(not attackLineClear(s,p,100),"time alone does not remove hiding protection")
+end
+do
+    local s,p,a=tableFixture()
+    s.AnchorCheckCooldown[a]=cpuNow+1
+    check(updateTableCheck(s,cpuNow)==false and s.TableCheckAnchor==nil,
+        "targeted inspection respects the table cooldown")
+    cpuNow+=1
+    check(updateTableCheck(s,cpuNow)==true and s.TableCheckAnchor==a,
+        "targeted inspection starts when the table cooldown expires")
 end
 for _,reason in {"wall","distance","exposed","dead","nearer"} do
     local s,p,a=tableFixture()
@@ -290,7 +322,9 @@ def main():
     hiding = (ROOT / HIDING_PATH).read_text(encoding="utf-8")
     config = (ROOT / CONFIG_PATH).read_text(encoding="utf-8")
     pieces = [PRELUDE, "local Configuration=(function()", config, "end)()", HIDING_PRELUDE,
+              section(hiding, "local function cdOnTable", "local function refreshPrompt"),
               section(hiding, "function Controller.IsHidden", "function Controller.SetFurnitureSuspended"),
+              section(hiding, "local function aiOccupant", "function Controller.OccupantCount"),
               section(hiding, "function Controller.OccupantCount", "function Controller.GetOccupiedAnchors"),
               section(hiding, "function Controller.FlushAnchor", "function Controller.GetSnapshot"),
               section(hiding, "local function tryEnter", "local function bindPlayer"),
