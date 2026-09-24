@@ -1,10 +1,13 @@
 {
   "formatVersion": 2,
-  "source": "Canonical repository inventory updated 2026-09-24 with hazmat and eight Level 5 script entries. Whole-place parity is not asserted; this manifest does not cover non-script Studio assets or subsequent concurrent edits. Hazmat work is not published.",
+  "source": "Studio-authoritative 182-script hazmat and Level 5 snapshot, exact Source/editor parity verified 2026-09-24; prior published v2036 metadata and main branch history retained. Current hazmat work remains unpublished.",
   "finalNewlineContract": "Entries flagged studioTrailingNewline hold exactly the canonical repo file plus one extra trailing newline in Studio. Exact landings remove the flag. Current flagged entry count: 0. Manifest hashes always describe the canonical repo file, never Studio's transport bytes.",
   "studio": {
     "id": "7b9759ba-1a0c-4f59-9eb8-21098b64c70b",
-    "name": "BACKROOMS: STAY QUIET [CO-OP HORROR] (placeId: 131311258779917)"
+    "name": "BACKROOMS: STAY QUIET [CO-OP HORROR] (placeId: 131311258779917)",
+    "placeId": 131311258779917,
+    "universeId": 10559217407,
+    "publishedVersion": 2036
   },
   "counts": {
     "scripts": 182,
@@ -256,8 +259,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/UIRegression.ModuleScript.lua",
-      "bytes": 453003,
-      "sha256": "4e975f803b3bf369729f436168fd95a13a067dab027c58ecec0d63e2cebb325f",
+      "bytes": 453529,
+      "sha256": "4d03151b347e07efb4d1d4e8ce68d475fb7d135c23249c3a95e06473041bd6fd",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -284,8 +287,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/ZyntraConfig.ModuleScript.lua",
-      "bytes": 13768,
-      "sha256": "7d35c401d3938d2fe49ff852830255d2767e40029a8af0e06f75f19908ea19c6",
+      "bytes": 14087,
+      "sha256": "1a54648b023a47104060db5a0bdfa51896966d420593faa736e8930958dbe416",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -402,8 +405,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 161143,
-      "sha256": "b898991761b83c71ccf2199ed1b0be1ea9530f7ac3899acf2c0f7e3ea0010e66",
+      "bytes": 164145,
+      "sha256": "e80f0c03bacd1843665c834a48738d348a86b4fbb281b45acb8ab6033d72c724",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -1039,8 +1042,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Round Completion Routing.ModuleScript.lua",
-      "bytes": 76790,
-      "sha256": "a55762b480f9ca1c98ea0b32265a4ec2f4e7a9bdd4a5e38c09b8283b917bafec",
+      "bytes": 77033,
+      "sha256": "12a42ae971fe76f1a8e499cc0e0267cd03c57c025e5d379f8308255310de08c9",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -1125,8 +1128,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
-      "bytes": 103347,
-      "sha256": "98a7d70dbaba096d2411711e36088b5bcc17452cbd047c18364bf0bdc4269e09",
+      "bytes": 103365,
+      "sha256": "f5ff4bd648f76f0d69e4608c9d74e576e45993e3d586576e55726d351d0c81f6",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -1169,8 +1172,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/ZyntraMonetization.Script.lua",
-      "bytes": 176477,
-      "sha256": "f53742b22b74ec942c1cc40c5b0b7d7fddae2703db1b52134272c5592d94d5e4",
+      "bytes": 181221,
+      "sha256": "b8316ad3d8f3c6e7727b60f17c501bd7aefc8bcec05a47712da37e797d202e9f",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2284,8 +2287,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Lucky Wheel Client.LocalScript.lua",
-      "bytes": 36752,
-      "sha256": "d7a28ab40d2c1068c6cf08d899e6bd4166e6d8d4d5947166ba35d3679bafa954",
+      "bytes": 37890,
+      "sha256": "3327f0734e54fdb713c33bbd52ae4e65af272720a0d6944bc6be1a0f6b44a05e",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2370,7 +2373,7 @@
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Round Entry Client.LocalScript.lua",
       "bytes": 6319,
-      "sha256": "3ce933734958789ab7b813128cc0ff06a40ddabf4b6d9a25605b8adc08d5b91a",
+      "sha256": "96294f5a47477d4c231b1a73606777068423c95fa1a47ed7c088bc658fc244b8",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2403,8 +2406,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
-      "bytes": 247468,
-      "sha256": "1c42d832d5342418f6396b27b9a6a20d35bf1ef8a2509f8ca69909ea5e125674",
+      "bytes": 248731,
+      "sha256": "0f920c7c035f89f0af19a0d68d7284114e2d6c147f484eeccb2f42e06b5f9c39",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2505,8 +2508,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
-      "bytes": 194768,
-      "sha256": "198e780c2acc40f1154685603fa21945f4f622e63ffdf363f60e3aae69654f5b",
+      "bytes": 194808,
+      "sha256": "0688eb058f3d2ba33642a3d44a0ee07ea25240b8dd163c460f4660f7c5bfac20",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
@@ -2878,5 +2881,129 @@
       "status": "synced",
       "captureMethod": "fresh Studio Source mirrored to canonical UTF-8 repository file on 2026-09-24"
     }
-  ]
+  ],
+  "scriptVerification": {
+    "scriptCount": 182,
+    "sourceEqualsEditorCount": 182,
+    "exactRepositoryByteMatches": 182,
+    "editorConflicts": [],
+    "sourceAudit": "artifacts/hazmat-20260924/studio-parity-after-main-merge.txt",
+    "sourceEditorAudit": "artifacts/hazmat-20260924/studio-editor-parity-after-main-merge.json"
+  },
+  "publication": {
+    "placeId": 131311258779917,
+    "universeId": 10559217407,
+    "publishedVersion": 2036,
+    "publishedAtUtc": "2026-09-23T23:05:12Z",
+    "success": true,
+    "sourceLog": "0.740.0.7400927_20260923T201259Z_Studio_b65c7_last.log",
+    "evidenceFile": "artifacts/level5-mold-20260924/publish-log-v2036.txt",
+    "evidenceSha256": "85acfcf882e14203d9f5dece1328255b8a8b3b05df8045c5b67848447e08cf51",
+    "scope": "Level 5 expansion, furnishing and current mold replacement, plus preserved authoritative Studio state. No active-server restart claimed.",
+    "metadataFile": "artifacts/level5-mold-20260924/publication-v2036.json"
+  },
+  "remoteVerification": {
+    "verifiedDuringLevel5Task": false,
+    "preservedHistoricalEntryCount": 15,
+    "scope": "Historical 15 RemoteEvent entries are preserved; remotes were not independently re-verified during this hazmat parity pass."
+  },
+  "nativePlaceBackupHistory": [
+    {
+      "file": "artifacts/remaining-trello-20260920/remaining-trello-20260920.rbxl",
+      "bytes": 9337807,
+      "sha256": "d2dbfed1b1d6c2c00b6b04caffe53ccada2bc02a65a14acf9c6e72fb6b370f1b",
+      "purpose": "Full v1947 native backup retains unchanged non-script Edit content. Final detector follow-up script sources mirrored separately."
+    },
+    {
+      "localPath": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-build/baselineOA.rbxlT.rbxl",
+      "bytes": 9448869,
+      "sha256": "1011e94bee1bb81d35f620ac11878239c1b9e67b881dee34f03653fa2c3b2f82",
+      "robloxBinaryHeaderVerified": true,
+      "metadataFile": "artifacts/level5-20260923/native-backups.json",
+      "purpose": "Pre-Level5 native place backup; original local filename retained."
+    },
+    {
+      "localPath": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-build/Backrooms-Level5-v2026.rbxl",
+      "bytes": 9462909,
+      "sha256": "37629bcccb5af38c150e2c7015f318942f0d1d1b0f761cff125309b6b7e221ab",
+      "robloxBinaryHeaderVerified": true,
+      "metadataFile": "artifacts/level5-20260923/native-backups.json",
+      "purpose": "Post-change native place backup after verified v2026 publication; full non-script place state. Binary retained locally; repository stores verified metadata."
+    }
+  ],
+  "previousSyncHistory": [
+    {
+      "source": "Studio-authoritative square detector artwork and compact shop captions, published v1949.",
+      "counts": {
+        "scripts": 168,
+        "remoteEvents": 15,
+        "total": 183,
+        "studioTrailingNewline": 0
+      },
+      "nativePlaceBackupSha256": "d2dbfed1b1d6c2c00b6b04caffe53ccada2bc02a65a14acf9c6e72fb6b370f1b",
+      "scope": "Historical pre-Level5 manifest summary retained while script entries refresh from authoritative Studio export."
+    },
+    {
+      "source": "Studio-authoritative Level 5 Indoor Suburbs map/developer preview plus preserved concurrent challenge changes; exact 174-script export verified; existing experience published as v2026.",
+      "counts": {
+        "scripts": 174,
+        "remoteEvents": 15,
+        "total": 189,
+        "studioTrailingNewline": 0
+      },
+      "nativePlaceBackupSha256": "37629bcccb5af38c150e2c7015f318942f0d1d1b0f761cff125309b6b7e221ab",
+      "publishedVersion": 2026,
+      "scope": "Historical pre-expansion Level 5 map delivery; preserved while only three architecture entries refresh."
+    },
+    {
+      "source": "Studio-authoritative Level 5 eight-district expansion; exact 176-script export verified. Only the architecture module changed and two district modules were added; 173 unrelated scripts preserved. Expansion publication pending; prior v2026 receipt retained below.",
+      "counts": {
+        "scripts": 178,
+        "remoteEvents": 15,
+        "total": 193,
+        "studioTrailingNewline": 0
+      },
+      "scope": "Historical pre-furnishing expansion record; final current export includes the other developer Records page."
+    },
+    {
+      "source": "Studio-authoritative Level 5 sparse furnishing and transparent tall wall drawings, house-light removal, Level 1 briefing correction; concurrent Records UI preserved from origin/claude/trello-20260921 at 2e5cfd8. Exact 178-script export verified; publication receipt recorded separately.",
+      "scriptVerification": {
+        "scriptCount": 178,
+        "sourceEqualsEditorCount": 178,
+        "exactRepositoryByteMatches": 178,
+        "editorConflicts": [],
+        "capturedPlaceVersion": 1999,
+        "sourceAudit": "artifacts/level5-furnishing-20260924/studio-source-verification.json",
+        "level4ScriptCount": 12,
+        "level4UnchangedVsBaselineAndRepository": true,
+        "repositoryOnlyServiceMirrors": 0
+      },
+      "publication": {
+        "placeId": 131311258779917,
+        "universeId": 10559217407,
+        "publishedVersion": 2026,
+        "publishedAtUtc": "2026-09-23T21:05:06Z",
+        "success": true,
+        "sourceLog": "0.740.0.7400927_20260923T201259Z_Studio_b65c7_last.log",
+        "evidenceFile": "artifacts/level5-20260923/publish-log-v2026.txt",
+        "evidenceSha256": "14e6628ac64871849f928167b48bbc3c8a8ad5ae00fbf0a21a2c3d16ba39c92f",
+        "scope": "Successful publication of existing experience; no active-server restart claimed.",
+        "metadataFile": "artifacts/level5-20260923/publication-v2026.json"
+      },
+      "currentSyncPublication": {
+        "status": "saved_and_backed_up_publication_pending",
+        "scope": "Level 5 expansion and furnishing, Level 1 briefing fix, preserved Records UI",
+        "savedAtUtc": "2026-09-23T22:31:25Z",
+        "priorPublicationVersion": 2026,
+        "newNativeAfterBackupVerified": true,
+        "reason": "Save to Roblox and local full native copy verified; UI publish confirmation pending."
+      }
+    }
+  ],
+  "currentSyncPublication": {
+    "status": "studio_ready_publication_pending",
+    "scope": "Six hazmat skins and six-sector Lucky Wheel, Level 1 multiplayer relay balance, preserved dev-only Level 5 snapshot",
+    "priorPublicationVersion": 2036,
+    "reason": "New skin meshes and SurfaceAppearance ColorMaps require Studio publish after verification."
+  }
 }

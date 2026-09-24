@@ -1,0 +1,1086 @@
+{
+  "at": "2026-09-23T22:09:28.168594+00:00",
+  "commit": "2c2ff2a3e9d087a2fdfe6a558c808719b9d27633",
+  "runtime": "<workspace>/output/level5-build/tools/luau/luau",
+  "results": [
+    {
+      "suite": "test_controller_input.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.173,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_controller_input.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_controller_input.log",
+      "testSha256": "ae7beedd55d213a720d0da4e45ed80dccaab06f46c5d5c3ed0fa3d1fadab7053",
+      "adaptation": null,
+      "tail": "Controller input: 120 checks passed (offline Luau; engine routing and hardware not exercised)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_daily_rewards.py",
+      "exitCode": 1,
+      "passed": false,
+      "elapsedSeconds": 0.157,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_daily_rewards.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_daily_rewards.log",
+      "testSha256": "ffa8a45305b18f987f729ddc08ed7b4f0913fe4f5ab25be781482d03d22b0c8c",
+      "adaptation": null,
+      "tail": "/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/daily-rewards-q8z5f4rv/daily_rewards.luau:566: harness has no module ZyntraChallenges\nstacktrace:\n[C] function error\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/daily-rewards-q8z5f4rv/daily_rewards.luau:566 function require\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/daily-rewards-q8z5f4rv/daily_rewards.luau:692 function world\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/daily-rewards-q8z5f4rv/daily_rewards.luau:1880 function fresh\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/daily-rewards-q8z5f4rv/daily_rewards.luau:1918\n\n",
+      "classification": "missing harness dependency",
+      "assessment": "New real ZyntraChallenges is missing from fake require. Supplemental harness run embedding real module passed 370 checks."
+    },
+    {
+      "suite": "test_daily_rewards_client.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.245,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_daily_rewards_client.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_daily_rewards_client.log",
+      "testSha256": "ea2a477b97a9f14337f4cc29ce11ef0364265d73895d52d19d8fb60e38bc3454",
+      "adaptation": null,
+      "tail": "Daily Rewards modal: 503 checks passed (entire actual LocalScript plus the real page module, UIStyle and ZyntraConfig, offline Luau; real touch, thumbstick suppression, font metrics and rendering not exercised)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_daily_rewards_page.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.17,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_daily_rewards_page.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_daily_rewards_page.log",
+      "testSha256": "ed8f99e639fab413f356aeb699ba3f8a56059b0e881e0c689c3410b8523e6074",
+      "adaptation": null,
+      "tail": "Daily rewards page: 521 checks passed (offline Luau, config source: ZyntraConfig; font metrics, TextBounds, real UIDevice and rendering not exercised)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_death_advice.py",
+      "exitCode": 1,
+      "passed": false,
+      "elapsedSeconds": 0.17,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_death_advice.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_death_advice.log",
+      "testSha256": "1298a530d1fad621d68354096a8e52299c4605f530e5451bb4b631fdafb0a0fd",
+      "adaptation": null,
+      "tail": "\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/death-advice-8ngb2vr5/death_advice_test.luau:365: attempt to index nil with table\nstacktrace:\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/death-advice-8ngb2vr5/death_advice_test.luau:365\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/death-advice-8ngb2vr5/death_advice_test.luau:25 function Fire\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/death-advice-8ngb2vr5/death_advice_test.luau:384\nTraceback (most recent call last):\n  File \"<workspace>/output/level5-audit/repository/tools/tests/test_death_advice.py\", line 472, in <module>\n    main()\n    ~~~~^^\n  File \"<workspace>/output/level5-audit/repository/tools/tests/test_death_advice.py\", line 456, in main\n    subprocess.run([binary, str(path)], check=True, timeout=30)\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py\", line 577, in run\n    raise CalledProcessError(retcode, process.args,\n                             output=stdout, stderr=stderr)\nsubprocess.CalledProcessError: Command '['<workspace>/output/level5-build/tools/luau/luau', '/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/death-advice-8ngb2vr5/death_advice_test.luau']' returned non-zero exit status 1.\n",
+      "classification": "missing harness dependency",
+      "assessment": "Extracted hookLife now accesses runFacts[player]; harness does not declare runFacts. Captured fixture line 365."
+    },
+    {
+      "suite": "test_dev_free_respawn_offer.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.228,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_dev_free_respawn_offer.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_dev_free_respawn_offer.log",
+      "testSha256": "1cad7407791541311010f2e9ce8220eb8fc1be3240bd037b5f7671f6adc1887a",
+      "adaptation": null,
+      "tail": "Free respawn offer (modal, dev=true): 17 checks passed\nFree respawn offer (card, dev=true): 24 checks passed\nFree respawn offer (modal, dev=false): 3 checks passed\nFree respawn offer (card, dev=false): 8 checks passed\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_donation_board_columns.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.139,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_donation_board_columns.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_donation_board_columns.log",
+      "testSha256": "439c8fee6e46aa056e0926b6c3f2d91b74db9fb0c640f517e6baf1caf14787df",
+      "adaptation": null,
+      "tail": "supporter board columns: 826 checks passed (10 rows, columns 12/72/408 on a 560x392 canvas, last plate foot 366)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_equipment_hud.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.126,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_equipment_hud.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_equipment_hud.log",
+      "testSha256": "338deb69d13a1b132a1ec4f544d20d21629d16794d3838cb3ea64f4f8fbe32ee",
+      "adaptation": null,
+      "tail": "Equipment HUD: 303 checks passed (real ProtectionHUD + real UIDevice plan, offline Luau)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_feedback_gift.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.081,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_feedback_gift.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_feedback_gift.log",
+      "testSha256": "6d4bcedcdb0813043fa5c589767c0fa47794dea5b9fbdba5865da2a095f25be3",
+      "adaptation": null,
+      "tail": "feedback gift: 26 checks passed (actual mutate + gift block; fake DataStore)\nnormalizeProfile keeps unknown Grants keys (3 Grants lines inspected)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_first_entry_guide.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.089,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_first_entry_guide.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_first_entry_guide.log",
+      "testSha256": "8f7d33031b9ea211da1759817a9f105ed98f426ac0d2b4f57ea0a38b9ef6cd28",
+      "adaptation": null,
+      "tail": "First Entry Guide: 39 checks passed (entire actual script, offline Luau)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_first_login_flag.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.124,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_first_login_flag.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_first_login_flag.log",
+      "testSha256": "f39a664b04dc819853d5a0b8b0cc1ed8a35e1536cdaf7295d2caf5eefe1e38e7",
+      "adaptation": null,
+      "tail": "first-login flag: 33 checks passed\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_flashlight_player_control.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.138,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_flashlight_player_control.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_flashlight_player_control.log",
+      "testSha256": "d1b99df9a54a12756c9119415110a5c50394a839ac5fc9c617e0338d8b026f10",
+      "adaptation": null,
+      "tail": "Flashlight player control: 249 checks passed (actual inputs, battery, lifecycle, server replication, teammate display)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_friend_boost.py",
+      "exitCode": 1,
+      "passed": false,
+      "elapsedSeconds": 0.125,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_friend_boost.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_friend_boost.log",
+      "testSha256": "8a010b6b4eb7f7573c1e85220c0c6954a2b67f1359f3376241e0340b40db4e6a",
+      "adaptation": null,
+      "tail": "\nTraceback (most recent call last):\n  File \"<workspace>/output/level5-audit/repository/tools/tests/test_friend_boost.py\", line 834, in <module>\n    main()\n    ~~~~^^\n  File \"<workspace>/output/level5-audit/repository/tools/tests/test_friend_boost.py\", line 776, in main\n    handler = section(MONETIZATION, \"levelCompletedEvent.Event:Connect(function(player, level, friendCount)\",\n                      \"MarketplaceService.PromptGamePassPurchaseFinished\")\n  File \"<workspace>/output/level5-audit/repository/tools/tests/test_friend_boost.py\", line 38, in section\n    begin = source.index(start)\nValueError: substring not found\n",
+      "classification": "stale extraction anchor",
+      "assessment": "Actual completion callback gained run argument; extraction still searches the older three-argument header, so no payout test executes."
+    },
+    {
+      "suite": "test_full_sync_contract.py",
+      "exitCode": 1,
+      "passed": false,
+      "elapsedSeconds": 0.577,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_full_sync_contract.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_full_sync_contract.log",
+      "testSha256": "f8d9022c2dfc8e4229d0b286de6fe73e6a955e7fd1d6e4c004a23399d99991c7",
+      "adaptation": null,
+      "tail": "rlf.ModuleScript.lua\n        keeping the mirrored file: Studio holds the one permitted trailing newline\n[03/07] ServerScriptService.NewScript -> ServerScriptService/NewScript.ModuleScript.lua\n[04/07] ServerScriptService.PlainCrlf -> ServerScriptService/PlainCrlf.ModuleScript.lua\n[05/07] ServerScriptService.PlainLf -> ServerScriptService/PlainLf.ModuleScript.lua\n[06/07] ServerScriptService.StaleExact -> ServerScriptService/StaleExact.ModuleScript.lua\n[07/07] ReplicatedStorage.RoundStatus -> ReplicatedStorage/RoundStatus.RemoteEvent.txt\n\n1 mirrored file(s) kept under the permitted trailing-newline contract:\n  +1 LF in Studio  ServerScriptService/FlaggedCrlf.ModuleScript.lua\n  ok   a second sync over a settled mirror changes nothing\n  ok   and still leaves the CRLF working files untouched\n  ok   the flag survived a second full rebuild too\n=== the PRODUCTION checkout reconciles, read-only ===\n  FAIL the production checkout really does hold the CRLF files this guards  (0 CRLF of 191)\n  ok   every mirrored file in the real checkout reconciles and verifies\n  ok   and the live manifest already describes canonical content for all of them\n=== the live manifest keeps its contract ===\n  ok   finalNewlineContract is present\n  ok   the published trailing-newline count is the number of entries that carry the flag\n  ok   and the contract prose names that same number rather than a stale one\n  ok   counts still reconcile\n  ok   every .lua in the mirrored services is listed in the manifest\n\nFAILED: 1 of the checks above\n  - the production checkout really does hold the CRLF files this guards\n\n",
+      "classification": "environment-dependent assertion",
+      "assessment": "All canonical reconciliation checks pass; sole failure demands this checkout contain CRLF files. This checkout has LF (0 of 191 CRLF)."
+    },
+    {
+      "suite": "test_item_inventory.py",
+      "exitCode": 1,
+      "passed": false,
+      "elapsedSeconds": 0.096,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_item_inventory.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_item_inventory.log",
+      "testSha256": "7f637e81f45238987e70334cf02f87e5d1f4a8fd198907818f0b5f7f1a204421",
+      "adaptation": null,
+      "tail": "/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/item-inventory-3x1ezao4/item_inventory.luau:534: attempt to index nil with 'content'\nstacktrace:\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/item-inventory-3x1ezao4/item_inventory.luau:534 function require\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/item-inventory-3x1ezao4/item_inventory.luau:700 function world\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/item-inventory-3x1ezao4/item_inventory.luau:1990 function fresh\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/item-inventory-3x1ezao4/item_inventory.luau:2000\n\n",
+      "classification": "missing harness dependency",
+      "assessment": "New real ZyntraChallenges is missing from fake require. Supplemental harness run embedding real module passed 87 checks."
+    },
+    {
+      "suite": "test_leaderboard_backfill.py",
+      "exitCode": 1,
+      "passed": false,
+      "elapsedSeconds": 0.172,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_leaderboard_backfill.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_leaderboard_backfill.log",
+      "testSha256": "3b25ea13db165316a6398f4aaaa07a9ed582dd4b819fa03ec834d826b113fcf2",
+      "adaptation": null,
+      "tail": "/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/leaderboard-backfill-z6t17y6v/leaderboard_backfill.luau:525: attempt to index nil with 'WaitForChild'\nstacktrace:\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/leaderboard-backfill-z6t17y6v/leaderboard_backfill.luau:525 function world\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/leaderboard-backfill-z6t17y6v/leaderboard_backfill.luau:1776\n\n",
+      "classification": "missing harness dependency",
+      "assessment": "Extracted profile setup now requires modules through ReplicatedStorage; fake world lacks that service at first WaitForChild."
+    },
+    {
+      "suite": "test_level1_cable_current.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.092,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_level1_cable_current.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_level1_cable_current.log",
+      "testSha256": "7faef0f6d683e54d36f91eb299c1bab76af64ec52c7f94c740b7f3cb00bcdd05",
+      "adaptation": null,
+      "tail": "cable current ok (21 checks)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_level1_relay_spawns.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.097,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_level1_relay_spawns.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_level1_relay_spawns.log",
+      "testSha256": "52c13334ec14ef5a966fd8f85ded79faf61b0e558645121a2a4c64ca832daf6b",
+      "adaptation": null,
+      "tail": "Level 1 relay spawns: 43 checks passed (offline; real wall-spot availability needs Studio)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_level1_team_prompts.py",
+      "exitCode": 1,
+      "passed": false,
+      "elapsedSeconds": 0.085,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_level1_team_prompts.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_level1_team_prompts.log",
+      "testSha256": "19c84481ab4132f9a67be652c92857ac3924b694a7dd4888867e7ee42a56b282",
+      "adaptation": null,
+      "tail": "\nlevel1_team_prompts_server:\n\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/tmp75nlwaax/level1_team_prompts_server.luau:53: attempt to index nil with 'Announce'\nstacktrace:\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/tmp75nlwaax/level1_team_prompts_server.luau:53 function announceTeam\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/tmp75nlwaax/level1_team_prompts_server.luau:126\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/tmp75nlwaax/level1_team_prompts_server.luau:232\n\n",
+      "classification": "missing harness dependency",
+      "assessment": "Actual announceTeam calls shared TeamObjectives.Announce; harness does not provide TeamObjectives."
+    },
+    {
+      "suite": "test_level2_pool_slide_release.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.107,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_level2_pool_slide_release.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_level2_pool_slide_release.log",
+      "testSha256": "440d6adabd64580d96912193122ead12261e79d395962159ac432a3351acfb05",
+      "adaptation": null,
+      "tail": "Level 2 Pool Slide release: 372 checks passed (actual adapter and acceptance guards)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_level2_tile_face_culling.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.153,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_level2_tile_face_culling.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_level2_tile_face_culling.log",
+      "testSha256": "34519dfe9b192072d0b1a8151f2493e63abfc8a76ff7c27908bee75dfb545fe5",
+      "adaptation": null,
+      "tail": "L2 tile face culling: 965 checks passed; 31 fixtures; 1198 textures before, 826 after (31.1% removed across the fixtures)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_level2_tunnel_height.py",
+      "exitCode": 1,
+      "passed": false,
+      "elapsedSeconds": 0.262,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_level2_tunnel_height.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_level2_tunnel_height.log",
+      "testSha256": "493cd1a90ba920f82be4de9ba59f9dcd8f201604298e928aaf24ae3623c89d91",
+      "adaptation": null,
+      "tail": "\nTraceback (most recent call last):\n  File \"<workspace>/output/level5-audit/repository/tools/tests/test_level2_tunnel_height.py\", line 236, in <module>\n    if __name__=='__main__':main()\n                            ~~~~^^\n  File \"<workspace>/output/level5-audit/repository/tools/tests/test_level2_tunnel_height.py\", line 144, in main\n    before=build(binary,BEFORE);after=build(binary,ROOT)\n                                      ~~~~~^^^^^^^^^^^^^\n  File \"<workspace>/output/level5-audit/repository/tools/tests/test_level2_tunnel_height.py\", line 117, in build\n    if result.returncode:raise AssertionError(result.stderr)\n                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: /var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/l2-vault-wdr1wls1/geometry.luau:452: attempt to index nil with 'IsStudio'\nstacktrace:\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/l2-vault-wdr1wls1/geometry.luau:452 function archRibMeshTemplate\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/l2-vault-wdr1wls1/geometry.luau:512 function makeArchSpan\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/l2-vault-wdr1wls1/geometry.luau:813 function makeCorridor\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/l2-vault-wdr1wls1/geometry.luau:1011\n\n",
+      "classification": "missing harness dependency",
+      "assessment": "Current archRibMeshTemplate calls RunService:IsStudio(); fake geometry host lacks RunService."
+    },
+    {
+      "suite": "test_level3_first_cd.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.516,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_level3_first_cd.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_level3_first_cd.log",
+      "testSha256": "1c43e13718174f80dec91b867bdccc73fbaa13fcec41e49429e00dcb2bf494a7",
+      "adaptation": null,
+      "tail": "L3 first CD: 7937 checks passed; 240 seeds; max attempt 1; fallbacks 0; 141 distinct CD sets; 2 entry rooms; 8 entry archetypes author a table; native Roblox Random sweep still required\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_level3_first_cd_prompt.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.09,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_level3_first_cd_prompt.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_level3_first_cd_prompt.log",
+      "testSha256": "1ec20086eb3dde5dd896543ddc4ac86e05da457a276ef3ee9ac273b52289cccc",
+      "adaptation": null,
+      "tail": "Level 3 first-CD prompt: 18 checks passed (offline; the shown prompt on seed 1154781618 needs Studio)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_level3_flashlight_timeline.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.132,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_level3_flashlight_timeline.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_level3_flashlight_timeline.log",
+      "testSha256": "e54b268ac52aa4bdeb98d9879f158916c93db571021dd8cb73f4ec7fd6c0a31b",
+      "adaptation": null,
+      "tail": "Level 3 flashlight timeline: 322 checks passed (complete controller + production config, clock boundaries, legacy cleanup, first CD, cycles and lifecycle)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_level3_hidden_chase.py",
+      "exitCode": 1,
+      "passed": false,
+      "elapsedSeconds": 0.164,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_level3_hidden_chase.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_level3_hidden_chase.log",
+      "testSha256": "a1977385bc29253ab68d0515482bb23a2766c8e3584484384cd1f08958e0e397",
+      "adaptation": null,
+      "tail": "\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/level3-hidden-chase-01v0lws0/hidden_chase.luau:743: attempt to index nil with 'IsActive'\nstacktrace:\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/level3-hidden-chase-01v0lws0/hidden_chase.luau:743 function livingPlayer\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/level3-hidden-chase-01v0lws0/hidden_chase.luau:754\nTraceback (most recent call last):\n  File \"<workspace>/output/level5-audit/repository/tools/tests/test_level3_hidden_chase.py\", line 313, in <module>\n    main()\n    ~~~~^^\n  File \"<workspace>/output/level5-audit/repository/tools/tests/test_level3_hidden_chase.py\", line 309, in main\n    subprocess.run([binary, str(fixture)], check=True, timeout=20)\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py\", line 577, in run\n    raise CalledProcessError(retcode, process.args,\n                             output=stdout, stderr=stderr)\nsubprocess.CalledProcessError: Command '['<workspace>/output/level5-build/tools/luau/luau', '/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/level3-hidden-chase-01v0lws0/hidden_chase.luau']' returned non-zero exit status 1.\n",
+      "classification": "missing harness dependency",
+      "assessment": "Actual livingPlayer now checks PlayerProtection.IsActive; harness omits PlayerProtection."
+    },
+    {
+      "suite": "test_level3_hide_animation.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.13,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_level3_hide_animation.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_level3_hide_animation.log",
+      "testSha256": "e3c4f6a3110dc615483681ab88ab0d2eb7229830dc4a1c55b1fe712c519c8918",
+      "adaptation": null,
+      "tail": "level 3 hide placement: 5 checks passed (actual pivotRootTo; fake rig)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_level3_run_in_exit.py",
+      "exitCode": 1,
+      "passed": false,
+      "elapsedSeconds": 0.168,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_level3_run_in_exit.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_level3_run_in_exit.log",
+      "testSha256": "304948163bb335dbaacc4672b265ed9d73c3ea8b7739deb2b266c05d39aceecc",
+      "adaptation": null,
+      "tail": "625pt08457bm0000gn/T/level3-run-in-exit-wqh9zo_p/exit_test.luau:565: attempt to call a nil value\nstacktrace:\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/level3-run-in-exit-wqh9zo_p/exit_test.luau:565\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/level3-run-in-exit-wqh9zo_p/exit_test.luau:54 function Fire\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/level3-run-in-exit-wqh9zo_p/exit_test.luau:622 function Tick\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/level3-run-in-exit-wqh9zo_p/exit_test.luau:660\nTraceback (most recent call last):\n  File \"<workspace>/output/level5-audit/repository/tools/tests/test_level3_run_in_exit.py\", line 367, in <module>\n    main()\n    ~~~~^^\n  File \"<workspace>/output/level5-audit/repository/tools/tests/test_level3_run_in_exit.py\", line 363, in main\n    subprocess.run([binary, str(path)], check=True, timeout=20)\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py\", line 577, in run\n    raise CalledProcessError(retcode, process.args,\n                             output=stdout, stderr=stderr)\nsubprocess.CalledProcessError: Command '['<workspace>/output/level5-build/tools/luau/luau', '/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/level3-run-in-exit-wqh9zo_p/exit_test.luau']' returned non-zero exit status 1.\n",
+      "classification": "incomplete extraction",
+      "assessment": "Heartbeat excerpt now calls rememberCarriedPositions/updatePlayerRooms, but harness does not extract those helpers. First failure at rememberCarriedPositions, fixture line 565."
+    },
+    {
+      "suite": "test_level3_slide_aperture.py",
+      "exitCode": 1,
+      "passed": false,
+      "elapsedSeconds": 0.155,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_level3_slide_aperture.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_level3_slide_aperture.log",
+      "testSha256": "7e6aeacbd39e2ba3b366c1cf176101d08ce3d9eddf79268fcd4f1c6e33830df7",
+      "adaptation": null,
+      "tail": "\nTraceback (most recent call last):\n  File \"<workspace>/output/level5-audit/repository/tools/tests/test_level3_slide_aperture.py\", line 318, in <module>\n    main()\n    ~~~~^^\n  File \"<workspace>/output/level5-audit/repository/tools/tests/test_level3_slide_aperture.py\", line 314, in main\n    verify(*build_geometry(binary, args.builder), geometry_only=args.geometry_only)\n            ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^\n  File \"<workspace>/output/level5-audit/repository/tools/tests/test_level3_slide_aperture.py\", line 207, in build_geometry\n    raise AssertionError(result.stdout + result.stderr)\nAssertionError: /var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/level3-slide-aperture-0k9dbtqn/geometry.luau:159: attempt to index nil with 'Atomic'\nstacktrace:\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/level3-slide-aperture-0k9dbtqn/geometry.luau:159 function makeArrivalElevator\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/level3-slide-aperture-0k9dbtqn/geometry.luau:346\n\n",
+      "classification": "missing engine enum",
+      "assessment": "Builder now sets ModelStreamingMode.Atomic; fake Enum lacks ModelStreamingMode."
+    },
+    {
+      "suite": "test_level3_square_layout.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.936,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/game-qa-20260924/square-layout-runner.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_level3_square_layout.log",
+      "testSha256": "d7a26d4a3e7f11fa3688fb87573273950cf283cdda27fd9dc560d5b3bb42b001",
+      "adaptation": "Only JSON output path redirected outside repository; runtime/test assertions unchanged.",
+      "tail": "L3 square: 9976 checks passed; 232 seeds; baseline rejected 104; aspect max 1.424031; core max 1.716075; native Roblox Random sweep still required\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_level3_steering.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.095,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_level3_steering.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_level3_steering.log",
+      "testSha256": "5f1b28f47f2bc73380f21fd7bd28dbe08b8dc1138cf50acf310f85042491acdc",
+      "adaptation": null,
+      "tail": "Level 3 navigation: 222 checks passed (offline Luau; live geometry not exercised)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_level4_neighbour_brain.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.09,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_level4_neighbour_brain.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_level4_neighbour_brain.log",
+      "testSha256": "5d5275ad65124789d242a9fda9506b7ac965bf0ad30f50a8250c70c92a4ae74b",
+      "adaptation": null,
+      "tail": "Level 4 Neighbour brain: 38 checks passed (offline; raycasts, navmesh and real chase pacing still need a Studio playtest)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_level4_plan.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.114,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_level4_plan.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_level4_plan.log",
+      "testSha256": "a3c9ff18d7034b0d090fbd8269c2c7f61f2e75f8119bdf33648592f33f4c663a",
+      "adaptation": null,
+      "tail": "Level 4 plan: 4873 checks passed over 68 seeds, 68 distinct plans, 3 variants (offline; navmesh/collision/frame time still need the Studio world checks)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_level5_access.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.084,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_level5_access.py",
+        "--sources",
+        "<workspace>/output/level5-audit/repository",
+        "--luau",
+        "<workspace>/output/level5-build/tools/luau/luau"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_level5_access.log",
+      "testSha256": "d4f4d17f81ed8f18ec719a6cae98bf0cc2dfbb17e739830af30e4558dbcfd5aa",
+      "adaptation": null,
+      "tail": "PASS: 74 access/transport assertions against proposed production source\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_lobby_palette.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.077,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_lobby_palette.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_lobby_palette.log",
+      "testSha256": "c148230a107a05dbe24f9cbb5cefa96f104907248b7d2086fad06c47f4c72c84",
+      "adaptation": null,
+      "tail": "lobby palette + supporter board: 828 checks passed (LOBBY_SATURATION=1.35, canvas 560x392 = 31.11 px/stud)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_lobby_shop_display.py",
+      "exitCode": 1,
+      "passed": false,
+      "elapsedSeconds": 0.068,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_lobby_shop_display.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_lobby_shop_display.log",
+      "testSha256": "9d366200df42db623372a7c48b74d517380865edd2d6f0ccc3a119cb7b60849d",
+      "adaptation": null,
+      "tail": "\nTraceback (most recent call last):\n  File \"<workspace>/output/level5-audit/repository/tools/tests/test_lobby_shop_display.py\", line 119, in <module>\n    assert len(BOX_IDS) == 8, f\"expected 8 product textures, found {len(BOX_IDS)}\"\n           ^^^^^^^^^^^^^^^^^\nAssertionError: expected 8 product textures, found 10\n",
+      "classification": "stale inventory expectation",
+      "assessment": "Pre-execution test guard insists on 8 product textures; source now has 10 after new products/art."
+    },
+    {
+      "suite": "test_lucky_wheel_client.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.099,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_lucky_wheel_client.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_lucky_wheel_client.log",
+      "testSha256": "750464b72d38a9490c54816142cc58b57a85e5ed86ebe32a64b51095bb28edf6",
+      "adaptation": null,
+      "tail": "Lucky Wheel client: 569 checks passed (entire actual LocalScript + real UIStyle and ZyntraConfig, offline Luau; asset loading, fonts, TextBounds and tween feel not exercised)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_no_level3_continue.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.126,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_no_level3_continue.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_no_level3_continue.log",
+      "testSha256": "29d62a60617e03b1d7177d4ec803fa6c09ad3b3070739bb26e50eedb1d653861",
+      "adaptation": null,
+      "tail": "routing: Level 3 has no continuation\nGameManager: the post-win window never continues past Level 3\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_pool_foam_audio.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.09,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_pool_foam_audio.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_pool_foam_audio.log",
+      "testSha256": "75b58ea79b824dd4b734328ca95dfc9274ee68b240643e94f3b02e904ccf5a15",
+      "adaptation": null,
+      "tail": "Pool Foam audio: 24 checks passed (offline Luau; engine loading/mix not exercised)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_pool_foam_navigation.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.082,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_pool_foam_navigation.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_pool_foam_navigation.log",
+      "testSha256": "8b9c4b5edd4ed6fd2ee83549267a890cf80e212a797a110e420fe637602941e8",
+      "adaptation": null,
+      "tail": "Pool Foam navigation: 29 checks passed (offline async lifecycle; geometry stubbed)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_pool_foam_separation.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.194,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_pool_foam_separation.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_pool_foam_separation.log",
+      "testSha256": "7a2f4397d6ab899a455aa55b4e7a91ca3e8546bf41228bfc47d7b076c53733ac",
+      "adaptation": null,
+      "tail": "Pool Foam separation: 77 checks passed, 2177 validated placements requested (offline; real floors/body sweeps need Studio)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_pool_foam_sight_rule.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.085,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_pool_foam_sight_rule.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_pool_foam_sight_rule.log",
+      "testSha256": "9e03e0dc801ffcddce469a268bf27c7a07c8eda81ff97a64d35733d52509f32d",
+      "adaptation": null,
+      "tail": "Pool Foam sight rule: 21 checks passed\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_pool_slide_audio_states.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.081,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_pool_slide_audio_states.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_pool_slide_audio_states.log",
+      "testSha256": "f9ba73ae8e1a4b37290f155e8de231b6204624e1443d1b1b99b1775398f48fc8",
+      "adaptation": null,
+      "tail": "Pool Slide audio states: 44 checks passed (offline Luau; engine mix, rolloff and asset loading not exercised)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_pool_slide_navigation.py",
+      "exitCode": 1,
+      "passed": false,
+      "elapsedSeconds": 0.216,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_pool_slide_navigation.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_pool_slide_navigation.log",
+      "testSha256": "8e1f3fc62b9344beee55ae0bdc1429d5f3052fab68258e31172f20db804218cf",
+      "adaptation": null,
+      "tail": "uau:3377: pre-fix navigator passed the stall contracts; the fixture no longer reproduces anything\nstacktrace:\n[C] function assert\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/pool-slide-navigation-touzqgnk/navigation_test.luau:3377\nTraceback (most recent call last):\n  File \"<workspace>/output/level5-audit/repository/tools/tests/test_pool_slide_navigation.py\", line 278, in <module>\n    main()\n    ~~~~^^\n  File \"<workspace>/output/level5-audit/repository/tools/tests/test_pool_slide_navigation.py\", line 274, in main\n    run(binary, previous, expect_stall=True)\n    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<workspace>/output/level5-audit/repository/tools/tests/test_pool_slide_navigation.py\", line 264, in run\n    subprocess.run([binary, str(path)], check=True, timeout=60)\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py\", line 577, in run\n    raise CalledProcessError(retcode, process.args,\n                             output=stdout, stderr=stderr)\nsubprocess.CalledProcessError: Command '['<workspace>/output/level5-build/tools/luau/luau', '/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/pool-slide-navigation-touzqgnk/navigation_test.luau']' returned non-zero exit status 1.\n",
+      "classification": "invalid historical regression fixture",
+      "assessment": "Current production navigator passes 7 checks. Chosen historical Git baseline also passes, invalidating the expected-stall counterexample."
+    },
+    {
+      "suite": "test_purchase_alert_relay.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 2.461,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_purchase_alert_relay.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_purchase_alert_relay.log",
+      "testSha256": "ee825f61bf5f2c7c0b77c5c461139bdfef15a78c2b7a1a4f7a4396410618a370",
+      "adaptation": null,
+      "tail": "purchase alert relay: 30 checks passed\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_purchase_alerts.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.104,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_purchase_alerts.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_purchase_alerts.log",
+      "testSha256": "e36c77a1c457d1471253b0d28492463bde1d396f83431f2766b48b4e87a02255",
+      "adaptation": null,
+      "tail": "purchase alerts: 97 checks passed\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_push_repo_to_studio.py",
+      "exitCode": 2,
+      "passed": false,
+      "elapsedSeconds": 1.916,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_push_repo_to_studio.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_push_repo_to_studio.log",
+      "testSha256": "5ad80a4c249568856d60f2cf7f8f616b67cf13cfb916c0db452f59095d8c8e6d",
+      "adaptation": null,
+      "tail": "o luau interpreter]\n  - TEST 3 -- idempotency: re-running after a successful push  [no luau interpreter]\n  - TEST 4 -- already-applied (Studio already has the new content)  [no luau interpreter]\n  - TEST 5 -- hostile content round-trip (unicode, escapes, CRLF, empty, huge)  [no luau interpreter]\n  - TEST 6 -- script missing from Studio (renamed/deleted)  [no luau interpreter]\n  - TEST 7 -- --file with spaces in the path  [no luau interpreter]\n  - TEST 9 -- --skip-conflicts pushes the clean files, leaves the conflict  [no luau interpreter]\n  - TEST 10 -- --overwrite-conflicts  [no luau interpreter]\n  - TEST 11 -- truncated staged transfer must abort BEFORE writing  [no luau interpreter]\n  - TEST 12 -- compare-and-swap catches drift between check and write  [no luau interpreter]\n  - TEST 13 -- no orphaned transfer buffer after a mid-transfer failure  [no luau interpreter]\n  - TEST 14 -- pre-push backups written  [no luau interpreter]\n  - TEST 16 -- backslash paths (Windows tab-completion) still match  [no luau interpreter]\n  - TEST 17 -- stale buffer and compile probe from a previous crash are cleaned at startup  [no luau interpreter]\n  - TEST 18 -- a pushed script that does not compile is reported, not passed as clean  [no luau interpreter]\nVERDICT: CANNOT EXECUTE -- <workspace>/output/level5-build/tools/luau/luau --version exited 1: Error: Unrecognized option '--version'.\n         The fixture is sound, but nothing was actually pushed.\n========================================================================\n\n",
+      "classification": "runtime probe incompatibility",
+      "assessment": "Official Luau executable works for other suites but rejects --version. Harness treats exit 1 as unavailable, skipping 16 tests; its fixture-only checks run. No real Studio contacted."
+    },
+    {
+      "suite": "test_queue_barrier.py",
+      "exitCode": 1,
+      "passed": false,
+      "elapsedSeconds": 0.083,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_queue_barrier.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_queue_barrier.log",
+      "testSha256": "5ee16923b052c1eaa605e970cded6e1584415eeb46f730a0bbbd0e715a092301",
+      "adaptation": null,
+      "tail": "/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/queue-barrier-o83ldydi/queue_barrier.luau:120: attempt to index nil with 'MaxLevel'\nstacktrace:\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/queue-barrier-o83ldydi/queue_barrier.luau:120 function playerInsideZone\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/queue-barrier-o83ldydi/queue_barrier.luau:142 function rawQueuedPlayers\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/queue-barrier-o83ldydi/queue_barrier.luau:222 function queuedPlayers\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/queue-barrier-o83ldydi/queue_barrier.luau:494\n\n",
+      "classification": "missing harness dependency",
+      "assessment": "Actual playerInsideZone now uses Routing.MaxLevel; fake queue harness does not provide Routing."
+    },
+    {
+      "suite": "test_rail_dots_intro.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.083,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_rail_dots_intro.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_rail_dots_intro.log",
+      "testSha256": "52544768cefcf4024f603e28d69c118b037c3ff2a4239fa2029132689b0e34c1",
+      "adaptation": null,
+      "tail": "rail dots + intro: 20 checks passed (offline; pixels, phone placement and quiet-moment timing need Studio)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_reentry_dismissal.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.097,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_reentry_dismissal.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_reentry_dismissal.log",
+      "testSha256": "454f16040d280ab37335af60399d9fcf822c8ed3c9394e5bf1be5e589a4f5953",
+      "adaptation": null,
+      "tail": "Re-entry dismissal: 37 checks passed (offline Luau; engine hit testing not exercised)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_round_entry_client.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.113,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_round_entry_client.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_round_entry_client.log",
+      "testSha256": "1349a87218c4992013315df06398dd9c25dbd86bc88e2b5148ddcee418ac2c12",
+      "adaptation": null,
+      "tail": "Round Entry Client: 59 checks passed (entire actual script, offline Luau)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_round_exit_hold.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.121,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_round_exit_hold.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_round_exit_hold.log",
+      "testSha256": "b3d53df224a97bcb0a20f03b08f4cc87edd79bf89794cc9869c3829c691df56d",
+      "adaptation": null,
+      "tail": "Round Exit hold: 299 checks passed (entire actual LocalScript, offline Luau; real cursor lock, real touch and font metrics not exercised)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_round_loading_host.py",
+      "exitCode": 1,
+      "passed": false,
+      "elapsedSeconds": 0.125,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_round_loading_host.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_round_loading_host.log",
+      "testSha256": "5ce211416333878e73c7874ed33bae1d88d7c9ca447715a5aed49fc9b19d94cf",
+      "adaptation": null,
+      "tail": "ar/folders/l9/6dykzds92x78625pt08457bm0000gn/T/round-loading-host-4plakul0/round_loading_host.luau:2146: attempt to call a nil value\nstacktrace:\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/round-loading-host-4plakul0/round_loading_host.luau:2146 function prepareGroupLoading\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/round-loading-host-4plakul0/round_loading_host.luau:2301 function Run\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/round-loading-host-4plakul0/round_loading_host.luau:2328\nTraceback (most recent call last):\n  File \"<workspace>/output/level5-audit/repository/tools/tests/test_round_loading_host.py\", line 439, in <module>\n    main()\n    ~~~~^^\n  File \"<workspace>/output/level5-audit/repository/tools/tests/test_round_loading_host.py\", line 435, in main\n    subprocess.run([binary, str(fixture)], check=True, timeout=20)\n    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/opt/homebrew/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py\", line 577, in run\n    raise CalledProcessError(retcode, process.args,\n                             output=stdout, stderr=stderr)\nsubprocess.CalledProcessError: Command '['<workspace>/output/level5-build/tools/luau/luau', '/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/round-loading-host-4plakul0/round_loading_host.luau']' returned non-zero exit status 1.\n",
+      "classification": "incomplete extraction",
+      "assessment": "Actual prepareGroupLoading now calls canAccessLevel; harness omits this local helper. Captured fixture line 2146."
+    },
+    {
+      "suite": "test_round_loading_notice.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.134,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_round_loading_notice.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_round_loading_notice.log",
+      "testSha256": "d06ebf2b82ea974fe92b58113a0d0388790727e05d03acee35fc4ba0266bd289",
+      "adaptation": null,
+      "tail": "Compiled 5 KLOC into 179 KB bytecode (read 0.00s, parse 0.00s, compile 0.01s)\nRound loading notice: 96 checks passed (real helpers, event branches, attribute fallback, fake-clock delivery races)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_route_markers.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.095,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_route_markers.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_route_markers.log",
+      "testSha256": "28c58a8a2abf1c3cd5ce2ea7b51f15f3aa4d373ba97f09d348aba5e29ee4d0fe",
+      "adaptation": null,
+      "tail": "Route markers: 189 checks passed (whole actual Script, offline Luau; rendering and replication not exercised)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_spectate_audio_gates.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.093,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_spectate_audio_gates.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_spectate_audio_gates.log",
+      "testSha256": "de7b93f0c172758ea71b9e599fdcf0958dc1ea948e511c158b55965b7104dbbf",
+      "adaptation": null,
+      "tail": "Spectate audio gates: 18 checks passed (offline Luau)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_spectate_parity.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.1,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_spectate_parity.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_spectate_parity.log",
+      "testSha256": "ac939e0e28af264b1c37e7e0715aac97857c8f690047582cb256174696a0aefd",
+      "adaptation": null,
+      "tail": "Spectate parity: 18 checks passed (offline Luau; engine mix and replication not exercised)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_spectator_count.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.096,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_spectator_count.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_spectator_count.log",
+      "testSha256": "a1a9a09ed04530b9c632c7fd135528025da11a9e9d6ed37116bb5f3338e348a1",
+      "adaptation": null,
+      "tail": "Spectator count: 16 checks passed\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_spectator_vitals.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.092,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_spectator_vitals.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_spectator_vitals.log",
+      "testSha256": "97cbeefa9ce5ae05bcd7b2a9b86fbbac8c073d011108186de28539e4ff8a0f09",
+      "adaptation": null,
+      "tail": "Spectator vitals: 14 checks passed\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_speed_potion.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.135,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_speed_potion.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_speed_potion.log",
+      "testSha256": "1ae0242120c2988b10ac54917c8e860f9dee375661b882a3158bcb30db81a7b3",
+      "adaptation": null,
+      "tail": "Speed potion: 498 checks passed (real NoiseReporter movement blocks, offline Luau)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_studio_source_contract.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.633,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_studio_source_contract.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_studio_source_contract.log",
+      "testSha256": "09eb677e8377c64fa932a2a38534afd0d2c2afd1949e7616ddef8d4e9e922b5a",
+      "adaptation": null,
+      "tail": "he recorded baseline is ready\n  ok   a flagged baseline may also carry the permitted newline\n  ok   real drift is a conflict even on a flagged entry\n  ok   a repo file that no longer matches its manifest entry is refused\n=== push phase 2: verify_written ===\n  ok   a byte-exact write verifies\n  ok   a flagged write that lands with the permitted newline verifies\n  ok   the same landing on an unflagged entry FAILS the push\n  ok   two trailing newlines fail the push whatever the flag says\n  ok   and a truncated or altered write fails it\n=== the live manifest obeys its own schema ===\n  ok   only scripts carry the trailing-newline flag\n  ok   and every flagged entry's hash is still the REPO file, not Studio's copy\n=== independent parity rejects wrong classes and duplicate paths ===\n  ok   a matching fingerprint with the wrong ClassName fails parity\n  ok   a duplicate Studio full path is rejected instead of overwritten\n  ok   the same source with the expected ClassName passes parity\n=== fallback bookkeeping reconciles exact and +LF landings ===\n  ok   record_synced_source removes the flag for an exact fallback landing\n  ok   record_synced_source retains the flag for a permitted +LF landing\n  ok   fallback bookkeeping republishes the reconciled flag count\n=== the release tools print on a default Windows console ===\n  ok   push_repo_to_studio --help survives a cp1252 console\n  ok   pull_source_from_studio --help survives a cp1252 console\n  ok   record_pending_push --help survives a cp1252 console\n  ok   sync_from_studio --help survives a cp1252 console\n\nAll contract checks passed.\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_support_product_receipts.py",
+      "exitCode": 1,
+      "passed": false,
+      "elapsedSeconds": 0.096,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_support_product_receipts.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_support_product_receipts.log",
+      "testSha256": "087d0ba47ee76c4480035c6ecb21ce92cf458f9e219ab32a81c64e7daf59a423",
+      "adaptation": null,
+      "tail": "/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/support-receipts-ghu7lisg/receipts.luau:499: attempt to index nil with 'WaitForChild'\nstacktrace:\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/support-receipts-ghu7lisg/receipts.luau:499 function world\n/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/support-receipts-ghu7lisg/receipts.luau:1415\n\n",
+      "classification": "missing harness dependency",
+      "assessment": "Profile setup requires DailyResearch/Challenges but fake receipt world lacks ReplicatedStorage. Fails before receipt assertions."
+    },
+    {
+      "suite": "test_token_grants.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.082,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_token_grants.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_token_grants.log",
+      "testSha256": "2a01c32e93eb5776f9b3f631e043ce1bb62170f0a45f2ce89ad9ab6b0ff419ee",
+      "adaptation": null,
+      "tail": "token grants: 243 checks passed\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_ui_style.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.113,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_ui_style.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_ui_style.log",
+      "testSha256": "1e19391551566f6371eaa2e0dccb03eec2c7089b9fa5091df9e59bedcabccfe0",
+      "adaptation": null,
+      "tail": "UI style: 83 checks passed (offline Luau; font metrics, rendering and look not exercised)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_zyntra_analytics.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.089,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_zyntra_analytics.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_zyntra_analytics.log",
+      "testSha256": "ba7e195ce220a56f291f41e33bfcb0332289edbd97fb89aa3a00f0a147afa38d",
+      "adaptation": null,
+      "tail": "zyntra analytics: 111 checks passed\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    },
+    {
+      "suite": "test_zyntra_store_compact.py",
+      "exitCode": 0,
+      "passed": true,
+      "elapsedSeconds": 0.356,
+      "command": [
+        "/opt/homebrew/opt/python@3.13/bin/python3.13",
+        "<workspace>/output/level5-audit/repository/tools/tests/test_zyntra_store_compact.py"
+      ],
+      "log": "<workspace>/output/game-qa-20260924/logs/test_zyntra_store_compact.log",
+      "testSha256": "6640bd003a8c3877629bcadb77d7002089dd56fb3b03c67443afe7f2d916069f",
+      "adaptation": null,
+      "tail": "ok  538 checks: terminal 1180x760, upgrade card 210/246/330px (phone/tablet/pointer), shop icon 52/64/76px, list+detail at >=760 pointer only, 5-button rail (tabs 8, supplies 42, supplies-absent 4, shop 102, rail 123, layout 121, routing 39, modals 19)\n\n",
+      "classification": "passed",
+      "assessment": "Existing suite passed under offline engine fakes."
+    }
+  ],
+  "summary": {
+    "totalExistingSuites": 66,
+    "passedUnmodified": 49,
+    "failedUnmodified": 17,
+    "supplementalRealDependencyPasses": 2,
+    "confirmedRuntimeFailuresFromTheseSuiteErrors": 0,
+    "notClaimed": "No full-game, live purchases, multiplayer, teleport, hardware or real DataStore certification."
+  },
+  "studioEvidenceReportedByParent": {
+    "level4PurePlan": {
+      "checks": 163,
+      "failures": 0
+    },
+    "level4PureBrain": {
+      "checks": 18,
+      "failures": 0
+    },
+    "level3EditSuiteRequire": "Cannot run in Edit: HidingController imports PlayerProtection, which requires Server. Old suite header is stale; use Server Play."
+  }
+}

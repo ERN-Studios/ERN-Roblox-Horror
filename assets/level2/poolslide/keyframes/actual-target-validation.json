@@ -1,0 +1,117 @@
+{
+  "status": "PASS",
+  "validation": "actual-target FK roundtrip, all bones/all frames",
+  "actual_studio_rest": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/implementation_work/level2_poolslide/actual-studio-poolslide-rest.json",
+  "bind_fit": {
+    "axis_source_world_to_model": [
+      [
+        -0.9999999999999999,
+        -9.135501663688564e-09,
+        1.6147988571988097e-08
+      ],
+      [
+        1.614798889460379e-08,
+        -3.7047655408162024e-08,
+        0.9999999999999994
+      ],
+      [
+        -9.13550107436989e-09,
+        0.9999999999999991,
+        3.7047655512822963e-08
+      ]
+    ],
+    "scale_studs_per_source_world_unit": 3.7714857061099707,
+    "bind_fit_offset": [
+      -3.2241976505309466e-07,
+      3.29979215507592e-07,
+      -5.011573732671692e-07
+    ],
+    "bind_fit_rms_studs": 1.751104505871384e-06,
+    "bind_fit_max_studs": 4.137614307907157e-06,
+    "target_joint_span_studs": 19.04863838616313
+  },
+  "rest_face_direction_model": [
+    2.9491054422726307e-07,
+    -1.9706269938394306e-06,
+    -0.9999999999980149
+  ],
+  "source_face_mapped_to_model": [
+    4.1171603294594246e-07,
+    3.704764890729308e-08,
+    -0.9999999999999146
+  ],
+  "face_forward_error": 2.0110696142417853e-06,
+  "actions": {
+    "Idle": {
+      "frames": 121,
+      "bones_per_frame": 24,
+      "duration": 4.0,
+      "source_normalization": {
+        "source_uniform_pose_scale": 1.1764715600430973,
+        "removed_uniform_pose_scale": true,
+        "scale_residual_max": 8.341198566519381e-06,
+        "normalization_origin_source_world": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "global_joint_position_max_error_studs": 0.0008443852702780746,
+      "global_joint_rotation_max_error_radians": 0.0002018069495756186,
+      "face_direction_max_error": 0.00014906413631423057,
+      "face_dot_model_forward_range": [
+        -0.7150313340536599,
+        0.982984665578678
+      ],
+      "exact_loop_seam": true
+    },
+    "Walk": {
+      "frames": 32,
+      "bones_per_frame": 24,
+      "duration": 1.0333333333333334,
+      "source_normalization": {
+        "source_uniform_pose_scale": 1.0,
+        "removed_uniform_pose_scale": false,
+        "scale_residual_max": 5.173879098263612e-06,
+        "normalization_origin_source_world": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "global_joint_position_max_error_studs": 2.6387848126243918e-05,
+      "global_joint_rotation_max_error_radians": 2.4489640215871065e-06,
+      "face_direction_max_error": 4.446008777761744e-06,
+      "face_dot_model_forward_range": [
+        0.9942268168992441,
+        0.9999048648895222
+      ],
+      "exact_loop_seam": true
+    },
+    "Run": {
+      "frames": 20,
+      "bones_per_frame": 24,
+      "duration": 0.6333333333333333,
+      "source_normalization": {
+        "source_uniform_pose_scale": 1.0,
+        "removed_uniform_pose_scale": false,
+        "scale_residual_max": 5.617872800511847e-06,
+        "normalization_origin_source_world": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "global_joint_position_max_error_studs": 3.468563926368982e-05,
+      "global_joint_rotation_max_error_radians": 2.3860477091375402e-06,
+      "face_direction_max_error": 4.3568886524992654e-06,
+      "face_dot_model_forward_range": [
+        0.9838298802050869,
+        0.9965003182052088
+      ],
+      "exact_loop_seam": true
+    }
+  },
+  "total_frames": 173,
+  "total_bone_poses": 4152
+}

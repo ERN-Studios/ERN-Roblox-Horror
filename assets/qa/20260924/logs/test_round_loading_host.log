@@ -1,0 +1,18 @@
+
+STDERR:
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/round-loading-host-4plakul0/round_loading_host.luau:2146: attempt to call a nil value
+stacktrace:
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/round-loading-host-4plakul0/round_loading_host.luau:2146 function prepareGroupLoading
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/round-loading-host-4plakul0/round_loading_host.luau:2301 function Run
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/round-loading-host-4plakul0/round_loading_host.luau:2328
+Traceback (most recent call last):
+  File "<workspace>/output/level5-audit/repository/tools/tests/test_round_loading_host.py", line 439, in <module>
+    main()
+    ~~~~^^
+  File "<workspace>/output/level5-audit/repository/tools/tests/test_round_loading_host.py", line 435, in main
+    subprocess.run([binary, str(fixture)], check=True, timeout=20)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['<workspace>/output/level5-build/tools/luau/luau', '/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/round-loading-host-4plakul0/round_loading_host.luau']' returned non-zero exit status 1.

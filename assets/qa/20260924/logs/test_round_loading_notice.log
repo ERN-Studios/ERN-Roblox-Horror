@@ -1,0 +1,4 @@
+Compiled 5 KLOC into 179 KB bytecode (read 0.00s, parse 0.00s, compile 0.01s)
+Round loading notice: 96 checks passed (real helpers, event branches, attribute fallback, fake-clock delivery races)
+
+STDERR:

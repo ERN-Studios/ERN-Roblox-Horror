@@ -1,0 +1,30 @@
+{
+  "file": "level5-mold-rising-alpha.png",
+  "absolutePath": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-mold/assets/level5-mold-rising-alpha.png",
+  "sourcePath": "/Users/zeanjuul4/.codex/generated_images/01a0cfe1-440b-79e2-acb9-8e509ddf6a64/exec-18d8eeea-2ca2-46a2-8ad8-9f8bd8887b1a.png",
+  "generationMode": "built-in imagegen",
+  "width": 1086,
+  "height": 1448,
+  "mode": "RGBA",
+  "bytes": 2014380,
+  "sha256": "84252a72299d89a350fca25e72ae4c88291d25eb7ea188b9f8e2765dbd29ce74",
+  "alphaMinMax": [
+    0,
+    255
+  ],
+  "fullyTransparentPercent": 48.511,
+  "fullyOpaquePercent": 0.0001,
+  "semiTransparentPercent": 51.4889,
+  "alphaBBox": [
+    0,
+    21,
+    1085,
+    1448
+  ],
+  "alphaInspection": "Read-only Pillow; no pixels transformed or resaved.",
+  "qa": {
+    "localImageInspected": true,
+    "actualWallVisualQAPending": true,
+    "note": "Dark bottom-rooted fuzzy colonies with upward capillary branches, broad asymmetric silhouette and transparent gaps. Semi-transparent dark olive-brown fungal film surrounds some branches; check that it blends naturally on actual light walls rather than looking like a substrate patch."
+  }
+}

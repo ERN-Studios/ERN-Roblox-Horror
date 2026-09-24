@@ -1,0 +1,6 @@
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/support-receipts-ghu7lisg/receipts.luau:499: attempt to index nil with 'WaitForChild'
+stacktrace:
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/support-receipts-ghu7lisg/receipts.luau:499 function world
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/support-receipts-ghu7lisg/receipts.luau:1415
+
+STDERR:

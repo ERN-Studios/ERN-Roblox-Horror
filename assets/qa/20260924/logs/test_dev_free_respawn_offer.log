@@ -1,0 +1,6 @@
+Free respawn offer (modal, dev=true): 17 checks passed
+Free respawn offer (card, dev=true): 24 checks passed
+Free respawn offer (modal, dev=false): 3 checks passed
+Free respawn offer (card, dev=false): 8 checks passed
+
+STDERR:

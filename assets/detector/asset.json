@@ -1,0 +1,9 @@
+{
+  "robloxAssetId": 94042368093581,
+  "file": "assets/detector/detector-face-v2.png",
+  "sha256": "5ca559ca1eaf2a42d8847c4f07f2a7b391ce11223e602b3050976679b191dc77",
+  "generator": "built-in image_gen",
+  "reference": "assets/shop/box-entity-detector.png",
+  "prompt": "assets/detector/generation-prompt.txt",
+  "usage": "Front-face decal on shared detector model; blank screen receives live readout."
+}

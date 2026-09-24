@@ -1,0 +1,18 @@
+
+STDERR:
+Traceback (most recent call last):
+  File "<workspace>/output/level5-audit/repository/tools/tests/test_level2_tunnel_height.py", line 236, in <module>
+    if __name__=='__main__':main()
+                            ~~~~^^
+  File "<workspace>/output/level5-audit/repository/tools/tests/test_level2_tunnel_height.py", line 144, in main
+    before=build(binary,BEFORE);after=build(binary,ROOT)
+                                      ~~~~~^^^^^^^^^^^^^
+  File "<workspace>/output/level5-audit/repository/tools/tests/test_level2_tunnel_height.py", line 117, in build
+    if result.returncode:raise AssertionError(result.stderr)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: /var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/l2-vault-wdr1wls1/geometry.luau:452: attempt to index nil with 'IsStudio'
+stacktrace:
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/l2-vault-wdr1wls1/geometry.luau:452 function archRibMeshTemplate
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/l2-vault-wdr1wls1/geometry.luau:512 function makeArchSpan
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/l2-vault-wdr1wls1/geometry.luau:813 function makeCorridor
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/l2-vault-wdr1wls1/geometry.luau:1011

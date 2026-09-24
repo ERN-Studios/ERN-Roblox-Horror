@@ -1,0 +1,244 @@
+{
+  "failureCount": 0,
+  "molds": {
+    "1": {
+      "name": "ArcadeDampCorner",
+      "variant": "corner",
+      "maxWallGap": 0.1,
+      "pass": true,
+      "backing": "Workspace.Level 5 Generated World.Level5_IndoorSuburbs.B_LowEavesArcade.Enclosure.ThresholdSideWall",
+      "backingRays": 9
+    },
+    "8": {
+      "name": "VillageFloorSpread",
+      "variant": "corner",
+      "maxWallGap": 0.0793,
+      "pass": true,
+      "backing": "Workspace.Level 5 Generated World.Level5_IndoorSuburbs.C_PastelVillage.Enclosure.DistrictSideWall",
+      "backingRays": 9
+    },
+    "3": {
+      "name": "CanyonUpperSeam",
+      "variant": "seam",
+      "maxWallGap": 0.0793,
+      "pass": true,
+      "backing": "Workspace.Level 5 Generated World.Level5_IndoorSuburbs.F_BayWindowCanyon.Enclosure.DistrictSideWall",
+      "backingRays": 9
+    },
+    "2": {
+      "name": "CanyonRearRising",
+      "variant": "rising",
+      "maxWallGap": 0.1,
+      "pass": true,
+      "backing": "Workspace.Level 5 Generated World.Level5_IndoorSuburbs.F_BayWindowCanyon.Enclosure.ThresholdSideWall",
+      "backingRays": 9
+    },
+    "5": {
+      "name": "DomesticCeilingSeam",
+      "variant": "seam",
+      "maxWallGap": 0.1,
+      "pass": true,
+      "backing": "Workspace.Level 5 Generated World.Level5_IndoorSuburbs.E_DomesticLabyrinth.Enclosure.ThresholdSideWall",
+      "backingRays": 9
+    },
+    "4": {
+      "name": "CanyonWestRising",
+      "variant": "rising",
+      "maxWallGap": 0.0793,
+      "pass": true,
+      "backing": "Workspace.Level 5 Generated World.Level5_IndoorSuburbs.F_BayWindowCanyon.Enclosure.DistrictSideWall",
+      "backingRays": 9
+    },
+    "7": {
+      "name": "SubdivisionUpperSeam",
+      "variant": "seam",
+      "maxWallGap": 0.0793,
+      "pass": true,
+      "backing": "Workspace.Level 5 Generated World.Level5_IndoorSuburbs.G_TiltedSubdivision.Enclosure.DistrictSideWall",
+      "backingRays": 9
+    },
+    "6": {
+      "name": "SubdivisionTerraceSpread",
+      "variant": "corner",
+      "maxWallGap": 0.0793,
+      "pass": true,
+      "backing": "Workspace.Level 5 Generated World.Level5_IndoorSuburbs.G_TiltedSubdivision.Enclosure.DistrictSideWall",
+      "backingRays": 9
+    }
+  },
+  "rooms": {
+    "20": {
+      "name": "SecretThroughHouse",
+      "variant": 4,
+      "pieces": 3,
+      "pass": true,
+      "parts": 43
+    },
+    "19": {
+      "name": "RosePorchHouse",
+      "variant": 3,
+      "pieces": 4,
+      "pass": true,
+      "parts": 40
+    },
+    "18": {
+      "name": "GroundBlueStarterHouse",
+      "variant": 1,
+      "pieces": 3,
+      "pass": true,
+      "parts": 47
+    },
+    "9": {
+      "name": "TerraceHouse_-1_2",
+      "variant": 3,
+      "pieces": 4,
+      "pass": true,
+      "parts": 40
+    },
+    "1": {
+      "name": "DetachedWaitingRoom_1",
+      "variant": 4,
+      "pieces": 3,
+      "pass": true,
+      "parts": 43
+    },
+    "15": {
+      "name": "CanyonDwelling_0",
+      "variant": 1,
+      "pieces": 3,
+      "pass": true,
+      "parts": 47
+    },
+    "3": {
+      "name": "CourtCottage_01",
+      "variant": 1,
+      "pieces": 3,
+      "pass": true,
+      "parts": 47
+    },
+    "2": {
+      "name": "LowEavesResidence_1_1",
+      "variant": 1,
+      "pieces": 3,
+      "pass": true,
+      "parts": 47
+    },
+    "5": {
+      "name": "CourtCottage_03",
+      "variant": 3,
+      "pieces": 4,
+      "pass": true,
+      "parts": 42
+    },
+    "4": {
+      "name": "CourtCottage_02",
+      "variant": 2,
+      "pieces": 4,
+      "pass": true,
+      "parts": 52
+    },
+    "7": {
+      "name": "CourtCottage_07",
+      "variant": 5,
+      "pieces": 3,
+      "pass": true,
+      "parts": 37
+    },
+    "6": {
+      "name": "CourtCottage_05",
+      "variant": 4,
+      "pieces": 3,
+      "pass": true,
+      "parts": 43
+    },
+    "14": {
+      "name": "CanyonDwelling_0",
+      "variant": 4,
+      "pieces": 3,
+      "pass": true,
+      "parts": 43
+    },
+    "8": {
+      "name": "CourtCottage_11",
+      "variant": 1,
+      "pieces": 3,
+      "pass": true,
+      "parts": 47
+    },
+    "16": {
+      "name": "HighTerraceCreamHouse",
+      "variant": 2,
+      "pieces": 4,
+      "pass": true,
+      "parts": 52
+    },
+    "17": {
+      "name": "HighTerracePinkHouse",
+      "variant": 5,
+      "pieces": 3,
+      "pass": true,
+      "parts": 37
+    },
+    "13": {
+      "name": "CutawayReadingRoom",
+      "variant": 5,
+      "pieces": 3,
+      "pass": true,
+      "parts": 37
+    },
+    "12": {
+      "name": "WestLoungeFurniture",
+      "variant": 2,
+      "pieces": 4,
+      "pass": true,
+      "parts": 52
+    },
+    "11": {
+      "name": "EastReadingFurniture",
+      "variant": 4,
+      "pieces": 3,
+      "pass": true,
+      "parts": 43
+    },
+    "10": {
+      "name": "TerraceHouse_1_3",
+      "variant": 2,
+      "pieces": 4,
+      "pass": true,
+      "parts": 52
+    }
+  },
+  "pass": true,
+  "qa": "Level5MoldRuntime",
+  "failuresOmitted": 0,
+  "moldAlphaCheck": "Transparent carrier flags, alpha attribute and exact uploaded asset references; image alpha is verified separately.",
+  "failures": [],
+  "counts": {
+    "glitchedTables": 1,
+    "furnitureGroups": 20,
+    "furnishedHomes": 20,
+    "tintedWindows": 356,
+    "checkedFurnitureCorners": 7128,
+    "houseNeon": 0,
+    "moldBackedCarriers": 8,
+    "moldBackingRays": 72,
+    "tvFronts": 13,
+    "houseLights": 0,
+    "oldDrawingAssetReferences": 0,
+    "molds": 8,
+    "worldParts": 11904,
+    "architectureNeon": 204,
+    "tvDecals": 13,
+    "moldVariants": 3,
+    "architectureDescendants": 12828,
+    "moldDecals": 8,
+    "architectureParts": 11904,
+    "oldDrawingAttributes": 0,
+    "architectureLights": 58,
+    "houseModels": 114,
+    "worldDescendants": 12829,
+    "furnitureParts": 891,
+    "moldAssets": 3
+  },
+  "version": "2026-09-24.mold.1"
+}
