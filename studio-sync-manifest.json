@@ -2722,8 +2722,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/ZyntraSkins.ModuleScript.lua",
-      "bytes": 5575,
-      "sha256": "bfeeef9d7cb402973fb928489c42c1d7281e0583ce10384cae6c30d6a1568bc1",
+      "bytes": 5768,
+      "sha256": "e2e0bb3286cbce8e823ae92a1cd9c1657ad1f6c6fa0d49d29e7437021c54164c",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "canonical UTF-8 bytes checked against fresh Studio Source/editor length and Adler32 on 2026-09-24"

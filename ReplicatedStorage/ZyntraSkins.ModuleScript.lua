@@ -16,38 +16,41 @@ Skins.Order = {
 	"SignalArchitect",
 }
 
+-- STANDING_PORTRAITS_20260924 (x4kKwPZx): PreviewImageId is the standing card
+-- render (assets/hazmat/catalogue-portraits); the T-pose samples it replaced
+-- are in git history for rollback.
 Skins.ById = {
 	BaselineYellow = {
 		Name = "Baseline Yellow", Kind = "Free", ImageId = 113696916548555,
-		PreviewImageId = 108962875803884,
+		PreviewImageId = 124074662246510,
 		Description = "The standard Zyntra hazmat suit.",
 	},
 	PoolService = {
 		Name = "Pool Service", Kind = "Tokens", TokenCost = 25,
-		ImageId = 71321355623557, PreviewImageId = 113105840961412,
+		ImageId = 71321355623557, PreviewImageId = 128677695300171,
 		Description = "A worn pool-crew suit earned with Research Tokens.",
 	},
 	SuburbSurvey = {
 		Name = "Suburb Survey", Kind = "Tokens", TokenCost = 75,
-		ImageId = 81335744794900, PreviewImageId = 105515413111120,
+		ImageId = 81335744794900, PreviewImageId = 78809161314896,
 		Description = "A survey suit earned with Research Tokens.",
 	},
 	BlacksiteDirector = {
 		Name = "Blacksite Director", Kind = "Tokens", TokenCost = 300,
 		RequiredClears = 100, ImageId = 96837294142054,
-		PreviewImageId = 96742758510511,
+		PreviewImageId = 73840400724040,
 		Description = "A prestige suit requiring 100 lifetime clears and 300 Research Tokens.",
 	},
 	StaticWraith = {
 		Name = "Static Wraith", Kind = "Robux", RobuxPrice = 99,
 		PassId = 1994666374, ImageId = 105116444000474,
-		PreviewImageId = 71524908131120,
+		PreviewImageId = 120474289726445,
 		Description = "Premium cosmetic suit with a separate static backpack.",
 	},
 	FalseSun = {
 		Name = "False Sun", Kind = "Robux", RobuxPrice = 149,
 		PassId = 1994816385, ImageId = 83272384519781,
-		PreviewImageId = 132614425134815,
+		PreviewImageId = 122113892663451,
 		Description = "Premium cosmetic suit with a separate sun backpack.",
 	},
 	-- DEV_SUIT_20260924 (Trello SYUaXHKQ). Owned exactly while DevAccess allows
