@@ -1,0 +1,22 @@
+# Signal Architect Ascendant — paused asset handoff
+
+**Status 24 September 2026:** owner asked to put this card on hold while Claude works in Studio. This folder is an asset package only. None of the v2 assets has been inserted into Studio, wired into game code, or published. Do not call the skin live. The current public skin is still the earlier Signal Architect.
+
+The new look is an obsidian/navy developer suit with cyan signal channels, gold hardware, a cyan visor, and a large rigid antenna halo/backpack. It should read as exclusive with particles disabled. `signal-architect-ascendant-concept-v1.png` is concept art; `ascendant-front-preview.png`, `ascendant-back-preview.png`, and `ascendant-standing-card.png` are renders of the **canonical rig** with the actual v2 texture and the lightweight halo placed approximately as it would sit in game.
+
+| File | Purpose | Group-owned Roblox asset ID | Moderation |
+| --- | --- | ---: | --- |
+| `ascendant-color-map.png` | 2048² `SurfaceAppearance.ColorMap` on existing `HazmatSkin_SignalArchitect_20260924` rig | `115045548138657` | Approved |
+| `ascendant-standing-card.png` | 512² catalogue/preview portrait | `110021662787844` | Approved |
+| `ascendant-signal-mote.png` | Small optional cyan square particle | `124315518046326` | Approved |
+| `ascendant-halo-backpiece.glb` | Single cosmetic mesh for UpperTorso topper | **Model asset** `112810865153770` | Approved |
+
+Use `rbxassetid://` for the three Image IDs. The halo ID is a **Model**, not a MeshId. Insert that Model through Studio, inspect its generated child MeshPart and use the actual MeshId and texture imported with it. Do not assign the Model ID to `MeshPart.MeshId`. `upload-receipt.json` records SHA-256, group `1039373905`, operation path and moderation proof. `upload_assets.py --verify` refreshes that proof without creating duplicate assets.
+
+`ascendant-halo-backpiece.glb` is 196,028 bytes, **one mesh, one primitive, one material, one embedded texture, 2,964 triangles**. `build_ascendant_backpiece.py` rebuilds it, the four-color atlas and the renders in Blender 5.2 from the canonical `../baseline-rigged.glb`. The backpiece was built locally after one Meshy text-to-3D accessory preview yielded an unusable 850,868-triangle boxy backpack with no ring. That Meshy preview is not a game asset. The intended in-game topper must contain exactly one BasePart and remain non-collidable, non-queryable, non-touching, massless, and welded to UpperTorso under the existing visual clone.
+
+`ascendant-color-map.png` came from Meshy retexture task `01a0d51d-a3c6-761f-b773-8df6fc62756d` with `enable_original_uv=true`, 2K PBR and the concept image as style reference. Its output GLB is **unrigged** and must not replace the 24-bone canonical body. The canonical and retextured GLBs have the same 14,402 unique UV coordinates at 1e-6 precision and the same 10,180 UV triangles as multisets, despite the rigged mesh having a slightly different split-vertex count. This is a texture compatibility check, not a Studio visual test. Meshy spent **10 credits** on the retexture and **20 credits** on the rejected accessory preview; no refine or paid rerun was submitted. `meshy_output/` holds the local task snapshots and is gitignored because snapshots include expiring signed URLs.
+
+When work resumes: take a full native place backup before non-script edits, read fresh Studio Source and editor-source, then update only the Signal Architect template and metadata. The existing `SignalArchitect` skin ID and server-side `DevAccess` restrictions must remain. Add a single-part topper using the halo's imported MeshPart and the `PREMIUM_TOPPERS` path in `HazmatSkinVisuals`. A client-only, low-rate cyan mote effect can use Image `124315518046326`; honour ReduceFlashing, distance culling, first-person hiding and cleanup. No gameplay light, collision, noise, hitbox, speed, wheel/Token/Robux purchase path, or entitlement change. Shop ViewportFrames do not render ParticleEmitters; the rigid halo and texture must carry the look there. Check mobile silhouette and frame time before publishing. The saved position in the Blender render is only a starting visual reference, not an approved Studio CFrame.
+
+The baseline rig and original skin contract are in [`../README.md`](../README.md) and [`../developer-signal-architect/README.md`](../developer-signal-architect/README.md). Current Trello card: <https://trello.com/c/SYUaXHKQ>.
