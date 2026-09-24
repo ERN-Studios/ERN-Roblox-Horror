@@ -2,6 +2,8 @@
 
 Branch `claude/trello-20260921`, draft [PR #8](https://github.com/ERN-Studios/ERN-Roblox-Horror/pull/8). The changes described here went into Studio through the verified compare-and-swap push (`tools/push_repo_to_studio.py`) against a fresh Source/editor baseline and were then mirrored. The owner published **v2081**; [the read-only receipt](../artifacts/publish-v2081-20260924/README.md) confirms all 182 mirrored scripts and the Pool Slide animation IDs in its binary. The later Level 2 wall-decal removal is compiled in Studio Edit but **is not yet republished**. No card is Done; each still has its remaining live/physical or owner-acceptance gate listed.
 
+Fresh Trello triage on 24 September moved eight code-implemented cards from To Do to Testing, preserving their verification gates. To Do now contains only the rejected [Level 2 wall-depth card](https://trello.com/c/DDqjXkyU) and a newly added, unstarted [Level 3 larger/maze-like map card](https://trello.com/c/3hEkFVUe); Testing contains 14 cards. None of this batch moved to Done. The [Level 2 render/nearby-loading review](LEVEL2_RENDER_STREAMING_REVIEW_2026-09-24.md) records v2081's actual 64/1024-stud radii and a measured next-experiment sequence; no streaming or LOD setting was changed.
+
 Final parity (end of session): 182/182 scripts match Studio `.Source`, 182/182 editor sources equal `.Source`, manifest 197/197 `synced`, no stray QA instances or attributes left in Edit.
 
 **Studio non-script changes** (additive; no pre-existing object deleted or overwritten):
