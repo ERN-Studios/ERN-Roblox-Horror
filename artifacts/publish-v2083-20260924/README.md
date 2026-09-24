@@ -1,0 +1,7 @@
+# Published place v2083 — read-only receipt
+
+At 2026-09-24 17:20 UTC, Roblox's place-version-history API returned **2083** as the latest version of place `131311258779917`, with `isPublished: true` and `publishStatus: 1`. Roblox records its creation at `2026-09-24T16:58:09.426Z` by user `40920547`; v2081 is now superseded (`publishStatus: 2`).
+
+The Asset Delivery API returned a valid binary RBXL for that exact version: 9,616,369 bytes, SHA-256 `b11c68f739cf4538de5306b2a8fddd5ab8773d64736d987c1acd98011c2901bd`. We decompressed its data chunks in memory and found the exact LF-normalized bytes of **all 182** manifest Lua sources, including `ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua`. The removed `placeWallDecals` function name is absent from the decompressed place data. This verifies that the Level 2 decal-removal hotfix (`9a15d4b`) reached the published binary.
+
+Method: read-only `GET https://apis.roblox.com/place-version-history-api/v1/131311258779917/history`, then `GET https://apis.roblox.com/asset-delivery-api/v1/assetId/131311258779917/version/2083` and its signed Asset Delivery location. The API key, signed URL and binary are not stored here. Binary source matching confirms code inclusion, not instance-path binding or visual/runtime behavior. The owner-rejected wall artwork still needs a new approved design before the wall-depth card can be Done. Published Player, multiplayer, DataStore, purchase, sound and physical-device checks remain open where the cards require them.
