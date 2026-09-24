@@ -1,0 +1,22 @@
+{
+  "decal-maintenance-v1.png": {
+    "sha256": "104b7d5a68a2bb391e9053d042bb9d2fa9615c79935b81bfee87691c901d7774",
+    "groupId": 1039373905,
+    "createdAtUtc": "2026-09-24T13:11:42.586954+00:00",
+    "operationPath": "operations/496dfd78-162d-48cf-983d-dd9983b0cb4e",
+    "assetId": "70761413249378",
+    "status": "created",
+    "moderationState": "Approved",
+    "verifiedAtUtc": "2026-09-24T13:12:00.041842+00:00"
+  },
+  "decal-visitor-traces-v1.png": {
+    "sha256": "0f5d0a335b19060d764709b4b2d6e87bfb21b5a82b7f289556e69fb3af5d8211",
+    "groupId": 1039373905,
+    "createdAtUtc": "2026-09-24T13:11:45.578917+00:00",
+    "operationPath": "operations/dedd508b-8197-4372-9cf8-754b26f2d396",
+    "assetId": "126468681550310",
+    "status": "created",
+    "moderationState": "Approved",
+    "verifiedAtUtc": "2026-09-24T13:12:00.181160+00:00"
+  }
+}

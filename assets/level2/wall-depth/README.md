@@ -1,6 +1,15 @@
-# Level 2 wall depth — concepts, not installed assets
+# Level 2 wall depth — concepts and upload-ready decals
 
 Card: [DDqjXkyU](https://trello.com/c/DDqjXkyU). These two ImageGen sketches are painted over the actual Level 2 vaulted-room reference at `artifacts/claude-20260922/screens/level2-corridor-B-mesh-ribs.jpg`. They show how to break up the long cream-tile walls without changing the corridor silhouette or adding a new objective. The images are **art-direction mockups**, not decals or evidence of a Studio import.
+
+Two separate, transparent 1024×512 decals were then painted from the selected motifs and uploaded as approved group-owned Roblox Images. They are **assets only**: no Studio placement or publication has been claimed.
+
+| Decal | Local file | Roblox Image ID | Use |
+| --- | --- | ---: | --- |
+| Maintenance history | `decal-maintenance-v1.png` | `70761413249378` | One old pump-service mural on a broad side wall away from the interactive pump |
+| Visitor traces | `decal-visitor-traces-v1.png` | `126468681550310` | One small handprint and drag-mark cluster in a dead-end or optional alcove |
+
+`source-*-decal.png` are the full-resolution transparent ImageGen outputs; `prepare_decals.py` reduces them for Roblox and creates `decal-tile-preview.jpg` for contrast review. The transparent corners stay transparent. The exact asset SHA-256, group owner, upload operations and moderation readback are in `decal-upload-receipt.json`. Neither image has words or an arrow that would imply a new objective.
 
 ## A. Maintenance history
 
@@ -20,6 +29,8 @@ Three long damp drag marks, a wiped handprint and a few scratched tallies imply 
 - Build final wall graphics as separate transparent decals or thin noncolliding planes aligned to existing tiles. Repaint any words and symbols cleanly; these mockups include generated lettering and should not be uploaded whole as wall textures.
 - Test at the game's usual dark lighting from near, mid-corridor and oblique views, including a low-resolution phone. A mark should resolve as a deliberate shape at roughly 8–15 studs without becoming a false objective marker. Reduce contrast or omit details that sparkle, alias or hide enemy silhouettes.
 - Keep the decals static and unlit; compare draw count, memory and frame time before/after on a physical phone. An art sketch alone does not satisfy the Trello card. Claude/Studio integration and an active Level 2 round are still needed before Done.
+
+Final ImageGen mode: transparent game decal art, using the in-scene concepts above as visual direction. The maintenance run requested an isolated, weathered charcoal pipe/valve stencil and worn ochre diagonal strip with a low mineral waterline, no text, on transparent background. The visitor run requested only three rusty hand-drag streaks, a palmprint and scratch tallies, no text, on transparent background. Both selected outputs were inspected over a cream wall-color preview before upload. These are project-owned source assets, and the `decal-*` PNGs are the final runtime candidates.
 
 ## Generation record
 
