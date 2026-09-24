@@ -128,8 +128,58 @@ function Page.mount(page, ctx)
 		camera.CFrame = CFrame.lookAt(Vector3.new(0, previewSize.Y * 0.02,
 			-distance), Vector3.zero)
 	end
+	-- FALSE_SUN_MOTES_20260924 (Trello IRLeRBcN). A ViewportFrame renders no
+	-- ParticleEmitter, so the standing preview gets the same quiet embers as 2D
+	-- sprites, projected from the topper window and shown only while that side
+	-- faces the camera. None for a viewer who asked for less flashing.
+	local motes, moteClock = {}, 0
+	local function clearMotes()
+		for _, mote in ipairs(motes) do mote.Label:Destroy() end
+		table.clear(motes)
+	end
+	local function stepMotes(deltaTime)
+		for index = #motes, 1, -1 do
+			local mote = motes[index]
+			mote.Age += deltaTime
+			local t = mote.Age / mote.Life
+			if t >= 1 then
+				mote.Label:Destroy()
+				table.remove(motes, index)
+			else
+				mote.Label.Position = UDim2.fromOffset(mote.X + mote.Drift * t, mote.Y - 22 * t)
+				mote.Label.ImageTransparency = 0.42 + 0.58 * t
+			end
+		end
+		local topper = previewModel and selectedSkinId == "FalseSun"
+			and previewModel:FindFirstChild("ZyntraPremiumTopper")
+		local part = topper and topper:FindFirstChildWhichIsA("BasePart", true)
+		moteClock += deltaTime
+		if not part or moteClock < 0.4 or #motes >= 3
+			or ctx.player:GetAttribute("ReduceFlashing") == true then return end
+		moteClock = 0
+		local at = camera.CFrame:PointToObjectSpace(part.Position)
+		local centre = camera.CFrame:PointToObjectSpace(previewModel:GetPivot().Position)
+		local depth = -at.Z
+		if depth <= 0.1 or at.Z <= centre.Z then return end -- window turned away
+		local size = viewport.AbsoluteSize
+		local tangent = math.tan(math.rad(camera.FieldOfView) * 0.5)
+		local label = Instance.new("ImageLabel")
+		label.Name = "FalseSunMote"
+		label.BackgroundTransparency = 1
+		label.Image = "rbxassetid://128661548525607"
+		label.ImageTransparency = 0.42
+		label.AnchorPoint = Vector2.new(0.5, 0.5)
+		label.Size = UDim2.fromOffset(12, 12)
+		label.ZIndex = viewport.ZIndex + 1
+		label.Parent = viewport
+		table.insert(motes, {Label = label, Age = 0, Life = 0.45 + math.random() * 0.3,
+			Drift = (math.random() - 0.5) * 10,
+			X = (at.X / depth / (tangent * size.X / math.max(1, size.Y)) + 1) / 2 * size.X,
+			Y = (1 - at.Y / depth / tangent) / 2 * size.Y})
+	end
 	local function releasePreview()
 		if previewModel then previewModel:Destroy() end
+		clearMotes()
 		previewModel, previewPivot, previewSize, loadedSkinId = nil, nil, nil, nil
 	end
 	local function loadPreview()
@@ -166,6 +216,7 @@ function Page.mount(page, ctx)
 			end
 			previewModel:PivotTo(CFrame.Angles(0, previewAngle, 0) * previewPivot)
 		end
+		stepMotes(deltaTime)
 	end)
 	viewport:GetPropertyChangedSignal("AbsoluteSize"):Connect(frameCamera)
 

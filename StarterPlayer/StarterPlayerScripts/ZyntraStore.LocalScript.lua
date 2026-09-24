@@ -1892,6 +1892,35 @@ for _, tier in ipairs({2, 3, 5}) do
 	makeProductCard("TokenEarner" .. tier .. "x", item, "Pass")
 	shopDetail.TokenEarner[tier] = item
 end
+-- Sale state is Roblox's: a pass that is off sale (all six are until QA) or not
+-- at its approved price shows COMING SOON, never a BUY that cannot complete.
+shopDetail.EarnerForSale = {}
+function shopDetail.renderEarner()
+	local earner = Config.TokenEarner
+	local owns = {}
+	for key in pairs(earner.Passes) do owns[key] = player:GetAttribute("ZyntraOwns" .. key) == true end
+	for tier, item in pairs(shopDetail.TokenEarner) do
+		local key = "TokenEarner" .. tier .. "x"
+		local itemButton = productButtons[key]
+		local offer = earner.Offer(earner.Passes, earner.Tier, owns, tier)
+		local pass = offer and earner.Passes[offer]
+		local onSale = pass ~= nil and shopDetail.EarnerForSale[pass.Id] == true
+		item.Id = onSale and pass.Id or 0
+		if pass then item.Price = pass.Price; displayedProductPrices[key] = pass.Price end
+		itemButton.Text = not pass and "OWNED" or onSale and (tostring(pass.Price) .. " R$") or "COMING SOON"
+		itemButton.TextColor3 = not pass and COLORS.accent or onSale and COLORS.accent2 or COLORS.muted
+		UIDevice.SetEnabled(itemButton, onSale)
+		if shopDetail.priceChanged then shopDetail.priceChanged(key) end
+	end
+end
+task.spawn(function()
+	for _, pass in pairs(Config.TokenEarner.Passes) do
+		local ok, info = pcall(MarketplaceService.GetProductInfo, MarketplaceService, pass.Id, Enum.InfoType.GamePass)
+		shopDetail.EarnerForSale[pass.Id] = ok and type(info) == "table" and info.IsForSale == true
+			and info.PriceInRobux == pass.Price
+	end
+	shopDetail.renderEarner()
+end)
 
 -- ── THE SHOP DETAIL PANE (card 102) ─────────────────────────────────────────
 -- Roblox's monetization guidance asks for a shop a player can "linger and
@@ -2083,11 +2112,13 @@ do
 		name.Text = tostring(item.Name or selected)
 		local row = productButtons[selected]
 		local owned = row ~= nil and row.Active ~= true and tostring(row.Text) == "OWNED"
+		-- A card that is not on sale says so here too (Token Earner, 2026-09-24).
+		local soon = row ~= nil and row.Active ~= true and tostring(row.Text) == "COMING SOON"
 		local robux = math.max(0, math.floor(tonumber(displayedProductPrices[selected]) or 0))
 		price.Text = owned and "IN YOUR ACCOUNT" or (tostring(robux) .. " R$")
-		buy.Text = owned and "OWNED" or ("BUY  //  " .. tostring(robux) .. " R$")
-		buy.TextColor3 = owned and COLORS.accent or COLORS.accent2
-		UIDevice.SetEnabled(buy, not owned)
+		buy.Text = owned and "OWNED" or soon and "COMING SOON" or ("BUY  //  " .. tostring(robux) .. " R$")
+		buy.TextColor3 = owned and COLORS.accent or soon and COLORS.muted or COLORS.accent2
+		UIDevice.SetEnabled(buy, not owned and not soon)
 		for _, old in ipairs(bullets:GetChildren()) do
 			if old:IsA("TextLabel") then old:Destroy() end
 		end
@@ -3257,21 +3288,7 @@ local function refreshUI()
 	end
 
 	-- TOKEN_EARNER_20260924: ownership is the server's, published per pass.
-	local earner = Config.TokenEarner
-	local earnerOwns = {}
-	for key in pairs(earner.Passes) do earnerOwns[key] = player:GetAttribute("ZyntraOwns" .. key) == true end
-	for tier, item in pairs(shopDetail.TokenEarner) do
-		local key = "TokenEarner" .. tier .. "x"
-		local itemButton = productButtons[key]
-		local offer = earner.Offer(earner.Passes, earner.Tier, earnerOwns, tier)
-		local pass = offer and Config.TokenEarner.Passes[offer]
-		item.Id = pass and pass.Id or 0
-		if pass then item.Price = pass.Price; displayedProductPrices[key] = pass.Price end
-		itemButton.Text = pass and (tostring(pass.Price) .. " R$") or "OWNED"
-		itemButton.TextColor3 = pass and COLORS.accent2 or COLORS.accent
-		UIDevice.SetEnabled(itemButton, pass ~= nil)
-		if shopDetail.priceChanged then shopDetail.priceChanged(key) end
-	end
+	shopDetail.renderEarner()
 
 	hazmatPicker.SetLocked(not profile.OwnsAdvancedEquipment, "ADVANCED EQUIPMENT REQUIRED")
 	glowstickPicker.SetLocked(not profile.OwnsCosmeticEquipment, "GLOWSTICK CUSTOMIZER REQUIRED")

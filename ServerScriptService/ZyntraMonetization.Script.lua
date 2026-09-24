@@ -408,9 +408,17 @@ end
 -- tokens a transform has just EARNED. Balances, bought packs, refunds and grants
 -- never pass through here.
 local tokenEarner = {}
-function tokenEarner.tier(player)
+-- The tier stays UNKNOWN (attribute nil) until refreshPasses has a definitive
+-- answer for all six passes, and an earning path waits for it rather than pay a
+-- 5x owner 1x in the seconds after join. Returns the tier and whether it is known.
+function tokenEarner.tier(player, waitSeconds)
+	local deadline = os.clock() + (waitSeconds or 0)
+	while player:GetAttribute("ZyntraTokenEarnerMultiplier") == nil and player.Parent
+		and sessions[player] and not sessions[player].closing and os.clock() < deadline do
+		task.wait(0.25)
+	end
 	local tier = player:GetAttribute("ZyntraTokenEarnerMultiplier")
-	return (tier == 2 or tier == 3 or tier == 5) and tier or 1
+	return (tier == 2 or tier == 3 or tier == 5) and tier or 1, tier ~= nil
 end
 function tokenEarner.bonus(data, earned, tier)
 	local extra = math.max(0, math.floor(earned)) * (tier - 1)
@@ -913,7 +921,11 @@ local function applyAttributes(player, data)
 	player:SetAttribute("ZyntraHazmatColor", readColor(data.Colors.Hazmat, Config.Colors.HazmatDefault))
 	-- Cosmetic selection replicates to other players. The visual applicator is
 	-- installed only after the imported skinned model passes avatar/animation QA.
-	player:SetAttribute("ZyntraSkinId", data.Skins.Equipped)
+	-- DEV_SUIT_20260924: fail closed. A Developer suit is never shown for a player
+	-- DevAccess does not allow, even before its revocation has been saved.
+	local equipped = Skins.Get(data.Skins.Equipped)
+	player:SetAttribute("ZyntraSkinId", (equipped and equipped.Kind == "Developer"
+		and not DevAccess.IsAllowed(player)) and Skins.DefaultId or data.Skins.Equipped)
 	player:SetAttribute("ZyntraGlowstickColor", readColor(data.Colors.Glowstick, Config.Colors.GlowstickDefault))
 	player:SetAttribute("ZyntraMuteDispatch", data.Settings.MuteDispatch)
 	player:SetAttribute("ZyntraLobbyBriefingPlayed", data.Settings.LobbyBriefingPlayed)
@@ -2102,17 +2114,21 @@ local PASS_RECHECK_LIMIT = 3
 
 local function passOwnership(player, key, pass)
 	-- Owner-authorized permanent in-experience entitlement. Does not grant other passes.
-	if key == "AdvancedEquipment" and player.UserId == 9488575949 then return true end -- LaverSneglen
+	if key == "AdvancedEquipment" and player.UserId == 9488575949 then return true, true end -- LaverSneglen
 	local purchases = passPurchases[player]
-	if purchases and purchases[key] then return true end
+	if purchases and purchases[key] then return true, true end
 	local answer = ownsPass(player, pass)
+	-- A purchase can finish while ownsPass yields, and Roblox's per-server cache
+	-- can still say false: the latch wins over a read that may predate it.
+	purchases = passPurchases[player]
+	if purchases and purchases[key] then return true, true end
 	if answer == nil then
 		passReadFailed[player] = true
 		-- Unknown: keep whatever this session already published rather than
-		-- downgrading an owner to false.
-		return player:GetAttribute("ZyntraOwns" .. key) == true
+		-- downgrading an owner to false. The second value says it is a guess.
+		return player:GetAttribute("ZyntraOwns" .. key) == true, false
 	end
-	return answer
+	return answer, true
 end
 
 local function refreshPasses(player)
@@ -2189,12 +2205,26 @@ local function refreshPasses(player)
 
 	-- TOKEN_EARNER_20260924: six passes, one tier. Each ownership is published
 	-- like any other pass; earning code reads only the resolved tier.
-	local earnerOwns = {}
+	local earnerOwns, earnerKnown = {}, true
 	for key, pass in pairs(Config.TokenEarner.Passes) do
-		earnerOwns[key] = passOwnership(player, key, pass)
-		player:SetAttribute("ZyntraOwns" .. key, earnerOwns[key])
+		local owns, known = passOwnership(player, key, pass)
+		earnerOwns[key], earnerKnown = owns, earnerKnown and known
+		player:SetAttribute("ZyntraOwns" .. key, owns)
 	end
-	player:SetAttribute("ZyntraTokenEarnerMultiplier", Config.TokenEarner.Tier(earnerOwns))
+	-- A refresh begun before a purchase must never publish a lower tier after
+	-- the purchase's own refresh: latches that landed while the reads above
+	-- yielded win before the tier is computed.
+	for key in pairs(Config.TokenEarner.Passes) do
+		if passPurchases[player] and passPurchases[player][key] then
+			earnerOwns[key] = true
+			player:SetAttribute("ZyntraOwns" .. key, true)
+		end
+	end
+	-- Only a definitive answer sets the tier; an unknown one keeps the last known
+	-- tier (or none yet, so earning waits) until the background re-check.
+	if earnerKnown then
+		player:SetAttribute("ZyntraTokenEarnerMultiplier", Config.TokenEarner.Tier(earnerOwns))
+	end
 
 	if supporter then
 		mutate(player, function(data)
@@ -2961,7 +2991,8 @@ researchProgress.Event:Connect(function(player, key)
  if typeof(player)~="Instance" or not player:IsA("Player") or player.Parent~=Players
   or (key~="Fuse" and key~="Lever") or not sessions[player] then return end
  local earnedDay=utcDay()
- local earnerTier=tokenEarner.tier(player)
+ -- Automatic progress cannot be refused: wait for the tier, then (outage only) 1x.
+ local earnerTier=tokenEarner.tier(player,60)
  for attempt=1,3 do
   if utcDay()~=earnedDay or player.Parent~=Players then return end
   local session=sessions[player]
@@ -3194,7 +3225,11 @@ local function claimPlaytimeReward(player, payload)
 			milestone.Minutes, math.floor(have / 60)), "error")
 		return
 	end
-	local earnerTier = tokenEarner.tier(player)
+	local earnerTier, earnerKnown = tokenEarner.tier(player, 10)
+	if not earnerKnown then
+		pushProfile(player, "Checking your Token Earner pass. Try again in a moment.", "error")
+		return
+	end
 	dailyMutate(player, function(data)
 		if data.Daily.Claimed[key] == true then return false, claimedMessage, "error" end
 		if data.Daily.PlaytimeSeconds < required then
@@ -3341,7 +3376,11 @@ local function claimWheelPrize(player)
 		pushProfile(player, "Nothing to collect.", "info")
 		return
 	end
-	local earnerTier = tokenEarner.tier(player)
+	local earnerTier, earnerKnown = tokenEarner.tier(player, 10)
+	if not earnerKnown then
+		pushProfile(player, "Checking your Token Earner pass. Try again in a moment.", "error")
+		return
+	end
 	dailyMutate(player, function(data)
 		local last = pendingWheelPrize(data.Daily)
 		if not last then return false, "Nothing to collect.", "info" end
@@ -3758,7 +3797,9 @@ levelCompletedEvent.Event:Connect(function(player, level, friendCount, run, roun
 	-- gets a stable id for its own retries.
 	local completionId = (type(roundId) == "string" and #roundId > 0 and #roundId <= 80)
 		and roundId .. ":" .. cleared or HttpService:GenerateGUID(false)
-	local earnerTier = tokenEarner.tier(player)
+	-- Waits only while pass ownership is still unknown (a failed read); an
+	-- outage that outlasts the minute pays 1x rather than lose the clear.
+	local earnerTier = tokenEarner.tier(player, 60)
 	completionSaves.settle(player, completionId, function(data)
 		if table.find(data.CompletionIds, completionId) then
 			return false, "Level clear saved.", "success"

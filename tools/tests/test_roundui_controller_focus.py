@@ -26,7 +26,8 @@ def section(source, start, stop):
 
 queue_block = section(round_ui, 'do\n local function cancelHostedQueue()', '\nrefreshQueuePanel()\n\n-- RoundUI is the sole cursor-policy owner')
 completion_block = section(round_ui, 'function completion.reset()', '-- One handler for both actions.')
-expiry_block = section(round_ui, 'do\n\tlocal completionLastDeadline = nil', '\n-- C_ONE_SPECTATE_CAMERA_20260904')
+expiry_block = section(round_ui, 'do\n\tlocal completionLastDeadline = nil', '\n-- AUDIT_FIX_20260924 (Codex review)')
+switch_block = section(round_ui, '-- AUDIT_FIX_20260924 (Codex review)', '\n-- C_ONE_SPECTATE_CAMERA_20260904 -- WHAT SHIPPED BROKEN.')
 
 harness = r'''
 local checks = 0
@@ -131,6 +132,44 @@ expect(completion.continueButton.Selectable, false, 'deadline disables the butto
 expect(GuiService.SelectedObject, nil, 'deadline drops the dead focus')
 GuiService.SelectedObject = other; completion.reset()
 expect(GuiService.SelectedObject, other, 'reset leaves unrelated focus alone')
+end
+-- ── a pad picked up while a modal is ALREADY open (Codex review) ───────
+do
+local lastInputChanged = signal()
+local UIS = {LastInputTypeChanged = lastInputChanged}
+local queueShade = {Visible = false}
+local queueSubmit = button(queueShade)
+local endFrame = {Visible = false}
+local completion = {continueButton = {Visible = false, Active = false}, button = {Visible = false, Active = false}}
+completion.buttons = {completion.continueButton, completion.button}
+local pad, keyboard = {Name = 'Gamepad1'}, {Name = 'Keyboard'}
+''' + switch_block + r'''
+GuiService.SelectedObject, GuiService.MenuIsOpen = nil, false
+queueShade.Visible = true
+lastInputChanged:Fire(keyboard)
+expect(GuiService.SelectedObject, nil, 'keyboard input takes no focus')
+lastInputChanged:Fire(pad)
+expect(GuiService.SelectedObject, queueSubmit, 'pad picked up with the party panel open selects CREATE PARTY')
+local inside = button(queueShade); GuiService.SelectedObject = inside
+lastInputChanged:Fire(pad)
+expect(GuiService.SelectedObject, inside, 'an existing focus inside the panel is kept')
+GuiService.SelectedObject, GuiService.MenuIsOpen = nil, true
+lastInputChanged:Fire(pad)
+expect(GuiService.SelectedObject, nil, 'Roblox menu open: hands off')
+GuiService.MenuIsOpen, queueShade.Visible, endFrame.Visible = false, false, true
+completion.continueButton.Visible, completion.continueButton.Active = true, true
+completion.button.Visible, completion.button.Active = true, true
+lastInputChanged:Fire(pad)
+expect(GuiService.SelectedObject, completion.continueButton, 'pad on an open result screen selects CONTINUE')
+GuiService.SelectedObject = completion.button
+lastInputChanged:Fire(pad)
+expect(GuiService.SelectedObject, completion.button, 'a chosen BACK TO LOBBY is kept')
+GuiService.SelectedObject, completion.continueButton.Visible = nil, false
+lastInputChanged:Fire(pad)
+expect(GuiService.SelectedObject, completion.button, 'last level: BACK TO LOBBY')
+GuiService.SelectedObject, completion.button.Active = nil, false
+lastInputChanged:Fire(pad)
+expect(GuiService.SelectedObject, nil, 'expired buttons take no focus')
 end
 print('RoundUI controller focus: ' .. checks .. ' checks passed (offline Luau; engine selection not exercised)')
 '''

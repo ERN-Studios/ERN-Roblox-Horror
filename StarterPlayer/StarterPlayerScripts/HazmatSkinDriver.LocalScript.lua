@@ -251,7 +251,10 @@ local function clearState(player)
 	local state = states[player]
 	if not state then return end
 	states[player] = nil
-	if state.Motes then state.Motes.Parent:Destroy() end
+	-- Idempotent: the server may already have removed the visual, and the motes
+	-- with it (lobby return, death, unequip). A throw here left the body hidden.
+	local motes = state.Motes and state.Motes.Parent
+	if motes then motes:Destroy() end
 	for object, original in pairs(state.Originals) do
 		if object.Parent then
 			object:SetAttribute(ORIGINAL_ATTRIBUTE, nil)

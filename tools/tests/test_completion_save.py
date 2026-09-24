@@ -88,7 +88,6 @@ local player = {UserId = 7, Name = "Escapee", Parent = Players, attrs = {}}
 function player:IsA(className) return className == "Player" end
 function player:GetAttribute(name) return self.attrs[name] end
 local MAX_SAFE_SUPPORT = 9007199254740991
-__TOKEN_EARNER__
 
 -- fake DataStore: a per-call script of outcomes
 local stored, commits, plan = {}, 0, {}
@@ -141,6 +140,9 @@ end
 
 local sessions = {}
 local mutationLocks = {}
+-- virtual clock for the tier wait; os.time stays real for records
+local os = {clock = function() return now end, time = os.time}
+__TOKEN_EARNER__
 '''
 
 TESTS = r'''
@@ -151,7 +153,7 @@ local function reset(profile)
     completionSaves.pending[player] = nil
     commits, plan, warnings, pushes, badges = 0, {}, {}, {}, {}
     player.Parent = Players
-    player.attrs = {}
+    player.attrs = {ZyntraTokenEarnerMultiplier = 1} -- passes known: 1x
     now, sleepers = 0, {}
 end
 local function saved() return stored.u_7 end
@@ -334,6 +336,23 @@ player.attrs.ZyntraTokenEarnerMultiplier = 3
 fire(player, 1, 0, nil, "earner-C")
 run()
 equal(saved().Tokens, 56, "3x multiplies only the 2 earned, never the 50 already held")
+
+-- 14. tier still unknown at the clear (pass reads pending): it waits, then pays
+-- the tier that lands -- never a silent 1x for a 5x owner
+reset()
+player.attrs.ZyntraTokenEarnerMultiplier = nil
+fire(player, 1, 0, nil, "earner-D")
+run(4)
+equal(saved().Tokens, 0, "nothing paid while the tier is unknown")
+player.attrs.ZyntraTokenEarnerMultiplier = 5
+run()
+equal(saved().Tokens, 10, "paid at the tier that landed")
+-- 15. ownership never answers: after the minute, 1x rather than lose the clear
+reset()
+player.attrs.ZyntraTokenEarnerMultiplier = nil
+fire(player, 1, 0, nil, "earner-E")
+run()
+equal(saved().Tokens, 2, "outage: 1x after the wait, clear kept")
 
 print(("completion save: %d checks passed (real mutateIdempotent + completionSaves + handler, fake DataStore)"):format(checks))
 '''

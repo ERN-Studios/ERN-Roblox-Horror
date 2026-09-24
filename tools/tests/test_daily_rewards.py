@@ -194,8 +194,9 @@ local function world(opts)
     w.character = makeCharacter
 
     local function makePlayer(name, userId)
+        -- Pass ownership already known (1x): claims wait for it (TOKEN_EARNER_20260924).
         local p = {Name = name, UserId = userId, ClassName = "Player", Parent = Players,
-            attributes = {}, attributeSignals = {}}
+            attributes = {ZyntraTokenEarnerMultiplier = 1}, attributeSignals = {}}
         p.CharacterAdded = signal()
         p.CharacterRemoving = signal()
         function p:IsA(class) return class == "Player" end

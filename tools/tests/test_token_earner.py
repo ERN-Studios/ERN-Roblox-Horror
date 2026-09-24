@@ -95,7 +95,99 @@ equal(tokenEarner.bonus(data, 2, 1), 0, "1x adds nothing")
 data.Tokens = MAX_SAFE_SUPPORT - 1
 equal(tokenEarner.bonus(data, 2, 5), 0, "never overflows the balance")
 
-print(("token earner: %d checks passed (real Config.TokenEarner + applyReward + tokenEarner)"):format(checks))
+-- ── ownership refresh races (Codex review of 91106da) ───────────────────────
+-- The REAL passOwnership and Token Earner block of refreshPasses, driven by a
+-- fake ownsPass that can pause mid-read like UserOwnsGamePassAsync. `answers`
+-- maps pass id -> true/false; a missing id is an unanswered (nil) read.
+local attrs, answers, paused = {}, {}, {}
+local racer = {Parent = true, UserId = 1}
+function racer:GetAttribute(k) return attrs[k] end
+function racer:SetAttribute(k, v) attrs[k] = v end
+local function ownsPass(_, pass)
+    if paused[pass.Id] then paused[pass.Id] = nil; coroutine.yield() end
+    return answers[pass.Id]
+end
+local passPurchases, passReadFailed = {}, {}
+local passOwnership = (function()
+    local RunService = {IsStudio = function() return false end}
+__PASS_OWNERSHIP__
+    return passOwnership
+end)()
+local function publishEarner(player)
+__EARNER_BLOCK__
+end
+local P = E.Passes
+local function reset(owned)
+    table.clear(attrs); table.clear(paused); table.clear(passPurchases); table.clear(passReadFailed)
+    table.clear(answers)
+    for key, pass in pairs(P) do answers[pass.Id] = owned and owned[key] or false end
+end
+local function purchase(key)
+    passPurchases[racer] = passPurchases[racer] or {}
+    passPurchases[racer][key] = true
+    publishEarner(racer) -- the purchase callback's own refresh
+end
+
+-- A pauses INSIDE the 2x read; purchase + refresh B finish; A resumes on a cached false
+reset()
+paused[P.TokenEarner2x.Id] = true
+local A = coroutine.create(publishEarner)
+coroutine.resume(A, racer)
+purchase("TokenEarner2x")
+equal(attrs.ZyntraTokenEarnerMultiplier, 2, "purchase refresh publishes 2x")
+coroutine.resume(A)
+equal(coroutine.status(A), "dead", "refresh A finished")
+equal(attrs.ZyntraOwnsTokenEarner2x, true, "a stale read never unpublishes a latched pass")
+equal(attrs.ZyntraTokenEarnerMultiplier, 2, "a refresh begun before the purchase never lowers the tier")
+
+-- A read 2x (false) BEFORE the purchase and pauses on every other pass in turn
+for key in pairs(P) do
+    if key ~= "TokenEarner2x" then
+        reset()
+        paused[P[key].Id] = true
+        A = coroutine.create(publishEarner)
+        coroutine.resume(A, racer)
+        purchase("TokenEarner2x")
+        coroutine.resume(A)
+        equal(attrs.ZyntraTokenEarnerMultiplier, 2, "stale snapshot paused on " .. key .. " keeps 2x")
+    end
+end
+
+-- the upgrade chain bought mid-refresh
+reset({TokenEarner2x = true})
+paused[P.TokenEarnerUp2to3.Id] = true
+A = coroutine.create(publishEarner)
+coroutine.resume(A, racer)
+purchase("TokenEarnerUp2to3")
+coroutine.resume(A)
+equal(attrs.ZyntraTokenEarnerMultiplier, 3, "2x owner buying 2->3 mid-refresh stays 3x")
+
+-- passOwnership alone (every pass, not only Token Earner): a latch that lands
+-- while the read yields wins over the cached false
+reset()
+paused[P.TokenEarner5x.Id] = true
+local result
+local reader = coroutine.create(function() result = {passOwnership(racer, "TokenEarner5x", P.TokenEarner5x)} end)
+coroutine.resume(reader)
+passPurchases[racer] = {TokenEarner5x = true}
+coroutine.resume(reader)
+equal(result[1], true, "a purchase during the read is owned")
+equal(result[2], true, "and counts as a definitive answer")
+
+-- definitive and unanswered reads
+reset()
+publishEarner(racer)
+equal(attrs.ZyntraTokenEarnerMultiplier, 1, "all answered false: a known 1x")
+reset({TokenEarner2x = true})
+answers[P.TokenEarner3x.Id] = nil
+publishEarner(racer)
+equal(attrs.ZyntraTokenEarnerMultiplier, nil, "an unanswered read publishes no tier, so earning waits")
+equal(passReadFailed[racer], true, "and a background re-check is owed")
+attrs.ZyntraTokenEarnerMultiplier = 5
+publishEarner(racer)
+equal(attrs.ZyntraTokenEarnerMultiplier, 5, "a later unanswered read keeps the last known tier")
+
+print(("token earner: %d checks passed (real Config.TokenEarner, applyReward, tokenEarner, passOwnership and the refresh block)"):format(checks))
 '''
 
 
@@ -113,7 +205,10 @@ def main():
         "local function protectionState() return nil end",
         "local ITEM_CONFIG = {SpeedPotion = {Name = 'Speed Potion'}}",
     ])
-    source = stubs + "\n" + helpers + "\n" + TESTS
+    ownership = section(SERVER, "local function passOwnership(player, key, pass)", "local function refreshPasses(player)")
+    earner = section(SERVER, "\t-- TOKEN_EARNER_20260924: six passes, one tier.", "\tif supporter then")
+    tests = TESTS.replace("__PASS_OWNERSHIP__", ownership).replace("__EARNER_BLOCK__", earner)
+    source = stubs + "\n" + helpers + "\n" + tests
     with tempfile.TemporaryDirectory(prefix="token-earner-") as directory:
         path = Path(directory) / "token_earner.luau"
         path.write_text(source, encoding="utf-8")

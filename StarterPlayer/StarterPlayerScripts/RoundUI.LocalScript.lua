@@ -1592,6 +1592,22 @@ do
 	end)
 end
 
+-- AUDIT_FIX_20260924 (Codex review): a pad picked up while the party panel or
+-- the round-complete choice is ALREADY open takes focus too; opening them was
+-- the only moment that set it. A focus already inside the modal is kept.
+do
+	local navigation = game:GetService("GuiService")
+	UIS.LastInputTypeChanged:Connect(function(inputType)
+		if not inputType.Name:find("^Gamepad") or navigation.MenuIsOpen then return end
+		local current = navigation.SelectedObject
+		if queueShade.Visible then
+			if not (current and current:IsDescendantOf(queueShade)) then navigation.SelectedObject = queueSubmit end
+		elseif endFrame.Visible and not table.find(completion.buttons, current) then
+			local target = completion.continueButton.Visible and completion.continueButton or completion.button
+			if target.Visible and target.Active then navigation.SelectedObject = target end
+		end
+	end)
+end
 -- C_ONE_SPECTATE_CAMERA_20260904 -- WHAT SHIPPED BROKEN.
 --
 -- TWO scripts drove the spectate camera off the same Humanoid.Died.
