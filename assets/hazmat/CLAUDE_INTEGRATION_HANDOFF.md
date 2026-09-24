@@ -32,4 +32,6 @@ The wheel image is Group Image `70472139920072` (`wheel/lucky-wheel-six-sector-r
 
 The file `artifacts/hazmat-20260924/studio-parity-182-final.txt` is the fresh whole-place Studio source dump. The eight Level 5 scripts missing from the older manifest were mirrored from Studio into the repository and added to `studio-sync-manifest.json`. The Level 5 prototype remains developer-gated; its gameplay acceptance is outside this skin/wheel handoff.
 
+The current review is draft PR [#8](https://github.com/ERN-Studios/ERN-Roblox-Horror/pull/8). After merging `main` into the branch, a new Studio probe still found 182 exact source matches, and `ScriptEditorService:GetEditorSource` matched each of those 182 sources with zero errors. The evidence is `artifacts/hazmat-20260924/studio-parity-after-main-merge.txt` and `studio-editor-parity-after-main-merge.json`; the manifest hashes were recalculated against the merged repository files. The owner's Level 1 relay rule remains one required circuit per two players, capped at three.
+
 Source art, rig contract, and Meshy task provenance are in [README.md](README.md). The checked-in images are design/source assets, not evidence of final in-game behavior.
