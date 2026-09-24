@@ -1174,12 +1174,11 @@
       "file": "ServerScriptService/ZyntraMonetization.Script.lua",
       "bytes": 204565,
       "sha256": "b3db78879c9e95af265544deac915341dd0f1dc7c2cae870045d7e786c8fa350",
-      "status": "pending-studio-push",
+      "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2",
       "disabled": false,
-      "runContext": "Enum.RunContext.Legacy",
-      "studioSha256Before": "541ce85f582c9762c2f34f422f90ef954ea027ad6ed83e44c3882c93db9ea63b"
+      "runContext": "Enum.RunContext.Legacy"
     },
     {
       "studioPath": "ServerStorage.Archive.Level 2 Kids Skylight Backup 20260806.Level 2 World Builder Before Kids Skylights",
