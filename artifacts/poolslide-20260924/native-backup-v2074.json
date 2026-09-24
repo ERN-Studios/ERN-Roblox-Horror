@@ -1,0 +1,31 @@
+{
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "assetVersion": 2074,
+  "revisionCreateTime": "2026-09-24T14:21:04.215444300Z",
+  "latestRevisionRecheckedAt": "2026-09-24T14:28:24Z",
+  "latestRevisionAtRecheck": 2074,
+  "source": "Roblox Open Cloud Asset Delivery API GET /asset-delivery-api/v1/assetId/131311258779917/version/2074",
+  "canonicalLocalFile": "artifacts/poolslide-20260924/saved-place-v2074.rbxl",
+  "bytes": 9612847,
+  "sha256": "dbfa99275c44a70315e4f4344b5b2f3b22476ca06d1276b1b5ec1abe69a215ba",
+  "binaryHeader": "<roblox!",
+  "verifiedTemplatePath": "ServerStorage.Level2Assets.Level 2 Pool Slide Template",
+  "templateDescendants": 105,
+  "boneCount": 20,
+  "walkAnimationId": 103719823156557,
+  "runAnimationId": 128800704640816,
+  "attributes": {
+    "AgentRadius": 8.25,
+    "AgentHeight": 18.37,
+    "GroundOffset": 6.6,
+    "AttackDistance": 11.55,
+    "Level2_PoolSlideRigVerified": true,
+    "Level2_PoolSlideCorridorFitVerified": true,
+    "SourceSHA256": "7446213563c55d9688fb6b756220a0101f4d10675ceed7646c4c30cf9fa1a2a0"
+  },
+  "previousTemplateSiblingPresent": true,
+  "liveStudioReadOnlyComparison": "Path, descendants, attributes and IDs matched Studio Edit inspector; no Studio mutation or UI control.",
+  "publicationStatus": "Saved asset version only; publication not established by this receipt.",
+  "standaloneModelStatus": "No safe .rbxm extract. rbxmk v0.9.1 could read the converted inspection copy, but its writer panicked on the model; the full RBXL is canonical."
+}
