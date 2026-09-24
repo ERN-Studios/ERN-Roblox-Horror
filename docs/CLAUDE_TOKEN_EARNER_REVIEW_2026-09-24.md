@@ -12,4 +12,8 @@ Required behavior: a refresh started before a confirmed purchase must never over
 
 `StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua` around lines 1887–1893 creates three Token Earner cards, and lines 3266–3272 enable BUY when an ownership offer exists. The UI does not check sale state. If published while the six passes are intentionally off sale, players can see active 149/299/399 R$ offers that cannot complete. Hide or disable the three paid cards until the pass sale state is enabled, or explicitly label them unavailable. Preserve dynamic price/ownership checks when sale begins.
 
-Both findings are tracked as unchecked items on [the Token Earner card](https://trello.com/c/EtdsUM4e). This review did not edit game code or Studio. No other definite material issue was found in the reviewed commit.
+## 3. Earned Tokens can pay 1× before owned passes load
+
+`loadProfile` installs the session and exposes `ZyntraProfileLoaded=true` around lines 1984–2002. Only afterward does `setupPlayer` call `refreshPasses` around line 2251. The refresh yields through several unrelated passes before reading the six Token Earner passes around lines 2141–2182. Meanwhile, `tokenEarner.tier` defaults to 1 at lines 411–413. An existing 2×/3×/5× owner can claim a wheel prize, Daily reward or clear during that gap. For example `claimWheelPrize` reads the default tier around line 3329 and persists the paid claim around line 3353; the later ownership refresh does not repair it. Gate earned-token grants until the player's pass ownership is known, and make failed/unknown ownership checks retriable without silently paying 1× or granting a free multiplier. Test an immediate claim during join/rejoin with ownership reads delayed.
+
+All three findings are tracked as unchecked items on [the Token Earner card](https://trello.com/c/EtdsUM4e). This review did not edit game code or Studio.
