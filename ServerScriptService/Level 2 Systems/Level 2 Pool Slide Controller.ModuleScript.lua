@@ -595,7 +595,10 @@ local function attackReach(session, record)
 	if session.Attack and relative.Magnitude > .01
 		and session.Navigator:GetFacing():Dot(relative.Unit)
 			< math.cos(math.rad(Configuration.AttackArcDegrees * .5)) then return false end
-	return distance(foot, root) <= ATTACK_DISTANCE and vertical >= -1
+	-- POOL_SLIDE_1P20_20260924: a larger rig stands further off (its body needs
+	-- the clearance) and reaches further; it carries its own reach.
+	local reach = session.Template:GetAttribute("AttackDistance") or ATTACK_DISTANCE
+	return distance(foot, root) <= reach and vertical >= -1
 		and vertical <= ATTACK_VERTICAL_DISTANCE
 		and clearLine(session, foot + Vector3.new(0, 3, 0), root)
 end

@@ -672,8 +672,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Slide Controller.ModuleScript.lua",
-      "bytes": 41313,
-      "sha256": "2ea96f904f8e541dcb58d4307c2ab96b83db32af262d45a094c522e8c22404b8",
+      "bytes": 41529,
+      "sha256": "905fa86b43c4ad607e8b7b3750c65de08097c9b1b8a6ec0f80a3ef1babd84655",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -702,8 +702,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 2 Systems/Level 2 Pool Slide Rig Adapter.ModuleScript.lua",
-      "bytes": 7363,
-      "sha256": "ce7daab2e8f93fc333152c7e241c79c2e6e577ff0a9a5801311adc01c2839db1",
+      "bytes": 7632,
+      "sha256": "aa78235250c8aa39bef76b2136f6452b6f1915115b44c97876026d3a092192b1",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
