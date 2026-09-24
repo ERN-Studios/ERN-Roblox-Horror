@@ -1043,6 +1043,59 @@ function TestSuite.ValidateWorld(manifest: {[string]: any}): {[string]: any}
 	return stats
 end
 
+-- Studio-only measurement against the built world, including furniture. The
+-- generator's structural ray bound is conservative; this samples the actual
+-- eye-level view between aligned room centres after walls and props exist.
+-- Run with a fresh World Builder manifest for seeds 101, 7331, 65537 and
+-- 1900813. Exit is omitted because its 560-stud scripted finale is intentional.
+function TestSuite.MeasureCoreSightlines(manifest: {[string]: any}): {[string]: any}
+	assert(RunService:IsStudio(), "MeasureCoreSightlines requires Studio")
+	assert(type(manifest) == "table" and manifest.World and manifest.World.Parent == workspace
+		and type(manifest.Layout) == "table", "A live Level 3 world manifest is required")
+	local opaque = {}
+	for _, object in ipairs(manifest.World:GetDescendants()) do
+		if object:IsA("BasePart") and object.CanQuery and object.Transparency < .95 then
+			table.insert(opaque, object)
+		end
+	end
+	local rayParams = RaycastParams.new()
+	rayParams.FilterType = Enum.RaycastFilterType.Include
+	rayParams.FilterDescendantsInstances = opaque
+	rayParams.IgnoreWater = true
+	local rooms = manifest.Layout.Rooms
+	local samples, clearPairs, longest = 0, 0, 0
+	local longestPair = ""
+	for firstIndex = 1, #rooms - 1 do
+		local first = rooms[firstIndex]
+		if first.Id ~= "Exit" then
+			for secondIndex = firstIndex + 1, #rooms do
+				local second = rooms[secondIndex]
+				if second.Id ~= "Exit"
+					and (math.abs(first.X - second.X) < .001
+						or math.abs(first.Z - second.Z) < .001) then
+					local origin = Configuration.WorldOrigin + Vector3.new(first.X, 5, first.Z)
+					local target = Configuration.WorldOrigin + Vector3.new(second.X, 5, second.Z)
+					local direction = target - origin
+					samples += 1
+					if workspace:Raycast(origin, direction, rayParams) == nil then
+						clearPairs += 1
+						if direction.Magnitude > longest then
+							longest = direction.Magnitude
+							longestPair = first.Id .. " -> " .. second.Id
+						end
+					end
+				end
+			end
+		end
+	end
+	assert(samples > 0 and clearPairs > 0,
+		"Level 3 sightline probe found no unobstructed room-centre ray")
+	assert(longest <= 450,
+		string.format("Level 3 core has a %.1f-stud clear view: %s", longest, longestPair))
+	return {Seed = manifest.Layout.Seed, Samples = samples, ClearPairs = clearPairs,
+		LongestClearStuds = longest, LongestPair = longestPair}
+end
+
 function TestSuite.CaptureLifecycleState(): {[string]: any}
 	local scripts = {}
 	for _, name in ipairs(LEVEL_ONE_RUNTIME_SCRIPTS) do

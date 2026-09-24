@@ -50,6 +50,8 @@ local DEFAULTS = {
 	RowHalfSpacing = 62,
 	ExtraLinksPerDistrict = 2,
 	MinimumModuleSeparation = 105,
+	MaximumStraightRunLinks = 3,
+	MaximumVerticalRunLinks = 2,
 	ArrivalWidth = 64,
 	ArrivalDepth = 54,
 	ExitWidth = 58,
@@ -108,6 +110,8 @@ local function resolveTuning()
 		RowHalfSpacing = integerSetting("RowHalfSpacing", DEFAULTS.RowHalfSpacing, 48, 100),
 		ExtraLinksPerDistrict = integerSetting("ExtraLinksPerDistrict", DEFAULTS.ExtraLinksPerDistrict, 0, 3),
 		MinimumModuleSeparation = numberSetting("MinimumModuleSeparation", DEFAULTS.MinimumModuleSeparation, 60, 220),
+		MaximumStraightRunLinks = integerSetting("MaximumStraightRunLinks", DEFAULTS.MaximumStraightRunLinks, 1, 8),
+		MaximumVerticalRunLinks = integerSetting("MaximumVerticalRunLinks", DEFAULTS.MaximumVerticalRunLinks, 1, 8),
 		ArrivalWidth = integerSetting("ArrivalWidth", DEFAULTS.ArrivalWidth, 52, 90),
 		ArrivalDepth = integerSetting("ArrivalDepth", DEFAULTS.ArrivalDepth, 44, 80),
 		ExitWidth = integerSetting("ExitWidth", DEFAULTS.ExitWidth, 48, 80),
@@ -268,6 +272,39 @@ local function corridorBounds(a, b)
 		MinZ=north.Z + north.D * .5 - .02, MaxZ=south.Z - south.D * .5 + .02}
 end
 
+-- Room and tunnel openings are centred on each linked side. This is the
+-- longest uninterrupted structural view through those openings, excluding
+-- the deliberately separate Signal Hall -> Exit finale.
+local function straightRuns(layout)
+	local ports = {}
+	for _, room in ipairs(layout.Rooms) do ports[room.Id] = {} end
+	for _, link in ipairs(layout.Links) do
+		if link.Door ~= "HiddenExit" then
+			local a, b = layout.RoomById[link.A], layout.RoomById[link.B]
+			local side = cardinalSide(a, b)
+			if side then
+				ports[a.Id][side] = b.Id
+				ports[b.Id][OPPOSITE_SIDE[side]] = a.Id
+			end
+		end
+	end
+	local longest, vertical = 0, 0
+	for roomId, sides in pairs(ports) do
+		for _, side in ipairs({"East", "South"}) do
+			if sides[side] and not sides[OPPOSITE_SIDE[side]] then
+				local count, current = 0, roomId
+				while ports[current][side] do
+					count += 1
+					current = ports[current][side]
+				end
+				longest = math.max(longest, count)
+				if side == "South" then vertical = math.max(vertical, count) end
+			end
+		end
+	end
+	return longest, vertical
+end
+
 local function makeHash(layout)
 	local pieces = {
 		tostring(VERSION),
@@ -301,7 +338,10 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 	local rng = Random.new(seed)
 	local rowZ = {-Tuning.RowHalfSpacing, Tuning.RowHalfSpacing}
 	local entryRow = rng:NextInteger(1, GRID_ROWS)
-	local gatewayColumns = {rng:NextInteger(1, GRID_COLUMNS), rng:NextInteger(1, GRID_COLUMNS)}
+	-- Align the gateways but omit the middle district's direct north-south
+	-- connection at this column. Players must turn between the two bridges.
+	local gatewayColumn = rng:NextInteger(1, GRID_COLUMNS - 1)
+	local gatewayColumns = {gatewayColumn, gatewayColumn}
 	local exitRow = rng:NextInteger(1, GRID_ROWS)
 
 	local layout = {
@@ -509,12 +549,35 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 		return link
 	end
 
+	-- A 2x4 district has ten possible edges. Keeping nine gives the original
+	-- seven-edge spanning tree plus two loops. Choose the one missing edge in
+	-- each district to break the arrival, bridge and Signal Hall sightlines.
+	-- A three-loop Master override deliberately restores all ten edges.
+	local omitted = {}
+	if Tuning.ExtraLinksPerDistrict <= 2 then
+		local entryCut = rng:NextInteger(1, GRID_COLUMNS - 1)
+		omitted[1] = pairKey(slots[1][entryRow][entryCut].Id,
+			slots[1][entryRow][entryCut + 1].Id)
+		omitted[2] = pairKey(slots[2][1][gatewayColumn].Id,
+			slots[2][GRID_ROWS][gatewayColumn].Id)
+		omitted[3] = pairKey(slots[3][exitRow][GRID_COLUMNS - 1].Id,
+			slots[3][exitRow][GRID_COLUMNS].Id)
+	end
+	layout.StraightRunRelaxed = Tuning.ExtraLinksPerDistrict == 3
+		or Tuning.MaximumStraightRunLinks < 3 or Tuning.MaximumVerticalRunLinks < 2
+
 	local function neighbourSlots(sectionIndex, row, column)
 		local result = {}
-		if row > 1 then table.insert(result, slots[sectionIndex][row - 1][column]) end
-		if row < GRID_ROWS then table.insert(result, slots[sectionIndex][row + 1][column]) end
-		if column > 1 then table.insert(result, slots[sectionIndex][row][column - 1]) end
-		if column < GRID_COLUMNS then table.insert(result, slots[sectionIndex][row][column + 1]) end
+		local current = slots[sectionIndex][row][column]
+		local function allow(other)
+			if pairKey(current.Id, other.Id) ~= omitted[sectionIndex] then
+				table.insert(result, other)
+			end
+		end
+		if row > 1 then allow(slots[sectionIndex][row - 1][column]) end
+		if row < GRID_ROWS then allow(slots[sectionIndex][row + 1][column]) end
+		if column > 1 then allow(slots[sectionIndex][row][column - 1]) end
+		if column < GRID_COLUMNS then allow(slots[sectionIndex][row][column + 1]) end
 		return result
 	end
 
@@ -556,13 +619,15 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 				local room = slots[sectionIndex][row][column]
 				if column < GRID_COLUMNS then
 					local other = slots[sectionIndex][row][column + 1]
-					if not selectedPairs[pairKey(room.Id, other.Id)] then
+					if not selectedPairs[pairKey(room.Id, other.Id)]
+						and pairKey(room.Id, other.Id) ~= omitted[sectionIndex] then
 						table.insert(unused, {room, other})
 					end
 				end
 				if row < GRID_ROWS then
 					local other = slots[sectionIndex][row + 1][column]
-					if not selectedPairs[pairKey(room.Id, other.Id)] then
+					if not selectedPairs[pairKey(room.Id, other.Id)]
+						and pairKey(room.Id, other.Id) ~= omitted[sectionIndex] then
 						table.insert(unused, {room, other})
 					end
 				end
@@ -729,6 +794,7 @@ local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
 	layout.ModuleCount = #layout.ModuleRooms
 	layout.HideSpotCount = DISTRICT_COUNT * ROOMS_PER_DISTRICT
 	layout.CyclomaticLoops = #layout.Links - #layout.Rooms + 1
+	layout.MaximumStraightRun, layout.MaximumVerticalRun = straightRuns(layout)
 	layout.GatewayColumns = gatewayColumns
 	layout.Roles = {
 		ArrivalRoomId = "Arrival",
@@ -977,6 +1043,22 @@ function LayoutGenerator.Validate(layout)
 	end
 	for roomId in pairs(seenRooms) do
 		if not reached[roomId] then return fail("whole graph is disconnected at " .. roomId) end
+	end
+	local straight, vertical = straightRuns(layout)
+	if layout.MaximumStraightRun ~= straight or layout.MaximumVerticalRun ~= vertical then
+		return fail("straight-run diagnostics are stale")
+	end
+	if layout.StraightRunRelaxed ~= true then
+		if straight > Tuning.MaximumStraightRunLinks
+			or vertical > Tuning.MaximumVerticalRunLinks then
+			return fail("core has an excessively long straight view")
+		end
+		for _, otherId in ipairs(layout.Adjacency.SignalHall) do
+			local other = layout.RoomById[otherId]
+			if otherId ~= "Exit" and other.Z == layout.RoomById.SignalHall.Z then
+				return fail("Signal Hall opens onto the finale axis")
+			end
+		end
 	end
 
 	for sectionIndex = 1, DISTRICT_COUNT do
