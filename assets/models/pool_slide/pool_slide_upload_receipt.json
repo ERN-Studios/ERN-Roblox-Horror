@@ -1,0 +1,18 @@
+{
+  "source": "assets\\models\\pool_slide\\pool_slide_scaled_walk_run_v1.glb",
+  "sha256": "d68ae9643bdf66e50cde89daff9235f0980ab328bf571a8ffbfca0cf6aba7926",
+  "groupId": 1039373905,
+  "createdAtUtc": "2026-09-24T12:52:41.585392+00:00",
+  "operationPath": "operations/6098be41-36e3-474d-bb1d-7600a8c55156",
+  "assetId": "95190427565492",
+  "status": "created",
+  "result": {
+    "assetType": "Model",
+    "displayName": "Pool Slide Enlarged Walk Run v1",
+    "revisionId": "1",
+    "moderationResult": {
+      "moderationState": "Approved"
+    },
+    "state": "Active"
+  }
+}

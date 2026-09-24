@@ -13,13 +13,15 @@ Dette er en **assetpakke til import/test**, ikke en ændring i det levende spil.
 
 ## Integration hos Claude
 
-1. Importér GLB som **ny** template i `ServerStorage.Level2Assets`; bevar `RootPart`/pivot, `AnimationController/Animator`, de 20 knogler og navne. Sæt visuelle dele til `CanCollide = false`. Overtag ikke originalen før A/B er grøn.
+1. Gruppeejet Model-asset **95190427565492** er nu uploadet fra GLB via Open Cloud, men er ikke sat ind i Studio. Importér som **ny** template i `ServerStorage.Level2Assets`; bevar `RootPart`/pivot, `AnimationController/Animator`, de 20 knogler og navne. Sæt visuelle dele til `CanCollide = false`. Overtag ikke originalen før A/B er grøn.
 2. Upload nye Walk/Run som Animation-assets ejet af **ERN Roblox Studios (gruppe 1039373905)** og indsæt ID'erne i templatens `Animations`-mappe. Overvej også skaleret Idle/Attack efter kontrol af `Contact`-markøren.
 3. Brug referencehastighederne ovenfor som udgangspunkt; mål fodglidning i Studio ved de tre faktiske farter. Mål `AgentRadius`, `AgentHeight`, animeret envelope og `GroundOffset` i ny template. Controllerens grænser er radius ≤ 12 og højde ≤ 24.
 4. Test passage og klipning på tre Level 2-layouts, to separate pumper → spawn, tredje pumpe → eskalation af samme entity, angreb ved `Contact`, spawnafstand ≥ 100 studs og mundlyd fra mundåbningen. Behold feature-gates slukket, indtil disse og mobil-ydelse er verificeret.
 
 ## Verifikation af pakken
 
-Blender 5.2.2 importerede den færdige GLB i baggrundstilstand med 2 vægtede meshes, 20 knogler og 4 actions. Khronos glTF-validator via `@gltf-transform/cli validate` gav **0 fejl og 0 advarsler**; to informationslinjer fortæller blot, at UV'erne endnu ikke bruges af en tekstur. Se `pool_slide_scaled_walk_run_v1_validation.csv`. Ingen Roblox-upload, Studio-ændring, publicering eller Meshy-kredit er brugt.
+Blender 5.2.2 importerede den færdige GLB i baggrundstilstand med 2 vægtede meshes, 20 knogler og 4 actions. Khronos glTF-validator via `@gltf-transform/cli validate` gav **0 fejl og 0 advarsler**; to informationslinjer fortæller blot, at UV'erne endnu ikke bruges af en tekstur. Se `pool_slide_scaled_walk_run_v1_validation.csv`.
+
+Open Cloud Model-uploaden 24/9 blev godkendt og aktiv som asset **95190427565492** for gruppe 1039373905; SHA-256 og operationskvittering er i `pool_slide_upload_receipt.json`. Den downloadede Roblox-model er gemt som `pool_slide_uploaded_model_v1.rbxm`. Dens instance-klasser indeholder en `AnimationController`, men **ingen `Animation` eller `KeyframeSequence`**: GLB-importen har ikke oprettet brugbare Walk/Run-animation-ID'er. Animationerne skal derfor uploades særskilt før integration. Ingen Studio-ændring, publicering eller Meshy-kredit er brugt.
 
 Pakken kan genskabes med `python tools/pool_slide_polish_glb.py <source.glb> <output.glb>`; scriptet bruger NumPy og kontrollerer kildens SHA-256, før det skriver noget.
