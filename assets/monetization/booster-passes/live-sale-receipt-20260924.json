@@ -1,0 +1,50 @@
+{
+  "universeId": 10559217407,
+  "checkedAtUtc": "2026-09-24T20:14:01.124067+00:00",
+  "source": "Roblox Open Cloud creator game-passes readback",
+  "ownerWaiver": "Real purchases, published-server and physical-hardware QA accepted without execution on 2026-09-24",
+  "passes": [
+    {
+      "name": "Token Earner 2x",
+      "gamePassId": 1995218405,
+      "isForSale": true,
+      "priceRobux": 149,
+      "iconAssetId": 110042354901224
+    },
+    {
+      "name": "Token Earner 3x",
+      "gamePassId": 1995716395,
+      "isForSale": true,
+      "priceRobux": 299,
+      "iconAssetId": 90602955172781
+    },
+    {
+      "name": "Token Earner 5x",
+      "gamePassId": 1994654411,
+      "isForSale": true,
+      "priceRobux": 399,
+      "iconAssetId": 123482394566073
+    },
+    {
+      "name": "Token Earner Upgrade 2x to 3x",
+      "gamePassId": 1994282418,
+      "isForSale": true,
+      "priceRobux": 150,
+      "iconAssetId": 127143625556663
+    },
+    {
+      "name": "Token Earner Upgrade 3x to 5x",
+      "gamePassId": 1995812369,
+      "isForSale": true,
+      "priceRobux": 100,
+      "iconAssetId": 99847748150208
+    },
+    {
+      "name": "Token Earner Upgrade 2x to 5x",
+      "gamePassId": 1994252411,
+      "isForSale": true,
+      "priceRobux": 250,
+      "iconAssetId": 138859474490319
+    }
+  ]
+}
