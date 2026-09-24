@@ -2408,18 +2408,27 @@ local function refreshPasses(player)
 
 	-- DEV_SUIT_20260924 (SYUaXHKQ): Developer suits follow DevAccess on every
 	-- load -- granted to developers, revoked (and unequipped) from anyone else.
-	local isDeveloper = DevAccess.IsAllowed(player)
-	local skinSession = sessions[player]
-	if skinSession then
-		local probe = table.clone(skinSession.data.Skins)
-		probe.Owned = table.clone(probe.Owned)
-		if Skins.SyncDeveloper(probe, isDeveloper) then
-			mutate(player, function(data)
+	-- DEV_SUIT_RETRY_20260924: a failed write is retried with backoff instead of
+	-- waiting for the next join. The transform re-reads DevAccess, so every
+	-- attempt syncs to the CURRENT answer, and one that finds the profile already
+	-- in sync writes nothing. applyAttributes hides a stale suit meanwhile.
+	task.spawn(function()
+		for _, delaySeconds in ipairs({0, 5, 20, 60}) do
+			if delaySeconds > 0 then task.wait(delaySeconds) end
+			local skinSession = sessions[player]
+			if not skinSession or skinSession.closing or not player.Parent then return end
+			local probe = table.clone(skinSession.data.Skins)
+			probe.Owned = table.clone(probe.Owned)
+			if not Skins.SyncDeveloper(probe, DevAccess.IsAllowed(player)) then return end
+			local saved = mutateIdempotent(player, function(data)
+				local isDeveloper = DevAccess.IsAllowed(player)
 				if not Skins.SyncDeveloper(data.Skins, isDeveloper) then return false end
 				return true, isDeveloper and "Signal Architect developer suit unlocked." or nil, "success"
 			end)
+			if saved then return end
 		end
-	end
+		warn("[Zyntra] Developer suit sync still unsaved after retries for userId", player.UserId)
+	end)
 
 	-- TOKEN_EARNER_20260924: six passes, one tier. Each ownership is published
 	-- like any other pass; earning code reads only the resolved tier.
