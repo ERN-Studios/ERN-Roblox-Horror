@@ -1,0 +1,54 @@
+{
+  "capturedAtUtc": "2026-09-24T13:44:32.210574+00:00",
+  "universeId": 10559217407,
+  "products": {
+    "3713829859": {
+      "productId": 3713829859,
+      "name": "Zyntra Expedition Pack",
+      "description": "One repeatable supply pack: 1 stored Emergency Re-entry credit, 1 Entity Shield charge, and 3 Route Markers. These are consumables, not a permanent pass. Use re-entry after dying in an active round; activate the shield and place markers from your equipment HUD.",
+      "universeId": 10559217407,
+      "isForSale": true,
+      "priceInformation": {
+        "defaultPriceInRobux": 69,
+        "enabledFeatures": []
+      },
+      "isImmutable": false,
+      "createdTimestamp": "2026-09-20T13:07:42.189Z",
+      "isManagedPricingEnabled": false,
+      "iconImageAssetId": 109100897990462,
+      "updatedTimestamp": "2026-09-24T13:44:26.604Z"
+    },
+    "3713115025": {
+      "productId": 3713115025,
+      "name": "Donate — 5,000 Robux",
+      "description": "Optional, repeatable donation toward continued development of BACKROOMS: STAY QUIET. Grants no items or gameplay advantages. Thank you for your support!",
+      "universeId": 10559217407,
+      "isForSale": true,
+      "priceInformation": {
+        "defaultPriceInRobux": 5000,
+        "enabledFeatures": []
+      },
+      "isImmutable": false,
+      "createdTimestamp": "2026-09-16T07:41:25.671Z",
+      "isManagedPricingEnabled": false,
+      "iconImageAssetId": 109172844880978,
+      "updatedTimestamp": "2026-09-24T13:44:29.278Z"
+    },
+    "3713115125": {
+      "productId": 3713115125,
+      "name": "Donate — 10,000 Robux",
+      "description": "Optional, repeatable donation toward continued development of BACKROOMS: STAY QUIET. Grants no items or gameplay advantages. Thank you for your support!",
+      "universeId": 10559217407,
+      "isForSale": true,
+      "priceInformation": {
+        "defaultPriceInRobux": 10000,
+        "enabledFeatures": []
+      },
+      "isImmutable": false,
+      "createdTimestamp": "2026-09-16T07:42:50.863Z",
+      "isManagedPricingEnabled": false,
+      "iconImageAssetId": 75225035218519,
+      "updatedTimestamp": "2026-09-24T13:44:31.981Z"
+    }
+  }
+}

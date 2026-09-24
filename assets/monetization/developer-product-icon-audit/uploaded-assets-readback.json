@@ -1,0 +1,26 @@
+{
+  "verifiedAtUtc": "2026-09-24T13:46:46.275723+00:00",
+  "assets": [
+    {
+      "productId": 3713829859,
+      "assetId": "109100897990462",
+      "assetType": "Image",
+      "state": "Active",
+      "moderationState": "Approved"
+    },
+    {
+      "productId": 3713115025,
+      "assetId": "109172844880978",
+      "assetType": "Image",
+      "state": "Active",
+      "moderationState": "Approved"
+    },
+    {
+      "productId": 3713115125,
+      "assetId": "75225035218519",
+      "assetType": "Image",
+      "state": "Active",
+      "moderationState": "Approved"
+    }
+  ]
+}
