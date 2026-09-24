@@ -108,6 +108,13 @@ local function ownsPass(_, pass)
     return answers[pass.Id]
 end
 local passPurchases, passReadFailed = {}, {}
+-- the refresh hands each snapshot to tokenEarner.settle (run for real in
+-- test_completion_save.py); here only the hand-off is counted
+local settles = 0
+local task = {spawn = function(fn, who)
+    assert(fn == tokenEarner.settle and who == racer, "refresh spawns settlement for its player")
+    settles += 1
+end}
 local passOwnership = (function()
     local RunService = {IsStudio = function() return false end}
 __PASS_OWNERSHIP__
@@ -122,9 +129,9 @@ local function reset(owned)
     table.clear(answers)
     for key, pass in pairs(P) do answers[pass.Id] = owned and owned[key] or false end
 end
-local function purchase(key)
+local function purchase(key, at)
     passPurchases[racer] = passPurchases[racer] or {}
-    passPurchases[racer][key] = true
+    passPurchases[racer][key] = at or os.time() -- the latch holds the purchase time
     publishEarner(racer) -- the purchase callback's own refresh
 end
 
@@ -186,6 +193,38 @@ equal(passReadFailed[racer], true, "and a background re-check is owed")
 attrs.ZyntraTokenEarnerMultiplier = 5
 publishEarner(racer)
 equal(attrs.ZyntraTokenEarnerMultiplier, 5, "a later unanswered read keeps the last known tier")
+
+-- ── snapshots for pending bonuses (TOKEN_EARNER_PENDING_20260924) ──────────
+local snap = function() return tokenEarner.snapshots[racer] end
+reset({TokenEarner2x = true})
+settles = 0
+publishEarner(racer)
+equal(settles, 1, "every refresh hands its snapshot to settlement")
+equal(snap().Owns.TokenEarner2x, true, "a definitive refresh carries the ownership set")
+equal(type(snap().Seen.TokenEarner2x), "number", "and stamps what it saw owned")
+equal(snap().Seen.TokenEarner3x, nil, "never a pass read as not owned")
+reset({TokenEarner2x = true})
+answers[P.TokenEarner3x.Id] = nil
+attrs.ZyntraOwnsTokenEarner3x = true -- what an unanswered read falls back to
+publishEarner(racer)
+equal(snap().Owns, nil, "an unanswered read gives no ownership set, so nothing settles")
+equal(type(snap().Seen.TokenEarner2x), "number", "but a definitive sighting is still stamped")
+equal(snap().Seen.TokenEarner3x, nil, "a guessed (unanswered) ownership is never stamped")
+reset()
+purchase("TokenEarner5x", 1234)
+equal(snap().Seen.TokenEarner5x, 1234, "a latched pass is stamped at its purchase time")
+-- a purchase during an outage may RAISE a known tier, never invent one
+reset({TokenEarner2x = true})
+publishEarner(racer)
+equal(attrs.ZyntraTokenEarnerMultiplier, 2, "known 2x")
+for key, pass in pairs(P) do if key ~= "TokenEarner2x" then answers[pass.Id] = nil end end
+answers[P.TokenEarner2x.Id] = nil
+purchase("TokenEarnerUp2to5")
+equal(attrs.ZyntraTokenEarnerMultiplier, 5, "2->5 bought mid-outage raises a known 2x to 5x")
+reset()
+for _, pass in pairs(P) do answers[pass.Id] = nil end
+purchase("TokenEarner2x")
+equal(attrs.ZyntraTokenEarnerMultiplier, nil, "with no known tier, a latch alone publishes none")
 
 print(("token earner: %d checks passed (real Config.TokenEarner, applyReward, tokenEarner, passOwnership and the refresh block)"):format(checks))
 '''
