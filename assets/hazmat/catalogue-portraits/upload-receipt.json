@@ -1,0 +1,68 @@
+{
+  "baseline-yellow-standing-card-v1.png": {
+    "sha256": "40879529c7ddd07098cf96d66da12be86a4e326af31d5742466163f89f15bd3f",
+    "groupId": 1039373905,
+    "createdAtUtc": "2026-09-24T13:30:53.810682+00:00",
+    "operationPath": "operations/5b3e10e7-d78f-477b-b742-8a52d0f204ac",
+    "assetId": "124074662246510",
+    "status": "approved",
+    "assetType": "Image",
+    "moderationState": "Approved",
+    "verifiedAtUtc": "2026-09-24T13:31:18.193534+00:00"
+  },
+  "pool-service-standing-card-v1.png": {
+    "sha256": "2e157de1fa37b00ff5f24594d306ba70b3a57d57b3412a0d936c05c3788db7fb",
+    "groupId": 1039373905,
+    "createdAtUtc": "2026-09-24T13:30:56.716698+00:00",
+    "operationPath": "operations/eb4a6d5a-f9ed-4f5b-aeb8-b45689326e79",
+    "assetId": "128677695300171",
+    "status": "approved",
+    "assetType": "Image",
+    "moderationState": "Approved",
+    "verifiedAtUtc": "2026-09-24T13:31:18.337082+00:00"
+  },
+  "suburb-survey-standing-card-v1.png": {
+    "sha256": "303236665838a0b291ecb6498048a005515b7412dc8a3abb12e0facd2f8223f1",
+    "groupId": 1039373905,
+    "createdAtUtc": "2026-09-24T13:30:59.522727+00:00",
+    "operationPath": "operations/3fe45b1a-a37b-480f-9b5a-46efa077ccb8",
+    "assetId": "78809161314896",
+    "status": "approved",
+    "assetType": "Image",
+    "moderationState": "Approved",
+    "verifiedAtUtc": "2026-09-24T13:31:18.491994+00:00"
+  },
+  "blacksite-director-standing-card-v1.png": {
+    "sha256": "41441b2390252e6c6d064485871a150f4674854a3925ea14a90be5600729f4b5",
+    "groupId": 1039373905,
+    "createdAtUtc": "2026-09-24T13:31:02.354995+00:00",
+    "operationPath": "operations/da6a44d0-9608-4bca-838f-211e68b5c8ea",
+    "assetId": "73840400724040",
+    "status": "approved",
+    "assetType": "Image",
+    "moderationState": "Approved",
+    "verifiedAtUtc": "2026-09-24T13:31:18.647930+00:00"
+  },
+  "static-wraith-standing-card-v1.png": {
+    "sha256": "b9526a489f29665b3afdfa353cc7ccbbe712afbc6f6bd395c3f79ef85001e80e",
+    "groupId": 1039373905,
+    "createdAtUtc": "2026-09-24T13:31:05.194551+00:00",
+    "operationPath": "operations/5fdb9f3f-5cda-48a9-bdb9-44071bf92eef",
+    "assetId": "120474289726445",
+    "status": "approved",
+    "assetType": "Image",
+    "moderationState": "Approved",
+    "verifiedAtUtc": "2026-09-24T13:31:18.808037+00:00"
+  },
+  "false-sun-standing-card-v1.png": {
+    "sha256": "3c10d737463062e292bd90a9413f17a26f024d3f9583929f2fd80accda9233da",
+    "groupId": 1039373905,
+    "createdAtUtc": "2026-09-24T13:31:08.074998+00:00",
+    "operationPath": "operations/f215dd78-1456-4a67-b81a-12d5ccb2fa97",
+    "assetId": "122113892663451",
+    "status": "approved",
+    "assetType": "Image",
+    "moderationState": "Approved",
+    "verifiedAtUtc": "2026-09-24T13:31:18.958968+00:00"
+  }
+}
