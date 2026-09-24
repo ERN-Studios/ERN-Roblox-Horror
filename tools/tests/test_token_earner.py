@@ -129,9 +129,12 @@ local function reset(owned)
     table.clear(answers)
     for key, pass in pairs(P) do answers[pass.Id] = owned and owned[key] or false end
 end
-local function purchase(key, at)
+-- PromptGamePassPurchaseFinished: latch, tokenEarner.latched, then the refresh
+local function purchase(key)
     passPurchases[racer] = passPurchases[racer] or {}
-    passPurchases[racer][key] = at or os.time() -- the latch holds the purchase time
+    local purchases = passPurchases[racer]
+    purchases[key] = purchases[key] or tokenEarner.stamp()
+    tokenEarner.latched(racer, key, purchases[key])
     publishEarner(racer) -- the purchase callback's own refresh
 end
 
@@ -194,25 +197,48 @@ attrs.ZyntraTokenEarnerMultiplier = 5
 publishEarner(racer)
 equal(attrs.ZyntraTokenEarnerMultiplier, 5, "a later unanswered read keeps the last known tier")
 
--- ── snapshots for pending bonuses (TOKEN_EARNER_PENDING_20260924) ──────────
+-- ── proofs and snapshots for pending bonuses (TOKEN_EARNER_PENDING_20260924) ─
 local snap = function() return tokenEarner.snapshots[racer] end
-reset({TokenEarner2x = true})
+local proof = function() return tokenEarner.proof(racer) end
+reset({TokenEarner2x = true}); tokenEarner.proofs[racer] = nil
 settles = 0
 publishEarner(racer)
 equal(settles, 1, "every refresh hands its snapshot to settlement")
 equal(snap().Owns.TokenEarner2x, true, "a definitive refresh carries the ownership set")
-equal(type(snap().Seen.TokenEarner2x), "number", "and stamps what it saw owned")
-equal(snap().Seen.TokenEarner3x, nil, "never a pass read as not owned")
-reset({TokenEarner2x = true})
+equal(proof().Seen.TokenEarner2x, nil, "an owned pass is never proven not owned")
+equal(type(proof().Seen.TokenEarner3x), "number", "a definitive not-owned read is a proof")
+equal(next(proof().Open), nil, "and no read is left open")
+reset({TokenEarner2x = true}); tokenEarner.proofs[racer] = nil
 answers[P.TokenEarner3x.Id] = nil
-attrs.ZyntraOwnsTokenEarner3x = true -- what an unanswered read falls back to
+attrs.ZyntraOwnsTokenEarner3x = false -- what an unanswered read falls back to
 publishEarner(racer)
 equal(snap().Owns, nil, "an unanswered read gives no ownership set, so nothing settles")
-equal(type(snap().Seen.TokenEarner2x), "number", "but a definitive sighting is still stamped")
-equal(snap().Seen.TokenEarner3x, nil, "a guessed (unanswered) ownership is never stamped")
-reset()
-purchase("TokenEarner5x", 1234)
-equal(snap().Seen.TokenEarner5x, 1234, "a latched pass is stamped at its purchase time")
+equal(proof().Seen.TokenEarner3x, nil, "and a guessed (unanswered) not-owned is no proof")
+-- a read is Open while it yields
+reset(); tokenEarner.proofs[racer] = nil
+paused[P.TokenEarner5x.Id] = true
+local R = coroutine.create(publishEarner)
+coroutine.resume(R, racer)
+equal(next(proof().Open) ~= nil, true, "a read in flight is open")
+coroutine.resume(R)
+equal(next(proof().Open), nil, "and closes when it answers")
+-- the latch is a proof at its own sequence, recorded before the refresh
+reset(); tokenEarner.proofs[racer] = nil
+purchase("TokenEarner5x")
+equal(proof().Seen.TokenEarner5x, passPurchases[racer].TokenEarner5x, "a latch is a not-owned proof at its sequence")
+-- a refresh that began before a newer ANSWERED one never replaces it
+reset({TokenEarner5x = true})
+paused[P.TokenEarner5x.Id] = true
+A = coroutine.create(publishEarner)
+coroutine.resume(A, racer) -- older refresh A waits on its 5x read
+answers[P.TokenEarner5x.Id] = true
+publishEarner(racer) -- newer refresh B answers 5x
+equal(attrs.ZyntraTokenEarnerMultiplier, 5, "B publishes 5x")
+answers[P.TokenEarner5x.Id] = false -- A's older read comes back "not owned"
+coroutine.resume(A)
+equal(attrs.ZyntraTokenEarnerMultiplier, 5, "stale A never lowers B's tier")
+equal(snap().Owns.TokenEarner5x, true, "nor replaces B's snapshot")
+equal(type(proof().Seen.TokenEarner5x), "number", "but its not-owned proof still counts")
 -- a purchase during an outage may RAISE a known tier, never invent one
 reset({TokenEarner2x = true})
 publishEarner(racer)

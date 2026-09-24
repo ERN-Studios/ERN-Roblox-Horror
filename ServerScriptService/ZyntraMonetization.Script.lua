@@ -431,78 +431,189 @@ end
 -- TOKEN_EARNER_PENDING_20260924. An AUTOMATIC earning (a clear, Fuse/Lever
 -- research) cannot wait for an ownership outage to end, so when the tier is
 -- still unknown it pays the base tokens and leaves the bonus in the profile,
--- in the same write, as {Id, Earned, At}. profile.TokenEarner.Since holds the
--- first time this game saw each pass owned (a purchase latch, or a definitive
--- read). tokenEarner.settle pays an entry only for passes owned at settlement
--- whose Since is <= its At: a pass bought after the earning never reprices it.
--- ponytail: a pass bought off-experience and first seen during an outage
--- counts only from that sighting; nothing records an earlier purchase time.
-tokenEarner.PENDING_LIMIT = 20
+-- in the same write. The earning itself is keyed (CompletionIds, the daily
+-- Research flag), so the bonus needs no key of its own and merges into
+-- profile.TokenEarner.Pending buckets {Earned, Unowned, Job, First, Last}.
+--
+-- A bucket settles at the first complete ownership answer, paying the tier
+-- of the passes owned then MINUS its Unowned set: passes this game has seen
+-- NOT owned after the earning -- a purchase latched later, or a definitive
+-- "not owned" read that began later. An existing owner is never seen not
+-- owned, so an outage costs them nothing. Order is tokenEarner.stamp(), a
+-- monotonic per-server sequence (os.time ties at one-second resolution);
+-- First..Last is the span of a bucket's earnings in it, and a bucket from
+-- another server (Job) predates everything here, because a player's sessions
+-- run one after another. Two earnings merge only when they carry the same
+-- proofs AND no read still in flight began between them (tokenEarner.proof's
+-- Open), so a "not owned" answer can always tell the earlier from the later.
+-- POLICY: UserOwnsGamePassAsync answers only a boolean, never when a pass was
+-- bought, so this is not purchase history. A pass owned at settlement counts
+-- as owned at the earning UNLESS this game itself saw it not owned afterwards
+-- (our own latch or read). Known limit: a pass bought outside the game between
+-- the earning and the first read after it is paid as if already owned; the
+-- other choice would underpay every pre-existing owner caught by an outage.
+tokenEarner.clock = 0
 tokenEarner.snapshots = setmetatable({}, { __mode = "k" })
-function tokenEarner.normalize(value)
-	local saved = type(value) == "table" and value or {}
-	local savedSince = type(saved.Since) == "table" and saved.Since or {}
-	local since, pending, ids = {}, {}, {}
-	for key in pairs(Config.TokenEarner.Passes) do
-		if isSafeSupportAmount(savedSince[key]) then since[key] = savedSince[key] end
+tokenEarner.proofs = setmetatable({}, { __mode = "k" })
+function tokenEarner.stamp()
+	tokenEarner.clock += 1
+	return tokenEarner.clock
+end
+-- Per player: Seen[pass] = the latest seq it was proven NOT owned at, and
+-- Open[seq] = true while a read that began at seq has not answered.
+function tokenEarner.proof(player)
+	local proof = tokenEarner.proofs[player]
+	if not proof then
+		proof = {Seen = {}, Open = {}}
+		tokenEarner.proofs[player] = proof
 	end
-	for _, entry in ipairs(type(saved.Pending) == "table" and saved.Pending or {}) do
-		local id = type(entry) == "table" and entry.Id
-		if type(id) == "string" and #id > 0 and #id <= 96 and not ids[id]
-			and wholeCount(entry.Earned) >= 1 then
-			ids[id] = true
-			table.insert(pending, {Id = id, Earned = wholeCount(entry.Earned), At = wholeCount(entry.At)})
+	return proof
+end
+-- The purchase callback's Token Earner part, run before anything yields: the
+-- proof that the pass was not owned until `seq`, and a KNOWN tier raised at
+-- once, so a clear during the purchase's slow refresh is not paid the old
+-- tier. Every pass it counts is latched or already published as owned. An
+-- unknown tier stays unknown: earnings pend and the refresh settles them.
+function tokenEarner.latched(player, key, seq)
+	if not Config.TokenEarner.Passes[key] then return end
+	local proof = tokenEarner.proof(player)
+	proof.Seen[key] = math.max(proof.Seen[key] or 0, seq)
+	local published = player:GetAttribute("ZyntraTokenEarnerMultiplier")
+	if published == nil then return end
+	local owns = {}
+	for other in pairs(Config.TokenEarner.Passes) do
+		owns[other] = other == key or player:GetAttribute("ZyntraOwns" .. other) == true
+	end
+	local tier = Config.TokenEarner.Tier(owns)
+	if tier > published then player:SetAttribute("ZyntraTokenEarnerMultiplier", tier) end
+end
+local function earnerSpan(bucket)
+	if bucket.Job ~= game.JobId then return 0, 0 end
+	return bucket.First, bucket.Last
+end
+local function earnerBucketMerge(buckets, bucket, open)
+	local first, last = earnerSpan(bucket)
+	for _, other in ipairs(buckets) do
+		local fits = true
+		for key in pairs(Config.TokenEarner.Passes) do
+			if (other.Unowned[key] == true) ~= (bucket.Unowned[key] == true) then fits = false break end
+		end
+		local otherFirst, otherLast = earnerSpan(other)
+		local lo, hi = math.min(first, otherFirst), math.max(last, otherLast)
+		for seq in pairs(open) do
+			if seq > lo and seq < hi then fits = false break end
+		end
+		if fits then
+			other.Earned = math.min(MAX_SAFE_SUPPORT, other.Earned + bucket.Earned)
+			if bucket.Job == game.JobId or other.Job == game.JobId then
+				other.Job, other.First, other.Last = game.JobId, lo, hi
+			end
+			return
 		end
 	end
-	while #pending > tokenEarner.PENDING_LIMIT do table.remove(pending, 1) end
-	return {Since = since, Pending = pending}
+	table.insert(buckets, bucket)
 end
--- Inside a transform: queue `earned` for settlement. Idempotent per id.
-function tokenEarner.defer(data, id, earned, at)
+local function earnerBucketCompact(state, open)
+	local merged = {}
+	for _, bucket in ipairs(state.Pending) do earnerBucketMerge(merged, bucket, open) end
+	state.Pending = merged
+end
+-- Adds every newer not-owned proof to the buckets whose earnings all predate
+-- it, and re-merges only if it did (a transform that reports no change must
+-- not have changed anything). With `dryRun` it only answers whether a proof
+-- is new.
+local function earnerBucketMark(state, proof, dryRun)
+	local changed = false
+	for _, bucket in ipairs(state.Pending) do
+		local _, last = earnerSpan(bucket)
+		for key, seq in pairs(proof.Seen) do
+			if not bucket.Unowned[key] and last < seq then
+				if dryRun then return true end
+				bucket.Unowned[key], changed = true, true
+			end
+		end
+	end
+	if changed then earnerBucketCompact(state, proof.Open) end
+	return changed
+end
+-- Runs inside every transform, so it never merges (it cannot see reads in
+-- flight); a hand-edited save beyond 64 buckets folds its oldest pairs by the
+-- UNION of their proofs, which can only pay less.
+function tokenEarner.normalize(value)
+	local saved = type(value) == "table" and value or {}
+	local buckets = {}
+	for _, bucket in ipairs(type(saved.Pending) == "table" and saved.Pending or {}) do
+		if type(bucket) == "table" and wholeCount(bucket.Earned) >= 1 then
+			local unowned, savedUnowned = {}, type(bucket.Unowned) == "table" and bucket.Unowned or {}
+			for key in pairs(Config.TokenEarner.Passes) do
+				if savedUnowned[key] == true then unowned[key] = true end
+			end
+			table.insert(buckets, {Earned = wholeCount(bucket.Earned), Unowned = unowned,
+				Job = type(bucket.Job) == "string" and #bucket.Job <= 64 and bucket.Job or "",
+				First = wholeCount(bucket.First), Last = math.max(wholeCount(bucket.First), wholeCount(bucket.Last))})
+		end
+	end
+	while #buckets > 64 do
+		local oldest = table.remove(buckets, 1)
+		for key in pairs(oldest.Unowned) do buckets[1].Unowned[key] = true end
+		buckets[1].Earned = math.min(MAX_SAFE_SUPPORT, buckets[1].Earned + oldest.Earned)
+	end
+	return {Pending = buckets}
+end
+-- Inside a transform that always writes: queue `earned`, stamped `seq` when it
+-- was earned (and compact what an answered read no longer keeps apart).
+function tokenEarner.defer(data, earned, seq, proof)
 	earned = math.floor(earned)
 	if earned < 1 then return false end
-	local pending = data.TokenEarner.Pending
-	for _, entry in ipairs(pending) do
-		if entry.Id == id then return true end
+	if not earnerBucketMark(data.TokenEarner, proof) then earnerBucketCompact(data.TokenEarner, proof.Open) end
+	local unowned = {}
+	for key, seen in pairs(proof.Seen) do
+		if seen > seq then unowned[key] = true end
 	end
-	if #pending >= tokenEarner.PENDING_LIMIT then
-		warn("[Zyntra] Token Earner pending list full; bonus not queued:", id)
-		return false
-	end
-	table.insert(pending, {Id = id, Earned = earned, At = at})
+	earnerBucketMerge(data.TokenEarner.Pending,
+		{Earned = earned, Unowned = unowned, Job = game.JobId, First = seq, Last = seq}, proof.Open)
 	return true
 end
--- Whether `snapshot` has anything to write: a first sighting to stamp, or
--- pending entries and a complete (all six definitive) ownership answer.
-function tokenEarner.owed(data, snapshot)
-	local state = data.TokenEarner
-	if snapshot.Owns and #state.Pending > 0 then return true end
-	for key in pairs(snapshot.Seen) do
-		if state.Since[key] == nil then return true end
+-- A read that began after these earnings and has not answered may still prove
+-- a pass not owned for them, whatever a newer refresh has already said.
+local function earnerBucketWaits(bucket, proof)
+	local _, last = earnerSpan(bucket)
+	for seq in pairs(proof.Open) do
+		if seq > last then return true end
 	end
 	return false
 end
--- The settlement transform body. Removing the entries in the same write that
--- pays them is what makes a lost-response retry pay nothing.
-function tokenEarner.apply(data, snapshot)
+-- Whether settling now would write: a proof to record, or a bucket that a
+-- complete (all six definitive) ownership answer can pay.
+function tokenEarner.owed(data, snapshot, proof)
 	local state = data.TokenEarner
-	local changed, paid = false, 0
-	for key, at in pairs(snapshot.Seen) do
-		if state.Since[key] == nil then
-			state.Since[key] = at
-			changed = true
-		end
+	if earnerBucketMark(state, proof, true) then return true end
+	if not snapshot.Owns then return false end
+	for _, bucket in ipairs(state.Pending) do
+		if not earnerBucketWaits(bucket, proof) then return true end
 	end
-	if snapshot.Owns and #state.Pending > 0 then
-		for _, entry in ipairs(state.Pending) do
-			local owned = {}
-			for key, owns in pairs(snapshot.Owns) do
-				owned[key] = owns and state.Since[key] ~= nil and state.Since[key] <= entry.At or nil
+	return false
+end
+-- The settlement transform body. Removing the buckets in the same write that
+-- pays them is what makes a lost-response retry pay nothing.
+function tokenEarner.apply(data, snapshot, proof)
+	local state = data.TokenEarner
+	local changed, paid = earnerBucketMark(state, proof), 0
+	if snapshot.Owns then
+		local waiting = {}
+		for _, bucket in ipairs(state.Pending) do
+			if earnerBucketWaits(bucket, proof) then
+				table.insert(waiting, bucket)
+			else
+				local owned = {}
+				for key, owns in pairs(snapshot.Owns) do
+					owned[key] = owns and not bucket.Unowned[key] or nil
+				end
+				paid += tokenEarner.bonus(data, bucket.Earned, Config.TokenEarner.Tier(owned))
+				changed = true
 			end
-			paid += tokenEarner.bonus(data, entry.Earned, Config.TokenEarner.Tier(owned))
 		end
-		state.Pending = {}
-		changed = true
+		state.Pending = waiting
 	end
 	return changed, paid
 end
@@ -1545,22 +1656,24 @@ local function mutateIdempotent(player, transform, suppressPush)
 	return false, false, message
 end
 
--- TOKEN_EARNER_PENDING_20260924: writes the latest ownership snapshot's first
--- sightings and settles pending bonuses. Keyed by the profile's own state, so
--- it is safe to call from every trigger, concurrently and on every retry.
--- Whatever is still owed when the retries run out stays in the profile and
--- settles at the next snapshot (a background re-check or the next join).
+-- TOKEN_EARNER_PENDING_20260924: records this session's not-owned sightings on
+-- the pending buckets and settles them at a complete ownership answer. Keyed
+-- by the profile's own state, so it is safe to call from every trigger,
+-- concurrently and on every retry. Whatever is still owed when the retries run
+-- out stays in the profile and settles at the next snapshot (a background
+-- re-check or the next join).
 tokenEarner.SETTLE_DELAYS = {0, 5, 20, 60}
 function tokenEarner.settle(player)
 	for _, delaySeconds in ipairs(tokenEarner.SETTLE_DELAYS) do
 		if delaySeconds > 0 then task.wait(delaySeconds) end
 		local session, snapshot = sessions[player], tokenEarner.snapshots[player]
+		local proof = tokenEarner.proof(player)
 		if not session or session.closing or not snapshot
-			or not tokenEarner.owed(session.data, snapshot) then return end
+			or not tokenEarner.owed(session.data, snapshot, proof) then return end
 		local paid = 0
 		local ok = mutateIdempotent(player, function(data)
 			local changed
-			changed, paid = tokenEarner.apply(data, snapshot)
+			changed, paid = tokenEarner.apply(data, snapshot, proof)
 			return changed, paid > 0 and ("Token Earner bonus: +%d Research Tokens for earlier earnings."):format(paid)
 				or nil, "success"
 		end)
@@ -2310,38 +2423,43 @@ local function refreshPasses(player)
 
 	-- TOKEN_EARNER_20260924: six passes, one tier. Each ownership is published
 	-- like any other pass; earning code reads only the resolved tier.
-	local earnerOwns, earnerKnown, earnerSeen = {}, true, {}
+	-- TOKEN_EARNER_PENDING_20260924: a definitive "not owned" proves the pass
+	-- was not owned when its read BEGAN (a purchase records its own proof in
+	-- tokenEarner.latched); pending earnings older than that never count it.
+	-- The read is Open while it yields, so no earning from before it merges
+	-- with one from after it.
+	local earnerOwns, earnerKnown = {}, true
+	local proof, refreshSeq = tokenEarner.proof(player), tokenEarner.stamp()
 	for key, pass in pairs(Config.TokenEarner.Passes) do
+		local readSeq = tokenEarner.stamp()
+		proof.Open[readSeq] = true
 		local owns, known = passOwnership(player, key, pass)
 		earnerOwns[key], earnerKnown = owns, earnerKnown and known
-		earnerSeen[key] = owns and known or nil
+		if known and not owns then proof.Seen[key] = math.max(proof.Seen[key] or 0, readSeq) end
+		proof.Open[readSeq] = nil
 		player:SetAttribute("ZyntraOwns" .. key, owns)
 	end
-	-- Taken AFTER the reads: a first sighting is stamped no earlier than the
-	-- answer that proved it (TOKEN_EARNER_PENDING_20260924).
-	local seenAt = os.time()
 	-- A refresh begun before a purchase must never publish a lower tier after
 	-- the purchase's own refresh: latches that landed while the reads above
 	-- yielded win before the tier is computed.
 	for key in pairs(Config.TokenEarner.Passes) do
-		local latched = passPurchases[player] and passPurchases[player][key]
-		if latched then
-			earnerOwns[key], earnerSeen[key] = true, true
+		if passPurchases[player] and passPurchases[player][key] then
+			earnerOwns[key] = true
 			player:SetAttribute("ZyntraOwns" .. key, true)
-		end
-		if earnerSeen[key] then
-			earnerSeen[key] = type(latched) == "number" and latched or seenAt
 		end
 	end
 	-- Only a definitive answer sets the tier; an unknown one keeps the last known
 	-- tier (or none yet, so automatic earnings pend) until the background
-	-- re-check. A purchase latched during an outage may still RAISE a known tier:
-	-- every pass it counts is either latched or already published as owned.
-	local tier, published = Config.TokenEarner.Tier(earnerOwns), player:GetAttribute("ZyntraTokenEarnerMultiplier")
-	if earnerKnown or (published ~= nil and tier > published) then
-		player:SetAttribute("ZyntraTokenEarnerMultiplier", tier)
+	-- re-check. (A purchase raises a known tier itself, in tokenEarner.latched.)
+	-- A refresh that began before the newest ANSWERED one is stale: it keeps
+	-- its proofs (above) but never replaces that snapshot or its tier.
+	local newest = tokenEarner.snapshots[player]
+	if not newest or newest.Seq < refreshSeq then
+		if earnerKnown then
+			player:SetAttribute("ZyntraTokenEarnerMultiplier", Config.TokenEarner.Tier(earnerOwns))
+		end
+		tokenEarner.snapshots[player] = {Seq = refreshSeq, Owns = earnerKnown and earnerOwns or nil}
 	end
-	tokenEarner.snapshots[player] = {Seen = earnerSeen, Owns = earnerKnown and earnerOwns or nil}
 	task.spawn(tokenEarner.settle, player)
 
 	if supporter then
@@ -3112,7 +3230,7 @@ researchProgress.Event:Connect(function(player, key)
  -- Automatic progress cannot be refused: an unknown tier pays the base now and
  -- pends the bonus in the same write (TOKEN_EARNER_PENDING_20260924).
  local earnerTier,earnerKnown=tokenEarner.tier(player)
- local earnedAt=os.time()
+ local earnedSeq=tokenEarner.stamp()
  for attempt=1,3 do
   if utcDay()~=earnedDay or player.Parent~=Players then break end
   local session=sessions[player]
@@ -3123,7 +3241,7 @@ researchProgress.Event:Connect(function(player, key)
    local changed,amount=DailyResearch.Complete(data,key)
    local note=""
    if changed and earnerKnown then amount+=tokenEarner.bonus(data,amount,earnerTier)
-   elseif changed and tokenEarner.defer(data,"Research:"..earnedDay..":"..key,amount,earnedAt) then
+   elseif changed and tokenEarner.defer(data,amount,earnedSeq,tokenEarner.proof(player)) then
     note=" Any Token Earner bonus follows once pass ownership is confirmed."
    end
    return changed, changed and ("Daily research complete: +"..amount.." Research Token"..(amount==1 and "" or "s")..note) or nil,"success"
@@ -3925,7 +4043,7 @@ levelCompletedEvent.Event:Connect(function(player, level, friendCount, run, roun
 	-- Read once, before the write. Unknown (an ownership outage) does not delay
 	-- the clear: its bonus pends in the same write (TOKEN_EARNER_PENDING_20260924).
 	local earnerTier, earnerKnown = tokenEarner.tier(player)
-	local earnedAt = os.time()
+	local earnedSeq = tokenEarner.stamp()
 	completionSaves.settle(player, completionId, function(data)
 		if table.find(data.CompletionIds, completionId) then
 			return false, "Level clear saved.", "success"
@@ -3964,7 +4082,7 @@ levelCompletedEvent.Event:Connect(function(player, level, friendCount, run, roun
 			if extra > 0 then
 				message ..= (" Token Earner %dx: +%d more."):format(earnerTier, extra)
 			end
-		elseif tokenEarner.defer(data, completionId, data.Tokens - tokensBefore, earnedAt) then
+		elseif tokenEarner.defer(data, data.Tokens - tokensBefore, earnedSeq, tokenEarner.proof(player)) then
 			message ..= " Any Token Earner bonus follows once pass ownership is confirmed."
 		end
 		table.insert(data.CompletionIds, completionId)
@@ -4010,9 +4128,12 @@ MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(player, passI
 				purchases = {}
 				passPurchases[player] = purchases
 			end
-			-- The latch holds WHEN (os.time): a Token Earner bonus earned before it
-			-- must not count it (TOKEN_EARNER_PENDING_20260924).
-			purchases[key] = purchases[key] or os.time()
+			-- The latch holds WHEN, as a tokenEarner.stamp() sequence: a Token Earner
+			-- bonus earned before it must not count it, and one earned after it
+			-- must, so both are settled NOW, before the refresh's reads yield
+			-- (TOKEN_EARNER_PENDING_20260924).
+			purchases[key] = purchases[key] or tokenEarner.stamp()
+			tokenEarner.latched(player, key, purchases[key])
 			-- Roblox has confirmed this player paid; a pass cannot be bought twice.
 			if Analytics then Analytics.Purchase(player, key, "Pass", pass.Price) end
 			task.spawn(refreshPasses, player)
