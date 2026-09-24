@@ -114,3 +114,9 @@ The owner clarified that the lobby and Level 1–3 spoken intros should be disab
 Trello [xKozYUIo](https://trello.com/c/xKozYUIo) should remain in Testing until the owner publishes the new Studio version, a published client confirms the four intros, a physical phone confirms the caption does not block movement, and the retained radio-open cues are listened to for any baked speech. The latest confirmed published version is still v2083; the new intro change and the earlier Level 3 maze/Signal Architect portrait changes are in Studio only.
 
 A read-only Open Cloud version check at 19:27 UTC confirmed v2083 is still published and v2084–v2089 are saves only. The saved v2089 binary contains the exact current `RoundUI` source; published v2083 does not.
+
+## Level 3 CD/hide priority
+
+Two more normal solo rounds reached 2/5 CDs; Mall Manager killed the player in both. At CD03, E chose the overlapping instant HIDE prompt instead of the 0.35-second COLLECT prompt. The existing suppression linked only CD01 although all five CDs use a hide table. Commit `621c903` links all five CD models to unique colocated hide anchors, so HIDE is disabled only while that CD is `WORLD` and returns after pickup. It includes a live-world assertion in the Level 3 Test Suite. A scoped Studio push compiled, 182/182 scripts and the two changed editor buffers match the repo.
+
+In a fresh Level 3 Studio round, all five WORLD CDs had COLLECT enabled/HIDE disabled and the other 19 hide tables remained enabled. A focused disposable Play setup placed the player by CD03; the ordinary prompt hold changed it to CARRIED at progress 1/5 without entering hiding. The same table then accepted HIDE. This is a prompt test, not a completed natural route. [Full evidence and remaining gates](LEVEL3_MAZE_QA_2026-09-24.md). Read-only Open Cloud at 19:52 UTC still showed v2083 published and v2090 saved only; this fix remains unpublished.

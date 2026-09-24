@@ -809,8 +809,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Hiding Controller.ModuleScript.lua",
-      "bytes": 25250,
-      "sha256": "6d6f6c7d1b17d43b0759208b69a38892b3c124526b105b15a1790b088452d3c0",
+      "bytes": 25364,
+      "sha256": "ce0e6e2b671a11b4de7534b4c3723da911b0f87864025029d93bdebcf03555ed",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
@@ -899,8 +899,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Test Suite.ModuleScript.lua",
-      "bytes": 199170,
-      "sha256": "c21fd84ebd21dae17d4a6cd4d2bcfcbc14f052bdeccf80d8b5dbf0df7f1dce40",
+      "bytes": 202633,
+      "sha256": "7c3f008e315d149270e970e2b2166f3d49054af3fcc83986f5e2a49f86c48299",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
