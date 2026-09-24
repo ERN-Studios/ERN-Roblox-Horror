@@ -8,6 +8,8 @@ This folder contains new art for [developer-only suit card 141](https://trello.c
 
 Roblox group-owned Image ID **`137400739559825`** is the approved color map; use `rbxassetid://137400739559825` as its `SurfaceAppearance.ColorMap`. The Open Cloud [upload receipt](upload-receipt.json) records the exact SHA-256, creator group `1039373905`, and approval. Uploading the Image did not insert it into Studio.
 
+The transparent 512 × 512 front render is also approved as group-owned Image ID **`125389579950767`**. It can serve as the new skin's catalogue `ImageId` and `PreviewImageId` until a different marketing image is made; it is not a texture map or pass icon.
+
 The new color map uses the original UVs. The retexture GLB and existing `baseline-yellow.glb` each have 14,446 UV vertices and byte-identical UV accessors (SHA-256 `baacd178e7532b5a16b52440ba743897b06d3f6bb53c712806b8eeaf44662d33`). The canonical `baseline-rigged.glb` has 14,463 UV vertices because rigging split some vertices, but its set of 14,402 unique UV coordinates is **identical** to the new retexture. This checks UV compatibility; it does not prove a Studio import or in-game appearance.
 
 Meshy `retexture` task `01a0d37a-86f5-73bc-9e67-82cb2cf1b3e2`, source remesh task `01a0d056-45f0-71ae-b756-f5ddbf80bb54`, `enable_original_uv=true`, 2K map, PBR on. Consumed **10 credits**. The local project record is under `meshy_output/` and is gitignored because its snapshot carries expiring signed URLs. No new rigging or remesh credits were spent.

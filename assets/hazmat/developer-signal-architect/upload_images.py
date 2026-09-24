@@ -24,6 +24,10 @@ IMAGES = {
         "Signal Architect Hazmat Color Map",
         "Developer-only cosmetic hazmat suit color map for BACKROOMS: STAY QUIET.",
     ),
+    "signal-architect-preview.png": (
+        "Signal Architect Hazmat Preview",
+        "Transparent character render for the developer-only cosmetic hazmat suit.",
+    ),
     "false-sun-mote.png": (
         "False Sun Cosmetic Mote",
         "Transparent particle sprite for the False Sun cosmetic hazmat topper.",

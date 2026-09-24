@@ -8,7 +8,7 @@
     "status": "approved",
     "assetType": "Image",
     "moderationState": "Approved",
-    "verifiedAtUtc": "2026-09-24T13:01:18.379514+00:00"
+    "verifiedAtUtc": "2026-09-24T13:03:29.924321+00:00"
   },
   "false-sun-mote.png": {
     "sha256": "213adf9872c4c4144aeb0ea48b68003b69a0f914367ede4f01d98c548804cb00",
@@ -19,6 +19,17 @@
     "status": "approved",
     "assetType": "Image",
     "moderationState": "Approved",
-    "verifiedAtUtc": "2026-09-24T13:01:18.524822+00:00"
+    "verifiedAtUtc": "2026-09-24T13:03:30.231474+00:00"
+  },
+  "signal-architect-preview.png": {
+    "sha256": "9930dec8bfd745e947f92e4efbe6b9eba1a723aab98574b384bbb11e0a702204",
+    "groupId": 1039373905,
+    "createdAtUtc": "2026-09-24T13:03:21.230498+00:00",
+    "operationPath": "operations/a1644c58-55ae-41a9-be57-a547895287b9",
+    "assetId": "125389579950767",
+    "status": "approved",
+    "assetType": "Image",
+    "moderationState": "Approved",
+    "verifiedAtUtc": "2026-09-24T13:03:30.080744+00:00"
   }
 }
