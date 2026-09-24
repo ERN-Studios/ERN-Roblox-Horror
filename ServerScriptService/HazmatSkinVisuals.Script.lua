@@ -72,6 +72,34 @@ local function rootToFootSole(model)
 	return -math.min(lowest(left), lowest(right))
 end
 
+-- PREVIEW_STANDING_POSE_20260924 (Trello x4kKwPZx). Meshy imported the suit in
+-- a horizontal T-pose, and a shop preview has no R15 body for HazmatSkinDriver
+-- to follow, so the arms are lowered to the sides in the preview itself.
+-- Bone.CFrame replicates and survives Clone(); Bone.Transform does neither.
+local function lowerPreviewArms(mesh, rootCFrame)
+	local function aim(joint, child, direction)
+		local from = child.WorldPosition - joint.WorldPosition
+		local axis = from.Unit:Cross(direction)
+		if axis.Magnitude < 1e-5 then return end
+		local pivot = joint.WorldPosition
+		local angle = math.acos(math.clamp(from.Unit:Dot(direction), -1, 1))
+		joint.CFrame = joint.Parent.WorldCFrame:ToObjectSpace(CFrame.new(pivot)
+			* CFrame.fromAxisAngle(axis.Unit, angle) * CFrame.new(-pivot) * joint.WorldCFrame)
+	end
+	for _, side in ipairs({"Left", "Right"}) do
+		local upper = mesh:FindFirstChild(side .. "Arm", true)
+		local lower = mesh:FindFirstChild(side .. "ForeArm", true)
+		local hand = mesh:FindFirstChild(side .. "Hand", true)
+		if not (upper and upper:IsA("Bone") and upper.Parent:IsA("Bone")
+			and lower and lower:IsA("Bone") and hand and hand:IsA("Bone")) then return false end
+		-- Outward is whichever side of the body this arm is on, measured.
+		local out = rootCFrame:PointToObjectSpace(upper.WorldPosition).X > 0 and 1 or -1
+		aim(upper, lower, rootCFrame:VectorToWorldSpace(Vector3.new(out * 0.22, -1, 0).Unit))
+		aim(lower, hand, rootCFrame:VectorToWorldSpace(Vector3.new(out * 0.12, -1, 0).Unit))
+	end
+	return true
+end
+
 local function publishPreviews()
 	local authoredRig = StarterPlayer:FindFirstChild("StarterCharacter")
 		or ServerStorage:FindFirstChild("StarterCharacter")
@@ -130,6 +158,9 @@ local function publishPreviews()
 		preview:PivotTo(root.CFrame
 			* CFrame.new(0, boundsSize.Y * 0.5 - rootToFloor, 0)
 			* pivotToBounds:Inverse())
+		if not lowerPreviewArms(mesh, root.CFrame) then
+			warnOnce(skinId .. "PreviewPose", "preview arm bones missing; showing the import pose")
+		end
 		if topperConfig then
 			local topper = topperTemplate:Clone()
 			topper.Name = "ZyntraPremiumTopper"

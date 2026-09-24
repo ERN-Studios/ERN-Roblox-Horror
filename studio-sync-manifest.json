@@ -2750,8 +2750,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/HazmatSkinVisuals.Script.lua",
-      "bytes": 13437,
-      "sha256": "90b74c8e3d239d63af806bb9e7abcb5d5995bbbeb481054ecc12e425bca2ab81",
+      "bytes": 15129,
+      "sha256": "4e4335e978db0a19762a0cb8ccd31d9798e71a7f95332611150c4069727feebe",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "canonical UTF-8 bytes checked against fresh Studio Source/editor length and Adler32 on 2026-09-24"
