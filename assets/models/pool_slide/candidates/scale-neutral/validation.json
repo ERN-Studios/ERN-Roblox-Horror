@@ -1,0 +1,32 @@
+[
+  {
+    "clip": "Walk",
+    "input": "assets\\models\\pool_slide\\candidates\\animations\\pool_slide_walk_1p20_v2-candidate.rbxmx",
+    "output": "assets\\models\\pool_slide\\candidates\\scale-neutral\\animations\\pool_slide_walk_v2-scale-neutral.rbxmx",
+    "frames": 64,
+    "poses_per_frame": 20,
+    "pose_translation_multiplier": 0.8333333333333334,
+    "changed_nonzero_components": 1342,
+    "max_translation_roundtrip_error": 5.000000413701855e-11,
+    "max_loop_seam_error": 0.0,
+    "rotations_and_times_unchanged": true,
+    "source_sha256": "52ca11ff391de7af520ca597dc86d58090f6a4d8fa42cc4b848f37c6e475a3dc",
+    "output_sha256": "d6e2c8fa19ac7cbd7ea1c5a9abbdcbd6103325df825c66c19230735865b6dccc",
+    "output_bytes": 1324341
+  },
+  {
+    "clip": "Run",
+    "input": "assets\\models\\pool_slide\\candidates\\animations\\pool_slide_run_1p20_v2-candidate.rbxmx",
+    "output": "assets\\models\\pool_slide\\candidates\\scale-neutral\\animations\\pool_slide_run_v2-scale-neutral.rbxmx",
+    "frames": 39,
+    "poses_per_frame": 20,
+    "pose_translation_multiplier": 0.8333333333333334,
+    "changed_nonzero_components": 818,
+    "max_translation_roundtrip_error": 4.9999976381442934e-11,
+    "max_loop_seam_error": 0.0,
+    "rotations_and_times_unchanged": true,
+    "source_sha256": "9317759f33e88ef92981c681f8a83f3578efdf00d66957968fe7d403575d2fb9",
+    "output_sha256": "2f1e1d85d819bbe099be986a8be5d41fbb69f85b9a3daa8ddff6b919e5ac2f0a",
+    "output_bytes": 806503
+  }
+]
