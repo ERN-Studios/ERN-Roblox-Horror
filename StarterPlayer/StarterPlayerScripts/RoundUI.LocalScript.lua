@@ -3113,6 +3113,41 @@ local function updateLevelOneGuideLayout()
 		and layout.ModalArea.Height > band.Height then
 		band = layout.ModalArea
 	end
+	-- The Level 3 reader is a live control at the upper-right throughout a
+	-- text briefing. On short landscape screens there is no room to put the
+	-- caption below its 101px panel inside ModalArea, but there is a safe lane
+	-- to its LEFT, above the movement controls. Fit against that lane before
+	-- choosing a width; moving a full-width caption after fitting leaves it
+	-- painted over the reader even though neither HUD was hidden.
+	if touch then
+		local readerGui = player.PlayerGui:FindFirstChild("Level3ReaderGui")
+		local reader = readerGui and readerGui:FindFirstChild("ReaderPanel")
+		if readerGui and readerGui.Enabled and reader and reader.Visible then
+			local lane = {
+				Left = layout.Safe.Left + 12,
+				Right = math.min(layout.Safe.Right - 12, reader.AbsolutePosition.X - 8),
+				Top = layout.Safe.Top + 8,
+				Bottom = layout.Safe.Bottom - 8,
+			}
+			for _, zone in ipairs({layout.Zones.Thumbstick,
+				layout.Zones.Controls, layout.Zones.Jump}) do
+				if lane.Left < zone.Right and lane.Right > zone.Left then
+					lane.Bottom = math.min(lane.Bottom, zone.Top - 8)
+				end
+			end
+			lane.Width = math.max(0, lane.Right - lane.Left)
+			lane.Height = math.max(0, lane.Bottom - lane.Top)
+			-- One 44px row plus the actual cue at the hard readable face is the
+			-- minimum useful caption. A narrower lane must earn its place with
+			-- measured copy, not by clipping text or shrinking the skip target.
+			local copyHeight = dispatchAudio.copyHeightFor(dispatchAudio.fitCopy(),
+				dispatchAudio.HARD_FACE, lane.Width - 36)
+			if lane.Width >= 240
+				and lane.Height >= 45 + math.max(20, copyHeight) then
+				band = lane
+			end
+		end
+	end
 	-- ── the BAND is the ceiling, and it is enforced in ONE place ─────────────
 	-- WHAT SHIPPED BROKEN: the last-resort block at the bottom of this function
 	-- sized the panel to its CONTENT -- `textTop + minimumText + bottomPad` --
@@ -3572,8 +3607,21 @@ local function updateLevelOneGuideLayout()
 		subtitleFrame.AnchorPoint = Vector2.new(0.5, 1)
 		-- Level 1–2 objective cards occupy the lower-right on desktop. The
 		-- original dispatch hid them; passive captions sit just above their row.
-		subtitleFrame.Position = UDim2.new(0.5, 0, 1,
-			narrow and -96 or (dispatchAudio.voiceEnabled and -64 or -120))
+		local bottomOffset = narrow and 96 or (dispatchAudio.voiceEnabled and 64 or 120)
+		local puzzleGui = player.PlayerGui:FindFirstChild("PuzzleGui")
+		local message = puzzleGui and puzzleGui:FindFirstChild("PuzzleMessage")
+		if puzzleGui and puzzleGui.Enabled and message and message.Visible then
+			local pos, size = message.AbsolutePosition, message.AbsoluteSize
+			local captionLeft = (layout.Safe.Left + layout.Safe.Right - panelWidth) / 2
+			local captionBottom = layout.Safe.Bottom - bottomOffset
+			if captionLeft < pos.X + size.X and captionLeft + panelWidth > pos.X
+				and captionBottom - panelHeight < pos.Y + size.Y
+				and captionBottom > pos.Y then
+				bottomOffset = math.max(bottomOffset,
+					UIDevice.BottomOffsetFor(guideGui, pos.Y - 8))
+			end
+		end
+		subtitleFrame.Position = UDim2.new(0.5, 0, 1, -bottomOffset)
 	end
 	subtitleFrame.Size = UDim2.fromOffset(panelWidth, panelHeight)
 	-- The constraint used to clamp height to 118 and width to 860 behind the
@@ -3670,6 +3718,10 @@ task.spawn(function()
 	local counter = puzzle:WaitForChild("Level1Objectives")
 	for _, property in ipairs({"Visible", "AbsolutePosition", "AbsoluteSize"}) do
 		counter:GetPropertyChangedSignal(property):Connect(updateLevelOneGuideLayout)
+	end
+	local message = puzzle:WaitForChild("PuzzleMessage")
+	for _, property in ipairs({"Visible", "AbsolutePosition", "AbsoluteSize"}) do
+		message:GetPropertyChangedSignal(property):Connect(updateLevelOneGuideLayout)
 	end
 	updateLevelOneGuideLayout()
 end)
