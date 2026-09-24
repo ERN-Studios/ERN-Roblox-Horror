@@ -1,15 +1,15 @@
 {
   "formatVersion": 2,
-  "source": "Studio-authoritative square detector artwork and compact shop captions, published v1949.",
+  "source": "Canonical repository inventory updated 2026-09-24 with hazmat and eight Level 5 script entries. Whole-place parity is not asserted; this manifest does not cover non-script Studio assets or subsequent concurrent edits. Hazmat work is not published.",
   "finalNewlineContract": "Entries flagged studioTrailingNewline hold exactly the canonical repo file plus one extra trailing newline in Studio. Exact landings remove the flag. Current flagged entry count: 0. Manifest hashes always describe the canonical repo file, never Studio's transport bytes.",
   "studio": {
     "id": "7b9759ba-1a0c-4f59-9eb8-21098b64c70b",
     "name": "BACKROOMS: STAY QUIET [CO-OP HORROR] (placeId: 131311258779917)"
   },
   "counts": {
-    "scripts": 170,
+    "scripts": 182,
     "remoteEvents": 15,
-    "total": 185,
+    "total": 197,
     "studioTrailingNewline": 0
   },
   "nativePlaceBackup": {
@@ -2710,6 +2710,173 @@
       "bytes": 15974,
       "sha256": "2b026764c5d0ffbdf45f084832cd3bb1f60ccccc7390417aaf8a39a4b73c35a2",
       "status": "synced"
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraSkins",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraSkins"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/ZyntraSkins.ModuleScript.lua",
+      "bytes": 4468,
+      "sha256": "aa1fdad9c0c898d14081c7e0023ad5945e892a751df0e048f72cfdd7b930f55c",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "canonical UTF-8 bytes checked against fresh Studio Source/editor length and Adler32 on 2026-09-24"
+    },
+    {
+      "studioPath": "ReplicatedStorage.ZyntraSkinsPage",
+      "segments": [
+        "ReplicatedStorage",
+        "ZyntraSkinsPage"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/ZyntraSkinsPage.ModuleScript.lua",
+      "bytes": 16489,
+      "sha256": "a7ea0b56aafecfb163ca86ec955a98ab8c5129815777c7915ede523a3b40cd9a",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "canonical UTF-8 bytes checked against fresh Studio Source/editor length and Adler32 on 2026-09-24"
+    },
+    {
+      "studioPath": "ServerScriptService.HazmatSkinVisuals",
+      "segments": [
+        "ServerScriptService",
+        "HazmatSkinVisuals"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/HazmatSkinVisuals.Script.lua",
+      "bytes": 13437,
+      "sha256": "90b74c8e3d239d63af806bb9e7abcb5d5995bbbeb481054ecc12e425bca2ab81",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "canonical UTF-8 bytes checked against fresh Studio Source/editor length and Adler32 on 2026-09-24"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.HazmatSkinDriver",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "HazmatSkinDriver"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/HazmatSkinDriver.LocalScript.lua",
+      "bytes": 14492,
+      "sha256": "407ec8f2db301f55187836b244f7ca26f3966aa6c64af3d63a31504782e6130c",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "canonical UTF-8 bytes checked against fresh Studio Source/editor length and Adler32 on 2026-09-24"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 5 Systems.Level 5 Architecture",
+      "segments": [
+        "ServerScriptService",
+        "Level 5 Systems",
+        "Level 5 Architecture"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 5 Systems/Level 5 Architecture.ModuleScript.lua",
+      "bytes": 24505,
+      "sha256": "0a7a99fe8e38a971604f420f40f8f08b7768ccf04ec417f3f6cd6a918b067e55",
+      "status": "synced",
+      "captureMethod": "fresh Studio Source mirrored to canonical UTF-8 repository file on 2026-09-24"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 5 Systems.Level 5 Furniture",
+      "segments": [
+        "ServerScriptService",
+        "Level 5 Systems",
+        "Level 5 Furniture"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 5 Systems/Level 5 Furniture.ModuleScript.lua",
+      "bytes": 13685,
+      "sha256": "eda52827e7be51b42f6354674141c146dd64c1421e559f571f802501225e957b",
+      "status": "synced",
+      "captureMethod": "fresh Studio Source mirrored to canonical UTF-8 repository file on 2026-09-24"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 5 Systems.Level 5 Landmark Districts",
+      "segments": [
+        "ServerScriptService",
+        "Level 5 Systems",
+        "Level 5 Landmark Districts"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 5 Systems/Level 5 Landmark Districts.ModuleScript.lua",
+      "bytes": 16337,
+      "sha256": "8559e86f110388cfa827d3e86d133b08fb8f37d8775ddb0e8133eadd204c9f62",
+      "status": "synced",
+      "captureMethod": "fresh Studio Source mirrored to canonical UTF-8 repository file on 2026-09-24"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 5 Systems.Level 5 Neighbourhood Districts",
+      "segments": [
+        "ServerScriptService",
+        "Level 5 Systems",
+        "Level 5 Neighbourhood Districts"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 5 Systems/Level 5 Neighbourhood Districts.ModuleScript.lua",
+      "bytes": 15022,
+      "sha256": "c44ed8cf067d7793c312aff5bd631491c100b77de239e191b8b900dad72604ca",
+      "status": "synced",
+      "captureMethod": "fresh Studio Source mirrored to canonical UTF-8 repository file on 2026-09-24"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 5 Systems.Level 5 Round Adapter",
+      "segments": [
+        "ServerScriptService",
+        "Level 5 Systems",
+        "Level 5 Round Adapter"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 5 Systems/Level 5 Round Adapter.ModuleScript.lua",
+      "bytes": 14422,
+      "sha256": "3f61f23d86931bcefd5d4c9b4257da1bb96a4f04c31d2ac2a48ae707a3b42be8",
+      "status": "synced",
+      "captureMethod": "fresh Studio Source mirrored to canonical UTF-8 repository file on 2026-09-24"
+    },
+    {
+      "studioPath": "ServerScriptService.Level5GateAccess",
+      "segments": [
+        "ServerScriptService",
+        "Level5GateAccess"
+      ],
+      "className": "Script",
+      "file": "ServerScriptService/Level5GateAccess.Script.lua",
+      "bytes": 3416,
+      "sha256": "df130f811195e8d88bc64f7b8ffd68077ba0a846fa03753d5fa584a34612c740",
+      "status": "synced",
+      "captureMethod": "fresh Studio Source mirrored to canonical UTF-8 repository file on 2026-09-24"
+    },
+    {
+      "studioPath": "ServerScriptService.Level5Generator",
+      "segments": [
+        "ServerScriptService",
+        "Level5Generator"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level5Generator.ModuleScript.lua",
+      "bytes": 406,
+      "sha256": "8917a82da5adaa114fff5051d9637aadf206ea5c0c757f2605969fe18d4cb54e",
+      "status": "synced",
+      "captureMethod": "fresh Studio Source mirrored to canonical UTF-8 repository file on 2026-09-24"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level 5 Lighting Controller",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 5 Lighting Controller"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level 5 Lighting Controller.LocalScript.lua",
+      "bytes": 3324,
+      "sha256": "975d426abe626db63ada7cba3d4d7aa0c0c629d698b3256446dd2c37e35eeca4",
+      "status": "synced",
+      "captureMethod": "fresh Studio Source mirrored to canonical UTF-8 repository file on 2026-09-24"
     }
   ]
 }

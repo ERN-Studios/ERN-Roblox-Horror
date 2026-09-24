@@ -1741,6 +1741,9 @@ end
 local PAGE_CONTENT = {
 	Upgrades = {Rows = 2, Actions = 2},
 	Shop = {Rows = 6, Actions = 6},
+	-- One heading plus all six authored suit cards, each with an action. A
+	-- premium action can be disabled while its pass ID is unconfigured.
+	Skins = {Rows = 7, Actions = 6},
 	-- Derived from the production config below, not guessed. `Rows = 1` was
 	-- vacuous: a Donate page that had built one card out of six would have
 	-- passed.
@@ -5119,6 +5122,10 @@ Fit.DonationTierKeys = {
 --   %d+:%d+ TO GO   a milestone that has not been played to yet ("2:20 TO GO")
 --   SPUN TODAY      the free daily wheel is used for this UTC day
 --   SPINNING        the wheel is resolving
+-- 2026-09-24: the Skins page deliberately stands down an already equipped
+-- suit, a token purchase short of tokens, and a clear-gated suit. Their
+-- buttons say EQUIPPED, NEED TOKENS, and LOCKED respectively; the locked
+-- card's price line shows the exact clear count needed.
 -- NO ENTRY MAY CARRY A LITERAL "...". These are Lua patterns fed to string.find,
 -- where "." matches any character, so "SAVING..." as an entry would also match
 -- "SAVINGXYZ" -- and the store draws "SAVING..." anyway, which "SAVING" finds.
@@ -5126,7 +5133,7 @@ Fit.ZyntraDisabledCaptions = {"OWNED", "COMING SOON", "LEVEL %d+ ONLY", "WAITING
 	"WHEN DEAD", "RESPAWNING", "UNAVAILABLE", "CONFIRMING", "SAVING",
 	"CLAIMED", "CLAIMING", "%d+:%d+ TO GO", "SPUN TODAY", "SPINNING",
 	-- WHEEL_COLLECT_20260922: the hub while a claim is in flight / confirmed.
-	"COLLECTING", "COLLECTED"}
+	"COLLECTING", "COLLECTED", "EQUIPPED", "NEED TOKENS", "LOCKED"}
 
 -- HOW MANY OF A PAGE'S CARD ACTIONS THE PLAYER CAN PRESS, where that number is
 -- a property of the build and not of the tester's save file.
@@ -5377,13 +5384,15 @@ function Fit.bodyZyntraTerminalFitMatrix(): (string, number)
 		-- subscriptions and two claim buttons for one server-side claim. The page
 		-- module still exists in ReplicatedStorage, which is exactly why this list
 		-- must not derive the tab from its presence any more.
-		-- FIELD_NOTES_REMOVED_20260922: the NOTES tab left with the Field Notes
-		-- feature, so the terminal is the five authored tabs (plus DEV).
-		-- RECORDS (CHALLENGES_20260923) is the one mounted page now, derived from
-		-- its module the way NOTES was, and sits before SETTINGS.
+		-- FIELD_NOTES_REMOVED_20260922: NOTES stays absent. SKINS and RECORDS
+		-- mount only when their modules exist, in the same authored order as the
+		-- store, with SETTINGS last before DEV.
 		local expectedTabs = {"Upgrades", "Shop", "Donate", "Colors", "Settings"}
+		if ReplicatedStorage:FindFirstChild("ZyntraSkinsPage") then
+			table.insert(expectedTabs, 3, "Skins")
+		end
 		if ReplicatedStorage:FindFirstChild("ZyntraRecordsPage") then
-			table.insert(expectedTabs, 5, "Records")
+			table.insert(expectedTabs, #expectedTabs, "Records")
 		end
 		local devExpected = DevAccess.IsAllowed(player)
 		if devExpected then table.insert(expectedTabs, "Dev") end

@@ -346,6 +346,15 @@ local function applyPlayerLighting()
   return
  end
 
+ -- LEVEL5_MAP_PREVIEW_20260923: its own client controller owns/restores the
+ -- fluorescent indoor grade. No Level 1 night or lobby tint over this map.
+ if workspace:FindFirstChild("Level 5 Generated World") ~= nil and selectedLevel == 5 and inMaze
+  and workspace:GetAttribute("Level5LightingOwnedByController") == true then
+  lobbyGrade.Enabled = false
+  if mazeGrade then mazeGrade.Enabled = false end
+  return
+ end
+
  if isLevelTwo and workspace:GetAttribute("Level2LightingOwnedByController") == true then
   lobbyGrade.Enabled = false
   if mazeGrade then mazeGrade.Enabled = false end
@@ -5213,7 +5222,10 @@ end
 local function mimicAnimationId(character, keyword)
  for _, item in ipairs(character:GetDescendants()) do
   if item:IsA("Animation") and item.Name:lower():find(keyword, 1, true)
-   and item.AnimationId ~= "" then return item.AnimationId end
+   and item.AnimationId ~= ""
+   and not item:FindFirstAncestor("ZyntraHazmatSkinVisual") then
+   return item.AnimationId
+  end
  end
  return nil
 end
@@ -5231,6 +5243,21 @@ local function mimicBuild(sourcePlayer, spawnPos)
  if not model then return nil end
  model.Name = "MimicApparition"
 
+ -- The player's Meshy skin is driven by a separate AnimationController. A
+ -- cloned character cannot inherit its running tracks, so that visual would
+ -- freeze while the R15 body underneath stays transparent. Let the mimic use
+ -- the native R15 suit and its own walk/run animator instead.
+ local cosmetic = model:FindFirstChild("ZyntraHazmatSkinVisual")
+ if cosmetic then cosmetic:Destroy() end
+ for _, item in ipairs(model:GetDescendants()) do
+  local original = item:GetAttribute("ZyntraHazmatOriginalTransparency")
+  if type(original) == "number"
+   and (item:IsA("BasePart") or item:IsA("Decal") or item:IsA("Texture")) then
+   item.Transparency = original
+   item:SetAttribute("ZyntraHazmatOriginalTransparency", nil)
+  end
+ end
+
  -- The clone inherits everything the source player is wearing, and that includes
  -- the overhead BillboardGui the Zyntra Supporter pass parents to the Head. A
  -- Mimic captioned ZYNTRA SUPPORTER is an instant tell, and it hangs a purchase
@@ -5247,6 +5274,7 @@ local function mimicBuild(sourcePlayer, spawnPos)
    item.CanTouch = false
    item.CanQuery = false
    item.Massless = true
+   item.LocalTransparencyModifier = 0
   end
  end
 

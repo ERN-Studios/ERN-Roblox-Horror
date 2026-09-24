@@ -1,0 +1,35 @@
+# Hazmat skins and six-sector Lucky Wheel — integration handoff
+
+**Status, 24 September 2026:** The six textured suit variants are imported as models in `ServerStorage`; both premium topper models and the six-sector wheel image are imported. The skin catalogue, server-owned purchase/equip state, shop tab, cosmetic avatar layer, and six-sector wheel code now match Studio and the repository. **These changes have not been published to the Roblox place.** The shop's 3D viewport shows one selected suit at a time, starts on the mask/front at 295°, rotates automatically, and includes premium toppers. Studio remains authoritative under `AGENTS.md`; do not overwrite another developer's Studio changes from this document. Do not reintroduce Field Notes or the lobby TRY AGAIN guide.
+
+| Suit | Group ColorMap Image ID | Shop preview Image ID | Unlock |
+| --- | ---: | ---: | --- |
+| Baseline Yellow | `113696916548555` | `108962875803884` | Default/free |
+| Pool Service | `71321355623557` | `113105840961412` | 25 Research Tokens; wheel eligible |
+| Suburb Survey | `81335744794900` | `105515413111120` | 75 Research Tokens; wheel eligible |
+| Blacksite Director | `96837294142054` | `96742758510511` | 300 Research Tokens and 100 lifetime clears |
+| Static Wraith | `105116444000474` | `71524908131120` | Game Pass `1994666374`, **99 Robux** |
+| False Sun | `83272384519781` | `132614425134815` | Game Pass `1994816385`, **149 Robux** |
+
+Both Game Passes are for sale under the existing ERN Roblox Studios experience (universe `10559217407`, group `1039373905`). [Static Wraith pass](https://create.roblox.com/dashboard/creations/experiences/10559217407/passes/1994666374/sales) and [False Sun pass](https://create.roblox.com/dashboard/creations/experiences/10559217407/passes/1994816385/sales) were checked against Roblox's pass listing. Their icon Image IDs are `101066368280251` and `90694693019242`. The shop verifies the current price and sale state before prompting; the server checks actual ownership before granting the skin. A real Robux purchase has not yet been tested.
+
+## Imported visual assets
+
+The canonical body was uploaded as Model `100469440565653`; its skinned MeshPart is `125592104159956`. Studio has six `ServerStorage.HazmatSkin_<SkinId>_20260924` templates using that body and the six ColorMaps above. The distinct templates are needed because the imported `SurfaceAppearance` ColorMap is not changed at runtime. Static Wraith's separate topper Model is `73050286670247`; False Sun's is `88222153966038`. The toppers are attached as cosmetics, with placement still awaiting final visual acceptance.
+
+Roblox's stock R15 movement drives the physical character. `HazmatSkinDriver` copies its pose onto the separate Meshy Bones on each client. The Meshy skeleton cannot use the stock `Animate` script directly. Imported walk/run animation trials visibly distorted the mesh, so their trial IDs must not be assigned to gameplay. Keep movement, collision, gameplay light, noise, hitboxes, and Advanced Equipment benefits on the existing R15 character. The native backup before import is `artifacts/hazmat-20260924/studio-before-hazmat.rbxl` (local artifact).
+
+The wheel image is Group Image `70472139920072` (`wheel/lucky-wheel-six-sector-random-skin.png`). Its six equal wedges are visual only. The server weights are `Token1` **40%**, `Token3` **20%**, `Potion1` **20%**, `Potion2` **5%**, `Shield1` **10%**, `Skin5` **5%**. The skin result records one exact unowned Pool Service or Suburb Survey ID at spin time. When both are owned, the recorded reward is 3 Research Tokens. Director and paid suits are excluded. Old pending wheel prizes stay claimable.
+
+## Code and verification
+
+- New modules/scripts: `ReplicatedStorage/ZyntraSkins.ModuleScript.lua`, `ReplicatedStorage/ZyntraSkinsPage.ModuleScript.lua`, `ServerScriptService/HazmatSkinVisuals.Script.lua`, and `StarterPlayer/StarterPlayerScripts/HazmatSkinDriver.LocalScript.lua`. The existing `ZyntraConfig`, `ZyntraMonetization`, `ZyntraStore`, `Lucky Wheel Client`, `RoundUI`, and `UIRegression` also contain scoped integration changes. Studio/source/editor reconciliation must be checked again after the current visual edits.
+- Offline suites passed **23 skin**, **401 daily rewards**, and **613 Lucky Wheel client** checks. They cover Token costs and the clear gate, skin selection and fallback, pending claims, duplicate claims, and six-sector client mapping.
+- Solo Studio Play showed six SKINS cards, a 25-Token Pool Service unlock and equip, and the six-sector wheel. A forced 5% `Skin5` spin recorded Pool Service and the collection granted it once; a second claim did not pay again. The original wheel weights were restored afterward. A real Game Pass purchase and DataStore rejoin remain unverified.
+- Native Play visual QA showed R15 idle/walk retargeting, both premium toppers, and the selected 3D suit. A two-client `StudioTestService` round passed: both clients saw Pool Service and Suburb Survey on both characters; visual parts had no collision/touch/query or mass; two players required one Level 1 circuit and spawned three findable `FuseRelay` models. The first QA attempt checked body hiding too early; the corrected harness waited for local visibility and passed. The two temporary QA scripts and `Workspace.HazmatVisualQA_20260924` were removed from Edit before the final parity audit.
+- The iPhone 17 Pro landscape simulator reported a 749×361 viewport and a 701×147 shop content area. Its first preview layout was too tall, and Studio reported `fit.Touch=false` despite `UserInputService.TouchEnabled=true`. The current 16489-byte `ZyntraSkinsPage` source uses actual touch support plus terminal height for a compact first-row 3D preview. The whole model, details, and a 44px card action were visible through normal scrolling. Selecting Pool Service loaded the matching 3D model and returned to the preview. An iPad Pro M5 landscape simulator also showed the preview and first card without clipping. Physical phone/tablet and mobile memory checks remain open.
+- A fresh whole-place probe found **182 exact Studio/repository scripts, 0 drift, 0 missing, 0 extra**; Luau 0.737 compiled all 182. The full UI fit matrix is being rerun after the mobile layout change. Do not mark the skin Trello card Done until remaining release and rejoin checks pass and a successful publish receipt is saved.
+
+The file `artifacts/hazmat-20260924/studio-parity-182-final.txt` is the fresh whole-place Studio source dump. The eight Level 5 scripts missing from the older manifest were mirrored from Studio into the repository and added to `studio-sync-manifest.json`. The Level 5 prototype remains developer-gated; its gameplay acceptance is outside this skin/wheel handoff.
+
+Source art, rig contract, and Meshy task provenance are in [README.md](README.md). The checked-in images are design/source assets, not evidence of final in-game behavior.

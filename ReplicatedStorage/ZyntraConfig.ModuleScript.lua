@@ -71,11 +71,15 @@ return {
 			{Minutes = 35, Reward = {Kind = "Item", Key = "EntityShield", Amount = 1}},
 		},
 		Wheel = {
-			{Key = "Token1", Weight = 45, Label = "1 Research Token", Reward = {Kind = "Tokens", Amount = 1}},
+			{Key = "Token1", Weight = 40, Label = "1 Research Token", Reward = {Kind = "Tokens", Amount = 1}},
 			{Key = "Token3", Weight = 20, Label = "3 Research Tokens", Reward = {Kind = "Tokens", Amount = 3}},
 			{Key = "Potion1", Weight = 20, Label = "1 Speed Potion", Reward = {Kind = "Item", Key = "SpeedPotion", Amount = 1}},
 			{Key = "Potion2", Weight = 5, Label = "2 Speed Potions", Reward = {Kind = "Item", Key = "SpeedPotion", Amount = 2}},
 			{Key = "Shield1", Weight = 10, Label = "1 Entity Shield", Reward = {Kind = "Item", Key = "EntityShield", Amount = 1}},
+			-- Only Pool Service and Suburb Survey are eligible. The server records
+			-- the exact unowned SkinId at spin time, or a 3-Token fallback when both
+			-- are owned. The field stays Skin5 in either case, preserving the 5% odds.
+			{Key = "Skin5", Weight = 5, Label = "Random Hazmat Skin", Reward = {Kind = "Skin"}},
 		},
 	},
 

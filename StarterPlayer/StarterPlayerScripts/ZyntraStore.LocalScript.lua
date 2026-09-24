@@ -639,8 +639,8 @@ end
 -- MOUNTED PAGE MODULES: a tab named here is built only when its module is
 -- actually in ReplicatedStorage (FindFirstChild, never WaitForChild -- this runs
 -- at build time). NOTES left with Field Notes (FIELD_NOTES_REMOVED_20260922);
--- RECORDS (CHALLENGES_20260923, Trello FnF49TWk) is the one mounted page now,
--- read-only, and sits before SETTINGS so SETTINGS stays last before DEV.
+-- RECORDS (CHALLENGES_20260923, Trello FnF49TWk) is read-only. SKINS is a
+-- mounted shop page; both sit before SETTINGS so SETTINGS stays last before DEV.
 -- UIRegression's expectedTabs derives it from the same module's presence.
 --
 -- REWARDS IS NO LONGER A TAB. Card #104 gave Daily Rewards its own standalone
@@ -650,9 +650,9 @@ end
 -- unchanged and is now mounted by StarterPlayerScripts."Daily Rewards Client";
 -- everything that used to ask for the Rewards tab (the kiosk plaque prompt and
 -- PlayerScripts.ZyntraOpenTerminal "Rewards") fires PlayerScripts.OpenDailyRewards.
-local TERMINAL_PAGE_MODULES = {Records = "ZyntraRecordsPage"}
+local TERMINAL_PAGE_MODULES = {Records = "ZyntraRecordsPage", Skins = "ZyntraSkinsPage"}
 local tabNames = {}
-for _, name in ipairs({"Upgrades", "Shop", "Donate", "Colors", "Records", "Settings"}) do
+for _, name in ipairs({"Upgrades", "Shop", "Skins", "Donate", "Colors", "Records", "Settings"}) do
 	local moduleName = TERMINAL_PAGE_MODULES[name]
 	if moduleName == nil or ReplicatedStorage:FindFirstChild(moduleName) ~= nil then
 		table.insert(tabNames, name)

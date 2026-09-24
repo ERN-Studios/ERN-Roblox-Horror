@@ -233,6 +233,7 @@ local ITEM_KEYS = {"SpeedPotion", "RouteMarker"}
 local ITEM_CONFIG = Config.Items or {}
 local DAILY_REWARDS = Config.DailyRewards or {}
 local DailyResearch = require(ReplicatedStorage:WaitForChild("ZyntraDailyResearch"))
+local Skins = require(ReplicatedStorage:WaitForChild("ZyntraSkins"))
 -- CHALLENGES_20260923 (Trello FnF49TWk): the pure record/challenge ledger.
 local Challenges = require(ReplicatedStorage:WaitForChild("ZyntraChallenges"))
 -- A consumable spent during a round makes that run assisted. Latched at the
@@ -306,6 +307,17 @@ local function normalizeDaily(value)
 			-- and must never be paid again.
 			Claimed = savedLast.Claimed ~= false,
 		}
+		if savedLast.Key == "Skin5" then
+			-- Only the two wheel-eligible suits can survive into a pending prize.
+			-- A missing/invalid ID becomes the disclosed fallback instead of
+			-- leaving an old save with an uncollectable prize forever.
+			for _, skinId in ipairs(Skins.WheelEligible) do
+				if savedLast.SkinId == skinId then wheelLast.SkinId = skinId; break end
+			end
+			if savedLast.FallbackTokens == 3 or not wheelLast.SkinId then
+				wheelLast.FallbackTokens = 3
+			end
+		end
 	end
 	local flushId = saved.FlushId
 	return {
@@ -453,6 +465,7 @@ local function newProfile()
 		-- Additive: every one of them normalizes from nil, so schema 4 saves
 		-- written before they existed load without a version bump.
 		Items = {SpeedPotion = 0, RouteMarker = 0},
+		Skins = Skins.Normalize(nil),
 		Daily = {PlaytimeSeconds = 0, Claimed = {}, Research = DailyResearch.Normalize(nil)},
 		FieldNotes = {Discovered = {}, Serial = 0},
 		DonationRobux = 0,
@@ -528,6 +541,7 @@ local function normalizeProfile(data)
 	data.Challenges = Challenges.NormalizeDone(data.Challenges, Config.Challenges)
 	data.ReentryCredits = math.max(0, math.floor(tonumber(data.ReentryCredits) or 0))
 	data.Items = normalizeItems(data.Items)
+	data.Skins = Skins.Normalize(data.Skins)
 	data.Daily = normalizeDaily(data.Daily)
 	data.FieldNotes = normalizeFieldNotes(data.FieldNotes)
 	-- Keep the two recorded streams separate. Retired SupportRobux and old
@@ -738,6 +752,7 @@ local function publicProfile(data, player)
 	local result = {
 		Tokens = data.Tokens,
 		Items = data.Items,
+		Skins = Skins.Public(data.Skins),
 		Daily = dailyPublic(data, player),
 		SpeedBoostUntil = player and player:GetAttribute("ZyntraSpeedBoostUntil") or 0,
 		StaminaLevel = data.StaminaLevel,
@@ -861,6 +876,9 @@ local function applyAttributes(player, data)
 	player:SetAttribute("ZyntraStaminaMultiplier", 1 + data.StaminaLevel * step + advancedStaminaBonus(player))
 	player:SetAttribute("ZyntraBatteryMultiplier", 1 + data.BatteryLevel * step)
 	player:SetAttribute("ZyntraHazmatColor", readColor(data.Colors.Hazmat, Config.Colors.HazmatDefault))
+	-- Cosmetic selection replicates to other players. The visual applicator is
+	-- installed only after the imported skinned model passes avatar/animation QA.
+	player:SetAttribute("ZyntraSkinId", data.Skins.Equipped)
 	player:SetAttribute("ZyntraGlowstickColor", readColor(data.Colors.Glowstick, Config.Colors.GlowstickDefault))
 	player:SetAttribute("ZyntraMuteDispatch", data.Settings.MuteDispatch)
 	player:SetAttribute("ZyntraLobbyBriefingPlayed", data.Settings.LobbyBriefingPlayed)
@@ -2091,6 +2109,27 @@ local function refreshPasses(player)
 			player:SetAttribute("ZyntraOwns" .. key, passOwnership(player, key, pass))
 		end
 	end
+	-- Permanent premium skins are Game Passes, not repeatable Developer
+	-- Products. An unconfigured ID cannot grant even in Studio's all-pass mode.
+	for _, skinId in ipairs(Skins.Order) do
+		local skin = Skins.ById[skinId]
+		if skin.Kind == "Robux" and skin.PassId > 0 then
+			local pass = {Id = skin.PassId, Name = skin.Name}
+			local owns = passOwnership(player, skinId, pass)
+			player:SetAttribute("ZyntraOwns" .. skinId, owns)
+			local session = sessions[player]
+			if owns and session and not Skins.IsOwned(session.data.Skins, skinId) then
+				local changed = mutate(player, function(data)
+					if not Skins.Grant(data.Skins, skinId) then return false end
+					return true, skin.Name .. " hazmat skin unlocked.", "success"
+				end)
+				if not changed and sessions[player]
+					and not Skins.IsOwned(sessions[player].data.Skins, skinId) then
+					passReadFailed[player] = true
+				end
+			end
+		end
+	end
 
 	if supporter then
 		mutate(player, function(data)
@@ -3126,11 +3165,22 @@ local function pickWheelPrize()
 	return wheel[#wheel]
 end
 
+local function wheelResultLabel(last, prize)
+	if prize and prize.Key == "Skin5" then
+		if last and last.FallbackTokens == 3 then
+			return "3 Research Tokens (skin fallback)"
+		end
+		local skin = last and Skins.Get(last.SkinId)
+		return skin and (skin.Name .. " hazmat skin") or "a hazmat skin"
+	end
+	return prize and prize.Label or "the last spin"
+end
+
 local function spentSpinMessage(daily)
 	local last = daily.WheelLast
 	local prize = last and wheelPrizeByKey(last.Key)
 	return string.format("Today's spin is done: %s. Next spin at 00:00 UTC.",
-		prize and prize.Label or "already claimed")
+		prize and wheelResultLabel(last, prize) or "already claimed")
 end
 
 -- WHEEL_COLLECT_20260922 (Trello 25GLltY6). A spin RECORDS the prize
@@ -3148,7 +3198,7 @@ end
 local function collectFirstMessage(daily)
 	local last = pendingWheelPrize(daily)
 	local prize = last and wheelPrizeByKey(last.Key)
-	return string.format("Collect your prize first: %s.", prize and prize.Label or "the last spin")
+	return string.format("Collect your prize first: %s.", wheelResultLabel(last, prize))
 end
 
 local function spinDailyWheel(player)
@@ -3175,14 +3225,31 @@ local function spinDailyWheel(player)
 		if not prize or type(prize.Reward) ~= "table" then
 			return false, "The supply wheel is offline right now.", "error"
 		end
+		local skinId, fallbackTokens
+		if prize.Key == "Skin5" then
+			local eligible = {}
+			for _, candidate in ipairs(Skins.WheelEligible) do
+				if not Skins.IsOwned(data.Skins, candidate) then
+					eligible[#eligible + 1] = candidate
+				end
+			end
+			if #eligible == 0 then
+				fallbackTokens = 3
+			else
+				skinId = eligible[math.floor(wheelRandom:NextNumber() * #eligible) + 1]
+			end
+		end
 		data.Daily.WheelDay = today
 		data.Daily.WheelLast = {
 			Day = today,
 			Key = prize.Key,
+			SkinId = skinId,
+			FallbackTokens = fallbackTokens,
 			Serial = wholeCount(data.Daily.WheelLast and data.Daily.WheelLast.Serial) + 1,
 			Claimed = false,
 		}
-		return true, "Supply Wheel: " .. prize.Label .. " -- collect your prize.", "success"
+		return true, "Supply Wheel: " .. wheelResultLabel(data.Daily.WheelLast, prize)
+			.. " -- collect your prize.", "success"
 	end)
 end
 
@@ -3210,7 +3277,22 @@ local function claimWheelPrize(player)
 		local last = pendingWheelPrize(data.Daily)
 		if not last then return false, "Nothing to collect.", "info" end
 		local prize = wheelPrizeByKey(last.Key)
-		local label = prize and applyReward(data, prize.Reward)
+		local label
+		if prize and prize.Key == "Skin5" then
+			if last.FallbackTokens == 3 or Skins.IsOwned(data.Skins, last.SkinId) then
+				-- A player can buy the selected suit after spinning but before
+				-- collecting. Keep the exact SkinId receipt and pay the same fallback.
+				label = applyReward(data, {Kind = "Tokens", Amount = 3})
+				if label then last.FallbackTokens = 3 end
+			else
+				local skin = Skins.Get(last.SkinId)
+				if skin and Skins.Grant(data.Skins, last.SkinId) then
+					label = skin.Name .. " hazmat skin"
+				end
+			end
+		else
+			label = prize and applyReward(data, prize.Reward)
+		end
 		if not label then return false, "That prize is unavailable right now.", "error" end
 		last.Claimed = true
 		return true, label .. " collected.", "success"
@@ -3316,6 +3398,8 @@ local WRITE_BEARING_ACTIONS = {
 	ClaimWheelPrize = true,
 	MarkRewardsIntroSeen = true,
 	BuyItem = true,
+	BuySkin = true,
+	EquipSkin = true,
 	UseSpeedPotion = true,
 }
 local ACTION_WINDOW = 0.12
@@ -3355,6 +3439,9 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 		windowKey = "ClaimPlaytimeReward:" .. tostring(payload.Minutes)
 	elseif action == "BuyItem" and type(payload) == "table" and ITEM_CONFIG[payload.Key] then
 		windowKey = "BuyItem:" .. payload.Key
+	elseif (action == "BuySkin" or action == "EquipSkin")
+		and type(payload) == "string" and Skins.Get(payload) then
+		windowKey = action .. ":" .. payload
 	end
 	local times = actionTimes[player]
 	if not times then
@@ -3472,6 +3559,35 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 		markRewardsIntroSeen(player)
 	elseif action == "BuyItem" then
 		buyItem(player, payload)
+	elseif action == "BuySkin" then
+		local skin = Skins.Get(payload)
+		if not skin or skin.Kind ~= "Tokens" then return end
+		local current = sessions[player].data
+		if Skins.IsOwned(current.Skins, payload) then
+			pushProfile(player, "Already owned.", "info")
+			return
+		end
+		if current.CompletedLevels < (skin.RequiredClears or 0) then
+			pushProfile(player, ("Requires %d lifetime clears."):format(skin.RequiredClears), "error")
+			return
+		end
+		if current.Tokens < skin.TokenCost then
+			pushProfile(player, ("Requires %d Research Tokens."):format(skin.TokenCost), "error")
+			return
+		end
+		mutate(player, function(data)
+			local changed, message = Skins.BuyToken(data, payload)
+			return changed, message, changed and "success" or "error"
+		end)
+	elseif action == "EquipSkin" then
+		if not Skins.Get(payload) then return end
+		local current = sessions[player].data.Skins
+		if not Skins.IsOwned(current, payload) then return end
+		if current.Equipped == payload then return end
+		mutate(player, function(data)
+			local changed, message = Skins.Equip(data.Skins, payload)
+			return changed, message, changed and "success" or "error"
+		end)
 	elseif action == "UseSpeedPotion" then
 		useSpeedPotion(player)
 	end
@@ -3540,6 +3656,12 @@ MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(player, passI
 	local passes = table.clone(Config.Passes)
 	for key, pass in pairs(Config.Donations or {}) do
 		if pass.Kind == "GamePass" then passes[key] = pass end
+	end
+	for _, skinId in ipairs(Skins.Order) do
+		local skin = Skins.ById[skinId]
+		if skin.Kind == "Robux" and skin.PassId > 0 then
+			passes[skinId] = {Id = skin.PassId, Name = skin.Name, Price = skin.RobuxPrice}
+		end
 	end
 	for key, pass in pairs(passes) do
 		if pass.Id > 0 and pass.Id == passId then
