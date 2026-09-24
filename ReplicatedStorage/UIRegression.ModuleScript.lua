@@ -7473,10 +7473,17 @@ function Fit.bodyObjectiveCornerMatrix(): (string, number)
 					tostring(restoreObject and (restoreObject :: any).Visible)))
 
 			-- ---- passive caption alongside the reader -------------------
+			-- resetScenario disabled this ScreenGui for the reader-only rows.
+			-- Restore it before measuring a caption: child.Visible alone does not
+			-- mean the player could see the briefing.
+			local guide = findGui("LevelOneGuideGui")
+			if guide then (guide :: ScreenGui).Enabled = true end
 			player:SetAttribute("UIRegressionForceDispatchActive", true)
 			task.wait(0.35)
-			local guide = findGui("LevelOneGuideGui")
 			local caption = guide and guide:FindFirstChild("CommandSubtitles")
+			record(guide ~= nil and (guide :: ScreenGui).Enabled == true,
+				device.Name .. ": the caption's ScreenGui is enabled for this synthetic row",
+				tostring(guide and (guide :: ScreenGui).Enabled))
 			record(player:GetAttribute("DispatchTextActive") == true
 				and player:GetAttribute("ZyntraDispatchClientActive") == false
 				and player:GetAttribute("DispatchBriefingOpen") == false,
