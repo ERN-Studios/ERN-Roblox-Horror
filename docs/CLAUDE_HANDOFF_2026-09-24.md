@@ -42,3 +42,46 @@ A read-only audit of six areas found 16 candidate defects; 13 survived three ind
 ## Tooling
 
 `tools/record_pending_push.py --file <path>` (repeatable) records only the named mirrored scripts, so one session can push its own files while another session's edits in the same checkout are mid-flight.
+
+## Residual fixes, 24 September evening (repo only — NOT in Studio)
+
+These were written by a Claude CLI session **without Studio MCP**. Nothing below is in Studio, saved in the place, or published. `ServerScriptService/ZyntraMonetization.Script.lua` is queued in the manifest as `pending-studio-push`:
+
+| | sha256 |
+| --- | --- |
+| Live Studio baseline (`studioSha256Before`) — `pull_source_from_studio.py --audit` at session start: 182/182 scripts matched | `541ce85f582c9762c2f34f422f90ef954ea027ad6ed83e44c3882c93db9ea63b` |
+| Repo target (manifest `sha256`, committed LF blob) | `b4c29497074d901f2a8206f22f12d14d2ef2eb70b7fa487055ef9676cf0a6c99` |
+
+A recheck at the end could not run because Studio was in Play mode (`Edit datamodel is not available in Play mode`). Before applying: stop Play, run `python tools/push_repo_to_studio.py --audit --file ServerScriptService/ZyntraMonetization.Script.lua`, and expect `ready`. A `conflict` means someone edited the script in Studio since then. Merge that edit; never `--overwrite-conflicts`.
+
+**Token Earner, automatic earnings (commits `66ddc5a`, `cb762f2`).** Clears and Fuse/Lever research no longer wait 60 s and then pay 1× during an ownership outage.
+- An unknown tier pays the base now and queues the bonus in the same write as the clear: `profile.TokenEarner.Pending` buckets `{Earned, Unowned, Job, First, Last}`. There is no cap and nothing is dropped; the earning is keyed by `CompletionIds` or the daily Research flag.
+- Settlement happens at the first complete ownership answer, with the tier of the passes owned then, minus the passes *this game saw not owned after the earning*: our purchase latch, or a definitive "not owned" read that began later.
+- Ordering uses `tokenEarner.stamp()`, a monotonic per-server sequence, not `os.time`. A bucket from another JobId predates the current server.
+- A read in flight blocks merges across it and delays settlement of older buckets.
+- A refresh that began before the newest answered one keeps its proofs but never replaces that snapshot or lowers the tier.
+- `tokenEarner.latched` runs in the purchase callback before any yield. It records the proof and raises a known tier, so a clear during the slow purchase refresh pays the new tier.
+- **Policy, not history.** `UserOwnsGamePassAsync` returns only a boolean, never a purchase time. A pass bought *outside the game* between an outage earning and the first read after it is paid as if already owned. The alternative underpays every pre-existing owner.
+- Existing balance, Token packs, gifts, refunds and grants never pass through it. Friend Boost, Daily Clear and challenge tokens count as earned.
+
+**Developer suit (commit `2469d2d`).** The `Skins.SyncDeveloper` write now retries through `mutateIdempotent` at 0/5/20/60 s. Its transform re-reads `DevAccess`, and a profile already in sync costs no request. Genuine developers are unchanged.
+
+**Offline evidence (Luau 0.737; each new guard mutation-checked; the killed mutants are listed in the commit messages):**
+- `test_completion_save.py` 177: case 15, which asserted the 1× fallback, is replaced.
+- `test_token_earner.py` 383.
+- `test_dev_suit_revocation.py` 34 (new).
+- `test_friend_boost.py` 329: the stub gains `stamp` and a `known` return.
+- Daily rewards 401, feedback gift 26, first login 33, lucky wheel 622, purchase alerts 97, rail dots 20, speed potion 498, token grants 243, upgrade cost 15, skins 31, hazmat cleanup 12.
+- `luau-compile` is clean.
+- The three stale harnesses fail with the same messages as at HEAD.
+
+**Native validations still required (none done):**
+1. Push through the verified compare-and-swap, then run the Studio compile probe.
+2. A Play round with a forced ownership outage. Clear once and check `TokenEarner.Pending` in the saved profile. Rejoin with ownership answering, and see exactly one "Token Earner bonus" payment.
+3. A live DataStore clear with a failed write, then a rejoin, on a published server.
+4. A two-client round where a non-developer sees no Signal Architect.
+5. A developer revoke plus rejoin on a real account.
+6. A forged `EquipSkin` from a non-developer client.
+7. Physical mobile.
+
+Keep all six Token Earner passes **off sale**. No purchases were made and nothing was published.
