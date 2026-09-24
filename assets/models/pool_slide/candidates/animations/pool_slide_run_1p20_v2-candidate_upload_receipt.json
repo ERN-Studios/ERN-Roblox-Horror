@@ -1,0 +1,19 @@
+{
+  "source": "assets/models/pool_slide/candidates/animations/pool_slide_run_1p20_v2-candidate.rbxmx",
+  "sha256": "9317759f33e88ef92981c681f8a83f3578efdf00d66957968fe7d403575d2fb9",
+  "groupId": 1039373905,
+  "expectedPrice": 0,
+  "createdAtUtc": "2026-09-24T14:42:50.886841+00:00",
+  "operationPath": "operations/b8fc3f21-6871-4e3a-a9ae-134d7ec872dd",
+  "assetId": "74954076089837",
+  "status": "created",
+  "result": {
+    "assetType": "Animation",
+    "displayName": "Pool Slide Run v2 repaired A/B",
+    "revisionId": "1",
+    "moderationResult": {
+      "moderationState": "Approved"
+    },
+    "state": "Active"
+  }
+}

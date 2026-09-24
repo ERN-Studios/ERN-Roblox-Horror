@@ -1,6 +1,6 @@
-# Pool Slide gait v2 — offline candidate only
+# Pool Slide gait v2 — isolated Studio A/B candidate
 
-**Do not swap the current Walk/Run asset IDs yet.** This package has not been uploaded to Roblox, installed in Studio, or tested in an active round. It is a separately versioned repair of the 1.20× rig's animation data for Claude/Codex review.
+**Do not swap the current Walk/Run asset IDs yet.** Both v2 pairs have been uploaded as approved, active group-owned Animation assets and tested on copies of the current rig in an isolated Studio Play session. Neither has been installed on the active template or tested in an active Level 2 round. The [Studio A/B report](../../../../docs/POOL_SLIDE_AB_2026-09-24.md) has IDs, measurements and screenshots.
 
 The v1 conversion from the recovered live clips treated missing pose tracks as a rest pose. The resulting Walk clip has **31 of 64** frames where all 20 bone rotations jump exactly to rest; Run has **19 of 39**. These frames alternate with actual gait frames, so a few selected stills can look fine while playback jerks and feet skate. [`v1_v2_pose_comparison.png`](v1_v2_pose_comparison.png) shows four such instants rendered headlessly in Blender; [`gait_v1_v2_comparison.png`](gait_v1_v2_comparison.png) shows the trajectory spikes.
 
@@ -26,4 +26,4 @@ python tools/pool_slide_repair_sparse_pose_dropout.py assets/models/pool_slide/p
 python tools/pool_slide_glb_to_rbxmx.py assets/models/pool_slide/candidates/pool_slide_scaled_walk_run_v2_dropout_repaired.glb assets/models/pool_slide/candidates/animations --label v2-candidate
 ```
 
-Versioned upload and Studio integration should happen only after Claude finishes its active shared-Studio round and the candidate is reviewed. Keep the current group model ID `95190427565492`; if this fix is accepted, only the Walk/Run animation IDs need replacement, followed by source/editor conflict checks, native active-round tests, and a separate publication receipt.
+The isolated Studio test has finished and the current rig/IDs were preserved. If this fix is accepted, only the Walk/Run animation IDs need replacement, followed by fresh conflict checks, native active-round tests, physical-device checks and a separate publication receipt. Keep the current group model ID `95190427565492` out of the live template because its imported bones were incomplete.
