@@ -170,6 +170,12 @@ Two rules follow from that move, and both have already bitten this project once:
   top-level locals; one more fails to compile ("Out of local registers"). Put new
   state in a `do ... end` block (the closure keeps it as an upvalue), and run the
   compile probe after every RoundUI edit.
+  **Offline, compile at `-O0`** (2026-09-24): `luau-compile`'s default `-O1`
+  folds constant locals and passes scripts Studio refuses; ZyntraMonetization
+  failed the push probe that way. `tools/tests/test_studio_compile_limits.py`
+  checks every mirrored script at `-O0` and prints the remaining headroom
+  (ZyntraMonetization: 6 after that fix). New helpers go on an existing table,
+  not new top-level locals.
 - **Flashlight beam numbers live in `ReplicatedStorage.FlashlightProfiles`**
   (`Own`, `Mount`, `Mate`, `Spectate` x `BASE` / `L3` / `L3_BLACKOUT`). The sets
   differ on purpose (they are what each script carried); the double-render is

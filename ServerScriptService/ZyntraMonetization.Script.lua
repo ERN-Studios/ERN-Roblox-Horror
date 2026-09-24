@@ -487,18 +487,18 @@ function tokenEarner.latched(player, key, seq)
 	local tier = Config.TokenEarner.Tier(owns)
 	if tier > published then player:SetAttribute("ZyntraTokenEarnerMultiplier", tier) end
 end
-local function earnerSpan(bucket)
+function tokenEarner.span(bucket)
 	if bucket.Job ~= game.JobId then return 0, 0 end
 	return bucket.First, bucket.Last
 end
-local function earnerBucketMerge(buckets, bucket, open)
-	local first, last = earnerSpan(bucket)
+function tokenEarner.merge(buckets, bucket, open)
+	local first, last = tokenEarner.span(bucket)
 	for _, other in ipairs(buckets) do
 		local fits = true
 		for key in pairs(Config.TokenEarner.Passes) do
 			if (other.Unowned[key] == true) ~= (bucket.Unowned[key] == true) then fits = false break end
 		end
-		local otherFirst, otherLast = earnerSpan(other)
+		local otherFirst, otherLast = tokenEarner.span(other)
 		local lo, hi = math.min(first, otherFirst), math.max(last, otherLast)
 		for seq in pairs(open) do
 			if seq > lo and seq < hi then fits = false break end
@@ -513,19 +513,19 @@ local function earnerBucketMerge(buckets, bucket, open)
 	end
 	table.insert(buckets, bucket)
 end
-local function earnerBucketCompact(state, open)
+function tokenEarner.compact(state, open)
 	local merged = {}
-	for _, bucket in ipairs(state.Pending) do earnerBucketMerge(merged, bucket, open) end
+	for _, bucket in ipairs(state.Pending) do tokenEarner.merge(merged, bucket, open) end
 	state.Pending = merged
 end
 -- Adds every newer not-owned proof to the buckets whose earnings all predate
 -- it, and re-merges only if it did (a transform that reports no change must
 -- not have changed anything). With `dryRun` it only answers whether a proof
 -- is new.
-local function earnerBucketMark(state, proof, dryRun)
+function tokenEarner.mark(state, proof, dryRun)
 	local changed = false
 	for _, bucket in ipairs(state.Pending) do
-		local _, last = earnerSpan(bucket)
+		local _, last = tokenEarner.span(bucket)
 		for key, seq in pairs(proof.Seen) do
 			if not bucket.Unowned[key] and last < seq then
 				if dryRun then return true end
@@ -533,7 +533,7 @@ local function earnerBucketMark(state, proof, dryRun)
 			end
 		end
 	end
-	if changed then earnerBucketCompact(state, proof.Open) end
+	if changed then tokenEarner.compact(state, proof.Open) end
 	return changed
 end
 -- Runs inside every transform, so it never merges (it cannot see reads in
@@ -565,19 +565,19 @@ end
 function tokenEarner.defer(data, earned, seq, proof)
 	earned = math.floor(earned)
 	if earned < 1 then return false end
-	if not earnerBucketMark(data.TokenEarner, proof) then earnerBucketCompact(data.TokenEarner, proof.Open) end
+	if not tokenEarner.mark(data.TokenEarner, proof) then tokenEarner.compact(data.TokenEarner, proof.Open) end
 	local unowned = {}
 	for key, seen in pairs(proof.Seen) do
 		if seen > seq then unowned[key] = true end
 	end
-	earnerBucketMerge(data.TokenEarner.Pending,
+	tokenEarner.merge(data.TokenEarner.Pending,
 		{Earned = earned, Unowned = unowned, Job = game.JobId, First = seq, Last = seq}, proof.Open)
 	return true
 end
 -- A read that began after these earnings and has not answered may still prove
 -- a pass not owned for them, whatever a newer refresh has already said.
-local function earnerBucketWaits(bucket, proof)
-	local _, last = earnerSpan(bucket)
+function tokenEarner.waits(bucket, proof)
+	local _, last = tokenEarner.span(bucket)
 	for seq in pairs(proof.Open) do
 		if seq > last then return true end
 	end
@@ -587,10 +587,10 @@ end
 -- complete (all six definitive) ownership answer can pay.
 function tokenEarner.owed(data, snapshot, proof)
 	local state = data.TokenEarner
-	if earnerBucketMark(state, proof, true) then return true end
+	if tokenEarner.mark(state, proof, true) then return true end
 	if not snapshot.Owns then return false end
 	for _, bucket in ipairs(state.Pending) do
-		if not earnerBucketWaits(bucket, proof) then return true end
+		if not tokenEarner.waits(bucket, proof) then return true end
 	end
 	return false
 end
@@ -598,11 +598,11 @@ end
 -- pays them is what makes a lost-response retry pay nothing.
 function tokenEarner.apply(data, snapshot, proof)
 	local state = data.TokenEarner
-	local changed, paid = earnerBucketMark(state, proof), 0
+	local changed, paid = tokenEarner.mark(state, proof), 0
 	if snapshot.Owns then
 		local waiting = {}
 		for _, bucket in ipairs(state.Pending) do
-			if earnerBucketWaits(bucket, proof) then
+			if tokenEarner.waits(bucket, proof) then
 				table.insert(waiting, bucket)
 			else
 				local owned = {}
@@ -2299,12 +2299,12 @@ end
 -- paying Supporter their tag, their pickers and their grant until they rejoined.
 -- Retry the throw a few times, and answer nil -- NOT false -- when Roblox never
 -- answered at all, so a caller can tell "does not own" from "do not know".
-local PASS_RETRY_DELAYS = {0, 1, 3}
+-- (Retry delays live inside: this chunk sits near Luau's 200-local limit.)
 local function ownsPass(player, pass)
 	if RunService:IsStudio() and Config.Studio.GrantAllPasses then return true end
 	if not pass or tonumber(pass.Id) == nil or pass.Id <= 0 then return false end
 	local lastError
-	for _, delaySeconds in ipairs(PASS_RETRY_DELAYS) do
+	for _, delaySeconds in ipairs({0, 1, 3}) do
 		if delaySeconds > 0 then task.wait(delaySeconds) end
 		if not player.Parent then return nil end
 		local ok, result = pcall(MarketplaceService.UserOwnsGamePassAsync, MarketplaceService, player.UserId, pass.Id)
@@ -2327,8 +2327,6 @@ local passReadFailed = setmetatable({}, { __mode = "k" })
 -- How many of those re-checks a player has already been given. The cap is what
 -- stops a MarketplaceService outage becoming a permanent poll.
 local passRechecks = setmetatable({}, { __mode = "k" })
-local PASS_RECHECK_DELAY = 20
-local PASS_RECHECK_LIMIT = 3
 
 local function passOwnership(player, key, pass)
 	-- Owner-authorized permanent in-experience entitlement. Does not grant other passes.
@@ -2506,6 +2504,7 @@ local function refreshPasses(player)
 	-- re-check is exactly the one the client refuses to send -- and the Supporter
 	-- pass has no such action at all. Re-ask in the background, a few times, then
 	-- stop. A successful pass clears passReadFailed above and schedules no more.
+	local PASS_RECHECK_DELAY, PASS_RECHECK_LIMIT = 20, 3
 	local rechecks = passRechecks[player] or 0
 	if passReadFailed[player] and rechecks < PASS_RECHECK_LIMIT then
 		passRechecks[player] = rechecks + 1

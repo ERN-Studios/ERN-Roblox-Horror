@@ -50,7 +50,13 @@ These were written by a Claude CLI session **without Studio MCP**. Nothing below
 | | sha256 |
 | --- | --- |
 | Live Studio baseline (`studioSha256Before`) — `pull_source_from_studio.py --audit` at session start: 182/182 scripts matched | `541ce85f582c9762c2f34f422f90ef954ea027ad6ed83e44c3882c93db9ea63b` |
-| Repo target (manifest `sha256`, committed LF blob) | `b4c29497074d901f2a8206f22f12d14d2ef2eb70b7fa487055ef9676cf0a6c99` |
+| Repo target (manifest `sha256`, committed LF blob) | `b3db78879c9e95af265544deac915341dd0f1dc7c2cae870045d7e786c8fa350` |
+
+**Compile-limit incident, corrected.** The first target, `b4c29497…`, landed through the CAS push and then **failed the Studio compile probe**. Studio's error was `Out of local registers when trying to allocate salesImportReadback: exceeded limit 200`, and Codex reverted the script to the pre-push source.
+- **Cause:** the patch added five top-level helper locals; at Studio's count the script had room for only three.
+- **Why offline missed it:** `luau-compile` defaults to `-O1`, which folds constant locals so they don't count toward the limit. `-O0` reproduces Studio's error exactly, at line 4460.
+- **Fix:** the helpers are now `tokenEarner.span/merge/compact/mark/waits` table fields, which restores the pre-change headroom of 3 locals. The pass-retry constants (`{0, 1, 3}` and the 20 s × 3 re-check) are also now declared inside `ownsPass`/`refreshPasses`, with the same values, for 6. `salesImportReadback` and the sales import are untouched.
+- **Guard:** `tools/tests/test_studio_compile_limits.py` compiles all 182 manifest scripts at `-O0`, inside the probe's `return function() … end` wrapper. It proves on a synthetic chunk that `-O0` catches a limit `-O1` misses, and prints the remaining headroom for ZyntraMonetization (6) and RoundUI (11). It exits 1 on `b4c29497…`.
 
 A recheck at the end could not run because Studio was in Play mode (`Edit datamodel is not available in Play mode`). Before applying: stop Play, run `python tools/push_repo_to_studio.py --audit --file ServerScriptService/ZyntraMonetization.Script.lua`, and expect `ready`. A `conflict` means someone edited the script in Studio since then. Merge that edit; never `--overwrite-conflicts`.
 
@@ -72,7 +78,7 @@ A recheck at the end could not run because Studio was in Play mode (`Edit datamo
 - `test_dev_suit_revocation.py` 34 (new).
 - `test_friend_boost.py` 329: the stub gains `stamp` and a `known` return.
 - Daily rewards 401, feedback gift 26, first login 33, lucky wheel 622, purchase alerts 97, rail dots 20, speed potion 498, token grants 243, upgrade cost 15, skins 31, hazmat cleanup 12.
-- `luau-compile` is clean.
+- `test_studio_compile_limits.py` compiles all 182 scripts at `-O0`, wrapped like the probe. The earlier `-O1`-only check was NOT enough (see the incident above).
 - The three stale harnesses fail with the same messages as at HEAD.
 
 **Native validations still required (none done):**
