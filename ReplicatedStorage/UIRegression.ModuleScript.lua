@@ -1108,8 +1108,8 @@ function UIRegression.Scenarios(): {any}
 	return {
 		{Name = "gameplay", Setup = resetScenario},
 		{Name = "briefing", Requires = {
-			"CommandSubtitles", "DispatchMuteButton", "DispatchStopButton",
-		}, TouchTargets = {"DispatchMuteButton", "DispatchStopButton"},
+			"CommandSubtitles", "DispatchStopButton",
+		}, Forbids = {"DispatchMuteButton"}, TouchTargets = {"DispatchStopButton"},
 			TextFitTargets = {"CommandSubtitles.Subtitle"}, Setup = function()
 			resetScenario(true)
 			local guide = findGui("LevelOneGuideGui")
@@ -1118,9 +1118,9 @@ function UIRegression.Scenarios(): {any}
 			setLongDispatchCue()
 		end},
 		{Name = "briefing-plus-level1-hud", Requires = {
-			"CommandSubtitles", "DispatchMuteButton", "DispatchStopButton",
-		}, TouchTargets = {"DispatchMuteButton", "DispatchStopButton"},
-			Forbids = {"Level1Objectives", "ExitEnergyDetector"}, Setup = function()
+			"CommandSubtitles", "DispatchStopButton",
+		}, Forbids = {"DispatchMuteButton"}, TouchTargets = {"DispatchStopButton"},
+			Setup = function()
 			resetScenario(true)
 			revealGui("PuzzleGui")
 			local guide = findGui("LevelOneGuideGui")
@@ -1128,12 +1128,11 @@ function UIRegression.Scenarios(): {any}
 			player:SetAttribute("UIRegressionForceDispatchActive", true)
 		end},
 		{Name = "briefing-plus-level2-hud", Requires = {
-			"CommandSubtitles", "DispatchMuteButton", "DispatchStopButton",
-		}, TouchTargets = {"DispatchMuteButton", "DispatchStopButton"},
-			Forbids = {"Level2ObjectiveGui", "Level2AlertGui"}, Setup = function()
+			"CommandSubtitles", "DispatchStopButton", "Level2ObjectiveGui",
+		}, Forbids = {"DispatchMuteButton"}, TouchTargets = {"DispatchStopButton"},
+			Setup = function()
 			resetScenario(true)
 			revealGui("Level2ObjectiveGui")
-			revealGui("Level2AlertGui")
 			local guide = findGui("LevelOneGuideGui")
 			if guide then (guide :: ScreenGui).Enabled = true end
 			player:SetAttribute("UIRegressionForceDispatchActive", true)
@@ -1252,9 +1251,9 @@ function UIRegression.Scenarios(): {any}
 			end)
 		end},
 		{Name = "briefing-plus-level3-reader", Requires = {
-			"CommandSubtitles", "DispatchMuteButton", "DispatchStopButton",
-		}, TouchTargets = {"DispatchMuteButton", "DispatchStopButton"},
-			Forbids = {"ReaderPanel", "ReaderRestore"}, Setup = function()
+			"CommandSubtitles", "DispatchStopButton", "ReaderPanel",
+		}, Forbids = {"DispatchMuteButton", "ReaderRestore"},
+			TouchTargets = {"DispatchStopButton"}, Setup = function()
 			resetScenario(true)
 			player:SetAttribute("UIRegressionForceLevel3Reader", true)
 			player:SetAttribute("UIRegressionForceReaderHidden", false)
@@ -2148,6 +2147,7 @@ local BORROWED_PLAYER_ATTRIBUTES = {
 -- harness wrote would be demanding that production stop deriving them.
 local DERIVED_PLAYER_ATTRIBUTES = {
 	"Level2AlertOwnsBand", "LevelOneGuideObjectivesOpen", "DispatchBriefingOpen",
+	"DispatchTextActive", "ZyntraDispatchClientActive",
 	"TouchMovementSuppressed",
 	-- RoundUI publishes both of these from the party-down window itself, and
 	-- ZyntraStore reads them to stand its own re-entry modal down. They are NOT
@@ -2204,7 +2204,9 @@ Fit.PretendDispatchLive = false
 function Fit.realDispatchLive(): boolean
 	if Fit.PretendDispatchLive then return true end
 	local player = Players.LocalPlayer
-	if player:GetAttribute("DispatchBriefingOpen") ~= true then return false end
+	-- The text caption is intentionally non-modal. DispatchBriefingOpen stays
+	-- false even while a real briefing continues behind a store or queue.
+	if player:GetAttribute("DispatchTextActive") ~= true then return false end
 	return player:GetAttribute("UIRegressionForceDispatchActive") == nil
 end
 
@@ -2219,7 +2221,7 @@ function Fit.awaitQuietDispatch(): (boolean, string?)
 				"a real dispatch briefing has been playing for the whole %ds this lane"
 				.. " is willing to wait, and this lane cannot run without interrupting"
 				.. " it. Nothing was borrowed, forced or measured. Run it again once the"
-				.. " briefing has finished, or clear DispatchBriefingOpen if it is stuck.",
+				.. " briefing has finished, or inspect DispatchTextActive if it is stuck.",
 				Fit.LiveDispatchWait)
 		end
 		Fit.beat()
@@ -2303,7 +2305,7 @@ function Fit.borrow()
 	-- snapshot (Fit.awaitQuietDispatch), so this reads false whenever a lane is
 	-- behaving; when it does not, residue says a transition happened instead of
 	-- quietly forgiving the widgets that moved.
-	saved.DispatchOpen = Players.LocalPlayer:GetAttribute("DispatchBriefingOpen") == true
+	saved.DispatchOpen = Players.LocalPlayer:GetAttribute("DispatchTextActive") == true
 	-- The live dispatch caption. setLongDispatchCue overwrites it in place, and
 	-- nothing put it back -- so every run left the player's briefing showing a
 	-- test string until the next real cue.
@@ -2425,7 +2427,7 @@ function Fit.residue(saved): ({string}, string?)
 	-- transition happened so the reader knows which way to look.
 	local note: string? = nil
 	if (saved.DispatchOpen == true)
-		~= (player:GetAttribute("DispatchBriefingOpen") == true) then
+		~= (player:GetAttribute("DispatchTextActive") == true) then
 		note = "      NOTE a real dispatch briefing "
 			.. (saved.DispatchOpen == true and "ENDED" or "STARTED")
 			.. " while this matrix was running. Nothing below is excused for it; the"
@@ -3961,22 +3963,16 @@ local BRIEFING_STRESS_CORPUS = {
 	},
 }
 
--- Every caption the two readouts can actually print, from RoundUI's
--- `dispatchAudio.refresh` (L128-165). "SAVING" is omitted deliberately: it is
--- strictly shorter than the four below and cannot fail a width they pass. The
--- "[M]" / "[N]" prefixes come from UIDevice.Binding and are never emitted on a
--- touch form factor, so they are prepended only on the desktop rows.
+-- Speech is disabled for now, so MUTE is deliberately absent from the input
+-- stack. Keep its instance for a future voice release, but measure only the
+-- visible dismiss control and the caption it actually prints.
 local BRIEFING_CONTROL_CAPTIONS = {
-	DispatchMuteButton = {
-		Binding = "[M]  ",
-		Captions = {"MUTE DISPATCH", "UNMUTE DISPATCH", "LOADING DISPATCH", "DISPATCH OFFLINE"},
-	},
 	DispatchStopButton = {
 		Binding = "[N]  ",
-		Captions = {"STOP DISPATCH"},
+		Captions = {"SKIP BRIEF"},
 	},
 }
-local BRIEFING_CONTROL_ORDER = {"DispatchMuteButton", "DispatchStopButton"}
+local BRIEFING_CONTROL_ORDER = {"DispatchStopButton"}
 
 -- The rows of MODAL_DEVICES this matrix sweeps: every PORTRAIT row, plus the
 -- four short landscape shapes where the panel has the least vertical room and
@@ -4069,13 +4065,14 @@ function Fit.bodyBriefingFitMatrix(): (string, number)
 	for _, name in ipairs(BRIEFING_CONTROL_ORDER) do
 		buttons[name] = controls and controls:FindFirstChild(name)
 	end
+	local mute = controls and controls:FindFirstChild("DispatchMuteButton")
 	if not (guide and panel and subtitle and controls and listLayout
-		and buttons.DispatchMuteButton and buttons.DispatchStopButton) then
+		and mute and buttons.DispatchStopButton) then
 		record(false, "the briefing panel exists to be measured", string.format(
 			"guide=%s panel=%s subtitle=%s controls=%s layout=%s mute=%s stop=%s",
 			tostring(guide ~= nil), tostring(panel ~= nil), tostring(subtitle ~= nil),
 			tostring(controls ~= nil), tostring(listLayout ~= nil),
-			tostring(buttons.DispatchMuteButton ~= nil),
+			tostring(mute ~= nil),
 			tostring(buttons.DispatchStopButton ~= nil)))
 		table.insert(report, string.format("TOTAL: %d checks, %d failed", checks, failures))
 		return table.concat(report, "\n"), failures
@@ -4288,7 +4285,7 @@ function Fit.bodyBriefingFitMatrix(): (string, number)
 			-- pixel of penetration does not; see analyticalOverlap above.
 			record(haveSubtitle and haveControls
 				and not analyticalOverlap(subtitleRect, controlsRect),
-				device.Name .. ": the Subtitle box does not overlap the MUTE/STOP row",
+				device.Name .. ": the Subtitle box does not overlap the SKIP row",
 				(haveSubtitle and haveControls) and string.format(
 					"subtitle (%.0f,%.0f)-(%.0f,%.0f) vs controls (%.0f,%.0f)-(%.0f,%.0f)",
 					subtitleRect.Left, subtitleRect.Top, subtitleRect.Right, subtitleRect.Bottom,
@@ -4322,23 +4319,28 @@ function Fit.bodyBriefingFitMatrix(): (string, number)
 						string.format("%.0fx%.0f", width, height))
 				end
 			end
-			local padding = haveControls and (listLayout.Padding.Offset
-				+ listLayout.Padding.Scale
-					* (horizontal and controlsRect.Width or controlsRect.Height)) or 0
-			local mute, stop = sizes.DispatchMuteButton, sizes.DispatchStopButton
-			local along = horizontal and (mute.Width + stop.Width + padding)
-				or (mute.Height + stop.Height + padding)
-			local across = horizontal and math.max(mute.Height, stop.Height)
-				or math.max(mute.Width, stop.Width)
+			local stop = sizes.DispatchStopButton
+			local along = horizontal and stop.Width or stop.Height
+			local across = horizontal and stop.Height or stop.Width
 			local alongLimit = haveControls
 				and (horizontal and controlsRect.Width or controlsRect.Height) or 0
 			local acrossLimit = haveControls
 				and (horizontal and controlsRect.Height or controlsRect.Width) or 0
 			record(haveControls and along <= alongLimit + 1 and across <= acrossLimit + 1,
-				device.Name .. ": both readouts and the list padding fit inside BriefingControls",
-				string.format("%s fill: %.0f + %.0f padding along %.0f, %.0f across %.0f",
+				device.Name .. ": the visible SKIP control fits inside BriefingControls",
+				string.format("%s fill: %.0f along %.0f, %.0f across %.0f",
 					horizontal and "horizontal" or "vertical",
-					along - padding, padding, alongLimit, across, acrossLimit))
+					along, alongLimit, across, acrossLimit))
+			record(mute.Visible == false and mute.Active == false
+				and buttons.DispatchStopButton.Visible == true
+				and buttons.DispatchStopButton.Active == true,
+				device.Name .. ": silent briefing hides MUTE and leaves SKIP actionable",
+				string.format("mute=%s/%s skip=%s/%s", tostring(mute.Visible),
+					tostring(mute.Active), tostring(buttons.DispatchStopButton.Visible),
+					tostring(buttons.DispatchStopButton.Active)))
+			record(buttons.DispatchStopButton.Text:find("SKIP BRIEF", 1, true) ~= nil,
+				device.Name .. ": the remaining control names its text-only action",
+				buttons.DispatchStopButton.Text)
 
 			-- Every caption the readouts can print, at the TextSize this row's
 			-- layout pass just wrote. A readout whose word does not fit its own
@@ -4565,10 +4567,14 @@ function Fit.bodyBriefingExclusionMatrix(): (string, number)
 	local previousShade = shade.Visible
 	local previousForce = player:GetAttribute("UIRegressionForceDispatchActive")
 	local previousSuppress = player:GetAttribute("UIRegressionSuppressDispatch")
+	local previousObjectivesOpen = player:GetAttribute("LevelOneGuideObjectivesOpen")
+	local previousAlertOwnsBand = player:GetAttribute("Level2AlertOwnsBand")
 	local previousTerminal = terminal.Visible
 	local previousDerived = {
 		QueueModalOpen = player:GetAttribute("QueueModalOpen"),
 		DispatchBriefingOpen = player:GetAttribute("DispatchBriefingOpen"),
+		DispatchTextActive = player:GetAttribute("DispatchTextActive"),
+		ZyntraDispatchClientActive = player:GetAttribute("ZyntraDispatchClientActive"),
 		ZyntraStoreOpen = player:GetAttribute("ZyntraStoreOpen"),
 		DevPhoneOpen = player:GetAttribute("DevPhoneOpen"),
 		MovementSuppressed = UIDevice.TouchMovementSuppressed(),
@@ -4605,19 +4611,19 @@ function Fit.bodyBriefingExclusionMatrix(): (string, number)
 	-- asserted below for every row that draws both.
 	local STATES = {
 		{Label = "idle", Force = false, Shade = false,
-			Brief = false, Subs = false, Opener = true, Transmission = false},
+			Subs = false, Opener = true, Transmission = false},
 		{Label = "briefing only", Force = true, Shade = false,
-			Brief = true, Subs = true, Opener = true, Transmission = true},
+			Subs = true, Opener = true, Transmission = true},
 		{Label = "modal opened over a live briefing", Force = true, Shade = true,
-			Brief = false, Subs = false, Opener = false, Transmission = true},
+			Subs = false, Opener = false, Transmission = true},
 		{Label = "modal closed, briefing still running", Force = true, Shade = false,
-			Brief = true, Subs = true, Opener = true, Transmission = true},
+			Subs = true, Opener = true, Transmission = true},
 		{Label = "briefing cleared", Force = false, Shade = false,
-			Brief = false, Subs = false, Opener = true, Transmission = false},
+			Subs = false, Opener = true, Transmission = false},
 		{Label = "modal only", Force = false, Shade = true,
-			Brief = false, Subs = false, Opener = false, Transmission = false},
+			Subs = false, Opener = false, Transmission = false},
 		{Label = "briefing raised while the modal is up", Force = true, Shade = true,
-			Brief = false, Subs = false, Opener = false, Transmission = true},
+			Subs = false, Opener = false, Transmission = true},
 	}
 
 	local ran, runError = pcall(function()
@@ -4670,19 +4676,18 @@ function Fit.bodyBriefingExclusionMatrix(): (string, number)
 				task.wait(.3)
 				local label = device.Name .. " / " .. state.Label
 
-				record(player:GetAttribute("DispatchBriefingOpen") == state.Brief
+				record(player:GetAttribute("DispatchBriefingOpen") == false
 					and player:GetAttribute("QueueModalOpen") == state.Shade,
-					label .. ": the two published flags say what the screen is doing",
-					string.format("brief=%s (want %s), modal=%s (want %s)",
+					label .. ": passive text never claims a blocking briefing flag",
+					string.format("brief=%s (want false), modal=%s (want %s)",
 						tostring(player:GetAttribute("DispatchBriefingOpen")),
-						tostring(state.Brief),
 						tostring(player:GetAttribute("QueueModalOpen")),
 						tostring(state.Shade)))
 
 				-- The flag and the pixels come from ONE expression; this is what
 				-- makes that worth asserting rather than assuming.
 				record(subtitles.Visible == state.Subs,
-					label .. ": the briefing panel is drawn exactly when the flag says so",
+					label .. ": captions yield to the queue and return afterwards",
 					string.format("Visible=%s, want %s", tostring(subtitles.Visible),
 						tostring(state.Subs)))
 
@@ -4722,13 +4727,13 @@ function Fit.bodyBriefingExclusionMatrix(): (string, number)
 						string.format("%.0f px^2 at %s", openerOverlap, openerPair))
 				end
 
-				record(
-					(player:GetAttribute("ZyntraDispatchClientActive") == true)
+				record(player:GetAttribute("ZyntraDispatchClientActive") == false
+					and (player:GetAttribute("DispatchTextActive") == true)
 						== state.Transmission,
-					label .. ": the transmission itself is untouched -- suppressing the"
-					.. " panel must never end the briefing",
-					string.format("ZyntraDispatchClientActive=%s, want %s",
+					label .. ": text activity persists behind a modal without hiding other HUDs",
+					string.format("hudGate=%s textActive=%s, want %s",
 						tostring(player:GetAttribute("ZyntraDispatchClientActive")),
+						tostring(player:GetAttribute("DispatchTextActive")),
 						tostring(state.Transmission)))
 
 				-- Geometry, descendants included: the overlap that shipped was
@@ -4761,6 +4766,36 @@ function Fit.bodyBriefingExclusionMatrix(): (string, number)
 					.. " the queue modal",
 					string.format("%.0f px^2 at %s", worst, worstPair))
 			end
+		end
+
+		-- Full objective and alert panels own their own screen region. Text must
+		-- pause behind each one, then return without claiming the old HUD gate.
+		player:SetAttribute("UIRegressionForceDispatchActive", true)
+		shade.Visible = false
+		storeProbe:Invoke("close")
+		task.wait(0.25)
+		for _, priority in ipairs({
+			{Name = "Level 1 full objectives", Attribute = "LevelOneGuideObjectivesOpen"},
+			{Name = "Level 2 alert", Attribute = "Level2AlertOwnsBand"},
+		}) do
+			record(subtitles.Visible == true,
+				priority.Name .. ": caption is present before the priority panel",
+				tostring(subtitles.Visible))
+			player:SetAttribute(priority.Attribute, true)
+			task.wait(0.2)
+			record(subtitles.Visible == false
+				and player:GetAttribute("DispatchTextActive") == true
+				and player:GetAttribute("ZyntraDispatchClientActive") == false,
+				priority.Name .. ": text yields without ending or blocking the briefing",
+				string.format("caption=%s text=%s hudGate=%s",
+					tostring(subtitles.Visible),
+					tostring(player:GetAttribute("DispatchTextActive")),
+					tostring(player:GetAttribute("ZyntraDispatchClientActive"))))
+			player:SetAttribute(priority.Attribute, nil)
+			task.wait(0.2)
+			record(subtitles.Visible == true,
+				priority.Name .. ": the same text briefing returns afterward",
+				tostring(subtitles.Visible))
 		end
 
 		-- ------------------------------------------------------------------
@@ -4796,12 +4831,13 @@ function Fit.bodyBriefingExclusionMatrix(): (string, number)
 
 		player:SetAttribute("UIRegressionForceDispatchActive", true)
 		task.wait(.3)
-		record(player:GetAttribute("ZyntraDispatchClientActive") == true
-			and player:GetAttribute("DispatchBriefingOpen") ~= true
+		record(player:GetAttribute("DispatchTextActive") == true
+			and player:GetAttribute("ZyntraDispatchClientActive") == false
+			and player:GetAttribute("DispatchBriefingOpen") == false
 			and subtitles.Visible == false and terminal.Visible == true,
-			"terminal already open: RoundUI keeps transmission alive but yields its panel",
-			string.format("active=%s brief=%s subtitles=%s terminal=%s",
-				tostring(player:GetAttribute("ZyntraDispatchClientActive")),
+			"terminal already open: text transmission continues behind it without a HUD gate",
+			string.format("textActive=%s brief=%s subtitles=%s terminal=%s",
+				tostring(player:GetAttribute("DispatchTextActive")),
 				tostring(player:GetAttribute("DispatchBriefingOpen")),
 				tostring(subtitles.Visible), tostring(terminal.Visible)))
 		record(UIDevice.TouchMovementSuppressed() == true,
@@ -4811,7 +4847,9 @@ function Fit.bodyBriefingExclusionMatrix(): (string, number)
 		storeProbe:Invoke("close")
 		task.wait(.3)
 		record(terminal.Visible == false and player:GetAttribute("ZyntraStoreOpen") ~= true
-			and player:GetAttribute("DispatchBriefingOpen") == true and subtitles.Visible == true,
+			and player:GetAttribute("DispatchBriefingOpen") == false
+			and player:GetAttribute("DispatchTextActive") == true
+			and subtitles.Visible == true,
 			"closing the terminal restores the still-running briefing",
 				string.format("store=%s brief=%s subtitles=%s",
 					tostring(player:GetAttribute("ZyntraStoreOpen")),
@@ -4829,13 +4867,14 @@ function Fit.bodyBriefingExclusionMatrix(): (string, number)
 		record(toggleDuringBrief == true and kioskDuringBrief == true
 			and terminal.Visible == true and player:GetAttribute("ZyntraStoreOpen") == true
 			and subtitles.Visible == false
-			and player:GetAttribute("ZyntraDispatchClientActive") == true,
+			and player:GetAttribute("ZyntraDispatchClientActive") == false
+			and player:GetAttribute("DispatchTextActive") == true,
 			"lobby briefing already open: both toggle and kiosk open the terminal, the panel"
 			.. " yields and the transmission keeps running (d0ff99e)",
-			string.format("toggle=%s kiosk=%s Visible=%s subtitles=%s active=%s",
+			string.format("toggle=%s kiosk=%s Visible=%s subtitles=%s textActive=%s",
 				tostring(toggleDuringBrief), tostring(kioskDuringBrief),
 				tostring(terminal.Visible), tostring(subtitles.Visible),
-				tostring(player:GetAttribute("ZyntraDispatchClientActive"))))
+				tostring(player:GetAttribute("DispatchTextActive"))))
 		storeProbe:Invoke("close")
 		task.wait(.3)
 		record(terminal.Visible == false and subtitles.Visible == true,
@@ -4999,6 +5038,8 @@ function Fit.bodyBriefingExclusionMatrix(): (string, number)
 	end
 	player:SetAttribute("UIRegressionForceDispatchActive", previousForce)
 	player:SetAttribute("UIRegressionSuppressDispatch", previousSuppress)
+	player:SetAttribute("LevelOneGuideObjectivesOpen", previousObjectivesOpen)
+	player:SetAttribute("Level2AlertOwnsBand", previousAlertOwnsBand)
 	-- Let every deferred attribute listener, UIDevice refresh, caption refresh and
 	-- movement ControlModule call settle before judging the cleanup.
 	task.wait(0.55)
@@ -5012,14 +5053,18 @@ function Fit.bodyBriefingExclusionMatrix(): (string, number)
 		and terminal.Visible == previousTerminal
 		and player:GetAttribute("QueueModalOpen") == previousDerived.QueueModalOpen
 		and player:GetAttribute("DispatchBriefingOpen") == previousDerived.DispatchBriefingOpen
+		and player:GetAttribute("DispatchTextActive") == previousDerived.DispatchTextActive
+		and player:GetAttribute("ZyntraDispatchClientActive") == previousDerived.ZyntraDispatchClientActive
 		and player:GetAttribute("ZyntraStoreOpen") == previousDerived.ZyntraStoreOpen
 		and player:GetAttribute("DevPhoneOpen") == previousDerived.DevPhoneOpen,
 		"cleanup restored the real modal sources and every derived modal flag",
-		string.format("shade=%s/%s terminal=%s/%s queue=%s/%s brief=%s/%s store=%s/%s dev=%s/%s",
+		string.format("shade=%s/%s terminal=%s/%s queue=%s/%s brief=%s/%s text=%s/%s hudGate=%s/%s store=%s/%s dev=%s/%s",
 			tostring(shade.Visible), tostring(previousShade),
 			tostring(terminal.Visible), tostring(previousTerminal),
 			tostring(player:GetAttribute("QueueModalOpen")), tostring(previousDerived.QueueModalOpen),
 			tostring(player:GetAttribute("DispatchBriefingOpen")), tostring(previousDerived.DispatchBriefingOpen),
+			tostring(player:GetAttribute("DispatchTextActive")), tostring(previousDerived.DispatchTextActive),
+			tostring(player:GetAttribute("ZyntraDispatchClientActive")), tostring(previousDerived.ZyntraDispatchClientActive),
 			tostring(player:GetAttribute("ZyntraStoreOpen")), tostring(previousDerived.ZyntraStoreOpen),
 			tostring(player:GetAttribute("DevPhoneOpen")), tostring(previousDerived.DevPhoneOpen)))
 	record(UIDevice.TouchMovementSuppressed() == previousDerived.MovementSuppressed,
@@ -7358,33 +7403,31 @@ function Fit.bodyObjectiveCornerMatrix(): (string, number)
 					tostring(livePanelObject and (livePanelObject :: any).Visible),
 					tostring(restoreObject and (restoreObject :: any).Visible)))
 
-			-- ---- against the dispatch briefing ---------------------------
+			-- ---- passive caption alongside the reader -------------------
 			player:SetAttribute("UIRegressionForceDispatchActive", true)
 			task.wait(0.35)
-			-- The QUESTION is whether a rectangle is on screen, not which mechanism
-			-- put it away. Level 2 disables its whole ScreenGui on dispatch; the
-			-- Level 3 reader keeps its gui enabled and hides the panel from
-			-- isActive(); PuzzleUI hides its children. Asserting `Enabled` tested
-			-- one of the three implementations and failed the other two while the
-			-- screen was, in fact, clear.
-			local onScreen = {}
-			for _, spec in ipairs({
-				{"PuzzleGui", "Level1Objectives"},
-				{"PuzzleGui", "ExitEnergyDetector"},
-				{"Level2ObjectiveGui", "Level2ObjectivePanel"},
-				{"Level3ReaderGui", "ReaderPanel"},
-				{"Level3ReaderGui", "ReaderRestore"},
-			}) do
-				local screen = findGui(spec[1])
-				local object = screen and screen:FindFirstChild(spec[2], true)
-				if object and (screen :: ScreenGui).Enabled and (object :: any).Visible then
-					table.insert(onScreen, spec[2])
-				end
-			end
-			record(#onScreen == 0,
-				device.Name .. ": every objective readout yields to a live dispatch briefing,"
-				.. " so the two can never share the corner",
-				table.concat(onScreen, ", "))
+			local guide = findGui("LevelOneGuideGui")
+			local caption = guide and guide:FindFirstChild("CommandSubtitles")
+			record(player:GetAttribute("DispatchTextActive") == true
+				and player:GetAttribute("ZyntraDispatchClientActive") == false
+				and player:GetAttribute("DispatchBriefingOpen") == false,
+				device.Name .. ": text remains active without suppressing objective HUDs",
+				string.format("text=%s hudGate=%s briefGate=%s",
+					tostring(player:GetAttribute("DispatchTextActive")),
+					tostring(player:GetAttribute("ZyntraDispatchClientActive")),
+					tostring(player:GetAttribute("DispatchBriefingOpen"))))
+			record(livePanelObject ~= nil and (livePanelObject :: any).Visible == true
+				and caption ~= nil and (caption :: any).Visible == true,
+				device.Name .. ": Level 3 reader remains visible beside the text briefing",
+				string.format("reader=%s caption=%s",
+					tostring(livePanelObject and (livePanelObject :: any).Visible),
+					tostring(caption and (caption :: any).Visible)))
+			local readerRect = livePanelObject and Fit.live(livePanelObject)
+			local captionRect = caption and Fit.live(caption)
+			record(readerRect ~= nil and captionRect ~= nil
+				and not Fit.overlaps(readerRect, captionRect),
+				device.Name .. ": reader and caption occupy separate screen space",
+				string.format("reader %s caption %s", Fit.text(readerRect), Fit.text(captionRect)))
 			player:SetAttribute("UIRegressionForceDispatchActive", nil)
 			player:SetAttribute("UIRegressionForceLevel3Reader", nil)
 			player:SetAttribute("UIRegressionForceReaderHidden", nil)
@@ -7476,6 +7519,12 @@ function Fit.bodyDispatchCompactMatrix(): (string, number)
 			player:SetAttribute("UIRegressionForceDispatchActive", true)
 			setLongDispatchCue()
 			task.wait(0.4)
+			record(panel.Visible == true and stop.Visible == true and stop.Active == true
+				and mute.Visible == false and mute.Active == false,
+				device.Name .. ": text and SKIP are visible, MUTE cannot take input",
+				string.format("panel=%s skip=%s/%s mute=%s/%s",
+					tostring(panel.Visible), tostring(stop.Visible), tostring(stop.Active),
+					tostring(mute.Visible), tostring(mute.Active)))
 
 			local layout = UIDevice.Layout()
 			local viewport, insetY = device.Size, layout.Inset.Y
@@ -7688,7 +7737,7 @@ function Fit.bodyDispatchCompactMatrix(): (string, number)
 
 			-- A FIXED, INDEPENDENT ceiling for every touch row, so a row cannot
 			-- grow to fill a panel that grew.
-			for _, spec in ipairs({{"MUTE", mute}, {"STOP", stop}}) do
+			for _, spec in ipairs({{"SKIP", stop}}) do
 				local node = spec[2] :: any
 				local rowWidth = node.Size.X.Offset + node.Size.X.Scale * controlsRect.Width
 				local rowHeight = node.Size.Y.Offset + node.Size.Y.Scale * controlsRect.Height
@@ -7713,7 +7762,7 @@ function Fit.bodyDispatchCompactMatrix(): (string, number)
 					rule and string.format("%.2f", rule.Transparency) or "none"))
 
 			-- The two controls keep their targets whatever the panel gave up.
-			for _, spec in ipairs({{"MUTE", mute}, {"STOP", stop}}) do
+			for _, spec in ipairs({{"SKIP", stop}}) do
 				local node = spec[2] :: any
 				local width = node.Size.X.Offset + node.Size.X.Scale * controlsRect.Width
 				local height = node.Size.Y.Offset + node.Size.Y.Scale * controlsRect.Height
@@ -7724,7 +7773,7 @@ function Fit.bodyDispatchCompactMatrix(): (string, number)
 			end
 
 			record(not Fit.overlaps(subtitleRect, controlsRect),
-				device.Name .. ": the copy does not land on the MUTE/STOP row",
+				device.Name .. ": the copy does not land on the SKIP row",
 				string.format("copy %s vs row %s", Fit.text(subtitleRect), Fit.text(controlsRect)))
 			record(Fit.within(subtitleRect, panelRect, 1) and Fit.within(controlsRect, panelRect, 1),
 				device.Name .. ": and both stay inside the panel",
@@ -8681,7 +8730,7 @@ function Fit.bodyExclusionTimingMatrix(): (string, number)
 		local TRIALS = 6
 		local HEARTBEAT_BOUND = 2
 		for _, gate in ipairs({
-			{Name = "a dispatch briefing", Attribute = "ZyntraDispatchClientActive"},
+			{Name = "the legacy blocking-dispatch gate", Attribute = "ZyntraDispatchClientActive"},
 			{Name = "the Zyntra terminal", Attribute = "ZyntraStoreOpen"},
 			{Name = "the queue modal", Attribute = "QueueModalOpen"},
 			{Name = "Level 3 hiding", Attribute = "Level3_Hiding"},
@@ -8725,6 +8774,17 @@ function Fit.bodyExclusionTimingMatrix(): (string, number)
 				gate.Name .. ": ...and the reader recovers when it clears",
 				look())
 		end
+		-- A real text briefing never raises that legacy gate. Exercise the
+		-- production forced-transmission seam and keep the reader on screen.
+		player:SetAttribute("UIRegressionForceDispatchActive", true)
+		task.wait(0.25)
+		local passive = look()
+		record(player:GetAttribute("DispatchTextActive") == true
+			and player:GetAttribute("ZyntraDispatchClientActive") == false
+			and field(passive, "ReaderPanel") == "true/true",
+			"a passive text briefing does not close the Level 3 reader", passive)
+		player:SetAttribute("UIRegressionForceDispatchActive", nil)
+		task.wait(0.15)
 
 		-- DESKTOP still draws nothing when hidden, and R remains the only way back.
 		workspace:SetAttribute("ForceTouchUI", false)
