@@ -1,0 +1,3065 @@
+{
+  "date": "2026-08-31",
+  "requestedSeed": 101,
+  "resolvedSeed": 101,
+  "beforeInternalRouteSmoothing": [
+    {
+      "finalDistance": 121.36914825439453,
+      "requests": 1,
+      "reversals": 0,
+      "case": 1,
+      "arrived": false,
+      "to": 2,
+      "waiting": true,
+      "samples": [
+        {
+          "computing": true,
+          "index": 1,
+          "goalDistance": 172.1187286376953,
+          "t": 0.11342924999917159,
+          "x": -605.0714111328125,
+          "count": 0,
+          "z": -296.7375793457031,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": true,
+          "index": 1,
+          "goalDistance": 172.1187286376953,
+          "t": 0.6345354583318112,
+          "x": -605.0714111328125,
+          "count": 0,
+          "z": -296.7375793457031,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": true,
+          "index": 1,
+          "goalDistance": 172.1187286376953,
+          "t": 1.1438467083280557,
+          "x": -605.0714111328125,
+          "count": 0,
+          "z": -296.7375793457031,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": true,
+          "index": 1,
+          "goalDistance": 172.1187286376953,
+          "t": 1.6507535416676546,
+          "x": -605.0714111328125,
+          "count": 0,
+          "z": -296.7375793457031,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": true,
+          "index": 1,
+          "goalDistance": 172.1187286376953,
+          "t": 2.168080416660814,
+          "x": -605.0714111328125,
+          "count": 0,
+          "z": -296.7375793457031,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": true,
+          "index": 1,
+          "goalDistance": 172.1187286376953,
+          "t": 2.7116357083286857,
+          "x": -605.0714111328125,
+          "count": 0,
+          "z": -296.7375793457031,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 167.18304443359375,
+          "t": 3.217905791665544,
+          "x": -599.7281494140625,
+          "count": 1,
+          "z": -297.0549011230469,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 154.98731994628906,
+          "t": 3.7255084999997052,
+          "x": -587.5877685546875,
+          "count": 1,
+          "z": -297.77581787109375,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 142.77696228027344,
+          "t": 4.238112333332538,
+          "x": -575.3651733398438,
+          "count": 1,
+          "z": -298.5015869140625,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 130.71961975097656,
+          "t": 4.738472333330719,
+          "x": -563.3123168945312,
+          "count": 1,
+          "z": -299.2173767089844,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 5.239668249996612,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 5.784264499998244,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 6.2922544999964884,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 6.79732937499648,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 7.309537083332543,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 7.82300308332924,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 8.334582791663706,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 8.834914541665057,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 9.348959333328821,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 9.854499541666883,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 10.354645708328462,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 10.883903291665774,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 11.393982958332344,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 11.900447958330915,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 12.403023833328916,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 12.905791916666203,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 13.418971125000098,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 13.934678208330297,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 14.438407374997041,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 14.948769874994468,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 15.480654583334399,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 16.02764133333403,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 16.570115999995323,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 17.094173624995165,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 17.68334741666331,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 18.18977454166452,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 18.695669458327757,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 19.324100999998336,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 19.831328666667105,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 20.333599999998114,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 20.84716374999698,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 21.35178504166106,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 21.86828612499812,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 22.396468624996487,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 22.90906562499731,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 23.41442499999539,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.36914825439453,
+          "t": 23.92308795833378,
+          "x": -554.2787475585938,
+          "count": 1,
+          "z": -299.7537536621094,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        }
+      ],
+      "travel": 50.882137686014175,
+      "lastCentring": {
+        "Queries": 55156,
+        "WorstShift": 0,
+        "Moved": 0,
+        "Unresolved": 1,
+        "DetourAttempts": 4,
+        "Detours": 0,
+        "Inserted": 2,
+        "Thinned": 3,
+        "Unwalkable": 2,
+        "DetourPoints": 0,
+        "Kept": 1,
+        "Points": 6,
+        "Result": 5,
+        "Aborted": false
+      },
+      "backwards": 0,
+      "maxFrameTravel": 1.3078410625457764,
+      "from": 1,
+      "finalStatus": "WAITING_FOR_CLEARANCE",
+      "started": true,
+      "delayed": false
+    },
+    {
+      "finalDistance": 0.6462306380271912,
+      "requests": 1,
+      "reversals": 3,
+      "case": 2,
+      "arrived": true,
+      "to": 31,
+      "waiting": false,
+      "samples": [
+        {
+          "computing": true,
+          "index": 1,
+          "goalDistance": 296.14471435546875,
+          "t": 0.07408574999863049,
+          "x": 585.7483520507812,
+          "count": 0,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": true,
+          "index": 1,
+          "goalDistance": 296.14471435546875,
+          "t": 0.5952164583359263,
+          "x": 585.7483520507812,
+          "count": 0,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 292.19940185546875,
+          "t": 1.1045162083319155,
+          "x": 585.69580078125,
+          "count": 35,
+          "z": 378.50860595703125,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 283.3620910644531,
+          "t": 1.6115857500044513,
+          "x": 585.5894775390625,
+          "count": 35,
+          "z": 390.6576843261719,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 274.6715087890625,
+          "t": 2.128938958332583,
+          "x": 585.480712890625,
+          "count": 35,
+          "z": 403.0744323730469,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 266.022216796875,
+          "t": 2.6725664583354956,
+          "x": 585.3677368164062,
+          "count": 35,
+          "z": 415.9908142089844,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 257.4724426269531,
+          "t": 3.1786939583325875,
+          "x": 585.2574462890625,
+          "count": 35,
+          "z": 428.5749816894531,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 249.8414764404297,
+          "t": 3.686087125002814,
+          "x": 585.1509399414062,
+          "count": 35,
+          "z": 440.7362365722656,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 242.5753936767578,
+          "t": 4.198923541669501,
+          "x": 585.0437622070312,
+          "count": 35,
+          "z": 452.9799499511719,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 235.8015899658203,
+          "t": 4.699057166668354,
+          "x": 584.9381103515625,
+          "count": 35,
+          "z": 465.0536193847656,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 229.5121307373047,
+          "t": 5.200347458332544,
+          "x": 584.8327026367188,
+          "count": 35,
+          "z": 477.0771789550781,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 223.5753173828125,
+          "t": 5.745259166666074,
+          "x": 584.719482421875,
+          "count": 35,
+          "z": 490.0438537597656,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 212.1848602294922,
+          "t": 6.253094958337897,
+          "x": 575.3312377929688,
+          "count": 35,
+          "z": 495.8240051269531,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 3,
+          "goalDistance": 200.4105987548828,
+          "t": 6.757997083332157,
+          "x": 564.0276489257812,
+          "count": 35,
+          "z": 500.5751953125,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 4,
+          "goalDistance": 188.36846923828125,
+          "t": 7.270208750000165,
+          "x": 554.9177856445312,
+          "count": 35,
+          "z": 508.82647705078125,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 5,
+          "goalDistance": 176.48583984375,
+          "t": 7.78366504166479,
+          "x": 545.8793334960938,
+          "count": 35,
+          "z": 517.6577758789062,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 6,
+          "goalDistance": 165.25439453125,
+          "t": 8.295256541670824,
+          "x": 537.3455200195312,
+          "count": 35,
+          "z": 526.0721435546875,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 7,
+          "goalDistance": 154.15023803710938,
+          "t": 8.795589666668093,
+          "x": 528.7981567382812,
+          "count": 35,
+          "z": 534.5078735351562,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 9,
+          "goalDistance": 146.8536376953125,
+          "t": 9.309867958334507,
+          "x": 524.3787231445312,
+          "count": 35,
+          "z": 544.3612670898438,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 11,
+          "goalDistance": 152.21051025390625,
+          "t": 9.815336500003468,
+          "x": 528.8929443359375,
+          "count": 35,
+          "z": 538.3742065429688,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 12,
+          "goalDistance": 155.80845642089844,
+          "t": 10.334301291666634,
+          "x": 527.5416259765625,
+          "count": 35,
+          "z": 525.9946899414062,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 14,
+          "goalDistance": 152.05783081054688,
+          "t": 10.844577083335025,
+          "x": 527.2485961914062,
+          "count": 35,
+          "z": 536.3896484375,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 16,
+          "goalDistance": 145.93077087402344,
+          "t": 11.354653000002145,
+          "x": 524.0226440429688,
+          "count": 35,
+          "z": 545.0897827148438,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 17,
+          "goalDistance": 134.4866180419922,
+          "t": 11.861121666668623,
+          "x": 513.1290283203125,
+          "count": 35,
+          "z": 548.9295043945312,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 19,
+          "goalDistance": 124.65036010742188,
+          "t": 12.363692874998378,
+          "x": 502.6202392578125,
+          "count": 35,
+          "z": 548.5574951171875,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 20,
+          "goalDistance": 112.97624969482422,
+          "t": 12.866669625000213,
+          "x": 491.66583251953125,
+          "count": 35,
+          "z": 552.7423706054688,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 22,
+          "goalDistance": 102.7276611328125,
+          "t": 13.379844499999308,
+          "x": 483.961181640625,
+          "count": 35,
+          "z": 561.8960571289062,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 23,
+          "goalDistance": 96.03975677490234,
+          "t": 13.89533891667088,
+          "x": 480.0355224609375,
+          "count": 35,
+          "z": 572.2373657226562,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 23,
+          "goalDistance": 98.4456787109375,
+          "t": 14.399076416666503,
+          "x": 484.0284423828125,
+          "count": 35,
+          "z": 583.699951171875,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 24,
+          "goalDistance": 106.10694885253906,
+          "t": 14.909958458338224,
+          "x": 492.5997009277344,
+          "count": 35,
+          "z": 589.3796997070312,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 25,
+          "goalDistance": 95.43864440917969,
+          "t": 15.441689791667159,
+          "x": 480.2760314941406,
+          "count": 35,
+          "z": 589.5406494140625,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 27,
+          "goalDistance": 82.912841796875,
+          "t": 15.988228208334476,
+          "x": 466.7939758300781,
+          "count": 35,
+          "z": 589.6484985351562,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 28,
+          "goalDistance": 69.50679016113281,
+          "t": 16.530774333332374,
+          "x": 454.3356628417969,
+          "count": 35,
+          "z": 589.6513671875,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 29,
+          "goalDistance": 56.78263854980469,
+          "t": 17.055762958334526,
+          "x": 441.4281921386719,
+          "count": 35,
+          "z": 589.6517333984375,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 30,
+          "goalDistance": 45.1339225769043,
+          "t": 17.64805787500518,
+          "x": 428.65753173828125,
+          "count": 35,
+          "z": 589.6517333984375,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 32,
+          "goalDistance": 29.68547821044922,
+          "t": 18.15044399999897,
+          "x": 414.9941101074219,
+          "count": 35,
+          "z": 589.1348876953125,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 33,
+          "goalDistance": 18.1839542388916,
+          "t": 18.6563402916654,
+          "x": 403.4812927246094,
+          "count": 35,
+          "z": 589.2044067382812,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 34,
+          "goalDistance": 6.138369083404541,
+          "t": 19.287111833335075,
+          "x": 389.471435546875,
+          "count": 35,
+          "z": 590.536865234375,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 36,
+          "goalDistance": 0.6462306380271912,
+          "t": 19.792034833335492,
+          "x": 386.3956298828125,
+          "count": 35,
+          "z": 590.8541259765625,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 36,
+          "goalDistance": 0.6462306380271912,
+          "t": 20.294315583334537,
+          "x": 386.3956298828125,
+          "count": 35,
+          "z": 590.8541259765625,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 36,
+          "goalDistance": 0.6462306380271912,
+          "t": 20.807866916671628,
+          "x": 386.3956298828125,
+          "count": 35,
+          "z": 590.8541259765625,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 36,
+          "goalDistance": 0.6462306380271912,
+          "t": 21.31249399999797,
+          "x": 386.3956298828125,
+          "count": 35,
+          "z": 590.8541259765625,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 36,
+          "goalDistance": 0.6462306380271912,
+          "t": 21.82895491666568,
+          "x": 386.3956298828125,
+          "count": 35,
+          "z": 590.8541259765625,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 36,
+          "goalDistance": 0.6462306380271912,
+          "t": 22.357196124998154,
+          "x": 386.3956298828125,
+          "count": 35,
+          "z": 590.8541259765625,
+          "request": 2,
+          "status": "ARRIVED"
+        }
+      ],
+      "travel": 443.59556141495705,
+      "lastCentring": {
+        "Queries": 3061,
+        "WorstShift": 18,
+        "Moved": 20,
+        "Unresolved": 0,
+        "DetourAttempts": 4,
+        "Detours": 4,
+        "Inserted": 10,
+        "Thinned": 37,
+        "Unwalkable": 0,
+        "DetourPoints": 7,
+        "Kept": 17,
+        "Points": 75,
+        "Result": 48,
+        "Aborted": false
+      },
+      "backwards": 22.23597291111946,
+      "maxFrameTravel": 2.4000234603881836,
+      "from": 30,
+      "finalStatus": "ARRIVED",
+      "started": true,
+      "delayed": true
+    },
+    {
+      "finalDistance": 1.6624755859375,
+      "requests": 1,
+      "reversals": 0,
+      "case": 3,
+      "arrived": true,
+      "to": 1,
+      "waiting": false,
+      "samples": [
+        {
+          "computing": true,
+          "index": 1,
+          "goalDistance": 40,
+          "t": 0.03856212500249967,
+          "x": -605.0714111328125,
+          "count": 0,
+          "z": -296.7375793457031,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 34.65960693359375,
+          "t": 0.5597133749979548,
+          "x": -605.0714111328125,
+          "count": 1,
+          "z": -289.7350158691406,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 20.79840087890625,
+          "t": 1.0689203750007437,
+          "x": -605.0714111328125,
+          "count": 1,
+          "z": -276.8727111816406,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 8.61383056640625,
+          "t": 1.576186541664356,
+          "x": -605.0714111328125,
+          "count": 1,
+          "z": -264.72314453125,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.6624755859375,
+          "t": 2.093456041664467,
+          "x": -605.0714111328125,
+          "count": 1,
+          "z": -258.4000549316406,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.6624755859375,
+          "t": 2.637082208333595,
+          "x": -605.0714111328125,
+          "count": 1,
+          "z": -258.4000549316406,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.6624755859375,
+          "t": 3.143209041663795,
+          "x": -605.0714111328125,
+          "count": 1,
+          "z": -258.4000549316406,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.6624755859375,
+          "t": 3.650450000001001,
+          "x": -605.0714111328125,
+          "count": 1,
+          "z": -258.4000549316406,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.6624755859375,
+          "t": 4.1634400416660355,
+          "x": -605.0714111328125,
+          "count": 1,
+          "z": -258.4000549316406,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.6624755859375,
+          "t": 4.677600583330786,
+          "x": -605.0714111328125,
+          "count": 1,
+          "z": -258.4000549316406,
+          "request": 2,
+          "status": "ARRIVED"
+        }
+      ],
+      "travel": 38.3375244140625,
+      "lastCentring": {
+        "Queries": 148,
+        "WorstShift": 0,
+        "Moved": 0,
+        "Unresolved": 0,
+        "DetourAttempts": 0,
+        "Detours": 0,
+        "Inserted": 0,
+        "Thinned": 4,
+        "Unwalkable": 0,
+        "DetourPoints": 0,
+        "Kept": 3,
+        "Points": 8,
+        "Result": 4,
+        "Aborted": false
+      },
+      "backwards": 0,
+      "maxFrameTravel": 1.852294921875,
+      "from": 1,
+      "finalStatus": "ARRIVED",
+      "started": true,
+      "delayed": false
+    },
+    {
+      "finalDistance": 1.692626953125,
+      "requests": 1,
+      "reversals": 0,
+      "case": 4,
+      "arrived": true,
+      "to": 30,
+      "waiting": false,
+      "samples": [
+        {
+          "computing": true,
+          "index": 1,
+          "goalDistance": 50,
+          "t": 0.003553833332262002,
+          "x": 585.7483520507812,
+          "count": 0,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 48.2457275390625,
+          "t": 0.5245180833371705,
+          "x": 582.3319702148438,
+          "count": 1,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 34.384521484375,
+          "t": 1.033853500004625,
+          "x": 569.4696044921875,
+          "count": 1,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 22.20001220703125,
+          "t": 1.5413094166651717,
+          "x": 557.3201293945312,
+          "count": 1,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 9.85772705078125,
+          "t": 2.0586051666687126,
+          "x": 544.9030151367188,
+          "count": 1,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.692626953125,
+          "t": 2.60211741666717,
+          "x": 537.4409790039062,
+          "count": 1,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.692626953125,
+          "t": 3.1082437916702474,
+          "x": 537.4409790039062,
+          "count": 1,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.692626953125,
+          "t": 3.6154721666680416,
+          "x": 537.4409790039062,
+          "count": 1,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.692626953125,
+          "t": 4.12847641667031,
+          "x": 537.4409790039062,
+          "count": 1,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.692626953125,
+          "t": 4.6426361666672165,
+          "x": 537.4409790039062,
+          "count": 1,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.692626953125,
+          "t": 5.143688458330871,
+          "x": 537.4409790039062,
+          "count": 1,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "ARRIVED"
+        }
+      ],
+      "travel": 48.307373046875,
+      "lastCentring": {
+        "Queries": 185,
+        "WorstShift": 0,
+        "Moved": 0,
+        "Unresolved": 0,
+        "DetourAttempts": 0,
+        "Detours": 0,
+        "Inserted": 0,
+        "Thinned": 5,
+        "Unwalkable": 0,
+        "DetourPoints": 0,
+        "Kept": 4,
+        "Points": 10,
+        "Result": 5,
+        "Aborted": false
+      },
+      "backwards": 0,
+      "maxFrameTravel": 1.852294921875,
+      "from": 30,
+      "finalStatus": "ARRIVED",
+      "started": true,
+      "delayed": true
+    }
+  ],
+  "final": [
+    {
+      "finalDistance": 121.16764068603516,
+      "requests": 1,
+      "reversals": 0,
+      "case": 1,
+      "arrived": false,
+      "to": 2,
+      "waiting": true,
+      "samples": [
+        {
+          "computing": true,
+          "index": 1,
+          "goalDistance": 172.1187286376953,
+          "t": 0.18973441666457802,
+          "x": -605.0714111328125,
+          "count": 0,
+          "z": -296.7375793457031,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": true,
+          "index": 1,
+          "goalDistance": 172.1187286376953,
+          "t": 0.7178625416636351,
+          "x": -605.0714111328125,
+          "count": 0,
+          "z": -296.7375793457031,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": true,
+          "index": 1,
+          "goalDistance": 172.1187286376953,
+          "t": 1.2299302083338262,
+          "x": -605.0714111328125,
+          "count": 0,
+          "z": -296.7375793457031,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": true,
+          "index": 1,
+          "goalDistance": 172.1187286376953,
+          "t": 1.7551358333294047,
+          "x": -605.0714111328125,
+          "count": 0,
+          "z": -296.7375793457031,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 171.04559326171875,
+          "t": 2.269956500000262,
+          "x": -603.6388549804688,
+          "count": 1,
+          "z": -296.8226318359375,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 159.12017822265625,
+          "t": 2.770605333331332,
+          "x": -591.6475219726562,
+          "count": 1,
+          "z": -297.5347595214844,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 146.73231506347656,
+          "t": 3.2867478749976726,
+          "x": -579.2817993164062,
+          "count": 1,
+          "z": -298.26904296875,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 134.7819366455078,
+          "t": 3.787644124997314,
+          "x": -567.2816772460938,
+          "count": 1,
+          "z": -298.9816589355469,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 122.42243194580078,
+          "t": 4.304606916666671,
+          "x": -554.8969116210938,
+          "count": 1,
+          "z": -299.71710205078125,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 4.8199483749995125,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 5.342298541669152,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 5.9000670416644425,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 6.40567733332864,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 6.919359458333929,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 7.419922499997483,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 7.920422333329043,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 8.437675125001988,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 8.938000249996549,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 9.454198333332897,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 9.970427250002103,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 10.471615541668143,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 10.986602791665064,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 11.488861458332394,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 12.003574333335564,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 12.514504083330394,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 13.024701791662665,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 13.53077679166745,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 14.038184375000128,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 14.561004833332845,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 15.07289958333422,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 15.582237666661968,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 16.086299666661944,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 16.598530708331964,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 17.10182583333517,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 17.608411833331047,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 18.143015333334915,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 18.709076541665127,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 19.2716931666655,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 19.79152408333175,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 20.334468916662445,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 20.842845708335517,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 21.364992750000965,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 21.93902349999553,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 22.44941362499958,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 22.95059883333306,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 23.5329381249976,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 121.16764068603516,
+          "t": 24.21425716666272,
+          "x": -554.0768432617188,
+          "count": 1,
+          "z": -299.7657775878906,
+          "request": 2,
+          "status": "WAITING_FOR_CLEARANCE"
+        }
+      ],
+      "travel": 51.08439986407757,
+      "lastCentring": {
+        "Queries": 55156,
+        "WorstShift": 0,
+        "Moved": 0,
+        "Unresolved": 1,
+        "DetourAttempts": 4,
+        "Detours": 0,
+        "Inserted": 2,
+        "Thinned": 3,
+        "Unwalkable": 2,
+        "DetourPoints": 0,
+        "Kept": 1,
+        "Points": 6,
+        "Result": 5,
+        "Aborted": false
+      },
+      "backwards": 0,
+      "maxFrameTravel": 0.7763895392417908,
+      "from": 1,
+      "finalStatus": "WAITING_FOR_CLEARANCE",
+      "started": true,
+      "delayed": false
+    },
+    {
+      "finalDistance": 1.8556890487670898,
+      "requests": 1,
+      "reversals": 0,
+      "case": 2,
+      "arrived": true,
+      "to": 31,
+      "waiting": false,
+      "samples": [
+        {
+          "computing": true,
+          "index": 1,
+          "goalDistance": 296.14471435546875,
+          "t": 0.14577479166473495,
+          "x": 585.7483520507812,
+          "count": 0,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": true,
+          "index": 1,
+          "goalDistance": 296.14471435546875,
+          "t": 0.6739272499980871,
+          "x": 585.7483520507812,
+          "count": 0,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 289.2402038574219,
+          "t": 1.1869979583279928,
+          "x": 585.662841796875,
+          "count": 4,
+          "z": 382.2692565917969,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 280.4289855957031,
+          "t": 1.7111997083338792,
+          "x": 585.5555419921875,
+          "count": 4,
+          "z": 394.53997802734375,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 271.13946533203125,
+          "t": 2.2261491249955725,
+          "x": 585.4390258789062,
+          "count": 4,
+          "z": 407.8661804199219,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 263.1243896484375,
+          "t": 2.7268422083288897,
+          "x": 585.3338623046875,
+          "count": 4,
+          "z": 419.8781433105469,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 255.12222290039062,
+          "t": 3.2427037916640984,
+          "x": 585.2254638671875,
+          "count": 4,
+          "z": 432.2650146484375,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 247.74461364746094,
+          "t": 3.7436084166620276,
+          "x": 585.1203002929688,
+          "count": 4,
+          "z": 444.285888671875,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 240.5006561279297,
+          "t": 4.260943499997666,
+          "x": 585.0115966796875,
+          "count": 4,
+          "z": 456.692138671875,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 233.74691772460938,
+          "t": 4.776209541661956,
+          "x": 584.9042358398438,
+          "count": 4,
+          "z": 468.9582824707031,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 227.60614013671875,
+          "t": 5.298739708334324,
+          "x": 584.794677734375,
+          "count": 4,
+          "z": 481.494384765625,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 226.62672424316406,
+          "t": 5.859006583334121,
+          "x": 584.764404296875,
+          "count": 4,
+          "z": 484.94281005859375,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 217.61268615722656,
+          "t": 6.36172383333178,
+          "x": 580.9401245117188,
+          "count": 4,
+          "z": 495.5035095214844,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 205.90179443359375,
+          "t": 6.875644749998173,
+          "x": 572.037353515625,
+          "count": 4,
+          "z": 504.06256103515625,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 194.51901245117188,
+          "t": 7.376330125000095,
+          "x": 563.37646484375,
+          "count": 4,
+          "z": 512.3890380859375,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 183.34263610839844,
+          "t": 7.8770117916647,
+          "x": 554.7191162109375,
+          "count": 4,
+          "z": 520.7120971679688,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 171.85574340820312,
+          "t": 8.393708916664764,
+          "x": 545.77587890625,
+          "count": 4,
+          "z": 529.31005859375,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 160.82705688476562,
+          "t": 8.894041458333959,
+          "x": 537.1180419921875,
+          "count": 4,
+          "z": 537.6334228515625,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 3,
+          "goalDistance": 149.64675903320312,
+          "t": 9.41058874999726,
+          "x": 528.1450805664062,
+          "count": 4,
+          "z": 546.1817016601562,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 3,
+          "goalDistance": 137.93690490722656,
+          "t": 9.926467375000357,
+          "x": 518.1370849609375,
+          "count": 4,
+          "z": 553.46875,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 3,
+          "goalDistance": 126.7490463256836,
+          "t": 10.427650291661848,
+          "x": 508.4178466796875,
+          "count": 4,
+          "z": 560.5455322265625,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 3,
+          "goalDistance": 115.36790466308594,
+          "t": 10.94296945833048,
+          "x": 498.4130859375,
+          "count": 4,
+          "z": 567.8302001953125,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 3,
+          "goalDistance": 104.89494323730469,
+          "t": 11.44511595833319,
+          "x": 488.9752197265625,
+          "count": 4,
+          "z": 574.7020874023438,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 3,
+          "goalDistance": 93.6965560913086,
+          "t": 11.959853958331223,
+          "x": 478.6824035644531,
+          "count": 4,
+          "z": 582.1965942382812,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 4,
+          "goalDistance": 83.44873809814453,
+          "t": 12.470563958333514,
+          "x": 468.7718811035156,
+          "count": 4,
+          "z": 588.5753173828125,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 4,
+          "goalDistance": 71.5070571899414,
+          "t": 12.980912916667876,
+          "x": 456.5431213378906,
+          "count": 4,
+          "z": 588.9208374023438,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 4,
+          "goalDistance": 59.266944885253906,
+          "t": 13.486984249997477,
+          "x": 444.3127136230469,
+          "count": 4,
+          "z": 589.2662963867188,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 4,
+          "goalDistance": 46.93316650390625,
+          "t": 13.99437454166764,
+          "x": 432.20404052734375,
+          "count": 4,
+          "z": 589.6084594726562,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 4,
+          "goalDistance": 35.43144989013672,
+          "t": 14.517059458332369,
+          "x": 419.9180603027344,
+          "count": 4,
+          "z": 589.9555053710938,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 4,
+          "goalDistance": 22.242904663085938,
+          "t": 15.028958166665689,
+          "x": 407.5872497558594,
+          "count": 4,
+          "z": 590.3037719726562,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 4,
+          "goalDistance": 9.858543395996094,
+          "t": 15.538292874996841,
+          "x": 395.1994323730469,
+          "count": 4,
+          "z": 590.6536254882812,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 5,
+          "goalDistance": 1.8556890487670898,
+          "t": 16.042350999996415,
+          "x": 387.6077575683594,
+          "count": 4,
+          "z": 590.8680419921875,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 5,
+          "goalDistance": 1.8556890487670898,
+          "t": 16.554612416664895,
+          "x": 387.6077575683594,
+          "count": 4,
+          "z": 590.8680419921875,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 5,
+          "goalDistance": 1.8556890487670898,
+          "t": 17.05791062500066,
+          "x": 387.6077575683594,
+          "count": 4,
+          "z": 590.8680419921875,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 5,
+          "goalDistance": 1.8556890487670898,
+          "t": 17.5644674166615,
+          "x": 387.6077575683594,
+          "count": 4,
+          "z": 590.8680419921875,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 5,
+          "goalDistance": 1.8556890487670898,
+          "t": 18.099104875000194,
+          "x": 387.6077575683594,
+          "count": 4,
+          "z": 590.8680419921875,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 5,
+          "goalDistance": 1.8556890487670898,
+          "t": 18.665106458334776,
+          "x": 387.6077575683594,
+          "count": 4,
+          "z": 590.8680419921875,
+          "request": 2,
+          "status": "ARRIVED"
+        }
+      ],
+      "travel": 352.1450556498021,
+      "lastCentring": {
+        "Queries": 3061,
+        "WorstShift": 18,
+        "Moved": 20,
+        "Unresolved": 0,
+        "DetourAttempts": 4,
+        "Detours": 4,
+        "Inserted": 10,
+        "Thinned": 37,
+        "Unwalkable": 0,
+        "DetourPoints": 7,
+        "Kept": 17,
+        "Points": 75,
+        "Result": 48,
+        "Aborted": false
+      },
+      "backwards": 0,
+      "maxFrameTravel": 2.3999640941619873,
+      "from": 30,
+      "finalStatus": "ARRIVED",
+      "started": true,
+      "delayed": true
+    },
+    {
+      "finalDistance": 1.597381591796875,
+      "requests": 1,
+      "reversals": 0,
+      "case": 3,
+      "arrived": true,
+      "to": 1,
+      "waiting": false,
+      "samples": [
+        {
+          "computing": true,
+          "index": 1,
+          "goalDistance": 40,
+          "t": 0.06637533333559986,
+          "x": -605.0714111328125,
+          "count": 0,
+          "z": -296.7375793457031,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 32.42919921875,
+          "t": 0.5945571250049397,
+          "x": -605.0714111328125,
+          "count": 1,
+          "z": -288.7760925292969,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 19.9710693359375,
+          "t": 1.1077713333361316,
+          "x": -605.0714111328125,
+          "count": 1,
+          "z": -276.3274230957031,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 7.706817626953125,
+          "t": 1.631734291666362,
+          "x": -605.0714111328125,
+          "count": 1,
+          "z": -264.0561218261719,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.597381591796875,
+          "t": 2.146792458333948,
+          "x": -605.0714111328125,
+          "count": 1,
+          "z": -258.3349609375,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.597381591796875,
+          "t": 2.6474897083317046,
+          "x": -605.0714111328125,
+          "count": 1,
+          "z": -258.3349609375,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.597381591796875,
+          "t": 3.1631695833348203,
+          "x": -605.0714111328125,
+          "count": 1,
+          "z": -258.3349609375,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.597381591796875,
+          "t": 3.6640848750030273,
+          "x": -605.0714111328125,
+          "count": 1,
+          "z": -258.3349609375,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.597381591796875,
+          "t": 4.181591791668325,
+          "x": -605.0714111328125,
+          "count": 1,
+          "z": -258.3349609375,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.597381591796875,
+          "t": 4.696853708337585,
+          "x": -605.0714111328125,
+          "count": 1,
+          "z": -258.3349609375,
+          "request": 2,
+          "status": "ARRIVED"
+        }
+      ],
+      "travel": 38.402618408203125,
+      "lastCentring": {
+        "Queries": 148,
+        "WorstShift": 0,
+        "Moved": 0,
+        "Unresolved": 0,
+        "DetourAttempts": 0,
+        "Detours": 0,
+        "Inserted": 0,
+        "Thinned": 4,
+        "Unwalkable": 0,
+        "DetourPoints": 0,
+        "Kept": 3,
+        "Points": 8,
+        "Result": 4,
+        "Aborted": false
+      },
+      "backwards": 0,
+      "maxFrameTravel": 2.033294677734375,
+      "from": 1,
+      "finalStatus": "ARRIVED",
+      "started": true,
+      "delayed": false
+    },
+    {
+      "finalDistance": 1.68121337890625,
+      "requests": 1,
+      "reversals": 0,
+      "case": 4,
+      "arrived": true,
+      "to": 30,
+      "waiting": false,
+      "samples": [
+        {
+          "computing": true,
+          "index": 1,
+          "goalDistance": 50,
+          "t": 0.006356833335303236,
+          "x": 585.7483520507812,
+          "count": 0,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 48.52850341796875,
+          "t": 0.5344896250026068,
+          "x": 583.8861694335938,
+          "count": 1,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 36.07037353515625,
+          "t": 1.0482117083302,
+          "x": 571.4375,
+          "count": 1,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 23.80615234375,
+          "t": 1.5716695833325502,
+          "x": 559.166259765625,
+          "count": 1,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 1,
+          "goalDistance": 10.75006103515625,
+          "t": 2.0716691666675615,
+          "x": 546.1996459960938,
+          "count": 1,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "MOVING"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.68121337890625,
+          "t": 2.587539416665095,
+          "x": 537.4295654296875,
+          "count": 1,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.68121337890625,
+          "t": 3.103199583332753,
+          "x": 537.4295654296875,
+          "count": 1,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.68121337890625,
+          "t": 3.604113083332777,
+          "x": 537.4295654296875,
+          "count": 1,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.68121337890625,
+          "t": 4.121638750002603,
+          "x": 537.4295654296875,
+          "count": 1,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.68121337890625,
+          "t": 4.636900291669008,
+          "x": 537.4295654296875,
+          "count": 1,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.68121337890625,
+          "t": 5.1594292916634,
+          "x": 537.4295654296875,
+          "count": 1,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "ARRIVED"
+        },
+        {
+          "computing": false,
+          "index": 2,
+          "goalDistance": 1.68121337890625,
+          "t": 5.719793833333824,
+          "x": 537.4295654296875,
+          "count": 1,
+          "z": 372.5091857910156,
+          "request": 2,
+          "status": "ARRIVED"
+        }
+      ],
+      "travel": 48.31878662109375,
+      "lastCentring": {
+        "Queries": 185,
+        "WorstShift": 0,
+        "Moved": 0,
+        "Unresolved": 0,
+        "DetourAttempts": 0,
+        "Detours": 0,
+        "Inserted": 0,
+        "Thinned": 5,
+        "Unwalkable": 0,
+        "DetourPoints": 0,
+        "Kept": 4,
+        "Points": 10,
+        "Result": 5,
+        "Aborted": false
+      },
+      "backwards": 0,
+      "maxFrameTravel": 2.033203125,
+      "from": 30,
+      "finalStatus": "ARRIVED",
+      "started": true,
+      "delayed": true
+    }
+  ],
+  "thirdPumpIntegration": {
+    "pauseDrift": 0,
+    "spawnCount": 1,
+    "phases": [
+      {
+        "path": "ARRIVED",
+        "index": 1,
+        "spawnCount": 1,
+        "finalDistance": 1.6204833984375,
+        "requestsBefore": 3,
+        "travel": 33.3795166015625,
+        "requests": 1,
+        "state": "CHASE",
+        "reversals": 0,
+        "target": "-622.2149658203125, -1.1199995279312134, -34.75398254394531"
+      },
+      {
+        "path": "ARRIVED",
+        "index": 2,
+        "spawnCount": 1,
+        "finalDistance": 1.8054276704788208,
+        "requestsBefore": 11,
+        "travel": 46.55976787209511,
+        "requests": 1,
+        "state": "CHASE",
+        "reversals": 0,
+        "target": "-587.2149658203125, -1.1199995279312134, -69.75398254394531"
+      },
+      {
+        "path": "ARRIVED",
+        "index": 3,
+        "spawnCount": 1,
+        "finalDistance": 1.756087303161621,
+        "requestsBefore": 19,
+        "travel": 66.94869440793991,
+        "requests": 9,
+        "state": "CHASE",
+        "reversals": 0,
+        "target": "-657.2149658203125, -1.1199995279312134, -69.75398254394531"
+      }
+    ],
+    "spawnCountAfter": 1,
+    "done": true,
+    "health": 1000000,
+    "templateSize": "15.000373840332031, 16.000001907348633, 3.6428275108337402",
+    "spawnDistance": 100.11568450927734,
+    "pumps": [
+      {
+        "count": 1,
+        "spawned": false,
+        "index": 1,
+        "activated": true
+      },
+      {
+        "count": 2,
+        "spawned": false,
+        "index": 2,
+        "activated": true
+      },
+      {
+        "count": 3,
+        "spawned": false,
+        "index": 3,
+        "activated": true
+      }
+    ]
+  },
+  "nativeRegression": {
+    "controller": {
+      "Total": 33,
+      "Passed": 33,
+      "Results": [
+        {
+          "Name": "third count only; queued and repeated edges cannot duplicate",
+          "Passed": true
+        },
+        {
+          "Name": "cleanup before deferred spawn; no late clone",
+          "Passed": true
+        },
+        {
+          "Name": "cleanup while yielding validation; private clone cleaned",
+          "Passed": true
+        },
+        {
+          "Name": "new generation survives previous deferred task",
+          "Passed": true
+        },
+        {
+          "Name": "grounded rejected candidate gets fresh navigator",
+          "Passed": true
+        },
+        {
+          "Name": "nearby visible anchor precedes distant hidden hall routes",
+          "Passed": true
+        },
+        {
+          "Name": "failed route retries without candidate leak",
+          "Passed": true
+        },
+        {
+          "Name": "commit-time player proximity closes ranking race",
+          "Passed": true
+        },
+        {
+          "Name": "pause after spawn request permits commit, freezes motion and damage, resume uses same model",
+          "Passed": true
+        },
+        {
+          "Name": "third pump while already paused produces one visible tagged model; earlier counts do not",
+          "Passed": true
+        },
+        {
+          "Name": "pause during body certification commits directly in paused state",
+          "Passed": true
+        },
+        {
+          "Name": "paused spawn still cancels on round end before deferred work",
+          "Passed": true
+        },
+        {
+          "Name": "paused validation still cancels and cleans private model on Stop",
+          "Passed": true
+        },
+        {
+          "Name": "uncertified route rejected: Unwalkable",
+          "Passed": true
+        },
+        {
+          "Name": "uncertified route rejected: Unresolved",
+          "Passed": true
+        },
+        {
+          "Name": "uncertified route rejected: ExhaustedBudget",
+          "Passed": true
+        },
+        {
+          "Name": "uncertified route rejected: DistantApproach",
+          "Passed": true
+        },
+        {
+          "Name": "uncertified route rejected: ObstructedApproach",
+          "Passed": true
+        },
+        {
+          "Name": "cleanup during body certification cancels commit",
+          "Passed": true
+        },
+        {
+          "Name": "watchdog allows slow bounded planning beyond two seconds",
+          "Passed": true
+        },
+        {
+          "Name": "watchdog retries an expired request once, then allows the replacement to finish",
+          "Passed": true
+        },
+        {
+          "Name": "watchdog leaves certified approach arrival idle via Step",
+          "Passed": true
+        },
+        {
+          "Name": "watchdog leaves certified approach arrival idle via Snapshot",
+          "Passed": true
+        },
+        {
+          "Name": "watchdog recovers a stationary noncomputing route",
+          "Passed": true
+        },
+        {
+          "Name": "certified visible17-stud approach admitted",
+          "Passed": true
+        },
+        {
+          "Name": "approach beyond24-stud spawn bound rejected",
+          "Passed": true
+        },
+        {
+          "Name": "17-stud approach acrosswall rejected",
+          "Passed": true
+        },
+        {
+          "Name": "server attack gate: Wall",
+          "Passed": true
+        },
+        {
+          "Name": "server attack gate: HighFloor",
+          "Passed": true
+        },
+        {
+          "Name": "server attack gate: Escaped",
+          "Passed": true
+        },
+        {
+          "Name": "server attack gate: OutOfRound",
+          "Passed": true
+        },
+        {
+          "Name": "server attack gate: Dead",
+          "Passed": true
+        },
+        {
+          "Name": "server attack gate: CloseHit",
+          "Passed": true
+        }
+      ]
+    },
+    "navigation": {
+      "Scope": "production navigator with controlled geometry; no DataModel mutation",
+      "Total": 43,
+      "Passed": 43,
+      "Results": [
+        {
+          "Name": "stable tuning reaches production constructor",
+          "Passed": true
+        },
+        {
+          "Name": "stationary target keeps its route after timer expiry",
+          "Passed": true
+        },
+        {
+          "Name": "moving target is throttled by request interval",
+          "Passed": true
+        },
+        {
+          "Name": "sub-threshold target drift does not replace route",
+          "Passed": true
+        },
+        {
+          "Name": "delayed ComputeAsync result cannot send entity back to old start",
+          "Passed": true
+        },
+        {
+          "Name": "movement while centring is rebased again at installation",
+          "Passed": true
+        },
+        {
+          "Name": "long delayed dense route rejoins beyond its first sixteen points",
+          "Passed": true
+        },
+        {
+          "Name": "graph hub behind entity is skipped through a certified join",
+          "Passed": true
+        },
+        {
+          "Name": "prefix rebasing cannot shortcut a wall",
+          "Passed": true
+        },
+        {
+          "Name": "certified internal walk-back loop is removed without changing its goal",
+          "Passed": true
+        },
+        {
+          "Name": "internal route smoothing preserves a necessary wall detour",
+          "Passed": true
+        },
+        {
+          "Name": "unresolved replacement retains incumbent route",
+          "Passed": true
+        },
+        {
+          "Name": "unwalkable replacement retains incumbent route",
+          "Passed": true
+        },
+        {
+          "Name": "exhausted 72000-query budget replacement retains incumbent route",
+          "Passed": true
+        },
+        {
+          "Name": "over-budget replacement retains incumbent route",
+          "Passed": true
+        },
+        {
+          "Name": "aborted replacement retains incumbent route",
+          "Passed": true
+        },
+        {
+          "Name": "failed path and graph preserve incumbent",
+          "Passed": true
+        },
+        {
+          "Name": "missing certification stats fail closed",
+          "Passed": true
+        },
+        {
+          "Name": "replacement with no certified live-foot join is rejected",
+          "Passed": true
+        },
+        {
+          "Name": "target changed during compute cannot install incompatible result",
+          "Passed": true
+        },
+        {
+          "Name": "arrived body approach does not restart route endlessly",
+          "Passed": true
+        },
+        {
+          "Name": "failed same-goal replacement preserves installed goal and body approach",
+          "Passed": true
+        },
+        {
+          "Name": "Path.Blocked validates actual current segment without losing returned foot",
+          "Passed": true
+        },
+        {
+          "Name": "Path.Blocked clears a truly blocked installed segment for replanning",
+          "Passed": true
+        },
+        {
+          "Name": "unresolved engine candidate is replaced by a fully certified graph route",
+          "Passed": true
+        },
+        {
+          "Name": "inaccessible full route walks only its certified partial approach",
+          "Passed": true
+        },
+        {
+          "Name": "stationary blocked target waits without shuffling or repeated requests",
+          "Passed": true
+        },
+        {
+          "Name": "unchanged obstruction is probed on its failed edge at bounded low frequency",
+          "Passed": true
+        },
+        {
+          "Name": "removed obstruction resumes pursuit of the same unchanged target",
+          "Passed": true
+        },
+        {
+          "Name": "Stop clears blocked-edge retry state and stops later clearance probes",
+          "Passed": true
+        },
+        {
+          "Name": "materially moved target clears blocked waiting and resumes pursuit",
+          "Passed": true
+        },
+        {
+          "Name": "no reachable prefix waits safely without inventing movement",
+          "Passed": true
+        },
+        {
+          "Name": "goal directly above on another floor is not reached",
+          "Passed": true
+        },
+        {
+          "Name": "old-floor body approach cannot satisfy a new goal on another floor",
+          "Passed": true
+        },
+        {
+          "Name": "partial scan budget cannot masquerade as a proven physical obstruction",
+          "Passed": true
+        },
+        {
+          "Name": "real target reversal may turn entity around",
+          "Passed": true
+        },
+        {
+          "Name": "stationary target graph route also remains stable",
+          "Passed": true
+        },
+        {
+          "Name": "legacy navigator retains timer-driven refresh semantics",
+          "Passed": true
+        },
+        {
+          "Name": "request timeout invalidates old queued work and permits replacement",
+          "Passed": true
+        },
+        {
+          "Name": "explicit forced repath still bypasses target throttle",
+          "Passed": true
+        },
+        {
+          "Name": "Stop invalidates delayed work before it can reinstall movement",
+          "Passed": true
+        },
+        {
+          "Name": "actual Step remains forward and speed-bounded at 30 FPS",
+          "Passed": true
+        },
+        {
+          "Name": "actual Step remains forward and speed-bounded at 60 FPS",
+          "Passed": true
+        }
+      ]
+    }
+  }
+}

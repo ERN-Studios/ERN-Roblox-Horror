@@ -1,0 +1,156 @@
+{
+  "reference": "source armature BIND rest",
+  "rig": "24-bone Pool Slide",
+  "target": {
+    "mesh_groups": 1,
+    "bone_copies": 24,
+    "copies_per_name": {
+      "Hips": 1,
+      "LeftUpLeg": 1,
+      "LeftLeg": 1,
+      "LeftFoot": 1,
+      "LeftToeBase": 1,
+      "RightUpLeg": 1,
+      "RightLeg": 1,
+      "RightFoot": 1,
+      "RightToeBase": 1,
+      "Spine02": 1,
+      "Spine01": 1,
+      "Spine": 1,
+      "LeftShoulder": 1,
+      "LeftArm": 1,
+      "LeftForeArm": 1,
+      "LeftHand": 1,
+      "RightShoulder": 1,
+      "RightArm": 1,
+      "RightForeArm": 1,
+      "RightHand": 1,
+      "neck": 1,
+      "Head": 1,
+      "head_end": 1,
+      "headfront": 1
+    },
+    "duplicate_rest_position_max_studs": 0.0,
+    "duplicate_rest_rotation_max_radians": 0.0,
+    "duplicate_local_rotation_max_radians": 0.0
+  },
+  "fit": {
+    "axis_source_world_to_model": [
+      [
+        -0.9999999999999999,
+        -9.135501663688564e-09,
+        1.6147988571988097e-08
+      ],
+      [
+        1.614798889460379e-08,
+        -3.7047655408162024e-08,
+        0.9999999999999994
+      ],
+      [
+        -9.13550107436989e-09,
+        0.9999999999999991,
+        3.7047655512822963e-08
+      ]
+    ],
+    "scale_studs_per_source_world_unit": 3.7714857061099707,
+    "bind_fit_offset": [
+      -3.2241976505309466e-07,
+      3.29979215507592e-07,
+      -5.011573732671692e-07
+    ],
+    "bind_fit_rms_studs": 1.751104505871384e-06,
+    "bind_fit_max_studs": 4.137614307907157e-06,
+    "target_joint_span_studs": 19.04863838616313
+  },
+  "bind_transform_identity_max_error": 3.180347906365443e-07,
+  "root_motion": "Rigid in-place root sway/height retained after fixed clip-scale normalization; no per-clip origin subtraction",
+  "actions": {
+    "Idle": {
+      "source_scale_normalization": {
+        "source_uniform_pose_scale": 1.1764715600430973,
+        "removed_uniform_pose_scale": true,
+        "scale_residual_max": 8.341198566519381e-06,
+        "normalization_origin_source_world": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "frames": 121,
+      "duration": 4.0,
+      "discarded_nonroot_numerical_translation_max_studs": 1.4559905272163109e-05,
+      "duplicate_transform_max_error": 3.952527629464634e-15,
+      "preclosure_seam_translation_studs": 8.900561780011346e-06,
+      "preclosure_seam_rotation_radians": 0.00011656714292616377,
+      "first_hips_transform": [
+        "Hips",
+        0.2209633,
+        -0.6567606,
+        -0.1301451,
+        0.08539187,
+        -0.35277677,
+        -0.05688091,
+        0.93006523
+      ]
+    },
+    "Walk": {
+      "source_scale_normalization": {
+        "source_uniform_pose_scale": 1.0,
+        "removed_uniform_pose_scale": false,
+        "scale_residual_max": 5.173879098263612e-06,
+        "normalization_origin_source_world": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "frames": 32,
+      "duration": 1.03333333,
+      "discarded_nonroot_numerical_translation_max_studs": 1.3578661024802052e-05,
+      "duplicate_transform_max_error": 3.71494505215517e-15,
+      "preclosure_seam_translation_studs": 9.219544457287055e-07,
+      "preclosure_seam_rotation_radians": 4.808713461717583e-06,
+      "first_hips_transform": [
+        "Hips",
+        0.0496292,
+        -0.15739,
+        -0.3818444,
+        -0.03549021,
+        0.01145447,
+        -0.00164719,
+        0.99930302
+      ]
+    },
+    "Run": {
+      "source_scale_normalization": {
+        "source_uniform_pose_scale": 1.0,
+        "removed_uniform_pose_scale": false,
+        "scale_residual_max": 5.617872800511847e-06,
+        "normalization_origin_source_world": [
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "frames": 20,
+      "duration": 0.63333333,
+      "discarded_nonroot_numerical_translation_max_studs": 1.6629945298028215e-05,
+      "duplicate_transform_max_error": 3.5741131191799336e-15,
+      "preclosure_seam_translation_studs": 3.741657386658996e-07,
+      "preclosure_seam_rotation_radians": 3.4882724019053904e-06,
+      "first_hips_transform": [
+        "Hips",
+        0.0859721,
+        -0.7154531,
+        -0.4817049,
+        -0.06611449,
+        -0.0667383,
+        0.0164487,
+        0.99544177
+      ]
+    }
+  },
+  "source_json_sha256": "cfb3e34af89c9d69634e7bc6410f0a3de3ceaaa25503380e32ea84e55fb47951",
+  "studio_rest_json_sha256": "c3f91815c2e688f0c9a822c3d0c7ee67d14c04086a14ee6cdb9ef5a1a3984519",
+  "actual_studio_rest_path": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/implementation_work/level2_poolslide/actual-studio-poolslide-rest.json"
+}
