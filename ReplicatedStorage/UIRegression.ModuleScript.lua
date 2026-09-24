@@ -793,6 +793,51 @@ local function rectsOverlap(a: any, b: any): boolean
 		and a.Top < b.Bottom - 1 and a.Bottom > b.Top + 1
 end
 
+-- In a short landscape Level 3 round, only the caption's non-interactive
+-- surface may cross the thumbstick reservation. The reader stays visible and
+-- SKIP must remain a full-size, unobstructed target outside every touch zone.
+function UIRegression.PassiveReaderCaptionSafe(): (boolean, string)
+	local layout = UIDevice.Layout()
+	local gui = Players.LocalPlayer:FindFirstChildOfClass("PlayerGui")
+	local guide = gui and gui:FindFirstChild("LevelOneGuideGui")
+	local caption = guide and guide:FindFirstChild("CommandSubtitles")
+	local skip = caption and caption:FindFirstChild("DispatchStopButton", true)
+	local readerGui = gui and gui:FindFirstChild("Level3ReaderGui")
+	local reader = readerGui and readerGui:FindFirstChild("ReaderPanel")
+	if not (layout.IsTouch and not layout.Portrait and guide and guide.Enabled
+		and caption and caption.Visible and caption:GetAttribute("ReaderPassiveLane") == true
+		and readerGui and readerGui.Enabled and reader and reader.Visible
+		and skip and skip.Visible and skip.Active) then
+		return false, "not a visible passive reader/caption pair"
+	end
+	local subtitle = caption:FindFirstChild("Subtitle")
+	local controls = caption:FindFirstChild("BriefingControls")
+	if caption.Active or (subtitle and subtitle.Active)
+		or (controls and controls.Active) then
+		return false, "caption body captures touch input"
+	end
+	local skipPos, skipSize = skip.AbsolutePosition, skip.AbsoluteSize
+	if skipSize.X < 44 or skipSize.Y < 44 then
+		return false, "SKIP target is under 44x44"
+	end
+	local zone = UIDevice.OverlapsMovementZone(skipPos.X, skipPos.Y,
+		skipPos.X + skipSize.X, skipPos.Y + skipSize.Y)
+	if zone then return false, "SKIP enters " .. zone .. " movement zone" end
+	local readerPos, readerSize = reader.AbsolutePosition, reader.AbsoluteSize
+	local captionPos, captionSize = caption.AbsolutePosition, caption.AbsoluteSize
+	local function overlaps(left, top, width, height): boolean
+		return left < readerPos.X + readerSize.X and left + width > readerPos.X
+			and top < readerPos.Y + readerSize.Y and top + height > readerPos.Y
+	end
+	if overlaps(skipPos.X, skipPos.Y, skipSize.X, skipSize.Y) then
+		return false, "SKIP overlaps the reader"
+	end
+	if overlaps(captionPos.X, captionPos.Y, captionSize.X, captionSize.Y) then
+		return false, "caption overlaps the reader"
+	end
+	return true, "passive caption, touch-safe SKIP, separate reader"
+end
+
 function UIRegression.Check(): {[string]: any}
 	local scan = UIRegression.Scan()
 	local viewport = scan.Viewport
@@ -820,7 +865,10 @@ function UIRegression.Check(): {[string]: any}
 			end
 			if scan.IsTouch and not a.MovementControl then
 				local zone = UIDevice.OverlapsMovementZone(a.Left, a.Top, a.Right, a.Bottom)
-				if zone then
+				local passive = a.Gui == "LevelOneGuideGui"
+					and a.Name == "CommandSubtitles"
+					and UIRegression.PassiveReaderCaptionSafe()
+				if zone and not passive then
 					table.insert(zoneHits, string.format(
 						"%s (%.0f,%.0f)-(%.0f,%.0f) sits in the %s movement zone",
 						a.Path, a.Left, a.Top, a.Right, a.Bottom, zone))
@@ -4248,22 +4296,30 @@ function Fit.bodyBriefingFitMatrix(): (string, number)
 				if band.Height < 80 and deviceLayout.ModalArea.Height > band.Height then
 					home = deviceLayout.ModalArea
 				end
+				local passive, passiveWhy = UIRegression.PassiveReaderCaptionSafe()
 				local guiTop = panelRect.Top
 				local guiBottom = panelRect.Bottom
 				record(havePanel
-					and guiTop >= home.Top - 1
-					and guiBottom <= home.Top + home.Height + 1
-					and panelRect.Left >= home.Left - 1
-					and panelRect.Right <= home.Left + home.Width + 1,
+					and ((guiTop >= home.Top - 1
+						and guiBottom <= home.Top + home.Height + 1
+						and panelRect.Left >= home.Left - 1
+						and panelRect.Right <= home.Left + home.Width + 1)
+						or (passive and Fit.within(panelRect, deviceLayout.Safe, 1))),
 					device.Name .. ": and fits inside the rectangle it was given"
-					.. " (top band, or ModalArea where the band is too short)",
+					.. " (or the click-through reader lane inside Safe)",
 					havePanel and string.format("panel y %.0f..%.0f vs band y %.0f..%.0f",
 						guiTop, guiBottom, home.Top, home.Top + home.Height) or "no rect")
 				local zone = havePanel and UIDevice.OverlapsMovementZone(
 					panelRect.Left, guiTop, panelRect.Right, guiBottom) or nil
-				record(havePanel and zone == nil,
-					device.Name .. ": and enters no movement zone",
-					tostring(zone))
+				record(havePanel and (zone == nil or passive),
+					device.Name .. ": only a verified click-through reader caption may enter a movement zone",
+					string.format("zone=%s passive=%s (%s)", tostring(zone),
+						tostring(passive), passiveWhy))
+				if panel:GetAttribute("ReaderPassiveLane") == true then
+					record(passive,
+						device.Name .. ": reader-lane marker has passive body, 44px SKIP outside zones and reader",
+						passiveWhy)
+				end
 			end
 
 			record(havePanel and haveSubtitle
@@ -4345,7 +4401,9 @@ function Fit.bodyBriefingFitMatrix(): (string, number)
 				string.format("mute=%s/%s skip=%s/%s", tostring(mute.Visible),
 					tostring(mute.Active), tostring(buttons.DispatchStopButton.Visible),
 					tostring(buttons.DispatchStopButton.Active)))
-			record(buttons.DispatchStopButton.Text:find("SKIP BRIEF", 1, true) ~= nil,
+			local skipWord = panel:GetAttribute("ReaderPassiveLane") == true
+				and "SKIP" or "SKIP BRIEF"
+			record(buttons.DispatchStopButton.Text:sub(-#skipWord) == skipWord,
 				device.Name .. ": the remaining control names its text-only action",
 				buttons.DispatchStopButton.Text)
 
@@ -4357,7 +4415,9 @@ function Fit.bodyBriefingFitMatrix(): (string, number)
 				local button = buttons[name] :: any
 				local spec = BRIEFING_CONTROL_CAPTIONS[name]
 				local prefix = device.Touch and "" or spec.Binding
-				for _, caption in ipairs(spec.Captions) do
+				local captions = panel:GetAttribute("ReaderPassiveLane") == true
+					and {"SKIP"} or spec.Captions
+				for _, caption in ipairs(captions) do
 					local text = prefix .. caption
 					local bounds, boundsError = requiredBounds(
 						text, button.FontFace, button.TextSize, nil)
@@ -7437,6 +7497,19 @@ function Fit.bodyObjectiveCornerMatrix(): (string, number)
 				and not Fit.overlaps(readerRect, captionRect),
 				device.Name .. ": reader and caption occupy separate screen space",
 				string.format("reader %s caption %s", Fit.text(readerRect), Fit.text(captionRect)))
+			local captionZone = captionRect and UIDevice.OverlapsMovementZone(
+				captionRect.Left, captionRect.Top, captionRect.Right, captionRect.Bottom)
+			local passive, passiveWhy = UIRegression.PassiveReaderCaptionSafe()
+			record(captionRect ~= nil and (captionZone == nil or passive),
+				device.Name .. ": reader caption crosses a touch zone only when click-through"
+					.. " and SKIP is 44px outside zones and reader",
+				string.format("zone=%s passive=%s (%s)", tostring(captionZone),
+					tostring(passive), passiveWhy))
+			if caption and caption:GetAttribute("ReaderPassiveLane") == true then
+				record(passive,
+					device.Name .. ": passive reader-lane marker is backed by safe target geometry",
+					passiveWhy)
+			end
 			player:SetAttribute("UIRegressionForceDispatchActive", nil)
 			player:SetAttribute("UIRegressionForceLevel3Reader", nil)
 			player:SetAttribute("UIRegressionForceReaderHidden", nil)
@@ -7725,11 +7798,18 @@ function Fit.bodyDispatchCompactMatrix(): (string, number)
 				device.Name .. ": the briefing lies inside the authoritative safe area",
 				string.format("%s vs safe (%.0f,%.0f)-(%.0f,%.0f)", Fit.text(panelRect),
 					layout.Safe.Left, layout.Safe.Top, layout.Safe.Right, layout.Safe.Bottom))
-			record(UIDevice.OverlapsMovementZone(panelRect.Left, panelRect.Top,
-				panelRect.Right, panelRect.Bottom) == nil,
-				device.Name .. ": and enters no movement zone",
-				tostring(UIDevice.OverlapsMovementZone(panelRect.Left, panelRect.Top,
-					panelRect.Right, panelRect.Bottom)))
+			local panelZone = UIDevice.OverlapsMovementZone(panelRect.Left, panelRect.Top,
+				panelRect.Right, panelRect.Bottom)
+			local passive, passiveWhy = UIRegression.PassiveReaderCaptionSafe()
+			record(panelZone == nil or passive,
+				device.Name .. ": only verified click-through reader captions enter a movement zone",
+				string.format("zone=%s passive=%s (%s)", tostring(panelZone),
+					tostring(passive), passiveWhy))
+			if panel:GetAttribute("ReaderPassiveLane") == true then
+				record(passive,
+					device.Name .. ": SKIP stays 44px outside movement zones and reader",
+					passiveWhy)
+			end
 
 			-- THE READABLE FLOOR. Never 8 or 9 on a handheld: the copy stays at
 			-- least 10, and the layout is expected to have reached 11 wherever it
