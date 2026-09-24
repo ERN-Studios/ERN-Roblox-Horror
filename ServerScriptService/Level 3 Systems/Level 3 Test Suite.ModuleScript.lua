@@ -1261,6 +1261,74 @@ function TestSuite.ValidateMallManagerRuntime(expectedPresent: boolean): {[strin
 	}
 end
 
+-- Run once before collecting a CD and again after pickup in a live Level 3
+-- round. All five source tables must hand E to COLLECT while their CD is WORLD;
+-- collected tables and an unrelated table must still offer HIDE. Keep this
+-- separate from ValidateWorld, which also runs before controllers start.
+function TestSuite.ValidateCDHidePromptPriority(manifest: {[string]: any}, expectedCollected: number): {[string]: any}
+	assert(type(manifest) == "table" and manifest.World and manifest.World.Parent == workspace,
+		"CD/hide priority requires the live Level 3 manifest")
+	assert(expectedCollected % 1 == 0 and expectedCollected >= 0
+		and expectedCollected <= Configuration.ModuleGoal,
+		"Expected collected CD count must be 0 through ModuleGoal")
+	assert(workspace:GetAttribute("SelectedLevel") == 3
+		and workspace:GetAttribute("RoundActive") == true,
+		"CD/hide priority requires an active Level 3 round")
+	local hiding = HidingController.GetSnapshot()
+	assert(hiding and hiding.Generation == manifest.Generation
+		and hiding.TableCount == #manifest.HideTables,
+		"Level 3 hiding controller is not running on this world")
+	assert(type(manifest.Modules) == "table" and #manifest.Modules == Configuration.ModuleGoal,
+		"CD/hide priority requires all five source CDs")
+
+	local cdAnchors = {}
+	local collected = 0
+	for _, module in ipairs(manifest.Modules) do
+		local model = module.Model
+		assert(model and model:IsA("Model") and model:IsDescendantOf(manifest.World),
+			"CD/hide priority source model is missing")
+		local state = model:GetAttribute("Level3_CDState")
+		local wasCollected = model:GetAttribute("Level3_Collected") == true
+		if wasCollected then collected += 1 end
+		assert((state == "WORLD") == (not wasCollected),
+			"CD source state disagrees with pickup: " .. tostring(module.Index))
+		assert(module.Prompt and module.Prompt:IsA("ProximityPrompt")
+			and module.Prompt.Enabled == (not wasCollected),
+			"CD collection prompt disagrees with pickup: " .. tostring(module.Index))
+
+		local matchingAnchor: BasePart? = nil
+		for _, anchor in ipairs(manifest.HideTables) do
+			if planarDistance(anchor.Position, model:GetPivot().Position) <= 3 then
+				assert(matchingAnchor == nil and cdAnchors[anchor] == nil,
+					"CD source tables must map to unique hide anchors")
+				matchingAnchor = anchor
+			end
+		end
+		assert(matchingAnchor, "CD source has no hide table: " .. tostring(module.Index))
+		local anchor = matchingAnchor :: BasePart
+		cdAnchors[anchor] = true
+		assert(HidingController.OccupantCount(anchor) == 0,
+			"CD/hide priority probe needs empty source tables")
+		local hide = anchor:FindFirstChild("HideUnderTablePrompt")
+		assert(hide and hide:IsA("ProximityPrompt") and hide.Enabled == wasCollected,
+			"CD table HIDE prompt has wrong priority: " .. tostring(module.Index))
+	end
+	assert(collected == expectedCollected,
+		"CD/hide priority collected count does not match the requested phase")
+
+	local nonCDTables = 0
+	for _, anchor in ipairs(manifest.HideTables) do
+		if not cdAnchors[anchor] and HidingController.OccupantCount(anchor) == 0 then
+			local hide = anchor:FindFirstChild("HideUnderTablePrompt")
+			assert(hide and hide:IsA("ProximityPrompt") and hide.Enabled,
+				"Unrelated empty hide table lost its prompt")
+			nonCDTables += 1
+		end
+	end
+	assert(nonCDTables > 0, "CD/hide priority probe needs an empty non-CD table")
+	return {MappedCDs = #manifest.Modules, CollectedCDs = collected, NonCDTables = nonCDTables}
+end
+
 function TestSuite.ValidateRuntime(expectedProgress: number): {[string]: any}
 	assert(expectedProgress % 1 == 0 and expectedProgress >= 0
 		and expectedProgress <= Configuration.ModuleGoal,

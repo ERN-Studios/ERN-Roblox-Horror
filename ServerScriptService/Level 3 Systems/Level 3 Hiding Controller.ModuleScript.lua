@@ -97,7 +97,7 @@ local function occupantsOf(session: any, anchor: BasePart): {Player}
 	return session.Occupants[anchor] or {}
 end
 
--- FIRST_CD_PROMPT_20260922. A CD still lying on this table (state WORLD, the
+-- A CD still lying on its table (state WORLD, the
 -- Objective Controller publishes it on the module model) owns the E prompt:
 -- HIDE stands down so TAKE is the one thing the table offers, and it comes
 -- back the moment the CD is CARRIED / DROPPED / INSERTED. The anchor carries
@@ -468,30 +468,33 @@ function Controller.Start(manifest: any, generation: number)
 		end))
 	end
 
-	-- FIRST_CD_PROMPT_20260922: the FIRST CD's table. The builder puts a room's
-	-- CD socket on its first table and the hide anchor on that same table (the
-	-- first-CD room has exactly one), so the two share a footprint; 3 studs in
-	-- the floor plane is far inside one table and far outside the next. Only
-	-- the introduction table is affected -- every other hide table, CD room or
-	-- not, keeps its normal rules. State changes on the module re-evaluate.
+	-- Each CD socket shares the room's first table with a hide anchor. Its
+	-- collection prompt owns E while the CD is still WORLD; every other table
+	-- keeps its normal hide rules. Link all five by their shared footprint and
+	-- re-evaluate the hide prompt when the CD changes state.
 	session.CDOnAnchor = {}
-	local roles = manifest.Layout and manifest.Layout.Roles
-	local firstCDRoomId = roles and roles.FirstCDRoomId
-	for _, module in ipairs(if type(manifest.Modules) == "table" then manifest.Modules else {}) do
+	assert(type(manifest.Modules) == "table" and #manifest.Modules == Configuration.ModuleGoal,
+		"Level 3 hiding requires all CD modules")
+	for _, module in ipairs(manifest.Modules) do
 		local model = module.Model
-		if module.RoomId == firstCDRoomId and model and model:IsA("Model") and model.Parent then
-			local at = model:GetPivot().Position
-			for _, anchor in ipairs(session.Anchors) do
-				local d = anchor.Position - at
-				if Vector3.new(d.X, 0, d.Z).Magnitude <= 3 then
-					session.CDOnAnchor[anchor] = model
-					table.insert(session.Connections, model:GetAttributeChangedSignal("Level3_CDState"):Connect(function()
-						if anchor.Parent then refreshPrompt(session, anchor) end
-					end))
-					break
-				end
+		assert(model and model:IsA("Model") and model:IsDescendantOf(manifest.World),
+			"Level 3 hiding CD model is missing from the world")
+		local at = model:GetPivot().Position
+		local matchedAnchor: BasePart? = nil
+		for _, anchor in ipairs(session.Anchors) do
+			local d = anchor.Position - at
+			if Vector3.new(d.X, 0, d.Z).Magnitude <= 3 then
+				assert(matchedAnchor == nil and session.CDOnAnchor[anchor] == nil,
+					"Level 3 CD tables must have unique hide anchors")
+				matchedAnchor = anchor
 			end
 		end
+		assert(matchedAnchor, "Level 3 CD table has no hide anchor: " .. tostring(module.Index))
+		local anchor = matchedAnchor :: BasePart
+		session.CDOnAnchor[anchor] = model
+		table.insert(session.Connections, model:GetAttributeChangedSignal("Level3_CDState"):Connect(function()
+			if anchor.Parent then refreshPrompt(session, anchor) end
+		end))
 	end
 
 	table.insert(session.Connections, (request :: RemoteEvent).OnServerEvent:Connect(function(player, command)
