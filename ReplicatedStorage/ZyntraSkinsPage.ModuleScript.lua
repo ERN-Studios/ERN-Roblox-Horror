@@ -7,6 +7,7 @@ local MarketplaceService = game:GetService("MarketplaceService")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local Skins = require(ReplicatedStorage:WaitForChild("ZyntraSkins"))
+local DevAccess = require(ReplicatedStorage:WaitForChild("DevAccess"))
 
 local Page = {}
 local PREVIEW_FOLDER_NAME = "HazmatSkinPreviewTemplates"
@@ -172,6 +173,8 @@ function Page.mount(page, ctx)
 	local paidVerified = {}
 	for order, skinId in ipairs(Skins.Order) do
 		local item = Skins.ById[skinId]
+		-- DEV_SUIT_20260924: a Developer suit has no card for anyone else.
+		if item.Kind == "Developer" and not DevAccess.IsAllowed(ctx.player) then continue end
 		local card = Instance.new("Frame")
 		card.Name = skinId
 		card.LayoutOrder = order + 1
@@ -255,6 +258,7 @@ function Page.mount(page, ctx)
 		for _, skinId in ipairs(Skins.Order) do
 			local item = Skins.ById[skinId]
 			local entry = entries[skinId]
+			if not entry then continue end
 			local button = entry.Action
 			local canAct = false
 			if owned[skinId] == true or skinId == Skins.DefaultId then
@@ -275,6 +279,10 @@ function Page.mount(page, ctx)
 				button.Text = tokens >= item.TokenCost and "UNLOCK" or "NEED TOKENS"
 				canAct = tokens >= item.TokenCost and clears >= (item.RequiredClears or 0)
 				if clears < (item.RequiredClears or 0) then button.Text = "LOCKED" end
+			elseif item.Kind == "Developer" then
+				-- Only while the server's grant is still on its way.
+				entry.Meta.Text = "DEVELOPER ONLY"
+				button.Text = "UNAVAILABLE"
 			else
 				entry.Meta.Text = ("%d R$"):format(item.RobuxPrice)
 				canAct = paidVerified[skinId] == true

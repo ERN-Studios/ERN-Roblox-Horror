@@ -83,6 +83,18 @@ expect(Skins.ById.FalseSun.PassId == 1994816385
     and Skins.ById.FalseSun.RobuxPrice == 149,
     "False Sun pass ID or price drifted")
 
+-- DEV_SUIT_20260924: the Developer suit follows DevAccess only.
+do
+	local dev = Skins.Normalize(nil)
+	expect(not Skins.BuyToken({Tokens = 9999, CompletedLevels = 9999, Skins = dev}, "SignalArchitect"), "no token path to the developer suit")
+	expect(Skins.SyncDeveloper(dev, true) and Skins.IsOwned(dev, "SignalArchitect"), "a developer is granted it")
+	expect(not Skins.SyncDeveloper(dev, true), "an unchanged developer costs no write")
+	expect(Skins.Equip(dev, "SignalArchitect") and dev.Equipped == "SignalArchitect", "and can equip it")
+	expect(Skins.SyncDeveloper(dev, false) and not Skins.IsOwned(dev, "SignalArchitect"), "access removed: revoked")
+	expect(dev.Equipped == Skins.DefaultId, "and the equipped suit falls back to the default")
+	expect(not Skins.SyncDeveloper(Skins.Normalize(nil), false), "an ordinary player never changes")
+	expect(not table.find(Skins.WheelEligible, "SignalArchitect"), "never a wheel prize")
+end
 print("Zyntra skins: " .. tostring(checks) .. " checks passed")
 '''
 

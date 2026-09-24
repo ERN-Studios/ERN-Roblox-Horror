@@ -2172,6 +2172,21 @@ local function refreshPasses(player)
 		end
 	end
 
+	-- DEV_SUIT_20260924 (SYUaXHKQ): Developer suits follow DevAccess on every
+	-- load -- granted to developers, revoked (and unequipped) from anyone else.
+	local isDeveloper = DevAccess.IsAllowed(player)
+	local skinSession = sessions[player]
+	if skinSession then
+		local probe = table.clone(skinSession.data.Skins)
+		probe.Owned = table.clone(probe.Owned)
+		if Skins.SyncDeveloper(probe, isDeveloper) then
+			mutate(player, function(data)
+				if not Skins.SyncDeveloper(data.Skins, isDeveloper) then return false end
+				return true, isDeveloper and "Signal Architect developer suit unlocked." or nil, "success"
+			end)
+		end
+	end
+
 	-- TOKEN_EARNER_20260924: six passes, one tier. Each ownership is published
 	-- like any other pass; earning code reads only the resolved tier.
 	local earnerOwns = {}
@@ -3645,7 +3660,10 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 			return changed, message, changed and "success" or "error"
 		end)
 	elseif action == "EquipSkin" then
-		if not Skins.Get(payload) then return end
+		local skin = Skins.Get(payload)
+		if not skin then return end
+		-- DEV_SUIT_20260924: a forged request, or one racing a revoke, is refused.
+		if skin.Kind == "Developer" and not DevAccess.IsAllowed(player) then return end
 		local current = sessions[player].data.Skins
 		if not Skins.IsOwned(current, payload) then return end
 		if current.Equipped == payload then return end

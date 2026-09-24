@@ -4,6 +4,7 @@
 -- stock Animate script can drive it directly. The physical R15 rig stays put.
 
 local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 
 local VISUAL_NAME = "ZyntraHazmatSkinVisual"
@@ -250,6 +251,7 @@ local function clearState(player)
 	local state = states[player]
 	if not state then return end
 	states[player] = nil
+	if state.Motes then state.Motes.Parent:Destroy() end
 	for object, original in pairs(state.Originals) do
 		if object.Parent then
 			object:SetAttribute(ORIGINAL_ATTRIBUTE, nil)
@@ -265,6 +267,43 @@ local function clearState(player)
 	for _, record in ipairs(state.Bones) do
 		if record.Bone.Parent then record.Bone.Transform = CFrame.identity end
 	end
+end
+
+-- FALSE_SUN_MOTES_20260924 (Trello IRLeRBcN). A quiet halo of embers off the
+-- False Sun topper only (Codex's art brief: assets/hazmat/developer-signal-
+-- architect/README.md). Client-local on every viewer, so each honours its own
+-- ReduceFlashing and nothing replicates. A ParticleEmitter lights no geometry;
+-- LightInfluence 1 lets the motes dim with the scene instead of marking a
+-- player in the dark. No Light instances, ever.
+local function falseSunMotes(topperPart, character)
+	local torso = character:FindFirstChild("UpperTorso")
+	local back = torso and -torso.CFrame.LookVector or Vector3.zero
+	-- How far the topper reaches along `back`, so the motes start just OUTSIDE
+	-- its back face (inside, the closed mesh hides them).
+	local c, half = topperPart.CFrame, topperPart.Size / 2
+	local reach = math.abs(back:Dot(c.RightVector)) * half.X + math.abs(back:Dot(c.UpVector)) * half.Y
+		+ math.abs(back:Dot(c.LookVector)) * half.Z
+	local attachment = Instance.new("Attachment")
+	attachment.Name = "ZyntraFalseSunMotes"
+	-- World-up, just behind the window; the weld keeps it riding the torso.
+	attachment.CFrame = c:ToObjectSpace(CFrame.new(topperPart.Position + back * (reach + 0.15)))
+	local touch = UserInputService.TouchEnabled
+	local emitter = Instance.new("ParticleEmitter")
+	emitter.Texture = "rbxassetid://128661548525607"
+	emitter.Rate = touch and 1 or 2.5
+	emitter.Lifetime = NumberRange.new(0.45, 0.75)
+	emitter.Speed = NumberRange.new(0.12, 0.28)
+	emitter.SpreadAngle = Vector2.new(16, 16)
+	emitter.Size = NumberSequence.new({NumberSequenceKeypoint.new(0, touch and 0.10 or 0.12),
+		NumberSequenceKeypoint.new(0.5, touch and 0.18 or 0.24), NumberSequenceKeypoint.new(1, 0)})
+	emitter.Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0, touch and 0.67 or 0.58),
+		NumberSequenceKeypoint.new(0.5, touch and 0.55 or 0.42), NumberSequenceKeypoint.new(1, 1)})
+	emitter.LightEmission = touch and 0.15 or 0.25
+	emitter.LightInfluence = 1
+	emitter.Enabled = false
+	emitter.Parent = attachment
+	attachment.Parent = topperPart
+	return emitter
 end
 
 local function buildState(character, visual)
@@ -309,6 +348,9 @@ local function buildState(character, visual)
 		Character = character, Visual = visual, Mesh = mesh,
 		Bones = records, Originals = {}, Visible = false,
 		VisualParts = visualParts, TargetByBone = {}, PoseFrames = 0,
+		-- Built last, so a calibration that bails out above leaves nothing behind.
+		Motes = visual:GetAttribute("SkinId") == "FalseSun" and visualParts[2]
+			and falseSunMotes(visualParts[2], character) or nil,
 	}
 	captureBody(character, state.Originals)
 	return state
@@ -408,6 +450,16 @@ RunService:BindToRenderStep("ZyntraHazmatR15Retarget",
 						if part.Parent then
 							part.LocalTransparencyModifier = nearHead and 1 or 0
 						end
+					end
+					if state.Motes then
+						-- Only on a shown suit, off the wearer's own face, not from
+						-- under a Level 3 table, within 40 studs, and never for a
+						-- viewer who asked for less flashing.
+						state.Motes.Enabled = state.Visible and not nearHead
+							and Players.LocalPlayer:GetAttribute("ReduceFlashing") ~= true
+							and player:GetAttribute("Level3_Hiding") ~= true
+							and camera ~= nil and head ~= nil
+							and (camera.CFrame.Position - head.Position).Magnitude < 40
 					end
 				end
 			end

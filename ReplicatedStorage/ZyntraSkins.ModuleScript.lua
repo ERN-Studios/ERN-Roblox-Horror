@@ -13,6 +13,7 @@ Skins.Order = {
 	"BlacksiteDirector",
 	"StaticWraith",
 	"FalseSun",
+	"SignalArchitect",
 }
 
 Skins.ById = {
@@ -48,6 +49,15 @@ Skins.ById = {
 		PassId = 1994816385, ImageId = 83272384519781,
 		PreviewImageId = 132614425134815,
 		Description = "Premium cosmetic suit with a separate sun backpack.",
+	},
+	-- DEV_SUIT_20260924 (Trello SYUaXHKQ). Owned exactly while DevAccess allows
+	-- the player: ZyntraMonetization syncs it on every profile load, and no
+	-- Token, wheel, Robux, gift or client path can grant it. Art: Codex,
+	-- assets/hazmat/developer-signal-architect/README.md.
+	SignalArchitect = {
+		Name = "Signal Architect", Kind = "Developer",
+		ImageId = 125389579950767, PreviewImageId = 125389579950767,
+		Description = "Developer-issue engineer suit.",
 	},
 }
 
@@ -115,6 +125,21 @@ function Skins.Equip(state, skinId)
 	if state.Equipped == skinId then return false, "Already equipped." end
 	state.Equipped = skinId
 	return true, Skins.ById[skinId].Name .. " equipped."
+end
+
+-- Grants every Developer suit to a developer and revokes it from anyone else,
+-- falling back to the default suit if a revoked one was equipped. Returns
+-- whether anything changed, so an unchanged profile costs no write.
+function Skins.SyncDeveloper(state, isDeveloper)
+	local changed = false
+	for _, skinId in ipairs(Skins.Order) do
+		if Skins.ById[skinId].Kind == "Developer" and (state.Owned[skinId] == true) ~= isDeveloper then
+			state.Owned[skinId] = isDeveloper or nil
+			if not isDeveloper and state.Equipped == skinId then state.Equipped = Skins.DefaultId end
+			changed = true
+		end
+	end
+	return changed
 end
 
 function Skins.Public(state)
