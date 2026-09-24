@@ -1257,6 +1257,9 @@ function UIRegression.Scenarios(): {any}
 			resetScenario(true)
 			player:SetAttribute("UIRegressionForceLevel3Reader", true)
 			player:SetAttribute("UIRegressionForceReaderHidden", false)
+			revealGui("Level3ReaderGui", function(child)
+				return child.Name == "ReaderPanel"
+			end)
 			local guide = findGui("LevelOneGuideGui")
 			if guide then (guide :: ScreenGui).Enabled = true end
 			player:SetAttribute("UIRegressionForceDispatchActive", true)
@@ -4103,7 +4106,11 @@ function Fit.bodyBriefingFitMatrix(): (string, number)
 	local wasPanelVisible = panelObject.Visible
 	local wasControlsVisible = controlsObject.Visible
 	local wasSubtitleText = subtitleLabel.Text
+	local previousForce = player:GetAttribute("UIRegressionForceDispatchActive")
 	local ran, runError = pcall(function()
+		-- The matrix displays a synthetic briefing. Tell RoundUI that it is
+		-- active too, so each viewport refresh keeps the SKIP control actionable.
+		player:SetAttribute("UIRegressionForceDispatchActive", true)
 		-- ------------------------------------------------------------------
 		-- CALIBRATION. The sweep below never measures anything: it computes.
 		-- A resolver that is wrong in the same direction as the layout it
@@ -4404,6 +4411,8 @@ function Fit.bodyBriefingFitMatrix(): (string, number)
 		end
 	end)
 
+	-- Restore even when calibration or a simulated device throws inside pcall.
+	player:SetAttribute("UIRegressionForceDispatchActive", previousForce)
 	for _, name in ipairs(BORROWED_WORKSPACE_ATTRIBUTES) do
 		workspace:SetAttribute(name, previousWorkspace[name].Value)
 	end
