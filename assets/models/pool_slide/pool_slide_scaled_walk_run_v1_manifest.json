@@ -1,0 +1,65 @@
+{
+  "name": "Pool Slide scaled walk/run v1",
+  "created_utc": "2026-09-24",
+  "source": {
+    "file": "pool_slide_live_rig_2026-09-23.glb",
+    "sha256": "12e70fe4e0c2724dc50d74add4f7074fe5679408410dafebf96b3b3d52b6a763",
+    "bytes": 1624160,
+    "provenance": "Recovered from live ServerStorage.Level2Assets.Level 2 Pool Slide Template on 2026-09-23"
+  },
+  "deliverable": {
+    "file": "pool_slide_scaled_walk_run_v1.glb",
+    "sha256": "d68ae9643bdf66e50cde89daff9235f0980ab328bf571a8ffbfca0cf6aba7926",
+    "bytes": 1624384,
+    "editable_blender_file": "pool_slide_scaled_walk_run_v1.blend"
+  },
+  "scale": 1.2,
+  "units": "1 glTF unit = 1 Roblox stud; glTF Y up",
+  "rig": {
+    "name": "PipeEntityRig",
+    "joints": 20,
+    "bone_names_preserved": true,
+    "root_motion": "in place; Root translation has no horizontal component in Walk or Run",
+    "all_rest_and_animation_translations_scaled": true
+  },
+  "geometry": {
+    "body_triangles": 17916,
+    "head_triangles": 1898,
+    "total_triangles": 19814,
+    "materials": 1,
+    "textures": 0,
+    "color_source": "vertex colors",
+    "static_bounds_y_up_studs": {
+      "min": [-6.91632032, -7.20000029, -2.37888002],
+      "max": [6.91632032, 7.20000029, 2.37888002],
+      "size": [13.83264065, 14.40000057, 4.75776005]
+    }
+  },
+  "animations": {
+    "Walk": {
+      "duration_seconds": 1.0333333,
+      "loop_first_last_identical": true,
+      "changed": "stronger hip/leg/arm motion, heel-toe articulation, slightly deeper weight shift",
+      "foot_forward_span_studs": [7.8548, 7.4129],
+      "suggested_reference_speed_studs_per_second": 14.85,
+      "reference_speed_status": "estimate from 1.372x average ankle-travel ratio vs old clip; tune in an active Level 2 round"
+    },
+    "Run": {
+      "duration_seconds": 0.6333333,
+      "loop_first_last_identical": true,
+      "changed": "more forceful chase stride and arm swing, heel-toe articulation, deeper body bounce",
+      "foot_forward_span_studs": [7.2118, 7.1826],
+      "suggested_reference_speed_studs_per_second": 36.8,
+      "reference_speed_status": "estimate from 1.333x average ankle-travel ratio vs old clip; tune at 20 and 32 studs/s in active chase"
+    },
+    "Idle": {"duration_seconds": 4.0, "changed": "animation translations scaled only"},
+    "Attack": {"duration_seconds": 1.2, "changed": "animation translations scaled only", "contact_marker": "glTF does not carry Roblox's Contact marker; preserve existing Attack asset or restore marker at 0.50 s after reimport"}
+  },
+  "verification": {
+    "blender_version": "5.2.2 LTS",
+    "headless_blender_import": "pass: 20 named joints, two weighted meshes, four named actions",
+    "gltf_validator": "pass: zero errors, zero warnings; two informational unused UV notices",
+    "roblox_studio_import": "not yet done",
+    "level_2_corridor_fit_and_foot_slip": "not yet tested"
+  }
+}
