@@ -300,6 +300,10 @@ end
 --               host -- GameManager's devCeiling() is what applies that.
 Routing.DevLevel = 4
 Routing.Level4DevAttribute = "Level4DevEnabled"
+-- LEVEL5_MAP_PREVIEW_20260923: transport may describe the independently gated
+-- preview. DevLevel/DevCeiling retain their existing Level 4 meaning.
+Routing.HighestDevLevel = 5
+Routing.Level5DevAttribute = "Level5DevEnabled"
 
 function Routing.DevCeiling(enabled: any, isDeveloper: any): number
 	if enabled == true and isDeveloper == true then return Routing.DevLevel end
@@ -311,7 +315,7 @@ function Routing.ClampLevelTo(level: any, ceiling: any): number
 	if not requested then return 1 end
 	local limit = tonumber(ceiling)
 	if not limit or limit ~= limit then limit = Routing.MaxLevel end
-	limit = math.clamp(math.floor(limit), 1, Routing.DevLevel)
+	limit = math.clamp(math.floor(limit), 1, Routing.HighestDevLevel)
 	return math.clamp(math.floor(requested), 1, limit)
 end
 
@@ -527,9 +531,9 @@ function Routing.SelectArrivalSession(entries)
 				group = {
 					SessionId = id,
 					Members = {},
-					-- Transport parsing preserves level 4, but grants no access.
-					-- GameManager checks every arriving player before world generation.
-					Level = Routing.ClampLevelTo(data.Level, Routing.DevLevel),
+					-- Transport preserves development levels but grants no access.
+					-- GameManager checks the exact level flag and every arriving player.
+					Level = Routing.ClampLevelTo(data.Level, Routing.HighestDevLevel),
 					EntryMode = data.EntryMode,
 					Expected = nil,
 					Deadline = nil,
