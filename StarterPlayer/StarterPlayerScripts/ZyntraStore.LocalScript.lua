@@ -1352,7 +1352,7 @@ end
 
 local upgradeIntro = label(
 	pages.Upgrades,
-	"Permanent upgrades have no cap. Entity Shield is a consumable.",
+	"Each level costs one token more than the last. Entity Shield is a consumable.",
 	UDim2.new(1, 0, 0, 42),
 	UDim2.fromOffset(4, 0),
 	15,
@@ -3210,6 +3210,12 @@ local function refreshUI()
 		"RECORDED SUPPORT  %d R$\nDonations %d R$ / Products %d R$ / Passes %d R$\nPurchases made before 2 Sep 2026 are not recorded.",
 		profile.RecordedSupportRobux or profile.DonationRobux or 0,
 		profile.DonationRobux or 0, profile.UtilityRobux or 0, profile.PassRobux or 0)
+	-- UPGRADE_COST_20260924: written BEFORE the layout pass, which measures
+	-- Spend.Text to choose one or two columns.
+	for card, level in pairs({[staminaCard] = profile.StaminaLevel, [batteryCard] = profile.BatteryLevel}) do
+		local cost = Config.UpgradeCost(level)
+		card.Spend.Text = ("SPEND %d TOKEN%s  //  %s"):format(cost, cost == 1 and "" or "S", PCT)
+	end
 	if applyTerminalLayout then applyTerminalLayout() end
 	staminaCard.Current.Text = "+" .. tostring(profile.StaminaPercent) .. "%"
 	staminaCard.Level.Text = "LEVEL " .. tostring(profile.StaminaLevel)

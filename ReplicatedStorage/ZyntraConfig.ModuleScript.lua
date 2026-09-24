@@ -12,6 +12,12 @@ return {
 	SupportLeaderboardRefreshSeconds = 90,
 	TokenPercentPerLevel = TokenPercentPerLevel,
 	LevelCompletionTokens = 2,
+	-- UPGRADE_COST_20260924 (Trello KF7FDmP1): each Stamina/Battery level costs
+	-- one token more than the last -- level 1 costs 1, level 10 costs 10. The
+	-- argument is the level the player holds NOW. Server and shop both read it.
+	UpgradeCost = function(level)
+		return 1 + math.max(0, math.floor(tonumber(level) or 0))
+	end,
 
 	-- FRIEND_BOOST_20260916. Additive, uncapped: +10% completion tokens per
 	-- unique verified Roblox friend who was in the SAME round on the SAME server

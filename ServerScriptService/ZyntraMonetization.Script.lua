@@ -3487,18 +3487,27 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 		-- Refuse in memory FIRST. The in-transform check below stays as the
 		-- cross-server race guard, but reaching it costs a DataStore write, and a
 		-- player with zero tokens could once drive one of those per click.
-		if sessions[player].data.Tokens < 1 then
-			pushProfile(player, "You need 1 Zyntra Research Token.", "error")
+		-- UPGRADE_COST_20260924: the price rises with the level held, and is
+		-- recomputed inside the transform from the profile it actually writes.
+		local field = action == "UpgradeStamina" and "StaminaLevel" or "BatteryLevel"
+		local function shortOf(data)
+			local price = Config.UpgradeCost(data[field])
+			if data.Tokens >= price then return nil end
+			return ("You need %d Zyntra Research Token%s."):format(price, price == 1 and "" or "s")
+		end
+		local refusal = shortOf(sessions[player].data)
+		if refusal then
+			pushProfile(player, refusal, "error")
 			return
 		end
 		mutate(player, function(data)
-			if data.Tokens < 1 then return false, "You need 1 Zyntra Research Token.", "error" end
-			data.Tokens -= 1
+			refusal = shortOf(data)
+			if refusal then return false, refusal, "error" end
+			data.Tokens -= Config.UpgradeCost(data[field])
+			data[field] += 1
 			if action == "UpgradeStamina" then
-				data.StaminaLevel += 1
 				return true, "Stamina increased by " .. PCT .. ".", "success"
 			end
-			data.BatteryLevel += 1
 			return true, "Battery increased by " .. PCT .. ".", "success"
 		end)
 	elseif action == "SetHazmatColor" then
