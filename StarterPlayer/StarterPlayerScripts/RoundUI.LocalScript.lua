@@ -228,13 +228,17 @@ function dispatchAudio.refresh()
 		-- They now exist EXACTLY while the transmission does; the parent frame
 		-- below is hidden on the same condition, so the two can never disagree.
 		dispatchAudio.button.Visible = active and shown and dispatchAudio.voiceEnabled
+			and not dispatchAudio.readerPassiveLane
 		dispatchAudio.button.TextTransparency = ready and 0 or .45
-		UIDevice.SetEnabled(dispatchAudio.button, ready and dispatchAudio.voiceEnabled)
+		UIDevice.SetEnabled(dispatchAudio.button, ready and dispatchAudio.voiceEnabled
+			and not dispatchAudio.readerPassiveLane)
 	end
 	if dispatchAudio.stopButton then
 		local stopBinding = UIDevice.Binding("[N]", "[B]")
 		dispatchAudio.stopButton.TextColor3 = dispatchAudio.accent
-		local stopWord = dispatchAudio.voiceEnabled and "STOP DISPATCH" or "SKIP BRIEF"
+		local stopWord = dispatchAudio.readerPassiveLane
+			and (dispatchAudio.voiceEnabled and "STOP" or "SKIP")
+			or (dispatchAudio.voiceEnabled and "STOP DISPATCH" or "SKIP BRIEF")
 		dispatchAudio.stopButton.Text = stopBinding ~= ""
 			and (stopBinding .. "  " .. stopWord) or stopWord
 		-- Same rule as MUTE above: present exactly while the briefing is, gone the
@@ -3109,6 +3113,7 @@ local function updateLevelOneGuideLayout()
 	-- home, and its home is never a place a thumb is driving the character from.
 	local BRIEFING_MIN_HEIGHT = 80
 	local band = layout.TopBand
+	local readerPassiveLane = false
 	if touch and band.Height < BRIEFING_MIN_HEIGHT
 		and layout.ModalArea.Height > band.Height then
 		band = layout.ModalArea
@@ -3142,12 +3147,41 @@ local function updateLevelOneGuideLayout()
 			-- measured copy, not by clipping text or shrinking the skip target.
 			local copyHeight = dispatchAudio.copyHeightFor(dispatchAudio.fitCopy(),
 				dispatchAudio.HARD_FACE, lane.Width - 36)
-			if lane.Width >= 240
-				and lane.Height >= 45 + math.max(20, copyHeight) then
+			local minimumHeight = 45 + math.max(20, copyHeight)
+			if lane.Width >= 240 and lane.Height >= minimumHeight then
 				band = lane
+			else
+				-- On the smallest landscape phones the dynamic thumbstick's
+				-- reserved rectangle begins only ~41px below the safe top. No
+				-- complete caption can fit ABOVE it, and there is no 44px lane
+				-- below the reader before the controls begin. Keep the caption
+				-- visible to the reader's left as a passive, click-through layer.
+				-- Only SKIP takes input, in the horizontal gap between thumbstick
+				-- and reader; the panel/background never consumes a movement tap.
+				lane.Bottom = math.min(layout.Safe.Bottom - 8,
+					reader.AbsolutePosition.Y + reader.AbsoluteSize.Y,
+					layout.Zones.Controls.Top - 4, layout.Zones.Jump.Top - 4)
+				lane.Height = math.max(0, lane.Bottom - lane.Top)
+				local initialWidth = math.min(math.floor(lane.Width),
+					math.max(240, math.min(560, math.floor(viewport.X * .59))))
+				local skipSpace = lane.Left + initialWidth - 4
+					- (layout.Zones.Thumbstick.Right + 1)
+				if lane.Width >= 240 and lane.Height >= minimumHeight
+					and skipSpace >= 44 then
+					band = lane
+					readerPassiveLane = true
+				end
 			end
 		end
 	end
+	dispatchAudio.readerPassiveLane = readerPassiveLane
+	subtitleFrame:SetAttribute("ReaderPassiveLane", readerPassiveLane)
+	-- These surfaces are visual only; SKIP is the sole interactive descendant.
+	-- This matters when the tiny-screen fallback paints across the thumbstick's
+	-- conservative activation rectangle without taking a movement tap.
+	subtitleFrame.Active = false
+	dispatchAudio.controls.Active = false
+	subtitleText.Active = false
 	-- ── the BAND is the ceiling, and it is enforced in ONE place ─────────────
 	-- WHAT SHIPPED BROKEN: the last-resort block at the bottom of this function
 	-- sized the panel to its CONTENT -- `textTop + minimumText + bottomPad` --
@@ -3631,6 +3665,14 @@ local function updateLevelOneGuideLayout()
 	subtitleConstraint.MaxSize = Vector2.new(panelWidth, panelHeight)
 
 	local rowWidth = fit.Candidate.Width
+	if readerPassiveLane then
+		-- The hidden MUTE control must not reserve the only safe touch gap.
+		-- The visible SKIP target keeps its 44px floor and stays wholly right
+		-- of the thumbstick and left of the reader on 568x320 and 705x338.
+		rowWidth = math.min(rowWidth, math.floor(
+			band.Left + panelWidth - 4
+			- (layout.Zones.Thumbstick.Right + 1)))
+	end
 	local rowHeight = fit.Candidate.Height
 	dispatchAudio.button.Size = UDim2.fromOffset(rowWidth, rowHeight)
 	dispatchAudio.stopButton.Size = UDim2.fromOffset(rowWidth, rowHeight)
@@ -3644,7 +3686,8 @@ local function updateLevelOneGuideLayout()
 	-- Subtler chrome on a handheld: the panel is a radio caption over the game,
 	-- not a dialog. A lighter fill and a fainter rule, and the same numbers on
 	-- desktop as before.
-	subtitleFrame.BackgroundTransparency = touch and 0.30 or 0.18
+	subtitleFrame.BackgroundTransparency = readerPassiveLane and 0.65
+		or (touch and 0.30 or 0.18)
 	local panelRule = subtitleFrame:FindFirstChildOfClass("UIStroke")
 	if panelRule then
 		panelRule.Transparency = touch and 0.55 or 0.38
@@ -3656,7 +3699,8 @@ local function updateLevelOneGuideLayout()
 		and Enum.FillDirection.Horizontal or Enum.FillDirection.Vertical
 	dispatchAudio.layout.HorizontalAlignment = Enum.HorizontalAlignment.Right
 	dispatchAudio.controls.AnchorPoint = Vector2.new(1, 0)
-	dispatchAudio.controls.Position = UDim2.new(1, -PANEL_MARGIN, 0, fit.ControlsTop)
+	dispatchAudio.controls.Position = UDim2.new(1,
+		readerPassiveLane and -4 or -PANEL_MARGIN, 0, fit.ControlsTop)
 	dispatchAudio.controls.Size = UDim2.fromOffset(fit.ControlsWidth, fit.ControlsHeight)
 
 	subtitleSpeaker.Position = UDim2.fromOffset(TEXT_INSET, 8)
