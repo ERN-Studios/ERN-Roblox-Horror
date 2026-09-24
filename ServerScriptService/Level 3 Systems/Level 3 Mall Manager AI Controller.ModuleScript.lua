@@ -1115,9 +1115,136 @@ local function buildRoomPerimeterPath(session: any, destination: Vector3,
 	return best
 end
 
+-- LEVEL3_MANAGER_ROOM_AISLE_REPAIR_20260924
+-- Both rings above are rectangles. Furniture can leave the body one narrow
+-- aisle that neither follows: on seed 1428587057, L3_S2_R05's only way to its
+-- south door is a 1.7-stud centre lane between two table envelopes, corner
+-- columns block both rings, and PFS voxels route through an 8.6-stud column
+-- gap the 10.5-stud sweep cannot pass. The finale Manager froze there for the
+-- rest of the round. Search this room on a one-stud grid with the unchanged
+-- volumeFits contract and keep only legs the unchanged volumeClear sweep
+-- accepts. At most one search per second per Manager, backing off to one per
+-- 8 s while searches keep failing.
+local function buildRoomAislePath(session: any, destination: Vector3): {any}?
+	if session.FinalHallChase and insideFinalHall(session, session.Root.Position) then return nil end
+	local began = os.clock()
+	if began < (session.AisleRepairRetryAt or 0) then return nil end
+	local current = flat(session.Root.Position, session.FloorY)
+	local room = roomDefinition(nearestRoomId(current))
+	local goalRoom = roomDefinition(nearestRoomId(destination))
+	if not room or not goalRoom then return nil end
+	local center = roomCenter(room.Id, session.FloorY) :: Vector3
+	local inset = Configuration.WallThickness * .5 + Tuning.SweepRadius + .5
+	local goal, lastPoint = flat(destination, session.FloorY), nil
+	if goalRoom.Id ~= room.Id then
+		-- The same adjacent cardinal doorway the perimeter repair targets.
+		local linked = false
+		for _, link in ipairs(layoutLinks()) do
+			if link.Door ~= "HiddenExit" and ((link.A == room.Id and link.B == goalRoom.Id)
+				or (link.B == room.Id and link.A == goalRoom.Id)) then linked = true break end
+		end
+		if not linked then return nil end
+		local nextCenter = roomCenter(goalRoom.Id, session.FloorY) :: Vector3
+		local delta = nextCenter - center
+		if math.abs(delta.X) > math.abs(delta.Z) then
+			if math.abs(delta.Z) > .05 or goalRoom.W * .5 <= inset or room.W * .5 <= inset then return nil end
+			local sign = if delta.X > 0 then 1 else -1
+			goal = center + Vector3.new(sign * (room.W * .5 - inset), 0, 0)
+			lastPoint = nextCenter + Vector3.new(-sign * (goalRoom.W * .5 - inset), 0, 0)
+		else
+			if math.abs(delta.X) > .05 or goalRoom.D * .5 <= inset or room.D * .5 <= inset then return nil end
+			local sign = if delta.Z > 0 then 1 else -1
+			goal = center + Vector3.new(0, 0, sign * (room.D * .5 - inset))
+			lastPoint = nextCenter + Vector3.new(0, 0, -sign * (goalRoom.D * .5 - inset))
+		end
+	end
+	local hx, hz = room.W * .5, room.D * .5
+	local nx, nz = math.max(1, math.floor(room.W)), math.max(1, math.floor(room.D))
+	local function cellPoint(index: number): Vector3
+		return center + Vector3.new(-hx + (index - 1) % nx + .5, 0, -hz + (index - 1) // nx + .5)
+	end
+	local function cellOf(position: Vector3): number
+		local i = math.clamp(math.floor(position.X - center.X + hx), 0, nx - 1)
+		local j = math.clamp(math.floor(position.Z - center.Z + hz), 0, nz - 1)
+		return j * nx + i + 1
+	end
+	local overlapParams = navigationOverlapParams(session)
+	local fits = {}
+	local function free(index: number): boolean
+		if fits[index] == nil then fits[index] = volumeFits(session, cellPoint(index), overlapParams) end
+		return fits[index]
+	end
+	local startCell, goalCell = cellOf(current), cellOf(goal)
+	-- Every leg starts from the body's real pose, so a body that does not fit
+	-- where it stands (overlap escape owns that) cannot use any route.
+	if not free(goalCell) or not volumeFits(session, current, overlapParams) then return nil end
+	local failures = session.AisleRepairFailures or 0
+	session.AisleRepairFailures = failures + 1
+	session.AisleRepairRetryAt = began + math.min(8, 2 ^ failures)
+	local function finish(result: {any}?): {any}?
+		if result then session.AisleRepairFailures = 0 end
+		if session.Model and session.Model.Parent then
+			session.Model:SetAttribute("Level3_MallManagerAisleRepairMs", math.round((os.clock() - began) * 10000) / 10)
+		end
+		return result
+	end
+	local parent = {[startCell] = 0}
+	local queue, head = {startCell}, 1
+	local steps = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}}
+	-- Hard cost cap: about 2,000 cells is ~35 ms of volumeFits on a live server.
+	while head <= #queue and parent[goalCell] == nil and #queue <= 2000 do
+		local index = queue[head]
+		head += 1
+		local i, j = (index - 1) % nx, (index - 1) // nx
+		for _, offset in ipairs(steps) do
+			local ni, nj = i + offset[1], j + offset[2]
+			local nextIndex = nj * nx + ni + 1
+			if ni >= 0 and ni < nx and nj >= 0 and nj < nz and parent[nextIndex] == nil and free(nextIndex) then
+				parent[nextIndex] = index
+				table.insert(queue, nextIndex)
+			end
+		end
+	end
+	if parent[goalCell] == nil then return finish(nil) end
+	local cells = {}
+	local index = goalCell
+	while index ~= startCell do
+		table.insert(cells, 1, cellPoint(index))
+		index = parent[index]
+	end
+	cells[math.max(1, #cells)] = goal
+	-- Greedy string-pull: from each accepted point, go to the furthest cell the
+	-- full-volume sweep still reaches in one straight leg.
+	local waypoints, from, first = {}, current, 1
+	while first <= #cells do
+		local reach = nil
+		local probe = first
+		while probe <= #cells and volumeClear(session, from, cells[probe]) do
+			reach = probe
+			probe += 1
+		end
+		if not reach then return finish(nil) end
+		table.insert(waypoints, {Position=cells[reach]})
+		from = cells[reach]
+		first = reach + 1
+	end
+	-- As in the perimeter repair, a route that cannot leave through the doorway
+	-- is no route: installing it would only replace a live PFS request.
+	if lastPoint then
+		if not volumeClear(session, from, lastPoint) then return finish(nil) end
+		table.insert(waypoints, {Position=lastPoint})
+	end
+	return finish(waypoints)
+end
+
 local function installRoomPerimeterPath(session: any, destination: Vector3): boolean
+	local status = "ROOM_PERIMETER"
 	local waypoints = buildRoomPerimeterPath(session, destination)
 	if not waypoints then waypoints = buildRoomPerimeterPath(session, destination, true) end
+	if not waypoints then
+		waypoints = buildRoomAislePath(session, destination)
+		status = "ROOM_AISLE"
+	end
 	if not waypoints then return false end
 	-- Reuse the ordinary follower/progress counters. Invalidate any old async
 	-- PFS result so it cannot overwrite this checked local repair with bad points.
@@ -1127,7 +1254,7 @@ local function installRoomPerimeterPath(session: any, destination: Vector3): boo
 	session.WaypointIndex = 1
 	session.PathGoal = destination
 	session.PathSwapSerial += 1
-	publishPathStatus(session, "ROOM_PERIMETER")
+	publishPathStatus(session, status)
 	return true
 end
 

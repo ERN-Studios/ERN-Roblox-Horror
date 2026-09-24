@@ -1,0 +1,45 @@
+Round 6 — genuine solo Level 3 clear WITH the finale chase, Roblox Studio Play, 2026-09-24 ~23:40 CEST (21:40 UTC).
+Build: Studio Edit after the aisle repair push (AI Controller 187,339 B, with the since-reverted reach edit; the reach edit only
+changes waypoint consumption and is not part of the final commit — round 7 re-verifies the final code).
+Start: lobby station 9, host panel 1-player party. Seed NOT pinned: resolved 1431515537, layout L3-2-415996d8.
+CD rooms: CD1 L3_S1_R01, CD2 L3_S1_R07, CD3 L3_S2_R06, CD4 L3_S3_R05, CD5 L3_S3_R07.
+Console for this round: no "[DevCheats]" lines other than this session's own "ESP OFF" before the queue; no script errors.
+Sprint in the finale: the game's own touch RUN toggle (workspace ForceTouchUI=true for the UI only, then a click on
+PlayerGui.StaminaGui.TouchRunHold -> "RUN  ON"), WalkSpeed 26 from NoiseReporter, stamina draining normally.
+
+Server recorder (s since recorder start):
+   16.4 Level3_ResolvedSeed=1431515537 LayoutHash=L3-2-415996d8 p.InRound=true
+   16.8 SelectedLevel=3 LoadStage=READY Level3_Phase=SEARCH
+   24.8 RoundActive=true RoomSongPhase=WAITING_FOR_FIRST_CD
+   80.9 CDCollectedProgress=1 RoomSongPhase=ARMED ; 82.4 PLAYING
+  104.9 CDCollectedProgress=2
+  138.9 CDCollectedProgress=3
+  164.5 CDCollectedProgress=4
+  179.0 CDCollectedProgress=5 HeldCDCount=5
+  208.0 ExitUnlocked=true Level3_Phase=EXIT_UNLOCKED CDInsertedProgress=5 RoomSongPhase=DONE HeldCDCount=0
+  221.5 HuntActive=true FinalHallChaseActive=true MallManagerState=CHASE MallManagerFinaleSpawn=true FinalHallChaseTriggered=true BeingChased=true
+        ("[Level 3 Mall Manager] hunt spawn 898.4 studs from nearest player; group 1, room Arrival")
+  244.8 p.Escaped=true (Manager -> PATROL)
+  245.2 RoundActive=false PostWinIntermissionActive=true
+  260.2 back to lobby (SelectedLevel=1, Level3_Phase=IDLE, InRound=false)
+Bot prompt records: CD1 dist 7.0, CD2 6.8, CD3/4/5 shown, every COLLECT shown with HIDE disabled before / enabled after;
+READER shown dist 7.0 -> inserted 5, exit unlocked, DONE. No hide cycle needed (5/5 at 179 s, reader before the first hunt).
+
+Finale (bot log, 1 s samples; x = player root X, dist = Level3_MallManagerTargetDistance):
+  146.8 x=6672 ws=26 stam=1.00 mgr=OFF
+  147.9 x=6699 stam=0.91 mgr CHASE dist 881
+  150.0 x=6755 stam=0.84 dist 479
+  152.2 x=6811 stam=0.76 dist 217
+  153.3 x=6840 stam=0.72 dist 131   (Manager inside the hall; locked hall speed ~32 studs/s)
+  156.3 x=6920 stam=0.62 dist 113
+  160.6 x=7032 stam=0.47 dist 87
+  164.9 x=7143 stam=0.32 dist 61
+  168.2 x=7229 stam=0.21 dist 41
+  170.2 x=7282 stam=0.14 dist 29
+  170.9 FINALE END escaped=true alive=true t=24.1 s maxWS=26 sprintFrac=1.00
+Manager telemetry: finale approach Arrival -> hall mouth in ~5.2 s at 360 studs/s, ROOM_PERIMETER repairs in 7 rooms,
+one ROOM_AISLE repair near SignalHall (search 15.9 ms), then the locked in-hall chase (gap closing ~6 studs/s).
+
+Stamina note (ZyntraStaminaMultiplier = 1.55 in Studio): 1.55 x 100 = 155 units; 86 % (~133 units) was spent in 24.1 s of
+chased sprint. A player with the base multiplier 1.0 (100 units) runs dry after ~18 s (~x 7150, gap ~60) and would then
+walk at 16 while the Manager closes at ~16 studs/s over the last ~150 studs. Round 7 measures this directly.

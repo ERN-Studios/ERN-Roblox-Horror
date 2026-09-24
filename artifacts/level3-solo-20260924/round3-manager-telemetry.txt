@@ -1,0 +1,43 @@
+Round 3 (Studio Play, 2026-09-24 ~21:05 UTC), Level3Seed pinned 1428587057, layout L3-2-b0507a65 (same as round 2).
+Finale: player sprinted (touch RUN toggle, WalkSpeed 26) from SignalHall x=6675 down the final hall; Manager finale spawn at Arrival.
+Sampler: server, 10 Hz, prints a line only when (mgr x,z | PathStatus | WaypointTarget | blocker phase | OverlapEscapeActive | AvoidanceSign) changes.
+Columns: servertime%1000 mgr=x,z st=State path=Level3_MallManagerPathStatus wp=Level3_MallManagerWaypointTarget blk=<LastPhysicalBlocker leaf>/<phase> oe=OverlapEscapeActive av=AvoidanceSign spd=Level3_MallManagerSpeed plX=player root X
+
+329.59 mgr=6208.0,-90.0 st=CHASE path=READY wp=nil blk=nil/nil oe=false av=0 spd=360 plX=6690
+329.71 mgr=6240.9,-90.0 st=CHASE path=REFRESH_PENDING wp=6281.94, 24, -90 blk=Level 3 Corridor Wall/BLOCKCAST
+329.82 mgr=6282.7,-91.8 st=CHASE path=COMPUTING wp=6295.17, 24, -96.16 blk=Level 3 West Wall A/BLOCKCAST
+329.94 mgr=6307.2,-73.3 st=CHASE path=ROOM_PERIMETER wp=6306, 24, 62.5 blk=Level 3 West Wall A/BLOCKCAST
+330.06-330.29 moving north along x~6306 at 360 studs/s (REFRESH_PENDING) to z=53
+330.41 mgr=6308.7,62.5 path=ROOM_PERIMETER wp=6332, 24, 62.5 blk=Level 3 North Wall A
+330.52-330.64 x=6332 z 75->117 wp=6332,24,117.5
+330.76-330.88 x=6306 z 129.7->172.3 wp=6306,24,175.5 blk=South Wall B
+330.98 mgr=6306.0,172.3 path=READY wp=6306,24,175.5 blk=North Wall B
+331.09 mgr=6314.5,185.5 path=REFRESH_PENDING wp=6333.50,24,199.5 blk=East Wall A av=-1
+331.21 mgr=6348.9,200.5 wp=6387.49,24,199.5 blk=Corridor Wall
+331.31 mgr=6385.0,200.9 path=COMPUTING wp=6412.37,24,197.48 blk=West Wall B
+331.42 mgr=6389.2,199.3 path=ROOM_PERIMETER wp=6385,24,199.5 blk=West Wall B av=1
+331.52 mgr=6392.4,223.1 wp=6413,24,223.5 blk=South Wall A
+331.64-331.87 x~6413 z 241->324 wp=6413,24,356.5
+331.99 mgr=6413.1,355.1 path=WAITING_FOR_REPLACEMENT wp=6413,24,356.5
+332.11 mgr=6412.1,356.5 path=READY wp=6383.59,24,379.5 blk=West Wall A
+332.22 mgr=6395.4,374.8 path=READY wp=6381.24,24,379.5
+332.34 mgr=6354.8,380.6 path=REFRESH_PENDING wp=6333.37,24,379.5 blk=Corridor Wall
+332.44 mgr=6323.2,373.8 path=COMPUTING wp=6307,24,378 blk=East Wall B av=-1       <- entered L3_S2_R05 through its EAST doorway
+332.56 mgr=6310.7,374.7 path=FINAL_SEGMENT_BLOCKED wp=6307,24,378 blk=East Wall B
+332.68 mgr=6310.7,374.7 path=READY wp=6307,24,378 blk=East Wall A
+332.79 mgr=6323.1,376.5 path=PHYSICAL_WAYPOINT_REJECTED wp=6330.654,24,374.046 blk=Level 3 East Wall A/BLOCKCAST   <- moved back east 12.4 studs, then FROZE
+333.01 .. 352.81  mgr=6323.1,376.5 CONSTANT for 20 s. PathStatus cycles DIRTY -> COMPUTING -> READY -> PHYSICAL_WAYPOINT_REJECTED,
+                  with STUCK_REPATH at 334.57, 336.29, 337.09, 338.79, 341.41, 344.84, 346.56, 347.44, 351.77, 352.59 and
+                  RECOVERY_REPATH at 335.36, 340.49, 350.86. WaypointTarget stays (6330.654, 24, 374.046), blocker stays East Wall A/BLOCKCAST,
+                  OverlapEscapeActive false throughout, AvoidanceSign -1.
+352.81 player escaped (moved to the waiting room, plX 7265)
+352.92 mgr=6323.7,376.5 st=PATROL path=ROOM_PERIMETER wp=6332,24,376.507 spd=5.25   <- as soon as the chase target is gone, a ROOM_PERIMETER path IS installed and the body moves east again
+353.04 mgr=6324.3,376.5 st=PATROL path=ROOM_PERIMETER
+353.17 mgr=6324.7,376.5 st=WAITING path=IDLE
+
+Room L3_S2_R05 (seed 1428587057): kind PartyHall, archetype BirthdayCenter, floor centre (6306, 379.5), size 65 x 59
+(x 6273.5..6338.5, z 350..409). Structural columns 2.1x11x2.1 at (6283.9,360.6) (6283.9,398.4) (6328.1,360.6) (6328.1,398.4).
+Its east doorway (14 wide, z 372.5..386.5) leads to L3_S2_R06 at (6413, 378).
+Round 2 (same seed) froze at (6328.75, 375.40) with WaypointTarget (6335.203, 24, 379.5) and blocker "Level 3 Structural Column"/BLOCKCAST.
+Round 1 (seed 1427802098): finale Manager reached ~80 studs of a (noclip-flying, non-genuine) player.
+Player side, round 3: sprint 26 studs/s; stamina (x1.55) went 1.00 -> 0.72 in 6.5 s then snapped back to 1.00 at 263.3 bot-time and drained again.

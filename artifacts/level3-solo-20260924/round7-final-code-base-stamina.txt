@@ -1,0 +1,34 @@
+Round 7 — final committed Manager code (AI Controller 186,936 B, aisle repair only), Roblox Studio Play, 2026-09-24 ~21:45 UTC.
+Seed pinned 1428587057 (Level3Seed set on the Play server only), layout L3-2-b0507a65 = the seed that froze the finale in rounds 2 and 3.
+Test aid, disclosed: player attribute ZyntraStaminaMultiplier held at 1.0 by a server loop for the whole round (Studio grants every
+pass, which normally gives 1.55; ZyntraMonetization rewrote it to 1.55 several times and the loop put it back within 0.1 s).
+Console for the round: only this session's own "[DevCheats] ESP OFF" before the queue; no foreign keystrokes, no script errors.
+
+Route (bot, ordinary PathfindingService + Humanoid:MoveTo, engine prompt holds):
+  5/5 CDs collected, COLLECT shown at 6.7-7.6 studs each time, HIDE disabled before / enabled after each pickup.
+  Hid under table 18 ~28 s before the first hunt; hunt Manager TABLE_CHECK on table 18 (2 s), player untouched.
+  Reader: InsertCDPrompt shown at 7.1 studs -> 5/5 inserted, exit unlocked, music DONE.
+  Staged 7 studs inside SignalHall with full stamina (mult 1.0), then sprint via the touch RUN toggle ("RUN  ON").
+
+Manager (server telemetry):
+  ROOM_AISLE used in L3_S2_R05 (search 13.2 ms) and once more near SignalHall (7.2 ms); no PHYSICAL_WAYPOINT_REJECTED freeze.
+  Finale spawn "896.4 studs from nearest player; room Arrival"; in-hall locked speed 32.79 studs/s.
+
+Finale with base stamina (bot log; x = player root X; dist = Level3_MallManagerTargetDistance):
+  259.2 x=6675 ws=26 stam=1.00
+  265.5 x=6840 stam=0.58 dist 163
+  270.9 x=6980 stam=0.29 dist 108
+  276.3 x=7120 stam=0.01 dist 73   <- sprint exhausted
+  277.4 x=7138 ws=16 dist 58 ; 278.5 x=7156 ws=16 dist 40
+  279.6 x=7181 ws=26 (sprint back at 0.21) dist 25
+  281.8 x=7238 dist 10
+  Manager entered ATTACK_WINDUP three times (server telemetry 74.08, 75.23, 75.93; last CHASE gaps before them 4.9, 5.0 and
+  3.4 studs); each confirm failed because the sprinting runner was already 5.5-7.5 studs away (confirm range 5.4).
+  284.5 FINALE END escaped=true alive=true t=25.4 s maxWS=26 sprintFrac=0.87
+Reading: a base-stamina runner who sprints perfectly from 7 studs inside SignalHall survives by a few tenths of a second;
+a runner who hesitates, enters with partial stamina or walks is caught. This is finale tuning for the owner, not changed here.
+
+Prompt-distance probe (same seed, fresh round, nothing collected; camera aimed at the jewel case, 1.5 s window for PromptShown):
+  CD1 and CD2, 4 sides x 3 target radii -> 24/24 COLLECT prompts shown, state stayed WORLD.
+  Long sides (front/back): planar 3.6-4.2 studs shown (the earlier "hidden at ~4.8 studs behind the table" case), 5.7-5.8 shown.
+  Table ends: the 3.5/4.8 targets are inside the 11-stud table footprint, so the walker stopped at 5.7-6.8 studs; shown there.

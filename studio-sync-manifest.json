@@ -839,8 +839,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 3 Systems/Level 3 Mall Manager AI Controller.ModuleScript.lua",
-      "bytes": 181985,
-      "sha256": "5c8bc44a41d2756b3dc53fab9fd6893c085fa2dcfc2204087d459b29403baf07",
+      "bytes": 187862,
+      "sha256": "a59a7ebf9885eff3377899358ac4498062be704bcdff97387f3dcda169d2502c",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "local UTF-8 bytes verified against fresh Studio length and djb2"
