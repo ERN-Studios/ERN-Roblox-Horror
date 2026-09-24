@@ -10,7 +10,7 @@ Required behavior: a refresh started before a confirmed purchase must never over
 
 ## 2. Off-sale offers appear purchasable
 
-`StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua` around lines 1887–1893 creates three Token Earner cards, and lines 3266–3272 enable BUY when an ownership offer exists. The UI does not check sale state. If published while the six passes are intentionally off sale, players can see active 149/299/399 R$ offers that cannot complete. Hide or disable the three paid cards until the pass sale state is enabled, or explicitly label them unavailable. Preserve dynamic price/ownership checks when sale begins.
+`StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua` around lines 1887–1893 creates three Token Earner cards, and lines 3266–3272 enable BUY when an ownership offer exists. The separate detail pane also enables its BUY button at lines 2084–2110 and invokes `productPurchase` directly. Neither checks sale state. If published while the six passes are intentionally off sale, players can see active 149/299/399 R$ offers that cannot complete. Hide or disable **both** the paid cards and detail-pane purchase action until the pass sale state is enabled, or explicitly label them unavailable. Preserve dynamic price/ownership checks when sale begins.
 
 ## 3. Earned Tokens can pay 1× before owned passes load
 
