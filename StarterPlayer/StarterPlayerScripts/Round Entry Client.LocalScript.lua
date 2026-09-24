@@ -63,7 +63,7 @@ local function begin(payload)
 		-- would simply hang the barrier for 60 seconds and fail the round.
 		-- Nothing else here changes, and groundReady below already resolves
 		-- "Level <n> Generated World" for any n.
-		or payload.Level % 1 ~= 0 or payload.Level < 1 or payload.Level > 4
+		or payload.Level % 1 ~= 0 or payload.Level < 1 or payload.Level > 5
 		or typeof(payload.Character) ~= "Instance" or not payload.Character:IsA("Model")
 		or payload.Character ~= player.Character or typeof(payload.Position) ~= "Vector3"
 		or not finite(payload.Position.X) or not finite(payload.Position.Y) or not finite(payload.Position.Z)

@@ -1,0 +1,51 @@
+=== the contract itself ===
+  ok   line endings are not content
+  ok   a CRLF working copy hashes the same as its LF blob
+  ok   an identical source is exact
+  ok   a FLAGGED entry tolerates exactly one extra trailing newline
+  ok   an UNFLAGGED entry does not
+  ok   and even a flagged entry refuses TWO extra newlines
+  ok   a trailing space is drift, flag or no flag
+  ok   a changed line is drift, flag or no flag
+  ok   the manifest flag is what switches the tolerance on
+  ok   a recorded repo hash matches a Studio copy with the permitted newline
+  ok   and does not when the entry is unflagged
+=== landing facts mutate the flag, never the acceptance rule ===
+  ok   an exact verified landing removes a stale trailing-newline flag
+  ok   a verified permitted +LF landing retains the flag
+  ok   recording cannot turn an unpermitted +LF into a new exception
+  ok   the pull audit removes only the stale exact flag and retains verified +LF
+=== push phase 1: classify_pending ===
+  ok   an exact match is already applied
+  ok   a flagged entry whose Studio copy has the permitted newline is already applied
+  ok   the same difference on an UNFLAGGED entry is a conflict
+  ok   Studio still holding the recorded baseline is ready
+  ok   a flagged baseline may also carry the permitted newline
+  ok   real drift is a conflict even on a flagged entry
+  ok   a repo file that no longer matches its manifest entry is refused
+=== push phase 2: verify_written ===
+  ok   a byte-exact write verifies
+  ok   a flagged write that lands with the permitted newline verifies
+  ok   the same landing on an unflagged entry FAILS the push
+  ok   two trailing newlines fail the push whatever the flag says
+  ok   and a truncated or altered write fails it
+=== the live manifest obeys its own schema ===
+  ok   only scripts carry the trailing-newline flag
+  ok   and every flagged entry's hash is still the REPO file, not Studio's copy
+=== independent parity rejects wrong classes and duplicate paths ===
+  ok   a matching fingerprint with the wrong ClassName fails parity
+  ok   a duplicate Studio full path is rejected instead of overwritten
+  ok   the same source with the expected ClassName passes parity
+=== fallback bookkeeping reconciles exact and +LF landings ===
+  ok   record_synced_source removes the flag for an exact fallback landing
+  ok   record_synced_source retains the flag for a permitted +LF landing
+  ok   fallback bookkeeping republishes the reconciled flag count
+=== the release tools print on a default Windows console ===
+  ok   push_repo_to_studio --help survives a cp1252 console
+  ok   pull_source_from_studio --help survives a cp1252 console
+  ok   record_pending_push --help survives a cp1252 console
+  ok   sync_from_studio --help survives a cp1252 console
+
+All contract checks passed.
+
+STDERR:

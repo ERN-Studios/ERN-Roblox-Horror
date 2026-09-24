@@ -1,0 +1,18 @@
+[
+  {
+    "suite": "test_daily_rewards",
+    "adaptation": "Add real ZyntraChallenges module source inside harness, unchanged test assertions and extracted production logic.",
+    "exitCode": 0,
+    "passed": true,
+    "output": "daily rewards: 370 checks passed\n",
+    "log": "<workspace>/output/game-qa-20260924/logs/test_daily_rewards-real-challenges.log"
+  },
+  {
+    "suite": "test_item_inventory",
+    "adaptation": "Add real ZyntraChallenges module source inside harness, unchanged test assertions and extracted production logic.",
+    "exitCode": 0,
+    "passed": true,
+    "output": "item inventory: 87 checks passed\n",
+    "log": "<workspace>/output/game-qa-20260924/logs/test_item_inventory-real-challenges.log"
+  }
+]

@@ -1,0 +1,21 @@
+Pool Slide navigation: 7 checks passed (offline clocks and scheduler; geometry stubbed)
+
+STDERR:
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/pool-slide-navigation-touzqgnk/navigation_test.luau:3377: pre-fix navigator passed the stall contracts; the fixture no longer reproduces anything
+stacktrace:
+[C] function assert
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/pool-slide-navigation-touzqgnk/navigation_test.luau:3377
+Traceback (most recent call last):
+  File "<workspace>/output/level5-audit/repository/tools/tests/test_pool_slide_navigation.py", line 278, in <module>
+    main()
+    ~~~~^^
+  File "<workspace>/output/level5-audit/repository/tools/tests/test_pool_slide_navigation.py", line 274, in main
+    run(binary, previous, expect_stall=True)
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<workspace>/output/level5-audit/repository/tools/tests/test_pool_slide_navigation.py", line 264, in run
+    subprocess.run([binary, str(path)], check=True, timeout=60)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.1/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['<workspace>/output/level5-build/tools/luau/luau', '/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/pool-slide-navigation-touzqgnk/navigation_test.luau']' returned non-zero exit status 1.

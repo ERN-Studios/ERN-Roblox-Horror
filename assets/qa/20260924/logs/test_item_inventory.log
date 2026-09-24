@@ -1,0 +1,8 @@
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/item-inventory-3x1ezao4/item_inventory.luau:534: attempt to index nil with 'content'
+stacktrace:
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/item-inventory-3x1ezao4/item_inventory.luau:534 function require
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/item-inventory-3x1ezao4/item_inventory.luau:700 function world
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/item-inventory-3x1ezao4/item_inventory.luau:1990 function fresh
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/item-inventory-3x1ezao4/item_inventory.luau:2000
+
+STDERR:

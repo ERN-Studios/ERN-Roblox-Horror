@@ -1,0 +1,679 @@
+{
+  "first": [
+    {
+      "name": "A-to-B",
+      "result": "Success"
+    },
+    {
+      "name": "B-main",
+      "result": "Success"
+    },
+    {
+      "name": "C-winding",
+      "result": "Success"
+    },
+    {
+      "name": "C-exit",
+      "result": "Success"
+    },
+    {
+      "name": "D-lower",
+      "result": "Success"
+    },
+    {
+      "name": "D-exit",
+      "result": "Success"
+    }
+  ],
+  "continued": [
+    {
+      "p": [
+        16986,
+        27,
+        675
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        16998,
+        27,
+        704
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        17020,
+        27,
+        733
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        16992,
+        27,
+        770
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        17000,
+        27,
+        805
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        17000,
+        27,
+        1006
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        17010,
+        27,
+        1090
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        17010,
+        27,
+        1179
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        17000,
+        27,
+        1221
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        17007,
+        27,
+        1247
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        17000,
+        27,
+        1253
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        16935,
+        42,
+        849
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        16921,
+        42,
+        846
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        16921,
+        57,
+        810
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        17000,
+        57,
+        929
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        17079,
+        57,
+        970
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        17079,
+        42,
+        934
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "sabuiltin_Assistant.rbxm.Assistant.Packages._Index.AssistantUI.AssistantUI.Tools.CharacterNavigationTool:70: sabuiltin_Assistant.rbxm.Assistant.Packages._Index.AssistantUI.AssistantUI.Util.TestAutomationUtils:688: Can not find a route to the destination"
+          }
+        ],
+        "isError": true
+      }
+    },
+    {
+      "p": [
+        16942,
+        27,
+        1017
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        16942,
+        35,
+        1042
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        16935,
+        35,
+        1100
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        16935,
+        35,
+        1138
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        16957,
+        27,
+        1173
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        17073,
+        27,
+        1030
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        17073,
+        43,
+        1069
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        17123,
+        43,
+        1150
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        17123,
+        27,
+        1189
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        16931,
+        27,
+        649
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        16931,
+        27,
+        676
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        16986,
+        27,
+        681
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        17054,
+        27,
+        742
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        17054,
+        27,
+        785
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        17000,
+        27,
+        800
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        17048,
+        27,
+        514
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        17000,
+        15,
+        514
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        16952,
+        27,
+        554
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        16900,
+        27,
+        224
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        16874,
+        27,
+        224
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        16859,
+        27,
+        224
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        16972,
+        27,
+        101
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    },
+    {
+      "p": [
+        16968,
+        27,
+        136
+      ],
+      "r": {
+        "content": [
+          {
+            "type": "text",
+            "text": "Success"
+          }
+        ],
+        "isError": false
+      }
+    }
+  ],
+  "returnFromChute": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Success"
+      }
+    ],
+    "isError": false
+  }
+}

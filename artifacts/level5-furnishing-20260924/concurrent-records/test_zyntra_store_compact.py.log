@@ -1,0 +1,3 @@
+ok  544 checks: terminal 1180x760, upgrade card 210/246/330px (phone/tablet/pointer), shop icon 52/64/76px, list+detail at >=760 pointer only, 5-button rail (tabs 14, supplies 42, supplies-absent 4, shop 102, rail 123, layout 121, routing 39, modals 19)
+
+STDERR:

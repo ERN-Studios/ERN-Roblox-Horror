@@ -1,0 +1,9 @@
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/daily-rewards-q8z5f4rv/daily_rewards.luau:566: harness has no module ZyntraChallenges
+stacktrace:
+[C] function error
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/daily-rewards-q8z5f4rv/daily_rewards.luau:566 function require
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/daily-rewards-q8z5f4rv/daily_rewards.luau:692 function world
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/daily-rewards-q8z5f4rv/daily_rewards.luau:1880 function fresh
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/daily-rewards-q8z5f4rv/daily_rewards.luau:1918
+
+STDERR:

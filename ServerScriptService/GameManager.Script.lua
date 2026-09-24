@@ -144,6 +144,7 @@ local LEVEL_GENERATORS = {
  -- Routing.MaxLevel through, and the adapter refuses to build without the
  -- workspace flag as well.
  [4] = "Level4Generator",
+ [5] = "Level5Generator",
 }
 
 -- LEVEL4_DEV_GATE_20260921
@@ -156,13 +157,32 @@ if workspace:GetAttribute(Routing.Level4DevAttribute) == nil then
  workspace:SetAttribute(Routing.Level4DevAttribute, true)
 end
 
+-- LEVEL5_MAP_PREVIEW_20260923. A ceiling is only a transport bound. Access
+-- is checked against the REQUESTED level too, so enabling 5 cannot enable 4.
+if workspace:GetAttribute(Routing.Level5DevAttribute) == nil then
+ workspace:SetAttribute(Routing.Level5DevAttribute, true)
+end
 local function devCeiling(group)
- if workspace:GetAttribute(Routing.Level4DevAttribute) ~= true then return Routing.MaxLevel end
  if type(group) ~= "table" or #group == 0 then return Routing.MaxLevel end
  for _, player in ipairs(group) do
   if not DevAccess.IsAllowed(player) then return Routing.MaxLevel end
  end
- return Routing.DevCeiling(true, true)
+ if workspace:GetAttribute(Routing.Level5DevAttribute) == true then return 5 end
+ return Routing.DevCeiling(workspace:GetAttribute(Routing.Level4DevAttribute), true)
+end
+
+local function canAccessLevel(requestedLevel, group)
+ local level = tonumber(requestedLevel)
+ if not level or level ~= level then return false end
+ if level <= Routing.MaxLevel then return true end
+ local flag = level == 4 and Routing.Level4DevAttribute
+  or level == 5 and Routing.Level5DevAttribute or nil
+ if not flag or workspace:GetAttribute(flag) ~= true then return false end
+ if type(group) ~= "table" or #group == 0 then return false end
+ for _, player in ipairs(group) do
+  if not DevAccess.IsAllowed(player) then return false end
+ end
+ return true
 end
 
 -- Always-on server authority for every developer command. Unlike the Level 1
@@ -618,6 +638,13 @@ local function sanitizePersistedLevelState()
   or selected == 4 then
   stale[#stale + 1] = 4
  end
+ if workspace:FindFirstChild("Level 5 Generated World") ~= nil
+  or ServerStorage:FindFirstChild("Level 5 Stored Server Lobby") ~= nil
+  or ServerStorage:FindFirstChild("Level 5 Stored Level 1 Entity") ~= nil
+  or ServerStorage:FindFirstChild("Level 5 Runtime Backup") ~= nil
+  or selected == 5 then
+  stale[#stale + 1] = 5
+ end
  if #stale == 0 then return end
 
  for _, level in ipairs(stale) do
@@ -731,6 +758,7 @@ end
 local function freeElevatorFrame(player, pad)
  local levelOne = pad:GetAttribute("Level2_CompatibilityMarker") ~= true
   and pad:GetAttribute("Level3_CompatibilityMarker") ~= true
+  and pad:GetAttribute("Level5_CompatibilityMarker") ~= true
  local forward = levelOne and Vector3.xAxis or pad.CFrame.LookVector
  local side = levelOne and Vector3.zAxis or pad.CFrame.RightVector
  local depth = pad.Size.X + 3 -- Level 1's emergency pad is 3 studs shorter than its floor.
@@ -1131,8 +1159,7 @@ local function queueRadius(station)
 end
 
 local function playerInsideZone(player, station, includeBusy)
- if station.level == 4 and (not DevAccess.IsAllowed(player)
-  or workspace:GetAttribute(Routing.Level4DevAttribute) ~= true) then return false end
+ if station.level > Routing.MaxLevel and not canAccessLevel(station.level, {player}) then return false end
  if inRound[player] or (station.busy and not includeBusy) then return false end
  local char = player.Character
  local hum = char and char:FindFirstChildOfClass("Humanoid")
@@ -1475,6 +1502,7 @@ end
 
 local function ensureWorld(group, requestedLevel, attempt)
  if attempt and not attempt:IsOpen() then return false end
+ if not canAccessLevel(requestedLevel, group) then return false end
  -- LEVEL4_DEV_GATE_20260921: ClampLevelTo with the dev ceiling. For every
  -- normal party devCeiling() returns Routing.MaxLevel, so this is exactly the
  -- old Routing.ClampLevel(requestedLevel).
@@ -1489,6 +1517,7 @@ local function ensureWorld(group, requestedLevel, attempt)
    [2] = "ENTERING_DRY_POOLROOMS",
    [3] = "ENTERING_FORGOTTEN_MALL",
    [4] = "ENTERING_QUIET_SUBURBS",
+   [5] = "ENTERING_INDOOR_SUBURBS",
   }
   workspace:SetAttribute("LoadStage", levelStages[level] or "GENERATING_WORLD")
   local ok, err = pcall(function()
@@ -2050,6 +2079,7 @@ end
 local function prepareGroupLoading(attempt, group, level, useSlideResume)
  if not attempt:IsOpen() then return false end
  attempt:SetMembers(group)
+ if not canAccessLevel(level, group) then attempt:Fail("LEVEL_ACCESS_DENIED"); return false end
  for _, player in ipairs(group) do
   if player.Parent == Players then
    inRound[player] = true
@@ -2407,6 +2437,10 @@ local function continueStudioCampaign(participants, continuing, returning, nextL
 end
 
 playRound = function(participants)
+ if not canAccessLevel(activeLevel, participants) then
+  returnGroupToLobby(participants)
+  return
+ end
 	if LEVEL_GENERATORS[activeLevel] then Players.CharacterAutoLoads = false end
  -- Warm the Friend Boost pair cache for this party now (it resolves in the
  -- background); the count at completion reads the cache and cannot yield there.
@@ -2813,7 +2847,7 @@ playRound = function(participants)
 		RunService.Heartbeat:Wait()
 		releaseSlideResume(participants)
 		fireGroup(participants, "level3access")
- elseif activeLevel == 3 or activeLevel == 4 then
+ elseif activeLevel == 3 or activeLevel == 4 or activeLevel == 5 then
   -- A short service descent establishes the level without replaying Level 1's
   -- fuse briefing. Level 3 owns its own objective presentation; LEVEL4_DEV_GATE
   -- _20260921 reuses the same descent through Level 4's service passage.
@@ -2831,7 +2865,7 @@ playRound = function(participants)
   -- it NOW so the cabin's maintenance poster lists every cable (count + colour)
   -- while the crew rides the elevator, instead of only after the doors open.
   -- PuzzleManager re-asserts the same value when the puzzle actually starts.
-  workspace:SetAttribute("Level1ActiveCircuitCount", math.clamp(#participants, 1, 6))
+  workspace:SetAttribute("Level1ActiveCircuitCount", math.clamp(math.ceil(#participants / 2), 1, 3))
   for t = ELEVATOR_TIME, 1, -1 do
    if aliveCount <= 0 then sendWipedPartyHome(); return end
    fireGroup(participants, "elevator", t)
@@ -3067,11 +3101,43 @@ level4DevStart.OnInvoke = function()
 end
 -- END LEVEL4_DEV_GATE_20260921 -----------------------------------------------
 
+-- LEVEL5_MAP_PREVIEW_20260923: server-only test entry. Independent of Level 4,
+-- with the same shared allowlist, no client remote and no privilege expansion.
+do
+ local hook = ServerStorage:FindFirstChild("Level5DevStart")
+ if not hook then
+  hook = Instance.new("BindableFunction")
+  hook.Name, hook.Parent = "Level5DevStart", ServerStorage
+ end
+ assert(hook:IsA("BindableFunction"), "Level5DevStart must be a BindableFunction")
+ hook.OnInvoke = function()
+  if IS_RESERVED_ROUND_SERVER then return false, "RESERVED_SERVER" end
+  if workspace:GetAttribute(Routing.Level5DevAttribute) ~= true then return false, "DISABLED" end
+  if roundBusy then return false, "BUSY" end
+  local group = {}
+  for _, player in ipairs(Players:GetPlayers()) do
+   if not DevAccess.IsAllowed(player) then return false, "NOT_DEVELOPER" end
+   group[#group + 1] = player
+  end
+  if #group == 0 then return false, "NO_PLAYERS" end
+  roundBusy = true
+  task.spawn(function()
+   local attempt = beginGroupLoading(group)
+   clearGlowsticks()
+   assignGlowstickSlots(group)
+   roundEntryMode = nil
+   if prepareGroupLoading(attempt, group, 5, false) then playRound(group) end
+   if not activeEntry or activeEntry.State ~= "failed" then roundBusy = false end
+  end)
+  return true
+ end
+end
+
 -- Launch one station. Published servers teleport the selected group into a fresh
 -- reserved server. Studio cannot test TeleportService, so it runs the same party
 -- locally as a practical editor-only fallback.
 local function launchStation(station, participants)
- if station.level == 4 and devCeiling(participants) ~= 4 then return end
+ if not canAccessLevel(station.level or 1, participants) then return end
  station.busy = true
  setStationDisplay(station, "STARTING PRIVATE WORLD", #participants .. "/" .. (station.maxPlayers or MAX_PLAYERS_PER_STATION) .. " PLAYERS", station.color)
  fireGroup(participants, "loadinggame", station.level or 1)
@@ -3620,6 +3686,11 @@ if IS_RESERVED_ROUND_SERVER then
   -- LEVEL4_DEV_GATE_20260921: clamped AFTER the roster is known, because the
   -- dev ceiling requires every arriving member to pass DevAccess. For a normal
   -- party this is exactly the old Routing.ClampLevel(group.Level).
+  if not canAccessLevel(group.Level, participants) then
+   attempt:SetMembers(participants)
+   attempt:Fail("LEVEL_ACCESS_DENIED")
+   return
+  end
   local selectedLevel = Routing.ClampLevelTo(group.Level, devCeiling(participants))
 
   local glowstickSlots = nil

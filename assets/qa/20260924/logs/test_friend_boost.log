@@ -1,0 +1,12 @@
+
+STDERR:
+Traceback (most recent call last):
+  File "<workspace>/output/level5-audit/repository/tools/tests/test_friend_boost.py", line 834, in <module>
+    main()
+    ~~~~^^
+  File "<workspace>/output/level5-audit/repository/tools/tests/test_friend_boost.py", line 776, in main
+    handler = section(MONETIZATION, "levelCompletedEvent.Event:Connect(function(player, level, friendCount)",
+                      "MarketplaceService.PromptGamePassPurchaseFinished")
+  File "<workspace>/output/level5-audit/repository/tools/tests/test_friend_boost.py", line 38, in section
+    begin = source.index(start)
+ValueError: substring not found

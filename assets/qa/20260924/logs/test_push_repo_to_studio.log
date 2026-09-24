@@ -1,0 +1,184 @@
+========================================================================
+FIXTURE -- the pending queue this suite pushes is SYNTHESIZED
+========================================================================
+This queue is SYNTHESIZED by fresh_repo() inside a temp copy;
+nothing here reflects live Studio or the real manifest's current
+queue state, and the real manifest is only ever read.
+synthesized pending entries: 9 of 191 manifest items
+     283954B  ModuleScript ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua
+     164213B  Script       ServerScriptService/GameManager.Script.lua
+      99965B  ModuleScript ReplicatedStorage/UIDevice.ModuleScript.lua
+      58827B  Script       ServerScriptService/Level 1 Systems/EntityAI.Script.lua
+      20138B  ModuleScript ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua  studioTrailingNewline
+      13628B  LocalScript  StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua  studioTrailingNewline
+      11667B  Script       ServerScriptService/Level 1 Systems/EntityKill.Script.lua
+       1644B  LocalScript  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua
+       1075B  ModuleScript ReplicatedStorage/DevAccess.ModuleScript.lua
+  PASS  the queue is not empty (the defect this fixture exists to fix)  [9 pending]
+  PASS  the queue has exactly the size fresh_repo() intended  [9 pending vs 9 requested]
+  PASS  live pending statuses cannot leak into the synthesized queue
+  PASS  every file the tests address by name is queued
+  PASS  every queued entry is a script class the push tool accepts
+  PASS  every studioSha256Before is the sha of the baseline the fake Studio is seeded with
+  PASS  flagged entries are seeded with the repo text plus exactly one newline; unflagged with the text itself
+  PASS  studio_source_contract.matches_hash accepts every seeded baseline
+  PASS  every pending entry's sha256 matches the modified file on disk
+  PASS  every pending entry's bytes matches the modified file on disk
+  PASS  every pending entry really differs from its baseline
+  PASS  push_repo_to_studio.classify_pending returns 'ready' for all of them
+  PASS  ...and 'conflict' once the fake Studio drifts
+  PASS  no non-pending entry carries a stray studioSha256Before
+  PASS  the queue spans a wide size range (TEST 1's 'largest file' check needs a real spread)  [1075B .. 283954B (Level 2 World Builder.ModuleScript.lua)]
+  PASS  the queue covers Script, LocalScript and ModuleScript  [['LocalScript', 'ModuleScript', 'Script']]
+  PASS  the queue includes studioTrailingNewline entries  [2 flagged]
+  PASS  the REAL manifest was not modified while building the fixture
+
+######################################################################################################################################################################################
+##  CANNOT EXECUTE: NO LUAU INTERPRETER                                                                                                                                             ##
+##                                                                                                                                                                                  ##
+##  <workspace>/output/level5-build/tools/luau/luau --version exited 1: Error: Unrecognized option '--version'.  ##
+##                                                                                                                                                                                  ##
+##  Every TEST below is ENUMERATED. The ones that talk to Studio are                                                                                                                ##
+##  reported as 'not executed' -- nothing was pushed, nothing was                                                                                                                   ##
+##  round-tripped, no Studio behaviour was verified. This run is a                                                                                                                  ##
+##  FAILURE (exit 2), not a pass.                                                                                                                                                   ##
+##                                                                                                                                                                                  ##
+##  To run them, install the luau CLI (nothing is downloaded here):                                                                                                                 ##
+##    https://github.com/luau-lang/luau/releases  -> luau[.exe]                                                                                                                     ##
+##    put it at <workspace>/output/level5-audit/repository/tools/tests/luau  or set LUAU_BIN=<path>              ##
+##                                                                                                                                                                                  ##
+##  The fixture itself needs no interpreter:                                                                                                                                        ##
+##    python tools/tests/test_push_repo_to_studio.py --fixture-only                                                                                                                 ##
+######################################################################################################################################################################################
+
+========================================================================
+TEST 1 -- full push of all pending scripts (happy path)
+========================================================================
+  NOT EXECUTED  no luau interpreter
+
+========================================================================
+TEST 2 -- conflict detection: Studio drifted since the baseline
+========================================================================
+  NOT EXECUTED  no luau interpreter
+
+========================================================================
+TEST 3 -- idempotency: re-running after a successful push
+========================================================================
+  NOT EXECUTED  no luau interpreter
+
+========================================================================
+TEST 4 -- already-applied (Studio already has the new content)
+========================================================================
+  NOT EXECUTED  no luau interpreter
+
+========================================================================
+TEST 5 -- hostile content round-trip (unicode, escapes, CRLF, empty, huge)
+========================================================================
+  NOT EXECUTED  no luau interpreter
+
+========================================================================
+TEST 6 -- script missing from Studio (renamed/deleted)
+========================================================================
+  NOT EXECUTED  no luau interpreter
+
+========================================================================
+TEST 7 -- --file with spaces in the path
+========================================================================
+  NOT EXECUTED  no luau interpreter
+
+========================================================================
+TEST 8 -- --list must never write
+========================================================================
+  PASS  --list has something to list  [9 pending]
+9 script(s) pending push:
+  ReplicatedStorage/DevAccess.ModuleScript.lua
+  ReplicatedStorage/UIDevice.ModuleScript.lua
+  ServerScriptService/GameManager.Script.lua
+  ServerScriptService/Level 1 Systems/EntityAI.Script.lua
+  ServerScriptService/Level 1 Systems/EntityKill.Script.lua
+  ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua
+  ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua
+  StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua
+  StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua
+  PASS  --list exits 0  [exit=0]
+  PASS  --list made zero Studio calls  [0 calls]
+  PASS  --list left the manifest untouched
+
+========================================================================
+TEST 9 -- --skip-conflicts pushes the clean files, leaves the conflict
+========================================================================
+  NOT EXECUTED  no luau interpreter
+
+========================================================================
+TEST 10 -- --overwrite-conflicts
+========================================================================
+  NOT EXECUTED  no luau interpreter
+
+========================================================================
+TEST 11 -- truncated staged transfer must abort BEFORE writing
+========================================================================
+  NOT EXECUTED  no luau interpreter
+
+========================================================================
+TEST 12 -- compare-and-swap catches drift between check and write
+========================================================================
+  NOT EXECUTED  no luau interpreter
+
+========================================================================
+TEST 13 -- no orphaned transfer buffer after a mid-transfer failure
+========================================================================
+  NOT EXECUTED  no luau interpreter
+
+========================================================================
+TEST 14 -- pre-push backups written
+========================================================================
+  NOT EXECUTED  no luau interpreter
+
+========================================================================
+TEST 15 -- --file that matches nothing is reported clearly
+========================================================================
+  PASS  there IS a pending queue to fail to match against
+--file did not match a pending entry: ServerScriptService/NoSuchFile.lua  (not in manifest)
+  PASS  unmatched --file exits 2 (not a misleading 'nothing pending')  [exit=2]
+  PASS  unmatched --file contacted Studio zero times
+
+========================================================================
+TEST 16 -- backslash paths (Windows tab-completion) still match
+========================================================================
+  NOT EXECUTED  no luau interpreter
+
+========================================================================
+TEST 17 -- stale buffer and compile probe from a previous crash are cleaned at startup
+========================================================================
+  NOT EXECUTED  no luau interpreter
+
+========================================================================
+TEST 18 -- a pushed script that does not compile is reported, not passed as clean
+========================================================================
+  NOT EXECUTED  no luau interpreter
+
+========================================================================
+RESULT: 25 passed, 0 failed
+tests enumerated: 18   executed: 2   not executed: 16
+NOT EXECUTED (16):
+  - TEST 1 -- full push of all pending scripts (happy path)  [no luau interpreter]
+  - TEST 2 -- conflict detection: Studio drifted since the baseline  [no luau interpreter]
+  - TEST 3 -- idempotency: re-running after a successful push  [no luau interpreter]
+  - TEST 4 -- already-applied (Studio already has the new content)  [no luau interpreter]
+  - TEST 5 -- hostile content round-trip (unicode, escapes, CRLF, empty, huge)  [no luau interpreter]
+  - TEST 6 -- script missing from Studio (renamed/deleted)  [no luau interpreter]
+  - TEST 7 -- --file with spaces in the path  [no luau interpreter]
+  - TEST 9 -- --skip-conflicts pushes the clean files, leaves the conflict  [no luau interpreter]
+  - TEST 10 -- --overwrite-conflicts  [no luau interpreter]
+  - TEST 11 -- truncated staged transfer must abort BEFORE writing  [no luau interpreter]
+  - TEST 12 -- compare-and-swap catches drift between check and write  [no luau interpreter]
+  - TEST 13 -- no orphaned transfer buffer after a mid-transfer failure  [no luau interpreter]
+  - TEST 14 -- pre-push backups written  [no luau interpreter]
+  - TEST 16 -- backslash paths (Windows tab-completion) still match  [no luau interpreter]
+  - TEST 17 -- stale buffer and compile probe from a previous crash are cleaned at startup  [no luau interpreter]
+  - TEST 18 -- a pushed script that does not compile is reported, not passed as clean  [no luau interpreter]
+VERDICT: CANNOT EXECUTE -- <workspace>/output/level5-build/tools/luau/luau --version exited 1: Error: Unrecognized option '--version'.
+         The fixture is sound, but nothing was actually pushed.
+========================================================================
+
+STDERR:

@@ -1,0 +1,8 @@
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/queue-barrier-o83ldydi/queue_barrier.luau:120: attempt to index nil with 'MaxLevel'
+stacktrace:
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/queue-barrier-o83ldydi/queue_barrier.luau:120 function playerInsideZone
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/queue-barrier-o83ldydi/queue_barrier.luau:142 function rawQueuedPlayers
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/queue-barrier-o83ldydi/queue_barrier.luau:222 function queuedPlayers
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/queue-barrier-o83ldydi/queue_barrier.luau:494
+
+STDERR:

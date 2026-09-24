@@ -1,0 +1,6 @@
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/leaderboard-backfill-z6t17y6v/leaderboard_backfill.luau:525: attempt to index nil with 'WaitForChild'
+stacktrace:
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/leaderboard-backfill-z6t17y6v/leaderboard_backfill.luau:525 function world
+/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/leaderboard-backfill-z6t17y6v/leaderboard_backfill.luau:1776
+
+STDERR:

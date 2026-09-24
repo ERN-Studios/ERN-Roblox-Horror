@@ -346,6 +346,15 @@ local function applyPlayerLighting()
   return
  end
 
+ -- LEVEL5_MAP_PREVIEW_20260923: its own client controller owns/restores the
+ -- fluorescent indoor grade. No Level 1 night or lobby tint over this map.
+ if workspace:FindFirstChild("Level 5 Generated World") ~= nil and selectedLevel == 5 and inMaze
+  and workspace:GetAttribute("Level5LightingOwnedByController") == true then
+  lobbyGrade.Enabled = false
+  if mazeGrade then mazeGrade.Enabled = false end
+  return
+ end
+
  if isLevelTwo and workspace:GetAttribute("Level2LightingOwnedByController") == true then
   lobbyGrade.Enabled = false
   if mazeGrade then mazeGrade.Enabled = false end
