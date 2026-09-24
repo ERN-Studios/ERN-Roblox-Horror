@@ -1,0 +1,107 @@
+{
+  "capturedAtUtc": "2026-09-24T13:22:29.682677+00:00",
+  "universeId": 10559217407,
+  "source": "Roblox Open Cloud Game Pass creator GET and official thumbnails API",
+  "passes": [
+    {
+      "gamePassId": 1994666374,
+      "name": "Static Wraith",
+      "description": "Permanent Static Wraith hazmat suit skin for BACKROOMS: STAY QUIET. Cosmetic only; no gameplay advantage.",
+      "isForSale": true,
+      "priceInformation": {
+        "defaultPriceInRobux": 99,
+        "enabledFeatures": []
+      },
+      "isManagedPricingEnabled": false,
+      "iconAssetId": 101066368280251,
+      "proposedFile": "static-wraith-round-v2.png",
+      "thumbnails": {
+        "square": {
+          "state": "Completed",
+          "file": "before/static-wraith-square-150.png",
+          "sha256": "90599e7d437d2b641ded44932259326cf972f268e1fe8d906d7426ebc369cebc"
+        },
+        "circle": {
+          "state": "Completed",
+          "file": "before/static-wraith-circle-150.png",
+          "sha256": "90599e7d437d2b641ded44932259326cf972f268e1fe8d906d7426ebc369cebc"
+        }
+      }
+    },
+    {
+      "gamePassId": 1994816385,
+      "name": "False Sun",
+      "description": "Permanent False Sun hazmat suit skin for BACKROOMS: STAY QUIET. Cosmetic only; no gameplay advantage.",
+      "isForSale": true,
+      "priceInformation": {
+        "defaultPriceInRobux": 149,
+        "enabledFeatures": []
+      },
+      "isManagedPricingEnabled": false,
+      "iconAssetId": 90694693019242,
+      "proposedFile": "false-sun-round-v2.png",
+      "thumbnails": {
+        "square": {
+          "state": "Completed",
+          "file": "before/false-sun-square-150.png",
+          "sha256": "2ce2722006736897d248017832fe6cb19adb955ee4adee45cffdf9b63270880f"
+        },
+        "circle": {
+          "state": "Completed",
+          "file": "before/false-sun-circle-150.png",
+          "sha256": "2ce2722006736897d248017832fe6cb19adb955ee4adee45cffdf9b63270880f"
+        }
+      }
+    },
+    {
+      "gamePassId": 1982715834,
+      "name": "Zyntra Entity Detector",
+      "description": "Permanent access to the Zyntra Entity Detector. Scan for a 4-second LOW / MEDIUM / HIGH danger reading. HIGH within 50 studs, MEDIUM up to 120 studs, LOW beyond 120. 20-second cooldown. Works on desktop and mobile. No exact locations, tracking or guaranteed safety. Try the free simulated shop demo before buying.",
+      "isForSale": true,
+      "priceInformation": {
+        "defaultPriceInRobux": 149,
+        "enabledFeatures": []
+      },
+      "isManagedPricingEnabled": false,
+      "iconAssetId": 134413710349950,
+      "proposedFile": "entity-detector-round-v2.png",
+      "thumbnails": {
+        "square": {
+          "state": "Completed",
+          "file": "before/entity-detector-square-150.png",
+          "sha256": "cfab9a4ac004b1489626e6167056184ff7ac9039ae5e374d7e141be8affb2cc8"
+        },
+        "circle": {
+          "state": "Completed",
+          "file": "before/entity-detector-circle-150.png",
+          "sha256": "cfab9a4ac004b1489626e6167056184ff7ac9039ae5e374d7e141be8affb2cc8"
+        }
+      }
+    },
+    {
+      "gamePassId": 1978617781,
+      "name": "ZYNTRA Support \u2014 20K",
+      "description": "",
+      "isForSale": true,
+      "priceInformation": {
+        "defaultPriceInRobux": 20000,
+        "enabledFeatures": []
+      },
+      "isManagedPricingEnabled": false,
+      "iconAssetId": 133448903949274,
+      "proposedFile": "donation-20k-round-v2.png",
+      "thumbnails": {
+        "square": {
+          "state": "Completed",
+          "file": "before/donation-20k-square-150.png",
+          "sha256": "caff837e3e3a200d4a07ca19d6ba91bf2fe0d0ff071f09306bd7db087317149c"
+        },
+        "circle": {
+          "state": "Completed",
+          "file": "before/donation-20k-circle-150.png",
+          "sha256": "4a3c168e8f0ffaf87e867564cfd30c38ec734e1c39c3ab51143188d9fb693111"
+        }
+      }
+    }
+  ]
+}

@@ -17,4 +17,6 @@ The upgrade passes can technically be bought outside the game's guarded shop. Ea
 
 The three icon designs were generated with the built-in image tool using `assets/monetization/icons-512/research-tokens-20.png` as a style reference. Prompts specified a centered embossed 2×, 3× or 5× gold medallion, dark industrial sci-fi background, cyan circuit glow and progressively richer token stacks. The three `source-*.png` files are the generated originals; `make_round_icons.py` creates 512×512 PNGs with transparent circular corners and a 128 px preview. The key numeral and coin remain inside Roblox's circular crop. No API key is in this folder; `provision_game_passes.py` reads the local secret file and is idempotent.
 
+The [24 September live pass-icon inventory](../pass-icon-refresh/pass-inventory-20260924.json) confirms all six Token Earner icon assets are Approved and all six official Roblox circular pass thumbnails render as `Completed`. The initial `Pending` thumbnail state after pass creation cleared without any reupload.
+
 Integration is Claude-owned. Verify entitlement on the server with `UserOwnsGamePassAsync`, including rejoin and purchase completion. Exercise all six ownership paths, repeat purchases, pending upgrades, non-stacking, bought-token exclusion and UI prices before enabling sale.

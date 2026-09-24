@@ -11,7 +11,7 @@
 | Static Wraith | `105116444000474` | `71524908131120` | Game Pass `1994666374`, **99 Robux** |
 | False Sun | `83272384519781` | `132614425134815` | Game Pass `1994816385`, **149 Robux** |
 
-Both Game Passes are for sale under the existing ERN Roblox Studios experience (universe `10559217407`, group `1039373905`). [Static Wraith pass](https://create.roblox.com/dashboard/creations/experiences/10559217407/passes/1994666374/sales) and [False Sun pass](https://create.roblox.com/dashboard/creations/experiences/10559217407/passes/1994816385/sales) were checked against Roblox's pass listing. Their icon Image IDs are `101066368280251` and `90694693019242`. The shop verifies the current price and sale state before prompting; the server checks actual ownership before granting the skin. A real Robux purchase has not yet been tested.
+Both Game Passes are for sale under the existing ERN Roblox Studios experience (universe `10559217407`, group `1039373905`). [Static Wraith pass](https://create.roblox.com/dashboard/creations/experiences/10559217407/passes/1994666374/sales) and [False Sun pass](https://create.roblox.com/dashboard/creations/experiences/10559217407/passes/1994816385/sales) were checked against Roblox's pass listing. Their circular helmet-portrait icon Image IDs are now `138340341615487` and `124426104310134`. The [before/after icon receipt](../monetization/pass-icon-refresh/README.md) preserves the original IDs and official 128 px previews; Open Cloud GET confirmed prices, names, descriptions and sale states did not change. The shop verifies the current price and sale state before prompting; the server checks actual ownership before granting the skin. A real Robux purchase has not yet been tested.
 
 ## Imported visual assets
 
