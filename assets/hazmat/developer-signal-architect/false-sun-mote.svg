@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!-- Source for the small, transparent False Sun particle sprite. -->
+  <defs>
+    <radialGradient id="mote">
+      <stop offset="0" stop-color="#fffdf1" stop-opacity="0.94"/>
+      <stop offset="0.14" stop-color="#fff5cf" stop-opacity="0.84"/>
+      <stop offset="0.32" stop-color="#ffd990" stop-opacity="0.53"/>
+      <stop offset="0.58" stop-color="#e99b4b" stop-opacity="0.19"/>
+      <stop offset="1" stop-color="#bb6c2d" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <circle cx="128" cy="128" r="120" fill="url(#mote)"/>
+</svg>
