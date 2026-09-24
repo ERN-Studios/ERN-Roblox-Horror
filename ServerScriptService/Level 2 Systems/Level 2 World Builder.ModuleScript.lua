@@ -223,6 +223,85 @@ local function hallFloorY(hall)
 	return 0
 end
 
+-- ── wall-depth decals ───────────────────────────────────────────────────────
+
+-- WALL_DEPTH_DECALS_20260924 (Trello DDqjXkyU). Codex's two approved accents
+-- (assets/level2/wall-depth), rare by design: an old pump-service mural on the
+-- longest solid wall of ordinary halls, and one small visitor trace in a dead
+-- end (or, failing one, the quietest hall -- fewest doorways). Only plain "Hall" rooms -- never pump, kids, slide, arrival, exit, den or
+-- the grand hall -- so nothing fake sits beside a real objective. Static,
+-- non-colliding and invisible to queries and shadows; deterministic per seed.
+-- The trace is placed first: it has the fewest good homes.
+local WALL_DECALS = {
+	{Name = "Visitor Traces", Image = 126468681550310, Size = Vector2.new(8, 4), CenterY = 5, Count = 1, Quiet = true},
+	{Name = "Maintenance History", Image = 70761413249378, Size = Vector2.new(16, 8), CenterY = 8, Count = 2},
+}
+
+local function placeWallDecals(parent, layout, doorsByHall)
+	local t, door = Configuration.WallThickness * .5, Configuration.DoorWidth * .5 + 3
+	local candidates = {}
+	for _, hall in ipairs(layout.Halls) do
+		local doors = doorsByHall[hall.Index]
+		if hall.Role == "Hall" and not hall.IsGrand and doors then
+			local doorCount = #doors.West + #doors.East + #doors.North + #doors.South
+			for _, wall in ipairs({
+				{doors.West, hall.MinZ, hall.MaxZ, function(a) return Vector3.new(hall.MinX + t, 0, a) end, Vector3.xAxis},
+				{doors.East, hall.MinZ, hall.MaxZ, function(a) return Vector3.new(hall.MaxX - t, 0, a) end, -Vector3.xAxis},
+				{doors.North, hall.MinX, hall.MaxX, function(a) return Vector3.new(a, 0, hall.MinZ + t) end, Vector3.zAxis},
+				{doors.South, hall.MinX, hall.MaxX, function(a) return Vector3.new(a, 0, hall.MaxZ - t) end, -Vector3.zAxis},
+			}) do
+				-- The longest stretch of solid wall between doorways and corners.
+				local centres = table.clone(wall[1])
+				table.sort(centres)
+				local cursor, bestLow, bestHigh = wall[2] + 6, 0, 0
+				table.insert(centres, wall[3] - 6 + door)
+				for _, centre in ipairs(centres) do
+					if centre - door - cursor > bestHigh - bestLow then bestLow, bestHigh = cursor, centre - door end
+					cursor = math.max(cursor, centre + door)
+				end
+				table.insert(candidates, {Hall = hall, Doors = doorCount, Length = bestHigh - bestLow,
+					Position = wall[4]((bestLow + bestHigh) * .5), Normal = wall[5]})
+			end
+		end
+	end
+	local rng = Random.new((math.floor(math.abs(tonumber(layout.Seed) or 1)) % 2147483000) + 5821)
+	for index = #candidates, 2, -1 do
+		local swap = rng:NextInteger(1, index)
+		candidates[index], candidates[swap] = candidates[swap], candidates[index]
+	end
+	local folder = Instance.new("Folder")
+	folder.Name = "Level 2 Wall Decals"
+	folder.Parent = parent
+	local used, placed = {}, 0
+	for _, spec in ipairs(WALL_DECALS) do
+		local count, quietest = 0, math.huge
+		for _, candidate in ipairs(candidates) do
+			if candidate.Length >= spec.Size.X + 4 then quietest = math.min(quietest, candidate.Doors) end
+		end
+		for _, candidate in ipairs(candidates) do
+			if count >= spec.Count then break end
+			if not used[candidate.Hall] and candidate.Length >= spec.Size.X + 4
+				and (not spec.Quiet or candidate.Doors == quietest) then
+				used[candidate.Hall], count, placed = true, count + 1, placed + 1
+				local centre = candidate.Position + Vector3.new(0, spec.CenterY, 0) + candidate.Normal * .06
+				local plane = Instance.new("Part")
+				plane.Name = "Level 2 Wall Decal " .. spec.Name
+				plane.Anchored, plane.CanCollide, plane.CanTouch, plane.CanQuery = true, false, false, false
+				plane.CastShadow, plane.Transparency = false, 1
+				plane.Size = Vector3.new(spec.Size.X, spec.Size.Y, .05)
+				plane.CFrame = CFrame.lookAt(centre, centre + candidate.Normal)
+				plane:SetAttribute("Level2_HallId", candidate.Hall.Id)
+				local decal = Instance.new("Decal")
+				decal.Face = Enum.NormalId.Front
+				decal.Texture = "rbxassetid://" .. spec.Image
+				decal.Parent = plane
+				plane.Parent = folder
+			end
+		end
+	end
+	folder:SetAttribute("Level2_WallDecalCount", placed)
+end
+
 -- ── walls ───────────────────────────────────────────────────────────────────
 
 local function makeWallWithGaps(parent, hall, name, axis, cross, low, high, gaps, height, bottomY, flumeGap)
@@ -6216,6 +6295,7 @@ function WorldBuilder.Build(layout, generation)
 		makeWallWithGaps(hallModel, hall, "Level 2 Hall North Wall", "X", hall.MinZ, hall.MinX, hall.MaxX, doors.North, height, bottomY)
 		makeWallWithGaps(hallModel, hall, "Level 2 Hall South Wall", "X", hall.MaxZ, hall.MinX, hall.MaxX, doors.South, height, bottomY)
 	end
+	placeWallDecals(world, layout, doorsByHall)
 	task.wait()
 
 	local corridorRecords = {}
