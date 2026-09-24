@@ -1,4 +1,4 @@
-"""Upload six reviewed standing hazmat shop cards to the Roblox group.
+"""Upload reviewed standing hazmat shop cards to the Roblox group.
 
 The receipt makes each upload resumable and prevents an accidental duplicate.
 This does not insert either image into Studio or publish a place version.
@@ -26,6 +26,7 @@ IMAGES = {
     "blacksite-director-standing-card-v1.png": ("Blacksite Director Hazmat Standing Shop Card", "Standing cosmetic shop portrait for BACKROOMS: STAY QUIET."),
     "static-wraith-standing-card-v1.png": ("Static Wraith Hazmat Standing Shop Card", "Standing cosmetic shop portrait for BACKROOMS: STAY QUIET."),
     "false-sun-standing-card-v1.png": ("False Sun Hazmat Standing Shop Card", "Standing cosmetic shop portrait for BACKROOMS: STAY QUIET."),
+    "signal-architect-standing-card-v1.png": ("Signal Architect Hazmat Standing Shop Card", "Standing developer cosmetic shop portrait for BACKROOMS: STAY QUIET."),
 }
 
 

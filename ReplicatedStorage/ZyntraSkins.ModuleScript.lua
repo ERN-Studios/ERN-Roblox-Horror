@@ -59,7 +59,7 @@ Skins.ById = {
 	-- assets/hazmat/developer-signal-architect/README.md.
 	SignalArchitect = {
 		Name = "Signal Architect", Kind = "Developer",
-		ImageId = 125389579950767, PreviewImageId = 125389579950767,
+		ImageId = 125389579950767, PreviewImageId = 139302197163453,
 		Description = "Developer-issue engineer suit.",
 	},
 }

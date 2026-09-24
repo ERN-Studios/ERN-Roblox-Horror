@@ -8,7 +8,7 @@
     "status": "approved",
     "assetType": "Image",
     "moderationState": "Approved",
-    "verifiedAtUtc": "2026-09-24T13:31:18.193534+00:00"
+    "verifiedAtUtc": "2026-09-24T17:40:36.822232+00:00"
   },
   "pool-service-standing-card-v1.png": {
     "sha256": "2e157de1fa37b00ff5f24594d306ba70b3a57d57b3412a0d936c05c3788db7fb",
@@ -19,7 +19,7 @@
     "status": "approved",
     "assetType": "Image",
     "moderationState": "Approved",
-    "verifiedAtUtc": "2026-09-24T13:31:18.337082+00:00"
+    "verifiedAtUtc": "2026-09-24T17:40:36.971246+00:00"
   },
   "suburb-survey-standing-card-v1.png": {
     "sha256": "303236665838a0b291ecb6498048a005515b7412dc8a3abb12e0facd2f8223f1",
@@ -30,7 +30,7 @@
     "status": "approved",
     "assetType": "Image",
     "moderationState": "Approved",
-    "verifiedAtUtc": "2026-09-24T13:31:18.491994+00:00"
+    "verifiedAtUtc": "2026-09-24T17:40:37.112223+00:00"
   },
   "blacksite-director-standing-card-v1.png": {
     "sha256": "41441b2390252e6c6d064485871a150f4674854a3925ea14a90be5600729f4b5",
@@ -41,7 +41,7 @@
     "status": "approved",
     "assetType": "Image",
     "moderationState": "Approved",
-    "verifiedAtUtc": "2026-09-24T13:31:18.647930+00:00"
+    "verifiedAtUtc": "2026-09-24T17:40:37.261457+00:00"
   },
   "static-wraith-standing-card-v1.png": {
     "sha256": "b9526a489f29665b3afdfa353cc7ccbbe712afbc6f6bd395c3f79ef85001e80e",
@@ -52,7 +52,7 @@
     "status": "approved",
     "assetType": "Image",
     "moderationState": "Approved",
-    "verifiedAtUtc": "2026-09-24T13:31:18.808037+00:00"
+    "verifiedAtUtc": "2026-09-24T17:40:37.407181+00:00"
   },
   "false-sun-standing-card-v1.png": {
     "sha256": "3c10d737463062e292bd90a9413f17a26f024d3f9583929f2fd80accda9233da",
@@ -63,6 +63,17 @@
     "status": "approved",
     "assetType": "Image",
     "moderationState": "Approved",
-    "verifiedAtUtc": "2026-09-24T13:31:18.958968+00:00"
+    "verifiedAtUtc": "2026-09-24T17:40:37.545158+00:00"
+  },
+  "signal-architect-standing-card-v1.png": {
+    "sha256": "35569893db41d976f0b01c5d96a4ac4d089a1c32f9c03d7c2aa30d6d8aa4f5fb",
+    "groupId": 1039373905,
+    "createdAtUtc": "2026-09-24T17:32:32.108871+00:00",
+    "operationPath": "operations/4becb273-b676-4fb7-9526-c6c208fc82dd",
+    "assetId": "139302197163453",
+    "status": "approved",
+    "assetType": "Image",
+    "moderationState": "Approved",
+    "verifiedAtUtc": "2026-09-24T17:40:37.691789+00:00"
   }
 }
