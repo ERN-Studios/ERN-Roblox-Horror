@@ -815,13 +815,20 @@ def main():
         "    local sessions = {[player] = {data = data, persistent = true}}",
         "    local Config = ZyntraConfig",
         "    local levelCompletedEvent = {Event = signal()}",
-        "    local function mutate(who, transform)",
+        # The handler saves through completionSaves (COMPLETION_SAVE_20260924);
+        # test_completion_save.py runs the real retry/keying against a fake
+        # DataStore. Here the write always lands once, as the old mutate did.
+        "    local guids = 0",
+        "    local HttpService = {GenerateGUID = function() guids += 1 return 'guid-' .. guids end}",
+        "    local completionSaves = {settle = function(who, _, transform, onSaved)",
         "        local profile = sessions[who].data",
         "        normalizeTenths(profile)",
+        "        profile.CompletionIds = profile.CompletionIds or {}",
         "        local ok, message = transform(profile)",
         "        check(ok == true, 'the completion transform always commits')",
         "        table.insert(messages, message)",
-        "    end",
+        "        onSaved()",
+        "    end}",
         "    local function awardBadge(_, badge) table.insert(w.badges, badge) end",
         # The daily ledger and the challenge ledger the handler also touches.
         # Daily research is a no-op here: this suite measures the boost alone,

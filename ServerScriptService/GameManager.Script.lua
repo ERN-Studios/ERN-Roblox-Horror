@@ -2455,6 +2455,9 @@ playRound = function(participants)
  -- moment, paid upgrades -- for records and voluntary challenges, handed to
  -- ZyntraMonetization with the completion event. Wall clock, never os.clock.
  local runFacts = {}
+ -- COMPLETION_SAVE_20260924: names this round's clears so ZyntraMonetization
+ -- can save each escapee's completion exactly once across its retries.
+ local completionRoundId = game:GetService("HttpService"):GenerateGUID(false)
  local runStartWall = nil
  local runPartySize = #participants
  local deathFrames, safeFrames = {}, {}
@@ -2951,7 +2954,7 @@ playRound = function(participants)
      DevTouched = runDevTouched,
     } or nil
     zyntraLevelCompleted:Fire(participant, activeLevel,
-     FriendBoost.CountRoundFriends(participant, participants), run)
+     FriendBoost.CountRoundFriends(participant, participants), run, completionRoundId)
    end
   end
  end

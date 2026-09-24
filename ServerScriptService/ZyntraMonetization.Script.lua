@@ -455,6 +455,8 @@ local function newProfile()
 		-- idempotent without asking Roblox on every clear.
 		LevelsCleared = {},
 		AwardedBadges = {},
+		-- COMPLETION_SAVE_20260924: ids of the latest applied clears, oldest first.
+		CompletionIds = {},
 		-- CHALLENGES_20260923: personal records per level x solo/party x
 		-- clean/assisted, and which one-time challenges are already paid.
 		Records = {},
@@ -537,6 +539,15 @@ local function normalizeProfile(data)
 		if savedBadges[badgeKey] == true then awardedBadges[badgeKey] = true end
 	end
 	data.AwardedBadges = awardedBadges
+	-- COMPLETION_SAVE_20260924. Only an in-flight retry of a clear ever looks an
+	-- id up, and those end with this server's session, so the newest 20 are
+	-- plenty; unlike ReceiptIds nothing outside this server can replay one.
+	local completionIds = {}
+	for _, id in ipairs(type(data.CompletionIds) == "table" and data.CompletionIds or {}) do
+		if type(id) == "string" and #id > 0 and #id <= 96 then table.insert(completionIds, id) end
+	end
+	while #completionIds > 20 do table.remove(completionIds, 1) end
+	data.CompletionIds = completionIds
 	data.Records = Challenges.NormalizeRecords(data.Records, Config.Challenges)
 	data.Challenges = Challenges.NormalizeDone(data.Challenges, Config.Challenges)
 	data.ReentryCredits = math.max(0, math.floor(tonumber(data.ReentryCredits) or 0))
@@ -1359,7 +1370,10 @@ local function mutateIdempotent(player, transform, suppressPush)
 	elseif session.persistent then
 		for _, delaySeconds in ipairs(IDEMPOTENT_RETRY_DELAYS) do
 			if delaySeconds > 0 then task.wait(delaySeconds) end
-			if not player.Parent or sessions[player] ~= session then break end
+			-- The FIRST attempt runs even for a player already unparented: the
+			-- leave-time finalizer writes through here (accessibility, pending
+			-- clears) while the session is still open. Only retries stop.
+			if (delaySeconds > 0 and not player.Parent) or sessions[player] ~= session then break end
 			local attemptChanged = false
 			local attemptMessage
 			local attemptTone
@@ -3593,7 +3607,69 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 	end
 end)
 
-levelCompletedEvent.Event:Connect(function(player, level, friendCount, run)
+-- COMPLETION_SAVE_20260924 (Trello EYpXKa9S). A clear is ONE keyed write: its
+-- id (GameManager's round id + level) lands in the same UpdateAsync as the
+-- tokens, clear count, daily Clear, level flag and records, and a transform that
+-- finds the id already there changes nothing. So a failed write is retried with
+-- backoff instead of dropped, and a retry after a lost response (committed, reply
+-- lost) cannot pay twice. Whatever is still unsaved when the player leaves rides
+-- the finalizer's last write. Limit: the retry state lives in this server only,
+-- so a clear that never lands before the session ends (a DataStore outage that
+-- outlasts it, a server crash) is lost and logged, never paid later.
+local completionSaves = {pending = {}, delays = {0, 2, 5, 10, 20, 40}}
+
+-- True once the profile holds this clear. Only the caller that retires the
+-- pending entry announces it, so a retry racing the leave-time flush cannot
+-- report or award twice.
+function completionSaves.save(player, id)
+	local queue = completionSaves.pending[player]
+	local entry = queue and queue[id]
+	if not entry then return true end
+	local ok, _, message = mutateIdempotent(player, entry.Apply, true)
+	if not ok then return false end
+	if queue[id] ~= entry then return true end
+	queue[id] = nil
+	pushProfile(player, message, "success")
+	entry.OnSaved()
+	return true
+end
+
+function completionSaves.settle(player, id, apply, onSaved)
+	local queue = completionSaves.pending[player] or {}
+	completionSaves.pending[player] = queue
+	if queue[id] then return end -- the same clear is already being saved
+	queue[id] = {Apply = apply, OnSaved = onSaved}
+	for attempt, delaySeconds in ipairs(completionSaves.delays) do
+		if delaySeconds > 0 then task.wait(delaySeconds) end
+		local session = sessions[player]
+		-- A closing session belongs to the finalizer, which flushes this queue.
+		if not session or session.closing or not player.Parent then return end
+		if completionSaves.save(player, id) then return end
+		if attempt == 1 then
+			pushProfile(player, "Your level clear is not saved yet. Retrying automatically.", "error")
+		end
+	end
+	warn("[Zyntra] Completion save still pending after retries; left for the leave-time save:",
+		player.UserId, id)
+end
+
+function completionSaves.flush(player)
+	local queue = completionSaves.pending[player]
+	if not queue then return end
+	for id in pairs(table.clone(queue)) do
+		local saved = false
+		for attempt = 1, 3 do
+			saved = completionSaves.save(player, id)
+			if saved then break end
+			if attempt < 3 then task.wait(attempt * 0.5) end
+		end
+		if not saved then
+			warn("[Zyntra] Completion save FAILED at leave; clear not saved for userId", player.UserId, id)
+		end
+	end
+end
+
+levelCompletedEvent.Event:Connect(function(player, level, friendCount, run, roundId)
 	if not player or not player:IsA("Player") or not sessions[player] then return end
 	-- GameManager fires this once per escapee with the level they just cleared and
 	-- how many of that round's OTHER participants are verified friends of theirs
@@ -3609,7 +3685,14 @@ levelCompletedEvent.Event:Connect(function(player, level, friendCount, run)
 	local counted = math.floor(tonumber(friendCount) or 0)
 	local friends = (counted >= 0 and counted < 1e6) and counted or 0
 	local boostPercent = friends * Config.FriendBoost.PercentPerFriend
-	mutate(player, function(data)
+	-- One id per escapee per round and level. A caller without a round id still
+	-- gets a stable id for its own retries.
+	local completionId = (type(roundId) == "string" and #roundId > 0 and #roundId <= 80)
+		and roundId .. ":" .. cleared or HttpService:GenerateGUID(false)
+	completionSaves.settle(player, completionId, function(data)
+		if table.find(data.CompletionIds, completionId) then
+			return false, "Level clear saved.", "success"
+		end
 		-- FRIEND_BOOST_20260916. The boost is counted in TENTHS of a token and the
 		-- remainder rides on the profile, so +10% of a 2-token clear (0.2) builds
 		-- up instead of rounding away: one friend pays a whole extra token on the
@@ -3636,18 +3719,21 @@ levelCompletedEvent.Event:Connect(function(player, level, friendCount, run)
 				message ..= " " .. note
 			end
 		end
+		table.insert(data.CompletionIds, completionId)
+		while #data.CompletionIds > 20 do table.remove(data.CompletionIds, 1) end
 		return true, message, "success"
+	end, function()
+		if not tracked then return end
+		-- Badges follow the CONFIRMED write, never precede it: a First Clear badge
+		-- on a profile that has no saved clear is exactly the bug this replaced.
+		-- awardBadge is non-blocking and contains its own failures.
+		awardBadge(player, "FirstClearLevel" .. cleared)
+		local session = sessions[player]
+		local levelsCleared = session and session.data.LevelsCleared
+		if levelsCleared and levelsCleared["1"] and levelsCleared["2"] and levelsCleared["3"] then
+			awardBadge(player, "CampaignComplete")
+		end
 	end)
-	if not tracked then return end
-	-- Badges hang off the write above rather than replacing it: awardBadge is
-	-- non-blocking and every failure inside it is contained, so a badge that
-	-- cannot be granted never costs the player the token they earned.
-	awardBadge(player, "FirstClearLevel" .. cleared)
-	local session = sessions[player]
-	local levelsCleared = session and session.data.LevelsCleared
-	if levelsCleared and levelsCleared["1"] and levelsCleared["2"] and levelsCleared["3"] then
-		awardBadge(player, "CampaignComplete")
-	end
 end)
 
 MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(player, passId, purchased)
@@ -3846,6 +3932,9 @@ local function finalizePlayerSessionBody(player)
 	-- minute of every round is lost to whoever leaves from the results screen.
 	-- BindToClose reaches this through finalizePlayerSession as well.
 	if session and not session.closing then flushPlaytime(player) end
+	-- COMPLETION_SAVE_20260924: a clear still retrying gets its last attempts
+	-- here, keyed, while the session can still write.
+	if session and not session.closing then completionSaves.flush(player) end
 	local dispatchPersisted = true
 	if muteQueue then
 		-- Stop a sleeping worker before it can begin an obsolete write. The last
@@ -3916,6 +4005,7 @@ local function finalizePlayerSession(player)
 	reentryAttempts[player] = nil
 	playtimeSessions[player] = nil
 	potionRoundUsed[player] = nil
+	completionSaves.pending[player] = nil
 	speedBoostTokens[player] = nil
 	dispatchMuteQueues[player] = nil
 	briefingClaims[player] = nil
