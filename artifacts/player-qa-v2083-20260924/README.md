@@ -10,3 +10,16 @@ At about 17:27–17:31 UTC, Roblox Player entered `BACKROOMS: STAY QUIET [CO-OP 
 This does not close the Testing cards that require fresh accounts, purchase/rejoin, multiplayer, physical devices, DataStore persistence or listening. The owner authorized Player-only computer control for this check; Studio was not operated through its UI.
 
 The Signal Architect defect was subsequently addressed in **unpublished Studio Edit**: the group-approved standing Image `139302197163453` is now `ZyntraSkins.SignalArchitect.PreviewImageId`, using the same catalogue presentation as the six ordinary skins. The Player screenshot above remains valid evidence for the published state before that change. A new published Player view is needed to verify the correction.
+
+## Published upgrade-cost check
+
+In the same published Player session, the developer account began with 892 Tokens, Stamina level 11 and Battery level 11. Four real in-game Token upgrades were purchased through the Upgrades panel; no Robux transaction was made:
+
+| Upgrade | Before | Cost shown and deducted | After | Next cost shown |
+| --- | ---: | ---: | ---: | ---: |
+| Stamina | level 11, 892 Tokens | 12 | level 12, 880 Tokens | 13 |
+| Stamina | level 12, 880 Tokens | 13 | level 13, 867 Tokens | 14 |
+| Battery | level 11, 867 Tokens | 12 | level 12, 855 Tokens | 13 |
+| Battery | level 12, 855 Tokens | 13 | level 13, 842 Tokens | 14 |
+
+The 50-Token spend and each resulting level were visible in the live UI. The actual server place version was not exposed; v2083 was the latest published version queried before joining. We did not test insufficient balance or leave/rejoin persistence. Player automation stopped when the tool detected separate user input in that window. [Upgrade Trello card](https://trello.com/c/KF7FDmP1) stays in Testing.
