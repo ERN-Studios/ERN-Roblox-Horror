@@ -121,7 +121,8 @@ local function context()
         for _ in assets do callback("asset",ctx.RefuseAssets and "Failure" or "Success") end
     end
     local services={Players={LocalPlayer=ctx.Player},ReplicatedStorage=storage,ContentProvider=content,
-        RunService={IsStudio=function() return ctx.Studio end}}
+        RunService={IsStudio=function() return ctx.Studio end},
+        StarterGui={SetCore=function(_, name, value) ctx.ResetAllowed = value end}}
     ctx.Game={GetService=function(_,name) return assert(services[name],name) end,
         IsLoaded=function() return ctx.Loaded end}
     function ctx:Advance(delta)
@@ -278,6 +279,15 @@ end
 do
     local ctx=fresh(); ctx:Prepare({Deadline=100.15}); ctx:Advance(.5)
     check(#ctx.Acks==0 and ctx.Player:GetAttribute("RoundEntryReadyToken")==nil,"deadline expires before insufficient stability")
+end
+-- AUDIT_FIX_20260924: Reset Character is off while an entry is pending.
+do
+    local ctx=fresh(); ctx:Prepare(); ctx:Advance(.1)
+    check(ctx.ResetAllowed==false,"reset is disabled while the entry is pending")
+    ctx:Advance(1)
+    ctx.Remote.OnClientEvent:Fire("entryreleased",{Token="attempt-1"})
+    ctx:Advance(.1)
+    check(ctx.ResetAllowed==true,"reset is restored when the entry ends")
 end
 print("Round Entry Client: "..checks.." checks passed (entire actual script, offline Luau)")
 '''

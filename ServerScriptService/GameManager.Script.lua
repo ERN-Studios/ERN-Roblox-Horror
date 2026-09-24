@@ -2315,6 +2315,12 @@ TeleportService.TeleportInitFailed:Connect(function(player, teleportResult, erro
 	local attemptId = Routing.AttemptIdOf(teleportOptions)
 	if transfers:ReportFailure(player, attemptId, teleportOptions, errorMessage) then
 		warn("GameManager: teleport initialization failed for", player.Name, teleportResult, errorMessage)
+	elseif not IS_RESERVED_ROUND_SERVER and player.Parent == Players and not inRound[player] then
+		-- AUDIT_FIX_20260924: a station launch takes no claim, so the runtime
+		-- has nothing to report into and the "loadinggame" cover it raised stayed
+		-- up in the lobby. On a public server every teleport is a station launch.
+		warn("GameManager: station launch failed for", player.Name, teleportResult, errorMessage)
+		status:FireClient(player, "lobby")
 	end
 end)
 
@@ -2355,6 +2361,22 @@ local function runPostWinIntermission(participants, elapsed, escapedCount, entry
 		Aborted = false,
 	}
 	activePostWin = session
+	-- AUDIT_FIX_20260924: reserve the next-level server ONCE, while the window
+	-- runs. The transfer runtime retries a failed member with the SAME
+	-- descriptor; with no code in it that descriptor said ShouldReserveServer, so
+	-- the retry reserved a server of its own and both halves of the party timed
+	-- out behind the loading cover. A reservation that fails, or is still in
+	-- flight at the deadline, falls back to reserving on dispatch as before.
+	if nextLevel and not IS_STUDIO then
+		task.spawn(function()
+			local ok, code = pcall(TeleportService.ReserveServer, TeleportService, game.PlaceId)
+			if ok and type(code) == "string" and code ~= "" then
+				session.NextServerCode = code
+			else
+				warn("GameManager: could not reserve the next-level server: " .. tostring(code))
+			end
+		end)
+	end
 	fireGroup(participants, "win", elapsed, escapedCount, #participants, deadline, nextLevel, session.Serial)
 	publishPostWinChoices(session)
 

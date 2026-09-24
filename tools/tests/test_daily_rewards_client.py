@@ -160,7 +160,7 @@ end
 local SIGNALS = {
 	MouseEnter = true, MouseLeave = true, Activated = true, Event = true,
 	InputBegan = true, InputEnded = true, OnClientEvent = true,
-	ChildAdded = true, DescendantAdded = true,
+	ChildAdded = true, DescendantAdded = true, LastInputTypeChanged = true,
 }
 local function newInstance(class)
 	local fields = {
@@ -814,6 +814,16 @@ do
 	openIt(ctx)
 	expect(ctx.GuiService.SelectedObject, ctx.Close,
 		"a gamepad is given the CLOSE control to start from")
+end
+do
+	-- AUDIT_FIX_20260924: a pad picked up while it is open takes focus too.
+	local ctx = start({})
+	openIt(ctx)
+	expect(ctx.GuiService.SelectedObject, nil, "a keyboard open forces no selection")
+	ctx.LastInput = "Gamepad"
+	ctx.UIS.LastInputTypeChanged:Fire()
+	expect(ctx.GuiService.SelectedObject, ctx.Close,
+		"switching to a controller while open lands on CLOSE")
 end
 
 -- ══ 5. it is refused where the contract says it is ════════════════════════

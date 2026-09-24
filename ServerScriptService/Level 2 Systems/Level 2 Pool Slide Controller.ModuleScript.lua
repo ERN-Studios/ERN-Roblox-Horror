@@ -101,7 +101,9 @@ local function pumpCount()
 	return finite(value) and math.max(0, math.floor(value)) or 0
 end
 
-local function livingRecord(session, player)
+-- AUDIT_FIX_20260924: includeProtected is for spawn separation only. A shielded
+-- or re-entry-graced player is untargetable, but still owed the 100-stud spawn gap.
+local function livingRecord(session, player, includeProtected)
 	if not roundReady(session) or player.Parent ~= Players
 		or player:GetAttribute("InRound") ~= true
 		or player:GetAttribute("Escaped") == true
@@ -111,14 +113,14 @@ local function livingRecord(session, player)
 	local root = character and character:FindFirstChild("HumanoidRootPart")
 	if not (character and character.Parent and humanoid and humanoid.Health > 0
 		and root and root:IsA("BasePart")) then return nil end
-	if PlayerProtection.IsActive(player, character) then return nil end
+	if not includeProtected and PlayerProtection.IsActive(player, character) then return nil end
 	return {Player = player, Character = character, Humanoid = humanoid, Root = root}
 end
 
-local function livingRecords(session)
+local function livingRecords(session, includeProtected)
 	local records = {}
 	for _, player in ipairs(Players:GetPlayers()) do
-		local record = livingRecord(session, player)
+		local record = livingRecord(session, player, includeProtected)
 		if record then table.insert(records, record) end
 	end
 	return records
@@ -398,7 +400,7 @@ end
 
 local function spawnModel(session)
 	if not spawnAllowed(session) then return false, "spawn cancelled" end
-	local records = livingRecords(session)
+	local records = livingRecords(session, true)
 	if #records == 0 then return false, "no living round participants" end
 	local ranked = candidates(session, records)
 	if #ranked == 0 then return false, "no safe anchor at least " .. tostring(SPAWN_MINIMUM_DISTANCE) .. " studs from every player" end
@@ -449,7 +451,7 @@ local function spawnModel(session)
 		session.SpawnProbeCount += 1
 		publish(session, "SpawnProbeCount", session.SpawnProbeCount)
 		local position = candidate.Anchor.Position
-		local target = livingRecord(session, candidate.Nearest.Player)
+		local target = livingRecord(session, candidate.Nearest.Player, true)
 		if not target then continue end
 		local targetPosition = target.Root.Position
 		local routeValid = false
@@ -466,7 +468,7 @@ local function spawnModel(session)
 			-- actual grounded position and publish only these fresh measurements.
 			local spawnPosition = navigator:GetPosition()
 			local minimum, observed = math.huge, false
-			local latest = livingRecords(session)
+			local latest = livingRecords(session, true)
 			if #latest == 0 then safe = false end
 			for _, record in ipairs(latest) do
 				local playerPosition = record.Root.Position

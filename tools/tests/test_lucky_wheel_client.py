@@ -113,7 +113,7 @@ local SIGNALS = {
     InputBegan = true, InputEnded = true, Activated = true, MouseEnter = true,
     MouseLeave = true, Event = true, OnClientEvent = true, Heartbeat = true,
     Changed = true, DescendantAdded = true, ChildAdded = true, Completed = true,
-    CharacterAdded = true,
+    CharacterAdded = true, LastInputTypeChanged = true,
 }
 local methods = {}
 local function newInstance(class, name)
@@ -482,6 +482,7 @@ local function daily(options)
         block.WheelDay = options.Day or TODAY
         block.WheelLast = {Day = options.Day or TODAY, Key = options.Key, Serial = options.Serial or 1,
             SkinId = options.SkinId, FallbackTokens = options.FallbackTokens,
+            PaidTokens = options.PaidTokens,
             -- WHEEL_COLLECT_20260922: a spin records, the claim pays. Omitted =
             -- an old, already-paid result (the server normalizes it to true).
             Claimed = options.Claimed}
@@ -1174,6 +1175,48 @@ do
     ctx:Advance(3.6)
     check(ctx.Hub.Text:sub(1, 4) == 'SPUN', 'and then the countdown, with nothing to collect')
 end
+do
+    -- AUDIT_FIX_20260924: the open-time re-read answered AFTER a COLLECT tap
+    -- predates the claim; it must not re-arm the hub or eat the confirmation.
+    local ctx = start(POINTER)
+    push(ctx, daily({Key = 'Token3', Serial = 7, Claimed = false}))
+    local held = nil
+    ctx.Task.spawn = function(fn) held = coroutine.create(fn) coroutine.resume(held) end
+    ctx.GetProfile.InvokeServer = function() return coroutine.yield() end
+    open(ctx)
+    check(ctx.Hub.Text == 'COLLECT\nPRIZE', 'owed from the cached profile while the re-read is in flight')
+    ctx.Hub.Activated:Fire()
+    coroutine.resume(held, daily({Key = 'Token3', Serial = 7, Claimed = false}))
+    check(ctx.Hub.Text == 'COLLECTING' and ctx.Hub.Active == false,
+        'a stale re-read answered after the tap does not re-arm COLLECT')
+    push(ctx, daily({Key = 'Token3', Serial = 7, Claimed = true}))
+    check(ctx.Hub.Text == '3 TOKENS\nCOLLECTED', 'and the claim push still confirms')
+end
+do
+    -- AUDIT_FIX_20260924: a suit bought after the spin is paid as 3 Tokens, so
+    -- the collect button must not promise the suit.
+    local ctx = start(POINTER)
+    open(ctx)
+    local owed = daily({Key = 'Skin5', Serial = 15, Claimed = false, SkinId = 'PoolService'})
+    owed.Skins = {Owned = {PoolService = true}, Equipped = 'PoolService'}
+    push(ctx, owed)
+    check(ctx.Hub.Text == 'COLLECT\n3\nTOKENS', 'an owned owed suit offers the 3-Token fallback')
+end
+do
+    -- TOKEN_EARNER_20260924: the confirmation names the tokens actually paid.
+    local ctx = start(POINTER)
+    open(ctx)
+    push(ctx, daily({Key = 'Token3', Serial = 7, Claimed = false}))
+    ctx.Hub.Activated:Fire()
+    push(ctx, daily({Key = 'Token3', Serial = 7, Claimed = true, PaidTokens = 15}))
+    check(ctx.Hub.Text == '15 TOKENS\nCOLLECTED', 'a multiplied payout is named by PaidTokens')
+    ctx:Advance(3.6)
+    push(ctx, daily({Key = 'Token1', Serial = 8, Claimed = false}))
+    ctx.Hub.Activated:Fire() -- skip the landing
+    ctx.Hub.Activated:Fire() -- collect
+    push(ctx, daily({Key = 'Token1', Serial = 8, Claimed = true, PaidTokens = 1}))
+    check(ctx.Hub.Text == '1 TOKEN\nCOLLECTED', 'and one paid token is singular')
+end
 
 -- ── a replay is not a spin ───────────────────────────────────────────────
 do
@@ -1317,6 +1360,19 @@ do
     check(ctx.Player:GetAttribute('LuckyWheelOpen') == nil, 'and clears the modal flag')
 end
 do
+    -- AUDIT_FIX_20260924: an owner that yields to screen-owning modals must
+    -- re-sync AFTER the hand-back, or it cannot undo a restore it no longer wants.
+    local ctx = start(POINTER)
+    local card = addGui(ctx, 'ZyntraShopDisplayCard')
+    local seenOnClose = nil
+    ctx.Player:GetAttributeChangedSignal('LuckyWheelOpen'):Connect(function()
+        if ctx.Player:GetAttribute('LuckyWheelOpen') == nil then seenOnClose = card.Enabled end
+    end)
+    open(ctx)
+    ctx.Close.Activated:Fire()
+    check(seenOnClose == true, 'the modal flag clears only after the HUD is handed back')
+end
+do
     -- Closing twice, and opening twice, must not double-record anything.
     local ctx = start(POINTER)
     local rail = addGui(ctx, 'ZyntraRailGui')
@@ -1432,6 +1488,14 @@ do
     open(ctx)
     check(ctx.GuiService.SelectedObject == nil,
         'a keyboard is never given a forced selection')
+    -- AUDIT_FIX_20260924: picking up a pad while it is open takes focus.
+    ctx.LastInput = 'Gamepad'
+    ctx.UIS.LastInputTypeChanged:Fire()
+    check(ctx.GuiService.SelectedObject == ctx.Hub,
+        'switching to a controller while open lands on the hub')
+    ctx.Close.Activated:Fire()
+    ctx.UIS.LastInputTypeChanged:Fire()
+    check(ctx.GuiService.SelectedObject == nil, 'and a shut wheel takes nothing')
 end
 do
     local ctx = start(POINTER, {Studio = true})

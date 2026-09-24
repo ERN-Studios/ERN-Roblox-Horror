@@ -851,15 +851,40 @@ queueSubmit.Activated:Connect(function()
   end
  end)
 end)
-queueClose.Activated:Connect(function()
- if queueSubmitting or not queueStation then return end
- local stationToCancel = queueStation
- queueShade.Visible = false
- queueStation = nil
- queueSubmitting = false
- refreshQueuePanel()
- queueRemote:FireServer(stationToCancel, 0, "cancel")
-end)
+-- AUDIT_FIX_20260924: the party panel was the one modal with no controller
+-- path. Nothing was selected, so the stick walked the host out of the square
+-- (which cancels the party), A jumped and B did nothing. A gamepad opening now
+-- selects CREATE PARTY, B cancels exactly like the X, and a hide drops any
+-- selection left inside -- a stale one keeps dispatchAudio.inputBlocked() true.
+-- A do-block: this chunk is at the 200-local limit.
+do
+ local function cancelHostedQueue()
+  if queueSubmitting or not queueStation then return end
+  local stationToCancel = queueStation
+  queueShade.Visible = false
+  queueStation = nil
+  queueSubmitting = false
+  refreshQueuePanel()
+  queueRemote:FireServer(stationToCancel, 0, "cancel")
+ end
+ queueClose.Activated:Connect(cancelHostedQueue)
+ queueShade:GetPropertyChangedSignal("Visible"):Connect(function()
+  local navigation = game:GetService("GuiService")
+  if queueShade.Visible then
+   if UIDevice.LastInput() == "Gamepad" then navigation.SelectedObject = queueSubmit end
+   ContextActionService:BindActionAtPriority("QueueHostClose", function(_, inputState)
+    if not queueShade.Visible or navigation.MenuIsOpen then return Enum.ContextActionResult.Pass end
+    if inputState == Enum.UserInputState.Begin then cancelHostedQueue() end
+    return Enum.ContextActionResult.Sink
+   end, false, Enum.ContextActionPriority.High.Value, Enum.KeyCode.ButtonB)
+  else
+   ContextActionService:UnbindAction("QueueHostClose")
+   if navigation.SelectedObject and navigation.SelectedObject:IsDescendantOf(queueShade) then
+    navigation.SelectedObject = nil
+   end
+  end
+ end)
+end
 refreshQueuePanel()
 
 -- RoundUI is the sole cursor-policy owner. Lobby players need the mouse for the
@@ -1450,6 +1475,9 @@ function completion.reset()
 	completion.returnVisible = false
 	completion.continueButton.Text = "CONTINUE"
 	completion.button.Text = "BACK TO LOBBY"
+	-- AUDIT_FIX_20260924: hand back the controller focus start() gave out.
+	local navigation = game:GetService("GuiService")
+	if table.find(completion.buttons, navigation.SelectedObject) then navigation.SelectedObject = nil end
 	for _, button in ipairs(completion.buttons) do
 		button.Visible = false
 		button.Active = false
@@ -1486,6 +1514,13 @@ function completion.start(deadline, nextLevel, serverSerial)
 	-- other, and start() is what decides which.
 	if endFrame.Visible then completion.applyLayout(completion.color) end
 	refreshCursor()
+	-- AUDIT_FIX_20260924: refreshCursor only frees a mouse, so a controller had
+	-- no way to the choice. CONTINUE first: it is also the server's default, so
+	-- a stray A changes nothing; the last level shows BACK TO LOBBY alone.
+	if UIDevice.LastInput() == "Gamepad" then
+		local target = completion.continueButton.Visible and completion.continueButton or completion.button
+		if target.Visible then game:GetService("GuiService").SelectedObject = target end
+	end
 end
 
 -- One handler for both actions. Which remote message a button sends is read
@@ -1546,6 +1581,9 @@ do
 		end
 		if remaining <= 0 and not completionButtonsDisabled then
 			completionButtonsDisabled = true
+			-- AUDIT_FIX_20260924: no dead focus on a button that just went unselectable.
+			local navigation = game:GetService("GuiService")
+			if table.find(completion.buttons, navigation.SelectedObject) then navigation.SelectedObject = nil end
 			for _, button in ipairs(completion.buttons) do
 				button.Active = false
 				button.Selectable = false

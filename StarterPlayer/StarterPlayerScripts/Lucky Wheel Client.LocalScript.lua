@@ -166,6 +166,11 @@ end
 -- eligible suits. The server records either the exact SkinId or the disclosed
 -- 3-Token fallback before this client animates, so a rejoin shows the same win.
 local function prizeFace(record, sector): string
+	-- TOKEN_EARNER_20260924: a claimed Token payout names what the server
+	-- actually paid (PaidTokens, multiplied by a Token Earner pass). Records
+	-- claimed before that field existed keep the field's own text.
+	local paid = record and type(record.PaidTokens) == "number" and math.floor(record.PaidTokens) or 0
+	if paid >= 1 then return paid .. (paid == 1 and " TOKEN" or " TOKENS") end
 	if not record or tostring(record.Key or "") ~= "Skin5" then return sector.Short end
 	if tonumber(record.FallbackTokens) == 3 then return "3 TOKENS" end
 	local skin = Skins.ById[tostring(record.SkinId or "")]
@@ -476,7 +481,12 @@ local function refreshProfile()
 	task.spawn(function()
 		local ok, data = pcall(function() return getProfile:InvokeServer() end)
 		-- A push that landed while the invoke was in flight is newer than it.
-		if ok and serial == profileSerial then acceptProfile(data) end
+		-- AUDIT_FIX_20260924: so is the push still owed for a SPIN/COLLECT fired
+		-- after the invoke went out -- this answer predates that action and must
+		-- not be taken for its reply. The timeouts clear the flag before re-reading.
+		if ok and serial == profileSerial and not pendingSpin and not pendingClaim then
+			acceptProfile(data)
+		end
 	end)
 end
 
@@ -664,7 +674,12 @@ function render()
 		-- The disc under the pointer already names the prize; the hub is the one
 		-- primary action left, on touch and pad as much as with a mouse.
 		if recorded.Key == "Skin5" then
-			hubText = "COLLECT\n" .. prizeFace(recorded, sector):gsub(" ", "\n")
+			-- AUDIT_FIX_20260924: a suit bought after the spin is paid as the
+			-- 3-Token fallback (the server's own IsOwned rule), so say that. Not in
+			-- prizeFace: after a real grant the suit is owned too.
+			local face = Skins.IsOwned(profile.Skins, recorded.SkinId) and "3 TOKENS"
+				or prizeFace(recorded, sector)
+			hubText = "COLLECT\n" .. face:gsub(" ", "\n")
 		else
 			hubText = "COLLECT\nPRIZE"
 		end
@@ -782,6 +797,14 @@ do
 			return Enum.ContextActionResult.Sink
 		end, false, Enum.ContextActionPriority.High.Value, Enum.KeyCode.ButtonB)
 	end
+
+	-- AUDIT_FIX_20260924: a pad picked up while the wheel is already open takes
+	-- focus too, the way the terminal does; focusModal checks for the pad.
+	UserInputService.LastInputTypeChanged:Connect(function()
+		if shade.Visible and GuiService.SelectedObject == nil and not GuiService.MenuIsOpen then
+			focusModal()
+		end
+	end)
 end
 
 function closeModal()
@@ -790,8 +813,10 @@ function closeModal()
 	-- Nobody is watching the replay, so it is over. The prize was banked before
 	-- the animation started; only the garnish is being skipped.
 	finishSpin()
-	player:SetAttribute("LuckyWheelOpen", nil)
+	-- AUDIT_FIX_20260924: hand back BEFORE unpublishing, so an owner that yields
+	-- to screen-owning modals re-syncs AFTER the restore in either signal mode.
 	handBack()
+	player:SetAttribute("LuckyWheelOpen", nil)
 	-- Suppression is SHARED. Derive the request from the complete published
 	-- modal set rather than letting the last caller win -- exactly as
 	-- ZyntraStore.setMainVisible does.

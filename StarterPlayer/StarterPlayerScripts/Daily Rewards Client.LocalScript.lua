@@ -602,6 +602,14 @@ end)
 GuiService:GetPropertyChangedSignal("MenuIsOpen"):Connect(function()
 	if GuiService.MenuIsOpen then close() end
 end)
+-- AUDIT_FIX_20260924: a pad picked up while the modal is already open takes
+-- focus too, the way the terminal does -- open() only focuses a pad it sees.
+UserInputService.LastInputTypeChanged:Connect(function()
+	if shade.Visible and GuiService.SelectedObject == nil and not GuiService.MenuIsOpen
+		and UIDevice.LastInput() == "Gamepad" then
+		GuiService.SelectedObject = closeButton
+	end
+end)
 
 UIDevice.Changed:Connect(applyLayout)
 
