@@ -53,6 +53,8 @@ A read-only audit of six areas found 16 candidate defects; 13 survived three ind
 
 Claude wrote these in a separate worktree. Codex reviewed them and then pushed `ServerScriptService/ZyntraMonetization.Script.lua` into the existing Studio Edit place through the scoped compare-and-swap tool. The Studio compile probe passed on 24 September; fresh `.Source` and editor-source were equal at 204,565 bytes. Commit `8937264` records the manifest as `synced`. **These fixes are not saved as a new published place version.**
 
+After the push, a full read-only Studio audit matched all 182 mirrored scripts to the repo (0 drift). An isolated solo Play check loaded the owner profile with 5× Token Earner and Signal Architect owned, then started a real Level 1 round (`WorldGenerated`, `LoadStage=READY`, `RoundActive`, `InRound`; no game-script errors). The Fuse prompt could not be activated from that position, so this did **not** verify an actual earned-token payout. No reward/completion bindable was fired artificially against the persistent profile. Studio was stopped back to Edit.
+
 | | sha256 |
 | --- | --- |
 | Pre-push Studio baseline | `541ce85f582c9762c2f34f422f90ef954ea027ad6ed83e44c3882c93db9ea63b` |
