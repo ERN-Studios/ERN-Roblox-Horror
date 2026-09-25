@@ -58,10 +58,12 @@ function Districts.Build(K)
 		local facing=yaw(side*90)
 		for index,spec in ipairs(stacks) do
 			local stack=model((side<0 and "West" or "East").."HouseStack"..index,F)
+			-- Keep the neighbouring facade clear of the east switchback flight.
+			local baseX=(side==1 and index==3) and 88 or spec.x
 			for storey=0,spec.stories-1 do
 				-- Upper overhangs are shallow and intersect the stack beneath them.
 				local overhang=storey>=3 and ((storey+index)%3-1)*2.25 or 0
-				local face=CF(side*(spec.x-overhang),storey*15,spec.z)*facing
+				local face=CF(side*(baseX-overhang),storey*15,spec.z)*facing
 				local cut=(storey==2 and index==2) or (storey==4 and index==3)
 				local home=house(stack,"CanyonDwelling_"..storey,face,35,29,14.7,
 					(storey+index)%3==0 and C.pale or spec.color,nil,
@@ -82,7 +84,7 @@ function Districts.Build(K)
 			end
 			-- Side-facing windows make the slots between houses intentionally domestic.
 			for storey=0,2 do
-				window(stack,CF(side*(spec.x+15),storey*15+7.6,spec.z-17.9),9,9,false)
+				window(stack,CF(side*(baseX+15),storey*15+7.6,spec.z-17.9),9,9,false)
 			end
 		end
 	end
@@ -192,9 +194,20 @@ function Districts.Build(K)
 	local tiltedA=house(fusedA,"EmbeddedTiltedRoseHome",CF(-126,19,1078)*CFrame.Angles(0,math.rad(-12),math.rad(17)),31,25,14,C.rose,C.blue,{open=false,lit=false})
 	window(fusedA,CF(-121,18,1077.35),14,10,false)
 	local fusedB=model("EastFusedTiltedHome",G)
-	part(fusedB,"SupportingDomesticVolume",V(34,22,27),CF(130,27,1133),C.cream)
+	-- The old solid support occupied the enterable pink house at x113..140,
+	-- y16..30.7, z1115..1145. Keep the upper scenic mass, with actual support
+	-- beside/behind that room instead of a hidden block through its interior.
+	part(fusedB,"RaisedDomesticSupportLintel",V(34,6,27),CF(130,35,1133),C.cream)
+	part(fusedB,"DomesticRearSupportPier",V(4,16,27),CF(143,24,1133),C.cream)
+	for _,z in ipairs({1113.6,1146.4}) do
+		part(fusedB,"DomesticFlankSupportPier",V(5,16,2.4),CF(136.5,24,z),C.cream)
+	end
+	fusedB:SetAttribute("HollowSupportPreservesHouse",true)
+	h6:SetAttribute("ScenicSupportHollowed",true)
 	local tiltedB=house(fusedB,"EmbeddedTiltedCreamHome",CF(120,36,1119)*CFrame.Angles(0,math.rad(18),math.rad(-19)),28,25,13,C.pale,C.lavender,{open=false,lit=false})
-	window(fusedB,CF(130,30,1119.2),12,11,false)
+	-- Move the support's decorative pane above the room as well: its previous
+	-- y24.5..35.5 extent would remain a collidable pane across the cleared room.
+	window(fusedB,CF(130,35,1119.2),12,5.2,false)
 	-- A cropped hedge is made of carpeted boxes: it must read as indoor material,
 	-- never as an outdoor landscape or an unexplained glowing object.
 	for _,v in ipairs({{-147,8,1053},{-143,8,1138},{143,16,1071},{148,0,1174},{-22,0,1176}}) do
@@ -207,12 +220,14 @@ function Districts.Build(K)
 	camera("TiltedSubdivisionFusedHomes",V(43,7,1176),V(122,39,1132))
 	point(0,3,1020); point(10,3,1090); point(10,3,1179); point(0,3,1192)
 	point(-58,3,1017); point(-58,11,1042); point(-65,11,1100); point(-65,11,1138); point(-43,3,1173)
-	point(73,3,1030); point(73,19,1069); point(123,19,1150); point(123,3,1189)
+	point(73,3,1030); point(73,19,1069); point(100,19,1069); point(100,19,1130)
+	point(116,19,1130); point(132,19,1130); point(116,19,1130); point(100,19,1130)
+	point(100,19,1150); point(123,19,1150); point(123,3,1189)
 
-	-- H: compression and quiet after the larger landmarks. The exit remains an
-	-- open architectural preview; the three lamps are deliberately unwired.
+	-- H: domestic familiarity compresses into an offset vestibule, then the
+	-- narrow descent. This remains architecture only: no puzzle, slide or win.
 	local H=zone("H_LastHouse",V(-60,-30,1196),V(60,26,1319),
-		"Quiet final residential court, easy-puzzle room placeholder, arrow-marked rear opening and enclosed steep black chute.")
+		"Quiet final residential court, sparse waiting house, offset low vestibule, painted directions and enclosed black descent.")
 	floor(H,"QuietCourtCarpet",0,0,1225.5,120,59,C.carpet) -- ends exactly at chute mouth
 	for _,s in ipairs({-1,1}) do
 		floor(H,"ChuteSideGround",s*32.5,0,1265.5,55,21,C.carpet)
@@ -224,44 +239,139 @@ function Districts.Build(K)
 	finalHouse:SetAttribute("PuzzleReady",true)
 	finalHouse:SetAttribute("FutureDoorPlaneZ",1255)
 	finalHouse:SetAttribute("GeometryOnly_NoPuzzle",true)
+	finalHouse:SetAttribute("EndingArchitectureVersion","2026-09-25.1")
+	finalHouse:SetAttribute("RearVestibuleClearance",10.6)
 	for _,s in ipairs({-1,1}) do
 		part(finalHouse,"InteriorRoomDivider",V(.55,15,10),CF(s*12,7.5,1230),C.cream)
-		thinPicture(finalHouse,CF(s*14,7,1254.5),4.5,3.7)
 		skirting(finalHouse,CF(s*12,0,1230)*yaw(90),10)
 	end
-	part(finalHouse,"PuzzleReadySideboard",V(12,3,2),CF(0,1.5,1242),Color3.fromRGB(135,111,82),Enum.Material.Wood)
-	-- The later puzzle gets its own design; no lamps in the house art pass.
-	for _,s in ipairs({-1,1}) do
-		local art=part(finalHouse,"ExitArrowArtSurface",V(4.7,4.7,.04),CF(s*7.5,6,1254.58),C.pale,Enum.Material.SmoothPlastic,false)
-		if config.ArrowTexture and config.ArrowTexture~="" then
-			local decal=Instance.new("Decal"); decal.Name="PaintedExitArrow"; decal.Texture=tostring(config.ArrowTexture); decal.Face=Enum.NormalId.Front; decal.Parent=art
-		else
-			part(finalHouse,"PaintedArrowShaft",V(3,.18,.05),CF(s*7.5,6,1254.53),C.red,Enum.Material.SmoothPlastic,false)
-			for _,v in ipairs({-1,1}) do part(finalHouse,"PaintedArrowHead",V(1.4,.18,.055),CF(s*6.5,6+v*.43,1254.51)*CFrame.Angles(0,0,s*v*math.rad(40)),C.red,Enum.Material.SmoothPlastic,false) end
-		end
+
+	-- A few deliberately ordinary objects occupy the side alcove. Nothing sits
+	-- in the entry or the turning path, and nothing implies an active puzzle.
+	local waiting=model("QuietWaitingAlcove",finalHouse)
+	local wood=Color3.fromRGB(121,94,63)
+	local woodEdge=Color3.fromRGB(153,122,85)
+	local darkWood=Color3.fromRGB(74,58,42)
+	local cabinet=CF(-18.35,0,1237.2)*yaw(-90)
+	for _,x in ipairs({-2.35,2.35}) do for _,z in ipairs({-.72,.72}) do
+		part(waiting,"CabinetRaisedFoot",V(.22,.42,.22),cabinet*CF(x,.21,z),darkWood,Enum.Material.Wood)
+	end end
+	part(waiting,"LowVeneerSideboard",V(5.8,2.3,2.15),cabinet*CF(0,1.55,0),wood,Enum.Material.Wood)
+	part(waiting,"SideboardOverhangingTop",V(6,.22,2.32),cabinet*CF(0,2.81,0),woodEdge,Enum.Material.Wood)
+	part(waiting,"SideboardDarkToeRecess",V(5.3,.18,1.8),cabinet*CF(0,.48,0),darkWood,Enum.Material.Wood)
+	for _,x in ipairs({-1.42,1.42}) do
+		part(waiting,"RecessedSideboardDoor",V(2.66,1.86,.07),cabinet*CF(x,1.59,-1.12),woodEdge,Enum.Material.Wood,false)
+		part(waiting,"SmallDullSideboardPull",V(.32,.08,.13),cabinet*CF(x<0 and -.3 or .3,1.9,-1.22),darkWood,Enum.Material.Metal,false)
 	end
+	local chair=CF(-16.7,0,1229.8)*yaw(-7)
+	for _,x in ipairs({-.86,.86}) do for _,z in ipairs({-.86,.86}) do
+		part(waiting,"WaitingChairLeg",V(.17,1.7,.17),chair*CF(x,.85,z),wood,Enum.Material.Wood)
+	end end
+	part(waiting,"WaitingChairSeat",V(2.08,.22,2.08),chair*CF(0,1.81,0),woodEdge,Enum.Material.Wood)
+	for _,x in ipairs({-.86,.86}) do
+		part(waiting,"WaitingChairBackPost",V(.17,2.35,.17),chair*CF(x,2.65,.86),wood,Enum.Material.Wood)
+	end
+	part(waiting,"WaitingChairBackRail",V(1.88,.25,.19),chair*CF(0,3.73,.86),woodEdge,Enum.Material.Wood)
+	part(waiting,"WaitingChairBackPanel",V(1.53,.62,.13),chair*CF(0,3.1,.86),woodEdge,Enum.Material.Wood)
+	thinPicture(finalHouse,CF(-15.3,6.8,1254.53),4.1,3.3)
+
+	-- The nine-stud opening is intentionally off-axis from both exterior doors.
+	-- The return wall ends with 7.475 studs of clear turning depth at the rear.
+	-- Preserve the front door and the original seven-stud chute doorway.
+	local vestibule=model("OffsetRearVestibule",finalHouse)
+	part(vestibule,"VestibuleFrontLeftWall",V(25.5,15,.65),CF(-8.25,7.5,1241.5),C.cream)
+	part(vestibule,"VestibuleFrontRightWall",V(7.5,15,.65),CF(17.25,7.5,1241.5),C.cream)
+	part(vestibule,"VestibuleDoorLintel",V(9,4.7,.65),CF(9,12.65,1241.5),C.cream)
+	K.doorframe(vestibule,CF(9,0,1241.12),9,10.3)
+	part(vestibule,"VestibuleReturnWall",V(.65,10.6,5.7),CF(4.5,5.3,1244.35),C.cream)
+	part(vestibule,"LowVestibuleCeiling",V(42,.45,13.35),CF(0,10.825,1248.325),C.ceiling)
+	skirting(vestibule,CF(-8.25,0,1241.12),25.5)
+	skirting(vestibule,CF(17.25,0,1241.12),7.5)
+	skirting(vestibule,CF(4.88,0,1244.35)*yaw(90),5.7)
+	part(vestibule,"VestibuleCeilingCornice",V(42,.3,.32),CF(0,10.45,1242.04),C.white)
+	vestibule:SetAttribute("ClearDoorWidth",9)
+	vestibule:SetAttribute("RearTurnDepth",7.475)
+	vestibule:SetAttribute("NoGameplayGate",true)
+
+	-- Direction-matched images keep gravity drips downward. Rotate within
+	-- the carrier's wall plane; Front (-local Z) always faces into the room.
+	-- The image alpha supplies the painted contour: the carrier is invisible.
+	local arrows=model("PaintedExitDirections",finalHouse)
+	local function paintedArrow(name,position,normal,width,height,direction,canonicalLeft)
+		local face=CFrame.lookAt(position,position+normal)
+		-- Front-face bitmap right is the negative object-local X direction.
+		local imageDirection=canonicalLeft and direction or -direction
+		local angle=math.atan2(imageDirection:Dot(face.UpVector),imageDirection:Dot(face.RightVector))
+		local surface=part(arrows,name,V(width,height,.015),face*CFrame.Angles(0,0,angle),C.white,Enum.Material.SmoothPlastic,false)
+		surface.Transparency=1;surface.CanQuery=false;surface.CanTouch=false;surface.CastShadow=false
+		surface:SetAttribute("Level5ExitArrow",true)
+		surface:SetAttribute("AlphaBackground",true)
+		surface:SetAttribute("CanonicalImageDirection",canonicalLeft and "Left" or "Right")
+		surface:SetAttribute("LocalRouteDirection",direction.Unit)
+		local asset=canonicalLeft and config.ExitArrowLeftTexture or config.ExitArrowTexture
+		if asset and asset~="" then
+			local decal=Instance.new("Decal");decal.Name="PaintedExitArrow"
+			decal.Texture=tostring(asset);decal.Face=Enum.NormalId.Front
+			decal.Color3=Color3.new(1,1,1);decal.Transparency=0;decal.Parent=surface
+		else
+			surface:SetAttribute("MissingExitArrowTexture",true)
+		end
+		return surface
+	end
+	paintedArrow("FirstRightTurnArrow",V(0,6,1241.15),V(0,0,-1),6.2,6.2/1.5,V(1,0,0),true)
+	paintedArrow("VestibuleForwardArrow",V(4.855,5.7,1244.35),V(1,0,0),4.8,3.2,V(0,0,1),true)
+	paintedArrow("RearLeftTurnArrow",V(8.6,5.7,1254.645),V(0,0,-1),6.2,6.2/1.5,V(-1,0,0))
+
 	local chute=model("NarrowDescent",H)
 	local chuteStart,bend,chuteEnd=V(0,0,1255),V(0,-11,1287),V(0,-29,1310)
 	local function chuteSegment(a,b,dark)
 		local length=(b-a).Magnitude
 		local frame=CFrame.lookAt((a+b)/2,b)
-		local black=Color3.fromRGB(5,6,6)
+		local black=Color3.fromRGB(3,3,3)
 		part(chute,"SmoothSlopingFloor",V(7.2,.85,length+.65),frame*CF(0,-.43,0),dark and black or C.carpet,Enum.Material.SmoothPlastic)
 		for _,s in ipairs({-1,1}) do part(chute,"CloseChuteWall",V(.7,8.7,length+.65),frame*CF(s*3.95,4.3,0),dark and black or C.cream) end
 		part(chute,"LowChuteCeiling",V(8.6,.65,length+.65),frame*CF(0,8.7,0),dark and black or C.ceiling)
 		if not dark then part(chute,"LastFluorescent",V(3,.12,1.7),frame*CF(0,8.3,length*.25),Color3.fromRGB(185,191,154),Enum.Material.Neon,false) end
+		return frame
 	end
-	chuteSegment(chuteStart,bend,false); chuteSegment(bend,chuteEnd,true)
-	floor(chute,"DarkArrivalFloor",0,-29,1314.5,8,9,Color3.fromRGB(3,4,4))
-	part(chute,"DarkArrivalCeiling",V(8,.7,9),CF(0,-20.3,1314.5),Color3.fromRGB(3,4,4))
-	for _,s in ipairs({-1,1}) do part(chute,"DarkArrivalSide",V(.7,9,9),CF(s*4,-24.5,1314.5),Color3.fromRGB(3,4,4)) end
-	part(chute,"DarkArrivalEnd",V(8,9,.7),CF(0,-24.5,1319),Color3.fromRGB(3,4,4))
+	local firstFrame=chuteSegment(chuteStart,bend,false)
+	local secondFrame=chuteSegment(bend,chuteEnd,true)
+
+	-- Differently pitched boxes leave a triangular opening above their shared
+	-- floor bend. Roof bridges and external side collars close the real shell;
+	-- no dark screen, blocker or trigger is placed across the walking passage.
+	local function roofClosure(name,a,b,color)
+		local midpoint=(a+b)/2
+		part(chute,name,V(8.7,.7,(b-a).Magnitude+.9),CFrame.lookAt(midpoint,b),color)
+	end
+	roofClosure("EntranceRoofClosure",V(0,10.75,1254.7),chuteStart+firstFrame.UpVector*8.7,C.ceiling)
+	for _,s in ipairs({-1,1}) do
+		part(chute,"EntranceSideCollar",V(.7,10.95,4.15),CF(s*3.95,5.325,1256.375),C.cream)
+	end
+	roofClosure("BendRoofClosure",bend+firstFrame.UpVector*8.7,bend+secondFrame.UpVector*8.7,Color3.fromRGB(3,3,3))
+	for _,s in ipairs({-1,1}) do
+		part(chute,"BendSideCollar",V(.7,11.5,8),CF(s*3.95,bend.Y+4,bend.Z+2.5),Color3.fromRGB(3,3,3))
+	end
+
+	-- One final painted direction follows the actual slope on the inside wall.
+	local descentDirection=(bend-chuteStart).Unit
+	local arrowCenter=chuteStart+descentDirection*6+firstFrame.UpVector*4.9+V(-3.585,0,0)
+	paintedArrow("DownTheSlopeArrow",arrowCenter,V(1,0,0),5.4,3.6,descentDirection,true)
+	floor(chute,"DarkArrivalFloor",0,-29,1314.5,8,9,Color3.fromRGB(2,2,2))
+	part(chute,"DarkArrivalCeiling",V(8,.7,9),CF(0,-20.3,1314.5),Color3.fromRGB(2,2,2))
+	for _,s in ipairs({-1,1}) do part(chute,"DarkArrivalSide",V(.7,9,9),CF(s*4,-24.5,1314.5),Color3.fromRGB(2,2,2)) end
+	part(chute,"DarkArrivalEnd",V(8,9,.7),CF(0,-24.5,1319),Color3.fromRGB(2,2,2))
 	chute:SetAttribute("GeometryOnly_NoSlideOrCompletion",true)
 	chute:SetAttribute("SuggestedSlideStartFraction",.7)
+	chute:SetAttribute("ArchitecturalDarkEnding",true)
+	chute:SetAttribute("PitchSeamsClosed",true)
 	camera("LastHouseQuietCourt",V(-12,6,1198),V(4,8,1231))
-	camera("LastHousePuzzleRoom",V(-8,7,1227),V(2,6,1254))
+	camera("LastHousePuzzleRoom",V(0,6,1230),V(8,5.8,1242))
+	camera("LastHouseVestibule",V(9,5,1244),V(0,5,1254))
 	camera("LastHouseDescent",V(0,5,1253),V(0,-10,1286))
-	point(0,3,1198); point(0,3,1221); point(0,3,1236); point(7,3,1247); point(0,3,1253)
+	camera("LastHouseDarkArrival",V(0,-18,1302),V(0,-25,1316))
+	point(0,3,1198); point(0,3,1221); point(0,3,1237.5)
+	point(9,3,1237.5); point(9,3,1250.9); point(0,3,1250.9); point(0,3,1253)
 	point(0,-8,1287); point(0,-26,1314)
 	return {PreviewCameras=cameras,Waypoints=waypoints,Zones=zones,FinalHouse=finalHouse,ChuteStart=chuteStart,ChuteEnd=chuteEnd}
 end

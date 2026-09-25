@@ -1,0 +1,25 @@
+{
+  "scope": "Native Studio server readback during final map QA; static deterministic ceiling pattern",
+  "ceilingPanels": 197,
+  "tubeStates": {
+    "On": 135,
+    "Dim": 34,
+    "Off": 28
+  },
+  "colorTemperatures": {
+    "Warm": 66,
+    "Neutral": 66,
+    "Cool": 65
+  },
+  "offPanelLightObjects": 0,
+  "offPanelNeonParts": 0,
+  "actualWorldLights": 50,
+  "houseLights": 0,
+  "houseNeon": 0,
+  "flickerOrPerFrameLightTasks": false,
+  "visualEvidence": [
+    "Final_LowEaves.png",
+    "Final_BayWindowCanyonEntrance.png"
+  ],
+  "limitations": "Studio desktop inspection; no physical mobile/tablet performance measurement."
+}

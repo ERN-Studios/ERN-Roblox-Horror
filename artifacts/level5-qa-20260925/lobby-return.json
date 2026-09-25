@@ -1,0 +1,18 @@
+{
+  "method": "Real client hold-L 2200ms; server and client readback after return",
+  "client": {
+    "inRound": false,
+    "worldPresent": false,
+    "lightingDifferences": {},
+    "checkedLightingProperties": 13,
+    "checkedAtmosphereProperties": 6,
+    "exitModalVisible": false
+  },
+  "server": {
+    "worldPresent": false,
+    "runtimeBackupPresent": false,
+    "compatibilityMarkers": 0,
+    "phase": "IDLE",
+    "lobbyPresent": true
+  }
+}

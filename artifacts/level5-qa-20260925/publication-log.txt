@@ -1,0 +1,22 @@
+2026-09-25T13:12:02.854Z,3741.854492,f0fa20c0,6,Info [FLog::StudioKeyEvents] publish request routing through state machine (publishType=2)
+2026-09-25T13:12:02.878Z,3741.878906,6fdef000,6,Debug [FLog::PublishSessionStateController] Processing task results for PublishInitiated state
+2026-09-25T13:12:02.879Z,3741.879395,6fdef000,6,Debug [FLog::PublishSessionStateController] Go to PublishPreAssetsPublishing
+2026-09-25T13:12:06.365Z,3745.365967,6fdef000,6,Debug [FLog::PublishSessionStateController] Processing task results for PublishPreAssetsPublishing state
+2026-09-25T13:12:06.366Z,3745.366699,6fdef000,6,Debug [FLog::PublishSessionStateController] Go to PublishInProgress
+2026-09-25T13:12:09.833Z,3748.833252,6fdef000,6,Debug [FLog::PublishSessionStateController] Processing task results for PublishInProgress state
+2026-09-25T13:12:09.833Z,3748.833252,6fdef000,6,Debug [FLog::PublishSessionStateController] Go to PublishSuccessful
+2026-09-25T13:12:09.851Z,3748.851318,f0fa20c0,6,Info [FLog::CreatorOutput] Saved new changes in "BACKROOMS: STAY QUIET [CO-OP HORROR]" to Roblox.
+2026-09-25T13:16:08.388Z,3987.388916,f0fa20c0,6,Info [FLog::StudioKeyEvents] publish request routing through state machine (publishType=1)
+2026-09-25T13:16:08.406Z,3987.406006,6fdef000,6,Debug [FLog::PublishSessionStateController] Processing task results for PublishInitiated state
+2026-09-25T13:16:08.406Z,3987.406494,6fdef000,6,Debug [FLog::PublishSessionStateController] Go to PublishPreAssetsPublishing
+2026-09-25T13:16:08.471Z,3987.471436,6f3e3000,6,Debug [FLog::PublishSessionStateController] Processing task results for PublishPreAssetsPublishing state
+2026-09-25T13:16:08.471Z,3987.471680,6f3e3000,6,Debug [FLog::PublishSessionStateController] Go to PublishInProgress
+2026-09-25T13:16:09.740Z,3988.740234,6dadf000,6,Info [FLog::CreatorOutput] Sent message to server to publish.
+2026-09-25T13:16:14.375Z,3993.375244,f0fa20c0,6,Info [DFLog::StudioPerformanceMeasurementsSummary] StudioPerformanceMeasurements summary for StudioPublishPlace: 5985ms
+2026-09-25T13:16:14.375Z,3993.375732,6f3e3000,6,Debug [FLog::PublishSessionStateController] Processing task results for PublishInProgress state
+2026-09-25T13:16:14.375Z,3993.375977,6f3e3000,6,Debug [FLog::PublishSessionStateController] Go to PublishSuccessful
+2026-09-25T13:16:14.417Z,3993.417969,f0fa20c0,6,Info [FLog::CreatorOutput] Place published. Eligible players can now play this place in Roblox.
+2026-09-25T13:16:14.417Z,3993.417969,f0fa20c0,6,Info [FLog::CreatorOutput] → Add publish notes to v2104
+2026-09-25T13:16:14.426Z,3993.426758,f0fa20c0,6,Info [FLog::CreatorOutput] Published new changes in "BACKROOMS: STAY QUIET [CO-OP HORROR]" to Roblox.
+2026-09-25T13:16:14.427Z,3993.427246,f0fa20c0,6 [FLog::StudioTimingLog] ======== Studio Publish Place Times =======
+2026-09-25T13:16:14.427Z,3993.427246,f0fa20c0,6 [FLog::StudioTimingLog] PublishPlaceTime : 3993.4272 sec

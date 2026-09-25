@@ -1,0 +1,13 @@
+{
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "publishedVersion": 2104,
+  "publishedAtUtc": "2026-09-25T13:16:14Z",
+  "success": true,
+  "sourceLog": "0.740.19.7400931_20260925T120939Z_Studio_ae100_last.log",
+  "evidenceFile": "artifacts/level5-qa-20260925/publication-log.txt",
+  "evidenceSha256": "f4b878b0fc87da8f67e7526125ce6c10fd4ce15867e6c29933186527fe678df8",
+  "publishedBy": "Owner via File > Publish to Roblox; independently confirmed from Studio publication log",
+  "scope": "Current existing place, with Level 5 developer-preview QA and lighting changes; no active server restart.",
+  "metadataFile": "artifacts/level5-qa-20260925/publication-v2104.json"
+}

@@ -1,0 +1,38 @@
+{
+  "createdUtc": "2026-09-25T12:32:13.454208+00:00",
+  "mode": "built-in image_gen",
+  "tool": "image_gen.imagegen",
+  "generationType": "new image",
+  "sourcePath": "/Users/zeanjuul4/.codex/generated_images/01a0cfe1-051b-7073-9dd4-8d21f8ddfda3/exec-d8509c2f-d610-433e-b0ad-06630250aa0b.png",
+  "destinationPath": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-polish-20260925/assets/exit-arrow-right-alpha.png",
+  "promptFile": "exit-arrow-right-alpha.prompt.txt",
+  "pixelEdits": false,
+  "copyPreservesOriginalBytes": true,
+  "sha256": "42b09dcb555db45802e309bed1bfe8a8bac80ce26059783a2de19e3a5c470ca0",
+  "bytes": 1874242,
+  "imageMode": "RGBA",
+  "width": 1536,
+  "height": 1024,
+  "alpha": {
+    "minimum": 0,
+    "maximum": 254,
+    "transparentPixels": 1135056,
+    "partiallyTransparentPixels": 437808,
+    "opaquePixels": 0,
+    "totalPixels": 1572864,
+    "transparentFraction": 0.721649169921875,
+    "nonzeroBoundingBox": [
+      33,
+      21,
+      1506,
+      1024
+    ],
+    "alphaAtLeast8BoundingBox": [
+      39,
+      145,
+      1504,
+      875
+    ]
+  },
+  "visualInspection": "Single right-facing broad brush-painted worn brick-red arrow, chipped bristle texture and thin downward drips. No text, wall or sign plate. Apparent dark/red halo in generator thumbnail is RGB beneath zero alpha; sampled pixels above/below arrow have alpha 0. Native alpha preserved, not edited. A few near-transparent generated pixels outside arrow, alpha under 8."
+}

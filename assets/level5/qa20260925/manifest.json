@@ -1,0 +1,30 @@
+[
+  {
+    "file": "assets/level5/qa20260925/exit-arrow-right-alpha.png",
+    "bytes": 1874242,
+    "sha256": "42b09dcb555db45802e309bed1bfe8a8bac80ce26059783a2de19e3a5c470ca0",
+    "robloxAssetId": 136557095207787,
+    "sourceDirection": "right",
+    "clientPreload": "Success",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "format": "RGBA PNG",
+    "note": "Native imagegen output with alpha; no pixel edits. Front Decal bitmap horizontal axis is opposite Part.RightVector."
+  },
+  {
+    "file": "assets/level5/qa20260925/exit-arrow-left-alpha.png",
+    "bytes": 1881849,
+    "sha256": "071fbde0746090a8cc66acd6c4648982cf1ab848055f92066a4eb417959b7d88",
+    "robloxAssetId": 119578216618152,
+    "sourceDirection": "left",
+    "clientPreload": "Success",
+    "dimensions": [
+      1536,
+      1024
+    ],
+    "format": "RGBA PNG",
+    "note": "Native imagegen output with alpha; no pixel edits. Front Decal bitmap horizontal axis is opposite Part.RightVector."
+  }
+]
