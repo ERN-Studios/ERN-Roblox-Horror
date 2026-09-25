@@ -22,7 +22,7 @@ function Architecture.Build(parent, origin, config)
 	origin = origin or Vector3.zero
 	local root = Instance.new("Model")
 	root.Name = "Level5_IndoorSuburbs"
-	root:SetAttribute("ArchitectureVersion", "2026-09-25.1")
+	root:SetAttribute("ArchitectureVersion", "2026-09-25.2")
 	root:SetAttribute("GeometryOnly", true)
 	root.Parent = parent
 	local offset = CFrame.new(origin)
@@ -347,7 +347,7 @@ function Architecture.Build(parent, origin, config)
 		{id="C",name="Pastel Village",model="C_PastelVillage",width=360,z0=196,z1=436,height=48,style="office",wall=C.pale},
 		{id="D",name="Floral Terraces",model="D_FloralTerraces",width=180,z0=436,z1=636,height=32,minY=-14,style="low",wall=C.yellow},
 		{id="E",name="Domestic Labyrinth",model="E_DomesticLabyrinth",width=200,z0=636,z1=796,height=15,style="domestic",wall=C.pale},
-		{id="F",name="Bay Window Canyon",model="F_BayWindowCanyon",width=300,z0=796,z1=1016,height=108,style="warehouse",wall=C.cream},
+		{id="F",name="Window Watcher Courts",model="F_BayWindowCanyon",width=300,z0=796,z1=1016,height=60,style="office",wall=C.cream},
 		{id="G",name="Tilted Subdivision",model="G_TiltedSubdivision",width=320,z0=1016,z1=1196,height=66,style="warehouse",wall=C.pale},
 		{id="H",name="Last House",model="H_LastHouse",width=120,z0=1196,z1=1276,height=26,style="domestic",wall=C.cream},
 	}
@@ -405,10 +405,10 @@ function Architecture.Build(parent, origin, config)
 	-- Bottom edges meet the floor or the raised terrace. Upper colonies originate
 	-- at wall joints; none of the carriers crosses the central threshold opening.
 	wallMold("VillageFloorSpread",V(-179.32,22.05,319),V(0,22.05,319),58.67,44,"corner","Floor corner")
-	wallMold("CanyonRearRising",V(55,48.05,1015.31),V(55,48.05,900),72,96,"rising","Floor seam")
-	wallMold("CanyonWestRising",V(-149.32,45.05,902),V(0,45.05,902),67.5,90,"rising","Floor seam")
+	wallMold("CanyonRearRising",V(55,27.05,1015.31),V(55,27.05,900),40.5,54,"rising","Floor seam")
+	wallMold("CanyonWestRising",V(-149.32,26.05,902),V(0,26.05,902),39,52,"rising","Floor seam")
 	wallMold("SubdivisionTerraceSpread",V(159.32,39.05,1092),V(0,39.05,1092),61.33,46,"corner","Raised terrace floor")
-	wallMold("CanyonUpperSeam",V(149.32,75,866),V(0,75,866),52,52,"seam","Upper wall seam")
+	wallMold("CanyonUpperSeam",V(149.32,42,866),V(0,42,866),28,28,"seam","Upper wall seam")
 	wallMold("SubdivisionUpperSeam",V(-159.32,46,1148),V(0,46,1148),36,36,"seam","Upper wall seam")
 	wallMold("ArcadeDampCorner",V(-65,8.05,195.31),V(-65,8.05,150),21.33,16,"corner","Low wall corner")
 	wallMold("DomesticCeilingSeam",V(-63,7.25,795.31),V(-63,7.25,740),13.5,13.5,"seam","Ceiling seam")

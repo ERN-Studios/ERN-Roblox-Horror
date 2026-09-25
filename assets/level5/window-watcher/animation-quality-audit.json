@@ -1,0 +1,45 @@
+{
+  "clips": [
+    {
+      "name": "WatchingIdle",
+      "frames": 181,
+      "duration_seconds": 6.0,
+      "loop_translation_error": 0.0,
+      "loop_rotation_error_degrees": 0.0,
+      "base_pose_translation_error": 0.0,
+      "base_pose_rotation_error_degrees": 0.0,
+      "max_step_translation": 0.00019016959666989607,
+      "max_step_rotation_degrees": 1.7302844014466245e-05,
+      "feet_max_drift": 0.0,
+      "root_max_drift": 0.0
+    },
+    {
+      "name": "SlowWindowLean",
+      "frames": 151,
+      "duration_seconds": 5.0,
+      "loop_translation_error": 0.0,
+      "loop_rotation_error_degrees": 0.0,
+      "base_pose_translation_error": 2.0882403774255725e-07,
+      "base_pose_rotation_error_degrees": 0.0,
+      "max_step_translation": 0.003154067344593487,
+      "max_step_rotation_degrees": 0.3165175562037229,
+      "feet_max_drift": 0.0,
+      "root_max_drift": 0.0
+    },
+    {
+      "name": "GlassTap",
+      "frames": 121,
+      "duration_seconds": 4.0,
+      "loop_translation_error": 0.0,
+      "loop_rotation_error_degrees": 0.0,
+      "base_pose_translation_error": 2.5463285726678545e-07,
+      "base_pose_rotation_error_degrees": 0.0,
+      "max_step_translation": 0.04413678927774755,
+      "max_step_rotation_degrees": 10.893592504432043,
+      "feet_max_drift": 0.0,
+      "root_max_drift": 0.0
+    }
+  ],
+  "issues": [],
+  "pass": true
+}

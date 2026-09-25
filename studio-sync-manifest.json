@@ -1,6 +1,6 @@
 {
   "formatVersion": 2,
-  "source": "Studio-authoritative Level 5 QA and exit-polish snapshot, 182 scripts with exact Source/editor parity verified 2026-09-25. Other-developer work from a8259d3 retained; only three Level 5 modules changed.",
+  "source": "Studio-authoritative Window Watcher court snapshot, 182 scripts with exact Source/editor parity verified 2026-09-25. Only Architecture and Landmark Districts changed; asset import and publication pending.",
   "finalNewlineContract": "Entries flagged studioTrailingNewline hold exactly the canonical repo file plus one extra trailing newline in Studio. Exact landings remove the flag. Current flagged entry count: 0. Manifest hashes always describe the canonical repo file, never Studio's transport bytes.",
   "studio": {
     "id": "b88b0236-d7ba-4c6e-839b-6a276c1a5d71",
@@ -9,7 +9,7 @@
     "universeId": 10559217407,
     "publishedVersion": 2104,
     "openedPlaceVersion": 2100,
-    "publicationStatus": "Published and verified"
+    "publicationStatus": "Current court changes not published; last verified publication v2104"
   },
   "counts": {
     "scripts": 182,
@@ -21,7 +21,7 @@
     "file": "artifacts/level5-qa-20260925/after.rbxl",
     "bytes": 9635146,
     "sha256": "a2ffc35f2e9e443e2946f2582158808028c3a4d7ac67dca384f59b45e9c351d0",
-    "purpose": "Full native Edit snapshot after Level 5 QA, including preserved non-script state. Level 5 geometry is generated at runtime by the mirrored modules."
+    "purpose": "Last complete native snapshot BEFORE current court changes. Current map changes are script-only and exported exactly; new native after-backup remains pending."
   },
   "extraMirroredFilesNotInStudio": [
     "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_AutomaticAssetCaptureSender_LocalizationService.RemoteEvent.txt",
@@ -2856,7 +2856,7 @@
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 5 Systems/Level 5 Architecture.ModuleScript.lua",
       "bytes": 25655,
-      "sha256": "eff5adfbe41bf406040a24b54ef3675d654ec46790c3199e8948f0848d55488e",
+      "sha256": "5b12240c3ddea10b313cdad26d1773f3c8640a20d620dca490a4c3864dc22aef",
       "status": "synced",
       "captureMethod": "Fresh Studio Source/editor export, exact UTF-8 byte parity verified 2026-09-25",
       "sourceEqualsEditor": true
@@ -2885,8 +2885,8 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 5 Systems/Level 5 Landmark Districts.ModuleScript.lua",
-      "bytes": 22695,
-      "sha256": "db4a48b8ee906b446248c1593fd18f9043049f7e0b76e5eef1b23e1f1a28ec85",
+      "bytes": 30455,
+      "sha256": "9a84a9b5141e094b9b26956fc0d51a689ab68c392767871f420c95ce5c21996e",
       "status": "synced",
       "captureMethod": "Fresh Studio Source/editor export, exact UTF-8 byte parity verified 2026-09-25",
       "sourceEqualsEditor": true
@@ -2979,11 +2979,15 @@
     "sourceEqualsEditorCount": 182,
     "exactRepositoryByteMatches": 182,
     "editorConflicts": [],
-    "sourceAudit": "artifacts/level5-qa-20260925/final-source-audit.json",
+    "sourceAudit": "artifacts/level5-window-watcher-20260925/source-audit-before-asset-import.json",
     "capturedPlaceVersion": 2100,
-    "publishedVersionVerifiedFromLog": 2104,
-    "changedScripts": 3,
-    "unchangedScripts": 179,
+    "lastPublishedVersionVerifiedFromLog": 2104,
+    "changedScripts": 2,
+    "changedScriptPaths": [
+      "ServerScriptService/Level 5 Systems/Level 5 Architecture.ModuleScript.lua",
+      "ServerScriptService/Level 5 Systems/Level 5 Landmark Districts.ModuleScript.lua"
+    ],
+    "unchangedScripts": 180,
     "level4ScriptCount": 12,
     "level4UnchangedVsBaselineAndRepository": true
   },
@@ -3125,18 +3129,28 @@
         "priorPublicationVersion": 2036,
         "reason": "New skin meshes and SurfaceAppearance ColorMaps require Studio publish after verification."
       }
+    },
+    {
+      "source": "Studio-authoritative Level 5 QA and exit-polish snapshot, 182 scripts with exact Source/editor parity verified 2026-09-25. Other-developer work from a8259d3 retained; only three Level 5 modules changed.",
+      "counts": {
+        "scripts": 182,
+        "remoteEvents": 15,
+        "total": 197,
+        "studioTrailingNewline": 0
+      },
+      "nativePlaceBackupSha256": "a2ffc35f2e9e443e2946f2582158808028c3a4d7ac67dca384f59b45e9c351d0",
+      "scope": "Before Window Watcher court replacement; last verified publication remains v2104."
     }
   ],
   "currentSyncPublication": {
-    "status": "published_verified",
-    "publishedVersion": 2104,
-    "scope": "Level 5 QA, exit polish and ceiling variation; all other Studio source preserved",
-    "evidenceFile": "artifacts/level5-qa-20260925/publication-log.txt"
+    "status": "pending_native_import_and_publication",
+    "lastVerifiedPublishedVersion": 2104,
+    "reason": "Native 3D file selector blocks automated import; awaiting owner import before final native QA and publication."
   },
   "preTaskNativePlaceBackup": {
-    "file": "artifacts/level5-qa-20260925/before.rbxl",
-    "bytes": 9632834,
-    "sha256": "5e15e41924ddaeb364bef7e24201b878b46f49cb80c6cf2f429679fbe1a600cc",
-    "purpose": "Full authoritative native place before this task; opened version 2100."
+    "file": "artifacts/level5-qa-20260925/after.rbxl",
+    "bytes": 9635146,
+    "sha256": "a2ffc35f2e9e443e2946f2582158808028c3a4d7ac67dca384f59b45e9c351d0",
+    "verifiedFreshNativeCopy": "2026-09-25: current-task backup matches this existing repository snapshot byte for byte"
   }
 }

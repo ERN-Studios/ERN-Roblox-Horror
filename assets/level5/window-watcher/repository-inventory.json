@@ -1,0 +1,210 @@
+{
+  "status": "Local asset verified; native Roblox import/playback pending",
+  "files": [
+    {
+      "file": "ASSET_INVENTORY.md",
+      "bytes": 5784,
+      "sha256": "ece475fe678db09af6bbe12f7da82194ba680d358ed1a79ba4caf0747fcb9c6a"
+    },
+    {
+      "file": "GlassTap-roblox-30fps.json",
+      "bytes": 186886,
+      "sha256": "139640ae4ad89c3a59525c45746520af3f5de25b670817734be894a72b62222a"
+    },
+    {
+      "file": "GlassTap.fbx",
+      "bytes": 6903804,
+      "sha256": "39548720519eb92acac53e02991286aadca0e403254ba79f356da7405691c3c0"
+    },
+    {
+      "file": "SlowWindowLean-roblox-30fps.json",
+      "bytes": 235895,
+      "sha256": "9062803490136db35f3ad76a1e5b1cb3b18bcea56f9a4596485d6335221f5f8b"
+    },
+    {
+      "file": "SlowWindowLean.fbx",
+      "bytes": 6948620,
+      "sha256": "11a8fa3e7c14a5b2e7d3191ece272fcc9d51ec8b1fe28520c535f9a37ef79eca"
+    },
+    {
+      "file": "WatchingIdle-roblox-30fps.json",
+      "bytes": 278337,
+      "sha256": "e3abd0959248f376f6c6a8f6a5d5036d114c96f8d9b96422e4c5085d7b8b9ce4"
+    },
+    {
+      "file": "WatchingIdle.fbx",
+      "bytes": 6983532,
+      "sha256": "669a226866f551eda4f0ad10aa182927e786bae15df550f91d1b7886a46362de"
+    },
+    {
+      "file": "WindowWatcher-basecolor.png",
+      "bytes": 5952974,
+      "sha256": "3229b3bc4eec4498379348bcfabb74dfac136dc1ab51d8a18cb073c34bb01133"
+    },
+    {
+      "file": "animation-quality-audit.json",
+      "bytes": 1374,
+      "sha256": "5d87d23c02fb172e032d6f8bd27ed372adeceb2c68113428dd664dcae31e6d06"
+    },
+    {
+      "file": "animation-transforms-30fps.json.gz",
+      "bytes": 2851456,
+      "sha256": "876d8a38ad2c65025bdcb1fc1c50048710b32529459c47b22186ec078b485ddb"
+    },
+    {
+      "file": "asset-manifest.json",
+      "bytes": 4414,
+      "sha256": "2ce3611a257117c92426a821679cdb0385b68f72fda23fda6a684329d0811633"
+    },
+    {
+      "file": "asset-provenance.json",
+      "bytes": 14746,
+      "sha256": "aaa0c694c6ed10fa49bcc27cd8c56972d3a5bf0606d33ef1f376e2e9a735b248"
+    },
+    {
+      "file": "blender-tools/README.md",
+      "bytes": 8030,
+      "sha256": "12d65ded25437d4be92ccb443a289cde37cfbb8aef6126e30759e02fe9cf2cee"
+    },
+    {
+      "file": "blender-tools/animation_quality_audit.py",
+      "bytes": 2387,
+      "sha256": "1be1de09c56f317d9852df2458f1acc9de6730ae17ba2bc20e3231321475ce59"
+    },
+    {
+      "file": "blender-tools/author_watcher.py",
+      "bytes": 9685,
+      "sha256": "8bcc6c9726afc7876ba02fdc18261a50ca9b854896988e22c2c3282b0f4356ce"
+    },
+    {
+      "file": "blender-tools/export_serialized_gltf_clips.py",
+      "bytes": 5619,
+      "sha256": "5399ce1ab526ef8779d2c25423dafd95a3d13621e3f8568c7a410e90df354ec7"
+    },
+    {
+      "file": "blender-tools/hand_orientation_study.py",
+      "bytes": 787,
+      "sha256": "aeb56e71043c4116d515b94e76d3c449cb6f2457e98b10f408cee30560e91de4"
+    },
+    {
+      "file": "blender-tools/inspect_asset.py",
+      "bytes": 543,
+      "sha256": "9652c2ef523ee0dfb9acc5161336c66aea14b9cdd467d900cff1e93fae66c6ce"
+    },
+    {
+      "file": "blender-tools/prepare_rig.py",
+      "bytes": 2133,
+      "sha256": "8209009a9d36d636746ec2126f3a659a47e2524c815b1132d604110e96453048"
+    },
+    {
+      "file": "blender-tools/render_previews.py",
+      "bytes": 3765,
+      "sha256": "bdecd8dc6ec9e69a4f1bace3cb4e97412d7801f3ee45625f3addc0386b0a6f20"
+    },
+    {
+      "file": "blender-tools/roundtrip_audit.py",
+      "bytes": 4225,
+      "sha256": "dfea5bfe4f9f3ac1a568bffbdef4f9bb142e1b7b3032d8993cc15225d9fe5faa"
+    },
+    {
+      "file": "blender-tools/watcher_common.py",
+      "bytes": 9571,
+      "sha256": "22f24c34c20c8849960eef1df8817aa0dfd716d2ab8e92f0bb09523db41c4b9b"
+    },
+    {
+      "file": "export-inventory.json",
+      "bytes": 35843,
+      "sha256": "a1652af25b237b95c4e4744bdcecfe72639d62213522a183edbbb93d5c6ae884"
+    },
+    {
+      "file": "meshy-source/window-watcher-meshy.glb",
+      "bytes": 7215504,
+      "sha256": "c3ff9b3a6e04f780108b6a38060a1bca35d30f8346be320e9f00bcc5f35299e7"
+    },
+    {
+      "file": "meshy-source/window-watcher-preview.png",
+      "bytes": 62852,
+      "sha256": "91530cf7a538225d6464d2a40562efcaac87177321d40bc74b6035d879b9a84f"
+    },
+    {
+      "file": "meshy-source/window-watcher-rigged.glb",
+      "bytes": 6516996,
+      "sha256": "37f35e920600ad98a50c6eee0edcf4fde041fcc30b5ba92d6366f4083cd45b4a"
+    },
+    {
+      "file": "model.blend",
+      "bytes": 6996669,
+      "sha256": "134e485ba1e8479d668a9460e87e18a9c87083f52ff4ae1a89dc4bbe0ac2f0ad"
+    },
+    {
+      "file": "model.fbx",
+      "bytes": 6596124,
+      "sha256": "3d5834fb84b094d1d76c4b0c4041a09dcc66fa0f3e91c988facd50af2cd23beb"
+    },
+    {
+      "file": "model.glb",
+      "bytes": 6501680,
+      "sha256": "cbf260ff36b8c7226f27271456eae6bf4db7fd266bdce82dda8b0eae7cbc051e"
+    },
+    {
+      "file": "placement-reference.json",
+      "bytes": 9079,
+      "sha256": "90646a50fea3956c5aea58d6da8f9593b47173bd848bc1d78e69e962671b89cc"
+    },
+    {
+      "file": "reference/window-watcher-a-pose.png",
+      "bytes": 1898446,
+      "sha256": "6fef4701787c3d57801a21ae48ed6e95318be886d0b9a9da9b9c46bafa46f424"
+    },
+    {
+      "file": "reference/window-watcher-a-pose.prompt.txt",
+      "bytes": 1563,
+      "sha256": "3dae6629b8fbd3f2a5e23ad8ec1b412cda5e7d62077498da7446dbde2e6dbf34"
+    },
+    {
+      "file": "reference/window-watcher-concept.png",
+      "bytes": 2073611,
+      "sha256": "b4a460872951431832ebef9fcf348171a5399406c270a82e83a33542ebec9150"
+    },
+    {
+      "file": "renders/GlassTap-palm-closeup.png",
+      "bytes": 1419808,
+      "sha256": "ac087f4cf0cb206dab2e9ec87dbbbec36cb248687ccb57cb26ea0ef70c38e89f"
+    },
+    {
+      "file": "renders/GlassTap-raising-arc.png",
+      "bytes": 1138480,
+      "sha256": "92fbb63bc6b6a322d751a16686f235cece1bf3cd3bcba0cd56e3b568d3110988"
+    },
+    {
+      "file": "renders/GlassTap-three-quarter.png",
+      "bytes": 1136946,
+      "sha256": "27edeed02049e173507daa1f7ba21ecffe03605210853db98c6ab1be95a9702d"
+    },
+    {
+      "file": "renders/SlowWindowLean-three-quarter.png",
+      "bytes": 1130990,
+      "sha256": "c2af136cde712daf30090cd098aaeae701435505ddf2714f71a5c8fa3ccbf9e0"
+    },
+    {
+      "file": "renders/WatchingIdle-three-quarter.png",
+      "bytes": 1133315,
+      "sha256": "b61df7151e3f74999a70cddc6e3932ac9555f91b2362fe13ee56aa21fe983b01"
+    },
+    {
+      "file": "renders/WindowWatcher-contactsheet.png",
+      "bytes": 2078969,
+      "sha256": "6f0fe20a4dc140e364930b5fc02ac47771ce769dc93d6662b9a46622723f556f"
+    },
+    {
+      "file": "roundtrip-audit.json",
+      "bytes": 172881,
+      "sha256": "65679b939d3b877d822be6573840e2dcbbf5a8c0c39507471942d80a60fd3fa0"
+    },
+    {
+      "file": "serialized-glb-coordinate-audit.json",
+      "bytes": 44468,
+      "sha256": "21d66d39cb702f80d3477a9f002ab6e9544b94535e230bc2289752215e1de0d9"
+    }
+  ]
+}

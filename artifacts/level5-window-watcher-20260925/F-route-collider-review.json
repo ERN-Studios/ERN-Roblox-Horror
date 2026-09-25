@@ -1,0 +1,263 @@
+{
+  "checkedUtc": "2026-09-25T14:18:26.994404+00:00",
+  "method": "Read-only exported collidable-part OBBs. Flat route/door-lane samples every<=0.4 stud; five spheres of radius0.9 at heights0.95,2.15,3.35,4.55,5.0 above authored floor. Normalized world origin17000,24,0. No live simulation. All Part/WedgePart/MeshPart shapes conservatively treated as boxes; candidates require native review. Stair slopes excluded; their landings and approaches included.",
+  "exportedPartCount": 3337,
+  "routeCount": 42,
+  "sampleCount": 3296,
+  "sphereChecks": 16480,
+  "routes": [
+    {
+      "route": "GroundCourtRoute",
+      "samples": 760,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "WestLowerLandingTurn",
+      "samples": 46,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "WestUpperLandingTurn",
+      "samples": 46,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "WestUpperBalcony",
+      "samples": 379,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "UpperBridge",
+      "samples": 231,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "EastUpperBalcony",
+      "samples": 86,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "EastUpperLandingTurn",
+      "samples": 46,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "EastLowerLandingTurn",
+      "samples": 46,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "WestLowerBalcony",
+      "samples": 129,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "LowerBridge",
+      "samples": 231,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "EastLowerBalcony",
+      "samples": 144,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "HeroPorchEntry",
+      "samples": 98,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "MiddlePorchEntry",
+      "samples": 69,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "NearWatcherApproach",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:CutawayReadingRoom",
+      "samples": 33,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:SideCourtHome_-1_964",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:SideCourtHome_-1_850",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:WestHouseStack1.CanyonDwelling_0",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:WestHouseStack3.CanyonDwelling_0",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:WestHouseStack3.CanyonDwelling_1",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:WestHouseStack2.CanyonDwelling_2",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:WestHouseStack2.CanyonDwelling_0",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:WestHouseStack4.CanyonDwelling_0",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:WestHouseStack2.CanyonDwelling_1",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:WestHouseStack4.CanyonDwelling_1",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:ExitCourtHouses.WestLowGable",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:MiddleCourtHouse.MiddleGroundHome",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:MiddleCourtHouse.MiddleUpperHome",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:NestedWatcherHouse.CreamMiddleHouse",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:NestedWatcherHouse.SageLowerHouse",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:ExitCourtHouses.ExitGroundHome",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:EastHouseStack1.CanyonDwelling_0",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:EastHouseStack3.CanyonDwelling_0",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:EastHouseStack1.CanyonDwelling_1",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:EastHouseStack3.CanyonDwelling_1",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:EastHouseStack2.CanyonDwelling_0",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:EastHouseStack2.CanyonDwelling_1",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:EastHouseStack2.CanyonDwelling_2",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:EastHouseStack4.CanyonDwelling_0",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:SideCourtHome_1_854",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:SideCourtHome_1_967",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    },
+    {
+      "route": "OpenHome:SideCourtHome_1_907",
+      "samples": 34,
+      "candidateCount": 0,
+      "candidates": []
+    }
+  ],
+  "candidateRoutes": []
+}

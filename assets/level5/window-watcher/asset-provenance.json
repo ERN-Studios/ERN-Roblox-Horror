@@ -1,0 +1,334 @@
+{
+  "createdUtc": "2026-09-25T14:38:31.005225+00:00",
+  "status": "FINAL frozen local asset files; native Roblox import/playback pending",
+  "sanitization": "Allowlisted task identity/status/credit fields and local paths only. No signed URLs, credentials, headers, CLI authentication config, or raw task payloads copied. Raw local Meshy receipts remain private evidence.",
+  "scope": "Twenty core frozen local outputs inventoried here. The full repository package additionally preserves source models, authoring scripts and compressed expanded evidence; see repository-inventory.json.",
+  "references": {
+    "conceptImage": "reference/window-watcher-concept.png",
+    "originalConceptImage": "../entity-concepts-20260925/02-the-window-watcher.png",
+    "conceptPrompt": "../entity-concepts-20260925/02-the-window-watcher.prompt.txt",
+    "conceptProvenance": "../entity-concepts-20260925/02-the-window-watcher.provenance.json",
+    "aPoseImage": "reference/window-watcher-a-pose.png",
+    "aPosePrompt": "reference/window-watcher-a-pose.prompt.txt"
+  },
+  "meshyTasks": [
+    {
+      "taskId": "01a0d8e3-3fdd-752a-b810-ea9cace0266e",
+      "resource": "image-to-3d",
+      "endpoint": "/openapi/v1/image-to-3d",
+      "status": "SUCCEEDED",
+      "progress": 100,
+      "actualConsumedCredits": 15,
+      "operationId": "window-watcher-20260925-geometry-v1",
+      "parentTaskId": null,
+      "createdUtc": "2026-09-25T14:06:08.197000+00:00",
+      "finishedUtc": "2026-09-25T14:07:09.707000+00:00",
+      "submissionReceipt": "meshy_output/geometry-submission.json",
+      "completionReceipt": "meshy_output/geometry-wait.json"
+    },
+    {
+      "taskId": "01a0d8ec-0c4f-71fc-b513-af1e1d1e59b4",
+      "resource": "rigging",
+      "endpoint": "/openapi/v1/rigging",
+      "status": "SUCCEEDED",
+      "progress": 100,
+      "actualConsumedCredits": 5,
+      "operationId": "window-watcher-20260925-rig-v1",
+      "parentTaskId": "01a0d8e3-3fdd-752a-b810-ea9cace0266e",
+      "createdUtc": "2026-09-25T14:16:16.653000+00:00",
+      "finishedUtc": "2026-09-25T14:16:49.096000+00:00",
+      "submissionReceipt": "meshy_output/rig-submission.json",
+      "completionReceipt": "meshy_output/rig-wait-recorded.json"
+    }
+  ],
+  "actualMeshyCreditsTotal": 20,
+  "creditAccounting": "15 image-to-3D +5 rigging, counted once per unique task ID. Project history has geometry/delivered/preview/rigging stage rows; those are not four paid generations. Image-generation credit usage is separate and not quantified in these Meshy receipts.",
+  "downloads": [
+    {
+      "receipt": "meshy_output/geometry-download.json",
+      "taskId": "01a0d8e3-3fdd-752a-b810-ea9cace0266e",
+      "resource": "image-to-3d",
+      "state": "completed",
+      "selectedAssets": [
+        "model.glb"
+      ],
+      "writtenPaths": [
+        "meshy_output/window-watcher-meshy.glb"
+      ],
+      "note": "Original source downloads are provenance inputs, not final deliverables; no signed URLs or original-download hashes copied here."
+    },
+    {
+      "receipt": "meshy_output/rig-download.json",
+      "taskId": "01a0d8ec-0c4f-71fc-b513-af1e1d1e59b4",
+      "resource": "rigging",
+      "state": "completed",
+      "selectedAssets": [
+        "result.rigged_character_glb_url"
+      ],
+      "writtenPaths": [
+        "meshy_output/window-watcher-rigged.glb"
+      ],
+      "note": "Original source downloads are provenance inputs, not final deliverables; no signed URLs or original-download hashes copied here."
+    },
+    {
+      "receipt": "meshy_output/preview-download.json",
+      "taskId": "01a0d8e3-3fdd-752a-b810-ea9cace0266e",
+      "resource": "image-to-3d",
+      "state": "completed",
+      "selectedAssets": [
+        "thumbnail.primary"
+      ],
+      "writtenPaths": [
+        "meshy_output/window-watcher-preview.png"
+      ],
+      "note": "Original source downloads are provenance inputs, not final deliverables; no signed URLs or original-download hashes copied here."
+    }
+  ],
+  "model": {
+    "modelGlbSha256": "cbf260ff36b8c7226f27271456eae6bf4db7fd266bdce82dda8b0eae7cbc051e",
+    "blenderVersion": "5.2.0 LTS",
+    "rigName": "WindowWatcherRig",
+    "boneCount": 25,
+    "meshes": [
+      {
+        "name": "WindowWatcher",
+        "vertices": 8968,
+        "triangles": 11862,
+        "unweighted_count": 0,
+        "more_than_four_count": 0,
+        "non_normalized_count": 0,
+        "root_weighted_count": 0
+      }
+    ],
+    "packedImageCount": 1,
+    "heightMeters": 2.4,
+    "fps": 30,
+    "animationNames": [
+      "WatchingIdle",
+      "SlowWindowLean",
+      "GlassTap"
+    ]
+  },
+  "coordinateAudit": {
+    "model_glb_sha256": "cbf260ff36b8c7226f27271456eae6bf4db7fd266bdce82dda8b0eae7cbc051e",
+    "height_meters": 2.4,
+    "units": "meters",
+    "fps": 30,
+    "root_object": "WindowWatcherRig",
+    "formula": "G_anim_world = C @ Blender_pose_world @ per_bone_basis_correction; D = inverse(serialized_G_rest_local) @ G_anim_local",
+    "finding": "Bone locals retain Blender local bases; do not conjugate local deltas by the world Y-up conversion.",
+    "max_exported_basis_correction_from_identity": 1.9925646483898163e-06,
+    "max_inverse_bind_vs_serialized_world_inverse_error": 1.996755599975586e-06
+  },
+  "qaAtSnapshot": {
+    "animationQualityAudit": "blender/exports/animation-quality-audit.json",
+    "animationQualityPassed": true,
+    "animationIssues": [],
+    "roundtripAudit": "blender/exports/roundtrip-audit.json",
+    "roundtripPassed": true,
+    "roundtripIssues": [],
+    "statusNote": "Final re-read after Blender frozen declaration: animation-quality and roundtrip audits both pass with empty issues. Earlier GlassTap frame-step finding was addressed before freeze.",
+    "studioImportStatus": "BLOCKED pending user/native file-picker import. No Roblox import or animation playback pass claimed."
+  },
+  "finalDeliverableFiles": [
+    {
+      "path": "model.glb",
+      "role": "final bind model; geometry frozen",
+      "bytes": 6501680,
+      "sha256": "cbf260ff36b8c7226f27271456eae6bf4db7fd266bdce82dda8b0eae7cbc051e",
+      "modifiedUtc": "2026-09-25T14:28:55.399961+00:00",
+      "hashStatus": "final frozen export verified",
+      "originalTaskPath": "blender/exports/model.glb"
+    },
+    {
+      "path": "model.fbx",
+      "role": "bind model export",
+      "bytes": 6596124,
+      "sha256": "3d5834fb84b094d1d76c4b0c4041a09dcc66fa0f3e91c988facd50af2cd23beb",
+      "modifiedUtc": "2026-09-25T14:28:55.173777+00:00",
+      "hashStatus": "final frozen export verified",
+      "originalTaskPath": "blender/exports/model.fbx"
+    },
+    {
+      "path": "model.blend",
+      "role": "authoring scene with rig, packed material and three actions",
+      "bytes": 6996669,
+      "sha256": "134e485ba1e8479d668a9460e87e18a9c87083f52ff4ae1a89dc4bbe0ac2f0ad",
+      "modifiedUtc": "2026-09-25T14:36:12.606933+00:00",
+      "hashStatus": "final frozen export verified",
+      "originalTaskPath": "blender/exports/model.blend"
+    },
+    {
+      "path": "WatchingIdle.fbx",
+      "role": "baked per-clip animation FBX",
+      "bytes": 6983532,
+      "sha256": "669a226866f551eda4f0ad10aa182927e786bae15df550f91d1b7886a46362de",
+      "modifiedUtc": "2026-09-25T14:36:12.312920+00:00",
+      "hashStatus": "final frozen export verified",
+      "originalTaskPath": "blender/exports/WatchingIdle.fbx"
+    },
+    {
+      "path": "SlowWindowLean.fbx",
+      "role": "baked per-clip animation FBX",
+      "bytes": 6948620,
+      "sha256": "11a8fa3e7c14a5b2e7d3191ece272fcc9d51ec8b1fe28520c535f9a37ef79eca",
+      "modifiedUtc": "2026-09-25T14:36:12.452796+00:00",
+      "hashStatus": "final frozen export verified",
+      "originalTaskPath": "blender/exports/SlowWindowLean.fbx"
+    },
+    {
+      "path": "GlassTap.fbx",
+      "role": "baked per-clip animation FBX",
+      "bytes": 6903804,
+      "sha256": "39548720519eb92acac53e02991286aadca0e403254ba79f356da7405691c3c0",
+      "modifiedUtc": "2026-09-25T14:36:12.583350+00:00",
+      "hashStatus": "final frozen export verified",
+      "originalTaskPath": "blender/exports/GlassTap.fbx"
+    },
+    {
+      "path": "WatchingIdle-roblox-30fps.json",
+      "role": "compact serialized-GLB-basis animation data",
+      "bytes": 278337,
+      "sha256": "e3abd0959248f376f6c6a8f6a5d5036d114c96f8d9b96422e4c5085d7b8b9ce4",
+      "modifiedUtc": "2026-09-25T14:36:47.754437+00:00",
+      "hashStatus": "final frozen export verified",
+      "originalTaskPath": "blender/exports/WatchingIdle-roblox-30fps.json"
+    },
+    {
+      "path": "SlowWindowLean-roblox-30fps.json",
+      "role": "compact serialized-GLB-basis animation data",
+      "bytes": 235895,
+      "sha256": "9062803490136db35f3ad76a1e5b1cb3b18bcea56f9a4596485d6335221f5f8b",
+      "modifiedUtc": "2026-09-25T14:36:47.887954+00:00",
+      "hashStatus": "final frozen export verified",
+      "originalTaskPath": "blender/exports/SlowWindowLean-roblox-30fps.json"
+    },
+    {
+      "path": "GlassTap-roblox-30fps.json",
+      "role": "compact serialized-GLB-basis animation data",
+      "bytes": 186886,
+      "sha256": "139640ae4ad89c3a59525c45746520af3f5de25b670817734be894a72b62222a",
+      "modifiedUtc": "2026-09-25T14:36:48.029994+00:00",
+      "hashStatus": "final frozen export verified",
+      "originalTaskPath": "blender/exports/GlassTap-roblox-30fps.json"
+    },
+    {
+      "path": "renders/WatchingIdle-three-quarter.png",
+      "role": "rendered preview",
+      "bytes": 1133315,
+      "sha256": "b61df7151e3f74999a70cddc6e3932ac9555f91b2362fe13ee56aa21fe983b01",
+      "modifiedUtc": "2026-09-25T14:36:52.470851+00:00",
+      "hashStatus": "final frozen export verified",
+      "originalTaskPath": "blender/exports/renders/WatchingIdle-three-quarter.png"
+    },
+    {
+      "path": "renders/SlowWindowLean-three-quarter.png",
+      "role": "rendered preview",
+      "bytes": 1130990,
+      "sha256": "c2af136cde712daf30090cd098aaeae701435505ddf2714f71a5c8fa3ccbf9e0",
+      "modifiedUtc": "2026-09-25T14:36:55.496735+00:00",
+      "hashStatus": "final frozen export verified",
+      "originalTaskPath": "blender/exports/renders/SlowWindowLean-three-quarter.png"
+    },
+    {
+      "path": "renders/GlassTap-three-quarter.png",
+      "role": "rendered preview",
+      "bytes": 1136946,
+      "sha256": "27edeed02049e173507daa1f7ba21ecffe03605210853db98c6ab1be95a9702d",
+      "modifiedUtc": "2026-09-25T14:36:58.652363+00:00",
+      "hashStatus": "final frozen export verified",
+      "originalTaskPath": "blender/exports/renders/GlassTap-three-quarter.png"
+    },
+    {
+      "path": "renders/GlassTap-palm-closeup.png",
+      "role": "rendered preview",
+      "bytes": 1419808,
+      "sha256": "ac087f4cf0cb206dab2e9ec87dbbbec36cb248687ccb57cb26ea0ef70c38e89f",
+      "modifiedUtc": "2026-09-25T14:37:00.885597+00:00",
+      "hashStatus": "final frozen export verified",
+      "originalTaskPath": "blender/exports/renders/GlassTap-palm-closeup.png"
+    },
+    {
+      "path": "renders/WindowWatcher-contactsheet.png",
+      "role": "rendered preview",
+      "bytes": 2078969,
+      "sha256": "6f0fe20a4dc140e364930b5fc02ac47771ce769dc93d6662b9a46622723f556f",
+      "modifiedUtc": "2026-09-25T14:37:08.749836+00:00",
+      "hashStatus": "final frozen export verified",
+      "originalTaskPath": "blender/exports/renders/WindowWatcher-contactsheet.png"
+    },
+    {
+      "path": "serialized-glb-coordinate-audit.json",
+      "role": "serialized coordinate audit",
+      "bytes": 44468,
+      "sha256": "21d66d39cb702f80d3477a9f002ab6e9544b94535e230bc2289752215e1de0d9",
+      "modifiedUtc": "2026-09-25T14:36:48.296665+00:00",
+      "hashStatus": "final frozen export verified",
+      "originalTaskPath": "blender/exports/serialized-glb-coordinate-audit.json"
+    },
+    {
+      "path": "WindowWatcher-basecolor.png",
+      "role": "standalone base-color texture",
+      "bytes": 5952974,
+      "sha256": "3229b3bc4eec4498379348bcfabb74dfac136dc1ab51d8a18cb073c34bb01133",
+      "modifiedUtc": "2026-09-25T14:37:34.332105+00:00",
+      "hashStatus": "final frozen export verified",
+      "originalTaskPath": "blender/exports/WindowWatcher-basecolor.png"
+    },
+    {
+      "path": "animation-quality-audit.json",
+      "role": "final authored animation quality audit",
+      "bytes": 1374,
+      "sha256": "5d87d23c02fb172e032d6f8bd27ed372adeceb2c68113428dd664dcae31e6d06",
+      "modifiedUtc": "2026-09-25T14:36:26.336439+00:00",
+      "hashStatus": "final frozen export verified",
+      "originalTaskPath": "blender/exports/animation-quality-audit.json"
+    },
+    {
+      "path": "roundtrip-audit.json",
+      "role": "final GLB and FBX reimport audit",
+      "bytes": 172881,
+      "sha256": "65679b939d3b877d822be6573840e2dcbbf5a8c0c39507471942d80a60fd3fa0",
+      "modifiedUtc": "2026-09-25T14:36:49.257819+00:00",
+      "hashStatus": "final frozen export verified",
+      "originalTaskPath": "blender/exports/roundtrip-audit.json"
+    },
+    {
+      "path": "placement-reference.json",
+      "role": "final anatomical placement reference",
+      "bytes": 9079,
+      "sha256": "90646a50fea3956c5aea58d6da8f9593b47173bd848bc1d78e69e962671b89cc",
+      "modifiedUtc": "2026-09-25T14:36:17.659845+00:00",
+      "hashStatus": "final frozen export verified",
+      "originalTaskPath": "blender/exports/placement-reference.json"
+    },
+    {
+      "path": "renders/GlassTap-raising-arc.png",
+      "role": "final corrected raising-arc preview render",
+      "bytes": 1138480,
+      "sha256": "92fbb63bc6b6a322d751a16686f235cece1bf3cd3bcba0cd56e3b568d3110988",
+      "modifiedUtc": "2026-09-25T14:37:04.033875+00:00",
+      "hashStatus": "final frozen export verified",
+      "originalTaskPath": "blender/exports/renders/GlassTap-raising-arc.png"
+    }
+  ],
+  "finalDeliverableCount": 20,
+  "pending": [
+    "Complete native Roblox Studio import; currently blocked on file picker/user action.",
+    "Verify imported rig, materials and animation playback in Roblox Studio."
+  ],
+  "updatedUtc": "2026-09-25T14:41:10.169207+00:00",
+  "freezeVerification": {
+    "modelGlbSha256": "cbf260ff36b8c7226f27271456eae6bf4db7fd266bdce82dda8b0eae7cbc051e",
+    "GlassTapCompactSha256": "139640ae4ad89c3a59525c45746520af3f5de25b670817734be894a72b62222a",
+    "GlassTapCompactBytes": 186886,
+    "allCompactClipsMatchFrozenModel": true,
+    "allCompactHashesMatchCoordinateAudit": true,
+    "blenderAgentFinalDeclaration": "Parent confirmed Blender agent declared final/frozen and all writes complete."
+  },
+  "pathConventions": {
+    "references": "Relative to this directory",
+    "finalDeliverables": "Relative to this directory; originalTaskPath preserves provenance",
+    "submissionReceipt_completionReceipt_receipt_writtenPaths": "Private original task-local paths; not repository links"
+  }
+}
