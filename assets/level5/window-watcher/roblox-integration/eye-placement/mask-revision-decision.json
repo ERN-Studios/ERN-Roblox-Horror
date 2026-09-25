@@ -1,0 +1,59 @@
+{
+  "variants": [
+    {
+      "file": "window-watcher-eye-emission-mask.png",
+      "status": "original published mask; preserved",
+      "bytes": 84388,
+      "sha256": "91cfc17625f5a01eea75a6591557c9f260057a1f0fa910129049ad76c8ae5d4b"
+    },
+    {
+      "file": "window-watcher-eye-emission-mask-v2.png",
+      "status": "rejected: uniform erosion creates broken iris patches",
+      "bytes": 20510,
+      "sha256": "bf9ecd4fb94bd18111f544ff175d1732728c0d80042bc5fb870b38ab3df686e3"
+    },
+    {
+      "file": "window-watcher-eye-emission-mask-v3.png",
+      "status": "rejected: all-distant-neighbor guard still removes visible iris seam fragments",
+      "bytes": 25757,
+      "sha256": "f20d7ae140e5ffddc95b2c3e40a86bc7bb71bd7c445a484f8dcd35fc102eb4a1"
+    },
+    {
+      "file": "window-watcher-eye-emission-mask-v4.png",
+      "status": "native test atstrength200 retains tiny brow fleck; superseded for nexttest byv5",
+      "bytes": 26032,
+      "sha256": "7e19249fddb9c2c75217955109d6bac3697565b142c136d1bf825c76aeb4b448"
+    },
+    {
+      "file": "window-watcher-eye-emission-mask-v5.png",
+      "status": "selected v5; native white cores/Glass visibility previewed at strength 200; final brow filtering sign-off pending",
+      "bytes": 25961,
+      "sha256": "99315f05889bbc4c9f1122f502913bef7bf3fd5d7742b2a5a30ded79fee45738"
+    }
+  ],
+  "recommendation": "Use selected v5 for durable integration; inspect the processed native material before final acceptance.",
+  "finding": "Original1024 downsample texel centers stay within eye surfaces; a conservative3px footprint reaches tiny neighboring UV islands, including brow/hairline triangles5787/5789 at Blenderapproximately[.064,-.086,2.287]. Parent native test reports fleck vanishes atEmissiveStrength0, implicating emission filtering.",
+  "finalTreatment": "V4 removes only27 of9126 nonblack1024texels that can filter onto the two matching brow triangles; preserves99.732% mask energy and round iris appearance. Three-pixel support audit has no overlap with those brow triangles.",
+  "qualification": "Does not simulate proprietary Roblox texture compression; actual brow-dot disappearance still requires native validation. Conservative3px potential support on other distant UVneighbors remains; no claim of total engine filtering immunity.",
+  "nativeReportsFromParent": [
+    "Strength100 visible behind matching tinted Glass",
+    "Strength200 whiter iris with tiny viewer-right brow/hairline fleck",
+    "Strength0 removes fleck"
+  ],
+  "offlineVisualQa": "V4 strength100 front render inspected; circles retained, no visible isolated viewer-right brow fleck. Left eye has minor edge unevenness from authored geometry/filtering.",
+  "installerStatus": "Selected v5 SHA pinned; default strength 200, allowed range 5\u2013200; not installed durably.",
+  "v5": {
+    "guardPixelsAt1024": 8,
+    "targetTriangles": [
+      5787,
+      5789
+    ],
+    "originalLitTexels": 9126,
+    "remainingLitTexels": 8983,
+    "energyRetained": 0.9834108352661133,
+    "offlineEightPixelTargetSupportCheck": "pass; no mask support reaches the two targeted brow triangles",
+    "offlineVisualQa": "Substantial round eye cores retained. Small lower notch in viewer-left iris; no broadfragmentation. Native engine brow-fleck result pending.",
+    "nativePreview": "White cores and tinted-Glass visibility confirmed; tiny brow fleck not conclusively resolved."
+  },
+  "checkpointNote": "Historical rejected candidate files are omitted; records preserve hashes and decision history."
+}

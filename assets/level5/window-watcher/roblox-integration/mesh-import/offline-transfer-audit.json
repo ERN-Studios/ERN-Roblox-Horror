@@ -1,0 +1,34 @@
+{
+  "pass": true,
+  "filesHashChecked": [
+    "vertices-01.json",
+    "vertices-02.json",
+    "vertices-03.json",
+    "vertices-04.json",
+    "vertices-05.json",
+    "vertices-06.json",
+    "faces-01.json",
+    "faces-02.json",
+    "faces-03.json",
+    "faces-04.json",
+    "WatchingIdle-8stud.json",
+    "SlowWindowLean-8stud.json",
+    "GlassTap-8stud.json",
+    "texture-0.png"
+  ],
+  "vertices": 8996,
+  "triangles": 11862,
+  "bones": 25,
+  "maxCenteredBoundsError": 2.220446049250313e-16,
+  "centeredMin": [
+    -2.953129013379415,
+    -3.9999995266784554,
+    -0.7636725654204687
+  ],
+  "centeredMax": [
+    2.953129013379415,
+    3.999999526678456,
+    0.7636725654204687
+  ],
+  "scope": "Offline transfer files only. Native import/publish/Animator verification is performed by parent."
+}

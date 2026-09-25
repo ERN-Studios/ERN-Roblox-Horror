@@ -2,9 +2,11 @@
 
 ## Delivery state
 
-The Window Watcher Meshy/Blender package is complete locally. The F-court replacement is installed and tested in Studio Edit/Play. **The model has not yet been imported into Roblox, its animation assets have not been published, and these current map changes have not been published.** Studio's native file chooser leaves Open disabled under automation; the owner has been asked to import `Level5-WindowWatcher.glb` from the Desktop and leave the 3D preview open. No new Roblox asset IDs or native animation playback are claimed.
+The F-court replacement is installed and tested in Studio. The model has now also been rebuilt exactly in a **temporary Studio preview**, with white emissive eyes and all three clips validated through native Animator stepping. **The durable mesh/animation assets are not uploaded, the intermittent encounter drafts are not installed, and current F changes are not published.**
 
-Last independently verified game publication remains **v2104**, before this change. The new preview module is an **uninstalled draft** under `tools/staging/`, not part of the live script mirror. Future AI, damage, puzzle, forced sliding and completion remain separate work.
+The upload API fails because the normal Studio **CreateAssetAsync Lua API** beta is visibly unchecked. Native UI automation cannot toggle its row reliably; the owner has been asked to enable it and save/restart if requested. Last independently verified game publication remains **v2104**.
+
+The prepared package is `assets/level5/window-watcher/roblox-integration/`, including exact mesh/skin transfer, white-eye UV masks, runtime drafts, upload tools, tests and completion steps. `artifacts/level5-window-watcher-20260925/integration-assets.json` lists the uploaded image IDs and explicitly leaves mesh/animation IDs empty. This is a recoverable checkpoint, not a claim the entity is playable.
 
 ## Meshy and Blender
 
@@ -39,12 +41,22 @@ Current map, before actor staging: 11,372 BaseParts, 12,240 descendants, 44 actu
 
 Actual Humanoid traversal passed 44 movement segments: 11 ground route, 18 stairs/upper bridge, 15 middle bridge/house interiors. No required jumps or noclip; only the start of each separate route was positioned. Hold-L returned to the lobby, removed the generated world and left phase IDLE. Entry inspection covered 77 open homes and 462 rays with no foreign obstruction or embedded sample. The existing chute still passed 98 enclosure rays.
 
-Furnishing inspection retained 20 furnished homes, 891 furniture parts, 7,128 corner checks and 72 mold-backing rays. The first report exposed four obsolete test assertions: three pane-reference ObjectValues were treated as panes, and the old total was 356. The test now checks actual BaseParts and expects 202 panes; rerunning the adjusted test in Play remains pending the modal import handoff. Source compilation passed 182/182 scripts; the existing access/transport test passed 74 assertions.
+Furnishing inspection retained 20 furnished homes, 891 furniture parts, 7,128 corner checks and 72 mold-backing rays. The first report exposed four obsolete test assertions: three pane-reference ObjectValues were treated as panes, and the old total was 356. The test now checks actual BaseParts and expects 202 panes; the adjusted test was rerun through the real Level 5 developer round and passed with zero failures. Source compilation passed 182/182 scripts; the existing access/transport test passed 74 assertions.
 
 ## Preserving Studio and completing integration
 
 Fresh baseline and current export matched Source/editor for all 182 scripts. Exactly Architecture and Landmark Districts changed; the other 180, including all 12 Level 4 scripts, are unchanged. Native pre-task backup is 9,635,146 bytes and exactly matches `artifacts/level5-qa-20260925/after.rbxl` (SHA256 `a2ffc35f2e9e443e2946f2582158808028c3a4d7ac67dca384f59b45e9c351d0`). Current map changes are completely represented by the two exact source exports. A new full native backup is required after the imported mesh/animations are in place.
 
-Remaining integration: complete native 3D import under game group 1039373905; verify rig/skin/material and scale; publish and actually play all three clips; prepare `ServerStorage.Level5WindowWatcher.WindowWatcherRig` plus sibling `Animations`; install/review the staging module and call it from the developer-only Adapter; verify cleanup, rendering, visibility, collision and re-entry; rerun relevant checks; save a native after-backup and publish to existing place 131311258779917 with a verified receipt.
+Remaining integration: enable the normal upload beta and publish the exact mesh under game group 1039373905; verify the published mesh round trip and final material filtering; publish and play all three durable clips in a round; prepare `ServerStorage.Level5WindowWatcher.WindowWatcherRig` plus sibling `Animations`; install/review the staging module and call it from the developer-only Adapter; verify cleanup, rendering, visibility, collision and re-entry; rerun relevant checks; save a native after-backup and publish to existing place 131311258779917 with a verified receipt.
 
 Physical mobile/tablet performance, two-account human multiplayer and published-server asset permissions have not been tested. Git delivery is a reviewable work checkpoint, not evidence that the pending import or publication is complete.
+
+## Intermittent encounters and white eyes — follow-up checkpoint
+
+The uninstalled encounter module shows one actor at a time at the three F panes: first appearance after 2–4 seconds, visibility 8–14 seconds, then 18–35 seconds hidden. It requires a living Level 5 participant in F with line of sight to a real pane. Cleanup owns all tracks/connections. No chase, damage, sounds or rewards were added. The draft passes 1,031 scheduling and 29 lifecycle assertions.
+
+The exact native EditableMesh has 8,996 serialized UV-split vertices (the Blender topology count is 8,968), 11,862 triangles and 25 bones. Temporary Animator tests verified Idle/Lean/Tap at four times each, plus the alternative parent-pose hierarchy for Idle: 400 bone comparisons, worst component error 0.0002191. Root directly under Keyframe binds correctly. These are Studio Edit temporary IDs; published-client playback/permissions remain pending.
+
+White eyes use SurfaceAppearance emission on the actual iris UVs, with no physical Lights or GUI. The original Billboard approach was rejected because Glass hid it. The selected v5 mask is 91743869995723; basecolor 91091934459636 is unchanged. Strength 200 produces white cores and has been previewed. Targeted UV guarding preserves 98.34% mask energy. Check the small brow-filtering artifact again after the new material pack finishes processing before final visual sign-off.
+
+A fresh 182-script export has no Source/editor conflicts and no changes since the previous committed F checkpoint. The latest origin/claude/trello-20260921 remains a8259d3; unrelated developer work is preserved. Temporary preview actors/test fixtures are removed at handoff; no provisional actor or HTTP setting should be saved in the game.
