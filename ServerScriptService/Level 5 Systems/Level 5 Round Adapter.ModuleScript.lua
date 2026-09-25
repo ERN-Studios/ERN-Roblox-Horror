@@ -214,6 +214,9 @@ local function buildCompatibility(spawnFrame: CFrame)
 end
 
 local function protectArrival(spawnFrame: CFrame)
+	-- Studio keeps the lobby floor: GameManager places only the queued roster.
+	-- Moving everyone here would drag an observing developer out of the lobby.
+	if RunService:IsStudio() then return end
 	-- All present players were checked against DevAccess before any mutation.
 	-- Place current rigs onto finished ground before parking their lobby; the
 	-- authoritative GameManager entry barrier then reloads/places its roster.

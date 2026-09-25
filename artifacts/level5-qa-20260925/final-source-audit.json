@@ -1,0 +1,1771 @@
+{
+  "checkedAtUtc": "2026-09-25T13:10:35.947959+00:00",
+  "baselineCount": 182,
+  "finalCount": 182,
+  "added": [],
+  "removed": [],
+  "changedFromBaseline": [
+    "ServerScriptService/Level 5 Systems/Level 5 Architecture.ModuleScript.lua",
+    "ServerScriptService/Level 5 Systems/Level 5 Landmark Districts.ModuleScript.lua",
+    "ServerScriptService/Level 5 Systems/Level 5 Round Adapter.ModuleScript.lua"
+  ],
+  "expectedOnlyThreeChanged": true,
+  "unchangedFromBaseline": 179,
+  "editorConflicts": 0,
+  "repository": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-qa-repository",
+  "repositoryHeadAtComparison": "a8259d3679007b79cbe63c983b39aa36caeabe8d",
+  "repositoryComparisonTime": "2026-09-25T13:10:35.947959+00:00",
+  "repositoryMatchesFinalCount": 182,
+  "repositoryDifferences": [],
+  "repositoryPackagingNote": "At comparison time the parent had already packaged all three changed sources: all 182 repository files matched the final Studio export byte-for-byte. This audit made no repository changes.",
+  "level4PathsChecked": 12,
+  "level4ChangedFromBaseline": [],
+  "chunks": [
+    {
+      "file": "chunk-1.json",
+      "sha256": "dc67238a5598d5f14f07b951b3ffe17e64106cef9cc0d05f2dd60a1de81af5cd"
+    },
+    {
+      "file": "chunk-2.json",
+      "sha256": "83243ca662abb8584fcafdaa437286bbd9024c4b330ced2500e1fe523369f8c9"
+    },
+    {
+      "file": "chunk-3.json",
+      "sha256": "572b3989d3635eefc27db7d6771487b981645dd5b23010bba7b176b08e7d5fd2"
+    },
+    {
+      "file": "chunk-4.json",
+      "sha256": "4bb7b516fae47bae9882821ec60acde1cb31f7ac54840f7ca8947e76cb12438b"
+    },
+    {
+      "file": "chunk-5.json",
+      "sha256": "6085e4e8ff088a8d5f05cd2220d52a0108a91c994d0d484c5222ed24efba7d63"
+    },
+    {
+      "file": "chunk-6.json",
+      "sha256": "0d8d762be073619c574d021c87e5d433c725a5f0aa5a72bc9ef16b6dfe6ed7a2"
+    },
+    {
+      "file": "chunk-7.json",
+      "sha256": "54f58a0548f3dac5a67875997406586c02425a1247c4e2f89e3aed70b1540575"
+    },
+    {
+      "file": "chunk-8.json",
+      "sha256": "aa14c740f32a35e91932bfba49ff503133859e5c45b253e7a4c4c7bf1f63270b"
+    },
+    {
+      "file": "chunk-9.json",
+      "sha256": "90236dfca0e405f8a3aaceee61788fc30f52ae74913e2f26e0b02d53f0e97534"
+    },
+    {
+      "file": "chunk-10.json",
+      "sha256": "87a33c0d5c6033bd61a545f1732ed87cc90eb2c4d38cb18c1cf05454180aadf9"
+    },
+    {
+      "file": "chunk-11.json",
+      "sha256": "a2c7951039cf136596b07640a4e3cfc5b9ad7cf6c657aa14d49ffc95434bac52"
+    },
+    {
+      "file": "chunk-12.json",
+      "sha256": "2ce02908292459f28e592a65ee49082e56c712ca94a01519dfe4a9e569232e9f"
+    },
+    {
+      "file": "chunk-13.json",
+      "sha256": "0c1221bbbb850c9e29c9b14e5f93b735f07bd47b4bac123cc82a26b30b356ca6"
+    }
+  ],
+  "allFinalCompilePassed": true,
+  "tests": [
+    {
+      "name": "existing Level5 access / transport",
+      "arguments": [
+        "python3",
+        "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-qa-repository/tools/tests/test_level5_access.py",
+        "--sources",
+        "/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/level5-final-qa-nwv8_a6o/sources",
+        "--luau",
+        "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-build/tools/luau/luau"
+      ],
+      "exitCode": 0,
+      "passed": true,
+      "stdout": "PASS: 74 access/transport assertions against proposed production source",
+      "stderr": "",
+      "notes": "Unmodified existing test executes final authoritative Routing and extracted GameManager access functions in a temporary source tree."
+    },
+    {
+      "name": "existing lobby retention with actual final function",
+      "arguments": [
+        "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-build/tools/luau/luau",
+        "/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/level5-final-qa-nwv8_a6o/lobby-retention.luau"
+      ],
+      "exitCode": 0,
+      "passed": true,
+      "stdout": "PASS: 6 park/leave-floor assertions against real adapter function",
+      "stderr": "",
+      "notes": "Replaced embedded parkLobby function with exact final Studio source before executing the existing six assertions; embedded function already matched final: True"
+    },
+    {
+      "name": "new Studio observer staging regression",
+      "arguments": [
+        "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-build/tools/luau/luau",
+        "/var/folders/l9/6dykzds92x78625pt08457bm0000gn/T/level5-final-qa-nwv8_a6o/protect-arrival.luau"
+      ],
+      "exitCode": 0,
+      "passed": true,
+      "stdout": "PASS: 6 spectator/staging assertions against final protectArrival",
+      "stderr": "",
+      "notes": "Executes exact final protectArrival, comparing Studio and published behavior with two present characters; no Roblox physics simulated."
+    }
+  ],
+  "review": {
+    "blockingFindings": [],
+    "changedBehavior": [
+      "Architecture: defaults both uploaded arrow images, decorative non-collidable parts become non-queryable, static fluorescent on/dim/off temperature variation.",
+      "Landmark Districts: east stair facade clearance, hollow support above enterable pink house, offset final vestibule with sparse furniture and direction-specific paint arrows, contained roof/side seams around black descent.",
+      "Round Adapter: Studio skips protectArrival so GameManager stages only the queued roster and lobby observers stay in place. Published reserved-server staging retained."
+    ],
+    "scopePreserved": "No new entity, puzzle, touch-trigger, Escaped/PuzzleWon setter or reward call in the three changed sources. All 179 other sources and all identified Level4 files unchanged.",
+    "conditionalRiskUnchanged": "Shared completion path has no explicit MapOnly reward rejection; final geometry still sets no win attributes, so this polish does not activate that path.",
+    "runtimeLimit": "Source review cannot establish exact collision/arrow visual quality; use parent native movement/geometry evidence."
+  },
+  "sources": [
+    {
+      "path": "ReplicatedStorage/DeathAdvice.ModuleScript.lua",
+      "baselineSha256": "0c9be57d8ed81236c71a30461a4383fb7c2d3c0dc799ca7b9a025b451bd9b3c5",
+      "finalSha256": "0c9be57d8ed81236c71a30461a4383fb7c2d3c0dc799ca7b9a025b451bd9b3c5",
+      "repositorySha256": "0c9be57d8ed81236c71a30461a4383fb7c2d3c0dc799ca7b9a025b451bd9b3c5",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ReplicatedStorage/DevAccess.ModuleScript.lua",
+      "baselineSha256": "4c51e000ecf702c0cfb6544d3c2bf46eb9959b3f7941b6b30eec29284e185514",
+      "finalSha256": "4c51e000ecf702c0cfb6544d3c2bf46eb9959b3f7941b6b30eec29284e185514",
+      "repositorySha256": "4c51e000ecf702c0cfb6544d3c2bf46eb9959b3f7941b6b30eec29284e185514",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ReplicatedStorage/FlashlightProfiles.ModuleScript.lua",
+      "baselineSha256": "e62444ac036ea3f9430190facfd47b639a35d484cd21c6d8448fa81d6619da36",
+      "finalSha256": "e62444ac036ea3f9430190facfd47b639a35d484cd21c6d8448fa81d6619da36",
+      "repositorySha256": "e62444ac036ea3f9430190facfd47b639a35d484cd21c6d8448fa81d6619da36",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ReplicatedStorage/Level 2 Entity Audio Bank.ModuleScript.lua",
+      "baselineSha256": "084cfec8d568140ffd05eaf7e38c29ec12755c0142ea51d7b77bf2d51d39860f",
+      "finalSha256": "084cfec8d568140ffd05eaf7e38c29ec12755c0142ea51d7b77bf2d51d39860f",
+      "repositorySha256": "084cfec8d568140ffd05eaf7e38c29ec12755c0142ea51d7b77bf2d51d39860f",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ReplicatedStorage/MasterConfiguration.ModuleScript.lua",
+      "baselineSha256": "d2b426761029e4f757a8633ee53f65123f9726364a5f11da2ba176ee392908d6",
+      "finalSha256": "d2b426761029e4f757a8633ee53f65123f9726364a5f11da2ba176ee392908d6",
+      "repositorySha256": "d2b426761029e4f757a8633ee53f65123f9726364a5f11da2ba176ee392908d6",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ReplicatedStorage/ProtectionClient.ModuleScript.lua",
+      "baselineSha256": "7465190a4b065cc0398923bfeb5938914e2cdfd7e06db574df25109a5c1d9649",
+      "finalSha256": "7465190a4b065cc0398923bfeb5938914e2cdfd7e06db574df25109a5c1d9649",
+      "repositorySha256": "7465190a4b065cc0398923bfeb5938914e2cdfd7e06db574df25109a5c1d9649",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ReplicatedStorage/SlideContinuationSafety.ModuleScript.lua",
+      "baselineSha256": "393dfb9c410700a78328d6e056c813fa25baf0bd9f8c5191c7de0e951eb5ec40",
+      "finalSha256": "393dfb9c410700a78328d6e056c813fa25baf0bd9f8c5191c7de0e951eb5ec40",
+      "repositorySha256": "393dfb9c410700a78328d6e056c813fa25baf0bd9f8c5191c7de0e951eb5ec40",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ReplicatedStorage/UIDevice.ModuleScript.lua",
+      "baselineSha256": "c64ba7abc2f7efb80e9dbae241bc3bb831f19ea8902fde30b159af33bf323f2f",
+      "finalSha256": "c64ba7abc2f7efb80e9dbae241bc3bb831f19ea8902fde30b159af33bf323f2f",
+      "repositorySha256": "c64ba7abc2f7efb80e9dbae241bc3bb831f19ea8902fde30b159af33bf323f2f",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ReplicatedStorage/UIRegression.ModuleScript.lua",
+      "baselineSha256": "dcca378c42ac28ae8d462f8e2663a392d5113fe4e44228c8295101de2d099c45",
+      "finalSha256": "dcca378c42ac28ae8d462f8e2663a392d5113fe4e44228c8295101de2d099c45",
+      "repositorySha256": "dcca378c42ac28ae8d462f8e2663a392d5113fe4e44228c8295101de2d099c45",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ReplicatedStorage/UIStyle.ModuleScript.lua",
+      "baselineSha256": "0b165e8a3819b6f14bc7c785b1f8af2ba4d5bd3a433bba48c0d952ed65ecf08a",
+      "finalSha256": "0b165e8a3819b6f14bc7c785b1f8af2ba4d5bd3a433bba48c0d952ed65ecf08a",
+      "repositorySha256": "0b165e8a3819b6f14bc7c785b1f8af2ba4d5bd3a433bba48c0d952ed65ecf08a",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ReplicatedStorage/ZyntraChallenges.ModuleScript.lua",
+      "baselineSha256": "c5aaa9b16a974cc13fa24a89a6d4dae3f26637f49ec53fccd1803dd562b9ab5b",
+      "finalSha256": "c5aaa9b16a974cc13fa24a89a6d4dae3f26637f49ec53fccd1803dd562b9ab5b",
+      "repositorySha256": "c5aaa9b16a974cc13fa24a89a6d4dae3f26637f49ec53fccd1803dd562b9ab5b",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ReplicatedStorage/ZyntraConfig.ModuleScript.lua",
+      "baselineSha256": "b5f8fbc9b0373d1b039cc57b5380267a02c922cb6f4e22876396ba91f8a3e811",
+      "finalSha256": "b5f8fbc9b0373d1b039cc57b5380267a02c922cb6f4e22876396ba91f8a3e811",
+      "repositorySha256": "b5f8fbc9b0373d1b039cc57b5380267a02c922cb6f4e22876396ba91f8a3e811",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ReplicatedStorage/ZyntraDailyResearch.ModuleScript.lua",
+      "baselineSha256": "c52745e7c9ab71d055d66512c8522f6629b1bafe39dc0079dc05a6da4e348515",
+      "finalSha256": "c52745e7c9ab71d055d66512c8522f6629b1bafe39dc0079dc05a6da4e348515",
+      "repositorySha256": "c52745e7c9ab71d055d66512c8522f6629b1bafe39dc0079dc05a6da4e348515",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ReplicatedStorage/ZyntraDailyRewardsPage.ModuleScript.lua",
+      "baselineSha256": "38e78dae01d1d96980660c75ac7c6c71f2cee32343ec6b1a95db8c82799747c9",
+      "finalSha256": "38e78dae01d1d96980660c75ac7c6c71f2cee32343ec6b1a95db8c82799747c9",
+      "repositorySha256": "38e78dae01d1d96980660c75ac7c6c71f2cee32343ec6b1a95db8c82799747c9",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ReplicatedStorage/ZyntraDetectorVisual.ModuleScript.lua",
+      "baselineSha256": "fa2fa10afd325f33a7e0eaf72fc233926a1ec20443602bb512778a0f74429cce",
+      "finalSha256": "fa2fa10afd325f33a7e0eaf72fc233926a1ec20443602bb512778a0f74429cce",
+      "repositorySha256": "fa2fa10afd325f33a7e0eaf72fc233926a1ec20443602bb512778a0f74429cce",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ReplicatedStorage/ZyntraRecordsPage.ModuleScript.lua",
+      "baselineSha256": "2b026764c5d0ffbdf45f084832cd3bb1f60ccccc7390417aaf8a39a4b73c35a2",
+      "finalSha256": "2b026764c5d0ffbdf45f084832cd3bb1f60ccccc7390417aaf8a39a4b73c35a2",
+      "repositorySha256": "2b026764c5d0ffbdf45f084832cd3bb1f60ccccc7390417aaf8a39a4b73c35a2",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ReplicatedStorage/ZyntraSkins.ModuleScript.lua",
+      "baselineSha256": "ac7fc5a7278eea8c36c9fccc80a040887ce61913bc6142a3c60bc1075b293af4",
+      "finalSha256": "ac7fc5a7278eea8c36c9fccc80a040887ce61913bc6142a3c60bc1075b293af4",
+      "repositorySha256": "ac7fc5a7278eea8c36c9fccc80a040887ce61913bc6142a3c60bc1075b293af4",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ReplicatedStorage/ZyntraSkinsPage.ModuleScript.lua",
+      "baselineSha256": "2dd92ce9389f57917a26ff6b608f6314d492c0ad99c5b7d312c5c4d5620d3bc1",
+      "finalSha256": "2dd92ce9389f57917a26ff6b608f6314d492c0ad99c5b7d312c5c4d5620d3bc1",
+      "repositorySha256": "2dd92ce9389f57917a26ff6b608f6314d492c0ad99c5b7d312c5c4d5620d3bc1",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/AvatarNormalize.Script.lua",
+      "baselineSha256": "19c6dab6bc7c09d5affd25180a54f14f03cfa954bb52bf90313de570564ac8de",
+      "finalSha256": "19c6dab6bc7c09d5affd25180a54f14f03cfa954bb52bf90313de570564ac8de",
+      "repositorySha256": "19c6dab6bc7c09d5affd25180a54f14f03cfa954bb52bf90313de570564ac8de",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Crouch State Server.Script.lua",
+      "baselineSha256": "2a474a0d3a18e5e97d53e2e0dced5fbe502663220684357d50f697f73300dffc",
+      "finalSha256": "2a474a0d3a18e5e97d53e2e0dced5fbe502663220684357d50f697f73300dffc",
+      "repositorySha256": "2a474a0d3a18e5e97d53e2e0dced5fbe502663220684357d50f697f73300dffc",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/FlashlightSync.Script.lua",
+      "baselineSha256": "6a386e4888a6f88069495f61e4900b5941336440230cd7ddeceb2848737c27e2",
+      "finalSha256": "6a386e4888a6f88069495f61e4900b5941336440230cd7ddeceb2848737c27e2",
+      "repositorySha256": "6a386e4888a6f88069495f61e4900b5941336440230cd7ddeceb2848737c27e2",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/FriendBoost.ModuleScript.lua",
+      "baselineSha256": "2db3a7a08c3ddfe68ec05d0eb10d607544ca027a0d837082ea30b4285e19027d",
+      "finalSha256": "2db3a7a08c3ddfe68ec05d0eb10d607544ca027a0d837082ea30b4285e19027d",
+      "repositorySha256": "2db3a7a08c3ddfe68ec05d0eb10d607544ca027a0d837082ea30b4285e19027d",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/GameManager.Script.lua",
+      "baselineSha256": "34cbc3e779bdf5bfca28266d6e0de13788668f248e56844f5eb9fa087ab8de3d",
+      "finalSha256": "34cbc3e779bdf5bfca28266d6e0de13788668f248e56844f5eb9fa087ab8de3d",
+      "repositorySha256": "34cbc3e779bdf5bfca28266d6e0de13788668f248e56844f5eb9fa087ab8de3d",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/HazmatSkinVisuals.Script.lua",
+      "baselineSha256": "073c5d974e438ecaef39da8932c62003a87355a3d2d0b1423aa3be68288ef798",
+      "finalSha256": "073c5d974e438ecaef39da8932c62003a87355a3d2d0b1423aa3be68288ef798",
+      "repositorySha256": "073c5d974e438ecaef39da8932c62003a87355a3d2d0b1423aa3be68288ef798",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 1 Systems/EntityAI.Script.lua",
+      "baselineSha256": "b79c50a480ed2448689cb1419170857fbaa6b623a74775bce7c4ab5729a0012c",
+      "finalSha256": "b79c50a480ed2448689cb1419170857fbaa6b623a74775bce7c4ab5729a0012c",
+      "repositorySha256": "b79c50a480ed2448689cb1419170857fbaa6b623a74775bce7c4ab5729a0012c",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 1 Systems/EntityAnimation.Script.lua",
+      "baselineSha256": "1416b0cc577a4ae2379c0a6c6fc6ffb68ddadf0afc1c43e3833444e7019d17f5",
+      "finalSha256": "1416b0cc577a4ae2379c0a6c6fc6ffb68ddadf0afc1c43e3833444e7019d17f5",
+      "repositorySha256": "1416b0cc577a4ae2379c0a6c6fc6ffb68ddadf0afc1c43e3833444e7019d17f5",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 1 Systems/EntityKill.Script.lua",
+      "baselineSha256": "4891d4175d4d1c185090128f3d7872dd07ca69a79c2d8304ed92eebac2363727",
+      "finalSha256": "4891d4175d4d1c185090128f3d7872dd07ca69a79c2d8304ed92eebac2363727",
+      "repositorySha256": "4891d4175d4d1c185090128f3d7872dd07ca69a79c2d8304ed92eebac2363727",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 1 Systems/MazeGenerator.Script.lua",
+      "baselineSha256": "e90cd8102f5183f5fa75447065d7de8ef1a14ee98e14e00c1ae25356d0cbb72e",
+      "finalSha256": "e90cd8102f5183f5fa75447065d7de8ef1a14ee98e14e00c1ae25356d0cbb72e",
+      "repositorySha256": "e90cd8102f5183f5fa75447065d7de8ef1a14ee98e14e00c1ae25356d0cbb72e",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 1 Systems/PuzzleManager.Script.lua",
+      "baselineSha256": "65ede1b20fa3418b8bb872953deff3c5a7f3ed957b3293eafb19d7442a171804",
+      "finalSha256": "65ede1b20fa3418b8bb872953deff3c5a7f3ed957b3293eafb19d7442a171804",
+      "repositorySha256": "65ede1b20fa3418b8bb872953deff3c5a7f3ed957b3293eafb19d7442a171804",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 2 Systems/Level 2 Configuration.ModuleScript.lua",
+      "baselineSha256": "0d420b4371f37deaa21d4830743d9fa5b5d3c6169288ceb0acad719f37d73c87",
+      "finalSha256": "0d420b4371f37deaa21d4830743d9fa5b5d3c6169288ceb0acad719f37d73c87",
+      "repositorySha256": "0d420b4371f37deaa21d4830743d9fa5b5d3c6169288ceb0acad719f37d73c87",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 2 Systems/Level 2 Exit Transition Test Suite.ModuleScript.lua",
+      "baselineSha256": "8f62fc39e7993c2cda2e51921ad257b1ee94e3aef898fe827293ee25bc08e871",
+      "finalSha256": "8f62fc39e7993c2cda2e51921ad257b1ee94e3aef898fe827293ee25bc08e871",
+      "repositorySha256": "8f62fc39e7993c2cda2e51921ad257b1ee94e3aef898fe827293ee25bc08e871",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 2 Systems/Level 2 Layout Generator.ModuleScript.lua",
+      "baselineSha256": "97633275065e517c8e9b86ee33a7e81eac7eae28f6c1131757e8062982923788",
+      "finalSha256": "97633275065e517c8e9b86ee33a7e81eac7eae28f6c1131757e8062982923788",
+      "repositorySha256": "97633275065e517c8e9b86ee33a7e81eac7eae28f6c1131757e8062982923788",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 2 Systems/Level 2 Objective Controller.ModuleScript.lua",
+      "baselineSha256": "15ee5a8547d26317f6ff4ff901ef03439e2555f150bbb30fb0873c291be14939",
+      "finalSha256": "15ee5a8547d26317f6ff4ff901ef03439e2555f150bbb30fb0873c291be14939",
+      "repositorySha256": "15ee5a8547d26317f6ff4ff901ef03439e2555f150bbb30fb0873c291be14939",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Animation Adapter.ModuleScript.lua",
+      "baselineSha256": "84c3edb8eff60ab023f5c7d9d5f608b324f92fb634dacfe2afc84b02d8d1f596",
+      "finalSha256": "84c3edb8eff60ab023f5c7d9d5f608b324f92fb634dacfe2afc84b02d8d1f596",
+      "repositorySha256": "84c3edb8eff60ab023f5c7d9d5f608b324f92fb634dacfe2afc84b02d8d1f596",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Configuration.ModuleScript.lua",
+      "baselineSha256": "17a5cd900d64960f6f2895b5a5add6569e9e47c8339662371385b0b12654b1f6",
+      "finalSha256": "17a5cd900d64960f6f2895b5a5add6569e9e47c8339662371385b0b12654b1f6",
+      "repositorySha256": "17a5cd900d64960f6f2895b5a5add6569e9e47c8339662371385b0b12654b1f6",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Controller.ModuleScript.lua",
+      "baselineSha256": "25141362d024adc588e9f7ed07d882b446059f42d931db26983b07d2ccb5d472",
+      "finalSha256": "25141362d024adc588e9f7ed07d882b446059f42d931db26983b07d2ccb5d472",
+      "repositorySha256": "25141362d024adc588e9f7ed07d882b446059f42d931db26983b07d2ccb5d472",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Navigator.ModuleScript.lua",
+      "baselineSha256": "37570a1fa44ba5841f63515837618662738fe34464c578f6143ecc00e2dc3b70",
+      "finalSha256": "37570a1fa44ba5841f63515837618662738fe34464c578f6143ecc00e2dc3b70",
+      "repositorySha256": "37570a1fa44ba5841f63515837618662738fe34464c578f6143ecc00e2dc3b70",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Observer.ModuleScript.lua",
+      "baselineSha256": "3f50361755427bf9438f5f2d43961348d646eda41ac060ae0754595ad2c6c4dc",
+      "finalSha256": "3f50361755427bf9438f5f2d43961348d646eda41ac060ae0754595ad2c6c4dc",
+      "repositorySha256": "3f50361755427bf9438f5f2d43961348d646eda41ac060ae0754595ad2c6c4dc",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 2 Systems/Level 2 Pool Foam Proxy Factory.ModuleScript.lua",
+      "baselineSha256": "759d388240f4079f06d06282923f76da8bbf0023af6d79415be48eb5d6a62a9a",
+      "finalSha256": "759d388240f4079f06d06282923f76da8bbf0023af6d79415be48eb5d6a62a9a",
+      "repositorySha256": "759d388240f4079f06d06282923f76da8bbf0023af6d79415be48eb5d6a62a9a",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 2 Systems/Level 2 Pool Slide Configuration.ModuleScript.lua",
+      "baselineSha256": "600ff29d74a931b358d4817506f5aaee2e046a26f25aecf5367a312d8f267703",
+      "finalSha256": "600ff29d74a931b358d4817506f5aaee2e046a26f25aecf5367a312d8f267703",
+      "repositorySha256": "600ff29d74a931b358d4817506f5aaee2e046a26f25aecf5367a312d8f267703",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 2 Systems/Level 2 Pool Slide Controller.ModuleScript.lua",
+      "baselineSha256": "905fa86b43c4ad607e8b7b3750c65de08097c9b1b8a6ec0f80a3ef1babd84655",
+      "finalSha256": "905fa86b43c4ad607e8b7b3750c65de08097c9b1b8a6ec0f80a3ef1babd84655",
+      "repositorySha256": "905fa86b43c4ad607e8b7b3750c65de08097c9b1b8a6ec0f80a3ef1babd84655",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 2 Systems/Level 2 Pool Slide Navigator.ModuleScript.lua",
+      "baselineSha256": "8cc8483cd8661e07af8dd5d2d89d10e73e0004ea04d69ceb05940738b47223ed",
+      "finalSha256": "8cc8483cd8661e07af8dd5d2d89d10e73e0004ea04d69ceb05940738b47223ed",
+      "repositorySha256": "8cc8483cd8661e07af8dd5d2d89d10e73e0004ea04d69ceb05940738b47223ed",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 2 Systems/Level 2 Pool Slide Rig Adapter.ModuleScript.lua",
+      "baselineSha256": "aa78235250c8aa39bef76b2136f6452b6f1915115b44c97876026d3a092192b1",
+      "finalSha256": "aa78235250c8aa39bef76b2136f6452b6f1915115b44c97876026d3a092192b1",
+      "repositorySha256": "aa78235250c8aa39bef76b2136f6452b6f1915115b44c97876026d3a092192b1",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 2 Systems/Level 2 Round Adapter.ModuleScript.lua",
+      "baselineSha256": "31a1da544c6588538591302e805dc8377a718808f080665d02aa7631a759f6e4",
+      "finalSha256": "31a1da544c6588538591302e805dc8377a718808f080665d02aa7631a759f6e4",
+      "repositorySha256": "31a1da544c6588538591302e805dc8377a718808f080665d02aa7631a759f6e4",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 2 Systems/Level 2 Slide Ragdoll Service.Script.lua",
+      "baselineSha256": "2468092ab1171b80c14525e7b0e2c5ebbb790186a475551479bebb7cc833152a",
+      "finalSha256": "2468092ab1171b80c14525e7b0e2c5ebbb790186a475551479bebb7cc833152a",
+      "repositorySha256": "2468092ab1171b80c14525e7b0e2c5ebbb790186a475551479bebb7cc833152a",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 2 Systems/Level 2 World Builder.ModuleScript.lua",
+      "baselineSha256": "c5e998fc4b516b41e91d4b22c157edeff473a8fdb87e8e24c3fc82cf54a11074",
+      "finalSha256": "c5e998fc4b516b41e91d4b22c157edeff473a8fdb87e8e24c3fc82cf54a11074",
+      "repositorySha256": "c5e998fc4b516b41e91d4b22c157edeff473a8fdb87e8e24c3fc82cf54a11074",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 2 Systems/README - LEVEL 2 POOL FOAM.ModuleScript.lua",
+      "baselineSha256": "bbf8d3b22ab76891958b1180ac41ab8a01faaaf2a261f9e7e3b09a5c97929941",
+      "finalSha256": "bbf8d3b22ab76891958b1180ac41ab8a01faaaf2a261f9e7e3b09a5c97929941",
+      "repositorySha256": "bbf8d3b22ab76891958b1180ac41ab8a01faaaf2a261f9e7e3b09a5c97929941",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 2 Systems/README - LEVEL 2 TWEAKS.ModuleScript.lua",
+      "baselineSha256": "6992c8687051748f053a7a1c0312a5a8c2700c75905f58dc278eaf51cbbd7c98",
+      "finalSha256": "6992c8687051748f053a7a1c0312a5a8c2700c75905f58dc278eaf51cbbd7c98",
+      "repositorySha256": "6992c8687051748f053a7a1c0312a5a8c2700c75905f58dc278eaf51cbbd7c98",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 3 Systems/Level 3 Configuration.ModuleScript.lua",
+      "baselineSha256": "8758d35fad3913ae1ac37eab4ee06267c99868cdd3425f40180a5452cd56cf28",
+      "finalSha256": "8758d35fad3913ae1ac37eab4ee06267c99868cdd3425f40180a5452cd56cf28",
+      "repositorySha256": "8758d35fad3913ae1ac37eab4ee06267c99868cdd3425f40180a5452cd56cf28",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 3 Systems/Level 3 Hiding Controller.ModuleScript.lua",
+      "baselineSha256": "ce0e6e2b671a11b4de7534b4c3723da911b0f87864025029d93bdebcf03555ed",
+      "finalSha256": "ce0e6e2b671a11b4de7534b4c3723da911b0f87864025029d93bdebcf03555ed",
+      "repositorySha256": "ce0e6e2b671a11b4de7534b4c3723da911b0f87864025029d93bdebcf03555ed",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 3 Systems/Level 3 Layout Generator.ModuleScript.lua",
+      "baselineSha256": "2b9aacd4c8bed4fab1da525592a0c777f0e21b0fc84665971721dce276ad4289",
+      "finalSha256": "2b9aacd4c8bed4fab1da525592a0c777f0e21b0fc84665971721dce276ad4289",
+      "repositorySha256": "2b9aacd4c8bed4fab1da525592a0c777f0e21b0fc84665971721dce276ad4289",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 3 Systems/Level 3 Mall Manager AI Controller.ModuleScript.lua",
+      "baselineSha256": "a59a7ebf9885eff3377899358ac4498062be704bcdff97387f3dcda169d2502c",
+      "finalSha256": "a59a7ebf9885eff3377899358ac4498062be704bcdff97387f3dcda169d2502c",
+      "repositorySha256": "a59a7ebf9885eff3377899358ac4498062be704bcdff97387f3dcda169d2502c",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 3 Systems/Level 3 Music Sequence Controller.ModuleScript.lua",
+      "baselineSha256": "803c62833b63d7b2a4f45216c782087ee7b526140399a3bf27cdb31585e1f5a1",
+      "finalSha256": "803c62833b63d7b2a4f45216c782087ee7b526140399a3bf27cdb31585e1f5a1",
+      "repositorySha256": "803c62833b63d7b2a4f45216c782087ee7b526140399a3bf27cdb31585e1f5a1",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 3 Systems/Level 3 Objective Controller.ModuleScript.lua",
+      "baselineSha256": "ba82b48051005190fe658922b2948830bb22fd0696ef34026af75de8404009ae",
+      "finalSha256": "ba82b48051005190fe658922b2948830bb22fd0696ef34026af75de8404009ae",
+      "repositorySha256": "ba82b48051005190fe658922b2948830bb22fd0696ef34026af75de8404009ae",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 3 Systems/Level 3 Round Adapter.ModuleScript.lua",
+      "baselineSha256": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb",
+      "finalSha256": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb",
+      "repositorySha256": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 3 Systems/Level 3 Test Suite.ModuleScript.lua",
+      "baselineSha256": "7c3f008e315d149270e970e2b2166f3d49054af3fcc83986f5e2a49f86c48299",
+      "finalSha256": "7c3f008e315d149270e970e2b2166f3d49054af3fcc83986f5e2a49f86c48299",
+      "repositorySha256": "7c3f008e315d149270e970e2b2166f3d49054af3fcc83986f5e2a49f86c48299",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 3 Systems/Level 3 World Builder.ModuleScript.lua",
+      "baselineSha256": "1ab3707df9f7dec093fe610478ad67bc563243bff72c52c300b7a3cd2378a652",
+      "finalSha256": "1ab3707df9f7dec093fe610478ad67bc563243bff72c52c300b7a3cd2378a652",
+      "repositorySha256": "1ab3707df9f7dec093fe610478ad67bc563243bff72c52c300b7a3cd2378a652",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 4 Systems/Level 4 Configuration.ModuleScript.lua",
+      "baselineSha256": "2b9f753b1f4ceae912f882dfcd96330833dee2fb6709bb59bda065345c84a986",
+      "finalSha256": "2b9f753b1f4ceae912f882dfcd96330833dee2fb6709bb59bda065345c84a986",
+      "repositorySha256": "2b9f753b1f4ceae912f882dfcd96330833dee2fb6709bb59bda065345c84a986",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 4 Systems/Level 4 Neighbour Brain.ModuleScript.lua",
+      "baselineSha256": "ea99f2d98970fcc69c00f64c7367688cae4ce6a2d205e36b5c17a8fb3abac4b9",
+      "finalSha256": "ea99f2d98970fcc69c00f64c7367688cae4ce6a2d205e36b5c17a8fb3abac4b9",
+      "repositorySha256": "ea99f2d98970fcc69c00f64c7367688cae4ce6a2d205e36b5c17a8fb3abac4b9",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 4 Systems/Level 4 Neighbour Controller.ModuleScript.lua",
+      "baselineSha256": "a846c735b13afae8a204208ec646ec9159c2a7a757dc09c11273428f1a528a5c",
+      "finalSha256": "a846c735b13afae8a204208ec646ec9159c2a7a757dc09c11273428f1a528a5c",
+      "repositorySha256": "a846c735b13afae8a204208ec646ec9159c2a7a757dc09c11273428f1a528a5c",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 4 Systems/Level 4 Objective Controller.ModuleScript.lua",
+      "baselineSha256": "ad456d0c6eda6bb7e5a3cfb6d4a760fb5d2296b040fd42c32b75d83e0a7e2614",
+      "finalSha256": "ad456d0c6eda6bb7e5a3cfb6d4a760fb5d2296b040fd42c32b75d83e0a7e2614",
+      "repositorySha256": "ad456d0c6eda6bb7e5a3cfb6d4a760fb5d2296b040fd42c32b75d83e0a7e2614",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 4 Systems/Level 4 Plan Generator.ModuleScript.lua",
+      "baselineSha256": "dedbb64cc87096ff3617ad9a13553e756da5686717dc778f57d3c4dffc47a6aa",
+      "finalSha256": "dedbb64cc87096ff3617ad9a13553e756da5686717dc778f57d3c4dffc47a6aa",
+      "repositorySha256": "dedbb64cc87096ff3617ad9a13553e756da5686717dc778f57d3c4dffc47a6aa",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 4 Systems/Level 4 Round Adapter.ModuleScript.lua",
+      "baselineSha256": "49bb57155095e88c4ae346bc9d23fc846d220e20eb3ce1a51abfc6a7e4a35add",
+      "finalSha256": "49bb57155095e88c4ae346bc9d23fc846d220e20eb3ce1a51abfc6a7e4a35add",
+      "repositorySha256": "49bb57155095e88c4ae346bc9d23fc846d220e20eb3ce1a51abfc6a7e4a35add",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 4 Systems/Level 4 Test Suite.ModuleScript.lua",
+      "baselineSha256": "b4a0eaa12366a163e57f7ae119ae1b699aa24dd437b3227e33845cc1c98e0ffe",
+      "finalSha256": "b4a0eaa12366a163e57f7ae119ae1b699aa24dd437b3227e33845cc1c98e0ffe",
+      "repositorySha256": "b4a0eaa12366a163e57f7ae119ae1b699aa24dd437b3227e33845cc1c98e0ffe",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 4 Systems/Level 4 World Builder.ModuleScript.lua",
+      "baselineSha256": "d778f0eaa47c233495a1ecfd436c42d0bea0d51c96c403140ffc513cc6c9d19d",
+      "finalSha256": "d778f0eaa47c233495a1ecfd436c42d0bea0d51c96c403140ffc513cc6c9d19d",
+      "repositorySha256": "d778f0eaa47c233495a1ecfd436c42d0bea0d51c96c403140ffc513cc6c9d19d",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 5 Systems/Level 5 Architecture.ModuleScript.lua",
+      "baselineSha256": "0a7a99fe8e38a971604f420f40f8f08b7768ccf04ec417f3f6cd6a918b067e55",
+      "finalSha256": "eff5adfbe41bf406040a24b54ef3675d654ec46790c3199e8948f0848d55488e",
+      "repositorySha256": "eff5adfbe41bf406040a24b54ef3675d654ec46790c3199e8948f0848d55488e",
+      "changedFromBaseline": true,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 5 Systems/Level 5 Furniture.ModuleScript.lua",
+      "baselineSha256": "eda52827e7be51b42f6354674141c146dd64c1421e559f571f802501225e957b",
+      "finalSha256": "eda52827e7be51b42f6354674141c146dd64c1421e559f571f802501225e957b",
+      "repositorySha256": "eda52827e7be51b42f6354674141c146dd64c1421e559f571f802501225e957b",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 5 Systems/Level 5 Landmark Districts.ModuleScript.lua",
+      "baselineSha256": "8559e86f110388cfa827d3e86d133b08fb8f37d8775ddb0e8133eadd204c9f62",
+      "finalSha256": "db4a48b8ee906b446248c1593fd18f9043049f7e0b76e5eef1b23e1f1a28ec85",
+      "repositorySha256": "db4a48b8ee906b446248c1593fd18f9043049f7e0b76e5eef1b23e1f1a28ec85",
+      "changedFromBaseline": true,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 5 Systems/Level 5 Neighbourhood Districts.ModuleScript.lua",
+      "baselineSha256": "c44ed8cf067d7793c312aff5bd631491c100b77de239e191b8b900dad72604ca",
+      "finalSha256": "c44ed8cf067d7793c312aff5bd631491c100b77de239e191b8b900dad72604ca",
+      "repositorySha256": "c44ed8cf067d7793c312aff5bd631491c100b77de239e191b8b900dad72604ca",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level 5 Systems/Level 5 Round Adapter.ModuleScript.lua",
+      "baselineSha256": "3f61f23d86931bcefd5d4c9b4257da1bb96a4f04c31d2ac2a48ae707a3b42be8",
+      "finalSha256": "c25abd3373ce2b427a722628b7b9194dec22033b9da0d623a912ea71fd66cae4",
+      "repositorySha256": "c25abd3373ce2b427a722628b7b9194dec22033b9da0d623a912ea71fd66cae4",
+      "changedFromBaseline": true,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level2Generator.ModuleScript.lua",
+      "baselineSha256": "b5edbf084450ddc309845668e1dc9f8df79af9e5edd94b827dbf6c1cd4040b76",
+      "finalSha256": "b5edbf084450ddc309845668e1dc9f8df79af9e5edd94b827dbf6c1cd4040b76",
+      "repositorySha256": "b5edbf084450ddc309845668e1dc9f8df79af9e5edd94b827dbf6c1cd4040b76",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level3Generator.ModuleScript.lua",
+      "baselineSha256": "3395a2c38e9de3e6b99568545fd1b5d719d8aa5d4e4cb5c2da3f0a6ada0da07d",
+      "finalSha256": "3395a2c38e9de3e6b99568545fd1b5d719d8aa5d4e4cb5c2da3f0a6ada0da07d",
+      "repositorySha256": "3395a2c38e9de3e6b99568545fd1b5d719d8aa5d4e4cb5c2da3f0a6ada0da07d",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level4GateAccess.Script.lua",
+      "baselineSha256": "7363338a0422d1d4a2b0b0d3a0f123878a22370ace464fd45d47a3b945aefb61",
+      "finalSha256": "7363338a0422d1d4a2b0b0d3a0f123878a22370ace464fd45d47a3b945aefb61",
+      "repositorySha256": "7363338a0422d1d4a2b0b0d3a0f123878a22370ace464fd45d47a3b945aefb61",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level4Generator.ModuleScript.lua",
+      "baselineSha256": "a6a72b56b35834197415f83805614b46328c2342801fa183b111abb789160a9a",
+      "finalSha256": "a6a72b56b35834197415f83805614b46328c2342801fa183b111abb789160a9a",
+      "repositorySha256": "a6a72b56b35834197415f83805614b46328c2342801fa183b111abb789160a9a",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level5GateAccess.Script.lua",
+      "baselineSha256": "df130f811195e8d88bc64f7b8ffd68077ba0a846fa03753d5fa584a34612c740",
+      "finalSha256": "df130f811195e8d88bc64f7b8ffd68077ba0a846fa03753d5fa584a34612c740",
+      "repositorySha256": "df130f811195e8d88bc64f7b8ffd68077ba0a846fa03753d5fa584a34612c740",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Level5Generator.ModuleScript.lua",
+      "baselineSha256": "8917a82da5adaa114fff5051d9637aadf206ea5c0c757f2605969fe18d4cb54e",
+      "finalSha256": "8917a82da5adaa114fff5051d9637aadf206ea5c0c757f2605969fe18d4cb54e",
+      "repositorySha256": "8917a82da5adaa114fff5051d9637aadf206ea5c0c757f2605969fe18d4cb54e",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/LobbyPartyModeController.Script.lua",
+      "baselineSha256": "790fad57bf00234e1ae66656227b8949b1917be257b3d4c3647b4e519d41c92c",
+      "finalSha256": "790fad57bf00234e1ae66656227b8949b1917be257b3d4c3647b4e519d41c92c",
+      "repositorySha256": "790fad57bf00234e1ae66656227b8949b1917be257b3d4c3647b4e519d41c92c",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/LobbyShopDisplay.ModuleScript.lua",
+      "baselineSha256": "bf18ca625f28689b93289613500efcf35dc2d3b4dd0c5dc6778d9c77e1702c6c",
+      "finalSha256": "bf18ca625f28689b93289613500efcf35dc2d3b4dd0c5dc6778d9c77e1702c6c",
+      "repositorySha256": "bf18ca625f28689b93289613500efcf35dc2d3b4dd0c5dc6778d9c77e1702c6c",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/NoiseRegistry.ModuleScript.lua",
+      "baselineSha256": "736bca202ea8f008f7c0c0338ccac55b1a09cc4edb6f27ce255d664b645250a9",
+      "finalSha256": "736bca202ea8f008f7c0c0338ccac55b1a09cc4edb6f27ce255d664b645250a9",
+      "repositorySha256": "736bca202ea8f008f7c0c0338ccac55b1a09cc4edb6f27ce255d664b645250a9",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/PlayerProtection.ModuleScript.lua",
+      "baselineSha256": "0447ca2a84e9d7f9e4c997c1eafdf450bd0c262ee69d4b0db24f3f8c26a80b2b",
+      "finalSha256": "0447ca2a84e9d7f9e4c997c1eafdf450bd0c262ee69d4b0db24f3f8c26a80b2b",
+      "repositorySha256": "0447ca2a84e9d7f9e4c997c1eafdf450bd0c262ee69d4b0db24f3f8c26a80b2b",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/PurchaseAlerts.ModuleScript.lua",
+      "baselineSha256": "f9de2995a607bd6101738acd4b955b8ba4d407c85c91a8111dd44dab032c9fd2",
+      "finalSha256": "f9de2995a607bd6101738acd4b955b8ba4d407c85c91a8111dd44dab032c9fd2",
+      "repositorySha256": "f9de2995a607bd6101738acd4b955b8ba4d407c85c91a8111dd44dab032c9fd2",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/ReentryPlacement.ModuleScript.lua",
+      "baselineSha256": "df169b0af66304a6216d5448464254987f2a59cd0cc44bb6bbe9d218443eef9c",
+      "finalSha256": "df169b0af66304a6216d5448464254987f2a59cd0cc44bb6bbe9d218443eef9c",
+      "repositorySha256": "df169b0af66304a6216d5448464254987f2a59cd0cc44bb6bbe9d218443eef9c",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Round Completion Routing.ModuleScript.lua",
+      "baselineSha256": "12a42ae971fe76f1a8e499cc0e0267cd03c57c025e5d379f8308255310de08c9",
+      "finalSha256": "12a42ae971fe76f1a8e499cc0e0267cd03c57c025e5d379f8308255310de08c9",
+      "repositorySha256": "12a42ae971fe76f1a8e499cc0e0267cd03c57c025e5d379f8308255310de08c9",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Round Completion Test Suite.ModuleScript.lua",
+      "baselineSha256": "47e85422ad334aecde58eddbdc034ff02badaaf65e8d632fbf6f58efb30cc5ab",
+      "finalSha256": "47e85422ad334aecde58eddbdc034ff02badaaf65e8d632fbf6f58efb30cc5ab",
+      "repositorySha256": "47e85422ad334aecde58eddbdc034ff02badaaf65e8d632fbf6f58efb30cc5ab",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Round Loading Runtime.ModuleScript.lua",
+      "baselineSha256": "e45e4943448ad99ef9c7bd4861e1e5fa18969523730c78146c4cb886a5c7debd",
+      "finalSha256": "e45e4943448ad99ef9c7bd4861e1e5fa18969523730c78146c4cb886a5c7debd",
+      "repositorySha256": "e45e4943448ad99ef9c7bd4861e1e5fa18969523730c78146c4cb886a5c7debd",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/Round Loading Test Suite.ModuleScript.lua",
+      "baselineSha256": "d82beaefcced451556031a8dcd0c5d9a47ef47057918c728a283ace762f70c5b",
+      "finalSha256": "d82beaefcced451556031a8dcd0c5d9a47ef47057918c728a283ace762f70c5b",
+      "repositorySha256": "d82beaefcced451556031a8dcd0c5d9a47ef47057918c728a283ace762f70c5b",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/RouteMarkerService.Script.lua",
+      "baselineSha256": "1f37b265e7cbb8fe9de76231e7f4ccf9eded7ec4cd3981d08694c196a8ddccb7",
+      "finalSha256": "1f37b265e7cbb8fe9de76231e7f4ccf9eded7ec4cd3981d08694c196a8ddccb7",
+      "repositorySha256": "1f37b265e7cbb8fe9de76231e7f4ccf9eded7ec4cd3981d08694c196a8ddccb7",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/TeamObjectives.ModuleScript.lua",
+      "baselineSha256": "30382e78f30a64cd753a2eb650f6bb2357e47f1941a586cd1eaaea70a52521d3",
+      "finalSha256": "30382e78f30a64cd753a2eb650f6bb2357e47f1941a586cd1eaaea70a52521d3",
+      "repositorySha256": "30382e78f30a64cd753a2eb650f6bb2357e47f1941a586cd1eaaea70a52521d3",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
+      "baselineSha256": "f5ff4bd648f76f0d69e4608c9d74e576e45993e3d586576e55726d351d0c81f6",
+      "finalSha256": "f5ff4bd648f76f0d69e4608c9d74e576e45993e3d586576e55726d351d0c81f6",
+      "repositorySha256": "f5ff4bd648f76f0d69e4608c9d74e576e45993e3d586576e55726d351d0c81f6",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/ZyntraAnalytics.ModuleScript.lua",
+      "baselineSha256": "b966bf4298d13e57bd8ef6a9a041c63175f5ed6e80487a819e8d4ae1d29df818",
+      "finalSha256": "b966bf4298d13e57bd8ef6a9a041c63175f5ed6e80487a819e8d4ae1d29df818",
+      "repositorySha256": "b966bf4298d13e57bd8ef6a9a041c63175f5ed6e80487a819e8d4ae1d29df818",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/ZyntraDetectorSensing.ModuleScript.lua",
+      "baselineSha256": "aed8a9a492ea2ce58ad112e3806873a6730d7b3d8906470888350b47772f05ab",
+      "finalSha256": "aed8a9a492ea2ce58ad112e3806873a6730d7b3d8906470888350b47772f05ab",
+      "repositorySha256": "aed8a9a492ea2ce58ad112e3806873a6730d7b3d8906470888350b47772f05ab",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/ZyntraDetectorService.Script.lua",
+      "baselineSha256": "cece441a57016a61e0ea6db41fcccba8257b27024ef25a6dd8043453de929f47",
+      "finalSha256": "cece441a57016a61e0ea6db41fcccba8257b27024ef25a6dd8043453de929f47",
+      "repositorySha256": "cece441a57016a61e0ea6db41fcccba8257b27024ef25a6dd8043453de929f47",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerScriptService/ZyntraMonetization.Script.lua",
+      "baselineSha256": "b3db78879c9e95af265544deac915341dd0f1dc7c2cae870045d7e786c8fa350",
+      "finalSha256": "b3db78879c9e95af265544deac915341dd0f1dc7c2cae870045d7e786c8fa350",
+      "repositorySha256": "b3db78879c9e95af265544deac915341dd0f1dc7c2cae870045d7e786c8fa350",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/Archive/FieldNotesRetired_20260922/Field Notes Client.LocalScript.lua",
+      "baselineSha256": "75162f7219bc5966ff5ee367360338a5d56356f085529e4188fc41f51f239c72",
+      "finalSha256": "75162f7219bc5966ff5ee367360338a5d56356f085529e4188fc41f51f239c72",
+      "repositorySha256": "75162f7219bc5966ff5ee367360338a5d56356f085529e4188fc41f51f239c72",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/Archive/FieldNotesRetired_20260922/FieldNotesService.Script.lua",
+      "baselineSha256": "a0aed81a20ee24e8a1f1413a09e75fd001281ae639ea4cb8e9cb9f55b69b0bcd",
+      "finalSha256": "a0aed81a20ee24e8a1f1413a09e75fd001281ae639ea4cb8e9cb9f55b69b0bcd",
+      "repositorySha256": "a0aed81a20ee24e8a1f1413a09e75fd001281ae639ea4cb8e9cb9f55b69b0bcd",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/Archive/FieldNotesRetired_20260922/ZyntraFieldNotes.ModuleScript.lua",
+      "baselineSha256": "7734ab1c871eee83d85bf7712f413bc72ea728ff9b4eccfad2349a1647409f18",
+      "finalSha256": "7734ab1c871eee83d85bf7712f413bc72ea728ff9b4eccfad2349a1647409f18",
+      "repositorySha256": "7734ab1c871eee83d85bf7712f413bc72ea728ff9b4eccfad2349a1647409f18",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/Archive/FieldNotesRetired_20260922/ZyntraFieldNotesPage.ModuleScript.lua",
+      "baselineSha256": "71457d7ecb83dff9e7999cc8cf75203c4ec14bb78a4e1a3f6ea08fb9794af7f0",
+      "finalSha256": "71457d7ecb83dff9e7999cc8cf75203c4ec14bb78a4e1a3f6ea08fb9794af7f0",
+      "repositorySha256": "71457d7ecb83dff9e7999cc8cf75203c4ec14bb78a4e1a3f6ea08fb9794af7f0",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/Archive/Level 2 Kids Skylight Backup 20260806/Level 2 World Builder Before Kids Skylights.ModuleScript.lua",
+      "baselineSha256": "380beb91a4623994c5e86b2c956eb9c68033d4df9fa0e9b4844ff451da9047b0",
+      "finalSha256": "380beb91a4623994c5e86b2c956eb9c68033d4df9fa0e9b4844ff451da9047b0",
+      "repositorySha256": "380beb91a4623994c5e86b2c956eb9c68033d4df9fa0e9b4844ff451da9047b0",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/Archive/Level 2 Kids Texture Backup 20260806/Level 2 World Builder Before Kids Textures.ModuleScript.lua",
+      "baselineSha256": "8971886166a1fa4a79671c35f533589b13ba5a36449f1134ad73018b0db61328",
+      "finalSha256": "8971886166a1fa4a79671c35f533589b13ba5a36449f1134ad73018b0db61328",
+      "repositorySha256": "8971886166a1fa4a79671c35f533589b13ba5a36449f1134ad73018b0db61328",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/Archive/Level 2 Kids V1 Backup 20260811/Level 2 Configuration.ModuleScript.lua",
+      "baselineSha256": "d24bd2185aead26ced59abb64f639f61494457642b6323943ce32d67f4bf2c6f",
+      "finalSha256": "d24bd2185aead26ced59abb64f639f61494457642b6323943ce32d67f4bf2c6f",
+      "repositorySha256": "d24bd2185aead26ced59abb64f639f61494457642b6323943ce32d67f4bf2c6f",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/Archive/Level 2 Kids V1 Backup 20260811/Level 2 World Builder.ModuleScript.lua",
+      "baselineSha256": "fdc69a799166da1f1b6324a8e09766d67fec298985d3408eb1d80685bba340d1",
+      "finalSha256": "fdc69a799166da1f1b6324a8e09766d67fec298985d3408eb1d80685bba340d1",
+      "repositorySha256": "fdc69a799166da1f1b6324a8e09766d67fec298985d3408eb1d80685bba340d1",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/Archive/Level 2 Lever Redesign Backup 20260806/Level 2 Configuration.ModuleScript.lua",
+      "baselineSha256": "24cec1cebf1816fd727c70992588c96d89c92432f2aa53b777a920d2002b529c",
+      "finalSha256": "24cec1cebf1816fd727c70992588c96d89c92432f2aa53b777a920d2002b529c",
+      "repositorySha256": "24cec1cebf1816fd727c70992588c96d89c92432f2aa53b777a920d2002b529c",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/Archive/Level 2 Lever Redesign Backup 20260806/Level 2 Objective Controller.ModuleScript.lua",
+      "baselineSha256": "c9a9847ad63b338abba95480a1cbe09d8e8f9f4651282551c85f1cfe870a520d",
+      "finalSha256": "c9a9847ad63b338abba95480a1cbe09d8e8f9f4651282551c85f1cfe870a520d",
+      "repositorySha256": "c9a9847ad63b338abba95480a1cbe09d8e8f9f4651282551c85f1cfe870a520d",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/Archive/Level 2 Lever Redesign Backup 20260806/Level 2 World Builder.ModuleScript.lua",
+      "baselineSha256": "4fca985383c272391f20ec44524c257f6e539a698b6480ddb5d4ec591e6aa046",
+      "finalSha256": "4fca985383c272391f20ec44524c257f6e539a698b6480ddb5d4ec591e6aa046",
+      "repositorySha256": "4fca985383c272391f20ec44524c257f6e539a698b6480ddb5d4ec591e6aa046",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/Archive/Level 2 Pump Scale Backup 20260806/Level 2 World Builder Before 40 Percent Reduction.ModuleScript.lua",
+      "baselineSha256": "343bcc9bf8bffcd225f1692ac722971c3e1d2e9551ba059614a8f3fd7387417b",
+      "finalSha256": "343bcc9bf8bffcd225f1692ac722971c3e1d2e9551ba059614a8f3fd7387417b",
+      "repositorySha256": "343bcc9bf8bffcd225f1692ac722971c3e1d2e9551ba059614a8f3fd7387417b",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/Archive/Level2AudioBackup_20260831_NoDistantSplash/Level 2 Configuration.ModuleScript.lua",
+      "baselineSha256": "8befab8a370d8e8c325243136e4ef624c548ffd54e4d54b07b5c169633e4d90a",
+      "finalSha256": "8befab8a370d8e8c325243136e4ef624c548ffd54e4d54b07b5c169633e4d90a",
+      "repositorySha256": "8befab8a370d8e8c325243136e4ef624c548ffd54e4d54b07b5c169633e4d90a",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/Archive/Level2AudioBackup_20260831_NoDistantSplash/Level 2 Sound Controller.LocalScript.lua",
+      "baselineSha256": "2b8c34b1b886f3ec85f303b8666ac6e69bfd8ebf9110ac61ae31804e7d67e0cd",
+      "finalSha256": "2b8c34b1b886f3ec85f303b8666ac6e69bfd8ebf9110ac61ae31804e7d67e0cd",
+      "repositorySha256": "2b8c34b1b886f3ec85f303b8666ac6e69bfd8ebf9110ac61ae31804e7d67e0cd",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/Archive/Level2RetiredSlidemouth_20260831/Level 2 Slidemouth Client.LocalScript.lua",
+      "baselineSha256": "1f6f81df549b4cecfaaf83490c7f61dc0a2182f6cf1208ac2af4010e745f762d",
+      "finalSha256": "1f6f81df549b4cecfaaf83490c7f61dc0a2182f6cf1208ac2af4010e745f762d",
+      "repositorySha256": "1f6f81df549b4cecfaaf83490c7f61dc0a2182f6cf1208ac2af4010e745f762d",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/Archive/Level2RetiredSlidemouth_20260831/Level 2 Slidemouth Controller.ModuleScript.lua",
+      "baselineSha256": "a2f0d1ed7e8b28de5803dccef88d517fbf61b9c255ec331c3c0db42b60652118",
+      "finalSha256": "a2f0d1ed7e8b28de5803dccef88d517fbf61b9c255ec331c3c0db42b60652118",
+      "repositorySha256": "a2f0d1ed7e8b28de5803dccef88d517fbf61b9c255ec331c3c0db42b60652118",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/Archive/Level2RetiredSlidemouth_20260831/Level 2 Slidemouth Test Suite.ModuleScript.lua",
+      "baselineSha256": "c3f183e46ae15fbbd6eb1b20d91291b0f1038a08cec43f89a4f19c7cd09f41bf",
+      "finalSha256": "c3f183e46ae15fbbd6eb1b20d91291b0f1038a08cec43f89a4f19c7cd09f41bf",
+      "repositorySha256": "c3f183e46ae15fbbd6eb1b20d91291b0f1038a08cec43f89a4f19c7cd09f41bf",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/Archive/RetiredLobbyAssets/Miso/MisoPatrol.Script.lua",
+      "baselineSha256": "19d0da27795704865d9b179ea3818ad56425607937a97b4259af336f4e4f2b4b",
+      "finalSha256": "19d0da27795704865d9b179ea3818ad56425607937a97b4259af336f4e4f2b4b",
+      "repositorySha256": "19d0da27795704865d9b179ea3818ad56425607937a97b4259af336f4e4f2b4b",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/CodexBackup_20260902_ComingSoonGates/TunnelLobbyBuilder_PreComingSoon.ModuleScript.lua",
+      "baselineSha256": "80ed54db4d80a88ffe7c9dfb2f1c0413b14f6204eeb3c132f34ca21590940512",
+      "finalSha256": "80ed54db4d80a88ffe7c9dfb2f1c0413b14f6204eeb3c132f34ca21590940512",
+      "repositorySha256": "80ed54db4d80a88ffe7c9dfb2f1c0413b14f6204eeb3c132f34ca21590940512",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__FlashlightSync.Script.lua",
+      "baselineSha256": "5ac6372a017e79d3522ef624fa57a1e7f7784a5303d86428fb0881b1ff8dede2",
+      "finalSha256": "5ac6372a017e79d3522ef624fa57a1e7f7784a5303d86428fb0881b1ff8dede2",
+      "repositorySha256": "5ac6372a017e79d3522ef624fa57a1e7f7784a5303d86428fb0881b1ff8dede2",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__Level 2 Systems__Level 2 Pool Foam Configuration.ModuleScript.lua",
+      "baselineSha256": "2b6936befb4a52c0cac4e5f62e13cd66275a40f8e26dd79b32d798bfd65cedd0",
+      "finalSha256": "2b6936befb4a52c0cac4e5f62e13cd66275a40f8e26dd79b32d798bfd65cedd0",
+      "repositorySha256": "2b6936befb4a52c0cac4e5f62e13cd66275a40f8e26dd79b32d798bfd65cedd0",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__Level 2 Systems__Level 2 Pool Foam Controller.ModuleScript.lua",
+      "baselineSha256": "3cb41a90df987ec3a9f83fc894cf094f844c95753400f22041d1e47d5e86dc5b",
+      "finalSha256": "3cb41a90df987ec3a9f83fc894cf094f844c95753400f22041d1e47d5e86dc5b",
+      "repositorySha256": "3cb41a90df987ec3a9f83fc894cf094f844c95753400f22041d1e47d5e86dc5b",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__Level 3 Systems__Level 3 Hiding Controller.ModuleScript.lua",
+      "baselineSha256": "7a5a44653b630fba1dbf7afbc7e12f4b1d763a96be0623a225d29317aa75e5d4",
+      "finalSha256": "7a5a44653b630fba1dbf7afbc7e12f4b1d763a96be0623a225d29317aa75e5d4",
+      "repositorySha256": "7a5a44653b630fba1dbf7afbc7e12f4b1d763a96be0623a225d29317aa75e5d4",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/CodexBackup_20260902_FiveFixes/ServerScriptService__TunnelLobbyBuilder.ModuleScript.lua",
+      "baselineSha256": "ce964f8a684c2719cd2939255046866acbb05091c1f1c0ae1f10c9285b645d3c",
+      "finalSha256": "ce964f8a684c2719cd2939255046866acbb05091c1f1c0ae1f10c9285b645d3c",
+      "repositorySha256": "ce964f8a684c2719cd2939255046866acbb05091c1f1c0ae1f10c9285b645d3c",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__EntityShakeController.LocalScript.lua",
+      "baselineSha256": "c856717e898f4bc80f734963306e51d55fa1862b4ef45fec8b7a33031bab78da",
+      "finalSha256": "c856717e898f4bc80f734963306e51d55fa1862b4ef45fec8b7a33031bab78da",
+      "repositorySha256": "c856717e898f4bc80f734963306e51d55fa1862b4ef45fec8b7a33031bab78da",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__FlashlightController.LocalScript.lua",
+      "baselineSha256": "84138b423271a4204568fe3df9a5c233df9c2692d1dd1b303f3f7dbdae09bddd",
+      "finalSha256": "84138b423271a4204568fe3df9a5c233df9c2692d1dd1b303f3f7dbdae09bddd",
+      "repositorySha256": "84138b423271a4204568fe3df9a5c233df9c2692d1dd1b303f3f7dbdae09bddd",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client.LocalScript.lua",
+      "baselineSha256": "2fc549d2d8b5838ea3db33d2c30d76aba60ff8be63b23bcf63af678c36af1e17",
+      "finalSha256": "2fc549d2d8b5838ea3db33d2c30d76aba60ff8be63b23bcf63af678c36af1e17",
+      "repositorySha256": "2fc549d2d8b5838ea3db33d2c30d76aba60ff8be63b23bcf63af678c36af1e17",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/CodexBackup_20260902_FiveFixes/StarterPlayer__StarterPlayerScripts__NoiseReporter.LocalScript.lua",
+      "baselineSha256": "3905d456cc0eaa446b563ca55ef538018da9a22b860cd52d3df49b67e4920ccd",
+      "finalSha256": "3905d456cc0eaa446b563ca55ef538018da9a22b860cd52d3df49b67e4920ccd",
+      "repositorySha256": "3905d456cc0eaa446b563ca55ef538018da9a22b860cd52d3df49b67e4920ccd",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/PoolSlideContextDiagnosticBackup_0710/Level 2 Pool Slide Controller.ModuleScript.lua",
+      "baselineSha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "finalSha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "repositorySha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/PoolSlideContextDiagnosticBackup_0710/Level 2 Pool Slide Navigator.ModuleScript.lua",
+      "baselineSha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "finalSha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "repositorySha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/PoolSlideContextDiagnosticBackup_MP6_1609Z/Controller.ModuleScript.lua",
+      "baselineSha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "finalSha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "repositorySha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/PoolSlideContextDiagnosticBackup_MP6_1609Z/Navigator.ModuleScript.lua",
+      "baselineSha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "finalSha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "repositorySha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/PoolSlideContextDiagnosticBackup_MP7_1624Z/Controller.ModuleScript.lua",
+      "baselineSha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "finalSha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "repositorySha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/PoolSlideContextDiagnosticBackup_MP7_1624Z/Navigator.ModuleScript.lua",
+      "baselineSha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "finalSha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "repositorySha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/PoolSlideContextDiagnosticBackup_MP8_1633Z/Controller.ModuleScript.lua",
+      "baselineSha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "finalSha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "repositorySha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/PoolSlideContextDiagnosticBackup_MP8_1633Z/Navigator.ModuleScript.lua",
+      "baselineSha256": "c4e8a1f3606c14830772a7f6d7fe9b82aabdc3b06772fa22e599e6b562251093",
+      "finalSha256": "c4e8a1f3606c14830772a7f6d7fe9b82aabdc3b06772fa22e599e6b562251093",
+      "repositorySha256": "c4e8a1f3606c14830772a7f6d7fe9b82aabdc3b06772fa22e599e6b562251093",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/PoolSlideContextDiagnosticBackup_MP8_1633Z/NavigatorBeforeBudgetFix.ModuleScript.lua",
+      "baselineSha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "finalSha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "repositorySha256": "7e62cf548381162c64addf7c047f1da5f2e4158c6f86820bc68cd283e373e669",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/PoolSlideContextDiagnosticBackup_MP9_1640Z/Controller.ModuleScript.lua",
+      "baselineSha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "finalSha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "repositorySha256": "69d82ea691b2a807a92144df1e588b2ff3833a5927e0698cbac924a96bac7900",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/PoolSlideContextDiagnosticBackup_MP9_1640Z/Navigator.ModuleScript.lua",
+      "baselineSha256": "c4e8a1f3606c14830772a7f6d7fe9b82aabdc3b06772fa22e599e6b562251093",
+      "finalSha256": "c4e8a1f3606c14830772a7f6d7fe9b82aabdc3b06772fa22e599e6b562251093",
+      "repositorySha256": "c4e8a1f3606c14830772a7f6d7fe9b82aabdc3b06772fa22e599e6b562251093",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/Project Mirror/IMPORTANT.LocalScript.lua",
+      "baselineSha256": "4095140216ad0d9515e60d4697c207f537da5a11847fda2421995c4fe03194da",
+      "finalSha256": "4095140216ad0d9515e60d4697c207f537da5a11847fda2421995c4fe03194da",
+      "repositorySha256": "4095140216ad0d9515e60d4697c207f537da5a11847fda2421995c4fe03194da",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/Project Mirror/Script.Script.lua",
+      "baselineSha256": "e583992400de7c9bafd421907b8b33f1a6aaa859526e64282702fd70f4a08acf",
+      "finalSha256": "e583992400de7c9bafd421907b8b33f1a6aaa859526e64282702fd70f4a08acf",
+      "repositorySha256": "e583992400de7c9bafd421907b8b33f1a6aaa859526e64282702fd70f4a08acf",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ServerStorage/TEMP_PipeEntityAnimations_20260909/PreviewControls.ModuleScript.lua",
+      "baselineSha256": "ab09c80f1ecb24dabc1561a5c9901af5e5767c8251e78359a85c1b1b2569e53e",
+      "finalSha256": "ab09c80f1ecb24dabc1561a5c9901af5e5767c8251e78359a85c1b1b2569e53e",
+      "repositorySha256": "ab09c80f1ecb24dabc1561a5c9901af5e5767c8251e78359a85c1b1b2569e53e",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterCharacter/Animate.LocalScript.lua",
+      "baselineSha256": "49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0",
+      "finalSha256": "49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0",
+      "repositorySha256": "49eab7530cfc33b8af13b995ae1fa87f482a489b6d108ec2410d12dd19b720f0",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterCharacterScripts/DanceEmote.LocalScript.lua",
+      "baselineSha256": "1adfdded75ae74aba87cb74c69590e55219b2ac9e7f5adc1a7f535cceb39fa8b",
+      "finalSha256": "1adfdded75ae74aba87cb74c69590e55219b2ac9e7f5adc1a7f535cceb39fa8b",
+      "repositorySha256": "1adfdded75ae74aba87cb74c69590e55219b2ac9e7f5adc1a7f535cceb39fa8b",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterCharacterScripts/DisableDefaultWalkingSound.LocalScript.lua",
+      "baselineSha256": "b5309d09c60b9fb5ea319c24d34cbdc3b861fdb1726727a608944e528462e66f",
+      "finalSha256": "b5309d09c60b9fb5ea319c24d34cbdc3b861fdb1726727a608944e528462e66f",
+      "repositorySha256": "b5309d09c60b9fb5ea319c24d34cbdc3b861fdb1726727a608944e528462e66f",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterCharacterScripts/SetRunAnimation.LocalScript.lua",
+      "baselineSha256": "3f84b7c495f091703b0636958f6691c0c2f23c9c7f487e1a3637b3b0e7c37f07",
+      "finalSha256": "3f84b7c495f091703b0636958f6691c0c2f23c9c7f487e1a3637b3b0e7c37f07",
+      "repositorySha256": "3f84b7c495f091703b0636958f6691c0c2f23c9c7f487e1a3637b3b0e7c37f07",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Daily Rewards Client.LocalScript.lua",
+      "baselineSha256": "9c4676676e8fb690f8eba800a8e03ddf8620a744c148ca78ed7ed881bbcceb50",
+      "finalSha256": "9c4676676e8fb690f8eba800a8e03ddf8620a744c148ca78ed7ed881bbcceb50",
+      "repositorySha256": "9c4676676e8fb690f8eba800a8e03ddf8620a744c148ca78ed7ed881bbcceb50",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/DevCheats.LocalScript.lua",
+      "baselineSha256": "cefdd63c547b5c3076455a1ed9b820bbcb8b9e121f290763fccef87b2c947e6b",
+      "finalSha256": "cefdd63c547b5c3076455a1ed9b820bbcb8b9e121f290763fccef87b2c947e6b",
+      "repositorySha256": "cefdd63c547b5c3076455a1ed9b820bbcb8b9e121f290763fccef87b2c947e6b",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/EntityShakeController.LocalScript.lua",
+      "baselineSha256": "f120ff0660785fe03a31ab3cf57705aeaa39bbc5fbe89d7592584812ebf16ac1",
+      "finalSha256": "f120ff0660785fe03a31ab3cf57705aeaa39bbc5fbe89d7592584812ebf16ac1",
+      "repositorySha256": "f120ff0660785fe03a31ab3cf57705aeaa39bbc5fbe89d7592584812ebf16ac1",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/First Entry Guide.LocalScript.lua",
+      "baselineSha256": "29ba9ceb5ec6b0d8249d1825ff36b14ff2945918367f9dc3588dc27e0ae6b6a0",
+      "finalSha256": "29ba9ceb5ec6b0d8249d1825ff36b14ff2945918367f9dc3588dc27e0ae6b6a0",
+      "repositorySha256": "29ba9ceb5ec6b0d8249d1825ff36b14ff2945918367f9dc3588dc27e0ae6b6a0",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/FlashlightController.LocalScript.lua",
+      "baselineSha256": "ceb79948b8f3c24f4b30e60b61b9cc03471d9ea32e34c16e96820ab7e3d1a283",
+      "finalSha256": "ceb79948b8f3c24f4b30e60b61b9cc03471d9ea32e34c16e96820ab7e3d1a283",
+      "repositorySha256": "ceb79948b8f3c24f4b30e60b61b9cc03471d9ea32e34c16e96820ab7e3d1a283",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Friend Boost Client.LocalScript.lua",
+      "baselineSha256": "f23f18b67d9858ee72263f622098a7e5e8bb65b0b64942306f591c775ef02262",
+      "finalSha256": "f23f18b67d9858ee72263f622098a7e5e8bb65b0b64942306f591c775ef02262",
+      "repositorySha256": "f23f18b67d9858ee72263f622098a7e5e8bb65b0b64942306f591c775ef02262",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/HazmatSkinDriver.LocalScript.lua",
+      "baselineSha256": "6059bff051061ee42f5d1e1976147db6e6ad11222ef54fd15e713013e387ffdc",
+      "finalSha256": "6059bff051061ee42f5d1e1976147db6e6ad11222ef54fd15e713013e387ffdc",
+      "repositorySha256": "6059bff051061ee42f5d1e1976147db6e6ad11222ef54fd15e713013e387ffdc",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/JumpscareUI.LocalScript.lua",
+      "baselineSha256": "faacdbb53c48b844bc122a629cbd0f68c7af0a6057953cb2b5d957e443343f8e",
+      "finalSha256": "faacdbb53c48b844bc122a629cbd0f68c7af0a6057953cb2b5d957e443343f8e",
+      "repositorySha256": "faacdbb53c48b844bc122a629cbd0f68c7af0a6057953cb2b5d957e443343f8e",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 1 Cable Current.LocalScript.lua",
+      "baselineSha256": "ecb3adeab5a09695574dccc27bedfa514d74fdc601807e4e996e24ae382f1133",
+      "finalSha256": "ecb3adeab5a09695574dccc27bedfa514d74fdc601807e4e996e24ae382f1133",
+      "repositorySha256": "ecb3adeab5a09695574dccc27bedfa514d74fdc601807e4e996e24ae382f1133",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 1 Sound Controller.LocalScript.lua",
+      "baselineSha256": "1cf0c64a0a95fb3dc82ac94c39191542f92461fdaf05f41164e40c6d29544fa5",
+      "finalSha256": "1cf0c64a0a95fb3dc82ac94c39191542f92461fdaf05f41164e40c6d29544fa5",
+      "repositorySha256": "1cf0c64a0a95fb3dc82ac94c39191542f92461fdaf05f41164e40c6d29544fa5",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 2 Entity Audio.LocalScript.lua",
+      "baselineSha256": "5d6405b2b806e286966c63b0f19959d348ef7b6b6f36f87257afb2ef21b294a8",
+      "finalSha256": "5d6405b2b806e286966c63b0f19959d348ef7b6b6f36f87257afb2ef21b294a8",
+      "repositorySha256": "5d6405b2b806e286966c63b0f19959d348ef7b6b6f36f87257afb2ef21b294a8",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 2 Lighting Controller.LocalScript.lua",
+      "baselineSha256": "d33a1d6290dd5b1bd829aeab3c61edeb7199896568a719c8d0a656a7a31bfecc",
+      "finalSha256": "d33a1d6290dd5b1bd829aeab3c61edeb7199896568a719c8d0a656a7a31bfecc",
+      "repositorySha256": "d33a1d6290dd5b1bd829aeab3c61edeb7199896568a719c8d0a656a7a31bfecc",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 2 Objective UI.LocalScript.lua",
+      "baselineSha256": "5b6397736dbf40f15f07d88bd57422be317ad387c2535e474de5c736e39feed2",
+      "finalSha256": "5b6397736dbf40f15f07d88bd57422be317ad387c2535e474de5c736e39feed2",
+      "repositorySha256": "5b6397736dbf40f15f07d88bd57422be317ad387c2535e474de5c736e39feed2",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 2 Pool Foam Client.LocalScript.lua",
+      "baselineSha256": "7e178ddfc4917766dd353e861388df756fe977a653816ecaf24d52f6fae26ec1",
+      "finalSha256": "7e178ddfc4917766dd353e861388df756fe977a653816ecaf24d52f6fae26ec1",
+      "repositorySha256": "7e178ddfc4917766dd353e861388df756fe977a653816ecaf24d52f6fae26ec1",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 2 Pool Slide Dev ESP.LocalScript.lua",
+      "baselineSha256": "a5b3cbb5f7a41c650207e9585d3b3c51fbf884b7a5859ac40d5e155114b064de",
+      "finalSha256": "a5b3cbb5f7a41c650207e9585d3b3c51fbf884b7a5859ac40d5e155114b064de",
+      "repositorySha256": "a5b3cbb5f7a41c650207e9585d3b3c51fbf884b7a5859ac40d5e155114b064de",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 2 Slide Controller.LocalScript.lua",
+      "baselineSha256": "5794562f45419c43f20fd7f8351ec16e05fd708309c71101c30dfd47a0055b93",
+      "finalSha256": "5794562f45419c43f20fd7f8351ec16e05fd708309c71101c30dfd47a0055b93",
+      "repositorySha256": "5794562f45419c43f20fd7f8351ec16e05fd708309c71101c30dfd47a0055b93",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 2 Sound Controller.LocalScript.lua",
+      "baselineSha256": "77afb53f5320eacca41b3d780146fe27df56cffa659f22ff53b88f6b14b55278",
+      "finalSha256": "77afb53f5320eacca41b3d780146fe27df56cffa659f22ff53b88f6b14b55278",
+      "repositorySha256": "77afb53f5320eacca41b3d780146fe27df56cffa659f22ff53b88f6b14b55278",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 3 Lighting Controller.LocalScript.lua",
+      "baselineSha256": "af55a6cba5254e627d6b1c7479a124b586280b024052616b93f0cca2d088c325",
+      "finalSha256": "af55a6cba5254e627d6b1c7479a124b586280b024052616b93f0cca2d088c325",
+      "repositorySha256": "af55a6cba5254e627d6b1c7479a124b586280b024052616b93f0cca2d088c325",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 3 Mall Manager Visual Smoother.LocalScript.lua",
+      "baselineSha256": "81309944181cf982fd2eda88291244bde8cdcaf5c2ecbd4c8c0f05f9f733cf37",
+      "finalSha256": "81309944181cf982fd2eda88291244bde8cdcaf5c2ecbd4c8c0f05f9f733cf37",
+      "repositorySha256": "81309944181cf982fd2eda88291244bde8cdcaf5c2ecbd4c8c0f05f9f733cf37",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 3 Reader Client.LocalScript.lua",
+      "baselineSha256": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b",
+      "finalSha256": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b",
+      "repositorySha256": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 3 Sound Controller.LocalScript.lua",
+      "baselineSha256": "8896ccdacbbd00116686a7f0547059b72e24776c99c119b4c8cd207d0eea3d3b",
+      "finalSha256": "8896ccdacbbd00116686a7f0547059b72e24776c99c119b4c8cd207d0eea3d3b",
+      "repositorySha256": "8896ccdacbbd00116686a7f0547059b72e24776c99c119b4c8cd207d0eea3d3b",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 3 Table Hiding Client.LocalScript.lua",
+      "baselineSha256": "e406296d0b1aa64f72cb9051caa36bc1d555a1c680c13cffebb8f79893ed6d98",
+      "finalSha256": "e406296d0b1aa64f72cb9051caa36bc1d555a1c680c13cffebb8f79893ed6d98",
+      "repositorySha256": "e406296d0b1aa64f72cb9051caa36bc1d555a1c680c13cffebb8f79893ed6d98",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 4 Lighting Controller.LocalScript.lua",
+      "baselineSha256": "770febda91de2412356f23d9111d4948466c03d22592c9ced1d3a7899a88ec91",
+      "finalSha256": "770febda91de2412356f23d9111d4948466c03d22592c9ced1d3a7899a88ec91",
+      "repositorySha256": "770febda91de2412356f23d9111d4948466c03d22592c9ced1d3a7899a88ec91",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 4 Objective UI.LocalScript.lua",
+      "baselineSha256": "262ed3b4e1ef053f981965216b58cd9a7d095300c6b67aab60508c4f3e3b6944",
+      "finalSha256": "262ed3b4e1ef053f981965216b58cd9a7d095300c6b67aab60508c4f3e3b6944",
+      "repositorySha256": "262ed3b4e1ef053f981965216b58cd9a7d095300c6b67aab60508c4f3e3b6944",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 5 Lighting Controller.LocalScript.lua",
+      "baselineSha256": "975d426abe626db63ada7cba3d4d7aa0c0c629d698b3256446dd2c37e35eeca4",
+      "finalSha256": "975d426abe626db63ada7cba3d4d7aa0c0c629d698b3256446dd2c37e35eeca4",
+      "repositorySha256": "975d426abe626db63ada7cba3d4d7aa0c0c629d698b3256446dd2c37e35eeca4",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level2AlertClient.LocalScript.lua",
+      "baselineSha256": "4350501fbaef5707c67bd2ebbc42ac429a7793653f61a330549feaf9aa2c6a32",
+      "finalSha256": "4350501fbaef5707c67bd2ebbc42ac429a7793653f61a330549feaf9aa2c6a32",
+      "repositorySha256": "4350501fbaef5707c67bd2ebbc42ac429a7793653f61a330549feaf9aa2c6a32",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/LobbyCeilingSweeps.LocalScript.lua",
+      "baselineSha256": "fda84a982df70caf1044eee533161d2fe2bd94ed5808701ad1b82acb087fdc4a",
+      "finalSha256": "fda84a982df70caf1044eee533161d2fe2bd94ed5808701ad1b82acb087fdc4a",
+      "repositorySha256": "fda84a982df70caf1044eee533161d2fe2bd94ed5808701ad1b82acb087fdc4a",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/LobbyLevel3GateFlicker.LocalScript.lua",
+      "baselineSha256": "187b2f54577f23dfd40ffcd23624acd1d01fe9e8b37dba58e30cdbc3ddccd80b",
+      "finalSha256": "187b2f54577f23dfd40ffcd23624acd1d01fe9e8b37dba58e30cdbc3ddccd80b",
+      "repositorySha256": "187b2f54577f23dfd40ffcd23624acd1d01fe9e8b37dba58e30cdbc3ddccd80b",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/LobbyMusicController.LocalScript.lua",
+      "baselineSha256": "7f9ecdeda7b62256ccd3f25484e7116fd31e0437dd1e692074b53f07bb966c38",
+      "finalSha256": "7f9ecdeda7b62256ccd3f25484e7116fd31e0437dd1e692074b53f07bb966c38",
+      "repositorySha256": "7f9ecdeda7b62256ccd3f25484e7116fd31e0437dd1e692074b53f07bb966c38",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Lucky Wheel Client.LocalScript.lua",
+      "baselineSha256": "04da67b5c45edc21c2f29fcfd9bf8c19bddc75e461230a9136045616e73eaeb9",
+      "finalSha256": "04da67b5c45edc21c2f29fcfd9bf8c19bddc75e461230a9136045616e73eaeb9",
+      "repositorySha256": "04da67b5c45edc21c2f29fcfd9bf8c19bddc75e461230a9136045616e73eaeb9",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/MasterTuningClient.LocalScript.lua",
+      "baselineSha256": "4094dc40c82aa71fba3c30d7d2296b11ec217db02bf12c60c721d1f8735ab7d4",
+      "finalSha256": "4094dc40c82aa71fba3c30d7d2296b11ec217db02bf12c60c721d1f8735ab7d4",
+      "repositorySha256": "4094dc40c82aa71fba3c30d7d2296b11ec217db02bf12c60c721d1f8735ab7d4",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/NoiseReporter.LocalScript.lua",
+      "baselineSha256": "aaf0ef925f94210d35baf9a6e169f37af7d6fc5efe931773b32726629b0d1f6e",
+      "finalSha256": "aaf0ef925f94210d35baf9a6e169f37af7d6fc5efe931773b32726629b0d1f6e",
+      "repositorySha256": "aaf0ef925f94210d35baf9a6e169f37af7d6fc5efe931773b32726629b0d1f6e",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/ProtectionHUD.LocalScript.lua",
+      "baselineSha256": "b59acc740b8880eb8fdfaaf29ff05a581601356b2b8683c823f789687b1e11c0",
+      "finalSha256": "b59acc740b8880eb8fdfaaf29ff05a581601356b2b8683c823f789687b1e11c0",
+      "repositorySha256": "b59acc740b8880eb8fdfaaf29ff05a581601356b2b8683c823f789687b1e11c0",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/PuzzleUI.LocalScript.lua",
+      "baselineSha256": "486d875682b4a36f84e1dd9a40d0c1fe89c4ee67eafb92e3963494aed8aaf5b3",
+      "finalSha256": "486d875682b4a36f84e1dd9a40d0c1fe89c4ee67eafb92e3963494aed8aaf5b3",
+      "repositorySha256": "486d875682b4a36f84e1dd9a40d0c1fe89c4ee67eafb92e3963494aed8aaf5b3",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Round Entry Client.LocalScript.lua",
+      "baselineSha256": "92ac13291317534d61e905e67db8e1295da1621ebb1d3d355fcff04e1c701b4d",
+      "finalSha256": "92ac13291317534d61e905e67db8e1295da1621ebb1d3d355fcff04e1c701b4d",
+      "repositorySha256": "92ac13291317534d61e905e67db8e1295da1621ebb1d3d355fcff04e1c701b4d",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Round Exit Client.LocalScript.lua",
+      "baselineSha256": "c96f56c9cd9325efcee8096183f5c356fa02985212d326d55c99ae8245b08af0",
+      "finalSha256": "c96f56c9cd9325efcee8096183f5c356fa02985212d326d55c99ae8245b08af0",
+      "repositorySha256": "c96f56c9cd9325efcee8096183f5c356fa02985212d326d55c99ae8245b08af0",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
+      "baselineSha256": "6e59247b7962b685f4c053ecc2db2e436eeaffe8947b79ce0f4ab0e62cbae733",
+      "finalSha256": "6e59247b7962b685f4c053ecc2db2e436eeaffe8947b79ce0f4ab0e62cbae733",
+      "repositorySha256": "6e59247b7962b685f4c053ecc2db2e436eeaffe8947b79ce0f4ab0e62cbae733",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Shop Display Client.LocalScript.lua",
+      "baselineSha256": "42da54fa5d54772fa93c5a730c97ca31d8049b1fb383a719a90c93ac80e812ce",
+      "finalSha256": "42da54fa5d54772fa93c5a730c97ca31d8049b1fb383a719a90c93ac80e812ce",
+      "repositorySha256": "42da54fa5d54772fa93c5a730c97ca31d8049b1fb383a719a90c93ac80e812ce",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/SoundController.LocalScript.lua",
+      "baselineSha256": "3f7dc04120583e596d1f167ace72192b3f1eebecfd675497db51d1d562674db6",
+      "finalSha256": "3f7dc04120583e596d1f167ace72192b3f1eebecfd675497db51d1d562674db6",
+      "repositorySha256": "3f7dc04120583e596d1f167ace72192b3f1eebecfd675497db51d1d562674db6",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/SpectateController.LocalScript.lua",
+      "baselineSha256": "7655acdb29b5398eed22fda1ed150b5652c408e85358da0cb9f078d637b1c13a",
+      "finalSha256": "7655acdb29b5398eed22fda1ed150b5652c408e85358da0cb9f078d637b1c13a",
+      "repositorySha256": "7655acdb29b5398eed22fda1ed150b5652c408e85358da0cb9f078d637b1c13a",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Team Objective Feed.LocalScript.lua",
+      "baselineSha256": "8284ee7a4922b969776c93c46ad5a8721fa907e15ae65696540d875930af9f75",
+      "finalSha256": "8284ee7a4922b969776c93c46ad5a8721fa907e15ae65696540d875930af9f75",
+      "repositorySha256": "8284ee7a4922b969776c93c46ad5a8721fa907e15ae65696540d875930af9f75",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/ZyntraDetectorClient.LocalScript.lua",
+      "baselineSha256": "8583b02a68fc91466c52cfadb7f7818c07c67bcf14f78c9cb76f3bd4eeb2a232",
+      "finalSha256": "8583b02a68fc91466c52cfadb7f7818c07c67bcf14f78c9cb76f3bd4eeb2a232",
+      "repositorySha256": "8583b02a68fc91466c52cfadb7f7818c07c67bcf14f78c9cb76f3bd4eeb2a232",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    },
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/ZyntraStore.LocalScript.lua",
+      "baselineSha256": "0a9f2669a16d18124acd22a4606ea5a0f8a0e086e63e0960fb4878b3e1ff8356",
+      "finalSha256": "0a9f2669a16d18124acd22a4606ea5a0f8a0e086e63e0960fb4878b3e1ff8356",
+      "repositorySha256": "0a9f2669a16d18124acd22a4606ea5a0f8a0e086e63e0960fb4878b3e1ff8356",
+      "changedFromBaseline": false,
+      "repositoryMatchesFinal": true,
+      "editorMatches": true
+    }
+  ]
+}

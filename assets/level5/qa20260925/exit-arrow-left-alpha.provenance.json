@@ -1,0 +1,40 @@
+{
+  "createdUtc": "2026-09-25T12:51:59.174257+00:00",
+  "mode": "built-in image_gen",
+  "tool": "image_gen.imagegen",
+  "generationType": "reference image edit",
+  "sourcePath": "/Users/zeanjuul4/.codex/generated_images/01a0cfe1-051b-7073-9dd4-8d21f8ddfda3/exec-62f300e8-ff8d-4ea4-8cf0-259d0d06a3d9.png",
+  "referenceImage": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-polish-20260925/assets/exit-arrow-right-alpha.png",
+  "referenceSha256": "42b09dcb555db45802e309bed1bfe8a8bac80ce26059783a2de19e3a5c470ca0",
+  "destinationPath": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-polish-20260925/assets/exit-arrow-left-alpha.png",
+  "promptFile": "exit-arrow-left-alpha.prompt.txt",
+  "pixelEdits": false,
+  "copyPreservesOriginalBytes": true,
+  "sha256": "071fbde0746090a8cc66acd6c4648982cf1ab848055f92066a4eb417959b7d88",
+  "bytes": 1881849,
+  "imageMode": "RGBA",
+  "width": 1536,
+  "height": 1024,
+  "alpha": {
+    "minimum": 0,
+    "maximum": 254,
+    "transparentPixels": 1109634,
+    "partiallyTransparentPixels": 463230,
+    "opaquePixels": 0,
+    "totalPixels": 1572864,
+    "transparentFraction": 0.7054862976074219,
+    "nonzeroBoundingBox": [
+      13,
+      21,
+      1513,
+      998
+    ],
+    "alphaAtLeast8BoundingBox": [
+      15,
+      126,
+      1511,
+      895
+    ]
+  },
+  "visualInspection": "Single LEFT-facing worn brick-red broad brush arrow matching reference paint family, thin gravity drips directed DOWN. No text/sign plate. Native alpha preserved, no pixel edits or opaque background. Generator thumbnail renders hidden RGB around arrow; sample alpha outside shape is zero."
+}

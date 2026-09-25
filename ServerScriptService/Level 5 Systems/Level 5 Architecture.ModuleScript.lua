@@ -4,6 +4,8 @@ local Architecture = {}
 
 function Architecture.Build(parent, origin, config)
 	config = table.clone(config or {})
+	config.ExitArrowTexture = config.ExitArrowTexture or "rbxassetid://136557095207787"
+	config.ExitArrowLeftTexture = config.ExitArrowLeftTexture or "rbxassetid://119578216618152"
 	config.FurnitureUpholsteryTexture = config.FurnitureUpholsteryTexture or "rbxassetid://132119936960491"
 	config.FurnitureTVTexture = config.FurnitureTVTexture or "rbxassetid://129933596500815"
 	local Furniture = require(script.Parent:WaitForChild("Level 5 Furniture"))
@@ -20,7 +22,7 @@ function Architecture.Build(parent, origin, config)
 	origin = origin or Vector3.zero
 	local root = Instance.new("Model")
 	root.Name = "Level5_IndoorSuburbs"
-	root:SetAttribute("ArchitectureVersion", "2026-09-24.2")
+	root:SetAttribute("ArchitectureVersion", "2026-09-25.1")
 	root:SetAttribute("GeometryOnly", true)
 	root.Parent = parent
 	local offset = CFrame.new(origin)
@@ -40,7 +42,7 @@ function Architecture.Build(parent, origin, config)
 		local p=Instance.new(className or "Part")
 		p.Name=name; p.Size=size; p.CFrame=offset*cf; p.Anchored=true
 		p.Color=color or C.cream; p.Material=material or Enum.Material.SmoothPlastic
-		p.CanCollide=collide~=false; p.CanTouch=false; p.TopSurface=Enum.SurfaceType.Smooth; p.BottomSurface=Enum.SurfaceType.Smooth
+		p.CanCollide=collide~=false; p.CanQuery=collide~=false; p.CanTouch=false; p.TopSurface=Enum.SurfaceType.Smooth; p.BottomSurface=Enum.SurfaceType.Smooth
 		p.CastShadow=collide~=false and math.min(size.X,size.Y,size.Z)>.4
 		p.Parent=into; partCount+=1; return p
 	end
@@ -201,12 +203,28 @@ function Architecture.Build(parent, origin, config)
 		local ix=0
 		for xx=-w/2+sx/2,w/2-8,sx do for zz=-d/2+sz/2,d/2-7,sz do
 			ix+=1
-			local fixtureColor=style=="low" and Color3.fromRGB(207,201,170) or Color3.fromRGB(215,226,209)
-			local p=part(m,"FluorescentPanel",V(style=="domestic" and 4 or 8,.13,2.6),CF(x+xx,y-.46,z+zz),fixtureColor,Enum.Material.Neon,false)
+			-- Static tube wear: different colour temperatures, weak ballast output
+			-- and truly dead panels. No strobing or per-frame light loops.
+			local pattern=ix+math.floor(z/40)
+			local failed=pattern%7==0
+			local dim=not failed and pattern%5==0
+			local warmth=(pattern+math.floor(x/20))%3
+			local fixtureColor=warmth==0 and Color3.fromRGB(223,208,167)
+				or warmth==1 and Color3.fromRGB(185,211,219) or Color3.fromRGB(214,222,202)
+			local lightColor=warmth==0 and Color3.fromRGB(250,223,178)
+				or warmth==1 and Color3.fromRGB(212,231,245) or Color3.fromRGB(232,236,211)
+			if style=="low" and warmth~=1 then fixtureColor=Color3.fromRGB(207,195,153) end
+			if dim then fixtureColor=fixtureColor:Lerp(Color3.fromRGB(80,83,69),.48) end
+			if failed then fixtureColor=Color3.fromRGB(67,65,56) end
+			local p=part(m,"FluorescentPanel",V(style=="domestic" and 4 or 8,.13,2.6),CF(x+xx,y-.46,z+zz),fixtureColor,failed and Enum.Material.SmoothPlastic or Enum.Material.Neon,false)
+			p:SetAttribute("FailedTube",failed)
+			p:SetAttribute("TubeState",failed and "Off" or dim and "Dim" or "On")
+			p:SetAttribute("ColourTemperature",warmth==0 and "Warm" or warmth==1 and "Cool" or "Neutral")
 			part(m,"LightPanelFrame",V(p.Size.X+.4,.12,3),CF(x+xx,y-.34,z+zz),C.white,nil,false)
-			if ix%4==1 then
-				local light=Instance.new("SurfaceLight");light.Face=Enum.NormalId.Bottom;light.Color=style=="low" and Color3.fromRGB(250,220,177) or Color3.fromRGB(237,236,211)
-				light.Brightness=.85;light.Range=math.min(y+8,60);light.Angle=160;light.Shadows=false;light.Parent=p;lightCount+=1
+			if ix%4==1 and not failed then
+				local light=Instance.new("SurfaceLight");light.Face=Enum.NormalId.Bottom;light.Color=lightColor
+				light.Brightness=dim and .3 or warmth==1 and .72 or .95
+				light.Range=math.min(y+8,60);light.Angle=160;light.Shadows=false;light.Parent=p;lightCount+=1
 			end
 		end end
 		if style=="warehouse" then
