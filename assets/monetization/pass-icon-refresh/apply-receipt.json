@@ -1,0 +1,69 @@
+{
+  "appliedAtUtc": "2026-09-24T13:22:37.063758+00:00",
+  "passes": [
+    {
+      "slug": "static-wraith",
+      "gamePassId": 1994666374,
+      "beforeIconAssetId": 101066368280251,
+      "afterIconAssetId": 138340341615487,
+      "uploadedFile": "static-wraith-round-v2.png",
+      "uploadedSha256": "a00ab9f93d6eaa851049d7c7821d7ead092fe94e727e2054041cc3c6e941b8e1",
+      "unchangedFields": [
+        "gamePassId",
+        "name",
+        "description",
+        "isForSale",
+        "priceInformation",
+        "isManagedPricingEnabled"
+      ]
+    },
+    {
+      "slug": "false-sun",
+      "gamePassId": 1994816385,
+      "beforeIconAssetId": 90694693019242,
+      "afterIconAssetId": 124426104310134,
+      "uploadedFile": "false-sun-round-v2.png",
+      "uploadedSha256": "7d660e917abccc9029462b4cf0f5ea791d708e23d8fcf89e9359856b3c4c822a",
+      "unchangedFields": [
+        "gamePassId",
+        "name",
+        "description",
+        "isForSale",
+        "priceInformation",
+        "isManagedPricingEnabled"
+      ]
+    },
+    {
+      "slug": "entity-detector",
+      "gamePassId": 1982715834,
+      "beforeIconAssetId": 134413710349950,
+      "afterIconAssetId": 95155166160730,
+      "uploadedFile": "entity-detector-round-v2.png",
+      "uploadedSha256": "90f4a466d49a1d9a4f2495eb14c15e6da5b08a8abfe14b9eafb67b8781edc484",
+      "unchangedFields": [
+        "gamePassId",
+        "name",
+        "description",
+        "isForSale",
+        "priceInformation",
+        "isManagedPricingEnabled"
+      ]
+    },
+    {
+      "slug": "donation-20k",
+      "gamePassId": 1978617781,
+      "beforeIconAssetId": 133448903949274,
+      "afterIconAssetId": 99653124666776,
+      "uploadedFile": "donation-20k-round-v2.png",
+      "uploadedSha256": "2ffe48d61c5c756c89246ee5a75fc245f033c0bddb75ef1db86b874cb00aec29",
+      "unchangedFields": [
+        "gamePassId",
+        "name",
+        "description",
+        "isForSale",
+        "priceInformation",
+        "isManagedPricingEnabled"
+      ]
+    }
+  ]
+}

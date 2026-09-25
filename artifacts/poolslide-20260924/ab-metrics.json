@@ -1,0 +1,30 @@
+{
+  "date": "2026-09-24",
+  "studioPlaceId": 131311258779917,
+  "mode": "isolated Play Server clones; no live template change",
+  "rigScale": 6.6,
+  "boneCount": 20,
+  "restLeftFootYRelativeToPivot": -5.708984375,
+  "variantOrderInScreenshots": ["v1", "v2", "neutral"],
+  "variants": {
+    "v1": {
+      "walkAssetId": 103719823156557,
+      "runAssetId": 128800704640816,
+      "walk": {"frames": 64, "restFrames": 31, "footVerticalSecondDifferenceSum": 173.99432373046876, "hipVerticalSecondDifferenceSum": 112.21766966662719, "minLeftFootY": -5.8057861328125},
+      "run": {"frames": 39, "restFrames": 19, "footVerticalSecondDifferenceSum": 293.9012451171875, "hipVerticalSecondDifferenceSum": 172.02666238990464, "minLeftFootY": -5.708984375}
+    },
+    "v2": {
+      "walkAssetId": 95711439274562,
+      "runAssetId": 74954076089837,
+      "walk": {"frames": 64, "restFrames": 0, "footVerticalSecondDifferenceSum": 2.71636962890625, "hipVerticalSecondDifferenceSum": 2.6653029173612596, "minLeftFootY": -5.8057861328125},
+      "run": {"frames": 39, "restFrames": 0, "footVerticalSecondDifferenceSum": 4.863037109375, "hipVerticalSecondDifferenceSum": 3.225256085395813, "minLeftFootY": -4.7421875}
+    },
+    "neutral": {
+      "walkAssetId": 100254982019982,
+      "runAssetId": 80850407466977,
+      "walk": {"frames": 64, "restFrames": 0, "footVerticalSecondDifferenceSum": 2.43853759765625, "hipVerticalSecondDifferenceSum": 2.2210851311683657, "minLeftFootY": -5.720703125},
+      "run": {"frames": 39, "restFrames": 0, "footVerticalSecondDifferenceSum": 4.4503173828125, "hipVerticalSecondDifferenceSum": 2.6877135038375856, "minLeftFootY": -4.85418701171875}
+    }
+  },
+  "limits": ["Foot bones are not the skinned-mesh soles", "No seeded active chase", "No physical mobile test", "No publication"]
+}

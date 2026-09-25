@@ -20,6 +20,7 @@ CONFIG = (ROOT / "ReplicatedStorage/ZyntraConfig.ModuleScript.lua").read_text(en
 RESEARCH = (ROOT / "ReplicatedStorage/ZyntraDailyResearch.ModuleScript.lua").read_text(encoding="utf-8")
 # ZyntraMonetization requires the challenge ledger since CHALLENGES_20260923.
 CHALLENGES = (ROOT / "ReplicatedStorage/ZyntraChallenges.ModuleScript.lua").read_text(encoding="utf-8")
+SKINS = (ROOT / "ReplicatedStorage/ZyntraSkins.ModuleScript.lua").read_text(encoding="utf-8")
 
 
 def section(start, stop):
@@ -74,6 +75,9 @@ RESEARCH_SOURCE
 end)()
 local ZyntraChallengesModule = (function()
 CHALLENGES_SOURCE
+end)()
+local ZyntraSkinsModule = (function()
+SKINS_SOURCE
 end)()
 
 -- Every world gets its own upvalues, so the real blocks below are pasted inside
@@ -190,8 +194,9 @@ local function world(opts)
     w.character = makeCharacter
 
     local function makePlayer(name, userId)
+        -- Pass ownership already known (1x): claims wait for it (TOKEN_EARNER_20260924).
         local p = {Name = name, UserId = userId, ClassName = "Player", Parent = Players,
-            attributes = {}, attributeSignals = {}}
+            attributes = {ZyntraTokenEarnerMultiplier = 1}, attributeSignals = {}}
         p.CharacterAdded = signal()
         p.CharacterRemoving = signal()
         function p:IsA(class) return class == "Player" end
@@ -243,6 +248,7 @@ local function world(opts)
     local function require(name)
         if name == "ZyntraDailyResearch" then return ZyntraDailyResearchModule end
         if name == "ZyntraChallenges" then return ZyntraChallengesModule end
+        if name == "ZyntraSkins" then return ZyntraSkinsModule end
         error("harness has no module " .. tostring(name))
     end
     local ServerStorage = {children = {}}
@@ -698,7 +704,9 @@ do
     local total = 0
     for _, prize in ipairs(Config.DailyRewards.Wheel) do total += prize.Weight end
     eq(total, 100, "the published odds add up to 100")
-    eq(#Config.DailyRewards.Wheel, 5, "five distinct prizes")
+    eq(#Config.DailyRewards.Wheel, 6, "six distinct prizes")
+    eq(Config.DailyRewards.Wheel[1].Weight, 40, "the 1-Token wedge is 40%")
+    eq(Config.DailyRewards.Wheel[6].Weight, 5, "the skin wedge is 5%")
 end
 
 do
@@ -741,7 +749,7 @@ do
     local writes, calls = w.writes, w.calls
     -- Spinning again while a prize is owed is refused without a write, today or
     -- tomorrow, so a day change can never overwrite an uncollected prize.
-    w.random = function() return 0.99 end
+    w.random = function() return 0.94 end
     w.spin(w.player)
     eq(w:saved().Daily.WheelLast.Key, "Token1", "a second spin cannot replace a pending prize")
     eq(w.writes, writes, "and writes nothing")
@@ -769,7 +777,7 @@ do
     w.collect(w.player)
     eq(w:saved().Tokens, 11, "a rejoin cannot collect again")
     -- The day-2 free spin was not lost: it is available now that the prize is in.
-    w.random = function() return 0.99 end
+    w.random = function() return 0.94 end
     w.spin(w.player)
     eq(w:saved().Daily.WheelDay, "2026-09-17", "the next day's spin is allowed after collection")
     eq(w:saved().Daily.WheelLast.Key, "Shield1", "and records the rolled prize")
@@ -843,6 +851,7 @@ do
         Potion1 = function(d) return d.Items.SpeedPotion == 1 end,
         Potion2 = function(d) return d.Items.SpeedPotion == 2 end,
         Shield1 = function(d) return d.Protection.Charges == 1 end,
+        Skin5 = function(d) return d.Skins.Owned.SuburbSurvey == true end,
     }
     local untouched = function(d) return d.Tokens == 10 and d.Items.SpeedPotion == 0 and d.Protection.Charges == 0 end
     local edge = 0
@@ -856,10 +865,93 @@ do
         w.spin(w.player)
         eq(w:saved().Daily.WheelLast.Key, prize.Key, "slice " .. index .. " selects " .. prize.Key)
         check(untouched(w:saved()), prize.Key .. " pays nothing at spin")
-        eq(w:lastPush().message, "Supply Wheel: " .. prize.Label .. " -- collect your prize.", prize.Key .. " reply")
+        local expectedLabel = prize.Key == "Skin5" and "Suburb Survey hazmat skin" or prize.Label
+        eq(w:lastPush().message, "Supply Wheel: " .. expectedLabel .. " -- collect your prize.", prize.Key .. " reply")
         w.collect(w.player)
         check(payouts[prize.Key](w:saved()), prize.Key .. " pays what its config declares on claim")
     end
+end
+
+-- The 5% field chooses one exact unowned Token skin at spin time, carries that
+-- ID over a rejoin, and grants it only on the first claim.
+do
+    local w = fresh()
+    local rolls, index = {0.97, 0.1}, 0
+    w.random = function()
+        index += 1
+        return rolls[index] or 0.1
+    end
+    w.spin(w.player)
+    local last = w:saved().Daily.WheelLast
+    eq(last.Key, "Skin5", "the 5% slice remains the skin sector")
+    eq(last.SkinId, "PoolService", "the exact unowned suit is selected at spin")
+    eq(last.FallbackTokens, nil, "an available skin does not get a fallback")
+    eq(w:saved().Skins.Owned.PoolService, nil, "spinning pays nothing")
+    eq(w:lastPush().message, "Supply Wheel: Pool Service hazmat skin -- collect your prize.",
+        "the response names the selected suit")
+    w:seed(w:saved())
+    eq(w:saved().Daily.WheelLast.SkinId, "PoolService", "a rejoin keeps the exact SkinId")
+    w.collect(w.player)
+    eq(w:saved().Skins.Owned.PoolService, true, "the first claim grants that suit")
+    eq(w:saved().Tokens, 10, "claiming a skin does not spend or mint Tokens")
+    local writes = w.writes
+    w.collect(w.player)
+    eq(w.writes, writes, "a repeated skin claim makes no second write")
+end
+
+-- Players who own both wheel suits still land on the 5% skin field. The
+-- disclosed 3-Token fallback is chosen before the spin record is published.
+do
+    local w = fresh()
+    w:seed({Tokens = 10, Skins = {Owned = {PoolService = true, SuburbSurvey = true}},
+        Daily = {Day = w.day, PlaytimeSeconds = 0, Claimed = {}}})
+    w.random = function() return 0.99 end
+    w.spin(w.player)
+    local last = w:saved().Daily.WheelLast
+    eq(last.Key, "Skin5", "all-owned still lands on the skin sector")
+    eq(last.SkinId, nil, "all-owned does not invent another suit")
+    eq(last.FallbackTokens, 3, "the fallback amount is durable at spin")
+    w:seed(w:saved())
+    eq(w:saved().Daily.WheelLast.FallbackTokens, 3, "the fallback survives rejoin")
+    eq(w:lastPush().message, "Supply Wheel: 3 Research Tokens (skin fallback) -- collect your prize.",
+        "the actual fallback is disclosed")
+    w.collect(w.player)
+    eq(w:saved().Tokens, 13, "fallback pays three Tokens exactly once")
+    eq(w:saved().Daily.WheelLast.Claimed, true, "fallback claim closes the spin")
+    local writes = w.writes
+    w.collect(w.player)
+    eq(w.writes, writes, "duplicate fallback claim writes nothing")
+end
+
+-- A player can buy the selected skin after spinning. They get the fallback on
+-- claim, while the original SkinId remains an auditable receipt.
+do
+    local w = fresh()
+    local rolls, index = {0.97, 0.1}, 0
+    w.random = function() index += 1; return rolls[index] or 0.1 end
+    w.spin(w.player)
+    local saved = w:saved()
+    saved.Skins.Owned.PoolService = true
+    w:seed(saved)
+    w.collect(w.player)
+    eq(w:saved().Tokens, 13, "a newly owned win pays the fallback")
+    eq(w:saved().Daily.WheelLast.SkinId, "PoolService", "the spun ID remains recorded")
+    eq(w:saved().Daily.WheelLast.FallbackTokens, 3, "the actual claim outcome is recorded")
+    w:seed(w:saved())
+    eq(w:saved().Daily.WheelLast.SkinId, "PoolService", "the receipt survives rejoin")
+end
+
+-- A pre-upgrade pending prize must still be redeemable under the six-field
+-- config, including the old two-Potion wedge that stayed at 5%.
+do
+    local w = fresh()
+    w:seed({Tokens = 10, Daily = {Day = w.day, WheelDay = w.day,
+        WheelLast = {Day = w.day, Key = "Potion2", Serial = 42, Claimed = false}}})
+    w.spin(w.player)
+    eq(w:saved().Daily.WheelLast.Key, "Potion2", "pending old prize cannot be replaced")
+    w.collect(w.player)
+    eq(w:saved().Items.SpeedPotion, 2, "old pending Potion2 pays both Potions")
+    eq(w:saved().Daily.WheelLast.Claimed, true, "and becomes claimed")
 end
 
 -- ---------------------------------------------------------------------------
@@ -1182,7 +1274,8 @@ def main():
     pieces = [
         PRELUDE,
         CONFIG,
-        WORLD.replace("RESEARCH_SOURCE", RESEARCH).replace("CHALLENGES_SOURCE", CHALLENGES),
+        WORLD.replace("RESEARCH_SOURCE", RESEARCH).replace("CHALLENGES_SOURCE", CHALLENGES)
+             .replace("SKINS_SOURCE", SKINS),
         section("local function colorData", "local function isDispatchPredecessorClosed"),
         section("local function accessibilityValue", "-- The switch a player"),
         section("local function publicProfile", "local tagCharacters"),

@@ -1,0 +1,46 @@
+{
+  "ascendant-color-map.png": {
+    "sha256": "0677f46eb172b0ec1e4e7e5262875dd9627e1179466863eb4f36c0eb35780838",
+    "groupId": 1039373905,
+    "createdAtUtc": "2026-09-24T20:45:03.260869+00:00",
+    "operationPath": "operations/a81f07c7-4d90-4995-ab25-90dedea5858e",
+    "assetId": "115045548138657",
+    "status": "approved",
+    "assetType": "Image",
+    "moderationState": "Approved",
+    "verifiedAtUtc": "2026-09-24T20:46:32.772578+00:00"
+  },
+  "ascendant-standing-card.png": {
+    "sha256": "55739fae9067e213de88d24c494f1d67639158a72f209ea8589c959cb07b2aa4",
+    "groupId": 1039373905,
+    "createdAtUtc": "2026-09-24T20:45:08.627604+00:00",
+    "operationPath": "operations/e7b1a279-f83d-4dbd-8028-1471e888e568",
+    "assetId": "110021662787844",
+    "status": "approved",
+    "assetType": "Image",
+    "moderationState": "Approved",
+    "verifiedAtUtc": "2026-09-24T20:46:32.912060+00:00"
+  },
+  "ascendant-signal-mote.png": {
+    "sha256": "e0d8c6549b1a1ad7f3f9fa4b6568bdf890a2fd4feae7851550541bab0b30d8d4",
+    "groupId": 1039373905,
+    "createdAtUtc": "2026-09-24T20:45:11.475764+00:00",
+    "operationPath": "operations/220f8c37-2164-487c-a5d5-5ff4128b42c9",
+    "assetId": "124315518046326",
+    "status": "approved",
+    "assetType": "Image",
+    "moderationState": "Approved",
+    "verifiedAtUtc": "2026-09-24T20:46:33.060066+00:00"
+  },
+  "ascendant-halo-backpiece.glb": {
+    "sha256": "27de7f6b5c4cb03a4e7464c3300d53c281d828131bfb503f0be4e5ff8396a6ed",
+    "groupId": 1039373905,
+    "createdAtUtc": "2026-09-24T20:45:14.720517+00:00",
+    "operationPath": "operations/416e00f0-e54a-4b2b-817b-df9b47a6fa01",
+    "assetId": "112810865153770",
+    "status": "approved",
+    "assetType": "Model",
+    "moderationState": "Approved",
+    "verifiedAtUtc": "2026-09-24T20:46:33.201397+00:00"
+  }
+}

@@ -269,7 +269,9 @@ def main():
     if not binary:
         raise SystemExit("Set LUAU_BIN or install luau; no tests were executed.")
     run(binary, (ROOT / NAVIGATOR).read_text(encoding="utf-8"), expect_stall=False)
-    previous = subprocess.run(["git", "show", "HEAD:" + NAVIGATOR], cwd=ROOT,
+    # Pin the historical static-obstruction stall. HEAD advances with normal
+    # work and now passes these checks, so it is not a negative control.
+    previous = subprocess.run(["git", "show", "715e4d9:" + NAVIGATOR], cwd=ROOT,
                               capture_output=True, check=True).stdout.decode("utf-8")
     run(binary, previous, expect_stall=True)
 

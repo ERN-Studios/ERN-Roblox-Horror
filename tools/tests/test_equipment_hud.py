@@ -842,6 +842,25 @@ do -- DPadDown keeps its shield binding
 	check(#ctx.Requests == 2, "losing focus clears the held-key latch")
 end
 
+do -- AUDIT_FIX_20260924: potion and marker have a pad key too
+	local ctx = hudContext()
+	ctx.player:SetAttribute("ZyntraSpeedPotions", 2)
+	ctx.player:SetAttribute("ZyntraRouteMarkers", 2)
+	ctx:Step()
+	ctx:Key("DPadRight")
+	check(#ctx.Fired == 1 and ctx.Fired[1].Remote == "ZyntraAction"
+		and ctx.Fired[1].Name == "UseSpeedPotion", "D-PAD RIGHT uses a potion")
+	ctx:Key("ButtonR2")
+	check(#ctx.Fired == 2 and ctx.Fired[2].Remote == "RouteMarker"
+		and ctx.Fired[2].Name == "place", "RT places a marker")
+	ctx.Gamepad = true
+	ctx.DeviceChanged:Fire()
+	ctx:Step()
+	check(ctx.Rows[2]:FindFirstChild("KeyChip").Text == "[D-PAD RIGHT]"
+		and ctx.Rows[3]:FindFirstChild("KeyChip").Text == "[RT]",
+		"and a live gamepad is shown those glyphs, not [T] / [X]")
+end
+
 do -- a tap is a press; a press from the wrong device is not
 	local ctx = hudContext()
 	ctx.player:SetAttribute("ZyntraSpeedPotions", 1)

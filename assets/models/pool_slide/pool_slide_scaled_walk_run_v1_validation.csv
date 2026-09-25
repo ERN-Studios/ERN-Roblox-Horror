@@ -1,0 +1,4 @@
+code,message,severity,pointer
+UNUSED_OBJECT,This object may be unused.,2,/meshes/0/primitives/0/attributes/TEXCOORD_0
+UNUSED_OBJECT,This object may be unused.,2,/meshes/1/primitives/0/attributes/TEXCOORD_0
+

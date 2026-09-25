@@ -1,0 +1,7 @@
+# Pool Slide x1.10 native saved-place backup
+
+The canonical native backup is `saved-place-v2074.rbxl` (9,612,847 bytes, SHA-256 `dbfa99275c44a70315e4f4344b5b2f3b22476ca06d1276b1b5ec1abe69a215ba`). It came from the version-specific, read-only [Roblox Open Cloud Asset Delivery API](https://create.roblox.com/docs/cloud/reference/features/assets) for place `131311258779917` at saved asset revision **2074** (`2026-09-24T14:21:04.215444300Z`). The revision was still latest at `2026-09-24T14:28:24Z`. This receipt does not prove that revision 2074 was published to players. The file contains the full place, not just the model.
+
+Offline parsing of the downloaded place found `ServerStorage.Level2Assets."Level 2 Pool Slide Template"` with 105 descendants, 20 Bones, Walk `103719823156557`, Run `128800704640816`, AgentRadius `8.25`, AgentHeight `18.37`, GroundOffset `6.6`, AttackDistance `11.55`, both verified flags true, and the pre-1p10 backup sibling. A read-only live Studio inspector independently showed the same template path, descendant count and attributes. The exact values are in `native-backup-v2074.json`.
+
+The downloaded Roblox file uses Zstandard chunks. For offline inspection, temporary derived copies were converted to LZ4 so `rbxmk v0.9.1` could read them; both were deleted afterward. A standalone `.rbxm` was not delivered: `rbxmk` panicked while writing the modern template, so its output could not be trusted. The original version-specific RBXL remains untouched.

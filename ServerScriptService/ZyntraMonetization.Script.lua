@@ -233,6 +233,7 @@ local ITEM_KEYS = {"SpeedPotion", "RouteMarker"}
 local ITEM_CONFIG = Config.Items or {}
 local DAILY_REWARDS = Config.DailyRewards or {}
 local DailyResearch = require(ReplicatedStorage:WaitForChild("ZyntraDailyResearch"))
+local Skins = require(ReplicatedStorage:WaitForChild("ZyntraSkins"))
 -- CHALLENGES_20260923 (Trello FnF49TWk): the pure record/challenge ledger.
 local Challenges = require(ReplicatedStorage:WaitForChild("ZyntraChallenges"))
 -- A consumable spent during a round makes that run assisted. Latched at the
@@ -306,6 +307,21 @@ local function normalizeDaily(value)
 			-- and must never be paid again.
 			Claimed = savedLast.Claimed ~= false,
 		}
+		if savedLast.Key == "Skin5" then
+			-- Only the two wheel-eligible suits can survive into a pending prize.
+			-- A missing/invalid ID becomes the disclosed fallback instead of
+			-- leaving an old save with an uncollectable prize forever.
+			for _, skinId in ipairs(Skins.WheelEligible) do
+				if savedLast.SkinId == skinId then wheelLast.SkinId = skinId; break end
+			end
+			if savedLast.FallbackTokens == 3 or not wheelLast.SkinId then
+				wheelLast.FallbackTokens = 3
+			end
+		end
+		-- TOKEN_EARNER_20260924: the tokens a claim actually paid, so the wheel's
+		-- COLLECTED face names the multiplied amount. Absent on older records.
+		local paidTokens = wholeCount(savedLast.PaidTokens)
+		if paidTokens > 0 then wheelLast.PaidTokens = paidTokens end
 	end
 	local flushId = saved.FlushId
 	return {
@@ -354,11 +370,14 @@ end
 -- milestones and the wheel so a prize cannot mean two different things in two
 -- places. Returns a short human label, or nil when this build cannot pay the
 -- reward -- a caller must read nil as "granted nothing" and refuse.
-local function applyReward(data, reward)
+-- `tier` (TOKEN_EARNER_20260924) multiplies a Tokens reward only: callers pass
+-- tokenEarner.tier(player), read once before their write.
+local function applyReward(data, reward, tier)
 	if type(reward) ~= "table" then return nil end
 	local amount = wholeCount(reward.Amount)
 	if amount < 1 then return nil end
 	if reward.Kind == "Tokens" then
+		amount *= (tier == 2 or tier == 3 or tier == 5) and tier or 1
 		if not isSafeSupportAmount(data.Tokens)
 			or amount > MAX_SAFE_SUPPORT - data.Tokens then return nil end
 		data.Tokens += amount
@@ -381,6 +400,222 @@ local function applyReward(data, reward)
 	if not owned or amount > MAX_SAFE_SUPPORT - owned then return nil end
 	data.Items[reward.Key] = owned + amount
 	return amount .. " " .. item.Name .. (amount == 1 and "" or "s")
+end
+
+-- TOKEN_EARNER_20260924 (Trello EtdsUM4e). The tier is session state that
+-- refreshPasses resolves from Roblox pass ownership. A caller reads it ONCE,
+-- before its write, so every retry of that write pays the same; `bonus` tops up
+-- tokens a transform has just EARNED. Balances, bought packs, refunds and grants
+-- never pass through here.
+local tokenEarner = {}
+-- The tier stays UNKNOWN (attribute nil) until refreshPasses has a definitive
+-- answer for all six passes. A claim waits for it and then refuses; an automatic
+-- earning pends its bonus (tokenEarner.defer) -- neither pays a 5x owner 1x.
+-- Returns the tier and whether it is known.
+function tokenEarner.tier(player, waitSeconds)
+	local deadline = os.clock() + (waitSeconds or 0)
+	while player:GetAttribute("ZyntraTokenEarnerMultiplier") == nil and player.Parent
+		and sessions[player] and not sessions[player].closing and os.clock() < deadline do
+		task.wait(0.25)
+	end
+	local tier = player:GetAttribute("ZyntraTokenEarnerMultiplier")
+	return (tier == 2 or tier == 3 or tier == 5) and tier or 1, tier ~= nil
+end
+function tokenEarner.bonus(data, earned, tier)
+	local extra = math.max(0, math.floor(earned)) * (tier - 1)
+	if extra < 1 or extra > MAX_SAFE_SUPPORT - data.Tokens then return 0 end
+	data.Tokens += extra
+	return extra
+end
+
+-- TOKEN_EARNER_PENDING_20260924. An AUTOMATIC earning (a clear, Fuse/Lever
+-- research) cannot wait for an ownership outage to end, so when the tier is
+-- still unknown it pays the base tokens and leaves the bonus in the profile,
+-- in the same write. The earning itself is keyed (CompletionIds, the daily
+-- Research flag), so the bonus needs no key of its own and merges into
+-- profile.TokenEarner.Pending buckets {Earned, Unowned, Job, First, Last}.
+--
+-- A bucket settles at the first complete ownership answer, paying the tier
+-- of the passes owned then MINUS its Unowned set: passes this game has seen
+-- NOT owned after the earning -- a purchase latched later, or a definitive
+-- "not owned" read that began later. An existing owner is never seen not
+-- owned, so an outage costs them nothing. Order is tokenEarner.stamp(), a
+-- monotonic per-server sequence (os.time ties at one-second resolution);
+-- First..Last is the span of a bucket's earnings in it, and a bucket from
+-- another server (Job) predates everything here, because a player's sessions
+-- run one after another. Two earnings merge only when they carry the same
+-- proofs AND no read still in flight began between them (tokenEarner.proof's
+-- Open), so a "not owned" answer can always tell the earlier from the later.
+-- POLICY: UserOwnsGamePassAsync answers only a boolean, never when a pass was
+-- bought, so this is not purchase history. A pass owned at settlement counts
+-- as owned at the earning UNLESS this game itself saw it not owned afterwards
+-- (our own latch or read). Known limit: a pass bought outside the game between
+-- the earning and the first read after it is paid as if already owned; the
+-- other choice would underpay every pre-existing owner caught by an outage.
+tokenEarner.clock = 0
+tokenEarner.snapshots = setmetatable({}, { __mode = "k" })
+tokenEarner.proofs = setmetatable({}, { __mode = "k" })
+function tokenEarner.stamp()
+	tokenEarner.clock += 1
+	return tokenEarner.clock
+end
+-- Per player: Seen[pass] = the latest seq it was proven NOT owned at, and
+-- Open[seq] = true while a read that began at seq has not answered.
+function tokenEarner.proof(player)
+	local proof = tokenEarner.proofs[player]
+	if not proof then
+		proof = {Seen = {}, Open = {}}
+		tokenEarner.proofs[player] = proof
+	end
+	return proof
+end
+-- The purchase callback's Token Earner part, run before anything yields: the
+-- proof that the pass was not owned until `seq`, and a KNOWN tier raised at
+-- once, so a clear during the purchase's slow refresh is not paid the old
+-- tier. Every pass it counts is latched or already published as owned. An
+-- unknown tier stays unknown: earnings pend and the refresh settles them.
+function tokenEarner.latched(player, key, seq)
+	if not Config.TokenEarner.Passes[key] then return end
+	local proof = tokenEarner.proof(player)
+	proof.Seen[key] = math.max(proof.Seen[key] or 0, seq)
+	local published = player:GetAttribute("ZyntraTokenEarnerMultiplier")
+	if published == nil then return end
+	local owns = {}
+	for other in pairs(Config.TokenEarner.Passes) do
+		owns[other] = other == key or player:GetAttribute("ZyntraOwns" .. other) == true
+	end
+	local tier = Config.TokenEarner.Tier(owns)
+	if tier > published then player:SetAttribute("ZyntraTokenEarnerMultiplier", tier) end
+end
+function tokenEarner.span(bucket)
+	if bucket.Job ~= game.JobId then return 0, 0 end
+	return bucket.First, bucket.Last
+end
+function tokenEarner.merge(buckets, bucket, open)
+	local first, last = tokenEarner.span(bucket)
+	for _, other in ipairs(buckets) do
+		local fits = true
+		for key in pairs(Config.TokenEarner.Passes) do
+			if (other.Unowned[key] == true) ~= (bucket.Unowned[key] == true) then fits = false break end
+		end
+		local otherFirst, otherLast = tokenEarner.span(other)
+		local lo, hi = math.min(first, otherFirst), math.max(last, otherLast)
+		for seq in pairs(open) do
+			if seq > lo and seq < hi then fits = false break end
+		end
+		if fits then
+			other.Earned = math.min(MAX_SAFE_SUPPORT, other.Earned + bucket.Earned)
+			if bucket.Job == game.JobId or other.Job == game.JobId then
+				other.Job, other.First, other.Last = game.JobId, lo, hi
+			end
+			return
+		end
+	end
+	table.insert(buckets, bucket)
+end
+function tokenEarner.compact(state, open)
+	local merged = {}
+	for _, bucket in ipairs(state.Pending) do tokenEarner.merge(merged, bucket, open) end
+	state.Pending = merged
+end
+-- Adds every newer not-owned proof to the buckets whose earnings all predate
+-- it, and re-merges only if it did (a transform that reports no change must
+-- not have changed anything). With `dryRun` it only answers whether a proof
+-- is new.
+function tokenEarner.mark(state, proof, dryRun)
+	local changed = false
+	for _, bucket in ipairs(state.Pending) do
+		local _, last = tokenEarner.span(bucket)
+		for key, seq in pairs(proof.Seen) do
+			if not bucket.Unowned[key] and last < seq then
+				if dryRun then return true end
+				bucket.Unowned[key], changed = true, true
+			end
+		end
+	end
+	if changed then tokenEarner.compact(state, proof.Open) end
+	return changed
+end
+-- Runs inside every transform, so it never merges (it cannot see reads in
+-- flight); a hand-edited save beyond 64 buckets folds its oldest pairs by the
+-- UNION of their proofs, which can only pay less.
+function tokenEarner.normalize(value)
+	local saved = type(value) == "table" and value or {}
+	local buckets = {}
+	for _, bucket in ipairs(type(saved.Pending) == "table" and saved.Pending or {}) do
+		if type(bucket) == "table" and wholeCount(bucket.Earned) >= 1 then
+			local unowned, savedUnowned = {}, type(bucket.Unowned) == "table" and bucket.Unowned or {}
+			for key in pairs(Config.TokenEarner.Passes) do
+				if savedUnowned[key] == true then unowned[key] = true end
+			end
+			table.insert(buckets, {Earned = wholeCount(bucket.Earned), Unowned = unowned,
+				Job = type(bucket.Job) == "string" and #bucket.Job <= 64 and bucket.Job or "",
+				First = wholeCount(bucket.First), Last = math.max(wholeCount(bucket.First), wholeCount(bucket.Last))})
+		end
+	end
+	while #buckets > 64 do
+		local oldest = table.remove(buckets, 1)
+		for key in pairs(oldest.Unowned) do buckets[1].Unowned[key] = true end
+		buckets[1].Earned = math.min(MAX_SAFE_SUPPORT, buckets[1].Earned + oldest.Earned)
+	end
+	return {Pending = buckets}
+end
+-- Inside a transform that always writes: queue `earned`, stamped `seq` when it
+-- was earned (and compact what an answered read no longer keeps apart).
+function tokenEarner.defer(data, earned, seq, proof)
+	earned = math.floor(earned)
+	if earned < 1 then return false end
+	if not tokenEarner.mark(data.TokenEarner, proof) then tokenEarner.compact(data.TokenEarner, proof.Open) end
+	local unowned = {}
+	for key, seen in pairs(proof.Seen) do
+		if seen > seq then unowned[key] = true end
+	end
+	tokenEarner.merge(data.TokenEarner.Pending,
+		{Earned = earned, Unowned = unowned, Job = game.JobId, First = seq, Last = seq}, proof.Open)
+	return true
+end
+-- A read that began after these earnings and has not answered may still prove
+-- a pass not owned for them, whatever a newer refresh has already said.
+function tokenEarner.waits(bucket, proof)
+	local _, last = tokenEarner.span(bucket)
+	for seq in pairs(proof.Open) do
+		if seq > last then return true end
+	end
+	return false
+end
+-- Whether settling now would write: a proof to record, or a bucket that a
+-- complete (all six definitive) ownership answer can pay.
+function tokenEarner.owed(data, snapshot, proof)
+	local state = data.TokenEarner
+	if tokenEarner.mark(state, proof, true) then return true end
+	if not snapshot.Owns then return false end
+	for _, bucket in ipairs(state.Pending) do
+		if not tokenEarner.waits(bucket, proof) then return true end
+	end
+	return false
+end
+-- The settlement transform body. Removing the buckets in the same write that
+-- pays them is what makes a lost-response retry pay nothing.
+function tokenEarner.apply(data, snapshot, proof)
+	local state = data.TokenEarner
+	local changed, paid = tokenEarner.mark(state, proof), 0
+	if snapshot.Owns then
+		local waiting = {}
+		for _, bucket in ipairs(state.Pending) do
+			if tokenEarner.waits(bucket, proof) then
+				table.insert(waiting, bucket)
+			else
+				local owned = {}
+				for key, owns in pairs(snapshot.Owns) do
+					owned[key] = owns and not bucket.Unowned[key] or nil
+				end
+				paid += tokenEarner.bonus(data, bucket.Earned, Config.TokenEarner.Tier(owned))
+				changed = true
+			end
+		end
+		state.Pending = waiting
+	end
+	return changed, paid
 end
 
 -- Live playtime accrual, per loaded player: where they were, when they last
@@ -443,6 +678,8 @@ local function newProfile()
 		-- idempotent without asking Roblox on every clear.
 		LevelsCleared = {},
 		AwardedBadges = {},
+		-- COMPLETION_SAVE_20260924: ids of the latest applied clears, oldest first.
+		CompletionIds = {},
 		-- CHALLENGES_20260923: personal records per level x solo/party x
 		-- clean/assisted, and which one-time challenges are already paid.
 		Records = {},
@@ -453,6 +690,7 @@ local function newProfile()
 		-- Additive: every one of them normalizes from nil, so schema 4 saves
 		-- written before they existed load without a version bump.
 		Items = {SpeedPotion = 0, RouteMarker = 0},
+		Skins = Skins.Normalize(nil),
 		Daily = {PlaytimeSeconds = 0, Claimed = {}, Research = DailyResearch.Normalize(nil)},
 		FieldNotes = {Discovered = {}, Serial = 0},
 		DonationRobux = 0,
@@ -524,10 +762,21 @@ local function normalizeProfile(data)
 		if savedBadges[badgeKey] == true then awardedBadges[badgeKey] = true end
 	end
 	data.AwardedBadges = awardedBadges
+	-- COMPLETION_SAVE_20260924. Only an in-flight retry of a clear ever looks an
+	-- id up, and those end with this server's session, so the newest 20 are
+	-- plenty; unlike ReceiptIds nothing outside this server can replay one.
+	local completionIds = {}
+	for _, id in ipairs(type(data.CompletionIds) == "table" and data.CompletionIds or {}) do
+		if type(id) == "string" and #id > 0 and #id <= 96 then table.insert(completionIds, id) end
+	end
+	while #completionIds > 20 do table.remove(completionIds, 1) end
+	data.CompletionIds = completionIds
+	data.TokenEarner = tokenEarner.normalize(data.TokenEarner)
 	data.Records = Challenges.NormalizeRecords(data.Records, Config.Challenges)
 	data.Challenges = Challenges.NormalizeDone(data.Challenges, Config.Challenges)
 	data.ReentryCredits = math.max(0, math.floor(tonumber(data.ReentryCredits) or 0))
 	data.Items = normalizeItems(data.Items)
+	data.Skins = Skins.Normalize(data.Skins)
 	data.Daily = normalizeDaily(data.Daily)
 	data.FieldNotes = normalizeFieldNotes(data.FieldNotes)
 	-- Keep the two recorded streams separate. Retired SupportRobux and old
@@ -738,6 +987,7 @@ local function publicProfile(data, player)
 	local result = {
 		Tokens = data.Tokens,
 		Items = data.Items,
+		Skins = Skins.Public(data.Skins),
 		Daily = dailyPublic(data, player),
 		SpeedBoostUntil = player and player:GetAttribute("ZyntraSpeedBoostUntil") or 0,
 		StaminaLevel = data.StaminaLevel,
@@ -861,6 +1111,13 @@ local function applyAttributes(player, data)
 	player:SetAttribute("ZyntraStaminaMultiplier", 1 + data.StaminaLevel * step + advancedStaminaBonus(player))
 	player:SetAttribute("ZyntraBatteryMultiplier", 1 + data.BatteryLevel * step)
 	player:SetAttribute("ZyntraHazmatColor", readColor(data.Colors.Hazmat, Config.Colors.HazmatDefault))
+	-- Cosmetic selection replicates to other players. The visual applicator is
+	-- installed only after the imported skinned model passes avatar/animation QA.
+	-- DEV_SUIT_20260924: fail closed. A Developer suit is never shown for a player
+	-- DevAccess does not allow, even before its revocation has been saved.
+	local equipped = Skins.Get(data.Skins.Equipped)
+	player:SetAttribute("ZyntraSkinId", (equipped and equipped.Kind == "Developer"
+		and not DevAccess.IsAllowed(player)) and Skins.DefaultId or data.Skins.Equipped)
 	player:SetAttribute("ZyntraGlowstickColor", readColor(data.Colors.Glowstick, Config.Colors.GlowstickDefault))
 	player:SetAttribute("ZyntraMuteDispatch", data.Settings.MuteDispatch)
 	player:SetAttribute("ZyntraLobbyBriefingPlayed", data.Settings.LobbyBriefingPlayed)
@@ -1341,7 +1598,10 @@ local function mutateIdempotent(player, transform, suppressPush)
 	elseif session.persistent then
 		for _, delaySeconds in ipairs(IDEMPOTENT_RETRY_DELAYS) do
 			if delaySeconds > 0 then task.wait(delaySeconds) end
-			if not player.Parent or sessions[player] ~= session then break end
+			-- The FIRST attempt runs even for a player already unparented: the
+			-- leave-time finalizer writes through here (accessibility, pending
+			-- clears) while the session is still open. Only retries stop.
+			if (delaySeconds > 0 and not player.Parent) or sessions[player] ~= session then break end
 			local attemptChanged = false
 			local attemptMessage
 			local attemptTone
@@ -1394,6 +1654,32 @@ local function mutateIdempotent(player, transform, suppressPush)
 		pushProfile(player, "Could not save that change. Please try again.", "error")
 	end
 	return false, false, message
+end
+
+-- TOKEN_EARNER_PENDING_20260924: records this session's not-owned sightings on
+-- the pending buckets and settles them at a complete ownership answer. Keyed
+-- by the profile's own state, so it is safe to call from every trigger,
+-- concurrently and on every retry. Whatever is still owed when the retries run
+-- out stays in the profile and settles at the next snapshot (a background
+-- re-check or the next join).
+tokenEarner.SETTLE_DELAYS = {0, 5, 20, 60}
+function tokenEarner.settle(player)
+	for _, delaySeconds in ipairs(tokenEarner.SETTLE_DELAYS) do
+		if delaySeconds > 0 then task.wait(delaySeconds) end
+		local session, snapshot = sessions[player], tokenEarner.snapshots[player]
+		local proof = tokenEarner.proof(player)
+		if not session or session.closing or not snapshot
+			or not tokenEarner.owed(session.data, snapshot, proof) then return end
+		local paid = 0
+		local ok = mutateIdempotent(player, function(data)
+			local changed
+			changed, paid = tokenEarner.apply(data, snapshot, proof)
+			return changed, paid > 0 and ("Token Earner bonus: +%d Research Tokens for earlier earnings."):format(paid)
+				or nil, "success"
+		end)
+		if ok then return end
+	end
+	warn("[Zyntra] Token Earner settlement still pending after retries for userId", player.UserId)
 end
 
 local function sameProtectionCommand(left, right)
@@ -1558,6 +1844,10 @@ local function handleProtectionAction(player, action, payload)
 			-- deadline commit happen together, after the durable reservation.
 			attempt.Applied = protectionOwnsLease(player, attempt.Session, attempt.Session.data)
 				and PlayerProtection.Activate(player, attempt.Context) == true
+			-- AUDIT_FIX_20260924: the run is aided the moment the shield is live, not
+			-- after the finalize write -- which can fail, or land after the round read
+			-- ZyntraRunAided and filed a shielded escape as a clean record.
+			if attempt.Applied then markRunAided(player) end
 		end
 		local wanted = attempt.Applied and "Consumed" or "Refunded"
 		success = mutateIdempotent(player, function(data)
@@ -1584,7 +1874,6 @@ local function handleProtectionAction(player, action, payload)
 	if sessions[player] ~= attempt.Session or protectionAttempts[player] ~= attempt then return end
 	if success and (outcome == "Bought" or outcome == "Consumed" or outcome == "Refunded") then
 		protectionAttempts[player] = nil
-		if outcome == "Consumed" then markRunAided(player) end
 		if outcome == "Consumed" and Analytics then Analytics.ItemUse(player, "EntityShield") end
 		protectionResponse(player, command, outcome)
 	elseif success and outcome and definiteRejection then
@@ -2010,12 +2299,12 @@ end
 -- paying Supporter their tag, their pickers and their grant until they rejoined.
 -- Retry the throw a few times, and answer nil -- NOT false -- when Roblox never
 -- answered at all, so a caller can tell "does not own" from "do not know".
-local PASS_RETRY_DELAYS = {0, 1, 3}
+-- (Retry delays live inside: this chunk sits near Luau's 200-local limit.)
 local function ownsPass(player, pass)
 	if RunService:IsStudio() and Config.Studio.GrantAllPasses then return true end
 	if not pass or tonumber(pass.Id) == nil or pass.Id <= 0 then return false end
 	local lastError
-	for _, delaySeconds in ipairs(PASS_RETRY_DELAYS) do
+	for _, delaySeconds in ipairs({0, 1, 3}) do
 		if delaySeconds > 0 then task.wait(delaySeconds) end
 		if not player.Parent then return nil end
 		local ok, result = pcall(MarketplaceService.UserOwnsGamePassAsync, MarketplaceService, player.UserId, pass.Id)
@@ -2038,22 +2327,24 @@ local passReadFailed = setmetatable({}, { __mode = "k" })
 -- How many of those re-checks a player has already been given. The cap is what
 -- stops a MarketplaceService outage becoming a permanent poll.
 local passRechecks = setmetatable({}, { __mode = "k" })
-local PASS_RECHECK_DELAY = 20
-local PASS_RECHECK_LIMIT = 3
 
 local function passOwnership(player, key, pass)
 	-- Owner-authorized permanent in-experience entitlement. Does not grant other passes.
-	if key == "AdvancedEquipment" and player.UserId == 9488575949 then return true end -- LaverSneglen
+	if key == "AdvancedEquipment" and player.UserId == 9488575949 then return true, true end -- LaverSneglen
 	local purchases = passPurchases[player]
-	if purchases and purchases[key] then return true end
+	if purchases and purchases[key] then return true, true end
 	local answer = ownsPass(player, pass)
+	-- A purchase can finish while ownsPass yields, and Roblox's per-server cache
+	-- can still say false: the latch wins over a read that may predate it.
+	purchases = passPurchases[player]
+	if purchases and purchases[key] then return true, true end
 	if answer == nil then
 		passReadFailed[player] = true
 		-- Unknown: keep whatever this session already published rather than
-		-- downgrading an owner to false.
-		return player:GetAttribute("ZyntraOwns" .. key) == true
+		-- downgrading an owner to false. The second value says it is a guess.
+		return player:GetAttribute("ZyntraOwns" .. key) == true, false
 	end
-	return answer
+	return answer, true
 end
 
 local function refreshPasses(player)
@@ -2091,6 +2382,92 @@ local function refreshPasses(player)
 			player:SetAttribute("ZyntraOwns" .. key, passOwnership(player, key, pass))
 		end
 	end
+	-- Permanent premium skins are Game Passes, not repeatable Developer
+	-- Products. An unconfigured ID cannot grant even in Studio's all-pass mode.
+	for _, skinId in ipairs(Skins.Order) do
+		local skin = Skins.ById[skinId]
+		if skin.Kind == "Robux" and skin.PassId > 0 then
+			local pass = {Id = skin.PassId, Name = skin.Name}
+			local owns = passOwnership(player, skinId, pass)
+			player:SetAttribute("ZyntraOwns" .. skinId, owns)
+			local session = sessions[player]
+			if owns and session and not Skins.IsOwned(session.data.Skins, skinId) then
+				local changed = mutate(player, function(data)
+					if not Skins.Grant(data.Skins, skinId) then return false end
+					return true, skin.Name .. " hazmat skin unlocked.", "success"
+				end)
+				if not changed and sessions[player]
+					and not Skins.IsOwned(sessions[player].data.Skins, skinId) then
+					passReadFailed[player] = true
+				end
+			end
+		end
+	end
+
+	-- DEV_SUIT_20260924 (SYUaXHKQ): Developer suits follow DevAccess on every
+	-- load -- granted to developers, revoked (and unequipped) from anyone else.
+	-- DEV_SUIT_RETRY_20260924: a failed write is retried with backoff instead of
+	-- waiting for the next join. The transform re-reads DevAccess, so every
+	-- attempt syncs to the CURRENT answer, and one that finds the profile already
+	-- in sync writes nothing. applyAttributes hides a stale suit meanwhile.
+	task.spawn(function()
+		for _, delaySeconds in ipairs({0, 5, 20, 60}) do
+			if delaySeconds > 0 then task.wait(delaySeconds) end
+			local skinSession = sessions[player]
+			if not skinSession or skinSession.closing or not player.Parent then return end
+			local probe = table.clone(skinSession.data.Skins)
+			probe.Owned = table.clone(probe.Owned)
+			if not Skins.SyncDeveloper(probe, DevAccess.IsAllowed(player)) then return end
+			local saved = mutateIdempotent(player, function(data)
+				local isDeveloper = DevAccess.IsAllowed(player)
+				if not Skins.SyncDeveloper(data.Skins, isDeveloper) then return false end
+				return true, isDeveloper and "Signal Architect developer suit unlocked." or nil, "success"
+			end)
+			if saved then return end
+		end
+		warn("[Zyntra] Developer suit sync still unsaved after retries for userId", player.UserId)
+	end)
+
+	-- TOKEN_EARNER_20260924: six passes, one tier. Each ownership is published
+	-- like any other pass; earning code reads only the resolved tier.
+	-- TOKEN_EARNER_PENDING_20260924: a definitive "not owned" proves the pass
+	-- was not owned when its read BEGAN (a purchase records its own proof in
+	-- tokenEarner.latched); pending earnings older than that never count it.
+	-- The read is Open while it yields, so no earning from before it merges
+	-- with one from after it.
+	local earnerOwns, earnerKnown = {}, true
+	local proof, refreshSeq = tokenEarner.proof(player), tokenEarner.stamp()
+	for key, pass in pairs(Config.TokenEarner.Passes) do
+		local readSeq = tokenEarner.stamp()
+		proof.Open[readSeq] = true
+		local owns, known = passOwnership(player, key, pass)
+		earnerOwns[key], earnerKnown = owns, earnerKnown and known
+		if known and not owns then proof.Seen[key] = math.max(proof.Seen[key] or 0, readSeq) end
+		proof.Open[readSeq] = nil
+		player:SetAttribute("ZyntraOwns" .. key, owns)
+	end
+	-- A refresh begun before a purchase must never publish a lower tier after
+	-- the purchase's own refresh: latches that landed while the reads above
+	-- yielded win before the tier is computed.
+	for key in pairs(Config.TokenEarner.Passes) do
+		if passPurchases[player] and passPurchases[player][key] then
+			earnerOwns[key] = true
+			player:SetAttribute("ZyntraOwns" .. key, true)
+		end
+	end
+	-- Only a definitive answer sets the tier; an unknown one keeps the last known
+	-- tier (or none yet, so automatic earnings pend) until the background
+	-- re-check. (A purchase raises a known tier itself, in tokenEarner.latched.)
+	-- A refresh that began before the newest ANSWERED one is stale: it keeps
+	-- its proofs (above) but never replaces that snapshot or its tier.
+	local newest = tokenEarner.snapshots[player]
+	if not newest or newest.Seq < refreshSeq then
+		if earnerKnown then
+			player:SetAttribute("ZyntraTokenEarnerMultiplier", Config.TokenEarner.Tier(earnerOwns))
+		end
+		tokenEarner.snapshots[player] = {Seq = refreshSeq, Owns = earnerKnown and earnerOwns or nil}
+	end
+	task.spawn(tokenEarner.settle, player)
 
 	if supporter then
 		mutate(player, function(data)
@@ -2127,6 +2504,7 @@ local function refreshPasses(player)
 	-- re-check is exactly the one the client refuses to send -- and the Supporter
 	-- pass has no such action at all. Re-ask in the background, a few times, then
 	-- stop. A successful pass clears passReadFailed above and schedules no more.
+	local PASS_RECHECK_DELAY, PASS_RECHECK_LIMIT = 20, 3
 	local rechecks = passRechecks[player] or 0
 	if passReadFailed[player] and rechecks < PASS_RECHECK_LIMIT then
 		passRechecks[player] = rechecks + 1
@@ -2857,19 +3235,29 @@ researchProgress.Event:Connect(function(player, key)
  if typeof(player)~="Instance" or not player:IsA("Player") or player.Parent~=Players
   or (key~="Fuse" and key~="Lever") or not sessions[player] then return end
  local earnedDay=utcDay()
+ -- Automatic progress cannot be refused: an unknown tier pays the base now and
+ -- pends the bonus in the same write (TOKEN_EARNER_PENDING_20260924).
+ local earnerTier,earnerKnown=tokenEarner.tier(player)
+ local earnedSeq=tokenEarner.stamp()
  for attempt=1,3 do
-  if utcDay()~=earnedDay or player.Parent~=Players then return end
+  if utcDay()~=earnedDay or player.Parent~=Players then break end
   local session=sessions[player]
-  if not session or session.closing then return end
-  if session.data.Daily.Day==earnedDay and session.data.Daily.Research[key] then return end
+  if not session or session.closing then break end
+  if session.data.Daily.Day==earnedDay and session.data.Daily.Research[key] then break end
   local done=dailyMutate(player,function(data,today)
    if today~=earnedDay then return false end
    local changed,amount=DailyResearch.Complete(data,key)
-   return changed, changed and ("Daily research complete: +"..amount.." Research Token") or nil,"success"
+   local note=""
+   if changed and earnerKnown then amount+=tokenEarner.bonus(data,amount,earnerTier)
+   elseif changed and tokenEarner.defer(data,amount,earnedSeq,tokenEarner.proof(player)) then
+    note=" Any Token Earner bonus follows once pass ownership is confirmed."
+   end
+   return changed, changed and ("Daily research complete: +"..amount.." Research Token"..(amount==1 and "" or "s")..note) or nil,"success"
   end)
-  if done then return end
+  if done then break end
   task.wait(attempt)
  end
+ if not earnerKnown then tokenEarner.settle(player) end
 end)
 
 local function flushPlaytime(player)
@@ -3088,13 +3476,18 @@ local function claimPlaytimeReward(player, payload)
 			milestone.Minutes, math.floor(have / 60)), "error")
 		return
 	end
+	local earnerTier, earnerKnown = tokenEarner.tier(player, 10)
+	if not earnerKnown then
+		pushProfile(player, "Checking your Token Earner pass. Try again in a moment.", "error")
+		return
+	end
 	dailyMutate(player, function(data)
 		if data.Daily.Claimed[key] == true then return false, claimedMessage, "error" end
 		if data.Daily.PlaytimeSeconds < required then
 			return false, string.format(
 				"Play %d minutes of a round today to claim this.", milestone.Minutes), "error"
 		end
-		local label = applyReward(data, milestone.Reward)
+		local label = applyReward(data, milestone.Reward, earnerTier)
 		if not label then return false, "That reward is unavailable right now.", "error" end
 		data.Daily.Claimed[key] = true
 		return true, string.format("%s collected -- %d minutes of play today.", label, milestone.Minutes), "success"
@@ -3126,11 +3519,22 @@ local function pickWheelPrize()
 	return wheel[#wheel]
 end
 
+local function wheelResultLabel(last, prize)
+	if prize and prize.Key == "Skin5" then
+		if last and last.FallbackTokens == 3 then
+			return "3 Research Tokens (skin fallback)"
+		end
+		local skin = last and Skins.Get(last.SkinId)
+		return skin and (skin.Name .. " hazmat skin") or "a hazmat skin"
+	end
+	return prize and prize.Label or "the last spin"
+end
+
 local function spentSpinMessage(daily)
 	local last = daily.WheelLast
 	local prize = last and wheelPrizeByKey(last.Key)
 	return string.format("Today's spin is done: %s. Next spin at 00:00 UTC.",
-		prize and prize.Label or "already claimed")
+		prize and wheelResultLabel(last, prize) or "already claimed")
 end
 
 -- WHEEL_COLLECT_20260922 (Trello 25GLltY6). A spin RECORDS the prize
@@ -3148,7 +3552,7 @@ end
 local function collectFirstMessage(daily)
 	local last = pendingWheelPrize(daily)
 	local prize = last and wheelPrizeByKey(last.Key)
-	return string.format("Collect your prize first: %s.", prize and prize.Label or "the last spin")
+	return string.format("Collect your prize first: %s.", wheelResultLabel(last, prize))
 end
 
 local function spinDailyWheel(player)
@@ -3175,14 +3579,31 @@ local function spinDailyWheel(player)
 		if not prize or type(prize.Reward) ~= "table" then
 			return false, "The supply wheel is offline right now.", "error"
 		end
+		local skinId, fallbackTokens
+		if prize.Key == "Skin5" then
+			local eligible = {}
+			for _, candidate in ipairs(Skins.WheelEligible) do
+				if not Skins.IsOwned(data.Skins, candidate) then
+					eligible[#eligible + 1] = candidate
+				end
+			end
+			if #eligible == 0 then
+				fallbackTokens = 3
+			else
+				skinId = eligible[math.floor(wheelRandom:NextNumber() * #eligible) + 1]
+			end
+		end
 		data.Daily.WheelDay = today
 		data.Daily.WheelLast = {
 			Day = today,
 			Key = prize.Key,
+			SkinId = skinId,
+			FallbackTokens = fallbackTokens,
 			Serial = wholeCount(data.Daily.WheelLast and data.Daily.WheelLast.Serial) + 1,
 			Claimed = false,
 		}
-		return true, "Supply Wheel: " .. prize.Label .. " -- collect your prize.", "success"
+		return true, "Supply Wheel: " .. wheelResultLabel(data.Daily.WheelLast, prize)
+			.. " -- collect your prize.", "success"
 	end)
 end
 
@@ -3206,12 +3627,34 @@ local function claimWheelPrize(player)
 		pushProfile(player, "Nothing to collect.", "info")
 		return
 	end
+	local earnerTier, earnerKnown = tokenEarner.tier(player, 10)
+	if not earnerKnown then
+		pushProfile(player, "Checking your Token Earner pass. Try again in a moment.", "error")
+		return
+	end
 	dailyMutate(player, function(data)
 		local last = pendingWheelPrize(data.Daily)
 		if not last then return false, "Nothing to collect.", "info" end
 		local prize = wheelPrizeByKey(last.Key)
-		local label = prize and applyReward(data, prize.Reward)
+		local label
+		local tokensBefore = data.Tokens
+		if prize and prize.Key == "Skin5" then
+			if last.FallbackTokens == 3 or Skins.IsOwned(data.Skins, last.SkinId) then
+				-- A player can buy the selected suit after spinning but before
+				-- collecting. Keep the exact SkinId receipt and pay the same fallback.
+				label = applyReward(data, {Kind = "Tokens", Amount = 3}, earnerTier)
+				if label then last.FallbackTokens = 3 end
+			else
+				local skin = Skins.Get(last.SkinId)
+				if skin and Skins.Grant(data.Skins, last.SkinId) then
+					label = skin.Name .. " hazmat skin"
+				end
+			end
+		else
+			label = prize and applyReward(data, prize.Reward, earnerTier)
+		end
 		if not label then return false, "That prize is unavailable right now.", "error" end
+		if data.Tokens > tokensBefore then last.PaidTokens = data.Tokens - tokensBefore end
 		last.Claimed = true
 		return true, label .. " collected.", "success"
 	end)
@@ -3316,6 +3759,8 @@ local WRITE_BEARING_ACTIONS = {
 	ClaimWheelPrize = true,
 	MarkRewardsIntroSeen = true,
 	BuyItem = true,
+	BuySkin = true,
+	EquipSkin = true,
 	UseSpeedPotion = true,
 }
 local ACTION_WINDOW = 0.12
@@ -3355,6 +3800,9 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 		windowKey = "ClaimPlaytimeReward:" .. tostring(payload.Minutes)
 	elseif action == "BuyItem" and type(payload) == "table" and ITEM_CONFIG[payload.Key] then
 		windowKey = "BuyItem:" .. payload.Key
+	elseif (action == "BuySkin" or action == "EquipSkin")
+		and type(payload) == "string" and Skins.Get(payload) then
+		windowKey = action .. ":" .. payload
 	end
 	local times = actionTimes[player]
 	if not times then
@@ -3386,18 +3834,27 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 		-- Refuse in memory FIRST. The in-transform check below stays as the
 		-- cross-server race guard, but reaching it costs a DataStore write, and a
 		-- player with zero tokens could once drive one of those per click.
-		if sessions[player].data.Tokens < 1 then
-			pushProfile(player, "You need 1 Zyntra Research Token.", "error")
+		-- UPGRADE_COST_20260924: the price rises with the level held, and is
+		-- recomputed inside the transform from the profile it actually writes.
+		local field = action == "UpgradeStamina" and "StaminaLevel" or "BatteryLevel"
+		local function shortOf(data)
+			local price = Config.UpgradeCost(data[field])
+			if data.Tokens >= price then return nil end
+			return ("You need %d Zyntra Research Token%s."):format(price, price == 1 and "" or "s")
+		end
+		local refusal = shortOf(sessions[player].data)
+		if refusal then
+			pushProfile(player, refusal, "error")
 			return
 		end
 		mutate(player, function(data)
-			if data.Tokens < 1 then return false, "You need 1 Zyntra Research Token.", "error" end
-			data.Tokens -= 1
+			refusal = shortOf(data)
+			if refusal then return false, refusal, "error" end
+			data.Tokens -= Config.UpgradeCost(data[field])
+			data[field] += 1
 			if action == "UpgradeStamina" then
-				data.StaminaLevel += 1
 				return true, "Stamina increased by " .. PCT .. ".", "success"
 			end
-			data.BatteryLevel += 1
 			return true, "Battery increased by " .. PCT .. ".", "success"
 		end)
 	elseif action == "SetHazmatColor" then
@@ -3472,12 +3929,106 @@ actionRemote.OnServerEvent:Connect(function(player, action, payload)
 		markRewardsIntroSeen(player)
 	elseif action == "BuyItem" then
 		buyItem(player, payload)
+	elseif action == "BuySkin" then
+		local skin = Skins.Get(payload)
+		if not skin or skin.Kind ~= "Tokens" then return end
+		local current = sessions[player].data
+		if Skins.IsOwned(current.Skins, payload) then
+			pushProfile(player, "Already owned.", "info")
+			return
+		end
+		if current.CompletedLevels < (skin.RequiredClears or 0) then
+			pushProfile(player, ("Requires %d lifetime clears."):format(skin.RequiredClears), "error")
+			return
+		end
+		if current.Tokens < skin.TokenCost then
+			pushProfile(player, ("Requires %d Research Tokens."):format(skin.TokenCost), "error")
+			return
+		end
+		mutate(player, function(data)
+			local changed, message = Skins.BuyToken(data, payload)
+			return changed, message, changed and "success" or "error"
+		end)
+	elseif action == "EquipSkin" then
+		local skin = Skins.Get(payload)
+		if not skin then return end
+		-- DEV_SUIT_20260924: a forged request, or one racing a revoke, is refused.
+		if skin.Kind == "Developer" and not DevAccess.IsAllowed(player) then return end
+		local current = sessions[player].data.Skins
+		if not Skins.IsOwned(current, payload) then return end
+		if current.Equipped == payload then return end
+		mutate(player, function(data)
+			local changed, message = Skins.Equip(data.Skins, payload)
+			return changed, message, changed and "success" or "error"
+		end)
 	elseif action == "UseSpeedPotion" then
 		useSpeedPotion(player)
 	end
 end)
 
-levelCompletedEvent.Event:Connect(function(player, level, friendCount, run)
+-- COMPLETION_SAVE_20260924 (Trello EYpXKa9S). A clear is ONE keyed write: its
+-- id (GameManager's round id + level) lands in the same UpdateAsync as the
+-- tokens, clear count, daily Clear, level flag and records, and a transform that
+-- finds the id already there changes nothing. So a failed write is retried with
+-- backoff instead of dropped, and a retry after a lost response (committed, reply
+-- lost) cannot pay twice. Whatever is still unsaved when the player leaves rides
+-- the finalizer's last write. Limit: the retry state lives in this server only,
+-- so a clear that never lands before the session ends (a DataStore outage that
+-- outlasts it, a server crash) is lost and logged, never paid later.
+local completionSaves = {pending = {}, delays = {0, 2, 5, 10, 20, 40}}
+
+-- True once the profile holds this clear. Only the caller that retires the
+-- pending entry announces it, so a retry racing the leave-time flush cannot
+-- report or award twice.
+function completionSaves.save(player, id)
+	local queue = completionSaves.pending[player]
+	local entry = queue and queue[id]
+	if not entry then return true end
+	local ok, _, message = mutateIdempotent(player, entry.Apply, true)
+	if not ok then return false end
+	if queue[id] ~= entry then return true end
+	queue[id] = nil
+	pushProfile(player, message, "success")
+	entry.OnSaved()
+	return true
+end
+
+function completionSaves.settle(player, id, apply, onSaved)
+	local queue = completionSaves.pending[player] or {}
+	completionSaves.pending[player] = queue
+	if queue[id] then return end -- the same clear is already being saved
+	queue[id] = {Apply = apply, OnSaved = onSaved}
+	for attempt, delaySeconds in ipairs(completionSaves.delays) do
+		if delaySeconds > 0 then task.wait(delaySeconds) end
+		local session = sessions[player]
+		-- A closing session belongs to the finalizer, which flushes this queue.
+		if not session or session.closing or not player.Parent then return end
+		if completionSaves.save(player, id) then return end
+		if attempt == 1 then
+			pushProfile(player, "Your level clear is not saved yet. Retrying automatically.", "error")
+		end
+	end
+	warn("[Zyntra] Completion save still pending after retries; left for the leave-time save:",
+		player.UserId, id)
+end
+
+function completionSaves.flush(player)
+	local queue = completionSaves.pending[player]
+	if not queue then return end
+	for id in pairs(table.clone(queue)) do
+		local saved = false
+		for attempt = 1, 3 do
+			saved = completionSaves.save(player, id)
+			if saved then break end
+			if attempt < 3 then task.wait(attempt * 0.5) end
+		end
+		if not saved then
+			warn("[Zyntra] Completion save FAILED at leave; clear not saved for userId", player.UserId, id)
+		end
+	end
+end
+
+levelCompletedEvent.Event:Connect(function(player, level, friendCount, run, roundId)
 	if not player or not player:IsA("Player") or not sessions[player] then return end
 	-- GameManager fires this once per escapee with the level they just cleared and
 	-- how many of that round's OTHER participants are verified friends of theirs
@@ -3493,7 +4044,19 @@ levelCompletedEvent.Event:Connect(function(player, level, friendCount, run)
 	local counted = math.floor(tonumber(friendCount) or 0)
 	local friends = (counted >= 0 and counted < 1e6) and counted or 0
 	local boostPercent = friends * Config.FriendBoost.PercentPerFriend
-	mutate(player, function(data)
+	-- One id per escapee per round and level. A caller without a round id still
+	-- gets a stable id for its own retries.
+	local completionId = (type(roundId) == "string" and #roundId > 0 and #roundId <= 80)
+		and roundId .. ":" .. cleared or HttpService:GenerateGUID(false)
+	-- Read once, before the write. Unknown (an ownership outage) does not delay
+	-- the clear: its bonus pends in the same write (TOKEN_EARNER_PENDING_20260924).
+	local earnerTier, earnerKnown = tokenEarner.tier(player)
+	local earnedSeq = tokenEarner.stamp()
+	completionSaves.settle(player, completionId, function(data)
+		if table.find(data.CompletionIds, completionId) then
+			return false, "Level clear saved.", "success"
+		end
+		local tokensBefore = data.Tokens
 		-- FRIEND_BOOST_20260916. The boost is counted in TENTHS of a token and the
 		-- remainder rides on the profile, so +10% of a 2-token clear (0.2) builds
 		-- up instead of rounding away: one friend pays a whole extra token on the
@@ -3520,18 +4083,32 @@ levelCompletedEvent.Event:Connect(function(player, level, friendCount, run)
 				message ..= " " .. note
 			end
 		end
+		-- TOKEN_EARNER_20260924: everything this clear paid -- tokens, daily Clear,
+		-- challenges -- is earned, and is multiplied once, here.
+		if earnerKnown then
+			local extra = tokenEarner.bonus(data, data.Tokens - tokensBefore, earnerTier)
+			if extra > 0 then
+				message ..= (" Token Earner %dx: +%d more."):format(earnerTier, extra)
+			end
+		elseif tokenEarner.defer(data, data.Tokens - tokensBefore, earnedSeq, tokenEarner.proof(player)) then
+			message ..= " Any Token Earner bonus follows once pass ownership is confirmed."
+		end
+		table.insert(data.CompletionIds, completionId)
+		while #data.CompletionIds > 20 do table.remove(data.CompletionIds, 1) end
 		return true, message, "success"
+	end, function()
+		if not earnerKnown then task.spawn(tokenEarner.settle, player) end
+		if not tracked then return end
+		-- Badges follow the CONFIRMED write, never precede it: a First Clear badge
+		-- on a profile that has no saved clear is exactly the bug this replaced.
+		-- awardBadge is non-blocking and contains its own failures.
+		awardBadge(player, "FirstClearLevel" .. cleared)
+		local session = sessions[player]
+		local levelsCleared = session and session.data.LevelsCleared
+		if levelsCleared and levelsCleared["1"] and levelsCleared["2"] and levelsCleared["3"] then
+			awardBadge(player, "CampaignComplete")
+		end
 	end)
-	if not tracked then return end
-	-- Badges hang off the write above rather than replacing it: awardBadge is
-	-- non-blocking and every failure inside it is contained, so a badge that
-	-- cannot be granted never costs the player the token they earned.
-	awardBadge(player, "FirstClearLevel" .. cleared)
-	local session = sessions[player]
-	local levelsCleared = session and session.data.LevelsCleared
-	if levelsCleared and levelsCleared["1"] and levelsCleared["2"] and levelsCleared["3"] then
-		awardBadge(player, "CampaignComplete")
-	end
 end)
 
 MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(player, passId, purchased)
@@ -3541,6 +4118,13 @@ MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(player, passI
 	for key, pass in pairs(Config.Donations or {}) do
 		if pass.Kind == "GamePass" then passes[key] = pass end
 	end
+	for _, skinId in ipairs(Skins.Order) do
+		local skin = Skins.ById[skinId]
+		if skin.Kind == "Robux" and skin.PassId > 0 then
+			passes[skinId] = {Id = skin.PassId, Name = skin.Name, Price = skin.RobuxPrice}
+		end
+	end
+	for key, pass in pairs(Config.TokenEarner.Passes) do passes[key] = pass end
 	for key, pass in pairs(passes) do
 		if pass.Id > 0 and pass.Id == passId then
 			-- Latch the purchase BEFORE refreshing: Roblox has just told us this
@@ -3552,7 +4136,12 @@ MarketplaceService.PromptGamePassPurchaseFinished:Connect(function(player, passI
 				purchases = {}
 				passPurchases[player] = purchases
 			end
-			purchases[key] = true
+			-- The latch holds WHEN, as a tokenEarner.stamp() sequence: a Token Earner
+			-- bonus earned before it must not count it, and one earned after it
+			-- must, so both are settled NOW, before the refresh's reads yield
+			-- (TOKEN_EARNER_PENDING_20260924).
+			purchases[key] = purchases[key] or tokenEarner.stamp()
+			tokenEarner.latched(player, key, purchases[key])
 			-- Roblox has confirmed this player paid; a pass cannot be bought twice.
 			if Analytics then Analytics.Purchase(player, key, "Pass", pass.Price) end
 			task.spawn(refreshPasses, player)
@@ -3724,6 +4313,9 @@ local function finalizePlayerSessionBody(player)
 	-- minute of every round is lost to whoever leaves from the results screen.
 	-- BindToClose reaches this through finalizePlayerSession as well.
 	if session and not session.closing then flushPlaytime(player) end
+	-- COMPLETION_SAVE_20260924: a clear still retrying gets its last attempts
+	-- here, keyed, while the session can still write.
+	if session and not session.closing then completionSaves.flush(player) end
 	local dispatchPersisted = true
 	if muteQueue then
 		-- Stop a sleeping worker before it can begin an obsolete write. The last
@@ -3794,6 +4386,7 @@ local function finalizePlayerSession(player)
 	reentryAttempts[player] = nil
 	playtimeSessions[player] = nil
 	potionRoundUsed[player] = nil
+	completionSaves.pending[player] = nil
 	speedBoostTokens[player] = nil
 	dispatchMuteQueues[player] = nil
 	briefingClaims[player] = nil

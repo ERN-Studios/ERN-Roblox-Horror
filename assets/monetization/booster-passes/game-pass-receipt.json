@@ -1,0 +1,73 @@
+{
+  "universeId": 10559217407,
+  "checkedAtUtc": "2026-09-24T12:43:51.406408+00:00",
+  "saleStatus": "off sale until published implementation passes QA",
+  "passes": [
+    {
+      "name": "Token Earner 2x",
+      "gamePassId": 1995218405,
+      "priceRobuxApproved": 149,
+      "iconAssetId": 110042354901224,
+      "isForSale": false,
+      "priceInformation": {
+        "defaultPriceInRobux": 149,
+        "enabledFeatures": []
+      }
+    },
+    {
+      "name": "Token Earner 3x",
+      "gamePassId": 1995716395,
+      "priceRobuxApproved": 299,
+      "iconAssetId": 90602955172781,
+      "isForSale": false,
+      "priceInformation": {
+        "defaultPriceInRobux": 299,
+        "enabledFeatures": []
+      }
+    },
+    {
+      "name": "Token Earner 5x",
+      "gamePassId": 1994654411,
+      "priceRobuxApproved": 399,
+      "iconAssetId": 123482394566073,
+      "isForSale": false,
+      "priceInformation": {
+        "defaultPriceInRobux": 399,
+        "enabledFeatures": []
+      }
+    },
+    {
+      "name": "Token Earner Upgrade 2x to 3x",
+      "gamePassId": 1994282418,
+      "priceRobuxApproved": 150,
+      "iconAssetId": 127143625556663,
+      "isForSale": false,
+      "priceInformation": {
+        "defaultPriceInRobux": 150,
+        "enabledFeatures": []
+      }
+    },
+    {
+      "name": "Token Earner Upgrade 3x to 5x",
+      "gamePassId": 1995812369,
+      "priceRobuxApproved": 100,
+      "iconAssetId": 99847748150208,
+      "isForSale": false,
+      "priceInformation": {
+        "defaultPriceInRobux": 100,
+        "enabledFeatures": []
+      }
+    },
+    {
+      "name": "Token Earner Upgrade 2x to 5x",
+      "gamePassId": 1994252411,
+      "priceRobuxApproved": 250,
+      "iconAssetId": 138859474490319,
+      "isForSale": false,
+      "priceInformation": {
+        "defaultPriceInRobux": 250,
+        "enabledFeatures": []
+      }
+    }
+  ]
+}

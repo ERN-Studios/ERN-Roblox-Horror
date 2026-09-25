@@ -100,6 +100,13 @@ function Loading.New(env)
      if env.Present(member) then
       live += 1
       local expected = self.Expected[member]
+      -- AUDIT_FIX_20260924: nothing respawns a member during entry, so a placed
+      -- character that died (Reset Character on the cover) can never be ready.
+      -- Fail now instead of holding the whole party to the deadline. Plain-table
+      -- test characters carry no FindFirstChildOfClass and skip this.
+      local character = expected and expected.Character
+      local humanoid = character and character.FindFirstChildOfClass and character:FindFirstChildOfClass("Humanoid")
+      if humanoid and humanoid.Health <= 0 then self:Fail("ENTRY_MEMBER_DIED"); return false end
       if not expected or not expected.Ready or env.Now() - (expected.ReadyAt or 0) > 2
        or not env.Validate(member, expected) then
        pending += 1

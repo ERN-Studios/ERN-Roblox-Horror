@@ -1,0 +1,37 @@
+{
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "publishedVersion": 2061,
+  "publishedAtUtc": "2026-09-24T12:04:21.226Z",
+  "success": true,
+  "nativeLog": "0.740.0.7400927_20260923T092827Z_Studio_B9061_last.log",
+  "filteredLog": "artifacts/hazmat-20260924/publish-log-v2061.txt",
+  "openCloudHistory": {
+    "isPublished": true,
+    "publishStatus": 1,
+    "createdTime": "2026-09-24T11:51:25.907Z"
+  },
+  "publishedPlaceFile": {
+    "bytes": 9604586,
+    "sha256": "f7e73811e67799fb79a903f01e07155dff757bf433f00049c8c8d571d8f21ea2",
+    "verifiedNames": [
+      "HazmatSkin_BaselineYellow_20260924",
+      "HazmatSkin_PoolService_20260924",
+      "HazmatSkin_SuburbSurvey_20260924",
+      "HazmatSkin_BlacksiteDirector_20260924",
+      "HazmatSkin_StaticWraith_20260924",
+      "HazmatSkin_FalseSun_20260924"
+    ],
+    "verifiedMarkers": [
+      "ZyntraSkinsPage",
+      "HazmatSkinDriver",
+      "HazmatSkinVisuals",
+      "Skin5",
+      "70472139920072",
+      "1994666374",
+      "1994816385"
+    ]
+  },
+  "method": "Read-only Roblox Open Cloud place-version-history GET and asset-delivery GET; downloaded published RBXL was decompressed and searched for exact model names and runtime markers. No Studio or DataStore write was made.",
+  "scopeLimit": "Publication and file contents are verified. Skin rejoin behavior, Game Pass purchase, physical touch/memory and standing preview pose remain separate acceptance checks."
+}

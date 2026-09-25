@@ -23,6 +23,9 @@ local dispatchAudio = {
 	-- every state so the controls stay part of the transmission. A table field
 	-- rather than a file local: this script is at Luau's 200-local ceiling.
 	accent = Color3.fromRGB(105, 238, 168),
+	-- Text-only briefings for now. Keep the speech SoundIds, instances and cue
+	-- timings so restoring the voice later is one deliberate setting change.
+	voiceEnabled = false,
 	action = remotes:WaitForChild("ZyntraAction"),
 	claimLobbyBriefing = remotes:WaitForChild("ZyntraClaimLobbyBriefing"),
 	group = SoundService:FindFirstChild("ZyntraDispatchAudio"),
@@ -116,14 +119,36 @@ function dispatchAudio.clearTransmission(owner)
 	dispatchAudio.refresh()
 end
 
+-- Text captions have their own clock. A terminal, queue dialog or other modal
+-- may hide them temporarily; time spent behind that UI must not consume lines
+-- from the one-time lobby welcome.
+function dispatchAudio.newCaptionClock()
+	return {elapsed = 0, sampledAt = os.clock()}
+end
+
+function dispatchAudio.captionPosition(clock, speech)
+	if dispatchAudio.voiceEnabled then return speech.TimePosition end
+	local now = os.clock()
+	if dispatchAudio.panel and dispatchAudio.panel.Visible then
+		clock.elapsed += now - clock.sampledAt
+	end
+	clock.sampledAt = now
+	return clock.elapsed
+end
+
 function dispatchAudio.refresh()
 	local loaded = dispatchAudio.preferenceLoaded()
 	local muted = player:GetAttribute("ZyntraMuteDispatch") == true
 	local active = dispatchAudio.hasActiveTransmission()
-	-- Other level HUDs use this client-local authority to yield their screen
-	-- space for the briefing, then restore themselves as soon as Command stops.
-	if player:GetAttribute("ZyntraDispatchClientActive") ~= active then
-		player:SetAttribute("ZyntraDispatchClientActive", active)
+	-- Observability for QA and future settings; unlike the former dispatch
+	-- attribute this does not ask any other HUD to disappear.
+	if player:GetAttribute("DispatchTextActive") ~= active then
+		player:SetAttribute("DispatchTextActive", active)
+	end
+	-- Captions are passive. They must never suppress puzzle controls, alerts,
+	-- the CD reader or equipment just because a briefing is in progress.
+	if player:GetAttribute("ZyntraDispatchClientActive") ~= false then
+		player:SetAttribute("ZyntraDispatchClientActive", false)
 	end
 	if dispatchAudio.pendingValue ~= nil then muted = dispatchAudio.pendingValue end
 	dispatchAudio.group.Volume = loaded and (muted and 0 or 1) or 0
@@ -139,41 +164,22 @@ function dispatchAudio.refresh()
 	then
 		hasSubtitle = false
 	end
-	-- C4A_BRIEFING_VS_QUEUE_20260829 -- WHAT SHIPPED BROKEN.
-	-- The briefing panel and the queue host modal were two independent modals
-	-- that knew nothing about each other, so both could be on screen at once. On
-	-- touch this panel is pinned to UIDevice's TopBand -- (12,66) 517x75 on a
-	-- 705x338 Galaxy A06 -- and it lives in LevelOneGuideGui at DisplayOrder 110
-	-- while the queue shade is RoundGui at DisplayOrder 100: the briefing drew
-	-- straight OVER an open party dialog, and its MUTE/STOP readouts took the
-	-- taps that belonged to the modal underneath.
-	--
-	-- Queue and the full Zyntra terminal win, in BOTH directions, out of ONE
-	-- expression: a briefing raised while either modal is up never draws, and a
-	-- modal opened over a live briefing hides it. Nothing is torn down -- the
-	-- transmission, its cue timer and ZyntraDispatchClientActive are untouched --
-	-- so closing the modal brings the panel back mid-sentence.
-	--
-	-- `dispatchAudio.queueModalOpen` is mirrored from queueShade.Visible at the
-	-- one property-changed signal that every show and every hide path already
-	-- lands on, so a path that forgets to clear it is not expressible. It is a
-	-- table field rather than a file local for two reasons: `queueShade` is
-	-- declared hundreds of lines BELOW this function and is not in scope here,
-	-- and this script sits on Luau's 200-local ceiling for its main chunk.
+	-- Captions yield to screen-owning UI and the two in-round panels that share
+	-- their band. The transmission stays active and its caption clock pauses
+	-- while hidden, so closing a modal resumes the line instead of skipping it.
 	local shown = (active or hasSubtitle)
-		and dispatchAudio.queueModalOpen ~= true
-		and player:GetAttribute("ZyntraStoreOpen") ~= true
+		and not UIDevice.ScreenOwningModalOpen()
 		and player:GetAttribute("ZyntraShopDetailOpen") ~= true
+		and player:GetAttribute("PartyDownCardOpen") ~= true
+		and player:GetAttribute("LevelOneGuideObjectivesOpen") ~= true
+		and player:GetAttribute("Level2AlertOwnsBand") ~= true
 	if dispatchAudio.panel then
 		dispatchAudio.panel.Visible = shown
 	end
-	-- Published for ZyntraStore, whose lobby opener sits inside this same TopBand
-	-- rectangle and has to stand down while the briefing owns it. Derived from
-	-- `shown` -- the very value the panel itself is given -- so the flag and the
-	-- pixels cannot drift apart, and it is cleared by that same expression on
-	-- every path that lowers the panel.
-	if player:GetAttribute("DispatchBriefingOpen") ~= shown then
-		player:SetAttribute("DispatchBriefingOpen", shown)
+	-- This is the old blocking-briefing contract consumed by detector,
+	-- protection, exit and store UIs. The caption panel is now non-modal.
+	if player:GetAttribute("DispatchBriefingOpen") ~= false then
+		player:SetAttribute("DispatchBriefingOpen", false)
 	end
 	if dispatchAudio.subtitleLabel then
 		dispatchAudio.subtitleLabel.Text = hasSubtitle
@@ -221,15 +227,20 @@ function dispatchAudio.refresh()
 		-- away from painting MUTE DISPATCH over a level with no dispatch in it.
 		-- They now exist EXACTLY while the transmission does; the parent frame
 		-- below is hidden on the same condition, so the two can never disagree.
-		dispatchAudio.button.Visible = active and shown
+		dispatchAudio.button.Visible = active and shown and dispatchAudio.voiceEnabled
+			and not dispatchAudio.readerPassiveLane
 		dispatchAudio.button.TextTransparency = ready and 0 or .45
-		UIDevice.SetEnabled(dispatchAudio.button, ready)
+		UIDevice.SetEnabled(dispatchAudio.button, ready and dispatchAudio.voiceEnabled
+			and not dispatchAudio.readerPassiveLane)
 	end
 	if dispatchAudio.stopButton then
 		local stopBinding = UIDevice.Binding("[N]", "[B]")
 		dispatchAudio.stopButton.TextColor3 = dispatchAudio.accent
+		local stopWord = dispatchAudio.readerPassiveLane
+			and (dispatchAudio.voiceEnabled and "STOP" or "SKIP")
+			or (dispatchAudio.voiceEnabled and "STOP DISPATCH" or "SKIP BRIEF")
 		dispatchAudio.stopButton.Text = stopBinding ~= ""
-			and (stopBinding .. "  STOP DISPATCH") or "STOP DISPATCH"
+			and (stopBinding .. "  " .. stopWord) or stopWord
 		-- Same rule as MUTE above: present exactly while the briefing is, gone the
 		-- moment it is not. STOP has no dimmed-but-informative state at all -- an
 		-- inactive STOP DISPATCH is a control that would do nothing if tapped.
@@ -256,7 +267,8 @@ function dispatchAudio.awaitPreference()
 end
 
 function dispatchAudio.requestToggle()
-	if not dispatchAudio.hasActiveTransmission()
+	if not dispatchAudio.voiceEnabled
+		or not dispatchAudio.hasActiveTransmission()
 		or dispatchAudio.pending
 		or not dispatchAudio.preferenceLoaded() then
 		return false
@@ -304,6 +316,10 @@ end)
 UIDevice.Changed:Connect(function() dispatchAudio.refresh() end)
 player:GetAttributeChangedSignal("ZyntraStoreOpen"):Connect(dispatchAudio.refresh)
 player:GetAttributeChangedSignal("ZyntraShopDetailOpen"):Connect(dispatchAudio.refresh)
+player:GetAttributeChangedSignal("PartyDownCardOpen"):Connect(dispatchAudio.refresh)
+player:GetAttributeChangedSignal("LevelOneGuideObjectivesOpen"):Connect(dispatchAudio.refresh)
+player:GetAttributeChangedSignal("Level2AlertOwnsBand"):Connect(dispatchAudio.refresh)
+UIDevice.OnScreenOwningModalChanged(dispatchAudio.refresh)
 if RunService:IsStudio() then
 	player:GetAttributeChangedSignal("UIRegressionForceDispatchActive"):Connect(dispatchAudio.refresh)
 	player:GetAttributeChangedSignal("UIRegressionSuppressDispatch"):Connect(dispatchAudio.refresh)
@@ -851,15 +867,40 @@ queueSubmit.Activated:Connect(function()
   end
  end)
 end)
-queueClose.Activated:Connect(function()
- if queueSubmitting or not queueStation then return end
- local stationToCancel = queueStation
- queueShade.Visible = false
- queueStation = nil
- queueSubmitting = false
- refreshQueuePanel()
- queueRemote:FireServer(stationToCancel, 0, "cancel")
-end)
+-- AUDIT_FIX_20260924: the party panel was the one modal with no controller
+-- path. Nothing was selected, so the stick walked the host out of the square
+-- (which cancels the party), A jumped and B did nothing. A gamepad opening now
+-- selects CREATE PARTY, B cancels exactly like the X, and a hide drops any
+-- selection left inside -- a stale one keeps dispatchAudio.inputBlocked() true.
+-- A do-block: this chunk is at the 200-local limit.
+do
+ local function cancelHostedQueue()
+  if queueSubmitting or not queueStation then return end
+  local stationToCancel = queueStation
+  queueShade.Visible = false
+  queueStation = nil
+  queueSubmitting = false
+  refreshQueuePanel()
+  queueRemote:FireServer(stationToCancel, 0, "cancel")
+ end
+ queueClose.Activated:Connect(cancelHostedQueue)
+ queueShade:GetPropertyChangedSignal("Visible"):Connect(function()
+  local navigation = game:GetService("GuiService")
+  if queueShade.Visible then
+   if UIDevice.LastInput() == "Gamepad" then navigation.SelectedObject = queueSubmit end
+   ContextActionService:BindActionAtPriority("QueueHostClose", function(_, inputState)
+    if not queueShade.Visible or navigation.MenuIsOpen then return Enum.ContextActionResult.Pass end
+    if inputState == Enum.UserInputState.Begin then cancelHostedQueue() end
+    return Enum.ContextActionResult.Sink
+   end, false, Enum.ContextActionPriority.High.Value, Enum.KeyCode.ButtonB)
+  else
+   ContextActionService:UnbindAction("QueueHostClose")
+   if navigation.SelectedObject and navigation.SelectedObject:IsDescendantOf(queueShade) then
+    navigation.SelectedObject = nil
+   end
+  end
+ end)
+end
 refreshQueuePanel()
 
 -- RoundUI is the sole cursor-policy owner. Lobby players need the mouse for the
@@ -1450,6 +1491,9 @@ function completion.reset()
 	completion.returnVisible = false
 	completion.continueButton.Text = "CONTINUE"
 	completion.button.Text = "BACK TO LOBBY"
+	-- AUDIT_FIX_20260924: hand back the controller focus start() gave out.
+	local navigation = game:GetService("GuiService")
+	if table.find(completion.buttons, navigation.SelectedObject) then navigation.SelectedObject = nil end
 	for _, button in ipairs(completion.buttons) do
 		button.Visible = false
 		button.Active = false
@@ -1486,6 +1530,13 @@ function completion.start(deadline, nextLevel, serverSerial)
 	-- other, and start() is what decides which.
 	if endFrame.Visible then completion.applyLayout(completion.color) end
 	refreshCursor()
+	-- AUDIT_FIX_20260924: refreshCursor only frees a mouse, so a controller had
+	-- no way to the choice. CONTINUE first: it is also the server's default, so
+	-- a stray A changes nothing; the last level shows BACK TO LOBBY alone.
+	if UIDevice.LastInput() == "Gamepad" then
+		local target = completion.continueButton.Visible and completion.continueButton or completion.button
+		if target.Visible then game:GetService("GuiService").SelectedObject = target end
+	end
 end
 
 -- One handler for both actions. Which remote message a button sends is read
@@ -1546,6 +1597,9 @@ do
 		end
 		if remaining <= 0 and not completionButtonsDisabled then
 			completionButtonsDisabled = true
+			-- AUDIT_FIX_20260924: no dead focus on a button that just went unselectable.
+			local navigation = game:GetService("GuiService")
+			if table.find(completion.buttons, navigation.SelectedObject) then navigation.SelectedObject = nil end
 			for _, button in ipairs(completion.buttons) do
 				button.Active = false
 				button.Selectable = false
@@ -1554,6 +1608,22 @@ do
 	end)
 end
 
+-- AUDIT_FIX_20260924 (Codex review): a pad picked up while the party panel or
+-- the round-complete choice is ALREADY open takes focus too; opening them was
+-- the only moment that set it. A focus already inside the modal is kept.
+do
+	local navigation = game:GetService("GuiService")
+	UIS.LastInputTypeChanged:Connect(function(inputType)
+		if not inputType.Name:find("^Gamepad") or navigation.MenuIsOpen then return end
+		local current = navigation.SelectedObject
+		if queueShade.Visible then
+			if not (current and current:IsDescendantOf(queueShade)) then navigation.SelectedObject = queueSubmit end
+		elseif endFrame.Visible and not table.find(completion.buttons, current) then
+			local target = completion.continueButton.Visible and completion.continueButton or completion.button
+			if target.Visible and target.Active then navigation.SelectedObject = target end
+		end
+	end)
+end
 -- C_ONE_SPECTATE_CAMERA_20260904 -- WHAT SHIPPED BROKEN.
 --
 -- TWO scripts drove the spectate camera off the same Humanoid.Died.
@@ -1935,6 +2005,9 @@ subtitleSpeaker.Size = UDim2.new(1, -278, 0, 20)
 subtitleSpeaker.BackgroundTransparency = 1
 subtitleSpeaker.Font = Enum.Font.Code
 subtitleSpeaker.Text = "> COMMAND CENTER  //  LIVE"
+if not dispatchAudio.voiceEnabled then
+	subtitleSpeaker.Text = "> COMMAND CENTER  //  BRIEFING"
+end
 subtitleSpeaker.TextColor3 = Color3.fromRGB(105, 238, 168)
 subtitleSpeaker.TextSize = 13
 subtitleSpeaker.TextXAlignment = Enum.TextXAlignment.Left
@@ -2337,7 +2410,7 @@ levelTwoBriefingSound.Parent = guideGui
 local levelTwoRadioCue = Instance.new("Sound")
 levelTwoRadioCue.Name = "LevelTwoRadioOpen"
 levelTwoRadioCue.SoundId = LEVEL_TWO_RADIO_CUE_ID
-levelTwoRadioCue.Volume = 1
+levelTwoRadioCue.Volume = 0 -- Keep the cue asset for later review; it may contain processed speech.
 levelTwoRadioCue.Looped = false
 levelTwoRadioCue.SoundGroup = dispatchAudio.group
 levelTwoRadioCue.Parent = guideGui
@@ -2494,13 +2567,6 @@ local function refreshObjectivesButton()
 		objectivesButton.Visible = false
 		return
 	end
-	-- C_DISPATCH_COMPACT_20260830: the compact briefing panel is pinned to the
-	-- top left of the safe band and this button sits at (12, 12) inside it. They
-	-- were always adjacent -- the full-band panel covered the same corner -- but
-	-- a panel is not a reason to leave a live control underneath one, and this
-	-- is the same remedy the Zyntra opener already uses for the same strip of
-	-- screen: the button is not drawn while the briefing owns it, and comes
-	-- straight back when Command stops.
 	-- The guide stands down entirely under a screen-owning modal. This gui is
 	-- DisplayOrder 110, well above the terminal's 55, so both the panel and the
 	-- button painted over an open terminal and -- being Active -- took its taps.
@@ -2513,8 +2579,6 @@ local function refreshObjectivesButton()
 	-- full brief is open, the panel's own close control takes over; leaving the
 	-- footer below it is the duplicate slab that made the old HUD feel broken.
 	objectivesButton.Visible = not panelOpen
-		and not (UIDevice.IsTouch()
-			and player:GetAttribute("DispatchBriefingOpen") == true)
 end
 UIDevice.OnScreenOwningModalChanged(function()
 	refreshObjectivesButton()
@@ -2532,8 +2596,15 @@ local function setObjectivesAvailable(available)
 end
 
 local function setSubtitle(text)
-	dispatchAudio.subtitleCopy = text or ""
+	local nextCopy = text or ""
+	local changed = dispatchAudio.subtitleCopy ~= nextCopy
+	dispatchAudio.subtitleCopy = nextCopy
 	dispatchAudio.refresh()
+	-- A device or reader change can fit the panel to a short current cue.
+	-- Refit when the next line arrives so a longer line cannot overflow it.
+	if changed and dispatchAudio.relayoutForCaption then
+		dispatchAudio.relayoutForCaption()
+	end
 end
 
 function lobbyBriefing.isEligible()
@@ -2561,11 +2632,12 @@ end
 function lobbyBriefing.preload()
 	if lobbyBriefing.preloaded then return true end
 	local ok = pcall(function()
-		ContentProvider:PreloadAsync({lobbyBriefing.radio, lobbyBriefing.sound})
+		ContentProvider:PreloadAsync(dispatchAudio.voiceEnabled
+			and {lobbyBriefing.radio, lobbyBriefing.sound} or {lobbyBriefing.radio})
 	end)
 	lobbyBriefing.preloaded = ok
 		and lobbyBriefing.radio.IsLoaded
-		and lobbyBriefing.sound.IsLoaded
+		and (not dispatchAudio.voiceEnabled or lobbyBriefing.sound.IsLoaded)
 	return lobbyBriefing.preloaded
 end
 
@@ -2598,7 +2670,7 @@ function lobbyBriefing.playOnce()
 	player:SetAttribute("LobbyBriefingActive", false)
 
 	task.spawn(function()
-		dispatchAudio.awaitPreference()
+		if dispatchAudio.voiceEnabled then dispatchAudio.awaitPreference() end
 		lobbyBriefing.preload()
 		local arrivalDeadline = os.clock() + 20
 		while run == lobbyBriefing.run
@@ -2642,7 +2714,7 @@ function lobbyBriefing.playOnce()
 		lobbyBriefing.pending = false
 		lobbyBriefing.active = true
 		lobbyBriefing.persistedStarted = true
-		player:SetAttribute("LobbyBriefingActive", true)
+		player:SetAttribute("LobbyBriefingActive", dispatchAudio.voiceEnabled)
 		local speechAt = os.clock() + lobbyBriefing.delay
 
 		local radioLength = lobbyBriefing.radio.TimeLength > 0.05
@@ -2685,7 +2757,10 @@ function lobbyBriefing.playOnce()
 
 		lobbyBriefing.sound:Stop()
 		lobbyBriefing.sound.TimePosition = 0
-		local played = pcall(function() lobbyBriefing.sound:Play() end)
+		local played = true
+		if dispatchAudio.voiceEnabled then
+			played = pcall(function() lobbyBriefing.sound:Play() end)
+		end
 		if not played then
 			if run == lobbyBriefing.run then lobbyBriefing.cancel() end
 			return
@@ -2695,10 +2770,11 @@ function lobbyBriefing.playOnce()
 		local playbackStarted = lobbyBriefing.sound.IsPlaying
 		local playbackStartDeadline = os.clock() + 4
 		local deadline = os.clock() + 50
+		local captionClock = dispatchAudio.newCaptionClock()
 		while run == lobbyBriefing.run
 			and lobbyBriefing.isEligible()
-			and os.clock() < deadline do
-			local position = lobbyBriefing.sound.TimePosition
+			and (not dispatchAudio.voiceEnabled or os.clock() < deadline) do
+			local position = dispatchAudio.captionPosition(captionClock, lobbyBriefing.sound)
 			local cueText = nil
 			for _, cue in ipairs(lobbyBriefing.cues) do
 				if position >= cue[1] and position < cue[2] then
@@ -2710,7 +2786,9 @@ function lobbyBriefing.playOnce()
 				currentText = cueText
 				setSubtitle(cueText)
 			end
-			if lobbyBriefing.sound.IsPlaying then
+			if not dispatchAudio.voiceEnabled then
+				if position >= lobbyBriefing.cues[#lobbyBriefing.cues][2] then break end
+			elseif lobbyBriefing.sound.IsPlaying then
 				playbackStarted = true
 			elseif playbackStarted or os.clock() >= playbackStartDeadline then
 				break
@@ -2735,9 +2813,11 @@ end)
 local function preloadLevelOneBriefing()
 	if briefingPreloaded then return true end
 	local ok = pcall(function()
-		ContentProvider:PreloadAsync({levelOneRadioCue, levelOneBriefingSound})
+		ContentProvider:PreloadAsync(dispatchAudio.voiceEnabled
+			and {levelOneRadioCue, levelOneBriefingSound} or {levelOneRadioCue})
 	end)
-	briefingPreloaded = ok and levelOneRadioCue.IsLoaded and levelOneBriefingSound.IsLoaded
+	briefingPreloaded = ok and levelOneRadioCue.IsLoaded
+		and (not dispatchAudio.voiceEnabled or levelOneBriefingSound.IsLoaded)
 	return briefingPreloaded
 end
 
@@ -2919,6 +2999,7 @@ local function updateLevelOneGuideLayout()
 		if counter and counter.Visible and left + 168 > counter.AbsolutePosition.X - 8 then
 			top = math.max(top, counter.AbsolutePosition.Y + counter.AbsoluteSize.Y + 8)
 		end
+		dispatchAudio.objectiveBottom = top + 44
 		objectivesButton.Position = UIDevice.LocalPosition(guideGui, left, top)
 	else
 		-- PuzzleUI owns the final 36px at the bottom-right. This guide completes
@@ -3039,10 +3120,75 @@ local function updateLevelOneGuideLayout()
 	-- home, and its home is never a place a thumb is driving the character from.
 	local BRIEFING_MIN_HEIGHT = 80
 	local band = layout.TopBand
+	local readerPassiveLane = false
 	if touch and band.Height < BRIEFING_MIN_HEIGHT
 		and layout.ModalArea.Height > band.Height then
 		band = layout.ModalArea
 	end
+	-- The Level 3 reader is a live control at the upper-right throughout a
+	-- text briefing. On short landscape screens there is no room to put the
+	-- caption below its 101px panel inside ModalArea, but there is a safe lane
+	-- to its LEFT, above the movement controls. Fit against that lane before
+	-- choosing a width; moving a full-width caption after fitting leaves it
+	-- painted over the reader even though neither HUD was hidden.
+	if touch then
+		local readerGui = player.PlayerGui:FindFirstChild("Level3ReaderGui")
+		local reader = readerGui and readerGui:FindFirstChild("ReaderPanel")
+		if readerGui and readerGui.Enabled and reader and reader.Visible then
+			local lane = {
+				Left = layout.Safe.Left + 12,
+				Right = math.min(layout.Safe.Right - 12, reader.AbsolutePosition.X - 8),
+				Top = layout.Safe.Top + 8,
+				Bottom = layout.Safe.Bottom - 8,
+			}
+			for _, zone in ipairs({layout.Zones.Thumbstick,
+				layout.Zones.Controls, layout.Zones.Jump}) do
+				if lane.Left < zone.Right and lane.Right > zone.Left then
+					lane.Bottom = math.min(lane.Bottom, zone.Top - 8)
+				end
+			end
+			lane.Width = math.max(0, lane.Right - lane.Left)
+			lane.Height = math.max(0, lane.Bottom - lane.Top)
+			-- One 44px row plus the actual cue at the hard readable face is the
+			-- minimum useful caption. A narrower lane must earn its place with
+			-- measured copy, not by clipping text or shrinking the skip target.
+			local copyHeight = dispatchAudio.copyHeightFor(dispatchAudio.fitCopy(),
+				dispatchAudio.HARD_FACE, lane.Width - 36)
+			local minimumHeight = 45 + math.max(20, copyHeight)
+			if lane.Width >= 240 and lane.Height >= minimumHeight then
+				band = lane
+			else
+				-- On the smallest landscape phones the dynamic thumbstick's
+				-- reserved rectangle begins only ~41px below the safe top. No
+				-- complete caption can fit ABOVE it, and there is no 44px lane
+				-- below the reader before the controls begin. Keep the caption
+				-- visible to the reader's left as a passive, click-through layer.
+				-- Only SKIP takes input, in the horizontal gap between thumbstick
+				-- and reader; the panel/background never consumes a movement tap.
+				lane.Bottom = math.min(layout.Safe.Bottom - 8,
+					reader.AbsolutePosition.Y + reader.AbsoluteSize.Y,
+					layout.Zones.Controls.Top - 4, layout.Zones.Jump.Top - 4)
+				lane.Height = math.max(0, lane.Bottom - lane.Top)
+				local initialWidth = math.min(math.floor(lane.Width),
+					math.max(240, math.min(560, math.floor(viewport.X * .59))))
+				local skipSpace = lane.Left + initialWidth - 4
+					- (layout.Zones.Thumbstick.Right + 1)
+				if lane.Width >= 240 and lane.Height >= minimumHeight
+					and skipSpace >= 44 then
+					band = lane
+					readerPassiveLane = true
+				end
+			end
+		end
+	end
+	dispatchAudio.readerPassiveLane = readerPassiveLane
+	subtitleFrame:SetAttribute("ReaderPassiveLane", readerPassiveLane)
+	-- These surfaces are visual only; SKIP is the sole interactive descendant.
+	-- This matters when the tiny-screen fallback paints across the thumbstick's
+	-- conservative activation rectangle without taking a movement tap.
+	subtitleFrame.Active = false
+	dispatchAudio.controls.Active = false
+	subtitleText.Active = false
 	-- ── the BAND is the ceiling, and it is enforced in ONE place ─────────────
 	-- WHAT SHIPPED BROKEN: the last-resort block at the bottom of this function
 	-- sized the panel to its CONTENT -- `textTop + minimumText + bottomPad` --
@@ -3466,7 +3612,32 @@ local function updateLevelOneGuideLayout()
 
 	if touch then
 		subtitleFrame.AnchorPoint = Vector2.new(0, 0)
-		subtitleFrame.Position = UIDevice.LocalPosition(guideGui, band.Left, band.Top)
+		local captionTop = band.Top
+		local function placeBelowHud(guiName, panelName)
+			if dispatchAudio.voiceEnabled then return end
+			local hudGui = player.PlayerGui:FindFirstChild(guiName)
+			local hud = hudGui and hudGui:FindFirstChild(panelName)
+			if not (hudGui and hudGui.Enabled and hud and hud.Visible) then return end
+			local pos, size = hud.AbsolutePosition, hud.AbsoluteSize
+			if band.Left < pos.X + size.X and band.Left + panelWidth > pos.X
+				and captionTop < pos.Y + size.Y and captionTop + panelHeight > pos.Y then
+				local nextTop = pos.Y + size.Y + 8
+				if nextTop + panelHeight <= band.Bottom then captionTop = nextTop end
+			end
+		end
+		-- Level 1's objective button is available throughout the text-only
+		-- briefing. On portrait screens put captions below that live control
+		-- whenever the safe band has room; landscape already uses ModalArea.
+		if not dispatchAudio.voiceEnabled and objectivesAvailable
+			and band == layout.TopBand
+			and dispatchAudio.objectiveBottom
+			and dispatchAudio.objectiveBottom + 8 + panelHeight <= band.Bottom then
+			captionTop = dispatchAudio.objectiveBottom + 8
+		end
+		placeBelowHud("PuzzleGui", "Level1Objectives")
+		placeBelowHud("Level2ObjectiveGui", "Level2ObjectivePanel")
+		placeBelowHud("Level3ReaderGui", "ReaderPanel")
+		subtitleFrame.Position = UIDevice.LocalPosition(guideGui, band.Left, captionTop)
 		if player:GetAttribute("Level3_Hiding") == true then
 			-- Hiding owns the top strip. The character is anchored, so captions
 			-- can use the bottom safe area while the warning and exit stay clear.
@@ -3475,7 +3646,23 @@ local function updateLevelOneGuideLayout()
 		end
 	else
 		subtitleFrame.AnchorPoint = Vector2.new(0.5, 1)
-		subtitleFrame.Position = UDim2.new(0.5, 0, 1, narrow and -96 or -64)
+		-- Level 1–2 objective cards occupy the lower-right on desktop. The
+		-- original dispatch hid them; passive captions sit just above their row.
+		local bottomOffset = narrow and 96 or (dispatchAudio.voiceEnabled and 64 or 120)
+		local puzzleGui = player.PlayerGui:FindFirstChild("PuzzleGui")
+		local message = puzzleGui and puzzleGui:FindFirstChild("PuzzleMessage")
+		if puzzleGui and puzzleGui.Enabled and message and message.Visible then
+			local pos, size = message.AbsolutePosition, message.AbsoluteSize
+			local captionLeft = (layout.Safe.Left + layout.Safe.Right - panelWidth) / 2
+			local captionBottom = layout.Safe.Bottom - bottomOffset
+			if captionLeft < pos.X + size.X and captionLeft + panelWidth > pos.X
+				and captionBottom - panelHeight < pos.Y + size.Y
+				and captionBottom > pos.Y then
+				bottomOffset = math.max(bottomOffset,
+					UIDevice.BottomOffsetFor(guideGui, pos.Y - 8))
+			end
+		end
+		subtitleFrame.Position = UDim2.new(0.5, 0, 1, -bottomOffset)
 	end
 	subtitleFrame.Size = UDim2.fromOffset(panelWidth, panelHeight)
 	-- The constraint used to clamp height to 118 and width to 860 behind the
@@ -3485,6 +3672,14 @@ local function updateLevelOneGuideLayout()
 	subtitleConstraint.MaxSize = Vector2.new(panelWidth, panelHeight)
 
 	local rowWidth = fit.Candidate.Width
+	if readerPassiveLane then
+		-- The hidden MUTE control must not reserve the only safe touch gap.
+		-- The visible SKIP target keeps its 44px floor and stays wholly right
+		-- of the thumbstick and left of the reader on 568x320 and 705x338.
+		rowWidth = math.min(rowWidth, math.floor(
+			band.Left + panelWidth - 4
+			- (layout.Zones.Thumbstick.Right + 1)))
+	end
 	local rowHeight = fit.Candidate.Height
 	dispatchAudio.button.Size = UDim2.fromOffset(rowWidth, rowHeight)
 	dispatchAudio.stopButton.Size = UDim2.fromOffset(rowWidth, rowHeight)
@@ -3498,7 +3693,8 @@ local function updateLevelOneGuideLayout()
 	-- Subtler chrome on a handheld: the panel is a radio caption over the game,
 	-- not a dialog. A lighter fill and a fainter rule, and the same numbers on
 	-- desktop as before.
-	subtitleFrame.BackgroundTransparency = touch and 0.30 or 0.18
+	subtitleFrame.BackgroundTransparency = readerPassiveLane and 0.65
+		or (touch and 0.30 or 0.18)
 	local panelRule = subtitleFrame:FindFirstChildOfClass("UIStroke")
 	if panelRule then
 		panelRule.Transparency = touch and 0.55 or 0.38
@@ -3510,7 +3706,8 @@ local function updateLevelOneGuideLayout()
 		and Enum.FillDirection.Horizontal or Enum.FillDirection.Vertical
 	dispatchAudio.layout.HorizontalAlignment = Enum.HorizontalAlignment.Right
 	dispatchAudio.controls.AnchorPoint = Vector2.new(1, 0)
-	dispatchAudio.controls.Position = UDim2.new(1, -PANEL_MARGIN, 0, fit.ControlsTop)
+	dispatchAudio.controls.Position = UDim2.new(1,
+		readerPassiveLane and -4 or -PANEL_MARGIN, 0, fit.ControlsTop)
 	dispatchAudio.controls.Size = UDim2.fromOffset(fit.ControlsWidth, fit.ControlsHeight)
 
 	subtitleSpeaker.Position = UDim2.fromOffset(TEXT_INSET, 8)
@@ -3551,6 +3748,8 @@ local function updateLevelOneGuideLayout()
 	dispatchAudio.refresh()
 end
 
+dispatchAudio.relayoutForCaption = updateLevelOneGuideLayout
+
 -- Studio-only relayout seam. The regression harness sets a stress cue by
 -- writing the subtitle label directly, and the panel is SIZED FOR THE COPY --
 -- so without a way to say "that changed", the matrix measured a box fitted to
@@ -3573,8 +3772,26 @@ task.spawn(function()
 	for _, property in ipairs({"Visible", "AbsolutePosition", "AbsoluteSize"}) do
 		counter:GetPropertyChangedSignal(property):Connect(updateLevelOneGuideLayout)
 	end
+	local message = puzzle:WaitForChild("PuzzleMessage")
+	for _, property in ipairs({"Visible", "AbsolutePosition", "AbsoluteSize"}) do
+		message:GetPropertyChangedSignal(property):Connect(updateLevelOneGuideLayout)
+	end
 	updateLevelOneGuideLayout()
 end)
+for _, target in ipairs({
+	{"Level2ObjectiveGui", "Level2ObjectivePanel"},
+	{"Level3ReaderGui", "ReaderPanel"},
+}) do
+	task.spawn(function()
+		local hudGui = player.PlayerGui:WaitForChild(target[1])
+		local hud = hudGui:WaitForChild(target[2])
+		hudGui:GetPropertyChangedSignal("Enabled"):Connect(updateLevelOneGuideLayout)
+		for _, property in ipairs({"Visible", "AbsolutePosition", "AbsoluteSize"}) do
+			hud:GetPropertyChangedSignal(property):Connect(updateLevelOneGuideLayout)
+		end
+		updateLevelOneGuideLayout()
+	end)
+end
 
 local viewportConnection = nil
 local function connectGuideViewport()
@@ -3593,11 +3810,11 @@ local function playLevelOneBriefing()
 	local run = briefingRun
 	local speechAt = os.clock() + LEVEL_ONE_BRIEFING_DELAY
 	player:SetAttribute("LevelOneBriefingActive", false)
-	setObjectivesAvailable(false)
+	setObjectivesAvailable(isLevelOneParticipant())
 	setSubtitle(nil)
 
 	task.spawn(function()
-		dispatchAudio.awaitPreference()
+		if dispatchAudio.voiceEnabled then dispatchAudio.awaitPreference() end
 		preloadLevelOneBriefing()
 
 		-- Asset 73198577463663 is exactly one second long. Start it early enough
@@ -3644,8 +3861,11 @@ local function playLevelOneBriefing()
 		levelOneBriefingSound:Stop()
 		levelOneBriefingSound.TimePosition = 0
 		levelOneBriefingSound.Volume = 1
-		player:SetAttribute("LevelOneBriefingActive", true)
-		local played = pcall(function() levelOneBriefingSound:Play() end)
+		player:SetAttribute("LevelOneBriefingActive", dispatchAudio.voiceEnabled)
+		local played = true
+		if dispatchAudio.voiceEnabled then
+			played = pcall(function() levelOneBriefingSound:Play() end)
+		end
 		if not played then
 			player:SetAttribute("LevelOneBriefingActive", false)
 			dispatchAudio.finishTransmission("level1", run)
@@ -3659,11 +3879,15 @@ local function playLevelOneBriefing()
 		local playbackStarted = levelOneBriefingSound.IsPlaying
 		local playbackStartDeadline = os.clock() + 4
 		local deadline = os.clock() + 52
-		while run == briefingRun and isLevelOneParticipant() and os.clock() < deadline do
-			local position = levelOneBriefingSound.TimePosition
+		local captionClock = dispatchAudio.newCaptionClock()
+		while run == briefingRun and isLevelOneParticipant()
+			and (not dispatchAudio.voiceEnabled or os.clock() < deadline) do
+			local position = dispatchAudio.captionPosition(captionClock, levelOneBriefingSound)
 			-- Retire the old timed-lever sentence without replaying outdated rules.
 			-- Keep its corrected caption visible; the remaining recording is unchanged.
-			levelOneBriefingSound.Volume = (position >= 20.78 and position < 25.86) and 0 or 1
+			if dispatchAudio.voiceEnabled then
+				levelOneBriefingSound.Volume = (position >= 20.78 and position < 25.86) and 0 or 1
+			end
 			local cueText = nil
 			for _, cue in ipairs(briefingCues) do
 				if position >= cue[1] and position < cue[2] then
@@ -3675,7 +3899,9 @@ local function playLevelOneBriefing()
 				currentText = cueText
 				setSubtitle(cueText)
 			end
-			if levelOneBriefingSound.IsPlaying then
+			if not dispatchAudio.voiceEnabled then
+				if position >= briefingCues[#briefingCues][2] then break end
+			elseif levelOneBriefingSound.IsPlaying then
 				playbackStarted = true
 			elseif playbackStarted or os.clock() >= playbackStartDeadline then
 				break
@@ -3713,9 +3939,11 @@ end
 local function preloadLevelTwoBriefing()
 	if levelTwoBriefingPreloaded then return true end
 	local ok = pcall(function()
-		ContentProvider:PreloadAsync({levelTwoRadioCue, levelTwoBriefingSound})
+		ContentProvider:PreloadAsync(dispatchAudio.voiceEnabled
+			and {levelTwoRadioCue, levelTwoBriefingSound} or {levelTwoRadioCue})
 	end)
-	levelTwoBriefingPreloaded = ok and levelTwoRadioCue.IsLoaded and levelTwoBriefingSound.IsLoaded
+	levelTwoBriefingPreloaded = ok and levelTwoRadioCue.IsLoaded
+		and (not dispatchAudio.voiceEnabled or levelTwoBriefingSound.IsLoaded)
 	return levelTwoBriefingPreloaded
 end
 
@@ -3729,7 +3957,7 @@ local function playLevelTwoBriefing()
 	setSubtitle(nil)
 
 	task.spawn(function()
-		dispatchAudio.awaitPreference()
+		if dispatchAudio.voiceEnabled then dispatchAudio.awaitPreference() end
 		preloadLevelTwoBriefing()
 
 		local radioLength = levelTwoRadioCue.TimeLength > 0.05 and levelTwoRadioCue.TimeLength or 1
@@ -3768,8 +3996,11 @@ local function playLevelTwoBriefing()
 
 		levelTwoBriefingSound:Stop()
 		levelTwoBriefingSound.TimePosition = 0
-		player:SetAttribute("LevelTwoBriefingActive", true)
-		local played = pcall(function() levelTwoBriefingSound:Play() end)
+		player:SetAttribute("LevelTwoBriefingActive", dispatchAudio.voiceEnabled)
+		local played = true
+		if dispatchAudio.voiceEnabled then
+			played = pcall(function() levelTwoBriefingSound:Play() end)
+		end
 		if not played then
 			player:SetAttribute("LevelTwoBriefingActive", false)
 			dispatchAudio.finishTransmission("level2", run)
@@ -3780,8 +4011,10 @@ local function playLevelTwoBriefing()
 		local playbackStarted = levelTwoBriefingSound.IsPlaying
 		local playbackStartDeadline = os.clock() + 4
 		local deadline = os.clock() + 50
-		while run == levelTwoBriefingRun and isLevelTwoParticipant() and os.clock() < deadline do
-			local position = levelTwoBriefingSound.TimePosition
+		local captionClock = dispatchAudio.newCaptionClock()
+		while run == levelTwoBriefingRun and isLevelTwoParticipant()
+			and (not dispatchAudio.voiceEnabled or os.clock() < deadline) do
+			local position = dispatchAudio.captionPosition(captionClock, levelTwoBriefingSound)
 			local cueText = nil
 			for _, cue in ipairs(levelTwoBriefingCues) do
 				if position >= cue[1] and position < cue[2] then
@@ -3793,7 +4026,9 @@ local function playLevelTwoBriefing()
 				currentText = cueText
 				setSubtitle(cueText)
 			end
-			if levelTwoBriefingSound.IsPlaying then
+			if not dispatchAudio.voiceEnabled then
+				if position >= levelTwoBriefingCues[#levelTwoBriefingCues][2] then break end
+			elseif levelTwoBriefingSound.IsPlaying then
 				playbackStarted = true
 			elseif playbackStarted or os.clock() >= playbackStartDeadline then
 				break
@@ -3857,11 +4092,12 @@ end
 function levelThreeBriefing.preload()
 	if levelThreeBriefing.preloaded then return true end
 	local ok = pcall(function()
-		ContentProvider:PreloadAsync({levelThreeBriefing.radio, levelThreeBriefing.sound})
+		ContentProvider:PreloadAsync(dispatchAudio.voiceEnabled
+			and {levelThreeBriefing.radio, levelThreeBriefing.sound} or {levelThreeBriefing.radio})
 	end)
 	levelThreeBriefing.preloaded = ok
 		and levelThreeBriefing.radio.IsLoaded
-		and levelThreeBriefing.sound.IsLoaded
+		and (not dispatchAudio.voiceEnabled or levelThreeBriefing.sound.IsLoaded)
 	return levelThreeBriefing.preloaded
 end
 
@@ -3876,7 +4112,7 @@ function levelThreeBriefing.play()
 	setSubtitle(nil)
 
 	task.spawn(function()
-		dispatchAudio.awaitPreference()
+		if dispatchAudio.voiceEnabled then dispatchAudio.awaitPreference() end
 		levelThreeBriefing.preload()
 
 		local radioLength = levelThreeBriefing.radio.TimeLength > 0.05
@@ -3919,8 +4155,11 @@ function levelThreeBriefing.play()
 		levelThreeBriefing.sound:Stop()
 		levelThreeBriefing.sound.TimePosition = 0
 		levelThreeBriefing.resetInterference()
-		player:SetAttribute("LevelThreeBriefingActive", true)
-		local played = pcall(function() levelThreeBriefing.sound:Play() end)
+		player:SetAttribute("LevelThreeBriefingActive", dispatchAudio.voiceEnabled)
+		local played = true
+		if dispatchAudio.voiceEnabled then
+			played = pcall(function() levelThreeBriefing.sound:Play() end)
+		end
 		if not played then
 			player:SetAttribute("LevelThreeBriefingActive", false)
 			levelThreeBriefing.resetInterference()
@@ -3932,11 +4171,14 @@ function levelThreeBriefing.play()
 		local playbackStarted = levelThreeBriefing.sound.IsPlaying
 		local playbackStartDeadline = os.clock() + 4
 		local deadline = os.clock() + 60
+		local captionClock = dispatchAudio.newCaptionClock()
 		while run == levelThreeBriefing.run
 			and levelThreeBriefing.isParticipant()
-			and os.clock() < deadline do
-			local position = levelThreeBriefing.sound.TimePosition
-			levelThreeBriefing.updateInterference(position)
+			and (not dispatchAudio.voiceEnabled or os.clock() < deadline) do
+			local position = dispatchAudio.captionPosition(captionClock, levelThreeBriefing.sound)
+			if dispatchAudio.voiceEnabled then
+				levelThreeBriefing.updateInterference(position)
+			end
 			local cueText = nil
 			for _, cue in ipairs(levelThreeBriefing.cues) do
 				if position >= cue[1] and position < cue[2] then
@@ -3948,7 +4190,9 @@ function levelThreeBriefing.play()
 				currentText = cueText
 				setSubtitle(cueText)
 			end
-			if levelThreeBriefing.sound.IsPlaying then
+			if not dispatchAudio.voiceEnabled then
+				if position >= levelThreeBriefing.cues[#levelThreeBriefing.cues][2] then break end
+			elseif levelThreeBriefing.sound.IsPlaying then
 				playbackStarted = true
 			elseif playbackStarted or os.clock() >= playbackStartDeadline then
 				break
@@ -5222,7 +5466,10 @@ end
 local function mimicAnimationId(character, keyword)
  for _, item in ipairs(character:GetDescendants()) do
   if item:IsA("Animation") and item.Name:lower():find(keyword, 1, true)
-   and item.AnimationId ~= "" then return item.AnimationId end
+   and item.AnimationId ~= ""
+   and not item:FindFirstAncestor("ZyntraHazmatSkinVisual") then
+   return item.AnimationId
+  end
  end
  return nil
 end
@@ -5240,6 +5487,21 @@ local function mimicBuild(sourcePlayer, spawnPos)
  if not model then return nil end
  model.Name = "MimicApparition"
 
+ -- The player's Meshy skin is driven by a separate AnimationController. A
+ -- cloned character cannot inherit its running tracks, so that visual would
+ -- freeze while the R15 body underneath stays transparent. Let the mimic use
+ -- the native R15 suit and its own walk/run animator instead.
+ local cosmetic = model:FindFirstChild("ZyntraHazmatSkinVisual")
+ if cosmetic then cosmetic:Destroy() end
+ for _, item in ipairs(model:GetDescendants()) do
+  local original = item:GetAttribute("ZyntraHazmatOriginalTransparency")
+  if type(original) == "number"
+   and (item:IsA("BasePart") or item:IsA("Decal") or item:IsA("Texture")) then
+   item.Transparency = original
+   item:SetAttribute("ZyntraHazmatOriginalTransparency", nil)
+  end
+ end
+
  -- The clone inherits everything the source player is wearing, and that includes
  -- the overhead BillboardGui the Zyntra Supporter pass parents to the Head. A
  -- Mimic captioned ZYNTRA SUPPORTER is an instant tell, and it hangs a purchase
@@ -5256,6 +5518,7 @@ local function mimicBuild(sourcePlayer, spawnPos)
    item.CanTouch = false
    item.CanQuery = false
    item.Massless = true
+   item.LocalTransparencyModifier = 0
   end
  end
 

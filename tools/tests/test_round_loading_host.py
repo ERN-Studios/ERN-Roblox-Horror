@@ -160,6 +160,7 @@ local function host(options)
   return player.Parent == Players and player.Character or nil
  end
  local function placeOnLevelEntry() return options.PlacementResult ~= false end
+ local function canAccessLevel() return true end -- prepareGroupLoading's level gate (fixtures stay <= Level 3)
  local function returnGroupToLobby(group)
   table.insert(h.Returns, {At=clock.Now, Group=table.clone(group)})
  end
@@ -401,6 +402,18 @@ do
  expect(h.AdmissionAt>=5,true,'present member with unreadable packet is not treated as disconnected')
  expect(h.Group.Expected,2,'read error never decrements cohort count')
  expect(#h.Group.Members,2,'both present players are admitted after packet recovery')
+end
+do
+ -- AUDIT_FIX_20260924: Reset Character on the loading cover. Nothing respawns
+ -- the placed character, so the barrier fails at once, not at the deadline.
+ local h = host({AckDelay=10})
+ local a, b = h:Player(1,packet(2,true)), h:Player(2,packet(2,true))
+ h:Add(a); h:Add(b)
+ h:At(3,function() a.Character.Humanoid.Health = 0 end)
+ h:Run()
+ expect(h.Prepared,false,'a member who died on the loading cover cannot enter')
+ expect(h.Attempt.Reason,'ENTRY_MEMBER_DIED','a dead placed member fails the barrier by name')
+ near(h.Returns[1].At,3,.21,'the party is not held to the sixty second deadline')
 end
 print('Round loading host: '..checks..' checks passed (actual host blocks; fake Roblox boundaries)')
 '''

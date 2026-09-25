@@ -1,0 +1,19 @@
+{
+  "source": "assets/models/pool_slide/candidates/scale-neutral/animations/pool_slide_walk_v2-scale-neutral.rbxmx",
+  "sha256": "d6e2c8fa19ac7cbd7ea1c5a9abbdcbd6103325df825c66c19230735865b6dccc",
+  "groupId": 1039373905,
+  "expectedPrice": 0,
+  "createdAtUtc": "2026-09-24T14:42:58.593749+00:00",
+  "operationPath": "operations/a5c3a0be-d12b-4252-b1db-ab996e004715",
+  "assetId": "100254982019982",
+  "status": "created",
+  "result": {
+    "assetType": "Animation",
+    "displayName": "Pool Slide Walk v2 scale-neutral A/B",
+    "revisionId": "1",
+    "moderationResult": {
+      "moderationState": "Approved"
+    },
+    "state": "Active"
+  }
+}

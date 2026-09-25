@@ -1,0 +1,19 @@
+{
+  "source": "assets/models/pool_slide/animations/pool_slide_run_1p20_v1.rbxmx",
+  "sha256": "3700e93c91d8baf988d436c3c3181291a796d39ced5180dadc19ad60d5613896",
+  "groupId": 1039373905,
+  "expectedPrice": 0,
+  "createdAtUtc": "2026-09-24T13:00:52.025466+00:00",
+  "operationPath": "operations/70fa8ce5-8148-47c1-9d67-0b2264f29fbe",
+  "assetId": "128800704640816",
+  "status": "created",
+  "result": {
+    "assetType": "Animation",
+    "displayName": "Pool Slide Run 1.20x v1",
+    "revisionId": "1",
+    "moderationResult": {
+      "moderationState": "Approved"
+    },
+    "state": "Active"
+  }
+}

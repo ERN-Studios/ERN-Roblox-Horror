@@ -1,0 +1,27 @@
+# Published Roblox Player check — 24 September 2026
+
+At about 17:27–17:31 UTC, Roblox Player entered `BACKROOMS: STAY QUIET [CO-OP HORROR]` on the existing developer account. Roblox's version-history API had reported v2083 as the latest published version immediately before this session. The Player UI did not expose the actual running server's place version, so these observations are **published-client behavior**, not proof of a specific server binary.
+
+- The returning-account lobby showed no `LEVEL 1 START HERE`, Field Notes or lobby `TRY AGAIN` guide in the visible view. The first-clear Rewards intro was present and dismissible. Fresh first login and death→lobby remain untested.
+- The wheel displayed six sectors: 1 Token 40%, 3 Tokens 20%, Speed Potion 20%, Entity Shield 10%, 2 Speed Potions 5%, and Skin or 3 Tokens 5%. Its X closed the panel. This session did not spin, collect or test UTC rollover.
+- The SKINS catalog loaded standing portraits for Baseline Yellow, Pool Service, Suburb Survey, Blacksite Director, Static Wraith and False Sun. The Baseline, Pool Service and Suburb Survey rotating 3D previews showed arms down. The Static Wraith and False Sun thumbnails appeared blank for about two seconds while loading, then rendered normally; this was not a permanent failure.
+- **New visual defect:** the separate developer-only Signal Architect catalog portrait is still in a T-pose. [Full Player screenshot](skins-dev-portrait.png). No purchase, equip, two-client visibility or physical touch test was performed.
+
+This does not close the Testing cards that require fresh accounts, purchase/rejoin, multiplayer, physical devices, DataStore persistence or listening. The owner authorized Player-only computer control for this check; Studio was not operated through its UI.
+
+The Signal Architect defect was subsequently addressed in **unpublished Studio Edit**: the group-approved standing Image `139302197163453` is now `ZyntraSkins.SignalArchitect.PreviewImageId`, using the same catalogue presentation as the six ordinary skins. The Player screenshot above remains valid evidence for the published state before that change. A new published Player view is needed to verify the correction.
+
+## Published upgrade-cost check
+
+In the same published Player session, the developer account began with 892 Tokens, Stamina level 11 and Battery level 11. Four real in-game Token upgrades were purchased through the Upgrades panel; no Robux transaction was made:
+
+| Upgrade | Before | Cost shown and deducted | After | Next cost shown |
+| --- | ---: | ---: | ---: | ---: |
+| Stamina | level 11, 892 Tokens | 12 | level 12, 880 Tokens | 13 |
+| Stamina | level 12, 880 Tokens | 13 | level 13, 867 Tokens | 14 |
+| Battery | level 11, 867 Tokens | 12 | level 12, 855 Tokens | 13 |
+| Battery | level 12, 855 Tokens | 13 | level 13, 842 Tokens | 14 |
+
+The 50-Token spend and each resulting level were visible in the live UI. A subsequent read-only Roblox Open Cloud read of `ZyntraPlayerData_v1` returned **Tokens 842, StaminaLevel 13, BatteryLevel 13** at revision `08DEFB824489BAFF.00000001BE.08DF1A65E79D9CDB.01`; the full profile and API key were not saved or printed. The owner then left, joined a new server, and confirmed that the Player UI still showed **842 Tokens, Stamina level 13 and Battery level 13**. This confirms both the persistent write and a new-server load; the rejoin result is the owner's direct report, not an automated capture. The actual server place version was not exposed; v2083 was the latest published version queried before joining. Player automation stopped when the tool detected separate user input in that window.
+
+The remaining insufficient-balance branch passed 15/15 checks with Luau 0.737 in `tools/tests/test_upgrade_cost.py`, which executes the real configuration and server action branch against an isolated stored profile. At Stamina level 1 with only 1 Token, it refused the 2-Token purchase with the exact price in the message, no DataStore write and no deduction. A stale session that looked rich while the stored profile had too few Tokens was likewise refused inside the write transform. Read-only Studio inspection confirmed the live Edit source retains these guards. This is an offline negative-path test, not an attempted purchase on a live low-balance account. Together with the published purchases and owner-confirmed new-server load, [upgrade Trello card](https://trello.com/c/KF7FDmP1) meets its acceptance evidence.

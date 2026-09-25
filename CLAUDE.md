@@ -170,6 +170,12 @@ Two rules follow from that move, and both have already bitten this project once:
   top-level locals; one more fails to compile ("Out of local registers"). Put new
   state in a `do ... end` block (the closure keeps it as an upvalue), and run the
   compile probe after every RoundUI edit.
+  **Offline, compile at `-O0`** (2026-09-24): `luau-compile`'s default `-O1`
+  folds constant locals and passes scripts Studio refuses; ZyntraMonetization
+  failed the push probe that way. `tools/tests/test_studio_compile_limits.py`
+  checks every mirrored script at `-O0` and prints the remaining headroom
+  (ZyntraMonetization: 6 after that fix). New helpers go on an existing table,
+  not new top-level locals.
 - **Flashlight beam numbers live in `ReplicatedStorage.FlashlightProfiles`**
   (`Own`, `Mount`, `Mate`, `Spectate` x `BASE` / `L3` / `L3_BLACKOUT`). The sets
   differ on purpose (they are what each script carried); the double-render is
@@ -470,3 +476,22 @@ Also landed 2026-08-19 (Studio first, then mirrored, manifest updated):
   token 93116899475472, potion 120211340805188, shield 126728249949579); milestones and claims
   unchanged. Studio's Device Simulator still reports a mouse and keyboard, so touch tiers only
   show there with `workspace:SetAttribute("ForceTouchUI", true)`.
+
+### Added 2026-09-24 (night; record in `artifacts/level3-solo-20260924/`)
+
+- **Level 3 can be played end to end by a client bot** (`artifacts/level3-solo-20260924/bot-client.luau`,
+  installed with `execute_luau` in the Client datamodel after `RoundActive`): PathfindingService +
+  `Humanoid:MoveTo`, prompt holds with the camera aimed, hide ~32 s before each hunt
+  (`Level3_RoomSongStartServerTime + 180.036`). The Manager only exists in 30 s hunts and cannot hurt
+  a hidden player, so a solo route is timing, not stealth. Finale sprint needs the touch RUN toggle
+  (`ForceTouchUI` + click `StaminaGui.TouchRunHold`); an MCP-held LeftShift does not register.
+- **`ROOM_AISLE` is the Manager's third room repair** (`LEVEL3_MANAGER_ROOM_AISLE_REPAIR_20260924`): a
+  one-stud grid search of the current room when PFS and both perimeter rings fail. Without it the
+  finale Manager froze forever in rooms whose only body-legal lane is narrower than a navmesh voxel
+  (seed 1428587057, L3_S2_R05). `LastPhysicalBlocker` is written by whichever sweep failed last, so it
+  does not name the blocker of the current waypoint; read PathStatus + WaypointTarget instead.
+- **Watch the Studio console for `[DevCheats]` lines you did not cause.** On 24 Sep a parallel Codex
+  computer-use session toggled noclip/third-person/unlimited stamina inside this session's Play runs;
+  those runs could not count as evidence.
+- Finale with base stamina (×1.0) is survivable only with a perfect sprint (Manager in ATTACK_WINDUP
+  3–5 studs behind at the door); that margin is an open owner tuning decision.

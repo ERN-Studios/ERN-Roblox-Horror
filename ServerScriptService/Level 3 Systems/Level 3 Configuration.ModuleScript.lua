@@ -5,7 +5,7 @@
 -- navigation, awareness, attacks, and lifecycle are isolated from Level 1.
 
 local Configuration = {
-	Version = 45,
+	Version = 46,
 	WorldName = "Level 3 Generated World",
 	StateFolderName = "Level 3 State",
 	RemotesFolderName = "Level 3 Remotes",
@@ -33,10 +33,10 @@ local Configuration = {
 		GenerationAttempts = 32,
 		RetryStride = 104729,
 		FallbackSeeds = {101, 7331, 65537, 1900813},
-		MinimumRoomWidth = 60,
-		MaximumRoomWidth = 78,
-		MinimumRoomDepth = 52,
-		MaximumRoomDepth = 68,
+		MinimumRoomWidth = 65,
+		MaximumRoomWidth = 85,
+		MinimumRoomDepth = 57,
+		MaximumRoomDepth = 74,
 		MinimumRoomHeight = 11,
 		MaximumRoomHeight = 13,
 		MinimumInternalGap = 24,
@@ -53,6 +53,10 @@ local Configuration = {
 		RowHalfSpacing = 90,
 		ExtraLinksPerDistrict = 2,
 		MinimumModuleSeparation = 105,
+		-- With two loops per 2x4 district, one grid edge is absent. Three links
+		-- is the smallest possible straight-run cap; the scripted finale is exempt.
+		MaximumStraightRunLinks = 3,
+		MaximumVerticalRunLinks = 2,
 		BuildYieldEveryRooms = 3,
 		BuildYieldEveryCorridors = 2,
 		HideTableCount = 24,

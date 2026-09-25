@@ -1,0 +1,63 @@
+{
+  "appliedAtUtc": "2026-09-24T13:44:24.159196+00:00",
+  "universeId": 10559217407,
+  "products": [
+    {
+      "productId": 3713829859,
+      "name": "Zyntra Expedition Pack",
+      "beforeIconImageAssetId": 88963008124478,
+      "afterIconImageAssetId": 109100897990462,
+      "uploadedFile": "proposed/expedition-pack-round-512.png",
+      "uploadedSha256": "d6b03df3018982c07127aa63b959cde711abe16059684b53a7ed4682afe58a64",
+      "unchangedFields": [
+        "productId",
+        "name",
+        "description",
+        "universeId",
+        "isForSale",
+        "priceInformation",
+        "isImmutable",
+        "createdTimestamp",
+        "isManagedPricingEnabled"
+      ]
+    },
+    {
+      "productId": 3713115025,
+      "name": "Donate — 5,000 Robux",
+      "beforeIconImageAssetId": 88963008124478,
+      "afterIconImageAssetId": 109172844880978,
+      "uploadedFile": "proposed/donation-5k-round-512.png",
+      "uploadedSha256": "3ed07b9c2c4bdafea5167d79d9005ea570c90bf43c0fad3b1a5ae7bd809324de",
+      "unchangedFields": [
+        "productId",
+        "name",
+        "description",
+        "universeId",
+        "isForSale",
+        "priceInformation",
+        "isImmutable",
+        "createdTimestamp",
+        "isManagedPricingEnabled"
+      ]
+    },
+    {
+      "productId": 3713115125,
+      "name": "Donate — 10,000 Robux",
+      "beforeIconImageAssetId": 88963008124478,
+      "afterIconImageAssetId": 75225035218519,
+      "uploadedFile": "proposed/donation-10k-round-512.png",
+      "uploadedSha256": "e268770855678d25da1a2732e7d272833b8416867ee4682a1c4f858e1f4ed8c0",
+      "unchangedFields": [
+        "productId",
+        "name",
+        "description",
+        "universeId",
+        "isForSale",
+        "priceInformation",
+        "isImmutable",
+        "createdTimestamp",
+        "isManagedPricingEnabled"
+      ]
+    }
+  ]
+}

@@ -4,6 +4,11 @@ local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ContentProvider = game:GetService("ContentProvider")
 local RunService = game:GetService("RunService")
+local StarterGui = game:GetService("StarterGui")
+-- AUDIT_FIX_20260924: Reset Character is off while an entry is pending. Nothing
+-- respawns a placed member during entry, so one reset used to hold the whole
+-- party behind the cover until the 60 s deadline sent everyone back.
+local function allowReset(on) pcall(StarterGui.SetCore, StarterGui, "ResetButtonCallback", on) end
 local player = Players.LocalPlayer
 local remote = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("RoundStatus")
 local active
@@ -15,6 +20,7 @@ end
 local function cancel()
 	active = nil
 	player:SetAttribute("RoundEntryReadyToken", nil)
+	allowReset(true)
 end
 
 local function current(request)
@@ -84,6 +90,7 @@ local function begin(payload)
 	request.Raycast.IgnoreWater = true
 	request.Raycast.RespectCanCollide = true
 	active = request
+	allowReset(false)
 	-- Both engine operations may yield. Neither owns the polling task or its
 	-- deadline, and their late results are useful only for this same request.
 	task.spawn(function()

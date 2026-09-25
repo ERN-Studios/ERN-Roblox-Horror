@@ -1,0 +1,284 @@
+{
+  "capturedAtUtc": "2026-09-24T13:46:17.533822+00:00",
+  "universeId": 10559217407,
+  "source": "Roblox Open Cloud creator product list and official asset thumbnail API",
+  "cropMethod": "Product thumbnail API returned no data; circle preview is local mask of live icon asset thumbnail",
+  "products": [
+    {
+      "productId": 3713829859,
+      "name": "Zyntra Expedition Pack",
+      "iconImageAssetId": 109100897990462,
+      "isForSale": true,
+      "defaultPriceInRobux": 69,
+      "thumbnails": {
+        "square": {
+          "state": "Completed",
+          "file": "live-thumbnails/3713829859-zyntra-expedition-pack-square-150.png",
+          "previewFile": "live-thumbnails/3713829859-square-128.png",
+          "sha256": "c93a1f621103294d3c3a8fa3870ef1cc89ce34a20a64aa1761d4bbe8d6c6da48",
+          "sourceIconAssetId": 109100897990462
+        },
+        "circle": {
+          "state": "Completed",
+          "file": "live-thumbnails/3713829859-zyntra-expedition-pack-circle-150.png",
+          "previewFile": "live-thumbnails/3713829859-circle-128.png",
+          "sha256": "36fac687e7d13f40170befc4a27edb534800fdc431f252b4e6eca3122b4e6bfd",
+          "sourceIconAssetId": 109100897990462
+        }
+      }
+    },
+    {
+      "productId": 3713115125,
+      "name": "Donate — 10,000 Robux",
+      "iconImageAssetId": 75225035218519,
+      "isForSale": true,
+      "defaultPriceInRobux": 10000,
+      "thumbnails": {
+        "square": {
+          "state": "Completed",
+          "file": "live-thumbnails/3713115125-donate-10-000-robux-square-150.png",
+          "previewFile": "live-thumbnails/3713115125-square-128.png",
+          "sha256": "0215d775df62516bd4d55df18e122d42771c6d0db407905f29a1fe9feaf9b641",
+          "sourceIconAssetId": 75225035218519
+        },
+        "circle": {
+          "state": "Completed",
+          "file": "live-thumbnails/3713115125-donate-10-000-robux-circle-150.png",
+          "previewFile": "live-thumbnails/3713115125-circle-128.png",
+          "sha256": "bd0a9df306453428813043c729a60a4da00968493453bd6ee7adf92faea4d04d",
+          "sourceIconAssetId": 75225035218519
+        }
+      }
+    },
+    {
+      "productId": 3713115025,
+      "name": "Donate — 5,000 Robux",
+      "iconImageAssetId": 109172844880978,
+      "isForSale": true,
+      "defaultPriceInRobux": 5000,
+      "thumbnails": {
+        "square": {
+          "state": "Completed",
+          "file": "live-thumbnails/3713115025-donate-5-000-robux-square-150.png",
+          "previewFile": "live-thumbnails/3713115025-square-128.png",
+          "sha256": "7f5fee78dfdb40ea87690f0be5954f90f56833d4a8d435dffa02ab11f29b018b",
+          "sourceIconAssetId": 109172844880978
+        },
+        "circle": {
+          "state": "Completed",
+          "file": "live-thumbnails/3713115025-donate-5-000-robux-circle-150.png",
+          "previewFile": "live-thumbnails/3713115025-circle-128.png",
+          "sha256": "dc4034015ba5cfa50b4071c9b56ccb6c7620b1b86aba0073a97f3470c9181bce",
+          "sourceIconAssetId": 109172844880978
+        }
+      }
+    },
+    {
+      "productId": 3710117136,
+      "name": "Donate Director",
+      "iconImageAssetId": 79580809021374,
+      "isForSale": true,
+      "defaultPriceInRobux": 1000,
+      "thumbnails": {
+        "square": {
+          "state": "Completed",
+          "file": "live-thumbnails/3710117136-donate-director-square-150.png",
+          "previewFile": "live-thumbnails/3710117136-square-128.png",
+          "sha256": "f5bd3fa7b63aff3e919999d57630af467512934d40076012f8f85384d7334f2c",
+          "sourceIconAssetId": 79580809021374
+        },
+        "circle": {
+          "state": "Completed",
+          "file": "live-thumbnails/3710117136-donate-director-circle-150.png",
+          "previewFile": "live-thumbnails/3710117136-circle-128.png",
+          "sha256": "c8cfcb42ef3d1c69615cc77a4e061e1eb576d3ff6c20be8a36d0fb458ed8ed49",
+          "sourceIconAssetId": 79580809021374
+        }
+      }
+    },
+    {
+      "productId": 3710117099,
+      "name": "Donate Command",
+      "iconImageAssetId": 123770822893972,
+      "isForSale": true,
+      "defaultPriceInRobux": 500,
+      "thumbnails": {
+        "square": {
+          "state": "Completed",
+          "file": "live-thumbnails/3710117099-donate-command-square-150.png",
+          "previewFile": "live-thumbnails/3710117099-square-128.png",
+          "sha256": "5d112a4c78a710fe3b6cda7fe606ca0150acb20c89ec7b2a152aff3e5bb5c3b9",
+          "sourceIconAssetId": 123770822893972
+        },
+        "circle": {
+          "state": "Completed",
+          "file": "live-thumbnails/3710117099-donate-command-circle-150.png",
+          "previewFile": "live-thumbnails/3710117099-circle-128.png",
+          "sha256": "88ece4ebf40e4633f0f82fa2fe1ab1cb8ef3f1801eb31ce87b4a093e6a25b452",
+          "sourceIconAssetId": 123770822893972
+        }
+      }
+    },
+    {
+      "productId": 3710117070,
+      "name": "Donate Research",
+      "iconImageAssetId": 126696663411853,
+      "isForSale": true,
+      "defaultPriceInRobux": 250,
+      "thumbnails": {
+        "square": {
+          "state": "Completed",
+          "file": "live-thumbnails/3710117070-donate-research-square-150.png",
+          "previewFile": "live-thumbnails/3710117070-square-128.png",
+          "sha256": "37d12a8d6acc7c5ec9d3909984410008c5a43348f4dbd7a0b53040871de43e0c",
+          "sourceIconAssetId": 126696663411853
+        },
+        "circle": {
+          "state": "Completed",
+          "file": "live-thumbnails/3710117070-donate-research-circle-150.png",
+          "previewFile": "live-thumbnails/3710117070-circle-128.png",
+          "sha256": "f950fbbf0c87941f417d739a7f3d2d088f8b143c6ff0c901e5e0d0b5f2165019",
+          "sourceIconAssetId": 126696663411853
+        }
+      }
+    },
+    {
+      "productId": 3710117017,
+      "name": "Donate Field",
+      "iconImageAssetId": 131884981410723,
+      "isForSale": true,
+      "defaultPriceInRobux": 100,
+      "thumbnails": {
+        "square": {
+          "state": "Completed",
+          "file": "live-thumbnails/3710117017-donate-field-square-150.png",
+          "previewFile": "live-thumbnails/3710117017-square-128.png",
+          "sha256": "03c45dcd2c9c6a7634a68f26fd5a4b1042216c2a4993096d77568af4fe5a7f9e",
+          "sourceIconAssetId": 131884981410723
+        },
+        "circle": {
+          "state": "Completed",
+          "file": "live-thumbnails/3710117017-donate-field-circle-150.png",
+          "previewFile": "live-thumbnails/3710117017-circle-128.png",
+          "sha256": "53e29b4ea3587c282aebd20f9f78c8bae4066f58051bda4059a9dc3cc9aef959",
+          "sourceIconAssetId": 131884981410723
+        }
+      }
+    },
+    {
+      "productId": 3710116945,
+      "name": "Donate Supply",
+      "iconImageAssetId": 84334810669405,
+      "isForSale": true,
+      "defaultPriceInRobux": 50,
+      "thumbnails": {
+        "square": {
+          "state": "Completed",
+          "file": "live-thumbnails/3710116945-donate-supply-square-150.png",
+          "previewFile": "live-thumbnails/3710116945-square-128.png",
+          "sha256": "b7759001a33d846ab33ff6a40b8d5a6c35a646fcdbb0af63da45e479ac6febf4",
+          "sourceIconAssetId": 84334810669405
+        },
+        "circle": {
+          "state": "Completed",
+          "file": "live-thumbnails/3710116945-donate-supply-circle-150.png",
+          "previewFile": "live-thumbnails/3710116945-circle-128.png",
+          "sha256": "d3adb3da95bc86231067afd7bac8622ae5dab27980d1312ac1be6eec7d622fbc",
+          "sourceIconAssetId": 84334810669405
+        }
+      }
+    },
+    {
+      "productId": 3710116814,
+      "name": "Donate Signal",
+      "iconImageAssetId": 82566076251779,
+      "isForSale": true,
+      "defaultPriceInRobux": 10,
+      "thumbnails": {
+        "square": {
+          "state": "Completed",
+          "file": "live-thumbnails/3710116814-donate-signal-square-150.png",
+          "previewFile": "live-thumbnails/3710116814-square-128.png",
+          "sha256": "aee870907f6312bb8662470d4cac2cd2be39954959a26a61906cd8e1cadfa0f0",
+          "sourceIconAssetId": 82566076251779
+        },
+        "circle": {
+          "state": "Completed",
+          "file": "live-thumbnails/3710116814-donate-signal-circle-150.png",
+          "previewFile": "live-thumbnails/3710116814-circle-128.png",
+          "sha256": "b52f90a2e09552aa03b231d812eb330fe433fd5c20aa0da1f368e88d7826352a",
+          "sourceIconAssetId": 82566076251779
+        }
+      }
+    },
+    {
+      "productId": 3707755318,
+      "name": "Emergency Re-entry",
+      "iconImageAssetId": 137929784189814,
+      "isForSale": true,
+      "defaultPriceInRobux": 29,
+      "thumbnails": {
+        "square": {
+          "state": "Completed",
+          "file": "live-thumbnails/3707755318-emergency-re-entry-square-150.png",
+          "previewFile": "live-thumbnails/3707755318-square-128.png",
+          "sha256": "bb2dd3d52ba22ae19125dcf8f5fa52252db5b99667f3dc848d9a5ac7da71796c",
+          "sourceIconAssetId": 137929784189814
+        },
+        "circle": {
+          "state": "Completed",
+          "file": "live-thumbnails/3707755318-emergency-re-entry-circle-150.png",
+          "previewFile": "live-thumbnails/3707755318-circle-128.png",
+          "sha256": "dff741fe5372ecb74977acccaf167b61e30c98591273aa19542121a6bc307259",
+          "sourceIconAssetId": 137929784189814
+        }
+      }
+    },
+    {
+      "productId": 3707755233,
+      "name": "20 Research Tokens",
+      "iconImageAssetId": 136487758639981,
+      "isForSale": true,
+      "defaultPriceInRobux": 149,
+      "thumbnails": {
+        "square": {
+          "state": "Completed",
+          "file": "live-thumbnails/3707755233-20-research-tokens-square-150.png",
+          "previewFile": "live-thumbnails/3707755233-square-128.png",
+          "sha256": "9ae9d15bbe090730c71f90d0f643cf49e7b6dfbf8547465f444335ae70e4b44e",
+          "sourceIconAssetId": 136487758639981
+        },
+        "circle": {
+          "state": "Completed",
+          "file": "live-thumbnails/3707755233-20-research-tokens-circle-150.png",
+          "previewFile": "live-thumbnails/3707755233-circle-128.png",
+          "sha256": "0f2f3f5ef8529e87af5a92f67d34567f16ad8ac1a1acfb66585ee857dd642a31",
+          "sourceIconAssetId": 136487758639981
+        }
+      }
+    },
+    {
+      "productId": 3707755089,
+      "name": "4 Research Tokens",
+      "iconImageAssetId": 106212286945374,
+      "isForSale": true,
+      "defaultPriceInRobux": 49,
+      "thumbnails": {
+        "square": {
+          "state": "Completed",
+          "file": "live-thumbnails/3707755089-4-research-tokens-square-150.png",
+          "previewFile": "live-thumbnails/3707755089-square-128.png",
+          "sha256": "60d428d06a8d575d84819d94367d5817964989858f709dcd650eb0e542a8771c",
+          "sourceIconAssetId": 106212286945374
+        },
+        "circle": {
+          "state": "Completed",
+          "file": "live-thumbnails/3707755089-4-research-tokens-circle-150.png",
+          "previewFile": "live-thumbnails/3707755089-circle-128.png",
+          "sha256": "0dd0c809f40bfaa34de82beb549cbe3e5bace03e9f7eb4430b46bcf55ab18093",
+          "sourceIconAssetId": 106212286945374
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "signal-architect-color.png": {
+    "sha256": "2f0b3ec76fa25d370dd1537cac32dccdbc123ffc2cb800edb945a53727b1f61a",
+    "groupId": 1039373905,
+    "createdAtUtc": "2026-09-24T13:00:26.267323+00:00",
+    "operationPath": "operations/dfa07d09-51c1-409d-9277-1078b0acade9",
+    "assetId": "137400739559825",
+    "status": "approved",
+    "assetType": "Image",
+    "moderationState": "Approved",
+    "verifiedAtUtc": "2026-09-24T13:03:29.924321+00:00"
+  },
+  "false-sun-mote.png": {
+    "sha256": "213adf9872c4c4144aeb0ea48b68003b69a0f914367ede4f01d98c548804cb00",
+    "groupId": 1039373905,
+    "createdAtUtc": "2026-09-24T13:00:31.125232+00:00",
+    "operationPath": "operations/1f551dbe-90d7-4024-b926-dae1bc15a676",
+    "assetId": "128661548525607",
+    "status": "approved",
+    "assetType": "Image",
+    "moderationState": "Approved",
+    "verifiedAtUtc": "2026-09-24T13:03:30.231474+00:00"
+  },
+  "signal-architect-preview.png": {
+    "sha256": "9930dec8bfd745e947f92e4efbe6b9eba1a723aab98574b384bbb11e0a702204",
+    "groupId": 1039373905,
+    "createdAtUtc": "2026-09-24T13:03:21.230498+00:00",
+    "operationPath": "operations/a1644c58-55ae-41a9-be57-a547895287b9",
+    "assetId": "125389579950767",
+    "status": "approved",
+    "assetType": "Image",
+    "moderationState": "Approved",
+    "verifiedAtUtc": "2026-09-24T13:03:30.080744+00:00"
+  }
+}

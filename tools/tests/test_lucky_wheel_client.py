@@ -9,7 +9,7 @@ the device, parenting a foreign ScreenGui into PlayerGui while the wheel is open
 to the ZyntraAction remote and to the tween it asked for.
 
 The REAL ReplicatedStorage/UIStyle and ReplicatedStorage/ZyntraConfig modules
-are loaded under the same fake, so the five fields, their copy and their odds
+are loaded under the same fake, so the six fields, their copy and their odds
 strings are built from the SERVER'S OWN weights rather than from numbers this
 test made up. UIDevice is faked, but only where its published contract is:
 Layout() answers a stated Display/Safe pair, ScreenOwningModalOpen() reads the
@@ -18,7 +18,7 @@ SuppressTouchMovement records the caller's intent. TweenService is faked so the
 test can read the goal the script asked for and finish or cancel it on demand.
 
 What this CANNOT see, and what the Studio QA pass in the report is for: whether
-rbxassetid://86770264881525 actually loads and how its rim lines up with the
+rbxassetid://70472139920072 actually loads and how its rim lines up with the
 pointer, real font metrics and TextBounds (so whether "1 SPEED POTION" fits a
 335px disc's field), the real 4.2 s Quint feel, and whether a landscape phone's
 topbar clips the top of a disc centred on the whole display.
@@ -36,6 +36,7 @@ ROOT = Path(__file__).resolve().parents[2]
 SOURCE = ROOT / "StarterPlayer/StarterPlayerScripts/Lucky Wheel Client.LocalScript.lua"
 UISTYLE = ROOT / "ReplicatedStorage/UIStyle.ModuleScript.lua"
 CONFIG = ROOT / "ReplicatedStorage/ZyntraConfig.ModuleScript.lua"
+SKINS = ROOT / "ReplicatedStorage/ZyntraSkins.ModuleScript.lua"
 
 HARNESS = r'''
 local checks = 0
@@ -112,7 +113,7 @@ local SIGNALS = {
     InputBegan = true, InputEnded = true, Activated = true, MouseEnter = true,
     MouseLeave = true, Event = true, OnClientEvent = true, Heartbeat = true,
     Changed = true, DescendantAdded = true, ChildAdded = true, Completed = true,
-    CharacterAdded = true,
+    CharacterAdded = true, LastInputTypeChanged = true,
 }
 local methods = {}
 local function newInstance(class, name)
@@ -270,6 +271,8 @@ local function context(layout)
     ctx.UIDeviceModule.Parent = storage
     ctx.ConfigModule = newInstance('ModuleScript', 'ZyntraConfig')
     ctx.ConfigModule.Parent = storage
+    ctx.SkinsModule = newInstance('ModuleScript', 'ZyntraSkins')
+    ctx.SkinsModule.Parent = storage
 
     local remotes = newInstance('Folder', 'Remotes')
     remotes.Parent = storage
@@ -361,6 +364,11 @@ BRIDGE_CONFIG = r'''
     local ConfigModule = (function()
 '''
 
+BRIDGE_SKINS = r'''
+    end)()
+    local SkinsModule = (function()
+'''
+
 BRIDGE = r'''
     end)()
     -- UIDevice, faked only where its published contract is. The modal list is
@@ -412,6 +420,7 @@ BRIDGE = r'''
         if module.Name == 'UIDevice' then return UIDeviceFake end
         if module.Name == 'UIStyle' then return UIStyleModule end
         if module.Name == 'ZyntraConfig' then return ConfigModule end
+        if module.Name == 'ZyntraSkins' then return SkinsModule end
         error('unexpected require: ' .. tostring(module.Name))
     end
 '''
@@ -421,7 +430,7 @@ end
 
 -- ── driving it ───────────────────────────────────────────────────────────
 local TODAY = '2026-09-16'
-local DISC_IMAGE = 'rbxassetid://86770264881525'
+local DISC_IMAGE = 'rbxassetid://70472139920072'
 
 local function start(layout, options)
     options = options or {}
@@ -472,6 +481,8 @@ local function daily(options)
     if options.Key then
         block.WheelDay = options.Day or TODAY
         block.WheelLast = {Day = options.Day or TODAY, Key = options.Key, Serial = options.Serial or 1,
+            SkinId = options.SkinId, FallbackTokens = options.FallbackTokens,
+            PaidTokens = options.PaidTokens,
             -- WHEEL_COLLECT_20260922: a spin records, the claim pays. Omitted =
             -- an old, already-paid result (the server normalizes it to true).
             Claimed = options.Claimed}
@@ -480,7 +491,7 @@ local function daily(options)
 end
 local function push(ctx, profile) ctx.Pushes.OnClientEvent:Fire(profile) end
 
--- The five prizes, read off the REAL config, with the EQUAL field each one owns.
+-- The six prizes, read off the REAL config, with the EQUAL field each one owns.
 local WHEEL = {}
 local FIELD = 0
 do
@@ -493,19 +504,21 @@ do
             Weight = entry.Weight, Angle = FIELD * (order - 1),
             Odds = tostring(math.floor(entry.Weight / total * 100 + 0.5)) .. '%'})
     end
-    check(#WHEEL == 5, 'the shipped config has five prizes')
+    check(#WHEEL == 6, 'the shipped config has six prizes')
     check(total == 100, 'the shipped weights total 100, so a weight IS a percent')
-    check(FIELD == 72, 'five equal fields are 72 degrees each')
+    check(FIELD == 60, 'six equal fields are 60 degrees each')
 end
 -- The copy the fields carry, long and short. Derived here the same way the
 -- script does, so a config edit moves both together.
-local LONG = {'1 TOKEN', '3 TOKENS', '1 SPEED POTION', '2 SPEED POTIONS', '1 ENTITY SHIELD'}
-local SHORT = {'1 TOKEN', '3 TOKENS', '1 POTION', '2 POTIONS', '1 SHIELD'}
+local LONG = {'1 TOKEN', '3 TOKENS', '1 SPEED POTION', '2 SPEED POTIONS',
+    '1 ENTITY SHIELD', 'SKIN OR 3 TOKENS'}
+local SHORT = {'1 TOKEN', '3 TOKENS', '1 POTION', '2 POTIONS',
+    '1 SHIELD', 'SKIN / 3T'}
 
 -- Where the stationary pointer at 12 o'clock is looking, given a Rotation.
 local function pointerAngle(rotation) return (-rotation) % 360 end
--- How far INTO field `order` that angle is: [0, 72) means it is inside, and the
--- modulo is what carries field 1, whose wedge straddles 0 as [324, 360)+[0,36).
+-- How far INTO field `order` that angle is: [0, 60) means it is inside, and the
+-- modulo is what carries field 1, whose wedge straddles 0 as [330, 360)+[0,30).
 local function into(angle, order)
     return (angle - (FIELD * (order - 1) - FIELD / 2)) % 360
 end
@@ -577,7 +590,7 @@ do
         'and the shade carries only the wheel and the way out')
 end
 
--- ── five equal fields, with the real odds inside them ────────────────────
+-- ── six equal fields, with the real odds inside them ────────────────────
 do
     local ctx = start(POINTER)
     for _, prize in ipairs(WHEEL) do
@@ -621,9 +634,10 @@ do
             and math.abs(odds.Position.SY - (0.5 - 0.18 * math.cos(a))) < 1e-9,
             prize.Key .. ': and the odds sit at 0.36, inside the same field')
     end
-    check(descendant(ctx.Disc, 'FieldLabel6') == nil, 'there is no sixth field')
+    check(descendant(ctx.Disc, 'FieldLabel6') ~= nil, 'the sixth skin field is drawn')
+    check(descendant(ctx.Disc, 'FieldLabel7') == nil, 'there is no seventh field')
     -- The field at 12 o'clock is the one the pointer is over at Rotation 0, and
-    -- it is the 45% token: that is the orientation the PNG was checked against.
+    -- it is the 40% token: that is the orientation the PNG was checked against.
     check(WHEEL[1].Angle == 0 and WHEEL[1].Key == 'Token1',
         'field 1 is centred at 12 o\'clock, matching the texture')
     check(fieldOf(pointerAngle(0)).Key == 'Token1',
@@ -647,7 +661,7 @@ for _, case in ipairs({
         if label:FindFirstChildOfClass('UITextSizeConstraint').MaxTextSize
             ~= math.max(11, math.floor(side * 0.040)) then maxOk = false end
     end
-    check(shortOk, case.Name .. ': all five fields print the short prize names')
+    check(shortOk, case.Name .. ': all six fields print the short prize names')
     check(maxOk, case.Name .. ': and their ceiling is the size derived from the disc')
 end
 do
@@ -800,8 +814,8 @@ do
             ctx.Hub.Activated:Fire()
         end
     end
-    check(seen == 100, 'a hundred recorded results were replayed')
-    check(#ctx.Tweens == 100, 'each of them asked for exactly one tween')
+    check(seen == 120, '120 recorded results were replayed')
+    check(#ctx.Tweens == 120, 'each of them asked for exactly one tween')
 end
 do
     -- The landing keeps 6 degrees clear of both edges, so a result never looks
@@ -814,13 +828,13 @@ do
         for serial = 1, 40 do
             push(ctx, daily({Key = prize.Key, Serial = serial}))
             local depth = into(pointerAngle(ctx.Tweens[#ctx.Tweens].Goal.Rotation), prize.Order)
-            if depth < 6 or depth > 66 then clear = false end
+            if depth < 6 or depth > 54 then clear = false end
             low, high = math.min(low, depth), math.max(high, depth)
             ctx.Hub.Activated:Fire()
         end
     end
-    check(clear, 'all 200 landings sit in [6, 66] degrees of their own 72-degree field')
-    check(low < 20 and high > 50, 'and they use the width of it rather than one spot')
+    check(clear, 'all 240 landings sit in [6, 54] degrees of their own 60-degree field')
+    check(low < 20 and high > 40, 'and they use the width of it rather than one spot')
 end
 do
     -- ReduceFlashing turns ONCE, and one turn is exactly where the old
@@ -842,7 +856,7 @@ do
             end
         end
         local label = reduced and 'reduced flashing' or 'the full spin'
-        check(forward, label .. ': every one of the 100 landings travels FORWARD')
+        check(forward, label .. ': every one of the 120 landings travels FORWARD')
         check(minTravel >= 360, label .. ': and always at least one whole turn')
         if reduced then
             check(maxTravel <= 720, 'reduced flashing turns about once, never five times')
@@ -996,13 +1010,13 @@ do
         'RETRY is short enough for the big face again')
 end
 do
-    -- Nothing else rides on the disc: ten labels, and no controls.
+    -- Nothing else rides on the disc: twelve labels, and no controls.
     local ctx = start(POINTER)
     local labels, others = 0, 0
     for _, child in ipairs(ctx.Disc.Children) do
         if child.ClassName == 'TextLabel' then labels += 1 else others += 1 end
     end
-    check(labels == 10, 'the disc carries exactly five names and five odds')
+    check(labels == 12, 'the disc carries exactly six names and six odds')
     check(others == 0, 'and nothing else -- no button ever turns with it')
 end
 do
@@ -1017,6 +1031,40 @@ do
         'and leaves the pointer in the 5% field it actually won')
     ctx.Hub.Activated:Fire()
     check(#ctx.Tweens == 1, 'and a tap afterwards cannot finish it a second time')
+end
+do
+    -- The skin wedge lands on its own 5% field, and the claim confirmation
+    -- names the exact suit recorded by the server, not a client-side reroll.
+    local ctx = start(POINTER)
+    open(ctx)
+    push(ctx, daily({}))
+    push(ctx, daily({Key = 'Skin5', Serial = 15, Claimed = false,
+        SkinId = 'PoolService'}))
+    ctx.Tweens[1]:Finish()
+    check(fieldOf(pointerAngle(ctx.Disc.Rotation)).Key == 'Skin5',
+        'a selected skin lands on the sixth field')
+    check(ctx.Hub.Text == 'COLLECT\nPOOL\nSERVICE',
+        'the unclaimed suit is named on the collect button')
+    ctx.Hub.Activated:Fire()
+    push(ctx, daily({Key = 'Skin5', Serial = 15, Claimed = true,
+        SkinId = 'PoolService'}))
+    check(ctx.Hub.Text == 'POOL\nSERVICE\nCOLLECTED',
+        'the server-confirmed suit is named in the hub')
+end
+do
+    local ctx = start(POINTER)
+    open(ctx)
+    push(ctx, daily({}))
+    push(ctx, daily({Key = 'Skin5', Serial = 16, Claimed = false,
+        FallbackTokens = 3}))
+    ctx.Tweens[1]:Finish()
+    check(fieldOf(pointerAngle(ctx.Disc.Rotation)).Key == 'Skin5',
+        'an all-owned fallback still lands on the 5% skin field')
+    ctx.Hub.Activated:Fire()
+    push(ctx, daily({Key = 'Skin5', Serial = 16, Claimed = true,
+        FallbackTokens = 3}))
+    check(ctx.Hub.Text == '3\nTOKENS\nCOLLECTED',
+        'the fallback payout is named after confirmation')
 end
 do
     -- Closing mid-spin ends the replay: the prize was banked before it started.
@@ -1126,6 +1174,48 @@ do
     check(ctx.Hub.Text == '1\nTOKEN', 'an old result shows the prize')
     ctx:Advance(3.6)
     check(ctx.Hub.Text:sub(1, 4) == 'SPUN', 'and then the countdown, with nothing to collect')
+end
+do
+    -- AUDIT_FIX_20260924: the open-time re-read answered AFTER a COLLECT tap
+    -- predates the claim; it must not re-arm the hub or eat the confirmation.
+    local ctx = start(POINTER)
+    push(ctx, daily({Key = 'Token3', Serial = 7, Claimed = false}))
+    local held = nil
+    ctx.Task.spawn = function(fn) held = coroutine.create(fn) coroutine.resume(held) end
+    ctx.GetProfile.InvokeServer = function() return coroutine.yield() end
+    open(ctx)
+    check(ctx.Hub.Text == 'COLLECT\nPRIZE', 'owed from the cached profile while the re-read is in flight')
+    ctx.Hub.Activated:Fire()
+    coroutine.resume(held, daily({Key = 'Token3', Serial = 7, Claimed = false}))
+    check(ctx.Hub.Text == 'COLLECTING' and ctx.Hub.Active == false,
+        'a stale re-read answered after the tap does not re-arm COLLECT')
+    push(ctx, daily({Key = 'Token3', Serial = 7, Claimed = true}))
+    check(ctx.Hub.Text == '3 TOKENS\nCOLLECTED', 'and the claim push still confirms')
+end
+do
+    -- AUDIT_FIX_20260924: a suit bought after the spin is paid as 3 Tokens, so
+    -- the collect button must not promise the suit.
+    local ctx = start(POINTER)
+    open(ctx)
+    local owed = daily({Key = 'Skin5', Serial = 15, Claimed = false, SkinId = 'PoolService'})
+    owed.Skins = {Owned = {PoolService = true}, Equipped = 'PoolService'}
+    push(ctx, owed)
+    check(ctx.Hub.Text == 'COLLECT\n3\nTOKENS', 'an owned owed suit offers the 3-Token fallback')
+end
+do
+    -- TOKEN_EARNER_20260924: the confirmation names the tokens actually paid.
+    local ctx = start(POINTER)
+    open(ctx)
+    push(ctx, daily({Key = 'Token3', Serial = 7, Claimed = false}))
+    ctx.Hub.Activated:Fire()
+    push(ctx, daily({Key = 'Token3', Serial = 7, Claimed = true, PaidTokens = 15}))
+    check(ctx.Hub.Text == '15 TOKENS\nCOLLECTED', 'a multiplied payout is named by PaidTokens')
+    ctx:Advance(3.6)
+    push(ctx, daily({Key = 'Token1', Serial = 8, Claimed = false}))
+    ctx.Hub.Activated:Fire() -- skip the landing
+    ctx.Hub.Activated:Fire() -- collect
+    push(ctx, daily({Key = 'Token1', Serial = 8, Claimed = true, PaidTokens = 1}))
+    check(ctx.Hub.Text == '1 TOKEN\nCOLLECTED', 'and one paid token is singular')
 end
 
 -- ── a replay is not a spin ───────────────────────────────────────────────
@@ -1270,6 +1360,19 @@ do
     check(ctx.Player:GetAttribute('LuckyWheelOpen') == nil, 'and clears the modal flag')
 end
 do
+    -- AUDIT_FIX_20260924: an owner that yields to screen-owning modals must
+    -- re-sync AFTER the hand-back, or it cannot undo a restore it no longer wants.
+    local ctx = start(POINTER)
+    local card = addGui(ctx, 'ZyntraShopDisplayCard')
+    local seenOnClose = nil
+    ctx.Player:GetAttributeChangedSignal('LuckyWheelOpen'):Connect(function()
+        if ctx.Player:GetAttribute('LuckyWheelOpen') == nil then seenOnClose = card.Enabled end
+    end)
+    open(ctx)
+    ctx.Close.Activated:Fire()
+    check(seenOnClose == true, 'the modal flag clears only after the HUD is handed back')
+end
+do
     -- Closing twice, and opening twice, must not double-record anything.
     local ctx = start(POINTER)
     local rail = addGui(ctx, 'ZyntraRailGui')
@@ -1385,6 +1488,14 @@ do
     open(ctx)
     check(ctx.GuiService.SelectedObject == nil,
         'a keyboard is never given a forced selection')
+    -- AUDIT_FIX_20260924: picking up a pad while it is open takes focus.
+    ctx.LastInput = 'Gamepad'
+    ctx.UIS.LastInputTypeChanged:Fire()
+    check(ctx.GuiService.SelectedObject == ctx.Hub,
+        'switching to a controller while open lands on the hub')
+    ctx.Close.Activated:Fire()
+    ctx.UIS.LastInputTypeChanged:Fire()
+    check(ctx.GuiService.SelectedObject == nil, 'and a shut wheel takes nothing')
 end
 do
     local ctx = start(POINTER, {Studio = true})
@@ -1437,6 +1548,8 @@ def main():
         UISTYLE.read_text(encoding="utf-8"),
         BRIDGE_CONFIG,
         CONFIG.read_text(encoding="utf-8"),
+        BRIDGE_SKINS,
+        SKINS.read_text(encoding="utf-8"),
         BRIDGE,
         SOURCE.read_text(encoding="utf-8"),
         TESTS,

@@ -1,0 +1,26 @@
+[
+  {
+    "clip": "Walk",
+    "frames": 64,
+    "duration_seconds": 1.0333333015441895,
+    "pose_count_per_frame": 20,
+    "max_translation_reconstruction_error": 1.1102230246251565e-16,
+    "max_quaternion_reconstruction_error": 3.154085503886961e-08,
+    "root_horizontal_motion_max": 0.0,
+    "file": "pool_slide_walk_1p20_v2-candidate.rbxmx",
+    "bytes": 1324525,
+    "sha256": "52ca11ff391de7af520ca597dc86d58090f6a4d8fa42cc4b848f37c6e475a3dc"
+  },
+  {
+    "clip": "Run",
+    "frames": 39,
+    "duration_seconds": 0.6333333253860474,
+    "pose_count_per_frame": 20,
+    "max_translation_reconstruction_error": 1.1102230246251565e-16,
+    "max_quaternion_reconstruction_error": 2.9689341207728148e-08,
+    "root_horizontal_motion_max": 0.0,
+    "file": "pool_slide_run_1p20_v2-candidate.rbxmx",
+    "bytes": 806600,
+    "sha256": "9317759f33e88ef92981c681f8a83f3578efdf00d66957968fe7d403575d2fb9"
+  }
+]

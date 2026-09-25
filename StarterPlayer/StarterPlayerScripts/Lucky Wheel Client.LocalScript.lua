@@ -14,12 +14,11 @@
 -- cut short by closing, or -- on a push carrying the SAME Serial -- not played
 -- at all. There is no client roll anywhere in this file.
 --
--- THE DISC IS ARTWORK (rbxassetid://86770264881525) and its five fields are
--- EQUAL. Verified by eye on the 1254x1254 PNG: field i (0-based, in config
--- order Token1, Token3, Potion1, Potion2, Shield1) is centred at 72*i degrees
--- CLOCKWISE FROM THE TOP and covers [72i - 36, 72i + 36). Equal art must never
--- be read as equal chances, so each field prints the SERVER's own weight
--- (45/20/20/5/10) as a percentage inside itself. Those weights are the odds;
+-- THE DISC IS ARTWORK (rbxassetid://70472139920072) and its six fields are
+-- EQUAL. Field i (0-based, in config order Token1, Token3, Potion1, Potion2,
+-- Shield1, Skin5) is centred at 60*i degrees clockwise from the top. Equal art
+-- must never be read as equal chances, so each field prints the SERVER's own
+-- weight (40/20/20/5/10/5) as a percentage. Those weights are the odds;
 -- the geometry is not.
 --
 -- ROTATION, stated once because three places depend on it. GuiObject.Rotation
@@ -49,6 +48,7 @@ local playerScripts = player:WaitForChild("PlayerScripts")
 local UIStyle = require(ReplicatedStorage:WaitForChild("UIStyle"))
 local UIDevice = require(ReplicatedStorage:WaitForChild("UIDevice"))
 local Config = require(ReplicatedStorage:WaitForChild("ZyntraConfig"))
+local Skins = require(ReplicatedStorage:WaitForChild("ZyntraSkins"))
 local remotes = ReplicatedStorage:WaitForChild("Remotes")
 local actionRemote = remotes:WaitForChild("ZyntraAction")
 local getProfile = remotes:WaitForChild("ZyntraGetProfile")
@@ -63,7 +63,7 @@ if not openEvent then
 	openEvent.Parent = playerScripts
 end
 
-local WHEEL_IMAGE = "rbxassetid://86770264881525"
+local WHEEL_IMAGE = "rbxassetid://70472139920072"
 local GOLD = Color3.fromRGB(255, 203, 79)
 local GOLD_DEEP = Color3.fromRGB(150, 108, 24)  -- the hub's own stroke
 local INK = Color3.fromRGB(12, 16, 12)          -- dark type on a gold hub
@@ -97,6 +97,11 @@ local WORD = {
 
 local function labelFor(entry, short: boolean): string
 	local reward = type(entry.Reward) == "table" and entry.Reward or nil
+	-- The 5% wedge keeps its probability when all eligible skins are owned.
+	-- Name the resulting 3-Token fallback on the field before a player spins.
+	if reward and reward.Kind == "Skin" then
+		return short and "SKIN / 3T" or "SKIN OR 3 TOKENS"
+	end
 	local amount = math.max(1, math.floor(reward and tonumber(reward.Amount) or 1))
 	local words = reward and (reward.Kind == "Tokens" and WORD.Tokens
 		or WORD[tostring(reward.Key or "")]) or nil
@@ -116,7 +121,7 @@ local function formatClock(seconds: number): string
 	return string.format("%02d:%02d:%02d", whole // 3600, (whole % 3600) // 60, whole % 60)
 end
 
--- ── the five fields, straight off the config ──────────────────────────────
+-- ── the six fields, straight off the config ───────────────────────────────
 local sectors = {}
 local weightTotal = 0
 do
@@ -142,8 +147,7 @@ end
 
 -- EQUAL fields, because the texture's fields are equal. Derived from the count
 -- so the geometry can never disagree with the config -- but the artwork has
--- FIVE fields baked in, so a config that is not five prizes needs new art, not
--- a different divisor here.
+-- SIX fields baked in, so a config that is not six prizes needs new art.
 local FIELD = #sectors > 0 and 360 / #sectors or 360
 
 -- Centre of field `order` (1-based), clockwise from 12 o'clock.
@@ -156,6 +160,21 @@ local function sectorByKey(key: string)
 		if sector.Key == key then return order, sector end
 	end
 	return nil, nil
+end
+
+-- The sixth field stays a skin field even if the player already owns its two
+-- eligible suits. The server records either the exact SkinId or the disclosed
+-- 3-Token fallback before this client animates, so a rejoin shows the same win.
+local function prizeFace(record, sector): string
+	-- TOKEN_EARNER_20260924: a claimed Token payout names what the server
+	-- actually paid (PaidTokens, multiplied by a Token Earner pass). Records
+	-- claimed before that field existed keep the field's own text.
+	local paid = record and type(record.PaidTokens) == "number" and math.floor(record.PaidTokens) or 0
+	if paid >= 1 then return paid .. (paid == 1 and " TOKEN" or " TOKENS") end
+	if not record or tostring(record.Key or "") ~= "Skin5" then return sector.Short end
+	if tonumber(record.FallbackTokens) == 3 then return "3 TOKENS" end
+	local skin = Skins.ById[tostring(record.SkinId or "")]
+	return skin and string.upper(skin.Name) or sector.Short
 end
 
 -- Deterministic from the Serial, and deliberately NOT Random.new: the same
@@ -369,6 +388,7 @@ local claimSerial = 0
 local awaitingClaim = nil   -- WheelLast.Serial the in-flight claim is for
 local showCollected = false -- the hub carries "<prize> COLLECTED" for PRIZE_SECONDS
 local collectedKey = nil
+local collectedFace = nil
 local collectedSerial = 0
 local resetAt = nil
 local rollAsked = false
@@ -436,6 +456,8 @@ local function acceptProfile(data)
 		if record and tonumber(record.Serial) == awaitingClaim and record.Claimed == true then
 			showCollected = true
 			collectedKey = tostring(record.Key or "")
+			local _, sector = sectorByKey(collectedKey)
+			collectedFace = sector and prizeFace(record, sector) or nil
 			collectedSerial += 1
 			local serial = collectedSerial
 			task.delay(PRIZE_SECONDS, function()
@@ -459,7 +481,12 @@ local function refreshProfile()
 	task.spawn(function()
 		local ok, data = pcall(function() return getProfile:InvokeServer() end)
 		-- A push that landed while the invoke was in flight is newer than it.
-		if ok and serial == profileSerial then acceptProfile(data) end
+		-- AUDIT_FIX_20260924: so is the push still owed for a SPIN/COLLECT fired
+		-- after the invoke went out -- this answer predates that action and must
+		-- not be taken for its reply. The timeouts clear the flag before re-reading.
+		if ok and serial == profileSerial and not pendingSpin and not pendingClaim then
+			acceptProfile(data)
+		end
 	end)
 end
 
@@ -638,16 +665,28 @@ function render()
 	elseif pendingClaim then
 		hubText, hubEnabled, hubBig = "COLLECTING", false, false
 	elseif showCollected and collectedSector then
-		-- The server's confirmation: "1 TOKEN" -> "1 TOKEN\nCOLLECTED".
-		hubText = collectedSector.Short .. "\nCOLLECTED"
+		-- The server's confirmation names the actual skin or fallback payout.
+		local face = collectedFace or collectedSector.Short
+		hubText = (collectedKey == "Skin5" and face:gsub(" ", "\n") or face)
+			.. "\nCOLLECTED"
 		hubEnabled, hubBig = false, false
 	elseif owed and sector then
 		-- The disc under the pointer already names the prize; the hub is the one
 		-- primary action left, on touch and pad as much as with a mouse.
-		hubText, hubEnabled, hubBig = "COLLECT\nPRIZE", true, false
+		if recorded.Key == "Skin5" then
+			-- AUDIT_FIX_20260924: a suit bought after the spin is paid as the
+			-- 3-Token fallback (the server's own IsOwned rule), so say that. Not in
+			-- prizeFace: after a real grant the suit is owned too.
+			local face = Skins.IsOwned(profile.Skins, recorded.SkinId) and "3 TOKENS"
+				or prizeFace(recorded, sector)
+			hubText = "COLLECT\n" .. face:gsub(" ", "\n")
+		else
+			hubText = "COLLECT\nPRIZE"
+		end
+		hubEnabled, hubBig = true, false
 	elseif showPrize and sector then
 		-- Two lines, because a circle is not a row: "2 POTIONS" -> "2\nPOTIONS".
-		hubText = (sector.Short:gsub(" ", "\n"))
+		hubText = (prizeFace(recorded, sector):gsub(" ", "\n"))
 		hubEnabled, hubBig = false, false
 	elseif retryOffered then
 		hubText, hubEnabled, hubBig = "RETRY", true, true
@@ -758,6 +797,14 @@ do
 			return Enum.ContextActionResult.Sink
 		end, false, Enum.ContextActionPriority.High.Value, Enum.KeyCode.ButtonB)
 	end
+
+	-- AUDIT_FIX_20260924: a pad picked up while the wheel is already open takes
+	-- focus too, the way the terminal does; focusModal checks for the pad.
+	UserInputService.LastInputTypeChanged:Connect(function()
+		if shade.Visible and GuiService.SelectedObject == nil and not GuiService.MenuIsOpen then
+			focusModal()
+		end
+	end)
 end
 
 function closeModal()
@@ -766,8 +813,10 @@ function closeModal()
 	-- Nobody is watching the replay, so it is over. The prize was banked before
 	-- the animation started; only the garnish is being skipped.
 	finishSpin()
-	player:SetAttribute("LuckyWheelOpen", nil)
+	-- AUDIT_FIX_20260924: hand back BEFORE unpublishing, so an owner that yields
+	-- to screen-owning modals re-syncs AFTER the restore in either signal mode.
 	handBack()
+	player:SetAttribute("LuckyWheelOpen", nil)
 	-- Suppression is SHARED. Derive the request from the complete published
 	-- modal set rather than letting the last caller win -- exactly as
 	-- ZyntraStore.setMainVisible does.

@@ -1,0 +1,19 @@
+{
+  "source": "assets/models/pool_slide/candidates/scale-neutral/animations/pool_slide_run_v2-scale-neutral.rbxmx",
+  "sha256": "2f1e1d85d819bbe099be986a8be5d41fbb69f85b9a3daa8ddff6b919e5ac2f0a",
+  "groupId": 1039373905,
+  "expectedPrice": 0,
+  "createdAtUtc": "2026-09-24T14:43:06.067566+00:00",
+  "operationPath": "operations/0c309efd-cfc3-4382-9e4f-4b75b1bb3668",
+  "assetId": "80850407466977",
+  "status": "created",
+  "result": {
+    "assetType": "Animation",
+    "displayName": "Pool Slide Run v2 scale-neutral A/B",
+    "revisionId": "1",
+    "moderationResult": {
+      "moderationState": "Approved"
+    },
+    "state": "Active"
+  }
+}

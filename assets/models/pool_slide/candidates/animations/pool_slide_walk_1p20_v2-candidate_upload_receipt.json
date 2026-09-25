@@ -1,0 +1,19 @@
+{
+  "source": "assets/models/pool_slide/candidates/animations/pool_slide_walk_1p20_v2-candidate.rbxmx",
+  "sha256": "52ca11ff391de7af520ca597dc86d58090f6a4d8fa42cc4b848f37c6e475a3dc",
+  "groupId": 1039373905,
+  "expectedPrice": 0,
+  "createdAtUtc": "2026-09-24T14:42:41.822682+00:00",
+  "operationPath": "operations/6e3fc30f-e6dd-4e3e-aa1a-35d7f8f61931",
+  "assetId": "95711439274562",
+  "status": "created",
+  "result": {
+    "assetType": "Animation",
+    "displayName": "Pool Slide Walk v2 repaired A/B",
+    "revisionId": "1",
+    "moderationResult": {
+      "moderationState": "Approved"
+    },
+    "state": "Active"
+  }
+}
