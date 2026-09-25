@@ -58,9 +58,9 @@ Skins.ById = {
 	-- Token, wheel, Robux, gift or client path can grant it. Art: Codex,
 	-- assets/hazmat/developer-signal-architect/README.md.
 	SignalArchitect = {
-		Name = "Signal Architect", Kind = "Developer",
-		ImageId = 125389579950767, PreviewImageId = 139302197163453,
-		Description = "Developer-issue engineer suit.",
+		Name = "Signal Architect Ascendant", Kind = "Developer",
+		ImageId = 115045548138657, PreviewImageId = 110021662787844,
+		Description = "Developer-only obsidian suit with cyan signal channels and an antenna halo.",
 	},
 }
 

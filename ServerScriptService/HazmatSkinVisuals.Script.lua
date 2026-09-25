@@ -22,6 +22,9 @@ local PREMIUM_TOPPERS = {
 		Scale = 2, Y = 1.15, Z = 1.15},
 	FalseSun = {Template = "HazmatFalseSunTopper_20260924",
 		Scale = 2, Y = 0.25, Z = 1.45},
+	-- Imported model pivot is normalized to its bounds center in ServerStorage.
+	SignalArchitect = {Template = "HazmatSignalArchitectTopper_20260925",
+		Scale = 2.6, Y = 1.1, Z = 1.35},
 }
 local active = {}
 local playerConnections = {}

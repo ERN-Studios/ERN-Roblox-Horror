@@ -309,6 +309,37 @@ local function falseSunMotes(topperPart, character)
 	return emitter
 end
 
+-- A few slow, client-local signal glyphs around the Ascendant backpiece.
+-- The rigid halo and texture carry the look even when ReduceFlashing is on.
+local function signalArchitectMotes(topperPart, character)
+	local torso = character:FindFirstChild("UpperTorso")
+	local back = torso and -torso.CFrame.LookVector or Vector3.zero
+	local c, half = topperPart.CFrame, topperPart.Size / 2
+	local reach = math.abs(back:Dot(c.RightVector)) * half.X + math.abs(back:Dot(c.UpVector)) * half.Y
+		+ math.abs(back:Dot(c.LookVector)) * half.Z
+	local attachment = Instance.new("Attachment")
+	attachment.Name = "ZyntraSignalArchitectMotes"
+	attachment.CFrame = c:ToObjectSpace(CFrame.new(topperPart.Position
+		+ back * (reach + 0.08) + Vector3.yAxis * (half.Y * 0.2)))
+	local touch = UserInputService.TouchEnabled
+	local emitter = Instance.new("ParticleEmitter")
+	emitter.Texture = "rbxassetid://124315518046326"
+	emitter.Rate = touch and 0.7 or 1.5
+	emitter.Lifetime = NumberRange.new(0.6, 1.1)
+	emitter.Speed = NumberRange.new(0.05, 0.18)
+	emitter.SpreadAngle = Vector2.new(20, 20)
+	emitter.Size = NumberSequence.new({NumberSequenceKeypoint.new(0, touch and 0.09 or 0.11),
+		NumberSequenceKeypoint.new(0.5, touch and 0.15 or 0.19), NumberSequenceKeypoint.new(1, 0)})
+	emitter.Transparency = NumberSequence.new({NumberSequenceKeypoint.new(0, touch and 0.55 or 0.42),
+		NumberSequenceKeypoint.new(0.5, touch and 0.45 or 0.3), NumberSequenceKeypoint.new(1, 1)})
+	emitter.LightEmission = touch and 0.12 or 0.2
+	emitter.LightInfluence = 1
+	emitter.Enabled = false
+	emitter.Parent = attachment
+	attachment.Parent = topperPart
+	return emitter
+end
+
 local function buildState(character, visual)
 	local root = character:FindFirstChild("HumanoidRootPart")
 	local mesh = visual:FindFirstChild("char1", true)
@@ -347,13 +378,21 @@ local function buildState(character, visual)
 				armBind[bone] or bone.WorldCFrame),
 		})
 	end
+	local motes
+	if visualParts[2] then
+		local skinId = visual:GetAttribute("SkinId")
+		if skinId == "FalseSun" then
+			motes = falseSunMotes(visualParts[2], character)
+		elseif skinId == "SignalArchitect" then
+			motes = signalArchitectMotes(visualParts[2], character)
+		end
+	end
 	local state = {
 		Character = character, Visual = visual, Mesh = mesh,
 		Bones = records, Originals = {}, Visible = false,
 		VisualParts = visualParts, TargetByBone = {}, PoseFrames = 0,
 		-- Built last, so a calibration that bails out above leaves nothing behind.
-		Motes = visual:GetAttribute("SkinId") == "FalseSun" and visualParts[2]
-			and falseSunMotes(visualParts[2], character) or nil,
+		Motes = motes,
 	}
 	captureBody(character, state.Originals)
 	return state

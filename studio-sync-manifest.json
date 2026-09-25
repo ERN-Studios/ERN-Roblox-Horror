@@ -2722,8 +2722,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/ZyntraSkins.ModuleScript.lua",
-      "bytes": 5768,
-      "sha256": "3a858c5aafe89c1ee202be5fba857c36083b9b620b068f5ccc18cff6108c78b2",
+      "bytes": 5823,
+      "sha256": "ac7fc5a7278eea8c36c9fccc80a040887ce61913bc6142a3c60bc1075b293af4",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "canonical UTF-8 bytes checked against fresh Studio Source/editor length and Adler32 on 2026-09-24"
@@ -2736,8 +2736,8 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/ZyntraSkinsPage.ModuleScript.lua",
-      "bytes": 19085,
-      "sha256": "c48cafc1e98b39573bbfb165d8947660dbad6694a6911b0f5b22006cdb614a67",
+      "bytes": 19438,
+      "sha256": "2dd92ce9389f57917a26ff6b608f6314d492c0ad99c5b7d312c5c4d5620d3bc1",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "canonical UTF-8 bytes checked against fresh Studio Source/editor length and Adler32 on 2026-09-24"
@@ -2750,8 +2750,8 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/HazmatSkinVisuals.Script.lua",
-      "bytes": 15129,
-      "sha256": "4e4335e978db0a19762a0cb8ccd31d9798e71a7f95332611150c4069727feebe",
+      "bytes": 15313,
+      "sha256": "073c5d974e438ecaef39da8932c62003a87355a3d2d0b1423aa3be68288ef798",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "canonical UTF-8 bytes checked against fresh Studio Source/editor length and Adler32 on 2026-09-24"
@@ -2765,8 +2765,8 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/HazmatSkinDriver.LocalScript.lua",
-      "bytes": 17582,
-      "sha256": "908e5033b3bf3d5ed4ccb04cc0cab6e0883fae9fed7d3b8f46a9efcdfbe8e09a",
+      "bytes": 19378,
+      "sha256": "6059bff051061ee42f5d1e1976147db6e6ad11222ef54fd15e713013e387ffdc",
       "status": "synced",
       "sourceEqualsEditor": true,
       "captureMethod": "canonical UTF-8 bytes checked against fresh Studio Source/editor length and Adler32 on 2026-09-24"

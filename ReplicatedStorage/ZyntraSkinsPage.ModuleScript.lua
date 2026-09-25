@@ -128,10 +128,8 @@ function Page.mount(page, ctx)
 		camera.CFrame = CFrame.lookAt(Vector3.new(0, previewSize.Y * 0.02,
 			-distance), Vector3.zero)
 	end
-	-- FALSE_SUN_MOTES_20260924 (Trello IRLeRBcN). A ViewportFrame renders no
-	-- ParticleEmitter, so the standing preview gets the same quiet embers as 2D
-	-- sprites, projected from the topper window and shown only while that side
-	-- faces the camera. None for a viewer who asked for less flashing.
+	-- ViewportFrames render no ParticleEmitter, so preview the two topper effects
+	-- as sparse 2D sprites. The rigid models remain visible with reduced flashing.
 	local motes, moteClock = {}, 0
 	local function clearMotes()
 		for _, mote in ipairs(motes) do mote.Label:Destroy() end
@@ -146,34 +144,42 @@ function Page.mount(page, ctx)
 				mote.Label:Destroy()
 				table.remove(motes, index)
 			else
-				mote.Label.Position = UDim2.fromOffset(mote.X + mote.Drift * t, mote.Y - 22 * t)
-				mote.Label.ImageTransparency = 0.42 + 0.58 * t
+				mote.Label.Position = UDim2.fromOffset(mote.X + mote.Drift * t,
+					mote.Y - mote.Rise * t)
+				mote.Label.ImageTransparency = mote.StartTransparency
+					+ (1 - mote.StartTransparency) * t
 			end
 		end
-		local topper = previewModel and selectedSkinId == "FalseSun"
+		local signal = selectedSkinId == "SignalArchitect"
+		local topper = previewModel and (selectedSkinId == "FalseSun" or signal)
 			and previewModel:FindFirstChild("ZyntraPremiumTopper")
 		local part = topper and topper:FindFirstChildWhichIsA("BasePart", true)
 		moteClock += deltaTime
-		if not part or moteClock < 0.4 or #motes >= 3
+		if not part or moteClock < (signal and 0.65 or 0.4)
+			or #motes >= (signal and 2 or 3)
 			or ctx.player:GetAttribute("ReduceFlashing") == true then return end
 		moteClock = 0
-		local at = camera.CFrame:PointToObjectSpace(part.Position)
+		local position = part.Position + (signal and Vector3.yAxis * (part.Size.Y * 0.2)
+			or Vector3.zero)
+		local at = camera.CFrame:PointToObjectSpace(position)
 		local centre = camera.CFrame:PointToObjectSpace(previewModel:GetPivot().Position)
 		local depth = -at.Z
-		if depth <= 0.1 or at.Z <= centre.Z then return end -- window turned away
+		if depth <= 0.1 or (not signal and at.Z <= centre.Z) then return end
 		local size = viewport.AbsoluteSize
 		local tangent = math.tan(math.rad(camera.FieldOfView) * 0.5)
 		local label = Instance.new("ImageLabel")
-		label.Name = "FalseSunMote"
+		label.Name = signal and "SignalArchitectMote" or "FalseSunMote"
 		label.BackgroundTransparency = 1
-		label.Image = "rbxassetid://128661548525607"
-		label.ImageTransparency = 0.42
+		label.Image = signal and "rbxassetid://124315518046326"
+			or "rbxassetid://128661548525607"
+		label.ImageTransparency = signal and 0.32 or 0.42
 		label.AnchorPoint = Vector2.new(0.5, 0.5)
-		label.Size = UDim2.fromOffset(12, 12)
+		label.Size = UDim2.fromOffset(signal and 10 or 12, signal and 10 or 12)
 		label.ZIndex = viewport.ZIndex + 1
 		label.Parent = viewport
 		table.insert(motes, {Label = label, Age = 0, Life = 0.45 + math.random() * 0.3,
-			Drift = (math.random() - 0.5) * 10,
+			Drift = (math.random() - 0.5) * (signal and 12 or 10),
+			Rise = signal and 14 or 22, StartTransparency = label.ImageTransparency,
 			X = (at.X / depth / (tangent * size.X / math.max(1, size.Y)) + 1) / 2 * size.X,
 			Y = (1 - at.Y / depth / tangent) / 2 * size.Y})
 	end
