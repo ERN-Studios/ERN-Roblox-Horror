@@ -1,0 +1,44 @@
+{
+  "studioId": "4c4f4e63-ad77-456e-8b99-b06b5a864bc8",
+  "placeId": 131311258779917,
+  "method": "Roblox Studio MCP upload_image",
+  "assets": [
+    {
+      "index": 1,
+      "colour": "Red",
+      "shape": "Circle",
+      "file": "1-red-circle.png",
+      "texture": "rbxassetid://129034114315469"
+    },
+    {
+      "index": 2,
+      "colour": "Yellow",
+      "shape": "Triangle",
+      "file": "2-yellow-triangle.png",
+      "texture": "rbxassetid://82053429341504"
+    },
+    {
+      "index": 3,
+      "colour": "Blue",
+      "shape": "Square",
+      "file": "3-blue-square.png",
+      "texture": "rbxassetid://98028147005436"
+    },
+    {
+      "index": 4,
+      "colour": "Green",
+      "shape": "Diamond",
+      "file": "4-green-diamond.png",
+      "texture": "rbxassetid://73277763916471"
+    }
+  ],
+  "owner": {
+    "type": "User",
+    "id": 9488575949,
+    "name": "LaverSneglen"
+  },
+  "experienceId": 10559217407,
+  "access": "Creator Dashboard reports existing experience access; Open Use",
+  "nativePreload": "All four real Decal textures loaded with Enum.AssetFetchStatus.Success after processing",
+  "thumbnailState": "Completed for all four"
+}

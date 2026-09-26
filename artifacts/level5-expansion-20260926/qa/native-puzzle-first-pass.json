@@ -1,0 +1,4745 @@
+{
+  "desktop": {
+    "menuOpen": false,
+    "status": "FAIL",
+    "localOpenAttribute": true,
+    "touchEnabled": false,
+    "panel": {
+      "height": 330,
+      "x": 226.5,
+      "y": 145,
+      "width": 600
+    },
+    "widgets": {
+      "1": {
+        "visible": true,
+        "textBounds": {
+          "1": 208.5,
+          "2": 21
+        },
+        "textFits": true,
+        "active": false,
+        "text": "HOUSE COLOUR LOCK",
+        "rect": {
+          "height": 30,
+          "x": 242.5,
+          "y": 157,
+          "width": 516
+        },
+        "name": "Title",
+        "textSize": 21,
+        "textScaled": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Title"
+      },
+      "2": {
+        "visible": true,
+        "textBounds": {
+          "1": 424,
+          "2": 16
+        },
+        "textFits": true,
+        "active": false,
+        "text": "Find the four numbered house clues. Set wheels 1–4 to match.",
+        "rect": {
+          "height": 34,
+          "x": 242.5,
+          "y": 194,
+          "width": 568
+        },
+        "name": "Instructions",
+        "textSize": 16,
+        "textScaled": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions"
+      },
+      "3": {
+        "visible": true,
+        "textBounds": {
+          "1": 195.5,
+          "2": 14
+        },
+        "textFits": true,
+        "active": false,
+        "text": "Tap a wheel to change its colour.",
+        "rect": {
+          "height": 36,
+          "x": 242.5,
+          "y": 344,
+          "width": 568
+        },
+        "name": "Feedback",
+        "textSize": 14,
+        "textScaled": false,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Feedback"
+      },
+      "4": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "×",
+        "selection": {
+          "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+        },
+        "name": "Close",
+        "selectionOrder": 0,
+        "rect": {
+          "height": 44,
+          "x": 774.5,
+          "y": 153,
+          "width": 44
+        },
+        "textSize": 28,
+        "textScaled": false,
+        "textBounds": {
+          "1": 14,
+          "2": 28
+        }
+      },
+      "5": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "UNLOCK",
+        "selection": {
+          "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+        },
+        "name": "Unlock",
+        "selectionOrder": 5,
+        "rect": {
+          "height": 44,
+          "x": 242.5,
+          "y": 415,
+          "width": 568
+        },
+        "textSize": 18,
+        "textScaled": false,
+        "textBounds": {
+          "1": 68.5,
+          "2": 18
+        }
+      },
+      "6": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "1\n◯ RED",
+        "selection": {
+          "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+          "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+          "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+          "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+        },
+        "name": "Wheel1",
+        "selectionOrder": 1,
+        "rect": {
+          "height": 104,
+          "x": 242.5,
+          "y": 234,
+          "width": 136
+        },
+        "textSize": 18,
+        "textScaled": true,
+        "textBounds": {
+          "1": 59,
+          "2": 42
+        }
+      },
+      "7": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "2\n◯ RED",
+        "selection": {
+          "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+          "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+          "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+          "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+        },
+        "name": "Wheel2",
+        "selectionOrder": 2,
+        "rect": {
+          "height": 104,
+          "x": 386.5,
+          "y": 234,
+          "width": 136
+        },
+        "textSize": 18,
+        "textScaled": true,
+        "textBounds": {
+          "1": 59,
+          "2": 42
+        }
+      },
+      "8": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "3\n◯ RED",
+        "selection": {
+          "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+          "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+          "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+          "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+        },
+        "name": "Wheel3",
+        "selectionOrder": 3,
+        "rect": {
+          "height": 104,
+          "x": 530.5,
+          "y": 234,
+          "width": 136
+        },
+        "textSize": 18,
+        "textScaled": true,
+        "textBounds": {
+          "1": 59,
+          "2": 42
+        }
+      },
+      "9": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "4\n◯ RED",
+        "selection": {
+          "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+          "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+          "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+          "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+        },
+        "name": "Wheel4",
+        "selectionOrder": 4,
+        "rect": {
+          "height": 104,
+          "x": 674.5,
+          "y": 234,
+          "width": 136
+        },
+        "textSize": 18,
+        "textScaled": true,
+        "textBounds": {
+          "1": 59,
+          "2": 42
+        }
+      }
+    },
+    "shade": {
+      "height": 620,
+      "x": 0,
+      "y": 0,
+      "width": 1053
+    },
+    "gamepadEnabled": false,
+    "scope": "Actual native client widget bounds/text at its current viewport; no simulated button presses or physical-device proof",
+    "controlsReady": true,
+    "remoteReady": true,
+    "gate1": {
+      "puzzleSolved": false,
+      "fullyOpen": false,
+      "unlocked": false
+    },
+    "issues": {
+      "1": {
+        "severity": "FAIL",
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions",
+        "detail": "Close",
+        "code": "WIDGET_RECT_OVERLAP"
+      }
+    },
+    "inset": {
+      "topLeft": {
+        "1": 0,
+        "2": 58
+      },
+      "bottomRight": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    "version": "2026-09-26.colour-ui.1",
+    "warnings": 0,
+    "viewport": {
+      "y": 678,
+      "x": 1053
+    },
+    "failures": 1,
+    "inRound": true,
+    "gui": {
+      "enabled": true,
+      "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui",
+      "ignoreGuiInset": false,
+      "displayOrder": 70
+    }
+  },
+  "observation": {
+    "seconds": 103.15,
+    "events": {
+      "1": {
+        "kind": "initial_snapshot",
+        "t": 0.01,
+        "detail": {
+          "menuOpen": false,
+          "status": "UI_CLOSED_LAYOUT_NOT_ASSESSED",
+          "inset": {
+            "topLeft": {
+              "1": 0,
+              "2": 58
+            },
+            "bottomRight": {
+              "1": 0,
+              "2": 0
+            }
+          },
+          "panel": {
+            "height": 248,
+            "x": 276,
+            "y": 118,
+            "width": 248
+          },
+          "touchEnabled": false,
+          "widgets": {
+            "1": {
+              "visible": true,
+              "textBounds": {
+                "1": 159,
+                "2": 16
+              },
+              "textFits": true,
+              "active": false,
+              "text": "HOUSE COLOUR LOCK",
+              "rect": {
+                "height": 30,
+                "x": 292,
+                "y": 130,
+                "width": 164
+              },
+              "name": "Title",
+              "textSize": 21,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Title"
+            },
+            "2": {
+              "visible": true,
+              "textBounds": {
+                "1": 210.5,
+                "2": 32
+              },
+              "textFits": true,
+              "active": false,
+              "text": "Find the four numbered house clues. Set wheels 1–4 to match.",
+              "rect": {
+                "height": 34,
+                "x": 292,
+                "y": 167,
+                "width": 216
+              },
+              "name": "Instructions",
+              "textSize": 16,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions"
+            },
+            "3": {
+              "visible": true,
+              "textBounds": {
+                "1": 195.5,
+                "2": 14
+              },
+              "textFits": true,
+              "active": false,
+              "text": "Tap a wheel to change its colour.",
+              "rect": {
+                "height": 36,
+                "x": 292,
+                "y": 257,
+                "width": 216
+              },
+              "name": "Feedback",
+              "textSize": 14,
+              "textScaled": false,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Feedback"
+            },
+            "4": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "×",
+              "selection": {
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Close",
+              "selectionOrder": 0,
+              "rect": {
+                "height": 44,
+                "x": 472,
+                "y": 126,
+                "width": 44
+              },
+              "textSize": 28,
+              "textScaled": false,
+              "textBounds": {
+                "1": 14,
+                "2": 28
+              }
+            },
+            "5": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "UNLOCK",
+              "selection": {
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Unlock",
+              "selectionOrder": 5,
+              "rect": {
+                "height": 44,
+                "x": 292,
+                "y": 306,
+                "width": 216
+              },
+              "textSize": 18,
+              "textScaled": false,
+              "textBounds": {
+                "1": 68.5,
+                "2": 18
+              }
+            },
+            "6": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "1\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel1",
+              "selectionOrder": 1,
+              "rect": {
+                "height": 44,
+                "x": 292,
+                "y": 207,
+                "width": 48
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 48,
+                "2": 34
+              }
+            },
+            "7": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "2\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel2",
+              "selectionOrder": 2,
+              "rect": {
+                "height": 44,
+                "x": 348,
+                "y": 207,
+                "width": 48
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 48,
+                "2": 34
+              }
+            },
+            "8": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "3\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel3",
+              "selectionOrder": 3,
+              "rect": {
+                "height": 44,
+                "x": 404,
+                "y": 207,
+                "width": 48
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 48,
+                "2": 34
+              }
+            },
+            "9": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "4\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel4",
+              "selectionOrder": 4,
+              "rect": {
+                "height": 44,
+                "x": 460,
+                "y": 207,
+                "width": 48
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 48,
+                "2": 34
+              }
+            }
+          },
+          "gamepadEnabled": false,
+          "scope": "Actual native client widget bounds/text at its current viewport; no simulated button presses or physical-device proof",
+          "controlsReady": true,
+          "remoteReady": true,
+          "gate1": {
+            "puzzleSolved": false,
+            "fullyOpen": false,
+            "unlocked": false
+          },
+          "shade": {
+            "height": 600,
+            "x": 0,
+            "y": -58,
+            "width": 800
+          },
+          "issues": [],
+          "version": "2026-09-26.colour-ui.1",
+          "warnings": 0,
+          "viewport": {
+            "y": 678,
+            "x": 1053
+          },
+          "failures": 0,
+          "inRound": true,
+          "gui": {
+            "enabled": false,
+            "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui",
+            "ignoreGuiInset": false,
+            "displayOrder": 70
+          }
+        }
+      },
+      "2": {
+        "kind": "gui_enabled",
+        "t": 0.17,
+        "detail": true
+      },
+      "3": {
+        "kind": "open_attribute",
+        "t": 0.17,
+        "detail": true
+      },
+      "4": {
+        "kind": "sample",
+        "t": 0.97,
+        "detail": {
+          "menuOpen": false,
+          "status": "FAIL",
+          "localOpenAttribute": true,
+          "touchEnabled": false,
+          "panel": {
+            "height": 330,
+            "x": 226.5,
+            "y": 145,
+            "width": 600
+          },
+          "widgets": {
+            "1": {
+              "visible": true,
+              "textBounds": {
+                "1": 208.5,
+                "2": 21
+              },
+              "textFits": true,
+              "active": false,
+              "text": "HOUSE COLOUR LOCK",
+              "rect": {
+                "height": 30,
+                "x": 242.5,
+                "y": 157,
+                "width": 516
+              },
+              "name": "Title",
+              "textSize": 21,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Title"
+            },
+            "2": {
+              "visible": true,
+              "textBounds": {
+                "1": 424,
+                "2": 16
+              },
+              "textFits": true,
+              "active": false,
+              "text": "Find the four numbered house clues. Set wheels 1–4 to match.",
+              "rect": {
+                "height": 34,
+                "x": 242.5,
+                "y": 194,
+                "width": 568
+              },
+              "name": "Instructions",
+              "textSize": 16,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions"
+            },
+            "3": {
+              "visible": true,
+              "textBounds": {
+                "1": 195.5,
+                "2": 14
+              },
+              "textFits": true,
+              "active": false,
+              "text": "Tap a wheel to change its colour.",
+              "rect": {
+                "height": 36,
+                "x": 242.5,
+                "y": 344,
+                "width": 568
+              },
+              "name": "Feedback",
+              "textSize": 14,
+              "textScaled": false,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Feedback"
+            },
+            "4": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "×",
+              "selection": {
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Close",
+              "selectionOrder": 0,
+              "rect": {
+                "height": 44,
+                "x": 774.5,
+                "y": 153,
+                "width": 44
+              },
+              "textSize": 28,
+              "textScaled": false,
+              "textBounds": {
+                "1": 14,
+                "2": 28
+              }
+            },
+            "5": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "UNLOCK",
+              "selection": {
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Unlock",
+              "selectionOrder": 5,
+              "rect": {
+                "height": 44,
+                "x": 242.5,
+                "y": 415,
+                "width": 568
+              },
+              "textSize": 18,
+              "textScaled": false,
+              "textBounds": {
+                "1": 68.5,
+                "2": 18
+              }
+            },
+            "6": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "1\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel1",
+              "selectionOrder": 1,
+              "rect": {
+                "height": 104,
+                "x": 242.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            },
+            "7": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "2\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel2",
+              "selectionOrder": 2,
+              "rect": {
+                "height": 104,
+                "x": 386.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            },
+            "8": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "3\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel3",
+              "selectionOrder": 3,
+              "rect": {
+                "height": 104,
+                "x": 530.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            },
+            "9": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "4\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel4",
+              "selectionOrder": 4,
+              "rect": {
+                "height": 104,
+                "x": 674.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            }
+          },
+          "shade": {
+            "height": 620,
+            "x": 0,
+            "y": 0,
+            "width": 1053
+          },
+          "gamepadEnabled": false,
+          "scope": "Actual native client widget bounds/text at its current viewport; no simulated button presses or physical-device proof",
+          "controlsReady": true,
+          "remoteReady": true,
+          "gate1": {
+            "puzzleSolved": false,
+            "fullyOpen": false,
+            "unlocked": false
+          },
+          "issues": {
+            "1": {
+              "severity": "FAIL",
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions",
+              "detail": "Close",
+              "code": "WIDGET_RECT_OVERLAP"
+            }
+          },
+          "inset": {
+            "topLeft": {
+              "1": 0,
+              "2": 58
+            },
+            "bottomRight": {
+              "1": 0,
+              "2": 0
+            }
+          },
+          "version": "2026-09-26.colour-ui.1",
+          "warnings": 0,
+          "viewport": {
+            "y": 678,
+            "x": 1053
+          },
+          "failures": 1,
+          "inRound": true,
+          "gui": {
+            "enabled": true,
+            "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui",
+            "ignoreGuiInset": false,
+            "displayOrder": 70
+          }
+        }
+      },
+      "5": {
+        "kind": "button_activated",
+        "t": 30.19,
+        "detail": {
+          "textAtSignal": "UNLOCK",
+          "name": "Unlock"
+        }
+      },
+      "6": {
+        "kind": "feedback",
+        "t": 30.19,
+        "detail": "Checking the lock…"
+      },
+      "7": {
+        "kind": "feedback",
+        "t": 30.25,
+        "detail": "That order does not match. Check house clues 1–4 and try again."
+      },
+      "8": {
+        "kind": "sample",
+        "t": 30.3,
+        "detail": {
+          "menuOpen": false,
+          "status": "FAIL",
+          "localOpenAttribute": true,
+          "touchEnabled": false,
+          "panel": {
+            "height": 330,
+            "x": 226.5,
+            "y": 145,
+            "width": 600
+          },
+          "widgets": {
+            "1": {
+              "visible": true,
+              "textBounds": {
+                "1": 208.5,
+                "2": 21
+              },
+              "textFits": true,
+              "active": false,
+              "text": "HOUSE COLOUR LOCK",
+              "rect": {
+                "height": 30,
+                "x": 242.5,
+                "y": 157,
+                "width": 516
+              },
+              "name": "Title",
+              "textSize": 21,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Title"
+            },
+            "2": {
+              "visible": true,
+              "textBounds": {
+                "1": 424,
+                "2": 16
+              },
+              "textFits": true,
+              "active": false,
+              "text": "Find the four numbered house clues. Set wheels 1–4 to match.",
+              "rect": {
+                "height": 34,
+                "x": 242.5,
+                "y": 194,
+                "width": 568
+              },
+              "name": "Instructions",
+              "textSize": 16,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions"
+            },
+            "3": {
+              "visible": true,
+              "textBounds": {
+                "1": 383.5,
+                "2": 14
+              },
+              "textFits": true,
+              "active": false,
+              "text": "That order does not match. Check house clues 1–4 and try again.",
+              "rect": {
+                "height": 36,
+                "x": 242.5,
+                "y": 344,
+                "width": 568
+              },
+              "name": "Feedback",
+              "textSize": 14,
+              "textScaled": false,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Feedback"
+            },
+            "4": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "×",
+              "selection": {
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Close",
+              "selectionOrder": 0,
+              "rect": {
+                "height": 44,
+                "x": 774.5,
+                "y": 153,
+                "width": 44
+              },
+              "textSize": 28,
+              "textScaled": false,
+              "textBounds": {
+                "1": 14,
+                "2": 28
+              }
+            },
+            "5": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "UNLOCK",
+              "selection": {
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Unlock",
+              "selectionOrder": 5,
+              "rect": {
+                "height": 44,
+                "x": 242.5,
+                "y": 415,
+                "width": 568
+              },
+              "textSize": 18,
+              "textScaled": false,
+              "textBounds": {
+                "1": 68.5,
+                "2": 18
+              }
+            },
+            "6": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "1\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel1",
+              "selectionOrder": 1,
+              "rect": {
+                "height": 104,
+                "x": 242.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            },
+            "7": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "2\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel2",
+              "selectionOrder": 2,
+              "rect": {
+                "height": 104,
+                "x": 386.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            },
+            "8": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "3\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel3",
+              "selectionOrder": 3,
+              "rect": {
+                "height": 104,
+                "x": 530.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            },
+            "9": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "4\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel4",
+              "selectionOrder": 4,
+              "rect": {
+                "height": 104,
+                "x": 674.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            }
+          },
+          "shade": {
+            "height": 620,
+            "x": 0,
+            "y": 0,
+            "width": 1053
+          },
+          "gamepadEnabled": false,
+          "scope": "Actual native client widget bounds/text at its current viewport; no simulated button presses or physical-device proof",
+          "controlsReady": true,
+          "remoteReady": true,
+          "gate1": {
+            "puzzleSolved": false,
+            "fullyOpen": false,
+            "unlocked": false
+          },
+          "issues": {
+            "1": {
+              "severity": "FAIL",
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions",
+              "detail": "Close",
+              "code": "WIDGET_RECT_OVERLAP"
+            }
+          },
+          "inset": {
+            "topLeft": {
+              "1": 0,
+              "2": 58
+            },
+            "bottomRight": {
+              "1": 0,
+              "2": 0
+            }
+          },
+          "version": "2026-09-26.colour-ui.1",
+          "warnings": 0,
+          "viewport": {
+            "y": 678,
+            "x": 1053
+          },
+          "failures": 1,
+          "inRound": true,
+          "gui": {
+            "enabled": true,
+            "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui",
+            "ignoreGuiInset": false,
+            "displayOrder": 70
+          }
+        }
+      },
+      "9": {
+        "kind": "sample",
+        "t": 45.47,
+        "detail": {
+          "menuOpen": false,
+          "status": "FAIL",
+          "localOpenAttribute": true,
+          "touchEnabled": true,
+          "panel": {
+            "height": 330,
+            "x": 16,
+            "y": 194.5,
+            "width": 369
+          },
+          "widgets": {
+            "1": {
+              "visible": true,
+              "textBounds": {
+                "1": 208.5,
+                "2": 21
+              },
+              "textFits": true,
+              "active": false,
+              "text": "HOUSE COLOUR LOCK",
+              "rect": {
+                "height": 30,
+                "x": 32,
+                "y": 206.5,
+                "width": 285
+              },
+              "name": "Title",
+              "textSize": 21,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Title"
+            },
+            "2": {
+              "visible": true,
+              "textBounds": {
+                "1": 331,
+                "2": 32
+              },
+              "textFits": true,
+              "active": false,
+              "text": "Find the four numbered house clues. Set wheels 1–4 to match.",
+              "rect": {
+                "height": 34,
+                "x": 32,
+                "y": 243.5,
+                "width": 337
+              },
+              "name": "Instructions",
+              "textSize": 16,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions"
+            },
+            "3": {
+              "visible": true,
+              "textBounds": {
+                "1": 325,
+                "2": 28
+              },
+              "textFits": true,
+              "active": false,
+              "text": "That order does not match. Check house clues 1–4 and try again.",
+              "rect": {
+                "height": 36,
+                "x": 32,
+                "y": 393.5,
+                "width": 337
+              },
+              "name": "Feedback",
+              "textSize": 14,
+              "textScaled": false,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Feedback"
+            },
+            "4": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "×",
+              "selection": {
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Close",
+              "selectionOrder": 0,
+              "rect": {
+                "height": 44,
+                "x": 333,
+                "y": 202.5,
+                "width": 44
+              },
+              "textSize": 28,
+              "textScaled": false,
+              "textBounds": {
+                "1": 14,
+                "2": 28
+              }
+            },
+            "5": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "UNLOCK",
+              "selection": {
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Unlock",
+              "selectionOrder": 5,
+              "rect": {
+                "height": 44,
+                "x": 32,
+                "y": 464.5,
+                "width": 337
+              },
+              "textSize": 18,
+              "textScaled": false,
+              "textBounds": {
+                "1": 68.5,
+                "2": 18
+              }
+            },
+            "6": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "1\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel1",
+              "selectionOrder": 1,
+              "rect": {
+                "height": 104,
+                "x": 32,
+                "y": 283.5,
+                "width": 78
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            },
+            "7": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "2\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel2",
+              "selectionOrder": 2,
+              "rect": {
+                "height": 104,
+                "x": 118,
+                "y": 283.5,
+                "width": 78
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            },
+            "8": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "3\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel3",
+              "selectionOrder": 3,
+              "rect": {
+                "height": 104,
+                "x": 204,
+                "y": 283.5,
+                "width": 78
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            },
+            "9": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "4\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel4",
+              "selectionOrder": 4,
+              "rect": {
+                "height": 104,
+                "x": 290,
+                "y": 283.5,
+                "width": 78
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            }
+          },
+          "shade": {
+            "height": 719,
+            "x": 0,
+            "y": 0,
+            "width": 401
+          },
+          "gamepadEnabled": false,
+          "scope": "Actual native client widget bounds/text at its current viewport; no simulated button presses or physical-device proof",
+          "controlsReady": true,
+          "remoteReady": true,
+          "gate1": {
+            "puzzleSolved": false,
+            "fullyOpen": false,
+            "unlocked": false
+          },
+          "issues": {
+            "1": {
+              "severity": "FAIL",
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions",
+              "detail": "Close",
+              "code": "WIDGET_RECT_OVERLAP"
+            }
+          },
+          "inset": {
+            "topLeft": {
+              "1": 0,
+              "2": 58
+            },
+            "bottomRight": {
+              "1": 0,
+              "2": 0
+            }
+          },
+          "version": "2026-09-26.colour-ui.1",
+          "warnings": 0,
+          "viewport": {
+            "y": 777,
+            "x": 401
+          },
+          "failures": 1,
+          "inRound": true,
+          "gui": {
+            "enabled": true,
+            "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui",
+            "ignoreGuiInset": false,
+            "displayOrder": 70
+          }
+        }
+      },
+      "10": {
+        "kind": "sample",
+        "t": 77.85,
+        "detail": {
+          "menuOpen": false,
+          "status": "FAIL",
+          "localOpenAttribute": true,
+          "touchEnabled": true,
+          "panel": {
+            "height": 330,
+            "x": -46,
+            "y": 222.5,
+            "width": 369
+          },
+          "widgets": {
+            "1": {
+              "visible": true,
+              "textBounds": {
+                "1": 208.5,
+                "2": 21
+              },
+              "textFits": true,
+              "active": false,
+              "text": "HOUSE COLOUR LOCK",
+              "rect": {
+                "height": 30,
+                "x": -30,
+                "y": 234.5,
+                "width": 285
+              },
+              "name": "Title",
+              "textSize": 21,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Title"
+            },
+            "2": {
+              "visible": true,
+              "textBounds": {
+                "1": 331,
+                "2": 32
+              },
+              "textFits": true,
+              "active": false,
+              "text": "Find the four numbered house clues. Set wheels 1–4 to match.",
+              "rect": {
+                "height": 34,
+                "x": -30,
+                "y": 271.5,
+                "width": 337
+              },
+              "name": "Instructions",
+              "textSize": 16,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions"
+            },
+            "3": {
+              "visible": true,
+              "textBounds": {
+                "1": 325,
+                "2": 28
+              },
+              "textFits": true,
+              "active": false,
+              "text": "That order does not match. Check house clues 1–4 and try again.",
+              "rect": {
+                "height": 36,
+                "x": -30,
+                "y": 421.5,
+                "width": 337
+              },
+              "name": "Feedback",
+              "textSize": 14,
+              "textScaled": false,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Feedback"
+            },
+            "4": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "×",
+              "selection": {
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Close",
+              "selectionOrder": 0,
+              "rect": {
+                "height": 44,
+                "x": 271,
+                "y": 230.5,
+                "width": 44
+              },
+              "textSize": 28,
+              "textScaled": false,
+              "textBounds": {
+                "1": 14,
+                "2": 28
+              }
+            },
+            "5": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "UNLOCK",
+              "selection": {
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Unlock",
+              "selectionOrder": 5,
+              "rect": {
+                "height": 44,
+                "x": -30,
+                "y": 492.5,
+                "width": 337
+              },
+              "textSize": 18,
+              "textScaled": false,
+              "textBounds": {
+                "1": 68.5,
+                "2": 18
+              }
+            },
+            "6": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "1\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel1",
+              "selectionOrder": 1,
+              "rect": {
+                "height": 104,
+                "x": -30,
+                "y": 311.5,
+                "width": 78
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            },
+            "7": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "2\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel2",
+              "selectionOrder": 2,
+              "rect": {
+                "height": 104,
+                "x": 56,
+                "y": 311.5,
+                "width": 78
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            },
+            "8": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "3\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel3",
+              "selectionOrder": 3,
+              "rect": {
+                "height": 104,
+                "x": 142,
+                "y": 311.5,
+                "width": 78
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            },
+            "9": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "4\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel4",
+              "selectionOrder": 4,
+              "rect": {
+                "height": 104,
+                "x": 228,
+                "y": 311.5,
+                "width": 78
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            }
+          },
+          "shade": {
+            "height": 775,
+            "x": 0,
+            "y": 0,
+            "width": 277
+          },
+          "gamepadEnabled": false,
+          "scope": "Actual native client widget bounds/text at its current viewport; no simulated button presses or physical-device proof",
+          "controlsReady": true,
+          "remoteReady": true,
+          "gate1": {
+            "puzzleSolved": false,
+            "fullyOpen": false,
+            "unlocked": false
+          },
+          "issues": {
+            "1": {
+              "severity": "FAIL",
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel",
+              "code": "PANEL_OUTSIDE_USABLE_GUI_AREA"
+            },
+            "2": {
+              "severity": "FAIL",
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel",
+              "code": "PANEL_OUTSIDE_VIEWPORT"
+            },
+            "3": {
+              "severity": "FAIL",
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions",
+              "detail": "Close",
+              "code": "WIDGET_RECT_OVERLAP"
+            }
+          },
+          "inset": {
+            "topLeft": {
+              "1": 0,
+              "2": 58
+            },
+            "bottomRight": {
+              "1": 0,
+              "2": 0
+            }
+          },
+          "version": "2026-09-26.colour-ui.1",
+          "warnings": 0,
+          "viewport": {
+            "y": 361,
+            "x": 749
+          },
+          "failures": 3,
+          "inRound": true,
+          "gui": {
+            "enabled": true,
+            "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui",
+            "ignoreGuiInset": false,
+            "displayOrder": 70
+          }
+        }
+      },
+      "11": {
+        "kind": "sample",
+        "t": 78.83,
+        "detail": {
+          "menuOpen": false,
+          "status": "FAIL",
+          "localOpenAttribute": true,
+          "touchEnabled": false,
+          "panel": {
+            "height": 330,
+            "x": 226.5,
+            "y": 145,
+            "width": 600
+          },
+          "widgets": {
+            "1": {
+              "visible": true,
+              "textBounds": {
+                "1": 208.5,
+                "2": 21
+              },
+              "textFits": true,
+              "active": false,
+              "text": "HOUSE COLOUR LOCK",
+              "rect": {
+                "height": 30,
+                "x": 242.5,
+                "y": 157,
+                "width": 516
+              },
+              "name": "Title",
+              "textSize": 21,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Title"
+            },
+            "2": {
+              "visible": true,
+              "textBounds": {
+                "1": 424,
+                "2": 16
+              },
+              "textFits": true,
+              "active": false,
+              "text": "Find the four numbered house clues. Set wheels 1–4 to match.",
+              "rect": {
+                "height": 34,
+                "x": 242.5,
+                "y": 194,
+                "width": 568
+              },
+              "name": "Instructions",
+              "textSize": 16,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions"
+            },
+            "3": {
+              "visible": true,
+              "textBounds": {
+                "1": 383.5,
+                "2": 14
+              },
+              "textFits": true,
+              "active": false,
+              "text": "That order does not match. Check house clues 1–4 and try again.",
+              "rect": {
+                "height": 36,
+                "x": 242.5,
+                "y": 344,
+                "width": 568
+              },
+              "name": "Feedback",
+              "textSize": 14,
+              "textScaled": false,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Feedback"
+            },
+            "4": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "×",
+              "selection": {
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Close",
+              "selectionOrder": 0,
+              "rect": {
+                "height": 44,
+                "x": 774.5,
+                "y": 153,
+                "width": 44
+              },
+              "textSize": 28,
+              "textScaled": false,
+              "textBounds": {
+                "1": 14,
+                "2": 28
+              }
+            },
+            "5": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "UNLOCK",
+              "selection": {
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Unlock",
+              "selectionOrder": 5,
+              "rect": {
+                "height": 44,
+                "x": 242.5,
+                "y": 415,
+                "width": 568
+              },
+              "textSize": 18,
+              "textScaled": false,
+              "textBounds": {
+                "1": 68.5,
+                "2": 18
+              }
+            },
+            "6": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "1\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel1",
+              "selectionOrder": 1,
+              "rect": {
+                "height": 104,
+                "x": 242.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            },
+            "7": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "2\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel2",
+              "selectionOrder": 2,
+              "rect": {
+                "height": 104,
+                "x": 386.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            },
+            "8": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "3\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel3",
+              "selectionOrder": 3,
+              "rect": {
+                "height": 104,
+                "x": 530.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            },
+            "9": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "4\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel4",
+              "selectionOrder": 4,
+              "rect": {
+                "height": 104,
+                "x": 674.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            }
+          },
+          "shade": {
+            "height": 620,
+            "x": 0,
+            "y": 0,
+            "width": 1053
+          },
+          "gamepadEnabled": false,
+          "scope": "Actual native client widget bounds/text at its current viewport; no simulated button presses or physical-device proof",
+          "controlsReady": true,
+          "remoteReady": true,
+          "gate1": {
+            "puzzleSolved": false,
+            "fullyOpen": false,
+            "unlocked": false
+          },
+          "issues": {
+            "1": {
+              "severity": "FAIL",
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions",
+              "detail": "Close",
+              "code": "WIDGET_RECT_OVERLAP"
+            }
+          },
+          "inset": {
+            "topLeft": {
+              "1": 0,
+              "2": 58
+            },
+            "bottomRight": {
+              "1": 0,
+              "2": 0
+            }
+          },
+          "version": "2026-09-26.colour-ui.1",
+          "warnings": 0,
+          "viewport": {
+            "y": 678,
+            "x": 1053
+          },
+          "failures": 1,
+          "inRound": true,
+          "gui": {
+            "enabled": true,
+            "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui",
+            "ignoreGuiInset": false,
+            "displayOrder": 70
+          }
+        }
+      },
+      "12": {
+        "kind": "button_activated",
+        "t": 79.38,
+        "detail": {
+          "textAtSignal": "2\n◯ RED",
+          "name": "Wheel2"
+        }
+      },
+      "13": {
+        "kind": "wheel_text",
+        "t": 79.38,
+        "detail": {
+          "name": "Wheel2",
+          "text": "2\n△ YELLOW"
+        }
+      },
+      "14": {
+        "kind": "feedback",
+        "t": 79.38,
+        "detail": "Tap a wheel to change its colour."
+      },
+      "15": {
+        "kind": "sample",
+        "t": 79.85,
+        "detail": {
+          "menuOpen": false,
+          "status": "FAIL",
+          "localOpenAttribute": true,
+          "touchEnabled": false,
+          "panel": {
+            "height": 330,
+            "x": 226.5,
+            "y": 145,
+            "width": 600
+          },
+          "widgets": {
+            "1": {
+              "visible": true,
+              "textBounds": {
+                "1": 208.5,
+                "2": 21
+              },
+              "textFits": true,
+              "active": false,
+              "text": "HOUSE COLOUR LOCK",
+              "rect": {
+                "height": 30,
+                "x": 242.5,
+                "y": 157,
+                "width": 516
+              },
+              "name": "Title",
+              "textSize": 21,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Title"
+            },
+            "2": {
+              "visible": true,
+              "textBounds": {
+                "1": 424,
+                "2": 16
+              },
+              "textFits": true,
+              "active": false,
+              "text": "Find the four numbered house clues. Set wheels 1–4 to match.",
+              "rect": {
+                "height": 34,
+                "x": 242.5,
+                "y": 194,
+                "width": 568
+              },
+              "name": "Instructions",
+              "textSize": 16,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions"
+            },
+            "3": {
+              "visible": true,
+              "textBounds": {
+                "1": 195.5,
+                "2": 14
+              },
+              "textFits": true,
+              "active": false,
+              "text": "Tap a wheel to change its colour.",
+              "rect": {
+                "height": 36,
+                "x": 242.5,
+                "y": 344,
+                "width": 568
+              },
+              "name": "Feedback",
+              "textSize": 14,
+              "textScaled": false,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Feedback"
+            },
+            "4": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "×",
+              "selection": {
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Close",
+              "selectionOrder": 0,
+              "rect": {
+                "height": 44,
+                "x": 774.5,
+                "y": 153,
+                "width": 44
+              },
+              "textSize": 28,
+              "textScaled": false,
+              "textBounds": {
+                "1": 14,
+                "2": 28
+              }
+            },
+            "5": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "UNLOCK",
+              "selection": {
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Unlock",
+              "selectionOrder": 5,
+              "rect": {
+                "height": 44,
+                "x": 242.5,
+                "y": 415,
+                "width": 568
+              },
+              "textSize": 18,
+              "textScaled": false,
+              "textBounds": {
+                "1": 68.5,
+                "2": 18
+              }
+            },
+            "6": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "1\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel1",
+              "selectionOrder": 1,
+              "rect": {
+                "height": 104,
+                "x": 242.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            },
+            "7": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "2\n△ YELLOW",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel2",
+              "selectionOrder": 2,
+              "rect": {
+                "height": 104,
+                "x": 386.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 95.5,
+                "2": 42
+              }
+            },
+            "8": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "3\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel3",
+              "selectionOrder": 3,
+              "rect": {
+                "height": 104,
+                "x": 530.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            },
+            "9": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "4\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel4",
+              "selectionOrder": 4,
+              "rect": {
+                "height": 104,
+                "x": 674.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            }
+          },
+          "shade": {
+            "height": 620,
+            "x": 0,
+            "y": 0,
+            "width": 1053
+          },
+          "gamepadEnabled": false,
+          "scope": "Actual native client widget bounds/text at its current viewport; no simulated button presses or physical-device proof",
+          "controlsReady": true,
+          "remoteReady": true,
+          "gate1": {
+            "puzzleSolved": false,
+            "fullyOpen": false,
+            "unlocked": false
+          },
+          "issues": {
+            "1": {
+              "severity": "FAIL",
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions",
+              "detail": "Close",
+              "code": "WIDGET_RECT_OVERLAP"
+            }
+          },
+          "inset": {
+            "topLeft": {
+              "1": 0,
+              "2": 58
+            },
+            "bottomRight": {
+              "1": 0,
+              "2": 0
+            }
+          },
+          "version": "2026-09-26.colour-ui.1",
+          "warnings": 0,
+          "viewport": {
+            "y": 678,
+            "x": 1053
+          },
+          "failures": 1,
+          "inRound": true,
+          "gui": {
+            "enabled": true,
+            "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui",
+            "ignoreGuiInset": false,
+            "displayOrder": 70
+          }
+        }
+      },
+      "16": {
+        "kind": "button_activated",
+        "t": 80.1,
+        "detail": {
+          "textAtSignal": "3\n◯ RED",
+          "name": "Wheel3"
+        }
+      },
+      "17": {
+        "kind": "wheel_text",
+        "t": 80.1,
+        "detail": {
+          "name": "Wheel3",
+          "text": "3\n△ YELLOW"
+        }
+      },
+      "18": {
+        "kind": "button_activated",
+        "t": 80.53,
+        "detail": {
+          "textAtSignal": "3\n△ YELLOW",
+          "name": "Wheel3"
+        }
+      },
+      "19": {
+        "kind": "wheel_text",
+        "t": 80.53,
+        "detail": {
+          "name": "Wheel3",
+          "text": "3\n□ BLUE"
+        }
+      },
+      "20": {
+        "kind": "sample",
+        "t": 80.87,
+        "detail": {
+          "menuOpen": false,
+          "status": "FAIL",
+          "localOpenAttribute": true,
+          "touchEnabled": false,
+          "panel": {
+            "height": 330,
+            "x": 226.5,
+            "y": 145,
+            "width": 600
+          },
+          "widgets": {
+            "1": {
+              "visible": true,
+              "textBounds": {
+                "1": 208.5,
+                "2": 21
+              },
+              "textFits": true,
+              "active": false,
+              "text": "HOUSE COLOUR LOCK",
+              "rect": {
+                "height": 30,
+                "x": 242.5,
+                "y": 157,
+                "width": 516
+              },
+              "name": "Title",
+              "textSize": 21,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Title"
+            },
+            "2": {
+              "visible": true,
+              "textBounds": {
+                "1": 424,
+                "2": 16
+              },
+              "textFits": true,
+              "active": false,
+              "text": "Find the four numbered house clues. Set wheels 1–4 to match.",
+              "rect": {
+                "height": 34,
+                "x": 242.5,
+                "y": 194,
+                "width": 568
+              },
+              "name": "Instructions",
+              "textSize": 16,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions"
+            },
+            "3": {
+              "visible": true,
+              "textBounds": {
+                "1": 195.5,
+                "2": 14
+              },
+              "textFits": true,
+              "active": false,
+              "text": "Tap a wheel to change its colour.",
+              "rect": {
+                "height": 36,
+                "x": 242.5,
+                "y": 344,
+                "width": 568
+              },
+              "name": "Feedback",
+              "textSize": 14,
+              "textScaled": false,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Feedback"
+            },
+            "4": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "×",
+              "selection": {
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Close",
+              "selectionOrder": 0,
+              "rect": {
+                "height": 44,
+                "x": 774.5,
+                "y": 153,
+                "width": 44
+              },
+              "textSize": 28,
+              "textScaled": false,
+              "textBounds": {
+                "1": 14,
+                "2": 28
+              }
+            },
+            "5": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "UNLOCK",
+              "selection": {
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Unlock",
+              "selectionOrder": 5,
+              "rect": {
+                "height": 44,
+                "x": 242.5,
+                "y": 415,
+                "width": 568
+              },
+              "textSize": 18,
+              "textScaled": false,
+              "textBounds": {
+                "1": 68.5,
+                "2": 18
+              }
+            },
+            "6": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "1\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel1",
+              "selectionOrder": 1,
+              "rect": {
+                "height": 104,
+                "x": 242.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            },
+            "7": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "2\n△ YELLOW",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel2",
+              "selectionOrder": 2,
+              "rect": {
+                "height": 104,
+                "x": 386.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 95.5,
+                "2": 42
+              }
+            },
+            "8": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "3\n□ BLUE",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel3",
+              "selectionOrder": 3,
+              "rect": {
+                "height": 104,
+                "x": 530.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 65.5,
+                "2": 42
+              }
+            },
+            "9": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "4\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel4",
+              "selectionOrder": 4,
+              "rect": {
+                "height": 104,
+                "x": 674.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            }
+          },
+          "shade": {
+            "height": 620,
+            "x": 0,
+            "y": 0,
+            "width": 1053
+          },
+          "gamepadEnabled": false,
+          "scope": "Actual native client widget bounds/text at its current viewport; no simulated button presses or physical-device proof",
+          "controlsReady": true,
+          "remoteReady": true,
+          "gate1": {
+            "puzzleSolved": false,
+            "fullyOpen": false,
+            "unlocked": false
+          },
+          "issues": {
+            "1": {
+              "severity": "FAIL",
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions",
+              "detail": "Close",
+              "code": "WIDGET_RECT_OVERLAP"
+            }
+          },
+          "inset": {
+            "topLeft": {
+              "1": 0,
+              "2": 58
+            },
+            "bottomRight": {
+              "1": 0,
+              "2": 0
+            }
+          },
+          "version": "2026-09-26.colour-ui.1",
+          "warnings": 0,
+          "viewport": {
+            "y": 678,
+            "x": 1053
+          },
+          "failures": 1,
+          "inRound": true,
+          "gui": {
+            "enabled": true,
+            "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui",
+            "ignoreGuiInset": false,
+            "displayOrder": 70
+          }
+        }
+      },
+      "21": {
+        "kind": "button_activated",
+        "t": 81.27,
+        "detail": {
+          "textAtSignal": "4\n◯ RED",
+          "name": "Wheel4"
+        }
+      },
+      "22": {
+        "kind": "wheel_text",
+        "t": 81.27,
+        "detail": {
+          "name": "Wheel4",
+          "text": "4\n△ YELLOW"
+        }
+      },
+      "23": {
+        "kind": "button_activated",
+        "t": 81.7,
+        "detail": {
+          "textAtSignal": "4\n△ YELLOW",
+          "name": "Wheel4"
+        }
+      },
+      "24": {
+        "kind": "wheel_text",
+        "t": 81.7,
+        "detail": {
+          "name": "Wheel4",
+          "text": "4\n□ BLUE"
+        }
+      },
+      "25": {
+        "kind": "sample",
+        "t": 81.88,
+        "detail": {
+          "menuOpen": false,
+          "status": "FAIL",
+          "localOpenAttribute": true,
+          "touchEnabled": false,
+          "panel": {
+            "height": 330,
+            "x": 226.5,
+            "y": 145,
+            "width": 600
+          },
+          "widgets": {
+            "1": {
+              "visible": true,
+              "textBounds": {
+                "1": 208.5,
+                "2": 21
+              },
+              "textFits": true,
+              "active": false,
+              "text": "HOUSE COLOUR LOCK",
+              "rect": {
+                "height": 30,
+                "x": 242.5,
+                "y": 157,
+                "width": 516
+              },
+              "name": "Title",
+              "textSize": 21,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Title"
+            },
+            "2": {
+              "visible": true,
+              "textBounds": {
+                "1": 424,
+                "2": 16
+              },
+              "textFits": true,
+              "active": false,
+              "text": "Find the four numbered house clues. Set wheels 1–4 to match.",
+              "rect": {
+                "height": 34,
+                "x": 242.5,
+                "y": 194,
+                "width": 568
+              },
+              "name": "Instructions",
+              "textSize": 16,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions"
+            },
+            "3": {
+              "visible": true,
+              "textBounds": {
+                "1": 195.5,
+                "2": 14
+              },
+              "textFits": true,
+              "active": false,
+              "text": "Tap a wheel to change its colour.",
+              "rect": {
+                "height": 36,
+                "x": 242.5,
+                "y": 344,
+                "width": 568
+              },
+              "name": "Feedback",
+              "textSize": 14,
+              "textScaled": false,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Feedback"
+            },
+            "4": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "×",
+              "selection": {
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Close",
+              "selectionOrder": 0,
+              "rect": {
+                "height": 44,
+                "x": 774.5,
+                "y": 153,
+                "width": 44
+              },
+              "textSize": 28,
+              "textScaled": false,
+              "textBounds": {
+                "1": 14,
+                "2": 28
+              }
+            },
+            "5": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "UNLOCK",
+              "selection": {
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Unlock",
+              "selectionOrder": 5,
+              "rect": {
+                "height": 44,
+                "x": 242.5,
+                "y": 415,
+                "width": 568
+              },
+              "textSize": 18,
+              "textScaled": false,
+              "textBounds": {
+                "1": 68.5,
+                "2": 18
+              }
+            },
+            "6": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "1\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel1",
+              "selectionOrder": 1,
+              "rect": {
+                "height": 104,
+                "x": 242.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            },
+            "7": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "2\n△ YELLOW",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel2",
+              "selectionOrder": 2,
+              "rect": {
+                "height": 104,
+                "x": 386.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 95.5,
+                "2": 42
+              }
+            },
+            "8": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "3\n□ BLUE",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel3",
+              "selectionOrder": 3,
+              "rect": {
+                "height": 104,
+                "x": 530.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 65.5,
+                "2": 42
+              }
+            },
+            "9": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "4\n□ BLUE",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel4",
+              "selectionOrder": 4,
+              "rect": {
+                "height": 104,
+                "x": 674.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 65.5,
+                "2": 42
+              }
+            }
+          },
+          "shade": {
+            "height": 620,
+            "x": 0,
+            "y": 0,
+            "width": 1053
+          },
+          "gamepadEnabled": false,
+          "scope": "Actual native client widget bounds/text at its current viewport; no simulated button presses or physical-device proof",
+          "controlsReady": true,
+          "remoteReady": true,
+          "gate1": {
+            "puzzleSolved": false,
+            "fullyOpen": false,
+            "unlocked": false
+          },
+          "issues": {
+            "1": {
+              "severity": "FAIL",
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions",
+              "detail": "Close",
+              "code": "WIDGET_RECT_OVERLAP"
+            }
+          },
+          "inset": {
+            "topLeft": {
+              "1": 0,
+              "2": 58
+            },
+            "bottomRight": {
+              "1": 0,
+              "2": 0
+            }
+          },
+          "version": "2026-09-26.colour-ui.1",
+          "warnings": 0,
+          "viewport": {
+            "y": 678,
+            "x": 1053
+          },
+          "failures": 1,
+          "inRound": true,
+          "gui": {
+            "enabled": true,
+            "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui",
+            "ignoreGuiInset": false,
+            "displayOrder": 70
+          }
+        }
+      },
+      "26": {
+        "kind": "button_activated",
+        "t": 82.17,
+        "detail": {
+          "textAtSignal": "4\n□ BLUE",
+          "name": "Wheel4"
+        }
+      },
+      "27": {
+        "kind": "wheel_text",
+        "t": 82.17,
+        "detail": {
+          "name": "Wheel4",
+          "text": "4\n◇ GREEN"
+        }
+      },
+      "28": {
+        "kind": "sample",
+        "t": 82.88,
+        "detail": {
+          "menuOpen": false,
+          "status": "FAIL",
+          "localOpenAttribute": true,
+          "touchEnabled": false,
+          "panel": {
+            "height": 330,
+            "x": 226.5,
+            "y": 145,
+            "width": 600
+          },
+          "widgets": {
+            "1": {
+              "visible": true,
+              "textBounds": {
+                "1": 208.5,
+                "2": 21
+              },
+              "textFits": true,
+              "active": false,
+              "text": "HOUSE COLOUR LOCK",
+              "rect": {
+                "height": 30,
+                "x": 242.5,
+                "y": 157,
+                "width": 516
+              },
+              "name": "Title",
+              "textSize": 21,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Title"
+            },
+            "2": {
+              "visible": true,
+              "textBounds": {
+                "1": 424,
+                "2": 16
+              },
+              "textFits": true,
+              "active": false,
+              "text": "Find the four numbered house clues. Set wheels 1–4 to match.",
+              "rect": {
+                "height": 34,
+                "x": 242.5,
+                "y": 194,
+                "width": 568
+              },
+              "name": "Instructions",
+              "textSize": 16,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions"
+            },
+            "3": {
+              "visible": true,
+              "textBounds": {
+                "1": 195.5,
+                "2": 14
+              },
+              "textFits": true,
+              "active": false,
+              "text": "Tap a wheel to change its colour.",
+              "rect": {
+                "height": 36,
+                "x": 242.5,
+                "y": 344,
+                "width": 568
+              },
+              "name": "Feedback",
+              "textSize": 14,
+              "textScaled": false,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Feedback"
+            },
+            "4": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "×",
+              "selection": {
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Close",
+              "selectionOrder": 0,
+              "rect": {
+                "height": 44,
+                "x": 774.5,
+                "y": 153,
+                "width": 44
+              },
+              "textSize": 28,
+              "textScaled": false,
+              "textBounds": {
+                "1": 14,
+                "2": 28
+              }
+            },
+            "5": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "UNLOCK",
+              "selection": {
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Unlock",
+              "selectionOrder": 5,
+              "rect": {
+                "height": 44,
+                "x": 242.5,
+                "y": 415,
+                "width": 568
+              },
+              "textSize": 18,
+              "textScaled": false,
+              "textBounds": {
+                "1": 68.5,
+                "2": 18
+              }
+            },
+            "6": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "1\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel1",
+              "selectionOrder": 1,
+              "rect": {
+                "height": 104,
+                "x": 242.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            },
+            "7": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "2\n△ YELLOW",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel2",
+              "selectionOrder": 2,
+              "rect": {
+                "height": 104,
+                "x": 386.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 95.5,
+                "2": 42
+              }
+            },
+            "8": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "3\n□ BLUE",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel3",
+              "selectionOrder": 3,
+              "rect": {
+                "height": 104,
+                "x": 530.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 65.5,
+                "2": 42
+              }
+            },
+            "9": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "4\n◇ GREEN",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel4",
+              "selectionOrder": 4,
+              "rect": {
+                "height": 104,
+                "x": 674.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 80.5,
+                "2": 42
+              }
+            }
+          },
+          "shade": {
+            "height": 620,
+            "x": 0,
+            "y": 0,
+            "width": 1053
+          },
+          "gamepadEnabled": false,
+          "scope": "Actual native client widget bounds/text at its current viewport; no simulated button presses or physical-device proof",
+          "controlsReady": true,
+          "remoteReady": true,
+          "gate1": {
+            "puzzleSolved": false,
+            "fullyOpen": false,
+            "unlocked": false
+          },
+          "issues": {
+            "1": {
+              "severity": "FAIL",
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions",
+              "detail": "Close",
+              "code": "WIDGET_RECT_OVERLAP"
+            }
+          },
+          "inset": {
+            "topLeft": {
+              "1": 0,
+              "2": 58
+            },
+            "bottomRight": {
+              "1": 0,
+              "2": 0
+            }
+          },
+          "version": "2026-09-26.colour-ui.1",
+          "warnings": 0,
+          "viewport": {
+            "y": 678,
+            "x": 1053
+          },
+          "failures": 1,
+          "inRound": true,
+          "gui": {
+            "enabled": true,
+            "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui",
+            "ignoreGuiInset": false,
+            "displayOrder": 70
+          }
+        }
+      },
+      "29": {
+        "kind": "button_activated",
+        "t": 101.18,
+        "detail": {
+          "textAtSignal": "UNLOCK",
+          "name": "Unlock"
+        }
+      },
+      "30": {
+        "kind": "feedback",
+        "t": 101.18,
+        "detail": "Checking the lock…"
+      },
+      "31": {
+        "kind": "gate1_Unlocked",
+        "t": 101.25,
+        "detail": true
+      },
+      "32": {
+        "kind": "gate1_OpenReason",
+        "t": 101.25,
+        "detail": "SOLVED"
+      },
+      "33": {
+        "kind": "gui_enabled",
+        "t": 101.25,
+        "detail": false
+      },
+      "34": {
+        "kind": "open_attribute",
+        "t": 101.25,
+        "detail": false
+      },
+      "35": {
+        "kind": "sample",
+        "t": 102.1,
+        "detail": {
+          "menuOpen": false,
+          "status": "UI_CLOSED_LAYOUT_NOT_ASSESSED",
+          "localOpenAttribute": false,
+          "touchEnabled": false,
+          "panel": {
+            "height": 330,
+            "x": 226.5,
+            "y": 145,
+            "width": 600
+          },
+          "widgets": {
+            "1": {
+              "visible": true,
+              "textBounds": {
+                "1": 208.5,
+                "2": 21
+              },
+              "textFits": true,
+              "active": false,
+              "text": "HOUSE COLOUR LOCK",
+              "rect": {
+                "height": 30,
+                "x": 242.5,
+                "y": 157,
+                "width": 516
+              },
+              "name": "Title",
+              "textSize": 21,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Title"
+            },
+            "2": {
+              "visible": true,
+              "textBounds": {
+                "1": 424,
+                "2": 16
+              },
+              "textFits": true,
+              "active": false,
+              "text": "Find the four numbered house clues. Set wheels 1–4 to match.",
+              "rect": {
+                "height": 34,
+                "x": 242.5,
+                "y": 194,
+                "width": 568
+              },
+              "name": "Instructions",
+              "textSize": 16,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions"
+            },
+            "3": {
+              "visible": true,
+              "textBounds": {
+                "1": 117,
+                "2": 14
+              },
+              "textFits": true,
+              "active": false,
+              "text": "Checking the lock…",
+              "rect": {
+                "height": 36,
+                "x": 242.5,
+                "y": 344,
+                "width": 568
+              },
+              "name": "Feedback",
+              "textSize": 14,
+              "textScaled": false,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Feedback"
+            },
+            "4": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "×",
+              "selection": {
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Close",
+              "selectionOrder": 0,
+              "rect": {
+                "height": 44,
+                "x": 774.5,
+                "y": 153,
+                "width": 44
+              },
+              "textSize": 28,
+              "textScaled": false,
+              "textBounds": {
+                "1": 14,
+                "2": 28
+              }
+            },
+            "5": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "UNLOCK",
+              "selection": {
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Unlock",
+              "selectionOrder": 5,
+              "rect": {
+                "height": 44,
+                "x": 242.5,
+                "y": 415,
+                "width": 568
+              },
+              "textSize": 18,
+              "textScaled": false,
+              "textBounds": {
+                "1": 68.5,
+                "2": 18
+              }
+            },
+            "6": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "1\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel1",
+              "selectionOrder": 1,
+              "rect": {
+                "height": 104,
+                "x": 242.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            },
+            "7": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "2\n△ YELLOW",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel2",
+              "selectionOrder": 2,
+              "rect": {
+                "height": 104,
+                "x": 386.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 95.5,
+                "2": 42
+              }
+            },
+            "8": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "3\n□ BLUE",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel3",
+              "selectionOrder": 3,
+              "rect": {
+                "height": 104,
+                "x": 530.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 65.5,
+                "2": 42
+              }
+            },
+            "9": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "4\n◇ GREEN",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel4",
+              "selectionOrder": 4,
+              "rect": {
+                "height": 104,
+                "x": 674.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 80.5,
+                "2": 42
+              }
+            }
+          },
+          "shade": {
+            "height": 620,
+            "x": 0,
+            "y": 0,
+            "width": 1053
+          },
+          "gamepadEnabled": false,
+          "scope": "Actual native client widget bounds/text at its current viewport; no simulated button presses or physical-device proof",
+          "controlsReady": true,
+          "remoteReady": true,
+          "gate1": {
+            "puzzleSolved": true,
+            "openReason": "SOLVED",
+            "unlocked": true,
+            "fullyOpen": false
+          },
+          "issues": [],
+          "inset": {
+            "topLeft": {
+              "1": 0,
+              "2": 58
+            },
+            "bottomRight": {
+              "1": 0,
+              "2": 0
+            }
+          },
+          "version": "2026-09-26.colour-ui.1",
+          "warnings": 0,
+          "viewport": {
+            "y": 678,
+            "x": 1053
+          },
+          "failures": 0,
+          "inRound": true,
+          "gui": {
+            "enabled": false,
+            "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui",
+            "ignoreGuiInset": false,
+            "displayOrder": 70
+          }
+        }
+      },
+      "36": {
+        "kind": "gate1_FullyOpen",
+        "t": 102.83,
+        "detail": true
+      },
+      "37": {
+        "kind": "final_snapshot",
+        "t": 103.15,
+        "detail": {
+          "menuOpen": false,
+          "status": "UI_CLOSED_LAYOUT_NOT_ASSESSED",
+          "localOpenAttribute": false,
+          "touchEnabled": false,
+          "panel": {
+            "height": 330,
+            "x": 226.5,
+            "y": 145,
+            "width": 600
+          },
+          "widgets": {
+            "1": {
+              "visible": true,
+              "textBounds": {
+                "1": 208.5,
+                "2": 21
+              },
+              "textFits": true,
+              "active": false,
+              "text": "HOUSE COLOUR LOCK",
+              "rect": {
+                "height": 30,
+                "x": 242.5,
+                "y": 157,
+                "width": 516
+              },
+              "name": "Title",
+              "textSize": 21,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Title"
+            },
+            "2": {
+              "visible": true,
+              "textBounds": {
+                "1": 424,
+                "2": 16
+              },
+              "textFits": true,
+              "active": false,
+              "text": "Find the four numbered house clues. Set wheels 1–4 to match.",
+              "rect": {
+                "height": 34,
+                "x": 242.5,
+                "y": 194,
+                "width": 568
+              },
+              "name": "Instructions",
+              "textSize": 16,
+              "textScaled": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions"
+            },
+            "3": {
+              "visible": true,
+              "textBounds": {
+                "1": 117,
+                "2": 14
+              },
+              "textFits": true,
+              "active": false,
+              "text": "Checking the lock…",
+              "rect": {
+                "height": 36,
+                "x": 242.5,
+                "y": 344,
+                "width": 568
+              },
+              "name": "Feedback",
+              "textSize": 14,
+              "textScaled": false,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Feedback"
+            },
+            "4": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "×",
+              "selection": {
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Close",
+              "selectionOrder": 0,
+              "rect": {
+                "height": 44,
+                "x": 774.5,
+                "y": 153,
+                "width": 44
+              },
+              "textSize": 28,
+              "textScaled": false,
+              "textBounds": {
+                "1": 14,
+                "2": 28
+              }
+            },
+            "5": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "UNLOCK",
+              "selection": {
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+              },
+              "name": "Unlock",
+              "selectionOrder": 5,
+              "rect": {
+                "height": 44,
+                "x": 242.5,
+                "y": 415,
+                "width": 568
+              },
+              "textSize": 18,
+              "textScaled": false,
+              "textBounds": {
+                "1": 68.5,
+                "2": 18
+              }
+            },
+            "6": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "1\n◯ RED",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel1",
+              "selectionOrder": 1,
+              "rect": {
+                "height": 104,
+                "x": 242.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 59,
+                "2": 42
+              }
+            },
+            "7": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "2\n△ YELLOW",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel2",
+              "selectionOrder": 2,
+              "rect": {
+                "height": 104,
+                "x": 386.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 95.5,
+                "2": 42
+              }
+            },
+            "8": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "3\n□ BLUE",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel3",
+              "selectionOrder": 3,
+              "rect": {
+                "height": 104,
+                "x": 530.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 65.5,
+                "2": 42
+              }
+            },
+            "9": {
+              "visible": true,
+              "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+              "textFits": true,
+              "active": true,
+              "selectable": true,
+              "text": "4\n◇ GREEN",
+              "selection": {
+                "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+                "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+                "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+                "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+              },
+              "name": "Wheel4",
+              "selectionOrder": 4,
+              "rect": {
+                "height": 104,
+                "x": 674.5,
+                "y": 234,
+                "width": 136
+              },
+              "textSize": 18,
+              "textScaled": true,
+              "textBounds": {
+                "1": 80.5,
+                "2": 42
+              }
+            }
+          },
+          "shade": {
+            "height": 620,
+            "x": 0,
+            "y": 0,
+            "width": 1053
+          },
+          "gamepadEnabled": false,
+          "scope": "Actual native client widget bounds/text at its current viewport; no simulated button presses or physical-device proof",
+          "controlsReady": true,
+          "remoteReady": true,
+          "gate1": {
+            "puzzleSolved": true,
+            "openReason": "SOLVED",
+            "unlocked": true,
+            "fullyOpen": true
+          },
+          "issues": [],
+          "inset": {
+            "topLeft": {
+              "1": 0,
+              "2": 58
+            },
+            "bottomRight": {
+              "1": 0,
+              "2": 0
+            }
+          },
+          "version": "2026-09-26.colour-ui.1",
+          "warnings": 0,
+          "viewport": {
+            "y": 678,
+            "x": 1053
+          },
+          "failures": 0,
+          "inRound": true,
+          "gui": {
+            "enabled": false,
+            "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui",
+            "ignoreGuiInset": false,
+            "displayOrder": 70
+          }
+        }
+      }
+    },
+    "eventsOmitted": 0,
+    "status": "COMPLETE_OBSERVATION",
+    "version": "2026-09-26.colour-ui-observer.1",
+    "scope": "Observes actual native button Activated/property events; does not trigger interaction or send remotes",
+    "reason": "Explicit stop"
+  },
+  "landscape": {
+    "menuOpen": false,
+    "status": "FAIL",
+    "localOpenAttribute": true,
+    "touchEnabled": true,
+    "panel": {
+      "height": 297,
+      "x": 74.5,
+      "y": 3,
+      "width": 600
+    },
+    "widgets": {
+      "1": {
+        "visible": true,
+        "textBounds": {
+          "1": 208.5,
+          "2": 21
+        },
+        "textFits": true,
+        "active": false,
+        "text": "HOUSE COLOUR LOCK",
+        "rect": {
+          "height": 30,
+          "x": 90.5,
+          "y": 15,
+          "width": 516
+        },
+        "name": "Title",
+        "textSize": 21,
+        "textScaled": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Title"
+      },
+      "2": {
+        "visible": true,
+        "textBounds": {
+          "1": 424,
+          "2": 16
+        },
+        "textFits": true,
+        "active": false,
+        "text": "Find the four numbered house clues. Set wheels 1–4 to match.",
+        "rect": {
+          "height": 34,
+          "x": 90.5,
+          "y": 52,
+          "width": 568
+        },
+        "name": "Instructions",
+        "textSize": 16,
+        "textScaled": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions"
+      },
+      "3": {
+        "visible": true,
+        "textBounds": {
+          "1": 383.5,
+          "2": 14
+        },
+        "textFits": true,
+        "active": false,
+        "text": "That order does not match. Check house clues 1–4 and try again.",
+        "rect": {
+          "height": 36,
+          "x": 90.5,
+          "y": 191,
+          "width": 568
+        },
+        "name": "Feedback",
+        "textSize": 14,
+        "textScaled": false,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Feedback"
+      },
+      "4": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "×",
+        "selection": {
+          "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+        },
+        "name": "Close",
+        "selectionOrder": 0,
+        "rect": {
+          "height": 44,
+          "x": 622.5,
+          "y": 11,
+          "width": 44
+        },
+        "textSize": 28,
+        "textScaled": false,
+        "textBounds": {
+          "1": 14,
+          "2": 28
+        }
+      },
+      "5": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "UNLOCK",
+        "selection": {
+          "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+        },
+        "name": "Unlock",
+        "selectionOrder": 5,
+        "rect": {
+          "height": 44,
+          "x": 90.5,
+          "y": 240,
+          "width": 568
+        },
+        "textSize": 18,
+        "textScaled": false,
+        "textBounds": {
+          "1": 68.5,
+          "2": 18
+        }
+      },
+      "6": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "1\n◯ RED",
+        "selection": {
+          "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+          "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+          "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+          "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+        },
+        "name": "Wheel1",
+        "selectionOrder": 1,
+        "rect": {
+          "height": 93,
+          "x": 90.5,
+          "y": 92,
+          "width": 136
+        },
+        "textSize": 18,
+        "textScaled": true,
+        "textBounds": {
+          "1": 59,
+          "2": 42
+        }
+      },
+      "7": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "2\n◯ RED",
+        "selection": {
+          "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+          "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+          "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+          "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+        },
+        "name": "Wheel2",
+        "selectionOrder": 2,
+        "rect": {
+          "height": 93,
+          "x": 234.5,
+          "y": 92,
+          "width": 136
+        },
+        "textSize": 18,
+        "textScaled": true,
+        "textBounds": {
+          "1": 59,
+          "2": 42
+        }
+      },
+      "8": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "3\n◯ RED",
+        "selection": {
+          "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+          "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+          "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+          "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+        },
+        "name": "Wheel3",
+        "selectionOrder": 3,
+        "rect": {
+          "height": 93,
+          "x": 378.5,
+          "y": 92,
+          "width": 136
+        },
+        "textSize": 18,
+        "textScaled": true,
+        "textBounds": {
+          "1": 59,
+          "2": 42
+        }
+      },
+      "9": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "4\n◯ RED",
+        "selection": {
+          "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+          "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+          "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+          "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+        },
+        "name": "Wheel4",
+        "selectionOrder": 4,
+        "rect": {
+          "height": 93,
+          "x": 522.5,
+          "y": 92,
+          "width": 136
+        },
+        "textSize": 18,
+        "textScaled": true,
+        "textBounds": {
+          "1": 59,
+          "2": 42
+        }
+      }
+    },
+    "shade": {
+      "height": 303,
+      "x": 0,
+      "y": 0,
+      "width": 749
+    },
+    "gamepadEnabled": false,
+    "scope": "Actual native client widget bounds/text at its current viewport; no simulated button presses or physical-device proof",
+    "controlsReady": true,
+    "remoteReady": true,
+    "gate1": {
+      "puzzleSolved": false,
+      "fullyOpen": false,
+      "unlocked": false
+    },
+    "issues": {
+      "1": {
+        "severity": "FAIL",
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions",
+        "detail": "Close",
+        "code": "WIDGET_RECT_OVERLAP"
+      }
+    },
+    "inset": {
+      "topLeft": {
+        "1": 0,
+        "2": 58
+      },
+      "bottomRight": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    "version": "2026-09-26.colour-ui.1",
+    "warnings": 0,
+    "viewport": {
+      "y": 361,
+      "x": 749
+    },
+    "failures": 1,
+    "inRound": true,
+    "gui": {
+      "enabled": true,
+      "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui",
+      "ignoreGuiInset": false,
+      "displayOrder": 70
+    }
+  },
+  "portrait": {
+    "menuOpen": false,
+    "status": "FAIL",
+    "localOpenAttribute": true,
+    "touchEnabled": true,
+    "panel": {
+      "height": 330,
+      "x": 16,
+      "y": 194.5,
+      "width": 369
+    },
+    "widgets": {
+      "1": {
+        "visible": true,
+        "textBounds": {
+          "1": 208.5,
+          "2": 21
+        },
+        "textFits": true,
+        "active": false,
+        "text": "HOUSE COLOUR LOCK",
+        "rect": {
+          "height": 30,
+          "x": 32,
+          "y": 206.5,
+          "width": 285
+        },
+        "name": "Title",
+        "textSize": 21,
+        "textScaled": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Title"
+      },
+      "2": {
+        "visible": true,
+        "textBounds": {
+          "1": 331,
+          "2": 32
+        },
+        "textFits": true,
+        "active": false,
+        "text": "Find the four numbered house clues. Set wheels 1–4 to match.",
+        "rect": {
+          "height": 34,
+          "x": 32,
+          "y": 243.5,
+          "width": 337
+        },
+        "name": "Instructions",
+        "textSize": 16,
+        "textScaled": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions"
+      },
+      "3": {
+        "visible": true,
+        "textBounds": {
+          "1": 325,
+          "2": 28
+        },
+        "textFits": true,
+        "active": false,
+        "text": "That order does not match. Check house clues 1–4 and try again.",
+        "rect": {
+          "height": 36,
+          "x": 32,
+          "y": 393.5,
+          "width": 337
+        },
+        "name": "Feedback",
+        "textSize": 14,
+        "textScaled": false,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Feedback"
+      },
+      "4": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "×",
+        "selection": {
+          "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+        },
+        "name": "Close",
+        "selectionOrder": 0,
+        "rect": {
+          "height": 44,
+          "x": 333,
+          "y": 202.5,
+          "width": 44
+        },
+        "textSize": 28,
+        "textScaled": false,
+        "textBounds": {
+          "1": 14,
+          "2": 28
+        }
+      },
+      "5": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "UNLOCK",
+        "selection": {
+          "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+        },
+        "name": "Unlock",
+        "selectionOrder": 5,
+        "rect": {
+          "height": 44,
+          "x": 32,
+          "y": 464.5,
+          "width": 337
+        },
+        "textSize": 18,
+        "textScaled": false,
+        "textBounds": {
+          "1": 68.5,
+          "2": 18
+        }
+      },
+      "6": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "1\n◯ RED",
+        "selection": {
+          "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+          "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+          "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+          "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+        },
+        "name": "Wheel1",
+        "selectionOrder": 1,
+        "rect": {
+          "height": 104,
+          "x": 32,
+          "y": 283.5,
+          "width": 78
+        },
+        "textSize": 18,
+        "textScaled": true,
+        "textBounds": {
+          "1": 59,
+          "2": 42
+        }
+      },
+      "7": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "2\n◯ RED",
+        "selection": {
+          "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+          "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+          "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+          "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+        },
+        "name": "Wheel2",
+        "selectionOrder": 2,
+        "rect": {
+          "height": 104,
+          "x": 118,
+          "y": 283.5,
+          "width": 78
+        },
+        "textSize": 18,
+        "textScaled": true,
+        "textBounds": {
+          "1": 59,
+          "2": 42
+        }
+      },
+      "8": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "3\n◯ RED",
+        "selection": {
+          "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+          "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+          "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+          "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+        },
+        "name": "Wheel3",
+        "selectionOrder": 3,
+        "rect": {
+          "height": 104,
+          "x": 204,
+          "y": 283.5,
+          "width": 78
+        },
+        "textSize": 18,
+        "textScaled": true,
+        "textBounds": {
+          "1": 59,
+          "2": 42
+        }
+      },
+      "9": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "4\n◯ RED",
+        "selection": {
+          "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+          "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+          "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+          "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+        },
+        "name": "Wheel4",
+        "selectionOrder": 4,
+        "rect": {
+          "height": 104,
+          "x": 290,
+          "y": 283.5,
+          "width": 78
+        },
+        "textSize": 18,
+        "textScaled": true,
+        "textBounds": {
+          "1": 59,
+          "2": 42
+        }
+      }
+    },
+    "shade": {
+      "height": 719,
+      "x": 0,
+      "y": 0,
+      "width": 401
+    },
+    "gamepadEnabled": false,
+    "scope": "Actual native client widget bounds/text at its current viewport; no simulated button presses or physical-device proof",
+    "controlsReady": true,
+    "remoteReady": true,
+    "gate1": {
+      "puzzleSolved": false,
+      "fullyOpen": false,
+      "unlocked": false
+    },
+    "issues": {
+      "1": {
+        "severity": "FAIL",
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions",
+        "detail": "Close",
+        "code": "WIDGET_RECT_OVERLAP"
+      }
+    },
+    "inset": {
+      "topLeft": {
+        "1": 0,
+        "2": 58
+      },
+      "bottomRight": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    "version": "2026-09-26.colour-ui.1",
+    "warnings": 0,
+    "viewport": {
+      "y": 777,
+      "x": 401
+    },
+    "failures": 1,
+    "inRound": true,
+    "gui": {
+      "enabled": true,
+      "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui",
+      "ignoreGuiInset": false,
+      "displayOrder": 70
+    }
+  },
+  "tablet": {
+    "menuOpen": false,
+    "status": "FAIL",
+    "localOpenAttribute": true,
+    "touchEnabled": true,
+    "panel": {
+      "height": 330,
+      "x": 387.5,
+      "y": 321,
+      "width": 600
+    },
+    "widgets": {
+      "1": {
+        "visible": true,
+        "textBounds": {
+          "1": 208.5,
+          "2": 21
+        },
+        "textFits": true,
+        "active": false,
+        "text": "HOUSE COLOUR LOCK",
+        "rect": {
+          "height": 30,
+          "x": 403.5,
+          "y": 333,
+          "width": 516
+        },
+        "name": "Title",
+        "textSize": 21,
+        "textScaled": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Title"
+      },
+      "2": {
+        "visible": true,
+        "textBounds": {
+          "1": 424,
+          "2": 16
+        },
+        "textFits": true,
+        "active": false,
+        "text": "Find the four numbered house clues. Set wheels 1–4 to match.",
+        "rect": {
+          "height": 34,
+          "x": 403.5,
+          "y": 370,
+          "width": 568
+        },
+        "name": "Instructions",
+        "textSize": 16,
+        "textScaled": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions"
+      },
+      "3": {
+        "visible": true,
+        "textBounds": {
+          "1": 383.5,
+          "2": 14
+        },
+        "textFits": true,
+        "active": false,
+        "text": "That order does not match. Check house clues 1–4 and try again.",
+        "rect": {
+          "height": 36,
+          "x": 403.5,
+          "y": 520,
+          "width": 568
+        },
+        "name": "Feedback",
+        "textSize": 14,
+        "textScaled": false,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Feedback"
+      },
+      "4": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "×",
+        "selection": {
+          "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+        },
+        "name": "Close",
+        "selectionOrder": 0,
+        "rect": {
+          "height": 44,
+          "x": 935.5,
+          "y": 329,
+          "width": 44
+        },
+        "textSize": 28,
+        "textScaled": false,
+        "textBounds": {
+          "1": 14,
+          "2": 28
+        }
+      },
+      "5": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "UNLOCK",
+        "selection": {
+          "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1"
+        },
+        "name": "Unlock",
+        "selectionOrder": 5,
+        "rect": {
+          "height": 44,
+          "x": 403.5,
+          "y": 591,
+          "width": 568
+        },
+        "textSize": 18,
+        "textScaled": false,
+        "textBounds": {
+          "1": 68.5,
+          "2": 18
+        }
+      },
+      "6": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "1\n◯ RED",
+        "selection": {
+          "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+          "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+          "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+          "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+        },
+        "name": "Wheel1",
+        "selectionOrder": 1,
+        "rect": {
+          "height": 104,
+          "x": 403.5,
+          "y": 410,
+          "width": 136
+        },
+        "textSize": 18,
+        "textScaled": true,
+        "textBounds": {
+          "1": 59,
+          "2": 42
+        }
+      },
+      "7": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "2\n◯ RED",
+        "selection": {
+          "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+          "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+          "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+          "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+        },
+        "name": "Wheel2",
+        "selectionOrder": 2,
+        "rect": {
+          "height": 104,
+          "x": 547.5,
+          "y": 410,
+          "width": 136
+        },
+        "textSize": 18,
+        "textScaled": true,
+        "textBounds": {
+          "1": 59,
+          "2": 42
+        }
+      },
+      "8": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "3\n◯ RED",
+        "selection": {
+          "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel2",
+          "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+          "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+          "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+        },
+        "name": "Wheel3",
+        "selectionOrder": 3,
+        "rect": {
+          "height": 104,
+          "x": 691.5,
+          "y": 410,
+          "width": 136
+        },
+        "textSize": 18,
+        "textScaled": true,
+        "textBounds": {
+          "1": 59,
+          "2": 42
+        }
+      },
+      "9": {
+        "visible": true,
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel4",
+        "textFits": true,
+        "active": true,
+        "selectable": true,
+        "text": "4\n◯ RED",
+        "selection": {
+          "left": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel3",
+          "right": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Wheel1",
+          "down": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Unlock",
+          "up": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Close"
+        },
+        "name": "Wheel4",
+        "selectionOrder": 4,
+        "rect": {
+          "height": 104,
+          "x": 835.5,
+          "y": 410,
+          "width": 136
+        },
+        "textSize": 18,
+        "textScaled": true,
+        "textBounds": {
+          "1": 59,
+          "2": 42
+        }
+      }
+    },
+    "shade": {
+      "height": 972,
+      "x": 0,
+      "y": 0,
+      "width": 1375
+    },
+    "gamepadEnabled": false,
+    "scope": "Actual native client widget bounds/text at its current viewport; no simulated button presses or physical-device proof",
+    "controlsReady": true,
+    "remoteReady": true,
+    "gate1": {
+      "puzzleSolved": false,
+      "fullyOpen": false,
+      "unlocked": false
+    },
+    "issues": {
+      "1": {
+        "severity": "FAIL",
+        "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui.Frame.LockPanel.Instructions",
+        "detail": "Close",
+        "code": "WIDGET_RECT_OVERLAP"
+      }
+    },
+    "inset": {
+      "topLeft": {
+        "1": 0,
+        "2": 58
+      },
+      "bottomRight": {
+        "1": 0,
+        "2": 0
+      }
+    },
+    "version": "2026-09-26.colour-ui.1",
+    "warnings": 0,
+    "viewport": {
+      "y": 1030,
+      "x": 1375
+    },
+    "failures": 1,
+    "inRound": true,
+    "gui": {
+      "enabled": true,
+      "path": "Players.LaverSneglen.PlayerGui.Level5ColourLockGui",
+      "ignoreGuiInset": false,
+      "displayOrder": 70
+    }
+  }
+}

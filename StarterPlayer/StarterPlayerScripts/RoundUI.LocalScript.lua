@@ -914,6 +914,7 @@ local function shouldShowCursor()
  return player:GetAttribute("InRound") ~= true
   or queueShade.Visible
   or player:GetAttribute("DevPhoneOpen") == true
+  or player:GetAttribute("Level5ColourLockOpen") == true
   or player:GetAttribute("ZyntraReentryOpen") == true
   -- The PARTY DOWN card is this file's own modal and frees its own cursor. It
   -- does reach ZyntraReentryOpen as well, but only via ZyntraStore's listener
@@ -986,6 +987,9 @@ player:GetAttributeChangedSignal("InRound"):Connect(refreshCursor)
 player:GetAttributeChangedSignal("DevPhoneOpen"):Connect(refreshCursor)
 player:GetAttributeChangedSignal("ZyntraReentryOpen"):Connect(refreshCursor)
 player:GetAttributeChangedSignal("PartyDownCardOpen"):Connect(refreshCursor)
+-- The Level 5 lock publishes its existing modal flag before its first frame.
+-- RoundUI remains the sole pointer-policy owner on both open and close.
+player:GetAttributeChangedSignal("Level5ColourLockOpen"):Connect(refreshCursor)
 refreshCursor()
 
 -- An open modal must keep the pointer free. Ordinary lobby play deliberately
@@ -994,7 +998,8 @@ refreshCursor()
 RunService.RenderStepped:Connect(function()
  if UIS.MouseEnabled and (queueShade.Visible or player:GetAttribute("DevPhoneOpen") == true
   or player:GetAttribute("ZyntraReentryOpen") == true
-  or player:GetAttribute("PartyDownCardOpen") == true or completion.returnVisible) then
+  or player:GetAttribute("PartyDownCardOpen") == true
+  or player:GetAttribute("Level5ColourLockOpen") == true or completion.returnVisible) then
   UIS.MouseBehavior = Enum.MouseBehavior.Default
   UIS.MouseIconEnabled = true
  end

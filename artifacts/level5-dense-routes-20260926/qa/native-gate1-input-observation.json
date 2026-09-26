@@ -1,0 +1,15 @@
+{
+  "method": "Native E prompt and user_mouse_input clicks; observed by root tool call",
+  "gate": 1,
+  "wrongFeedback": "Check the numbered clues and try those colours again.",
+  "correctChoices": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "FullyOpen": true,
+  "OpenReason": "SOLVED",
+  "Puzzle1Solved": true,
+  "scope": "First installed draft. Catalog/progression/client unchanged in final geometry correction."
+}

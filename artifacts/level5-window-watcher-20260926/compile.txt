@@ -1,0 +1,4 @@
+Studio Edit native compile probe after final installation:
+compiled 184/184
+FAILURES: none
+NOT STAGED: none

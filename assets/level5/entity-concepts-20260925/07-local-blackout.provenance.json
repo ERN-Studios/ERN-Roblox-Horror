@@ -1,0 +1,24 @@
+{
+  "createdUtc": "2026-09-25T13:45:05.989559+00:00",
+  "tool": "image_gen.imagegen",
+  "mode": "built-in generation",
+  "generationCallsForConcept": 1,
+  "inputReferences": [],
+  "sourcePath": "/Users/zeanjuul4/.codex/generated_images/01a0cfe1-051b-7073-9dd4-8d21f8ddfda3/exec-51011491-1f35-46a4-9ba3-0fedb8564998.png",
+  "destinationPath": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-entity-concepts-20260925/07-local-blackout.png",
+  "exactPromptFile": "07-local-blackout.prompt.txt",
+  "promptSha256": "4e416ea38c6406b71736761129feb5c70dcf99592363dad46a02160a7dd6f07b",
+  "bytes": 2094247,
+  "width": 1536,
+  "height": 1024,
+  "imageMode": "RGB",
+  "format": "PNG",
+  "sha256": "9fb28ff8948062f01278047ad3552f65f7e35fcfab19f19f7785a730cbf7e999",
+  "originalBytesPreserved": true,
+  "pixelManipulation": false,
+  "visualInspection": [
+    "Three coherent warning/outage/distant-Neighbor panels; exact title correct; near panel off while background lighting remains on; flashlight and tall near-human visible.",
+    "Minor brief deviation: distant table lamps appear on a sideboard; they are not facade-mounted. This is concept art, not the approved live fixture configuration."
+  ],
+  "scope": "Concept board only. No gameplay implementation, Studio edit, Git/Trello mutation, asset upload, or claims of in-engine rendering."
+}

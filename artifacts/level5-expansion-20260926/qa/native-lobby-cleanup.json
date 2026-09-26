@@ -1,0 +1,19 @@
+{
+  "worldPresent": true,
+  "inRound": false,
+  "fov": 70,
+  "remotePresent": true,
+  "watcherGaze": {
+    "GazeAppearance": 2,
+    "GazeLineOfSight": false,
+    "GazeExposure": 1,
+    "GazeIntensity": 0,
+    "GazeHidden": true,
+    "GazeDistance": 17268.9,
+    "GazeAngle": 78.9,
+    "GazeThresholdSeconds": 5.971226988799726,
+    "WindowWatcherOwner": "WindowWatcher20260926"
+  },
+  "puzzleEnabled": false,
+  "modal": false
+}

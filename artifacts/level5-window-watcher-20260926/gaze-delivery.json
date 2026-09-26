@@ -1,0 +1,43 @@
+{
+  "date": "2026-09-26",
+  "published": true,
+  "publishVersion": 2123,
+  "publishUtc": "2026-09-26T12:35:15.298Z",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "nativeGazeQA": "PASS_OBSERVED_CHECKS",
+  "scriptCount": 186,
+  "compiled": 186,
+  "sourceEditorConflicts": 0,
+  "unchangedSince2121": 183,
+  "serverEncounterTimingUnchanged": true,
+  "localOnly": true,
+  "thresholds": {
+    "atOrBelow12Studs": [
+      2.5,
+      4.5
+    ],
+    "at100Studs": [
+      5,
+      8
+    ],
+    "fullAngleDegrees": 8,
+    "onsetAngleDegrees": 30,
+    "maximumDistanceStuds": 145,
+    "lookAwayDecayPerSecond": 0.2,
+    "maximumZoomInDegrees": 1.5,
+    "bpm": [
+      60,
+      105
+    ]
+  },
+  "backup": {
+    "file": "after-gaze.rbxl",
+    "bytes": 9767008,
+    "sha256": "8b0074fd9b92a8fb87f6fb2563b3b888bcc961dbcc94f72769ce58e2100b1841"
+  },
+  "limitations": [
+    "Physical mobile/tablet and two-account human multiplayer not tested",
+    "Published-server asset permissions not exercised outside Studio"
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "source": "Meshy actual rigged GLB, requested height2.4m",
+  "animation_authoring": "Local Blender 5.2 via bpy; no paid Meshy animations",
+  "mesh_triangles": 11862,
+  "vertices": 8968,
+  "bones": 25,
+  "finger_bones": false,
+  "max_influences": 4,
+  "weights_normalized": true,
+  "root_at_origin": true,
+  "root_weighted_vertices": 0,
+  "files": [
+    {
+      "path": "GlassTap-roblox-30fps.json",
+      "bytes": 186886,
+      "sha256": "139640ae4ad89c3a59525c45746520af3f5de25b670817734be894a72b62222a"
+    },
+    {
+      "path": "GlassTap.fbx",
+      "bytes": 6903804,
+      "sha256": "39548720519eb92acac53e02991286aadca0e403254ba79f356da7405691c3c0"
+    },
+    {
+      "path": "SlowWindowLean-roblox-30fps.json",
+      "bytes": 235895,
+      "sha256": "9062803490136db35f3ad76a1e5b1cb3b18bcea56f9a4596485d6335221f5f8b"
+    },
+    {
+      "path": "SlowWindowLean.fbx",
+      "bytes": 6948620,
+      "sha256": "11a8fa3e7c14a5b2e7d3191ece272fcc9d51ec8b1fe28520c535f9a37ef79eca"
+    },
+    {
+      "path": "WatchingIdle-roblox-30fps.json",
+      "bytes": 278337,
+      "sha256": "e3abd0959248f376f6c6a8f6a5d5036d114c96f8d9b96422e4c5085d7b8b9ce4"
+    },
+    {
+      "path": "WatchingIdle.fbx",
+      "bytes": 6983532,
+      "sha256": "669a226866f551eda4f0ad10aa182927e786bae15df550f91d1b7886a46362de"
+    },
+    {
+      "path": "WindowWatcher-basecolor.png",
+      "bytes": 5952974,
+      "sha256": "3229b3bc4eec4498379348bcfabb74dfac136dc1ab51d8a18cb073c34bb01133"
+    },
+    {
+      "path": "animation-quality-audit.json",
+      "bytes": 1374,
+      "sha256": "5d87d23c02fb172e032d6f8bd27ed372adeceb2c68113428dd664dcae31e6d06"
+    },
+    {
+      "path": "animation-transforms-30fps.json.gz",
+      "compression": "gzip",
+      "uncompressedBytes": 25968735,
+      "uncompressedSha256": "f27a5ea5924c3484e6388b8c85831dafea1e2c252b5a9eb62ba28b28318fe7a5",
+      "bytes": 2851456,
+      "sha256": "876d8a38ad2c65025bdcb1fc1c50048710b32529459c47b22186ec078b485ddb"
+    },
+    {
+      "path": "export-inventory.json",
+      "bytes": 35843,
+      "sha256": "a1652af25b237b95c4e4744bdcecfe72639d62213522a183edbbb93d5c6ae884"
+    },
+    {
+      "path": "model.blend",
+      "bytes": 6996669,
+      "sha256": "134e485ba1e8479d668a9460e87e18a9c87083f52ff4ae1a89dc4bbe0ac2f0ad"
+    },
+    {
+      "path": "model.fbx",
+      "bytes": 6596124,
+      "sha256": "3d5834fb84b094d1d76c4b0c4041a09dcc66fa0f3e91c988facd50af2cd23beb"
+    },
+    {
+      "path": "model.glb",
+      "bytes": 6501680,
+      "sha256": "cbf260ff36b8c7226f27271456eae6bf4db7fd266bdce82dda8b0eae7cbc051e"
+    },
+    {
+      "path": "placement-reference.json",
+      "bytes": 9079,
+      "sha256": "90646a50fea3956c5aea58d6da8f9593b47173bd848bc1d78e69e962671b89cc"
+    },
+    {
+      "path": "roundtrip-audit.json",
+      "bytes": 172881,
+      "sha256": "65679b939d3b877d822be6573840e2dcbbf5a8c0c39507471942d80a60fd3fa0"
+    },
+    {
+      "path": "serialized-glb-coordinate-audit.json",
+      "bytes": 44468,
+      "sha256": "21d66d39cb702f80d3477a9f002ab6e9544b94535e230bc2289752215e1de0d9"
+    },
+    {
+      "path": "renders/GlassTap-palm-closeup.png",
+      "bytes": 1419808,
+      "sha256": "ac087f4cf0cb206dab2e9ec87dbbbec36cb248687ccb57cb26ea0ef70c38e89f"
+    },
+    {
+      "path": "renders/GlassTap-raising-arc.png",
+      "bytes": 1138480,
+      "sha256": "92fbb63bc6b6a322d751a16686f235cece1bf3cd3bcba0cd56e3b568d3110988"
+    },
+    {
+      "path": "renders/GlassTap-three-quarter.png",
+      "bytes": 1136946,
+      "sha256": "27edeed02049e173507daa1f7ba21ecffe03605210853db98c6ab1be95a9702d"
+    },
+    {
+      "path": "renders/SlowWindowLean-three-quarter.png",
+      "bytes": 1130990,
+      "sha256": "c2af136cde712daf30090cd098aaeae701435505ddf2714f71a5c8fa3ccbf9e0"
+    },
+    {
+      "path": "renders/WatchingIdle-three-quarter.png",
+      "bytes": 1133315,
+      "sha256": "b61df7151e3f74999a70cddc6e3932ac9555f91b2362fe13ee56aa21fe983b01"
+    },
+    {
+      "path": "renders/WindowWatcher-contactsheet.png",
+      "bytes": 2078969,
+      "sha256": "6f0fe20a4dc140e364930b5fc02ac47771ce769dc93d6662b9a46622723f556f"
+    }
+  ],
+  "excludedIntermediates": [
+    {
+      "path": "prepared-rig-inventory.json",
+      "bytes": 24255,
+      "sha256": "b7132d2273b0fd1005802de60ad303ab95c508060adf88341daf09f71c76deeb",
+      "note": "Source-only intermediate; not part of repository delivery."
+    }
+  ],
+  "pathBase": "This directory"
+}

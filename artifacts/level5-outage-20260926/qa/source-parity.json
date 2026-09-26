@@ -1,0 +1,33 @@
+{
+  "baselineScripts": 189,
+  "finalScripts": 191,
+  "scopedChanges": [
+    {
+      "path": "StarterPlayer/StarterPlayerScripts/Level 5 Lighting Controller",
+      "sha256": "ce5f3e28cd549bd0f0953e1a4d1d6607820b51ae8630d10a00a877892a696dca",
+      "bytes": 9452
+    },
+    {
+      "path": "ServerScriptService/Level 5 Systems/Level 5 Power Outage",
+      "sha256": "82730d0871b9fe1707c8d4b8ccf0bb96d533fba182bd13302610b566e322180e",
+      "bytes": 7201
+    },
+    {
+      "path": "ServerScriptService/Level 5 Systems/Level 5 Section Progression",
+      "sha256": "7f589fdd301f0aa1e4554643b1f2733154910143e84d43f16366fa25bbcc7d90",
+      "bytes": 16436
+    },
+    {
+      "path": "ReplicatedStorage/Level5OutageLogic",
+      "sha256": "9a68cccf31c46d7f154786ca3b8ac830216bcb9e969d0e50b03c7d2e6ade9049",
+      "bytes": 4636
+    }
+  ],
+  "newScripts": [
+    "ServerScriptService/Level 5 Systems/Level 5 Power Outage",
+    "ReplicatedStorage/Level5OutageLogic"
+  ],
+  "unchangedExistingScripts": 187,
+  "level4Unchanged": true,
+  "editorConflicts": 0
+}

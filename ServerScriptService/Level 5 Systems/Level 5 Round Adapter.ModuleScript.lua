@@ -1,7 +1,8 @@
 --!strict
 -- Level 5 map-only preview lifecycle. Independent of Level 4 and its gameplay.
 -- GameManager owns entry, Back to Lobby and round cleanup. This module never
--- sets Escaped/PuzzleWon, loads an entity or grants completion/rewards.
+-- sets Escaped/PuzzleWon or grants completion/rewards. The passive window
+-- encounter has no chase, damage or completion behavior.
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
@@ -299,12 +300,28 @@ function Adapter.Build()
 		})
 		assert(type(manifest) == "table" and typeof(manifest.SpawnCFrame) == "CFrame", "Architecture needs an arrival SpawnCFrame")
 		manifest.World, manifest.Origin = world, ORIGIN
+		if RunService:IsRunning() then
+			local progression = require(script.Parent:WaitForChild("Level 5 Section Progression"))
+			local progressResult = progression.Start(world, manifest, {
+				ClueTextures = {"rbxassetid://129034114315469", "rbxassetid://82053429341504", "rbxassetid://98028147005436", "rbxassetid://73277763916471"},
+				AllowDeveloperBypass = true,
+			})
+			assert(progressResult.ok, progressResult.error)
+			manifest.SectionProgression = progressResult
+			local encounters = require(script.Parent:FindFirstChild("Level 5 Window Watcher Encounters") :: ModuleScript)
+			local result = encounters.Start(world, {
+				Origin = ORIGIN,
+				GetParticipants = function() return Players:GetPlayers() end,
+			})
+			assert(result.ok, result.error)
+			manifest.WindowWatcher = result
+		end
 		-- Architecture supplies a HumanoidRootPart-height pose, three studs
 		-- above its entry carpet. GameManager's compatibility pad is the FLOOR.
 		manifest.ArrivalFloorCFrame = manifest.SpawnCFrame * CFrame.new(0, -3, 0)
 		manifest.Elevator, manifest.ElevatorSpawn, manifest.MazeStart = buildCompatibility(manifest.ArrivalFloorCFrame)
 		local descendants = #world:GetDescendants()
-		assert(descendants <= 18000, "Level 5 exceeds the 18,000-instance map preview budget")
+		assert(descendants <= 30000, "Level 5 exceeds the 30,000-instance dense-neighbourhood budget")
 		currentState:SetAttribute("Level5_WorldDescendants", descendants)
 		currentState:SetAttribute("Level5_BuildSeconds", math.round((os.clock() - started) * 100) / 100)
 		currentState:SetAttribute("Level5_SpawnCFrame", manifest.SpawnCFrame)

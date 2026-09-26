@@ -1,0 +1,23 @@
+{
+  "createdUtc": "2026-09-25T13:45:50.813297+00:00",
+  "concept": "04-noisy-shortcuts",
+  "title": "NOISY SHORTCUTS",
+  "tool": "image_gen.imagegen",
+  "mode": "built-in generation",
+  "generationCalls": 1,
+  "inputImages": [],
+  "sourcePath": "/Users/zeanjuul4/.codex/generated_images/01a0cfe4-74ed-7262-a527-95459bf25d57/exec-6d02e3fa-ac18-407b-9509-1276b2e5953a.png",
+  "destinationPath": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-entity-concepts-20260925/04-noisy-shortcuts.png",
+  "format": "PNG",
+  "modeOfImage": "RGB",
+  "width": 1536,
+  "height": 1024,
+  "bytes": 2405609,
+  "sha256": "184237eb1c810310cd12a37bb7c4fa4ef72e331fa6ea5e63b9cf58e3863033f3",
+  "exactPromptFile": "04-noisy-shortcuts.prompt.txt",
+  "exactPrompt": "Use case: stylized-concept.\nAsset type: a premium, practical 3D environment/mechanic concept board for a Roblox Backrooms horror game, landscape 1536x1024, not gameplay HUD.\nShared art direction: uncanny domestic suburb architecture entirely INSIDE one endless building. Cream and warm beige plaster houses, muted sage and dusty pink fa\u00e7ades, white wood trim, uniformly dark tinted glass in every window, beige and green carpet where outdoor streets would normally be, sparse 1980s domestic furniture. Office suspended false ceilings clearly visible above the houses, fluorescent ceiling panels with mixed warm/cool, dim and switched-off states. Modular, buildable forms and appealing realistic materials with restrained Roblox-realizable geometry; high-end architectural game concept render, not photoreal humans, not Minecraft, not toy block art.\nReadable soft interior illumination, eerie liminal stillness, no sunlight or sky, no exterior landscape. No lamps or lights mounted on any house, no glowing windows, no light emitted from furniture. No laboratory or Zyntra branding, no suggestion anyone built the Backrooms. No gore, no HUD, no UI arrows, no logo/watermark. Restrained presentation on a warm charcoal/cream board with thin dividers, ample scene area. The only typography is the requested exact uppercase title in a small clean header; no other words or captions.\nPrimary request: communicate a meaningful spatial choice between a short noisy route and a longer quiet route through the same indoor carpet suburb.\nComposition: ONE large three-quarter slightly elevated architectural hero occupying the top two thirds, with TWO tightly framed cinematic detail panels below. Header text exactly \"NOISY SHORTCUTS\".\nHero: both routes visibly start at one shared near clearing and rejoin at the very same open doorway in a distant sage house on a raised terrace. The short route runs directly up a modest old wooden staircase, across a loose white wooden railing bridge, past a displaced chair and small sideboard that narrow the shortcut. Uneven wooden treads and slightly loose railing parts show why running creates creaks and rattles. The alternate route is unmistakably longer: a broad continuous padded beige carpet ramp/path gently loops around two cream/pink indoor houses to reach that exact same destination, no obstacles and no required jump. Both choices must be geometrically possible and easy to read; no floating or impossible disconnected walkways. Perspective should let the reader trace both routes without colored diagram overlays.\nLower left inset: close-up of one muted-clothed block-proportioned Roblox-like explorer boot pressing down an aged wooden stair tread, the tread subtly flexing at its joint beside a slightly vibrating railing and chair. Tiny restrained motion emphasis, no drawn sound words.\nLower right inset: the same explorer carefully walking along the quiet deep carpet, heel lowered softly, the continuous long way and distant shared destination readable in the background. No monsters needed. The mechanic is noise versus safety, not damage.",
+  "nativeBytesPreserved": true,
+  "pixelEdits": false,
+  "visualInspection": "One large hero clearly contrasts direct wooden stair/railing shortcut with a longer continuous carpet ramp to the same sage-house doorway. Two lower details show stair pressure/rattle and quiet walking. Indoor false ceiling, dark windows, no mounted house lights. No material issues.",
+  "implementationStatus": "Concept only; no Studio, Git or Trello modifications."
+}

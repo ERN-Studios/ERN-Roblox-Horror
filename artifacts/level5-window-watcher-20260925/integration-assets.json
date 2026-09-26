@@ -1,0 +1,22 @@
+{
+  "basecolor": "rbxassetid://91091934459636",
+  "eyeEmissionMask": "rbxassetid://91743869995723",
+  "eyeEmissionMaskVersion": "v5",
+  "eyeEmissionMaskSha256": "99315f05889bbc4c9f1122f502913bef7bf3fd5d7742b2a5a30ded79fee45738",
+  "previewEmissiveStrength": 200,
+  "supersededEyeMasks": {
+    "v1": "rbxassetid://128472864748309",
+    "v4": "rbxassetid://119490136326046"
+  },
+  "mesh": null,
+  "animations": {},
+  "installedRuntime": false,
+  "publishedGame": false,
+  "lastVerifiedPlaceVersion": 2104,
+  "temporaryNativeAnimatorTests": {
+    "clips": 3,
+    "boneSamples": 400,
+    "maxComponentError": 0.00021905452013015747
+  },
+  "blocker": "CreateAssetAsync Lua API beta visibly unchecked; native GUI handoff pending"
+}

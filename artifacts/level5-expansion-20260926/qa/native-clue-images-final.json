@@ -1,0 +1,26 @@
+{
+  "1": {
+    "loaded": true,
+    "image": "rbxassetid://129034114315469",
+    "backgroundTransparency": 1,
+    "index": 1
+  },
+  "2": {
+    "loaded": true,
+    "image": "rbxassetid://82053429341504",
+    "backgroundTransparency": 1,
+    "index": 2
+  },
+  "3": {
+    "loaded": true,
+    "image": "rbxassetid://98028147005436",
+    "backgroundTransparency": 1,
+    "index": 3
+  },
+  "4": {
+    "loaded": true,
+    "image": "rbxassetid://73277763916471",
+    "backgroundTransparency": 1,
+    "index": 4
+  }
+}

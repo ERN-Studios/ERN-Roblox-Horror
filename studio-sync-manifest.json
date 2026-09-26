@@ -1,27 +1,27 @@
 {
   "formatVersion": 2,
-  "source": "Studio-authoritative Level 5 QA and exit-polish snapshot, 182 scripts with exact Source/editor parity verified 2026-09-25. Other-developer work from a8259d3 retained; only three Level 5 modules changed.",
+  "source": "Studio-authoritative Level 5 surface stability and padlock UI; 192 verified scripts. Publication evidence is separate.",
   "finalNewlineContract": "Entries flagged studioTrailingNewline hold exactly the canonical repo file plus one extra trailing newline in Studio. Exact landings remove the flag. Current flagged entry count: 0. Manifest hashes always describe the canonical repo file, never Studio's transport bytes.",
   "studio": {
-    "id": "b88b0236-d7ba-4c6e-839b-6a276c1a5d71",
+    "id": "4c4f4e63-ad77-456e-8b99-b06b5a864bc8",
     "name": "BACKROOMS: STAY QUIET [CO-OP HORROR] (placeId: 131311258779917)",
     "placeId": 131311258779917,
     "universeId": 10559217407,
-    "publishedVersion": 2104,
-    "openedPlaceVersion": 2100,
-    "publicationStatus": "Published and verified"
+    "publishedVersion": 2139,
+    "openedPlaceVersion": 2115,
+    "publicationStatus": "Published v2139, verified from native Studio publication log."
   },
   "counts": {
-    "scripts": 182,
+    "scripts": 192,
     "remoteEvents": 15,
-    "total": 197,
+    "total": 207,
     "studioTrailingNewline": 0
   },
   "nativePlaceBackup": {
-    "file": "artifacts/level5-qa-20260925/after.rbxl",
-    "bytes": 9635146,
-    "sha256": "a2ffc35f2e9e443e2946f2582158808028c3a4d7ac67dca384f59b45e9c351d0",
-    "purpose": "Full native Edit snapshot after Level 5 QA, including preserved non-script state. Level 5 geometry is generated at runtime by the mirrored modules."
+    "file": "artifacts/level5-surface-ui-fixes-20260926/after.rbxl",
+    "bytes": 9793957,
+    "sha256": "014d75e52f27a296b84a2df0a12a7cfa21617d7988ce37eddc47b8aece0915f8",
+    "purpose": "Full native Edit backup after verified Level 5 surface and padlock fixes; 192 scripts and existing material assets, before v2139 publication."
   },
   "extraMirroredFilesNotInStudio": [
     "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_AutomaticAssetCaptureSender_LocalizationService.RemoteEvent.txt",
@@ -247,11 +247,11 @@
       ],
       "className": "ModuleScript",
       "file": "ReplicatedStorage/UIDevice.ModuleScript.lua",
-      "bytes": 99881,
-      "sha256": "c64ba7abc2f7efb80e9dbae241bc3bb831f19ea8902fde30b159af33bf323f2f",
+      "bytes": 99905,
+      "sha256": "78644ae1f35f1e03b3fdba819dcd26a282472a724bf6e9b50e2444564b3e3bd5",
       "status": "synced",
       "sourceEqualsEditor": true,
-      "captureMethod": "Fresh Studio Source/editor export, exact UTF-8 byte parity verified 2026-09-25"
+      "captureMethod": "Final Studio Source/editor export, exact scoped patch parity verified 2026-09-26"
     },
     {
       "studioPath": "ReplicatedStorage.UIRegression",
@@ -2434,11 +2434,11 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua",
-      "bytes": 260899,
-      "sha256": "6e59247b7962b685f4c053ecc2db2e436eeaffe8947b79ce0f4ab0e62cbae733",
+      "bytes": 261244,
+      "sha256": "6f489d6ec7e3f039bbac516a830d1520cb11fe5f58c95b0ac28bc51708fef895",
       "status": "synced",
       "sourceEqualsEditor": true,
-      "captureMethod": "Fresh Studio Source/editor export, exact UTF-8 byte parity verified 2026-09-25",
+      "captureMethod": "Final native Studio Source/editor export verified against scoped surface/UI patch, 2026-09-26",
       "disabled": false,
       "runContext": "Legacy",
       "attributes": {
@@ -2855,10 +2855,10 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 5 Systems/Level 5 Architecture.ModuleScript.lua",
-      "bytes": 25655,
-      "sha256": "eff5adfbe41bf406040a24b54ef3675d654ec46790c3199e8948f0848d55488e",
+      "bytes": 49884,
+      "sha256": "15c515893f69af54b553ad3201d6a88b6818cb1424b9db2981feb82bbb3ffb37",
       "status": "synced",
-      "captureMethod": "Fresh Studio Source/editor export, exact UTF-8 byte parity verified 2026-09-25",
+      "captureMethod": "Final native Studio Source/editor export verified against scoped surface/UI patch, 2026-09-26",
       "sourceEqualsEditor": true
     },
     {
@@ -2870,10 +2870,10 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 5 Systems/Level 5 Furniture.ModuleScript.lua",
-      "bytes": 13685,
-      "sha256": "eda52827e7be51b42f6354674141c146dd64c1421e559f571f802501225e957b",
+      "bytes": 18159,
+      "sha256": "00a6f0457c9c4edbccb280784aab20d62cc6129aa460256ff85a8440bacf6f5d",
       "status": "synced",
-      "captureMethod": "Fresh Studio Source/editor export, exact UTF-8 byte parity verified 2026-09-25",
+      "captureMethod": "Final native Studio Source/editor export verified against scoped dense-route patch, 2026-09-26",
       "sourceEqualsEditor": true
     },
     {
@@ -2885,10 +2885,10 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 5 Systems/Level 5 Landmark Districts.ModuleScript.lua",
-      "bytes": 22695,
-      "sha256": "db4a48b8ee906b446248c1593fd18f9043049f7e0b76e5eef1b23e1f1a28ec85",
+      "bytes": 28127,
+      "sha256": "8b0f2a636fd6294cfd87cd10729134c5f4b5acccffa924935454da25869a0466",
       "status": "synced",
-      "captureMethod": "Fresh Studio Source/editor export, exact UTF-8 byte parity verified 2026-09-25",
+      "captureMethod": "Final native Studio Source/editor export verified against scoped residential-atrium patch, 2026-09-26",
       "sourceEqualsEditor": true
     },
     {
@@ -2900,10 +2900,10 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 5 Systems/Level 5 Neighbourhood Districts.ModuleScript.lua",
-      "bytes": 15022,
-      "sha256": "c44ed8cf067d7793c312aff5bd631491c100b77de239e191b8b900dad72604ca",
+      "bytes": 9788,
+      "sha256": "f36c23b01b1b6b03132007b7f5c2384fbbf787b4e5c255356a29a043250ca12d",
       "status": "synced",
-      "captureMethod": "Fresh Studio Source/editor export, exact UTF-8 byte parity verified 2026-09-25",
+      "captureMethod": "Final native Studio Source/editor export verified against scoped dense-route patch, 2026-09-26",
       "sourceEqualsEditor": true
     },
     {
@@ -2915,10 +2915,10 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 5 Systems/Level 5 Round Adapter.ModuleScript.lua",
-      "bytes": 14618,
-      "sha256": "c25abd3373ce2b427a722628b7b9194dec22033b9da0d623a912ea71fd66cae4",
+      "bytes": 15482,
+      "sha256": "d44b319241cfe070ed590836d6fc56cc8d118c481ef56e2ce7cf1fbf766b4d2d",
       "status": "synced",
-      "captureMethod": "Fresh Studio Source/editor export, exact UTF-8 byte parity verified 2026-09-25",
+      "captureMethod": "Final native Studio Source/editor export verified against scoped dense-route patch, 2026-09-26",
       "sourceEqualsEditor": true,
       "attributes": {
         "CarpetTexture": "rbxassetid://78670100328161",
@@ -2965,40 +2965,273 @@
       ],
       "className": "LocalScript",
       "file": "StarterPlayer/StarterPlayerScripts/Level 5 Lighting Controller.LocalScript.lua",
-      "bytes": 3324,
-      "sha256": "975d426abe626db63ada7cba3d4d7aa0c0c629d698b3256446dd2c37e35eeca4",
+      "bytes": 9452,
+      "sha256": "ce5f3e28cd549bd0f0953e1a4d1d6607820b51ae8630d10a00a877892a696dca",
       "status": "synced",
-      "captureMethod": "Fresh Studio Source/editor export, exact UTF-8 byte parity verified 2026-09-25",
+      "captureMethod": "Fresh Studio Source/editor export, exact UTF-8 parity verified 2026-09-26 after outage QA",
       "sourceEqualsEditor": true,
       "disabled": false,
       "runContext": "Legacy"
+    },
+    {
+      "studioPath": "ReplicatedStorage.WindowWatcherGazeLogic",
+      "segments": [
+        "ReplicatedStorage",
+        "WindowWatcherGazeLogic"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/WindowWatcherGazeLogic.ModuleScript.lua",
+      "bytes": 4468,
+      "sha256": "b5884ffea2085662507fa4f029999e9e73458a8a962b00b6a9c64f12b85a5bd5",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "Final Studio Source/editor export, exact scoped patch parity verified 2026-09-26"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 5 Systems.Level 5 Colour Lock Logic",
+      "segments": [
+        "ServerScriptService",
+        "Level 5 Systems",
+        "Level 5 Colour Lock Logic"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 5 Systems/Level 5 Colour Lock Logic.ModuleScript.lua",
+      "bytes": 1182,
+      "sha256": "54d63131b5a2e9ec7896dcb5509fd74f48843403155449a5ba787eb792bd3fb0",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "Final Studio Source/editor export, exact scoped patch parity verified 2026-09-26"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 5 Systems.Level 5 Section Progression",
+      "segments": [
+        "ServerScriptService",
+        "Level 5 Systems",
+        "Level 5 Section Progression"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 5 Systems/Level 5 Section Progression.ModuleScript.lua",
+      "bytes": 26930,
+      "sha256": "c9a6865e45dc5fb6be78efa79e7e69318c4ba2cbae3824a0a32194fd86535b43",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "Final native Studio Source/editor export verified against scoped surface/UI patch, 2026-09-26"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 5 Systems.Level 5 Window Watcher Encounters",
+      "segments": [
+        "ServerScriptService",
+        "Level 5 Systems",
+        "Level 5 Window Watcher Encounters"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 5 Systems/Level 5 Window Watcher Encounters.ModuleScript.lua",
+      "bytes": 23722,
+      "sha256": "a69ca35ac4ace9bbe462801ca7397ab12be7dbeceab74e7b15ce9c81f2483f59",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "Final native Studio Source/editor export verified against scoped surface/UI patch, 2026-09-26"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.Level5ColourLockClient",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level5ColourLockClient"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/Level5ColourLockClient.LocalScript.lua",
+      "bytes": 19527,
+      "sha256": "354c81776e6cd7f79bfa91b1e9a2f2dad443d4774b8931f685c2817ac03729b7",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "Final native Studio Source/editor export verified against scoped surface/UI patch, 2026-09-26"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.WindowWatcherGazeClient",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "WindowWatcherGazeClient"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/WindowWatcherGazeClient.LocalScript.lua",
+      "bytes": 8057,
+      "sha256": "df78f4794b518e7fed0ab9e7e4baac3e238783cbf73666bf7c3223939d4f328f",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "Final Studio Source/editor export, exact scoped patch parity verified 2026-09-26"
+    },
+    {
+      "studioPath": "StarterPlayer.StarterPlayerScripts.WindowWatcherVisualClient",
+      "segments": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "WindowWatcherVisualClient"
+      ],
+      "className": "LocalScript",
+      "file": "StarterPlayer/StarterPlayerScripts/WindowWatcherVisualClient.LocalScript.lua",
+      "bytes": 9063,
+      "sha256": "71b993e0e37a45cbddd7741f7951f91013005b677b5ab935214650a07b6be7c5",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "Final Studio Source/editor export, exact scoped patch parity verified 2026-09-26"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 5 Systems.Level 5 Power Outage",
+      "segments": [
+        "ServerScriptService",
+        "Level 5 Systems",
+        "Level 5 Power Outage"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 5 Systems/Level 5 Power Outage.ModuleScript.lua",
+      "bytes": 7201,
+      "sha256": "82730d0871b9fe1707c8d4b8ccf0bb96d533fba182bd13302610b566e322180e",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "Fresh Studio Source/editor export, exact UTF-8 parity verified 2026-09-26 after outage QA"
+    },
+    {
+      "studioPath": "ReplicatedStorage.Level5OutageLogic",
+      "segments": [
+        "ReplicatedStorage",
+        "Level5OutageLogic"
+      ],
+      "className": "ModuleScript",
+      "file": "ReplicatedStorage/Level5OutageLogic.ModuleScript.lua",
+      "bytes": 4636,
+      "sha256": "9a68cccf31c46d7f154786ca3b8ac830216bcb9e969d0e50b03c7d2e6ade9049",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "Fresh Studio Source/editor export, exact UTF-8 parity verified 2026-09-26 after outage QA"
+    },
+    {
+      "studioPath": "ServerScriptService.Level 5 Systems.Level 5 Puzzle Catalog",
+      "segments": [
+        "ServerScriptService",
+        "Level 5 Systems",
+        "Level 5 Puzzle Catalog"
+      ],
+      "className": "ModuleScript",
+      "file": "ServerScriptService/Level 5 Systems/Level 5 Puzzle Catalog.ModuleScript.lua",
+      "bytes": 5473,
+      "sha256": "ca4d44eeb68ce45d360b1f759971cc3abc88bbf4c56b4461575a1c81e31371be",
+      "status": "synced",
+      "sourceEqualsEditor": true,
+      "captureMethod": "Final native Studio Source/editor export verified against scoped dense-route patch, 2026-09-26"
     }
   ],
   "scriptVerification": {
-    "scriptCount": 182,
-    "sourceEqualsEditorCount": 182,
-    "exactRepositoryByteMatches": 182,
+    "scriptCount": 192,
+    "sourceEqualsEditorCount": 192,
+    "exactRepositoryByteMatches": 192,
+    "permittedTrailingNewlineMatches": 0,
     "editorConflicts": [],
-    "sourceAudit": "artifacts/level5-qa-20260925/final-source-audit.json",
-    "capturedPlaceVersion": 2100,
-    "publishedVersionVerifiedFromLog": 2104,
-    "changedScripts": 3,
-    "unchangedScripts": 179,
+    "baselineScriptCount": 192,
+    "changedScripts": 5,
+    "newScripts": 0,
+    "changedExistingScripts": 5,
+    "unchangedScripts": 187,
+    "changedScriptPaths": [
+      "ServerScriptService/Level 5 Systems/Level 5 Architecture.ModuleScript.lua",
+      "ServerScriptService/Level 5 Systems/Level 5 Section Progression.ModuleScript.lua",
+      "ServerScriptService/Level 5 Systems/Level 5 Window Watcher Encounters.ModuleScript.lua",
+      "StarterPlayer/StarterPlayerScripts/Level5ColourLockClient.LocalScript.lua",
+      "StarterPlayer/StarterPlayerScripts/RoundUI.LocalScript.lua"
+    ],
     "level4ScriptCount": 12,
-    "level4UnchangedVsBaselineAndRepository": true
+    "level4UnchangedVsBaselineAndRepository": true,
+    "exportFiles": [
+      {
+        "file": "verification/final-export-1.json",
+        "bytes": 682850,
+        "sha256": "228b9a23084a92edc214c59ea562222cc2388b01477336e7a6b1aed51f548c9e"
+      },
+      {
+        "file": "verification/final-export-10.json",
+        "bytes": 537903,
+        "sha256": "01e7329c85821affdcad529db0db2a0ff618066db505107298c7714ec1e8af3b"
+      },
+      {
+        "file": "verification/final-export-11.json",
+        "bytes": 867699,
+        "sha256": "90cda2d7394a789165aac822813aedec16e1c236ff751e044cbbad415a54255f"
+      },
+      {
+        "file": "verification/final-export-12.json",
+        "bytes": 156707,
+        "sha256": "4d45b3a5f07225c84dfc5a5113f3eb151565f01d84fc8b5991e5918ff647bee8"
+      },
+      {
+        "file": "verification/final-export-13.json",
+        "bytes": 344632,
+        "sha256": "4c94fa82b032fb7d129af7292ac9d62a19d93fe1ff054ae1bb8ce3bebc620b8f"
+      },
+      {
+        "file": "verification/final-export-14.json",
+        "bytes": 330197,
+        "sha256": "362f9e2127752e7b3749b79b9679b41b6b1d8e3ec3985c1591b218ee8b6791ba"
+      },
+      {
+        "file": "verification/final-export-15.json",
+        "bytes": 660722,
+        "sha256": "ca2886ff1c35ef693394987f789820fb2b2ab4f012b46c68c26bd551eb1b2036"
+      },
+      {
+        "file": "verification/final-export-2.json",
+        "bytes": 330348,
+        "sha256": "29b09c9b97cac673451fd817445fa5b1b4552bb9cc432470557fecc110ea16e2"
+      },
+      {
+        "file": "verification/final-export-3.json",
+        "bytes": 709884,
+        "sha256": "e52c4c284a0a50226660c44ff2ad80c90d435979bbf9a0f970377ce876f554c0"
+      },
+      {
+        "file": "verification/final-export-4.json",
+        "bytes": 642460,
+        "sha256": "1acde6c16777593c9462c5861392b0e77011a70da65d819cc61af6bcd124de58"
+      },
+      {
+        "file": "verification/final-export-5.json",
+        "bytes": 841196,
+        "sha256": "2a7249d4e64b37d91773ad27d9408446aefb303bd032456348560f9022edf381"
+      },
+      {
+        "file": "verification/final-export-6.json",
+        "bytes": 283442,
+        "sha256": "a902fb9b8819d77ec89e05bba316b5fc8064b4bd2c44a583a8069acf93db4914"
+      },
+      {
+        "file": "verification/final-export-7.json",
+        "bytes": 287977,
+        "sha256": "a076f393d7be6eabaa97b3b2a98326f521c6e2c7afb6c596e794c8a80f94e49d"
+      },
+      {
+        "file": "verification/final-export-8.json",
+        "bytes": 453834,
+        "sha256": "8a2d60de457686e5e1fdcff9fe5c6f5fef7be1c9f266b7c23ebb30e4e7f4190c"
+      },
+      {
+        "file": "verification/final-export-9.json",
+        "bytes": 970205,
+        "sha256": "e75427699a9d02f0172d75f9427b88fa57765586787ed5f167a05c8463ee58bc"
+      }
+    ],
+    "publicationVerification": "Verified native publication v2139; see publication receipt."
   },
   "publication": {
+    "success": true,
     "placeId": 131311258779917,
     "universeId": 10559217407,
-    "publishedVersion": 2104,
-    "publishedAtUtc": "2026-09-25T13:16:14Z",
-    "success": true,
-    "sourceLog": "0.740.19.7400931_20260925T120939Z_Studio_ae100_last.log",
-    "evidenceFile": "artifacts/level5-qa-20260925/publication-log.txt",
-    "evidenceSha256": "f4b878b0fc87da8f67e7526125ce6c10fd4ce15867e6c29933186527fe678df8",
-    "publishedBy": "Owner via File > Publish to Roblox; independently confirmed from Studio publication log",
-    "scope": "Current existing place, with Level 5 developer-preview QA and lighting changes; no active server restart.",
-    "metadataFile": "artifacts/level5-qa-20260925/publication-v2104.json"
+    "publishedVersion": 2139,
+    "publishedAtUtc": "2026-09-26T20:01:51.250Z",
+    "method": "Native File > Publish to Roblox",
+    "sourceLog": "0.740.19.7400931_20260926T113832Z_Studio_a1f69_last.log",
+    "evidenceFile": "artifacts/level5-surface-ui-fixes-20260926/publication-log.txt",
+    "evidenceSha256": "cbf016108f234c9e20c22e67228d8fb36862252d5d60ef34d9e721a4a83a7e24",
+    "scope": "Level 5 surface ownership, remove house-clue signs, immediate padlock cursor and transparent backdrop; no active server restart."
   },
   "remoteVerification": {
     "verifiedDuringLevel5Task": false,
@@ -3027,6 +3260,30 @@
       "robloxBinaryHeaderVerified": true,
       "metadataFile": "artifacts/level5-20260923/native-backups.json",
       "purpose": "Post-change native place backup after verified v2026 publication; full non-script place state. Binary retained locally; repository stores verified metadata."
+    },
+    {
+      "file": "artifacts/level5-qa-20260925/after.rbxl",
+      "bytes": 9635146,
+      "sha256": "a2ffc35f2e9e443e2946f2582158808028c3a4d7ac67dca384f59b45e9c351d0",
+      "purpose": "Last complete native snapshot BEFORE current court changes. Current map changes are script-only and exported exactly; new native after-backup remains pending."
+    },
+    {
+      "file": "artifacts/level5-expansion-20260926/after.rbxl",
+      "bytes": 9771701,
+      "sha256": "5dcf3faf4ec3d9fdfd6e7d5a3c10cdd833a57014632d375365e435bafdd6c0d4",
+      "purpose": "Full native place backup after final 189-script compile and source/editor parity, before verified v2128 publish."
+    },
+    {
+      "file": "artifacts/level5-outage-20260926/after.rbxl",
+      "bytes": 9776013,
+      "sha256": "ff28e430f8a879890112e48924e6efe5c5357dbc2233bbf7dcd42c67f3bbeabd",
+      "purpose": "Full native Edit backup after final outage play QA and 191-script parity, before verified v2129 publication."
+    },
+    {
+      "file": "artifacts/level5-dense-routes-20260926/after.rbxl",
+      "bytes": 9787627,
+      "sha256": "12f375d5016ade4e73ae06a635f2c880c57f9a6eb0c5554a8c466200eef9d9e3",
+      "purpose": "Full native Edit backup with seven MaterialVariants and 192 verified scripts, after native QA, before confirmed v2133 publication."
     }
   ],
   "previousSyncHistory": [
@@ -3125,18 +3382,453 @@
         "priorPublicationVersion": 2036,
         "reason": "New skin meshes and SurfaceAppearance ColorMaps require Studio publish after verification."
       }
+    },
+    {
+      "source": "Studio-authoritative Level 5 QA and exit-polish snapshot, 182 scripts with exact Source/editor parity verified 2026-09-25. Other-developer work from a8259d3 retained; only three Level 5 modules changed.",
+      "counts": {
+        "scripts": 182,
+        "remoteEvents": 15,
+        "total": 197,
+        "studioTrailingNewline": 0
+      },
+      "nativePlaceBackupSha256": "a2ffc35f2e9e443e2946f2582158808028c3a4d7ac67dca384f59b45e9c351d0",
+      "scope": "Before Window Watcher court replacement; last verified publication remains v2104."
+    },
+    {
+      "source": "Studio-authoritative Window Watcher court snapshot, 182 scripts with exact Source/editor parity verified 2026-09-25. Only Architecture and Landmark Districts changed; asset import and publication pending.",
+      "counts": {
+        "scripts": 182,
+        "remoteEvents": 15,
+        "total": 197,
+        "studioTrailingNewline": 0
+      },
+      "scriptVerification": {
+        "scriptCount": 182,
+        "sourceEqualsEditorCount": 182,
+        "exactRepositoryByteMatches": 182,
+        "editorConflicts": [],
+        "sourceAudit": "artifacts/level5-window-watcher-20260925/source-audit-before-asset-import.json",
+        "capturedPlaceVersion": 2100,
+        "lastPublishedVersionVerifiedFromLog": 2104,
+        "changedScripts": 2,
+        "changedScriptPaths": [
+          "ServerScriptService/Level 5 Systems/Level 5 Architecture.ModuleScript.lua",
+          "ServerScriptService/Level 5 Systems/Level 5 Landmark Districts.ModuleScript.lua"
+        ],
+        "unchangedScripts": 180,
+        "level4ScriptCount": 12,
+        "level4UnchangedVsBaselineAndRepository": true
+      },
+      "scope": "Preserved prior summary before 2026-09-26 exact 189-script mirror. Four existing watcher sources were absent from the old 182-entry script manifest; three puzzle sources are new in this task."
+    },
+    {
+      "source": "Studio-authoritative Level 5 gate-triggered power outages, final 191-script source/editor export.",
+      "counts": {
+        "scripts": 191,
+        "remoteEvents": 15,
+        "total": 206,
+        "studioTrailingNewline": 0
+      },
+      "scriptVerification": {
+        "atUtc": "2026-09-26T15:01:04.042395+00:00",
+        "scripts": 191,
+        "exact": 191,
+        "editorConflicts": 0,
+        "scopedChanges": 4,
+        "unchangedExistingScripts": 187,
+        "evidenceFile": "artifacts/level5-outage-20260926/qa/source-parity.json"
+      },
+      "scope": "Preserved before dense-route source mirror; no publication or backup inference."
+    },
+    {
+      "source": "Studio-authoritative Level 5 dense neighbourhoods, seven image-generated materials and seven household puzzles; 192 exact scripts, native QA and v2133 publication verified.",
+      "counts": {
+        "scripts": 192,
+        "remoteEvents": 15,
+        "total": 207,
+        "studioTrailingNewline": 0
+      },
+      "scriptVerification": {
+        "scriptCount": 192,
+        "sourceEqualsEditorCount": 192,
+        "exactRepositoryByteMatches": 192,
+        "permittedTrailingNewlineMatches": 0,
+        "editorConflicts": [],
+        "baselineScriptCount": 191,
+        "changedScripts": 8,
+        "newScripts": 1,
+        "changedExistingScripts": 7,
+        "unchangedScripts": 184,
+        "changedScriptPaths": [
+          "ServerScriptService/Level 5 Systems/Level 5 Architecture.ModuleScript.lua",
+          "ServerScriptService/Level 5 Systems/Level 5 Furniture.ModuleScript.lua",
+          "ServerScriptService/Level 5 Systems/Level 5 Landmark Districts.ModuleScript.lua",
+          "ServerScriptService/Level 5 Systems/Level 5 Neighbourhood Districts.ModuleScript.lua",
+          "ServerScriptService/Level 5 Systems/Level 5 Puzzle Catalog.ModuleScript.lua",
+          "ServerScriptService/Level 5 Systems/Level 5 Round Adapter.ModuleScript.lua",
+          "ServerScriptService/Level 5 Systems/Level 5 Section Progression.ModuleScript.lua",
+          "StarterPlayer/StarterPlayerScripts/Level5ColourLockClient.LocalScript.lua"
+        ],
+        "level4ScriptCount": 12,
+        "level4UnchangedVsBaselineAndRepository": true,
+        "exportFiles": [
+          {
+            "file": "verification/dense-final-1.json",
+            "bytes": 682850,
+            "sha256": "228b9a23084a92edc214c59ea562222cc2388b01477336e7a6b1aed51f548c9e"
+          },
+          {
+            "file": "verification/dense-final-10.json",
+            "bytes": 537903,
+            "sha256": "01e7329c85821affdcad529db0db2a0ff618066db505107298c7714ec1e8af3b"
+          },
+          {
+            "file": "verification/dense-final-11.json",
+            "bytes": 867699,
+            "sha256": "90cda2d7394a789165aac822813aedec16e1c236ff751e044cbbad415a54255f"
+          },
+          {
+            "file": "verification/dense-final-12.json",
+            "bytes": 156707,
+            "sha256": "4d45b3a5f07225c84dfc5a5113f3eb151565f01d84fc8b5991e5918ff647bee8"
+          },
+          {
+            "file": "verification/dense-final-13.json",
+            "bytes": 344632,
+            "sha256": "4c94fa82b032fb7d129af7292ac9d62a19d93fe1ff054ae1bb8ce3bebc620b8f"
+          },
+          {
+            "file": "verification/dense-final-14.json",
+            "bytes": 329604,
+            "sha256": "49aa858a089cc3f1dc1cacb44197e2f5b0600154a4581fc9c723485e15b1f046"
+          },
+          {
+            "file": "verification/dense-final-15.json",
+            "bytes": 660366,
+            "sha256": "87897669ec4325d8018c5f47c5b19b8fda2316ea00cc7b9f066f3c894c314a72"
+          },
+          {
+            "file": "verification/dense-final-2.json",
+            "bytes": 330348,
+            "sha256": "29b09c9b97cac673451fd817445fa5b1b4552bb9cc432470557fecc110ea16e2"
+          },
+          {
+            "file": "verification/dense-final-3.json",
+            "bytes": 709884,
+            "sha256": "e52c4c284a0a50226660c44ff2ad80c90d435979bbf9a0f970377ce876f554c0"
+          },
+          {
+            "file": "verification/dense-final-4.json",
+            "bytes": 642460,
+            "sha256": "1acde6c16777593c9462c5861392b0e77011a70da65d819cc61af6bcd124de58"
+          },
+          {
+            "file": "verification/dense-final-5.json",
+            "bytes": 841196,
+            "sha256": "2a7249d4e64b37d91773ad27d9408446aefb303bd032456348560f9022edf381"
+          },
+          {
+            "file": "verification/dense-final-6.json",
+            "bytes": 262513,
+            "sha256": "90da297c4450713428d4aa3735ba25aea2b91d0a42cd878832574444ac61c5d1"
+          },
+          {
+            "file": "verification/dense-final-7.json",
+            "bytes": 287977,
+            "sha256": "a076f393d7be6eabaa97b3b2a98326f521c6e2c7afb6c596e794c8a80f94e49d"
+          },
+          {
+            "file": "verification/dense-final-8.json",
+            "bytes": 453834,
+            "sha256": "8a2d60de457686e5e1fdcff9fe5c6f5fef7be1c9f266b7c23ebb30e4e7f4190c"
+          },
+          {
+            "file": "verification/dense-final-9.json",
+            "bytes": 970205,
+            "sha256": "e75427699a9d02f0172d75f9427b88fa57765586787ed5f167a05c8463ee58bc"
+          }
+        ],
+        "publicationVerification": "Native File > Publish to Roblox confirmed v2133; separate receipt retained.",
+        "lastPublishedVersionVerifiedFromLog": 2133,
+        "sourceAudit": "artifacts/level5-dense-routes-20260926/qa/final-source-mirror-report.json"
+      },
+      "scope": "Preserved before reference-atrium source mirror; no publication or backup inference."
+    },
+    {
+      "source": "Studio-authoritative Level 5 reference residential atrium; 192 verified scripts. Publication evidence is separate.",
+      "counts": {
+        "scripts": 192,
+        "remoteEvents": 15,
+        "total": 207,
+        "studioTrailingNewline": 0
+      },
+      "scriptVerification": {
+        "scriptCount": 192,
+        "sourceEqualsEditorCount": 192,
+        "exactRepositoryByteMatches": 192,
+        "permittedTrailingNewlineMatches": 0,
+        "editorConflicts": [],
+        "baselineScriptCount": 192,
+        "changedScripts": 2,
+        "newScripts": 0,
+        "changedExistingScripts": 2,
+        "unchangedScripts": 190,
+        "changedScriptPaths": [
+          "ServerScriptService/Level 5 Systems/Level 5 Architecture.ModuleScript.lua",
+          "ServerScriptService/Level 5 Systems/Level 5 Landmark Districts.ModuleScript.lua"
+        ],
+        "level4ScriptCount": 12,
+        "level4UnchangedVsBaselineAndRepository": true,
+        "exportFiles": [
+          {
+            "file": "verification/atrium-final-1.json",
+            "bytes": 682850,
+            "sha256": "228b9a23084a92edc214c59ea562222cc2388b01477336e7a6b1aed51f548c9e"
+          },
+          {
+            "file": "verification/atrium-final-10.json",
+            "bytes": 537903,
+            "sha256": "01e7329c85821affdcad529db0db2a0ff618066db505107298c7714ec1e8af3b"
+          },
+          {
+            "file": "verification/atrium-final-11.json",
+            "bytes": 867699,
+            "sha256": "90cda2d7394a789165aac822813aedec16e1c236ff751e044cbbad415a54255f"
+          },
+          {
+            "file": "verification/atrium-final-12.json",
+            "bytes": 156707,
+            "sha256": "4d45b3a5f07225c84dfc5a5113f3eb151565f01d84fc8b5991e5918ff647bee8"
+          },
+          {
+            "file": "verification/atrium-final-13.json",
+            "bytes": 344632,
+            "sha256": "4c94fa82b032fb7d129af7292ac9d62a19d93fe1ff054ae1bb8ce3bebc620b8f"
+          },
+          {
+            "file": "verification/atrium-final-14.json",
+            "bytes": 329604,
+            "sha256": "49aa858a089cc3f1dc1cacb44197e2f5b0600154a4581fc9c723485e15b1f046"
+          },
+          {
+            "file": "verification/atrium-final-15.json",
+            "bytes": 660366,
+            "sha256": "87897669ec4325d8018c5f47c5b19b8fda2316ea00cc7b9f066f3c894c314a72"
+          },
+          {
+            "file": "verification/atrium-final-2.json",
+            "bytes": 330348,
+            "sha256": "29b09c9b97cac673451fd817445fa5b1b4552bb9cc432470557fecc110ea16e2"
+          },
+          {
+            "file": "verification/atrium-final-3.json",
+            "bytes": 709884,
+            "sha256": "e52c4c284a0a50226660c44ff2ad80c90d435979bbf9a0f970377ce876f554c0"
+          },
+          {
+            "file": "verification/atrium-final-4.json",
+            "bytes": 642460,
+            "sha256": "1acde6c16777593c9462c5861392b0e77011a70da65d819cc61af6bcd124de58"
+          },
+          {
+            "file": "verification/atrium-final-5.json",
+            "bytes": 841196,
+            "sha256": "2a7249d4e64b37d91773ad27d9408446aefb303bd032456348560f9022edf381"
+          },
+          {
+            "file": "verification/atrium-final-6.json",
+            "bytes": 269724,
+            "sha256": "fc068ddfae9c5bd822485e2b35ae19373707f3892819d2bf6789e0a8cc72783d"
+          },
+          {
+            "file": "verification/atrium-final-7.json",
+            "bytes": 287977,
+            "sha256": "a076f393d7be6eabaa97b3b2a98326f521c6e2c7afb6c596e794c8a80f94e49d"
+          },
+          {
+            "file": "verification/atrium-final-8.json",
+            "bytes": 453834,
+            "sha256": "8a2d60de457686e5e1fdcff9fe5c6f5fef7be1c9f266b7c23ebb30e4e7f4190c"
+          },
+          {
+            "file": "verification/atrium-final-9.json",
+            "bytes": 970205,
+            "sha256": "e75427699a9d02f0172d75f9427b88fa57765586787ed5f167a05c8463ee58bc"
+          }
+        ],
+        "publicationVerification": "Native File > Publish to Roblox confirmed v2136; separate receipt retained."
+      },
+      "scope": "Preserved before surface/UI source mirror; no publication or backup inference."
     }
   ],
   "currentSyncPublication": {
-    "status": "published_verified",
-    "publishedVersion": 2104,
-    "scope": "Level 5 QA, exit polish and ceiling variation; all other Studio source preserved",
-    "evidenceFile": "artifacts/level5-qa-20260925/publication-log.txt"
+    "status": "published",
+    "lastVerifiedPublishedVersion": 2139,
+    "receipt": "artifacts/level5-surface-ui-fixes-20260926/publication-v2139.json"
   },
   "preTaskNativePlaceBackup": {
-    "file": "artifacts/level5-qa-20260925/before.rbxl",
-    "bytes": 9632834,
-    "sha256": "5e15e41924ddaeb364bef7e24201b878b46f49cb80c6cf2f429679fbe1a600cc",
-    "purpose": "Full authoritative native place before this task; opened version 2100."
-  }
+    "file": "artifacts/level5-atrium-reference-20260926/after.rbxl",
+    "bytes": 9790056,
+    "sha256": "b117548bc9d4a4f4ed999f32871e6ffc10755548df7bf28ac3a90b8609b250e3",
+    "purpose": "Full native Edit backup after F residential-atrium QA; 192 scripts and seven MaterialVariants, before verified v2136 publication."
+  },
+  "publicationHistory": [
+    {
+      "placeId": 131311258779917,
+      "universeId": 10559217407,
+      "publishedVersion": 2104,
+      "publishedAtUtc": "2026-09-25T13:16:14Z",
+      "success": true,
+      "sourceLog": "0.740.19.7400931_20260925T120939Z_Studio_ae100_last.log",
+      "evidenceFile": "artifacts/level5-qa-20260925/publication-log.txt",
+      "evidenceSha256": "f4b878b0fc87da8f67e7526125ce6c10fd4ce15867e6c29933186527fe678df8",
+      "publishedBy": "Owner via File > Publish to Roblox; independently confirmed from Studio publication log",
+      "scope": "Current existing place, with Level 5 developer-preview QA and lighting changes; no active server restart.",
+      "metadataFile": "artifacts/level5-qa-20260925/publication-v2104.json"
+    },
+    {
+      "placeId": 131311258779917,
+      "universeId": 10559217407,
+      "publishedVersion": 2128,
+      "publishedAtUtc": "2026-09-26T14:28:41.849Z",
+      "success": true,
+      "sourceLog": "0.740.19.7400931_20260926T113832Z_Studio_a1f69_last.log",
+      "evidenceFile": "artifacts/level5-expansion-20260926/publication-log.txt",
+      "evidenceSha256": "7c97d1b21156d2bca51a57b4de0dadd2b966ef5e4ffc54133a0cfd639da14645",
+      "publishedBy": "Codex through native File > Publish to Roblox",
+      "scope": "Existing place, tested Level 5 developer preview expansion/first colour lock/map-wide Window Watcher; no active server restart."
+    },
+    {
+      "status": "published",
+      "placeId": 131311258779917,
+      "universeId": 10559217407,
+      "publishedVersion": 2133,
+      "publishedAtUtc": "2026-09-26T17:46:27.384Z",
+      "publishedBy": "Codex through native File > Publish to Roblox",
+      "evidenceFile": "artifacts/level5-dense-routes-20260926/publish-log-v2133.txt",
+      "scope": "Current Studio place; Level5 remains developer preview. No access setting or server restart."
+    }
+  ],
+  "previousScriptVerifications": [
+    {
+      "scriptCount": 189,
+      "sourceEqualsEditorCount": 189,
+      "exactRepositoryByteMatches": 189,
+      "permittedTrailingNewlineMatches": 0,
+      "editorConflicts": [],
+      "baselineScriptCount": 186,
+      "changedScripts": 10,
+      "changedExistingScripts": 7,
+      "newScripts": 3,
+      "changedScriptPaths": [
+        "ReplicatedStorage/UIDevice.ModuleScript.lua",
+        "ServerScriptService/Level 5 Systems/Level 5 Architecture.ModuleScript.lua",
+        "ServerScriptService/Level 5 Systems/Level 5 Colour Lock Logic.ModuleScript.lua",
+        "ServerScriptService/Level 5 Systems/Level 5 Landmark Districts.ModuleScript.lua",
+        "ServerScriptService/Level 5 Systems/Level 5 Neighbourhood Districts.ModuleScript.lua",
+        "ServerScriptService/Level 5 Systems/Level 5 Round Adapter.ModuleScript.lua",
+        "ServerScriptService/Level 5 Systems/Level 5 Section Progression.ModuleScript.lua",
+        "ServerScriptService/Level 5 Systems/Level 5 Window Watcher Encounters.ModuleScript.lua",
+        "StarterPlayer/StarterPlayerScripts/Level5ColourLockClient.LocalScript.lua",
+        "StarterPlayer/StarterPlayerScripts/WindowWatcherGazeClient.LocalScript.lua"
+      ],
+      "unchangedScripts": 179,
+      "level4ScriptCount": 12,
+      "level4UnchangedVsBaselineAndRepository": true,
+      "exportFiles": [
+        {
+          "file": "final-export-1.json",
+          "bytes": 696071,
+          "sha256": "d3931f14ef420c9d0c949a71addd0b840d5408f0d74c863916a90f8b55ebceaf"
+        },
+        {
+          "file": "final-export-10.json",
+          "bytes": 634715,
+          "sha256": "bcb43e02bbde4432f0bbc353fcc07936563f857eaf34c766db96c3e7d489c07c"
+        },
+        {
+          "file": "final-export-11.json",
+          "bytes": 659046,
+          "sha256": "5c8869e6ca2edaf9a0f8f438037ec4bfec90749aba1d9d3e4818c1de64330389"
+        },
+        {
+          "file": "final-export-12.json",
+          "bytes": 195633,
+          "sha256": "0084c0ab32c3a4cae12feb7912d3fce9b84d9f3f58a813fa66e2550693570062"
+        },
+        {
+          "file": "final-export-13.json",
+          "bytes": 357842,
+          "sha256": "34c78b37c3d1369c6ca0813ffb7cdb5fb3209d40fc64b33e2b426cca9f4b51d4"
+        },
+        {
+          "file": "final-export-14.json",
+          "bytes": 591873,
+          "sha256": "bd7cddfb22d99c77051959e33b4488315384a064e1abe0725ee692bf30d494e6"
+        },
+        {
+          "file": "final-export-15.json",
+          "bytes": 328645,
+          "sha256": "7c5741438dd5fd87eb2c302083a695bb44a6b77cea88d65fa9585713c88ad410"
+        },
+        {
+          "file": "final-export-2.json",
+          "bytes": 374756,
+          "sha256": "67fe3237e8d321496041f075bbe1db2182dace70ee360e84846a94c71df08c6d"
+        },
+        {
+          "file": "final-export-3.json",
+          "bytes": 666550,
+          "sha256": "7eac2cd38d07d24b79aa9cbc4c05711620eb7c1e209f43bd7cacf837d8c5ac0c"
+        },
+        {
+          "file": "final-export-4.json",
+          "bytes": 669917,
+          "sha256": "8c435bb8a5c06bcf0d4d154f860c69754ab4162fd4d0afda57b1815d75bfa660"
+        },
+        {
+          "file": "final-export-5.json",
+          "bytes": 813426,
+          "sha256": "8cf130f2685a9277edd86212c35c52508bf9ddf77dc002472e5711b521577b2c"
+        },
+        {
+          "file": "final-export-6.json",
+          "bytes": 203632,
+          "sha256": "c263e7e5a7a863207eda0fd676d02b6641f2604afc8f65789c347e8bee3526fa"
+        },
+        {
+          "file": "final-export-7.json",
+          "bytes": 321659,
+          "sha256": "c2ec1d60eb11a94304f9064abef2224c98e25b8e9a6d845c885557d84fa98dd8"
+        },
+        {
+          "file": "final-export-8.json",
+          "bytes": 587084,
+          "sha256": "cfa75a6069591eec560467ce444e024e49cea7083dd23f580af972205f56eb51"
+        },
+        {
+          "file": "final-export-9.json",
+          "bytes": 913673,
+          "sha256": "f48cb6358de464b787a6c5b833f60fa6fbafb2b3c645cd15403dff673576f478"
+        }
+      ],
+      "manifestRepair": {
+        "previousScriptEntries": 182,
+        "newPuzzleEntries": [
+          "ServerScriptService/Level 5 Systems/Level 5 Colour Lock Logic",
+          "ServerScriptService/Level 5 Systems/Level 5 Section Progression",
+          "StarterPlayer/StarterPlayerScripts/Level5ColourLockClient"
+        ],
+        "verifiedPreExistingWatcherEntries": [
+          "ReplicatedStorage/WindowWatcherGazeLogic",
+          "ServerScriptService/Level 5 Systems/Level 5 Window Watcher Encounters",
+          "StarterPlayer/StarterPlayerScripts/WindowWatcherGazeClient",
+          "StarterPlayer/StarterPlayerScripts/WindowWatcherVisualClient"
+        ]
+      },
+      "publicationVerification": "Not performed by this source-mirroring script; separate receipts are preserved unchanged.",
+      "sourceAudit": "artifacts/level5-expansion-20260926/qa/final-source-mirror-report.json",
+      "lastPublishedVersionVerifiedFromLog": 2128
+    }
+  ]
 }

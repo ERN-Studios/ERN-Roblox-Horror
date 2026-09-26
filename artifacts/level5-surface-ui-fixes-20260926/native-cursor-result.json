@@ -1,0 +1,87 @@
+{
+  "openTransitions": 2,
+  "startedAtUtc": "2026-09-26T19:31:04Z",
+  "pass": true,
+  "closeTransitions": 2,
+  "closedSnapshots": [
+    {
+      "mouseIcon": false,
+      "modal": false,
+      "reason": "four frames after close",
+      "at": 28364.894698583288,
+      "guiEnabled": false,
+      "cameraMode": "LockFirstPerson",
+      "mouse": true,
+      "inRound": true,
+      "mouseBehavior": "LockCenter"
+    },
+    {
+      "mouseIcon": false,
+      "modal": false,
+      "reason": "four frames after close",
+      "at": 28405.88323916658,
+      "guiEnabled": false,
+      "cameraMode": "LockFirstPerson",
+      "mouse": true,
+      "inRound": true,
+      "mouseBehavior": "LockCenter"
+    }
+  ],
+  "openFrames": 1134,
+  "events": [
+    {
+      "mouseIcon": true,
+      "modal": true,
+      "reason": "open signal after listeners",
+      "at": 28328.728793166578,
+      "guiEnabled": true,
+      "cameraMode": "LockFirstPerson",
+      "mouse": true,
+      "inRound": true,
+      "mouseBehavior": "Default"
+    },
+    {
+      "mouseIcon": false,
+      "modal": false,
+      "reason": "close signal after listeners",
+      "at": 28364.683006374864,
+      "guiEnabled": false,
+      "cameraMode": "LockFirstPerson",
+      "mouse": true,
+      "inRound": true,
+      "mouseBehavior": "Default"
+    },
+    {
+      "mouseIcon": true,
+      "modal": true,
+      "reason": "open signal after listeners",
+      "at": 28365.31337962486,
+      "guiEnabled": true,
+      "cameraMode": "LockFirstPerson",
+      "mouse": true,
+      "inRound": true,
+      "mouseBehavior": "Default"
+    },
+    {
+      "mouseIcon": false,
+      "modal": false,
+      "reason": "close signal after listeners",
+      "at": 28405.581032874994,
+      "guiEnabled": false,
+      "cameraMode": "LockFirstPerson",
+      "mouse": true,
+      "inRound": true,
+      "mouseBehavior": "Default"
+    }
+  ],
+  "failures": [],
+  "finishedAtUtc": "2026-09-26T19:32:34Z",
+  "kind": "native observed padlock cursor",
+  "mouseOpenFrames": 1134,
+  "limitations": [
+    "Observed real UI only; this script does not create a synthetic open event",
+    "Deferred RenderStepped samples observe cursor state, not guaranteed final compositor ordering",
+    "Visual reference screenshots and an actual pointer click still need separate evidence",
+    "Closing into another modal is allowed to retain the visible free pointer"
+  ]
+}
