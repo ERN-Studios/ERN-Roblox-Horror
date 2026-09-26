@@ -1,0 +1,26 @@
+{
+  "cleanup": {
+    "ownerRemoved": false,
+    "roundActive": false,
+    "actorRemoved": false,
+    "playingTracks": 0,
+    "worldRemoved": false
+  },
+  "playingBeforeLeave": 1,
+  "reentry": {
+    "visible": true,
+    "newActor": true,
+    "playingTracks": 1,
+    "guard": "VISIBLE",
+    "newWorld": true
+  },
+  "clientCleanupNote": "At three seconds world still replicated while RoundActive false and tracks already stopped; settled read after next world generation confirms old instances removed.",
+  "method": "Real dev queue -> actual visible official track -> normal leaveround remote -> settled cleanup -> real dev queue reentry",
+  "visibleBeforeLeave": true,
+  "settledCleanup": {
+    "playingTracks": 0,
+    "actorRemoved": true,
+    "ownerRemoved": true,
+    "worldRemoved": true
+  }
+}

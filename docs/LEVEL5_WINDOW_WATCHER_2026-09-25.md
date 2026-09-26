@@ -1,62 +1,78 @@
-# Level 5 — Window Watcher asset and reference courts
+# Level 5 — Window Watcher and reference courts
 
-## Delivery state
+## Published delivery — 26 September 2026
 
-The F-court replacement is installed and tested in Studio. The model has now also been rebuilt exactly in a **temporary Studio preview**, with white emissive eyes and all three clips validated through native Animator stepping. **The durable mesh/animation assets are not uploaded, the intermittent encounter drafts are not installed, and current F changes are not published.**
+**Window Watcher and the revised F courts are published to Roblox as v2121**, place **131311258779917**. Native File → Publish to Roblox succeeded at **2026-09-26T12:17:16.432Z**; the Studio log records the successful publish request (`publishType: 1`) and “Add publish notes to v2121”. The publication receipt and final evidence are retained under `artifacts/level5-window-watcher-20260926/`.
 
-The upload API fails because the normal Studio **CreateAssetAsync Lua API** beta is visibly unchecked. Native UI automation cannot toggle its row reliably; the owner has been asked to enable it and save/restart if requested. Last independently verified game publication remains **v2104**.
+The permanent rig, three published clips, intermittent encounter module, Adapter hook and client visibility guard are installed. Her eyes emit white light on the skinned iris surfaces. Developers can encounter her occasionally in the three F windows through the existing Level 5 developer queue; public Level 5 access remains restricted. No chase, damage, sounds, puzzle, slide control, rewards or completion behavior was added.
 
-The prepared package is `assets/level5/window-watcher/roblox-integration/`, including exact mesh/skin transfer, white-eye UV masks, runtime drafts, upload tools, tests and completion steps. `artifacts/level5-window-watcher-20260925/integration-assets.json` lists the uploaded image IDs and explicitly leaves mesh/animation IDs empty. This is a recoverable checkpoint, not a claim the entity is playable.
+Git review and the final push receipt are tracked in [PR #10](https://github.com/ERN-Studios/ERN-Roblox-Horror/pull/10), stacked on the previous Level 5 QA work. The [Level 5 Trello card](https://trello.com/c/Y2xXThBN) retains the remaining gameplay work. Publication confirms delivery of the current place; published-server permissions and human multiplayer have not been independently tested.
 
-## Meshy and Blender
+## Durable assets and source provenance
 
-The installed Blender 5.2 LTS background `bpy` connection was executed successfully. No additional MCP addon was needed. Meshy CLI 0.4.0 was authorized through the owner's device flow; no credentials or expiring download URLs are included in this repository.
+The mesh and three animations were published for ERN Roblox Studios, group **1039373905**. The existing image assets are reused; no transfer of image ownership is claimed.
 
-| Stage | Resource / task | Actual cost |
+| Asset | Roblox asset ID | Duration |
 | --- | --- | --- |
-| Textured A-pose model | `image-to-3d` / `01a0d8e3-3fdd-752a-b810-ea9cace0266e` | 15 credits |
-| Skeleton and automatic weights | `rigging` / `01a0d8ec-0c4f-71fc-b513-af1e1d1e59b4` | 5 credits |
+| Skinned Window Watcher mesh | `138178192370575` | — |
+| Original base-color image | `91091934459636` | — |
+| White-eye emission mask, v5 | `91743869995723` | — |
+| WatchingIdle | `123386867650430` | 6 seconds |
+| SlowWindowLean | `85635358459792` | 5 seconds |
+| GlassTap | `85948818863545` | 4 seconds |
 
-Three window clips were authored in Blender, without paid Meshy animation tasks: WatchingIdle (6s), SlowWindowLean (5s), GlassTap (4s). The final custom NPC is 2.4m tall with one 11,862-triangle mesh, 8,968 vertices and 25 bones. Original Meshy bone names are retained; an unweighted Root was added and an unrelated Icosphere helper removed. All vertices have normalized weights with at most four influences. The rig has no finger bones; tapping uses hand/wrist motion.
+Meshy image-to-3D task `01a0d8e3-3fdd-752a-b810-ea9cace0266e` cost 15 credits; rigging task `01a0d8ec-0c4f-71fc-b513-af1e1d1e59b4` cost 5. The authorized Meshy CLI and local Blender 5.2 `bpy` pipeline were used. All three gestures were authored in Blender without paid Meshy animation tasks. No credentials or expiring download URLs are included in the repository.
 
-Files are in `assets/level5/window-watcher/`: editable `.blend`, model GLB/FBX, one FBX per animation, exact base-color texture, source references, Meshy source models, compact 30fps pose JSON, preview renders and reproducible Blender scripts. Expanded matrix evidence is stored as `animation-transforms-30fps.json.gz`.
+The source model is 2.4 metres tall, with 11,862 triangles, 8,968 Blender vertices and 25 bones. Its serialized GLB has 8,996 vertices because normal/UV seams split vertices. Original bone names are retained; an unweighted Root was added and an unrelated helper removed. Skin weights are normalized with at most four influences. There are no finger bones; tapping uses hand/wrist motion. Reimported GLB/FBX and all clips preserve the rig and motion, with planted feet/root and matching loop endpoints.
 
-Blender QA passes: fresh reimport of GLB/FBX and each clip preserves the hierarchy and movement; feet/root remain planted; loop endpoints and shared starting pose agree. Full-frame glass-clearance inspection caught and corrected a fingertip overshoot during the arm's raising arc. Final renders were visually inspected. These checks establish the local files, not native Roblox playback.
+Frozen GLB SHA-256: `cbf260ff36b8c7226f27271456eae6bf4db7fd266bdce82dda8b0eae7cbc051e`.
 
-## Coordinate and import contract
+Editable `.blend`, GLB/FBX files, animation FBXs, source references, original texture, 30 fps pose data and Blender scripts are in `assets/level5/window-watcher/`. The [integration package](../assets/level5/window-watcher/roblox-integration/README.md) records transfer and recovery procedures. Older files under its `patches/` directory are historical proposals; authoritative Studio source mirrors contain the installed implementation.
 
-Frozen GLB SHA256: `cbf260ff36b8c7226f27271456eae6bf4db7fd266bdce82dda8b0eae7cbc051e`.
+## White eyes, placement and encounter behavior
 
-The compact `*-roblox-30fps.json` files derive pose deltas against the actual serialized GLB joint-node matrices and inverse binds. Use them instead of guessing a world-axis conjugation for bone-local rotations. Each pose is `[boneName, tx, ty, tz, qx, qy, qz, qw]`, with translation in metres. Compare native imported Bone rest CFrames before uploading KeyframeSequences; scale translations and the rig consistently.
+The installed rig is eight studs tall, faces local −Z and has a floor-origin pivot. Vertices and mesh-world bind frames were centered together; runtime Bone frames and animation translations use the actual serialized GLB bases. Do not resize only MeshPart.Size or invent a new bone-axis conversion. The template is `ServerStorage.Level5WindowWatcher.WindowWatcherRig`, with sibling published `Animations`.
 
-Target prepared actor height is 8 studs, bottom pivot at the floor, facing local −Z. The model's GLB world-facing direction is +Z, so inspect the importer and normalize the full model orientation. Do not resize only MeshPart.Size. At 8-stud height, whole-mesh forward extrema are −0.763673 studs idle, −0.779343 lean and −1.745002 tap. The F panes are 0.14 studs thick. The uninstalled draft uses inward depths 0.95/0.95/1.90; tap therefore keeps its nearest evaluated fingertip 0.154998 studs behind the pane centre, beyond its rear surface at 0.07. These are provisional placements until the actual imported actor and clip are inspected in Studio.
+White eyes use a SurfaceAppearance emission mask, white tint and strength **200**. The approximately 0.067-stud iris cores follow the skin directly, without eye GUI, extra geometry, physical lights or an eye update loop. Whole-mesh hiding also hides the emission. The original dark albedo and model geometry are unchanged. Billboard eyes were rejected because tinted glass occluded them.
 
-All three anchors reference the real tinted pane through an ObjectValue. The planned actor X offset is 1.1 studs to avoid the central mullion. Preserve dark tinted Glass, existing crossbars and unlit houses. Check the face/palm from both the balcony and the ground, including the entire raising/lowering arc.
+Mask SHA-256: `99315f05889bbc4c9f1122f502913bef7bf3fd5d7742b2a5a30ded79fee45738`. Its targeted guard around neighboring brow UV islands retains 98.34% of the mask energy. The native Play image `artifacts/level5-window-watcher-20260926/native-guarded-glass-tap.png` shows a dark body and white eyes through the actual pane with the hand raised. No obvious brow fleck is visible at that normal viewing distance; this is not immunity to every filtering artifact or a guarantee at every distance/device.
 
-## Area F
+One noncolliding actor appears at a time. A living Level 5 participant in F starts a 2–4-second first-appearance delay. Eligible panes face a participant and have a clear ray to their real glass. Visits last 8–14 seconds, followed by 18–35-second hidden intervals; another eligible pane is preferred when available. Leaving the eligible audience hides the actor. World cleanup owns and removes the encounter and its tracks.
 
-The former tall canyon is replaced with 33 nested domestic houses around three connected carpet courts. Floors at 0/15/30 studs, continuous white balconies, two switchback stair circuits, short bridges, sage/rose/oatmeal façades and dark gabled roofs match the concept's architectural language. One office-style shared ceiling sits at 60 studs. House Lights/Neon remain absent. Three F mold carriers were resized for the lower enclosure.
+Placement uses `pane.CFrame * CFrame.new(1.1, -6.55, depth)`: depth 0.95 studs for Idle/Lean and 1.90 for Tap. The lateral offset avoids the center mullion. The authored full-mesh tap extrema reach −1.745002 studs forward, leaving about **0.084998 stud behind the pane's rear surface**. Native pose comparisons and the inspected complete gesture support this placement; the runtime observer does not measure every skinned vertex against glass on every rendered frame.
 
-Current map, before actor staging: 11,372 BaseParts, 12,240 descendants, 44 actual lights and 202 standard tinted panes. Map footprint is unchanged. Canonical native geometry comparison confirms A–E, G and H exactly match the baseline; outside F only the three named Canyon mold carriers changed.
+The server controls timing and official Animator playback. A scoped client guard keeps the owned actor locally hidden until the matching published track has positive Length, advances across frames and evaluates a non-bind pose. It changes local transparency rather than Bone.Transform, camera or server state. This fixes a brief loaded/unevaluated pose exposure found in the first client run.
 
-Actual Humanoid traversal passed 44 movement segments: 11 ground route, 18 stairs/upper bridge, 15 middle bridge/house interiors. No required jumps or noclip; only the start of each separate route was positioned. Hold-L returned to the lobby, removed the generated world and left phase IDLE. Entry inspection covered 77 open homes and 462 rays with no foreign obstruction or embedded sample. The existing chute still passed 98 enclosure rays.
+## QA results and their limits
 
-Furnishing inspection retained 20 furnished homes, 891 furniture parts, 7,128 corner checks and 72 mold-backing rays. The first report exposed four obsolete test assertions: three pane-reference ObjectValues were treated as panes, and the old total was 356. The test now checks actual BaseParts and expects 202 panes; the adjusted test was rerun through the real Level 5 developer round and passed with zero failures. Source compilation passed 182/182 scripts; the existing access/transport test passed 74 assertions.
+All **300 published-asset bone/time comparisons passed**, with maximum matrix-component error below 0.000194 against tolerance 0.001. These use the durable clips. The earlier 400 temporary-ID comparisons remain historical binding evidence. The original draft's 1,031 scheduler and 29 mocked lifecycle assertions retain their original source-version scope.
 
-## Preserving Studio and completing integration
+The final native server and client observers each recorded **zero failures, all three moving clips and five complete appearances**. Both reports deliberately remain **INCOMPLETE**: their 180-second observation deadlines arrived before normal round cleanup. They have not been relabeled PASS. Evidence is `final-native-server.json` and `final-native-client.json` in the final artifact directory.
 
-Fresh baseline and current export matched Source/editor for all 182 scripts. Exactly Architecture and Landmark Districts changed; the other 180, including all 12 Level 4 scripts, are unchanged. Native pre-task backup is 9,635,146 bytes and exactly matches `artifacts/level5-qa-20260925/after.rbxl` (SHA256 `a2ffc35f2e9e443e2946f2582158808028c3a4d7ac67dca384f59b45e9c351d0`). Current map changes are completely represented by the two exact source exports. A new full native backup is required after the imported mesh/animations are in place.
+A separate focused `cleanup-reentry.json` supplies that missing lifecycle observation: one active track before leaving through the normal round-return flow; zero tracks afterward; then the old actor, owner and world were removed. The client still held the old world at the three-second sample while RoundActive was false and tracks were already stopped; the settled sample confirmed all old instances removed. Re-entering through the real developer queue created a fresh world and actor, with one playing track and client guard status VISIBLE.
 
-Remaining integration: enable the normal upload beta and publish the exact mesh under game group 1039373905; verify the published mesh round trip and final material filtering; publish and play all three durable clips in a round; prepare `ServerStorage.Level5WindowWatcher.WindowWatcherRig` plus sibling `Animations`; install/review the staging module and call it from the developer-only Adapter; verify cleanup, rendering, visibility, collision and re-entry; rerun relevant checks; save a native after-backup and publish to existing place 131311258779917 with a verified receipt.
+Client guard diagnostics recorded 3,156 display frames and five warm-up-hidden frames across 10,804 pre-render observations. Observer callback order is not guaranteed to run after the guard in each frame, so these counters are diagnostic sampling, not proof of final raster output on every frame. Native inspection and the saved real-window capture provide the separate visual evidence.
 
-Physical mobile/tablet performance, two-account human multiplayer and published-server asset permissions have not been tested. Git delivery is a reviewable work checkpoint, not evidence that the pending import or publication is complete.
+Fresh source/editor parity covers **184 scripts with zero conflicts**, and **184/184 scripts compile**. The final source parity and compile evidence accompany the runtime reports. Physical mobile/tablet performance, two-account human multiplayer and published-server asset permissions remain untested. Earlier first-run failure reports are preserved as regression evidence, not substituted for the final results.
 
-## Intermittent encounters and white eyes — follow-up checkpoint
+## Reference area F and preserved vision
 
-The uninstalled encounter module shows one actor at a time at the three F panes: first appearance after 2–4 seconds, visibility 8–14 seconds, then 18–35 seconds hidden. It requires a living Level 5 participant in F with line of sight to a real pane. Cleanup owns all tracks/connections. No chase, damage, sounds or rewards were added. The draft passes 1,031 scheduling and 29 lifecycle assertions.
+The former tall canyon is replaced by **33 nested domestic houses around three connected carpet courts**. Floors at 0/15/30 studs, continuous white balconies, two switchback stair circuits, short bridges, sage/rose/oatmeal façades and dark gabled roofs follow the Window Watcher concept. One shared office ceiling sits at 60 studs. Houses retain dark tinted glass and have no individual Lights or Neon. Three F mold carriers were resized for the lower enclosure. The Backrooms' origin is unknown; Zyntra is the researchers' organization, not the creator of this space.
 
-The exact native EditableMesh has 8,996 serialized UV-split vertices (the Blender topology count is 8,968), 11,862 triangles and 25 bones. Temporary Animator tests verified Idle/Lean/Tap at four times each, plus the alternative parent-pose hierarchy for Idle: 400 bone comparisons, worst component error 0.0002191. Root directly under Keyframe binds correctly. These are Studio Edit temporary IDs; published-client playback/permissions remain pending.
+The map before actor installation contains 11,372 BaseParts, 12,240 descendants, 44 lights and 202 tinted panes. These map-only counts exclude the runtime actor. Canonical comparison confirmed A–E, G and H match the preceding map baseline; outside F only the three named mold carriers changed. The existing Level 4 and other developer's work are preserved.
 
-White eyes use SurfaceAppearance emission on the actual iris UVs, with no physical Lights or GUI. The original Billboard approach was rejected because Glass hid it. The selected v5 mask is 91743869995723; basecolor 91091934459636 is unchanged. Strength 200 produces white cores and has been previewed. Targeted UV guarding preserves 98.34% mask energy. Check the small brow-filtering artifact again after the new material pack finishes processing before final visual sign-off.
+Earlier native map QA passed 44 actual Humanoid movement segments, 77 open-home checks with 462 entry rays, and 98 chute enclosure rays. No required jumps or noclip were used; only the starts of separate routes were positioned. The furnishing rerun passed 20 homes, 891 furniture parts, 7,128 corner checks and 72 mold backing rays, with no house lights or Neon. The existing access/transport check passed 74 assertions. Those results retain their map-test scope.
 
-A fresh 182-script export has no Source/editor conflicts and no changes since the previous committed F checkpoint. The latest origin/claude/trello-20260921 remains a8259d3; unrelated developer work is preserved. Temporary preview actors/test fixtures are removed at handoff; no provisional actor or HTTP setting should be saved in the game.
+## Source preservation and backups
+
+The fresh 26 September baseline matched repository checkpoint `c6109d5`: 182 scripts, no Source/editor conflicts. Git audit found no newer remote commits; the other developer's branch remained at `a8259d3`, including Signal Architect Ascendant. The integration then changed exactly three source paths relative to that baseline:
+
+- `ServerScriptService/Level 5 Systems/Level 5 Window Watcher Encounters.ModuleScript.lua` — new server encounter module.
+- `StarterPlayer/StarterPlayerScripts/WindowWatcherVisualClient.LocalScript.lua` — new scoped visibility guard.
+- `ServerScriptService/Level 5 Systems/Level 5 Round Adapter.ModuleScript.lua` — encounter hook.
+
+The preceding F-map changes remain represented by the existing Architecture and Landmark Districts source mirrors. All unrelated scripts, including the 12 Level 4 scripts and the other developer's work, are preserved.
+
+The full native **before-integration** backup is `output/level5-window-watcher-20260926/baseline/Backrooms-pre-WindowWatcher-20260926.rbxl`: **9,637,458 bytes**, SHA-256 `eaf5a42d710113999c8661f314d4ef102666558d36a5e9b041b229b763e10fa9`.
+
+The full native **after-integration** backup is `artifacts/level5-window-watcher-20260926/after.rbxl`: **9,763,745 bytes**, SHA-256 `be9d81da45369de47e484c451bd9e18da38c8011d5ef4a8f6e349680d9557de0`. It preserves the permanent rig and animation references as well as the source. Dated 25 September preview/checkpoint evidence remains unchanged; the 26 September artifacts and v2121 receipt describe the delivered integration.

@@ -1,6 +1,6 @@
 # Eye-emission filtering review
 
-**Selected: v5, asset 91743869995723, strength 200.** Native Studio preview confirmed white cores through tinted Glass. Final close-up filtering sign-off remains pending; the tiny brow fleck was not conclusively eliminated while Roblox was processing the material pack.
+**Status 2026-09-26: v5, asset 91743869995723, strength 200, is installed on the durable rig.** Native Play inspection showed the dark body and white cores through the actual tinted window during the full tap gesture. Final visual/runtime QA and publication are recorded in the [main handoff](../../../../../docs/LEVEL5_WINDOW_WATCHER_2026-09-25.md). This review preserves the mask's derivation and limits; it does not claim immunity to all filtering artifacts.
 
 The original 2048 mask and a 1024 area downsample map directly only to eye surfaces. A conservative sampling footprint reaches neighboring UV islands. Two triangles (5787/5789) map to the viewer-right brow/hairline near Blender (0.064, −0.086, 2.287), matching the fleck position. Native strength 0 removed it, implicating emission filtering.
 
@@ -17,4 +17,4 @@ Uniform erosion and a global guard (v2/v3) were rejected because they fragmented
 - Offline render: `emission-v5-face-strength100.png`.
 - Native strength-200 evidence: repository-root `artifacts/level5-window-watcher-20260925/native-white-eyes-v5.png` and `native-white-eyes-v5-tinted-glass.png`.
 
-This does not simulate proprietary Roblox compression or guarantee immunity to every neighboring UV island. Recheck the final processed material before accepting the durable rig. Original albedo, GLB and blend were not modified.
+This does not simulate proprietary Roblox compression or guarantee immunity to every neighboring UV island. Use the main handoff's actual processed-material visual result for acceptance. Original albedo, GLB and blend were not modified.

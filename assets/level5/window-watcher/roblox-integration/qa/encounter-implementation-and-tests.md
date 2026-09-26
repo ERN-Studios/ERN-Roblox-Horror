@@ -1,10 +1,12 @@
-# Window Watcher encounter draft — implementation and test handoff
+# Window Watcher encounter — draft history and integration contract
 
 Date: 2026-09-25. Version: `2026-09-25.intermittent.1`.
 
-**Prepared locally; NOT installed in Studio and NOT published.** This document covers the draft ModuleScript and its local tests; a subsequent temporary native Animator check is recorded below. The native rig/animation upload, exact imported placement, fresh Studio integration, and publication receipt remain root-owned work. Enabling an upload beta alone would not establish installation or successful playback. The encounter drafts remain uninstalled.
+**Update 2026-09-26:** the permanent rig, published clips, encounter module, Adapter hook and client visibility guard are installed in Studio Edit. The three published clips passed 300 native bone/time comparisons (maximum component error below 0.000194; tolerance 0.001). Current runtime QA and experience publication receipts are in the [main handoff](../../../../../docs/LEVEL5_WINDOW_WATCHER_2026-09-25.md).
 
-## Prepared files
+The sections below retain the 25 September draft contract and its tests. Files under `patches/` are historical proposals; use fresh authoritative Studio source mirrors for the installed implementation and its visual client. The guard permits local visibility only after the correct official track loads, advances and evaluates its pose. It leaves server timing and animation playback authoritative. Historical test results do not certify subsequent source changes.
+
+## Historical prepared files
 
 All paths below are relative to the repository root.
 
@@ -26,11 +28,11 @@ The last participant leaving F/its roster immediately hides the actor and cancel
 
 There is one Heartbeat connection and bounded destruction/ancestry connections; no spawned threads or delayed tasks. `Cleanup(world)` is idempotent. World destruction, moving the world out of Workspace, destroying the owned encounter folder, or disabling Level5DevEnabled disconnects the owner and destroys its tracks and rig. Partial installation/load failures roll back the folder. Duplicate installation preserves the existing owner and returns an error.
 
-The final proposed eyes use a UV emission mask on the actual skinned MeshPart through SurfaceAppearance, so mesh transparency hides the body and eyes together. No physical Light or GUI is required. The original BillboardGui proposal was rejected after native inspection found that the tinted pane occluded it. The encounter module also hides/restores any authored GUI/Light descendants for defensive cleanup, but the prepared eye installer does not create them. Imported scripts/sounds are removed from the clone.
+The installed eyes use a UV emission mask on the actual skinned MeshPart through SurfaceAppearance, so mesh transparency hides the body and eyes together. No physical Light or GUI is required. The original BillboardGui proposal was rejected after native inspection found that the tinted pane occluded it. The encounter module also hides/restores any authored GUI/Light descendants for defensive cleanup, but the eye installer does not create them. Imported scripts/sounds are removed from the clone.
 
-## Exact integration contract — proposal, not applied
+## Original integration contract
 
-Install the new ModuleScript as `ServerScriptService.Level 5 Systems.Level 5 Window Watcher Encounters` only after reconciling a fresh Studio Source/editor baseline. Call after Architecture.Build, when `manifest.World` and `manifest.Origin` are assigned and the world is in Workspace. Skip edit-mode architectural previews.
+The server ModuleScript is installed as `ServerScriptService.Level 5 Systems.Level 5 Window Watcher Encounters`. The Adapter calls it after Architecture.Build, when `manifest.World` and `manifest.Origin` are assigned and the world is in Workspace; edit-mode architectural previews skip it. This snippet records the original hook contract, not a replacement for the fresh authoritative Adapter source.
 
 ```lua
 if RunService:IsRunning() then
@@ -48,7 +50,7 @@ if RunService:IsRunning() then
 end
 ```
 
-`GetParticipants` must synchronously return a Player array without yielding. The encounter module applies the roster/alive/round filters described above. The Adapter's existing DevAccess checks remain unchanged. Its existing world-destruction cleanup already cancels the encounter; an additional explicit `watcher.Cleanup(world)` is permitted but unnecessary. Update the Adapter's old “loads no entity” comment to allow a passive window encounter while preserving the no-damage/no-completion contract.
+`GetParticipants` must synchronously return a Player array without yielding. The encounter module applies the roster/alive/round filters described above. The Adapter's existing DevAccess checks remain unchanged. Its existing world-destruction cleanup already cancels the encounter; an additional explicit `watcher.Cleanup(world)` is permitted but unnecessary. The passive encounter preserves the no-damage/no-completion contract.
 
 Required template structure:
 
@@ -74,11 +76,11 @@ Anchors remain under `world.Level5_IndoorSuburbs.F_BayWindowCanyon.WindowWatcher
 | MiddleCourtWindow | SlowWindowLean | 0.95 studs |
 | NearGroundWindow | GlassTap | 1.90 studs |
 
-Depth uses the final exported GlassTap minimum Z of −1.745002 studs, leaving +0.154998 in pane space before accounting for its +0.07 rear glass surface. **Native imported scale and full animated extrema still need verification.**
+Depth uses the final exported GlassTap minimum Z of −1.745002 studs, leaving +0.154998 in pane space before accounting for its +0.07 rear glass surface. Native Play has shown the full tap through the real window. Final placement/clearance evidence is recorded in the main handoff; bone samples alone do not prove every skinned vertex's clearance.
 
 `Start` returns `{ok, folder, version, actorCount = 1, assetPlaybackVerified = false}` or `{ok = false, error}`. The rig remains hidden until all three official Animator tracks report positive Length. A 20-second loading timeout removes the encounter and records `world.WindowWatcherError`; the map remains intact. Syntactic asset IDs and positive track lengths do not prove ownership permissions, correct skinning, visible bone motion or client replication.
 
-## Completed local verification
+## Historical local verification — 25 September draft
 
 - Luau compilation passed.
 - **1,031 scheduler assertions passed**, including 200 complete appearances, timer bounds, no overlap, eligible-window variety, warm-up-adjusted duration, absence/re-entry, and permanently inert state after Stop.
@@ -104,10 +106,10 @@ python3 assets/level5/window-watcher/roblox-integration/qa/test_window_watcher_l
 
 Read-only comparison used the three actual `assets/level5/window-watcher/*-roblox-30fps.json` files and `animation-quality-audit.json` under this task. Every one of the 25 bones has numerically identical first/last transform components for all three clips: WatchingIdle 181 samples/6 seconds, SlowWindowLean 151/5 seconds, and GlassTap 121/4 seconds. Lean/Tap starts differ from Idle's start by at most 1.9e−7 and 1.6e−7 per component respectively. The authored audit reports zero root/foot drift and no issues.
 
-Lean/Tap metadata says non-looping, but both return to the lowered-arm idle pose, so retaining `track.Looped = true` introduces no endpoint pose jump in the exported data. It also avoids a stop returning to the imported bind/A-pose. During an 8–14-second visit, lean repeats roughly twice and tap roughly two to three times. No one-shot-to-idle state machine is needed for this passive behavior. Smooth native playback, particularly the complete hand-raising arc, remains unverified.
+Lean/Tap metadata says non-looping, but both return to the lowered-arm idle pose, so retaining `track.Looped = true` introduces no endpoint pose jump in the exported data. It also avoids a stop returning to the imported bind/A-pose. During an 8–14-second visit, lean repeats roughly twice and tap roughly two to three times. No one-shot-to-idle state machine is needed for this passive behavior. Native playback and final guard QA are tracked in the main handoff.
 
-## Subsequent native Edit verification
+## Historical temporary native Edit verification — 25 September
 
 All three clips were bound to the exact temporary native rig with KeyframeSequenceProvider and Animator stepping. Four times per clip, plus Idle with the alternative parent-pose hierarchy, yielded **400 passing bone comparisons**; worst matrix-component error was 0.0002191 (tolerance 0.001). Direct Root under Keyframe binds correctly. These tests use temporary Studio IDs, not published animation assets.
 
-The white UV emission eyes were also inspected natively through tinted Glass. Final material filtering, complete smooth playback in a real round, published asset permissions, encounter lifecycle in the game and client replication remain pending. The temporary preview/test fixtures were removed.
+The white UV emission eyes were also inspected natively through tinted Glass, and the temporary preview/test fixtures were removed. Durable import and real-round playback followed on 26 September. Refer to the main handoff for current client visibility, cleanup, visual QA and publication results rather than treating this older temporary test as final delivery evidence.

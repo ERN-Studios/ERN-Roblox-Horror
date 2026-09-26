@@ -16,7 +16,10 @@ local ok,result=xpcall(function()
  local folder=container:FindFirstChild("Animations")
  if not folder then folder=Instance.new("Folder");folder.Name="Animations";folder.Parent=container end
  local results={}
+ local saved=container:FindFirstChild("AuthoredClips")
+ if not saved then saved=Instance.new("Folder");saved.Name="AuthoredClips";saved.Parent=container end
  for _,clip in ipairs(manifest.clips) do
+  if _G.WWPublishClipName and clip.name~=_G.WWPublishClipName then continue end
   local existing=folder:FindFirstChild(clip.name)
   if existing and existing:IsA("Animation") and existing:GetAttribute("WindowWatcherSourceSha256")==manifest.sourceGlbSha256 then
    table.insert(results,{name=clip.name,id=existing.AnimationId,reused=true})
@@ -40,6 +43,8 @@ local ok,result=xpcall(function()
     for name,pose in pairs(poses) do pose.Parent=parents[name] and assert(poses[parents[name]]) or key end
     key.Parent=sequence
    end
+   _G.WWPublishStatus={clip=clip.name,stage="upload",started=os.clock(),sequence=sequence}
+   sequence.Parent=saved -- Preserve the authored clip and match the existing successful publisher.
    local called,status,id=pcall(function()
     return AS:CreateAssetAsync(sequence,Enum.AssetType.Animation,{
      Name="Level 5 Window Watcher "..data.name,
@@ -47,13 +52,16 @@ local ok,result=xpcall(function()
      CreatorId=1039373905,CreatorType=Enum.AssetCreatorType.Group,
     })
    end)
-   sequence:Destroy()
+   -- Retain local KeyframeSequence for Animation Editor recovery and native backup.
+   _G.WWPublishStatus.stage=called and tostring(status) or "call-error"
+   _G.WWPublishStatus.result=tostring(id or status)
    assert(called,"Animation publish call failed: "..tostring(status))
    assert(status==Enum.CreateAssetResult.Success,"Animation publish failed: "..tostring(status).." / "..tostring(id))
    local animation=Instance.new("Animation");animation.Name=data.name;animation.AnimationId="rbxassetid://"..tostring(id)
    animation:SetAttribute("WindowWatcherSourceSha256",manifest.sourceGlbSha256)
    animation:SetAttribute("AuthoredDuration",data.duration)
    animation.Parent=folder
+   sequence:SetAttribute("PublishedAssetId",tostring(id))
    table.insert(results,{name=data.name,id=animation.AnimationId,duration=data.duration,frames=#data.frames})
   end
  end

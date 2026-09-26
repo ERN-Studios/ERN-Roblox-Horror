@@ -1,7 +1,8 @@
 --!strict
 -- Level 5 map-only preview lifecycle. Independent of Level 4 and its gameplay.
 -- GameManager owns entry, Back to Lobby and round cleanup. This module never
--- sets Escaped/PuzzleWon, loads an entity or grants completion/rewards.
+-- sets Escaped/PuzzleWon or grants completion/rewards. The passive window
+-- encounter has no chase, damage or completion behavior.
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local ServerScriptService = game:GetService("ServerScriptService")
@@ -299,6 +300,15 @@ function Adapter.Build()
 		})
 		assert(type(manifest) == "table" and typeof(manifest.SpawnCFrame) == "CFrame", "Architecture needs an arrival SpawnCFrame")
 		manifest.World, manifest.Origin = world, ORIGIN
+		if RunService:IsRunning() then
+			local encounters = require(script.Parent:FindFirstChild("Level 5 Window Watcher Encounters") :: ModuleScript)
+			local result = encounters.Start(world, {
+				Origin = ORIGIN,
+				GetParticipants = function() return Players:GetPlayers() end,
+			})
+			assert(result.ok, result.error)
+			manifest.WindowWatcher = result
+		end
 		-- Architecture supplies a HumanoidRootPart-height pose, three studs
 		-- above its entry carpet. GameManager's compatibility pad is the FLOOR.
 		manifest.ArrivalFloorCFrame = manifest.SpawnCFrame * CFrame.new(0, -3, 0)

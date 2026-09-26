@@ -2,6 +2,8 @@
 
 **Current rendering approach:** use the physical UV emission mask and installer described in [EMISSION_README.md](EMISSION_README.md). Native testing found the historical BillboardGui approach below invisible behind the tinted Glass. The coordinates and old renders remain anatomical references only.
 
+**Status 2026-09-26:** the permanent rig and white-emission material are installed in Studio. Published clips passed 300 native bone/time comparisons, and real-window Play inspection has followed. The [main handoff](../../../../../docs/LEVEL5_WINDOW_WATCHER_2026-09-25.md) records final client/runtime QA and publication. The installed design uses no eye attachments.
+
 ## Historical anatomical measurements — superseded rendering approach
 
 The following coordinates document the original marker study only. Its GUI rendering instructions are not the installation procedure; use EMISSION_README.md above. Historical local renders are not all included in this checkpoint.
@@ -26,4 +28,4 @@ If the importer rebases bone axes instead of preserving GLB locals, derive the o
 - `rest-face-front.png`: unmodified face reference.
 - `eyes-white-rest-front.png`, `eyes-white-rest-three-quarter.png`, `eyes-white-lean-three-quarter.png`: white-marker reference renders (3D ellipsoids, not a simulation of Roblox BillboardGui).
 
-These outputs establish anatomical coordinates. Native temporary Animator binding has since passed 400 comparisons, while durable asset/client playback remains pending; the final design uses no eye attachments.
+These outputs establish anatomical coordinates. The earlier temporary Animator binding passed 400 comparisons; the dated status above and main handoff cover subsequent durable integration. Do not reinstall the historical attachment/GUI approach.

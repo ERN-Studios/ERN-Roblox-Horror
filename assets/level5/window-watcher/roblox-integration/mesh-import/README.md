@@ -2,6 +2,8 @@
 
 This is an import of the real, frozen Meshy model with its authored Blender rig. It does not replace the model with primitives, regenerate the shape, decimate it, merge seams, or re-rig it.
 
+**Status 2026-09-26:** durable mesh **138178192370575** and the three published clips are installed in Studio with the intermittent encounter and visual client. The normal CreateAssetAsync beta blocker is resolved. The [main handoff](../../../../../docs/LEVEL5_WINDOW_WATCHER_2026-09-25.md) records final QA and experience publication. The procedure below is for recovery; reuse existing assets and reconcile fresh Studio state before rebuilding.
+
 ## Frozen input and evidence
 
 - Input: `../../model.glb`
@@ -63,7 +65,7 @@ print(H:JSONEncode(info))
 
 After all ten chunks are loaded, `buildPreview(91091934459636, actorFloorCFrame)` constructs the same rig directly from `Content.fromObject(S.mesh)`. This call is Studio-only and creates an unparented model named `WindowWatcher_TemporaryStudioPreview`. Both the model and MeshPart have `TemporaryStudioPreview=true`, and the model's `PersistenceStatus` explicitly says it is not a published asset. `getModel()` and `applyPose()` work on this preview for local visual QA.
 
-The preview has no durable mesh ID. It is not a workaround for asset publication and must not be treated as preserved by saving/publishing the containing place. See the parent integration README for the current upload blocker and normal CreateAssetAsync beta setting.
+The preview has no durable mesh ID. It is not a workaround for asset publication and must not be treated as preserved by saving/publishing the containing place. See the parent integration README for the existing durable asset IDs and recovery prerequisites.
 
 `discardPreview()` explicitly destroys this helper-created preview and clears its pose target, retaining the editable mesh so a later verified runtime model can be built. `destroy()` refuses while a preview is still attached to the session; discard it first. Otherwise `destroy()` only destroys the helper's temporary EditableMesh and clears its session reference. It does not delete a returned published model or uploaded asset.
 
@@ -76,7 +78,7 @@ Eye glow uses the separate UV emission mask described in `../eye-placement/EMISS
 ## Official API evidence and restrictions
 
 - [EditableMesh](https://create.roblox.com/docs/reference/engine/classes/EditableMesh): AddBone supports Name, ParentId, CFrame in mesh-local bind space, and Virtual; assign vertex bone IDs before weights.
-- [AssetService](https://create.roblox.com/docs/reference/engine/classes/AssetService): CreateAssetAsync supports EditableMesh as Mesh and creator metadata; the docs limit this creation route to locally loaded plugin context. The current Studio MCP context already passed a harmless CreateEditableMesh/AddBone capability probe; upload success must still be independently checked.
+- [AssetService](https://create.roblox.com/docs/reference/engine/classes/AssetService): CreateAssetAsync supports EditableMesh as Mesh and creator metadata; the docs limit this creation route to locally loaded plugin context. This route produced durable mesh 138178192370575 after the normal beta feature was enabled. Any future upload still requires its own verified receipt and readback.
 - [Roblox skinning API announcement](https://devforum.roblox.com/t/studio-beta-introducing-skinning-and-facs-data-support-for-editablemesh-objects/3731147): embedded mesh bones and runtime Bone instances are distinct; they bind by unique names.
 - [StudioService](https://create.roblox.com/docs/reference/engine/classes/StudioService) and [File](https://create.roblox.com/docs/reference/engine/classes/File): PromptImportFileAsync is a PluginSecurity native picker returning a File, not an arbitrary filesystem-path GLB decoder. It does not bypass the blocked native picker.
 - [Open Cloud Assets](https://create.roblox.com/docs/cloud/guides/usage-assets): authenticated Model creation supports GLB/GLTF/FBX, but requires an authorized API key or OAuth. No credentials or browser cookies were accessed. The in-Studio EditableMesh route uses the already authorized Studio context.

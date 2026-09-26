@@ -1,0 +1,495 @@
+{
+  "latest": {
+    "visible": false,
+    "guardStatus": "WAITING_FOR_TRACK",
+    "candidates": {
+      "NearGroundWindow": true,
+      "MiddleCourtWindow": true,
+      "FarUpperWindow": true
+    },
+    "status": "HIDDEN",
+    "displayedParts": 0,
+    "guardReady": false,
+    "audience": 1
+  },
+  "observedSamples": 1639,
+  "durationLimit": 180,
+  "elapsed": 180.058,
+  "appearances": [
+    {
+      "candidatesAtReveal": {
+        "NearGroundWindow": true,
+        "MiddleCourtWindow": true,
+        "FarUpperWindow": true
+      },
+      "window": "NearGroundWindow",
+      "interrupted": false,
+      "endReason": "scheduled-hide",
+      "duration": 9.483385916566476,
+      "startedAt": 24.828794500092044,
+      "partial": false,
+      "firstEligibleDelay": 24.7152952500619,
+      "appearanceCount": 4,
+      "clip": "GlassTap",
+      "pivotError": 0
+    },
+    {
+      "candidatesAtReveal": {
+        "NearGroundWindow": true,
+        "MiddleCourtWindow": true,
+        "FarUpperWindow": true
+      },
+      "window": "FarUpperWindow",
+      "interrupted": false,
+      "endReason": "scheduled-hide",
+      "duration": 10.532469999976456,
+      "startedAt": 61.627510166727006,
+      "partial": false,
+      "hiddenGap": 27.315329750068486,
+      "appearanceCount": 5,
+      "clip": "WatchingIdle",
+      "pivotError": 0
+    },
+    {
+      "candidatesAtReveal": {
+        "NearGroundWindow": true,
+        "MiddleCourtWindow": true,
+        "FarUpperWindow": true
+      },
+      "window": "NearGroundWindow",
+      "interrupted": false,
+      "endReason": "scheduled-hide",
+      "duration": 10.416213291697204,
+      "startedAt": 92.55930404178798,
+      "partial": false,
+      "hiddenGap": 20.39932387508452,
+      "appearanceCount": 6,
+      "clip": "GlassTap",
+      "pivotError": 0
+    },
+    {
+      "candidatesAtReveal": {
+        "NearGroundWindow": true,
+        "MiddleCourtWindow": true,
+        "FarUpperWindow": true
+      },
+      "window": "MiddleCourtWindow",
+      "interrupted": false,
+      "endReason": "scheduled-hide",
+      "duration": 10.266045874916017,
+      "startedAt": 127.84154770849273,
+      "partial": false,
+      "hiddenGap": 24.86603037500754,
+      "appearanceCount": 7,
+      "clip": "SlowWindowLean",
+      "pivotError": 0
+    },
+    {
+      "candidatesAtReveal": {
+        "NearGroundWindow": true,
+        "MiddleCourtWindow": true,
+        "FarUpperWindow": true
+      },
+      "window": "NearGroundWindow",
+      "interrupted": false,
+      "endReason": "scheduled-hide",
+      "duration": 11.966130833374336,
+      "startedAt": 159.32396062510088,
+      "partial": false,
+      "hiddenGap": 21.216367041692138,
+      "appearanceCount": 8,
+      "clip": "GlassTap",
+      "pivotError": 0
+    }
+  ],
+  "status": "INCOMPLETE",
+  "context": "Client",
+  "finishReason": "bounded-observation-timeout",
+  "cleanup": {
+    "observerConnectionsDisconnected": true,
+    "observed": false
+  },
+  "checks": {
+    "boneCount": 25,
+    "mesh": {
+      "sizeError": 0,
+      "pivotOffset": [
+        -1.986821445143505e-7,
+        -4,
+        -7.450580596923828e-8,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "meshId": "rbxassetid://138178192370575",
+      "nativeMeshSize": [
+        5.9062581062316895,
+        7.999999046325684,
+        1.5273451805114746
+      ],
+      "size": [
+        5.9062581062316895,
+        7.999999046325684,
+        1.5273451805114746
+      ]
+    },
+    "eyeMaterial": {
+      "colorMap": "rbxassetid://91091934459636",
+      "tint": [
+        1,
+        1,
+        1
+      ],
+      "mask": "Content{SourceType=Uri, Uri=rbxassetid://91743869995723}",
+      "strength": 200,
+      "maskSha": "99315f05889bbc4c9f1122f502913bef7bf3fd5d7742b2a5a30ded79fee45738"
+    }
+  },
+  "anchors": {
+    "NearGroundWindow": {
+      "expectedPivot": [
+        16983.720703125,
+        24,
+        839.75,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "floorError": 0,
+      "support": "Workspace.Level 5 Generated World.Level5_IndoorSuburbs.F_BayWindowCanyon.NearWatcherCottage.InteriorCarpet",
+      "relativePosition": [
+        -18.1796875,
+        6.549999237060547,
+        840.8499755859375
+      ],
+      "size": [
+        6,
+        7.199999809265137,
+        0.14000000059604645
+      ],
+      "pane": "Workspace.Level 5 Generated World.Level5_IndoorSuburbs.F_BayWindowCanyon.NearWatcherCottage.WindowGlass"
+    },
+    "MiddleCourtWindow": {
+      "expectedPivot": [
+        16982.25,
+        39,
+        919.77001953125,
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      "floorError": 0,
+      "support": "Workspace.Level 5 Generated World.Level5_IndoorSuburbs.F_BayWindowCanyon.MiddleCourtHouse.MiddleUpperHome.InteriorCarpet",
+      "relativePosition": [
+        -18.849609375,
+        21.549999237060547,
+        918.8200073242188
+      ],
+      "size": [
+        10,
+        7.199999809265137,
+        0.14000000059604645
+      ],
+      "pane": "Workspace.Level 5 Generated World.Level5_IndoorSuburbs.F_BayWindowCanyon.MiddleCourtHouse.MiddleUpperHome.WindowGlass"
+    },
+    "FarUpperWindow": {
+      "expectedPivot": [
+        17012.76953125,
+        54,
+        859.550048828125,
+        0,
+        0,
+        1,
+        0,
+        1,
+        0,
+        -1,
+        0,
+        0
+      ],
+      "floorError": 0,
+      "support": "Workspace.Level 5 Generated World.Level5_IndoorSuburbs.F_BayWindowCanyon.NestedWatcherHouse.UpperWatchingRoom.InteriorCarpet",
+      "relativePosition": [
+        11.8203125,
+        36.54999923706055,
+        860.6500244140625
+      ],
+      "size": [
+        11,
+        7.199999809265137,
+        0.14000000059604645
+      ],
+      "pane": "Workspace.Level 5 Generated World.Level5_IndoorSuburbs.F_BayWindowCanyon.NestedWatcherHouse.UpperWatchingRoom.WindowGlass"
+    }
+  },
+  "coverage": {
+    "animatedClips": 3,
+    "completeAppearances": 5,
+    "requiredClips": 3
+  },
+  "clips": {
+    "WatchingIdle": {
+      "visibleSamples": 95,
+      "movingBones": {
+        "neck": true,
+        "Head": true,
+        "Spine": true,
+        "Spine01": true
+      },
+      "serverVisibleSamples": 96,
+      "length": 6,
+      "looped": true,
+      "trackPositions": [
+        {
+          "sample": 61.72765262494795,
+          "time": 0.40000012516975403
+        },
+        {
+          "sample": 61.82809550012462,
+          "time": 0.5000001788139343
+        },
+        {
+          "sample": 61.94493987504393,
+          "time": 0.6166667342185974
+        },
+        {
+          "sample": 62.06053612497635,
+          "time": 0.7333332896232605
+        },
+        {
+          "sample": 62.16091149998829,
+          "time": 0.8333331942558289
+        },
+        {
+          "sample": 62.27830475009978,
+          "time": 0.9499997496604919
+        },
+        {
+          "sample": 62.39397312514484,
+          "time": 1.0666663646697998
+        },
+        {
+          "sample": 62.511830375064164,
+          "time": 1.183332920074463
+        },
+        {
+          "sample": 62.626820833422244,
+          "time": 1.2999995946884155
+        },
+        {
+          "sample": 62.72738991677761,
+          "time": 1.3999994993209839
+        },
+        {
+          "sample": 62.82754062511958,
+          "time": 1.4999994039535522
+        },
+        {
+          "sample": 62.943468666635454,
+          "time": 1.6166659593582153
+        }
+      ],
+      "guardObservedTrackAdvance": true,
+      "officialIdVerified": true,
+      "trackTimeAdvanced": true,
+      "displayedRenderFrames": 626,
+      "warmupHiddenSamples": 1,
+      "animationId": "rbxassetid://123386867650430",
+      "warmupHiddenRenderFrames": 1,
+      "maxBoneTransformDelta": 0.02162573451641947,
+      "playing": true
+    },
+    "GlassTap": {
+      "visibleSamples": 291,
+      "movingBones": {
+        "RightArm": true,
+        "neck": true,
+        "RightForeArm": true,
+        "RightHand": true,
+        "Spine01": true
+      },
+      "maxBoneTransformDelta": 1.0350311398506165,
+      "looped": true,
+      "trackPositions": [
+        {
+          "sample": 24.828794500092044,
+          "time": 0.3666667342185974
+        },
+        {
+          "sample": 24.929048416670412,
+          "time": 0.4666668176651001
+        },
+        {
+          "sample": 25.04594516661018,
+          "time": 0.5875000953674316
+        },
+        {
+          "sample": 25.162017916794866,
+          "time": 0.699999988079071
+        },
+        {
+          "sample": 25.26293308334425,
+          "time": 0.8041665554046631
+        },
+        {
+          "sample": 25.378861916717142,
+          "time": 0.9166664481163025
+        },
+        {
+          "sample": 25.479482874972746,
+          "time": 1.0208330154418945
+        },
+        {
+          "sample": 25.596003208309412,
+          "time": 1.1333332061767578
+        },
+        {
+          "sample": 25.696268999949098,
+          "time": 1.2374998331069946
+        },
+        {
+          "sample": 25.811834291787818,
+          "time": 1.350000023841858
+        },
+        {
+          "sample": 25.912047708407044,
+          "time": 1.4500000476837158
+        },
+        {
+          "sample": 26.012253916822374,
+          "time": 1.5499999523162842
+        }
+      ],
+      "guardObservedTrackAdvance": true,
+      "officialIdVerified": true,
+      "trackTimeAdvanced": true,
+      "displayedRenderFrames": 1913,
+      "length": 4,
+      "animationId": "rbxassetid://85948818863545",
+      "warmupHiddenRenderFrames": 3,
+      "serverVisibleSamples": 291,
+      "playing": true
+    },
+    "SlowWindowLean": {
+      "visibleSamples": 94,
+      "movingBones": {
+        "Spine02": true,
+        "Head": true,
+        "neck": true,
+        "Spine": true,
+        "Spine01": true
+      },
+      "maxBoneTransformDelta": 0.06913165375590324,
+      "looped": true,
+      "trackPositions": [
+        {
+          "sample": 127.84154770849273,
+          "time": 0.3500000238418579
+        },
+        {
+          "sample": 127.9578351250384,
+          "time": 0.4666667580604553
+        },
+        {
+          "sample": 128.05821279180236,
+          "time": 0.5666667222976685
+        },
+        {
+          "sample": 128.15835204161704,
+          "time": 0.6666666269302368
+        },
+        {
+          "sample": 128.25846050004475,
+          "time": 0.7666665315628052
+        },
+        {
+          "sample": 128.37513312511146,
+          "time": 0.8833330869674683
+        },
+        {
+          "sample": 128.49188541667536,
+          "time": 1.0041663646697998
+        },
+        {
+          "sample": 128.6083326668013,
+          "time": 1.1166664361953735
+        },
+        {
+          "sample": 128.72424170840532,
+          "time": 1.2333332300186157
+        },
+        {
+          "sample": 128.8244495417457,
+          "time": 1.333333134651184
+        },
+        {
+          "sample": 128.94152383343317,
+          "time": 1.4499996900558472
+        },
+        {
+          "sample": 129.05869112513028,
+          "time": 1.5666662454605103
+        }
+      ],
+      "guardObservedTrackAdvance": true,
+      "officialIdVerified": true,
+      "trackTimeAdvanced": true,
+      "displayedRenderFrames": 617,
+      "length": 5,
+      "animationId": "rbxassetid://85635358459792",
+      "warmupHiddenRenderFrames": 1,
+      "serverVisibleSamples": 94,
+      "playing": true
+    }
+  },
+  "mutationScope": "temporary QA report folder only",
+  "version": "2026-09-26.native.guarded.1",
+  "warnings": [],
+  "clientGuard": {
+    "clips": [],
+    "renderFrames": 10804,
+    "latest": {
+      "localTransparencyModifier": 1,
+      "weightedTrackCount": 0,
+      "matchingOfficialTrack": false,
+      "displayed": false,
+      "transparency": 1,
+      "poseEvaluated": true,
+      "timeAdvancedObserved": false,
+      "status": "WAITING_FOR_TRACK",
+      "serverVisible": false,
+      "clip": "GlassTap",
+      "ready": false
+    },
+    "serverVisibleFrames": 3161,
+    "hiddenReadyFrames": 5,
+    "displayedFrames": 3156,
+    "displayedWithoutObservedTimeAdvance": 0,
+    "warmupHiddenFrames": 5
+  },
+  "failures": [],
+  "unverified": [
+    "skinned vertex/glass intersection",
+    "visual eye filtering and appearance",
+    "published-server asset permission"
+  ],
+  "worldGeneration": 1
+}
