@@ -1,20 +1,69 @@
--- Passive intermittent Window Watcher; one prepared rig, three real windows.
+-- Passive intermittent Window Watcher; one prepared rig, curated windows in all eight districts.
 -- No AI, damage, chase, sounds, rewards, movement/pathfinding or delayed tasks.
 -- Start only from the existing developer-only Level 5 round adapter.
 -- Import contract: bottom pivot, 8 studs tall, facing local -Z. Mesh/rest bones
 -- AND animation translations must share the import scale (~3.333 studs/metre).
 -- Never fix this by scaling only MeshPart.Size. Verify native animated extrema.
 local Encounters = {}
-local VERSION = "2026-09-25.intermittent.1"
+local VERSION = "2026-09-26.mapwide.1"
 local FOLDER_NAME = "Level5WindowWatcherEncounters"
 local OWNED = "Level5WindowWatcherOwned"
 local active = setmetatable({}, {__mode="k"})
+local SOURCE_SHA = "cbf260ff36b8c7226f27271456eae6bf4db7fd266bdce82dda8b0eae7cbc051e"
 local poses = {
-	{anchor="FarUpperWindow",clip="WatchingIdle",depth=.95},
-	{anchor="MiddleCourtWindow",clip="SlowWindowLean",depth=.95},
-	-- Final baked tap minimum Z -1.745002; rear pane surface is +.07.
-	{anchor="NearGroundWindow",clip="GlassTap",depth=1.90},
+	{clip="WatchingIdle",depth=.95,id="rbxassetid://123386867650430"},
+	{clip="SlowWindowLean",depth=.95,id="rbxassetid://85635358459792"},
+	-- Actual baked tap minimum Z -1.745002; pane rear surface is +.07.
+	{clip="GlassTap",depth=1.90,id="rbxassetid://85948818863545"},
 }
+local MAX_DISTANCE=145
+local MIN_VIEW_DOT=math.cos(math.rad(70)) -- server Head/HRP facing, not a camera assertion
+local MAX_RAYS_PER_SCAN=96
+local MAX_WINDOWS_PER_SCAN=24
+local SCAN_INTERVAL=.75
+
+local function finite(value)
+	return type(value)=="number" and value==value and math.abs(value)<math.huge
+end
+
+-- Pure selection helpers use the same bounds and weighting as native Start.
+-- A general view cone is intentional: players need not center the exact eyes.
+function Encounters.ViewQuality(distance,facingDot,paneLocalZ)
+	if not finite(distance) or not finite(facingDot) or not finite(paneLocalZ)
+		or distance<3 or distance>MAX_DISTANCE or facingDot<MIN_VIEW_DOT or paneLocalZ>=-.8 then return nil end
+	local alignment=math.clamp((facingDot-MIN_VIEW_DOT)/(1-MIN_VIEW_DOT),0,1)
+	return .5+.35*alignment+.15*(1-distance/MAX_DISTANCE)
+end
+
+function Encounters.CandidateScore(viewerCount,totalQuality)
+	if not finite(viewerCount) or viewerCount<1 or viewerCount%1~=0 or not finite(totalQuality) or totalQuality<=0 then return 0 end
+	-- Every additional confirmed onlooker raises weight more than any one
+	-- viewer's angle/range adjustment. Distinct living roster members only.
+	return viewerCount*viewerCount+math.clamp(totalQuality/viewerCount,.5,1)-1
+end
+
+function Encounters.ChooseCandidate(candidates,last,randomUnit)
+	local all,alternatives={},{}
+	for _,entry in ipairs(candidates) do
+		local index=type(entry)=="table" and entry.index or entry
+		local score=type(entry)=="table" and entry.score or 1
+		if finite(index) and index>=1 and index%1==0 and finite(score) and score>0 then
+			local candidate={index=index,score=score,viewers=type(entry)=="table" and entry.viewers or 1}
+			table.insert(all,candidate)
+			if index~=last then table.insert(alternatives,candidate) end
+		end
+	end
+	local choices=#alternatives>0 and alternatives or all
+	if #choices==0 then return nil end
+	local total=0;for _,entry in ipairs(choices) do total+=entry.score end
+	local threshold=math.clamp(randomUnit,0,.999999999)*total
+	local cumulative=0
+	for _,entry in ipairs(choices) do
+		cumulative+=entry.score
+		if threshold<cumulative then return entry.index,entry end
+	end
+	return choices[#choices].index,choices[#choices]
+end
 
 -- Pure scheduling core: the same code is exercised by the deterministic CLI
 -- harness. The caller supplies monotonically increasing seconds and candidates.
@@ -42,17 +91,11 @@ function Encounters.NewSchedule(randomUnit)
 		end
 		if state.due==nil then state.due=now+between(2,4);return nil end
 		if now<state.due or #candidates==0 then return nil end
-		local choices={}
-		for _,index in ipairs(candidates) do
-			if index~=state.last then table.insert(choices,index) end
-		end
-		-- Reuse only if this is the sole currently visible window. Whenever two
-		-- or more are eligible, consecutive appearances use different windows.
-		if #choices==0 then choices=candidates end
-		local index=choices[math.floor(unit()*#choices)+1]
+		local index,selected=Encounters.ChooseCandidate(candidates,state.last,unit())
+		if not index then return nil end
 		state.visible=index;state.last=index;state.due=nil
 		state.duration=between(8,14);state.ends=now+state.duration;state.revealed=false;state.count+=1
-		return {kind="show",index=index,endsAt=state.ends,count=state.count}
+		return {kind="show",index=index,endsAt=state.ends,count=state.count,viewers=selected.viewers,score=selected.score}
 	end
 	function schedule.MarkRevealed(now)
 		if not state.stopped and state.visible and not state.revealed then
@@ -106,26 +149,56 @@ function Encounters.Start(world,options)
 	if not template or not template:IsA("Model") or not template.Archivable or not animations then
 		return failure("missing archivable WindowWatcherRig or sibling Animations")
 	end
+	if template:GetAttribute("SourceGlbSha256")~=SOURCE_SHA then return failure("prepared rig source SHA changed") end
 	local architecture=world:FindFirstChild("Level5_IndoorSuburbs")
-	local district=architecture and architecture:FindFirstChild("F_BayWindowCanyon")
-	local anchors=district and district:FindFirstChild("WindowWatcherAnchors")
-	if not anchors then return failure("F's WindowWatcherAnchors are missing") end
-	local prepared={}
+	local anchors=world:FindFirstChild("WindowWatcherAnchors")
+	if not architecture or not anchors then return failure("map-wide WindowWatcherAnchors are missing") end
 	for _,pose in ipairs(poses) do
-		local anchor=anchors:FindFirstChild(pose.anchor)
-		local reference=anchor and anchor:FindFirstChild("WindowGlass")
-		local pane=reference and reference:IsA("ObjectValue") and reference.Value
 		local animation=animations:FindFirstChild(pose.clip)
-		if not anchor or not anchor:IsA("BasePart") or anchor:GetAttribute("Level5WindowWatcherAnchor")~=true
-			or not pane or not pane:IsA("BasePart") or not pane:IsDescendantOf(district)
-			or pane:GetAttribute("Level5TintedWindow")~=true or pane.Material~=Enum.Material.Glass then
-			return failure("invalid real glass/anchor: "..pose.anchor)
+		if not animation or not animation:IsA("Animation") or animation.AnimationId~=pose.id then
+			return failure("missing verified permanent AnimationId: "..pose.clip)
 		end
-		if not animation or not animation:IsA("Animation")
-			or not string.match(animation.AnimationId,"^rbxassetid://[1-9]%d*$") then
-			return failure("missing published AnimationId: "..pose.clip)
+	end
+	local prepared,districts,names={},{},{}
+	local anchorList=anchors:GetChildren()
+	table.sort(anchorList,function(a,b) return a.Name<b.Name end)
+	if #anchorList>128 then return failure("curated anchor budget exceeds 128") end
+	local supportParams=RaycastParams.new()
+	supportParams.FilterType=Enum.RaycastFilterType.Exclude;supportParams.FilterDescendantsInstances={anchors}
+	for _,anchor in ipairs(anchorList) do
+		local reference=anchor:FindFirstChild("WindowGlass")
+		local pane=reference and reference:IsA("ObjectValue") and reference.Value
+		local districtName=anchor:GetAttribute("District")
+		local district=type(districtName)=="string" and architecture:FindFirstChild(districtName)
+		local initial=type(districtName)=="string" and districtName:match("^([A-H])_")
+		local floor=anchor:GetAttribute("FloorCFrame")
+		local depth=anchor:GetAttribute("PawnDepth")
+		if not anchor:IsA("BasePart") or anchor:GetAttribute("Level5WindowWatcherAnchor")~=true or names[anchor.Name]
+			or not initial or not district or not pane or not pane:IsA("BasePart") or not pane:IsDescendantOf(district)
+			or pane.Material~=Enum.Material.Glass or pane:GetAttribute("Level5TintedWindow")~=true or not pane.CanQuery
+			or pane.Size.X<6 or pane.Size.Y<7.19 or pane.Size.Z>.5
+			or typeof(floor)~="CFrame" or not finite(depth) or depth<1.90 or depth>4
+			or depth-1.745002-pane.Size.Z*.5<.04 then
+			return failure("invalid supported glass/anchor: "..anchor.Name)
 		end
-		table.insert(prepared,{pose=pose,pane=pane,animation=animation})
+		local relative=pane.CFrame:ToObjectSpace(floor)
+		if (relative.Position-Vector3.new(0,-6.55,0)).Magnitude>.02
+			or relative.LookVector:Dot(Vector3.new(0,0,-1))<.9999 or floor.UpVector.Y<.9999 then
+			return failure("floor frame must share pane rotation and sit 6.55 studs below its center: "..anchor.Name)
+		end
+		-- Validate the two actual actor depth extrema without changing geometry.
+		for _,testDepth in ipairs({math.max(depth,.95),math.max(depth,1.90)}) do
+			local position=(floor*CFrame.new(1.1,0,testDepth)).Position
+			local support=workspace:Raycast(position+Vector3.new(0,.5,0),Vector3.new(0,-1.25,0),supportParams)
+			if not support or not support.Instance.CanCollide or math.abs(support.Position.Y-position.Y)>.15 then
+				return failure("unsupported actor feet: "..anchor.Name)
+			end
+		end
+		names[anchor.Name]=true;districts[initial]=true
+		table.insert(prepared,{anchor=anchor,pane=pane,floor=floor,depth=depth,district=districtName})
+	end
+	for _,initial in ipairs({"A","B","C","D","E","F","G","H"}) do
+		if not districts[initial] then return failure("no valid supported house window in district "..initial) end
 	end
 	-- Everything above is read-only. An installation failure below destroys its
 	-- sole unpublished/hidden clone and disconnects every connection.
@@ -133,10 +206,12 @@ function Encounters.Start(world,options)
 	folder.Name=FOLDER_NAME;folder:SetAttribute(OWNED,true)
 	folder:SetAttribute("Version",VERSION);folder:SetAttribute("PassiveOnly",true)
 	folder:SetAttribute("Visible",false);folder:SetAttribute("AppearanceCount",0)
+	folder:SetAttribute("AnchorCount",#prepared);folder:SetAttribute("DistrictCount",8)
+	folder:SetAttribute("ViewDirectionSource","Server Head/HRP facing; 70 degree half-cone")
 	local random=Random.new()
 	local schedule=Encounters.NewSchedule(function() return random:NextNumber() end)
 	local state={connections={},tracks={},visuals={},effects={},cleaned=false,actor=nil,pending=nil,
-		current=nil,schedule=schedule,folder=folder,loadingSince=os.clock()}
+		current=nil,schedule=schedule,folder=folder,loadingSince=os.clock(),scanCursor=1,lastScan=-math.huge,lastPose=nil}
 	local function setVisible(visible)
 		for _,entry in ipairs(state.visuals) do entry.object.Transparency=visible and entry.original or 1 end
 		for _,entry in ipairs(state.effects) do entry.object.Enabled=visible and entry.original or false end
@@ -146,7 +221,7 @@ function Encounters.Start(world,options)
 		state.pending=nil;state.current=nil
 		setVisible(false)
 		for _,track in ipairs(state.tracks) do track:Stop(0) end
-		folder:SetAttribute("ActiveWindow",nil)
+		folder:SetAttribute("ActiveWindow",nil);folder:SetAttribute("ActiveDistrict",nil)
 	end
 	local function cleanup(folderAlreadyDestroying)
 		if state.cleaned then return end
@@ -172,6 +247,9 @@ function Encounters.Start(world,options)
 		local actor=assert(template:Clone(),"prepared rig clone failed")
 		actor.Parent=folder;actor.Name="WindowWatcher";state.actor=actor
 		actor:SetAttribute(OWNED,true);actor:SetAttribute("PassiveOnly",true)
+		local activePane=actor:FindFirstChild("ActiveWindowGlass")
+		assert(not activePane,"template contains conflicting ActiveWindowGlass")
+		activePane=Instance.new("ObjectValue");activePane.Name="ActiveWindowGlass";activePane.Parent=actor
 		local parts,controllers,controller=0,0,nil
 		for _,object in ipairs(actor:GetDescendants()) do
 			if object:IsA("BaseScript") or object:IsA("Sound") then object:Destroy()
@@ -203,7 +281,7 @@ function Encounters.Start(world,options)
 		local animatorCount=0
 		for _,child in ipairs(controller:GetChildren()) do if child:IsA("Animator") then animatorCount+=1 end end
 		assert(animatorCount==1,"prepared rig has multiple Animators")
-		actor:PivotTo(prepared[1].pane.CFrame*CFrame.new(1.1,-6.55,prepared[1].pose.depth))
+		actor:PivotTo(prepared[1].floor*CFrame.new(1.1,0,math.max(prepared[1].depth,1.90)))
 		folder.Parent=world -- official Animator loading requires ancestry in Workspace
 		active[world]=state
 		table.insert(state.connections,world.Destroying:Connect(function() cleanup(false) end))
@@ -211,13 +289,90 @@ function Encounters.Start(world,options)
 		table.insert(state.connections,world.AncestryChanged:Connect(function()
 			if not world:IsDescendantOf(workspace) then cleanup(false) end
 		end))
-		for _,entry in ipairs(prepared) do
-			local track=animator:LoadAnimation(entry.animation)
+		for _,pose in ipairs(poses) do
+			local track=animator:LoadAnimation(animations:FindFirstChild(pose.clip))
 			table.insert(state.tracks,track)
 			track.Looped=true;track.Priority=Enum.AnimationPriority.Idle
 		end
 		folder:SetAttribute("Status","LOADING_ANIMATIONS")
 		world:SetAttribute("WindowWatcherError",nil)
+		-- All scan decisions remain server-owned; no client-selected spawn or
+		-- camera payload remote exists. Direction is a broad body/head proxy.
+		local function collectViewers()
+			local viewers,seen={},{ }
+			if workspace:GetAttribute("SelectedLevel")~=5 or workspace:GetAttribute("RoundActive")~=true then return viewers end
+			local roster=options.GetParticipants()
+			assert(type(roster)=="table","GetParticipants must synchronously return a player array")
+			for _,player in ipairs(roster) do
+				if not seen[player] and typeof(player)=="Instance" and player:IsA("Player") and player.Parent==Players
+					and player:GetAttribute("InRound")==true and player:GetAttribute("Escaped")~=true
+					and player:GetAttribute("Spectating")~=true then
+					seen[player]=true
+					local character=player.Character
+					local humanoid=character and character:FindFirstChildOfClass("Humanoid")
+					local root=character and character:FindFirstChild("HumanoidRootPart")
+					local head=character and character:FindFirstChild("Head")
+					if humanoid and humanoid.Health>0 and root and root:IsA("BasePart") then
+						local observer=head and head:IsA("BasePart") and head or root
+						local eye=head and head:IsA("BasePart") and head.Position or root.Position+Vector3.new(0,2,0)
+						local nearby=false
+						for _,entry in ipairs(prepared) do
+							if (entry.pane.Position-eye).Magnitude<=MAX_DISTANCE+10 then nearby=true;break end
+						end
+						if nearby then table.insert(viewers,{character=character,eye=eye,look=observer.CFrame.LookVector}) end
+					end
+				end
+			end
+			return viewers
+		end
+		local function getParams(viewers)
+			local excluded={folder,anchors}
+			for _,viewer in ipairs(viewers) do table.insert(excluded,viewer.character) end
+			local params=RaycastParams.new()
+			params.FilterType=Enum.RaycastFilterType.Exclude;params.FilterDescendantsInstances=excluded
+			return params,excluded
+		end
+		local function viewersFor(entry,viewers,params,excluded,budget)
+			local count,quality,rays=0,0,0
+			if not entry.pane:IsDescendantOf(architecture) or not entry.anchor:IsDescendantOf(anchors) then return 0,0,0 end
+			-- Curated anchors support all clips. The face point is behind the
+			-- actual pane, not a target in empty space in front of a wall.
+			local target=(entry.floor*CFrame.new(1.1,0,math.max(entry.depth,1.90))):PointToWorldSpace(Vector3.new(0,7.45,-.37))
+			for _,viewer in ipairs(viewers) do
+				local delta=target-viewer.eye
+				local distance=delta.Magnitude
+				local score=distance>0 and Encounters.ViewQuality(distance,viewer.look:Dot(delta.Unit),entry.pane.CFrame:PointToObjectSpace(viewer.eye).Z)
+				if score and rays+2<=budget then
+					rays+=1
+					local hit=workspace:Raycast(viewer.eye,delta,params)
+					if hit and hit.Instance==entry.pane then
+						local insideParams=RaycastParams.new()
+						insideParams.FilterType=Enum.RaycastFilterType.Exclude
+						local insideExcluded=table.clone(excluded);table.insert(insideExcluded,entry.pane)
+						insideParams.FilterDescendantsInstances=insideExcluded
+						local start=hit.Position+delta.Unit*.01
+						rays+=1
+						if not workspace:Raycast(start,target-start,insideParams) then count+=1;quality+=score end
+					end
+				end
+			end
+			return count,quality,rays
+		end
+		local function scanCandidates(viewers)
+			local params,excluded=getParams(viewers)
+			local candidates={}
+			local checked,rays,windowsRayed=0,0,0
+			while checked<#prepared and windowsRayed<MAX_WINDOWS_PER_SCAN and rays+2<=MAX_RAYS_PER_SCAN do
+				local index=state.scanCursor
+				state.scanCursor=index%#prepared+1;checked+=1
+				local count,quality,used=viewersFor(prepared[index],viewers,params,excluded,MAX_RAYS_PER_SCAN-rays)
+				rays+=used;if used>0 then windowsRayed+=1 end
+				if count>0 then table.insert(candidates,{index=index,score=Encounters.CandidateScore(count,quality),viewers=count}) end
+			end
+			folder:SetAttribute("SelectionRaysLast",rays);folder:SetAttribute("SelectionWindowsLast",checked)
+			folder:SetAttribute("EligibleWindowsLast",#candidates)
+			return candidates
+		end
 		local ready=false
 		local elapsed=0
 		local function step(now)
@@ -232,66 +387,55 @@ function Encounters.Start(world,options)
 				end
 				ready=true;folder:SetAttribute("Status","WAITING_FOR_PARTICIPANTS")
 			end
-			local nearby={}
-			if workspace:GetAttribute("SelectedLevel")==5 and workspace:GetAttribute("RoundActive")==true then
-				local roster=options.GetParticipants()
-				assert(type(roster)=="table","GetParticipants must synchronously return a player array")
-				for _,player in ipairs(roster) do
-					if typeof(player)=="Instance" and player:IsA("Player") and player.Parent==Players
-						and player:GetAttribute("InRound")==true and player:GetAttribute("Escaped")~=true
-						and player:GetAttribute("Spectating")~=true then
-						local character=player.Character
-						local humanoid=character and character:FindFirstChildOfClass("Humanoid")
-						local root=character and character:FindFirstChild("HumanoidRootPart")
-						if humanoid and humanoid.Health>0 and root and root:IsA("BasePart") then
-							local relative=root.Position-options.Origin
-							if math.abs(relative.X)<=160 and relative.Z>=776 and relative.Z<=1036
-								and relative.Y>=-10 and relative.Y<=70 then
-								table.insert(nearby,{character=character,eye=root.Position+Vector3.new(0,2,0)})
-							end
-						end
-					end
-				end
-			end
+			local nearby=collectViewers()
 			local candidates={}
-			-- Rays run only when a hidden watcher is due, never every frame and
-			-- never while the entity is visible. At most 3 rays per participant.
-			if #nearby>0 and schedule.IsDue(now) then
-				local excluded={folder}
-				for _,entry in ipairs(nearby) do table.insert(excluded,entry.character) end
-				local params=RaycastParams.new()
-				params.FilterType=Enum.RaycastFilterType.Exclude;params.FilterDescendantsInstances=excluded
-				for index,entry in ipairs(prepared) do
-					assert(entry.pane:IsDescendantOf(district),"watcher window removed during round")
-					local target=entry.pane.CFrame:PointToWorldSpace(Vector3.new(1.1,.5,-.08))
-					for _,viewer in ipairs(nearby) do
-						local delta=target-viewer.eye
-						local outside=entry.pane.CFrame:PointToObjectSpace(viewer.eye).Z<-.8
-						if outside and delta.Magnitude>=3 and delta.Magnitude<=145 then
-							local hit=workspace:Raycast(viewer.eye,delta,params)
-							if not hit or hit.Instance==entry.pane then table.insert(candidates,index);break end
-						end
-					end
-				end
+			-- Hidden due scans are bounded and round-robin. No global ray fan
+			-- every render frame; at most 96 rays per .75s selection scan.
+			if #nearby>0 and schedule.IsDue(now) and now-state.lastScan>=SCAN_INTERVAL then
+				state.lastScan=now;candidates=scanCandidates(nearby)
 			end
 			local event=schedule.Step(now,#nearby>0,candidates)
 			if event and event.kind=="hide" then hide();folder:SetAttribute("Status","HIDDEN")
 			elseif event and event.kind=="show" then
 				hide()
 				local entry=prepared[event.index]
-				actor:PivotTo(entry.pane.CFrame*CFrame.new(1.1,-6.55,entry.pose.depth))
-				actor:SetAttribute("WindowAnchor",entry.pose.anchor)
-				actor:SetAttribute("PreviewClip",entry.pose.clip)
-				state.tracks[event.index]:Play(0,1,1)
+				-- Rotate all three authored gestures independently of the chosen
+				-- district/window, without replaying the previous gesture.
+				local poseChoices={}
+				for index=1,#poses do if index~=state.lastPose then table.insert(poseChoices,index) end end
+				local poseIndex=poseChoices[random:NextInteger(1,#poseChoices)]
+				state.lastPose=poseIndex
+				local pose=poses[poseIndex]
+				actor:PivotTo(entry.floor*CFrame.new(1.1,0,math.max(entry.depth,pose.depth)))
+				activePane.Value=entry.pane
+				actor:SetAttribute("WindowAnchor",entry.anchor.Name)
+				actor:SetAttribute("WindowDistrict",entry.district)
+				actor:SetAttribute("PreviewClip",pose.clip)
+				state.tracks[poseIndex]:Play(0,1,1)
 				state.current=event.index
-				-- Let the Animator evaluate while hidden: no imported bind/A-pose flash.
+				-- Let the official Animator evaluate while hidden. The client
+				-- readiness guard independently prevents a late-load bind flash.
 				state.pending=now+.15
-				folder:SetAttribute("ActiveWindow",entry.pose.anchor)
+				folder:SetAttribute("ActiveWindow",entry.anchor.Name)
+				folder:SetAttribute("ActiveDistrict",entry.district)
+				folder:SetAttribute("SelectedViewerCount",event.viewers)
+				folder:SetAttribute("SelectedScore",event.score)
 				folder:SetAttribute("AppearanceCount",event.count)
 			end
 			if state.pending and now>=state.pending then
-				state.pending=nil;setVisible(true);schedule.MarkRevealed(now)
-				folder:SetAttribute("Status","VISIBLE")
+				-- Revalidate after warm-up: a participant may turn a corner before
+				-- the skin is ready. Never reveal solely on a stale sightline.
+				local params,excluded=getParams(nearby)
+				local viewers,_,rays=viewersFor(prepared[state.current],nearby,params,excluded,MAX_RAYS_PER_SCAN)
+				folder:SetAttribute("RevealRaysLast",rays)
+				if viewers<1 then
+					schedule.Step(now,false,{}) -- clears this unrevealed attempt
+					hide();folder:SetAttribute("Status","WAITING_FOR_SIGHT")
+				else
+					state.pending=nil;setVisible(true);schedule.MarkRevealed(now)
+					folder:SetAttribute("VisibleViewerCountAtReveal",viewers)
+					folder:SetAttribute("Status","VISIBLE")
+				end
 			end
 		end
 		table.insert(state.connections,RunService.Heartbeat:Connect(function(dt)
@@ -302,7 +446,7 @@ function Encounters.Start(world,options)
 		end))
 	end,debug.traceback)
 	if not ok then cleanup(false);return failure(err) end
-	return {ok=true,folder=folder,version=VERSION,actorCount=1,assetPlaybackVerified=false,
+	return {ok=true,folder=folder,version=VERSION,actorCount=1,anchorCount=#prepared,districtCount=8,assetPlaybackVerified=false,
 		note="One hidden rig installed; animation delivery, native bone motion and client visibility still require QA."}
 end
 

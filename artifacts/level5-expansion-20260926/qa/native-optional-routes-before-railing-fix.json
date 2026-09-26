@@ -1,0 +1,1778 @@
+{
+  "1": {
+    "playerUserId": 9488575949,
+    "reason": "Waypoint was not reached within its bounded movement deadline",
+    "segments": {
+      "1": {
+        "arrived": {
+          "1": 16934.994,
+          "2": 27.527,
+          "3": 14.904
+        },
+        "index": 1,
+        "heightError": 3.5273609161376953,
+        "elapsed": 0.19323241664096713,
+        "target": {
+          "1": 16935,
+          "2": 24,
+          "3": 15
+        },
+        "horizontalError": 0.09661339223384857
+      },
+      "2": {
+        "arrived": {
+          "1": 16934.994,
+          "2": 34.233,
+          "3": 32.211
+        },
+        "index": 2,
+        "heightError": 3.232654571533203,
+        "elapsed": 1.0995890833437443,
+        "target": {
+          "1": 16935,
+          "2": 31,
+          "3": 33
+        },
+        "horizontalError": 0.7886684536933899
+      },
+      "3": {
+        "arrived": {
+          "1": 16934.994,
+          "2": 41.233,
+          "3": 47.344
+        },
+        "index": 3,
+        "heightError": 3.232654571533203,
+        "elapsed": 0.94931033346802,
+        "target": {
+          "1": 16935,
+          "2": 38,
+          "3": 49
+        },
+        "horizontalError": 1.6557072401046753
+      },
+      "4": {
+        "arrived": {
+          "1": 16908.785,
+          "2": 41.605,
+          "3": 52.846
+        },
+        "index": 4,
+        "heightError": 3.6047630310058594,
+        "elapsed": 1.7010462081525475,
+        "target": {
+          "1": 16908,
+          "2": 38,
+          "3": 53
+        },
+        "horizontalError": 0.8000422716140747
+      },
+      "5": {
+        "arrived": {
+          "1": 16908.021,
+          "2": 41.605,
+          "3": 97.707
+        },
+        "index": 5,
+        "heightError": 3.6047630310058594,
+        "elapsed": 2.8160132083576173,
+        "target": {
+          "1": 16908,
+          "2": 38,
+          "3": 99
+        },
+        "horizontalError": 1.2930023670196533
+      },
+      "6": {
+        "arrived": {
+          "1": 16999.279,
+          "2": 41.605,
+          "3": 98.992
+        },
+        "index": 6,
+        "heightError": 3.6047630310058594,
+        "elapsed": 5.750530750025064,
+        "target": {
+          "1": 17000,
+          "2": 38,
+          "3": 99
+        },
+        "horizontalError": 0.7207460999488831
+      },
+      "7": {
+        "arrived": {
+          "1": 17091.121,
+          "2": 41.605,
+          "3": 99
+        },
+        "index": 7,
+        "heightError": 3.6047630310058594,
+        "elapsed": 5.765538416802883,
+        "target": {
+          "1": 17092,
+          "2": 38,
+          "3": 99
+        },
+        "horizontalError": 0.87890625
+      },
+      "8": {
+        "arrived": {
+          "1": 17094.535,
+          "2": 41.605,
+          "3": 102.509
+        },
+        "index": 8,
+        "heightError": 3.6047630310058594,
+        "elapsed": 0.31656016665510833,
+        "target": {
+          "1": 17095,
+          "2": 38,
+          "3": 103
+        },
+        "horizontalError": 0.6762509942054749
+      },
+      "9": {
+        "arrived": {
+          "1": 17066.17,
+          "2": 41.605,
+          "3": 102.984
+        },
+        "index": 9,
+        "heightError": 3.6047630310058594,
+        "elapsed": 1.8002718333154917,
+        "target": {
+          "1": 17065,
+          "2": 38,
+          "3": 103
+        },
+        "horizontalError": 1.1700366735458374
+      }
+    },
+    "waypointCount": 15,
+    "distanceTravelled": 329.2613620149232,
+    "distanceToTarget": 18.340858459472656,
+    "status": "FAIL",
+    "completedWaypoints": 9,
+    "arrivalRadius": 2,
+    "finalPosition": {
+      "1": 17065.639,
+      "2": 41.603,
+      "3": 104.67
+    },
+    "samples": {
+      "1": {
+        "state": "Enum.HumanoidStateType.Freefall",
+        "remaining": 0.1,
+        "point": 1,
+        "position": {
+          "1": 16934.994,
+          "2": 29.703,
+          "3": 14.904
+        },
+        "t": 0.08
+      },
+      "2": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 2.55,
+        "point": 2,
+        "position": {
+          "1": 16934.994,
+          "2": 33.369,
+          "3": 30.446
+        },
+        "t": 1.18
+      },
+      "3": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 1.66,
+        "point": 3,
+        "position": {
+          "1": 16934.994,
+          "2": 41.233,
+          "3": 47.344
+        },
+        "t": 2.24
+      },
+      "4": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 11.07,
+        "point": 4,
+        "position": {
+          "1": 16918.879,
+          "2": 41.605,
+          "3": 50.955
+        },
+        "t": 3.31
+      },
+      "5": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 39.42,
+        "point": 5,
+        "position": {
+          "1": 16908.529,
+          "2": 41.605,
+          "3": 59.579
+        },
+        "t": 4.38
+      },
+      "6": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 22.36,
+        "point": 5,
+        "position": {
+          "1": 16908.326,
+          "2": 41.605,
+          "3": 76.643
+        },
+        "t": 5.44
+      },
+      "7": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 5.03,
+        "point": 5,
+        "position": {
+          "1": 16908.076,
+          "2": 41.605,
+          "3": 93.974
+        },
+        "t": 6.53
+      },
+      "8": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 78.72,
+        "point": 6,
+        "position": {
+          "1": 16921.285,
+          "2": 41.605,
+          "3": 98.135
+        },
+        "t": 7.61
+      },
+      "9": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 61.72,
+        "point": 6,
+        "position": {
+          "1": 16938.285,
+          "2": 41.605,
+          "3": 98.323
+        },
+        "t": 8.68
+      },
+      "10": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 44.19,
+        "point": 6,
+        "position": {
+          "1": 16955.816,
+          "2": 41.605,
+          "3": 98.516
+        },
+        "t": 9.78
+      },
+      "11": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 27.19,
+        "point": 6,
+        "position": {
+          "1": 16972.816,
+          "2": 41.605,
+          "3": 98.703
+        },
+        "t": 10.84
+      },
+      "12": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 9.65,
+        "point": 6,
+        "position": {
+          "1": 16990.348,
+          "2": 41.605,
+          "3": 98.895
+        },
+        "t": 11.94
+      },
+      "13": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 84.02,
+        "point": 7,
+        "position": {
+          "1": 17007.98,
+          "2": 41.605,
+          "3": 98.994
+        },
+        "t": 13.06
+      },
+      "14": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 68.08,
+        "point": 7,
+        "position": {
+          "1": 17023.918,
+          "2": 41.605,
+          "3": 98.995
+        },
+        "t": 14.06
+      },
+      "15": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 50.55,
+        "point": 7,
+        "position": {
+          "1": 17041.449,
+          "2": 41.605,
+          "3": 98.997
+        },
+        "t": 15.16
+      },
+      "16": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 33.55,
+        "point": 7,
+        "position": {
+          "1": 17058.449,
+          "2": 41.605,
+          "3": 98.998
+        },
+        "t": 16.23
+      },
+      "17": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 16.29,
+        "point": 7,
+        "position": {
+          "1": 17075.715,
+          "2": 41.605,
+          "3": 98.999
+        },
+        "t": 17.31
+      },
+      "18": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 4.03,
+        "point": 8,
+        "position": {
+          "1": 17092.25,
+          "2": 41.605,
+          "3": 100.061
+        },
+        "t": 18.38
+      },
+      "19": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 16.58,
+        "point": 9,
+        "position": {
+          "1": 17081.576,
+          "2": 41.605,
+          "3": 102.766
+        },
+        "t": 19.43
+      },
+      "20": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 18.44,
+        "point": 10,
+        "position": {
+          "1": 17065.809,
+          "2": 41.605,
+          "3": 104.581
+        },
+        "t": 20.51
+      },
+      "21": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 18.32,
+        "point": 10,
+        "position": {
+          "1": 17065.58,
+          "2": 41.602,
+          "3": 104.685
+        },
+        "t": 21.59
+      },
+      "22": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 18.33,
+        "point": 10,
+        "position": {
+          "1": 17065.58,
+          "2": 41.602,
+          "3": 104.684
+        },
+        "t": 22.66
+      },
+      "23": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 18.33,
+        "point": 10,
+        "position": {
+          "1": 17065.58,
+          "2": 41.602,
+          "3": 104.684
+        },
+        "t": 23.73
+      },
+      "24": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 18.34,
+        "point": 10,
+        "position": {
+          "1": 17065.58,
+          "2": 41.604,
+          "3": 104.667
+        },
+        "t": 24.79
+      },
+      "25": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 18.34,
+        "point": 10,
+        "position": {
+          "1": 17065.639,
+          "2": 41.604,
+          "3": 104.669
+        },
+        "t": 25.86
+      },
+      "26": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 18.34,
+        "point": 10,
+        "position": {
+          "1": 17065.639,
+          "2": 41.603,
+          "3": 104.67
+        },
+        "t": 26.93
+      }
+    },
+    "method": "Humanoid MoveTo through supplied world-coordinate waypoints, without teleport/Jump/WalkSpeed/gate changes",
+    "samplesOmitted": 0,
+    "activeWaypoint": 10,
+    "heightTolerance": 5,
+    "version": "2026-09-26.native-waypoints.1",
+    "blocked": {
+      "hitPosition": {
+        "1": 17065.039,
+        "2": 44.788,
+        "3": 121.859
+      },
+      "firstRayHit": "Workspace.Level 5 Generated World.Level5_IndoorSuburbs.A_BalconyAtrium.FirstToUpperBalcony.Riser",
+      "target": {
+        "1": 17065,
+        "2": 45,
+        "3": 123
+      },
+      "elapsed": 6.63334129168652,
+      "from": {
+        "1": 17065.639,
+        "2": 41.603,
+        "3": 104.67
+      },
+      "index": 10
+    },
+    "start": {
+      "1": 16934.994,
+      "2": 31.086,
+      "3": 14.904
+    },
+    "elapsed": 27.025647916598246,
+    "unverified": {
+      "1": "paths outside supplied segments",
+      "2": "another account/device",
+      "3": "full-volume coverage of every interior"
+    },
+    "worldGeneration": 1
+  },
+  "2": {
+    "playerUserId": 9488575949,
+    "reason": "Waypoint was not reached within its bounded movement deadline",
+    "segments": {
+      "1": {
+        "arrived": {
+          "1": 16904.994,
+          "2": 27.434,
+          "3": 1616.904
+        },
+        "index": 1,
+        "heightError": 3.4337635040283203,
+        "elapsed": 0.3872791666071862,
+        "target": {
+          "1": 16905,
+          "2": 24,
+          "3": 1617
+        },
+        "horizontalError": 0.09661339223384857
+      },
+      "2": {
+        "arrived": {
+          "1": 16904.994,
+          "2": 33.907,
+          "3": 1634.509
+        },
+        "index": 2,
+        "heightError": 2.9072532653808594,
+        "elapsed": 1.1130176249425858,
+        "target": {
+          "1": 16905,
+          "2": 31,
+          "3": 1636
+        },
+        "horizontalError": 1.4914665222167969
+      },
+      "3": {
+        "arrived": {
+          "1": 16904.994,
+          "2": 41.603,
+          "3": 1653.97
+        },
+        "index": 3,
+        "heightError": 3.60302734375,
+        "elapsed": 1.2161454167217016,
+        "target": {
+          "1": 16905,
+          "2": 38,
+          "3": 1655
+        },
+        "horizontalError": 1.029557704925537
+      },
+      "4": {
+        "arrived": {
+          "1": 16875.607,
+          "2": 41.605,
+          "3": 1656.944
+        },
+        "index": 4,
+        "heightError": 3.6047630310058594,
+        "elapsed": 1.866216416703537,
+        "target": {
+          "1": 16875,
+          "2": 38,
+          "3": 1657
+        },
+        "horizontalError": 0.6100230813026428
+      },
+      "5": {
+        "arrived": {
+          "1": 16875.012,
+          "2": 41.605,
+          "3": 1774.246
+        },
+        "index": 5,
+        "heightError": 3.6047630310058594,
+        "elapsed": 7.36649987497367,
+        "target": {
+          "1": 16875,
+          "2": 38,
+          "3": 1775
+        },
+        "horizontalError": 0.7537531852722168
+      }
+    },
+    "waypointCount": 15,
+    "distanceTravelled": 203.4367291959934,
+    "distanceToTarget": 111.9981460571289,
+    "status": "FAIL",
+    "completedWaypoints": 5,
+    "arrivalRadius": 2,
+    "finalPosition": {
+      "1": 16888.004,
+      "2": 41.604,
+      "3": 1774.322
+    },
+    "samples": {
+      "1": {
+        "state": "Enum.HumanoidStateType.Freefall",
+        "remaining": 0.1,
+        "point": 1,
+        "position": {
+          "1": 16904.994,
+          "2": 30.146,
+          "3": 1616.904
+        },
+        "t": 0.29
+      },
+      "2": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 3.36,
+        "point": 2,
+        "position": {
+          "1": 16904.994,
+          "2": 33.125,
+          "3": 1632.642
+        },
+        "t": 1.38
+      },
+      "3": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 6.09,
+        "point": 3,
+        "position": {
+          "1": 16904.994,
+          "2": 40.235,
+          "3": 1648.905
+        },
+        "t": 2.4
+      },
+      "4": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 18.12,
+        "point": 4,
+        "position": {
+          "1": 16893.039,
+          "2": 41.605,
+          "3": 1655.339
+        },
+        "t": 3.48
+      },
+      "5": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 2.11,
+        "point": 4,
+        "position": {
+          "1": 16877.102,
+          "2": 41.605,
+          "3": 1656.805
+        },
+        "t": 4.48
+      },
+      "6": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 102.25,
+        "point": 5,
+        "position": {
+          "1": 16875.527,
+          "2": 41.605,
+          "3": 1672.747
+        },
+        "t": 5.58
+      },
+      "7": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 84.93,
+        "point": 5,
+        "position": {
+          "1": 16875.527,
+          "2": 41.605,
+          "3": 1690.077
+        },
+        "t": 6.66
+      },
+      "8": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 67.6,
+        "point": 5,
+        "position": {
+          "1": 16875.527,
+          "2": 41.605,
+          "3": 1707.406
+        },
+        "t": 7.75
+      },
+      "9": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 51.6,
+        "point": 5,
+        "position": {
+          "1": 16875.527,
+          "2": 41.605,
+          "3": 1723.402
+        },
+        "t": 8.75
+      },
+      "10": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 35.61,
+        "point": 5,
+        "position": {
+          "1": 16875.52,
+          "2": 41.605,
+          "3": 1739.398
+        },
+        "t": 9.75
+      },
+      "11": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 19.34,
+        "point": 5,
+        "position": {
+          "1": 16875.285,
+          "2": 41.605,
+          "3": 1755.661
+        },
+        "t": 10.76
+      },
+      "12": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 2.01,
+        "point": 5,
+        "position": {
+          "1": 16875.027,
+          "2": 41.605,
+          "3": 1772.99
+        },
+        "t": 11.85
+      },
+      "13": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 112,
+        "point": 6,
+        "position": {
+          "1": 16888.002,
+          "2": 41.605,
+          "3": 1774.322
+        },
+        "t": 12.93
+      },
+      "14": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 112,
+        "point": 6,
+        "position": {
+          "1": 16888.002,
+          "2": 41.605,
+          "3": 1774.322
+        },
+        "t": 14
+      },
+      "15": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 112,
+        "point": 6,
+        "position": {
+          "1": 16888.002,
+          "2": 41.605,
+          "3": 1774.322
+        },
+        "t": 15.1
+      },
+      "16": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 112,
+        "point": 6,
+        "position": {
+          "1": 16888.002,
+          "2": 41.605,
+          "3": 1774.322
+        },
+        "t": 16.17
+      },
+      "17": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 112,
+        "point": 6,
+        "position": {
+          "1": 16888.002,
+          "2": 41.605,
+          "3": 1774.322
+        },
+        "t": 17.26
+      },
+      "18": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 112,
+        "point": 6,
+        "position": {
+          "1": 16888.002,
+          "2": 41.605,
+          "3": 1774.322
+        },
+        "t": 18.33
+      },
+      "19": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 112,
+        "point": 6,
+        "position": {
+          "1": 16888.002,
+          "2": 41.605,
+          "3": 1774.322
+        },
+        "t": 19.33
+      },
+      "20": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 112,
+        "point": 6,
+        "position": {
+          "1": 16888.002,
+          "2": 41.605,
+          "3": 1774.322
+        },
+        "t": 20.35
+      },
+      "21": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 112,
+        "point": 6,
+        "position": {
+          "1": 16888.002,
+          "2": 41.605,
+          "3": 1774.322
+        },
+        "t": 21.43
+      },
+      "22": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 112,
+        "point": 6,
+        "position": {
+          "1": 16888.002,
+          "2": 41.605,
+          "3": 1774.322
+        },
+        "t": 22.43
+      },
+      "23": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 112,
+        "point": 6,
+        "position": {
+          "1": 16888.002,
+          "2": 41.605,
+          "3": 1774.322
+        },
+        "t": 23.51
+      },
+      "24": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 112,
+        "point": 6,
+        "position": {
+          "1": 16888.004,
+          "2": 41.604,
+          "3": 1774.322
+        },
+        "t": 24.61
+      },
+      "25": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 112,
+        "point": 6,
+        "position": {
+          "1": 16888.004,
+          "2": 41.604,
+          "3": 1774.322
+        },
+        "t": 25.72
+      },
+      "26": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 112,
+        "point": 6,
+        "position": {
+          "1": 16888.004,
+          "2": 41.604,
+          "3": 1774.322
+        },
+        "t": 26.82
+      },
+      "27": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 112,
+        "point": 6,
+        "position": {
+          "1": 16888.004,
+          "2": 41.604,
+          "3": 1774.322
+        },
+        "t": 27.83
+      },
+      "28": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 112,
+        "point": 6,
+        "position": {
+          "1": 16888.004,
+          "2": 41.604,
+          "3": 1774.322
+        },
+        "t": 28.93
+      },
+      "29": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 112,
+        "point": 6,
+        "position": {
+          "1": 16888.004,
+          "2": 41.604,
+          "3": 1774.322
+        },
+        "t": 30
+      },
+      "30": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 112,
+        "point": 6,
+        "position": {
+          "1": 16888.004,
+          "2": 41.604,
+          "3": 1774.322
+        },
+        "t": 31.03
+      }
+    },
+    "method": "Humanoid MoveTo through supplied world-coordinate waypoints, without teleport/Jump/WalkSpeed/gate changes",
+    "samplesOmitted": 0,
+    "activeWaypoint": 6,
+    "heightTolerance": 5,
+    "version": "2026-09-26.native-waypoints.1",
+    "blocked": {
+      "hitPosition": {
+        "1": 16889,
+        "2": 41.572,
+        "3": 1774.328
+      },
+      "firstRayHit": "Workspace.Level 5 Generated World.Level5_IndoorSuburbs.F_BayWindowCanyon.DomesticSupportPier",
+      "target": {
+        "1": 17000,
+        "2": 38,
+        "3": 1775
+      },
+      "elapsed": 19.71540645835921,
+      "from": {
+        "1": 16888.004,
+        "2": 41.604,
+        "3": 1774.322
+      },
+      "index": 6
+    },
+    "start": {
+      "1": 16904.994,
+      "2": 31.086,
+      "3": 1616.904
+    },
+    "elapsed": 31.664721874985844,
+    "unverified": {
+      "1": "paths outside supplied segments",
+      "2": "another account/device",
+      "3": "full-volume coverage of every interior"
+    },
+    "worldGeneration": 1
+  },
+  "3": {
+    "elapsed": 46.85037887492217,
+    "reason": "All supplied targets reached with normal MoveTo",
+    "segments": {
+      "1": {
+        "arrived": {
+          "1": 16888.004,
+          "2": 41.605,
+          "3": 1774.322
+        },
+        "index": 1,
+        "heightError": 3.6047630310058594,
+        "elapsed": 0.10030287504196167,
+        "target": {
+          "1": 16888,
+          "2": 38,
+          "3": 1774.32
+        },
+        "horizontalError": 0.004216288216412067
+      },
+      "2": {
+        "arrived": {
+          "1": 16888.004,
+          "2": 41.605,
+          "3": 1772.913
+        },
+        "index": 2,
+        "heightError": 3.6047630310058594,
+        "elapsed": 0.10083549981936812,
+        "target": {
+          "1": 16888,
+          "2": 38,
+          "3": 1771
+        },
+        "horizontalError": 1.9126015901565552
+      },
+      "3": {
+        "arrived": {
+          "1": 16898.371,
+          "2": 41.605,
+          "3": 1771.225
+        },
+        "index": 3,
+        "heightError": 3.6047630310058594,
+        "elapsed": 0.6648575416766107,
+        "target": {
+          "1": 16900,
+          "2": 38,
+          "3": 1771
+        },
+        "horizontalError": 1.64431893825531
+      },
+      "4": {
+        "arrived": {
+          "1": 16999.209,
+          "2": 41.605,
+          "3": 1774.97
+        },
+        "index": 4,
+        "heightError": 3.6047630310058594,
+        "elapsed": 6.333699791692197,
+        "target": {
+          "1": 17000,
+          "2": 38,
+          "3": 1775
+        },
+        "horizontalError": 0.7915807962417603
+      },
+      "5": {
+        "arrived": {
+          "1": 17098.156,
+          "2": 41.605,
+          "3": 1771.073
+        },
+        "index": 5,
+        "heightError": 3.6047630310058594,
+        "elapsed": 6.213791958522052,
+        "target": {
+          "1": 17100,
+          "2": 38,
+          "3": 1771
+        },
+        "horizontalError": 1.8451752662658691
+      },
+      "6": {
+        "arrived": {
+          "1": 17123.988,
+          "2": 41.605,
+          "3": 1771.003
+        },
+        "index": 6,
+        "heightError": 3.6047630310058594,
+        "elapsed": 1.6203019998501986,
+        "target": {
+          "1": 17125,
+          "2": 38,
+          "3": 1771
+        },
+        "horizontalError": 1.0117230415344238
+      },
+      "7": {
+        "arrived": {
+          "1": 17124.834,
+          "2": 41.605,
+          "3": 1774.163
+        },
+        "index": 7,
+        "heightError": 3.6047630310058594,
+        "elapsed": 0.21624362492002547,
+        "target": {
+          "1": 17125,
+          "2": 38,
+          "3": 1775
+        },
+        "horizontalError": 0.8531014323234558
+      },
+      "8": {
+        "arrived": {
+          "1": 17124.99,
+          "2": 41.605,
+          "3": 1894.133
+        },
+        "index": 8,
+        "heightError": 3.6047630310058594,
+        "elapsed": 7.500055375043303,
+        "target": {
+          "1": 17125,
+          "2": 38,
+          "3": 1895
+        },
+        "horizontalError": 0.8667542338371277
+      },
+      "9": {
+        "arrived": {
+          "1": 17095.598,
+          "2": 41.605,
+          "3": 1894.989
+        },
+        "index": 9,
+        "heightError": 3.6047630310058594,
+        "elapsed": 1.8821822917088866,
+        "target": {
+          "1": 17095,
+          "2": 38,
+          "3": 1895
+        },
+        "horizontalError": 0.5977640748023987
+      },
+      "10": {
+        "arrived": {
+          "1": 17095.012,
+          "2": 48.403,
+          "3": 1915.25
+        },
+        "index": 10,
+        "heightError": 3.4032020568847656,
+        "elapsed": 1.300520250108093,
+        "target": {
+          "1": 17095,
+          "2": 45,
+          "3": 1916
+        },
+        "horizontalError": 0.7503356337547302
+      },
+      "11": {
+        "arrived": {
+          "1": 17095.012,
+          "2": 55.604,
+          "3": 1934.374
+        },
+        "index": 11,
+        "heightError": 3.6044235229492188,
+        "elapsed": 1.2174858748912811,
+        "target": {
+          "1": 17095,
+          "2": 52,
+          "3": 1935
+        },
+        "horizontalError": 0.6263303160667419
+      },
+      "12": {
+        "arrived": {
+          "1": 17123.242,
+          "2": 55.605,
+          "3": 1936.85
+        },
+        "index": 12,
+        "heightError": 3.6047630310058594,
+        "elapsed": 1.782256874954328,
+        "target": {
+          "1": 17125,
+          "2": 52,
+          "3": 1937
+        },
+        "horizontalError": 1.7642236948013306
+      },
+      "13": {
+        "arrived": {
+          "1": 17124.914,
+          "2": 55.605,
+          "3": 1968.071
+        },
+        "index": 13,
+        "heightError": 3.6047630310058594,
+        "elapsed": 1.9667095001786947,
+        "target": {
+          "1": 17125,
+          "2": 52,
+          "3": 1970
+        },
+        "horizontalError": 1.93099045753479
+      },
+      "14": {
+        "arrived": {
+          "1": 17124.961,
+          "2": 55.605,
+          "3": 1967.288
+        },
+        "index": 14,
+        "heightError": 3.6047630310058594,
+        "elapsed": 0.10022916668094695,
+        "target": {
+          "1": 17125,
+          "2": 52,
+          "3": 1966
+        },
+        "horizontalError": 1.2883120775222778
+      },
+      "15": {
+        "arrived": {
+          "1": 17101.074,
+          "2": 55.605,
+          "3": 1966.042
+        },
+        "index": 15,
+        "heightError": 3.6047630310058594,
+        "elapsed": 1.5165969582740217,
+        "target": {
+          "1": 17100,
+          "2": 52,
+          "3": 1966
+        },
+        "horizontalError": 1.0750535726547241
+      },
+      "16": {
+        "arrived": {
+          "1": 17001.73,
+          "2": 55.605,
+          "3": 1969.932
+        },
+        "index": 16,
+        "heightError": 3.6047630310058594,
+        "elapsed": 6.233328250003979,
+        "target": {
+          "1": 17000,
+          "2": 52,
+          "3": 1970
+        },
+        "horizontalError": 1.7318040132522583
+      },
+      "17": {
+        "arrived": {
+          "1": 16900.627,
+          "2": 55.605,
+          "3": 1966.025
+        },
+        "index": 17,
+        "heightError": 3.6047630310058594,
+        "elapsed": 6.349493583198637,
+        "target": {
+          "1": 16900,
+          "2": 52,
+          "3": 1966
+        },
+        "horizontalError": 0.6274426579475403
+      },
+      "18": {
+        "arrived": {
+          "1": 16876.52,
+          "2": 55.605,
+          "3": 1966.001
+        },
+        "index": 18,
+        "heightError": 3.6047630310058594,
+        "elapsed": 1.5175193750765175,
+        "target": {
+          "1": 16875,
+          "2": 52,
+          "3": 1966
+        },
+        "horizontalError": 1.5195317268371582
+      },
+      "19": {
+        "arrived": {
+          "1": 16875.248,
+          "2": 55.605,
+          "3": 1969.243
+        },
+        "index": 19,
+        "heightError": 3.6047630310058594,
+        "elapsed": 0.23390979156829417,
+        "target": {
+          "1": 16875,
+          "2": 52,
+          "3": 1970
+        },
+        "horizontalError": 0.7967950105667114
+      }
+    },
+    "waypointCount": 19,
+    "distanceTravelled": 745.1918811202049,
+    "worldGeneration": 1,
+    "method": "Humanoid MoveTo through supplied world-coordinate waypoints, without teleport/Jump/WalkSpeed/gate changes",
+    "activeWaypoint": 19,
+    "distanceToTarget": 0.7967950105667114,
+    "samples": {
+      "1": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 0,
+        "point": 1,
+        "position": {
+          "1": 16888.004,
+          "2": 41.605,
+          "3": 1774.322
+        },
+        "t": 0.1
+      },
+      "2": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 96.38,
+        "point": 4,
+        "position": {
+          "1": 16903.684,
+          "2": 41.605,
+          "3": 1771.413
+        },
+        "t": 1.2
+      },
+      "3": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 80.37,
+        "point": 4,
+        "position": {
+          "1": 16919.688,
+          "2": 41.605,
+          "3": 1772.002
+        },
+        "t": 2.2
+      },
+      "4": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 63.16,
+        "point": 4,
+        "position": {
+          "1": 16936.887,
+          "2": 41.605,
+          "3": 1772.634
+        },
+        "t": 3.28
+      },
+      "5": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 45.88,
+        "point": 4,
+        "position": {
+          "1": 16954.152,
+          "2": 41.605,
+          "3": 1773.278
+        },
+        "t": 4.37
+      },
+      "6": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 28.6,
+        "point": 4,
+        "position": {
+          "1": 16971.418,
+          "2": 41.605,
+          "3": 1773.926
+        },
+        "t": 5.45
+      },
+      "7": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 11.06,
+        "point": 4,
+        "position": {
+          "1": 16988.949,
+          "2": 41.605,
+          "3": 1774.585
+        },
+        "t": 6.55
+      },
+      "8": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 93.76,
+        "point": 5,
+        "position": {
+          "1": 17006.316,
+          "2": 41.605,
+          "3": 1774.691
+        },
+        "t": 7.65
+      },
+      "9": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 77.54,
+        "point": 5,
+        "position": {
+          "1": 17022.52,
+          "2": 41.605,
+          "3": 1774.053
+        },
+        "t": 8.67
+      },
+      "10": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 61.32,
+        "point": 5,
+        "position": {
+          "1": 17038.723,
+          "2": 41.605,
+          "3": 1773.414
+        },
+        "t": 9.68
+      },
+      "11": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 44.31,
+        "point": 5,
+        "position": {
+          "1": 17055.723,
+          "2": 41.605,
+          "3": 1772.744
+        },
+        "t": 10.75
+      },
+      "12": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 26.77,
+        "point": 5,
+        "position": {
+          "1": 17073.254,
+          "2": 41.605,
+          "3": 1772.054
+        },
+        "t": 11.85
+      },
+      "13": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 10.55,
+        "point": 5,
+        "position": {
+          "1": 17089.457,
+          "2": 41.605,
+          "3": 1771.415
+        },
+        "t": 12.87
+      },
+      "14": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 18.28,
+        "point": 6,
+        "position": {
+          "1": 17106.723,
+          "2": 41.605,
+          "3": 1771.05
+        },
+        "t": 13.95
+      },
+      "15": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 1.01,
+        "point": 6,
+        "position": {
+          "1": 17123.988,
+          "2": 41.605,
+          "3": 1771.003
+        },
+        "t": 15.03
+      },
+      "16": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 108.31,
+        "point": 8,
+        "position": {
+          "1": 17124.84,
+          "2": 41.605,
+          "3": 1786.693
+        },
+        "t": 16.03
+      },
+      "17": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 90.71,
+        "point": 8,
+        "position": {
+          "1": 17124.84,
+          "2": 41.605,
+          "3": 1804.289
+        },
+        "t": 17.13
+      },
+      "18": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 73.12,
+        "point": 8,
+        "position": {
+          "1": 17124.84,
+          "2": 41.605,
+          "3": 1821.884
+        },
+        "t": 18.23
+      },
+      "19": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 57.12,
+        "point": 8,
+        "position": {
+          "1": 17124.84,
+          "2": 41.605,
+          "3": 1837.88
+        },
+        "t": 19.23
+      },
+      "20": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 40.86,
+        "point": 8,
+        "position": {
+          "1": 17124.84,
+          "2": 41.605,
+          "3": 1854.143
+        },
+        "t": 20.25
+      },
+      "21": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 23.26,
+        "point": 8,
+        "position": {
+          "1": 17124.84,
+          "2": 41.605,
+          "3": 1871.739
+        },
+        "t": 21.35
+      },
+      "22": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 5.93,
+        "point": 8,
+        "position": {
+          "1": 17124.912,
+          "2": 41.605,
+          "3": 1889.068
+        },
+        "t": 22.43
+      },
+      "23": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 17.79,
+        "point": 9,
+        "position": {
+          "1": 17112.787,
+          "2": 41.605,
+          "3": 1894.658
+        },
+        "t": 23.53
+      },
+      "24": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 0.6,
+        "point": 9,
+        "position": {
+          "1": 17095.598,
+          "2": 41.605,
+          "3": 1894.989
+        },
+        "t": 24.63
+      },
+      "25": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 3.87,
+        "point": 10,
+        "position": {
+          "1": 17095.09,
+          "2": 46.882,
+          "3": 1912.127
+        },
+        "t": 25.72
+      },
+      "26": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 5.81,
+        "point": 11,
+        "position": {
+          "1": 17095.012,
+          "2": 54.369,
+          "3": 1929.194
+        },
+        "t": 26.82
+      },
+      "27": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 17.76,
+        "point": 12,
+        "position": {
+          "1": 17107.305,
+          "2": 55.605,
+          "3": 1935.482
+        },
+        "t": 27.93
+      },
+      "28": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 31.82,
+        "point": 13,
+        "position": {
+          "1": 17123.576,
+          "2": 55.605,
+          "3": 1938.212
+        },
+        "t": 29.03
+      },
+      "29": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 14.21,
+        "point": 13,
+        "position": {
+          "1": 17124.373,
+          "2": 55.605,
+          "3": 1955.807
+        },
+        "t": 30.13
+      },
+      "30": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 21.81,
+        "point": 15,
+        "position": {
+          "1": 17121.793,
+          "2": 55.605,
+          "3": 1966.879
+        },
+        "t": 31.22
+      },
+      "31": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 4.53,
+        "point": 15,
+        "position": {
+          "1": 17104.527,
+          "2": 55.605,
+          "3": 1966.18
+        },
+        "t": 32.3
+      },
+      "32": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 88.66,
+        "point": 16,
+        "position": {
+          "1": 17088.59,
+          "2": 55.605,
+          "3": 1966.521
+        },
+        "t": 33.3
+      },
+      "33": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 70.85,
+        "point": 16,
+        "position": {
+          "1": 17070.793,
+          "2": 55.605,
+          "3": 1967.211
+        },
+        "t": 34.42
+      },
+      "34": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 53.57,
+        "point": 16,
+        "position": {
+          "1": 17053.527,
+          "2": 55.605,
+          "3": 1967.891
+        },
+        "t": 35.5
+      },
+      "35": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 37.35,
+        "point": 16,
+        "position": {
+          "1": 17037.324,
+          "2": 55.605,
+          "3": 1968.529
+        },
+        "t": 36.52
+      },
+      "36": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 19.54,
+        "point": 16,
+        "position": {
+          "1": 17019.527,
+          "2": 55.605,
+          "3": 1969.231
+        },
+        "t": 37.63
+      },
+      "37": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 3.33,
+        "point": 16,
+        "position": {
+          "1": 17003.324,
+          "2": 55.605,
+          "3": 1969.869
+        },
+        "t": 38.65
+      },
+      "38": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 85.86,
+        "point": 17,
+        "position": {
+          "1": 16985.793,
+          "2": 55.605,
+          "3": 1969.32
+        },
+        "t": 39.75
+      },
+      "39": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 68.84,
+        "point": 17,
+        "position": {
+          "1": 16968.793,
+          "2": 55.605,
+          "3": 1968.664
+        },
+        "t": 40.82
+      },
+      "40": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 52.9,
+        "point": 17,
+        "position": {
+          "1": 16952.855,
+          "2": 55.605,
+          "3": 1968.048
+        },
+        "t": 41.82
+      },
+      "41": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 35.35,
+        "point": 17,
+        "position": {
+          "1": 16935.324,
+          "2": 55.605,
+          "3": 1967.372
+        },
+        "t": 42.92
+      },
+      "42": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 18.34,
+        "point": 17,
+        "position": {
+          "1": 16918.324,
+          "2": 55.605,
+          "3": 1966.715
+        },
+        "t": 43.98
+      },
+      "43": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 0.63,
+        "point": 17,
+        "position": {
+          "1": 16900.627,
+          "2": 55.605,
+          "3": 1966.025
+        },
+        "t": 45.1
+      },
+      "44": {
+        "state": "Enum.HumanoidStateType.Running",
+        "remaining": 8.16,
+        "point": 18,
+        "position": {
+          "1": 16883.16,
+          "2": 55.605,
+          "3": 1966.008
+        },
+        "t": 46.2
+      }
+    },
+    "arrivalRadius": 2,
+    "samplesOmitted": 0,
+    "playerUserId": 9488575949,
+    "heightTolerance": 5,
+    "version": "2026-09-26.native-waypoints.1",
+    "completedWaypoints": 19,
+    "start": {
+      "1": 16888.004,
+      "2": 41.605,
+      "3": 1774.322
+    },
+    "status": "PASS_WAYPOINT_TRAVERSAL",
+    "unverified": {
+      "1": "paths outside supplied segments",
+      "2": "another account/device",
+      "3": "full-volume coverage of every interior"
+    },
+    "finalPosition": {
+      "1": 16875.248,
+      "2": 55.605,
+      "3": 1969.243
+    }
+  }
+}

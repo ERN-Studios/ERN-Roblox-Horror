@@ -1,0 +1,3 @@
+Native Studio compile after final A railing fix: compiled 189/189
+FAILURES: none
+NOT STAGED: none

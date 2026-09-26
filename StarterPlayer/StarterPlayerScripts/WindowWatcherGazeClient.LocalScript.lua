@@ -92,16 +92,29 @@ local function frame(dt)
 		rayClock=0
 		-- Attribute/streaming order is not atomic. Resolve the actual pane again
 		-- at each bounded ray tick, including arrivals during an appearance.
-		local district=world:FindFirstChild("Level5_IndoorSuburbs")
-		district=district and district:FindFirstChild("F_BayWindowCanyon")
-		local anchors=district and district:FindFirstChild("WindowWatcherAnchors")
-		local anchor=anchors and anchors:FindFirstChild(actor:GetAttribute("WindowAnchor") or "")
-		local reference=anchor and anchor:FindFirstChild("WindowGlass")
+		local reference=actor:FindFirstChild("ActiveWindowGlass")
 		pane=reference and reference:IsA("ObjectValue") and reference.Value or nil
+		-- ObjectValue targets may arrive after the actor under StreamingEnabled.
+		-- Recover from the stable world-wide anchor name at each bounded tick.
+		if not pane or not pane:IsA("BasePart") or not pane:IsDescendantOf(world) then
+			local anchors=world:FindFirstChild("WindowWatcherAnchors")
+			local anchor=anchors and anchors:FindFirstChild(actor:GetAttribute("WindowAnchor") or "")
+			local paneReference=anchor and anchor:FindFirstChild("WindowGlass")
+			pane=paneReference and paneReference:IsA("ObjectValue") and paneReference.Value or nil
+		end
+		local validPane=pane and pane:IsA("BasePart") and pane:IsDescendantOf(world)
+			and pane:GetAttribute("Level5TintedWindow")==true and pane.Material==Enum.Material.Glass
 		local params=RaycastParams.new();params.FilterType=Enum.RaycastFilterType.Exclude
 		params.FilterDescendantsInstances=player.Character and {actor,player.Character} or {actor}
 		local hit=workspace:Raycast(camera.CFrame.Position,delta,params)
-		hasLineOfSight=hit==nil or hit.Instance==pane
+		hasLineOfSight=validPane==true and hit==nil
+		if validPane==true and hit and hit.Instance==pane then
+			-- Glass alone may be ignored; a real wall, mullion or furniture
+			-- between that glass and the animated head still blocks a stare.
+			params.FilterDescendantsInstances=player.Character and {actor,player.Character,pane} or {actor,pane}
+			local behind=hit.Position+delta.Unit*.01
+			hasLineOfSight=workspace:Raycast(behind,target-behind,params)==nil
+		end
 	end
 	local result=Gaze.Step(logic,dt,{appearanceId=count,active=allowed==true,
 		angleDegrees=angle,distance=distance,hasLineOfSight=hasLineOfSight})

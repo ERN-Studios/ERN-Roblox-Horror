@@ -10,19 +10,10 @@ function Architecture.Build(parent, origin, config)
 	config.FurnitureTVTexture = config.FurnitureTVTexture or "rbxassetid://129933596500815"
 	local Furniture = require(script.Parent:WaitForChild("Level 5 Furniture"))
 	local furnitureKit
-	local furnishedHomes={
-		LowEavesResidence_1_1=1,DetachedWaitingRoom_1=4,
-		CourtCottage_01=1,CourtCottage_02=2,CourtCottage_03=3,
-		CourtCottage_05=4,CourtCottage_07=5,CourtCottage_11=1,
-		["TerraceHouse_-1_2"]=3,TerraceHouse_1_3=2,
-		CutawayReadingRoom=5,
-		GroundBlueStarterHouse=1,RosePorchHouse=3,
-		SecretThroughHouse=4,HighTerraceCreamHouse=2,HighTerracePinkHouse=5,
-	}
 	origin = origin or Vector3.zero
 	local root = Instance.new("Model")
 	root.Name = "Level5_IndoorSuburbs"
-	root:SetAttribute("ArchitectureVersion", "2026-09-25.2")
+	root:SetAttribute("ArchitectureVersion", "2026-09-26.expansion.1")
 	root:SetAttribute("GeometryOnly", true)
 	root.Parent = parent
 	local offset = CFrame.new(origin)
@@ -91,7 +82,7 @@ function Architecture.Build(parent, origin, config)
 		end
 		return m
 	end
-	local function window(into,frame,w,h,lit)
+	local function window(into,frame,w,h,lit,simple)
 		local glass=part(into,"WindowGlass",V(w,h,.14),frame,C.glass,Enum.Material.Glass)
 		glass.Transparency=.2
 		glass.Reflectance=0
@@ -101,13 +92,14 @@ function Architecture.Build(parent, origin, config)
 			part(into,"WindowSill",V(w+.65,.25,.4),frame*CF(0,s*(h/2+.08),-.12),C.white)
 		end
 		part(into,"WindowMullion",V(.12,h,.23),frame*CF(0,0,-.09),C.white)
-		for _,s in ipairs({-.22,.22}) do part(into,"WindowCrossbar",V(w,.12,.23),frame*CF(0,h*s,-.09),C.white) end
+		for _,s in ipairs(simple and {0} or {-.22,.22}) do part(into,"WindowCrossbar",V(w,.12,.23),frame*CF(0,h*s,-.09),C.white) end
+		return glass
 	end
 	local function doorframe(into,frame,width,height)
 		for _,s in ipairs({-1,1}) do part(into,"DoorJamb",V(.4,height+.3,.55),frame*CF(s*(width/2+.2),height/2,-.13),C.white) end
 		part(into,"DoorHeader",V(width+.8,.45,.55),frame*CF(0,height+.15,-.13),C.white)
 	end
-	local function facade(into,frame,w,h,color,openDoor,lit)
+	local function facade(into,frame,w,h,color,openDoor,lit,simple)
 		local dw,dh=5.4,10.3
 		local sw=(w-dw)/2
 		part(into,"FacadeLintel",V(w,h-dh,.65),frame*CF(0,dh+(h-dh)/2,0),color)
@@ -115,13 +107,17 @@ function Architecture.Build(parent, origin, config)
 			local x=s*(dw/2+sw/2)
 			part(into,"WindowApron",V(sw,2.8,.65),frame*CF(x,1.4,0),color)
 			for _,j in ipairs({-1,1}) do part(into,"FacadePier",V(1.15,dh,.65),frame*CF(x+j*(sw/2-.575),dh/2,0),color) end
-			window(into,frame*CF(x,6.55,-.18),sw-2.3,7.2,lit)
+			window(into,frame*CF(x,6.55,-.18),sw-2.3,7.2,lit,simple)
 		end
 		doorframe(into,frame,dw,dh)
 		if not openDoor then
 			part(into,"ClosedPanelDoor",V(dw,dh,.32),frame*CF(0,dh/2,.05),C.white,Enum.Material.Wood)
-			for _,y in ipairs({2.4,6.6,8.7}) do for _,x in ipairs({-1.25,1.25}) do part(into,"DoorRaisedPanel",V(1.85,y==6.6 and 2.8 or 1.25,.13),frame*CF(x,y,-.18),C.pale,Enum.Material.Wood) end end
-			local knob=part(into,"BrassDoorKnob",V(.27,.27,.4),frame*CF(2,4.6,-.4),Color3.fromRGB(137,119,65),Enum.Material.Metal); knob.Shape=Enum.PartType.Ball
+			if simple then
+				part(into,"ScenicDoorInset",V(dw-.9,dh-1.3,.13),frame*CF(0,dh/2,-.18),C.pale,Enum.Material.Wood)
+			else
+				for _,y in ipairs({2.4,6.6,8.7}) do for _,x in ipairs({-1.25,1.25}) do part(into,"DoorRaisedPanel",V(1.85,y==6.6 and 2.8 or 1.25,.13),frame*CF(x,y,-.18),C.pale,Enum.Material.Wood) end end
+				local knob=part(into,"BrassDoorKnob",V(.27,.27,.4),frame*CF(2,4.6,-.4),Color3.fromRGB(137,119,65),Enum.Material.Metal); knob.Shape=Enum.PartType.Ball
+			end
 		end
 		part(into,"FacadeSkirting",V(w,.42,.8),frame*CF(0,.25,.08),C.white)
 		-- Split the skirting at an open doorway so there is no trip-sized threshold.
@@ -137,7 +133,16 @@ function Architecture.Build(parent, origin, config)
 	end
 	local function house(into,name,frame,w,d,h,color,roofColor,options)
 		options=options or {}; local m=model(name,into)
-		floor(m,"InteriorCarpet",0,0,d/2,w,d,C.carpet,frame)
+		m:SetAttribute("Enterable",options.open~=false)
+		m:SetAttribute("HouseFloorFrame",offset*frame)
+		m:SetAttribute("HouseRoomSize",V(w,h,d))
+		m:SetAttribute("HouseWindowFloorY",(offset*frame).Position.Y)
+		-- Unreachable upper houses retain the full silhouette, glass, floor and
+		-- enclosure; only tiny or invisible details use a cheaper static variant.
+		local scenic=options.open==false and frame.Position.Y>=13
+		m:SetAttribute("ScenicUpperDetail",scenic)
+		if scenic then part(m,"InteriorCarpet",V(w,1.2,d),frame*CF(0,-.6,d/2),C.carpet,Enum.Material.Fabric)
+		else floor(m,"InteriorCarpet",0,0,d/2,w,d,C.carpet,frame) end
 		if options.cutaway then
 			-- A few upper rooms have exposed wall sections, as in the reference.
 			-- These are fixed architectural cuts rather than destructible objects.
@@ -154,10 +159,10 @@ function Architecture.Build(parent, origin, config)
 			for i=0,3 do
 				part(m,"ExposedPlasterEdge",V(.38,1.15,.95),frame*CF(-w/2+1.35,3.5+i*2.3,-.05)*CFrame.Angles(0,0,math.rad(i%2==0 and 12 or -9)),C.white,Enum.Material.Plaster)
 			end
-		else facade(m,frame,w,h,color,options.open~=false,options.lit) end
+		else facade(m,frame,w,h,color,options.open~=false,options.lit,scenic) end
 		for _,s in ipairs({-1,1}) do
 			part(m,"SideWall",V(.65,h,d),frame*CF(s*w/2,h/2,d/2),color)
-			part(m,"InteriorBaseboard",V(.18,.5,d),frame*CF(s*(w/2-.4),.25,d/2),C.white)
+			if not scenic then part(m,"InteriorBaseboard",V(.18,.5,d),frame*CF(s*(w/2-.4),.25,d/2),C.white) end
 		end
 		if options.backOpening then
 			local wing=(w-7)/2
@@ -183,10 +188,9 @@ function Architecture.Build(parent, origin, config)
 			end
 			part(m,"RoofRidge",V(.35,.35,d+2.4),frame*CF(0,h+half*math.tan(pitch)+.5,d/2),roofColor)
 		end
-		local variant=furnishedHomes[name]
-		if name=="CanyonDwelling_0" and (into.Name=="WestHouseStack2" or into.Name=="EastHouseStack3") then variant=into.Name=="WestHouseStack2" and 1 or 4 end
+		local variant=options.furniture
 		if furnitureKit and variant and options.open~=false then
-			Furniture.FurnishHome(furnitureKit,m,frame,w,d,h,{variant=variant,open=true,backOpening=options.backOpening,glitchedTable=name=="CourtCottage_03"})
+			Furniture.FurnishHome(furnitureKit,m,frame,w,d,h,{variant=variant,open=true,backOpening=options.backOpening,glitchedTable=options.glitchedTable==true})
 			m:SetAttribute("FurnitureRoomFrame",offset*frame)
 			m:SetAttribute("FurnitureRoomSize",V(w,h,d))
 		end
@@ -196,10 +200,10 @@ function Architecture.Build(parent, origin, config)
 		local m=model(name,into)
 		local tint=style=="domestic" and C.pale or (style=="low" and Color3.fromRGB(177,172,145) or C.ceiling)
 		part(m,"CeilingPlane",V(w,.6,d),CF(x,y,z),tint)
-		local tile=style=="warehouse" and 24 or style=="domestic" and 9 or 15
+		local tile=y>70 and 24 or style=="domestic" and 12 or 18
 		for xx=-w/2,w/2,tile do part(m,"CeilingGrid",V(.08,.08,d),CF(x+xx,y-.34,z),C.grid,nil,false) end
 		for zz=-d/2,d/2,tile do part(m,"CeilingGrid",V(w,.08,.08),CF(x,y-.34,z+zz),C.grid,nil,false) end
-		local sx,sz=style=="domestic" and 36 or 40,style=="domestic" and 32 or 40
+		local sx,sz=y>70 and 56 or 40,y>70 and 56 or 40
 		local ix=0
 		for xx=-w/2+sx/2,w/2-8,sx do for zz=-d/2+sz/2,d/2-7,sz do
 			ix+=1
@@ -221,7 +225,7 @@ function Architecture.Build(parent, origin, config)
 			p:SetAttribute("TubeState",failed and "Off" or dim and "Dim" or "On")
 			p:SetAttribute("ColourTemperature",warmth==0 and "Warm" or warmth==1 and "Cool" or "Neutral")
 			part(m,"LightPanelFrame",V(p.Size.X+.4,.12,3),CF(x+xx,y-.34,z+zz),C.white,nil,false)
-			if ix%4==1 and not failed then
+			if y<=60 and ix%4==1 and not failed then
 				local light=Instance.new("SurfaceLight");light.Face=Enum.NormalId.Bottom;light.Color=lightColor
 				light.Brightness=dim and .3 or warmth==1 and .72 or .95
 				light.Range=math.min(y+8,60);light.Angle=160;light.Shadows=false;light.Parent=p;lightCount+=1
@@ -254,198 +258,204 @@ function Architecture.Build(parent, origin, config)
 		beam=beam,rail=rail,stairs=stairs,window=window,doorframe=doorframe,facade=facade,
 		house=house,texture=texture,wallLamp=wallLamp,bay=bay,ceiling=ceiling}
 	furnitureKit=K
-	-- A: the first reveal is a multi-level residential atrium under a low office ceiling.
+
+	-- Curated panes use real supporting rooms. The origin remains private to this
+	-- module; exposed floor frames are world-space for puzzle/Watcher consumers.
+	local anchors=Instance.new("Folder");anchors.Name="WindowWatcherAnchors";anchors.Parent=parent
+	local function registerWatcher(home,name,district,index)
+		local panes={}
+		for _,v in ipairs(home:GetDescendants()) do
+			-- Vector3 dimensions round through float32: authored 7.2 becomes 7.1999998.
+			if v:IsA("BasePart") and v:GetAttribute("Level5TintedWindow")==true and v.Size.X>=6.79 and v.Size.Y>=7.19 then table.insert(panes,v) end
+		end
+		local pane=panes[index or 1]
+		assert(pane,"Watcher home requires a full-height standard pane: "..home.Name)
+		local a=Instance.new("Part");a.Name=name;a.Size=V(.2,.2,.2);a.CFrame=pane.CFrame
+		a.Anchored=true;a.Transparency=1;a.CanCollide=false;a.CanQuery=false;a.CanTouch=false;a.CastShadow=false
+		a:SetAttribute("District",district);a:SetAttribute("FloorCFrame",pane.CFrame*CF(0,-6.55,0))
+		a:SetAttribute("PawnDepth",1.90);a:SetAttribute("InteriorClearanceDepth",home:GetAttribute("HouseRoomSize").Z)
+		a:SetAttribute("Level5WindowWatcherAnchor",true);a.Parent=anchors
+		local v=Instance.new("ObjectValue");v.Name="WindowGlass";v.Value=pane;v.Parent=a
+		local h=Instance.new("ObjectValue");h.Name="SupportingHouse";h.Value=home;h.Parent=a
+		return a
+	end
+	local function edgeRail(into,x,y,z0,z1,gaps)
+		local cursor=z0
+		for _,gap in ipairs(gaps or {}) do
+			if gap[1]>cursor then rail(into,CF(x,y,(cursor+gap[1])/2)*CFrame.Angles(0,math.pi/2,0),gap[1]-cursor) end
+			cursor=math.max(cursor,gap[2])
+		end
+		if cursor<z1 then rail(into,CF(x,y,(cursor+z1)/2)*CFrame.Angles(0,math.pi/2,0),z1-cursor) end
+	end
+	K.registerWatcher=registerWatcher;K.edgeRail=edgeRail
+	local yaw=function(a) return CFrame.Angles(0,math.rad(a),0) end
 	local A=model("A_BalconyAtrium")
-	floor(A,"AtriumCarpet",0,0,36,220,80)
-	for _,s in ipairs({-1,1}) do
-		for i,z in ipairs({13,38,63}) do
-			local yaw=s==1 and math.rad(90) or math.rad(-90)
-			for level=0,2 do
-				house(A,"AtriumHouse_"..s.."_"..i.."_"..level,CF(s*80,level*14,z)*CFrame.Angles(0,yaw,0),23,20,13.8,(i+level)%2==0 and C.cream or C.pale,nil,{open=level<2,lit=level==2 and i%2==0,cutaway=level==2 and i==2})
-			end
-		end
-		for _,height in ipairs({14,28}) do
-			if s==-1 and height==28 then
-				floor(A,"UpperBalconyBeforeStairwell",-69,28,18,22,42)
-				floor(A,"UpperBalconyAfterStairwell",-69,28,71,22,8)
-				floor(A,"UpperStairwellOuterWalk",-77,28,53.5,6,29)
-				floor(A,"UpperStairwellInnerWalk",-60,28,53.5,4,29)
-				rail(A,CF(-75,28,53.5)*CFrame.Angles(0,math.rad(90),0),27)
-				rail(A,CF(-63,28,53.5)*CFrame.Angles(0,math.rad(90),0),27)
-			else floor(A,"BalconyCarpet",s*69,height,36,22,78) end
-			if height==14 then
-				rail(A,CF(s*58,height,22)*CFrame.Angles(0,math.rad(90),0),22)
-				rail(A,CF(s*58,height,60)*CFrame.Angles(0,math.rad(90),0),26)
-			else rail(A,CF(s*58,height,42)*CFrame.Angles(0,math.rad(90),0),62) end
-		end
-		for _,z in ipairs({8,70}) do part(A,"SquareAtriumColumn",V(2,42,2),CF(s*57,21,z),C.pale) end
-	end
-	floor(A,"AtriumBridge",0,14,40,117,11)
-	-- Open only the two stair approaches; do not put a cross-bridge rail across
-	-- either staircase's top tread.
-	rail(A,CF(-55,14,34.5),6); rail(A,CF(10,14,34.5),96)
-	rail(A,CF(-10,14,45.5),96); rail(A,CF(55,14,45.5),6)
-	stairs(A,"FirstBalconyStair",CF(-45,0,6),11,14,28,28,C.carpet,true)
-	floor(A,"FirstStairLanding",-51.5,14,36,23,5)
-	stairs(A,"ReturnBalconyStair",CF(45,0,74)*CFrame.Angles(0,math.pi,0),11,14,28,28,C.carpet,true)
-	floor(A,"ReturnStairLanding",51.5,14,44,23,5)
-	stairs(A,"UpperBalconyStair",CF(-69,14,40),10,14,27,28,C.carpet,true)
-	floor(A,"UpperLanding",-69,28,69,22,7)
-
-	-- B: compress the player into a low, long residential arcade before the
-	-- larger village reveal. Deep corners and offset islands break the sightline.
-	local B=model("B_LowEavesArcade")
-	floor(B,"WornOchreCarpet",0,0,136,220,120,Color3.fromRGB(148,137,99))
-	floor(B,"ArcadeRunner",0,.025,136,15,118,Color3.fromRGB(102,94,72))
+	floor(A,"AtriumCarpet",0,0,96,320,200)
+	local clueIndex=0
 	for _,side in ipairs({-1,1}) do
-		for i,z in ipairs({94,128,167}) do
-			local f=CF(side*(i==2 and 72 or 82),0,z)*CFrame.Angles(0,side*math.pi/2,0)
-			local m=house(B,"LowEavesResidence_"..side.."_"..i,f,24,19,12.3,i==2 and C.cream or C.yellow,nil,{open=true})
-			part(m,"BroadFlatPorchCanopy",V(28,.7,7),f*CF(0,12.7,-3),C.pale)
-			for _,sign in ipairs({-1,1}) do
-				part(m,"PorchPost",V(.7,12.4,.7),f*CF(sign*12,6.2,-5.7),C.white)
-				part(m,"WoodShutter",V(1.1,7.4,.28),f*CF(sign*10.65,6.5,-.45),Color3.fromRGB(115,125,100),Enum.Material.Wood)
+		for i,z in ipairs({42,99,156}) do
+			local stack=model("ResidentialAtriumStack_"..side.."_"..i,A)
+			local storeys=(side<0 and {5,7,4} or {6,4,7})[i]
+			stack:SetAttribute("StoreyCount",storeys)
+			for level=0,storeys-1 do
+				local x=side*(110+(level>=3 and (i%2)*3 or 0))
+				local f=CF(x,level*14,z)*yaw(side*90)
+				local home=house(stack,"AtriumHome_"..level,f,30,24,13.8,(level+i)%3==0 and C.pale or C.cream,level==storeys-1 and C.blue or nil,{open=level<=2,furniture=level==0 and i==2 and (side<0 and 2 or 4) or nil})
+				if level==0 and i~=2 then
+					clueIndex+=1;home.Name="ClueHouse_"..clueIndex;home:SetAttribute("PuzzleClueIndex",clueIndex)
+					local clue=part(home,"PuzzleClueSurface",V(4,5,.03),f*CF(0,6,23.62),C.white,nil,false)
+					clue.Transparency=1;clue:SetAttribute("ClueIndex",clueIndex)
+				end
+				if level==0 and i==1 then registerWatcher(home,"AtriumWindow_"..side,A.Name) end
 			end
-			floor(m,"DeepCarpetPorch",0,.05,-3,28,6,C.carpet,f)
+		end
+		for _,y in ipairs({14,28}) do
+			floor(A,"ContinuousBalcony",side*96,y,99,28,168)
+			local gaps=y==14 and (side<0 and {{48,59},{92,106}} or {{92,108}}) or {{136,150},{155,169}}
+			edgeRail(A,side*82,y,15,183,gaps)
+			rail(A,CF(side*96,y,15),28);rail(A,CF(side*96,y,183),28)
+		end
+		for _,z in ipairs({20,178}) do part(A,"StackSupportColumn",V(2.5,42,2.5),CF(side*82,21,z),C.pale) end
+	end
+	floor(A,"FirstCrossBridge",0,14,99,194,14)
+	rail(A,CF(0,14,92),164)
+	-- The upper-flight entrance crosses the rear edge at X65. Retain the
+	-- protective rail except for its sixteen-stud stair approach opening.
+	rail(A,CF(-12.5,14,106),139) -- -82..57
+	rail(A,CF(77.5,14,106),9) -- 73..82
+	floor(A,"UpperCrossBridge",0,28,162,194,14)
+	for _,z in ipairs({155,169}) do rail(A,CF(0,28,z),164) end
+	stairs(A,"GroundToFirstBalcony",CF(-65,0,18),12,14,30,28,C.carpet,true)
+	floor(A,"FirstBalconyLanding",-80.5,14,53,43,10)
+	stairs(A,"FirstToUpperBalcony",CF(65,14,108),12,14,30,28,C.carpet,true)
+	floor(A,"UpperFlightBase",80.5,14,103,43,10)
+	floor(A,"UpperFlightLanding",80.5,28,143,43,10)
+	for _,s in ipairs({-1,1}) do
+		house(A,"GroundWaitingCottage_"..s,CF(s*42,0,128),26,24,13.8,s<0 and C.rose or C.cream,C.lavender,{open=true})
+	end
 
-
+	-- B trades the tall atrium for deep covered porches and low passage rooms.
+	local B=model("B_LowEavesArcade")
+	floor(B,"OchreArcadeCarpet",0,0,326,280,260,Color3.fromRGB(147,137,101))
+	floor(B,"LongWornRunner",0,.025,326,18,258,Color3.fromRGB(107,99,77))
+	for _,s in ipairs({-1,1}) do
+		for i,z in ipairs({232,286,348,418}) do
+			local frame=CF(s*96,0,z)*yaw(s*90)
+			for level=0,2 do
+				local home=house(B,"ArcadeResidence_"..s.."_"..i.."_"..level,frame*CF(0,level*14,0),28,28,13.8,(i+level)%2==0 and C.pale or C.yellow,nil,{open=level==0,backOpening=level==0 and i%2==0,furniture=level==0 and i==2 and (s<0 and 1 or 3) or nil})
+				if level==0 and i==1 then registerWatcher(home,"ArcadeWindow_"..s,B.Name) end
+			end
+			floor(B,"CoveredPorch",s*86,0,z,20,31,C.pink)
+			part(B,"LowPorchCanopy",V(24,.55,34),CF(s*86,12.6,z),C.pale)
+			for _,dz in ipairs({-15,15}) do part(B,"PorchPost",V(.6,12.3,.6),CF(s*76,6.15,z+dz),C.white) end
 		end
 	end
-	-- Two detached low room islands can be explored on either side and through.
-	for i,item in ipairs({{x=-28,z=107,c=C.pale},{x=29,z=160,c=C.cream}}) do
-		local f=CF(item.x,0,item.z)*CFrame.Angles(0,i==1 and math.rad(-8) or math.rad(7),0)
-		local m=house(B,"DetachedWaitingRoom_"..i,f,28,22,11.8,item.c,nil,{open=true,backOpening=true})
-		part(m,"LowCofferedRoof",V(31,.6,26),f*CF(0,12.35,11),C.cream)
-		part(m,"SilentTelephoneShelf",V(5,.3,1.5),f*CF(-9,3,15),Color3.fromRGB(116,97,71),Enum.Material.Wood)
-		for _,s in ipairs({-1,1}) do wallLamp(m,f*CF(s*12,8,-.6)) end
+	for i,info in ipairs({{-31,239},{32,302},{-31,365},{32,420}}) do
+		house(B,"DetachedThroughRoom_"..i,CF(info[1],0,info[2]),30,21,12.8,i%2==0 and C.cream or C.pale,nil,{open=true,backOpening=true})
 	end
-	for _,x in ipairs({-51,51}) do
-		for _,z in ipairs({82,116,151,189}) do
-			part(B,"LowArcadeSquareColumn",V(1.4,18,1.4),CF(x,9,z),C.pale)
-		end
-		part(B,"DroppedLongSoffit",V(5,2.8,120),CF(x,16.6,136),C.cream)
-	end
-	for _,z in ipairs({83,137,188}) do floor(B,"LoopCrossing",0,.045,z,158,7,C.carpet) end
-
-	local neighbourhood=require(script.Parent:WaitForChild("Level 5 Neighbourhood Districts"))
-	local landmarks=require(script.Parent:WaitForChild("Level 5 Landmark Districts"))
-	local N=neighbourhood.Build(K)
-	local L=landmarks.Build(K)
-	local domestic=root:FindFirstChild("E_DomesticLabyrinth")
-	for _,room in ipairs({{name="WestLoungeFurniture",x=-35,z=696,w=26,d=24,v=2},{name="EastReadingFurniture",x=65,z=696,w=32,d=22,v=4}}) do
-		local m=model(room.name,domestic)
-		local f=CF(room.x,0,room.z)
-		Furniture.FurnishHome(K,m,f,room.w,room.d,14.8,{variant=room.v,open=true,backOpening=true})
-		m:SetAttribute("FurnitureRoomFrame",offset*f);m:SetAttribute("FurnitureRoomSize",V(room.w,14.8,room.d))
+	for _,z in ipairs({267,332,397}) do
+		part(B,"SharedDroppedCeiling",V(130,.55,20),CF(0,17,z),C.ceiling)
+		for _,x in ipairs({-60,60}) do part(B,"ArcadeDomesticColumn",V(.8,17,.8),CF(x,8.5,z),C.white) end
 	end
 
-	-- Separate room envelopes, each with its own ceiling and deliberately narrow
-	-- threshold. No sightline can mistake this for one giant shared warehouse.
+	local N=require(script.Parent:WaitForChild("Level 5 Neighbourhood Districts")).Build(K)
+	local L=require(script.Parent:WaitForChild("Level 5 Landmark Districts")).Build(K)
 	local zones={
-		{id="A",name="Balcony Atrium",model="A_BalconyAtrium",width=220,z0=-4,z1=76,height=44,style="office",wall=C.cream},
-		{id="B",name="Low Eaves Arcade",model="B_LowEavesArcade",width=220,z0=76,z1=196,height=18,style="low",wall=C.yellow},
-		{id="C",name="Pastel Village",model="C_PastelVillage",width=360,z0=196,z1=436,height=48,style="office",wall=C.pale},
-		{id="D",name="Floral Terraces",model="D_FloralTerraces",width=180,z0=436,z1=636,height=32,minY=-14,style="low",wall=C.yellow},
-		{id="E",name="Domestic Labyrinth",model="E_DomesticLabyrinth",width=200,z0=636,z1=796,height=15,style="domestic",wall=C.pale},
-		{id="F",name="Window Watcher Courts",model="F_BayWindowCanyon",width=300,z0=796,z1=1016,height=60,style="office",wall=C.cream},
-		{id="G",name="Tilted Subdivision",model="G_TiltedSubdivision",width=320,z0=1016,z1=1196,height=66,style="warehouse",wall=C.pale},
-		{id="H",name="Last House",model="H_LastHouse",width=120,z0=1196,z1=1276,height=26,style="domestic",wall=C.cream},
+		{Name="A_BalconyAtrium",Title="Stacked Balcony Atrium",Width=320,Z0=-4,Z1=196,CeilingHeight=120,Style="office"},
+		{Name="B_LowEavesArcade",Title="Low Eaves Arcade",Width=280,Z0=196,Z1=456,CeilingHeight=50,Style="low"},
+		{Name="C_PastelVillage",Title="Pastel Carpet Villages",Width=560,Z0=456,Z1=936,CeilingHeight=100,Style="office"},
+		{Name="D_FloralTerraces",Title="Sunken Floral Terraces",Width=320,Z0=936,Z1=1296,CeilingHeight=88,Style="office",Bottom=-14},
+		{Name="E_DomesticLabyrinth",Title="Domestic Room Labyrinth",Width=320,Z0=1296,Z1=1596,CeilingHeight=44,Style="domestic"},
+		{Name="F_BayWindowCanyon",Title="Nested Window Courts",Width=500,Z0=1596,Z1=2076,CeilingHeight=156,Style="office"},
+		{Name="G_TiltedSubdivision",Title="Impossible Tilted Subdivision",Width=480,Z0=2076,Z1=2456,CeilingHeight=180,Style="warehouse"},
+		{Name="H_LastHouse",Title="Last House",Width=220,Z0=2456,Z1=2636,CeilingHeight=70,Style="domestic"},
 	}
 	local totalFootprint=0
 	for index,z in ipairs(zones) do
-		local m=root:FindFirstChild(z.model) or model(z.model)
-		m:SetAttribute("BiomeName",z.name);m:SetAttribute("CeilingY",z.height)
-		m:SetAttribute("GroundEnvelopeArea",z.width*(z.z1-z.z0))
+		local m=root:FindFirstChild(z.Name);assert(m,"Missing district "..z.Name)
+		z.Model=m;z.Min=V(-z.Width/2,z.Bottom or 0,z.Z0);z.Max=V(z.Width/2,z.CeilingHeight,z.Z1)
+		-- Retain lower-case metadata for older diagnostics; runtime contracts use
+		-- Name/Model/Min/Max/CeilingHeight and never derive geometry by scaling.
+		z.model=z.Name;z.name=z.Title;z.width=z.Width;z.z0=z.Z0;z.z1=z.Z1;z.height=z.CeilingHeight
+		m:SetAttribute("BiomeName",z.Title);m:SetAttribute("CeilingY",z.CeilingHeight)
+		m:SetAttribute("DistrictMin",z.Min);m:SetAttribute("DistrictMax",z.Max)
+		m:SetAttribute("ZoneMin",z.Min);m:SetAttribute("ZoneMax",z.Max);m:SetAttribute("CeilingHeight",z.CeilingHeight)
 		local enclosure=model("Enclosure",m)
-		local bottom=z.minY or 0
+		local bottom=z.Bottom or 0
 		for _,s in ipairs({-1,1}) do
-			part(enclosure,"DistrictSideWall",V(1.2,z.height-bottom,z.z1-z.z0),CF(s*z.width/2,(z.height+bottom)/2,(z.z0+z.z1)/2),z.wall)
-			part(enclosure,"ContinuousBaseboard",V(.45,.8,z.z1-z.z0),CF(s*(z.width/2-.65),.4,(z.z0+z.z1)/2),C.white,nil,false)
+			part(enclosure,"DistrictSideWall",V(1.2,z.CeilingHeight-bottom,z.Z1-z.Z0),CF(s*z.Width/2,(z.CeilingHeight+bottom)/2,(z.Z0+z.Z1)/2),C.cream)
+			part(enclosure,"ContinuousBaseboard",V(.45,.8,z.Z1-z.Z0),CF(s*(z.Width/2-.65),.4,(z.Z0+z.Z1)/2),C.white,nil,false)
 		end
 		for _,isBack in ipairs({false,true}) do
-			local edge=isBack and (z.z1-.04) or (z.z0+.04)
-			local isEntrance=index==1 and not isBack
-			local isChute=index==#zones and isBack
-			local opening=isChute and 9.3 or 22
-			local openingHeight=isChute and 11 or 14
-			local wallBottom=isChute and -35 or bottom
-			if isEntrance then
-				part(enclosure,"ArrivalBackWall",V(z.width,z.height,1.3),CF(0,z.height/2,edge),z.wall)
+			local edge=isBack and z.Z1-.04 or z.Z0+.04
+			local entrance=index==1 and not isBack
+			local chute=index==8 and isBack
+			local opening=chute and 9.3 or 22;local openingHeight=chute and 11 or 14
+			local wallBottom=chute and -35 or bottom
+			if entrance then part(enclosure,"ArrivalBackWall",V(z.Width,z.CeilingHeight,1.3),CF(0,z.CeilingHeight/2,edge),C.cream)
 			else
-				local wing=(z.width-opening)/2
-				for _,s in ipairs({-1,1}) do
-					part(enclosure,"ThresholdSideWall",V(wing,z.height-wallBottom,1.1),CF(s*(opening/2+wing/2),(z.height+wallBottom)/2,edge),z.wall)
+				local wing=(z.Width-opening)/2
+				for _,s in ipairs({-1,1}) do part(enclosure,"ThresholdSideWall",V(wing,z.CeilingHeight-wallBottom,1.1),CF(s*(opening/2+wing/2),(z.CeilingHeight+wallBottom)/2,edge),C.cream) end
+				part(enclosure,"ThresholdHighClosure",V(opening,z.CeilingHeight-openingHeight,1.1),CF(0,(z.CeilingHeight+openingHeight)/2,edge),C.cream)
+				if bottom<0 and not chute then
+					-- The sunken street can be explored beneath its raised platforms.
+					-- Close the below-grade portal so it cannot lead under the next zone.
+					part(enclosure,"ThresholdFoundation",V(opening,-bottom,1.1),CF(0,bottom/2,edge),C.cream)
 				end
-				part(enclosure,"ThresholdHighClosure",V(opening,z.height-openingHeight,1.1),CF(0,(z.height+openingHeight)/2,edge),z.wall)
-				if not isChute then
-					for _,s in ipairs({-1,1}) do part(enclosure,"WideThresholdJamb",V(.55,14,.9),CF(s*11,7,edge-.7),C.white) end
-					part(enclosure,"WideThresholdTrim",V(22.5,.5,.9),CF(0,14.15,edge-.7),C.white)
+				if not chute then
+					for _,s in ipairs({-1,1}) do part(enclosure,"WideThresholdJamb",V(.55,14,.9),CF(s*11.28,7,edge-.7),C.white) end
+					part(enclosure,"WideThresholdTrim",V(22.5,.5,.9),CF(0,14.25,edge-.7),C.white)
 				end
 			end
 		end
-		ceiling(enclosure,z.name.."Ceiling",0,(z.z0+z.z1)/2,z.width,z.z1-z.z0,z.height,z.style)
-
-		totalFootprint+=z.width*(z.z1-z.z0)
+		ceiling(enclosure,z.Title.."Ceiling",0,(z.Z0+z.Z1)/2,z.Width,z.Z1-z.Z0,z.CeilingHeight,z.Style)
+		-- A limited shared suspended-light grid keeps human-height paths legible
+		-- beneath tall rooms. These are room fixtures, never house-mounted lights.
+		if z.CeilingHeight>60 then
+			for i,zz in ipairs({z.Z0+35,(z.Z0+z.Z1)/2,z.Z1-35}) do
+				for _,xx in ipairs({-34,34}) do
+					local y=index==8 and 24 or 37
+					local p=part(enclosure,"SuspendedSharedFluorescent",V(7,.18,3),CF(xx,y,zz),i==2 and C.ceiling or Color3.fromRGB(221,218,187),i==2 and Enum.Material.SmoothPlastic or Enum.Material.Neon,false)
+					p:SetAttribute("TubeState",i==2 and "Off" or "On")
+					for _,dx in ipairs({-2.6,2.6}) do part(enclosure,"CeilingSuspension",V(.055,z.CeilingHeight-y,.055),CF(xx+dx,(z.CeilingHeight+y)/2,zz),C.grid,nil,false) end
+					if i~=2 then local l=Instance.new("SurfaceLight");l.Face=Enum.NormalId.Bottom;l.Range=52;l.Angle=160;l.Brightness=.85;l.Shadows=false;l.Color=Color3.fromRGB(244,233,204);l.Parent=p end
+				end
+			end
+		end
+		totalFootprint+=z.Width*(z.Z1-z.Z0)
 	end
-	-- Dark fungal colonies grow from different damp seams; no pictorial wall art.
+
 	local growth=model("MyceliumWallGrowth")
-	local moldAssets={
-		rising="rbxassetid://111130507669211",
-		corner="rbxassetid://84997095468417",
-		seam="rbxassetid://119550867817499",
-	}
-	local function wallMold(name,position,look,width,height,variant,growthOrigin)
-		local surface=part(growth,name,V(width,height,.015),CFrame.lookAt(position,look),C.pale,Enum.Material.SmoothPlastic,false)
-		surface.Transparency=1;surface.CastShadow=false;surface.CanQuery=false;surface.CanTouch=false
-		surface:SetAttribute("Level5WallMold",true);surface:SetAttribute("AlphaBackground",true)
-		surface:SetAttribute("MoldVariant",variant);surface:SetAttribute("GrowthOrigin",growthOrigin)
-		local decal=Instance.new("Decal");decal.Name="DarkMyceliumOnPlaster";decal.Texture=moldAssets[variant];decal.Face=Enum.NormalId.Front
-		decal.Color3=Color3.fromRGB(168,164,150);decal.Transparency=.04;decal.Parent=surface
+	local moldAssets={"rbxassetid://111130507669211","rbxassetid://84997095468417","rbxassetid://119550867817499"}
+	for i,z in ipairs(zones) do
+		local side=i%2==0 and 1 or -1
+		local pos=V(side*(z.Width/2-.68),i==4 and 16 or 20,(z.Z0+z.Z1)/2)
+		local surface=part(growth,"WallColony_"..i,V(38,32,.015),CFrame.lookAt(pos,pos+V(-side,0,0)),C.white,nil,false)
+		surface.Transparency=1;surface.CastShadow=false;surface:SetAttribute("Level5WallMold",true);surface:SetAttribute("AlphaBackground",true)
+		surface:SetAttribute("MoldVariant",({"rising","corner","seam"})[(i-1)%3+1]);surface:SetAttribute("GrowthOrigin","Outer structural wall")
+		local decal=Instance.new("Decal");decal.Name="DarkMyceliumOnPlaster";decal.Texture=moldAssets[(i-1)%3+1];decal.Face=Enum.NormalId.Front;decal.Color3=Color3.fromRGB(168,164,150);decal.Transparency=.04;decal.Parent=surface
 	end
-	-- Bottom edges meet the floor or the raised terrace. Upper colonies originate
-	-- at wall joints; none of the carriers crosses the central threshold opening.
-	wallMold("VillageFloorSpread",V(-179.32,22.05,319),V(0,22.05,319),58.67,44,"corner","Floor corner")
-	wallMold("CanyonRearRising",V(55,27.05,1015.31),V(55,27.05,900),40.5,54,"rising","Floor seam")
-	wallMold("CanyonWestRising",V(-149.32,26.05,902),V(0,26.05,902),39,52,"rising","Floor seam")
-	wallMold("SubdivisionTerraceSpread",V(159.32,39.05,1092),V(0,39.05,1092),61.33,46,"corner","Raised terrace floor")
-	wallMold("CanyonUpperSeam",V(149.32,42,866),V(0,42,866),28,28,"seam","Upper wall seam")
-	wallMold("SubdivisionUpperSeam",V(-159.32,46,1148),V(0,46,1148),36,36,"seam","Upper wall seam")
-	wallMold("ArcadeDampCorner",V(-65,8.05,195.31),V(-65,8.05,150),21.33,16,"corner","Low wall corner")
-	wallMold("DomesticCeilingSeam",V(-63,7.25,795.31),V(-63,7.25,740),13.5,13.5,"seam","Ceiling seam")
-	root:SetAttribute("TallWallDrawingCount",0)
-	root:SetAttribute("WallMoldCount",8)
-	root:SetAttribute("WallMoldVariantCount",3)
+	root:SetAttribute("TallWallDrawingCount",0);root:SetAttribute("WallMoldCount",8);root:SetAttribute("WallMoldVariantCount",3)
 	local cameras={
-		{name="Atrium",position=V(-34,12,7),lookAt=V(52,18,49)},
-		{name="LowEaves",position=V(9,6,80),lookAt=V(-44,8,132)},
-		{name="LowEavesLoop",position=V(-49,5,146),lookAt=V(26,7,174)},
+		{name="ExpandedAtriumArrival",position=V(-25,7,7),lookAt=V(110,39,99)},
+		{name="ExpandedAtriumBalconies",position=V(-91,33,165),lookAt=V(95,45,55)},
+		{name="ExpandedArcade",position=V(9,6,204),lookAt=V(-78,10,284)},
+		{name="ExpandedArcadeSideLoop",position=V(127,6,309),lookAt=V(90,9,390)},
 	}
-	local waypoints={V(0,3,5),V(0,3,68),V(0,3,83),V(0,3,137),V(0,3,190)}
-	local function append(t,src) for _,v in ipairs(src or {}) do t[#t+1]=v end end
-	append(cameras,N.PreviewCameras);append(cameras,L.PreviewCameras)
-	append(waypoints,N.Waypoints);append(waypoints,L.Waypoints)
-	for _,camera in ipairs(cameras) do camera.position+=origin;camera.lookAt+=origin end
-	for i,p in ipairs(waypoints) do waypoints[i]=origin+p end
-	local actualParts,actualLights,windowCount=0,0,0
-	for _,object in ipairs(root:GetDescendants()) do
-		if object:IsA("BasePart") then actualParts+=1 end
-		if object:IsA("Light") then actualLights+=1 end
-		if object:GetAttribute("Level5TintedWindow")==true then windowCount+=1 end
-	end
-	root:SetAttribute("PartCount",actualParts);root:SetAttribute("LightCount",actualLights)
-	root:SetAttribute("TintedWindowCount",windowCount)
-	root:SetAttribute("BiomeCount",#zones);root:SetAttribute("GroundEnvelopeArea",totalFootprint)
-	root:SetAttribute("PreviousGroundEnvelopeArea",65396)
-	root:SetAttribute("GroundEnvelopeExpansionFactor",totalFootprint/65396)
+	local waypoints={V(0,3,5),V(0,3,60),V(0,3,120),V(0,3,190),V(0,3,203),V(0,3,263),V(0,3,326),V(0,3,392),V(0,3,450)}
+	for _,r in ipairs({N,L}) do for _,v in ipairs(r.PreviewCameras or {}) do table.insert(cameras,v) end;for _,v in ipairs(r.Waypoints or {}) do table.insert(waypoints,v) end end
+	for _,v in ipairs(cameras) do v.position+=origin;v.lookAt+=origin end
+	for i,v in ipairs(waypoints) do waypoints[i]=origin+v end
+	local actualParts,actualLights,windows=0,0,0
+	for _,v in ipairs(root:GetDescendants()) do if v:IsA("BasePart") then actualParts+=1 end;if v:IsA("Light") then actualLights+=1 end;if v:GetAttribute("Level5TintedWindow")==true then windows+=1 end end
+	root:SetAttribute("PartCount",actualParts);root:SetAttribute("LightCount",actualLights);root:SetAttribute("TintedWindowCount",windows)
+	root:SetAttribute("BiomeCount",8);root:SetAttribute("GroundEnvelopeArea",totalFootprint);root:SetAttribute("PreviousGroundEnvelopeArea",331600)
+	root:SetAttribute("GroundEnvelopeExpansionFactor",totalFootprint/331600)
 	root:SetAttribute("WindowStandard","Glass RGB(87,102,102), transparency 0.2; no luminous panes")
-	root:SetAttribute("Design","Unknown-origin Backrooms; visitors are researchers. No organisation created this place.")
-	return {
-		Model=root,SpawnCFrame=CFrame.lookAt(origin+V(0,3,5),origin+V(0,3,38)),
-		PreviewCameras=cameras,Waypoints=waypoints,Zones=zones,
-		FinalHouse=L.FinalHouse,ChuteStart=CFrame.new(origin+L.ChuteStart),ChuteEnd=CFrame.new(origin+L.ChuteEnd),
-		Bounds={Min=origin+V(-181,-36,-5),Max=origin+V(181,110,1324)},
-		GroundEnvelopeArea=totalFootprint,PreviousGroundEnvelopeArea=65396,
-	}
+	root:SetAttribute("Design","Unknown-origin Backrooms. The researchers did not create this place.")
+	root:SetAttribute("SpawnCFrame",CFrame.lookAt(origin+V(0,3,5),origin+V(0,3,70)))
+	return {Model=root,SpawnCFrame=CFrame.lookAt(origin+V(0,3,5),origin+V(0,3,70)),PreviewCameras=cameras,Waypoints=waypoints,Zones=zones,
+		FinalHouse=L.FinalHouse,ChuteStart=CF(origin+L.ChuteStart),ChuteEnd=CF(origin+L.ChuteEnd),
+		Bounds={Min=origin+V(-281,-36,-5),Max=origin+V(281,181,2680)},GroundEnvelopeArea=totalFootprint,PreviousGroundEnvelopeArea=331600}
 end
-
 return Architecture

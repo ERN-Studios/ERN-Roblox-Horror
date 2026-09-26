@@ -1642,7 +1642,7 @@ end
 -- a private flag that the HUDs, and each other, would have to learn.
 local SCREEN_OWNING_MODALS = {
 	"ZyntraStoreOpen", "DevPhoneOpen", "ZyntraReentryOpen", "QueueModalOpen",
-	"LuckyWheelOpen", "DailyRewardsOpen",
+	"LuckyWheelOpen", "DailyRewardsOpen", "Level5ColourLockOpen",
 }
 
 function UIDevice.ScreenOwningModalOpen(): boolean
