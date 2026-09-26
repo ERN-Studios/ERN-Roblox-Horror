@@ -2,7 +2,7 @@
 
 ## Published delivery — 26 September 2026
 
-**Window Watcher and the revised F courts are published to Roblox as v2121**, place **131311258779917**. Native File → Publish to Roblox succeeded at **2026-09-26T12:17:16.432Z**; the Studio log records the successful publish request (`publishType: 1`) and “Add publish notes to v2121”. The publication receipt and final evidence are retained under `artifacts/level5-window-watcher-20260926/`.
+**Window Watcher, the revised F courts and the gaze heartbeat are published as v2123**, place **131311258779917**. The latest native File → Publish to Roblox succeeded at **2026-09-26T12:35:15.298Z**, with a successful publish request and “Add publish notes to v2123”. See the [final delivery manifest](../artifacts/level5-window-watcher-20260926/gaze-delivery.json) and [publish receipt](../artifacts/level5-window-watcher-20260926/gaze-publish-receipt.log). The original rig/encounter integration was published as v2121 at 12:17:16.432Z; its preceding evidence below retains that scope.
 
 The permanent rig, three published clips, intermittent encounter module, Adapter hook and client visibility guard are installed. Her eyes emit white light on the skinned iris surfaces. Developers can encounter her occasionally in the three F windows through the existing Level 5 developer queue; public Level 5 access remains restricted. No chase, damage, sounds, puzzle, slide control, rewards or completion behavior was added.
 
@@ -76,3 +76,13 @@ The preceding F-map changes remain represented by the existing Architecture and 
 The full native **before-integration** backup is `output/level5-window-watcher-20260926/baseline/Backrooms-pre-WindowWatcher-20260926.rbxl`: **9,637,458 bytes**, SHA-256 `eaf5a42d710113999c8661f314d4ef102666558d36a5e9b041b229b763e10fa9`.
 
 The full native **after-integration** backup is `artifacts/level5-window-watcher-20260926/after.rbxl`: **9,763,745 bytes**, SHA-256 `be9d81da45369de47e484c451bd9e18da38c8011d5ef4a8f6e349680d9557de0`. It preserves the permanent rig and animation references as well as the source. Dated 25 September preview/checkpoint evidence remains unchanged; the 26 September artifacts and v2121 receipt describe the delivered integration.
+
+## Additional 26 September request — gaze response
+
+This follow-up is published as **v2123** at 12:35:15Z on 26 September. All **186 scripts** compile and match their Studio/editor sources; 183 remain unchanged from the v2121 integration. The full final backup is [after-gaze.rbxl](../artifacts/level5-window-watcher-20260926/after-gaze.rbxl), 9,767,008 bytes, SHA-256 `8b0074fd9b92a8fb87f6fb2563b3b888bcc961dbcc94f72769ce58e2100b1841`. The v2121 receipts above retain their historical scope.
+
+`ReplicatedStorage.WindowWatcherGazeLogic` and the `WindowWatcherGazeClient` LocalScript add a local stare response. A direct stare within 12 studs uses a per-appearance random threshold of 2.5–4.5 seconds; this grows to 5–8 seconds at 100 studs. Gaze influence is full within 8° of the face, fades to zero at 30°, and fades with distance from 100 to 145 studs. Normalized exposure accumulates while looking and decays by 0.20 per second when looking away. Reaching the threshold hides her for that client until the next server appearance counter. The visibility guard respects the client-local `WindowWatcherGazeHidden` attribute; the server encounter and other clients are not changed.
+
+A heartbeat-shaped camera pulse varies from 60–105 beats per minute, with at most 1.5° inward FOV change and smaller outward rebounds. It respects ReduceCameraShake, ReduceFlashing, menus and non-Custom cameras, and restores its own FOV contribution on exit. No audio or damage is added.
+
+The pure helper passed **11,297 assertions**. The native test in `artifacts/level5-window-watcher-20260926/native-gaze-result.json` reports **PASS_OBSERVED_CHECKS with zero failures**. At the actual MiddleCourtWindow, the test began 11.6 studs away with a 2.6437-second threshold, then exercised approach, direct gaze, looking away and renewed gaze. Local disappearance occurred 3.997 seconds into that mixed sequence; server visibility stayed true and one official animation track continued. The mesh was locally hidden with LocalTransparencyModifier 1. FOV ranged from 68.54485° to 70.70368° and returned to 69.999985° after exit, effectively the 70° baseline. This focused gaze result supplements the earlier runtime/cleanup evidence; it does not change those observers' historical INCOMPLETE status or add physical-device or human-multiplayer coverage.

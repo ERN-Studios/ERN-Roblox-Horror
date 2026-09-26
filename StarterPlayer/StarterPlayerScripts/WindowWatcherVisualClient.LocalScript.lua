@@ -106,10 +106,11 @@ local function update(actor,state)
 		ready=state.qualified and evaluated
 	else resetTrack(state) end
 	local visible=owner:GetAttribute("Visible")==true
-	localVisibility(state,visible and ready)
+	local gazeHidden=actor:GetAttribute("WindowWatcherGazeHidden")==true
+	localVisibility(state,visible and ready and not gazeHidden)
 	diagnostic(actor,"WindowWatcherVisualReady",ready)
 	diagnostic(actor,"WindowWatcherVisualError",nil)
-	diagnostic(actor,"WindowWatcherVisualStatus",ready and (visible and "VISIBLE" or "POSE_READY_HIDDEN") or "WAITING_FOR_TRACK")
+	diagnostic(actor,"WindowWatcherVisualStatus",ready and (gazeHidden and "GAZE_HIDDEN" or (visible and "VISIBLE" or "POSE_READY_HIDDEN")) or "WAITING_FOR_TRACK")
 end
 local function ensureRenderConnection()
 	if renderConnection or stopped then return end
