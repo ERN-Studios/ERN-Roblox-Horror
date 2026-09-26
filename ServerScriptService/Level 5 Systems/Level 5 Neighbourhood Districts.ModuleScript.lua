@@ -41,6 +41,19 @@ function Districts.Build(K)
 			end
 		end
 	end
+	-- Short residential lanes occupy the spaces between the four courts. Their
+	-- doors, rooflines and asymmetric heights read as houses at walking scale.
+	for _,side in ipairs({-1,1}) do
+		for i,z in ipairs({615,675,745,805}) do
+			local stories=i%2==0 and 3 or 2
+			for level=0,stories-1 do
+				house(Czone,"VillageInnerLaneHome_"..side.."_"..i.."_"..level,CF(side*50,level*14,z)*yaw(side*90),32,26,13.8,colors[(i+(side+1)/2)%4+1],level==stories-1 and C.blue or nil,{open=level==0,completeHome=level==0,furniture=level==0 and i==1 and (side<0 and 6 or 7) or nil})
+			end
+		end
+		for i,z in ipairs({655,750}) do
+			for level=0,3 do house(Czone,"OuterVillageStack_"..side.."_"..i.."_"..level,CF(side*244,level*14,z)*yaw(side*90),30,28,13.8,colors[(i+level)%4+1],level==3 and C.lavender or nil,{open=level==0,completeHome=level==0}) end
+		end
+	end
 	floor(Czone,"WhiteBridgeCarpet",0,14,700,230,16,C.pink)
 	for _,z in ipairs({692,708}) do
 		rail(Czone,CF(0,14,z),182)
@@ -68,7 +81,9 @@ function Districts.Build(K)
 	for _,s in ipairs({-1,1}) do
 		floor(D,"RaisedPorchPromenade",s*128,0,1116,64,336,C.yellow)
 		part(D,"TerraceRetainingWall",V(.8,12,336),CF(s*96,-6,1116),C.yellow)
-		K.edgeRail(D,s*96,0,948,1284,{{1097,1115}})
+		-- The exit street returns to full-width grade at1262: no fall edge
+		-- remains there, so continuing the rail would block the offset gate route.
+		K.edgeRail(D,s*96,0,948,1262,{{1097,1115}})
 		for i,z in ipairs({994,1109,1214}) do
 			local frame=CF(s*105,0,z)*yaw(s*90)
 			for level=0,5 do
@@ -79,13 +94,21 @@ function Districts.Build(K)
 		for i,z in ipairs({1045,1170}) do house(D,"LowerFloralHome_"..s.."_"..i,CF(s*48,-12,z)*yaw(s*90),28,26,13.8,i==1 and C.rose or C.yellow,C.blue,{open=true}) end
 		for i,z in ipairs({1032,1158,1250}) do
 			local p=part(D,"FloralPaperWallPanel",V(.06,34,34),CF(s*159.33,28,z),C.pale,nil,false)
-			K.texture(p,K.config.FloralTexture,s<0 and Enum.NormalId.Right or Enum.NormalId.Left,17)
+			K.material(p,"Wallpaper")
 		end
 	end
+	for _,side in ipairs({-1,1}) do
+		for i,z in ipairs({1004,1220}) do
+			for level=0,2 do house(D,"SunkenPocketStack_"..side.."_"..i.."_"..level,CF(side*26,-12+level*14,z)*yaw(side*90),26,24,13.8,i==1 and C.pale or C.rose,level==2 and C.blue or nil,{open=level==0}) end
+		end
+	end
+	house(D,"SunkenCornerResidence",CF(0,-12,1132),36,24,13.8,C.yellow,C.lavender,{open=true,completeHome=true,furniture=8})
 	floor(D,"RaisedCrossStreet",0,0,1106,320,18,C.yellow)
 	for _,z in ipairs({1097,1115}) do
 		rail(D,CF(0,0,z),146)
-		for _,s in ipairs({-1,1}) do rail(D,CF(s*129,0,z),62) end
+		-- The outer promenades are already at this same height on both sides.
+		-- Only the central sunken street needs a fall barrier; outer rails would
+		-- bisect actual homes and prevent reaching the cross-street at grade.
 	end
 	stairs(D,"SunkenWestReturn",CF(-86,-12,1057),14,12,32,24,C.pink,true)
 	floor(D,"SunkenWestLanding",-86,0,1094,18,10,C.pink)
@@ -108,15 +131,24 @@ function Districts.Build(K)
 			end
 		end
 		part(E,"LowRoomCeilingBand",V(114,.6,300),CF(s*103,16,1446),C.ceiling)
-		for _,z in ipairs({1387,1477,1570}) do K.doorframe(E,CF(s*91,0,z),12,11.5) end
+		for _,z in ipairs({1387,1477,1570}) do
+			-- The two cross-lane homes replace these former free-standing frames;
+			-- retaining a frame inside a new room would obstruct its furniture.
+			if not (s==1 and z==1387) and not (s==-1 and z==1477) then K.doorframe(E,CF(s*91,0,z),12,11.5) end
+		end
 	end
 	for i,z in ipairs({1370,1460,1540}) do
 		for level=0,2 do
 			house(E,"NestedThroughHouse_"..i.."_"..level,CF(level==0 and 0 or (i%2==0 and 4 or -4),level*14,z),level==0 and 66 or 58,28,13.8,level==1 and C.pale or C.cream,nil,{open=level==0,backOpening=level==0})
 		end
 	end
+	for i,z in ipairs({1310,1570}) do
+		for level=0,2 do house(E,"LabyrinthEndResidence_"..i.."_"..level,CF(0,level*14,z),44,i==1 and 26 or 20,13.8,C.pale,nil,{open=level==0,completeHome=level==0 and i==1,furniture=level==0 and i==1 and 7 or nil}) end
+	end
+	house(E,"EastCrossLaneRoom",CF(72,0,1390)*yaw(90),22,34,13.8,C.cream,nil,{open=true})
+	house(E,"WestCrossLaneRoom",CF(-72,0,1478)*yaw(-90),22,34,13.8,C.pale,nil,{open=true})
 	for _,z in ipairs({1320,1415,1505,1580}) do
-		local p=part(E,"SharedLowDomesticPanel",V(6,.15,3),CF(0,15,z),Color3.fromRGB(211,216,188),Enum.Material.Neon,false)
+		local p=part(E,"SharedLowDomesticPanel",V(6,.15,3),CF(z==1320 and 28 or 0,15,z),Color3.fromRGB(211,216,188),Enum.Material.Neon,false)
 		p:SetAttribute("TubeState","Dim")
 		local l=Instance.new("SurfaceLight");l.Face=Enum.NormalId.Bottom;l.Range=26;l.Angle=150;l.Brightness=.45;l.Shadows=false;l.Parent=p
 	end

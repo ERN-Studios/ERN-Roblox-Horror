@@ -1,0 +1,12 @@
+{
+  "method": "Native Edit loadstring for every LuaSourceContainer plus ScriptEditorService:GetEditorSource parity check",
+  "scriptCount": 192,
+  "compileErrors": [],
+  "editorConflicts": [],
+  "playOnlyQAScriptPresent": false,
+  "generatedRuntimeWorldPresent": false,
+  "HttpEnabled": false,
+  "materialVariantCount": 7,
+  "placeId": 131311258779917,
+  "universeId": 10559217407
+}

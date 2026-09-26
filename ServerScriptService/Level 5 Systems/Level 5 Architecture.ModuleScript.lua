@@ -1,6 +1,8 @@
 -- Level 5: The Indoor Suburbs. Geometry only; deliberately independent of Level 4.
 -- All authored coordinates are relative to origin. No Lighting, entity or quest mutation.
 local Architecture = {}
+local DEFAULT_TEXTURES={Plaster="rbxassetid://108985650994325",Wallpaper="rbxassetid://102299936573476",Siding="rbxassetid://115748401620318",Grass="rbxassetid://126776492995543",Wood="rbxassetid://118880038763227",Roof="rbxassetid://118077370167392",Carpet="rbxassetid://113909496202267"}
+local DEFAULT_VARIANTS={Plaster="Level5AgedPlaster",Wallpaper="Level5FloralWallpaper",Siding="Level5PaintedSiding",Grass="Level5LawnGrass",Wood="Level5VeneerWood",Roof="Level5RoofShingles",Carpet="Level5LoopCarpet"}
 
 function Architecture.Build(parent, origin, config)
 	config = table.clone(config or {})
@@ -8,12 +10,14 @@ function Architecture.Build(parent, origin, config)
 	config.ExitArrowLeftTexture = config.ExitArrowLeftTexture or "rbxassetid://119578216618152"
 	config.FurnitureUpholsteryTexture = config.FurnitureUpholsteryTexture or "rbxassetid://132119936960491"
 	config.FurnitureTVTexture = config.FurnitureTVTexture or "rbxassetid://129933596500815"
+	config.TexturePalette = setmetatable(table.clone(config.TexturePalette or {}),{__index=DEFAULT_TEXTURES})
+	config.MaterialVariants = setmetatable(table.clone(config.MaterialVariants or {}),{__index=DEFAULT_VARIANTS})
 	local Furniture = require(script.Parent:WaitForChild("Level 5 Furniture"))
 	local furnitureKit
 	origin = origin or Vector3.zero
 	local root = Instance.new("Model")
 	root.Name = "Level5_IndoorSuburbs"
-	root:SetAttribute("ArchitectureVersion", "2026-09-26.expansion.1")
+	root:SetAttribute("ArchitectureVersion", "2026-09-26.dense-routes.1")
 	root:SetAttribute("GeometryOnly", true)
 	root.Parent = parent
 	local offset = CFrame.new(origin)
@@ -26,6 +30,19 @@ function Architecture.Build(parent, origin, config)
 		ceiling=Color3.fromRGB(181,179,157), grid=Color3.fromRGB(136,138,126), red=Color3.fromRGB(133,38,32),
 	}
 	local partCount, lightCount = 0, 0
+	local materials=game:GetService("MaterialService")
+	local bases={Plaster=Enum.Material.Plaster,Wallpaper=Enum.Material.Plaster,Siding=Enum.Material.WoodPlanks,Grass=Enum.Material.Grass,Wood=Enum.Material.Wood,Roof=Enum.Material.Slate,Carpet=Enum.Material.Fabric}
+	local function material(p,key,tint)
+		local base=bases[key];if not base then return p end
+		p.Material=base
+		local variantName=config.MaterialVariants[key]
+		local variant=variantName and materials:FindFirstChild(variantName)
+		if variant and variant:IsA("MaterialVariant") then
+			p.MaterialVariant=variantName;p.Color=tint or Color3.new(1,1,1)
+		else p.MaterialVariant="";if tint then p.Color=tint end end
+		p:SetAttribute("Level5SurfaceMaterial",key)
+		return p
+	end
 	local function model(name, into)
 		local m=Instance.new("Model"); m.Name=name; m.Parent=into or root; return m
 	end
@@ -35,7 +52,14 @@ function Architecture.Build(parent, origin, config)
 		p.Color=color or C.cream; p.Material=material or Enum.Material.SmoothPlastic
 		p.CanCollide=collide~=false; p.CanQuery=collide~=false; p.CanTouch=false; p.TopSurface=Enum.SurfaceType.Smooth; p.BottomSurface=Enum.SurfaceType.Smooth
 		p.CastShadow=collide~=false and math.min(size.X,size.Y,size.Z)>.4
-		p.Parent=into; partCount+=1; return p
+		p.Parent=into; partCount+=1
+		if material==Enum.Material.Plaster then p.MaterialVariant=config.MaterialVariants.Plaster or ""
+		elseif material==Enum.Material.WoodPlanks then p.MaterialVariant=config.MaterialVariants.Siding or ""
+		elseif material==Enum.Material.Slate and materials:FindFirstChild(config.MaterialVariants.Roof) then p.MaterialVariant=config.MaterialVariants.Roof;p.Color=Color3.new(1,1,1)
+		elseif material==Enum.Material.Fabric and materials:FindFirstChild(config.MaterialVariants.Carpet) then
+			p.MaterialVariant=config.MaterialVariants.Carpet;p.Color=color and Color3.new(1,1,1):Lerp(color,.3) or Color3.new(1,1,1)
+		end
+		return p
 	end
 	local function texture(p, asset, face, tile)
 		if not asset or asset=="" then return end
@@ -44,12 +68,15 @@ function Architecture.Build(parent, origin, config)
 		t.Transparency=.12; t.Parent=p; return t
 	end
 	local function floor(into, name, x,y,z,w,d,color,frame)
-		local p=part(into,name,V(w,1.2,d),(frame or CF())*CF(x,y-.6,z),color or C.carpet,Enum.Material.Fabric)
-		local surface=texture(p,config.CarpetTexture,Enum.NormalId.Top,8)
-		-- Texture colour is independent of the underlying Part colour. Preserve
-		-- the green "lawn" carpet and pink/yellow street palette under the bitmap.
-		if surface and color and color~=C.carpet then
-			surface.Color3=color==C.green and Color3.fromRGB(86,132,98) or color
+		local lawn=color==C.green
+		local p=part(into,name,V(w,1.2,d),(frame or CF())*CF(x,y-.6,z),color or C.carpet,lawn and Enum.Material.Grass or Enum.Material.Fabric)
+		if lawn then
+			material(p,"Grass");p:SetAttribute("LawnSurface",true)
+		elseif materials:FindFirstChild(config.MaterialVariants.Carpet) then
+			material(p,"Carpet",color and color~=C.carpet and Color3.new(1,1,1):Lerp(color,.32) or nil)
+		else
+			local surface=texture(p,config.CarpetTexture,Enum.NormalId.Top,8)
+			if surface and color and color~=C.carpet then surface.Color3=color end
 		end
 		return p
 	end
@@ -107,7 +134,17 @@ function Architecture.Build(parent, origin, config)
 			local x=s*(dw/2+sw/2)
 			part(into,"WindowApron",V(sw,2.8,.65),frame*CF(x,1.4,0),color)
 			for _,j in ipairs({-1,1}) do part(into,"FacadePier",V(1.15,dh,.65),frame*CF(x+j*(sw/2-.575),dh/2,0),color) end
-			window(into,frame*CF(x,6.55,-.18),sw-2.3,7.2,lit,simple)
+			-- Broad houses retain domestic window proportions rather than one
+			-- shopfront-length ribbon. Narrow curated Watcher homes stay exact.
+			local clearWidth=sw-2.3
+			local count=sw>16 and math.clamp(math.ceil(clearWidth/11),2,3) or 1
+			local pier=.85
+			local paneWidth=(clearWidth-(count-1)*pier)/count
+			for i=1,count do
+				local px=x-clearWidth/2+paneWidth/2+(i-1)*(paneWidth+pier)
+				window(into,frame*CF(px,6.55,-.18),paneWidth,7.2,lit,simple)
+				if i<count then part(into,"FacadePier",V(pier,dh,.65),frame*CF(px+paneWidth/2+pier/2,dh/2,0),color) end
+			end
 		end
 		doorframe(into,frame,dw,dh)
 		if not openDoor then
@@ -188,6 +225,41 @@ function Architecture.Build(parent, origin, config)
 			end
 			part(m,"RoofRidge",V(.35,.35,d+2.4),frame*CF(0,h+half*math.tan(pitch)+.5,d/2),roofColor)
 		end
+		-- Selected houses have a genuine central hall and two separate side rooms.
+		-- The hall and rear clue wall stay clear; room furniture lives beside the
+		-- exterior walls. All internal doorways are full human height.
+		if options.completeHome and options.open~=false and w>=30 and d>=22 then
+			m:SetAttribute("CompleteHome",true);m:SetAttribute("RoomCount",3)
+			for _,side in ipairs({-1,1}) do
+				material(part(m,"InteriorPlasterLining",V(.025,h-.2,d-.65),frame*CF(side*(w/2-.345),h/2,d/2),C.pale,Enum.Material.Plaster),"Plaster")
+			end
+			if not options.backOpening then material(part(m,"InteriorBackPlasterLining",V(w-.7,h-.2,.025),frame*CF(0,h/2,d-.345),C.pale,Enum.Material.Plaster),"Plaster") end
+			local doorZ=d*.48;local opening=6.5;local front=3;local rear=d-.65
+			for _,side in ipairs({-1,1}) do
+				for _,span in ipairs({{front,doorZ-opening/2},{doorZ+opening/2,rear}}) do
+					if span[2]>span[1] then
+						local p=part(m,"WallpaperRoomPartition",V(.4,h,span[2]-span[1]),frame*CF(side*5.5,h/2,(span[1]+span[2])/2),C.pale,Enum.Material.Plaster)
+						material(p,"Wallpaper")
+					end
+				end
+				material(part(m,"RoomDoorLintel",V(.4,h-10,opening),frame*CF(side*5.5,10+(h-10)/2,doorZ),C.pale,Enum.Material.Plaster),"Wallpaper")
+				doorframe(m,frame*CF(side*5.5,0,doorZ)*CFrame.Angles(0,math.pi/2,0),opening,10)
+			end
+		end
+		if options.open~=false and math.abs(frame.Position.Y)<.1 and not options.backOpening then
+			m:SetAttribute("HousePuzzleCandidate",true)
+			local hint=part(m,"PuzzleHintSurface",V(6,5,.03),frame*CF(0,6,d-.38),C.white,nil,false)
+			hint.Transparency=1;hint.CastShadow=false;hint:SetAttribute("ReservedBlankClueArea",true)
+		end
+		local colorful=color==C.rose or color==C.pink or color==C.blue or color==C.lavender or color==C.yellow
+		local pastel=Color3.new(1,1,1):Lerp(color or C.cream,colorful and .55 or .3)
+		for _,surface in ipairs(m:GetChildren()) do
+			if surface:IsA("BasePart") then
+				local n=surface.Name
+				if n=="SideWall" or n=="BackWall" or n=="BackWallWing" or n=="BackWallHeader" or n=="FacadeLintel" or n=="WindowApron" or n=="FacadePier" or n=="GableBaseBand" or n=="ClosedGableTriangle" then material(surface,"Siding",pastel)
+				elseif n=="InteriorCeiling" then material(surface,"Plaster") end
+			end
+		end
 		local variant=options.furniture
 		if furnitureKit and variant and options.open~=false then
 			Furniture.FurnishHome(furnitureKit,m,frame,w,d,h,{variant=variant,open=true,backOpening=options.backOpening,glitchedTable=options.glitchedTable==true})
@@ -199,7 +271,7 @@ function Architecture.Build(parent, origin, config)
 	local function ceiling(into,name,x,z,w,d,y,style)
 		local m=model(name,into)
 		local tint=style=="domestic" and C.pale or (style=="low" and Color3.fromRGB(177,172,145) or C.ceiling)
-		part(m,"CeilingPlane",V(w,.6,d),CF(x,y,z),tint)
+		material(part(m,"CeilingPlane",V(w+12,8,d+12),CF(x,y+3.7,z),tint,Enum.Material.Plaster),"Plaster")
 		local tile=y>70 and 24 or style=="domestic" and 12 or 18
 		for xx=-w/2,w/2,tile do part(m,"CeilingGrid",V(.08,.08,d),CF(x+xx,y-.34,z),C.grid,nil,false) end
 		for zz=-d/2,d/2,tile do part(m,"CeilingGrid",V(w,.08,.08),CF(x,y-.34,z+zz),C.grid,nil,false) end
@@ -256,7 +328,7 @@ function Architecture.Build(parent, origin, config)
 
 	local K={root=root,config=config,C=C,V=V,CF=CF,model=model,part=part,floor=floor,
 		beam=beam,rail=rail,stairs=stairs,window=window,doorframe=doorframe,facade=facade,
-		house=house,texture=texture,wallLamp=wallLamp,bay=bay,ceiling=ceiling}
+		house=house,texture=texture,wallLamp=wallLamp,bay=bay,ceiling=ceiling,material=material}
 	furnitureKit=K
 
 	-- Curated panes use real supporting rooms. The origin remains private to this
@@ -334,6 +406,16 @@ function Architecture.Build(parent, origin, config)
 		house(A,"GroundWaitingCottage_"..s,CF(s*42,0,128),26,24,13.8,s<0 and C.rose or C.cream,C.lavender,{open=true})
 	end
 
+	-- Infill forms real short streets around the existing atrium stairs, rather
+	-- than stretching a central aisle between distant scenic facades.
+	for level=0,2 do
+		house(A,"CentralHallResidence_"..level,CF(0,level*14,60),52,32,13.8,C.pale,level==2 and C.blue or nil,{open=level==0,completeHome=level==0,furniture=level==0 and 6 or nil})
+	end
+	for _,side in ipairs({-1,1}) do
+		for level=0,2 do house(A,"AtriumInnerStack_"..side.."_"..level,CF(side*44,level*14,76)*yaw(side*90),28,24,13.8,C.cream,level==2 and C.lavender or nil,{open=level==0}) end
+		house(A,"AtriumRearCottage_"..side,CF(side*26,0,163),26,22,13.8,side<0 and C.rose or C.pale,C.blue,{open=true})
+	end
+
 	-- B trades the tall atrium for deep covered porches and low passage rooms.
 	local B=model("B_LowEavesArcade")
 	floor(B,"OchreArcadeCarpet",0,0,326,280,260,Color3.fromRGB(147,137,101))
@@ -358,6 +440,10 @@ function Architecture.Build(parent, origin, config)
 		for _,x in ipairs({-60,60}) do part(B,"ArcadeDomesticColumn",V(.8,17,.8),CF(x,8.5,z),C.white) end
 	end
 
+	for i,z in ipairs({272,338}) do
+		for level=0,1 do house(B,"ArcadeCrossLaneHome_"..i.."_"..level,CF(0,level*14,z),50,22,13.8,i==1 and C.pale or C.yellow,nil,{open=level==0,completeHome=level==0,furniture=level==0 and (i==1 and 7 or 8) or nil}) end
+	end
+
 	local N=require(script.Parent:WaitForChild("Level 5 Neighbourhood Districts")).Build(K)
 	local L=require(script.Parent:WaitForChild("Level 5 Landmark Districts")).Build(K)
 	local zones={
@@ -370,6 +456,9 @@ function Architecture.Build(parent, origin, config)
 		{Name="G_TiltedSubdivision",Title="Impossible Tilted Subdivision",Width=480,Z0=2076,Z1=2456,CeilingHeight=180,Style="warehouse"},
 		{Name="H_LastHouse",Title="Last House",Width=220,Z0=2456,Z1=2636,CeilingHeight=70,Style="domestic"},
 	}
+	local gateLocal={V(0,0,196),V(88,0,456),V(-120,0,936),V(120,0,1296),V(-120,0,1596),V(178,0,2076),V(-65,0,2456)}
+	local sectionGates={}
+	for i,p in ipairs(gateLocal) do sectionGates[i]={Frame=offset*CF(p),Approach=origin+p+V(0,3,-12),Departure=origin+p+V(0,3,12),WallThickness=8} end
 	local totalFootprint=0
 	for index,z in ipairs(zones) do
 		local m=root:FindFirstChild(z.Name);assert(m,"Missing district "..z.Name)
@@ -382,30 +471,30 @@ function Architecture.Build(parent, origin, config)
 		m:SetAttribute("ZoneMin",z.Min);m:SetAttribute("ZoneMax",z.Max);m:SetAttribute("CeilingHeight",z.CeilingHeight)
 		local enclosure=model("Enclosure",m)
 		local bottom=z.Bottom or 0
-		for _,s in ipairs({-1,1}) do
-			part(enclosure,"DistrictSideWall",V(1.2,z.CeilingHeight-bottom,z.Z1-z.Z0),CF(s*z.Width/2,(z.CeilingHeight+bottom)/2,(z.Z0+z.Z1)/2),C.cream)
-			part(enclosure,"ContinuousBaseboard",V(.45,.8,z.Z1-z.Z0),CF(s*(z.Width/2-.65),.4,(z.Z0+z.Z1)/2),C.white,nil,false)
+		-- A physically opaque shell: the interior faces stay on the existing
+		-- envelope, while thick outward walls overlap the roof and corner caps.
+		local top=z.CeilingHeight+6;local deep=bottom-6
+		for _,side in ipairs({-1,1}) do
+			material(part(enclosure,"DistrictSideWall",V(6,top-deep,z.Z1-z.Z0+12),CF(side*(z.Width/2+2.4),(top+deep)/2,(z.Z0+z.Z1)/2),C.cream,Enum.Material.Plaster),"Plaster")
+			part(enclosure,"ContinuousBaseboard",V(.45,.8,z.Z1-z.Z0),CF(side*(z.Width/2-.65),.4,(z.Z0+z.Z1)/2),C.white,nil,false)
+			for _,edge in ipairs({z.Z0,z.Z1}) do material(part(enclosure,"OverlappingCornerColumn",V(4,top-deep,4),CF(side*(z.Width/2+1), (top+deep)/2,edge),C.cream,Enum.Material.Plaster),"Plaster") end
 		end
 		for _,isBack in ipairs({false,true}) do
-			local edge=isBack and z.Z1-.04 or z.Z0+.04
+			local edge=isBack and z.Z1 or z.Z0
 			local entrance=index==1 and not isBack
 			local chute=index==8 and isBack
 			local opening=chute and 9.3 or 22;local openingHeight=chute and 11 or 14
-			local wallBottom=chute and -35 or bottom
-			if entrance then part(enclosure,"ArrivalBackWall",V(z.Width,z.CeilingHeight,1.3),CF(0,z.CeilingHeight/2,edge),C.cream)
+			local wallBottom=chute and -35 or deep
+			local gate=not entrance and not chute and gateLocal[isBack and index or index-1] or nil
+			local gx=gate and gate.X or 0
+			if entrance then
+				material(part(enclosure,"ArrivalBackWall",V(z.Width+12,top-deep,8),CF(0,(top+deep)/2,edge-3.3),C.cream,Enum.Material.Plaster),"Plaster")
 			else
-				local wing=(z.Width-opening)/2
-				for _,s in ipairs({-1,1}) do part(enclosure,"ThresholdSideWall",V(wing,z.CeilingHeight-wallBottom,1.1),CF(s*(opening/2+wing/2),(z.CeilingHeight+wallBottom)/2,edge),C.cream) end
-				part(enclosure,"ThresholdHighClosure",V(opening,z.CeilingHeight-openingHeight,1.1),CF(0,(z.CeilingHeight+openingHeight)/2,edge),C.cream)
-				if bottom<0 and not chute then
-					-- The sunken street can be explored beneath its raised platforms.
-					-- Close the below-grade portal so it cannot lead under the next zone.
-					part(enclosure,"ThresholdFoundation",V(opening,-bottom,1.1),CF(0,bottom/2,edge),C.cream)
+				for _,span in ipairs({{-z.Width/2-6,gx-opening/2},{gx+opening/2,z.Width/2+6}}) do
+					material(part(enclosure,"ThresholdSideWall",V(span[2]-span[1],top-wallBottom,8),CF((span[1]+span[2])/2,(top+wallBottom)/2,edge),C.cream,Enum.Material.Plaster),"Plaster")
 				end
-				if not chute then
-					for _,s in ipairs({-1,1}) do part(enclosure,"WideThresholdJamb",V(.55,14,.9),CF(s*11.28,7,edge-.7),C.white) end
-					part(enclosure,"WideThresholdTrim",V(22.5,.5,.9),CF(0,14.25,edge-.7),C.white)
-				end
+				material(part(enclosure,"ThresholdHighClosure",V(opening,top-openingHeight,8),CF(gx,(top+openingHeight)/2,edge),C.cream,Enum.Material.Plaster),"Plaster")
+				if bottom<0 and not chute then material(part(enclosure,"ThresholdFoundation",V(opening,-deep,8),CF(gx,deep/2,edge),C.cream,Enum.Material.Plaster),"Plaster") end
 			end
 		end
 		ceiling(enclosure,z.Title.."Ceiling",0,(z.Z0+z.Z1)/2,z.Width,z.Z1-z.Z0,z.CeilingHeight,z.Style)
@@ -442,8 +531,8 @@ function Architecture.Build(parent, origin, config)
 		{name="ExpandedArcade",position=V(9,6,204),lookAt=V(-78,10,284)},
 		{name="ExpandedArcadeSideLoop",position=V(127,6,309),lookAt=V(90,9,390)},
 	}
-	local waypoints={V(0,3,5),V(0,3,60),V(0,3,120),V(0,3,190),V(0,3,203),V(0,3,263),V(0,3,326),V(0,3,392),V(0,3,450)}
-	for _,r in ipairs({N,L}) do for _,v in ipairs(r.PreviewCameras or {}) do table.insert(cameras,v) end;for _,v in ipairs(r.Waypoints or {}) do table.insert(waypoints,v) end end
+	local waypoints={V(0,3,5),V(0,3,45),V(35,3,50),V(35,3,104),V(0,3,108),V(0,3,184),V(0,3,208),V(0,3,263),V(58,3,264),V(58,3,329),V(-55,3,329),V(-55,3,397),V(60,3,400),V(60,3,444),V(88,3,444),V(88,3,468),V(110,3,468),V(110,3,513),V(145,3,513),V(145,3,565),V(90,3,592),V(25,3,592),V(25,3,650),V(-25,3,700),V(-25,3,740),V(-25,3,778),V(-90,3,778),V(-145,3,800),V(-145,3,865),V(-100,3,875),V(-100,3,924),V(-120,3,924),V(-120,3,948),V(-120,3,965),V(-101,3,965),V(-101,3,1087),V(-101,3,1109),V(-86,3,1109),V(-86,3,1094),V(-86,3,1089),V(-86,-3,1073),V(-86,-9,1057),V(-86,-9,1024),V(15,-9,1024),V(15,-9,1106),V(30,-9,1122),V(30,-9,1195),V(0,-9,1228),V(0,-3,1246),V(0,3,1265),V(120,3,1278),V(120,3,1284),V(120,3,1308),V(90,3,1310),V(90,3,1373),V(60,3,1373),V(60,3,1406),V(-90,3,1406),V(-90,3,1458),V(-60,3,1458),V(-60,3,1495),V(-90,3,1495),V(-90,3,1550),V(-120,3,1584),V(-120,3,1608),V(-125,3,1689),V(-80,3,1690),V(-80,3,1755),V(15,3,1755),V(75,3,1790),V(75,3,1840),V(75,3,1910),V(40,3,1955),V(0,3,1955),V(0,3,2028),V(80,3,2028),V(178,3,2048),V(178,3,2064),V(178,3,2088),V(135,3,2100),V(95,3,2140),V(0,3,2140),V(-54,3,2173),V(-54,7,2188),V(-54,11,2204),V(-90,11,2208),V(-90,11,2270),V(-60,11,2270),V(-10,11,2270),V(6,11,2270),V(18,15,2270),V(30,19,2270),V(36,19,2270),V(92,19,2270),V(92,19,2332),V(54,19,2332),V(54,19,2340),V(54,11,2360),V(54,3,2380),V(54,3,2383),V(0,3,2400),V(0,3,2444),V(-65,3,2444),V(-65,3,2468),V(-65,3,2538),V(-30,3,2548),V(0,3,2555),V(0,3,2578),V(0,3,2588),V(0,3,2597.5),V(9,3,2597.5),V(9,3,2610.9),V(0,3,2610.9),V(0,3,2613),V(0,3,2615),V(0,-2.5,2631),V(0,-8,2647),V(0,-17,2658.5),V(0,-26,2670),V(0,-26,2676)}
+	for _,r in ipairs({N,L}) do for _,v in ipairs(r.PreviewCameras or {}) do table.insert(cameras,v) end end
 	for _,v in ipairs(cameras) do v.position+=origin;v.lookAt+=origin end
 	for i,v in ipairs(waypoints) do waypoints[i]=origin+v end
 	local actualParts,actualLights,windows=0,0,0
@@ -454,8 +543,8 @@ function Architecture.Build(parent, origin, config)
 	root:SetAttribute("WindowStandard","Glass RGB(87,102,102), transparency 0.2; no luminous panes")
 	root:SetAttribute("Design","Unknown-origin Backrooms. The researchers did not create this place.")
 	root:SetAttribute("SpawnCFrame",CFrame.lookAt(origin+V(0,3,5),origin+V(0,3,70)))
-	return {Model=root,SpawnCFrame=CFrame.lookAt(origin+V(0,3,5),origin+V(0,3,70)),PreviewCameras=cameras,Waypoints=waypoints,Zones=zones,
+	return {Model=root,SpawnCFrame=CFrame.lookAt(origin+V(0,3,5),origin+V(0,3,70)),PreviewCameras=cameras,Waypoints=waypoints,RouteWaypoints=waypoints,SectionGates=sectionGates,Zones=zones,
 		FinalHouse=L.FinalHouse,ChuteStart=CF(origin+L.ChuteStart),ChuteEnd=CF(origin+L.ChuteEnd),
-		Bounds={Min=origin+V(-281,-36,-5),Max=origin+V(281,181,2680)},GroundEnvelopeArea=totalFootprint,PreviousGroundEnvelopeArea=331600}
+		Bounds={Min=origin+V(-287,-36,-12),Max=origin+V(287,188,2680)},GroundEnvelopeArea=totalFootprint,PreviousGroundEnvelopeArea=331600}
 end
 return Architecture

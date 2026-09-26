@@ -36,7 +36,7 @@ function Districts.Build(K)
 	-- F: several intimate courts lie below a much taller, tangled domestic skyline.
 	-- All houses retain human dimensions. Only the scenic upper floors are closed.
 	local F=zone("F_BayWindowCanyon",V(-250,0,1596),V(250,156,2076),"Deep carpet courts, nested small houses and continuous balconies below asymmetric residential towers.")
-	F:SetAttribute("CourtVersion","2026-09-26.expanded")
+	F:SetAttribute("CourtVersion","2026-09-26.dense-courts")
 	F:SetAttribute("PlayableFloorHeights","0,14,28")
 	floor(F,"CanyonCarpet",0,0,1836,500,480,C.carpet)
 	local sage=Color3.fromRGB(139,145,119)
@@ -92,11 +92,21 @@ function Districts.Build(K)
 	floor(F,"CanyonHighBridge",0,28,1970,254,14,C.carpet)
 	for _,z in ipairs({1963,1977}) do rail(F,CF(0,28,z),224) end
 	for _,side in ipairs({-1,1}) do for _,z in ipairs({1612,1775,1970,2050}) do post(F,side*110,0,z,28) end end
-	-- Short roofed side courts break up the far view without closing any loop.
-	for _,side in ipairs({-1,1}) do for _,z in ipairs({1798,1952}) do
-		part(F,"SideCourtDomesticLintel",V(68,2,8),CF(side*190,20,z),C.pale)
-		for _,x in ipairs({160,222}) do post(F,side*x,0,z,19) end
-	end end
+	-- Inhabitable scale without inhabitants: a series of nested domestic blocks
+	-- breaks the floor into short, readable courts. The old isolated lintels are
+	-- replaced by supported residential volumes and real doorways.
+	for i,info in ipairs({{0,1645,46,32,3},{0,1800,50,30,5},{-5,1920,54,28,4},{0,2038,70,24,2}}) do
+		local x,z,w,d,count=table.unpack(info)
+		for level=0,count-1 do
+			house(F,"NestedCourtInfill_"..i.."_"..level,CF(x,level*14,z),w,d,13.8,i%2==0 and sage or C.pale,level==count-1 and C.blue or nil,{open=level==0,completeHome=level==0,furniture=level==0 and i<=2 and (i==1 and 6 or 8) or nil})
+		end
+	end
+	for _,side in ipairs({-1,1}) do
+		for i,z in ipairs({1800,1960}) do
+			local count=i==1 and 4 or 6
+			for level=0,count-1 do house(F,"SideCourtDomesticStack_"..side.."_"..i.."_"..level,CF(side*190,level*14,z)*yaw(side*90),30,28,13.8,side<0 and C.rose or sage,level==count-1 and C.lavender or nil,{open=level==0,completeHome=level==0}) end
+		end
+	end
 	camera("ExpandedCanyonArrival",V(8,7,1604),V(-139,48,1741))
 	camera("ExpandedCanyonMiddleBalcony",V(-121,20,1789),V(117,48,1935))
 	camera("ExpandedCanyonSkyline",V(8,8,1820),V(145,104,1736))
@@ -140,6 +150,13 @@ function Districts.Build(K)
 		K.edgeRail(G,s*70,y,2149,2391,{{2200,2216},{2263,2277},{2324,2340}})
 		for _,z in ipairs({2149,2391}) do rail(G,CF(s*110,y,z),80) end
 	end
+	-- Solid masonry beneath the terraces closes low headroom crawl-throughs and
+	-- makes the domestic streets read as a terraced subdivision, not platforms.
+	for _,side in ipairs({-1,1}) do
+		local height=side<0 and 8 or 16
+		for _,x in ipairs({70,150}) do K.material(part(G,"TerraceFoundationSide",V(1,height,242),CF(side*x,height/2,2270),C.pale,Enum.Material.Plaster),"Plaster") end
+		for _,z in ipairs({2149,2391}) do K.material(part(G,"TerraceFoundationEnd",V(81,height,1),CF(side*110,height/2,z),C.pale,Enum.Material.Plaster),"Plaster") end
+	end
 	-- Flights sit in dedicated inner-side pockets, never under a solid terrace.
 	stairs(G,"WestTerraceEntryFlight",CF(-54,0,2176),14,8,24,16,C.pink,true)
 	floor(G,"WestTerraceEntryLanding",-68,8,2208,42,16,C.pink)
@@ -173,6 +190,15 @@ function Districts.Build(K)
 		house(G,"GroundDetachedHome_"..s,CF(s*42,0,2106),28,24,13.8,s<0 and C.rose or C.pale,C.blue,{open=true,backOpening=true})
 		house(G,"DepartureDetachedHome_"..s,CF(s*43,0,2410),28,26,13.8,C.cream,C.lavender,{open=true})
 	end
+	for level=0,2 do house(G,"CentralTerracedResidence_"..level,CF(0,level*14,2220),72,40,13.8,C.cream,nil,{open=level==0,completeHome=level==0,furniture=level==0 and 7 or nil}) end
+	-- A smaller ordinary house grows at a wrong angle from the otherwise usable
+	-- lower residence. Its base remains supported, far above the crossing.
+	house(G,"PerchedAngledResidence",CF(8,42,2240)*yaw(12)*CFrame.Angles(0,0,math.rad(-8)),32,28,13.8,C.pale,C.blue,{open=false})
+	for _,side in ipairs({-1,1}) do
+		for i,z in ipairs({2240,2290}) do
+			for level=0,1 do house(G,"OuterGardenResidence_"..side.."_"..i.."_"..level,CF(side*214,level*14,z)*yaw(side*90),28,24,13.8,i==1 and C.rose or C.pale,level==1 and C.lavender or nil,{open=level==0}) end
+		end
+	end
 	camera("ExpandedTiltedArrival",V(7,7,2083),V(-172,73,2206))
 	camera("ExpandedTiltedTerrace",V(87,22,2330),V(-167,108,2350))
 	camera("ExpandedTiltedCrossing",V(-58,14,2267),V(185,61,2238))
@@ -186,11 +212,14 @@ function Districts.Build(K)
 	floor(H,"QuietCourtCarpet",0,0,2535.5,220,159,C.carpet) -- ends exactly at chute mouth
 	for _,s in ipairs({-1,1}) do
 		floor(H,"ChuteSideGround",s*57.5,0,2625.5,105,21,C.carpet)
-		part(H,"QuietCourtPlanter",V(4,2,6),CF(s*25,1,2576),C.green,Enum.Material.Fabric)
+		K.material(part(H,"QuietCourtPlanter",V(4,2,6),CF(s*25,1,2576),C.green,Enum.Material.Grass),"Grass")
 		local home=house(H,"QuietClosedNeighbour"..s,CF(s*67,0,2566),28,24,14.2,C.cream,nil,{open=false,lit=false})
 		if s==-1 then K.registerWatcher(home,"LastHouseNeighbourWindow",H.Name) end
 		for i,z in ipairs({2485,2526}) do house(H,"QuietApproachHouse_"..s.."_"..i,CF(s*75,0,z)*yaw(s*90),28,26,13.8,C.pale,i==1 and C.blue or nil,{open=true,furniture=i==1 and (s<0 and 1 or 2) or nil}) end
 	end
+	-- One final nested home bends the arrival lane left, then releases it into
+	-- the quiet final-house reveal. The vestibule and complete chute stay intact.
+	for level=0,2 do house(H,"LastNeighbourhoodHall_"..level,CF(0,level*14,2496),44,30,13.8,C.pale,level==2 and C.blue or nil,{open=level==0,completeHome=level==0,furniture=level==0 and 8 or nil}) end
 	path(H,"LastHouseApproach",0,0,2570,17,28,C.pink)
 	local finalHouse=house(H,"FinalHouse",CF(0,0,2584),42,31,15,C.pale,nil,{open=true,backOpening=true,lit=false})
 	finalHouse:SetAttribute("PuzzleReady",true)

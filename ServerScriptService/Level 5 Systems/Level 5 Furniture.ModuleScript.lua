@@ -6,11 +6,11 @@
 -- No services, Lights, Neon, scripts, Seats, animations or moving assemblies.
 local Furniture = {}
 
-Furniture.Version = "2026-09-24.2"
-Furniture.MaxHomes = 20
-Furniture.MaxPartsPerHome = 100
+Furniture.Version = "2026-09-26.domestic.3"
+Furniture.MaxHomes = 36
+Furniture.MaxPartsPerHome = 115
 Furniture.ClearLaneWidth = 7
-Furniture.VariantNames = {"SofaTVLounge","ReadingCorner","DiningRoom","JoinedChairs","SparseSittingRoom"}
+Furniture.VariantNames = {"SofaTVLounge","ReadingCorner","DiningRoom","JoinedChairs","SparseSittingRoom","Bedroom","KitchenBreakfast","WritingRoom"}
 
 function Furniture.FurnishHome(K, home, frame, width, depth, height, options)
 	options = options or {}
@@ -28,7 +28,7 @@ function Furniture.FurnishHome(K, home, frame, width, depth, height, options)
 		or width<18 or depth<10.5 or height<9 then
 		return {Placed=false,Reason="Room too small for clear domestic furniture",PartCount=0}
 	end
-	local variant=1+(math.floor(tonumber(options.variant or options.Variant) or 1)-1)%5
+	local variant=1+(math.floor(tonumber(options.variant or options.Variant) or 1)-1)%8
 	local compact=depth<16
 	if compact then variant=1 end
 	local V,CF=K.V,K.CF
@@ -38,7 +38,7 @@ function Furniture.FurnishHome(K, home, frame, width, depth, height, options)
 	local oatmeal=Color3.fromRGB(167,153,123)
 	local sage=Color3.fromRGB(108,119,100)
 	local brown=Color3.fromRGB(126,105,85)
-	local cloth=({oatmeal,sage,brown,oatmeal,sage})[variant]
+	local cloth=({oatmeal,sage,brown,oatmeal,sage,sage,oatmeal,brown})[variant]
 	local piping=Color3.fromRGB(139,126,105)
 	local black=Color3.fromRGB(24,27,25)
 	local group=K.model("DomesticFurniture",home)
@@ -68,6 +68,14 @@ function Furniture.FurnishHome(K, home, frame, width, depth, height, options)
 		extents.Max=V(math.max(extents.Max.X,maximum.X),math.max(extents.Max.Y,maximum.Y),math.max(extents.Max.Z,maximum.Z))
 		partCount+=1
 		local p=K.part(into,name,size,frame*localFrame,color,material,collide,className)
+		local woodTexture=config.TexturePalette and config.TexturePalette.Wood
+		if material==Enum.Material.Wood and K.material then
+			K.material(p,"Wood",(color or Color3.new(1,1,1)):Lerp(Color3.new(1,1,1),.7))
+		elseif material==Enum.Material.Wood and woodTexture and math.max(size.X,size.Y,size.Z)>1.2 then
+			local face=size.Y<math.min(size.X,size.Z) and Enum.NormalId.Top or Enum.NormalId.Front
+			local t=K.texture(p,woodTexture,face,4)
+			if t then t.Color3=Color3.fromRGB(255,255,255);t.Transparency=.12 end
+		end
 		if collide==false then p.CanQuery=false;p.CanTouch=false end
 		return p
 	end
@@ -77,7 +85,7 @@ function Furniture.FurnishHome(K, home, frame, width, depth, height, options)
 	end
 	local function fabric(p,face)
 		local t=K.texture(p,config.FurnitureUpholsteryTexture,face or Enum.NormalId.Top,2.5)
-		if t then t.Color3=cloth;t.Transparency=.35 end
+		if t then t.Color3=Color3.fromRGB(255,255,255);t.Transparency=.18 end
 	end
 	local function legs(m,f,x,z,legHeight,thickness)
 		for _,sx in ipairs({-1,1}) do for _,sz in ipairs({-1,1}) do
@@ -205,6 +213,64 @@ function Furniture.FurnishHome(K, home, frame, width, depth, height, options)
 		add(m,"FadedSageShape",V(.72,.87,.025),f*CF(.55,-.55,-.067),Color3.fromRGB(100,115,91),Enum.Material.SmoothPlastic,false)
 	end
 
+	local function bedroom()
+		local m=item("DomesticSingleBed","Bed")
+		local f=CF(-width/2+2.75,0,depth*.54)
+		legs(m,f,1.8,3.0,.65,.24)
+		add(m,"WalnutBedFrame",V(4.4,.42,7.25),f*CF(0,.82,0),wood,Enum.Material.Wood)
+		local mattress=add(m,"OldCreamMattress",V(4.05,.65,6.9),f*CF(0,1.34,0),oatmeal,Enum.Material.Fabric);fabric(mattress)
+		local quilt=add(m,"FoldedWovenCover",V(4.1,.16,4.7),f*CF(0,1.75,-.8),sage,Enum.Material.Fabric);fabric(quilt)
+		local pillow=add(m,"TooSquarePillow",V(2.5,.35,1.45),f*CF(.1,1.89,2.45),oatmeal,Enum.Material.Fabric);fabric(pillow)
+		add(m,"BedHeadboard",V(4.4,2.9,.23),f*CF(0,1.75,3.5),wood,Enum.Material.Wood)
+		local wardrobe=item("ClosedBedroomWardrobe","Wardrobe")
+		local wf=CF(width/2-1.85,0,depth*.62)
+		add(wardrobe,"WardrobeCarcass",V(2.8,7.4,4.8),wf*CF(0,3.7,0),wood,Enum.Material.Wood)
+		for _,s in ipairs({-1,1}) do
+			add(wardrobe,"WardrobePanel",V(.15,6.95,2.13),wf*CF(-1.47,3.72,s*1.15),edge,Enum.Material.Wood)
+			add(wardrobe,"WardrobePull",V(.16,.55,.12),wf*CF(-1.6,3.8,s*.22),darkWood,Enum.Material.Metal,false)
+		end
+		framedPrint(-width/2+.56,depth*.54)
+	end
+	local function kitchenette()
+		local m=item("FittedKitchenRun","Kitchen")
+		local f=CF(-width/2+1.72,0,depth*.53)
+		add(m,"CreamKitchenBase",V(2.5,2.8,7),f*CF(0,1.4,0),oatmeal,Enum.Material.Wood)
+		add(m,"DarkKitchenWorktop",V(2.7,.2,7.2),f*CF(0,2.9,0),darkWood,Enum.Material.Wood)
+		for _,z in ipairs({-2.3,0,2.3}) do
+			add(m,"InsetCupboardFace",V(.12,2.25,2.13),f*CF(1.31,1.46,z),edge,Enum.Material.Wood)
+			add(m,"CupboardHandle",V(.15,.08,.62),f*CF(1.43,2.15,z),black,Enum.Material.Metal,false)
+		end
+		add(m,"SteelSinkRim",V(1.7,.09,1.9),f*CF(0,3.04,-1.65),Color3.fromRGB(139,144,137),Enum.Material.Metal)
+		add(m,"SinkBasin",V(1.4,.04,1.55),f*CF(0,3.095,-1.65),black,Enum.Material.Metal,false)
+		add(m,"TapStem",V(.1,.72,.1),f*CF(-.75,3.42,-1.65),Color3.fromRGB(139,144,137),Enum.Material.Metal,false)
+		add(m,"TapSpout",V(.65,.1,.1),f*CF(-.46,3.77,-1.65),Color3.fromRGB(139,144,137),Enum.Material.Metal,false)
+		add(m,"OldElectricHob",V(1.85,.08,2.1),f*CF(0,3.05,1.7),black,Enum.Material.Metal)
+		for _,z in ipairs({1.1,2.25}) do add(m,"UnlitHotplate",V(1.2,.05,.72),f*CF(0,3.115,z),Color3.fromRGB(65,61,52),Enum.Material.Metal,false) end
+		local tableModel=item("BreakfastShelf","BreakfastTable")
+		local tf=CF(width/2-1.9,0,depth*.54)
+		legs(tableModel,tf,.9,2.15,2.65,.19)
+		add(tableModel,"BreakfastTop",V(2.8,.22,5.2),tf*CF(0,2.76,0),edge,Enum.Material.Wood)
+		local cup=add(tableModel,"AbandonedCup",V(.48,.62,.48),tf*CF(-.35,3.18,.85),oatmeal,Enum.Material.SmoothPlastic,false);cup.Shape=Enum.PartType.Cylinder
+		wallClock(width/2-.56,depth*.54)
+	end
+	local function writingRoom()
+		local m=item("VeneerWritingDesk","Desk")
+		local f=CF(-width/2+2.1,0,depth*.5)
+		legs(m,f,1.15,2.15,2.5,.2)
+		add(m,"WritingDeskTop",V(3.1,.22,5.2),f*CF(0,2.61,0),edge,Enum.Material.Wood)
+		add(m,"ClosedDrawerBlock",V(2.8,1.5,1.5),f*CF(0,1.7,1.65),wood,Enum.Material.Wood)
+		add(m,"BlankPaperStack",V(1.55,.09,1.3),f*CF(0,2.765,-.85),Color3.fromRGB(196,188,159),Enum.Material.SmoothPlastic,false)
+		local shelf=item("BookshelfWithRepeatedVolumes","Bookcase")
+		local bf=CF(width/2-1.1,0,depth*.57)
+		add(shelf,"BookcaseBack",V(.17,6.7,5),bf*CF(.64,3.35,0),wood,Enum.Material.Wood)
+		for _,z in ipairs({-2.5,2.5}) do add(shelf,"BookcaseSide",V(1.4,6.7,.18),bf*CF(0,3.35,z),wood,Enum.Material.Wood) end
+		for _,y in ipairs({.15,2.3,4.5,6.7}) do add(shelf,"VeneerShelf",V(1.4,.16,5),bf*CF(0,y,0),edge,Enum.Material.Wood) end
+		for i=1,8 do
+			local z=-1.9+(i-1)*.52
+			add(shelf,"RepeatedUnlabelledBook",V(.95,1.45,.36),bf*CF(-.1,3.105,z),i%2==0 and sage or brown,Enum.Material.Fabric,false)
+		end
+		framedPrint(-width/2+.56,depth*.5)
+	end
 	local sofaZ=depth*.56
 	local leftX=-width/2+2.35
 	local rightX=width/2-2.1
@@ -229,8 +295,11 @@ function Furniture.FurnishHome(K, home, frame, width, depth, height, options)
 		sofa(CF(leftX,0,sofaZ)*yaw(-90),7.2)
 		sideTable(CF(leftX,0,sofaZ+5.2))
 		wallClock(-width/2+.56,sofaZ-3)
+	elseif variant==6 then bedroom()
+	elseif variant==7 then kitchenette()
+	elseif variant==8 then writingRoom()
 	end
-	assert(pieceCount>=2 and pieceCount<=4,"Furniture density exceeded the sparse-room contract")
+	assert(pieceCount>=2 and pieceCount<=4,"Furniture density exceeded the domestic-room contract")
 	group:SetAttribute("PartCount",partCount)
 	group:SetAttribute("FurniturePieceCount",pieceCount)
 	home:SetAttribute("Level5FurnitureVersion",Furniture.Version)
