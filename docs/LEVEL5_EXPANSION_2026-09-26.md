@@ -92,7 +92,7 @@ A later optional-route run found a real A obstruction: the rear railing of the f
 
 F's initial optional crossing targeted a visible structural column. Detouring its waypoints around the column required no geometry change; the continuation passed **19/19 waypoints** over approximately 745 studs through the upper/lower balcony circuit. `native-optional-routes-before-railing-fix.json` retains the initial A/F failures and the successful F continuation. These are sampled traversal routes, not full-volume coverage of every room or all optional paths.
 
-Root exercised the actual first-gate E prompt and wheel UI: RED/RED/RED/RED returned retry feedback and left the gate closed; real wheel clicks then set the correct order and produced shared SOLVED state with both leaves noncolliding. All six later gates were opened with the actual held F developer-bypass prompt. This establishes these normal and developer flows. Server rejection and idempotence have the local validator/lifecycle coverage described below; those input-fault cases were not all repeated as native interactions.
+Root exercised the actual first-gate E prompt and wheel UI: RED/RED/RED/RED returned retry feedback and left the gate closed; real wheel clicks then set the correct order and produced shared SOLVED state with both leaves noncolliding. All six later gates were opened with the actual held F developer-bypass prompt. This establishes these normal and developer flows. Pure puzzle tests cover malformed answers and participation/range/line-of-sight predicates. Puzzle nonce/expiry/rate checks and idempotent gate handling were source-reviewed but not separately fault-injected; the mocked lifecycle tests below cover the Watcher.
 
 The first native UI inspector found a small three-pixel overlap between the help area and Close control. The client layout was corrected. `native-final-ui-layouts.json` then reports **PASS with zero issues in all five native simulated viewports**: desktop 1053×678, iPhone portrait 401×777, iPhone landscape 749×361, Galaxy landscape 705×338 and iPad landscape 1375×1030. Text-fit, control bounds and overlap checks passed; mobile simulations reported touch enabled. These are Studio device-layout results, not physical phone/tablet or full gamepad play sessions. `native-clue-images-final.json` also confirms all four actual client clue ImageLabels had `IsLoaded=true` and `BackgroundTransparency=1`.
 
@@ -122,7 +122,7 @@ Coverage limits remain explicit:
 - Watcher cases used one actual player, QA teleporting between viewpoints and restarting the owned controller. They are not a continuous natural traversal/schedule or full two-account multiplayer acceptance. Warm-up/blocked/away/local-disappearance edge cases are not proven solely by rendered sample counts.
 - Phone/tablet checks used Studio device simulation. Physical hardware, mobile performance and a full gamepad session were not tested.
 - Performance samples cover A/F at quality 10 on this Studio desktop. Other views, real published-server load and multiplayer performance are not established.
-- Malformed/range/nonce/idempotence behavior has the cited local logic/lifecycle coverage; every fault case was not repeated through the native UI.
+- Malformed answer and participation/range/line-of-sight predicates have pure-test coverage. Puzzle nonce/expiry/rate checks and idempotent gate handling were source-reviewed, not separately fault-injected. The mocked lifecycle tests are Watcher-specific.
 
 Release records:
 
