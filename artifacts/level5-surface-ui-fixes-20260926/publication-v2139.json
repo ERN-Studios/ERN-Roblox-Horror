@@ -1,0 +1,12 @@
+{
+  "success": true,
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "publishedVersion": 2139,
+  "publishedAtUtc": "2026-09-26T20:01:51.250Z",
+  "method": "Native File > Publish to Roblox",
+  "sourceLog": "0.740.19.7400931_20260926T113832Z_Studio_a1f69_last.log",
+  "evidenceFile": "artifacts/level5-surface-ui-fixes-20260926/publication-log.txt",
+  "evidenceSha256": "cbf016108f234c9e20c22e67228d8fb36862252d5d60ef34d9e721a4a83a7e24",
+  "scope": "Level 5 surface ownership, remove house-clue signs, immediate padlock cursor and transparent backdrop; no active server restart."
+}

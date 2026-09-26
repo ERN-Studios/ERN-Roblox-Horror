@@ -173,18 +173,21 @@ function Encounters.Start(world,options)
 		local initial=type(districtName)=="string" and districtName:match("^([A-H])_")
 		local floor=anchor:GetAttribute("FloorCFrame")
 		local depth=anchor:GetAttribute("PawnDepth")
+		local surfaceLift=anchor:GetAttribute("SurfaceLift")
+		if surfaceLift==nil then surfaceLift=0 end -- legacy anchors keep their authored floor
 		if not anchor:IsA("BasePart") or anchor:GetAttribute("Level5WindowWatcherAnchor")~=true or names[anchor.Name]
 			or not initial or not district or not pane or not pane:IsA("BasePart") or not pane:IsDescendantOf(district)
 			or pane.Material~=Enum.Material.Glass or pane:GetAttribute("Level5TintedWindow")~=true or not pane.CanQuery
 			or pane.Size.X<6 or pane.Size.Y<7.19 or pane.Size.Z>.5
 			or typeof(floor)~="CFrame" or not finite(depth) or depth<1.90 or depth>4
+			or not finite(surfaceLift) or surfaceLift<0 or surfaceLift>.48
 			or depth-1.745002-pane.Size.Z*.5<.04 then
 			return failure("invalid supported glass/anchor: "..anchor.Name)
 		end
 		local relative=pane.CFrame:ToObjectSpace(floor)
-		if (relative.Position-Vector3.new(0,-6.55,0)).Magnitude>.02
+		if (relative.Position-Vector3.new(0,-6.55+surfaceLift,0)).Magnitude>.02
 			or relative.LookVector:Dot(Vector3.new(0,0,-1))<.9999 or floor.UpVector.Y<.9999 then
-			return failure("floor frame must share pane rotation and sit 6.55 studs below its center: "..anchor.Name)
+			return failure("floor frame must share pane rotation and match its bounded floor surface lift: "..anchor.Name)
 		end
 		-- Validate the two actual actor depth extrema without changing geometry.
 		for _,testDepth in ipairs({math.max(depth,.95),math.max(depth,1.90)}) do

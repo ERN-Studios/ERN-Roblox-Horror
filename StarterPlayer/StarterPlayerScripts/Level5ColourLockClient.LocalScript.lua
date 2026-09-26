@@ -86,8 +86,9 @@ local function connect(signal,callback) local c=signal:Connect(callback);table.i
 local gui=Instance.new("ScreenGui");gui.Name="Level5ColourLockGui";gui.ResetOnSpawn=false
 assert(not playerGui:FindFirstChild(gui.Name),"Existing colour-lock UI must not be replaced")
 gui:SetAttribute("Level5ProgressionOwned",true);gui.DisplayOrder=70;gui.IgnoreGuiInset=false;gui.Enabled=false;gui.Parent=playerGui
-local shade=Instance.new("Frame");shade.Size=UDim2.fromScale(1,1);shade.BackgroundColor3=Color3.new(0,0,0)
-shade.BackgroundTransparency=.28;shade.BorderSizePixel=0;shade.Active=true;shade.Parent=gui
+-- Keep the modal input blocker, but let the live world remain undimmed.
+local shade=Instance.new("Frame");shade.Name="ModalInputBlocker";shade.Size=UDim2.fromScale(1,1)
+shade.BackgroundTransparency=1;shade.BorderSizePixel=0;shade.Active=true;shade.Parent=gui
 local panel=Instance.new("Frame");panel.Name="LockPanel";panel.AnchorPoint=Vector2.new(.5,.5)
 panel.Position=UDim2.fromScale(.5,.5);panel.Size=UDim2.fromOffset(600,330)
 panel.BackgroundColor3=Color3.fromRGB(30,35,31);panel.BorderSizePixel=0;panel.Parent=shade
@@ -183,6 +184,15 @@ local function close(notifyServer)
 	previousSelection=nil
 	if notifyServer and submitRemote and submitRemote.Parent and oldNonce then submitRemote:FireServer("close",oldNonce) end
 end
+-- Every teardown reaches the same close function and clears the shared modal
+-- flag. RoundUI then restores its current gameplay/lobby policy; this client
+-- never saves an old MouseBehavior that might belong to a different screen.
+connect(player.CharacterRemoving,function() close(true) end)
+connect(player.CharacterAdded,function() close(true) end)
+connect(gui:GetPropertyChangedSignal("Enabled"),function()
+	if open and not gui.Enabled then close(true) end
+end)
+connect(gui.Destroying,function() close(true) end)
 local OTHER_MODAL_ATTRIBUTES={"ZyntraStoreOpen","DevPhoneOpen","ZyntraReentryOpen","QueueModalOpen","LuckyWheelOpen","DailyRewardsOpen","DispatchBriefingOpen","ZyntraDispatchClientActive"}
 local function allowed()
 	local camera=workspace.CurrentCamera;local char=player.Character;local hum=char and char:FindFirstChildOfClass("Humanoid")

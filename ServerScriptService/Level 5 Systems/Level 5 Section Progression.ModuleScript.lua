@@ -11,7 +11,7 @@ local Catalog = require(script.Parent:WaitForChild("Level 5 Puzzle Catalog"))
 local Outage = require(script.Parent:WaitForChild("Level 5 Power Outage"))
 local Progression = {}
 local sessions = setmetatable({}, {__mode = "k"})
-local VERSION = "2026-09-26.seven-household-puzzles.3"
+local VERSION = "2026-09-26.seven-household-puzzles.4"
 local COLOURS = {Color3.fromRGB(160,44,43), Color3.fromRGB(225,189,73), Color3.fromRGB(54,99,165), Color3.fromRGB(52,122,81)}
 local CREAM, DARK = Color3.fromRGB(215,207,181), Color3.fromRGB(43,47,43)
 local V, CF = Vector3.new, CFrame.new
@@ -327,22 +327,6 @@ function Progression.Start(world, manifest, config)
 				model:SetAttribute("PuzzleGateIndex",gateIndex);model:SetAttribute("PuzzleClueSlot",clueSlot);model:SetAttribute("PuzzleMode",definition.mode)
 				model:SetAttribute("Level5ProgressionOwned",true);model.Parent=owner
 				local reference=Instance.new("ObjectValue");reference.Name="SourceHome";reference.Value=candidate.home;reference.Parent=model
-				-- A consistent small paper mark identifies the few relevant homes without a HUD arrow.
-				local frontZ=-.43
-				for _,edge in ipairs(candidate.home:GetDescendants()) do
-					if edge:IsA("BasePart") and edge.Name=="DoorJamb" then
-						local relative=candidate.floor:ToObjectSpace(edge.CFrame)
-						if relative.Position.Z<.5 then
-							local halfDepth=(math.abs(relative.XVector.Z)*edge.Size.X+math.abs(relative.YVector.Z)*edge.Size.Y+math.abs(relative.ZVector.Z)*edge.Size.Z)/2
-							frontZ=math.min(frontZ,relative.Position.Z-halfDepth-.04)
-						end
-					end
-				end
-				local tag=part(model,"HouseCluePaper",V(1,2.5,.025),candidate.floor*CF(3.35,6.2,frontZ),Color3.fromRGB(226,216,182),false)
-				tag:SetAttribute("PuzzleGateIndex",gateIndex)
-				local hintText="HOUSE\nCLUE"..(gateIndex==3 and "\n"..definition.labels[clueSlot] or "")
-				local paperGui,paperLabel=surface(tag,hintText,Vector2.new(240,540));paperGui.Name="HouseClueMark"
-				paperLabel.TextColor3=Color3.fromRGB(106,42,32);paperLabel.BackgroundTransparency=1
 				local board=part(model,"HintSurface",V(6,4.8,.13),candidate.marker.CFrame*CF(0,0,-.10),CREAM,false)
 				board:SetAttribute("PuzzleGateIndex",gateIndex)
 				local gui,oldLabel=surface(board,"",Vector2.new(900,720));oldLabel:Destroy();gui.Name="PuzzleClueGui"

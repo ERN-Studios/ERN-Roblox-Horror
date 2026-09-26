@@ -1,0 +1,28 @@
+{
+  "publication": {
+    "verified": true,
+    "version": 2139,
+    "publishedAtUtc": "2026-09-26T20:01:51.250Z",
+    "evidence": "publication-log.txt; publication-v2139.json"
+  },
+  "backup": {
+    "file": "after.rbxl",
+    "bytes": 9793957,
+    "sha256": "014d75e52f27a296b84a2df0a12a7cfa21617d7988ce37eddc47b8aece0915f8",
+    "verified": true
+  },
+  "sourceParity": {
+    "scripts": 192,
+    "sourceEditorRepositoryEqual": true,
+    "changedScripts": 5,
+    "unchangedScripts": 187,
+    "level4Unchanged": 12,
+    "evidence": "final-source-mirror-report.json"
+  },
+  "materials": {
+    "totalVariantEntries": 11,
+    "level5ImagegenVariantsRetained": 7,
+    "evidence": "materials-final.json"
+  },
+  "git": "Containing commit on codex/level5-window-watcher; PR https://github.com/ERN-Studios/ERN-Roblox-Horror/pull/10"
+}

@@ -17,7 +17,7 @@ function Architecture.Build(parent, origin, config)
 	origin = origin or Vector3.zero
 	local root = Instance.new("Model")
 	root.Name = "Level5_IndoorSuburbs"
-	root:SetAttribute("ArchitectureVersion", "2026-09-26.residential-atrium.1")
+	root:SetAttribute("ArchitectureVersion", "2026-09-26.surface-ownership.3")
 	root:SetAttribute("GeometryOnly", true)
 	root.Parent = parent
 	local offset = CFrame.new(origin)
@@ -30,6 +30,7 @@ function Architecture.Build(parent, origin, config)
 		ceiling=Color3.fromRGB(181,179,157), grid=Color3.fromRGB(136,138,126), red=Color3.fromRGB(133,38,32),
 	}
 	local partCount, lightCount = 0, 0
+	local floorSurfaces,sideWalls={},{}
 	local materials=game:GetService("MaterialService")
 	local bases={Plaster=Enum.Material.Plaster,Wallpaper=Enum.Material.Plaster,Siding=Enum.Material.WoodPlanks,Grass=Enum.Material.Grass,Wood=Enum.Material.Wood,Roof=Enum.Material.Slate,Carpet=Enum.Material.Fabric}
 	local function material(p,key,tint)
@@ -47,6 +48,22 @@ function Architecture.Build(parent, origin, config)
 		local m=Instance.new("Model"); m.Name=name; m.Parent=into or root; return m
 	end
 	local function part(into, name, size, cf, color, material, collide, className)
+		if name=="CarpetLedgePlasterSoffit" or name=="CrossingPlasterSoffit" then
+			-- A small plaster reveal covers the slab edge instead of sharing its
+			-- vertical face. Crossings have a deeper underside than side galleries.
+			size+=V(.24,0,.24)
+			if name=="CrossingPlasterSoffit" then size+=V(0,.26,0);cf-=V(0,.13,0) end
+		elseif name=="PitEndWall" then
+			local minimum,maximum=into:GetAttribute("PitMin"),into:GetAttribute("PitMax")
+			if typeof(minimum)=="Vector3" and typeof(maximum)=="Vector3" then
+				-- The pit wall is the visible face; the full solid gallery backing
+				-- stays behind it rather than ending on the same plaster plane.
+				cf+=V(0,0,cf.Position.Z<(minimum.Z+maximum.Z)/2 and .24 or -.24)
+			end
+		elseif name=="TerraceFoundationEnd" then
+			-- End infill stops at the inner faces of the existing side walls.
+			size-=V(2,0,0)
+		end
 		local p=Instance.new(className or "Part")
 		p.Name=name; p.Size=size; p.CFrame=offset*cf; p.Anchored=true
 		p.Color=color or C.cream; p.Material=material or Enum.Material.SmoothPlastic
@@ -59,6 +76,10 @@ function Architecture.Build(parent, origin, config)
 		elseif material==Enum.Material.Fabric and materials:FindFirstChild(config.MaterialVariants.Carpet) then
 			p.MaterialVariant=config.MaterialVariants.Carpet;p.Color=color and Color3.new(1,1,1):Lerp(color,.3) or Color3.new(1,1,1)
 		end
+		-- Scenic houses use the direct part path rather than floor(). Keep both
+		-- in the same surface-ownership pass without touching furniture or stairs.
+		if name=="InteriorCarpet" then floorSurfaces[p]=true end
+		if name=="SideWall" then table.insert(sideWalls,p) end
 		return p
 	end
 	local function texture(p, asset, face, tile)
@@ -78,7 +99,213 @@ function Architecture.Build(parent, origin, config)
 			local surface=texture(p,config.CarpetTexture,Enum.NormalId.Top,8)
 			if surface and color and color~=C.carpet then surface.Color3=color end
 		end
+		floorSurfaces[p]=true
 		return p
+	end
+	local function resolveSharedSideWalls()
+		-- Touching homes share one physical partition. On continuous F facades,
+		-- neighbouring houses previously emitted the same plaster wall twice.
+		-- Subtract only redundant intervals on the exact same plane and height;
+		-- preserve outer walls and the exposed ends of differently recessed rooms.
+		local groups={}
+		for _,p in ipairs(sideWalls) do
+			if p.Parent and p.CFrame.UpVector.Y>.99999 then
+				local nx=math.abs(p.CFrame.RightVector.X)>.99999
+				local nz=math.abs(p.CFrame.RightVector.Z)>.99999
+				if nx or nz then
+					local f,s=p.CFrame,p.Size
+					local tangent=nx and V(0,0,1) or V(1,0,0)
+					local plane=nx and f.Position.X or f.Position.Z
+					local key=string.format("%s:%.3f:%.3f:%.3f:%.3f",nx and "X" or "Z",plane,f.Position.Y,s.Y,s.X)
+					local g=groups[key] or {};groups[key]=g
+					local center=f.Position:Dot(tangent)
+					table.insert(g,{part=p,key=p:GetFullName(),tangent=tangent,center=center,a=center-s.Z/2,b=center+s.Z/2})
+				end
+			end
+		end
+		local removed,trimmed,extra=0,0,0
+		for _,g in pairs(groups) do
+			table.sort(g,function(a,b) if a.key~=b.key then return a.key<b.key end;return a.a<b.a end)
+			local owned={}
+			for _,r in ipairs(g) do
+				local spans={{r.a,r.b}}
+				for _,o in ipairs(owned) do
+					local nextSpans={}
+					for _,s in ipairs(spans) do
+						if o[2]<=s[1]+.001 or o[1]>=s[2]-.001 then table.insert(nextSpans,s)
+						else
+							if o[1]>s[1]+.01 then table.insert(nextSpans,{s[1],math.min(o[1],s[2])}) end
+							if o[2]<s[2]-.01 then table.insert(nextSpans,{math.max(o[2],s[1]),s[2]}) end
+						end
+					end
+					spans=nextSpans
+				end
+				if #spans==0 then r.part:Destroy();removed+=1
+				elseif #spans~=1 or math.abs(spans[1][1]-r.a)>.001 or math.abs(spans[1][2]-r.b)>.001 then
+					local originalFrame,originalSize=r.part.CFrame,r.part.Size
+					for i,s in ipairs(spans) do
+						local p=i==1 and r.part or r.part:Clone()
+						p.Size=V(originalSize.X,originalSize.Y,s[2]-s[1])
+						p.CFrame=originalFrame+r.tangent*((s[1]+s[2])/2-r.center)
+						p:SetAttribute("SharedWallTrimmed",true)
+						if i>1 then p.Parent=r.part.Parent;extra+=1 end
+					end
+					trimmed+=1
+				end
+				table.insert(owned,{r.a,r.b})
+			end
+		end
+		root:SetAttribute("SharedWallDuplicatesRemoved",removed)
+		root:SetAttribute("SharedWallIntervalsTrimmed",trimmed)
+		root:SetAttribute("SharedWallRemaindersAdded",extra)
+	end
+	local function resolveFloorSurfaces()
+		-- Adjacent slabs may meet at the same grade, but overlapping textured
+		-- faces must have one visible owner. Work only on horizontal floor slabs:
+		-- authored stairs, sloping chute, furniture and tilted houses stay exact.
+		local separation,maxLift=.12,.48
+		local groups={}
+		local function rectangle(p)
+			if not p:IsA("Part") or p.Shape~=Enum.PartType.Block or p.CFrame.UpVector.Y<.99999 then return nil end
+			local f,s=p.CFrame,p.Size
+			return {part=p,x=f.Position.X,z=f.Position.Z,u=f.RightVector,v=f.ZVector,hx=s.X/2,hz=s.Z/2,top=f.Position.Y+s.Y/2}
+		end
+		local function overlaps(a,b)
+			local dx,dz=b.x-a.x,b.z-a.z
+			for _,axis in ipairs({a.u,a.v,b.u,b.v}) do
+				local rA=a.hx*math.abs(a.u:Dot(axis))+a.hz*math.abs(a.v:Dot(axis))
+				local rB=b.hx*math.abs(b.u:Dot(axis))+b.hz*math.abs(b.v:Dot(axis))
+				-- Shared edges, including the tiny stair tread overlap, are seams
+				-- rather than competing surfaces and do not need a height change.
+				if math.abs(dx*axis.X+dz*axis.Z)>=rA+rB-.02 then return false end
+			end
+			return true
+		end
+		local function grade(y) return math.floor(y*10+.5)/10 end
+		for p in pairs(floorSurfaces) do
+			if p.Parent then
+				local r=rectangle(p)
+				if r then
+					local y=grade(r.top)
+					local g=groups[y] or {floors={},fixed={}};groups[y]=g
+					r.authoredTop=r.top;r.room=p.Name=="InteriorCarpet"
+					r.key=p:GetFullName();table.insert(g.floors,r)
+				end
+			end
+		end
+		-- Foundations finish inside the existing 1.2-stud floor slab, not on its
+		-- visible top. This removes their competing face without lifting a whole
+		-- district merely because a small gate foundation reaches the same grade.
+		local trimmedFoundations=0
+		-- Lower-house ceilings can also terminate on a floor grade. Their tops
+		-- stay fixed; the floor above must cover them cleanly.
+		for _,p in ipairs(root:GetDescendants()) do
+			if p:IsA("BasePart") and p.CanCollide and p.Transparency==0 and not floorSurfaces[p] then
+				local r=rectangle(p)
+				if r then
+					local y=grade(r.top)
+					local foundationGroup=groups[y]
+					if foundationGroup and p.Name:find("Foundation",1,true) and p.Size.Y>separation then
+						for _,f in ipairs(foundationGroup.floors) do
+							if math.abs(f.authoredTop-r.top)<.04 and overlaps(r,f) then
+								p.Size-=V(0,separation,0);p.CFrame-=V(0,separation/2,0)
+								p:SetAttribute("FoundationSurfaceInset",separation)
+								r.top-=separation;trimmedFoundations+=1;break
+							end
+						end
+					end
+					for _,key in ipairs({y-.1,y,y+.1}) do
+						local g=groups[grade(key)]
+						if g and math.abs(r.top-grade(key))<.081 then table.insert(g.fixed,r) end
+					end
+				end
+			end
+		end
+		local adjusted,highest,checked,exposedUndersides,plasterCeilingsRevealed=0,0,0,0,0
+		local districtBottom={A_BalconyAtrium=0,B_LowEavesArcade=0,C_PastelVillage=0,D_FloralTerraces=-12,E_DomesticLabyrinth=0,F_BayWindowCanyon=-42,G_TiltedSubdivision=0,H_LastHouse=0}
+		for y,g in pairs(groups) do
+			-- Large ground/court supports first, then smaller overlay slabs; room
+			-- carpets resolve last so gardens never show through house interiors.
+			table.sort(g.floors,function(a,b)
+				if a.room~=b.room then return not a.room end
+				local aa,ba=a.hx*a.hz,b.hx*b.hz
+				if math.abs(aa-ba)>.001 then return aa>ba end
+				if a.key~=b.key then return a.key<b.key end
+				if math.abs(a.x-b.x)>.001 then return a.x<b.x end
+				if math.abs(a.z-b.z)>.001 then return a.z<b.z end
+				return a.authoredTop<b.authoredTop
+			end)
+			local placed={}
+			for _,r in ipairs(g.floors) do
+				local candidates={}
+				for _,q in ipairs(g.fixed) do if overlaps(r,q) then table.insert(candidates,q) end end
+				for _,q in ipairs(placed) do if overlaps(r,q) then table.insert(candidates,q) end end
+				local chosen
+				for layer=0,4 do
+					local top=y+layer*separation
+					if top>=r.authoredTop-.002 and top-r.authoredTop<=maxLift+.002 then
+						local clear=true
+						for _,q in ipairs(candidates) do
+							if top-q.top<separation-.002 then clear=false;break end
+						end
+						if clear then chosen=math.max(top,r.authoredTop);break end
+					end
+				end
+				assert(chosen,"Level 5 floor surface layers exceed 0.48 studs: "..r.key)
+				local lift=chosen-r.authoredTop
+				if lift>.002 then
+					local p=r.part
+					p.Size+=V(0,lift,0);p.CFrame+=V(0,lift/2,0)
+					local ancestor=p.Parent;local lowestFloor
+					while ancestor and ancestor~=root do
+						lowestFloor=districtBottom[ancestor.Name]
+						if lowestFloor~=nil then break end
+						ancestor=ancestor.Parent
+					end
+					-- Above playable space, an overlay slab also needs a distinct
+					-- underside. Lift that underside by the already-approved top
+					-- offset: the slab keeps its original thickness, headroom grows,
+					-- and the walking top stays exactly where the first pass put it.
+					-- F's dedicated plaster soffits own its visible undersides.
+					if not r.room and lowestFloor~=nil and r.authoredTop-origin.Y>lowestFloor+.1
+						and p.Name~="CrossingCarpet" and not p.Name:find("CarpetLedge_",1,true) then
+						p.Size-=V(0,lift,0);p.CFrame+=V(0,lift/2,0)
+						p:SetAttribute("ExposedUndersideLift",lift);exposedUndersides+=1
+					end
+					p:SetAttribute("SurfaceLift",lift)
+					p:SetAttribute("AuthoredFloorTopY",r.authoredTop-origin.Y)
+					adjusted+=1;highest=math.max(highest,lift)
+				end
+				if r.room then
+					for _,q in ipairs(candidates) do
+						if q.part.Name=="InteriorCeiling" and math.abs(q.top-r.authoredTop)<.081 then
+							-- A stacked room's old 1.2-thick carpet slab extended below
+							-- the lower room's plaster ceiling, making its roof carpet.
+							-- Keep the walking top, and finish this slab .10 below its
+							-- authored grade: the plaster ceiling still overlaps it by
+							-- .125, so the enclosure remains physically opaque.
+							local p=r.part
+							local trim=r.authoredTop-.10-(p.Position.Y-p.Size.Y/2)
+							if trim>.002 then
+								assert(p.Size.Y-trim>.09,"Stacked room floor lost thickness: "..r.key)
+								p.Size-=V(0,trim,0);p.CFrame+=V(0,trim/2,0)
+								p:SetAttribute("PlasterCeilingUnderlap",.10);plasterCeilingsRevealed+=1
+							end
+							break
+						end
+					end
+				end
+				r.top=chosen;checked+=1;table.insert(placed,r)
+			end
+		end
+		root:SetAttribute("SurfaceOwnershipVersion","2026-09-26.3")
+		root:SetAttribute("FloorSurfacesChecked",checked)
+		root:SetAttribute("FloorSurfacesSeparated",adjusted)
+		root:SetAttribute("MaximumFloorSurfaceLift",highest)
+		root:SetAttribute("FloorSurfaceSeparation",separation)
+		root:SetAttribute("FoundationSurfacesInset",trimmedFoundations)
+		root:SetAttribute("ExposedUndersidesSeparated",exposedUndersides)
+		root:SetAttribute("StackedPlasterCeilingsRevealed",plasterCeilingsRevealed)
 	end
 	local function beam(into,name,a,b,width,color)
 		local mid=(a+b)/2
@@ -123,7 +350,10 @@ function Architecture.Build(parent, origin, config)
 		return glass
 	end
 	local function doorframe(into,frame,width,height)
-		for _,s in ipairs({-1,1}) do part(into,"DoorJamb",V(.4,height+.3,.55),frame*CF(s*(width/2+.2),height/2,-.13),C.white) end
+		-- The white reveal projects .12 into the opening, hiding the plaster
+		-- return face rather than sharing its plane. Even the narrowest opening
+		-- retains 5.16 studs of clear passage.
+		for _,s in ipairs({-1,1}) do part(into,"DoorJamb",V(.4,height+.3,.55),frame*CF(s*(width/2+.08),height/2,-.13),C.white) end
 		part(into,"DoorHeader",V(width+.8,.45,.55),frame*CF(0,height+.15,-.13),C.white)
 	end
 	local function facade(into,frame,w,h,color,openDoor,lit,simple)
@@ -133,7 +363,9 @@ function Architecture.Build(parent, origin, config)
 		for _,s in ipairs({-1,1}) do
 			local x=s*(dw/2+sw/2)
 			part(into,"WindowApron",V(sw,2.8,.65),frame*CF(x,1.4,0),color)
-			for _,j in ipairs({-1,1}) do part(into,"FacadePier",V(1.15,dh,.65),frame*CF(x+j*(sw/2-.575),dh/2,0),color) end
+			-- The apron already fills y0..2.8. Piers start above it so their
+			-- independently tiled front faces never occupy the same wall plane.
+			for _,j in ipairs({-1,1}) do part(into,"FacadePier",V(1.15,dh-2.8,.65),frame*CF(x+j*(sw/2-.575),(dh+2.8)/2,0),color) end
 			-- Broad houses retain domestic window proportions rather than one
 			-- shopfront-length ribbon. Narrow curated Watcher homes stay exact.
 			local clearWidth=sw-2.3
@@ -143,7 +375,7 @@ function Architecture.Build(parent, origin, config)
 			for i=1,count do
 				local px=x-clearWidth/2+paneWidth/2+(i-1)*(paneWidth+pier)
 				window(into,frame*CF(px,6.55,-.18),paneWidth,7.2,lit,simple)
-				if i<count then part(into,"FacadePier",V(pier,dh,.65),frame*CF(px+paneWidth/2+pier/2,dh/2,0),color) end
+				if i<count then part(into,"FacadePier",V(pier,dh-2.8,.65),frame*CF(px+paneWidth/2+pier/2,(dh+2.8)/2,0),color) end
 			end
 		end
 		doorframe(into,frame,dw,dh)
@@ -207,7 +439,23 @@ function Architecture.Build(parent, origin, config)
 			part(m,"BackWallHeader",V(7,h-10,.65),frame*CF(0,10+(h-10)/2,d),color)
 			doorframe(m,frame*CF(0,0,d),7,10)
 		else part(m,"BackWall",V(w,h,.65),frame*CF(0,h/2,d),color) end
-		part(m,"InteriorCeiling",V(w,.45,d),frame*CF(0,h,d/2),C.ceiling)
+		-- Ceiling edges terminate inside the .65-thick walls, overlapping them
+		-- by .205 studs while avoiding the upper floor's exposed perimeter plane.
+		local conjoinedSide=into.Name=="C_PastelVillage" and name:match("^CrossStreetCottage_([%-]?1)_3_0$")
+		if conjoinedSide then
+			-- These two cottages meet the rear court houses at a right angle.
+			-- Their court-side ceiling corner already belongs to the neighbouring
+			-- CourtHouse ceiling. Keep the exact solid union with two L-shaped
+			-- remainder panels, rather than drawing two broadloom/plaster planes
+			-- over each other inside the joined rooms.
+			local side=tonumber(conjoinedSide)
+			local splitZ=11.12;local rearLength=d-.12-splitZ
+			part(m,"InteriorCeiling",V(w-.24,.45,splitZ-.12),frame*CF(0,h,(splitZ+.12)/2),C.ceiling)
+			part(m,"InteriorCeiling",V(w/2,.45,rearLength),frame*CF(side*(w/4-.12),h,(splitZ+d-.12)/2),C.ceiling)
+			m:SetAttribute("SharedCourtCeilingOwner",false)
+		else
+			part(m,"InteriorCeiling",V(w-.24,.45,d-.24),frame*CF(0,h,d/2),C.ceiling)
+		end
 		m:SetAttribute("HouseLighting","None")
 		part(m,"CrownMoulding",V(w+.6,.5,.85),frame*CF(0,h-.15,-.08),C.white)
 		for _,s in ipairs({-1,1}) do wallLamp(m,frame*CF(s*(w/2-1.2),10.8,-.55)) end
@@ -480,21 +728,31 @@ function Architecture.Build(parent, origin, config)
 			for _,edge in ipairs({z.Z0,z.Z1}) do material(part(enclosure,"OverlappingCornerColumn",V(4,top-deep,4),CF(side*(z.Width/2+1), (top+deep)/2,edge),C.cream,Enum.Material.Plaster),"Plaster") end
 		end
 		for _,isBack in ipairs({false,true}) do
+			-- A shared boundary belongs to the preceding district. Its one opaque
+			-- shell covers both envelopes; generating it again on the next district
+			-- produces identical visible plaster faces at every gate.
+			if index==1 or isBack then
 			local edge=isBack and z.Z1 or z.Z0
 			local entrance=index==1 and not isBack
 			local chute=index==8 and isBack
+			local neighbour=isBack and zones[index+1] or nil
+			local wallWidth=math.max(z.Width,neighbour and neighbour.Width or z.Width)
+			local wallTop=math.max(top,neighbour and neighbour.CeilingHeight+6 or top)
+			local sharedBottom=math.min(bottom,neighbour and neighbour.Bottom or 0)
+			local wallDeep=math.min(deep,sharedBottom-6)
 			local opening=chute and 9.3 or 22;local openingHeight=chute and 11 or 14
-			local wallBottom=chute and -35 or deep
+			local wallBottom=chute and -35 or wallDeep
 			local gate=not entrance and not chute and gateLocal[isBack and index or index-1] or nil
 			local gx=gate and gate.X or 0
 			if entrance then
 				material(part(enclosure,"ArrivalBackWall",V(z.Width+12,top-deep,8),CF(0,(top+deep)/2,edge-3.3),C.cream,Enum.Material.Plaster),"Plaster")
 			else
-				for _,span in ipairs({{-z.Width/2-6,gx-opening/2},{gx+opening/2,z.Width/2+6}}) do
-					material(part(enclosure,"ThresholdSideWall",V(span[2]-span[1],top-wallBottom,8),CF((span[1]+span[2])/2,(top+wallBottom)/2,edge),C.cream,Enum.Material.Plaster),"Plaster")
+				for _,span in ipairs({{-wallWidth/2-6,gx-opening/2},{gx+opening/2,wallWidth/2+6}}) do
+					material(part(enclosure,"ThresholdSideWall",V(span[2]-span[1],wallTop-wallBottom,8),CF((span[1]+span[2])/2,(wallTop+wallBottom)/2,edge),C.cream,Enum.Material.Plaster),"Plaster")
 				end
-				material(part(enclosure,"ThresholdHighClosure",V(opening,top-openingHeight,8),CF(gx,(top+openingHeight)/2,edge),C.cream,Enum.Material.Plaster),"Plaster")
-				if bottom<0 and not chute then material(part(enclosure,"ThresholdFoundation",V(opening,-deep,8),CF(gx,deep/2,edge),C.cream,Enum.Material.Plaster),"Plaster") end
+				material(part(enclosure,"ThresholdHighClosure",V(opening,wallTop-openingHeight,8),CF(gx,(wallTop+openingHeight)/2,edge),C.cream,Enum.Material.Plaster),"Plaster")
+				if sharedBottom<0 and not chute then material(part(enclosure,"ThresholdFoundation",V(opening,-wallDeep,8),CF(gx,wallDeep/2,edge),C.cream,Enum.Material.Plaster),"Plaster") end
+			end
 			end
 		end
 		ceiling(enclosure,z.Title.."Ceiling",0,(z.Z0+z.Z1)/2,z.Width,z.Z1-z.Z0,z.CeilingHeight,z.Style)
@@ -551,6 +809,27 @@ function Architecture.Build(parent, origin, config)
 	for _,r in ipairs({N,L}) do for _,v in ipairs(r.PreviewCameras or {}) do table.insert(cameras,v) end end
 	for _,v in ipairs(cameras) do v.position+=origin;v.lookAt+=origin end
 	for i,v in ipairs(waypoints) do waypoints[i]=origin+v end
+	resolveSharedSideWalls()
+	resolveFloorSurfaces()
+	for p in pairs(floorSurfaces) do
+		if p.Parent and p.Name=="InteriorCarpet" and p.CFrame.UpVector.Y>.99999 then
+			local top=p.Position.Y+p.Size.Y/2
+			p.Parent:SetAttribute("ActualFloorTopY",top)
+			p.Parent:SetAttribute("HouseWindowFloorY",top)
+		end
+	end
+	for _,anchor in ipairs(anchors:GetChildren()) do
+		local ref=anchor:FindFirstChild("SupportingHouse")
+		local home=ref and ref.Value
+		local frame=anchor:GetAttribute("FloorCFrame")
+		local top=home and home:GetAttribute("ActualFloorTopY")
+		if typeof(frame)=="CFrame" and typeof(top)=="number" then
+			local lift=top-frame.Position.Y
+			assert(lift>=-.002 and lift<=.482,"Watcher floor adjustment exceeds surface policy: "..anchor.Name)
+			anchor:SetAttribute("SurfaceLift",math.clamp(lift,0,.48))
+			anchor:SetAttribute("FloorCFrame",frame+V(0,math.max(0,lift),0))
+		end
+	end
 	local actualParts,actualLights,windows=0,0,0
 	for _,v in ipairs(root:GetDescendants()) do if v:IsA("BasePart") then actualParts+=1 end;if v:IsA("Light") then actualLights+=1 end;if v:GetAttribute("Level5TintedWindow")==true then windows+=1 end end
 	root:SetAttribute("PartCount",actualParts);root:SetAttribute("LightCount",actualLights);root:SetAttribute("TintedWindowCount",windows)
