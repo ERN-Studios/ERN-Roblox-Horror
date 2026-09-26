@@ -1,15 +1,15 @@
 {
   "formatVersion": 2,
-  "source": "Studio-authoritative Level 5 dense neighbourhoods, seven image-generated materials and seven household puzzles; 192 exact scripts, native QA and v2133 publication verified.",
+  "source": "Studio-authoritative Level 5 reference residential atrium; 192 verified scripts. Publication evidence is separate.",
   "finalNewlineContract": "Entries flagged studioTrailingNewline hold exactly the canonical repo file plus one extra trailing newline in Studio. Exact landings remove the flag. Current flagged entry count: 0. Manifest hashes always describe the canonical repo file, never Studio's transport bytes.",
   "studio": {
     "id": "4c4f4e63-ad77-456e-8b99-b06b5a864bc8",
     "name": "BACKROOMS: STAY QUIET [CO-OP HORROR] (placeId: 131311258779917)",
     "placeId": 131311258779917,
     "universeId": 10559217407,
-    "publishedVersion": 2129,
+    "publishedVersion": 2136,
     "openedPlaceVersion": 2115,
-    "publicationStatus": "Published v2129, verified from native Studio publication log."
+    "publicationStatus": "Published v2136, verified from native Studio publication log."
   },
   "counts": {
     "scripts": 192,
@@ -18,10 +18,10 @@
     "studioTrailingNewline": 0
   },
   "nativePlaceBackup": {
-    "file": "artifacts/level5-dense-routes-20260926/after.rbxl",
-    "bytes": 9787627,
-    "sha256": "12f375d5016ade4e73ae06a635f2c880c57f9a6eb0c5554a8c466200eef9d9e3",
-    "purpose": "Full native Edit backup with seven MaterialVariants and 192 verified scripts, after native QA, before confirmed v2133 publication."
+    "file": "artifacts/level5-atrium-reference-20260926/after.rbxl",
+    "bytes": 9790056,
+    "sha256": "b117548bc9d4a4f4ed999f32871e6ffc10755548df7bf28ac3a90b8609b250e3",
+    "purpose": "Full native Edit backup after F residential-atrium QA; 192 scripts and seven MaterialVariants, before verified v2136 publication."
   },
   "extraMirroredFilesNotInStudio": [
     "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_AutomaticAssetCaptureSender_LocalizationService.RemoteEvent.txt",
@@ -2855,10 +2855,10 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 5 Systems/Level 5 Architecture.ModuleScript.lua",
-      "bytes": 35686,
-      "sha256": "1e7aabb143d5f9a84ceacc7b046b5b11e16bc623db3c57ad4025c22407783eca",
+      "bytes": 36689,
+      "sha256": "b350d235befe950b220ed101216762015b4ae860620827b23b39d72b180e9145",
       "status": "synced",
-      "captureMethod": "Final native Studio Source/editor export verified against scoped dense-route patch, 2026-09-26",
+      "captureMethod": "Final native Studio Source/editor export verified against scoped residential-atrium patch, 2026-09-26",
       "sourceEqualsEditor": true
     },
     {
@@ -2885,10 +2885,10 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 5 Systems/Level 5 Landmark Districts.ModuleScript.lua",
-      "bytes": 22301,
-      "sha256": "2892ab10c6740528b9c113c81fe8b07e2e8746851d26c0e5317535bc9d63ab83",
+      "bytes": 28127,
+      "sha256": "8b0f2a636fd6294cfd87cd10729134c5f4b5acccffa924935454da25869a0466",
       "status": "synced",
-      "captureMethod": "Final native Studio Source/editor export verified against scoped dense-route patch, 2026-09-26",
+      "captureMethod": "Final native Studio Source/editor export verified against scoped residential-atrium patch, 2026-09-26",
       "sourceEqualsEditor": true
     },
     {
@@ -3128,103 +3128,95 @@
     "exactRepositoryByteMatches": 192,
     "permittedTrailingNewlineMatches": 0,
     "editorConflicts": [],
-    "baselineScriptCount": 191,
-    "changedScripts": 8,
-    "newScripts": 1,
-    "changedExistingScripts": 7,
-    "unchangedScripts": 184,
+    "baselineScriptCount": 192,
+    "changedScripts": 2,
+    "newScripts": 0,
+    "changedExistingScripts": 2,
+    "unchangedScripts": 190,
     "changedScriptPaths": [
       "ServerScriptService/Level 5 Systems/Level 5 Architecture.ModuleScript.lua",
-      "ServerScriptService/Level 5 Systems/Level 5 Furniture.ModuleScript.lua",
-      "ServerScriptService/Level 5 Systems/Level 5 Landmark Districts.ModuleScript.lua",
-      "ServerScriptService/Level 5 Systems/Level 5 Neighbourhood Districts.ModuleScript.lua",
-      "ServerScriptService/Level 5 Systems/Level 5 Puzzle Catalog.ModuleScript.lua",
-      "ServerScriptService/Level 5 Systems/Level 5 Round Adapter.ModuleScript.lua",
-      "ServerScriptService/Level 5 Systems/Level 5 Section Progression.ModuleScript.lua",
-      "StarterPlayer/StarterPlayerScripts/Level5ColourLockClient.LocalScript.lua"
+      "ServerScriptService/Level 5 Systems/Level 5 Landmark Districts.ModuleScript.lua"
     ],
     "level4ScriptCount": 12,
     "level4UnchangedVsBaselineAndRepository": true,
     "exportFiles": [
       {
-        "file": "verification/dense-final-1.json",
+        "file": "verification/atrium-final-1.json",
         "bytes": 682850,
         "sha256": "228b9a23084a92edc214c59ea562222cc2388b01477336e7a6b1aed51f548c9e"
       },
       {
-        "file": "verification/dense-final-10.json",
+        "file": "verification/atrium-final-10.json",
         "bytes": 537903,
         "sha256": "01e7329c85821affdcad529db0db2a0ff618066db505107298c7714ec1e8af3b"
       },
       {
-        "file": "verification/dense-final-11.json",
+        "file": "verification/atrium-final-11.json",
         "bytes": 867699,
         "sha256": "90cda2d7394a789165aac822813aedec16e1c236ff751e044cbbad415a54255f"
       },
       {
-        "file": "verification/dense-final-12.json",
+        "file": "verification/atrium-final-12.json",
         "bytes": 156707,
         "sha256": "4d45b3a5f07225c84dfc5a5113f3eb151565f01d84fc8b5991e5918ff647bee8"
       },
       {
-        "file": "verification/dense-final-13.json",
+        "file": "verification/atrium-final-13.json",
         "bytes": 344632,
         "sha256": "4c94fa82b032fb7d129af7292ac9d62a19d93fe1ff054ae1bb8ce3bebc620b8f"
       },
       {
-        "file": "verification/dense-final-14.json",
+        "file": "verification/atrium-final-14.json",
         "bytes": 329604,
         "sha256": "49aa858a089cc3f1dc1cacb44197e2f5b0600154a4581fc9c723485e15b1f046"
       },
       {
-        "file": "verification/dense-final-15.json",
+        "file": "verification/atrium-final-15.json",
         "bytes": 660366,
         "sha256": "87897669ec4325d8018c5f47c5b19b8fda2316ea00cc7b9f066f3c894c314a72"
       },
       {
-        "file": "verification/dense-final-2.json",
+        "file": "verification/atrium-final-2.json",
         "bytes": 330348,
         "sha256": "29b09c9b97cac673451fd817445fa5b1b4552bb9cc432470557fecc110ea16e2"
       },
       {
-        "file": "verification/dense-final-3.json",
+        "file": "verification/atrium-final-3.json",
         "bytes": 709884,
         "sha256": "e52c4c284a0a50226660c44ff2ad80c90d435979bbf9a0f970377ce876f554c0"
       },
       {
-        "file": "verification/dense-final-4.json",
+        "file": "verification/atrium-final-4.json",
         "bytes": 642460,
         "sha256": "1acde6c16777593c9462c5861392b0e77011a70da65d819cc61af6bcd124de58"
       },
       {
-        "file": "verification/dense-final-5.json",
+        "file": "verification/atrium-final-5.json",
         "bytes": 841196,
         "sha256": "2a7249d4e64b37d91773ad27d9408446aefb303bd032456348560f9022edf381"
       },
       {
-        "file": "verification/dense-final-6.json",
-        "bytes": 262513,
-        "sha256": "90da297c4450713428d4aa3735ba25aea2b91d0a42cd878832574444ac61c5d1"
+        "file": "verification/atrium-final-6.json",
+        "bytes": 269724,
+        "sha256": "fc068ddfae9c5bd822485e2b35ae19373707f3892819d2bf6789e0a8cc72783d"
       },
       {
-        "file": "verification/dense-final-7.json",
+        "file": "verification/atrium-final-7.json",
         "bytes": 287977,
         "sha256": "a076f393d7be6eabaa97b3b2a98326f521c6e2c7afb6c596e794c8a80f94e49d"
       },
       {
-        "file": "verification/dense-final-8.json",
+        "file": "verification/atrium-final-8.json",
         "bytes": 453834,
         "sha256": "8a2d60de457686e5e1fdcff9fe5c6f5fef7be1c9f266b7c23ebb30e4e7f4190c"
       },
       {
-        "file": "verification/dense-final-9.json",
+        "file": "verification/atrium-final-9.json",
         "bytes": 970205,
         "sha256": "e75427699a9d02f0172d75f9427b88fa57765586787ed5f167a05c8463ee58bc"
       }
     ],
-    "publicationVerification": "Native File > Publish to Roblox confirmed v2133; separate receipt retained.",
-    "lastPublishedVersionVerifiedFromLog": 2133,
-    "sourceAudit": "artifacts/level5-dense-routes-20260926/qa/final-source-mirror-report.json"
+    "publicationVerification": "Native File > Publish to Roblox confirmed v2136; separate receipt retained."
   },
   "publication": {
     "placeId": 131311258779917,
@@ -3283,6 +3275,12 @@
       "bytes": 9776013,
       "sha256": "ff28e430f8a879890112e48924e6efe5c5357dbc2233bbf7dcd42c67f3bbeabd",
       "purpose": "Full native Edit backup after final outage play QA and 191-script parity, before verified v2129 publication."
+    },
+    {
+      "file": "artifacts/level5-dense-routes-20260926/after.rbxl",
+      "bytes": 9787627,
+      "sha256": "12f375d5016ade4e73ae06a635f2c880c57f9a6eb0c5554a8c466200eef9d9e3",
+      "purpose": "Full native Edit backup with seven MaterialVariants and 192 verified scripts, after native QA, before confirmed v2133 publication."
     }
   ],
   "previousSyncHistory": [
@@ -3438,12 +3436,126 @@
         "evidenceFile": "artifacts/level5-outage-20260926/qa/source-parity.json"
       },
       "scope": "Preserved before dense-route source mirror; no publication or backup inference."
+    },
+    {
+      "source": "Studio-authoritative Level 5 dense neighbourhoods, seven image-generated materials and seven household puzzles; 192 exact scripts, native QA and v2133 publication verified.",
+      "counts": {
+        "scripts": 192,
+        "remoteEvents": 15,
+        "total": 207,
+        "studioTrailingNewline": 0
+      },
+      "scriptVerification": {
+        "scriptCount": 192,
+        "sourceEqualsEditorCount": 192,
+        "exactRepositoryByteMatches": 192,
+        "permittedTrailingNewlineMatches": 0,
+        "editorConflicts": [],
+        "baselineScriptCount": 191,
+        "changedScripts": 8,
+        "newScripts": 1,
+        "changedExistingScripts": 7,
+        "unchangedScripts": 184,
+        "changedScriptPaths": [
+          "ServerScriptService/Level 5 Systems/Level 5 Architecture.ModuleScript.lua",
+          "ServerScriptService/Level 5 Systems/Level 5 Furniture.ModuleScript.lua",
+          "ServerScriptService/Level 5 Systems/Level 5 Landmark Districts.ModuleScript.lua",
+          "ServerScriptService/Level 5 Systems/Level 5 Neighbourhood Districts.ModuleScript.lua",
+          "ServerScriptService/Level 5 Systems/Level 5 Puzzle Catalog.ModuleScript.lua",
+          "ServerScriptService/Level 5 Systems/Level 5 Round Adapter.ModuleScript.lua",
+          "ServerScriptService/Level 5 Systems/Level 5 Section Progression.ModuleScript.lua",
+          "StarterPlayer/StarterPlayerScripts/Level5ColourLockClient.LocalScript.lua"
+        ],
+        "level4ScriptCount": 12,
+        "level4UnchangedVsBaselineAndRepository": true,
+        "exportFiles": [
+          {
+            "file": "verification/dense-final-1.json",
+            "bytes": 682850,
+            "sha256": "228b9a23084a92edc214c59ea562222cc2388b01477336e7a6b1aed51f548c9e"
+          },
+          {
+            "file": "verification/dense-final-10.json",
+            "bytes": 537903,
+            "sha256": "01e7329c85821affdcad529db0db2a0ff618066db505107298c7714ec1e8af3b"
+          },
+          {
+            "file": "verification/dense-final-11.json",
+            "bytes": 867699,
+            "sha256": "90cda2d7394a789165aac822813aedec16e1c236ff751e044cbbad415a54255f"
+          },
+          {
+            "file": "verification/dense-final-12.json",
+            "bytes": 156707,
+            "sha256": "4d45b3a5f07225c84dfc5a5113f3eb151565f01d84fc8b5991e5918ff647bee8"
+          },
+          {
+            "file": "verification/dense-final-13.json",
+            "bytes": 344632,
+            "sha256": "4c94fa82b032fb7d129af7292ac9d62a19d93fe1ff054ae1bb8ce3bebc620b8f"
+          },
+          {
+            "file": "verification/dense-final-14.json",
+            "bytes": 329604,
+            "sha256": "49aa858a089cc3f1dc1cacb44197e2f5b0600154a4581fc9c723485e15b1f046"
+          },
+          {
+            "file": "verification/dense-final-15.json",
+            "bytes": 660366,
+            "sha256": "87897669ec4325d8018c5f47c5b19b8fda2316ea00cc7b9f066f3c894c314a72"
+          },
+          {
+            "file": "verification/dense-final-2.json",
+            "bytes": 330348,
+            "sha256": "29b09c9b97cac673451fd817445fa5b1b4552bb9cc432470557fecc110ea16e2"
+          },
+          {
+            "file": "verification/dense-final-3.json",
+            "bytes": 709884,
+            "sha256": "e52c4c284a0a50226660c44ff2ad80c90d435979bbf9a0f970377ce876f554c0"
+          },
+          {
+            "file": "verification/dense-final-4.json",
+            "bytes": 642460,
+            "sha256": "1acde6c16777593c9462c5861392b0e77011a70da65d819cc61af6bcd124de58"
+          },
+          {
+            "file": "verification/dense-final-5.json",
+            "bytes": 841196,
+            "sha256": "2a7249d4e64b37d91773ad27d9408446aefb303bd032456348560f9022edf381"
+          },
+          {
+            "file": "verification/dense-final-6.json",
+            "bytes": 262513,
+            "sha256": "90da297c4450713428d4aa3735ba25aea2b91d0a42cd878832574444ac61c5d1"
+          },
+          {
+            "file": "verification/dense-final-7.json",
+            "bytes": 287977,
+            "sha256": "a076f393d7be6eabaa97b3b2a98326f521c6e2c7afb6c596e794c8a80f94e49d"
+          },
+          {
+            "file": "verification/dense-final-8.json",
+            "bytes": 453834,
+            "sha256": "8a2d60de457686e5e1fdcff9fe5c6f5fef7be1c9f266b7c23ebb30e4e7f4190c"
+          },
+          {
+            "file": "verification/dense-final-9.json",
+            "bytes": 970205,
+            "sha256": "e75427699a9d02f0172d75f9427b88fa57765586787ed5f167a05c8463ee58bc"
+          }
+        ],
+        "publicationVerification": "Native File > Publish to Roblox confirmed v2133; separate receipt retained.",
+        "lastPublishedVersionVerifiedFromLog": 2133,
+        "sourceAudit": "artifacts/level5-dense-routes-20260926/qa/final-source-mirror-report.json"
+      },
+      "scope": "Preserved before reference-atrium source mirror; no publication or backup inference."
     }
   ],
   "currentSyncPublication": {
     "status": "published",
-    "lastVerifiedPublishedVersion": 2133,
-    "receipt": "artifacts/level5-dense-routes-20260926/publication-v2133.json"
+    "lastVerifiedPublishedVersion": 2136,
+    "receipt": "artifacts/level5-atrium-reference-20260926/publication-v2136.json"
   },
   "preTaskNativePlaceBackup": {
     "file": "artifacts/level5-outage-20260926/after.rbxl",

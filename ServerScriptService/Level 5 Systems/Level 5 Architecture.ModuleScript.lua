@@ -17,7 +17,7 @@ function Architecture.Build(parent, origin, config)
 	origin = origin or Vector3.zero
 	local root = Instance.new("Model")
 	root.Name = "Level5_IndoorSuburbs"
-	root:SetAttribute("ArchitectureVersion", "2026-09-26.dense-routes.1")
+	root:SetAttribute("ArchitectureVersion", "2026-09-26.residential-atrium.1")
 	root:SetAttribute("GeometryOnly", true)
 	root.Parent = parent
 	local offset = CFrame.new(origin)
@@ -452,7 +452,7 @@ function Architecture.Build(parent, origin, config)
 		{Name="C_PastelVillage",Title="Pastel Carpet Villages",Width=560,Z0=456,Z1=936,CeilingHeight=100,Style="office"},
 		{Name="D_FloralTerraces",Title="Sunken Floral Terraces",Width=320,Z0=936,Z1=1296,CeilingHeight=88,Style="office",Bottom=-14},
 		{Name="E_DomesticLabyrinth",Title="Domestic Room Labyrinth",Width=320,Z0=1296,Z1=1596,CeilingHeight=44,Style="domestic"},
-		{Name="F_BayWindowCanyon",Title="Nested Window Courts",Width=500,Z0=1596,Z1=2076,CeilingHeight=156,Style="office"},
+		{Name="F_BayWindowCanyon",Title="Deep Residential Atrium",Width=500,Z0=1596,Z1=2076,CeilingHeight=84,Style="office",Bottom=-42},
 		{Name="G_TiltedSubdivision",Title="Impossible Tilted Subdivision",Width=480,Z0=2076,Z1=2456,CeilingHeight=180,Style="warehouse"},
 		{Name="H_LastHouse",Title="Last House",Width=220,Z0=2456,Z1=2636,CeilingHeight=70,Style="domestic"},
 	}
@@ -503,11 +503,11 @@ function Architecture.Build(parent, origin, config)
 		if z.CeilingHeight>60 then
 			for i,zz in ipairs({z.Z0+35,(z.Z0+z.Z1)/2,z.Z1-35}) do
 				for _,xx in ipairs({-34,34}) do
-					local y=index==8 and 24 or 37
+						local y=index==6 and 82 or (index==8 and 24 or 37)
 					local p=part(enclosure,"SuspendedSharedFluorescent",V(7,.18,3),CF(xx,y,zz),i==2 and C.ceiling or Color3.fromRGB(221,218,187),i==2 and Enum.Material.SmoothPlastic or Enum.Material.Neon,false)
 					p:SetAttribute("TubeState",i==2 and "Off" or "On")
 					for _,dx in ipairs({-2.6,2.6}) do part(enclosure,"CeilingSuspension",V(.055,z.CeilingHeight-y,.055),CF(xx+dx,(z.CeilingHeight+y)/2,zz),C.grid,nil,false) end
-					if i~=2 then local l=Instance.new("SurfaceLight");l.Face=Enum.NormalId.Bottom;l.Range=52;l.Angle=160;l.Brightness=.85;l.Shadows=false;l.Color=Color3.fromRGB(244,233,204);l.Parent=p end
+						if i~=2 then local l=Instance.new("SurfaceLight");l.Face=Enum.NormalId.Bottom;l.Range=index==6 and 60 or 52;l.Angle=160;l.Brightness=.85;l.Shadows=false;l.Color=Color3.fromRGB(244,233,204);l.Parent=p end
 				end
 			end
 		end
@@ -532,6 +532,22 @@ function Architecture.Build(parent, origin, config)
 		{name="ExpandedArcadeSideLoop",position=V(127,6,309),lookAt=V(90,9,390)},
 	}
 	local waypoints={V(0,3,5),V(0,3,45),V(35,3,50),V(35,3,104),V(0,3,108),V(0,3,184),V(0,3,208),V(0,3,263),V(58,3,264),V(58,3,329),V(-55,3,329),V(-55,3,397),V(60,3,400),V(60,3,444),V(88,3,444),V(88,3,468),V(110,3,468),V(110,3,513),V(145,3,513),V(145,3,565),V(90,3,592),V(25,3,592),V(25,3,650),V(-25,3,700),V(-25,3,740),V(-25,3,778),V(-90,3,778),V(-145,3,800),V(-145,3,865),V(-100,3,875),V(-100,3,924),V(-120,3,924),V(-120,3,948),V(-120,3,965),V(-101,3,965),V(-101,3,1087),V(-101,3,1109),V(-86,3,1109),V(-86,3,1094),V(-86,3,1089),V(-86,-3,1073),V(-86,-9,1057),V(-86,-9,1024),V(15,-9,1024),V(15,-9,1106),V(30,-9,1122),V(30,-9,1195),V(0,-9,1228),V(0,-3,1246),V(0,3,1265),V(120,3,1278),V(120,3,1284),V(120,3,1308),V(90,3,1310),V(90,3,1373),V(60,3,1373),V(60,3,1406),V(-90,3,1406),V(-90,3,1458),V(-60,3,1458),V(-60,3,1495),V(-90,3,1495),V(-90,3,1550),V(-120,3,1584),V(-120,3,1608),V(-125,3,1689),V(-80,3,1690),V(-80,3,1755),V(15,3,1755),V(75,3,1790),V(75,3,1840),V(75,3,1910),V(40,3,1955),V(0,3,1955),V(0,3,2028),V(80,3,2028),V(178,3,2048),V(178,3,2064),V(178,3,2088),V(135,3,2100),V(95,3,2140),V(0,3,2140),V(-54,3,2173),V(-54,7,2188),V(-54,11,2204),V(-90,11,2208),V(-90,11,2270),V(-60,11,2270),V(-10,11,2270),V(6,11,2270),V(18,15,2270),V(30,19,2270),V(36,19,2270),V(92,19,2270),V(92,19,2332),V(54,19,2332),V(54,19,2340),V(54,11,2360),V(54,3,2380),V(54,3,2383),V(0,3,2400),V(0,3,2444),V(-65,3,2444),V(-65,3,2468),V(-65,3,2538),V(-30,3,2548),V(0,3,2555),V(0,3,2578),V(0,3,2588),V(0,3,2597.5),V(9,3,2597.5),V(9,3,2610.9),V(0,3,2610.9),V(0,3,2613),V(0,3,2615),V(0,-2.5,2631),V(0,-8,2647),V(0,-17,2658.5),V(0,-26,2670),V(0,-26,2676)}
+	-- Replace only the F traversal: the domestic atrium now crosses a deep
+	-- void at several heights while retaining both authored gate thresholds.
+	local atriumRoute=assert(L.FRouteWaypoints,"Missing residential atrium route")
+	local revisedRoute={};local inserted=false
+	for _,point in ipairs(waypoints) do
+		if point.Z>1596 and point.Z<2076 then
+			if not inserted then
+				for _,p in ipairs(atriumRoute) do table.insert(revisedRoute,p) end
+				inserted=true
+			end
+		else table.insert(revisedRoute,point) end
+	end
+	assert(inserted,"Missing F route replacement span");waypoints=revisedRoute
+	local function worldRoute(localPoints)
+		local points={};for _,p in ipairs(localPoints or {}) do table.insert(points,origin+p) end;return points
+	end
 	for _,r in ipairs({N,L}) do for _,v in ipairs(r.PreviewCameras or {}) do table.insert(cameras,v) end end
 	for _,v in ipairs(cameras) do v.position+=origin;v.lookAt+=origin end
 	for i,v in ipairs(waypoints) do waypoints[i]=origin+v end
@@ -545,6 +561,7 @@ function Architecture.Build(parent, origin, config)
 	root:SetAttribute("SpawnCFrame",CFrame.lookAt(origin+V(0,3,5),origin+V(0,3,70)))
 	return {Model=root,SpawnCFrame=CFrame.lookAt(origin+V(0,3,5),origin+V(0,3,70)),PreviewCameras=cameras,Waypoints=waypoints,RouteWaypoints=waypoints,SectionGates=sectionGates,Zones=zones,
 		FinalHouse=L.FinalHouse,ChuteStart=CF(origin+L.ChuteStart),ChuteEnd=CF(origin+L.ChuteEnd),
-		Bounds={Min=origin+V(-287,-36,-12),Max=origin+V(287,188,2680)},GroundEnvelopeArea=totalFootprint,PreviousGroundEnvelopeArea=331600}
+		FRouteWaypoints=worldRoute(L.FRouteWaypoints),FRescueRouteWaypoints=worldRoute(L.FRescueRouteWaypoints),FClueRouteWaypoints=worldRoute(L.FClueRouteWaypoints),FAtriumPitBounds=L.FAtriumPitBounds,
+		Bounds={Min=origin+V(-287,-50,-12),Max=origin+V(287,188,2680)},GroundEnvelopeArea=totalFootprint,PreviousGroundEnvelopeArea=331600}
 end
 return Architecture

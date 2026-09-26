@@ -33,86 +33,193 @@ function Districts.Build(K)
 		part(into,"FadedPicturePaper",V(w-.65,h-.65,.32),frame*CF(0,0,-.03),C.carpet,Enum.Material.Fabric)
 	end
 
-	-- F: several intimate courts lie below a much taller, tangled domestic skyline.
-	-- All houses retain human dimensions. Only the scenic upper floors are closed.
-	local F=zone("F_BayWindowCanyon",V(-250,0,1596),V(250,156,2076),"Deep carpet courts, nested small houses and continuous balconies below asymmetric residential towers.")
-	F:SetAttribute("CourtVersion","2026-09-26.dense-courts")
-	F:SetAttribute("PlayableFloorHeights","0,14,28")
-	floor(F,"CanyonCarpet",0,0,1836,500,480,C.carpet)
-	local sage=Color3.fromRGB(139,145,119)
-	local homes={}
+	-- F: continuous domestic walls around a real multi-storey carpeted atrium.
+	-- Entry is an upper landing, not a broad ground court. The grade route is
+	-- deliberately broken; ordinary stairs and crossings reconnect its pieces.
+	local F=zone("F_BayWindowCanyon",V(-250,-42,1596),V(250,84,2076),"Continuous cream plaster dwellings, narrow deep void, carpet ledges and staggered crossings.")
+	F:SetAttribute("CourtVersion","2026-09-26.reference-atrium.1")
+	F:SetAttribute("PlayableFloorHeights","-42,-28,-14,0,14,28")
+	F:SetAttribute("EntryLedgeY",0)
+	local pitBounds={Min=V(-50,-42,1668),Max=V(50,-28,1968),Space="local"}
+	local voidBounds={Min=V(-28,-42,1668),Max=V(28,0,1968),Space="local"}
+	F:SetAttribute("PitMin",pitBounds.Min);F:SetAttribute("PitMax",pitBounds.Max)
+	F:SetAttribute("VoidMin",voidBounds.Min);F:SetAttribute("VoidMax",voidBounds.Max)
+	local cream=Color3.fromRGB(244,240,223)
+	local function plaster(p) return K.material(p,"Plaster",cream) end
+	local function plasterPart(into,name,size,frame)
+		return plaster(part(into,name,size,frame,cream,Enum.Material.Plaster))
+	end
+	local function dwelling(into,name,frame,w,d,h,options)
+		options=options or {}
+		local home=house(into,name,frame,w,d,h,C.pale,nil,options)
+		-- Reuse the standard real doors, panes and room metadata, but make this
+		-- district solid domestic plaster rather than clapboard/pastel cottages.
+		for _,p in ipairs(home:GetDescendants()) do
+			if p:IsA("BasePart") and (p:GetAttribute("Level5SurfaceMaterial")=="Siding" or p.Material==Enum.Material.Plaster) then plaster(p) end
+		end
+		home:SetAttribute("HousePuzzleCandidate",false)
+		return home
+	end
+	local function foundation(name,x,z,w,d)
+		plasterPart(F,name,V(w,126,d),CF(x,21,z)) -- -42..84, opaque backing
+	end
+	floor(F,"AtriumArrivalCarpet",0,0,1632,500,72,C.carpet) -- 1596..1668
+	floor(F,"AtriumDepartureCarpet",0,0,2022,500,108,C.carpet) -- 1968..2076
+	-- The old outer courts become actual building mass. There is no concealed
+	-- grade bypass behind the front rooms or under the gate foundations.
 	for _,side in ipairs({-1,1}) do
-		for i,z in ipairs({1650,1732,1832,1932,2020}) do
-			local tower=model("NestedCanyonTower_"..side.."_"..i,F)
-			local levels=({6,9,5,8,7})[i]
-			for level=0,levels-1 do
-				-- Small high-level setbacks articulate the silhouette without
-				-- shearing walkable walls into stairs or adjacent rooms.
-				local setback=level>=3 and (level%3)*3 or 0
-				local frame=CF(side*(140+setback),level*14,z+(level>=4 and (i%2)*3 or 0))*yaw(side*90)
-				local home=house(tower,"CanyonHome_"..level,frame,30,28,13.8,(i+level)%3==0 and sage or (i%2==0 and C.pale or C.cream),level==levels-1 and C.blue or nil,{open=level<=2,furniture=level==0 and i==3 and (side<0 and 4 or 2) or nil})
-				if (i==1 and level==3) or (i==2 and level==5) or (i==4 and level==4) or (i==5 and level==3) then
-					local projection=model("ProjectingDomesticBay",home)
-					bay(projection,frame*CF(0,0,-.65),22,8,false)
-					projection:SetAttribute("ClosedScenicProjection",true)
+		foundation("ArrivalResidentialMass",side*165,1643,170,50) -- 1618..1668
+		foundation("DepartureResidentialMass",side*165,2002,170,68) -- 1968..2036
+	end
+	local ledges={
+		[-28]={[-1]={{1668,1678},{1710,1968}},[1]={{1668,1968}}},
+		[-14]={[-1]={{1788,1856}},[1]={{1766,1830}}},
+		[0]={[-1]={{1668,1756},{1964,1968}},[1]={{1668,1724},{1862,1880}}},
+		[14]={[-1]={{1668,1932}},[1]={{1668,1880},{1912,1968}}},
+		[28]={[-1]={{1668,1840},{1872,1968}},[1]={{1668,1730},{1762,1968}}},
+	}
+	local bridgeGaps={
+		[-28]={[-1]={{1712,1724}},[1]={{1712,1724}}},
+		[-14]={[-1]={{1804,1816}},[1]={{1804,1816}}},
+		[14]={[-1]={{1692,1704},{1910,1926}},[1]={{1692,1704},{1922,1938}}},
+		[28]={[-1]={{1886,1902}},[1]={{1874,1890}}},
+	}
+	local function railInterval(side,y,a,b,gaps)
+		local cuts={}
+		for _,g in ipairs(gaps or {}) do if g[2]>a and g[1]<b then table.insert(cuts,{math.max(a,g[1]),math.min(b,g[2])}) end end
+		table.sort(cuts,function(x,y) return x[1]<y[1] end)
+		K.edgeRail(F,side*28,y,a,b,cuts)
+	end
+	for y,sides in pairs(ledges) do for _,side in ipairs({-1,1}) do
+		for i,span in ipairs(sides[side]) do
+			floor(F,"CarpetLedge_"..side.."_"..y.."_"..i,side*39,y,(span[1]+span[2])/2,22,span[2]-span[1],C.carpet)
+			plasterPart(F,"CarpetLedgePlasterSoffit",V(22,.22,span[2]-span[1]),CF(side*39,y-1.26,(span[1]+span[2])/2))
+			railInterval(side,y,span[1],span[2],bridgeGaps[y] and bridgeGaps[y][side])
+		end
+	end end
+	-- Exposed dead ends receive rails; stair mouths and bridge ends stay clear.
+	for _,cap in ipairs({{1,0,1724},{-1,-14,1856},{-1,-28,1668},{1,-28,1668},{-1,-28,1968},{1,-28,1968},{-1,14,1668},{1,14,1668},{1,14,1968},{-1,28,1668},{1,28,1668},{-1,28,1968},{1,28,1968}}) do rail(F,CF(cap[1]*39,cap[2],cap[3]),22) end
+	-- At grade the unconnected east ledge must not offer a walk around the void.
+	-- Rail the arrival rim between the two genuine side entrances.
+	rail(F,CF(0,0,1668),56)
+	-- The rear rim has one west stair landing. The other side is protected.
+	rail(F,CF(11,0,1968),78)
+	floor(F,"PitFloor",0,-42,1818,100,300,C.carpet)
+	for _,side in ipairs({-1,1}) do plasterPart(F,"PitSideWall",V(1.4,14,300),CF(side*50.7,-35,1818)) end
+	for _,z in ipairs({1667.3,1968.7}) do plasterPart(F,"PitEndWall",V(102.8,42,1.4),CF(0,-21,z)) end
+	-- Close beneath the arrival/departure galleries, not just at eye height.
+	plasterPart(F,"ArrivalPitFoundation",V(500,42,72),CF(0,-21,1632))
+	plasterPart(F,"DeparturePitFoundation",V(500,42,108),CF(0,-21,2022))
+
+	local function onLedge(side,y,z)
+		local bands=ledges[y] and ledges[y][side]
+		if not bands then return false end
+		for _,span in ipairs(bands) do if z>=span[1]+4 and z<=span[2]-4 then return true end end
+		return false
+	end
+	local stairFootprints={
+		{side=-1,y=-28,a=1678,b=1710},{side=1,y=-28,a=1734,b=1766},
+		{side=-1,y=0,a=1756,b=1788},{side=1,y=-14,a=1830,b=1862},
+		{side=1,y=0,a=1880,b=1912},{side=-1,y=14,a=1932,b=1964},
+		{side=-1,y=14,a=1840,b=1872},{side=1,y=14,a=1730,b=1762},
+	}
+	local function roomAccessible(side,y,z)
+		if not onLedge(side,y,z) then return false end
+		for _,s in ipairs(stairFootprints) do if side==s.side and y==s.y and z>s.a-3 and z<s.b+3 then return false end end
+		return true
+	end
+	local clueHome
+	for _,side in ipairs({-1,1}) do
+		local wall=model(side<0 and "WestContinuousDwellings" or "EastContinuousDwellings",F)
+		for bayIndex=1,10 do
+			local z=1653+bayIndex*30 -- 1683..1953, contiguous thirty-stud bays
+			local frontage=(bayIndex==4 or bayIndex==8) and 50 or 46
+			local massStart=frontage+25.9
+			foundation("OpaqueResidentialBacking",side*(massStart+250)/2,z,250-massStart,30)
+			for _,y in ipairs({-28,-14,0,14,28,42,56,70}) do
+				local open=roomAccessible(side,y,z)
+				local frame=CF(side*frontage,y,z)*yaw(side*90)
+				local cutaway=(side<0 and bayIndex==4 and y==42) or (side>0 and bayIndex==7 and y==56)
+				local furniture=y==0 and ((side<0 and bayIndex==1 and 7) or (side<0 and bayIndex==3 and 8) or (side>0 and bayIndex==1 and 6)) or nil
+				local home=dwelling(wall,"PlasterDwelling_"..bayIndex.."_"..y,frame,30,26,13.8,{open=open,cutaway=cutaway,furniture=furniture,completeHome=furniture~=nil})
+				if cutaway then
+					home:SetAttribute("UncannyCutaway",true)
+					part(home,"ClosedPanelDoor",V(5.4,10.3,.32),frame*CF(0,5.15,.05),C.white,Enum.Material.Wood)
 				end
-				if side==-1 and i==3 and level==1 then K.registerWatcher(home,"MiddleCourtWindow",F.Name) end
-				if side==1 and i==5 and level==2 then K.registerWatcher(home,"FarUpperWindow",F.Name) end
-				if level>=3 and level%2==1 then
-					floor(tower,"ScenicOffsetPorch",0,0,-3,32,6,C.carpet,frame)
-					rail(tower,frame*CF(0,0,-6),32)
+				if side<0 and bayIndex==3 and y==0 then
+					clueHome=home;home.Name="TelevisionClueResidence";home:SetAttribute("HousePuzzleCandidate",true)
+				end
+				if side<0 and bayIndex==2 and y==0 then K.registerWatcher(home,"NearGroundWindow",F.Name) end
+				if side>0 and bayIndex==9 and y==14 then K.registerWatcher(home,"MiddleCourtWindow",F.Name) end
+				if side<0 and bayIndex==9 and y==28 then K.registerWatcher(home,"FarUpperWindow",F.Name) end
+				-- Irregular little projections above the walkable floors interrupt
+				-- the otherwise continuous domestic wall, like the reference.
+				if y>=42 and (bayIndex+(side<0 and 1 or 3)+y/14)%4==0 then
+					floor(wall,"ProjectingDomesticBalcony",0,0,-3.5,20,7,C.carpet,frame)
+					rail(wall,frame*CF(0,0,-7),20)
+					for _,s in ipairs({-1,1}) do rail(wall,frame*CF(s*10,0,-3.5)*yaw(90),7) end
+					plasterPart(wall,"BalconyMouldedUnderside",V(21,.65,7.8),frame*CF(0,-1,-3.5))
 				end
 			end
 		end
-		for _,height in ipairs({14,28}) do
-			floor(F,"ContinuousCanyonBalcony",side*126,height,1831,28,442,C.carpet)
-			local gaps=height==14 and (side<0 and {{1652,1665},{1768,1782}} or {{1768,1782},{1889,1901}}) or {{1931,1943},{1963,1977}}
-			K.edgeRail(F,side*112,height,1610,2052,gaps)
-			rail(F,CF(side*126,height,1610),28);rail(F,CF(side*126,height,2052),28)
-		end
-		for i,z in ipairs({1710,1880,2010}) do
-			for level=0,1 do house(F,"OuterCourtHome_"..side.."_"..i.."_"..level,CF(side*214,level*14,z)*yaw(side*90),30,25,13.8,i%2==0 and C.rose or sage,level==1 and C.lavender or nil,{open=level==0,backOpening=level==0 and i==2}) end
-			floor(F,"SideCourtLanding",side*187,.03,z,46,36,C.green)
-		end
-		for i,z in ipairs({1708,1864,1998}) do
-			local levels=i==2 and 3 or 1
-			for level=0,levels-1 do
-				local home=house(F,"CourtIslandHome_"..side.."_"..i.."_"..level,CF(side*44,level*14,z),28,24,13.8,side<0 and C.rose or C.pale,level==levels-1 and C.blue or nil,{open=level==0,backOpening=level==0})
-				if side==-1 and i==1 and level==0 then K.registerWatcher(home,"NearGroundWindow",F.Name) end
-			end
-		end
 	end
-	stairs(F,"CanyonFirstFlight",CF(-95,0,1620),14,14,32,28,C.carpet,true)
-	floor(F,"CanyonFirstLanding",-110.5,14,1657,43,10,C.carpet)
-	floor(F,"CanyonMiddleBridge",0,14,1775,254,14,C.carpet)
-	for _,z in ipairs({1768,1782}) do rail(F,CF(0,14,z),224) end
-	stairs(F,"CanyonSecondFlight",CF(95,14,1900),14,14,32,28,C.carpet,true)
-	floor(F,"CanyonSecondBase",110.5,14,1895,43,10,C.carpet)
-	floor(F,"CanyonSecondLanding",110.5,28,1937,43,10,C.carpet)
-	floor(F,"CanyonHighBridge",0,28,1970,254,14,C.carpet)
-	for _,z in ipairs({1963,1977}) do rail(F,CF(0,28,z),224) end
-	for _,side in ipairs({-1,1}) do for _,z in ipairs({1612,1775,1970,2050}) do post(F,side*110,0,z,28) end end
-	-- Inhabitable scale without inhabitants: a series of nested domestic blocks
-	-- breaks the floor into short, readable courts. The old isolated lintels are
-	-- replaced by supported residential volumes and real doorways.
-	for i,info in ipairs({{0,1645,46,32,3},{0,1800,50,30,5},{-5,1920,54,28,4},{0,2038,70,24,2}}) do
-		local x,z,w,d,count=table.unpack(info)
-		for level=0,count-1 do
-			house(F,"NestedCourtInfill_"..i.."_"..level,CF(x,level*14,z),w,d,13.8,i%2==0 and sage or C.pale,level==count-1 and C.blue or nil,{open=level==0,completeHome=level==0,furniture=level==0 and i<=2 and (i==1 and 6 or 8) or nil})
-		end
+	assert(clueHome and clueHome:GetAttribute("Enterable"),"F requires an accessible ground-level television clue residence")
+
+	local function flight(name,side,y,z,rise,run)
+		local frame=CF(side*37,y,z)
+		local m=stairs(F,name,frame,12,rise,run,28,C.carpet,true)
+		local a,b=V(side*37,y,z),V(side*37,y+rise,z+run)
+		local align=CFrame.lookAt((a+b)/2,b)
+		plasterPart(m,"SolidPlasterStairSoffit",V(12,1,(b-a).Magnitude+.2),align*CF(0,-.9,0))
+		return m
 	end
-	for _,side in ipairs({-1,1}) do
-		for i,z in ipairs({1800,1960}) do
-			local count=i==1 and 4 or 6
-			for level=0,count-1 do house(F,"SideCourtDomesticStack_"..side.."_"..i.."_"..level,CF(side*190,level*14,z)*yaw(side*90),30,28,13.8,side<0 and C.rose or sage,level==count-1 and C.lavender or nil,{open=level==0,completeHome=level==0}) end
-		end
+	flight("MainDescentToLowerGallery",-1,0,1756,-14,32)
+	flight("MainRiseToMiddleLanding",1,-14,1830,14,32)
+	flight("MainRiseToUpperCrossing",1,0,1880,14,32)
+	flight("MainDescentToExitLanding",-1,14,1932,-14,32)
+	flight("PitRecoveryFirstFlight",-1,-42,1678,14,32)
+	flight("PitRecoverySecondFlight",1,-28,1734,14,32)
+	flight("OptionalWestUpperFlight",-1,14,1840,14,32)
+	flight("OptionalEastUpperFlight",1,14,1730,14,32)
+	local function crossing(name,leftZ,rightZ,y)
+		local a,b=V(-37,y,leftZ),V(37,y,rightZ)
+		local dir=b-a;local frame=CF((a+b)/2)*yaw(-math.deg(math.atan2(dir.Z,dir.X)))
+		local m=model(name,F)
+		floor(m,"CrossingCarpet",0,0,0,dir.Magnitude,12,C.carpet,frame)
+		plasterPart(m,"CrossingPlasterSoffit",V(dir.Magnitude,.22,12),frame*CF(0,-1.26,0))
+		-- Rail the void-spanning centre only; full-width rails would cut into the
+		-- receiving ledges and prevent turning onto or off the crossing.
+		for _,z in ipairs({-6,6}) do rail(m,frame*CF(0,0,z),56) end
+		plasterPart(m,"WhiteBridgeFascia",V(dir.Magnitude,1.6,.45),frame*CF(0,-.7,-6.1))
+		plasterPart(m,"WhiteBridgeFascia",V(dir.Magnitude,1.6,.45),frame*CF(0,-.7,6.1))
 	end
-	camera("ExpandedCanyonArrival",V(8,7,1604),V(-139,48,1741))
-	camera("ExpandedCanyonMiddleBalcony",V(-121,20,1789),V(117,48,1935))
-	camera("ExpandedCanyonSkyline",V(8,8,1820),V(145,104,1736))
-	camera("ExpandedCanyonHighBridge",V(94,34,1970),V(-140,43,1828))
-	camera("ExpandedCanyonOuterCourt",V(184,7,1912),V(217,23,2012))
-	for _,z in ipairs({1602,1660,1740,1810,1880,1950,2020,2070}) do point(0,3,z) end
+	crossing("LowerRecoveryCrossing",1718,1718,-28)
+	crossing("MainLowerCrossing",1810,1810,-14)
+	crossing("NorthUpperReturnCrossing",1698,1698,14)
+	crossing("SkewedMainUpperCrossing",1918,1930,14)
+	crossing("SkewedHighGalleryCrossing",1894,1882,28)
+
+	-- Solid flat-roof domestic entrance/exit blocks compress the broad envelope
+	-- into the ledges. Neither introduces a detached gabled village silhouette.
+	for level=0,3 do dwelling(F,"ArrivalDomesticBlock_"..level,CF(0,level*14,1624),40,26,13.8,{open=level==0}) end
+	for level=0,2 do dwelling(F,"DepartureDomesticBlock_"..level,CF(0,level*14,2000),48,26,13.8,{open=level==0,furniture=level==0 and 2 or nil}) end
+
+	local route={
+		V(-120,3,1608),V(-43,3,1608),V(-37,3,1658),V(-37,3,1683),V(-37,3,1713),V(-37,3,1743),
+		V(-37,3,1756),V(-37,-4,1772),V(-37,-11,1788),V(-37,-11,1810),V(37,-11,1810),
+		V(37,-11,1830),V(37,-4,1846),V(37,3,1862),V(37,3,1880),V(37,10,1896),V(37,17,1912),
+		V(37,17,1930),V(0,17,1924),V(-37,17,1918),V(-37,17,1932),V(-37,10,1948),V(-37,3,1964),
+		V(-37,3,1988),V(37,3,1988),V(37,3,2048),V(178,3,2048),V(178,3,2064),
+	}
+	local rescue={V(0,-39,1818),V(0,-39,1673),V(-37,-39,1673),V(-37,-39,1678),V(-37,-32,1694),V(-37,-25,1710),V(-37,-25,1718),V(37,-25,1718),V(37,-25,1734),V(37,-18,1750),V(37,-11,1766),V(37,-11,1810)}
+	local clueRoute={V(-37,3,1743),V(-48,3,1743),V(-66,3,1743)}
+	camera("ReferenceAtriumArrival",V(-37,6,1661),V(24,-6,1810))
+	camera("ReferenceAtriumVerticalVoid",V(-36,6,1748),V(38,-13,1872))
+	camera("ReferenceAtriumLowerCrossing",V(-36,-8,1808),V(42,32,1910))
+	camera("ReferenceAtriumUpperSkewBridge",V(31,20,1930),V(-44,35,1770))
+	camera("ReferenceAtriumHighGallery",V(-37,34,1905),V(34,13,1730))
+	camera("ReferenceAtriumRecoveryFloor",V(0,-36,1828),V(-34,20,1690))
+	for _,p in ipairs(route) do table.insert(waypoints,p) end
 
 	-- G: the wide subdivision has habitable terraces below two impossible pairs
 	-- of tall stacks. Tilted domestic volumes rest on piers outside enterable homes.
@@ -359,7 +466,7 @@ function Districts.Build(K)
 	point(0,3,2462); point(0,3,2515); point(0,3,2558); point(0,3,2581); point(0,3,2597.5)
 	point(9,3,2597.5); point(9,3,2610.9); point(0,3,2610.9); point(0,3,2613)
 	point(0,-8,2647); point(0,-26,2674)
-	return {PreviewCameras=cameras,Waypoints=waypoints,Zones=zones,FinalHouse=finalHouse,ChuteStart=chuteStart,ChuteEnd=chuteEnd}
+	return {PreviewCameras=cameras,Waypoints=waypoints,Zones=zones,FinalHouse=finalHouse,ChuteStart=chuteStart,ChuteEnd=chuteEnd,FRouteWaypoints=route,FRescueRouteWaypoints=rescue,FClueRouteWaypoints=clueRoute,FAtriumPitBounds=pitBounds,FAtriumVoidBounds=voidBounds}
 end
 
 return Districts
