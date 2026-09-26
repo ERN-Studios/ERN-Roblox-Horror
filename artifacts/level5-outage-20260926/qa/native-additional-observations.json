@@ -1,0 +1,29 @@
+{
+  "source": "Recorded native MCP tool observations; final runtime probe executed as temporary server Script, then removed.",
+  "serverFixtureCount": 421,
+  "sectionFixtureCounts": [
+    24,
+    42,
+    86,
+    42,
+    60,
+    78,
+    62,
+    27
+  ],
+  "repeatGateRejected": true,
+  "repeatReason": "Gate already triggered",
+  "closedGateRejected": true,
+  "closedReason": "Gate must be fully open",
+  "rejectedCallsPreservedSchedule": true,
+  "lateFixtureDuringBlackout": {
+    "source": "Server-cloned ceiling fixture with same metadata, inserted into streamed atrium during blackout; runtime-only probe removed afterwards",
+    "clientMaterial": "SmoothPlastic",
+    "clientColour": "0.0862745, 0.0784314, 0.0627451",
+    "section": 1
+  },
+  "firstAttemptFailure": {
+    "reason": "Color3 multiplication unsupported in Roblox",
+    "fix": "Explicit RGB component scaling in client; production-duration test rerun successfully before publishing"
+  }
+}

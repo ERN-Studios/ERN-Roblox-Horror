@@ -6,9 +6,10 @@ local HttpService = game:GetService("HttpService")
 local RunService = game:GetService("RunService")
 local DevAccess = require(RS:WaitForChild("DevAccess"))
 local Logic = require(script.Parent:WaitForChild("Level 5 Colour Lock Logic"))
+local Outage = require(script.Parent:WaitForChild("Level 5 Power Outage"))
 local Progression = {}
 local sessions = setmetatable({}, {__mode = "k"})
-local VERSION = "2026-09-26.colour-lock.1"
+local VERSION = "2026-09-26.colour-lock.outage.2"
 local COLOURS = {Color3.fromRGB(160,44,43), Color3.fromRGB(225,189,73), Color3.fromRGB(54,99,165), Color3.fromRGB(52,122,81)}
 local CREAM, DARK = Color3.fromRGB(215,207,181), Color3.fromRGB(43,47,43)
 local V, CF = Vector3.new, CFrame.new
@@ -17,6 +18,7 @@ function Progression.Cleanup(world)
 	local s = sessions[world]
 	if not s or s.closed then return end
 	s.closed = true; sessions[world] = nil
+	Outage.Cleanup(world)
 	for _, c in ipairs(s.connections) do c:Disconnect() end
 	for _, t in ipairs(s.tweens) do t:Cancel() end
 	table.clear(s.clients)
@@ -38,6 +40,8 @@ function Progression.Start(world, manifest, config)
 	local s = {world = world, connections = {}, tweens = {}, clients = {}, gates = {}, clueGuis = {}, closed = false}
 	sessions[world] = s
 	local ok, result = pcall(function()
+		local outageResult=Outage.Start(world,manifest)
+		assert(outageResult.ok,outageResult.error)
 		local token = HttpService:GenerateGUID(false)
 		local owner = Instance.new("Folder"); owner.Name = "Level5SectionProgression"
 		owner:SetAttribute("Level5ProgressionOwned", true); owner:SetAttribute("WorldToken", token)
@@ -112,7 +116,10 @@ function Progression.Start(world, manifest, config)
 					if not s.closed and playback == Enum.PlaybackState.Completed and leaf.Parent then
 						leaf.CanCollide = false; leaf.CanQuery = false
 						gate.completed += 1
-						if gate.completed == 2 then gate.model:SetAttribute("FullyOpen", true) end
+						if gate.completed == 2 then
+							gate.model:SetAttribute("FullyOpen", true)
+							Outage.Trigger(world,index)
+						end
 					end
 				end)
 				tween:Play()
