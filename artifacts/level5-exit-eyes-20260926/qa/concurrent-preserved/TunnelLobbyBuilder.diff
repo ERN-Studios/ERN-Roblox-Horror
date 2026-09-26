@@ -1,0 +1,14 @@
+--- baseline/ServerScriptService/TunnelLobbyBuilder
++++ StudioFinal/ServerScriptService/TunnelLobbyBuilder
+@@ -284,9 +284,8 @@
+ -- information-board layout. This keeps "COMING SOON" readable from the tunnel
+ -- while preserving the sealed DiamondPlate door as the physical blocker.
+ local function addComingSoonBoard(panel, face, level)
+-	-- Level 4 is the active development target. Later future levels stay at
+-	-- their initial planning stage until work on them begins.
+-	local progressPercent = ({[4] = 60, [5] = 10, [6] = 5})[level] or 0
++	-- Owner's current development progress estimates for the sealed gates.
++	local progressPercent = ({[4] = 90, [5] = 70, [6] = 30})[level] or 0
+ 
+ 	local gui = Instance.new("SurfaceGui")
+ 	gui.Name = "ComingSoonDisplay"

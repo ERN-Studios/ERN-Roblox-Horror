@@ -5,10 +5,25 @@ Logic.BLACKOUT_SECONDS = 60
 Logic.RESTORE_SECONDS = 1.5
 Logic.FIXTURE_FALL_SECONDS = .5
 Logic.REFLASH_POWER = .28
+Logic.OUTAGE_SECTION_COUNT = 7
+Logic.LAST_OUTAGE_GATE = 6
+Logic.EXEMPT_SECTION = 8
 local function finite(n) return type(n)=="number" and n==n and math.abs(n)<math.huge end
 local function integer(n,lo,hi) return finite(n) and n%1==0 and n>=lo and n<=hi end
 local function clamp01(n) return math.clamp(n,0,1) end
 local function smooth(n) n=clamp01(n);return n*n*(3-2*n) end
+
+function Logic.IsOutageGate(gate)
+	return integer(gate,1,Logic.LAST_OUTAGE_GATE)
+end
+
+-- Plain number components keep this spatial predicate portable in standalone tests.
+function Logic.ContainsPoint(x,y,z,minX,minY,minZ,maxX,maxY,maxZ)
+	if not (finite(x) and finite(y) and finite(z) and finite(minX) and finite(minY) and finite(minZ)
+		and finite(maxX) and finite(maxY) and finite(maxZ)) then return false end
+	return minX<=maxX and minY<=maxY and minZ<=maxZ
+		and x>=minX and x<=maxX and y>=minY and y<=maxY and z>=minZ and z<=maxZ
+end
 
 function Logic.ValidateSchedule(s)
 	return type(s)=="table" and finite(s.startedAt) and finite(s.blackoutAt) and finite(s.restoreAt)
@@ -41,31 +56,34 @@ function Logic.Phase(schedule,now)
 end
 
 -- Nearest section first; equal-distance ties travel forward before backward.
--- For gate 4: sections 4,5,3,6,2,7,1,8. The result is zero-based, 0..7.
+-- Only A-G participate: gate 4 orders 4,5,3,6,2,7,1 (ranks 0..6).
+-- Legacy schedules originating at gate 7 remain valid; H never participates.
 local sectionRanks = {}
 for gate=1,7 do
 	local ranks={};local order=0
-	for distance=0,7 do
+	for distance=0,6 do
 		local ahead=gate+distance
-		if ahead<=8 then ranks[ahead]=order;order+=1 end
+		if ahead<=7 then ranks[ahead]=order;order+=1 end
 		if distance>0 then local behind=gate-distance;if behind>=1 then ranks[behind]=order;order+=1 end end
 	end
 	sectionRanks[gate]=ranks
 end
 function Logic.SectionRank(gate,section)
 	assert(integer(gate,1,7) and integer(section,1,8),"Gate/section outside the map")
-	return sectionRanks[gate][section]
+	return section==Logic.EXEMPT_SECTION and 7 or sectionRanks[gate][section]
 end
 
 function Logic.FixtureOffTime(schedule,section,order)
 	assert(Logic.ValidateSchedule(schedule),"Valid outage schedule required")
 	assert(integer(section,1,8) and finite(order) and order>=0 and order<=1,"Valid section and normalized fixture order required")
+	if section==Logic.EXEMPT_SECTION then return math.huge end
 	local rank=sectionRanks[schedule.gate][section]
 	-- Every section occupies a different time band. Last rank/order reaches t=5 exactly.
-	return schedule.startedAt+Logic.FALL_SECONDS*(rank+1+order*.5)/8.5
+	return schedule.startedAt+Logic.FALL_SECONDS*(rank+1+order*.5)/7.5
 end
 
-function Logic.AmbientPower(schedule,now)
+function Logic.AmbientPower(schedule,now,section)
+	if section==Logic.EXEMPT_SECTION then return 1 end
 	local phase=Logic.Phase(schedule,now)
 	if phase=="NORMAL" then return 1 end
 	if phase=="BLACKOUT" then return 0 end
@@ -74,6 +92,8 @@ function Logic.AmbientPower(schedule,now)
 end
 
 function Logic.FixturePower(schedule,now,section,order,reduceFlashing)
+	-- Test exemption before phase, including legacy active/recovery schedules.
+	if section==Logic.EXEMPT_SECTION then return 1 end
 	local phase=Logic.Phase(schedule,now)
 	if phase=="NORMAL" then return 1 end
 	if phase=="BLACKOUT" then return 0 end

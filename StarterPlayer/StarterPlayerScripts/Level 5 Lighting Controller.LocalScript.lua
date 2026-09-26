@@ -65,14 +65,53 @@ local function readSchedule()
 	lastAmbient = nil
 end
 
+local function fixtureSection(part)
+	local section=part:GetAttribute("Level5OutageSection")
+	-- Streaming can deliver a part before its annotation. Never momentarily
+	-- darken H while waiting for metadata, and do not guess section A.
+	local ancestor=part.Parent
+	while ancestor and ancestor~=watchedWorld do
+		if ancestor.Name=="H_LastHouse" and ancestor:IsA("Model") then return Logic.EXEMPT_SECTION end
+		ancestor=ancestor.Parent
+	end
+	if type(section)=="number" and section%1==0 and section>=1 and section<=8 then return section end
+	return nil
+end
+
+local function insideBounds(point,minName,maxName)
+	local minimum=watchedWorld:GetAttribute(minName)
+	local maximum=watchedWorld:GetAttribute(maxName)
+	if typeof(minimum)~="Vector3" or typeof(maximum)~="Vector3" then return false end
+	return Logic.ContainsPoint(point.X,point.Y,point.Z,minimum.X,minimum.Y,minimum.Z,maximum.X,maximum.Y,maximum.Z)
+end
+
+local function ambientExempt()
+	local character=player.Character
+	local root=character and character:FindFirstChild("HumanoidRootPart")
+	if not root or not root:IsA("BasePart") then return false end
+	-- During replication/teardown of exemption metadata, keep ambient normal.
+	-- Fixture timing remains server-scheduled; never guess H's bounds from map coordinates.
+	for _,name in ipairs({"Level5OutageExemptMin","Level5OutageExemptMax","Level5OutageExitMin","Level5OutageExitMax"}) do
+		if typeof(watchedWorld:GetAttribute(name))~="Vector3" then return true end
+	end
+	local point=root.Position
+	return insideBounds(point,"Level5OutageExemptMin","Level5OutageExemptMax")
+		or insideBounds(point,"Level5OutageExitMin","Level5OutageExitMax")
+end
+
 local function applyFixture(record, now, phase)
 	local part = record.part
-	if not part.Parent or not record.active then return end
+	if not part.Parent then return end
+	if not record.active or part:GetAttribute("TubeState")=="Off" or part:GetAttribute("FailedTube")==true then
+		if record.lastPower~=nil then originalFixture(record) end
+		return
+	end
 	local reduced = player:GetAttribute("ReduceFlashing") ~= false
-	local power = Logic.FixturePower(schedule,now,part:GetAttribute("Level5OutageSection") or 1,
-		part:GetAttribute("Level5OutageOrder") or 0,reduced)
+	local section=fixtureSection(part)
+	local power = section and Logic.FixturePower(schedule,now,section,
+		part:GetAttribute("Level5OutageOrder") or 0,reduced) or 1
 	local serial = schedule and schedule.startedAt
-	if reduced and phase == "FALLING" and record.serial == serial and record.lastPower then
+	if section~=Logic.EXEMPT_SECTION and reduced and phase == "FALLING" and record.serial == serial and record.lastPower then
 		-- Toggling accessibility mid-flicker must not brighten an already failed tube.
 		power = math.min(power,record.lastPower)
 	end
@@ -136,9 +175,11 @@ end
 applyPower = function()
 	if not snapshot or not watchedState or not watchedWorld then return end
 	local now=workspace:GetServerTimeNow()
-	local power=Logic.AmbientPower(schedule,now)
+	local exempt=ambientExempt()
+	local power=Logic.AmbientPower(schedule,now,exempt and Logic.EXEMPT_SECTION or nil)
 	local phase=Logic.Phase(schedule,now)
-	if watchedWorld:GetAttribute("Level5OutageVisualPhase")~=phase then watchedWorld:SetAttribute("Level5OutageVisualPhase",phase) end
+	local ambientPhase=exempt and "NORMAL" or phase
+	if watchedWorld:GetAttribute("Level5OutageVisualPhase")~=ambientPhase then watchedWorld:SetAttribute("Level5OutageVisualPhase",ambientPhase) end
 	if power~=lastAmbient then
 		lastAmbient=power
 		for _, key in ipairs({"Brightness","Ambient","OutdoorAmbient","EnvironmentDiffuseScale","EnvironmentSpecularScale","FogColor"}) do

@@ -1,0 +1,12 @@
+{
+  "success": true,
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "publishedVersion": 2143,
+  "publishedAtUtc": "2026-09-26T21:09:18.148Z",
+  "method": "Native File > Publish to Roblox",
+  "sourceLog": "0.740.19.7400931_20260926T113832Z_Studio_a1f69_last.log",
+  "evidenceFile": "artifacts/level5-exit-eyes-20260926/publication-log.txt",
+  "evidenceSha256": "b2c5faa06fc7315f312ec698f8f9e8d385872e6142f7e783b90d0c592160ce7d",
+  "scope": "Level 5 exit ceiling eyes and A-G-only outage. Concurrent lobby progress percentages preserved. No active server restart."
+}

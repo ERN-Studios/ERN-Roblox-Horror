@@ -17,7 +17,7 @@ function Architecture.Build(parent, origin, config)
 	origin = origin or Vector3.zero
 	local root = Instance.new("Model")
 	root.Name = "Level5_IndoorSuburbs"
-	root:SetAttribute("ArchitectureVersion", "2026-09-26.surface-ownership.3")
+	root:SetAttribute("ArchitectureVersion", "2026-09-26.exit-ceiling-eyes.3")
 	root:SetAttribute("GeometryOnly", true)
 	root.Parent = parent
 	local offset = CFrame.new(origin)
@@ -770,6 +770,89 @@ function Architecture.Build(parent, origin, config)
 			end
 		end
 		totalFootprint+=z.Width*(z.Z1-z.Z0)
+	end
+
+	-- The final court has an irregular congregation of eyes, not another
+	-- fluorescent grid. The client may turn each four-part rig toward nearby
+	-- researchers; geometry, safe rotation bounds and the home pose live here.
+	local exitEyes=model("ExitCeilingEyes",assert(root:FindFirstChild("H_LastHouse")))
+	exitEyes:SetAttribute("CeilingEyesVersion","2026-09-26.3")
+	exitEyes:SetAttribute("PairCount",48)
+	exitEyes:SetAttribute("GeometryPartCount",192)
+	exitEyes:SetAttribute("EllipsoidMeshCount",192)
+	exitEyes:SetAttribute("TrackingBoundsMin",origin+V(-110,-36,2432))
+	exitEyes:SetAttribute("TrackingBoundsMax",origin+V(110,90,2680))
+	exitEyes:SetAttribute("NoDynamicLights",true)
+	local eyePositions={}
+	local function radicalInverse(index,base)
+		local result,fraction=0,1/base
+		while index>0 do result+=(index%base)*fraction;index=math.floor(index/base);fraction/=base end
+		return result
+	end
+	local function ellipsoid(p)
+		-- Native Ball parts render as a uniform sphere, collapsing thin lenses
+		-- to their smallest axis. A Sphere SpecialMesh on a Block uses all three
+		-- parent Size axes, retaining the authored elliptical eye silhouette.
+		p.Shape=Enum.PartType.Block
+		local mesh=Instance.new("SpecialMesh")
+		mesh.Name="EyeEllipsoid";mesh.MeshType=Enum.MeshType.Sphere;mesh.Scale=V(1,1,1)
+		mesh.Parent=p
+	end
+	-- Low-discrepancy candidates plus a clearance test give a stable scattered
+	-- layout without random seeds or rows of identically spaced fixtures.
+	for candidate=1,512 do
+		local p=V(-96+192*radicalInverse(candidate+17,2),0,2469+154*radicalInverse(candidate+31,3))
+		local clear=true
+		for _,other in ipairs(eyePositions) do if (p-other).Magnitude<14 then clear=false;break end end
+		if clear then table.insert(eyePositions,p) end
+		if #eyePositions==48 then break end
+	end
+	assert(#eyePositions==48,"Final court requires 48 separated ceiling eye pairs")
+	for index,p in ipairs(eyePositions) do
+		local scale=.82+.44*((index*13)%47)/46
+		local rotationRadius=4.5*scale
+		local drop=math.max(rotationRadius+.8,1+13*((index*11)%47)/46)
+		-- The tallest nested hall roof reaches approximately56.2. These few
+		-- mounts stay above it even through the entire permitted pivot rotation.
+		if math.abs(p.X)<29 and p.Z>2490 and p.Z<2537 then drop=math.min(drop,7) end
+		local position=V(p.X,70-drop,p.Z)
+		local target=V(p.X*.35+((index*7)%13-6),4,2545+((index*17)%71-35))
+		local home= CFrame.lookAt(position,target,V(0,0,-1))*CFrame.Angles(0,0,math.rad((index*19)%47-23))
+		local worldHome=offset*home
+		local rig=model(string.format("EyePair_%02d",index),exitEyes)
+		rig.ModelStreamingMode=Enum.ModelStreamingMode.Atomic
+		rig:SetAttribute("Level5CeilingEye",true)
+		rig:SetAttribute("EyeIndex",index)
+		rig:SetAttribute("ExpectedPartCount",4)
+		rig:SetAttribute("ExpectedMeshCount",4)
+		rig:SetAttribute("HomeCFrame",worldHome)
+		rig:SetAttribute("CeilingMountPosition",origin+V(p.X,69.7,p.Z))
+		rig:SetAttribute("RotationRadius",rotationRadius)
+		rig:SetAttribute("CeilingClearance",drop-rotationRadius-.3)
+		rig:SetAttribute("EyeScale",scale)
+		local spacing=(1.95+.2*(index%3)/2)*scale
+		local slant=math.rad(7+(index*3)%10)
+		local firstLens
+		for _,side in ipairs({-1,1}) do
+			local suffix=side<0 and "Left" or "Right"
+			local eye=home*CF(side*spacing,side*.055*scale,0)*CFrame.Angles(0,0,-side*slant)
+			local lens=part(rig,"LuminousLens"..suffix,V(2.85,1.03,.48)*scale,eye*CF(0,-.04*scale,-.37*scale),Color3.fromRGB(246,241,222),Enum.Material.Neon,false)
+			ellipsoid(lens)
+			local pupil=part(rig,"Pupil"..suffix,V(.43,.74,.13)*scale,eye*CF(0,-.04*scale,-.655*scale),Color3.fromRGB(3,5,5),Enum.Material.SmoothPlastic,false)
+			ellipsoid(pupil)
+			firstLens=firstLens or lens
+		end
+		-- A replicated PrimaryPart pivot avoids an extra invisible fifth part.
+		firstLens.PivotOffset=firstLens.CFrame:ToObjectSpace(worldHome)
+		rig.PrimaryPart=firstLens
+		for _,p in ipairs(rig:GetChildren()) do
+			if p:IsA("BasePart") then
+				p.CanCollide=false;p.CanQuery=false;p.CanTouch=false;p.CastShadow=false
+				p:SetAttribute("Level5CeilingEyePart",true)
+				p:SetAttribute("HomeLocalCFrame",worldHome:ToObjectSpace(p.CFrame))
+			end
+		end
+		game:GetService("CollectionService"):AddTag(rig,"Level5CeilingEye")
 	end
 
 	local growth=model("MyceliumWallGrowth")

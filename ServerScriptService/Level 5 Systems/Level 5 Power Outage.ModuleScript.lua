@@ -79,6 +79,27 @@ function Outage.Start(world,manifest)
 			local entry={object=object,name=name,before=object:GetAttribute(name),written=value}
 			table.insert(s.attributes,entry);object:SetAttribute(name,value)
 		end
+		-- Replicate world-space bounds from this generation's real H geometry. The
+		-- authored main zone excludes the downward chute, so give it its own box.
+		local finalZone=manifest.Zones[8]
+		local origin=manifest.Origin
+		assert(typeof(origin)=="Vector3","Actual manifest origin required")
+		local minimum=finalZone.Model:GetAttribute("ZoneMin")
+		local maximum=finalZone.Model:GetAttribute("ZoneMax")
+		assert(finalZone.Model.Name=="H_LastHouse" and typeof(minimum)=="Vector3" and typeof(maximum)=="Vector3",
+			"Actual final-section bounds required")
+		write(world,"Level5OutageExemptMin",origin+minimum)
+		write(world,"Level5OutageExemptMax",origin+maximum)
+		local chute=finalZone.Model:FindFirstChild("NarrowDescent")
+		assert(chute and chute:IsA("Model"),"Final descent geometry required")
+		local frame,size=chute:GetBoundingBox()
+		local half=size/2
+		local extent=Vector3.new(
+			math.abs(frame.XVector.X)*half.X+math.abs(frame.YVector.X)*half.Y+math.abs(frame.ZVector.X)*half.Z,
+			math.abs(frame.XVector.Y)*half.X+math.abs(frame.YVector.Y)*half.Y+math.abs(frame.ZVector.Y)*half.Z,
+			math.abs(frame.XVector.Z)*half.X+math.abs(frame.YVector.Z)*half.Y+math.abs(frame.ZVector.Z)*half.Z)
+		write(world,"Level5OutageExitMin",frame.Position-extent)
+		write(world,"Level5OutageExitMax",frame.Position+extent)
 		local counts={}
 		for section=1,8 do
 			local entries=fixtures[section];assert(#entries>0,"No ceiling fixture in section "..section)
@@ -114,7 +135,7 @@ function Outage.Start(world,manifest)
 				s.schedule=nil;s.scheduleJSON=nil
 			end
 		end)
-		return {ok=true,fixtureCount=fixtureCount,sectionCounts=counts,version="2026-09-26.outage.1"}
+		return {ok=true,fixtureCount=fixtureCount,sectionCounts=counts,version="2026-09-26.outage.2.exit-exempt"}
 	end)
 	if not ok then Outage.Cleanup(world);return {ok=false,error=tostring(result)} end
 	return result
@@ -124,6 +145,7 @@ function Outage.Trigger(world,gate)
 	local s=sessions[world]
 	if not s or not live(s) then return false,"No live outage controller" end
 	if not integer(gate,1,7) then return false,"Gate outside 1..7" end
+	if not Logic.IsOutageGate(gate) then return false,"Final exit gate is outage-exempt" end
 	if s.seen[gate] then return false,"Gate already triggered" end
 	if workspace:GetAttribute("SelectedLevel")~=5 or workspace:GetAttribute("RoundActive")~=true then return false,"Level 5 round is inactive" end
 	local owner=world:FindFirstChild("Level5SectionProgression")

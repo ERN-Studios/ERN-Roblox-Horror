@@ -1,0 +1,22 @@
+{
+  "StarterPlayer/StarterPlayerScripts/Level5CeilingEyesClient": {
+    "class": "LocalScript",
+    "patch": "Level5CeilingEyesClient.LocalScript.lua"
+  },
+  "StarterPlayer/StarterPlayerScripts/Level 5 Lighting Controller": {
+    "class": "LocalScript",
+    "patch": "Level 5 Lighting Controller.LocalScript.lua"
+  },
+  "ServerScriptService/Level 5 Systems/Level 5 Architecture": {
+    "class": "ModuleScript",
+    "patch": "Level 5 Architecture.ModuleScript.lua"
+  },
+  "ServerScriptService/Level 5 Systems/Level 5 Power Outage": {
+    "class": "ModuleScript",
+    "patch": "Level 5 Power Outage.ModuleScript.lua"
+  },
+  "ReplicatedStorage/Level5OutageLogic": {
+    "class": "ModuleScript",
+    "patch": "Level5OutageLogic.ModuleScript.lua"
+  }
+}
