@@ -1,4 +1,4 @@
--- Developer-only entry to the static Level 5 architecture preview.
+-- Developer-only entry to unfinished Level 5 reference work.
 -- The playable Level 5 round and its queue stay closed while the map is rebuilt.
 local Players = game:GetService("Players")
 local ServerScriptService = game:GetService("ServerScriptService")
@@ -10,8 +10,9 @@ local MARKER_NAME = "Level5DeveloperPreviewArrival"
 local ENTER_PROMPT = "Level5DeveloperPreviewPrompt"
 local RETURN_PROMPT = "Level5DeveloperPreviewReturnPrompt"
 local RETURN_POINT = "Level5DeveloperPreviewReturnPoint"
--- Keep this static copy clear of the playable Level 5 world at X=17000.
-local ORIGIN = Vector3.new(31000, 24, 0)
+local GALLERY_VERSION = "reference-gallery-2026-09-27-v1"
+-- Isolate this draft gallery from playable Level 5 and the old X=31000 static preview.
+local ORIGIN = Vector3.new(47000, 24, 0)
 local STREAM_TIMEOUT = 8
 local DOOR_REACH = 12
 local RETURN_REACH = 12
@@ -25,6 +26,24 @@ local nextUse = {}
 local preview = nil
 local buildInProgress = false
 local nextBuildAt = 0
+local galleryCache = nil
+
+local function galleryModule()
+	if galleryCache then return galleryCache end
+	local systems = ServerScriptService:FindFirstChild("Level 5 Systems")
+	local module = systems and systems:FindFirstChild("Level 5 Rework Gallery")
+	if not (module and module:IsA("ModuleScript")) then
+		warn("[Level5PreviewAccess] Level 5 Rework Gallery is missing")
+		return nil
+	end
+	local ok, result = pcall(require, module)
+	if not ok or type(result) ~= "table" or result.ContentVersion ~= GALLERY_VERSION then
+		warn("[Level5PreviewAccess] Level 5 Rework Gallery failed or has the wrong version:", result)
+		return nil
+	end
+	galleryCache = result
+	return result
+end
 
 local function upright(position, look)
 	local flat = Vector3.new(look.X, 0, look.Z)
@@ -81,6 +100,15 @@ local function release(player)
 	nextUse[player] = if player.Parent == Players then os.clock() + COOLDOWN else nil
 end
 
+local function hookPrompt(prompt, onTriggered)
+	if not (prompt and prompt:IsA("ProximityPrompt")) then return nil end
+	if not hooked[prompt] then
+		hooked[prompt] = true
+		prompt.Triggered:Connect(function(player) onTriggered(player, prompt) end)
+	end
+	return prompt
+end
+
 local function ensurePrompt(parent, name, actionText, objectText, onTriggered)
 	local prompt = parent:FindFirstChild(name)
 	if not prompt then
@@ -94,18 +122,30 @@ local function ensurePrompt(parent, name, actionText, objectText, onTriggered)
 		prompt.Parent = parent
 	end
 	if not prompt:IsA("ProximityPrompt") then return nil end
-	if not hooked[prompt] then
-		hooked[prompt] = true
-		prompt.Triggered:Connect(function(player) onTriggered(player, prompt) end)
-	end
-	return prompt
+	return hookPrompt(prompt, onTriggered)
+end
+
+local function returnOwner(prompt)
+	local model = prompt:FindFirstAncestor(PREVIEW_NAME)
+	if not model or not model:IsA("Model") or model.Parent ~= workspace
+		or workspace:FindFirstChild(PREVIEW_NAME) ~= model
+		or model:GetAttribute("Level5Preview") ~= true or model:GetAttribute("PreviewOnly") ~= true
+		or model:GetAttribute("PreviewReady") ~= true
+		or model:GetAttribute("GalleryContentVersion") ~= GALLERY_VERSION
+		or #model:GetDescendants() ~= model:GetAttribute("PartCount") then return nil end
+	local Gallery = galleryModule()
+	if not Gallery then return nil end
+	local ok, manifest = pcall(Gallery.ReadManifest, model)
+	if not ok or manifest.LobbyPrompt ~= prompt or not prompt.Enabled then return nil end
+	return model
 end
 
 local function onReturn(player, prompt)
 	if (nextUse[player] or 0) > os.clock() then return end
 	local character, root = ready(player)
 	local at = promptPosition(prompt)
-	if not character or not at or not prompt:IsDescendantOf(workspace)
+	local model = returnOwner(prompt)
+	if not character or not model or not at or not prompt:IsDescendantOf(workspace)
 		or (root.Position - at).Magnitude > RETURN_REACH then return end
 	local pad = liveSpawn()
 	if not pad then
@@ -118,7 +158,8 @@ local function onReturn(player, prompt)
 		local nowCharacter, nowRoot = ready(player)
 		pad = liveSpawn()
 		at = promptPosition(prompt)
-		if nowCharacter ~= character or not pad or not at or not prompt:IsDescendantOf(workspace)
+		if nowCharacter ~= character or returnOwner(prompt) ~= model
+			or not pad or not at or not prompt:IsDescendantOf(workspace)
 			or (nowRoot.Position - at).Magnitude > RETURN_REACH then return end
 		character:PivotTo(upright(pad.Position + Vector3.new(0, SPAWN_LIFT, 0), pad.CFrame.LookVector))
 	end)
@@ -126,10 +167,14 @@ local function onReturn(player, prompt)
 	if not ok then warn("[Level5PreviewAccess] return failed:", err) end
 end
 
-local function validPreview(model)
+local function ownedPreview(model)
 	return typeof(model) == "Instance" and model:IsA("Model")
 		and model:GetAttribute("Level5Preview") == true and model:GetAttribute("PreviewOnly") == true
-		and model:GetAttribute("PreviewReady") == true
+end
+
+local function validPreview(model)
+	return ownedPreview(model) and model:GetAttribute("PreviewReady") == true
+		and model:GetAttribute("GalleryContentVersion") == GALLERY_VERSION
 end
 
 local function previewMarker(model)
@@ -137,28 +182,39 @@ local function previewMarker(model)
 	return marker and marker:IsA("BasePart") and marker or nil
 end
 
+local onGalleryTravel
 local function hookPreview(model)
 	if not validPreview(model) then return nil end
-	local marker = previewMarker(model)
-	if not marker then return nil end
-	local holder = marker:FindFirstChild(RETURN_POINT)
-	if not holder then
-		holder = Instance.new("Attachment")
-		holder.Name = RETURN_POINT
-		holder.CFrame = CFrame.new(0, -1, -4)
-		holder.Parent = marker
+	local Gallery = galleryModule()
+	if not Gallery then return nil end
+	local ok, manifest = pcall(Gallery.ReadManifest, model)
+	if not ok or #model:GetDescendants() ~= model:GetAttribute("PartCount") then
+		warn("[Level5PreviewAccess] gallery manifest or instance count changed:", manifest)
+		return nil
 	end
-	if not holder:IsA("Attachment") then return nil end
-	return ensurePrompt(holder, RETURN_PROMPT, "RETURN TO LOBBY", "LEVEL 5 DEVELOPER PREVIEW", onReturn)
+	if previewMarker(model) ~= manifest.HubMarker
+		or manifest.LobbyPrompt.Parent ~= manifest.HubMarker:FindFirstChild(RETURN_POINT)
+		or manifest.LobbyPrompt.Name ~= RETURN_PROMPT then return nil end
+	local returnPrompt = hookPrompt(manifest.LobbyPrompt, onReturn)
+	if not returnPrompt then return nil end
+	for id, section in ipairs(manifest.Sections) do
+		if not hookPrompt(section.SelectPrompt, function(player, prompt)
+			onGalleryTravel(player, prompt, model, id, false)
+		end) or not hookPrompt(section.ReturnPrompt, function(player, prompt)
+			onGalleryTravel(player, prompt, model, id, true)
+		end) then return nil end
+	end
+	returnPrompt.Enabled = true
+	for _, section in ipairs(manifest.Sections) do
+		section.SelectPrompt.Enabled = true
+		section.ReturnPrompt.Enabled = true
+	end
+	return returnPrompt, manifest
 end
 
 local function buildPreview()
-	local systems = ServerScriptService:FindFirstChild("Level 5 Systems")
-	local module = systems and systems:FindFirstChild("Level 5 Architecture")
-	if not (module and module:IsA("ModuleScript")) then
-		warn("[Level5PreviewAccess] Level 5 Architecture is missing")
-		return nil
-	end
+	local Gallery = galleryModule()
+	if not Gallery then return nil end
 	local model
 	local ok, result = xpcall(function()
 		model = Instance.new("Model")
@@ -166,39 +222,20 @@ local function buildPreview()
 		model:SetAttribute("Level5Preview", true)
 		model:SetAttribute("PreviewOnly", true)
 		model.Parent = workspace
-		local manifest = require(module).Build(model, ORIGIN, {MapOnly = true})
-		assert(type(manifest) == "table" and typeof(manifest.SpawnCFrame) == "CFrame",
-			"Architecture did not return an arrival CFrame")
-		-- The playable adapter supplies this floor separately. Preview entry needs
-		-- the same safe landing without changing the adapter or the round state.
-		local floor = Instance.new("Part")
-		floor.Name = "Level5PreviewArrivalFloor"
-		floor.CFrame = manifest.SpawnCFrame * CFrame.new(0, -3, 0)
-		floor.Size = Vector3.new(16, 0.5, 16)
-		floor.Anchored = true
-		floor.Transparency = 1
-		floor.CanCollide = true
-		floor.CanTouch = false
-		floor.Parent = model
-		local marker = Instance.new("Part")
-		marker.Name = MARKER_NAME
-		marker.CFrame = manifest.SpawnCFrame
-		marker.Size = Vector3.new(0.25, 0.25, 0.25)
-		marker.Anchored = true
-		marker.Transparency = 1
-		marker.CanCollide = false
-		marker.CanTouch = false
-		marker.CanQuery = false
-		marker.Parent = model
+		local manifest = Gallery.Build(model, ORIGIN)
+		assert(type(manifest) == "table" and manifest.HubMarker and manifest.HubPad,
+			"Gallery did not return a safe hub")
 		local descendants = #model:GetDescendants()
-		-- Reserve two descendants for the return attachment and prompt added on entry.
-		assert(descendants + 2 <= MAX_PREVIEW_DESCENDANTS, "Level 5 preview exceeds the 30,000-instance budget")
+		assert(descendants <= MAX_PREVIEW_DESCENDANTS, "Level 5 gallery exceeds the 30,000-instance budget")
 		model:SetAttribute("PartCount", descendants)
 		model:SetAttribute("PreviewReady", true)
+		assert(workspace:FindFirstChild(PREVIEW_NAME) == model and hookPreview(model),
+			"Gallery prompts could not be connected")
+		assert(#model:GetDescendants() == descendants, "Gallery changed while prompts were connected")
 		return model
 	end, debug.traceback)
 	if not ok then
-		warn("[Level5PreviewAccess] architecture build failed:", result)
+		warn("[Level5PreviewAccess] gallery build failed:", result)
 		if model then model:Destroy() end
 		return nil
 	end
@@ -210,7 +247,10 @@ local function getPreview()
 	local found = workspace:FindFirstChild(PREVIEW_NAME)
 	if found then
 		if validPreview(found) then preview = found; return found end
-		if found:GetAttribute("Level5Preview") == true and found:GetAttribute("PreviewOnly") == true then return nil end
+		if ownedPreview(found) then
+			warn("[Level5PreviewAccess] a stale or incomplete preview occupies this name; entry refused")
+			return nil
+		end
 		warn("[Level5PreviewAccess] preview name is occupied by unowned content")
 		return nil
 	end
@@ -224,12 +264,56 @@ local function getPreview()
 	return preview
 end
 
-local function hasFloor(model, arrival)
+local function hasFloor(pad, arrival)
+	if not pad or not pad:IsA("BasePart") or not pad.CanCollide or not pad.CanQuery
+		or not pad:IsDescendantOf(workspace) then return false end
 	local params = RaycastParams.new()
 	params.FilterType = Enum.RaycastFilterType.Include
-	params.FilterDescendantsInstances = {model}
+	params.FilterDescendantsInstances = {pad}
 	params.RespectCanCollide = true
-	return workspace:Raycast(arrival.Position, Vector3.new(0, -8, 0), params) ~= nil
+	local hit = workspace:Raycast(arrival.Position, Vector3.new(0, -8, 0), params)
+	return hit ~= nil and hit.Instance == pad
+end
+
+onGalleryTravel = function(player, prompt, model, id, toHub)
+	if (nextUse[player] or 0) > os.clock() then return end
+	local character, root = ready(player)
+	local Gallery = galleryModule()
+	if not character or not Gallery or not validPreview(model)
+		or workspace:FindFirstChild(PREVIEW_NAME) ~= model
+		or #model:GetDescendants() ~= model:GetAttribute("PartCount") then return end
+	local okManifest, manifest = pcall(Gallery.ReadManifest, model)
+	if not okManifest then return end
+	local section = manifest.Sections[id]
+	local expectedPrompt = toHub and section.ReturnPrompt or section.SelectPrompt
+	local destination = toHub and manifest.HubMarker or section.Marker
+	local pad = toHub and manifest.HubPad or section.Pad
+	local at = promptPosition(prompt)
+	local arrival = destination.CFrame
+	if prompt ~= expectedPrompt or not prompt.Enabled or not prompt:IsDescendantOf(model)
+		or not at or (root.Position - at).Magnitude > RETURN_REACH
+		or not hasFloor(pad, arrival) then return end
+	nextUse[player] = math.huge
+	local ok, err = pcall(function()
+		if not stream(player, arrival.Position) then return end
+		local nowCharacter, nowRoot = ready(player)
+		if nowCharacter ~= character or workspace:FindFirstChild(PREVIEW_NAME) ~= model
+			or not validPreview(model)
+			or #model:GetDescendants() ~= model:GetAttribute("PartCount") then return end
+		local stillValid, current = pcall(Gallery.ReadManifest, model)
+		if not stillValid then return end
+		local currentSection = current.Sections[id]
+		at = promptPosition(prompt)
+		if not at or (nowRoot.Position - at).Magnitude > RETURN_REACH
+			or prompt ~= (toHub and currentSection.ReturnPrompt or currentSection.SelectPrompt)
+			or not prompt.Enabled or not prompt:IsDescendantOf(model)
+			or destination ~= (toHub and current.HubMarker or currentSection.Marker)
+			or pad ~= (toHub and current.HubPad or currentSection.Pad)
+			or destination.CFrame ~= arrival or not hasFloor(pad, arrival) then return end
+		character:PivotTo(arrival)
+	end)
+	release(player)
+	if not ok then warn("[Level5PreviewAccess] gallery travel failed:", err) end
 end
 
 local function onEnter(player, prompt)
@@ -240,23 +324,28 @@ local function onEnter(player, prompt)
 	nextUse[player] = math.huge
 	local ok, err = pcall(function()
 		local model = getPreview()
-		local marker = model and previewMarker(model)
+		local returnPrompt, manifest
+		if model then returnPrompt, manifest = hookPreview(model) end
+		local marker = manifest and manifest.HubMarker
 		local arrival = marker and marker.CFrame
-		local returnPrompt = model and hookPreview(model)
 		if not model or not marker or not returnPrompt or not returnPrompt.Enabled
-			or not hasFloor(model, arrival) then
+			or not hasFloor(manifest.HubPad, arrival) then
 			warn("[Level5PreviewAccess] preview unavailable, unreturnable or floorless; entry refused")
 			return
 		end
 		if not stream(player, arrival.Position) then return end
 		local nowCharacter, nowRoot = ready(player)
+		local currentReturn, currentManifest = hookPreview(model)
 		if nowCharacter ~= character or prompt.Parent ~= door or door ~= liveDoor()
 			or distanceToPart(door, nowRoot.Position) > DOOR_REACH
 			or workspace:FindFirstChild(PREVIEW_NAME) ~= model or not validPreview(model)
+			or not currentManifest or currentManifest.HubMarker ~= marker
+			or currentManifest.HubPad ~= manifest.HubPad
+			or currentReturn ~= returnPrompt
 			or previewMarker(model) ~= marker or marker.CFrame ~= arrival
 			or not returnPrompt:IsDescendantOf(model)
 			or returnPrompt.Parent ~= marker:FindFirstChild(RETURN_POINT)
-			or not returnPrompt.Enabled or not hasFloor(model, arrival) then return end
+			or not returnPrompt.Enabled or not hasFloor(manifest.HubPad, arrival) then return end
 		character:PivotTo(arrival)
 	end)
 	release(player)
@@ -285,7 +374,7 @@ end
 local guardedModel, guardedPartCount, guardedFrame, guardedHalf
 local function ejectNonDevelopers()
 	local model = workspace:FindFirstChild(PREVIEW_NAME)
-	if not validPreview(model) then return end
+	if not ownedPreview(model) or model:GetAttribute("PreviewReady") ~= true then return end
 	local partCount = model:GetAttribute("PartCount")
 	if guardedModel ~= model or guardedPartCount ~= partCount then
 		guardedModel, guardedPartCount = model, partCount
