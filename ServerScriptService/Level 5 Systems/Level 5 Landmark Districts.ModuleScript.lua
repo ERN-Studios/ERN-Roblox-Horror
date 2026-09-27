@@ -452,21 +452,23 @@ function Districts.Build(K)
 				-- The upper silhouette sits within the 70-degree grass-court view.
 				-- Ground Watcher homes stay at x +/-176; the closer mass begins
 				-- above terrace headroom and does not change their support or route.
-				part(group,"CreamTowerMass",V(31,76,74),CF(s*82,66,2215),paleTower,Enum.Material.Plaster)
+				-- Keep the rounded S05 tower around the inclined homes. Its old
+				-- 74-stud tail projected into the next, distinct S06 gabled view.
+				part(group,"CreamTowerMass",V(31,76,44),CF(s*82,66,2184),paleTower,Enum.Material.Plaster)
 				local nose=part(group,"RoundedTowerNose",V(76,43,43),CF(s*82,66,2184)*CFrame.Angles(0,0,math.pi/2),paleTower,Enum.Material.Plaster)
 				nose.Shape=Enum.PartType.Cylinder
 				for level=3,8 do
 					local y=level*12
 					roundedDeck(group,"RoundedProjectingBalcony",V(s*82,0,2184),22.5,y)
-					part(group,"SideBalconyBand",V(5,.8,70),CF(s*64.5,y-.4,2220),C.pale,Enum.Material.Plaster,false)
-					decorativeRail(group,V(s*61,0,2188),V(s*61,0,2250),y)
+					part(group,"SideBalconyBand",V(5,.8,46),CF(s*64.5,y-.4,2184),C.pale,Enum.Material.Plaster,false)
+					decorativeRail(group,V(s*61,0,2163),V(s*61,0,2205),y)
 					if level<=6 then
-						towerArch(group,CF(s*66.3,y,2215)*yaw(s*90))
+						towerArch(group,CF(s*66.3,y,2184)*yaw(s*90))
 						towerArch(group,CF(s*82,y,2162.2))
 					end
 				end
 				for _,yy in ipairs({44,68,92}) do
-					local lamp=part(group,"WarmApartmentSconce",V(.5,1.2,.5),CF(s*66.2,yy,2240),Color3.fromRGB(245,207,143),Enum.Material.Neon,false)
+					local lamp=part(group,"WarmApartmentSconce",V(.5,1.2,.5),CF(s*66.2,yy,2200),Color3.fromRGB(245,207,143),Enum.Material.Neon,false)
 					lamp.CastShadow=false
 				end
 			else
@@ -551,16 +553,9 @@ function Districts.Build(K)
 	for _,z in ipairs({2263,2277}) do
 		rail(G,CF(-34,8,z),72);rail(G,CF(50,16,z),48)
 	end
-	for _,s in ipairs({-1,1}) do
-		local group=model("FusedTiltedHouses_"..s,G)
-		for _,z in ipairs({2207,2296}) do
-			local frame=CF(s*179,45,z)*yaw(s*90)*CFrame.Angles(math.rad(s*14),0,math.rad(s*21))
-			house(group,"TiltedClosedHome_"..z,frame,32,29,13.8,C.cream,C.lavender,{open=false})
-		end
-		-- The support is hollow over actual domestic rooms, not a solid block.
-		for _,z in ipairs({2180,2318}) do part(group,"TallOffsetSupportPier",V(6,50,6),CF(s*216,25,z),C.pale) end
-		part(group,"SupportingDomesticLintel",V(57,5,12),CF(s*188,49,2250),C.pale)
-	end
+	-- Two old, closed outer tilted-house stacks projected across the S06
+	-- black recess. The central inclined S05 homes below already carry that
+	-- anomaly, so omit these duplicate scenic stacks from the new section.
 	for _,s in ipairs({-1,1}) do
 		house(G,"GroundDetachedHome_"..s,CF(s*42,0,2106),28,24,13.8,s<0 and C.rose or C.pale,C.blue,{open=true,backOpening=true})
 		house(G,"DepartureDetachedHome_"..s,CF(s*43,0,2410),28,26,13.8,C.cream,C.lavender,{open=true})
@@ -620,6 +615,17 @@ function Districts.Build(K)
 	-- the photographed dark field without altering its support or collision.
 	local facadeLawn=part(gabledSection,"DarkGabledFacadeLawn",V(80,.08,185),CF(110,16.08,2270),Color3.fromRGB(24,42,25),Enum.Material.Grass,false)
 	texture(facadeLawn,"rbxassetid://108216315862080",Enum.NormalId.Top,8)
+	-- A black vertical end recess terminates this distinct gabled corridor.
+	-- The side-wall slot farther ahead is only legible from its own oblique
+	-- approach, so it cannot supply the dark silhouette in the S06 lawn view.
+	part(gabledSection,"DeepEndStructuralVoid",V(30,118,.2),CF(126,69,2179),Color3.fromRGB(3,4,3),Enum.Material.SmoothPlastic,false)
+	for _,x in ipairs({110.5,141.5}) do
+		part(gabledSection,"EndVoidCreamJamb",V(1.8,120,2.3),CF(x,69,2178.3),C.pale,Enum.Material.Plaster,false)
+	end
+	part(gabledSection,"EndVoidCreamHead",V(34,2.2,2.3),CF(126,129,2178.3),C.pale,Enum.Material.Plaster,false)
+	for _,y in ipairs({33,59,85,111}) do
+		part(gabledSection,"DeepRecessLandingShadow",V(28,.6,2),CF(126,y,2178.6),Color3.fromRGB(32,35,29),Enum.Material.Concrete,false)
+	end
 	-- The opposite facade rises above the playable terrace edge. Its open
 	-- ground storey preserves the flight, crossing, and inner walkway below.
 	part(gabledSection,"WestGabledBalconyWall",V(2,154,124),CF(68,101,2262),C.cream,Enum.Material.Plaster,false)
