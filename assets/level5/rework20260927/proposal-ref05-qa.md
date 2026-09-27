@@ -1,0 +1,5 @@
+# Level 5 section 05 isolated proposal — 2026-09-27
+
+The [first proposal camera](gallery-proposal-ref05.jpg) and [closer QA camera](gallery-proposal-ref05-closer.jpg) were captured from a fresh clone of the live Studio gallery with only the local `Level 5 Reference Anomalies` draft substituted. The temporary model and clone folder were removed afterward. The live Anomalies Source/editor baseline was 78,531 bytes, SHA-256 `4b0a6e7fd6ded49498b81d3e111c95db4e5d6b907096bbc6659df3df24793408`.
+
+The isolated gallery had **9,142 descendants**, including **1,254** in section 05. Its manifest built successfully. The rounded tower ends, balconies, arches, side stairs and inclined support are now readable. The camera in the local proposal places the tilted houses too far away; the closer QA camera reveals overly symmetric towers and underspecified house facades. The local section is undergoing a further draft revision. No live Studio script was changed, and 1:1 fidelity is not established.
