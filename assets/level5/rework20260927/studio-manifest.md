@@ -25,6 +25,8 @@ Both preview scripts were `Enabled=true`, `Disabled=false`, and `RunContext=Lega
 
 Both had identity rotation; color RGB `(241, 238, 220)` approximately; `SmoothPlastic`; `Anchored=true`; `CanCollide=false`; `CanQuery=false`; `CanTouch=false`; `CastShadow=false`; `UsePartColor=true`; `Transparency=0`; `Reflectance=0`; `CollisionFidelity=Hull`; `RenderFidelity=Automatic`; no descendants. AssetId and MeshId were not readable properties of these `UnionOperation` instances. Their CSG data must be preserved in a native place backup; source mirrors alone cannot recreate it.
 
+On 2026-09-27, the same live folder was serialized in Studio Edit with `SerializationService:SerializeInstancesAsync({folder})`. The 15,955-byte engine-native result is `assets/level5/rework20260927/window-trim-templates.rbxm`, SHA-256 `76e5d0e41b28531d28854e9352442e081350110567a3e110d1bd5cac1feb616c`. A Studio `DeserializeInstancesAsync` roundtrip into an unparented model recovered the folder, both UnionOperations, their attributes, dimensions and `UsePartColor`; the temporary instances were destroyed. This backs up the changed CSG assets specifically. The pre-change full native place is `pre-rework-place.rbxl`; a post-change full `.rbxl` remains outstanding because Studio's Download a Copy file picker has not returned a save path.
+
 ## Verification scope
 
 This read confirms the listed live instances and source/editor consistency only. It does not verify 1:1 visual fidelity, gameplay, multiplayer access, or publication.
