@@ -1,13 +1,14 @@
--- Developer-only entry to unfinished Level 5 reference work.
--- The playable Level 5 round and its queue stay closed while the map is rebuilt.
+-- Developer-only gallery entry and, when explicitly enabled, playable Level 5 entry.
 local Players = game:GetService("Players")
 local ServerScriptService = game:GetService("ServerScriptService")
+local ServerStorage = game:GetService("ServerStorage")
 local DevAccess = require(game:GetService("ReplicatedStorage"):WaitForChild("DevAccess"))
 
 local DOOR_NAME = "Level5SealedDoor"
 local PREVIEW_NAME = "Level 5 Architecture Preview"
 local MARKER_NAME = "Level5DeveloperPreviewArrival"
 local ENTER_PROMPT = "Level5DeveloperPreviewPrompt"
+local PLAY_PROMPT = "Level5DeveloperPlayPrompt"
 local RETURN_PROMPT = "Level5DeveloperPreviewReturnPrompt"
 local RETURN_POINT = "Level5DeveloperPreviewReturnPoint"
 local GALLERY_VERSION = "reference-gallery-2026-09-27-v1"
@@ -27,6 +28,7 @@ local preview = nil
 local buildInProgress = false
 local nextBuildAt = 0
 local galleryCache = nil
+local playLaunchPending = false
 
 local function galleryModule()
 	if galleryCache then return galleryCache end
@@ -61,6 +63,11 @@ local function liveSpawn()
 	local lobby = workspace:FindFirstChild("ServerLobby")
 	local pad = lobby and lobby:FindFirstChild("LobbySpawn")
 	return pad and pad:IsA("BasePart") and pad or nil
+end
+
+local function levelFiveRoundInProgress()
+	return workspace:GetAttribute("SelectedLevel") == 5
+		or workspace:FindFirstChild("Level 5 Generated World") ~= nil
 end
 
 local function ready(player)
@@ -109,7 +116,7 @@ local function hookPrompt(prompt, onTriggered)
 	return prompt
 end
 
-local function ensurePrompt(parent, name, actionText, objectText, onTriggered)
+local function ensurePrompt(parent, name, actionText, objectText, onTriggered, keyboardKey, gamepadKey)
 	local prompt = parent:FindFirstChild(name)
 	if not prompt then
 		prompt = Instance.new("ProximityPrompt")
@@ -119,9 +126,16 @@ local function ensurePrompt(parent, name, actionText, objectText, onTriggered)
 		prompt.HoldDuration = 0.5
 		prompt.MaxActivationDistance = 10
 		prompt.RequiresLineOfSight = false
+		if keyboardKey then prompt.KeyboardKeyCode = keyboardKey end
+		if gamepadKey then prompt.GamepadKeyCode = gamepadKey end
 		prompt.Parent = parent
 	end
 	if not prompt:IsA("ProximityPrompt") then return nil end
+	if (keyboardKey and prompt.KeyboardKeyCode ~= keyboardKey)
+		or (gamepadKey and prompt.GamepadKeyCode ~= gamepadKey) then
+		warn("[Level5PreviewAccess] prompt input changed; refusing to reuse:", name)
+		return nil
+	end
 	return hookPrompt(prompt, onTriggered)
 end
 
@@ -276,7 +290,8 @@ local function hasFloor(pad, arrival)
 end
 
 onGalleryTravel = function(player, prompt, model, id, toHub)
-	if (nextUse[player] or 0) > os.clock() then return end
+	if (not toHub and (playLaunchPending or levelFiveRoundInProgress()))
+		or (nextUse[player] or 0) > os.clock() then return end
 	local character, root = ready(player)
 	local Gallery = galleryModule()
 	if not character or not Gallery or not validPreview(model)
@@ -304,7 +319,8 @@ onGalleryTravel = function(player, prompt, model, id, toHub)
 		if not stillValid then return end
 		local currentSection = current.Sections[id]
 		at = promptPosition(prompt)
-		if not at or (nowRoot.Position - at).Magnitude > RETURN_REACH
+		if (not toHub and (playLaunchPending or levelFiveRoundInProgress()))
+			or not at or (nowRoot.Position - at).Magnitude > RETURN_REACH
 			or prompt ~= (toHub and currentSection.ReturnPrompt or currentSection.SelectPrompt)
 			or not prompt.Enabled or not prompt:IsDescendantOf(model)
 			or destination ~= (toHub and current.HubMarker or currentSection.Marker)
@@ -317,7 +333,8 @@ onGalleryTravel = function(player, prompt, model, id, toHub)
 end
 
 local function onEnter(player, prompt)
-	if (nextUse[player] or 0) > os.clock() then return end
+	if playLaunchPending or levelFiveRoundInProgress()
+		or (nextUse[player] or 0) > os.clock() then return end
 	local character, root = ready(player)
 	local door = prompt.Parent
 	if not character or not door or door ~= liveDoor() or distanceToPart(door, root.Position) > DOOR_REACH then return end
@@ -336,7 +353,8 @@ local function onEnter(player, prompt)
 		if not stream(player, arrival.Position) then return end
 		local nowCharacter, nowRoot = ready(player)
 		local currentReturn, currentManifest = hookPreview(model)
-		if nowCharacter ~= character or prompt.Parent ~= door or door ~= liveDoor()
+		if playLaunchPending or levelFiveRoundInProgress()
+			or nowCharacter ~= character or prompt.Parent ~= door or door ~= liveDoor()
 			or distanceToPart(door, nowRoot.Position) > DOOR_REACH
 			or workspace:FindFirstChild(PREVIEW_NAME) ~= model or not validPreview(model)
 			or not currentManifest or currentManifest.HubMarker ~= marker
@@ -352,9 +370,114 @@ local function onEnter(player, prompt)
 	if not ok then warn("[Level5PreviewAccess] entry failed:", err) end
 end
 
+local function verifiedGallery()
+	local model
+	for _, child in ipairs(workspace:GetChildren()) do
+		if child.Name == PREVIEW_NAME then
+			if model then return nil, "duplicate preview names exist" end
+			model = child
+		end
+	end
+	if not model then return nil end
+	if model.Parent ~= workspace or not validPreview(model)
+		or model:GetAttribute("GalleryOnly") ~= true
+		or #model:GetDescendants() ~= model:GetAttribute("PartCount") then
+		return nil, "an unverified preview occupies the gallery name"
+	end
+	local Gallery = galleryModule()
+	if not Gallery then return nil, "the gallery module is unavailable" end
+	local ok = pcall(Gallery.ReadManifest, model)
+	if not ok then return nil, "the gallery manifest changed" end
+	return model
+end
+
+local function galleryOccupied(model)
+	local frame, size = model:GetBoundingBox()
+	local half = size * 0.5 + Vector3.new(8, 20, 8)
+	for _, visitor in ipairs(Players:GetPlayers()) do
+		local character = visitor.Character
+		local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+		local root = (humanoid and humanoid.RootPart) or (character and character:FindFirstChild("HumanoidRootPart"))
+		local position
+		if root and root:IsA("BasePart") and root:IsDescendantOf(workspace) then
+			position = root.Position
+		elseif character and character:IsA("Model") and character:IsDescendantOf(workspace) then
+			position = character:GetPivot().Position
+		end
+		if position then
+			local at = frame:PointToObjectSpace(position)
+			if math.abs(at.X) <= half.X and math.abs(at.Y) <= half.Y
+				and math.abs(at.Z) <= half.Z then return true end
+		end
+	end
+	return false
+end
+
+local function onPlay(player, prompt)
+	if playLaunchPending or levelFiveRoundInProgress()
+		or (nextUse[player] or 0) > os.clock() then return end
+	local character, root = ready(player)
+	local door = prompt.Parent
+	if not character or not prompt.Enabled or prompt.Name ~= PLAY_PROMPT
+		or not door or door ~= liveDoor() or prompt ~= door:FindFirstChild(PLAY_PROMPT)
+		or not prompt:IsDescendantOf(workspace) or distanceToPart(door, root.Position) > DOOR_REACH
+		or workspace:GetAttribute("Level5DevEnabled") ~= true
+		or workspace:GetAttribute("Level5PublicPreviewEnabled") == true then return end
+	local model, problem = verifiedGallery()
+	if problem or (model and galleryOccupied(model)) then
+		warn("[Level5PreviewAccess] playable entry refused:", problem or "someone is in the gallery")
+		return
+	end
+	local start = ServerStorage:FindFirstChild("Level5DevStart")
+	if not (start and start:IsA("BindableFunction")) then
+		warn("[Level5PreviewAccess] Level5DevStart is unavailable")
+		return
+	end
+	local nowCharacter, nowRoot = ready(player)
+	if playLaunchPending or levelFiveRoundInProgress()
+		or nowCharacter ~= character or prompt.Parent ~= door or door ~= liveDoor()
+		or not prompt.Enabled or distanceToPart(door, nowRoot.Position) > DOOR_REACH
+		or workspace:GetAttribute("Level5DevEnabled") ~= true
+		or workspace:GetAttribute("Level5PublicPreviewEnabled") == true then return end
+	playLaunchPending = true
+	nextUse[player] = math.huge
+	local ok, accepted, reason = pcall(function() return start:Invoke(player) end)
+	if not ok or accepted ~= true then
+		playLaunchPending = false
+		warn("[Level5PreviewAccess] playable entry refused:", if ok then reason else accepted)
+	else
+		-- The GameManager accepted the launch. Remove only the exact gallery that
+		-- was verified empty above; a newly occupied or changed model is preserved.
+		if model then
+			local current, currentProblem = verifiedGallery()
+			if current == model and not galleryOccupied(model) then
+				local removed, removeError = pcall(function() model:Destroy() end)
+				if removed then preview = nil
+				else warn("[Level5PreviewAccess] gallery cleanup failed:", removeError) end
+			else
+				warn("[Level5PreviewAccess] retained gallery during playable launch:",
+					currentProblem or "gallery changed or became occupied")
+			end
+		end
+		-- GameManager marks the accepted roster InRound asynchronously. Keep
+		-- gallery travel closed until that server-owned state has taken effect.
+		task.delay(10, function() playLaunchPending = false end)
+	end
+	release(player)
+end
+
 local function hookDoor()
 	local door = liveDoor()
-	if door then ensurePrompt(door, ENTER_PROMPT, "ENTER LEVEL 5 PREVIEW", "DEVELOPER PREVIEW", onEnter) end
+	if not door then return end
+	local enter = ensurePrompt(door, ENTER_PROMPT, "ENTER LEVEL 5 PREVIEW", "DEVELOPER PREVIEW", onEnter)
+	if enter then enter.Enabled = not levelFiveRoundInProgress() end
+	local play = ensurePrompt(door, PLAY_PROMPT, "PLAY LEVEL 5", "DEVELOPER ONLY", onPlay,
+		Enum.KeyCode.F, Enum.KeyCode.ButtonY)
+	if play then
+		play.Enabled = workspace:GetAttribute("Level5DevEnabled") == true
+			and workspace:GetAttribute("Level5PublicPreviewEnabled") ~= true
+			and not levelFiveRoundInProgress()
+	end
 end
 
 local function onDescendantAdded(instance)
@@ -401,6 +524,9 @@ local function ejectNonDevelopers()
 end
 
 Players.PlayerRemoving:Connect(function(player) nextUse[player] = nil end)
+workspace:GetAttributeChangedSignal("Level5DevEnabled"):Connect(hookDoor)
+workspace:GetAttributeChangedSignal("Level5PublicPreviewEnabled"):Connect(hookDoor)
+workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(hookDoor)
 workspace.DescendantAdded:Connect(onDescendantAdded)
 for _, descendant in ipairs(workspace:GetDescendants()) do onDescendantAdded(descendant) end
 task.spawn(function()

@@ -30,3 +30,19 @@ On 2026-09-27, the same live folder was serialized in Studio Edit with `Serializ
 ## Verification scope
 
 This read confirms the listed live instances and source/editor consistency only. It does not verify 1:1 visual fidelity, gameplay, multiplayer access, or publication.
+
+## Integrated DEV revision — 2026-09-27 20:39 UTC
+
+The following sources were written to their exact existing Studio instances after checking each live `Source` against `ScriptEditorService:GetEditorSource` and its pre-write hash. The write callback checked the same baseline again; the post-write Studio source/editor pair matched the proposal. At 20:39 UTC, a fresh Edit read rechecked all five live sources, classes, byte lengths and both rolling hashes. The repository mirrors below have the listed SHA-256 digests. This is a live Studio export record, not an instruction to push repository scripts into Studio.
+
+| Live Studio path | Class | Bytes | Source/editor rolling hashes (131, 257) | Mirror SHA-256 |
+| --- | --- | ---: | --- | --- |
+| `ServerScriptService.GameManager` | `Script` | 168,265 | `994004659`, `1884662859` | `03694b9fcbc53589a284efd7cbc4378d5495eb07d653477b6a4a91f6d1817e27` |
+| `ServerScriptService.Level 5 Systems.Level 5 Architecture` | `ModuleScript` | 71,161 | `562016983`, `975192154` | `044485bb4d1b408ca1755b05333e815543e4d2316b3c632b4c1e8d565b40abe7` |
+| `ServerScriptService.Level 5 Systems.Level 5 Neighbourhood Districts` | `ModuleScript` | 29,411 | `988680040`, `2070253584` | `067292fe9285df1980d3f4eea29876746720b9373182d481550e19a74c3b9b41` |
+| `ServerScriptService.Level 5 Systems.Level 5 Landmark Districts` | `ModuleScript` | 40,432 | `688882602`, `1796157685` | `f793cff7746902817a5187ecbff5745a897b1368f907350cc1d9e3649b26a6aa` |
+| `ServerScriptService.Level5PreviewAccess` | `Script` | 22,459 | `549940819`, `448334585` | `f9679951e44ed6670ab1b732a520842af0ed0b67b7a9eaf11f86650c860879ce` |
+
+`Workspace.Level5DevEnabled=true` and `Workspace.Level5PublicPreviewEnabled=false` in Edit. The Edit-only QA payload folders `_L5Integrated_Modules_TEMP` and `_L5LiveScriptPayloads_TEMP` were identity-checked and removed; neither remains. No live non-script geometry was changed in this revision. The native pre-rework place and CSG trim backup above remain the native backup records; a post-rework full `.rbxl` backup remains outstanding.
+
+The F key `Level5DeveloperPlayPrompt` on the existing sealed Level 5 door was Play-tested with whitelisted owner UserId `9488575949`: `SelectedLevel=5`, `RoundActive=true`, player `InRound=true`, position around `(17002,24,5)`, and `Workspace.Level 5 Generated World` had 26,889 descendants and 18 Window Watcher anchors. The console showed no Level 5 error in that run. This tests Studio Play only; published-server teleport, all gates, multiplayer and visual 1:1 remain unverified. See [integrated-play-qa-2026-09-27.md](integrated-play-qa-2026-09-27.md).

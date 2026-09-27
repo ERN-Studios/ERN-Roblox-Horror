@@ -37,7 +37,7 @@ function Districts.Build(K)
 	-- Entry is an upper landing, not a broad ground court. The grade route is
 	-- deliberately broken; ordinary stairs and crossings reconnect its pieces.
 	local F=zone("F_BayWindowCanyon",V(-250,-42,1596),V(250,84,2076),"Continuous cream plaster dwellings, narrow deep void, carpet ledges and staggered crossings.")
-	F:SetAttribute("CourtVersion","2026-09-26.reference-atrium.1")
+	F:SetAttribute("CourtVersion","2026-09-27.reference-07-08.1")
 	F:SetAttribute("PlayableFloorHeights","-42,-28,-14,0,14,28")
 	F:SetAttribute("EntryLedgeY",0)
 	local pitBounds={Min=V(-50,-42,1668),Max=V(50,-28,1968),Space="local"}
@@ -128,6 +128,49 @@ function Districts.Build(K)
 		for _,s in ipairs(stairFootprints) do if side==s.side and y==s.y and z>s.a-3 and z<s.b+3 then return false end end
 		return true
 	end
+	-- These are two different reference compositions in one traversable atrium.
+	-- Only the unreachable upper apartment shells are replaced; the real lower
+	-- homes, ledges, pit, crossings and recovery flights keep their coordinates.
+	local cutawaySection=model("S07_StairCutaway",F)
+	local walkwaySection=model("S08_UpperAtriumWalkway",F)
+	cutawaySection:SetAttribute("ReferenceSection",7)
+	walkwaySection:SetAttribute("ReferenceSection",8)
+	local function upperApartmentFront(into,frame,cutaway,level,side,bayIndex)
+		local opening=cutaway and side<0 and bayIndex==4
+		if opening then
+			for _,sgn in ipairs({-1,1}) do
+				plasterPart(into,"TornApartmentPier",V(10.1,13.8,.8),frame*CF(sgn*9.95,6.9,0))
+				for step=1,3 do
+					plasterPart(into,"BrokenPlasterReturn",V(.7,4.7,1.4+step*.25),
+						frame*CF(sgn*(4.5+(step%2)*.5),2.35+(step-1)*4.5,-.18))
+				end
+			end
+			plasterPart(into,"TornApartmentHeader",V(30,1,.9),frame*CF(0,13.3,0))
+			part(into,"RecessedStairwellShadow",V(8.6,11.2,.15),frame*CF(0,5.6,6.8),Color3.fromRGB(68,62,57),Enum.Material.SmoothPlastic,false)
+			local stair=stairs(into,"ExposedCarpetHalfFlight_"..level,frame*CF(0,.5,1.8),7,5.5,7.5,8,C.carpet,true)
+			for _,p in ipairs(stair:GetDescendants()) do if p:IsA("BasePart") then p.CanCollide=false;p.CanQuery=false end end
+			return
+		end
+		plasterPart(into,"ApartmentFrontPlane",V(30,13.8,.75),frame*CF(0,6.9,0))
+		plasterPart(into,"StoreyCornice",V(30.6,.42,1.1),frame*CF(0,13.6,-.26))
+		local windowX=cutaway and 6 or (bayIndex%2==0 and -6.8 or 6.8)
+		window(into,frame*CF(windowX,7.4,-.48),cutaway and 7.2 or 8,7.2,false,true)
+		if cutaway then
+			part(into,"WhitePanelDoor",V(4.8,9.4,.22),frame*CF(-7,4.7,-.52),C.white,Enum.Material.Wood,false)
+			for _,dy in ipairs({2.2,5,7.8}) do part(into,"DoorRaisedPanel",V(3.5,1.35,.13),frame*CF(-7,dy,-.69),C.pale,Enum.Material.Wood,false) end
+			part(into,"DoorHandle",V(.25,.25,.35),frame*CF(-5.45,4.25,-.78),Color3.fromRGB(135,119,84),Enum.Material.Metal,false)
+		else
+			-- Reference 08 has modest projecting white-metal balconies beside
+			-- dark apartment windows, not the torn rooms of reference 07.
+			if level<=56 and bayIndex%2==0 then
+				floor(into,"TinyApartmentBalcony",-8,0,-2.8,8,5,C.carpet,frame)
+				rail(into,frame*CF(-8,0,-5.5),8)
+				for _,sgn in ipairs({-1,1}) do rail(into,frame*CF(-8+sgn*4,0,-2.8)*yaw(90),5) end
+			end
+			local lamp=part(into,"WarmDoorSconce",V(.45,.8,.32),frame*CF(-8.5,8.8,-.55),Color3.fromRGB(247,214,151),Enum.Material.Neon,false)
+			lamp.CastShadow=false
+		end
+	end
 	local clueHome
 	for _,side in ipairs({-1,1}) do
 		local wall=model(side<0 and "WestContinuousDwellings" or "EastContinuousDwellings",F)
@@ -139,26 +182,21 @@ function Districts.Build(K)
 			for _,y in ipairs({-28,-14,0,14,28,42,56,70}) do
 				local open=roomAccessible(side,y,z)
 				local frame=CF(side*frontage,y,z)*yaw(side*90)
-				local cutaway=(side<0 and bayIndex==4 and y==42) or (side>0 and bayIndex==7 and y==56)
+				local cutaway=side<0 and bayIndex==4 and (y==14 or y==28)
 				local furniture=y==0 and ((side<0 and bayIndex==1 and 7) or (side<0 and bayIndex==3 and 8) or (side>0 and bayIndex==1 and 6)) or nil
-				local home=dwelling(wall,"PlasterDwelling_"..bayIndex.."_"..y,frame,30,26,13.8,{open=open,cutaway=cutaway,furniture=furniture,completeHome=furniture~=nil})
-				if cutaway then
-					home:SetAttribute("UncannyCutaway",true)
-					part(home,"ClosedPanelDoor",V(5.4,10.3,.32),frame*CF(0,5.15,.05),C.white,Enum.Material.Wood)
-				end
-				if side<0 and bayIndex==3 and y==0 then
-					clueHome=home;home.Name="TelevisionClueResidence";home:SetAttribute("HousePuzzleCandidate",true)
-				end
-				if side<0 and bayIndex==2 and y==0 then K.registerWatcher(home,"NearGroundWindow",F.Name) end
-				if side>0 and bayIndex==9 and y==14 then K.registerWatcher(home,"MiddleCourtWindow",F.Name) end
-				if side<0 and bayIndex==9 and y==28 then K.registerWatcher(home,"FarUpperWindow",F.Name) end
-				-- Irregular little projections above the walkable floors interrupt
-				-- the otherwise continuous domestic wall, like the reference.
-				if y>=42 and (bayIndex+(side<0 and 1 or 3)+y/14)%4==0 then
-					floor(wall,"ProjectingDomesticBalcony",0,0,-3.5,20,7,C.carpet,frame)
-					rail(wall,frame*CF(0,0,-7),20)
-					for _,s in ipairs({-1,1}) do rail(wall,frame*CF(s*10,0,-3.5)*yaw(90),7) end
-					plasterPart(wall,"BalconyMouldedUnderside",V(21,.65,7.8),frame*CF(0,-1,-3.5))
+				if y>=42 then
+					upperApartmentFront(z<1830 and cutawaySection or walkwaySection,frame,z<1830,y,side,bayIndex)
+				else
+					local home=dwelling(wall,"PlasterDwelling_"..bayIndex.."_"..y,frame,30,26,13.8,{open=open,cutaway=cutaway,furniture=furniture~=nil})
+					if cutaway then
+						home:SetAttribute("UncannyCutaway",true)
+					end
+					if side<0 and bayIndex==3 and y==0 then
+						clueHome=home;home.Name="TelevisionClueResidence";home:SetAttribute("HousePuzzleCandidate",true)
+					end
+					if side<0 and bayIndex==2 and y==0 then K.registerWatcher(home,"NearGroundWindow",F.Name) end
+					if side>0 and bayIndex==9 and y==14 then K.registerWatcher(home,"MiddleCourtWindow",F.Name) end
+					if side<0 and bayIndex==9 and y==28 then K.registerWatcher(home,"FarUpperWindow",F.Name) end
 				end
 			end
 		end
@@ -219,29 +257,101 @@ function Districts.Build(K)
 	camera("ReferenceAtriumUpperSkewBridge",V(31,20,1930),V(-44,35,1770))
 	camera("ReferenceAtriumHighGallery",V(-37,34,1905),V(34,13,1730))
 	camera("ReferenceAtriumRecoveryFloor",V(0,-36,1828),V(-34,20,1690))
+	camera("S07_StairCutawayReferenceView",V(17,8,1710),V(-49,58,1773))
+	camera("S08_UpperAtriumWalkwayReferenceView",V(-37,31,1905),V(35,20,1950))
 	for _,p in ipairs(route) do table.insert(waypoints,p) end
 
 	-- G: the wide subdivision has habitable terraces below two impossible pairs
 	-- of tall stacks. Tilted domestic volumes rest on piers outside enterable homes.
 	local G=zone("G_TiltedSubdivision",V(-240,0,2076),V(240,180,2456),"Carpet lawns, two playable terraces and supported tilted houses between towering domestic stacks.")
-	floor(G,"SubdivisionGreenCarpet",0,0,2266,480,380,C.green)
+	local gLawn=floor(G,"SubdivisionGreenCarpet",0,0,2266,480,380,C.green)
+	gLawn.Color=Color3.fromRGB(24,42,25);gLawn.MaterialVariant=""
+	texture(gLawn,"rbxassetid://108216315862080",Enum.NormalId.Top,8)
 	floor(G,"SubdivisionCentralRunner",0,.03,2266,22,376,C.carpet)
+	local slopeSection=model("S05_SlopedHouseAnomaly",G)
+	local gabledSection=model("S06_GabledFacadeLawn",G)
+	local skybridgeSection=model("S09_SkybridgeCanyon",G)
+	slopeSection:SetAttribute("ReferenceSection",5)
+	gabledSection:SetAttribute("ReferenceSection",6)
+	skybridgeSection:SetAttribute("ReferenceSection",9)
+	local paleTower=Color3.fromRGB(222,210,184)
+	local darkPane=Color3.fromRGB(24,26,22)
+	local function decorativeRail(into,a,b,y)
+		local length=(b-a).Magnitude
+		local frame=CFrame.lookAt((a+b)/2,b)
+		part(into,"ContinuousWhiteRail",V(.24,.22,length),frame*CF(0,y+3.2,0),C.white,nil,false)
+		for i=0,math.ceil(length/12) do
+			local t=i/math.ceil(length/12)
+			part(into,"BalconyRailPost",V(.2,3,.2),CF(a:Lerp(b,t)+V(0,y+1.6,0)),C.white,nil,false)
+		end
+	end
+	local function roundedDeck(into,name,center,radius,y)
+		local deck=part(into,name,V(1,radius*2,radius*2),CF(center.X,y-.5,center.Z)*CFrame.Angles(0,0,math.pi/2),C.pale,Enum.Material.Plaster,false)
+		deck.Shape=Enum.PartType.Cylinder
+		local previous
+		for j=0,8 do
+			local angle=math.pi*j/8
+			local p=V(center.X+radius*math.cos(angle),0,center.Z-radius*math.sin(angle))
+			if previous then decorativeRail(into,previous,p,y) end
+			previous=p
+		end
+	end
+	local function towerArch(into,frame)
+		part(into,"ArchedWindowDarkRecess",V(6,11,.2),frame*CF(0,7,-.18),darkPane,Enum.Material.SmoothPlastic,false)
+		for _,sgn in ipairs({-1,1}) do part(into,"ArchedWindowJamb",V(.25,11,.32),frame*CF(sgn*3,7,-.34),C.white,nil,false) end
+		for _,sgn in ipairs({-1,1}) do part(into,"ArchedWindowMullion",V(.16,10,.25),frame*CF(sgn*1,7,-.37),C.white,nil,false) end
+		for _,dy in ipairs({4.7,8.3}) do part(into,"ArchedWindowCrossbar",V(6,.17,.27),frame*CF(0,dy,-.37),C.white,nil,false) end
+		local last
+		for j=0,6 do
+			local a=math.pi*j/6
+			local p=frame:PointToWorldSpace(V(3*math.cos(a),12.5+3*math.sin(a),-.36))
+			if last then K.beam(into,"ArchedWindowHead",last,p,.24,C.white) end
+			last=p
+		end
+	end
 	for _,s in ipairs({-1,1}) do
 		for i,z in ipairs({2150,2350}) do
 			local tower=model("ImpossibleDomesticTower_"..s.."_"..i,G)
-			local count=i==1 and 10 or 11
-			for level=0,count-1 do
-				local frame=CF(s*(176+(level%3)*2),level*14,z+(level>=5 and s*3 or 0))*yaw(s*90)
-				local home=house(tower,"TowerDwelling_"..level,frame,30,28,13.8,(level+i)%3==0 and C.pale or C.cream,level==count-1 and C.blue or nil,{open=level==0})
-				if level==3 or level==6 then
-					local projection=model("ProjectingDomesticBay",home)
-					bay(projection,frame*CF(0,0,-.65),24,8.4,false)
-					projection:SetAttribute("ClosedScenicProjection",true)
+			-- Keep the two real ground homes and their supported Watcher panes.
+			-- The former 38 closed upper houses were a repeated silhouette; each
+			-- reference now gets its own much lighter upper facade.
+			local frame=CF(s*176,0,z)*yaw(s*90)
+			local home=house(tower,"TowerDwelling_0",frame,30,28,13.8,C.cream,nil,{open=true})
+			if i==1 then
+				K.registerWatcher(home,"SubdivisionTowerWindow_"..s,G.Name)
+				local group=model(s<0 and "LeftRoundedBalconyTower" or "RightRoundedBalconyTower",slopeSection)
+				-- The upper silhouette sits within the 70-degree grass-court view.
+				-- Ground Watcher homes stay at x +/-176; the closer mass begins
+				-- above terrace headroom and does not change their support or route.
+				part(group,"CreamTowerMass",V(31,76,74),CF(s*82,66,2215),paleTower,Enum.Material.Plaster)
+				local nose=part(group,"RoundedTowerNose",V(76,43,43),CF(s*82,66,2184)*CFrame.Angles(0,0,math.pi/2),paleTower,Enum.Material.Plaster)
+				nose.Shape=Enum.PartType.Cylinder
+				for level=3,8 do
+					local y=level*12
+					roundedDeck(group,"RoundedProjectingBalcony",V(s*82,0,2184),22.5,y)
+					part(group,"SideBalconyBand",V(5,.8,70),CF(s*64.5,y-.4,2220),C.pale,Enum.Material.Plaster,false)
+					decorativeRail(group,V(s*61,0,2188),V(s*61,0,2250),y)
+					if level<=6 then
+						towerArch(group,CF(s*66.3,y,2215)*yaw(s*90))
+						towerArch(group,CF(s*82,y,2162.2))
+					end
 				end
-				if level==0 and i==1 then K.registerWatcher(home,"SubdivisionTowerWindow_"..s,G.Name) end
-				if level>=2 and level%2==0 then
-					floor(tower,"HighClosedPorch",0,0,-3,33,6,C.carpet,frame)
-					rail(tower,frame*CF(0,0,-6),33)
+				for _,yy in ipairs({44,68,92}) do
+					local lamp=part(group,"WarmApartmentSconce",V(.5,1.2,.5),CF(s*66.2,yy,2240),Color3.fromRGB(245,207,143),Enum.Material.Neon,false)
+					lamp.CastShadow=false
+				end
+			else
+				local group=model(s<0 and "WestCurvedBalconyWall" or "EastCurvedBalconyWall",skybridgeSection)
+				-- Upper scenic mass draws the canyon inward while the real ground
+				-- home, terraced foot route, and Watcher pane stay at their old sites.
+				part(group,"MonumentalTowerWall",V(25,150,126),CF(s*112,103,2387),paleTower,Enum.Material.Plaster,false)
+				for level=3,13 do
+					local y=level*12
+					part(group,"DarkRecessedWindowBand",V(.18,6.1,118),CF(s*99.3,y+3.8,2387),darkPane,nil,false)
+					part(group,"CurvedBalconyBand",V(7,.8,120),CF(s*95.5,y-.4,2387),C.pale,Enum.Material.Plaster,false)
+					local lip=part(group,"RoundedBandNose",V(120,2,2),CF(s*92,y-.5,2387)*yaw(90),C.pale,Enum.Material.Plaster,false)
+					lip.Shape=Enum.PartType.Cylinder
+					decorativeRail(group,V(s*91,0,2328),V(s*91,0,2446),y)
 				end
 			end
 		end
@@ -251,8 +361,9 @@ function Districts.Build(K)
 	for _,s in ipairs({-1,1}) do
 		local y=s<0 and 8 or 16
 		for i,z in ipairs({2188,2270,2352}) do
-			local frame=CF(s*116,y,z)*yaw(s*90)
+			local frame=CF(s<0 and -116 or 130,y,z)*yaw(s*90)
 			house(G,"TerraceCottage_"..s.."_"..i,frame,30,29,13.8,i==2 and C.rose or C.pale,i==2 and C.lavender or C.blue,{open=true,backOpening=i==2,furniture=i==2 and (s<0 and 3 or 5) or nil})
+			if s>0 then part(G,"EastCottageOuterSupportPier",V(3,16,3),CF(156,8,z),C.pale,Enum.Material.Plaster) end
 		end
 		K.edgeRail(G,s*70,y,2149,2391,{{2200,2216},{2263,2277},{2324,2340}})
 		for _,z in ipairs({2149,2391}) do rail(G,CF(s*110,y,z),80) end
@@ -306,10 +417,109 @@ function Districts.Build(K)
 			for level=0,1 do house(G,"OuterGardenResidence_"..side.."_"..i.."_"..level,CF(side*214,level*14,z)*yaw(side*90),28,24,13.8,i==1 and C.rose or C.pale,level==1 and C.lavender or nil,{open=level==0}) end
 		end
 	end
+
+	-- 05: the planted volume actually hangs between the two rounded towers.
+	-- Its lowest edge is above the ground runner and terrace approach, while
+	-- pale diagonal ribs carry the pitched houses rather than a detached ramp.
+	local slope=CF(0,59,2170)*CFrame.Angles(0,0,math.rad(-30))
+	part(slopeSection,"InclinedDarkPlantedMass",V(90,4.8,38),slope,Color3.fromRGB(29,51,31),Enum.Material.Grass,false)
+	part(slopeSection,"InclinedStructuralUnderside",V(91,3.2,39),slope*CF(0,-4,0),paleTower,Enum.Material.Plaster)
+	for _,x in ipairs({-38,38}) do
+		local y=x<0 and 72 or 34
+		part(slopeSection,"InclineSupportPier",V(6,y-2,7),CF(x,(y-2)/2,2164),paleTower,Enum.Material.Plaster)
+	end
+	for i,data in ipairs({{-24,76,2149,-16},{23,53,2152,13}}) do
+		local x,y,z,roll=table.unpack(data)
+		local tilted=house(slopeSection,"VisiblyTiltedGabledHome_"..i,CF(x,y,z)*CFrame.Angles(0,0,math.rad(roll)),28,24,13.8,C.cream,Color3.fromRGB(73,65,64),{open=false})
+		tilted:SetAttribute("ClosedScenicProjection",true)
+	end
+	part(slopeSection,"LowerSuspendedTileCeiling",V(300,.7,100),CF(0,112,2130),Color3.fromRGB(155,151,133),Enum.Material.Plaster,false)
+	for _,x in ipairs({-82,0,82}) do
+		for _,z in ipairs({2102,2144,2172}) do
+			part(slopeSection,"BrightRectangularCeilingPanel",V(9,.15,5),CF(x,111.55,z),Color3.fromRGB(231,230,218),Enum.Material.Neon,false)
+		end
+	end
+
+	-- 06: a long gabled wall belongs to the lawn's east side. A full-height
+	-- black recess is framed by actual separated plaster spans, not a black
+	-- patch on a continuous wall. It is a blind facade, not a route shortcut.
+	for _,span in ipairs({{2178,2248},{2278,2362}}) do
+		part(gabledSection,"SeparatedGabledWallMass",V(2,178,span[2]-span[1]),CF(162,89,(span[1]+span[2])/2),C.cream,Enum.Material.WoodPlanks)
+	end
+	part(gabledSection,"BlackOpeningHead",V(2,68,30),CF(162,144,2263),C.cream,Enum.Material.WoodPlanks)
+	part(gabledSection,"DeepBlackArchitecturalReturn",V(.3,110,29),CF(191,55,2263),Color3.fromRGB(2,3,2),Enum.Material.SmoothPlastic)
+	for _,edge in ipairs({2248,2278}) do
+		part(gabledSection,"OpeningWhiteJamb",V(.6,110,.55),CF(160.8,55,edge),C.white,nil,false)
+	end
+	-- A visual lawn skin makes the already traversable upper terrace read as
+	-- the photographed dark field without altering its support or collision.
+	local facadeLawn=part(gabledSection,"DarkGabledFacadeLawn",V(80,.08,185),CF(110,16.08,2270),Color3.fromRGB(24,42,25),Enum.Material.Grass,false)
+	texture(facadeLawn,"rbxassetid://108216315862080",Enum.NormalId.Top,8)
+	-- The opposite facade rises above the playable terrace edge. Its open
+	-- ground storey preserves the flight, crossing, and inner walkway below.
+	part(gabledSection,"WestGabledBalconyWall",V(2,154,124),CF(68,101,2262),C.cream,Enum.Material.Plaster,false)
+	for level=3,12 do
+		local y=level*12
+		part(gabledSection,"WestFacadeWindowBand",V(.15,6,120),CF(69.1,y+3.5,2262),darkPane,nil,false)
+		part(gabledSection,"WestFacadeBalconyBand",V(5,.8,120),CF(72,y-.4,2262),C.pale,Enum.Material.Plaster,false)
+		decorativeRail(gabledSection,V(75,0,2203),V(75,0,2321),y)
+	end
+	part(gabledSection,"DistantBlackLawnMouth",V(87,120,.15),CF(115,76,2180),Color3.fromRGB(2,3,2),Enum.Material.SmoothPlastic,false)
+	for _,z in ipairs({2190,2206,2222,2238,2288,2304,2320,2336}) do
+		for level=0,11 do
+			local frame=CF(160,level*14,z)*yaw(90)
+			part(gabledSection,"ClapboardBayFace",V(16,13.8,.5),frame*CF(0,6.9,-.4),C.pale,Enum.Material.WoodPlanks,false)
+			part(gabledSection,"DarkGabledWindow",V(6.4,6.2,.12),frame*CF(0,7.2,-.82),darkPane,nil,false)
+			for _,sgn in ipairs({-1,1}) do
+				part(gabledSection,"WhiteWindowJamb",V(.24,6.7,.22),frame*CF(sgn*3.3,7.2,-.94),C.white,nil,false)
+			end
+			part(gabledSection,"WhiteWindowCrossbar",V(6.6,.16,.22),frame*CF(0,7.2,-.96),C.white,nil,false)
+			if level%2==0 then
+				for _,sgn in ipairs({-1,1}) do
+					part(gabledSection,"RepeatedPitchedGable",V(10,.5,11),frame*CF(sgn*4,14.3,-3.2)*CFrame.Angles(0,0,-sgn*math.rad(28)),
+						Color3.fromRGB(91,76,72),Enum.Material.Slate,false)
+				end
+			end
+		end
+		local frame=CF(160,0,z)*yaw(90)
+		part(gabledSection,"WhiteGroundPorch",V(15,.8,8),frame*CF(0,1,-4),C.white,Enum.Material.Wood,false)
+		decorativeRail(gabledSection,frame:PointToWorldSpace(V(-7,0,-8)),frame:PointToWorldSpace(V(7,0,-8)),1)
+	end
+
+	-- 09: three high bridges cross a dark, ribbed rear canyon. The tiny rear
+	-- houses sit off the centre path to gate seven and preserve its left turn.
+	for _,bridge in ipairs({{2350,38},{2388,82},{2422,136}}) do
+		local z,y=bridge[1],bridge[2]
+		part(skybridgeSection,"RailedHighSkybridge",V(184,.85,7),CF(0,y-.45,z),C.pale,Enum.Material.Plaster,false)
+		for _,side in ipairs({-1,1}) do
+			decorativeRail(skybridgeSection,V(-92,0,z+side*3.5),V(92,0,z+side*3.5),y)
+		end
+	end
+	part(skybridgeSection,"DarkRibbedCeilingField",V(218,.8,126),CF(0,177.5,2388),Color3.fromRGB(47,48,31),Enum.Material.SmoothPlastic,false)
+	for i=0,6 do
+		local z=2334+i*18
+		part(skybridgeSection,"LongDarkCeilingRib",V(218,.3,.5),CF(0,176.9,z),Color3.fromRGB(17,18,17),Enum.Material.Metal,false)
+		if i%2==0 then part(skybridgeSection,"CentralFluorescentPanel",V(12,.14,5),CF(0,176.65,z),Color3.fromRGB(230,231,218),Enum.Material.Neon,false) end
+	end
+	for _,span in ipairs({{-165,-76},{-54,165}}) do
+		part(skybridgeSection,"RecessedDarkCanyonEnd",V(span[2]-span[1],170,.15),
+			CF((span[1]+span[2])/2,85,2450),Color3.fromRGB(8,10,9),Enum.Material.SmoothPlastic,false)
+	end
+	part(skybridgeSection,"DarkHighReturnOverGateSeven",V(22,156,.15),CF(-65,92,2450),
+		Color3.fromRGB(8,10,9),Enum.Material.SmoothPlastic,false)
+	local cottageGroup=model("ConnectedRearCottageGroup",skybridgeSection)
+	for _,x in ipairs({-24,0,24}) do
+		-- The central home has front and rear openings so the existing centre
+		-- approach can continue through this deliberately domestic far silhouette.
+		house(cottageGroup,"RearCanyonCottage_"..x,CF(x,0,2433),24,16,11,C.pale,Color3.fromRGB(61,58,55),{open=x==0,backOpening=x==0})
+	end
 	camera("ExpandedTiltedArrival",V(7,7,2083),V(-172,73,2206))
 	camera("ExpandedTiltedTerrace",V(87,22,2330),V(-167,108,2350))
 	camera("ExpandedTiltedCrossing",V(-58,14,2267),V(185,61,2238))
 	camera("ExpandedTiltedRear",V(-12,8,2440),V(176,112,2345))
+	camera("S05_SlopedHouseReferenceView",V(0,7,2100),V(0,68,2200))
+	camera("S06_GabledFacadeReferenceView",V(115,23,2314),V(115,65,2188))
+	camera("S09_SkybridgeCanyonReferenceView",V(0,7,2288),V(0,75,2420))
 	for _,z in ipairs({2082,2152,2220,2290,2360,2420,2450}) do point(0,3,z) end
 
 	-- H: domestic familiarity compresses into an offset vestibule, then the

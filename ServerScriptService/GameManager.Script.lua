@@ -3137,22 +3137,65 @@ end
 -- LEVEL5_MAP_PREVIEW_20260923: server-only test entry. Independent of Level 4,
 -- with the same shared allowlist, no client remote and no privilege expansion.
 do
+ local pendingDevTransfer = {}
+ TeleportService.TeleportInitFailed:Connect(function(player, _, _, _, teleportOptions)
+  local token = pendingDevTransfer[player]
+  if not token then return end
+  local ok, packet = pcall(function() return teleportOptions:GetTeleportData() end)
+  if not ok or type(packet) ~= "table" or packet.LaunchToken ~= token then return end
+  pendingDevTransfer[player] = nil
+  if player.Parent == Players then fireGroup({player}, "lobbycancel") end
+ end)
+ Players.PlayerRemoving:Connect(function(player) pendingDevTransfer[player] = nil end)
  local hook = ServerStorage:FindFirstChild("Level5DevStart")
  if not hook then
   hook = Instance.new("BindableFunction")
   hook.Name, hook.Parent = "Level5DevStart", ServerStorage
  end
  assert(hook:IsA("BindableFunction"), "Level5DevStart must be a BindableFunction")
- hook.OnInvoke = function()
+ hook.OnInvoke = function(requester)
   if IS_RESERVED_ROUND_SERVER then return false, "RESERVED_SERVER" end
-  if workspace:GetAttribute(Routing.Level5DevAttribute) ~= true then return false, "DISABLED" end
-  if roundBusy then return false, "BUSY" end
-  local group = {}
-  for _, player in ipairs(Players:GetPlayers()) do
-   if not DevAccess.IsAllowed(player) then return false, "NOT_DEVELOPER" end
-   group[#group + 1] = player
+  if typeof(requester) ~= "Instance" or not requester:IsA("Player")
+   or requester.Parent ~= Players or not DevAccess.IsAllowed(requester) then
+   return false, "NOT_DEVELOPER"
   end
-  if #group == 0 then return false, "NO_PLAYERS" end
+  if workspace:GetAttribute(Routing.Level5DevAttribute) ~= true then return false, "DISABLED" end
+  if workspace:GetAttribute("Level5PublicPreviewEnabled") == true then return false, "PUBLIC_PREVIEW" end
+  if requester:GetAttribute("InRound") == true or inRound[requester]
+   or workspace:GetAttribute("RoundActive") == true then return false, "IN_ROUND" end
+  if roundBusy then return false, "BUSY" end
+  if pendingDevTransfer[requester] then return false, "BUSY" end
+  local group = {requester}
+  if not IS_STUDIO then
+   -- The lobby stays public. Only the requesting developer moves into a fresh,
+   -- server-verified Level 5 cohort; ordinary and late lobby arrivals stay here.
+   local token = game.JobId .. ":level5dev:" .. requester.UserId .. ":" .. math.floor(os.clock() * 1000)
+   pendingDevTransfer[requester] = token
+   task.delay(25, function()
+    if pendingDevTransfer[requester] ~= token then return end
+    pendingDevTransfer[requester] = nil
+    if requester.Parent == Players then fireGroup(group, "lobbycancel") end
+   end)
+   local ok, err = pcall(function()
+    local options = Instance.new("TeleportOptions")
+    options.ShouldReserveServer = true
+    options:SetTeleportData(Routing.ArrivalPacket({
+     Ceiling = devCeiling(group), Level = 5, SessionId = token,
+     Expected = 1, Final = true,
+     GlowstickSlots = {[tostring(requester.UserId)] = 1},
+     LaunchToken = token,
+    }))
+    fireGroup(group, "loadinggame", 5)
+    TeleportService:TeleportAsync(game.PlaceId, group, options)
+   end)
+   if not ok or pendingDevTransfer[requester] ~= token then
+    pendingDevTransfer[requester] = nil
+    fireGroup(group, "lobbycancel")
+    warn("GameManager: Level 5 DEV teleport failed: " .. tostring(err or "initialization failed"))
+    return false, "TELEPORT_FAILED"
+   end
+   return true
+  end
   roundBusy = true
   task.spawn(function()
    local attempt = beginGroupLoading(group)
