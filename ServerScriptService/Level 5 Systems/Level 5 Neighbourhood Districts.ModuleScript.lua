@@ -242,16 +242,21 @@ function Districts.Build(K)
 		end
 		part(tower,"WhiteFloorBand",V(.35,.24,66),CF(-93.5,level*7.6+8,600),C.white,nil,false)
 	end
-	-- The visible end of this tower faces the arrival view. A single dark
-	-- glazing field with white mullions gives it the dense residential grid
-	-- from the reference without dozens of separately modelled rooms.
-	part(tower,"FrontTowerGlazing",V(27,82,.16),CF(-110,44,633.18),Color3.fromRGB(57,68,69),Enum.Material.Glass,false)
-	for _,x in ipairs({-121,-115.5,-110,-104.5,-99}) do
-		part(tower,"FrontTowerVerticalMullion",V(.28,83,.26),CF(x,44,633.33),C.white,nil,false)
+	-- The arrival-facing end reads as separate apartment windows and cream
+	-- piers, matching the side's residential facade rather than curtain glass.
+	for level=0,10 do
+		local y=5+level*7.6
+		for bay=0,4 do
+			part(tower,"FrontTowerWindow",V(4.25,5.45,.18),CF(-121+bay*5.5,y,633.18),Color3.fromRGB(53,65,65),Enum.Material.Glass,false)
+		end
+		part(tower,"FrontTowerFloorBand",V(29,.35,.26),CF(-110,y+3.28,633.35),C.white,nil,false)
 	end
-	for y=7,83,7.6 do
-		part(tower,"FrontTowerFloorMullion",V(28,.28,.26),CF(-110,y,633.34),C.white,nil,false)
+	for _,x in ipairs({-123.75,-118.25,-112.75,-107.25,-101.75,-96.25}) do
+		part(tower,"FrontTowerPier",V(.32,83,.26),CF(x,44,633.35),C.white,nil,false)
 	end
+	-- Pull the separate window tower into the left background of the arrival
+	-- composition. Its glazing and trim move together without changing routes.
+	tower:PivotTo(tower:GetPivot()+V(10,0,150))
 	-- At the distant end, staggered office facades replace a single blank cap.
 	-- Their lower edges float above circulation and never bisect the gate route.
 	local distant=model("LayeredFarResidentialClosure",S03)
@@ -313,9 +318,16 @@ function Districts.Build(K)
 		K.edgeRail(D,s*96,0,948,1262,{{1097,1115}})
 		for i,z in ipairs({994,1109,1214}) do
 			local frame=CF(s*105,0,z)*yaw(s*90)
-			local clapboard=i%2==0 and Color3.fromRGB(183,181,165) or Color3.fromRGB(169,171,157)
-			local home=house(S04,"FloralTowerHome_"..s.."_"..i.."_0",frame,30,26,13.8,clapboard,towerSlate,{open=true,backOpening=i==2,furniture=i==3 and (s<0 and 3 or 5) or nil})
+			local clapboard=i==1 and (s<0 and Color3.fromRGB(211,204,184) or Color3.fromRGB(132,130,115)) or (i%2==0 and Color3.fromRGB(183,181,165) or Color3.fromRGB(169,171,157))
+			local nearHome=i==1
+			local groundRoof=towerSlate
+			if nearHome then groundRoof=nil end
+			local home=house(S04,"FloralTowerHome_"..s.."_"..i.."_0",frame,30,26,13.8,clapboard,groundRoof,{open=true,backOpening=i==2,furniture=i==3 and (s<0 and 3 or 5) or nil})
 			colorRoof(home,towerSlate);colorClapboard(home,clapboard)
+			if nearHome then
+				local upper=house(S04,"FloralTowerUpperHome_"..s.."_"..i,frame*CF(0,14,0),30,26,13.8,clapboard,towerSlate,{open=false})
+				colorRoof(upper,towerSlate);colorClapboard(upper,clapboard)
+			end
 			-- Set the west arrival posts closer to the promenade rail so the
 			-- ground route clears both posts without losing the white porch.
 			if i~=2 then porch(S04,frame,30,6,towerSlate,s<0 and i==1 and 2 or nil) end
@@ -337,8 +349,10 @@ function Districts.Build(K)
 	for _,side in ipairs({-1,1}) do
 		for i,z in ipairs({1004,1220}) do
 			local roofTint=Color3.fromRGB(87,88,82)
-			local home=house(D,"SunkenPocketStack_"..side.."_"..i.."_0",CF(side*26,-12,z)*yaw(side*90),26,24,13.8,i==1 and C.pale or C.rose,roofTint,{open=true})
+			local pocketClapboard=i==1 and (side<0 and Color3.fromRGB(132,130,115) or Color3.fromRGB(211,204,184)) or C.rose
+			local home=house(D,"SunkenPocketStack_"..side.."_"..i.."_0",CF(side*26,-12,z)*yaw(side*90),26,24,13.8,pocketClapboard,roofTint,{open=true})
 			colorRoof(home,roofTint)
+			colorClapboard(home,pocketClapboard)
 		end
 	end
 	-- Tall, restrained shafts sit behind the gabled street houses. The small
