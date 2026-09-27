@@ -1,0 +1,1202 @@
+[
+  {
+    "cue": "room_hum",
+    "take": 1,
+    "generationId": "QTrWFCoaWxZ2rvkZt4Du",
+    "file": "audio/raw/room_hum__take01.mp3",
+    "sha256": "8035869cbc84aef6aacc55a31cd292a21876ec8a8a5911d55d7d6b461046ebd5",
+    "bytes": 209977,
+    "contentType": "audio/mpeg",
+    "durationSecs": 12,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "12.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ]
+  },
+  {
+    "cue": "room_hum",
+    "take": 2,
+    "generationId": "HWjv4GP9abdmRvnBZL3X",
+    "file": "audio/raw/room_hum__take02.mp3",
+    "sha256": "2d5dab647ba8e3000116499c10d4851dc6dbd587a861647790d0419a432de1d9",
+    "bytes": 209977,
+    "contentType": "audio/mpeg",
+    "durationSecs": 12,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "12.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ]
+  },
+  {
+    "cue": "room_hum",
+    "take": 3,
+    "generationId": "3RGTpNokMKu4qbF6OkKt",
+    "file": "audio/raw/room_hum__take03.mp3",
+    "sha256": "48ff968ea921f6b1b4e50873013d17af08560d2dcc08e51b1172aa0c4febf34b",
+    "bytes": 209977,
+    "contentType": "audio/mpeg",
+    "durationSecs": 12,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "12.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ]
+  },
+  {
+    "cue": "room_hum",
+    "take": 4,
+    "generationId": "OhLHQV9g3h8PHZ0qFQK5",
+    "file": "audio/raw/room_hum__take04.mp3",
+    "sha256": "488cc0f21eac15b0e1fa8ee605d2b679456d0c26674615e957f242c38b3cd413",
+    "bytes": 209977,
+    "contentType": "audio/mpeg",
+    "durationSecs": 12,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "12.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ]
+  },
+  {
+    "cue": "blackout_roomtone",
+    "take": 1,
+    "generationId": "G8Cchz1cgpdHNWCBWv13",
+    "file": "audio/raw/blackout_roomtone__take01.mp3",
+    "sha256": "bd4a4b8ac223a29b3c98b553f0a84bf9da775f1fecfcbf9519fb91168947ea22",
+    "bytes": 209977,
+    "contentType": "audio/mpeg",
+    "durationSecs": 12,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "12.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ]
+  },
+  {
+    "cue": "blackout_roomtone",
+    "take": 2,
+    "generationId": "KOZAtCMye8JXaAvnckWA",
+    "file": "audio/raw/blackout_roomtone__take02.mp3",
+    "sha256": "04f00220f945bf4116e94df2ede5d18e65cc3e56096948faa242aa0ccb6bfeb1",
+    "bytes": 209977,
+    "contentType": "audio/mpeg",
+    "durationSecs": 12,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "12.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ]
+  },
+  {
+    "cue": "blackout_roomtone",
+    "take": 3,
+    "generationId": "dS4Eae8sikdamFlVC7Xs",
+    "file": "audio/raw/blackout_roomtone__take03.mp3",
+    "sha256": "edb849146853ad6d44711a8cab8505253e73cd708e0c386d6aa483589de2acc5",
+    "bytes": 209977,
+    "contentType": "audio/mpeg",
+    "durationSecs": 12,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "12.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ]
+  },
+  {
+    "cue": "blackout_roomtone",
+    "take": 4,
+    "generationId": "8Uz0O1sgaamkRFXjRbxm",
+    "file": "audio/raw/blackout_roomtone__take04.mp3",
+    "sha256": "cebbcb7d1824ba5ecc9c4e9e420bbf3bda1de0fc446cf1504c8a2985cc045d47",
+    "bytes": 209977,
+    "contentType": "audio/mpeg",
+    "durationSecs": 12,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "12.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ]
+  },
+  {
+    "cue": "watcher_heartbeat",
+    "take": 1,
+    "generationId": "BPRFreTjMnvUqgqdNjFy",
+    "file": "audio/raw/watcher_heartbeat__take01.mp3",
+    "sha256": "c733ed07b9fc64fee484caf4ac2d931c2d85d48c24e0833e7e327b17c4821eae",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ]
+  },
+  {
+    "cue": "watcher_heartbeat",
+    "take": 2,
+    "generationId": "h6CtKIk3jxS94jbvIyhP",
+    "file": "audio/raw/watcher_heartbeat__take02.mp3",
+    "sha256": "485421367b9adec3608a7f442464dca652fabfc12ff9feaedc4274c24b55993e",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ]
+  },
+  {
+    "cue": "watcher_heartbeat",
+    "take": 3,
+    "generationId": "iuD7vPbcgnemBLBfpHZV",
+    "file": "audio/raw/watcher_heartbeat__take03.mp3",
+    "sha256": "468abc9fc3bc738db92da103fd90ad67bc8fdf3b526b0b1e0ae8f7e7b2a1e2cd",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ]
+  },
+  {
+    "cue": "watcher_heartbeat",
+    "take": 4,
+    "generationId": "rKt5G99nqrI4mtrBoWME",
+    "file": "audio/raw/watcher_heartbeat__take04.mp3",
+    "sha256": "f3f40f3db6e2e6ded66b398b215f2a4c321221cf841b30d168255cf1b677198d",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "True"
+      }
+    ]
+  },
+  {
+    "cue": "puzzle_click",
+    "take": 1,
+    "generationId": "2KqK4XXewTV6ufZ5zzvx",
+    "file": "audio/raw/puzzle_click__take01.mp3",
+    "sha256": "d526088a8b491879e45213c0267870e1b698410e1f64dec1158c65122b780235",
+    "bytes": 26075,
+    "contentType": "audio/mpeg",
+    "durationSecs": 0.52,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "0.55"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "puzzle_click",
+    "take": 2,
+    "generationId": "PJg7d2gh0Gj9Cray7zH3",
+    "file": "audio/raw/puzzle_click__take02.mp3",
+    "sha256": "902618e157a6ee0043e7296ed6a3a6dddd759e94ddf2e0d85ea79cae65ae5c09",
+    "bytes": 26075,
+    "contentType": "audio/mpeg",
+    "durationSecs": 0.52,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "0.55"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "puzzle_click",
+    "take": 3,
+    "generationId": "PpLtTdLj4U2HozfO8n2a",
+    "file": "audio/raw/puzzle_click__take03.mp3",
+    "sha256": "45fce5b0421ea6a87c1ffff18968287eba6718aded4969942dd2c0c81cfe3364",
+    "bytes": 26075,
+    "contentType": "audio/mpeg",
+    "durationSecs": 0.52,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "0.55"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "puzzle_click",
+    "take": 4,
+    "generationId": "hHz1UcP1aUAghquSAY8r",
+    "file": "audio/raw/puzzle_click__take04.mp3",
+    "sha256": "035a2997a1ce3db3d3a0a9102ed4eabd86f4dd683d4a65340bc6d60d2e723885",
+    "bytes": 26075,
+    "contentType": "audio/mpeg",
+    "durationSecs": 0.52,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "0.55"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "puzzle_reject",
+    "take": 1,
+    "generationId": "Lh8aXMmwJE0WjW6NwQew",
+    "file": "audio/raw/puzzle_reject__take01.mp3",
+    "sha256": "5a7720314359085bbe5914e97671b12b8baf089d327311cceaabdec10dca2757",
+    "bytes": 31926,
+    "contentType": "audio/mpeg",
+    "durationSecs": 0.88,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "0.9"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "puzzle_reject",
+    "take": 2,
+    "generationId": "oVQSwls2ezeoNL2pV0KV",
+    "file": "audio/raw/puzzle_reject__take02.mp3",
+    "sha256": "4df3c55ab28cd30457b34194d7eaf46aa66f6c2851c6a62482c0d8bd3a81c566",
+    "bytes": 31926,
+    "contentType": "audio/mpeg",
+    "durationSecs": 0.88,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "0.9"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "puzzle_reject",
+    "take": 3,
+    "generationId": "zBvjhM3WvOlEbifjTtXM",
+    "file": "audio/raw/puzzle_reject__take03.mp3",
+    "sha256": "606866bdac12217d22fe1c519536486110289400f8523396df00f53ca8c13856",
+    "bytes": 31926,
+    "contentType": "audio/mpeg",
+    "durationSecs": 0.88,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "0.9"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "puzzle_reject",
+    "take": 4,
+    "generationId": "lH78UxAIjPBbOl4wyZKq",
+    "file": "audio/raw/puzzle_reject__take04.mp3",
+    "sha256": "de882e2360fc688f219d612fd4b0f5aa7170598c9f9db0fe940c39126a5d9bde",
+    "bytes": 31926,
+    "contentType": "audio/mpeg",
+    "durationSecs": 0.88,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "0.9"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "puzzle_unlock",
+    "take": 1,
+    "generationId": "eE5teiWHRgLRDBFPk9Kc",
+    "file": "audio/raw/puzzle_unlock__take01.mp3",
+    "sha256": "5b9b165e14278ce9733174aeee0aaecb31a7d9808ec8cf05611c358f68593246",
+    "bytes": 41539,
+    "contentType": "audio/mpeg",
+    "durationSecs": 1.48,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "1.5"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "puzzle_unlock",
+    "take": 2,
+    "generationId": "yudYT54B5w63yVqWNsMo",
+    "file": "audio/raw/puzzle_unlock__take02.mp3",
+    "sha256": "73708d57ab2966021829e640254af6414704dcd8a566085e04f41aea336d42b8",
+    "bytes": 41539,
+    "contentType": "audio/mpeg",
+    "durationSecs": 1.48,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "1.5"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "puzzle_unlock",
+    "take": 3,
+    "generationId": "tH1PncjMHamFw02xUPgE",
+    "file": "audio/raw/puzzle_unlock__take03.mp3",
+    "sha256": "27cd95be7116e4feb125aa30be7a2b4faed2f4f60b9d8b51a1f8fe897eb30e9f",
+    "bytes": 41539,
+    "contentType": "audio/mpeg",
+    "durationSecs": 1.48,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "1.5"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "puzzle_unlock",
+    "take": 4,
+    "generationId": "MFMb3cV5oeMngGANtIZG",
+    "file": "audio/raw/puzzle_unlock__take04.mp3",
+    "sha256": "f670858e5ba36ac7d83eadd3b9f428a7ca633f91b23863159ece8cac06cd7040",
+    "bytes": 41539,
+    "contentType": "audio/mpeg",
+    "durationSecs": 1.48,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "1.5"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "sliding_gate",
+    "take": 1,
+    "generationId": "fYPot7MqJXsWOuSnvx6p",
+    "file": "audio/raw/sliding_gate__take01.mp3",
+    "sha256": "d39b8eb66e4bef11a71c4f28a8d1df3adb07ddfe840f67a75eb3e696dd3b2653",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "sliding_gate",
+    "take": 2,
+    "generationId": "1F8MlU0522wdZtcS52zr",
+    "file": "audio/raw/sliding_gate__take02.mp3",
+    "sha256": "452e60336f341b42d460a4e5c9f4500d34c83c0b756951adc4b9778b9a42a504",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "sliding_gate",
+    "take": 3,
+    "generationId": "Eq42khvko2kQLZ7ErM9j",
+    "file": "audio/raw/sliding_gate__take03.mp3",
+    "sha256": "7f5cd4803ceda38e4573c14b835e9dd5fdfcfcf8ea8e25a821e69c12f8190ca3",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "sliding_gate",
+    "take": 4,
+    "generationId": "mm59yjZ41YeFZ56SXd3G",
+    "file": "audio/raw/sliding_gate__take04.mp3",
+    "sha256": "c8a03ac67cc6bcba7f915f55499240221ec1fe1726325f604dd02f3d0bf57610",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "power_fall",
+    "take": 1,
+    "generationId": "ACiAsVNQP6MycQOzieXY",
+    "file": "audio/raw/power_fall__take01.mp3",
+    "sha256": "a589bfe785374e1a5a84b68e35921e4f23afb86219d3582ec7fffaa3637c3439",
+    "bytes": 97964,
+    "contentType": "audio/mpeg",
+    "durationSecs": 5,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "5.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "power_fall",
+    "take": 2,
+    "generationId": "GUilV7qRjD0Eszjne70F",
+    "file": "audio/raw/power_fall__take02.mp3",
+    "sha256": "0ce97ed5fa760625916f1fb5dbb0ca71dc3df8a14c3b45d412b4262c25ce77f4",
+    "bytes": 97964,
+    "contentType": "audio/mpeg",
+    "durationSecs": 5,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "5.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "power_fall",
+    "take": 3,
+    "generationId": "YpcI3uzVimq8fc8Ujh7B",
+    "file": "audio/raw/power_fall__take03.mp3",
+    "sha256": "967e9bc9b0480de777d1932ce16bf091d9e20892ba2b09c8f120d21bfd1c9380",
+    "bytes": 97964,
+    "contentType": "audio/mpeg",
+    "durationSecs": 5,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "5.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "power_fall",
+    "take": 4,
+    "generationId": "KgdSSdN1nFns3JicmVTM",
+    "file": "audio/raw/power_fall__take04.mp3",
+    "sha256": "01597a5370a13c0398bf08509f9585a1ac3ddaba7a094694cc7092b8a8fbfac4",
+    "bytes": 97964,
+    "contentType": "audio/mpeg",
+    "durationSecs": 5,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "5.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "power_restart",
+    "take": 1,
+    "generationId": "HaOcnz2ERXHlmhKVkSIT",
+    "file": "audio/raw/power_restart__take01.mp3",
+    "sha256": "d4ce9ba26c14c8957979c3119f3df12be600c5a7ec559639cc7d05cc72cb9b39",
+    "bytes": 65781,
+    "contentType": "audio/mpeg",
+    "durationSecs": 3,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "3.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "power_restart",
+    "take": 2,
+    "generationId": "y0BtRFE3J6CJhX5M2XJ6",
+    "file": "audio/raw/power_restart__take02.mp3",
+    "sha256": "00ce4ec4e592b8c9e233eaaac12dd21bc216dc536e3742b10eda8a9d0ad24796",
+    "bytes": 65781,
+    "contentType": "audio/mpeg",
+    "durationSecs": 3,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "3.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "power_restart",
+    "take": 3,
+    "generationId": "KrL5tf1JlsipNgYyD5gq",
+    "file": "audio/raw/power_restart__take03.mp3",
+    "sha256": "219183d30ac73b3188281132af82be3d9d51b2b96812674b7033c066981f0205",
+    "bytes": 65781,
+    "contentType": "audio/mpeg",
+    "durationSecs": 3,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "3.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "power_restart",
+    "take": 4,
+    "generationId": "sugjMizVWPV3aYGczvm3",
+    "file": "audio/raw/power_restart__take04.mp3",
+    "sha256": "910a27d99daa5a4ccf3f6c51d66574d6b628c0c95fc23d04877869a26beddfb0",
+    "bytes": 65781,
+    "contentType": "audio/mpeg",
+    "durationSecs": 3,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "3.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "watcher_glass",
+    "take": 1,
+    "generationId": "vxtLU20dofaN8qJ1I1n6",
+    "file": "audio/raw/watcher_glass__take01.mp3",
+    "sha256": "de61c4c6f9bd65603fc55f63fd2b3361bdde7ff6265140053748ec6b6d149373",
+    "bytes": 49898,
+    "contentType": "audio/mpeg",
+    "durationSecs": 2,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "2.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "watcher_glass",
+    "take": 2,
+    "generationId": "p6a6BYcOiyoXLwNyInLj",
+    "file": "audio/raw/watcher_glass__take02.mp3",
+    "sha256": "3e810b19f39d1d73b7509698b6638b1b1f5ba62b618311be26d17f8927c608df",
+    "bytes": 49898,
+    "contentType": "audio/mpeg",
+    "durationSecs": 2,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "2.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "watcher_glass",
+    "take": 3,
+    "generationId": "Z4vB4jNocVpBZBSbdKcE",
+    "file": "audio/raw/watcher_glass__take03.mp3",
+    "sha256": "cbf8cacf02a37f552f7a0f66eb4a8f1bfd9feea5346bb806cacbf6a0e7ba3e63",
+    "bytes": 49898,
+    "contentType": "audio/mpeg",
+    "durationSecs": 2,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "2.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "watcher_glass",
+    "take": 4,
+    "generationId": "jDkqOmU5xC4NI9N7YKRZ",
+    "file": "audio/raw/watcher_glass__take04.mp3",
+    "sha256": "2b1d3200a4ad1b65426eb1f180a232766e0438077a6894c158ecbc0401895859",
+    "bytes": 49898,
+    "contentType": "audio/mpeg",
+    "durationSecs": 2,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "2.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "watcher_breath",
+    "take": 1,
+    "generationId": "s33zBDNclL91t33v4okv",
+    "file": "audio/raw/watcher_breath__take01.mp3",
+    "sha256": "c70785a0e9d3d7fcec411ff6d8c1fb57882feb334addfb1cb23a1541c02ae41d",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "watcher_breath",
+    "take": 2,
+    "generationId": "F7cXub8GmqdyHMTOtZ5J",
+    "file": "audio/raw/watcher_breath__take02.mp3",
+    "sha256": "9022b85363fbb244ef3a689ab24f4319fbaf760d42a8f3fbab7a3dfb76a9d1d8",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "watcher_breath",
+    "take": 3,
+    "generationId": "e8SVpzxv6ytCsn7DTBHh",
+    "file": "audio/raw/watcher_breath__take03.mp3",
+    "sha256": "7d14a49db9f05a2674ee1dbe164f1c9a2afa4cebd80a1fbb5ea0275e1a7462a7",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "watcher_breath",
+    "take": 4,
+    "generationId": "0T1Yi8bpbxnIPDwgSnhq",
+    "file": "audio/raw/watcher_breath__take04.mp3",
+    "sha256": "4f6e8fbdb00de3a78ed0a68a079d2954fc8b24ef9f56d1e701c4e44091bf37c8",
+    "bytes": 82081,
+    "contentType": "audio/mpeg",
+    "durationSecs": 4,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "4.0"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "watcher_recede",
+    "take": 1,
+    "generationId": "2jaEMkkY4yafwF33d76C",
+    "file": "audio/raw/watcher_recede__take01.mp3",
+    "sha256": "e74421855d2c8ecc4c55e66e81d1cfb0640a4355affd65aeb33730e21e12bf6e",
+    "bytes": 57422,
+    "contentType": "audio/mpeg",
+    "durationSecs": 2.48,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "2.5"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "watcher_recede",
+    "take": 2,
+    "generationId": "1Tu9x0skKsMe2AEOpv2K",
+    "file": "audio/raw/watcher_recede__take02.mp3",
+    "sha256": "069e7021594b9bd49093624d8f25b3abae6ba0ee309c0e338e209323df16bc78",
+    "bytes": 57422,
+    "contentType": "audio/mpeg",
+    "durationSecs": 2.48,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "2.5"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "watcher_recede",
+    "take": 3,
+    "generationId": "DAmrvUrnsSB5uhJ27mWU",
+    "file": "audio/raw/watcher_recede__take03.mp3",
+    "sha256": "2bbb23f74b8d999a7a389314c86d5f1794d771d09fdce0726d575d18b054e18d",
+    "bytes": 57422,
+    "contentType": "audio/mpeg",
+    "durationSecs": 2.48,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "2.5"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  },
+  {
+    "cue": "watcher_recede",
+    "take": 4,
+    "generationId": "t7iO4I5tqSm2DKidbq6Q",
+    "file": "audio/raw/watcher_recede__take04.mp3",
+    "sha256": "44cc830eb97ed4d628fdef72dd09d0cae3adbcc386dce8f81dfdf6cb605a4c09",
+    "bytes": 57422,
+    "contentType": "audio/mpeg",
+    "durationSecs": 2.48,
+    "model": "eleven_text_to_sound_v2",
+    "settings": [
+      {
+        "label": "Duration seconds",
+        "value": "2.5"
+      },
+      {
+        "label": "Prompt influence",
+        "value": "0.65"
+      },
+      {
+        "label": "Loop",
+        "value": "False"
+      }
+    ]
+  }
+]

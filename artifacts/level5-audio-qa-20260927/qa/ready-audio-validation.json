@@ -1,0 +1,207 @@
+{
+  "cues": [
+    {
+      "cue": "room_hum",
+      "duration": 11.94,
+      "cyclicSeamStepDbfs": -47.3864379856296,
+      "checks": {
+        "singleAudioStream": true,
+        "mono": true,
+        "sampleRate44100": true,
+        "pcm16": true,
+        "below20MB": true,
+        "durationUnder7min": true,
+        "peakAtMostMinus2": true,
+        "durationExpected": true,
+        "hashMatches": true,
+        "cyclicSeamWithinNormalSampleSlope": true
+      },
+      "sampleStepP999": 0.017333984375,
+      "seamStep": 0.0042724609375
+    },
+    {
+      "cue": "blackout_roomtone",
+      "duration": 11.94,
+      "cyclicSeamStepDbfs": -66.78717351808073,
+      "checks": {
+        "singleAudioStream": true,
+        "mono": true,
+        "sampleRate44100": true,
+        "pcm16": true,
+        "below20MB": true,
+        "durationUnder7min": true,
+        "peakAtMostMinus2": true,
+        "durationExpected": true,
+        "hashMatches": true,
+        "cyclicSeamWithinNormalSampleSlope": true
+      },
+      "sampleStepP999": 0.007598876953125,
+      "seamStep": 0.000457763671875
+    },
+    {
+      "cue": "watcher_heartbeat",
+      "duration": 3.94,
+      "cyclicSeamStepDbfs": -240.0,
+      "checks": {
+        "singleAudioStream": true,
+        "mono": true,
+        "sampleRate44100": true,
+        "pcm16": true,
+        "below20MB": true,
+        "durationUnder7min": true,
+        "peakAtMostMinus2": true,
+        "durationExpected": true,
+        "hashMatches": true,
+        "cyclicSeamWithinNormalSampleSlope": true
+      },
+      "sampleStepP999": 0.00701904296875,
+      "seamStep": 0.0
+    },
+    {
+      "cue": "puzzle_click",
+      "duration": 0.52,
+      "cyclicSeamStepDbfs": null,
+      "checks": {
+        "singleAudioStream": true,
+        "mono": true,
+        "sampleRate44100": true,
+        "pcm16": true,
+        "below20MB": true,
+        "durationUnder7min": true,
+        "peakAtMostMinus2": true,
+        "durationExpected": true,
+        "hashMatches": true
+      }
+    },
+    {
+      "cue": "puzzle_reject",
+      "duration": 0.88,
+      "cyclicSeamStepDbfs": null,
+      "checks": {
+        "singleAudioStream": true,
+        "mono": true,
+        "sampleRate44100": true,
+        "pcm16": true,
+        "below20MB": true,
+        "durationUnder7min": true,
+        "peakAtMostMinus2": true,
+        "durationExpected": true,
+        "hashMatches": true
+      }
+    },
+    {
+      "cue": "puzzle_unlock",
+      "duration": 1.48,
+      "cyclicSeamStepDbfs": null,
+      "checks": {
+        "singleAudioStream": true,
+        "mono": true,
+        "sampleRate44100": true,
+        "pcm16": true,
+        "below20MB": true,
+        "durationUnder7min": true,
+        "peakAtMostMinus2": true,
+        "durationExpected": true,
+        "hashMatches": true
+      }
+    },
+    {
+      "cue": "sliding_gate",
+      "duration": 4.0,
+      "cyclicSeamStepDbfs": null,
+      "checks": {
+        "singleAudioStream": true,
+        "mono": true,
+        "sampleRate44100": true,
+        "pcm16": true,
+        "below20MB": true,
+        "durationUnder7min": true,
+        "peakAtMostMinus2": true,
+        "durationExpected": true,
+        "hashMatches": true
+      }
+    },
+    {
+      "cue": "power_fall",
+      "duration": 5.0,
+      "cyclicSeamStepDbfs": null,
+      "checks": {
+        "singleAudioStream": true,
+        "mono": true,
+        "sampleRate44100": true,
+        "pcm16": true,
+        "below20MB": true,
+        "durationUnder7min": true,
+        "peakAtMostMinus2": true,
+        "durationExpected": true,
+        "hashMatches": true
+      }
+    },
+    {
+      "cue": "power_restart",
+      "duration": 3.0,
+      "cyclicSeamStepDbfs": null,
+      "checks": {
+        "singleAudioStream": true,
+        "mono": true,
+        "sampleRate44100": true,
+        "pcm16": true,
+        "below20MB": true,
+        "durationUnder7min": true,
+        "peakAtMostMinus2": true,
+        "durationExpected": true,
+        "hashMatches": true
+      }
+    },
+    {
+      "cue": "watcher_glass",
+      "duration": 2.0,
+      "cyclicSeamStepDbfs": null,
+      "checks": {
+        "singleAudioStream": true,
+        "mono": true,
+        "sampleRate44100": true,
+        "pcm16": true,
+        "below20MB": true,
+        "durationUnder7min": true,
+        "peakAtMostMinus2": true,
+        "durationExpected": true,
+        "hashMatches": true
+      }
+    },
+    {
+      "cue": "watcher_breath",
+      "duration": 4.0,
+      "cyclicSeamStepDbfs": null,
+      "checks": {
+        "singleAudioStream": true,
+        "mono": true,
+        "sampleRate44100": true,
+        "pcm16": true,
+        "below20MB": true,
+        "durationUnder7min": true,
+        "peakAtMostMinus2": true,
+        "durationExpected": true,
+        "hashMatches": true
+      }
+    },
+    {
+      "cue": "watcher_recede",
+      "duration": 2.48,
+      "cyclicSeamStepDbfs": null,
+      "checks": {
+        "singleAudioStream": true,
+        "mono": true,
+        "sampleRate44100": true,
+        "pcm16": true,
+        "below20MB": true,
+        "durationUnder7min": true,
+        "peakAtMostMinus2": true,
+        "durationExpected": true,
+        "hashMatches": true
+      }
+    }
+  ],
+  "allPassed": true,
+  "subjectiveListeningPerformed": false
+}

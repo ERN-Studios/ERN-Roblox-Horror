@@ -1,0 +1,104 @@
+{
+  "status": "draft_not_generated",
+  "model": "eleven_text_to_sound_v2",
+  "variations": 4,
+  "notes": "Default four variations according to connected tool and skill; estimate first, audition and select best take(s) rather than upload every variation.",
+  "cues": [
+    {
+      "key": "room_hum",
+      "duration_seconds": 12,
+      "loop": true,
+      "prompt_influence": 0.65,
+      "prompt": "Quiet empty indoor suburb ambience: fluorescent electrical ballast hum, distant ventilation rumble, enormous enclosed shopping-hall room tone, subtle uneasy air movement. Stable seamless loop, no melody, no voices, no footsteps, no sharp events.",
+      "use": "A–H normal room ambience; attenuate in A–G outage, retain H."
+    },
+    {
+      "key": "blackout_roomtone",
+      "duration_seconds": 12,
+      "loop": true,
+      "prompt_influence": 0.65,
+      "prompt": "Very quiet sealed building darkness: distant building creaks and low hollow air pressure, sparse subtle duct resonance, unsettling vast empty residential atrium. Seamless stable ambient loop, no electrical buzzing, no music, no voices, no jumpscare.",
+      "use": "A–G blackout only; bounded quiet ambience."
+    },
+    {
+      "key": "watcher_heartbeat",
+      "duration_seconds": 4,
+      "loop": true,
+      "prompt_influence": 0.65,
+      "prompt": "Close dry muffled human heartbeat, steady slow paired lub-dub pulse at about sixty beats per minute, four even cycles. Subtle organic low thumps with air between, seamless loop, no music, no breath, no voices.",
+      "use": "Local gaze intensity drives volume and playback speed; silence behind walls/hidden."
+    },
+    {
+      "key": "puzzle_click",
+      "duration_seconds": 0.55,
+      "loop": false,
+      "prompt_influence": 0.65,
+      "prompt": "A single quiet precise worn mechanical padlock dial click, muted brass detent, intimate dry sound with a very short natural tail. No music, no voices, no repeated clicks.",
+      "use": "Local input wheel/button press."
+    },
+    {
+      "key": "puzzle_reject",
+      "duration_seconds": 0.9,
+      "loop": false,
+      "prompt_influence": 0.65,
+      "prompt": "Small old mechanical lock refusing a combination: one restrained dull metal clunk and tiny spring rattle, dry short tail. No electronic beep, no music, no voices.",
+      "use": "Wrong submitted answer."
+    },
+    {
+      "key": "puzzle_unlock",
+      "duration_seconds": 1.5,
+      "loop": false,
+      "prompt_influence": 0.65,
+      "prompt": "A worn heavy brass padlock opening: clean spring release click, small metal shackle clink, gentle settling rattle. Satisfying but subdued, dry mechanical foley, no music, no voices.",
+      "use": "Correct answer/gate unlock feedback."
+    },
+    {
+      "key": "sliding_gate",
+      "duration_seconds": 4,
+      "loop": false,
+      "prompt_influence": 0.65,
+      "prompt": "A heavy old interior metal sliding security door opens once: latch release then steady restrained motor grinding and roller scrape, ending in a soft heavy stop. Indoor room reverb, no alarm, no voice, no music.",
+      "use": "3D gate opening at all seven boundaries."
+    },
+    {
+      "key": "power_fall",
+      "duration_seconds": 5,
+      "loop": false,
+      "prompt_influence": 0.65,
+      "prompt": "An empty large building losing power over five seconds: staggered fluorescent ballast clicks, sparse electrical sputters moving into a descending ventilation wind-down, ending in near silence. Restrained eerie realistic sound design, no explosive boom, no music, no voices.",
+      "use": "A–G five-second staggered power collapse only."
+    },
+    {
+      "key": "power_restart",
+      "duration_seconds": 3,
+      "loop": false,
+      "prompt_influence": 0.65,
+      "prompt": "Power returns in a large empty building: quiet breaker relay clack, fluorescent tube ignition ticks then ventilation motor gently winding up to steady low hum. Three second event, no alarm, no music, no voices.",
+      "use": "A–G recovery start only."
+    },
+    {
+      "key": "watcher_glass",
+      "duration_seconds": 2,
+      "loop": false,
+      "prompt_influence": 0.65,
+      "prompt": "From the far side of a window, two very faint uneven fingernail taps on thin glass followed by a tiny glass resonance. Uncomfortably close but quiet, realistic dry foley, no voice, no music.",
+      "use": "Sparse localized visible Window Watcher apparition cue, max once/appearance."
+    },
+    {
+      "key": "watcher_breath",
+      "duration_seconds": 4,
+      "loop": false,
+      "prompt_influence": 0.65,
+      "prompt": "A faint cold slow human exhale heard through closed window glass, distant and muffled, a subtle cloth rustle beneath it, no words, no growls, no screaming, no music.",
+      "use": "Very low localized tension cue only near visible Watcher."
+    },
+    {
+      "key": "watcher_recede",
+      "duration_seconds": 2.5,
+      "loop": false,
+      "prompt_influence": 0.65,
+      "prompt": "A soft uncanny inhaling air movement recedes away behind a window with a delicate dusty fabric rustle, fading into silence. Gentle eerie vanishing sound, no jumpscare impact, no voice, no music.",
+      "use": "Local disappearance after gaze threshold, once/appearance."
+    }
+  ]
+}

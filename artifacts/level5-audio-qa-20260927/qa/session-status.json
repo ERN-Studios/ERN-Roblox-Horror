@@ -1,0 +1,22 @@
+{
+  "status": "blocked_on_native_ui_and_entry_readiness",
+  "studioPlaceId": 131311258779917,
+  "universeId": 10559217407,
+  "baselineScripts": 197,
+  "baselineSourceEditorEqual": true,
+  "previousMirrorScriptsUnchanged": 193,
+  "concurrentLevel6ScriptsPreserved": 4,
+  "productionSourcesMutated": false,
+  "audioGenerated": 48,
+  "audioSelectedReady": 12,
+  "audioUploaded": 0,
+  "nativePlayAttempts": 2,
+  "nativeResult": "entry_readiness_timeout",
+  "studioScriptTimeoutRestoredTo": 10,
+  "liveVersionLastVerified": 2143,
+  "newPublishPerformed": false,
+  "audioLogicAssertions": 218,
+  "controllerMockAssertions": 125,
+  "independentSourceReview": "three_findings_fixed_recheck_passed",
+  "subjectiveListeningPerformed": false
+}

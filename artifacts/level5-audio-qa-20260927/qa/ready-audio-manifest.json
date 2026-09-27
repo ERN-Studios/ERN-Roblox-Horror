@@ -1,0 +1,563 @@
+{
+  "status": "technically_mastered_ready_for_import_subjective_listening_unverified",
+  "flowId": "jjheL5GNVJdYYNrfs1E8",
+  "model": "eleven_text_to_sound_v2",
+  "generationBatches": 1,
+  "generatedTakes": 48,
+  "selectedCues": 12,
+  "subjectiveListeningPerformed": false,
+  "cues": [
+    {
+      "key": "room_hum",
+      "file": "audio/ready/L5_room_hum.wav",
+      "sourceFile": "audio/raw/room_hum__take04.mp3",
+      "sourceSha256": "488cc0f21eac15b0e1fa8ee605d2b679456d0c26674615e957f242c38b3cd413",
+      "generationId": "OhLHQV9g3h8PHZ0qFQK5",
+      "take": 4,
+      "sha256": "04c6886a2db2c4126c71175848d4420d32dd4386045da6278e83f82fdeb81e22",
+      "bytes": 1053186,
+      "loop": true,
+      "duration": 11.94,
+      "sampleRate": 44100,
+      "channels": 1,
+      "format": "16bit PCM WAV",
+      "targetLufs": -24,
+      "measuredLufs": -24.0,
+      "truePeakDbtp": -10.99,
+      "gainDb": 17.17,
+      "processing": [
+        "60ms cyclic tail/head linear crossfade, duration reduced by60ms; no added audio",
+        "constant gain limited by -2.3dBTP ceiling; no dynamic compression"
+      ],
+      "selection": {
+        "method": "Objective technical metrics; not a subjective listening review",
+        "score": 0.09188485843339976,
+        "alternatives": [
+          {
+            "take": 4,
+            "score": 0.09188485843339976
+          },
+          {
+            "take": 2,
+            "score": 0.12249556890105225
+          },
+          {
+            "take": 1,
+            "score": 0.14589868899340508
+          },
+          {
+            "take": 3,
+            "score": 0.3845765268970962
+          }
+        ]
+      },
+      "use": "A\u2013H normal room ambience; attenuate in A\u2013G outage, retain H."
+    },
+    {
+      "key": "blackout_roomtone",
+      "file": "audio/ready/L5_blackout_roomtone.wav",
+      "sourceFile": "audio/raw/blackout_roomtone__take01.mp3",
+      "sourceSha256": "bd4a4b8ac223a29b3c98b553f0a84bf9da775f1fecfcbf9519fb91168947ea22",
+      "generationId": "G8Cchz1cgpdHNWCBWv13",
+      "take": 1,
+      "sha256": "d805492a2a07ac362c5337ca59f02c0c0a42b5e34bb2877b8a3c90350c6b93b6",
+      "bytes": 1053186,
+      "loop": true,
+      "duration": 11.94,
+      "sampleRate": 44100,
+      "channels": 1,
+      "format": "16bit PCM WAV",
+      "targetLufs": -24,
+      "measuredLufs": -24.01,
+      "truePeakDbtp": -2.3,
+      "gainDb": 38.01,
+      "processing": [
+        "60ms cyclic tail/head linear crossfade, duration reduced by60ms; no added audio",
+        "constant gain limited by -2.3dBTP ceiling; no dynamic compression"
+      ],
+      "selection": {
+        "method": "Objective technical metrics; not a subjective listening review",
+        "score": 0.14494383881763628,
+        "alternatives": [
+          {
+            "take": 1,
+            "score": 0.14494383881763628
+          },
+          {
+            "take": 2,
+            "score": 0.28322654632054445
+          },
+          {
+            "take": 4,
+            "score": 0.3279385299682617
+          },
+          {
+            "take": 3,
+            "score": 0.6155659351348878
+          }
+        ]
+      },
+      "use": "A\u2013G blackout only; bounded quiet ambience."
+    },
+    {
+      "key": "watcher_heartbeat",
+      "file": "audio/ready/L5_watcher_heartbeat.wav",
+      "sourceFile": "audio/raw/watcher_heartbeat__take02.mp3",
+      "sourceSha256": "485421367b9adec3608a7f442464dca652fabfc12ff9feaedc4274c24b55993e",
+      "generationId": "h6CtKIk3jxS94jbvIyhP",
+      "take": 2,
+      "sha256": "33846c184f605991215d3d2e59b927cc3d0cffd32892ade1d6fc47db509a0dc5",
+      "bytes": 347586,
+      "loop": true,
+      "duration": 3.94,
+      "sampleRate": 44100,
+      "channels": 1,
+      "format": "16bit PCM WAV",
+      "targetLufs": -22,
+      "measuredLufs": -22.01,
+      "truePeakDbtp": -3.53,
+      "gainDb": -6.09,
+      "processing": [
+        "60ms cyclic tail/head linear crossfade, duration reduced by60ms; no added audio",
+        "constant gain limited by -2.3dBTP ceiling; no dynamic compression"
+      ],
+      "selection": {
+        "method": "Objective technical metrics; not a subjective listening review",
+        "score": 0.007134367269745957,
+        "alternatives": [
+          {
+            "take": 2,
+            "score": 0.007134367269745957
+          },
+          {
+            "take": 1,
+            "score": 0.07242299937095424
+          },
+          {
+            "take": 4,
+            "score": 1.0069805146373243
+          },
+          {
+            "take": 3,
+            "score": 1.0704546450543448
+          }
+        ]
+      },
+      "use": "Local gaze intensity drives volume and playback speed; silence behind walls/hidden."
+    },
+    {
+      "key": "puzzle_click",
+      "file": "audio/ready/L5_puzzle_click.wav",
+      "sourceFile": "audio/raw/puzzle_click__take02.mp3",
+      "sourceSha256": "902618e157a6ee0043e7296ed6a3a6dddd759e94ddf2e0d85ea79cae65ae5c09",
+      "generationId": "PJg7d2gh0Gj9Cray7zH3",
+      "take": 2,
+      "sha256": "a3ff657313d92e2c9d9a78e4ef76c19b052388d463b54208678d35834026a120",
+      "bytes": 45942,
+      "loop": false,
+      "duration": 0.52,
+      "sampleRate": 44100,
+      "channels": 1,
+      "format": "16bit PCM WAV",
+      "targetLufs": -18,
+      "measuredLufs": -30.6,
+      "truePeakDbtp": -2.3,
+      "gainDb": -0.32,
+      "processing": [
+        "5ms input and35ms output edge fades",
+        "constant gain limited by -2.3dBTP ceiling; no dynamic compression"
+      ],
+      "selection": {
+        "method": "Objective technical metrics; not a subjective listening review",
+        "score": 0.3620424766542138,
+        "alternatives": [
+          {
+            "take": 2,
+            "score": 0.3620424766542138
+          },
+          {
+            "take": 3,
+            "score": 0.47159999428978594
+          },
+          {
+            "take": 4,
+            "score": 0.5293620452337036
+          },
+          {
+            "take": 1,
+            "score": 0.6530058009395604
+          }
+        ]
+      },
+      "use": "Local input wheel/button press."
+    },
+    {
+      "key": "puzzle_reject",
+      "file": "audio/ready/L5_puzzle_reject.wav",
+      "sourceFile": "audio/raw/puzzle_reject__take04.mp3",
+      "sourceSha256": "de882e2360fc688f219d612fd4b0f5aa7170598c9f9db0fe940c39126a5d9bde",
+      "generationId": "lH78UxAIjPBbOl4wyZKq",
+      "take": 4,
+      "sha256": "03e69e406636b891066867fe69d99ab18f67bf16efdc72ba6649e2c9ca666a77",
+      "bytes": 77694,
+      "loop": false,
+      "duration": 0.88,
+      "sampleRate": 44100,
+      "channels": 1,
+      "format": "16bit PCM WAV",
+      "targetLufs": -18,
+      "measuredLufs": -20.59,
+      "truePeakDbtp": -2.3,
+      "gainDb": 5.69,
+      "processing": [
+        "5ms input and35ms output edge fades",
+        "constant gain limited by -2.3dBTP ceiling; no dynamic compression"
+      ],
+      "selection": {
+        "method": "Objective technical metrics; not a subjective listening review",
+        "score": 0.025098069358547498,
+        "alternatives": [
+          {
+            "take": 4,
+            "score": 0.025098069358547498
+          },
+          {
+            "take": 2,
+            "score": 0.02628056563965865
+          },
+          {
+            "take": 1,
+            "score": 0.030814162801955612
+          },
+          {
+            "take": 3,
+            "score": 0.06814384830477244
+          }
+        ]
+      },
+      "use": "Wrong submitted answer."
+    },
+    {
+      "key": "puzzle_unlock",
+      "file": "audio/ready/L5_puzzle_unlock.wav",
+      "sourceFile": "audio/raw/puzzle_unlock__take03.mp3",
+      "sourceSha256": "27cd95be7116e4feb125aa30be7a2b4faed2f4f60b9d8b51a1f8fe897eb30e9f",
+      "generationId": "tH1PncjMHamFw02xUPgE",
+      "take": 3,
+      "sha256": "7da9da24e629c6b6ed1070739b9f47adcb22d5dcbb3ffd11dede6c59933b4bf9",
+      "bytes": 130614,
+      "loop": false,
+      "duration": 1.48,
+      "sampleRate": 44100,
+      "channels": 1,
+      "format": "16bit PCM WAV",
+      "targetLufs": -18,
+      "measuredLufs": -19.47,
+      "truePeakDbtp": -2.3,
+      "gainDb": 1.0,
+      "processing": [
+        "5ms input and35ms output edge fades",
+        "constant gain limited by -2.3dBTP ceiling; no dynamic compression"
+      ],
+      "selection": {
+        "method": "Objective technical metrics; not a subjective listening review",
+        "score": 0.44023322594224173,
+        "alternatives": [
+          {
+            "take": 3,
+            "score": 0.44023322594224173
+          },
+          {
+            "take": 4,
+            "score": 0.5197598477281171
+          },
+          {
+            "take": 2,
+            "score": 0.5644499291127376
+          },
+          {
+            "take": 1,
+            "score": 0.6371665881431936
+          }
+        ]
+      },
+      "use": "Correct answer/gate unlock feedback."
+    },
+    {
+      "key": "sliding_gate",
+      "file": "audio/ready/L5_sliding_gate.wav",
+      "sourceFile": "audio/raw/sliding_gate__take03.mp3",
+      "sourceSha256": "7f5cd4803ceda38e4573c14b835e9dd5fdfcfcf8ea8e25a821e69c12f8190ca3",
+      "generationId": "Eq42khvko2kQLZ7ErM9j",
+      "take": 3,
+      "sha256": "fbaced6edc7c704c377f367723a368e98123f7cd99324b30dc31a8b4f92af9bc",
+      "bytes": 352878,
+      "loop": false,
+      "duration": 4.0,
+      "sampleRate": 44100,
+      "channels": 1,
+      "format": "16bit PCM WAV",
+      "targetLufs": -20,
+      "measuredLufs": -25.38,
+      "truePeakDbtp": -2.3,
+      "gainDb": -3.05,
+      "processing": [
+        "5ms input and35ms output edge fades",
+        "constant gain limited by -2.3dBTP ceiling; no dynamic compression"
+      ],
+      "selection": {
+        "method": "Objective technical metrics; not a subjective listening review",
+        "score": 0.0063928338222468024,
+        "alternatives": [
+          {
+            "take": 3,
+            "score": 0.0063928338222468024
+          },
+          {
+            "take": 2,
+            "score": 0.010709273635486459
+          },
+          {
+            "take": 4,
+            "score": 0.012017465906653094
+          },
+          {
+            "take": 1,
+            "score": 0.018014061136205572
+          }
+        ]
+      },
+      "use": "3D gate opening at all seven boundaries."
+    },
+    {
+      "key": "power_fall",
+      "file": "audio/ready/L5_power_fall.wav",
+      "sourceFile": "audio/raw/power_fall__take04.mp3",
+      "sourceSha256": "01597a5370a13c0398bf08509f9585a1ac3ddaba7a094694cc7092b8a8fbfac4",
+      "generationId": "KgdSSdN1nFns3JicmVTM",
+      "take": 4,
+      "sha256": "ee1ee65a1a87d368dd9ca71066e444422764055c8cbe7c44b4a6bf0be3d01571",
+      "bytes": 441078,
+      "loop": false,
+      "duration": 5.0,
+      "sampleRate": 44100,
+      "channels": 1,
+      "format": "16bit PCM WAV",
+      "targetLufs": -18,
+      "measuredLufs": -19.71,
+      "truePeakDbtp": -2.3,
+      "gainDb": 1.78,
+      "processing": [
+        "5ms input and35ms output edge fades",
+        "constant gain limited by -2.3dBTP ceiling; no dynamic compression"
+      ],
+      "selection": {
+        "method": "Objective technical metrics; not a subjective listening review",
+        "score": 0.024427706630507567,
+        "alternatives": [
+          {
+            "take": 4,
+            "score": 0.024427706630507567
+          },
+          {
+            "take": 2,
+            "score": 0.042128583419692896
+          },
+          {
+            "take": 1,
+            "score": 0.19053400076258958
+          },
+          {
+            "take": 3,
+            "score": 0.2686455390127925
+          }
+        ]
+      },
+      "use": "A\u2013G five-second staggered power collapse only."
+    },
+    {
+      "key": "power_restart",
+      "file": "audio/ready/L5_power_restart.wav",
+      "sourceFile": "audio/raw/power_restart__take04.mp3",
+      "sourceSha256": "910a27d99daa5a4ccf3f6c51d66574d6b628c0c95fc23d04877869a26beddfb0",
+      "generationId": "sugjMizVWPV3aYGczvm3",
+      "take": 4,
+      "sha256": "023ceb33e171100475289cef799256aed83ec6ecccc7331493e9f2473b2bef6b",
+      "bytes": 264678,
+      "loop": false,
+      "duration": 3.0,
+      "sampleRate": 44100,
+      "channels": 1,
+      "format": "16bit PCM WAV",
+      "targetLufs": -18,
+      "measuredLufs": -28.27,
+      "truePeakDbtp": -2.3,
+      "gainDb": -4.68,
+      "processing": [
+        "5ms input and35ms output edge fades",
+        "constant gain limited by -2.3dBTP ceiling; no dynamic compression"
+      ],
+      "selection": {
+        "method": "Objective technical metrics; not a subjective listening review",
+        "score": 0.08136816402579738,
+        "alternatives": [
+          {
+            "take": 4,
+            "score": 0.08136816402579738
+          },
+          {
+            "take": 3,
+            "score": 0.08347631756106556
+          },
+          {
+            "take": 1,
+            "score": 0.08459630796630649
+          },
+          {
+            "take": 2,
+            "score": 0.11613537727952584
+          }
+        ]
+      },
+      "use": "A\u2013G recovery start only."
+    },
+    {
+      "key": "watcher_glass",
+      "file": "audio/ready/L5_watcher_glass.wav",
+      "sourceFile": "audio/raw/watcher_glass__take04.mp3",
+      "sourceSha256": "2b1d3200a4ad1b65426eb1f180a232766e0438077a6894c158ecbc0401895859",
+      "generationId": "jDkqOmU5xC4NI9N7YKRZ",
+      "take": 4,
+      "sha256": "be8954e8b9e5f32b75fc78856509bb01f9fef13afe65266e645415004f95f6a0",
+      "bytes": 176478,
+      "loop": false,
+      "duration": 2.0,
+      "sampleRate": 44100,
+      "channels": 1,
+      "format": "16bit PCM WAV",
+      "targetLufs": -20,
+      "measuredLufs": -19.99,
+      "truePeakDbtp": -6.96,
+      "gainDb": 2.64,
+      "processing": [
+        "5ms input and35ms output edge fades",
+        "constant gain limited by -2.3dBTP ceiling; no dynamic compression"
+      ],
+      "selection": {
+        "method": "Objective technical metrics; not a subjective listening review",
+        "score": 0.03933116913875482,
+        "alternatives": [
+          {
+            "take": 4,
+            "score": 0.03933116913875482
+          },
+          {
+            "take": 3,
+            "score": 0.045155324494875776
+          },
+          {
+            "take": 1,
+            "score": 0.1610675400173104
+          },
+          {
+            "take": 2,
+            "score": 0.19379193564508707
+          }
+        ]
+      },
+      "use": "Sparse localized visible Window Watcher apparition cue, max once/appearance."
+    },
+    {
+      "key": "watcher_breath",
+      "file": "audio/ready/L5_watcher_breath.wav",
+      "sourceFile": "audio/raw/watcher_breath__take02.mp3",
+      "sourceSha256": "9022b85363fbb244ef3a689ab24f4319fbaf760d42a8f3fbab7a3dfb76a9d1d8",
+      "generationId": "F7cXub8GmqdyHMTOtZ5J",
+      "take": 2,
+      "sha256": "5cb1b445beef76b1cd536d8f584965bf138133875a54145e8affd5e9b25a1281",
+      "bytes": 352878,
+      "loop": false,
+      "duration": 4.0,
+      "sampleRate": 44100,
+      "channels": 1,
+      "format": "16bit PCM WAV",
+      "targetLufs": -22,
+      "measuredLufs": -28.52,
+      "truePeakDbtp": -2.3,
+      "gainDb": 36.02,
+      "processing": [
+        "5ms input and35ms output edge fades",
+        "constant gain limited by -2.3dBTP ceiling; no dynamic compression"
+      ],
+      "selection": {
+        "method": "Objective technical metrics; not a subjective listening review",
+        "score": 0.037233262536438154,
+        "alternatives": [
+          {
+            "take": 2,
+            "score": 0.037233262536438154
+          },
+          {
+            "take": 1,
+            "score": 0.03864485463482906
+          },
+          {
+            "take": 3,
+            "score": 0.0389145593933045
+          },
+          {
+            "take": 4,
+            "score": 0.04339124143597417
+          }
+        ]
+      },
+      "use": "Very low localized tension cue only near visible Watcher."
+    },
+    {
+      "key": "watcher_recede",
+      "file": "audio/ready/L5_watcher_recede.wav",
+      "sourceFile": "audio/raw/watcher_recede__take01.mp3",
+      "sourceSha256": "e74421855d2c8ecc4c55e66e81d1cfb0640a4355affd65aeb33730e21e12bf6e",
+      "generationId": "2jaEMkkY4yafwF33d76C",
+      "take": 1,
+      "sha256": "38936dcfae137b6ab2de52aa1030715c0d18dd936074df6028799ac1a7c63fd3",
+      "bytes": 218814,
+      "loop": false,
+      "duration": 2.48,
+      "sampleRate": 44100,
+      "channels": 1,
+      "format": "16bit PCM WAV",
+      "targetLufs": -22,
+      "measuredLufs": -21.99,
+      "truePeakDbtp": -7.98,
+      "gainDb": 18.82,
+      "processing": [
+        "5ms input and35ms output edge fades",
+        "constant gain limited by -2.3dBTP ceiling; no dynamic compression"
+      ],
+      "selection": {
+        "method": "Objective technical metrics; not a subjective listening review",
+        "score": 0.05136166015973619,
+        "alternatives": [
+          {
+            "take": 1,
+            "score": 0.05136166015973619
+          },
+          {
+            "take": 3,
+            "score": 0.08861469292104816
+          },
+          {
+            "take": 4,
+            "score": 0.10576101000041643
+          },
+          {
+            "take": 2,
+            "score": 0.1951689861646854
+          }
+        ]
+      },
+      "use": "Local disappearance after gaze threshold, once/appearance."
+    }
+  ]
+}
