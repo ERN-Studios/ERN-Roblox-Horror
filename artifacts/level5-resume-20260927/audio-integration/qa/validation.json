@@ -1,0 +1,11 @@
+{
+  "logicAssertions": 218,
+  "controllerAssertions": 127,
+  "allFourDraftsCompile": true,
+  "regressionFailsUnfixedController": true,
+  "nativeStudioQA": false,
+  "subjectiveListeningPerformed": false,
+  "repositoryRuntimeChanged": false,
+  "studioChanged": false,
+  "uploadedAssets": 0
+}

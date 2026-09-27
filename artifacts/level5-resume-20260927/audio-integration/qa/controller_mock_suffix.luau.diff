@@ -1,0 +1,6 @@
+--- before/tests/controller_mock_suffix.luau
++++ after/tests/controller_mock_suffix.luau
+@@ -4,0 +5 @@
++eq(script:GetAttribute("AudioLoadedCount"),12,"active pool reports loaded assets")
+@@ -32,0 +34 @@
++eq(script:GetAttribute("AudioLoadedCount"),0,"death cleanup clears loaded-asset diagnostics")

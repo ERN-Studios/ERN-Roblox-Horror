@@ -1,5 +1,7 @@
 # Level 5 QA and ElevenLabs audio checkpoint — 27 September 2026
 
+Later resume: [fresh v2149 source comparison, draft cleanup fix and current UI blockers](LEVEL5_RESUME_2026-09-27.md). Audio remains uninstalled.
+
 Artifact root: [`artifacts/level5-audio-qa-20260927`](../artifacts/level5-audio-qa-20260927/README.md). Paths and commands below are relative to that directory.
 
 **Prepared, not installed or published.** Twelve original sound cues are generated and technically validated. Roblox upload is still zero; every draft catalog AssetId is deliberately zero. The production Studio scripts and repository runtime mirror are unchanged by this task.
