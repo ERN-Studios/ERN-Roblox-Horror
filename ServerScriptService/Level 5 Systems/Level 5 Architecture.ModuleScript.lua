@@ -698,14 +698,17 @@ function Architecture.Build(parent, origin, config)
 			light.Color=Color3.fromRGB(218,211,184);light.Parent=emitter
 		end
 	end
-	for _,bed in ipairs({{-25,19,20,12},{-27,56,18,14},{-31,96,20,13},{-27,138,18,16},{25,17,15,12},{56,58,19,13},{63,111,18,11},{51,175,17,11}}) do
+	for bedIndex,bed in ipairs({{-25,19,20,12},{-27,56,18,14},{-31,96,20,13},{-27,138,18,16},{25,17,15,12},{56,58,19,13},{63,111,18,11},{51,175,17,11}}) do
 		part(courtyard,"PlantedSoil",V(bed[3],.16,bed[4]),CF(bed[1],.08,bed[2]),Color3.fromRGB(61,54,45),Enum.Material.Ground,false)
-		for n=1,3 do
-			local radius=2.2+.45*((n+math.floor(bed[2]))%3)
-			local height=radius*(n==2 and 1.5 or .85)
-			local shrub=part(courtyard,"PlantedShrub",V(radius,height,radius),CF(bed[1]+(n-2)*bed[3]/4,height/2,bed[2]+((n%2)*2-1)*bed[4]/5),
-				n==2 and Color3.fromRGB(54,83,48) or Color3.fromRGB(45,73,44),Enum.Material.LeafyGrass,false)
-			shrub.Shape=Enum.PartType.Ball
+		local height=5.5+(bedIndex%3)*.45
+		local texture=bedIndex%3==0 and "rbxassetid://114091435155355" or "rbxassetid://96127727672974"
+		for plane=0,1 do
+			local card=part(courtyard,"PlantedShrubCutout",V(height*2,height,.12),CF(bed[1],height/2,bed[2])*CFrame.Angles(0,math.rad(25+bedIndex*11+plane*90),0),C.white,Enum.Material.SmoothPlastic,false)
+			card.Transparency=1;card.CanQuery=false;card.CanTouch=false;card.CastShadow=false
+			for _,face in ipairs({Enum.NormalId.Front,Enum.NormalId.Back}) do
+				local decal=Instance.new("Decal")
+				decal.Name="GeneratedGardenCutout";decal.Face=face;decal.Texture=texture;decal.Parent=card
+			end
 		end
 	end
 	for _,tree in ipairs({{58,35,9},{69,143,8},{-57,134,7}}) do

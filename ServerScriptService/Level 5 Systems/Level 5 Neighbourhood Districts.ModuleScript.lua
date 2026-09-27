@@ -293,6 +293,25 @@ function Districts.Build(K)
 	stairs(Czone,"EastBridgeFlight",CF(100,0,745)*yaw(180),14,14,32,28,C.pink,true)
 	floor(Czone,"EastBridgeLanding",100,14,709,18,10,C.pink)
 	for _,x in ipairs({-115,115}) do part(Czone,"BridgeSupportPier",V(2,14,2),CF(x,7,700),C.white) end
+	-- The photograph's planted cottage courts need leaf silhouettes at ground
+	-- level. Crossed alpha cards give the beds depth without blocking the route.
+	local planting=model("S03_CottageGardenCutouts",S03)
+	local function plantCutout(name,texture,x,z,width,height,angle)
+		local plant=model(name,planting)
+		for plane=0,1 do
+			local card=part(plant,"TransparentFoliagePlane",V(width,height,.12),CF(x,height/2,z)*yaw(angle+plane*90),C.white,Enum.Material.SmoothPlastic,false)
+			card.Transparency=1;card.CanTouch=false;card.CanQuery=false;card.CastShadow=false
+			for _,face in ipairs({Enum.NormalId.Front,Enum.NormalId.Back}) do
+				local decal=Instance.new("Decal")
+				decal.Name="GeneratedFoliageCutout";decal.Face=face;decal.Texture=texture;decal.Parent=card
+			end
+		end
+	end
+	local hedgeTexture="rbxassetid://96127727672974"
+	for i,site in ipairs({{-31,856,13,6,20},{28,850,13,6,20},{-49,842,11,5,37},{55,843,11,5,-15},{-37,780,12,5,8},{48,775,12,5,33}}) do
+		plantCutout("CottageHedge_"..i,hedgeTexture,site[1],site[2],site[3],site[4],site[5])
+	end
+	plantCutout("BurgundyCourtyardMaple","rbxassetid://73750223479530",40,870,18,20,25)
 	camera("VillageFourCourts",V(0,8,916),V(10,52,710))
 	camera("VillageUpperCrossing",V(-101,19,696),V(135,35,838))
 	camera("VillageBackCourt",V(171,6,881),V(220,49,840))
