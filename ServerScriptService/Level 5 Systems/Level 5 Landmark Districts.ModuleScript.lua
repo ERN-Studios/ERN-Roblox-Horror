@@ -657,6 +657,7 @@ function Districts.Build(K)
 			for _,sgn in ipairs({-1,1}) do
 				part(gabledSection,"WhiteWindowJamb",V(.24,6.7,.22),frame*CF(sgn*3.3,7.2,-.94),C.white,nil,false)
 			end
+			part(gabledSection,"WhiteWindowMullion",V(.24,6.7,.22),frame*CF(0,7.2,-.98),C.white,nil,false)
 			part(gabledSection,"WhiteWindowCrossbar",V(6.6,.16,.22),frame*CF(0,7.2,-.96),C.white,nil,false)
 			if level>0 and level%2==0 then
 				-- Narrow, projecting white balconies repeat the photograph's
@@ -664,11 +665,11 @@ function Districts.Build(K)
 				part(gabledSection,"ProjectingHouseBalcony",V(14,.55,5),frame*CF(0,-.28,-2.5),C.white,Enum.Material.Wood,false)
 				decorativeRail(gabledSection,frame:PointToWorldSpace(V(-7,0,-5)),frame:PointToWorldSpace(V(7,0,-5)),0)
 			end
-			if level%2==0 then
-				for _,sgn in ipairs({-1,1}) do
-					part(gabledSection,"RepeatedPitchedGable",V(10,.5,11),frame*CF(sgn*4,14.3,-3.2)*CFrame.Angles(0,0,-sgn*math.rad(28)),
-						Color3.fromRGB(91,76,72),Enum.Material.Slate,false)
-				end
+			for _,sgn in ipairs({-1,1}) do
+				local roofTint=level%3==0 and Color3.fromRGB(190,164,157) or Color3.fromRGB(174,158,142)
+				local roof=part(gabledSection,"RepeatedPitchedGable",V(10,.5,11),frame*CF(sgn*4,14.3,-3.2)*CFrame.Angles(0,0,-sgn*math.rad(28)),
+					roofTint,Enum.Material.Slate,false)
+				roof.MaterialVariant="";roof.Color=roofTint
 			end
 		end
 		local frame=CF(160,16,z)*yaw(90)
@@ -695,8 +696,8 @@ function Districts.Build(K)
 		part(skybridgeSection,"CentralFluorescentPanel",V(8,.14,4.6),CF(0,176.65,z),Color3.fromRGB(230,231,218),Enum.Material.Neon,false)
 	end
 	for _,span in ipairs({{-165,-76},{-54,165}}) do
-		part(skybridgeSection,"RecessedDarkCanyonEnd",V(span[2]-span[1],170,.15),
-			CF((span[1]+span[2])/2,85,2450),Color3.fromRGB(8,10,9),Enum.Material.SmoothPlastic,false)
+		part(skybridgeSection,"RecessedDomesticCanyonEnd",V(span[2]-span[1],170,.15),
+			CF((span[1]+span[2])/2,85,2450),Color3.fromRGB(143,138,116),Enum.Material.Plaster,false)
 	end
 	part(skybridgeSection,"DarkHighReturnOverGateSeven",V(22,156,.15),CF(-65,92,2450),
 		Color3.fromRGB(8,10,9),Enum.Material.SmoothPlastic,false)
@@ -706,13 +707,36 @@ function Districts.Build(K)
 		-- approach can continue through this deliberately domestic far silhouette.
 		house(cottageGroup,"RearCanyonCottage_"..x,CF(x,0,2433),17,13,10.5,C.pale,Color3.fromRGB(61,58,55),{open=x==0,backOpening=x==0})
 	end
+	-- The tower bases rise from planted banks rather than a flat grass field.
+	-- Both banks and cutouts are visual only so the gate-seven lawn route remains open.
+	for _,side in ipairs({-1,1}) do
+		local bank=part(skybridgeSection,"SlopedPlantedBank",V(28,.24,142),
+			CF(side*70,6,2355)*CFrame.Angles(0,0,side*math.rad(25)),
+			Color3.fromRGB(37,63,36),Enum.Material.Grass,false)
+		local bankWeave=texture(bank,"rbxassetid://108216315862080",Enum.NormalId.Top,16)
+		if bankWeave then bankWeave.Transparency=.3 end
+		for i,z in ipairs({2325,2355,2385,2415}) do
+			local height=i%2==0 and 8 or 10
+			for plane=0,1 do
+				local card=part(skybridgeSection,"BankHedgeCutout",V(18,height,.12),
+					CF(side*(69+i%2*4),6+height/2,z)*yaw(i*27+plane*90),
+					C.white,Enum.Material.SmoothPlastic,false)
+				card.Transparency=1;card.CanQuery=false;card.CanTouch=false;card.CastShadow=false
+				for _,face in ipairs({Enum.NormalId.Front,Enum.NormalId.Back}) do
+					local decal=Instance.new("Decal")
+					decal.Name="GeneratedHedgeFoliage";decal.Face=face
+					decal.Texture="rbxassetid://96127727672974";decal.Parent=card
+				end
+			end
+		end
+	end
 	camera("ExpandedTiltedArrival",V(7,7,2083),V(-172,73,2206))
 	camera("ExpandedTiltedTerrace",V(87,22,2330),V(-167,108,2350))
 	camera("ExpandedTiltedCrossing",V(-58,14,2267),V(185,61,2238))
 	camera("ExpandedTiltedRear",V(-12,8,2440),V(176,112,2345))
 	camera("S05_SlopedHouseReferenceView",V(0,7,2100),V(0,68,2200))
 	camera("S06_GabledFacadeReferenceView",V(115,23,2314),V(115,65,2188))
-	camera("S09_SkybridgeCanyonReferenceView",V(30,7,2288),V(0,70,2420))
+	camera("S09_SkybridgeCanyonReferenceView",V(30,7,2288),V(0,30,2420))
 	for _,z in ipairs({2082,2152,2220,2290,2360,2420,2450}) do point(0,3,z) end
 
 	-- H: domestic familiarity compresses into an offset vestibule, then the

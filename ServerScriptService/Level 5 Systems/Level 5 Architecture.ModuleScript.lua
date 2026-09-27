@@ -920,27 +920,28 @@ function Architecture.Build(parent, origin, config)
 	-- two frontages; only their closed upper scenery and porch canopy repetition
 	-- give way to the low fluorescent corridor seen from the gate-1 approach.
 	local B=model("B_LowEavesArcade")
-	local arcadeBase=floor(B,"OchreArcadeCarpet",0,0,326,280,260,Color3.fromRGB(147,137,101))
-	arcadeBase.Color=Color3.fromRGB(150,140,125)
+	local arcadeBase=floor(B,"OchreArcadeCarpet",0,0,326,280,260,Color3.fromRGB(185,181,170))
+	arcadeBase.Color=Color3.fromRGB(185,181,170)
 	arcadeBase.MaterialVariant=""
 	local corridor=model("S02_TownhouseCorridor",B)
 	corridor:SetAttribute("ReferenceViewId",2)
 	corridor:SetAttribute("GeometryIsEstimate",true)
 	local corridorCarpet=model("SquareCarpetTiles",corridor)
-	for row=0,37 do
+	for row=0,41 do
 		for col=0,1 do
 			local alt=(row+col)%2==1
 			local tile=part(corridorCarpet,alt and "CrossGrainTile" or "LengthGrainTile",V(5.95,.06,5.95),
-				CF(86+col*6,.035,227+row*6)*CFrame.Angles(0,alt and math.pi/2 or 0,0),
-				alt and Color3.fromRGB(140,131,117) or Color3.fromRGB(150,140,125),Enum.Material.Fabric,false)
+				CF(86+col*6,.035,203+row*6)*CFrame.Angles(0,alt and math.pi/2 or 0,0),
+				alt and Color3.fromRGB(182,178,168) or Color3.fromRGB(194,189,177),Enum.Material.Fabric,false)
 			tile.MaterialVariant=""
-			tile.Color=alt and Color3.fromRGB(140,131,117) or Color3.fromRGB(150,140,125)
+			tile.Color=alt and Color3.fromRGB(182,178,168) or Color3.fromRGB(194,189,177)
 			local weave=texture(tile,"rbxassetid://136282007145831",Enum.NormalId.Top,6)
-			if weave then weave.Color3=Color3.fromRGB(242,222,190);weave.Transparency=.24 end
+			if weave then weave.Color3=Color3.fromRGB(247,245,236);weave.Transparency=.18 end
 		end
 	end
 	local corridorCeiling=model("FluorescentTileCeiling",corridor)
-	part(corridorCeiling,"LowSuspendedPlane",V(17,.5,232),CF(89,14.55,338),Color3.fromRGB(198,195,184),Enum.Material.Plaster)
+	local suspendedPlane=part(corridorCeiling,"LowSuspendedPlane",V(17,.5,232),CF(89,14.55,338),Color3.fromRGB(210,207,197),Enum.Material.Plaster)
+	suspendedPlane.MaterialVariant=""
 	for _,x in ipairs({85,93}) do part(corridorCeiling,"CeilingTBarLong",V(.15,.09,228),CF(x,14.26,338),C.white,nil,false) end
 	for z=224,452,8 do part(corridorCeiling,"CeilingTBarCross",V(14,.09,.15),CF(89,14.26,z),C.white,nil,false) end
 	for i=0,12 do
@@ -951,9 +952,9 @@ function Architecture.Build(parent, origin, config)
 			failed and Enum.Material.SmoothPlastic or Enum.Material.Neon,false)
 		part(corridorCeiling,"LightPanelFrame",V(3.55,.1,3.85),CF(89,14.27,z),C.white,nil,false)
 		if not failed then
-			local light=Instance.new("SurfaceLight");light.Face=Enum.NormalId.Bottom;light.Range=17
-			light.Brightness=.72;light.Angle=150;light.Shadows=false
-			light.Color=Color3.fromRGB(233,229,210);light.Parent=panel
+			local light=Instance.new("SurfaceLight");light.Face=Enum.NormalId.Bottom;light.Range=26
+			light.Brightness=1.15;light.Angle=150;light.Shadows=false
+			light.Color=Color3.fromRGB(246,244,234);light.Parent=panel
 		end
 	end
 	for _,z in ipairs({286,376}) do
@@ -962,7 +963,8 @@ function Architecture.Build(parent, origin, config)
 	local rightWall=model("CreamRightWallAndRecesses",corridor)
 	local function rightPier(z0,z1)
 		if z1<=z0 then return end
-		part(rightWall,"CreamWallPier",V(.6,14.3,z1-z0),CF(82.7,7.15,(z0+z1)/2),Color3.fromRGB(218,207,187),Enum.Material.Plaster)
+		local pier=part(rightWall,"CreamWallPier",V(.6,14.3,z1-z0),CF(82.7,7.15,(z0+z1)/2),Color3.fromRGB(222,217,204),Enum.Material.Plaster)
+		pier.MaterialVariant=""
 		part(rightWall,"WhiteBaseboard",V(.25,.6,z1-z0),CF(83.12,.3,(z0+z1)/2),C.white,nil,false)
 		-- The reference has a repeated line of framed domestic pictures between
 		-- the door recesses, rather than a featureless office wall.
@@ -977,7 +979,8 @@ function Architecture.Build(parent, origin, config)
 	for _,z in ipairs({254,292,330,368,406}) do
 		local first,last=z-2.5,z+2.5
 		rightPier(rightCursor,first)
-		part(rightWall,"RecessLintel",V(.6,6.3,5),CF(82.7,11.15,z),Color3.fromRGB(218,207,187),Enum.Material.Plaster)
+		local lintel=part(rightWall,"RecessLintel",V(.6,6.3,5),CF(82.7,11.15,z),Color3.fromRGB(222,217,204),Enum.Material.Plaster)
+		lintel.MaterialVariant=""
 		for _,side in ipairs({-1,1}) do
 			part(rightWall,"WhiteOpeningReturn",V(5.3,8,.25),CF(80.05,4,z+side*2.5),C.white,Enum.Material.Plaster)
 		end
