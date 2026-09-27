@@ -32,6 +32,7 @@ function Architecture.Build(parent, origin, config)
 	local partCount, lightCount = 0, 0
 	local floorSurfaces,sideWalls={},{}
 	local materials=game:GetService("MaterialService")
+	local trimTemplates=game:GetService("ServerStorage"):FindFirstChild("Level5GeometryTemplates")
 	local bases={Plaster=Enum.Material.Plaster,Wallpaper=Enum.Material.Plaster,Siding=Enum.Material.WoodPlanks,Grass=Enum.Material.Grass,Wood=Enum.Material.Wood,Roof=Enum.Material.Slate,Carpet=Enum.Material.Fabric}
 	local function material(p,key,tint)
 		local base=bases[key];if not base then return p end
@@ -341,12 +342,27 @@ function Architecture.Build(parent, origin, config)
 		glass.Transparency=.2
 		glass.Reflectance=0
 		glass:SetAttribute("Level5TintedWindow",true)
-		for _,s in ipairs({-1,1}) do
-			part(into,"WindowJamb",V(.25,h+.45,.34),frame*CF(s*(w/2+.08),0,-.08),C.white)
-			part(into,"WindowSill",V(w+.65,.25,.4),frame*CF(0,s*(h/2+.08),-.12),C.white)
+		local compactTrim
+		if trimTemplates and math.abs(w-10)<.001 and math.abs(h-7.2)<.001
+			and into:FindFirstAncestor("F_BayWindowCanyon") then
+			local template=trimTemplates:FindFirstChild(simple and "WindowTrimSimple" or "WindowTrimStandard")
+			if template and template:IsA("UnionOperation") and template:GetAttribute("Level5WindowTrimTemplate")==true
+				and template:GetAttribute("WindowWidth")==10 and template:GetAttribute("WindowHeight")==7.2 then
+				compactTrim=template:Clone()
+				compactTrim.Name="WindowTrimUnion"
+				compactTrim.CFrame=offset*frame*template.CFrame
+				compactTrim.Parent=into
+				partCount+=1
+			end
 		end
-		part(into,"WindowMullion",V(.12,h,.23),frame*CF(0,0,-.09),C.white)
-		for _,s in ipairs(simple and {0} or {-.22,.22}) do part(into,"WindowCrossbar",V(w,.12,.23),frame*CF(0,h*s,-.09),C.white) end
+		if not compactTrim then
+			for _,s in ipairs({-1,1}) do
+				part(into,"WindowJamb",V(.25,h+.45,.34),frame*CF(s*(w/2+.08),0,-.08),C.white)
+				part(into,"WindowSill",V(w+.65,.25,.4),frame*CF(0,s*(h/2+.08),-.12),C.white)
+			end
+			part(into,"WindowMullion",V(.12,h,.23),frame*CF(0,0,-.09),C.white)
+			for _,s in ipairs(simple and {0} or {-.22,.22}) do part(into,"WindowCrossbar",V(w,.12,.23),frame*CF(0,h*s,-.09),C.white) end
+		end
 		return glass
 	end
 	local function doorframe(into,frame,width,height)
