@@ -179,10 +179,7 @@ function Districts.Build(K)
 		if opening then
 			for _,sgn in ipairs({-1,1}) do
 				plasterPart(into,"TornApartmentPier",V(10.1,13.8,.8),frame*CF(sgn*9.95,6.9,0))
-				for step=1,3 do
-					plasterPart(into,"BrokenPlasterReturn",V(.7,4.7,1.4+step*.25),
-						frame*CF(sgn*(4.5+(step%2)*.5),2.35+(step-1)*4.5,-.18))
-				end
+				plasterPart(into,"ContinuousCutawayReturn",V(.7,13.6,1.8),frame*CF(sgn*4.5,6.8,-.18))
 			end
 			plasterPart(into,"TornApartmentHeader",V(30,1,.9),frame*CF(0,13.3,0))
 			-- The broken floor ends project into the cut, with exposed substrate;
@@ -190,10 +187,8 @@ function Districts.Build(K)
 			for _,sgn in ipairs({-1,1}) do
 				scenic(into,"BrokenFloorSlabStub",V(4.1,.42,3.1),frame*CF(sgn*7.0,.05,-1.5),Color3.fromRGB(219,210,191))
 				scenic(into,"BrokenFloorCarpetEdge",V(3.8,.10,2.75),frame*CF(sgn*7.0,.31,-1.5),Color3.fromRGB(172,158,142),Enum.Material.Fabric)
-				for tier=0,2 do
-					scenic(into,"JaggedPlasterEdge",V(.55+((tier+level)%2)*.34,2.3,1.35+tier*.27),
-						frame*CF(sgn*(4.8+(tier%2)*.35),2+tier*4.1,-.7),Color3.fromRGB(229,219,198))
-				end
+				scenic(into,"SingleBrokenPlasterEdge",V(.72,2.8,1.65),
+					frame*CF(sgn*4.8,6.8,-.7),Color3.fromRGB(229,219,198))
 			end
 			part(into,"RecessedStairwellShadow",V(8.6,11.2,.15),frame*CF(0,5.6,6.8),Color3.fromRGB(68,62,57),Enum.Material.SmoothPlastic,false)
 			panelDoor(into,frame*CF(9.9,0,-.45))
@@ -286,9 +281,14 @@ function Districts.Build(K)
 	exposedHouse:SetAttribute("ReferenceSection",7)
 	exposedHouse:SetAttribute("ClosedScenicProjection",true)
 	local exposedFrame=CF(-8,0,1773)*yaw(-90)
+	-- Keep a legible four-storey cut line and continuous white left trim.
+	-- Scattered detached plaster chips previously obscured the switchback.
+	scenic(exposedHouse,"ContinuousWhiteCutawayTrim",V(.65,56,.7),exposedFrame*CF(-16.35,28,-.6),C.white)
 	for storey=0,4 do
 		local y=storey*14
-		local slab=scenic(exposedHouse,"BrokenOpenFloorSlab",V(33,.58,22),exposedFrame*CF(0,y-.29,11),Color3.fromRGB(209,197,177),Enum.Material.Plaster)
+		-- A rear landing strip supports the room illusion but leaves the
+		-- front half of each stair flight visible from the opposite gallery.
+		local slab=scenic(exposedHouse,"BrokenOpenFloorSlab",V(33,.58,8),exposedFrame*CF(0,y-.29,17.5),Color3.fromRGB(209,197,177),Enum.Material.Plaster)
 		if storey<4 then
 			local backWall=scenic(exposedHouse,"OpenRoomBackWall",V(33,13.7,.65),exposedFrame*CF(0,y+6.85,21.7),Color3.fromRGB(215,203,183))
 			local roomFill=Instance.new("SurfaceLight")
@@ -299,7 +299,7 @@ function Districts.Build(K)
 			panelDoor(exposedHouse,exposedFrame*CF(-9,y,21.32))
 			local strip=scenic(exposedHouse,"CarpetedLanding",V(12,.08,7),exposedFrame*CF(-5,y+.08,17.5),Color3.fromRGB(174,159,144),Enum.Material.Fabric)
 			strip.MaterialVariant=""
-			for chip=0,3 do
+			for chip=0,1 do
 				scenic(exposedHouse,"UnevenTornPlaster",V(.55+(chip%2)*.25,2.5,1.8+(chip%3)*.37),
 					exposedFrame*CF(14.35,y+1.5+chip*3.2,-.7),Color3.fromRGB(234,220,197))
 			end
@@ -308,6 +308,9 @@ function Districts.Build(K)
 	for level=0,3 do
 		local y=level*14
 		local direction=level%2==0 and 1 or -1
+		local landing=scenic(exposedHouse,"SwitchbackCarpetLanding",V(8,.1,9),
+			exposedFrame*CF(direction*12,y+13.98,10),Color3.fromRGB(171,154,138),Enum.Material.Fabric)
+		landing.MaterialVariant=""
 		-- The stair climbs across the exposed face, so the diagonal reads
 		-- clearly from the opposite gallery instead of collapsing into a ladder.
 		for step=0,8 do
@@ -622,7 +625,19 @@ function Districts.Build(K)
 	part(gabledSection,"WestGabledBalconyWall",V(2,154,124),CF(68,101,2262),C.cream,Enum.Material.Plaster,false)
 	for level=3,12 do
 		local y=level*12
-		part(gabledSection,"WestFacadeWindowBand",V(.15,6,120),CF(69.1,y+3.5,2262),darkPane,nil,false)
+		-- Individual homes, white vertical divisions and intermittent small
+		-- gables replace the single black horizontal stripe in the lawn view.
+		for _,dz in ipairs({-38,0,38}) do
+			part(gabledSection,"WestFacadeApartmentWindow",V(.15,6,22),CF(69.1,y+3.5,2262+dz),darkPane,nil,false)
+			if level%3==0 then
+				part(gabledSection,"WestFacadePitchedAwning",V(6,.35,16),
+					CF(71.5,y+8.9,2262+dz)*CFrame.Angles(math.rad(19),0,0),
+					Color3.fromRGB(82,76,69),Enum.Material.Slate,false)
+			end
+		end
+		for _,dz in ipairs({-51,-19,19,51}) do
+			part(gabledSection,"WestFacadeWhitePier",V(.32,11.5,1),CF(69.25,y+5.7,2262+dz),C.white,nil,false)
+		end
 		part(gabledSection,"WestFacadeBalconyBand",V(5,.8,120),CF(72,y-.4,2262),C.pale,Enum.Material.Plaster,false)
 		decorativeRail(gabledSection,V(75,0,2203),V(75,0,2321),y)
 	end
