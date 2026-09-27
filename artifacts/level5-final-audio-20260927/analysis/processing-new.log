@@ -1,0 +1,33 @@
+sliding_gate_v2 1 -5.209 -5.176 {'segment_rms_dbfs': [-26.51, -23.03, -24.85, -27.32, -60.91], 'motion_coverage_min_to_max': 0.6104161220634022}
+sliding_gate_v2 2 -3.831 -5.005 {'segment_rms_dbfs': [-25.54, -18.38, -19.31, -22.96, -43.03], 'motion_coverage_min_to_max': 0.4388515129695295}
+sliding_gate_v2 3 -4.023 -5.005 {'segment_rms_dbfs': [-24.33, -18.06, -22.55, -22.49, -46.12], 'motion_coverage_min_to_max': 0.48564198018297544}
+sliding_gate_v2 4 -5.031 -5.005 {'segment_rms_dbfs': [-20.3, -17.3, -17.55, -22.63, -60.19], 'motion_coverage_min_to_max': 0.5413703375995376}
+wooden_door_open 1 -2.319 -7.045 {}
+wooden_door_open 2 -2.429 -7.005 {}
+wooden_door_open 3 -1.87 -7.033 {}
+wooden_door_open 4 -2.187 -7.012 {}
+wooden_door_close 1 -1.955 -7.015 {}
+wooden_door_close 2 -1.918 -8.088 {}
+wooden_door_close 3 -1.773 -9.052 {}
+wooden_door_close 4 -1.326 -15.069 {}
+house_wood_creak 1 -2.351 -10.006 {}
+house_wood_creak 2 -2.302 -14.846 {}
+house_wood_creak 3 -0.117 -10.005 {}
+house_wood_creak 4 -1.938 -10.006 {}
+window_frame_creak 1 -1.85 -10.006 {}
+window_frame_creak 2 -1.256 -10.011 {}
+window_frame_creak 3 -2.267 -10.005 {}
+window_frame_creak 4 -1.792 -10.006 {}
+curtain_movement 1 -1.239 -12.498 {}
+curtain_movement 2 -1.528 -14.921 {}
+curtain_movement 3 -1.47 -15.175 {}
+curtain_movement 4 -0.742 -17.509 {}
+ceiling_relay_tick 1 2.003 -10.005 {'energy_5_to_95_percent_seconds': np.float64(0.462562358276644)}
+ceiling_relay_tick 2 2.227 -10.262 {'energy_5_to_95_percent_seconds': np.float64(0.43777777777777777)}
+ceiling_relay_tick 3 1.279 -11.352 {'energy_5_to_95_percent_seconds': np.float64(0.2200907029478458)}
+ceiling_relay_tick 4 3.014 -10.6 {'energy_5_to_95_percent_seconds': np.float64(0.4473922902494331)}
+queue_arrival 1 5.144 -28.336 {}
+queue_arrival 2 3.764 -26.002 {}
+queue_arrival 3 2.705 -23.285 {}
+queue_arrival 4 1.474 -18.011 {}
+SELECTED [('sliding_gate_v2', 1), ('wooden_door_open', 2), ('wooden_door_close', 1), ('house_wood_creak', 1), ('window_frame_creak', 3), ('curtain_movement', 2), ('ceiling_relay_tick', 3), ('queue_arrival', 4)]

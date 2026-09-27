@@ -1,0 +1,39 @@
+{
+  "scope": "Exact four source edits from the two executed closure payloads. Expected full hashes reconstructed from the independently exported open sources, with closed byte lengths/djb2 matching both closure receipts. Current mirrors must match these hashes before replay.",
+  "files": [
+    {
+      "file": "ServerScriptService/GameManager.Script.lua",
+      "openedSha256": "6809d69fee8c15c4039d586a1ddde5bb7b20f2c5a6412fa4f031e40e5571b7ae",
+      "closedSha256": "1a5d4162bc38d900a67051af8bd450607e141bd2d46c06c820f7716ec57cdfc3",
+      "closedLength": 166065,
+      "closedDjb2": 2083096384,
+      "edits": [
+        {
+          "opened": "workspace:SetAttribute(\"Level5PublicPreviewEnabled\", true)",
+          "closed": "workspace:SetAttribute(\"Level5PublicPreviewEnabled\", false)"
+        },
+        {
+          "opened": "workspace:SetAttribute(Routing.Level5DevAttribute, true)",
+          "closed": "workspace:SetAttribute(Routing.Level5DevAttribute, false)"
+        }
+      ]
+    },
+    {
+      "file": "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
+      "openedSha256": "e98ae3de991fb6a12a8b5f358eb6e61d5dbc395f30b89f3d8d0f36f90cb89b75",
+      "closedSha256": "735d5e62b09351de521b6246b5654367def1c70e84415510a478cc6f652ac9f2",
+      "closedLength": 116614,
+      "closedDjb2": 3201910213,
+      "edits": [
+        {
+          "opened": "{level = 5, side = -1, z = 80, active = true}",
+          "closed": "{level = 5, side = -1, z = 80, active = false}"
+        },
+        {
+          "opened": "addRoom(rooms, center, def.level, def.side, def.z, def.active or def.level == 4 or def.level == 5, stations)",
+          "closed": "addRoom(rooms, center, def.level, def.side, def.z, def.active or def.level == 4, stations)"
+        }
+      ]
+    }
+  ]
+}

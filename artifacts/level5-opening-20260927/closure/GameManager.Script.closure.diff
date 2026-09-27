@@ -1,0 +1,15 @@
+--- opening/ServerScriptService/GameManager.Script.lua
++++ closure/ServerScriptService/GameManager.Script.lua
+@@ -162,10 +162,10 @@
+ -- requested level, so opening 5 never opens the developer-only Level 4.
+ -- Explicit false keeps public entry closed while preserving developer access.
+ if workspace:GetAttribute("Level5PublicPreviewEnabled") == nil then
+- workspace:SetAttribute("Level5PublicPreviewEnabled", true)
++ workspace:SetAttribute("Level5PublicPreviewEnabled", false)
+ end
+ if workspace:GetAttribute(Routing.Level5DevAttribute) == nil then
+- workspace:SetAttribute(Routing.Level5DevAttribute, true)
++ workspace:SetAttribute(Routing.Level5DevAttribute, false)
+ end
+ local function devCeiling(group)
+  if type(group) ~= "table" or #group == 0 then return Routing.MaxLevel end

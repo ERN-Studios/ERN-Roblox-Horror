@@ -1,0 +1,19 @@
+{
+  "manifestHeaderOwnedByRoot": true,
+  "rootConcurrentHeaderChangesPreserved": [
+    "studio",
+    "source"
+  ],
+  "observedPublishedVersion": 2157,
+  "changedManifestItems": [
+    "ServerScriptService/GameManager.Script.lua",
+    "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua"
+  ],
+  "mirrorsExactToExport": true,
+  "preservedOtherTaskEdits": [
+    "ServerScriptService/Level 5 Systems/Level 5 Power Outage.ModuleScript.lua",
+    "ServerScriptService/Level 5 Systems/Level 5 Round Adapter.ModuleScript.lua",
+    "ServerScriptService/Level 5 Systems/Level 5 Section Progression.ModuleScript.lua",
+    "ServerScriptService/Level 5 Systems/Level 5 Window Watcher Encounters.ModuleScript.lua"
+  ]
+}

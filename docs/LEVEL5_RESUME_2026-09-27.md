@@ -1,5 +1,13 @@
 # Level 5 resume checkpoint — 27 September 2026
 
+## Latest checkpoint — lobby access closed, v2157
+
+Read [LEVEL5_OPENING_QA_2026-09-27.md](LEVEL5_OPENING_QA_2026-09-27.md) and [LEVEL5_FINAL_AUDIO_2026-09-27.md](LEVEL5_FINAL_AUDIO_2026-09-27.md) before the historical notes below. **The owner requested Level 5 closed to everyone.** Both public and developer flags are false; its lobby door is sealed and all four stations are offline. Final publication v2157 is verified. Existing running servers need a restart, requested from the owner because Creator Hub browser access is unavailable. The residential bay styling, disabled outages and B clue visibility fix remain. Before closure, a fresh native desktop run solved A–G with real wrong/correct inputs, walked the F recovery route and H descent, and returned to the lobby with cleanup. H still lacks slide/completion. Sixteen cleaned active WAVs are in `~/Downloads/Level 5 Final Sounds - Cleaned` for manual upload; no new audio IDs or hooks are installed. Do not regenerate them. The final native place download remains blocked by macOS Save; a verified prechange full recovery file and fresh source/property records are preserved.
+
+The following text is the earlier checkpoint; its publication and blocked-QA statements are historical.
+
+---
+
 **Audio is still not uploaded, installed or published. No live game scripts were changed.**
 
 ## Fresh authoritative state

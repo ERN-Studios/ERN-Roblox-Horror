@@ -330,6 +330,7 @@ function Progression.Start(world, manifest, config)
 				local board=part(model,"HintSurface",V(6,4.8,.13),candidate.marker.CFrame*CF(0,0,-.10),CREAM,false)
 				board:SetAttribute("PuzzleGateIndex",gateIndex)
 				local gui,oldLabel=surface(board,"",Vector2.new(900,720));oldLabel:Destroy();gui.Name="PuzzleClueGui"
+				if gateIndex==2 then gui.LightInfluence=.25 end -- Keep the indoor B clue readable in dim light.
 				local root=Instance.new("Frame");root.Size=UDim2.fromScale(1,1);root.BackgroundColor3=Color3.fromRGB(224,216,190);root.BorderSizePixel=0;root.Parent=gui
 				diagramText(root,definition.title,.035,.025,.93,.14)
 				local slots=wanted==3 and {clueSlot} or {1,2,3}

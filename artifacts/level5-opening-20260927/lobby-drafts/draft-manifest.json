@@ -1,0 +1,10 @@
+{
+  "baseline": "/Users/zeanjuul4/.codex/.chatgpt-projects/g-p-6a72501f4e648191a4bd04f306d6606e/output/level5-opening-20260927/baseline/sources/ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
+  "baselineSha256": "c74923a4985dcc7e5b2f19f36c1af8361a15857cdd524c85d6e448694ce4f874",
+  "draftSha256": "e98ae3de991fb6a12a8b5f358eb6e61d5dbc395f30b89f3d8d0f36f90cb89b75",
+  "compileExitCode": 0,
+  "compileOutput": "Compiled 3 KLOC into 96 KB bytecode (read 0.00s, parse 0.00s, compile 0.00s)\n",
+  "geometryAssertionCount": 1456,
+  "nativeDetectorBaseline": "FutureLaunchZone17-20; LevelEnabled=false",
+  "status": "DRAFT ONLY; no Studio installation or native visual check"
+}

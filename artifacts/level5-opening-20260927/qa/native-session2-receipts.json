@@ -1,0 +1,752 @@
+{
+  "captured": "2026-09-27",
+  "scope": "Native Studio single desktop client. Real prompt/mouse puzzle inputs; character navigation and W movement. No forced gate answers or character teleports. See route exceptions for tool path limitations.",
+  "records": {
+    "qa-a-ui": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"panel\":{\"y\":129,\"x\":146.5,\"w\":600,\"h\":330},\"limitations\":\"Snapshot only: no input, font-independent math, device emulation, multiplayer, or successful submission is inferred. Run with each actual gate open.\",\"playerOpenFlag\":true,\"buttons\":[{\"bounds\":{\"y\":137,\"x\":694.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"selectable\":true,\"links\":{\"NextSelectionDown\":\"Wheel1\"}},{\"bounds\":{\"y\":399,\"x\":162.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"selectable\":true,\"links\":{\"NextSelectionUp\":\"Wheel1\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":218,\"x\":162.5,\"w\":136,\"h\":104},\"name\":\"Wheel1\",\"selectable\":true,\"choiceLabel\":\"RED\",\"links\":{\"NextSelectionRight\":\"Wheel2\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel4\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":218,\"x\":306.5,\"w\":136,\"h\":104},\"name\":\"Wheel2\",\"selectable\":true,\"choiceLabel\":\"RED\",\"links\":{\"NextSelectionRight\":\"Wheel3\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel1\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":218,\"x\":450.5,\"w\":136,\"h\":104},\"name\":\"Wheel3\",\"selectable\":true,\"choiceLabel\":\"RED\",\"links\":{\"NextSelectionRight\":\"Wheel4\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel2\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":218,\"x\":594.5,\"w\":136,\"h\":104},\"name\":\"Wheel4\",\"selectable\":true,\"choiceLabel\":\"RED\",\"links\":{\"NextSelectionRight\":\"Wheel1\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel3\",\"NextSelectionUp\":\"Close\"}}],\"scope\":\"Read-only snapshot of the currently open real puzzle UI\",\"text\":[{\"bounds\":{\"y\":141,\"x\":162.5,\"w\":516,\"h\":30},\"name\":\"Title\",\"text\":\"FOUR HOUSE COLOURS\",\"textBounds\":{\"y\":21,\"x\":224},\"textFits\":true},{\"bounds\":{\"y\":185,\"x\":162.5,\"w\":568,\"h\":28},\"name\":\"Instructions\",\"text\":\"Read the four numbered house clues. Match their colours.\",\"textBounds\":{\"y\":16,\"x\":419},\"textFits\":true},{\"bounds\":{\"y\":328,\"x\":162.5,\"w\":568,\"h\":36},\"name\":\"Feedback\",\"text\":\"Tap a wheel to change its colour.\",\"textBounds\":{\"y\":14,\"x\":200},\"textFits\":true},{\"bounds\":{\"y\":137,\"x\":694.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"text\":\"×\",\"textBounds\":{\"y\":28,\"x\":14},\"textFits\":true},{\"bounds\":{\"y\":399,\"x\":162.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"text\":\"UNLOCK\",\"textBounds\":{\"y\":18,\"x\":70},\"textFits\":true},{\"bounds\":{\"y\":218,\"x\":162.5,\"w\":136,\"h\":104},\"name\":\"Wheel1\",\"text\":\"1\\n◯ RED\",\"textBounds\":{\"y\":42,\"x\":60},\"textFits\":true},{\"bounds\":{\"y\":218,\"x\":306.5,\"w\":136,\"h\":104},\"name\":\"Wheel2\",\"text\":\"2\\n◯ RED\",\"textBounds\":{\"y\":42,\"x\":60},\"textFits\":true},{\"bounds\":{\"y\":218,\"x\":450.5,\"w\":136,\"h\":104},\"name\":\"Wheel3\",\"text\":\"3\\n◯ RED\",\"textBounds\":{\"y\":42,\"x\":60},\"textFits\":true},{\"bounds\":{\"y\":218,\"x\":594.5,\"w\":136,\"h\":104},\"name\":\"Wheel4\",\"text\":\"4\\n◯ RED\",\"textBounds\":{\"y\":42,\"x\":60},\"textFits\":true}],\"safeFrame\":{\"y\":0,\"x\":0,\"w\":893,\"h\":588},\"gate\":1,\"viewport\":{\"y\":646,\"x\":893},\"controlCount\":4,\"warnings\":[],\"status\":\"PASS\",\"failures\":[],\"mode\":\"colours\",\"guiInset\":{\"topLeft\":{\"y\":58,\"x\":0},\"bottomRight\":{\"y\":0,\"x\":0}}}"
+        }
+      ],
+      "isError": false
+    },
+    "qa-a-wrong": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"unlocked\":false,\"feedback\":\"Check the numbered clues and try those colours again.\"}"
+        }
+      ],
+      "isError": false
+    },
+    "qa-a-solved": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"solved\":true,\"gate\":{\"FullyOpen\":true,\"GateFrame\":{\"Rotation\":\"1, 0, 0, 0, 1, 0, 0, 0, 1\",\"Position\":\"17000, 24, 196\"},\"GateIndex\":1,\"PuzzleMode\":\"colours\",\"OpenReason\":\"SOLVED\",\"Unlocked\":true,\"Level5ProgressionOwned\":true}}"
+        }
+      ],
+      "isError": false
+    },
+    "qa-b-ui": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"panel\":{\"y\":129,\"x\":146.5,\"w\":600,\"h\":330},\"limitations\":\"Snapshot only: no input, font-independent math, device emulation, multiplayer, or successful submission is inferred. Run with each actual gate open.\",\"playerOpenFlag\":true,\"buttons\":[{\"bounds\":{\"y\":137,\"x\":694.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"selectable\":true,\"links\":{\"NextSelectionDown\":\"Wheel1\"}},{\"bounds\":{\"y\":399,\"x\":162.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"selectable\":true,\"links\":{\"NextSelectionUp\":\"Wheel1\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":218,\"x\":162.5,\"w\":184,\"h\":104},\"name\":\"Wheel1\",\"selectable\":true,\"choiceLabel\":\"KEY\",\"links\":{\"NextSelectionRight\":\"Wheel2\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel3\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":218,\"x\":354.5,\"w\":184,\"h\":104},\"name\":\"Wheel2\",\"selectable\":true,\"choiceLabel\":\"KEY\",\"links\":{\"NextSelectionRight\":\"Wheel3\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel1\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":218,\"x\":546.5,\"w\":184,\"h\":104},\"name\":\"Wheel3\",\"selectable\":true,\"choiceLabel\":\"KEY\",\"links\":{\"NextSelectionRight\":\"Wheel1\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel2\",\"NextSelectionUp\":\"Close\"}}],\"scope\":\"Read-only snapshot of the currently open real puzzle UI\",\"text\":[{\"bounds\":{\"y\":141,\"x\":162.5,\"w\":516,\"h\":30},\"name\":\"Title\",\"text\":\"DOMESTIC SYMBOLS\",\"textBounds\":{\"y\":21,\"x\":197},\"textFits\":true},{\"bounds\":{\"y\":185,\"x\":162.5,\"w\":568,\"h\":28},\"name\":\"Instructions\",\"text\":\"Read the three symbols in the house, from left to right.\",\"textBounds\":{\"y\":16,\"x\":400},\"textFits\":true},{\"bounds\":{\"y\":328,\"x\":162.5,\"w\":568,\"h\":36},\"name\":\"Feedback\",\"text\":\"Tap a symbol to change it.\",\"textBounds\":{\"y\":14,\"x\":159},\"textFits\":true},{\"bounds\":{\"y\":137,\"x\":694.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"text\":\"×\",\"textBounds\":{\"y\":28,\"x\":14},\"textFits\":true},{\"bounds\":{\"y\":399,\"x\":162.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"text\":\"UNLOCK\",\"textBounds\":{\"y\":18,\"x\":70},\"textFits\":true}],\"safeFrame\":{\"y\":0,\"x\":0,\"w\":893,\"h\":588},\"gate\":2,\"viewport\":{\"y\":646,\"x\":893},\"controlCount\":3,\"warnings\":[],\"status\":\"PASS\",\"failures\":[],\"mode\":\"symbols\",\"guiInset\":{\"topLeft\":{\"y\":58,\"x\":0},\"bottomRight\":{\"y\":0,\"x\":0}}}"
+        }
+      ],
+      "isError": false
+    },
+    "qa-b-wrong": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"unlocked\":false,\"feedback\":\"Read the house symbols from left to right.\"}"
+        }
+      ],
+      "isError": false
+    },
+    "qa-b-solved": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"solved\":true,\"hasOutage\":false,\"gate\":{\"FullyOpen\":true,\"GateFrame\":{\"Rotation\":\"1, 0, 0, 0, 1, 0, 0, 0, 1\",\"Position\":\"17088, 24, 456\"},\"GateIndex\":2,\"PuzzleMode\":\"symbols\",\"OpenReason\":\"SOLVED\",\"Unlocked\":true,\"Level5ProgressionOwned\":true}}"
+        }
+      ],
+      "isError": false
+    },
+    "qa-c-ui": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"panel\":{\"y\":129,\"x\":146.5,\"w\":600,\"h\":330},\"limitations\":\"Snapshot only: no input, font-independent math, device emulation, multiplayer, or successful submission is inferred. Run with each actual gate open.\",\"playerOpenFlag\":true,\"buttons\":[{\"bounds\":{\"y\":137,\"x\":694.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"selectable\":true,\"links\":{\"NextSelectionDown\":\"Wheel1\"}},{\"bounds\":{\"y\":399,\"x\":162.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"selectable\":true,\"links\":{\"NextSelectionUp\":\"Wheel1\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":218,\"x\":162.5,\"w\":184,\"h\":104},\"name\":\"Wheel1\",\"selectable\":true,\"choiceLabel\":\"0\",\"links\":{\"NextSelectionRight\":\"Wheel2\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel3\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":218,\"x\":354.5,\"w\":184,\"h\":104},\"name\":\"Wheel2\",\"selectable\":true,\"choiceLabel\":\"0\",\"links\":{\"NextSelectionRight\":\"Wheel3\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel1\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":218,\"x\":546.5,\"w\":184,\"h\":104},\"name\":\"Wheel3\",\"selectable\":true,\"choiceLabel\":\"0\",\"links\":{\"NextSelectionRight\":\"Wheel1\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel2\",\"NextSelectionUp\":\"Close\"}}],\"scope\":\"Read-only snapshot of the currently open real puzzle UI\",\"text\":[{\"bounds\":{\"y\":141,\"x\":162.5,\"w\":516,\"h\":30},\"name\":\"Title\",\"text\":\"MISSING ADDRESSES\",\"textBounds\":{\"y\":21,\"x\":204},\"textFits\":true},{\"bounds\":{\"y\":185,\"x\":162.5,\"w\":568,\"h\":28},\"name\":\"Instructions\",\"text\":\"Find red, blue and yellow house numbers, in that order.\",\"textBounds\":{\"y\":16,\"x\":404},\"textFits\":true},{\"bounds\":{\"y\":328,\"x\":162.5,\"w\":568,\"h\":36},\"name\":\"Feedback\",\"text\":\"Tap a digit to change the house number.\",\"textBounds\":{\"y\":14,\"x\":248},\"textFits\":true},{\"bounds\":{\"y\":137,\"x\":694.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"text\":\"×\",\"textBounds\":{\"y\":28,\"x\":14},\"textFits\":true},{\"bounds\":{\"y\":399,\"x\":162.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"text\":\"UNLOCK\",\"textBounds\":{\"y\":18,\"x\":70},\"textFits\":true}],\"safeFrame\":{\"y\":0,\"x\":0,\"w\":893,\"h\":588},\"gate\":3,\"viewport\":{\"y\":646,\"x\":893},\"controlCount\":3,\"warnings\":[],\"status\":\"PASS\",\"failures\":[],\"mode\":\"address\",\"guiInset\":{\"topLeft\":{\"y\":58,\"x\":0},\"bottomRight\":{\"y\":0,\"x\":0}}}"
+        }
+      ],
+      "isError": false
+    },
+    "qa-c-wrong": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"unlocked\":false,\"feedback\":\"Use the red number, then blue, then yellow.\"}"
+        }
+      ],
+      "isError": false
+    },
+    "qa-c-solved": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"solved\":true,\"hasOutage\":false,\"gate\":{\"FullyOpen\":true,\"GateFrame\":{\"Rotation\":\"1, 0, 0, 0, 1, 0, 0, 0, 1\",\"Position\":\"16880, 24, 936\"},\"GateIndex\":3,\"PuzzleMode\":\"address\",\"OpenReason\":\"SOLVED\",\"Unlocked\":true,\"Level5ProgressionOwned\":true}}"
+        }
+      ],
+      "isError": false
+    },
+    "qa-d-ui": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"panel\":{\"y\":129,\"x\":146.5,\"w\":600,\"h\":330},\"limitations\":\"Snapshot only: no input, font-independent math, device emulation, multiplayer, or successful submission is inferred. Run with each actual gate open.\",\"playerOpenFlag\":true,\"buttons\":[{\"bounds\":{\"y\":137,\"x\":694.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"selectable\":true,\"links\":{\"NextSelectionDown\":\"Wheel1\"}},{\"bounds\":{\"y\":399,\"x\":162.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"selectable\":true,\"links\":{\"NextSelectionUp\":\"Wheel1\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":218,\"x\":162.5,\"w\":184,\"h\":104},\"name\":\"Wheel1\",\"selectable\":true,\"choiceLabel\":\"DOWN\",\"links\":{\"NextSelectionRight\":\"Wheel2\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel3\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":218,\"x\":354.5,\"w\":184,\"h\":104},\"name\":\"Wheel2\",\"selectable\":true,\"choiceLabel\":\"DOWN\",\"links\":{\"NextSelectionRight\":\"Wheel3\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel1\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":218,\"x\":546.5,\"w\":184,\"h\":104},\"name\":\"Wheel3\",\"selectable\":true,\"choiceLabel\":\"DOWN\",\"links\":{\"NextSelectionRight\":\"Wheel1\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel2\",\"NextSelectionUp\":\"Close\"}}],\"scope\":\"Read-only snapshot of the currently open real puzzle UI\",\"text\":[{\"bounds\":{\"y\":141,\"x\":162.5,\"w\":516,\"h\":30},\"name\":\"Title\",\"text\":\"QUIET SWITCHES\",\"textBounds\":{\"y\":21,\"x\":165},\"textFits\":true},{\"bounds\":{\"y\":185,\"x\":162.5,\"w\":568,\"h\":28},\"name\":\"Instructions\",\"text\":\"Match the three switch positions shown inside the house.\",\"textBounds\":{\"y\":16,\"x\":421},\"textFits\":true},{\"bounds\":{\"y\":328,\"x\":162.5,\"w\":568,\"h\":36},\"name\":\"Feedback\",\"text\":\"Tap a switch to flip it.\",\"textBounds\":{\"y\":14,\"x\":127},\"textFits\":true},{\"bounds\":{\"y\":137,\"x\":694.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"text\":\"×\",\"textBounds\":{\"y\":28,\"x\":14},\"textFits\":true},{\"bounds\":{\"y\":399,\"x\":162.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"text\":\"UNLOCK\",\"textBounds\":{\"y\":18,\"x\":70},\"textFits\":true}],\"safeFrame\":{\"y\":0,\"x\":0,\"w\":893,\"h\":588},\"gate\":4,\"viewport\":{\"y\":646,\"x\":893},\"controlCount\":3,\"warnings\":[],\"status\":\"PASS\",\"failures\":[],\"mode\":\"switches\",\"guiInset\":{\"topLeft\":{\"y\":58,\"x\":0},\"bottomRight\":{\"y\":0,\"x\":0}}}"
+        }
+      ],
+      "isError": false
+    },
+    "qa-d-wrong": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"unlocked\":false,\"feedback\":\"Check which switches point up and which point down.\"}"
+        }
+      ],
+      "isError": false
+    },
+    "qa-d-solved": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"solved\":true,\"hasOutage\":false,\"gate\":{\"FullyOpen\":true,\"GateFrame\":{\"Rotation\":\"1, 0, 0, 0, 1, 0, 0, 0, 1\",\"Position\":\"17120, 24, 1296\"},\"GateIndex\":4,\"PuzzleMode\":\"switches\",\"OpenReason\":\"SOLVED\",\"Unlocked\":true,\"Level5ProgressionOwned\":true}}"
+        }
+      ],
+      "isError": false
+    },
+    "qa-e-ui": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"panel\":{\"y\":129,\"x\":146.5,\"w\":600,\"h\":330},\"limitations\":\"Snapshot only: no input, font-independent math, device emulation, multiplayer, or successful submission is inferred. Run with each actual gate open.\",\"playerOpenFlag\":true,\"buttons\":[{\"bounds\":{\"y\":137,\"x\":694.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"selectable\":true,\"links\":{\"NextSelectionDown\":\"Wheel1\"}},{\"bounds\":{\"y\":399,\"x\":162.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"selectable\":true,\"links\":{\"NextSelectionUp\":\"Wheel1\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":218,\"x\":162.5,\"w\":184,\"h\":104},\"name\":\"Wheel1\",\"selectable\":true,\"choiceLabel\":\"12:00\",\"links\":{\"NextSelectionRight\":\"Wheel2\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel3\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":218,\"x\":354.5,\"w\":184,\"h\":104},\"name\":\"Wheel2\",\"selectable\":true,\"choiceLabel\":\"12:00\",\"links\":{\"NextSelectionRight\":\"Wheel3\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel1\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":218,\"x\":546.5,\"w\":184,\"h\":104},\"name\":\"Wheel3\",\"selectable\":true,\"choiceLabel\":\"12:00\",\"links\":{\"NextSelectionRight\":\"Wheel1\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel2\",\"NextSelectionUp\":\"Close\"}}],\"scope\":\"Read-only snapshot of the currently open real puzzle UI\",\"text\":[{\"bounds\":{\"y\":141,\"x\":162.5,\"w\":516,\"h\":30},\"name\":\"Title\",\"text\":\"STOPPED CLOCKS\",\"textBounds\":{\"y\":21,\"x\":172},\"textFits\":true},{\"bounds\":{\"y\":185,\"x\":162.5,\"w\":568,\"h\":28},\"name\":\"Instructions\",\"text\":\"Match the three stopped clocks, from left to right.\",\"textBounds\":{\"y\":16,\"x\":363},\"textFits\":true},{\"bounds\":{\"y\":328,\"x\":162.5,\"w\":568,\"h\":36},\"name\":\"Feedback\",\"text\":\"Tap a clock to set its hour.\",\"textBounds\":{\"y\":14,\"x\":158},\"textFits\":true},{\"bounds\":{\"y\":137,\"x\":694.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"text\":\"×\",\"textBounds\":{\"y\":28,\"x\":14},\"textFits\":true},{\"bounds\":{\"y\":399,\"x\":162.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"text\":\"UNLOCK\",\"textBounds\":{\"y\":18,\"x\":70},\"textFits\":true}],\"safeFrame\":{\"y\":0,\"x\":0,\"w\":893,\"h\":588},\"gate\":5,\"viewport\":{\"y\":646,\"x\":893},\"controlCount\":3,\"warnings\":[],\"status\":\"PASS\",\"failures\":[],\"mode\":\"clocks\",\"guiInset\":{\"topLeft\":{\"y\":58,\"x\":0},\"bottomRight\":{\"y\":0,\"x\":0}}}"
+        }
+      ],
+      "isError": false
+    },
+    "qa-e-wrong": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"unlocked\":false,\"feedback\":\"Read the stopped clocks from left to right.\"}"
+        }
+      ],
+      "isError": false
+    },
+    "qa-e-solved": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"solved\":true,\"hasOutage\":false,\"gate\":{\"FullyOpen\":true,\"GateFrame\":{\"Rotation\":\"1, 0, 0, 0, 1, 0, 0, 0, 1\",\"Position\":\"16880, 24, 1596\"},\"GateIndex\":5,\"PuzzleMode\":\"clocks\",\"OpenReason\":\"SOLVED\",\"Unlocked\":true,\"Level5ProgressionOwned\":true}}"
+        }
+      ],
+      "isError": false
+    },
+    "qa-f-ui": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"panel\":{\"y\":129,\"x\":146.5,\"w\":600,\"h\":330},\"limitations\":\"Snapshot only: no input, font-independent math, device emulation, multiplayer, or successful submission is inferred. Run with each actual gate open.\",\"playerOpenFlag\":true,\"buttons\":[{\"bounds\":{\"y\":137,\"x\":694.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"selectable\":true,\"links\":{\"NextSelectionDown\":\"Wheel1\"}},{\"bounds\":{\"y\":399,\"x\":162.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"selectable\":true,\"links\":{\"NextSelectionUp\":\"Wheel1\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":218,\"x\":162.5,\"w\":184,\"h\":104},\"name\":\"Wheel1\",\"selectable\":true,\"choiceLabel\":\"CH01\",\"links\":{\"NextSelectionRight\":\"Wheel2\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel3\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":218,\"x\":354.5,\"w\":184,\"h\":104},\"name\":\"Wheel2\",\"selectable\":true,\"choiceLabel\":\"CH01\",\"links\":{\"NextSelectionRight\":\"Wheel3\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel1\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":218,\"x\":546.5,\"w\":184,\"h\":104},\"name\":\"Wheel3\",\"selectable\":true,\"choiceLabel\":\"CH01\",\"links\":{\"NextSelectionRight\":\"Wheel1\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel2\",\"NextSelectionUp\":\"Close\"}}],\"scope\":\"Read-only snapshot of the currently open real puzzle UI\",\"text\":[{\"bounds\":{\"y\":141,\"x\":162.5,\"w\":516,\"h\":30},\"name\":\"Title\",\"text\":\"EMPTY CHANNELS\",\"textBounds\":{\"y\":21,\"x\":177},\"textFits\":true},{\"bounds\":{\"y\":185,\"x\":162.5,\"w\":568,\"h\":28},\"name\":\"Instructions\",\"text\":\"Enter the three channel numbers shown inside the house.\",\"textBounds\":{\"y\":16,\"x\":427},\"textFits\":true},{\"bounds\":{\"y\":328,\"x\":162.5,\"w\":568,\"h\":36},\"name\":\"Feedback\",\"text\":\"Tap a TV to change its channel.\",\"textBounds\":{\"y\":14,\"x\":188},\"textFits\":true},{\"bounds\":{\"y\":137,\"x\":694.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"text\":\"×\",\"textBounds\":{\"y\":28,\"x\":14},\"textFits\":true},{\"bounds\":{\"y\":399,\"x\":162.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"text\":\"UNLOCK\",\"textBounds\":{\"y\":18,\"x\":70},\"textFits\":true}],\"safeFrame\":{\"y\":0,\"x\":0,\"w\":893,\"h\":588},\"gate\":6,\"viewport\":{\"y\":646,\"x\":893},\"controlCount\":3,\"warnings\":[],\"status\":\"PASS\",\"failures\":[],\"mode\":\"television\",\"guiInset\":{\"topLeft\":{\"y\":58,\"x\":0},\"bottomRight\":{\"y\":0,\"x\":0}}}"
+        }
+      ],
+      "isError": false
+    },
+    "qa-f-wrong": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"open\":true,\"feedback\":\"Check the three channel numbers and their order.\"}"
+        }
+      ],
+      "isError": false
+    },
+    "qa-f-solved": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"hasOutage\":false,\"gate\":{\"FullyOpen\":true,\"GateFrame\":{\"Rotation\":\"1, 0, 0, 0, 1, 0, 0, 0, 1\",\"Position\":\"17178, 24, 2076\"},\"GateIndex\":6,\"PuzzleMode\":\"television\",\"OpenReason\":\"SOLVED\",\"Unlocked\":true,\"Level5ProgressionOwned\":true}}"
+        }
+      ],
+      "isError": false
+    },
+    "qa-g-ui": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"panel\":{\"y\":129,\"x\":146.5,\"w\":600,\"h\":330},\"limitations\":\"Snapshot only: no input, font-independent math, device emulation, multiplayer, or successful submission is inferred. Run with each actual gate open.\",\"playerOpenFlag\":true,\"buttons\":[{\"bounds\":{\"y\":137,\"x\":694.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"selectable\":true,\"links\":{\"NextSelectionDown\":\"Wheel1\"}},{\"bounds\":{\"y\":399,\"x\":162.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"selectable\":true,\"links\":{\"NextSelectionUp\":\"Wheel1\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":218,\"x\":162.5,\"w\":184,\"h\":104},\"name\":\"Wheel1\",\"selectable\":true,\"choiceLabel\":\"UP\",\"links\":{\"NextSelectionRight\":\"Wheel2\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel3\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":218,\"x\":354.5,\"w\":184,\"h\":104},\"name\":\"Wheel2\",\"selectable\":true,\"choiceLabel\":\"UP\",\"links\":{\"NextSelectionRight\":\"Wheel3\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel1\",\"NextSelectionUp\":\"Close\"}},{\"choiceIndex\":1,\"bounds\":{\"y\":218,\"x\":546.5,\"w\":184,\"h\":104},\"name\":\"Wheel3\",\"selectable\":true,\"choiceLabel\":\"UP\",\"links\":{\"NextSelectionRight\":\"Wheel1\",\"NextSelectionDown\":\"Unlock\",\"NextSelectionLeft\":\"Wheel2\",\"NextSelectionUp\":\"Close\"}}],\"scope\":\"Read-only snapshot of the currently open real puzzle UI\",\"text\":[{\"bounds\":{\"y\":141,\"x\":162.5,\"w\":516,\"h\":30},\"name\":\"Title\",\"text\":\"LAST DIRECTIONS\",\"textBounds\":{\"y\":21,\"x\":170},\"textFits\":true},{\"bounds\":{\"y\":185,\"x\":162.5,\"w\":568,\"h\":28},\"name\":\"Instructions\",\"text\":\"Follow the three house arrows, from left to right.\",\"textBounds\":{\"y\":16,\"x\":353},\"textFits\":true},{\"bounds\":{\"y\":328,\"x\":162.5,\"w\":568,\"h\":36},\"name\":\"Feedback\",\"text\":\"Tap a house to rotate it.\",\"textBounds\":{\"y\":14,\"x\":144},\"textFits\":true},{\"bounds\":{\"y\":137,\"x\":694.5,\"w\":44,\"h\":44},\"name\":\"Close\",\"text\":\"×\",\"textBounds\":{\"y\":28,\"x\":14},\"textFits\":true},{\"bounds\":{\"y\":399,\"x\":162.5,\"w\":568,\"h\":44},\"name\":\"Unlock\",\"text\":\"UNLOCK\",\"textBounds\":{\"y\":18,\"x\":70},\"textFits\":true}],\"safeFrame\":{\"y\":0,\"x\":0,\"w\":893,\"h\":588},\"gate\":7,\"viewport\":{\"y\":646,\"x\":893},\"controlCount\":3,\"warnings\":[],\"status\":\"PASS\",\"failures\":[],\"mode\":\"arrows\",\"guiInset\":{\"topLeft\":{\"y\":58,\"x\":0},\"bottomRight\":{\"y\":0,\"x\":0}}}"
+        }
+      ],
+      "isError": false
+    },
+    "qa-g-wrong": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"open\":true,\"feedback\":\"Read the three arrow directions from left to right.\"}"
+        }
+      ],
+      "isError": false
+    },
+    "qa-g-solved": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"puzzles\":{\"Puzzle3Solved\":true,\"Puzzle7Solved\":true,\"Puzzle6Solved\":true,\"Puzzle1Solved\":true,\"Level5ProgressionOwned\":true,\"Puzzle2Solved\":true,\"Puzzle5Solved\":true,\"Puzzle4Solved\":true,\"WorldToken\":\"413054f4-c032-426b-81b9-753184577e67\",\"Version\":\"2026-09-26.seven-household-puzzles.4\"},\"hasOutage\":false,\"gate\":{\"FullyOpen\":true,\"GateFrame\":{\"Rotation\":\"1, 0, 0, 0, 1, 0, 0, 0, 1\",\"Position\":\"16935, 24, 2456\"},\"GateIndex\":7,\"PuzzleMode\":\"arrows\",\"OpenReason\":\"SOLVED\",\"Unlocked\":true,\"Level5ProgressionOwned\":true}}"
+        }
+      ],
+      "isError": false
+    },
+    "qa-f-rescue1": [
+      {
+        "health": 100,
+        "position": "16963.080078125, -17.78565788269043, 1677.2413330078125",
+        "height": -17.78565788269043,
+        "distance": 0.7628814578056335,
+        "target": {
+          "1": 16963,
+          "2": -15,
+          "3": 1678
+        }
+      },
+      {
+        "health": 100,
+        "position": "16963.009765625, -10.923481941223145, 1693.0982666015625",
+        "height": -10.923481941223145,
+        "distance": 0.9017862677574158,
+        "target": {
+          "1": 16963,
+          "2": -8,
+          "3": 1694
+        }
+      },
+      {
+        "health": 100,
+        "position": "16963.009765625, -3.991497039794922, 1709.239501953125",
+        "height": -3.991497039794922,
+        "distance": 0.7605607509613037,
+        "target": {
+          "1": 16963,
+          "2": -1,
+          "3": 1710
+        }
+      },
+      {
+        "health": 100,
+        "position": "16963.009765625, -3.7614195346832275, 1717.16796875",
+        "height": -3.7614195346832275,
+        "distance": 0.8320885300636292,
+        "target": {
+          "1": 16963,
+          "2": -1,
+          "3": 1718
+        }
+      },
+      {
+        "health": 100,
+        "position": "17036.380859375, -3.7614195346832275, 1717.897216796875",
+        "height": -3.7614195346832275,
+        "distance": 0.6276141405105591,
+        "target": {
+          "1": 17037,
+          "2": -1,
+          "3": 1718
+        }
+      }
+    ],
+    "qa-f-rescue2": [
+      {
+        "health": 100,
+        "position": "17036.962890625, -3.7850394248962402, 1733.1209716796875",
+        "height": -3.7850394248962402,
+        "distance": 0.8798112869262695,
+        "target": {
+          "1": 17037,
+          "2": -1,
+          "3": 1734
+        }
+      },
+      {
+        "health": 100,
+        "position": "17036.98046875, 3.0668740272521973, 1749.24462890625",
+        "height": 3.0668740272521973,
+        "distance": 0.7556235790252686,
+        "target": {
+          "1": 17037,
+          "2": 6,
+          "3": 1750
+        }
+      },
+      {
+        "health": 100,
+        "position": "17036.98046875, 9.984518051147461, 1765.1016845703125",
+        "height": 9.984518051147461,
+        "distance": 0.8985277414321899,
+        "target": {
+          "1": 17037,
+          "2": 13,
+          "3": 1766
+        }
+      },
+      {
+        "health": 100,
+        "position": "17036.703125, 10.478578567504883, 1809.2427978515625",
+        "height": 10.478578567504883,
+        "distance": 0.8133202791213989,
+        "target": {
+          "1": 17037,
+          "2": 13,
+          "3": 1810
+        }
+      },
+      {
+        "health": 100,
+        "position": "17036.849609375, 10.404242515563965, 1829.1661376953125",
+        "height": 10.404242515563965,
+        "distance": 0.8473155498504639,
+        "target": {
+          "1": 17037,
+          "2": 13,
+          "3": 1830
+        }
+      },
+      {
+        "health": 100,
+        "position": "17036.98046875, 16.890151977539062, 1845.022705078125",
+        "height": 16.890151977539062,
+        "distance": 0.9774900674819946,
+        "target": {
+          "1": 17037,
+          "2": 20,
+          "3": 1846
+        }
+      },
+      {
+        "health": 100,
+        "position": "17036.98046875, 24.033987045288086, 1861.2130126953125",
+        "height": 24.033987045288086,
+        "distance": 0.787229597568512,
+        "target": {
+          "1": 17037,
+          "2": 27,
+          "3": 1862
+        }
+      },
+      {
+        "health": 100,
+        "position": "17036.98046875, 24.404247283935547, 1879.202880859375",
+        "height": 24.404247283935547,
+        "distance": 0.7973583936691284,
+        "target": {
+          "1": 17037,
+          "2": 27,
+          "3": 1880
+        }
+      },
+      {
+        "health": 100,
+        "position": "17036.98046875, 30.990102767944336, 1895.0599365234375",
+        "height": 30.990102767944336,
+        "distance": 0.9402663707733154,
+        "target": {
+          "1": 17037,
+          "2": 34,
+          "3": 1896
+        }
+      },
+      {
+        "health": 100,
+        "position": "17036.98046875, 38.03857421875, 1911.18359375",
+        "height": 38.03857421875,
+        "distance": 0.8166398406028748,
+        "target": {
+          "1": 17037,
+          "2": 41,
+          "3": 1912
+        }
+      }
+    ],
+    "qa-f-main3": [
+      {
+        "health": 100,
+        "position": "17036.98046875, 38.47856903076172, 1929.1734619140625",
+        "height": 38.47856903076172,
+        "distance": 0.8267688155174255,
+        "target": {
+          "1": 17037,
+          "2": 41,
+          "3": 1930
+        }
+      },
+      {
+        "health": 100,
+        "position": "17000.77734375, 38.47856903076172, 1924.0159912109375",
+        "height": 38.47856903076172,
+        "distance": 0.7775081992149353,
+        "target": {
+          "1": 17000,
+          "2": 41,
+          "3": 1924
+        }
+      },
+      {
+        "health": 100,
+        "position": "16963.568359375, 38.47856903076172, 1917.9974365234375",
+        "height": 38.47856903076172,
+        "distance": 0.5683651566505432,
+        "target": {
+          "1": 16963,
+          "2": 41,
+          "3": 1918
+        }
+      },
+      {
+        "health": 100,
+        "position": "16963.017578125, 38.196006774902344, 1931.3548583984375",
+        "height": 38.196006774902344,
+        "distance": 0.6453810334205627,
+        "target": {
+          "1": 16963,
+          "2": 41,
+          "3": 1932
+        }
+      },
+      {
+        "health": 100,
+        "position": "16963.009765625, 31.30681800842285, 1947.1630859375",
+        "height": 31.30681800842285,
+        "distance": 0.8369710445404053,
+        "target": {
+          "1": 16963,
+          "2": 34,
+          "3": 1948
+        }
+      },
+      {
+        "health": 100,
+        "position": "16963.009765625, 24.287734985351562, 1963.0052490234375",
+        "height": 24.287734985351562,
+        "distance": 0.9947988986968994,
+        "target": {
+          "1": 16963,
+          "2": 27,
+          "3": 1964
+        }
+      },
+      {
+        "health": 100,
+        "position": "16963.009765625, 24.238574981689453, 1987.0572509765625",
+        "height": 24.238574981689453,
+        "distance": 0.9427995681762695,
+        "target": {
+          "1": 16963,
+          "2": 27,
+          "3": 1988
+        }
+      },
+      {
+        "health": 100,
+        "position": "17036.29296875, 24.238574981689453, 1987.8955078125",
+        "height": 24.238574981689453,
+        "distance": 0.7147110104560852,
+        "target": {
+          "1": 17037,
+          "2": 27,
+          "3": 1988
+        }
+      }
+    ],
+    "qa-g-route1": [
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.6692681908607483,\"health\":100,\"position\":\"17178.59375, 24.238574981689453, 2069.691162109375\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.7829483151435852,\"health\":100,\"position\":\"17178.02734375, 24.118576049804688, 2084.217529296875\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.6522202491760254,\"health\":100,\"position\":\"17000.64453125, 24.238576889038086, 2084.900146484375\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.8640335202217102,\"health\":100,\"position\":\"17000.005859375, 24.238576889038086, 2151.135986328125\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.7314687967300415,\"health\":100,\"position\":\"17000.005859375, 24.25723648071289, 2219.2685546875\"}"
+          }
+        ],
+        "isError": false
+      }
+    ],
+    "qa-g-clue-route": [
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.5559039115905762,\"health\":100,\"position\":\"16985.138671875, 24.118576049804688, 2150.538330078125\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.6389408111572266,\"health\":100,\"position\":\"16936.62890625, 24.118576049804688, 2134.11279296875\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.6302803158760071,\"health\":100,\"position\":\"16840.623046875, 24.118576049804688, 2133.90478515625\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.7534407377243042,\"health\":100,\"position\":\"16804.736328125, 24.118576049804688, 2169.84033203125\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.9189639687538147,\"health\":100,\"position\":\"16804.005859375, 24.118576049804688, 2289.0810546875\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.6932054758071899,\"health\":100,\"position\":\"16790.6796875, 24.118576049804688, 2289.86376953125\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.7292575240135193,\"health\":100,\"position\":\"16770.72265625, 24.238574981689453, 2289.902099609375\"}"
+          }
+        ],
+        "isError": false
+      }
+    ],
+    "qa-g-route2": [
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.7389358878135681,\"health\":100,\"position\":\"16803.267578125, 24.118576049804688, 2289.902099609375\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.8422864675521851,\"health\":100,\"position\":\"16804.384765625, 24.118576049804688, 2417.250732421875\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.7832618951797485,\"health\":100,\"position\":\"16935.25, 24.118576049804688, 2439.774169921875\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.8189094066619873,\"health\":100,\"position\":\"16947.150390625, 24.118576049804688, 2445.373779296875\"}"
+          }
+        ],
+        "isError": false
+      }
+    ],
+    "qa-h-route1": [
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.5406175851821899,\"health\":100,\"position\":\"16935.466796875, 24.118576049804688, 2449.727294921875\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.8704402446746826,\"health\":100,\"position\":\"16935.01171875, 24.118576049804688, 2465.129638671875\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.6124946475028992,\"health\":100,\"position\":\"16999.396484375, 24.118576049804688, 2465.8955078125\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.729808509349823,\"health\":100,\"position\":\"16999.978515625, 24.238574981689453, 2514.2705078125\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.9568100571632385,\"health\":100,\"position\":\"17000.552734375, 24.238380432128906, 2557.218994140625\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.8921240568161011,\"health\":100,\"position\":\"17000.0078125, 24.238574981689453, 2580.10791015625\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.732951819896698,\"health\":100,\"position\":\"17000.0078125, 24.238574981689453, 2596.76708984375\"}"
+          }
+        ],
+        "isError": false
+      }
+    ],
+    "qa-h-route2": [
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.6850789785385132,\"health\":100,\"position\":\"17008.330078125, 24.238574981689453, 2597.356689453125\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.7213162183761597,\"health\":100,\"position\":\"17008.96484375, 24.238574981689453, 2610.179443359375\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.8052764534950256,\"health\":100,\"position\":\"17000.791015625, 24.238574981689453, 2610.7490234375\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.7854210138320923,\"health\":100,\"position\":\"17000.232421875, 24.238574981689453, 2612.249755859375\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":0.6706997752189636,\"health\":100,\"position\":\"17000.0078125, 13.324159622192383, 2646.329345703125\"}"
+          }
+        ],
+        "isError": false
+      },
+      {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"distance\":27.670654296875,\"health\":100,\"position\":\"17000.0078125, 13.325834274291992, 2646.329345703125\"}"
+          }
+        ],
+        "isError": false
+      }
+    ],
+    "qa-h-end": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"notices\":{\"1\":{\"attrs\":{\"Level5Owned\":true},\"class\":\"Folder\",\"path\":\"Workspace.Level 5 Generated World.Level5PreviewNotices\"},\"3\":{\"attrs\":[],\"class\":\"SurfaceGui\",\"path\":\"Workspace.Level 5 Generated World.Level5PreviewNotices.PreviewArrival.PreviewInformation\"},\"2\":{\"attrs\":{\"Level5Owned\":true},\"class\":\"Part\",\"path\":\"Workspace.Level 5 Generated World.Level5PreviewNotices.PreviewArrival\"},\"5\":{\"attrs\":[],\"class\":\"SurfaceGui\",\"path\":\"Workspace.Level 5 Generated World.Level5PreviewNotices.PreviewEnding.PreviewInformation\"},\"4\":{\"attrs\":{\"Level5Owned\":true},\"class\":\"Part\",\"path\":\"Workspace.Level 5 Generated World.Level5PreviewNotices.PreviewEnding\"}},\"worldCount\":29935,\"ending\":{\"ArchitecturalDarkEnding\":true,\"GeometryOnly_NoSlideOrCompletion\":true,\"SuggestedSlideStartFraction\":0.7,\"PitchSeamsClosed\":true},\"roundActive\":true}"
+        }
+      ],
+      "isError": false
+    },
+    "qa-h-native-descent": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"root\":\"16999.90234375, -1.3971431255340576, 2677.4716796875\",\"health\":100,\"position\":\"16999.896484375, -4.883285045623779, 2677.373291015625\"}"
+        }
+      ],
+      "isError": false
+    },
+    "qa-return-lobby-final": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"possibleOwned\":[],\"health\":100,\"generatedWorld\":false,\"position\":\"0.28125429153442383, 33.15675735473633, -860.8724975585938\",\"InRound\":false,\"public5\":true,\"roundActive\":false}"
+        }
+      ],
+      "isError": false
+    }
+  }
+}

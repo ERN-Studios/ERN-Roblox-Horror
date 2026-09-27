@@ -1,0 +1,52 @@
+{
+  "readOnlyStudioExport": true,
+  "scripts": [
+    {
+      "path": "ServerScriptService.GameManager",
+      "universeId": 10559217407,
+      "equal": true,
+      "djb2": 2083096384,
+      "placeId": 131311258779917,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      },
+      "fnv1a": 2388737342,
+      "version": 2150,
+      "observedAtUtc": "2026-09-27T11:10:21Z",
+      "length": 166065,
+      "class": "Script",
+      "stableDuringRead": true,
+      "file": "ServerScriptService/GameManager.Script.lua",
+      "sha256": "1a5d4162bc38d900a67051af8bd450607e141bd2d46c06c820f7716ec57cdfc3",
+      "chunkCount": 6,
+      "lastObservedAtUtc": "2026-09-27T11:10:22Z",
+      "sourceEditorExact": true
+    },
+    {
+      "path": "ServerScriptService.TunnelLobbyBuilder",
+      "universeId": 10559217407,
+      "equal": true,
+      "djb2": 3201910213,
+      "placeId": 131311258779917,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      },
+      "fnv1a": 3027167469,
+      "version": 2150,
+      "observedAtUtc": "2026-09-27T11:10:22Z",
+      "length": 116614,
+      "class": "ModuleScript",
+      "stableDuringRead": true,
+      "file": "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
+      "sha256": "735d5e62b09351de521b6246b5654367def1c70e84415510a478cc6f652ac9f2",
+      "chunkCount": 4,
+      "lastObservedAtUtc": "2026-09-27T11:10:22Z",
+      "sourceEditorExact": true
+    }
+  ]
+}

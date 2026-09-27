@@ -157,13 +157,19 @@ if workspace:GetAttribute(Routing.Level4DevAttribute) == nil then
  workspace:SetAttribute(Routing.Level4DevAttribute, true)
 end
 
--- LEVEL5_MAP_PREVIEW_20260923. A ceiling is only a transport bound. Access
--- is checked against the REQUESTED level too, so enabling 5 cannot enable 4.
+-- Level 5 is a selectable public preview, separate from campaign progression.
+-- A ceiling is only a transport bound: canAccessLevel still checks the exact
+-- requested level, so opening 5 never opens the developer-only Level 4.
+-- Explicit false keeps public entry closed while preserving developer access.
+if workspace:GetAttribute("Level5PublicPreviewEnabled") == nil then
+ workspace:SetAttribute("Level5PublicPreviewEnabled", false)
+end
 if workspace:GetAttribute(Routing.Level5DevAttribute) == nil then
- workspace:SetAttribute(Routing.Level5DevAttribute, true)
+ workspace:SetAttribute(Routing.Level5DevAttribute, false)
 end
 local function devCeiling(group)
  if type(group) ~= "table" or #group == 0 then return Routing.MaxLevel end
+ if workspace:GetAttribute("Level5PublicPreviewEnabled") == true then return 5 end
  for _, player in ipairs(group) do
   if not DevAccess.IsAllowed(player) then return Routing.MaxLevel end
  end
@@ -173,8 +179,11 @@ end
 
 local function canAccessLevel(requestedLevel, group)
  local level = tonumber(requestedLevel)
- if not level or level ~= level then return false end
+ if not level or level ~= level or level % 1 ~= 0 or level < 1 then return false end
  if level <= Routing.MaxLevel then return true end
+ if level == 5 and workspace:GetAttribute("Level5PublicPreviewEnabled") == true then
+  return type(group) == "table" and #group > 0
+ end
  local flag = level == 4 and Routing.Level4DevAttribute
   or level == 5 and Routing.Level5DevAttribute or nil
  if not flag or workspace:GetAttribute(flag) ~= true then return false end
@@ -1503,9 +1512,8 @@ end
 local function ensureWorld(group, requestedLevel, attempt)
  if attempt and not attempt:IsOpen() then return false end
  if not canAccessLevel(requestedLevel, group) then return false end
- -- LEVEL4_DEV_GATE_20260921: ClampLevelTo with the dev ceiling. For every
- -- normal party devCeiling() returns Routing.MaxLevel, so this is exactly the
- -- old Routing.ClampLevel(requestedLevel).
+ -- Access was checked for this exact level. The transport ceiling also
+ -- includes the standalone public preview without changing the campaign.
  local level = Routing.ClampLevelTo(requestedLevel, devCeiling(group))
  if worldReady and activeLevel == level then return true end
  activeLevel = level
@@ -3708,9 +3716,8 @@ if IS_RESERVED_ROUND_SERVER then
   table.sort(participants, function(a, b) return a.UserId < b.UserId end)
   while #participants > MAX_PLAYERS_PER_STATION do table.remove(participants) end
   if #participants == 0 then attempt:Fail("PARTY_LEFT"); return end
-  -- LEVEL4_DEV_GATE_20260921: clamped AFTER the roster is known, because the
-  -- dev ceiling requires every arriving member to pass DevAccess. For a normal
-  -- party this is exactly the old Routing.ClampLevel(group.Level).
+  -- Check the exact destination after the whole roster arrives. The public
+  -- Level 5 preview is independent of Level 4's entire-party developer check.
   if not canAccessLevel(group.Level, participants) then
    attempt:SetMembers(participants)
    attempt:Fail("LEVEL_ACCESS_DENIED")

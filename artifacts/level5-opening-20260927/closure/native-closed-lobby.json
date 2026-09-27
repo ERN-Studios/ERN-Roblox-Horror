@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"enabled\":false,\"world5\":false,\"futureZones\":4,\"dev5\":false,\"position\":\"-0.8750133514404297, 33.15675735473633, -860.1693725585938\",\"public5\":false,\"doorCollide\":true,\"roundActive\":false,\"doorTransparency\":0,\"theme\":\"IndoorSuburbs\",\"activeZones\":0}"
+    }
+  ],
+  "isError": false
+}

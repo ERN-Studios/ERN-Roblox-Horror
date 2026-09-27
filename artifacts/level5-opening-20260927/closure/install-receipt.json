@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "{\"enabled\":false,\"scripts\":{\"1\":{\"hash\":2083096384,\"length\":166065,\"path\":\"ServerScriptService.GameManager\"},\"2\":{\"hash\":4109718538,\"length\":116632,\"path\":\"ServerScriptService.TunnelLobbyBuilder\"}},\"status\":\"CLOSED_VERIFIED\",\"dev5\":false,\"public5\":false,\"door\":true}"
+    }
+  ],
+  "isError": false
+}

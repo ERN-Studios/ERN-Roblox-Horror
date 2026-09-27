@@ -1,0 +1,3487 @@
+{
+  "scope": "Final closed native Level5 lobby properties; read-only chunk export after v2157 publication",
+  "total": 219,
+  "instances": [
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station17MonitorArmWall",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.192157, 0.215686, 0.211765",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorArm": true
+      },
+      "variant": "",
+      "cframe": "-73.3328247, 38.2799988, -703.352234, 0.914478242, -0.0426300243, 0.402383089, 0, 0.994434655, 0.105354272, -0.404634982, -0.0963441879, 0.909388959",
+      "material": "Enum.Material.Metal",
+      "size": "0.41999998688697815, 0.41999998688697815, 1.8983277082443237"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station17MonitorCapRight",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.0784314, 0.0980392, 0.0941176",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "RoundedMonitorBacking": true,
+        "StationMonitorDecor": true
+      },
+      "variant": "",
+      "cframe": "-75.9199982, 37.3253326, -700.006165, 4.37113847e-08, 0, -0.99999994, -0.374075502, 0.927398205, -1.63513594e-08, 0.927398264, 0.374075472, 4.05378664e-08",
+      "material": "Enum.Material.Metal",
+      "size": "0.5199999809265137, 4.340000152587891, 4.340000152587891"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station19MonitorBacking",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.0784314, 0.0980392, 0.0941176",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "RoundedMonitorBacking": true,
+        "StationMonitorDecor": true
+      },
+      "variant": "",
+      "cframe": "-72, 37.3253326, -659.993835, 0.99999994, 0, 0, 0, 0.927398205, 0.374075502, 0, -0.374075472, 0.927398264",
+      "material": "Enum.Material.Metal",
+      "size": "7.840000152587891, 4.340000152587891, 0.5199999809265137"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station20MonitorArmWall",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.192157, 0.215686, 0.211765",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorArm": true
+      },
+      "variant": "",
+      "cframe": "-52.6671753, 38.2799988, -656.647766, -0.914476812, 0.0426303148, -0.402386457, 0, 0.994434774, 0.105354108, 0.40463838, 0.0963438898, -0.909387529",
+      "material": "Enum.Material.Metal",
+      "size": "0.41999998688697815, 0.41999998688697815, 1.898330807685852"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station19MonitorJoint2",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.505882, 0.290196, 0.262745",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorArmJoint": true
+      },
+      "variant": "",
+      "cframe": "-72.9508972, 38.3799973, -657.510925, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Metal",
+      "size": "0.7599999904632568, 0.7599999904632568, 0.7599999904632568"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station20MonitorJoint2",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.505882, 0.290196, 0.262745",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorArmJoint": true
+      },
+      "variant": "",
+      "cframe": "-53.0491066, 38.3799973, -657.510925, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Metal",
+      "size": "0.7599999904632568, 0.7599999904632568, 0.7599999904632568"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station19MonitorJoint3",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.258824, 0.278431, 0.270588",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorArmJoint": true
+      },
+      "variant": "",
+      "cframe": "-73.7147522, 38.1800003, -655.784607, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Metal",
+      "size": "0.7599999904632568, 0.7599999904632568, 0.7599999904632568"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.FutureLaunchZone20",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "1, 0.298039, 0.235294",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 1,
+      "attributes": {
+        "QueueRadius": 7.41,
+        "QueueDetectorShape": "Circle",
+        "CircularPadDiameter": 14.82
+      },
+      "variant": "",
+      "cframe": "-54, 30.1800003, -666.799988, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.SmoothPlastic",
+      "size": "14.819999694824219, 0.30000001192092896, 14.819999694824219"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.DoorThreshold",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.635294, 0.588235, 0.490196",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "TunnelTextureRole": "LobbyIndoorSuburbsCarpet"
+      },
+      "variant": "Level5LoopCarpet",
+      "cframe": "-34.5, 29.75, -680, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Fabric",
+      "size": "5, 0.5, 19.600000381469727"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station17MonitorWallPlate",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.231373, 0.25098, 0.243137",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorWallMount": true
+      },
+      "variant": "",
+      "cframe": "-73.8118668, 38.1800003, -704.434875, -0.914481044, 0, -0.404628724, 0, 1, -0, 0.404628724, -0, -0.914481044",
+      "material": "Enum.Material.Metal",
+      "size": "2.25, 2.700000047683716, 0.3400000035762787"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station18MonitorJoint3",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.258824, 0.278431, 0.270588",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorArmJoint": true
+      },
+      "variant": "",
+      "cframe": "-52.285244, 38.1800003, -704.215393, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Metal",
+      "size": "0.7599999904632568, 0.7599999904632568, 0.7599999904632568"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.FutureLaunchZone17",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "1, 0.298039, 0.235294",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 1,
+      "attributes": {
+        "QueueRadius": 7.41,
+        "QueueDetectorShape": "Circle",
+        "CircularPadDiameter": 14.82
+      },
+      "variant": "",
+      "cframe": "-72, 30.1800003, -693.200012, -1, 0, 0, 0, 1, 0, 0, 0, -1",
+      "material": "Enum.Material.SmoothPlastic",
+      "size": "14.819999694824219, 0.30000001192092896, 14.819999694824219"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station18MonitorJoint1",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.258824, 0.278431, 0.270588",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorArmJoint": true
+      },
+      "variant": "",
+      "cframe": "-53.8057747, 37.579998, -700.778992, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Metal",
+      "size": "0.7599999904632568, 0.7599999904632568, 0.7599999904632568"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station18MonitorJoint2",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.505882, 0.290196, 0.262745",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorArmJoint": true
+      },
+      "variant": "",
+      "cframe": "-53.0491066, 38.3799973, -702.489075, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Metal",
+      "size": "0.7599999904632568, 0.7599999904632568, 0.7599999904632568"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station18MonitorCapRight",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.0784314, 0.0980392, 0.0941176",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "RoundedMonitorBacking": true,
+        "StationMonitorDecor": true
+      },
+      "variant": "",
+      "cframe": "-57.9199982, 37.3253326, -700.006165, 4.37113847e-08, 0, -0.99999994, -0.374075502, 0.927398205, -1.63513594e-08, 0.927398264, 0.374075472, 4.05378664e-08",
+      "material": "Enum.Material.Metal",
+      "size": "0.5199999809265137, 4.340000152587891, 4.340000152587891"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station17MonitorCapLeft",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.0784314, 0.0980392, 0.0941176",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "RoundedMonitorBacking": true,
+        "StationMonitorDecor": true
+      },
+      "variant": "",
+      "cframe": "-68.0800018, 37.3253326, -700.006165, 4.37113847e-08, 0, -0.99999994, -0.374075502, 0.927398205, -1.63513594e-08, 0.927398264, 0.374075472, 4.05378664e-08",
+      "material": "Enum.Material.Metal",
+      "size": "0.5199999809265137, 4.340000152587891, 4.340000152587891"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station20CircularPad",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "1, 0.298039, 0.235294",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 1,
+      "attributes": {
+        "CircularLaunchVisual": true,
+        "Diameter": 14.82,
+        "NearestCircleGap": 3.1799999999999997,
+        "StationIndex": 20
+      },
+      "variant": "",
+      "cframe": "-54, 30.4500008, -666.799988, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.SmoothPlastic",
+      "size": "14.819999694824219, 0.05000000074505806, 14.819999694824219"
+    },
+    {
+      "enabled": true,
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station20CircularPad.CircularPadSurface",
+      "attributes": [],
+      "class": "SurfaceGui"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.QuietBrassHandle2",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.537255, 0.439216, 0.152941",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-86.0599976, 34.4099998, -681.080017, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Metal",
+      "size": "0.15000000596046448, 0.2800000011920929, 0.1899999976158142"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.SharedCeilingSeam",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.529412, 0.541176, 0.47451",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-63, 51.6699982, -680, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Metal",
+      "size": "43, 0.03999999910593033, 0.07999999821186066"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DoorReveal1",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-85, 34.4599991, -690.47998, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "0.18000000715255737, 8, 0.23999999463558197"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DoorHeader2",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-86.0999985, 38.4300003, -682.150024, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "3.5199999809265137, 0.23000000417232513, 0.23999999463558197"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.WhiteBalconyPicket",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-83.9199982, 42.4099998, -681, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "0.10000000149011612, 2.200000047683716, 0.10000000149011612"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DomesticWindow3Crossbar",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-84.8700027, 35.9099998, -668, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "3.0999999046325684, 0.10000000149011612, 0.12999999523162842"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DoorReveal3",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-85, 34.4599991, -670.47998, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "0.18000000715255737, 8, 0.23999999463558197"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.ClosedDomesticDoor3",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.909804, 0.882353, 0.803922",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "TunnelTextureRole": "LobbyIndoorSuburbsWood",
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "Level5VeneerWood",
+      "cframe": "-85.1500015, 34.4099998, -672.150024, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "3.0999999046325684, 7.599999904632568, 0.2199999988079071"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DomesticWindow1Recess",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-85.1299973, 35.9099998, -688, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "3.440000057220459, 4.539999961853027, 0.20000000298023224"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.WhiteBalconyPicket",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-83.9199982, 42.4099998, -679, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "0.10000000149011612, 2.200000047683716, 0.10000000149011612"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DomesticWindow1TintedPane",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.317647, 0.4, 0.4",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0.20000000298023224,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-84.9499969, 35.9099998, -688, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Glass",
+      "size": "3.0999999046325684, 4.199999809265137, 0.07999999821186066"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DomesticWindow2Recess",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-86.2299957, 35.9099998, -678, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "3.440000057220459, 4.539999961853027, 0.20000000298023224"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.WhiteBalconyPicket",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-83.9199982, 42.4099998, -684, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "0.10000000149011612, 2.200000047683716, 0.10000000149011612"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DomesticWindow1Crossbar",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-84.8700027, 35.9099998, -688, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "3.0999999046325684, 0.10000000149011612, 0.12999999523162842"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DoorHeader1",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-85, 38.4300003, -692.150024, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "3.5199999809265137, 0.23000000417232513, 0.23999999463558197"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.QuietBrassHandle1",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.537255, 0.439216, 0.152941",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-84.9599991, 34.4099998, -691.080017, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Metal",
+      "size": "0.15000000596046448, 0.2800000011920929, 0.1899999976158142"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DomesticWindow3Mullion",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-84.8799973, 35.9099998, -668, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "0.10000000149011612, 4.199999809265137, 0.12999999523162842"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.UpperDomesticWindowCrossbar",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-85.9700012, 44.8099976, -680, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "5.199999809265137, 0.10000000149011612, 0.12999999523162842"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DoorReveal2",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-86.0999985, 34.4599991, -680.47998, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "0.18000000715255737, 8, 0.23999999463558197"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.SharedFluorescentDiffuser3",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.937255, 0.886275, 0.72549",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-72, 51.2799988, -672, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Neon",
+      "size": "6.550000190734863, 0.11999999731779099, 1.7000000476837158"
+    },
+    {
+      "enabled": true,
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.SharedFluorescentDiffuser3.ResidentialHallLight",
+      "attributes": [],
+      "class": "SurfaceLight",
+      "range": 28,
+      "brightness": 0.75
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.UpperDomesticWindowRecess",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-86.2299957, 44.8099976, -680, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "5.539999961853027, 4.539999961853027, 0.20000000298023224"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DoorReveal2",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-86.0999985, 34.4599991, -683.820007, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "0.18000000715255737, 8, 0.23999999463558197"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DoorReveal3",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-85, 34.4599991, -673.820007, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "0.18000000715255737, 8, 0.23999999463558197"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.QuietBrassHandle3",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.537255, 0.439216, 0.152941",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-84.9599991, 34.4099998, -671.080017, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Metal",
+      "size": "0.15000000596046448, 0.2800000011920929, 0.1899999976158142"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.WhiteBalconyHandrail",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-83.9199982, 43.5099983, -680, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "9, 0.1599999964237213, 0.1599999964237213"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.SharedCeilingSeam",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.529412, 0.541176, 0.47451",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-63, 51.6699982, -664, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Metal",
+      "size": "43, 0.03999999910593033, 0.07999999821186066"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.SharedFluorescentFrame1",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.529412, 0.541176, 0.47451",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-72, 51.4599991, -688, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Metal",
+      "size": "7, 0.23999999463558197, 2.0999999046325684"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.WhiteBalconyPicket",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-83.9199982, 42.4099998, -677, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "0.10000000149011612, 2.200000047683716, 0.10000000149011612"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.UpperDomesticWindowDarkInterior",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.0823529, 0.117647, 0.109804",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-86.1100006, 44.8099976, -680, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.SmoothPlastic",
+      "size": "5.199999809265137, 4.199999809265137, 0.07999999821186066"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DomesticWindow2Mullion",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-85.9799957, 35.9099998, -678, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "0.10000000149011612, 4.199999809265137, 0.12999999523162842"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.WhiteBalconyPicket",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-83.9199982, 42.4099998, -682, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "0.10000000149011612, 2.200000047683716, 0.10000000149011612"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.UpperBalconySlab",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.839216, 0.788235, 0.627451",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-85.0999985, 41.0099983, -680, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Plaster",
+      "size": "9, 0.30000001192092896, 2.5999999046325684"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DomesticWindow2DarkInterior",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.0823529, 0.117647, 0.109804",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-86.1100006, 35.9099998, -678, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.SmoothPlastic",
+      "size": "3.0999999046325684, 4.199999809265137, 0.07999999821186066"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.WhiteBalconyPicket",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-83.9199982, 42.4099998, -683, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "0.10000000149011612, 2.200000047683716, 0.10000000149011612"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.ResidentialFront3",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "TunnelTextureRole": "LobbyIndoorSuburbsSiding",
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "Level5PaintedSiding",
+      "cframe": "-85.5, 37.5099983, -670, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.WoodPlanks",
+      "size": "8.600000381469727, 14.399999618530273, 0.550000011920929"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.WhiteBalconyPicket",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-83.9199982, 42.4099998, -676, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "0.10000000149011612, 2.200000047683716, 0.10000000149011612"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DomesticWindow3Recess",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-85.1299973, 35.9099998, -668, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "3.440000057220459, 4.539999961853027, 0.20000000298023224"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.FrontSkirting2",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-86.2399979, 30.5299988, -680, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "8.699999809265137, 0.36000001430511475, 0.23999999463558197"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.ResidentialFront2",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.909804, 0.882353, 0.803922",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "TunnelTextureRole": "LobbyIndoorSuburbsSiding",
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "Level5PaintedSiding",
+      "cframe": "-86.5999985, 39.4099998, -680, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.WoodPlanks",
+      "size": "8.600000381469727, 18.200000762939453, 0.550000011920929"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.UpperDomesticWindowMullion",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-85.9799957, 44.8099976, -680, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "0.10000000149011612, 4.199999809265137, 0.12999999523162842"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.UpperDomesticWindowTintedPane",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.317647, 0.4, 0.4",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0.20000000298023224,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-86.0499954, 44.8099976, -680, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Glass",
+      "size": "5.199999809265137, 4.199999809265137, 0.07999999821186066"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DomesticWindow1DarkInterior",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.0823529, 0.117647, 0.109804",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-85.0100021, 35.9099998, -688, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.SmoothPlastic",
+      "size": "3.0999999046325684, 4.199999809265137, 0.07999999821186066"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.FrontCrown2",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-86.2600021, 48.4099998, -680, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "8.800000190734863, 0.4000000059604645, 0.3199999928474426"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.SharedFluorescentDiffuser1",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.937255, 0.886275, 0.72549",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-72, 51.2799988, -688, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Neon",
+      "size": "6.550000190734863, 0.11999999731779099, 1.7000000476837158"
+    },
+    {
+      "enabled": true,
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.SharedFluorescentDiffuser1.ResidentialHallLight",
+      "attributes": [],
+      "class": "SurfaceLight",
+      "range": 28,
+      "brightness": 0.75
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DomesticWindow3TintedPane",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.317647, 0.4, 0.4",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0.20000000298023224,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-84.9499969, 35.9099998, -668, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Glass",
+      "size": "3.0999999046325684, 4.199999809265137, 0.07999999821186066"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.FrontCrown3",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-85.1600037, 44.6100006, -670, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "8.800000190734863, 0.4000000059604645, 0.3199999928474426"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.SharedFluorescentFrame2",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.529412, 0.541176, 0.47451",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-54, 51.4599991, -688, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Metal",
+      "size": "7, 0.23999999463558197, 2.0999999046325684"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.FrontSkirting3",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-85.1399994, 30.5299988, -670, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "8.699999809265137, 0.36000001430511475, 0.23999999463558197"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.WhiteBalconyPicket",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-83.9199982, 42.4099998, -678, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "0.10000000149011612, 2.200000047683716, 0.10000000149011612"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DomesticWindow2Crossbar",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-85.9700012, 35.9099998, -678, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "3.0999999046325684, 0.10000000149011612, 0.12999999523162842"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.FrontSkirting1",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-85.1399994, 30.5299988, -690, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "8.699999809265137, 0.36000001430511475, 0.23999999463558197"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.FrontCrown1",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-85.1600037, 41.6100006, -690, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "8.800000190734863, 0.4000000059604645, 0.3199999928474426"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DomesticWindow1Mullion",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-84.8799973, 35.9099998, -688, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "0.10000000149011612, 4.199999809265137, 0.12999999523162842"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.SharedFluorescentFrame4",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.529412, 0.541176, 0.47451",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-54, 51.4599991, -672, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Metal",
+      "size": "7, 0.23999999463558197, 2.0999999046325684"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.ResidentialFront1",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "TunnelTextureRole": "LobbyIndoorSuburbsSiding",
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "Level5PaintedSiding",
+      "cframe": "-85.5, 36.0099983, -690, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.WoodPlanks",
+      "size": "8.600000381469727, 11.399999618530273, 0.550000011920929"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DomesticWindow3DarkInterior",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.0823529, 0.117647, 0.109804",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-85.0100021, 35.9099998, -668, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.SmoothPlastic",
+      "size": "3.0999999046325684, 4.199999809265137, 0.07999999821186066"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.ClosedDomesticDoor1",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.909804, 0.882353, 0.803922",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "TunnelTextureRole": "LobbyIndoorSuburbsWood",
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "Level5VeneerWood",
+      "cframe": "-85.1500015, 34.4099998, -692.150024, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "3.0999999046325684, 7.599999904632568, 0.2199999988079071"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.SharedFluorescentFrame3",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.529412, 0.541176, 0.47451",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-72, 51.4599991, -672, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Metal",
+      "size": "7, 0.23999999463558197, 2.0999999046325684"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.ClosedDomesticDoor2",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.909804, 0.882353, 0.803922",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "TunnelTextureRole": "LobbyIndoorSuburbsWood",
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "Level5VeneerWood",
+      "cframe": "-86.25, 34.4099998, -682.150024, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "3.0999999046325684, 7.599999904632568, 0.2199999988079071"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.SharedFluorescentDiffuser4",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.937255, 0.886275, 0.72549",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-54, 51.2799988, -672, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Neon",
+      "size": "6.550000190734863, 0.11999999731779099, 1.7000000476837158"
+    },
+    {
+      "enabled": true,
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.SharedFluorescentDiffuser4.ResidentialHallLight",
+      "attributes": [],
+      "class": "SurfaceLight",
+      "range": 28,
+      "brightness": 0.75
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.WhiteBalconyBottomRail",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-83.9199982, 41.3600006, -680, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "9, 0.14000000059604645, 0.14000000059604645"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.SharedFluorescentDiffuser2",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.937255, 0.886275, 0.72549",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-54, 51.2799988, -688, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Neon",
+      "size": "6.550000190734863, 0.11999999731779099, 1.7000000476837158"
+    },
+    {
+      "enabled": true,
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.SharedFluorescentDiffuser2.ResidentialHallLight",
+      "attributes": [],
+      "class": "SurfaceLight",
+      "range": 28,
+      "brightness": 0.75
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.SharedCeilingSeam",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.529412, 0.541176, 0.47451",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-63, 51.6699982, -696, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Metal",
+      "size": "43, 0.03999999910593033, 0.07999999821186066"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.WhiteBalconyPicket",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-83.9199982, 42.4099998, -680, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "0.10000000149011612, 2.200000047683716, 0.10000000149011612"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DoorReveal1",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-85, 34.4599991, -693.820007, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "0.18000000715255737, 8, 0.23999999463558197"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DoorHeader3",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.945098, 0.92549, 0.831373",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-85, 38.4300003, -672.150024, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Wood",
+      "size": "3.5199999809265137, 0.23000000417232513, 0.23999999463558197"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.LobbyLevel5ResidentialDecor.DomesticWindow2TintedPane",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.317647, 0.4, 0.4",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0.20000000298023224,
+      "attributes": {
+        "LobbyBayDecorLevel": 5
+      },
+      "variant": "",
+      "cframe": "-86.0499954, 35.9099998, -678, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Glass",
+      "size": "3.0999999046325684, 4.199999809265137, 0.07999999821186066"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -151.1891464540088,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 56,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-45.2369881, 41.2000008, -701.644287, -0.773010373, 0, 0.634393394, 0, 1, -0, -0.634393394, 0, -0.773010373",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -68.72233929727672,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 26,
+        "TunnelTextureRole": "LobbyIndoorSuburbsWallpaper"
+      },
+      "variant": "Level5FloralWallpaper",
+      "cframe": "-84.6442947, 41.2000008, -662.237, 0.634393036, 0, -0.773010731, -0, 1.00000012, -0, 0.773010731, 0, 0.634393036",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station20MonitorJoint3",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.258824, 0.278431, 0.270588",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorArmJoint": true
+      },
+      "variant": "",
+      "cframe": "-52.285244, 38.1800003, -655.784607, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Metal",
+      "size": "0.7599999904632568, 0.7599999904632568, 0.7599999904632568"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -13.744467859455344,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 6,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-38.3062057, 41.2000008, -666.800903, 0.471396416, 0, 0.88192147, 0, 1, -0, -0.88192147, 0, 0.471396416",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -131.94689145077132,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 49,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-63, 41.2000008, -708, -1, 0, 0, 0, 1, 0, 0, 0, -1",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station18MonitorCapLeft",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.0784314, 0.0980392, 0.0941176",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "RoundedMonitorBacking": true,
+        "StationMonitorDecor": true
+      },
+      "variant": "",
+      "cframe": "-50.0800018, 37.3253326, -700.006165, 4.37113847e-08, 0, -0.99999994, -0.374075502, 0.927398205, -1.63513594e-08, 0.927398264, 0.374075472, 4.05378664e-08",
+      "material": "Enum.Material.Metal",
+      "size": "0.5199999809265137, 4.340000152587891, 4.340000152587891"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -27.48893571891069,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 11,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-47.4440308, 41.2000008, -656.718872, 0.831469297, 0, 0.555570662, 0, 1, -0, -0.555570662, 0, 0.831469297",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station20Sign",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.12549, 0.137255, 0.133333",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 1,
+      "attributes": {
+        "WallMountedMonitor": true,
+        "RoundedStationMonitor": true
+      },
+      "variant": "",
+      "cframe": "-54, 37.4599991, -659.659973, 0.99999994, 0, -0, -0, 0.927398205, 0.374075502, 0, -0.374075472, 0.927398264",
+      "material": "Enum.Material.SmoothPlastic",
+      "size": "12.180000305175781, 4.340000152587891, 0.07999999821186066"
+    },
+    {
+      "enabled": true,
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station20Sign.Display",
+      "attributes": [],
+      "class": "SurfaceGui"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station20Sign.Display.Frame.Title",
+      "attributes": [],
+      "class": "TextLabel",
+      "text": "STATION 4  •  OFFLINE",
+      "textColor": "0.886275, 0.521569, 0.439216"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station20Sign.Display.Frame.Subtitle",
+      "attributes": [],
+      "class": "TextLabel",
+      "text": "AWAITING LEVEL AUTHORIZATION",
+      "textColor": "0.890196, 0.854902, 0.694118"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station20MonitorJoint1",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.258824, 0.278431, 0.270588",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorArmJoint": true
+      },
+      "variant": "",
+      "cframe": "-53.8057747, 37.579998, -659.221008, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Metal",
+      "size": "0.7599999904632568, 0.7599999904632568, 0.7599999904632568"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station18MonitorArmWall",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.192157, 0.215686, 0.211765",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorArm": true
+      },
+      "variant": "",
+      "cframe": "-52.6671753, 38.2799988, -703.352234, 0.914476812, 0.0426303148, -0.402386457, -0, 0.994434774, 0.105354108, 0.40463838, -0.0963438898, 0.909387529",
+      "material": "Enum.Material.Metal",
+      "size": "0.41999998688697815, 0.41999998688697815, 1.898330807685852"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -85.21570072862313,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 32,
+        "TunnelTextureRole": "LobbyIndoorSuburbsWallpaper"
+      },
+      "variant": "Level5FloralWallpaper",
+      "cframe": "-90.8651733, 41.2000008, -677.255493, 0.0980181023, 0, -0.9951846, -0, 1, -0, 0.99518472, 0, 0.0980180874",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -57.72676500971245,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 22,
+        "TunnelTextureRole": "LobbyIndoorSuburbsWallpaper"
+      },
+      "variant": "Level5FloralWallpaper",
+      "cframe": "-76.1991119, 41.2000008, -655.306213, 0.881921172, 0, -0.471396983, -0, 1, -0, 0.471396983, 0, 0.881921172",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -123.70021073509811,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 46,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-71.1279678, 41.2000008, -706.794312, -0.956940353, 0, -0.290284753, 0, 1.00000012, -0, 0.290284753, -0, -0.956940353",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -164.93361431346415,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 61,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-37.1313744, 41.2000008, -690.715149, -0.382683873, 0, 0.923879325, 0, 1, -0, -0.923879445, 0, -0.382683814",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station19MonitorWallPlate",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.231373, 0.25098, 0.243137",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorWallMount": true
+      },
+      "variant": "",
+      "cframe": "-73.8118668, 38.1800003, -655.565125, 0.914481044, 0, -0.404628724, -0, 1, -0, 0.404628724, 0, 0.914481044",
+      "material": "Enum.Material.Metal",
+      "size": "2.25, 2.700000047683716, 0.3400000035762787"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -10.995574287564276,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 5,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-37.1313744, 41.2000008, -669.284851, 0.382683873, 0, 0.923879325, 0, 1, -0, -0.923879445, 0, 0.382683814",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -43.982297150257104,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 17,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-63, 41.2000008, -652, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station19CircularPad",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "1, 0.298039, 0.235294",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 1,
+      "attributes": {
+        "CircularLaunchVisual": true,
+        "Diameter": 14.82,
+        "NearestCircleGap": 3.1799999999999997,
+        "StationIndex": 19
+      },
+      "variant": "",
+      "cframe": "-72, 30.4500008, -666.799988, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.SmoothPlastic",
+      "size": "14.819999694824219, 0.05000000074505806, 14.819999694824219"
+    },
+    {
+      "enabled": true,
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station19CircularPad.CircularPadSurface",
+      "attributes": [],
+      "class": "SurfaceGui"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -134.6957850226624,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 50,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-60.2555199, 41.2000008, -707.865173, -0.99518472, 0, 0.0980171412, 0, 1, -0, -0.0980171412, 0, -0.99518472",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.DoorVestibuleWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-38, 41.25, -669.849976, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Plaster",
+      "size": "11, 23.5, 1.5"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station17MonitorArmInner",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.192157, 0.215686, 0.211765",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorArm": true
+      },
+      "variant": "",
+      "cframe": "-72.5725555, 37.9799957, -701.634033, 0.914475918, 0.159155026, 0.372026294, 0, 0.919399858, -0.393324584, -0.404640406, 0.359685868, 0.840768933",
+      "material": "Enum.Material.Metal",
+      "size": "0.41999998688697815, 0.41999998688697815, 2.033947229385376"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station17CircularPad",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "1, 0.298039, 0.235294",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 1,
+      "attributes": {
+        "CircularLaunchVisual": true,
+        "Diameter": 14.82,
+        "NearestCircleGap": 3.1799999999999997,
+        "StationIndex": 17
+      },
+      "variant": "",
+      "cframe": "-72, 30.4500008, -693.200012, -1, 0, 0, 0, 1, 0, 0, 0, -1",
+      "material": "Enum.Material.SmoothPlastic",
+      "size": "14.819999694824219, 0.05000000074505806, 14.819999694824219"
+    },
+    {
+      "enabled": true,
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station17CircularPad.CircularPadSurface",
+      "attributes": [],
+      "class": "SurfaceGui"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -98.96016858807849,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 37,
+        "TunnelTextureRole": "LobbyIndoorSuburbsWallpaper"
+      },
+      "variant": "Level5FloralWallpaper",
+      "cframe": "-88.8686218, 41.2000008, -690.715149, -0.382683903, 0, -0.923879385, 0, 1.00000012, -0, 0.923879385, -0, -0.382683903",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -65.97344572538566,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 25,
+        "TunnelTextureRole": "LobbyIndoorSuburbsWallpaper"
+      },
+      "variant": "Level5FloralWallpaper",
+      "cframe": "-82.7989883, 41.2000008, -660.200989, 0.707107186, 0, -0.707106411, -0, 1, -0, 0.707106411, 0, 0.707107186",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station18MonitorArmInner",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.192157, 0.215686, 0.211765",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorArm": true
+      },
+      "variant": "",
+      "cframe": "-53.4274406, 37.9799957, -701.634033, 0.914478898, -0.159152761, -0.372019798, -0, 0.919399202, -0.393325657, 0.404633552, 0.359688014, 0.840771198",
+      "material": "Enum.Material.Metal",
+      "size": "0.41999998688697815, 0.41999998688697815, 2.0339443683624268"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -104.45795573186062,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 39,
+        "TunnelTextureRole": "LobbyIndoorSuburbsWallpaper"
+      },
+      "variant": "Level5FloralWallpaper",
+      "cframe": "-86.2811508, 41.2000008, -695.555969, -0.555570304, 0, -0.831469595, 0, 1, -0, 0.831469595, -0, -0.555570304",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.ChamberLight",
+      "canQuery": true,
+      "canCollide": false,
+      "color": "1, 0.341176, 0.262745",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 1,
+      "attributes": [],
+      "variant": "",
+      "cframe": "-51.7999992, 51.8499985, -680, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Neon",
+      "size": "11.199999809265137, 0.2199999988079071, 1.7999999523162842"
+    },
+    {
+      "enabled": false,
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.ChamberLight.PointLight",
+      "attributes": [],
+      "class": "PointLight",
+      "range": 31,
+      "brightness": 0.6499999761581421
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.FutureLaunchZone19",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "1, 0.298039, 0.235294",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 1,
+      "attributes": {
+        "QueueRadius": 7.41,
+        "QueueDetectorShape": "Circle",
+        "CircularPadDiameter": 14.82
+      },
+      "variant": "",
+      "cframe": "-72, 30.1800003, -666.799988, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.SmoothPlastic",
+      "size": "14.819999694824219, 0.30000001192092896, 14.819999694824219"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -137.44467859455344,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 51,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-57.5374718, 41.2000008, -707.461975, -0.98078531, 0, 0.195090368, 0, 0.99999994, -0, -0.195090398, 0, -0.980785191",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -156.68693359779093,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 58,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-41.3557053, 41.2000008, -697.763, -0.634393036, 0, 0.773010731, 0, 1.00000012, -0, -0.773010731, 0, -0.634393036",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -38.48451000647496,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 15,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-57.5374718, 41.2000008, -652.538025, 0.98078531, 0, 0.195090368, 0, 0.99999994, -0, -0.195090398, 0, 0.980785191",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -118.20242359131596,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 44,
+        "TunnelTextureRole": "LobbyIndoorSuburbsWallpaper"
+      },
+      "variant": "Level5FloralWallpaper",
+      "cframe": "-76.1991119, 41.2000008, -704.693787, -0.881921172, 0, -0.471396983, 0, 1, -0, 0.471396983, -0, -0.881921172",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -101.70906215996955,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 38,
+        "TunnelTextureRole": "LobbyIndoorSuburbsWallpaper"
+      },
+      "variant": "Level5FloralWallpaper",
+      "cframe": "-87.6937943, 41.2000008, -693.199097, -0.471396416, 0, -0.88192147, 0, 1, -0, 0.88192147, -0, -0.471396416",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -87.96459430051421,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 33,
+        "TunnelTextureRole": "LobbyIndoorSuburbsWallpaper"
+      },
+      "variant": "Level5FloralWallpaper",
+      "cframe": "-91, 41.2000008, -680, 0, 0, -1, 0, 1, 0, 1, 0, 0",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.DoorVestibuleFloor",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.635294, 0.588235, 0.490196",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "TunnelTextureRole": "LobbyIndoorSuburbsCarpet"
+      },
+      "variant": "Level5LoopCarpet",
+      "cframe": "-38, 29.75, -680, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Fabric",
+      "size": "11, 0.800000011920929, 21.799999237060547"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station18MonitorBacking",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.0784314, 0.0980392, 0.0941176",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "RoundedMonitorBacking": true,
+        "StationMonitorDecor": true
+      },
+      "variant": "",
+      "cframe": "-54, 37.3253326, -700.006165, -0.99999994, 0, 0, 0, 0.927398205, 0.374075502, 0, 0.374075472, -0.927398264",
+      "material": "Enum.Material.Metal",
+      "size": "7.840000152587891, 4.340000152587891, 0.5199999809265137"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -21.991148575128552,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 9,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-43.2010117, 41.2000008, -660.200989, 0.707107186, 0, 0.707106411, 0, 1, -0, -0.707106411, 0, 0.707107186",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station19MonitorCapLeft",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.0784314, 0.0980392, 0.0941176",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "RoundedMonitorBacking": true,
+        "StationMonitorDecor": true
+      },
+      "variant": "",
+      "cframe": "-75.9199982, 37.3253326, -659.993835, -4.37113847e-08, 0, 0.99999994, -0.374075502, 0.927398205, -1.63513594e-08, -0.927398264, -0.374075472, -4.05378664e-08",
+      "material": "Enum.Material.Metal",
+      "size": "0.5199999809265137, 4.340000152587891, 4.340000152587891"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -63.224552153494585,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 24,
+        "TunnelTextureRole": "LobbyIndoorSuburbsWallpaper"
+      },
+      "variant": "Level5FloralWallpaper",
+      "cframe": "-80.7630157, 41.2000008, -658.355713, 0.773010314, 0, -0.634393454, -0, 1, -0, 0.634393454, 0, 0.773010314",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -115.4535300194249,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 43,
+        "TunnelTextureRole": "LobbyIndoorSuburbsWallpaper"
+      },
+      "variant": "Level5FloralWallpaper",
+      "cframe": "-78.5559692, 41.2000008, -703.281128, -0.831469297, 0, -0.555570662, 0, 1, -0, 0.555570662, -0, -0.831469297",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -49.480084294039244,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 19,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-68.462532, 41.2000008, -652.538025, 0.98078531, 0, -0.195090503, -0, 1, -0, 0.195090532, 0, 0.980785191",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station20MonitorBacking",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.0784314, 0.0980392, 0.0941176",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "RoundedMonitorBacking": true,
+        "StationMonitorDecor": true
+      },
+      "variant": "",
+      "cframe": "-54, 37.3253326, -659.993835, 0.99999994, 0, 0, 0, 0.927398205, 0.374075502, 0, -0.374075472, 0.927398264",
+      "material": "Enum.Material.Metal",
+      "size": "7.840000152587891, 4.340000152587891, 0.5199999809265137"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -32.98672286269283,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 13,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-52.2848663, 41.2000008, -654.131348, 0.923879802, 0, 0.382683039, 0, 1.00000012, -0, -0.382683098, 0, 0.923879683",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -129.19799787888024,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 48,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-65.7444763, 41.2000008, -707.865173, -0.995184839, 0, -0.0980170071, 0, 1.00000012, -0, 0.098017022, -0, -0.99518472",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station18Sign",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.12549, 0.137255, 0.133333",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 1,
+      "attributes": {
+        "WallMountedMonitor": true,
+        "RoundedStationMonitor": true
+      },
+      "variant": "",
+      "cframe": "-54, 37.4599991, -700.340027, -0.99999994, 0, -0, 0, 0.927398205, 0.374075502, 0, 0.374075472, -0.927398264",
+      "material": "Enum.Material.SmoothPlastic",
+      "size": "12.180000305175781, 4.340000152587891, 0.07999999821186066"
+    },
+    {
+      "enabled": true,
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station18Sign.Display",
+      "attributes": [],
+      "class": "SurfaceGui"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station18Sign.Display.Frame.Title",
+      "attributes": [],
+      "class": "TextLabel",
+      "text": "STATION 2  •  OFFLINE",
+      "textColor": "0.886275, 0.521569, 0.439216"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station18Sign.Display.Frame.Subtitle",
+      "attributes": [],
+      "class": "TextLabel",
+      "text": "AWAITING LEVEL AUTHORIZATION",
+      "textColor": "0.890196, 0.854902, 0.694118"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -79.717913584841,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 30,
+        "TunnelTextureRole": "LobbyIndoorSuburbsWallpaper"
+      },
+      "variant": "Level5FloralWallpaper",
+      "cframe": "-89.7943268, 41.2000008, -671.872009, 0.290285349, 0, -0.956940114, -0, 1, -0, 0.956940114, 0, 0.290285349",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -60.47565858160352,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 23,
+        "TunnelTextureRole": "LobbyIndoorSuburbsWallpaper"
+      },
+      "variant": "Level5FloralWallpaper",
+      "cframe": "-78.5559692, 41.2000008, -656.718872, 0.831469297, 0, -0.555570662, -0, 1, -0, 0.555570662, 0, 0.831469297",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -16.493361431346415,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 7,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-39.7188492, 41.2000008, -664.444031, 0.555570304, 0, 0.831469595, 0, 1, -0, -0.831469595, 0, 0.555570304",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station19MonitorCapRight",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.0784314, 0.0980392, 0.0941176",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "RoundedMonitorBacking": true,
+        "StationMonitorDecor": true
+      },
+      "variant": "",
+      "cframe": "-68.0800018, 37.3253326, -659.993835, -4.37113847e-08, 0, 0.99999994, -0.374075502, 0.927398205, -1.63513594e-08, -0.927398264, -0.374075472, -4.05378664e-08",
+      "material": "Enum.Material.Metal",
+      "size": "0.5199999809265137, 4.340000152587891, 4.340000152587891"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -52.22897786593031,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 20,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-71.1279678, 41.2000008, -653.205688, 0.956940353, 0, -0.290284753, -0, 1.00000012, -0, 0.290284753, 0, 0.956940353",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -142.94246573833559,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 53,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-52.2848663, 41.2000008, -705.868652, -0.923879802, 0, 0.382683039, 0, 1.00000012, -0, -0.382683098, 0, -0.923879683",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -82.46680715673207,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 31,
+        "TunnelTextureRole": "LobbyIndoorSuburbsWallpaper"
+      },
+      "variant": "Level5FloralWallpaper",
+      "cframe": "-90.4619904, 41.2000008, -674.537476, 0.195090145, 0, -0.98078531, -0, 1, -0, 0.98078531, 0, 0.195090145",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.DoorVestibuleWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-38, 41.25, -690.150024, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Plaster",
+      "size": "11, 23.5, 1.5"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -140.1935721664445,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 52,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-54.8720284, 41.2000008, -706.794312, -0.956940353, 0, 0.290284872, 0, 1, -0, -0.290284902, 0, -0.956940234",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -93.46238144429634,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 35,
+        "TunnelTextureRole": "LobbyIndoorSuburbsWallpaper"
+      },
+      "variant": "Level5FloralWallpaper",
+      "cframe": "-90.4619904, 41.2000008, -685.462524, -0.195090145, 0, -0.98078531, 0, 1, -0, 0.98078531, -0, -0.195090145",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station19MonitorArmInner",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.192157, 0.215686, 0.211765",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorArm": true
+      },
+      "variant": "",
+      "cframe": "-72.5725555, 37.9799957, -658.365967, -0.914475918, 0.159155026, 0.372026294, 0, 0.919399858, -0.393324584, -0.404640406, -0.359685868, -0.840768933",
+      "material": "Enum.Material.Metal",
+      "size": "0.41999998688697815, 0.41999998688697815, 2.033947229385376"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -76.96902001294993,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 29,
+        "TunnelTextureRole": "LobbyIndoorSuburbsWallpaper"
+      },
+      "variant": "Level5FloralWallpaper",
+      "cframe": "-88.8686218, 41.2000008, -669.284851, 0.382683903, 0, -0.923879385, -0, 1.00000012, -0, 0.923879385, 0, 0.382683903",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -112.70463644753383,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 42,
+        "TunnelTextureRole": "LobbyIndoorSuburbsWallpaper"
+      },
+      "variant": "Level5FloralWallpaper",
+      "cframe": "-80.7630157, 41.2000008, -701.644287, -0.773010314, 0, -0.634393454, 0, 1, -0, 0.634393454, -0, -0.773010314",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -35.735616434583896,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 14,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-54.8720284, 41.2000008, -653.205688, 0.956940353, 0, 0.290284872, 0, 1, -0, -0.290284902, 0, 0.956940234",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -19.24225500323748,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 8,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-41.3557053, 41.2000008, -662.237, 0.634393036, 0, 0.773010731, 0, 1.00000012, -0, -0.773010731, 0, 0.634393036",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station17MonitorJoint3",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.258824, 0.278431, 0.270588",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorArmJoint": true
+      },
+      "variant": "",
+      "cframe": "-73.7147522, 38.1800003, -704.215393, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Metal",
+      "size": "0.7599999904632568, 0.7599999904632568, 0.7599999904632568"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station20MonitorCapLeft",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.0784314, 0.0980392, 0.0941176",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "RoundedMonitorBacking": true,
+        "StationMonitorDecor": true
+      },
+      "variant": "",
+      "cframe": "-57.9199982, 37.3253326, -659.993835, -4.37113847e-08, 0, 0.99999994, -0.374075502, 0.927398205, -1.63513594e-08, -0.927398264, -0.374075472, -4.05378664e-08",
+      "material": "Enum.Material.Metal",
+      "size": "0.5199999809265137, 4.340000152587891, 4.340000152587891"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station18CircularPad",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "1, 0.298039, 0.235294",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 1,
+      "attributes": {
+        "CircularLaunchVisual": true,
+        "Diameter": 14.82,
+        "NearestCircleGap": 3.1799999999999997,
+        "StationIndex": 18
+      },
+      "variant": "",
+      "cframe": "-54, 30.4500008, -693.200012, -1, 0, 0, 0, 1, 0, 0, 0, -1",
+      "material": "Enum.Material.SmoothPlastic",
+      "size": "14.819999694824219, 0.05000000074505806, 14.819999694824219"
+    },
+    {
+      "enabled": true,
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station18CircularPad.CircularPadSurface",
+      "attributes": [],
+      "class": "SurfaceGui"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -90.71348787240528,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 34,
+        "TunnelTextureRole": "LobbyIndoorSuburbsWallpaper"
+      },
+      "variant": "Level5FloralWallpaper",
+      "cframe": "-90.8651733, 41.2000008, -682.744507, -0.0980181023, 0, -0.9951846, 0, 1, -0, 0.99518472, -0, -0.0980180874",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -74.22012644105887,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 28,
+        "TunnelTextureRole": "LobbyIndoorSuburbsWallpaper"
+      },
+      "variant": "Level5FloralWallpaper",
+      "cframe": "-87.6937943, 41.2000008, -666.800903, 0.471396416, 0, -0.88192147, -0, 1, -0, 0.88192147, 0, 0.471396416",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -148.44025288211773,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 55,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-47.4440308, 41.2000008, -703.281128, -0.831469297, 0, 0.555570662, 0, 1, -0, -0.555570662, 0, -0.831469297",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.DoorVestibuleCeiling",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.909804, 0.882353, 0.803922",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-38, 49.4000015, -680, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Plaster",
+      "size": "11, 7.800000190734863, 21.799999237060547"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -107.2068493037517,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 40,
+        "TunnelTextureRole": "LobbyIndoorSuburbsWallpaper"
+      },
+      "variant": "Level5FloralWallpaper",
+      "cframe": "-84.6442947, 41.2000008, -697.763, -0.634393036, 0, -0.773010731, 0, 1.00000012, -0, 0.773010731, -0, -0.634393036",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.ChamberCeiling",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.909804, 0.882353, 0.803922",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-63, 52.5999985, -680, -4.37113883e-08, -1, 0, 1, -4.37113883e-08, 0, 0, 0, 1",
+      "material": "Enum.Material.Plaster",
+      "size": "1.7999999523162842, 59, 59"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station17MonitorJoint2",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.505882, 0.290196, 0.262745",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorArmJoint": true
+      },
+      "variant": "",
+      "cframe": "-72.9508972, 38.3799973, -702.489075, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Metal",
+      "size": "0.7599999904632568, 0.7599999904632568, 0.7599999904632568"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station17MonitorBacking",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.0784314, 0.0980392, 0.0941176",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "RoundedMonitorBacking": true,
+        "StationMonitorDecor": true
+      },
+      "variant": "",
+      "cframe": "-72, 37.3253326, -700.006165, -0.99999994, 0, 0, 0, 0.927398205, 0.374075502, 0, 0.374075472, -0.927398264",
+      "material": "Enum.Material.Metal",
+      "size": "7.840000152587891, 4.340000152587891, 0.5199999809265137"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.FutureLaunchZone18",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "1, 0.298039, 0.235294",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 1,
+      "attributes": {
+        "QueueRadius": 7.41,
+        "QueueDetectorShape": "Circle",
+        "CircularPadDiameter": 14.82
+      },
+      "variant": "",
+      "cframe": "-54, 30.1800003, -693.200012, -1, 0, 0, 0, 1, 0, 0, 0, -1",
+      "material": "Enum.Material.SmoothPlastic",
+      "size": "14.819999694824219, 0.30000001192092896, 14.819999694824219"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -109.95574287564276,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 41,
+        "TunnelTextureRole": "LobbyIndoorSuburbsWallpaper"
+      },
+      "variant": "Level5FloralWallpaper",
+      "cframe": "-82.7989883, 41.2000008, -699.799011, -0.707107186, 0, -0.707106411, 0, 1, -0, 0.707106411, -0, -0.707107186",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -46.73119072214817,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 18,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-65.7444763, 41.2000008, -652.134827, 0.995184839, 0, -0.0980170071, -0, 1.00000012, -0, 0.098017022, 0, 0.99518472",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -54.97787143782138,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 21,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-73.7151337, 41.2000008, -654.131348, 0.923879802, 0, -0.382683039, -0, 1.00000012, -0, 0.382683098, 0, 0.923879683",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.ChamberFloor",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.635294, 0.588235, 0.490196",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "TunnelTextureRole": "LobbyIndoorSuburbsCarpet"
+      },
+      "variant": "Level5LoopCarpet",
+      "cframe": "-63, 29.5799999, -680, -4.37113883e-08, -1, 0, 1, -4.37113883e-08, 0, 0, 0, 1",
+      "material": "Enum.Material.Fabric",
+      "size": "1.399999976158142, 59, 59"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station20MonitorArmInner",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.192157, 0.215686, 0.211765",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorArm": true
+      },
+      "variant": "",
+      "cframe": "-53.4274406, 37.9799957, -658.365967, -0.914478898, -0.159152761, -0.372019798, 0, 0.919399202, -0.393325657, 0.404633552, -0.359688014, -0.840771198",
+      "material": "Enum.Material.Metal",
+      "size": "0.41999998688697815, 0.41999998688697815, 2.0339443683624268"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -96.21127501618741,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 36,
+        "TunnelTextureRole": "LobbyIndoorSuburbsWallpaper"
+      },
+      "variant": "Level5FloralWallpaper",
+      "cframe": "-89.7943268, 41.2000008, -688.127991, -0.290285349, 0, -0.956940114, 0, 1, -0, 0.956940114, -0, -0.290285349",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -24.740042147019622,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 10,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-45.2369881, 41.2000008, -658.355713, 0.773010373, 0, 0.634393394, 0, 1, -0, -0.634393394, 0, 0.773010373",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -162.18472074157307,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 60,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-38.3062057, 41.2000008, -693.199097, -0.471396416, 0, 0.88192147, 0, 1, -0, -0.88192147, 0, -0.471396416",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station17MonitorJoint1",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.258824, 0.278431, 0.270588",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorArmJoint": true
+      },
+      "variant": "",
+      "cframe": "-72.1942215, 37.579998, -700.778992, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Metal",
+      "size": "0.7599999904632568, 0.7599999904632568, 0.7599999904632568"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station19MonitorJoint1",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.258824, 0.278431, 0.270588",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorArmJoint": true
+      },
+      "variant": "",
+      "cframe": "-72.1942215, 37.579998, -659.221008, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Metal",
+      "size": "0.7599999904632568, 0.7599999904632568, 0.7599999904632568"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -145.69135931022666,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 54,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-49.8008919, 41.2000008, -704.693787, -0.881921172, 0, 0.471396893, 0, 1, -0, -0.471396834, 0, -0.881921291",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -159.435827169682,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 59,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-39.7188492, 41.2000008, -695.555969, -0.555570304, 0, 0.831469595, 0, 1, -0, -0.831469595, 0, -0.555570304",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -126.44910430698917,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 47,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-68.462532, 41.2000008, -707.461975, -0.98078531, 0, -0.195090503, 0, 1, -0, 0.195090532, -0, -0.980785191",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station18MonitorWallPlate",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.231373, 0.25098, 0.243137",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorWallMount": true
+      },
+      "variant": "",
+      "cframe": "-52.1881332, 38.1800003, -704.434875, -0.914479613, 0, 0.404631943, 0, 1, -0, -0.404631883, 0, -0.914479733",
+      "material": "Enum.Material.Metal",
+      "size": "2.25, 2.700000047683716, 0.3400000035762787"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -153.93804002589985,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 57,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-43.2010117, 41.2000008, -699.799011, -0.707107186, 0, 0.707106411, 0, 1, -0, -0.707106411, 0, -0.707107186",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station19Sign",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.12549, 0.137255, 0.133333",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 1,
+      "attributes": {
+        "WallMountedMonitor": true,
+        "RoundedStationMonitor": true
+      },
+      "variant": "",
+      "cframe": "-72, 37.4599991, -659.659973, 0.99999994, 0, -0, -0, 0.927398205, 0.374075502, 0, -0.374075472, 0.927398264",
+      "material": "Enum.Material.SmoothPlastic",
+      "size": "12.180000305175781, 4.340000152587891, 0.07999999821186066"
+    },
+    {
+      "enabled": true,
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station19Sign.Display",
+      "attributes": [],
+      "class": "SurfaceGui"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station19Sign.Display.Frame.Title",
+      "attributes": [],
+      "class": "TextLabel",
+      "text": "STATION 3  •  OFFLINE",
+      "textColor": "0.886275, 0.521569, 0.439216"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station19Sign.Display.Frame.Subtitle",
+      "attributes": [],
+      "class": "TextLabel",
+      "text": "AWAITING LEVEL AUTHORIZATION",
+      "textColor": "0.890196, 0.854902, 0.694118"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -71.47123286916779,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 27,
+        "TunnelTextureRole": "LobbyIndoorSuburbsWallpaper"
+      },
+      "variant": "Level5FloralWallpaper",
+      "cframe": "-86.2811508, 41.2000008, -664.444031, 0.555570304, 0, -0.831469595, -0, 1, -0, 0.831469595, 0, 0.555570304",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station17Sign",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.12549, 0.137255, 0.133333",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 1,
+      "attributes": {
+        "WallMountedMonitor": true,
+        "RoundedStationMonitor": true
+      },
+      "variant": "",
+      "cframe": "-72, 37.4599991, -700.340027, -0.99999994, 0, -0, 0, 0.927398205, 0.374075502, 0, 0.374075472, -0.927398264",
+      "material": "Enum.Material.SmoothPlastic",
+      "size": "12.180000305175781, 4.340000152587891, 0.07999999821186066"
+    },
+    {
+      "enabled": true,
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station17Sign.Display",
+      "attributes": [],
+      "class": "SurfaceGui"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station17Sign.Display.Frame.Title",
+      "attributes": [],
+      "class": "TextLabel",
+      "text": "STATION 1  •  OFFLINE",
+      "textColor": "0.886275, 0.521569, 0.439216"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station17Sign.Display.Frame.Subtitle",
+      "attributes": [],
+      "class": "TextLabel",
+      "text": "AWAITING LEVEL AUTHORIZATION",
+      "textColor": "0.890196, 0.854902, 0.694118"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -120.95131716320704,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 45,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-73.7151337, 41.2000008, -705.868652, -0.923879802, 0, -0.382683039, 0, 1.00000012, -0, 0.382683098, -0, -0.923879683",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station20MonitorCapRight",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.0784314, 0.0980392, 0.0941176",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "RoundedMonitorBacking": true,
+        "StationMonitorDecor": true
+      },
+      "variant": "",
+      "cframe": "-50.0800018, 37.3253326, -659.993835, -4.37113847e-08, 0, 0.99999994, -0.374075502, 0.927398205, -1.63513594e-08, -0.927398264, -0.374075472, -4.05378664e-08",
+      "material": "Enum.Material.Metal",
+      "size": "0.5199999809265137, 4.340000152587891, 4.340000152587891"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station20MonitorWallPlate",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.231373, 0.25098, 0.243137",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorWallMount": true
+      },
+      "variant": "",
+      "cframe": "-52.1881332, 38.1800003, -655.565125, 0.914479613, 0, 0.404631943, 0, 1, -0, -0.404631883, 0, 0.914479733",
+      "material": "Enum.Material.Metal",
+      "size": "2.25, 2.700000047683716, 0.3400000035762787"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -30.23782929080176,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 12,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-49.8008919, 41.2000008, -655.306213, 0.881921172, 0, 0.471396893, 0, 1, -0, -0.471396834, 0, 0.881921291",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.Station19MonitorArmWall",
+      "canQuery": false,
+      "canCollide": false,
+      "color": "0.192157, 0.215686, 0.211765",
+      "class": "Part",
+      "canTouch": false,
+      "transparency": 0,
+      "attributes": {
+        "StationMonitorDecor": true,
+        "MonitorArm": true
+      },
+      "variant": "",
+      "cframe": "-73.3328247, 38.2799988, -656.647766, -0.914478242, -0.0426300243, 0.402383089, 0, 0.994434655, 0.105354272, -0.404634982, 0.0963441879, -0.909388959",
+      "material": "Enum.Material.Metal",
+      "size": "0.41999998688697815, 0.41999998688697815, 1.8983277082443237"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.CurvedChamberWall",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.839216, 0.803922, 0.682353",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "CircularWallCenterRadius": 28,
+        "CircularTextureOffsetU": -41.23340357836604,
+        "CircularWallSegmentCount": 64,
+        "CircularWallSegmentIndex": 16,
+        "TunnelTextureRole": "LobbyIndoorSuburbsPlaster"
+      },
+      "variant": "Level5AgedPlaster",
+      "cframe": "-60.2555199, 41.2000008, -652.134827, 0.99518472, 0, 0.0980171412, 0, 1, -0, -0.0980171412, 0, 0.99518472",
+      "material": "Enum.Material.Plaster",
+      "size": "2.831103563308716, 22.399999618530273, 1.25"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.ChamberLight",
+      "canQuery": true,
+      "canCollide": false,
+      "color": "1, 0.341176, 0.262745",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 1,
+      "attributes": [],
+      "variant": "",
+      "cframe": "-74.1999969, 51.8499985, -680, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Neon",
+      "size": "11.199999809265137, 0.2199999988079071, 1.7999999523162842"
+    },
+    {
+      "enabled": false,
+      "path": "Workspace.ServerLobby.LevelQueueRooms.Level5QueueRoom.ChamberLight.PointLight",
+      "attributes": [],
+      "class": "PointLight",
+      "range": 31,
+      "brightness": 0.6499999761581421
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelDoorways.Level5Information",
+      "canQuery": true,
+      "canCollide": false,
+      "color": "0.12549, 0.137255, 0.133333",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": [],
+      "variant": "",
+      "cframe": "-26.5, 45.7999992, -680, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.Metal",
+      "size": "0.47999998927116394, 4.400000095367432, 19"
+    },
+    {
+      "enabled": true,
+      "path": "Workspace.ServerLobby.LevelDoorways.Level5Information.Display",
+      "attributes": [],
+      "class": "SurfaceGui"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelDoorways.Level5Information.Display.Frame.Title",
+      "attributes": [],
+      "class": "TextLabel",
+      "text": "LEVEL 5",
+      "textColor": "0.886275, 0.521569, 0.439216"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelDoorways.Level5Information.Display.Frame.Subtitle",
+      "attributes": [],
+      "class": "TextLabel",
+      "text": "COMING SOON  •  WORK IN PROGRESS",
+      "textColor": "0.890196, 0.854902, 0.694118"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelDoorways.Level5SealedDoor",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.243137, 0.258824, 0.243137",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "Level5PreviewDoorOpen": false,
+        "TunnelTextureRole": "Metal"
+      },
+      "variant": "",
+      "cframe": "-34, 37, -680, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.DiamondPlate",
+      "size": "2.25, 13.800000190734863, 18"
+    },
+    {
+      "enabled": true,
+      "path": "Workspace.ServerLobby.LevelDoorways.Level5SealedDoor.Display",
+      "attributes": [],
+      "class": "SurfaceGui"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelDoorways.Level5SealedDoor.Display.Frame.Title",
+      "attributes": [],
+      "class": "TextLabel",
+      "text": "ACCESS UNSTABLE",
+      "textColor": "1, 0.298039, 0.235294"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelDoorways.Level5SealedDoor.Display.Frame.Subtitle",
+      "attributes": [],
+      "class": "TextLabel",
+      "text": "STILL TRYING TO BREACH THIS ANOMALOUS SPACE",
+      "textColor": "0.890196, 0.854902, 0.694118"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelDoorways.Level4SealedDoor",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.243137, 0.258824, 0.243137",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "TunnelTextureRole": "Metal"
+      },
+      "variant": "",
+      "cframe": "34, 37, -760, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.DiamondPlate",
+      "size": "2.25, 13.800000190734863, 18"
+    },
+    {
+      "enabled": true,
+      "path": "Workspace.ServerLobby.LevelDoorways.Level4SealedDoor.Display",
+      "attributes": [],
+      "class": "SurfaceGui"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelDoorways.Level4SealedDoor.Display.Frame.Title",
+      "attributes": [],
+      "class": "TextLabel",
+      "text": "ACCESS UNSTABLE",
+      "textColor": "1, 0.298039, 0.235294"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelDoorways.Level4SealedDoor.Display.Frame.Subtitle",
+      "attributes": [],
+      "class": "TextLabel",
+      "text": "STILL TRYING TO BREACH THIS ANOMALOUS SPACE",
+      "textColor": "0.890196, 0.854902, 0.694118"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelDoorways.Level6SealedDoor",
+      "canQuery": true,
+      "canCollide": true,
+      "color": "0.243137, 0.258824, 0.243137",
+      "class": "Part",
+      "canTouch": true,
+      "transparency": 0,
+      "attributes": {
+        "TunnelTextureRole": "Metal"
+      },
+      "variant": "",
+      "cframe": "34, 37, -680, 1, 0, 0, 0, 1, 0, 0, 0, 1",
+      "material": "Enum.Material.DiamondPlate",
+      "size": "2.25, 13.800000190734863, 18"
+    },
+    {
+      "enabled": true,
+      "path": "Workspace.ServerLobby.LevelDoorways.Level6SealedDoor.Display",
+      "attributes": [],
+      "class": "SurfaceGui"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelDoorways.Level6SealedDoor.Display.Frame.Title",
+      "attributes": [],
+      "class": "TextLabel",
+      "text": "ACCESS UNSTABLE",
+      "textColor": "1, 0.298039, 0.235294"
+    },
+    {
+      "path": "Workspace.ServerLobby.LevelDoorways.Level6SealedDoor.Display.Frame.Subtitle",
+      "attributes": [],
+      "class": "TextLabel",
+      "text": "STILL TRYING TO BREACH THIS ANOMALOUS SPACE",
+      "textColor": "0.890196, 0.854902, 0.694118"
+    }
+  ]
+}

@@ -1,15 +1,15 @@
 {
   "formatVersion": 2,
-  "source": "Studio-authoritative Level 5 exit ceiling eyes and scoped outage; 193 verified scripts, with 1 separately preserved concurrent Studio change. Publication evidence is separate.",
+  "source": "Studio-authoritative Level 5 audio preparation, temporary outage disable, B clue visibility and residential lobby styling. The owner then requested immediate closure: both Level 5 entry flags and all lobby stations are disabled in published v2157. Concurrent Level 6 work is preserved separately.",
   "finalNewlineContract": "Entries flagged studioTrailingNewline hold exactly the canonical repo file plus one extra trailing newline in Studio. Exact landings remove the flag. Current flagged entry count: 0. Manifest hashes always describe the canonical repo file, never Studio's transport bytes.",
   "studio": {
-    "id": "4c4f4e63-ad77-456e-8b99-b06b5a864bc8",
+    "id": "e7dbf962-5b02-4de6-9494-ef440fb543aa",
     "name": "BACKROOMS: STAY QUIET [CO-OP HORROR] (placeId: 131311258779917)",
     "placeId": 131311258779917,
     "universeId": 10559217407,
-    "publishedVersion": 2143,
-    "openedPlaceVersion": 2115,
-    "publicationStatus": "Published v2143, verified from native Studio publication log."
+    "publishedVersion": 2157,
+    "openedPlaceVersion": 2150,
+    "publicationStatus": "Level 5 closure published v2157 on 2026-09-27 at 11:09:42 UTC; native Studio log receipt in artifacts/level5-opening-20260927/qa/closure-final-publication.txt. Existing live servers require restart; user asked via current task because Creator Hub browser security check is unavailable."
   },
   "counts": {
     "scripts": 193,
@@ -18,10 +18,11 @@
     "studioTrailingNewline": 0
   },
   "nativePlaceBackup": {
-    "file": "artifacts/level5-exit-eyes-20260926/after.rbxl",
-    "bytes": 9821563,
-    "sha256": "0a1bab9bc1510b952ef85c335e8df4f2bf953edbb447fa107da3da29bc59b7f1",
-    "purpose": "Full native Edit backup after verified ceiling-eye and exit outage changes, before v2143 publication. Includes preserved concurrent lobby progress estimates."
+    "file": "artifacts/level5-opening-20260927/recovery/Studio-AutoRecovery-20260927-121430.rbxl",
+    "bytes": 17362339,
+    "sha256": "13710246d8b2f634631418080f7cfe3eda6110791e88517bda7a5219910acc92",
+    "purpose": "Full current prechange recovery checkpoint from 2026-09-27 10:14:30 UTC, independently parsed; all 197 scripts match the prechange v2150 baseline. Precedes the six scoped task edits and native Level 5 lobby changes. Never restore blindly over Studio.",
+    "finalTaskNativeCopyStatus": "Not obtained: macOS Download a Copy disabled Save and froze Studio. Recovered by reopening the current cloud place after verified publication. Source/editor exports and scoped native-property receipts are not a replacement for a final full RBXL."
   },
   "extraMirroredFilesNotInStudio": [
     "RobloxReplicatedStorage/IntegrityCheckProcessorKey2_AutomaticAssetCaptureSender_LocalizationService.RemoteEvent.txt",
@@ -407,13 +408,14 @@
       ],
       "className": "Script",
       "file": "ServerScriptService/GameManager.Script.lua",
-      "bytes": 165648,
-      "sha256": "34cbc3e779bdf5bfca28266d6e0de13788668f248e56844f5eb9fa087ab8de3d",
+      "bytes": 166065,
+      "sha256": "1a5d4162bc38d900a67051af8bd450607e141bd2d46c06c820f7716ec57cdfc3",
       "status": "synced",
       "sourceEqualsEditor": true,
-      "captureMethod": "Fresh Studio Source/editor export, exact UTF-8 byte parity verified 2026-09-25",
+      "captureMethod": "Fresh chunked Studio Source/editor export after final Level 5 closure; exact SHA-256 parity verified 2026-09-27. Native gameplay and publication receipts are separate.",
       "disabled": false,
-      "runContext": "Legacy"
+      "runContext": "Legacy",
+      "sourceVerificationRecord": "artifacts/level5-opening-20260927/closure/verified-source-receipt.json"
     },
     {
       "studioPath": "ServerScriptService.Level 1 Systems.EntityAI",
@@ -1134,11 +1136,12 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/TunnelLobbyBuilder.ModuleScript.lua",
-      "bytes": 103305,
-      "sha256": "c74923a4985dcc7e5b2f19f36c1af8361a15857cdd524c85d6e448694ce4f874",
+      "bytes": 116614,
+      "sha256": "735d5e62b09351de521b6246b5654367def1c70e84415510a478cc6f652ac9f2",
       "status": "synced",
       "sourceEqualsEditor": true,
-      "captureMethod": "Final native Studio Source/editor export; explicitly reviewed hash-pinned concurrent source preserved downstream, not an exit-eyes/outage implementation, 2026-09-26"
+      "captureMethod": "Fresh chunked Studio Source/editor export after final Level 5 closure; exact SHA-256 parity verified 2026-09-27. Native gameplay and publication receipts are separate.",
+      "sourceVerificationRecord": "artifacts/level5-opening-20260927/closure/verified-source-receipt.json"
     },
     {
       "studioPath": "ServerScriptService.ZyntraDetectorSensing",
@@ -2915,16 +2918,17 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 5 Systems/Level 5 Round Adapter.ModuleScript.lua",
-      "bytes": 15482,
-      "sha256": "d44b319241cfe070ed590836d6fc56cc8d118c481ef56e2ce7cf1fbf766b4d2d",
+      "bytes": 17720,
+      "sha256": "2acd7dc20a27eea96989dea6bfd4eb6fdc7bb63f344b7dd2883654acb8e3239f",
       "status": "synced",
-      "captureMethod": "Final native Studio Source/editor export verified against scoped dense-route patch, 2026-09-26",
+      "captureMethod": "Fresh cloud Studio Source/editor export after scoped Level 5 opening CAS; exact SHA-256 parity verified 2026-09-27. Source verification only; publication and gameplay evidence are separate.",
       "sourceEqualsEditor": true,
       "attributes": {
         "CarpetTexture": "rbxassetid://78670100328161",
         "ArrowTexture": "rbxassetid://129457371506376",
         "FloralTexture": "rbxassetid://87982596857809"
-      }
+      },
+      "sourceVerificationRecord": "artifacts/level5-opening-20260927/post-install/source-index.json"
     },
     {
       "studioPath": "ServerScriptService.Level5GateAccess",
@@ -3011,11 +3015,12 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 5 Systems/Level 5 Section Progression.ModuleScript.lua",
-      "bytes": 26930,
-      "sha256": "c9a6865e45dc5fb6be78efa79e7e69318c4ba2cbae3824a0a32194fd86535b43",
+      "bytes": 27031,
+      "sha256": "e5690e2411b5f4da87f084801f5e2c33ff092bf4b6cde6897ec2f0492fbc5dda",
       "status": "synced",
       "sourceEqualsEditor": true,
-      "captureMethod": "Final native Studio Source/editor export verified against scoped surface/UI patch, 2026-09-26"
+      "captureMethod": "Fresh cloud Studio Source/editor export after scoped Level 5 opening CAS; exact SHA-256 parity verified 2026-09-27. Source verification only; publication and gameplay evidence are separate.",
+      "sourceVerificationRecord": "artifacts/level5-opening-20260927/post-install/source-index.json"
     },
     {
       "studioPath": "ServerScriptService.Level 5 Systems.Level 5 Window Watcher Encounters",
@@ -3026,11 +3031,12 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 5 Systems/Level 5 Window Watcher Encounters.ModuleScript.lua",
-      "bytes": 23722,
-      "sha256": "a69ca35ac4ace9bbe462801ca7397ab12be7dbeceab74e7b15ce9c81f2483f59",
+      "bytes": 23818,
+      "sha256": "46120fc6e0379138094e9cac08a73dd21e650c732309833627847d4fd40d87da",
       "status": "synced",
       "sourceEqualsEditor": true,
-      "captureMethod": "Final native Studio Source/editor export verified against scoped surface/UI patch, 2026-09-26"
+      "captureMethod": "Fresh cloud Studio Source/editor export after scoped Level 5 opening CAS; exact SHA-256 parity verified 2026-09-27. Source verification only; publication and gameplay evidence are separate.",
+      "sourceVerificationRecord": "artifacts/level5-opening-20260927/post-install/source-index.json"
     },
     {
       "studioPath": "StarterPlayer.StarterPlayerScripts.Level5ColourLockClient",
@@ -3086,11 +3092,12 @@
       ],
       "className": "ModuleScript",
       "file": "ServerScriptService/Level 5 Systems/Level 5 Power Outage.ModuleScript.lua",
-      "bytes": 8618,
-      "sha256": "ce645e6063424ff8e4fb806826bdbf8cee5be7683860c7b2812ae98e51999c1f",
+      "bytes": 8818,
+      "sha256": "bf3e38ccdddfbbf07fb6cac2685489a20a2e4d21565dc8bb63a3f6aa0fcea40b",
       "status": "synced",
       "sourceEqualsEditor": true,
-      "captureMethod": "Final native Studio Source/editor export verified against scoped exit-eyes/outage patch, 2026-09-26"
+      "captureMethod": "Fresh cloud Studio Source/editor export after scoped Level 5 opening CAS; exact SHA-256 parity verified 2026-09-27. Source verification only; publication and gameplay evidence are separate.",
+      "sourceVerificationRecord": "artifacts/level5-opening-20260927/post-install/source-index.json"
     },
     {
       "studioPath": "ReplicatedStorage.Level5OutageLogic",
@@ -3972,5 +3979,19 @@
       "sourceAudit": "artifacts/level5-expansion-20260926/qa/final-source-mirror-report.json",
       "lastPublishedVersionVerifiedFromLog": 2128
     }
-  ]
+  ],
+  "currentStudioAudit": {
+    "scriptCount": 198,
+    "mirroredScriptCount": 193,
+    "preservedConcurrentUnmirroredScriptCount": 5,
+    "taskChangedScriptCount": 6,
+    "unchangedScriptCount": 191,
+    "sourceEditorConflicts": 0,
+    "evidence": "artifacts/level5-opening-20260927/post-install/comparison.json",
+    "postInstallScriptCount": 197,
+    "newConcurrentAfterReopen": "ServerScriptService.Level6Renovation",
+    "reopenEvidence": "artifacts/level5-opening-20260927/qa/reopened-script-audit-20260927T105952Z.json",
+    "closureEvidence": "artifacts/level5-opening-20260927/closure/mirror-verification.json",
+    "currentAccess": "Closed for public and developers in v2157; existing running server restart not verified."
+  }
 }

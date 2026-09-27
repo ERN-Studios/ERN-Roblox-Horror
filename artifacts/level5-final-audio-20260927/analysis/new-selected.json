@@ -1,0 +1,662 @@
+[
+  {
+    "key": "sliding_gate_v2",
+    "take": 1,
+    "node_id": "KcU60Xliz3MIWuhMDxzC",
+    "session_id": "4ejrayR1w0JpkLj5jLIx",
+    "generation_id": "aSKNXS6U87h2gfy6Tmez",
+    "prompt": "Heavy mechanical door slides on rollers for exactly 1.6 seconds, then a soft stop and short settling tail; close dry foley, isolated in silence, no hiss or ambience.",
+    "file": "raw/sliding_gate_v2__take01.mp3",
+    "sha256": "017b5f09e587f5437c4d9e64ecaa3402890319ded3e5c0f0505039eadc9cd412",
+    "bytes": 53242,
+    "output_file": "processed/L5_sliding_gate_v2__take01_clean.wav",
+    "output_sha256": "4897900bc6fe6a131e0b22207e6206b281737167a086fdabf2234fdb8643ebb8",
+    "settings": {
+      "highpass_hz": 55,
+      "lowpass_hz": 6500,
+      "filter": "3rd order Butterworth zero phase",
+      "denoise": "STFT smoothed Wiener-style soft attenuation",
+      "fft": 1024,
+      "hop": 256,
+      "noise_profile": "median spectrum of quietest 15 percent interior frames",
+      "spectral_min_gain_db": -15.917600346881503,
+      "expander": {
+        "threshold_dbfs": -52.53860431577645,
+        "ratio": 2.25,
+        "max_reduction_db": 24,
+        "attack_ms": 8,
+        "release_ms": 120
+      },
+      "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+      "noise_profile_rms_dbfs": -78.87591345510934,
+      "motion_envelope": "unchanged through 1.6s, raised-cosine settling decay through 2.175s, silence to 2.2s"
+    },
+    "leading_silence_removed_s": 0.0,
+    "constant_gain_db": -8.525457162488028,
+    "before": {
+      "duration_s": 2.2,
+      "rms_dbfs": -17.604,
+      "peak_dbfs": 2.753,
+      "true_peak_4x_dbtp": 2.932,
+      "quiet_decile_rms_dbfs": -61.524,
+      "tail_100ms_rms_dbfs": -80.168,
+      "dc": 0.0006490533271398515,
+      "clipped_samples": 16,
+      "digital_zero_samples": 0,
+      "seam_step": 0.027524230361450464
+    },
+    "after": {
+      "duration_s": 2.2,
+      "rms_dbfs": -26.489,
+      "peak_dbfs": -5.176,
+      "true_peak_4x_dbtp": -5.0,
+      "quiet_decile_rms_dbfs": -92.915,
+      "tail_100ms_rms_dbfs": -95.757,
+      "dc": -1.6204009865072923e-05,
+      "clipped_samples": 0,
+      "digital_zero_samples": 8602,
+      "seam_step": 0.0
+    },
+    "selection_score": -5.209236356021394,
+    "quiet_to_active_contrast_db": 69.21888682797554,
+    "timing": {
+      "segment_rms_dbfs": [
+        -26.51,
+        -23.03,
+        -24.85,
+        -27.32,
+        -60.91
+      ],
+      "motion_coverage_min_to_max": 0.6104161220634022
+    },
+    "purpose": "Replacement for 1.6-second section gate movement; 0.6-second settling tail.",
+    "selection_method": "Objective technical contrast, energy and timing metrics. No perceptual listening review claimed.",
+    "alternative_scores": [
+      {
+        "take": 1,
+        "score": -5.209236356021394
+      },
+      {
+        "take": 4,
+        "score": -5.031115236282692
+      },
+      {
+        "take": 3,
+        "score": -4.02270408887745
+      },
+      {
+        "take": 2,
+        "score": -3.8312387497466687
+      }
+    ]
+  },
+  {
+    "key": "wooden_door_open",
+    "take": 2,
+    "node_id": "PEM4t9gmm8gVAjYP6OOH",
+    "session_id": "kMiLgKHWK5Diw761u5nK",
+    "generation_id": "FswDzVnniRBjjTOGYpgd",
+    "prompt": "An old wooden interior door opens once, latch releases then a short low hinge creak; close dry isolated foley, silence before and after, no ambience or hiss.",
+    "file": "raw/wooden_door_open__take02.mp3",
+    "sha256": "7b6b4d766e0b95df4181410d45662a591c9b276aecf938b90866fa500c0a887e",
+    "bytes": 57422,
+    "output_file": "processed/L5_wooden_door_open__take02_clean.wav",
+    "output_sha256": "16693048e1451f597680e474b5751e39ff3bc3b1ece1450ab7963515807f641b",
+    "settings": {
+      "highpass_hz": 65,
+      "lowpass_hz": 6500,
+      "filter": "3rd order Butterworth zero phase",
+      "denoise": "STFT smoothed Wiener-style soft attenuation",
+      "fft": 1024,
+      "hop": 256,
+      "noise_profile": "median spectrum of quietest 15 percent interior frames",
+      "spectral_min_gain_db": -15.917600346881503,
+      "expander": {
+        "threshold_dbfs": -58.61240213345664,
+        "ratio": 2.25,
+        "max_reduction_db": 24,
+        "attack_ms": 8,
+        "release_ms": 120
+      },
+      "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+      "noise_profile_rms_dbfs": -86.05998670998098
+    },
+    "leading_silence_removed_s": 0.0,
+    "constant_gain_db": -2.838887103869018,
+    "before": {
+      "duration_s": 2.48,
+      "rms_dbfs": -30.545,
+      "peak_dbfs": -2.897,
+      "true_peak_4x_dbtp": -2.614,
+      "quiet_decile_rms_dbfs": -83.18,
+      "tail_100ms_rms_dbfs": -81.135,
+      "dc": 7.882295464305184e-05,
+      "clipped_samples": 0,
+      "digital_zero_samples": 0,
+      "seam_step": 0.050573728047311306
+    },
+    "after": {
+      "duration_s": 2.48,
+      "rms_dbfs": -33.868,
+      "peak_dbfs": -7.005,
+      "true_peak_4x_dbtp": -7.0,
+      "quiet_decile_rms_dbfs": -93.342,
+      "tail_100ms_rms_dbfs": -94.363,
+      "dc": -2.199666448295548e-05,
+      "clipped_samples": 0,
+      "digital_zero_samples": 23492,
+      "seam_step": 0.0
+    },
+    "selection_score": -2.429167959310134,
+    "quiet_to_active_contrast_db": 61.023268737206905,
+    "timing": {},
+    "purpose": "Single hinged wooden door opening.",
+    "selection_method": "Objective technical contrast, energy and timing metrics. No perceptual listening review claimed.",
+    "alternative_scores": [
+      {
+        "take": 2,
+        "score": -2.429167959310134
+      },
+      {
+        "take": 1,
+        "score": -2.318890997612564
+      },
+      {
+        "take": 4,
+        "score": -2.1870338211093583
+      },
+      {
+        "take": 3,
+        "score": -1.8701105511428087
+      }
+    ]
+  },
+  {
+    "key": "wooden_door_close",
+    "take": 1,
+    "node_id": "magiiKMNuJT4l72aZmgc",
+    "session_id": "I44WL09WKUQv0dGtOaXQ",
+    "generation_id": "bJ2GRUC8Z7Ci3R9PRkht",
+    "prompt": "An old wooden interior door closes gently once, soft solid wood thud and latch click; close dry isolated foley, silence before and after, no ambience or hiss.",
+    "file": "raw/wooden_door_close__take01.mp3",
+    "sha256": "656460fffa9e06748b9c38416108b1f2dedb34f7f808b7c45d1fa278ffd4805e",
+    "bytes": 41539,
+    "output_file": "processed/L5_wooden_door_close__take01_clean.wav",
+    "output_sha256": "cd67748d852ee8b56764402e25b0c14929b503f9673603319747d4cc5bf75230",
+    "settings": {
+      "highpass_hz": 55,
+      "lowpass_hz": 6500,
+      "filter": "3rd order Butterworth zero phase",
+      "denoise": "STFT smoothed Wiener-style soft attenuation",
+      "fft": 1024,
+      "hop": 256,
+      "noise_profile": "median spectrum of quietest 15 percent interior frames",
+      "spectral_min_gain_db": -15.917600346881503,
+      "expander": {
+        "threshold_dbfs": -57.24539350412266,
+        "ratio": 2.25,
+        "max_reduction_db": 24,
+        "attack_ms": 8,
+        "release_ms": 120
+      },
+      "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+      "noise_profile_rms_dbfs": -86.83959500482993
+    },
+    "leading_silence_removed_s": 0.0,
+    "constant_gain_db": -2.8366149508574736,
+    "before": {
+      "duration_s": 1.48,
+      "rms_dbfs": -20.494,
+      "peak_dbfs": 0.908,
+      "true_peak_4x_dbtp": 0.913,
+      "quiet_decile_rms_dbfs": -83.575,
+      "tail_100ms_rms_dbfs": -78.92,
+      "dc": -0.00013058530964799183,
+      "clipped_samples": 10,
+      "digital_zero_samples": 0,
+      "seam_step": 0.0008834751788526773
+    },
+    "after": {
+      "duration_s": 1.48,
+      "rms_dbfs": -30.0,
+      "peak_dbfs": -7.015,
+      "true_peak_4x_dbtp": -7.0,
+      "quiet_decile_rms_dbfs": -93.803,
+      "tail_100ms_rms_dbfs": -94.77,
+      "dc": -1.5753949251786865e-05,
+      "clipped_samples": 0,
+      "digital_zero_samples": 17412,
+      "seam_step": 0.0
+    },
+    "selection_score": -1.954723519633833,
+    "quiet_to_active_contrast_db": 48.88339410788127,
+    "timing": {},
+    "purpose": "Single hinged wooden door closing.",
+    "selection_method": "Objective technical contrast, energy and timing metrics. No perceptual listening review claimed.",
+    "alternative_scores": [
+      {
+        "take": 1,
+        "score": -1.954723519633833
+      },
+      {
+        "take": 2,
+        "score": -1.9176460660096282
+      },
+      {
+        "take": 3,
+        "score": -1.773280252745662
+      },
+      {
+        "take": 4,
+        "score": -1.3255126071952628
+      }
+    ]
+  },
+  {
+    "key": "house_wood_creak",
+    "take": 1,
+    "node_id": "q2hHoy1Ex9KgUZOGTviz",
+    "session_id": "8RMT4PBbaGY36jb8aIq4",
+    "generation_id": "oF4JrD08S3alMBeKjT48",
+    "prompt": "One low wooden wall beam settles with a short natural creak and gentle knock; close dry isolated foley in silence, no wind, hiss, voices or background atmosphere.",
+    "file": "raw/house_wood_creak__take01.mp3",
+    "sha256": "2aa24fbdf575b204f81f46b59331c4f932db01dcec11603df1c869426c171190",
+    "bytes": 57422,
+    "output_file": "processed/L5_house_wood_creak__take01_clean.wav",
+    "output_sha256": "c270bb745ad7f954c1f473b1e1cdf27b5e8019d5fcd6c8351d5a921baf4476b6",
+    "settings": {
+      "highpass_hz": 65,
+      "lowpass_hz": 5500,
+      "filter": "3rd order Butterworth zero phase",
+      "denoise": "STFT smoothed Wiener-style soft attenuation",
+      "fft": 1024,
+      "hop": 256,
+      "noise_profile": "median spectrum of quietest 15 percent interior frames",
+      "spectral_min_gain_db": -15.917600346881503,
+      "expander": {
+        "threshold_dbfs": -52.78075780134919,
+        "ratio": 2.25,
+        "max_reduction_db": 24,
+        "attack_ms": 8,
+        "release_ms": 120
+      },
+      "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+      "noise_profile_rms_dbfs": -83.56415901219178
+    },
+    "leading_silence_removed_s": 0.0,
+    "constant_gain_db": -13.477977108416571,
+    "before": {
+      "duration_s": 2.48,
+      "rms_dbfs": -15.381,
+      "peak_dbfs": 2.673,
+      "true_peak_4x_dbtp": 2.679,
+      "quiet_decile_rms_dbfs": -50.555,
+      "tail_100ms_rms_dbfs": -63.916,
+      "dc": -0.02142929465749736,
+      "clipped_samples": 239,
+      "digital_zero_samples": 0,
+      "seam_step": 0.12982170761097223
+    },
+    "after": {
+      "duration_s": 2.48,
+      "rms_dbfs": -34.485,
+      "peak_dbfs": -10.006,
+      "true_peak_4x_dbtp": -10.0,
+      "quiet_decile_rms_dbfs": -93.819,
+      "tail_100ms_rms_dbfs": -94.693,
+      "dc": -6.260166275641641e-06,
+      "clipped_samples": 0,
+      "digital_zero_samples": 28526,
+      "seam_step": 0.0
+    },
+    "selection_score": -2.3508302493173128,
+    "quiet_to_active_contrast_db": 58.770770349449116,
+    "timing": {},
+    "purpose": "Sparse positional house settling sound.",
+    "selection_method": "Objective technical contrast, energy and timing metrics. No perceptual listening review claimed.",
+    "alternative_scores": [
+      {
+        "take": 1,
+        "score": -2.3508302493173128
+      },
+      {
+        "take": 2,
+        "score": -2.3018100175157734
+      },
+      {
+        "take": 4,
+        "score": -1.9377913518949115
+      },
+      {
+        "take": 3,
+        "score": -0.11665446413277415
+      }
+    ]
+  },
+  {
+    "key": "window_frame_creak",
+    "take": 3,
+    "node_id": "zjNgMVvocmWBgG9K5kLl",
+    "session_id": "F2CowaPOxA5v5Im5hkiP",
+    "generation_id": "gScu9Eb7dcJUMUOTK7D3",
+    "prompt": "An old wooden window frame creaks softly once under slight pressure; close dry isolated foley with a short decay into silence, no wind, hiss or background atmosphere.",
+    "file": "raw/window_frame_creak__take03.mp3",
+    "sha256": "74d0a7baa198424bc4eb2d8016ad733e4f2c1687aa8a2db7f7b5404a91e5e7ef",
+    "bytes": 46137,
+    "output_file": "processed/L5_window_frame_creak__take03_clean.wav",
+    "output_sha256": "7cdb704d2671e317f840b4bdef36fa1184681ca4a8f9aac1ab01a1dd757ad87d",
+    "settings": {
+      "highpass_hz": 100,
+      "lowpass_hz": 6500,
+      "filter": "3rd order Butterworth zero phase",
+      "denoise": "STFT smoothed Wiener-style soft attenuation",
+      "fft": 1024,
+      "hop": 256,
+      "noise_profile": "median spectrum of quietest 15 percent interior frames",
+      "spectral_min_gain_db": -15.917600346881503,
+      "expander": {
+        "threshold_dbfs": -60.44597692531233,
+        "ratio": 2.25,
+        "max_reduction_db": 24,
+        "attack_ms": 8,
+        "release_ms": 120
+      },
+      "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+      "noise_profile_rms_dbfs": -85.53293765949158
+    },
+    "leading_silence_removed_s": 0.05140589569160998,
+    "constant_gain_db": 0.27827019110572593,
+    "before": {
+      "duration_s": 1.76,
+      "rms_dbfs": -25.329,
+      "peak_dbfs": -5.61,
+      "true_peak_4x_dbtp": -5.605,
+      "quiet_decile_rms_dbfs": -80.612,
+      "tail_100ms_rms_dbfs": -83.108,
+      "dc": 0.0001541303776871592,
+      "clipped_samples": 0,
+      "digital_zero_samples": 0,
+      "seam_step": 0.0015505445735470857
+    },
+    "after": {
+      "duration_s": 1.76,
+      "rms_dbfs": -28.573,
+      "peak_dbfs": -10.005,
+      "true_peak_4x_dbtp": -10.0,
+      "quiet_decile_rms_dbfs": -93.092,
+      "tail_100ms_rms_dbfs": -100.032,
+      "dc": -1.4616322011167156e-05,
+      "clipped_samples": 0,
+      "digital_zero_samples": 11601,
+      "seam_step": 0.0
+    },
+    "selection_score": -2.2666628275963316,
+    "quiet_to_active_contrast_db": 58.95253104887509,
+    "timing": {},
+    "purpose": "Sparse positional window-frame tension cue.",
+    "selection_method": "Objective technical contrast, energy and timing metrics. No perceptual listening review claimed.",
+    "alternative_scores": [
+      {
+        "take": 3,
+        "score": -2.2666628275963316
+      },
+      {
+        "take": 1,
+        "score": -1.849925789368047
+      },
+      {
+        "take": 4,
+        "score": -1.7919428058190032
+      },
+      {
+        "take": 2,
+        "score": -1.2558292604875736
+      }
+    ]
+  },
+  {
+    "key": "curtain_movement",
+    "take": 2,
+    "node_id": "kGLnnMHAxBdjA7LwRj9V",
+    "session_id": "WET03k5bYzezXIXgSRxG",
+    "generation_id": "U3XjBA37YKrvUChWyoG6",
+    "prompt": "One soft heavy cotton curtain brushes gently across a wooden sill, short dry cloth rustle fading to complete silence, isolated close foley, no wind or background hiss.",
+    "file": "raw/curtain_movement__take02.mp3",
+    "sha256": "21d4c07efdf00072ef7bf55bfb08c5d6770d29ed451616f407fcfa1198cddfb8",
+    "bytes": 46137,
+    "output_file": "processed/L5_curtain_movement__take02_clean.wav",
+    "output_sha256": "1a17a917fffcbacc28437efdb8e953e6d0d0d7a00b425bf3ce2be68bbf6d6038",
+    "settings": {
+      "highpass_hz": 150,
+      "lowpass_hz": 6500,
+      "filter": "3rd order Butterworth zero phase",
+      "denoise": "STFT smoothed Wiener-style soft attenuation",
+      "fft": 1024,
+      "hop": 256,
+      "noise_profile": "median spectrum of quietest 15 percent interior frames",
+      "spectral_min_gain_db": -9.89700043360188,
+      "expander": {
+        "threshold_dbfs": -67.58734706232812,
+        "ratio": 2.25,
+        "max_reduction_db": 24,
+        "attack_ms": 8,
+        "release_ms": 120
+      },
+      "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+      "noise_profile_rms_dbfs": -81.43924293520051
+    },
+    "leading_silence_removed_s": 0.0,
+    "constant_gain_db": 6.0,
+    "before": {
+      "duration_s": 1.76,
+      "rms_dbfs": -35.344,
+      "peak_dbfs": -18.964,
+      "true_peak_4x_dbtp": -18.733,
+      "quiet_decile_rms_dbfs": -73.195,
+      "tail_100ms_rms_dbfs": -80.797,
+      "dc": -2.3744373104537698e-05,
+      "clipped_samples": 0,
+      "digital_zero_samples": 0,
+      "seam_step": 0.0015973646040947642
+    },
+    "after": {
+      "duration_s": 1.76,
+      "rms_dbfs": -30.879,
+      "peak_dbfs": -14.921,
+      "true_peak_4x_dbtp": -14.862,
+      "quiet_decile_rms_dbfs": -75.173,
+      "tail_100ms_rms_dbfs": -94.033,
+      "dc": -1.5570979294298212e-05,
+      "clipped_samples": 0,
+      "digital_zero_samples": 3580,
+      "seam_step": 0.0
+    },
+    "selection_score": -1.5282614935602086,
+    "quiet_to_active_contrast_db": 40.94607670531414,
+    "timing": {},
+    "purpose": "One short localized curtain movement.",
+    "selection_method": "Objective technical contrast, energy and timing metrics. No perceptual listening review claimed.",
+    "alternative_scores": [
+      {
+        "take": 2,
+        "score": -1.5282614935602086
+      },
+      {
+        "take": 3,
+        "score": -1.4703054328069733
+      },
+      {
+        "take": 1,
+        "score": -1.2394980218370883
+      },
+      {
+        "take": 4,
+        "score": -0.7424921721586604
+      }
+    ]
+  },
+  {
+    "key": "ceiling_relay_tick",
+    "take": 3,
+    "node_id": "FOHGlui4O2l0LjSNarZa",
+    "session_id": "U3mHXI3kCFCaD2IWYFsS",
+    "generation_id": "tNrx9hiDgSs0ShWFn1jU",
+    "prompt": "One tiny dry electromechanical ceiling relay tick, a crisp restrained plastic and metal click followed by complete silence, isolated close foley, no buzz or hiss.",
+    "file": "raw/ceiling_relay_tick__take03.mp3",
+    "sha256": "be9246b27f35975ed8cb3c4c3d77e851685416ad7d9f10a51e533940e0ed9920",
+    "bytes": 28164,
+    "output_file": "processed/L5_ceiling_relay_tick__take03_clean.wav",
+    "output_sha256": "9fec577df15254a1616793dae4c5cef8ebc2e2884d5a36d6156b742d4cf445e4",
+    "settings": {
+      "highpass_hz": 180,
+      "lowpass_hz": 8500,
+      "filter": "3rd order Butterworth zero phase",
+      "denoise": "STFT smoothed Wiener-style soft attenuation",
+      "fft": 1024,
+      "hop": 256,
+      "noise_profile": "median spectrum of quietest 15 percent interior frames",
+      "spectral_min_gain_db": -15.917600346881503,
+      "expander": {
+        "threshold_dbfs": -73.06175504196932,
+        "ratio": 2.25,
+        "max_reduction_db": 24,
+        "attack_ms": 8,
+        "release_ms": 120
+      },
+      "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+      "noise_profile_rms_dbfs": -85.73810665208397
+    },
+    "leading_silence_removed_s": 0.0,
+    "constant_gain_db": 2.3646355825793073,
+    "before": {
+      "duration_s": 0.64,
+      "rms_dbfs": -26.194,
+      "peak_dbfs": -1.36,
+      "true_peak_4x_dbtp": -0.464,
+      "quiet_decile_rms_dbfs": -70.664,
+      "tail_100ms_rms_dbfs": -70.717,
+      "dc": -0.0012148114070027803,
+      "clipped_samples": 0,
+      "digital_zero_samples": 0,
+      "seam_step": 0.0012860914575867355
+    },
+    "after": {
+      "duration_s": 0.64,
+      "rms_dbfs": -35.295,
+      "peak_dbfs": -11.352,
+      "true_peak_4x_dbtp": -10.0,
+      "quiet_decile_rms_dbfs": -93.531,
+      "tail_100ms_rms_dbfs": -94.573,
+      "dc": -1.4714913573665143e-05,
+      "clipped_samples": 0,
+      "digital_zero_samples": 6181,
+      "seam_step": 0.0
+    },
+    "selection_score": 1.279274813307604,
+    "quiet_to_active_contrast_db": 61.466488229004014,
+    "timing": {
+      "energy_5_to_95_percent_seconds": 0.2200907029478458
+    },
+    "purpose": "Sparse ceiling/lighting relay click without a power outage.",
+    "selection_method": "Objective technical contrast, energy and timing metrics. No perceptual listening review claimed.",
+    "alternative_scores": [
+      {
+        "take": 3,
+        "score": 1.279274813307604
+      },
+      {
+        "take": 1,
+        "score": 2.0032325694520914
+      },
+      {
+        "take": 2,
+        "score": 2.2271568116454654
+      },
+      {
+        "take": 4,
+        "score": 3.0143539289817145
+      }
+    ]
+  },
+  {
+    "key": "queue_arrival",
+    "take": 4,
+    "node_id": "ZEV66urKKjGkTTTsK83A",
+    "session_id": "HRlrYjhadmlWOrC1AuwX",
+    "generation_id": "4rHhiyZ72xGYujopsUwo",
+    "prompt": "A single subdued old mechanical hotel desk bell strikes softly, warm low metallic resonance with a short decay into silence, close dry foley, no music, voices or hiss.",
+    "file": "raw/queue_arrival__take04.mp3",
+    "sha256": "d36efcdf17f2e511f5c6fdbcb616963a40b0d264706495bfce37caf888c243ff",
+    "bytes": 49898,
+    "output_file": "processed/L5_queue_arrival__take04_clean.wav",
+    "output_sha256": "485c9d6753f281530ed8f77c6c101d89ebe7a541b89207985984f823150280f8",
+    "settings": {
+      "highpass_hz": 100,
+      "lowpass_hz": 7000,
+      "filter": "3rd order Butterworth zero phase",
+      "denoise": "STFT smoothed Wiener-style soft attenuation",
+      "fft": 1024,
+      "hop": 256,
+      "noise_profile": "median spectrum of quietest 15 percent interior frames",
+      "spectral_min_gain_db": -15.917600346881503,
+      "expander": {
+        "threshold_dbfs": -66.9425115041267,
+        "ratio": 2.25,
+        "max_reduction_db": 24,
+        "attack_ms": 8,
+        "release_ms": 120
+      },
+      "tail": "25ms exact digital silence after 85ms raised-cosine fade",
+      "noise_profile_rms_dbfs": -71.12315721866128
+    },
+    "leading_silence_removed_s": 0.0,
+    "constant_gain_db": 12.0,
+    "before": {
+      "duration_s": 2.0,
+      "rms_dbfs": -47.263,
+      "peak_dbfs": -27.926,
+      "true_peak_4x_dbtp": -27.545,
+      "quiet_decile_rms_dbfs": -62.458,
+      "tail_100ms_rms_dbfs": -72.583,
+      "dc": -0.0008080924476217717,
+      "clipped_samples": 0,
+      "digital_zero_samples": 0,
+      "seam_step": 0.015000690007582307
+    },
+    "after": {
+      "duration_s": 2.0,
+      "rms_dbfs": -38.129,
+      "peak_dbfs": -18.011,
+      "true_peak_4x_dbtp": -17.899,
+      "quiet_decile_rms_dbfs": -68.219,
+      "tail_100ms_rms_dbfs": -85.533,
+      "dc": -1.2859595335530045e-05,
+      "clipped_samples": 0,
+      "digital_zero_samples": 2737,
+      "seam_step": 0.0
+    },
+    "selection_score": 1.474022913048179,
+    "quiet_to_active_contrast_db": 27.877100186645833,
+    "timing": {},
+    "purpose": "One subtle Level 5 queue arrival/transition cue.",
+    "selection_method": "Objective technical contrast, energy and timing metrics. No perceptual listening review claimed.",
+    "alternative_scores": [
+      {
+        "take": 4,
+        "score": 1.474022913048179
+      },
+      {
+        "take": 3,
+        "score": 2.7049698632158092
+      },
+      {
+        "take": 2,
+        "score": 3.7639744671570825
+      },
+      {
+        "take": 1,
+        "score": 5.1440519815604295
+      }
+    ]
+  }
+]

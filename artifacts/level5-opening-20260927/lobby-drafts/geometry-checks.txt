@@ -1,0 +1,2 @@
+PASS: 1456 assertions; 67 decorative parts; max radius 26.892 / 27.375 studs; low-part queue clearance >= 5.395 studs
+Offline transforms/ownership only. No native rendering, texture load, queue entry, or walk test was performed.

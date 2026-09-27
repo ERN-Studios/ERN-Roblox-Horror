@@ -1,0 +1,4588 @@
+{
+  "count": 198,
+  "universeId": 10559217407,
+  "version": 2150,
+  "observedAtUtc": "2026-09-27T10:59:52Z",
+  "services": [
+    "Workspace",
+    "ReplicatedStorage",
+    "ServerScriptService",
+    "ServerStorage",
+    "StarterGui",
+    "StarterPack",
+    "StarterPlayer",
+    "ReplicatedFirst"
+  ],
+  "placeId": 131311258779917,
+  "errors": [],
+  "scripts": [
+    {
+      "path": "ReplicatedStorage.DeathAdvice",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 7503,
+      "names": [
+        "ReplicatedStorage",
+        "DeathAdvice"
+      ],
+      "editorFnv1a": 835438144,
+      "sourceDjb2": 3001360718,
+      "sourceFnv1a": 835438144,
+      "sourceOK": true,
+      "editorDjb2": 3001360718,
+      "sourceLength": 7503,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ReplicatedStorage.DevAccess",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 990,
+      "names": [
+        "ReplicatedStorage",
+        "DevAccess"
+      ],
+      "editorFnv1a": 2716009356,
+      "sourceDjb2": 3864079872,
+      "sourceFnv1a": 2716009356,
+      "sourceOK": true,
+      "editorDjb2": 3864079872,
+      "sourceLength": 990,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ReplicatedStorage.FlashlightProfiles",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 2505,
+      "names": [
+        "ReplicatedStorage",
+        "FlashlightProfiles"
+      ],
+      "editorFnv1a": 641220157,
+      "sourceDjb2": 2035285055,
+      "sourceFnv1a": 641220157,
+      "sourceOK": true,
+      "editorDjb2": 2035285055,
+      "sourceLength": 2505,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ReplicatedStorage.Level 2 Entity Audio Bank",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 5063,
+      "names": [
+        "ReplicatedStorage",
+        "Level 2 Entity Audio Bank"
+      ],
+      "editorFnv1a": 3664956787,
+      "sourceDjb2": 965365251,
+      "sourceFnv1a": 3664956787,
+      "sourceOK": true,
+      "editorDjb2": 965365251,
+      "sourceLength": 5063,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ReplicatedStorage.Level5OutageLogic",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 5618,
+      "names": [
+        "ReplicatedStorage",
+        "Level5OutageLogic"
+      ],
+      "editorFnv1a": 1629063841,
+      "sourceDjb2": 2121975011,
+      "sourceFnv1a": 1629063841,
+      "sourceOK": true,
+      "editorDjb2": 2121975011,
+      "sourceLength": 5618,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ReplicatedStorage.MasterConfiguration",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 21208,
+      "names": [
+        "ReplicatedStorage",
+        "MasterConfiguration"
+      ],
+      "editorFnv1a": 679232391,
+      "sourceDjb2": 311143705,
+      "sourceFnv1a": 679232391,
+      "sourceOK": true,
+      "editorDjb2": 311143705,
+      "sourceLength": 21208,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ReplicatedStorage.ProtectionClient",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 6906,
+      "names": [
+        "ReplicatedStorage",
+        "ProtectionClient"
+      ],
+      "editorFnv1a": 172950341,
+      "sourceDjb2": 3496899417,
+      "sourceFnv1a": 172950341,
+      "sourceOK": true,
+      "editorDjb2": 3496899417,
+      "sourceLength": 6906,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ReplicatedStorage.SlideContinuationSafety",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 3945,
+      "names": [
+        "ReplicatedStorage",
+        "SlideContinuationSafety"
+      ],
+      "editorFnv1a": 3330799591,
+      "sourceDjb2": 3552844659,
+      "sourceFnv1a": 3330799591,
+      "sourceOK": true,
+      "editorDjb2": 3552844659,
+      "sourceLength": 3945,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ReplicatedStorage.UIDevice",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 99905,
+      "names": [
+        "ReplicatedStorage",
+        "UIDevice"
+      ],
+      "editorFnv1a": 1021029623,
+      "sourceDjb2": 662946277,
+      "sourceFnv1a": 1021029623,
+      "sourceOK": true,
+      "editorDjb2": 662946277,
+      "sourceLength": 99905,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ReplicatedStorage.UIRegression",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 462314,
+      "names": [
+        "ReplicatedStorage",
+        "UIRegression"
+      ],
+      "editorFnv1a": 1411567755,
+      "sourceDjb2": 1873320783,
+      "sourceFnv1a": 1411567755,
+      "sourceOK": true,
+      "editorDjb2": 1873320783,
+      "sourceLength": 462314,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ReplicatedStorage.UIStyle",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 10555,
+      "names": [
+        "ReplicatedStorage",
+        "UIStyle"
+      ],
+      "editorFnv1a": 1793121658,
+      "sourceDjb2": 2683759656,
+      "sourceFnv1a": 1793121658,
+      "sourceOK": true,
+      "editorDjb2": 2683759656,
+      "sourceLength": 10555,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ReplicatedStorage.WindowWatcherGazeLogic",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 4468,
+      "names": [
+        "ReplicatedStorage",
+        "WindowWatcherGazeLogic"
+      ],
+      "editorFnv1a": 519313353,
+      "sourceDjb2": 3666584431,
+      "sourceFnv1a": 519313353,
+      "sourceOK": true,
+      "editorDjb2": 3666584431,
+      "sourceLength": 4468,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraChallenges",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 6018,
+      "names": [
+        "ReplicatedStorage",
+        "ZyntraChallenges"
+      ],
+      "editorFnv1a": 3372501150,
+      "sourceDjb2": 613818156,
+      "sourceFnv1a": 3372501150,
+      "sourceOK": true,
+      "editorDjb2": 613818156,
+      "sourceLength": 6018,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraConfig",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 16708,
+      "names": [
+        "ReplicatedStorage",
+        "ZyntraConfig"
+      ],
+      "editorFnv1a": 2007976867,
+      "sourceDjb2": 657475697,
+      "sourceFnv1a": 2007976867,
+      "sourceOK": true,
+      "editorDjb2": 657475697,
+      "sourceLength": 16708,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraDailyResearch",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 1496,
+      "names": [
+        "ReplicatedStorage",
+        "ZyntraDailyResearch"
+      ],
+      "editorFnv1a": 2988427499,
+      "sourceDjb2": 2390954477,
+      "sourceFnv1a": 2988427499,
+      "sourceOK": true,
+      "editorDjb2": 2390954477,
+      "sourceLength": 1496,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraDailyRewardsPage",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 38146,
+      "names": [
+        "ReplicatedStorage",
+        "ZyntraDailyRewardsPage"
+      ],
+      "editorFnv1a": 343587955,
+      "sourceDjb2": 1678333741,
+      "sourceFnv1a": 343587955,
+      "sourceOK": true,
+      "editorDjb2": 1678333741,
+      "sourceLength": 38146,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraDetectorVisual",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 13427,
+      "names": [
+        "ReplicatedStorage",
+        "ZyntraDetectorVisual"
+      ],
+      "editorFnv1a": 714434650,
+      "sourceDjb2": 306147318,
+      "sourceFnv1a": 714434650,
+      "sourceOK": true,
+      "editorDjb2": 306147318,
+      "sourceLength": 13427,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraRecordsPage",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 15974,
+      "names": [
+        "ReplicatedStorage",
+        "ZyntraRecordsPage"
+      ],
+      "editorFnv1a": 3526505350,
+      "sourceDjb2": 3969162270,
+      "sourceFnv1a": 3526505350,
+      "sourceOK": true,
+      "editorDjb2": 3969162270,
+      "sourceLength": 15974,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraSkins",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 5823,
+      "names": [
+        "ReplicatedStorage",
+        "ZyntraSkins"
+      ],
+      "editorFnv1a": 3240132610,
+      "sourceDjb2": 1693736678,
+      "sourceFnv1a": 3240132610,
+      "sourceOK": true,
+      "editorDjb2": 1693736678,
+      "sourceLength": 5823,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ReplicatedStorage.ZyntraSkinsPage",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 19438,
+      "names": [
+        "ReplicatedStorage",
+        "ZyntraSkinsPage"
+      ],
+      "editorFnv1a": 2147487354,
+      "sourceDjb2": 1822359888,
+      "sourceFnv1a": 2147487354,
+      "sourceOK": true,
+      "editorDjb2": 1822359888,
+      "sourceLength": 19438,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.AvatarNormalize",
+      "equal": true,
+      "class": "Script",
+      "editorLength": 2567,
+      "names": [
+        "ServerScriptService",
+        "AvatarNormalize"
+      ],
+      "editorFnv1a": 4113383485,
+      "sourceDjb2": 2434167251,
+      "sourceFnv1a": 4113383485,
+      "sourceOK": true,
+      "editorDjb2": 2434167251,
+      "sourceLength": 2567,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerScriptService.Crouch State Server",
+      "equal": true,
+      "class": "Script",
+      "editorLength": 6714,
+      "names": [
+        "ServerScriptService",
+        "Crouch State Server"
+      ],
+      "editorFnv1a": 1816284250,
+      "sourceDjb2": 2395885106,
+      "sourceFnv1a": 1816284250,
+      "sourceOK": true,
+      "editorDjb2": 2395885106,
+      "sourceLength": 6714,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerScriptService.FlashlightSync",
+      "equal": true,
+      "class": "Script",
+      "editorLength": 6163,
+      "names": [
+        "ServerScriptService",
+        "FlashlightSync"
+      ],
+      "editorFnv1a": 4195128371,
+      "sourceDjb2": 1478505597,
+      "sourceFnv1a": 4195128371,
+      "sourceOK": true,
+      "editorDjb2": 1478505597,
+      "sourceLength": 6163,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerScriptService.FriendBoost",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 5413,
+      "names": [
+        "ServerScriptService",
+        "FriendBoost"
+      ],
+      "editorFnv1a": 2291753085,
+      "sourceDjb2": 4078293387,
+      "sourceFnv1a": 2291753085,
+      "sourceOK": true,
+      "editorDjb2": 4078293387,
+      "sourceLength": 5413,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.GameManager",
+      "equal": true,
+      "class": "Script",
+      "editorLength": 166063,
+      "names": [
+        "ServerScriptService",
+        "GameManager"
+      ],
+      "editorFnv1a": 1515612148,
+      "sourceDjb2": 951332234,
+      "sourceFnv1a": 1515612148,
+      "sourceOK": true,
+      "editorDjb2": 951332234,
+      "sourceLength": 166063,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerScriptService.HazmatSkinVisuals",
+      "equal": true,
+      "class": "Script",
+      "editorLength": 15313,
+      "names": [
+        "ServerScriptService",
+        "HazmatSkinVisuals"
+      ],
+      "editorFnv1a": 1574654576,
+      "sourceDjb2": 3755636776,
+      "sourceFnv1a": 1574654576,
+      "sourceOK": true,
+      "editorDjb2": 3755636776,
+      "sourceLength": 15313,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems.EntityAI",
+      "equal": true,
+      "class": "Script",
+      "editorLength": 58731,
+      "names": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "EntityAI"
+      ],
+      "editorFnv1a": 2302433934,
+      "sourceDjb2": 2980162132,
+      "sourceFnv1a": 2302433934,
+      "sourceOK": true,
+      "editorDjb2": 2980162132,
+      "sourceLength": 58731,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems.EntityAnimation",
+      "equal": true,
+      "class": "Script",
+      "editorLength": 6301,
+      "names": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "EntityAnimation"
+      ],
+      "editorFnv1a": 1828340166,
+      "sourceDjb2": 3441592848,
+      "sourceFnv1a": 1828340166,
+      "sourceOK": true,
+      "editorDjb2": 3441592848,
+      "sourceLength": 6301,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems.EntityKill",
+      "equal": true,
+      "class": "Script",
+      "editorLength": 11569,
+      "names": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "EntityKill"
+      ],
+      "editorFnv1a": 959775553,
+      "sourceDjb2": 1270315101,
+      "sourceFnv1a": 959775553,
+      "sourceOK": true,
+      "editorDjb2": 1270315101,
+      "sourceLength": 11569,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems.MazeGenerator",
+      "equal": true,
+      "class": "Script",
+      "editorLength": 84208,
+      "names": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "MazeGenerator"
+      ],
+      "editorFnv1a": 3803940195,
+      "sourceDjb2": 2780934517,
+      "sourceFnv1a": 3803940195,
+      "sourceOK": true,
+      "editorDjb2": 2780934517,
+      "sourceLength": 84208,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 1 Systems.PuzzleManager",
+      "equal": true,
+      "class": "Script",
+      "editorLength": 97783,
+      "names": [
+        "ServerScriptService",
+        "Level 1 Systems",
+        "PuzzleManager"
+      ],
+      "editorFnv1a": 3665439815,
+      "sourceDjb2": 1742932101,
+      "sourceFnv1a": 3665439815,
+      "sourceOK": true,
+      "editorDjb2": 1742932101,
+      "sourceLength": 97783,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Configuration",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 12107,
+      "names": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Configuration"
+      ],
+      "editorFnv1a": 591823437,
+      "sourceDjb2": 424312789,
+      "sourceFnv1a": 591823437,
+      "sourceOK": true,
+      "editorDjb2": 424312789,
+      "sourceLength": 12107,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Exit Transition Test Suite",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 47083,
+      "names": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Exit Transition Test Suite"
+      ],
+      "editorFnv1a": 2496708817,
+      "sourceDjb2": 542717137,
+      "sourceFnv1a": 2496708817,
+      "sourceOK": true,
+      "editorDjb2": 542717137,
+      "sourceLength": 47083,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Layout Generator",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 37520,
+      "names": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Layout Generator"
+      ],
+      "editorFnv1a": 3673669186,
+      "sourceDjb2": 2471315786,
+      "sourceFnv1a": 3673669186,
+      "sourceOK": true,
+      "editorDjb2": 2471315786,
+      "sourceLength": 37520,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Objective Controller",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 50965,
+      "names": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Objective Controller"
+      ],
+      "editorFnv1a": 1972067529,
+      "sourceDjb2": 929057489,
+      "sourceFnv1a": 1972067529,
+      "sourceOK": true,
+      "editorDjb2": 929057489,
+      "sourceLength": 50965,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Animation Adapter",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 16481,
+      "names": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Animation Adapter"
+      ],
+      "editorFnv1a": 881338526,
+      "sourceDjb2": 3230588902,
+      "sourceFnv1a": 881338526,
+      "sourceOK": true,
+      "editorDjb2": 3230588902,
+      "sourceLength": 16481,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Configuration",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 16193,
+      "names": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Configuration"
+      ],
+      "editorFnv1a": 2996310805,
+      "sourceDjb2": 2633822709,
+      "sourceFnv1a": 2996310805,
+      "sourceOK": true,
+      "editorDjb2": 2633822709,
+      "sourceLength": 16193,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Controller",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 99086,
+      "names": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Controller"
+      ],
+      "editorFnv1a": 3090898326,
+      "sourceDjb2": 2049235030,
+      "sourceFnv1a": 3090898326,
+      "sourceOK": true,
+      "editorDjb2": 2049235030,
+      "sourceLength": 99086,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Navigator",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 123871,
+      "names": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Navigator"
+      ],
+      "editorFnv1a": 2102811240,
+      "sourceDjb2": 1504378368,
+      "sourceFnv1a": 2102811240,
+      "sourceOK": true,
+      "editorDjb2": 1504378368,
+      "sourceLength": 123871,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Observer",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 17971,
+      "names": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Observer"
+      ],
+      "editorFnv1a": 3058325827,
+      "sourceDjb2": 2447328525,
+      "sourceFnv1a": 3058325827,
+      "sourceOK": true,
+      "editorDjb2": 2447328525,
+      "sourceLength": 17971,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Foam Proxy Factory",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 11278,
+      "names": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Foam Proxy Factory"
+      ],
+      "editorFnv1a": 1213744911,
+      "sourceDjb2": 1756786975,
+      "sourceFnv1a": 1213744911,
+      "sourceOK": true,
+      "editorDjb2": 1756786975,
+      "sourceLength": 11278,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Configuration",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 691,
+      "names": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Configuration"
+      ],
+      "editorFnv1a": 469001571,
+      "sourceDjb2": 3199129851,
+      "sourceFnv1a": 469001571,
+      "sourceOK": true,
+      "editorDjb2": 3199129851,
+      "sourceLength": 691,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Controller",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 41529,
+      "names": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Controller"
+      ],
+      "editorFnv1a": 439717814,
+      "sourceDjb2": 2834051430,
+      "sourceFnv1a": 439717814,
+      "sourceOK": true,
+      "editorDjb2": 2834051430,
+      "sourceLength": 41529,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Navigator",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 137281,
+      "names": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Navigator"
+      ],
+      "editorFnv1a": 34529849,
+      "sourceDjb2": 3956555195,
+      "sourceFnv1a": 34529849,
+      "sourceOK": true,
+      "editorDjb2": 3956555195,
+      "sourceLength": 137281,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Pool Slide Rig Adapter",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 7632,
+      "names": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Pool Slide Rig Adapter"
+      ],
+      "editorFnv1a": 3935265763,
+      "sourceDjb2": 4205495807,
+      "sourceFnv1a": 3935265763,
+      "sourceOK": true,
+      "editorDjb2": 4205495807,
+      "sourceLength": 7632,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Round Adapter",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 20023,
+      "names": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Round Adapter"
+      ],
+      "editorFnv1a": 4083065358,
+      "sourceDjb2": 1589776676,
+      "sourceFnv1a": 4083065358,
+      "sourceOK": true,
+      "editorDjb2": 1589776676,
+      "sourceLength": 20023,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 Slide Ragdoll Service",
+      "equal": true,
+      "class": "Script",
+      "editorLength": 21604,
+      "names": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 Slide Ragdoll Service"
+      ],
+      "editorFnv1a": 1061404189,
+      "sourceDjb2": 3531639917,
+      "sourceFnv1a": 1061404189,
+      "sourceOK": true,
+      "editorDjb2": 3531639917,
+      "sourceLength": 21604,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.Level 2 World Builder",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 283839,
+      "names": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "Level 2 World Builder"
+      ],
+      "editorFnv1a": 319642116,
+      "sourceDjb2": 4050124890,
+      "sourceFnv1a": 319642116,
+      "sourceOK": true,
+      "editorDjb2": 4050124890,
+      "sourceLength": 283839,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.README - LEVEL 2 POOL FOAM",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 8054,
+      "names": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "README - LEVEL 2 POOL FOAM"
+      ],
+      "editorFnv1a": 4159917354,
+      "sourceDjb2": 3406043986,
+      "sourceFnv1a": 4159917354,
+      "sourceOK": true,
+      "editorDjb2": 3406043986,
+      "sourceLength": 8054,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 2 Systems.README - LEVEL 2 TWEAKS",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 5828,
+      "names": [
+        "ServerScriptService",
+        "Level 2 Systems",
+        "README - LEVEL 2 TWEAKS"
+      ],
+      "editorFnv1a": 1509394330,
+      "sourceDjb2": 2341741100,
+      "sourceFnv1a": 1509394330,
+      "sourceOK": true,
+      "editorDjb2": 2341741100,
+      "sourceLength": 5828,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 19286,
+      "names": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Configuration"
+      ],
+      "editorFnv1a": 2195228857,
+      "sourceDjb2": 256537285,
+      "sourceFnv1a": 2195228857,
+      "sourceOK": true,
+      "editorDjb2": 256537285,
+      "sourceLength": 19286,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Hiding Controller",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 25364,
+      "names": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Hiding Controller"
+      ],
+      "editorFnv1a": 8405229,
+      "sourceDjb2": 290798707,
+      "sourceFnv1a": 8405229,
+      "sourceOK": true,
+      "editorDjb2": 290798707,
+      "sourceLength": 25364,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Layout Generator",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 42613,
+      "names": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Layout Generator"
+      ],
+      "editorFnv1a": 1818422629,
+      "sourceDjb2": 613364593,
+      "sourceFnv1a": 1818422629,
+      "sourceOK": true,
+      "editorDjb2": 613364593,
+      "sourceLength": 42613,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 187862,
+      "names": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Mall Manager AI Controller"
+      ],
+      "editorFnv1a": 2565222601,
+      "sourceDjb2": 2101613647,
+      "sourceFnv1a": 2565222601,
+      "sourceOK": true,
+      "editorDjb2": 2101613647,
+      "sourceLength": 187862,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Music Sequence Controller",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 20901,
+      "names": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Music Sequence Controller"
+      ],
+      "editorFnv1a": 334720085,
+      "sourceDjb2": 1781181791,
+      "sourceFnv1a": 334720085,
+      "sourceOK": true,
+      "editorDjb2": 1781181791,
+      "sourceLength": 20901,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 70421,
+      "names": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Objective Controller"
+      ],
+      "editorFnv1a": 983244331,
+      "sourceDjb2": 1555601163,
+      "sourceFnv1a": 983244331,
+      "sourceOK": true,
+      "editorDjb2": 1555601163,
+      "sourceLength": 70421,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 31538,
+      "names": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Round Adapter"
+      ],
+      "editorFnv1a": 3250286112,
+      "sourceDjb2": 2986256398,
+      "sourceFnv1a": 3250286112,
+      "sourceOK": true,
+      "editorDjb2": 2986256398,
+      "sourceLength": 31538,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Test Suite",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 202633,
+      "names": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 Test Suite"
+      ],
+      "editorFnv1a": 2031759922,
+      "sourceDjb2": 1692570688,
+      "sourceFnv1a": 2031759922,
+      "sourceOK": true,
+      "editorDjb2": 1692570688,
+      "sourceLength": 202633,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 105403,
+      "names": [
+        "ServerScriptService",
+        "Level 3 Systems",
+        "Level 3 World Builder"
+      ],
+      "editorFnv1a": 2351051922,
+      "sourceDjb2": 793173584,
+      "sourceFnv1a": 2351051922,
+      "sourceOK": true,
+      "editorDjb2": 793173584,
+      "sourceLength": 105403,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Configuration",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 20124,
+      "names": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Configuration"
+      ],
+      "editorFnv1a": 2027738276,
+      "sourceDjb2": 4221286472,
+      "sourceFnv1a": 2027738276,
+      "sourceOK": true,
+      "editorDjb2": 4221286472,
+      "sourceLength": 20124,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Neighbour Brain",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 7859,
+      "names": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Neighbour Brain"
+      ],
+      "editorFnv1a": 3910500775,
+      "sourceDjb2": 568490685,
+      "sourceFnv1a": 3910500775,
+      "sourceOK": true,
+      "editorDjb2": 568490685,
+      "sourceLength": 7859,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Neighbour Controller",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 28604,
+      "names": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Neighbour Controller"
+      ],
+      "editorFnv1a": 2718888025,
+      "sourceDjb2": 144955049,
+      "sourceFnv1a": 2718888025,
+      "sourceOK": true,
+      "editorDjb2": 144955049,
+      "sourceLength": 28604,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Objective Controller",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 25455,
+      "names": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Objective Controller"
+      ],
+      "editorFnv1a": 1567453461,
+      "sourceDjb2": 2037697687,
+      "sourceFnv1a": 1567453461,
+      "sourceOK": true,
+      "editorDjb2": 2037697687,
+      "sourceLength": 25455,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Plan Generator",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 21815,
+      "names": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Plan Generator"
+      ],
+      "editorFnv1a": 2162289067,
+      "sourceDjb2": 461585925,
+      "sourceFnv1a": 2162289067,
+      "sourceOK": true,
+      "editorDjb2": 461585925,
+      "sourceLength": 21815,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Round Adapter",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 19939,
+      "names": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Round Adapter"
+      ],
+      "editorFnv1a": 181620604,
+      "sourceDjb2": 2647340426,
+      "sourceFnv1a": 181620604,
+      "sourceOK": true,
+      "editorDjb2": 2647340426,
+      "sourceLength": 19939,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 Test Suite",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 17631,
+      "names": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 Test Suite"
+      ],
+      "editorFnv1a": 1261788644,
+      "sourceDjb2": 2006061590,
+      "sourceFnv1a": 1261788644,
+      "sourceOK": true,
+      "editorDjb2": 2006061590,
+      "sourceLength": 17631,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 4 Systems.Level 4 World Builder",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 60098,
+      "names": [
+        "ServerScriptService",
+        "Level 4 Systems",
+        "Level 4 World Builder"
+      ],
+      "editorFnv1a": 4186306333,
+      "sourceDjb2": 2159504171,
+      "sourceFnv1a": 4186306333,
+      "sourceOK": true,
+      "editorDjb2": 2159504171,
+      "sourceLength": 60098,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 5 Systems.Level 5 Architecture",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 54124,
+      "names": [
+        "ServerScriptService",
+        "Level 5 Systems",
+        "Level 5 Architecture"
+      ],
+      "editorFnv1a": 1492061637,
+      "sourceDjb2": 2274622577,
+      "sourceFnv1a": 1492061637,
+      "sourceOK": true,
+      "editorDjb2": 2274622577,
+      "sourceLength": 54124,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 5 Systems.Level 5 Colour Lock Logic",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 1182,
+      "names": [
+        "ServerScriptService",
+        "Level 5 Systems",
+        "Level 5 Colour Lock Logic"
+      ],
+      "editorFnv1a": 903664211,
+      "sourceDjb2": 4004819529,
+      "sourceFnv1a": 903664211,
+      "sourceOK": true,
+      "editorDjb2": 4004819529,
+      "sourceLength": 1182,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 5 Systems.Level 5 Furniture",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 18159,
+      "names": [
+        "ServerScriptService",
+        "Level 5 Systems",
+        "Level 5 Furniture"
+      ],
+      "editorFnv1a": 65454718,
+      "sourceDjb2": 3730062732,
+      "sourceFnv1a": 65454718,
+      "sourceOK": true,
+      "editorDjb2": 3730062732,
+      "sourceLength": 18159,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 5 Systems.Level 5 Landmark Districts",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 28127,
+      "names": [
+        "ServerScriptService",
+        "Level 5 Systems",
+        "Level 5 Landmark Districts"
+      ],
+      "editorFnv1a": 3485550377,
+      "sourceDjb2": 1545522825,
+      "sourceFnv1a": 3485550377,
+      "sourceOK": true,
+      "editorDjb2": 1545522825,
+      "sourceLength": 28127,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 5 Systems.Level 5 Neighbourhood Districts",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 9788,
+      "names": [
+        "ServerScriptService",
+        "Level 5 Systems",
+        "Level 5 Neighbourhood Districts"
+      ],
+      "editorFnv1a": 2125750243,
+      "sourceDjb2": 2498399857,
+      "sourceFnv1a": 2125750243,
+      "sourceOK": true,
+      "editorDjb2": 2498399857,
+      "sourceLength": 9788,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 5 Systems.Level 5 Power Outage",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 8818,
+      "names": [
+        "ServerScriptService",
+        "Level 5 Systems",
+        "Level 5 Power Outage"
+      ],
+      "editorFnv1a": 930692109,
+      "sourceDjb2": 3854323309,
+      "sourceFnv1a": 930692109,
+      "sourceOK": true,
+      "editorDjb2": 3854323309,
+      "sourceLength": 8818,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 5 Systems.Level 5 Puzzle Catalog",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 5473,
+      "names": [
+        "ServerScriptService",
+        "Level 5 Systems",
+        "Level 5 Puzzle Catalog"
+      ],
+      "editorFnv1a": 3513362995,
+      "sourceDjb2": 4107360401,
+      "sourceFnv1a": 3513362995,
+      "sourceOK": true,
+      "editorDjb2": 4107360401,
+      "sourceLength": 5473,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 5 Systems.Level 5 Round Adapter",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 17720,
+      "names": [
+        "ServerScriptService",
+        "Level 5 Systems",
+        "Level 5 Round Adapter"
+      ],
+      "editorFnv1a": 2036167387,
+      "sourceDjb2": 3055794701,
+      "sourceFnv1a": 2036167387,
+      "sourceOK": true,
+      "editorDjb2": 3055794701,
+      "sourceLength": 17720,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 5 Systems.Level 5 Section Progression",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 27031,
+      "names": [
+        "ServerScriptService",
+        "Level 5 Systems",
+        "Level 5 Section Progression"
+      ],
+      "editorFnv1a": 3689872434,
+      "sourceDjb2": 3047997768,
+      "sourceFnv1a": 3689872434,
+      "sourceOK": true,
+      "editorDjb2": 3047997768,
+      "sourceLength": 27031,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level 5 Systems.Level 5 Window Watcher Encounters",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 23818,
+      "names": [
+        "ServerScriptService",
+        "Level 5 Systems",
+        "Level 5 Window Watcher Encounters"
+      ],
+      "editorFnv1a": 3522004075,
+      "sourceDjb2": 4257775843,
+      "sourceFnv1a": 3522004075,
+      "sourceOK": true,
+      "editorDjb2": 4257775843,
+      "sourceLength": 23818,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level2Generator",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 427,
+      "names": [
+        "ServerScriptService",
+        "Level2Generator"
+      ],
+      "editorFnv1a": 2055522474,
+      "sourceDjb2": 278658600,
+      "sourceFnv1a": 2055522474,
+      "sourceOK": true,
+      "editorDjb2": 278658600,
+      "sourceLength": 427,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level3Generator",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 437,
+      "names": [
+        "ServerScriptService",
+        "Level3Generator"
+      ],
+      "editorFnv1a": 3166422934,
+      "sourceDjb2": 3490766066,
+      "sourceFnv1a": 3166422934,
+      "sourceOK": true,
+      "editorDjb2": 3490766066,
+      "sourceLength": 437,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level4GateAccess",
+      "equal": true,
+      "class": "Script",
+      "editorLength": 2857,
+      "names": [
+        "ServerScriptService",
+        "Level4GateAccess"
+      ],
+      "editorFnv1a": 81826972,
+      "sourceDjb2": 333230952,
+      "sourceFnv1a": 81826972,
+      "sourceOK": true,
+      "editorDjb2": 333230952,
+      "sourceLength": 2857,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerScriptService.Level4Generator",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 622,
+      "names": [
+        "ServerScriptService",
+        "Level4Generator"
+      ],
+      "editorFnv1a": 3723262721,
+      "sourceDjb2": 73853635,
+      "sourceFnv1a": 3723262721,
+      "sourceOK": true,
+      "editorDjb2": 73853635,
+      "sourceLength": 622,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level5GateAccess",
+      "equal": true,
+      "class": "Script",
+      "editorLength": 3416,
+      "names": [
+        "ServerScriptService",
+        "Level5GateAccess"
+      ],
+      "editorFnv1a": 1251136320,
+      "sourceDjb2": 786361866,
+      "sourceFnv1a": 1251136320,
+      "sourceOK": true,
+      "editorDjb2": 786361866,
+      "sourceLength": 3416,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerScriptService.Level5Generator",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 406,
+      "names": [
+        "ServerScriptService",
+        "Level5Generator"
+      ],
+      "editorFnv1a": 932226824,
+      "sourceDjb2": 2037629922,
+      "sourceFnv1a": 932226824,
+      "sourceOK": true,
+      "editorDjb2": 2037629922,
+      "sourceLength": 406,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level6Expansion",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 36647,
+      "names": [
+        "ServerScriptService",
+        "Level6Expansion"
+      ],
+      "editorFnv1a": 3459565689,
+      "sourceDjb2": 1411380433,
+      "sourceFnv1a": 3459565689,
+      "sourceOK": true,
+      "editorDjb2": 1411380433,
+      "sourceLength": 36647,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level6Generator",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 34952,
+      "names": [
+        "ServerScriptService",
+        "Level6Generator"
+      ],
+      "editorFnv1a": 3713531895,
+      "sourceDjb2": 3459385941,
+      "sourceFnv1a": 3713531895,
+      "sourceOK": true,
+      "editorDjb2": 3459385941,
+      "sourceLength": 34952,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Level6PreviewAccess",
+      "equal": true,
+      "class": "Script",
+      "editorLength": 11150,
+      "names": [
+        "ServerScriptService",
+        "Level6PreviewAccess"
+      ],
+      "editorFnv1a": 1291942055,
+      "sourceDjb2": 478374729,
+      "sourceFnv1a": 1291942055,
+      "sourceOK": true,
+      "editorDjb2": 478374729,
+      "sourceLength": 11150,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerScriptService.Level6Renovation",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 28679,
+      "names": [
+        "ServerScriptService",
+        "Level6Renovation"
+      ],
+      "editorFnv1a": 4187561088,
+      "sourceDjb2": 152901484,
+      "sourceFnv1a": 4187561088,
+      "sourceOK": true,
+      "editorDjb2": 152901484,
+      "sourceLength": 28679,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.LobbyPartyModeController",
+      "equal": true,
+      "class": "Script",
+      "editorLength": 7124,
+      "names": [
+        "ServerScriptService",
+        "LobbyPartyModeController"
+      ],
+      "editorFnv1a": 232020724,
+      "sourceDjb2": 3448053770,
+      "sourceFnv1a": 232020724,
+      "sourceOK": true,
+      "editorDjb2": 3448053770,
+      "sourceLength": 7124,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerScriptService.LobbyShopDisplay",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 22048,
+      "names": [
+        "ServerScriptService",
+        "LobbyShopDisplay"
+      ],
+      "editorFnv1a": 3081146145,
+      "sourceDjb2": 3508484151,
+      "sourceFnv1a": 3081146145,
+      "sourceOK": true,
+      "editorDjb2": 3508484151,
+      "sourceLength": 22048,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.NoiseRegistry",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 1991,
+      "names": [
+        "ServerScriptService",
+        "NoiseRegistry"
+      ],
+      "editorFnv1a": 678611511,
+      "sourceDjb2": 1640011175,
+      "sourceFnv1a": 678611511,
+      "sourceOK": true,
+      "editorDjb2": 1640011175,
+      "sourceLength": 1991,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.PlayerProtection",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 7408,
+      "names": [
+        "ServerScriptService",
+        "PlayerProtection"
+      ],
+      "editorFnv1a": 1142867255,
+      "sourceDjb2": 326713719,
+      "sourceFnv1a": 1142867255,
+      "sourceOK": true,
+      "editorDjb2": 326713719,
+      "sourceLength": 7408,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.PurchaseAlerts",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 6278,
+      "names": [
+        "ServerScriptService",
+        "PurchaseAlerts"
+      ],
+      "editorFnv1a": 243767919,
+      "sourceDjb2": 3831620165,
+      "sourceFnv1a": 243767919,
+      "sourceOK": true,
+      "editorDjb2": 3831620165,
+      "sourceLength": 6278,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.ReentryPlacement",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 4473,
+      "names": [
+        "ServerScriptService",
+        "ReentryPlacement"
+      ],
+      "editorFnv1a": 989193723,
+      "sourceDjb2": 114897137,
+      "sourceFnv1a": 989193723,
+      "sourceOK": true,
+      "editorDjb2": 114897137,
+      "sourceLength": 4473,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Round Completion Routing",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 77033,
+      "names": [
+        "ServerScriptService",
+        "Round Completion Routing"
+      ],
+      "editorFnv1a": 2786918870,
+      "sourceDjb2": 2683194094,
+      "sourceFnv1a": 2786918870,
+      "sourceOK": true,
+      "editorDjb2": 2683194094,
+      "sourceLength": 77033,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Round Completion Test Suite",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 135364,
+      "names": [
+        "ServerScriptService",
+        "Round Completion Test Suite"
+      ],
+      "editorFnv1a": 1061654066,
+      "sourceDjb2": 1186912996,
+      "sourceFnv1a": 1061654066,
+      "sourceOK": true,
+      "editorDjb2": 1186912996,
+      "sourceLength": 135364,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Round Loading Runtime",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 8712,
+      "names": [
+        "ServerScriptService",
+        "Round Loading Runtime"
+      ],
+      "editorFnv1a": 3927667698,
+      "sourceDjb2": 2447752598,
+      "sourceFnv1a": 3927667698,
+      "sourceOK": true,
+      "editorDjb2": 2447752598,
+      "sourceLength": 8712,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.Round Loading Test Suite",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 15550,
+      "names": [
+        "ServerScriptService",
+        "Round Loading Test Suite"
+      ],
+      "editorFnv1a": 1607593530,
+      "sourceDjb2": 1678066252,
+      "sourceFnv1a": 1607593530,
+      "sourceOK": true,
+      "editorDjb2": 1678066252,
+      "sourceLength": 15550,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.RouteMarkerService",
+      "equal": true,
+      "class": "Script",
+      "editorLength": 12066,
+      "names": [
+        "ServerScriptService",
+        "RouteMarkerService"
+      ],
+      "editorFnv1a": 863764112,
+      "sourceDjb2": 3525654410,
+      "sourceFnv1a": 863764112,
+      "sourceOK": true,
+      "editorDjb2": 3525654410,
+      "sourceLength": 12066,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerScriptService.TeamObjectives",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 1228,
+      "names": [
+        "ServerScriptService",
+        "TeamObjectives"
+      ],
+      "editorFnv1a": 3681307018,
+      "sourceDjb2": 2405335804,
+      "sourceFnv1a": 3681307018,
+      "sourceOK": true,
+      "editorDjb2": 2405335804,
+      "sourceLength": 1228,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.TunnelLobbyBuilder",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 116631,
+      "names": [
+        "ServerScriptService",
+        "TunnelLobbyBuilder"
+      ],
+      "editorFnv1a": 3861787729,
+      "sourceDjb2": 3492273471,
+      "sourceFnv1a": 3861787729,
+      "sourceOK": true,
+      "editorDjb2": 3492273471,
+      "sourceLength": 116631,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.ZyntraAnalytics",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 19089,
+      "names": [
+        "ServerScriptService",
+        "ZyntraAnalytics"
+      ],
+      "editorFnv1a": 275005833,
+      "sourceDjb2": 1809837161,
+      "sourceFnv1a": 275005833,
+      "sourceOK": true,
+      "editorDjb2": 1809837161,
+      "sourceLength": 19089,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.ZyntraDetectorSensing",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 1819,
+      "names": [
+        "ServerScriptService",
+        "ZyntraDetectorSensing"
+      ],
+      "editorFnv1a": 1121304659,
+      "sourceDjb2": 4196723567,
+      "sourceFnv1a": 1121304659,
+      "sourceOK": true,
+      "editorDjb2": 4196723567,
+      "sourceLength": 1819,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerScriptService.ZyntraDetectorService",
+      "equal": true,
+      "class": "Script",
+      "editorLength": 2562,
+      "names": [
+        "ServerScriptService",
+        "ZyntraDetectorService"
+      ],
+      "editorFnv1a": 346932223,
+      "sourceDjb2": 365771417,
+      "sourceFnv1a": 346932223,
+      "sourceOK": true,
+      "editorDjb2": 365771417,
+      "sourceLength": 2562,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerScriptService.ZyntraMonetization",
+      "equal": true,
+      "class": "Script",
+      "editorLength": 204565,
+      "names": [
+        "ServerScriptService",
+        "ZyntraMonetization"
+      ],
+      "editorFnv1a": 3749222722,
+      "sourceDjb2": 772652814,
+      "sourceFnv1a": 3749222722,
+      "sourceOK": true,
+      "editorDjb2": 772652814,
+      "sourceLength": 204565,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerStorage.Archive.FieldNotesRetired_20260922.Field Notes Client",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 9288,
+      "names": [
+        "ServerStorage",
+        "Archive",
+        "FieldNotesRetired_20260922",
+        "Field Notes Client"
+      ],
+      "editorFnv1a": 1861860069,
+      "sourceDjb2": 634705961,
+      "sourceFnv1a": 1861860069,
+      "sourceOK": true,
+      "editorDjb2": 634705961,
+      "sourceLength": 9288,
+      "editorOK": true,
+      "properties": {
+        "Enabled": false,
+        "LinkedSource": "",
+        "Disabled": true,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerStorage.Archive.FieldNotesRetired_20260922.FieldNotesService",
+      "equal": true,
+      "class": "Script",
+      "editorLength": 21612,
+      "names": [
+        "ServerStorage",
+        "Archive",
+        "FieldNotesRetired_20260922",
+        "FieldNotesService"
+      ],
+      "editorFnv1a": 786097743,
+      "sourceDjb2": 3646331193,
+      "sourceFnv1a": 786097743,
+      "sourceOK": true,
+      "editorDjb2": 3646331193,
+      "sourceLength": 21612,
+      "editorOK": true,
+      "properties": {
+        "Enabled": false,
+        "LinkedSource": "",
+        "Disabled": true,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerStorage.Archive.FieldNotesRetired_20260922.ZyntraFieldNotes",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 7373,
+      "names": [
+        "ServerStorage",
+        "Archive",
+        "FieldNotesRetired_20260922",
+        "ZyntraFieldNotes"
+      ],
+      "editorFnv1a": 2977857177,
+      "sourceDjb2": 2549927091,
+      "sourceFnv1a": 2977857177,
+      "sourceOK": true,
+      "editorDjb2": 2549927091,
+      "sourceLength": 7373,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.Archive.FieldNotesRetired_20260922.ZyntraFieldNotesPage",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 16492,
+      "names": [
+        "ServerStorage",
+        "Archive",
+        "FieldNotesRetired_20260922",
+        "ZyntraFieldNotesPage"
+      ],
+      "editorFnv1a": 1159115581,
+      "sourceDjb2": 3748128709,
+      "sourceFnv1a": 1159115581,
+      "sourceOK": true,
+      "editorDjb2": 3748128709,
+      "sourceLength": 16492,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.Archive.Level 2 Kids Skylight Backup 20260806.Level 2 World Builder Before Kids Skylights",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 84738,
+      "names": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids Skylight Backup 20260806",
+        "Level 2 World Builder Before Kids Skylights"
+      ],
+      "editorFnv1a": 3504704032,
+      "sourceDjb2": 4239643150,
+      "sourceFnv1a": 3504704032,
+      "sourceOK": true,
+      "editorDjb2": 4239643150,
+      "sourceLength": 84738,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.Archive.Level 2 Kids Texture Backup 20260806.Level 2 World Builder Before Kids Textures",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 69618,
+      "names": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids Texture Backup 20260806",
+        "Level 2 World Builder Before Kids Textures"
+      ],
+      "editorFnv1a": 3107830890,
+      "sourceDjb2": 963118296,
+      "sourceFnv1a": 3107830890,
+      "sourceOK": true,
+      "editorDjb2": 963118296,
+      "sourceLength": 69618,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.Archive.Level 2 Kids V1 Backup 20260811.Level 2 Configuration",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 5803,
+      "names": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids V1 Backup 20260811",
+        "Level 2 Configuration"
+      ],
+      "editorFnv1a": 3914607091,
+      "sourceDjb2": 775349615,
+      "sourceFnv1a": 3914607091,
+      "sourceOK": true,
+      "editorDjb2": 775349615,
+      "sourceLength": 5803,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.Archive.Level 2 Kids V1 Backup 20260811.Level 2 World Builder",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 97093,
+      "names": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Kids V1 Backup 20260811",
+        "Level 2 World Builder"
+      ],
+      "editorFnv1a": 3526968118,
+      "sourceDjb2": 1721824290,
+      "sourceFnv1a": 3526968118,
+      "sourceOK": true,
+      "editorDjb2": 1721824290,
+      "sourceLength": 97093,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 Configuration",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 5926,
+      "names": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Lever Redesign Backup 20260806",
+        "Level 2 Configuration"
+      ],
+      "editorFnv1a": 1847756581,
+      "sourceDjb2": 960046379,
+      "sourceFnv1a": 1847756581,
+      "sourceOK": true,
+      "editorDjb2": 960046379,
+      "sourceLength": 5926,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 Objective Controller",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 7391,
+      "names": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Lever Redesign Backup 20260806",
+        "Level 2 Objective Controller"
+      ],
+      "editorFnv1a": 4268498514,
+      "sourceDjb2": 504324176,
+      "sourceFnv1a": 4268498514,
+      "sourceOK": true,
+      "editorDjb2": 504324176,
+      "sourceLength": 7391,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.Archive.Level 2 Lever Redesign Backup 20260806.Level 2 World Builder",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 58002,
+      "names": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Lever Redesign Backup 20260806",
+        "Level 2 World Builder"
+      ],
+      "editorFnv1a": 2284670575,
+      "sourceDjb2": 4090486371,
+      "sourceFnv1a": 2284670575,
+      "sourceOK": true,
+      "editorDjb2": 4090486371,
+      "sourceLength": 58002,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.Archive.Level 2 Pump Scale Backup 20260806.Level 2 World Builder Before 40 Percent Reduction",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 68535,
+      "names": [
+        "ServerStorage",
+        "Archive",
+        "Level 2 Pump Scale Backup 20260806",
+        "Level 2 World Builder Before 40 Percent Reduction"
+      ],
+      "editorFnv1a": 3490913952,
+      "sourceDjb2": 2353508344,
+      "sourceFnv1a": 3490913952,
+      "sourceOK": true,
+      "editorDjb2": 2353508344,
+      "sourceLength": 68535,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.Archive.Level2AudioBackup_20260831_NoDistantSplash.Level 2 Configuration",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 9801,
+      "names": [
+        "ServerStorage",
+        "Archive",
+        "Level2AudioBackup_20260831_NoDistantSplash",
+        "Level 2 Configuration"
+      ],
+      "editorFnv1a": 2799060142,
+      "sourceDjb2": 422023566,
+      "sourceFnv1a": 2799060142,
+      "sourceOK": true,
+      "editorDjb2": 422023566,
+      "sourceLength": 9801,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.Archive.Level2AudioBackup_20260831_NoDistantSplash.Level 2 Sound Controller",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 26598,
+      "names": [
+        "ServerStorage",
+        "Archive",
+        "Level2AudioBackup_20260831_NoDistantSplash",
+        "Level 2 Sound Controller"
+      ],
+      "editorFnv1a": 2780156748,
+      "sourceDjb2": 1453134650,
+      "sourceFnv1a": 2780156748,
+      "sourceOK": true,
+      "editorDjb2": 1453134650,
+      "sourceLength": 26598,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Client",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 9372,
+      "names": [
+        "ServerStorage",
+        "Archive",
+        "Level2RetiredSlidemouth_20260831",
+        "Level 2 Slidemouth Client"
+      ],
+      "editorFnv1a": 1926425669,
+      "sourceDjb2": 3321308729,
+      "sourceFnv1a": 1926425669,
+      "sourceOK": true,
+      "editorDjb2": 3321308729,
+      "sourceLength": 9372,
+      "editorOK": true,
+      "properties": {
+        "Enabled": false,
+        "LinkedSource": "",
+        "Disabled": true,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Controller",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 167166,
+      "names": [
+        "ServerStorage",
+        "Archive",
+        "Level2RetiredSlidemouth_20260831",
+        "Level 2 Slidemouth Controller"
+      ],
+      "editorFnv1a": 126745329,
+      "sourceDjb2": 525644413,
+      "sourceFnv1a": 126745329,
+      "sourceOK": true,
+      "editorDjb2": 525644413,
+      "sourceLength": 167166,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.Archive.Level2RetiredSlidemouth_20260831.Level 2 Slidemouth Test Suite",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 295599,
+      "names": [
+        "ServerStorage",
+        "Archive",
+        "Level2RetiredSlidemouth_20260831",
+        "Level 2 Slidemouth Test Suite"
+      ],
+      "editorFnv1a": 4232049597,
+      "sourceDjb2": 4020833381,
+      "sourceFnv1a": 4232049597,
+      "sourceOK": true,
+      "editorDjb2": 4020833381,
+      "sourceLength": 295599,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.Archive.RetiredLobbyAssets.Miso.MisoPatrol",
+      "equal": true,
+      "class": "Script",
+      "editorLength": 2250,
+      "names": [
+        "ServerStorage",
+        "Archive",
+        "RetiredLobbyAssets",
+        "Miso",
+        "MisoPatrol"
+      ],
+      "editorFnv1a": 3155994961,
+      "sourceDjb2": 393301951,
+      "sourceFnv1a": 3155994961,
+      "sourceOK": true,
+      "editorDjb2": 393301951,
+      "sourceLength": 2250,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerStorage.CodexBackup_20260902_ComingSoonGates.TunnelLobbyBuilder_PreComingSoon",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 96252,
+      "names": [
+        "ServerStorage",
+        "CodexBackup_20260902_ComingSoonGates",
+        "TunnelLobbyBuilder_PreComingSoon"
+      ],
+      "editorFnv1a": 1935292873,
+      "sourceDjb2": 2761280007,
+      "sourceFnv1a": 1935292873,
+      "sourceOK": true,
+      "editorDjb2": 2761280007,
+      "sourceLength": 96252,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__FlashlightSync",
+      "equal": true,
+      "class": "Script",
+      "editorLength": 6740,
+      "names": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__FlashlightSync"
+      ],
+      "editorFnv1a": 847072588,
+      "sourceDjb2": 403707552,
+      "sourceFnv1a": 847072588,
+      "sourceOK": true,
+      "editorDjb2": 403707552,
+      "sourceLength": 6740,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 2 Systems__Level 2 Pool Foam Configuration",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 5736,
+      "names": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__Level 2 Systems__Level 2 Pool Foam Configuration"
+      ],
+      "editorFnv1a": 2646359700,
+      "sourceDjb2": 2493076798,
+      "sourceFnv1a": 2646359700,
+      "sourceOK": true,
+      "editorDjb2": 2493076798,
+      "sourceLength": 5736,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 2 Systems__Level 2 Pool Foam Controller",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 42420,
+      "names": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__Level 2 Systems__Level 2 Pool Foam Controller"
+      ],
+      "editorFnv1a": 1733469582,
+      "sourceDjb2": 2377820728,
+      "sourceFnv1a": 1733469582,
+      "sourceOK": true,
+      "editorDjb2": 2377820728,
+      "sourceLength": 42420,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__Level 3 Systems__Level 3 Hiding Controller",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 16436,
+      "names": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__Level 3 Systems__Level 3 Hiding Controller"
+      ],
+      "editorFnv1a": 2934228220,
+      "sourceDjb2": 3266719072,
+      "sourceFnv1a": 2934228220,
+      "sourceOK": true,
+      "editorDjb2": 3266719072,
+      "sourceLength": 16436,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.ServerScriptService__TunnelLobbyBuilder",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 95466,
+      "names": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "ServerScriptService__TunnelLobbyBuilder"
+      ],
+      "editorFnv1a": 2750918267,
+      "sourceDjb2": 2465356827,
+      "sourceFnv1a": 2750918267,
+      "sourceOK": true,
+      "editorDjb2": 2465356827,
+      "sourceLength": 95466,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__EntityShakeController",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 8095,
+      "names": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__EntityShakeController"
+      ],
+      "editorFnv1a": 276057593,
+      "sourceDjb2": 1453969031,
+      "sourceFnv1a": 276057593,
+      "sourceOK": true,
+      "editorDjb2": 1453969031,
+      "sourceLength": 8095,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__FlashlightController",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 28932,
+      "names": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__FlashlightController"
+      ],
+      "editorFnv1a": 2899115706,
+      "sourceDjb2": 932442676,
+      "sourceFnv1a": 2899115706,
+      "sourceOK": true,
+      "editorDjb2": 932442676,
+      "sourceLength": 28932,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 6350,
+      "names": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client"
+      ],
+      "editorFnv1a": 2516833704,
+      "sourceDjb2": 3374472632,
+      "sourceFnv1a": 2516833704,
+      "sourceOK": true,
+      "editorDjb2": 3374472632,
+      "sourceLength": 6350,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerStorage.CodexBackup_20260902_FiveFixes.StarterPlayer__StarterPlayerScripts__NoiseReporter",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 27514,
+      "names": [
+        "ServerStorage",
+        "CodexBackup_20260902_FiveFixes",
+        "StarterPlayer__StarterPlayerScripts__NoiseReporter"
+      ],
+      "editorFnv1a": 3754336086,
+      "sourceDjb2": 694641386,
+      "sourceFnv1a": 3754336086,
+      "sourceOK": true,
+      "editorDjb2": 694641386,
+      "sourceLength": 27514,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_0710.Level 2 Pool Slide Controller",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 35774,
+      "names": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_0710",
+        "Level 2 Pool Slide Controller"
+      ],
+      "editorFnv1a": 3597343905,
+      "sourceDjb2": 2429415967,
+      "sourceFnv1a": 3597343905,
+      "sourceOK": true,
+      "editorDjb2": 2429415967,
+      "sourceLength": 35774,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_0710.Level 2 Pool Slide Navigator",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 126820,
+      "names": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_0710",
+        "Level 2 Pool Slide Navigator"
+      ],
+      "editorFnv1a": 2822493746,
+      "sourceDjb2": 2696878426,
+      "sourceFnv1a": 2822493746,
+      "sourceOK": true,
+      "editorDjb2": 2696878426,
+      "sourceLength": 126820,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP6_1609Z.Controller",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 35774,
+      "names": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP6_1609Z",
+        "Controller"
+      ],
+      "editorFnv1a": 3597343905,
+      "sourceDjb2": 2429415967,
+      "sourceFnv1a": 3597343905,
+      "sourceOK": true,
+      "editorDjb2": 2429415967,
+      "sourceLength": 35774,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP6_1609Z.Navigator",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 126820,
+      "names": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP6_1609Z",
+        "Navigator"
+      ],
+      "editorFnv1a": 2822493746,
+      "sourceDjb2": 2696878426,
+      "sourceFnv1a": 2822493746,
+      "sourceOK": true,
+      "editorDjb2": 2696878426,
+      "sourceLength": 126820,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP7_1624Z.Controller",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 35774,
+      "names": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP7_1624Z",
+        "Controller"
+      ],
+      "editorFnv1a": 3597343905,
+      "sourceDjb2": 2429415967,
+      "sourceFnv1a": 3597343905,
+      "sourceOK": true,
+      "editorDjb2": 2429415967,
+      "sourceLength": 35774,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP7_1624Z.Navigator",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 126820,
+      "names": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP7_1624Z",
+        "Navigator"
+      ],
+      "editorFnv1a": 2822493746,
+      "sourceDjb2": 2696878426,
+      "sourceFnv1a": 2822493746,
+      "sourceOK": true,
+      "editorDjb2": 2696878426,
+      "sourceLength": 126820,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.Controller",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 35774,
+      "names": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP8_1633Z",
+        "Controller"
+      ],
+      "editorFnv1a": 3597343905,
+      "sourceDjb2": 2429415967,
+      "sourceFnv1a": 3597343905,
+      "sourceOK": true,
+      "editorDjb2": 2429415967,
+      "sourceLength": 35774,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.Navigator",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 126975,
+      "names": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP8_1633Z",
+        "Navigator"
+      ],
+      "editorFnv1a": 1147962987,
+      "sourceDjb2": 209686369,
+      "sourceFnv1a": 1147962987,
+      "sourceOK": true,
+      "editorDjb2": 209686369,
+      "sourceLength": 126975,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP8_1633Z.NavigatorBeforeBudgetFix",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 126820,
+      "names": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP8_1633Z",
+        "NavigatorBeforeBudgetFix"
+      ],
+      "editorFnv1a": 2822493746,
+      "sourceDjb2": 2696878426,
+      "sourceFnv1a": 2822493746,
+      "sourceOK": true,
+      "editorDjb2": 2696878426,
+      "sourceLength": 126820,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP9_1640Z.Controller",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 35774,
+      "names": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP9_1640Z",
+        "Controller"
+      ],
+      "editorFnv1a": 3597343905,
+      "sourceDjb2": 2429415967,
+      "sourceFnv1a": 3597343905,
+      "sourceOK": true,
+      "editorDjb2": 2429415967,
+      "sourceLength": 35774,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.PoolSlideContextDiagnosticBackup_MP9_1640Z.Navigator",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 126975,
+      "names": [
+        "ServerStorage",
+        "PoolSlideContextDiagnosticBackup_MP9_1640Z",
+        "Navigator"
+      ],
+      "editorFnv1a": 1147962987,
+      "sourceDjb2": 209686369,
+      "sourceFnv1a": 1147962987,
+      "sourceOK": true,
+      "editorDjb2": 209686369,
+      "sourceLength": 126975,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "ServerStorage.Project Mirror.IMPORTANT",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 167,
+      "names": [
+        "ServerStorage",
+        "Project Mirror",
+        "IMPORTANT"
+      ],
+      "editorFnv1a": 1850834664,
+      "sourceDjb2": 428501494,
+      "sourceFnv1a": 1850834664,
+      "sourceOK": true,
+      "editorDjb2": 428501494,
+      "sourceLength": 167,
+      "editorOK": true,
+      "properties": {
+        "Enabled": false,
+        "LinkedSource": "",
+        "Disabled": true,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerStorage.Project Mirror.Script",
+      "equal": true,
+      "class": "Script",
+      "editorLength": 235,
+      "names": [
+        "ServerStorage",
+        "Project Mirror",
+        "Script"
+      ],
+      "editorFnv1a": 680965487,
+      "sourceDjb2": 1177353877,
+      "sourceFnv1a": 680965487,
+      "sourceOK": true,
+      "editorDjb2": 1177353877,
+      "sourceLength": 235,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "ServerStorage.TEMP_PipeEntityAnimations_20260909.PreviewControls",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 4670,
+      "names": [
+        "ServerStorage",
+        "TEMP_PipeEntityAnimations_20260909",
+        "PreviewControls"
+      ],
+      "editorFnv1a": 149289041,
+      "sourceDjb2": 2018353447,
+      "sourceFnv1a": 149289041,
+      "sourceOK": true,
+      "editorDjb2": 2018353447,
+      "sourceLength": 4670,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterCharacter.Animate",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 28802,
+      "names": [
+        "StarterPlayer",
+        "StarterCharacter",
+        "Animate"
+      ],
+      "editorFnv1a": 264228278,
+      "sourceDjb2": 3780544750,
+      "sourceFnv1a": 264228278,
+      "sourceOK": true,
+      "editorDjb2": 3780544750,
+      "sourceLength": 28802,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterCharacterScripts.DanceEmote",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 1539,
+      "names": [
+        "StarterPlayer",
+        "StarterCharacterScripts",
+        "DanceEmote"
+      ],
+      "editorFnv1a": 1305879626,
+      "sourceDjb2": 1807488750,
+      "sourceFnv1a": 1305879626,
+      "sourceOK": true,
+      "editorDjb2": 1807488750,
+      "sourceLength": 1539,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterCharacterScripts.DisableDefaultWalkingSound",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 300,
+      "names": [
+        "StarterPlayer",
+        "StarterCharacterScripts",
+        "DisableDefaultWalkingSound"
+      ],
+      "editorFnv1a": 4287499600,
+      "sourceDjb2": 3439527266,
+      "sourceFnv1a": 4287499600,
+      "sourceOK": true,
+      "editorDjb2": 3439527266,
+      "sourceLength": 300,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterCharacterScripts.SetRunAnimation",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 654,
+      "names": [
+        "StarterPlayer",
+        "StarterCharacterScripts",
+        "SetRunAnimation"
+      ],
+      "editorFnv1a": 1225271655,
+      "sourceDjb2": 1673959203,
+      "sourceFnv1a": 1225271655,
+      "sourceOK": true,
+      "editorDjb2": 1673959203,
+      "sourceLength": 654,
+      "editorOK": true,
+      "properties": {
+        "Enabled": false,
+        "LinkedSource": "",
+        "Disabled": true,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Daily Rewards Client",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 27402,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Daily Rewards Client"
+      ],
+      "editorFnv1a": 1417102629,
+      "sourceDjb2": 487978585,
+      "sourceFnv1a": 1417102629,
+      "sourceOK": true,
+      "editorDjb2": 487978585,
+      "sourceLength": 27402,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.DevCheats",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 22809,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "DevCheats"
+      ],
+      "editorFnv1a": 914956399,
+      "sourceDjb2": 1384591171,
+      "sourceFnv1a": 914956399,
+      "sourceOK": true,
+      "editorDjb2": 1384591171,
+      "sourceLength": 22809,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.EntityShakeController",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 10390,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "EntityShakeController"
+      ],
+      "editorFnv1a": 2441214135,
+      "sourceDjb2": 4219574313,
+      "sourceFnv1a": 2441214135,
+      "sourceOK": true,
+      "editorDjb2": 4219574313,
+      "sourceLength": 10390,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.First Entry Guide",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 430,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "First Entry Guide"
+      ],
+      "editorFnv1a": 3466219897,
+      "sourceDjb2": 150190495,
+      "sourceFnv1a": 3466219897,
+      "sourceOK": true,
+      "editorDjb2": 150190495,
+      "sourceLength": 430,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.FlashlightController",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 33275,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "FlashlightController"
+      ],
+      "editorFnv1a": 2214304938,
+      "sourceDjb2": 3553547400,
+      "sourceFnv1a": 2214304938,
+      "sourceOK": true,
+      "editorDjb2": 3553547400,
+      "sourceLength": 33275,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Friend Boost Client",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 8742,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Friend Boost Client"
+      ],
+      "editorFnv1a": 3216218494,
+      "sourceDjb2": 1009762652,
+      "sourceFnv1a": 3216218494,
+      "sourceOK": true,
+      "editorDjb2": 1009762652,
+      "sourceLength": 8742,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.HazmatSkinDriver",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 19378,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "HazmatSkinDriver"
+      ],
+      "editorFnv1a": 2827629189,
+      "sourceDjb2": 2091205425,
+      "sourceFnv1a": 2827629189,
+      "sourceOK": true,
+      "editorDjb2": 2091205425,
+      "sourceLength": 19378,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.JumpscareUI",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 7476,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "JumpscareUI"
+      ],
+      "editorFnv1a": 161055957,
+      "sourceDjb2": 2974176949,
+      "sourceFnv1a": 161055957,
+      "sourceOK": true,
+      "editorDjb2": 2974176949,
+      "sourceLength": 7476,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 1 Cable Current",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 10507,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 1 Cable Current"
+      ],
+      "editorFnv1a": 3753073123,
+      "sourceDjb2": 941913027,
+      "sourceFnv1a": 3753073123,
+      "sourceOK": true,
+      "editorDjb2": 941913027,
+      "sourceLength": 10507,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 1 Sound Controller",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 3462,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 1 Sound Controller"
+      ],
+      "editorFnv1a": 55631835,
+      "sourceDjb2": 3922834887,
+      "sourceFnv1a": 55631835,
+      "sourceOK": true,
+      "editorDjb2": 3922834887,
+      "sourceLength": 3462,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Entity Audio",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 20263,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Entity Audio"
+      ],
+      "editorFnv1a": 1037014357,
+      "sourceDjb2": 3011263827,
+      "sourceFnv1a": 1037014357,
+      "sourceOK": true,
+      "editorDjb2": 3011263827,
+      "sourceLength": 20263,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Lighting Controller",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 5592,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Lighting Controller"
+      ],
+      "editorFnv1a": 3281879598,
+      "sourceDjb2": 647352600,
+      "sourceFnv1a": 3281879598,
+      "sourceOK": true,
+      "editorDjb2": 647352600,
+      "sourceLength": 5592,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Objective UI",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 13516,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Objective UI"
+      ],
+      "editorFnv1a": 2643817023,
+      "sourceDjb2": 1332525697,
+      "sourceFnv1a": 2643817023,
+      "sourceOK": true,
+      "editorDjb2": 1332525697,
+      "sourceLength": 13516,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Pool Foam Client",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 18788,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Pool Foam Client"
+      ],
+      "editorFnv1a": 339066662,
+      "sourceDjb2": 3812252092,
+      "sourceFnv1a": 339066662,
+      "sourceOK": true,
+      "editorDjb2": 3812252092,
+      "sourceLength": 18788,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Pool Slide Dev ESP",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 9656,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Pool Slide Dev ESP"
+      ],
+      "editorFnv1a": 2736243939,
+      "sourceDjb2": 2765241465,
+      "sourceFnv1a": 2736243939,
+      "sourceOK": true,
+      "editorDjb2": 2765241465,
+      "sourceLength": 9656,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Slide Controller",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 31003,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Slide Controller"
+      ],
+      "editorFnv1a": 2336033064,
+      "sourceDjb2": 1277968138,
+      "sourceFnv1a": 2336033064,
+      "sourceOK": true,
+      "editorDjb2": 1277968138,
+      "sourceLength": 31003,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 2 Sound Controller",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 40174,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 2 Sound Controller"
+      ],
+      "editorFnv1a": 1047363651,
+      "sourceDjb2": 3340117437,
+      "sourceFnv1a": 1047363651,
+      "sourceOK": true,
+      "editorDjb2": 3340117437,
+      "sourceLength": 40174,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 39946,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Lighting Controller"
+      ],
+      "editorFnv1a": 1529188971,
+      "sourceDjb2": 3941783821,
+      "sourceFnv1a": 1529188971,
+      "sourceOK": true,
+      "editorDjb2": 3941783821,
+      "sourceLength": 39946,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Mall Manager Visual Smoother",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 6548,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Mall Manager Visual Smoother"
+      ],
+      "editorFnv1a": 1611533712,
+      "sourceDjb2": 788152186,
+      "sourceFnv1a": 1611533712,
+      "sourceOK": true,
+      "editorDjb2": 788152186,
+      "sourceLength": 6548,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 59104,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Reader Client"
+      ],
+      "editorFnv1a": 1201117548,
+      "sourceDjb2": 296225372,
+      "sourceFnv1a": 1201117548,
+      "sourceOK": true,
+      "editorDjb2": 296225372,
+      "sourceLength": 59104,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Sound Controller",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 46833,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Sound Controller"
+      ],
+      "editorFnv1a": 3437704839,
+      "sourceDjb2": 3799268199,
+      "sourceFnv1a": 3437704839,
+      "sourceOK": true,
+      "editorDjb2": 3799268199,
+      "sourceLength": 46833,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Table Hiding Client",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 21675,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 3 Table Hiding Client"
+      ],
+      "editorFnv1a": 2297723325,
+      "sourceDjb2": 3278484801,
+      "sourceFnv1a": 2297723325,
+      "sourceOK": true,
+      "editorDjb2": 3278484801,
+      "sourceLength": 21675,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 4 Lighting Controller",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 10346,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 4 Lighting Controller"
+      ],
+      "editorFnv1a": 3263481412,
+      "sourceDjb2": 2629425078,
+      "sourceFnv1a": 3263481412,
+      "sourceOK": true,
+      "editorDjb2": 2629425078,
+      "sourceLength": 10346,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 4 Objective UI",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 14190,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 4 Objective UI"
+      ],
+      "editorFnv1a": 1158061120,
+      "sourceDjb2": 145662860,
+      "sourceFnv1a": 1158061120,
+      "sourceOK": true,
+      "editorDjb2": 145662860,
+      "sourceLength": 14190,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level 5 Lighting Controller",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 11445,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level 5 Lighting Controller"
+      ],
+      "editorFnv1a": 1395775303,
+      "sourceDjb2": 664165835,
+      "sourceFnv1a": 1395775303,
+      "sourceOK": true,
+      "editorDjb2": 664165835,
+      "sourceLength": 11445,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level2AlertClient",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 34389,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level2AlertClient"
+      ],
+      "editorFnv1a": 2742157579,
+      "sourceDjb2": 2897461417,
+      "sourceFnv1a": 2742157579,
+      "sourceOK": true,
+      "editorDjb2": 2897461417,
+      "sourceLength": 34389,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level5CeilingEyesClient",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 10280,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level5CeilingEyesClient"
+      ],
+      "editorFnv1a": 1426639517,
+      "sourceDjb2": 3194260771,
+      "sourceFnv1a": 1426639517,
+      "sourceOK": true,
+      "editorDjb2": 3194260771,
+      "sourceLength": 10280,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level5ColourLockClient",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 19527,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level5ColourLockClient"
+      ],
+      "editorFnv1a": 3194295996,
+      "sourceDjb2": 1824812034,
+      "sourceFnv1a": 3194295996,
+      "sourceOK": true,
+      "editorDjb2": 1824812034,
+      "sourceLength": 19527,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Level6PreviewPrompt",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 926,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Level6PreviewPrompt"
+      ],
+      "editorFnv1a": 701126810,
+      "sourceDjb2": 2405905514,
+      "sourceFnv1a": 701126810,
+      "sourceOK": true,
+      "editorDjb2": 2405905514,
+      "sourceLength": 926,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyCeilingSweeps",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 7021,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyCeilingSweeps"
+      ],
+      "editorFnv1a": 4206654804,
+      "sourceDjb2": 43626616,
+      "sourceFnv1a": 4206654804,
+      "sourceOK": true,
+      "editorDjb2": 43626616,
+      "sourceLength": 7021,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyLevel3GateFlicker",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 5033,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyLevel3GateFlicker"
+      ],
+      "editorFnv1a": 646200955,
+      "sourceDjb2": 3678563929,
+      "sourceFnv1a": 646200955,
+      "sourceOK": true,
+      "editorDjb2": 3678563929,
+      "sourceLength": 5033,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.LobbyMusicController",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 10098,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "LobbyMusicController"
+      ],
+      "editorFnv1a": 921016362,
+      "sourceDjb2": 3837618104,
+      "sourceFnv1a": 921016362,
+      "sourceOK": true,
+      "editorDjb2": 3837618104,
+      "sourceLength": 10098,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Lucky Wheel Client",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 39336,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Lucky Wheel Client"
+      ],
+      "editorFnv1a": 1255905830,
+      "sourceDjb2": 3977434200,
+      "sourceFnv1a": 1255905830,
+      "sourceOK": true,
+      "editorDjb2": 3977434200,
+      "sourceLength": 39336,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.MasterTuningClient",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 10614,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "MasterTuningClient"
+      ],
+      "editorFnv1a": 917282060,
+      "sourceDjb2": 2372024782,
+      "sourceFnv1a": 917282060,
+      "sourceOK": true,
+      "editorDjb2": 2372024782,
+      "sourceLength": 10614,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 43475,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "NoiseReporter"
+      ],
+      "editorFnv1a": 64119119,
+      "sourceDjb2": 4013165107,
+      "sourceFnv1a": 64119119,
+      "sourceOK": true,
+      "editorDjb2": 4013165107,
+      "sourceLength": 43475,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ProtectionHUD",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 31713,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "ProtectionHUD"
+      ],
+      "editorFnv1a": 1110372560,
+      "sourceDjb2": 3858083888,
+      "sourceFnv1a": 1110372560,
+      "sourceOK": true,
+      "editorDjb2": 3858083888,
+      "sourceLength": 31713,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.PuzzleUI",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 81067,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "PuzzleUI"
+      ],
+      "editorFnv1a": 3447141195,
+      "sourceDjb2": 3585503623,
+      "sourceFnv1a": 3447141195,
+      "sourceOK": true,
+      "editorDjb2": 3585503623,
+      "sourceLength": 81067,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Round Entry Client",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 6733,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Round Entry Client"
+      ],
+      "editorFnv1a": 654810926,
+      "sourceDjb2": 4104169512,
+      "sourceFnv1a": 654810926,
+      "sourceOK": true,
+      "editorDjb2": 4104169512,
+      "sourceLength": 6733,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Round Exit Client",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 20545,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Round Exit Client"
+      ],
+      "editorFnv1a": 631160152,
+      "sourceDjb2": 1298341756,
+      "sourceFnv1a": 631160152,
+      "sourceOK": true,
+      "editorDjb2": 1298341756,
+      "sourceLength": 20545,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.RoundUI",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 261244,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "RoundUI"
+      ],
+      "editorFnv1a": 3188082581,
+      "sourceDjb2": 1841329807,
+      "sourceFnv1a": 3188082581,
+      "sourceOK": true,
+      "editorDjb2": 1841329807,
+      "sourceLength": 261244,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Shop Display Client",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 32796,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Shop Display Client"
+      ],
+      "editorFnv1a": 4013477645,
+      "sourceDjb2": 550262413,
+      "sourceFnv1a": 4013477645,
+      "sourceOK": true,
+      "editorDjb2": 550262413,
+      "sourceLength": 32796,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.SoundController",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 67153,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "SoundController"
+      ],
+      "editorFnv1a": 963593199,
+      "sourceDjb2": 2022468377,
+      "sourceFnv1a": 963593199,
+      "sourceOK": true,
+      "editorDjb2": 2022468377,
+      "sourceLength": 67153,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.SpectateController",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 19883,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "SpectateController"
+      ],
+      "editorFnv1a": 3881245405,
+      "sourceDjb2": 3072305203,
+      "sourceFnv1a": 3881245405,
+      "sourceOK": true,
+      "editorDjb2": 3072305203,
+      "sourceLength": 19883,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.Team Objective Feed",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 3388,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "Team Objective Feed"
+      ],
+      "editorFnv1a": 1508547599,
+      "sourceDjb2": 3177459099,
+      "sourceFnv1a": 1508547599,
+      "sourceOK": true,
+      "editorDjb2": 3177459099,
+      "sourceLength": 3388,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.WindowWatcherGazeClient",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 8057,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "WindowWatcherGazeClient"
+      ],
+      "editorFnv1a": 810928398,
+      "sourceDjb2": 3799846832,
+      "sourceFnv1a": 810928398,
+      "sourceOK": true,
+      "editorDjb2": 3799846832,
+      "sourceLength": 8057,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.WindowWatcherVisualClient",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 9063,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "WindowWatcherVisualClient"
+      ],
+      "editorFnv1a": 3505795947,
+      "sourceDjb2": 2077903647,
+      "sourceFnv1a": 3505795947,
+      "sourceOK": true,
+      "editorDjb2": 2077903647,
+      "sourceLength": 9063,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraDetectorClient",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 3216,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "ZyntraDetectorClient"
+      ],
+      "editorFnv1a": 433917887,
+      "sourceDjb2": 1241926937,
+      "sourceFnv1a": 433917887,
+      "sourceOK": true,
+      "editorDjb2": 1241926937,
+      "sourceLength": 3216,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    },
+    {
+      "path": "StarterPlayer.StarterPlayerScripts.ZyntraStore",
+      "equal": true,
+      "class": "LocalScript",
+      "editorLength": 197826,
+      "names": [
+        "StarterPlayer",
+        "StarterPlayerScripts",
+        "ZyntraStore"
+      ],
+      "editorFnv1a": 4212812559,
+      "sourceDjb2": 3758044871,
+      "sourceFnv1a": 4212812559,
+      "sourceOK": true,
+      "editorDjb2": 3758044871,
+      "sourceLength": 197826,
+      "editorOK": true,
+      "properties": {
+        "Enabled": true,
+        "LinkedSource": "",
+        "Disabled": false,
+        "RunContext": "Enum.RunContext.Legacy",
+        "Archivable": true
+      }
+    }
+  ]
+}

@@ -4,6 +4,7 @@ local RS=game:GetService("ReplicatedStorage")
 local HttpService=game:GetService("HttpService")
 local Logic=require(RS:WaitForChild("Level5OutageLogic"))
 local Outage={}
+local OUTAGES_ENABLED=false -- Temporarily disabled at the owner's request; keep fixture metadata and cleanup.
 local sessions=setmetatable({},{__mode="k"})
 local SCHEDULE_ATTRIBUTE="Level5OutageSchedule"
 local SECTION_ATTRIBUTE="Level5OutageSection"
@@ -142,6 +143,7 @@ function Outage.Start(world,manifest)
 end
 
 function Outage.Trigger(world,gate)
+	if not OUTAGES_ENABLED then return false,"Level 5 outages are temporarily disabled" end
 	local s=sessions[world]
 	if not s or not live(s) then return false,"No live outage controller" end
 	if not integer(gate,1,7) then return false,"Gate outside 1..7" end

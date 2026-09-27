@@ -1,0 +1,19 @@
+{
+  "compile": {
+    "passed": true,
+    "mode": "Luau O0 syntax/bytecode"
+  },
+  "scope": {
+    "passed": true,
+    "startCleanupLiveHelpersUnchanged": true,
+    "onlySwitchAndTriggerGuard": true
+  },
+  "behavioralMock": {
+    "passed": true,
+    "detail": "PASS disabled-outage lifecycle: 78 behavioral assertions; mock services, not native playtest"
+  },
+  "native": {
+    "verified": false,
+    "note": "Parent will install after playtest ends and verify natively; no Studio or repo write performed."
+  }
+}

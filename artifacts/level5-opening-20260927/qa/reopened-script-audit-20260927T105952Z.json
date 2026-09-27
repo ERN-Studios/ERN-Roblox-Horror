@@ -1,0 +1,44 @@
+{
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "reportedCloudEditVersion": 2150,
+  "observedAtUtc": "2026-09-27T10:59:52Z",
+  "baselineCount": 197,
+  "reopenedCount": 198,
+  "matchingExistingScripts": 197,
+  "changes": [],
+  "added": [
+    {
+      "path": "ServerScriptService.Level6Renovation",
+      "equal": true,
+      "class": "ModuleScript",
+      "editorLength": 28679,
+      "names": [
+        "ServerScriptService",
+        "Level6Renovation"
+      ],
+      "editorFnv1a": 4187561088,
+      "sourceDjb2": 152901484,
+      "sourceFnv1a": 4187561088,
+      "sourceOK": true,
+      "editorDjb2": 152901484,
+      "sourceLength": 28679,
+      "editorOK": true,
+      "properties": {
+        "Archivable": true,
+        "LinkedSource": ""
+      }
+    }
+  ],
+  "removed": [],
+  "sourceEditorMismatches": [],
+  "readErrors": [],
+  "readOnly": true,
+  "baseline": "post-install/live-index.json",
+  "reopenedIndex": "qa/reopened-script-index-20260927T105952Z.json",
+  "limitations": [
+    "Read-only script fingerprints and selected properties; not a native binary backup.",
+    "Reported PlaceVersion is cloud Edit metadata; independent Studio publish log supplied by root confirms v2153.",
+    "New scripts are reported and preserved; none were edited or removed."
+  ]
+}

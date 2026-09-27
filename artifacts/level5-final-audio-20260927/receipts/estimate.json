@@ -1,0 +1,14 @@
+{
+  "flow_id": "6B2UMQj1yZKRKiBLhKYd",
+  "flow_created": false,
+  "flow_url": "https://elevenlabs.io/app/flows/6B2UMQj1yZKRKiBLhKYd",
+  "estimate": {
+    "credits": 657.8000000000001,
+    "price_cents": 11.959999999999999,
+    "generations_count": 4,
+    "currency": "usd",
+    "estimated_runtime_seconds": 3
+  },
+  "notes": "Estimate only \u2014 nothing was generated and nothing was charged. Call again without estimate_only to run it.",
+  "view_state_id": "viewstate_01m3h4yym3f328m7sgg5hmb3az"
+}

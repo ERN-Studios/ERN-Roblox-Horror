@@ -1,0 +1,56 @@
+{
+  "install-outage": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"path\":\"ServerScriptService.Level 5 Systems.Level 5 Power Outage\",\"baselineLength\":8618,\"class\":\"ModuleScript\",\"expectedLength\":8818,\"expectedDjb2\":3854323309,\"baselineDjb2\":398132620,\"status\":\"APPLIED_VERIFIED\",\"updateInvoked\":true,\"callbackAccepted\":true,\"detail\":\"\"}"
+      }
+    ],
+    "isError": false
+  },
+  "install-b-clue": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"path\":\"ServerScriptService.Level 5 Systems.Level 5 Section Progression\",\"baselineLength\":26930,\"class\":\"ModuleScript\",\"expectedLength\":27031,\"expectedDjb2\":3047997768,\"baselineDjb2\":1904696397,\"status\":\"APPLIED_VERIFIED\",\"updateInvoked\":true,\"callbackAccepted\":true,\"detail\":\"\"}"
+      }
+    ],
+    "isError": false
+  },
+  "install-game-manager": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"path\":\"ServerScriptService.GameManager\",\"baselineLength\":165648,\"class\":\"Script\",\"expectedLength\":166063,\"expectedDjb2\":951332234,\"baselineDjb2\":3634059721,\"status\":\"APPLIED_VERIFIED\",\"updateInvoked\":true,\"callbackAccepted\":true,\"detail\":\"\"}"
+      }
+    ],
+    "isError": false
+  },
+  "install-adapter": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"path\":\"ServerScriptService.Level 5 Systems.Level 5 Round Adapter\",\"baselineLength\":15482,\"class\":\"ModuleScript\",\"expectedLength\":17720,\"expectedDjb2\":3055794701,\"baselineDjb2\":2781571066,\"status\":\"APPLIED_VERIFIED\",\"updateInvoked\":true,\"callbackAccepted\":true,\"detail\":\"\"}"
+      }
+    ],
+    "isError": false
+  },
+  "install-watcher": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"path\":\"ServerScriptService.Level 5 Systems.Level 5 Window Watcher Encounters\",\"baselineLength\":23722,\"class\":\"ModuleScript\",\"expectedLength\":23818,\"expectedDjb2\":4257775843,\"baselineDjb2\":2001089542,\"status\":\"APPLIED_VERIFIED\",\"updateInvoked\":true,\"callbackAccepted\":true,\"detail\":\"\"}"
+      }
+    ],
+    "isError": false
+  },
+  "install-lobby": {
+    "content": [
+      {
+        "type": "text",
+        "text": "{\"path\":\"ServerScriptService.TunnelLobbyBuilder\",\"baselineLength\":103305,\"class\":\"ModuleScript\",\"expectedLength\":116631,\"expectedDjb2\":3492273471,\"baselineDjb2\":3458785195,\"status\":\"APPLIED_VERIFIED\",\"updateInvoked\":true,\"callbackAccepted\":true,\"detail\":\"\"}"
+      }
+    ],
+    "isError": false
+  }
+}

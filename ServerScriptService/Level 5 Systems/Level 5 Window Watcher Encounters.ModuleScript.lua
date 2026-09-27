@@ -1,6 +1,6 @@
 -- Passive intermittent Window Watcher; one prepared rig, curated windows in all eight districts.
 -- No AI, damage, chase, sounds, rewards, movement/pathfinding or delayed tasks.
--- Start only from the existing developer-only Level 5 round adapter.
+-- Start only from the enabled public/developer Level 5 preview round adapter.
 -- Import contract: bottom pivot, 8 studs tall, facing local -Z. Mesh/rest bones
 -- AND animation translations must share the import scale (~3.333 studs/metre).
 -- Never fix this by scaling only MeshPart.Size. Verify native animated extrema.
@@ -21,6 +21,11 @@ local MIN_VIEW_DOT=math.cos(math.rad(70)) -- server Head/HRP facing, not a camer
 local MAX_RAYS_PER_SCAN=96
 local MAX_WINDOWS_PER_SCAN=24
 local SCAN_INTERVAL=.75
+
+local function previewEnabled()
+	return workspace:GetAttribute("Level5PublicPreviewEnabled")==true
+		or workspace:GetAttribute("Level5DevEnabled")==true
+end
 
 local function finite(value)
 	return type(value)=="number" and value==value and math.abs(value)<math.huge
@@ -134,8 +139,8 @@ function Encounters.Start(world,options)
 	end
 	if typeof(world)~="Instance" or not world:IsA("Model")
 		or world.Name~="Level 5 Generated World" or world:GetAttribute("Level5_MapOnly")~=true
-		or workspace:GetAttribute("Level5DevEnabled")~=true or not world:IsDescendantOf(workspace) then
-		return failure("requires the enabled Level 5 developer map preview in Workspace")
+		or not previewEnabled() or not world:IsDescendantOf(workspace) then
+		return failure("requires an enabled Level 5 preview in Workspace")
 	end
 	if typeof(options.Origin)~="Vector3" or type(options.GetParticipants)~="function" then
 		return failure("Origin and a synchronous GetParticipants callback are required")
@@ -380,7 +385,7 @@ function Encounters.Start(world,options)
 		local elapsed=0
 		local function step(now)
 			if state.cleaned then return end
-			if workspace:GetAttribute("Level5DevEnabled")~=true then cleanup(false);return end
+			if not previewEnabled() then cleanup(false);return end
 			if not ready then
 				local loaded=true
 				for _,track in ipairs(state.tracks) do if track.Length<=0 then loaded=false;break end end

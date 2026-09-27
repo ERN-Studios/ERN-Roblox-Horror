@@ -1,0 +1,178 @@
+--- baseline/ServerScriptService/GameManager.Script.lua
++++ draft/ServerScriptService/GameManager.Script.lua
+@@ -157,13 +157,19 @@
+  workspace:SetAttribute(Routing.Level4DevAttribute, true)
+ end
+ 
+--- LEVEL5_MAP_PREVIEW_20260923. A ceiling is only a transport bound. Access
+--- is checked against the REQUESTED level too, so enabling 5 cannot enable 4.
++-- Level 5 is a selectable public preview, separate from campaign progression.
++-- A ceiling is only a transport bound: canAccessLevel still checks the exact
++-- requested level, so opening 5 never opens the developer-only Level 4.
++-- Explicit false keeps public entry closed while preserving developer access.
++if workspace:GetAttribute("Level5PublicPreviewEnabled") == nil then
++ workspace:SetAttribute("Level5PublicPreviewEnabled", true)
++end
+ if workspace:GetAttribute(Routing.Level5DevAttribute) == nil then
+  workspace:SetAttribute(Routing.Level5DevAttribute, true)
+ end
+ local function devCeiling(group)
+  if type(group) ~= "table" or #group == 0 then return Routing.MaxLevel end
++ if workspace:GetAttribute("Level5PublicPreviewEnabled") == true then return 5 end
+  for _, player in ipairs(group) do
+   if not DevAccess.IsAllowed(player) then return Routing.MaxLevel end
+  end
+@@ -173,8 +179,11 @@
+ 
+ local function canAccessLevel(requestedLevel, group)
+  local level = tonumber(requestedLevel)
+- if not level or level ~= level then return false end
++ if not level or level ~= level or level % 1 ~= 0 or level < 1 then return false end
+  if level <= Routing.MaxLevel then return true end
++ if level == 5 and workspace:GetAttribute("Level5PublicPreviewEnabled") == true then
++  return type(group) == "table" and #group > 0
++ end
+  local flag = level == 4 and Routing.Level4DevAttribute
+   or level == 5 and Routing.Level5DevAttribute or nil
+  if not flag or workspace:GetAttribute(flag) ~= true then return false end
+@@ -1503,9 +1512,8 @@
+ local function ensureWorld(group, requestedLevel, attempt)
+  if attempt and not attempt:IsOpen() then return false end
+  if not canAccessLevel(requestedLevel, group) then return false end
+- -- LEVEL4_DEV_GATE_20260921: ClampLevelTo with the dev ceiling. For every
+- -- normal party devCeiling() returns Routing.MaxLevel, so this is exactly the
+- -- old Routing.ClampLevel(requestedLevel).
++ -- Access was checked for this exact level. The transport ceiling also
++ -- includes the standalone public preview without changing the campaign.
+  local level = Routing.ClampLevelTo(requestedLevel, devCeiling(group))
+  if worldReady and activeLevel == level then return true end
+  activeLevel = level
+@@ -3708,9 +3716,8 @@
+   table.sort(participants, function(a, b) return a.UserId < b.UserId end)
+   while #participants > MAX_PLAYERS_PER_STATION do table.remove(participants) end
+   if #participants == 0 then attempt:Fail("PARTY_LEFT"); return end
+-  -- LEVEL4_DEV_GATE_20260921: clamped AFTER the roster is known, because the
+-  -- dev ceiling requires every arriving member to pass DevAccess. For a normal
+-  -- party this is exactly the old Routing.ClampLevel(group.Level).
++  -- Check the exact destination after the whole roster arrives. The public
++  -- Level 5 preview is independent of Level 4's entire-party developer check.
+   if not canAccessLevel(group.Level, participants) then
+    attempt:SetMembers(participants)
+    attempt:Fail("LEVEL_ACCESS_DENIED")
+--- baseline/ServerScriptService/Level 5 Systems/Level 5 Round Adapter.ModuleScript.lua
++++ draft/ServerScriptService/Level 5 Systems/Level 5 Round Adapter.ModuleScript.lua
+@@ -1,5 +1,5 @@
+ --!strict
+--- Level 5 map-only preview lifecycle. Independent of Level 4 and its gameplay.
++-- Level 5 playable preview lifecycle. Independent of Level 4 and campaign completion.
+ -- GameManager owns entry, Back to Lobby and round cleanup. This module never
+ -- sets Escaped/PuzzleWon or grants completion/rewards. The passive window
+ -- encounter has no chase, damage or completion behavior.
+@@ -258,14 +258,53 @@
+ 	end
+ end
+ 
++-- These two owned signs describe the current preview boundary. They do not
++-- complete the round, award a clear, or invoke any transfer; the existing
++-- BACK TO LOBBY control remains the player's way out.
++local function addPreviewNotices(world: Model, built: any)
++	local notices = Instance.new("Folder")
++	notices.Name = "Level5PreviewNotices"
++	notices:SetAttribute(OWNED, true)
++	notices.Parent = world
++	local function sign(name: string, frame: CFrame, text: string)
++		local board = Instance.new("Part")
++		board.Name, board.Size, board.CFrame = name, Vector3.new(6.6, 3.6, 0.1), frame
++		board.Anchored, board.CanCollide, board.CanTouch, board.CanQuery = true, false, false, false
++		board.CastShadow = false
++		board.Color, board.Material = Color3.fromRGB(49, 44, 35), Enum.Material.Wood
++		board:SetAttribute(OWNED, true)
++		board.Parent = notices
++		local gui = Instance.new("SurfaceGui")
++		gui.Name, gui.Face = "PreviewInformation", Enum.NormalId.Front
++		gui.CanvasSize, gui.LightInfluence, gui.AlwaysOnTop = Vector2.new(880, 480), 0, false
++		gui.MaxDistance = 55
++		gui.Parent = board
++		local label = Instance.new("TextLabel")
++		label.Position, label.Size = UDim2.fromScale(.06, .06), UDim2.fromScale(.88, .88)
++		label.BackgroundTransparency = 1
++		label.Font, label.TextColor3 = Enum.Font.GothamMedium, Color3.fromRGB(236, 226, 194)
++		label.TextSize, label.TextWrapped, label.Text = 35, true, text
++		label.Parent = gui
++	end
++	local entry = built.SpawnCFrame.Position
++	sign("PreviewArrival", CFrame.lookAt(entry + Vector3.new(8, 2, 7), entry + Vector3.new(0, 2, 0)),
++		"LEVEL 5 · PLAYABLE PREVIEW\n\nSeven puzzles lead through eight sections. The final slide and ending are still in development.\n\nUse the lobby control to leave at any time.")
++	assert(typeof(built.ChuteEnd) == "CFrame", "Preview ending needs the authored descent endpoint")
++	local ending = built.ChuteEnd.Position
++	sign("PreviewEnding", CFrame.lookAt(ending + Vector3.new(0, 4.5, 8.45), ending + Vector3.new(0, 4.5, 0)),
++		"END OF THE CURRENT PREVIEW\n\nThe final slide and ending are still in development.\n\nUse the lobby control to return.")
++end
++
+ function Adapter.Build()
+-	assert(workspace:GetAttribute("Level5DevEnabled") == true, "Level 5 map preview is developer-only")
+-	for _, player in ipairs(Players:GetPlayers()) do
+-		assert(DevAccess.IsAllowed(player), "Level 5 preview refuses a non-developer roster")
++	if workspace:GetAttribute("Level5PublicPreviewEnabled") ~= true then
++		assert(workspace:GetAttribute("Level5DevEnabled") == true, "Level 5 preview is currently closed")
++		for _, player in ipairs(Players:GetPlayers()) do
++			assert(DevAccess.IsAllowed(player), "Level 5 private preview requires a developer roster")
++		end
+ 	end
+ 	for _, level in ipairs({2, 3, 4}) do
+ 		assert(workspace:FindFirstChild("Level " .. level .. " Generated World") == nil,
+-			"End the existing level before starting the Level 5 map preview")
++			"End the existing level before starting the Level 5 preview")
+ 	end
+ 	Adapter.Cleanup()
+ 	assert(workspace:FindFirstChild(WORLD_NAME) == nil, "Level 5 world name is occupied by unowned content")
+@@ -300,6 +339,7 @@
+ 		})
+ 		assert(type(manifest) == "table" and typeof(manifest.SpawnCFrame) == "CFrame", "Architecture needs an arrival SpawnCFrame")
+ 		manifest.World, manifest.Origin = world, ORIGIN
++		addPreviewNotices(world, manifest)
+ 		if RunService:IsRunning() then
+ 			local progression = require(script.Parent:WaitForChild("Level 5 Section Progression"))
+ 			local progressResult = progression.Start(world, manifest, {
+--- baseline/ServerScriptService/Level 5 Systems/Level 5 Window Watcher Encounters.ModuleScript.lua
++++ draft/ServerScriptService/Level 5 Systems/Level 5 Window Watcher Encounters.ModuleScript.lua
+@@ -1,6 +1,6 @@
+ -- Passive intermittent Window Watcher; one prepared rig, curated windows in all eight districts.
+ -- No AI, damage, chase, sounds, rewards, movement/pathfinding or delayed tasks.
+--- Start only from the existing developer-only Level 5 round adapter.
++-- Start only from the enabled public/developer Level 5 preview round adapter.
+ -- Import contract: bottom pivot, 8 studs tall, facing local -Z. Mesh/rest bones
+ -- AND animation translations must share the import scale (~3.333 studs/metre).
+ -- Never fix this by scaling only MeshPart.Size. Verify native animated extrema.
+@@ -22,6 +22,11 @@
+ local MAX_WINDOWS_PER_SCAN=24
+ local SCAN_INTERVAL=.75
+ 
++local function previewEnabled()
++	return workspace:GetAttribute("Level5PublicPreviewEnabled")==true
++		or workspace:GetAttribute("Level5DevEnabled")==true
++end
++
+ local function finite(value)
+ 	return type(value)=="number" and value==value and math.abs(value)<math.huge
+ end
+@@ -134,8 +139,8 @@
+ 	end
+ 	if typeof(world)~="Instance" or not world:IsA("Model")
+ 		or world.Name~="Level 5 Generated World" or world:GetAttribute("Level5_MapOnly")~=true
+-		or workspace:GetAttribute("Level5DevEnabled")~=true or not world:IsDescendantOf(workspace) then
+-		return failure("requires the enabled Level 5 developer map preview in Workspace")
++		or not previewEnabled() or not world:IsDescendantOf(workspace) then
++		return failure("requires an enabled Level 5 preview in Workspace")
+ 	end
+ 	if typeof(options.Origin)~="Vector3" or type(options.GetParticipants)~="function" then
+ 		return failure("Origin and a synchronous GetParticipants callback are required")
+@@ -380,7 +385,7 @@
+ 		local elapsed=0
+ 		local function step(now)
+ 			if state.cleaned then return end
+-			if workspace:GetAttribute("Level5DevEnabled")~=true then cleanup(false);return end
++			if not previewEnabled() then cleanup(false);return end
+ 			if not ready then
+ 				local loaded=true
+ 				for _,track in ipairs(state.tracks) do if track.Length<=0 then loaded=false;break end end

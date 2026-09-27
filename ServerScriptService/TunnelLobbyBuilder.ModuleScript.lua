@@ -1849,6 +1849,233 @@ local function styleLevelThreeBay(roomModel, roomCenter, side, roomRadius, roomH
 	roomModel:SetAttribute("LobbyBayStyleVersion", 2)
 end
 
+local function styleLevelFiveRoom(roomModel, roomCenter, side, roomRadius, roomHeight)
+	local oldDecor = roomModel:FindFirstChild("LobbyLevel5ResidentialDecor")
+	assert(not oldDecor or oldDecor:GetAttribute("LobbyBayDecorLevel") == 5,
+		"Preserve an unowned Level 5 lobby decoration")
+	local V, CF = Vector3.new, CFrame.new
+	local palette = {
+		cream = Color3.fromRGB(214,205,174), pale = Color3.fromRGB(232,225,205),
+		white = Color3.fromRGB(241,238,220), carpet = Color3.fromRGB(162,150,125),
+		glass = Color3.fromRGB(87,102,102), dark = Color3.fromRGB(24,30,29),
+		light = Color3.fromRGB(239,230,199),
+	}
+	-- Exact assets and MaterialVariant names from the current Level 5 Architecture.
+	local finishes = {
+		Plaster = {Enum.Material.Plaster,"Level5AgedPlaster","rbxassetid://108985650994325",8},
+		Wallpaper = {Enum.Material.Plaster,"Level5FloralWallpaper","rbxassetid://102299936573476",8},
+		Siding = {Enum.Material.WoodPlanks,"Level5PaintedSiding","rbxassetid://115748401620318",8},
+		Wood = {Enum.Material.Wood,"Level5VeneerWood","rbxassetid://118880038763227",8},
+		Carpet = {Enum.Material.Fabric,"Level5LoopCarpet","rbxassetid://113909496202267",8},
+	}
+	local materials = game:GetService("MaterialService")
+	local function finish(part, key, face, tint)
+		local spec = finishes[key]
+		clearLobbyConcreteTextures(part)
+		for _, child in ipairs(part:GetChildren()) do
+			if child:IsA("Texture") and child:GetAttribute("LobbyBayDecorLevel") == 5 then child:Destroy() end
+		end
+		part.Material = spec[1]; part.MaterialVariant = ""; part.Reflectance = 0
+		part.Color = tint or palette.cream
+		local variant = materials:FindFirstChild(spec[2])
+		if variant and variant:IsA("MaterialVariant") and variant.BaseMaterial == spec[1] then
+			part.MaterialVariant = spec[2]
+		else
+			addLobbyThemeTexture(part,"LobbyLevel5"..key,spec[3],{face},spec[4])
+			for _, child in ipairs(part:GetChildren()) do
+				if child:IsA("Texture") and child.Name == "LobbyLevel5"..key then child:SetAttribute("LobbyBayDecorLevel",5) end
+			end
+		end
+		part:SetAttribute("TunnelTextureRole","LobbyIndoorSuburbs"..key)
+	end
+	local outward = V(side,0,0)
+	local surfaces = {
+		ChamberFloor={"Carpet",Enum.NormalId.Right,palette.carpet},
+		DoorThreshold={"Carpet",Enum.NormalId.Top,palette.carpet},
+		DoorVestibuleFloor={"Carpet",Enum.NormalId.Top,palette.carpet},
+		ChamberCeiling={"Plaster",Enum.NormalId.Left,palette.pale},
+		DoorVestibuleCeiling={"Plaster",Enum.NormalId.Bottom,palette.pale},
+	}
+	for _, object in ipairs(roomModel:GetChildren()) do
+		if object:IsA("BasePart") then
+			local spec = surfaces[object.Name]
+			if object.Name == "CurvedChamberWall" then
+				local rear = (object.Position-roomCenter):Dot(outward) > roomRadius*.45
+				spec = {rear and "Wallpaper" or "Plaster",Enum.NormalId.Front,palette.cream}
+			elseif object.Name == "DoorVestibuleWall" then
+				spec = {"Plaster",object.Position.Z>roomCenter.Z and Enum.NormalId.Front or Enum.NormalId.Back,palette.cream}
+			end
+			if spec then finish(object,spec[1],spec[2],spec[3]) end
+		end
+	end
+	if oldDecor then oldDecor:Destroy() end
+	local decor = Instance.new("Model")
+	decor.Name = "LobbyLevel5ResidentialDecor"; decor:SetAttribute("LobbyBayDecorLevel",5); decor.Parent = roomModel
+	local function piece(name, frame, size, tint, material)
+		local part = makeLobbyThemePart(decor,5,name,frame,size,tint,material)
+		part.CastShadow = false
+		return part
+	end
+	-- Shallow scenic fronts occupy only the rear strip. Their nearest point is
+	-- 20.8 studs outward; queue detector squares end at 16.41 (4.39 clear).
+	-- They are cosmetic and carry no prompts, triggers, collisions or queries.
+	for index, spec in ipairs({{-10,22.5,11.4},{0,23.6,18.2},{10,22.5,14.4}}) do
+		local z, depth, height = spec[1],spec[2],spec[3]
+		local origin = roomCenter+outward*depth+V(0,.31,z)
+		local frame = CFrame.lookAt(origin,origin-outward)
+		local wall = piece("ResidentialFront"..index,frame*CF(0,height/2,0),V(8.6,height,.55),palette.cream,Enum.Material.WoodPlanks)
+		finish(wall,"Siding",Enum.NormalId.Front,index==2 and palette.pale or palette.cream)
+		piece("FrontSkirting"..index,frame*CF(0,.22,-.36),V(8.7,.36,.24),palette.white,Enum.Material.Wood)
+		piece("FrontCrown"..index,frame*CF(0,height-.1,-.34),V(8.8,.4,.32),palette.white,Enum.Material.Wood)
+		local door = piece("ClosedDomesticDoor"..index,frame*CF(-2.15,4.1,-.35),V(3.1,7.6,.22),palette.pale,Enum.Material.Wood)
+		finish(door,"Wood",Enum.NormalId.Front,palette.pale)
+		for _, x in ipairs({-3.82,-.48}) do
+			piece("DoorReveal"..index,frame*CF(x,4.15,-.5),V(.18,8,.24),palette.white,Enum.Material.Wood)
+		end
+		piece("DoorHeader"..index,frame*CF(-2.15,8.12,-.5),V(3.52,.23,.24),palette.white,Enum.Material.Wood)
+		piece("QuietBrassHandle"..index,frame*CF(-1.08,4.1,-.54),V(.15,.28,.19),Color3.fromRGB(137,119,65),Enum.Material.Metal)
+		local function window(name,x,y,width,height)
+			piece(name.."Recess",frame*CF(x,y,-.37),V(width+.34,height+.34,.2),palette.white,Enum.Material.Wood)
+			piece(name.."DarkInterior",frame*CF(x,y,-.49),V(width,height,.08),palette.dark,Enum.Material.SmoothPlastic)
+			local pane = piece(name.."TintedPane",frame*CF(x,y,-.55),V(width,height,.08),palette.glass,Enum.Material.Glass)
+			pane.Transparency=.2; pane.Reflectance=0
+			piece(name.."Mullion",frame*CF(x,y,-.62),V(.1,height,.13),palette.white,Enum.Material.Wood)
+			piece(name.."Crossbar",frame*CF(x,y,-.63),V(width,.1,.13),palette.white,Enum.Material.Wood)
+		end
+		window("DomesticWindow"..index,2,5.6,3.1,4.2)
+		if index==2 then
+			window("UpperDomesticWindow",0,14.5,5.2,4.2)
+			piece("UpperBalconySlab",frame*CF(0,10.7,-1.5),V(9,.3,2.6),palette.cream,Enum.Material.Plaster)
+			piece("WhiteBalconyHandrail",frame*CF(0,13.2,-2.68),V(9,.16,.16),palette.white,Enum.Material.Wood)
+			piece("WhiteBalconyBottomRail",frame*CF(0,11.05,-2.68),V(9,.14,.14),palette.white,Enum.Material.Wood)
+			for picket=-4,4 do
+				piece("WhiteBalconyPicket",frame*CF(picket,12.1,-2.68),V(.1,2.2,.1),palette.white,Enum.Material.Wood)
+			end
+		end
+	end
+	-- Shared overhead fittings echo the level's fluorescent domestic hall.
+	-- Keep the previous generic fixtures as reversible, hidden authored parts.
+	for _, child in ipairs(roomModel:GetChildren()) do
+		if child:IsA("BasePart") and child.Name=="ChamberLight" then
+			child.Transparency=1
+			for _, light in ipairs(child:GetChildren()) do if light:IsA("Light") then light.Enabled=false end end
+		end
+	end
+	for index, offset in ipairs({V(-9,0,-8),V(9,0,-8),V(-9,0,8),V(9,0,8)}) do
+		local frame=CF(roomCenter+offset+V(0,roomHeight-.94,0))
+		piece("SharedFluorescentFrame"..index,frame,V(7,.24,2.1),Color3.fromRGB(136,138,126),Enum.Material.Metal)
+		local diffuser=piece("SharedFluorescentDiffuser"..index,frame*CF(0,-.18,0),V(6.55,.12,1.7),palette.light,Enum.Material.Neon)
+		local light=Instance.new("SurfaceLight")
+		light.Name="ResidentialHallLight";light.Face=Enum.NormalId.Bottom;light.Color=palette.light
+		light.Brightness=.75;light.Range=28;light.Angle=128;light.Shadows=false;light.Parent=diffuser
+	end
+	for _, z in ipairs({-16,0,16}) do
+		piece("SharedCeilingSeam",CF(roomCenter+V(0,roomHeight-.73,z)),V(43,.04,.08),Color3.fromRGB(136,138,126),Enum.Material.Metal)
+	end
+	roomModel:SetAttribute("LobbyBayTheme","IndoorSuburbs")
+	roomModel:SetAttribute("LobbyBayStyleVersion",1)
+	roomModel:SetAttribute("Level5ResidentialPreview",true)
+	return decor
+end
+
+-- Reapply only the Level 5 room's finish/decor in an existing lobby. Stations,
+-- detectors, their GUIs, doorway objects and all other bays stay in place.
+function Builder.RefreshLevelFiveRoom(roomModel)
+	assert(roomModel and roomModel:IsA("Model") and roomModel.Name=="Level5QueueRoom","Expected the existing Level5QueueRoom")
+	assert(roomModel:GetAttribute("LevelNumber")==5,"Wrong lobby room")
+	local floor=assert(roomModel:FindFirstChild("ChamberFloor"),"Missing chamber floor")
+	local ceiling=assert(roomModel:FindFirstChild("ChamberCeiling"),"Missing chamber ceiling")
+	local rooms=assert(roomModel.Parent,"Detached lobby room")
+	local lobby=assert(rooms.Parent,"Detached lobby")
+	local doors=lobby:FindFirstChild("LevelDoorways")
+	local header=doors and doors:FindFirstChild("Level5Information")
+	assert(header and header:IsA("BasePart"),"Missing current Level 5 doorway sign")
+	local center=floor.Position+Vector3.new(0,.42,0)
+	local side=center.X<header.Position.X and -1 or 1
+	local radius=roomModel:GetAttribute("CircularBayDiameter")/2
+	local height=ceiling.Position.Y-center.Y-.2
+	assert(math.abs(radius-28)<.01 and math.abs(height-22.4)<.01,"Inspect changed Level 5 room dimensions before restyling")
+	for index=17,20 do
+		local active=roomModel:FindFirstChild("LaunchZone"..index)
+		local future=roomModel:FindFirstChild("FutureLaunchZone"..index)
+		assert(not (active and future),"Ambiguous queue detector "..index)
+		local detector=active or future
+		assert(detector and detector:IsA("BasePart"),"Preserve missing or renamed queue detector "..index)
+	end
+	return styleLevelFiveRoom(roomModel,center,side,radius,height)
+end
+
+-- Activate only the four existing Level 5 station objects. GameManager owns its
+-- private registry; callers must explicitly bind returned station records in a
+-- running lobby. Renaming a marker alone is not a live queue registration.
+function Builder.ActivateLevelFiveStations(roomModel)
+	assert(roomModel and roomModel:IsA("Model") and roomModel.Name=="Level5QueueRoom"
+		and roomModel:GetAttribute("LevelNumber")==5,"Expected the existing Level 5 room")
+	local floor=assert(roomModel:FindFirstChild("ChamberFloor"),"Missing chamber floor")
+	local center=floor.Position+Vector3.new(0,.42,0)
+	local offsets={Vector3.new(-9,.18,-13.2),Vector3.new(9,.18,-13.2),Vector3.new(-9,.18,13.2),Vector3.new(9,.18,13.2)}
+	local colors={Color3.fromRGB(82,255,180),Color3.fromRGB(88,218,255),Color3.fromRGB(168,255,112),Color3.fromRGB(126,196,255)}
+	local receipt={changes={},room=roomModel}
+	local stations={}
+	local function stage(object,property,nextValue,attribute)
+		local oldValue
+		if attribute then oldValue=object:GetAttribute(property) else oldValue=object[property] end
+		if oldValue~=nextValue then table.insert(receipt.changes,{object=object,property=property,attribute=attribute==true,oldValue=oldValue,newValue=nextValue}) end
+	end
+	-- All four detectors, transforms and display labels are checked before writes.
+	for displayIndex=1,4 do
+		local index=16+displayIndex
+		local active=roomModel:FindFirstChild("LaunchZone"..index)
+		local future=roomModel:FindFirstChild("FutureLaunchZone"..index)
+		assert(not (active and future),"Ambiguous Level 5 station "..index)
+		local detector=active or future
+		assert(detector and detector:IsA("BasePart") and not detector.CanCollide,"Missing or changed detector "..index)
+		local delta=detector.Position-center-offsets[displayIndex]
+		assert(delta.Magnitude<.02 and (detector.Size-Vector3.new(14.82,.3,14.82)).Magnitude<.02,
+			"Inspect changed Level 5 detector geometry "..index)
+		local sign=roomModel:FindFirstChild("Station"..index.."Sign")
+		local title=sign and sign:FindFirstChild("Title",true)
+		local subtitle=sign and sign:FindFirstChild("Subtitle",true)
+		assert(title and title:IsA("TextLabel") and subtitle and subtitle:IsA("TextLabel"),"Missing existing station display "..index)
+		if future then
+			assert(title.Text=="STATION "..displayIndex.."  •  OFFLINE" or title.Text=="STATION "..displayIndex.."  •  COMING SOON",
+				"Preserve changed station title "..index)
+			assert(subtitle.Text=="AWAITING LEVEL AUTHORIZATION" or subtitle.Text=="LEVEL 5  •  ROUTE IN DEVELOPMENT",
+				"Preserve changed station subtitle "..index)
+			stage(detector,"Name","LaunchZone"..index)
+			stage(title,"Text","STATION "..displayIndex.."  •  0/6")
+			stage(title,"TextColor3",colors[displayIndex])
+			stage(subtitle,"Text","ENTER TO HOST  •  MAX 6 PLAYERS")
+		end
+		stations[index]={index=index,displayIndex=displayIndex,level=5,zone=detector,title=title,sub=subtitle,color=colors[displayIndex],busy=false}
+	end
+	stage(roomModel,"LevelEnabled",true,true)
+	for _,change in ipairs(receipt.changes) do
+		if change.attribute then change.object:SetAttribute(change.property,change.newValue)
+		else change.object[change.property]=change.newValue end
+	end
+	return {stations=stations,receipt=receipt}
+end
+
+function Builder.RestoreLevelFiveStationActivation(receipt)
+	assert(type(receipt)=="table" and type(receipt.changes)=="table" and receipt.room
+		and receipt.room.Parent and receipt.room.Name=="Level5QueueRoom","Invalid Level 5 activation receipt")
+	-- Reject stale rollback instead of overwriting subsequent edits or queue use.
+	for _,change in ipairs(receipt.changes) do
+		assert(change.object.Parent,"Activation object no longer exists")
+		local value
+		if change.attribute then value=change.object:GetAttribute(change.property) else value=change.object[change.property] end
+		assert(value==change.newValue,"Activation changed since receipt; preserve newer edits")
+	end
+	for index=#receipt.changes,1,-1 do
+		local change=receipt.changes[index]
+		if change.attribute then change.object:SetAttribute(change.property,change.oldValue)
+		else change.object[change.property]=change.oldValue end
+	end
+	return true
+end
+
+
 local function addRoom(parent, center, level, side, zOffset, active, stations)
 	local roomModel = Instance.new("Model")
 	roomModel.Name = "Level" .. level .. "QueueRoom"
@@ -2020,6 +2247,8 @@ local function addRoom(parent, center, level, side, zOffset, active, stations)
 		styleLevelTwoBay(roomModel, roomCenter, side, roomRadius, roomHeight)
 	elseif level == 3 then
 		styleLevelThreeBay(roomModel, roomCenter, side, roomRadius, roomHeight)
+	elseif level == 5 then
+		styleLevelFiveRoom(roomModel, roomCenter, side, roomRadius, roomHeight)
 	end
 
 	roomModel:SetAttribute("LevelNumber", level)
@@ -2067,8 +2296,8 @@ local function addDoorway(parent, center, level, side, zOffset, active)
 		header,
 		face,
 		"LEVEL " .. level,
-		-- An open door carries no subtitle; the queue/capacity line was dropped.
-		not active and "COMING SOON  •  WORK IN PROGRESS" or nil,
+		-- The residential level is publicly accessible as a preview.
+		level == 5 and active and "RESIDENTIAL PREVIEW" or (not active and "COMING SOON  •  WORK IN PROGRESS" or nil),
 		accentColor
 	)
 
@@ -2683,7 +2912,7 @@ function Builder.Build(center)
 	}
 	for _, def in ipairs(levelDefs) do
 		addDoorway(doors, center, def.level, def.side, def.z, def.active)
-		addRoom(rooms, center, def.level, def.side, def.z, def.active or def.level == 4 or def.level == 5, stations)
+		addRoom(rooms, center, def.level, def.side, def.z, def.active or def.level == 4, stations)
 	end
 
 	-- Startup fingerprint. This is the fastest way to tell a stale server apart
