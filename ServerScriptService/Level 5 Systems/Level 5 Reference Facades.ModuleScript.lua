@@ -923,16 +923,17 @@ function Facades.BuildBrightAtrium(K, parent, frame)
 	-- The small fronts are distinct houses with tan, green and brown shingles;
 	-- the apartment tiers are a separate plane behind their pitched roofs.
 	for _, house in ipairs({
-		{ "LeftGreenRoof", -42, 8, 22, 16, 8, COLORS.lightSage, COLORS.sageReveal, COLORS.shutter },
-		{ "TanMiddle", -17, 5, 24, 18, 9, COLORS.oatmeal, COLORS.roofTan, nil },
-		{ "BrownMiddle", 11, 8, 24, 17, 9, COLORS.brownHouse, COLORS.roofTan, COLORS.shutter },
-		{ "RightOliveRoof", 39, 4, 27, 19, 10, COLORS.oliveGray, COLORS.roof, COLORS.shutter },
+		{ "SmallGreenGable", -46, 19, 20, 16, 8, COLORS.lightSage, COLORS.sageReveal, COLORS.shutter, 6 },
+		{ "TanShingledFront", -19, 10, 24, 18, 9, COLORS.oatmeal, COLORS.roofTan, nil, 7.5 },
+		{ "BrownShingledFront", 10, 8, 24, 17, 10, COLORS.brownHouse, COLORS.roofTan, COLORS.shutter, 6.5 },
+		{ "NearOlivePorch", 40, 1, 29, 20, 12, COLORS.oliveGray, COLORS.roof, COLORS.shutter, 9 },
 	}) do
 		addClapboardHouse(b, houses, {
 			name = house[1], x = -house[2], z = house[3],
 			width = house[4], height = house[5], rise = house[6],
 			wall = house[7], roof = house[8], shutters = house[9],
-			porchDepth = 6.5, doorSide = house[2] == -17 and -1 or 1,
+			porchDepth = house[10], doorSide = house[2] == -19 and -1 or 1,
+			porchGableRise = house[1] == "NearOlivePorch" and 5 or nil,
 		})
 	end
 	piece(court, "CourtWalk", V(125, 0.25, 22), CF(-1, -0.14, -18), COLORS.path, Enum.Material.Concrete)
@@ -944,56 +945,97 @@ function Facades.BuildBrightAtrium(K, parent, frame)
 		end
 	end
 
-	local apartmentRail = Facades.RailStyle({ height = 3.1, spacing = 8, balusterSize = 0.22 })
-	addBalconyTower(b, apartments, {
-		name = "CreamStackedBalconies", x = -13, z = 63,
-		width = 124, floors = 9, floorH = 12, bays = 6,
-		color = COLORS.tower, railStyle = apartmentRail, distant = true,
-	})
-	-- Exposed switchback stairs in the right bay: usable-looking landings and
-	-- crossing flights remain visibly separate from the balcony faces.
+	-- The two balcony banks project from the wall at different depths. Broad
+	-- cream piers keep the facade reading as rooms behind a circulation face,
+	-- rather than one continuous flat band.
+	local apartmentRail = Facades.RailStyle({ height = 3.1, balusters = 5, balusterSize = 0.22 })
+	piece(apartments, "CreamApartmentCore", V(124, 108, 16), CF(-13, 54, 71), COLORS.tower, Enum.Material.Plaster)
+	for _, x in ipairs({ -74, -43, -12, 19, 48 }) do
+		piece(apartments, "DeepVerticalPier", V(2.3, 109, 7.4), CF(x, 54.5, 60), COLORS.tower, Enum.Material.Plaster)
+	end
 	for floor = 0, 8 do
-		local y = 5 + floor * 12
+		local y = 2.5 + floor * 12
+		for _, x in ipairs({ -58.5, -27.5, 3.5, 34 }) do
+			piece(apartments, "DarkBalconyRoom", V(24, 7.4, 0.22), CF(x, y + 4.4, 62.5), COLORS.towerRecess)
+			piece(apartments, "DividedBalconyDoor", V(12, 6.8, 0.24), CF(x, y + 4.4, 62.3), COLORS.glass)
+		end
+		for bank, x in ipairs({ -29, 19 }) do
+			local frontZ = bank == 1 and 56.6 or 57.7
+			local deckWidth = bank == 1 and 34 or 58
+			piece(apartments, "DeepBalconyDeck", V(deckWidth, 0.75, 6.5), CF(x, y, frontZ + 3.25), COLORS.tower, Enum.Material.Plaster)
+			Facades.BuildBalconyRail(piece, apartments, CF(x, y + 0.38, frontZ), deckWidth - 2, apartmentRail)
+		end
+		for _, x in ipairs({ -28, 34 }) do
+			piece(apartments, "WarmBalconySconce", V(0.55, 0.8, 0.3), CF(x, y + 6.8, 62.05), COLORS.lamp, Enum.Material.Neon)
+		end
+	end
+	piece(apartments, "ApartmentParapet", V(127, 1.5, 6.5), CF(-13, 108.75, 60), COLORS.tower, Enum.Material.Plaster)
+	-- Flights overlap the front edge of each landing and the adjacent balcony.
+	-- The near-side tread and handrail rhythm makes the switchback legible.
+	for floor = 0, 8 do
+		local y = 2.5 + floor * 12
 		local side = floor % 2 == 0 and 1 or -1
-		piece(apartments, "StairLanding", V(13, 0.6, 5), CF(-68, y, 54), COLORS.tower, Enum.Material.Plaster)
-		piece(apartments, "ZigzagFlight", V(18.5, 0.48, 2.8), CF(-68, y + 5.8, 49) * CFrame.Angles(0, 0, -side * math.rad(40)), COLORS.stairGray)
-		piece(apartments, "ZigzagHandrail", V(18.5, 0.2, 0.22), CF(-68, y + 8.4, 47.2) * CFrame.Angles(0, 0, -side * math.rad(40)), COLORS.trim)
-		piece(apartments, "LandingFrontRail", V(13, 0.22, 0.24), CF(-68, y + 3.1, 51.3), COLORS.trim)
+		local slope = CFrame.Angles(0, 0, -side * math.rad(40))
+		piece(apartments, "ConnectedStairLanding", V(19, 0.6, 8), CF(-67, y, 56), COLORS.tower, Enum.Material.Plaster)
+		piece(apartments, "SwitchbackFlight", V(19, 0.55, 3), CF(-67, y + 5.9, 54) * slope, COLORS.stairGray)
+		for step = 1, 3 do
+			local px = -67 - side * (step - 2) * 4.3
+			piece(apartments, "VisibleStairTread", V(3.7, 0.22, 3.25), CF(px, y + step * 3, 54), COLORS.porchWhite)
+		end
+		for _, z in ipairs({ 52.35, 55.65 }) do
+			piece(apartments, "WhiteStairHandrail", V(19.5, 0.24, 0.24), CF(-67, y + 8.4, z) * slope, COLORS.trim)
+		end
+		piece(apartments, "LandingFrontRail", V(19, 0.24, 0.24), CF(-67, y + 3.1, 51.9), COLORS.trim)
 	end
 
-	-- This is a many-windowed, modern rectangular tower, unlike the
-	-- continuous curved balcony canyon in reference #9.
-	addBalconyTower(b, modernTower, {
-		name = "LeftManyWindowTower", x = 69, z = 73,
-		width = 41, depth = 21, floors = 16, floorH = 10.8, bays = 6,
-		modern = true, color = COLORS.towerWhite,
-	})
+	-- The rear tower has a curved corner with separate narrow window bays.
+	-- Cylindrical pale floor bands give a different silhouette from the flat
+	-- cream apartment tiers and from section 9's rounded balconies.
+	local towerHeight, towerRadius = 16 * 10.8, 18
+	local towerX, towerZ = 102, 128
+	local towerCore = piece(modernTower, "RoundModernTowerCore", V(towerHeight, towerRadius * 2, towerRadius * 2), CF(towerX, towerHeight / 2, towerZ) * CFrame.Angles(0, 0, math.rad(90)), COLORS.towerWhite, Enum.Material.Plaster)
+	setShape(towerCore, Enum.PartType.Cylinder, V(towerHeight, towerRadius * 2, towerRadius * 2))
+	for column = 0, 8 do
+		local angle = math.rad(-72 + column * 18)
+		local x = towerX + math.sin(angle) * (towerRadius + 0.25)
+		local z = towerZ - math.cos(angle) * (towerRadius + 0.25)
+		for floor = 0, 15 do
+			piece(modernTower, "CurvedTowerWindow", V(3.5, 7.4, 0.2), CF(x, 5.5 + floor * 10.8, z) * CFrame.Angles(0, -angle, 0), COLORS.glassBlue)
+		end
+	end
+	for column = 0, 9 do
+		local angle = math.rad(-81 + column * 18)
+		piece(modernTower, "CurvedTowerMullion", V(0.55, towerHeight, 0.7), CF(towerX + math.sin(angle) * (towerRadius + 0.55), towerHeight / 2, towerZ - math.cos(angle) * (towerRadius + 0.55)) * CFrame.Angles(0, -angle, 0), COLORS.trim)
+	end
 	for floor = 0, 15 do
-		piece(modernTower, "WhiteCornerGlazingBand", V(0.55, 7.5, 13), CF(89.8, 6 + floor * 10.8, 67), COLORS.trim)
+		local ring = piece(modernTower, "WhiteCurvedFloorBand", V(0.48, towerRadius * 2 + 2, towerRadius * 2 + 2), CF(towerX, floor * 10.8 + 1, towerZ) * CFrame.Angles(0, 0, math.rad(90)), COLORS.trim)
+		setShape(ring, Enum.PartType.Cylinder, V(0.48, towerRadius * 2 + 2, towerRadius * 2 + 2))
 	end
 
 	-- Broad suspended-tile ceiling with thick coffer beams and luminous
 	-- squares. Its comparatively bright cream tone is specific to this view.
 	local CY, CX, CZ = 191, 4, 16
-	piece(coffer, "CreamCeilingField", V(300, 0.8, 330), CF(CX, CY + 0.4, CZ), COLORS.ceilingTile)
-	for x = -145, 145, 16 do
-		piece(coffer, "CeilingTileBarLong", V(0.17, 0.11, 330), CF(x, CY - 0.06, CZ), COLORS.tBar)
+	piece(coffer, "CreamCeilingField", V(700, 0.8, 620), CF(CX, CY + 0.4, CZ), COLORS.ceilingTile)
+	for x = -240, 240, 16 do
+		piece(coffer, "CeilingTileBarLong", V(0.17, 0.11, 490), CF(x, CY - 0.06, CZ), COLORS.tBar)
 	end
-	for z = -142, 164, 17 do
-		piece(coffer, "CeilingTileBarCross", V(300, 0.11, 0.17), CF(CX, CY - 0.06, z), COLORS.tBar)
+	for z = -220, 220, 17 do
+		piece(coffer, "CeilingTileBarCross", V(490, 0.11, 0.17), CF(CX, CY - 0.06, z), COLORS.tBar)
 	end
 	for _, x in ipairs({ -65, 65 }) do
-		piece(coffer, "DeepCofferLongBeam", V(3.5, 3.8, 330), CF(x, CY - 1.9, CZ), COLORS.cofferBeam)
+		piece(coffer, "DeepCofferLongBeam", V(3.5, 3.8, 490), CF(x, CY - 1.9, CZ), COLORS.cofferBeam)
 	end
 	for _, z in ipairs({ -50, 75 }) do
-		piece(coffer, "DeepCofferCrossBeam", V(300, 3.8, 3.5), CF(CX, CY - 1.9, z), COLORS.cofferBeam)
+		piece(coffer, "DeepCofferCrossBeam", V(490, 3.8, 3.5), CF(CX, CY - 1.9, z), COLORS.cofferBeam)
 	end
 	for _, x in ipairs({ -110, -54, 0, 54, 110 }) do
 		for _, z in ipairs({ -96, -27, 42, 111 }) do
 			piece(coffer, "LuminousSquarePanel", V(6.7, 0.15, 6.7), CF(x, CY - 0.16, z), COLORS.fluorescent, Enum.Material.Neon)
 		end
 	end
-	piece(coffer, "CreamAtriumClosure", V(300, CY, 1.5), CF(CX, CY / 2, 180), COLORS.tower, Enum.Material.Plaster)
+	piece(coffer, "CreamAtriumClosure", V(700, CY, 1.5), CF(CX, CY / 2, 180), COLORS.tower, Enum.Material.Plaster)
+	piece(coffer, "LeftAtriumClosure", V(1.5, CY, 450), CF(155, CY / 2, 8), COLORS.tower, Enum.Material.Plaster)
+	piece(coffer, "RightAtriumClosure", V(1.5, CY, 450), CF(-160, CY / 2, 8), COLORS.tower, Enum.Material.Plaster)
 	return b.finish(root, 3, VIEW3_BUDGET, VIEW3_CAMERA)
 end
 
@@ -1013,14 +1055,15 @@ function Facades.BuildTowerCanyon(K, parent, frame)
 	-- Their four-panel recessed openings, clapboard, rails and roofs are not
 	-- shared with the very different rounded-tower or dense-gable sections.
 	for _, house in ipairs({
-		{ "GrayTaupeLeft", -37, 5, 28, 21, 13, COLORS.taupe, COLORS.shingle },
-		{ "MutedCenter", -6, 3, 27, 20, 12, COLORS.brownHouse, COLORS.roof },
-		{ "PaleRight", 25, 8, 27, 20, 12, COLORS.beigeHouse, COLORS.shingle },
+		{ "PaleCroppedRight", -39, 1, 29, 23, 13, COLORS.beigeHouse, COLORS.shingle, 8, -1, nil },
+		{ "DeepPorchCenter", -5, 6, 31, 20, 11, COLORS.brownHouse, COLORS.roof, 10, 1, nil },
+		{ "GrayTaupeLeft", 29, 10, 34, 22, 14, COLORS.taupe, COLORS.shingle, 9, -1, 5 },
 	}) do
 		addClapboardHouse(b, homes, {
 			name = house[1], x = house[2], z = house[3],
 			width = house[4], height = house[5], rise = house[6],
-			wall = house[7], roof = house[8], porchDepth = 9,
+			wall = house[7], roof = house[8], porchDepth = house[9],
+			doorSide = house[10], porchGableRise = house[11],
 		})
 	end
 	piece(borders, "SmallFrontLawn", V(115, 0.28, 42), CF(-5, -0.18, -23), COLORS.grass, Enum.Material.LeafyGrass)
@@ -1031,50 +1074,56 @@ function Facades.BuildTowerCanyon(K, parent, frame)
 		setShape(piece(borders, "GardenShrub", size, CF(x, 1.05, -9), COLORS.shrub, Enum.Material.LeafyGrass), Enum.PartType.Ball, size)
 	end
 
-	-- Separate tall cream shafts sit immediately behind the two-storey
-	-- houses. Balconies are recessed tier by tier, not continuous bright
-	-- horizontal strips; slim dark window runs punctuate the pale piers.
-	local rail = Facades.RailStyle({ height = 3.1, balusters = 7, topHeight = 0.32, balusterSize = 0.22 })
-	addBalconyTower(b, towers, {
-		name = "NearLeftBalconyShaft", x = -47, z = 40,
-		width = 48, floors = 21, floorH = 12.5, bays = 3,
-		railStyle = rail, distant = true, projection = 3.4,
-	})
-	addBalconyTower(b, towers, {
-		name = "NearRightBalconyShaft", x = 19, z = 52,
-		width = 45, floors = 22, floorH = 12.5, bays = 3,
-		railStyle = rail, distant = true, projection = 3.4,
-	})
-	addBalconyTower(b, towers, {
-		name = "FarCentralVerticalShaft", x = 74, z = 106,
-		width = 39, floors = 22, floorH = 12.5, bays = 3,
-		modern = true, color = COLORS.hazeTower, simpleModern = true,
-	})
-	for floor = 0, 20 do
-		local y = 8 + floor * 12.5
-		for _, x in ipairs({ -67, -27 }) do
-			piece(towers, "LeftNarrowWindow", V(1.3, 8.2, 0.2), CF(x, y, 39.45), COLORS.glass)
+	-- Tall narrow stacks at different setbacks reveal dark room recesses
+	-- between solid vertical piers. Each balcony is a short bay, so its white
+	-- rail does not become one uninterrupted stripe across the whole canyon.
+	local rail = Facades.RailStyle({ height = 3.1, balusters = 5, topHeight = 0.32, balusterSize = 0.22 })
+	local function recessedShaft(name, x, z, width, floors, balconyWidth, projection, side)
+		local shaft = model(name, towers)
+		local height = floors * 12.5
+		piece(shaft, "SolidCreamShaft", V(width, height, 16), CF(x, height / 2, z + 8), COLORS.tower, Enum.Material.Plaster)
+		for _, side in ipairs({ -1, 1 }) do
+			piece(shaft, "ProjectingShaftPier", V(3.4, height, 8), CF(x + side * (width / 2 - 1.7), height / 2, z - 1.3), COLORS.tower, Enum.Material.Plaster)
 		end
-		for _, x in ipairs({ 0, 38 }) do
-			piece(towers, "RightNarrowWindow", V(1.3, 8.2, 0.2), CF(x, y, 51.45), COLORS.glass)
+		local faceX = x - side * 7
+		for floor = 0, floors - 1 do
+			local y = 2.5 + floor * 12.5
+			local tierColor = COLORS.tower:Lerp(COLORS.hazeTower, 0.65 * floor / floors)
+			piece(shaft, "DeepBalconyRecess", V(balconyWidth - 2, 8.2, 0.25), CF(faceX, y + 4.4, z - 0.35), COLORS.towerRecess)
+			piece(shaft, "DarkRecessedWindow", V(balconyWidth - 8, 7.5, 0.25), CF(faceX, y + 4.4, z - 0.57), COLORS.glass)
+			piece(shaft, "IndividualBalconySlab", V(balconyWidth + 0.7, 0.7, projection), CF(faceX, y, z - projection / 2), tierColor, Enum.Material.Plaster)
+			Facades.BuildBalconyRail(piece, shaft, CF(faceX, y + 0.35, z - projection), balconyWidth, rail)
+			piece(shaft, "NarrowShaftWindow", V(7.2, 8.4, 0.21), CF(x + side * 14.5, y + 4.6, z - 1.45), COLORS.glass)
+			if floor % 3 == 0 then
+				piece(shaft, "WarmLandingLight", V(0.5, 0.7, 0.3), CF(faceX - balconyWidth / 2 + 2, y + 7.6, z - 0.6), COLORS.lamp, Enum.Material.Neon)
+			end
 		end
+		piece(shaft, "ShaftCornice", V(width + 1.5, 1.5, 5), CF(x, height + 0.75, z - 1.2), COLORS.tower, Enum.Material.Plaster)
 	end
 
-	-- Local translucent planes soften the upper silhouettes without
-	-- changing global Lighting or masking the house fronts.
-	local function veil(name, size, cf, transparency)
-		local part = piece(haze, name, size, cf, COLORS.haze)
-		if part then
-			part.Transparency = transparency
-			part.CastShadow = false
-		end
+	recessedShaft("LeftSetbackBalconyStack", 41, 55, 43, 22, 22, 5.5, 1)
+	recessedShaft("NearRightBalconyStack", -49, 37, 44, 23, 23, 4.8, -1)
+	-- A solid cream spine and separate far glass shaft break the previous
+	-- empty center while retaining a readable vertical gap between towers.
+	piece(towers, "CentralNarrowSpine", V(21, 286, 25), CF(-2, 143, 91), COLORS.tower, Enum.Material.Plaster)
+	for _, x in ipairs({ -11, 7 }) do
+		piece(towers, "SpineCornerPier", V(2.2, 286, 5), CF(x, 143, 77), COLORS.trim)
 	end
-	veil("UpperMistNear", V(300, 205, 0.2), CF(8, 190, 25), 0.93)
-	veil("UpperMistFar", V(320, 240, 0.2), CF(14, 180, 82), 0.91)
-	veil("GrayDistantRoof", V(300, 0.7, 330), CF(0, 286, 48), 0)
-	piece(haze, "FarMistBackdrop", V(320, 286, 1.5), CF(0, 143, 170), COLORS.hazeTower, Enum.Material.Plaster)
-	piece(haze, "LeftPaleCanyonWall", V(2, 286, 310), CF(-135, 143, 49), COLORS.hazeTower, Enum.Material.Plaster)
-	piece(haze, "RightPaleCanyonWall", V(2, 286, 310), CF(135, 143, 49), COLORS.hazeTower, Enum.Material.Plaster)
+	for floor = 0, 22 do
+		piece(towers, "CentralVerticalWindowRun", V(2.3, 8.7, 0.24), CF(-2, 7.4 + floor * 12.5, 77.9), COLORS.glass)
+	end
+	addBalconyTower(b, towers, {
+		name = "FarManyWindowShaft", x = 78, z = 124,
+		width = 30, floors = 24, floorH = 11.7, bays = 3,
+		modern = true, color = COLORS.hazeTower, simpleModern = true,
+	})
+
+	-- Enclosure closes the sky without the old visible translucent rectangles.
+	-- A camera-local fog effect would require a separate, scoped visual test.
+	piece(haze, "GrayDistantRoof", V(440, 0.7, 390), CF(0, 286, 48), COLORS.haze)
+	piece(haze, "FarMistBackdrop", V(440, 286, 1.5), CF(0, 143, 170), COLORS.hazeTower, Enum.Material.Plaster)
+	piece(haze, "LeftPaleCanyonWall", V(2, 286, 390), CF(-218, 143, 49), COLORS.hazeTower, Enum.Material.Plaster)
+	piece(haze, "RightPaleCanyonWall", V(2, 286, 390), CF(218, 143, 49), COLORS.hazeTower, Enum.Material.Plaster)
 	return b.finish(root, 4, VIEW4_BUDGET, VIEW4_CAMERA)
 end
 
