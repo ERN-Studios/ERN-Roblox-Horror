@@ -36,7 +36,7 @@ local COLORS = {
 	ceilingDark = Color3.fromRGB(120, 118, 112), -- uneven/dark tile bays
 	tBar = Color3.fromRGB(225, 225, 220),
 	fluorescent = Color3.fromRGB(228, 236, 236), -- Neon panel only, no light object
-	corridorWall = Color3.fromRGB(226, 218, 198), -- plain cream right wall
+	corridorWall = Color3.fromRGB(224, 207, 177), -- warm cream right wall
 	corridorBacking = Color3.fromRGB(214, 206, 188),
 	corridorEnd = Color3.fromRGB(200, 192, 172),
 	opening = Color3.fromRGB(34, 34, 36),
@@ -81,8 +81,8 @@ local COLORS = {
 -- Estimated reference cameras, each in its builder's local space.
 -- View 1: origin = ground level at the center of the cottage front wall; cottage faces local -Z.
 local VIEW1_CAMERA = { offset = Vector3.new(-8, 5.5, -58), target = Vector3.new(2, 55, 78), fov = 70 }
--- View 2: origin = floor at the corridor centerline, near end; the hall runs toward local -Z.
-local VIEW2_CAMERA = { offset = Vector3.new(1, 5.5, -2), target = Vector3.new(0, 5, -120), fov = 70 }
+-- View 2: camera sits by the near left frontage and looks obliquely down local -Z.
+local VIEW2_CAMERA = { offset = Vector3.new(-3.5, 5.5, -0.5), target = Vector3.new(-29.5, 5, -120), fov = 70 }
 -- View 3: origin = ground at the center of the cottage front wall; cottage faces local -Z.
 local VIEW3_CAMERA = { offset = Vector3.new(-8, 5.5, -50), target = Vector3.new(8, 58, 42), fov = 74 }
 -- View 4: same convention; low camera tilted up to stress tower height.
@@ -367,6 +367,17 @@ local function addClapboardHouse(b, parent, o)
 	p(house, "PorchCeiling", V(W + 0.8, 0.25, porchDepth), CF(0, deck + 9.1, -porchDepth / 2), COLORS.trim)
 	p(house, "PorchRoof", V(W + 1.6, 0.55, porchDepth + 1.3), CF(0, deck + 9.5, -porchDepth / 2) * CFrame.Angles(math.rad(-7), 0, 0), roof, Enum.Material.Slate)
 	p(house, "PorchFascia", V(W + 1.6, 0.85, 0.3), CF(0, deck + 9.1, -porchDepth - 0.55), COLORS.trim)
+	if o.porchGableRise then
+		-- Section 01's nearest house has a peaked entry canopy; other shared
+		-- cottage facades keep their existing low porch roof.
+		local function entryPiece(parentModel, name, size, localCf, color, material, className)
+			return p(parentModel, name, size, CF(doorX, 0, -porchDepth - 0.5) * localCf, color, material, className)
+		end
+		addFrontGable({ V = V, CF = CF, piece = entryPiece }, house, {
+			cx = 0, baseY = deck + 9.5, width = 10.5, rise = o.porchGableRise,
+			depth = 4.4, wallColor = wall, roofColor = roof, roofThick = 0.5,
+		})
+	end
 	for _, span in ipairs({ { columnXs[1], columnXs[2] }, { columnXs[3], columnXs[4] } }) do
 		Facades.BuildBalconyRail(p, house, CF((span[1] + span[2]) / 2, deck, frontZ), span[2] - span[1] - 0.9, PORCH_RAIL_STYLE)
 	end
@@ -437,94 +448,243 @@ function Facades.BuildCourtyard(K, parent, frame)
 	-- The path curves from the low camera between dark lawns; clusters of
 	-- planted beds and shrubs interrupt the ground instead of a flat strip.
 	piece(garden, "DarkLawn", V(125, 0.3, 255), CF(1, -0.22, 56), COLORS.grassDark, Enum.Material.LeafyGrass)
-	for k = 0, 12 do
+	for k = 0, 13 do
 		local z = -54 + k * 17
-		local x = -10 + 0.11 * (z + 54) - 0.00042 * (z + 54) ^ 2
-		local tangent = 0.11 - 0.00084 * (z + 54)
-		piece(garden, "CurvedPaleWalk", V(17.5, 0.12, 17.35), CF(-x, 0.05, z) * CFrame.Angles(0, -math.atan(tangent), 0), COLORS.path, Enum.Material.Concrete)
+		local x = 12 - 0.22 * (z + 54) + 0.0005 * (z + 54) ^ 2
+		local tangent = -0.22 + 0.001 * (z + 54)
+		piece(garden, "CurvedPaleWalk", V(13.4, 0.12, 17.5), CF(x, 0.05, z) * CFrame.Angles(0, math.atan(tangent), 0), COLORS.path, Enum.Material.Concrete)
 	end
 	for _, patch in ipairs({
-		{ 10, -43, 13, 10 }, { 15, -17, 15, 10 }, { 13, 15, 14, 12 },
-		{ 16, 49, 17, 11 }, { 13, 82, 15, 12 }, { 15, 113, 16, 12 },
-		{ -27, -20, 12, 10 }, { -31, 28, 14, 12 }, { -30, 76, 16, 13 },
+		{ -17, -46, 17, 13 }, { -20, -17, 20, 12 }, { -22, 16, 19, 14 },
+		{ -25, 51, 21, 15 }, { -25, 84, 17, 14 }, { -24, 118, 18, 13 },
+		{ 29, -25, 18, 14 }, { 30, 24, 20, 15 }, { 29, 79, 18, 14 },
 	}) do
-		piece(garden, "MulchedPlantingBed", V(patch[3], 0.32, patch[4]), CF(-patch[1], 0.05, patch[2]), COLORS.soil, Enum.Material.Ground)
+		piece(garden, "MulchedPlantingBed", V(patch[3], 0.32, patch[4]), CF(-patch[1], 0.05, patch[2]) * CFrame.Angles(0, math.rad(12), 0), COLORS.soil, Enum.Material.Ground)
 	end
 	local shrubs = {
-		{ 9, -46, 2.9 }, { 15, -40, 2.2 }, { 17, -19, 3.4 }, { 13, -14, 2.1 },
-		{ 12, 12, 2.6 }, { 18, 19, 3.1 }, { 12, 45, 2.6 }, { 20, 52, 3.5 },
-		{ 11, 77, 2.4 }, { 19, 83, 3 }, { 10, 108, 2.7 }, { 20, 115, 3.4 },
-		{ -29, -22, 2 }, { -33, -16, 3 }, { -33, 26, 2.5 }, { -27, 32, 3.1 },
-		{ -33, 74, 3.6 }, { -26, 80, 2.5 },
+		{ -17, -48, 3.4 }, { -22, -42, 2.8 }, { -25, -18, 3.6 }, { -16, -13, 2.5 },
+		{ -19, 11, 3.0 }, { -27, 20, 4 }, { -20, 47, 3.1 }, { -30, 54, 4.2 },
+		{ -19, 80, 3 }, { -27, 87, 3.8 }, { -21, 111, 2.8 }, { -28, 120, 3.4 },
+		{ 28, -27, 2.8 }, { 33, -20, 3.4 }, { 31, 24, 2.8 }, { 25, 31, 3.5 },
+		{ 31, 73, 3.3 }, { 24, 83, 2.8 },
 	}
 	for _, shrub in ipairs(shrubs) do
 		local size = V(shrub[3], shrub[3] * 0.95, shrub[3])
 		setShape(piece(garden, "Shrub", size, CF(-shrub[1], shrub[3] * 0.4, shrub[2]), COLORS.shrub, Enum.Material.LeafyGrass), Enum.PartType.Ball, size)
 	end
+	for _, tree in ipairs({ { 20, -39, 8 }, { 24, 40, 10 }, { -32, 27, 7 } }) do
+		piece(garden, "GardenTreeStem", V(0.65, tree[3], 0.65), CF(-tree[1], tree[3] / 2, tree[2]), COLORS.brownHouse, Enum.Material.Wood)
+		for _, branch in ipairs({ { -2, 0, 0 }, { 2, 0.7, 1 }, { 0, 2, -1 } }) do
+			local radius = tree[3] * 0.54
+			local foliageSize = V(radius, radius * 0.8, radius)
+			setShape(piece(garden, "GardenTreeFoliage", foliageSize,
+				CF(-tree[1] + branch[1], tree[3] + branch[2], tree[2] + branch[3]), COLORS.shrub,
+				Enum.Material.LeafyGrass), Enum.PartType.Ball, foliageSize)
+		end
+	end
 	for _, location in ipairs({ { 14, -42 }, { 16, 16 }, { 18, 54 }, { 17, 110 } }) do
 		piece(garden, "PaleGardenFlower", V(0.55, 0.65, 0.55), CF(-location[1], 0.8, location[2]), COLORS.flowers)
 	end
 
-	-- Each right-side unit has its own gable, siding tone, divided windows,
-	-- entry and deep white porch. Their fronts face the path, not the camera.
+	-- The first three fronts use distinct porch depths, gables, openings and
+	-- roof tones. The small distant pair use a cheaper silhouette builder.
 	for _, house in ipairs({
-		{ "SageNear", 27, -33, 25, 18, 9, COLORS.sage, COLORS.roof },
-		{ "MutedGreen", 29, -3, 24, 19, 10, COLORS.lightSage, COLORS.roof },
-		{ "OatmealMiddle", 29, 27, 25, 19, 9, COLORS.oatmeal, COLORS.roofTan },
-		{ "GrayGreenFar", 29, 59, 25, 18, 9, COLORS.sage, COLORS.roof },
-		{ "CreamFar", 29, 91, 24, 17, 8, COLORS.beigeHouse, COLORS.roofTan },
+		{ name = "SageNear", x = -27, z = -34, width = 28, height = 20, rise = 11,
+			wall = COLORS.sage, roof = COLORS.roof, porchDepth = 8.5, doorSide = 1, porchGableRise = 3.4 },
+		{ name = "OatmealPorch", x = -29, z = -3, width = 23, height = 17, rise = 7,
+			wall = COLORS.oatmeal, roof = COLORS.roofTan, porchDepth = 5.2, doorSide = -1, shutters = COLORS.shutter },
+		{ name = "MutedGreenMiddle", x = -31, z = 27, width = 26, height = 19, rise = 9,
+			wall = COLORS.lightSage, roof = COLORS.roof, porchDepth = 7, doorSide = 1 },
 	}) do
-		addClapboardHouse(b, cottages, {
-			name = house[1], x = -house[2], z = house[3], yaw = -90,
-			width = house[4], height = house[5], rise = house[6],
-			wall = house[7], roof = house[8], porchDepth = 7,
-			doorSide = house[3] == -3 and -1 or 1,
+		house.yaw = -90
+		addClapboardHouse(b, cottages, house)
+	end
+	local function distantCottage(name, x, z, width, height, rise, wall, roof)
+		local house = model(name, cottages)
+		local placement = CF(x, 0, z) * CFrame.Angles(0, math.rad(-90), 0)
+		local function p(parentModel, partName, size, localCf, color, material, className)
+			return piece(parentModel, partName, size, placement * localCf, color, material, className)
+		end
+		p(house, "ClapboardBody", V(width, height, 14), CF(0, height / 2, 7), wall)
+		addFrontGable({ V = V, CF = CF, piece = p }, house, {
+			cx = 0, baseY = height, width = width, rise = rise, depth = 14,
+			wallColor = wall, roofColor = roof, roofThick = 0.55,
 		})
+		for _, windowX in ipairs({ -width * 0.26, width * 0.26 }) do
+			p(house, "DarkWindow", V(4, 5.2, 0.16), CF(windowX, 8, -0.37), COLORS.glass)
+			p(house, "WindowMullion", V(0.16, 5.2, 0.18), CF(windowX, 8, -0.5), COLORS.trim)
+			p(house, "WindowHead", V(4.8, 0.35, 0.5), CF(windowX, 10.75, -0.4), COLORS.trim)
+			p(house, "WindowSill", V(4.8, 0.35, 0.5), CF(windowX, 5.2, -0.4), COLORS.trim)
+		end
+		p(house, "PorchDeck", V(width, 1, 4.5), CF(0, 0.5, -2.25), COLORS.deck)
+		p(house, "PorchRoof", V(width + 1, 0.5, 5), CF(0, 10.2, -2.5), roof, Enum.Material.Slate)
+		for _, columnX in ipairs({ -width / 2 + 1, width / 2 - 1 }) do
+			p(house, "PorchColumn", V(0.7, 9, 0.7), CF(columnX, 5.5, -4.4), COLORS.trim)
+		end
+		p(house, "EntryShadow", V(3.8, 7.5, 0.16), CF(0, 4.6, -0.4), COLORS.doorShadow)
+		p(house, "PorchLamp", V(0.55, 0.75, 0.5), CF(3, 6.5, -0.65), COLORS.lamp, Enum.Material.Neon)
+		return house
 	end
+	distantCottage("GrayGreenFar", -32, 59, 24, 17, 8, COLORS.sage, COLORS.roof)
+	distantCottage("CreamFar", -32, 91, 22, 16, 7, COLORS.beigeHouse, COLORS.roofTan)
 
-	-- Tall flanking apartment walls extend well behind the row. Balcony
-	-- recesses, floor plates and repeated white rails give the vertical scale.
-	local farRail = Facades.RailStyle({ height = 3, spacing = 13, topHeight = 0.35, balusterSize = 0.25 })
-	addBalconyTower(b, towers, {
-		name = "LeftApartmentWall", x = 47, z = 48, yaw = 90,
-		width = 190, floors = 15, floorH = 13, bays = 8,
-		railStyle = farRail, distant = true,
-	})
-	addBalconyTower(b, towers, {
-		name = "RightStackedBalconies", x = -67, z = 60, yaw = -90,
-		width = 210, floors = 16, floorH = 12.5, bays = 7,
-		railStyle = farRail, distant = true,
-	})
-	-- A more distant central wall closes the canyon through the hazy gap.
-	addBalconyTower(b, towers, {
-		name = "DistantEndTower", x = 2, z = 178, width = 97,
-		floors = 15, floorH = 12.5, bays = 5, modern = true,
-		color = COLORS.hazeTower, simpleModern = true,
-	})
-	-- Explicit zigzag circulation on the right backdrop, not a flat balcony
-	-- texture. The runs alternate direction up the apartment face.
-	for floor = 0, 9 do
-		local y = 15 + floor * 16
-		local x = -51 - (floor % 2) * 13
-		piece(towers, "RightStairLanding", V(14, 0.55, 4.5), CF(x, y, 121), COLORS.tower, Enum.Material.Plaster)
-		piece(towers, "RightStairRun", V(17.5, 0.5, 2.8), CF(-57.5, y + 6.4, 117) * CFrame.Angles(0, 0, (floor % 2 == 0 and -1 or 1) * math.rad(35)), COLORS.stairGray)
-		piece(towers, "RightStairHandrail", V(17.5, 0.2, 0.2), CF(-57.5, y + 9.2, 115.4) * CFrame.Angles(0, 0, (floor % 2 == 0 and -1 or 1) * math.rad(35)), COLORS.trim)
+	-- A low cream frontage with narrow dark windows frames the left entrance.
+	-- The real balcony canyon begins beyond it; a single striped tower could
+	-- never reproduce the reference's near-wall / far-balcony transition.
+	local leftNear = model("LeftNearCreamFrontage", towers)
+	piece(leftNear, "UpperCreamWall", V(1.4, 207, 68), CF(47, 111.5, -23), COLORS.tower, Enum.Material.Plaster)
+	for _, span in ipairs({ { -57, -43 }, { -15, 11 } }) do
+		piece(leftNear, "GroundCreamPier", V(1.4, 8, span[2] - span[1]),
+			CF(47, 4, (span[1] + span[2]) / 2), COLORS.tower, Enum.Material.Plaster)
 	end
-
-	-- Enclose the courtyard with the high gray tile ceiling and repeated
-	-- small luminous fixtures; the original draft exposed an outdoor blue sky.
-	local CEIL_Y = 215
-	piece(ceiling, "SuspendedCeiling", V(180, 0.7, 290), CF(0, CEIL_Y + 0.35, 65), COLORS.ceilingDark)
-	for _, x in ipairs({ -70, -42, -21, 0, 21, 42, 70 }) do
-		piece(ceiling, "CeilingTBarLong", V(0.25, 0.1, 290), CF(x, CEIL_Y - 0.05, 65), COLORS.ceilingTile)
-	end
-	for z = -60, 170, 20 do
-		piece(ceiling, "CeilingTBarCross", V(180, 0.1, 0.25), CF(0, CEIL_Y - 0.05, z), COLORS.ceilingTile)
-		for _, x in ipairs({ -32, -10, 12, 34 }) do
-			piece(ceiling, "SmallCeilingLight", V(2.3, 0.12, 2.3), CF(x, CEIL_Y - 0.11, z + 9), COLORS.fluorescent, Enum.Material.Neon)
+	piece(leftNear, "CoveredPassageShadow", V(0.16, 7.5, 28), CF(49, 3.75, -29), COLORS.doorShadow)
+	piece(leftNear, "CoveredPassageCanopy", V(7, 0.7, 30), CF(43.5, 8.1, -29), COLORS.trim)
+	for _, floor in ipairs({ 0, 1, 2 }) do
+		for _, z in ipairs({ -48, -34, -20, -6 }) do
+			local y = 12 + floor * 8
+			piece(leftNear, "NarrowWindowSurround", V(0.18, 6.9, 4.3), CF(46.17, y, z), COLORS.trim)
+			piece(leftNear, "NarrowDarkWindow", V(0.2, 6.2, 3.5), CF(46.02, y, z), COLORS.glass)
+			piece(leftNear, "WindowCrossbar", V(0.23, 0.15, 3.5), CF(45.88, y + 0.7, z), COLORS.trim)
 		end
 	end
-	piece(ceiling, "HazyFarCanyonClosure", V(180, CEIL_Y, 1.5), CF(0, CEIL_Y / 2, 208), COLORS.hazeTower, Enum.Material.Plaster)
+	for floor = 0, 11 do
+		for _, z in ipairs({ -40, -12 }) do
+			local y = 45 + floor * 13
+			piece(leftNear, "UpperNarrowWindowSurround", V(0.18, 6.9, 4.3), CF(46.17, y, z), COLORS.trim)
+			piece(leftNear, "UpperNarrowDarkWindow", V(0.2, 6.2, 3.5), CF(46.02, y, z), COLORS.glass)
+		end
+	end
+	for _, z in ipairs({ -55, 11 }) do
+		piece(leftNear, "CreamCornerPier", V(1.8, 215, 0.8), CF(46.5, 107.5, z), COLORS.trim)
+	end
+	piece(leftNear, "CreamCornice", V(2.2, 0.8, 69), CF(46.5, 37.4, -23), COLORS.trim)
+
+	local function railAlongZ(parentModel, name, x, y, z, length, outward, detailed)
+		piece(parentModel, name .. "Top", V(0.44, 0.4, length), CF(x, y + 3.1, z), COLORS.trim)
+		piece(parentModel, name .. "Bottom", V(0.3, 0.22, length), CF(x, y + 0.55, z), COLORS.trim)
+		if detailed then
+			for n = 1, math.floor(length / 9) - 1 do
+				local postZ = z - length / 2 + length * n / math.floor(length / 9)
+				piece(parentModel, name .. "Baluster", V(0.24, 2.45, 0.24), CF(x + outward * 0.1, y + 1.78, postZ), COLORS.trim)
+			end
+		end
+	end
+
+	local leftStack = model("LeftRecessedBalconyStacks", towers)
+	piece(leftStack, "SetbackCreamCore", V(1.8, 202, 152), CF(65, 101, 88), COLORS.tower, Enum.Material.Plaster)
+	for floor = 0, 14 do
+		local y = 4 + floor * 13
+		for _, bay in ipairs({ { 40, 61 }, { 116, 61 } }) do
+			piece(leftStack, "LeftBalconyDarkRecess", V(0.16, 8.1, bay[2] - 4),
+				CF(63.96, y + 4.6, bay[1]), COLORS.towerRecess)
+			piece(leftStack, "LeftBalconyWindowMullion", V(0.2, 7.5, 0.25),
+				CF(63.79, y + 4.6, bay[1]), COLORS.trim)
+			piece(leftStack, "LeftBalconySlab", V(15, 0.7, bay[2]),
+				CF(57, y, bay[1]), COLORS.tower, Enum.Material.Plaster)
+			railAlongZ(leftStack, "LeftBalconyRail", 49.3, y + 0.35, bay[1], bay[2] - 1, -1, true)
+		end
+	end
+	for _, z in ipairs({ 10, 78, 163 }) do
+		piece(leftStack, "LeftVerticalShaftPier", V(3, 202, 2.2), CF(62.8, 101, z), COLORS.trim)
+	end
+
+	-- The opposite wall is a deeper three-stack apartment facade. Its nearest
+	-- floors get real vertical balusters; small high tiers use two rail bands.
+	local rightStack = model("RightTieredBalconyStacks", towers)
+	piece(rightStack, "SetbackCreamCore", V(1.8, 205, 194), CF(-75, 102.5, 86), COLORS.tower, Enum.Material.Plaster)
+	for floor = 0, 15 do
+		local y = 4 + floor * 12.6
+		for _, bay in ipairs({ { 18, 43 }, { 75, 43 }, { 132, 43 } }) do
+			piece(rightStack, "RightBalconyDarkRecess", V(0.16, 7.6, bay[2] - 4),
+				CF(-73.93, y + 4.4, bay[1]), COLORS.towerRecess)
+			for _, offset in ipairs({ -6, 6 }) do
+				piece(rightStack, "RightBalconyWindowMullion", V(0.2, 7.2, 0.25),
+					CF(-73.75, y + 4.4, bay[1] + offset), COLORS.trim)
+			end
+			piece(rightStack, "RightBalconySlab", V(12.2, 0.7, bay[2]),
+				CF(-68, y, bay[1]), COLORS.tower, Enum.Material.Plaster)
+			railAlongZ(rightStack, "RightBalconyRail", -61.7, y + 0.35, bay[1], bay[2] - 1, 1, true)
+			if floor % 4 == 1 then
+				piece(rightStack, "WarmLandingWindow", V(0.2, 3, 2.4),
+					CF(-73.78, y + 5, bay[1] + 8), COLORS.lamp, Enum.Material.Neon)
+			end
+		end
+	end
+	for _, z in ipairs({ -11, 47, 104, 160, 183 }) do
+		piece(rightStack, "RightVerticalShaftPier", V(2.3, 205, 2.2), CF(-72.7, 102.5, z), COLORS.trim)
+	end
+
+	-- Paired railings and landings make each exposed flight read as a connected
+	-- zigzag, instead of a detached diagonal stripe on the right backdrop.
+	local stair = model("RightExteriorSwitchbackStairs", towers)
+	local runLen = math.sqrt(18 * 18 + 16 * 16)
+	local pitch = math.atan2(16, 18)
+	for floor = 0, 9 do
+		local y = 15 + floor * 16
+		local startX = floor % 2 == 0 and -59 or -41
+		local endX = floor % 2 == 0 and -41 or -59
+		local sign = floor % 2 == 0 and 1 or -1
+		piece(stair, "StairLanding", V(7.2, 0.55, 5.5), CF(startX, y, 121), COLORS.tower, Enum.Material.Plaster)
+		local runCf = CF((startX + endX) / 2, y + 8, 121) * CFrame.Angles(0, 0, sign * pitch)
+		piece(stair, "ConnectedStairRun", V(runLen, 0.6, 4.2), runCf, COLORS.stairGray)
+		for _, side in ipairs({ -1, 1 }) do
+			piece(stair, "SlopedHandrail", V(runLen, 0.25, 0.25),
+				CF((startX + endX) / 2, y + 10.8, 121 + side * 2.2)
+					* CFrame.Angles(0, 0, sign * pitch), COLORS.trim)
+		end
+		for step = 1, 3 do
+			local t = step / 4
+			piece(stair, "VisibleStairTread", V(3.8, 0.17, 4.2),
+				CF(startX + (endX - startX) * t, y + 16 * t + 0.2, 121), COLORS.deck)
+		end
+	end
+
+	-- The far termination is a staggered residential cluster, not a blue-glass
+	-- office grid. Hazy cream colors and changing depth carry the long canyon.
+	local farStack = model("StaggeredFarResidentialTowers", towers)
+	local function distantBalconyShaft(name, x, z, width, floors, floorHeight, color)
+		local shaft = model(name, farStack)
+		local height = floors * floorHeight
+		piece(shaft, "PaleTowerCore", V(width, height, 5), CF(x, height / 2, z + 2.5), color, Enum.Material.Plaster)
+		for floor = 0, floors - 1 do
+			local y = 3 + floor * floorHeight
+			piece(shaft, "DistantDarkOpening", V(width - 5, floorHeight - 5, 0.15),
+				CF(x, y + 3.8, z - 0.1), COLORS.towerRecess)
+			piece(shaft, "DistantBalconySlab", V(width + 0.6, 0.6, 4.3), CF(x, y, z - 1.9), color)
+			piece(shaft, "DistantRailTop", V(width, 0.27, 0.25), CF(x, y + 3.15, z - 4.1), COLORS.trim)
+			piece(shaft, "DistantRailBottom", V(width, 0.2, 0.25), CF(x, y + 0.8, z - 4.1), COLORS.trim)
+			if floor % 2 == 0 then
+				local posts = math.floor(width / 8)
+				for n = 1, posts - 1 do
+					piece(shaft, "DistantRailBaluster", V(0.23, 2.1, 0.23),
+						CF(x - width / 2 + width * n / posts, y + 1.95, z - 4.1), COLORS.trim)
+				end
+			end
+		end
+		for _, offset in ipairs({ -width / 2 + 1, 0, width / 2 - 1 }) do
+			piece(shaft, "DistantCreamPier", V(1, height, 1.5), CF(x + offset, height / 2, z - 0.1), color)
+		end
+	end
+	distantBalconyShaft("MiddleSetbackShaft", 7, 158, 51, 15, 12.5, COLORS.tower)
+	distantBalconyShaft("LeftFarShaft", 48, 188, 51, 16, 11.9, COLORS.hazeTower)
+	distantBalconyShaft("RightFarShaft", -33, 207, 59, 15, 12.1, COLORS.hazeTower)
+
+	-- The very high warm-gray enclosure recedes beyond the staggered towers.
+	-- The T-bars are subdued so the light points read through the distance.
+	local CEIL_Y = 215
+	piece(ceiling, "SuspendedCeiling", V(380, 0.7, 340), CF(20, CEIL_Y + 0.35, 70), Color3.fromRGB(137, 132, 128))
+	for _, x in ipairs({ -74, -44, -18, 8, 34, 62, 82 }) do
+		piece(ceiling, "CeilingTBarLong", V(0.16, 0.08, 340), CF(x, CEIL_Y - 0.05, 70), Color3.fromRGB(151, 147, 141))
+	end
+	for z = -60, 228, 24 do
+		piece(ceiling, "CeilingTBarCross", V(380, 0.08, 0.16), CF(20, CEIL_Y - 0.05, z), Color3.fromRGB(151, 147, 141))
+		for _, x in ipairs({ -41, -7, 26 }) do
+			local drift = z % 48 == 0 and 3.5 or -2
+			piece(ceiling, "SmallCeilingLight", V(2.7, 0.12, 2.7),
+				CF(x + drift, CEIL_Y - 0.11, z + 10), COLORS.fluorescent, Enum.Material.Neon)
+		end
+	end
+	piece(ceiling, "HazyFarCanyonClosure", V(380, CEIL_Y, 1.5), CF(20, CEIL_Y / 2, 239), COLORS.hazeTower, Enum.Material.Plaster)
 	return b.finish(root, 1, VIEW1_BUDGET, VIEW1_CAMERA)
 end
 
@@ -560,7 +720,9 @@ function Facades.BuildCorridor(K, parent, frame)
 
 	-- Three tile columns and thirty rows, with the transverse bars kept visible
 	-- from the low camera. The light panels sit inside the central tile column.
-	piece(shell, "Ceiling", V(CW, 0.5, CL), CF(0, CH + 0.25, -CL / 2), COLORS.ceilingTile)
+	-- The first open doorway is seen obliquely; extend the ceiling over its
+	-- recessed room so the upper-left edge cannot reveal the outdoor sky.
+	piece(shell, "Ceiling", V(CW + 7, 0.5, CL + 4), CF(-2.5, CH + 0.25, -CL / 2 + 2), COLORS.ceilingTile)
 	for _, x in ipairs({ -2, 2 }) do
 		piece(shell, "CeilingTBar", V(0.25, 0.1, CL), CF(x, CH - 0.05, -CL / 2), COLORS.tBar)
 	end
@@ -601,28 +763,28 @@ function Facades.BuildCorridor(K, parent, frame)
 	piece(shell, "ExitSignEnd", V(2.6, 1, 0.3), CF(0, 8.6, -CL + 0.15), COLORS.exitHousing)
 	piece(shell, "ExitSignEndFace", V(2.2, 0.6, 0.06), CF(0, 8.6, -CL + 0.33), COLORS.exitRed, Enum.Material.Neon)
 
-	-- Right-hand cream wall: solid piers and lintels surround three holes. The
-	-- dark back walls are 2+ studs beyond the opening, never flush facade plates.
+	-- Right-hand cream wall: five narrower openings recede at a regular pace.
+	-- White side returns lead to dark back walls, rather than flush dark plates.
 	local RIGHT_X = CW / 2 + 0.3
-	local OPEN_H, OPEN_W = 7.5, 4.5
+	local OPEN_H, OPEN_W = 7.5, 3.8
 	local function rightPier(z0, z1)
 		local span = z1 - z0
 		piece(right, "CreamWallPier", V(0.6, CH, span), CF(RIGHT_X, CH / 2, (z0 + z1) / 2), COLORS.corridorWall)
 		piece(right, "Baseboard", V(0.22, 0.6, span), CF(CW / 2 - 0.1, FLOOR_TOP + 0.3, (z0 + z1) / 2), COLORS.trim)
 	end
+	-- A continuous dark wall catches oblique rays through every recess. Its
+	-- lower edge extends below the floor for the low camera's sight lines.
+	piece(right, "RecessedRoomShadow", V(0.1, CH + 6, CL + 60), CF(CW / 2 + 3.3, (CH - 6) / 2, -CL / 2 - 30), COLORS.opening)
 	local cursor = -CL
-	for _, z in ipairs({ -88, -56, -24 }) do
+	for _, z in ipairs({ -108, -84, -60, -36, -12 }) do
 		local z0, z1 = z - OPEN_W / 2, z + OPEN_W / 2
 		rightPier(cursor, z0)
 		local top = FLOOR_TOP + OPEN_H
 		piece(right, "CreamWallLintel", V(0.6, CH - top, OPEN_W), CF(RIGHT_X, (top + CH) / 2, z), COLORS.corridorWall)
 		for _, side in ipairs({ -1, 1 }) do
-			piece(right, "OpeningJamb", V(0.3, OPEN_H, 0.28), CF(CW / 2 - 0.22, FLOOR_TOP + OPEN_H / 2, z + side * (OPEN_W / 2 + 0.12)), COLORS.trim)
-			piece(right, "OpeningReturn", V(1.6, OPEN_H, 0.12), CF(CW / 2 + 0.8, FLOOR_TOP + OPEN_H / 2, z + side * OPEN_W / 2), COLORS.trim)
+			piece(right, "OpeningReturn", V(2.3, OPEN_H, 0.2), CF(CW / 2 + 1.15, FLOOR_TOP + OPEN_H / 2, z + side * OPEN_W / 2), COLORS.trim)
 		end
 		piece(right, "OpeningHead", V(0.3, 0.28, OPEN_W + 0.5), CF(CW / 2 - 0.22, top, z), COLORS.trim)
-		piece(right, "OpeningCeilingReturn", V(1.6, 0.12, OPEN_W), CF(CW / 2 + 0.8, top, z), COLORS.trim)
-		piece(right, "RecessedRoomShadow", V(0.1, OPEN_H, OPEN_W), CF(CW / 2 + 2.5, FLOOR_TOP + OPEN_H / 2, z), COLORS.opening)
 		cursor = z1
 	end
 	rightPier(cursor, 0)
@@ -646,7 +808,8 @@ function Facades.BuildCorridor(K, parent, frame)
 		local cz = -BAY / 2 - k * BAY
 		local color = bayColors[k % 3 + 1]
 		local wz, wy, ww, wh = cz - 4, 5.6, 4, 4.4
-		local dz, dw, doorTop = cz + 5, 3.2, 7.2
+		local dz, dw = cz + 5, 3.2
+		local doorTop = k == 0 and 8.4 or 7.2
 		local bay0, bay1 = cz - BAY / 2, cz + BAY / 2
 		local w0, w1 = wz - ww / 2, wz + ww / 2
 		local d0, d1 = dz - dw / 2, dz + dw / 2
@@ -668,6 +831,17 @@ function Facades.BuildCorridor(K, parent, frame)
 			sidingCourse(span[1], span[2], 4.6, color)
 		end
 		sidingCourse(bay0, bay1, 9.4, color)
+		if k <= 1 then
+			-- Extra close-range courses where the reference camera sees the siding.
+			for _, y in ipairs({ 1.2, 3.1 }) do
+				sidingCourse(bay0, d0, y, color)
+				sidingCourse(d1, bay1, y, color)
+			end
+			sidingCourse(bay0, bay1, 8.8, color)
+			if k == 0 then
+				sidingCourse(bay0, bay1, 10.3, color)
+			end
+		end
 		piece(left, "CornerBoard", V(0.3, CH, 0.45), CF(-CW / 2 + 0.22, CH / 2, bay1), COLORS.trim)
 
 		-- The dark six-pane window is recessed behind the wall's actual hole.
@@ -688,23 +862,36 @@ function Facades.BuildCorridor(K, parent, frame)
 		-- fourth doors stay dark and open; other panels sit well behind the trim.
 		for _, side in ipairs({ -1, 1 }) do
 			piece(left, "DoorJamb", V(0.28, doorTop - FLOOR_TOP, 0.32), CF(-CW / 2 + 0.22, (FLOOR_TOP + doorTop) / 2, dz + side * (dw / 2 + 0.12)), COLORS.trim)
-			piece(left, "DoorReturn", V(1.45, doorTop - FLOOR_TOP, 0.12), CF(-CW / 2 - 0.7, (FLOOR_TOP + doorTop) / 2, dz + side * dw / 2), COLORS.trim)
+			local returnDepth = k == 0 and 0.65 or 1.45
+			local returnX = k == 0 and -CW / 2 - 0.3 or -CW / 2 - 0.7
+			piece(left, "DoorReturn", V(returnDepth, doorTop - FLOOR_TOP, 0.12), CF(returnX, (FLOOR_TOP + doorTop) / 2, dz + side * dw / 2), COLORS.trim)
 		end
 		piece(left, "DoorHead", V(0.28, 0.32, dw + 0.6), CF(-CW / 2 + 0.22, doorTop, dz), COLORS.trim)
-		if k % 3 ~= 0 then
+		if k == 0 then
+			-- A whole recessed room back wall covers side rays through the near
+			-- doorway, while the opening and its white returns remain in front.
+			piece(left, "OpenDoorInteriorShadow", V(0.1, CH + 6, BAY + 12), CF(-CW / 2 - 2.7, (CH - 6) / 2, cz), COLORS.opening)
+		elseif k % 3 ~= 0 then
 			piece(left, "RecessedDoorPanel", V(0.14, doorTop - FLOOR_TOP, dw), CF(-CW / 2 - 1.5, (FLOOR_TOP + doorTop) / 2, dz), COLORS.corridorDoor)
 		end
 
-		-- Small projecting gabled awning over the door: two dark slabs, ridge perpendicular to the wall.
-		for _, side in ipairs({ -1, 1 }) do
-			piece(left, "AwningSlab", V(AWNING_P, 0.25, awningSlope + 0.2), CF(-CW / 2 + AWNING_P / 2, 8.1 + AWNING_RISE / 2, dz + side * AWNING_HALF / 2) * CFrame.Angles(side * awningPitch, 0, 0), COLORS.roof, Enum.Material.Slate)
+		-- The tall open foreground door is flush; later doors have dark gabled canopies.
+		if k > 0 then
+			for _, side in ipairs({ -1, 1 }) do
+				piece(left, "AwningSlab", V(AWNING_P, 0.25, awningSlope + 0.2), CF(-CW / 2 + AWNING_P / 2, 8.1 + AWNING_RISE / 2, dz + side * AWNING_HALF / 2) * CFrame.Angles(side * awningPitch, 0, 0), COLORS.roof, Enum.Material.Slate)
+			end
 		end
 
 		-- Warm shaded sconce between the window and the doorway.
 		local lampZ = cz + 0.8
 		piece(left, "SconceStem", V(0.4, 0.45, 0.18), CF(-CW / 2 + 0.55, 6.2, lampZ), COLORS.lampMetal)
 		local bulb = piece(left, "SconceGlow", V(0.42, 0.3, 0.42), CF(-CW / 2 + 0.75, 6.4, lampZ), COLORS.lamp, Enum.Material.Neon)
-		piece(left, "SconceShade", V(0.7, 0.6, 0.8), CF(-CW / 2 + 0.76, 6.65, lampZ), COLORS.trim)
+		local shade = piece(left, "SconceShade", V(0.55, 0.84, 0.84), CF(-CW / 2 + 0.76, 6.65, lampZ) * CFrame.Angles(0, 0, math.rad(90)), Color3.fromRGB(245, 223, 187), FABRIC)
+		if shade and shade:IsA("Part") then
+			shade.Shape = Enum.PartType.Cylinder
+			shade.Transparency = 0.16
+			shade.CastShadow = false
+		end
 		if bulb then
 			local light = Instance.new("PointLight")
 			light.Name = "WarmSconceLight"

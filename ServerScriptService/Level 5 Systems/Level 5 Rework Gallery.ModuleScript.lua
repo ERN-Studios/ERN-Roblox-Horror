@@ -133,6 +133,7 @@ local function tiledTexture(surface, face, assetId, studsPerTile, name)
 	texture.StudsPerTileV = studsPerTile
 	texture:SetAttribute("Level5GalleryCandidate", true)
 	texture.Parent = surface
+	return texture
 end
 
 local LAWN_SURFACES = {
@@ -170,7 +171,8 @@ local function applyCandidateTextures(cell, id)
 	if id == 2 then
 		assert(carpetBase and hiddenTiles == 40 and creamSiding == 3,
 			"Corridor candidate texture targets changed")
-		tiledTexture(carpetBase, Enum.NormalId.Top, CARPET_TEXTURE, 12, "CandidateGreigeCarpet")
+		local carpet = tiledTexture(carpetBase, Enum.NormalId.Top, CARPET_TEXTURE, 6, "CandidateGreigeCarpet")
+		carpet.Color3 = Color3.fromRGB(174, 165, 147)
 	end
 end
 

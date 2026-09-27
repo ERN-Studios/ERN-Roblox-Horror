@@ -143,13 +143,14 @@ local function kit(K, anchor)
 end
 
 -- A black gridded window facing `frame.LookVector`. Grid bars only where `grid` is set (near LOD).
-local function gridWindow(k, into, frame, w, h, grid)
+local function gridWindow(k, into, frame, w, h, grid, muntinColor)
 	local V, CF = k.V, k.CF
 	k.part(into, "BlackGridPane", V(w, h, .25), frame, PAL.pane, M.Glass, "Scenic")
 	if not grid then return end
-	k.part(into, "GridMuntin", V(.22, h, .22), frame * CF(0, 0, -.16), PAL.grid, nil, "Scenic")
+	local line = muntinColor or PAL.grid
+	k.part(into, "GridMuntin", V(.22, h, .22), frame * CF(0, 0, -.16), line, nil, "Scenic")
 	for _, t in ipairs({-1/6, 1/6}) do
-		k.part(into, "GridMuntin", V(w, .22, .22), frame * CF(0, h * t, -.16), PAL.grid, nil, "Scenic")
+		k.part(into, "GridMuntin", V(w, .22, .22), frame * CF(0, h * t, -.16), line, nil, "Scenic")
 	end
 end
 
@@ -215,22 +216,49 @@ end
 
 ---------------------------------------------------------------------------------------------------
 -- Section 5: sloped-house anomaly between rounded towers.
--- Local layout: camera side is z = 0 looking +Z. Court x -100..100, z 0..222, ceiling at 112.
+-- Local layout: camera side is z = -120 looking +Z. Court x -100..100, z -120..222, ceiling at 112.
 -- Towers: inner facades at x = +-50, masses to +-98, z 45..175, seven 12-stud storeys.
--- Incline: 120-stud dark green slab at 28 degrees, yawed 15 degrees so it crosses the view
--- diagonally, rising from z ~62 to ~y 56 at the back; pale structural slab and ribs beneath.
+-- Incline: 118-stud dark green slab at 34 degrees, yawed 29 degrees so it crosses the view
+-- diagonally, rising from z ~58 to ~y 66 at the back; pale structural slab and ribs beneath.
 ---------------------------------------------------------------------------------------------------
 local function buildSection5(k, K, root)
 	local V, CF = k.V, k.CF
-	local W, D, CEIL, STOREY, STOREYS = 200, 222, 112, 12, 7
+	local W, D, FRONT, CEIL, STOREY, STOREYS = 200, 222, -120, 112, 12, 7
 	local TH = STOREY * STOREYS + 6
 	local cameras, waypoints, zones = {}, {}, {}
 
 	local grade = k.model("Grade", root)
-	k.floor(grade, "DimCourtLawn", 0, 0, D / 2, W, D, K.C.green)
+	local courtLawn = k.floor(grade, "DimCourtLawn", 0, 0, (FRONT + D) / 2, W, D - FRONT, K.C.green)
+	courtLawn.Color = Color3.fromRGB(25, 49, 34)
 	k.part(grade, "CourtBackWall", V(W, CEIL, 2), CF(0, CEIL / 2, D + 1), PAL.creamDim, M.Plaster, "Blocking")
 	for _, side in ipairs({-1, 1}) do
-		k.part(grade, "CourtSideWall", V(2, CEIL, D), CF(side * (W / 2 + 1), CEIL / 2, D / 2), PAL.creamDim, M.Plaster, "Blocking")
+		k.part(grade, "CourtSideWall", V(2, CEIL, D - FRONT),
+			CF(side * (W / 2 + 1), CEIL / 2, (FRONT + D) / 2), PAL.creamDim, M.Plaster, "Blocking")
+	end
+	local function framedTowerArch(into, base, normal, width, height)
+		archWindow(k, into, base, normal, width, height)
+		local straight = height - width / 2
+		local frame = CFrame.lookAt(base + V(0, straight / 2, 0),
+			base + V(0, straight / 2, 0) + normal)
+		for _, edge in ipairs({-1, 1}) do
+			k.part(into, "WhiteArchJamb", V(.28, straight, .24),
+				frame * CF(edge * (width / 2 + .08), 0, -.2), PAL.white, M.Plaster, "Scenic")
+		end
+		k.part(into, "WhiteArchCenterMullion", V(.18, straight, .25),
+			frame * CF(0, 0, -.23), PAL.white, M.Wood, "Scenic")
+		for _, fraction in ipairs({-.2, .2}) do
+			k.part(into, "WhiteArchCrossbar", V(width, .18, .25),
+				frame * CF(0, straight * fraction, -.23), PAL.white, M.Wood, "Scenic")
+		end
+		local arcCenter = base + V(0, straight, 0) + normal * .22
+		local function arcPoint(j)
+			local a = math.pi * j / 6
+			return arcCenter + frame.RightVector * (width / 2 * math.cos(a))
+				+ V(0, width / 2 * math.sin(a), 0)
+		end
+		for j = 0, 5 do
+			k.bar(into, "WhiteArchHeadCasing", arcPoint(j), arcPoint(j + 1), .25, PAL.white, "Scenic")
+		end
 	end
 
 	-- Towers --------------------------------------------------------------------------------------
@@ -240,66 +268,57 @@ local function buildSection5(k, K, root)
 		local t = k.model(side < 0 and "RoundedTower_Left" or "RoundedTower_Right", root)
 		local face, out = side * 50, -side
 		local outV = V(out, 0, 0)
-		-- The near end is a projecting polygonal tower, not a flat face of one long box.
-		-- Four overlapping masses keep the rounded silhouette structural at every level.
-		k.part(t, "TowerMainMass", V(48, TH, 126), CF(side * 74, TH / 2, 112), PAL.cream, M.Plaster, "Blocking")
-		k.part(t, "TowerFrontCenter", V(26, TH, 13), CF(side * 74, TH / 2, 42.5), PAL.cream, M.Plaster, "Blocking")
-		for _, bx in ipairs({55, 93}) do
-			k.part(t, "TowerFrontShoulder", V(14, TH, 14),
-				CF(side * bx, TH / 2, 45) * CFrame.Angles(0, math.rad(45), 0),
-				PAL.cream, M.Plaster, "Blocking")
-		end
+		-- The camera looks along +Z, so world -X is screen right.
+		local towerWall = side > 0 and Color3.fromRGB(220, 206, 173) or PAL.cream
+		-- The near end is an actual cylindrical tower mass. Its front half remains
+		-- visible between balcony decks, instead of relying on rounded slab corners
+		-- pasted onto a long rectangular wall.
+		k.part(t, "TowerMainMass", V(48, TH, 126), CF(side * 74, TH / 2, 112), towerWall, M.Plaster, "Blocking")
+		-- The two rounded ends have different depths in the reference view; a larger
+		-- right nose also breaks the mirrored arcade silhouette.
+		local towerCx, towerCz = side * 74, 50
+		local towerRadius = side < 0 and 28.5 or 25
+		k.shaped(t, "RoundedTowerEndMass", V(TH, towerRadius * 2, towerRadius * 2),
+			CF(towerCx, TH / 2, towerCz) * CFrame.Angles(0, 0, math.pi / 2),
+			towerWall, M.Plaster, "Blocking", Enum.PartType.Cylinder)
 		k.part(t, "TowerCornice", V(3, 1.6, 134), CF(face + out * 1.2, TH - .8, 110), PAL.white, nil, "Scenic")
 
-		-- Balconies from storey 2 up, so none crosses the two-storey arched openings. Rails get
-		-- bottom bars and posts only on the two nearest storeys.
+		-- Balconies from storey 2 up, so none crosses the two-storey arched openings.
+		-- A round deck and a segmented half-circle rail trace the cylindrical front.
 		for s = 2, STOREYS - 1 do
 			local y = s * STOREY
-			local near = s <= 3
 			local bal = k.model("Balcony_" .. s, t)
 			k.part(bal, "BalconySlab", V(6, 1, BAL_Z1 - BAL_Z0), CF(face + out * 3, y - .5, (BAL_Z0 + BAL_Z1) / 2), PAL.pale, M.Plaster, "Scenic")
 			local rx = face + out * RAIL_R
 			k.bar(bal, "BalconyRailTop", V(rx, y + 3.4, BAL_Z0), V(rx, y + 3.4, BAL_Z1), .26, PAL.white, "Scenic")
-			if near then k.bar(bal, "BalconyRailBottom", V(rx, y + .5, BAL_Z0), V(rx, y + .5, BAL_Z1), .18, PAL.white, "Scenic") end
-			for _, zEnd in ipairs({BAL_Z0, BAL_Z1}) do
-				-- Disc centred on the facade line: half is buried in the mass, half is the rounded corner.
-				k.shaped(bal, "RoundedBalconyCorner", V(1, 12, 12), CF(face, y - .5, zEnd) * CFrame.Angles(0, 0, math.pi / 2), PAL.pale, M.Plaster, "Scenic", Enum.PartType.Cylinder)
-				local dir = zEnd == BAL_Z0 and -1 or 1
-				local function arc(deg) return V(face + out * RAIL_R * math.cos(math.rad(deg)), y + 3.4, zEnd + dir * RAIL_R * math.sin(math.rad(deg))) end
-				k.bar(bal, "CornerRailChord", arc(0), arc(45), .26, PAL.white, "Scenic")
-				k.bar(bal, "CornerRailChord", arc(45), arc(90), .26, PAL.white, "Scenic")
+			k.bar(bal, "BalconyRailBottom", V(rx, y + .55, BAL_Z0), V(rx, y + .55, BAL_Z1), .18, PAL.white, "Scenic")
+			for z = BAL_Z0, BAL_Z1, 12 do
+				k.part(bal, "BalconyRailPost", V(.22, 3.4, .22), CF(rx, y + 1.7, z), PAL.white, nil, "Scenic")
 			end
-			if near then
-				for z = BAL_Z0, BAL_Z1, 10 do
-					k.part(bal, "BalconyRailPost", V(.2, 3.2, .2), CF(rx, y + 1.9, z), PAL.white, nil, "Scenic")
-				end
+			local deckRadius, railRadius, arcSteps = towerRadius + 1, towerRadius + 1.3, 8
+			k.shaped(bal, "RoundedFrontBalconyDeck", V(1, deckRadius * 2, deckRadius * 2),
+				CF(towerCx, y - .5, towerCz) * CFrame.Angles(0, 0, math.pi / 2),
+				PAL.pale, M.Plaster, "Scenic", Enum.PartType.Cylinder)
+			if side < 0 then
+				k.shaped(bal, "WrappedWhiteBalconyFascia", V(.65, (deckRadius + .35) * 2, (deckRadius + .35) * 2),
+					CF(towerCx, y - 1.33, towerCz) * CFrame.Angles(0, 0, math.pi / 2),
+					PAL.white, M.Plaster, "Scenic", Enum.PartType.Cylinder)
 			end
-			-- Faceted wrap reaches forward at the center. Broad side returns connect it to
-			-- the inner galleries; the visible rail follows that path rather than one line.
-			k.part(bal, "FrontWrapCenter", V(28, 1, 9), CF(side * 74, y - .5, 35), PAL.pale, M.Plaster, "Scenic")
-			for _, bx in ipairs({55, 93}) do
-				k.part(bal, "FrontWrapReturn", V(13, 1, 17), CF(side * bx, y - .5, 47), PAL.pale, M.Plaster, "Scenic")
-				k.shaped(bal, "RoundedFrontCorner", V(1, 12, 12),
-					CF(side * bx, y - .5, 39) * CFrame.Angles(0, 0, math.pi / 2),
-					PAL.pale, M.Plaster, "Scenic", Enum.PartType.Cylinder)
+			local function arcPoint(j, railY)
+				local a = math.pi * j / arcSteps
+				return V(towerCx + side * railRadius * math.cos(a), railY,
+					towerCz - railRadius * math.sin(a))
 			end
-			local railPath = {
-				V(side * 50, 0, 54), V(side * 55, 0, 35), V(side * 63, 0, 29.4),
-				V(side * 85, 0, 29.4), V(side * 93, 0, 35), V(side * 98, 0, 54),
-			}
-			for j = 1, #railPath - 1 do
-				local a, b = railPath[j], railPath[j + 1]
-				k.bar(bal, "FrontWrapRailTop", V(a.X, y + 3.4, a.Z), V(b.X, y + 3.4, b.Z), .26, PAL.white, "Scenic")
-				if near then
-					k.bar(bal, "FrontWrapRailBottom", V(a.X, y + .5, a.Z), V(b.X, y + .5, b.Z), .18, PAL.white, "Scenic")
-				end
+			for j = 0, arcSteps - 1 do
+				k.bar(bal, "RoundedFrontRailTop", arcPoint(j, y + 3.4), arcPoint(j + 1, y + 3.4), .26, PAL.white, "Scenic")
+				k.bar(bal, "RoundedFrontRailBottom", arcPoint(j, y + .55), arcPoint(j + 1, y + .55), .18, PAL.white, "Scenic")
 			end
-			if near then
-				for j = 2, #railPath - 1 do
-					local p = railPath[j]
-					k.part(bal, "FrontWrapRailPost", V(.2, 3.2, .2), CF(p.X, y + 1.9, p.Z), PAL.white, nil, "Scenic")
-				end
+			for j = 0, arcSteps do
+				local p = arcPoint(j, y + 1.7)
+				k.part(bal, "RoundedFrontRailPost", V(.22, 3.4, .22), CF(p), PAL.white, nil, "Scenic")
 			end
+			k.bar(bal, "SideToFrontRail", V(rx, y + 3.4, BAL_Z0),
+				V(towerCx - side * railRadius, y + 3.4, towerCz), .26, PAL.white, "Scenic")
 		end
 
 		-- Windows: tall arched openings span storeys 0-1 on the middle three bays.
@@ -312,7 +331,7 @@ local function buildSection5(k, K, root)
 					archWindow(k, win, V(face + out * .1, .5, z), outV, 6.5, 19)
 				elseif not (s == 1 and arched) then
 					local c = V(face + out * .1, y + 2 + 3.4, z)
-					gridWindow(k, win, CFrame.lookAt(c, c + outV), 5.2, 6.8, s <= 3)
+					gridWindow(k, win, CFrame.lookAt(c, c + outV), 5.2, 6.8, s <= 3, PAL.white)
 				end
 			end
 			if s <= 2 then
@@ -325,67 +344,89 @@ local function buildSection5(k, K, root)
 		-- Three vertical window bays follow the faceted front: one on the near center,
 		-- one on each shoulder. Ground arches span two storeys beneath gridded panes.
 		local front = k.model("CameraFacingFacade", t)
+		local frontOffset = towerRadius * .62
+		local frontZ = towerCz - towerRadius * math.sqrt(1 - .62 ^ 2) - .3
+		local diagonalNormalZ = -math.sqrt(1 - .62 ^ 2)
 		local frontBays = {
-			{bx=55, z=35.4, normal=V(out * .7, 0, -.7)},
-			{bx=74, z=35.7, normal=V(0, 0, -1)},
-			{bx=93, z=35.4, normal=V(-out * .7, 0, -.7)},
+			{bx=74 - frontOffset, z=frontZ, normal=V(out * .62, 0, diagonalNormalZ)},
+			{bx=74, z=towerCz - towerRadius - .3, normal=V(0, 0, -1)},
+			{bx=74 + frontOffset, z=frontZ, normal=V(-out * .62, 0, diagonalNormalZ)},
 		}
-		for _, bay in ipairs(frontBays) do
-			archWindow(k, front, V(side * bay.bx, .6, bay.z), bay.normal, 5.4, 19)
+		for bayIndex, bay in ipairs(frontBays) do
+			local groundWidth = if side < 0 and bayIndex == 2 then 9.5 else 5.9
+			framedTowerArch(front, V(side * bay.bx, .6, bay.z), bay.normal, groundWidth, 19)
 			for s = 2, STOREYS - 1 do
-				local c = V(side * bay.bx, s * STOREY + 5.4, bay.z)
-				gridWindow(k, front, CFrame.lookAt(c, c + bay.normal), 5.2, 6.8, s <= 3)
+				if side < 0 and bayIndex == 2 then
+					framedTowerArch(front, V(side * bay.bx, s * STOREY + 1, bay.z),
+						bay.normal, 9.5, 9.5)
+				else
+					local c = V(side * bay.bx, s * STOREY + 5.4, bay.z)
+					local windowWidth = if side > 0 and bayIndex == 2 then 8 else 5.2
+					gridWindow(k, front, CFrame.lookAt(c, c + bay.normal), windowWidth, 7.4, true, PAL.white)
+				end
 			end
 		end
-		for _, bx in ipairs({61, 87}) do
-			k.part(front, "WhiteVerticalPier", V(.55, TH, .65), CF(side * bx, TH / 2, 35.4), PAL.white, M.Plaster, "Scenic")
+		local pierZ = towerCz - towerRadius * math.sqrt(1 - .43 ^ 2) - .2
+		for _, bx in ipairs({74 - towerRadius * .43, 74 + towerRadius * .43}) do
+			k.part(front, "WhiteVerticalPier", V(.55, TH, .65),
+				CF(side * bx, TH / 2, pierZ), PAL.white, M.Plaster, "Scenic")
 		end
 
-		-- Bring the switchback forward of the wrap balconies so its alternating flights
-		-- are legible from the court. Deep landings tie the exposed flight back to the tower.
+		-- Five full switchback flights sit on the inner tower flank. Each ramp, its
+		-- horizontal tread rhythm and its landing share the same endpoints, rather
+		-- than crossing the new round front windows as disconnected diagonal bars.
 		local st = k.model("SwitchbackStairs", t)
-		local zc, zOut = 25, 21.8
-		local xA, xB, fA, fB = side * 58.5, side * 89.5, side * 61, side * 87
+		local stairX, openX = side * 40, side * 36.8
+		local nearZ, farZ = 58, 82
 		for i = 1, 5 do
 			local y0, y1 = (i - 1) * STOREY, i * STOREY
-			local sx, ex = fA, fB
-			if i % 2 == 0 then sx, ex = fB, fA end
-			local dx = ex - sx
-			local len = math.sqrt(dx * dx + STOREY * STOREY)
-			local rz = math.atan2(STOREY, math.abs(dx)) * (dx > 0 and 1 or -1)
-			local cx, cy = (sx + ex) / 2, (y0 + y1) / 2
-			k.part(st, "StairFlight", V(len, 1, 5), CF(cx, cy - .5, zc) * CFrame.Angles(0, 0, rz), PAL.pale, M.Plaster, "Walkable")
-			for step = 1, 6 do
-				local tStep = step / 7
-				k.part(st, "StairTreadEdge", V(.38, .15, 5.2),
-					CF(sx + dx * tStep, y0 + STOREY * tStep + .12, zc), PAL.white, nil, "Scenic")
+			local z0, z1 = nearZ, farZ
+			if i % 2 == 0 then z0, z1 = farZ, nearZ end
+			local dz = z1 - z0
+			local len = math.sqrt(dz * dz + STOREY * STOREY)
+			local angle = -math.atan2(STOREY, dz)
+			local cz, cy = (z0 + z1) / 2, (y0 + y1) / 2
+			k.part(st, "StairFlight", V(6, 1, len),
+				CF(stairX, cy - .5, cz) * CFrame.Angles(angle, 0, 0), PAL.pale, M.Plaster, "Walkable")
+			for step = 1, 8 do
+				local tStep = step / 9
+				k.part(st, "StairTreadEdge", V(6.2, .16, .38),
+					CF(stairX, y0 + STOREY * tStep + .12, z0 + dz * tStep), PAL.white, nil, "Scenic")
 			end
-			k.bar(st, "StairHandrail", V(sx, y0 + 3.4, zOut + .2), V(ex, y1 + 3.4, zOut + .2), .24, PAL.white, "DropProtection")
-			k.part(st, "StairDropGuard", V(len, 7, .3), CF(cx, cy + 3.5, zOut) * CFrame.Angles(0, 0, rz), nil, nil, "DropGuard")
-
-			local xl = (i % 2 == 1) and xB or xA
-			local openDir = (xl == xB) and side or -side
-			k.part(st, "StairLanding", V(5, 1, 14), CF(xl, y1 - .5, 31), PAL.pale, M.Plaster, "Walkable")
-			k.bar(st, "LandingRail", V(xl - 2.5, y1 + 3.4, zOut + .2), V(xl + 2.5, y1 + 3.4, zOut + .2), .24, PAL.white, "DropProtection")
-			k.part(st, "LandingDropGuard", V(5.4, 7, .3), CF(xl, y1 + 3.5, zOut), nil, nil, "DropGuard")
-			k.part(st, "LandingEndDropGuard", V(.3, 7, 14), CF(xl + openDir * 2.6, y1 + 3.5, 31), nil, nil, "DropGuard")
+			k.bar(st, "StairHandrail", V(openX, y0 + 3.4, z0), V(openX, y1 + 3.4, z1), .26, PAL.white, "DropProtection")
+			for post = 0, 4 do
+				local fraction = post / 4
+				k.part(st, "StairRailPost", V(.22, 3.4, .22),
+					CF(openX, y0 + STOREY * fraction + 1.7, z0 + dz * fraction), PAL.white, nil, "Scenic")
+			end
+			k.part(st, "StairDropGuard", V(.3, 7, len),
+				CF(openX - side * .25, cy + 3.5, cz) * CFrame.Angles(angle, 0, 0), nil, nil, "DropGuard")
+			k.part(st, "StairLanding", V(6, 1, 5), CF(stairX, y1 - .5, z1), PAL.pale, M.Plaster, "Walkable")
+			k.bar(st, "LandingRail", V(openX, y1 + 3.4, z1 - 2.5),
+				V(openX, y1 + 3.4, z1 + 2.5), .26, PAL.white, "DropProtection")
+			k.part(st, "LandingDropGuard", V(.3, 7, 5),
+				CF(openX - side * .25, y1 + 3.5, z1), nil, nil, "DropGuard")
 		end
-		table.insert(waypoints, V(xA, 3, 24))
+		table.insert(waypoints, V(stairX, 3, nearZ))
 	end
 
 	-- Incline -------------------------------------------------------------------------------------
 	local inc = k.model("SkewedHouseIncline", root)
-	local THETA, L, IW = math.rad(28), 120, 40
-	local base = CF(-12, 0, 62) * CFrame.Angles(0, math.rad(15), 0)
+	local THETA, L, IW = math.rad(34), 118, 38
+	-- The lengthwise yaw shifts the high end toward the left of the camera image;
+	-- its green face remains walkable while the pale belly reads as a separate mass.
+	local base = CF(-21, 0, 58) * CFrame.Angles(0, math.rad(29), 0)
 	local IF = base * CFrame.Angles(-THETA, 0, 0)
-	k.floor(inc, "DarkGreenInclineLawn", 0, 0, L / 2, IW, L, K.C.green, IF)
-	k.part(inc, "PaleStructuralUnderside", V(IW, 8, L), IF * CF(0, -5.2, L / 2), PAL.pale, M.Plaster, "Blocking")
-	-- The reference exposes a wide pale diagonal outside the green surface. Offset
-	-- this side rib beyond the lawn edge so it cannot disappear under the slope.
-	k.part(inc, "PaleProjectedSideSupport", V(14, 11, L + 2),
-		IF * CF(-IW / 2 - 5, -7.1, L / 2), PAL.pale, M.Plaster, "Blocking")
-	k.part(inc, "PaleSoffitLip", V(IW + 13, 2, L + 2),
-		IF * CF(-5, -10.3, L / 2), PAL.creamDim, M.Plaster, "Blocking")
+	local inclineLawn = k.floor(inc, "DarkGreenInclineLawn", 0, 0, L / 2, IW, L, K.C.green, IF)
+	inclineLawn.Color = Color3.fromRGB(23, 44, 31)
+	k.part(inc, "PaleStructuralUnderside", V(IW, 15, L),
+		IF * CF(0, -8.7, L / 2), PAL.pale, M.Plaster, "Blocking")
+	-- This projected edge is wide and deep enough to remain visible next to the
+	-- green face at the reference camera, rather than becoming one white stripe.
+	k.part(inc, "PaleProjectedSideSupport", V(18, 20, L + 2),
+		IF * CF(-IW / 2 - 8, -11, L / 2), PAL.pale, M.Plaster, "Blocking")
+	k.part(inc, "PaleSoffitLip", V(IW + 18, 3, L + 2),
+		IF * CF(-7, -17.8, L / 2), PAL.creamDim, M.Plaster, "Blocking")
 	-- Pale ribs under the slope and an end wall under the high edge (heights reach the slab soffit).
 	local soffitDrop = 9.2 / math.cos(THETA)
 	for _, s in ipairs({40, 80, 100}) do
@@ -402,9 +443,9 @@ local function buildSection5(k, K, root)
 	-- Three larger fronts overlap near the high end. Each keeps most of the slope's
 	-- pitch, then acquires its own roll/yaw and roof pitch, making the cluster visibly askew.
 	local HOUSES = {
-		{s=65, x=-12, w=27, h=18, depth=12, pitch=48, yaw=19,  lean=.76, roll=22,  col=PAL.beige},
-		{s=82, x=13,  w=32, h=21, depth=13, pitch=37, yaw=-17, lean=.96, roll=-25, col=PAL.slate},
-		{s=104,x=-6,  w=29, h=20, depth=12, pitch=43, yaw=9,   lean=.9,  roll=17,  col=PAL.sage},
+		{s=50, x=-11, w=39, h=28, depth=18, pitch=47, yaw=19,  lean=.82, roll=20,  col=PAL.beige},
+		{s=66, x=12,  w=43, h=30, depth=20, pitch=36, yaw=-17, lean=.95, roll=-24, col=PAL.creamDim},
+		{s=86, x=-3,  w=35, h=26, depth=17, pitch=42, yaw=9,   lean=.9,  roll=17,  col=PAL.sage},
 	}
 	for i, h in ipairs(HOUSES) do
 		local hf = IF * CF(h.x, 0, h.s) * CFrame.Angles(THETA * (1 - h.lean), 0, 0)
@@ -413,6 +454,17 @@ local function buildSection5(k, K, root)
 		local pitch = math.rad(h.pitch)
 		local rise = h.w / 2 * math.tan(pitch)
 		k.part(m, "ClapboardHouseBody", V(h.w, h.h + 3, h.depth), hf * CF(0, (h.h - 3) / 2, 0), h.col, M.WoodPlanks, "Blocking")
+		if i == 1 then
+			-- This is the broad house face nearest the camera. Keep its photographed
+			-- pale clapboard legible instead of letting the dark siding variant dominate.
+			k.part(m, "PaleCameraFacingSiding", V(h.w - .35, h.h, .16),
+				hf * CF(0, h.h / 2, -h.depth / 2 - .1),
+				Color3.fromRGB(222, 212, 190), M.SmoothPlastic, "Scenic")
+			for course = 2, h.h - 2, 2.5 do
+				k.part(m, "ClapboardCourse", V(h.w - .5, .1, .12),
+					hf * CF(0, course, -h.depth / 2 - .23), PAL.creamDim, M.Wood, "Scenic")
+			end
+		end
 		-- Tapered horizontal courses fill the variable-pitch front gable without a
 		-- generic 45-degree diamond protruding below its eave.
 		for row = 1, 3 do
@@ -427,35 +479,93 @@ local function buildSection5(k, K, root)
 				hf * CF(s * (h.w / 4 + overhang / 2),
 					h.h + (h.w / 4 - overhang / 2) * math.tan(pitch), 0)
 					* CFrame.Angles(0, 0, -s * pitch), PAL.roof, M.Slate, "Blocking")
+			k.bar(m, "WhiteGableRake",
+				hf * V(0, h.h + rise, -h.depth / 2 - .55),
+				hf * V(s * h.w / 2, h.h, -h.depth / 2 - .55), .28, PAL.white, "Scenic")
 		end
-		local doorX = -h.w * .22
-		k.part(m, "WhitePanelDoor", V(2.7, 5.8, .2), hf * CF(doorX, 2.9, -h.depth / 2 - .14), PAL.door, M.Wood, "Scenic")
-		for _, y in ipairs({h.h * .16, h.h * .3, h.h * .56, h.h * .88}) do
-			k.part(m, "ClapboardCourse", V(h.w - .3, .12, .12), hf * CF(0, y, -h.depth / 2 - .08), PAL.creamDim, nil, "Scenic")
+		local doorX = i == 2 and 0 or -h.w * .22
+		k.part(m, "WhitePanelDoor", V(3.1, 6.2, .2), hf * CF(doorX, 3.1, -h.depth / 2 - .14), PAL.door, M.Wood, "Scenic")
+		for _, edge in ipairs({-1, 1}) do
+			k.part(m, "FrontCornerBoard", V(.32, h.h, .3),
+				hf * CF(edge * (h.w / 2 - .13), h.h / 2, -h.depth / 2 - .2), PAL.white, M.Wood, "Scenic")
+			k.part(m, "DoorJamb", V(.23, 6.5, .24),
+				hf * CF(doorX + edge * 1.68, 3.25, -h.depth / 2 - .25), PAL.white, M.Wood, "Scenic")
 		end
-		for _, window in ipairs({
+		k.part(m, "DoorHead", V(3.65, .24, .25),
+			hf * CF(doorX, 6.48, -h.depth / 2 - .25), PAL.white, M.Wood, "Scenic")
+		k.part(m, "SecondStoreyBelt", V(h.w - .3, .3, .3),
+			hf * CF(0, h.h * .52, -h.depth / 2 - .2), PAL.white, M.Wood, "Scenic")
+		local frontWindows = if i == 1 then {
+			{x=0, y=h.h * .4}, {x=h.w * .28, y=h.h * .4},
+			{x=-h.w * .25, y=h.h * .75}, {x=0, y=h.h * .75},
+			{x=h.w * .25, y=h.h * .75},
+		} elseif i == 2 then {
+			{x=-h.w * .28, y=h.h * .36}, {x=h.w * .28, y=h.h * .36},
+			{x=-h.w * .28, y=h.h * .75}, {x=h.w * .28, y=h.h * .75},
+		} else {
 			{x=h.w * .22, y=h.h * .4},
 			{x=-h.w * .2, y=h.h * .74},
 			{x=h.w * .22, y=h.h * .74},
-		}) do
+		}
+		for _, window in ipairs(frontWindows) do
 			local x, y, z = window.x, window.y, -h.depth / 2 - .22
-			k.part(m, "DividedHousePane", V(2.9, 2.8, .16), hf * CF(x, y, z), PAL.pane, M.Glass, "Scenic")
-			for _, edge in ipairs({-1.55, 1.55}) do
-				k.part(m, "WindowSideTrim", V(.22, 3.1, .22), hf * CF(x + edge, y, z - .06), PAL.white, nil, "Scenic")
+			k.part(m, "DividedHousePane", V(3.8, 3.5, .16), hf * CF(x, y, z), PAL.pane, M.Glass, "Scenic")
+			for _, edge in ipairs({-2.02, 2.02}) do
+				k.part(m, "WindowSideTrim", V(.22, 3.85, .22), hf * CF(x + edge, y, z - .06), PAL.white, nil, "Scenic")
 			end
-			for _, edge in ipairs({-1.5, 1.5}) do
-				k.part(m, "WindowHeadSill", V(3.3, .22, .22), hf * CF(x, y + edge, z - .06), PAL.white, nil, "Scenic")
+			for _, edge in ipairs({-1.88, 1.88}) do
+				k.part(m, "WindowHeadSill", V(4.3, .22, .22), hf * CF(x, y + edge, z - .06), PAL.white, nil, "Scenic")
 			end
-			k.part(m, "WindowMullion", V(.18, 2.8, .2), hf * CF(x, y, z - .07), PAL.white, nil, "Scenic")
-			k.part(m, "WindowCrossbar", V(2.9, .18, .2), hf * CF(x, y, z - .07), PAL.white, nil, "Scenic")
+			k.part(m, "WindowMullion", V(.18, 3.5, .2), hf * CF(x, y, z - .07), PAL.white, nil, "Scenic")
+			k.part(m, "WindowCrossbar", V(3.8, .18, .2), hf * CF(x, y, z - .07), PAL.white, nil, "Scenic")
 		end
-		k.part(m, "TiltedPorchLanding", V(h.w * .5, .45, 2.6),
-			hf * CF(-h.w * .1, 1.7, -h.depth / 2 - 1.35), PAL.pale, M.WoodPlanks, "Scenic")
-		k.bar(m, "TiltedPorchRail", hf * V(0, 3.1, -h.depth / 2 - 2.55),
-			hf * V(h.w * .17, 3.1, -h.depth / 2 - 2.55), .22, PAL.white, "Scenic")
-		for _, px in ipairs({-h.w * .34, h.w * .17}) do
-			k.part(m, "TiltedPorchPost", V(.24, 2.8, .24),
-				hf * CF(px, 2.85, -h.depth / 2 - 2.55), PAL.white, nil, "Scenic")
+		-- Two storeys remain legible from oblique angles: divided side lights,
+		-- corner boards, and a projecting roofed porch rather than a bare box.
+		local visibleFlank = i == 2 and -1 or 1
+		for _, y in ipairs({h.h * .32, h.h * .74}) do
+			k.window(m,
+				hf * CF(visibleFlank * (h.w / 2 + .14), y, 0)
+					* CFrame.Angles(0, -visibleFlank * math.pi / 2, 0),
+				3.8, 3.7, false, true)
+		end
+		local porchFront = -h.depth / 2 - 4.2
+		k.part(m, "TiltedPorchLanding", V(h.w * .68, .48, 4.3),
+			hf * CF(-h.w * .1, 1.6, -h.depth / 2 - 2.2), PAL.pale, M.WoodPlanks, "Scenic")
+		k.part(m, "PorchCanopy", V(h.w * .76, .38, 5),
+			hf * CF(-h.w * .1, 6.25, -h.depth / 2 - 2.3), PAL.roof, M.Slate, "Scenic")
+		local porchHalf = h.w * .76 / 2
+		local porchPitch = math.rad(8)
+		local porchRise = porchHalf * math.tan(porchPitch)
+		for _, slope in ipairs({-1, 1}) do
+			k.part(m, "PorchGableRoof", V((porchHalf + .4) / math.cos(porchPitch), .32, 5.2),
+				hf * CF(-h.w * .1 + slope * porchHalf / 2,
+					6.38 + porchRise / 2, -h.depth / 2 - 2.3)
+					* CFrame.Angles(0, 0, -slope * porchPitch), PAL.roof, M.Slate, "Scenic")
+		end
+		k.part(m, "PorchWhiteFascia", V(h.w * .76, .32, .32),
+			hf * CF(-h.w * .1, 6.1, porchFront - .2), PAL.white, M.Wood, "Scenic")
+		for _, px in ipairs({-h.w * .43, h.w * .23}) do
+			k.part(m, "TiltedPorchColumn", V(.42, 4.5, .42),
+				hf * CF(px, 3.85, porchFront), PAL.white, M.Wood, "Scenic")
+		end
+		k.bar(m, "TiltedPorchRail", hf * V(-h.w * .03, 4.1, porchFront),
+			hf * V(h.w * .23, 4.1, porchFront), .24, PAL.white, "Scenic")
+		if i == 1 then
+			k.bar(m, "PorchLeftRail", hf * V(-h.w * .43, 4.1, porchFront),
+				hf * V(-h.w * .3, 4.1, porchFront), .24, PAL.white, "Scenic")
+			for _, px in ipairs({-h.w * .43, -h.w * .3}) do
+				k.part(m, "PorchLeftRailPost", V(.2, 2.5, .2),
+					hf * CF(px, 2.9, porchFront), PAL.white, nil, "Scenic")
+			end
+		end
+		for _, px in ipairs({-h.w * .03, h.w * .06, h.w * .15, h.w * .23}) do
+			k.part(m, "TiltedPorchRailPost", V(.2, 2.5, .2),
+				hf * CF(px, 2.9, porchFront), PAL.white, nil, "Scenic")
+		end
+		for step = 1, 3 do
+			k.part(m, "PorchEntryStep", V(5.3, .35, .85),
+				hf * CF(doorX, 1.5 - step * .38, porchFront - step * .8),
+				PAL.pale, M.WoodPlanks, "Scenic")
 		end
 		m:SetAttribute("SkewYaw", h.yaw); m:SetAttribute("SkewRoll", h.roll)
 		m:SetAttribute("SlopeFractionKept", h.lean); m:SetAttribute("RoofPitchDegrees", h.pitch)
@@ -464,12 +574,16 @@ local function buildSection5(k, K, root)
 
 	-- Ceiling -------------------------------------------------------------------------------------
 	local ceil = k.model("TiledCeiling", root)
-	k.part(ceil, "CeilingSlab", V(W, 2, D), CF(0, CEIL + 1, D / 2), PAL.ceiling, M.Plaster, "Scenic")
-	for x = -W / 2 + 20, W / 2 - 20, 20 do k.part(ceil, "CeilingGrid", V(.12, .12, D), CF(x, CEIL - .06, D / 2), PAL.ceilingGrid, nil, "Scenic") end
-	for z = 20, D - 2, 20 do k.part(ceil, "CeilingGrid", V(W, .12, .12), CF(0, CEIL - .06, z), PAL.ceilingGrid, nil, "Scenic") end
+	k.part(ceil, "CeilingSlab", V(W, 2, D - FRONT),
+		CF(0, CEIL + 1, (FRONT + D) / 2), PAL.ceiling, M.Plaster, "Scenic")
+	for x = -W / 2 + 20, W / 2 - 20, 20 do
+		k.part(ceil, "CeilingGrid", V(.12, .12, D - FRONT),
+			CF(x, CEIL - .06, (FRONT + D) / 2), PAL.ceilingGrid, nil, "Scenic")
+	end
+	for z = FRONT + 20, D - 2, 20 do k.part(ceil, "CeilingGrid", V(W, .12, .12), CF(0, CEIL - .06, z), PAL.ceilingGrid, nil, "Scenic") end
 	local ix = 0
 	for _, x in ipairs({-60, -20, 20, 60}) do
-		for _, z in ipairs({30, 72, 114, 156, 198}) do
+		for _, z in ipairs({-90, -50, -10, 30, 72, 114, 156, 198}) do
 			ix += 1
 			local panel = k.part(ceil, "RectCeilingLight", V(10, .3, 4), CF(x, CEIL - .2, z), PAL.panel, M.Neon, "Scenic")
 			panel.Transparency = .3
@@ -478,7 +592,7 @@ local function buildSection5(k, K, root)
 	end
 
 	cameras = {
-		{name="S05_Reference", position=V(0, 5, 8), lookAt=V(0, 40, 113)},
+		{name="S05_Reference", position=V(0, 5, -65), lookAt=V(0, 44, 123)},
 		{name="S05_LeftTowerAndStairs", position=V(-15, 7, -8), lookAt=V(-64, 36, 49)},
 		{name="S05_InclineUnderside", position=V(37, 5, 22), lookAt=V(8, 31, 112)},
 	}
@@ -486,10 +600,10 @@ local function buildSection5(k, K, root)
 	table.insert(waypoints, 2, V(0, 3, 55))
 	-- IF.LookVector points down-slope (local -Z), so this sits 6 studs below the top edge.
 	table.insert(waypoints, inclineTop + V(0, 3, 0) + IF.LookVector * 6)
-	table.insert(zones, {Name="S05_Court", Min=V(-W / 2, 0, 0), Max=V(W / 2, CEIL, D), CeilingHeight=CEIL,
+	table.insert(zones, {Name="S05_Court", Min=V(-W / 2, 0, FRONT), Max=V(W / 2, CEIL, D), CeilingHeight=CEIL,
 		Description="Dim grass court, rounded cream towers with arched openings and switchbacks, skewed houses on a pale-bellied incline."})
-	local footprint = {Min=V(-W / 2 - 4, 0, 0), Max=V(W / 2 + 4, CEIL + 2, D + 2), CeilingY=CEIL, GradeY=0,
-		TowerHeight=TH, TowerFacadeX=50, InclineAngleDegrees=28, InclineTopY=inclineTop.Y, SkewedHouseCount=#HOUSES}
+	local footprint = {Min=V(-W / 2 - 4, 0, FRONT), Max=V(W / 2 + 4, CEIL + 2, D + 2), CeilingY=CEIL, GradeY=0,
+		TowerHeight=TH, TowerFacadeX=50, InclineAngleDegrees=34, InclineTopY=inclineTop.Y, SkewedHouseCount=#HOUSES}
 	return cameras, waypoints, zones, footprint
 end
 
@@ -522,6 +636,7 @@ local function buildSection9(k, K, root)
 
 	-- Tower walls ---------------------------------------------------------------------------------
 	local WARM = {{1, 52}, {2, 117}, {1, 182}, {3, 91}, {4, 30}, {2, 221}}
+	local RECESS = Color3.fromRGB(17, 18, 15)
 	for _, side in ipairs({-1, 1}) do
 		local tw = k.model(side < 0 and "BalconyTowerWall_Left" or "BalconyTowerWall_Right", root)
 		local face, out = side * half, -side
@@ -537,23 +652,31 @@ local function buildSection9(k, K, root)
 		for lvl = 1, LEVELS do
 			local y = lvl * STOREY
 			local band = k.model("BalconyBand_" .. lvl, tw)
-			k.part(band, "RecessedWindowBand", V(.2, 6.5, D), CF(face + out * .1, y + 4.6, D / 2), PAL.pane, M.Glass, "Scenic")
+			k.part(band, "RecessedWindowBand", V(.2, 6.5, D), CF(face + out * .1, y + 4.6, D / 2), RECESS, M.SmoothPlastic, "Scenic")
 			k.part(band, "BalconyBandSlab", V(4.4, 1, D), CF(face + out * 2.2, y - .5, D / 2), PAL.pale, M.Plaster, "Scenic")
 			-- Cylinder axis turned onto Z: the band's rounded nose runs the full canyon length.
 			k.shaped(band, "CurvedBalconyNose", V(D, 2.4, 2.4), CF(face + out * 4.4, y - .7, D / 2) * CFrame.Angles(0, math.pi / 2, 0), PAL.pale, M.Plaster, "Scenic", Enum.PartType.Cylinder)
 			k.part(band, "BalconyBandRail", V(.28, .28, D), CF(face + out * 4.9, y + 3.2, D / 2), PAL.white, nil, "Scenic")
-			-- Spend detail on two curved tower-end stacks instead of hundreds of repeated
-			-- pier/post plates along straight runs. Long balcony bands remain continuous.
-			if lvl % 2 == 0 then
-				k.part(band, "DistantWindowBayPier", V(.45, 6.5, .85),
-					CF(face + out * .28, y + 4.6, 320), PAL.pale, nil, "Scenic")
+			-- Real rail posts and apartment-bay piers where the primary camera can read them.
+			-- The upper/far bands keep their continuous, lower-detail silhouette.
+			if lvl <= 8 then
+				for z = 18, 282, 24 do
+					if math.abs(z - 75) > 20 and math.abs(z - 215) > 15 then
+						k.part(band, "NearRunRailPost", V(.22, 3.1, .22),
+							CF(face + out * 4.9, y + 1.7, z), PAL.white, nil, "Scenic")
+					end
+				end
+				for z = 30, 270, 48 do
+					if math.abs(z - 75) > 20 and math.abs(z - 215) > 15 then
+						k.part(band, "ApartmentBayPier", V(.45, 6.5, .85),
+							CF(face + out * .28, y + 4.6, z), PAL.pale, nil, "Scenic")
+					end
+				end
 			end
-			k.part(band, "LongRunRailPost", V(.22, 3.1, .22),
-				CF(face + out * 4.9, y + 1.7, 145), PAL.white, nil, "Scenic")
 			for _, pod in ipairs({{z=75, radius=18, chords=6, posts=true}, {z=215, radius=13, chords=4, posts=false}}) do
 				local zc, radius = pod.z, pod.radius
 				k.shaped(band, "RoundedTowerEndBalcony", V(1, radius * 2, radius * 2),
-					CF(face, y - .5, zc) * CFrame.Angles(0, 0, math.pi / 2),
+					CF(face, y - .44, zc) * CFrame.Angles(0, 0, math.pi / 2),
 					PAL.pale, M.Plaster, "Scenic", Enum.PartType.Cylinder)
 				local function railPoint(step)
 					local a = -math.pi / 2 + step * math.pi / pod.chords
@@ -572,7 +695,7 @@ local function buildSection9(k, K, root)
 				end
 			end
 			k.part(band, "RoundEndDarkWindow", V(6, 6.5, .2),
-				CF(face, y + 4.6, 62.8), PAL.pane, M.Glass, "Scenic")
+				CF(face, y + 4.6, 62.8), RECESS, M.SmoothPlastic, "Scenic")
 		end
 		for i, w in ipairs(WARM) do
 			local lit = k.part(tw, "WarmLitWindow", V(.3, 5, 3.2), CF(face + out * .25, w[1] * STOREY + 4.6, w[2]), PAL.warm, M.Neon, "Scenic")
@@ -623,13 +746,32 @@ local function buildSection9(k, K, root)
 	-- remain individually readable in the primary camera and a portrait crop.
 	local cottages = k.model("DistantCottages", root)
 	local COTTAGES = {
-		{x=-39, z=417, w=20, h=9,  depth=9,  col=PAL.cream, yaw=2},
-		{x=-14, z=421, w=23, h=11, depth=10, col=PAL.white, yaw=-3},
-		{x=13,  z=416, w=22, h=10, depth=10, col=PAL.pale,  yaw=2},
-		{x=39,  z=420, w=19, h=9,  depth=9,  col=PAL.white, yaw=-2},
+		{x=-39, z=394, w=19, h=9,  depth=9,  col=PAL.creamDim, yaw=3, roof=Color3.fromRGB(45, 46, 42), porch=false},
+		{x=-14, z=388, w=23, h=11, depth=10, col=PAL.white, yaw=-4, roof=Color3.fromRGB(40, 43, 39), porch=true},
+		{x=13,  z=401, w=21, h=10, depth=10, col=Color3.fromRGB(201, 205, 188), yaw=2, roof=Color3.fromRGB(52, 49, 43), porch=false},
+		{x=39,  z=391, w=20, h=9,  depth=9,  col=PAL.pale, yaw=-3, roof=Color3.fromRGB(43, 46, 45), porch=true},
 	}
 	for i, c in ipairs(COTTAGES) do
-		gabledHouse(k, cottages, "Cottage_" .. i, CF(c.x, 0, c.z) * CFrame.Angles(0, math.rad(c.yaw), 0), c.w, c.h, c.depth, c.col, {detail=i == 2})
+		local houseFrame = CF(c.x, 0, c.z) * CFrame.Angles(0, math.rad(c.yaw), 0)
+		local house = gabledHouse(k, cottages, "Cottage_" .. i, houseFrame,
+			c.w, c.h, c.depth, c.col, {detail=true})
+		for _, piece in ipairs(house:GetChildren()) do
+			if piece.Name == "RoofPanel" then piece.Color = c.roof end
+		end
+		if c.porch then
+			local frontZ = -c.depth / 2 - 2
+			k.part(house, "CottagePorchDeck", V(c.w * .64, .35, 2.6),
+				houseFrame * CF(-c.w * .05, .18, -c.depth / 2 - 1.3),
+				PAL.pale, M.WoodPlanks, "Scenic")
+			k.part(house, "CottagePorchCanopy", V(c.w * .64, .32, 2.6),
+				houseFrame * CF(-c.w * .05, c.h * .69, -c.depth / 2 - 1.3),
+				c.roof, M.Slate, "Scenic")
+			for _, px in ipairs({-.3, .2}) do
+				k.part(house, "CottagePorchColumn", V(.24, c.h * .69, .24),
+					houseFrame * CF(c.w * px, c.h * .345, frontZ),
+					PAL.white, M.Wood, "Scenic")
+			end
+		end
 	end
 
 	cameras = {
@@ -1076,7 +1218,7 @@ end
 ---------------------------------------------------------------------------------------------------
 local function buildSection8(k, K, root)
 	local V, CF = k.V, k.CF
-	local W, D, CEIL, TOP, PIT, EDGE, FRONT, BACK = 160, 220, 50, 24, -24, 28, 30, 180
+	local W, D, CEIL, TOP, PIT, EDGE, FRONT, BACK = 136, 300, 50, 24, -24, 38, 30, 260
 	local carpet = Color3.fromRGB(180, 169, 151)
 	local shell = k.model("CarpetedUpperAtrium", root)
 	-- Four non-overlapping slabs leave the centre entirely open at the upper grade.
@@ -1084,17 +1226,19 @@ local function buildSection8(k, K, root)
 	k.floor(shell, "LeftWalkway", -(W / 2 + EDGE) / 2, TOP, (FRONT + BACK) / 2, W / 2 - EDGE, BACK - FRONT, carpet)
 	k.floor(shell, "RightWalkway", (W / 2 + EDGE) / 2, TOP, (FRONT + BACK) / 2, W / 2 - EDGE, BACK - FRONT, carpet)
 	k.floor(shell, "ReturnWalkway", 0, TOP, (BACK + D) / 2, W, D - BACK, carpet)
-	k.floor(shell, "DeepAtriumFloor", 0, PIT, (FRONT + BACK) / 2, EDGE * 2, BACK - FRONT, carpet)
+	-- The pit grade also continues beneath the side galleries, so the lower view has
+	-- a solid floor instead of exposing the blue exterior below the upper slabs.
+	k.floor(shell, "DeepAtriumFloor", 0, PIT, D / 2, W, D, carpet)
 	for _, s in ipairs({-1, 1}) do
 		k.part(shell, "PitSideFooting", V(1, 6, BACK - FRONT), CF(s * (EDGE + .5), PIT + 3, (FRONT + BACK) / 2), PAL.cream, M.Plaster, "Blocking")
-		for _, z in ipairs({FRONT, 80, 130, BACK}) do
+		for z = FRONT, BACK, 46 do
 			k.part(shell, "AtriumSupportPier", V(1.5, TOP - PIT, 1.5), CF(s * EDGE, (TOP + PIT) / 2, z), PAL.pale, M.Plaster, "Blocking")
 		end
 		k.part(shell, "OuterApartmentWall", V(2, CEIL - PIT, D), CF(s * (W / 2 + 1), (CEIL + PIT) / 2, D / 2), PAL.cream, M.Plaster, "Blocking")
 		-- Continuous visible white rail and a separate collision guard around the upper drop.
 		k.bar(shell, "UpperAtriumRail", V(s * EDGE, TOP + 3.4, FRONT), V(s * EDGE, TOP + 3.4, BACK), .28, PAL.white, "DropProtection")
 		k.part(shell, "UpperAtriumDropGuard", V(.3, 7, BACK - FRONT), CF(s * EDGE, TOP + 3.5, (FRONT + BACK) / 2), nil, nil, "DropGuard")
-		for z = FRONT, BACK, 8 do
+		for z = FRONT, BACK, 10 do
 			k.part(shell, "UpperRailPost", V(.22, 3.2, .22), CF(s * EDGE, TOP + 1.8, z), PAL.white, M.Metal, "DropProtection")
 		end
 	end
@@ -1113,7 +1257,9 @@ local function buildSection8(k, K, root)
 	for _, s in ipairs({-1, 1}) do
 		local inward = V(-s, 0, 0)
 		for _, y in ipairs({0, 12, 24, 36}) do
-			for bay, z in ipairs({48, 78, 108, 138, 168}) do
+			local bay = 0
+			for z = 48, BACK - 22, 30 do
+				bay += 1
 				local f = k.model("Apartment_" .. s .. "_" .. y .. "_" .. bay, fronts)
 				local x = s * (W / 2 - .2)
 				local door = k.part(f, "WhitePanelDoor", V(.3, 7.4, 3.4), CF(x - s * .3, y + 3.7, z - 3.5), PAL.door, M.Wood, "Scenic")
@@ -1122,49 +1268,121 @@ local function buildSection8(k, K, root)
 				end
 				door:SetAttribute("ScenicClosed", true)
 				local wc = V(x - s * .3, y + 5.5, z + 3.2)
-				gridWindow(k, f, CFrame.lookAt(wc, wc + inward), 3.8, 6.6, y >= 12)
+				local windowFrame = CFrame.lookAt(wc, wc + inward)
+				gridWindow(k, f, windowFrame, 3.8, 6.6, y >= 12)
+				-- The near facade needs a legible white casing against the cream wall. Give the
+				-- opposite apartments the same detail so the cross-atrium view stays consistent.
+				for _, side in ipairs({-1, 1}) do
+					k.part(f, "WindowSideCasing", V(.26, 6.86, .28),
+						windowFrame * CF(side * 2.03, 0, -.2), PAL.white, M.Wood, "Scenic")
+					k.part(f, "WindowHeadSill", V(4.32, .26, .28),
+						windowFrame * CF(0, side * 3.43, -.2), PAL.white, M.Wood, "Scenic")
+				end
 				local lamp = k.part(f, "WarmSconce", V(.65, .8, .65), CF(x - s * .7, y + 7.8, z), PAL.warm, M.Neon, "Scenic")
 				if y == TOP and bay % 2 == 1 then k.light(lamp, "PointLight", {Color=PAL.warm, Brightness=.55, Range=11, Shadows=false}) end
-				if y > PIT and y < CEIL - 8 then
+				-- At the broad upper grade, doors open onto carpet. Only the storey above
+				-- it has separate projecting balconies; lower levels use full galleries.
+				if y > TOP and y < CEIL - 8 then
 					local bx = s * (W / 2 - 2.7)
 					k.part(f, "TinyBalcony", V(5, .55, 10), CF(bx, y - .28, z), PAL.pale, M.Plaster, "Scenic")
 					k.bar(f, "TinyBalconyRail", V(bx - s * 2.4, y + 3.2, z - 5), V(bx - s * 2.4, y + 3.2, z + 5), .22, PAL.white, "Scenic")
+					for _, dz in ipairs({-4.8, 0, 4.8}) do
+						k.part(f, "TinyBalconyPost", V(.22, 3.2, .22),
+							CF(bx - s * 2.4, y + 1.6, z + dz), PAL.white, M.Metal, "Scenic")
+					end
 				end
 			end
 		end
 		for _, y in ipairs({-12, 0, 12}) do
-			local gx = s * (EDGE + 7)
-			k.part(fronts, "OppositeGallery", V(16, .8, BACK - FRONT), CF(gx, y - .4, (FRONT + BACK) / 2), PAL.pale, M.Plaster, "Scenic")
-			k.bar(fronts, "OppositeGalleryRail", V(s * EDGE, y + 3.4, FRONT), V(s * EDGE, y + 3.4, BACK), .23, PAL.white, "Scenic")
+			local gx = s * (W / 2 + EDGE) / 2
+			k.part(fronts, "OppositeGallery", V(W / 2 - EDGE, .8, BACK - FRONT),
+				CF(gx, y - .4, (FRONT + BACK) / 2), PAL.pale, M.Plaster, "Scenic")
+			-- The far side has a stair opening between the two rail spans. Every
+			-- lower gallery now reaches its apartment doors at the outer wall.
+			local spans = if s < 0 then {{FRONT, 136}, {180, BACK}} else {{FRONT, BACK}}
+			for _, span in ipairs(spans) do
+				k.bar(fronts, "OppositeGalleryRail", V(s * EDGE, y + 3.4, span[1]),
+					V(s * EDGE, y + 3.4, span[2]), .23, PAL.white, "Scenic")
+				for z = span[1], span[2], 12 do
+					k.part(fronts, "OppositeGalleryPost", V(.2, 3.2, .2),
+						CF(s * EDGE, y + 1.8, z), PAL.white, M.Metal, "Scenic")
+				end
+			end
 		end
 	end
-	-- The far visible stair stack occupies one gallery bay. It is a sightline element, not an
-	-- authored ascent: future integration needs actual landings and collision checks.
+	-- The far stair stack projects just inside the open drop. Its landings meet the
+	-- far galleries at their inner edge; all stair parts remain scenic until an
+	-- authored ascent and separate collision/guard check are added.
 	local stairs = k.model("AcrossVoidStairStack", root)
-	for level = 0, 2 do
-		local y0 = PIT + level * 12
+	local stairX, railX, nearZ, farZ = -EDGE + 5, -EDGE + 9.3, 142, 174
+	for level = 0, 4 do
+		local landingZ = if level % 2 == 0 then nearZ else farZ
+		k.part(stairs, "CarpetStairLanding", V(10, .7, 7),
+			CF(stairX, PIT + level * 12 - .35, landingZ), carpet, M.Fabric, "Scenic")
+	end
+	for level = 0, 3 do
+		local y0, z0 = PIT + level * 12, if level % 2 == 0 then nearZ else farZ
+		local z1 = if level % 2 == 0 then farZ else nearZ
 		for i = 1, 8 do
-			local z = level % 2 == 0 and (145 + i * 2.6) or (169 - i * 2.6)
-			k.part(stairs, "CarpetTread", V(8, .7, 2.7), CF(-40, y0 + i * 1.5 - .35, z), carpet, M.Fabric, "Scenic")
+			local z = z0 + (z1 - z0) * (i - .5) / 8
+			k.part(stairs, "CarpetTread", V(8, 1.5, 4.05),
+				CF(stairX, y0 + i * 1.5 - .75, z), carpet, M.Fabric, "Scenic")
 		end
-		k.bar(stairs, "WhiteStairHandrail", V(-45, y0 + 3.4, 145), V(-45, y0 + 15.4, 169), .23, PAL.white, "Scenic")
+		k.bar(stairs, "WhiteStairHandrail", V(railX, y0 + 3.4, z0),
+			V(railX, y0 + 15.4, z1), .23, PAL.white, "Scenic")
+		for i = 0, 8 do
+			k.part(stairs, "WhiteStairPost", V(.22, 3.2, .22),
+				CF(railX, y0 + 1.8 + i * 1.5, z0 + (z1 - z0) * i / 8),
+				PAL.white, M.Metal, "Scenic")
+		end
+	end
+
+	-- The end wall is a distant apartment face rather than a bare plaster plane.
+	local rear = k.model("AtriumEndApartments", root)
+	for _, y in ipairs({TOP, 36}) do
+		for bay = -2, 2 do
+			local x = bay * W / 5
+			local frame = CFrame.lookAt(V(x, y + 5.5, D - .3), V(x, y + 5.5, D - 1.3))
+			gridWindow(k, rear, frame, 4.2, 6.6, true, PAL.white)
+			for _, side in ipairs({-1, 1}) do
+				k.part(rear, "EndWindowSideCasing", V(.26, 6.86, .28),
+					frame * CF(side * 2.23, 0, -.2), PAL.white, M.Wood, "Scenic")
+				k.part(rear, "EndWindowHeadSill", V(4.72, .26, .28),
+					frame * CF(0, side * 3.43, -.2), PAL.white, M.Wood, "Scenic")
+			end
+		end
+	end
+	k.part(rear, "EndGalleryLedge", V(W - 8, .7, 5),
+		CF(0, 36 - .35, D - 2.5), PAL.pale, M.Plaster, "Scenic")
+	k.bar(rear, "EndGalleryRail", V(-W / 2 + 4, 39.4, D - 5),
+		V(W / 2 - 4, 39.4, D - 5), .23, PAL.white, "Scenic")
+	for x = -W / 2 + 4, W / 2 - 4, 12 do
+		k.part(rear, "EndGalleryPost", V(.2, 3.2, .2),
+			CF(x, 37.8, D - 5), PAL.white, M.Metal, "Scenic")
 	end
 
 	local ceil = k.model("OfficeTileCeiling", root)
 	k.part(ceil, "CeilingSlab", V(W, 2, D), CF(0, CEIL + 1, D / 2), PAL.ceiling, M.Plaster, "Scenic")
-	for x = -72, 72, 12 do k.part(ceil, "CeilingGrid", V(.12, .12, D), CF(x, CEIL - .06, D / 2), PAL.ceilingGrid, nil, "Scenic") end
+	for x = -W / 2 + 8, W / 2 - 8, 12 do
+		k.part(ceil, "CeilingGrid", V(.12, .12, D), CF(x, CEIL - .06, D / 2), PAL.ceilingGrid, nil, "Scenic")
+	end
 	for z = 12, D - 4, 12 do k.part(ceil, "CeilingGrid", V(W, .12, .12), CF(0, CEIL - .06, z), PAL.ceilingGrid, nil, "Scenic") end
-	for _, x in ipairs({-54, -18, 18, 54}) do for _, z in ipairs({24, 72, 120, 168, 204}) do
+	for _, fraction in ipairs({-.375, -.125, .125, .375}) do for z = 24, D - 16, 48 do
+		local x = W * fraction
 		local p = k.part(ceil, "FluorescentPanel", V(5, .3, 9), CF(x, CEIL - .2, z), PAL.cool, M.Neon, "Scenic")
-		if z == 72 or z == 168 then k.light(p, "SurfaceLight", {Face=Enum.NormalId.Bottom, Color=PAL.cool, Brightness=.7, Range=26, Angle=100, Shadows=false}) end
+		if z % 96 == 72 then k.light(p, "SurfaceLight", {Face=Enum.NormalId.Bottom, Color=PAL.cool, Brightness=.7, Range=26, Angle=100, Shadows=false}) end
 	end end
 
 	local cameras = {
-		{name="S08_Reference", position=V(-34, TOP + 7, 76), lookAt=V(5, TOP + 1, 132)},
-		{name="S08_AcrossVoid", position=V(-53, TOP + 4, 103), lookAt=V(65, 4, 130)},
-		{name="S08_DeepDrop", position=V(-38, TOP + 5, 70), lookAt=V(0, PIT, 112)},
+		-- The apartment frontage and broad carpet stay on screen left; the protected
+		-- opening and cross-atrium galleries fall to screen right, as in reference 08.
+		{name="S08_Reference", position=V(55, TOP + 7, 62), lookAt=V(36, TOP - 5, 138)},
+		{name="S08_AcrossVoid", position=V(56, TOP + 4, 103), lookAt=V(-65, 4, 150)},
+		{name="S08_DeepDrop", position=V(51, TOP + 5, 70), lookAt=V(0, PIT, 112)},
 	}
-	local waypoints = {V(0, TOP + 3, 8), V(-54, TOP + 3, 48), V(-54, TOP + 3, 158), V(0, TOP + 3, 204)}
+	local sideWaypointX = (EDGE + W / 2) / 2
+	local waypoints = {V(0, TOP + 3, 8), V(sideWaypointX, TOP + 3, 48),
+		V(sideWaypointX, TOP + 3, BACK - 22), V(0, TOP + 3, D - 16)}
 	local zones = {{Name="S08_UpperAtrium", Min=V(-W / 2, PIT, 0), Max=V(W / 2, CEIL, D), CeilingHeight=CEIL,
 		Description="Broad carpeted upper walkway around an open deep atrium; small apartment balconies, doors, windows and opposite stair galleries."}}
 	local footprint = {Min=V(-W / 2 - 2, PIT, 0), Max=V(W / 2 + 2, CEIL + 2, D + 2), CeilingY=CEIL, GradeY=TOP,
