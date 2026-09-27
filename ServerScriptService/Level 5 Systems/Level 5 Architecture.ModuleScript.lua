@@ -17,7 +17,7 @@ function Architecture.Build(parent, origin, config)
 	origin = origin or Vector3.zero
 	local root = Instance.new("Model")
 	root.Name = "Level5_IndoorSuburbs"
-	root:SetAttribute("ArchitectureVersion", "2026-09-27.playable-courtyard-corridor.1")
+	root:SetAttribute("ArchitectureVersion", "2026-09-27.courtyard-light-path.2")
 	root:SetAttribute("GeometryOnly", true)
 	root.Parent = parent
 	local offset = CFrame.new(origin)
@@ -558,11 +558,12 @@ function Architecture.Build(parent, origin, config)
 			if style=="low" and warmth~=1 then fixtureColor=Color3.fromRGB(207,195,153) end
 			if dim then fixtureColor=fixtureColor:Lerp(Color3.fromRGB(80,83,69),.48) end
 			if failed then fixtureColor=Color3.fromRGB(67,65,56) end
-			local p=part(m,"FluorescentPanel",V(style=="courtyard" and 3 or (style=="domestic" and 4 or 8),.13,style=="courtyard" and 3 or 2.6),CF(x+xx,y-.46,z+zz),fixtureColor,failed and Enum.Material.SmoothPlastic or Enum.Material.Neon,false)
+				local villageSquare=name=="Pastel Carpet VillagesCeiling"
+				local p=part(m,"FluorescentPanel",V(style=="courtyard" and 3 or (style=="domestic" and 4 or 8),.13,villageSquare and 8 or (style=="courtyard" and 3 or 2.6)),CF(x+xx,y-.46,z+zz),fixtureColor,failed and Enum.Material.SmoothPlastic or Enum.Material.Neon,false)
 			p:SetAttribute("FailedTube",failed)
 			p:SetAttribute("TubeState",failed and "Off" or dim and "Dim" or "On")
 			p:SetAttribute("ColourTemperature",warmth==0 and "Warm" or warmth==1 and "Cool" or "Neutral")
-			part(m,"LightPanelFrame",V(p.Size.X+.4,.12,style=="courtyard" and 3.4 or 3),CF(x+xx,y-.34,z+zz),C.white,nil,false)
+				part(m,"LightPanelFrame",V(p.Size.X+.4,.12,villageSquare and 8.4 or (style=="courtyard" and 3.4 or 3)),CF(x+xx,y-.34,z+zz),C.white,nil,false)
 			if y<=60 and ix%4==1 and not failed then
 				local light=Instance.new("SurfaceLight");light.Face=Enum.NormalId.Bottom;light.Color=lightColor
 				light.Brightness=dim and .3 or warmth==1 and .72 or .95
@@ -629,9 +630,10 @@ function Architecture.Build(parent, origin, config)
 	local yaw=function(a) return CFrame.Angles(0,math.rad(a),0) end
 	local A=model("A_BalconyAtrium")
 	local courtyardLawn=floor(A,"PlantedCourtyardLawn",0,0,96,320,200,C.green)
-	courtyardLawn.Color=Color3.fromRGB(40,67,43)
+	courtyardLawn.Color=Color3.fromRGB(72,94,61)
 	courtyardLawn.MaterialVariant=""
-	texture(courtyardLawn,"rbxassetid://108216315862080",Enum.NormalId.Top,8)
+	local lawnDetail=texture(courtyardLawn,"rbxassetid://108216315862080",Enum.NormalId.Top,8)
+	if lawnDetail then lawnDetail.Transparency=.42 end
 	local clueIndex=0
 	for _,side in ipairs({-1,1}) do
 		for i,z in ipairs({42,99,156}) do
@@ -678,17 +680,31 @@ function Architecture.Build(parent, origin, config)
 	courtyard:SetAttribute("ReferenceViewId",1)
 	-- The existing ground slab remains the support. Thin scenic paving and soil
 	-- sit above it without entering the floor-ownership pass or obstructing feet.
-	local walkPoints={V(0,0,5),V(0,0,45),V(35,0,50),V(35,0,104),V(0,0,108),V(0,0,184),V(0,0,196)}
+	local walkPoints={V(-48,0,5),V(-40,0,39),V(-9,0,59),V(35,0,77),V(35,0,104),V(0,0,108),V(8,0,137),V(-6,0,166),V(0,0,184),V(0,0,196)}
 	for i=1,#walkPoints-1 do
 		local a,b=walkPoints[i],walkPoints[i+1]
 		local midpoint=(a+b)/2
-		part(courtyard,"CurvedPaleWalk",V(15,.12,(b-a).Magnitude+1),CFrame.lookAt(midpoint+V(0,.07,0),b+V(0,.07,0)),Color3.fromRGB(187,183,166),Enum.Material.Concrete,false)
+		part(courtyard,"CurvedPaleWalk",V(8.5,.12,(b-a).Magnitude+1),CFrame.lookAt(midpoint+V(0,.07,0),b+V(0,.07,0)),Color3.fromRGB(145,143,127),Enum.Material.Concrete,false)
+	end
+	-- The photographed courtyard receives a low, diffuse bounce from the
+	-- balcony and cottage lighting. Without it the dark lawn texture disappears
+	-- into black in the actual round while the ceiling panels remain visible.
+	for _,z in ipairs({35,105,175}) do
+		for _,x in ipairs({-72,72}) do
+			local emitter=part(courtyard,"CourtyardDiffuseBounce",V(.2,.2,.2),CF(x,24,z),C.white,nil,false)
+			emitter.Transparency=1
+			local light=Instance.new("PointLight")
+			light.Brightness=.85;light.Range=56;light.Shadows=false
+			light.Color=Color3.fromRGB(218,211,184);light.Parent=emitter
+		end
 	end
 	for _,bed in ipairs({{-25,19,20,12},{-27,56,18,14},{-31,96,20,13},{-27,138,18,16},{25,17,15,12},{56,58,19,13},{63,111,18,11},{51,175,17,11}}) do
 		part(courtyard,"PlantedSoil",V(bed[3],.16,bed[4]),CF(bed[1],.08,bed[2]),Color3.fromRGB(61,54,45),Enum.Material.Ground,false)
 		for n=1,3 do
 			local radius=2.2+.45*((n+math.floor(bed[2]))%3)
-			local shrub=part(courtyard,"PlantedShrub",V(radius,radius*.85,radius),CF(bed[1]+(n-2)*bed[3]/4,radius*.42,bed[2]+((n%2)*2-1)*bed[4]/5),Color3.fromRGB(45,73,44),Enum.Material.LeafyGrass,false)
+			local height=radius*(n==2 and 1.5 or .85)
+			local shrub=part(courtyard,"PlantedShrub",V(radius,height,radius),CF(bed[1]+(n-2)*bed[3]/4,height/2,bed[2]+((n%2)*2-1)*bed[4]/5),
+				n==2 and Color3.fromRGB(54,83,48) or Color3.fromRGB(45,73,44),Enum.Material.LeafyGrass,false)
 			shrub.Shape=Enum.PartType.Ball
 		end
 	end
@@ -756,22 +772,43 @@ function Architecture.Build(parent, origin, config)
 		local lamp=part(home,"WarmEntryLamp",V(.6,.8,.35),frame*CF(width*.28,7,-.45),Color3.fromRGB(255,210,145),Enum.Material.Neon,false)
 		local light=Instance.new("PointLight");light.Brightness=.5;light.Range=13;light.Color=Color3.fromRGB(255,212,153);light.Parent=lamp
 	end
+	local function courtyardClapboard(home,siding,roofTint)
+		local exterior={SideWall=true,BackWall=true,BackWallWing=true,BackWallHeader=true,
+			FacadeLintel=true,WindowApron=true,FacadePier=true,GableBaseBand=true,ClosedGableTriangle=true}
+		for _,piece in ipairs(home:GetDescendants()) do
+			if piece:IsA("BasePart") then
+				if exterior[piece.Name] then
+					piece.MaterialVariant="";piece.Material=Enum.Material.WoodPlanks;piece.Color=siding
+				elseif piece.Name=="PitchedRoof" or piece.Name=="RoofRidge" or piece.Name=="RoofCladdingSeam" then
+					piece.MaterialVariant="";piece.Material=Enum.Material.Slate;piece.Color=roofTint
+				end
+			end
+		end
+	end
 	for _,side in ipairs({-1,1}) do
 		local waitingFrame=CF(side*42,0,128)
-		local waiting=house(A,"GroundWaitingCottage_"..side,waitingFrame,26,24,13.8,side<0 and C.rose or Color3.fromRGB(147,160,140),nil,{open=true})
+		local waitingTint=side<0 and Color3.fromRGB(184,177,159) or Color3.fromRGB(137,151,127)
+		local waiting=house(A,"GroundWaitingCottage_"..side,waitingFrame,26,24,13.8,waitingTint,C.dark,{open=true})
+		courtyardClapboard(waiting,waitingTint,Color3.fromRGB(54,59,56))
 		porch(waiting,waitingFrame,26,6)
 		if side>0 then
-			house(courtyard,"SageUpperHouse",waitingFrame*CF(0,14,0),26,24,13.8,Color3.fromRGB(147,160,140),C.dark,{open=false})
+			local upper=house(courtyard,"SageUpperHouse",waitingFrame*CF(0,14,0),26,24,13.8,waitingTint,C.dark,{open=false})
+			courtyardClapboard(upper,waitingTint,Color3.fromRGB(54,59,56))
 		end
 		local innerFrame=CF(side*44,0,76)*yaw(side*90)
-		local inner=house(A,"AtriumInnerStack_"..side.."_0",innerFrame,28,24,13.8,side>0 and Color3.fromRGB(174,178,155) or C.cream,C.dark,{open=true})
+		local innerTint=side>0 and Color3.fromRGB(163,170,147) or Color3.fromRGB(195,188,170)
+		local inner=house(A,"AtriumInnerStack_"..side.."_0",innerFrame,28,24,13.8,innerTint,C.dark,{open=true})
+		courtyardClapboard(inner,innerTint,Color3.fromRGB(59,63,59))
 		if side>0 then porch(inner,innerFrame,28,5) end
 		local rearFrame=CF(side*26,0,163)
-		local rear=house(A,"AtriumRearCottage_"..side,rearFrame,26,22,13.8,side<0 and C.rose or C.pale,C.dark,{open=true})
+		local rearTint=side<0 and Color3.fromRGB(177,173,156) or Color3.fromRGB(182,180,163)
+		local rear=house(A,"AtriumRearCottage_"..side,rearFrame,26,22,13.8,rearTint,C.dark,{open=true})
+		courtyardClapboard(rear,rearTint,Color3.fromRGB(66,68,60))
 		if side>0 then porch(rear,rearFrame,26,5) end
 	end
 	local nearFrame=CF(56,0,28)
 	local near=house(courtyard,"SageNearPorchHouse",nearFrame,28,24,13.8,Color3.fromRGB(145,158,137),C.dark,{open=true})
+	courtyardClapboard(near,Color3.fromRGB(120,139,117),Color3.fromRGB(47,54,53))
 	porch(near,nearFrame,28,7)
 	-- This courtyard is inside the vast residential shell. Close the upper
 	-- envelope before the next zone; otherwise the playable route exposes the
@@ -803,7 +840,7 @@ function Architecture.Build(parent, origin, config)
 	for _,x in ipairs({-147,-105,-63,-21,21,63,105,147}) do
 		part(farFacade,"DistantVerticalPier",V(1.8,146,.45),CF(x,140,191.55),C.pale,Enum.Material.Plaster,false)
 	end
-	for row,y in ipairs({85,111,137,163,189}) do
+	for row,y in ipairs({29,43,57,85,111,137,163,189}) do
 		part(farFacade,"DistantFloorBand",V(314,.65,1.5),CF(0,y-5,191.2),C.pale,Enum.Material.Plaster,false)
 		for col,x in ipairs({-126,-84,-42,0,42,84,126}) do
 			local lit=(row*3+col)%5==0
@@ -814,6 +851,67 @@ function Architecture.Build(parent, origin, config)
 			part(farFacade,"DistantWindowMullion",V(.2,7,.55),CF(x,y,191.24),C.white,nil,false)
 		end
 	end
+	-- In front of the end cap, two offset facades and their exposed flights
+	-- give the view the same receding residential canyon as the side balconies.
+	-- They are high, scenic layers: the gate corridor stays unobstructed below.
+	local rearCanyon=model("S01_RecedingResidentialLayers",A)
+	for _,info in ipairs({{-77,146,53},{78,164,49}}) do
+		local cx,z,width=info[1],info[2],info[3]
+		local tint=cx<0 and Color3.fromRGB(187,181,167) or Color3.fromRGB(202,193,173)
+		part(rearCanyon,"RecessedTowerFacade",V(width,155,.7),CF(cx,128,z),tint,Enum.Material.Plaster,false)
+		for level=0,10 do
+			local y=56+level*13.5
+			part(rearCanyon,"MouldedFloorCourse",V(width+.5,.35,2.6),CF(cx,y-5,z-1.2),C.pale,Enum.Material.Plaster,false)
+			for _,dx in ipairs({-width*.28,0,width*.28}) do
+				local wx=cx+dx
+				part(rearCanyon,"DeepApartmentWindow",V(6.8,7.4,.18),CF(wx,y,z-.52),
+					level%4==2 and Color3.fromRGB(155,136,101) or Color3.fromRGB(61,70,67),Enum.Material.Glass,false)
+				part(rearCanyon,"WhiteSashHead",V(7.2,.22,.26),CF(wx,y+3.8,z-.67),C.white,nil,false)
+				part(rearCanyon,"WhiteSashSill",V(7.2,.22,.26),CF(wx,y-3.8,z-.67),C.white,nil,false)
+				part(rearCanyon,"WhiteSashMullion",V(.18,7.4,.26),CF(wx,y,z-.68),C.white,nil,false)
+			end
+			if level%2==0 then
+				part(rearCanyon,"SetbackBalconyDeck",V(width*.78,.4,3.4),CF(cx,y-5.1,z-2.2),C.pale,Enum.Material.Plaster,false)
+				part(rearCanyon,"SetbackBalconyRail",V(width*.78,.18,.18),CF(cx,y-1.95,z-3.75),C.white,nil,false)
+				for _,dx in ipairs({-width*.38,0,width*.38}) do
+					part(rearCanyon,"SetbackRailPost",V(.17,3,.17),CF(cx+dx,y-3.5,z-3.75),C.white,nil,false)
+				end
+			end
+		end
+	end
+	for level=0,6 do
+		local y=52+level*16
+		local sign=level%2==0 and 1 or -1
+		part(rearCanyon,"ExposedZigzagLanding",V(13,.55,4),CF(0,y,160),C.pale,Enum.Material.Concrete,false)
+		local flight=CF(sign*7,y+7,160)*CFrame.Angles(0,0,-sign*math.rad(43))
+		part(rearCanyon,"ExposedZigzagFlight",V(19,.48,3),flight,C.pale,Enum.Material.Concrete,false)
+		for _,edge in ipairs({-1,1}) do
+			part(rearCanyon,"ExposedZigzagRail",V(19,.16,.16),flight*CF(0,2.5,edge*1.5),C.white,nil,false)
+		end
+	end
+	-- Staggered, nonblocking high floors break up the flat gate-wall silhouette.
+	-- Their ground clearance preserves the gate and the existing clue cottages.
+	local farStacks=model("S01_StaggeredFarApartmentStacks",A)
+	for _,spec in ipairs({{-34,174,43},{31,183,50}}) do
+		local cx,z,width=spec[1],spec[2],spec[3]
+		local face=part(farStacks,"SetbackCreamFacade",V(width,145,2.8),CF(cx,132,z),Color3.fromRGB(190,184,168),Enum.Material.Plaster,false)
+		face.MaterialVariant=""
+		local returnWall=part(farStacks,"DeepSideReturn",V(2.1,145,10),CF(cx-width/2+1,132,z-5),Color3.fromRGB(153,151,141),Enum.Material.Plaster,false)
+		returnWall.MaterialVariant=""
+		for level=0,8 do
+			local y=66+level*15
+			part(farStacks,"WhiteFloorCourse",V(width+.8,.32,3.9),CF(cx,y-5,z-2),C.pale,nil,false)
+			for _,flank in ipairs({-1,1}) do
+				part(farStacks,"DeepWindowPair",V(7.4,8,.2),CF(cx+flank*width*.23,y,z-1.55),
+					(level+flank)%5==0 and Color3.fromRGB(173,154,119) or Color3.fromRGB(63,72,70),Enum.Material.Glass,false)
+			end
+			if level%2==0 then
+				part(farStacks,"NarrowBalconyRail",V(width*.75,.23,.2),CF(cx,y-1.8,z-4.1),C.white,nil,false)
+			end
+		end
+	end
+	local farMist=part(A,"S01_DistantHazeScrim",V(310,190,.12),CF(0,115,188),Color3.fromRGB(172,169,161),Enum.Material.SmoothPlastic,false)
+	farMist.Transparency=.6
 
 	-- B is a long interior townhouse hall. All ground rooms survive behind its
 	-- two frontages; only their closed upper scenery and porch canopy repetition
@@ -1174,6 +1272,17 @@ function Architecture.Build(parent, origin, config)
 		else table.insert(revisedRoute,point) end
 	end
 	assert(inserted,"Missing F route replacement span");waypoints=revisedRoute
+	-- Follow the clear side of the planted incline and turn before the rear
+	-- cottages. Both detours retain continuous lawn support at ground level.
+	local pierDetour,rearDetour=false,false
+	for i=#waypoints,2,-1 do
+		if waypoints[i-1]==V(0,3,2140) and waypoints[i]==V(-54,3,2173) then
+			table.insert(waypoints,i,V(-54,3,2155));pierDetour=true
+		elseif waypoints[i-1]==V(0,3,2400) and waypoints[i]==V(0,3,2444) then
+			waypoints[i]=V(-65,3,2400);rearDetour=true
+		end
+	end
+	assert(pierDetour and rearDetour,"Missing Level 5 lawn route detour")
 	local function worldRoute(localPoints)
 		local points={};for _,p in ipairs(localPoints or {}) do table.insert(points,origin+p) end;return points
 	end
@@ -1209,7 +1318,7 @@ function Architecture.Build(parent, origin, config)
 	root:SetAttribute("WindowStandard","Glass RGB(87,102,102), transparency 0.2; no luminous panes")
 	root:SetAttribute("Design","Unknown-origin Backrooms. The researchers did not create this place.")
 	root:SetAttribute("SpawnCFrame",CFrame.lookAt(origin+V(0,3,5),origin+V(0,3,70)))
-	return {Model=root,SpawnCFrame=CFrame.lookAt(origin+V(0,3,5),origin+V(0,3,70)),PreviewCameras=cameras,Waypoints=waypoints,RouteWaypoints=waypoints,SectionGates=sectionGates,Zones=zones,
+	return {Model=root,SpawnCFrame=CFrame.lookAt(origin+V(-18,3,5),origin+V(20,3,100)),PreviewCameras=cameras,Waypoints=waypoints,RouteWaypoints=waypoints,SectionGates=sectionGates,Zones=zones,
 		FinalHouse=L.FinalHouse,ChuteStart=CF(origin+L.ChuteStart),ChuteEnd=CF(origin+L.ChuteEnd),
 		FRouteWaypoints=worldRoute(L.FRouteWaypoints),FRescueRouteWaypoints=worldRoute(L.FRescueRouteWaypoints),FClueRouteWaypoints=worldRoute(L.FClueRouteWaypoints),FAtriumPitBounds=L.FAtriumPitBounds,
 		Bounds={Min=origin+V(-287,-50,-12),Max=origin+V(287,330,2680)},GroundEnvelopeArea=totalFootprint,PreviousGroundEnvelopeArea=331600}

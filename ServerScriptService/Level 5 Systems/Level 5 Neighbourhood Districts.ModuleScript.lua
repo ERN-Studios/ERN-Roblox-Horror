@@ -25,11 +25,13 @@ function Districts.Build(K)
 		local exterior={SideWall=true,BackWall=true,BackWallWing=true,BackWallHeader=true,FacadeLintel=true,WindowApron=true,FacadePier=true,GableBaseBand=true,ClosedGableTriangle=true}
 		for _,piece in ipairs(home:GetDescendants()) do
 			if piece:IsA("BasePart") and exterior[piece.Name] then
-				piece.Color=Color3.new(1,1,1):Lerp(tint,.78)
+				-- Keep the shared horizontal siding texture while preserving the
+				-- photographed sage/taupe distinction between house fronts.
+				piece.Color=tint
 			end
 		end
 	end
-	local function porch(into,frame,width,depth,roofTint)
+	local function porch(into,frame,width,depth,roofTint,postOffsetX)
 		local p=model("WhiteColumnPorch",into)
 		part(p,"PorchEdge",V(width,.24,.5),frame*CF(0,.12,-depth),C.white,nil,false)
 		for _,s in ipairs({-1,1}) do
@@ -38,8 +40,9 @@ function Districts.Build(K)
 		end
 		part(p,"PorchFascia",V(width+3,.75,.35),frame*CF(0,12.05,-depth-1),C.white)
 		for _,s in ipairs({-1,1}) do
-			part(p,"SquarePorchColumn",V(.75,11.7,.75),frame*CF(s*(width/2-1),6,-depth+.7),C.white)
-			part(p,"ColumnFoot",V(1.2,.6,1.2),frame*CF(s*(width/2-1),.3,-depth+.7),C.white)
+			local offset=V(postOffsetX or 0,0,0)
+			part(p,"SquarePorchColumn",V(.75,11.7,.75),frame*CF(s*(width/2-1),6,-depth+.7)+offset,C.white)
+			part(p,"ColumnFoot",V(1.2,.6,1.2),frame*CF(s*(width/2-1),.3,-depth+.7)+offset,C.white)
 			part(p,"PorchSideHandrail",V(.22,.25,depth-1),frame*CF(s*(width/2-1),3.3,-depth/2),C.white,nil,false)
 			for j=1,3 do part(p,"PorchSideSpindle",V(.16,3,.16),frame*CF(s*(width/2-1),1.8,-depth+j*depth/4),C.white,nil,false) end
 			local half=(width-8)/2
@@ -173,7 +176,24 @@ function Districts.Build(K)
 			part(apartment,"ProjectingBalconyDeck",V(15,.6,32),CF(175,y-.3,z+inset),C.pale)
 			balconyRail(apartment,167.6,y,z+inset,31)
 			part(apartment,"BalconyDoorShadow",V(.2,8,5),CF(181.6,y+5,z+inset-7),C.dark,nil,false)
+			-- The photograph reads as a stack of recessed homes, rather than
+			-- continuous horizontal concrete stripes. Frame each landing as a bay.
+			part(apartment,"ApartmentBalconyCeiling",V(14,.32,31),CF(175,y+11.6,z+inset),Color3.fromRGB(225,221,204),Enum.Material.Plaster,false)
+			part(apartment,"ApartmentWindowPair",V(.2,7.6,5.4),CF(181.5,y+5,z+inset+6),Color3.fromRGB(62,72,69),Enum.Material.Glass,false)
+			for _,edge in ipairs({-1,1}) do
+				part(apartment,"ApartmentWindowJamb",V(.27,8,.27),CF(181.1,y+5,z+inset+6+edge*2.75),C.white,nil,false)
+			end
+			part(apartment,"ApartmentWindowHead",V(.27,.28,6),CF(181.1,y+9,z+inset+6),C.white,nil,false)
+			part(apartment,"ApartmentWindowSill",V(.4,.26,6),CF(181.1,y+1,z+inset+6),C.white,nil,false)
+			local porchLamp=part(apartment,"WarmBalconyDownlight",V(2.5,.13,3.2),CF(174.5,y+11.38,z+inset),Color3.fromRGB(252,228,177),Enum.Material.Neon,false)
+			local glow=Instance.new("SurfaceLight");glow.Face=Enum.NormalId.Bottom;glow.Range=16;glow.Brightness=.3;glow.Shadows=false;glow.Color=Color3.fromRGB(255,227,180);glow.Parent=porchLamp
 		end
+	end
+	for _,z in ipairs({594,636,678,720,762,804}) do
+		part(apartment,"FullHeightBalconyPier",V(3.2,74,3.2),CF(181,49,z),Color3.fromRGB(226,221,202),Enum.Material.Plaster,false)
+	end
+	for _,y in ipairs({28,42,56,70,84}) do
+		part(apartment,"RecessedStoreyBand",V(.5,.58,226),CF(181.2,y+11.9,705),C.white,Enum.Material.Plaster,false)
 	end
 	for level=2,4 do
 		local y=level*14
@@ -198,14 +218,39 @@ function Districts.Build(K)
 	local foreground=model("CloserVariedCottageFronts",S03)
 	scenicCottageFront(foreground,"WestTwoStoreyClapboard",-62,835,28,27,Color3.fromRGB(174,178,161),Color3.fromRGB(73,79,72))
 	scenicCottageFront(foreground,"EastLowGable",37,835,28,22,Color3.fromRGB(196,187,163),Color3.fromRGB(102,92,78))
+	-- A projecting three-light bay interrupts the otherwise flat cottage row.
+	-- It is scenic and sits ahead of the existing facade, never across a path.
+	local bayFrame=CF(37,0,835)*yaw(180)
+	local cottageBay=model("EastCottageProjectingBay",foreground)
+	part(cottageBay,"BayWindowCanopy",V(10,.42,3.8),bayFrame*CF(7.2,11,-2),C.white,Enum.Material.Wood,false)
+	part(cottageBay,"BayWindowSill",V(10,.34,3.3),bayFrame*CF(7.2,3.1,-2),C.white,Enum.Material.Wood,false)
+	part(cottageBay,"BayWindowGlazing",V(9.1,7.5,.16),bayFrame*CF(7.2,7,-3.5),Color3.fromRGB(49,63,59),Enum.Material.Glass,false)
+	for _,x in ipairs({2.55,5.65,8.75,11.85}) do
+		part(cottageBay,"BayWindowMullion",V(.2,7.8,.24),bayFrame*CF(x,7,-3.61),C.white,nil,false)
+	end
+	for _,y in ipairs({3.25,7,10.75}) do
+		part(cottageBay,"BayWindowCrossbar",V(9.4,.22,.24),bayFrame*CF(7.2,y,-3.61),C.white,nil,false)
+	end
 	local tower=model("SeparateManyWindowTower",S03)
 	part(tower,"TowerCore",V(31,88,66),CF(-110,44,600),Color3.fromRGB(220,222,208),Enum.Material.Plaster,false)
 	for level=0,10 do
 		for j=0,6 do
 			local z=574+j*8.5
 			part(tower,"DarkTowerWindow",V(.2,5.8,5.3),CF(-93.8,5+level*7.6,z),Color3.fromRGB(53,65,65),Enum.Material.Glass,false)
+			for _,edge in ipairs({-1,1}) do part(tower,"TowerWindowJamb",V(.2,6.1,.16),CF(-93.62,5+level*7.6,z+edge*2.72),C.white,nil,false) end
+			part(tower,"TowerWindowSill",V(.28,.2,5.55),CF(-93.61,2+level*7.6,z),C.white,nil,false)
 		end
 		part(tower,"WhiteFloorBand",V(.35,.24,66),CF(-93.5,level*7.6+8,600),C.white,nil,false)
+	end
+	-- The visible end of this tower faces the arrival view. A single dark
+	-- glazing field with white mullions gives it the dense residential grid
+	-- from the reference without dozens of separately modelled rooms.
+	part(tower,"FrontTowerGlazing",V(27,82,.16),CF(-110,44,633.18),Color3.fromRGB(57,68,69),Enum.Material.Glass,false)
+	for _,x in ipairs({-121,-115.5,-110,-104.5,-99}) do
+		part(tower,"FrontTowerVerticalMullion",V(.28,83,.26),CF(x,44,633.33),C.white,nil,false)
+	end
+	for y=7,83,7.6 do
+		part(tower,"FrontTowerFloorMullion",V(28,.28,.26),CF(-110,y,633.34),C.white,nil,false)
 	end
 	-- At the distant end, staggered office facades replace a single blank cap.
 	-- Their lower edges float above circulation and never bisect the gate route.
@@ -271,7 +316,9 @@ function Districts.Build(K)
 			local clapboard=i%2==0 and Color3.fromRGB(183,181,165) or Color3.fromRGB(169,171,157)
 			local home=house(S04,"FloralTowerHome_"..s.."_"..i.."_0",frame,30,26,13.8,clapboard,towerSlate,{open=true,backOpening=i==2,furniture=i==3 and (s<0 and 3 or 5) or nil})
 			colorRoof(home,towerSlate);colorClapboard(home,clapboard)
-			if i~=2 then porch(S04,frame,30,6,towerSlate) end
+			-- Set the west arrival posts closer to the promenade rail so the
+			-- ground route clears both posts without losing the white porch.
+			if i~=2 then porch(S04,frame,30,6,towerSlate,s<0 and i==1 and 2 or nil) end
 			if i==1 then K.registerWatcher(home,"FloralTerraceWindow_"..s,D.Name) end
 		end
 		for i,z in ipairs({1045,1170}) do
@@ -319,24 +366,77 @@ function Districts.Build(K)
 				part(tower,"InsetBalconyShadow",V(.25,10,narrow),CF(side*146,y+6,z+offsetZ),Color3.fromRGB(117,121,112):Lerp(tone,.42),nil,false)
 				local deck=part(tower,"OffsetBalconyDeck",V(10,.55,narrow+2),CF(deckX,y-.3,z+offsetZ),tone,nil,level<=12)
 				deck.Transparency=level>12 and (level-12)/7*.24 or 0
+				-- The upper balconies dissolve into the mist. Full sash trim on
+				-- every distant storey adds thousands of invisible tiny instances.
+				if level<=9 then
+					part(tower,"BalconyRecessDoor",V(.2,7.6,5.6),CF(side*145.7,y+5,z+offsetZ-5.5),Color3.fromRGB(66,76,72):Lerp(tone,haze*.38),Enum.Material.Glass,false)
+					part(tower,"BalconyRecessWindow",V(.2,7.6,5.6),CF(side*145.7,y+5,z+offsetZ+5.5),Color3.fromRGB(66,76,72):Lerp(tone,haze*.38),Enum.Material.Glass,false)
+					for _,windowZ in ipairs({z+offsetZ-5.5,z+offsetZ+5.5}) do
+						for _,edge in ipairs({-1,1}) do
+							part(tower,"BalconyOpeningJamb",V(.26,8,.23),CF(side*145.45,y+5,windowZ+edge*2.9),C.white,nil,false)
+						end
+						part(tower,"BalconyOpeningHeader",V(.3,.26,6),CF(side*145.45,y+9,windowZ),C.white,nil,false)
+					end
+				end
 				local railX=deckX-side*5.2
 				if level<=8 then
 					balconyRail(tower,railX,y,z+offsetZ,narrow+1)
 				else
 					part(tower,"HazyUpperRail",V(.2,.23,narrow+1),CF(railX,y+3.3,z+offsetZ),tone,nil,false)
-					for post=0,4 do part(tower,"HazyUpperPost",V(.15,3,.15),CF(railX,y+1.8,z+offsetZ-narrow/2+narrow*post/4),tone,nil,false) end
+					if level<13 then
+						for post=0,4 do part(tower,"HazyUpperPost",V(.15,3,.15),CF(railX,y+1.8,z+offsetZ-narrow/2+narrow*post/4),tone,nil,false) end
+					end
+				end
+				if level<=9 and level%2==1 then
+					local warm=part(tower,"BalconyUndersideLamp",V(2.4,.14,2.4),CF(deckX,y-.67,z+offsetZ),Color3.fromRGB(248,226,176),Enum.Material.Neon,false)
+					local glow=Instance.new("SurfaceLight");glow.Face=Enum.NormalId.Bottom;glow.Range=14;glow.Brightness=.22;glow.Shadows=false;glow.Color=Color3.fromRGB(255,226,181);glow.Parent=warm
 				end
 			end
 			for _,z in ipairs({993,1073,1163,1250}) do
 				part(tower,"NarrowVerticalWindow",V(.2,8.4,3.2),CF(side*146,y+4.5,z),Color3.fromRGB(51,61,59):Lerp(tone,haze),Enum.Material.Glass,false)
+				if level<=8 then
+					for _,edge in ipairs({-1,1}) do
+						part(tower,"NarrowWindowJamb",V(.25,8.8,.18),CF(side*145.78,y+4.5,z+edge*1.66),C.white,nil,false)
+					end
+					part(tower,"NarrowWindowSill",V(.32,.21,3.6),CF(side*145.76,y+.2,z),C.white,nil,false)
+				end
 			end
 		end
+	end
+	-- A separate middle-distance facade makes the towers recede behind the
+	-- porch roofs instead of reading as one flat pair of parallel walls.
+	-- It starts well above all playable streets and is entirely scenic.
+	local middleTower=model("MistyMiddleDistanceResidence",S04)
+	local middleFace=part(middleTower,"CreamResidenceCore",V(42,302,2.4),CF(-70,139,1125),Color3.fromRGB(204,199,183),Enum.Material.Plaster,false)
+	middleFace.MaterialVariant=""
+	for _,x in ipairs({-91,-49}) do
+		local pier=part(middleTower,"FullHeightCornerPier",V(2,302,9),CF(x,139,1120),Color3.fromRGB(218,212,194),Enum.Material.Plaster,false)
+		pier.MaterialVariant=""
+	end
+	for level=0,14 do
+		local y=60+level*14
+		local fade=level/14*.55
+		for _,x in ipairs({-80,-60}) do
+			part(middleTower,"RecessedResidenceWindow",V(7.4,8,.18),CF(x,y,1123.6),
+				Color3.fromRGB(57,68,67):Lerp(Color3.fromRGB(143,146,137),fade),Enum.Material.Glass,false)
+		end
+		part(middleTower,"ProjectingWhiteBalcony",V(37,.38,5),CF(-70,y-4.4,1121),C.pale,Enum.Material.Plaster,false)
+		part(middleTower,"BalconyFrontRail",V(37,.25,.2),CF(-70,y-1.2,1118.4),C.white,nil,false)
+		if level%3==0 then
+			for _,x in ipairs({-87,-70,-53}) do
+				part(middleTower,"BalconyWhitePost",V(.2,3.1,.2),CF(x,y-2.8,1118.4),C.white,nil,false)
+			end
+		end
+	end
+	for _,spec in ipairs({{1180,.88},{1238,.77}}) do
+		local veil=part(S04,"MistyTowerDepthVeil",V(240,274,.12),CF(0,168,spec[1]),Color3.fromRGB(166,160,151),Enum.Material.SmoothPlastic,false)
+		veil.Transparency=spec[2]
 	end
 	-- A second, more distant bank fills the otherwise blank end of the canyon.
 	-- It begins above the exit stair and has no collidable pieces or ground mass.
 	local rearTowers=model("MistyRearTowerLayers",S04)
 	for _,side in ipairs({-1,1}) do
-		part(rearTowers,"RecedingCreamShaft",V(4,250,36),CF(side*77,150,1248),Color3.fromRGB(211,205,188),Enum.Material.Plaster,false)
+		part(rearTowers,"RecedingCreamShaft",V(4,300,36),CF(side*77,150,1248),Color3.fromRGB(211,205,188),Enum.Material.Plaster,false)
 		for level=0,18 do
 			local y=35+level*13
 			local z=level%2==0 and 1239 or 1256
@@ -356,6 +456,7 @@ function Districts.Build(K)
 			local mist=level/19*.72
 			for _,side in ipairs({-1,1}) do
 				part(farFace,"FadingStackWindow",V(6,7.5,.13),CF(x+side*w*.23,y,1288.6),Color3.fromRGB(56,67,66):Lerp(Color3.fromRGB(169,174,164),mist),Enum.Material.Glass,false)
+				if level<=8 then part(farFace,"FadingWindowSill",V(6.5,.2,.24),CF(x+side*w*.23,y-3.86,1288.48),C.white,nil,false) end
 			end
 			if level%3==1 then
 				part(farFace,"FarBalconyBand",V(w*.82,.35,3.6),CF(x,y-4,1287.5),Color3.fromRGB(224,220,202),nil,false)
@@ -389,7 +490,12 @@ function Districts.Build(K)
 	-- a succession of through-houses forms an understandable central passage.
 	local E=zone("E_DomesticLabyrinth",V(-160,0,1296),V(160,44,1596))
 	local S10=model("S10_EmptyBalconyRoom",E)
-	floor(E,"DomesticBroadloom",0,0,1446,320,300,C.carpet)
+	local warmBroadloom=Color3.fromRGB(174,163,143)
+	local warmPlaster=Color3.fromRGB(211,203,185)
+	local broadloom=floor(E,"DomesticBroadloom",0,0,1446,320,300,warmBroadloom)
+	-- The carpet variant normally resets its tint toward white. Give this
+	-- district the subdued warm-beige broadloom visible in the reference.
+	broadloom.MaterialVariant="";broadloom.Material=Enum.Material.Fabric;broadloom.Color=warmBroadloom
 	for _,s in ipairs({-1,1}) do
 		-- These two real ground rooms retain the existing supported Window
 		-- Watcher panes; the repeated side-room array no longer hides the void.
@@ -415,18 +521,20 @@ function Districts.Build(K)
 	-- The first view is a low, broad carpeted room with a six-panel door and
 	-- a separate 18-stud right passage. Its left windows look across a sealed
 	-- shaft toward actual stacked railings; the glass prevents a fall.
-	part(S10,"ContinuousRoomCarpet",V(72,.34,83),CF(0,.06,1348),C.carpet,Enum.Material.Fabric)
-	part(S10,"RightRoomWall",V(.7,16,83),CF(-36,8,1348),C.cream,Enum.Material.Plaster)
-	part(S10,"LeftWindowApron",V(.7,3.4,83),CF(36,1.7,1348),C.cream,Enum.Material.Plaster)
-	part(S10,"LeftWindowHeader",V(.7,3.4,83),CF(36,14.3,1348),C.cream,Enum.Material.Plaster)
+	local roomCarpet=part(S10,"ContinuousRoomCarpet",V(72,.34,83),CF(0,.06,1348),warmBroadloom,Enum.Material.Fabric)
+	roomCarpet.MaterialVariant="";roomCarpet.Material=Enum.Material.Fabric;roomCarpet.Color=warmBroadloom
+	part(S10,"RightRoomWall",V(.7,16,83),CF(-36,8,1348),warmPlaster,Enum.Material.Plaster)
+	part(S10,"LeftWindowApron",V(.7,3.4,83),CF(36,1.7,1348),warmPlaster,Enum.Material.Plaster)
+	part(S10,"LeftWindowHeader",V(.7,3.4,83),CF(36,14.3,1348),warmPlaster,Enum.Material.Plaster)
 	for _,span in ipairs({{1306.5,1319},{1333,1339},{1353,1359},{1373,1389.5}}) do
-		part(S10,"LeftWindowPier",V(.7,9.2,span[2]-span[1]),CF(36,8,(span[1]+span[2])/2),C.cream,Enum.Material.Plaster)
+		part(S10,"LeftWindowPier",V(.7,9.2,span[2]-span[1]),CF(36,8,(span[1]+span[2])/2),warmPlaster,Enum.Material.Plaster)
 	end
 	for _,z in ipairs({1326,1346,1366}) do
 		local glass=part(S10,"InteriorAtriumWindowGlass",V(.15,9.2,14),CF(35.5,8,z),Color3.fromRGB(70,81,79),Enum.Material.Glass)
-		glass.Transparency=.88
+		glass.Transparency=.66
 		for _,y in ipairs({3.4,8,12.6}) do part(S10,"WindowCrossbar",V(.3,.17,14.5),CF(35.25,y,z),C.white,nil,false) end
 		for _,zz in ipairs({z-7.1,z+7.1}) do part(S10,"WindowJamb",V(.3,9.6,.22),CF(35.25,8,zz),C.white,nil,false) end
+		part(S10,"WindowCentreMullion",V(.3,9.2,.2),CF(35.25,8,z),C.white,nil,false)
 	end
 	-- The return is a shallow, nonblocking visual bay: two front-facing tall
 	-- windows remain legible from arrival while the central x=0 line stays free.
@@ -445,8 +553,14 @@ function Districts.Build(K)
 	end
 	part(S10,"BroadPortalHeader",V(76,1.4,.85),CF(0,15.3,1306.5),C.white,Enum.Material.Plaster)
 	for _,s in ipairs({-1,1}) do part(S10,"BroadPortalJamb",V(.85,16,.85),CF(s*36.6,8,1306.5),C.white,Enum.Material.Plaster) end
-	part(S10,"CentralPartitionLeft",V(32.2,16,.7),CF(19.9,8,1358),C.cream,Enum.Material.Plaster)
-	part(S10,"CentralPartitionRight",V(14.2,16,.7),CF(-10.9,8,1358),C.cream,Enum.Material.Plaster)
+	part(S10,"CentralPartitionLeft",V(32.2,16,.7),CF(19.9,8,1358),warmPlaster,Enum.Material.Plaster)
+	part(S10,"CentralPartitionRight",V(14.2,16,.7),CF(-10.9,8,1358),warmPlaster,Enum.Material.Plaster)
+	for _,span in ipairs({{19.9,32.2},{-10.9,14.2}}) do
+		part(S10,"CentralPartitionBaseboard",V(span[2],.52,.2),CF(span[1],.26,1357.52),C.white,nil,false)
+		part(S10,"CentralPartitionCrown",V(span[2],.38,.38),CF(span[1],15.7,1357.5),C.white,nil,false)
+	end
+	part(S10,"RoomSideBaseboard",V(.28,.58,83),CF(-35.48,.29,1348),C.white,nil,false)
+	part(S10,"RoomSideCrown",V(.44,.38,83),CF(-35.44,15.65,1348),C.white,nil,false)
 	part(S10,"CentralSixPanelDoor",V(7.6,10,.35),CF(0,5,1357.6),C.white,Enum.Material.Wood)
 	for _,s in ipairs({-1,1}) do
 		for _,row in ipairs({1,2,3}) do
@@ -459,9 +573,14 @@ function Districts.Build(K)
 	knob.Shape=Enum.PartType.Ball
 	part(S10,"DoorFrameHeader",V(8.6,.42,.65),CF(0,10.2,1357.3),C.white)
 	for _,s in ipairs({-1,1}) do part(S10,"DoorFrameJamb",V(.45,10.2,.65),CF(s*4,5.1,1357.3),C.white) end
-	part(S10,"PassageHeader",V(18,5.4,.75),CF(-27,13.3,1358),C.cream,Enum.Material.Plaster)
+	part(S10,"PassageHeader",V(18,5.4,.75),CF(-27,13.3,1358),warmPlaster,Enum.Material.Plaster)
 	for _,x in ipairs({-18.3,-35.7}) do part(S10,"PassageJamb",V(.45,10.7,.75),CF(x,5.35,1358),C.white) end
 	part(S10,"LowSuspendedCeiling",V(72,.45,83),CF(0,16.2,1348),C.ceiling,Enum.Material.Plaster)
+	-- The low ceiling joins the side bands at x=46. These strips remove the
+	-- accidental high atrium slit above the domestic room's window wall.
+	for _,s in ipairs({-1,1}) do
+		part(S10,"WindowWallCeilingReturn",V(10,.45,83),CF(s*41,16.2,1348),C.ceiling,Enum.Material.Plaster,false)
+	end
 	for _,z in ipairs({1321,1343,1365,1382}) do part(S10,"CeilingGridCrossbeam",V(72,.13,.15),CF(0,15.9,z),C.white,nil,false) end
 	for _,x in ipairs({-18,0,18}) do part(S10,"CeilingGridLongBeam",V(.15,.13,83),CF(x,15.9,1348),C.white,nil,false) end
 	for _,z in ipairs({1324,1347,1372}) do

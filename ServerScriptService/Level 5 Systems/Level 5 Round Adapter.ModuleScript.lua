@@ -258,9 +258,10 @@ function Adapter.Cleanup()
 	end
 end
 
--- These two owned signs describe the current preview boundary. They do not
+-- The ending sign describes the current preview boundary. It does not
 -- complete the round, award a clear, or invoke any transfer; the existing
--- BACK TO LOBBY control remains the player's way out.
+-- BACK TO LOBBY control remains the player's way out. Keep the arrival view
+-- clear so the residential facade is visible as soon as the player spawns.
 local function addPreviewNotices(world: Model, built: any)
 	local notices = Instance.new("Folder")
 	notices.Name = "Level5PreviewNotices"
@@ -286,9 +287,6 @@ local function addPreviewNotices(world: Model, built: any)
 		label.TextSize, label.TextWrapped, label.Text = 35, true, text
 		label.Parent = gui
 	end
-	local entry = built.SpawnCFrame.Position
-	sign("PreviewArrival", CFrame.lookAt(entry + Vector3.new(8, 2, 7), entry + Vector3.new(0, 2, 0)),
-		"LEVEL 5 · PLAYABLE PREVIEW\n\nSeven puzzles lead through eight sections. The final slide and ending are still in development.\n\nUse the lobby control to leave at any time.")
 	assert(typeof(built.ChuteEnd) == "CFrame", "Preview ending needs the authored descent endpoint")
 	local ending = built.ChuteEnd.Position
 	sign("PreviewEnding", CFrame.lookAt(ending + Vector3.new(0, 4.5, 8.45), ending + Vector3.new(0, 4.5, 0)),

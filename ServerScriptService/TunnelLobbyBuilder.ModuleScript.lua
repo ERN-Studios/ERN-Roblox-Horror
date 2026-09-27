@@ -1858,7 +1858,8 @@ local function styleLevelFiveRoom(roomModel, roomCenter, side, roomRadius, roomH
 		cream = Color3.fromRGB(214,205,174), pale = Color3.fromRGB(232,225,205),
 		white = Color3.fromRGB(241,238,220), carpet = Color3.fromRGB(162,150,125),
 		glass = Color3.fromRGB(87,102,102), dark = Color3.fromRGB(24,30,29),
-		light = Color3.fromRGB(239,230,199),
+		light = Color3.fromRGB(239,230,199), sage = Color3.fromRGB(174,187,173),
+		stone = Color3.fromRGB(194,181,160), slate = Color3.fromRGB(51,53,54),
 	}
 	-- Exact assets and MaterialVariant names from the current Level 5 Architecture.
 	local finishes = {
@@ -1917,14 +1918,15 @@ local function styleLevelFiveRoom(roomModel, roomCenter, side, roomRadius, roomH
 		return part
 	end
 	-- Shallow scenic fronts occupy only the rear strip. Their nearest point is
-	-- 20.8 studs outward; queue detector squares end at 16.41 (4.39 clear).
+	-- 20.4 studs outward; queue detector squares end at 16.41 (3.99 clear).
 	-- They are cosmetic and carry no prompts, triggers, collisions or queries.
+	local frontageTints = {palette.sage,palette.pale,palette.stone}
 	for index, spec in ipairs({{-10,22.5,11.4},{0,23.6,18.2},{10,22.5,14.4}}) do
 		local z, depth, height = spec[1],spec[2],spec[3]
 		local origin = roomCenter+outward*depth+V(0,.31,z)
 		local frame = CFrame.lookAt(origin,origin-outward)
 		local wall = piece("ResidentialFront"..index,frame*CF(0,height/2,0),V(8.6,height,.55),palette.cream,Enum.Material.WoodPlanks)
-		finish(wall,"Siding",Enum.NormalId.Front,index==2 and palette.pale or palette.cream)
+		finish(wall,"Siding",Enum.NormalId.Front,frontageTints[index])
 		piece("FrontSkirting"..index,frame*CF(0,.22,-.36),V(8.7,.36,.24),palette.white,Enum.Material.Wood)
 		piece("FrontCrown"..index,frame*CF(0,height-.1,-.34),V(8.8,.4,.32),palette.white,Enum.Material.Wood)
 		local door = piece("ClosedDomesticDoor"..index,frame*CF(-2.15,4.1,-.35),V(3.1,7.6,.22),palette.pale,Enum.Material.Wood)
@@ -1934,11 +1936,39 @@ local function styleLevelFiveRoom(roomModel, roomCenter, side, roomRadius, roomH
 		end
 		piece("DoorHeader"..index,frame*CF(-2.15,8.12,-.5),V(3.52,.23,.24),palette.white,Enum.Material.Wood)
 		piece("QuietBrassHandle"..index,frame*CF(-1.08,4.1,-.54),V(.15,.28,.19),Color3.fromRGB(137,119,65),Enum.Material.Metal)
+		-- The real Level 5 houses use dark pitched porch canopies and warm sconces.
+		-- Every projection stays in this rear scenic strip, clear of queue pads.
+		for slope=-1,1,2 do
+			piece("SlateEntryCanopy"..index.."_"..slope,
+				frame*CF(-2.15+slope*1.05,8.73,-1.04)*CFrame.Angles(0,0,-slope*math.rad(16)),
+				V(2.5,.28,1.6),palette.slate,Enum.Material.Slate)
+		end
+		piece("PalePorchStep"..index,frame*CF(-2.15,.08,-1.35),V(4.2,.16,1.5),palette.pale,Enum.Material.Plaster)
+		piece("DarkDoorMat"..index,frame*CF(-2.15,.17,-1.36),V(2.35,.04,.78),
+			Color3.fromRGB(95,89,75),Enum.Material.Fabric)
+		local sconce=piece("WarmEntrySconce"..index,frame*CF(0,7.05,-.72),
+			V(.38,.62,.24),Color3.fromRGB(255,209,148),Enum.Material.Neon)
+		local glow=Instance.new("PointLight")
+		glow.Name="ResidentialEntryGlow";glow.Brightness=.38;glow.Range=9;glow.Shadows=false
+		glow.Color=Color3.fromRGB(255,213,155);glow.Parent=sconce
+		local plaque=piece("HouseNumberPlaque"..index,frame*CF(-2.15,6.85,-.52),
+			V(.72,.46,.08),palette.dark,Enum.Material.Metal)
+		local numberGui=Instance.new("SurfaceGui")
+		numberGui.Name="HouseNumber";numberGui.Face=Enum.NormalId.Front
+		numberGui.SizingMode=Enum.SurfaceGuiSizingMode.PixelsPerStud
+		numberGui.PixelsPerStud=100;numberGui.Parent=plaque
+		local numberText=Instance.new("TextLabel")
+		numberText.Name="Number";numberText.Size=UDim2.fromScale(1,1)
+		numberText.BackgroundTransparency=1;numberText.Font=Enum.Font.GothamBold
+		numberText.Text="5"..string.char(64+index);numberText.TextScaled=true
+		numberText.TextColor3=palette.white;numberText.Parent=numberGui
 		local function window(name,x,y,width,height)
 			piece(name.."Recess",frame*CF(x,y,-.37),V(width+.34,height+.34,.2),palette.white,Enum.Material.Wood)
 			piece(name.."DarkInterior",frame*CF(x,y,-.49),V(width,height,.08),palette.dark,Enum.Material.SmoothPlastic)
 			local pane = piece(name.."TintedPane",frame*CF(x,y,-.55),V(width,height,.08),palette.glass,Enum.Material.Glass)
 			pane.Transparency=.2; pane.Reflectance=0
+			piece(name.."WhiteSill",frame*CF(x,y-height/2-.14,-.66),
+				V(width+.45,.2,.43),palette.white,Enum.Material.Wood)
 			piece(name.."Mullion",frame*CF(x,y,-.62),V(.1,height,.13),palette.white,Enum.Material.Wood)
 			piece(name.."Crossbar",frame*CF(x,y,-.63),V(width,.1,.13),palette.white,Enum.Material.Wood)
 		end
@@ -1973,7 +2003,7 @@ local function styleLevelFiveRoom(roomModel, roomCenter, side, roomRadius, roomH
 		piece("SharedCeilingSeam",CF(roomCenter+V(0,roomHeight-.73,z)),V(43,.04,.08),Color3.fromRGB(136,138,126),Enum.Material.Metal)
 	end
 	roomModel:SetAttribute("LobbyBayTheme","IndoorSuburbs")
-	roomModel:SetAttribute("LobbyBayStyleVersion",1)
+	roomModel:SetAttribute("LobbyBayStyleVersion",2)
 	roomModel:SetAttribute("Level5ResidentialPreview",true)
 	return decor
 end
