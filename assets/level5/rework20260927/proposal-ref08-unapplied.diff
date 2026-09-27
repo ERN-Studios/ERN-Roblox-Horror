@@ -1,0 +1,50 @@
+diff --git a/ServerScriptService/Level 5 Systems/Level 5 Reference Anomalies.ModuleScript.lua b/ServerScriptService/Level 5 Systems/Level 5 Reference Anomalies.ModuleScript.lua
+index 24d072e..83fc5f5 100644
+--- a/ServerScriptService/Level 5 Systems/Level 5 Reference Anomalies.ModuleScript.lua	
++++ b/ServerScriptService/Level 5 Systems/Level 5 Reference Anomalies.ModuleScript.lua	
+@@ -1122,13 +1122,26 @@ local function buildSection8(k, K, root)
+ 				end
+ 				door:SetAttribute("ScenicClosed", true)
+ 				local wc = V(x - s * .3, y + 5.5, z + 3.2)
+-				gridWindow(k, f, CFrame.lookAt(wc, wc + inward), 3.8, 6.6, y >= 12)
++				local windowFrame = CFrame.lookAt(wc, wc + inward)
++				gridWindow(k, f, windowFrame, 3.8, 6.6, y >= 12)
++				-- The near facade needs a legible white casing against the cream wall. Give the
++				-- opposite apartments the same detail so the cross-atrium view stays consistent.
++				for _, side in ipairs({-1, 1}) do
++					k.part(f, "WindowSideCasing", V(.26, 6.86, .28),
++						windowFrame * CF(side * 2.03, 0, -.2), PAL.white, M.Wood, "Scenic")
++					k.part(f, "WindowHeadSill", V(4.32, .26, .28),
++						windowFrame * CF(0, side * 3.43, -.2), PAL.white, M.Wood, "Scenic")
++				end
+ 				local lamp = k.part(f, "WarmSconce", V(.65, .8, .65), CF(x - s * .7, y + 7.8, z), PAL.warm, M.Neon, "Scenic")
+ 				if y == TOP and bay % 2 == 1 then k.light(lamp, "PointLight", {Color=PAL.warm, Brightness=.55, Range=11, Shadows=false}) end
+ 				if y > PIT and y < CEIL - 8 then
+ 					local bx = s * (W / 2 - 2.7)
+ 					k.part(f, "TinyBalcony", V(5, .55, 10), CF(bx, y - .28, z), PAL.pale, M.Plaster, "Scenic")
+ 					k.bar(f, "TinyBalconyRail", V(bx - s * 2.4, y + 3.2, z - 5), V(bx - s * 2.4, y + 3.2, z + 5), .22, PAL.white, "Scenic")
++					for _, dz in ipairs({-4.8, 0, 4.8}) do
++						k.part(f, "TinyBalconyPost", V(.22, 3.2, .22),
++							CF(bx - s * 2.4, y + 1.6, z + dz), PAL.white, M.Metal, "Scenic")
++					end
+ 				end
+ 			end
+ 		end
+@@ -1160,11 +1173,13 @@ local function buildSection8(k, K, root)
+ 	end end
+ 
+ 	local cameras = {
+-		{name="S08_Reference", position=V(-34, TOP + 7, 76), lookAt=V(5, TOP + 1, 132)},
+-		{name="S08_AcrossVoid", position=V(-53, TOP + 4, 103), lookAt=V(65, 4, 130)},
+-		{name="S08_DeepDrop", position=V(-38, TOP + 5, 70), lookAt=V(0, PIT, 112)},
++		-- The apartment frontage and broad carpet stay on screen left; the protected
++		-- opening and cross-atrium galleries fall to screen right, as in reference 08.
++		{name="S08_Reference", position=V(62, TOP + 7, 62), lookAt=V(44, TOP - 7, 130)},
++		{name="S08_AcrossVoid", position=V(56, TOP + 4, 103), lookAt=V(-65, 4, 150)},
++		{name="S08_DeepDrop", position=V(51, TOP + 5, 70), lookAt=V(0, PIT, 112)},
+ 	}
+-	local waypoints = {V(0, TOP + 3, 8), V(-54, TOP + 3, 48), V(-54, TOP + 3, 158), V(0, TOP + 3, 204)}
++	local waypoints = {V(0, TOP + 3, 8), V(54, TOP + 3, 48), V(54, TOP + 3, 158), V(0, TOP + 3, 204)}
+ 	local zones = {{Name="S08_UpperAtrium", Min=V(-W / 2, PIT, 0), Max=V(W / 2, CEIL, D), CeilingHeight=CEIL,
+ 		Description="Broad carpeted upper walkway around an open deep atrium; small apartment balconies, doors, windows and opposite stair galleries."}}
+ 	local footprint = {Min=V(-W / 2 - 2, PIT, 0), Max=V(W / 2 + 2, CEIL + 2, D + 2), CeilingY=CEIL, GradeY=TOP,
