@@ -541,7 +541,7 @@ function Architecture.Build(parent, origin, config)
 				doorframe(m,frame*CF(side*5.5,0,doorZ)*CFrame.Angles(0,math.pi/2,0),opening,10)
 			end
 		end
-		if options.open~=false and math.abs(frame.Position.Y)<.1 and not options.backOpening then
+		if options.open~=false and (math.abs(frame.Position.Y)<.1 or options.puzzleCandidate==true) and not options.backOpening then
 			m:SetAttribute("HousePuzzleCandidate",true)
 			local hint=part(m,"PuzzleHintSurface",V(6,5,.03),frame*CF(0,6,d-.38),C.white,nil,false)
 			hint.Transparency=1;hint.CastShadow=false;hint:SetAttribute("ReservedBlankClueArea",true)

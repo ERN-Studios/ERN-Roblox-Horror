@@ -851,10 +851,11 @@ function Districts.Build(K)
 		rail(G,CF(-34,8,z),72);rail(G,CF(50,16,z),48)
 	end
 	-- The detached and repeated outer houses once hid the reference sections.
-	-- Gate seven's selected clue keeps its exact real room and floor frame.
-	local gateSevenClueHome=house(G,"OuterGardenResidence_-1_2_0",CF(-214,0,2290)*yaw(-90),28,24,13.8,C.pale,nil,{open=true})
+	-- Gate seven's real clue home belongs on the raised S06 gabled lawn.
+	-- Players use the east entry flight, visit the house, then return to grade.
+	local gateSevenClueHome=house(G,"EastTerraceClueResidence",CF(125,16,2350)*yaw(90),28,24,13.8,C.pale,Color3.fromRGB(89,74,66),{open=true,puzzleCandidate=true})
 	gateSevenClueHome:SetAttribute("GateSevenClueResidence",true)
-	restyleEssentialGroundHome(gateSevenClueHome,CF(-214,0,2290)*yaw(-90),28,13.8,"Clue")
+	restyleEssentialGroundHome(gateSevenClueHome,CF(125,16,2350)*yaw(90),28,13.8,"Clue")
 	-- The removed three-storey central house exposed an empty dark rectangle
 	-- behind the S05 incline. A continuous, room-bay apartment elevation now
 	-- closes that view. Both faces have windows, so it also reads as architecture

@@ -13,7 +13,7 @@ local definitions = {
 	{title="Quiet Switches",instructions="Match the three switch positions shown inside the house.",mode="switches",count=3,labels={"1","2","3"},options=options({"DOWN","UP"},{"↓","↑"}),solution={2,1,2},incorrectText="Check which switches point up and which point down."},
 	{title="Stopped Clocks",instructions="Match the three stopped clocks, from left to right.",mode="clocks",count=3,labels={"1","2","3"},options=options({"12:00","3:00","6:00","9:00"}),solution={2,4,3},incorrectText="Read the stopped clocks from left to right."},
 	{title="Empty Channels",instructions="Enter the three channel numbers shown inside the house.",mode="television",count=3,labels={"1","2","3"},options=options({"CH01","CH02","CH03","CH04","CH05","CH06","CH07","CH08","CH09"}),solution={4,7,2},incorrectText="Check the three channel numbers and their order."},
-	{title="Last Directions",instructions="Follow the three house arrows, from left to right.",mode="arrows",count=3,labels={"1","2","3"},options=options({"UP","RIGHT","DOWN","LEFT"},{"↑","→","↓","←"}),solution={2,3,1},incorrectText="Read the three arrow directions from left to right."},
+	{title="Last Directions",instructions="Find the clue house on the raised gabled lawn. Read its three arrows left to right.",mode="arrows",count=3,labels={"1","2","3"},options=options({"UP","RIGHT","DOWN","LEFT"},{"↑","→","↓","←"}),solution={2,3,1},incorrectText="Read the three arrow directions from left to right."},
 }
 local function freezeDeep(value)
 	if type(value) ~= "table" or table.isfrozen(value) then return value end
