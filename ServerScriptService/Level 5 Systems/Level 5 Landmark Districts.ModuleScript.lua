@@ -696,8 +696,10 @@ function Districts.Build(K)
 		part(skybridgeSection,"CentralFluorescentPanel",V(8,.14,4.6),CF(0,176.65,z),Color3.fromRGB(230,231,218),Enum.Material.Neon,false)
 	end
 	for _,span in ipairs({{-165,-76},{-54,165}}) do
-		part(skybridgeSection,"RecessedDomesticCanyonEnd",V(span[2]-span[1],170,.15),
+		local farFacade=part(skybridgeSection,"RecessedDomesticCanyonEnd",V(span[2]-span[1],170,.15),
 			CF((span[1]+span[2])/2,85,2450),Color3.fromRGB(143,138,116),Enum.Material.Plaster,false)
+		local apartmentDetail=texture(farFacade,"rbxassetid://84616323392440",Enum.NormalId.Front,85)
+		if apartmentDetail then apartmentDetail.Color3=Color3.fromRGB(175,170,145);apartmentDetail.Transparency=.4 end
 	end
 	part(skybridgeSection,"DarkHighReturnOverGateSeven",V(22,156,.15),CF(-65,92,2450),
 		Color3.fromRGB(8,10,9),Enum.Material.SmoothPlastic,false)

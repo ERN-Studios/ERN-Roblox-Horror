@@ -372,8 +372,34 @@ function Architecture.Build(parent, origin, config)
 		for _,s in ipairs({-1,1}) do part(into,"DoorJamb",V(.4,height+.3,.55),frame*CF(s*(width/2+.08),height/2,-.13),C.white) end
 		part(into,"DoorHeader",V(width+.8,.45,.55),frame*CF(0,height+.15,-.13),C.white)
 	end
-	local function facade(into,frame,w,h,color,openDoor,lit,simple)
+	local function facade(into,frame,w,h,color,openDoor,lit,simple,frontDoorNear)
 		local dw,dh=5.4,10.3
+		if frontDoorNear then
+			-- Only the first +X corridor home uses this frontage. Its real entry
+			-- precedes the windows from the S02 approach; the far Watcher pane
+			-- stays at virtually the same position as on the standard facade.
+			assert(openDoor,"near corridor entry must remain passable")
+			local doorX=9
+			local farEdge,windowEdge,nearEdge=-w/2,doorX-dw/2,doorX+dw/2
+			local windowWidth,endWidth=windowEdge-farEdge,w/2-nearEdge
+			local paneWidth=(windowWidth-2.3-.85)/2
+			assert(paneWidth>=6.8 and endWidth>=1.15,"near corridor entry needs supported windows and wall")
+			part(into,"FacadeLintel",V(w,h-dh,.65),frame*CF(0,dh+(h-dh)/2,0),color)
+			part(into,"WindowApron",V(windowWidth,2.8,.65),frame*CF((farEdge+windowEdge)/2,1.4,0),color)
+			for _,x in ipairs({farEdge+.575,windowEdge-.575}) do
+				part(into,"FacadePier",V(1.15,dh-2.8,.65),frame*CF(x,(dh+2.8)/2,0),color)
+			end
+			part(into,"FacadePier",V(endWidth,dh,.65),frame*CF((nearEdge+w/2)/2,dh/2,0),color)
+			for i=0,1 do
+				local paneX=farEdge+1.15+paneWidth/2+i*(paneWidth+.85)
+				window(into,frame*CF(paneX,6.55,-.18),paneWidth,7.2,lit,simple)
+				if i==0 then part(into,"FacadePier",V(.85,dh-2.8,.65),frame*CF(paneX+paneWidth/2+.425,(dh+2.8)/2,0),color) end
+			end
+			doorframe(into,frame*CF(doorX,0,0),dw,dh)
+			part(into,"SplitSkirting",V(windowWidth,.35,.8),frame*CF((farEdge+windowEdge)/2,.18,.08),C.white)
+			part(into,"SplitSkirting",V(endWidth,.35,.8),frame*CF((nearEdge+w/2)/2,.18,.08),C.white)
+			return
+		end
 		local sw=(w-dw)/2
 		part(into,"FacadeLintel",V(w,h-dh,.65),frame*CF(0,dh+(h-dh)/2,0),color)
 		for _,s in ipairs({-1,1}) do
@@ -444,7 +470,7 @@ function Architecture.Build(parent, origin, config)
 			for i=0,3 do
 				part(m,"ExposedPlasterEdge",V(.38,1.15,.95),frame*CF(-w/2+1.35,3.5+i*2.3,-.05)*CFrame.Angles(0,0,math.rad(i%2==0 and 12 or -9)),C.white,Enum.Material.Plaster)
 			end
-		else facade(m,frame,w,h,color,options.open~=false,options.lit,scenic) end
+		else facade(m,frame,w,h,color,options.open~=false,options.lit,scenic,options.frontDoorNear) end
 		for _,s in ipairs({-1,1}) do
 			part(m,"SideWall",V(.65,h,d),frame*CF(s*w/2,h/2,d/2),color)
 			if not scenic then part(m,"InteriorBaseboard",V(.18,.5,d),frame*CF(s*(w/2-.4),.25,d/2),C.white) end
@@ -940,10 +966,10 @@ function Architecture.Build(parent, origin, config)
 		end
 	end
 	local corridorCeiling=model("FluorescentTileCeiling",corridor)
-	local suspendedPlane=part(corridorCeiling,"LowSuspendedPlane",V(17,.5,232),CF(89,14.55,338),Color3.fromRGB(210,207,197),Enum.Material.Plaster)
+	local suspendedPlane=part(corridorCeiling,"LowSuspendedPlane",V(17,.5,238),CF(89,14.55,335),Color3.fromRGB(210,207,197),Enum.Material.Plaster)
 	suspendedPlane.MaterialVariant=""
-	for _,x in ipairs({85,93}) do part(corridorCeiling,"CeilingTBarLong",V(.15,.09,228),CF(x,14.26,338),C.white,nil,false) end
-	for z=224,452,8 do part(corridorCeiling,"CeilingTBarCross",V(14,.09,.15),CF(89,14.26,z),C.white,nil,false) end
+	for _,x in ipairs({85,93}) do part(corridorCeiling,"CeilingTBarLong",V(.15,.09,236),CF(x,14.26,334),C.white,nil,false) end
+	for z=216,452,8 do part(corridorCeiling,"CeilingTBarCross",V(14,.09,.15),CF(89,14.26,z),C.white,nil,false) end
 	for i=0,12 do
 		local z=232+i*17
 		local failed=i==3 or i==9
@@ -975,7 +1001,7 @@ function Architecture.Build(parent, origin, config)
 			part(rightWall,"PictureInnerLine",V(.19,4.35,3.15),CF(83.16,7.35,z),C.pale,Enum.Material.SmoothPlastic,false)
 		end
 	end
-	local rightCursor=226
+	local rightCursor=216
 	for _,z in ipairs({254,292,330,368,406}) do
 		local first,last=z-2.5,z+2.5
 		rightPier(rightCursor,first)
@@ -994,7 +1020,7 @@ function Architecture.Build(parent, origin, config)
 		for i,z in ipairs({232,286,348,418}) do
 			local frame=CF(s*96,0,z)*yaw(s*90)
 			local home=house(B,"ArcadeResidence_"..s.."_"..i.."_0",frame,28,28,13.8,i%2==0 and C.pale or C.yellow,nil,
-				{open=true,backOpening=i%2==0,furniture=i==2 and (s<0 and 1 or 3) or nil})
+				{open=true,backOpening=i%2==0,furniture=i==2 and (s<0 and 1 or 3) or nil,frontDoorNear=s>0 and i==1})
 			if i==1 then registerWatcher(home,"ArcadeWindow_"..s,B.Name) end
 			if s>0 then
 				local tint=({Color3.fromRGB(190,179,161),Color3.fromRGB(108,125,139),Color3.fromRGB(163,153,143),Color3.fromRGB(191,183,166)})[i]
@@ -1237,7 +1263,7 @@ function Architecture.Build(parent, origin, config)
 	local waypoints={V(0,3,5),V(0,3,45),V(35,3,50),V(35,3,104),V(0,3,108),V(0,3,184),V(0,3,208),V(0,3,263),V(58,3,264),V(58,3,329),V(-55,3,329),V(-55,3,397),V(60,3,400),V(60,3,444),V(88,3,444),V(88,3,468),V(110,3,468),V(110,3,513),V(145,3,513),V(145,3,565),V(90,3,592),V(25,3,592),V(25,3,650),V(-25,3,700),V(-25,3,740),V(-25,3,778),V(-90,3,778),V(-145,3,800),V(-145,3,865),V(-100,3,875),V(-100,3,924),V(-120,3,924),V(-120,3,948),V(-120,3,965),V(-101,3,965),V(-101,3,1087),V(-101,3,1109),V(-86,3,1109),V(-86,3,1094),V(-86,3,1089),V(-86,-3,1073),V(-86,-9,1057),V(-86,-9,1024),V(15,-9,1024),V(15,-9,1106),V(30,-9,1122),V(30,-9,1195),V(0,-9,1228),V(0,-3,1246),V(0,3,1265),V(120,3,1278),V(120,3,1284),V(120,3,1308),V(90,3,1310),V(90,3,1373),V(60,3,1373),V(60,3,1406),V(-90,3,1406),V(-90,3,1458),V(-60,3,1458),V(-60,3,1495),V(-90,3,1495),V(-90,3,1550),V(-120,3,1584),V(-120,3,1608),V(-125,3,1689),V(-80,3,1690),V(-80,3,1755),V(15,3,1755),V(75,3,1790),V(75,3,1840),V(75,3,1910),V(40,3,1955),V(0,3,1955),V(0,3,2028),V(80,3,2028),V(178,3,2048),V(178,3,2064),V(178,3,2088),V(135,3,2100),V(95,3,2140),V(0,3,2140),V(-54,3,2173),V(-54,7,2188),V(-54,11,2204),V(-90,11,2208),V(-90,11,2270),V(-60,11,2270),V(-10,11,2270),V(6,11,2270),V(18,15,2270),V(30,19,2270),V(36,19,2270),V(92,19,2270),V(92,19,2332),V(54,19,2332),V(54,19,2340),V(54,11,2360),V(54,3,2380),V(54,3,2383),V(0,3,2400),V(0,3,2444),V(-65,3,2444),V(-65,3,2468),V(-65,3,2538),V(-30,3,2548),V(0,3,2555),V(0,3,2578),V(0,3,2588),V(0,3,2597.5),V(9,3,2597.5),V(9,3,2610.9),V(0,3,2610.9),V(0,3,2613),V(0,3,2615),V(0,-2.5,2631),V(0,-8,2647),V(0,-17,2658.5),V(0,-26,2670),V(0,-26,2676)}
 	-- The B guide route follows the actual hall. The former zigzag crossed
 	-- through the sealed cross-lane scenery and did not reveal reference 02.
-	local hallRoute={V(0,3,208),V(44,3,214),V(89,3,224),V(89,3,263),V(89,3,329),V(89,3,397),V(89,3,438),V(88,3,444)}
+	local hallRoute={V(0,3,208),V(44,3,208),V(89,3,212),V(89,3,224),V(89,3,263),V(89,3,329),V(89,3,397),V(89,3,438),V(88,3,444)}
 	local hallwayWaypoints={};local hallInserted=false
 	for _,point in ipairs(waypoints) do
 		if point.Z>=208 and point.Z<=444 then
