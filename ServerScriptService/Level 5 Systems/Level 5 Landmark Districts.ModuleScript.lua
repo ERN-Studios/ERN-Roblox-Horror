@@ -476,7 +476,7 @@ function Districts.Build(K)
 				-- Upper scenic mass draws the canyon inward while the real ground
 				-- home, terraced foot route, and Watcher pane stay at their old sites.
 				local scenicBase=s<0 and 8 or 16
-				part(group,"MonumentalTowerWall",V(25,178-scenicBase,126),CF(s*112,(178+scenicBase)/2,2387),paleTower,Enum.Material.Plaster,false)
+				part(group,"MonumentalTowerWall",V(25,178-scenicBase,126),CF(s*112,(178+scenicBase)/2,2387),Color3.fromRGB(190,177,145),Enum.Material.Plaster,false)
 				for level=3,13 do
 					local y=level*12
 					-- The photographed tower has individual dark apartment openings
@@ -495,11 +495,11 @@ function Districts.Build(K)
 					-- stacked rounded corner balconies visible on both reference towers.
 					for _,endZ in ipairs({2328,2446}) do
 						if level%2==1 then
-							roundedDeck(group,"RoundedCornerBalcony",V(s*97,0,endZ),7.5,y,endZ==2328 and -1 or 1)
+							roundedDeck(group,"RoundedCornerBalcony",V(s*97,0,endZ),10.5,y,endZ==2328 and -1 or 1)
 						else
 							-- Keep the round deck silhouette at every height; distant
 							-- intermediate rails merge visually into the long balcony line.
-							local endSlab=part(group,"RoundedCornerSoffit",V(1,15,15),
+							local endSlab=part(group,"RoundedCornerSoffit",V(1,21,21),
 								CF(s*97,y-.5,endZ)*CFrame.Angles(0,0,math.pi/2),C.pale,Enum.Material.Plaster,false)
 							endSlab.Shape=Enum.PartType.Cylinder
 						end
@@ -573,23 +573,27 @@ function Districts.Build(K)
 	-- 05: the planted volume actually hangs between the two rounded towers.
 	-- Its lowest edge is above the ground runner and terrace approach, while
 	-- pale diagonal ribs carry the pitched houses rather than a detached ramp.
-	local slope=CF(0,59,2170)*CFrame.Angles(0,0,math.rad(-30))
-	part(slopeSection,"InclinedDarkPlantedMass",V(90,4.8,38),slope,Color3.fromRGB(29,51,31),Enum.Material.Grass,false)
+	local slope=CF(0,58,2183)*CFrame.Angles(0,0,math.rad(-50))
+	part(slopeSection,"InclinedDarkPlantedMass",V(84,4.8,34),slope,Color3.fromRGB(29,51,31),Enum.Material.Grass,false)
 	-- The broad lawn face must read from the ground approach as green turf,
 	-- rather than only showing the pale underside of the suspended volume.
-	local frontTurf=part(slopeSection,"InclinedVisibleGrassFace",V(85,.3,25),
-		CF(0,51,2155)*CFrame.Angles(0,0,math.rad(-28))*CFrame.Angles(math.rad(65),0,0),
+	local frontTurf=part(slopeSection,"InclinedVisibleGrassFace",V(72,.3,24),
+		CF(0,53,2166)*CFrame.Angles(0,0,math.rad(-50))*CFrame.Angles(math.rad(65),0,0),
 		Color3.fromRGB(66,88,60),Enum.Material.Grass,false)
 	local frontWeave=texture(frontTurf,"rbxassetid://108216315862080",Enum.NormalId.Top,8)
 	if frontWeave then frontWeave.Transparency=.45 end
-	part(slopeSection,"InclinedStructuralUnderside",V(91,3.2,39),slope*CF(0,-4,0),paleTower,Enum.Material.Plaster)
-	for _,x in ipairs({-38,38}) do
-		local y=x<0 and 72 or 34
-		part(slopeSection,"InclineSupportPier",V(6,y-2,7),CF(x,(y-2)/2,2164),paleTower,Enum.Material.Plaster)
+	part(slopeSection,"InclinedStructuralUnderside",V(85,6,35),slope*CF(0,-4,0),paleTower,Enum.Material.Plaster)
+	for _,x in ipairs({-24,24}) do
+		local y=x<0 and 86 or 30
+		part(slopeSection,"InclineSupportPier",V(6,y-2,7),CF(x,(y-2)/2,2180),paleTower,Enum.Material.Plaster)
 	end
-	for i,data in ipairs({{-24,76,2149,-16},{23,53,2152,13}}) do
+	for i,data in ipairs({{-13,76,2160,-16},{15,45,2162,13}}) do
 		local x,y,z,roll=table.unpack(data)
-		local tilted=house(slopeSection,"VisiblyTiltedGabledHome_"..i,CF(x,y,z)*CFrame.Angles(0,0,math.rad(roll)),28,24,13.8,C.cream,Color3.fromRGB(73,65,64),{open=false})
+		local siding=i==1 and Color3.fromRGB(185,172,153) or Color3.fromRGB(206,190,166)
+		local tilted=house(slopeSection,"VisiblyTiltedGabledHome_"..i,CF(x,y,z)*CFrame.Angles(0,0,math.rad(roll)),34,24,13.8,siding,Color3.fromRGB(89,74,66),{open=false})
+		for _,piece in ipairs(tilted:GetDescendants()) do
+			if piece:IsA("BasePart") and piece.Name=="WindowGlass" then piece.Color=Color3.fromRGB(35,38,35) end
+		end
 		tilted:SetAttribute("ClosedScenicProjection",true)
 	end
 	part(slopeSection,"LowerSuspendedTileCeiling",V(300,.7,100),CF(0,112,2130),Color3.fromRGB(155,151,133),Enum.Material.Plaster,false)
@@ -697,9 +701,9 @@ function Districts.Build(K)
 	end
 	for _,span in ipairs({{-165,-76},{-54,165}}) do
 		local farFacade=part(skybridgeSection,"RecessedDomesticCanyonEnd",V(span[2]-span[1],170,.15),
-			CF((span[1]+span[2])/2,85,2450),Color3.fromRGB(143,138,116),Enum.Material.Plaster,false)
+			CF((span[1]+span[2])/2,85,2450),Color3.fromRGB(82,82,65),Enum.Material.Plaster,false)
 		local apartmentDetail=texture(farFacade,"rbxassetid://84616323392440",Enum.NormalId.Front,85)
-		if apartmentDetail then apartmentDetail.Color3=Color3.fromRGB(175,170,145);apartmentDetail.Transparency=.4 end
+		if apartmentDetail then apartmentDetail.Color3=Color3.fromRGB(111,109,89);apartmentDetail.Transparency=.62 end
 	end
 	part(skybridgeSection,"DarkHighReturnOverGateSeven",V(22,156,.15),CF(-65,92,2450),
 		Color3.fromRGB(8,10,9),Enum.Material.SmoothPlastic,false)
