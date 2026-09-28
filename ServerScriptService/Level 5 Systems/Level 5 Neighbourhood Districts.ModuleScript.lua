@@ -455,10 +455,10 @@ function Districts.Build(K)
 			part(middleTower,"RecessedResidenceWindow",V(7.4,8,.18),CF(x,y,1123.6),
 				Color3.fromRGB(57,68,67):Lerp(Color3.fromRGB(143,146,137),fade),Enum.Material.Glass,false)
 		end
-		part(middleTower,"ProjectingWhiteBalcony",V(37,.38,5),CF(-70,y-4.4,1121),C.pale,Enum.Material.Plaster,false)
-		part(middleTower,"BalconyFrontRail",V(37,.25,.2),CF(-70,y-1.2,1118.4),C.white,nil,false)
+		part(middleTower,"ProjectingWhiteBalcony",V(20,.38,5),CF(-80,y-4.4,1121),C.pale,Enum.Material.Plaster,false)
+		part(middleTower,"BalconyFrontRail",V(20,.25,.2),CF(-80,y-1.2,1118.4),C.white,nil,false)
 		if level%3==0 then
-			for _,x in ipairs({-87,-70,-53}) do
+			for _,x in ipairs({-88,-80,-72}) do
 				part(middleTower,"BalconyWhitePost",V(.2,3.1,.2),CF(x,y-2.8,1118.4),C.white,nil,false)
 			end
 		end
@@ -530,6 +530,15 @@ function Districts.Build(K)
 	floor(D,"SunkenWestLanding",-86,0,1094,18,10,C.pink)
 	stairs(D,"SunkenEastReturn",CF(86,-12,1158)*yaw(180),14,12,32,24,C.pink,true)
 	floor(D,"SunkenEastLanding",86,0,1121,18,12,C.pink)
+	-- S04ReferenceDarkWindowFinish: the photographed background tower panes
+	-- read as charcoal beneath the warm indoor ceiling, not daylight blue.
+	for _,pane in ipairs(D:GetDescendants()) do
+		if pane:IsA("BasePart") and pane.Material==Enum.Material.Glass and pane:GetAttribute("Level5TintedWindow")~=true then
+			pane.Color=Color3.fromRGB(50,55,51)
+			pane.Transparency=.04
+			pane.Material=Enum.Material.SmoothPlastic
+		end
+	end
 	camera("FloralSunkenArrival",V(9,5,943),V(-73,66,1108))
 	camera("FloralLowerStreet",V(-15,-6,1031),V(90,37,1195))
 	camera("FloralHighPorches",V(-93,6,1130),V(116,32,1212))
