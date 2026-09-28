@@ -909,11 +909,17 @@ function Districts.Build(K)
 		restyleEssentialGroundHome(tilted,tiltedFrame,34,13.8,"Tilted")
 		tilted:SetAttribute("ClosedScenicProjection",true)
 	end
-	part(slopeSection,"LowerSuspendedTileCeiling",V(300,.7,100),CF(0,112,2130),Color3.fromRGB(155,151,133),Enum.Material.Plaster,false)
+	part(slopeSection,"LowerSuspendedTileCeiling",V(300,.7,100),CF(0,112,2130),C.ceiling,Enum.Material.Plaster,false)
 	for _,x in ipairs({-82,0,82}) do
 		for _,z in ipairs({2102,2144,2172}) do
 			part(slopeSection,"BrightRectangularCeilingPanel",V(9,.15,5),CF(x,111.55,z),Color3.fromRGB(231,230,218),Enum.Material.Neon,false)
 		end
+	end
+	for x=-135,135,30 do
+		part(slopeSection,"LowerCeilingLongGrid",V(.14,.12,99),CF(x,111.55,2130),Color3.fromRGB(130,132,126),nil,false)
+	end
+	for _,z in ipairs({2096,2128,2160}) do
+		part(slopeSection,"LowerCeilingCrossGrid",V(299,.12,.14),CF(0,111.55,z),Color3.fromRGB(130,132,126),nil,false)
 	end
 
 	-- 06: a long gabled wall belongs to the lawn's east side. A full-height
@@ -973,15 +979,15 @@ function Districts.Build(K)
 			if gabledBay then
 				-- Staggered projecting houses break the left wall's uninterrupted
 				-- balcony stripes without entering the lawn route below.
-				part(gabledSection,"WestProjectingGabledBay",V(4.5,11.8,20),CF(71.7,y+5.9,2262+dz),C.cream,Enum.Material.Plaster,false)
-				part(gabledSection,"WestGabledBayDarkWindow",V(.18,6.4,10.5),CF(74.05,y+5.7,2262+dz),darkPane,nil,false)
-				part(gabledSection,"WestGabledBayWhiteSill",V(.65,.34,11.2),CF(74.32,y+2.32,2262+dz),C.white,nil,false)
+				part(gabledSection,"WestProjectingGabledBay",V(4.5,11.8,20),CF(74.7,y+5.9,2262+dz),C.cream,Enum.Material.Plaster,false)
+				part(gabledSection,"WestGabledBayDarkWindow",V(.18,6.4,10.5),CF(77.05,y+5.7,2262+dz),darkPane,nil,false)
+				part(gabledSection,"WestGabledBayWhiteSill",V(.65,.34,11.2),CF(77.32,y+2.32,2262+dz),C.white,nil,false)
 				for _,edge in ipairs({-5.45,5.45}) do
-					part(gabledSection,"WestGabledBayWhiteJamb",V(.65,6.8,.32),CF(74.32,y+5.7,2262+dz+edge),C.white,nil,false)
+					part(gabledSection,"WestGabledBayWhiteJamb",V(.65,6.8,.32),CF(77.32,y+5.7,2262+dz+edge),C.white,nil,false)
 				end
 				for _,roofSide in ipairs({-1,1}) do
 					part(gabledSection,"WestGabledBayPitchedRoof",V(6,.45,11),
-						CF(73.3,y+12.25,2262+dz+roofSide*5.2)*CFrame.Angles(roofSide*math.rad(24),0,0),
+						CF(76.3,y+12.25,2262+dz+roofSide*5.2)*CFrame.Angles(roofSide*math.rad(24),0,0),
 						Color3.fromRGB(119,105,91),Enum.Material.Slate,false)
 				end
 			else
@@ -1053,18 +1059,18 @@ function Districts.Build(K)
 	end
 	for _,span in ipairs({{-165,-76},{-54,165}}) do
 		local farFacade=part(skybridgeSection,"RecessedDomesticCanyonEnd",V(span[2]-span[1],180,.15),
-			CF((span[1]+span[2])/2,90,2450),Color3.fromRGB(112,107,89),Enum.Material.Plaster,false)
+			CF((span[1]+span[2])/2,90,2450),Color3.fromRGB(77,78,65),Enum.Material.Plaster,false)
 		local apartmentDetail=texture(farFacade,"rbxassetid://84616323392440",Enum.NormalId.Front,85)
-		if apartmentDetail then apartmentDetail.Color3=Color3.fromRGB(132,127,105);apartmentDetail.Transparency=.72 end
+		if apartmentDetail then apartmentDetail.Color3=Color3.fromRGB(122,119,100);apartmentDetail.Transparency=.5 end
 	end
-	-- The far facade streams after the first S09 sightline. Keep one very light
+	-- The far facade streams after the first S09 sightline. Keep a muted
 	-- residential closure two studs behind it so arrival never sees open sky.
 	local distantClosure=model("S09_PersistentFarResidentialClosure",G)
 	distantClosure.ModelStreamingMode=Enum.ModelStreamingMode.Persistent
-	local farArrivalPanel=part(distantClosure,"DistantApartmentClosure",V(800,180,.4),CF(0,90,2452),Color3.fromRGB(136,131,109),Enum.Material.Plaster,false)
+	local farArrivalPanel=part(distantClosure,"DistantApartmentClosure",V(800,180,.4),CF(0,90,2452),Color3.fromRGB(77,78,65),Enum.Material.Plaster,false)
 	local farArrivalDetail=texture(farArrivalPanel,"rbxassetid://84616323392440",Enum.NormalId.Front,85)
-	if farArrivalDetail then farArrivalDetail.Color3=Color3.fromRGB(148,144,122);farArrivalDetail.Transparency=.58 end
-	-- The far wall is a residential elevation rather than a dark image plane.
+	if farArrivalDetail then farArrivalDetail.Color3=Color3.fromRGB(122,119,100);farArrivalDetail.Transparency=.5 end
+	-- The far wall retains shallow residential bays within the dark backdrop.
 	-- Shallow noncolliding bays sit behind all three bridge silhouettes.
 	for _,x in ipairs({-49,-8,44,96,154}) do
 		part(skybridgeSection,"CanyonEndPlasterPier",V(1.4,146,.7),CF(x,97,2449.48),C.pale,Enum.Material.Plaster,false)
@@ -1083,16 +1089,38 @@ function Districts.Build(K)
 		Color3.fromRGB(8,10,9),Enum.Material.SmoothPlastic,false)
 	local cottageGroup=model("ConnectedRearCottageGroup",skybridgeSection)
 	cottageGroup.ModelStreamingMode=Enum.ModelStreamingMode.Persistent
-	-- This real central home is the gate-seven passage. The closed side cottages
-	-- become shallow plaster apartment wings in the same flanking footprints.
+	-- Three gabled cottages close the far lawn beneath the skybridges.
+	-- The central enterable passage remains unchanged; the flanking homes
+	-- are scenic facades with their own clapboard, windows and doors.
 	local rearPassage=house(cottageGroup,"RearCanyonCottage_0",CF(0,0,2433),17,13,10.5,C.pale,Color3.fromRGB(61,58,55),{open=true,backOpening=true})
 	restyleEssentialGroundHome(rearPassage,CF(0,0,2433),17,10.5,"ThroughHouse")
-	for _,x in ipairs({-18,18}) do
+	for _,x in ipairs({-34,34}) do
 		local wing=model("RearCanyonPlasterWing_"..x,cottageGroup)
-		part(wing,"CreamApartmentWing",V(17,10.5,13),CF(x,5.25,2439.5),C.pale,Enum.Material.Plaster)
-		part(wing,"DarkApartmentOpening",V(8,5.5,.2),CF(x,6,2432.82),darkPane,Enum.Material.SmoothPlastic,false)
-		part(wing,"ApartmentWindowSill",V(8.5,.3,.6),CF(x,3.12,2432.62),C.white,nil,false)
-		part(wing,"WhiteRoofCornice",V(17.5,.55,13.5),CF(x,10.25,2439.5),C.white,Enum.Material.Plaster,false)
+		local siding=x<0 and Color3.fromRGB(186,174,174) or Color3.fromRGB(202,202,190)
+		local wall=part(wing,"CreamApartmentWing",V(30,10.5,13),CF(x,5.25,2439.5),siding,Enum.Material.WoodPlanks)
+		wall.MaterialVariant="Level5CourtyardClapboard"
+		part(wing,"WhiteRoofCornice",V(30.5,.55,13.5),CF(x,10.25,2439.5),C.white,Enum.Material.Plaster,false)
+		for _,dx in ipairs({-8,8}) do
+			part(wing,"DarkApartmentOpening",V(6,5.5,.2),CF(x+dx,6,2432.82),darkPane,Enum.Material.SmoothPlastic,false)
+			part(wing,"ApartmentWindowSill",V(6.5,.3,.6),CF(x+dx,3.12,2432.62),C.white,nil,false)
+			part(wing,"WindowVerticalMullion",V(.22,5.5,.28),CF(x+dx,6,2432.55),C.white,nil,false)
+			part(wing,"WindowHorizontalMullion",V(6,.22,.28),CF(x+dx,6,2432.55),C.white,nil,false)
+		end
+		part(wing,"CottageEntryDoor",V(4,8,.23),CF(x,4,2432.7),Color3.fromRGB(75,79,72),Enum.Material.Wood,false)
+		for _,dx in ipairs({-2.2,2.2}) do
+			part(wing,"CottageDoorJamb",V(.28,8.6,.45),CF(x+dx,4.3,2432.5),C.white,nil,false)
+		end
+		part(wing,"CottageDoorHeader",V(4.65,.35,.45),CF(x,8.55,2432.5),C.white,nil,false)
+		part(wing,"CottagePorchStep",V(6,.3,2.5),CF(x,.15,2431.4),C.white,Enum.Material.Concrete,false)
+	end
+	for _,spec in ipairs({{-34,30},{0,19},{34,30}}) do
+		local x,width=spec[1],spec[2]
+		for _,side in ipairs({-1,1}) do
+			local roofFrame=CF(x+side*width/4,13.1,2439.5)*CFrame.Angles(0,0,-side*math.rad(25))
+			part(cottageGroup,"DarkPitchedCottageRoof",V(width*.57,.45,16),roofFrame,Color3.fromRGB(53,57,55),Enum.Material.Slate,false)
+			local trimFrame=CF(x+side*width/4,13.1,2431.25)*CFrame.Angles(0,0,-side*math.rad(25))
+			part(cottageGroup,"WhiteFrontGableTrim",V(width*.57,.3,.35),trimFrame,C.white,Enum.Material.Plaster,false)
+		end
 	end
 	-- The tower bases rise from planted banks rather than a flat grass field.
 	-- Both banks and cutouts are visual only so the gate-seven lawn route remains open.

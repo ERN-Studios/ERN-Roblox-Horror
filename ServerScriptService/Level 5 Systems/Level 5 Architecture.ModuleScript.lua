@@ -17,7 +17,7 @@ function Architecture.Build(parent, origin, config)
 	origin = origin or Vector3.zero
 	local root = Instance.new("Model")
 	root.Name = "Level5_IndoorSuburbs"
-	root:SetAttribute("ArchitectureVersion", "2026-09-28.s02-domestic-hall.2")
+	root:SetAttribute("ArchitectureVersion", "2026-09-28.s01-balcony-depth.4")
 	root:SetAttribute("GeometryOnly", true)
 	root.Parent = parent
 	local offset = CFrame.new(origin)
@@ -784,7 +784,7 @@ function Architecture.Build(parent, origin, config)
 			for bay,z in ipairs({42,99,156}) do
 				-- The narrow left window wall has plaster behind its windows;
 				-- charcoal recesses belong to the deep balconies opposite it.
-				local recessTint=side>0 and Color3.fromRGB(210,202,182) or Color3.fromRGB(111,109,103)
+				local recessTint=side>0 and Color3.fromRGB(125,123,115) or Color3.fromRGB(111,109,103)
 				part(towers,"DarkBalconyRecess",V(.22,8.3,39),CF(side*134.25,y+5,z),recessTint,nil,false)
 				for _,dz in ipairs({-10,10}) do
 					part(towers,"UpperApartmentWindow",V(.24,6.8,6),CF(side*134.02,y+5,z+dz),C.glass,Enum.Material.Glass,false)
@@ -802,9 +802,9 @@ function Architecture.Build(parent, origin, config)
 						part(towers,"LowerApartmentDoorJamb",V(.34,9.5,.3),CF(side*133.82,y+4.6,z+dz),C.white,nil,false)
 					end
 				elseif side>0 or (level%3==0 and bay==2) then
-					local slabDepth=side>0 and 14 or 34
-					local slabX=side>0 and 126 or 116
-					local railX=side>0 and 118.7 or 98.7
+					local slabDepth=side>0 and 10 or 16
+					local slabX=side>0 and 128 or 125
+					local railX=side>0 and 122.7 or 116.7
 					part(towers,"ProjectingBalconySlab",V(slabDepth,.65,43),CF(side*slabX,y-.25,z),C.pale,Enum.Material.Plaster,false)
 					part(towers,"BalconyFrontTop",V(.35,.3,41),CF(side*railX,y+3.2,z),C.white,nil,false)
 					part(towers,"BalconyFrontBottom",V(.3,.2,41),CF(side*railX,y+.55,z),C.white,nil,false)
@@ -858,7 +858,6 @@ function Architecture.Build(parent, origin, config)
 		local waitingTint=side<0 and Color3.fromRGB(184,177,159) or Color3.fromRGB(137,151,127)
 		local waiting=house(A,"GroundWaitingCottage_"..side,waitingFrame,26,24,13.8,waitingTint,C.dark,{open=true})
 		referenceClapboard(waiting,waitingTint,Color3.fromRGB(54,59,56))
-		porch(waiting,waitingFrame,26,5)
 		porch(waiting,waitingFrame,26,6)
 		local innerFrame=CF(side*44,0,76)*yaw(side*90)
 		local innerTint=side>0 and Color3.fromRGB(163,170,147) or Color3.fromRGB(138,151,129)
