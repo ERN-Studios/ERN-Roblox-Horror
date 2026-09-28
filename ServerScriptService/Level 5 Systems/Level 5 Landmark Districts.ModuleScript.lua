@@ -758,7 +758,7 @@ function Districts.Build(K)
 				-- Upper scenic mass draws the canyon inward while the terraced
 				-- foot route and distant S05 Watcher panes stay at their old sites.
 				local scenicBase=s<0 and 8 or 16
-				part(group,"MonumentalTowerWall",V(25,178-scenicBase,126),CF(s*112,(178+scenicBase)/2,2387),Color3.fromRGB(190,177,145),Enum.Material.Plaster,false)
+				part(group,"MonumentalTowerWall",V(25,178-scenicBase,126),CF(s*112,(178+scenicBase)/2,2387),Color3.fromRGB(158,148,121),Enum.Material.Plaster,false)
 				-- Vertical apartment bays interrupt the long dark glazing bands.
 				-- They are noncolliding scenery behind the balcony route.
 				for _,dz in ipairs({-56,-28,0,28,56}) do
@@ -770,20 +770,20 @@ function Districts.Build(K)
 			for level=1,41 do
 				local y=24+(level-1)*3.75
 				part(group,"RecessedApartmentOpening",V(.18,2.15,120),CF(s*99.3,y+1.45,2387),darkPane,nil,false)
-				part(group,"CurvedBalconyBand",V(5,.32,120),CF(s*95.5,y-.16,2387),C.pale,Enum.Material.Plaster,false)
+				part(group,"CurvedBalconyBand",V(5,.75,120),CF(s*95.5,y-.16,2387),Color3.fromRGB(176,165,135),Enum.Material.Plaster,false)
 				for _,bayZ in ipairs({2332,2369,2405,2440}) do
 					local radius=11
 					local cx=s*97
-					local disc=part(group,"ScallopedBalconyDeck",V(.35,2*radius,2*radius),
-						CF(cx,y-.18,bayZ)*CFrame.Angles(0,0,math.pi/2),C.pale,Enum.Material.Plaster,false)
+					local disc=part(group,"ScallopedBalconyDeck",V(1.2,2*radius,2*radius),
+						CF(cx,y-.18,bayZ)*CFrame.Angles(0,0,math.pi/2),Color3.fromRGB(176,165,135),Enum.Material.Plaster,false)
 					disc.Shape=Enum.PartType.Cylinder
 					local top=part(group,"ScallopWhiteTopRail",V(.18,.18,20),
-						CF(cx-s*radius,y+1.42,bayZ),C.white,nil,false)
+						CF(cx-s*radius,y+1.42,bayZ),Color3.fromRGB(191,186,166),nil,false)
 					top.CastShadow=false
 				end
 				for _,dz in ipairs({-42,42}) do
 					part(group,"ScallopWhiteUpright",V(.18,1.55,.18),
-						CF(s*89,y+.73,2387+dz),C.white,nil,false)
+						CF(s*89,y+.73,2387+dz),Color3.fromRGB(191,186,166),nil,false)
 				end
 			end
 				-- Bring the two stacked facades into the bridge canyon. The
@@ -1020,8 +1020,8 @@ function Districts.Build(K)
 					part(gabledSection,"WestGabledBayWhiteJamb",V(.65,6.8,.32),CF(79.82,y+5.7,2262+dz+edge),C.white,nil,false)
 				end
 				for _,roofSide in ipairs({-1,1}) do
-					local roof=part(gabledSection,"WestGabledBayPitchedRoof",V(6,.45,11),
-						CF(78.8,y+12.25,2262+dz+roofSide*5.2)*CFrame.Angles(roofSide*math.rad(24),0,0),
+					local roof=part(gabledSection,"WestGabledBayPitchedRoof",V(6,.45,12.5),
+						CF(78.8,y+12.25,2262+dz+roofSide*5.2)*CFrame.Angles(roofSide*math.rad(42),0,0),
 						Color3.fromRGB(188,164,153),Enum.Material.Slate,false)
 					roof.MaterialVariant="";roof.Color=Color3.fromRGB(188,164,153)
 				end

@@ -440,3 +440,20 @@ Studio File > **Save to Roblox** reported `StudioSavePlaceToCloud: 5475ms` and `
 | `Level 5 Puzzle Catalog` | `ModuleScript` | 5,506 | `1379301938` / `1416381944` | `b525747aae6f42cc79d8cc43eedc8d8461d46996d501c8e2f88cfedaccc45dfb` |
 
 This is a Roblox cloud **draft save**, not publication. Strict facade fidelity remains a material publication blocker.
+
+### DEV prompt visibility and S06/S09 facade pass — 2026-09-28
+
+The preceding terrace-clue checkpoint was committed and pushed as `b391d0f390a89e1d153f65df76bc0d5d13ec0815`; local HEAD and the remote branch matched before this pass. A fresh live Studio audit found the Level 5 server E prompt, GameManager launch hook, reserved-arrival gate and Level 5 section gate all enforcing `DevAccess`, but the existing `StarterPlayer.StarterPlayerScripts.Level6PreviewPrompt` client filter named only Level 6 prompts. Non-developers could therefore see a Level 5 E prompt that the server would deny. Its live 926-byte `LocalScript` Source and editor buffer matched before a guarded `ScriptEditorService:UpdateSourceAsync` added the Level 5 enter, return and legacy prompt names to the same client filter. For non-developers, it now watches each matching prompt's `Enabled` property and restores `false` if a later server update reenables it. The existing server authorization checks were preserved. The previously absent repository mirror of this live `LocalScript` was added from the verified Studio source. A true non-DEV client interaction test remains outstanding; this is a source-verified client visibility correction, not a claim that test passed.
+
+Fresh owner DEV Play captures compared the live S06/S09 facades with `IMG_2106.PNG` and `IMG_2109.PNG`. Reversible Play trials showed the west S06 gabled bays needed a steeper pitch and longer roof slabs, and S09's 41-tier walls needed thicker, more muted scalloped deck fascia. An overlarge 13.5-stud S09 scallop-radius trial made the edges spikier and was discarded on Stop. After fresh Source/editor equality checks, a guarded Edit `UpdateSourceAsync` changed the 52 west S06 roof slabs from 24° / 11 studs to 42° / 12.5 studs, retinted the two S09 monumental walls and balcony rails, and thickened the existing 82 balcony bands and 328 scalloped decks. No new world instances, textures, gate geometry or answers were added.
+
+A fresh source-built DEV round reached `RoundLoadingState=ready`, `RoundActive=true`, `SelectedLevel=5` and **29,964 generated descendants**. Runtime inspection confirmed 52 west roofs at 12.5 studs and 42°, 82 thicker S09 balcony bands, 328 thicker scalloped decks and two darker tower walls. The streamed S09 camera capture reproduced the accepted Play trial; Studio Output had no Level 5 error. The client hider ran in an allowlisted owner session; a non-DEV Play client was not available in this pass. The S06/S09 facades are closer in color and roof rhythm but remain visibly short of strict 1:1 reference fidelity.
+
+Studio File > **Save to Roblox** reported `StudioSavePlaceToCloud: 4425ms` and `Saved new changes in "BACKROOMS: STAY QUIET [CO-OP HORROR]" to Roblox.` at Studio log timestamp **17:53:15.333 UTC**. Post-save Edit confirmed place `131311258779917`, universe `10559217407`, no generated Play world, `Level5DevEnabled=true`, `Level5PublicPreviewEnabled=false`, and `Source` equal to editor source for both scoped scripts:
+
+| Exact Studio instance | Class | Bytes | Rolling hashes (131 / 257) | Local mirror SHA-256 |
+| --- | --- | ---: | --- | --- |
+| `ServerScriptService.Level 5 Systems.Level 5 Landmark Districts` | `ModuleScript` | 82,676 | `1260346722` / `1261677176` | `0e7967d90e0c0e40221e7a6f782a2374d7f9fefaceaef7f8db9442b9511b0dc6` |
+| `StarterPlayer.StarterPlayerScripts.Level6PreviewPrompt` | `LocalScript` | 1,345 | `1998444795` / `1877268431` | `cc1660d58fea18a6a5537c05d9e80cf74c84bf0d2900a42d649d09e57218760b` |
+
+This is a Roblox cloud **draft save**, not publication. Strict facade fidelity and remaining gameplay checks still block publication.
