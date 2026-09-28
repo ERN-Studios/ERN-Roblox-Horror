@@ -551,7 +551,7 @@ function Districts.Build(K)
 	local D=zone("D_FloralTerraces",V(-160,-14,936),V(160,320,1296))
 	local S04=model("S04_MistyTowerCanyon",D)
 	local towerHomes,towerDetails,towerGables,towerPorches=0,0,0,0
-	local function towerCottageFinish(home,frame,width,height,siding,roofTint,hasGable,hasPorch)
+	local function towerCottageFinish(home,frame,width,height,siding,roofTint,hasGable,hasPorch,deepPorch)
 		-- Refinish the existing rooms. Their doorway, standard glass, floor,
 		-- Watcher reference and puzzle marker stay on the original house model.
 		local exterior={SideWall=true,BackWall=true,BackWallWing=true,BackWallHeader=true,FacadeLintel=true,WindowApron=true,FacadePier=true,GableBaseBand=true,ClosedGableTriangle=true}
@@ -582,14 +582,15 @@ function Districts.Build(K)
 			towerPorches+=1
 			-- A shallow, open veranda leaves the central doorway and the raised
 			-- promenade clear. These replace the bulky 27-instance old porches.
-			detail("TowerCottagePorchDeck",V(width+.4,.15,4.5),CF(0,.08,-2.25),C.pale,Enum.Material.WoodPlanks,false)
-			local canopy=detail("TowerCottageFlatCanopy",V(width+1,.4,5.3),CF(0,11.7,-2.65),roofTint,Enum.Material.Slate,false)
+			local porchDepth=deepPorch and 7 or 4.5
+			detail("TowerCottagePorchDeck",V(width+.4,.15,porchDepth),CF(0,.08,-porchDepth/2),C.pale,Enum.Material.WoodPlanks,false)
+			local canopy=detail("TowerCottageFlatCanopy",V(width+1,.4,porchDepth+.8),CF(0,11.7,-(porchDepth+.8)/2),roofTint,Enum.Material.Slate,false)
 			canopy.MaterialVariant="";canopy.Color=roofTint
-			detail("TowerCottagePorchFascia",V(width+1,.6,.32),CF(0,11.35,-5.25),C.white,nil,false)
+			detail("TowerCottagePorchFascia",V(width+1,.6,.32),CF(0,11.35,-porchDepth-.75),C.white,nil,false)
 			local railWidth=width/2-4.6
 			for _,side in ipairs({-1,1}) do
-				detail("TowerCottagePorchColumn",V(.72,10.9,.72),CF(side*(width/2-1),5.45,-4.55),C.white,nil,false)
-				detail("TowerCottagePorchRail",V(railWidth,.22,.2),CF(side*(4.6+railWidth/2),3.05,-4.55),C.white,nil,false)
+				detail("TowerCottagePorchColumn",V(.72,10.9,.72),CF(side*(width/2-1),5.45,-porchDepth-.05),C.white,nil,false)
+				detail("TowerCottagePorchRail",V(railWidth,.22,.2),CF(side*(4.6+railWidth/2),3.05,-porchDepth-.05),C.white,nil,false)
 			end
 		end
 		towerHomes+=1
@@ -644,6 +645,47 @@ function Districts.Build(K)
 			K.material(p,"Wallpaper")
 		end
 	end
+	local function refaceSunkenPocketUpper(upper,siding)
+		-- The closed scenic upper room presents divided windows, not a second-floor
+		-- front door. Reuse its existing door trim and panels without new parts.
+		local panes,panels,jambs={},{},{}
+		for _,piece in ipairs(upper:GetChildren()) do
+			if piece:IsA("BasePart") then
+				if piece.Name=="WindowGlass" then table.insert(panes,piece)
+				elseif piece.Name=="DoorRaisedPanel" then table.insert(panels,piece)
+				elseif piece.Name=="DoorJamb" then table.insert(jambs,piece) end
+			end
+		end
+		local door=assert(upper:FindFirstChild("ClosedPanelDoor"))
+		local header=assert(upper:FindFirstChild("DoorHeader"))
+		local knob=assert(upper:FindFirstChild("BrassDoorKnob"))
+		assert(#panes==2 and #panels==6 and #jambs==2,"S04 upper window inventory changed")
+		local doorFrame=door.CFrame
+		local clapboard=game:GetService("MaterialService"):FindFirstChild("Level5CourtyardClapboard")
+		door.Size=V(5.4,10.3,.65)
+		door.CFrame=doorFrame*CF(0,0,-.05)
+		door.Color=siding;door.Material=Enum.Material.WoodPlanks
+		door.MaterialVariant=clapboard and clapboard:IsA("MaterialVariant") and clapboard.Name or ""
+		for i,pane in ipairs(panes) do
+			for j=1,3 do
+				local bar=panels[(i-1)*3+j]
+				bar.Size=j==3 and V(pane.Size.X,.14,.23) or V(.14,pane.Size.Y,.23)
+				bar.CFrame=pane.CFrame*CF(j==1 and -pane.Size.X/4 or j==2 and pane.Size.X/4 or 0,0,-.09)
+				bar.Color=C.white;bar.Material=Enum.Material.SmoothPlastic;bar.MaterialVariant=""
+				bar.CanCollide=false;bar.CanQuery=false;bar.CanTouch=false;bar.CastShadow=false
+			end
+		end
+		for i,side in ipairs({-1,1}) do
+			local pier=jambs[i]
+			pier.Size=V(.36,13.8,.4)
+			pier.CFrame=doorFrame*CF(side*3.35,1.75,-.18)
+			pier.CanCollide=false;pier.CanQuery=false;pier.CanTouch=false
+		end
+		header.Size=V(30.8,.4,.55)
+		header.CFrame=doorFrame*CF(0,5.25,-.18)
+		header.CanCollide=false;header.CanQuery=false;header.CanTouch=false
+		knob:Destroy()
+	end
 	for _,side in ipairs({-1,1}) do
 		for i,z in ipairs({1004,1220}) do
 			local roofTint=Color3.fromRGB(87,88,82)
@@ -654,7 +696,7 @@ function Districts.Build(K)
 			local home=house(D,"SunkenPocketStack_"..side.."_"..i.."_0",frame,26,24,13.8,pocketClapboard,groundRoof,{open=true})
 			colorRoof(home,roofTint)
 			colorClapboard(home,pocketClapboard)
-			towerCottageFinish(home,frame,26,13.8,pocketClapboard,roofTint,i~=1,true)
+			towerCottageFinish(home,frame,26,13.8,pocketClapboard,roofTint,i~=1,true,i==1)
 			if i==1 then
 				-- These two near cottages are two storeys in the S04 reference:
 				-- taupe on the arrival left and cream on the right.
@@ -662,6 +704,7 @@ function Districts.Build(K)
 				local upper=house(S04,"SunkenPocketUpper_"..side.."_"..i,upperFrame,30,26,13.8,pocketClapboard,roofTint,{open=false})
 				colorRoof(upper,roofTint);colorClapboard(upper,pocketClapboard)
 				towerCottageFinish(upper,upperFrame,30,13.8,pocketClapboard,roofTint,true,false)
+				refaceSunkenPocketUpper(upper,pocketClapboard)
 			end
 		end
 	end
@@ -953,16 +996,16 @@ function Districts.Build(K)
 	for _,s in ipairs({-1,1}) do part(S10,"DoorFrameJamb",V(.45,10.2,.65),CF(s*4,5.1,1357.3),C.white) end
 	smoothRoom(S10,"PassageHeader",V(18,5.4,.75),CF(-27,13.3,1358),warmPlaster)
 	for _,x in ipairs({-18.3,-35.7}) do part(S10,"PassageJamb",V(.45,10.7,.75),CF(x,5.35,1358),C.white) end
-	smoothRoom(S10,"LowSuspendedCeiling",V(72,.45,83),CF(0,16.2,1348),quietCeiling)
+	smoothRoom(S10,"LowSuspendedCeiling",V(72,.45,83),CF(0,13,1348),quietCeiling)
 	-- The low ceiling joins the side bands at x=46. These strips remove the
 	-- accidental high atrium slit above the domestic room's window wall.
 	for _,s in ipairs({-1,1}) do
-		smoothRoom(S10,"WindowWallCeilingReturn",V(10,.45,83),CF(s*41,16.2,1348),quietCeiling,false)
+		smoothRoom(S10,"WindowWallCeilingReturn",V(10,.45,83),CF(s*41,13,1348),quietCeiling,false)
 	end
-	for _,z in ipairs({1321,1343,1365,1382}) do part(S10,"CeilingGridCrossbeam",V(72,.13,.15),CF(0,15.9,z),C.white,nil,false) end
-	for _,x in ipairs({-18,0,18}) do part(S10,"CeilingGridLongBeam",V(.15,.13,83),CF(x,15.9,1348),C.white,nil,false) end
+	for _,z in ipairs({1321,1343,1365,1382}) do part(S10,"CeilingGridCrossbeam",V(72,.13,.15),CF(0,12.7,z),C.white,nil,false) end
+	for _,x in ipairs({-18,0,18}) do part(S10,"CeilingGridLongBeam",V(.15,.13,83),CF(x,12.7,1348),C.white,nil,false) end
 	for _,z in ipairs({1324,1347,1372}) do
-		local lamp=part(S10,"LongFluorescentPanel",V(10,.16,3.2),CF(0,15.85,z),Color3.fromRGB(224,226,214),Enum.Material.Neon,false)
+		local lamp=part(S10,"LongFluorescentPanel",V(10,.16,3.2),CF(0,12.65,z),Color3.fromRGB(224,226,214),Enum.Material.Neon,false)
 		local light=Instance.new("SurfaceLight");light.Face=Enum.NormalId.Bottom;light.Range=24;light.Brightness=.55;light.Shadows=false;light.Parent=lamp
 	end
 	local balconies=model("ContainedOppositeBalconies",S10)
