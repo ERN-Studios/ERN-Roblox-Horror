@@ -656,10 +656,10 @@ function Architecture.Build(parent, origin, config)
 	local yaw=function(a) return CFrame.Angles(0,math.rad(a),0) end
 	local A=model("A_BalconyAtrium")
 	local courtyardLawn=floor(A,"PlantedCourtyardLawn",0,0,96,320,200,C.green)
-	courtyardLawn.Color=Color3.fromRGB(72,94,61)
+	courtyardLawn.Color=Color3.fromRGB(88,108,72)
 	courtyardLawn.MaterialVariant=""
 	local lawnDetail=texture(courtyardLawn,"rbxassetid://108216315862080",Enum.NormalId.Top,8)
-	if lawnDetail then lawnDetail.Transparency=.42 end
+	if lawnDetail then lawnDetail.Transparency=.52 end
 	local clueIndex=0
 	for _,side in ipairs({-1,1}) do
 		for i,z in ipairs({42,99,156}) do
@@ -766,16 +766,25 @@ function Architecture.Build(parent, origin, config)
 		for level=3,14 do
 			local y=level*14
 			for bay,z in ipairs({42,99,156}) do
-				part(towers,"DarkBalconyRecess",V(.22,8.3,39),CF(side*134.25,y+5,z),Color3.fromRGB(111,109,103),nil,false)
+				-- The narrow left window wall has plaster behind its windows;
+				-- charcoal recesses belong to the deep balconies opposite it.
+				local recessTint=side>0 and Color3.fromRGB(210,202,182) or Color3.fromRGB(111,109,103)
+				part(towers,"DarkBalconyRecess",V(.22,8.3,39),CF(side*134.25,y+5,z),recessTint,nil,false)
 				for _,dz in ipairs({-10,10}) do
 					part(towers,"UpperApartmentWindow",V(.24,6.8,6),CF(side*134.02,y+5,z+dz),C.glass,Enum.Material.Glass,false)
 					part(towers,"UpperWindowMullion",V(.28,.16,6),CF(side*133.82,y+5,z+dz),C.white,nil,false)
 				end
-				part(towers,"ProjectingBalconySlab",V(34,.65,43),CF(side*116,y-.25,z),C.pale,Enum.Material.Plaster,false)
-				part(towers,"BalconyFrontTop",V(.35,.3,41),CF(side*98.7,y+3.2,z),C.white,nil,false)
-				part(towers,"BalconyFrontBottom",V(.3,.2,41),CF(side*98.7,y+.55,z),C.white,nil,false)
+				-- The reference has a close, narrow window wall on the left and
+				-- deep apartment balconies predominantly on the right. Keep the
+				-- playable lower galleries untouched beneath these scenic tiers.
+				local slabDepth=side>0 and 14 or 34
+				local slabX=side>0 and 126 or 116
+				local railX=side>0 and 118.7 or 98.7
+				part(towers,"ProjectingBalconySlab",V(slabDepth,.65,43),CF(side*slabX,y-.25,z),C.pale,Enum.Material.Plaster,false)
+				part(towers,"BalconyFrontTop",V(.35,.3,41),CF(side*railX,y+3.2,z),C.white,nil,false)
+				part(towers,"BalconyFrontBottom",V(.3,.2,41),CF(side*railX,y+.55,z),C.white,nil,false)
 				if level<=7 or bay==2 then
-					for post=1,5 do part(towers,"BalconySpindle",V(.16,2.6,.16),CF(side*98.7,y+1.85,z-20.5+post*41/6),C.white,nil,false) end
+					for post=1,5 do part(towers,"BalconySpindle",V(.16,2.6,.16),CF(side*railX,y+1.85,z-20.5+post*41/6),C.white,nil,false) end
 				end
 			end
 		end
@@ -807,7 +816,11 @@ function Architecture.Build(parent, origin, config)
 		for _,piece in ipairs(home:GetDescendants()) do
 			if piece:IsA("BasePart") then
 				if exterior[piece.Name] then
-					piece.MaterialVariant="";piece.Material=Enum.Material.WoodPlanks;piece.Color=siding
+					-- The dedicated Studio MaterialVariant keeps the finer horizontal
+					-- clapboard on these eight courtyard cottages only.
+					piece.Material=Enum.Material.WoodPlanks
+					piece.MaterialVariant="Level5CourtyardClapboard"
+					piece.Color=siding
 				elseif piece.Name=="PitchedRoof" or piece.Name=="RoofRidge" or piece.Name=="RoofCladdingSeam" then
 					piece.MaterialVariant="";piece.Material=Enum.Material.Slate;piece.Color=roofTint
 				end
@@ -825,7 +838,7 @@ function Architecture.Build(parent, origin, config)
 			courtyardClapboard(upper,waitingTint,Color3.fromRGB(54,59,56))
 		end
 		local innerFrame=CF(side*44,0,76)*yaw(side*90)
-		local innerTint=side>0 and Color3.fromRGB(163,170,147) or Color3.fromRGB(195,188,170)
+		local innerTint=side>0 and Color3.fromRGB(163,170,147) or Color3.fromRGB(138,151,129)
 		local inner=house(A,"AtriumInnerStack_"..side.."_0",innerFrame,28,24,13.8,innerTint,C.dark,{open=true})
 		courtyardClapboard(inner,innerTint,Color3.fromRGB(59,63,59))
 		if side>0 then porch(inner,innerFrame,28,5) end
@@ -836,8 +849,8 @@ function Architecture.Build(parent, origin, config)
 		if side>0 then porch(rear,rearFrame,26,5) end
 	end
 	local nearFrame=CF(56,0,28)
-	local near=house(courtyard,"SageNearPorchHouse",nearFrame,28,24,13.8,Color3.fromRGB(145,158,137),C.dark,{open=true})
-	courtyardClapboard(near,Color3.fromRGB(120,139,117),Color3.fromRGB(47,54,53))
+	local near=house(courtyard,"SageNearPorchHouse",nearFrame,28,24,13.8,Color3.fromRGB(184,177,159),C.dark,{open=true})
+	courtyardClapboard(near,Color3.fromRGB(184,177,159),Color3.fromRGB(47,54,53))
 	porch(near,nearFrame,28,7)
 	-- This courtyard is inside the vast residential shell. Close the upper
 	-- envelope before the next zone; otherwise the playable route exposes the
