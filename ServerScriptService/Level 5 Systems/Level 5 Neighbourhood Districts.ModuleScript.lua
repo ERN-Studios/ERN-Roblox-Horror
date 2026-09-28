@@ -232,31 +232,27 @@ function Districts.Build(K)
 		part(cottageBay,"BayWindowCrossbar",V(9.4,.22,.24),bayFrame*CF(7.2,y,-3.61),C.white,nil,false)
 	end
 	local tower=model("SeparateManyWindowTower",S03)
-	part(tower,"TowerCore",V(31,88,66),CF(-110,44,600),Color3.fromRGB(220,222,208),Enum.Material.Plaster,false)
-	for level=0,10 do
-		for j=0,6 do
-			local z=574+j*8.5
-			part(tower,"DarkTowerWindow",V(.2,5.8,5.3),CF(-93.8,5+level*7.6,z),Color3.fromRGB(53,65,65),Enum.Material.Glass,false)
-			for _,edge in ipairs({-1,1}) do part(tower,"TowerWindowJamb",V(.2,6.1,.16),CF(-93.62,5+level*7.6,z+edge*2.72),C.white,nil,false) end
-			part(tower,"TowerWindowSill",V(.28,.2,5.55),CF(-93.61,2+level*7.6,z),C.white,nil,false)
+	-- The separate modern tower wraps windows and pale floor bands around a
+	-- circular core, unlike the flat balcony wall behind the cottage row.
+	-- It is scenic and stays below the coffered ceiling and outside the route.
+	local towerX,towerZ,towerRadius=-102.5,750,18
+	local core=part(tower,"CurvedTowerCore",V(88,36,36),CF(towerX,44,towerZ)*CFrame.Angles(0,0,math.pi/2),Color3.fromRGB(220,222,208),Enum.Material.Plaster,false)
+	core.Shape=Enum.PartType.Cylinder
+	for column=0,19 do
+		local angle=2*math.pi*column/20
+		for level=0,10 do
+			local frame=CF(towerX,5+level*7.6,towerZ)*CFrame.Angles(0,angle,0)*CF(0,0,-towerRadius-.2)
+			part(tower,"CurvedTowerWindow",V(4.2,5.45,.16),frame,Color3.fromRGB(53,65,65),Enum.Material.Glass,false)
 		end
-		part(tower,"WhiteFloorBand",V(.35,.24,66),CF(-93.5,level*7.6+8,600),C.white,nil,false)
+		local edgeAngle=2*math.pi*(column+.5)/20
+		part(tower,"CurvedTowerPier",V(.32,83,.35),CF(towerX,44,towerZ)*CFrame.Angles(0,edgeAngle,0)*CF(0,0,-towerRadius-.35),C.white,Enum.Material.SmoothPlastic,false)
 	end
-	-- The arrival-facing end reads as separate apartment windows and cream
-	-- piers, matching the side's residential facade rather than curtain glass.
 	for level=0,10 do
-		local y=5+level*7.6
-		for bay=0,4 do
-			part(tower,"FrontTowerWindow",V(4.25,5.45,.18),CF(-121+bay*5.5,y,633.18),Color3.fromRGB(53,65,65),Enum.Material.Glass,false)
-		end
-		part(tower,"FrontTowerFloorBand",V(29,.35,.26),CF(-110,y+3.28,633.35),C.white,nil,false)
+		local ring=part(tower,"CurvedTowerFloorBand",V(.3,36.8,36.8),CF(towerX,level*7.6+8.28,towerZ)*CFrame.Angles(0,0,math.pi/2),C.white,Enum.Material.SmoothPlastic,false)
+		ring.Shape=Enum.PartType.Cylinder
 	end
-	for _,x in ipairs({-123.75,-118.25,-112.75,-107.25,-101.75,-96.25}) do
-		part(tower,"FrontTowerPier",V(.32,83,.26),CF(x,44,633.35),C.white,nil,false)
-	end
-	-- Pull the separate window tower into the left background of the arrival
-	-- composition. Its glazing and trim move together without changing routes.
-	tower:PivotTo(tower:GetPivot()+V(10,0,150))
+	local cornice=part(tower,"CurvedTowerCornice",V(.6,37.4,37.4),CF(towerX,88.3,towerZ)*CFrame.Angles(0,0,math.pi/2),C.white,Enum.Material.SmoothPlastic,false)
+	cornice.Shape=Enum.PartType.Cylinder
 	-- At the distant end, staggered office facades replace a single blank cap.
 	-- Their lower edges float above circulation and never bisect the gate route.
 	local distant=model("LayeredFarResidentialClosure",S03)
@@ -523,8 +519,12 @@ function Districts.Build(K)
 	-- a succession of through-houses forms an understandable central passage.
 	local E=zone("E_DomesticLabyrinth",V(-160,0,1296),V(160,44,1596))
 	local S10=model("S10_EmptyBalconyRoom",E)
-	local warmBroadloom=Color3.fromRGB(174,163,143)
+	local warmBroadloom=Color3.fromRGB(185,176,160)
 	local warmPlaster=Color3.fromRGB(211,203,185)
+	local quietCeiling=Color3.fromRGB(201,199,184)
+	local function smoothRoom(into,name,size,frame,color,collide)
+		return part(into,name,size,frame,color,Enum.Material.SmoothPlastic,collide)
+	end
 	local broadloom=floor(E,"DomesticBroadloom",0,0,1446,320,300,warmBroadloom)
 	-- The carpet variant normally resets its tint toward white. Give this
 	-- district the subdued warm-beige broadloom visible in the reference.
@@ -538,7 +538,7 @@ function Districts.Build(K)
 		-- Leave the upper balcony shaft visible beside S10's three windows.
 		local ceilingStart=s<0 and 1296 or 1390
 		local ceilingLength=1596-ceilingStart
-		part(E,"LowRoomCeilingBand",V(114,.6,ceilingLength),CF(s*103,16,ceilingStart+ceilingLength/2),C.ceiling)
+		smoothRoom(E,"LowRoomCeilingBand",V(114,.6,ceilingLength),CF(s*103,16,ceilingStart+ceilingLength/2),quietCeiling)
 	end
 	for i,z in ipairs({1460,1540}) do
 		house(E,"NestedThroughHouse_"..i.."_0",CF(0,0,z),66,28,13.8,C.cream,nil,{open=true,backOpening=true})
@@ -556,11 +556,11 @@ function Districts.Build(K)
 	-- shaft toward actual stacked railings; the glass prevents a fall.
 	local roomCarpet=part(S10,"ContinuousRoomCarpet",V(72,.34,83),CF(0,.06,1348),warmBroadloom,Enum.Material.Fabric)
 	roomCarpet.MaterialVariant="";roomCarpet.Material=Enum.Material.Fabric;roomCarpet.Color=warmBroadloom
-	part(S10,"RightRoomWall",V(.7,16,83),CF(-36,8,1348),warmPlaster,Enum.Material.Plaster)
-	part(S10,"LeftWindowApron",V(.7,3.4,83),CF(36,1.7,1348),warmPlaster,Enum.Material.Plaster)
-	part(S10,"LeftWindowHeader",V(.7,3.4,83),CF(36,14.3,1348),warmPlaster,Enum.Material.Plaster)
+	smoothRoom(S10,"RightRoomWall",V(.7,16,83),CF(-36,8,1348),warmPlaster)
+	smoothRoom(S10,"LeftWindowApron",V(.7,3.4,83),CF(36,1.7,1348),warmPlaster)
+	smoothRoom(S10,"LeftWindowHeader",V(.7,3.4,83),CF(36,14.3,1348),warmPlaster)
 	for _,span in ipairs({{1306.5,1319},{1333,1339},{1353,1359},{1373,1389.5}}) do
-		part(S10,"LeftWindowPier",V(.7,9.2,span[2]-span[1]),CF(36,8,(span[1]+span[2])/2),warmPlaster,Enum.Material.Plaster)
+		smoothRoom(S10,"LeftWindowPier",V(.7,9.2,span[2]-span[1]),CF(36,8,(span[1]+span[2])/2),warmPlaster)
 	end
 	for _,z in ipairs({1326,1346,1366}) do
 		local glass=part(S10,"InteriorAtriumWindowGlass",V(.15,9.2,14),CF(35.5,8,z),Color3.fromRGB(151,156,147),Enum.Material.Glass)
@@ -572,10 +572,10 @@ function Districts.Build(K)
 	-- The return is a shallow, nonblocking visual bay: two front-facing tall
 	-- windows remain legible from arrival while the central x=0 line stays free.
 	local windowReturn=model("S10_TwoTallWindowReturn",S10)
-	part(windowReturn,"LowPlasterApron",V(24,3.4,.48),CF(24,1.7,1332),C.cream,Enum.Material.Plaster,false)
-	part(windowReturn,"HighPlasterHeader",V(24,3.4,.48),CF(24,14.3,1332),C.cream,Enum.Material.Plaster,false)
+	smoothRoom(windowReturn,"LowPlasterApron",V(24,3.4,.48),CF(24,1.7,1332),warmPlaster,false)
+	smoothRoom(windowReturn,"HighPlasterHeader",V(24,3.4,.48),CF(24,14.3,1332),warmPlaster,false)
 	for _,span in ipairs({{12,13.55},{20.05,25.95},{32.45,36}}) do
-		part(windowReturn,"PlasterWindowPier",V(span[2]-span[1],9.2,.48),CF((span[1]+span[2])/2,8,1332),C.cream,Enum.Material.Plaster,false)
+		smoothRoom(windowReturn,"PlasterWindowPier",V(span[2]-span[1],9.2,.48),CF((span[1]+span[2])/2,8,1332),warmPlaster,false)
 	end
 	for _,wx in ipairs({16.8,29.2}) do
 		local pane=part(windowReturn,"TallReturnWindowGlass",V(6.5,9.2,.12),CF(wx,8,1331.69),Color3.fromRGB(151,156,147),Enum.Material.Glass,false)
@@ -586,8 +586,8 @@ function Districts.Build(K)
 	end
 	part(S10,"BroadPortalHeader",V(76,1.4,.85),CF(0,15.3,1306.5),C.white,Enum.Material.Plaster)
 	for _,s in ipairs({-1,1}) do part(S10,"BroadPortalJamb",V(.85,16,.85),CF(s*36.6,8,1306.5),C.white,Enum.Material.Plaster) end
-	part(S10,"CentralPartitionLeft",V(32.2,16,.7),CF(19.9,8,1358),warmPlaster,Enum.Material.Plaster)
-	part(S10,"CentralPartitionRight",V(14.2,16,.7),CF(-10.9,8,1358),warmPlaster,Enum.Material.Plaster)
+	smoothRoom(S10,"CentralPartitionLeft",V(32.2,16,.7),CF(19.9,8,1358),warmPlaster)
+	smoothRoom(S10,"CentralPartitionRight",V(14.2,16,.7),CF(-10.9,8,1358),warmPlaster)
 	for _,span in ipairs({{19.9,32.2},{-10.9,14.2}}) do
 		part(S10,"CentralPartitionBaseboard",V(span[2],.52,.2),CF(span[1],.26,1357.52),C.white,nil,false)
 		part(S10,"CentralPartitionCrown",V(span[2],.38,.38),CF(span[1],15.7,1357.5),C.white,nil,false)
@@ -606,13 +606,13 @@ function Districts.Build(K)
 	knob.Shape=Enum.PartType.Ball
 	part(S10,"DoorFrameHeader",V(8.6,.42,.65),CF(0,10.2,1357.3),C.white)
 	for _,s in ipairs({-1,1}) do part(S10,"DoorFrameJamb",V(.45,10.2,.65),CF(s*4,5.1,1357.3),C.white) end
-	part(S10,"PassageHeader",V(18,5.4,.75),CF(-27,13.3,1358),warmPlaster,Enum.Material.Plaster)
+	smoothRoom(S10,"PassageHeader",V(18,5.4,.75),CF(-27,13.3,1358),warmPlaster)
 	for _,x in ipairs({-18.3,-35.7}) do part(S10,"PassageJamb",V(.45,10.7,.75),CF(x,5.35,1358),C.white) end
-	part(S10,"LowSuspendedCeiling",V(72,.45,83),CF(0,16.2,1348),C.ceiling,Enum.Material.Plaster)
+	smoothRoom(S10,"LowSuspendedCeiling",V(72,.45,83),CF(0,16.2,1348),quietCeiling)
 	-- The low ceiling joins the side bands at x=46. These strips remove the
 	-- accidental high atrium slit above the domestic room's window wall.
 	for _,s in ipairs({-1,1}) do
-		part(S10,"WindowWallCeilingReturn",V(10,.45,83),CF(s*41,16.2,1348),C.ceiling,Enum.Material.Plaster,false)
+		smoothRoom(S10,"WindowWallCeilingReturn",V(10,.45,83),CF(s*41,16.2,1348),quietCeiling,false)
 	end
 	for _,z in ipairs({1321,1343,1365,1382}) do part(S10,"CeilingGridCrossbeam",V(72,.13,.15),CF(0,15.9,z),C.white,nil,false) end
 	for _,x in ipairs({-18,0,18}) do part(S10,"CeilingGridLongBeam",V(.15,.13,83),CF(x,15.9,1348),C.white,nil,false) end

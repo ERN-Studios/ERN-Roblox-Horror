@@ -793,8 +793,8 @@ function Architecture.Build(parent, origin, config)
 	for level=3,11 do
 		local y=level*14
 		local sign=level%2==0 and 1 or -1
-		part(flights,"ZigzagStairLanding",V(9,.6,6),CF(76,y,125),C.pale,Enum.Material.Plaster,false)
-		local slant=CF(76+sign*7,y+7,125)*CFrame.Angles(0,0,sign*math.rad(45))
+		part(flights,"ZigzagStairLanding",V(9,.6,6),CF(-76,y,125),C.pale,Enum.Material.Plaster,false)
+		local slant=CF(-76-sign*7,y+7,125)*CFrame.Angles(0,0,-sign*math.rad(45))
 		part(flights,"VisibleStairFlight",V(19.8,.55,5),slant,C.pale,Enum.Material.Concrete,false)
 		for _,edge in ipairs({-1,1}) do
 			part(flights,"VisibleStairRail",V(19.8,.2,.2),slant*CF(0,2.8,edge*2.5),C.white,nil,false)
