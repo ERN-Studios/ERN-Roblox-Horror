@@ -970,7 +970,7 @@ function Districts.Build(K)
 	-- A black vertical end recess terminates this distinct gabled corridor.
 	-- The side-wall slot farther ahead is only legible from its own oblique
 	-- approach, so it cannot supply the dark silhouette in the S06 lawn view.
-	part(gabledSection,"DeepEndStructuralVoid",V(30,170,.2),CF(126,93,2179),Color3.fromRGB(3,4,3),Enum.Material.SmoothPlastic,false)
+	part(gabledSection,"DeepEndStructuralVoid",V(30,52,.2),CF(126,34,2179),Color3.fromRGB(3,4,3),Enum.Material.SmoothPlastic,false)
 	-- Substantial apartment-lined returns replace the freestanding thin portal
 	-- poles. The 28-stud dark center remains a blind visual canyon, not a route.
 	for _,side in ipairs({-1,1}) do
@@ -1071,11 +1071,11 @@ function Districts.Build(K)
 			if level<10 then
 				for _,sgn in ipairs({-1,1}) do
 					local roofTint=level%3==0 and Color3.fromRGB(190,164,157) or Color3.fromRGB(174,158,142)
-					local roofFrame=frame*CF(sgn*4,14.3,-1.8)*CFrame.Angles(0,0,-sgn*math.rad(28))
-					local roof=part(gabledSection,"RepeatedPitchedGable",V(10,.5,7.4),roofFrame,roofTint,Enum.Material.Slate,false)
+					local roofFrame=frame*CF(sgn*4,14.3,-1.8)*CFrame.Angles(0,0,-sgn*math.rad(42))
+					local roof=part(gabledSection,"RepeatedPitchedGable",V(11.2,.5,7.4),roofFrame,roofTint,Enum.Material.Slate,false)
 					roof.MaterialVariant="";roof.Color=roofTint
-					part(gabledSection,"WhiteGableFascia",V(10,.65,.3),
-						frame*CF(sgn*4,14.3,-5.5)*CFrame.Angles(0,0,-sgn*math.rad(28)),C.white,Enum.Material.Wood,false)
+					part(gabledSection,"WhiteGableFascia",V(11.2,.65,.3),
+						frame*CF(sgn*4,14.3,-5.5)*CFrame.Angles(0,0,-sgn*math.rad(42)),C.white,Enum.Material.Wood,false)
 				end
 			end
 		end
