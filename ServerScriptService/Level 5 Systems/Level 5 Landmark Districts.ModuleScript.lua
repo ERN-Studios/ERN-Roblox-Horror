@@ -755,17 +755,24 @@ function Districts.Build(K)
 					local lip=part(group,"RoundedBandNose",V(120,2,2),CF(s*92,y-.5,2387)*yaw(90),C.pale,Enum.Material.Plaster,false)
 					lip.Shape=Enum.PartType.Cylinder
 					decorativeRail(group,V(s*91,0,2328),V(s*91,0,2446),y)
-					-- Semi-circular end bays break the perfectly planar parapet into the
-					-- stacked rounded corner balconies visible on both reference towers.
-					for _,endZ in ipairs({2328,2446}) do
-						if level%2==1 then
-							roundedDeck(group,"RoundedCornerBalcony",V(s*97,0,endZ),10.5,y,endZ==2328 and -1 or 1)
-						else
-							-- Keep the round deck silhouette at every height; distant
-							-- intermediate rails merge visually into the long balcony line.
-							local endSlab=part(group,"RoundedCornerSoffit",V(1,21,21),
-								CF(s*97,y-.5,endZ)*CFrame.Angles(0,0,math.pi/2),C.pale,Enum.Material.Plaster,false)
-							endSlab.Shape=Enum.PartType.Cylinder
+					-- Four rounded balcony bays repeat across every floor; their short
+					-- white rails leave the three skybridges and central lawn clear.
+					for _,bayZ in ipairs({2332,2369,2405,2440}) do
+						local radius=9
+						local cx=s*97
+						local disc=part(group,"ScallopedBalconyDeck",V(1,2*radius,2*radius),
+							CF(cx,y-.5,bayZ)*CFrame.Angles(0,0,math.pi/2),C.pale,Enum.Material.Plaster,false)
+						disc.Shape=Enum.PartType.Cylinder
+						local last
+						for j=0,3 do
+							local a=-math.pi/2+j*math.pi/3
+							local outer=V(cx-s*radius*math.cos(a),y+3.2,bayZ+radius*math.sin(a))
+							part(group,"ScallopWhiteUpright",V(.2,3,.2),CF(outer-V(0,1.6,0)),C.white,nil,false)
+							if last then
+								local top=K.beam(group,"ScallopWhiteTopRail",last,outer,.22,C.white)
+								top.CanCollide=false;top.CanQuery=false;top.CastShadow=false
+							end
+							last=outer
 						end
 					end
 				end
@@ -891,8 +898,8 @@ function Districts.Build(K)
 	part(slopeSection,"InclinedDarkPlantedMass",V(84,4.8,34),slope,Color3.fromRGB(29,51,31),Enum.Material.Grass,false)
 	-- The broad lawn face must read from the ground approach as green turf,
 	-- rather than only showing the pale underside of the suspended volume.
-	local frontTurf=part(slopeSection,"InclinedVisibleGrassFace",V(72,.3,24),
-		CF(0,53,2166)*CFrame.Angles(0,0,math.rad(-50))*CFrame.Angles(math.rad(65),0,0),
+	local frontTurf=part(slopeSection,"InclinedVisibleGrassFace",V(84,28,.2),
+		CF(0,58,2163)*CFrame.Angles(0,0,math.rad(-50)),
 		Color3.fromRGB(66,88,60),Enum.Material.Grass,false)
 	local frontWeave=texture(frontTurf,"rbxassetid://108216315862080",Enum.NormalId.Top,8)
 	if frontWeave then frontWeave.Transparency=.45 end
@@ -979,15 +986,16 @@ function Districts.Build(K)
 			if gabledBay then
 				-- Staggered projecting houses break the left wall's uninterrupted
 				-- balcony stripes without entering the lawn route below.
-				part(gabledSection,"WestProjectingGabledBay",V(4.5,11.8,20),CF(74.7,y+5.9,2262+dz),C.cream,Enum.Material.Plaster,false)
-				part(gabledSection,"WestGabledBayDarkWindow",V(.18,6.4,10.5),CF(77.05,y+5.7,2262+dz),darkPane,nil,false)
-				part(gabledSection,"WestGabledBayWhiteSill",V(.65,.34,11.2),CF(77.32,y+2.32,2262+dz),C.white,nil,false)
+				local westFace=part(gabledSection,"WestProjectingGabledBay",V(8,11.8,20),CF(75.5,y+5.9,2262+dz),C.cream,Enum.Material.WoodPlanks,false)
+				westFace.MaterialVariant="Level5CourtyardClapboard"
+				part(gabledSection,"WestGabledBayDarkWindow",V(.18,6.4,10.5),CF(79.55,y+5.7,2262+dz),darkPane,nil,false)
+				part(gabledSection,"WestGabledBayWhiteSill",V(.65,.34,11.2),CF(79.82,y+2.32,2262+dz),C.white,nil,false)
 				for _,edge in ipairs({-5.45,5.45}) do
-					part(gabledSection,"WestGabledBayWhiteJamb",V(.65,6.8,.32),CF(77.32,y+5.7,2262+dz+edge),C.white,nil,false)
+					part(gabledSection,"WestGabledBayWhiteJamb",V(.65,6.8,.32),CF(79.82,y+5.7,2262+dz+edge),C.white,nil,false)
 				end
 				for _,roofSide in ipairs({-1,1}) do
 					part(gabledSection,"WestGabledBayPitchedRoof",V(6,.45,11),
-						CF(76.3,y+12.25,2262+dz+roofSide*5.2)*CFrame.Angles(roofSide*math.rad(24),0,0),
+						CF(78.8,y+12.25,2262+dz+roofSide*5.2)*CFrame.Angles(roofSide*math.rad(24),0,0),
 						Color3.fromRGB(119,105,91),Enum.Material.Slate,false)
 				end
 			else
@@ -1010,7 +1018,8 @@ function Districts.Build(K)
 	for _,z in ipairs({2190,2206,2222,2238,2288,2304,2320,2336}) do
 		for level=0,10 do
 			local frame=CF(160,16+level*14,z)*yaw(90)
-			part(gabledSection,"ClapboardBayFace",V(16,13.8,4.2),frame*CF(0,6.9,-1.1),C.pale,Enum.Material.WoodPlanks,false)
+			local clapFace=part(gabledSection,"ClapboardBayFace",V(16,13.8,4.2),frame*CF(0,6.9,-1.1),C.pale,Enum.Material.WoodPlanks,false)
+			clapFace.MaterialVariant="Level5CourtyardClapboard"
 			part(gabledSection,"DarkGabledWindow",V(6.4,6.2,.12),frame*CF(0,7.2,-3.4),darkPane,nil,false)
 			for _,sgn in ipairs({-1,1}) do
 				part(gabledSection,"WhiteWindowJamb",V(.24,6.7,.22),frame*CF(sgn*3.3,7.2,-3.52),C.white,nil,false)

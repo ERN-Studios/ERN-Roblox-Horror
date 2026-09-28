@@ -665,10 +665,10 @@ function Districts.Build(K)
 	-- language from S03's broad, bright apartment landings.
 	for _,side in ipairs({-1,1}) do
 		local tower=model(side<0 and "WestRecessedTower" or "EastRecessedTower",S04)
-		local outer=side*151
+		local outer=side*156
 		for tier=0,5 do
 			local tone=Color3.fromRGB(224,214,192):Lerp(Color3.fromRGB(193,192,181),tier/5*.82)
-			local shaft=part(tower,"PaleTowerShaft",V(8,47.6,324),CF(outer,11.75+tier*47.5,1116),tone,Enum.Material.Plaster)
+			local shaft=part(tower,"PaleTowerShaft",V(6,47.6,324),CF(outer,11.75+tier*47.5,1116),tone,Enum.Material.Plaster)
 			shaft.Transparency=tier>=4 and (tier-3)*.08 or 0
 		end
 		for _,z in ipairs({981,1063,1145,1227}) do
@@ -681,23 +681,23 @@ function Districts.Build(K)
 			for bay,z in ipairs({1025,1115,1205}) do
 				local offsetZ=(side<0 and bay%2 or (bay+1)%2)*7
 				local narrow=bay==2 and 17 or 20
-				local deckX=side*(138-(bay==2 and 2 or 0)-(level%3==0 and 1 or 0))
-				part(tower,"InsetBalconyShadow",V(.25,10,narrow),CF(side*146,y+6,z+offsetZ),Color3.fromRGB(117,121,112):Lerp(tone,.42),nil,false)
-				local deck=part(tower,"OffsetBalconyDeck",V(10,.55,narrow+2),CF(deckX,y-.3,z+offsetZ),tone,nil,level<=12)
+				local deckX=side*(142-(bay==2 and 2 or 0)-(level%3==0 and 1 or 0))
+				part(tower,"InsetBalconyShadow",V(.25,10,narrow),CF(side*152.7,y+6,z+offsetZ),Color3.fromRGB(117,121,112):Lerp(tone,.42),nil,false)
+				local deck=part(tower,"OffsetBalconyDeck",V(18,.55,narrow+2),CF(deckX,y-.3,z+offsetZ),tone,nil,level<=12)
 				deck.Transparency=level>12 and (level-12)/7*.24 or 0
 				-- The upper balconies dissolve into the mist. Full sash trim on
 				-- every distant storey adds thousands of invisible tiny instances.
 				if level<=9 then
-					part(tower,"BalconyRecessDoor",V(.2,7.6,5.6),CF(side*145.7,y+5,z+offsetZ-5.5),Color3.fromRGB(66,76,72):Lerp(tone,haze*.38),Enum.Material.Glass,false)
-					part(tower,"BalconyRecessWindow",V(.2,7.6,5.6),CF(side*145.7,y+5,z+offsetZ+5.5),Color3.fromRGB(66,76,72):Lerp(tone,haze*.38),Enum.Material.Glass,false)
+					part(tower,"BalconyRecessDoor",V(.2,7.6,5.6),CF(side*152.7,y+5,z+offsetZ-5.5),Color3.fromRGB(66,76,72):Lerp(tone,haze*.38),Enum.Material.Glass,false)
+					part(tower,"BalconyRecessWindow",V(.2,7.6,5.6),CF(side*152.7,y+5,z+offsetZ+5.5),Color3.fromRGB(66,76,72):Lerp(tone,haze*.38),Enum.Material.Glass,false)
 					for _,windowZ in ipairs({z+offsetZ-5.5,z+offsetZ+5.5}) do
 						for _,edge in ipairs({-1,1}) do
-							part(tower,"BalconyOpeningJamb",V(.26,8,.23),CF(side*145.45,y+5,windowZ+edge*2.9),C.white,nil,false)
+							part(tower,"BalconyOpeningJamb",V(.26,8,.23),CF(side*152.45,y+5,windowZ+edge*2.9),C.white,nil,false)
 						end
-						part(tower,"BalconyOpeningHeader",V(.3,.26,6),CF(side*145.45,y+9,windowZ),C.white,nil,false)
+						part(tower,"BalconyOpeningHeader",V(.3,.26,6),CF(side*152.45,y+9,windowZ),C.white,nil,false)
 					end
 				end
-				local railX=deckX-side*5.2
+				local railX=deckX-side*9.2
 				if level<=8 then
 					balconyRail(tower,railX,y,z+offsetZ,narrow+1)
 				else
@@ -712,12 +712,12 @@ function Districts.Build(K)
 				end
 			end
 			for _,z in ipairs({993,1073,1163,1250}) do
-				part(tower,"NarrowVerticalWindow",V(.2,8.4,3.2),CF(side*146,y+4.5,z),Color3.fromRGB(51,61,59):Lerp(tone,haze),Enum.Material.Glass,false)
+				part(tower,"NarrowVerticalWindow",V(.2,8.4,3.2),CF(side*153,y+4.5,z),Color3.fromRGB(51,61,59):Lerp(tone,haze),Enum.Material.Glass,false)
 				if level<=8 then
 					for _,edge in ipairs({-1,1}) do
-						part(tower,"NarrowWindowJamb",V(.25,8.8,.18),CF(side*145.78,y+4.5,z+edge*1.66),C.white,nil,false)
+						part(tower,"NarrowWindowJamb",V(.25,8.8,.18),CF(side*152.78,y+4.5,z+edge*1.66),C.white,nil,false)
 					end
-					part(tower,"NarrowWindowSill",V(.32,.21,3.6),CF(side*145.76,y+.2,z),C.white,nil,false)
+					part(tower,"NarrowWindowSill",V(.32,.21,3.6),CF(side*152.76,y+.2,z),C.white,nil,false)
 				end
 			end
 		end
