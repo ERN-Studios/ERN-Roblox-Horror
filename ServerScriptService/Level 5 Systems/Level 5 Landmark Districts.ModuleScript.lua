@@ -537,8 +537,8 @@ function Districts.Build(K)
 	camera("ReferenceAtriumUpperSkewBridge",V(31,20,1930),V(-44,35,1770))
 	camera("ReferenceAtriumHighGallery",V(-37,34,1905),V(34,13,1730))
 	camera("ReferenceAtriumRecoveryFloor",V(0,-36,1828),V(-34,20,1690))
-	camera("S07_StairCutawayReferenceView",V(30,4,1773),V(-24,48,1773))
-	camera("S08_UpperAtriumWalkwayReferenceView",V(-37,31,1905),V(35,20,1950))
+	camera("S07_StairCutawayReferenceView",V(37,5,1810),V(-20,35,1773))
+	camera("S08_UpperAtriumWalkwayReferenceView",V(37,31,1845),V(37,31,1950))
 	for _,p in ipairs(route) do table.insert(waypoints,p) end
 
 	-- G: the wide subdivision has habitable terraces below two impossible pairs
