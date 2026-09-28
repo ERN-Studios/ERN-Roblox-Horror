@@ -31,88 +31,160 @@ function Districts.Build(K)
 			end
 		end
 	end
-	local function porch(into,frame,width,depth,roofTint,postOffsetX)
-		local p=model("WhiteColumnPorch",into)
-		part(p,"PorchEdge",V(width,.24,.5),frame*CF(0,.12,-depth),C.white,nil,false)
-		for _,s in ipairs({-1,1}) do
-			local roof=part(p,"ShallowPitchedPorchRoof",V((width+3)/2,.55,depth+2),frame*CF(s*(width+3)/4,13.35,-depth/2)*CFrame.Angles(0,0,-s*math.rad(12)),roofTint or C.dark,Enum.Material.Slate)
-			roof.MaterialVariant="";roof.Color=roofTint or C.dark
-		end
-		part(p,"PorchFascia",V(width+3,.75,.35),frame*CF(0,12.05,-depth-1),C.white)
-		for _,s in ipairs({-1,1}) do
-			local offset=V(postOffsetX or 0,0,0)
-			part(p,"SquarePorchColumn",V(.75,11.7,.75),frame*CF(s*(width/2-1),6,-depth+.7)+offset,C.white)
-			part(p,"ColumnFoot",V(1.2,.6,1.2),frame*CF(s*(width/2-1),.3,-depth+.7)+offset,C.white)
-			part(p,"PorchSideHandrail",V(.22,.25,depth-1),frame*CF(s*(width/2-1),3.3,-depth/2),C.white,nil,false)
-			for j=1,3 do part(p,"PorchSideSpindle",V(.16,3,.16),frame*CF(s*(width/2-1),1.8,-depth+j*depth/4),C.white,nil,false) end
-			local half=(width-8)/2
-			part(p,"FrontBalustradeTop",V(half,.25,.2),frame*CF(s*(width+8)/4,3.3,-depth+.7),C.white,nil,false)
-			for j=0,3 do part(p,"FrontBalustradeSpindle",V(.15,3,.15),frame*CF(s*(4+j*half/3),1.8,-depth+.7),C.white,nil,false) end
-		end
-		return p
-	end
-	local function balconyRail(into,front,y,z,width)
+	local function balconyRail(into,front,y,z,width,intervals)
 		part(into,"WhiteBalconyTopRail",V(.2,.25,width),CF(front,y+3.4,z),C.white,nil,false)
 		part(into,"WhiteBalconyBottomRail",V(.2,.18,width),CF(front,y+.5,z),C.white,nil,false)
-		for j=0,math.ceil(width/4) do
-			part(into,"WhiteBalconySpindle",V(.16,2.9,.16),CF(front,y+1.9,z-width/2+width*j/math.ceil(width/4)),C.white,nil,false)
+		local count=intervals or math.ceil(width/4)
+		for j=0,count do
+			part(into,"WhiteBalconySpindle",V(.16,2.9,.16),CF(front,y+1.9,z-width/2+width*j/count),C.white,nil,false)
 		end
 	end
-	local function scenicCottageFront(into,name,x,z,width,height,siding,roofTint)
-		-- This thin, nonblocking frontage closes the large gaps in S03's arrival
-		-- perspective. It never replaces a clue home or a Watcher-supporting room.
-		local facade=model(name,into)
-		local frame=CF(x,0,z)*yaw(180)
-		part(facade,"ClapboardFront",V(width,height,.55),frame*CF(0,height/2,0),siding,Enum.Material.Wood,false)
-		for y=2.5,height-1,2.5 do
-			part(facade,"SidingShadowLine",V(width,.08,.06),frame*CF(0,y,-.34),siding:Lerp(C.dark,.16),nil,false)
+	local function referenceCottage(home,frame,width,depth,height,siding,roofTint,upperStorey)
+		-- Dress the actual enterable room rather than covering it with the gallery
+		-- builder's solid HouseCore. The original two standard panes, doorway,
+		-- floor, clue marker and supporting-house references remain untouched.
+		local added=0
+		local function detail(name,size,localFrame,color,material,collide)
+			added+=1
+			return part(home,name,size,frame*localFrame,color,material,collide)
 		end
-		for _,level in ipairs(height>23 and {7,20} or {7,16}) do
+		local floorFrame=home:GetAttribute("HouseFloorFrame")
+		assert(typeof(floorFrame)=="CFrame","Reference cottage needs a room frame")
+		local clapboard=game:GetService("MaterialService"):FindFirstChild("Level5CourtyardClapboard")
+		local exterior={SideWall=true,BackWall=true,BackWallWing=true,BackWallHeader=true,FacadeLintel=true,WindowApron=true,FacadePier=true,GableBaseBand=true,ClosedGableTriangle=true}
+		local panes={}
+		for _,item in ipairs(home:GetChildren()) do
+			if item:IsA("BasePart") and item.Name=="WindowGlass" then table.insert(panes,item) end
+			if item:IsA("BasePart") and exterior[item.Name] then
+				item.Material=Enum.Material.WoodPlanks
+				if clapboard and clapboard:IsA("MaterialVariant") then item.MaterialVariant=clapboard.Name end
+				item.Color=siding
+			end
+		end
+		assert(#panes==2,"Reference cottage needs two existing standard panes: "..home.Name)
+		for _,pane in ipairs(panes) do
+			local localPane=floorFrame:ToObjectSpace(pane.CFrame)
+			for _,edge in ipairs({-1,1}) do
+				detail("ReferenceWindowShutter",V(.68,7.7,.2),CF(localPane.Position.X+edge*(pane.Size.X/2+.48),localPane.Position.Y,-.52),siding:Lerp(C.dark,.38),Enum.Material.Wood,false)
+			end
+		end
+		local upperHeight=12
+		if upperStorey then
+			-- Move this house's existing pitched roof; no second roof is layered on
+			-- the old one. These scenic upper rooms sit over real ground interiors.
+			local roofPieces={GableBaseBand=true,PitchedRoof=true,RoofCladdingSeam=true,WhiteGableTrim=true,ClosedGableTriangle=true,RoofRidge=true}
+			for _,item in ipairs(home:GetChildren()) do
+				if item:IsA("BasePart") and roofPieces[item.Name] then item.CFrame+=V(0,upperHeight,0) end
+			end
+			for _,shape in ipairs({
+				{"ReferenceUpperFront",V(width,upperHeight,.65),CF(0,height+upperHeight/2,0)},
+				{"ReferenceUpperSide",V(.65,upperHeight,depth),CF(-width/2,height+upperHeight/2,depth/2)},
+				{"ReferenceUpperSide",V(.65,upperHeight,depth),CF(width/2,height+upperHeight/2,depth/2)},
+				{"ReferenceUpperBack",V(width,upperHeight,.65),CF(0,height+upperHeight/2,depth)},
+			}) do
+				local wall=detail(shape[1],shape[2],shape[3],siding,Enum.Material.WoodPlanks,true)
+				if clapboard and clapboard:IsA("MaterialVariant") then wall.MaterialVariant=clapboard.Name end
+				wall.Color=siding -- retain the clapboard tint with its MaterialVariant
+			end
 			for _,side in ipairs({-1,1}) do
-				local wx=side*width*.27
-				part(facade,"TallDarkSash",V(5.7,7.4,.12),frame*CF(wx,level,-.39),Color3.fromRGB(49,59,56),Enum.Material.Glass,false)
-				for _,edge in ipairs({-1,1}) do
-					part(facade,"WhiteWindowJamb",V(.32,8.1,.22),frame*CF(wx+edge*3,level,-.48),C.white,nil,false)
-				end
-				for _,dy in ipairs({-3.9,0,3.9}) do
-					part(facade,"WhiteWindowRail",V(6.3,.25,.22),frame*CF(wx,level+dy,-.48),C.white,nil,false)
-				end
-				part(facade,"CentreMullion",V(.18,7.6,.22),frame*CF(wx,level,-.49),C.white,nil,false)
-				for _,edge in ipairs({-1,1}) do
-					part(facade,"NarrowShutter",V(.7,8,.22),frame*CF(wx+edge*3.5,level,-.43),siding:Lerp(C.dark,.35),Enum.Material.Wood,false)
+				local x=side*width*.25
+				local y=height+upperHeight*.56
+				detail("ReferenceUpperWindow",V(5.1,5.7,.16),CF(x,y,-.43),C.dark,Enum.Material.Glass,false)
+				detail("ReferenceUpperMullion",V(.17,5.7,.2),CF(x,y,-.55),C.white,nil,false)
+				detail("ReferenceUpperCrossbar",V(5.1,.17,.2),CF(x,y,-.55),C.white,nil,false)
+				detail("ReferenceUpperSill",V(5.7,.27,.5),CF(x,y-3,-.5),C.white,nil,false)
+			end
+			for _,y in ipairs({height+2.1,height+10.2}) do
+				detail("ReferenceSidingReveal",V(width,.09,.12),CF(0,y,-.39),siding:Lerp(C.dark,.2),nil,false)
+			end
+		end
+		local gableY=height+(upperStorey and upperHeight or 0)+width*.18
+		detail("ReferenceGableWindowFrame",V(3.55,3.25,.16),CF(0,gableY,-.55),C.white,nil,false)
+		detail("ReferenceGableWindow",V(2.8,2.5,.18),CF(0,gableY,-.68),C.dark,Enum.Material.Glass,false)
+		detail("ReferenceGableMullion",V(.16,2.5,.2),CF(0,gableY,-.8),C.white,nil,false)
+		-- Keep the entrance at ground level and leave the middle of the porch
+		-- open so the three clue interiors remain reachable without a step.
+		detail("ReferencePorchDeck",V(width+.4,.16,4.5),CF(0,.08,-2.25),C.pale,Enum.Material.WoodPlanks,false)
+		local canopy=detail("ReferencePorchCanopy",V(width+1,.42,5.5),CF(0,11.65,-2.75)*CFrame.Angles(math.rad(-6),0,0),roofTint,Enum.Material.Slate,false)
+		canopy.MaterialVariant="";canopy.Color=roofTint
+		detail("ReferencePorchFascia",V(width+1,.58,.3),CF(0,11.25,-5.35),C.white,nil,false)
+		local railWidth=width/2-4.6
+		for _,side in ipairs({-1,1}) do
+			detail("ReferencePorchColumn",V(.75,10.9,.75),CF(side*(width/2-1),5.45,-4.65),C.white,nil,true)
+			detail("ReferencePorchRail",V(railWidth,.25,.22),CF(side*(4.6+railWidth/2),3.15,-4.65),C.white,nil,false)
+			if upperStorey then
+				for _,j in ipairs({1,2}) do
+					detail("ReferencePorchBaluster",V(.18,2.8,.18),CF(side*(4.6+j*railWidth/3),1.65,-4.65),C.white,nil,false)
 				end
 			end
 		end
-		part(facade,"RecessedFrontDoor",V(4.8,9,.18),frame*CF(0,4.5,-.43),Color3.fromRGB(71,79,69),Enum.Material.Wood,false)
-		for _,side in ipairs({-1,1}) do
-			part(facade,"DoorJamb",V(.38,9.5,.27),frame*CF(side*2.6,4.75,-.49),C.white,nil,false)
-		end
-		part(facade,"DoorHeader",V(5.6,.4,.27),frame*CF(0,9.6,-.49),C.white,nil,false)
-		local half=width/2+1
-		local pitch=math.rad(31)
-		local gableRise=(width/2)*math.tan(pitch)
-		local gableBase=.5+math.tan(pitch)
-		part(facade,"GableBaseBand",V(width,gableBase,.55),frame*CF(0,height+gableBase/2,-.02),siding,Enum.Material.Wood,false)
-		for _,side in ipairs({-1,1}) do
-			local roof=part(facade,"PitchedSlateRoof",V(half/math.cos(pitch),.42,10),frame*CF(side*half/2,height+half*math.tan(pitch)/2+.35,4)*CFrame.Angles(0,0,-side*pitch),roofTint,Enum.Material.Slate,false)
-			roof.MaterialVariant="";roof.Color=roofTint
-			part(facade,"GableWhiteRake",V(half/math.cos(pitch),.27,.4),frame*CF(side*half/2,height+half*math.tan(pitch)/2+.4,-1.3)*CFrame.Angles(0,0,-side*pitch),C.white,nil,false)
-			part(facade,"ClosedGableTriangle",V(.6,gableRise,width/2),frame*CF(side*width/4,height+gableBase+gableRise/2,-.03)*CFrame.Angles(0,-side*math.pi/2,0),siding,Enum.Material.Wood,false,"WedgePart")
-		end
-		part(facade,"RoofRidge",V(.38,.38,10.5),frame*CF(0,height+half*math.tan(pitch)+.4,4),roofTint,Enum.Material.Slate,false)
-		part(facade,"PorchFascia",V(width*.78,.5,.4),frame*CF(0,11,-5),C.white,nil,false)
-		part(facade,"PorchCanopy",V(width*.8,.35,5.4),frame*CF(0,11.3,-2.7),roofTint,Enum.Material.Slate,false)
-		for _,side in ipairs({-1,1}) do
-			part(facade,"PorchPost",V(.65,10.8,.65),frame*CF(side*width*.36,5.4,-4.5),C.white,nil,false)
-			part(facade,"PorchRail",V(width*.26,.22,.24),frame*CF(side*width*.24,3.3,-4.5),C.white,nil,false)
-		end
-		return facade
+		home:SetAttribute("S03ReferenceFacade",true)
+		home:SetAttribute("S03ScenicUpperStorey",upperStorey==true)
+		return added
 	end
 	local Czone=zone("C_PastelVillage",V(-280,0,456),V(280,100,936))
 	local S03=model("S03_BrightCottageAtrium",Czone)
+	local foregroundTrim=model("ForegroundCourtWindowDetails",S03)
+	local foregroundHomes,foregroundParts=0,0
+	local function dressForegroundCourt(frame,width,depth,innerSide)
+		-- The nearest cottage backs and inner side walls face the S03 arrival
+		-- camera. Add window rhythm outside those solid walls without altering
+		-- any room, clue surface, door, floor or Watcher glass.
+		local function detail(name,size,pose,color,material)
+			foregroundParts+=1
+			return part(foregroundTrim,name,size,pose,color,material,false)
+		end
+		local function window(pose,w,h)
+			detail("CourtRearWindow",V(w,h,.16),pose,Color3.fromRGB(56,69,68),Enum.Material.SmoothPlastic)
+			for _,side in ipairs({-1,1}) do
+				detail("CourtRearWindowJamb",V(.23,h+.3,.25),pose*CF(side*(w/2+.08),0,.13),C.white,nil)
+			end
+			for _,side in ipairs({-1,1}) do
+				detail("CourtRearWindowCrosspiece",V(w+.42,.23,.25),pose*CF(0,side*(h/2+.08),.13),C.white,nil)
+			end
+			detail("CourtRearWindowMullion",V(.15,h,.24),pose*CF(0,0,.14),C.white,nil)
+			detail("CourtRearWindowCrosspiece",V(w,.14,.24),pose*CF(0,0,.14),C.white,nil)
+		end
+		for _,y in ipairs({6.55,20.4}) do
+			for _,x in ipairs({-width*.24,width*.24}) do
+				window(frame*CF(x,y,depth+.48),5.1,5.8)
+			end
+		end
+		detail("CourtRearStoreyBand",V(width,.3,.26),frame*CF(0,13.95,depth+.5),C.white,nil)
+		local gableY=13.8+12+width*.18
+		detail("CourtRearGableFrame",V(3.5,3.1,.16),frame*CF(0,gableY,depth+.53),C.white,nil)
+		detail("CourtRearGableWindow",V(2.75,2.35,.18),frame*CF(0,gableY,depth+.65),Color3.fromRGB(56,69,68),Enum.Material.SmoothPlastic)
+		detail("CourtRearGableMullion",V(.16,2.35,.22),frame*CF(0,gableY,depth+.79),C.white,nil)
+		if innerSide then
+			for _,y in ipairs({6.55,20.4}) do
+				for _,z in ipairs({8,18}) do
+					window(frame*CF(innerSide*(width/2+.48),y,z)*yaw(innerSide*90),5.1,5.8)
+				end
+			end
+			detail("CourtSideStoreyBand",V(depth,.3,.26),frame*CF(innerSide*(width/2+.5),13.95,depth/2)*yaw(innerSide*90),C.white,nil)
+		end
+		foregroundHomes+=1
+	end
+	local referenceHomes,referenceParts=0,0
+	local function dressReferenceHome(home,frame,width,depth,height,siding,roofTint,upperStorey)
+		referenceHomes+=1
+		referenceParts+=referenceCottage(home,frame,width,depth,height,siding,roofTint,upperStorey)
+	end
 	floor(Czone,"GreenCarpetNeighbourhood",0,0,696,560,480,C.green)
-	floor(Czone,"CentralSandRunner",0,.025,696,12,478,C.carpet)
-	local colors={Color3.fromRGB(186,186,158),Color3.fromRGB(166,179,166),Color3.fromRGB(193,178,157),Color3.fromRGB(197,187,168)}
+	-- Pale stepping stones bend between the offset section gates. The
+	-- continuous lawn underneath remains the walkable floor and keeps the
+	-- courtyard open instead of reading as one long asphalt strip.
+	local steppingSites={
+		{60,462,30,8},{34,473,26,8},
+		{26,480},{19,508},{10,536},{3,564},{-2,592},{4,620},{0,648},{-3,676},
+		{4,704},{-4,732},{0,760},{5,788},{0,816},{-6,844},{-12,872},{-16,900},{-30,928},
+		{-50,930,34,8},{-80,932,30,8},{-110,932,30,8},
+	}
+	assert(#steppingSites==22,"S03 garden path changed its instance budget")
+	for _,site in ipairs(steppingSites) do
+		part(Czone,"GardenSteppingWalk",V(site[3] or 9,.08,site[4] or 18),CF(site[1],.09,site[2]),Color3.fromRGB(211,207,192),Enum.Material.Concrete,false)
+	end
+	local colors={Color3.fromRGB(212,207,190),Color3.fromRGB(194,205,187),Color3.fromRGB(203,190,171),Color3.fromRGB(218,211,193)}
 	for court,info in ipairs({{-145,545},{145,545},{-145,840},{145,840}}) do
 		local cx,cz=info[1],info[2]
 		local cluster=model("PastelCourt_"..court,S03)
@@ -124,15 +196,19 @@ function Districts.Build(K)
 			local home=house(cluster,"CourtHouse_"..court.."_"..i.."_0",frame,width,25,13.8,colors[(court+i-2)%4+1],roofTint,{open=true,backOpening=i==1,furniture=i==2 and (court%5+1) or nil,glitchedTable=court==2})
 			colorRoof(home,roofTint)
 			colorClapboard(home,colors[(court+i-2)%4+1])
+			dressReferenceHome(home,frame,width,25,13.8,colors[(court+i-2)%4+1],roofTint,court>=3)
+			if court>=3 and (i==2 or i==4) then
+				dressForegroundCourt(frame,width,25,i==2 and (court==3 and 1 or -1) or nil)
+			end
 			if i==1 then K.registerWatcher(home,"VillageCourtWindow_"..court,Czone.Name) end
-			if (court==1 or court==4) and i<=2 then porch(cluster,frame,width,7,Color3.fromRGB(98,102,95)) end
 			floor(cluster,"PorchThreshold",0,0,-3,28,6,C.pink,frame)
-			-- Shutters and tiny offsets are architectural variation, never scaled homes.
-			for _,s in ipairs({-1,1}) do part(cluster,"PastelShutter",V(.65,7.5,.25),frame*CF(s*(width/2+.45),6.55,-.6),colors[(court+1)%4+1],Enum.Material.Wood) end
 		end
 		local side=cx<0 and -1 or 1
 		floor(cluster,"CourtConnectingCarpet",side*66,.045,cz,132,13,C.carpet)
 	end
+	assert(foregroundHomes==4 and foregroundParts==186,"S03 near-court facade inventory changed")
+	foregroundTrim:SetAttribute("DetailedHouseCount",foregroundHomes)
+	foregroundTrim:SetAttribute("WindowTrimParts",foregroundParts)
 	for _,side in ipairs({-1,1}) do
 		for i,z in ipairs({650,715,765}) do
 			local frame=CF(side*120,0,z)*yaw(side*90)
@@ -140,18 +216,72 @@ function Districts.Build(K)
 			local home=house(Czone,"CrossStreetCottage_"..side.."_"..i.."_0",frame,28,26,13.8,colors[(i+(side+1)/2)%4+1],roofTint,{open=true})
 			colorRoof(home,roofTint)
 			colorClapboard(home,colors[(i+(side+1)/2)%4+1])
-			if i~=2 then porch(S03,frame,28,6,Color3.fromRGB(113,105,89)) end
+			dressReferenceHome(home,frame,28,26,13.8,colors[(i+(side+1)/2)%4+1],roofTint,false)
 		end
 	end
 	-- Short residential lanes occupy the spaces between the four courts. Their
 	-- doors, rooflines and asymmetric heights read as houses at walking scale.
+	local arrivalCottageParts=0
 	for _,side in ipairs({-1,1}) do
 		for i,z in ipairs({615,675,745,805}) do
-			local frame=CF(side*50,0,z)*yaw(side*90)
+			-- The unfurnished east home becomes the near two-storey cottage.
+			-- Its doorway still opens toward the lawn, and the central route stays
+			-- clear between it and the west lane house.
+			local foregroundRight=i==4 and side>0
+			local frame=foregroundRight and CF(38,0,890)*yaw(180)
+				or CF(side*(i==4 and 30 or 50),0,z)*yaw(side*(i==4 and 155 or 90))
 			local roofTint=Color3.fromRGB(104,107,99)
-			local home=house(Czone,"VillageInnerLaneHome_"..side.."_"..i.."_0",frame,32,26,13.8,colors[(i+(side+1)/2)%4+1],roofTint,{open=true,completeHome=true,furniture=i==1 and (side<0 and 6 or 7) or nil})
+			local siding=foregroundRight and Color3.fromRGB(236,227,209) or colors[(i+(side+1)/2)%4+1]
+			local home=house(Czone,"VillageInnerLaneHome_"..side.."_"..i.."_0",frame,32,26,13.8,siding,roofTint,{open=true,completeHome=true,furniture=i==1 and (side<0 and 6 or 7) or nil})
 			colorRoof(home,roofTint)
-			colorClapboard(home,colors[(i+(side+1)/2)%4+1])
+			colorClapboard(home,siding)
+			dressReferenceHome(home,frame,32,26,13.8,siding,roofTint,foregroundRight)
+			if foregroundRight then
+				-- This is the wall facing the arrival camera. Keep its interior
+				-- solid and its clue surfaces untouched; the windows are scenic.
+				assert(home.Name=="VillageInnerLaneHome_1_4_0")
+				-- Native WoodPlanks made this otherwise cream cottage look gray in Play.
+				-- Keep its tested clapboard variant on just the cream siding pieces.
+				local creamSidingParts=0
+				for _,piece in ipairs(home:GetDescendants()) do
+					if piece:IsA("BasePart") and piece.Material==Enum.Material.WoodPlanks and piece.Color==siding then
+						piece.MaterialVariant="Level5CourtyardClapboard"
+						creamSidingParts+=1
+					end
+				end
+				assert(creamSidingParts==17,"S03 arrival cottage siding inventory changed")
+				local function arrivalDetail(name,size,localFrame,color,material)
+					arrivalCottageParts+=1
+					local piece=part(home,name,size,frame*localFrame,color,material,false)
+					piece.CanQuery=false;piece.CanTouch=false
+					return piece
+				end
+				for _,y in ipairs({6.7,20.1}) do
+					for _,windowZ in ipairs({7,19}) do
+						arrivalDetail("ArrivalSideWindowFrame",V(6.4,6.4,.12),CF(16.45,y,windowZ)*yaw(90),C.white,nil)
+						arrivalDetail("ArrivalSideWindowGlass",V(5.7,5.7,.14),CF(16.6,y,windowZ)*yaw(90),Color3.fromRGB(54,65,65),Enum.Material.Glass)
+						arrivalDetail("ArrivalSideWindowMullion",V(.16,5.7,.2),CF(16.7,y,windowZ)*yaw(90),C.white,nil)
+						arrivalDetail("ArrivalSideWindowCrossbar",V(5.7,.16,.2),CF(16.7,y,windowZ)*yaw(90),C.white,nil)
+						arrivalDetail("ArrivalSideWindowSill",V(6.6,.25,.65),CF(16.64,y-3.25,windowZ)*yaw(90),C.white,nil)
+						for _,edge in ipairs({-1,1}) do
+							arrivalDetail("ArrivalSideWindowShutter",V(.72,6.4,.2),CF(16.66,y,windowZ+edge*3.65)*yaw(90),Color3.fromRGB(117,125,112),Enum.Material.Wood)
+						end
+					end
+				end
+				arrivalDetail("ArrivalSideStoreyBand",V(26,.3,.36),CF(16.63,13.93,13)*yaw(90),C.white,nil)
+				arrivalDetail("ArrivalSidePorchTopRail",V(4.2,.25,.22),CF(15,3.15,-2.55)*yaw(90),C.white,nil)
+				arrivalDetail("ArrivalSidePorchBottomRail",V(4.2,.2,.22),CF(15,.55,-2.55)*yaw(90),C.white,nil)
+				for _,porchZ in ipairs({-3.45,-1.45}) do
+					arrivalDetail("ArrivalSidePorchBaluster",V(.18,2.6,.18),CF(15,1.85,porchZ),C.white,nil)
+				end
+			end
+			if i==4 then
+				if foregroundRight then
+					part(Czone,"CottageEntryWalk",V(34,.08,10),CF(21,.1,895),Color3.fromRGB(211,207,192),Enum.Material.Concrete,false)
+				else
+					part(Czone,"CottageEntryWalk",V(26,.08,6),CF(-16.5,.1,812),Color3.fromRGB(211,207,192),Enum.Material.Concrete,false)
+				end
+			end
 		end
 		for i,z in ipairs({655,750}) do
 			-- The right-side apartment wall now occupies this former scenic lot.
@@ -161,9 +291,15 @@ function Districts.Build(K)
 				local home=house(Czone,"OuterVillageStack_"..side.."_"..i.."_0",CF(side*244,0,z)*yaw(side*90),30,28,13.8,colors[i%4+1],roofTint,{open=true,completeHome=true})
 				colorRoof(home,roofTint)
 				colorClapboard(home,colors[i%4+1])
+				dressReferenceHome(home,CF(side*244,0,z)*yaw(side*90),30,28,13.8,colors[i%4+1],roofTint,false)
 			end
 		end
 	end
+	assert(arrivalCottageParts==33,"S03 arrival cottage trim changed its instance budget")
+	S03:SetAttribute("ArrivalCottageDetailParts",arrivalCottageParts)
+	assert(referenceHomes==32 and referenceParts==610,"S03 reference cottages changed their instance budget")
+	S03:SetAttribute("ReferenceCottageCount",referenceHomes)
+	S03:SetAttribute("ReferenceCottageDetailParts",referenceParts)
 	-- A separate rectilinear apartment facade rises behind the cottage row.
 	-- Its compact rail rhythm replaces the forty-six unreachable upper homes.
 	local apartment=model("RectangularApartmentWall",S03)
@@ -174,7 +310,7 @@ function Districts.Build(K)
 			local inset=bay%2==0 and 2 or 0
 			part(apartment,"RecessedBalconyBay",V(.5,11.4,29),CF(182,y+5.8,z+inset),Color3.fromRGB(181,181,165),nil,false)
 			part(apartment,"ProjectingBalconyDeck",V(15,.6,32),CF(175,y-.3,z+inset),C.pale)
-			balconyRail(apartment,167.6,y,z+inset,31)
+			balconyRail(apartment,167.6,y,z+inset,31,5)
 			part(apartment,"BalconyDoorShadow",V(.2,8,5),CF(181.6,y+5,z+inset-7),C.dark,nil,false)
 			-- The photograph reads as a stack of recessed homes, rather than
 			-- continuous horizontal concrete stripes. Frame each landing as a bay.
@@ -211,39 +347,63 @@ function Districts.Build(K)
 			local zz=z+(level+bay)%2*3
 			part(nearWing,"DeepBalconyShadow",V(.2,10,23),CF(94.3,y+5,zz),Color3.fromRGB(97,105,99),nil,false)
 			part(nearWing,"DeepBalconyDeck",V(16,.55,26),CF(86,y-.28,zz),C.pale,nil,false)
-			balconyRail(nearWing,77.8,y,zz,25)
+			balconyRail(nearWing,77.8,y,zz,25,5)
 			part(nearWing,"RecessedDoor",V(.18,8,5.5),CF(94.1,y+5,zz),C.dark,nil,false)
 		end
 	end
-	local foreground=model("CloserVariedCottageFronts",S03)
-	scenicCottageFront(foreground,"WestTwoStoreyClapboard",-62,835,28,27,Color3.fromRGB(174,178,161),Color3.fromRGB(73,79,72))
-	scenicCottageFront(foreground,"EastLowGable",37,835,28,22,Color3.fromRGB(196,187,163),Color3.fromRGB(102,92,78))
-	-- A projecting three-light bay interrupts the otherwise flat cottage row.
-	-- It is scenic and sits ahead of the existing facade, never across a path.
-	local bayFrame=CF(37,0,835)*yaw(180)
-	local cottageBay=model("EastCottageProjectingBay",foreground)
-	part(cottageBay,"BayWindowCanopy",V(10,.42,3.8),bayFrame*CF(7.2,11,-2),C.white,Enum.Material.Wood,false)
-	part(cottageBay,"BayWindowSill",V(10,.34,3.3),bayFrame*CF(7.2,3.1,-2),C.white,Enum.Material.Wood,false)
-	part(cottageBay,"BayWindowGlazing",V(9.1,7.5,.16),bayFrame*CF(7.2,7,-3.5),Color3.fromRGB(49,63,59),Enum.Material.Glass,false)
-	for _,x in ipairs({2.55,5.65,8.75,11.85}) do
-		part(cottageBay,"BayWindowMullion",V(.2,7.8,.24),bayFrame*CF(x,7,-3.61),C.white,nil,false)
+	-- The arrival camera looks along Z, so the side balcony run above is
+	-- nearly edge-on. Turn its near end toward the central lawn. Its first
+	-- balcony level clears the foreground cottage roof and leaves the route open.
+	local frontBalconyParts=0
+	local function frontBalconyPart(name,size,frame,color,material)
+		frontBalconyParts+=1
+		return part(nearWing,name,size,frame,color,material,false)
 	end
-	for _,y in ipairs({3.25,7,10.75}) do
-		part(cottageBay,"BayWindowCrossbar",V(9.4,.22,.24),bayFrame*CF(7.2,y,-3.61),C.white,nil,false)
+	frontBalconyPart("CourtFacingCreamCore",V(120,54,2.2),CF(70,67,860),Color3.fromRGB(223,218,201),Enum.Material.Plaster)
+	for _,x in ipairs({10,40,70,100,130}) do
+		frontBalconyPart("CourtFacingBalconyPier",V(2.4,54,3),CF(x,67,861),C.white,Enum.Material.Plaster)
 	end
+	for level=0,3 do
+		local y=42+level*12.5
+		frontBalconyPart("CourtFacingStoreyBand",V(120,.42,2.5),CF(70,y-.55,861.8),C.white,Enum.Material.Plaster)
+		for bay=0,3 do
+			local x=25+bay*30
+			frontBalconyPart("CourtFacingRecessedBay",V(25,10.7,.2),CF(x,y+5.4,861.2),Color3.fromRGB(85,95,91),Enum.Material.SmoothPlastic)
+			frontBalconyPart("CourtFacingBalconyDeck",V(26,.55,12),CF(x,y-.3,865.7),C.pale,Enum.Material.Concrete)
+			frontBalconyPart("CourtFacingBalconySoffit",V(26,.28,11.5),CF(x,y+11.6,865.7),Color3.fromRGB(231,226,209),Enum.Material.Plaster)
+			frontBalconyPart("CourtFacingWarmWindow",V(7,6.7,.24),CF(x-5,y+5.8,861.4),Color3.fromRGB(237,208,157),Enum.Material.Glass)
+			frontBalconyPart("CourtFacingDoor",V(4.6,8,.24),CF(x+5.2,y+4.9,861.4),Color3.fromRGB(48,58,56),Enum.Material.Glass)
+			frontBalconyPart("CourtFacingWindowMullion",V(.2,6.7,.27),CF(x-5,y+5.8,861.59),C.white,nil)
+			frontBalconyPart("CourtFacingWindowSill",V(7.4,.24,.45),CF(x-5,y+2.3,861.6),C.white,nil)
+			frontBalconyPart("CourtFacingTopRail",V(26,.2,.2),CF(x,y+3.3,871.55),C.white,nil)
+			frontBalconyPart("CourtFacingBottomRail",V(26,.2,.2),CF(x,y+.45,871.55),C.white,nil)
+			for spindle=0,3 do
+				frontBalconyPart("CourtFacingBaluster",V(.18,3,.18),CF(x-12+spindle*8,y+1.85,871.55),C.white,nil)
+			end
+		end
+	end
+	assert(frontBalconyParts==218,"S03 court-facing balconies changed their instance budget")
+	nearWing:SetAttribute("CourtFacingBalconyParts",frontBalconyParts)
+	-- The former two thin cottage fronts and projecting bay occupied the same
+	-- foreground as enterable homes. Their visible details now live on those homes.
 	local tower=model("SeparateManyWindowTower",S03)
+	tower.ModelStreamingMode=Enum.ModelStreamingMode.Persistent
 	-- The separate modern tower wraps windows and pale floor bands around a
 	-- circular core, unlike the flat balcony wall behind the cottage row.
 	-- It is scenic and stays below the coffered ceiling and outside the route.
-	local towerX,towerZ,towerRadius=-102.5,750,18
-	local core=part(tower,"CurvedTowerCore",V(88,36,36),CF(towerX,44,towerZ)*CFrame.Angles(0,0,math.pi/2),Color3.fromRGB(220,222,208),Enum.Material.Plaster,false)
+	local towerX,towerZ,towerRadius=-95,785,18
+	local core=part(tower,"CurvedTowerCore",V(88,36,36),CF(towerX,44,towerZ)*CFrame.Angles(0,0,math.pi/2),Color3.fromRGB(226,224,214),Enum.Material.Plaster,false)
+	core.MaterialVariant="";core.Color=Color3.fromRGB(226,224,214)
 	core.Shape=Enum.PartType.Cylinder
-	for column=0,19 do
+	-- The camera-facing half needs window rhythm; the hidden rear arc does not.
+	for column=6,14 do
 		local angle=2*math.pi*column/20
 		for level=0,10 do
 			local frame=CF(towerX,5+level*7.6,towerZ)*CFrame.Angles(0,angle,0)*CF(0,0,-towerRadius-.2)
-			part(tower,"CurvedTowerWindow",V(4.2,5.45,.16),frame,Color3.fromRGB(53,65,65),Enum.Material.Glass,false)
+			part(tower,"CurvedTowerWindow",V(4.2,5.45,.16),frame,Color3.fromRGB(68,73,72),Enum.Material.SmoothPlastic,false)
 		end
+	end
+	for column=5,14 do
 		local edgeAngle=2*math.pi*(column+.5)/20
 		part(tower,"CurvedTowerPier",V(.32,83,.35),CF(towerX,44,towerZ)*CFrame.Angles(0,edgeAngle,0)*CF(0,0,-towerRadius-.35),C.white,Enum.Material.SmoothPlastic,false)
 	end
@@ -253,25 +413,82 @@ function Districts.Build(K)
 	end
 	local cornice=part(tower,"CurvedTowerCornice",V(.6,37.4,37.4),CF(towerX,88.3,towerZ)*CFrame.Angles(0,0,math.pi/2),C.white,Enum.Material.SmoothPlastic,false)
 	cornice.Shape=Enum.PartType.Cylinder
-	-- At the distant end, staggered office facades replace a single blank cap.
-	-- Their lower edges float above circulation and never bisect the gate route.
+	-- The far apartment bank is behind the north cottages, above their gables
+	-- and below the suspended ceiling beams. Persistent streaming keeps this
+	-- distant architecture present from the arrival court camera.
 	local distant=model("LayeredFarResidentialClosure",S03)
-	for _,info in ipairs({{-58,507,44,62},{39,493,48,70}}) do
-		local x,z,w,h=info[1],info[2],info[3],info[4]
-		part(distant,"PaleUpperMass",V(w,h,.7),CF(x,24+h/2,z),Color3.fromRGB(194,199,188),Enum.Material.Plaster,false)
-		for row=0,5 do
-			for col=0,3 do
-				local wx=x-w/2+7+col*(w-14)/3
-				part(distant,"DarkDistantWindow",V(5.2,6,.14),CF(wx,30+row*9.4,z+.45),Color3.fromRGB(59,69,68),Enum.Material.Glass,false)
-			end
-			part(distant,"ThinFloorBand",V(w+.5,.18,.2),CF(x,27+row*9.4,z+.52),C.white,nil,false)
+	distant.ModelStreamingMode=Enum.ModelStreamingMode.Persistent
+	local farParts=0
+	local function farPart(name,size,frame,color,material)
+		farParts+=1
+		return part(distant,name,size,frame,color,material,false)
+	end
+	for wing,info in ipairs({{-150,476,124},{-15,480,138},{118,475,116}}) do
+		local x,z,w=info[1],info[2],info[3]
+		local shellColor=wing==2 and Color3.fromRGB(224,219,204) or Color3.fromRGB(215,215,201)
+		farPart("CreamApartmentCore",V(w,68,2.5),CF(x,60,z),shellColor,Enum.Material.Plaster)
+		for _,side in ipairs({-1,1}) do
+			farPart("ApartmentSideReturn",V(2,68,7),CF(x+side*(w/2-1),60,z+3.1),shellColor,Enum.Material.Plaster)
 		end
-		for _,y in ipairs({42,61,80}) do
-			part(distant,"DistantBalconyLedge",V(w*.72,.32,4),CF(x,y,z+2.2),Color3.fromRGB(218,219,204),nil,false)
-			part(distant,"DistantBalconyRail",V(w*.72,.18,.2),CF(x,y+3.2,z+4.2),C.white,nil,false)
-			for _,postX in ipairs({-w*.35,0,w*.35}) do part(distant,"DistantBalconyPost",V(.16,3,.16),CF(x+postX,y+1.6,z+4.2),C.white,nil,false) end
+		local bayWidth=(w-8)/3
+		for level=0,4 do
+			local y=30+level*13
+			farPart("CreamStoreyBand",V(w,.36,.8),CF(x,y+11.7,z+1.5),C.white,Enum.Material.Plaster)
+			for bay=1,3 do
+				local bx=x-w/2+4+(bay-.5)*bayWidth
+				local warm=(wing+level+bay)%5==0
+				local paneColor=warm and Color3.fromRGB(227,207,156) or Color3.fromRGB(62,72,72)
+				farPart("DeepBalconyRecess",V(bayWidth-1,9,.18),CF(bx,y+5.7,z+1.48),Color3.fromRGB(133,137,126),Enum.Material.SmoothPlastic)
+				for _,side in ipairs({-1,1}) do
+					farPart("BalconyBayCheek",V(.42,10,4.8),CF(bx+side*(bayWidth/2-.55),y+5.8,z+3.6),shellColor,Enum.Material.Plaster)
+				end
+				farPart("DeepBalconyDeck",V(bayWidth-1,.52,8),CF(bx,y-.26,z+5.3),Color3.fromRGB(226,223,209),Enum.Material.Plaster)
+				farPart("BalconySoffit",V(bayWidth-1,.28,8),CF(bx,y+11.35,z+5.3),Color3.fromRGB(236,233,218),Enum.Material.Plaster)
+				local windowX=bx-bayWidth*.17
+				farPart("ApartmentWindow",V(bayWidth*.45,7.4,.16),CF(windowX,y+5.6,z+1.66),paneColor,warm and Enum.Material.SmoothPlastic or Enum.Material.Glass)
+				farPart("ApartmentDoor",V(4.5,8,.16),CF(bx+bayWidth*.29,y+5.3,z+1.66),Color3.fromRGB(53,67,66),Enum.Material.Glass)
+				farPart("WhiteWindowMullion",V(.17,7.4,.23),CF(windowX,y+5.6,z+1.54),C.white,nil)
+				farPart("WhiteWindowSill",V(bayWidth*.45+.5,.24,.42),CF(windowX,y+1.8,z+1.58),C.white,nil)
+				farPart("BalconyTopRail",V(bayWidth-1,.23,.2),CF(bx,y+3.25,z+9.38),C.white,nil)
+				farPart("BalconyBottomRail",V(bayWidth-1,.18,.2),CF(bx,y+.5,z+9.38),C.white,nil)
+				for post=0,3 do
+					farPart("BalconyRailPost",V(.18,2.9,.18),CF(bx-(bayWidth-1)/2+(bayWidth-1)*post/3,y+1.85,z+9.38),C.white,nil)
+				end
+			end
 		end
 	end
+	assert(farParts==699,"S03 far apartment bank changed its instance budget")
+	distant:SetAttribute("ReferenceBalconyParts",farParts)
+	-- The right court's outer wall has its own inward-facing apartment face.
+	-- It sits beyond the cottage roofs and never occupies the walking lane.
+	local sideWing=model("RightCourtApartmentWall",S03)
+	local sideParts=0
+	local function sidePart(name,size,frame,color,material)
+		sideParts+=1
+		return part(sideWing,name,size,frame,color,material,false)
+	end
+	sidePart("RightCourtCreamCore",V(3,68,160),CF(261,60,820),Color3.fromRGB(217,215,202),Enum.Material.Plaster)
+	for _,z in ipairs({740,780,820,860,900}) do
+		sidePart("RightCourtWhitePier",V(.4,68,1.2),CF(259.2,60,z),C.white,Enum.Material.Plaster)
+	end
+	for level=0,4 do
+		local y=30+level*13
+		for bay,z in ipairs({760,800,840,880}) do
+			local warm=(level+bay)%6==0
+			sidePart("RightCourtBalconyRecess",V(.2,9,25),CF(259.35,y+5.7,z),Color3.fromRGB(126,133,125),nil)
+			sidePart("RightCourtBalconyDeck",V(9,.52,29),CF(254.5,y-.26,z),Color3.fromRGB(228,225,210),Enum.Material.Plaster)
+			sidePart("RightCourtBalconySoffit",V(9,.28,29),CF(254.5,y+11.35,z),Color3.fromRGB(236,233,219),Enum.Material.Plaster)
+			sidePart("RightCourtWindow",V(.16,7.4,8.5),CF(259.18,y+5.5,z-5.6),warm and Color3.fromRGB(226,206,158) or Color3.fromRGB(59,72,71),warm and Enum.Material.SmoothPlastic or Enum.Material.Glass)
+			sidePart("RightCourtDoor",V(.16,8,5.1),CF(259.18,y+5.3,z+6.3),Color3.fromRGB(53,67,66),Enum.Material.Glass)
+			sidePart("RightCourtTopRail",V(.2,.23,29),CF(249.8,y+3.25,z),C.white,nil)
+			sidePart("RightCourtBottomRail",V(.2,.18,29),CF(249.8,y+.5,z),C.white,nil)
+			for post=0,4 do
+				sidePart("RightCourtRailPost",V(.18,2.9,.18),CF(249.8,y+1.85,z-14.5+29*post/4),C.white,nil)
+			end
+		end
+	end
+	assert(sideParts==246,"S03 right apartment wall changed its instance budget")
+	sideWing:SetAttribute("ReferenceBalconyParts",sideParts)
 	for _,z in ipairs({552,688,824}) do part(S03,"HeavyCofferBeam",V(550,2.2,3.2),CF(0,96,z),C.pale,nil,false) end
 	for _,x in ipairs({-130,0,130}) do part(S03,"LongCofferBeam",V(3.2,2.2,474),CF(x,96,696),C.pale,nil,false) end
 	for _,x in ipairs({-70,70}) do
@@ -304,10 +521,21 @@ function Districts.Build(K)
 		end
 	end
 	local hedgeTexture="rbxassetid://96127727672974"
-	for i,site in ipairs({{-31,856,13,6,20},{28,850,13,6,20},{-49,842,11,5,37},{55,843,11,5,-15},{-37,780,12,5,8},{48,775,12,5,33}}) do
+	-- Low planted islands interrupt the vacant court lawn while keeping
+	-- the stepping path and all cottage thresholds open.
+	for _,z in ipairs({585,700,865}) do
+		for _,side in ipairs({-1,1}) do
+			part(planting,"CourtGardenBed",V(20,.16,9),CF(side*75,.08,z),Color3.fromRGB(91,112,75),Enum.Material.Grass,false)
+		end
+	end
+	for _,side in ipairs({-1,1}) do
+		part(planting,"NearCottageGardenBed",V(23,.16,9),CF(side*30,.08,850),Color3.fromRGB(101,119,78),Enum.Material.Grass,false)
+	end
+	for i,site in ipairs({{-31,856,13,6,20},{28,850,13,6,20},{-49,842,11,5,37},{55,843,11,5,-15},{-82,790,12,5,8},{82,790,12,5,33},
+		{-75,585,17,6,12},{75,585,17,6,-17},{-75,700,18,6,-9},{75,700,18,6,22},{-75,865,18,6,14},{75,865,18,6,-12}}) do
 		plantCutout("CottageHedge_"..i,hedgeTexture,site[1],site[2],site[3],site[4],site[5])
 	end
-	plantCutout("BurgundyCourtyardMaple","rbxassetid://73750223479530",40,870,18,20,25)
+	plantCutout("BurgundyCourtyardMaple","rbxassetid://73750223479530",70,891,18,20,25)
 	camera("VillageFourCourts",V(0,8,916),V(10,52,710))
 	camera("VillageUpperCrossing",V(-101,19,696),V(135,35,838))
 	camera("VillageBackCourt",V(171,6,881),V(220,49,840))
@@ -317,8 +545,57 @@ function Districts.Build(K)
 	-- cross-street at grade. Lower and upper circuits reconnect without jumping.
 	local D=zone("D_FloralTerraces",V(-160,-14,936),V(160,320,1296))
 	local S04=model("S04_MistyTowerCanyon",D)
+	local towerHomes,towerDetails,towerGables,towerPorches=0,0,0,0
+	local function towerCottageFinish(home,frame,width,height,siding,roofTint,hasGable,hasPorch)
+		-- Refinish the existing rooms. Their doorway, standard glass, floor,
+		-- Watcher reference and puzzle marker stay on the original house model.
+		local exterior={SideWall=true,BackWall=true,BackWallWing=true,BackWallHeader=true,FacadeLintel=true,WindowApron=true,FacadePier=true,GableBaseBand=true,ClosedGableTriangle=true}
+		local clapboard=game:GetService("MaterialService"):FindFirstChild("Level5CourtyardClapboard")
+		for _,piece in ipairs(home:GetChildren()) do
+			if piece:IsA("BasePart") and exterior[piece.Name] then
+				piece.Material=Enum.Material.WoodPlanks
+				piece.MaterialVariant=clapboard and clapboard:IsA("MaterialVariant") and clapboard.Name or ""
+				piece.Color=siding
+			end
+		end
+		local function detail(name,size,localFrame,color,material,collide)
+			towerDetails+=1
+			return part(home,name,size,frame*localFrame,color,material,collide)
+		end
+		for _,side in ipairs({-1,1}) do
+			detail("TowerCottageCornerBoard",V(.36,height,.38),CF(side*(width/2-.18),height/2,-.52),C.white,nil,false)
+		end
+		if hasGable then
+			towerGables+=1
+			local y=height+width*.18
+			detail("TowerCottageAtticFrame",V(3.5,3.2,.2),CF(0,y,-.55),C.white,nil,false)
+			detail("TowerCottageAtticGlass",V(2.75,2.45,.22),CF(0,y,-.69),Color3.fromRGB(54,62,62),Enum.Material.Glass,false)
+			detail("TowerCottageAtticMullion",V(.16,2.45,.25),CF(0,y,-.84),C.white,nil,false)
+			detail("TowerCottageAtticSill",V(3.9,.25,.45),CF(0,y-1.7,-.58),C.white,nil,false)
+		end
+		if hasPorch then
+			towerPorches+=1
+			-- A shallow, open veranda leaves the central doorway and the raised
+			-- promenade clear. These replace the bulky 27-instance old porches.
+			detail("TowerCottagePorchDeck",V(width+.4,.15,4.5),CF(0,.08,-2.25),C.pale,Enum.Material.WoodPlanks,false)
+			local canopy=detail("TowerCottageFlatCanopy",V(width+1,.4,5.3),CF(0,11.7,-2.65),roofTint,Enum.Material.Slate,false)
+			canopy.MaterialVariant="";canopy.Color=roofTint
+			detail("TowerCottagePorchFascia",V(width+1,.6,.32),CF(0,11.35,-5.25),C.white,nil,false)
+			local railWidth=width/2-4.6
+			for _,side in ipairs({-1,1}) do
+				detail("TowerCottagePorchColumn",V(.72,10.9,.72),CF(side*(width/2-1),5.45,-4.55),C.white,nil,false)
+				detail("TowerCottagePorchRail",V(railWidth,.22,.2),CF(side*(4.6+railWidth/2),3.05,-4.55),C.white,nil,false)
+			end
+		end
+		towerHomes+=1
+		home:SetAttribute("S04ReferenceCottage",true)
+	end
 	local terraceStone=Color3.fromRGB(167,164,145)
 	local towerSlate=Color3.fromRGB(78,81,76)
+	local towerCream=Color3.fromRGB(222,218,203)
+	local towerTaupe=Color3.fromRGB(195,191,181)
+	local towerGray=Color3.fromRGB(205,206,199)
+	local towerSage=Color3.fromRGB(208,211,196)
 	floor(D,"SunkenGreenCarpet",0,-12,1116,320,360,C.green)
 	floor(D,"ArrivalAtGrade",0,0,942,320,12,C.carpet)
 	floor(D,"DepartureAtGrade",0,0,1279,320,34,C.carpet)
@@ -333,28 +610,29 @@ function Districts.Build(K)
 		K.edgeRail(D,s*96,0,948,1262,{{1097,1115}})
 		for i,z in ipairs({994,1109,1214}) do
 			local frame=CF(s*105,0,z)*yaw(s*90)
-			local clapboard=i==1 and (s<0 and Color3.fromRGB(211,204,184) or Color3.fromRGB(132,130,115)) or (i%2==0 and Color3.fromRGB(183,181,165) or Color3.fromRGB(169,171,157))
+			local clapboard=i==1 and (s<0 and towerCream or towerTaupe) or (i%2==0 and towerGray or towerSage)
 			local nearHome=i==1
 			local groundRoof=towerSlate
 			if nearHome then groundRoof=nil end
 			local home=house(S04,"FloralTowerHome_"..s.."_"..i.."_0",frame,30,26,13.8,clapboard,groundRoof,{open=true,backOpening=i==2,furniture=i==3 and (s<0 and 3 or 5) or nil})
 			colorRoof(home,towerSlate);colorClapboard(home,clapboard)
+			towerCottageFinish(home,frame,30,13.8,clapboard,towerSlate,not nearHome,true)
 			if nearHome then
 				local upper=house(S04,"FloralTowerUpperHome_"..s.."_"..i,frame*CF(0,14,0),30,26,13.8,clapboard,towerSlate,{open=false})
 				colorRoof(upper,towerSlate);colorClapboard(upper,clapboard)
+				towerCottageFinish(upper,frame*CF(0,14,0),30,13.8,clapboard,towerSlate,true,false)
 			end
-			-- Set the west arrival posts closer to the promenade rail so the
-			-- ground route clears both posts without losing the white porch.
-			if i~=2 then porch(S04,frame,30,6,towerSlate,s<0 and i==1 and 2 or nil) end
 			if i==1 then K.registerWatcher(home,"FloralTerraceWindow_"..s,D.Name) end
 		end
 		for i,z in ipairs({1045,1170}) do
 			local frame=CF(s*48,-12,z)*yaw(s*90)
-			local lower=house(S04,"LowerFloralHome_"..s.."_"..i,frame,28,26,13.8,Color3.fromRGB(166,162,144),nil,{open=true})
-			local upper=house(S04,"UpperFloralHome_"..s.."_"..i,frame*CF(0,14,0),28,26,13.8,Color3.fromRGB(177,173,157),Color3.fromRGB(67,73,70),{open=false})
-			colorClapboard(lower,Color3.fromRGB(166,162,144));colorClapboard(upper,Color3.fromRGB(177,173,157))
-			colorRoof(upper,Color3.fromRGB(67,73,70))
-			porch(S04,frame,28,7,Color3.fromRGB(76,80,76))
+			local siding=i==1 and towerGray or towerTaupe
+			local lower=house(S04,"LowerFloralHome_"..s.."_"..i,frame,28,26,13.8,siding,nil,{open=true})
+			local upper=house(S04,"UpperFloralHome_"..s.."_"..i,frame*CF(0,14,0),28,26,13.8,siding,towerSlate,{open=false})
+			colorClapboard(lower,siding);colorClapboard(upper,siding)
+			colorRoof(upper,towerSlate)
+			towerCottageFinish(lower,frame,28,13.8,siding,towerSlate,false,true)
+			towerCottageFinish(upper,frame*CF(0,14,0),28,13.8,siding,towerSlate,true,false)
 		end
 		for i,z in ipairs({1032,1158,1250}) do
 			local p=part(D,"FloralPaperWallPanel",V(.06,34,34),CF(s*159.33,28,z),C.pale,nil,false)
@@ -364,15 +642,21 @@ function Districts.Build(K)
 	for _,side in ipairs({-1,1}) do
 		for i,z in ipairs({1004,1220}) do
 			local roofTint=Color3.fromRGB(87,88,82)
-			local pocketClapboard=i==1 and (side<0 and Color3.fromRGB(211,204,184) or Color3.fromRGB(132,130,115)) or C.rose
-			local home=house(D,"SunkenPocketStack_"..side.."_"..i.."_0",CF(side*26,-12,z)*yaw(side*90),26,24,13.8,pocketClapboard,roofTint,{open=true})
+			local pocketClapboard=i==1 and (side<0 and towerCream or towerTaupe) or towerSage
+			local frame=CF(side*26,-12,z)*yaw(side*90)
+			local groundRoof=roofTint
+			if i==1 then groundRoof=nil end -- the second storey owns this roofline
+			local home=house(D,"SunkenPocketStack_"..side.."_"..i.."_0",frame,26,24,13.8,pocketClapboard,groundRoof,{open=true})
 			colorRoof(home,roofTint)
 			colorClapboard(home,pocketClapboard)
+			towerCottageFinish(home,frame,26,13.8,pocketClapboard,roofTint,i~=1,true)
 			if i==1 then
 				-- These two near cottages are two storeys in the S04 reference:
 				-- taupe on the arrival left and cream on the right.
-				local upper=house(S04,"SunkenPocketUpper_"..side.."_"..i,CF(side*26,2,z)*yaw(side*90),30,26,13.8,pocketClapboard,roofTint,{open=false})
+				local upperFrame=CF(side*26,2,z)*yaw(side*90)
+				local upper=house(S04,"SunkenPocketUpper_"..side.."_"..i,upperFrame,30,26,13.8,pocketClapboard,roofTint,{open=false})
 				colorRoof(upper,roofTint);colorClapboard(upper,pocketClapboard)
+				towerCottageFinish(upper,upperFrame,30,13.8,pocketClapboard,roofTint,true,false)
 			end
 		end
 	end
@@ -513,7 +797,13 @@ function Districts.Build(K)
 			end
 		end
 	end
-	house(D,"SunkenCornerResidence",CF(0,-12,1132),36,24,13.8,Color3.fromRGB(180,177,160),towerSlate,{open=true,completeHome=true,furniture=8})
+	local cornerFrame=CF(0,-12,1132)
+	local corner=house(D,"SunkenCornerResidence",cornerFrame,36,24,13.8,towerGray,towerSlate,{open=true,completeHome=true,furniture=8})
+	colorRoof(corner,towerSlate)
+	towerCottageFinish(corner,cornerFrame,36,13.8,towerGray,towerSlate,true,true)
+	assert(towerHomes==23 and towerGables==15 and towerPorches==15 and towerDetails==211,"S04 cottage inventory changed")
+	S04:SetAttribute("ReferenceCottageCount",towerHomes)
+	S04:SetAttribute("ReferenceCottageDetailParts",towerDetails)
 	floor(D,"RaisedCrossStreet",0,0,1106,320,18,terraceStone)
 	for _,z in ipairs({1097,1115}) do
 		rail(D,CF(0,0,z),146)
@@ -551,6 +841,22 @@ function Districts.Build(K)
 	local warmBroadloom=Color3.fromRGB(185,176,160)
 	local warmPlaster=Color3.fromRGB(211,203,185)
 	local quietCeiling=Color3.fromRGB(201,199,184)
+	local domesticHomes=0
+	local function domesticRoomFinish(home,tint)
+		-- These are connected interior rooms, so their old exterior siding
+		-- becomes the same warm plaster as the S10 partitions. Keep the real
+		-- openings, standard Watcher panes and puzzle marker in each room.
+		local walls={SideWall=true,BackWall=true,BackWallWing=true,BackWallHeader=true,FacadeLintel=true,WindowApron=true,FacadePier=true}
+		for _,piece in ipairs(home:GetChildren()) do
+			if piece:IsA("BasePart") and walls[piece.Name] then
+				piece.Material=Enum.Material.Plaster;piece.MaterialVariant="";piece.Color=tint
+			elseif piece:IsA("BasePart") and piece.Name=="InteriorCeiling" then
+				piece.Material=Enum.Material.Plaster;piece.MaterialVariant="";piece.Color=quietCeiling
+			end
+		end
+		domesticHomes+=1
+		home:SetAttribute("S10PlasterRoom",true)
+	end
 	local function smoothRoom(into,name,size,frame,color,collide)
 		return part(into,name,size,frame,color,Enum.Material.SmoothPlastic,collide)
 	end
@@ -563,6 +869,7 @@ function Districts.Build(K)
 		-- Watcher panes; the repeated side-room array no longer hides the void.
 		local homeX=s<0 and -54 or 88
 		local home=house(E,"DomesticRoom_"..s.."_1_1",CF(homeX,0,1340)*yaw(s*90),36,28,13.8,C.cream,nil,{open=true,backOpening=true})
+		domesticRoomFinish(home,warmPlaster)
 		K.registerWatcher(home,"DomesticWindow_"..s,E.Name)
 		-- Leave the upper balcony shaft visible beside S10's three windows.
 		local ceilingStart=s<0 and 1296 or 1390
@@ -570,11 +877,15 @@ function Districts.Build(K)
 		smoothRoom(E,"LowRoomCeilingBand",V(114,.6,ceilingLength),CF(s*103,16,ceilingStart+ceilingLength/2),quietCeiling)
 	end
 	for i,z in ipairs({1460,1540}) do
-		house(E,"NestedThroughHouse_"..i.."_0",CF(0,0,z),66,28,13.8,C.cream,nil,{open=true,backOpening=true})
+		local home=house(E,"NestedThroughHouse_"..i.."_0",CF(0,0,z),66,28,13.8,C.cream,nil,{open=true,backOpening=true})
+		domesticRoomFinish(home,i==1 and Color3.fromRGB(217,209,193) or warmPlaster)
 	end
 	-- The gate-five clock candidate stays a true enterable home beyond the
 	-- sparse front room, with the original HousePuzzleCandidate attributes.
-	house(E,"LabyrinthEndResidence_2_0",CF(0,0,1570),44,20,13.8,C.pale,nil,{open=true,completeHome=true,furniture=7})
+	local endHome=house(E,"LabyrinthEndResidence_2_0",CF(0,0,1570),44,20,13.8,C.pale,nil,{open=true,completeHome=true,furniture=7})
+	domesticRoomFinish(endHome,Color3.fromRGB(207,200,184))
+	assert(domesticHomes==5,"S10 connected room inventory changed")
+	S10:SetAttribute("PlasterRoomCount",domesticHomes)
 	for _,z in ipairs({1415,1505,1580}) do
 		local p=part(E,"SharedLowDomesticPanel",V(6,.15,3),CF(0,15,z),Color3.fromRGB(211,216,188),Enum.Material.Neon,false)
 		p:SetAttribute("TubeState","Dim")

@@ -17,7 +17,7 @@ function Architecture.Build(parent, origin, config)
 	origin = origin or Vector3.zero
 	local root = Instance.new("Model")
 	root.Name = "Level5_IndoorSuburbs"
-	root:SetAttribute("ArchitectureVersion", "2026-09-27.courtyard-light-path.2")
+	root:SetAttribute("ArchitectureVersion", "2026-09-28.s02-domestic-hall.2")
 	root:SetAttribute("GeometryOnly", true)
 	root.Parent = parent
 	local offset = CFrame.new(origin)
@@ -382,19 +382,24 @@ function Architecture.Build(parent, origin, config)
 			local doorX=9
 			local farEdge,windowEdge,nearEdge=-w/2,doorX-dw/2,doorX+dw/2
 			local windowWidth,endWidth=windowEdge-farEdge,w/2-nearEdge
-			local paneWidth=(windowWidth-2.3-.85)/2
-			assert(paneWidth>=6.8 and endWidth>=1.15,"near corridor entry needs supported windows and wall")
+			local watcherPaneWidth,smallPaneWidth=7.2,3.6
+			local middleStart=farEdge+1.15+watcherPaneWidth
+			local middleEnd=windowEdge-1.15-smallPaneWidth
+			assert(middleEnd-middleStart>=1.15 and endWidth>=1.15,"near corridor entry needs supported windows and wall")
 			part(into,"FacadeLintel",V(w,h-dh,.65),frame*CF(0,dh+(h-dh)/2,0),color)
 			part(into,"WindowApron",V(windowWidth,2.8,.65),frame*CF((farEdge+windowEdge)/2,1.4,0),color)
 			for _,x in ipairs({farEdge+.575,windowEdge-.575}) do
 				part(into,"FacadePier",V(1.15,dh-2.8,.65),frame*CF(x,(dh+2.8)/2,0),color)
 			end
 			part(into,"FacadePier",V(endWidth,dh,.65),frame*CF((nearEdge+w/2)/2,dh/2,0),color)
-			for i=0,1 do
-				local paneX=farEdge+1.15+paneWidth/2+i*(paneWidth+.85)
-				window(into,frame*CF(paneX,6.55,-.18),paneWidth,7.2,lit,simple)
-				if i==0 then part(into,"FacadePier",V(.85,dh-2.8,.65),frame*CF(paneX+paneWidth/2+.425,(dh+2.8)/2,0),color) end
-			end
+			local watcherPaneX=farEdge+1.15+watcherPaneWidth/2
+			local watcherGlass=window(into,frame*CF(watcherPaneX,6.55,-.18),watcherPaneWidth,7.2,lit,simple)
+			watcherGlass.Color=Color3.fromRGB(70,76,72)
+			part(into,"FacadePier",V(middleEnd-middleStart,dh-2.8,.65),
+				frame*CF((middleStart+middleEnd)/2,(dh+2.8)/2,0),color)
+			local smallPaneX=windowEdge-1.15-smallPaneWidth/2
+			local smallGlass=window(into,frame*CF(smallPaneX,6.55,-.18),smallPaneWidth,7.2,lit,simple)
+			smallGlass.Color=Color3.fromRGB(70,76,72)
 			doorframe(into,frame*CF(doorX,0,0),dw,dh)
 			part(into,"SplitSkirting",V(windowWidth,.35,.8),frame*CF((farEdge+windowEdge)/2,.18,.08),C.white)
 			part(into,"SplitSkirting",V(endWidth,.35,.8),frame*CF((nearEdge+w/2)/2,.18,.08),C.white)
@@ -564,6 +569,10 @@ function Architecture.Build(parent, origin, config)
 			or (style=="domestic" and C.pale or (style=="low" and Color3.fromRGB(177,172,145) or C.ceiling))
 		local plane=material(part(m,"CeilingPlane",V(w+12,8,d+12),CF(x,y+3.7,z),tint,Enum.Material.Plaster),"Plaster")
 		if style=="courtyard" then plane.Color=tint end
+		if name=="Pastel Carpet VillagesCeiling" then
+			plane.MaterialVariant=""
+			plane.Color=Color3.fromRGB(236,233,225)
+		end
 		local tile=y>70 and 24 or style=="domestic" and 12 or 18
 		for xx=-w/2,w/2,tile do part(m,"CeilingGrid",V(.08,.08,d),CF(x+xx,y-.34,z),C.grid,nil,false) end
 		for zz=-d/2,d/2,tile do part(m,"CeilingGrid",V(w,.08,.08),CF(x,y-.34,z+zz),C.grid,nil,false) end
@@ -665,11 +674,12 @@ function Architecture.Build(parent, origin, config)
 		for i,z in ipairs({42,99,156}) do
 			local stack=model("ResidentialAtriumStack_"..side.."_"..i,A)
 			local storeys=(side<0 and {5,7,4} or {6,4,7})[i]
-			stack:SetAttribute("StoreyCount",math.min(storeys,3))
+			stack:SetAttribute("StoreyCount",1)
 			stack:SetAttribute("OriginalStoreyCount",storeys)
-			-- The closed upper rooms are superseded by a taller, recessed apartment
-			-- facade below. Levels 0..2 retain every clue, Watcher and balcony door.
-			for level=0,math.min(storeys-1,2) do
+			-- Only the ground room remains. Its four numbered clues and two
+			-- Watcher panes are real; the upper two levels are rebuilt as continuous
+			-- apartment frontage against the balcony core below.
+			for level=0,0 do
 				local x=side*(110+(level>=3 and (i%2)*3 or 0))
 				local f=CF(x,level*14,z)*yaw(side*90)
 				local home=house(stack,"AtriumHome_"..level,f,30,24,13.8,(level+i)%3==0 and C.pale or C.cream,level==storeys-1 and C.blue or nil,{open=level<=2,furniture=level==0 and i==2 and (side<0 and 2 or 4) or nil})
@@ -683,6 +693,12 @@ function Architecture.Build(parent, origin, config)
 		end
 		for _,y in ipairs({14,28}) do
 			floor(A,"ContinuousBalcony",side*96,y,99,28,168)
+			-- The old upper room carpets filled this 24-stud band between the
+			-- playable gallery and the apartment core. A continuous collidable
+			-- extension keeps the gallery usable after those boxes are retired.
+			-- A thin slab keeps its underside above the ground rooms' plaster
+			-- ceilings, unlike a full-depth house carpet in this same footprint.
+			part(A,"LowerReferenceBalconyExtension",V(24,.24,168),CF(side*122,y-.08,99),C.carpet,Enum.Material.Fabric)
 			local gaps=y==14 and (side<0 and {{48,59},{92,106}} or {{92,108}}) or {{136,150},{155,169}}
 			edgeRail(A,side*82,y,15,183,gaps)
 			rail(A,CF(side*96,y,15),28);rail(A,CF(side*96,y,183),28)
@@ -758,12 +774,12 @@ function Architecture.Build(parent, origin, config)
 		end
 	end
 	for _,side in ipairs({-1,1}) do
-		local core=part(towers,"RecessedApartmentCore",V(3,211,179),CF(side*136,105.5,99),Color3.fromRGB(219,211,190),Enum.Material.Plaster,false)
+		local core=part(towers,"RecessedApartmentCore",V(3,211,179),CF(side*136,105.5,99),Color3.fromRGB(219,211,190),Enum.Material.Plaster)
 		core.CastShadow=false
 		for _,z in ipairs({15,70,127,183}) do
 			part(towers,"VerticalBalconyPier",V(3.4,211,2.2),CF(side*134,105.5,z),C.white,Enum.Material.Plaster,false)
 		end
-		for level=3,14 do
+		for level=1,14 do
 			local y=level*14
 			for bay,z in ipairs({42,99,156}) do
 				-- The narrow left window wall has plaster behind its windows;
@@ -777,14 +793,24 @@ function Architecture.Build(parent, origin, config)
 				-- The reference has a close, narrow window wall on the left and
 				-- deep apartment balconies predominantly on the right. Keep the
 				-- playable lower galleries untouched beneath these scenic tiers.
-				local slabDepth=side>0 and 14 or 34
-				local slabX=side>0 and 126 or 116
-				local railX=side>0 and 118.7 or 98.7
-				part(towers,"ProjectingBalconySlab",V(slabDepth,.65,43),CF(side*slabX,y-.25,z),C.pale,Enum.Material.Plaster,false)
-				part(towers,"BalconyFrontTop",V(.35,.3,41),CF(side*railX,y+3.2,z),C.white,nil,false)
-				part(towers,"BalconyFrontBottom",V(.3,.2,41),CF(side*railX,y+.55,z),C.white,nil,false)
-				if level<=7 or bay==2 then
-					for post=1,5 do part(towers,"BalconySpindle",V(.16,2.6,.16),CF(side*railX,y+1.85,z-20.5+post*41/6),C.white,nil,false) end
+				if level<=2 then
+					-- Real lower floors and rails already run continuously in front
+					-- of these windows; adding a second scenic slab here would overlap
+					-- their walking surface and recreate the legacy stacked-house seam.
+					part(towers,"LowerApartmentDoorPanel",V(.25,9,5),CF(side*134.01,y+4.6,z),Color3.fromRGB(76,83,79),Enum.Material.Wood,false)
+					for _,dz in ipairs({-2.7,2.7}) do
+						part(towers,"LowerApartmentDoorJamb",V(.34,9.5,.3),CF(side*133.82,y+4.6,z+dz),C.white,nil,false)
+					end
+				elseif side>0 or (level%3==0 and bay==2) then
+					local slabDepth=side>0 and 14 or 34
+					local slabX=side>0 and 126 or 116
+					local railX=side>0 and 118.7 or 98.7
+					part(towers,"ProjectingBalconySlab",V(slabDepth,.65,43),CF(side*slabX,y-.25,z),C.pale,Enum.Material.Plaster,false)
+					part(towers,"BalconyFrontTop",V(.35,.3,41),CF(side*railX,y+3.2,z),C.white,nil,false)
+					part(towers,"BalconyFrontBottom",V(.3,.2,41),CF(side*railX,y+.55,z),C.white,nil,false)
+					if level<=7 or bay==2 then
+						for post=1,5 do part(towers,"BalconySpindle",V(.16,2.6,.16),CF(side*railX,y+1.85,z-20.5+post*41/6),C.white,nil,false) end
+					end
 				end
 			end
 		end
@@ -810,14 +836,14 @@ function Architecture.Build(parent, origin, config)
 		local lamp=part(home,"WarmEntryLamp",V(.6,.8,.35),frame*CF(width*.28,7,-.45),Color3.fromRGB(255,210,145),Enum.Material.Neon,false)
 		local light=Instance.new("PointLight");light.Brightness=.5;light.Range=13;light.Color=Color3.fromRGB(255,212,153);light.Parent=lamp
 	end
-	local function courtyardClapboard(home,siding,roofTint)
+	local function referenceClapboard(home,siding,roofTint)
 		local exterior={SideWall=true,BackWall=true,BackWallWing=true,BackWallHeader=true,
 			FacadeLintel=true,WindowApron=true,FacadePier=true,GableBaseBand=true,ClosedGableTriangle=true}
 		for _,piece in ipairs(home:GetDescendants()) do
 			if piece:IsA("BasePart") then
 				if exterior[piece.Name] then
-					-- The dedicated Studio MaterialVariant keeps the finer horizontal
-					-- clapboard on these eight courtyard cottages only.
+					-- The dedicated Studio MaterialVariant keeps the photographed
+					-- horizontal clapboard on the courtyard and corridor homes.
 					piece.Material=Enum.Material.WoodPlanks
 					piece.MaterialVariant="Level5CourtyardClapboard"
 					piece.Color=siding
@@ -831,39 +857,36 @@ function Architecture.Build(parent, origin, config)
 		local waitingFrame=CF(side*42,0,128)
 		local waitingTint=side<0 and Color3.fromRGB(184,177,159) or Color3.fromRGB(137,151,127)
 		local waiting=house(A,"GroundWaitingCottage_"..side,waitingFrame,26,24,13.8,waitingTint,C.dark,{open=true})
-		courtyardClapboard(waiting,waitingTint,Color3.fromRGB(54,59,56))
+		referenceClapboard(waiting,waitingTint,Color3.fromRGB(54,59,56))
+		porch(waiting,waitingFrame,26,5)
 		porch(waiting,waitingFrame,26,6)
-		if side>0 then
-			local upper=house(courtyard,"SageUpperHouse",waitingFrame*CF(0,14,0),26,24,13.8,waitingTint,C.dark,{open=false})
-			courtyardClapboard(upper,waitingTint,Color3.fromRGB(54,59,56))
-		end
 		local innerFrame=CF(side*44,0,76)*yaw(side*90)
 		local innerTint=side>0 and Color3.fromRGB(163,170,147) or Color3.fromRGB(138,151,129)
 		local inner=house(A,"AtriumInnerStack_"..side.."_0",innerFrame,28,24,13.8,innerTint,C.dark,{open=true})
-		courtyardClapboard(inner,innerTint,Color3.fromRGB(59,63,59))
+		referenceClapboard(inner,innerTint,Color3.fromRGB(59,63,59))
 		if side>0 then porch(inner,innerFrame,28,5) end
 		local rearFrame=CF(side*26,0,163)
 		local rearTint=side<0 and Color3.fromRGB(177,173,156) or Color3.fromRGB(182,180,163)
 		local rear=house(A,"AtriumRearCottage_"..side,rearFrame,26,22,13.8,rearTint,C.dark,{open=true})
-		courtyardClapboard(rear,rearTint,Color3.fromRGB(66,68,60))
+		referenceClapboard(rear,rearTint,Color3.fromRGB(66,68,60))
 		if side>0 then porch(rear,rearFrame,26,5) end
 	end
 	local nearFrame=CF(56,0,28)
 	local near=house(courtyard,"SageNearPorchHouse",nearFrame,28,24,13.8,Color3.fromRGB(184,177,159),C.dark,{open=true})
-	courtyardClapboard(near,Color3.fromRGB(184,177,159),Color3.fromRGB(47,54,53))
+	referenceClapboard(near,Color3.fromRGB(184,177,159),Color3.fromRGB(47,54,53))
 	porch(near,nearFrame,28,7)
 	-- This courtyard is inside the vast residential shell. Close the upper
 	-- envelope before the next zone; otherwise the playable route exposes the
 	-- outdoor sky even though the reference has a continuous fluorescent roof.
 	local roof=model("S01_EnclosedAtriumRoof",A)
-	part(roof,"SuspendedTilePlane",V(336,2,218),CF(0,214,95),Color3.fromRGB(189,186,171),Enum.Material.SmoothPlastic)
+	part(roof,"SuspendedTilePlane",V(336,2,218),CF(0,214,95),Color3.fromRGB(143,142,148),Enum.Material.SmoothPlastic)
 	for x=-162,162,18 do
-		local grid=part(roof,"LongCeilingGrid",V(.13,.12,216),CF(x,212.91,95),Color3.fromRGB(189,186,171),nil,false)
-		grid.Transparency=.55
+		local grid=part(roof,"LongCeilingGrid",V(.13,.12,216),CF(x,212.91,95),Color3.fromRGB(105,105,110),nil,false)
+		grid.Transparency=.18
 	end
 	for z=-12,202,18 do
-		local grid=part(roof,"CrossCeilingGrid",V(334,.12,.13),CF(0,212.91,z),Color3.fromRGB(189,186,171),nil,false)
-		grid.Transparency=.55
+		local grid=part(roof,"CrossCeilingGrid",V(334,.12,.13),CF(0,212.91,z),Color3.fromRGB(105,105,110),nil,false)
+		grid.Transparency=.18
 	end
 	for _,x in ipairs({-108,-36,36,108}) do
 		for _,z in ipairs({8,35,62,89,116,143,170,197}) do
@@ -882,32 +905,48 @@ function Architecture.Build(parent, origin, config)
 	-- at Z=192. Dress that actual visible face, not a wall behind the shell.
 	local farFacade=model("S01_DistantApartmentFront",A)
 	for _,x in ipairs({-147,-105,-63,-21,21,63,105,147}) do
-		part(farFacade,"DistantVerticalPier",V(1.8,146,.45),CF(x,140,191.55),C.pale,Enum.Material.Plaster,false)
+		part(farFacade,"DistantVerticalPier",V(1.8,198,.45),CF(x,114,191.55),C.pale,Enum.Material.Plaster,false)
 	end
-	for row,y in ipairs({29,43,57,85,111,137,163,189}) do
+	for row=1,13 do
+		local y=14+row*14
 		part(farFacade,"DistantFloorBand",V(314,.65,1.5),CF(0,y-5,191.2),C.pale,Enum.Material.Plaster,false)
 		for col,x in ipairs({-126,-84,-42,0,42,84,126}) do
 			local lit=(row*3+col)%5==0
+			-- The gate shell is the real end of the court. Give that surface
+			-- recessed rooms and projecting balcony edges, rather than relying
+			-- on a translucent wall-sized veil to suggest distant apartments.
+			part(farFacade,"DistantApartmentRecess",V(32,9.7,.14),CF(x,y+.15,191.82),
+				Color3.fromRGB(98,101,91),Enum.Material.SmoothPlastic,false)
 			part(farFacade,"DistantApartmentWindow",V(8,7,.3),CF(x,y,191.53),
 				lit and Color3.fromRGB(178,155,111) or Color3.fromRGB(72,78,75),Enum.Material.SmoothPlastic,false)
 			part(farFacade,"DistantWindowHead",V(8.8,.3,.52),CF(x,y+3.65,191.31),C.white,nil,false)
 			part(farFacade,"DistantWindowSill",V(8.8,.3,.52),CF(x,y-3.65,191.31),C.white,nil,false)
 			part(farFacade,"DistantWindowMullion",V(.2,7,.55),CF(x,y,191.24),C.white,nil,false)
+			if row>=3 and row%2==col%2 then
+				part(farFacade,"DistantBalconyDeck",V(32,.43,6.9),CF(x,y-4.9,188.4),C.pale,Enum.Material.Plaster,false)
+				part(farFacade,"DistantBalconyFront",V(31,.23,.23),CF(x,y-1.65,184.9),C.white,nil,false)
+				for post=-1,1 do
+					part(farFacade,"DistantBalconyPost",V(.18,3.1,.18),CF(x+post*14.7,y-3.3,184.9),C.white,nil,false)
+				end
+			end
 		end
 	end
 	-- In front of the end cap, two offset facades and their exposed flights
 	-- give the view the same receding residential canyon as the side balconies.
 	-- They are high, scenic layers: the gate corridor stays unobstructed below.
 	local rearCanyon=model("S01_RecedingResidentialLayers",A)
-	for _,info in ipairs({{-77,146,53},{78,164,49}}) do
+	for _,info in ipairs({{-88,151,52},{68,166,50}}) do
 		local cx,z,width=info[1],info[2],info[3]
-		local tint=cx<0 and Color3.fromRGB(187,181,167) or Color3.fromRGB(202,193,173)
-		part(rearCanyon,"RecessedTowerFacade",V(width,155,.7),CF(cx,128,z),tint,Enum.Material.Plaster,false)
+		local tint=cx<0 and Color3.fromRGB(188,187,173) or Color3.fromRGB(200,195,180)
+		local height=cx<0 and 145 or 168
+		part(rearCanyon,"RecessedTowerFacade",V(width,height,.7),CF(cx,128,z),tint,Enum.Material.Plaster,false)
 		for level=0,10 do
 			local y=56+level*13.5
-			part(rearCanyon,"MouldedFloorCourse",V(width+.5,.35,2.6),CF(cx,y-5,z-1.2),C.pale,Enum.Material.Plaster,false)
+			part(rearCanyon,"MouldedFloorCourse",V(width+.5,.35,7.5),CF(cx,y-5,z-3.65),C.pale,Enum.Material.Plaster,false)
 			for _,dx in ipairs({-width*.28,0,width*.28}) do
 				local wx=cx+dx
+				part(rearCanyon,"DeepApartmentRecess",V(9.4,9,.12),CF(wx,y,z-.39),
+					Color3.fromRGB(93,96,87),Enum.Material.SmoothPlastic,false)
 				part(rearCanyon,"DeepApartmentWindow",V(6.8,7.4,.18),CF(wx,y,z-.52),
 					level%4==2 and Color3.fromRGB(155,136,101) or Color3.fromRGB(61,70,67),Enum.Material.Glass,false)
 				part(rearCanyon,"WhiteSashHead",V(7.2,.22,.26),CF(wx,y+3.8,z-.67),C.white,nil,false)
@@ -915,10 +954,10 @@ function Architecture.Build(parent, origin, config)
 				part(rearCanyon,"WhiteSashMullion",V(.18,7.4,.26),CF(wx,y,z-.68),C.white,nil,false)
 			end
 			if level%2==0 then
-				part(rearCanyon,"SetbackBalconyDeck",V(width*.78,.4,3.4),CF(cx,y-5.1,z-2.2),C.pale,Enum.Material.Plaster,false)
-				part(rearCanyon,"SetbackBalconyRail",V(width*.78,.18,.18),CF(cx,y-1.95,z-3.75),C.white,nil,false)
+				part(rearCanyon,"SetbackBalconyDeck",V(width*.78,.4,7.2),CF(cx,y-5.1,z-3.9),C.pale,Enum.Material.Plaster,false)
+				part(rearCanyon,"SetbackBalconyRail",V(width*.78,.18,.18),CF(cx,y-1.95,z-7.55),C.white,nil,false)
 				for _,dx in ipairs({-width*.38,0,width*.38}) do
-					part(rearCanyon,"SetbackRailPost",V(.17,3,.17),CF(cx+dx,y-3.5,z-3.75),C.white,nil,false)
+					part(rearCanyon,"SetbackRailPost",V(.17,3,.17),CF(cx+dx,y-3.5,z-7.55),C.white,nil,false)
 				end
 			end
 		end
@@ -936,33 +975,42 @@ function Architecture.Build(parent, origin, config)
 	-- Staggered, nonblocking high floors break up the flat gate-wall silhouette.
 	-- Their ground clearance preserves the gate and the existing clue cottages.
 	local farStacks=model("S01_StaggeredFarApartmentStacks",A)
-	for _,spec in ipairs({{-34,174,43},{31,183,50}}) do
+	for _,spec in ipairs({{-43,173,39},{27,183,55}}) do
 		local cx,z,width=spec[1],spec[2],spec[3]
-		local face=part(farStacks,"SetbackCreamFacade",V(width,145,2.8),CF(cx,132,z),Color3.fromRGB(190,184,168),Enum.Material.Plaster,false)
+		local height=cx<0 and 126 or 158
+		local face=part(farStacks,"SetbackCreamFacade",V(width,height,2.8),CF(cx,132,z),Color3.fromRGB(188,188,174),Enum.Material.Plaster,false)
 		face.MaterialVariant=""
-		local returnWall=part(farStacks,"DeepSideReturn",V(2.1,145,10),CF(cx-width/2+1,132,z-5),Color3.fromRGB(153,151,141),Enum.Material.Plaster,false)
-		returnWall.MaterialVariant=""
+		for _,side in ipairs({-1,1}) do
+			local returnWall=part(farStacks,"DeepSideReturn",V(2.1,height,13.5),CF(cx+side*(width/2-1),132,z-6.75),Color3.fromRGB(164,165,155),Enum.Material.Plaster,false)
+			returnWall.MaterialVariant=""
+		end
 		for level=0,8 do
 			local y=66+level*15
-			part(farStacks,"WhiteFloorCourse",V(width+.8,.32,3.9),CF(cx,y-5,z-2),C.pale,nil,false)
+			part(farStacks,"WhiteFloorCourse",V(width+.8,.32,8.8),CF(cx,y-5,z-4.4),C.pale,nil,false)
 			for _,flank in ipairs({-1,1}) do
+				part(farStacks,"DeepWindowRecess",V(12.5,9.7,.13),CF(cx+flank*width*.23,y,z-1.42),
+					Color3.fromRGB(91,95,87),Enum.Material.SmoothPlastic,false)
 				part(farStacks,"DeepWindowPair",V(7.4,8,.2),CF(cx+flank*width*.23,y,z-1.55),
 					(level+flank)%5==0 and Color3.fromRGB(173,154,119) or Color3.fromRGB(63,72,70),Enum.Material.Glass,false)
 			end
 			if level%2==0 then
-				part(farStacks,"NarrowBalconyRail",V(width*.75,.23,.2),CF(cx,y-1.8,z-4.1),C.white,nil,false)
+				part(farStacks,"NarrowBalconyDeck",V(width*.75,.4,8.3),CF(cx,y-5.1,z-4.65),C.pale,Enum.Material.Plaster,false)
+				part(farStacks,"NarrowBalconyRail",V(width*.75,.23,.2),CF(cx,y-1.8,z-8.9),C.white,nil,false)
+				for _,dx in ipairs({-width*.37,0,width*.37}) do
+					part(farStacks,"NarrowBalconyPost",V(.17,3.1,.17),CF(cx+dx,y-3.5,z-8.9),C.white,nil,false)
+				end
 			end
 		end
 	end
-	local farMist=part(A,"S01_DistantHazeScrim",V(310,190,.12),CF(0,115,188),Color3.fromRGB(172,169,161),Enum.Material.SmoothPlastic,false)
-	farMist.Transparency=.6
+	-- The former 310-by-190 stud scrim covered the shell in the gaps between
+	-- towers. Removing it keeps the separate setback faces legible at a distance.
 
 	-- B is a long interior townhouse hall. All ground rooms survive behind its
 	-- two frontages; only their closed upper scenery and porch canopy repetition
 	-- give way to the low fluorescent corridor seen from the gate-1 approach.
 	local B=model("B_LowEavesArcade")
-	local arcadeBase=floor(B,"OchreArcadeCarpet",0,0,326,280,260,Color3.fromRGB(185,181,170))
-	arcadeBase.Color=Color3.fromRGB(185,181,170)
+	local arcadeBase=floor(B,"OchreArcadeCarpet",0,0,326,280,260,Color3.fromRGB(205,201,190))
+	arcadeBase.Color=Color3.fromRGB(205,201,190)
 	arcadeBase.MaterialVariant=""
 	local corridor=model("S02_TownhouseCorridor",B)
 	corridor:SetAttribute("ReferenceViewId",2)
@@ -973,11 +1021,11 @@ function Architecture.Build(parent, origin, config)
 			local alt=(row+col)%2==1
 			local tile=part(corridorCarpet,alt and "CrossGrainTile" or "LengthGrainTile",V(5.95,.06,5.95),
 				CF(86+col*6,.035,203+row*6)*CFrame.Angles(0,alt and math.pi/2 or 0,0),
-				alt and Color3.fromRGB(182,178,168) or Color3.fromRGB(194,189,177),Enum.Material.Fabric,false)
+				alt and Color3.fromRGB(209,205,192) or Color3.fromRGB(221,216,202),Enum.Material.Fabric,false)
 			tile.MaterialVariant=""
-			tile.Color=alt and Color3.fromRGB(182,178,168) or Color3.fromRGB(194,189,177)
+			tile.Color=alt and Color3.fromRGB(209,205,192) or Color3.fromRGB(221,216,202)
 			local weave=texture(tile,"rbxassetid://136282007145831",Enum.NormalId.Top,6)
-			if weave then weave.Color3=Color3.fromRGB(247,245,236);weave.Transparency=.18 end
+			if weave then weave.Color3=Color3.fromRGB(247,245,236);weave.Transparency=.55 end
 		end
 	end
 	local corridorCeiling=model("FluorescentTileCeiling",corridor)
@@ -1007,14 +1055,9 @@ function Architecture.Build(parent, origin, config)
 		local pier=part(rightWall,"CreamWallPier",V(.6,14.3,z1-z0),CF(82.7,7.15,(z0+z1)/2),Color3.fromRGB(222,217,204),Enum.Material.Plaster)
 		pier.MaterialVariant=""
 		part(rightWall,"WhiteBaseboard",V(.25,.6,z1-z0),CF(83.12,.3,(z0+z1)/2),C.white,nil,false)
-		-- The reference has a repeated line of framed domestic pictures between
-		-- the door recesses, rather than a featureless office wall.
-		if z1-z0>10 then
-			local z=(z0+z1)/2
-			part(rightWall,"PictureWoodFrame",V(.17,4.8,3.6),CF(83.09,7.35,z),Color3.fromRGB(89,78,62),Enum.Material.Wood,false)
-			part(rightWall,"PictureMutedPrint",V(.18,4.2,3.0),CF(83.19,7.35,z),Color3.fromRGB(139,131,108),Enum.Material.SmoothPlastic,false)
-			part(rightWall,"PictureInnerLine",V(.19,4.35,3.15),CF(83.16,7.35,z),C.pale,Enum.Material.SmoothPlastic,false)
-		end
+		-- The photographed right side is a quiet cream corridor between real
+		-- repeated door recesses. Keep the pier unbroken instead of hanging
+		-- near-black framed panels on its visible face.
 	end
 	local rightCursor=216
 	for _,z in ipairs({254,292,330,368,406}) do
@@ -1025,7 +1068,7 @@ function Architecture.Build(parent, origin, config)
 		for _,side in ipairs({-1,1}) do
 			part(rightWall,"WhiteOpeningReturn",V(5.3,8,.25),CF(80.05,4,z+side*2.5),C.white,Enum.Material.Plaster)
 		end
-		part(rightWall,"DarkRoomBacking",V(.4,9,5.2),CF(77.2,4.5,z),Color3.fromRGB(46,49,48),Enum.Material.Plaster)
+		part(rightWall,"DarkRoomBacking",V(.4,9,5.2),CF(77.2,4.5,z),Color3.fromRGB(151,146,134),Enum.Material.Plaster)
 		part(rightWall,"WhiteOpeningHead",V(.3,.28,5.5),CF(83.13,8,z),C.white,nil,false)
 		rightCursor=last
 	end
@@ -1036,16 +1079,26 @@ function Architecture.Build(parent, origin, config)
 			local frame=CF(s*96,0,z)*yaw(s*90)
 			local home=house(B,"ArcadeResidence_"..s.."_"..i.."_0",frame,28,28,13.8,i%2==0 and C.pale or C.yellow,nil,
 				{open=true,backOpening=i%2==0,furniture=i==2 and (s<0 and 1 or 3) or nil,frontDoorNear=s>0 and i==1})
+			-- The first +X home has the real entry on the reference corridor.
+			-- Keep the gate-2 clue there rather than selecting an unrelated
+			-- detached room by the global median-candidate rule.
+			if not (s>0 and i==1) then home:SetAttribute("HousePuzzleCandidate",false) end
 			if i==1 then registerWatcher(home,"ArcadeWindow_"..s,B.Name) end
 			if s>0 then
 				local tint=({Color3.fromRGB(190,179,161),Color3.fromRGB(108,125,139),Color3.fromRGB(163,153,143),Color3.fromRGB(191,183,166)})[i]
-				for _,surface in ipairs(home:GetChildren()) do
-					if surface:IsA("BasePart") and (surface.Name=="FacadeLintel" or surface.Name=="WindowApron" or surface.Name=="FacadePier") then surface.Color=tint end
-				end
-				if i>1 then
-					for _,side in ipairs({-1,1}) do
-						part(leftDetails,"DarkGabledDoorCanopy",V(4.1,.36,3.5),frame*CF(side*1.7,11.2,-2)*CFrame.Angles(0,0,-side*math.rad(24)),Color3.fromRGB(51,53,54),Enum.Material.Slate,false)
+				referenceClapboard(home,tint,Color3.fromRGB(54,59,56))
+				if i==1 then
+					-- The first hall home is pale lavender-taupe in reference view 2.
+					for _,piece in ipairs(home:GetDescendants()) do
+						if piece:IsA("BasePart") and piece.MaterialVariant=="Level5CourtyardClapboard" then
+							piece.MaterialVariant="Level5PaintedSiding"
+							piece.Color=Color3.fromRGB(218,207,208)
+						end
 					end
+				end
+				local canopyCenter=i==1 and 9 or 0
+				for _,side in ipairs({-1,1}) do
+					part(leftDetails,"DarkGabledDoorCanopy",V(4.1,.36,3.5),frame*CF(canopyCenter+side*1.7,11.2,-2)*CFrame.Angles(0,0,-side*math.rad(24)),Color3.fromRGB(51,53,54),Enum.Material.Slate,false)
 				end
 				local lamp=part(leftDetails,"WarmWallSconce",V(.45,.7,.35),frame*CF(3.35,7.2,-.58),Color3.fromRGB(255,209,148),Enum.Material.Neon,false)
 				local light=Instance.new("PointLight");light.Range=9;light.Brightness=.52;light.Shadows=false
@@ -1074,7 +1127,7 @@ function Architecture.Build(parent, origin, config)
 		for _,z in ipairs({d0,d1}) do part(leftDetails,"WhiteDoorJamb",V(.4,8.8,.24),CF(95.66,4.4,z),C.white,nil,false) end
 		part(leftDetails,"WhiteDoorHead",V(.4,.35,4.2),CF(95.66,8.72,doorZ),C.white,nil,false)
 	end
-	infillTownhouse(246,272,Color3.fromRGB(164,166,158))
+	infillTownhouse(246,272,Color3.fromRGB(216,208,207))
 	infillTownhouse(300,334,Color3.fromRGB(144,155,164))
 	infillTownhouse(362,404,Color3.fromRGB(183,170,159))
 	part(leftDetails,"EndTownhouseWall",V(.6,14.3,20),CF(96,7.15,442),Color3.fromRGB(191,183,166),Enum.Material.WoodPlanks)
@@ -1087,13 +1140,57 @@ function Architecture.Build(parent, origin, config)
 		label.TextScaled=true;label.Font=Enum.Font.GothamBold;label.Parent=gui;gui.Parent=sign
 	end
 	exitSign(344);exitSign(438)
-	for i,info in ipairs({{-31,239},{32,302},{-31,365},{32,420}}) do
-		house(B,"DetachedThroughRoom_"..i,CF(info[1],0,info[2]),30,21,12.8,i%2==0 and C.cream or C.pale,nil,{open=true,backOpening=true})
+	-- Gate 1 opens at X=0 while the photographed long hall begins at X=89.
+	-- Retire the six disconnected legacy houses and join the two positions with
+	-- a low, enclosed carpeted turn. Its 16-stud clear width reaches the actual
+	-- corridor without changing either gate, its doorway or the Watcher rooms.
+	local entryTurn=model("S02_EnclosedEntryTurn",B)
+	entryTurn:SetAttribute("ReferenceViewId",2)
+	for col=0,14 do
+		local x=-7+col*6
+		for row,z in ipairs({204,210}) do
+			local alternate=(col+row)%2==0
+			local tile=part(entryTurn,alternate and "CrossGrainTile" or "LengthGrainTile",V(5.95,.06,5.95),
+				CF(x,.035,z)*CFrame.Angles(0,alternate and math.pi/2 or 0,0),
+				alternate and Color3.fromRGB(209,205,192) or Color3.fromRGB(221,216,202),Enum.Material.Fabric,false)
+			tile.MaterialVariant=""
+			tile.Color=alternate and Color3.fromRGB(209,205,192) or Color3.fromRGB(221,216,202)
+			local weave=texture(tile,"rbxassetid://136282007145831",Enum.NormalId.Top,6)
+			if weave then weave.Color3=Color3.fromRGB(247,245,236);weave.Transparency=.55 end
+		end
 	end
-
-	for i,z in ipairs({272,338}) do
-		house(B,"ArcadeCrossLaneHome_"..i.."_0",CF(0,0,z),50,22,13.8,i==1 and C.pale or C.yellow,nil,{open=true,completeHome=true,furniture=i==1 and 7 or 8})
+	local entryCeiling=part(entryTurn,"SuspendedEntryCeiling",V(93.5,.5,19),CF(33.75,14.55,206.5),Color3.fromRGB(210,207,197),Enum.Material.Plaster)
+	entryCeiling.MaterialVariant=""
+	local cornerCeiling=part(entryTurn,"SuspendedTurnCeiling",V(17,.5,19),CF(89,14.55,206.5),Color3.fromRGB(210,207,197),Enum.Material.Plaster)
+	cornerCeiling.MaterialVariant=""
+	for _,z in ipairs({202,210}) do
+		part(entryTurn,"EntryCeilingTBar",V(93,.09,.15),CF(33.75,14.26,z),C.white,nil,false)
 	end
+	for x=-4,76,16 do
+		local lit=x~=44
+		local panel=part(entryTurn,"EntryFluorescentPanel",V(3.5,.1,3.2),CF(x,14.2,207),
+			lit and Color3.fromRGB(226,231,225) or Color3.fromRGB(94,92,86),
+			lit and Enum.Material.Neon or Enum.Material.SmoothPlastic,false)
+		if lit then
+			local light=Instance.new("SurfaceLight");light.Face=Enum.NormalId.Bottom
+			light.Range=24;light.Brightness=.9;light.Angle=150;light.Shadows=false
+			light.Color=Color3.fromRGB(246,244,234);light.Parent=panel
+		end
+	end
+	local cornerPanel=part(entryTurn,"TurnFluorescentPanel",V(3.2,.1,3.5),CF(89,14.2,207),Color3.fromRGB(226,231,225),Enum.Material.Neon,false)
+	local cornerLight=Instance.new("SurfaceLight");cornerLight.Face=Enum.NormalId.Bottom
+	cornerLight.Range=24;cornerLight.Brightness=.9;cornerLight.Angle=150;cornerLight.Shadows=false
+	cornerLight.Color=Color3.fromRGB(246,244,234);cornerLight.Parent=cornerPanel
+	for _,span in ipairs({{12,97.5,199.7},{-13,82.4,216.3}}) do
+		local x0,x1,z=span[1],span[2],span[3]
+		local wall=part(entryTurn,"CreamTransitionWall",V(x1-x0,14.3,.6),CF((x0+x1)/2,7.15,z),Color3.fromRGB(222,217,204),Enum.Material.Plaster)
+		wall.MaterialVariant=""
+		part(entryTurn,"WhiteTransitionBaseboard",V(x1-x0,.58,.24),CF((x0+x1)/2,.3,z+(z>208 and -.43 or .43)),C.white,nil,false)
+	end
+	local westEnd=part(entryTurn,"WestTransitionReturn",V(.6,14.3,16.6),CF(-13.3,7.15,208),Color3.fromRGB(222,217,204),Enum.Material.Plaster)
+	westEnd.MaterialVariant=""
+	local eastEnd=part(entryTurn,"EastTransitionReturn",V(.6,14.3,18),CF(97.8,7.15,208.7),Color3.fromRGB(222,217,204),Enum.Material.Plaster)
+	eastEnd.MaterialVariant=""
 
 	local N=require(script.Parent:WaitForChild("Level 5 Neighbourhood Districts")).Build(K)
 	local L=require(script.Parent:WaitForChild("Level 5 Landmark Districts")).Build(K)
