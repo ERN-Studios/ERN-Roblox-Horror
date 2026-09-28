@@ -450,7 +450,7 @@ function Districts.Build(K)
 			scenic(exposedHouse,"ExposedWhiteFloorLip",V(32.5,.4,.65),exposedFrame*CF(0,y+.12,-.55),C.white)
 			panelDoor(exposedHouse,exposedFrame*CF(-9,y,21.32))
 			local strip=scenic(exposedHouse,"CarpetedLanding",V(12,.08,7),exposedFrame*CF(-5,y+.08,17.5),Color3.fromRGB(174,159,144),Enum.Material.Fabric)
-			strip.MaterialVariant=""
+			strip.MaterialVariant="";strip.Color=Color3.fromRGB(174,159,144)
 			for chip=0,1 do
 				scenic(exposedHouse,"UnevenTornPlaster",V(.55+(chip%2)*.25,2.5,1.8+(chip%3)*.37),
 					exposedFrame*CF(14.35,y+1.5+chip*3.2,-.7),Color3.fromRGB(234,220,197))
@@ -462,14 +462,14 @@ function Districts.Build(K)
 		local direction=level%2==0 and 1 or -1
 		local landing=scenic(exposedHouse,"SwitchbackCarpetLanding",V(8,.1,9),
 			exposedFrame*CF(direction*12,y+13.98,10),Color3.fromRGB(171,154,138),Enum.Material.Fabric)
-		landing.MaterialVariant=""
+		landing.MaterialVariant="";landing.Color=Color3.fromRGB(171,154,138)
 		-- The stair climbs across the exposed face, so the diagonal reads
 		-- clearly from the opposite gallery instead of collapsing into a ladder.
 		for step=0,8 do
 			local x=direction*(-13+step*3.25)
 			local tread=scenic(exposedHouse,"VisibleDiagonalCarpetTread",V(3,.43,8.5),
 				exposedFrame*CF(x,y+.25+step*1.55,10),Color3.fromRGB(170,153,139),Enum.Material.Fabric)
-			tread.MaterialVariant=""
+			tread.MaterialVariant="";tread.Color=Color3.fromRGB(170,153,139)
 		end
 		for _,frontZ in ipairs({5.5,14.5}) do
 			local a=exposedFrame:PointToWorldSpace(V(direction*-13.5,y+2.6,frontZ))
@@ -977,12 +977,17 @@ function Districts.Build(K)
 	-- The opposite facade rises above the playable terrace edge. Its open
 	-- ground storey preserves the flight, crossing, and inner walkway below.
 	part(gabledSection,"WestGabledBalconyWall",V(2,154,124),CF(68,101,2262),C.cream,Enum.Material.Plaster,false)
+	local function westGabledBay(level,dz)
+		return (level%3==0 and dz~=0)
+			or (dz==0 and (level==4 or level==7 or level==10))
+			or (dz==-38 and level==5)
+	end
 	for level=3,12 do
 		local y=level*12
 		-- Individual homes, white vertical divisions and intermittent small
 		-- gables replace the single black horizontal stripe in the lawn view.
 		for _,dz in ipairs({-38,0,38}) do
-			local gabledBay=level%3==0 and dz~=0
+			local gabledBay=westGabledBay(level,dz)
 			if gabledBay then
 				-- Staggered projecting houses break the left wall's uninterrupted
 				-- balcony stripes without entering the lawn route below.
@@ -994,24 +999,30 @@ function Districts.Build(K)
 					part(gabledSection,"WestGabledBayWhiteJamb",V(.65,6.8,.32),CF(79.82,y+5.7,2262+dz+edge),C.white,nil,false)
 				end
 				for _,roofSide in ipairs({-1,1}) do
-					part(gabledSection,"WestGabledBayPitchedRoof",V(6,.45,11),
+					local roof=part(gabledSection,"WestGabledBayPitchedRoof",V(6,.45,11),
 						CF(78.8,y+12.25,2262+dz+roofSide*5.2)*CFrame.Angles(roofSide*math.rad(24),0,0),
-						Color3.fromRGB(119,105,91),Enum.Material.Slate,false)
+						Color3.fromRGB(188,164,153),Enum.Material.Slate,false)
+					roof.MaterialVariant="";roof.Color=Color3.fromRGB(188,164,153)
 				end
 			else
 				part(gabledSection,"WestFacadeApartmentWindow",V(.15,6,22),CF(69.1,y+3.5,2262+dz),darkPane,nil,false)
 			end
 			if level%3==0 and not gabledBay then
-				part(gabledSection,"WestFacadePitchedAwning",V(6,.35,16),
+				local awning=part(gabledSection,"WestFacadePitchedAwning",V(6,.35,16),
 					CF(71.5,y+8.9,2262+dz)*CFrame.Angles(math.rad(19),0,0),
-					Color3.fromRGB(82,76,69),Enum.Material.Slate,false)
+					Color3.fromRGB(174,155,139),Enum.Material.Slate,false)
+				awning.MaterialVariant="";awning.Color=Color3.fromRGB(174,155,139)
 			end
 		end
 		for _,dz in ipairs({-51,-19,19,51}) do
 			part(gabledSection,"WestFacadeWhitePier",V(.32,11.5,1),CF(69.25,y+5.7,2262+dz),C.white,nil,false)
 		end
-		part(gabledSection,"WestFacadeBalconyBand",V(5,.8,120),CF(72,y-.4,2262),C.pale,Enum.Material.Plaster,false)
-		decorativeRail(gabledSection,V(75,0,2203),V(75,0,2321),y)
+		for _,dz in ipairs(level%2==0 and {-38,0} or {0,38}) do
+			local deckX=westGabledBay(level,dz) and 79.5 or 72
+			local z=2262+dz
+			part(gabledSection,"WestFacadeBalconyBand",V(5,.8,24),CF(deckX,y-.4,z),C.pale,Enum.Material.Plaster,false)
+			decorativeRail(gabledSection,V(deckX+3,0,z-12),V(deckX+3,0,z+12),y)
+		end
 	end
 	-- The earlier dark plane spanned the entire far lawn and read as a void.
 	-- The only deep black is the narrow recessed opening in the east facade.

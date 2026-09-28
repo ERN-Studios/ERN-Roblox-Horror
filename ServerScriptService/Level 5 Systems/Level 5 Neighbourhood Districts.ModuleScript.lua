@@ -337,6 +337,10 @@ function Districts.Build(K)
 		part(apartment,"ExposedStairLanding",V(21,.65,12),CF(158,y-.3,z),C.pale)
 		part(apartment,"ExposedStairFlight",V(2.5,.55,25),CF(157,y+7,z+12)*CFrame.Angles(math.rad(-29),0,0),C.pale)
 	end
+	-- Bring the existing apartment wall closer to the lawn without moving houses or paths.
+	for _,apartmentPart in ipairs(apartment:GetDescendants()) do
+		if apartmentPart:IsA("BasePart") then apartmentPart.CFrame-=V(65,0,0) end
+	end
 	-- A closer, deeper balcony face frames the right of the arrival view.
 	-- All of it is scenic; the enterable lane homes underneath remain intact.
 	local nearWing=model("NearRightApartmentBalconies",S03)
@@ -359,15 +363,15 @@ function Districts.Build(K)
 		frontBalconyParts+=1
 		return part(nearWing,name,size,frame,color,material,false)
 	end
-	frontBalconyPart("CourtFacingCreamCore",V(120,54,2.2),CF(70,67,860),Color3.fromRGB(223,218,201),Enum.Material.Plaster)
-	for _,x in ipairs({10,40,70,100,130}) do
+	frontBalconyPart("CourtFacingCreamCore",V(120,54,2.2),CF(55,67,860),Color3.fromRGB(223,218,201),Enum.Material.Plaster)
+	for _,x in ipairs({-5,25,55,85,115}) do
 		frontBalconyPart("CourtFacingBalconyPier",V(2.4,54,3),CF(x,67,861),C.white,Enum.Material.Plaster)
 	end
 	for level=0,3 do
 		local y=42+level*12.5
-		frontBalconyPart("CourtFacingStoreyBand",V(120,.42,2.5),CF(70,y-.55,861.8),C.white,Enum.Material.Plaster)
+		frontBalconyPart("CourtFacingStoreyBand",V(120,.42,2.5),CF(55,y-.55,861.8),C.white,Enum.Material.Plaster)
 		for bay=0,3 do
-			local x=25+bay*30
+			local x=10+bay*30
 			frontBalconyPart("CourtFacingRecessedBay",V(25,10.7,.2),CF(x,y+5.4,861.2),Color3.fromRGB(85,95,91),Enum.Material.SmoothPlastic)
 			frontBalconyPart("CourtFacingBalconyDeck",V(26,.55,12),CF(x,y-.3,865.7),C.pale,Enum.Material.Concrete)
 			frontBalconyPart("CourtFacingBalconySoffit",V(26,.28,11.5),CF(x,y+11.6,865.7),Color3.fromRGB(231,226,209),Enum.Material.Plaster)
@@ -391,7 +395,7 @@ function Districts.Build(K)
 	-- The separate modern tower wraps windows and pale floor bands around a
 	-- circular core, unlike the flat balcony wall behind the cottage row.
 	-- It is scenic and stays below the coffered ceiling and outside the route.
-	local towerX,towerZ,towerRadius=-95,785,18
+	local towerX,towerZ,towerRadius=-120,750,18
 	local core=part(tower,"CurvedTowerCore",V(88,36,36),CF(towerX,44,towerZ)*CFrame.Angles(0,0,math.pi/2),Color3.fromRGB(226,224,214),Enum.Material.Plaster,false)
 	core.MaterialVariant="";core.Color=Color3.fromRGB(226,224,214)
 	core.Shape=Enum.PartType.Cylinder
@@ -536,7 +540,7 @@ function Districts.Build(K)
 		plantCutout("CottageHedge_"..i,hedgeTexture,site[1],site[2],site[3],site[4],site[5])
 	end
 	plantCutout("BurgundyCourtyardMaple","rbxassetid://73750223479530",70,891,18,20,25)
-	camera("VillageFourCourts",V(0,8,916),V(10,52,710))
+	camera("VillageFourCourts",V(-30,7,920),V(-20,54,720))
 	camera("VillageUpperCrossing",V(-101,19,696),V(135,35,838))
 	camera("VillageBackCourt",V(171,6,881),V(220,49,840))
 	for _,z in ipairs({462,535,610,682,719,790,870,930}) do point(0,3,z) end
