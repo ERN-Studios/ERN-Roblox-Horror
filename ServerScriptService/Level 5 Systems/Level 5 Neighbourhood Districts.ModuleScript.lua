@@ -230,7 +230,7 @@ function Districts.Build(K)
 			local foregroundRight=i==4 and side>0
 			local frame=foregroundRight and CF(38,0,890)*yaw(180)
 				or CF(side*(i==4 and 30 or 50),0,z)*yaw(side*(i==4 and 155 or 90))
-			local roofTint=Color3.fromRGB(104,107,99)
+			local roofTint=foregroundRight and Color3.fromRGB(76,91,78) or Color3.fromRGB(104,107,99)
 			local siding=foregroundRight and Color3.fromRGB(236,227,209) or colors[(i+(side+1)/2)%4+1]
 			local home=house(Czone,"VillageInnerLaneHome_"..side.."_"..i.."_0",frame,32,26,13.8,siding,roofTint,{open=true,completeHome=true,furniture=i==1 and (side<0 and 6 or 7) or nil})
 			colorRoof(home,roofTint)
@@ -372,7 +372,7 @@ function Districts.Build(K)
 		frontBalconyPart("CourtFacingStoreyBand",V(120,.42,2.5),CF(55,y-.55,861.8),C.white,Enum.Material.Plaster)
 		for bay=0,3 do
 			local x=10+bay*30
-			frontBalconyPart("CourtFacingRecessedBay",V(25,10.7,.2),CF(x,y+5.4,861.2),Color3.fromRGB(85,95,91),Enum.Material.SmoothPlastic)
+			frontBalconyPart("CourtFacingRecessedBay",V(25,10.7,.2),CF(x,y+5.4,861.2),Color3.fromRGB(132,130,116),Enum.Material.SmoothPlastic)
 			frontBalconyPart("CourtFacingBalconyDeck",V(26,.55,12),CF(x,y-.3,865.7),C.pale,Enum.Material.Concrete)
 			frontBalconyPart("CourtFacingBalconySoffit",V(26,.28,11.5),CF(x,y+11.6,865.7),Color3.fromRGB(231,226,209),Enum.Material.Plaster)
 			frontBalconyPart("CourtFacingWarmWindow",V(7,6.7,.24),CF(x-5,y+5.8,861.4),Color3.fromRGB(237,208,157),Enum.Material.Glass)
@@ -395,7 +395,7 @@ function Districts.Build(K)
 	-- The separate modern tower wraps windows and pale floor bands around a
 	-- circular core, unlike the flat balcony wall behind the cottage row.
 	-- It is scenic and stays below the coffered ceiling and outside the route.
-	local towerX,towerZ,towerRadius=-120,750,18
+	local towerX,towerZ,towerRadius=-125,790,18
 	local core=part(tower,"CurvedTowerCore",V(88,36,36),CF(towerX,44,towerZ)*CFrame.Angles(0,0,math.pi/2),Color3.fromRGB(226,224,214),Enum.Material.Plaster,false)
 	core.MaterialVariant="";core.Color=Color3.fromRGB(226,224,214)
 	core.Shape=Enum.PartType.Cylinder
@@ -493,8 +493,8 @@ function Districts.Build(K)
 	end
 	assert(sideParts==246,"S03 right apartment wall changed its instance budget")
 	sideWing:SetAttribute("ReferenceBalconyParts",sideParts)
-	for _,z in ipairs({552,688,824}) do part(S03,"HeavyCofferBeam",V(550,2.2,3.2),CF(0,96,z),C.pale,nil,false) end
-	for _,x in ipairs({-130,0,130}) do part(S03,"LongCofferBeam",V(3.2,2.2,474),CF(x,96,696),C.pale,nil,false) end
+	for _,z in ipairs({552,688,824}) do part(S03,"HeavyCofferBeam",V(550,5,5),CF(0,97,z),C.pale,nil,false) end
+	for _,x in ipairs({-130,0,130}) do part(S03,"LongCofferBeam",V(5,5,474),CF(x,97,696),C.pale,nil,false) end
 	for _,x in ipairs({-70,70}) do
 		for _,z in ipairs({610,745,879}) do
 			part(S03,"SquareCeilingLight",V(8,.12,8),CF(x,99.42,z),Color3.fromRGB(224,223,210),Enum.Material.Neon,false)
