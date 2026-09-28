@@ -966,9 +966,7 @@ function Districts.Build(K)
 	-- ground storey preserves the flight, crossing, and inner walkway below.
 	part(gabledSection,"WestGabledBalconyWall",V(2,154,124),CF(68,101,2262),C.cream,Enum.Material.Plaster,false)
 	local function westGabledBay(level,dz)
-		return (level%3==0 and dz~=0)
-			or (dz==0 and (level==4 or level==7 or level==10))
-			or (dz==-38 and level==5)
+		return dz~=0 or level%2==0 or level==7
 	end
 	for level=3,12 do
 		local y=level*12
