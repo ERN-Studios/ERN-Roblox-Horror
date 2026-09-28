@@ -674,16 +674,38 @@ function Districts.Build(K)
 			end
 			part(home,"FlatApartmentRoofCap",V(w+.6,.6,13.4),frame*CF(0,h+.22,6.5),C.pale,Enum.Material.Plaster,false)
 		elseif kind=="Tilted" then
-			-- Keep the intentionally wrong angle and roof silhouette, but replace
-			-- the first revision's symmetrical standard windows and panel door.
+			-- The two skewed scenic houses need actual stacked domestic window bays.
+			-- All new sash and porch detail stays outside the playable route.
 			for _,side in ipairs({-1,1}) do
-				local paneWidth=side<0 and sideWidth-2.2 or sideWidth-4.1
-				local pane=part(home,"TiltedDeepApartmentPane",V(paneWidth,7.1,.18),frame*CF(side*sideX,6.5,-.46),darkPane,Enum.Material.Glass)
-				pane.Transparency=.28;pane:SetAttribute("Level5TintedWindow",true)
-				part(home,"TiltedPaneWhiteSill",V(paneWidth+.5,.3,.6),frame*CF(side*sideX,2.79,-.64),C.white,nil,false)
+				local paneWidth=side<0 and 7.8 or 7.2
+				local paneX=side*sideX
+				local pane=part(home,"TiltedDeepApartmentPane",V(paneWidth,7.1,.18),frame*CF(paneX,6.5,-.72),darkPane,Enum.Material.Glass,false)
+				pane.Transparency=.16;pane:SetAttribute("Level5TintedWindow",true)
+				part(home,"TiltedPaneWhiteSill",V(paneWidth+.6,.34,.6),frame*CF(paneX,2.79,-.92),C.white,nil,false)
+				part(home,"TiltedPaneWhiteHead",V(paneWidth+.6,.34,.6),frame*CF(paneX,10.22,-.92),C.white,nil,false)
+				for _,edge in ipairs({-1,1}) do
+					part(home,"TiltedPaneWhiteJamb",V(.3,7.45,.42),frame*CF(paneX+edge*(paneWidth/2+.15),6.5,-.93),C.white,nil,false)
+				end
+				part(home,"TiltedPaneVerticalSash",V(.24,7.05,.25),frame*CF(paneX,6.5,-.96),C.white,nil,false)
+				for _,yy in ipairs({5.25,7.7}) do
+					part(home,"TiltedPaneHorizontalSash",V(paneWidth,.22,.25),frame*CF(paneX,yy,-.96),C.white,nil,false)
+				end
 			end
 			part(home,"TiltedClosedPanelDoor",V(doorWidth,10.2,.35),frame*CF(0,5.1,-.42),C.white,Enum.Material.Wood)
 			part(home,"TiltedInsetDoorPanel",V(doorWidth-1.1,7.9,.18),frame*CF(0,5.2,-.64),C.pale,Enum.Material.Wood,false)
+			part(home,"TiltedStoreyBand",V(w+.65,.42,.8),frame*CF(0,12.4,-.72),C.white,Enum.Material.Plaster,false)
+			for _,x in ipairs({-10.1,0,10.1}) do
+				local upperY=h-4.6
+				local pane=part(home,"TiltedUpperDividedPane",V(5.3,5.2,.2),frame*CF(x,upperY,-.84),darkPane,Enum.Material.Glass,false)
+				pane.Transparency=.16
+				part(home,"TiltedUpperWhiteSill",V(5.9,.3,.62),frame*CF(x,upperY-2.75,-1.03),C.white,nil,false)
+				part(home,"TiltedUpperWhiteHead",V(5.9,.3,.62),frame*CF(x,upperY+2.75,-1.03),C.white,nil,false)
+				for _,edge in ipairs({-1,1}) do
+					part(home,"TiltedUpperWhiteJamb",V(.3,5.5,.42),frame*CF(x+edge*2.8,upperY,-1.02),C.white,nil,false)
+				end
+				part(home,"TiltedUpperVerticalSash",V(.22,5.18,.25),frame*CF(x,upperY,-1.08),C.white,nil,false)
+				part(home,"TiltedUpperCrossbar",V(5.3,.22,.25),frame*CF(x,upperY,-1.08),C.white,nil,false)
+			end
 		end
 		assert(home:GetAttribute("HouseFloorFrame")==oldFloor,"G essential home floor frame moved")
 		if kind=="Clue" then assert(oldHint and oldHint.Parent==home,"G gate-seven clue surface changed") end
@@ -896,12 +918,24 @@ function Districts.Build(K)
 		local y=x<0 and 86 or 30
 		part(slopeSection,"InclineSupportPier",V(6,y-2,7),CF(x,(y-2)/2,2180),paleTower,Enum.Material.Plaster)
 	end
-	for i,data in ipairs({{-13,76,2160,-16},{15,45,2162,13}}) do
-		local x,y,z,roll=table.unpack(data)
+	for i,data in ipairs({{-13,72,2160,-16,22},{15,45,2162,13,23.2}}) do
+		local x,y,z,roll,height=table.unpack(data)
 		local siding=i==1 and Color3.fromRGB(185,172,153) or Color3.fromRGB(206,190,166)
 		local tiltedFrame=CF(x,y,z)*CFrame.Angles(0,0,math.rad(roll))
-		local tilted=house(slopeSection,"VisiblyTiltedGabledHome_"..i,tiltedFrame,34,24,13.8,siding,Color3.fromRGB(89,74,66),{open=false})
-		restyleEssentialGroundHome(tilted,tiltedFrame,34,13.8,"Tilted")
+		local tilted=house(slopeSection,"VisiblyTiltedGabledHome_"..i,tiltedFrame,34,24,height,siding,Color3.fromRGB(89,74,66),{open=false})
+		restyleEssentialGroundHome(tilted,tiltedFrame,34,height,"Tilted")
+		for _,piece in ipairs(tilted:GetChildren()) do
+			if piece:IsA("BasePart") and piece.Name=="RoofCladdingSeam" then
+				piece.Color=Color3.fromRGB(95,82,73)
+			end
+		end
+		part(tilted,"TiltedWhitePorchDeck",V(24,.42,4.4),tiltedFrame*CF(0,2.05,-3.1),C.white,Enum.Material.Wood,false)
+		for _,side in ipairs({-1,1}) do
+			part(tilted,"TiltedWhitePorchRail",V(8.4,.26,.28),tiltedFrame*CF(side*8.1,5.1,-5.2),C.white,Enum.Material.Wood,false)
+			for _,xOffset in ipairs({4.2,8.1,12}) do
+				part(tilted,"TiltedWhitePorchPost",V(.28,3.1,.28),tiltedFrame*CF(side*xOffset,3.65,-5.2),C.white,Enum.Material.Wood,false)
+			end
+		end
 		tilted:SetAttribute("ClosedScenicProjection",true)
 	end
 	part(slopeSection,"LowerSuspendedTileCeiling",V(300,.7,100),CF(0,112,2130),C.ceiling,Enum.Material.Plaster,false)
