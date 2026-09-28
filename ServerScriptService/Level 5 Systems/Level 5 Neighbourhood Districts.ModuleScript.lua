@@ -482,6 +482,20 @@ function Districts.Build(K)
 			part(rearTowers,"MistyDoorRecess",V(.15,7,4),CF(side*74.8,y+4,z),Color3.fromRGB(80,92,89):Lerp(ledge,fade),Enum.Material.Glass,false)
 		end
 	end
+	-- Keep a light, distant apartment facade visible before the far 3D
+	-- towers stream in. The plane is scenic and sits behind those towers.
+	local farBackdrop=model("MistyFarImageBackdrop",S04)
+	farBackdrop.ModelStreamingMode=Enum.ModelStreamingMode.Persistent
+	local backdropPanel=part(farBackdrop,"DistantApartmentFacade",V(340,340,.6),CF(0,150,1290.6),Color3.fromRGB(142,138,138),Enum.Material.SmoothPlastic,false)
+	backdropPanel.CanTouch=false;backdropPanel.CanQuery=false;backdropPanel.CastShadow=false
+	local backdropGui=Instance.new("SurfaceGui")
+	backdropGui.Name="DistantApartmentFacadeImage";backdropGui.Face=Enum.NormalId.Front
+	backdropGui.LightInfluence=0;backdropGui.Brightness=1;backdropGui.PixelsPerStud=4
+	backdropGui.AlwaysOnTop=false;backdropGui.Parent=backdropPanel
+	local facadeImage=Instance.new("ImageLabel")
+	facadeImage.Name="FacadeImage";facadeImage.Size=UDim2.fromScale(1,1)
+	facadeImage.BackgroundTransparency=1;facadeImage.Image="rbxassetid://70683122425519"
+	facadeImage.Parent=backdropGui
 	local farFace=model("MistyFarApartmentClosure",S04)
 	for _,info in ipairs({{-61,34},{-8,40},{49,36}}) do
 		local x,w=info[1],info[2]
