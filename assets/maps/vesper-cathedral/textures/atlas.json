@@ -1,0 +1,482 @@
+{
+  "name": "Vesper Cathedral original material atlas",
+  "version": 1,
+  "generator": "tools/build_cathedral_palette.py",
+  "seed": 28092026,
+  "copyright": "Original procedural textures created for the Vesper Cathedral project, 2026. No third-party image inputs.",
+  "size": [
+    1024,
+    1024
+  ],
+  "grid": [
+    4,
+    4
+  ],
+  "tile_size": 256,
+  "padding_pixels": 12,
+  "index_convention": "index = column + 4 * row_from_bottom; Blender UV origin at bottom left",
+  "sampling": "Map individual faces within safe_uv; padding is extruded, not blank. Atlas must not repeat outside its tiles.",
+  "base_color_space": "sRGB",
+  "roughness_color_space": "Non-Color / linear",
+  "normal_map": null,
+  "files": {
+    "VesperCathedral_BaseColor.png": {
+      "sha256": "78b67a746aa00723eaa17db2e237a4e85502eea25c88c863a1bb13f6a0f79e66",
+      "channels": "RGB"
+    },
+    "VesperCathedral_Roughness.png": {
+      "sha256": "0181d2380cc87136b30c16b54b7cc2010b18f7e88912dcbf3ccad6146e402a79",
+      "channels": "grayscale"
+    }
+  },
+  "tiles": [
+    {
+      "index": 0,
+      "name": "warm_limestone",
+      "base_rgb_srgb": [
+        163,
+        145,
+        117
+      ],
+      "roughness": 0.83,
+      "column": 0,
+      "row_from_bottom": 0,
+      "pixel_rect_top_left": [
+        0,
+        768,
+        256,
+        256
+      ],
+      "safe_uv": {
+        "min": [
+          0.01220703125,
+          0.01220703125
+        ],
+        "max": [
+          0.23779296875,
+          0.23779296875
+        ]
+      }
+    },
+    {
+      "index": 1,
+      "name": "pale_edge_stone",
+      "base_rgb_srgb": [
+        205,
+        188,
+        153
+      ],
+      "roughness": 0.83,
+      "column": 1,
+      "row_from_bottom": 0,
+      "pixel_rect_top_left": [
+        256,
+        768,
+        256,
+        256
+      ],
+      "safe_uv": {
+        "min": [
+          0.26220703125,
+          0.01220703125
+        ],
+        "max": [
+          0.48779296875,
+          0.23779296875
+        ]
+      }
+    },
+    {
+      "index": 2,
+      "name": "aged_stone",
+      "base_rgb_srgb": [
+        93,
+        91,
+        78
+      ],
+      "roughness": 0.88,
+      "column": 2,
+      "row_from_bottom": 0,
+      "pixel_rect_top_left": [
+        512,
+        768,
+        256,
+        256
+      ],
+      "safe_uv": {
+        "min": [
+          0.51220703125,
+          0.01220703125
+        ],
+        "max": [
+          0.73779296875,
+          0.23779296875
+        ]
+      }
+    },
+    {
+      "index": 3,
+      "name": "flagstone_floor",
+      "base_rgb_srgb": [
+        142,
+        130,
+        110
+      ],
+      "roughness": 0.86,
+      "column": 3,
+      "row_from_bottom": 0,
+      "pixel_rect_top_left": [
+        768,
+        768,
+        256,
+        256
+      ],
+      "safe_uv": {
+        "min": [
+          0.76220703125,
+          0.01220703125
+        ],
+        "max": [
+          0.98779296875,
+          0.23779296875
+        ]
+      }
+    },
+    {
+      "index": 4,
+      "name": "teal_slate",
+      "base_rgb_srgb": [
+        32,
+        66,
+        66
+      ],
+      "roughness": 0.68,
+      "column": 0,
+      "row_from_bottom": 1,
+      "pixel_rect_top_left": [
+        0,
+        512,
+        256,
+        256
+      ],
+      "safe_uv": {
+        "min": [
+          0.01220703125,
+          0.26220703125
+        ],
+        "max": [
+          0.23779296875,
+          0.48779296875
+        ]
+      }
+    },
+    {
+      "index": 5,
+      "name": "walnut_wood",
+      "base_rgb_srgb": [
+        65,
+        43,
+        31
+      ],
+      "roughness": 0.8,
+      "column": 1,
+      "row_from_bottom": 1,
+      "pixel_rect_top_left": [
+        256,
+        512,
+        256,
+        256
+      ],
+      "safe_uv": {
+        "min": [
+          0.26220703125,
+          0.26220703125
+        ],
+        "max": [
+          0.48779296875,
+          0.48779296875
+        ]
+      }
+    },
+    {
+      "index": 6,
+      "name": "antique_gold",
+      "base_rgb_srgb": [
+        170,
+        125,
+        52
+      ],
+      "roughness": 0.35,
+      "column": 2,
+      "row_from_bottom": 1,
+      "pixel_rect_top_left": [
+        512,
+        512,
+        256,
+        256
+      ],
+      "safe_uv": {
+        "min": [
+          0.51220703125,
+          0.26220703125
+        ],
+        "max": [
+          0.73779296875,
+          0.48779296875
+        ]
+      }
+    },
+    {
+      "index": 7,
+      "name": "wine_fabric",
+      "base_rgb_srgb": [
+        83,
+        21,
+        32
+      ],
+      "roughness": 0.92,
+      "column": 3,
+      "row_from_bottom": 1,
+      "pixel_rect_top_left": [
+        768,
+        512,
+        256,
+        256
+      ],
+      "safe_uv": {
+        "min": [
+          0.76220703125,
+          0.26220703125
+        ],
+        "max": [
+          0.98779296875,
+          0.48779296875
+        ]
+      }
+    },
+    {
+      "index": 8,
+      "name": "cyan_glass",
+      "base_rgb_srgb": [
+        33,
+        151,
+        176
+      ],
+      "roughness": 0.2,
+      "column": 0,
+      "row_from_bottom": 2,
+      "pixel_rect_top_left": [
+        0,
+        256,
+        256,
+        256
+      ],
+      "safe_uv": {
+        "min": [
+          0.01220703125,
+          0.51220703125
+        ],
+        "max": [
+          0.23779296875,
+          0.73779296875
+        ]
+      }
+    },
+    {
+      "index": 9,
+      "name": "amber_glass",
+      "base_rgb_srgb": [
+        232,
+        147,
+        38
+      ],
+      "roughness": 0.2,
+      "column": 1,
+      "row_from_bottom": 2,
+      "pixel_rect_top_left": [
+        256,
+        256,
+        256,
+        256
+      ],
+      "safe_uv": {
+        "min": [
+          0.26220703125,
+          0.51220703125
+        ],
+        "max": [
+          0.48779296875,
+          0.73779296875
+        ]
+      }
+    },
+    {
+      "index": 10,
+      "name": "ruby_glass",
+      "base_rgb_srgb": [
+        155,
+        40,
+        58
+      ],
+      "roughness": 0.2,
+      "column": 2,
+      "row_from_bottom": 2,
+      "pixel_rect_top_left": [
+        512,
+        256,
+        256,
+        256
+      ],
+      "safe_uv": {
+        "min": [
+          0.51220703125,
+          0.51220703125
+        ],
+        "max": [
+          0.73779296875,
+          0.73779296875
+        ]
+      }
+    },
+    {
+      "index": 11,
+      "name": "blue_glass",
+      "base_rgb_srgb": [
+        44,
+        83,
+        167
+      ],
+      "roughness": 0.2,
+      "column": 3,
+      "row_from_bottom": 2,
+      "pixel_rect_top_left": [
+        768,
+        256,
+        256,
+        256
+      ],
+      "safe_uv": {
+        "min": [
+          0.76220703125,
+          0.51220703125
+        ],
+        "max": [
+          0.98779296875,
+          0.73779296875
+        ]
+      }
+    },
+    {
+      "index": 12,
+      "name": "dark_iron",
+      "base_rgb_srgb": [
+        29,
+        33,
+        34
+      ],
+      "roughness": 0.5,
+      "column": 0,
+      "row_from_bottom": 3,
+      "pixel_rect_top_left": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "safe_uv": {
+        "min": [
+          0.01220703125,
+          0.76220703125
+        ],
+        "max": [
+          0.23779296875,
+          0.98779296875
+        ]
+      }
+    },
+    {
+      "index": 13,
+      "name": "courtyard_grass",
+      "base_rgb_srgb": [
+        71,
+        87,
+        54
+      ],
+      "roughness": 0.96,
+      "column": 1,
+      "row_from_bottom": 3,
+      "pixel_rect_top_left": [
+        256,
+        0,
+        256,
+        256
+      ],
+      "safe_uv": {
+        "min": [
+          0.26220703125,
+          0.76220703125
+        ],
+        "max": [
+          0.48779296875,
+          0.98779296875
+        ]
+      }
+    },
+    {
+      "index": 14,
+      "name": "candle_wax",
+      "base_rgb_srgb": [
+        224,
+        204,
+        158
+      ],
+      "roughness": 0.5,
+      "column": 2,
+      "row_from_bottom": 3,
+      "pixel_rect_top_left": [
+        512,
+        0,
+        256,
+        256
+      ],
+      "safe_uv": {
+        "min": [
+          0.51220703125,
+          0.76220703125
+        ],
+        "max": [
+          0.73779296875,
+          0.98779296875
+        ]
+      }
+    },
+    {
+      "index": 15,
+      "name": "dark_basalt",
+      "base_rgb_srgb": [
+        58,
+        63,
+        60
+      ],
+      "roughness": 0.89,
+      "column": 3,
+      "row_from_bottom": 3,
+      "pixel_rect_top_left": [
+        768,
+        0,
+        256,
+        256
+      ],
+      "safe_uv": {
+        "min": [
+          0.76220703125,
+          0.76220703125
+        ],
+        "max": [
+          0.98779296875,
+          0.98779296875
+        ]
+      }
+    }
+  ]
+}

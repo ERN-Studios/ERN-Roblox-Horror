@@ -1,0 +1,95 @@
+{
+  "asset": "Vesper Cathedral",
+  "created": "2026-09-28",
+  "primary_import": "VesperCathedral.glb",
+  "source": "VesperCathedral.blend",
+  "setup": "SetupCathedral.luau",
+  "read_first": "IMPORT_TO_ROBLOX.md",
+  "files": [
+    {
+      "path": "IMPORT_TO_ROBLOX.md",
+      "bytes": 7046,
+      "sha256": "c07730bd47820298f275ef0807e0a1e9680673106a1208def3afec1df0a9d55b"
+    },
+    {
+      "path": "README.md",
+      "bytes": 2957,
+      "sha256": "e9dcafd286a60696311d8d11d350b3775b95c86800b8a6c38af8d510bbe02127"
+    },
+    {
+      "path": "SetupCathedral.luau",
+      "bytes": 30702,
+      "sha256": "2a86b96c363955daec9c53cdf85df622df9e572bf7b70b6c97aaf9495ea05ea5"
+    },
+    {
+      "path": "VesperCathedral.blend",
+      "bytes": 1215478,
+      "sha256": "7b81590aa585ee5319b200f014dd2fb7583709b7644a02cc0ae41df25e9ebe90"
+    },
+    {
+      "path": "VesperCathedral.fbx",
+      "bytes": 2340732,
+      "sha256": "b36a5f4d4fbfec43fcff43d838e688d92b6a9d03c15a843ec9bef13e0fe36cc3"
+    },
+    {
+      "path": "VesperCathedral.glb",
+      "bytes": 5588828,
+      "sha256": "5f2145068590e8ca94e5751cd9f48e43c5b266de28d9eeb2f949e7c49abe4dae"
+    },
+    {
+      "path": "collision-design-check.json",
+      "bytes": 6317,
+      "sha256": "97aa00702e8de5ae51efc6b6bf5b437ad45aadfb6284216d4664060c8a250c46"
+    },
+    {
+      "path": "creation-record.json",
+      "bytes": 922,
+      "sha256": "c3fd7bff31853ba86010f58764a84ceaeaa439c6a736f8210a7625052c373fe9"
+    },
+    {
+      "path": "geometry-manifest.json",
+      "bytes": 14706,
+      "sha256": "41272322a3ec2c8f57bd6a450b63da036017c5630f36b0086229248d34a29621"
+    },
+    {
+      "path": "previews/exterior.png",
+      "bytes": 1692780,
+      "sha256": "d4fb4900f2c4f861060760c4f965ee09f7b0c403548dcca70ed22dd46e5ac7f1"
+    },
+    {
+      "path": "previews/interior.png",
+      "bytes": 1784967,
+      "sha256": "2e93ec0c30750ba6cae16966956a49040d24f3d6217904d9d4130a7d6c4da3d9"
+    },
+    {
+      "path": "previews/sanctuary.png",
+      "bytes": 1762274,
+      "sha256": "096eabfcd1f4fdb5dcc19f536a3d882e8feea5e83f93778283fc68e51ed747f0"
+    },
+    {
+      "path": "setup-data.json",
+      "bytes": 36601,
+      "sha256": "ee9c855238a2a6f49baee4478e318cef4a66bc9acd440286a0936deefb8b186a"
+    },
+    {
+      "path": "textures/VesperCathedral_BaseColor.png",
+      "bytes": 407307,
+      "sha256": "78b67a746aa00723eaa17db2e237a4e85502eea25c88c863a1bb13f6a0f79e66"
+    },
+    {
+      "path": "textures/VesperCathedral_Roughness.png",
+      "bytes": 206070,
+      "sha256": "0181d2380cc87136b30c16b54b7cc2010b18f7e88912dcbf3ccad6146e402a79"
+    },
+    {
+      "path": "textures/atlas.json",
+      "bytes": 8613,
+      "sha256": "20c23635dedabca4b1a20bc316a0100d1fe91879283cd02076ed3ac4a88bbec9"
+    },
+    {
+      "path": "verification.json",
+      "bytes": 226444,
+      "sha256": "5d25e9f1ae8f103cab14124e2a5c509b8f38381e9d8c1efee447cb6f8e5e7757"
+    }
+  ]
+}

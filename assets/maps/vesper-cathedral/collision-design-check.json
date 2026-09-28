@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "checked_utc": "2026-09-28T20:49:32.379839+00:00",
+  "scope": "Offline Python design check of authored axis-aligned collision boxes and static setup source. This does not execute Luau, Roblox Studio, physics, or a character controller.",
+  "input": {
+    "file": "setup-data.json",
+    "sha256": "ee9c855238a2a6f49baee4478e318cef4a66bc9acd440286a0936deefb8b186a",
+    "generated_script": "SetupCathedral.luau",
+    "generated_script_sha256": "2a86b96c363955daec9c53cdf85df622df9e572bf7b70b6c97aaf9495ea05ea5"
+  },
+  "bounds": {
+    "authored_visual_dimensions_studs": [
+      108.0,
+      82.55999994277954,
+      168.0
+    ],
+    "authored_visual_center": [
+      0.0,
+      38.22000002861023,
+      3.0
+    ],
+    "authored_visual_min": [
+      -54.0,
+      -3.059999942779541,
+      -81.0
+    ],
+    "authored_visual_max": [
+      54.0,
+      79.5,
+      87.0
+    ],
+    "collider_min": [
+      -54.0,
+      -3.06,
+      -81.0
+    ],
+    "collider_max": [
+      54.0,
+      49.949999999999996,
+      87.0
+    ],
+    "collider_count": 114,
+    "light_count": 12,
+    "all_colliders_axis_aligned": true,
+    "finite_valid_geometry": true,
+    "colliders_outside_visual_bounds": []
+  },
+  "test_player": {
+    "width_studs": 2.2,
+    "depth_studs": 2.2,
+    "height_studs": 5.5,
+    "floor_top_y": 1.62,
+    "lower_body_test_tolerance_studs": 0.2,
+    "tested_y_interval": [
+      1.82,
+      7.12
+    ],
+    "body_collision_rule": "Strict positive-volume intersection above feet + 0.2 studs. Touching boundaries alone are not overlaps.",
+    "support_rule": "Entire 2.2x2.2 footprint must be inside one authored collider top at Y=1.62 at every sample."
+  },
+  "method": "Sample each straight centerline every 0.25 studs inclusive, then independently intersect the continuous swept player AABB against every collider in the body height interval. Exact for these axis-aligned, straight, fixed-height test paths. Floor support is checked at each sample.",
+  "paths": [
+    {
+      "name": "central",
+      "authoring_logical_y_interval": [
+        -19,
+        13
+      ],
+      "roblox_x": 0,
+      "start_feet_position": [
+        0,
+        1.62,
+        57
+      ],
+      "end_feet_position": [
+        0,
+        1.62,
+        -39
+      ],
+      "length_studs": 96,
+      "sample_spacing_studs": 0.25,
+      "sample_count": 385,
+      "overlap_count": 0,
+      "overlaps": [],
+      "unsupported_sample_count": 0,
+      "unsupported_samples": [],
+      "minimum_sampled_horizontal_box_clearance_studs": 1.45,
+      "nearest_obstacle": {
+        "sample": 0,
+        "position": [
+          0,
+          1.62,
+          57.0
+        ],
+        "collider_index": 5,
+        "collider_name": "Vesper_01_Foundation_solid"
+      },
+      "continuous_swept_aabb_overlap_count": 0,
+      "continuous_swept_aabb_overlaps": [],
+      "passed": true
+    },
+    {
+      "name": "west_side",
+      "authoring_logical_y_interval": [
+        -14,
+        13
+      ],
+      "roblox_x": -24,
+      "start_feet_position": [
+        -24,
+        1.62,
+        42
+      ],
+      "end_feet_position": [
+        -24,
+        1.62,
+        -39
+      ],
+      "length_studs": 81,
+      "sample_spacing_studs": 0.25,
+      "sample_count": 325,
+      "overlap_count": 0,
+      "overlaps": [],
+      "unsupported_sample_count": 0,
+      "unsupported_samples": [],
+      "minimum_sampled_horizontal_box_clearance_studs": 4.075,
+      "nearest_obstacle": {
+        "sample": 27,
+        "position": [
+          -24,
+          1.62,
+          35.25
+        ],
+        "collider_index": 32,
+        "collider_name": "Vesper_05_Arcade_-1_solid"
+      },
+      "continuous_swept_aabb_overlap_count": 0,
+      "continuous_swept_aabb_overlaps": [],
+      "passed": true
+    },
+    {
+      "name": "east_side",
+      "authoring_logical_y_interval": [
+        -14,
+        13
+      ],
+      "roblox_x": 24,
+      "start_feet_position": [
+        24,
+        1.62,
+        42
+      ],
+      "end_feet_position": [
+        24,
+        1.62,
+        -39
+      ],
+      "length_studs": 81,
+      "sample_spacing_studs": 0.25,
+      "sample_count": 325,
+      "overlap_count": 0,
+      "overlaps": [],
+      "unsupported_sample_count": 0,
+      "unsupported_samples": [],
+      "minimum_sampled_horizontal_box_clearance_studs": 4.075,
+      "nearest_obstacle": {
+        "sample": 27,
+        "position": [
+          24,
+          1.62,
+          35.25
+        ],
+        "collider_index": 67,
+        "collider_name": "Vesper_05_Arcade_1_solid"
+      },
+      "continuous_swept_aabb_overlap_count": 0,
+      "continuous_swept_aabb_overlaps": [],
+      "passed": true
+    }
+  ],
+  "total_samples": 1035,
+  "all_requested_path_checks_passed": true,
+  "intentional_exclusions": [
+    "Paths stop at Z=-39 before altar steps; stair ascent and altar access are not tested.",
+    "Entrance path starts at Z=57 inside the entrance approach; exterior stairs and full entrance approach are not tested.",
+    "No cross-aisle, between-pew, tower, exterior, jumping, moving-character, multiplayer, or device performance checks.",
+    "Checks use setup-data box geometry, not Studio-imported assets or generated physics."
+  ],
+  "setup_source_review": {
+    "embedded_data_matches_setup_data": true,
+    "generated_script_matches_template": true,
+    "checks_before_mutation": [
+      "Studio Edit mode",
+      "Exactly one selected Workspace Model",
+      "Valid dimensions and finite collider/light metadata",
+      "Only owned setup folder can be replaced; foreign contents cause refusal",
+      "All visuals are MeshParts with Vesper prefix and required cathedral markers",
+      "PrimaryPart is not inside replaceable setup",
+      "Visual aspect ratios within 3 percent before normalization"
+    ],
+    "scaling": "Model:ScaleTo(currentScale * authoredWidth / measuredVisualWidth); exact saved pivot restored; visual bounds exclude previous setup. Collider positions map authored center into normalized visual bounds in pivot orientation.",
+    "undo_and_failure": "TryBeginRecording required before modifications; previous owned setup detached within recording; failures restore scale/pivot/visual properties/setup or retain an Undo step if restoration fails.",
+    "runtime_executed": false
+  },
+  "status": "PASS_OFFLINE_DESIGN"
+}

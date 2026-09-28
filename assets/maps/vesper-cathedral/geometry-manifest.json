@@ -1,0 +1,648 @@
+{
+  "name": "Vesper Cathedral",
+  "units": "studs",
+  "seed": 928,
+  "design_grid_to_studs": 3.0,
+  "mesh_count": 104,
+  "triangles": 66736,
+  "max_mesh_triangles": 2640,
+  "dimensions_roblox": [
+    108.0,
+    82.55999994277954,
+    168.0
+  ],
+  "center_roblox": [
+    0.0,
+    38.22000002861023,
+    3.0
+  ],
+  "objects": [
+    {
+      "name": "Vesper_01_Foundation",
+      "vertices": 248,
+      "triangles": 372,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_02_InteriorFloor",
+      "vertices": 296,
+      "triangles": 444,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_03_West_Bay1",
+      "vertices": 448,
+      "triangles": 672,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_Window_-1_0_Glass",
+      "vertices": 162,
+      "triangles": 216,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_Window_-1_0_Tracery",
+      "vertices": 672,
+      "triangles": 1016,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_03_West_Bay2",
+      "vertices": 448,
+      "triangles": 672,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_Window_-1_1_Glass",
+      "vertices": 162,
+      "triangles": 216,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_Window_-1_1_Tracery",
+      "vertices": 672,
+      "triangles": 1016,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_03_West_Bay3",
+      "vertices": 448,
+      "triangles": 672,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_Window_-1_2_Glass",
+      "vertices": 162,
+      "triangles": 216,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_Window_-1_2_Tracery",
+      "vertices": 672,
+      "triangles": 1016,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_03_West_Bay4",
+      "vertices": 448,
+      "triangles": 672,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_Window_-1_3_Glass",
+      "vertices": 162,
+      "triangles": 216,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_Window_-1_3_Tracery",
+      "vertices": 672,
+      "triangles": 1016,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_03_West_Bay5",
+      "vertices": 448,
+      "triangles": 672,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_Window_-1_4_Glass",
+      "vertices": 162,
+      "triangles": 216,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_Window_-1_4_Tracery",
+      "vertices": 672,
+      "triangles": 1016,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_04_Buttresses_-1",
+      "vertices": 208,
+      "triangles": 312,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_05_Arcade_-1",
+      "vertices": 1664,
+      "triangles": 2640,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_06_Clerestory_-1_-14.4",
+      "vertices": 424,
+      "triangles": 636,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_UpperWindow_-1_-14.4_Glass",
+      "vertices": 162,
+      "triangles": 216,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_UpperWindow_-1_-14.4_Tracery",
+      "vertices": 672,
+      "triangles": 1016,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_06_Clerestory_-1_-7.2",
+      "vertices": 424,
+      "triangles": 636,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_UpperWindow_-1_-7.2_Glass",
+      "vertices": 162,
+      "triangles": 216,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_UpperWindow_-1_-7.2_Tracery",
+      "vertices": 672,
+      "triangles": 1016,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_06_Clerestory_-1_0",
+      "vertices": 424,
+      "triangles": 636,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_UpperWindow_-1_0_Glass",
+      "vertices": 162,
+      "triangles": 216,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_UpperWindow_-1_0_Tracery",
+      "vertices": 672,
+      "triangles": 1016,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_06_Clerestory_-1_7.2",
+      "vertices": 424,
+      "triangles": 636,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_UpperWindow_-1_7.2_Glass",
+      "vertices": 162,
+      "triangles": 216,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_UpperWindow_-1_7.2_Tracery",
+      "vertices": 672,
+      "triangles": 1016,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_06_Clerestory_-1_14.4",
+      "vertices": 424,
+      "triangles": 636,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_UpperWindow_-1_14.4_Glass",
+      "vertices": 162,
+      "triangles": 216,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_UpperWindow_-1_14.4_Tracery",
+      "vertices": 672,
+      "triangles": 1016,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_03_East_Bay1",
+      "vertices": 448,
+      "triangles": 672,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_Window_1_0_Glass",
+      "vertices": 162,
+      "triangles": 216,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_Window_1_0_Tracery",
+      "vertices": 672,
+      "triangles": 1016,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_03_East_Bay2",
+      "vertices": 448,
+      "triangles": 672,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_Window_1_1_Glass",
+      "vertices": 162,
+      "triangles": 216,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_Window_1_1_Tracery",
+      "vertices": 672,
+      "triangles": 1016,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_03_East_Bay3",
+      "vertices": 448,
+      "triangles": 672,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_Window_1_2_Glass",
+      "vertices": 162,
+      "triangles": 216,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_Window_1_2_Tracery",
+      "vertices": 672,
+      "triangles": 1016,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_03_East_Bay4",
+      "vertices": 448,
+      "triangles": 672,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_Window_1_3_Glass",
+      "vertices": 162,
+      "triangles": 216,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_Window_1_3_Tracery",
+      "vertices": 672,
+      "triangles": 1016,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_03_East_Bay5",
+      "vertices": 448,
+      "triangles": 672,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_Window_1_4_Glass",
+      "vertices": 162,
+      "triangles": 216,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_Window_1_4_Tracery",
+      "vertices": 672,
+      "triangles": 1016,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_04_Buttresses_1",
+      "vertices": 208,
+      "triangles": 312,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_05_Arcade_1",
+      "vertices": 1664,
+      "triangles": 2640,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_06_Clerestory_1_-14.4",
+      "vertices": 424,
+      "triangles": 636,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_UpperWindow_1_-14.4_Glass",
+      "vertices": 162,
+      "triangles": 216,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_UpperWindow_1_-14.4_Tracery",
+      "vertices": 672,
+      "triangles": 1016,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_06_Clerestory_1_-7.2",
+      "vertices": 424,
+      "triangles": 636,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_UpperWindow_1_-7.2_Glass",
+      "vertices": 162,
+      "triangles": 216,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_UpperWindow_1_-7.2_Tracery",
+      "vertices": 672,
+      "triangles": 1016,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_06_Clerestory_1_0",
+      "vertices": 424,
+      "triangles": 636,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_UpperWindow_1_0_Glass",
+      "vertices": 162,
+      "triangles": 216,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_UpperWindow_1_0_Tracery",
+      "vertices": 672,
+      "triangles": 1016,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_06_Clerestory_1_7.2",
+      "vertices": 424,
+      "triangles": 636,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_UpperWindow_1_7.2_Glass",
+      "vertices": 162,
+      "triangles": 216,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_UpperWindow_1_7.2_Tracery",
+      "vertices": 672,
+      "triangles": 1016,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_06_Clerestory_1_14.4",
+      "vertices": 424,
+      "triangles": 636,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_UpperWindow_1_14.4_Glass",
+      "vertices": 162,
+      "triangles": 216,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_UpperWindow_1_14.4_Tracery",
+      "vertices": 672,
+      "triangles": 1016,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_07_NaveRoof",
+      "vertices": 64,
+      "triangles": 108,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_08_AisleRoof_-1",
+      "vertices": 24,
+      "triangles": 40,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_08_AisleRoof_1",
+      "vertices": 24,
+      "triangles": 40,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_09_VaultRib0",
+      "vertices": 256,
+      "triangles": 396,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_09_VaultRib1",
+      "vertices": 256,
+      "triangles": 396,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_09_VaultRib2",
+      "vertices": 256,
+      "triangles": 396,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_09_VaultRib3",
+      "vertices": 256,
+      "triangles": 396,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_09_VaultRib4",
+      "vertices": 256,
+      "triangles": 396,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_09_VaultRib5",
+      "vertices": 256,
+      "triangles": 396,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_10_RoofSeams",
+      "vertices": 140,
+      "triangles": 224,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_11_Entrance",
+      "vertices": 1270,
+      "triangles": 1912,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_12_OpenOakDoor_-1",
+      "vertices": 64,
+      "triangles": 96,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_12_OpenOakDoor_1",
+      "vertices": 64,
+      "triangles": 96,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_13_RoseWindow_Stone",
+      "vertices": 1152,
+      "triangles": 1728,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_13_RoseWindow_Glass",
+      "vertices": 160,
+      "triangles": 252,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_13_RoseWindow_Tracery",
+      "vertices": 192,
+      "triangles": 320,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_14_SanctuaryWall_0",
+      "vertices": 424,
+      "triangles": 636,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_SanctuaryGlass_0_Glass",
+      "vertices": 162,
+      "triangles": 216,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_SanctuaryGlass_0_Tracery",
+      "vertices": 672,
+      "triangles": 1016,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_14_SanctuaryWall_1",
+      "vertices": 424,
+      "triangles": 636,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_SanctuaryGlass_1_Glass",
+      "vertices": 162,
+      "triangles": 216,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_SanctuaryGlass_1_Tracery",
+      "vertices": 672,
+      "triangles": 1016,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_14_SanctuaryWall_2",
+      "vertices": 424,
+      "triangles": 636,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_SanctuaryGlass_2_Glass",
+      "vertices": 162,
+      "triangles": 216,
+      "material": "Vesper_StainedGlass"
+    },
+    {
+      "name": "Vesper_SanctuaryGlass_2_Tracery",
+      "vertices": 672,
+      "triangles": 1016,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_15_EastGable",
+      "vertices": 42,
+      "triangles": 64,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_16_BellTower_-1",
+      "vertices": 1500,
+      "triangles": 2320,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_17_Spire_-1",
+      "vertices": 160,
+      "triangles": 260,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_16_BellTower_1",
+      "vertices": 1500,
+      "triangles": 2320,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_17_Spire_1",
+      "vertices": 160,
+      "triangles": 260,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_18_Pews_-1_0",
+      "vertices": 280,
+      "triangles": 420,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_18_Pews_-1_1",
+      "vertices": 280,
+      "triangles": 420,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_18_Pews_1_0",
+      "vertices": 280,
+      "triangles": 420,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_18_Pews_1_1",
+      "vertices": 280,
+      "triangles": 420,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_19_Altar",
+      "vertices": 144,
+      "triangles": 240,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_20_Chandeliers",
+      "vertices": 972,
+      "triangles": 1644,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_21_Courtyard_-1",
+      "vertices": 204,
+      "triangles": 356,
+      "material": "Vesper_Atlas"
+    },
+    {
+      "name": "Vesper_21_Courtyard_1",
+      "vertices": 204,
+      "triangles": 356,
+      "material": "Vesper_Atlas"
+    }
+  ],
+  "collision_parts": 114,
+  "local_lights": 12,
+  "studio_import_verified": false
+}

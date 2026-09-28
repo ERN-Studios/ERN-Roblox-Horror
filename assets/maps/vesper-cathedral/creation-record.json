@@ -1,0 +1,18 @@
+{
+  "task": "Create a simple beautiful cathedral map ready for Roblox import",
+  "created": "2026-09-28",
+  "studio_authority": "No connected Roblox Studio instances; no live game read/write/import or publish performed.",
+  "repo_status_at_start": "Unborn main; no configured remotes; existing project content untracked and preserved.",
+  "remote_observed": {
+    "repository": "ERN-Studios/ERN-Roblox-Horror",
+    "default_branch_head": "b60701178804689954f83c564fe759ce2d4cc19c",
+    "commit_date": "2026-09-24T09:15:20Z",
+    "read_method": "GitHub API latest commits"
+  },
+  "scope": "New standalone original Blender asset pack only; no runtime scripts mirrored or changed.",
+  "mesh_source": "Original parametrically modeled architecture, authored in Blender",
+  "texture_source": "Original deterministic procedural atlas",
+  "meshy_used": false,
+  "paid_generation_credits_used": 0,
+  "live_place_affected": false
+}
