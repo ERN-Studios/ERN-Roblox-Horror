@@ -457,3 +457,9 @@ Studio File > **Save to Roblox** reported `StudioSavePlaceToCloud: 4425ms` and `
 | `StarterPlayer.StarterPlayerScripts.Level6PreviewPrompt` | `LocalScript` | 1,345 | `1998444795` / `1877268431` | `cc1660d58fea18a6a5537c05d9e80cf74c84bf0d2900a42d649d09e57218760b` |
 
 This is a Roblox cloud **draft save**, not publication. Strict facade fidelity and remaining gameplay checks still block publication.
+
+### Owner-requested progress publish — 2026-09-28
+
+The immediately preceding Studio draft and its exact mirrors were committed and pushed as `f60d279485a06754c2e0f2f9b179fb66ec8aedb0`; `git ls-remote` confirmed that commit on `codex/level5-window-watcher`. The owner then explicitly requested publishing the current progress so it could be tested via Roblox Play. A Studio **Server and Clients** test session started a server process but did not expose a usable non-developer client; **End Session** was used and the non-DEV prompt test remains unverified. Before publishing, Edit still targeted place `131311258779917` / universe `10559217407`; the generated Play world was absent and the four scoped Architecture, Landmark, Puzzle Catalog and preview-prompt scripts had `Source` equal to their editor buffers with the hashes recorded above.
+
+Studio File > **Publish to Roblox** then logged `Sent message to server to publish`, `StudioPublishPlace: 6014ms`, `Place published. Eligible players can now play this place in Roblox.`, `Add publish notes to v2390`, and `Published new changes in "BACKROOMS: STAY QUIET [CO-OP HORROR]" to Roblox.` at Studio log timestamp **18:03:17.501 UTC**. Post-publish Edit source/editor parity for those four scripts and the correct place/universe were checked again. This is a verified **progress publish, version v2390**, requested by the owner. It is not a claim of 1:1 facade fidelity or complete Level 5 gameplay validation. No access settings or active servers were changed.
