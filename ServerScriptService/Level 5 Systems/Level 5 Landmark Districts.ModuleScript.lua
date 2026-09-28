@@ -741,41 +741,28 @@ function Districts.Build(K)
 				for _,dz in ipairs({-56,-28,0,28,56}) do
 					part(group,"FullHeightApartmentBayPier",V(.55,178-scenicBase,1.4),CF(s*99.05,(178+scenicBase)/2,2387+dz),C.pale,Enum.Material.Plaster,false)
 				end
-				for level=3,13 do
-					local y=level*12
-					-- The photographed tower has individual dark apartment openings
-					-- between pale piers, not one continuous void at each storey.
-					for _,offset in ipairs({-42,-14,14,42}) do
-						part(group,"RecessedApartmentOpening",V(.18,7.3,16),CF(s*99.3,y+3.8,2387+offset),darkPane,nil,false)
-					end
-					-- A shallow band leaves the apartment windows visible from the
-					-- lawn. Large circular decks swallowed the canyon view at this
-					-- camera distance; the separate end bays carry the rounded edge.
-					part(group,"CurvedBalconyBand",V(7,.8,120),CF(s*95.5,y-.4,2387),C.pale,Enum.Material.Plaster,false)
-					local lip=part(group,"RoundedBandNose",V(120,2,2),CF(s*92,y-.5,2387)*yaw(90),C.pale,Enum.Material.Plaster,false)
-					lip.Shape=Enum.PartType.Cylinder
-					decorativeRail(group,V(s*91,0,2328),V(s*91,0,2446),y)
-					-- Four rounded balcony bays repeat across every floor; their short
-					-- white rails leave the three skybridges and central lawn clear.
-					for _,bayZ in ipairs({2332,2369,2405,2440}) do
-						local radius=9
-						local cx=s*97
-						local disc=part(group,"ScallopedBalconyDeck",V(1,2*radius,2*radius),
-							CF(cx,y-.5,bayZ)*CFrame.Angles(0,0,math.pi/2),C.pale,Enum.Material.Plaster,false)
-						disc.Shape=Enum.PartType.Cylinder
-						local last
-						for j=0,3 do
-							local a=-math.pi/2+j*math.pi/3
-							local outer=V(cx-s*radius*math.cos(a),y+3.2,bayZ+radius*math.sin(a))
-							part(group,"ScallopWhiteUpright",V(.2,3,.2),CF(outer-V(0,1.6,0)),C.white,nil,false)
-							if last then
-								local top=K.beam(group,"ScallopWhiteTopRail",last,outer,.22,C.white)
-								top.CanCollide=false;top.CanQuery=false;top.CastShadow=false
-							end
-							last=outer
-						end
-					end
+			-- The distant facade optically compresses forty-one balcony tiers
+			-- into the same noncolliding wall height. The real gallery and
+			-- three crossings below keep their existing floor and route.
+			for level=1,41 do
+				local y=24+(level-1)*3.75
+				part(group,"RecessedApartmentOpening",V(.18,2.15,120),CF(s*99.3,y+1.45,2387),darkPane,nil,false)
+				part(group,"CurvedBalconyBand",V(5,.32,120),CF(s*95.5,y-.16,2387),C.pale,Enum.Material.Plaster,false)
+				for _,bayZ in ipairs({2332,2369,2405,2440}) do
+					local radius=11
+					local cx=s*97
+					local disc=part(group,"ScallopedBalconyDeck",V(.35,2*radius,2*radius),
+						CF(cx,y-.18,bayZ)*CFrame.Angles(0,0,math.pi/2),C.pale,Enum.Material.Plaster,false)
+					disc.Shape=Enum.PartType.Cylinder
+					local top=part(group,"ScallopWhiteTopRail",V(.18,.18,20),
+						CF(cx-s*radius,y+1.42,bayZ),C.white,nil,false)
+					top.CastShadow=false
 				end
+				for _,dz in ipairs({-42,42}) do
+					part(group,"ScallopWhiteUpright",V(.18,1.55,.18),
+						CF(s*89,y+.73,2387+dz),C.white,nil,false)
+				end
+			end
 				-- Bring the two stacked facades into the bridge canyon. The
 				-- bridges terminate at the inner balcony faces in the reference.
 				group:PivotTo(group:GetPivot()+V(-s*20,0,0))
