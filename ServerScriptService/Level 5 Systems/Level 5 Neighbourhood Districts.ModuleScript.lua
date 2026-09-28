@@ -337,9 +337,10 @@ function Districts.Build(K)
 		part(apartment,"ExposedStairLanding",V(21,.65,12),CF(158,y-.3,z),C.pale)
 		part(apartment,"ExposedStairFlight",V(2.5,.55,25),CF(157,y+7,z+12)*CFrame.Angles(math.rad(-29),0,0),C.pale)
 	end
-	-- Bring the existing apartment wall closer to the lawn without moving houses or paths.
+	-- Seat the scenic block behind the real east cottages; its former
+	-- shift filled three open entry lanes with the colliding apartment core.
 	for _,apartmentPart in ipairs(apartment:GetDescendants()) do
-		if apartmentPart:IsA("BasePart") then apartmentPart.CFrame-=V(65,0,0) end
+		if apartmentPart:IsA("BasePart") then apartmentPart.CFrame-=V(35,0,0) end
 	end
 	-- A closer, deeper balcony face frames the right of the arrival view.
 	-- All of it is scenic; the enterable lane homes underneath remain intact.

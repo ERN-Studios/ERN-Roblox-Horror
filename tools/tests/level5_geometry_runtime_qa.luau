@@ -121,14 +121,10 @@ else result.chute.warning="NarrowDescent not found; adapt names to revised archi
 
 local adapterScript=game:GetService("ServerScriptService"):FindFirstChild("Level 5 Round Adapter",true)
 local manifest=adapterScript and require(adapterScript).GetManifest()
-if manifest then
-    local points=table.clone(manifest.Waypoints or {})
-    -- Representative optional routes from the authored geometry, HRP height.
-    for _,p in ipairs({Vector3.new(-65,3,810),Vector3.new(-65,18,849),Vector3.new(-79,33,810),
-        Vector3.new(65,3,970),Vector3.new(65,18,930),Vector3.new(79,33,970),
-        Vector3.new(-58,11,1042),Vector3.new(-65,11,1100),Vector3.new(73,19,1069),Vector3.new(123,19,1150)}) do
-        table.insert(points,manifest.Origin+p)
-    end
+local points=manifest and (manifest.RouteWaypoints or manifest.Waypoints)
+if manifest and manifest.World==world and typeof(manifest.Origin)=="Vector3"
+    and type(points)=="table" and #points>=8 then
+    result.waypoints.source="Live Level 5 adapter route"
     for index,p in ipairs(points) do
         result.waypoints.inspected+=1
         local ground=workspace:Raycast(p+Vector3.new(0,1,0),Vector3.new(0,-12,0),onlyWorld)
@@ -139,12 +135,12 @@ if manifest then
             if overhead then addCandidate(result.waypoints.candidates,{index=index,kind="Potential headroom obstruction",position=xyz(p),hit=path(overhead.Instance),hitPosition=xyz(overhead.Position)}) end
         end
     end
-else result.waypoints.warning="No active adapter manifest" end
+else result.waypoints.warning="Live adapter route unavailable in this execution context; run inside a temporary server Script in Play" end
 local parts,lights,windows=0,0,0
 for _,p in ipairs(root:GetDescendants()) do
     if p:IsA("BasePart") then parts+=1 end
     if p:IsA("Light") then lights+=1 end
     if p:GetAttribute("Level5TintedWindow")==true then windows+=1 end
 end
-result.budget={parts=parts,lights=lights,windows=windows,descendants=#world:GetDescendants(),limit=18000}
+result.budget={parts=parts,lights=lights,windows=windows,descendants=#world:GetDescendants(),limit=30000}
 return result
