@@ -294,11 +294,9 @@ local function addPreviewNotices(world: Model, built: any)
 end
 
 function Adapter.Build()
-	if workspace:GetAttribute("Level5PublicPreviewEnabled") ~= true then
-		assert(workspace:GetAttribute("Level5DevEnabled") == true, "Level 5 preview is currently closed")
-		for _, player in ipairs(Players:GetPlayers()) do
-			assert(DevAccess.IsAllowed(player), "Level 5 private preview requires a developer roster")
-		end
+	assert(workspace:GetAttribute("Level5DevEnabled") == true, "Level 5 preview is currently closed")
+	for _, player in ipairs(Players:GetPlayers()) do
+		assert(DevAccess.IsAllowed(player), "Level 5 private preview requires a developer roster")
 	end
 	for _, level in ipairs({2, 3, 4}) do
 		assert(workspace:FindFirstChild("Level " .. level .. " Generated World") == nil,

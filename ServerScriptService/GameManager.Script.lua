@@ -157,19 +157,13 @@ if workspace:GetAttribute(Routing.Level4DevAttribute) == nil then
  workspace:SetAttribute(Routing.Level4DevAttribute, true)
 end
 
--- Level 5 is a selectable public preview, separate from campaign progression.
--- A ceiling is only a transport bound: canAccessLevel still checks the exact
--- requested level, so opening 5 never opens the developer-only Level 4.
--- Explicit false keeps public entry closed while preserving developer access.
-if workspace:GetAttribute("Level5PublicPreviewEnabled") == nil then
- workspace:SetAttribute("Level5PublicPreviewEnabled", false)
-end
+-- Level 5 stays outside campaign progression and requires the developer
+-- allowlist plus its own workspace enable flag at every entry path.
 if workspace:GetAttribute(Routing.Level5DevAttribute) == nil then
  workspace:SetAttribute(Routing.Level5DevAttribute, false)
 end
 local function devCeiling(group)
  if type(group) ~= "table" or #group == 0 then return Routing.MaxLevel end
- if workspace:GetAttribute("Level5PublicPreviewEnabled") == true then return 5 end
  for _, player in ipairs(group) do
   if not DevAccess.IsAllowed(player) then return Routing.MaxLevel end
  end
@@ -181,9 +175,6 @@ local function canAccessLevel(requestedLevel, group)
  local level = tonumber(requestedLevel)
  if not level or level ~= level or level % 1 ~= 0 or level < 1 then return false end
  if level <= Routing.MaxLevel then return true end
- if level == 5 and workspace:GetAttribute("Level5PublicPreviewEnabled") == true then
-  return type(group) == "table" and #group > 0
- end
  local flag = level == 4 and Routing.Level4DevAttribute
   or level == 5 and Routing.Level5DevAttribute or nil
  if not flag or workspace:GetAttribute(flag) ~= true then return false end
@@ -3160,7 +3151,6 @@ do
    return false, "NOT_DEVELOPER"
   end
   if workspace:GetAttribute(Routing.Level5DevAttribute) ~= true then return false, "DISABLED" end
-  if workspace:GetAttribute("Level5PublicPreviewEnabled") == true then return false, "PUBLIC_PREVIEW" end
   if requester:GetAttribute("InRound") == true or inRound[requester]
    or workspace:GetAttribute("RoundActive") == true then return false, "IN_ROUND" end
   if roundBusy then return false, "BUSY" end

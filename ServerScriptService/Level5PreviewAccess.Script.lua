@@ -421,8 +421,7 @@ local function onPlay(player, prompt)
 	if not character or not prompt.Enabled or prompt.Name ~= ENTER_PROMPT
 		or not door or door ~= liveDoor() or prompt ~= door:FindFirstChild(ENTER_PROMPT)
 		or not prompt:IsDescendantOf(workspace) or distanceToPart(door, root.Position) > DOOR_REACH
-		or workspace:GetAttribute("Level5DevEnabled") ~= true
-		or workspace:GetAttribute("Level5PublicPreviewEnabled") == true then return end
+		or workspace:GetAttribute("Level5DevEnabled") ~= true then return end
 	local model, problem = verifiedGallery()
 	if problem or (model and galleryOccupied(model)) then
 		warn("[Level5PreviewAccess] playable entry refused:", problem or "someone is in the gallery")
@@ -437,8 +436,7 @@ local function onPlay(player, prompt)
 	if playLaunchPending or levelFiveRoundInProgress()
 		or nowCharacter ~= character or prompt.Parent ~= door or door ~= liveDoor()
 		or not prompt.Enabled or distanceToPart(door, nowRoot.Position) > DOOR_REACH
-		or workspace:GetAttribute("Level5DevEnabled") ~= true
-		or workspace:GetAttribute("Level5PublicPreviewEnabled") == true then return end
+		or workspace:GetAttribute("Level5DevEnabled") ~= true then return end
 	playLaunchPending = true
 	nextUse[player] = math.huge
 	local ok, accepted, reason = pcall(function() return start:Invoke(player) end)
@@ -471,10 +469,9 @@ local function hookDoor()
 	if not door then return end
 	-- E uses the same lobby affordance as Level 6, but starts the current
 	-- server-authoritative Level 5 world instead of the stale gallery copy.
-	local enter = ensurePrompt(door, ENTER_PROMPT, "ENTER LEVEL 5 PREVIEW", "DEVELOPER PREVIEW", onPlay)
+	local enter = ensurePrompt(door, ENTER_PROMPT, "ENTER LEVEL 5 PREVIEW", "DEVELOPER PREVIEW", onPlay, Enum.KeyCode.E)
 	if enter then
 		enter.Enabled = workspace:GetAttribute("Level5DevEnabled") == true
-			and workspace:GetAttribute("Level5PublicPreviewEnabled") ~= true
 			and not levelFiveRoundInProgress()
 	end
 	local oldPlay = door:FindFirstChild(PLAY_PROMPT)
@@ -526,7 +523,6 @@ end
 
 Players.PlayerRemoving:Connect(function(player) nextUse[player] = nil end)
 workspace:GetAttributeChangedSignal("Level5DevEnabled"):Connect(hookDoor)
-workspace:GetAttributeChangedSignal("Level5PublicPreviewEnabled"):Connect(hookDoor)
 workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(hookDoor)
 workspace.DescendantAdded:Connect(onDescendantAdded)
 for _, descendant in ipairs(workspace:GetDescendants()) do onDescendantAdded(descendant) end

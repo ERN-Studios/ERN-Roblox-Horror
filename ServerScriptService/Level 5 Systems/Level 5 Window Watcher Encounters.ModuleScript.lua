@@ -23,8 +23,7 @@ local MAX_WINDOWS_PER_SCAN=24
 local SCAN_INTERVAL=.75
 
 local function previewEnabled()
-	return workspace:GetAttribute("Level5PublicPreviewEnabled")==true
-		or workspace:GetAttribute("Level5DevEnabled")==true
+	return workspace:GetAttribute("Level5DevEnabled")==true
 end
 
 local function finite(value)
