@@ -326,7 +326,7 @@ function Districts.Build(K)
 		end
 	end
 	for _,z in ipairs({594,636,678,720,762,804}) do
-		part(apartment,"FullHeightBalconyPier",V(3.2,74,3.2),CF(181,49,z),Color3.fromRGB(226,221,202),Enum.Material.Plaster,false)
+		part(apartment,"FullHeightBalconyPier",V(5.4,84,4.4),CF(167,47,z),Color3.fromRGB(226,221,202),Enum.Material.Plaster,false)
 	end
 	for _,y in ipairs({28,42,56,70,84}) do
 		part(apartment,"RecessedStoreyBand",V(.5,.58,226),CF(181.2,y+11.9,705),C.white,Enum.Material.Plaster,false)
@@ -365,7 +365,7 @@ function Districts.Build(K)
 	end
 	frontBalconyPart("CourtFacingCreamCore",V(120,54,2.2),CF(55,67,860),Color3.fromRGB(223,218,201),Enum.Material.Plaster)
 	for _,x in ipairs({-5,25,55,85,115}) do
-		frontBalconyPart("CourtFacingBalconyPier",V(2.4,54,3),CF(x,67,861),C.white,Enum.Material.Plaster)
+		frontBalconyPart("CourtFacingBalconyPier",V(4.2,54,4.5),CF(x,67,871.3),Color3.fromRGB(230,225,205),Enum.Material.Plaster)
 	end
 	for level=0,3 do
 		local y=42+level*12.5
