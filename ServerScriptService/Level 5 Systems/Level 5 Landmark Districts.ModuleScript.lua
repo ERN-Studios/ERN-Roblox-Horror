@@ -1032,7 +1032,7 @@ function Districts.Build(K)
 				part(gabledSection,"ProjectingHouseBalcony",V(14,.55,5),frame*CF(0,-.28,-2.5),C.white,Enum.Material.Wood,false)
 				decorativeRail(gabledSection,frame:PointToWorldSpace(V(-7,0,-5)),frame:PointToWorldSpace(V(7,0,-5)),0)
 			end
-			if level%2==0 and level<10 then
+			if level<10 then
 				for _,sgn in ipairs({-1,1}) do
 					local roofTint=level%3==0 and Color3.fromRGB(190,164,157) or Color3.fromRGB(174,158,142)
 					local roofFrame=frame*CF(sgn*4,14.3,-1.8)*CFrame.Angles(0,0,-sgn*math.rad(28))

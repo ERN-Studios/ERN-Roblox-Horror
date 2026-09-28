@@ -2,7 +2,20 @@
 
 The user supplied **ten screenshots**, numbered below in their message order. Each different screenshot is a **separate section or view** to build and assess. Shared architectural pieces may be reused, but a repeated generic facade must not erase the differences in silhouette, openings, balconies, roof forms, materials, or scale. The social-media interface, captions, and phone status bar are not part of the environment.
 
-This is an interpretation of the visible screenshots, not a measurement survey. The original image files are not present in this checkout, and a single view cannot establish exact dimensions, unseen sides, or a complete floor plan. Dimensions and connections between views must be derived and then checked in Studio; do not report guessed dimensions or unseen facade details as reference facts.
+The ten original 1284 × 2778 PNG screenshots were located on the owner's computer at `/Users/zeanjuul4/Downloads/IMG_2101.PNG` through `IMG_2110.PNG`, in section order. They are not copied into this checkout. Their SHA-256 digests below identify the exact files used for comparison. A single view cannot establish exact dimensions, unseen sides, or a complete floor plan. Dimensions and connections between views must be derived and then checked in Studio; do not report guessed dimensions or unseen facade details as reference facts.
+
+| Section | Original PNG | SHA-256 |
+| --- | --- | --- |
+| 1 | `IMG_2101.PNG` | `237a8a7f2aa91f80b2093fd58f995a931d81b5d3188e68fb70710cad8ee483cd` |
+| 2 | `IMG_2102.PNG` | `37f0628e3189051a24c7a394eac1ad2c1b7699f386fc5022485de5fc86442264` |
+| 3 | `IMG_2103.PNG` | `debab14f9633f5c6f67bc1646fc6cf1883157e22ba66659f7e0bd3502431aa29` |
+| 4 | `IMG_2104.PNG` | `045b3477a72621c3301ea6c9138d6d527c286678fa17025e8045f2efe4892871` |
+| 5 | `IMG_2105.PNG` | `c7f58959fb68978d6ecd86397f8d51ecc20b8cc7befb1e86cf95c625ed8e2f46` |
+| 6 | `IMG_2106.PNG` | `980d432290af0982c082be98a12a6f605e187ddf8a95cd6087dc6f2a75342278` |
+| 7 | `IMG_2107.PNG` | `2eee2c598f7b02f834a5d6bdf2669690d00f68ac911caca4f524bc8c9c5eb1d5` |
+| 8 | `IMG_2108.PNG` | `aa0911fa9b9a5149a4e036792a395b0734c8f0b80d3e1ca3e7844e7c2b84b488` |
+| 9 | `IMG_2109.PNG` | `c40e6c9a27f87eb52d1437bbf5f883d7ae27eeef18bf77a9da149d12c817f2b6` |
+| 10 | `IMG_2110.PNG` | `56491ecd8ddfa064989e4ef4eadec9f66432906ac7125d79cac1c14e7fa3ebd0` |
 
 ## Sections in supplied image order
 
