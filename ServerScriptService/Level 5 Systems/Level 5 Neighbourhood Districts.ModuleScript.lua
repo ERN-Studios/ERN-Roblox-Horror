@@ -563,8 +563,8 @@ function Districts.Build(K)
 		part(S10,"LeftWindowPier",V(.7,9.2,span[2]-span[1]),CF(36,8,(span[1]+span[2])/2),warmPlaster,Enum.Material.Plaster)
 	end
 	for _,z in ipairs({1326,1346,1366}) do
-		local glass=part(S10,"InteriorAtriumWindowGlass",V(.15,9.2,14),CF(35.5,8,z),Color3.fromRGB(70,81,79),Enum.Material.Glass)
-		glass.Transparency=.66
+		local glass=part(S10,"InteriorAtriumWindowGlass",V(.15,9.2,14),CF(35.5,8,z),Color3.fromRGB(151,156,147),Enum.Material.Glass)
+		glass.Transparency=.8
 		for _,y in ipairs({3.4,8,12.6}) do part(S10,"WindowCrossbar",V(.3,.17,14.5),CF(35.25,y,z),C.white,nil,false) end
 		for _,zz in ipairs({z-7.1,z+7.1}) do part(S10,"WindowJamb",V(.3,9.6,.22),CF(35.25,8,zz),C.white,nil,false) end
 		part(S10,"WindowCentreMullion",V(.3,9.2,.2),CF(35.25,8,z),C.white,nil,false)
@@ -578,8 +578,8 @@ function Districts.Build(K)
 		part(windowReturn,"PlasterWindowPier",V(span[2]-span[1],9.2,.48),CF((span[1]+span[2])/2,8,1332),C.cream,Enum.Material.Plaster,false)
 	end
 	for _,wx in ipairs({16.8,29.2}) do
-		local pane=part(windowReturn,"TallReturnWindowGlass",V(6.5,9.2,.12),CF(wx,8,1331.69),Color3.fromRGB(63,77,77),Enum.Material.Glass,false)
-		pane.Transparency=.34
+		local pane=part(windowReturn,"TallReturnWindowGlass",V(6.5,9.2,.12),CF(wx,8,1331.69),Color3.fromRGB(151,156,147),Enum.Material.Glass,false)
+		pane.Transparency=.72
 		for _,edge in ipairs({-1,1}) do part(windowReturn,"TallReturnJamb",V(.27,9.6,.2),CF(wx+edge*3.32,8,1331.55),C.white,nil,false) end
 		for _,y in ipairs({3.35,8,12.65}) do part(windowReturn,"TallReturnCrossbar",V(6.8,.2,.2),CF(wx,y,1331.55),C.white,nil,false) end
 		part(windowReturn,"TallReturnMullion",V(.18,9.5,.2),CF(wx,8,1331.53),C.white,nil,false)
@@ -594,12 +594,12 @@ function Districts.Build(K)
 	end
 	part(S10,"RoomSideBaseboard",V(.28,.58,83),CF(-35.48,.29,1348),C.white,nil,false)
 	part(S10,"RoomSideCrown",V(.44,.38,83),CF(-35.44,15.65,1348),C.white,nil,false)
-	part(S10,"CentralSixPanelDoor",V(7.6,10,.35),CF(0,5,1357.6),C.white,Enum.Material.Wood)
+	part(S10,"CentralSixPanelDoor",V(7.6,10,.35),CF(0,5,1357.6),Color3.fromRGB(232,231,224),Enum.Material.SmoothPlastic)
 	for _,s in ipairs({-1,1}) do
 		for _,row in ipairs({1,2,3}) do
 			local y=row==1 and 1.8 or row==2 and 5.3 or 8.2
 			local h=row==2 and 2.9 or 1.55
-			part(S10,"RaisedDoorPanel",V(2.4,h,.12),CF(s*1.75,y,1357.34),Color3.fromRGB(224,222,210),Enum.Material.Wood,false)
+			part(S10,"RaisedDoorPanel",V(2.4,h,.12),CF(s*1.75,y,1357.34),Color3.fromRGB(242,241,237),Enum.Material.SmoothPlastic,false)
 		end
 	end
 	local knob=part(S10,"BrassDoorKnob",V(.35,.35,.35),CF(2.7,4.9,1357.1),Color3.fromRGB(147,130,80),Enum.Material.Metal,false)
@@ -617,13 +617,13 @@ function Districts.Build(K)
 	for _,z in ipairs({1321,1343,1365,1382}) do part(S10,"CeilingGridCrossbeam",V(72,.13,.15),CF(0,15.9,z),C.white,nil,false) end
 	for _,x in ipairs({-18,0,18}) do part(S10,"CeilingGridLongBeam",V(.15,.13,83),CF(x,15.9,1348),C.white,nil,false) end
 	for _,z in ipairs({1324,1347,1372}) do
-		local lamp=part(S10,"LongFluorescentPanel",V(18,.16,3.2),CF(0,15.85,z),Color3.fromRGB(224,226,214),Enum.Material.Neon,false)
-		local light=Instance.new("SurfaceLight");light.Face=Enum.NormalId.Bottom;light.Range=24;light.Brightness=.72;light.Shadows=false;light.Parent=lamp
+		local lamp=part(S10,"LongFluorescentPanel",V(10,.16,3.2),CF(0,15.85,z),Color3.fromRGB(224,226,214),Enum.Material.Neon,false)
+		local light=Instance.new("SurfaceLight");light.Face=Enum.NormalId.Bottom;light.Range=24;light.Brightness=.55;light.Shadows=false;light.Parent=lamp
 	end
 	local balconies=model("ContainedOppositeBalconies",S10)
 	-- Begin the shaft behind the arrival crossing so the route from gate four
 	-- reaches the room portal before the first window starts at z=1319.
-	part(balconies,"DarkShaftBacking",V(1,43,69.5),CF(119,21.5,1354.75),Color3.fromRGB(53,58,55),Enum.Material.Plaster)
+	part(balconies,"DarkShaftBacking",V(1,43,69.5),CF(119,21.5,1354.75),Color3.fromRGB(105,108,100),Enum.Material.Plaster)
 	part(balconies,"DarkShaftFloor",V(82,.12,69.5),CF(77,.07,1354.75),Color3.fromRGB(45,48,44),Enum.Material.SmoothPlastic,false)
 	for level=0,2 do
 		local y=level*14

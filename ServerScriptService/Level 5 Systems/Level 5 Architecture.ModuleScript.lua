@@ -858,14 +858,16 @@ function Architecture.Build(parent, origin, config)
 	local roof=model("S01_EnclosedAtriumRoof",A)
 	part(roof,"SuspendedTilePlane",V(336,2,218),CF(0,214,95),Color3.fromRGB(189,186,171),Enum.Material.SmoothPlastic)
 	for x=-162,162,18 do
-		part(roof,"LongCeilingGrid",V(.13,.12,216),CF(x,212.91,95),Color3.fromRGB(136,136,124),nil,false)
+		local grid=part(roof,"LongCeilingGrid",V(.13,.12,216),CF(x,212.91,95),Color3.fromRGB(189,186,171),nil,false)
+		grid.Transparency=.55
 	end
 	for z=-12,202,18 do
-		part(roof,"CrossCeilingGrid",V(334,.12,.13),CF(0,212.91,z),Color3.fromRGB(136,136,124),nil,false)
+		local grid=part(roof,"CrossCeilingGrid",V(334,.12,.13),CF(0,212.91,z),Color3.fromRGB(189,186,171),nil,false)
+		grid.Transparency=.55
 	end
 	for _,x in ipairs({-108,-36,36,108}) do
 		for _,z in ipairs({8,35,62,89,116,143,170,197}) do
-			local panel=part(roof,"FluorescentRoofPanel",V(9,.13,4.4),CF(x,212.78,z),Color3.fromRGB(225,228,218),Enum.Material.Neon,false)
+			local panel=part(roof,"FluorescentRoofPanel",V(3,.13,2.4),CF(x,212.78,z),Color3.fromRGB(210,212,205),Enum.Material.Neon,false)
 			local light=Instance.new("SurfaceLight");light.Face=Enum.NormalId.Bottom;light.Brightness=.65
 			light.Range=28;light.Angle=150;light.Shadows=false;light.Parent=panel
 		end

@@ -1,4 +1,4 @@
--- Developer-only gallery entry and, when explicitly enabled, playable Level 5 entry.
+-- Developer-only E preview entry launches the current playable Level 5 map.
 local Players = game:GetService("Players")
 local ServerScriptService = game:GetService("ServerScriptService")
 local ServerStorage = game:GetService("ServerStorage")
@@ -418,8 +418,8 @@ local function onPlay(player, prompt)
 		or (nextUse[player] or 0) > os.clock() then return end
 	local character, root = ready(player)
 	local door = prompt.Parent
-	if not character or not prompt.Enabled or prompt.Name ~= PLAY_PROMPT
-		or not door or door ~= liveDoor() or prompt ~= door:FindFirstChild(PLAY_PROMPT)
+	if not character or not prompt.Enabled or prompt.Name ~= ENTER_PROMPT
+		or not door or door ~= liveDoor() or prompt ~= door:FindFirstChild(ENTER_PROMPT)
 		or not prompt:IsDescendantOf(workspace) or distanceToPart(door, root.Position) > DOOR_REACH
 		or workspace:GetAttribute("Level5DevEnabled") ~= true
 		or workspace:GetAttribute("Level5PublicPreviewEnabled") == true then return end
@@ -469,15 +469,16 @@ end
 local function hookDoor()
 	local door = liveDoor()
 	if not door then return end
-	local enter = ensurePrompt(door, ENTER_PROMPT, "ENTER LEVEL 5 PREVIEW", "DEVELOPER PREVIEW", onEnter)
-	if enter then enter.Enabled = not levelFiveRoundInProgress() end
-	local play = ensurePrompt(door, PLAY_PROMPT, "PLAY LEVEL 5", "DEVELOPER ONLY", onPlay,
-		Enum.KeyCode.F, Enum.KeyCode.ButtonY)
-	if play then
-		play.Enabled = workspace:GetAttribute("Level5DevEnabled") == true
+	-- E uses the same lobby affordance as Level 6, but starts the current
+	-- server-authoritative Level 5 world instead of the stale gallery copy.
+	local enter = ensurePrompt(door, ENTER_PROMPT, "ENTER LEVEL 5 PREVIEW", "DEVELOPER PREVIEW", onPlay)
+	if enter then
+		enter.Enabled = workspace:GetAttribute("Level5DevEnabled") == true
 			and workspace:GetAttribute("Level5PublicPreviewEnabled") ~= true
 			and not levelFiveRoundInProgress()
 	end
+	local oldPlay = door:FindFirstChild(PLAY_PROMPT)
+	if oldPlay and oldPlay:IsA("ProximityPrompt") then oldPlay.Enabled = false end
 end
 
 local function onDescendantAdded(instance)
