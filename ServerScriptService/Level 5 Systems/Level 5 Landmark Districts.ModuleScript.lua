@@ -1048,12 +1048,17 @@ function Districts.Build(K)
 	-- The only deep black is the narrow recessed opening in the east facade.
 	for _,z in ipairs({2190,2206,2222,2238,2288,2304,2320,2336}) do
 		for level=0,10 do
-			local frame=CF(160,16+level*14,z)*yaw(90)
+			-- Recess and project intact upper house fronts as staggered stacked dwellings.
+			local bayIndex=math.floor((z-2190)/16+.5)
+			local rhythm=(level+bayIndex)%4
+			local projection=level==0 and 0 or rhythm==0 and 3.1 or rhythm==2 and 1.55 or 0
+			local frame=CF(160,16+level*14,z)*yaw(90)*CF(0,0,-projection)
 			local clapFace=part(gabledSection,"ClapboardBayFace",V(16,13.8,4.2),frame*CF(0,6.9,-1.1),C.pale,Enum.Material.WoodPlanks,false)
 			clapFace.MaterialVariant="Level5CourtyardClapboard"
 			part(gabledSection,"DarkGabledWindow",V(6.4,6.2,.12),frame*CF(0,7.2,-3.4),darkPane,nil,false)
 			for _,sgn in ipairs({-1,1}) do
-				part(gabledSection,"WhiteWindowJamb",V(.24,6.7,.22),frame*CF(sgn*3.3,7.2,-3.52),C.white,nil,false)
+				part(gabledSection,"DarkGreenWindowShutter",V(1.1,6.8,.26),
+					frame*CF(sgn*3.85,7.2,-3.54),Color3.fromRGB(57,66,56),Enum.Material.Wood,false)
 			end
 			part(gabledSection,"WhiteWindowMullion",V(.24,6.7,.22),frame*CF(0,7.2,-3.56),C.white,nil,false)
 			part(gabledSection,"WhiteWindowCrossbar",V(6.6,.16,.22),frame*CF(0,7.2,-3.54),C.white,nil,false)
