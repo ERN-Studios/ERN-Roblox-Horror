@@ -871,14 +871,14 @@ function Architecture.Build(parent, origin, config)
 		if side>0 then porch(rear,rearFrame,26,5) end
 	end
 	local nearFrame=CF(56,0,28)
-	local near=house(courtyard,"SageNearPorchHouse",nearFrame,28,24,13.8,Color3.fromRGB(184,177,159),C.dark,{open=true})
-	referenceClapboard(near,Color3.fromRGB(184,177,159),Color3.fromRGB(47,54,53))
+	local near=house(courtyard,"SageNearPorchHouse",nearFrame,28,24,13.8,Color3.fromRGB(137,151,127),C.dark,{open=true})
+	referenceClapboard(near,Color3.fromRGB(137,151,127),Color3.fromRGB(47,54,53))
 	porch(near,nearFrame,28,7)
 	-- This courtyard is inside the vast residential shell. Close the upper
 	-- envelope before the next zone; otherwise the playable route exposes the
 	-- outdoor sky even though the reference has a continuous fluorescent roof.
 	local roof=model("S01_EnclosedAtriumRoof",A)
-	part(roof,"SuspendedTilePlane",V(336,2,218),CF(0,214,95),Color3.fromRGB(143,142,148),Enum.Material.SmoothPlastic)
+	part(roof,"SuspendedTilePlane",V(336,2,218),CF(0,214,95),Color3.fromRGB(185,183,178),Enum.Material.SmoothPlastic)
 	for x=-162,162,18 do
 		local grid=part(roof,"LongCeilingGrid",V(.13,.12,216),CF(x,212.91,95),Color3.fromRGB(105,105,110),nil,false)
 		grid.Transparency=.18
@@ -889,7 +889,7 @@ function Architecture.Build(parent, origin, config)
 	end
 	for _,x in ipairs({-108,-36,36,108}) do
 		for _,z in ipairs({8,35,62,89,116,143,170,197}) do
-			local panel=part(roof,"FluorescentRoofPanel",V(3,.13,2.4),CF(x,212.78,z),Color3.fromRGB(210,212,205),Enum.Material.Neon,false)
+			local panel=part(roof,"FluorescentRoofPanel",V(5,.13,4),CF(x,212.78,z),Color3.fromRGB(210,212,205),Enum.Material.Neon,false)
 			local light=Instance.new("SurfaceLight");light.Face=Enum.NormalId.Bottom;light.Brightness=.65
 			light.Range=28;light.Angle=150;light.Shadows=false;light.Parent=panel
 		end
