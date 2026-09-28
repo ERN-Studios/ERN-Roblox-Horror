@@ -447,13 +447,13 @@ function Districts.Build(K)
 			roomFill.Face=Enum.NormalId.Front;roomFill.Brightness=.42;roomFill.Range=18;roomFill.Angle=140;roomFill.Shadows=false;roomFill.Parent=backWall
 			scenic(exposedHouse,"OpenRoomLeftReturn",V(.68,13.7,22),exposedFrame*CF(-16.15,y+6.85,11),Color3.fromRGB(217,204,183))
 			scenic(exposedHouse,"BrokenRightEdgePier",V(1.7,13.7,2.5),exposedFrame*CF(15.5,y+6.85,-.45),Color3.fromRGB(226,211,190))
-			scenic(exposedHouse,"ExposedWhiteFloorLip",V(32.5,.4,.65),exposedFrame*CF(0,y+.12,-.55),C.white)
+			scenic(exposedHouse,"ExposedWhiteFloorLip",V(15,.4,.65),exposedFrame*CF(-8.75,y+.12,-.55),C.white)
 			panelDoor(exposedHouse,exposedFrame*CF(-9,y,21.32))
-			local strip=scenic(exposedHouse,"CarpetedLanding",V(12,.08,7),exposedFrame*CF(-5,y+.08,17.5),Color3.fromRGB(174,159,144),Enum.Material.Fabric)
-			strip.MaterialVariant="";strip.Color=Color3.fromRGB(174,159,144)
+			local strip=scenic(exposedHouse,"CarpetedLanding",V(12,.08,7),exposedFrame*CF(-5,y+.08,17.5),Color3.fromRGB(132,113,100),Enum.Material.Fabric)
+			strip.MaterialVariant="";strip.Color=Color3.fromRGB(132,113,100)
 			for chip=0,1 do
 				scenic(exposedHouse,"UnevenTornPlaster",V(.55+(chip%2)*.25,2.5,1.8+(chip%3)*.37),
-					exposedFrame*CF(14.35,y+1.5+chip*3.2,-.7),Color3.fromRGB(234,220,197))
+					exposedFrame*CF(14.75,y+1.5+chip*3.2,-.7),Color3.fromRGB(234,220,197))
 			end
 		end
 	end
@@ -461,23 +461,24 @@ function Districts.Build(K)
 		local y=level*14
 		local direction=level%2==0 and 1 or -1
 		local landing=scenic(exposedHouse,"SwitchbackCarpetLanding",V(8,.1,9),
-			exposedFrame*CF(direction*12,y+13.98,10),Color3.fromRGB(171,154,138),Enum.Material.Fabric)
-		landing.MaterialVariant="";landing.Color=Color3.fromRGB(171,154,138)
+			exposedFrame*CF(direction*12,y+13.98,10),Color3.fromRGB(132,113,100),Enum.Material.Fabric)
+		landing.MaterialVariant="";landing.Color=Color3.fromRGB(132,113,100)
 		-- The stair climbs across the exposed face, so the diagonal reads
 		-- clearly from the opposite gallery instead of collapsing into a ladder.
 		for step=0,8 do
 			local x=direction*(-13+step*3.25)
-			local tread=scenic(exposedHouse,"VisibleDiagonalCarpetTread",V(3,.43,8.5),
-				exposedFrame*CF(x,y+.25+step*1.55,10),Color3.fromRGB(170,153,139),Enum.Material.Fabric)
-			tread.MaterialVariant="";tread.Color=Color3.fromRGB(170,153,139)
+			local tread=scenic(exposedHouse,"VisibleDiagonalCarpetTread",V(3.35,1.43,8.5),
+				exposedFrame*CF(x,y-.25+step*1.55,10),Color3.fromRGB(126,106,94),Enum.Material.Fabric)
+			tread.MaterialVariant="";tread.Color=Color3.fromRGB(126,106,94)
 		end
 		for _,frontZ in ipairs({5.5,14.5}) do
 			local a=exposedFrame:PointToWorldSpace(V(direction*-13.5,y+2.6,frontZ))
 			local b=exposedFrame:PointToWorldSpace(V(direction*13.5,y+15,frontZ))
-			scenic(exposedHouse,"DiagonalWhiteStairRail",V(.24,.24,(b-a).Magnitude),CFrame.lookAt((a+b)/2,b),C.white,Enum.Material.Wood)
-			for spindle=0,6 do
-				local t=spindle/6
-				scenic(exposedHouse,"WhiteTurnedStairBaluster",V(.2,2.9,.2),
+			scenic(exposedHouse,"DiagonalWhiteStairRail",V(.35,.35,(b-a).Magnitude),CFrame.lookAt((a+b)/2,b),C.white,Enum.Material.Wood)
+			local spindleCount=frontZ==5.5 and 10 or 2
+			for spindle=0,spindleCount do
+				local t=spindle/spindleCount
+				scenic(exposedHouse,"WhiteTurnedStairBaluster",V(frontZ==5.5 and .27 or .2,2.9,frontZ==5.5 and .27 or .2),
 					exposedFrame*CF(direction*(-13.5+27*t),y+1.2+12.4*t,frontZ),C.white,Enum.Material.Wood)
 			end
 		end
