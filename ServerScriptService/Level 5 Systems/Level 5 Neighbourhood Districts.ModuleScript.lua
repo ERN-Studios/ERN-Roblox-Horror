@@ -364,10 +364,16 @@ function Districts.Build(K)
 	for _,side in ipairs({-1,1}) do
 		for i,z in ipairs({1004,1220}) do
 			local roofTint=Color3.fromRGB(87,88,82)
-			local pocketClapboard=i==1 and (side<0 and Color3.fromRGB(132,130,115) or Color3.fromRGB(211,204,184)) or C.rose
+			local pocketClapboard=i==1 and (side<0 and Color3.fromRGB(211,204,184) or Color3.fromRGB(132,130,115)) or C.rose
 			local home=house(D,"SunkenPocketStack_"..side.."_"..i.."_0",CF(side*26,-12,z)*yaw(side*90),26,24,13.8,pocketClapboard,roofTint,{open=true})
 			colorRoof(home,roofTint)
 			colorClapboard(home,pocketClapboard)
+			if i==1 then
+				-- These two near cottages are two storeys in the S04 reference:
+				-- taupe on the arrival left and cream on the right.
+				local upper=house(S04,"SunkenPocketUpper_"..side.."_"..i,CF(side*26,2,z)*yaw(side*90),30,26,13.8,pocketClapboard,roofTint,{open=false})
+				colorRoof(upper,roofTint);colorClapboard(upper,pocketClapboard)
+			end
 		end
 	end
 	-- Tall, restrained shafts sit behind the gabled street houses. The small

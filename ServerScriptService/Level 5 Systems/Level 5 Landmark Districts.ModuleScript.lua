@@ -477,6 +477,11 @@ function Districts.Build(K)
 				-- home, terraced foot route, and Watcher pane stay at their old sites.
 				local scenicBase=s<0 and 8 or 16
 				part(group,"MonumentalTowerWall",V(25,178-scenicBase,126),CF(s*112,(178+scenicBase)/2,2387),Color3.fromRGB(190,177,145),Enum.Material.Plaster,false)
+				-- Vertical apartment bays interrupt the long dark glazing bands.
+				-- They are noncolliding scenery behind the balcony route.
+				for _,dz in ipairs({-56,-28,0,28,56}) do
+					part(group,"FullHeightApartmentBayPier",V(.55,178-scenicBase,1.4),CF(s*99.05,(178+scenicBase)/2,2387+dz),C.pale,Enum.Material.Plaster,false)
+				end
 				for level=3,13 do
 					local y=level*12
 					-- The photographed tower has individual dark apartment openings
