@@ -1,0 +1,23 @@
+{
+  "label": "AI approximation of existing Level 3 beige City room; not an actual gameplay screenshot",
+  "mode": "built-in image_gen",
+  "use_case": "precise-object-edit",
+  "prompt": "Use case: precise-object-edit. Asset type: AI reconstruction of the CURRENT EXISTING Roblox Level 3 beige party room, for reference verification, NOT concept art and NOT a redesign. Input image 1 is the sole authoritative edit target and visual reference. Reconstruct this exact image very faithfully, changing ONLY removal of the CD READER HUD at upper right and flashlight icon at bottom left, filling those areas with the exact continued ceiling/floor. Preserve camera position, portrait framing, room proportions, objects, geometry, colors, materials, composition and low-resolution simple Roblox game rendering. Low dirty beige suspended ceiling with coarse dark square tile grid; existing plain flat rectangular fluorescent lamps only; flat tan beige walls; open rectangular passages at left and right; black rectangular wall speaker on rear wall; dark mottled green, ochre, orange and brown carpet. Preserve exactly the dark reddish-brown folding table in the foreground with thin black folding legs, red plastic chair at front-left, dark chair beyond it, green plastic chair front-right; the smaller green table in the background with existing red/yellow/green plastic chairs and small red/yellow/blue/green balloon cluster. Keep existing relative object placement and perspective extremely close. The ceiling takes nearly the upper half of the image. Maintain dim sickly warm flat fluorescent game lighting and simple polygonal assets; slightly improve clarity only enough to see the existing details without adding anything. No people, no HUD, no captions, no logo, no watermarks. Do not add or redesign architecture, furniture, decorative objects, doors, windows, kiosks, counters, banquettes, plants, arches, ceiling coffers, trims or modern mall luxury. No photorealism, no cinematic redesign, no Frutiger Aero makeover, no water. Deliver one portrait image matching the reference composition.",
+  "reference_path": "/Users/zeanjuul4/Documents/Roblox Horror REPO/artifacts/level3-modular-analysis-20260929/current-city-room.jpg",
+  "original_generated_path": "/Users/zeanjuul4/.codex/generated_images/01a0ef31-486a-7bb3-aceb-03088d3f8de5/exec-2b15fe54-3668-4ae5-ba54-ec97e602a8b4.png",
+  "asset_filename": "01-current-beige-generated.png",
+  "visual_inspection": {
+    "faithful": [
+      "Low suspended square tile ceiling and flat rectangular fluorescent lights",
+      "Beige walls and open rectangular side passages",
+      "Mottled green/ochre carpet",
+      "Foreground folding table and red, dark and green chairs",
+      "Background table with colored plastic chairs, balloons and black wall speaker"
+    ],
+    "differences": [
+      "HUD and flashlight UI removed as intended",
+      "Image regenerated at a larger resolution with slightly clearer and brighter material shading",
+      "Fine geometry, chair shapes, shadow edges and surface textures are approximate rather than pixel-identical"
+    ]
+  }
+}

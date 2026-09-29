@@ -1,0 +1,35 @@
+{
+  "date": "2026-09-30",
+  "method": "built-in image_gen.imagegen with actual Studio screenshot reference",
+  "file": "03-current-red-generated.png",
+  "originalGeneratedPath": "/Users/zeanjuul4/.codex/generated_images/01a0e98c-ab1b-7f00-9c2d-89b31b7edbc9/exec-fea1a7d0-35da-4b98-b57c-2c20179abca2.png",
+  "reference": "reference-current-red-studio.jpg",
+  "prompt": "Use case: precise-object-edit. Asset type: faithful AI reconstruction of an EXISTING Roblox Level 3 screenshot, NOT a redesign or an architectural visualization.\nInput image: the attached reference is a direct fresh Roblox Studio Play capture of the CURRENT Red Carpet Party Rooms, seed101, room19, placeversion2403. Treat it as authoritative.\nGenerate ONE image staying extremely close to the screenshot's actual camera, room arrangement, plain low-polygon Roblox graphics, surfaces and simple furnishing. Remove only the overlaid CD READER HUD in the upper right and flashlight icon in the lower left. The purpose is to show that we understand what the CURRENT level looks like. Keep its plain game appearance; do not beautify, modernize, turn photorealistic, or add imagined architecture.\nPreserve the VERY LOW beige square suspended ceiling grid with simple thin black-framed rectangular fluorescent slabs; plain red/orange walls and darker base trim; broad boxy doorless passages into adjacent rooms; red carpet with the same mottled yellow looping pattern and dark spots. Preserve the foreground pale rectangular folding table with dark blue edge and thin black folding legs, the row of green, yellow and black plastic chairs facing it, red and blue plastic chairs on the far side, and more simple table/chairs in the back. Keep all furniture placement and apparent sizes. Keep the partially visible orange balloon at top-right. Retain the ordinary dark warm-yellow Roblox lighting and visible texture tiling. Slightly clearer shadows are allowed, but no cinematic relighting or polished reflections.\nPreserve original landscape composition and field of view. No people, no monster, no additional objects, no branding or captions. No plants, no luxurious banquet furniture, no white tablecloths, no arches, no podium or curtains, no mall storefronts, no display cabinets, no coffered ceilings, no water, no Frutiger Aero redesign. Return a close scene reconstruction with HUD removed. The fine pixels may be AI approximations; the existing visual identity must remain unchanged.",
+  "referenceCapture": {
+    "placeId": 131311258779917,
+    "placeVersion": 2403,
+    "seed": 101,
+    "room": "19 Red Carpet Party Rooms 02",
+    "cameraPosition": [
+      6384,
+      29.2,
+      466
+    ],
+    "lookAtPosition": [
+      6412,
+      27.8,
+      497
+    ],
+    "mode": "Temporary Play, direct existing Level3Generator.Build; no script or persistent game changes."
+  },
+  "visualReview": "Very close reconstruction: same low tile ceiling and slab fluorescents, plain reddish walls, mottled red carpet, foreground folding table and colored plastic chairs, rectangular passages and partial orange balloon. HUD removed. Fine texture, chair silhouettes and lighting are AI approximations, not an exact screenshot.",
+  "cleanup": {
+    "mode": "Edit",
+    "placeVersion": 2403,
+    "checkedSourceCount": 16,
+    "changedSources": [],
+    "editorConflicts": [],
+    "generatedWorldRemains": false,
+    "seedPinned": false
+  }
+}

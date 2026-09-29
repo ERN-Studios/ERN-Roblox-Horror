@@ -1,0 +1,15 @@
+{
+  "createdDate": "2026-09-30",
+  "label": "AI-generated approximation of current Level 3, based on actual Studio screenshot. Not a screenshot and not a redesign.",
+  "mode": "built-in imagegen",
+  "useCase": "stylized-concept",
+  "referencePath": "/Users/zeanjuul4/Documents/Roblox Horror REPO/artifacts/level3-modular-analysis-20260929/current-orange-room.jpg",
+  "referenceRole": "Actual Studio screenshot, current Level 3 orange room, source configuration rechecked unchanged at place version 2403 by parent",
+  "originalResultPath": "/Users/zeanjuul4/.codex/generated_images/01a0ef31-952a-7fb2-8763-1da5ea17f410/exec-d492afa8-a29e-4b0e-a956-1137b0f7091d.png",
+  "filename": "02-current-orange-generated.png",
+  "prompt": "Use case: stylized-concept\nAsset type: faithful reference reconstruction of an existing Roblox game environment.\nInput image 1 is the exact visual reference, an actual screenshot of the CURRENT Level 3 orange room. Recreate this specific room faithfully; this is not a redesign or an improvement concept.\nPreserve the same portrait camera framing and perspective, large low flat tiled suspended ceiling occupying the upper half, black ceiling grid, sparsely spaced flat rectangular fluorescent ceiling lights, plain dark orange upper walls with a solid BLACK lower wall band, doorless rectangular openings at the back/right, small black rectangular wall speaker on the back wall. Preserve the same sparsely furnished room arrangement: pale speckled plain rectangular folding tables arranged in rows, mismatched red/yellow/green/blue molded plastic chairs, a small cluster of balloons at the back left, and very dark party carpet with tiny red/orange/green/blue confetti dash marks.\nStyle: keep the simple low-poly Roblox real-time rendering, plain geometry, inexpensive tiled textures, hard flat surfaces and dark yellowish fluorescent lighting of the exact input. Preserve the reference layout and appearance. Lift shadow exposure just slightly so furniture and carpet can be read, but keep the room dim.\nRemove only the top-right CD reader HUD and bottom-left flashlight HUD. No interface overlays, labels, captions, watermarks, people or monsters.\nDo not add new furniture or architecture. No arcade machines, jukeboxes, planters, decorative wall panels, mall kiosks, glowing trim, photorealism, cinematic art, elaborate rendering, red carpet, Frutiger Aero features or water.\nGenerate one faithful portrait image matching the reference framing.",
+  "inspection": {
+    "faithfulness": "Preserves low tiled ceiling, rectangular fluorescent fixtures, plain orange upper walls and black lower band, multicolored plastic chairs, pale folding tables, balloons, back wall speaker, dark confetti carpet, portrait view and dim lighting.",
+    "differences": "HUD removed as requested. Shadow exposure brighter than screenshot; table/chair silhouettes and carpet motifs regenerated and therefore approximate. No gameplay/world modification."
+  }
+}
