@@ -1,0 +1,212 @@
+[
+  {
+    "path": "assets/level6-worn-party/audio/mastered/arcade_credit_button.wav",
+    "duration_seconds": 3.0,
+    "peak_dbfs": -7.08,
+    "rms_dbfs": -25.68,
+    "frame_rms_dbfs": {
+      "p10": -139.09,
+      "p50": -138.42,
+      "p90": -21.83,
+      "p99": -13.62
+    },
+    "head_0_2s_rms_dbfs": -36.69,
+    "tail_0_5s_rms_dbfs": -138.85,
+    "tail_0_5s_highpass_4k5_rms_dbfs": -157.65,
+    "quietest_0_5s_start_seconds": 0.3,
+    "quietest_0_5s_rms_dbfs": -138.99,
+    "quietest_0_5s_highpass_4k5_rms_dbfs": -155.73,
+    "loop_boundary_sample_step_dbfs": -240.0,
+    "natural_adjacent_step_p99_9_dbfs": -20.14,
+    "loop_boundary_exceeds_natural_p99_9": false
+  },
+  {
+    "path": "assets/level6-worn-party/audio/mastered/breaker_switch.wav",
+    "duration_seconds": 3.0,
+    "peak_dbfs": -7.41,
+    "rms_dbfs": -34.81,
+    "frame_rms_dbfs": {
+      "p10": -141.1,
+      "p50": -134.46,
+      "p90": -43.97,
+      "p99": -19.27
+    },
+    "head_0_2s_rms_dbfs": -25.66,
+    "tail_0_5s_rms_dbfs": -84.1,
+    "tail_0_5s_highpass_4k5_rms_dbfs": -117.1,
+    "quietest_0_5s_start_seconds": 1.5,
+    "quietest_0_5s_rms_dbfs": -138.48,
+    "quietest_0_5s_highpass_4k5_rms_dbfs": -158.51,
+    "loop_boundary_sample_step_dbfs": -240.0,
+    "natural_adjacent_step_p99_9_dbfs": -17.52,
+    "loop_boundary_exceeds_natural_p99_9": false
+  },
+  {
+    "path": "assets/level6-worn-party/audio/mastered/budget_arcade_ambience.wav",
+    "duration_seconds": 19.75,
+    "peak_dbfs": -8.18,
+    "rms_dbfs": -33.02,
+    "frame_rms_dbfs": {
+      "p10": -60.01,
+      "p50": -57.92,
+      "p90": -27.72,
+      "p99": -22.35
+    },
+    "head_0_2s_rms_dbfs": -44.47,
+    "tail_0_5s_rms_dbfs": -37.94,
+    "tail_0_5s_highpass_4k5_rms_dbfs": -41.95,
+    "quietest_0_5s_start_seconds": 13.24,
+    "quietest_0_5s_rms_dbfs": -59.9,
+    "quietest_0_5s_highpass_4k5_rms_dbfs": -85.31,
+    "loop_boundary_sample_step_dbfs": -81.62,
+    "natural_adjacent_step_p99_9_dbfs": -21.09,
+    "loop_boundary_exceeds_natural_p99_9": false
+  },
+  {
+    "path": "assets/level6-worn-party/audio/mastered/maintenance_workshop_ambience.wav",
+    "duration_seconds": 19.75,
+    "peak_dbfs": -20.96,
+    "rms_dbfs": -33.12,
+    "frame_rms_dbfs": {
+      "p10": -36.08,
+      "p50": -33.45,
+      "p90": -31.02,
+      "p99": -29.75
+    },
+    "head_0_2s_rms_dbfs": -37.52,
+    "tail_0_5s_rms_dbfs": -33.12,
+    "tail_0_5s_highpass_4k5_rms_dbfs": -74.46,
+    "quietest_0_5s_start_seconds": 0.0,
+    "quietest_0_5s_rms_dbfs": -35.45,
+    "quietest_0_5s_highpass_4k5_rms_dbfs": -73.68,
+    "loop_boundary_sample_step_dbfs": -74.08,
+    "natural_adjacent_step_p99_9_dbfs": -53.63,
+    "loop_boundary_exceeds_natural_p99_9": false
+  },
+  {
+    "path": "assets/level6-worn-party/audio/mastered/party_hall_ambience.wav",
+    "duration_seconds": 19.75,
+    "peak_dbfs": -21.4,
+    "rms_dbfs": -34.55,
+    "frame_rms_dbfs": {
+      "p10": -36.25,
+      "p50": -34.65,
+      "p90": -33.31,
+      "p99": -32.1
+    },
+    "head_0_2s_rms_dbfs": -38.55,
+    "tail_0_5s_rms_dbfs": -35.04,
+    "tail_0_5s_highpass_4k5_rms_dbfs": -61.62,
+    "quietest_0_5s_start_seconds": 0.02,
+    "quietest_0_5s_rms_dbfs": -36.57,
+    "quietest_0_5s_highpass_4k5_rms_dbfs": -63.42,
+    "loop_boundary_sample_step_dbfs": -74.39,
+    "natural_adjacent_step_p99_9_dbfs": -45.55,
+    "loop_boundary_exceeds_natural_p99_9": false
+  },
+  {
+    "path": "assets/level6-worn-party/audio/mastered/arcade_credit_button.mp3",
+    "duration_seconds": 3.0,
+    "peak_dbfs": -7.3,
+    "rms_dbfs": -25.94,
+    "frame_rms_dbfs": {
+      "p10": -139.29,
+      "p50": -138.63,
+      "p90": -22.09,
+      "p99": -13.86
+    },
+    "head_0_2s_rms_dbfs": -36.96,
+    "tail_0_5s_rms_dbfs": -139.12,
+    "tail_0_5s_highpass_4k5_rms_dbfs": -158.16,
+    "quietest_0_5s_start_seconds": 0.3,
+    "quietest_0_5s_rms_dbfs": -139.25,
+    "quietest_0_5s_highpass_4k5_rms_dbfs": -156.26,
+    "loop_boundary_sample_step_dbfs": -167.21,
+    "natural_adjacent_step_p99_9_dbfs": -20.36,
+    "loop_boundary_exceeds_natural_p99_9": false
+  },
+  {
+    "path": "assets/level6-worn-party/audio/mastered/breaker_switch.mp3",
+    "duration_seconds": 3.0,
+    "peak_dbfs": -7.9,
+    "rms_dbfs": -35.03,
+    "frame_rms_dbfs": {
+      "p10": -141.43,
+      "p50": -134.73,
+      "p90": -44.24,
+      "p99": -19.44
+    },
+    "head_0_2s_rms_dbfs": -25.86,
+    "tail_0_5s_rms_dbfs": -84.38,
+    "tail_0_5s_highpass_4k5_rms_dbfs": -117.24,
+    "quietest_0_5s_start_seconds": 1.5,
+    "quietest_0_5s_rms_dbfs": -138.76,
+    "quietest_0_5s_highpass_4k5_rms_dbfs": -158.94,
+    "loop_boundary_sample_step_dbfs": -186.96,
+    "natural_adjacent_step_p99_9_dbfs": -17.66,
+    "loop_boundary_exceeds_natural_p99_9": false
+  },
+  {
+    "path": "assets/level6-worn-party/audio/mastered/budget_arcade_ambience.mp3",
+    "duration_seconds": 19.75,
+    "peak_dbfs": -8.43,
+    "rms_dbfs": -33.29,
+    "frame_rms_dbfs": {
+      "p10": -60.27,
+      "p50": -58.19,
+      "p90": -27.99,
+      "p99": -22.61
+    },
+    "head_0_2s_rms_dbfs": -44.72,
+    "tail_0_5s_rms_dbfs": -38.21,
+    "tail_0_5s_highpass_4k5_rms_dbfs": -42.22,
+    "quietest_0_5s_start_seconds": 13.24,
+    "quietest_0_5s_rms_dbfs": -60.16,
+    "quietest_0_5s_highpass_4k5_rms_dbfs": -85.58,
+    "loop_boundary_sample_step_dbfs": -80.57,
+    "natural_adjacent_step_p99_9_dbfs": -21.34,
+    "loop_boundary_exceeds_natural_p99_9": false
+  },
+  {
+    "path": "assets/level6-worn-party/audio/mastered/maintenance_workshop_ambience.mp3",
+    "duration_seconds": 19.75,
+    "peak_dbfs": -21.23,
+    "rms_dbfs": -33.39,
+    "frame_rms_dbfs": {
+      "p10": -36.34,
+      "p50": -33.71,
+      "p90": -31.29,
+      "p99": -30.0
+    },
+    "head_0_2s_rms_dbfs": -37.78,
+    "tail_0_5s_rms_dbfs": -33.39,
+    "tail_0_5s_highpass_4k5_rms_dbfs": -74.62,
+    "quietest_0_5s_start_seconds": 0.0,
+    "quietest_0_5s_rms_dbfs": -35.71,
+    "quietest_0_5s_highpass_4k5_rms_dbfs": -73.76,
+    "loop_boundary_sample_step_dbfs": -59.17,
+    "natural_adjacent_step_p99_9_dbfs": -53.89,
+    "loop_boundary_exceeds_natural_p99_9": false
+  },
+  {
+    "path": "assets/level6-worn-party/audio/mastered/party_hall_ambience.mp3",
+    "duration_seconds": 19.75,
+    "peak_dbfs": -21.7,
+    "rms_dbfs": -34.81,
+    "frame_rms_dbfs": {
+      "p10": -36.51,
+      "p50": -34.9,
+      "p90": -33.57,
+      "p99": -32.37
+    },
+    "head_0_2s_rms_dbfs": -38.83,
+    "tail_0_5s_rms_dbfs": -35.31,
+    "tail_0_5s_highpass_4k5_rms_dbfs": -61.88,
+    "quietest_0_5s_start_seconds": 0.02,
+    "quietest_0_5s_rms_dbfs": -36.84,
+    "quietest_0_5s_highpass_4k5_rms_dbfs": -63.66,
+    "loop_boundary_sample_step_dbfs": -64.79,
+    "natural_adjacent_step_p99_9_dbfs": -45.81,
+    "loop_boundary_exceeds_natural_p99_9": false
+  }
+]

@@ -1,0 +1,23 @@
+{
+  "source": "/Users/zeanjuul4/Documents/Roblox Horror REPO/assets/level6-worn-party/Level6_FULL_Seed101.blend",
+  "fullScene": "Level 6 | FULL seed 101 | 32 rooms",
+  "instances": 3220,
+  "instancedVisualTriangles": 1094368,
+  "roomFloorInstances": 32,
+  "prefabCollections": 49,
+  "usedPrefabs": 39,
+  "cdInstances": 5,
+  "cdPlayerInstances": 1,
+  "missingReferencedPrefabs": [],
+  "atlasImages": [
+    {
+      "name": "WornParty_Atlas.png",
+      "size": [
+        2048,
+        2048
+      ],
+      "packed": true,
+      "path": "//textures/WornParty_Atlas.png"
+    }
+  ]
+}

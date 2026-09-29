@@ -1,0 +1,34 @@
+[
+  {
+    "path": "StarterPlayer.StarterPlayerScripts.NoiseReporter",
+    "class": "LocalScript",
+    "candidate": "StarterPlayer__StarterPlayerScripts__NoiseReporter.LocalScript.luau",
+    "beforeSha256": "aaf0ef925f94210d35baf9a6e169f37af7d6fc5efe931773b32726629b0d1f6e",
+    "afterSha256": "718c799d49987698eb1d816f7dfc07c9c7ae198fbfcce38d78a380980cc7b1f8",
+    "baseline": "artifacts/level6-build-20260930/native-backup/scripts.json"
+  },
+  {
+    "path": "StarterPlayer.StarterPlayerScripts.LobbyMusicController",
+    "class": "LocalScript",
+    "candidate": "StarterPlayer__StarterPlayerScripts__LobbyMusicController.LocalScript.luau",
+    "beforeSha256": "7f9ecdeda7b62256ccd3f25484e7116fd31e0437dd1e692074b53f07bb966c38",
+    "afterSha256": "77d9d1631cafe4f9c7f2f06ab7fee4b78ea846985215c3672c1e251f688917f6",
+    "baseline": "artifacts/level6-build-20260930/native-backup/scripts.json"
+  },
+  {
+    "path": "ServerScriptService.Crouch State Server",
+    "class": "Script",
+    "candidate": "ServerScriptService__Crouch State Server.Script.luau",
+    "beforeSha256": "2a474a0d3a18e5e97d53e2e0dced5fbe502663220684357d50f697f73300dffc",
+    "afterSha256": "3cd73777c6340a8e24bc021b16cd89b5bf27242757397073ccbf033213ee982b",
+    "baseline": "artifacts/level6-build-20260930/native-backup/scripts.json"
+  },
+  {
+    "path": "StarterPlayer.StarterPlayerScripts.Level4PreviewPrompt",
+    "class": "LocalScript",
+    "candidate": "StarterPlayer__StarterPlayerScripts__Level4PreviewPrompt.LocalScript.luau",
+    "beforeSha256": "6bc9ffd0d140318b53c7efe1eaf433eee866bd8746ba92ee1637452582db01d7",
+    "afterSha256": "63e54f182c3837581c6309184677d6b036452daa75b227dbe3335f00fca0e577",
+    "baseline": "artifacts/level6-build-20260930/native-backup/scripts.json"
+  }
+]

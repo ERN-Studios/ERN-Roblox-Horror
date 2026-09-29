@@ -1,0 +1,541 @@
+{
+  "package": "Level 6 Worn Party \u2014 offline audio palette",
+  "created_utc": "2026-09-29T23:37:41+00:00",
+  "status": "Offline assets only; no Roblox audio IDs uploaded or bound in Studio.",
+  "source": {
+    "provider": "ElevenLabs Creative Studio Sound Effects",
+    "model_id": "eleven_text_to_sound_v2",
+    "flow_id": "Zlw8w6brtdpGTVh66twg",
+    "flow_url": "https://elevenlabs.io/app/flows/Zlw8w6brtdpGTVh66twg",
+    "generation_settings": {
+      "prompt_influence": 0.75,
+      "variations_per_prompt": 4
+    },
+    "license_status": "Workspace subscription tier was not exposed by the connector; verify the ElevenLabs plan permits commercial use before importing into a monetized experience.",
+    "license_terms_url": "https://elevenlabs.io/docs/overview/administration/billing",
+    "sound_effects_terms_url": "https://elevenlabs.io/sound-effects-terms"
+  },
+  "roblox_import": {
+    "recommended": "Use 48 kHz stereo 24-bit PCM WAV masters for ambience loops and one-shots. 48 kHz stereo 192 kb/s MP3 alternatives are included.",
+    "official_requirements_url": "https://create.roblox.com/docs/audio/assets",
+    "all_deliverables_under_20_mb": true,
+    "transcode_and_in_studio_listening_test_pending": true
+  },
+  "assets": [
+    {
+      "name": "party_hall_ambience",
+      "role": "looped ambience: beige party hall and birthday rooms",
+      "loop": true,
+      "generation_id": "AxpNKfZxsRv9JeOBfbJl",
+      "flow_node_id": "MI6WCcIT0ioPDEX2sM48",
+      "prompt": "Quiet abandoned 1990s mall birthday party hall at night. A soft fluorescent tube hum, distant HVAC airflow, very occasional ceiling tile tick and loose paper decoration rustle in a tiled room. Restrained eerie realism, subtle stereo depth, even low ambience, no people, no voices, no music, no scream, no digital crackle or hiss.",
+      "selected_take": 4,
+      "source_mp3": {
+        "path": "assets/level6-worn-party/audio/raw/party_hall_ambience-elevenlabs-take4.mp3",
+        "sha256": "ca8e61ee2c604ab76a766b881f3ff302c1635335e909c8a6aa004876b840f464",
+        "qc": {
+          "path": "assets/level6-worn-party/audio/raw/party_hall_ambience-elevenlabs-take4.mp3",
+          "duration_seconds": 20.0,
+          "peak_dbfs": -22.84,
+          "rms_dbfs": -36.09,
+          "frame_rms_dbfs": {
+            "p10": -37.84,
+            "p50": -36.21,
+            "p90": -34.73,
+            "p99": -33.55
+          },
+          "head_0_2s_rms_dbfs": -39.63,
+          "tail_0_5s_rms_dbfs": -37.4,
+          "tail_0_5s_highpass_4k5_rms_dbfs": -60.84,
+          "quietest_0_5s_start_seconds": 0.0,
+          "quietest_0_5s_rms_dbfs": -37.84,
+          "quietest_0_5s_highpass_4k5_rms_dbfs": -61.17,
+          "loop_boundary_sample_step_dbfs": -55.59,
+          "natural_adjacent_step_p99_9_dbfs": -46.01,
+          "loop_boundary_exceeds_natural_p99_9": false
+        }
+      },
+      "master_wav": {
+        "path": "assets/level6-worn-party/audio/mastered/party_hall_ambience.wav",
+        "codec": "pcm_s24le",
+        "sample_rate_hz": 48000,
+        "channels": 2,
+        "bits_per_sample": 24,
+        "duration_seconds_container": 19.75,
+        "bytes": 5688102,
+        "sha256": "11058a6b2d8f7ee02403113f57f4bdaa27b71b771b79ae83deb1de53fa12fc8e",
+        "qc": {
+          "path": "assets/level6-worn-party/audio/mastered/party_hall_ambience.wav",
+          "duration_seconds": 19.75,
+          "peak_dbfs": -21.4,
+          "rms_dbfs": -34.55,
+          "frame_rms_dbfs": {
+            "p10": -36.25,
+            "p50": -34.65,
+            "p90": -33.31,
+            "p99": -32.1
+          },
+          "head_0_2s_rms_dbfs": -38.55,
+          "tail_0_5s_rms_dbfs": -35.04,
+          "tail_0_5s_highpass_4k5_rms_dbfs": -61.62,
+          "quietest_0_5s_start_seconds": 0.02,
+          "quietest_0_5s_rms_dbfs": -36.57,
+          "quietest_0_5s_highpass_4k5_rms_dbfs": -63.42,
+          "loop_boundary_sample_step_dbfs": -74.39,
+          "natural_adjacent_step_p99_9_dbfs": -45.55,
+          "loop_boundary_exceeds_natural_p99_9": false
+        }
+      },
+      "upload_mp3": {
+        "path": "assets/level6-worn-party/audio/mastered/party_hall_ambience.mp3",
+        "codec": "mp3",
+        "sample_rate_hz": 48000,
+        "channels": 2,
+        "bits_per_sample": null,
+        "duration_seconds_container": 19.776,
+        "bytes": 475244,
+        "sha256": "49108519991ee8b7bbbbb649539adec59ff76e1c05692a6bbae46284a9fe6b70",
+        "qc": {
+          "path": "assets/level6-worn-party/audio/mastered/party_hall_ambience.mp3",
+          "duration_seconds": 19.75,
+          "peak_dbfs": -21.7,
+          "rms_dbfs": -34.81,
+          "frame_rms_dbfs": {
+            "p10": -36.51,
+            "p50": -34.9,
+            "p90": -33.57,
+            "p99": -32.37
+          },
+          "head_0_2s_rms_dbfs": -38.83,
+          "tail_0_5s_rms_dbfs": -35.31,
+          "tail_0_5s_highpass_4k5_rms_dbfs": -61.88,
+          "quietest_0_5s_start_seconds": 0.02,
+          "quietest_0_5s_rms_dbfs": -36.84,
+          "quietest_0_5s_highpass_4k5_rms_dbfs": -63.66,
+          "loop_boundary_sample_step_dbfs": -64.79,
+          "natural_adjacent_step_p99_9_dbfs": -45.81,
+          "loop_boundary_exceeds_natural_p99_9": false
+        }
+      },
+      "processing": {
+        "filters": "highpass=f=45,afftdn=nr=8:nf=-55:rf=-62:tn=1,lowpass=f=8500",
+        "overlap_ms": 250,
+        "fade_in_ms": 0,
+        "fade_out_ms": 0,
+        "gain_db": 2.05
+      }
+    },
+    {
+      "name": "budget_arcade_ambience",
+      "role": "looped ambience: budget arcade zone",
+      "loop": true,
+      "generation_id": "IbXegJWW4oOAcTXps0JO",
+      "flow_node_id": "E21mnMmNv4WxBnTJrBTJ",
+      "prompt": "Abandoned budget arcade in a 1990s shopping mall. A few distant coin-op cabinets emit isolated low analog bleeps and short relay ticks over a very soft electrical transformer hum and room air. Sparse irregular events with clear gaps, dusty empty room reverb, no melody, no voices, no music, no exaggerated static or broadband hiss.",
+      "selected_take": 2,
+      "source_mp3": {
+        "path": "assets/level6-worn-party/audio/raw/budget_arcade_ambience-elevenlabs-take2.mp3",
+        "sha256": "c4bf6e599c1c3eb0a601061cd883d5e01e28fe84801828e6c5686f2ef403db9b",
+        "qc": {
+          "path": "assets/level6-worn-party/audio/raw/budget_arcade_ambience-elevenlabs-take2.mp3",
+          "duration_seconds": 20.0,
+          "peak_dbfs": -16.96,
+          "rms_dbfs": -41.11,
+          "frame_rms_dbfs": {
+            "p10": -58.59,
+            "p50": -53.64,
+            "p90": -36.08,
+            "p99": -30.87
+          },
+          "head_0_2s_rms_dbfs": -42.66,
+          "tail_0_5s_rms_dbfs": -50.53,
+          "tail_0_5s_highpass_4k5_rms_dbfs": -54.87,
+          "quietest_0_5s_start_seconds": 13.28,
+          "quietest_0_5s_rms_dbfs": -58.75,
+          "quietest_0_5s_highpass_4k5_rms_dbfs": -70.27,
+          "loop_boundary_sample_step_dbfs": -73.01,
+          "natural_adjacent_step_p99_9_dbfs": -27.68,
+          "loop_boundary_exceeds_natural_p99_9": false
+        }
+      },
+      "master_wav": {
+        "path": "assets/level6-worn-party/audio/mastered/budget_arcade_ambience.wav",
+        "codec": "pcm_s24le",
+        "sample_rate_hz": 48000,
+        "channels": 2,
+        "bits_per_sample": 24,
+        "duration_seconds_container": 19.75,
+        "bytes": 5688102,
+        "sha256": "9216affa14717996fb5b7cdafff98e6bf0dbe1d186f509e0f5a92a7fef300a82",
+        "qc": {
+          "path": "assets/level6-worn-party/audio/mastered/budget_arcade_ambience.wav",
+          "duration_seconds": 19.75,
+          "peak_dbfs": -8.18,
+          "rms_dbfs": -33.02,
+          "frame_rms_dbfs": {
+            "p10": -60.01,
+            "p50": -57.92,
+            "p90": -27.72,
+            "p99": -22.35
+          },
+          "head_0_2s_rms_dbfs": -44.47,
+          "tail_0_5s_rms_dbfs": -37.94,
+          "tail_0_5s_highpass_4k5_rms_dbfs": -41.95,
+          "quietest_0_5s_start_seconds": 13.24,
+          "quietest_0_5s_rms_dbfs": -59.9,
+          "quietest_0_5s_highpass_4k5_rms_dbfs": -85.31,
+          "loop_boundary_sample_step_dbfs": -81.62,
+          "natural_adjacent_step_p99_9_dbfs": -21.09,
+          "loop_boundary_exceeds_natural_p99_9": false
+        }
+      },
+      "upload_mp3": {
+        "path": "assets/level6-worn-party/audio/mastered/budget_arcade_ambience.mp3",
+        "codec": "mp3",
+        "sample_rate_hz": 48000,
+        "channels": 2,
+        "bits_per_sample": null,
+        "duration_seconds_container": 19.776,
+        "bytes": 475244,
+        "sha256": "e078d7636b1fb775ca13e56bde7d9b741db1f66877ee0870d198bed7e6a238cb",
+        "qc": {
+          "path": "assets/level6-worn-party/audio/mastered/budget_arcade_ambience.mp3",
+          "duration_seconds": 19.75,
+          "peak_dbfs": -8.43,
+          "rms_dbfs": -33.29,
+          "frame_rms_dbfs": {
+            "p10": -60.27,
+            "p50": -58.19,
+            "p90": -27.99,
+            "p99": -22.61
+          },
+          "head_0_2s_rms_dbfs": -44.72,
+          "tail_0_5s_rms_dbfs": -38.21,
+          "tail_0_5s_highpass_4k5_rms_dbfs": -42.22,
+          "quietest_0_5s_start_seconds": 13.24,
+          "quietest_0_5s_rms_dbfs": -60.16,
+          "quietest_0_5s_highpass_4k5_rms_dbfs": -85.58,
+          "loop_boundary_sample_step_dbfs": -80.57,
+          "natural_adjacent_step_p99_9_dbfs": -21.34,
+          "loop_boundary_exceeds_natural_p99_9": false
+        }
+      },
+      "processing": {
+        "filters": "[0:a]asplit=2[lo][hi];[lo]highpass=f=45,lowpass=f=600[bed];[hi]highpass=f=600,lowpass=f=6000,afftdn=nr=20:nf=-48:rf=-68:tn=1,agate=threshold=0.004:ratio=12:range=0.001:attack=4:release=160[events];[bed][events]amix=inputs=2:normalize=0[out]",
+        "overlap_ms": 250,
+        "fade_in_ms": 0,
+        "fade_out_ms": 0,
+        "gain_db": 9.65
+      }
+    },
+    {
+      "name": "maintenance_workshop_ambience",
+      "role": "looped ambience: maintenance workshop zone",
+      "loop": true,
+      "generation_id": "LuSXm53viloKLhBMxSeF",
+      "flow_node_id": "SHvxN1H4amd7XmJCUzM2",
+      "prompt": "Empty back-of-mall maintenance workshop at night. Old ventilation motor turns steadily at low volume, a pipe pings occasionally and a loose vent flap taps once in the distance. Sparse, ominous physical room tone, realistic perspective, no voices, no music, no electrical static or white noise.",
+      "selected_take": 3,
+      "source_mp3": {
+        "path": "assets/level6-worn-party/audio/raw/maintenance_workshop_ambience-elevenlabs-take3.mp3",
+        "sha256": "709f11232f20de4268216d643660527f0858df782a86296a5abc103f22672f55",
+        "qc": {
+          "path": "assets/level6-worn-party/audio/raw/maintenance_workshop_ambience-elevenlabs-take3.mp3",
+          "duration_seconds": 20.0,
+          "peak_dbfs": -21.12,
+          "rms_dbfs": -33.0,
+          "frame_rms_dbfs": {
+            "p10": -36.0,
+            "p50": -33.31,
+            "p90": -31.01,
+            "p99": -29.45
+          },
+          "head_0_2s_rms_dbfs": -33.89,
+          "tail_0_5s_rms_dbfs": -34.66,
+          "tail_0_5s_highpass_4k5_rms_dbfs": -73.83,
+          "quietest_0_5s_start_seconds": 19.5,
+          "quietest_0_5s_rms_dbfs": -34.66,
+          "quietest_0_5s_highpass_4k5_rms_dbfs": -73.83,
+          "loop_boundary_sample_step_dbfs": -66.25,
+          "natural_adjacent_step_p99_9_dbfs": -54.23,
+          "loop_boundary_exceeds_natural_p99_9": false
+        }
+      },
+      "master_wav": {
+        "path": "assets/level6-worn-party/audio/mastered/maintenance_workshop_ambience.wav",
+        "codec": "pcm_s24le",
+        "sample_rate_hz": 48000,
+        "channels": 2,
+        "bits_per_sample": 24,
+        "duration_seconds_container": 19.75,
+        "bytes": 5688102,
+        "sha256": "12f5f97c10dad520683f5a119c4766488b24806a2a9d848f22d9b9af31e2699d",
+        "qc": {
+          "path": "assets/level6-worn-party/audio/mastered/maintenance_workshop_ambience.wav",
+          "duration_seconds": 19.75,
+          "peak_dbfs": -20.96,
+          "rms_dbfs": -33.12,
+          "frame_rms_dbfs": {
+            "p10": -36.08,
+            "p50": -33.45,
+            "p90": -31.02,
+            "p99": -29.75
+          },
+          "head_0_2s_rms_dbfs": -37.52,
+          "tail_0_5s_rms_dbfs": -33.12,
+          "tail_0_5s_highpass_4k5_rms_dbfs": -74.46,
+          "quietest_0_5s_start_seconds": 0.0,
+          "quietest_0_5s_rms_dbfs": -35.45,
+          "quietest_0_5s_highpass_4k5_rms_dbfs": -73.68,
+          "loop_boundary_sample_step_dbfs": -74.08,
+          "natural_adjacent_step_p99_9_dbfs": -53.63,
+          "loop_boundary_exceeds_natural_p99_9": false
+        }
+      },
+      "upload_mp3": {
+        "path": "assets/level6-worn-party/audio/mastered/maintenance_workshop_ambience.mp3",
+        "codec": "mp3",
+        "sample_rate_hz": 48000,
+        "channels": 2,
+        "bits_per_sample": null,
+        "duration_seconds_container": 19.776,
+        "bytes": 475244,
+        "sha256": "373506de60fbeedc4c661335db6b865b493d32ee7ef815adc20ff20d17ec246e",
+        "qc": {
+          "path": "assets/level6-worn-party/audio/mastered/maintenance_workshop_ambience.mp3",
+          "duration_seconds": 19.75,
+          "peak_dbfs": -21.23,
+          "rms_dbfs": -33.39,
+          "frame_rms_dbfs": {
+            "p10": -36.34,
+            "p50": -33.71,
+            "p90": -31.29,
+            "p99": -30.0
+          },
+          "head_0_2s_rms_dbfs": -37.78,
+          "tail_0_5s_rms_dbfs": -33.39,
+          "tail_0_5s_highpass_4k5_rms_dbfs": -74.62,
+          "quietest_0_5s_start_seconds": 0.0,
+          "quietest_0_5s_rms_dbfs": -35.71,
+          "quietest_0_5s_highpass_4k5_rms_dbfs": -73.76,
+          "loop_boundary_sample_step_dbfs": -59.17,
+          "natural_adjacent_step_p99_9_dbfs": -53.89,
+          "loop_boundary_exceeds_natural_p99_9": false
+        }
+      },
+      "processing": {
+        "filters": "highpass=f=45,afftdn=nr=8:nf=-55:rf=-62:tn=1,lowpass=f=8500",
+        "overlap_ms": 250,
+        "fade_in_ms": 0,
+        "fade_out_ms": 0,
+        "gain_db": 1.41
+      }
+    },
+    {
+      "name": "arcade_credit_button",
+      "role": "one-shot: arcade PlayPrompt / credit confirmation",
+      "loop": false,
+      "generation_id": "AvQ6vRECs9bEtzesXpTq",
+      "flow_node_id": "0q4xSInsAkZcY7dJAERs",
+      "prompt": "One close-up interaction in a 1990s coin-op arcade cabinet: a plastic button depresses with a tactile click, a coin-credit relay clacks, then a brief low two-note synthesized confirmation blip decays into true silence. Dry mechanical detail, no background ambience, no music, no speech, no hiss.",
+      "selected_take": 2,
+      "source_mp3": {
+        "path": "assets/level6-worn-party/audio/raw/arcade_credit_button-elevenlabs-take2.mp3",
+        "sha256": "7739143d3e4df47c77d4a38a21964968bfe2d3822817ad5ec8c6cbcddbbd3e4f",
+        "qc": {
+          "path": "assets/level6-worn-party/audio/raw/arcade_credit_button-elevenlabs-take2.mp3",
+          "duration_seconds": 3.0,
+          "peak_dbfs": 3.58,
+          "rms_dbfs": -13.63,
+          "frame_rms_dbfs": {
+            "p10": -78.32,
+            "p50": -71.63,
+            "p90": -10.31,
+            "p99": -1.75
+          },
+          "head_0_2s_rms_dbfs": -24.15,
+          "tail_0_5s_rms_dbfs": -72.36,
+          "tail_0_5s_highpass_4k5_rms_dbfs": -87.85,
+          "quietest_0_5s_start_seconds": 0.24,
+          "quietest_0_5s_rms_dbfs": -78.35,
+          "quietest_0_5s_highpass_4k5_rms_dbfs": -91.41,
+          "loop_boundary_sample_step_dbfs": -20.4,
+          "natural_adjacent_step_p99_9_dbfs": -7.29,
+          "loop_boundary_exceeds_natural_p99_9": false
+        }
+      },
+      "master_wav": {
+        "path": "assets/level6-worn-party/audio/mastered/arcade_credit_button.wav",
+        "codec": "pcm_s24le",
+        "sample_rate_hz": 48000,
+        "channels": 2,
+        "bits_per_sample": 24,
+        "duration_seconds_container": 3.0,
+        "bytes": 864102,
+        "sha256": "cc4963723f46530eeb00eb36ce15c35c42eb6e4a40b205ab9a5c78b45eab9885",
+        "qc": {
+          "path": "assets/level6-worn-party/audio/mastered/arcade_credit_button.wav",
+          "duration_seconds": 3.0,
+          "peak_dbfs": -7.08,
+          "rms_dbfs": -25.68,
+          "frame_rms_dbfs": {
+            "p10": -139.09,
+            "p50": -138.42,
+            "p90": -21.83,
+            "p99": -13.62
+          },
+          "head_0_2s_rms_dbfs": -36.69,
+          "tail_0_5s_rms_dbfs": -138.85,
+          "tail_0_5s_highpass_4k5_rms_dbfs": -157.65,
+          "quietest_0_5s_start_seconds": 0.3,
+          "quietest_0_5s_rms_dbfs": -138.99,
+          "quietest_0_5s_highpass_4k5_rms_dbfs": -155.73,
+          "loop_boundary_sample_step_dbfs": -240.0,
+          "natural_adjacent_step_p99_9_dbfs": -20.14,
+          "loop_boundary_exceeds_natural_p99_9": false
+        }
+      },
+      "upload_mp3": {
+        "path": "assets/level6-worn-party/audio/mastered/arcade_credit_button.mp3",
+        "codec": "mp3",
+        "sample_rate_hz": 48000,
+        "channels": 2,
+        "bits_per_sample": null,
+        "duration_seconds_container": 3.024,
+        "bytes": 73196,
+        "sha256": "dc862a6ed42056777945f02ae7e69b8e38bb4daa963adc29c057bdef2e644d10",
+        "qc": {
+          "path": "assets/level6-worn-party/audio/mastered/arcade_credit_button.mp3",
+          "duration_seconds": 3.0,
+          "peak_dbfs": -7.3,
+          "rms_dbfs": -25.94,
+          "frame_rms_dbfs": {
+            "p10": -139.29,
+            "p50": -138.63,
+            "p90": -22.09,
+            "p99": -13.86
+          },
+          "head_0_2s_rms_dbfs": -36.96,
+          "tail_0_5s_rms_dbfs": -139.12,
+          "tail_0_5s_highpass_4k5_rms_dbfs": -158.16,
+          "quietest_0_5s_start_seconds": 0.3,
+          "quietest_0_5s_rms_dbfs": -139.25,
+          "quietest_0_5s_highpass_4k5_rms_dbfs": -156.26,
+          "loop_boundary_sample_step_dbfs": -167.21,
+          "natural_adjacent_step_p99_9_dbfs": -20.36,
+          "loop_boundary_exceeds_natural_p99_9": false
+        }
+      },
+      "processing": {
+        "filters": "highpass=f=65,afftdn=nr=12:nf=-55:rf=-68:tn=1,lowpass=f=10000,agate=threshold=0.002:ratio=8:range=0.001:attack=3:release=100",
+        "overlap_ms": 0,
+        "fade_in_ms": 4,
+        "fade_out_ms": 300,
+        "gain_db": -12.02
+      }
+    },
+    {
+      "name": "breaker_switch",
+      "role": "one-shot: maintenance power-switch interaction candidate",
+      "loop": false,
+      "generation_id": "qPkp6y7iWo3ZTdTUJLau",
+      "flow_node_id": "fMkrYyTb4W2pXryMjVrO",
+      "prompt": "One close-up maintenance breaker switch being pulled down and reset: hard plastic lever clack, short electrical contact thunk, a restrained metallic cabinet resonance fading into true silence. Realistic physical sound, no buzz after the action, no ambience, no speech, no music, no hiss.",
+      "selected_take": 3,
+      "source_mp3": {
+        "path": "assets/level6-worn-party/audio/raw/breaker_switch-elevenlabs-take3.mp3",
+        "sha256": "afb49d7e65df962b527487f88b88f55be4b51e93f3ea34db5ebff7ba7f81e184",
+        "qc": {
+          "path": "assets/level6-worn-party/audio/raw/breaker_switch-elevenlabs-take3.mp3",
+          "duration_seconds": 3.0,
+          "peak_dbfs": 4.17,
+          "rms_dbfs": -22.72,
+          "frame_rms_dbfs": {
+            "p10": -69.27,
+            "p50": -54.02,
+            "p90": -30.58,
+            "p99": -7.68
+          },
+          "head_0_2s_rms_dbfs": -13.56,
+          "tail_0_5s_rms_dbfs": -55.94,
+          "tail_0_5s_highpass_4k5_rms_dbfs": -93.46,
+          "quietest_0_5s_start_seconds": 1.48,
+          "quietest_0_5s_rms_dbfs": -58.73,
+          "quietest_0_5s_highpass_4k5_rms_dbfs": -93.04,
+          "loop_boundary_sample_step_dbfs": -77.76,
+          "natural_adjacent_step_p99_9_dbfs": -2.35,
+          "loop_boundary_exceeds_natural_p99_9": false
+        }
+      },
+      "master_wav": {
+        "path": "assets/level6-worn-party/audio/mastered/breaker_switch.wav",
+        "codec": "pcm_s24le",
+        "sample_rate_hz": 48000,
+        "channels": 2,
+        "bits_per_sample": 24,
+        "duration_seconds_container": 3.0,
+        "bytes": 864102,
+        "sha256": "209c194645abe3b200ac342fbdd2d1bd62b8484d002467e1443c17222b835a2c",
+        "qc": {
+          "path": "assets/level6-worn-party/audio/mastered/breaker_switch.wav",
+          "duration_seconds": 3.0,
+          "peak_dbfs": -7.41,
+          "rms_dbfs": -34.81,
+          "frame_rms_dbfs": {
+            "p10": -141.1,
+            "p50": -134.46,
+            "p90": -43.97,
+            "p99": -19.27
+          },
+          "head_0_2s_rms_dbfs": -25.66,
+          "tail_0_5s_rms_dbfs": -84.1,
+          "tail_0_5s_highpass_4k5_rms_dbfs": -117.1,
+          "quietest_0_5s_start_seconds": 1.5,
+          "quietest_0_5s_rms_dbfs": -138.48,
+          "quietest_0_5s_highpass_4k5_rms_dbfs": -158.51,
+          "loop_boundary_sample_step_dbfs": -240.0,
+          "natural_adjacent_step_p99_9_dbfs": -17.52,
+          "loop_boundary_exceeds_natural_p99_9": false
+        }
+      },
+      "upload_mp3": {
+        "path": "assets/level6-worn-party/audio/mastered/breaker_switch.mp3",
+        "codec": "mp3",
+        "sample_rate_hz": 48000,
+        "channels": 2,
+        "bits_per_sample": null,
+        "duration_seconds_container": 3.024,
+        "bytes": 73196,
+        "sha256": "55e4264a3e771b7709a1e8b44a8c5d393ca117f98176ac51a5fcbb90f8740838",
+        "qc": {
+          "path": "assets/level6-worn-party/audio/mastered/breaker_switch.mp3",
+          "duration_seconds": 3.0,
+          "peak_dbfs": -7.9,
+          "rms_dbfs": -35.03,
+          "frame_rms_dbfs": {
+            "p10": -141.43,
+            "p50": -134.73,
+            "p90": -44.24,
+            "p99": -19.44
+          },
+          "head_0_2s_rms_dbfs": -25.86,
+          "tail_0_5s_rms_dbfs": -84.38,
+          "tail_0_5s_highpass_4k5_rms_dbfs": -117.24,
+          "quietest_0_5s_start_seconds": 1.5,
+          "quietest_0_5s_rms_dbfs": -138.76,
+          "quietest_0_5s_highpass_4k5_rms_dbfs": -158.94,
+          "loop_boundary_sample_step_dbfs": -186.96,
+          "natural_adjacent_step_p99_9_dbfs": -17.66,
+          "loop_boundary_exceeds_natural_p99_9": false
+        }
+      },
+      "processing": {
+        "filters": "highpass=f=65,afftdn=nr=12:nf=-55:rf=-68:tn=1,lowpass=f=10000,agate=threshold=0.002:ratio=8:range=0.001:attack=3:release=100",
+        "overlap_ms": 0,
+        "fade_in_ms": 4,
+        "fade_out_ms": 300,
+        "gain_db": -11.14
+      }
+    }
+  ]
+}

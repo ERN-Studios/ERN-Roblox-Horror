@@ -1,0 +1,1696 @@
+{
+  "schema": "level6-blender-prefabs-v1",
+  "axisMapping": "X,Z,-Y",
+  "studsPerUnit": 1,
+  "groupId": 1039373905,
+  "atlas": "../textures/WornParty_Atlas.png",
+  "chunks": [
+    {
+      "id": 0,
+      "name": "WallBeige",
+      "file": "chunks/c00000.b64",
+      "sha256": "4d30a9737cf761ee3e517443c6f8442cfd0a66a2f323683beb87bd04284cd188",
+      "bytes": 3900,
+      "vertices": 48,
+      "normals": 18,
+      "uvs": 8,
+      "triangles": 84,
+      "center": [
+        0.0,
+        6.0,
+        0.0
+      ],
+      "size": [
+        8.0,
+        12.0,
+        1.544
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0,
+            0,
+            6
+          ],
+          "size": [
+            8,
+            1.5,
+            12
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 1,
+      "name": "LintelBeige",
+      "file": "chunks/c00001.b64",
+      "sha256": "88b7f543f6cc7bca73b525dc77b10a3bc14614ed9bf42d074c73ccbc68056e77",
+      "bytes": 2716,
+      "vertices": 32,
+      "normals": 10,
+      "uvs": 4,
+      "triangles": 60,
+      "center": [
+        0.0,
+        0.75,
+        0.0
+      ],
+      "size": [
+        14.0,
+        1.5,
+        1.5
+      ],
+      "colliders_xyz": [],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 2,
+      "name": "WallOrange",
+      "file": "chunks/c00002.b64",
+      "sha256": "d6d27a900dd214473aa265c8c72aa348e4a566e6a9d4311df1f1e214e783ed61",
+      "bytes": 3900,
+      "vertices": 48,
+      "normals": 18,
+      "uvs": 8,
+      "triangles": 84,
+      "center": [
+        0.0,
+        6.0,
+        0.0
+      ],
+      "size": [
+        8.0,
+        12.0,
+        1.544
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0,
+            0,
+            6
+          ],
+          "size": [
+            8,
+            1.5,
+            12
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 3,
+      "name": "LintelOrange",
+      "file": "chunks/c00003.b64",
+      "sha256": "d5b71642fca1b870dfba5591f0c66788aea63db4771e56861d7d1661a07648f6",
+      "bytes": 2716,
+      "vertices": 32,
+      "normals": 10,
+      "uvs": 4,
+      "triangles": 60,
+      "center": [
+        0.0,
+        0.75,
+        0.0
+      ],
+      "size": [
+        14.0,
+        1.5,
+        1.5
+      ],
+      "colliders_xyz": [],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 4,
+      "name": "WallRed",
+      "file": "chunks/c00004.b64",
+      "sha256": "8baff292b03a9362d433c00fb0211ac390706584420964402ef3ce2a3e7e720c",
+      "bytes": 3900,
+      "vertices": 48,
+      "normals": 18,
+      "uvs": 8,
+      "triangles": 84,
+      "center": [
+        0.0,
+        6.0,
+        0.0
+      ],
+      "size": [
+        8.0,
+        12.0,
+        1.544
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0,
+            0,
+            6
+          ],
+          "size": [
+            8,
+            1.5,
+            12
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 5,
+      "name": "LintelRed",
+      "file": "chunks/c00005.b64",
+      "sha256": "0d9a060cd74cbf58497d93f17b4c5029e7ce0f12c2072607669fb5a7cd6943fd",
+      "bytes": 2716,
+      "vertices": 32,
+      "normals": 10,
+      "uvs": 4,
+      "triangles": 60,
+      "center": [
+        0.0,
+        0.75,
+        0.0
+      ],
+      "size": [
+        14.0,
+        1.5,
+        1.5
+      ],
+      "colliders_xyz": [],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 6,
+      "name": "WallService",
+      "file": "chunks/c00006.b64",
+      "sha256": "dcda4fb7c9dad9161de7f064cc214d3386f79d21dc8847edeeefbe173bf5050e",
+      "bytes": 9020,
+      "vertices": 112,
+      "normals": 18,
+      "uvs": 12,
+      "triangles": 204,
+      "center": [
+        0.0,
+        6.0,
+        0.0
+      ],
+      "size": [
+        8.0,
+        12.0,
+        1.627
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0,
+            0,
+            6
+          ],
+          "size": [
+            8,
+            1.5,
+            12
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 7,
+      "name": "LintelService",
+      "file": "chunks/c00007.b64",
+      "sha256": "88b7f543f6cc7bca73b525dc77b10a3bc14614ed9bf42d074c73ccbc68056e77",
+      "bytes": 2716,
+      "vertices": 32,
+      "normals": 10,
+      "uvs": 4,
+      "triangles": 60,
+      "center": [
+        0.0,
+        0.75,
+        0.0
+      ],
+      "size": [
+        14.0,
+        1.5,
+        1.5
+      ],
+      "colliders_xyz": [],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 8,
+      "name": "FloorBeige",
+      "file": "chunks/c00008.b64",
+      "sha256": "ee3fc14169b0bbbab2e30996423117d46b232e28ce41ecc5c64d805dbd0aa290",
+      "bytes": 2484,
+      "vertices": 38,
+      "normals": 6,
+      "uvs": 8,
+      "triangles": 52,
+      "center": [
+        0.0,
+        -0.5025000000000001,
+        0.0
+      ],
+      "size": [
+        80.0,
+        1.015,
+        64.0
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0,
+            0,
+            -0.5
+          ],
+          "size": [
+            80,
+            64,
+            1
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 9,
+      "name": "FloorOrange",
+      "file": "chunks/c00009.b64",
+      "sha256": "af3cf0143aa7bfaf1c9ad5e920e8d8517603fafd8fc6bc2a79479e54204a3e8b",
+      "bytes": 2484,
+      "vertices": 38,
+      "normals": 6,
+      "uvs": 8,
+      "triangles": 52,
+      "center": [
+        0.0,
+        -0.5025000000000001,
+        0.0
+      ],
+      "size": [
+        80.0,
+        1.015,
+        64.0
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0,
+            0,
+            -0.5
+          ],
+          "size": [
+            80,
+            64,
+            1
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 10,
+      "name": "FloorRed",
+      "file": "chunks/c00010.b64",
+      "sha256": "c24404b06faaecea461dbc57820cdec36a339be70ca275c0877357c65dbd9cd1",
+      "bytes": 2484,
+      "vertices": 38,
+      "normals": 6,
+      "uvs": 8,
+      "triangles": 52,
+      "center": [
+        0.0,
+        -0.5025000000000001,
+        0.0
+      ],
+      "size": [
+        80.0,
+        1.015,
+        64.0
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0,
+            0,
+            -0.5
+          ],
+          "size": [
+            80,
+            64,
+            1
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 11,
+      "name": "FloorService",
+      "file": "chunks/c00011.b64",
+      "sha256": "241f5eedcca842fd1b9845d01506608e8be97e5e0578aa6710784788bbfb6641",
+      "bytes": 2484,
+      "vertices": 38,
+      "normals": 6,
+      "uvs": 8,
+      "triangles": 52,
+      "center": [
+        0.0,
+        -0.5025000000000001,
+        0.0
+      ],
+      "size": [
+        80.0,
+        1.015,
+        64.0
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0,
+            0,
+            -0.5
+          ],
+          "size": [
+            80,
+            64,
+            1
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 12,
+      "name": "Ceiling",
+      "file": "chunks/c00012.b64",
+      "sha256": "eb1d6a47c5be5e3010fb21f56dab31510d29541351c420895024780f756c03f9",
+      "bytes": 47544,
+      "vertices": 661,
+      "normals": 6,
+      "uvs": 8,
+      "triangles": 1096,
+      "center": [
+        0.0,
+        -0.034999999999999996,
+        0.0
+      ],
+      "size": [
+        80.07,
+        0.075,
+        64.07
+      ],
+      "colliders_xyz": [],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 13,
+      "name": "FluorescentFrame",
+      "file": "chunks/c00013.b64",
+      "sha256": "12596014b812a1674690132aaa10bdb95588e6e6d194e2d62741522e8eaf8c5e",
+      "bytes": 3852,
+      "vertices": 48,
+      "normals": 14,
+      "uvs": 8,
+      "triangles": 84,
+      "center": [
+        0.0,
+        0.08625000000000001,
+        0.0
+      ],
+      "size": [
+        7.5,
+        0.36750000000000005,
+        2.4
+      ],
+      "colliders_xyz": [],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 14,
+      "name": "FluorescentDiffuser",
+      "file": "chunks/c00014.b64",
+      "sha256": "16ae53a9cfcb92566837584748edf1cd0d3e51a1efc6f2cf5b8d9cf8d7ddc247",
+      "bytes": 21180,
+      "vertices": 312,
+      "normals": 6,
+      "uvs": 8,
+      "triangles": 480,
+      "center": [
+        0.0,
+        -0.0075,
+        0.0
+      ],
+      "size": [
+        7.05,
+        0.15500000000000003,
+        2.05
+      ],
+      "colliders_xyz": [],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 15,
+      "name": "PASpeaker",
+      "file": "chunks/c00015.b64",
+      "sha256": "218288e0d05674c7e4786751a4d59a97a58f563b795af45e86a4eceac2783030",
+      "bytes": 24068,
+      "vertices": 260,
+      "normals": 168,
+      "uvs": 78,
+      "triangles": 508,
+      "center": [
+        0.0,
+        0.0,
+        0.05479999999999996
+      ],
+      "size": [
+        1.75,
+        2.3,
+        1.2096
+      ],
+      "colliders_xyz": [],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 16,
+      "name": "RoomDivider",
+      "file": "chunks/c00016.b64",
+      "sha256": "437017d214d1533d66d66ee3153aa3ea3cb9b62ab75f2424c17920d20ab25c8b",
+      "bytes": 30764,
+      "vertices": 384,
+      "normals": 10,
+      "uvs": 12,
+      "triangles": 720,
+      "center": [
+        0.0,
+        4.0,
+        0.0
+      ],
+      "size": [
+        8.26,
+        8.0,
+        0.7
+      ],
+      "colliders_xyz": [],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 17,
+      "name": "ServiceDoor",
+      "file": "chunks/c00017.b64",
+      "sha256": "d79d634dab9e2e131d16546f804d813badc50a8e03227d007250b7f04ef1734b",
+      "bytes": 9980,
+      "vertices": 128,
+      "normals": 10,
+      "uvs": 12,
+      "triangles": 228,
+      "center": [
+        0.0,
+        5.1625,
+        0.0325
+      ],
+      "size": [
+        6.56,
+        10.335,
+        0.615
+      ],
+      "colliders_xyz": [],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 18,
+      "name": "VentGrille",
+      "file": "chunks/c00018.b64",
+      "sha256": "71b0c3e4705e597810b6e71022f8c2e7890f02d895ce66cedba331d5f91d5500",
+      "bytes": 9660,
+      "vertices": 136,
+      "normals": 14,
+      "uvs": 8,
+      "triangles": 216,
+      "center": [
+        0.0,
+        0.0,
+        0.023749999999999993
+      ],
+      "size": [
+        3.5,
+        1.8,
+        0.1875
+      ],
+      "colliders_xyz": [],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 19,
+      "name": "Clock",
+      "file": "chunks/c00019.b64",
+      "sha256": "86b441fa0ff8d0d295d5dfbe91d1d62d649598b4dd7011f4701d977bfdd92369",
+      "bytes": 19196,
+      "vertices": 240,
+      "normals": 62,
+      "uvs": 72,
+      "triangles": 416,
+      "center": [
+        0.0,
+        0.0,
+        0.04000000000000001
+      ],
+      "size": [
+        1.6,
+        1.6,
+        0.2
+      ],
+      "colliders_xyz": [],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 20,
+      "name": "ChairRed",
+      "file": "chunks/c00020.b64",
+      "sha256": "d2bccbfa14a2d44ef0ca4c0703c6ecb3d932e264d9f8147922bd538a8be5ce54",
+      "bytes": 39548,
+      "vertices": 448,
+      "normals": 238,
+      "uvs": 258,
+      "triangles": 812,
+      "center": [
+        0.0,
+        2.15,
+        0.0
+      ],
+      "size": [
+        2.5078,
+        4.3,
+        2.456
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0.0,
+            0.0,
+            1.13
+          ],
+          "size": [
+            2.5,
+            2.55,
+            2.26
+          ]
+        },
+        {
+          "center": [
+            0.0,
+            1.0,
+            3.2
+          ],
+          "size": [
+            2.25,
+            0.3,
+            2.14
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 21,
+      "name": "ChairYellow",
+      "file": "chunks/c00021.b64",
+      "sha256": "a58da3bb6bc3e6dbbfed1d88104bef807f2a07589a33286a4f0e53f3babfe631",
+      "bytes": 39548,
+      "vertices": 448,
+      "normals": 238,
+      "uvs": 258,
+      "triangles": 812,
+      "center": [
+        0.0,
+        2.15,
+        0.0
+      ],
+      "size": [
+        2.5078,
+        4.3,
+        2.456
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0.0,
+            0.0,
+            1.13
+          ],
+          "size": [
+            2.5,
+            2.55,
+            2.26
+          ]
+        },
+        {
+          "center": [
+            0.0,
+            1.0,
+            3.2
+          ],
+          "size": [
+            2.25,
+            0.3,
+            2.14
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 22,
+      "name": "ChairGreen",
+      "file": "chunks/c00022.b64",
+      "sha256": "195451970dbfe9bc0b4aa0a283f644af20c9d6ab3250bb8fb3c2ba5dc4f97a83",
+      "bytes": 39548,
+      "vertices": 448,
+      "normals": 238,
+      "uvs": 258,
+      "triangles": 812,
+      "center": [
+        0.0,
+        2.15,
+        0.0
+      ],
+      "size": [
+        2.5078,
+        4.3,
+        2.456
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0.0,
+            0.0,
+            1.13
+          ],
+          "size": [
+            2.5,
+            2.55,
+            2.26
+          ]
+        },
+        {
+          "center": [
+            0.0,
+            1.0,
+            3.2
+          ],
+          "size": [
+            2.25,
+            0.3,
+            2.14
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 23,
+      "name": "ChairBlue",
+      "file": "chunks/c00023.b64",
+      "sha256": "b80902c3a1e1513b226c86d5d06bafa8b5fc6bf94b5dd60b930f6373ca2655f6",
+      "bytes": 39556,
+      "vertices": 448,
+      "normals": 238,
+      "uvs": 259,
+      "triangles": 812,
+      "center": [
+        0.0,
+        2.15,
+        0.0
+      ],
+      "size": [
+        2.5078,
+        4.3,
+        2.456
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0.0,
+            0.0,
+            1.13
+          ],
+          "size": [
+            2.5,
+            2.55,
+            2.26
+          ]
+        },
+        {
+          "center": [
+            0.0,
+            1.0,
+            3.2
+          ],
+          "size": [
+            2.25,
+            0.3,
+            2.14
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 24,
+      "name": "FoldingTable",
+      "file": "chunks/c00024.b64",
+      "sha256": "9291a345b97e99052f4e367d955d9a9afe8911dce8657eada457a74cb0b5aa5f",
+      "bytes": 36328,
+      "vertices": 424,
+      "normals": 227,
+      "uvs": 160,
+      "triangles": 756,
+      "center": [
+        0.0,
+        1.72,
+        0.0
+      ],
+      "size": [
+        11.2,
+        3.44,
+        4.35
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0.0,
+            0.0,
+            3.33
+          ],
+          "size": [
+            11.2,
+            4.35,
+            0.22
+          ]
+        },
+        {
+          "center": [
+            -3.83,
+            0.0,
+            1.61
+          ],
+          "size": [
+            0.2,
+            3.76,
+            3.04
+          ]
+        },
+        {
+          "center": [
+            3.83,
+            0.0,
+            1.61
+          ],
+          "size": [
+            0.2,
+            3.76,
+            3.04
+          ]
+        }
+      ],
+      "anchors_xyz": {
+        "HidePrompt": [
+          0.0,
+          -2.180000066757202,
+          2.200000047683716
+        ],
+        "HidePose": [
+          0.0,
+          0.0,
+          1.399999976158142
+        ]
+      },
+      "transparent": false
+    },
+    {
+      "id": 25,
+      "name": "Tableware",
+      "file": "chunks/c00025.b64",
+      "sha256": "1a6a7480724404267f64bdc66db39b54e9bbfce47da394b11cd7eeec309c7245",
+      "bytes": 34212,
+      "vertices": 384,
+      "normals": 138,
+      "uvs": 215,
+      "triangles": 728,
+      "center": [
+        0.059813000000000005,
+        0.25625,
+        -0.05608400000000002
+      ],
+      "size": [
+        2.9803740000000003,
+        0.5125,
+        1.49706
+      ],
+      "colliders_xyz": [],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 26,
+      "name": "ChairStack",
+      "file": "chunks/c00026.b64",
+      "sha256": "12e62904c68968c548cf51c1a2f15f283d9251f5f32524cf454c04f37b66d47c",
+      "bytes": 147096,
+      "vertices": 1792,
+      "normals": 537,
+      "uvs": 275,
+      "triangles": 3248,
+      "center": [
+        0.0,
+        2.81,
+        -0.05249999999999999
+      ],
+      "size": [
+        2.5078,
+        5.62,
+        2.561
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0.0,
+            0.03,
+            2.83
+          ],
+          "size": [
+            2.55,
+            2.62,
+            5.66
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 27,
+      "name": "FoldedTables",
+      "file": "chunks/c00027.b64",
+      "sha256": "7025ab86e00d4c98b327470b908ce73ea39bee242a3b2b5028bc989b7b19e7bf",
+      "bytes": 22228,
+      "vertices": 264,
+      "normals": 92,
+      "uvs": 82,
+      "triangles": 480,
+      "center": [
+        0.0,
+        3.4,
+        -0.418391
+      ],
+      "size": [
+        4.12,
+        6.8,
+        1.121782
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0.0,
+            0.34,
+            3.4
+          ],
+          "size": [
+            4.12,
+            1.13,
+            6.8
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 28,
+      "name": "ArcadeInvaders",
+      "file": "chunks/c00028.b64",
+      "sha256": "27dfbec2bb75460d52a57ee9a2128c0eeb1f38df8a796462cf36f61911ff7f9d",
+      "bytes": 135136,
+      "vertices": 1812,
+      "normals": 333,
+      "uvs": 406,
+      "triangles": 2948,
+      "center": [
+        0.0,
+        3.5925,
+        0.07899999999999996
+      ],
+      "size": [
+        3.29,
+        7.185,
+        3.178
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0.0,
+            -0.05,
+            3.63
+          ],
+          "size": [
+            3.45,
+            3.3,
+            7.26
+          ]
+        }
+      ],
+      "anchors_xyz": {
+        "PlayPrompt": [
+          0.0,
+          -1.7999999523162842,
+          4.199999809265137
+        ],
+        "ScreenCenter": [
+          0.0,
+          -0.9900000095367432,
+          5.25
+        ]
+      },
+      "transparent": false
+    },
+    {
+      "id": 29,
+      "name": "ArcadeMaze",
+      "file": "chunks/c00029.b64",
+      "sha256": "7ea173ef2a8d79a9e4dea9c5b13f4781a30b7a2fab860a4235d8cdf3031cedd9",
+      "bytes": 72968,
+      "vertices": 862,
+      "normals": 357,
+      "uvs": 396,
+      "triangles": 1532,
+      "center": [
+        0.0,
+        3.5925,
+        0.07899999999999996
+      ],
+      "size": [
+        3.29,
+        7.185,
+        3.178
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0.0,
+            -0.05,
+            3.63
+          ],
+          "size": [
+            3.45,
+            3.3,
+            7.26
+          ]
+        }
+      ],
+      "anchors_xyz": {
+        "PlayPrompt": [
+          0.0,
+          -1.7999999523162842,
+          4.199999809265137
+        ],
+        "ScreenCenter": [
+          0.0,
+          -0.9900000095367432,
+          5.25
+        ]
+      },
+      "transparent": false
+    },
+    {
+      "id": 30,
+      "name": "ArcadePlatform",
+      "file": "chunks/c00030.b64",
+      "sha256": "21e6c50822d13ff455e2161ffb0677d2663d38c8e64211237df13027fcb36769",
+      "bytes": 70656,
+      "vertices": 836,
+      "normals": 333,
+      "uvs": 398,
+      "triangles": 1484,
+      "center": [
+        0.0,
+        3.5925,
+        0.07899999999999996
+      ],
+      "size": [
+        3.29,
+        7.185,
+        3.178
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0.0,
+            -0.05,
+            3.63
+          ],
+          "size": [
+            3.45,
+            3.3,
+            7.26
+          ]
+        }
+      ],
+      "anchors_xyz": {
+        "PlayPrompt": [
+          0.0,
+          -1.7999999523162842,
+          4.199999809265137
+        ],
+        "ScreenCenter": [
+          0.0,
+          -0.9900000095367432,
+          5.25
+        ]
+      },
+      "transparent": false
+    },
+    {
+      "id": 31,
+      "name": "ClawMachine",
+      "file": "chunks/c00031.b64",
+      "sha256": "710990ba27fe3548519e904d1f1039b49118d3eed83c5322a27957ae1b765276",
+      "bytes": 144104,
+      "vertices": 1730,
+      "normals": 641,
+      "uvs": 378,
+      "triangles": 3128,
+      "center": [
+        0.0,
+        3.42,
+        0.21499999999999997
+      ],
+      "size": [
+        3.51,
+        6.84,
+        3.74
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0.0,
+            0.0,
+            3.42
+          ],
+          "size": [
+            3.51,
+            3.55,
+            6.84
+          ]
+        }
+      ],
+      "anchors_xyz": {
+        "PlayPrompt": [
+          0.5199999809265137,
+          -1.940000057220459,
+          2.6500000953674316
+        ]
+      },
+      "transparent": true
+    },
+    {
+      "id": 32,
+      "name": "PrizeCounter",
+      "file": "chunks/c00032.b64",
+      "sha256": "5bf88b174c56c376867bc78b10f1aa9e260f4680676b2755f8969487db6fc345",
+      "bytes": 142076,
+      "vertices": 1648,
+      "normals": 358,
+      "uvs": 276,
+      "triangles": 3216,
+      "center": [
+        0.0,
+        3.115,
+        0.0
+      ],
+      "size": [
+        9.42,
+        6.23,
+        2.92
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0.0,
+            0.0,
+            3.12
+          ],
+          "size": [
+            9.42,
+            2.92,
+            6.24
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "transparent": true
+    },
+    {
+      "id": 33,
+      "name": "BalloonCluster",
+      "file": "chunks/c00033.b64",
+      "sha256": "96c4d0bd7f5999f83cdc6699ed563989bba6ca7cd03e07a995ba67343ab68437",
+      "bytes": 34728,
+      "vertices": 362,
+      "normals": 245,
+      "uvs": 350,
+      "triangles": 684,
+      "center": [
+        -0.015000000000000013,
+        3.975,
+        -0.08999999999999997
+      ],
+      "size": [
+        2.21,
+        7.95,
+        1.22
+      ],
+      "colliders_xyz": [],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 34,
+      "name": "BirthdayGarland",
+      "file": "chunks/c00034.b64",
+      "sha256": "560164711a28fe8ac30d829b3f348503ea3a78cee4633aa09d9d6d88dc6c1e97",
+      "bytes": 13872,
+      "vertices": 162,
+      "normals": 145,
+      "uvs": 101,
+      "triangles": 260,
+      "center": [
+        0.0,
+        0.7850555,
+        0.0
+      ],
+      "size": [
+        11.207968,
+        1.540881,
+        0.032
+      ],
+      "colliders_xyz": [],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 35,
+      "name": "CakeTable",
+      "file": "chunks/c00035.b64",
+      "sha256": "1cff247ac15853f0e04ed281b6cd09ab2ac99c9d2b4a8c713633b54317d8d401",
+      "bytes": 91068,
+      "vertices": 1020,
+      "normals": 474,
+      "uvs": 374,
+      "triangles": 1948,
+      "center": [
+        0.0,
+        2.155,
+        0.0
+      ],
+      "size": [
+        4.5,
+        4.31,
+        2.65
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0.0,
+            0.0,
+            1.76
+          ],
+          "size": [
+            4.5,
+            2.65,
+            3.52
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 36,
+      "name": "SupplyShelf",
+      "file": "chunks/c00036.b64",
+      "sha256": "3f61602d6ded987b4ea34a62d92ebb6ff85143f8feda6a73dd2fe1f20137fb30",
+      "bytes": 195160,
+      "vertices": 2272,
+      "normals": 561,
+      "uvs": 1171,
+      "triangles": 4216,
+      "center": [
+        0.0,
+        3.75275,
+        0.0
+      ],
+      "size": [
+        6.96,
+        7.5055,
+        2.23
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0.0,
+            0.0,
+            3.76
+          ],
+          "size": [
+            6.98,
+            2.23,
+            7.52
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 37,
+      "name": "HeliumTank",
+      "file": "chunks/c00037.b64",
+      "sha256": "d9082354be96880170e8d44999f31b76d29cf9dc767afd19938a475cf82e2335",
+      "bytes": 28372,
+      "vertices": 302,
+      "normals": 194,
+      "uvs": 244,
+      "triangles": 568,
+      "center": [
+        0.0,
+        2.35375,
+        0.0
+      ],
+      "size": [
+        1.26,
+        4.7075,
+        1.26
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0.0,
+            0.0,
+            2.37
+          ],
+          "size": [
+            1.27,
+            1.27,
+            4.74
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 38,
+      "name": "FlatClownCutout",
+      "file": "chunks/c00038.b64",
+      "sha256": "c616cf7e02a1986d98b1664407d6500ffc4bd35d1b8068cd877d4d2552d5fede",
+      "bytes": 58396,
+      "vertices": 648,
+      "normals": 378,
+      "uvs": 232,
+      "triangles": 1228,
+      "center": [
+        0.0,
+        2.2225,
+        0.014020999999999992
+      ],
+      "size": [
+        2.66,
+        4.445,
+        0.30804200000000004
+      ],
+      "colliders_xyz": [],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 39,
+      "name": "WorkshopBench",
+      "file": "chunks/c00039.b64",
+      "sha256": "2b702a6128b66cb7d2886c86329f155364c395c99593ad5fafa33bba85addd79",
+      "bytes": 112352,
+      "vertices": 1336,
+      "normals": 479,
+      "uvs": 429,
+      "triangles": 2420,
+      "center": [
+        0.0,
+        2.675,
+        0.0
+      ],
+      "size": [
+        9.7,
+        5.35,
+        2.8
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0.0,
+            0.0,
+            2.7
+          ],
+          "size": [
+            9.7,
+            2.8,
+            5.4
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 40,
+      "name": "Pegboard",
+      "file": "chunks/c00040.b64",
+      "sha256": "8b5aa46ae99d1755316b71657cb23936c6fc8077b40da98a07e2200c813cd463",
+      "bytes": 75836,
+      "vertices": 1056,
+      "normals": 170,
+      "uvs": 168,
+      "triangles": 1660,
+      "center": [
+        0.0,
+        2.1,
+        0.1425
+      ],
+      "size": [
+        7.3,
+        4.2,
+        0.425
+      ],
+      "colliders_xyz": [],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 41,
+      "name": "BreakerPanel",
+      "file": "chunks/c00041.b64",
+      "sha256": "d8d5d28e3176dd7ba616bffbc58c769f4f37831b2417d41348db7ee3e002ff9d",
+      "bytes": 22396,
+      "vertices": 254,
+      "normals": 168,
+      "uvs": 112,
+      "triangles": 456,
+      "center": [
+        0.0,
+        2.8250005,
+        0.07
+      ],
+      "size": [
+        2.77,
+        5.650001,
+        0.65
+      ],
+      "colliders_xyz": [],
+      "anchors_xyz": {
+        "SwitchPrompt": [
+          0.9800000190734863,
+          -0.41999998688697815,
+          2.1500000953674316
+        ]
+      },
+      "transparent": false
+    },
+    {
+      "id": 42,
+      "name": "MopBucket",
+      "file": "chunks/c00042.b64",
+      "sha256": "8a06e71eaded3d763c08816c3c4f9ca6c763d481ddfc8a9f15a0a08d02123d6c",
+      "bytes": 63664,
+      "vertices": 736,
+      "normals": 333,
+      "uvs": 322,
+      "triangles": 1340,
+      "center": [
+        0.45764200000000005,
+        2.968763,
+        0.0
+      ],
+      "size": [
+        2.805284,
+        5.937526,
+        1.67
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0.21,
+            0.0,
+            1.82
+          ],
+          "size": [
+            2.32,
+            1.7,
+            3.64
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "transparent": false
+    },
+    {
+      "id": 43,
+      "name": "CD",
+      "file": "chunks/c00043.b64",
+      "sha256": "0829343af918c458ef51bc1951599d4ac738f36e193b1a81442b9abd06089c72",
+      "bytes": 84092,
+      "vertices": 896,
+      "normals": 150,
+      "uvs": 876,
+      "triangles": 1792,
+      "center": [
+        0.0,
+        0.03425,
+        0.0
+      ],
+      "size": [
+        1.04,
+        0.0435,
+        1.04
+      ],
+      "colliders_xyz": [],
+      "anchors_xyz": {
+        "PickupPrompt": [
+          0.0,
+          0.0,
+          0.15000000596046448
+        ]
+      },
+      "transparent": false
+    },
+    {
+      "id": 44,
+      "name": "CDCase",
+      "file": "chunks/c00044.b64",
+      "sha256": "0e39383ec459ce7534528ec71e820135e78ea0bd17af91056a515648b5324a6d",
+      "bytes": 8876,
+      "vertices": 104,
+      "normals": 46,
+      "uvs": 72,
+      "triangles": 180,
+      "center": [
+        0.0,
+        0.07125,
+        0.0
+      ],
+      "size": [
+        1.1,
+        0.1425,
+        1.18
+      ],
+      "colliders_xyz": [],
+      "anchors_xyz": {
+        "InspectPrompt": [
+          0.0,
+          0.0,
+          0.25
+        ]
+      },
+      "transparent": true
+    },
+    {
+      "id": 45,
+      "name": "CDPlayer",
+      "file": "chunks/c00045.b64",
+      "sha256": "b6e7163cc3ee52625e1d2abcc0e4a30858d25a0ea09a480086c89a8958b883c7",
+      "bytes": 82132,
+      "vertices": 936,
+      "normals": 420,
+      "uvs": 346,
+      "triangles": 1752,
+      "center": [
+        0.0,
+        0.6675,
+        0.03550000000000003
+      ],
+      "size": [
+        3.36,
+        1.335,
+        1.741
+      ],
+      "colliders_xyz": [
+        {
+          "center": [
+            0.0,
+            0.0,
+            0.41
+          ],
+          "size": [
+            3.36,
+            1.67,
+            0.82
+          ]
+        }
+      ],
+      "anchors_xyz": {
+        "InsertDisc": [
+          0.0,
+          -0.07000000029802322,
+          0.8700000047683716
+        ],
+        "Controls": [
+          0.0,
+          -0.8799999952316284,
+          0.5799999833106995
+        ],
+        "SpeakerLeft": [
+          -1.159999966621399,
+          -0.8700000047683716,
+          0.5
+        ],
+        "SpeakerRight": [
+          1.159999966621399,
+          -0.8700000047683716,
+          0.5
+        ]
+      },
+      "transparent": false
+    },
+    {
+      "id": 46,
+      "name": "FluorescentFixture",
+      "file": "chunks/c00046.b64",
+      "sha256": "f94dfe890a623283307f48cdf7ae9eefa29e34ee24614264245548ee60b26ffc",
+      "bytes": 9672,
+      "vertices": 104,
+      "normals": 67,
+      "uvs": 86,
+      "triangles": 192,
+      "center": [
+        0.0,
+        0.1915,
+        0.0
+      ],
+      "size": [
+        5.5,
+        0.383,
+        1.43
+      ],
+      "colliders_xyz": [],
+      "anchors_xyz": {
+        "LightOrigin": [
+          0.0,
+          0.0,
+          -0.11999999731779099
+        ]
+      },
+      "transparent": false
+    },
+    {
+      "id": 47,
+      "name": "WallSpeaker",
+      "file": "chunks/c00047.b64",
+      "sha256": "06b1619edb48401fd13151e731d585d5374438e2586dddd0e33dff132566e927",
+      "bytes": 19580,
+      "vertices": 228,
+      "normals": 138,
+      "uvs": 60,
+      "triangles": 408,
+      "center": [
+        0.0,
+        1.13,
+        0.027999999999999997
+      ],
+      "size": [
+        1.4,
+        2.26,
+        0.986
+      ],
+      "colliders_xyz": [],
+      "anchors_xyz": {
+        "SoundOrigin": [
+          0.0,
+          -0.5199999809265137,
+          1.1299999952316284
+        ]
+      },
+      "transparent": false
+    },
+    {
+      "id": 48,
+      "name": "WallClock",
+      "file": "chunks/c00048.b64",
+      "sha256": "dfadb698de9d400c796e96c40be1106f728013393f2d30e57729b7e9ff01618c",
+      "bytes": 32484,
+      "vertices": 376,
+      "normals": 98,
+      "uvs": 251,
+      "triangles": 688,
+      "center": [
+        0.0,
+        1.0,
+        0.109588
+      ],
+      "size": [
+        2.0,
+        2.0,
+        0.219176
+      ],
+      "colliders_xyz": [],
+      "anchors_xyz": {},
+      "transparent": false
+    }
+  ]
+}

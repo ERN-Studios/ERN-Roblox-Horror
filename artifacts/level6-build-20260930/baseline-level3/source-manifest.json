@@ -1,0 +1,218 @@
+{
+  "studioId": "f3ec78b0-2c14-4a03-b6e3-9d66973d9c88",
+  "placeId": 131311258779917,
+  "universeId": 10559217407,
+  "placeVersion": 2403,
+  "scripts": [
+    {
+      "bytes": 59104,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Reader Client",
+      "adler32": 1169367387,
+      "editorRead": true,
+      "class": "LocalScript",
+      "editorMatches": true,
+      "file": "artifacts/level6-build-20260930/baseline-level3/StarterPlayer__StarterPlayerScripts__Level 3 Reader Client.LocalScript.lua",
+      "sha256": "0000562193cc57aa5ae2f7a659e5dff7b35773e28764e6bd83aad1a8b083281b"
+    },
+    {
+      "bytes": 39946,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Lighting Controller",
+      "adler32": 3958545141,
+      "editorRead": true,
+      "class": "LocalScript",
+      "editorMatches": true,
+      "file": "artifacts/level6-build-20260930/baseline-level3/StarterPlayer__StarterPlayerScripts__Level 3 Lighting Controller.LocalScript.lua",
+      "sha256": "af55a6cba5254e627d6b1c7479a124b586280b024052616b93f0cca2d088c325"
+    },
+    {
+      "bytes": 46833,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Sound Controller",
+      "adler32": 251619670,
+      "editorRead": true,
+      "class": "LocalScript",
+      "editorMatches": true,
+      "file": "artifacts/level6-build-20260930/baseline-level3/StarterPlayer__StarterPlayerScripts__Level 3 Sound Controller.LocalScript.lua",
+      "sha256": "8896ccdacbbd00116686a7f0547059b72e24776c99c119b4c8cd207d0eea3d3b"
+    },
+    {
+      "bytes": 6548,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Mall Manager Visual Smoother",
+      "adler32": 1472761326,
+      "editorRead": true,
+      "class": "LocalScript",
+      "editorMatches": true,
+      "file": "artifacts/level6-build-20260930/baseline-level3/StarterPlayer__StarterPlayerScripts__Level 3 Mall Manager Visual Smoother.LocalScript.lua",
+      "sha256": "81309944181cf982fd2eda88291244bde8cdcaf5c2ecbd4c8c0f05f9f733cf37"
+    },
+    {
+      "bytes": 21675,
+      "path": "StarterPlayer.StarterPlayerScripts.Level 3 Table Hiding Client",
+      "adler32": 3418381362,
+      "editorRead": true,
+      "class": "LocalScript",
+      "editorMatches": true,
+      "file": "artifacts/level6-build-20260930/baseline-level3/StarterPlayer__StarterPlayerScripts__Level 3 Table Hiding Client.LocalScript.lua",
+      "sha256": "e406296d0b1aa64f72cb9051caa36bc1d555a1c680c13cffebb8f79893ed6d98"
+    },
+    {
+      "bytes": 21208,
+      "path": "ReplicatedStorage.MasterConfiguration",
+      "adler32": 3254879515,
+      "editorRead": true,
+      "class": "ModuleScript",
+      "editorMatches": true,
+      "file": "artifacts/level6-build-20260930/baseline-level3/ReplicatedStorage__MasterConfiguration.ModuleScript.lua",
+      "sha256": "d2b426761029e4f757a8633ee53f65123f9726364a5f11da2ba176ee392908d6"
+    },
+    {
+      "bytes": 437,
+      "path": "ServerScriptService.Level3Generator",
+      "adler32": 3519386702,
+      "editorRead": true,
+      "class": "ModuleScript",
+      "editorMatches": true,
+      "file": "artifacts/level6-build-20260930/baseline-level3/ServerScriptService__Level3Generator.ModuleScript.lua",
+      "sha256": "3395a2c38e9de3e6b99568545fd1b5d719d8aa5d4e4cb5c2da3f0a6ada0da07d"
+    },
+    {
+      "bytes": 159281,
+      "path": "ServerScriptService.GameManager",
+      "adler32": 3291645548,
+      "editorRead": true,
+      "class": "Script",
+      "editorMatches": true,
+      "file": "artifacts/level6-build-20260930/baseline-level3/ServerScriptService__GameManager.Script.lua",
+      "sha256": "e4f01d4b6eb6c079bcbc3bcfddf142144b4a7d6d8e70265c15f2a05717bdec3a"
+    },
+    {
+      "bytes": 75753,
+      "path": "ServerScriptService.Round Completion Routing",
+      "adler32": 2916991037,
+      "editorRead": true,
+      "class": "ModuleScript",
+      "editorMatches": true,
+      "file": "artifacts/level6-build-20260930/baseline-level3/ServerScriptService__Round Completion Routing.ModuleScript.lua",
+      "sha256": "a8ec68ded254d2280e15d3486cea7e086c4e29b7cf4276628e80829faa078f85"
+    },
+    {
+      "bytes": 8042,
+      "path": "ServerScriptService.Level5PreviewAccess",
+      "adler32": 3450776103,
+      "editorRead": true,
+      "class": "Script",
+      "editorMatches": true,
+      "file": "artifacts/level6-build-20260930/baseline-level3/ServerScriptService__Level5PreviewAccess.Script.lua",
+      "sha256": "14d602be6cdb8416ba818898a72a6d99c64f7bad0afa163181df847376c44504"
+    },
+    {
+      "bytes": 19286,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Configuration",
+      "adler32": 3785025146,
+      "editorRead": true,
+      "class": "ModuleScript",
+      "editorMatches": true,
+      "file": "artifacts/level6-build-20260930/baseline-level3/ServerScriptService__Level 3 Systems__Level 3 Configuration.ModuleScript.lua",
+      "sha256": "8758d35fad3913ae1ac37eab4ee06267c99868cdd3425f40180a5452cd56cf28"
+    },
+    {
+      "bytes": 105403,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 World Builder",
+      "adler32": 2959452966,
+      "editorRead": true,
+      "class": "ModuleScript",
+      "editorMatches": true,
+      "file": "artifacts/level6-build-20260930/baseline-level3/ServerScriptService__Level 3 Systems__Level 3 World Builder.ModuleScript.lua",
+      "sha256": "1ab3707df9f7dec093fe610478ad67bc563243bff72c52c300b7a3cd2378a652"
+    },
+    {
+      "bytes": 70421,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Objective Controller",
+      "adler32": 3790283657,
+      "editorRead": true,
+      "class": "ModuleScript",
+      "editorMatches": true,
+      "file": "artifacts/level6-build-20260930/baseline-level3/ServerScriptService__Level 3 Systems__Level 3 Objective Controller.ModuleScript.lua",
+      "sha256": "ba82b48051005190fe658922b2948830bb22fd0696ef34026af75de8404009ae"
+    },
+    {
+      "bytes": 31538,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Round Adapter",
+      "adler32": 1689107328,
+      "editorRead": true,
+      "class": "ModuleScript",
+      "editorMatches": true,
+      "file": "artifacts/level6-build-20260930/baseline-level3/ServerScriptService__Level 3 Systems__Level 3 Round Adapter.ModuleScript.lua",
+      "sha256": "d1e0a7d68fd4bbbae2bc0052ec849e7c8f4314d35e728ea2f8b72c786595cceb"
+    },
+    {
+      "bytes": 202633,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Test Suite",
+      "adler32": 2839556336,
+      "editorRead": true,
+      "class": "ModuleScript",
+      "editorMatches": true,
+      "file": "artifacts/level6-build-20260930/baseline-level3/ServerScriptService__Level 3 Systems__Level 3 Test Suite.ModuleScript.lua",
+      "sha256": "7c3f008e315d149270e970e2b2166f3d49054af3fcc83986f5e2a49f86c48299"
+    },
+    {
+      "bytes": 20901,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Music Sequence Controller",
+      "adler32": 2238959935,
+      "editorRead": true,
+      "class": "ModuleScript",
+      "editorMatches": true,
+      "file": "artifacts/level6-build-20260930/baseline-level3/ServerScriptService__Level 3 Systems__Level 3 Music Sequence Controller.ModuleScript.lua",
+      "sha256": "803c62833b63d7b2a4f45216c782087ee7b526140399a3bf27cdb31585e1f5a1"
+    },
+    {
+      "bytes": 187862,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Mall Manager AI Controller",
+      "adler32": 4057881342,
+      "editorRead": true,
+      "class": "ModuleScript",
+      "editorMatches": true,
+      "file": "artifacts/level6-build-20260930/baseline-level3/ServerScriptService__Level 3 Systems__Level 3 Mall Manager AI Controller.ModuleScript.lua",
+      "sha256": "a59a7ebf9885eff3377899358ac4498062be704bcdff97387f3dcda169d2502c"
+    },
+    {
+      "bytes": 25364,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Hiding Controller",
+      "adler32": 1265458573,
+      "editorRead": true,
+      "class": "ModuleScript",
+      "editorMatches": true,
+      "file": "artifacts/level6-build-20260930/baseline-level3/ServerScriptService__Level 3 Systems__Level 3 Hiding Controller.ModuleScript.lua",
+      "sha256": "ce0e6e2b671a11b4de7534b4c3723da911b0f87864025029d93bdebcf03555ed"
+    },
+    {
+      "bytes": 42613,
+      "path": "ServerScriptService.Level 3 Systems.Level 3 Layout Generator",
+      "adler32": 1290163479,
+      "editorRead": true,
+      "class": "ModuleScript",
+      "editorMatches": true,
+      "file": "artifacts/level6-build-20260930/baseline-level3/ServerScriptService__Level 3 Systems__Level 3 Layout Generator.ModuleScript.lua",
+      "sha256": "2b9aacd4c8bed4fab1da525592a0c777f0e21b0fc84665971721dce276ad4289"
+    },
+    {
+      "path": "ServerScriptService.PlayerProtection",
+      "class": "ModuleScript",
+      "file": "artifacts/level6-build-20260930/baseline-level3/ServerScriptService__PlayerProtection.ModuleScript.lua",
+      "bytes": 7408,
+      "sha256": "0447ca2a84e9d7f9e4c997c1eafdf450bd0c262ee69d4b0db24f3f8c26a80b2b",
+      "adler32": 260580905,
+      "editorRead": true,
+      "editorMatches": true
+    },
+    {
+      "path": "ReplicatedStorage.DevAccess",
+      "class": "ModuleScript",
+      "file": "artifacts/level6-build-20260930/baseline-level3/ReplicatedStorage__DevAccess.ModuleScript.lua",
+      "bytes": 990,
+      "sha256": "4c51e000ecf702c0cfb6544d3c2bf46eb9959b3f7941b6b30eec29284e185514",
+      "adler32": 3753723883,
+      "editorRead": true,
+      "editorMatches": true
+    }
+  ]
+}

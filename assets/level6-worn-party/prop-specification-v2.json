@@ -1,0 +1,1274 @@
+{
+  "schema": "level6-worn-party-props/1",
+  "source": "tools/level6_build/props.py",
+  "unit": "Roblox stud",
+  "coordinates": {
+    "up": "+Z",
+    "front": "-Y",
+    "roblox_xyz": [
+      "X",
+      "Z",
+      "-Y"
+    ]
+  },
+  "art_direction": "Worn budget 1990s birthday-party mall; plastic chairs, laminate, black tubular legs, tired arcade cabinets. No luxury styling.",
+  "material_keys": [
+    "balloon_blue",
+    "balloon_green",
+    "balloon_red",
+    "balloon_yellow",
+    "black_metal",
+    "blue_plastic",
+    "cardboard",
+    "cd_silver",
+    "chrome",
+    "glass",
+    "green_plastic",
+    "grey_metal",
+    "ivory_plastic",
+    "laminate",
+    "paper",
+    "red_plastic",
+    "rubber",
+    "screen_cyan",
+    "screen_dark",
+    "screen_green",
+    "screen_magenta",
+    "wood_worn",
+    "yellow_plastic"
+  ],
+  "assets": {
+    "ChairRed": {
+      "collection": "L6K_ChairRed",
+      "collision_boxes": [
+        {
+          "center_xyz": [
+            0,
+            0,
+            1.13
+          ],
+          "size_xyz": [
+            2.5,
+            2.55,
+            2.26
+          ]
+        },
+        {
+          "center_xyz": [
+            0,
+            1.0,
+            3.2
+          ],
+          "size_xyz": [
+            2.25,
+            0.3,
+            2.14
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "decorative_noncolliding": false,
+      "visual_objects": 3,
+      "vertices": 744,
+      "triangles": 1428,
+      "materials": [
+        "ivory_plastic",
+        "red_plastic",
+        "rubber"
+      ],
+      "bounds_xyz": [
+        [
+          -1.2539000511169434,
+          -1.2280000448226929,
+          0.0
+        ],
+        [
+          1.2539000511169434,
+          1.2280000448226929,
+          4.300000190734863
+        ]
+      ]
+    },
+    "ChairYellow": {
+      "collection": "L6K_ChairYellow",
+      "collision_boxes": [
+        {
+          "center_xyz": [
+            0,
+            0,
+            1.13
+          ],
+          "size_xyz": [
+            2.5,
+            2.55,
+            2.26
+          ]
+        },
+        {
+          "center_xyz": [
+            0,
+            1.0,
+            3.2
+          ],
+          "size_xyz": [
+            2.25,
+            0.3,
+            2.14
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "decorative_noncolliding": false,
+      "visual_objects": 3,
+      "vertices": 744,
+      "triangles": 1428,
+      "materials": [
+        "ivory_plastic",
+        "rubber",
+        "yellow_plastic"
+      ],
+      "bounds_xyz": [
+        [
+          -1.2539000511169434,
+          -1.2280000448226929,
+          0.0
+        ],
+        [
+          1.2539000511169434,
+          1.2280000448226929,
+          4.300000190734863
+        ]
+      ]
+    },
+    "ChairGreen": {
+      "collection": "L6K_ChairGreen",
+      "collision_boxes": [
+        {
+          "center_xyz": [
+            0,
+            0,
+            1.13
+          ],
+          "size_xyz": [
+            2.5,
+            2.55,
+            2.26
+          ]
+        },
+        {
+          "center_xyz": [
+            0,
+            1.0,
+            3.2
+          ],
+          "size_xyz": [
+            2.25,
+            0.3,
+            2.14
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "decorative_noncolliding": false,
+      "visual_objects": 3,
+      "vertices": 744,
+      "triangles": 1428,
+      "materials": [
+        "green_plastic",
+        "ivory_plastic",
+        "rubber"
+      ],
+      "bounds_xyz": [
+        [
+          -1.2539000511169434,
+          -1.2280000448226929,
+          0.0
+        ],
+        [
+          1.2539000511169434,
+          1.2280000448226929,
+          4.300000190734863
+        ]
+      ]
+    },
+    "ChairBlue": {
+      "collection": "L6K_ChairBlue",
+      "collision_boxes": [
+        {
+          "center_xyz": [
+            0,
+            0,
+            1.13
+          ],
+          "size_xyz": [
+            2.5,
+            2.55,
+            2.26
+          ]
+        },
+        {
+          "center_xyz": [
+            0,
+            1.0,
+            3.2
+          ],
+          "size_xyz": [
+            2.25,
+            0.3,
+            2.14
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "decorative_noncolliding": false,
+      "visual_objects": 3,
+      "vertices": 744,
+      "triangles": 1428,
+      "materials": [
+        "blue_plastic",
+        "ivory_plastic",
+        "rubber"
+      ],
+      "bounds_xyz": [
+        [
+          -1.2539000511169434,
+          -1.2280000448226929,
+          0.0
+        ],
+        [
+          1.2539000511169434,
+          1.2280000448226929,
+          4.300000190734863
+        ]
+      ]
+    },
+    "FoldingTable": {
+      "collection": "L6K_FoldingTable",
+      "collision_boxes": [
+        {
+          "center_xyz": [
+            0,
+            0,
+            3.33
+          ],
+          "size_xyz": [
+            11.2,
+            4.35,
+            0.22
+          ]
+        },
+        {
+          "center_xyz": [
+            -3.83,
+            0,
+            1.61
+          ],
+          "size_xyz": [
+            0.2,
+            3.76,
+            3.04
+          ]
+        },
+        {
+          "center_xyz": [
+            3.83,
+            0,
+            1.61
+          ],
+          "size_xyz": [
+            0.2,
+            3.76,
+            3.04
+          ]
+        }
+      ],
+      "anchors_xyz": {
+        "HidePrompt": [
+          0,
+          -2.18,
+          2.2
+        ],
+        "HidePose": [
+          0,
+          0,
+          1.4
+        ]
+      },
+      "decorative_noncolliding": false,
+      "visual_objects": 5,
+      "vertices": 424,
+      "triangles": 756,
+      "materials": [
+        "black_metal",
+        "grey_metal",
+        "laminate",
+        "rubber",
+        "wood_worn"
+      ],
+      "bounds_xyz": [
+        [
+          -5.599999904632568,
+          -2.174999952316284,
+          0.0
+        ],
+        [
+          5.599999904632568,
+          2.174999952316284,
+          3.440000057220459
+        ]
+      ]
+    },
+    "Tableware": {
+      "collection": "L6K_Tableware",
+      "collision_boxes": [],
+      "anchors_xyz": {},
+      "decorative_noncolliding": true,
+      "visual_objects": 3,
+      "vertices": 384,
+      "triangles": 728,
+      "materials": [
+        "ivory_plastic",
+        "paper",
+        "wood_worn"
+      ],
+      "bounds_xyz": [
+        [
+          -1.4303739070892334,
+          -0.6924461126327515,
+          0.0
+        ],
+        [
+          1.5499999523162842,
+          0.8046139478683472,
+          0.512499988079071
+        ]
+      ]
+    },
+    "ChairStack": {
+      "collection": "L6K_ChairStack",
+      "collision_boxes": [
+        {
+          "center_xyz": [
+            0,
+            0.03,
+            2.6
+          ],
+          "size_xyz": [
+            2.55,
+            2.62,
+            5.2
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "decorative_noncolliding": false,
+      "visual_objects": 3,
+      "vertices": 2232,
+      "triangles": 4284,
+      "materials": [
+        "green_plastic",
+        "ivory_plastic",
+        "rubber"
+      ],
+      "bounds_xyz": [
+        [
+          -1.2539000511169434,
+          -1.2280000448226929,
+          0.0
+        ],
+        [
+          1.2539000511169434,
+          1.2979999780654907,
+          5.179999828338623
+        ]
+      ]
+    },
+    "FoldedTables": {
+      "collection": "L6K_FoldedTables",
+      "collision_boxes": [
+        {
+          "center_xyz": [
+            0,
+            0.34,
+            3.4
+          ],
+          "size_xyz": [
+            4.12,
+            1.13,
+            6.8
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "decorative_noncolliding": false,
+      "visual_objects": 2,
+      "vertices": 264,
+      "triangles": 480,
+      "materials": [
+        "black_metal",
+        "laminate"
+      ],
+      "bounds_xyz": [
+        [
+          -2.059999942779541,
+          -0.14249999821186066,
+          0.0
+        ],
+        [
+          2.059999942779541,
+          0.9792820811271667,
+          6.800000190734863
+        ]
+      ]
+    },
+    "ArcadeInvaders": {
+      "collection": "L6K_ArcadeInvaders",
+      "collision_boxes": [
+        {
+          "center_xyz": [
+            0,
+            -0.05,
+            3.63
+          ],
+          "size_xyz": [
+            3.45,
+            3.3,
+            7.26
+          ]
+        }
+      ],
+      "anchors_xyz": {
+        "PlayPrompt": [
+          0,
+          -1.8,
+          4.2
+        ],
+        "ScreenCenter": [
+          0,
+          -0.99,
+          5.25
+        ]
+      },
+      "decorative_noncolliding": false,
+      "visual_objects": 11,
+      "vertices": 1812,
+      "triangles": 2948,
+      "materials": [
+        "black_metal",
+        "blue_plastic",
+        "chrome",
+        "grey_metal",
+        "red_plastic",
+        "rubber",
+        "screen_cyan",
+        "screen_dark",
+        "screen_green",
+        "screen_magenta",
+        "yellow_plastic"
+      ],
+      "bounds_xyz": [
+        [
+          -1.6449999809265137,
+          -1.6679999828338623,
+          0.0
+        ],
+        [
+          1.6449999809265137,
+          1.5099999904632568,
+          7.184999942779541
+        ]
+      ]
+    },
+    "ArcadeMaze": {
+      "collection": "L6K_ArcadeMaze",
+      "collision_boxes": [
+        {
+          "center_xyz": [
+            0,
+            -0.05,
+            3.63
+          ],
+          "size_xyz": [
+            3.45,
+            3.3,
+            7.26
+          ]
+        }
+      ],
+      "anchors_xyz": {
+        "PlayPrompt": [
+          0,
+          -1.8,
+          4.2
+        ],
+        "ScreenCenter": [
+          0,
+          -0.99,
+          5.25
+        ]
+      },
+      "decorative_noncolliding": false,
+      "visual_objects": 8,
+      "vertices": 862,
+      "triangles": 1532,
+      "materials": [
+        "black_metal",
+        "chrome",
+        "red_plastic",
+        "rubber",
+        "screen_cyan",
+        "screen_dark",
+        "screen_magenta",
+        "yellow_plastic"
+      ],
+      "bounds_xyz": [
+        [
+          -1.6449999809265137,
+          -1.6679999828338623,
+          0.0
+        ],
+        [
+          1.6449999809265137,
+          1.5099999904632568,
+          7.184999942779541
+        ]
+      ]
+    },
+    "ArcadePlatform": {
+      "collection": "L6K_ArcadePlatform",
+      "collision_boxes": [
+        {
+          "center_xyz": [
+            0,
+            -0.05,
+            3.63
+          ],
+          "size_xyz": [
+            3.45,
+            3.3,
+            7.26
+          ]
+        }
+      ],
+      "anchors_xyz": {
+        "PlayPrompt": [
+          0,
+          -1.8,
+          4.2
+        ],
+        "ScreenCenter": [
+          0,
+          -0.99,
+          5.25
+        ]
+      },
+      "decorative_noncolliding": false,
+      "visual_objects": 9,
+      "vertices": 836,
+      "triangles": 1484,
+      "materials": [
+        "black_metal",
+        "chrome",
+        "grey_metal",
+        "red_plastic",
+        "rubber",
+        "screen_cyan",
+        "screen_dark",
+        "screen_magenta",
+        "yellow_plastic"
+      ],
+      "bounds_xyz": [
+        [
+          -1.6449999809265137,
+          -1.6679999828338623,
+          0.0
+        ],
+        [
+          1.6449999809265137,
+          1.5099999904632568,
+          7.184999942779541
+        ]
+      ]
+    },
+    "ClawMachine": {
+      "collection": "L6K_ClawMachine",
+      "collision_boxes": [
+        {
+          "center_xyz": [
+            0,
+            0,
+            3.42
+          ],
+          "size_xyz": [
+            3.51,
+            3.55,
+            6.84
+          ]
+        }
+      ],
+      "anchors_xyz": {
+        "PlayPrompt": [
+          0.52,
+          -1.94,
+          2.65
+        ]
+      },
+      "decorative_noncolliding": false,
+      "visual_objects": 10,
+      "vertices": 1730,
+      "triangles": 3128,
+      "materials": [
+        "black_metal",
+        "blue_plastic",
+        "chrome",
+        "glass",
+        "green_plastic",
+        "grey_metal",
+        "paper",
+        "red_plastic",
+        "rubber",
+        "yellow_plastic"
+      ],
+      "bounds_xyz": [
+        [
+          -1.7549999952316284,
+          -2.0850000381469727,
+          0.0
+        ],
+        [
+          1.7549999952316284,
+          1.6549999713897705,
+          6.840000152587891
+        ]
+      ]
+    },
+    "PrizeCounter": {
+      "collection": "L6K_PrizeCounter",
+      "collision_boxes": [
+        {
+          "center_xyz": [
+            0,
+            0,
+            3.12
+          ],
+          "size_xyz": [
+            9.42,
+            2.92,
+            6.24
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "decorative_noncolliding": false,
+      "visual_objects": 10,
+      "vertices": 1776,
+      "triangles": 3216,
+      "materials": [
+        "black_metal",
+        "blue_plastic",
+        "glass",
+        "green_plastic",
+        "grey_metal",
+        "ivory_plastic",
+        "laminate",
+        "paper",
+        "red_plastic",
+        "yellow_plastic"
+      ],
+      "bounds_xyz": [
+        [
+          -4.710000038146973,
+          -1.4600000381469727,
+          0.0
+        ],
+        [
+          4.710000038146973,
+          1.4600000381469727,
+          6.230000019073486
+        ]
+      ]
+    },
+    "BalloonCluster": {
+      "collection": "L6K_BalloonCluster",
+      "collision_boxes": [],
+      "anchors_xyz": {},
+      "decorative_noncolliding": true,
+      "visual_objects": 5,
+      "vertices": 362,
+      "triangles": 684,
+      "materials": [
+        "balloon_green",
+        "balloon_red",
+        "balloon_yellow",
+        "paper",
+        "red_plastic"
+      ],
+      "bounds_xyz": [
+        [
+          -1.1200000047683716,
+          -0.5199999809265137,
+          0.0
+        ],
+        [
+          1.090000033378601,
+          0.699999988079071,
+          7.949999809265137
+        ]
+      ]
+    },
+    "BirthdayGarland": {
+      "collection": "L6K_BirthdayGarland",
+      "collision_boxes": [],
+      "anchors_xyz": {},
+      "decorative_noncolliding": true,
+      "visual_objects": 5,
+      "vertices": 182,
+      "triangles": 260,
+      "materials": [
+        "blue_plastic",
+        "green_plastic",
+        "paper",
+        "red_plastic",
+        "yellow_plastic"
+      ],
+      "bounds_xyz": [
+        [
+          -5.603984355926514,
+          -0.01600000262260437,
+          0.014615384861826897
+        ],
+        [
+          5.603984355926514,
+          0.01600000262260437,
+          1.5554957389831543
+        ]
+      ]
+    },
+    "CakeTable": {
+      "collection": "L6K_CakeTable",
+      "collision_boxes": [
+        {
+          "center_xyz": [
+            0,
+            0,
+            1.76
+          ],
+          "size_xyz": [
+            4.5,
+            2.65,
+            3.52
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "decorative_noncolliding": false,
+      "visual_objects": 7,
+      "vertices": 1020,
+      "triangles": 1948,
+      "materials": [
+        "black_metal",
+        "laminate",
+        "paper",
+        "red_plastic",
+        "rubber",
+        "wood_worn",
+        "yellow_plastic"
+      ],
+      "bounds_xyz": [
+        [
+          -2.25,
+          -1.3250000476837158,
+          0.0
+        ],
+        [
+          2.25,
+          1.3250000476837158,
+          4.309999942779541
+        ]
+      ]
+    },
+    "SupplyShelf": {
+      "collection": "L6K_SupplyShelf",
+      "collision_boxes": [
+        {
+          "center_xyz": [
+            0,
+            0,
+            3.76
+          ],
+          "size_xyz": [
+            6.98,
+            2.23,
+            7.52
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "decorative_noncolliding": false,
+      "visual_objects": 8,
+      "vertices": 2272,
+      "triangles": 4216,
+      "materials": [
+        "blue_plastic",
+        "cardboard",
+        "green_plastic",
+        "grey_metal",
+        "paper",
+        "red_plastic",
+        "wood_worn",
+        "yellow_plastic"
+      ],
+      "bounds_xyz": [
+        [
+          -3.4800000190734863,
+          -1.1150000095367432,
+          0.0
+        ],
+        [
+          3.4800000190734863,
+          1.1150000095367432,
+          7.505499839782715
+        ]
+      ]
+    },
+    "HeliumTank": {
+      "collection": "L6K_HeliumTank",
+      "collision_boxes": [
+        {
+          "center_xyz": [
+            0,
+            0,
+            2.37
+          ],
+          "size_xyz": [
+            1.27,
+            1.27,
+            4.74
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "decorative_noncolliding": false,
+      "visual_objects": 6,
+      "vertices": 302,
+      "triangles": 568,
+      "materials": [
+        "black_metal",
+        "chrome",
+        "grey_metal",
+        "paper",
+        "red_plastic",
+        "yellow_plastic"
+      ],
+      "bounds_xyz": [
+        [
+          -0.6299999952316284,
+          -0.6299999952316284,
+          0.0
+        ],
+        [
+          0.6299999952316284,
+          0.6299999952316284,
+          4.707499980926514
+        ]
+      ]
+    },
+    "FlatClownCutout": {
+      "collection": "L6K_FlatClownCutout",
+      "collision_boxes": [],
+      "anchors_xyz": {},
+      "decorative_noncolliding": true,
+      "visual_objects": 6,
+      "vertices": 648,
+      "triangles": 1228,
+      "materials": [
+        "black_metal",
+        "blue_plastic",
+        "cardboard",
+        "paper",
+        "red_plastic",
+        "yellow_plastic"
+      ],
+      "bounds_xyz": [
+        [
+          -1.3300000429153442,
+          -0.16804225742816925,
+          0.0
+        ],
+        [
+          1.3300000429153442,
+          0.14000000059604645,
+          4.445000171661377
+        ]
+      ]
+    },
+    "WorkshopBench": {
+      "collection": "L6K_WorkshopBench",
+      "collision_boxes": [
+        {
+          "center_xyz": [
+            0,
+            0,
+            2.7
+          ],
+          "size_xyz": [
+            9.7,
+            2.8,
+            5.4
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "decorative_noncolliding": false,
+      "visual_objects": 8,
+      "vertices": 1336,
+      "triangles": 2420,
+      "materials": [
+        "black_metal",
+        "chrome",
+        "green_plastic",
+        "grey_metal",
+        "ivory_plastic",
+        "paper",
+        "red_plastic",
+        "wood_worn"
+      ],
+      "bounds_xyz": [
+        [
+          -4.849999904632568,
+          -1.399999976158142,
+          0.0
+        ],
+        [
+          4.849999904632568,
+          1.399999976158142,
+          5.349999904632568
+        ]
+      ]
+    },
+    "Pegboard": {
+      "collection": "L6K_Pegboard",
+      "collision_boxes": [],
+      "anchors_xyz": {},
+      "decorative_noncolliding": true,
+      "visual_objects": 6,
+      "vertices": 1056,
+      "triangles": 1660,
+      "materials": [
+        "black_metal",
+        "blue_plastic",
+        "chrome",
+        "grey_metal",
+        "red_plastic",
+        "wood_worn"
+      ],
+      "bounds_xyz": [
+        [
+          -3.6500000953674316,
+          -0.35499998927116394,
+          0.0
+        ],
+        [
+          3.6500000953674316,
+          0.07000000029802322,
+          4.199999809265137
+        ]
+      ]
+    },
+    "BreakerPanel": {
+      "collection": "L6K_BreakerPanel",
+      "collision_boxes": [],
+      "anchors_xyz": {
+        "SwitchPrompt": [
+          0.98,
+          -0.42,
+          2.15
+        ]
+      },
+      "decorative_noncolliding": true,
+      "visual_objects": 5,
+      "vertices": 254,
+      "triangles": 456,
+      "materials": [
+        "black_metal",
+        "chrome",
+        "grey_metal",
+        "paper",
+        "yellow_plastic"
+      ],
+      "bounds_xyz": [
+        [
+          -1.3849999904632568,
+          -0.39500001072883606,
+          0.0
+        ],
+        [
+          1.3849999904632568,
+          0.2549999952316284,
+          5.65000057220459
+        ]
+      ]
+    },
+    "MopBucket": {
+      "collection": "L6K_MopBucket",
+      "collision_boxes": [
+        {
+          "center_xyz": [
+            0.21,
+            0,
+            1.82
+          ],
+          "size_xyz": [
+            2.32,
+            1.7,
+            3.64
+          ]
+        }
+      ],
+      "anchors_xyz": {},
+      "decorative_noncolliding": false,
+      "visual_objects": 6,
+      "vertices": 736,
+      "triangles": 1340,
+      "materials": [
+        "black_metal",
+        "chrome",
+        "paper",
+        "red_plastic",
+        "rubber",
+        "yellow_plastic"
+      ],
+      "bounds_xyz": [
+        [
+          -0.9449999928474426,
+          -0.8349999785423279,
+          0.0
+        ],
+        [
+          1.860284447669983,
+          0.8349999785423279,
+          5.937526226043701
+        ]
+      ]
+    },
+    "CD": {
+      "collection": "L6K_CD",
+      "collision_boxes": [],
+      "anchors_xyz": {
+        "PickupPrompt": [
+          0,
+          0,
+          0.15
+        ]
+      },
+      "decorative_noncolliding": true,
+      "visual_objects": 5,
+      "vertices": 896,
+      "triangles": 1792,
+      "materials": [
+        "cd_silver",
+        "paper",
+        "screen_cyan",
+        "screen_green",
+        "screen_magenta"
+      ],
+      "bounds_xyz": [
+        [
+          -0.5199999809265137,
+          -0.5199999809265137,
+          0.012500000186264515
+        ],
+        [
+          0.5199999809265137,
+          0.5199999809265137,
+          0.0560000017285347
+        ]
+      ]
+    },
+    "CDCase": {
+      "collection": "L6K_CDCase",
+      "collision_boxes": [],
+      "anchors_xyz": {
+        "InspectPrompt": [
+          0,
+          0,
+          0.25
+        ]
+      },
+      "decorative_noncolliding": true,
+      "visual_objects": 4,
+      "vertices": 104,
+      "triangles": 180,
+      "materials": [
+        "black_metal",
+        "glass",
+        "paper",
+        "red_plastic"
+      ],
+      "bounds_xyz": [
+        [
+          -0.550000011920929,
+          -0.5899999737739563,
+          0.0
+        ],
+        [
+          0.550000011920929,
+          0.5899999737739563,
+          0.14249999821186066
+        ]
+      ]
+    },
+    "CDPlayer": {
+      "collection": "L6K_CDPlayer",
+      "collision_boxes": [
+        {
+          "center_xyz": [
+            0,
+            0,
+            0.41
+          ],
+          "size_xyz": [
+            3.36,
+            1.67,
+            0.82
+          ]
+        }
+      ],
+      "anchors_xyz": {
+        "InsertDisc": [
+          0,
+          -0.07,
+          0.87
+        ],
+        "Controls": [
+          0,
+          -0.88,
+          0.58
+        ],
+        "SpeakerLeft": [
+          -1.16,
+          -0.87,
+          0.5
+        ],
+        "SpeakerRight": [
+          1.16,
+          -0.87,
+          0.5
+        ]
+      },
+      "decorative_noncolliding": false,
+      "visual_objects": 6,
+      "vertices": 936,
+      "triangles": 1752,
+      "materials": [
+        "black_metal",
+        "grey_metal",
+        "paper",
+        "rubber",
+        "screen_dark",
+        "screen_green"
+      ],
+      "bounds_xyz": [
+        [
+          -1.6799999475479126,
+          -0.906000018119812,
+          0.0
+        ],
+        [
+          1.6799999475479126,
+          0.8349999785423279,
+          1.3350000381469727
+        ]
+      ]
+    },
+    "FluorescentFixture": {
+      "collection": "L6K_FluorescentFixture",
+      "collision_boxes": [],
+      "anchors_xyz": {
+        "LightOrigin": [
+          0,
+          0,
+          -0.12
+        ]
+      },
+      "decorative_noncolliding": true,
+      "visual_objects": 3,
+      "vertices": 104,
+      "triangles": 192,
+      "materials": [
+        "black_metal",
+        "ivory_plastic",
+        "paper"
+      ],
+      "bounds_xyz": [
+        [
+          -2.75,
+          -0.7149999737739563,
+          -1.7136335372924805e-07
+        ],
+        [
+          2.75,
+          0.7149999737739563,
+          0.382999986410141
+        ]
+      ]
+    },
+    "WallSpeaker": {
+      "collection": "L6K_WallSpeaker",
+      "collision_boxes": [],
+      "anchors_xyz": {
+        "SoundOrigin": [
+          0,
+          -0.52,
+          1.13
+        ]
+      },
+      "decorative_noncolliding": true,
+      "visual_objects": 3,
+      "vertices": 228,
+      "triangles": 408,
+      "materials": [
+        "black_metal",
+        "grey_metal",
+        "rubber"
+      ],
+      "bounds_xyz": [
+        [
+          -0.699999988079071,
+          -0.5210000276565552,
+          0.0
+        ],
+        [
+          0.699999988079071,
+          0.4650000035762787,
+          2.259999990463257
+        ]
+      ]
+    },
+    "WallClock": {
+      "collection": "L6K_WallClock",
+      "collision_boxes": [],
+      "anchors_xyz": {},
+      "decorative_noncolliding": true,
+      "visual_objects": 2,
+      "vertices": 376,
+      "triangles": 688,
+      "materials": [
+        "black_metal",
+        "paper"
+      ],
+      "bounds_xyz": [
+        [
+          -1.0,
+          -0.2191760092973709,
+          0.0
+        ],
+        [
+          1.0,
+          -0.0,
+          2.0
+        ]
+      ]
+    }
+  }
+}

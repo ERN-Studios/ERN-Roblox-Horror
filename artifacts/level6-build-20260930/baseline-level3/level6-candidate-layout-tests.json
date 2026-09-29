@@ -1,0 +1,336 @@
+{
+  "mode": "pure in-memory candidate layout generation only; no Studio instances created or modified; uses live MasterConfiguration L6 overlay with no matching entries",
+  "tested": 1000,
+  "minimumArea": 167368,
+  "maximumDeadEnds": 4,
+  "uniqueTopologies": 956,
+  "minimumDeadEnds": 1,
+  "seconds": 1.5758178333308024,
+  "firstTryCount": 846,
+  "fallbackCount": 0,
+  "maximumArea": 195896,
+  "uniqueLayoutHashes": 1000,
+  "maximumAttempt": 4,
+  "results": [
+    {
+      "hash": "L6-6-02c0be8f",
+      "serviceRooms": [
+        "L6_S1_R08",
+        "L6_S2_R02",
+        "L6_S3_R07"
+      ],
+      "attempt": 1,
+      "rooms": 32,
+      "links": 37,
+      "loops": 6,
+      "deadEnds": 1,
+      "seed": 1,
+      "fallback": false,
+      "area": 190792
+    },
+    {
+      "hash": "L6-6-7c88fa8a",
+      "serviceRooms": [
+        "L6_S1_R03",
+        "L6_S2_R04",
+        "L6_S3_R05"
+      ],
+      "attempt": 1,
+      "rooms": 32,
+      "links": 37,
+      "loops": 6,
+      "deadEnds": 2,
+      "seed": 2,
+      "fallback": false,
+      "area": 174600
+    },
+    {
+      "hash": "L6-6-5623043c",
+      "serviceRooms": [
+        "L6_S1_R03",
+        "L6_S2_R04",
+        "L6_S3_R08"
+      ],
+      "attempt": 1,
+      "rooms": 32,
+      "links": 37,
+      "loops": 6,
+      "deadEnds": 3,
+      "seed": 3,
+      "fallback": false,
+      "area": 174376
+    },
+    {
+      "hash": "L6-6-ed4fb4bf",
+      "serviceRooms": [
+        "L6_S1_R08",
+        "L6_S2_R03",
+        "L6_S3_R08"
+      ],
+      "attempt": 1,
+      "rooms": 32,
+      "links": 37,
+      "loops": 6,
+      "deadEnds": 1,
+      "seed": 4,
+      "fallback": false,
+      "area": 190696
+    },
+    {
+      "hash": "L6-6-d2c8b34f",
+      "serviceRooms": [
+        "L6_S1_R09",
+        "L6_S2_R09",
+        "L6_S3_R06"
+      ],
+      "attempt": 1,
+      "rooms": 32,
+      "links": 37,
+      "loops": 6,
+      "deadEnds": 2,
+      "seed": 5,
+      "fallback": false,
+      "area": 184536
+    },
+    {
+      "hash": "L6-6-239a9139",
+      "serviceRooms": [
+        "L6_S1_R09",
+        "L6_S2_R10",
+        "L6_S3_R01"
+      ],
+      "attempt": 1,
+      "rooms": 32,
+      "links": 37,
+      "loops": 6,
+      "deadEnds": 3,
+      "seed": 6,
+      "fallback": false,
+      "area": 187960
+    },
+    {
+      "hash": "L6-6-bef2b0f9",
+      "serviceRooms": [
+        "L6_S1_R10",
+        "L6_S2_R06",
+        "L6_S3_R06"
+      ],
+      "attempt": 1,
+      "rooms": 32,
+      "links": 37,
+      "loops": 6,
+      "deadEnds": 1,
+      "seed": 7,
+      "fallback": false,
+      "area": 176104
+    },
+    {
+      "hash": "L6-6-eaab8207",
+      "serviceRooms": [
+        "L6_S1_R07",
+        "L6_S2_R07",
+        "L6_S3_R01"
+      ],
+      "attempt": 1,
+      "rooms": 32,
+      "links": 37,
+      "loops": 6,
+      "deadEnds": 2,
+      "seed": 8,
+      "fallback": false,
+      "area": 188392
+    },
+    {
+      "hash": "L6-6-78877e02",
+      "serviceRooms": [
+        "L6_S1_R03",
+        "L6_S2_R10",
+        "L6_S3_R02"
+      ],
+      "attempt": 2,
+      "rooms": 32,
+      "links": 37,
+      "loops": 6,
+      "deadEnds": 2,
+      "seed": 9,
+      "fallback": false,
+      "area": 181656
+    },
+    {
+      "hash": "L6-6-fbef3e3f",
+      "serviceRooms": [
+        "L6_S1_R10",
+        "L6_S2_R04",
+        "L6_S3_R05"
+      ],
+      "attempt": 1,
+      "rooms": 32,
+      "links": 37,
+      "loops": 6,
+      "deadEnds": 2,
+      "seed": 10,
+      "fallback": false,
+      "area": 179016
+    },
+    {
+      "hash": "L6-6-0f9b66a5",
+      "serviceRooms": [
+        "L6_S1_R04",
+        "L6_S2_R07",
+        "L6_S3_R04"
+      ],
+      "attempt": 1,
+      "rooms": 32,
+      "links": 37,
+      "loops": 6,
+      "deadEnds": 2,
+      "seed": 11,
+      "fallback": false,
+      "area": 175096
+    },
+    {
+      "hash": "L6-6-e516a30a",
+      "serviceRooms": [
+        "L6_S1_R02",
+        "L6_S2_R07",
+        "L6_S3_R09"
+      ],
+      "attempt": 1,
+      "rooms": 32,
+      "links": 37,
+      "loops": 6,
+      "deadEnds": 2,
+      "seed": 12,
+      "fallback": false,
+      "area": 185624
+    },
+    {
+      "hash": "L6-6-e8ead621",
+      "serviceRooms": [
+        "L6_S1_R08",
+        "L6_S2_R08",
+        "L6_S3_R09"
+      ],
+      "attempt": 1,
+      "rooms": 32,
+      "links": 37,
+      "loops": 6,
+      "deadEnds": 2,
+      "seed": 13,
+      "fallback": false,
+      "area": 181800
+    },
+    {
+      "hash": "L6-6-d2114a8a",
+      "serviceRooms": [
+        "L6_S1_R03",
+        "L6_S2_R09",
+        "L6_S3_R08"
+      ],
+      "attempt": 1,
+      "rooms": 32,
+      "links": 37,
+      "loops": 6,
+      "deadEnds": 2,
+      "seed": 14,
+      "fallback": false,
+      "area": 183992
+    },
+    {
+      "hash": "L6-6-f72b2270",
+      "serviceRooms": [
+        "L6_S1_R09",
+        "L6_S2_R09",
+        "L6_S3_R09"
+      ],
+      "attempt": 1,
+      "rooms": 32,
+      "links": 37,
+      "loops": 6,
+      "deadEnds": 1,
+      "seed": 15,
+      "fallback": false,
+      "area": 185608
+    },
+    {
+      "hash": "L6-6-13b0c208",
+      "serviceRooms": [
+        "L6_S1_R06",
+        "L6_S2_R08",
+        "L6_S3_R10"
+      ],
+      "attempt": 1,
+      "rooms": 32,
+      "links": 37,
+      "loops": 6,
+      "deadEnds": 1,
+      "seed": 16,
+      "fallback": false,
+      "area": 180600
+    },
+    {
+      "hash": "L6-6-5973d609",
+      "serviceRooms": [
+        "L6_S1_R02",
+        "L6_S2_R05",
+        "L6_S3_R07"
+      ],
+      "attempt": 1,
+      "rooms": 32,
+      "links": 37,
+      "loops": 6,
+      "deadEnds": 1,
+      "seed": 17,
+      "fallback": false,
+      "area": 180104
+    },
+    {
+      "hash": "L6-6-af1c1243",
+      "serviceRooms": [
+        "L6_S1_R08",
+        "L6_S2_R07",
+        "L6_S3_R03"
+      ],
+      "attempt": 1,
+      "rooms": 32,
+      "links": 37,
+      "loops": 6,
+      "deadEnds": 3,
+      "seed": 18,
+      "fallback": false,
+      "area": 175976
+    },
+    {
+      "hash": "L6-6-6edc1504",
+      "serviceRooms": [
+        "L6_S1_R10",
+        "L6_S2_R03",
+        "L6_S3_R10"
+      ],
+      "attempt": 1,
+      "rooms": 32,
+      "links": 37,
+      "loops": 6,
+      "deadEnds": 1,
+      "seed": 19,
+      "fallback": false,
+      "area": 183384
+    },
+    {
+      "hash": "L6-6-858eb895",
+      "serviceRooms": [
+        "L6_S1_R07",
+        "L6_S2_R05",
+        "L6_S3_R10"
+      ],
+      "attempt": 1,
+      "rooms": 32,
+      "links": 37,
+      "loops": 6,
+      "deadEnds": 3,
+      "seed": 20,
+      "fallback": false,
+      "area": 187224
+    }
+  ]
+}

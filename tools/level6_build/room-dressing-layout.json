@@ -1,0 +1,206 @@
+{
+  "schema": "level6-room-dressing-layout/1",
+  "source": "tools/level6_build/room_dressing.luau",
+  "sourceSha256": "a5a16e313fe93686666ef9de3eed498b95b381c20f43b1b34a67855ce656455f",
+  "api": "Dress.Apply(manifest, helper, options?) -> {Cleanup, Report, Owner}",
+  "helper": {
+    "Place": "function(assetName, CFrame, parent, {Collidable, Scale}) -> Instance?",
+    "WorldOrigin": "Vector3 in Roblox coordinates",
+    "IsParticipant": "function(Player)->boolean; prompts disabled when absent",
+    "OnNoise": "optional function(Player, Vector3, intensity)",
+    "SoundIds": "optional asset-id dictionary: ArcadeInvaders, ArcadeMaze, ArcadePlatform, ClawMotor, BreakerInspect"
+  },
+  "units": "Roblox studs",
+  "assetFront": "+Z after Blender(X,Y,Z) -> Roblox(X,Z,-Y)",
+  "servicePocket": {
+    "width": 18,
+    "depth": 24,
+    "u": "inner partition toward exterior X wall",
+    "v": "open entrance toward exterior Z wall",
+    "entranceWidth": 18,
+    "walls": "two existing outside room walls plus one Blender WallService inner partition",
+    "floor": "Blender FloorService overlay, visual only",
+    "placement": "fresh room geometry exclusion envelopes, seeded corner order; scattered alcove fallback if no 18x24 pocket fits"
+  },
+  "clearances": {
+    "newColliderCardinalCrossWidth": 14,
+    "managerSweepRadius": 5.25,
+    "perimeter": "Service alcoves attach to exterior walls. They interrupt the former wall-hugging perimeter; active-round navigation must be tested.",
+    "preserved": [
+      "table navigation exclusions",
+      "hide anchor access envelopes",
+      "CD/table sockets",
+      "original objective locations"
+    ],
+    "existingObjectsDeleted": false
+  },
+  "variants": {
+    "BudgetArcade": [
+      {
+        "asset": "ArcadeInvaders",
+        "u": 2.4,
+        "v": 20.8,
+        "y": 0.0,
+        "facing": "entrance",
+        "interaction": "arcade"
+      },
+      {
+        "asset": "ArcadeMaze",
+        "u": 6.4,
+        "v": 20.8,
+        "y": 0.0,
+        "facing": "entrance",
+        "interaction": "arcade"
+      },
+      {
+        "asset": "ArcadePlatform",
+        "u": 10.4,
+        "v": 20.8,
+        "y": 0.0,
+        "facing": "entrance",
+        "interaction": "arcade"
+      },
+      {
+        "asset": "PrizeCounter",
+        "u": 16.2,
+        "v": 8.0,
+        "y": 0.0,
+        "facing": "inward",
+        "interaction": null
+      },
+      {
+        "asset": "ClawMachine",
+        "u": 15.0,
+        "v": 20.8,
+        "y": 0.0,
+        "facing": "entrance",
+        "interaction": "claw"
+      }
+    ],
+    "PartySupplyStore": [
+      {
+        "asset": "SupplyShelf",
+        "u": 16.7,
+        "v": 7.0,
+        "y": 0.0,
+        "facing": "inward",
+        "interaction": null
+      },
+      {
+        "asset": "SupplyShelf",
+        "u": 16.7,
+        "v": 17.5,
+        "y": 0.0,
+        "facing": "inward",
+        "interaction": null
+      },
+      {
+        "asset": "ChairStack",
+        "u": 1.95,
+        "v": 16.0,
+        "y": 0.0,
+        "facing": "entrance",
+        "interaction": null
+      },
+      {
+        "asset": "FoldedTables",
+        "u": 1.65,
+        "v": 6.5,
+        "y": 0.0,
+        "facing": "outward",
+        "interaction": null
+      },
+      {
+        "asset": "HeliumTank",
+        "u": 4.0,
+        "v": 21.5,
+        "y": 0.0,
+        "facing": "entrance",
+        "interaction": null
+      },
+      {
+        "asset": "FlatClownCutout",
+        "u": 11.5,
+        "v": 23.4,
+        "y": 0.0,
+        "facing": "entrance",
+        "interaction": null
+      }
+    ],
+    "MaintenanceWorkshop": [
+      {
+        "asset": "WorkshopBench",
+        "u": 16.3,
+        "v": 14.0,
+        "y": 0.0,
+        "facing": "inward",
+        "interaction": null
+      },
+      {
+        "asset": "Pegboard",
+        "u": 17.65,
+        "v": 14.0,
+        "y": 5.0,
+        "facing": "inward",
+        "interaction": null
+      },
+      {
+        "asset": "SupplyShelf",
+        "u": 1.85,
+        "v": 16.2,
+        "y": 0.0,
+        "facing": "outward",
+        "interaction": null
+      },
+      {
+        "asset": "BreakerPanel",
+        "u": 11.0,
+        "v": 23.4,
+        "y": 4.55,
+        "facing": "entrance",
+        "interaction": "breaker"
+      },
+      {
+        "asset": "MopBucket",
+        "u": 14.0,
+        "v": 3.8,
+        "y": 0.0,
+        "facing": "inward",
+        "interaction": null
+      },
+      {
+        "asset": "ChairRed",
+        "u": 7.0,
+        "v": 20.0,
+        "y": 0.0,
+        "facing": "entrance",
+        "interaction": null
+      }
+    ]
+  },
+  "interactionBehavior": {
+    "Arcades": "Server-authoritative rejected-credit prompt, bounded optional original sound, optional noise callback; not a fully playable minigame.",
+    "Claw": "Server-authoritative stuck-claw response with optional original sound.",
+    "Breaker": "Dry visual inspection label only, does not modify core lighting or objectives.",
+    "validation": [
+      "active isolated Level6 preview round",
+      "provided participant predicate",
+      "living humanoid and root",
+      "server distance <=10 studs",
+      "per-player and per-machine rate limits",
+      "round/generation ownership"
+    ],
+    "cleanup": "Disconnect all signals, cancel owned delayed callbacks, stop sounds, clear only owned tableware markers, destroy only own folder."
+  },
+  "validation": {
+    "independentNumericLayoutCases": 128,
+    "validAssetReferences": true,
+    "actualLuauCompile": "Lune luau.compile passed on 2026-09-30; active Studio Play still pending",
+    "activeRoundPhysicsNavigationAndMultiplayer": "unverified; root integration must test"
+  },
+  "visualQA": {
+    "reviewed": "previews-v2 01,04,06",
+    "chairs": "Rounded monobloc shell and genuine oval back slots now match inexpensive plastic-chair silhouette.",
+    "remaining": "Game mesh recreation retains budget colors and furnishing motifs; final runtime density, grime, lighting and navigation still require live-room review."
+  }
+}

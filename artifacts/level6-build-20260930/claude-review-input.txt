@@ -1,0 +1,3331 @@
+You are the independent engineering reviewer for an authorized Blender/Roblox development task. Read-only: no tools, no edits. User explicitly asks to use Claude if useful. Studio is authoritative; provided snapshots are freshly exported from live place131311258779917 v2403 with matching Source/editor. We are creating isolated Level6 placeholder for an upgraded Level3, leaving all existing Levels1–5 untouched. Visual target is a semi-dirty inexpensive1990s children party/backrooms venue: beige carpet rooms, orange confetti party rooms, red party maze, new budget arcade, supply storeroom, maintenance workshop. All visible geometry authored in Blender modular prefab kit with a shared color atlas and simple invisible Roblox colliders. Existing Level3 has26rooms,31links,5CDs,24hiding tables, blackout/music/Manager interactions. User requires at least same map scale, improved seedrandompathways, fully interactive CDs/player/hiding/lighting, DEV lobby door6. Agent clones Level3 systems but avoids RoundAdapter because it parks lobby/changes shared GameManager flags; custom preview runtime calls Layout/Builder/controllers with isolated Level6SelectedLevel/Level6RoundActive/Level6InRound attrs. New visualadapter hides old builder visuals and attaches Blender kit at gameplay sockets, preserving collision/interaction anchors. Material IDs reused. No runtime performance claims from source only. Please identify exact serious hazards, simplest robust isolated integration, improve topology WITHOUT shrinking map, and actionable verification gates. Consider client lighting/audio conflict, completion escape, sharedassets refs, streaming, teardown and concurrent users. Keep under1200words, concrete source anchors. Separate observations and recommendations.
+
+FILE ServerScriptService__Level 3 Systems__Level 3 Configuration.ModuleScript.lua
+--!strict
+-- Level 3 Configuration
+-- Production tuning for the abandoned 1990s mall service-space level.
+-- Level 3 owns one dedicated hostile: the Mall Manager. Its custom bone rig,
+-- navigation, awareness, attacks, and lifecycle are isolated from Level 1.
+
+local Configuration = {
+	Version = 46,
+	WorldName = "Level 3 Generated World",
+	StateFolderName = "Level 3 State",
+	RemotesFolderName = "Level 3 Remotes",
+	ClientEventName = "ClientEvent",
+	MallManagerMotionEventName = "MallManagerMotion",
+	HideRequestEventName = "Level3HideRequest",
+	WorldOrigin = Vector3.new(6200, 24, 0),
+	RoomHeight = 14,
+	WallThickness = 1.5,
+	FloorThickness = 1,
+	CeilingThickness = 1,
+	-- Every link uses one continuous, human-scale tunnel cross-section.
+	-- Room openings consume these exact outer dimensions so neither the ceiling
+	-- nor side walls step inward at a room boundary.
+	CorridorWidth = 14,
+	CorridorHeight = 10.5,
+	ModuleGoal = 5,
+	-- Seeded topology is generated only when a Level 3 party launches.  The
+	-- bounded district plan is larger than the former authored graph while still
+	-- keeping each six-player reserved server within a predictable build budget.
+	Layout = {
+		GeneratorVersion = 2,
+		DistrictCount = 3,
+		RoomsPerDistrict = 8,
+		GenerationAttempts = 32,
+		RetryStride = 104729,
+		FallbackSeeds = {101, 7331, 65537, 1900813},
+		MinimumRoomWidth = 65,
+		MaximumRoomWidth = 85,
+		MinimumRoomDepth = 57,
+		MaximumRoomDepth = 74,
+		MinimumRoomHeight = 11,
+		MaximumRoomHeight = 13,
+		MinimumInternalGap = 24,
+		MaximumInternalGap = 34,
+		MinimumGatewayGap = 38,
+		MaximumGatewayGap = 48,
+		MinimumCorridorLength = 18,
+		-- The concealed Signal Hall route is deliberately much longer than every
+		-- ordinary mall connector so the reversed PA master has time to unsettle players.
+		ExitCorridorLength = 560,
+		FinalHallHalfwayProgress = .50,
+		ExitCorridorSpeakerCount = 7,
+		ExitCorridorFixtureCount = 9,
+		RowHalfSpacing = 90,
+		ExtraLinksPerDistrict = 2,
+		MinimumModuleSeparation = 105,
+		-- With two loops per 2x4 district, one grid edge is absent. Three links
+		-- is the smallest possible straight-run cap; the scripted finale is exempt.
+		MaximumStraightRunLinks = 3,
+		MaximumVerticalRunLinks = 2,
+		BuildYieldEveryRooms = 3,
+		BuildYieldEveryCorridors = 2,
+		HideTableCount = 24,
+	},
+	TextureStuds = {
+		PartyCarpet = 28,
+		PartyCarpetNeon = 22,
+		PartyCarpetRed = 30,
+		CityCarpet = 52,
+		Wallpaper = 18,
+		OrangeWall = 22,
+		Tablecloth = 10,
+	},
+	Textures = {
+		PartyCarpet = "rbxassetid://92795890253148",
+		PartyCarpetNeon = "rbxassetid://110230144446272",
+		PartyCarpetRed = "rbxassetid://108064770913201",
+		CityCarpet = "rbxassetid://75635502248205",
+		PastelWallpaper = "rbxassetid://96252806287644",
+		OrangeWall = "rbxassetid://128270554927663",
+		ConfettiTablecloth = "rbxassetid://103412925025303",
+		FinalExitDoor = "rbxassetid://120063024460642",
+		KidsDrawingsAtlas = "rbxassetid://136455642832077",
+		KidsDrawingsWholesome25 = "rbxassetid://128767366284181",
+		KidsDrawingsDisturbing25 = "rbxassetid://132144680342985",
+		KidsNotesAtlas = "rbxassetid://81550568434150",
+		CDCoversAtlas = "rbxassetid://88160214591687",
+		DiskPlayerSurface = "rbxassetid://92830391726737",
+		CRTScreenSurface = "rbxassetid://106602270400755",
+	},
+	Audio = {
+		FluorescentHum = "rbxassetid://92576512092725",
+		HVAC = "rbxassetid://9125446543",
+		-- Reserved for the replacement lights-out cue.
+		PowerDown = "",
+		-- Group-owned song uploaded specifically for the synchronized Level 3 sequence.
+		RoomListeningSong = "rbxassetid://140244948455675",
+		-- Filled with the group upload of the reversed 180-second master.
+		RoomListeningSongReversed = "rbxassetid://75285146479953",
+		CDCollected = "rbxassetid://84585027971879",
+		-- Reserved Level 3 scare slots. Add group-owned IDs when the sounds are ready.
+		ScareBalloonPop = "",
+		ScareChairScrape = "",
+		ScareChildGiggle = "",
+		ScarePAWhisper = "",
+		ScareRunningSteps = "",
+		-- Reserved cues fired by the Objective Controller (exit unseal + escape).
+		ExitUnlocked = "",
+		Escape = "",
+		-- Exact group-owned Mall Manager walk uploads. Their names are preserved
+		-- verbatim in the saved Sound prototypes and runtime emitter.
+		["Mall Manager Walk Sound 1"] = "rbxassetid://86969848436282",
+		["Mall Manager Walk Sound 2"] = "rbxassetid://125163405380423",
+		["Mall Manager Walk Sound 3"] = "rbxassetid://131363472955449",
+		["Mall Manager Walk Sound 4"] = "rbxassetid://128260682244977",
+		-- Group-owned Mall Manager vocals. Blackout is reproduced spatially from
+		-- corridor-opening markers; chase remains attached to the balloon head.
+		MallManagerBalloonScream = "rbxassetid://105088070261380",
+		MallManagerBlackout = "rbxassetid://125407251695204",
+	},
+	MusicSequence = {
+		DurationSeconds = 180.035917,
+		-- Every fixture visibly dies for five seconds before the exact 2:30 blackout.
+		-- The song keeps playing in darkness. Its distant scream begins during the
+		-- final three song seconds; the song end still starts the 30-second hunt.
+		BlackoutStartSeconds = 150,
+		PreBlackoutFlickerSeconds = 5,
+		BlackoutScreamLeadSeconds = 3,
+		PostSongBlackoutSeconds = 30,
+		BlackoutSeconds = 60.035917,
+		CycleEndSeconds = 210.035917,
+		RecoveryFlickerSeconds = 3.2,
+		PreloadLeadSeconds = 1.5,
+		RoomVolume = 0.48,
+		CompletionSongVolume = 0.34,
+		CompletionSongPitchOctave = 0.68,
+		CompletionDimSeconds = 5.5,
+		CorridorVolume = 0.045,
+		-- Only the two nearest synchronized PA speakers contribute to the local
+		-- mix. This prevents coherent stacking while preserving coverage in the
+		-- largest rooms and a faint bleed from the next room.
+		SpeakerVolume = 0.30,
+		SpeakerMinDistance = 18,
+		SpeakerMaxDistance = 180,
+		SpeakerMaxAudibleVoices = 2,
+		SpeakerSecondaryVolumeScale = 0.25,
+	},
+	MallManager = {
+		TemplateName = "MallManagerTemplate",
+		-- NoiseReporter defines the real player sprint at 26 studs/second. The
+		-- blackout Manager must win a straight chase by exactly twenty percent.
+		PlayerRunSpeedReference = 26,
+		ChaseSpeedMultiplier = 1.20,
+		RuntimeName = "Mall Manager",
+		-- Signal Hall remains an authored emergency fallback only. Every real blackout
+		-- spawn is selected near a random member of the densest living player group.
+		SpawnRoomId = "SignalHall",
+		SpawnMinimumDistance = 90,
+		SpawnPreferredDistance = 125,
+		SpawnMaximumDistance = 180,
+		FinalHallSpawnProgress = .40,
+		FinaleApproachSpeed = 360,
+		SpawnGroupRadius = 75,
+		SpawnRoomMargin = 10,
+		-- Radius 5 matches the animated root-relative body sway. The slightly
+		-- larger local sweep preserves a visible buffer from walls and corners.
+		AgentRadius = 5,
+		-- Roblox's four-stud navmesh voxels reject a radius-five agent in the
+		-- authored 14-stud corridors even though the exact geometry fits. Route
+		-- with four studs, then enforce the true body envelope on every local sweep.
+		PathAgentRadius = 4,
+		SweepRadius = 5.25,
+		AgentHeight = 10,
+		WaypointSpacing = 4,
+		WaypointReachDistance = 1.25,
+		PathLookaheadWaypoints = 4,
+		BlackoutPathLookaheadWaypoints = 7,
+		PathSampleHeight = 0.5,
+		CorridorCenteringLead = 12,
+		DirectPathRange = 32,
+		BlackoutDirectPathRange = 48,
+		GoalTolerance = 3.2,
+		PathGoalMoveThreshold = 7,
+		-- The hunt tracks a moving nearest-player goal. Refresh before a runner can
+		-- pull a stale route several studs behind them, without flooding PFS.
+		BlackoutPathGoalMoveThreshold = 3,
+		PathRecomputeSeconds = 0.45,
+		BlackoutPathRecomputeSeconds = 0.20,
+		ThinkIntervalSeconds = 0.12,
+		BlackoutThinkIntervalSeconds = 0.10,
+		StuckSeconds = 0.85,
+		MaxPathFailures = 3,
+		ObstructionRecoveryAttempts = 3,
+		-- LEVEL3_MANAGER_FURNITURE_NAV_20260821
+		-- Hold one avoidance side long enough to clear wide furniture instead of
+		-- choosing a new left/right answer every movement frame.
+		AvoidanceCommitSeconds = 1.35,
+		OverlapEscapeProbeDistance = 3.5,
+		FurniturePathLabel = "Level3ManagerFurniture",
+		FurniturePathPadding = 1.25,
+		ProgressResetDistance = 8,
+		MovementAcceleration = 48,
+		MovementDeceleration = 72,
+		BlackoutMovementAcceleration = 96,
+		BlackoutMovementDeceleration = 120,
+		TurnResponsiveness = 9,
+		BlackoutTurnResponsiveness = 18,
+		MaximumMovementDeltaSeconds = 0.05,
+		MotionSnapshotRate = 30,
+		MotionInterpolationDelaySeconds = 0.065,
+		MotionBufferSamples = 8,
+		MotionLongGapSeconds = 0.30,
+		ChaseVisualLossGraceSeconds = 1.25,
+		BlackoutTargetLeadSeconds = 0.25,
+		BlackoutTargetLeadMaximumDistance = 8,
+		AttackRange = 4.4,
+		AttackConfirmRange = 5.4,
+		VerticalAttackTolerance = 6,
+		AttackWindupSeconds = 0.40,
+		BlackoutAttackWindupSeconds = 0.22,
+		AttackRecoverySeconds = 0.65,
+		BlackoutAttackRecoverySeconds = 0.40,
+		RetargetDistanceAdvantage = 28,
+		-- The blackout-only Manager begins moving on the reveal frame and never idles at patrol goals.
+		SpawnGraceSeconds = 0,
+		PatrolPauseSeconds = 0,
+		-- Absolute floor for a blackout sweep leg. The controller extends this by
+		-- direct distance / patrol speed, a detour factor, and slack; a fixed 20s
+		-- deadline is shorter than even several healthy adjacent-room routes.
+		BlackoutSweepLegSeconds = 20,
+		BlackoutSweepDistanceFactor = 1.5,
+		BlackoutSweepSlackSeconds = 8,
+		NoiseLifetimeSeconds = 4,
+		CrouchHearingMultiplier = 0.18,
+		SearchPointRadius = 18,
+		WalkReferenceSpeed = 13,
+		AnimationFadeSeconds = 0.18,
+		MinimumAnimationSpeed = 0.30,
+		MaximumAnimationSpeed = 2.6,
+		ContinuousAnimationPlaybackSpeed = 0.65,
+		-- Four real touchdown phases measured from the published 2.9-second limp.
+		-- Phase-following keeps audio locked to the feet at every playback speed.
+		FootstepSoundNames = {
+			"Mall Manager Walk Sound 1",
+			"Mall Manager Walk Sound 2",
+			"Mall Manager Walk Sound 3",
+			"Mall Manager Walk Sound 4",
+		},
+		FootstepAnimationTimes = {0.8, 1.2, 2.266667, 2.666667},
+		FootstepEmitterHeight = 0.18,
+		-- Strong at close range, with a shorter tail so it does not fill the whole mall.
+		FootstepVolume = 2.0,
+		FootstepRollOffMinDistance = 20,
+		FootstepRollOffMaxDistance = 90,
+		BlackoutScreamSoundName = "Mall Manager Walk Blackout Scream",
+		BlackoutScreamDurationSeconds = 8.071836735,
+		-- The blackout vocal is one distant corridor source, never a copy on the
+		-- nearby Manager. Structural occlusion plus filtering makes it read as
+		-- several rooms away instead of eight synchronized screams at once.
+		BlackoutScreamVolume = 0.90,
+		BlackoutScreamRollOffMinDistance = 22,
+		BlackoutScreamRollOffMaxDistance = 210,
+		BlackoutScreamMaxLocalVoices = 1,
+		BlackoutScreamSourceMinimumDistance = 75,
+		BlackoutScreamSourcePreferredDistance = 115,
+		BlackoutScreamSourceMaximumDistance = 175,
+		BlackoutScreamMinimumStructuralOccluders = 2,
+		BlackoutScreamLowGain = 0,
+		BlackoutScreamMidGain = -9,
+		BlackoutScreamHighGain = -24,
+		BlackoutScreamReverbDensity = 0.88,
+		BlackoutScreamReverbDiffusion = 0.82,
+		BlackoutScreamReverbDecayTime = 2.2,
+		BlackoutScreamReverbDryLevel = -3,
+		BlackoutScreamReverbWetLevel = -10,
+		ChaseScreamSoundName = "Mall Manager Chase Scream 1",
+		ChaseScreamDurationSeconds = 22.569795918,
+		ChaseScreamVolume = 1.25,
+		ChaseScreamRollOffMinDistance = 18,
+		ChaseScreamRollOffMaxDistance = 260,
+		-- The clip is 22.57 seconds; a longer cooldown prevents state-flap stacking.
+		ChaseScreamCooldownSeconds = 25,
+		Normal = {
+			-- Neutral wandering is intentionally slow and uses the limping walk.
+			PatrolSpeed = 4.5,
+			InvestigateSpeed = 13,
+			SearchSpeed = 15,
+			ChaseSpeed = 22,
+			VisionRange = 115,
+			FieldOfViewDegrees = 120,
+			ProximitySenseRange = 12,
+			HearingWalkRange = 65,
+			HearingSprintRange = 120,
+			OccludedHearingMultiplier = 0.58,
+			FlashlightVisibilityMultiplier = 1.40,
+			AcquireSeconds = 0.40,
+			SuspicionDecaySeconds = 0.80,
+			AlertSeconds = 0.30,
+			MemorySeconds = 6,
+			SearchSeconds = 10,
+		},
+		Blackout = {
+			-- Exact 30% reduction across every blackout movement state. Scaling the
+			-- whole profile preserves its escalation and prevents SEARCH outrunning CHASE.
+			PatrolSpeed = 5.25,
+			InvestigateSpeed = 12.6,
+			SearchSpeed = 15.4,
+			-- 26 player RUN × 1.20 = 31.2 studs/second.
+			ChaseSpeed = 31.2,
+			VisionRange = 280,
+			FieldOfViewDegrees = 280,
+			ProximitySenseRange = 28,
+			HearingWalkRange = 170,
+			HearingSprintRange = 270,
+			OccludedHearingMultiplier = 0.72,
+			FlashlightVisibilityMultiplier = 1.20,
+			AcquireSeconds = 0.08,
+			SuspicionDecaySeconds = 0.25,
+			AlertSeconds = 0.10,
+			MemorySeconds = 32,
+			SearchSeconds = 20,
+		},
+	},
+	Hiding = {
+		HoldAnimationId = "rbxassetid://119040885264927", -- Actual hazmat hold v2; group 1039373905
+		PromptHoldDuration = 0,
+		PromptMaxDistance = 8,
+		ServerDistanceSlack = 3,
+		ActionCooldownSeconds = 0.25,
+		HiddenRootHeight = 2.2,
+		HideVolumeSize = Vector3.new(8.6, 2.5, 3.0),
+		SightOccluderSize = Vector3.new(11.1, 3.35, 4.3),
+		ExitOffsetZ = 5.8,
+		ExitVerticalOffset = 1.0,
+		-- Two players share one table. Slot 1 sits on the anchor's -X side and
+		-- slot 2 on +X, so both bodies, both camera points and both exit lanes
+		-- stay inside the 8.6-stud hide volume without overlapping.
+		HideOccupantCap = 2,
+		HideOccupantLateralOffset = 2.0,
+	},
+	-- LEVEL3_MANAGER_TABLE_CHECK_20260904
+	-- The Mall Manager kneels at an occupied hiding table during a hunt, warns
+	-- whoever is under it, then flushes them out. A targeted hidden player is
+	-- pursued directly; sweep bias and cooldowns apply only to patrol checks.
+	-- The warning and flush immunity give occupants time to leave and run.
+	TableCheck = {
+		-- Chance that a fresh sweep leg aims at an occupied table instead of a
+		-- random room. This does not gate pursuit of a selected hidden player.
+		SweepBiasChance = 0.5,
+		-- Floor between incidental patrol checks anywhere in the mall.
+		GlobalIntervalSeconds = 18,
+		-- Floor before the SAME table may be checked again on patrol.
+		AnchorCooldownSeconds = 25,
+		-- How close the Manager must get to the anchor before the check starts.
+		-- Measured to the anchor CENTRE, and the table's own navigation envelope
+		-- plus the 5.25-stud body sweep already hold the Manager 9-12 studs off
+		-- it, so anything much tighter than this simply never fires.
+		StartRange = 14,
+		-- The warning window. Leaving on your own during it is allowed and safe.
+		ReactionWindowSeconds = 2.0,
+		-- Head start handed to everyone a flush ejects: attacks refuse them for
+		-- this long, so being found under a table is never an instant kill.
+		FlushImmunitySeconds = 1.5,
+		-- Cue played at the table when the check starts. This names a key of
+		-- Configuration.Audio above; no new asset ids are introduced here.
+		SoundName = "MallManagerBlackout",
+		SoundVolume = 0.8,
+		SoundRollOffMinDistance = 12,
+		SoundRollOffMaxDistance = 90,
+	},
+	Colors = {
+		AgedWhite = Color3.fromRGB(218, 211, 184),
+		DustyPeach = Color3.fromRGB(176, 99, 74),
+		MutedBlue = Color3.fromRGB(66, 83, 124),
+		FadedGreen = Color3.fromRGB(91, 126, 83),
+		Burgundy = Color3.fromRGB(92, 43, 49),
+		DarkCarpet = Color3.fromRGB(18, 18, 22),
+		Energon = Color3.fromRGB(66, 244, 218),
+	},
+	Rooms = {
+		{Id="Arrival", Name="Receiving Vestibule", Kind="PartyHall", Decor="SparseWelcome", X=0, Z=0, W=70, D=52, H=12.5},
+		{Id="StaffJunction", Name="Service Junction A", Kind="PartyHall", Decor="EmptyTransition", X=100, Z=0, W=56, D=36, H=11.5},
+		{Id="BackOffice", Name="Vacant Leasing Office", Kind="City", Decor="KidsCafeteria", X=195, Z=0, W=78, D=48, H=12},
+		{Id="BreakRoom", Name="Employee Break Room", Kind="City", Decor="ForgottenPair", X=100, Z=-105, W=60, D=50, H=10.5, Module=true},
+		{Id="UtilityWest", Name="West Party Annex", Kind="PartyHall", Decor="DanceFloor", X=100, Z=105, W=80, D=70, H=16},
+		{Id="PartySpine", Name="Party Service Gallery", Kind="PartyHall", Decor="SparseGallery", X=300, Z=0, W=98, D=40, H=13},
+		{Id="Maintenance", Name="White Celebration Room", Kind="City", Decor="WhiteClassroom", X=195, Z=-105, W=68, D=64, H=11},
+		{Id="LoadingStore", Name="Orange Banquet Annex", Kind="Party", Decor="BanquetRows", X=195, Z=105, W=88, D=74, H=15, Module=true},
+		{Id="PartyA", Name="Party Room 03", Kind="Party", Decor="BirthdayCenter", X=300, Z=-105, W=108, D=78, H=16},
+		{Id="ChairStore", Name="White City Hall", Kind="City", Decor="CityCafe", X=300, Z=105, W=76, D=60, H=12.5},
+		{Id="CentralHall", Name="Parallel Party Gallery", Kind="PartyHall", Decor="SparseGallery", X=440, Z=0, W=76, D=44, H=12},
+		{Id="CityPlay", Name="Little Streets Room", Kind="City", Decor="KidsCluster", X=440, Z=-105, W=112, D=84, H=15, Module=true},
+		{Id="Janitor", Name="Orange Function Room", Kind="Party", Decor="AfterParty", X=440, Z=105, W=66, D=50, H=11.5},
+		{Id="LostFound", Name="White Atrium", Kind="City", Decor="WhiteAtrium", X=570, Z=0, W=88, D=62, H=16},
+		{Id="PartyB", Name="Abandoned Banquet Hall 07", Kind="Party", Decor="GrandBanquet", X=570, Z=-105, W=126, D=96, H=18, Module=true},
+		{Id="Records", Name="Orange Celebration Room", Kind="Party", Decor="AbandonedCelebration", X=570, Z=105, W=84, D=70, H=14, Module=true},
+		{Id="SignalHall", Name="East Party Passage", Kind="PartyHall", Decor="EmptyTransition", X=710, Z=0, W=78, D=40, H=11.5},
+		{Id="Exit", Name="Freight Elevator Chamber", Kind="Exit", Decor="Exit", X=1040, Z=0, W=58, D=52, H=14},
+	},
+	Links = {
+		{A="Arrival", B="StaffJunction", Door="Open"},
+		{A="StaffJunction", B="BackOffice", Door="Open"},
+		{A="BackOffice", B="PartySpine", Door="Open"},
+		{A="PartySpine", B="CentralHall", Door="Open"},
+		{A="CentralHall", B="LostFound", Door="Open"},
+		{A="LostFound", B="SignalHall", Door="Open"},
+		{A="SignalHall", B="Exit", Door="HiddenExit"},
+		{A="StaffJunction", B="BreakRoom", Door="Open"},
+		{A="BreakRoom", B="Maintenance", Door="Open"},
+		{A="Maintenance", B="PartyA", Door="Open"},
+		{A="PartyA", B="CityPlay", Door="Open"},
+		{A="CityPlay", B="PartyB", Door="Open"},
+		{A="PartyB", B="LostFound", Door="Open"},
+		{A="StaffJunction", B="UtilityWest", Door="Open"},
+		{A="UtilityWest", B="LoadingStore", Door="Open"},
+		{A="LoadingStore", B="ChairStore", Door="Open"},
+		{A="ChairStore", B="Janitor", Door="Open"},
+		{A="Janitor", B="Records", Door="Open"},
+		{A="Records", B="LostFound", Door="Open"},
+		{A="BackOffice", B="Maintenance", Door="Open"},
+		{A="BackOffice", B="LoadingStore", Door="Open"},
+		{A="PartySpine", B="PartyA", Door="Open"},
+		{A="PartySpine", B="ChairStore", Door="Open"},
+		{A="CentralHall", B="CityPlay", Door="Open"},
+		{A="CentralHall", B="Janitor", Door="Open"},
+	},
+}
+
+table.freeze(Configuration.Layout)
+table.freeze(Configuration.TextureStuds)
+table.freeze(Configuration.Textures)
+table.freeze(Configuration.Audio)
+table.freeze(Configuration.MusicSequence)
+table.freeze(Configuration.MallManager.FootstepSoundNames)
+table.freeze(Configuration.MallManager.FootstepAnimationTimes)
+table.freeze(Configuration.MallManager.Normal)
+table.freeze(Configuration.MallManager.Blackout)
+table.freeze(Configuration.MallManager)
+table.freeze(Configuration.Hiding)
+table.freeze(Configuration.TableCheck)
+table.freeze(Configuration.Colors)
+for _, room in ipairs(Configuration.Rooms) do table.freeze(room) end
+for _, link in ipairs(Configuration.Links) do table.freeze(link) end
+table.freeze(Configuration.Rooms)
+table.freeze(Configuration.Links)
+table.freeze(Configuration)
+
+return Configuration
+
+FILE ServerScriptService__Level 3 Systems__Level 3 Round Adapter.ModuleScript.lua
+--!strict
+-- Level 3 Round Adapter
+--
+-- GameManager-facing lifecycle owner for Level 3. Everything Level 3 touches
+-- outside its generated world is acquired here and restored by Cleanup(): the
+-- persistent lobby, Level 1 server scripts, the Level 1 Workspace.Entity,
+-- compatibility markers, replicated state, objective mirrors, and the dedicated
+-- Level 3 Mall Manager runtime. Level 3 still never creates EntityStart.
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerScriptService = game:GetService("ServerScriptService")
+local ServerStorage = game:GetService("ServerStorage")
+
+local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
+local LayoutGenerator = require(script.Parent:WaitForChild("Level 3 Layout Generator"))
+local WorldBuilder = require(script.Parent:WaitForChild("Level 3 World Builder"))
+local ObjectiveController = require(script.Parent:WaitForChild("Level 3 Objective Controller"))
+local MusicSequenceController = require(script.Parent:WaitForChild("Level 3 Music Sequence Controller"))
+local HidingController = require(script.Parent:WaitForChild("Level 3 Hiding Controller"))
+local MallManagerController = require(script.Parent:WaitForChild("Level 3 Mall Manager AI Controller"))
+
+local Adapter = {}
+
+local activeManifest: any = nil
+local generation = 0
+local levelOneScriptStates: {[BaseScript]: boolean}? = nil
+local storedLevelOneEntity: Instance? = nil
+local storedServerLobby: Instance? = nil
+local managerBlackoutConnection: RBXScriptConnection? = nil
+local managerLifecycleToken = 0
+
+local STORED_LOBBY_NAME = "Level 3 Stored Server Lobby"
+local STORED_LEVEL_ONE_ENTITY_NAME = "Level 3 Stored Level 1 Entity"
+local MAX_SEED = 2147483647
+
+-- A manual override only counts when it is a real, usable seed. 0 is the OFF
+-- value -- it is what a tester leaves behind by typing a zero instead of
+-- deleting the attribute, and the old `type(value) ~= "number"` guard accepted
+-- it as a pinned seed, so every round would silently rebuild seed 0's mall.
+-- Level 2 shipped exactly this bug and was fixed on 2026-08-19; this is the same
+-- fix, kept deliberately identical to Level 2 Round Adapter's pinnedSeedOverride.
+local function pinnedSeedOverride(): number?
+	local requested = workspace:GetAttribute("Level3Seed")
+	if type(requested) ~= "number" then return nil end
+	if requested ~= requested then return nil end -- NaN
+	-- Reject out of range rather than wrapping. `% MAX_SEED` silently aliased
+	-- the top of the documented "any number >= 1" range: 2147483647 built
+	-- seed 0's map, 2147483648 built seed 1's. MAX_SEED is finite, so this
+	-- bound also subsumes the old math.huge check.
+	if requested < 1 or requested >= MAX_SEED then return nil end
+	return math.floor(requested)
+end
+
+-- These are the active Level 1 services in the clean project baseline. They
+-- must not keep running after their world has been replaced by Level 3.
+local LEVEL_ONE_RUNTIME_SCRIPTS = {
+	"EntityAI",
+	"EntityAnimation",
+	"EntityKill",
+	"PuzzleManager",
+}
+
+local LEGACY_LEVEL_THREE_ATTRIBUTES = {
+	"Level3Pumps",
+	"Level3PumpGoal",
+	"Level3ExitPowered",
+	-- Retired with the furniture state machine (LEVEL3_PERMANENT_FURNITURE_20260828).
+	-- Cleared rather than merely abandoned so a place saved mid-hunt under the old
+	-- build cannot keep advertising suppressed furniture to anything that looks.
+	"Level3FurnitureTemporarilyRemoved",
+	"Level3FurnitureCollisionSuppressed",
+}
+
+local function ownedFolder(parent: Instance, name: string): Folder
+	local existing = parent:FindFirstChild(name)
+	if existing and existing:IsA("Folder") then
+		return existing
+	end
+	if existing then
+		existing:Destroy()
+	end
+	local created = Instance.new("Folder")
+	created.Name = name
+	created.Parent = parent
+	return created
+end
+
+local function state(): Folder
+	return ownedFolder(ReplicatedStorage, Configuration.StateFolderName)
+end
+
+local function ensureRemotes()
+	local remotes = ownedFolder(ReplicatedStorage, Configuration.RemotesFolderName)
+	local existing = remotes:FindFirstChild(Configuration.ClientEventName)
+	if not (existing and existing:IsA("RemoteEvent")) then
+		if existing then existing:Destroy() end
+		local event = Instance.new("RemoteEvent")
+		event.Name = Configuration.ClientEventName
+		event.Parent = remotes
+	end
+	local hideRequest = remotes:FindFirstChild(Configuration.HideRequestEventName)
+	if not (hideRequest and hideRequest:IsA("RemoteEvent")) then
+		if hideRequest then hideRequest:Destroy() end
+		local event = Instance.new("RemoteEvent")
+		event.Name = Configuration.HideRequestEventName
+		event.Parent = remotes
+	end
+	local motion = remotes:FindFirstChild(Configuration.MallManagerMotionEventName)
+	if not (motion and motion:IsA("UnreliableRemoteEvent")) then
+		if motion then motion:Destroy() end
+		local event = Instance.new("UnreliableRemoteEvent")
+		event.Name = Configuration.MallManagerMotionEventName
+		event.Parent = remotes
+	end
+end
+
+local function setScriptsEnabled(names: {string}, enabled: boolean)
+	for _, name in ipairs(names) do
+		-- Recursive: Level 1's runtime scripts moved into a "Level 1 Systems"
+		-- folder on 2026-09-02, and a non-recursive lookup would silently return
+		-- nil there -- which is exactly how every Level 2/3 round once came to
+		-- start Level 1's fuse puzzle server-side. Recursive works from either
+		-- layout, so this cannot break again on the next reorganisation.
+		local object = ServerScriptService:FindFirstChild(name, true)
+		if object and object:IsA("BaseScript") then
+			object.Enabled = enabled
+		end
+	end
+end
+
+-- The lobby is parked rather than cloned. GameManager's references to stations
+-- and zones therefore stay valid when the same instance is restored.
+local function storeLobby()
+	local lobby = workspace:FindFirstChild("ServerLobby")
+	if not lobby then
+		return
+	end
+	storedServerLobby = lobby
+	lobby.Name = STORED_LOBBY_NAME
+	lobby.Parent = ServerStorage
+end
+
+local function restoreLobby()
+	local stored = storedServerLobby
+	if not (stored and stored.Parent == ServerStorage) then
+		stored = ServerStorage:FindFirstChild(STORED_LOBBY_NAME)
+	end
+	storedServerLobby = nil
+	if not stored then
+		return
+	end
+
+	local existing = workspace:FindFirstChild("ServerLobby")
+	if existing then
+		-- GameManager has already rebuilt a live lobby, so this stored copy is
+		-- stale and must not create duplicate launch zones.
+		stored:Destroy()
+		return
+	end
+	stored.Name = "ServerLobby"
+	stored.Parent = workspace
+end
+
+local function isolateLevelOneRuntime()
+	levelOneScriptStates = {}
+	for _, name in ipairs(LEVEL_ONE_RUNTIME_SCRIPTS) do
+		-- Recursive: Level 1's runtime scripts moved into a "Level 1 Systems"
+		-- folder on 2026-09-02, and a non-recursive lookup would silently return
+		-- nil there -- which is exactly how every Level 2/3 round once came to
+		-- start Level 1's fuse puzzle server-side. Recursive works from either
+		-- layout, so this cannot break again on the next reorganisation.
+		local object = ServerScriptService:FindFirstChild(name, true)
+		if object and object:IsA("BaseScript") then
+			levelOneScriptStates[object] = object.Enabled
+			object.Enabled = false
+		end
+	end
+
+	local entity = workspace:FindFirstChild("Entity")
+	if entity then
+		storedLevelOneEntity = entity
+		entity.Name = STORED_LEVEL_ONE_ENTITY_NAME
+		entity.Parent = ServerStorage
+	end
+end
+
+local function restoreLevelOneRuntime(forceEnableScripts: boolean)
+	local stored = storedLevelOneEntity
+	if not (stored and stored.Parent) then
+		stored = ServerStorage:FindFirstChild(STORED_LEVEL_ONE_ENTITY_NAME)
+	end
+	if stored and stored.Parent then
+		local existing = workspace:FindFirstChild("Entity")
+		if existing and existing ~= stored then
+			existing:Destroy()
+		end
+		stored.Name = "Entity"
+		stored.Parent = workspace
+	end
+	storedLevelOneEntity = nil
+
+	if levelOneScriptStates then
+		for object, wasEnabled in pairs(levelOneScriptStates) do
+			if object.Parent then
+				object.Enabled = wasEnabled
+			end
+		end
+	elseif forceEnableScripts then
+		-- A saved or crashed edit state cannot preserve the old Lua table. The
+		-- listed scripts are enabled in the clean Level 1 baseline.
+		setScriptsEnabled(LEVEL_ONE_RUNTIME_SCRIPTS, true)
+	end
+	levelOneScriptStates = nil
+end
+
+local function destroyCompatibilityObjects()
+	-- Deliberately no EntityStart: Level 3 does not create or require one.
+	for _, name in ipairs({"Elevator", "MazeStart", "ElevatorSpawn"}) do
+		for _, object in ipairs(workspace:GetChildren()) do
+			if object.Name == name and object:GetAttribute("Level3_CompatibilityMarker") == true then
+				object:Destroy()
+			end
+		end
+	end
+end
+
+local function destroyGeneratedWorlds()
+	-- A failed procedural build may still be staged off-Workspace.  Sweep both
+	-- owners so a retry never inherits half-built rooms or retained Instances.
+	for _, parent in ipairs({workspace, ServerStorage}) do
+		local stale = parent:FindFirstChild(Configuration.WorldName)
+		while stale do
+			stale:Destroy()
+			stale = parent:FindFirstChild(Configuration.WorldName)
+		end
+	end
+end
+
+local function clearLegacyAttributes()
+	for _, name in ipairs(LEGACY_LEVEL_THREE_ATTRIBUTES) do
+		workspace:SetAttribute(name, nil)
+	end
+end
+
+local function stopObjectiveController()
+	local success, problem = pcall(ObjectiveController.Stop)
+	if not success then
+		warn("[Level 3] Objective controller cleanup failed: " .. tostring(problem))
+	end
+end
+
+local function stopMusicSequence()
+	local success, problem = pcall(MusicSequenceController.Stop)
+	if not success then
+		warn("[Level 3] Music sequence cleanup failed: " .. tostring(problem))
+	end
+end
+
+local function stopMallManager()
+	local success, problem = pcall(MallManagerController.Stop)
+	if not success then
+		warn("[Level 3] Mall Manager cleanup failed: " .. tostring(problem))
+	end
+end
+
+local function disconnectManagerLifecycle()
+	managerLifecycleToken += 1
+	if managerBlackoutConnection and managerBlackoutConnection.Connected then
+		managerBlackoutConnection:Disconnect()
+	end
+	managerBlackoutConnection = nil
+end
+
+local function bindManagerToHunt(manifest: any, activeGeneration: number)
+	disconnectManagerLifecycle()
+	local token = managerLifecycleToken
+	local function sync()
+		if token ~= managerLifecycleToken or activeManifest ~= manifest
+			or not manifest.World or manifest.World.Parent ~= workspace then return end
+		local shouldExist = workspace:GetAttribute("Level3MallManagerHuntActive") == true
+			and workspace:GetAttribute("RoundActive") == true
+			and workspace:GetAttribute("SelectedLevel") == 3
+		if not shouldExist then
+			stopMallManager()
+			return
+		end
+		if MallManagerController.GetSnapshot() then return end
+		local ok, result = pcall(MallManagerController.Start, manifest, activeGeneration)
+		if not ok then
+			warn("[Level 3] Mall Manager hunt spawn failed: " .. tostring(result))
+			return
+		end
+		if result == nil then
+			-- Characters can briefly be unavailable on the exact edge. Retry only
+			-- while this same hunt generation is still authoritative.
+			task.delay(.35, function()
+				if token == managerLifecycleToken
+					and workspace:GetAttribute("Level3MallManagerHuntActive") == true then sync() end
+			end)
+		end
+	end
+	managerBlackoutConnection = workspace:GetAttributeChangedSignal("Level3MallManagerHuntActive"):Connect(sync)
+	sync()
+end
+
+local function validateManifest(manifest: any)
+	assert(type(manifest) == "table", "Level 3 world builder must return a manifest table")
+	local layout = manifest.Layout
+	assert(type(layout) == "table", "Level 3 manifest is missing its generated layout")
+	local layoutValid, layoutProblem = LayoutGenerator.Validate(layout)
+	assert(layoutValid, "Level 3 generated layout failed validation: " .. tostring(layoutProblem))
+	assert(manifest.World:GetAttribute("Level3_LayoutHash") == layout.LayoutHash,
+		"Level 3 world and manifest layout hashes do not match")
+	assert(manifest.World and manifest.World:IsA("Model") and manifest.World.Parent == workspace,
+		"Level 3 manifest is missing its live World model")
+	assert(manifest.World:GetAttribute("Level3_Generation") == generation,
+		"Level 3 manifest generation does not match the active build")
+	assert(manifest.Elevator and manifest.Elevator:IsA("Model") and manifest.Elevator.Parent == workspace,
+		"Level 3 manifest is missing its Elevator compatibility model")
+	assert(manifest.ElevatorSpawn and manifest.ElevatorSpawn:IsA("BasePart")
+		and manifest.ElevatorSpawn.Parent == workspace,
+		"Level 3 manifest is missing its ElevatorSpawn compatibility part")
+	assert(manifest.MazeStart and manifest.MazeStart:IsA("BasePart") and manifest.MazeStart.Parent == workspace,
+		"Level 3 manifest is missing its MazeStart compatibility part")
+	assert(type(manifest.Modules) == "table" and #manifest.Modules == Configuration.ModuleGoal,
+		"Level 3 manifest module count does not match Configuration.ModuleGoal")
+	assert(type(manifest.Corridors) == "table" and #manifest.Corridors == #layout.Links,
+		"Level 3 manifest corridor count does not match its generated layout")
+	local expectedHideTables = tonumber(layout.HideSpotCount) or Configuration.Layout.HideTableCount
+	assert(type(manifest.HideTables) == "table" and #manifest.HideTables == expectedHideTables,
+		"Level 3 manifest hide-table count does not match its generated layout")
+	local hideIndices = {}
+	for _, anchor in ipairs(manifest.HideTables) do
+		assert(anchor:IsA("BasePart") and anchor:IsDescendantOf(manifest.World)
+			and anchor:GetAttribute("Level3_HideTableAnchor") == true,
+			"Level 3 hide table anchor is invalid")
+		local index = tonumber(anchor:GetAttribute("Level3_HideTableIndex"))
+		assert(index and index >= 1 and index <= expectedHideTables and not hideIndices[index],
+			"Level 3 hide table indices must be unique and contiguous")
+		hideIndices[index] = true
+		local prompt = anchor:FindFirstChild("HideUnderTablePrompt")
+		assert(prompt and prompt:IsA("ProximityPrompt"), "Level 3 hide table prompt is missing")
+	end
+	assert(type(manifest.BlackoutScreamOpenings) == "table"
+		and #manifest.BlackoutScreamOpenings == #manifest.Corridors * 2,
+		"Level 3 manifest requires two blackout scream markers per generated corridor")
+	for _, opening in ipairs(manifest.BlackoutScreamOpenings) do
+		assert(opening:IsA("Attachment") and opening:IsDescendantOf(manifest.World)
+			and opening:GetAttribute("Level3_CorridorOpeningScreamEmitter") == true,
+			"Level 3 blackout scream opening marker is invalid")
+	end
+	assert(manifest.MallManagerSpawn and manifest.MallManagerSpawn:IsA("BasePart")
+		and manifest.MallManagerSpawn:IsDescendantOf(manifest.World),
+		"Level 3 manifest is missing Mall Manager Spawn")
+	local spawnRoomId = manifest.MallManagerSpawn:GetAttribute("Level3_SpawnRoomId")
+	assert(type(spawnRoomId) == "string" and layout.RoomById[spawnRoomId]
+		and spawnRoomId ~= layout.Roles.ExitRoomId,
+		"Level 3 Mall Manager spawn role is invalid for the generated layout")
+	assert(manifest.MallManagerRuntime and manifest.MallManagerRuntime:IsA("Folder")
+		and manifest.MallManagerRuntime:IsDescendantOf(manifest.World),
+		"Level 3 manifest is missing Mall Manager Runtime")
+	assert(type(manifest.DiscPlayer) == "table" and manifest.DiscPlayer.Model
+		and manifest.DiscPlayer.Model:IsA("Model")
+		and manifest.DiscPlayer.Model:IsDescendantOf(manifest.World)
+		and manifest.DiscPlayer.Prompt:IsA("ProximityPrompt")
+		and type(manifest.DiscPlayer.Slots) == "table"
+		and #manifest.DiscPlayer.Slots == Configuration.ModuleGoal,
+		"Level 3 manifest is missing its five-slot Signal Hall disc player")
+	assert(manifest.EscapeTrigger and manifest.EscapeTrigger:IsA("BasePart")
+		and manifest.EscapeTrigger:IsDescendantOf(manifest.World),
+		"Level 3 manifest is missing its escape trigger")
+	assert(manifest.ExitSafeSpawn and manifest.ExitSafeSpawn:IsA("BasePart")
+		and manifest.ExitSafeSpawn:IsDescendantOf(manifest.World),
+		"Level 3 manifest is missing its exit safe spawn")
+	assert(typeof(manifest.ExitPosition) == "Vector3", "Level 3 manifest is missing its exit position")
+	local finalHall = manifest.FinalHall
+	assert(type(finalHall) == "table" and finalHall.Model and finalHall.Model:IsA("Model")
+		and finalHall.Model:IsDescendantOf(manifest.World),
+		"Level 3 manifest is missing its generated final hall")
+	assert(type(finalHall.Length) == "number"
+		and math.abs(finalHall.Length - Configuration.Layout.ExitCorridorLength) <= .1,
+		"Level 3 final hall length does not match configuration")
+	assert(finalHall.HalfwayMarker and finalHall.HalfwayMarker:IsA("BasePart")
+		and finalHall.HalfwayMarker:GetAttribute("Level3_FinalHallHalfway") == true,
+		"Level 3 final hall halfway marker is invalid")
+	assert(finalHall.SpawnMarker and finalHall.SpawnMarker:IsA("BasePart")
+		and finalHall.SpawnMarker:GetAttribute("Level3_MallManagerFinaleSpawn") == true,
+		"Level 3 final hall Manager spawn marker is invalid")
+end
+
+local function movePlayersToArrival(manifest: any)
+	local spawnPart = manifest.ElevatorSpawn :: BasePart
+	local arrivals = Players:GetPlayers()
+	local columns = math.min(8, math.max(1, #arrivals))
+	local rows = math.ceil(#arrivals / columns)
+	local moved = 0
+	for _, player in ipairs(arrivals) do
+		local character = player.Character
+		local root = character and character:FindFirstChild("HumanoidRootPart")
+		if character and root and root:IsA("BasePart") then
+			local index = moved
+			moved += 1
+			local column = index % columns
+			local row = math.floor(index / columns)
+			local target = spawnPart.CFrame * CFrame.new((column - (columns - 1) / 2) * 4, 4, (row - (rows - 1) / 2) * 4)
+			character:PivotTo(target)
+			root.AssemblyLinearVelocity = Vector3.zero
+			root.AssemblyAngularVelocity = Vector3.zero
+		end
+	end
+end
+
+-- One authoritative list of every replicated Level 3 attribute. Build and the
+-- round reset both consume it so the two can never drift apart; the handful of
+-- values that differ between "fresh round" and "idle" arrive as overrides.
+local function applyBaselineReplicatedState(levelState: Folder, overrides: {[string]: any}?)
+	local o = overrides or {}
+	-- Retired with the furniture state machine (LEVEL3_PERMANENT_FURNITURE_20260828).
+	-- The state folder is a saved place object, so a stale replicated flag would
+	-- otherwise outlive the code that wrote it.
+	levelState:SetAttribute("Level3_FurnitureTemporarilyRemoved", nil)
+	levelState:SetAttribute("Level3_FurnitureCollisionSuppressed", nil)
+	levelState:SetAttribute("Level3_Phase", o.Phase or "IDLE")
+	levelState:SetAttribute("Level3_RequestedSeed", o.RequestedSeed or 0)
+	-- Visible in the state folder so "why is the map the same?" is one glance,
+	-- the same readback Level 2 publishes as Level2_SeedPinned.
+	levelState:SetAttribute("Level3_SeedPinned", o.SeedPinned == true)
+	levelState:SetAttribute("Level3_ResolvedSeed", 0)
+	levelState:SetAttribute("Level3_GenerationAttempt", 0)
+	levelState:SetAttribute("Level3_UsedFallback", false)
+	levelState:SetAttribute("Level3_LayoutHash", "")
+	levelState:SetAttribute("Level3_GeneratorVersion", LayoutGenerator.Version)
+	levelState:SetAttribute("Level3_GeneratedRoomCount", 0)
+	levelState:SetAttribute("Level3_GeneratedCorridorCount", 0)
+	levelState:SetAttribute("Level3_GeneratedDistrictCount", 0)
+	if o.Generation ~= nil then
+		levelState:SetAttribute("Level3_Generation", o.Generation)
+	end
+	levelState:SetAttribute("Level3_ModuleProgress", 0)
+	levelState:SetAttribute("Level3_ModuleGoal", o.ModuleGoal or 0)
+	levelState:SetAttribute("Level3_CDCollectedProgress", 0)
+	levelState:SetAttribute("Level3_CDInsertedProgress", 0)
+	levelState:SetAttribute("Level3_CDCarriedCount", 0)
+	levelState:SetAttribute("Level3_CDDroppedCount", 0)
+	levelState:SetAttribute("Level3_ExitUnlocked", false)
+	levelState:SetAttribute("Level3_ExitPosition", nil)
+	levelState:SetAttribute("Level3_LightingMode", o.LightingMode or "OFF")
+	levelState:SetAttribute("Level3_RoomSongPhase", o.RoomSongPhase or "STOPPED")
+	levelState:SetAttribute("Level3_RoomSongStartServerTime", 0)
+	levelState:SetAttribute("Level3_CompletionSongStartServerTime", 0)
+	levelState:SetAttribute("Level3_CompletionDimStartedAtServerTime", 0)
+	levelState:SetAttribute("Level3_CompletionDimDuration", Configuration.MusicSequence.CompletionDimSeconds)
+	levelState:SetAttribute("Level3_FinalHallEligibleCount", 0)
+	levelState:SetAttribute("Level3_FinalHallCrossedCount", 0)
+	levelState:SetAttribute("Level3_FinalHallChaseTriggered", false)
+	levelState:SetAttribute("Level3_FinalHallChaseActive", false)
+	levelState:SetAttribute("Level3_RoomSongDuration", Configuration.MusicSequence.DurationSeconds)
+	levelState:SetAttribute("Level3_BlackoutStartSeconds", Configuration.MusicSequence.BlackoutStartSeconds)
+	levelState:SetAttribute("Level3_RoomSongStopSeconds", Configuration.MusicSequence.DurationSeconds)
+	levelState:SetAttribute("Level3_PreBlackoutDuration", Configuration.MusicSequence.PreBlackoutFlickerSeconds)
+	levelState:SetAttribute("Level3_PreBlackoutStartedAtServerTime", 0)
+	levelState:SetAttribute("Level3_PreBlackoutUntilServerTime", 0)
+	levelState:SetAttribute("Level3_PreBlackoutSerial", 0)
+	levelState:SetAttribute("Level3_PreBlackoutActive", false)
+	levelState:SetAttribute("Level3_PostSongBlackoutDuration", Configuration.MusicSequence.PostSongBlackoutSeconds)
+	levelState:SetAttribute("Level3_CycleEndSeconds", Configuration.MusicSequence.CycleEndSeconds)
+	levelState:SetAttribute("Level3_RecoveryFlickerDuration", Configuration.MusicSequence.RecoveryFlickerSeconds)
+	levelState:SetAttribute("Level3_RecoveryFlickerStartedAtServerTime", 0)
+	levelState:SetAttribute("Level3_RecoveryFlickerUntilServerTime", 0)
+	levelState:SetAttribute("Level3_RecoveryFlickerActive", false)
+	levelState:SetAttribute("Level3_BlackoutDuration", Configuration.MusicSequence.BlackoutSeconds)
+	levelState:SetAttribute("Level3_BlackoutStartedAtServerTime", 0)
+	levelState:SetAttribute("Level3_BlackoutUntilServerTime", 0)
+	levelState:SetAttribute("Level3_BlackoutActive", false)
+	levelState:SetAttribute("Level3_BlackoutScreamAssetId", Configuration.Audio.MallManagerBlackout)
+	levelState:SetAttribute("Level3_BlackoutScreamDuration", Configuration.MallManager.BlackoutScreamDurationSeconds)
+	levelState:SetAttribute("Level3_BlackoutScreamVolume", Configuration.MallManager.BlackoutScreamVolume)
+	levelState:SetAttribute("Level3_BlackoutScreamStartedAtServerTime", 0)
+	levelState:SetAttribute("Level3_MallManagerHuntActive", false)
+	levelState:SetAttribute("Level3_FlashlightsSuppressed", false)
+	levelState:SetAttribute("Level3_BlackoutScreamOpeningCount", 0)
+	levelState:SetAttribute("Level3_MallManagerActive", false)
+	levelState:SetAttribute("Level3_MallManagerState", "OFF")
+	levelState:SetAttribute("Level3_MallManagerBlackoutBoosted", false)
+	levelState:SetAttribute("Level3_MallManagerTargetUserId", 0)
+	levelState:SetAttribute("Level3_MallManagerSpeed", 0)
+	levelState:SetAttribute("Level3_MallManagerAwarenessRange", 0)
+	levelState:SetAttribute("Level3_MallManagerSpawnRoomId", Configuration.MallManager.SpawnRoomId)
+	levelState:SetAttribute("Level3_MallManagerSpawnDistance", 0)
+	levelState:SetAttribute("Level3_MallManagerSpawnAnchorUserId", 0)
+	levelState:SetAttribute("Level3_MallManagerSpawnGroupSize", 0)
+	levelState:SetAttribute("Level3_MallManagerSpawnCycle", 0)
+	levelState:SetAttribute("Level3_MallManagerSpawnSerial", 0)
+	levelState:SetAttribute("Level3_MallManagerPathStatus", "OFF")
+	levelState:SetAttribute("Level3_MallManagerAttackSerial", 0)
+	levelState:SetAttribute("Level3_MallManagerLastCaptureUserId", 0)
+	levelState:SetAttribute("Level3_MallManagerChaseScreamSerial", 0)
+	levelState:SetAttribute("Level3_MallManagerChaseScreamPlaying", false)
+	levelState:SetAttribute("Level3_MallManagerLastChaseScreamAtServerTime", 0)
+	levelState:SetAttribute("Level3_MallManagerLastChaseScreamName", "")
+	levelState:SetAttribute("Level3_HiddenPlayers", 0)
+	levelState:SetAttribute("Level3_Error", nil)
+end
+
+local function resetReplicatedState(levelState: Folder)
+	applyBaselineReplicatedState(levelState, nil)
+end
+
+-- The live manifest for the round this adapter last built, or nil.
+--
+-- The deterministic test suites need the manifest the generator produced, and
+-- the only alternative was to build a SECOND world alongside the real one and
+-- measure that instead -- which tests the builder but not the round anybody
+-- actually plays. Read-only, and nil whenever no world is standing.
+function Adapter.GetManifest()
+	return activeManifest
+end
+
+function Adapter.Cleanup()
+	local recoveringPersistedState = levelOneScriptStates == nil and (
+		workspace:GetAttribute("SelectedLevel") == 3
+		or workspace:FindFirstChild(Configuration.WorldName) ~= nil
+		or ServerStorage:FindFirstChild(STORED_LEVEL_ONE_ENTITY_NAME) ~= nil
+		or ServerStorage:FindFirstChild(STORED_LOBBY_NAME) ~= nil
+	)
+
+	-- Stop lifecycle callbacks before blackout authority is torn down.
+	disconnectManagerLifecycle()
+	stopMallManager()
+	HidingController.Stop()
+	stopMusicSequence()
+	stopObjectiveController()
+	local levelState = state()
+	levelState:SetAttribute("Level3_Phase", "CLEANING")
+
+	if activeManifest and activeManifest.World and activeManifest.World.Parent then
+		activeManifest.World:Destroy()
+	end
+	activeManifest = nil
+	destroyGeneratedWorlds()
+	destroyCompatibilityObjects()
+	restoreLobby()
+	restoreLevelOneRuntime(recoveringPersistedState)
+
+	workspace:SetAttribute("WorldGenerated", false)
+	workspace:SetAttribute("Level3Modules", 0)
+	workspace:SetAttribute("Level3ModuleGoal", 0)
+	workspace:SetAttribute("Level3CDsCollected", 0)
+	workspace:SetAttribute("Level3CDsCarried", 0)
+	workspace:SetAttribute("Level3CDsDropped", 0)
+	workspace:SetAttribute("Level3ExitUnlocked", false)
+	workspace:SetAttribute("Level3LightingOwnedByController", false)
+	workspace:SetAttribute("Level3PreBlackoutActive", false)
+	workspace:SetAttribute("Level3BlackoutActive", false)
+	workspace:SetAttribute("Level3MallManagerHuntActive", false)
+	workspace:SetAttribute("Level3RecoveryFlickerActive", false)
+	workspace:SetAttribute("Level3MallManagerActive", false)
+	workspace:SetAttribute("Level3MallManagerState", "OFF")
+	workspace:SetAttribute("Level3MallManagerBlackoutBoosted", false)
+	workspace:SetAttribute("Level3HiddenPlayers", 0)
+	clearLegacyAttributes()
+
+	-- Preserve SelectedLevel throughout GameManager's result delay. Cleanup is
+	-- called only after that delay, so it is now safe to hand ownership back.
+	if workspace:GetAttribute("SelectedLevel") == 3 then
+		workspace:SetAttribute("SelectedLevel", 1)
+	end
+	resetReplicatedState(levelState)
+end
+
+function Adapter.Build()
+	Adapter.Cleanup()
+	generation += 1
+
+	local levelState = state()
+	ensureRemotes()
+	clearLegacyAttributes()
+
+	-- Level3Seed is a manual reproducibility override only. Never write the
+	-- random production choice back or subsequent rounds would repeat the map.
+	-- The random path lands in [1, MAX_SEED - 1] so it can never produce the
+	-- same 0 the override guard rejects.
+	local pinnedSeed = pinnedSeedOverride()
+	local requestedSeed = pinnedSeed
+		or (DateTime.now().UnixTimestampMillis % (MAX_SEED - 1) + 1)
+
+	applyBaselineReplicatedState(levelState, {
+		Phase = "GENERATING_LAYOUT",
+		RequestedSeed = requestedSeed,
+		SeedPinned = pinnedSeed ~= nil,
+		Generation = generation,
+		ModuleGoal = Configuration.ModuleGoal,
+		LightingMode = "NORMAL",
+		RoomSongPhase = "WAITING_FOR_ROUND",
+	})
+
+	workspace:SetAttribute("WorldGenerated", false)
+	workspace:SetAttribute("LoadStage", "LEVEL_3_GENERATING_LAYOUT")
+	workspace:SetAttribute("Level3Modules", 0)
+	workspace:SetAttribute("Level3ModuleGoal", Configuration.ModuleGoal)
+	workspace:SetAttribute("Level3CDsCollected", 0)
+	workspace:SetAttribute("Level3CDsCarried", 0)
+	workspace:SetAttribute("Level3CDsDropped", 0)
+	workspace:SetAttribute("Level3ExitUnlocked", false)
+	workspace:SetAttribute("Level3LightingOwnedByController", true)
+	workspace:SetAttribute("Level3PreBlackoutActive", false)
+	workspace:SetAttribute("Level3BlackoutActive", false)
+	workspace:SetAttribute("Level3MallManagerHuntActive", false)
+	workspace:SetAttribute("Level3RecoveryFlickerActive", false)
+	workspace:SetAttribute("Level3MallManagerActive", false)
+	workspace:SetAttribute("Level3MallManagerState", "OFF")
+	workspace:SetAttribute("Level3MallManagerBlackoutBoosted", false)
+	workspace:SetAttribute("Level3HiddenPlayers", 0)
+
+	isolateLevelOneRuntime()
+
+	-- GameManager treats a raised error as a failed generation. Every failure
+	-- path therefore restores the lobby and Level 1 runtime before re-raising.
+	local success, result = xpcall(function()
+		local layoutBegan = os.clock()
+		local layout = LayoutGenerator.Generate(requestedSeed)
+		-- Load-time readbacks (Trello Zpj0Gkbb), same names as Level 2's.
+		levelState:SetAttribute("Level3_LayoutSeconds", math.round((os.clock() - layoutBegan) * 100) / 100)
+		local layoutValid, layoutProblem = LayoutGenerator.Validate(layout)
+		assert(layoutValid, "Level 3 layout validation failed: " .. tostring(layoutProblem))
+		levelState:SetAttribute("Level3_ResolvedSeed", layout.ResolvedSeed)
+		levelState:SetAttribute("Level3_GenerationAttempt", layout.Attempt)
+		levelState:SetAttribute("Level3_UsedFallback", layout.UsedFallbackSeed == true)
+		levelState:SetAttribute("Level3_LayoutHash", layout.LayoutHash)
+		levelState:SetAttribute("Level3_GeneratorVersion", layout.Version or LayoutGenerator.Version)
+		levelState:SetAttribute("Level3_GeneratedRoomCount", #layout.Rooms)
+		levelState:SetAttribute("Level3_GeneratedCorridorCount", #layout.Links)
+		levelState:SetAttribute("Level3_GeneratedDistrictCount", #layout.Districts)
+
+		levelState:SetAttribute("Level3_Phase", "BUILDING_WORLD")
+		workspace:SetAttribute("LoadStage", "LEVEL_3_BUILDING_WORLD")
+		local buildBegan = os.clock()
+		local manifest = WorldBuilder.Build(layout, generation)
+		validateManifest(manifest)
+		activeManifest = manifest
+		levelState:SetAttribute("Level3_BuildSeconds", math.round((os.clock() - buildBegan) * 100) / 100)
+		-- A readback must never be able to fail a build.
+		local counted, descendants = pcall(function() return #manifest.World:GetDescendants() end)
+		levelState:SetAttribute("Level3_WorldDescendants", counted and descendants or nil)
+
+		-- Move characters onto solid Level 3 ground before the lobby is parked.
+		-- GameManager will place the round party again when entry begins.
+		movePlayersToArrival(manifest)
+		storeLobby()
+
+		workspace:SetAttribute("SelectedLevel", 3)
+		levelState:SetAttribute("Level3_ExitPosition", manifest.ExitPosition)
+		levelState:SetAttribute("Level3_MallManagerSpawnRoomId",
+			manifest.Layout.Roles.MallManagerSpawnRoomId)
+		levelState:SetAttribute("Level3_BlackoutScreamOpeningCount", #manifest.BlackoutScreamOpenings)
+		levelState:SetAttribute("Level3_Phase", "READY")
+
+		-- READY is established first so the objective controller may replace it
+		-- with its more specific active phase without the adapter overwriting it.
+		ObjectiveController.Start(manifest, generation)
+		HidingController.Start(manifest, generation)
+		-- Bind once to the shared hunt authority. The music timeline may use it
+		-- before completion; the final-hall midpoint uses it for the finale chase.
+		bindManagerToHunt(manifest, generation)
+		MusicSequenceController.Start(manifest, generation)
+
+		workspace:SetAttribute("LoadStage", "READY")
+		workspace:SetAttribute("WorldGenerated", true)
+		return manifest.World
+	end, debug.traceback)
+
+	if not success then
+		Adapter.Cleanup()
+		workspace:SetAttribute("LoadStage", "WORLD_ERROR")
+		levelState:SetAttribute("Level3_Phase", "ERROR")
+		levelState:SetAttribute("Level3_Error", tostring(result))
+		error(result)
+	end
+	return result
+end
+
+return Adapter
+
+FILE ServerScriptService__Level 3 Systems__Level 3 Layout Generator.ModuleScript.lua
+--!strict
+-- Level 3 Layout Generator
+-- Deterministic, server-side plan generation for the Mall Backrooms Party.
+--
+-- The generator deliberately emits only straight, axis-aligned connections and
+-- reserves at most one connection on each side of every room. That contract lets
+-- the current Level 3 World Builder cut one centered opening per side without
+-- overlapping doors or producing diagonal corridors.
+
+local Configuration = require(script.Parent:WaitForChild("Level 3 Configuration"))
+local Master = require(game:GetService("ReplicatedStorage"):WaitForChild("MasterConfiguration"))
+
+local LayoutGenerator = {}
+
+local VERSION = 2
+local DISTRICT_COUNT = 3
+local ROOMS_PER_DISTRICT = 8
+local GRID_ROWS = 2
+local GRID_COLUMNS = 4
+local MODULE_GOAL = 5
+local ENTRY_AND_GATEWAY_LINKS = 4
+local MAX_SEED = 2147483646
+
+-- The district sizing is structural: ROOMS_PER_DISTRICT is the 2x4 room grid.
+-- Configuration.Layout advertises the same numbers to the test suite and world
+-- builder, so a config edit that the generator cannot honor must fail loudly
+-- instead of silently generating the old shape.
+assert(Configuration.Layout.DistrictCount == DISTRICT_COUNT
+	and Configuration.Layout.RoomsPerDistrict == ROOMS_PER_DISTRICT
+	and ROOMS_PER_DISTRICT == GRID_ROWS * GRID_COLUMNS
+	and Configuration.Layout.GeneratorVersion == VERSION,
+	"Level 3 Configuration.Layout district sizing drifted from the generator's fixed grid")
+
+local DEFAULTS = {
+	GenerationAttempts = 24,
+	RetryStride = 104729,
+	FallbackSeeds = {101, 7331, 65537, 1900813},
+	MinimumRoomWidth = 60,
+	MaximumRoomWidth = 78,
+	MinimumRoomDepth = 48,
+	MaximumRoomDepth = 62,
+	MinimumRoomHeight = 11,
+	MaximumRoomHeight = 13,
+	MinimumInternalGap = 24,
+	MaximumInternalGap = 34,
+	MinimumGatewayGap = 38,
+	MaximumGatewayGap = 48,
+	MinimumCorridorLength = 18,
+	ExitCorridorLength = 560,
+	RowHalfSpacing = 62,
+	ExtraLinksPerDistrict = 2,
+	MinimumModuleSeparation = 105,
+	MaximumStraightRunLinks = 3,
+	MaximumVerticalRunLinks = 2,
+	ArrivalWidth = 64,
+	ArrivalDepth = 54,
+	ExitWidth = 58,
+	ExitDepth = 52,
+}
+
+-- Resolved on every Generate, not once at module load.
+--
+-- A master-panel override of room size has to show up on the NEXT round
+-- build. Resolved at load it would need a whole server restart instead --
+-- in Studio a stop/start of Play, in production never.
+local function resolveTuning()
+	local configuredLayout = Master.Overlay(
+		if type((Configuration :: any).Layout) == "table"
+			then (Configuration :: any).Layout else {},
+		"L3Layout")
+
+	local function integerSetting(name, defaultValue, minimum, maximum)
+		local value = tonumber(configuredLayout[name])
+		if value == nil then value = defaultValue end
+		value = math.floor(value)
+		return math.clamp(value, minimum, maximum)
+	end
+
+	local function numberSetting(name, defaultValue, minimum, maximum)
+		local value = tonumber(configuredLayout[name])
+		if value == nil then value = defaultValue end
+		return math.clamp(value, minimum, maximum)
+	end
+
+	local fallbackSeeds = {}
+	if type(configuredLayout.FallbackSeeds) == "table" then
+		for _, value in ipairs(configuredLayout.FallbackSeeds) do
+			local numeric = tonumber(value)
+			if numeric then table.insert(fallbackSeeds, math.floor(math.abs(numeric)) % MAX_SEED) end
+		end
+	end
+	if #fallbackSeeds == 0 then fallbackSeeds = table.clone(DEFAULTS.FallbackSeeds) end
+
+	local Tuning = {
+		GenerationAttempts = integerSetting("GenerationAttempts", DEFAULTS.GenerationAttempts, 1, 100),
+		RetryStride = integerSetting("RetryStride", DEFAULTS.RetryStride, 1, MAX_SEED - 1),
+		FallbackSeeds = fallbackSeeds,
+		MinimumRoomWidth = integerSetting("MinimumRoomWidth", DEFAULTS.MinimumRoomWidth, 48, 100),
+		MaximumRoomWidth = integerSetting("MaximumRoomWidth", DEFAULTS.MaximumRoomWidth, 48, 120),
+		MinimumRoomDepth = integerSetting("MinimumRoomDepth", DEFAULTS.MinimumRoomDepth, 40, 90),
+		MaximumRoomDepth = integerSetting("MaximumRoomDepth", DEFAULTS.MaximumRoomDepth, 40, 100),
+		MinimumRoomHeight = integerSetting("MinimumRoomHeight", DEFAULTS.MinimumRoomHeight, 10, 16),
+		MaximumRoomHeight = integerSetting("MaximumRoomHeight", DEFAULTS.MaximumRoomHeight, 10, 18),
+		MinimumInternalGap = integerSetting("MinimumInternalGap", DEFAULTS.MinimumInternalGap, 18, 60),
+		MaximumInternalGap = integerSetting("MaximumInternalGap", DEFAULTS.MaximumInternalGap, 18, 70),
+		MinimumGatewayGap = integerSetting("MinimumGatewayGap", DEFAULTS.MinimumGatewayGap, 24, 80),
+		MaximumGatewayGap = integerSetting("MaximumGatewayGap", DEFAULTS.MaximumGatewayGap, 24, 90),
+		MinimumCorridorLength = numberSetting("MinimumCorridorLength", DEFAULTS.MinimumCorridorLength, 12, 40),
+		ExitCorridorLength = numberSetting("ExitCorridorLength", DEFAULTS.ExitCorridorLength, 120, 720),
+		RowHalfSpacing = integerSetting("RowHalfSpacing", DEFAULTS.RowHalfSpacing, 48, 100),
+		ExtraLinksPerDistrict = integerSetting("ExtraLinksPerDistrict", DEFAULTS.ExtraLinksPerDistrict, 0, 3),
+		MinimumModuleSeparation = numberSetting("MinimumModuleSeparation", DEFAULTS.MinimumModuleSeparation, 60, 220),
+		MaximumStraightRunLinks = integerSetting("MaximumStraightRunLinks", DEFAULTS.MaximumStraightRunLinks, 1, 8),
+		MaximumVerticalRunLinks = integerSetting("MaximumVerticalRunLinks", DEFAULTS.MaximumVerticalRunLinks, 1, 8),
+		ArrivalWidth = integerSetting("ArrivalWidth", DEFAULTS.ArrivalWidth, 52, 90),
+		ArrivalDepth = integerSetting("ArrivalDepth", DEFAULTS.ArrivalDepth, 44, 80),
+		ExitWidth = integerSetting("ExitWidth", DEFAULTS.ExitWidth, 48, 80),
+		ExitDepth = integerSetting("ExitDepth", DEFAULTS.ExitDepth, 44, 76),
+	}
+
+	if Tuning.MinimumRoomWidth > Tuning.MaximumRoomWidth then
+		Tuning.MinimumRoomWidth, Tuning.MaximumRoomWidth = Tuning.MaximumRoomWidth, Tuning.MinimumRoomWidth
+	end
+	if Tuning.MinimumRoomDepth > Tuning.MaximumRoomDepth then
+		Tuning.MinimumRoomDepth, Tuning.MaximumRoomDepth = Tuning.MaximumRoomDepth, Tuning.MinimumRoomDepth
+	end
+	if Tuning.MinimumRoomHeight > Tuning.MaximumRoomHeight then
+		Tuning.MinimumRoomHeight, Tuning.MaximumRoomHeight = Tuning.MaximumRoomHeight, Tuning.MinimumRoomHeight
+	end
+	if Tuning.MinimumInternalGap > Tuning.MaximumInternalGap then
+		Tuning.MinimumInternalGap, Tuning.MaximumInternalGap = Tuning.MaximumInternalGap, Tuning.MinimumInternalGap
+	end
+	if Tuning.MinimumGatewayGap > Tuning.MaximumGatewayGap then
+		Tuning.MinimumGatewayGap, Tuning.MaximumGatewayGap = Tuning.MaximumGatewayGap, Tuning.MinimumGatewayGap
+	end
+
+	return Tuning
+end
+
+local Tuning = resolveTuning()
+
+local DISTRICT_DEFINITIONS = {
+	{
+		Id = "CITY",
+		Name = "Beige City Party Rooms",
+		ThemeId = "City",
+		Kind = "City",
+		DecorPool = {
+			"KidsCafeteria", "ForgottenPair", "WhiteClassroom", "CityCafe",
+			"KidsCluster", "WhiteAtrium", "SparseGallery", "SparseWelcome",
+		},
+	},
+	{
+		Id = "ORANGE_BLACK",
+		Name = "Orange and Black Party Rooms",
+		ThemeId = "OrangeBlackParty",
+		Kind = "PartyHall",
+		DecorPool = {
+			"SparseWelcome", "DanceFloor", "SparseGallery", "BanquetRows",
+			"BirthdayCenter", "AfterParty", "AbandonedCelebration", "GrandBanquet",
+		},
+	},
+	{
+		Id = "RED_PARTY",
+		Name = "Red Carpet Party Rooms",
+		ThemeId = "RedParty",
+		Kind = "Party",
+		DecorPool = {
+			"BanquetRows", "BirthdayCenter", "AfterParty", "GrandBanquet",
+			"AbandonedCelebration", "DanceFloor", "SparseGallery", "SparseWelcome",
+		},
+	},
+}
+
+local function copyArray(source)
+	local result = {}
+	for index, value in ipairs(source) do result[index] = value end
+	return result
+end
+
+local function shuffled(rng, source)
+	local result = copyArray(source)
+	for index = #result, 2, -1 do
+		local swapIndex = rng:NextInteger(1, index)
+		result[index], result[swapIndex] = result[swapIndex], result[index]
+	end
+	return result
+end
+
+local function normalizeSeed(value)
+	local numeric = tonumber(value)
+	if numeric == nil then
+		numeric = DateTime.now().UnixTimestampMillis
+	end
+	numeric = math.floor(math.abs(numeric)) % MAX_SEED
+	if numeric == 0 then numeric = 1 end
+	return numeric
+end
+
+local function pairKey(a, b)
+	if a < b then return a .. "|" .. b end
+	return b .. "|" .. a
+end
+
+local function gridIndex(row, column)
+	return (row - 1) * GRID_COLUMNS + column
+end
+
+local function cardinalSide(a, b)
+	local dx, dz = b.X - a.X, b.Z - a.Z
+	if math.abs(dz) < 0.001 and math.abs(dx) >= 0.001 then
+		return if dx > 0 then "East" else "West"
+	end
+	if math.abs(dx) < 0.001 and math.abs(dz) >= 0.001 then
+		return if dz > 0 then "South" else "North"
+	end
+	return nil
+end
+
+local OPPOSITE_SIDE = {
+	North = "South",
+	South = "North",
+	East = "West",
+	West = "East",
+}
+
+local function planarDistance(a, b)
+	local dx, dz = a.X - b.X, a.Z - b.Z
+	return math.sqrt(dx * dx + dz * dz)
+end
+
+local function measureBounds(rooms, excludeExit)
+	local minX, maxX, minZ, maxZ = math.huge, -math.huge, math.huge, -math.huge
+	for _, room in ipairs(rooms) do
+		if not excludeExit or room.Id ~= "Exit" then
+			minX = math.min(minX, room.X - room.W * .5)
+			maxX = math.max(maxX, room.X + room.W * .5)
+			minZ = math.min(minZ, room.Z - room.D * .5)
+			maxZ = math.max(maxZ, room.Z + room.D * .5)
+		end
+	end
+	local width, depth = maxX - minX, maxZ - minZ
+	return {MinX=minX, MaxX=maxX, MinZ=minZ, MaxZ=maxZ, Width=width, Depth=depth,
+		Aspect=math.max(width, depth) / math.min(width, depth)}
+end
+
+local function boundsMatch(actual, expected)
+	if type(actual) ~= "table" then return false end
+	for key, value in pairs(expected) do
+		if type(actual[key]) ~= "number" or actual[key] ~= actual[key]
+			or math.abs(actual[key]) == math.huge or math.abs(actual[key] - value) > .001 then return false end
+	end
+	return true
+end
+
+local function rectanglesOverlap(a, b)
+	return math.min(a.MaxX, b.MaxX) - math.max(a.MinX, b.MinX) > .001
+		and math.min(a.MaxZ, b.MaxZ) - math.max(a.MinZ, b.MinZ) > .001
+end
+
+-- Conservative footprint of the actual corridor kit: the 14-stud clear lane
+-- plus both side walls, and the .04 floor seal. Endpoint rooms own the joins.
+local function corridorBounds(a, b)
+	local halfWidth = Configuration.CorridorWidth * .5 + Configuration.WallThickness
+	if math.abs(a.Z - b.Z) < .001 then
+		local left, right = if a.X < b.X then a else b, if a.X < b.X then b else a
+		return {MinX=left.X + left.W * .5 - .02, MaxX=right.X - right.W * .5 + .02,
+			MinZ=a.Z - halfWidth, MaxZ=a.Z + halfWidth}
+	end
+	local north, south = if a.Z < b.Z then a else b, if a.Z < b.Z then b else a
+	return {MinX=a.X - halfWidth, MaxX=a.X + halfWidth,
+		MinZ=north.Z + north.D * .5 - .02, MaxZ=south.Z - south.D * .5 + .02}
+end
+
+-- Room and tunnel openings are centred on each linked side. This is the
+-- longest uninterrupted structural view through those openings, excluding
+-- the deliberately separate Signal Hall -> Exit finale.
+local function straightRuns(layout)
+	local ports = {}
+	for _, room in ipairs(layout.Rooms) do ports[room.Id] = {} end
+	for _, link in ipairs(layout.Links) do
+		if link.Door ~= "HiddenExit" then
+			local a, b = layout.RoomById[link.A], layout.RoomById[link.B]
+			local side = cardinalSide(a, b)
+			if side then
+				ports[a.Id][side] = b.Id
+				ports[b.Id][OPPOSITE_SIDE[side]] = a.Id
+			end
+		end
+	end
+	local longest, vertical = 0, 0
+	for roomId, sides in pairs(ports) do
+		for _, side in ipairs({"East", "South"}) do
+			if sides[side] and not sides[OPPOSITE_SIDE[side]] then
+				local count, current = 0, roomId
+				while ports[current][side] do
+					count += 1
+					current = ports[current][side]
+				end
+				longest = math.max(longest, count)
+				if side == "South" then vertical = math.max(vertical, count) end
+			end
+		end
+	end
+	return longest, vertical
+end
+
+local function makeHash(layout)
+	local pieces = {
+		tostring(VERSION),
+		tostring(layout.Seed),
+		tostring(layout.Attempt),
+	}
+	for _, room in ipairs(layout.Rooms) do
+		table.insert(pieces, string.format(
+			"R:%s:%.3f:%.3f:%d:%d:%d:%s:%s:%s:%d:%d:%d",
+			room.Id, room.X, room.Z, room.W, room.D, room.H,
+			room.Kind, room.Decor, room.ThemeId, room.SectionIndex,
+			if room.Module then 1 else 0, room.LocalSeed
+		))
+	end
+	for _, link in ipairs(layout.Links) do
+		table.insert(pieces, string.format(
+			"L:%s:%s:%s:%s:%s:%d:%d",
+			link.Id, link.A, link.B, link.Door, link.ThemeId,
+			link.SectionIndex, if link.Gateway then 1 else 0
+		))
+	end
+	local text = table.concat(pieces, ";")
+	local hash = 5381
+	for index = 1, #text do
+		hash = (hash * 33 + string.byte(text, index)) % 4294967296
+	end
+	return string.format("L3-%d-%08x", VERSION, hash)
+end
+
+local function generateAttempt(seed, requestedSeed, attempt, usedFallback)
+	local rng = Random.new(seed)
+	local rowZ = {-Tuning.RowHalfSpacing, Tuning.RowHalfSpacing}
+	local entryRow = rng:NextInteger(1, GRID_ROWS)
+	-- Align the gateways but omit the middle district's direct north-south
+	-- connection at this column. Players must turn between the two bridges.
+	local gatewayColumn = rng:NextInteger(1, GRID_COLUMNS - 1)
+	local gatewayColumns = {gatewayColumn, gatewayColumn}
+	local exitRow = rng:NextInteger(1, GRID_ROWS)
+
+	local layout = {
+		Version = VERSION,
+		RequestedSeed = requestedSeed,
+		Seed = seed,
+		ResolvedSeed = seed,
+		Attempt = attempt,
+		UsedFallbackSeed = usedFallback == true,
+		Rooms = {},
+		Links = {},
+		RoomById = {},
+		LinkById = {},
+		Adjacency = {},
+		Districts = {},
+		DistrictById = {},
+		GatewayLinks = {},
+		ModuleRooms = {},
+		Roles = {},
+	}
+
+	local function addRoom(room)
+		if layout.RoomById[room.Id] then return nil, "duplicate room id " .. room.Id end
+		table.insert(layout.Rooms, room)
+		layout.RoomById[room.Id] = room
+		layout.Adjacency[room.Id] = {}
+		return room
+	end
+
+	local arrival = addRoom({
+		Id = "Arrival",
+		Name = "Level 3 Arrival",
+		X = 0,
+		Z = rowZ[entryRow],
+		W = Tuning.ArrivalWidth,
+		D = Tuning.ArrivalDepth,
+		H = 12,
+		Kind = "PartyHall",
+		Decor = "SparseWelcome",
+		Module = false,
+		ThemeId = "ArrivalTransition",
+		SectionIndex = 0,
+		DistrictId = "ARRIVAL",
+		Role = "Arrival",
+		HideSpotCount = 0,
+		LocalSeed = rng:NextInteger(1, 2 ^ 30),
+		GridRow = entryRow,
+		GridColumn = 0,
+	})
+	if not arrival then return nil, "arrival could not be created" end
+
+	local sectionLeft = arrival.X + arrival.W * 0.5
+		+ rng:NextInteger(Tuning.MinimumGatewayGap, Tuning.MaximumGatewayGap)
+	local slots = {}
+	local sharedWidths, sharedGaps, gatewayGaps = {}, {}, {}
+
+	for sectionIndex, definition in ipairs(DISTRICT_DEFINITIONS) do
+		local widths = {}
+		local depths = {
+			rng:NextInteger(Tuning.MinimumRoomDepth, Tuning.MaximumRoomDepth),
+			rng:NextInteger(Tuning.MinimumRoomDepth, Tuning.MaximumRoomDepth),
+		}
+		for column = 1, GRID_COLUMNS do
+			widths[column] = rng:NextInteger(Tuning.MinimumRoomWidth, Tuning.MaximumRoomWidth)
+			sharedWidths[column] = math.max(sharedWidths[column] or 0, widths[column])
+		end
+		local gaps = {}
+		for column = 1, GRID_COLUMNS - 1 do
+			gaps[column] = rng:NextInteger(Tuning.MinimumInternalGap, Tuning.MaximumInternalGap)
+			sharedGaps[column] = math.max(sharedGaps[column] or 0, gaps[column])
+		end
+		local decors = shuffled(rng, definition.DecorPool)
+		local district = {
+			Index = sectionIndex,
+			Id = definition.Id,
+			Name = definition.Name,
+			ThemeId = definition.ThemeId,
+			Kind = definition.Kind,
+			RoomIds = {},
+			Rooms = {},
+			IncomingGatewayLinkId = "",
+			OutgoingGatewayLinkId = "",
+		}
+		layout.Districts[sectionIndex] = district
+		layout.DistrictById[district.Id] = district
+		slots[sectionIndex] = {{}, {}}
+
+		for row = 1, GRID_ROWS do
+			for column = 1, GRID_COLUMNS do
+				local slotNumber = gridIndex(row, column)
+				local isSignal = sectionIndex == DISTRICT_COUNT
+					and column == GRID_COLUMNS and row == exitRow
+				local id = if isSignal then "SignalHall"
+					else string.format("L3_S%d_R%02d", sectionIndex, slotNumber)
+				local room = {
+					Id = id,
+					Name = if isSignal then "Signal Hall"
+						else string.format("%s %02d", definition.Name, slotNumber),
+					X = 0, -- Assigned after all three district widths are known.
+					Z = rowZ[row],
+					W = widths[column],
+					D = depths[row],
+					H = rng:NextInteger(Tuning.MinimumRoomHeight, Tuning.MaximumRoomHeight),
+					Kind = definition.Kind,
+					Decor = decors[slotNumber],
+					Module = false,
+					ThemeId = definition.ThemeId,
+					SectionIndex = sectionIndex,
+					DistrictId = definition.Id,
+					Role = if isSignal then "SignalHall" else "Room",
+					HideSpotCount = 1,
+					LocalSeed = rng:NextInteger(1, 2 ^ 30),
+					GridRow = row,
+					GridColumn = column,
+				}
+				local inserted, roomError = addRoom(room)
+				if not inserted then return nil, roomError end
+				slots[sectionIndex][row][column] = room
+				table.insert(district.Rooms, room)
+				table.insert(district.RoomIds, room.Id)
+			end
+		end
+
+		if sectionIndex < DISTRICT_COUNT then
+			gatewayGaps[sectionIndex] = rng:NextInteger(Tuning.MinimumGatewayGap, Tuning.MaximumGatewayGap)
+		end
+	end
+
+	-- Shared columns keep the bridges straight while each district retains its
+	-- own seeded room sizes. Stack districts along Z instead of extending X.
+	local columnCenters = {}
+	local cursor = sectionLeft
+	for column = 1, GRID_COLUMNS do
+		columnCenters[column] = cursor + sharedWidths[column] * .5
+		cursor += sharedWidths[column]
+		if column < GRID_COLUMNS then cursor += sharedGaps[column] end
+	end
+	local districtOffset = 0
+	for sectionIndex, district in ipairs(layout.Districts) do
+		if sectionIndex > 1 then
+			local previousSouth = slots[sectionIndex - 1][GRID_ROWS][1]
+			local currentNorth = slots[sectionIndex][1][1]
+			districtOffset = previousSouth.Z + previousSouth.D * .5
+				+ gatewayGaps[sectionIndex - 1] + currentNorth.D * .5 - rowZ[1]
+		end
+		for _, room in ipairs(district.Rooms) do
+			room.X = columnCenters[room.GridColumn]
+			room.Z = rowZ[room.GridRow] + districtOffset
+		end
+		district.Bounds = measureBounds(district.Rooms)
+	end
+
+	local signalHall = layout.RoomById.SignalHall
+	if not signalHall then return nil, "SignalHall was not assigned" end
+	local exitGap = Tuning.ExitCorridorLength
+	local exitRoom = addRoom({
+		Id = "Exit",
+		Name = "Level 3 Exit",
+		X = signalHall.X + signalHall.W * 0.5 + exitGap + Tuning.ExitWidth * 0.5,
+		Z = signalHall.Z,
+		W = Tuning.ExitWidth,
+		D = Tuning.ExitDepth,
+		H = 12,
+		Kind = "Exit",
+		Decor = "EmptyTransition",
+		Module = false,
+		ThemeId = DISTRICT_DEFINITIONS[DISTRICT_COUNT].ThemeId,
+		SectionIndex = DISTRICT_COUNT + 1,
+		DistrictId = "EXIT",
+		Role = "Exit",
+		HideSpotCount = 0,
+		LocalSeed = rng:NextInteger(1, 2 ^ 30),
+		GridRow = exitRow,
+		GridColumn = GRID_COLUMNS + 1,
+	})
+	if not exitRoom then return nil, "exit could not be created" end
+
+	local selectedPairs = {}
+	local function addLink(a, b, properties)
+		local key = pairKey(a.Id, b.Id)
+		if selectedPairs[key] then return nil, "duplicate link " .. key end
+		local side = cardinalSide(a, b)
+		if not side then return nil, "non-axis-aligned link " .. key end
+		local link = {
+			Id = string.format("Level3_Link_%02d", #layout.Links + 1),
+			A = a.Id,
+			B = b.Id,
+			Door = properties.Door or "Open",
+			ThemeId = properties.ThemeId,
+			SectionIndex = properties.SectionIndex,
+			LinkType = properties.LinkType or "Internal",
+			Gateway = properties.Gateway == true,
+			GatewayKind = properties.GatewayKind,
+			FromSection = properties.FromSection,
+			ToSection = properties.ToSection,
+			FromThemeId = properties.FromThemeId,
+			ToThemeId = properties.ToThemeId,
+		}
+		selectedPairs[key] = true
+		table.insert(layout.Links, link)
+		layout.LinkById[link.Id] = link
+		table.insert(layout.Adjacency[a.Id], b.Id)
+		table.insert(layout.Adjacency[b.Id], a.Id)
+		if link.Gateway then table.insert(layout.GatewayLinks, link) end
+		return link
+	end
+
+	-- A 2x4 district has ten possible edges. Keeping nine gives the original
+	-- seven-edge spanning tree plus two loops. Choose the one missing edge in
+	-- each district to break the arrival, bridge and Signal Hall sightlines.
+	-- A three-loop Master override deliberately restores all ten edges.
+	local omitted = {}
+	if Tuning.ExtraLinksPerDistrict <= 2 then
+		local entryCut = rng:NextInteger(1, GRID_COLUMNS - 1)
+		omitted[1] = pairKey(slots[1][entryRow][entryCut].Id,
+			slots[1][entryRow][entryCut + 1].Id)
+		omitted[2] = pairKey(slots[2][1][gatewayColumn].Id,
+			slots[2][GRID_ROWS][gatewayColumn].Id)
+		omitted[3] = pairKey(slots[3][exitRow][GRID_COLUMNS - 1].Id,
+			slots[3][exitRow][GRID_COLUMNS].Id)
+	end
+	layout.StraightRunRelaxed = Tuning.ExtraLinksPerDistrict == 3
+		or Tuning.MaximumStraightRunLinks < 3 or Tuning.MaximumVerticalRunLinks < 2
+
+	local function neighbourSlots(sectionIndex, row, column)
+		local result = {}
+		local current = slots[sectionIndex][row][column]
+		local function allow(other)
+			if pairKey(current.Id, other.Id) ~= omitted[sectionIndex] then
+				table.insert(result, other)
+			end
+		end
+		if row > 1 then allow(slots[sectionIndex][row - 1][column]) end
+		if row < GRID_ROWS then allow(slots[sectionIndex][row + 1][column]) end
+		if column > 1 then allow(slots[sectionIndex][row][column - 1]) end
+		if column < GRID_COLUMNS then allow(slots[sectionIndex][row][column + 1]) end
+		return result
+	end
+
+	for sectionIndex, definition in ipairs(DISTRICT_DEFINITIONS) do
+		local startRow = if sectionIndex == 1 then entryRow else 1
+		local startColumn = if sectionIndex == 1 then 1 else gatewayColumns[sectionIndex - 1]
+		local start = slots[sectionIndex][startRow][startColumn]
+		local visited = {[start.Id] = true}
+		local stack = {start}
+		local visitedCount = 1
+		while #stack > 0 do
+			local current = stack[#stack]
+			local options = {}
+			for _, other in ipairs(neighbourSlots(sectionIndex, current.GridRow, current.GridColumn)) do
+				if not visited[other.Id] then table.insert(options, other) end
+			end
+			if #options == 0 then
+				table.remove(stack)
+			else
+				local nextRoom = options[rng:NextInteger(1, #options)]
+				local link, linkError = addLink(current, nextRoom, {
+					ThemeId = definition.ThemeId,
+					SectionIndex = sectionIndex,
+					LinkType = "Internal",
+				})
+				if not link then return nil, linkError end
+				visited[nextRoom.Id] = true
+				visitedCount += 1
+				table.insert(stack, nextRoom)
+			end
+		end
+		if visitedCount ~= ROOMS_PER_DISTRICT then
+			return nil, "district spanning tree did not visit every room"
+		end
+
+		local unused = {}
+		for row = 1, GRID_ROWS do
+			for column = 1, GRID_COLUMNS do
+				local room = slots[sectionIndex][row][column]
+				if column < GRID_COLUMNS then
+					local other = slots[sectionIndex][row][column + 1]
+					if not selectedPairs[pairKey(room.Id, other.Id)]
+						and pairKey(room.Id, other.Id) ~= omitted[sectionIndex] then
+						table.insert(unused, {room, other})
+					end
+				end
+				if row < GRID_ROWS then
+					local other = slots[sectionIndex][row + 1][column]
+					if not selectedPairs[pairKey(room.Id, other.Id)]
+						and pairKey(room.Id, other.Id) ~= omitted[sectionIndex] then
+						table.insert(unused, {room, other})
+					end
+				end
+			end
+		end
+		unused = shuffled(rng, unused)
+		if #unused < Tuning.ExtraLinksPerDistrict then
+			return nil, "not enough unused grid edges for district loops"
+		end
+		for index = 1, Tuning.ExtraLinksPerDistrict do
+			local edge = unused[index]
+			local link, linkError = addLink(edge[1], edge[2], {
+				ThemeId = definition.ThemeId,
+				SectionIndex = sectionIndex,
+				LinkType = "InternalLoop",
+			})
+			if not link then return nil, linkError end
+		end
+	end
+
+	local gatewaySpecs = {
+		{
+			A = arrival,
+			B = slots[1][entryRow][1],
+			Kind = "Entry",
+			FromSection = 0,
+			ToSection = 1,
+			FromThemeId = arrival.ThemeId,
+			ToThemeId = DISTRICT_DEFINITIONS[1].ThemeId,
+		},
+		{
+			A = slots[1][GRID_ROWS][gatewayColumns[1]],
+			B = slots[2][1][gatewayColumns[1]],
+			Kind = "District",
+			FromSection = 1,
+			ToSection = 2,
+			FromThemeId = DISTRICT_DEFINITIONS[1].ThemeId,
+			ToThemeId = DISTRICT_DEFINITIONS[2].ThemeId,
+		},
+		{
+			A = slots[2][GRID_ROWS][gatewayColumns[2]],
+			B = slots[3][1][gatewayColumns[2]],
+			Kind = "District",
+			FromSection = 2,
+			ToSection = 3,
+			FromThemeId = DISTRICT_DEFINITIONS[2].ThemeId,
+			ToThemeId = DISTRICT_DEFINITIONS[3].ThemeId,
+		},
+		{
+			A = signalHall,
+			B = exitRoom,
+			Kind = "Exit",
+			FromSection = 3,
+			ToSection = 4,
+			FromThemeId = DISTRICT_DEFINITIONS[3].ThemeId,
+			ToThemeId = exitRoom.ThemeId,
+			Door = "HiddenExit",
+		},
+	}
+	for index, spec in ipairs(gatewaySpecs) do
+		local destinationSection = math.clamp(spec.ToSection, 1, DISTRICT_COUNT)
+		local link, linkError = addLink(spec.A, spec.B, {
+			Door = spec.Door or "Open",
+			ThemeId = DISTRICT_DEFINITIONS[destinationSection].ThemeId,
+			SectionIndex = destinationSection,
+			LinkType = "Gateway",
+			Gateway = true,
+			GatewayKind = spec.Kind,
+			FromSection = spec.FromSection,
+			ToSection = spec.ToSection,
+			FromThemeId = spec.FromThemeId,
+			ToThemeId = spec.ToThemeId,
+		})
+		if not link then return nil, linkError end
+		if index == 1 then
+			layout.Districts[1].IncomingGatewayLinkId = link.Id
+		elseif index == 2 then
+			layout.Districts[1].OutgoingGatewayLinkId = link.Id
+			layout.Districts[2].IncomingGatewayLinkId = link.Id
+		elseif index == 3 then
+			layout.Districts[2].OutgoingGatewayLinkId = link.Id
+			layout.Districts[3].IncomingGatewayLinkId = link.Id
+		else
+			layout.Districts[3].OutgoingGatewayLinkId = link.Id
+		end
+	end
+
+	local chosenModules = {}
+	local chosenSet = {}
+	local function addModule(room)
+		if chosenSet[room.Id] then return end
+		chosenSet[room.Id] = true
+		room.Module = true
+		if room.Role == "Room" then room.Role = "ModuleRoom" end
+		table.insert(chosenModules, room)
+	end
+
+	-- L3_FIRST_CD_IN_THE_ENTRY_ROOM_20260921.
+	-- gatewaySpecs[1].B is the far side of the Entry gateway -- the room the
+	-- player physically walks into from the arrival elevator, and Arrival's only
+	-- link -- so seeding it here puts one visible CD on its first table instead
+	-- of leaving the opening minutes to a blind search. It is seeded BEFORE the
+	-- district pass, so the other four are chosen by the unchanged seeded rule
+	-- and are separated from this one by the same MinimumModuleSeparation: no
+	-- two CDs can share a room or crowd each other. Nothing later re-rolls it.
+	local firstCDRoom = gatewaySpecs[1].B
+	addModule(firstCDRoom)
+
+	for sectionIndex = 1, DISTRICT_COUNT do
+		local candidates = {}
+		for _, room in ipairs(layout.Districts[sectionIndex].Rooms) do
+			if room.Id ~= "SignalHall" and (room.GridColumn == 2 or room.GridColumn == 3) then
+				local separated = true
+				for _, existing in ipairs(chosenModules) do
+					if planarDistance(room, existing) < Tuning.MinimumModuleSeparation then
+						separated = false
+						break
+					end
+				end
+				if separated then table.insert(candidates, room) end
+			end
+		end
+		if #candidates == 0 then return nil, "district has no sufficiently separated module candidate" end
+		addModule(candidates[rng:NextInteger(1, #candidates)])
+	end
+
+	while #chosenModules < MODULE_GOAL do
+		local best = nil
+		local bestScore = -math.huge
+		for sectionIndex = 1, DISTRICT_COUNT do
+			for _, room in ipairs(layout.Districts[sectionIndex].Rooms) do
+				if not chosenSet[room.Id] and room.Id ~= "SignalHall" then
+					local minimumDistance = math.huge
+					for _, existing in ipairs(chosenModules) do
+						minimumDistance = math.min(minimumDistance, planarDistance(room, existing))
+					end
+					if minimumDistance >= Tuning.MinimumModuleSeparation then
+						local score = minimumDistance + rng:NextNumber(0, 0.01)
+						if score > bestScore then
+							best = room
+							bestScore = score
+						end
+					end
+				end
+			end
+		end
+		if not best then return nil, "five sufficiently separated module rooms could not be selected" end
+		addModule(best)
+	end
+
+	table.sort(chosenModules, function(a, b)
+		if a.SectionIndex == b.SectionIndex then return a.Id < b.Id end
+		return a.SectionIndex < b.SectionIndex
+	end)
+	layout.ModuleRooms = chosenModules
+
+	for _, neighbours in pairs(layout.Adjacency) do table.sort(neighbours) end
+
+	layout.Bounds = measureBounds(layout.Rooms)
+	layout.CoreBounds = measureBounds(layout.Rooms, true)
+	layout.RoomCount = #layout.Rooms
+	layout.LinkCount = #layout.Links
+	layout.DistrictCount = #layout.Districts
+	layout.ModuleCount = #layout.ModuleRooms
+	layout.HideSpotCount = DISTRICT_COUNT * ROOMS_PER_DISTRICT
+	layout.CyclomaticLoops = #layout.Links - #layout.Rooms + 1
+	layout.MaximumStraightRun, layout.MaximumVerticalRun = straightRuns(layout)
+	layout.GatewayColumns = gatewayColumns
+	layout.Roles = {
+		ArrivalRoomId = "Arrival",
+		ExitRoomId = "Exit",
+		SignalRoomId = "SignalHall",
+		MallManagerSpawnRoomId = "SignalHall",
+		EntryDistrictRoomId = gatewaySpecs[1].B.Id,
+		FirstCDRoomId = firstCDRoom.Id,
+		ModuleRoomIds = (function()
+			local ids = {}
+			for _, room in ipairs(chosenModules) do table.insert(ids, room.Id) end
+			return ids
+		end)(),
+		GatewayLinkIds = (function()
+			local ids = {}
+			for _, link in ipairs(layout.GatewayLinks) do table.insert(ids, link.Id) end
+			return ids
+		end)(),
+		AmbientHVACRoomId = slots[1][3 - entryRow][GRID_COLUMNS].Id,
+	}
+	layout.LayoutHash = makeHash(layout)
+	return layout
+end
+
+local function fail(message)
+	return false, message
+end
+
+function LayoutGenerator.Validate(layout)
+	if type(layout) ~= "table" then return fail("layout is not a table") end
+	if layout.Version ~= VERSION then return fail("layout version is stale") end
+	if type(layout.Rooms) ~= "table" or #layout.Rooms ~= DISTRICT_COUNT * ROOMS_PER_DISTRICT + 2 then
+		return fail("layout must contain exactly 26 rooms")
+	end
+	local expectedLinks = DISTRICT_COUNT
+		* ((ROOMS_PER_DISTRICT - 1) + Tuning.ExtraLinksPerDistrict)
+		+ ENTRY_AND_GATEWAY_LINKS
+	if type(layout.Links) ~= "table" or #layout.Links ~= expectedLinks then
+		return fail(string.format("layout must contain exactly %d links", expectedLinks))
+	end
+	if type(layout.Districts) ~= "table" or #layout.Districts ~= DISTRICT_COUNT then
+		return fail("layout must contain exactly three districts")
+	end
+	if type(layout.RoomById) ~= "table" or type(layout.Adjacency) ~= "table"
+		or type(layout.GatewayLinks) ~= "table" then
+		return fail("layout lookup tables are missing")
+	end
+
+	local seenRooms = {}
+	local sectionCounts = {0, 0, 0}
+	local moduleCounts = {0, 0, 0}
+	local moduleTotal = 0
+	local hideSpotTotal = 0
+	for _, room in ipairs(layout.Rooms) do
+		if type(room.Id) ~= "string" or room.Id == "" or seenRooms[room.Id] then
+			return fail("room ids must be non-empty and unique")
+		end
+		seenRooms[room.Id] = true
+		if layout.RoomById[room.Id] ~= room then return fail("RoomById is inconsistent for " .. room.Id) end
+		if type(room.X) ~= "number" or type(room.Z) ~= "number"
+			or type(room.W) ~= "number" or type(room.D) ~= "number" or type(room.H) ~= "number"
+			or room.W <= 0 or room.D <= 0 or room.H <= 0 then
+			return fail("room dimensions are invalid for " .. room.Id)
+		end
+		if room.Id == "Arrival" or room.Id == "Exit" then
+			if room.HideSpotCount ~= 0 or room.Module == true then
+				return fail(room.Id .. " must not have hide spots or a module")
+			end
+		else
+			if room.SectionIndex < 1 or room.SectionIndex > DISTRICT_COUNT then
+				return fail("district room has invalid section: " .. room.Id)
+			end
+			if room.HideSpotCount ~= 1 then
+				return fail("each district room must request exactly one hide spot")
+			end
+			hideSpotTotal += room.HideSpotCount
+			sectionCounts[room.SectionIndex] += 1
+			local definition = DISTRICT_DEFINITIONS[room.SectionIndex]
+			if room.ThemeId ~= definition.ThemeId or room.Kind ~= definition.Kind
+				or room.DistrictId ~= definition.Id then
+				return fail("district theme metadata is inconsistent for " .. room.Id)
+			end
+			if room.Module == true then
+				moduleTotal += 1
+				moduleCounts[room.SectionIndex] += 1
+			end
+		end
+	end
+	if not seenRooms.Arrival or not seenRooms.Exit or not seenRooms.SignalHall then
+		return fail("Arrival, SignalHall, and Exit are required")
+	end
+	for sectionIndex = 1, DISTRICT_COUNT do
+		if sectionCounts[sectionIndex] ~= ROOMS_PER_DISTRICT then
+			return fail("every district must contain exactly eight rooms")
+		end
+		if moduleCounts[sectionIndex] < 1 then
+			return fail("every district must contain at least one module")
+		end
+	end
+	if moduleTotal ~= MODULE_GOAL or type(layout.ModuleRooms) ~= "table"
+		or #layout.ModuleRooms ~= MODULE_GOAL then
+		return fail("layout must contain exactly five module rooms")
+	end
+	if hideSpotTotal ~= DISTRICT_COUNT * ROOMS_PER_DISTRICT then
+		return fail("layout must request exactly 24 evenly distributed hide spots")
+	end
+
+	for index = 1, #layout.Rooms - 1 do
+		local a = layout.Rooms[index]
+		for otherIndex = index + 1, #layout.Rooms do
+			local b = layout.Rooms[otherIndex]
+			local overlapX = (a.W + b.W) * 0.5 - math.abs(a.X - b.X)
+			local overlapZ = (a.D + b.D) * 0.5 - math.abs(a.Z - b.Z)
+			if overlapX > 0.001 and overlapZ > 0.001 then
+				return fail("rooms overlap: " .. a.Id .. " and " .. b.Id)
+			end
+		end
+	end
+
+	local ports = {}
+	local seenPairs = {}
+	local hiddenCount = 0
+	local gatewayCount = 0
+	local corridorFootprints = {}
+	local rebuiltAdjacency = {}
+	for roomId in pairs(seenRooms) do
+		ports[roomId] = {}
+		rebuiltAdjacency[roomId] = {}
+	end
+	for _, link in ipairs(layout.Links) do
+		local a, b = layout.RoomById[link.A], layout.RoomById[link.B]
+		if not a or not b or a == b then return fail("link endpoint is invalid") end
+		local key = pairKey(a.Id, b.Id)
+		if seenPairs[key] then return fail("duplicate room pair " .. key) end
+		seenPairs[key] = true
+		local sideA = cardinalSide(a, b)
+		if not sideA then return fail("link is not straight and axis-aligned: " .. key) end
+		local sideB = OPPOSITE_SIDE[sideA]
+		if ports[a.Id][sideA] or ports[b.Id][sideB] then
+			return fail("more than one connection uses the same room side: " .. key)
+		end
+		ports[a.Id][sideA] = link.Id
+		ports[b.Id][sideB] = link.Id
+		local gap
+		if sideA == "East" or sideA == "West" then
+			gap = math.abs(a.X - b.X) - (a.W + b.W) * 0.5
+		else
+			gap = math.abs(a.Z - b.Z) - (a.D + b.D) * 0.5
+		end
+		if gap < Tuning.MinimumCorridorLength - 0.001 then
+			return fail("corridor is shorter than the configured minimum: " .. key)
+		end
+		table.insert(rebuiltAdjacency[a.Id], b.Id)
+		table.insert(rebuiltAdjacency[b.Id], a.Id)
+		if link.Door == "HiddenExit" then
+			hiddenCount += 1
+			if not (link.A == "SignalHall" and link.B == "Exit")
+				or math.abs(gap - Tuning.ExitCorridorLength) > .001 then
+				return fail("the only hidden link must be SignalHall to Exit")
+			end
+		end
+		if link.Gateway == true then
+			gatewayCount += 1
+			local kind = if a.SectionIndex == 0 then "Entry"
+				elseif b.Id == "Exit" then "Exit" else "District"
+			if link.FromSection ~= a.SectionIndex or link.ToSection ~= b.SectionIndex
+				or b.SectionIndex ~= a.SectionIndex + 1
+				or link.FromThemeId ~= a.ThemeId or link.ToThemeId ~= b.ThemeId
+				or link.GatewayKind ~= kind or layout.GatewayLinks[gatewayCount] ~= link then
+				return fail("gateway metadata is inconsistent: " .. key)
+			end
+			if kind == "District" then
+				if sideA ~= "South" or a.GridRow ~= GRID_ROWS or b.GridRow ~= 1
+					or a.GridColumn ~= b.GridColumn or type(layout.GatewayColumns) ~= "table"
+					or layout.GatewayColumns[a.SectionIndex] ~= a.GridColumn then
+					return fail("district gateway does not join the shared column: " .. key)
+				end
+			elseif sideA ~= "East" then
+				return fail("arrival and final exit must face east")
+			end
+		end
+		if a.SectionIndex == b.SectionIndex and a.SectionIndex >= 1
+			and a.SectionIndex <= DISTRICT_COUNT then
+			local definition = DISTRICT_DEFINITIONS[a.SectionIndex]
+			if link.ThemeId ~= definition.ThemeId or link.SectionIndex ~= a.SectionIndex then
+				return fail("internal link theme does not match its district")
+			end
+		end
+		table.insert(corridorFootprints, {Link=link, Bounds=corridorBounds(a, b)})
+	end
+	if hiddenCount ~= 1 then return fail("layout must contain one hidden exit link") end
+	if gatewayCount ~= ENTRY_AND_GATEWAY_LINKS
+		or type(layout.GatewayLinks) ~= "table"
+		or #layout.GatewayLinks ~= ENTRY_AND_GATEWAY_LINKS then
+		return fail("layout must contain four explicit gateway links")
+	end
+	if type(layout.GatewayColumns) ~= "table" or #layout.GatewayColumns ~= 2 then
+		return fail("layout must identify two gateway columns")
+	end
+	for index, corridor in ipairs(corridorFootprints) do
+		for _, room in ipairs(layout.Rooms) do
+			if room.Id ~= corridor.Link.A and room.Id ~= corridor.Link.B then
+				local halfWall = Configuration.WallThickness * .5
+				local roomShell = {MinX=room.X-room.W*.5-halfWall, MaxX=room.X+room.W*.5+halfWall,
+					MinZ=room.Z-room.D*.5-halfWall, MaxZ=room.Z+room.D*.5+halfWall}
+				if rectanglesOverlap(corridor.Bounds, roomShell) then
+					return fail("corridor crosses unrelated room: " .. corridor.Link.Id .. " and " .. room.Id)
+				end
+			end
+		end
+		for otherIndex = index + 1, #corridorFootprints do
+			local other = corridorFootprints[otherIndex]
+			if rectanglesOverlap(corridor.Bounds, other.Bounds) then
+				return fail("corridor shells overlap: " .. corridor.Link.Id .. " and " .. other.Link.Id)
+			end
+		end
+	end
+	if not boundsMatch(layout.Bounds, measureBounds(layout.Rooms))
+		or not boundsMatch(layout.CoreBounds, measureBounds(layout.Rooms, true)) then
+		return fail("layout bounds are stale")
+	end
+
+	for roomId, expected in pairs(rebuiltAdjacency) do
+		table.sort(expected)
+		local actual = layout.Adjacency[roomId]
+		if type(actual) ~= "table" or #actual ~= #expected then
+			return fail("Adjacency is inconsistent for " .. roomId)
+		end
+		for index, otherId in ipairs(expected) do
+			if actual[index] ~= otherId then return fail("Adjacency is inconsistent for " .. roomId) end
+		end
+	end
+
+	local reached = {Arrival = true}
+	local queue = {"Arrival"}
+	local cursor = 1
+	while cursor <= #queue do
+		local roomId = queue[cursor]
+		cursor += 1
+		for _, otherId in ipairs(layout.Adjacency[roomId]) do
+			if not reached[otherId] then
+				reached[otherId] = true
+				table.insert(queue, otherId)
+			end
+		end
+	end
+	for roomId in pairs(seenRooms) do
+		if not reached[roomId] then return fail("whole graph is disconnected at " .. roomId) end
+	end
+	local straight, vertical = straightRuns(layout)
+	if layout.MaximumStraightRun ~= straight or layout.MaximumVerticalRun ~= vertical then
+		return fail("straight-run diagnostics are stale")
+	end
+	if layout.StraightRunRelaxed ~= true then
+		if straight > Tuning.MaximumStraightRunLinks
+			or vertical > Tuning.MaximumVerticalRunLinks then
+			return fail("core has an excessively long straight view")
+		end
+		for _, otherId in ipairs(layout.Adjacency.SignalHall) do
+			local other = layout.RoomById[otherId]
+			if otherId ~= "Exit" and other.Z == layout.RoomById.SignalHall.Z then
+				return fail("Signal Hall opens onto the finale axis")
+			end
+		end
+	end
+
+	for sectionIndex = 1, DISTRICT_COUNT do
+		local district = layout.Districts[sectionIndex]
+		if district.Index ~= sectionIndex or district.Id ~= DISTRICT_DEFINITIONS[sectionIndex].Id
+			or district.ThemeId ~= DISTRICT_DEFINITIONS[sectionIndex].ThemeId
+			or type(district.RoomIds) ~= "table" or #district.RoomIds ~= ROOMS_PER_DISTRICT
+			or district.IncomingGatewayLinkId ~= layout.GatewayLinks[sectionIndex].Id
+			or district.OutgoingGatewayLinkId ~= layout.GatewayLinks[sectionIndex + 1].Id
+			or not boundsMatch(district.Bounds, measureBounds(district.Rooms)) then
+			return fail("district metadata is inconsistent")
+		end
+		local startId = district.RoomIds[1]
+		local sectionReached = {[startId] = true}
+		local sectionQueue = {startId}
+		local sectionCursor = 1
+		while sectionCursor <= #sectionQueue do
+			local roomId = sectionQueue[sectionCursor]
+			sectionCursor += 1
+			for _, otherId in ipairs(layout.Adjacency[roomId]) do
+				local other = layout.RoomById[otherId]
+				if other and other.SectionIndex == sectionIndex and not sectionReached[otherId] then
+					sectionReached[otherId] = true
+					table.insert(sectionQueue, otherId)
+				end
+			end
+		end
+		local count = 0
+		for _ in pairs(sectionReached) do count += 1 end
+		if count ~= ROOMS_PER_DISTRICT then
+			return fail("district graph is not internally contiguous")
+		end
+	end
+
+	for index = 1, #layout.ModuleRooms - 1 do
+		for otherIndex = index + 1, #layout.ModuleRooms do
+			if planarDistance(layout.ModuleRooms[index], layout.ModuleRooms[otherIndex])
+				< Tuning.MinimumModuleSeparation - 0.001 then
+				return fail("module rooms are not sufficiently separated")
+			end
+		end
+	end
+	if type(layout.Roles) ~= "table"
+		or layout.Roles.ArrivalRoomId ~= "Arrival"
+		or layout.Roles.ExitRoomId ~= "Exit"
+		or layout.Roles.SignalRoomId ~= "SignalHall"
+		or layout.Roles.MallManagerSpawnRoomId ~= "SignalHall" then
+		return fail("role metadata is incomplete")
+	end
+	-- L3_FIRST_CD_IN_THE_ENTRY_ROOM_20260921: the guarantee, restated where a
+	-- mutated or hand-built plan is rejected rather than only where it is made.
+	local firstCDRoom = layout.RoomById[tostring(layout.Roles.FirstCDRoomId)]
+	if layout.Roles.FirstCDRoomId ~= layout.Roles.EntryDistrictRoomId
+		or firstCDRoom == nil or firstCDRoom.Module ~= true
+		or firstCDRoom.HideSpotCount ~= 1 then
+		return fail("the first CD must occupy the entry district room")
+	end
+	if layout.LayoutHash ~= makeHash(layout) then return fail("layout hash is inconsistent") end
+	return true, "OK"
+end
+
+function LayoutGenerator.Generate(requestedSeed)
+	Tuning = resolveTuning()
+	local normalizedRequested = normalizeSeed(requestedSeed)
+	local failures = {}
+	for attempt = 1, Tuning.GenerationAttempts do
+		local seed = (normalizedRequested + (attempt - 1) * Tuning.RetryStride) % MAX_SEED
+		if seed == 0 then seed = 1 end
+		local layout, generationError = generateAttempt(seed, normalizedRequested, attempt, false)
+		if layout then
+			local valid, validationError = LayoutGenerator.Validate(layout)
+			if valid then
+				layout.GenerationFailures = failures
+				return layout
+			end
+			generationError = validationError
+		end
+		table.insert(failures, string.format("seed %d: %s", seed, tostring(generationError)))
+	end
+	for fallbackIndex, fallbackValue in ipairs(Tuning.FallbackSeeds) do
+		local seed = normalizeSeed(fallbackValue)
+		local layout, generationError = generateAttempt(
+			seed,
+			normalizedRequested,
+			Tuning.GenerationAttempts + fallbackIndex,
+			true
+		)
+		if layout then
+			layout.FallbackSeed = seed
+			local valid, validationError = LayoutGenerator.Validate(layout)
+			if valid then
+				layout.GenerationFailures = failures
+				return layout
+			end
+			generationError = validationError
+		end
+		table.insert(failures, string.format("fallback seed %d: %s", seed, tostring(generationError)))
+	end
+	error("Level 3 layout generation failed: " .. table.concat(failures, " | "))
+end
+
+LayoutGenerator.Tuning = Tuning
+LayoutGenerator.DistrictDefinitions = DISTRICT_DEFINITIONS
+LayoutGenerator.Version = VERSION
+
+return LayoutGenerator
+
+FILE StarterPlayer__StarterPlayerScripts__Level 3 Lighting Controller.LocalScript.lua
+--!strict
+-- Level 3 Lighting Controller
+-- A readable, artificial mall/service-space grade with sparse fluorescent
+-- instability. All global Lighting properties are captured and restored.
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RunService = game:GetService("RunService")
+local Lighting = game:GetService("Lighting")
+local TweenService = game:GetService("TweenService")
+
+local player = Players.LocalPlayer
+local random = Random.new()
+
+local LEVEL = 3
+local WORLD_NAME = "Level 3 Generated World"
+local STATE_FOLDER_NAME = "Level 3 State"
+local MAX_FLICKER_FIXTURES = 10
+
+type LightingSnapshot = {
+	Brightness: number,
+	ClockTime: number,
+	ExposureCompensation: number,
+	Ambient: Color3,
+	OutdoorAmbient: Color3,
+	ColorShiftTop: Color3,
+	ColorShiftBottom: Color3,
+	FogColor: Color3,
+	FogStart: number,
+	FogEnd: number,
+	EnvironmentDiffuseScale: number,
+	EnvironmentSpecularScale: number,
+	ShadowSoftness: number,
+	GlobalShadows: boolean,
+}
+
+type FixtureRecord = {
+	Part: BasePart,
+	Light: SurfaceLight,
+	Brightness: number,
+	Enabled: boolean,
+	NextAt: number,
+	RestoreAt: number,
+	Pulse: number,
+	NextPulseAt: number,
+}
+
+type SuppressedEffect = {
+	Effect: PostEffect,
+	Enabled: boolean,
+}
+
+type BlackoutLightRecord = {
+	Light: Light,
+	Enabled: boolean,
+	Brightness: number,
+}
+
+type BlackoutPartRecord = {
+	Part: BasePart,
+	Material: Enum.Material,
+	Color: Color3,
+}
+
+local grade = Lighting:FindFirstChild("Level3ClientColorGrade")
+if not (grade and grade:IsA("ColorCorrectionEffect")) then
+	if grade then grade:Destroy() end
+	grade = Instance.new("ColorCorrectionEffect")
+	grade.Name = "Level3ClientColorGrade"
+	grade.Parent = Lighting
+end
+local colorGrade = grade :: ColorCorrectionEffect
+colorGrade.Enabled = false
+
+local bloomObject = Lighting:FindFirstChild("Level3ClientBloom")
+if not (bloomObject and bloomObject:IsA("BloomEffect")) then
+	if bloomObject then bloomObject:Destroy() end
+	bloomObject = Instance.new("BloomEffect")
+	bloomObject.Name = "Level3ClientBloom"
+	bloomObject.Parent = Lighting
+end
+local bloom = bloomObject :: BloomEffect
+bloom.Enabled = false
+
+local snapshot: LightingSnapshot? = nil
+local active = false
+local transitionSerial = 0
+local tweens: {Tween} = {}
+local lastExitUnlocked: boolean? = nil
+local suppressedEffects: {SuppressedEffect} = {}
+
+local fixtures: {FixtureRecord} = {}
+local fixtureByPart: {[BasePart]: FixtureRecord} = {}
+local boundWorld: Model? = nil
+local worldAddedConnection: RBXScriptConnection? = nil
+local worldRemovingConnection: RBXScriptConnection? = nil
+local blackoutApplied = false
+local blackoutLights: {BlackoutLightRecord} = {}
+local blackoutParts: {BlackoutPartRecord} = {}
+local blackoutPartSeen: {[BasePart]: boolean} = {}
+-- enforceBlackout used to walk the WHOLE generated mall on every throttled
+-- Heartbeat -- 12.5 times a second for the ~52 s of each blackout that is not
+-- the scream, and then continuously for the rest of the round once five CDs
+-- unlock the exit. It is a sweep, not a tick: nothing changes between passes
+-- unless the world does.
+--
+-- `blackoutSweptUnlocked` holds the exitUnlocked() value the last full sweep
+-- ran for, and `nil` means a sweep is due now. Everything on THIS client that
+-- can put a lit fixture back -- a fresh baseline, a late-streamed Light, the
+-- end of a flicker pass -- writes nil here, so those cases are corrected on the
+-- very next tick rather than eventually.
+--
+-- The interval is what covers the writers this client cannot see coming.
+-- `Level 3 Objective Controller` is a SERVER module and it writes Lights inside
+-- the same world (`slot.Light.Enabled = active` as CDs go into the VCR, and
+-- restoreModule putting a module's Enabled/Brightness back); those arrive as
+-- replicated property changes on instances that already exist, so they fire no
+-- DescendantAdded and nothing local marks the sweep due. The old code hid that
+-- behind brute force. This is still a poll -- deliberately -- but at 2 passes a
+-- second instead of 12.5, which is where the cost was.
+local BLACKOUT_SWEEP_SAFETY_INTERVAL = 0.5
+local blackoutSweptUnlocked: boolean? = nil
+local blackoutSweptAt = 0
+local blackoutFlickerPulse = -1
+local preBlackoutApplied = false
+local preBlackoutFlickerPulse = -1
+local recoveryFlickerApplied = false
+local recoveryFlickerPulse = -1
+local BLACKOUT_SCREAM_DURATION = 8.071836735
+-- PHOTOSENSITIVITY. updateBlackoutFlicker computes ONE `lit` for the whole mall
+-- and applies it to every fixture at once, so each pulse is a full-screen
+-- luminance flip. The hash lights ~4 of every 11 pulses plus every 13th -- up
+-- to ~0.45 flashes per pulse -- and the published guidance is no more than
+-- three flashes a second over a large area, so the interval floor is
+-- 0.45 / 3 = 0.15 s. This was 0.085 (about 4.5 flashes a second, over the
+-- threshold every blackout and again every 3.5 minutes for the whole level);
+-- 0.17 keeps a margin and still reads as a violent stutter rather than a fade.
+--
+-- The other two passes keep their authored cadence on purpose:
+-- updatePreBlackoutFlicker and updateRecoveryFlicker fold the light INDEX into
+-- their hash, so they are desynchronised per-fixture flicker and their
+-- aggregate luminance is comparatively smooth. What they do gain is the
+-- ReduceFlashing floor below.
+local BLACKOUT_FLICKER_INTERVAL = 0.17
+local PRE_BLACKOUT_FLICKER_INTERVAL = 0.09
+local RECOVERY_FLICKER_INTERVAL = 0.085
+-- ReduceFlashing does not gate the strobe slower still, it REPLACES it: no
+-- fixture is switched off, no material is swapped, and the mall breathes
+-- between this floor and full over REDUCED_FLASH_PERIOD seconds. The darkness
+-- and the scream timing are untouched; only the on/off edge is gone.
+local REDUCED_FLASH_FLOOR = 0.4
+local REDUCED_FLASH_PERIOD = 1.1
+local DEFAULT_COMPLETION_DIM_DURATION = 5.5
+local completionFadeActive = false
+local completionFadeEndsAtServerTime = 0
+script:SetAttribute("Level3_BlackoutScreamFlickerActive", false)
+script:SetAttribute("Level3_BlackoutScreamFlickerPulse", -1)
+script:SetAttribute("Level3_PreBlackoutFlickerActive", false)
+script:SetAttribute("Level3_PreBlackoutFlickerPulse", -1)
+script:SetAttribute("Level3_RecoveryFlickerActive", false)
+script:SetAttribute("Level3_RecoveryFlickerPulse", -1)
+script:SetAttribute("Level3_CompletionBlackoutActive", false)
+script:SetAttribute("Level3_CompletionDimActive", false)
+script:SetAttribute("Level3_CompletionDimProgress", 0)
+local applyLevelGrade: (boolean) -> ()
+
+local function cancelTweens()
+	for _, tween in ipairs(tweens) do tween:Cancel() end
+	table.clear(tweens)
+end
+
+local function tween(instance: Instance, duration: number, goals: {[string]: any})
+	local object = TweenService:Create(instance, TweenInfo.new(duration, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), goals)
+	table.insert(tweens, object)
+	object:Play()
+end
+
+local function captureLighting(): LightingSnapshot
+	return {
+		Brightness = Lighting.Brightness,
+		ClockTime = Lighting.ClockTime,
+		ExposureCompensation = Lighting.ExposureCompensation,
+		Ambient = Lighting.Ambient,
+		OutdoorAmbient = Lighting.OutdoorAmbient,
+		ColorShiftTop = Lighting.ColorShift_Top,
+		ColorShiftBottom = Lighting.ColorShift_Bottom,
+		FogColor = Lighting.FogColor,
+		FogStart = Lighting.FogStart,
+		FogEnd = Lighting.FogEnd,
+		EnvironmentDiffuseScale = Lighting.EnvironmentDiffuseScale,
+		EnvironmentSpecularScale = Lighting.EnvironmentSpecularScale,
+		ShadowSoftness = Lighting.ShadowSoftness,
+		GlobalShadows = Lighting.GlobalShadows,
+	}
+end
+
+local function suppressInheritedEffects()
+	table.clear(suppressedEffects)
+	for _, child in ipairs(Lighting:GetChildren()) do
+		if child ~= bloom and (child:IsA("BloomEffect") or child:IsA("SunRaysEffect")) then
+			table.insert(suppressedEffects, {
+				Effect = child,
+				Enabled = child.Enabled,
+			})
+			child.Enabled = false
+		end
+	end
+end
+
+local function restoreInheritedEffects()
+	for _, record in ipairs(suppressedEffects) do
+		if record.Effect.Parent then record.Effect.Enabled = record.Enabled end
+	end
+	table.clear(suppressedEffects)
+end
+
+local function stateFolder(): Folder?
+	local object = ReplicatedStorage:FindFirstChild(STATE_FOLDER_NAME)
+	return if object and object:IsA("Folder") then object else nil
+end
+
+local function exitUnlocked(): boolean
+	local state = stateFolder()
+	local value = state and state:GetAttribute("Level3_ExitUnlocked")
+	if value == nil then value = workspace:GetAttribute("Level3ExitUnlocked") end
+	return value == true
+end
+
+-- The player's own accessibility switch, read LIVE rather than cached: the
+-- Zyntra terminal writes it mid-round and the very next pulse has to honour it.
+local function reduceFlashing(): boolean
+	return player:GetAttribute("ReduceFlashing") == true
+end
+
+-- LEVEL3_COMPLETION_BLACKOUT_GUIDE_20260821
+local function blackoutRequested(): boolean
+	local state = stateFolder()
+	local value = state and state:GetAttribute("Level3_BlackoutActive")
+	if value == nil then value = workspace:GetAttribute("Level3BlackoutActive") end
+	-- Five CDs permanently hand lighting ownership to the exit breadcrumb mode;
+	-- the normal music timeline may enter DONE, but it cannot relight the mall.
+	return value == true or exitUnlocked()
+end
+
+local function preBlackoutRequested(): boolean
+	local state = stateFolder()
+	local value = state and state:GetAttribute("Level3_PreBlackoutActive")
+	if value == nil then value = workspace:GetAttribute("Level3PreBlackoutActive") end
+	return value == true or (state and state:GetAttribute("Level3_RoomSongPhase") == "PRE_BLACKOUT")
+end
+
+local function recoveryFlickerRequested(): boolean
+	local state = stateFolder()
+	local value = state and state:GetAttribute("Level3_RecoveryFlickerActive")
+	if value == nil then value = workspace:GetAttribute("Level3RecoveryFlickerActive") end
+	return value == true or (state and state:GetAttribute("Level3_RoomSongPhase") == "RECOVERY_FLICKER")
+end
+
+local function captureWorldLightBaseline()
+	table.clear(blackoutLights)
+	table.clear(blackoutParts)
+	table.clear(blackoutPartSeen)
+	-- A fresh baseline is a fresh world, so the next enforceBlackout sweeps it.
+	blackoutSweptUnlocked = nil
+	local world = boundWorld
+	if not world then return end
+	for _, descendant in ipairs(world:GetDescendants()) do
+		if descendant:IsA("Light") then
+			table.insert(blackoutLights, {
+				Light = descendant,
+				Enabled = descendant.Enabled,
+				Brightness = descendant.Brightness,
+			})
+			local parent = descendant.Parent
+			if parent and parent:IsA("BasePart") and not blackoutPartSeen[parent] then
+				blackoutPartSeen[parent] = true
+				table.insert(blackoutParts, {
+					Part = parent,
+					Material = parent.Material,
+					Color = parent.Color,
+				})
+			end
+		end
+	end
+end
+
+local function restoreBlackoutWorld()
+	for _, record in ipairs(blackoutLights) do
+		if record.Light.Parent then
+			record.Light.Enabled = record.Enabled
+			record.Light.Brightness = record.Brightness
+		end
+	end
+	for _, record in ipairs(blackoutParts) do
+		if record.Part.Parent then
+			record.Part.Material = record.Material
+			record.Part.Color = record.Color
+		end
+	end
+	table.clear(blackoutLights)
+	table.clear(blackoutParts)
+	table.clear(blackoutPartSeen)
+	blackoutSweptUnlocked = nil
+	blackoutFlickerPulse = -1
+	preBlackoutFlickerPulse = -1
+	recoveryFlickerPulse = -1
+	completionFadeActive = false
+	completionFadeEndsAtServerTime = 0
+	blackoutApplied = false
+	preBlackoutApplied = false
+	recoveryFlickerApplied = false
+	script:SetAttribute("Level3_BlackoutScreamFlickerActive", false)
+	script:SetAttribute("Level3_BlackoutScreamFlickerPulse", -1)
+	script:SetAttribute("Level3_PreBlackoutFlickerActive", false)
+	script:SetAttribute("Level3_PreBlackoutFlickerPulse", -1)
+	script:SetAttribute("Level3_RecoveryFlickerActive", false)
+	script:SetAttribute("Level3_RecoveryFlickerPulse", -1)
+	script:SetAttribute("Level3_CompletionDimActive", false)
+	script:SetAttribute("Level3_CompletionDimProgress", 0)
+	script:SetAttribute("Level3_CompletionBlackoutActive", false)
+end
+
+local function enforceBlackout()
+	-- ON CHANGE, or on the safety interval -- never once per throttled frame.
+	-- Both non-flicker paths in updateBlackoutFlicker land here every 0.08 s and
+	-- everything below is idempotent, so a pass whose inputs have not moved is
+	-- pure waste. exitUnlocked() is the guard as well as an input: it is the only
+	-- thing the published attributes at the foot of this function vary on, so a
+	-- mid-blackout unlock re-sweeps without any extra signal being wired up.
+	local unlocked = exitUnlocked()
+	-- SERVER TIME, like every other bound in this file's blackout logic. Roblox's
+	-- os.clock() is CPU time, not wall time, so a 0.5 s deadline written against
+	-- it stretches on a loaded client -- and this deadline is the worst-case
+	-- window in which a fixture the SERVER relit (the Objective Controller's VCR
+	-- slot indicators) stays visible through the blackout. os.clock is fine at
+	-- :763/:987 below, where the drift is a feel value; it is not fine here.
+	local now = workspace:GetServerTimeNow()
+	if blackoutSweptUnlocked == unlocked
+		and now - blackoutSweptAt < BLACKOUT_SWEEP_SAFETY_INTERVAL then
+		return
+	end
+	blackoutSweptUnlocked = unlocked
+	blackoutSweptAt = now
+	-- Streaming can deliver fixtures after the initial baseline snapshot. Sweep
+	-- the authoritative live world so completion can never leave a late light on.
+	if boundWorld then
+		for _, descendant in ipairs(boundWorld:GetDescendants()) do
+			if descendant:IsA("Light") then
+				descendant.Enabled = false
+				descendant.Brightness = 0
+				local parent = descendant.Parent
+				if parent and parent:IsA("BasePart") then
+					parent.Material = Enum.Material.SmoothPlastic
+					parent.Color = Color3.fromRGB(13, 14, 15)
+				end
+			end
+		end
+	end
+	for _, record in ipairs(blackoutLights) do
+		if record.Light.Parent then
+			record.Light.Enabled = false
+			record.Light.Brightness = 0
+		end
+	end
+	for _, record in ipairs(blackoutParts) do
+		if record.Part.Parent then
+			record.Part.Material = Enum.Material.SmoothPlastic
+			record.Part.Color = Color3.fromRGB(13, 14, 15)
+		end
+	end
+	completionFadeActive = false
+	script:SetAttribute("Level3_CompletionDimActive", false)
+	script:SetAttribute("Level3_CompletionDimProgress", if unlocked then 1 else 0)
+	script:SetAttribute("Level3_CompletionBlackoutActive", unlocked)
+	script:SetAttribute("Level3_BlackoutScreamFlickerActive", false)
+end
+
+local function completionTiming(): (number, number, number)
+	local state = stateFolder()
+	local startValue = state and state:GetAttribute("Level3_CompletionDimStartedAtServerTime")
+	if type(startValue) ~= "number" or startValue <= 0 then
+		startValue = state and state:GetAttribute("Level3_CompletionSongStartServerTime")
+	end
+	local durationValue = state and state:GetAttribute("Level3_CompletionDimDuration")
+	local duration = if type(durationValue) == "number" and durationValue > .1
+		then durationValue else DEFAULT_COMPLETION_DIM_DURATION
+	local now = workspace:GetServerTimeNow()
+	local startedAt = if type(startValue) == "number" and startValue > 0 then startValue else now
+	return startedAt, duration, math.clamp((now - startedAt) / duration, 0, 1)
+end
+
+local function beginCompletionFade()
+	local startedAt, duration, progress = completionTiming()
+	local remaining = math.max(0, duration * (1 - progress))
+	completionFadeActive = remaining > .04
+	completionFadeEndsAtServerTime = startedAt + duration
+	script:SetAttribute("Level3_CompletionDimActive", completionFadeActive)
+	script:SetAttribute("Level3_CompletionDimProgress", progress)
+	script:SetAttribute("Level3_CompletionBlackoutActive", false)
+
+	local dark = Color3.fromRGB(13, 14, 15)
+	for _, record in ipairs(blackoutLights) do
+		if record.Light.Parent then
+			record.Light.Enabled = record.Enabled
+			record.Light.Brightness = record.Brightness * (1 - progress)
+			if completionFadeActive then tween(record.Light, remaining, {Brightness = 0}) end
+		end
+	end
+	for _, record in ipairs(blackoutParts) do
+		if record.Part.Parent then
+			record.Part.Material = record.Material
+			record.Part.Color = record.Color:Lerp(dark, progress)
+			if completionFadeActive then tween(record.Part, remaining, {Color = dark}) end
+		end
+	end
+
+	colorGrade.Enabled = true
+	bloom.Enabled = false
+	local targetBrightness = .04
+	local targetExposure = -.85
+	local targetAmbient = Color3.fromRGB(0, 0, 0)
+	local targetFog = Color3.fromRGB(2, 3, 4)
+	Lighting.Brightness = Lighting.Brightness + (targetBrightness - Lighting.Brightness) * progress
+	Lighting.ExposureCompensation = Lighting.ExposureCompensation
+		+ (targetExposure - Lighting.ExposureCompensation) * progress
+	Lighting.Ambient = Lighting.Ambient:Lerp(targetAmbient, progress)
+	Lighting.OutdoorAmbient = Lighting.OutdoorAmbient:Lerp(targetAmbient, progress)
+	Lighting.ColorShift_Top = Lighting.ColorShift_Top:Lerp(Color3.new(0, 0, 0), progress)
+	Lighting.ColorShift_Bottom = Lighting.ColorShift_Bottom:Lerp(Color3.new(0, 0, 0), progress)
+	Lighting.EnvironmentDiffuseScale *= 1 - progress
+	Lighting.EnvironmentSpecularScale += (.02 - Lighting.EnvironmentSpecularScale) * progress
+	Lighting.FogColor = Lighting.FogColor:Lerp(targetFog, progress)
+	Lighting.FogStart += (14 - Lighting.FogStart) * progress
+	Lighting.FogEnd += (115 - Lighting.FogEnd) * progress
+	colorGrade.Brightness += (-.08 - colorGrade.Brightness) * progress
+	colorGrade.Contrast += (.13 - colorGrade.Contrast) * progress
+	colorGrade.Saturation += (-.32 - colorGrade.Saturation) * progress
+	colorGrade.TintColor = colorGrade.TintColor:Lerp(Color3.fromRGB(104, 122, 132), progress)
+	if completionFadeActive then
+		tween(Lighting, remaining, {
+			Brightness = targetBrightness,
+			ExposureCompensation = targetExposure,
+			Ambient = targetAmbient,
+			OutdoorAmbient = targetAmbient,
+			ColorShift_Top = Color3.new(0, 0, 0),
+			ColorShift_Bottom = Color3.new(0, 0, 0),
+			EnvironmentDiffuseScale = 0,
+			EnvironmentSpecularScale = .02,
+			FogColor = targetFog,
+			FogStart = 14,
+			FogEnd = 115,
+		})
+		tween(colorGrade, remaining, {
+			Brightness = -.08,
+			Contrast = .13,
+			Saturation = -.32,
+			TintColor = Color3.fromRGB(104, 122, 132),
+		})
+	else
+		enforceBlackout()
+	end
+end
+
+local function updateBlackoutFlicker()
+	if not blackoutApplied then return end
+	if exitUnlocked() then
+		local _, duration, progress = completionTiming()
+		script:SetAttribute("Level3_CompletionDimProgress", progress)
+		if completionFadeActive
+			and workspace:GetServerTimeNow() < completionFadeEndsAtServerTime - .01
+			and progress < 1 then
+			return
+		end
+		if duration > 0 then enforceBlackout() end
+		return
+	end
+	local state = stateFolder()
+	local startValue = state and state:GetAttribute("Level3_BlackoutScreamStartedAtServerTime")
+	local durationValue = state and state:GetAttribute("Level3_BlackoutScreamDuration")
+	local serialValue = state and state:GetAttribute("Level3_BlackoutSerial")
+	local startedAt = if type(startValue) == "number" then startValue else 0
+	local duration = if type(durationValue) == "number" and durationValue > 0
+		then durationValue else BLACKOUT_SCREAM_DURATION
+	local elapsed = workspace:GetServerTimeNow() - startedAt
+	if startedAt <= 0 or elapsed < 0 or elapsed >= duration then
+		if blackoutFlickerPulse ~= -1 then
+			blackoutFlickerPulse = -1
+			-- The pass that just ended left fixtures lit, so the sweep below has
+			-- real work to do -- exactly once.
+			blackoutSweptUnlocked = nil
+			script:SetAttribute("Level3_BlackoutScreamFlickerPulse", -1)
+		end
+		enforceBlackout()
+		return
+	end
+
+	local pulse = math.floor(elapsed / BLACKOUT_FLICKER_INTERVAL)
+	if reduceFlashing() then
+		-- A smooth swell, never a full-scene on/off: every fixture keeps its own
+		-- material and colour and none of them reaches zero, so the scream still
+		-- lands as a wave of darkness with no strobe edge in it. Written every
+		-- throttled frame rather than once per pulse, because the whole point is
+		-- that it is continuous.
+		local level = REDUCED_FLASH_FLOOR + (1 - REDUCED_FLASH_FLOOR)
+			* (.5 - .5 * math.cos(elapsed * (math.pi * 2) / REDUCED_FLASH_PERIOD))
+		for _, record in ipairs(blackoutLights) do
+			if record.Light.Parent then
+				record.Light.Enabled = record.Enabled
+				record.Light.Brightness = record.Brightness * level
+			end
+		end
+		for _, record in ipairs(blackoutParts) do
+			if record.Part.Parent then
+				record.Part.Material = record.Material
+				record.Part.Color = Color3.fromRGB(13, 14, 15):Lerp(record.Color, level)
+			end
+		end
+		-- Not -1, so the branch above knows a pass has touched the world and marks
+		-- the sweep due when the scream ends.
+		blackoutFlickerPulse = pulse
+		script:SetAttribute("Level3_BlackoutScreamFlickerActive", true)
+		script:SetAttribute("Level3_BlackoutScreamFlickerPulse", pulse)
+		return
+	end
+	if pulse == blackoutFlickerPulse then return end
+	blackoutFlickerPulse = pulse
+	local serial = if type(serialValue) == "number" then math.floor(serialValue) else 0
+	-- Shared server-time hashing gives every client the same violent, irregular
+	-- sequence without local waits drifting apart.
+	local lit = ((pulse * 37 + serial * 17 + 5) % 11) < 4 or pulse % 13 == 0
+	for _, record in ipairs(blackoutLights) do
+		if record.Light.Parent then
+			record.Light.Enabled = lit and record.Enabled
+			record.Light.Brightness = if lit then record.Brightness * 1.4 else 0
+		end
+	end
+	for _, record in ipairs(blackoutParts) do
+		if record.Part.Parent then
+			record.Part.Material = if lit then record.Material else Enum.Material.SmoothPlastic
+			record.Part.Color = if lit then record.Color else Color3.fromRGB(13, 14, 15)
+		end
+	end
+	script:SetAttribute("Level3_BlackoutScreamFlickerActive", true)
+	script:SetAttribute("Level3_BlackoutScreamFlickerPulse", pulse)
+end
+
+local function normalizeSubtleFixtures()
+	for _, record in ipairs(fixtures) do
+		if record.Light.Parent then
+			record.Light.Brightness = record.Brightness
+			record.Light.Enabled = record.Enabled
+		end
+		if record.Part.Parent then record.Part.Material = Enum.Material.Neon end
+		record.RestoreAt = 0
+		record.Pulse = 0
+		record.NextPulseAt = 0
+	end
+end
+
+local function beginPreBlackout()
+	if preBlackoutApplied or blackoutApplied or recoveryFlickerApplied then return end
+	normalizeSubtleFixtures()
+	captureWorldLightBaseline()
+	preBlackoutApplied = true
+	preBlackoutFlickerPulse = -1
+	script:SetAttribute("Level3_PreBlackoutFlickerActive", true)
+end
+
+local function updatePreBlackoutFlicker()
+	if not preBlackoutApplied then return end
+	local state = stateFolder()
+	local startValue = state and state:GetAttribute("Level3_PreBlackoutStartedAtServerTime")
+	local untilValue = state and state:GetAttribute("Level3_PreBlackoutUntilServerTime")
+	local serialValue = state and state:GetAttribute("Level3_PreBlackoutSerial")
+	local startedAt = if type(startValue) == "number" then startValue else 0
+	local untilTime = if type(untilValue) == "number" then untilValue else 0
+	local duration = math.max(.1, untilTime - startedAt)
+	local elapsed = workspace:GetServerTimeNow() - startedAt
+	if startedAt <= 0 or elapsed < 0 or elapsed >= duration then return end
+	local pulse = math.floor(elapsed / PRE_BLACKOUT_FLICKER_INTERVAL)
+	if pulse == preBlackoutFlickerPulse then return end
+	preBlackoutFlickerPulse = pulse
+	local progress = math.clamp(elapsed / duration, 0, 1)
+	local serial = if type(serialValue) == "number" then math.floor(serialValue) else 0
+	local offChance = .10 + progress * .67
+	-- This pass is already desynchronised per fixture, so it is not the
+	-- whole-screen strobe the scream is. ReduceFlashing still takes the on/off
+	-- EDGE out of it: an unlit fixture dips to this fraction of its baseline and
+	-- keeps its material instead of snapping to black.
+	local dimFloor = if reduceFlashing() then REDUCED_FLASH_FLOOR else 0
+	for index, record in ipairs(blackoutLights) do
+		if record.Light.Parent then
+			local hash = ((pulse * 43 + index * 19 + serial * 11) % 100) / 100
+			local surge = (pulse + index * 3) % 17 == 0
+			local lit = record.Enabled and (hash > offChance or surge)
+			record.Light.Enabled = lit or (dimFloor > 0 and record.Enabled)
+			record.Light.Brightness = if lit
+				then record.Brightness * (surge and 1.35 or math.max(.28, 1 - progress * .48))
+				else record.Brightness * dimFloor
+		end
+	end
+	for index, record in ipairs(blackoutParts) do
+		if record.Part.Parent then
+			local hash = ((pulse * 31 + index * 23 + serial * 7) % 100) / 100
+			local lit = hash > offChance or (pulse + index) % 19 == 0
+			record.Part.Material = if lit or dimFloor > 0
+				then record.Material else Enum.Material.SmoothPlastic
+			record.Part.Color = if lit then record.Color
+				else Color3.fromRGB(22, 22, 20):Lerp(record.Color, dimFloor)
+		end
+	end
+	script:SetAttribute("Level3_PreBlackoutFlickerPulse", pulse)
+end
+
+local function endPreBlackout(reapplyGrade: boolean)
+	if not preBlackoutApplied then return end
+	restoreBlackoutWorld()
+	if reapplyGrade and active then applyLevelGrade(exitUnlocked()) end
+end
+
+local function beginRecoveryFlicker()
+	if recoveryFlickerApplied then return end
+	if preBlackoutApplied then endPreBlackout(false) end
+	if not blackoutApplied and #blackoutLights == 0 then captureWorldLightBaseline() end
+	blackoutApplied = false
+	recoveryFlickerApplied = true
+	recoveryFlickerPulse = -1
+	script:SetAttribute("Level3_BlackoutScreamFlickerActive", false)
+	script:SetAttribute("Level3_RecoveryFlickerActive", true)
+	cancelTweens()
+	applyLevelGrade(exitUnlocked())
+end
+
+local function updateRecoveryFlicker()
+	if not recoveryFlickerApplied then return end
+	local state = stateFolder()
+	local startValue = state and state:GetAttribute("Level3_RecoveryFlickerStartedAtServerTime")
+	local untilValue = state and state:GetAttribute("Level3_RecoveryFlickerUntilServerTime")
+	local startedAt = if type(startValue) == "number" then startValue else 0
+	local untilTime = if type(untilValue) == "number" then untilValue else 0
+	local duration = math.max(.1, untilTime - startedAt)
+	local elapsed = workspace:GetServerTimeNow() - startedAt
+	if startedAt <= 0 or elapsed < 0 then return end
+	local progress = math.clamp(elapsed / duration, 0, 1)
+	local pulse = math.floor(math.max(0, elapsed) / RECOVERY_FLICKER_INTERVAL)
+	if pulse == recoveryFlickerPulse then return end
+	recoveryFlickerPulse = pulse
+	-- Same rule as the pre-blackout pass: desynchronised already, so the cadence
+	-- stands, but ReduceFlashing removes the snap to black.
+	local dimFloor = if reduceFlashing() then REDUCED_FLASH_FLOOR else 0
+	for index, record in ipairs(blackoutLights) do
+		if record.Light.Parent then
+			local turnOnAt = .10 + (((index * 37) % 67) / 100)
+			local sputter = ((pulse * 29 + index * 17) % 13) < 3
+			local lit = record.Enabled and (progress >= .94 or (progress >= turnOnAt and not sputter))
+			record.Light.Enabled = lit or (dimFloor > 0 and record.Enabled)
+			record.Light.Brightness = if lit
+				then record.Brightness * math.min(1, .55 + progress * .55)
+				else record.Brightness * dimFloor
+		end
+	end
+	for index, record in ipairs(blackoutParts) do
+		if record.Part.Parent then
+			local turnOnAt = .08 + (((index * 41) % 71) / 100)
+			local sputter = ((pulse * 23 + index * 13) % 11) < 2
+			local lit = progress >= .94 or (progress >= turnOnAt and not sputter)
+			record.Part.Material = if lit or dimFloor > 0
+				then record.Material else Enum.Material.SmoothPlastic
+			record.Part.Color = if lit then record.Color
+				else Color3.fromRGB(13, 14, 15):Lerp(record.Color, dimFloor)
+		end
+	end
+	script:SetAttribute("Level3_RecoveryFlickerPulse", pulse)
+end
+
+local function endRecoveryFlicker(reapplyGrade: boolean)
+	if not recoveryFlickerApplied then return end
+	restoreBlackoutWorld()
+	if reapplyGrade and active then applyLevelGrade(exitUnlocked()) end
+end
+
+local function beginBlackout()
+	if blackoutApplied then return end
+	if recoveryFlickerApplied then endRecoveryFlicker(false) end
+	if preBlackoutApplied then
+		-- Keep the clean baseline captured at 2:25; never snapshot a fixture while
+		-- the warning flicker has it temporarily dimmed or switched off.
+		preBlackoutApplied = false
+		preBlackoutFlickerPulse = -1
+		script:SetAttribute("Level3_PreBlackoutFlickerActive", false)
+		script:SetAttribute("Level3_PreBlackoutFlickerPulse", -1)
+	else
+		normalizeSubtleFixtures()
+		captureWorldLightBaseline()
+	end
+	blackoutApplied = true
+	-- The pre-blackout branch above deliberately keeps its clean baseline, so
+	-- captureWorldLightBaseline did not run on that path and nothing else has
+	-- marked the sweep due.
+	blackoutSweptUnlocked = nil
+	cancelTweens()
+	if exitUnlocked() then
+		beginCompletionFade()
+		return
+	end
+	colorGrade.Enabled = true
+	bloom.Enabled = false
+	tween(Lighting, .35, {
+		-- Keep the unlit world black while allowing a handheld dynamic light to
+		-- survive the grade. The previous -1.55 exposure erased ~80% of its beam.
+		Brightness = .04,
+		ExposureCompensation = -.85,
+		Ambient = Color3.fromRGB(0, 0, 0),
+		OutdoorAmbient = Color3.fromRGB(0, 0, 0),
+		ColorShift_Top = Color3.new(0, 0, 0),
+		ColorShift_Bottom = Color3.new(0, 0, 0),
+		EnvironmentDiffuseScale = 0,
+		EnvironmentSpecularScale = .02,
+		FogColor = Color3.fromRGB(2, 3, 4),
+		FogStart = 14,
+		FogEnd = 115,
+	})
+	tween(colorGrade, .35, {
+		Brightness = -.08,
+		Contrast = .13,
+		Saturation = -.32,
+		TintColor = Color3.fromRGB(104, 122, 132),
+	})
+	enforceBlackout()
+end
+
+local function endBlackout(reapplyGrade: boolean)
+	if not blackoutApplied then return end
+	restoreBlackoutWorld()
+	if reapplyGrade and active then applyLevelGrade(exitUnlocked()) end
+end
+
+local function shouldOwnLighting(): boolean
+	return workspace:GetAttribute("SelectedLevel") == LEVEL
+		and workspace:GetAttribute("Level3LightingOwnedByController") == true
+		and player:GetAttribute("InRound") == true
+end
+
+local function restoreFixtures()
+	for _, record in ipairs(fixtures) do
+		if record.Light.Parent then
+			record.Light.Brightness = record.Brightness
+			record.Light.Enabled = record.Enabled
+		end
+	end
+end
+
+local function clearFixtureRecords()
+	restoreFixtures()
+	table.clear(fixtures)
+	table.clear(fixtureByPart)
+end
+
+local function tryAddFixture(instance: Instance)
+	if #fixtures >= MAX_FLICKER_FIXTURES or not instance:IsA("BasePart") then return end
+	if instance:GetAttribute("Level3_SubtleFlicker") ~= true or fixtureByPart[instance] then return end
+	local light = instance:FindFirstChild("Level 3 Fluorescent Light")
+	if not (light and light:IsA("SurfaceLight")) then return end
+	local record: FixtureRecord = {
+		Part = instance,
+		Light = light,
+		Brightness = light.Brightness,
+		Enabled = light.Enabled,
+		NextAt = os.clock() + random:NextNumber(4.5, 12),
+		RestoreAt = 0,
+		Pulse = 0,
+		NextPulseAt = 0,
+	}
+	fixtureByPart[instance] = record
+	table.insert(fixtures, record)
+end
+
+local function bindWorld(world: Model?)
+	if world == boundWorld then return end
+	if blackoutApplied or preBlackoutApplied or recoveryFlickerApplied then restoreBlackoutWorld() end
+	if worldAddedConnection then worldAddedConnection:Disconnect() end
+	if worldRemovingConnection then worldRemovingConnection:Disconnect() end
+	worldAddedConnection = nil
+	worldRemovingConnection = nil
+	clearFixtureRecords()
+	boundWorld = world
+	if not world then return end
+
+	for _, descendant in ipairs(world:GetDescendants()) do tryAddFixture(descendant) end
+	worldAddedConnection = world.DescendantAdded:Connect(function(descendant)
+		-- The builder attaches the flicker attribute immediately after parenting.
+		-- Deferring one scheduler turn observes the completed fixture safely.
+		task.defer(function()
+			if world ~= boundWorld or not descendant:IsDescendantOf(world) then return end
+			tryAddFixture(descendant)
+			if blackoutApplied and descendant:IsA("Light") then
+				-- UNGATED, unlike the completion handling below it. A Light that
+				-- streams in during an ORDINARY blackout is exactly the case
+				-- enforceBlackout's sweep exists for, and marking the sweep due here
+				-- is what lets that sweep stop running every frame the rest of the
+				-- time. It costs one boolean write per late fixture.
+				blackoutSweptUnlocked = nil
+			end
+			if blackoutApplied and exitUnlocked() and descendant:IsA("Light") then
+				local _, duration, progress = completionTiming()
+				local remaining = duration * (1 - progress)
+				local parent = descendant.Parent
+				if completionFadeActive and remaining > .04 then
+					local baseline = descendant.Brightness
+					descendant.Brightness = baseline * (1 - progress)
+					tween(descendant, remaining, {Brightness = 0})
+					if parent and parent:IsA("BasePart") then
+						local dark = Color3.fromRGB(13, 14, 15)
+						parent.Color = parent.Color:Lerp(dark, progress)
+						tween(parent, remaining, {Color = dark})
+					end
+				else
+					descendant.Enabled = false
+					descendant.Brightness = 0
+					if parent and parent:IsA("BasePart") then
+						parent.Material = Enum.Material.SmoothPlastic
+						parent.Color = Color3.fromRGB(13, 14, 15)
+					end
+				end
+			end
+		end)
+	end)
+	worldRemovingConnection = world.AncestryChanged:Connect(function(_, parent)
+		if parent == nil and boundWorld == world then bindWorld(nil) end
+	end)
+end
+
+local function refreshWorld()
+	local object = workspace:FindFirstChild(WORLD_NAME)
+	bindWorld(if object and object:IsA("Model") then object else nil)
+end
+
+applyLevelGrade = function(unlocked: boolean)
+	lastExitUnlocked = unlocked
+	cancelTweens()
+	colorGrade.Enabled = true
+	bloom.Enabled = true
+	Lighting.GlobalShadows = true
+
+	local tint = if unlocked then Color3.fromRGB(216, 235, 214) else Color3.fromRGB(232, 219, 184)
+	local fog = if unlocked then Color3.fromRGB(93, 109, 101) else Color3.fromRGB(103, 99, 82)
+	local ambient = if unlocked then Color3.fromRGB(92, 98, 94) else Color3.fromRGB(98, 91, 76)
+	local outdoor = if unlocked then Color3.fromRGB(62, 69, 65) else Color3.fromRGB(66, 61, 52)
+
+	tween(Lighting, 0.48, {
+		Brightness = if unlocked then 1.64 else 1.54,
+		ClockTime = 1.5,
+		ExposureCompensation = if unlocked then -0.02 else -0.06,
+		Ambient = ambient,
+		OutdoorAmbient = outdoor,
+		-- ColorShift is additive in Roblox; near-white values flatten and wash
+		-- out every lit surface.  Keep it near neutral and let the dedicated
+		-- color grade provide the abandoned-mall tint.
+		ColorShift_Top = if unlocked then Color3.fromRGB(4, 12, 8) else Color3.fromRGB(18, 14, 8),
+		ColorShift_Bottom = if unlocked then Color3.fromRGB(0, 5, 6) else Color3.fromRGB(2, 3, 0),
+		FogColor = fog,
+		FogStart = 72,
+		FogEnd = if unlocked then 540 else 460,
+		EnvironmentDiffuseScale = 0.32,
+		EnvironmentSpecularScale = 0.22,
+		ShadowSoftness = 0.72,
+	})
+	tween(colorGrade, 0.48, {
+		Brightness = if unlocked then 0.012 else 0.004,
+		Contrast = if unlocked then 0.040 else 0.045,
+		Saturation = if unlocked then -0.045 else -0.065,
+		TintColor = tint,
+	})
+	tween(bloom, 0.48, {
+		Intensity = if unlocked then 0.11 else 0.08,
+		Size = 18,
+		Threshold = 1.45,
+	})
+
+	if not recoveryFlickerApplied then
+		for _, record in ipairs(fixtures) do
+			if record.Light.Parent then
+				record.Light.Enabled = true
+				record.Light.Brightness = record.Brightness
+			end
+		end
+	end
+end
+
+local function restoreLighting()
+	if blackoutApplied or preBlackoutApplied or recoveryFlickerApplied then restoreBlackoutWorld() end
+	transitionSerial += 1
+	local serial = transitionSerial
+	local original = snapshot
+	snapshot = nil
+	lastExitUnlocked = nil
+	cancelTweens()
+	restoreFixtures()
+	if not original then
+		restoreInheritedEffects()
+		colorGrade.Enabled = false
+		bloom.Enabled = false
+		return
+	end
+
+	Lighting.GlobalShadows = original.GlobalShadows
+	tween(Lighting, 0.38, {
+		Brightness = original.Brightness,
+		ClockTime = original.ClockTime,
+		ExposureCompensation = original.ExposureCompensation,
+		Ambient = original.Ambient,
+		OutdoorAmbient = original.OutdoorAmbient,
+		ColorShift_Top = original.ColorShiftTop,
+		ColorShift_Bottom = original.ColorShiftBottom,
+		FogColor = original.FogColor,
+		FogStart = original.FogStart,
+		FogEnd = original.FogEnd,
+		EnvironmentDiffuseScale = original.EnvironmentDiffuseScale,
+		EnvironmentSpecularScale = original.EnvironmentSpecularScale,
+		ShadowSoftness = original.ShadowSoftness,
+	})
+	tween(colorGrade, 0.30, {Brightness = 0, Contrast = 0, Saturation = 0, TintColor = Color3.new(1, 1, 1)})
+	tween(bloom, 0.30, {Intensity = 0})
+	task.delay(0.4, function()
+		if serial ~= transitionSerial or active then return end
+		restoreInheritedEffects()
+		colorGrade.Enabled = false
+		bloom.Enabled = false
+	end)
+end
+
+local function refreshOwnership()
+	local shouldBeActive = shouldOwnLighting()
+	if shouldBeActive and not active then
+		active = true
+		transitionSerial += 1
+		snapshot = captureLighting()
+		suppressInheritedEffects()
+		refreshWorld()
+		applyLevelGrade(exitUnlocked())
+	elseif not shouldBeActive and active then
+		active = false
+		restoreLighting()
+	end
+end
+
+workspace:GetAttributeChangedSignal("SelectedLevel"):Connect(refreshOwnership)
+workspace:GetAttributeChangedSignal("Level3LightingOwnedByController"):Connect(refreshOwnership)
+workspace:GetAttributeChangedSignal("Level3ExitUnlocked"):Connect(function()
+	if active and not blackoutApplied and not preBlackoutApplied and not recoveryFlickerApplied
+		and lastExitUnlocked ~= exitUnlocked() then applyLevelGrade(exitUnlocked()) end
+end)
+player:GetAttributeChangedSignal("InRound"):Connect(refreshOwnership)
+workspace.ChildAdded:Connect(function(child)
+	if child.Name == WORLD_NAME then task.defer(refreshWorld) end
+end)
+workspace.ChildRemoved:Connect(function(child)
+	if child == boundWorld then bindWorld(nil) end
+end)
+
+local accumulated = 0
+RunService.Heartbeat:Connect(function(dt)
+	accumulated += dt
+	if accumulated < 0.08 then return end
+	accumulated = 0
+
+	refreshOwnership()
+	if not active then return end
+	local wantsBlackout = blackoutRequested()
+	local wantsPreBlackout = preBlackoutRequested()
+	local wantsRecovery = recoveryFlickerRequested()
+	if wantsBlackout then
+		if recoveryFlickerApplied then endRecoveryFlicker(false) end
+		beginBlackout()
+		updateBlackoutFlicker()
+	elseif wantsRecovery then
+		beginRecoveryFlicker()
+		updateRecoveryFlicker()
+	elseif wantsPreBlackout then
+		if blackoutApplied then endBlackout(true) end
+		if recoveryFlickerApplied then endRecoveryFlicker(true) end
+		beginPreBlackout()
+		updatePreBlackoutFlicker()
+	else
+		if blackoutApplied then endBlackout(true)
+		elseif preBlackoutApplied then endPreBlackout(true)
+		elseif recoveryFlickerApplied then endRecoveryFlicker(true) end
+	end
+	local unlocked = exitUnlocked()
+	if not blackoutApplied and not preBlackoutApplied and not recoveryFlickerApplied
+		and unlocked ~= lastExitUnlocked then applyLevelGrade(unlocked) end
+
+	local now = os.clock()
+	for index = #fixtures, 1, -1 do
+		if blackoutApplied or preBlackoutApplied or recoveryFlickerApplied then break end
+		local record = fixtures[index]
+		if not (record.Part.Parent and record.Light.Parent) then
+			fixtureByPart[record.Part] = nil
+			table.remove(fixtures, index)
+		elseif record.RestoreAt > 0 and now >= record.RestoreAt then
+			record.Light.Brightness = record.Brightness
+			record.Part.Material = Enum.Material.Neon
+			record.RestoreAt = 0
+			if record.Pulse > 0 then
+				record.NextPulseAt = now + random:NextNumber(0.045, 0.12)
+			else
+				record.NextAt = now + random:NextNumber(5.5, 16)
+			end
+		elseif record.RestoreAt == 0 and record.Pulse > 0 and now >= record.NextPulseAt then
+			-- A failing ballast gives one or two clearly readable irregular blinks.
+			record.Light.Brightness = record.Brightness * random:NextNumber(0.03, 0.18)
+			record.Part.Material = Enum.Material.SmoothPlastic
+			record.Pulse -= 1
+			record.RestoreAt = now + random:NextNumber(0.075, 0.18)
+		elseif record.RestoreAt == 0 and record.Pulse == 0 and now >= record.NextAt then
+			record.Light.Brightness = record.Brightness * random:NextNumber(0.02, 0.14)
+			record.Part.Material = Enum.Material.SmoothPlastic
+			record.Pulse = random:NextInteger(0, 2)
+			record.RestoreAt = now + random:NextNumber(0.09, 0.24)
+		end
+	end
+end)
+
+refreshWorld()
+refreshOwnership()

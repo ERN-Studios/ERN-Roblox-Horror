@@ -1,0 +1,166 @@
+-- Developer-only functional preview. Isolated from GameManager and public level progression.
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local HttpService = game:GetService("HttpService")
+local DevAccess = require(ReplicatedStorage:WaitForChild("DevAccess"))
+local Runtime = require(script.Parent:WaitForChild("Level 6 Systems"):WaitForChild("Level 6 Preview Runtime"))
+local MODEL_NAME, EXIT_NAME = "Level 6 Generated World", "Level6Exit"
+local ENTER, RETURN = "Level6DeveloperPreviewPrompt", "Level6DeveloperPreviewReturnPrompt"
+local transport = ReplicatedStorage:FindFirstChild("Level6PreviewTransport")
+if not transport then
+	transport = Instance.new("RemoteEvent")
+	transport.Name = "Level6PreviewTransport"
+	transport.Parent = ReplicatedStorage
+end
+assert(transport:IsA("RemoteEvent"), "Level6PreviewTransport has wrong class")
+local pending, nextUse = {}, {}
+local hooked = setmetatable({}, {__mode = "k"})
+
+local function lobbyPart(name)
+	local lobby = workspace:FindFirstChild("ServerLobby")
+	if not lobby then return nil end
+	if name == "LobbySpawn" then return lobby:FindFirstChild(name) end
+	local doors = lobby:FindFirstChild("LevelDoorways")
+	return doors and doors:FindFirstChild(name)
+end
+local function playerReady(player)
+	if player.Parent ~= Players or not DevAccess.IsAllowed(player)
+		or player:GetAttribute("InRound") == true
+		or workspace:GetAttribute("ReservedRoundServer") == true then return nil end
+	local character = player.Character
+	local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+	local root = humanoid and humanoid.RootPart
+	if not root or not character:IsDescendantOf(workspace) or root.Anchored
+		or humanoid.SeatPart or humanoid.Health <= 0 then return nil end
+	return character, root
+end
+local function previewReady()
+	local model = workspace:FindFirstChild(MODEL_NAME)
+	if not model or not model:IsA("Model") or model:GetAttribute("Level6Preview") ~= true
+		or model:GetAttribute("PreviewOnly") ~= true or model:GetAttribute("Level6PreviewReady") ~= true then return nil end
+	local exit = model:FindFirstChild(EXIT_NAME, true)
+	if not exit or not exit:IsA("BasePart") then return nil end
+	return model, exit
+end
+local function floorAt(model, point)
+	local params = RaycastParams.new()
+	params.FilterType = Enum.RaycastFilterType.Include
+	params.FilterDescendantsInstances = {model}
+	params.RespectCanCollide = true
+	local hit = workspace:Raycast(point, Vector3.new(0, -10, 0), params)
+	return hit ~= nil and hit.Normal.Y > 0.7
+end
+local function upright(cf)
+	local flat = Vector3.new(cf.LookVector.X, 0, cf.LookVector.Z)
+	return CFrame.lookAt(cf.Position, cf.Position + (if flat.Magnitude > .01 then flat else Vector3.zAxis))
+end
+transport.OnServerEvent:Connect(function(player, nonce, ready)
+	local token = pending[player]
+	if token and nonce == token.nonce and ready == true and os.clock() <= token.expires
+		and DevAccess.IsAllowed(player) then token.ready = true end
+end)
+local function streamReady(player, target, modelName)
+	local token = {nonce = HttpService:GenerateGUID(false), expires = os.clock() + 22, ready = false}
+	pending[player] = token
+	local ok = pcall(function() player:RequestStreamAroundAsync(target, 8) end)
+	if ok and player.Parent == Players then
+		transport:FireClient(player, token.nonce, target, modelName)
+		while pending[player] == token and not token.ready and os.clock() < token.expires
+			and player.Parent == Players do task.wait(.1) end
+	end
+	if pending[player] == token then pending[player] = nil end
+	return ok and token.ready
+end
+local function release(player)
+	nextUse[player] = if player.Parent == Players then os.clock() + 2 else nil
+end
+
+local onReturn
+local function ensurePrompt(parent, name, action, callback)
+	local prompt = parent:FindFirstChild(name)
+	if not prompt then
+		prompt = Instance.new("ProximityPrompt")
+		prompt.Name = name; prompt.ActionText = action; prompt.ObjectText = "LEVEL 6 · DEV PREVIEW"
+		prompt.HoldDuration = .5; prompt.MaxActivationDistance = 10; prompt.RequiresLineOfSight = false
+		prompt.Parent = parent
+	end
+	if prompt:IsA("ProximityPrompt") and not hooked[prompt] then
+		hooked[prompt] = prompt.Triggered:Connect(function(player) callback(player, prompt) end)
+	end
+	return prompt
+end
+local function hookExit()
+	local _, exit = previewReady()
+	if exit then ensurePrompt(exit, RETURN, "RETURN TO LOBBY", onReturn) end
+end
+
+local function onEnter(player, prompt)
+	if (nextUse[player] or 0) > os.clock() or player:GetAttribute("Level6InRound") == true then return end
+	local character, root = playerReady(player)
+	local door = lobbyPart("Level6SealedDoor")
+	if not character or not door or prompt.Parent ~= door or (root.Position - door.Position).Magnitude > 14 then return end
+	nextUse[player] = math.huge
+	local previous = character:GetPivot()
+	local ok, err = pcall(function()
+		local model, exit = Runtime.EnsureWorld()
+		hookExit()
+		if not model or not exit or not floorAt(model, exit.Position) then error("Preview landing floor unavailable") end
+		if not streamReady(player, exit.Position, MODEL_NAME) then error("Preview streaming confirmation timed out") end
+		local currentCharacter, currentRoot = playerReady(player)
+		local currentModel, currentExit = previewReady()
+		if currentCharacter ~= character or currentModel ~= model or currentExit ~= exit
+			or lobbyPart("Level6SealedDoor") ~= door or prompt.Parent ~= door
+			or (currentRoot.Position - door.Position).Magnitude > 14
+			or not floorAt(model, exit.Position) then return end
+		root.AssemblyLinearVelocity = Vector3.zero; root.AssemblyAngularVelocity = Vector3.zero
+		character:PivotTo(upright(exit.CFrame))
+		local joined, reason = Runtime.Join(player)
+		if not joined then
+			character:PivotTo(previous)
+			error("Preview join rejected: " .. tostring(reason))
+		end
+	end)
+	release(player)
+	if not ok then warn("[Level6PreviewAccess] " .. tostring(err)) end
+end
+onReturn = function(player, prompt)
+	if (nextUse[player] or 0) > os.clock() then return end
+	local character, root = playerReady(player)
+	local model, exit = previewReady()
+	local spawn = lobbyPart("LobbySpawn")
+	if not character or not model or not exit or not spawn or player:GetAttribute("Level6InRound") ~= true
+		or prompt.Parent ~= exit or (root.Position - exit.Position).Magnitude > 12 then return end
+	nextUse[player] = math.huge
+	local ok, err = pcall(function()
+		local landing = spawn.Position + Vector3.new(0, 4, 0)
+		if not streamReady(player, landing, "ServerLobby") then error("Lobby streaming confirmation timed out") end
+		local currentCharacter, currentRoot = playerReady(player)
+		if currentCharacter ~= character or not exit.Parent or prompt.Parent ~= exit
+			or (currentRoot.Position - exit.Position).Magnitude > 12 or lobbyPart("LobbySpawn") ~= spawn then return end
+		Runtime.Leave(player)
+		root.AssemblyLinearVelocity = Vector3.zero; root.AssemblyAngularVelocity = Vector3.zero
+		character:PivotTo(upright(spawn.CFrame + Vector3.new(0, 4, 0)))
+	end)
+	release(player)
+	if not ok then warn("[Level6PreviewAccess] " .. tostring(err)) end
+end
+local function hookDoor()
+	local door = lobbyPart("Level6SealedDoor")
+	if door and door:IsA("BasePart") then ensurePrompt(door, ENTER, "ENTER PARTY BACKROOMS", onEnter) end
+end
+local watchedModel, readyConnection
+local function watchModel(model)
+	if watchedModel ~= model then
+		if readyConnection then readyConnection:Disconnect() end
+		watchedModel = model
+		readyConnection = model and model:GetAttributeChangedSignal("Level6PreviewReady"):Connect(hookExit) or nil
+	end
+	hookExit()
+end
+Players.PlayerRemoving:Connect(function(player) pending[player] = nil; nextUse[player] = nil end)
+workspace.DescendantAdded:Connect(function(instance)
+	if instance.Name == "ServerLobby" or instance.Name == "LevelDoorways" or instance.Name == "Level6SealedDoor" then hookDoor()
+	elseif instance.Name == MODEL_NAME and instance.Parent == workspace and instance:IsA("Model") then watchModel(instance)
+	elseif instance.Name == EXIT_NAME then hookExit() end
+end)
+hookDoor(); watchModel(workspace:FindFirstChild(MODEL_NAME))

@@ -1,0 +1,563 @@
+{
+  "units": "1 Blender unit = 1 Roblox stud",
+  "axisMap": "(x,y,z)->(x,z,-y)",
+  "atlas": "textures/WornParty_Atlas.png",
+  "assets": {
+    "WallBeige": {
+      "collection": "L6K_WallBeige",
+      "visualObjects": 3,
+      "triangles": 84,
+      "colliders": [
+        {
+          "center": [
+            0,
+            0,
+            6
+          ],
+          "size": [
+            8,
+            1.5,
+            12
+          ]
+        }
+      ],
+      "anchors": {}
+    },
+    "LintelBeige": {
+      "collection": "L6K_LintelBeige",
+      "visualObjects": 1,
+      "triangles": 60,
+      "colliders": [],
+      "anchors": {}
+    },
+    "WallOrange": {
+      "collection": "L6K_WallOrange",
+      "visualObjects": 3,
+      "triangles": 84,
+      "colliders": [
+        {
+          "center": [
+            0,
+            0,
+            6
+          ],
+          "size": [
+            8,
+            1.5,
+            12
+          ]
+        }
+      ],
+      "anchors": {}
+    },
+    "LintelOrange": {
+      "collection": "L6K_LintelOrange",
+      "visualObjects": 1,
+      "triangles": 60,
+      "colliders": [],
+      "anchors": {}
+    },
+    "WallRed": {
+      "collection": "L6K_WallRed",
+      "visualObjects": 3,
+      "triangles": 84,
+      "colliders": [
+        {
+          "center": [
+            0,
+            0,
+            6
+          ],
+          "size": [
+            8,
+            1.5,
+            12
+          ]
+        }
+      ],
+      "anchors": {}
+    },
+    "LintelRed": {
+      "collection": "L6K_LintelRed",
+      "visualObjects": 1,
+      "triangles": 60,
+      "colliders": [],
+      "anchors": {}
+    },
+    "WallService": {
+      "collection": "L6K_WallService",
+      "visualObjects": 5,
+      "triangles": 204,
+      "colliders": [
+        {
+          "center": [
+            0,
+            0,
+            6
+          ],
+          "size": [
+            8,
+            1.5,
+            12
+          ]
+        }
+      ],
+      "anchors": {}
+    },
+    "LintelService": {
+      "collection": "L6K_LintelService",
+      "visualObjects": 1,
+      "triangles": 60,
+      "colliders": [],
+      "anchors": {}
+    },
+    "FloorBeige": {
+      "collection": "L6K_FloorBeige",
+      "visualObjects": 2,
+      "triangles": 52,
+      "colliders": [
+        {
+          "center": [
+            0,
+            0,
+            -0.5
+          ],
+          "size": [
+            80,
+            64,
+            1
+          ]
+        }
+      ],
+      "anchors": {}
+    },
+    "FloorOrange": {
+      "collection": "L6K_FloorOrange",
+      "visualObjects": 2,
+      "triangles": 52,
+      "colliders": [
+        {
+          "center": [
+            0,
+            0,
+            -0.5
+          ],
+          "size": [
+            80,
+            64,
+            1
+          ]
+        }
+      ],
+      "anchors": {}
+    },
+    "FloorRed": {
+      "collection": "L6K_FloorRed",
+      "visualObjects": 2,
+      "triangles": 52,
+      "colliders": [
+        {
+          "center": [
+            0,
+            0,
+            -0.5
+          ],
+          "size": [
+            80,
+            64,
+            1
+          ]
+        }
+      ],
+      "anchors": {}
+    },
+    "FloorService": {
+      "collection": "L6K_FloorService",
+      "visualObjects": 2,
+      "triangles": 52,
+      "colliders": [
+        {
+          "center": [
+            0,
+            0,
+            -0.5
+          ],
+          "size": [
+            80,
+            64,
+            1
+          ]
+        }
+      ],
+      "anchors": {}
+    },
+    "Ceiling": {
+      "collection": "L6K_Ceiling",
+      "visualObjects": 39,
+      "triangles": 1096,
+      "colliders": [],
+      "anchors": {}
+    },
+    "FluorescentFrame": {
+      "collection": "L6K_FluorescentFrame",
+      "visualObjects": 3,
+      "triangles": 84,
+      "colliders": [],
+      "anchors": {}
+    },
+    "FluorescentDiffuser": {
+      "collection": "L6K_FluorescentDiffuser",
+      "visualObjects": 36,
+      "triangles": 480,
+      "colliders": [],
+      "anchors": {}
+    },
+    "PASpeaker": {
+      "collection": "L6K_PASpeaker",
+      "visualObjects": 3,
+      "triangles": 508,
+      "colliders": [],
+      "anchors": {}
+    },
+    "RoomDivider": {
+      "collection": "L6K_RoomDivider",
+      "visualObjects": 12,
+      "triangles": 720,
+      "colliders": [],
+      "anchors": {}
+    },
+    "ServiceDoor": {
+      "collection": "L6K_ServiceDoor",
+      "visualObjects": 7,
+      "triangles": 228,
+      "colliders": [],
+      "anchors": {}
+    },
+    "VentGrille": {
+      "collection": "L6K_VentGrille",
+      "visualObjects": 14,
+      "triangles": 216,
+      "colliders": [],
+      "anchors": {}
+    },
+    "Clock": {
+      "collection": "L6K_Clock",
+      "visualObjects": 16,
+      "triangles": 416,
+      "colliders": [],
+      "anchors": {}
+    },
+    "ChairRed": {
+      "collection": "L6K_ChairRed",
+      "visualObjects": 3,
+      "triangles": 1428,
+      "colliders": [],
+      "anchors": {}
+    },
+    "ChairYellow": {
+      "collection": "L6K_ChairYellow",
+      "visualObjects": 3,
+      "triangles": 1428,
+      "colliders": [],
+      "anchors": {}
+    },
+    "ChairGreen": {
+      "collection": "L6K_ChairGreen",
+      "visualObjects": 3,
+      "triangles": 1428,
+      "colliders": [],
+      "anchors": {}
+    },
+    "ChairBlue": {
+      "collection": "L6K_ChairBlue",
+      "visualObjects": 3,
+      "triangles": 1428,
+      "colliders": [],
+      "anchors": {}
+    },
+    "FoldingTable": {
+      "collection": "L6K_FoldingTable",
+      "visualObjects": 5,
+      "triangles": 756,
+      "colliders": [],
+      "anchors": {
+        "FoldingTable__HidePrompt": [
+          0.0,
+          -2.180000066757202,
+          2.200000047683716
+        ],
+        "FoldingTable__HidePose": [
+          0.0,
+          0.0,
+          1.399999976158142
+        ]
+      }
+    },
+    "Tableware": {
+      "collection": "L6K_Tableware",
+      "visualObjects": 3,
+      "triangles": 728,
+      "colliders": [],
+      "anchors": {}
+    },
+    "ChairStack": {
+      "collection": "L6K_ChairStack",
+      "visualObjects": 3,
+      "triangles": 4284,
+      "colliders": [],
+      "anchors": {}
+    },
+    "FoldedTables": {
+      "collection": "L6K_FoldedTables",
+      "visualObjects": 2,
+      "triangles": 480,
+      "colliders": [],
+      "anchors": {}
+    },
+    "ArcadeInvaders": {
+      "collection": "L6K_ArcadeInvaders",
+      "visualObjects": 11,
+      "triangles": 2948,
+      "colliders": [],
+      "anchors": {
+        "ArcadeInvaders__PlayPrompt": [
+          0.0,
+          -1.7999999523162842,
+          4.199999809265137
+        ],
+        "ArcadeInvaders__ScreenCenter": [
+          0.0,
+          -0.9900000095367432,
+          5.25
+        ]
+      }
+    },
+    "ArcadeMaze": {
+      "collection": "L6K_ArcadeMaze",
+      "visualObjects": 8,
+      "triangles": 1532,
+      "colliders": [],
+      "anchors": {
+        "ArcadeMaze__PlayPrompt": [
+          0.0,
+          -1.7999999523162842,
+          4.199999809265137
+        ],
+        "ArcadeMaze__ScreenCenter": [
+          0.0,
+          -0.9900000095367432,
+          5.25
+        ]
+      }
+    },
+    "ArcadePlatform": {
+      "collection": "L6K_ArcadePlatform",
+      "visualObjects": 9,
+      "triangles": 1484,
+      "colliders": [],
+      "anchors": {
+        "ArcadePlatform__PlayPrompt": [
+          0.0,
+          -1.7999999523162842,
+          4.199999809265137
+        ],
+        "ArcadePlatform__ScreenCenter": [
+          0.0,
+          -0.9900000095367432,
+          5.25
+        ]
+      }
+    },
+    "ClawMachine": {
+      "collection": "L6K_ClawMachine",
+      "visualObjects": 10,
+      "triangles": 3128,
+      "colliders": [],
+      "anchors": {
+        "ClawMachine__PlayPrompt": [
+          0.5199999809265137,
+          -1.940000057220459,
+          2.6500000953674316
+        ]
+      }
+    },
+    "PrizeCounter": {
+      "collection": "L6K_PrizeCounter",
+      "visualObjects": 10,
+      "triangles": 3216,
+      "colliders": [],
+      "anchors": {}
+    },
+    "BalloonCluster": {
+      "collection": "L6K_BalloonCluster",
+      "visualObjects": 5,
+      "triangles": 684,
+      "colliders": [],
+      "anchors": {}
+    },
+    "BirthdayGarland": {
+      "collection": "L6K_BirthdayGarland",
+      "visualObjects": 5,
+      "triangles": 260,
+      "colliders": [],
+      "anchors": {}
+    },
+    "CakeTable": {
+      "collection": "L6K_CakeTable",
+      "visualObjects": 7,
+      "triangles": 1948,
+      "colliders": [],
+      "anchors": {}
+    },
+    "SupplyShelf": {
+      "collection": "L6K_SupplyShelf",
+      "visualObjects": 8,
+      "triangles": 4216,
+      "colliders": [],
+      "anchors": {}
+    },
+    "HeliumTank": {
+      "collection": "L6K_HeliumTank",
+      "visualObjects": 6,
+      "triangles": 568,
+      "colliders": [],
+      "anchors": {}
+    },
+    "FlatClownCutout": {
+      "collection": "L6K_FlatClownCutout",
+      "visualObjects": 6,
+      "triangles": 1228,
+      "colliders": [],
+      "anchors": {}
+    },
+    "WorkshopBench": {
+      "collection": "L6K_WorkshopBench",
+      "visualObjects": 8,
+      "triangles": 2420,
+      "colliders": [],
+      "anchors": {}
+    },
+    "Pegboard": {
+      "collection": "L6K_Pegboard",
+      "visualObjects": 6,
+      "triangles": 1660,
+      "colliders": [],
+      "anchors": {}
+    },
+    "BreakerPanel": {
+      "collection": "L6K_BreakerPanel",
+      "visualObjects": 5,
+      "triangles": 456,
+      "colliders": [],
+      "anchors": {
+        "BreakerPanel__SwitchPrompt": [
+          0.9800000190734863,
+          -0.41999998688697815,
+          2.1500000953674316
+        ]
+      }
+    },
+    "MopBucket": {
+      "collection": "L6K_MopBucket",
+      "visualObjects": 6,
+      "triangles": 1340,
+      "colliders": [],
+      "anchors": {}
+    },
+    "CD": {
+      "collection": "L6K_CD",
+      "visualObjects": 5,
+      "triangles": 1792,
+      "colliders": [],
+      "anchors": {
+        "CD__PickupPrompt": [
+          0.0,
+          0.0,
+          0.15000000596046448
+        ]
+      }
+    },
+    "CDCase": {
+      "collection": "L6K_CDCase",
+      "visualObjects": 4,
+      "triangles": 180,
+      "colliders": [],
+      "anchors": {
+        "CDCase__InspectPrompt": [
+          0.0,
+          0.0,
+          0.25
+        ]
+      }
+    },
+    "CDPlayer": {
+      "collection": "L6K_CDPlayer",
+      "visualObjects": 6,
+      "triangles": 1752,
+      "colliders": [],
+      "anchors": {
+        "CDPlayer__InsertDisc": [
+          0.0,
+          -0.07000000029802322,
+          0.8700000047683716
+        ],
+        "CDPlayer__Controls": [
+          0.0,
+          -0.8799999952316284,
+          0.5799999833106995
+        ],
+        "CDPlayer__SpeakerLeft": [
+          -1.159999966621399,
+          -0.8700000047683716,
+          0.5
+        ],
+        "CDPlayer__SpeakerRight": [
+          1.159999966621399,
+          -0.8700000047683716,
+          0.5
+        ]
+      }
+    },
+    "FluorescentFixture": {
+      "collection": "L6K_FluorescentFixture",
+      "visualObjects": 3,
+      "triangles": 192,
+      "colliders": [],
+      "anchors": {
+        "FluorescentFixture__LightOrigin": [
+          0.0,
+          0.0,
+          -0.11999999731779099
+        ]
+      }
+    },
+    "WallSpeaker": {
+      "collection": "L6K_WallSpeaker",
+      "visualObjects": 3,
+      "triangles": 408,
+      "colliders": [],
+      "anchors": {
+        "WallSpeaker__SoundOrigin": [
+          0.0,
+          -0.5199999809265137,
+          1.1299999952316284
+        ]
+      }
+    },
+    "WallClock": {
+      "collection": "L6K_WallClock",
+      "visualObjects": 2,
+      "triangles": 688,
+      "colliders": [],
+      "anchors": {}
+    }
+  },
+  "studies": [
+    "Study 01 | Beige Party Hall",
+    "Study 02 | Orange Birthday Rooms",
+    "Study 03 | Red Party Maze",
+    "Study 04 | Budget Arcade",
+    "Study 05 | Party Supply Store",
+    "Study 06 | Maintenance Workshop"
+  ]
+}

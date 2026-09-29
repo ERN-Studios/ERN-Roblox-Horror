@@ -1,0 +1,17 @@
+/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level6_build/build.py:17: DeprecationWarning: 'Material.use_nodes' is expected to be removed in Blender 6.0
+  mat=bpy.data.materials.new('L6_'+key);mat.use_nodes=True;mat['l6_material_key']=key
+/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level6_build/build.py:152: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  scene.world=bpy.data.worlds.new(scene.name+' | World');scene.world.use_nodes=True
+BlenderMCP addon registered
+Info: Saved as "Level6_WornParty.blend"
+L6_BUILD_COMPLETE 49 prefabs 45212 unique triangles
+00:36.855  render           | Saved: '/Users/zeanjuul4/Documents/Roblox Horror REPO/assets/level6-worn-party/previews/01-Beige-Party-Hall.png'
+01:04.829  render           | Saved: '/Users/zeanjuul4/Documents/Roblox Horror REPO/assets/level6-worn-party/previews/02-Orange-Birthday-Rooms.png'
+01:39.742  render           | Saved: '/Users/zeanjuul4/Documents/Roblox Horror REPO/assets/level6-worn-party/previews/03-Red-Party-Maze.png'
+02:10.832  render           | Saved: '/Users/zeanjuul4/Documents/Roblox Horror REPO/assets/level6-worn-party/previews/04-Budget-Arcade.png'
+02:46.763  render           | Saved: '/Users/zeanjuul4/Documents/Roblox Horror REPO/assets/level6-worn-party/previews/05-Party-Supply-Store.png'
+03:27.348  render           | Saved: '/Users/zeanjuul4/Documents/Roblox Horror REPO/assets/level6-worn-party/previews/06-Maintenance-Workshop.png'
+BlenderMCP addon unregistered
+Blender 5.2.0 LTS (hash fbe6228777e7 built 2026-07-14 01:31:22)
+
+Blender quit

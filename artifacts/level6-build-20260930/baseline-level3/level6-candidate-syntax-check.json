@@ -1,0 +1,70 @@
+{
+  "method": "Each entire candidate source wrapped in an uncalled function and parsed by Studio ExecuteLuau. No candidate bodies executed or instances changed. This is syntax only, not runtime/gameplay proof.",
+  "results": [
+    {
+      "name": "Level 6 Reader Client",
+      "ok": true,
+      "result": "syntax parsed; body not executed"
+    },
+    {
+      "name": "Level 6 Lighting Controller",
+      "ok": true,
+      "result": "syntax parsed; body not executed"
+    },
+    {
+      "name": "Level 6 Sound Controller",
+      "ok": true,
+      "result": "syntax parsed; body not executed"
+    },
+    {
+      "name": "Level 6 Mall Manager Visual Smoother",
+      "ok": true,
+      "result": "syntax parsed; body not executed"
+    },
+    {
+      "name": "Level 6 Table Hiding Client",
+      "ok": true,
+      "result": "syntax parsed; body not executed"
+    },
+    {
+      "name": "Level 6 Configuration",
+      "ok": true,
+      "result": "syntax parsed; body not executed"
+    },
+    {
+      "name": "Level 6 World Builder",
+      "ok": true,
+      "result": "syntax parsed; body not executed"
+    },
+    {
+      "name": "Level 6 Objective Controller",
+      "ok": true,
+      "result": "syntax parsed; body not executed"
+    },
+    {
+      "name": "Level 6 Music Sequence Controller",
+      "ok": true,
+      "result": "syntax parsed; body not executed"
+    },
+    {
+      "name": "Level 6 Mall Manager AI Controller",
+      "ok": true,
+      "result": "syntax parsed; body not executed"
+    },
+    {
+      "name": "Level 6 Hiding Controller",
+      "ok": true,
+      "result": "syntax parsed; body not executed"
+    },
+    {
+      "name": "Level 6 Layout Generator",
+      "ok": true,
+      "result": "syntax parsed; body not executed"
+    },
+    {
+      "name": "Level 6 Preview Runtime",
+      "ok": true,
+      "result": "syntax parsed; body not executed"
+    }
+  ]
+}

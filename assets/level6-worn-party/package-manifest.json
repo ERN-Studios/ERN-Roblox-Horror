@@ -1,0 +1,231 @@
+{
+  "schema": "level6-offline-import-package/1",
+  "scope": "Prepared locally; not a verified Studio import or publish",
+  "files": [
+    {
+      "path": "assets/level6-worn-party/IMPORT_READY.md",
+      "bytes": 5001,
+      "sha256": "de36fead8b64edf81751b8e32816b35025b25fcc5555bbcc94e80d802e129531"
+    },
+    {
+      "path": "assets/level6-worn-party/Level6_FULL_Seed101.blend",
+      "bytes": 4196514,
+      "sha256": "8845c7331f9c4bbce36bf883fe571873cac85482fdd999e86128f9bf6f36721c"
+    },
+    {
+      "path": "assets/level6-worn-party/Level6_FULL_Seed101_Overview.png",
+      "bytes": 2260756,
+      "sha256": "1a83da9ef77b1fa06c027d4f11496c21e032c0e4d5e61e4ea2f736a2ee047b23"
+    },
+    {
+      "path": "assets/level6-worn-party/Level6_WornParty_v2.blend",
+      "bytes": 3935829,
+      "sha256": "915c9fb3ce9904b29570eedc5474ec083676ad9f7a0c2450776d78d43a62a3c4"
+    },
+    {
+      "path": "assets/level6-worn-party/Level6_ImportKit.blend",
+      "bytes": 4237786,
+      "sha256": "3a5c4a32dc57f7db619cb283b57f88c4975cb41b796c5ee367d54ea42bf24183"
+    },
+    {
+      "path": "assets/level6-worn-party/Level6_ReusableKit.fbx",
+      "bytes": 967292,
+      "sha256": "2e24d6f4837ae7bb48c5074568f3e6898d7e3c6f1510cb3a7247dda4302dc30c"
+    },
+    {
+      "path": "assets/level6-worn-party/full-map-record.json",
+      "bytes": 522,
+      "sha256": "37ee29096015cff3abe00a49bb8ff7f0ae34ec1ffb49d11bab5e18461a68656e"
+    },
+    {
+      "path": "assets/level6-worn-party/kit-manifest-v2.json",
+      "bytes": 11884,
+      "sha256": "a8b34db259bcfb63e18b0e70ec077d8929ae1a9f740f2c2228d32345151dfb8e"
+    },
+    {
+      "path": "assets/level6-worn-party/exports-v2/manifest.json",
+      "bytes": 33115,
+      "sha256": "a246ab09b53224054fd41aee827c9fa0275e9017922103c18778c58ce3610587"
+    },
+    {
+      "path": "assets/level6-worn-party/runtime-source/atlas-pixels.json",
+      "bytes": 229,
+      "sha256": "7c156195fcf8e4b5ec76b18398900d7e2be91f56421a97fc1bca5a3cce1ea5b0"
+    },
+    {
+      "path": "assets/level6-worn-party/runtime-source/atlas-rgba.b64",
+      "bytes": 5592408,
+      "sha256": "29e64e4d059a50dd0b4a2e79f084e977bd75d1ceb09576b17948b060193933ec"
+    },
+    {
+      "path": "assets/level6-worn-party/textures/WornParty_Atlas1024.png",
+      "bytes": 962070,
+      "sha256": "a7116406dd3112c820baed6f5449f0c7d242af19ca840234d510e2328fa0191e"
+    },
+    {
+      "path": "assets/level6-worn-party/textures/WornParty_Atlas.png",
+      "bytes": 3276656,
+      "sha256": "7614f9b5844ed4538475437a0a65360e17de5d1114b9e6b411990cbe87758cae"
+    },
+    {
+      "path": "tools/level6_build/gameplay-candidates/candidate-manifest.json",
+      "bytes": 6131,
+      "sha256": "1dbba155c242bd06921e83d97bbea2fb2c1d347e0fee4de00af07c7570bce16a"
+    },
+    {
+      "path": "tools/level6_build/import/Level6KitMetadataReconcile.luau",
+      "bytes": 4805,
+      "sha256": "2c5dfdb036d1d62e99441e209f5748f3058002fc5df3098d73c4b2b19ffdb40e"
+    },
+    {
+      "path": "artifacts/level6-build-20260930/offline-package-handoff.json",
+      "bytes": 8484,
+      "sha256": "f21dd01803b9d72c447a7f1728a147f785a6afd125d43862a8b341faafc91f3c"
+    },
+    {
+      "path": "assets/level6-worn-party/previews-v2/01-Beige-Party-Hall.png",
+      "bytes": 1190288,
+      "sha256": "b4988d9ef499a09aef96a70cd907fceec6110fa8bc2c4ee57099c0df77a3ac15"
+    },
+    {
+      "path": "assets/level6-worn-party/previews-v2/02-Orange-Birthday-Rooms.png",
+      "bytes": 1165014,
+      "sha256": "0940df3c753135d1593b34d481df6dcbf58dcd6aeeecb0a0170efa3b9ffe7953"
+    },
+    {
+      "path": "assets/level6-worn-party/previews-v2/03-Red-Party-Maze.png",
+      "bytes": 1197917,
+      "sha256": "7f21421a279d1d6e59127d0368a8c7c6b8296734ed31f11310200156952f4eef"
+    },
+    {
+      "path": "assets/level6-worn-party/previews-v2/04-Budget-Arcade.png",
+      "bytes": 1123212,
+      "sha256": "79a3913f9d070a39a97604a04d91bd410c8b9cdaef80bb74d650a3d858b42a44"
+    },
+    {
+      "path": "assets/level6-worn-party/previews-v2/05-Party-Supply-Store.png",
+      "bytes": 1169380,
+      "sha256": "2367ed7fdaca47567c980ccb70ec8c433fabb25b5ff02afa76c5217f60b61089"
+    },
+    {
+      "path": "assets/level6-worn-party/previews-v2/06-Maintenance-Workshop.png",
+      "bytes": 1175539,
+      "sha256": "3cb49567de71481c9b557f37738ee4f9aea43e8cd77883372a1ac378f6afcdbe"
+    },
+    {
+      "path": "assets/level6-worn-party/audio/README.md",
+      "bytes": 3934,
+      "sha256": "775e6f574219341265ecc33ed8005154c4471b7030108c3e5d4f5f6d413885ce"
+    },
+    {
+      "path": "assets/level6-worn-party/audio/audio_qc.py",
+      "bytes": 3555,
+      "sha256": "f1bd772d47f41dc719d9e49286db4fcc1a6222c254be59e7895cb2a168a719be"
+    },
+    {
+      "path": "assets/level6-worn-party/audio/build-results.json",
+      "bytes": 4483,
+      "sha256": "68de646d3db6ff15cd79ff0a3207a32e286b08ed380773811638d79c9e4436e5"
+    },
+    {
+      "path": "assets/level6-worn-party/audio/build_manifest.py",
+      "bytes": 7525,
+      "sha256": "e12a67d033e7e018f024a3b059f034d15d6eca7bbeb734e19beab530b1eacfc5"
+    },
+    {
+      "path": "assets/level6-worn-party/audio/final-qc.json",
+      "bytes": 6716,
+      "sha256": "61b96e406a9581613b25c62560f90c7e2ac051fecba46711865914d2de160fd5"
+    },
+    {
+      "path": "assets/level6-worn-party/audio/manifest.json",
+      "bytes": 22568,
+      "sha256": "88167a58090a5610895a0438b8bb7d952a8360456a7e304de1257080d767f5e0"
+    },
+    {
+      "path": "assets/level6-worn-party/audio/master_audio.py",
+      "bytes": 7296,
+      "sha256": "4c40b1f024835f2151473f0b9cac3e678aaef7ffcc96649a8ae5a313663c4b42"
+    },
+    {
+      "path": "assets/level6-worn-party/audio/mastered/arcade_credit_button.mp3",
+      "bytes": 73196,
+      "sha256": "dc862a6ed42056777945f02ae7e69b8e38bb4daa963adc29c057bdef2e644d10"
+    },
+    {
+      "path": "assets/level6-worn-party/audio/mastered/arcade_credit_button.wav",
+      "bytes": 864102,
+      "sha256": "cc4963723f46530eeb00eb36ce15c35c42eb6e4a40b205ab9a5c78b45eab9885"
+    },
+    {
+      "path": "assets/level6-worn-party/audio/mastered/breaker_switch.mp3",
+      "bytes": 73196,
+      "sha256": "55e4264a3e771b7709a1e8b44a8c5d393ca117f98176ac51a5fcbb90f8740838"
+    },
+    {
+      "path": "assets/level6-worn-party/audio/mastered/breaker_switch.wav",
+      "bytes": 864102,
+      "sha256": "209c194645abe3b200ac342fbdd2d1bd62b8484d002467e1443c17222b835a2c"
+    },
+    {
+      "path": "assets/level6-worn-party/audio/mastered/budget_arcade_ambience.mp3",
+      "bytes": 475244,
+      "sha256": "e078d7636b1fb775ca13e56bde7d9b741db1f66877ee0870d198bed7e6a238cb"
+    },
+    {
+      "path": "assets/level6-worn-party/audio/mastered/budget_arcade_ambience.wav",
+      "bytes": 5688102,
+      "sha256": "9216affa14717996fb5b7cdafff98e6bf0dbe1d186f509e0f5a92a7fef300a82"
+    },
+    {
+      "path": "assets/level6-worn-party/audio/mastered/maintenance_workshop_ambience.mp3",
+      "bytes": 475244,
+      "sha256": "373506de60fbeedc4c661335db6b865b493d32ee7ef815adc20ff20d17ec246e"
+    },
+    {
+      "path": "assets/level6-worn-party/audio/mastered/maintenance_workshop_ambience.wav",
+      "bytes": 5688102,
+      "sha256": "12f5f97c10dad520683f5a119c4766488b24806a2a9d848f22d9b9af31e2699d"
+    },
+    {
+      "path": "assets/level6-worn-party/audio/mastered/party_hall_ambience.mp3",
+      "bytes": 475244,
+      "sha256": "49108519991ee8b7bbbbb649539adec59ff76e1c05692a6bbae46284a9fe6b70"
+    },
+    {
+      "path": "assets/level6-worn-party/audio/mastered/party_hall_ambience.wav",
+      "bytes": 5688102,
+      "sha256": "11058a6b2d8f7ee02403113f57f4bdaa27b71b771b79ae83deb1de53fa12fc8e"
+    },
+    {
+      "path": "assets/level6-worn-party/audio/raw/arcade_credit_button-elevenlabs-take2.mp3",
+      "bytes": 65781,
+      "sha256": "7739143d3e4df47c77d4a38a21964968bfe2d3822817ad5ec8c6cbcddbbd3e4f"
+    },
+    {
+      "path": "assets/level6-worn-party/audio/raw/breaker_switch-elevenlabs-take3.mp3",
+      "bytes": 65781,
+      "sha256": "afb49d7e65df962b527487f88b88f55be4b51e93f3ea34db5ebff7ba7f81e184"
+    },
+    {
+      "path": "assets/level6-worn-party/audio/raw/budget_arcade_ambience-elevenlabs-take2.mp3",
+      "bytes": 337872,
+      "sha256": "c4bf6e599c1c3eb0a601061cd883d5e01e28fe84801828e6c5686f2ef403db9b"
+    },
+    {
+      "path": "assets/level6-worn-party/audio/raw/maintenance_workshop_ambience-elevenlabs-take3.mp3",
+      "bytes": 337872,
+      "sha256": "709f11232f20de4268216d643660527f0858df782a86296a5abc103f22672f55"
+    },
+    {
+      "path": "assets/level6-worn-party/audio/raw/party_hall_ambience-elevenlabs-take4.mp3",
+      "bytes": 337872,
+      "sha256": "ca8e61ee2c604ab76a766b881f3ff302c1635335e909c8a6aa004876b840f464"
+    },
+    {
+      "path": "assets/level6-worn-party/audio/raw-qc.json",
+      "bytes": 3403,
+      "sha256": "92be1dfb09e99e6976fe673b07d56214695fcc3c86ffa8db80f19c5f3fbd58e9"
+    }
+  ]
+}

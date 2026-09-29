@@ -1,0 +1,7 @@
+00:01.201  blend            | Read blend: "/Users/zeanjuul4/Documents/Roblox Horror REPO/assets/level6-worn-party/Level6_FULL_Seed101.blend"
+BlenderMCP addon registered
+LEVEL6_BLEND_VERIFIED {"source": "/Users/zeanjuul4/Documents/Roblox Horror REPO/assets/level6-worn-party/Level6_FULL_Seed101.blend", "fullScene": "Level 6 | FULL seed 101 | 32 rooms", "instances": 3220, "roomFloorInstances": 32, "prefabCollections": 49, "usedPrefabs": 39, "missingReferencedPrefabs": [], "atlasImages": [{"name": "WornParty_Atlas.png", "size": [2048, 2048], "packed": true, "path": "//textures/WornParty_Atlas.png"}]}
+BlenderMCP addon unregistered
+Blender 5.2.0 LTS (hash fbe6228777e7 built 2026-07-14 01:31:22)
+
+Blender quit

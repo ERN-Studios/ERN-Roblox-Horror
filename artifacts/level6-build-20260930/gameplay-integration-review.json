@@ -1,0 +1,43 @@
+{
+  "status": "Static integration review complete; active Play remains required",
+  "baseline": {
+    "placeId": 131311258779917,
+    "placeVersion": 2403,
+    "source": "artifacts/level6-build-20260930/baseline-level3/source-manifest.json",
+    "sourceEditorParity": true
+  },
+  "scope": {
+    "newScripts": 19,
+    "guardedSharedEdits": 4,
+    "snapshotSha256": "e74e4fe19e695b8c19ddcc01b4d9aec6ed0a5e24a69416a5632d67ab74134653",
+    "studioMutationsByReview": false
+  },
+  "fixes": [
+    "Preview Runtime calls Level6BlenderRuntimeBake.Ensure before constructing or dressing the world and records kit bake metrics.",
+    "The final preview departure and failed builds destroy only Level6BuildOwned generated worlds, including a partially staged world; the shared selected level stays untouched.",
+    "World Builder refuses to replace a same-named unowned workspace or staged world.",
+    "Room Dressing arcade, claw and breaker prompts use isolated Level6SelectedLevel and Level6RoundActive gates.",
+    "Music Sequence dev skip hook is owned and removed on Stop; an unowned same-name object is preserved.",
+    "Mall Manager and Music Sequence no longer destroy a wrong-class Level 6 state object by name.",
+    "The moving Blender hidden-exit wall uses box collision."
+  ],
+  "staticEvidence": {
+    "luneSyntaxCandidates": 27,
+    "luneSyntaxResult": "pass",
+    "snapshotManifestCheck": "pass: 19 new scripts and 4 guarded shared edits",
+    "candidateManifestHashes": "pass",
+    "roomDressingHash": "pass",
+    "layoutGeneratorSeeds": "1000 seeds passed in the prior isolated candidate test; no generator edit in this review",
+    "managerParticipantGate": "livingPlayer and eligibleSpawnPlayers require Level6InRound and Level6RoundActive; ordinary spawn scores nearest living participant at least 90 studs away",
+    "rewardIsolation": "Objective escape writes Level6Escaped; no badge, token, or shared RoundStatus call in the Level 6 candidate"
+  },
+  "playGatesPending": [
+    "Bake all 49 templates and confirm client replication and appearance in Play.",
+    "Enter through the developer Level 6 lobby door, collect/carry/drop/recover/insert five CDs, unlock and escape, then confirm lobby return and no progression write.",
+    "Check two players under a table, table-check flush, blackout and recovery, and prompt/lighting/audio restoration after death and last departure.",
+    "Measure safe Manager spawn distance from every living participant, second distinct spawn, and third distinct spawn escalation of the same entity.",
+    "Measure server CPU/memory and navigation/retry behavior during an active round, including service-room alcoves and finale corridor.",
+    "Run a participant plus two lobby clients to confirm no lobby movement, lighting, audio or target leakage and a single build for simultaneous entry.",
+    "Re-export and compare live Studio sources and properties after installation, then commit scoped changes and publish only after material checks pass."
+  ]
+}

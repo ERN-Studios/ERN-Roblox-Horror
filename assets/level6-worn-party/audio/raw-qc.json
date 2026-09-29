@@ -1,0 +1,107 @@
+[
+  {
+    "path": "assets/level6-worn-party/audio/raw/arcade_credit_button-elevenlabs-take2.mp3",
+    "duration_seconds": 3.0,
+    "peak_dbfs": 3.58,
+    "rms_dbfs": -13.63,
+    "frame_rms_dbfs": {
+      "p10": -78.32,
+      "p50": -71.63,
+      "p90": -10.31,
+      "p99": -1.75
+    },
+    "head_0_2s_rms_dbfs": -24.15,
+    "tail_0_5s_rms_dbfs": -72.36,
+    "tail_0_5s_highpass_4k5_rms_dbfs": -87.85,
+    "quietest_0_5s_start_seconds": 0.24,
+    "quietest_0_5s_rms_dbfs": -78.35,
+    "quietest_0_5s_highpass_4k5_rms_dbfs": -91.41,
+    "loop_boundary_sample_step_dbfs": -20.4,
+    "natural_adjacent_step_p99_9_dbfs": -7.29,
+    "loop_boundary_exceeds_natural_p99_9": false
+  },
+  {
+    "path": "assets/level6-worn-party/audio/raw/breaker_switch-elevenlabs-take3.mp3",
+    "duration_seconds": 3.0,
+    "peak_dbfs": 4.17,
+    "rms_dbfs": -22.72,
+    "frame_rms_dbfs": {
+      "p10": -69.27,
+      "p50": -54.02,
+      "p90": -30.58,
+      "p99": -7.68
+    },
+    "head_0_2s_rms_dbfs": -13.56,
+    "tail_0_5s_rms_dbfs": -55.94,
+    "tail_0_5s_highpass_4k5_rms_dbfs": -93.46,
+    "quietest_0_5s_start_seconds": 1.48,
+    "quietest_0_5s_rms_dbfs": -58.73,
+    "quietest_0_5s_highpass_4k5_rms_dbfs": -93.04,
+    "loop_boundary_sample_step_dbfs": -77.76,
+    "natural_adjacent_step_p99_9_dbfs": -2.35,
+    "loop_boundary_exceeds_natural_p99_9": false
+  },
+  {
+    "path": "assets/level6-worn-party/audio/raw/budget_arcade_ambience-elevenlabs-take2.mp3",
+    "duration_seconds": 20.0,
+    "peak_dbfs": -16.96,
+    "rms_dbfs": -41.11,
+    "frame_rms_dbfs": {
+      "p10": -58.59,
+      "p50": -53.64,
+      "p90": -36.08,
+      "p99": -30.87
+    },
+    "head_0_2s_rms_dbfs": -42.66,
+    "tail_0_5s_rms_dbfs": -50.53,
+    "tail_0_5s_highpass_4k5_rms_dbfs": -54.87,
+    "quietest_0_5s_start_seconds": 13.28,
+    "quietest_0_5s_rms_dbfs": -58.75,
+    "quietest_0_5s_highpass_4k5_rms_dbfs": -70.27,
+    "loop_boundary_sample_step_dbfs": -73.01,
+    "natural_adjacent_step_p99_9_dbfs": -27.68,
+    "loop_boundary_exceeds_natural_p99_9": false
+  },
+  {
+    "path": "assets/level6-worn-party/audio/raw/maintenance_workshop_ambience-elevenlabs-take3.mp3",
+    "duration_seconds": 20.0,
+    "peak_dbfs": -21.12,
+    "rms_dbfs": -33.0,
+    "frame_rms_dbfs": {
+      "p10": -36.0,
+      "p50": -33.31,
+      "p90": -31.01,
+      "p99": -29.45
+    },
+    "head_0_2s_rms_dbfs": -33.89,
+    "tail_0_5s_rms_dbfs": -34.66,
+    "tail_0_5s_highpass_4k5_rms_dbfs": -73.83,
+    "quietest_0_5s_start_seconds": 19.5,
+    "quietest_0_5s_rms_dbfs": -34.66,
+    "quietest_0_5s_highpass_4k5_rms_dbfs": -73.83,
+    "loop_boundary_sample_step_dbfs": -66.25,
+    "natural_adjacent_step_p99_9_dbfs": -54.23,
+    "loop_boundary_exceeds_natural_p99_9": false
+  },
+  {
+    "path": "assets/level6-worn-party/audio/raw/party_hall_ambience-elevenlabs-take4.mp3",
+    "duration_seconds": 20.0,
+    "peak_dbfs": -22.84,
+    "rms_dbfs": -36.09,
+    "frame_rms_dbfs": {
+      "p10": -37.84,
+      "p50": -36.21,
+      "p90": -34.73,
+      "p99": -33.55
+    },
+    "head_0_2s_rms_dbfs": -39.63,
+    "tail_0_5s_rms_dbfs": -37.4,
+    "tail_0_5s_highpass_4k5_rms_dbfs": -60.84,
+    "quietest_0_5s_start_seconds": 0.0,
+    "quietest_0_5s_rms_dbfs": -37.84,
+    "quietest_0_5s_highpass_4k5_rms_dbfs": -61.17,
+    "loop_boundary_sample_step_dbfs": -55.59,
+    "natural_adjacent_step_p99_9_dbfs": -46.01,
+    "loop_boundary_exceeds_natural_p99_9": false
+  }
+]

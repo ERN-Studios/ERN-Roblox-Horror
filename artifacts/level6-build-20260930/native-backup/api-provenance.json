@@ -1,0 +1,30 @@
+{
+  "url": "https://raw.githubusercontent.com/MaximumADHD/Roblox-Client-Tracker/roblox/API-Dump.json",
+  "sha256": "04caa58c2583315adfb2b44a7325eca6bc499e4915096c45e59e39fd6962dd46",
+  "selectedServices": [
+    "Workspace",
+    "Lighting",
+    "SoundService",
+    "ReplicatedFirst",
+    "ReplicatedStorage",
+    "ServerScriptService",
+    "ServerStorage",
+    "StarterGui",
+    "StarterPack",
+    "StarterPlayer",
+    "Teams",
+    "TextChatService",
+    "MaterialService",
+    "LocalizationService",
+    "Chat",
+    "Players",
+    "HttpService",
+    "PhysicsService",
+    "TestService",
+    "JointsService",
+    "CollectionService",
+    "ProximityPromptService",
+    "VoiceChatService",
+    "PathfindingService"
+  ]
+}

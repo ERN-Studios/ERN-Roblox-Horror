@@ -1,0 +1,27 @@
+[
+  {
+    "file": "BeforeLevel6-AuthoritativeStudio.rbxl",
+    "bytes": 27070921,
+    "sha256": "be256ca3050fb3668c05461a824f36d19f6852ab1e8cc7028bf26ff5570b5cc5"
+  },
+  {
+    "file": "all-service-children.rbxm",
+    "bytes": 27073811,
+    "sha256": "bc6cf366c13af17727dab6c92abf70464ef3e5a0af746c7a213b74ae71a81214"
+  },
+  {
+    "file": "metadata.json",
+    "bytes": 54917,
+    "sha256": "c1795366cc3df18b4a4f925fefa5e2fa3d973bdefa116f9c05b69220627caa24"
+  },
+  {
+    "file": "scripts.json",
+    "bytes": 8095745,
+    "sha256": "5813389ef38fb43c481e6c8c97c7e741f38d75999547cc72fc7e3ed7417d69fd"
+  },
+  {
+    "file": "native-place-verification.json",
+    "bytes": 37071,
+    "sha256": "4cf87d8407d2bdfcd4d5d9663c4b416a1e35de181a9e1691755f627726ffd558"
+  }
+]

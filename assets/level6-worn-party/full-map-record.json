@@ -1,0 +1,16 @@
+{
+  "seed": 101,
+  "sourceLayoutHash": "L6-6-1f1d9521",
+  "rooms": 32,
+  "links": 37,
+  "sourceRoomAreaStud2": 189656,
+  "blenderInstances": 3220,
+  "mapXYBlenderBounds": [
+    0,
+    1223,
+    -678,
+    90
+  ],
+  "source": "/Users/zeanjuul4/Documents/Roblox Horror REPO/assets/level6-worn-party/Level6_FULL_Seed101.blend",
+  "scope": "Whole authored map source with Blender instances. Gameplay controllers and invisible collision are supplied by Level6 Studio runtime; visual placements may be refined by live export."
+}

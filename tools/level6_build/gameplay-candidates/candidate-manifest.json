@@ -1,0 +1,140 @@
+{
+  "status": "offline-revision-pending-studio-reconciliation",
+  "scope": "Isolated Level 6 dev preview. Studio installed guarded snapshot 90b5d1e68587d4a213dea9e4666ad67d017342033561ecae7aebac4ee61220d1; this offline package revises v2 kit metadata and requires a fresh guarded Studio reconciliation before Play verification, export, or publication.",
+  "scripts": [
+    {
+      "targetPath": "ServerScriptService.Level 6 Systems.Level 6 Configuration",
+      "class": "ModuleScript",
+      "file": "tools/level6_build/gameplay-candidates/Level 6 Configuration.ModuleScript.luau",
+      "bytes": 19287,
+      "sha256": "91ea0307b47fa4fefffeda72133991ce7c3a578f2adf0aa17e9771acc1f669cb"
+    },
+    {
+      "targetPath": "ServerScriptService.Level 6 Systems.Level 6 Hiding Controller",
+      "class": "ModuleScript",
+      "file": "tools/level6_build/gameplay-candidates/Level 6 Hiding Controller.ModuleScript.luau",
+      "bytes": 25600,
+      "sha256": "3592e7bef181cbc80cd1f0e7e4d89126a76bdb554b6a0c7c6594cfbbf2a9249b"
+    },
+    {
+      "targetPath": "ServerScriptService.Level 6 Systems.Level 6 Kit Metadata",
+      "class": "ModuleScript",
+      "file": "tools/level6_build/gameplay-candidates/Level 6 Kit Metadata.ModuleScript.luau",
+      "bytes": 8763,
+      "sha256": "c141f4c5246ece81288d1cefdedd8243057149d4844f8fea7c14ee428ff66f4b"
+    },
+    {
+      "targetPath": "ServerScriptService.Level 6 Systems.Level 6 Layout Generator",
+      "class": "ModuleScript",
+      "file": "tools/level6_build/gameplay-candidates/Level 6 Layout Generator.ModuleScript.luau",
+      "bytes": 44317,
+      "sha256": "1277fbc0777d8c22c37c61f1eec2a4cd236320b473905147d04fe68c6c8a1a78"
+    },
+    {
+      "targetPath": "StarterPlayer.StarterPlayerScripts.Level 6 Lighting Controller",
+      "class": "LocalScript",
+      "file": "tools/level6_build/gameplay-candidates/Level 6 Lighting Controller.LocalScript.luau",
+      "bytes": 39958,
+      "sha256": "1e63d06df7a647f8e4c157da0dadc29b7ffd84ce9bdef53b4521086c77249c10"
+    },
+    {
+      "targetPath": "ServerScriptService.Level 6 Systems.Level 6 Mall Manager AI Controller",
+      "class": "ModuleScript",
+      "file": "tools/level6_build/gameplay-candidates/Level 6 Mall Manager AI Controller.ModuleScript.luau",
+      "bytes": 188710,
+      "sha256": "635b3c5d3ab2ac5230e746a70f430492336aeffde6493fa011c1c87f49a514df"
+    },
+    {
+      "targetPath": "StarterPlayer.StarterPlayerScripts.Level 6 Mall Manager Visual Smoother",
+      "class": "LocalScript",
+      "file": "tools/level6_build/gameplay-candidates/Level 6 Mall Manager Visual Smoother.LocalScript.luau",
+      "bytes": 6548,
+      "sha256": "ad56c7c05384232059416d7fe33cacef1df5207322a3ef1f5001f4f7d2ee5651"
+    },
+    {
+      "targetPath": "ServerScriptService.Level 6 Systems.Level 6 Music Sequence Controller",
+      "class": "ModuleScript",
+      "file": "tools/level6_build/gameplay-candidates/Level 6 Music Sequence Controller.ModuleScript.luau",
+      "bytes": 21426,
+      "sha256": "981f70c781cf0f2906bd869ea8e9c00f689685d00d8da65203ea83c6087c26a0"
+    },
+    {
+      "targetPath": "ServerScriptService.Level 6 Systems.Level 6 Objective Controller",
+      "class": "ModuleScript",
+      "file": "tools/level6_build/gameplay-candidates/Level 6 Objective Controller.ModuleScript.luau",
+      "bytes": 71394,
+      "sha256": "436cfc10cb9e17f3ad6c22c1facf08254aab98c7724ff0a05f697d0118bc8c57"
+    },
+    {
+      "targetPath": "ServerScriptService.Level 6 Systems.Level 6 Preview Runtime",
+      "class": "ModuleScript",
+      "file": "tools/level6_build/gameplay-candidates/Level 6 Preview Runtime.ModuleScript.luau",
+      "bytes": 20960,
+      "sha256": "c08f474cedd3c0aae0aef242f212dd592e154467a1241ff83bcec837e72a8a88"
+    },
+    {
+      "targetPath": "StarterPlayer.StarterPlayerScripts.Level 6 Reader Client",
+      "class": "LocalScript",
+      "file": "tools/level6_build/gameplay-candidates/Level 6 Reader Client.LocalScript.luau",
+      "bytes": 59188,
+      "sha256": "156b7f2ef89c50d6ac208c660ecb6c33a67e278500d4996d4c708c51af3b9029"
+    },
+    {
+      "targetPath": "StarterPlayer.StarterPlayerScripts.Level 6 Sound Controller",
+      "class": "LocalScript",
+      "file": "tools/level6_build/gameplay-candidates/Level 6 Sound Controller.LocalScript.luau",
+      "bytes": 46887,
+      "sha256": "dce904e81c3fc07ee8d7136f7510082b1fe60f6244a19aa0ffd96090383d9115"
+    },
+    {
+      "targetPath": "StarterPlayer.StarterPlayerScripts.Level 6 Table Hiding Client",
+      "class": "LocalScript",
+      "file": "tools/level6_build/gameplay-candidates/Level 6 Table Hiding Client.LocalScript.luau",
+      "bytes": 21976,
+      "sha256": "dde4900944a79d69161001676409668629775ed3dc480160c87e4c957fd9cee7"
+    },
+    {
+      "targetPath": "ServerScriptService.Level 6 Systems.Level 6 Visual Adapter",
+      "class": "ModuleScript",
+      "file": "tools/level6_build/gameplay-candidates/Level 6 Visual Adapter.ModuleScript.luau",
+      "bytes": 16318,
+      "sha256": "26425f91b20ccc85334088d9ba6d7c2a1ef1a8784ba9fa5a783a70cc47e85732"
+    },
+    {
+      "targetPath": "ServerScriptService.Level 6 Systems.Level 6 World Builder",
+      "class": "ModuleScript",
+      "file": "tools/level6_build/gameplay-candidates/Level 6 World Builder.ModuleScript.luau",
+      "bytes": 90114,
+      "sha256": "36870a6791fef044d2fea376f65d6dbd0145e23d30e7da2a424dba96bef5a1fc"
+    }
+  ],
+  "validation": {
+    "syntaxOnly": "Lune luau.compile passed all 27 current Level 6 candidates on 2026-09-30; no execution",
+    "layoutPureSeedCount": 1000,
+    "uniqueTopologyGraphs": 956,
+    "layoutPassed": true,
+    "noGameplayChecksYet": true
+  },
+  "isolation": {
+    "workspace": [
+      "Level6SelectedLevel",
+      "Level6RoundActive"
+    ],
+    "player": [
+      "Level6InRound",
+      "Level6Escaped",
+      "Level6BeingChased"
+    ],
+    "assetTemplates": [
+      "ServerStorage.Level6BlenderKit"
+    ],
+    "sharedImmutableAssetContainers": [
+      "ServerStorage.Level3Assets",
+      "ReplicatedStorage.Level 3 Assets"
+    ],
+    "visualDependencies": [
+      "Level 6 Kit Metadata",
+      "Level 6 Room Dressing"
+    ]
+  }
+}

@@ -1,0 +1,10 @@
+00:04.020  blend            | Read blend: "/Users/zeanjuul4/Documents/Roblox Horror REPO/assets/level6-worn-party/Level6_WornParty_v2.blend"
+/Users/zeanjuul4/Documents/Roblox Horror REPO/tools/level6_build/build_full_map.py:161: DeprecationWarning: 'World.use_nodes' is expected to be removed in Blender 6.0
+  scene.world=bpy.data.worlds.new('Level 6 | subdued ambient');scene.world.use_nodes=True
+BlenderMCP addon registered
+Info: Saved as "Level6_FULL_Seed101.blend"
+FULL_MAP_ASSEMBLED {"seed": 101, "sourceLayoutHash": "L6-6-1f1d9521", "rooms": 32, "links": 37, "sourceRoomAreaStud2": 189656, "blenderInstances": 3220, "mapXYBlenderBounds": [0, 1223, -678, 90], "source": "/Users/zeanjuul4/Documents/Roblox Horror REPO/assets/level6-worn-party/Level6_FULL_Seed101.blend", "scope": "Whole authored map source with Blender instances. Gameplay controllers and invisible collision are supplied by Level6 Studio runtime; visual placements may be refined by live export."}
+BlenderMCP addon unregistered
+Blender 5.2.0 LTS (hash fbe6228777e7 built 2026-07-14 01:31:22)
+
+Blender quit

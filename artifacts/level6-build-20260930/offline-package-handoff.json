@@ -1,0 +1,80 @@
+{
+  "schema": "level6-offline-package-handoff/1",
+  "status": "Offline source and asset package verified; Studio work stopped at owner's latest scope boundary",
+  "authority": "Roblox Studio is the source of truth. This offline revision must not overwrite changed Studio source without a fresh Source/editor comparison and guarded reconciliation.",
+  "studio": {
+    "placeId": 131311258779917,
+    "universeId": 10559217407,
+    "observedPlaceVersionBeforeInstall": 2403,
+    "guardedGameplayInstallBatch": "c0736c08-00a4-44a9-9153-456be94dee95",
+    "installedGameplaySnapshotSha256": "90b5d1e68587d4a213dea9e4666ad67d017342033561ecae7aebac4ee61220d1",
+    "installedScopeFromInstallerResponse": "19 new scripts and 4 guarded shared edits",
+    "runtimeSourceFromInstallReport": "ServerStorage.Level6BlenderSource: 49 mesh source folders, Ready true",
+    "independentPostInstallSourceEditorAudit": "Not completed. Studio connection was unavailable before the owner stopped further Studio calls.",
+    "remainingStudioCallsAuthorizedInThisHandoff": false,
+    "meshImageAPISetting": "Owner reported that the Mesh and Image API setting is now enabled. This was not independently verified after the scope stop."
+  },
+  "offlineSnapshot": {
+    "sha256": "23a305861ebff83d884b77cf504212abc3728f52a400f0e41e83ec5d60c7eae9",
+    "builder": "tools/level6_build/import/serve_gameplay_candidates.py",
+    "candidateManifest": "tools/level6_build/gameplay-candidates/candidate-manifest.json",
+    "newScripts": 19,
+    "guardedSharedEdits": 4,
+    "relationshipToInstalledSnapshot": "Only the Level 6 Kit Metadata source item changed. Replacing its new bytes and SHA-256 in the current canonical snapshot with the installed values and recomputing the canonical JSON SHA-256 exactly reproduces 90b5d1e68587d4a213dea9e4666ad67d017342033561ecae7aebac4ee61220d1; all other 22 source items are identical.",
+    "changedStudioTarget": {
+      "path": "ServerScriptService.Level 6 Systems.Level 6 Kit Metadata",
+      "class": "ModuleScript",
+      "installedBytes": 8761,
+      "installedSha256": "6270f72d32a197a002cd18815f203225f7f3660dd3a9c6da261eea48900870f6",
+      "offlineBytes": 8763,
+      "offlineSha256": "c141f4c5246ece81288d1cefdedd8243057149d4844f8fea7c14ee428ff66f4b",
+      "reason": "The v2 export has 1,428 triangles in each of ChairRed, ChairYellow, ChairGreen and ChairBlue, and ChairStack center [0, 2.59, -0.035], size [2.5078, 5.18, 2.526], collider center [0, 0.03, 2.60], collider size [2.55, 2.62, 5.20], and 4,284 triangles. The installed v1 metadata retained 812 triangles per colored chair and 3,248 triangles, the older 5.62-stud stack height, and its older collider position/depth."
+    }
+  },
+  "assetBundle": {
+    "blenderFullMap": "assets/level6-worn-party/Level6_FULL_Seed101.blend",
+    "blenderFullMapSha256": "8845c7331f9c4bbce36bf883fe571873cac85482fdd999e86128f9bf6f36721c",
+    "blenderReusableKit": "assets/level6-worn-party/Level6_ImportKit.blend",
+    "blenderReusableKitSha256": "3a5c4a32dc57f7db619cb283b57f88c4975cb41b796c5ee367d54ea42bf24183",
+    "reusableFbx": "assets/level6-worn-party/Level6_ReusableKit.fbx",
+    "reusableFbxSha256": "2e24d6f4837ae7bb48c5074568f3e6898d7e3c6f1510cb3a7247dda4302dc30c",
+    "v2ExportManifest": "assets/level6-worn-party/exports-v2/manifest.json",
+    "runtimeAtlasPixels": "assets/level6-worn-party/runtime-source/atlas-rgba.b64",
+    "runtimeAtlasMetadata": "assets/level6-worn-party/runtime-source/atlas-pixels.json",
+    "prefabs": 49,
+    "uniqueTriangles": 48712,
+    "fullMapInstancedVisualTriangles": 1094368,
+    "meshPayloadRawBytes": 2290980,
+    "atlasRGBABytes": 4194304,
+    "atlasRGBASha256": "99784cbd9cece6656ac55173f5114f1adcd6858b12724961d443e2b69072d67e",
+    "atlasPNGSha256": "a7116406dd3112c820baed6f5449f0c7d242af19ca840234d510e2328fa0191e",
+    "verification": "All 49 mesh payloads passed decoded-byte SHA-256, binary header, vertex/normal/UV/triangle length checks, and all 49 Lua metadata center/size/colliders/anchors/triangle comparisons against exports-v2. The 1024x1024 atlas RGBA and PNG hashes passed. The FBX roundtrip independently found 49 UV-mapped meshes and 48,712 triangles.",
+    "fullMapVerification": "Blender full scene has 32 room floors, 3,220 instances, 49 prefab collections and no missing referenced prefabs; see blend-verification.json. This is an offline example seed, not proof of live randomized Play layout."
+  },
+  "dimensionAudit": {
+    "v1ToV2Changes": "Only ChairRed, ChairYellow, ChairGreen, ChairBlue and ChairStack changed metadata in exports-v2. ChairStack is the only changed prefab dimension; its height fell from 5.62 to 5.18 studs, and its collider depth and center also changed.",
+    "visualAdapter": "Uses Level 6 Kit Metadata Center/Size for every kit mesh, including chair placement. Its explicit target sizes adapt architecture, legacy fixtures and UI anchors; no old ChairStack size or chair triangle count is hard-coded.",
+    "roomDressing": "SIZES contains conservative planar placement/navigation envelopes, not exact prefab dimensions. ChairStack already has v2 height 5.18 and a safe 2.60-stud depth envelope for its 2.526-stud v2 mesh. Other SIZES entries are unchanged because their v1/v2 prefab dimensions are unchanged. RoomDivider's SIZES entry is not used by service-asset placement or navBox and is not a metadata source."
+  },
+  "checksPassedOffline": [
+    "python3 tools/level6_build/import/verify_offline_bundle.py",
+    "python3 tools/level6_build/import/serve_gameplay_candidates.py --check",
+    "/private/tmp/level6-native-backup-tools/lune run tools/level6_build/compile_candidates.luau: 29 Luau candidates parse"
+  ],
+  "historicalReview": "gameplay-integration-review.json captured an earlier static snapshot. Its e74e4f... snapshot hash is retained as a historical review record and is superseded for import by the offline snapshot in this handoff.",
+  "nativeBackup": "artifacts/level6-build-20260930/native-backup/BeforeLevel6-AuthoritativeStudio.rbxl; preserve its all-service-children.rbxm and verification sidecar for recovery. The backup predates Level 6 Studio edits.",
+  "playBlockerObserved": "The first Play runtime bake stopped with: EditableImage is not accessible. Go to Security Tab in Experience Settings to enable this API. The owner later reported enabling the setting, but no further Play or independent settings check occurred. No completed kit bake, client replication, gameplay, performance, multiplayer or post-install parity verification is claimed.",
+  "preparedFutureReconciliation": {
+    "script": "tools/level6_build/import/Level6KitMetadataReconcile.luau",
+    "server": "tools/level6_build/import/serve_gameplay_candidates.py",
+    "exactInstalledSource": "tools/level6_build/import/baselines/Level 6 Kit Metadata.installed.luau",
+    "executionStatus": "Prepared and syntax-checked offline only; not executed in Studio",
+    "guard": "Requires Edit mode, exact place/universe, installed batch, exact old Source/editor bytes and old source SHA attribute; rechecks the same baseline inside UpdateSourceAsync; reads back both Source/editor and records the new SHA attribute on that same ModuleScript."
+  },
+  "futureGuardedReconciliationChecklist": [
+    "Resume Studio work only after the owner authorizes it. Read the exact Level 6 Kit Metadata instance class, Source and editor source in Studio Edit. Confirm both equal the installed SHA-256 above; if either differs, investigate and merge against the fresh live source instead of applying this package blindly.",
+    "Run the prepared one-target reconciliation only after the fresh Studio audit. It fetches the immutable installed source and current offline source from the validated loopback snapshot, rechecks the baseline inside the write, preserves the 4 shared edits and every unrelated Level 1-5 script and asset, and reads back both Source/editor.",
+    "Independently confirm the owner-reported Mesh and Image API setting; rerun Play to bake 49 templates, inspect server/client replication and rendering, and exercise the developer Level 6 door, five CDs/CD player, hiding, Manager, blackout and isolated cleanup.",
+    "Run live multiplayer, navigation, spawn-distance, CPU/memory and retry checks. Export the verified Studio state and native non-script data to the repository. Inspect the exact staged diff before a scoped commit. Publish only after material checks pass and the owner's current scope permits it."
+  ]
+}
