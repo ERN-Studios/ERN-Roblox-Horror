@@ -1,0 +1,69 @@
+{
+  "created": "2026-09-30",
+  "title": "Level 3 — worn birthday-party redesign",
+  "mode": "built-in image_gen; generation guided by actual current Studio screenshots",
+  "scope": "Six concept images only. No Blender geometry, Studio game content, or published experience changed.",
+  "artDirection": "Semi-dirty inexpensive 1990s mall children's-party Backrooms. Low yellowed ceiling tiles, flat fluorescent lights, cheap laminate folding tables, mismatched molded plastic chairs, worn patterned carpets, plain beige/orange/red walls and modest party decorations. Improve composition, branching sightlines, material detail and functional side rooms while retaining the existing venue identity.",
+  "baseline": {
+    "placeId": 131311258779917,
+    "universeId": 10559217407,
+    "placeVersion": 2403,
+    "studioRead": "Current Level 3 Configuration, Layout Generator and World Builder Source/editor pairs were read and matched the prior Studio audit at task start.",
+    "referenceDirectory": "assets/concepts/level3-current-reference-20260930/",
+    "referenceFiles": [
+      "reference-current-beige-studio.jpg",
+      "reference-current-orange-studio.jpg",
+      "reference-current-red-studio.jpg"
+    ],
+    "repositoryHeadBeforeTask": "96d263f",
+    "githubHeadObserved": "254f04f576f3e85a0fc17e61513df215c6a0a062"
+  },
+  "limitations": [
+    "Concept art is more detailed than current Roblox rendering; these are not current-game screenshots.",
+    "No mesh, collision, modular connection, gameplay or performance validation is implied by these images.",
+    "Wear is slightly stronger in the orange carpet and service-room furniture than in the baseline screenshots."
+  ],
+  "promptRecords": [
+    "core-prompts.json",
+    "red-arcade-prompts.json",
+    "service-prompts.json"
+  ],
+  "images": [
+    {
+      "file": "01-beige-party-hall.png",
+      "title": "Beige party hall",
+      "role": "Improved current district",
+      "identity": "Beige walls, ugly green-brown carpet, low tile ceiling and colored plastic chairs; boxy branches and inexpensive serving counter."
+    },
+    {
+      "file": "02-orange-birthday-room.png",
+      "title": "Orange birthday rooms",
+      "role": "Improved current district",
+      "identity": "Orange/black walls, confetti carpet, low fluorescent grid, cheap table clusters and connected party alcoves."
+    },
+    {
+      "file": "03-red-party-maze.png",
+      "title": "Red-carpet party maze",
+      "role": "Improved current district",
+      "identity": "Gaudy red carpet, flat red/orange walls, plastic chairs, modest folding dividers and offset passages."
+    },
+    {
+      "file": "04-budget-arcade.png",
+      "title": "Budget arcade",
+      "role": "New area",
+      "identity": "A small CRT arcade and inexpensive prize counter attached to the existing party maze."
+    },
+    {
+      "file": "05-party-supply-store.png",
+      "title": "Party-supply storeroom",
+      "role": "New room",
+      "identity": "Used plastic chairs, folded tables, cardboard decorations and cheap party supplies on battered racks."
+    },
+    {
+      "file": "06-maintenance-workshop.png",
+      "title": "Maintenance workshop",
+      "role": "New room",
+      "identity": "Cramped practical workbench, conduit, breaker box and patched floor, visibly belonging to the same party venue."
+    }
+  ]
+}

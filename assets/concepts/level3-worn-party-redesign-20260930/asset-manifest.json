@@ -1,0 +1,66 @@
+{
+  "generatedBy": "built-in image_gen",
+  "verifiedDate": "2026-09-30",
+  "images": [
+    {
+      "file": "01-beige-party-hall.png",
+      "bytes": 2345193,
+      "width": 1536,
+      "height": 1024,
+      "sha256": "8c8a1c1058d600685eb62f28e9b6e87164b43312275886869ad16b4c8838d001",
+      "promptRecord": "core-prompts.json",
+      "originalMatches": true,
+      "visuallyReviewed": true
+    },
+    {
+      "file": "02-orange-birthday-room.png",
+      "bytes": 2177753,
+      "width": 1536,
+      "height": 1024,
+      "sha256": "2a94af6a1b8a5df9cae0945cf73c52e1f50c1eebc38b43993ee06917b78ac034",
+      "promptRecord": "core-prompts.json",
+      "originalMatches": true,
+      "visuallyReviewed": true
+    },
+    {
+      "file": "03-red-party-maze.png",
+      "bytes": 2159784,
+      "width": 1536,
+      "height": 1024,
+      "sha256": "0b5a0b85e1bfc2d921c470901d68c18347b5031413ab29a28f6cc6d6b4abbf67",
+      "promptRecord": "red-arcade-prompts.json",
+      "originalMatches": true,
+      "visuallyReviewed": true
+    },
+    {
+      "file": "04-budget-arcade.png",
+      "bytes": 2054821,
+      "width": 1536,
+      "height": 1024,
+      "sha256": "ca2d5d4d95ee4550e4cd0d0c954390c05a96697d19cb6e4141a612f44418d1fc",
+      "promptRecord": "red-arcade-prompts.json",
+      "originalMatches": true,
+      "visuallyReviewed": true
+    },
+    {
+      "file": "05-party-supply-store.png",
+      "bytes": 2247751,
+      "width": 1536,
+      "height": 1024,
+      "sha256": "91fce8dcd01ec7d165950f9715656fa62138aa18d21f8be9e2b03a69ac8b9b5f",
+      "promptRecord": "service-prompts.json",
+      "originalMatches": true,
+      "visuallyReviewed": true
+    },
+    {
+      "file": "06-maintenance-workshop.png",
+      "bytes": 2314881,
+      "width": 1536,
+      "height": 1024,
+      "sha256": "00ae8fb9954036d2b92f9d1285489bb3878a37bcea88ed0aeb2cc06be71f4169",
+      "promptRecord": "service-prompts.json",
+      "originalMatches": true,
+      "visuallyReviewed": true
+    }
+  ]
+}
