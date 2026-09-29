@@ -1,0 +1,3582 @@
+{
+  "asset": "Aero House",
+  "scope": "Offline geometry and analytic collision only",
+  "source_sha256": "2851201f313245396f9979675460c66dac8de046ac84d0e08e3ac8bfbc229b32",
+  "blender_version": "5.2.0 LTS",
+  "meshes": 87,
+  "triangles": 50448,
+  "maximum_mesh_triangles": 3716,
+  "bounds_blender": {
+    "min": [
+      -62.0,
+      -55.0,
+      -0.75
+    ],
+    "max": [
+      62.0,
+      54.0,
+      36.900001525878906
+    ]
+  },
+  "size_roblox": [
+    124.0,
+    37.650001525878906,
+    109.0
+  ],
+  "expected_dimension_delta": 0.0,
+  "source_geometry_pass": true,
+  "source_meshes": [
+    {
+      "name": "Aero_Anchor_Entry",
+      "vertices": 56,
+      "triangles": 108,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 1.805280555754215,
+      "bounds_blender": {
+        "min": [
+          -0.30000001192092896,
+          -42.29999923706055,
+          1.7000000476837158
+        ],
+        "max": [
+          0.30000001192092896,
+          -41.70000076293945,
+          2.299999952316284
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_Anchor_RearLeft",
+      "vertices": 56,
+      "triangles": 108,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 1.8052786078102236,
+      "bounds_blender": {
+        "min": [
+          -40.29999923706055,
+          35.70000076293945,
+          1.7000000476837158
+        ],
+        "max": [
+          -39.70000076293945,
+          36.29999923706055,
+          2.299999952316284
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_Anchor_RearRight",
+      "vertices": 56,
+      "triangles": 108,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 1.8052786078102236,
+      "bounds_blender": {
+        "min": [
+          39.70000076293945,
+          35.70000076293945,
+          1.7000000476837158
+        ],
+        "max": [
+          40.29999923706055,
+          36.29999923706055,
+          2.299999952316284
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_AtriumBridgeRail_Glass",
+      "vertices": 8,
+      "triangles": 12,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 238.94395810967248,
+      "bounds_blender": {
+        "min": [
+          -13.0600004196167,
+          -38.0,
+          18.200000762939453
+        ],
+        "max": [
+          -12.9399995803833,
+          -6.0,
+          21.799999237060547
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_AtriumBridgeRail_Palette",
+      "vertices": 112,
+      "triangles": 204,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 44.277524580697516,
+      "bounds_blender": {
+        "min": [
+          -13.15999984741211,
+          -38.11000061035156,
+          18.0
+        ],
+        "max": [
+          -12.84000015258789,
+          -5.889999866485596,
+          22.15999984741211
+        ]
+      },
+      "topology": {
+        "components": 5,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_AtriumRearRail_Glass",
+      "vertices": 8,
+      "triangles": 12,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 261.2638087765479,
+      "bounds_blender": {
+        "min": [
+          -49.0,
+          16.940000534057617,
+          18.200000762939453
+        ],
+        "max": [
+          -14.0,
+          17.059999465942383,
+          21.799999237060547
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_AtriumRearRail_Palette",
+      "vertices": 112,
+      "triangles": 204,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 47.21649131030584,
+      "bounds_blender": {
+        "min": [
+          -49.11000061035156,
+          16.84000015258789,
+          18.0
+        ],
+        "max": [
+          -13.890000343322754,
+          17.15999984741211,
+          22.15999984741211
+        ]
+      },
+      "topology": {
+        "components": 5,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_BathFront_Palette",
+      "vertices": 360,
+      "triangles": 700,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 718.0320669275454,
+      "bounds_blender": {
+        "min": [
+          -12.0,
+          21.399999618530273,
+          1.0
+        ],
+        "max": [
+          12.0,
+          22.399999618530273,
+          16.5
+        ]
+      },
+      "topology": {
+        "components": 5,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_BathSideL_Palette",
+      "vertices": 56,
+      "triangles": 108,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 693.6966236193163,
+      "bounds_blender": {
+        "min": [
+          -12.350000381469727,
+          22.0,
+          1.0
+        ],
+        "max": [
+          -11.649999618530273,
+          43.0,
+          16.5
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_BathSideR_Palette",
+      "vertices": 56,
+      "triangles": 108,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 693.6966236193163,
+      "bounds_blender": {
+        "min": [
+          11.649999618530273,
+          22.0,
+          1.0
+        ],
+        "max": [
+          12.350000381469727,
+          43.0,
+          16.5
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_Bathroom_Palette",
+      "vertices": 690,
+      "triangles": 1328,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 251.47551324935893,
+      "bounds_blender": {
+        "min": [
+          -5.875,
+          27.350000381469727,
+          1.0
+        ],
+        "max": [
+          3.450000047683716,
+          31.125,
+          9.0
+        ]
+      },
+      "topology": {
+        "components": 13,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_CornerShell_Palette",
+      "vertices": 1184,
+      "triangles": 2352,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 4682.576481677896,
+      "bounds_blender": {
+        "min": [
+          -53.0,
+          -43.0,
+          0.8999996185302734
+        ],
+        "max": [
+          53.0,
+          43.0,
+          33.30000305175781
+        ]
+      },
+      "topology": {
+        "components": 4,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_Dining_Glow",
+      "vertices": 160,
+      "triangles": 320,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 6.2733705731018015,
+      "bounds_blender": {
+        "min": [
+          24.487998962402344,
+          -24.812000274658203,
+          11.368000030517578
+        ],
+        "max": [
+          32.11199951171875,
+          -17.187999725341797,
+          11.461999893188477
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_Dining_Palette",
+      "vertices": 1112,
+      "triangles": 2140,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 381.56911388124246,
+      "bounds_blender": {
+        "min": [
+          20.14499855041504,
+          -26.55500030517578,
+          1.0199999809265137
+        ],
+        "max": [
+          36.45499801635742,
+          -14.645000457763672,
+          16.5
+        ]
+      },
+      "topology": {
+        "components": 22,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_EastG_Glass",
+      "vertices": 48,
+      "triangles": 72,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 1917.879379422624,
+      "bounds_blender": {
+        "min": [
+          52.95000076293945,
+          -34.82500076293945,
+          2.3500003814697266
+        ],
+        "max": [
+          53.04999923706055,
+          34.82500457763672,
+          16.25
+        ]
+      },
+      "topology": {
+        "components": 6,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_EastG_Palette",
+      "vertices": 504,
+      "triangles": 972,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 315.27923374894647,
+      "bounds_blender": {
+        "min": [
+          52.79999923706055,
+          -35.17499923706055,
+          1.9099998474121094
+        ],
+        "max": [
+          53.20000076293945,
+          35.17499923706055,
+          16.690000534057617
+        ]
+      },
+      "topology": {
+        "components": 9,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_EastU_Glass",
+      "vertices": 48,
+      "triangles": 72,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 2068.5793786231748,
+      "bounds_blender": {
+        "min": [
+          52.95000076293945,
+          -34.82500076293945,
+          18.25
+        ],
+        "max": [
+          53.04999923706055,
+          34.82500457763672,
+          33.25
+        ]
+      },
+      "topology": {
+        "components": 6,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_EastU_Palette",
+      "vertices": 504,
+      "triangles": 972,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 324.6135105044269,
+      "bounds_blender": {
+        "min": [
+          52.79999923706055,
+          -35.17499923706055,
+          17.809999465942383
+        ],
+        "max": [
+          53.20000076293945,
+          35.17499923706055,
+          33.689998626708984
+        ]
+      },
+      "topology": {
+        "components": 9,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_EntryUpper_Glass",
+      "vertices": 8,
+      "triangles": 12,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 475.629906354195,
+      "bounds_blender": {
+        "min": [
+          -7.824999809265137,
+          -43.04999923706055,
+          18.25
+        ],
+        "max": [
+          7.824999809265137,
+          -42.95000076293945,
+          33.25
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_EntryUpper_Palette",
+      "vertices": 224,
+      "triangles": 432,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 81.96946552803763,
+      "bounds_blender": {
+        "min": [
+          -8.175000190734863,
+          -43.20000076293945,
+          17.809999465942383
+        ],
+        "max": [
+          8.175000190734863,
+          -42.79999923706055,
+          33.689998626708984
+        ]
+      },
+      "topology": {
+        "components": 4,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_Entry_Glass",
+      "vertices": 16,
+      "triangles": 24,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 95.25594235456248,
+      "bounds_blender": {
+        "min": [
+          -7.649999618530273,
+          -43.06999969482422,
+          1.1500000953674316
+        ],
+        "max": [
+          7.649999618530273,
+          -42.93000030517578,
+          11.649999618530273
+        ]
+      },
+      "topology": {
+        "components": 2,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_Entry_Palette",
+      "vertices": 872,
+      "triangles": 1708,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 1214.5718098128714,
+      "bounds_blender": {
+        "min": [
+          -11.5,
+          -54.0,
+          -0.05999999865889549
+        ],
+        "max": [
+          11.5,
+          -41.20000076293945,
+          16.600000381469727
+        ]
+      },
+      "topology": {
+        "components": 9,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_FrontLeftG_Glass",
+      "vertices": 24,
+      "triangles": 36,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 958.9396584068855,
+      "bounds_blender": {
+        "min": [
+          -43.82500076293945,
+          -43.04999923706055,
+          2.3500003814697266
+        ],
+        "max": [
+          -9.17500114440918,
+          -42.95000076293945,
+          16.25
+        ]
+      },
+      "topology": {
+        "components": 3,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_FrontLeftG_Palette",
+      "vertices": 336,
+      "triangles": 648,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 166.55720890280563,
+      "bounds_blender": {
+        "min": [
+          -44.17499923706055,
+          -43.20000076293945,
+          1.9099998474121094
+        ],
+        "max": [
+          -8.824999809265137,
+          -42.79999923706055,
+          16.690000534057617
+        ]
+      },
+      "topology": {
+        "components": 6,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_FrontLeftU_Glass",
+      "vertices": 24,
+      "triangles": 36,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 1034.2896545305614,
+      "bounds_blender": {
+        "min": [
+          -43.82500076293945,
+          -43.04999923706055,
+          18.25
+        ],
+        "max": [
+          -9.17500114440918,
+          -42.95000076293945,
+          33.25
+        ]
+      },
+      "topology": {
+        "components": 3,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_FrontLeftU_Palette",
+      "vertices": 336,
+      "triangles": 648,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 171.89110496064475,
+      "bounds_blender": {
+        "min": [
+          -44.17499923706055,
+          -43.20000076293945,
+          17.809999465942383
+        ],
+        "max": [
+          -8.824999809265137,
+          -42.79999923706055,
+          33.689998626708984
+        ]
+      },
+      "topology": {
+        "components": 6,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_FrontRightG_Glass",
+      "vertices": 24,
+      "triangles": 36,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 958.9396584068855,
+      "bounds_blender": {
+        "min": [
+          9.17500114440918,
+          -43.04999923706055,
+          2.3500003814697266
+        ],
+        "max": [
+          43.82499694824219,
+          -42.95000076293945,
+          16.25
+        ]
+      },
+      "topology": {
+        "components": 3,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_FrontRightG_Palette",
+      "vertices": 336,
+      "triangles": 648,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 166.55720871646645,
+      "bounds_blender": {
+        "min": [
+          8.824999809265137,
+          -43.20000076293945,
+          1.9099998474121094
+        ],
+        "max": [
+          44.17499923706055,
+          -42.79999923706055,
+          16.690000534057617
+        ]
+      },
+      "topology": {
+        "components": 6,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_FrontRightU_Glass",
+      "vertices": 16,
+      "triangles": 24,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 770.0599283442904,
+      "bounds_blender": {
+        "min": [
+          9.175000190734863,
+          -43.04999923706055,
+          18.25
+        ],
+        "max": [
+          43.82500076293945,
+          -42.95000076293945,
+          33.25
+        ]
+      },
+      "topology": {
+        "components": 2,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_FrontRightU_Palette",
+      "vertices": 448,
+      "triangles": 864,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 147.4712779894481,
+      "bounds_blender": {
+        "min": [
+          8.824999809265137,
+          -43.20000076293945,
+          17.809999465942383
+        ],
+        "max": [
+          44.17499923706055,
+          -42.79999923706055,
+          33.689998626708984
+        ]
+      },
+      "topology": {
+        "components": 8,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_GroundFloor_Palette",
+      "vertices": 72,
+      "triangles": 140,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 19311.54792418245,
+      "bounds_blender": {
+        "min": [
+          -54.0,
+          -44.0,
+          -0.10000000149011612
+        ],
+        "max": [
+          54.0,
+          44.0,
+          1.0
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_GuestBedroom_Palette",
+      "vertices": 744,
+      "triangles": 1440,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 884.2893371627669,
+      "bounds_blender": {
+        "min": [
+          -38.79999923706055,
+          22.625,
+          1.0450000762939453
+        ],
+        "max": [
+          -23.19999885559082,
+          30.975000381469727,
+          5.944999694824219
+        ]
+      },
+      "topology": {
+        "components": 12,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_GuestSide_Palette",
+      "vertices": 56,
+      "triangles": 108,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 854.5703817318243,
+      "bounds_blender": {
+        "min": [
+          -14.350000381469727,
+          17.0,
+          1.0
+        ],
+        "max": [
+          -13.649999618530273,
+          43.0,
+          16.5
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_GuestWall_Palette",
+      "vertices": 360,
+      "triangles": 700,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 954.4300101147562,
+      "bounds_blender": {
+        "min": [
+          -46.0,
+          16.399999618530273,
+          1.0
+        ],
+        "max": [
+          -14.0,
+          17.399999618530273,
+          16.5
+        ]
+      },
+      "topology": {
+        "components": 5,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_Kitchen_Palette",
+      "vertices": 968,
+      "triangles": 1832,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 843.8158486684271,
+      "bounds_blender": {
+        "min": [
+          19.350000381469727,
+          -14.164999961853027,
+          1.0049999952316284
+        ],
+        "max": [
+          39.5,
+          -9.25,
+          9.75
+        ]
+      },
+      "topology": {
+        "components": 26,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_Lounge_Glow",
+      "vertices": 160,
+      "triangles": 320,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 8.606108004222868,
+      "bounds_blender": {
+        "min": [
+          -34.71200180053711,
+          -19.512001037597656,
+          14.368000030517578
+        ],
+        "max": [
+          -24.28799819946289,
+          -9.088000297546387,
+          14.461999893188477
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_Lounge_Palette",
+      "vertices": 1944,
+      "triangles": 3716,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 1271.5315006284584,
+      "bounds_blender": {
+        "min": [
+          -39.70000076293945,
+          -25.21782875061035,
+          0.9999999403953552
+        ],
+        "max": [
+          -17.04376983642578,
+          -1.4000000953674316,
+          34.5
+        ]
+      },
+      "topology": {
+        "components": 44,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_LowerRibbon_Palette",
+      "vertices": 480,
+      "triangles": 940,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 1115.8357842288228,
+      "bounds_blender": {
+        "min": [
+          -53.54999923706055,
+          -43.54999923706055,
+          0.9999999403953552
+        ],
+        "max": [
+          53.54999923706055,
+          43.54999923706055,
+          2.0999999046325684
+        ]
+      },
+      "topology": {
+        "components": 5,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_MasterFront_Palette",
+      "vertices": 360,
+      "triangles": 700,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 954.4299740911156,
+      "bounds_blender": {
+        "min": [
+          -46.0,
+          20.899999618530273,
+          18.0
+        ],
+        "max": [
+          -14.0,
+          21.899999618530273,
+          33.5
+        ]
+      },
+      "topology": {
+        "components": 5,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_MiddleAccent_Palette",
+      "vertices": 144,
+      "triangles": 288,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 384.3464576726595,
+      "bounds_blender": {
+        "min": [
+          -55.099998474121094,
+          -45.099998474121094,
+          16.850000381469727
+        ],
+        "max": [
+          55.099998474121094,
+          45.099998474121094,
+          17.149999618530273
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_MiddleRibbon_Palette",
+      "vertices": 144,
+      "triangles": 288,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 2368.911969407023,
+      "bounds_blender": {
+        "min": [
+          -55.0,
+          -45.0,
+          16.5
+        ],
+        "max": [
+          55.0,
+          45.0,
+          18.1200008392334
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_ReadingWall_Palette",
+      "vertices": 360,
+      "triangles": 700,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 839.8993466254279,
+      "bounds_blender": {
+        "min": [
+          16.0,
+          0.3999999761581421,
+          18.0
+        ],
+        "max": [
+          46.0,
+          1.399999976158142,
+          33.5
+        ]
+      },
+      "topology": {
+        "components": 5,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_RearG_Glass",
+      "vertices": 56,
+      "triangles": 84,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 2414.8592212105723,
+      "bounds_blender": {
+        "min": [
+          -43.82500076293945,
+          42.95000076293945,
+          2.3500003814697266
+        ],
+        "max": [
+          43.82500076293945,
+          43.04999923706055,
+          16.25
+        ]
+      },
+      "topology": {
+        "components": 7,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_RearG_Palette",
+      "vertices": 560,
+      "triangles": 1080,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 382.2355858774892,
+      "bounds_blender": {
+        "min": [
+          -44.17499923706055,
+          42.79999923706055,
+          1.9099998474121094
+        ],
+        "max": [
+          44.17499923706055,
+          43.20000076293945,
+          16.690000534057617
+        ]
+      },
+      "topology": {
+        "components": 10,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_RearU_Glass",
+      "vertices": 56,
+      "triangles": 84,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 2604.60915875289,
+      "bounds_blender": {
+        "min": [
+          -43.82500076293945,
+          42.95000076293945,
+          18.25
+        ],
+        "max": [
+          43.82500076293945,
+          43.04999923706055,
+          33.25
+        ]
+      },
+      "topology": {
+        "components": 7,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_RearU_Palette",
+      "vertices": 560,
+      "triangles": 1080,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 392.9032840474039,
+      "bounds_blender": {
+        "min": [
+          -44.17499923706055,
+          42.79999923706055,
+          17.809999465942383
+        ],
+        "max": [
+          44.17499923706055,
+          43.20000076293945,
+          33.689998626708984
+        ]
+      },
+      "topology": {
+        "components": 10,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_RoofAccent_Palette",
+      "vertices": 144,
+      "triangles": 288,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 399.7251283498115,
+      "bounds_blender": {
+        "min": [
+          -55.099998474121094,
+          -45.099998474121094,
+          33.849998474121094
+        ],
+        "max": [
+          55.099998474121094,
+          45.099998474121094,
+          34.16999816894531
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_RoofBack_Palette",
+      "vertices": 40,
+      "triangles": 76,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 6230.356176901893,
+      "bounds_blender": {
+        "min": [
+          -54.0,
+          16.0,
+          34.29999923706055
+        ],
+        "max": [
+          54.0,
+          44.0,
+          35.20000076293945
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_RoofFin_Palette",
+      "vertices": 576,
+      "triangles": 1128,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 545.7222671681608,
+      "bounds_blender": {
+        "min": [
+          26.790000915527344,
+          7.0,
+          35.099998474121094
+        ],
+        "max": [
+          40.709999084472656,
+          29.0,
+          36.900001525878906
+        ]
+      },
+      "topology": {
+        "components": 6,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_RoofFront_Palette",
+      "vertices": 40,
+      "triangles": 76,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 5903.656297233641,
+      "bounds_blender": {
+        "min": [
+          -54.0,
+          -44.0,
+          34.29999923706055
+        ],
+        "max": [
+          54.0,
+          -17.5,
+          35.20000076293945
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_RoofLeft_Palette",
+      "vertices": 8,
+      "triangles": 12,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 954.7001410207571,
+      "bounds_blender": {
+        "min": [
+          -54.0,
+          -17.5,
+          34.29999923706055
+        ],
+        "max": [
+          -41.0,
+          16.0,
+          35.20000076293945
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_RoofRibbon_Palette",
+      "vertices": 144,
+      "triangles": 288,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 2873.2371132263543,
+      "bounds_blender": {
+        "min": [
+          -55.0,
+          -45.0,
+          33.5
+        ],
+        "max": [
+          55.0,
+          45.0,
+          35.29999923706055
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_RoofRight_Palette",
+      "vertices": 8,
+      "triangles": 12,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 4016.3002440558953,
+      "bounds_blender": {
+        "min": [
+          -3.5,
+          -17.5,
+          34.29999923706055
+        ],
+        "max": [
+          54.0,
+          16.0,
+          35.20000076293945
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_Site_Palette",
+      "vertices": 72,
+      "triangles": 140,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 26819.108085396918,
+      "bounds_blender": {
+        "min": [
+          -62.0,
+          -54.0,
+          -0.75
+        ],
+        "max": [
+          62.0,
+          54.0,
+          -0.10000000149011612
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_SkylightFrame_Palette",
+      "vertices": 384,
+      "triangles": 752,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 262.2039771449587,
+      "bounds_blender": {
+        "min": [
+          -40.75,
+          -17.75,
+          34.900001525878906
+        ],
+        "max": [
+          -3.25,
+          16.25,
+          35.5
+        ]
+      },
+      "topology": {
+        "components": 4,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_Skylight_Glass",
+      "vertices": 8,
+      "triangles": 12,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 2555.5365775886157,
+      "bounds_blender": {
+        "min": [
+          -41.0,
+          -17.450000762939453,
+          35.03999710083008
+        ],
+        "max": [
+          -3.0,
+          15.950000762939453,
+          35.15999984741211
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_StairFlightA_Palette",
+      "vertices": 312,
+      "triangles": 572,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 1059.7838573380507,
+      "bounds_blender": {
+        "min": [
+          3.0,
+          -16.00749969482422,
+          1.0
+        ],
+        "max": [
+          10.0,
+          5.007499694824219,
+          7.5
+        ]
+      },
+      "topology": {
+        "components": 13,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_StairFlightB_Palette",
+      "vertices": 312,
+      "triangles": 572,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 3106.39352985783,
+      "bounds_blender": {
+        "min": [
+          -8.0,
+          -9.010000228881836,
+          1.0
+        ],
+        "max": [
+          -1.0,
+          5.009999752044678,
+          18.0
+        ]
+      },
+      "topology": {
+        "components": 13,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_StairNosingA_Palette",
+      "vertices": 104,
+      "triangles": 156,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 21.840005157550422,
+      "bounds_blender": {
+        "min": [
+          3.1500000953674316,
+          -15.949999809265137,
+          1.4994999170303345
+        ],
+        "max": [
+          9.850000381469727,
+          3.5346152782440186,
+          7.524499893188477
+        ]
+      },
+      "topology": {
+        "components": 13,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_StairNosingB_Palette",
+      "vertices": 104,
+      "triangles": 156,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 21.84006737819791,
+      "bounds_blender": {
+        "min": [
+          -7.849999904632568,
+          -8.073077201843262,
+          11.999500274658203
+        ],
+        "max": [
+          -1.1500000953674316,
+          4.950000286102295,
+          18.024499893188477
+        ]
+      },
+      "topology": {
+        "components": 13,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_StairRails_Palette",
+      "vertices": 1888,
+      "triangles": 3672,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 168.63908200817056,
+      "bounds_blender": {
+        "min": [
+          -8.170000076293945,
+          -15.287307739257812,
+          1.6000001430511475
+        ],
+        "max": [
+          10.170000076293945,
+          13.99380111694336,
+          21.85419273376465
+        ]
+      },
+      "topology": {
+        "components": 26,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_StairTurn_Palette",
+      "vertices": 64,
+      "triangles": 96,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 1516.1720749338897,
+      "bounds_blender": {
+        "min": [
+          -8.0,
+          5.0,
+          1.0
+        ],
+        "max": [
+          10.0,
+          14.0,
+          11.5
+        ]
+      },
+      "topology": {
+        "components": 8,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_StairVoidEast_Glass",
+      "vertices": 8,
+      "triangles": 12,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 157.84798045026278,
+      "bounds_blender": {
+        "min": [
+          12.9399995803833,
+          -5.5,
+          18.200000762939453
+        ],
+        "max": [
+          13.0600004196167,
+          15.600000381469727,
+          21.799999237060547
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_StairVoidEast_Palette",
+      "vertices": 88,
+      "triangles": 160,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 30.40329541061059,
+      "bounds_blender": {
+        "min": [
+          12.84000015258789,
+          -5.610000133514404,
+          18.0
+        ],
+        "max": [
+          13.15999984741211,
+          15.710000038146973,
+          22.15999984741211
+        ]
+      },
+      "topology": {
+        "components": 4,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_StairVoidRear_Glass",
+      "vertices": 8,
+      "triangles": 12,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 183.14387020314277,
+      "bounds_blender": {
+        "min": [
+          -12.0,
+          16.940000534057617,
+          18.200000762939453
+        ],
+        "max": [
+          12.5,
+          17.059999465942383,
+          21.799999237060547
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_StairVoidRear_Palette",
+      "vertices": 88,
+      "triangles": 160,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 33.73413753591349,
+      "bounds_blender": {
+        "min": [
+          -12.109999656677246,
+          16.84000015258789,
+          18.0
+        ],
+        "max": [
+          12.609999656677246,
+          17.15999984741211,
+          22.15999984741211
+        ]
+      },
+      "topology": {
+        "components": 4,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_StudySide_Palette",
+      "vertices": 56,
+      "triangles": 108,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 854.5703817318243,
+      "bounds_blender": {
+        "min": [
+          14.649999618530273,
+          17.0,
+          1.0
+        ],
+        "max": [
+          15.350000381469727,
+          43.0,
+          16.5
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_StudyWall_Palette",
+      "vertices": 360,
+      "triangles": 700,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 922.2552488191815,
+      "bounds_blender": {
+        "min": [
+          15.0,
+          16.399999618530273,
+          1.0
+        ],
+        "max": [
+          46.0,
+          17.399999618530273,
+          16.5
+        ]
+      },
+      "topology": {
+        "components": 5,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_Study_Palette",
+      "vertices": 1214,
+      "triangles": 2292,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 390.3807103957926,
+      "bounds_blender": {
+        "min": [
+          25.020000457763672,
+          22.44499969482422,
+          1.0
+        ],
+        "max": [
+          37.900001525878906,
+          30.650001525878906,
+          9.399999618530273
+        ]
+      },
+      "topology": {
+        "components": 34,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_TerraceDoorHeader_Palette",
+      "vertices": 96,
+      "triangles": 188,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 104.28404395099697,
+      "bounds_blender": {
+        "min": [
+          24.0,
+          -43.349998474121094,
+          28.5
+        ],
+        "max": [
+          33.0,
+          -42.650001525878906,
+          33.5
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_TerraceRail_Glass",
+      "vertices": 16,
+      "triangles": 24,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 343.96815650680946,
+      "bounds_blender": {
+        "min": [
+          13.0,
+          -54.060001373291016,
+          18.200000762939453
+        ],
+        "max": [
+          49.060001373291016,
+          -44.0,
+          21.799999237060547
+        ]
+      },
+      "topology": {
+        "components": 2,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_TerraceRail_Palette",
+      "vertices": 200,
+      "triangles": 364,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 67.72517077536772,
+      "bounds_blender": {
+        "min": [
+          12.890000343322754,
+          -54.15999984741211,
+          18.0
+        ],
+        "max": [
+          49.15999984741211,
+          -43.88999938964844,
+          22.15999984741211
+        ]
+      },
+      "topology": {
+        "components": 9,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_Terrace_Palette",
+      "vertices": 216,
+      "triangles": 376,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 1616.3796119192307,
+      "bounds_blender": {
+        "min": [
+          13.0,
+          -55.0,
+          17.0
+        ],
+        "max": [
+          49.0,
+          -43.0,
+          18.111000061035156
+        ]
+      },
+      "topology": {
+        "components": 14,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_UpperBridge_Palette",
+      "vertices": 56,
+      "triangles": 108,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 1867.3351513341631,
+      "bounds_blender": {
+        "min": [
+          -13.0,
+          -43.0,
+          17.0
+        ],
+        "max": [
+          13.0,
+          -9.0,
+          18.0
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_UpperCyanBedroom_Palette",
+      "vertices": 1056,
+      "triangles": 1996,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 934.6984756488094,
+      "bounds_blender": {
+        "min": [
+          -38.79999923706055,
+          22.882171630859375,
+          18.0
+        ],
+        "max": [
+          -20.143770217895508,
+          35.17499923706055,
+          23.81999969482422
+        ]
+      },
+      "topology": {
+        "components": 29,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_UpperFloorEast_Palette",
+      "vertices": 56,
+      "triangles": 108,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 7089.035868502444,
+      "bounds_blender": {
+        "min": [
+          13.0,
+          -43.0,
+          17.0
+        ],
+        "max": [
+          53.0,
+          43.0,
+          18.0
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_UpperFloorRear_Palette",
+      "vertices": 56,
+      "triangles": 108,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 3530.861322014962,
+      "bounds_blender": {
+        "min": [
+          -52.0,
+          17.0,
+          17.0
+        ],
+        "max": [
+          13.0,
+          43.0,
+          18.0
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_UpperGuestFront_Palette",
+      "vertices": 360,
+      "triangles": 700,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 922.2552066948416,
+      "bounds_blender": {
+        "min": [
+          15.0,
+          20.899999618530273,
+          18.0
+        ],
+        "max": [
+          46.0,
+          21.899999618530273,
+          33.5
+        ]
+      },
+      "topology": {
+        "components": 5,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_UpperGuestSide_Palette",
+      "vertices": 56,
+      "triangles": 108,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 709.7839622866337,
+      "bounds_blender": {
+        "min": [
+          14.649999618530273,
+          21.5,
+          18.0
+        ],
+        "max": [
+          15.350000381469727,
+          43.0,
+          33.5
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_UpperLimeBedroom_Palette",
+      "vertices": 744,
+      "triangles": 1440,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 829.3222776811414,
+      "bounds_blender": {
+        "min": [
+          23.549999237060547,
+          26.825000762939453,
+          18.045000076293945
+        ],
+        "max": [
+          38.44999694824219,
+          35.17499923706055,
+          22.94499969482422
+        ]
+      },
+      "topology": {
+        "components": 12,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_UpperMasterSide_Palette",
+      "vertices": 56,
+      "triangles": 108,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 709.7839622866337,
+      "bounds_blender": {
+        "min": [
+          -14.350000381469727,
+          21.5,
+          18.0
+        ],
+        "max": [
+          -13.649999618530273,
+          43.0,
+          33.5
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_UpperReading_Glow",
+      "vertices": 160,
+      "triangles": 320,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 6.273440562059434,
+      "bounds_blender": {
+        "min": [
+          27.187999725341797,
+          -23.812000274658203,
+          28.368000030517578
+        ],
+        "max": [
+          34.8120002746582,
+          -16.187999725341797,
+          28.46200180053711
+        ]
+      },
+      "topology": {
+        "components": 1,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_UpperReading_Palette",
+      "vertices": 1256,
+      "triangles": 2444,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 723.0840702422748,
+      "bounds_blender": {
+        "min": [
+          23.700000762939453,
+          -23.899999618530273,
+          18.0
+        ],
+        "max": [
+          39.599998474121094,
+          -12.0,
+          34.20000076293945
+        ]
+      },
+      "topology": {
+        "components": 18,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_WestG_Glass",
+      "vertices": 48,
+      "triangles": 72,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 1917.879379422624,
+      "bounds_blender": {
+        "min": [
+          -53.04999923706055,
+          -34.82500076293945,
+          2.3500003814697266
+        ],
+        "max": [
+          -52.95000076293945,
+          34.82500457763672,
+          16.25
+        ]
+      },
+      "topology": {
+        "components": 6,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_WestG_Palette",
+      "vertices": 504,
+      "triangles": 972,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 315.27923374894647,
+      "bounds_blender": {
+        "min": [
+          -53.20000076293945,
+          -35.17499923706055,
+          1.9099998474121094
+        ],
+        "max": [
+          -52.79999923706055,
+          35.17499923706055,
+          16.690000534057617
+        ]
+      },
+      "topology": {
+        "components": 9,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_WestU_Glass",
+      "vertices": 48,
+      "triangles": 72,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 2068.5793786231748,
+      "bounds_blender": {
+        "min": [
+          -53.04999923706055,
+          -34.82500076293945,
+          18.25
+        ],
+        "max": [
+          -52.95000076293945,
+          34.82500457763672,
+          33.25
+        ]
+      },
+      "topology": {
+        "components": 6,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    },
+    {
+      "name": "Aero_WestU_Palette",
+      "vertices": 504,
+      "triangles": 972,
+      "material_slots": 1,
+      "uv_layers": 1,
+      "invalid_uv_loops": 0,
+      "zero_area_uv_triangles": 0,
+      "invalid_normals": 0,
+      "zero_area_triangles": 0,
+      "surface_area": 324.6135105044269,
+      "bounds_blender": {
+        "min": [
+          -53.20000076293945,
+          -35.17499923706055,
+          17.809999465942383
+        ],
+        "max": [
+          -52.79999923706055,
+          35.17499923706055,
+          33.689998626708984
+        ]
+      },
+      "topology": {
+        "components": 9,
+        "nonmanifold_edges": 0,
+        "inconsistent_winding_edges": 0,
+        "inward_components": 0,
+        "zero_volume_components": 0
+      },
+      "errors": []
+    }
+  ],
+  "analytic_collisions": {
+    "scope": "Analytic static OBB probes with 0.75-stud horizontal radius and 5.5-stud height; not a Humanoid simulation.",
+    "routes": {
+      "stair_centerline": {
+        "samples": 423,
+        "pass": true,
+        "failures": []
+      },
+      "entry_steps": {
+        "samples": 30,
+        "pass": true,
+        "failures": []
+      },
+      "ground_entry_and_lounge": {
+        "samples": 132,
+        "pass": true,
+        "failures": []
+      },
+      "ground_guest_room": {
+        "samples": 225,
+        "pass": true,
+        "failures": []
+      },
+      "ground_bathroom": {
+        "samples": 41,
+        "pass": true,
+        "failures": []
+      },
+      "ground_study": {
+        "samples": 75,
+        "pass": true,
+        "failures": []
+      },
+      "upper_terrace": {
+        "samples": 213,
+        "pass": true,
+        "failures": []
+      },
+      "upper_reading_and_lime_bedroom": {
+        "samples": 225,
+        "pass": true,
+        "failures": []
+      },
+      "upper_cyan_bedroom": {
+        "samples": 249,
+        "pass": true,
+        "failures": []
+      },
+      "upper_front_window_floor": {
+        "samples": 82,
+        "pass": true,
+        "failures": []
+      },
+      "upper_rear_window_floor": {
+        "samples": 65,
+        "pass": true,
+        "failures": []
+      }
+    },
+    "pass": true,
+    "duplicate_collider_names": 0
+  },
+  "studio_import": "unverified",
+  "roblox_walkthrough": "unverified",
+  "runtime_performance": "unverified",
+  "glb_roundtrip": {
+    "pass": true,
+    "sha256": "365fe355b672de1d2aacea79ecfed59bcea79b388aafb8ee50bee13e1a23622a",
+    "meshes": [
+      {
+        "name": "Aero_Anchor_Entry",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_Anchor_RearLeft",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_Anchor_RearRight",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_AtriumBridgeRail_Glass",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_AtriumBridgeRail_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_AtriumRearRail_Glass",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_AtriumRearRail_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_BathFront_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_BathSideL_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_BathSideR_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_Bathroom_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_CornerShell_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_Dining_Glow",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_Dining_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_EastG_Glass",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_EastG_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_EastU_Glass",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_EastU_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_EntryUpper_Glass",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_EntryUpper_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_Entry_Glass",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_Entry_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_FrontLeftG_Glass",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_FrontLeftG_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_FrontLeftU_Glass",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_FrontLeftU_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_FrontRightG_Glass",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_FrontRightG_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_FrontRightU_Glass",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_FrontRightU_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_GroundFloor_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_GuestBedroom_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_GuestSide_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_GuestWall_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_Kitchen_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_Lounge_Glow",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_Lounge_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_LowerRibbon_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_MasterFront_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_MiddleAccent_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_MiddleRibbon_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_ReadingWall_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_RearG_Glass",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_RearG_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_RearU_Glass",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_RearU_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_RoofAccent_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_RoofBack_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_RoofFin_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_RoofFront_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_RoofLeft_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_RoofRibbon_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_RoofRight_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_Site_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_SkylightFrame_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_Skylight_Glass",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_StairFlightA_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_StairFlightB_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_StairNosingA_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_StairNosingB_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_StairRails_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_StairTurn_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_StairVoidEast_Glass",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_StairVoidEast_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_StairVoidRear_Glass",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_StairVoidRear_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_StudySide_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_StudyWall_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_Study_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_TerraceDoorHeader_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_TerraceRail_Glass",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_TerraceRail_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_Terrace_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_UpperBridge_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_UpperCyanBedroom_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_UpperFloorEast_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_UpperFloorRear_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_UpperGuestFront_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_UpperGuestSide_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_UpperLimeBedroom_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_UpperMasterSide_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_UpperReading_Glow",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_UpperReading_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_WestG_Glass",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_WestG_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_WestU_Glass",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      },
+      {
+        "name": "Aero_WestU_Palette",
+        "pass": true,
+        "triangles_equal": true,
+        "bounds_delta": 0.0,
+        "surface_area_delta": 0.0,
+        "import_errors": []
+      }
+    ]
+  },
+  "overall_offline_pass": true
+}

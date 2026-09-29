@@ -1,0 +1,80 @@
+{
+  "asset": "Aero House",
+  "date": "2026-09-29",
+  "files": [
+    {
+      "path": "AeroHouse.blend",
+      "bytes": 559065,
+      "sha256": "2851201f313245396f9979675460c66dac8de046ac84d0e08e3ac8bfbc229b32"
+    },
+    {
+      "path": "AeroHouse.glb",
+      "bytes": 2965480,
+      "sha256": "365fe355b672de1d2aacea79ecfed59bcea79b388aafb8ee50bee13e1a23622a"
+    },
+    {
+      "path": "AeroHouse.fbx",
+      "bytes": 1438940,
+      "sha256": "8eb30349e0a722b9d581ff4b0f0993cd31750578925fb77e3e9b2dcbc2817126"
+    },
+    {
+      "path": "README.md",
+      "bytes": 5929,
+      "sha256": "8894ed83e7d76054579f93840fcbde98a1001378c990c1cb6dd7d7d3635b05c9"
+    },
+    {
+      "path": "SetupAeroHouse.luau",
+      "bytes": 42313,
+      "sha256": "482a9224d1fb2275ff96a75ce7e5c6cd1c3b90b579fa8d98aaa05ca84defae53"
+    },
+    {
+      "path": "manifest.json",
+      "bytes": 60248,
+      "sha256": "9225ebb293d604203c4ca32eea95b133e1ee70a2f5c6211c45a065b1e479e85a"
+    },
+    {
+      "path": "verification.json",
+      "bytes": 86873,
+      "sha256": "bc946bd7414388ce686dd78bcced133ae274ddea400cb2aebd5bbaaf8a66ad88"
+    },
+    {
+      "path": "textures/Aero_Color.png",
+      "bytes": 2038,
+      "sha256": "f14b8cc526c6a4724adaa6be4f7a605017927391cccfe91fd043d5611431cbaf"
+    },
+    {
+      "path": "textures/Aero_Roughness.png",
+      "bytes": 2014,
+      "sha256": "ea15b278103fd15eda1c4314f5f4eb7c769bf1d54d48eb1037d113e1b691b443"
+    },
+    {
+      "path": "textures/Aero_Metallic.png",
+      "bytes": 1548,
+      "sha256": "020e30f8e42e00380665954d999ab71f0c949cda1ec411ecb5245d3b4e04c7a9"
+    },
+    {
+      "path": "previews/exterior.png",
+      "bytes": 1304655,
+      "sha256": "8adf8269f18257fed7d5245f6b2f045643a157efea114fa62a20729b6d1020ef"
+    },
+    {
+      "path": "previews/lounge.png",
+      "bytes": 1385936,
+      "sha256": "5517e707c1fc8bc0355637fe4873908d18458ead2dd7b92f3f14acbcdca1270a"
+    }
+  ],
+  "archive": {
+    "path": "assets/models/AeroHouse_Roblox_Import.zip",
+    "bytes": 4860539,
+    "sha256": "43e52be299eac794cba68d34b58eff481721373f48a17a4a4dfc32ea245350d0"
+  },
+  "setup_luau_compile": {
+    "passed": true,
+    "executed": false,
+    "studio_place_id": 121672571539226
+  },
+  "studio_import": "not performed",
+  "runtime_performance": "not tested",
+  "repository_remote_read": "ERN-Studios/ERN-Roblox-Horror",
+  "remote_head_before_task": "b60701178804689954f83c564fe759ce2d4cc19c"
+}
